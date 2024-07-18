@@ -276,7 +276,7 @@ use Illuminate\Support\Str;
                                                 <b href="#" class="btn btn-rounded btn-danger">Almacén</b>
                                                 @elseif(auth()->user()->hasRoles(['Operativo HI']))
                                                 <b href="#" class="btn btn-rounded btn-danger">Operativo HI</b>
-                                                
+
                                                 @elseif(auth()->user()->hasRoles(['Externo']))
                                                 <b href="#" class="btn btn-rounded btn-info">Proveedor</b>
                                                 @else
