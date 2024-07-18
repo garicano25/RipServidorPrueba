@@ -180,11 +180,11 @@
 
                         @else
                         @if(auth()->user()->hasRoles(['Superusuario', 'Administrador','Coordinador','Compras','Almacén','Operativo HI']))
-                        <a class="cta" href="{{route('recsensorial.index')}}">
+                        <a class="cta" href="{{route('programa.index')}}">
                             <span>Ingresar</span>
 
                             @elseif(auth()->user()->hasRoles(['Superusuario', 'Administrador', 'Coordinador','Compras','Almacén','Operativo HI']))
-                            <a class="cta" href="{{route('recsensorial.index')}}">
+                            <a class="cta" href="{{route('programa.index')}}">
                                 <span>Ingresar</span>
 
                                 @endif
