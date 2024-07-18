@@ -694,7 +694,7 @@
 									<div class="col-6">
 										<div class="form-group">
 											<label>Vía ingreso al organismo </label>
-											<select class="custom-select form-control" id="VIA_INGRESO" name="VIA_INGRESO" >
+											<select class="custom-select form-control" id="VIA_INGRESO" name="VIA_INGRESO">
 												<option value=""></option>
 												@foreach($catviaingresoorganismo as $dato)
 												<option value="{{$dato->id}}">{{$dato->catviaingresoorganismo_viaingreso}}</option>
@@ -863,7 +863,7 @@
 									<div class="col-12">
 										<div class="form-group">
 											<label> Nota </label>
-											<textarea class="form-control" rows="3" id="NOTA_SUSTANCIA_ENTIDAD" name="NOTA_SUSTANCIA_ENTIDAD" required></textarea>
+											<textarea class="form-control" rows="3" id="NOTA_SUSTANCIA_ENTIDAD" name="NOTA_SUSTANCIA_ENTIDAD"></textarea>
 										</div>
 									</div>
 								</div>
@@ -884,8 +884,8 @@
 											background-color: #fff;
 										}
 									</style>
-									<label>Connotacion *</label>
-									<select class="custom-select form-control" id="CONNOTACION" name="CONNOTACIONES[]" multiple="multiple" required>
+									<label>Connotacion </label>
+									<select class="custom-select form-control" id="CONNOTACION" name="CONNOTACIONES[]" multiple="multiple">
 										<option value=""></option>
 
 									</select>
