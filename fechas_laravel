@@ -1,0 +1,49 @@
+
+
+
+<?php
+
+namespace App\Modelos\Procesos;
+use Carbon\Carbon;
+use DateTime;
+
+
+use Illuminate\Database\Eloquent\Model;
+
+class Seguimiento extends Model
+{
+    protected $table = 'seguimiento';
+    protected $fillable = [
+    'buzon_id',
+        'seguimiento_Actividad',
+        'seguimiento_FechaInicio',
+'seguimiento_FechaTermino',
+        'seguimiento_Responsable',
+        'seguimiento_Avance',
+        'seguimiento_Cerrado'
+    ];
+    public function setSeguimientoFechaInicioAttribute($seguimiento_FechaInicio)
+    {
+        $this->attributes['seguimiento_FechaInicio'] = Carbon::createFromFormat('d/m/Y',$seguimiento_FechaInicio)->format('Y-m-d');
+    }
+    public function setSeguimientoFechaTerminoAttribute($seguimiento_FechaTermino)
+    {
+        $this->attributes['seguimiento_FechaTermino'] = Carbon::createFromFormat('d/m/Y',$seguimiento_FechaTermino)->format('Y-m-d');
+    }
+
+
+     public function getSeguimientoFechaInicioAttribute($seguimiento_FechaInicio)
+    {
+        $this->attributes['seguimiento_FechaInicio'] = Carbon::createFromFormat('Y-m-d',$seguimiento_FechaInicio)->format('d/m/Y');
+    }
+    public function getSeguimientoFechaTerminoAttribute($seguimiento_FechaTermino)
+    {
+        $this->attributes['seguimiento_FechaTermino'] = Carbon::createFromFormat('Y-m-d',$seguimiento_FechaTermino)->format('d/m/Y');
+    }
+
+    public function buzon()
+    {
+        return $this->belongsTo(\App\Modelos\Procesos\Buzon::class);
+    }
+}
+
