@@ -2503,8 +2503,8 @@
 
                                                 <div class="col-12">
                                                     <div class="form-group">
-                                                        <label> Nivel 1 *</label>
-                                                        <select class="custom-select form-control" style="width: 50%;" id="NIVEL1" name="NIVEL1" required="">
+                                                        <label> Nivel 1 </label>
+                                                        <select class="custom-select form-control" style="width: 50%;" id="NIVEL1" name="NIVEL1" >
 
                                                         </select>
                                                     </div>
@@ -2512,8 +2512,8 @@
 
                                                 <div class="col-12">
                                                     <div class="form-group">
-                                                        <label> Nivel 2 *</label>
-                                                        <select class="custom-select form-control" style="width: 50%;" id="NIVEL2" name="NIVEL2" required="">
+                                                        <label> Nivel 2 </label>
+                                                        <select class="custom-select form-control" style="width: 50%;" id="NIVEL2" name="NIVEL2" >
 
                                                         </select>
                                                     </div>
@@ -2521,8 +2521,8 @@
 
                                                 <div class="col-12">
                                                     <div class="form-group">
-                                                        <label> Nivel 3 *</label>
-                                                        <select class="custom-select form-control" style="width: 50%;" id="NIVEL3" name="NIVEL3" required="">
+                                                        <label> Nivel 3 </label>
+                                                        <select class="custom-select form-control" style="width: 50%;" id="NIVEL3" name="NIVEL3" >
 
                                                         </select>
                                                     </div>
@@ -2530,8 +2530,8 @@
 
                                                 <div class="col-12">
                                                     <div class="form-group">
-                                                        <label> Nivel 4 *</label>
-                                                        <select class="custom-select form-control" style="width: 50%;" id="NIVEL4" name="NIVEL4" required="">
+                                                        <label> Nivel 4 </label>
+                                                        <select class="custom-select form-control" style="width: 50%;" id="NIVEL4" name="NIVEL4" >
 
                                                         </select>
                                                     </div>
@@ -2539,8 +2539,8 @@
 
                                                 <div class="col-12">
                                                     <div class="form-group">
-                                                        <label> Nivel 5 *</label>
-                                                        <select class="custom-select form-control" style="width: 50%;" id="NIVEL5" name="NIVEL5" required="">
+                                                        <label> Nivel 5 </label>
+                                                        <select class="custom-select form-control" style="width: 50%;" id="NIVEL5" name="NIVEL5" >
 
                                                         </select>
                                                     </div>
