@@ -125,14 +125,14 @@
                                             </div>
                                             @endif
 
-                                            @if(auth()->user()->hasRoles(['Superusuario', 'Administrador', 'Coordinador','Operativo HI']))
+                                            @if(auth()->user()->hasRoles(['Superusuario', 'Administrador', 'Coordinador','Operativo HI','Compras']))
                                             <div class="multisteps-form__progress-btn" id="steps_menu_tab3">
                                                 <i class="fa fa-address-card-o"></i><br>
                                                 <span>Signatarios</span>
                                             </div>
                                             @endif
 
-                                            @if(auth()->user()->hasRoles(['Superusuario', 'Administrador', 'Coordinador','Operativo HI']))
+                                            @if(auth()->user()->hasRoles(['Superusuario', 'Administrador', 'Coordinador','Operativo HI','Compras']))
                                             <div class="multisteps-form__progress-btn" id="steps_menu_tab4">
                                                 <i class="fa fa-desktop"></i><br>
                                                 <span>Equipos</span>
@@ -146,7 +146,7 @@
                                             </div>
                                             @endif
                                             
-                                            @if(auth()->user()->hasRoles(['Superusuario', 'Administrador', 'Coordinador','Almacén','Operativo HI']))
+                                            @if(auth()->user()->hasRoles(['Superusuario', 'Administrador', 'Coordinador','Almacén','Operativo HI','Compras']))
                                             <div class="multisteps-form__progress-btn" id="steps_menu_tab6">
                                                 <i class="fa fa-list"></i><br>
                                                 <span>Lista de permisos</span>
@@ -398,7 +398,7 @@
                                                                 <!-- Tab Panels -->
                                                                 <div class="tab-content">
                                                                     <div class="tab-pane p-20 active" id="reportetab_1" role="tabpanel">
-                                                                        @if(auth()->user()->hasRoles(['Superusuario', 'Administrador', 'Coordinador','Operativo HI']))
+                                                                        @if(auth()->user()->hasRoles(['Superusuario', 'Administrador', 'Coordinador','Operativo HI','Compras']))
                                                                         <ol class="breadcrumb m-b-10">
                                                                             <button type="button" class="btn btn-secondary waves-effect waves-light botonnuevo_moduloproyecto" data-toggle="tooltip" title="Generar nueva" id="boton_generar_ot">
                                                                                 <span class="btn-label"><i class="fa fa-refresh"></i></span> Generar nueva orden de trabajo
@@ -422,7 +422,7 @@
                                                                         </div>
                                                                     </div>
                                                                     <div class="tab-pane p-20" id="reportetab_2" role="tabpanel">
-                                                                        @if(auth()->user()->hasRoles(['Superusuario', 'Administrador','Coordinador','Compras']))
+                                                                        @if(auth()->user()->hasRoles(['Superusuario', 'Administrador','Coordinador','Compras','Compras']))
                                                                         <ol class="breadcrumb m-b-10">
                                                                             <button type="button" class="btn btn-secondary waves-effect waves-light botonnuevo_moduloproyecto" data-toggle="tooltip" title="Generar nueva" id="boton_proveedores_oc">
                                                                                 <span class="btn-label"><i class="fa fa-refresh"></i></span> Generar nueva orden de compra
@@ -485,7 +485,7 @@
                                                                 <div class="tab-content">
                                                                    
                                                                     <div class="tab-pane p-20" id="reportetab_3" role="tabpanel">
-                                                                        @if(auth()->user()->hasRoles(['Superusuario', 'Administrador', 'Coordinador','Operativo HI']))
+                                                                        @if(auth()->user()->hasRoles(['Superusuario', 'Administrador', 'Coordinador','Operativo HI','Compras']))
                                                                         <ol class="breadcrumb m-b-10">
                                                                             <button type="button" class="btn btn-secondary waves-effect waves-light botonnuevo_moduloproyecto" data-toggle="tooltip" title="Generar nueva" id="boton_nueva_ls">
                                                                                 <span class="btn-label"><i class="fa fa-plus"></i></span>Generar nueva lista de signatarios
@@ -509,7 +509,7 @@
                                                                         </div>
                                                                     </div>
                                                                     <div class="tab-pane p-20" id="reportetab_4" role="tabpanel">
-                                                                        @if(auth()->user()->hasRoles(['Superusuario', 'Administrador', 'Coordinador','Operativo HI']))
+                                                                        @if(auth()->user()->hasRoles(['Superusuario', 'Administrador', 'Coordinador','Operativo HI','Compras']))
                                                                         <ol class="breadcrumb m-b-10">
                                                                             <button type="button" class="btn btn-secondary waves-effect waves-light botonnuevo_moduloproyecto" data-toggle="tooltip" title="Generar nueva" id="boton_nueva_le">
                                                                                 <span class="btn-label"><i class="fa fa-plus"></i></span>Generar nueva lista de equipos

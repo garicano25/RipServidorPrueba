@@ -279,7 +279,7 @@ class parametroruidoController extends Controller
             $listacategorias = DB::select('SELECT
                                                 recsensorialareacategorias.recsensorialarea_id,
                                                 recsensorialareacategorias.recsensorialcategoria_id,
-                                                CONCAT(recsensorialcategoria.recsensorialcategoria_nombrecategoria, " (", recsensorialcategoria.recsensorialcategoria_funcioncategoria, ")") AS recsensorialcategoria_nombrecategoria,
+                                                recsensorialcategoria.recsensorialcategoria_nombrecategoria  AS recsensorialcategoria_nombrecategoria,
                                                 IFNULL((
                                                     SELECT
                                                         IF(parametroruidosonometriacategorias.recsensorialcategoria_id, "checked", "") 
@@ -391,8 +391,8 @@ class parametroruidoController extends Controller
                                     equipo.equipo_Marca,
                                     equipo.equipo_Modelo,
                                     equipo.equipo_Serie,
-                                    equipo.equipo_VigenciaCalibracion,
-                                    equipo.equipo_CertificadoPDF 
+                                    equipo.equipo_VigenciaCalibracion
+                                    -- equipo.equipo_CertificadoPDF 
                                 FROM
                                     parametroruidoequipos
                                     LEFT JOIN proveedor ON parametroruidoequipos.proveedor_id = proveedor.id
