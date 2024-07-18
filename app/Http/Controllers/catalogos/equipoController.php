@@ -141,7 +141,7 @@ class equipoController extends Controller
                 }
 
                 // Botones
-                if (auth()->user()->hasRoles(['Superusuario', 'Administrador','Almacén']) && ($proveedor->proveedor_Bloqueado + 0) == 0) {
+                if (auth()->user()->hasRoles(['Superusuario', 'Administrador', 'Almacén']) && ($proveedor->proveedor_Bloqueado + 0) == 0) {
                     $value->accion_activa = 1;
                     $value->boton_editar = '<button type="button" class="btn btn-warning btn-circle"><i class="fa fa-pencil"></i></button>';
                 } else {
@@ -274,7 +274,7 @@ class equipoController extends Controller
                 }
 
                 // Botones
-                if (auth()->user()->hasRoles(['Superusuario', 'Administrador','Almacén']) && ($equipo->proveedor->proveedor_Bloqueado + 0) == 0) {
+                if (auth()->user()->hasRoles(['Superusuario', 'Administrador', 'Almacén']) && ($equipo->proveedor->proveedor_Bloqueado + 0) == 0) {
                     $value->accion_activa = 1;
                     $value->boton_editar = '<button type="button" class="btn btn-warning btn-circle"><i class="fa fa-pencil"></i></button>';
                     $value->boton_eliminar = '<button type="button" class="btn btn-danger btn-circle"><i class="fa fa-trash"></i></button>';
@@ -418,7 +418,7 @@ class equipoController extends Controller
                 try {
                     // Verificar si hay un archivo en la solicitud
                     if ($request->hasFile('excelEquipos')) {
-                        
+
                         // Obtenemos el Excel de los equipo
                         $excel = $request->file('excelEquipos');
 
@@ -636,7 +636,7 @@ class equipoController extends Controller
                                     'equipo_PesoNeto' => is_null($rowData['H']) ? null : floatval($rowData['H']),
                                     'unidad_medida' => $unidadMedida,
                                     'equipo_CostoAprox' => $costoEquipo,
-                                    'folio_factura' => is_null($rowData['K']) ? null : floatval($rowData['K']),
+                                    'folio_factura' => is_null($rowData['K']) ? null : $rowData['K'],
                                     'requiere_calibracion' => $requiereCalibracion,
                                     'equipo_TipoCalibracion' => is_null($rowData['M']) ? null : $rowData['M'],
                                     'equipo_FechaCalibracion' => $fechaCalibracion,
@@ -659,7 +659,7 @@ class equipoController extends Controller
                                     'equipo_PesoNeto' => is_null($rowData['H']) ? null : floatval($rowData['H']),
                                     'unidad_medida' => $unidadMedida,
                                     'equipo_CostoAprox' => $costoEquipo,
-                                    'folio_factura' => is_null($rowData['K']) ? null : floatval($rowData['K']),
+                                    'folio_factura' => is_null($rowData['K']) ? null : $rowData['K'],
                                     'requiere_calibracion' => $requiereCalibracion,
                                     'equipo_TipoCalibracion' => is_null($rowData['M']) ? null : $rowData['M'],
                                     'equipo_FechaCalibracion' => $fechaCalibracion,

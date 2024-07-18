@@ -687,7 +687,7 @@ class proyectoController extends Controller
                                             IF(con.id IS NULL,"SIN_CONVENIO" ,IF(con.clienteconvenio_vigencia < DATE(NOW()), "CON_CONVENIO_VENCIDO", "CON_CONVENIO_ACTIVO")) AS STATUS_CONVENIO
                                         FROM contratos_clientes as cc 
                                         LEFT JOIN contratos_convenios as con ON con.CONTRATO_ID = cc.ID_CONTRATO
-                                        AND ACTIVO = 1
+                                        WHERE ACTIVO = 1
                                         AND CONCLUIDO = 0
                                         ');
 

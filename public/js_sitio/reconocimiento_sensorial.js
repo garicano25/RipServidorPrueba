@@ -430,124 +430,97 @@ function menu_parametros_ocultar()
 
 //===============================================================
 
+var tabla_recsensorial = null;
 
-function tabla_reconocimientosensorial()
-{
-	try 
-	{
-		var ruta = "/tablarecsensorial";
+function tabla_reconocimientosensorial() {
+    try {
+        var ruta = "/tablarecsensorial";
 
-		if (tabla_recsensorial != null)
-		{
-			tabla_recsensorial.clear().draw();
-			tabla_recsensorial.ajax.url(ruta).load();
+        if (tabla_recsensorial != null) {
+            // Destruir la tabla existente antes de crear una nueva
+            tabla_recsensorial.destroy();
+            
+        }
 
-		}
-		else
-		{
-			var numeroejecucion = 1;
-			tabla_recsensorial = $('#tabla_reconocimiento_sensorial').DataTable({
-		        "ajax": {
-		            "url": ruta,
-		            "type": "get",
-		            "cache": false,
-		            error: function (xhr, error, code)
-		            {
-		                // console.log(xhr); console.log(code);
-						console.log('error en tabla_recsensorial');
-						if (numeroejecucion <= 1)
-						{
-							tabla_reconocimientosensorial();
-							numeroejecucion += 1;
-						}
-		            },
-		            "data": {}
-		        },
-		          createdRow: function (row, data, dataIndex) {
-                    if (data.autorizado == 0) {
-											$(row).css({
-							"background-color": "#FFFFCC", // Amarillo claro
-							"border": "1px solid #CCCC00", // Borde amarillo más oscuro
-							// Otros estilos opcionales
-							"opacity": "0.9" // Opacidad reducida
-						});
-                    }
+        tabla_recsensorial = $('#tabla_reconocimiento_sensorial').DataTable({
+            "ajax": {
+                "url": ruta,
+                "type": "get",
+                "cache": false,
+                "error": function (xhr, error, code) {
+                    console.log('error en tabla_recsensorial');
                 },
-		        "columns": [
-		            // {
-		            //     "data": "id" 
-		            // },
-		            {
-		                "data": "numero_registro",
-		                "defaultContent": "-" 
-		            },
-		            {
-		                "data": "alcance",
-		                "defaultContent": "-" 
-		            },
-		            {
-		                "data": "folios",
-		                "defaultContent": "-"
-		            },
-		            {
-		                "data": "cliente_contrato",
-		                "defaultContent": "-"
-		            },
-		            // {
-		            //     "data": "catregion.catregion_nombre",
-		            //     "defaultContent": "-"
-		            // },
-		            
-					{
-						"data": "proyecto_folio",
-						"defaultContent": "--"
-					},
-		            {
-		                "data": "recsensorial_instalacion"
-					},
-		            {
-		                "className": 'mostrar',
-		                "orderable": false,
-		                "data": 'boton_mostrar',
-		                "defaultContent": '-'
-		            }
-		        ],
-		        "lengthMenu": [[20, 50, 100, -1], [20, 50, 100, "Todos"]],
-		        // "rowsGroup": [0, 1], //agrupar filas
-		        "order": [[ 0, "DESC" ]],
-		        "ordering": true,
-		        "processing": true,
-		        'responsive': true,
-		        "language": {
-		            "lengthMenu": "Mostrar _MENU_ Registros",
-		            "zeroRecords": "No se encontraron registros",
-		            "info": "Página _PAGE_ de _PAGES_ (Total _MAX_ registros)",
-		            "infoEmpty": "No se encontraron registros",
-		            "infoFiltered": "(Filtrado de _MAX_ registros)",
-		            "emptyTable": "No hay datos disponibles en la tabla",
-		            "loadingRecords": "Cargando datos....",
-		            "processing": "Procesando <i class='fa fa-spin fa-spinner fa-3x'></i>",
-		            "search": "Buscar",
-		            "paginate": {
-		                "first": "Primera",
-		                "last": "Ultima",
-		                "next": "Siguiente",
-		                "previous": "Anterior"
-		            }
-		        }
-		    });
-		}
+                "data": {}
+            },
+            "createdRow": function (row, data, dataIndex) {
+                if (data.autorizado == 0) {
+                    $(row).css({
+                        "background-color": "#FFFFCC",
+                        "border": "1px solid #CCCC00",
+                        "opacity": "0.9"
+                    });
+                }
+            },
+            "columns": [
+                {
+                    "data": "numero_registro",
+                    "defaultContent": "-"
+                },
+                {
+                    "data": "alcance",
+                    "defaultContent": "-"
+                },
+                {
+                    "data": "folios",
+                    "defaultContent": "-"
+                },
+                {
+                    "data": "cliente_contrato",
+                    "defaultContent": "-"
+                },
+                {
+                    "data": "proyecto_folio",
+                    "defaultContent": "--"
+                },
+                {
+                    "data": "recsensorial_instalacion"
+                },
+                {
+                    "className": 'mostrar',
+                    "orderable": false,
+                    "data": 'boton_mostrar',
+                    "defaultContent": '-'
+                }
+            ],
+            "lengthMenu": [[20, 50, 100, -1], [20, 50, 100, "Todos"]],
+            "order": [[0, "DESC"]],
+            "ordering": true,
+            "processing": true,
+            "responsive": true,
+            "language": {
+                "lengthMenu": "Mostrar _MENU_ Registros",
+                "zeroRecords": "No se encontraron registros",
+                "info": "Página _PAGE_ de _PAGES_ (Total _MAX_ registros)",
+                "infoEmpty": "No se encontraron registros",
+                "infoFiltered": "(Filtrado de _MAX_ registros)",
+                "emptyTable": "No hay datos disponibles en la tabla",
+                "loadingRecords": "Cargando datos....",
+                "processing": "Procesando <i class='fa fa-spin fa-spinner fa-3x'></i>",
+                "search": "Buscar",
+                "paginate": {
+                    "first": "Primera",
+                    "last": "Última",
+                    "next": "Siguiente",
+                    "previous": "Anterior"
+                }
+            }
+        });
 
-		// Tooltip en DataTable
-        tabla_recsensorial.on( 'draw', function ()
-        {
+        tabla_recsensorial.on('draw', function () {
             $('[data-toggle="tooltip"]').tooltip();
         });
-	}
-	catch (exception)
-	{
-        // alert("error en el ajax");
-        tabla_reconocimientosensorial();
+    } catch (exception) {
+        console.error("Error en tabla_reconocimientosensorial:", exception);
     }
 }
 
@@ -10473,7 +10446,11 @@ $(document).ready(function() {
 		var ct = parentRow.find('.CT_CLIENTE');
 		var puntos = parentRow.find('.PUNTOS_CLIENTE')
 		
-		var total = ct.val() + ppt.val()
+
+		var val_ct = ct.val() || 0;
+		var val_ppt = ppt.val() || 0;
+
+		var total = parseInt(val_ct) + parseInt(val_ppt)
 
 		//Asignamos el valor de la suma de PPT y CT
 		puntos.val(total)

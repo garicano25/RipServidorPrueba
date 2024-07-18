@@ -294,7 +294,7 @@
                                                     <br>
                                                     <div class="datosProveedor">
                                                         <ol class="breadcrumb m-b-10">
-                                                            
+
                                                             <h2 style="color: #ffff; margin: 0;"><i class="fa fa-file-text"></i> Documentación </h2>
                                                             @if(auth()->user()->hasRoles(['Superusuario', 'Administrador','Compras']))
                                                             <button type="button" class="btn btn-secondary waves-effect waves-light   botonnuevo_moduloproveedores" data-toggle="tooltip" id="boton_nuevo_documento" style="margin-left: auto;">
@@ -982,7 +982,7 @@
                         </div>
                         <div class="col-sm-12">
                             <div class="form-group">
-                                <label>Método (s) *</label>
+                                <label>Método (s) </label>
                                 <input type="text" class="form-control" id="acreditacionAlcance_Metodo" name="Metodo" placeholder="Método 1, Método 2, Etc...">
                             </div>
                         </div>
@@ -1233,7 +1233,7 @@
                                                         <span class="btn-label"><i class="fa fa-plus"></i></span> Documento
                                                     </button>
                                                     @else
-                                                 <h2 style="color: #ffff; margin: 0;"> Documento </h2>
+                                                    <h2 style="color: #ffff; margin: 0;"> Documento </h2>
                                                     @endif
                                                 </ol><br>
                                                 <div class="table-responsive">
@@ -1459,7 +1459,7 @@
                                                         <span class="btn-label"><i class="fa fa-plus"></i></span> Documento
                                                     </button>
                                                     @else
-                                              <h2 style="color: #ffff; margin: 0;"> Documento </h2>
+                                                    <h2 style="color: #ffff; margin: 0;"> Documento </h2>
 
                                                     @endif
                                                 </ol><br>
@@ -1803,7 +1803,7 @@
             <form enctype="multipart/form-data" method="post" name="formExcelPersonal" id="formExcelPersonal">
                 <div class="modal-header">
                     <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
-                    <h4 class="modal-title">Carga de Personales por medio de un Excel</h4>
+                    <h4 class="modal-title">Carga de Personal por medio de un Excel</h4>
                 </div>
                 <div class="modal-body">
                     <div class="row">
@@ -1832,7 +1832,7 @@
                     <div class="row mt-3" id="divCargaPersonal" style="display: none;">
 
                         <div class="col-12 text-center">
-                            <h2>Cargando lista de personales espere un momento...</h2>
+                            <h2>Cargando lista de personal espere un momento...</h2>
                         </div>
                         <div class="col-12 text-center">
                             <i class='fa fa-spin fa-spinner fa-5x'></i>
@@ -1845,7 +1845,7 @@
 
                     @if(auth()->user()->hasRoles(['Superusuario', 'Administrador','Compras','Almacén']))
                     <button type="submit" class="btn btn-danger waves-effect waves-light" id="botonCargarExcelPersonal">
-                        Cargar personales <i class="fa fa-upload" aria-hidden="true"></i>
+                        Cargar personal <i class="fa fa-upload" aria-hidden="true"></i>
                     </button>
                     @endif
                 </div>
