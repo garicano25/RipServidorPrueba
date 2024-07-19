@@ -327,7 +327,7 @@
 						<div class="col-12">
 							<div class="form-group">
 								<label> Descripción * </label>
-								<textarea class="form-control" rows="5" id="DESCRIPCION" name="DESCRIPCION"></textarea>
+								<textarea class="form-control" rows="5" id="DESCRIPCION" name="DESCRIPCION" required></textarea>
 							</div>
 						</div>
 						<div class="col-12">

@@ -133,9 +133,6 @@
                     </ol>
                     @endif
                     <div class="table-responsive">
-                        {{-- <div class="row">
-                            <div class="col-12" id="tabla_reconocimiento_sensorial_campobuscar"></div>
-                        </div> --}}
                         <table class="table table-hover stylish-table" width="100%" id="tabla_reconocimiento_sensorial">
                             <thead>
                                 <tr>
@@ -143,9 +140,7 @@
                                     <th width="100">Alcance</th>
                                     <th width="130">Folios</th>
                                     <th width="110">Cliente / Contrato</th>
-                                    <!-- <th width="110">Región</th> -->
                                     <th>Folio Proyecto</th>
-                                    <!-- <th>Gerencia / Activo</th> -->
                                     <th>Instalación</th>
                                     <th width="70">Mostrar</th>
                                 </tr>
@@ -2995,7 +2990,7 @@
 
                         <div class="col-12">
                             <div class="form-group">
-                                <label> Descripción del área*</label>
+                                <label> Descripción del área</label>
                                 <select class="custom-select form-control" id="DESCRIPCION_AREA" name="DESCRIPCION_AREA">
                                     <option value=""></option>
                                     @foreach($descripciones as $dato)

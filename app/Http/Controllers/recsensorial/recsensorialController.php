@@ -1502,7 +1502,9 @@ class recsensorialController extends Controller
 
             $proyectos = DB::select(" SELECT 
                                     p.id, 
-                                    p.proyecto_folio
+                                    p.proyecto_folio,
+                                    p.proyecto_clienteinstalacion,
+                                    proyecto_clientedireccionservicio
                                 FROM 
                                     proyecto p
                                 LEFT JOIN 
@@ -1512,14 +1514,16 @@ class recsensorialController extends Controller
                                     AND sp.HI_RECONOCIMIENTO = 1
                                     AND (p.recsensorial_id IS NULL OR p.proyecto_folio = ?) ", [$proyecto_folio]);
 
-            foreach ($proyectos as $key => $value) {
-                if ($value->proyecto_folio == $proyecto_folio) {
+                        foreach ($proyectos as $key => $value) {
+                            $displayText = '[' . htmlspecialchars($value->proyecto_folio) . '] ' . htmlspecialchars($value->proyecto_clienteinstalacion);
 
-                    $opciones_select .= '<option value="' . $value->proyecto_folio . '"  selected>' . $value->proyecto_folio . '</option>';
-                } else {
+                            if ($value->proyecto_folio == $proyecto_folio) {
+                                $opciones_select .= '<option value="' . htmlspecialchars($value->proyecto_folio) . '" selected>' . $displayText . '</option>';
+                            } else {
+                                $opciones_select .= '<option value="' . htmlspecialchars($value->proyecto_folio) . '">' . $displayText . '</option>';
+                            }
 
-                    $opciones_select .= '<option value="' . $value->proyecto_folio . '"  >' . $value->proyecto_folio . ' </option>';
-                }
+
             }
 
             // // respuesta
