@@ -7645,27 +7645,31 @@ function funcion_tabla_quimicosresumen_1(recsensorial_id, numero_tabla)
 		            //     "defaultContent": "-"
 		            // },
 		            {
-		                "data": "area_nombre",
+		                "data": "AREA",
 		                "defaultContent": "-"
 		            },
 		            {
-		                "data": "sustancia_nombre",
+		                "data": "PRODUCTO",
+		                "defaultContent": "-"
+					},
+					{
+		                "data": "COMPONENTE",
 		                "defaultContent": "-"
 		            },
 		            {
-		                "data": "ponderacion_cantidad",
+		                "data": "PONDERACION_CANTIDAD",
 		                "defaultContent": "-"
 		            },
 		            {
-		                "data": "ponderacion_riesgo",
+		                "data": "PONDERACION_CLASIFICACION",
 		                "defaultContent": "-"
 		            },
 		            {
-		                "data": "ponderacion_volatilidad",
+		                "data": "PONDERACION_VOLATILIDAD",
 		                "defaultContent": "-"
 		            },
 		            {
-		                "data": "TOTAL",
+		                "data": "SUMA_PONDERACIONES",
 		                "defaultContent": "-"
 		            },
 		            {
@@ -7674,7 +7678,7 @@ function funcion_tabla_quimicosresumen_1(recsensorial_id, numero_tabla)
 		            }
 		        ],
 		        "order": [[ 2, "asc" ]],
-		        "rowsGroup": [0], //agrupar filas
+		        "rowsGroup": [0,1], //agrupar filas
 		        "lengthMenu": [[20, 50, 100, -1], [20, 50, 100, "Todos"]],
 		        "ordering": false,
 		        "processing": true,
@@ -7740,27 +7744,31 @@ function funcion_tabla_quimicosresumen_2(recsensorial_id, numero_tabla)
 		            //     "defaultContent": "-"
 		            // },
 		            {
-		                "data": "area_nombre",
+		                "data": "AREA",
 		                "defaultContent": "-"
 		            },
 		            {
-		                "data": "categoria_nombre",
+		                "data": "CATEGORIA",
 		                "defaultContent": "-"
 		            },
 		            {
-		                "data": "sustancia_nombre",
+		                "data": "PRODUCTO",
+		                "defaultContent": "-"
+					},
+					 {
+		                "data": "COMPONENTE",
 		                "defaultContent": "-"
 		            },
 		            {
-		                "data": "tot_ingresoorganismo",
+		                "data": "PONDERACION_VIAINGRESO",
 		                "defaultContent": "-"
 		            },
 		            {
-		                "data": "tot_personalexposicion",
+		                "data": "PONDERACION_POE",
 		                "defaultContent": "-"
 		            },
 		            {
-		                "data": "tot_tiempoexposicion",
+		                "data": "PONDERACION_EXPOSICION",
 		                "defaultContent": "-"
 		            },
 		            {
@@ -7839,31 +7847,31 @@ function funcion_tabla_quimicosresumen_3(recsensorial_id, numero_tabla)
 		            //     "defaultContent": "-"
 		            // },
 		            {
-		                "data": "area_nombre",
+		                "data": "AREA",
 		                "defaultContent": "-"
 		            },
 		            {
-		                "data": "categoria_nombre",
+		                "data": "CATEGORIA",
 		                "defaultContent": "-"
 		            },
 		            {
-		                "data": "sustancia_nombre",
+		                "data": "PRODUCTO_COMPONENTE",
 		                "defaultContent": "-"
 		            },
 		            {
-		                "data": "tot_trabajadores",
+		                "data": "NUM_TRABAJADORES",
 		                "defaultContent": "-"
 		            },
 		            {
-		                "data": "tiempo_expo",
+		                "data": "TIEMPO_EXPO",
 		                "defaultContent": "-"
 		            },
 		            {
-		                "data": "frecuencia_expo",
+		                "data": "FRECUENCIA_EXPO",
 		                "defaultContent": "-"
 		            },
 		            {
-		                "data": "suma_tiempoexposicion",
+		                "data": "TOTAL_EXPO",
 		                "defaultContent": "-"
 		            },
 		            {
@@ -7871,14 +7879,14 @@ function funcion_tabla_quimicosresumen_3(recsensorial_id, numero_tabla)
 		                "defaultContent": "-"
 		            },
 		            {
-		                "data": "PRIORIDAD2",
+		                "data": "PRIORIDAD",
 		                "defaultContent": "-"
 		            },
 		            {
-		                "data": "NUMERO_MUESTREOS",
+		                "data": "NUM_POE",
 		                "defaultContent": "-"
 		            }
-		        ],
+		        ], 
 		        "order": [[ 2, "asc" ]],
 		        "rowsGroup": [0, 1, 2], //agrupar filas
 		        "lengthMenu": [[20, 50, 100, -1], [20, 50, 100, "Todos"]],
@@ -7948,11 +7956,11 @@ function funcion_tabla_quimicosresumen_4(recsensorial_id, numero_tabla)
 		            //     "data": "id"
 		            // },
 		            {
-		                "data": "categoria_nombre",
+		                "data": "CATEGORIA",
 		                "defaultContent": "-"
 		            },
 		            {
-		                "data": "componente",
+		                "data": "PRODUCTO_COMPONENTE",
 		                "defaultContent": "-"
 		            },
 		            {

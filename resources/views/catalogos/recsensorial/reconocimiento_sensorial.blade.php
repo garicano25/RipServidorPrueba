@@ -1734,14 +1734,15 @@
                                                 <div class="multisteps-form__content-3">
                                                     <div class="row">
                                                         <div class="col-12">
-                                                            <ol class="breadcrumb m-b-10">Determinación de la prioridad de muestreo de las sustancias químicas.</ol>
+                                                            <ol class="breadcrumb m-b-10 text-light ">Determinación de la prioridad de muestreo de las sustancias químicas.</ol>
                                                             <div class="table-responsive">
                                                                 <table class="table table-bordered" width="100%" id="tabla_quimicosresumen_1">
                                                                     <thead>
                                                                         <tr>
                                                                             {{-- <th style="width: 80px!important;">No</th> --}}
                                                                             <th>Área</th>
-                                                                            <th>Sustancia<br>química</th>
+                                                                            <th>Sustancia química y/o<br>producto</th>
+                                                                            <th>Componentes de la<br>mezcla</th>
                                                                             <th style="width: 160px!important;">Ponderación<br>Cantidad manejada</th>
                                                                             <th style="width: 170px!important;">Ponderación<br>Clasificación de riesgo</th>
                                                                             <th style="width: 160px!important;">Ponderación<br>Volatilidad sustancia</th>
@@ -1765,15 +1766,16 @@
                                                 <div class="multisteps-form__content-3">
                                                     <div class="row">
                                                         <div class="col-12">
-                                                            <ol class="breadcrumb m-b-10">Determinación de los grupos de exposición homogénea.</ol>
+                                                            <ol class="breadcrumb m-b-10 text-light">Determinación de los grupos de exposición homogénea.</ol>
                                                             <div class="table-responsive">
                                                                 <table class="table table-bordered" width="100%" id="tabla_quimicosresumen_2">
                                                                     <thead>
                                                                         <tr>
                                                                             {{-- <th style="width: 80px!important;">No</th> --}}
-                                                                            <th>Área</th>
+                                                                            <th>Área/Zona</th>
                                                                             <th>Grupo de expo. homogénea</th>
-                                                                            <th>Sustancia</th>
+                                                                            <th>Sustancia química y/o<br>producto</th>
+                                                                            <th>Componentes de la<br>mezcla</th>
                                                                             <th style="width: 130px!important;">Vía de ingreso<br>al organismo</th>
                                                                             <th style="width: 130px!important;">Numero de<br>POE expuesto</th>
                                                                             <th style="width: 130px!important;">Tiempo de<br>Exposición</th>
@@ -1797,7 +1799,7 @@
                                                 <div class="multisteps-form__content-3">
                                                     <div class="row">
                                                         <div class="col-12">
-                                                            <ol class="breadcrumb m-b-10">Grupos de exposición homogénea.</ol>
+                                                            <ol class="breadcrumb m-b-10 text-light">Grupos de exposición homogénea.</ol>
                                                             <div class="table-responsive">
                                                                 <table class="table table-bordered" width="100%" id="tabla_quimicosresumen_3">
                                                                     <thead>
@@ -1832,7 +1834,7 @@
                                                 <div class="multisteps-form__content-3">
                                                     <div class="row">
                                                         <div class="col-12">
-                                                            <ol class="breadcrumb m-b-10">Personal ocupacionalmente expuesto a considerar para el muestreo.</ol>
+                                                            <ol class="breadcrumb m-b-10 text-light">Personal ocupacionalmente expuesto a considerar para el muestreo.</ol>
                                                             <div class="table-responsive">
                                                                 <style type="text/css">
                                                                     #tabla_quimicosresumen_4 th {
@@ -1846,7 +1848,9 @@
                                                                     <thead>
                                                                         <tr>
                                                                             <th rowspan="2" style="vertical-align: middle!important;">Grupo de expo. homogénea</th>
-                                                                            <th width="250" rowspan="2" style="vertical-align: middle!important;">Agente químico</th>
+                                                                            <th width="250" rowspan="2" style="vertical-align: middle!important;">Componente de la mezcla <br> (Sustancia química
+                                                                                y/o producto)
+                                                                            </th>
                                                                             <th width="360" colspan="2">Número de puntos por POE / punto a considerar</th>
                                                                             <th width="180" rowspan="2" style="vertical-align: middle!important;">Total muestras</th>
                                                                         </tr>
@@ -2499,7 +2503,7 @@
                                                 <div class="col-12">
                                                     <div class="form-group">
                                                         <label> Nivel 1 </label>
-                                                        <select class="custom-select form-control" style="width: 50%;" id="NIVEL1" name="NIVEL1" >
+                                                        <select class="custom-select form-control" style="width: 50%;" id="NIVEL1" name="NIVEL1">
 
                                                         </select>
                                                     </div>
@@ -2508,7 +2512,7 @@
                                                 <div class="col-12">
                                                     <div class="form-group">
                                                         <label> Nivel 2 </label>
-                                                        <select class="custom-select form-control" style="width: 50%;" id="NIVEL2" name="NIVEL2" >
+                                                        <select class="custom-select form-control" style="width: 50%;" id="NIVEL2" name="NIVEL2">
 
                                                         </select>
                                                     </div>
@@ -2517,7 +2521,7 @@
                                                 <div class="col-12">
                                                     <div class="form-group">
                                                         <label> Nivel 3 </label>
-                                                        <select class="custom-select form-control" style="width: 50%;" id="NIVEL3" name="NIVEL3" >
+                                                        <select class="custom-select form-control" style="width: 50%;" id="NIVEL3" name="NIVEL3">
 
                                                         </select>
                                                     </div>
@@ -2526,7 +2530,7 @@
                                                 <div class="col-12">
                                                     <div class="form-group">
                                                         <label> Nivel 4 </label>
-                                                        <select class="custom-select form-control" style="width: 50%;" id="NIVEL4" name="NIVEL4" >
+                                                        <select class="custom-select form-control" style="width: 50%;" id="NIVEL4" name="NIVEL4">
 
                                                         </select>
                                                     </div>
@@ -2535,7 +2539,7 @@
                                                 <div class="col-12">
                                                     <div class="form-group">
                                                         <label> Nivel 5 </label>
-                                                        <select class="custom-select form-control" style="width: 50%;" id="NIVEL5" name="NIVEL5" >
+                                                        <select class="custom-select form-control" style="width: 50%;" id="NIVEL5" name="NIVEL5">
 
                                                         </select>
                                                     </div>
