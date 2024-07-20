@@ -1,4 +1,3 @@
-
 <!-- Popup CSS -->
 <link href="/assets/plugins/Magnific-Popup-master/dist/magnific-popup.css" rel="stylesheet">
 
@@ -7,24 +6,23 @@
 <div class="tab-pane active" role="tabpanel" id="tab_parametro_1">
 
     @if(auth()->user()->hasRoles(['Superusuario', 'Administrador', 'Coordinador','Operativo HI']) && ($recsensorial->recsensorial_bloqueado + 0) == 0 && ($recsensorial->recsensorial_fisicosimprimirbloqueado + 0) == 0)
-        <ol class="breadcrumb m-b-10">
-            <button type="button" class="btn btn-secondary waves-effect waves-light" data-toggle="tooltip" title="Nueva evidencia <br> fotográfica / Plano" data-html="true" id="boton_nueva_fotoevidencia">
-                <span class="btn-label"><i class="fa fa-plus"></i></span>Evidencia fotográfica / Plano
-            </button>
-        </ol>
+    <ol class="breadcrumb m-b-10">
+        <button type="button" class="btn btn-secondary waves-effect waves-light" data-toggle="tooltip" title="Nueva evidencia <br> fotográfica / Plano" data-html="true" id="boton_nueva_fotoevidencia">
+            <span class="btn-label"><i class="fa fa-plus"></i></span>Evidencia fotográfica / Plano
+        </button>
+    </ol>
     @else
-        <ol class="breadcrumb m-b-10">
-            Evidencia fotográfica / Planos
-        </ol>
+    <ol class="breadcrumb m-b-10">
+        Evidencia fotográfica / Planos
+    </ol>
     @endif
     <div class="row">
         <div class="col-12">
             <div class="card">
                 <div class="card-body cardbody_galeria">
                     <style type="text/css">
-                        #image-popups .foto_galeria:hover i
-                        {
-                            opacity: 1!important;
+                        #image-popups .foto_galeria:hover i {
+                            opacity: 1 !important;
                             cursor: pointer;
                         }
                     </style>
@@ -44,15 +42,15 @@
     </div>
 
     @if(auth()->user()->hasRoles(['Superusuario', 'Administrador', 'Coordinador','Operativo HI']) && ($recsensorial->recsensorial_bloqueado + 0) == 0 && ($recsensorial->recsensorial_fisicosimprimirbloqueado + 0) == 0)
-        <ol class="breadcrumb m-b-10">
-            <button type="button" class="btn btn-secondary waves-effect waves-light" data-toggle="tooltip" title="Nuevo Equipo utilizado en la medición" data-html="true" id="boton_nuevo_equiporuido">
-                <span class="btn-label"><i class="fa fa-plus"></i></span>Equipo utilizado
-            </button>
-        </ol>
+    <ol class="breadcrumb m-b-10">
+        <button type="button" class="btn btn-secondary waves-effect waves-light" data-toggle="tooltip" title="Nuevo Equipo utilizado en la medición" data-html="true" id="boton_nuevo_equiporuido">
+            <span class="btn-label"><i class="fa fa-plus"></i></span>Equipo utilizado
+        </button>
+    </ol>
     @else
-        <ol class="breadcrumb m-b-10">
-            Equipos utilizados para la medición
-        </ol>
+    <ol class="breadcrumb m-b-10">
+        Equipos utilizados para la medición
+    </ol>
     @endif
     <div class="row">
         <div class="col-12">
@@ -70,7 +68,6 @@
                                         <th>Modelo</th>
                                         <th>Serie</th>
                                         <th width="120">Vigencia</th>
-                                        <th width="60">Certificado</th>
                                         <th width="50">Eliminar</th>
                                     </tr>
                                 </thead>
@@ -89,11 +86,11 @@
 
     <ol class="breadcrumb m-b-10">
         @if(auth()->user()->hasRoles(['Superusuario', 'Administrador', 'Coordinador','Operativo HI']) && ($recsensorial->recsensorial_bloqueado + 0) == 0 && ($recsensorial->recsensorial_fisicosimprimirbloqueado + 0) == 0)
-            <button type="button" class="btn btn-secondary waves-effect waves-light" data-toggle="tooltip" title="Nuevo registro" id="boton_nueva_sonometria">
-                <span class="btn-label"><i class="fa fa-plus"></i></span>Sonometría
-            </button>
+        <button type="button" class="btn btn-secondary waves-effect waves-light" data-toggle="tooltip" title="Nuevo registro" id="boton_nueva_sonometria">
+            <span class="btn-label"><i class="fa fa-plus"></i></span>Sonometría
+        </button>
         @else
-            SONOMETRÍAS
+        SONOMETRÍAS
         @endif
     </ol>
     <table class="table table-hover stylish-table" width="100%" id="tabla_parametroruidosonometria">
@@ -117,11 +114,11 @@
     </table><br><br><br>
     <ol class="breadcrumb m-b-10">
         @if(auth()->user()->hasRoles(['Superusuario', 'Administrador', 'Coordinador','Operativo HI']) && ($recsensorial->recsensorial_bloqueado + 0) == 0 && ($recsensorial->recsensorial_fisicosimprimirbloqueado + 0) == 0)
-            <button type="button" class="btn btn-secondary waves-effect waves-light" data-toggle="tooltip" title="Nuevo registro" id="boton_nueva_dosimetria">
-                <span class="btn-label"><i class="fa fa-plus"></i></span>Dosimetría
-            </button>
+        <button type="button" class="btn btn-secondary waves-effect waves-light" data-toggle="tooltip" title="Nuevo registro" id="boton_nueva_dosimetria">
+            <span class="btn-label"><i class="fa fa-plus"></i></span>Dosimetría
+        </button>
         @else
-            DOSIMETRÍAS
+        DOSIMETRÍAS
         @endif
     </ol>
     <table class="table table-hover stylish-table" width="100%" id="tabla_parametroruidodosimetria">
@@ -186,9 +183,8 @@
 
                         <div class="col-12">
                             <style type="text/css">
-                                #tabla_sonometria_mediciones label
-                                {
-                                    font-size: 16px!important;
+                                #tabla_sonometria_mediciones label {
+                                    font-size: 16px !important;
                                 }
                             </style>
                             <table border="0" cellspacing="0" cellpadding="12" width="100%" id="tabla_sonometria_mediciones">
@@ -276,10 +272,10 @@
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-default waves-effect" data-dismiss="modal">Cerrar</button>
-                    @if(auth()->user()->hasRoles(['Superusuario', 'Administrador', 'Coordinador','Operativo HI'])  && ($recsensorial->recsensorial_bloqueado + 0) == 0)
-                        <button type="submit" class="btn btn-danger waves-effect waves-light" id="boton_guardar_parametro_1">
-                            Guardar <i class="fa fa-save"></i>
-                        </button>
+                    @if(auth()->user()->hasRoles(['Superusuario', 'Administrador', 'Coordinador','Operativo HI']) && ($recsensorial->recsensorial_bloqueado + 0) == 0)
+                    <button type="submit" class="btn btn-danger waves-effect waves-light" id="boton_guardar_parametro_1">
+                        Guardar <i class="fa fa-save"></i>
+                    </button>
                     @endif
                 </div>
             </form>
@@ -321,10 +317,10 @@
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-default waves-effect" data-dismiss="modal">Cerrar</button>
-                    @if(auth()->user()->hasRoles(['Superusuario', 'Administrador', 'Coordinador','Operativo HI'])  && ($recsensorial->recsensorial_bloqueado + 0) == 0)
-                        <button type="submit" class="btn btn-danger waves-effect waves-light" id="boton_guardar_parametro_2">
-                            Guardar <i class="fa fa-save"></i>
-                        </button>
+                    @if(auth()->user()->hasRoles(['Superusuario', 'Administrador', 'Coordinador','Operativo HI']) && ($recsensorial->recsensorial_bloqueado + 0) == 0)
+                    <button type="submit" class="btn btn-danger waves-effect waves-light" id="boton_guardar_parametro_2">
+                        Guardar <i class="fa fa-save"></i>
+                    </button>
                     @endif
                 </div>
             </form>
@@ -339,15 +335,15 @@
 <!-- ============================================================== -->
 <!-- MODAL-EVIDENCIA-FOTOS -->
 <!-- ============================================================== -->
-<style type="text/css" media="screen">    
-    #modal_evidencia_fotos .modal-body .form-group{
-        margin: 0px 0px 12px 0px!important;
-        padding: 0px!important;
+<style type="text/css" media="screen">
+    #modal_evidencia_fotos .modal-body .form-group {
+        margin: 0px 0px 12px 0px !important;
+        padding: 0px !important;
     }
 
-    #modal_evidencia_fotos .modal-body .form-group label{
-        margin: 0px!important;
-        padding: 0px 0px 3px 0px!important;
+    #modal_evidencia_fotos .modal-body .form-group label {
+        margin: 0px !important;
+        padding: 0px 0px 3px 0px !important;
     }
 </style>
 <div id="modal_evidencia_fotos" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" style="display: none;">
@@ -370,7 +366,8 @@
                                 <label> Foto evidencia / Plano *</label>
                                 <style type="text/css" media="screen">
                                     .dropify-wrapper {
-                                        height: 292px!important; /*tamaño estatico del campo foto*/
+                                        height: 292px !important;
+                                        /*tamaño estatico del campo foto*/
                                     }
                                 </style>
                                 <input type="file" class="dropify" accept="image/jpeg,image/x-png" id="inputevidenciafoto" name="inputevidenciafoto" data-allowed-file-extensions="jpg png JPG PNG" data-height="296" data-default-file="" onchange="redimencionar_fotoevidencia();" required>
@@ -394,7 +391,7 @@
                                         <select class="custom-select form-control" id="recsensorialevidencias_recsensorialarea_id" name="recsensorialarea_id" onchange="descripcion_foto()" required>
                                             <option value=""></option>
                                             @foreach($recsensorialareas as $dato)
-                                                <option value="{{$dato->id}}">{{$dato->recsensorialarea_nombre}}</option>
+                                            <option value="{{$dato->id}}">{{$dato->recsensorialarea_nombre}}</option>
                                             @endforeach
                                         </select>
                                     </div>
@@ -402,7 +399,7 @@
                                 <div class="col-12">
                                     <div class="form-group">
                                         <label>Descripción de la (foto / plano) en el reporte</label>
-                                        <textarea  class="form-control" rows="6" id="recsensorialevidencias_descripcion" name="recsensorialevidencias_descripcion" required></textarea>
+                                        <textarea class="form-control" rows="6" id="recsensorialevidencias_descripcion" name="recsensorialevidencias_descripcion" required></textarea>
                                     </div>
                                 </div>
                             </div>
@@ -416,10 +413,10 @@
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-default waves-effect" data-dismiss="modal">Cerrar</button>
-                    @if(auth()->user()->hasRoles(['Superusuario', 'Administrador', 'Coordinador','Operativo HI'])  && ($recsensorial->recsensorial_bloqueado + 0) == 0)
-                        <button type="submit" class="btn btn-danger" id="boton_guardar_evidencia_fotos">
-                            Guardar <i class="fa fa-save"></i>
-                        </button>
+                    @if(auth()->user()->hasRoles(['Superusuario', 'Administrador', 'Coordinador','Operativo HI']) && ($recsensorial->recsensorial_bloqueado + 0) == 0)
+                    <button type="submit" class="btn btn-danger" id="boton_guardar_evidencia_fotos">
+                        Guardar <i class="fa fa-save"></i>
+                    </button>
                     @endif
                 </div>
             </div>
@@ -434,15 +431,15 @@
 <!-- ============================================================== -->
 <!-- MODAL-EQUIPO-MEDICION -->
 <!-- ============================================================== -->
-<style type="text/css" media="screen">    
-    #modal_equiporuido .modal-body .form-group{
-        margin: 0px 0px 12px 0px!important;
-        padding: 0px!important;
+<style type="text/css" media="screen">
+    #modal_equiporuido .modal-body .form-group {
+        margin: 0px 0px 12px 0px !important;
+        padding: 0px !important;
     }
 
-    #modal_equiporuido .modal-body .form-group label{
-        margin: 0px!important;
-        padding: 0px 0px 3px 0px!important;
+    #modal_equiporuido .modal-body .form-group label {
+        margin: 0px !important;
+        padding: 0px 0px 3px 0px !important;
     }
 </style>
 <div id="modal_equiporuido" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" style="display: none;">
@@ -466,7 +463,7 @@
                                 <select class="custom-select form-control" id="equiporuidoproveedor_id" name="proveedor_id" onchange="filtra_equipos(this.value)" required>
                                     <option value=""></option>
                                     @foreach($proveedores as $proveedor)
-                                        <option value="{{$proveedor->id}}">{{$proveedor->proveedor_RazonSocial}}</option>
+                                    <option value="{{$proveedor->id}}">{{$proveedor->proveedor_RazonSocial}}</option>
                                     @endforeach
                                 </select>
                             </div>
@@ -477,7 +474,7 @@
                                 <select class="custom-select form-control" id="equiporuidoequipo_id" name="equipo_id" required>
                                     <option value=""></option>
                                     {{-- @foreach($equipos as $equipo)
-                                        <option value="{{$equipo->id}}">{{$equipo->equipo_Descripcion}}, {{$equipo->equipo_VigenciaCalibracion}}, {{  date('Y-m-d') }}</option>
+                                        <option value="{{$equipo->id}}">{{$equipo->equipo_Descripcion}}, {{$equipo->equipo_VigenciaCalibracion}}, {{ date('Y-m-d') }}</option>
                                     @endforeach --}}
                                 </select>
                             </div>
@@ -486,10 +483,10 @@
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-default waves-effect" data-dismiss="modal">Cerrar</button>
-                    @if(auth()->user()->hasRoles(['Superusuario', 'Administrador', 'Coordinador','Operativo HI'])  && ($recsensorial->recsensorial_bloqueado + 0) == 0)
-                        <button type="submit" class="btn btn-danger" id="boton_guardar_equiporuido">
-                            Guardar <i class="fa fa-save"></i>
-                        </button>
+                    @if(auth()->user()->hasRoles(['Superusuario', 'Administrador', 'Coordinador','Operativo HI']) && ($recsensorial->recsensorial_bloqueado + 0) == 0)
+                    <button type="submit" class="btn btn-danger" id="boton_guardar_equiporuido">
+                        Guardar <i class="fa fa-save"></i>
+                    </button>
                     @endif
                 </div>
             </div>
@@ -506,14 +503,17 @@
 <!-- ============================================================== -->
 <script type="text/javascript" charset="utf-8" async defer>
     // Variables
-    var recsensorial_id = ({{$recsensorial_id}}+0);
+    var recsensorial_id = ({
+        {
+            $recsensorial_id
+        }
+    } + 0);
     var tabla_parametroruidosonometria = null;
     var tabla_parametroruidodosimetria = null;
 
 
     // Load pagina
-    $(document).ready(function()
-    {
+    $(document).ready(function() {
         funcion_tabla_parametroruidosonometria(recsensorial_id);
         funcion_tabla_parametroruidodosimetria(recsensorial_id);
         // consulta_select_areas(recsensorial_id, 0);
@@ -522,104 +522,93 @@
     });
 
 
-    function consulta_select_areas(recsensorial_id, seleccionado_id)
-    {
+    function consulta_select_areas(recsensorial_id, seleccionado_id) {
         $.ajax({
             type: "GET",
             dataType: "json",
-            url: "/recsensorialconsultaareas/"+recsensorial_id+"/"+seleccionado_id,
-            data:{},
+            url: "/recsensorialconsultaareas/" + recsensorial_id + "/" + seleccionado_id,
+            data: {},
             cache: false,
-            success:function(dato){
+            success: function(dato) {
                 $("#select_area").html(dato.opciones);
             },
-            error: function(dato){
+            error: function(dato) {
                 // alert('Error: '+dato.msj);
                 return false;
             }
-        });//Fin ajax
+        }); //Fin ajax
     }
 
 
-    function consulta_select_categorias(recsensorial_id, seleccionado_id)
-    {
+    function consulta_select_categorias(recsensorial_id, seleccionado_id) {
         // alert('mensaje '+seleccionado_id);
         $.ajax({
             type: "GET",
             dataType: "json",
-            url: "/recsensorialconsultaselectcategorias/"+recsensorial_id+"/"+seleccionado_id,
-            data:{},
+            url: "/recsensorialconsultaselectcategorias/" + recsensorial_id + "/" + seleccionado_id,
+            data: {},
             cache: false,
-            success:function(dato){
+            success: function(dato) {
                 $("#select_categoria").html(dato.opciones);
                 $("#select_categoria_2").html(dato.opciones);
             },
-            error: function(dato){
+            error: function(dato) {
                 // alert('Error: '+dato.msj);
                 return false;
             }
-        });//Fin ajax
+        }); //Fin ajax
     }
 
 
-    function consultalista_categoriasxarea(recsensorialarea_id)
-    {
-        if (recsensorialarea_id)
-        {
+    function consultalista_categoriasxarea(recsensorialarea_id) {
+        if (recsensorialarea_id) {
             $.ajax({
                 type: "GET",
                 dataType: "json",
-                url: "/recsensoriallistacategoriasxarea/"+recsensorialarea_id,
-                data:{},
+                url: "/recsensoriallistacategoriasxarea/" + recsensorialarea_id,
+                data: {},
                 cache: false,
-                success:function(dato)
-                {
+                success: function(dato) {
                     $('#chekbox_categorias').html('');
-                    $.each( dato.categorias, function( key, value ) {
-                        $("#chekbox_categorias").append('<div class="col-12">'+
-                                                            '<div class="form-group">'+
-                                                                '<div class="switch" style="float: left;">'+
-                                                                    '<label>'+
-                                                                        '<input type="checkbox" name="categoria[]" value="'+value.recsensorialcategoria_id+'" '+value.checked+'>'+
-                                                                        '<span class="lever switch-col-light-blue"></span>'+
-                                                                    '</label>'+
-                                                                '</div>'+
-                                                                '<label class="demo-switch-title" style="float: left;">'+value.recsensorialcategoria_nombrecategoria+'</label>'+
-                                                            '</div>'+
-                                                        '</div>');
+                    $.each(dato.categorias, function(key, value) {
+                        $("#chekbox_categorias").append('<div class="col-12">' +
+                            '<div class="form-group">' +
+                            '<div class="switch" style="float: left;">' +
+                            '<label>' +
+                            '<input type="checkbox" name="categoria[]" value="' + value.recsensorialcategoria_id + '" ' + value.checked + '>' +
+                            '<span class="lever switch-col-light-blue"></span>' +
+                            '</label>' +
+                            '</div>' +
+                            '<label class="demo-switch-title" style="float: left;">' + value.recsensorialcategoria_nombrecategoria + '</label>' +
+                            '</div>' +
+                            '</div>');
                     });
                 },
-                beforeSend: function()
-                {
+                beforeSend: function() {
                     $('#chekbox_categorias').html('<i class="fa fa-spin fa-spinner fa-3x" style="margin: 0px auto;"></i>');
                 },
-                error: function(dato){
+                error: function(dato) {
                     $('#chekbox_categorias').html('');
                     return false;
                 }
-            });//Fin ajax
-        }
-        else
-        {
+            }); //Fin ajax
+        } else {
             $('#chekbox_categorias').html('');
         }
     }
 
 
-    function funcion_tabla_parametroruidosonometria(recsensorial_id)
-    {
+    function funcion_tabla_parametroruidosonometria(recsensorial_id) {
         var numeroejecucion = 1;
         tabla_parametroruidosonometria = $('#tabla_parametroruidosonometria').DataTable({
             "ajax": {
-                "url": "/parametroruidosonometriatabla/"+recsensorial_id,
+                "url": "/parametroruidosonometriatabla/" + recsensorial_id,
                 "type": "get",
                 "cache": false,
-                error: function (xhr, error, code)
-                {
-                    console.log('error en tabla_parametroruidosonometria '+code);
-                    if (numeroejecucion <= 1)
-                    {
-                        tabla_parametroruidosonometria.ajax.url("/parametroruidosonometriatabla/"+recsensorial_id).load();
+                error: function(xhr, error, code) {
+                    console.log('error en tabla_parametroruidosonometria ' + code);
+                    if (numeroejecucion <= 1) {
+                        tabla_parametroruidosonometria.ajax.url("/parametroruidosonometriatabla/" + recsensorial_id).load();
                         numeroejecucion += 1;
                     }
                 },
@@ -667,9 +656,14 @@
                 }
 
             ],
-            lengthMenu: [[10, 25, 50, 100, -1], [10, 25, 50, 100, "Todos"]],
+            lengthMenu: [
+                [10, 25, 50, 100, -1],
+                [10, 25, 50, 100, "Todos"]
+            ],
             // rowsGroup: [1, 2, 3], //agrupar filas
-            order: [[ 0, "DESC" ]],
+            order: [
+                [0, "DESC"]
+            ],
             ordering: true,
             processing: true,
             searching: true,
@@ -696,12 +690,10 @@
     }
 
 
-    function nsa10mediciones_estado(estado)
-    {
+    function nsa10mediciones_estado(estado) {
         var disabled = true;
         var required = false;
-        if (estado.checked || parseInt(estado) == 1)
-        {
+        if (estado.checked || parseInt(estado) == 1) {
             disabled = false; // QUITAR DISABLE
             required = true; // REQUERIDO
 
@@ -721,25 +713,53 @@
         $("#parametroruidosonometria_med9").val('');
         $("#parametroruidosonometria_med10").val('');
 
-        $("#parametroruidosonometria_med1").attr({'disabled': disabled, 'required': required});
-        $("#parametroruidosonometria_med2").attr({'disabled': disabled, 'required': required});
-        $("#parametroruidosonometria_med3").attr({'disabled': disabled, 'required': required});
-        $("#parametroruidosonometria_med4").attr({'disabled': disabled, 'required': required});
-        $("#parametroruidosonometria_med5").attr({'disabled': disabled, 'required': required});
-        $("#parametroruidosonometria_med6").attr({'disabled': disabled, 'required': required});
-        $("#parametroruidosonometria_med7").attr({'disabled': disabled, 'required': required});
-        $("#parametroruidosonometria_med8").attr({'disabled': disabled, 'required': required});
-        $("#parametroruidosonometria_med9").attr({'disabled': disabled, 'required': required});
-        $("#parametroruidosonometria_med10").attr({'disabled': disabled, 'required': required});
+        $("#parametroruidosonometria_med1").attr({
+            'disabled': disabled,
+            'required': required
+        });
+        $("#parametroruidosonometria_med2").attr({
+            'disabled': disabled,
+            'required': required
+        });
+        $("#parametroruidosonometria_med3").attr({
+            'disabled': disabled,
+            'required': required
+        });
+        $("#parametroruidosonometria_med4").attr({
+            'disabled': disabled,
+            'required': required
+        });
+        $("#parametroruidosonometria_med5").attr({
+            'disabled': disabled,
+            'required': required
+        });
+        $("#parametroruidosonometria_med6").attr({
+            'disabled': disabled,
+            'required': required
+        });
+        $("#parametroruidosonometria_med7").attr({
+            'disabled': disabled,
+            'required': required
+        });
+        $("#parametroruidosonometria_med8").attr({
+            'disabled': disabled,
+            'required': required
+        });
+        $("#parametroruidosonometria_med9").attr({
+            'disabled': disabled,
+            'required': required
+        });
+        $("#parametroruidosonometria_med10").attr({
+            'disabled': disabled,
+            'required': required
+        });
     }
 
 
-    function nsa2mediciones_estado(estado)
-    {
+    function nsa2mediciones_estado(estado) {
         var disabled = true;
         var required = false;
-        if (estado.checked || parseInt(estado) == 1)
-        {
+        if (estado.checked || parseInt(estado) == 1) {
             disabled = false; // QUITAR DISABLE
             required = true; // REQUERIDO
 
@@ -751,18 +771,23 @@
         $("#parametroruidosonometria_medmax").val('');
         $("#parametroruidosonometria_medmin").val('');
 
-        $("#parametroruidosonometria_medmax").attr({'disabled': disabled, 'required': required});
-        $("#parametroruidosonometria_medmin").attr({'disabled': disabled, 'required': required});
+        $("#parametroruidosonometria_medmax").attr({
+            'disabled': disabled,
+            'required': required
+        });
+        $("#parametroruidosonometria_medmin").attr({
+            'disabled': disabled,
+            'required': required
+        });
     }
 
 
-    $("#boton_nueva_sonometria").click(function()
-    {
+    $("#boton_nueva_sonometria").click(function() {
         $('#chekbox_categorias').html('');
         consulta_select_areas(recsensorial_id, 0);
 
         // Borrar formulario
-        $('#form_parametro_1').each(function(){
+        $('#form_parametro_1').each(function() {
             this.reset();
         });
 
@@ -777,41 +802,34 @@
         $("#sonometria_recsensorial_id").val(recsensorial_id);
 
         // mostrar modal
-        $('#modal_sonometria').modal({backdrop:false});
+        $('#modal_sonometria').modal({
+            backdrop: false
+        });
     });
 
 
     // Selecciona REGISTRO
-    $(document).ready(function()
-    {
-        $('#tabla_parametroruidosonometria tbody').on('click', 'td.editar', function() 
-        {
+    $(document).ready(function() {
+        $('#tabla_parametroruidosonometria tbody').on('click', 'td.editar', function() {
             var tr = $(this).closest('tr');
             var row = tabla_parametroruidosonometria.row(tr);
 
-            if (parseInt(row.data().accion_activa) > 0)
-            {
+            if (parseInt(row.data().accion_activa) > 0) {
                 $('#chekbox_categorias').html('');
 
                 // Borrar formulario
-                $('#form_parametro_1').each(function(){
+                $('#form_parametro_1').each(function() {
                     this.reset();
-                });                
+                });
 
 
-                if (row.data().parametroruidosonometria_med1 != null || row.data().parametroruidosonometria_medmax != null)
-                {
-                    if (row.data().parametroruidosonometria_med1)
-                    {
+                if (row.data().parametroruidosonometria_med1 != null || row.data().parametroruidosonometria_medmax != null) {
+                    if (row.data().parametroruidosonometria_med1) {
                         nsa10mediciones_estado(1);
-                    }
-                    else
-                    {
+                    } else {
                         nsa2mediciones_estado(1);
                     }
-                }
-                else
-                {
+                } else {
                     nsa10mediciones_estado(0);
                     nsa2mediciones_estado(0);
                 }
@@ -820,8 +838,8 @@
                 // LLENAR CAMPOS
                 $("#sonometria_registro_id").val(row.data().id);
                 $("#sonometria_recsensorial_id").val(row.data().recsensorial_id);
-                $("#parametroruidosonometria_puntos").val(row.data().parametroruidosonometria_puntos); 
-                
+                $("#parametroruidosonometria_puntos").val(row.data().parametroruidosonometria_puntos);
+
                 $("#parametroruidosonometria_med1").val(row.data().parametroruidosonometria_med1);
                 $("#parametroruidosonometria_med2").val(row.data().parametroruidosonometria_med2);
                 $("#parametroruidosonometria_med3").val(row.data().parametroruidosonometria_med3);
@@ -833,8 +851,8 @@
                 $("#parametroruidosonometria_med9").val(row.data().parametroruidosonometria_med9);
                 $("#parametroruidosonometria_med10").val(row.data().parametroruidosonometria_med10);
 
-                $("#parametroruidosonometria_medmax").val(row.data().parametroruidosonometria_medmax); 
-                $("#parametroruidosonometria_medmin").val(row.data().parametroruidosonometria_medmin); 
+                $("#parametroruidosonometria_medmax").val(row.data().parametroruidosonometria_medmax);
+                $("#parametroruidosonometria_medmin").val(row.data().parametroruidosonometria_medmin);
 
 
                 // llenar campos
@@ -842,30 +860,29 @@
                 consultalista_categoriasxarea(row.data().recsensorialarea_id);
 
                 // mostrar modal
-                $('#modal_sonometria').modal({backdrop:false});
+                $('#modal_sonometria').modal({
+                    backdrop: false
+                });
             }
         });
     });
 
 
     // GUARDAR SONOMETRIA
-    $("#boton_guardar_parametro_1").click(function()
-    {
+    $("#boton_guardar_parametro_1").click(function() {
         // valida campos vacios
         var valida = this.form.checkValidity();
-        if (valida)
-        {
+        if (valida) {
             // valida opciones categorias
             var seleccionados = 0;
-            $('#form_parametro_1 input[type=checkbox]').each(function(){
+            $('#form_parametro_1 input[type=checkbox]').each(function() {
                 if (this.checked) {
                     seleccionados += 1;
                 }
             });
 
 
-            if (seleccionados > 0)
-            {
+            if (seleccionados > 0) {
                 // enviar datos
                 $('#form_parametro_1').ajaxForm({
                     dataType: 'json',
@@ -875,8 +892,7 @@
                         opcion: 1,
                     },
                     resetForm: false,
-                    success: function(dato)
-                    {
+                    success: function(dato) {
                         // Campos Hidden
                         $("#sonometria_registro_id").val(dato.parametro.id);
                         $("#sonometria_recsensorial_id").val(dato.parametro.recsensorial_id);
@@ -888,7 +904,7 @@
                         // mensaje
                         swal({
                             title: "Correcto",
-                            text: ""+dato.msj,
+                            text: "" + dato.msj,
                             type: "success", // warning, error, success, info
                             buttons: {
                                 visible: false, // true , false
@@ -903,7 +919,7 @@
                         // cerrar modal
                         $('#modal_sonometria').modal('hide');
                     },
-                    beforeSend: function(){
+                    beforeSend: function() {
                         $('#boton_guardar_parametro_1').html('Guardando <i class="fa fa-spin fa-spinner"></i>');
                     },
                     error: function(dato) {
@@ -912,7 +928,7 @@
                         // mensaje
                         swal({
                             title: "Error",
-                            text: "Error en la acción: "+dato,
+                            text: "Error en la acción: " + dato,
                             type: "error", // warning, error, success, info
                             buttons: {
                                 visible: false, // true , false
@@ -924,9 +940,7 @@
                     }
                 }).submit();
                 return false;
-            }
-            else
-            {
+            } else {
                 // mensaje
                 swal({
                     title: "Seleccione categorías",
@@ -946,41 +960,36 @@
 
 
     // eliminar SONOMETRIA
-    $(document).ready(function()
-    {
-        $('#tabla_parametroruidosonometria tbody').on('click', 'td.eliminar', function()
-        {
+    $(document).ready(function() {
+        $('#tabla_parametroruidosonometria tbody').on('click', 'td.eliminar', function() {
             var tr = $(this).closest('tr');
             var row = tabla_parametroruidosonometria.row(tr);
 
-            if (parseInt(row.data().accion_activa) > 0)
-            {
-                swal({   
-                    title: "¿Eliminar registo de Sonometría?",   
-                    text: "Registro: "+row.data().numero_registro,
-                    type: "warning",   
-                    showCancelButton: true,   
-                    confirmButtonColor: "#DD6B55",   
-                    confirmButtonText: "Eliminar!",   
-                    cancelButtonText: "Cancelar!",   
-                    closeOnConfirm: false,   
-                    closeOnCancel: false 
-                }, function(isConfirm){   
-                    if (isConfirm)
-                    {
-                        swal({   
+            if (parseInt(row.data().accion_activa) > 0) {
+                swal({
+                    title: "¿Eliminar registo de Sonometría?",
+                    text: "Registro: " + row.data().numero_registro,
+                    type: "warning",
+                    showCancelButton: true,
+                    confirmButtonColor: "#DD6B55",
+                    confirmButtonText: "Eliminar!",
+                    cancelButtonText: "Cancelar!",
+                    closeOnConfirm: false,
+                    closeOnCancel: false
+                }, function(isConfirm) {
+                    if (isConfirm) {
+                        swal({
                             title: "¡Confirme nuevamente eliminar registro de Sonometría!",
-                            text: "Registro: "+row.data().numero_registro,
-                            type: "warning",   
-                            showCancelButton: true,   
-                            confirmButtonColor: "#DD6B55",   
-                            confirmButtonText: "Eliminar!",   
-                            cancelButtonText: "Cancelar!",   
-                            closeOnConfirm: false,   
-                            closeOnCancel: false 
-                        }, function(isConfirm){   
-                            if (isConfirm)
-                            {
+                            text: "Registro: " + row.data().numero_registro,
+                            type: "warning",
+                            showCancelButton: true,
+                            confirmButtonColor: "#DD6B55",
+                            confirmButtonText: "Eliminar!",
+                            cancelButtonText: "Cancelar!",
+                            closeOnConfirm: false,
+                            closeOnCancel: false
+                        }, function(isConfirm) {
+                            if (isConfirm) {
                                 // cerrar msj confirmacion
                                 swal.close();
 
@@ -988,10 +997,10 @@
                                 $.ajax({
                                     type: "GET",
                                     dataType: "json",
-                                    url: "/parametroruidosonometriaeliminar/"+row.data().id,
-                                    data:{},
+                                    url: "/parametroruidosonometriaeliminar/" + row.data().id,
+                                    data: {},
                                     cache: false,
-                                    success:function(dato){
+                                    success: function(dato) {
                                         // actualiza tabla
                                         tabla_parametroruidosonometria.destroy();
                                         funcion_tabla_parametroruidosonometria(row.data().recsensorial_id);
@@ -999,7 +1008,7 @@
                                         // mensaje
                                         swal({
                                             title: "Correcto",
-                                             text: ""+dato.msj,
+                                            text: "" + dato.msj,
                                             type: "success", // warning, error, success, info
                                             buttons: {
                                                 visible: false, // true , false
@@ -1008,14 +1017,12 @@
                                             showConfirmButton: false
                                         });
                                     },
-                                    error: function(dato){
+                                    error: function(dato) {
                                         // alert('Error: '+dato.msj);
                                         return false;
                                     }
-                                });//Fin ajax
-                            }
-                            else 
-                            {
+                                }); //Fin ajax
+                            } else {
                                 // mensaje
                                 swal({
                                     title: "Cancelado",
@@ -1026,12 +1033,10 @@
                                     },
                                     timer: 500,
                                     showConfirmButton: false
-                                });   
-                            } 
+                                });
+                            }
                         });
-                    }
-                    else 
-                    {
+                    } else {
                         // mensaje
                         swal({
                             title: "Cancelado",
@@ -1042,8 +1047,8 @@
                             },
                             timer: 500,
                             showConfirmButton: false
-                        });   
-                    } 
+                        });
+                    }
                 });
             }
         });
@@ -1053,12 +1058,11 @@
     //======================================================
 
 
-    $("#boton_nueva_dosimetria").click(function()
-    {
+    $("#boton_nueva_dosimetria").click(function() {
         consulta_select_categorias(recsensorial_id, 0);
 
         // Borrar formulario
-        $('#form_parametro_2').each(function(){
+        $('#form_parametro_2').each(function() {
             this.reset();
         });
 
@@ -1067,22 +1071,21 @@
         $("#dosimetria_recsensorial_id").val(recsensorial_id);
 
         // mostrar modal
-        $('#modal_dosimetria').modal({backdrop:false});
+        $('#modal_dosimetria').modal({
+            backdrop: false
+        });
     });
 
 
     // Selecciona REGISTRO
-    $(document).ready(function()
-    {
-        $('#tabla_parametroruidodosimetria tbody').on('click', 'td.editar', function() 
-        {
+    $(document).ready(function() {
+        $('#tabla_parametroruidodosimetria tbody').on('click', 'td.editar', function() {
             var tr = $(this).closest('tr');
             var row = tabla_parametroruidodosimetria.row(tr);
 
-            if (parseInt(row.data().accion_activa) > 0)
-            {
+            if (parseInt(row.data().accion_activa) > 0) {
                 // Borrar formulario
-                $('#form_parametro_2').each(function(){
+                $('#form_parametro_2').each(function() {
                     this.reset();
                 });
 
@@ -1093,24 +1096,24 @@
                 consulta_select_categorias(recsensorial_id, row.data().recsensorialcategoria_id);
 
                 // mostrar modal
-                $('#modal_dosimetria').modal({backdrop:false});
+                $('#modal_dosimetria').modal({
+                    backdrop: false
+                });
             }
         });
     });
 
 
-    function funcion_tabla_parametroruidodosimetria(recsensorial_id)
-    {
+    function funcion_tabla_parametroruidodosimetria(recsensorial_id) {
         tabla_parametroruidodosimetria = $('#tabla_parametroruidodosimetria').DataTable({
             "ajax": {
-                "url": "/parametroruidodosimetriatabla/"+recsensorial_id,
+                "url": "/parametroruidodosimetriatabla/" + recsensorial_id,
                 "type": "get",
                 "cache": false,
-                error: function (xhr, error, code)
-                {
+                error: function(xhr, error, code) {
                     // console.log(xhr); console.log(code);
                     // funcion_tabla_parametroruidodosimetria(recsensorial_id);
-                    tabla_parametroruidodosimetria.ajax.url("/parametroruidodosimetriatabla/"+recsensorial_id).load();
+                    tabla_parametroruidodosimetria.ajax.url("/parametroruidodosimetriatabla/" + recsensorial_id).load();
                 },
                 "data": {}
             },
@@ -1142,8 +1145,13 @@
                 }
 
             ],
-            "lengthMenu": [[10, 25, 50, -1], [10, 25, 50, "Todos"]],
-            "order": [[ 0, "desc" ]],
+            "lengthMenu": [
+                [10, 25, 50, -1],
+                [10, 25, 50, "Todos"]
+            ],
+            "order": [
+                [0, "desc"]
+            ],
             "ordering": true,
             "language": {
                 "lengthMenu": "Mostrar _MENU_ Registros",
@@ -1167,12 +1175,10 @@
 
 
     // GUARDAR DOSIMETRIA
-    $("#boton_guardar_parametro_2").click(function()
-    {
+    $("#boton_guardar_parametro_2").click(function() {
         // valida campos vacios
         var valida = this.form.checkValidity();
-        if (valida)
-        {
+        if (valida) {
             // enviar datos
             $('#form_parametro_2').ajaxForm({
                 dataType: 'json',
@@ -1182,8 +1188,7 @@
                     opcion: 1,
                 },
                 resetForm: false,
-                success: function(dato)
-                {
+                success: function(dato) {
                     // Campos Hidden
                     $("#dosimetria_registro_id").val(dato.parametro.id);
                     $("#dosimetria_recsensorial_id").val(dato.parametro.recsensorial_id);
@@ -1195,7 +1200,7 @@
                     // mensaje
                     swal({
                         title: "Correcto",
-                        text: ""+dato.msj,
+                        text: "" + dato.msj,
                         type: "success", // warning, error, success, info
                         buttons: {
                             visible: false, // true , false
@@ -1210,7 +1215,7 @@
                     // cerrar modal
                     $('#modal_dosimetria').modal('hide');
                 },
-                beforeSend: function(){
+                beforeSend: function() {
                     $('#boton_guardar_parametro_2').html('Guardando <i class="fa fa-spin fa-spinner"></i>');
                 },
                 error: function(dato) {
@@ -1219,7 +1224,7 @@
                     // mensaje
                     swal({
                         title: "Error",
-                        text: "Error en la acción: "+dato,
+                        text: "Error en la acción: " + dato,
                         type: "error", // warning, error, success, info
                         buttons: {
                             visible: false, // true , false
@@ -1236,52 +1241,47 @@
 
 
     // eliminar DOSIMETRIA
-    $(document).ready(function()
-    {
-        $('#tabla_parametroruidodosimetria tbody').on('click', 'td.eliminar', function()
-        {
+    $(document).ready(function() {
+        $('#tabla_parametroruidodosimetria tbody').on('click', 'td.eliminar', function() {
             var tr = $(this).closest('tr');
             var row = tabla_parametroruidodosimetria.row(tr);
 
-            if (parseInt(row.data().accion_activa) > 0)
-            {
-                swal({   
-                    title: "¿Eliminar registo de Dosimetría?",   
-                    text: "Registro: "+row.data().numero_registro,
-                    type: "warning",   
-                    showCancelButton: true,   
-                    confirmButtonColor: "#DD6B55",   
-                    confirmButtonText: "Eliminar!",   
-                    cancelButtonText: "Cancelar!",   
-                    closeOnConfirm: false,   
-                    closeOnCancel: false 
-                }, function(isConfirm){   
-                    if (isConfirm)
-                    {
-                        swal({   
+            if (parseInt(row.data().accion_activa) > 0) {
+                swal({
+                    title: "¿Eliminar registo de Dosimetría?",
+                    text: "Registro: " + row.data().numero_registro,
+                    type: "warning",
+                    showCancelButton: true,
+                    confirmButtonColor: "#DD6B55",
+                    confirmButtonText: "Eliminar!",
+                    cancelButtonText: "Cancelar!",
+                    closeOnConfirm: false,
+                    closeOnCancel: false
+                }, function(isConfirm) {
+                    if (isConfirm) {
+                        swal({
                             title: "¡Confirme nuevamente eliminar registro de Dosimetría!",
-                            text: "Registro: "+row.data().numero_registro,
-                            type: "warning",   
-                            showCancelButton: true,   
-                            confirmButtonColor: "#DD6B55",   
-                            confirmButtonText: "Eliminar!",   
-                            cancelButtonText: "Cancelar!",   
-                            closeOnConfirm: false,   
-                            closeOnCancel: false 
-                        }, function(isConfirm){   
-                            if (isConfirm)
-                            {
+                            text: "Registro: " + row.data().numero_registro,
+                            type: "warning",
+                            showCancelButton: true,
+                            confirmButtonColor: "#DD6B55",
+                            confirmButtonText: "Eliminar!",
+                            cancelButtonText: "Cancelar!",
+                            closeOnConfirm: false,
+                            closeOnCancel: false
+                        }, function(isConfirm) {
+                            if (isConfirm) {
                                 // cerrar msj confirmacion
                                 swal.close();
-                                
+
                                 // eliminar
                                 $.ajax({
                                     type: "GET",
                                     dataType: "json",
-                                    url: "/parametroruidodosimetriaeliminar/"+row.data().id,
-                                    data:{},
+                                    url: "/parametroruidodosimetriaeliminar/" + row.data().id,
+                                    data: {},
                                     cache: false,
-                                    success:function(dato){
+                                    success: function(dato) {
                                         // actualiza tabla
                                         tabla_parametroruidodosimetria.destroy();
                                         funcion_tabla_parametroruidodosimetria(row.data().recsensorial_id);
@@ -1289,7 +1289,7 @@
                                         // mensaje
                                         swal({
                                             title: "Correcto",
-                                             text: ""+dato.msj,
+                                            text: "" + dato.msj,
                                             type: "success", // warning, error, success, info
                                             buttons: {
                                                 visible: false, // true , false
@@ -1298,14 +1298,12 @@
                                             showConfirmButton: false
                                         });
                                     },
-                                    error: function(dato){
+                                    error: function(dato) {
                                         // alert('Error: '+dato.msj);
                                         return false;
                                     }
-                                });//Fin ajax
-                            }
-                            else 
-                            {
+                                }); //Fin ajax
+                            } else {
                                 // mensaje
                                 swal({
                                     title: "Cancelado",
@@ -1316,12 +1314,10 @@
                                     },
                                     timer: 500,
                                     showConfirmButton: false
-                                });   
-                            } 
+                                });
+                            }
                         });
-                    }
-                    else 
-                    {
+                    } else {
                         // mensaje
                         swal({
                             title: "Cancelado",
@@ -1332,14 +1328,14 @@
                             },
                             timer: 500,
                             showConfirmButton: false
-                        });   
-                    } 
+                        });
+                    }
                 });
             }
         });
     });
 
-    
+
     //------------------------------------------------------------
 
     var parametro_id = 1; // ID en base datos
@@ -1348,15 +1344,14 @@
 
 
     // Load pagina
-    $(document).ready(function()
-    {
+    $(document).ready(function() {
         // inicializar campo FOTO mapa ubicacion
         $('#inputevidenciafoto').dropify({
             messages: {
                 'default': 'Arrastre la imagen aquí o haga click',
                 'replace': 'Arrastre la imagen o haga clic para reemplazar',
-                'remove':  'Quitar',
-                'error':   'Ooops, ha ocurrido un error.'
+                'remove': 'Quitar',
+                'error': 'Ooops, ha ocurrido un error.'
             },
             error: {
                 'fileSize': 'Demasiado grande (5MB max).',
@@ -1372,10 +1367,9 @@
     });
 
 
-    $("#boton_nueva_fotoevidencia").click(function()
-    {
+    $("#boton_nueva_fotoevidencia").click(function() {
         // Borrar formulario
-        $('#form_evidencia_fotos').each(function(){
+        $('#form_evidencia_fotos').each(function() {
             this.reset();
         });
 
@@ -1396,12 +1390,13 @@
         foto_resizebase64 = "";
 
         // mostrar modal
-        $('#modal_evidencia_fotos').modal({backdrop:false});
+        $('#modal_evidencia_fotos').modal({
+            backdrop: false
+        });
     });
 
 
-    function redimencionar_fotoevidencia()
-    {
+    function redimencionar_fotoevidencia() {
         // Mostrar mensaje de espera
         $('#mensaje_cargando_fotos').css('display', 'block');
         $('#boton_guardar_evidencia_fotos').attr('disabled', true);
@@ -1420,14 +1415,12 @@
         reader.readAsDataURL(file);
 
         // Set the image once loaded into file reader
-        reader.onload = function(e)
-        {
+        reader.onload = function(e) {
             //img.src = e.target.result;
             var img = new Image();
             img.src = this.result;
-            
-            setTimeout(function()
-            {
+
+            setTimeout(function() {
                 var canvas = document.createElement("canvas");
                 //var canvas = $("<canvas>", {"id":"testing"})[0];
                 //var ctx = canvas.getContext("2d");
@@ -1438,30 +1431,22 @@
                 var height = img.height;
 
                 // Dimensiones Nuevas
-                if (parseInt(width) > 8000)
-                {
+                if (parseInt(width) > 8000) {
                     var MAX_WIDTH = 4000; //Ancho de la imagen
                     var MAX_HEIGHT = 3000; //Alto de la imagen
-                }
-                else
-                {
+                } else {
                     var MAX_WIDTH = 1200; //Ancho de la imagen
                     var MAX_HEIGHT = 900; //Alto de la imagen
                 }
 
                 // Dimensionar con respecto a la relacion de aspecto
-                if (width > height)
-                {
-                    if (width > MAX_WIDTH)
-                    {
+                if (width > height) {
+                    if (width > MAX_WIDTH) {
                         height *= MAX_WIDTH / width;
                         width = MAX_WIDTH;
                     }
-                }
-                else
-                {
-                    if (height > MAX_HEIGHT)
-                    {
+                } else {
+                    if (height > MAX_HEIGHT) {
                         width *= MAX_HEIGHT / height;
                         height = MAX_HEIGHT;
                     }
@@ -1471,7 +1456,7 @@
                 canvas.height = height;
                 var ctx = canvas.getContext("2d");
                 ctx.drawImage(img, 0, 0, width, height);
-                console.log("Nuevas dimensiones ",width, height);
+                console.log("Nuevas dimensiones ", width, height);
 
                 // Resultado
                 var dataurl = canvas.toDataURL("image/jpeg");
@@ -1486,35 +1471,25 @@
     }
 
 
-    function descripcion_foto()
-    {
-        if(parseInt($("#recsensorialevidencias_tipo").val()) > 0)
-        {
-            if(parseInt($("#recsensorialevidencias_tipo").val()) == 1)
-            {
+    function descripcion_foto() {
+        if (parseInt($("#recsensorialevidencias_tipo").val()) > 0) {
+            if (parseInt($("#recsensorialevidencias_tipo").val()) == 1) {
                 $("#recsensorialevidencias_descripcion").attr('disabled', false);
                 $("#recsensorialevidencias_recsensorialarea_id").attr('disabled', false);
 
-                if(parseInt($("#recsensorialevidencias_recsensorialarea_id").val()) > 0)
-                {
-                    $("#recsensorialevidencias_descripcion").val('Evidencia de reconocimiento de '+parametro_nombre+' en '+$("#recsensorialevidencias_recsensorialarea_id option:selected").text());
+                if (parseInt($("#recsensorialevidencias_recsensorialarea_id").val()) > 0) {
+                    $("#recsensorialevidencias_descripcion").val('Evidencia de reconocimiento de ' + parametro_nombre + ' en ' + $("#recsensorialevidencias_recsensorialarea_id option:selected").text());
+                } else {
+                    $("#recsensorialevidencias_descripcion").val('Evidencia de reconocimiento de ' + parametro_nombre);
                 }
-                else
-                {
-                    $("#recsensorialevidencias_descripcion").val('Evidencia de reconocimiento de '+parametro_nombre);
-                }
-            }
-            else
-            {
+            } else {
                 $("#recsensorialevidencias_recsensorialarea_id").val('');
                 $("#recsensorialevidencias_recsensorialarea_id").attr('disabled', true);
 
-                $("#recsensorialevidencias_descripcion").val('Ubicación de puntos de '+parametro_nombre);
+                $("#recsensorialevidencias_descripcion").val('Ubicación de puntos de ' + parametro_nombre);
                 $("#recsensorialevidencias_descripcion").attr('disabled', false);
             }
-        }
-        else
-        {
+        } else {
             $("#recsensorialevidencias_recsensorialarea_id").val('');
             $("#recsensorialevidencias_recsensorialarea_id").attr('disabled', true);
             $("#recsensorialevidencias_descripcion").val('');
@@ -1523,15 +1498,13 @@
     }
 
 
-    $("#boton_guardar_evidencia_fotos").click(function()
-    {
+    $("#boton_guardar_evidencia_fotos").click(function() {
         // valida campos vacios
         var valida = this.form.checkValidity();
-        if (valida)
-        {
+        if (valida) {
             // Valida envio de datos
-            swal({   
-                title: "¡Confirme guardar "+$("#recsensorialevidencias_tipo option:selected").text()+"!",
+            swal({
+                title: "¡Confirme guardar " + $("#recsensorialevidencias_tipo option:selected").text() + "!",
                 text: "",
                 type: "info",
                 showCancelButton: true,
@@ -1540,9 +1513,8 @@
                 cancelButtonText: "Cancelar!",
                 closeOnConfirm: false,
                 closeOnCancel: false
-            }, function(isConfirm){
-                if (isConfirm)
-                {
+            }, function(isConfirm) {
+                if (isConfirm) {
                     // cerrar msj confirmacion
                     swal.close();
 
@@ -1559,15 +1531,14 @@
                             foto_base64: foto_resizebase64,
                         },
                         resetForm: false,
-                        success: function(dato)
-                        {
+                        success: function(dato) {
                             // Actualiza galeria de fotos
                             consulta_evidencia_fotos(recsensorial_id, parametro_id);
 
                             // mensaje
                             swal({
                                 title: "Correcto",
-                                text: ""+dato.msj,
+                                text: "" + dato.msj,
                                 type: "success", // warning, error, success, info
                                 buttons: {
                                     visible: false, // true , false
@@ -1583,13 +1554,11 @@
                             // cerrar modal
                             $('#modal_evidencia_fotos').modal('hide');
                         },
-                        beforeSend: function()
-                        {
+                        beforeSend: function() {
                             $('#boton_guardar_evidencia_fotos').html('Guardando <i class="fa fa-spin fa-spinner"></i>');
                             $('#boton_guardar_evidencia_fotos').attr('disabled', true);
                         },
-                        error: function(dato)
-                        {
+                        error: function(dato) {
                             // actualiza boton
                             $('#boton_guardar_evidencia_fotos').html('Guardar <i class="fa fa-save"></i>');
                             $('#boton_guardar_evidencia_fotos').attr('disabled', false);
@@ -1597,7 +1566,7 @@
                             // mensaje
                             swal({
                                 title: "Error",
-                                text: ""+dato.msj,
+                                text: "" + dato.msj,
                                 type: "error", // warning, error, success, info
                                 buttons: {
                                     visible: false, // true , false
@@ -1609,9 +1578,7 @@
                         }
                     }).submit();
                     return false;
-                }
-                else 
-                {
+                } else {
                     // mensaje
                     swal({
                         title: "Cancelado",
@@ -1630,55 +1597,48 @@
     });
 
 
-    function consulta_evidencia_fotos(recsensorial_id, parametro_id)
-    {
+    function consulta_evidencia_fotos(recsensorial_id, parametro_id) {
         $.ajax({
             type: "GET",
             dataType: "json",
-            url: "/recsensorialevidenciagaleria/"+recsensorial_id+"/"+parametro_id,
-            data:{},
+            url: "/recsensorialevidenciagaleria/" + recsensorial_id + "/" + parametro_id,
+            data: {},
             cache: false,
-            success:function(dato)
-            {
+            success: function(dato) {
                 // Vaciar contenido
                 $('.galeria').html('');
 
                 // validar si trae datos
-                if (dato.galeria)
-                {
+                if (dato.galeria) {
                     // GALERIA DE FOTOS
                     $(".galeria").html(dato.galeria);
-                }
-                else
-                {
+                } else {
                     $('.galeria').html('<div class="col-12" style="text-align: center;">No hay fotos que mostrar</div>');
                 }
 
                 // Inicializar tooltip
                 $('[data-toggle="tooltip"]').tooltip();
             },
-            beforeSend: function(){
+            beforeSend: function() {
                 $('.galeria').html('<div class="col-12" style="text-align: center;"><i class="fa fa-spin fa-spinner fa-5x"></i></div>');
             },
-            error: function(dato){          
+            error: function(dato) {
                 $('.galeria').html('<div class="col-12" style="text-align: center;">Error al cargar las fotos</div>');
                 return false;
             }
-        });//Fin ajax
+        }); //Fin ajax
     }
 
 
-    function foto_descargar(foto_id)
-    {
-        window.open("/recsensorialevidenciafotomostrar/"+foto_id+"/1");
+    function foto_descargar(foto_id) {
+        window.open("/recsensorialevidenciafotomostrar/" + foto_id + "/1");
     }
 
 
-    function foto_eliminar(foto_id, tipo_nombre)
-    {
+    function foto_eliminar(foto_id, tipo_nombre) {
         // Valida envio de datos
-        swal({   
-            title: "¡Confirme eliminar "+tipo_nombre+"!",
+        swal({
+            title: "¡Confirme eliminar " + tipo_nombre + "!",
             text: "",
             type: "warning",
             showCancelButton: true,
@@ -1687,18 +1647,16 @@
             cancelButtonText: "Cancelar!",
             closeOnConfirm: false,
             closeOnCancel: false
-        }, function(isConfirm){
-            if (isConfirm)
-            {
+        }, function(isConfirm) {
+            if (isConfirm) {
                 // Enviar datos
                 $.ajax({
                     type: "GET",
                     dataType: "json",
-                    url: "/recsensorialevidenciafotoeliminar/"+foto_id,
-                    data:{},
+                    url: "/recsensorialevidenciafotoeliminar/" + foto_id,
+                    data: {},
                     cache: false,
-                    success:function(dato)
-                    {
+                    success: function(dato) {
                         // Actualiza galeria de fotos
                         consulta_evidencia_fotos(recsensorial_id, parametro_id);
 
@@ -1708,7 +1666,7 @@
                         // mensaje
                         swal({
                             title: "Correcto",
-                            text: ""+dato.msj,
+                            text: "" + dato.msj,
                             type: "success", // warning, error, success, info
                             buttons: {
                                 visible: false, // true , false
@@ -1717,12 +1675,11 @@
                             showConfirmButton: false
                         });
                     },
-                    error: function(dato)
-                    {
+                    error: function(dato) {
                         // mensaje
                         swal({
                             title: "Error",
-                            text: ""+dato.msj,
+                            text: "" + dato.msj,
                             type: "error", // warning, error, success, info
                             buttons: {
                                 visible: false, // true , false
@@ -1732,10 +1689,8 @@
                         });
                         return false;
                     }
-                });//Fin ajax
-            }
-            else 
-            {
+                }); //Fin ajax
+            } else {
                 // mensaje
                 swal({
                     title: "Cancelado",
@@ -1760,28 +1715,23 @@
 
 
     // Load pagina
-    $(document).ready(function()
-    {
+    $(document).ready(function() {
         tabla_ruidoequipos(recsensorial_id);
     });
 
 
     var datatable_ruidoequipos = null;
-    function tabla_ruidoequipos(recsensorial_id)
-    {
-        try 
-        {
-            var ruta = "/parametroruidoequipotabla/"+recsensorial_id;
 
-            if (datatable_ruidoequipos != null)
-            {
+    function tabla_ruidoequipos(recsensorial_id) {
+        try {
+            var ruta = "/parametroruidoequipotabla/" + recsensorial_id;
+
+            if (datatable_ruidoequipos != null) {
                 // datatable_ruidoequipos.clear().draw();
                 // datatable_ruidoequipos.ajax.url(ruta).load();
 
                 datatable_ruidoequipos.ajax.reload();
-            }
-            else
-            {
+            } else {
                 var numeroejecucion = 1;
                 datatable_ruidoequipos = $('#tabla_ruidoequipos').DataTable({
                     ajax: {
@@ -1790,16 +1740,13 @@
                         cache: false,
                         dataType: "json",
                         data: {},
-                        dataSrc: function (json)
-                        {
+                        dataSrc: function(json) {
                             // alert("Done! "+json.msj);
                             return json.data;
                         },
-                        error: function (xhr, error, code)
-                        {                       
-                            console.log('error en datatable_ruidoequipos '+code);
-                            if (numeroejecucion <= 1)
-                            {
+                        error: function(xhr, error, code) {
+                            console.log('error en datatable_ruidoequipos ' + code);
+                            if (numeroejecucion <= 1) {
                                 tabla_ruidoequipos(recsensorial_id);
                                 numeroejecucion += 1;
                             }
@@ -1851,21 +1798,21 @@
                             // className: '',
                             orderable: false,
                         },
-                        {
-                            data: "boton_mostrar",
-                            defaultContent: "-",
-                            // className: '',
-                            orderable: false,
-                        },
+                      
                         {
                             data: "boton_eliminar",
                             defaultContent: "-",
                             orderable: false,
                         }
                     ],
-                    lengthMenu: [[20, 50, 100, -1], [20, 50, 100, "Todos"]],
+                    lengthMenu: [
+                        [20, 50, 100, -1],
+                        [20, 50, 100, "Todos"]
+                    ],
                     // rowsGroup: [1, 2, 3], //agrupar filas
-                    order: [[ 0, "ASC" ]],
+                    order: [
+                        [0, "ASC"]
+                    ],
                     ordering: false,
                     processing: true,
                     searching: false,
@@ -1888,8 +1835,7 @@
                             previous: "Anterior"
                         }
                     },
-                    rowCallback: function(row, data, index)
-                    {
+                    rowCallback: function(row, data, index) {
                         // console.log(index+' - '+data.reporteiluminacionpuntos_nopunto);
 
                         // if(data.reporteiluminacionpuntos_nopunto == 2)
@@ -1912,22 +1858,17 @@
             }
 
             // Tooltip en DataTable
-            datatable_ruidoequipos.on('draw', function ()
-            {
+            datatable_ruidoequipos.on('draw', function() {
                 $('[data-toggle="tooltip"]').tooltip();
             });
-        }
-        catch (exception)
-        {
+        } catch (exception) {
             tabla_ruidoequipos(recsensorial_id);
         }
     }
 
 
-    $("#boton_nuevo_equiporuido").click(function()
-    {
-        if ($("#equiporuidoequipo_id")[0].selectize)
-        {
+    $("#boton_nuevo_equiporuido").click(function() {
+        if ($("#equiporuidoequipo_id")[0].selectize) {
             $("#equiporuidoequipo_id")[0].selectize.destroy();
         }
 
@@ -1936,37 +1877,32 @@
 
 
         // Borrar formulario
-        $('#form_equiporuido').each(function(){
+        $('#form_equiporuido').each(function() {
             this.reset();
         });
 
 
         // mostrar modal
-        $('#modal_equiporuido').modal({backdrop:false});
+        $('#modal_equiporuido').modal({
+            backdrop: false
+        });
     });
 
 
-    function filtra_equipos(proveedor_id)
-    {
-        if (parseInt(proveedor_id) > 0)
-        {
-            if ($("#equiporuidoequipo_id")[0].selectize)
-            {
+    function filtra_equipos(proveedor_id) {
+        if (parseInt(proveedor_id) > 0) {
+            if ($("#equiporuidoequipo_id")[0].selectize) {
                 $("#equiporuidoequipo_id")[0].selectize.destroy();
-            }
-            else
-            {
+            } else {
                 $("#equiporuidoequipo_id").html('<option value="">Filtrando, por favor espere...</option>');
             }
-            
-            
+
+
             var selectoption = '<option value=""></option>';
-            equipos.forEach(function(value, index)
-            {
-                if (parseInt(proveedor_id) == parseInt(value.proveedor_id))
-                {
+            equipos.forEach(function(value, index) {
+                if (parseInt(proveedor_id) == parseInt(value.proveedor_id)) {
                     // alert(value.equipo_Descripcion);
-                    selectoption += '<option value="'+value.id+'">'+value.equipo_Descripcion+', Serie: '+value.equipo_Serie+'</option>';
+                    selectoption += '<option value="' + value.id + '">' + value.equipo_Descripcion + ', Serie: ' + value.equipo_Serie + '</option>';
                 }
             });
 
@@ -1974,9 +1910,7 @@
             $("#equiporuidoequipo_id").html(selectoption);
             $("#equiporuidoequipo_id").selectize(); //Inicializar campo tipo [select-search]
             $("#equiporuidoequipo_id").attr('required', true);
-        }
-        else
-        {
+        } else {
             $("#equiporuidoequipo_id")[0].selectize.destroy();
             $("#equiporuidoequipo_id").html('<option value=""></option>');
             $("#equiporuidoequipo_id").attr('required', true);
@@ -1984,14 +1918,12 @@
     }
 
 
-    $("#boton_guardar_equiporuido").click(function()
-    {
+    $("#boton_guardar_equiporuido").click(function() {
         // valida campos vacios
         var valida = this.form.checkValidity();
-        if (valida)
-        {
+        if (valida) {
             // Valida envio de datos
-            swal({   
+            swal({
                 title: "¡Confirme guardar el equipo",
                 text: "",
                 type: "info",
@@ -2001,9 +1933,8 @@
                 cancelButtonText: "Cancelar!",
                 closeOnConfirm: false,
                 closeOnCancel: false
-            }, function(isConfirm){
-                if (isConfirm)
-                {
+            }, function(isConfirm) {
+                if (isConfirm) {
                     // cerrar msj confirmacion
                     swal.close();
 
@@ -2017,15 +1948,14 @@
                             recsensorial_id: recsensorial_id,
                         },
                         resetForm: false,
-                        success: function(dato)
-                        {
+                        success: function(dato) {
                             // Actualiza TABLA equipos
                             tabla_ruidoequipos(recsensorial_id);
 
                             // mensaje
                             swal({
                                 title: "Correcto",
-                                text: ""+dato.msj,
+                                text: "" + dato.msj,
                                 type: "success", // warning, error, success, info
                                 buttons: {
                                     visible: false, // true , false
@@ -2041,13 +1971,11 @@
                             // cerrar modal
                             $('#modal_equiporuido').modal('hide');
                         },
-                        beforeSend: function()
-                        {
+                        beforeSend: function() {
                             $('#boton_guardar_equiporuido').html('Guardando <i class="fa fa-spin fa-spinner"></i>');
                             $('#boton_guardar_equiporuido').attr('disabled', true);
                         },
-                        error: function(dato)
-                        {
+                        error: function(dato) {
                             // actualiza boton
                             $('#boton_guardar_equiporuido').html('Guardar <i class="fa fa-save"></i>');
                             $('#boton_guardar_equiporuido').attr('disabled', false);
@@ -2055,7 +1983,7 @@
                             // mensaje
                             swal({
                                 title: "Error",
-                                text: ""+dato.msj,
+                                text: "" + dato.msj,
                                 type: "error", // warning, error, success, info
                                 buttons: {
                                     visible: false, // true , false
@@ -2066,11 +1994,9 @@
                             return false;
                         }
                     }).submit();
-                    
+
                     return false;
-                }
-                else 
-                {
+                } else {
                     // mensaje
                     swal({
                         title: "Cancelado",
@@ -2089,62 +2015,60 @@
     });
 
 
-    $('#tabla_ruidoequipos tbody').on('click', 'td>button.mostrar_pdf', function() 
-    {
+    $('#tabla_ruidoequipos tbody').on('click', 'td>button.mostrar_pdf', function() {
         var tr = $(this).closest('tr');
         var row = datatable_ruidoequipos.row(tr);
 
         // alert(row.data().equipo_Descripcion);
 
         // abrir modal
-        $('#modal_visor').modal({backdrop:false});
+        $('#modal_visor').modal({
+            backdrop: false
+        });
 
         // TITULO DLE VISOR
         $('#nombre_documento_visor').html(row.data().equipo_Descripcion);
 
         // $('#visor_documento').attr('src', '/assets/plugins/viewer-pdfjs/web/viewer.html?file=/verequipodocumento/'+row.data().id);
-        $('#visor_documento').attr('src', '/assets/plugins/viewer-pdfjs/web/viewer_read.html?file=/verequipodocumento/'+row.data().id);
+        $('#visor_documento').attr('src', '/assets/plugins/viewer-pdfjs/web/viewer_read.html?file=/verequipodocumento/' + row.data().id);
     });
 
 
     // ELIMINAR EQUIPO DE LA LISTA
-    $('#tabla_ruidoequipos tbody').on('click', 'td>button.eliminar_equipo', function()
-    {
+    $('#tabla_ruidoequipos tbody').on('click', 'td>button.eliminar_equipo', function() {
         var tr = $(this).closest('tr');
         var row = datatable_ruidoequipos.row(tr);
 
-        swal({   
-            title: "¿Eliminar equipo?",   
-            text: ""+row.data().equipo_Descripcion,
-            type: "warning",   
-            showCancelButton: true,   
-            confirmButtonColor: "#DD6B55",   
-            confirmButtonText: "Eliminar!",   
-            cancelButtonText: "Cancelar!",   
-            closeOnConfirm: false,   
-            closeOnCancel: false 
-        }, function(isConfirm){   
-            if (isConfirm)
-            {
+        swal({
+            title: "¿Eliminar equipo?",
+            text: "" + row.data().equipo_Descripcion,
+            type: "warning",
+            showCancelButton: true,
+            confirmButtonColor: "#DD6B55",
+            confirmButtonText: "Eliminar!",
+            cancelButtonText: "Cancelar!",
+            closeOnConfirm: false,
+            closeOnCancel: false
+        }, function(isConfirm) {
+            if (isConfirm) {
                 // cerrar msj confirmacion
                 swal.close();
-                
+
                 // eliminar
                 $.ajax({
                     type: "GET",
                     dataType: "json",
-                    url: "/parametroruidoequipoeliminar/"+row.data().id,
-                    data:{},
+                    url: "/parametroruidoequipoeliminar/" + row.data().id,
+                    data: {},
                     cache: false,
-                    success:function(dato)
-                    {
+                    success: function(dato) {
                         // Actualiza TABLA equipos
                         tabla_ruidoequipos(recsensorial_id);
 
                         // mensaje
                         swal({
                             title: "Correcto",
-                             text: ""+dato.msj,
+                            text: "" + dato.msj,
                             type: "success", // warning, error, success, info
                             buttons: {
                                 visible: false, // true , false
@@ -2153,16 +2077,14 @@
                             showConfirmButton: false
                         });
                     },
-                    error: function(dato){
+                    error: function(dato) {
                         // alert('Error: '+dato.msj);
                         return false;
                     }
-                });//Fin ajax
+                }); //Fin ajax
 
                 return false;
-            }
-            else 
-            {
+            } else {
                 // mensaje
                 swal({
                     title: "Cancelado",
@@ -2173,8 +2095,8 @@
                     },
                     timer: 500,
                     showConfirmButton: false
-                });   
-            } 
+                });
+            }
         });
 
         return false;
