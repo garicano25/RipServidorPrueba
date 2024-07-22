@@ -865,19 +865,19 @@ class recsensorialController extends Controller
     {
         try {
             $opciones_select = '<option value="">&nbsp;</option>';
-            $html  = '';
+            $html  = '<option value="">&nbsp;</option>';
             $info = DB::select('SELECT ID_RECURSO_INFORME,
                                         RECSENSORIAL_ID,
                                         INTRODUCCION,
                                         METODOLOGIA,
                                         CONCLUSION,
                                         IMAGEN_PORTADA,
-                                        IFNULL(OPCION_PORTADA1, 0) CHECK1,
-                                        IFNULL(OPCION_PORTADA2, 0) CHECK2,
-                                        IFNULL(OPCION_PORTADA3, 0) CHECK3,
-                                        IFNULL(OPCION_PORTADA4, 0) CHECK4,
-                                        IFNULL(OPCION_PORTADA5, 0) CHECK5,
-                                        IFNULL(OPCION_PORTADA6, 0) CHECK6,
+                                        OPCION_PORTADA1,
+                                        OPCION_PORTADA2,
+                                        OPCION_PORTADA3,
+                                        OPCION_PORTADA4,
+                                        OPCION_PORTADA5,
+                                        OPCION_PORTADA6,                                        
                                         NIVEL1,
                                         NIVEL2,
                                         NIVEL3,
@@ -948,38 +948,16 @@ class recsensorialController extends Controller
                 }
             }
 
-            $count = 1;
+
             foreach ($niveles as $key => $value) {
+                  if ($value->ETIQUETA == 'Instalación' || $value->NIVEL != 0) {
 
-                if ($value->NIVEL != 0) {
+                    $html .= '<option value="' . $value->OPCION . '">' . $value->ETIQUETA . " : " . $value->OPCION;
+                    if ($value->NIVEL != 0) {
 
-                    $html .= '<div class="col-12">
-                            <div class="switch" style="float: left;">
-                                <label>
-                                    <input type="checkbox" class="checkbox_puntos" id="CHECK' . $count . '" name="OPCION_PORTADA' . $count . '" value="' . $value->OPCION . '">
-                                    <span class="lever switch-col-light-blue"></span>
-                                </label>
-                            </div>
-                            <label class="demo-switch-title" style="float: left;" > ' . $value->ETIQUETA . " : " . $value->OPCION . ' </label>
-                        </div>';
-
-                    $count++;
-                }
-
-
-                if ($value->ETIQUETA == 'Instalación') {
-
-                    $html .= '<div class="col-12">
-                            <div class="switch" style="float: left;">
-                                <label>
-                                    <input type="checkbox" class="checkbox_puntos" id="CHECK' . $count . '" name="OPCION_PORTADA' . $count . '" value="' . $value->OPCION . '">
-                                    <span class="lever switch-col-light-blue"></span>
-                                </label>
-                            </div>
-                            <label class="demo-switch-title" style="float: left;" > ' . $value->ETIQUETA . " : " . $value->OPCION . ' </label>
-                        </div>';
-
-                    $count++;
+                        $html .= ' [ Nivel ' . $value->NIVEL . ']'; 
+                    }
+                    $html .= '</option>';
                 }
             }
 

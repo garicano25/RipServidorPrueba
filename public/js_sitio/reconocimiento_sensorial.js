@@ -9308,12 +9308,19 @@ function formatearFechas(fecha1, fecha2) {
     const mes2 = meses[date2.getUTCMonth()];
     const año2 = date2.getUTCFullYear();
 
-    // Formatear las fechas
-    const fechaFormateada1 = `${dia1.toString().padStart(2, '0')} de ${mes1} del ${año1}`;
-    const fechaFormateada2 = `${dia2.toString().padStart(2, '0')} de ${mes2} del ${año2}`;
-
-    // Devolver las fechas formateadas
-    return `${fechaFormateada1} al ${fechaFormateada2}`;
+    // Casos específicos
+    if (año1 === año2) {
+        if (mes1 === mes2) {
+            // Caso 1: Mismo mes y año
+            return `${dia1.toString().padStart(2, '0')} al ${dia2.toString().padStart(2, '0')} de ${mes1} del ${año1}`;
+        } else {
+            // Caso 2: Mismo año, mes diferente
+            return `${dia1.toString().padStart(2, '0')} de ${mes1} al ${dia2.toString().padStart(2, '0')} de ${mes2} del ${año1}`;
+        }
+    } else {
+        // Caso 3: Año diferente
+        return `${dia1.toString().padStart(2, '0')} de ${mes1} del ${año1} al ${dia2.toString().padStart(2, '0')} de ${mes2} del ${año2}`;
+    }
 }
 
 
@@ -9359,7 +9366,18 @@ $('#boton_editarInforme').on('click', function (e) {
 			$("#NIVEL3").html(dato.opciones)
 			$("#NIVEL4").html(dato.opciones)
 			$("#NIVEL5").html(dato.opciones)
-			$("#opcionesPortada").html(dato.checks)
+
+
+			$("#OPCION_PORTADA1").html(dato.checks)
+			$("#OPCION_PORTADA2").html(dato.checks)
+			$("#OPCION_PORTADA3").html(dato.checks)
+			$("#OPCION_PORTADA4").html(dato.checks)
+			$("#OPCION_PORTADA5").html(dato.checks)
+			$("#OPCION_PORTADA6").html(dato.checks)
+
+
+
+			// $("#opcionesPortada").html(dato.checks)
 
 
 
@@ -9488,7 +9506,14 @@ $('#boton_editarInforme').on('click', function (e) {
 				$("#NIVEL4").val(dato.data[0].NIVEL4)
 				$("#NIVEL5").val(dato.data[0].NIVEL5)
 
-			}
+
+			$("#OPCION_PORTADA1").val(dato.data[0].OPCION_PORTADA1)
+			$("#OPCION_PORTADA2").val(dato.data[0].OPCION_PORTADA2)
+			$("#OPCION_PORTADA3").val(dato.data[0].OPCION_PORTADA3)
+			$("#OPCION_PORTADA4").val(dato.data[0].OPCION_PORTADA4)
+			$("#OPCION_PORTADA5").val(dato.data[0].OPCION_PORTADA5)
+}			$("#OPCION_PORTADA6").val(dato.data[0].OPCION_PORTADA6)
+
 
 			$("#tab1_informe_info").click();
 			

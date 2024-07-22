@@ -392,9 +392,11 @@
 				</div>
 				<div class="modal-footer">
 					<button type="button" class="btn btn-default waves-effect" data-dismiss="modal">Cerrar</button>
+					@if(auth()->user()->hasRoles(['Superusuario', 'Administrador']))
 					<button type="submit" class="btn btn-danger waves-effect waves-light" id="boton_guardar_sustancia">
 						Guardar <i class="fa fa-save"></i>
 					</button>
+					@endif
 				</div>
 			</form>
 		</div>
@@ -798,9 +800,12 @@
 				</div>
 				<div class="modal-footer">
 					<button type="button" class="btn btn-default waves-effect" data-dismiss="modal">Cerrar</button>
+					@if(auth()->user()->hasRoles(['Superusuario', 'Administrador']))					
 					<button type="submit" class="btn btn-danger waves-effect waves-light" id="boton_guardar_catSustanciaQuimica">
 						Guardar <i class="fa fa-save"></i>
 					</button>
+					@endif 
+
 				</div>
 			</form>
 		</div>
@@ -963,9 +968,11 @@
 				</div>
 				<div class="modal-footer">
 					<button type="button" class="btn btn-default waves-effect" data-dismiss="modal">Cerrar</button>
+					@if(auth()->user()->hasRoles(['Superusuario', 'Administrador']))
 					<button type="submit" class="btn btn-danger waves-effect waves-light" id="boton_guardar_catUnidadMedida">
 						Guardar <i class="fa fa-save"></i>
 					</button>
+					@endif
 				</div>
 			</form>
 		</div>
@@ -1015,9 +1022,11 @@
 				</div>
 				<div class="modal-footer">
 					<button type="button" class="btn btn-default waves-effect" data-dismiss="modal">Cerrar</button>
+					@if(auth()->user()->hasRoles(['Superusuario', 'Administrador']))
 					<button type="submit" class="btn btn-danger waves-effect waves-light" id="boton_guardar_catConnotacion">
 						Guardar <i class="fa fa-save"></i>
 					</button>
+					@endif
 				</div>
 			</form>
 		</div>
@@ -1057,9 +1066,11 @@
 				</div>
 				<div class="modal-footer">
 					<button type="button" class="btn btn-default waves-effect" data-dismiss="modal">Cerrar</button>
+					@if(auth()->user()->hasRoles(['Superusuario', 'Administrador']))
 					<button type="submit" class="btn btn-danger waves-effect waves-light" id="boton_guardar_catEntidades">
 						Guardar <i class="fa fa-save"></i>
 					</button>
+					@endif
 				</div>
 			</form>
 		</div>

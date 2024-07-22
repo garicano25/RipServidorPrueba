@@ -276,7 +276,7 @@ use Illuminate\Support\Str;
                                                 <b href="#" class="btn btn-rounded btn-danger">Almacén</b>
                                                 @elseif(auth()->user()->hasRoles(['Operativo HI']))
                                                 <b href="#" class="btn btn-rounded btn-danger">Operativo HI</b>
-
+                                                
                                                 @elseif(auth()->user()->hasRoles(['Externo']))
                                                 <b href="#" class="btn btn-rounded btn-info">Proveedor</b>
                                                 @else
@@ -447,7 +447,7 @@ use Illuminate\Support\Str;
                                 <li><a href="{{route('recsensorialcatalogos.index')}}">Módulo Rec. sensorial</a></li>
                                 @endif
 
-                                @if(auth()->user()->hasRoles(['Superusuario', 'Administrador']))
+                                @if(auth()->user()->hasRoles(['Superusuario', 'Administrador','Coordinador','Operativo HI','Almacén','Compras']))
                                 <li><a href="{{route('recsensorialquimicoscatalogos.index')}}">Módulo Rec. químicos</a></li>
                                 @endif
                             </ul>

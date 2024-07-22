@@ -35,7 +35,7 @@ class recsensorialquimicoscatalogosController extends Controller
     {
         $this->middleware('auth');
         // $this->middleware('Superusuario,Administrador,Proveedor,Reconocimiento,Proyecto,Compras,Staff,Psicólogo,Ergónomo,CoordinadorPsicosocial,CoordinadorErgonómico,CoordinadorRN,CoordinadorRS,CoordinadorRM,CoordinadorHI,Externo');
-        $this->middleware('roles:Superusuario,Administrador');
+        $this->middleware('roles:Superusuario,Administrador,Coordinador,Compras,Almacén,Operativo HI');
     }
 
 
@@ -179,12 +179,14 @@ class recsensorialquimicoscatalogosController extends Controller
 
                         // Valida perfil
                         // $this->middleware('Superusuario,Administrador,Proveedor,Reconocimiento,Proyecto,Compras,Staff,Psicólogo,Ergónomo,CoordinadorPsicosocial,CoordinadorErgonómico,CoordinadorRN,CoordinadorRS,CoordinadorRM,CoordinadorHI,Externo');
-                        if (auth()->user()->hasRoles(['Superusuario', 'Administrador', 'Reconocimiento', 'CoordinadorHI'])) {
+                        if (auth()->user()->hasRoles(['Superusuario', 'Administrador'])) {
                             $value->perfil = 1;
                             $value->boton_editar = '<button type="button" class="btn btn-danger btn-circle" onclick="selecciona_sustancia_quimico();"><i class="fa fa-pencil"></i></button>';
                         } else {
                             $value->perfil = 0;
                             $value->boton_editar = '<button type="button" class="btn btn-secondary btn-circle" ><i class="fa fa-ban" aria-hidden="true"></i></button>';
+                            $value->CheckboxEstado = '<div class="switch"><label><input type="checkbox" disabled><span class="lever switch-col-light-blue"></span></label></div>';
+
                         }
                     }
 
@@ -306,10 +308,17 @@ class recsensorialquimicoscatalogosController extends Controller
 
                         // Valida perfil
                         // $this->middleware('Superusuario,Administrador,Proveedor,Reconocimiento,Proyecto,Compras,Staff,Psicólogo,Ergónomo,CoordinadorPsicosocial,CoordinadorErgonómico,CoordinadorRN,CoordinadorRS,CoordinadorRM,CoordinadorHI,Externo');
+                      
+                      
+                      
                         if (auth()->user()->hasRoles(['Superusuario', 'Administrador', 'Reconocimiento', 'CoordinadorHI'])) {
                             $value->perfil = 1;
+
                         } else {
                             $value->perfil = 0;
+                            $value->boton_editar = '<button type="button" class="btn btn-info btn-circle" onclick="selecciona_sustancia();"><i class="fa fa-eye"></i></button>';
+                            $value->CheckboxEstado = '<div class="switch"><label><input type="checkbox" disabled><span class="lever switch-col-light-blue"></span></label></div>';
+
                         }
                     }
                     break;
@@ -330,6 +339,9 @@ class recsensorialquimicoscatalogosController extends Controller
                         } else {
                             $value['CheckboxEstado'] = '<div class="switch"><label><input type="checkbox" onclick="cambia_estado_registro(' . $num_catalogo . ', ' . $value->id . ', this);"><span class="lever switch-col-light-blue"></span></label></div>';
                         }
+
+
+                        
                     }
                     break;
                 case 3: // CATALOGO VOLATILIDAD
@@ -418,6 +430,17 @@ class recsensorialquimicoscatalogosController extends Controller
                         } else {
                             $value['CheckboxEstado'] = '<div class="switch"><label><input type="checkbox" onclick="cambia_estado_registro(' . $num_catalogo . ', ' . $value->ID_UNIDAD_MEDIDA . ', this);"><span class="lever switch-col-light-blue"></span></label></div>';
                         }
+
+
+                        if (auth()->user()->hasRoles(['Superusuario', 'Administrador'])) {
+                            $value->perfil = 1;
+
+                        } else {
+                            $value->perfil = 0;
+                            $value['boton_editar'] = '<button type="button" class="btn btn-info btn-circle" onclick="selecciona_catvolatilidad();"><i class="fa fa-eye"></i></button>';
+                            $value['CheckboxEstado'] = '<div class="switch"><label><input type="checkbox" disabled><span class="lever switch-col-light-blue"></span></label></div>';
+                
+                        }
                     }
                     break;
                 case 9: // CATALOGO DE CONNOTACIONES
@@ -438,6 +461,16 @@ class recsensorialquimicoscatalogosController extends Controller
                         } else {
                             $value->CheckboxEstado = '<div class="switch"><label><input type="checkbox" onclick="cambia_estado_registro(' . $num_catalogo . ', ' . $value->ID_CONNOTACION . ', this);"><span class="lever switch-col-light-blue"></span></label></div>';
                         }
+
+                        if (auth()->user()->hasRoles(['Superusuario', 'Administrador', 'Reconocimiento', 'CoordinadorHI'])) {
+                            $value->perfil = 1;
+
+                        } else {
+                            $value->perfil = 0;
+                            $value->boton_editar = '<button type="button" class="btn btn-info btn-circle" onclick="selecciona_catConnotacion();"><i class="fa fa-eye"></i></button>';
+                            $value->CheckboxEstado = '<div class="switch"><label><input type="checkbox" disabled><span class="lever switch-col-light-blue"></span></label></div>';
+
+                        }
                     }
                     break;
                 case 10: // CATALOGO DE ENTIDADES
@@ -455,6 +488,20 @@ class recsensorialquimicoscatalogosController extends Controller
                         } else {
                             $value['CheckboxEstado'] = '<div class="switch"><label><input type="checkbox" onclick="cambia_estado_registro(' . $num_catalogo . ', ' . $value->ID_ENTIDAD . ', this);"><span class="lever switch-col-light-blue"></span></label></div>';
                         }
+
+
+                        if (auth()->user()->hasRoles(['Superusuario', 'Administrador'])) {
+                            $value->perfil = 1;
+
+                        } else {
+                            $value->perfil = 0;
+
+                            $value['boton_editar'] = '<button type="button" class="btn btn-info btn-circle" onclick="selecciona_catEntidades();"><i class="fa fa-eye"></i></button>';
+                            $value['CheckboxEstado'] = '<div class="switch"><label><input type="checkbox" disabled><span class="lever switch-col-light-blue"></span></label></div>';
+                
+                        }
+
+                        
                     }
                     break;
             }

@@ -2428,61 +2428,54 @@
                                                 </div>
 
                                                 <h3 class="mx-4 mt-3">Seleccione las opciones que desee mostrar en la Portada del Informe (Instalación)</h3>
-                                                <div class="row mx-1" id="opcionesPortada">
-
-                                                </div>
-
-                                                <!-- <div class="col-12">
-                                                    <div class="switch" style="float: left;">
-                                                        <label>
-                                                            <input type="checkbox" class="checkbox_puntos" name="REGION" id="chekbox_puntos_region" value="1">
-                                                            <span class="lever switch-col-light-blue"></span>
-                                                        </label>
+                                                <div class="col-12">
+                                                    <div class="form-group">
+                                                        <label> Opción 1 </label>
+                                                        <select class="custom-select form-control" style="width: 50%;" id="OPCION_PORTADA1" name="OPCION_PORTADA1">
+                                                        </select>
                                                     </div>
-                                                    <label class="demo-switch-title" style="float: left;" id="puntoRegion"></label>
                                                 </div>
 
                                                 <div class="col-12">
-                                                    <div class="switch" style="float: left;">
-                                                        <label>
-                                                            <input type="checkbox" class="checkbox_puntos" name="SUBDIRRECCION" id="chekbox_puntos_subdirreccion" value="1">
-                                                            <span class="lever switch-col-light-blue"></span>
-                                                        </label>
+                                                    <div class="form-group">
+                                                        <label> Opción 2 </label>
+                                                        <select class="custom-select form-control" style="width: 50%;" id="OPCION_PORTADA2" name="OPCION_PORTADA2">
+                                                        </select>
                                                     </div>
-                                                    <label class="demo-switch-title" style="float: left;" id="puntoSubdirreccion"></label>
                                                 </div>
-
-                                                <div class="col-12 mt-2">
-                                                    <div class="switch" style="float: left;">
-                                                        <label>
-                                                            <input type="checkbox" class="checkbox_puntos" name="GERENCIA" id="chekbox_puntos_gerencia" value="1">
-                                                            <span class="lever switch-col-light-blue"></span>
-                                                        </label>
-                                                    </div>
-                                                    <label class="demo-switch-title" style="float: left;" id="puntoGerencia"></label>
-                                                </div>
-
 
                                                 <div class="col-12">
-                                                    <div class="switch" style="float: left;">
-                                                        <label>
-                                                            <input type="checkbox" class="checkbox_puntos" name="ACTIVO" id="chekbox_puntos_activo" value="1">
-                                                            <span class="lever switch-col-light-blue"></span>
-                                                        </label>
+                                                    <div class="form-group">
+                                                        <label> Opción 3 </label>
+                                                        <select class="custom-select form-control" style="width: 50%;" id="OPCION_PORTADA3" name="OPCION_PORTADA3">
+                                                        </select>
                                                     </div>
-                                                    <label class="demo-switch-title" style="float: left;" id="puntoActivo"></label>
                                                 </div>
 
+                                                <div class="col-12">
+                                                    <div class="form-group">
+                                                        <label> Opción 4 </label>
+                                                        <select class="custom-select form-control" style="width: 50%;" id="OPCION_PORTADA4" name="OPCION_PORTADA4">
+                                                        </select>
+                                                    </div>
+                                                </div>
 
                                                 <div class="col-12">
-                                                    <div class="switch" style="float: left;">
-                                                        <label>
-                                                            <input type="checkbox" class="checkbox_puntos" name="INSTALACION" id="chekbox_puntos_instalacion" value="1">
-                                                            <span class="lever switch-col-light-blue"></span>
-                                                        </label>
+                                                    <div class="form-group">
+                                                        <label> Opción 5 </label>
+                                                        <select class="custom-select form-control" style="width: 50%;" id="OPCION_PORTADA5" name="OPCION_PORTADA5">
+                                                        </select>
                                                     </div>
-                                                    <label class="demo-switch-title" style="float: left;" id="puntoInstalacion"></label>
-                                                </div> -->
+                                                </div>
+                                                <div class="col-12">
+                                                    <div class="form-group">
+                                                        <label> Opción 6 </label>
+                                                        <select class="custom-select form-control" style="width: 50%;" id="OPCION_PORTADA6" name="OPCION_PORTADA6">
+                                                        </select>
+                                                    </div>
+                                                </div>
+
+                                                
 
                                                 <style>
                                                     .legend {
