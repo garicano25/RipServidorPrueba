@@ -77,7 +77,7 @@ class signatarioController extends Controller
                 }
 
                 // Botones
-                if (auth()->user()->hasRoles(['Superusuario', 'Administrador','Compras','Almacén']) && ($proveedor->proveedor_Bloqueado + 0) == 0) {
+                if (auth()->user()->hasRoles(['Superusuario', 'Administrador', 'Compras', 'Almacén']) && ($proveedor->proveedor_Bloqueado + 0) == 0) {
                     $value->accion_activa = 1;
                     $value->boton_editar = '<button type="button" class="btn btn-warning btn-circle"><i class="fa fa-pencil"></i></button>';
                 } else {
@@ -117,29 +117,29 @@ class signatarioController extends Controller
     public function store(Request $request)
     {
         try {
-            if ($request['api'] == 1){
+            if ($request['api'] == 1) {
 
                 if ($request['signatario_Eliminado'] == 0) //valida eliminacion
                 {
-    
+
                     if ($request['signatario_id'] == 0) //nuevo
                     {
                         // AUTO_INCREMENT
                         DB::statement('ALTER TABLE signatario AUTO_INCREMENT=1');
                         $signatario = SignatarioModel::create($request->all());
-    
+
                         if ($request->file('signatariofoto')) {
                             $extension = $request->file('signatariofoto')->getClientOriginalExtension();
                             $request['signatario_Foto'] = $request->file('signatariofoto')->storeAs('proveedores/' . $request['proveedor_id'] . '/signatarios/' . $request['signatario_id'] . '/foto', $signatario->id . '.' . $extension);
-    
+
                             $signatario->update($request->all());
                         }
-    
+
                         return response()->json($signatario);
                     } else //editar
                     {
                         $signatario = SignatarioModel::findOrFail($request['signatario_id']);
-    
+
                         if ($request->file('signatariofoto')) {
 
                             if (Storage::exists($signatario->signatario_Foto)) {
@@ -149,7 +149,7 @@ class signatarioController extends Controller
                             $extension = $request->file('signatariofoto')->getClientOriginalExtension();
                             $request['signatario_Foto'] = $request->file('signatariofoto')->storeAs('proveedores/' . $request['proveedor_id'] . '/signatarios/' . $request['signatario_id'] . '/foto', $signatario->id . '.' . $extension);
                         }
-    
+
                         $signatario->update($request->all());
                         return response()->json($signatario);
                     }
@@ -159,14 +159,13 @@ class signatarioController extends Controller
                     $signatario->update($request->all());
                     return response()->json($signatario);
                 }
-            
             } else { //CARGAMOS LA LISTA DE PERSONALES POR MEDIO DE UN EXCEL
 
                 try {
 
                     // Verificar si hay un archivo en la solicitud
                     if ($request->hasFile('excelPersonales')) {
-                        
+
                         // Obtenemos el Excel de los personales
                         $excel = $request->file('excelPersonales');
 
@@ -303,7 +302,7 @@ class signatarioController extends Controller
 
                             //Limpiamos los campos con mas complejidad
                             $pesonalApoyo = validarPersonalApoyo($rowData['I']);
-                           
+
 
                             //VALIDAMOS SI REQUIERE FOTO EN ESTE CASO (TRUE)
                             if (validarFotoRequerida($rowData['O'])) {
@@ -347,12 +346,11 @@ class signatarioController extends Controller
                                     'signatario_parentesco' => is_null($rowData['N']) ? "No especificado" : $rowData['N'],
 
                                 ]);
-
                             }
 
                             $personalInsertados++;
                         }
-                        
+
                         //RETORNAMOS UN MENSAJE DE CUANTOS INSERTO 
                         return response()->json(['msj' => 'Total de personales agregados : ' . $personalInsertados . ' de ' . $totalPersonal, 'code' => 200]);
                     } else {
@@ -361,11 +359,9 @@ class signatarioController extends Controller
                     }
                 } catch (Exception $e) {
 
-                    return response()->json(['msj' => 'Se produjo un error al intentar cargar los personales, inténtelo de nuevo o comuníquelo con el responsable ' . ' ---- ' . $e->getMessage(), 'code' => 500]);
+                    return response()->json(['msj' => 'Se produjo un error al intentar cargar el personal, inténtelo de nuevo o comuníquelo con el responsable ' . ' ---- ' . $e->getMessage(), 'code' => 500]);
                 }
-
             }
-
         } catch (Exception $e) {
             return response()->json('Error al guardar');
         }

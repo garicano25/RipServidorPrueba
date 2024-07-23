@@ -89,7 +89,7 @@
                         <span class="hidden-xs-down">Datos del proyecto</span>
                     </a>
                 </li>
-              
+
                 <!-- <li class="nav-item" style="display: none;">
                     <a class="nav-link" data-toggle="tab" href="#tab_3" id="tab_menu3" role="tab">
                         <span class="hidden-sm-up"><i class="ti-layout-tab"></i></span>
@@ -682,7 +682,7 @@
                                                                                             <textarea class="form-control" rows="6" id="proyecto_clienteobservacion" name="proyecto_clienteobservacion"></textarea>
                                                                                         </div>
                                                                                     </div>
-                                                                                    <div id="servicios" class="row mx-3 mb-3 p-1" style="border: 1px solid #0B3F64; border-radius: 10px">
+                                                                                    <div id="servicios" class="row mx-3 mb-3 p-1" style="border: 1px solid #0B3F64; border-radius: 10px; width:100%">
 
                                                                                         <div class="col-12 text-center mb-3 mt-2">
                                                                                             <h3 class="mb-2" id="titleServicios">Tipos de servicios</h3>
