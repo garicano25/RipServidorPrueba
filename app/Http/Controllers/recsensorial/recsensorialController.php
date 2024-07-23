@@ -238,7 +238,7 @@ class recsensorialController extends Controller
                 }
 
                 // Valida perfil
-                if (auth()->user()->hasRoles(['Superusuario', 'Administrador','Coordinador','Operativo HI'])) {
+                if (auth()->user()->hasRoles(['Superusuario', 'Administrador', 'Coordinador', 'Operativo HI'])) {
                     $value->perfil = 1;
                 } else {
                     $value->perfil = 0;
@@ -950,12 +950,12 @@ class recsensorialController extends Controller
 
 
             foreach ($niveles as $key => $value) {
-                  if ($value->ETIQUETA == 'Instalación' || $value->NIVEL != 0) {
+                if ($value->ETIQUETA == 'Instalación' || $value->NIVEL != 0) {
 
                     $html .= '<option value="' . $value->OPCION . '">' . $value->ETIQUETA . " : " . $value->OPCION;
                     if ($value->NIVEL != 0) {
 
-                        $html .= ' [ Nivel ' . $value->NIVEL . ']'; 
+                        $html .= ' [ Nivel ' . $value->NIVEL . ']';
                     }
                     $html .= '</option>';
                 }
@@ -1016,20 +1016,20 @@ class recsensorialController extends Controller
                             LEFT JOIN sustanciaQuimicaEntidad entidad ON entidad.SUSTANCIA_QUIMICA_ID = sus.ID_SUSTANCIA_QUIMICA
                             WHERE tabla.RECONOCIMIENTO_ID = ?
                             GROUP BY tabla.ID_TABLA_INFORME,
-                                            CATEGORIA,
+                                            categoria.recsensorialcategoria_nombrecategoria,
                                             PRODUCTO_COMPONENTE,
-                                            RECONOCIMIENTO_ID,
-                                            CATEGORIA_ID,
-                                            SUSTANCIA_ID,
-                                            PRODUCTO_ID,
+                                            tabla.RECONOCIMIENTO_ID,
+                                            categoria.id,
+                                            sus.ID_SUSTANCIA_QUIMICA,
+                                            hoja.id ,
                                             PPT,
                                             CT,
                                             VAL_PPT_VIEJO,
                                             VAL_CT_VIEJO,
-                                            VAL_PUNTOS_VIEJO,
+                                            tabla.PUNTOS_VIEJO,
                                             VAL_PPT_NUEVO,
                                             VAL_CT_NUEVEO,
-                                            VAL_PUNTOS_NUEVO,
+                                            tabla.PUNTOS_NUEVO,
                                             JUSTIFICACION,
                                             TIENE_JUSTIFICACION,
                                             TIEMPO_EXPO
@@ -1040,7 +1040,6 @@ class recsensorialController extends Controller
                 $dato["data"] = $info;
                 $dato["nuevo"] = 0;
                 return response()->json($dato);
-                
             } else {
 
                 $datos = DB::select('SELECT DISTINCT PONDERACION2.*,
@@ -1492,16 +1491,14 @@ class recsensorialController extends Controller
                                     AND sp.HI_RECONOCIMIENTO = 1
                                     AND (p.recsensorial_id IS NULL OR p.proyecto_folio = ?) ", [$proyecto_folio]);
 
-                        foreach ($proyectos as $key => $value) {
-                            $displayText = '[' . htmlspecialchars($value->proyecto_folio) . '] ' . htmlspecialchars($value->proyecto_clienteinstalacion);
+            foreach ($proyectos as $key => $value) {
+                $displayText = '[' . htmlspecialchars($value->proyecto_folio) . '] ' . htmlspecialchars($value->proyecto_clienteinstalacion);
 
-                            if ($value->proyecto_folio == $proyecto_folio) {
-                                $opciones_select .= '<option value="' . htmlspecialchars($value->proyecto_folio) . '" selected>' . $displayText . '</option>';
-                            } else {
-                                $opciones_select .= '<option value="' . htmlspecialchars($value->proyecto_folio) . '">' . $displayText . '</option>';
-                            }
-
-
+                if ($value->proyecto_folio == $proyecto_folio) {
+                    $opciones_select .= '<option value="' . htmlspecialchars($value->proyecto_folio) . '" selected>' . $displayText . '</option>';
+                } else {
+                    $opciones_select .= '<option value="' . htmlspecialchars($value->proyecto_folio) . '">' . $displayText . '</option>';
+                }
             }
 
             // // respuesta
@@ -1923,13 +1920,12 @@ class recsensorialController extends Controller
                     }
 
                     ///VERIFICAMOS QUE EL FOLIO DEL PROYECTO QUE ENVIA SEA EL MISMO
-                    if($recsensorial->proyecto_folio == $request['proyecto_folio']){
+                    if ($recsensorial->proyecto_folio == $request['proyecto_folio']) {
 
-                        $proyecto = proyectoModel::where('proyecto_folio',$request["proyecto_folio"])->first();
+                        $proyecto = proyectoModel::where('proyecto_folio', $request["proyecto_folio"])->first();
                         $proyecto->recsensorial_id = $recsensorial->id;
                         $proyecto->save();
-
-                    }else{
+                    } else {
 
 
                         $proyecto = proyectoModel::where('proyecto_folio', $recsensorial->proyecto_folio)->first();
@@ -1940,8 +1936,6 @@ class recsensorialController extends Controller
                         $proyecto = proyectoModel::where('proyecto_folio', $request["proyecto_folio"])->first();
                         $proyecto->recsensorial_id = $recsensorial->id;
                         $proyecto->save();
-
-
                     }
 
 
