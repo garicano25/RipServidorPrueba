@@ -1203,38 +1203,35 @@ class reportequimicosController extends Controller
             // }
 
 
-            $partidas = DB::select('SELECT
-                                        clientepartidas.cliente_id, 
-                                        clientepartidas.id, 
-                                        clientepartidas.catprueba_id, 
-                                        clientepartidas.clientepartidas_tipo, 
-                                        clientepartidas.clientepartidas_nombre, 
-                                        clientepartidas.clientepartidas_descripcion
-                                    FROM
-                                        clientepartidas
-                                    WHERE
-                                        clientepartidas.cliente_id = '.$proyecto->recsensorial->cliente_id.'
-                                        AND clientepartidas.clientepartidas_tipo = 2 -- 1 = RECONOCIMIENTO, 2 = INFORME
-                                        AND clientepartidas.catprueba_id = 15 -- QUIMICOS
-                                    ORDER BY
-                                        clientepartidas.id ASC,
-                                        clientepartidas.clientepartidas_descripcion ASC');
+            $partidas = DB::select("SELECT
+                                cc.CLIENTE_ID, 
+                                clientepartidas.id, 
+                                clientepartidas.catprueba_id, 
+                                clientepartidas.clientepartidas_tipo, 
+                                clientepartidas.clientepartidas_nombre, 
+                                clientepartidas.clientepartidas_descripcion
+                                FROM
+                                contratos_partidas  clientepartidas
+                                LEFT JOIN contratos_clientes cc ON cc.ID_CONTRATO = clientepartidas.CONTRATO_ID
+                                WHERE
+                                cc.CLIENTE_ID = ".$proyecto->recsensorial->cliente_id."
+                                AND clientepartidas.clientepartidas_tipo = 2 -- 1 = RECONOCIMIENTO, 2 = INFORME
+                                AND clientepartidas.catprueba_id = 15 -- QUIMICOS
+                                ORDER BY
+                                clientepartidas.id ASC,
+                                clientepartidas.clientepartidas_descripcion ASC");
 
+                    $dato['catpartidasquimicos'] = '<option value=""></option>';
 
-            $dato['catpartidasquimicos'] = '<option value=""></option>';
-            foreach ($partidas as $key => $value)
-            {
-                $dato['catpartidasquimicos'] .= '<option value="'.$value->id.'">'.$value->clientepartidas_descripcion.'</option>';
-                
-                // if(strlen($value->clientepartidas_descripcion) > 140)
-                // {
-                //     $dato['catpartidasquimicos'] .= '<option value="'.$value->id.'">'.substr($value->clientepartidas_descripcion, 0, 47).'...'.substr($value->clientepartidas_descripcion, -70).'</option>';
-                // }
-                // else
-                // {
-                //     $dato['catpartidasquimicos'] .= '<option value="'.$value->id.'">'.$value->clientepartidas_descripcion.'</option>';
-                // }
+                    // Verificamos si la consulta devolvió algún resultado
+            if (count($partidas) > 0) {
+                    foreach ($partidas as $key => $value) {
+                    $dato['catpartidasquimicos'] .= '<option value="'.$value->id.'">'.$value->clientepartidas_descripcion.'</option>';
             }
+                } else {
+                    // Si no hay partidas, agregamos una opción indicando que no hay contratos
+                $dato['catpartidasquimicos'] = '<option value="">Reconocimiento sin contrato</option>';
+                }
 
 
             //============================================
@@ -1294,7 +1291,7 @@ class reportequimicosController extends Controller
                                         reportequimicosgrupos.proveedor_id,
                                         proveedor.proveedor_NombreComercial,
                                         reportequimicosgrupos.catreportequimicospartidas_id,
-                                        clientepartidas.clientepartidas_descripcion,
+                                        -- clientepartidas.clientepartidas_descripcion,
                                         reportequimicosgrupos.reportequimicosproyecto_id,
                                         reportequimicosproyecto.reportequimicosproyecto_parametro,
                                         (
@@ -1315,13 +1312,12 @@ class reportequimicosController extends Controller
                                     FROM
                                         reportequimicosgrupos
                                         LEFT JOIN proveedor ON reportequimicosgrupos.proveedor_id = proveedor.id
-                                        LEFT JOIN clientepartidas ON reportequimicosgrupos.catreportequimicospartidas_id = clientepartidas.id
+                                        -- LEFT JOIN clientepartidas ON reportequimicosgrupos.catreportequimicospartidas_id = clientepartidas.id
                                         LEFT JOIN reportequimicosproyecto ON reportequimicosgrupos.reportequimicosproyecto_id = reportequimicosproyecto.id 
                                     WHERE
                                         reportequimicosgrupos.proyecto_id = '.$proyecto_id.' 
                                         AND reportequimicosgrupos.registro_id = '.$reporteregistro_id.'  
                                     ORDER BY
-                                        clientepartidas.clientepartidas_descripcion ASC,
                                         orden ASC,
                                         reportequimicosproyecto.reportequimicosproyecto_parametro ASC');
 
@@ -1345,12 +1341,12 @@ class reportequimicosController extends Controller
                 $quimicos_lista[] = $value->reportequimicosproyecto_parametro;
 
 
-                if ($partida != $value->clientepartidas_descripcion)
-                {
-                    $partida = $value->clientepartidas_descripcion;
+                // if ($partida != $value->clientepartidas_descripcion)
+                // {
+                //     $partida = $value->clientepartidas_descripcion;
 
-                    $dato['catpartidasquimicos_utilizadas'] .= '<option value="'.$value->catreportequimicospartidas_id.'">'.$value->clientepartidas_descripcion.'</option>';
-                }
+                //     $dato['catpartidasquimicos_utilizadas'] .= '<option value="'.$value->catreportequimicospartidas_id.'">'.$value->clientepartidas_descripcion.'</option>';
+                // }
             }
 
 
@@ -2531,17 +2527,17 @@ class reportequimicosController extends Controller
                                                                     recsensorialarea.recsensorialarea_nombre AS area_nombre,
                                                                     recsensorialquimicosinventario.recsensorialcategoria_id AS categoria_id,
                                                                     recsensorialcategoria.recsensorialcategoria_nombrecategoria AS categoria_nombre,
-                                                                    recsensorialcategoria.recsensorialcategoria_funcioncategoria AS categoria_funcion,
+                                                                    -- recsensorialcategoria.recsensorialcategoria_funcioncategoria AS categoria_funcion,
                                                                     recsensorialareacategorias.recsensorialareacategorias_actividad AS categoria_actividad,
                                                                     recsensorialareacategorias.recsensorialareacategorias_geh AS categoria_geh,
-                                                                    recsensorialcategoria.recsensorialcategoria_horasjornada AS horas_jornada,
+                                                                    -- recsensorialcategoria.recsensorialcategoria_horasjornada AS horas_jornada,
                                                                     recsensorialareacategorias.recsensorialareacategorias_total AS tot_trabajadores,
                                                                     -- recsensorialareacategorias.recsensorialareacategorias_tiempoexpo AS tiempo_expo,
                                                                     -- recsensorialareacategorias.recsensorialareacategorias_frecuenciaexpo AS frecuencia_expo,
                                                                     IFNULL(recsensorialquimicosinventario.recsensorialcategoria_tiempoexpo, 0) AS tiempo_expo,
                                                                     IFNULL(recsensorialquimicosinventario.recsensorialcategoria_frecuenciaexpo, 0) AS frecuencia_expo,
-                                                                    recsensorialcategoria.recsensorialcategoria_horarioentrada AS horario_entrada,
-                                                                    recsensorialcategoria.recsensorialcategoria_horariosalida AS horario_salida,
+                                                                    -- recsensorialcategoria.recsensorialcategoria_horarioentrada AS horario_entrada,
+                                                                    -- recsensorialcategoria.recsensorialcategoria_horariosalida AS horario_salida,
                                                                     recsensorialquimicosinventario.catsustancia_id AS sustancia_id,
                                                                     catsustancia.catsustancia_nombre AS sustancia_nombre,
                                                                     recsensorialquimicosinventario.recsensorialquimicosinventario_cantidad AS sustancia_cantidad,
@@ -2616,13 +2612,10 @@ class reportequimicosController extends Controller
                                                                     recsensorialarea.recsensorialarea_nombre,
                                                                     recsensorialquimicosinventario.recsensorialcategoria_id,
                                                                     recsensorialcategoria.recsensorialcategoria_nombrecategoria,
-                                                                    recsensorialcategoria.recsensorialcategoria_funcioncategoria,
+                                                                  
                                                                     recsensorialareacategorias.recsensorialareacategorias_actividad,
                                                                     recsensorialareacategorias.recsensorialareacategorias_geh,
-                                                                    recsensorialcategoria.recsensorialcategoria_horasjornada,
                                                                     recsensorialareacategorias.recsensorialareacategorias_total,
-                                                                    recsensorialcategoria.recsensorialcategoria_horarioentrada,
-                                                                    recsensorialcategoria.recsensorialcategoria_horariosalida,
                                                                     recsensorialquimicosinventario.catsustancia_id,
                                                                     catsustancia.catsustancia_nombre,
                                                                     recsensorialquimicosinventario.recsensorialquimicosinventario_cantidad,
@@ -4288,7 +4281,7 @@ class reportequimicosController extends Controller
                                         proyectoevidenciaplano.agente_nombre,
                                         proyectoevidenciaplano.proyectoevidenciaplano_carpeta,
                                         proyectoevidenciaplano.catreportequimicospartidas_id,
-                                        clientepartidas.clientepartidas_descripcion,
+                                        contratos_partidas.clientepartidas_descripcion,
                                         COUNT(proyectoevidenciaplano.id) AS total_planos,
                                         IFNULL((
                                             SELECT
@@ -4304,7 +4297,7 @@ class reportequimicosController extends Controller
                                         ), "") AS checked
                                     FROM
                                         proyectoevidenciaplano
-                                        LEFT JOIN clientepartidas ON proyectoevidenciaplano.catreportequimicospartidas_id = clientepartidas.id 
+                                        LEFT JOIN contratos_partidas  ON proyectoevidenciaplano.catreportequimicospartidas_id = contratos_partidas.id 
                                     WHERE
                                         proyectoevidenciaplano.proyecto_id = '.$proyecto_id.' 
                                         AND proyectoevidenciaplano.agente_nombre = "'.$agente_nombre.'" 
@@ -4315,7 +4308,7 @@ class reportequimicosController extends Controller
                                         proyectoevidenciaplano.agente_nombre,
                                         proyectoevidenciaplano.proyectoevidenciaplano_carpeta,
                                         proyectoevidenciaplano.catreportequimicospartidas_id,
-                                        clientepartidas.clientepartidas_descripcion
+                                        contratos_partidas.clientepartidas_descripcion
                                     ORDER BY
                                         proyectoevidenciaplano.catreportequimicospartidas_id ASC,
                                         proyectoevidenciaplano.proyectoevidenciaplano_carpeta ASC');
@@ -4519,8 +4512,8 @@ class reportequimicosController extends Controller
                                                 ELSE "text-danger"
                                             END
                                         ) AS vigencia_color,
-                                        equipo.equipo_CertificadoPDF,
-                                        equipo.equipo_cartaPDF,
+                                        -- equipo.equipo_CertificadoPDF,
+                                        -- equipo.equipo_cartaPDF,
                                         IFNULL((
                                             SELECT
                                                 IF(IFNULL(reporteequiposutilizados.equipo_id, ""), "checked" , "")
@@ -4597,52 +4590,13 @@ class reportequimicosController extends Controller
                 $value->vigencia = '<span class="'.$value->vigencia_color.'">'.$value->vigencia_texto.'</span>';
 
 
-                if ($value->equipo_CertificadoPDF)
-                {
-                    $value->certificado = '<button type="button" class="btn btn-info waves-effect btn-circle" data-toggle="tooltip" title="Mostrar certificado"><i class="fa fa-file-pdf-o fa-2x"></i></button>';
-                }
-                else
-                {
-                    $value->certificado = '<button type="button" class="btn btn-default waves-effect btn-circle" data-toggle="tooltip" title="N/A certificado"><i class="fa fa-ban fa-2x"></i></button>';
-                }
+            
 
 
                 //---------------------------
 
 
-                if ($value->equipo_cartaPDF)
-                {
-                    $checkedcarta_disabled = 'disabled';
-                    if ($value->checked)
-                    {
-                        $checkedcarta_disabled = '';
-                    }
-
-
-                    $checked_carta = '';
-                    if ($value->cartacalibracion)
-                    {
-                        $checked_carta = 'checked';
-                    }
-
-
-                    $value->checkbox_carta = '<div class="switch">
-                                                    <label>
-                                                        <input type="checkbox" id="equipoutilizado_checkboxcarta_'.$value->equipo_id.'" name="equipoutilizado_checkboxcarta_'.$value->equipo_id.'" value="'.$value->equipo_id.'" '.$checkedcarta_disabled.' '.$checked_carta.'/>
-                                                        <span class="lever switch-col-light-green"></span>
-                                                    </label>
-                                                </div>';
-
-
-                    $value->carta = '<button type="button" class="btn btn-success waves-effect btn-circle" data-toggle="tooltip" title="Mostrar carta">
-                                            <i class="fa fa-file-pdf-o fa-2x"></i>
-                                        </button>';
-                }
-                else
-                {
-                    $value->checkbox_carta = 'N/A';
-                    $value->carta = 'N/A';
-                }
+             
 
 
                 // VERIFICAR SI HAY EQUIPOS SELECCIONADOS
