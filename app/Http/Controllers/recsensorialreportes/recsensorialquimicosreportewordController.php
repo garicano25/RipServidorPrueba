@@ -234,6 +234,7 @@ class recsensorialquimicosreportewordController extends Controller
             ->where('catprueba_id', 2) // quimicos
             ->orderBy('updated_at', 'DESC')
             ->get();
+
         //PARTE DEL PROYECTO
         if (count($titulo_partida) > 0) {
 
@@ -1372,6 +1373,44 @@ class recsensorialquimicosreportewordController extends Controller
         }
 
         $plantillaword->setComplexBlock('tabla_quimicos_resumen4-1', $table);
+
+
+        // TABLA 13.1 Controles para agentes químicos con los que cuenta el área
+        //================================================================================
+        // Crear tabla
+        $table = null;
+        $No = 1;
+        $total = 0;
+        $table = new Table(array('name' => 'Arial', 'width' => 13500, 'borderSize' => 10, 'borderColor' => '000000', 'cellMargin' => 0, 'spaceAfter' => 0, 'unit' => TblWidth::TWIP));
+
+        $sql = DB::select('SELECT
+                                recsensorialarea.recsensorial_id,
+                                recsensorialarea.id,
+                                IFNULL(recsensorialarea.recsensorialarea_nombre, "Sin dato") AS recsensorialarea_nombre,
+                                recsensorialarea.recsensorialarea_controlestecnicos,
+                                recsensorialarea.recsensorialarea_controlesadministrativos 
+                            FROM
+                                recsensorialarea 
+                            WHERE
+                                recsensorialarea.recsensorial_id = ? 
+                            ORDER BY
+                                recsensorialarea.id ASC', [$recsensorial_id]);
+
+        // encabezado tabla
+        $table->addRow(200, array('tblHeader' => true));
+        $table->addCell(3000, $encabezado_celda)->addTextRun($centrado)->addText('Área', $encabezado_texto);
+        $table->addCell(3000, $encabezado_celda)->addTextRun($centrado)->addText('Controles técnicos', $encabezado_texto);
+        $table->addCell(3000, $encabezado_celda)->addTextRun($centrado)->addText('Controles administrativos', $encabezado_texto);
+
+        // registros tabla
+        foreach ($sql as $key => $value) {
+            $table->addRow(); //fila
+            $table->addCell(null, $celda)->addTextRun($centrado)->addText($value->recsensorialarea_nombre, $texto);
+            $table->addCell(null, $celda)->addTextRun($centrado)->addText($value->recsensorialarea_controlestecnicos, $texto);
+            $table->addCell(null, $celda)->addTextRun($centrado)->addText($value->recsensorialarea_controlesadministrativos, $texto);
+        }
+
+        $plantillaword->setComplexBlock('tabla_quimicos_controles', $table);
 
 
 
