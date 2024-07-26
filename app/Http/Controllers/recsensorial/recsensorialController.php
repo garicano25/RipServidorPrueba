@@ -988,52 +988,7 @@ class recsensorialController extends Controller
     {
         try {
 
-            $info = DB::select('SELECT categoria.recsensorialcategoria_nombrecategoria AS CATEGORIA,
-                                    CONCAT(sus.SUSTANCIA_QUIMICA," (",hoja.catsustancia_nombre,")") AS PRODUCTO_COMPONENTE,
-                                    tabla.RECONOCIMIENTO_ID AS RECONOCIMIENTO_ID,
-                                    categoria.id AS CATEGORIA_ID,
-                                    sus.ID_SUSTANCIA_QUIMICA AS SUSTANCIA_ID,
-                                    hoja.id AS PRODUCTO_ID,
-                                    IF(entidad.VLE_PPT IS NULL, 0, 1) AS PPT,
-                                    IF(entidad.VLE_CT_P IS NULL, 0, 1) AS CT,
-
-                                    IFNULL(tabla.PPT_VIEJO, 0) VAL_PPT_VIEJO,
-                                    IFNULL(tabla.CT_VIEJO, 0) VAL_CT_VIEJO,
-                                    tabla.PUNTOS_VIEJO VAL_PUNTOS_VIEJO,
-                                    
-                                    IFNULL(tabla.PPT_NUEVO, 0) VAL_PPT_NUEVO,
-                                    IFNULL(tabla.CT_NUEVO, 0) VAL_CT_NUEVEO,
-                                    tabla.PUNTOS_NUEVO VAL_PUNTOS_NUEVO,
-
-                                    IFNULL(tabla.JUSTIFICACION,"") JUSTIFICACION,
-                                    IF(tabla.JUSTIFICACION IS NULL, 0, 1) AS TIENE_JUSTIFICACION,
-                                    (IFNULL(inventario.recsensorialcategoria_tiempoexpo, 0) * IFNULL(inventario.recsensorialcategoria_frecuenciaexpo, 0)) AS TIEMPO_EXPO 
-                            FROM recsensorial_tabla_informes tabla
-                            LEFT JOIN recsensorialcategoria categoria ON categoria.id = tabla.CATEGORIA_ID
-                            LEFT JOIN catsustancias_quimicas sus ON sus.ID_SUSTANCIA_QUIMICA = tabla.SUSTANCIA_ID
-                            LEFT JOIN catsustancia hoja ON hoja.id = tabla.PRODUCTO_ID
-                            LEFT JOIN recsensorialquimicosinventario inventario ON inventario.recsensorialcategoria_id = categoria.id
-                            LEFT JOIN sustanciaQuimicaEntidad entidad ON entidad.SUSTANCIA_QUIMICA_ID = sus.ID_SUSTANCIA_QUIMICA
-                            WHERE tabla.RECONOCIMIENTO_ID = ?
-                            GROUP BY tabla.ID_TABLA_INFORME,
-                                            categoria.recsensorialcategoria_nombrecategoria,
-                                            PRODUCTO_COMPONENTE,
-                                            tabla.RECONOCIMIENTO_ID,
-                                            categoria.id,
-                                            sus.ID_SUSTANCIA_QUIMICA,
-                                            hoja.id ,
-                                            PPT,
-                                            CT,
-                                            VAL_PPT_VIEJO,
-                                            VAL_CT_VIEJO,
-                                            tabla.PUNTOS_VIEJO,
-                                            VAL_PPT_NUEVO,
-                                            VAL_CT_NUEVEO,
-                                            tabla.PUNTOS_NUEVO,
-                                            JUSTIFICACION,
-                                            TIENE_JUSTIFICACION,
-                                            TIEMPO_EXPO
-                            ORDER BY tabla.ID_TABLA_INFORME', [$ID]);
+            $info = DB::select('CALL sp_puntos_muestreoPOE_cargados_b(?)', [$ID]);
 
             if (!empty($info)) {
 
