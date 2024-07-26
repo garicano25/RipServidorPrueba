@@ -32,7 +32,9 @@ class programaTrabajoController extends Controller
                                     IFNULL(r.recsensorial_foliofisico, "") FOLIO_FISICO,
                                     IFNULL(r.recsensorial_folioquimico , "" ) FOLIO_QUIMICO,
                                     r.recsensorial_alcancefisico,
-                                    r.recsensorial_alcancequimico
+                                    r.recsensorial_alcancequimico,
+                                    p.proyecto_clienteinstalacion,
+                                    p.proyecto_clientedireccionservicio
                             FROM proyecto p
                             LEFT JOIN recsensorial r ON r.id = p.recsensorial_id 
                             LEFT JOIN serviciosProyecto s ON s.PROYECTO_ID = p.id
@@ -44,6 +46,7 @@ class programaTrabajoController extends Controller
             $count += 1;
 
             $value->COUNT = $count;
+            $value->instalacion_y_direccion = '<span style="color: #999999;">' . $value->proyecto_clienteinstalacion . '</span><br>' . $value->proyecto_clientedireccionservicio;
 
             if ($value->TIENE_RECONOCIMIENTO  != 0) {
 

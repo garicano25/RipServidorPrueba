@@ -219,6 +219,10 @@ function tablaprogramaTrabajo()
 					    "defaultContent": "-"
 					},
 					{
+					    "data": "instalacion_y_direccion",
+					    "defaultContent": "-"
+					},
+					{
 					    "data": "FECHA_INICIO",
 					    "defaultContent": "-"
 					},

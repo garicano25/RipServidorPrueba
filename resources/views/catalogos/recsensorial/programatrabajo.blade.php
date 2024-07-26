@@ -68,6 +68,7 @@
                                 <tr>
                                     <th>No.</th>
                                     <th>Folio Proyecto</th>
+                                    <th width="600">Intalación / Dirrección</th>
                                     <th>Fecha inicio</th>
                                     <th>Fecha fin</th>
                                     <th>Reconocimiento vinculado</th>
@@ -145,7 +146,7 @@
                                                 <span>Ordenes</span>
                                             </div>
                                             @endif
-                                            
+
                                             @if(auth()->user()->hasRoles(['Superusuario', 'Administrador', 'Coordinador','Almacén','Operativo HI','Compras']))
                                             <div class="multisteps-form__progress-btn" id="steps_menu_tab6">
                                                 <i class="fa fa-list"></i><br>
@@ -393,7 +394,7 @@
                                                                         </a>
                                                                     </li>
                                                                     @endif
-                                                                   
+
                                                                 </ul>
                                                                 <!-- Tab Panels -->
                                                                 <div class="tab-content">
@@ -448,7 +449,7 @@
                                                                             </table>
                                                                         </div>
                                                                     </div>
-                                                                    
+
                                                                 </div>
                                                             </div>
                                                         </div>
@@ -463,7 +464,7 @@
                                                             <div class="card">
                                                                 <!-- Tab Menus -->
                                                                 <ul class="nav nav-tabs customtab" role="tablist">
-                                                        
+
 
                                                                     @if(auth()->user()->hasRoles(['Superusuario', 'Administrador','Coordinador','Compras','Almacén','Operativo HI']))
 
@@ -483,7 +484,7 @@
                                                                 </ul>
                                                                 <!-- Tab Panels -->
                                                                 <div class="tab-content">
-                                                                   
+
                                                                     <div class="tab-pane p-20" id="reportetab_3" role="tabpanel">
                                                                         @if(auth()->user()->hasRoles(['Superusuario', 'Administrador', 'Coordinador','Operativo HI','Compras']))
                                                                         <ol class="breadcrumb m-b-10">
