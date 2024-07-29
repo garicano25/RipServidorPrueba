@@ -776,7 +776,7 @@ Route::get('proyectoselectcliente/{cliente_id}', ['as' => 'proyecto.proyectosele
 
 Route::get('proyectocliente/{cliente_id}', ['as' => 'proyecto.proyectocliente', 'uses' => 'proyecto\proyectoController@proyectocliente']);
 
-Route::get('proyectoselectcontrato/{contrato_id}', ['as' => 'proyecto.proyectoselectcontrato', 'uses' => 'proyecto\proyectoController@proyectoselectcontrato']);
+Route::get('proyectoselectcontrato/{contrato_id}/{tipo}', ['as' => 'proyecto.proyectoselectcontrato', 'uses' => 'proyecto\proyectoController@proyectoselectcontrato']);
 
 Route::get('proyectocontrato/{contrato_id}', ['as' => 'proyecto.proyectocontrato', 'uses' => 'proyecto\proyectoController@proyectocontrato']);
 
@@ -969,7 +969,11 @@ Route::get('reporteslistaparametros/{proyecto_id}', ['as' => 'reportes.reportesl
 
 Route::get('/servicioHI', ['as' => 'reportes.servicioHI', 'uses' => 'reportes\reportesController@servicioHI']);
 
+Route::get('/estatusProyecto/{PROYECTO_ID}', ['as' => 'reportes.estatusProyecto', 'uses' => 'reportes\reportesController@estatusProyecto']);
 
+Route::get('/finalizarPOE/{PROYECTO_ID}/{OPCION}/{NUEVO}', ['as' => 'reportes.finalizarPOE', 'uses' => 'reportes\reportesController@finalizarPOE']);
+
+Route::get('obtenerDatosInformesProyecto/{ID}', ['as' => 'reportes.obtenerDatosInformesProyecto', 'uses' => 'reportes\reportesController@obtenerDatosInformesProyecto']);
 
 Route::get('reportepoevista/{proyecto_id}', ['as' => 'reportes.reportepoevista', 'uses' => 'reportes\reportesController@reportepoevista']);
 
@@ -986,7 +990,7 @@ Route::get('reporteareaeliminar/{reportearea_id}', ['as' => 'reportes.reporteare
 Route::get('reportepoeword/{proyecto_id}', ['as' => 'reportes.reportepoeword', 'uses' => 'reportes\reportesController@reportepoeword']);
 
 
-
+Route::get('descargarPortadaInformes/{proyecto_id}/{tipo}', ['as' => 'reportes.descargarPortadaInformes', 'uses' => 'reportes\reportesController@descargarPortadaInformes']);
 
 
 //==============================================
@@ -1062,6 +1066,9 @@ Route::resource('reporteruido', 'reportes\reporteruidoController');
 Route::get('reporteruidovista/{proyecto_id}', ['as' => 'reporteruido.reporteruidovista', 'uses' => 'reportes\reporteruidoController@reporteruidovista']);
 
 Route::get('reporteruidodatosgenerales/{proyecto_id}/{agente_id}/{agente_nombre}', ['as' => 'reporteruido.reporteruidodatosgenerales', 'uses' => 'reportes\reporteruidoController@reporteruidodatosgenerales']);
+
+
+
 
 Route::get('reporteruidotabladefiniciones/{proyecto_id}/{agente_nombre}/{reporteregistro_id}', ['as' => 'reporteruido.reporteruidotabladefiniciones', 'uses' => 'reportes\reporteruidoController@reporteruidotabladefiniciones']);
 
@@ -1629,8 +1636,12 @@ Route::get('detalleprogramagestion/{proyecto_id}/{proyectoordentrabajo_id}/{fase
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////Route::get('/mostrar-plantilla', function () {
 
 // Catalogo de cliente
-Route::get('/banco-imagenes', function () { return view('catalogos.plantilla.plantillas');})->name('banco-imagenes');
-Route::get('/clientecatalogo', function () { return view('catalogos.cliente.catalogocliente');})->name('clientecatalogo');
+Route::get('/banco-imagenes', function () {
+    return view('catalogos.plantilla.plantillas');
+})->name('banco-imagenes');
+Route::get('/clientecatalogo', function () {
+    return view('catalogos.cliente.catalogocliente');
+})->name('clientecatalogo');
 
 
 

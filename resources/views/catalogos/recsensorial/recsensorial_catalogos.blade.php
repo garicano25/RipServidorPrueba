@@ -191,6 +191,14 @@
 										</a>
 									</td>
 								</tr>
+								<tr id="tr_18">
+									<td>Sistema de iluminación</td>
+									<td>
+										<a href="#" onclick="mostrar_catalogo(18);">
+											<i class="fa fa-chevron-circle-right fa-3x text-secondary" id="cat_18"></i>
+										</a>
+									</td>
+								</tr>
 							</tbody>
 						</table>
 					</div>
@@ -316,7 +324,7 @@
 			<form method="post" enctype="multipart/form-data" name="form_descripcionarea" id="form_descripcionarea">
 				<div class="modal-header">
 					<button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
-					<h4 class="modal-title" id="modal_titulo">Conclusiones para Informes</h4>
+					<h4 class="modal-title" id="modal_titulo">Descripciones del área</h4>
 				</div>
 				<div class="modal-body">
 					<div class="row">
@@ -338,6 +346,48 @@
 				<div class="modal-footer">
 					<button type="button" class="btn btn-default waves-effect" data-dismiss="modal">Cerrar</button>
 					<button type="submit" class="btn btn-danger waves-effect waves-light" id="boton_guardar_descripcionarea">
+						Guardar <i class="fa fa-save"></i>
+					</button>
+				</div>
+			</form>
+		</div>
+	</div>
+</div>
+
+<div id="modal_sistema" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" style="display: none;">
+	<div class="modal-dialog" style="min-width: 70%;">
+		<div class="modal-content">
+			<form method="post" enctype="multipart/form-data" name="form_sistema" id="form_sistema">
+				<div class="modal-header">
+					<button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+					<h4 class="modal-title" id="modal_titulo">Sistema de iluminación</h4>
+				</div>
+				<div class="modal-body">
+					<div class="row">
+						{!! csrf_field() !!}
+						<div class="col-12">
+							<input type="hidden" class="form-control" id="ID_SISTEMA_ILUMINACION" name="ID_SISTEMA_ILUMINACION" value="0">
+						</div>
+						<div class="col-12">
+							<div class="form-group">
+								<label>Nombre *</label>
+								<input type="text" class="form-control" id="NOMBRE" name="NOMBRE" required>
+							</div>
+						</div>
+						<div class="col-12">
+							<div class="form-group">
+								<label> Descripción </label>
+								<textarea class="form-control" rows="2" id="DESCRIPCION" name="DESCRIPCION"></textarea>
+							</div>
+						</div>
+						<div class="col-12">
+							<input type="hidden" class="form-control" id="catalogo" name="catalogo" value="18">
+						</div>
+					</div>
+				</div>
+				<div class="modal-footer">
+					<button type="button" class="btn btn-default waves-effect" data-dismiss="modal">Cerrar</button>
+					<button type="submit" class="btn btn-danger waves-effect waves-light" id="boton_guardar_sistemailuminacion">
 						Guardar <i class="fa fa-save"></i>
 					</button>
 				</div>

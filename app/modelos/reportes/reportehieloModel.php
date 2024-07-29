@@ -13,6 +13,7 @@ class reportehieloModel extends Model
 		, 'agente_nombre'
 		, 'catactivo_id'
 		, 'reportehielo_revision'
+		,'reporte_mes'
 		, 'reportehielo_fecha'
 		, 'reportehielo_instalacion'
 		, 'reportehielo_catregion_activo'

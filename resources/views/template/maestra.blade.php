@@ -92,6 +92,8 @@ use Illuminate\Support\Str;
     <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
     <!-- Popper.js -->
     <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js"></script>
+    {{-- Select search filter --}}
+    <link href="/assets/plugins/select-search/selectize.css" rel="stylesheet" type="text/css" />
     @endif
 
     @if(request()->is('recsensorialcatalogos'))
@@ -276,7 +278,7 @@ use Illuminate\Support\Str;
                                                 <b href="#" class="btn btn-rounded btn-danger">Almacén</b>
                                                 @elseif(auth()->user()->hasRoles(['Operativo HI']))
                                                 <b href="#" class="btn btn-rounded btn-danger">Operativo HI</b>
-                                                
+
                                                 @elseif(auth()->user()->hasRoles(['Externo']))
                                                 <b href="#" class="btn btn-rounded btn-info">Proveedor</b>
                                                 @else
@@ -677,6 +679,8 @@ use Illuminate\Support\Str;
     <script src="/assets/plugins/datatables/jquery.dataTables.min.js"></script>
     <script src="/js_sitio/recsensorialquimicos_catalogos.js"></script>
     <script src="/assets/plugins/datatables/dataTables.rowsGroup.js"></script>
+    {{-- Select search filter --}}
+    <script src="/assets/plugins/select-search/selectize.js" type="text/javascript"></script>
     {{-- Select2 search filter --}}
     <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
     <!-- jQuery file upload -->

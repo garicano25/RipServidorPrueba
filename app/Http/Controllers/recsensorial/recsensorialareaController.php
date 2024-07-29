@@ -63,33 +63,30 @@ class recsensorialareaController extends Controller
      */
     public function recsensorialareatabla($recsensorial_id)
     {
-        try
-        {
+        try {
             // Reconocimiento
             $recsensorial = recsensorialModel::findOrFail($recsensorial_id);
 
             $tabla = recsensorialareaModel::with(['recsensorialareapruebas', 'recsensorialareapruebas.catprueba', 'recsensorialareacategorias', 'recsensorialareacategorias.categorias'])
-                    ->where('recsensorial_id', $recsensorial_id)
-                    ->orderBy('id', 'asc')
-                    ->get();
+                ->where('recsensorial_id', $recsensorial_id)
+                ->orderBy('id', 'asc')
+                ->get();
 
             // FORMATEAR FILAS
             $numero_registro = 0;
-            foreach ($tabla  as $key => $value) 
-            {
+            foreach ($tabla  as $key => $value) {
                 $numero_registro += 1;
                 $value->numero_registro = $numero_registro;
-                
+
                 //=======================================
 
                 // obtener las pruebas
                 $value['agentes'] = $value->recsensorialareapruebas->pluck('catprueba.catPrueba_Nombre');
-                
+
                 // formatear pruebas
                 $cadena = "";
-                foreach ($value['agentes']  as $key => $agentes) 
-                {
-                    $cadena .= "<li>".$agentes."</li>";
+                foreach ($value['agentes']  as $key => $agentes) {
+                    $cadena .= "<li>" . $agentes . "</li>";
                 }
                 $value['agentes'] = $cadena;
 
@@ -97,25 +94,21 @@ class recsensorialareaController extends Controller
 
                 // obtener categorias
                 $value['categorias'] = $value->recsensorialareacategorias->pluck('categorias.recsensorialcategoria_nombrecategoria');
-                
+
                 // formatear pruebas
                 $cadena = "";
-                foreach ($value['categorias']  as $key => $categorias) 
-                {
-                    $cadena .= "<li>".$categorias."</li>";
+                foreach ($value['categorias']  as $key => $categorias) {
+                    $cadena .= "<li>" . $categorias . "</li>";
                 }
                 $value['categorias'] = $cadena;
 
                 //=======================================
 
                 // Botones
-                if (auth()->user()->hasRoles(['Superusuario', 'Administrador', 'Coordinador','Operativo HI'])  && ($recsensorial->recsensorial_bloqueado + 0) == 0)
-                {
+                if (auth()->user()->hasRoles(['Superusuario', 'Administrador', 'Coordinador', 'Operativo HI'])  && ($recsensorial->recsensorial_bloqueado + 0) == 0) {
                     $value->accion_activa = 1;
                     $value->boton_eliminar = '<button type="button" class="btn btn-danger btn-circle"><i class="fa fa-trash"></i></button>';
-                }
-                else
-                {
+                } else {
                     $value->accion_activa = 0;
                     $value->boton_eliminar = '<button type="button" class="btn btn-secondary btn-circle"><i class="fa fa-ban"></i></button>';
                 }
@@ -125,10 +118,8 @@ class recsensorialareaController extends Controller
             $dato['data'] = $tabla;
             $dato["msj"] = 'Informacion consultada correctamente';
             return response()->json($dato);
-        }
-        catch(Exception $e)
-        {
-            $dato["msj"] = 'Error '.$e->getMessage();
+        } catch (Exception $e) {
+            $dato["msj"] = 'Error ' . $e->getMessage();
             $dato['data'] = 0;
             return response()->json($dato);
         }
@@ -145,8 +136,7 @@ class recsensorialareaController extends Controller
      */
     public function recsensorialareaparametros($recsensorial_id, $area_id)
     {
-        try
-        {
+        try {
             $listaparametros = DB::select('SELECT
                                                 recsensorialpruebas.recsensorial_id,
                                                 recsensorialpruebas.catprueba_id,
@@ -157,14 +147,14 @@ class recsensorialareaController extends Controller
                                                     FROM
                                                         recsensorialareapruebas 
                                                     WHERE
-                                                        recsensorialareapruebas.recsensorialarea_id = '.$area_id.' AND recsensorialareapruebas.catprueba_id = recsensorialpruebas.catprueba_id
+                                                        recsensorialareapruebas.recsensorialarea_id = ' . $area_id . ' AND recsensorialareapruebas.catprueba_id = recsensorialpruebas.catprueba_id
                                                     LIMIT 1
                                                 ), "") AS checked
                                             FROM
                                                 recsensorialpruebas
                                                 LEFT JOIN cat_prueba ON recsensorialpruebas.catprueba_id = cat_prueba.id 
                                             WHERE
-                                                recsensorialpruebas.recsensorial_id = '.$recsensorial_id.'
+                                                recsensorialpruebas.recsensorial_id = ' . $recsensorial_id . '
                                             ORDER BY
                                                 recsensorialpruebas.catprueba_id ASC');
 
@@ -172,10 +162,8 @@ class recsensorialareaController extends Controller
             $dato['parametros'] = $listaparametros;
             $dato["msj"] = 'Informacion consultada correctamente';
             return response()->json($dato);
-        }
-        catch(Exception $e)
-        {
-            $dato["msj"] = 'Error '.$e->getMessage();
+        } catch (Exception $e) {
+            $dato["msj"] = 'Error ' . $e->getMessage();
             return response()->json($dato);
         }
     }
@@ -190,8 +178,7 @@ class recsensorialareaController extends Controller
      */
     public function recsensorialareacategorias($recsensorial_id)
     {
-        try
-        {
+        try {
             $categorias = DB::select('SELECT
                                             recsensorialcategoria.recsensorial_id,
                                             recsensorialcategoria.id,
@@ -200,17 +187,15 @@ class recsensorialareaController extends Controller
                                         FROM
                                             recsensorialcategoria 
                                         WHERE
-                                            recsensorialcategoria.recsensorial_id = '.$recsensorial_id.' 
+                                            recsensorialcategoria.recsensorial_id = ' . $recsensorial_id . ' 
                                         ORDER BY
                                             recsensorialcategoria.recsensorialcategoria_nombrecategoria ASC');
             // respuesta
             $dato['categorias'] = $categorias;
             $dato["msj"] = 'Informacion consultada correctamente';
             return response()->json($dato);
-        }
-        catch(Exception $e)
-        {
-            $dato["msj"] = 'Error '.$e->getMessage();
+        } catch (Exception $e) {
+            $dato["msj"] = 'Error ' . $e->getMessage();
             return response()->json($dato);
         }
     }
@@ -225,8 +210,7 @@ class recsensorialareaController extends Controller
      */
     public function recsensorialareacategoriaselegidas($area_id)
     {
-        try
-        {
+        try {
             $categoriaselegidas = DB::select('SELECT
                                                     recsensorialareacategorias.recsensorialarea_id,
                                                     recsensorialareacategorias.recsensorialcategoria_id,
@@ -238,16 +222,14 @@ class recsensorialareaController extends Controller
                                                 FROM
                                                     recsensorialareacategorias
                                                 WHERE
-                                                    recsensorialareacategorias.recsensorialarea_id = '.$area_id);
+                                                    recsensorialareacategorias.recsensorialarea_id = ' . $area_id);
 
             // respuesta
             $dato['categoriaselegidas'] = $categoriaselegidas;
             $dato["msj"] = 'Informacion consultada correctamente';
             return response()->json($dato);
-        }
-        catch(Exception $e)
-        {
-            $dato["msj"] = 'Error '.$e->getMessage();
+        } catch (Exception $e) {
+            $dato["msj"] = 'Error ' . $e->getMessage();
             return response()->json($dato);
         }
     }
@@ -263,21 +245,19 @@ class recsensorialareaController extends Controller
      */
     public function recsensorialconsultaareas($recsensorial_id, $id_seleccionado)
     {
-        try
-        {
+        try {
             $opciones = '<option value=""></option>';
-            $tabla = recsensorialareaModel::where('recsensorial_id', $recsensorial_id)->get();
+            $tabla = DB::select('SELECT a.*
+                            FROM recsensorialarea a
+                            LEFT JOIN recsensorialareapruebas p ON p.recsensorialarea_id = a.id
+                            WHERE recsensorial_id = ? AND p.catprueba_id = 15', [$recsensorial_id]);
 
             // colocar numero de registro
-            foreach ($tabla  as $key => $value) 
-            {
-                if ($id_seleccionado == $value['id'])
-                {
-                    $opciones .= '<option value="'.$value['id'].'" selected>'.$value['recsensorialarea_nombre'].'</option>';
-                }
-                else
-                {
-                    $opciones .= '<option value="'.$value['id'].'">'.$value['recsensorialarea_nombre'].'</option>';
+            foreach ($tabla as $key => $value) {
+                if ($id_seleccionado == $value->id) {
+                    $opciones .= '<option value="' . $value->id . '" selected>' . $value->recsensorialarea_nombre . '</option>';
+                } else {
+                    $opciones .= '<option value="' . $value->id . '">' . $value->recsensorialarea_nombre . '</option>';
                 }
             }
 
@@ -285,14 +265,13 @@ class recsensorialareaController extends Controller
             $dato['opciones'] = $opciones;
             $dato["msj"] = 'Informacion consultada correctamente';
             return response()->json($dato);
-        }
-        catch(Exception $e)
-        {
+        } catch (Exception $e) {
             $dato['opciones'] = 0;
-            $dato["msj"] = 'Error '.$e->getMessage();
+            $dato["msj"] = 'Error ' . $e->getMessage();
             return response()->json($dato);
         }
     }
+
 
 
 
@@ -304,8 +283,7 @@ class recsensorialareaController extends Controller
      */
     public function recsensorialareaeliminar($area_id)
     {
-        try
-        {
+        try {
             // $listaparametros = recsensorialpruebasModel::all();
             $area = recsensorialareaModel::where('id', $area_id)->delete();
             $area = recsensorialareapruebasModel::where('recsensorialarea_id', $area_id)->delete();
@@ -315,10 +293,8 @@ class recsensorialareaController extends Controller
             $dato['eliminado'] = $area;
             $dato["msj"] = 'Información eliminada correctamente';
             return response()->json($dato);
-        }
-        catch(Exception $e)
-        {
-            $dato["msj"] = 'Error '.$e->getMessage();
+        } catch (Exception $e) {
+            $dato["msj"] = 'Error ' . $e->getMessage();
             return response()->json($dato);
         }
     }
@@ -333,22 +309,20 @@ class recsensorialareaController extends Controller
      */
     public function store(Request $request)
     {
-        try
-        {
+        try {
             if ($request['area_id'] == 0) //nuevo
             {
                 // AUTO_INCREMENT
                 DB::statement('ALTER TABLE recsensorialarea AUTO_INCREMENT=1');
-    
+
                 // guardar
                 $area = recsensorialareaModel::create($request->all());
                 $area->recsensorialareapruebassincronizacion()->sync($request->parametro);
                 // $area->recsensorialareacategoriassincronizacion()->sync($request->categoria);
                 $opcionesSeleccionadas = $request->input('recsensorialarea_generacioncontaminante');
-    
+
                 // guardar categorias
-                foreach ($request->categoria as $key => $value)
-                {
+                foreach ($request->categoria as $key => $value) {
                     $sustancia = recsensorialareacategoriasModel::create([
                         'recsensorialarea_id' => $area->id,
                         'recsensorialcategoria_id' => $request->categoria[$key],
@@ -359,26 +333,24 @@ class recsensorialareaController extends Controller
                         'recsensorialareacategorias_frecuenciaexpo' => $request->frecuencia[$key],
                     ]);
                 }
-    
+
                 // mensaje
                 $dato["msj"] = 'Informacion guardada correctamente';
                 $dato["opciones_seleccionadas"] = $opcionesSeleccionadas;
-            }
-            else //editar
+            } else //editar
             {
                 // modificar
                 $area = recsensorialareaModel::findOrFail($request['area_id']);
                 $area->update($request->all());
                 $area->recsensorialareapruebassincronizacion()->sync($request->parametro);
                 // $area->recsensorialareacategoriassincronizacion()->sync($request->categoria);
-    
+
                 $areascategoriaseliminar = recsensorialareacategoriasModel::where('recsensorialarea_id', $request['area_id'])->delete(); //eliminar todas las categorias del area
-    
+
                 $opcionesSeleccionadas = $request->input('recsensorialarea_generacioncontaminante');
-    
+
                 // guardar categorias
-                foreach ($request->categoria as $key => $value)
-                {
+                foreach ($request->categoria as $key => $value) {
                     $sustancia = recsensorialareacategoriasModel::create([
                         'recsensorialarea_id' => $area->id,
                         'recsensorialcategoria_id' => $request->categoria[$key],
@@ -389,36 +361,33 @@ class recsensorialareaController extends Controller
                         'recsensorialareacategorias_frecuenciaexpo' => $request->frecuencia[$key],
                     ]);
                 }
-    
+
                 // mensaje
                 $dato["msj"] = 'Informacion modificada correctamente';
                 $dato["opciones_seleccionadas"] = $opcionesSeleccionadas;
             }
-    
+
             // respuesta
             $dato['area'] = $area;
             return response()->json($dato);
-        }
-        catch(Exception $e)
-        {
-            $dato["msj"] = 'Error '.$e->getMessage();
+        } catch (Exception $e) {
+            $dato["msj"] = 'Error ' . $e->getMessage();
             return response()->json($dato);
         }
     }
-    
+
 
 
 
     /**
-        * Display the specified resource.
-        *
-        * @param int $recsensorial_id
-        * @return \Illuminate\Http\Response
-    */
+     * Display the specified resource.
+     *
+     * @param int $recsensorial_id
+     * @return \Illuminate\Http\Response
+     */
     public function recsensorialpoeword($recsensorial_id)
     {
-        try
-        {
+        try {
             // $proyecto = proyectoModel::with(['catregion', 'catsubdireccion', 'catgerencia', 'catactivo'])->findOrFail($recsensorial_id);
             $recsensorial = recsensorialModel::with(['cliente', 'catregion', 'catsubdireccion', 'catgerencia', 'catactivo'])->findOrFail($recsensorial_id);
             $cliente = clienteModel::findOrFail($recsensorial->cliente_id);
@@ -428,43 +397,31 @@ class recsensorialareaController extends Controller
             //================================================================================
 
 
-            $plantillaword = new TemplateProcessor(storage_path('app/plantillas_reportes/reconocimiento_sensorial/Plantilla_tabla_poe.docx'));//Ruta carpeta storage
+            $plantillaword = new TemplateProcessor(storage_path('app/plantillas_reportes/reconocimiento_sensorial/Plantilla_tabla_poe.docx')); //Ruta carpeta storage
 
 
             // LOGOS
             //================================================================================
 
 
-            if ($cliente->cliente_plantillalogoizquierdo)
-            {
-                if (file_exists(storage_path('app/'.$cliente->cliente_plantillalogoizquierdo)))
-                {
-                    $plantillaword->setImageValue('LOGO_IZQUIERDO', array('path' => storage_path('app/'.$cliente->cliente_plantillalogoizquierdo), 'height' => 39, 'width' => 580, 'ratio' => true, 'borderColor' => '000000'));
-                }
-                else
-                {
+            if ($cliente->cliente_plantillalogoizquierdo) {
+                if (file_exists(storage_path('app/' . $cliente->cliente_plantillalogoizquierdo))) {
+                    $plantillaword->setImageValue('LOGO_IZQUIERDO', array('path' => storage_path('app/' . $cliente->cliente_plantillalogoizquierdo), 'height' => 39, 'width' => 580, 'ratio' => true, 'borderColor' => '000000'));
+                } else {
                     $plantillaword->setValue('LOGO_IZQUIERDO', 'SIN IMAGEN');
                 }
-            }
-            else
-            {
+            } else {
                 $plantillaword->setValue('LOGO_IZQUIERDO', 'SIN IMAGEN');
             }
 
 
-            if ($cliente->cliente_plantillalogoderecho)
-            {
-                if (file_exists(storage_path('app/'.$cliente->cliente_plantillalogoderecho)))
-                {
-                    $plantillaword->setImageValue('LOGO_DERECHO', array('path' => storage_path('app/'.$cliente->cliente_plantillalogoderecho), 'height' => 39, 'width' => 580, 'ratio' => true, 'borderColor' => '000000'));
-                }
-                else
-                {
+            if ($cliente->cliente_plantillalogoderecho) {
+                if (file_exists(storage_path('app/' . $cliente->cliente_plantillalogoderecho))) {
+                    $plantillaword->setImageValue('LOGO_DERECHO', array('path' => storage_path('app/' . $cliente->cliente_plantillalogoderecho), 'height' => 39, 'width' => 580, 'ratio' => true, 'borderColor' => '000000'));
+                } else {
                     $plantillaword->setValue('LOGO_DERECHO', 'SIN IMAGEN');
                 }
-            }
-            else
-            {
+            } else {
                 $plantillaword->setValue('LOGO_DERECHO', 'SIN IMAGEN');
             }
 
@@ -475,7 +432,7 @@ class recsensorialareaController extends Controller
 
             $plantillaword->setValue('INSTALACION_NOMBRE', 'Población ocupacionalmente expuesta');
             // $plantillaword->setValue('FECHA_CREACION', date_format(date_create($recsensorial->recsensorial_fechainicio), 'F Y')); // date('Y-m-d H:i:s')
-            setlocale(LC_ALL,"es_MX");
+            setlocale(LC_ALL, "es_MX");
             $plantillaword->setValue('FECHA_CREACION', ucfirst(strftime("%B %Y", strtotime(date("d-m-Y", strtotime($recsensorial->recsensorial_fechainicio)))))); //ucfirst = primera letra mayuscula
 
 
@@ -483,20 +440,19 @@ class recsensorialareaController extends Controller
             //================================================================================
 
             $folio = '';
-            switch (1)
-            {
+            switch (1) {
                 case ($recsensorial->recsensorial_alcancefisico > 0 && $recsensorial->recsensorial_alcancequimico > 0):
-                    $folio = 'FOLIOS: '.$recsensorial->recsensorial_foliofisico.' y '.$recsensorial->recsensorial_folioquimico;
+                    $folio = 'FOLIOS: ' . $recsensorial->recsensorial_foliofisico . ' y ' . $recsensorial->recsensorial_folioquimico;
                     break;
                 case ($recsensorial->recsensorial_alcancefisico > 0):
-                    $folio = 'FOLIO: '.$recsensorial->recsensorial_foliofisico;
+                    $folio = 'FOLIO: ' . $recsensorial->recsensorial_foliofisico;
                     break;
                 default:
-                    $folio = 'FOLIO: '.$recsensorial->recsensorial_folioquimico;
+                    $folio = 'FOLIO: ' . $recsensorial->recsensorial_folioquimico;
                     break;
             }
 
-            $plantillaword->setValue('PIE_PAGINA', str_replace("\r\n", "<w:br/>", str_replace("\n\n", "<w:br/>", $cliente->cliente_plantillapiepagina.'<w:br/>'.$folio)));
+            $plantillaword->setValue('PIE_PAGINA', str_replace("\r\n", "<w:br/>", str_replace("\n\n", "<w:br/>", $cliente->cliente_plantillapiepagina . '<w:br/>' . $folio)));
 
 
             // TABLA'S POE
@@ -529,7 +485,7 @@ class recsensorialareaController extends Controller
             $col_7 = 1000;
 
             // CREAR TABLA
-            $table = null;            
+            $table = null;
             $table = new Table(array('name' => $fuente, 'borderSize' => 1, 'borderColor' => '000000', 'cellMargin' => 40, 'unit' => TblWidth::TWIP));
 
             // ENCABEZADO DE TABLA
@@ -569,28 +525,25 @@ class recsensorialareaController extends Controller
                                     LEFT JOIN recsensorialarea ON recsensorialareacategorias.recsensorialarea_id = recsensorialarea.id
                                     LEFT JOIN recsensorialcategoria ON recsensorialareacategorias.recsensorialcategoria_id = recsensorialcategoria.id 
                                 WHERE
-                                    recsensorialarea.recsensorial_id = '.$recsensorial_id.' 
+                                    recsensorialarea.recsensorial_id = ' . $recsensorial_id . ' 
                                 ORDER BY
                                     recsensorialarea.recsensorialarea_nombre ASC,
                                     recsensorialcategoria.recsensorialcategoria_nombrecategoria ASC');
 
-            $numero_fila = 0; $area = 'xxxx';
+            $numero_fila = 0;
+            $area = 'xxxx';
 
 
-            foreach ($sql as $key => $value) 
-            {
+            foreach ($sql as $key => $value) {
                 $table->addRow(); //fila
 
-                if($area != $value->recsensorialarea_nombre)
-                {
+                if ($area != $value->recsensorialarea_nombre) {
                     $numero_fila += 1;
                     $table->addCell($col_1, $combinar_fila)->addTextRun($centrado)->addText($numero_fila, $texto);
 
                     $table->addCell($col_2, $combinar_fila)->addTextRun($centrado)->addText($value->recsensorialarea_nombre, $texto);
                     $area = $value->recsensorialarea_nombre;
-                }
-                else
-                {
+                } else {
                     $table->addCell($col_1, $continua_fila);
                     $table->addCell($col_2, $continua_fila);
                 }
@@ -610,14 +563,12 @@ class recsensorialareaController extends Controller
             //================================================================================
 
 
-            $word_ruta = storage_path('app/reportes/recsensorial/Tabla POE Reconocmiento ('.$recsensorial->recsensorial_instalacion.').docx');
+            $word_ruta = storage_path('app/reportes/recsensorial/Tabla POE Reconocmiento (' . $recsensorial->recsensorial_instalacion . ').docx');
             $plantillaword->saveAs($word_ruta); //GUARDAR Y CREAR archivo word TEMPORAL
             return response()->download($word_ruta)->deleteFileAfterSend(true);
-        }
-        catch(Exception $e)
-        {
+        } catch (Exception $e) {
             // respuesta
-            $dato["msj"] = 'Error '.$e->getMessage();
+            $dato["msj"] = 'Error ' . $e->getMessage();
             return response()->json($dato);
         }
     }

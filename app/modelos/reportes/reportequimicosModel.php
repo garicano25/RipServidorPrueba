@@ -13,6 +13,7 @@ class reportequimicosModel extends Model
 		, 'agente_nombre'
 		, 'catactivo_id'
 		, 'reportequimicos_revision'
+		,'reporte_mes'
 		, 'reportequimicos_fecha'
 		, 'reportequimicos_instalacion'
 		, 'reportequimicos_catregion_activo'

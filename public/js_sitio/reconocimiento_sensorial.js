@@ -1581,10 +1581,10 @@ $('#tabla_reconocimiento_sensorial tbody').on('click', 'td.mostrar', function()
 	var contrato = row.data().descripcion_contrato == null ? "Sin asignar contrato" : row.data().descripcion_contrato;
 
 
-	$('#infoCliente').html(`<h2 class="mt-2" style="font-weight:bold"><i class="fa fa-id-badge"></i> Cliente</h2>
-							<h4>${cliente}</h4>
-							<h2 class="mt-4" style="font-weight:bold"> <i class="fa fa-file-text"></i> Contrato</h2>
-							<h4 class="mb-2">${contrato}</h4>`).css('border-style','dotted')
+	// $('#infoCliente').html(`<h2 class="mt-2" style="font-weight:bold"><i class="fa fa-id-badge"></i> Cliente</h2>
+	// 						<h4>${cliente}</h4>
+	// 						<h2 class="mt-4" style="font-weight:bold"> <i class="fa fa-file-text"></i> Formalización del servicio</h2>
+	// 						<h4 class="mb-2">${contrato}</h4>`).css('border-style','dotted')
 
 
     // llenar campos
@@ -11322,7 +11322,7 @@ function obtenerEstructuraProyectos(FOLIO, NUEVO) {
 
 				$('#infoCliente').html(`<h2 class="mt-2" style="font-weight:bold"><i class="fa fa-id-badge"></i> Cliente</h2>
 										<h4>${response.info[0].RAZON_SOCIAL}</h4>
-										<h2 class="mt-4" style="font-weight:bold"> <i class="fa fa-file-text"></i> Contrato</h2>
+										<h2 class="mt-4" style="font-weight:bold"> <i class="fa fa-file-text"></i> ${response.info[0].TIPO_SERVICIO}</h2>
 										<h4 class="mb-2">${response.info[0].NOMBRE_CONTRATO}</h4>`).css('border-style', 'dotted')
 				
 				
@@ -11335,9 +11335,14 @@ function obtenerEstructuraProyectos(FOLIO, NUEVO) {
 					showCancelButton: false,
 
 				});
-			}
+			} else {
+				
+				$('#infoCliente').html(`<h2 class="mt-2" style="font-weight:bold"><i class="fa fa-id-badge"></i> Cliente</h2>
+									<h4>${response.info[0].RAZON_SOCIAL}</h4>
+									<h2 class="mt-4" style="font-weight:bold"> <i class="fa fa-file-text"></i> ${response.info[0].TIPO_SERVICIO}</h2>
+									<h4 class="mb-2">${response.info[0].NOMBRE_CONTRATO}</h4>`).css('border-style', 'dotted')
 
-		
+			}
         },
         error: function(jqXHR, textStatus, errorThrown) {
             console.error('Error al consultar los datos:', textStatus, errorThrown);

@@ -10,6 +10,7 @@ class clientecontratoModel extends Model
     protected $table = 'contratos_clientes';
     protected $fillable = [
         'CLIENTE_ID',
+        'TIPO_SERVICIO',
         'NOMBRE_CONTACTO',
         'CARGO_CONTACTO',
         'CORREO_CONTACTO',
@@ -23,12 +24,11 @@ class clientecontratoModel extends Model
         'CONTRATO_PLANTILLA_LOGODERECHO',
         'CONTRATO_PLANTILLA_ENCABEZADO',
         'CONTRATO_PLANTILLA_EMPRESARESPONSABLE',
-         'CONTRATO_PLANTILLA_PIEPAGINA',
+        'CONTRATO_PLANTILLA_PIEPAGINA',
         'FECHA_INICIO',
         'FECHA_FIN',
         'RUTA_CONTRATO',
         'CONCLUIDO',
         'ACTIVO'
     ];
-
 }

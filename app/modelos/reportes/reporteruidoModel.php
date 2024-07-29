@@ -14,6 +14,7 @@ class reporteruidoModel extends Model
 		, 'catactivo_id'
 		, 'reporteruido_revision'
 		, 'reporteruido_fecha'
+		,'reporte_mes'
 		, 'reporteruido_instalacion'
 		, 'reporteruido_catregion_activo'
 		, 'reporteruido_catsubdireccion_activo'

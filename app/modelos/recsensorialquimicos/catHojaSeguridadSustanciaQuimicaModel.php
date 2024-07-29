@@ -16,6 +16,7 @@ class catHojaSeguridadSustanciaQuimicaModel extends Model
         'TEM_EBULLICION',
         'VOLATILIDAD',
         'ESTADO_FISICO',
+        'FORMA',
         'ACTIVO'
     ];
 }

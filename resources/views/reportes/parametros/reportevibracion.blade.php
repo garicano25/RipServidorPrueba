@@ -1,9 +1,7 @@
-
 <style type="text/css">
-	.reporte_estructura
-	{
-		font-size: 14px!important;
-		line-height: 14px!important;
+	.reporte_estructura {
+		font-size: 14px !important;
+		line-height: 14px !important;
 	}
 
 
@@ -27,154 +25,135 @@
 
 
 
-	.list-group-item
-	{
+	.list-group-item {
 		padding: 2px 1px;
 		font-family: Agency FB;
 		/*font-family: Calibri;*/
-		font-size: 0.55vw!important;
+		font-size: 0.55vw !important;
 		line-height: 1;
 	}
 
-	.list-group-item.active
-	{
-		font-size: 1.2vw!important;
+	.list-group-item.active {
+		font-size: 1.2vw !important;
 	}
 
-	.list-group-item i
-	{
+	.list-group-item i {
 		color: #fc4b6c;
 	}
 
-	.list-group-item:hover
-	{
-		font-size: 1.2vw!important;
+	.list-group-item:hover {
+		font-size: 1.2vw !important;
 	}
 
-	.list-group .submenu
-	{
+	.list-group .submenu {
 		padding: 2px 1px 2px 8px;
 	}
 
-	.list-group .subsubmenu
-	{
+	.list-group .subsubmenu {
 		padding: 2px 1px 2px 20px;
 	}
 
-	.card-title{
+	.card-title {
 		margin: 20px 0px 10px 0px;
 		color: blue;
 	}
 
-	.form-group{
-        margin: 0px 0px 12px 0px!important;
-        padding: 0px!important;
-    }
+	.form-group {
+		margin: 0px 0px 12px 0px !important;
+		padding: 0px !important;
+	}
 
-    .form-group label{
-        margin: 0px!important;
-        padding: 0px 0px 3px 0px!important;
-    }
+	.form-group label {
+		margin: 0px !important;
+		padding: 0px 0px 3px 0px !important;
+	}
 
-	table
-	{
+	table {
 		width: 100%;
 		margin: 0px;
 		font-family: inherit;
 	}
 
-	table th
-	{
-		padding: 1px 2px;		
+	table th {
+		padding: 1px 2px;
 		color: #777777;
 	}
 
-	table td.justificado
-	{
-		padding: 4px!important;
-		text-align: justify!important;
+	table td.justificado {
+		padding: 4px !important;
+		text-align: justify !important;
 	}
 
-	p.justificado
-	{
-		text-align: justify!important;
-		margin: 0px!important;
-		padding: 0px!important;
+	p.justificado {
+		text-align: justify !important;
+		margin: 0px !important;
+		padding: 0px !important;
 	}
 
-	textarea{
-		text-align: justify!important;
+	textarea {
+		text-align: justify !important;
 	}
 
-	div.informacion_estatica
-	{
+	div.informacion_estatica {
 		font-size: 14px;
-		line-height: 14px!important;
+		line-height: 14px !important;
 		text-align: justify;
 	}
 
-	div.imagen_formula
-	{
+	div.imagen_formula {
 		text-align: center;
 		border: 0px #F00 solid;
 	}
 
-	div.informacion_estatica b
-	{
+	div.informacion_estatica b {
 		font-size: 13px;
 		font-weight: bold;
 		color: #777777;
 	}
 
-	.tabla_info_centrado th
-	{
+	.tabla_info_centrado th {
 		background: #F9F9F9;
-		border: 1px #E5E5E5 solid!important;
-		padding: 2px!important;
+		border: 1px #E5E5E5 solid !important;
+		padding: 2px !important;
 		text-align: center;
-		vertical-align: middle!important;
+		vertical-align: middle !important;
 	}
 
-	.tabla_info_centrado td
-	{
-		border: 1px #E5E5E5 solid!important;
-		padding: 4px!important;
+	.tabla_info_centrado td {
+		border: 1px #E5E5E5 solid !important;
+		padding: 4px !important;
 		text-align: center;
-		vertical-align: middle!important;
+		vertical-align: middle !important;
 	}
 
-	.tabla_info_justificado th
-	{
+	.tabla_info_justificado th {
 		background: #F9F9F9;
-		border: 1px #E5E5E5 solid!important;
-		padding: 2px!important;
+		border: 1px #E5E5E5 solid !important;
+		padding: 2px !important;
 		text-align: center;
-		vertical-align: middle!important;
+		vertical-align: middle !important;
 	}
 
-	.tabla_info_justificado td
-	{
-		border: 1px #E5E5E5 solid!important;
-		padding: 4px!important;
+	.tabla_info_justificado td {
+		border: 1px #E5E5E5 solid !important;
+		padding: 4px !important;
 		text-align: justify;
-		vertical-align: middle!important;
+		vertical-align: middle !important;
 	}
 
-	.tabla_reporte th
-	{
+	.tabla_reporte th {
 		background: #F9F9F9;
-		border: 1px #E5E5E5 solid!important;
-		padding: 2px!important;
+		border: 1px #E5E5E5 solid !important;
+		padding: 2px !important;
 		text-align: center;
-		vertical-align: middle!important;
+		vertical-align: middle !important;
 	}
 
-	.tabla_reporte td
-	{
-		border-bottom: 1px #E5E5E5 solid!important;
-		padding: 4px!important;
+	.tabla_reporte td {
+		border-bottom: 1px #E5E5E5 solid !important;
+		padding: 4px !important;
 		text-align: center;
-		vertical-align: middle!important;
+		vertical-align: middle !important;
 	}
 </style>
 
@@ -226,1016 +205,1161 @@
 	<div class="col-xlg-10 col-lg-9 col-md-7">
 		<div class="card">
 			<div class="card-body">
-				<h4 class="card-title" style="padding: 0px!important;" id="0">Portada</h4>
-					<form method="post" enctype="multipart/form-data" name="form_reporte_portada" id="form_reporte_portada">
-						<div class="row">
-							<div class="col-12">
-								{!! csrf_field() !!}
-							</div>
-							<div class="col-1">
-								<div class="form-group">
-									<label class="demo-switch-title">Mostrar</label>
-									<div class="switch" style="margin-top: 6px;">
-										<label><input type="checkbox" id="reporte_catsubdireccion_activo" name="reporte_catsubdireccion_activo" checked><span class="lever switch-col-light-blue"></span></label>
-									</div>
-								</div>
-							</div>
-							<div class="col-11">
-								<div class="form-group">
-									<label>Subdirección</label>
-									<select class="custom-select form-control" id="reporte_catsubdireccion_id" name="reporte_catsubdireccion_id" disabled>
-										<option value=""></option>
-										@foreach($catsubdireccion as $subdireccion)
-											<option value="{{$subdireccion->id}}">{{$subdireccion->catsubdireccion_nombre}}</option>
-										@endforeach
-									</select>
-								</div>
-							</div>
-							<div class="col-1">
-								<div class="form-group">
-									<label class="demo-switch-title">Mostrar</label>
-
-
-									<div class="switch" style="margin-top: 6px;">
-										<label><input type="checkbox" id="reporte_catgerencia_activo" name="reporte_catgerencia_activo" checked><span class="lever switch-col-light-blue"></span></label>
-									</div>
-								</div>
-							</div>
-							<div class="col-11">
-								<div class="form-group">
-									<label>Gerencia</label>
-									<select class="custom-select form-control" id="reporte_catgerencia_id" name="reporte_catgerencia_id" disabled>
-										<option value=""></option>
-										@foreach($catgerencia as $gerencia)
-											<option value="{{$gerencia->id}}">{{$gerencia->catgerencia_nombre}}</option>
-										@endforeach
-									</select>
-								</div>
-							</div>
-							<div class="col-1">
-								<div class="form-group">
-									<label class="demo-switch-title">Mostrar</label>
-									<div class="switch" style="margin-top: 6px;">
-										<label><input type="checkbox" id="reporte_catactivo_activo" name="reporte_catactivo_activo" checked><span class="lever switch-col-light-blue"></span></label>
-									</div>
-								</div>
-							</div>
-							<div class="col-11">
-								<div class="form-group">
-									<label>Activo</label>
-									<select class="custom-select form-control" id="reporte_catactivo_id" name="reporte_catactivo_id" disabled>
-										<option value=""></option>
-										@foreach($catactivo as $activo)
-											<option value="{{$activo->id}}">{{$activo->catactivo_nombre}}</option>
-										@endforeach
-									</select>
-								</div>
-							</div>
-							<div class="col-12">
-								<div class="form-group">
-									<label>Instalación</label>
-									<input type="text" class="form-control" id="reporte_instalacion" name="reporte_instalacion" onchange="instalacion_nombre(this.value);" readonly>
-								</div>
-							</div>
-							{{-- <div class="col-4"></div> --}}
-							<div class="col-1">
-								<div class="form-group">
-									<label class="demo-switch-title">Mostrar</label>
-									<div class="switch" style="margin-top: 6px;">
-										<label><input type="checkbox" id="reporte_catregion_activo" name="reporte_catregion_activo" checked><span class="lever switch-col-light-blue"></span></label>
-									</div>
-								</div>
-							</div>
-							<div class="col-3">
-								<div class="form-group">
-									<label>Región</label>
-									<select class="custom-select form-control" id="reporte_catregion_id" name="reporte_catregion_id" disabled>
-										<option value=""></option>
-										@foreach($catregion as $region)
-											<option value="{{$region->id}}">{{$region->catregion_nombre}}</option>
-										@endforeach
-									</select>
-								</div>
-							</div>
-							{{-- <div class="col-4"></div> --}}
-							{{-- <div class="col-4"></div> --}}
-							<div class="col-4">
-								<div class="form-group">
-									<label>Fecha</label>
-									<input type="text" class="form-control" id="reporte_fecha" name="reporte_fecha" required>
-								</div>
-							</div>
-							<div class="col-4">
-								<div class="form-group">
-									<label>Alcance del informe</label>
-									<select class="custom-select form-control" id="reporte_alcanceinforme" name="reporte_alcanceinforme" onchange="reporte_alcance(this.value);" required>
-										<option value=""></option>
-										<option value="1">Cuerpo entero</option>
-										<option value="2">Extremidades superiores</option>
-										<option value="3">Cuerpo entero y Extremidades superiores</option>
-									</select>
-								</div>
-							</div>
-							{{-- <div class="col-4"></div> --}}
-							<div class="col-12" style="text-align: right;">
-								<button type="submit" class="btn btn-danger waves-effect waves-light botoninforme" id="botonguardar_reporte_portada">Guardar portada <i class="fa fa-save"></i></button>
-							</div>
-						</div>
-					</form>
-				<h4 class="card-title" id="1">1.- Introducción</h4>
-					<form method="post" enctype="multipart/form-data" name="form_reporte_introduccion" id="form_reporte_introduccion">
-						<div class="row">
-							<div class="col-12">
-								{!! csrf_field() !!}
-							</div>
-							<div class="col-12">
-								<div class="form-group">
-									{{-- <label style="color: #000000;">Introducción</label> --}}
-									<textarea  class="form-control" style="margin-bottom: 0px;" rows="20" id="reporte_introduccion" name="reporte_introduccion" required></textarea>
-								</div>
-							</div>
-							<div class="col-12" style="text-align: right;">
-								<button type="submit" class="btn btn-danger waves-effect waves-light botoninforme" id="botonguardar_reporte_introduccion">Guardar introducción <i class="fa fa-save"></i></button>
-							</div>
-						</div>
-					</form>
-				<h4 class="card-title" id="2">2.- Definiciones</h4>
+				<h4 class="card-title" style="padding: 0px!important;" id="0">Portadas</h4>
+				<form method="post" enctype="multipart/form-data" name="form_reporte_portada" id="form_reporte_portada">
 					<div class="row">
 						<div class="col-12">
-							<ol class="breadcrumb" style="padding: 6px; margin: 10px 0px;">
-								<button type="button" class="btn btn-default waves-effect botoninforme" data-toggle="tooltip" title="Nueva definición" id="boton_reporte_nuevadefinicion">
-									<span class="btn-label"><i class="fa fa-plus"></i></span>Nueva definición
-								</button>
-							</ol>
-							<table class="table-hover tabla_info_centrado" width="100%" id="tabla_reporte_definiciones">
-								<thead>
-									<tr>
-										<th width="130">Concepto</th>
-										<th>Descripción / Fuente</th>
-										<th width="60">Editar</th>
-										<th width="60">Eliminar</th>
-									</tr>
-								</thead>
-								<tbody></tbody>
-							</table>
+							{!! csrf_field() !!}
+						</div>
+						<div class="row w-100">
+							<div class="col-5">
+								<div class="col-12">
+									<label> Imagen Portada Exterior * </label>
+									<div class="form-group">
+										<style type="text/css" media="screen">
+											.dropify-wrapper {
+												height: 400px !important;
+												/*tamaño estatico del campo foto*/
+											}
+										</style>
+										<input type="file" accept="image/jpeg,image/x-png" id="PORTADA" name="PORTADA" data-allowed-file-extensions="jpg png JPG PNG" data-height="300" data-default-file="" required />
+									</div>
+								</div>
+							</div>
+							<div class="col-7">
+								<div class="col-12">
+									<h3 class=" mt-1 mb-4">Selecciona hasta 5 opciones (Cuerpo del Encabezado en el Informe)</h3>
+								</div>
+
+								<div class="col-12 mb-4">
+									<div class="form-group">
+										<label> Nivel 1 </label>
+										<select class="custom-select form-control" style="width: 90%;" id="NIVEL1" name="NIVEL1">
+
+										</select>
+									</div>
+								</div>
+
+								<div class="col-12 mb-4">
+									<div class="form-group">
+										<label> Nivel 2 </label>
+										<select class="custom-select form-control" style="width: 90%;" id="NIVEL2" name="NIVEL2">
+
+										</select>
+									</div>
+								</div>
+
+								<div class="col-12 mb-4">
+									<div class="form-group">
+										<label> Nivel 3 </label>
+										<select class="custom-select form-control" style="width: 90%;" id="NIVEL3" name="NIVEL3">
+
+										</select>
+									</div>
+								</div>
+
+								<div class="col-12 mb-4">
+									<div class="form-group">
+										<label> Nivel 4 </label>
+										<select class="custom-select form-control" style="width: 90%;" id="NIVEL4" name="NIVEL4">
+
+										</select>
+									</div>
+								</div>
+
+								<div class="col-12 mb-4">
+									<div class="form-group">
+										<label> Nivel 5 </label>
+										<select class="custom-select form-control" style="width: 90%;" id="NIVEL5" name="NIVEL5">
+
+										</select>
+									</div>
+								</div>
+
+								<div class="col-12 ">
+									<div class="form-group">
+										<label>Alcance del informe</label>
+										<select class="custom-select form-control" id="reporte_alcanceinforme" name="reporte_alcanceinforme" onchange="reporte_alcance(this.value);" required>
+											<option value=""></option>
+											<option value="1">Cuerpo entero</option>
+											<option value="2">Extremidades superiores</option>
+											<option value="3">Cuerpo entero y Extremidades superiores</option>
+										</select>
+									</div>
+								</div>
+							</div>
+						</div>
+
+
+						<h3 class="mx-4 mt-5 mb-4">Seleccione las opciones que desee mostrar en la Portada Interna del Informe</h3>
+						<div class="col-1" style="display: none;">
+							<div class="form-group">
+								<label class="demo-switch-title">Mostrar</label>
+								<div class="switch" style="margin-top: 6px;">
+									<label><input type="checkbox" id="reporte_catsubdireccion_activo" name="reporte_catsubdireccion_activo" checked><span class="lever switch-col-light-blue"></span></label>
+								</div>
+							</div>
+						</div>
+						<div class="col-11" style="display: none;">
+							<div class="form-group">
+								<label>Subdirección</label>
+								<select class="custom-select form-control" id="reporte_catsubdireccion_id" name="reporte_catsubdireccion_id" disabled>
+									<option value=""></option>
+									@foreach($catsubdireccion as $subdireccion)
+									<option value="{{$subdireccion->id}}">{{$subdireccion->catsubdireccion_nombre}}</option>
+									@endforeach
+								</select>
+							</div>
+						</div>
+						<div class="col-1" style="display: none;">
+							<div class="form-group">
+								<label class="demo-switch-title">Mostrar</label>
+
+
+								<div class="switch" style="margin-top: 6px;">
+									<label><input type="checkbox" id="reporte_catgerencia_activo" name="reporte_catgerencia_activo" checked><span class="lever switch-col-light-blue"></span></label>
+								</div>
+							</div>
+						</div>
+						<div class="col-11" style="display: none;">
+							<div class="form-group">
+								<label>Gerencia</label>
+								<select class="custom-select form-control" id="reporte_catgerencia_id" name="reporte_catgerencia_id" disabled>
+									<option value=""></option>
+									@foreach($catgerencia as $gerencia)
+									<option value="{{$gerencia->id}}">{{$gerencia->catgerencia_nombre}}</option>
+									@endforeach
+								</select>
+							</div>
+						</div>
+						<div class="col-1" style="display: none;">
+							<div class="form-group">
+								<label class="demo-switch-title">Mostrar</label>
+								<div class="switch" style="margin-top: 6px;">
+									<label><input type="checkbox" id="reporte_catactivo_activo" name="reporte_catactivo_activo" checked><span class="lever switch-col-light-blue"></span></label>
+								</div>
+							</div>
+						</div>
+						<div class="col-11" style="display: none;">
+							<div class="form-group">
+								<label>Activo</label>
+								<select class="custom-select form-control" id="reporte_catactivo_id" name="reporte_catactivo_id" disabled>
+									<option value=""></option>
+									@foreach($catactivo as $activo)
+									<option value="{{$activo->id}}">{{$activo->catactivo_nombre}}</option>
+									@endforeach
+								</select>
+							</div>
+						</div>
+						<div class="col-12" style="display: none;">
+							<div class="form-group">
+								<label>Instalación</label>
+								<input type="text" class="form-control" id="reporte_instalacion" name="reporte_instalacion" onchange="instalacion_nombre(this.value);" readonly>
+							</div>
+						</div>
+
+						<div class="col-1" style="display: none;">
+							<div class="form-group">
+								<label class="demo-switch-title">Mostrar</label>
+								<div class="switch" style="margin-top: 6px;">
+									<label><input type="checkbox" id="reporte_catregion_activo" name="reporte_catregion_activo" checked><span class="lever switch-col-light-blue"></span></label>
+								</div>
+							</div>
+						</div>
+						<div class="col-5" style="display: none;">
+							<div class="form-group">
+								<label>Región</label>
+								<select class="custom-select form-control" id="reporte_catregion_id" name="reporte_catregion_id" disabled>
+									<option value=""></option>
+									@foreach($catregion as $region)
+									<option value="{{$region->id}}">{{$region->catregion_nombre}}</option>
+									@endforeach
+								</select>
+							</div>
+						</div>
+						<div class="row w-100 mt-4">
+							<div class="col-8">
+								<div class="col-12 mb-2">
+									<div class="form-group">
+										<label> Opción 1 </label>
+										<select class="custom-select form-control" style="width: 80%;" id="OPCION_PORTADA1" name="OPCION_PORTADA1">
+										</select>
+									</div>
+								</div>
+
+								<div class="col-12 mb-2">
+									<div class="form-group">
+										<label> Opción 2 </label>
+										<select class="custom-select form-control" style="width: 80%;" id="OPCION_PORTADA2" name="OPCION_PORTADA2">
+										</select>
+									</div>
+								</div>
+
+								<div class="col-12 mb-2">
+									<div class="form-group">
+										<label> Opción 3 </label>
+										<select class="custom-select form-control" style="width: 80%;" id="OPCION_PORTADA3" name="OPCION_PORTADA3">
+										</select>
+									</div>
+								</div>
+
+								<div class="col-12 mb-2">
+									<div class="form-group">
+										<label> Opción 4 </label>
+										<select class="custom-select form-control" style="width: 80%;" id="OPCION_PORTADA4" name="OPCION_PORTADA4">
+										</select>
+									</div>
+								</div>
+
+								<div class="col-12 mb-2">
+									<div class="form-group">
+										<label> Opción 5 </label>
+										<select class="custom-select form-control" style="width: 80%;" id="OPCION_PORTADA5" name="OPCION_PORTADA5">
+										</select>
+									</div>
+								</div>
+								<div class="col-12 mb-2">
+									<div class="form-group">
+										<label> Opción 6 </label>
+										<select class="custom-select form-control" style="width: 80%;" id="OPCION_PORTADA6" name="OPCION_PORTADA6">
+										</select>
+									</div>
+								</div>
+							</div>
+							<div class="col-4">
+								<div class="col-12 text-center mt-4">
+									<div class="form-group">
+										<label>Mes</label>
+										<select class="custom-select form-control" id="reporte_mes" name="reporte_mes">
+											<option value="" selected disabled></option>
+											<option value="Enero">Enero</option>
+											<option value="Febrero">Febrero</option>
+											<option value="Marzo">Marzo</option>
+											<option value="Abril">Abril</option>
+											<option value="Mayo">Mayo</option>
+											<option value="Junio">Junio</option>
+											<option value="Julio">Julio</option>
+											<option value="Agosto">Agosto</option>
+											<option value="Septiembre">Septiembre</option>
+											<option value="Octubre">Octubre</option>
+											<option value="Noviembre">Noviembre</option>
+											<option value="Diciembre">Diciembre</option>
+										</select>
+									</div>
+								</div>
+								<div class="col-12 text-center mt-4 mb-4">
+									<label> <b>del</b></label>
+								</div>
+								<div class="col-12 text-center">
+									<div class="form-group">
+										<label>Año</label>
+										<select class="custom-select form-control" id="reporte_fecha" name="reporte_fecha">
+											<option value="" selected disabled></option>
+											<script>
+												$(document).ready(function() {
+													const currentYear = new Date().getFullYear();
+													for (let year = currentYear; year >= 2017; year--) {
+														$('#reporte_fecha').append(new Option(year, year));
+													}
+												});
+											</script>
+										</select>
+									</div>
+								</div>
+							</div>
+						</div>
+
+						<div class="col-12" style="text-align: right;">
+							<button type="submit" class="btn btn-danger waves-effect waves-light botoninforme" id="botonguardar_reporte_portada">Guardar portadas <i class="fa fa-save"></i></button>
 						</div>
 					</div>
+				</form>
+				<h4 class="card-title" id="1">1.- Introducción</h4>
+				<form method="post" enctype="multipart/form-data" name="form_reporte_introduccion" id="form_reporte_introduccion">
+					<div class="row">
+						<div class="col-12">
+							{!! csrf_field() !!}
+						</div>
+						<div class="col-12">
+							<div class="form-group">
+								{{-- <label style="color: #000000;">Introducción</label> --}}
+								<textarea class="form-control" style="margin-bottom: 0px;" rows="20" id="reporte_introduccion" name="reporte_introduccion" required></textarea>
+							</div>
+						</div>
+						<div class="col-12" style="text-align: right;">
+							<button type="submit" class="btn btn-danger waves-effect waves-light botoninforme" id="botonguardar_reporte_introduccion">Guardar introducción <i class="fa fa-save"></i></button>
+						</div>
+					</div>
+				</form>
+
+
+
+				<!-- ======== ELIMINAR DESPUES DE SUBIR AL SERVIDOR =============-->
+				<div class="col-12 mt-4" style="text-align: center;">
+					<button type="submit" class="btn btn-info waves-effect waves-light" id="btn_descargar_plantilla">Descargar plantilla principal <i class="fa fa-download"></i></button>
+				</div>
+				<!-- ======== ELIMINAR DESPUES DE SUBIR AL SERVIDOR =============-->
+
+
+
+
+
+				<h4 class="card-title" id="2">2.- Definiciones</h4>
+				<div class="row">
+					<div class="col-12">
+						<ol class="breadcrumb" style="padding: 6px; margin: 10px 0px;">
+							<button type="button" class="btn btn-default waves-effect botoninforme" data-toggle="tooltip" title="Nueva definición" id="boton_reporte_nuevadefinicion">
+								<span class="btn-label"><i class="fa fa-plus"></i></span>Nueva definición
+							</button>
+						</ol>
+						<table class="table-hover tabla_info_centrado" width="100%" id="tabla_reporte_definiciones">
+							<thead>
+								<tr>
+									<th width="130">Concepto</th>
+									<th>Descripción / Fuente</th>
+									<th width="60">Editar</th>
+									<th width="60">Eliminar</th>
+								</tr>
+							</thead>
+							<tbody></tbody>
+						</table>
+					</div>
+				</div>
 				<h4 class="card-title" id="3">3.- Objetivos</h4>
 				<h4 class="card-title" id="3_1">3.1.- Objetivo general</h4>
-					<form method="post" enctype="multipart/form-data" name="form_reporte_objetivogeneral" id="form_reporte_objetivogeneral">
-						<div class="row">
-							<div class="col-12">
-								<div class="form-group">
-									{!! csrf_field() !!}
-									<textarea  class="form-control" style="margin-bottom: 0px;" rows="8" id="reporte_objetivogeneral" name="reporte_objetivogeneral" required></textarea>
-								</div>
-							</div>
-							<div class="col-12" style="text-align: right;">
-								<button type="submit" class="btn btn-danger waves-effect waves-light botoninforme" id="botonguardar_reporte_objetivogeneral">Guardar objetivo general <i class="fa fa-save"></i></button>
-							</div>
-						</div>
-					</form>
-				<h4 class="card-title" id="3_2">3.2.- Objetivos específicos</h4>
-					<form method="post" enctype="multipart/form-data" name="form_reporte_objetivoespecifico" id="form_reporte_objetivoespecifico">
-						<div class="row">
-							<div class="col-12">
+				<form method="post" enctype="multipart/form-data" name="form_reporte_objetivogeneral" id="form_reporte_objetivogeneral">
+					<div class="row">
+						<div class="col-12">
+							<div class="form-group">
 								{!! csrf_field() !!}
-							</div>
-							<div class="col-12">
-								<div class="form-group">
-									{{-- <label style="color: #000000;">Objetivos específicos</label> --}}
-									<textarea  class="form-control" style="margin-bottom: 0px;" rows="8" id="reporte_objetivoespecifico" name="reporte_objetivoespecifico" required></textarea>
-								</div>
-							</div>
-							<div class="col-12" style="text-align: right;">
-								<button type="submit" class="btn btn-danger waves-effect waves-light botoninforme" id="botonguardar_reporte_objetivoespecifico">Guardar objetivos específicos <i class="fa fa-save"></i></button>
+								<textarea class="form-control" style="margin-bottom: 0px;" rows="8" id="reporte_objetivogeneral" name="reporte_objetivogeneral" required></textarea>
 							</div>
 						</div>
-					</form>
+						<div class="col-12" style="text-align: right;">
+							<button type="submit" class="btn btn-danger waves-effect waves-light botoninforme" id="botonguardar_reporte_objetivogeneral">Guardar objetivo general <i class="fa fa-save"></i></button>
+						</div>
+					</div>
+				</form>
+				<h4 class="card-title" id="3_2">3.2.- Objetivos específicos</h4>
+				<form method="post" enctype="multipart/form-data" name="form_reporte_objetivoespecifico" id="form_reporte_objetivoespecifico">
+					<div class="row">
+						<div class="col-12">
+							{!! csrf_field() !!}
+						</div>
+						<div class="col-12">
+							<div class="form-group">
+								{{-- <label style="color: #000000;">Objetivos específicos</label> --}}
+								<textarea class="form-control" style="margin-bottom: 0px;" rows="8" id="reporte_objetivoespecifico" name="reporte_objetivoespecifico" required></textarea>
+							</div>
+						</div>
+						<div class="col-12" style="text-align: right;">
+							<button type="submit" class="btn btn-danger waves-effect waves-light botoninforme" id="botonguardar_reporte_objetivoespecifico">Guardar objetivos específicos <i class="fa fa-save"></i></button>
+						</div>
+					</div>
+				</form>
 				<h4 class="card-title" id="4">4.- Metodología</h4>
 				<h4 class="card-title" id="4_1">4.1.- Reconocimiento de los agentes y factores</h4>
-					<form method="post" enctype="multipart/form-data" name="form_reporte_metodologia_4_1" id="form_reporte_metodologia_4_1">
-						<div class="row">
-							<div class="col-12">
-								{!! csrf_field() !!}
-							</div>
-							<div class="col-12">
-								<div class="form-group">
-									{{-- <label style="color: #000000;">Reconocimiento de los agentes y factores</label> --}}
-									<textarea  class="form-control" style="margin-bottom: 0px;" rows="14" id="reporte_metodologia_4_1" name="reporte_metodologia_4_1" required></textarea>
-								</div>
-							</div>
-							<div class="col-12" style="text-align: right;">
-								<button type="submit" class="btn btn-danger waves-effect waves-light botoninforme" id="botonguardar_reporte_metodologia_4_1">Guardar metodología punto 4.1 <i class="fa fa-save"></i></button>
+				<form method="post" enctype="multipart/form-data" name="form_reporte_metodologia_4_1" id="form_reporte_metodologia_4_1">
+					<div class="row">
+						<div class="col-12">
+							{!! csrf_field() !!}
+						</div>
+						<div class="col-12">
+							<div class="form-group">
+								{{-- <label style="color: #000000;">Reconocimiento de los agentes y factores</label> --}}
+								<textarea class="form-control" style="margin-bottom: 0px;" rows="14" id="reporte_metodologia_4_1" name="reporte_metodologia_4_1" required></textarea>
 							</div>
 						</div>
-					</form>
+						<div class="col-12" style="text-align: right;">
+							<button type="submit" class="btn btn-danger waves-effect waves-light botoninforme" id="botonguardar_reporte_metodologia_4_1">Guardar metodología punto 4.1 <i class="fa fa-save"></i></button>
+						</div>
+					</div>
+				</form>
 				<h4 class="card-title" id="4_2">4.2.- Método de evaluación</h4>
-					<div class="row">
-						<style type="text/css">
-							.texto_metodologia
-							{
-								/*font-size:0.7vw!important;*/
-								text-align: justify;
-							}
+				<div class="row">
+					<style type="text/css">
+						.texto_metodologia {
+							/*font-size:0.7vw!important;*/
+							text-align: justify;
+						}
 
-							.tabla_metodologia th
-							{
-								background: #F9F9F9;
-								border: 1px #E5E5E5 solid!important;
-								padding: 1px!important;
-								/*font-size:0.7vw!important;*/
-								text-align: center;
-								vertical-align: middle;
-							}
+						.tabla_metodologia th {
+							background: #F9F9F9;
+							border: 1px #E5E5E5 solid !important;
+							padding: 1px !important;
+							/*font-size:0.7vw!important;*/
+							text-align: center;
+							vertical-align: middle;
+						}
 
-							.tabla_metodologia td
-							{
-								padding: 1px!important;
-								/*font-size:0.7vw!important;*/
-								text-align: center;
-								border: 1px #E5E5E5 solid!important;
-								vertical-align: middle;
-							}
+						.tabla_metodologia td {
+							padding: 1px !important;
+							/*font-size:0.7vw!important;*/
+							text-align: center;
+							border: 1px #E5E5E5 solid !important;
+							vertical-align: middle;
+						}
 
-							.tabla_metodologia tr:hover td
-							{
-								color: #000000;
-							}
-						</style>
-						<div class="col-12">
-							<div class="texto_metodologia">
-								<div class="info_cuerpoentero">
-									Para la evaluación de vibraciones se realizó en cada ciclo de exposición la medición correspondiente al POE usando los procedimientos de evaluación para cuerpo entero.<br><br>
+						.tabla_metodologia tr:hover td {
+							color: #000000;
+						}
+					</style>
+					<div class="col-12">
+						<div class="texto_metodologia">
+							<div class="info_cuerpoentero">
+								Para la evaluación de vibraciones se realizó en cada ciclo de exposición la medición correspondiente al POE usando los procedimientos de evaluación para cuerpo entero.<br><br>
 
-									Para la evaluación en cuerpo entero en cada punto de medición, se localizan tres ejes ortogonales de acuerdo con la figura 1 (NOM-024-STPS-2001), en los que se realizan las mediciones continuas de la aceleración y se registran al menos durante un minuto en cada una de las bandas de tercios de octava.<br>
+								Para la evaluación en cuerpo entero en cada punto de medición, se localizan tres ejes ortogonales de acuerdo con la figura 1 (NOM-024-STPS-2001), en los que se realizan las mediciones continuas de la aceleración y se registran al menos durante un minuto en cada una de las bandas de tercios de octava.<br>
 
 
-									<div class="imagen_formula"><img src="/assets/images/reportes/reportevibracion_fig_4.2_1.jpg" height="500"></div>
-									<b style="text-align: center!important; margin: 0px auto!important;">Figura 1.</b> Direcciones de incidencia de las vibraciones sobre el cuerpo humano (NOM-024-STPS-2001).<br><br>
+								<div class="imagen_formula"><img src="/assets/images/reportes/reportevibracion_fig_4.2_1.jpg" height="500"></div>
+								<b style="text-align: center!important; margin: 0px auto!important;">Figura 1.</b> Direcciones de incidencia de las vibraciones sobre el cuerpo humano (NOM-024-STPS-2001).<br><br>
 
 
-									ax, ay, az. son las direcciones de la aceleración en los ejes x, y, z.<br>
-									eje x es la dirección de espalda a pecho.<br>
-									eje y es la dirección de lado derecho a izquierdo.<br>
-									eje z es la dirección de los pies o parte inferior, a la cabeza.<br><br>
-									
-									La evaluación se realizó de acuerdo con el procedimiento establecido en el punto 8.3.2.1. Procedimiento de evaluación de vibraciones para cuerpo entero de la NOM-024-STPS-2001 “Vibraciones-Condiciones de seguridad e higiene en los centros de trabajo”.<br><br>
-								</div>
+								ax, ay, az. son las direcciones de la aceleración en los ejes x, y, z.<br>
+								eje x es la dirección de espalda a pecho.<br>
+								eje y es la dirección de lado derecho a izquierdo.<br>
+								eje z es la dirección de los pies o parte inferior, a la cabeza.<br><br>
 
-								<div class="info_extremidades">
-									Para la evaluación en extremidades superiores (mano-brazo) en cada punto de medición, se localizan tres ejes ortogonales, cercanos al punto de contacto de las vibraciones con la mano, de acuerdo con lo mostrado por los sistemas de coordenadas biodinámicas y basicéntricas de la figura 2, en los que se realizan las mediciones continuas de la aceleración y se registran al menos durante un minuto, en cada una de las bandas de tercios de octava.<br><br>
+								La evaluación se realizó de acuerdo con el procedimiento establecido en el punto 8.3.2.1. Procedimiento de evaluación de vibraciones para cuerpo entero de la NOM-024-STPS-2001 “Vibraciones-Condiciones de seguridad e higiene en los centros de trabajo”.<br><br>
+							</div>
 
-
-									<div class="imagen_formula"><img src="/assets/images/reportes/reportevibracion_fig_4.2_2.jpg" height="300"></div>
-									<b style="text-align: center!important; margin: 0px auto!important;">Figura 2.</b> Sistemas biodinámico y basicéntrico de coordenadas (NOM-024-STPS-2001).<br><br>
+							<div class="info_extremidades">
+								Para la evaluación en extremidades superiores (mano-brazo) en cada punto de medición, se localizan tres ejes ortogonales, cercanos al punto de contacto de las vibraciones con la mano, de acuerdo con lo mostrado por los sistemas de coordenadas biodinámicas y basicéntricas de la figura 2, en los que se realizan las mediciones continuas de la aceleración y se registran al menos durante un minuto, en cada una de las bandas de tercios de octava.<br><br>
 
 
-									Se realiza un análisis espectral en bandas de tercios de octava (de 8 a 1600 Hz) por cada eje y se calculó el componente direccional de la aceleración ponderada conforme a la siguiente ecuación:<br><br>
+								<div class="imagen_formula"><img src="/assets/images/reportes/reportevibracion_fig_4.2_2.jpg" height="300"></div>
+								<b style="text-align: center!important; margin: 0px auto!important;">Figura 2.</b> Sistemas biodinámico y basicéntrico de coordenadas (NOM-024-STPS-2001).<br><br>
 
 
-									<div class="imagen_formula"><img src="/assets/images/reportes/reportevibracion_fig_4.2_3.jpg" height="100"></div><br>
+								Se realiza un análisis espectral en bandas de tercios de octava (de 8 a 1600 Hz) por cada eje y se calculó el componente direccional de la aceleración ponderada conforme a la siguiente ecuación:<br><br>
 
-									Dónde:<br><br>
 
-									<b>ak:</b> es el componente direccional de la aceleración ponderada;<br>
-									<b>T:</b> es la duración de la exposición diaria;<br>
-									<b>Kj:</b> es la iésima frecuencia ponderada, valor cuadrático medio de la componente de la aceleración con duración Ti.<br><br>
-								</div>
+								<div class="imagen_formula"><img src="/assets/images/reportes/reportevibracion_fig_4.2_3.jpg" height="100"></div><br>
 
-								<div class="info_adicional">
-									En <b class="div_instalacion_nombre" style="color: #000000;">NOMBRE INSTALACION</b> se realizó la metodología de cuerpo entero y de acuerdo al reconocimiento inicial realizado, para las mediciones de extremidades superiores (mano-brazo) no se encontraron puestos de trabajo que tengan este tipo de exposición, por lo que esta metodología no será aplicada.
-								</div>
+								Dónde:<br><br>
+
+								<b>ak:</b> es el componente direccional de la aceleración ponderada;<br>
+								<b>T:</b> es la duración de la exposición diaria;<br>
+								<b>Kj:</b> es la iésima frecuencia ponderada, valor cuadrático medio de la componente de la aceleración con duración Ti.<br><br>
+							</div>
+
+							<div class="info_adicional">
+								En <b class="div_instalacion_nombre" style="color: #000000;">NOMBRE INSTALACION</b> se realizó la metodología de cuerpo entero y de acuerdo al reconocimiento inicial realizado, para las mediciones de extremidades superiores (mano-brazo) no se encontraron puestos de trabajo que tengan este tipo de exposición, por lo que esta metodología no será aplicada.
 							</div>
 						</div>
 					</div>
+				</div>
 				<h4 class="card-title" id="4_3">4.3.- Límites máximos permisibles de exposición a vibraciones</h4>
-					<div class="row">
-						<div class="col-12">
-							<div class="texto_metodologia">
-								<div class="info_cuerpoentero">
-									<b>En cuerpo entero.</b><br><br>
+				<div class="row">
+					<div class="col-12">
+						<div class="texto_metodologia">
+							<div class="info_cuerpoentero">
+								<b>En cuerpo entero.</b><br><br>
 
-									Cuando se conoce la frecuencia de un mecanismo que genera vibración y se relaciona con la aceleración en m/s<sup>2</sup> ya sea en el eje de aceleración longitudinal a<sub>z</sub>, o en los ejes de aceleración transversal a<sub>x</sub> y a<sub>y</sub>, se obtiene el tiempo de exposición que puede variar de un minuto a veinticuatro horas. Los límites de exposición a vibraciones en el eje longitudinal a<sub>z</sub> y en los ejes transversales a<sub>x</sub> y a<sub>y</sub>, se establecen en las Tablas 1 y 2 de la norma, respectivamente.<br>
-
-
-									<div class="imagen_formula"><img src="/assets/images/reportes/reportevibracion_fig_4.3_1.jpg" height="640"></div><br>
-									<div class="imagen_formula"><img src="/assets/images/reportes/reportevibracion_fig_4.3_2.jpg" height="400"></div><br>
-									<div class="imagen_formula"><img src="/assets/images/reportes/reportevibracion_fig_4.3_3.jpg" height="640"></div><br>
-									<div class="imagen_formula"><img src="/assets/images/reportes/reportevibracion_fig_4.3_4.jpg" height="450"></div><br>
-								</div>
-
-								<div class="info_extremidades">
-									<b>En extremidades superiores</b><br><br>
-
-									Dependiendo del tiempo de exposición, se establecen los valores permitidos de aceleración ponderada (que se deben calcular según se establece en los Apartados 8.3.2.2.1 al 8.3.2.2.6, y en la Tabla 3).<br><br>
+								Cuando se conoce la frecuencia de un mecanismo que genera vibración y se relaciona con la aceleración en m/s<sup>2</sup> ya sea en el eje de aceleración longitudinal a<sub>z</sub>, o en los ejes de aceleración transversal a<sub>x</sub> y a<sub>y</sub>, se obtiene el tiempo de exposición que puede variar de un minuto a veinticuatro horas. Los límites de exposición a vibraciones en el eje longitudinal a<sub>z</sub> y en los ejes transversales a<sub>x</sub> y a<sub>y</sub>, se establecen en las Tablas 1 y 2 de la norma, respectivamente.<br>
 
 
-									<div class="imagen_formula"><img src="/assets/images/reportes/reportevibracion_fig_4.3_5.jpg" height="250"></div><br>
+								<div class="imagen_formula"><img src="/assets/images/reportes/reportevibracion_fig_4.3_1.jpg" height="640"></div><br>
+								<div class="imagen_formula"><img src="/assets/images/reportes/reportevibracion_fig_4.3_2.jpg" height="400"></div><br>
+								<div class="imagen_formula"><img src="/assets/images/reportes/reportevibracion_fig_4.3_3.jpg" height="640"></div><br>
+								<div class="imagen_formula"><img src="/assets/images/reportes/reportevibracion_fig_4.3_4.jpg" height="450"></div><br>
+							</div>
 
-									<b>(*) Nota</b>: Comúnmente, uno de los ejes de vibración domina sobre los dos restantes. Si uno o más ejes de vibración sobrepasan la exposición total diaria, se han sobrepasado los valores de los límites máximos de exposición.
-								</div>
+							<div class="info_extremidades">
+								<b>En extremidades superiores</b><br><br>
+
+								Dependiendo del tiempo de exposición, se establecen los valores permitidos de aceleración ponderada (que se deben calcular según se establece en los Apartados 8.3.2.2.1 al 8.3.2.2.6, y en la Tabla 3).<br><br>
+
+
+								<div class="imagen_formula"><img src="/assets/images/reportes/reportevibracion_fig_4.3_5.jpg" height="250"></div><br>
+
+								<b>(*) Nota</b>: Comúnmente, uno de los ejes de vibración domina sobre los dos restantes. Si uno o más ejes de vibración sobrepasan la exposición total diaria, se han sobrepasado los valores de los límites máximos de exposición.
 							</div>
 						</div>
 					</div>
+				</div>
 				<h4 class="card-title" id="5">5.- Reconocimiento</h4>
 				<h4 class="card-title" id="5_1">5.1.- Ubicación de la instalación</h4>
-					<form method="post" enctype="multipart/form-data" name="form_reporte_ubicacion" id="form_reporte_ubicacion">
-						<div class="row">
-							<div class="col-6">
-								<div class="row">
-									<div class="col-12">
-										{!! csrf_field() !!}
-										<textarea  class="form-control" style="margin-bottom: 0px;" rows="14" id="reporte_ubicacioninstalacion" name="reporte_ubicacioninstalacion" required></textarea>
+				<form method="post" enctype="multipart/form-data" name="form_reporte_ubicacion" id="form_reporte_ubicacion">
+					<div class="row">
+						<div class="col-6">
+							<div class="row">
+								<div class="col-12">
+									{!! csrf_field() !!}
+									<textarea class="form-control" style="margin-bottom: 0px;" rows="14" id="reporte_ubicacioninstalacion" name="reporte_ubicacioninstalacion" required></textarea>
+								</div>
+							</div>
+						</div>
+						<div class="col-6">
+							<i class="fa fa-download fa-2x text-success" style="position: absolute; margin-top: 6px; margin-left: 8px; z-index: 50; text-shadow: 1px 1px 0 #FFFFFF, 1px -1px 0 #FFFFFF, -1px 1px 0 #FFFFFF, -1px -1px 0 #FFFFFF, 1px 0px 0 #FFFFFF, 0px 1px 0 #FFFFFF, -1px 0px 0 #FFFFFF, 0px -1px 0 #FFFFFF; cursor: pointer; display: block;" data-toggle="tooltip" title="Descargar mapa ubicación" id="boton_descargarmapaubicacion"></i>
+							<input type="file" class="dropify" accept="image/jpeg,image/x-png" data-allowed-file-extensions="jpg png JPG PNG" data-height="280" id="reporteubicacionfoto" name="reporteubicacionfoto" onchange="redimencionar_mapaubicacion();" required>
+						</div>
+					</div>
+					<div class="row">
+						<div class="col-12" style="text-align: right;">
+							<div class="form-group">
+								<button type="submit" class="btn btn-danger waves-effect waves-light botoninforme" id="botonguardar_reporte_ubicacion">Guardar ubicación <i class="fa fa-save"></i></button>
+							</div>
+						</div>
+					</div>
+				</form>
+				<h4 class="card-title" id="5_2">5.2.- Descripción del proceso en la instalación</h4>
+				<form method="post" enctype="multipart/form-data" name="form_reporte_procesoinstalacion" id="form_reporte_procesoinstalacion">
+					<div class="row">
+						<div class="col-12">
+							{!! csrf_field() !!}
+						</div>
+						<div class="col-12">
+							<div class="form-group">
+								<label style="color: #000000;">Descripción del proceso en la instalación</label>
+								<textarea class="form-control" style="margin-bottom: 0px;" rows="20" id="reporte_procesoinstalacion" name="reporte_procesoinstalacion" required></textarea>
+							</div>
+						</div>
+						<div class="col-12">
+							<div class="form-group">
+								<label style="color: #000000;">Descripción de la actividad principal</label>
+								<textarea class="form-control" style="margin-bottom: 0px;" rows="8" id="reporte_actividadprincipal" name="reporte_actividadprincipal" required></textarea>
+							</div>
+						</div>
+						<div class="col-12" style="text-align: right;">
+							<div class="form-group">
+								<button type="submit" class="btn btn-danger waves-effect waves-light botoninforme" id="botonguardar_reporte_procesoinstalacion">Guardar proceso instalación <i class="fa fa-save"></i></button>
+							</div>
+						</div>
+					</div>
+				</form>
+				<h4 class="card-title" id="5_3">5.3.- Población ocupacionalmente expuesta</h4>
+				<div class="row">
+					<div class="col-12">
+						<p class="justificado">En este apartado se muestra la actividad principal desarrollada en la instalación, involucrando al personal / categoría adscrito en cada área que integran a la <b class="div_instalacion_nombre" style="color: #000000;">NOMBRE INSTALACION</b>.</p>
+						<table class="table table-hover tabla_info_centrado" width="100%" id="tabla_reporte_area">
+							<thead>
+								<tr>
+									<th width="50">No.</th>
+									<th width="130">Instalación</th>
+									<th width="150">Área</th>
+									<th width="">Categoría</th>
+									<th width="60">Total</th>
+									<th width="60">Editar</th>
+									{{-- <th width="60">Eliminar</th> --}}
+								</tr>
+							</thead>
+							<tbody></tbody>
+						</table>
+					</div>
+				</div>
+				<h4 class="card-title" id="5_4">5.4.- Actividades del personal expuesto</h4>
+				<div class="row">
+					<div class="col-12">
+						<p class="justificado">A continuación, se describen las actividades realizadas en cada área con exposición a vibraciones según la categoría encontrada en dicho sitio.</p>
+						<div class="informacion_estatica">
+							<table class="table table-hover tabla_info_centrado" width="100%" id="tabla_reporte_5_4">
+								<thead>
+									<tr>
+										<th width="60">No.</th>
+										<th width="130">Instalación</th>
+										<th width="150">Área</th>
+										<th width="250">Categoría</th>
+										<th width="">Actividades</th>
+									</tr>
+								</thead>
+								<tbody></tbody>
+							</table>
+						</div>
+					</div>
+				</div>
+				<h4 class="card-title" id="5_5">5.5.- Tabla de identificación de las áreas</h4>
+				<div class="row">
+					<div class="col-12">
+						<p class="justificado">Para esta sección se han registrado las áreas, fuentes generadoras de vibraciones, cantidad de equipo y/o herramienta y tipo de exposición que representa.</p>
+						<div class="informacion_estatica">
+							<table class="table table-hover tabla_info_centrado" width="100%" id="tabla_reporte_5_5">
+								<thead>
+									<tr>
+										<th width="40">No.</th>
+										<th width="130">Instalación</th>
+										<th width="150">Área</th>
+										<th width="">Fuente generadora</th>
+										<th width="70">Cantidad</th>
+										<th width="130">Tipo de exposición</th>
+									</tr>
+								</thead>
+								<tbody></tbody>
+							</table>
+						</div>
+					</div>
+				</div>
+				<h4 class="card-title" id="6">6.- Evaluación</h4>
+				<h4 class="card-title" id="6_1">6.1.- Condiciones de operación durante la evaluación (representado en porcentaje)</h4>
+				<div class="row">
+					<div class="col-12">
+						<p class="justificado">Las condiciones de operación que se encontraron en las diversas áreas de la instalación se presentan por porcentaje en la siguiente tabla:</p>
+						<table class="table table-hover tabla_info_centrado" width="100%" id="tabla_reporte_6_1">
+							<thead>
+								<tr>
+									<th width="60">No.</th>
+									<th width="130">Instalación</th>
+									<th width="">Áreas de trabajo</th>
+									<th width="100">Porcentaje de<br>operación</th>
+								</tr>
+							</thead>
+							<tbody></tbody>
+						</table>
+					</div>
+				</div>
+				<h4 class="card-title" id="6_2">6.2.- Método de evaluación</h4>
+				<div class="row">
+					<div class="col-12">
+						<p class="justificado">En este apartado se muestra la identificación de áreas, categoría a evaluar, método de evaluación y número de puntos evaluados.</p>
+						<table class="table table-hover tabla_info_centrado" width="100%" id="tabla_reporte_6_2">
+							<thead>
+								<tr>
+									<th width="60">No.</th>
+									<th width="130">Instalación</th>
+									<th width="150">Área</th>
+									<th width="">Categoría</th>
+									<th width="130">Método</th>
+									<th width="120">Puntos por área</th>
+								</tr>
+							</thead>
+							<tbody></tbody>
+							<tfoot>
+								<tr>
+									<th colspan="5">Total de puntos evaluados</th>
+									<td id="total_puntosmedicion" style="font-weight: bold; color: #777777;">0</td>
+								</tr>
+							</tfoot>
+						</table>
+					</div>
+				</div>
+				<h4 class="card-title" id="7">7.- Resultados</h4>
+				<div class="row">
+					<div class="col-12">
+						<p class="justificado">En este capítulo se presentan los resultados obtenidos durante la evaluación de vibraciones en tipo de evaluación cuerpo entero por punto de medición.</p>
+						<ol class="breadcrumb" style="padding: 6px; margin: 10px 0px;">
+							<button type="button" class="btn btn-default waves-effect botoninforme" data-toggle="tooltip" title="Nuevo punto de medición" id="boton_reporte_nuevopuntomedicion">
+								<span class="btn-label"><i class="fa fa-plus"></i></span>Punto de medición
+							</button>
+						</ol>
+						<style type="text/css">
+							.tabla_evaluacion th {
+								padding: 2px 1px !important;
+								font-size: 0.7vw !important;
+								text-align: center;
+								vertical-align: middle;
+							}
+
+							.tabla_evaluacion td {
+								padding: 2px 1px !important;
+								font-size: 0.7vw !important;
+								text-align: center;
+								vertical-align: middle;
+							}
+						</style>
+						<table class="table table-hover tabla_info_centrado tabla_evaluacion" width="100%" id="tabla_reporte_puntos">
+							<thead>
+								<tr>
+									<th width="60">No. de<br>Medición</th>
+									<th width="120">Instalación</th>
+									<th width="130">Área</th>
+									<th width="130">Punto de<br>evaluación</th>
+									<th width="">Categoría</th>
+									<th width="80">Tipo<br>evaluación</th>
+									<th width="80">Numero<br>de mediciones</th>
+									<th width="80">Tiempo<br>Exposición</th>
+									<th width="60">Editar</th>
+									<th width="60">Eliminar</th>
+								</tr>
+							</thead>
+							<tbody></tbody>
+						</table>
+					</div>
+				</div>
+				<h4 class="card-title" id="7_1">7.1.- Tabla de resultados</h4>
+				<div class="row">
+					<div class="col-12">
+						<style type="text/css">
+							.tabla_resultados th {
+								padding: 2px 1px !important;
+								font-size: 0.55vw !important;
+								text-align: center;
+								vertical-align: middle;
+							}
+
+							.tabla_resultados td {
+								padding: 2px 1px !important;
+								font-size: 0.55vw !important;
+								text-align: center;
+								vertical-align: middle;
+							}
+						</style>
+						<table class="table table-hover tabla_info_centrado tabla_resultados" width="100%" id="tabla_reporte_7_1">
+						</table>
+					</div>
+				</div>
+				<h4 class="card-title" id="7_2">7.2.- Matriz de exposición laboral</h4>
+				<div class="row">
+					<div class="col-12">
+						<p class="justificado">La matriz de exposición laboral contiene un concentrado de los resultados de la evaluación del agente físico vibraciones en cuerpo entero, así como información del área física y de la plantilla laboral de la instalación en cuestión.</p>
+
+						<style type="text/css">
+							#tabla_reporte_matriz th {
+								background: #F9F9F9;
+								border: 1px #E5E5E5 solid;
+								padding: 1px !important;
+								font-size: 0.5vw !important;
+								text-align: center;
+								vertical-align: middle;
+							}
+
+							#tabla_reporte_matriz td {
+								padding: 1px !important;
+								font-size: 0.5vw !important;
+								text-align: center;
+							}
+
+							#tabla_reporte_matriz tr:hover td {
+								color: #000000;
+							}
+
+							.rotartexto {
+								-webkit-transform: rotate(-90deg);
+								-moz-transform: rotate(-90deg);
+								-o-transform: rotate(-90deg);
+								transform: rotate(-90deg);
+								filter: progid:DXImageTransform.Microsoft.BasicImage(rotation=3);
+
+								display: -moz-inline-stack;
+								display: inline-block;
+								zoom: 1;
+								*display: inline;
+							}
+						</style>
+
+						<table class="table table-hover tabla_info_centrado" width="100%" id="tabla_reporte_matriz">
+						</table>
+					</div>
+				</div>
+				<h4 class="card-title" id="8">8.- Conclusiones</h4>
+				<div class="row">
+					<div class="col-12">
+						<form method="post" enctype="multipart/form-data" name="form_reporte_conclusion" id="form_reporte_conclusion">
+							<div class="row">
+								<div class="col-12">
+									{!! csrf_field() !!}
+								</div>
+								<div class="col-12">
+									<div class="form-group">
+										{{-- <label style="color: #000000;">Conclusiones</label> --}}
+										<textarea class="form-control" style="margin-bottom: 0px;" rows="18" id="reporte_conclusion" name="reporte_conclusion" required></textarea>
+									</div>
+								</div>
+								<div class="col-12" style="text-align: right;">
+									<div class="form-group">
+										<button type="submit" class="btn btn-danger waves-effect waves-light botoninforme" id="botonguardar_reporte_conclusion">Guardar conclusión <i class="fa fa-save"></i></button>
 									</div>
 								</div>
 							</div>
-							<div class="col-6">
-								<i class="fa fa-download fa-2x text-success" style="position: absolute; margin-top: 6px; margin-left: 8px; z-index: 50; text-shadow: 1px 1px 0 #FFFFFF, 1px -1px 0 #FFFFFF, -1px 1px 0 #FFFFFF, -1px -1px 0 #FFFFFF, 1px 0px 0 #FFFFFF, 0px 1px 0 #FFFFFF, -1px 0px 0 #FFFFFF, 0px -1px 0 #FFFFFF; cursor: pointer; display: block;" data-toggle="tooltip" title="Descargar mapa ubicación" id="boton_descargarmapaubicacion"></i>
-								<input type="file" class="dropify" accept="image/jpeg,image/x-png" data-allowed-file-extensions="jpg png JPG PNG" data-height="280" id="reporteubicacionfoto" name="reporteubicacionfoto" onchange="redimencionar_mapaubicacion();" required>
-							</div>
-						</div>
-						<div class="row">
-							<div class="col-12" style="text-align: right;">
-								<div class="form-group">
-									<button type="submit" class="btn btn-danger waves-effect waves-light botoninforme" id="botonguardar_reporte_ubicacion">Guardar ubicación <i class="fa fa-save"></i></button>
-								</div>
-							</div>
-						</div>
-					</form>
-				<h4 class="card-title" id="5_2">5.2.- Descripción del proceso en la instalación</h4>
-					<form method="post" enctype="multipart/form-data" name="form_reporte_procesoinstalacion" id="form_reporte_procesoinstalacion">
-						<div class="row">
-							<div class="col-12">
-								{!! csrf_field() !!}
-							</div>
-							<div class="col-12">								
-								<div class="form-group">
-									<label style="color: #000000;">Descripción del proceso en la instalación</label>
-									<textarea  class="form-control" style="margin-bottom: 0px;" rows="20" id="reporte_procesoinstalacion" name="reporte_procesoinstalacion" required></textarea>
-								</div>
-							</div>
-							<div class="col-12">								
-								<div class="form-group">
-									<label style="color: #000000;">Descripción de la actividad principal</label>
-									<textarea  class="form-control" style="margin-bottom: 0px;" rows="8" id="reporte_actividadprincipal" name="reporte_actividadprincipal" required></textarea>
-								</div>
-							</div>
-							<div class="col-12" style="text-align: right;">
-								<div class="form-group">
-									<button type="submit" class="btn btn-danger waves-effect waves-light botoninforme" id="botonguardar_reporte_procesoinstalacion">Guardar proceso instalación <i class="fa fa-save"></i></button>
-								</div>
-							</div>
-						</div>
-					</form>
-				<h4 class="card-title" id="5_3">5.3.- Población ocupacionalmente expuesta</h4>
-					<div class="row">
-						<div class="col-12">
-							<p class="justificado">En este apartado se muestra la actividad principal desarrollada en la instalación, involucrando al personal / categoría adscrito en cada área que integran a la <b class="div_instalacion_nombre" style="color: #000000;">NOMBRE INSTALACION</b>.</p>
-							<table class="table table-hover tabla_info_centrado" width="100%" id="tabla_reporte_area">
-								<thead>
+						</form>
+					</div>
+				</div>
+				<div class="row">
+					<div class="col-12">
+						<p class="justificado">A continuación, se plasman los resultados en la siguiente figura:</p><br>
+
+						<style type="text/css">
+							#tabla_dashboard {
+								width: 100%;
+								border: 3px #0BACDB solid;
+							}
+
+							#tabla_dashboard th {
+								border: 1px #E9E9E9 solid;
+								background: #0BACDB;
+								color: #FFFFFF !important;
+								padding: 4px;
+								font-size: 1.1vw !important;
+								line-height: 20px;
+								margin: 0px;
+								text-align: center;
+								vertical-align: middle;
+							}
+
+							#tabla_dashboard td {
+								border: 1px #E9E9E9 solid;
+								padding: 4px;
+								line-height: 1.1;
+								margin: 0px;
+								vertical-align: middle;
+								text-align: center;
+								font-size: 0.85vw !important;
+								color: #555555;
+							}
+
+							#tabla_dashboard td.td_top {
+								vertical-align: top;
+							}
+
+							#tabla_dashboard td .icono {
+								width: 100%;
+								font-size: 5vw !important;
+								margin: 10px 0px;
+							}
+
+							#tabla_dashboard td .texto {
+								font-size: 0.9vw !important;
+								line-height: 1 !important;
+								font-weight: bold;
+							}
+
+							#tabla_dashboard td .numero {
+								font-size: 1.2vw !important;
+								line-height: 1.2 !important;
+								font-weight: bold;
+							}
+						</style>
+
+						<div id="div_tabla_dashboard">
+							<table class="table" width="100%" id="tabla_dashboard">
+								<tbody>
 									<tr>
-										<th width="50">No.</th>
-										<th width="130">Instalación</th>
-										<th width="150">Área</th>
-										<th width="">Categoría</th>
-										<th width="60">Total</th>
-										<th width="60">Editar</th>
-										{{-- <th width="60">Eliminar</th> --}}
+										<th colspan="6">
+											<b style="font-size:1.3vw!important; font-weight: 600; color: #000000;">
+												Evaluación de Vibraciones en:<br><span class="div_instalacion_nombre">NOMBRE INSTALACION</span>
+											</b>
+										</th>
 									</tr>
-								</thead>
-								<tbody></tbody>
+									<tr>
+										<th colspan="2" width="32%">Número de puntos de medición</th>
+										<th colspan="2" width="36%">Cumplimiento normativo</th>
+										<th colspan="2" width="32%">Recomendaciones emitidas</th>
+									</tr>
+									<tr>
+										<td colspan="2" height="180">
+											<i class="fa fa-podcast text-success" style="font-size: 6vw!important;" id="dashboard_puntos"> 0</i><br>
+										</td>
+										<td colspan="2">
+											<i class="fa fa-line-chart text-info" style="font-size: 6vw!important;" id="dashboard_cumplimiento">0%</i><br>
+										</td>
+										<td colspan="2">
+											<i class="fa fa-pencil-square-o text-warning" style="font-size: 6.5vw!important;" id="dashboard_recomendaciones"> 0</i><br>
+										</td>
+									</tr>
+									<tr>
+										<th colspan="3" width="50%">Distribución de puntos de evaluación<br><i class="fa fa-braille fa-3x"></i></th>
+										<th colspan="3" width="50%">Categorías evaluadas (<span style="color: #FF0000; font-weight: normal;">● Críticas</span>)<br><i class="fa fa-male fa-3x"></i></th>
+									</tr>
+									<tr>
+										<td colspan="3" height="230">
+											<span id="dashboard_distribucionpuntos">Distribución</span>
+										</td>
+										<td colspan="3">
+											<span id="dashboard_categoriasevaluadas">Categorías</span>
+										</td>
+									</tr>
+									<tr>
+										<td colspan="6" style="font-style: italic; font-size: 11px!important;">Análisis derivado del informe de resultados de la evaluación de vibraciones - condiciones de seguridad e higiene en los centros de trabajo (NOM-024-STPS-2001).</td>
+									</tr>
+								</tbody>
 							</table>
 						</div>
+
+						{{-- <div id="captura" style="height: 800px; width: 100%; border: 1px #000 solid;">graficas</div><br> --}}
+						{{-- <button type="button" class="btn btn-success waves-effect waves-light" id="botonguardar_generargraficas">Guardar gráficas <i class="fa fa-chart"></i></button> --}}
 					</div>
-				<h4 class="card-title" id="5_4">5.4.- Actividades del personal expuesto</h4>
+				</div>
+				<h4 class="card-title" id="9">9.- Recomendaciones de control</h4>
+				<form method="post" enctype="multipart/form-data" name="form_reporte_recomendaciones" id="form_reporte_recomendaciones">
 					<div class="row">
 						<div class="col-12">
-							<p class="justificado">A continuación, se describen las actividades realizadas en cada área con exposición a vibraciones según la categoría encontrada en dicho sitio.</p>
-							<div class="informacion_estatica">
-								<table class="table table-hover tabla_info_centrado" width="100%" id="tabla_reporte_5_4">
-									<thead>
-										<tr>
-											<th width="60">No.</th>
-											<th width="130">Instalación</th>
-											<th width="150">Área</th>
-											<th width="250">Categoría</th>
-											<th width="">Actividades</th>
-										</tr>
-									</thead>
-									<tbody></tbody>
-								</table>
-							</div>
+							{!! csrf_field() !!}
 						</div>
-					</div>
-				<h4 class="card-title" id="5_5">5.5.- Tabla de identificación de las áreas</h4>
-					<div class="row">
 						<div class="col-12">
-							<p class="justificado">Para esta sección se han registrado las áreas, fuentes generadoras de vibraciones, cantidad de equipo y/o herramienta y tipo de exposición que representa.</p>
-							<div class="informacion_estatica">
-								<table class="table table-hover tabla_info_centrado" width="100%" id="tabla_reporte_5_5">
-									<thead>
-										<tr>
-											<th width="40">No.</th>
-											<th width="130">Instalación</th>
-											<th width="150">Área</th>
-											<th width="">Fuente generadora</th>
-											<th width="70">Cantidad</th>
-											<th width="130">Tipo de exposición</th>
-										</tr>
-									</thead>
-									<tbody></tbody>
-								</table>
-							</div>
-						</div>
-					</div>
-				<h4 class="card-title" id="6">6.- Evaluación</h4>
-				<h4 class="card-title" id="6_1">6.1.- Condiciones de operación durante la evaluación (representado en porcentaje)</h4>
-					<div class="row">
-						<div class="col-12">
-							<p class="justificado">Las condiciones de operación que se encontraron en las diversas áreas de la instalación se presentan por porcentaje en la siguiente tabla:</p>
-							<table class="table table-hover tabla_info_centrado" width="100%" id="tabla_reporte_6_1">
-								<thead>
-									<tr>
-										<th width="60">No.</th>
-										<th width="130">Instalación</th>
-										<th width="">Áreas de trabajo</th>
-										<th width="100">Porcentaje de<br>operación</th>
-									</tr>
-								</thead>
-								<tbody></tbody>
-							</table>
-						</div>
-					</div>
-				<h4 class="card-title" id="6_2">6.2.- Método de evaluación</h4>
-					<div class="row">
-						<div class="col-12">
-							<p class="justificado">En este apartado se muestra la identificación de áreas, categoría a evaluar, método de evaluación y número de puntos evaluados.</p>
-							<table class="table table-hover tabla_info_centrado" width="100%" id="tabla_reporte_6_2">
-								<thead>
-									<tr>
-										<th width="60">No.</th>
-										<th width="130">Instalación</th>
-										<th width="150">Área</th>
-										<th width="">Categoría</th>
-										<th width="130">Método</th>
-										<th width="120">Puntos por área</th>
-									</tr>
-								</thead>
-								<tbody></tbody>
-								<tfoot>
-									<tr>
-										<th colspan="5">Total de puntos evaluados</th>
-										<td id="total_puntosmedicion" style="font-weight: bold; color: #777777;">0</td>
-									</tr>
-								</tfoot>
-							</table>
-						</div>
-					</div>
-				<h4 class="card-title" id="7">7.- Resultados</h4>
-					<div class="row">
-						<div class="col-12">
-							<p class="justificado">En este capítulo se presentan los resultados obtenidos durante la evaluación de vibraciones en tipo de evaluación cuerpo entero por punto de medición.</p>
 							<ol class="breadcrumb" style="padding: 6px; margin: 10px 0px;">
-								<button type="button" class="btn btn-default waves-effect botoninforme" data-toggle="tooltip" title="Nuevo punto de medición" id="boton_reporte_nuevopuntomedicion">
-									<span class="btn-label"><i class="fa fa-plus"></i></span>Punto de medición
+								<button type="button" class="btn btn-default waves-effect botoninforme" data-toggle="tooltip" title="Agregar nueva recomendación" id="boton_reporte_nuevarecomendacion">
+									<span class="btn-label"><i class="fa fa-plus"></i></span>Nueva recomendación
 								</button>
 							</ol>
 							<style type="text/css">
-								.tabla_evaluacion th
-								{
-									padding: 2px 1px!important;
-									font-size:0.7vw!important;
-									text-align: center;
-									vertical-align: middle;
+								#tabla_reporte_recomendaciones td.alinear_izquierda {
+									text-align: left;
 								}
 
-								.tabla_evaluacion td
-								{
-									padding: 2px 1px!important;
-									font-size:0.7vw!important;
-									text-align: center;
-									vertical-align: middle;
-								}
-							</style>
-							<table class="table table-hover tabla_info_centrado tabla_evaluacion" width="100%" id="tabla_reporte_puntos">
-								<thead>
-									<tr>
-										<th width="60">No. de<br>Medición</th>
-										<th width="120">Instalación</th>
-										<th width="130">Área</th>
-										<th width="130">Punto de<br>evaluación</th>
-										<th width="">Categoría</th>
-										<th width="80">Tipo<br>evaluación</th>
-										<th width="80">Numero<br>de mediciones</th>
-										<th width="80">Tiempo<br>Exposición</th>
-										<th width="60">Editar</th>
-										<th width="60">Eliminar</th>
-									</tr>
-								</thead>
-								<tbody></tbody>
-							</table>
-						</div>
-					</div>
-				<h4 class="card-title" id="7_1">7.1.- Tabla de resultados</h4>
-					<div class="row">
-						<div class="col-12">
-							<style type="text/css">
-								.tabla_resultados th
-								{
-									padding: 2px 1px!important;
-									font-size:0.55vw!important;
-									text-align: center;
-									vertical-align: middle;
-								}
-
-								.tabla_resultados td
-								{
-									padding: 2px 1px!important;
-									font-size:0.55vw!important;
-									text-align: center;
-									vertical-align: middle;
-								}
-							</style>
-							<table class="table table-hover tabla_info_centrado tabla_resultados" width="100%" id="tabla_reporte_7_1">
-							</table>
-						</div>
-					</div>
-				<h4 class="card-title" id="7_2">7.2.- Matriz de exposición laboral</h4>
-					<div class="row">
-						<div class="col-12">
-							<p class="justificado">La matriz de exposición laboral contiene un concentrado de los resultados de la evaluación del agente físico vibraciones en cuerpo entero, así como información del área física y de la plantilla laboral de la instalación en cuestión.</p>
-
-							<style type="text/css">
-								#tabla_reporte_matriz th
-								{
-									background: #F9F9F9;
-									border: 1px #E5E5E5 solid;
-									padding: 1px!important;
-									font-size:0.5vw!important;
-									text-align: center;
-									vertical-align: middle;
-								}
-
-								#tabla_reporte_matriz td
-								{
-									padding: 1px!important;
-									font-size:0.5vw!important;
-									text-align: center;
-								}
-
-								#tabla_reporte_matriz tr:hover td
-								{
+								#tabla_reporte_recomendaciones td label {
+									font-size: 14px;
 									color: #000000;
 								}
-
-								.rotartexto
-								{
-									-webkit-transform: rotate(-90deg); 
-									-moz-transform: rotate(-90deg);
-									-o-transform: rotate(-90deg);
-									transform: rotate(-90deg);
-									filter: progid:DXImageTransform.Microsoft.BasicImage(rotation=3);
-
-									display:-moz-inline-stack;
-									display:inline-block;
-									zoom:1;
-									*display:inline; 
-								}
 							</style>
-
-							<table class="table table-hover tabla_info_centrado" width="100%" id="tabla_reporte_matriz">
-							</table>
-						</div>
-					</div>
-				<h4 class="card-title" id="8">8.- Conclusiones</h4>
-					<div class="row">
-						<div class="col-12">
-							<form method="post" enctype="multipart/form-data" name="form_reporte_conclusion" id="form_reporte_conclusion">
-								<div class="row">
-									<div class="col-12">
-										{!! csrf_field() !!}
-									</div>
-									<div class="col-12">
-										<div class="form-group">
-											{{-- <label style="color: #000000;">Conclusiones</label> --}}
-											<textarea  class="form-control" style="margin-bottom: 0px;" rows="18" id="reporte_conclusion" name="reporte_conclusion" required></textarea>
-										</div>
-									</div>
-									<div class="col-12" style="text-align: right;">
-										<div class="form-group">
-											<button type="submit" class="btn btn-danger waves-effect waves-light botoninforme" id="botonguardar_reporte_conclusion">Guardar conclusión <i class="fa fa-save"></i></button>
-										</div>
-									</div>
-								</div>
-							</form>
-						</div>
-					</div>
-					<div class="row">
-						<div class="col-12">
-							<p class="justificado">A continuación, se plasman los resultados en la siguiente figura:</p><br>
-							
-							<style type="text/css">
-								#tabla_dashboard
-								{
-									width: 100%;
-									border: 3px #0BACDB solid;
-								}
-
-								#tabla_dashboard th
-								{
-									border: 1px #E9E9E9 solid;
-									background: #0BACDB;
-									color: #FFFFFF!important;
-									padding: 4px;
-									font-size:1.1vw!important;
-									line-height: 20px;
-									margin: 0px;
-									text-align: center;
-									vertical-align: middle;
-								}
-
-								#tabla_dashboard td
-								{
-									border: 1px #E9E9E9 solid;
-									padding: 4px;
-									line-height: 1.1;
-									margin: 0px;
-									vertical-align: middle;
-									text-align: center;
-									font-size:0.85vw!important;
-									color: #555555;
-								}
-
-								#tabla_dashboard td.td_top
-								{
-									vertical-align: top;
-								}
-
-								#tabla_dashboard td .icono
-								{
-									width: 100%;
-									font-size:5vw!important;
-									margin: 10px 0px;
-								}
-
-								#tabla_dashboard td .texto
-								{
-									font-size:0.9vw!important;
-									line-height: 1!important;
-									font-weight: bold;
-								}
-
-								#tabla_dashboard td .numero
-								{
-									font-size:1.2vw!important;
-									line-height: 1.2!important;
-									font-weight: bold;
-								}
-							</style>
-
-							<div id="div_tabla_dashboard">
-								<table class="table" width="100%" id="tabla_dashboard">
-									<tbody>
-										<tr>
-											<th colspan="6">
-												<b style="font-size:1.3vw!important; font-weight: 600; color: #000000;">
-													Evaluación de Vibraciones en:<br><span class="div_instalacion_nombre">NOMBRE INSTALACION</span>
-												</b>
-											</th>
-										</tr>
-										<tr>
-											<th colspan="2" width="32%">Número de puntos de medición</th>
-											<th colspan="2" width="36%">Cumplimiento normativo</th>
-											<th colspan="2" width="32%">Recomendaciones emitidas</th>
-										</tr>
-										<tr>
-											<td colspan="2" height="180">
-												<i class="fa fa-podcast text-success" style="font-size: 6vw!important;" id="dashboard_puntos"> 0</i><br>
-											</td>
-											<td colspan="2">
-												<i class="fa fa-line-chart text-info" style="font-size: 6vw!important;" id="dashboard_cumplimiento">0%</i><br>
-											</td>
-											<td colspan="2">
-												<i class="fa fa-pencil-square-o text-warning" style="font-size: 6.5vw!important;" id="dashboard_recomendaciones"> 0</i><br>
-											</td>
-										</tr>
-										<tr>
-											<th colspan="3" width="50%">Distribución de puntos de evaluación<br><i class="fa fa-braille fa-3x"></i></th>
-											<th colspan="3" width="50%">Categorías evaluadas (<span style="color: #FF0000; font-weight: normal;">● Críticas</span>)<br><i class="fa fa-male fa-3x"></i></th>
-										</tr>
-										<tr>
-											<td colspan="3" height="230">
-												<span id="dashboard_distribucionpuntos">Distribución</span>
-											</td>
-											<td colspan="3">
-												<span id="dashboard_categoriasevaluadas">Categorías</span>
-											</td>
-										</tr>
-										<tr>
-											<td colspan="6" style="font-style: italic; font-size: 11px!important;">Análisis derivado del informe de resultados de la evaluación de vibraciones - condiciones de seguridad e higiene en los centros de trabajo (NOM-024-STPS-2001).</td>
-										</tr>
-									</tbody>
-								</table>
-							</div>
-
-							{{-- <div id="captura" style="height: 800px; width: 100%; border: 1px #000 solid;">graficas</div><br> --}}
-							{{-- <button type="button" class="btn btn-success waves-effect waves-light" id="botonguardar_generargraficas">Guardar gráficas <i class="fa fa-chart"></i></button> --}}
-						</div>
-					</div>
-				<h4 class="card-title" id="9">9.- Recomendaciones de control</h4>
-					<form method="post" enctype="multipart/form-data" name="form_reporte_recomendaciones" id="form_reporte_recomendaciones">
-						<div class="row">
-							<div class="col-12">
-								{!! csrf_field() !!}
-							</div>
-							<div class="col-12">
-								<ol class="breadcrumb" style="padding: 6px; margin: 10px 0px;">
-									<button type="button" class="btn btn-default waves-effect botoninforme" data-toggle="tooltip" title="Agregar nueva recomendación" id="boton_reporte_nuevarecomendacion">
-										<span class="btn-label"><i class="fa fa-plus"></i></span>Nueva recomendación
-									</button>
-								</ol>
-								<style type="text/css">
-									#tabla_reporte_recomendaciones td.alinear_izquierda
-									{
-										text-align: left;
-									}
-
-									#tabla_reporte_recomendaciones td label
-									{
-										font-size: 14px;
-										color: #000000;
-									}
-								</style>
-								<table class="table table-hover tabla_info_centrado" width="100%" id="tabla_reporte_recomendaciones">
-									<thead>
-										<tr>
-											<th width="60">No.</th>
-											<th width="70">Activo</th>
-											<th>Descripción</th>
-										</tr>
-									</thead>
-									<tbody></tbody>
-								</table>
-							</div>
-							<div class="col-12" style="text-align: right;">
-								<div class="form-group">
-									<button type="submit" class="btn btn-danger waves-effect waves-light botoninforme" id="botonguardar_reporte_recomendaciones">Guardar recomendaciones <i class="fa fa-save"></i></button>
-								</div>
-							</div>
-						</div>
-					</form>
-				<h4 class="card-title" id="10">10.- Responsables del informe</h4>
-					<form method="post" enctype="multipart/form-data" name="form_reporte_responsablesinforme" id="form_reporte_responsablesinforme">
-						<div class="row">
-							<div class="col-12">
-								{!! csrf_field() !!}
-								<input type="hidden" class="form-control" id="responsablesinforme_carpetadocumentoshistorial" name="responsablesinforme_carpetadocumentoshistorial">
-							</div>
-							<div class="col-6">
-								<div class="row">
-									<div class="col-12">
-										<div class="form-group">
-											<label>Nombre del responsable técnico</label>
-											<input type="text" class="form-control" id="reporte_responsable1" name="reporte_responsable1" required>
-										</div>
-									</div>
-									<div class="col-12">
-										<div class="form-group">
-											<label>Cargo del responsable técnico</label>
-											<input type="text" class="form-control" id="reporte_responsable1cargo" name="reporte_responsable1cargo" required>
-										</div>
-									</div>
-									<div class="col-12">
-										<div class="form-group">
-											<label>Foto documento del responsable técnico</label>
-											<i class="fa fa-download fa-2x text-success" style="position: absolute; margin-top: 6px; margin-left: 8px; z-index: 50; text-shadow: 1px 1px 0 #FFFFFF, 1px -1px 0 #FFFFFF, -1px 1px 0 #FFFFFF, -1px -1px 0 #FFFFFF, 1px 0px 0 #FFFFFF, 0px 1px 0 #FFFFFF, -1px 0px 0 #FFFFFF, 0px -1px 0 #FFFFFF; cursor: pointer; display: none;" data-toggle="tooltip" title="Descargar foto documento" id="boton_descargarresponsabledoc1"></i>
-											<input type="hidden" class="form-control" id="reporte_responsable1_documentobase64" name="reporte_responsable1_documentobase64">
-											<input type="file" class="dropify" accept="image/jpeg,image/x-png" data-allowed-file-extensions="jpg png JPG PNG" data-height="280" id="reporteresponsable1documento" name="reporteresponsable1documento" onchange="redimencionar_foto('reporteresponsable1documento', 'reporte_responsable1_documentobase64', 'botonguardar_reporte_responsablesinforme');" required>
-										</div>
-									</div>
-								</div>
-							</div>
-							<div class="col-6">
-								<div class="row">
-									<div class="col-12">
-										<div class="form-group">
-											<label>Nombre del administrativo prestador de servicio</label>
-											<input type="text" class="form-control" id="reporte_responsable2" name="reporte_responsable2" required>
-										</div>
-									</div>
-									<div class="col-12">
-										<div class="form-group">
-											<label>Cargo del administrativo prestador de servicio</label>
-											<input type="text" class="form-control" id="reporte_responsable2cargo" name="reporte_responsable2cargo" required>
-										</div>
-									</div>
-									<div class="col-12">
-										<div class="form-group">
-											<label>Foto documento del prestador de servicio</label>
-											<i class="fa fa-download fa-2x text-success" style="position: absolute; margin-top: 6px; margin-left: 8px; z-index: 50; text-shadow: 1px 1px 0 #FFFFFF, 1px -1px 0 #FFFFFF, -1px 1px 0 #FFFFFF, -1px -1px 0 #FFFFFF, 1px 0px 0 #FFFFFF, 0px 1px 0 #FFFFFF, -1px 0px 0 #FFFFFF, 0px -1px 0 #FFFFFF; cursor: pointer; display: none;" data-toggle="tooltip" title="Descargar foto documento" id="boton_descargarresponsabledoc2"></i>
-											<input type="hidden" class="form-control" id="reporte_responsable2_documentobase64" name="reporte_responsable2_documentobase64">
-											<input type="file" class="dropify" accept="image/jpeg,image/x-png" data-allowed-file-extensions="jpg png JPG PNG" data-height="280" id="reporteresponsable2documento" name="reporteresponsable2documento" onchange="redimencionar_foto('reporteresponsable2documento', 'reporte_responsable2_documentobase64', 'botonguardar_reporte_responsablesinforme');" required>
-										</div>
-									</div>
-								</div>
-							</div>
-						</div>
-						<div class="row">
-							<div class="col-12" style="text-align: right;">
-								<div class="form-group">
-									<button type="submit" class="btn btn-danger waves-effect waves-light botoninforme" id="botonguardar_reporte_responsablesinforme">Guardar responsables del informe <i class="fa fa-save"></i></button>
-								</div>
-							</div>
-						</div>
-					</form>
-				<h4 class="card-title" id="11">11.- Anexos</h4>
-				<h4 class="card-title" id="11_1">11.1.- Anexo 1: Memoria fotográfica</h4>
-					<div class="row">
-						<div class="col-12" style="padding-top: 10px;">
-							<p class="justificado"><b style="color: #333333; font-weight: bold;">Nota del software:</b> Las <span id="reporte_memoriafotografica_lista">0</span> fotos encontradas se agregaran en la impresión del informe de vibración.</p>
-						</div>
-					</div>
-				<h4 class="card-title" id="11_2">11.2.-	Anexo 2: Planos de ubicación de las fuentes generadoras y puntos evaluados</h4>
-					<form method="post" enctype="multipart/form-data" name="form_reporte_planos" id="form_reporte_planos">
-						<div class="row">
-							<div class="col-12">
-								{!! csrf_field() !!}
-							</div>
-							<div class="col-12">
-								<p class="justificado"><b style="color: #333333; font-weight: bold;">Nota del software:</b> Los planos de las carpetas seleccionadas se agregaran en el informe de temperatura.</p><br>
-								<table class="table table-hover tabla_info_centrado" width="100%" id="tabla_reporte_planos">
-									<thead>
-										<tr>											
-											<th width="60">Seleccionado</th>
-											<th width="">Carpeta de planos</th>
-											<th width="100">Total planos</th>
-										</tr>
-									</thead>
-									<tbody></tbody>
-								</table>
-							</div>
-							<div class="col-12" style="text-align: right;">
-								<div class="form-group">
-									<button type="submit" class="btn btn-danger waves-effect waves-light botoninforme" id="botonguardar_reporte_planos">Guardar carpeta planos <i class="fa fa-save"></i></button>
-								</div>
-							</div>
-						</div>
-					</form>
-				<h4 class="card-title" id="11_3">11.3.-	Anexo 3: Registro de la evaluación de la exposición a los niveles de vibración</h4>
-					<div class="row">
-						<div class="col-12">
-							<p class="justificado"><b style="color: #333333; font-weight: bold;">Nota del software:</b> El Registro de la evaluación de la exposición a los niveles de vibración debe seleccionarlo en el punto "11.7.- Anexo 7: Informe de resultados".</p>
-						</div>
-					</div>
-				<h4 class="card-title" id="11_4">11.4.-	Anexo 4: Memoria de cálculo de los NEV cuando se evalúe exposición sin usar instrumentos de lectura directa</h4>
-					<div class="row">
-						<div class="col-12">
-							<p class="justificado"><b style="color: #333333; font-weight: bold;">Nota del software:</b> La Memoria de cálculo de los NEV cuando se evalúe exposición sin usar instrumentos de lectura directa debe seleccionarlo en el punto "11.7.- Anexo 7: Informe de resultados".</p>
-						</div>
-					</div>
-				<h4 class="card-title" id="11_5">11.5.-	Anexo 5: Equipo utilizado en la medición</h4>
-					<form method="post" enctype="multipart/form-data" name="form_reporte_equipoutilizado" id="form_reporte_equipoutilizado">
-						<div class="row">
-							<div class="col-12">
-								{!! csrf_field() !!}
-							</div>
-							<div class="col-12">
-								<table class="table table-hover tabla_info_centrado" width="100%" id="tabla_reporte_equipoutilizado">
-									<thead>
-										<tr>
-											<th width="60">No.</th>
-											<th width="60">Seleccionado</th>
-											<th>Equipo</th>
-											<th width="200">Marca / Modelo / Serie</th>
-											<th width="160">Vigencia</th>
-											<th width="60">Certificado</th>
-											<th width="60">Aplica Carta</th>
-											<th width="120">Carta PDF</th>
-										</tr>
-									</thead>
-									<tbody></tbody>
-								</table>
-							</div>
-							<div class="col-12">
-								<div class="informacion_estatica">
-									<br><b>Nota *:</b> La calibración tiene una extensión en el tiempo de vigencia avalada mediante una carta emitida por el laboratorio acreditado misma que se encuentra disponible para consulta en el anexo 5.<br>
-								</div>
-							</div>
-							<div class="col-12" style="text-align: right;">
-								<div class="form-group">
-									<button type="submit" class="btn btn-danger waves-effect waves-light botoninforme" id="botonguardar_reporte_equipoutilizado">
-										Guardar equipo utilizado <i class="fa fa-save"></i>
-									</button>
-								</div>
-							</div>
-						</div>
-					</form>
-				<h4 class="card-title" id="11_6">11.6.-	Anexo 6: Copia de certificados o aviso de calibración del equipo</h4>
-					<div class="row">
-						<div class="col-12" style="padding-top: 10px;">
-							<p class="justificado"><b style="color: #333333; font-weight: bold;">Nota del software:</b> Los certificados de los equipos utilizados seleccionados en el punto "11.5.- Anexo 5: Equipo utilizado en la medición" se adjuntará en la impresión del reporte en formato PDF.</p>
-						</div>
-					</div>
-				<h4 class="card-title" id="11_7">11.7.-	Anexo 7: Informe de resultados</h4>
-					<form method="post" enctype="multipart/form-data" name="form_reporte_anexosresultados" id="form_reporte_anexosresultados">
-						<div class="row">
-							<div class="col-12">
-								{!! csrf_field() !!}
-							</div>
-							<div class="col-12">
-								<p class="justificado"><b style="color: #333333; font-weight: bold;">Nota del software:</b> Los arhivos seleccionados se adjuntarán en la impresión del reporte en formato PDF.</p>
-								<table class="table table-hover tabla_info_centrado" width="100%" id="tabla_reporte_anexosresultados">
-									<thead>
-										<tr>
-											<th width="60">No.</th>
-											<th width="70">Seleccionado</th>
-											<th>Documento</th>
-											<th width="160">Fecha carga</th>
-											<th width="60">Mostrar</th>
-										</tr>
-									</thead>
-									<tbody></tbody>
-								</table><br><br>
-							</div>
-							<div class="col-12" style="text-align: right;">
-								<div class="form-group">
-									<button type="submit" class="btn btn-danger waves-effect waves-light botoninforme" id="botonguardar_reporte_anexosresultados">Guardar anexos resultados <i class="fa fa-save"></i></button>
-								</div>
-							</div>
-						</div>
-					</form>
-				<h4 class="card-title" id="11_8">11.8.-	Anexo 8: Copia de aprobación del laboratorio de ensayo ante la STPS</h4>
-					<div class="row">
-						<div class="col-12" style="padding-top: 10px;">
-							<p class="justificado"><b style="color: #333333; font-weight: bold;">Nota del software:</b> El Anexo "Anexo 8", debe elegirlo en la tabla del punto 12 El cual se adjuntará en la impresión del informe en formato PDF.</p>
-						</div>
-					</div>
-				<h4 class="card-title" id="11_9">11.9.-	Anexo 9: Copia del registro del laboratorio ante la entidad mexicana de acreditación (ema)</h4>
-					<div class="row">
-						<div class="col-12" style="padding-top: 10px;">
-							<p class="justificado"><b style="color: #333333; font-weight: bold;">Nota del software:</b> El Anexo "Anexo 9", debe elegirlo en la tabla del punto 12 El cual se adjuntará en la impresión del informe en formato PDF.</p>
-						</div>
-					</div>
-				<h4 class="card-title" id="12">12.- Seleccionar Anexos 7 (STPS) y 7 (EMA)</h4>
-					<form method="post" enctype="multipart/form-data" name="form_reporte_acreditacionaprobacion" id="form_reporte_acreditacionaprobacion">
-						<div class="row">
-							<div class="col-12">
-								{!! csrf_field() !!}
-							</div>
-							<div class="col-12">
-								<p class="justificado"><b style="color: #333333; font-weight: bold;">Nota del software:</b> Los arhivos seleccionados se adjuntarán en la impresión del reporte en formato PDF.</p>
-								<table class="table table-hover tabla_info_centrado" width="100%" id="tabla_reporte_acreditacionaprobacion">
-									<thead>
-										<tr>
-											<th width="60">No.</th>
-											<th width="60">Seleccionado</th>
-											<th width="100">Proveedor</th>
-											<th width="100">Tipo</th>
-											<th>Entidad</th>
-											<th width="200">Numero</th>
-											<th>Área</th>
-											<th width="160">Vigencia</th>
-											<th width="60">Certificado</th>
-										</tr>
-									</thead>
-									<tbody></tbody>
-								</table><br><br>
-							</div>
-							<div class="col-12" style="text-align: right;">
-								<div class="form-group">
-									<button type="submit" class="btn btn-danger waves-effect waves-light botoninforme" id="botonguardar_reporte_acreditacionaprobacion">Guardar anexos 6 (STPS) y 7 (EMA) <i class="fa fa-save"></i></button>
-								</div>
-							</div>
-						</div>
-					</form>
-				<h4 class="card-title" id="13">Generar informe .docx + Anexos .Zip</h4>
-					<div class="row">
-						<div class="col-12">
-							@if(auth()->user()->hasRoles(['Superusuario', 'Administrador', 'Proyecto', 'Coordinador']))
-								<ol class="breadcrumb" style="padding: 6px; margin: 10px 0px;">
-									<button type="button" class="btn btn-default waves-effect" data-toggle="tooltip" title="Nueva revisión" id="boton_reporte_nuevarevision">
-										<span class="btn-label"><i class="fa fa-plus"></i></span>Crear nueva revisión
-									</button>
-								</ol>
-							@endif
-							<table class="table table-hover tabla_reporte" width="100%" id="tabla_reporte_revisiones">
+							<table class="table table-hover tabla_info_centrado" width="100%" id="tabla_reporte_recomendaciones">
 								<thead>
 									<tr>
-										<th width="40">Revisión</th>
-										<th width="60">Concluido</th>
-										<th width="180">Concluido por:</th>
-										<th width="60">Cancelado</th>
-										<th width="180">Cancelado por:</th>
-										<th>Estado</th>
-										<th width="60">Descargar</th>
+										<th width="60">No.</th>
+										<th width="70">Activo</th>
+										<th>Descripción</th>
 									</tr>
 								</thead>
 								<tbody></tbody>
 							</table>
-							{{-- <div id="captura" style="width: 100%; border: 1px #000 solid;"></div><br> --}}
+						</div>
+						<div class="col-12" style="text-align: right;">
+							<div class="form-group">
+								<button type="submit" class="btn btn-danger waves-effect waves-light botoninforme" id="botonguardar_reporte_recomendaciones">Guardar recomendaciones <i class="fa fa-save"></i></button>
+							</div>
 						</div>
 					</div>
+				</form>
+				<h4 class="card-title" id="10">10.- Responsables del informe</h4>
+				<form method="post" enctype="multipart/form-data" name="form_reporte_responsablesinforme" id="form_reporte_responsablesinforme">
+					<div class="row">
+						<div class="col-12">
+							{!! csrf_field() !!}
+							<input type="hidden" class="form-control" id="responsablesinforme_carpetadocumentoshistorial" name="responsablesinforme_carpetadocumentoshistorial">
+						</div>
+						<div class="col-6">
+							<div class="row">
+								<div class="col-12">
+									<div class="form-group">
+										<label>Nombre del responsable técnico</label>
+										<input type="text" class="form-control" id="reporte_responsable1" name="reporte_responsable1" required>
+									</div>
+								</div>
+								<div class="col-12">
+									<div class="form-group">
+										<label>Cargo del responsable técnico</label>
+										<input type="text" class="form-control" id="reporte_responsable1cargo" name="reporte_responsable1cargo" required>
+									</div>
+								</div>
+								<div class="col-12">
+									<div class="form-group">
+										<label>Foto documento del responsable técnico</label>
+										<i class="fa fa-download fa-2x text-success" style="position: absolute; margin-top: 6px; margin-left: 8px; z-index: 50; text-shadow: 1px 1px 0 #FFFFFF, 1px -1px 0 #FFFFFF, -1px 1px 0 #FFFFFF, -1px -1px 0 #FFFFFF, 1px 0px 0 #FFFFFF, 0px 1px 0 #FFFFFF, -1px 0px 0 #FFFFFF, 0px -1px 0 #FFFFFF; cursor: pointer; display: none;" data-toggle="tooltip" title="Descargar foto documento" id="boton_descargarresponsabledoc1"></i>
+										<input type="hidden" class="form-control" id="reporte_responsable1_documentobase64" name="reporte_responsable1_documentobase64">
+										<input type="file" class="dropify" accept="image/jpeg,image/x-png" data-allowed-file-extensions="jpg png JPG PNG" data-height="280" id="reporteresponsable1documento" name="reporteresponsable1documento" onchange="redimencionar_foto('reporteresponsable1documento', 'reporte_responsable1_documentobase64', 'botonguardar_reporte_responsablesinforme');" required>
+									</div>
+								</div>
+							</div>
+						</div>
+						<div class="col-6">
+							<div class="row">
+								<div class="col-12">
+									<div class="form-group">
+										<label>Nombre del administrativo prestador de servicio</label>
+										<input type="text" class="form-control" id="reporte_responsable2" name="reporte_responsable2" required>
+									</div>
+								</div>
+								<div class="col-12">
+									<div class="form-group">
+										<label>Cargo del administrativo prestador de servicio</label>
+										<input type="text" class="form-control" id="reporte_responsable2cargo" name="reporte_responsable2cargo" required>
+									</div>
+								</div>
+								<div class="col-12">
+									<div class="form-group">
+										<label>Foto documento del prestador de servicio</label>
+										<i class="fa fa-download fa-2x text-success" style="position: absolute; margin-top: 6px; margin-left: 8px; z-index: 50; text-shadow: 1px 1px 0 #FFFFFF, 1px -1px 0 #FFFFFF, -1px 1px 0 #FFFFFF, -1px -1px 0 #FFFFFF, 1px 0px 0 #FFFFFF, 0px 1px 0 #FFFFFF, -1px 0px 0 #FFFFFF, 0px -1px 0 #FFFFFF; cursor: pointer; display: none;" data-toggle="tooltip" title="Descargar foto documento" id="boton_descargarresponsabledoc2"></i>
+										<input type="hidden" class="form-control" id="reporte_responsable2_documentobase64" name="reporte_responsable2_documentobase64">
+										<input type="file" class="dropify" accept="image/jpeg,image/x-png" data-allowed-file-extensions="jpg png JPG PNG" data-height="280" id="reporteresponsable2documento" name="reporteresponsable2documento" onchange="redimencionar_foto('reporteresponsable2documento', 'reporte_responsable2_documentobase64', 'botonguardar_reporte_responsablesinforme');" required>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+					<div class="row">
+						<div class="col-12" style="text-align: right;">
+							<div class="form-group">
+								<button type="submit" class="btn btn-danger waves-effect waves-light botoninforme" id="botonguardar_reporte_responsablesinforme">Guardar responsables del informe <i class="fa fa-save"></i></button>
+							</div>
+						</div>
+					</div>
+				</form>
+				<h4 class="card-title" id="11">11.- Anexos</h4>
+				<h4 class="card-title" id="11_1">11.1.- Anexo 1: Memoria fotográfica</h4>
+				<div class="row">
+					<div class="col-12" style="padding-top: 10px;">
+						<p class="justificado"><b style="color: #333333; font-weight: bold;">Nota del software:</b> Las <span id="reporte_memoriafotografica_lista">0</span> fotos encontradas se agregaran en la impresión del informe de vibración.</p>
+					</div>
+				</div>
+				<h4 class="card-title" id="11_2">11.2.- Anexo 2: Planos de ubicación de las fuentes generadoras y puntos evaluados</h4>
+				<form method="post" enctype="multipart/form-data" name="form_reporte_planos" id="form_reporte_planos">
+					<div class="row">
+						<div class="col-12">
+							{!! csrf_field() !!}
+						</div>
+						<div class="col-12">
+							<p class="justificado"><b style="color: #333333; font-weight: bold;">Nota del software:</b> Los planos de las carpetas seleccionadas se agregaran en el informe de temperatura.</p><br>
+							<table class="table table-hover tabla_info_centrado" width="100%" id="tabla_reporte_planos">
+								<thead>
+									<tr>
+										<th width="60">Seleccionado</th>
+										<th width="">Carpeta de planos</th>
+										<th width="100">Total planos</th>
+									</tr>
+								</thead>
+								<tbody></tbody>
+							</table>
+						</div>
+						<div class="col-12" style="text-align: right;">
+							<div class="form-group">
+								<button type="submit" class="btn btn-danger waves-effect waves-light botoninforme" id="botonguardar_reporte_planos">Guardar carpeta planos <i class="fa fa-save"></i></button>
+							</div>
+						</div>
+					</div>
+				</form>
+				<h4 class="card-title" id="11_3">11.3.- Anexo 3: Registro de la evaluación de la exposición a los niveles de vibración</h4>
+				<div class="row">
+					<div class="col-12">
+						<p class="justificado"><b style="color: #333333; font-weight: bold;">Nota del software:</b> El Registro de la evaluación de la exposición a los niveles de vibración debe seleccionarlo en el punto "11.7.- Anexo 7: Informe de resultados".</p>
+					</div>
+				</div>
+				<h4 class="card-title" id="11_4">11.4.- Anexo 4: Memoria de cálculo de los NEV cuando se evalúe exposición sin usar instrumentos de lectura directa</h4>
+				<div class="row">
+					<div class="col-12">
+						<p class="justificado"><b style="color: #333333; font-weight: bold;">Nota del software:</b> La Memoria de cálculo de los NEV cuando se evalúe exposición sin usar instrumentos de lectura directa debe seleccionarlo en el punto "11.7.- Anexo 7: Informe de resultados".</p>
+					</div>
+				</div>
+				<h4 class="card-title" id="11_5">11.5.- Anexo 5: Equipo utilizado en la medición</h4>
+				<form method="post" enctype="multipart/form-data" name="form_reporte_equipoutilizado" id="form_reporte_equipoutilizado">
+					<div class="row">
+						<div class="col-12">
+							{!! csrf_field() !!}
+						</div>
+						<div class="col-12">
+							<table class="table table-hover tabla_info_centrado" width="100%" id="tabla_reporte_equipoutilizado">
+								<thead>
+									<tr>
+										<th width="60">No.</th>
+										<th width="60">Seleccionado</th>
+										<th>Equipo</th>
+										<th width="200">Marca / Modelo / Serie</th>
+										<th width="160">Vigencia</th>
+										<th width="60">Certificado</th>
+										<th width="60">Aplica Carta</th>
+										<th width="120">Carta PDF</th>
+									</tr>
+								</thead>
+								<tbody></tbody>
+							</table>
+						</div>
+						<div class="col-12">
+							<div class="informacion_estatica">
+								<br><b>Nota *:</b> La calibración tiene una extensión en el tiempo de vigencia avalada mediante una carta emitida por el laboratorio acreditado misma que se encuentra disponible para consulta en el anexo 5.<br>
+							</div>
+						</div>
+						<div class="col-12" style="text-align: right;">
+							<div class="form-group">
+								<button type="submit" class="btn btn-danger waves-effect waves-light botoninforme" id="botonguardar_reporte_equipoutilizado">
+									Guardar equipo utilizado <i class="fa fa-save"></i>
+								</button>
+							</div>
+						</div>
+					</div>
+				</form>
+				<h4 class="card-title" id="11_6">11.6.- Anexo 6: Copia de certificados o aviso de calibración del equipo</h4>
+				<div class="row">
+					<div class="col-12" style="padding-top: 10px;">
+						<p class="justificado"><b style="color: #333333; font-weight: bold;">Nota del software:</b> Los certificados de los equipos utilizados seleccionados en el punto "11.5.- Anexo 5: Equipo utilizado en la medición" se adjuntará en la impresión del reporte en formato PDF.</p>
+					</div>
+				</div>
+				<h4 class="card-title" id="11_7">11.7.- Anexo 7: Informe de resultados</h4>
+				<form method="post" enctype="multipart/form-data" name="form_reporte_anexosresultados" id="form_reporte_anexosresultados">
+					<div class="row">
+						<div class="col-12">
+							{!! csrf_field() !!}
+						</div>
+						<div class="col-12">
+							<p class="justificado"><b style="color: #333333; font-weight: bold;">Nota del software:</b> Los arhivos seleccionados se adjuntarán en la impresión del reporte en formato PDF.</p>
+							<table class="table table-hover tabla_info_centrado" width="100%" id="tabla_reporte_anexosresultados">
+								<thead>
+									<tr>
+										<th width="60">No.</th>
+										<th width="70">Seleccionado</th>
+										<th>Documento</th>
+										<th width="160">Fecha carga</th>
+										<th width="60">Mostrar</th>
+									</tr>
+								</thead>
+								<tbody></tbody>
+							</table><br><br>
+						</div>
+						<div class="col-12" style="text-align: right;">
+							<div class="form-group">
+								<button type="submit" class="btn btn-danger waves-effect waves-light botoninforme" id="botonguardar_reporte_anexosresultados">Guardar anexos resultados <i class="fa fa-save"></i></button>
+							</div>
+						</div>
+					</div>
+				</form>
+				<h4 class="card-title" id="11_8">11.8.- Anexo 8: Copia de aprobación del laboratorio de ensayo ante la STPS</h4>
+				<div class="row">
+					<div class="col-12" style="padding-top: 10px;">
+						<p class="justificado"><b style="color: #333333; font-weight: bold;">Nota del software:</b> El Anexo "Anexo 8", debe elegirlo en la tabla del punto 12 El cual se adjuntará en la impresión del informe en formato PDF.</p>
+					</div>
+				</div>
+				<h4 class="card-title" id="11_9">11.9.- Anexo 9: Copia del registro del laboratorio ante la entidad mexicana de acreditación (ema)</h4>
+				<div class="row">
+					<div class="col-12" style="padding-top: 10px;">
+						<p class="justificado"><b style="color: #333333; font-weight: bold;">Nota del software:</b> El Anexo "Anexo 9", debe elegirlo en la tabla del punto 12 El cual se adjuntará en la impresión del informe en formato PDF.</p>
+					</div>
+				</div>
+				<h4 class="card-title" id="12">12.- Seleccionar Anexos 7 (STPS) y 7 (EMA)</h4>
+				<form method="post" enctype="multipart/form-data" name="form_reporte_acreditacionaprobacion" id="form_reporte_acreditacionaprobacion">
+					<div class="row">
+						<div class="col-12">
+							{!! csrf_field() !!}
+						</div>
+						<div class="col-12">
+							<p class="justificado"><b style="color: #333333; font-weight: bold;">Nota del software:</b> Los arhivos seleccionados se adjuntarán en la impresión del reporte en formato PDF.</p>
+							<table class="table table-hover tabla_info_centrado" width="100%" id="tabla_reporte_acreditacionaprobacion">
+								<thead>
+									<tr>
+										<th width="60">No.</th>
+										<th width="60">Seleccionado</th>
+										<th width="100">Proveedor</th>
+										<th width="100">Tipo</th>
+										<th>Entidad</th>
+										<th width="200">Numero</th>
+										<th>Área</th>
+										<th width="160">Vigencia</th>
+										<th width="60">Certificado</th>
+									</tr>
+								</thead>
+								<tbody></tbody>
+							</table><br><br>
+						</div>
+						<div class="col-12" style="text-align: right;">
+							<div class="form-group">
+								<button type="submit" class="btn btn-danger waves-effect waves-light botoninforme" id="botonguardar_reporte_acreditacionaprobacion">Guardar anexos 6 (STPS) y 7 (EMA) <i class="fa fa-save"></i></button>
+							</div>
+						</div>
+					</div>
+				</form>
+				<h4 class="card-title" id="13">Generar informe .docx + Anexos .Zip</h4>
+				<div class="row">
+					<div class="col-12">
+						@if(auth()->user()->hasRoles(['Superusuario', 'Administrador', 'Proyecto', 'Coordinador']))
+						<ol class="breadcrumb" style="padding: 6px; margin: 10px 0px;">
+							<button type="button" class="btn btn-default waves-effect" data-toggle="tooltip" title="Nueva revisión" id="boton_reporte_nuevarevision">
+								<span class="btn-label"><i class="fa fa-plus"></i></span>Crear nueva revisión
+							</button>
+						</ol>
+						@endif
+						<table class="table table-hover tabla_reporte" width="100%" id="tabla_reporte_revisiones">
+							<thead>
+								<tr>
+									<th width="40">Revisión</th>
+									<th width="60">Concluido</th>
+									<th width="180">Concluido por:</th>
+									<th width="60">Cancelado</th>
+									<th width="180">Cancelado por:</th>
+									<th>Estado</th>
+									<th width="60">Descargar</th>
+								</tr>
+							</thead>
+							<tbody></tbody>
+						</table>
+						{{-- <div id="captura" style="width: 100%; border: 1px #000 solid;"></div><br> --}}
+					</div>
+				</div>
 			</div>
 		</div>
 	</div>
@@ -1246,20 +1370,20 @@
 <!-- MODAL-CARGANDO -->
 <!-- ============================================================== -->
 <div id="modal_cargando" class="modal fade bs-example-modal-sm" tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel" aria-hidden="true" style="display: none;">
-    <div class="modal-dialog modal-sm" style="max-width: 350px!important; margin-top: 250px;">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h4 class="modal-title" id="mySmallModalLabel">Cargando</h4>
-                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
-            </div>
-            <div class="modal-body" style="text-align: center;">
-            	<i class='fa fa-spin fa-spinner fa-5x'></i>
-            	<br><br>Por favor espere <span id="segundos_espera">0</span>
-            </div>
-        </div>
-        <!-- /.modal-content -->
-    </div>
-    <!-- /.modal-dialog -->
+	<div class="modal-dialog modal-sm" style="max-width: 350px!important; margin-top: 250px;">
+		<div class="modal-content">
+			<div class="modal-header">
+				<h4 class="modal-title" id="mySmallModalLabel">Cargando</h4>
+				<button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+			</div>
+			<div class="modal-body" style="text-align: center;">
+				<i class='fa fa-spin fa-spinner fa-5x'></i>
+				<br><br>Por favor espere <span id="segundos_espera">0</span>
+			</div>
+		</div>
+		<!-- /.modal-content -->
+	</div>
+	<!-- /.modal-dialog -->
 </div>
 <!-- ============================================================== -->
 <!-- MODAL-CARGANDO -->
@@ -1270,36 +1394,36 @@
 <!-- VISOR-MODAL -->
 <!-- ============================================================== -->
 <style type="text/css" media="screen">
-    #modal_visor>.modal-dialog{
-        min-width: 900px !important;
-    }
+	#modal_visor>.modal-dialog {
+		min-width: 900px !important;
+	}
 
-    iframe{
-        width: 100%;
-        height: 600px;
-        border: 0px #fff solid;
-    }
+	iframe {
+		width: 100%;
+		height: 600px;
+		border: 0px #fff solid;
+	}
 </style>
 <div id="modal_visor" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" style="display: none;">
-    <div class="modal-dialog modal-lg">
-        <div class="modal-content">
-            <div class="modal-header">
-                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
-                <h4 class="modal-title">Documento</h4>
-            </div>
-            <div class="modal-body" style="background: #555555;">
-                <div class="row">
-                    <div class="col-12">
-                        <iframe src="/assets/images/cargando.gif" name="visor_documento" id="visor_documento" style=""></iframe>
-                    </div>
-                </div>
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-default waves-effect" data-dismiss="modal" id="botoncerrar_modalvisor_reporte">Cerrar</button>
-                {{-- <button type="button" class="btn btn-danger waves-effect waves-light">Guardar</button> --}}
-            </div>
-        </div>
-    </div>
+	<div class="modal-dialog modal-lg">
+		<div class="modal-content">
+			<div class="modal-header">
+				<button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+				<h4 class="modal-title">Documento</h4>
+			</div>
+			<div class="modal-body" style="background: #555555;">
+				<div class="row">
+					<div class="col-12">
+						<iframe src="/assets/images/cargando.gif" name="visor_documento" id="visor_documento" style=""></iframe>
+					</div>
+				</div>
+			</div>
+			<div class="modal-footer">
+				<button type="button" class="btn btn-default waves-effect" data-dismiss="modal" id="botoncerrar_modalvisor_reporte">Cerrar</button>
+				{{-- <button type="button" class="btn btn-danger waves-effect waves-light">Guardar</button> --}}
+			</div>
+		</div>
+	</div>
 </div>
 <!-- ============================================================== -->
 <!-- VISOR-MODAL -->
@@ -1310,18 +1434,18 @@
 <!-- MODAL-REPORTE-DEFINICION -->
 <!-- ============================================================== -->
 <style type="text/css" media="screen">
-	#modal_reporte_definicion>.modal-dialog{
-		min-width: 900px!important;
+	#modal_reporte_definicion>.modal-dialog {
+		min-width: 900px !important;
 	}
 
-	#modal_reporte_definicion .modal-body .form-group{
-		margin: 0px 0px 12px 0px!important;
-		padding: 0px!important;
+	#modal_reporte_definicion .modal-body .form-group {
+		margin: 0px 0px 12px 0px !important;
+		padding: 0px !important;
 	}
 
-	#modal_reporte_definicion .modal-body .form-group label{
-		margin: 0px!important;
-		padding: 0px 0px 3px 0px!important;
+	#modal_reporte_definicion .modal-body .form-group label {
+		margin: 0px !important;
+		padding: 0px 0px 3px 0px !important;
 	}
 </style>
 <div id="modal_reporte_definicion" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" style="display: none;">
@@ -1375,18 +1499,18 @@
 <!-- MODAL-REPORTE-ÁREA -->
 <!-- ============================================================== -->
 <style type="text/css" media="screen">
-	#modal_reporte_area>.modal-dialog{
-		min-width: 1100px!important;
+	#modal_reporte_area>.modal-dialog {
+		min-width: 1100px !important;
 	}
 
-	#modal_reporte_area .modal-body .form-group{
-		margin: 0px 0px 12px 0px!important;
-		padding: 0px!important;
+	#modal_reporte_area .modal-body .form-group {
+		margin: 0px 0px 12px 0px !important;
+		padding: 0px !important;
 	}
 
-	#modal_reporte_area .modal-body .form-group label{
-		margin: 0px!important;
-		padding: 0px 0px 3px 0px!important;
+	#modal_reporte_area .modal-body .form-group label {
+		margin: 0px !important;
+		padding: 0px 0px 3px 0px !important;
 	}
 </style>
 <div id="modal_reporte_area" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" style="display: none;">
@@ -1458,8 +1582,8 @@
 
 							<ol class="breadcrumb" style="padding: 6px; margin: 0px 0px 6px 0px; text-align: left;">
 								<button type="button" class="btn btn-default waves-effect waves-light" style="height: 26px; padding: 3px 8px;" data-toggle="tooltip" title="Agregar fuente generadora" id="botonnueva_areamaquina">
-	                                <span class="btn-label"><i class="fa fa-plus"></i></span>Fuente generadora en el área
-	                            </button>
+									<span class="btn-label"><i class="fa fa-plus"></i></span>Fuente generadora en el área
+								</button>
 							</ol>
 							<div style="margin: 6px 0px 0px 0px!important; padding: 0px!important; max-height: 180px; overflow-y: auto; overflow-x: hidden;" id="div_tabla_areamaquinaria">
 								<table class="table table-hover tabla_info_centrado" width="100%" id="tabla_areamaquinaria">
@@ -1493,18 +1617,18 @@
 <!-- MODAL-REPORTE-EVALUACION -->
 <!-- ============================================================== -->
 <style type="text/css" media="screen">
-	#modal_reporte_puntomedicion>.modal-dialog{
-		min-width: 1200px!important;
+	#modal_reporte_puntomedicion>.modal-dialog {
+		min-width: 1200px !important;
 	}
 
-	#modal_reporte_puntomedicion .modal-body .form-group{
-		margin: 0px 0px 12px 0px!important;
-		padding: 0px!important;
+	#modal_reporte_puntomedicion .modal-body .form-group {
+		margin: 0px 0px 12px 0px !important;
+		padding: 0px !important;
 	}
 
-	#modal_reporte_puntomedicion .modal-body .form-group label{
-		margin: 0px!important;
-		padding: 0px 0px 3px 0px!important;
+	#modal_reporte_puntomedicion .modal-body .form-group label {
+		margin: 0px !important;
+		padding: 0px 0px 3px 0px !important;
 	}
 </style>
 <div id="modal_reporte_puntomedicion" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" style="display: none;">
@@ -1619,31 +1743,28 @@
 						<div class="col-12">
 							<ol class="breadcrumb" style="padding: 4px; margin: 0px 0px 10px 0px; text-align: center;">Resultados del punto de medición</ol>
 							<style type="text/css">
-								#tabla_evaluacion_puntodatos th
-								{
-									padding: 2px 1px!important;
-									font-size:0.7vw!important;
-									text-align: center!important;
-									vertical-align: middle!important;
-									border: 1px #DDDDDD solid!important;
+								#tabla_evaluacion_puntodatos th {
+									padding: 2px 1px !important;
+									font-size: 0.7vw !important;
+									text-align: center !important;
+									vertical-align: middle !important;
+									border: 1px #DDDDDD solid !important;
 									background: #F5F5F5;
 								}
 
-								#tabla_evaluacion_puntodatos td
-								{
-									padding: 2px 1px!important;
-									font-size:0.7vw!important;
-									text-align: center!important;
-									vertical-align: middle!important;
-									border: 1px #DDDDDD solid!important;
+								#tabla_evaluacion_puntodatos td {
+									padding: 2px 1px !important;
+									font-size: 0.7vw !important;
+									text-align: center !important;
+									vertical-align: middle !important;
+									border: 1px #DDDDDD solid !important;
 								}
 
-								#tabla_evaluacion_puntodatos td input.form-control
-								{
-									min-height: 18px!important;
-									padding: 2px!important;
-									font-size:12px!important;
-									margin: 0px!important;
+								#tabla_evaluacion_puntodatos td input.form-control {
+									min-height: 18px !important;
+									padding: 2px !important;
+									font-size: 12px !important;
+									margin: 0px !important;
 								}
 							</style>
 							<table class="table table-hover" id="tabla_evaluacion_puntodatos" width="100%">
@@ -1960,18 +2081,18 @@
 <!-- MODAL-REPORTE-CANCELACION OBSERVACION -->
 <!-- ============================================================== -->
 <style type="text/css" media="screen">
-	#modal_reporte_cancelacionobservacion>.modal-dialog{
-		min-width: 800px!important;
+	#modal_reporte_cancelacionobservacion>.modal-dialog {
+		min-width: 800px !important;
 	}
 
-	#modal_reporte_cancelacionobservacion .modal-body .form-group{
-		margin: 0px 0px 12px 0px!important;
-		padding: 0px!important;
+	#modal_reporte_cancelacionobservacion .modal-body .form-group {
+		margin: 0px 0px 12px 0px !important;
+		padding: 0px !important;
 	}
 
-	#modal_reporte_cancelacionobservacion .modal-body .form-group label{
-		margin: 0px!important;
-		padding: 0px 0px 3px 0px!important;
+	#modal_reporte_cancelacionobservacion .modal-body .form-group label {
+		margin: 0px !important;
+		padding: 0px 0px 3px 0px !important;
 	}
 </style>
 <div id="modal_reporte_cancelacionobservacion" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" style="display: none;">

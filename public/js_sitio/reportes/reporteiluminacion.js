@@ -1,6 +1,7 @@
 //=================================================
 // MENU INDICE
 
+
 $(".stickyside").stick_in_parent({
 	offset_top: 150 // Margin Top del menu
 });
@@ -129,7 +130,7 @@ $(document).ready(function()
         $(this).datepicker('setDate', $(this).val());// Mostrar fecha del input y marcar en el calendario
     });
 });
-
+ 
 
 //=================================================
 // DATOS GENERALES
@@ -189,7 +190,14 @@ function datosgenerales()
 			
 			
 			$('#reporteiluminacion_instalacion').val(dato.reporteiluminacion_portada.reporteiluminacion_instalacion);
+
 			$('#reporteiluminacion_fecha').val(dato.reporteiluminacion_portada.reporteiluminacion_fecha);
+
+			// $('#reporte_fecha').val(dato.reporte_portada.reporte_fecha);
+
+
+			$('#reporteiluminacion_mes').val(dato.reporteiluminacion_portada.reporteiluminacion_mes);
+
 			$('.div_instalacion_nombre').html(dato.reporteiluminacion_portada.reporteiluminacion_instalacion);
 
 			$('#reporteiluminacion_introduccion').html(dato.reporteiluminacion_introduccion);
@@ -364,6 +372,7 @@ function datosgenerales()
 			
 			$('#reporteiluminacion_instalacion').val('Error al cargar los datos');
 			$('#reporteiluminacion_fecha').val('Error al cargar los datos');
+			$('#reporteiluminacion_mes').val('Error al cargar los datos');
 			$('#reporteiluminacion_introduccion').html('Error al cargar los datos');
 			$('#reporteiluminacion_objetivogeneral').html('Error al cargar los datos');
 			$('#reporteiluminacion_objetivoespecifico').html('Error al cargar los datos');
@@ -734,6 +743,9 @@ $("#botonguardar_reporte_introduccion").click(function()
 
 $(document).ready(function()
 {
+
+	obtenerdatos()
+	
 	setTimeout(function()
 	{
 		tabla_reporte_definiciones(proyecto.id, agente_nombre, reporteiluminacion_id);
@@ -3067,11 +3079,11 @@ $("#boton_reporte_nuevaarea").click(function()
 		},
 		beforeSend: function()
 		{
-			$('#tabla_areacategorias tbody').html('<tr><td colspan="6" style="text-align: center;"><i class="fa fa-spin fa-spinner" style="font-size: 40px!important;"></i></td></tr>');
+			$('#tabla_areacategorias tbody').html('<tr><td colspan="7" style="text-align: center;"><i class="fa fa-spin fa-spinner" style="font-size: 40px!important;"></i></td></tr>');
 		},
 		error: function(dato)
 		{
-			$('#tabla_areacategorias tbody').html('<tr><td colspan="6" style="text-align: center;">Error al cargar las categorías</td></tr>');
+			$('#tabla_areacategorias tbody').html('<tr><td colspan="7" style="text-align: center;">Error al cargar las categorías</td></tr>');
 			return false;
 		}
 	});//Fin ajax
@@ -3166,6 +3178,22 @@ $('#tabla_reporte_area tbody').on('click', 'td.editar', function()
 	$('#reportearea_ancho').val(row.data().reportearea_ancho);
 	$('#reportearea_alto').val(row.data().reportearea_alto);
 
+	$('#reportearea_criterio').val(row.data().reportearea_criterio);
+	$('#reportearea_colortecho').val(row.data().reportearea_colortecho);
+	$('#reportearea_paredes').val(row.data().reportearea_paredes);
+	$('#reportearea_colorpiso').val(row.data().reportearea_colorpiso);
+	$('#reportearea_superficietecho').val(row.data().reportearea_superficietecho);
+	$('#reportearea_superficieparedes').val(row.data().reportearea_superficieparedes);
+	$('#reportearea_superficiepiso').val(row.data().reportearea_superficiepiso);
+	$('#reportearea_potenciaslamparas').val(row.data().reportearea_potenciaslamparas);
+	$('#reportearea_numlamparas').val(row.data().reportearea_numlamparas);
+	$('#reportearea_alturalamparas').val(row.data().reportearea_alturalamparas);
+	$('#reportearea_programamantenimiento').val(row.data().reportearea_programamantenimiento);
+	$('#reportearea_tipoiluminacion').val(row.data().reportearea_tipoiluminacion);
+	$('#reportearea_descripcionilimunacion').val(row.data().reportearea_descripcionilimunacion);
+
+
+
 
 	if (areas_poe == 1)
 	{
@@ -3211,11 +3239,11 @@ $('#tabla_reporte_area tbody').on('click', 'td.editar', function()
 		},
 		beforeSend: function()
 		{
-			$('#tabla_areacategorias tbody').html('<tr><td colspan="6" style="text-align: center;"><i class="fa fa-spin fa-spinner" style="font-size: 40px!important;"></i></td></tr>');
+			$('#tabla_areacategorias tbody').html('<tr><td colspan="7" style="text-align: center;"><i class="fa fa-spin fa-spinner" style="font-size: 40px!important;"></i></td></tr>');
 		},
 		error: function(dato)
 		{
-			$('#tabla_areacategorias tbody').html('<tr><td colspan="6" style="text-align: center;">Error al cargar las categorías</td></tr>');
+			$('#tabla_areacategorias tbody').html('<tr><td colspan="7" style="text-align: center;">Error al cargar las categorías</td></tr>');
 			return false;
 		}
 	});//Fin ajax
@@ -6064,6 +6092,24 @@ $(document).ready(function()
 			'imageFormat': 'Formato no permitido, sólo (JPG, PNG).'
 		}
 	});
+	$('#PORTADA').dropify({
+		messages:
+		{
+			'default': 'Arrastre el mapa aquí o haga click',
+			'replace': 'Arrastre el mapa o haga clic para reemplazar',
+			'remove':  'Quitar',
+			'error':   'Ooops, ha ocurrido un error.'
+		},
+		error:
+		{
+			'fileSize': 'Archivo demasiado grande.',
+			'minWidth': 'Ancho demasiado pequeño.',
+			'maxWidth': 'Ancho demasiado grande.',
+			'minHeight': 'Alto demasiado pequeño.',
+			'maxHeight': 'Alto demasiado grande.',
+			'imageFormat': 'Formato no permitido, sólo (JPG, PNG).'
+		}
+	});
 });
 
 
@@ -6506,23 +6552,23 @@ function tabla_reporte_equipoutilizado(proyecto_id, reporteiluminacion_id, agent
 						data: "vigencia",
 						defaultContent: "-"
 					},
-					{
-						className: 'certificadopdf',
-						orderable: false,
-						data: "certificado",
-						defaultContent: "-"
-					},
-					{
-						data: "checkbox_carta",
-						defaultContent: "-",
-						orderable: false,
-					},
-					{
-						className: 'cartapdf',
-						data: "carta",
-						defaultContent: "-",
-						orderable: false,
-					},
+					// {
+					// 	className: 'certificadopdf',
+					// 	orderable: false,
+					// 	data: "certificado",
+					// 	defaultContent: "-"
+					// },
+					// {
+					// 	data: "checkbox_carta",
+					// 	defaultContent: "-",
+					// 	orderable: false,
+					// },
+					// {
+					// 	className: 'cartapdf',
+					// 	data: "carta",
+					// 	defaultContent: "-",
+					// 	orderable: false,
+					// },
 				],
 				lengthMenu: [[20, 50, 100, -1], [20, 50, 100, "Todos"]],
 				// rowsGroup: [0, 1], //agrupar filas
@@ -8418,3 +8464,364 @@ $('#tabla_reporte_revisiones tbody').on('click', 'td>button.botondescarga', func
 		}
 	}, 500);
 });
+
+//FUNCION PARA CARGAR PUNTOS POR MEDIO DE UN EXCEL
+$(document).ready(function () {
+
+    $('#boton_reporte_iluminacion_importar').on('click', function (e) {
+        e.preventDefault();
+
+        $('#divCargaPuntos').css('display', 'none');
+        $('#alertaVerificacion2').css('display', 'none');
+
+        $('#formExcelPuntos')[0].reset();
+
+        $('#modal_excel_puntos').modal({backdrop:false});
+
+    })
+
+    $("#botonCargarExcelPuntos").click(function() {
+        var guardar = 0;
+
+        // valida campos vacios
+        var valida = this.form.checkValidity();
+        if (valida){
+            if ($("#excelPuntos").val() != ""){
+                // Tipo archivo
+                var archivo = $("#excelPuntos").val();
+                var extension = archivo.substring(archivo.lastIndexOf("."));
+
+                // valida tipo de archivo
+                if(extension == ".xlsx" || extension == ".XLSX"){
+                    guardar = 1;
+                }
+                else{
+                    // mensaje
+                    swal({
+                        title: "Tipo de archivo incorrecto "+extension,
+                        text: "Solo se pueden cargar archivos tipo .xlsx",
+                        type: "warning", // warning, error, success, info
+                        buttons: {
+                            visible: false, // true , false
+                        },
+                        timer: 3000,
+                        showConfirmButton: false
+                    });
+
+                    guardar = 0;
+                    return false;
+                }
+            }
+            else{
+                guardar = 0;
+            }
+
+            // guardar
+            if (guardar == 1){
+            
+                swal({   
+                    title: "¿Está  seguro de cargar este documento?",   
+                    text: "Está acción  no se puede revertir",   
+                    type: "warning",   
+                    showCancelButton: true,   
+                    confirmButtonColor: "#DD6B55",   
+                    confirmButtonText: "Guardar!",   
+                    cancelButtonText: "Cancelar!",   
+                    closeOnConfirm: false,   
+                    closeOnCancel: false 
+                }, function (isConfirm) {   
+                    
+                    if (isConfirm){
+                        // cerrar msj confirmacion
+                        swal.close();
+
+                        // enviar datos
+                        $('#formExcelPuntos').ajaxForm({
+                            dataType: 'json',
+                            type: 'POST',
+                            url: "/reporteiluminacion",
+                            data: {
+								opcion: 8000,
+								registro_id: reporteiluminacion_id,
+								proyecto_id: proyecto.id,
+
+                                
+                            },
+                            contentType: false,
+                            processData: false,
+                            success: function (dato) {
+
+                                // actualizar boton
+                                $('#botonCargarExcelPuntos').prop('disabled', false);
+                                $('#divCargaPuntos').css('display', 'none');
+                                
+                                if (dato.code == 200) {
+                                    
+                                    // cerrar modal
+                                    $('#modal_excel_puntos').modal('hide');
+    
+                                    // mensaje
+                                    swal({
+                                        title: "Los puntos fueron cargados exitosamente",
+                                        text: ""+dato.msj,
+                                        type: "success", // warning, error, success, info
+                                        buttons: {
+                                            visible: true, // true , false
+                                        },
+                                        showConfirmButton: true,
+                                        showCancelButton: false
+                                    });
+
+                                    //Recargamos la tabla
+                                   	menureporte_estado("menureporte_0", 1);
+
+									tabla_reporte_revisiones(proyecto.id);
+									tabla_reporte_iluminacionpuntos(proyecto.id, reporteiluminacion_id);
+									tabla_reporte_iluminacionresultados(proyecto.id, reporteiluminacion_id);
+									tabla_reporte_reflexionresultados(proyecto.id, reporteiluminacion_id);
+									tabla_reporte_matrizexposicion(proyecto.id, reporteiluminacion_id);
+									reporteiluminacion_dashboard(proyecto.id, reporteiluminacion_id);
+                                
+                                } else {
+
+                                     swal({
+                                        title: "Ocurrio un error al intentar insertar los puntos.",
+                                        text: ""+dato.msj,
+                                        type: "error", // warning, error, success, info
+                                        buttons: {
+                                            visible: true, // true , false
+                                        },
+                                        showConfirmButton: true,
+                                        showCancelButton: false
+									 });
+									
+                                }
+
+                                
+                            },
+                            beforeSend: function () {
+
+                                $('#botonCargarExcelPuntos').prop('disabled', true);
+                                $('#divCargaPuntos').css('display', 'block');
+                            },
+                            error: function(dato) {
+                                
+                                // actualiza boton
+                                $('#botonCargarExcelPuntos').prop('disabled', false);
+                                $('#divCargaPuntos').css('display', 'none');
+
+                                // mensaje
+                                swal({
+                                    title: "Error al cargar los puntos.",
+                                    text: ""+dato.msj,
+                                    type: "error", // warning, error, success, info
+                                    buttons: {
+                                        visible: false, // true , false
+                                    },
+                                    timer: 1500,
+                                    showConfirmButton: false
+                                });
+
+                                return false;
+                            }
+                        }).submit();
+                        return false;
+                    }
+                    else 
+                    {
+                        // mensaje
+                        swal({
+                            title: "Cancelado",
+                            text: "Acción cancelada",
+                            type: "error", // warning, error, success, info
+                            buttons: {
+                                visible: false, // true , false
+                            },
+                            timer: 1500,
+                            showConfirmButton: false
+                        });   
+                    } 
+                });
+                return false;
+            }
+        }
+    });
+
+
+
+    $('#excelPuntos').change(function () {
+        
+        if ($(this).val()) {
+            
+            $('#alertaVerificacion2').css('display', 'block');
+
+        } else {
+            $('#alertaVerificacion2').css('display', 'none');
+            
+        }
+    });
+
+});
+
+
+
+
+document.addEventListener('DOMContentLoaded', function() {
+
+    document.querySelectorAll('.custom-select').forEach(function(select) {
+		
+        select.addEventListener('change', function() {
+            var numero = this.id.split('_')[2]; 
+            var descripcion = '';
+            switch (this.value) {
+				case '1':
+				descripcion = 'En exteriores: distinguir el área de tránsito, desplazarse caminando, vigilancia, movimiento de vehículos.';
+				break;
+			case '2':
+				descripcion = 'En interiores: distinguir el área de tránsito, desplazarse caminando. Vigilancia, movimiento de vehículos.';
+				break;
+			case '3':
+				descripcion = 'En interiores.';
+				break;
+			case '4':
+				descripcion = 'Requerimiento visual simple: inspección visual, recuento de piezas, trabajo en banco y máquina.';
+				break;
+			case '5':
+			descripcion = 'Distinción moderada de detalles: ensamble simple, trabajo medio en banco y máquina, inspección simple, empaque y trabajos de oficina.';
+				break;
+			case '6':
+				descripcion = 'Distinción clara de detalles: maquinado y acabados delicados, ensamble de inspección moderadamente difícil, captura y procesamiento de información, manejo de instrumentos y equipo de laboratorio.';
+				break;
+			case '7':
+				descripcion = 'Distinción fina de detalles: maquinado de precisión, ensamble e inspección de trabajos delicados, manejo de instrumentos y equipo de precisión, manejo de piezas pequeñas.';
+				break;
+			case '8':
+				descripcion = 'Alta exactitud en la distinción de detalles: ensamble, proceso e inspección de piezas pequeñas y complejas, acabado con pulidos finos.';
+				break;
+			case '9':
+				descripcion = 'Alto grado de especialización en la distinción de detalles.';
+				break;
+			default:
+				descripcion = '';
+				break;
+            }
+            var textareaId = 'textarea_tareavisual_' + numero;
+            var textarea = document.getElementById(textareaId);
+            if (textarea) {
+                textarea.value = descripcion;
+            } else {
+                console.log('No se encontró el textarea con ID:', textareaId);
+            }
+        });
+    });
+});
+
+
+$('#btn_descargar_plantilla').on('click', function (e) {
+	e.preventDefault();
+	
+    swal({
+        title: "¡Confirme descargar!",
+        text: "Plantilla principal del Informe.",
+        type: "info",
+        showCancelButton: true,
+        confirmButtonColor: "#DD6B55",
+        confirmButtonText: "Descargar!",
+        cancelButtonText: "Cancelar!",
+        closeOnConfirm: false,
+        closeOnCancel: false
+    },
+    function(isConfirm) {
+        if (isConfirm) {
+            // Mostrar mensaje de carga
+            swal({
+                title: "Generando documento",
+                text: 'Espere un momento, el documento se esta documento se esta generando...',
+                type: "info",
+                showConfirmButton: false,
+                allowOutsideClick: false
+            });
+
+			url = 'descargarPortadaInformes/' + proyecto.id + '/' + 4;
+			instalacion = $('#reporte_instalacion').val();
+
+            $.ajax({
+                url: url,
+                method: 'GET',
+                xhrFields: {
+                    responseType: 'blob'
+                },
+                success: function(data) {
+                    var a = document.createElement('a');
+                    var url = window.URL.createObjectURL(data);
+                    a.href = url;
+                    a.download = `Plantilla principal (Iluminación) - ${instalacion}.docx`;
+                    document.body.append(a);
+                    a.click();
+                    a.remove();
+                    window.URL.revokeObjectURL(url);
+
+                    // Cerrar mensaje de carga
+                    swal.close();
+
+                    $('#btn_descargar_plantilla').prop('disabled', true);
+                },
+                error: function() {
+                    swal({
+                        title: "Hubo un problema al generar el documento.",
+                        text: "Intentelo de nuevo, o comuniquelo con el responsable",
+                        type: "error",
+                        showConfirmButton: true
+                    });
+                }
+            });
+        } else {
+            // mensaje de cancelación
+            swal({
+                title: "Cancelado",
+                text: "Acción cancelada",
+                type: "error",
+                buttons: {
+                    visible: false,
+                },
+                timer: 500,
+                showConfirmButton: false
+            });
+        }
+    });
+    return false;
+})
+
+
+function obtenerdatos() {
+	
+    // $('#PROYECTO_ID_INFORME').val($('#proyecto_id').val());
+
+    $.ajax({
+        type: "GET",
+        dataType: "json",
+        url: "/obtenerDatosInformesProyecto/" + proyecto.id,
+        data: {},
+        cache: false,
+        success: function(dato) {
+
+        
+            $("#NIVEL1").html(dato.opciones);
+            $("#NIVEL2").html(dato.opciones);
+            $("#NIVEL3").html(dato.opciones);
+            $("#NIVEL4").html(dato.opciones);
+            $("#NIVEL5").html(dato.opciones);
+
+            $("#OPCION_PORTADA1").html(dato.checks);
+            $("#OPCION_PORTADA2").html(dato.checks);
+            $("#OPCION_PORTADA3").html(dato.checks);
+            $("#OPCION_PORTADA4").html(dato.checks);
+            $("#OPCION_PORTADA5").html(dato.checks);
+            $("#OPCION_PORTADA6").html(dato.checks);
+        },
+        error: function(xhr, status, error) {
+            console.log('Error: ' + error);
+            swal('Error', 'No se pudieron obtener los datos del informe', 'error');
+        }
+    });
+}

@@ -13,6 +13,7 @@ class reporteaguaModel extends Model
 		, 'agente_nombre'
 		, 'catactivo_id'
 		, 'reporteagua_revision'
+		,'reporte_mes'
 		, 'reporteagua_fecha'
 		, 'reporteagua_instalacion'
 		, 'reporteagua_catregion_activo'

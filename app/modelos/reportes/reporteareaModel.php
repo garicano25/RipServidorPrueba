@@ -6,16 +6,9 @@ use Illuminate\Database\Eloquent\Model;
 
 class reporteareaModel extends Model
 {
-    protected $table = 'reportearea';
+	protected $table = 'reportearea';
 	protected $fillable = [
-		  'proyecto_id'
-		, 'recsensorialarea_id'
-		, 'reportearea_instalacion'
-		, 'reportearea_nombre'
-		, 'reportearea_orden'
-		, 'reportearea_porcientooperacion'
-		
-		, 'reporteiluminacionarea_porcientooperacion' //Iluminación
+		'proyecto_id', 'recsensorialarea_id', 'reportearea_instalacion', 'reportearea_nombre', 'reportearea_orden', 'reportearea_porcientooperacion', 'reporteiluminacionarea_porcientooperacion' //Iluminación
 		, 'reportearea_puntos_ic' //Iluminación
 		, 'reportearea_puntos_pt' //Iluminación
 		, 'reportearea_sistemailuminacion' //Iluminación
@@ -26,7 +19,21 @@ class reporteareaModel extends Model
 		, 'reportearea_largo' //Iluminación
 		, 'reportearea_ancho' //Iluminación
 		, 'reportearea_alto' //Iluminación
-		
+		, 'reportearea_criterio'   //Iluminación
+		, 'reportearea_colortecho'  //Iluminación
+		, 'reportearea_paredes'  //Iluminación
+		, 'reportearea_colorpiso'  //Iluminación
+		, 'reportearea_superficietecho'  //Iluminación
+		, 'reportearea_superficieparedes'  //Iluminación
+		, 'reportearea_superficiepiso'  //Iluminación
+		, 'reportearea_potenciaslamparas'  //Iluminación
+		, 'reportearea_numlamparas'  //Iluminación
+		, 'reportearea_alturalamparas'  //Iluminación
+		, 'reportearea_programamantenimiento'  //Iluminación
+		, 'reportearea_tipoiluminacion'  //Iluminación
+		, 'reportearea_descripcionilimunacion'  //Iluminación
+
+
 		, 'reporteruidoarea_porcientooperacion' //Ruido
 		, 'reportearea_proceso' //Ruido
 		, 'reportearea_tiporuido' //Ruido
@@ -53,7 +60,7 @@ class reporteareaModel extends Model
 		, 'reportearea_ventilacioncantidad' //Aire
 
 		, 'reporteaguaarea_porcientooperacion' //Agua
-		
+
 		, 'reportehieloarea_porcientooperacion' //Hielo
 
 		, 'reportetemperaturaarea_porcientooperacion' //Temperatura

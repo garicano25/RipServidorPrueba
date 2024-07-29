@@ -25,5 +25,20 @@ class reporteiluminacionareaModel extends Model
 		, 'reporteiluminacionarea_largo'
 		, 'reporteiluminacionarea_ancho'
 		, 'reporteiluminacionarea_alto'
+
+		, 'reporteiluminacionarea_criterio '
+		, 'reporteiluminacionarea_colortecho'
+		, 'reporteiluminacionarea_paredes'
+		, 'reporteiluminacionarea_colorpiso'
+		, 'reporteiluminacionarea_superficietecho'
+		, 'reporteiluminacionarea_superficieparedes'
+		, 'reporteiluminacionarea_superficiepiso'
+		, 'reporteiluminacionarea_potenciaslamparas'
+		, 'reporteiluminacionarea_numlamparas'
+		, 'reporteiluminacionarea_alturalamparas'
+		, 'reporteiluminacionarea_programamantenimiento'
+		, 'reporteiluminacionarea_tipoiluminacion'
+		, 'reporteiluminacionarea_descripcionilimunacion'
+
 	];
 }

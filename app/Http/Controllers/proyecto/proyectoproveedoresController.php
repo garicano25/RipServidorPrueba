@@ -77,16 +77,17 @@ class proyectoproveedoresController extends Controller
                                         TABLA.acreditacionalcance_id,
                                         TABLA.proveedor_id,
                                         TABLA.agente_id,
-                                        TABLA.agente_nombre
+                                        TABLA.agente_nombre,
+                                        TABLA.activo
                                     FROM
                                         (
                                             (
                                                 SELECT
-                                                    1 tipo,
+                                                     1 AS tipo,
                                                     acreditacionalcance.id AS acreditacionalcance_id,
                                                     acreditacionalcance.proveedor_id,
                                                     acreditacionalcance.prueba_id AS agente_id,
-                                                    IF(IFNULL(acreditacionalcance.acreditacionAlcance_agentetipo, "") = "", acreditacionalcance.acreditacionAlcance_agente, CONCAT(acreditacionalcance.acreditacionAlcance_agente, " (", acreditacionalcance.acreditacionAlcance_agentetipo,")")) AS agente_nombre
+                                                    IF(IFNULL(acreditacionalcance.acreditacionAlcance_agentetipo, "") = "", acreditacionalcance.acreditacionAlcance_agente, CONCAT(acreditacionalcance.acreditacionAlcance_agente, " (", acreditacionalcance.acreditacionAlcance_agentetipo,")")) AS agente_nombre, NULL AS activo 
                                                 FROM
                                                     acreditacionalcance
                                                 WHERE
@@ -96,22 +97,27 @@ class proyectoproveedoresController extends Controller
                                             UNION ALL
                                             (
                                                 SELECT
-                                                    2 tipo,
-                                                    0 AS acreditacionalcance_id,
-                                                    servicio.proveedor_id,
-                                                    servicioprecios.agente_id,
-                                                    servicioprecios.agente_nombre
-                                                FROM
+                                                2 AS tipo,
+                                                0 AS acreditacionalcance_id,
+                                                servicio.proveedor_id,
+                                                servicioprecios.agente_id,
+                                                servicioprecios.agente_nombre,
+                                                servicioprecios.ACTIVO_PARTIDAPROVEEDOR AS activo
+                                            FROM
                                                     servicio
                                                     LEFT JOIN servicioprecios ON servicio.id = servicioprecios.servicio_id
                                                 WHERE
                                                     servicio.proveedor_id = ' . $proveedor_id . '
                                                     AND servicioprecios.agente_id = 0
                                                     AND servicio.servicio_Eliminado = 0
-                                                GROUP BY
-                                                    servicio.proveedor_id,
-                                                    servicioprecios.agente_id,
-                                                    servicioprecios.agente_nombre
+                                               	AND servicio.ACTIVO_COTIZACIONPROVEEDOR = 1
+                                                AND servicioprecios.ACTIVO_PARTIDAPROVEEDOR = 1
+                                                
+                                            GROUP BY
+                                                servicio.proveedor_id,
+                                                servicioprecios.agente_id,
+                                                servicioprecios.agente_nombre,
+                                                servicioprecios.ACTIVO_PARTIDAPROVEEDOR
                                             )
                                         ) AS TABLA
                                     ORDER BY
@@ -786,6 +792,15 @@ class proyectoproveedoresController extends Controller
                                             ORDER BY
                                                 TABLA.tipo ASC,
                                                 TABLA.agente_nombre ASC');
+
+
+
+
+
+
+
+
+
 
                     // lista alcances
                     $select_lista_proveedoralcances = '';

@@ -14,6 +14,7 @@ class reporteiluminacionModel extends Model
 		, 'catactivo_id'
 		, 'reporteiluminacion_revision'
 		, 'reporteiluminacion_fecha'
+		, 'reporteiluminacion_mes'
 		, 'reporteiluminacion_instalacion'
 		, 'reporteiluminacion_catregion_activo'
 		, 'reporteiluminacion_catsubdireccion_activo'

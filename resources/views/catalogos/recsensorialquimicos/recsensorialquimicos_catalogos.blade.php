@@ -270,7 +270,8 @@
 									</div>
 									<div class="col-6">
 										<div class="form-group">
-											<label>Temperatura de Operación </label>
+											<label>Temperatura de Operación (°C)</label>
+											<button type="button" class="btn btn-danger text-center mb-1" style="margin-left: 35%; width: 35px; height: 35px; border-radius: 9px;" data-toggle="tooltip" title="Click para cambiar la Tem. de operación a °C una vez insertada en °F" onclick="cambiarGrados('catTemOperacion')"><i class="fa fa-thermometer-three-quarters" aria-hidden="true"></i></button>
 											<input type="number" class="form-control" id="catTemOperacion" name="catTemOperacion">
 										</div>
 									</div>
@@ -385,6 +386,32 @@
 
 							<h4 class="mt-3 mx-5" id="textPorcentajes" style="display: none;">Ingrese el % del Componente. El (*) se considera como un porcentaje normal</h4>
 							<div class=" col-12 mt-3" id="sustancias_seleccionadas">
+								<style type="text/css">
+									#tablaSustanciasSeleccionadas td,
+									#tablaSustanciasSeleccionadas th {
+										padding: 0.5rem;
+									}
+
+									#tablaSustanciasSeleccionadas input,
+									#tablaSustanciasSeleccionadas select {
+										width: 100%;
+									}
+								</style>
+								<table class="table table-bordered mt-4" style="width: 100%;" id="tablaSustanciasSeleccionadas">
+									<thead>
+										<tr>
+											<th>Componente</th>
+											<th>Operador</th>
+											<th>Porcentaje</th>
+											<th>Estado Fisico</th>
+											<th>Forma</th>
+											<th>Tem. de ebullición (°C)</th>
+											<th>Volatilidad</th>
+										</tr>
+									</thead>
+									<tbody>
+									</tbody>
+								</table>
 							</div>
 
 						</div>
@@ -800,11 +827,11 @@
 				</div>
 				<div class="modal-footer">
 					<button type="button" class="btn btn-default waves-effect" data-dismiss="modal">Cerrar</button>
-					@if(auth()->user()->hasRoles(['Superusuario', 'Administrador']))					
+					@if(auth()->user()->hasRoles(['Superusuario', 'Administrador']))
 					<button type="submit" class="btn btn-danger waves-effect waves-light" id="boton_guardar_catSustanciaQuimica">
 						Guardar <i class="fa fa-save"></i>
 					</button>
-					@endif 
+					@endif
 
 				</div>
 			</form>
@@ -876,17 +903,31 @@
 							<div class="col-6">
 								<div class="form-group" style="width: 660px;">
 									<style>
-										/* Estilos para el elemento select */
-										.select2-selection__choice {
-											color: #000;
-										}
-
-										.select2-container--default .select2-selection--multiple .select2-selection__choice {
+										.selectize-control.selectize-select .selectize-input.items .item {
 											background-color: #bee24f;
+											/* Color de fondo para las opciones seleccionadas */
+											color: #fff;
+											/* Color del texto */
+											border-radius: 5px;
+											/* Bordes redondeados */
+											padding: 5px 10px;
+											/* Espaciado interno */
+											margin: 2px;
+											/* Margen entre las opciones */
 										}
 
-										.select2-container--default .select2-selection--multiple .select2-selection__choice__remove {
-											background-color: #fff;
+										.selectize-control.selectize-select .selectize-dropdown .option {
+											padding: 10px;
+											/* Espaciado interno */
+											cursor: pointer;
+											/* Cambia el cursor al pasar por encima */
+										}
+
+										.selectize-control.selectize-select .selectize-dropdown .option:hover {
+											background-color: #f0f0f0;
+											/* Color de fondo al pasar el cursor */
+											color: #333;
+											/* Color del texto al pasar el cursor */
 										}
 									</style>
 									<label>Connotacion </label>

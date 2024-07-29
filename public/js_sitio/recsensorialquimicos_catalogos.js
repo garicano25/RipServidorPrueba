@@ -669,7 +669,8 @@ function function_tabla_catsustancia(num_catalogo)
 function boton_nueva_sustancia() {
 
     $('#textPorcentajes').css('display', 'none');
-    $('#sustancias_seleccionadas').html('');
+    $('#tablaSustanciasSeleccionadas tbody').empty();
+    $('#tablaSustanciasSeleccionadas').css('display', 'none');
 
     //Limpiar select de componetes
     $('#sustancias_quimicias').val('');
@@ -993,6 +994,10 @@ $("#boton_cerrar_visorpdf").click(function()
 
 function selecciona_sustancia(){
     $('#tabla_catsustancia tbody').on('click', 'td.Editar', function () {
+
+        $('#form_catsustancia').each(function(){
+            this.reset();
+        });
         
         //Limpiamos nuestro select de los componentes
         $('#sustancias_quimicias').val('');
@@ -1166,12 +1171,16 @@ $(document).on('input change', 'input[name="PORCENTAJE"], input[name="TEM_EBULLI
   }
 });
 
+// Limpiamos la tabla de los componentes cada vez que cerramos el modal 
+$('#modal_catsustancia').on('hidden.bs.modal', function (e) {
+    $('#tablaSustanciasSeleccionadas tbody').empty();
+})
 
 
 function mostarSustanciasQuimicas(ID) {
 
     proceso = 1
-
+    $('#tablaSustanciasSeleccionadas').css('display', 'block');
 	$.ajax({
 		type: "get",
 		dataType: "json",
@@ -1191,44 +1200,57 @@ function mostarSustanciasQuimicas(ID) {
 
 
                   selectedOptionsHtml += `
-                <div id="sustanciaPorcentaje_${valor.SUSTANCIA_QUIMICA_ID}" class="mb-2 divPorcentajeSustancias">
-                    <input type="hidden" class="form-control IDSustanciaQuimica text-center"  name="SUSTANCIA_QUIMICA_ID" value="${valor.SUSTANCIA_QUIMICA_ID}">
-                    <label class="form-check-label" for="sustancia_${valor.SUSTANCIA_QUIMICA_ID}">[${valor.NUM_CAS}] ${valor.SUSTANCIA_QUIMICA}</label>
-                    <select class="custom-select form-control mx-1" id="operadorSustancia_${valor.SUSTANCIA_QUIMICA_ID}" name="OPERADOR" style="width: 4%"  required>
-                                
-                        <option value="*" > * </option>
-                        <option value="<"> < </option>
-                        <option value=">"> > </option>
-    
-                    </select>
-                    <input type="number" class="form-control porcentajeSustancias text-center" id="porcentajeSustancia_${valor.SUSTANCIA_QUIMICA_ID}" name="PORCENTAJE" style="width: 160px!important; height: 5px!important;" placeholder="% Componente" min="0"  required value="${valor.PORCENTAJE}" >
-                    
-                     <select class="custom-select form-control ml-2" id="estadoSustancia_${valor.SUSTANCIA_QUIMICA_ID}" name="ESTADO_FISICO" style="width: 10%" required>
-                        <option value="" selected disabled> Estado Fisico </option>
-                        <option value="1"> Líquido </option>
-                        <option value="2"> Sólido </option>
-                        <option value="6"> Gas </option>
-                        <option value="100"> ND </option>
-                    </select>
+                <tr id="sustanciaPorcentaje_${valor.SUSTANCIA_QUIMICA_ID}">
+                    <td>
+                        <input type="hidden" class="form-control IDSustanciaQuimica text-center" style="width: 100%;" name="SUSTANCIA_QUIMICA_ID" value="${valor.SUSTANCIA_QUIMICA_ID}">
+                        <label class="form-check-label" for="sustancia_${valor.SUSTANCIA_QUIMICA_ID}">[${valor.NUM_CAS}] ${valor.SUSTANCIA_QUIMICA}</label>
+                    </td>
+                    <td>
+                        <select class="custom-select form-control" id="operadorSustancia_${valor.SUSTANCIA_QUIMICA_ID}" name="OPERADOR" style="width: 100%;" required>
+                            <option value="*" > * </option>
+                            <option value="<"> < </option>
+                            <option value=">"> > </option>
+                        </select>
+                    </td>
+                    <td>
+                        <input type="number" class="form-control porcentajeSustancias text-center" style="width: 100%;" id="porcentajeSustancia_${valor.SUSTANCIA_QUIMICA_ID}" name="PORCENTAJE" style="width: 100%;" placeholder="% Componente" min="0" required value="${valor.PORCENTAJE}">
+                    </td>
+                    <td>
+                        <select class="custom-select form-control" id="estadoSustancia_${valor.SUSTANCIA_QUIMICA_ID}" name="ESTADO_FISICO" style="width: 100%;" required onchange="cambiarFormaSustancia('formaSustancia_${valor.SUSTANCIA_QUIMICA_ID}', this.value)">
+                            <option value="" selected disabled> Estado Fisico </option>
+                            <option value="1"> Líquido </option>
+                            <option value="2"> Sólido </option>
+                            <option value="6"> Gas </option>
+                            <option value="100"> ND </option>
+                        </select>
+                    </td>
+                    <td>
+                        <select class="custom-select form-control" id="formaSustancia_${valor.SUSTANCIA_QUIMICA_ID}" name="FORMA_SUSTANCIA" style="width: 100%;" required>
+                            <option value="" selected disabled> Forma </option>
+                        </select>
+                    </td>
+                    <td style="display: flex; align-items: center;">
+                            <button type="button" class="btn btn-danger text-center mb-1" style="margin-right: 10px; width: 35px; height: 35px; border-radius: 9px;margin-left: 10px;" data-toggle="tooltip" title="Click para cambiar la Tem. de ebullición a °C una vez insertada en °F" onclick="cambiarGrados('temSustancia_${valor.SUSTANCIA_QUIMICA_ID}')">
+                                <i class="fa fa-thermometer-three-quarters" aria-hidden="true"></i>
+                            </button>
 
-                     <input type="text" class="form-control text-center" id="temSustancia_${valor.SUSTANCIA_QUIMICA_ID}" name="TEM_EBULLICION" style="width: 160px!important; height: 10px!important;" placeholder="Tem. de ebullición" min="0" required value="${valor.TEM_EBULLICION}">
-
-                    <select class="custom-select form-control" id="valatilidadSustancia_${valor.SUSTANCIA_QUIMICA_ID}" name="VOLATILIDAD" style="width: 10%" required>
-                        <option value="" selected disabled> Volatilidad </option>
-                        <option value="1"> Baja </option>
-                        <option value="2"> Media </option>
-                        <option value="3"> Alta </option>
-                        <option value="100"> ND </option>
-                    </select>
-
-                   
-
-                </div> `;
+                        <input type="text" class="form-control text-center" id="temSustancia_${valor.SUSTANCIA_QUIMICA_ID}" name="TEM_EBULLICION" style="width: 100%;" placeholder="Tem. de ebullición (°C)" min="0" required value="${valor.TEM_EBULLICION}">
+                    </td>
+                    <td>
+                        <select class="custom-select form-control" id="valatilidadSustancia_${valor.SUSTANCIA_QUIMICA_ID}" name="VOLATILIDAD" style="width: 100%;" required>
+                            <option value="" selected disabled> Volatilidad </option>
+                            <option value="1"> Baja </option>
+                            <option value="2"> Media </option>
+                            <option value="3"> Alta </option>
+                            <option value="100"> ND </option>
+                        </select>
+                    </td>
+                </tr> `;
 
 			});
 
 
-            $('#sustancias_seleccionadas').html(selectedOptionsHtml);
+            $('#tablaSustanciasSeleccionadas tbody').append(selectedOptionsHtml);
 
             //ESPERAMOS QUE NUESTRO DOM TERMINE DE CARGAR PARA PODER ASEIGNAR VALORES A LOS SELECT
             setTimeout(function () {
@@ -1237,7 +1259,14 @@ function mostarSustanciasQuimicas(ID) {
                     $(`#estadoSustancia_${valor.SUSTANCIA_QUIMICA_ID}`).val(valor.ESTADO_FISICO);
                     $(`#valatilidadSustancia_${valor.SUSTANCIA_QUIMICA_ID}`).val(valor.VOLATILIDAD);
 
+                    // EJECUTAMOS LA FUNCION QUE CAMBIA LAS OPCIONES DE NUESTRO SELECT DE FORMAS
+                    cambiarFormaSustancia(`formaSustancia_${valor.SUSTANCIA_QUIMICA_ID}`, valor.ESTADO_FISICO)
+                    // ASIGNAMOS CALOR UNA VEZ CAMBIADA LAS OPCIONES
+                    $(`#formaSustancia_${valor.SUSTANCIA_QUIMICA_ID}`).val(valor.FORMA);
+
                 });
+
+
             }, 100);
 
 
@@ -2639,15 +2668,19 @@ function obtenerBEIs(data) {
 $('#boton_nueva_sustanciaEntidad').on('click', function (e) {
     e.preventDefault();
     
-    $('#CONNOTACION').val('');
-    $('#CONNOTACION').trigger('change');
-    $('#CONNOTACION').html('')
+     if ($('#CONNOTACION')[0].selectize) {
+        var selectize = $('#CONNOTACION')[0].selectize;
+        selectize.clear();
+         selectize.enable();
 
-
-     if ($('#CONNOTACION').hasClass('select2-hidden-accessible')) {
-        $('#CONNOTACION').select2('destroy');	
+    } else {
+        
+         $('#CONNOTACION').prop('disabled', false);
+        $('#CONNOTACION').html('');
+        $('#CONNOTACION').val('');
+        
     }
-    
+
     $('#opciones_seleccionadas').html('');
 
     $('#form_catSustanciQuimicaEntidad').each(function () {
@@ -2846,17 +2879,22 @@ function tablaSustanciasQuimicasEntidades(SUSTANCIA_QUIMICA_ID) {
 }
 
 $('#ENTIDAD_ID').on('change', function () {
-
     $('#opciones_seleccionadas').html('');
     
     var valorSeleccionado = $(this).find("option:selected");
     var infoAdicional = valorSeleccionado.data("descripcion");
+    $('#DESCRIPCION_NORMATIVA').val(infoAdicional);
 
-    $('#DESCRIPCION_NORMATIVA').val(infoAdicional)
-
-    $('#CONNOTACION').prop('disabled', false);
-	$('#CONNOTACION').html('');
-	$('#CONNOTACION').val('');
+    if ($('#CONNOTACION')[0].selectize) {
+        var selectize = $('#CONNOTACION')[0].selectize;
+        selectize.clear();
+        selectize.clearOptions();
+        selectize.enable();
+    } else {
+        $('#CONNOTACION').prop('disabled', false);
+        $('#CONNOTACION').html('');
+        $('#CONNOTACION').val('');
+    }
 
     $.ajax({
         type: "GET",
@@ -2865,19 +2903,40 @@ $('#ENTIDAD_ID').on('change', function () {
         data: {},
         cache: false,
         success: function (dato) {
+            var opciones = dato.opciones;
 
-            if ($('#CONNOTACION').hasClass('select2-hidden-accessible')) {
-				$('#CONNOTACION').select2('destroy');	
-			}
-			
+            if ($('#CONNOTACION')[0].selectize) {
+                var selectize = $('#CONNOTACION')[0].selectize;
+                selectize.clearOptions();  // Limpia las opciones anteriores
+                selectize.addOption(opciones);  // Añade las nuevas opciones
+                selectize.refreshOptions(false);  // Refresca el dropdown
+            } else {
+                $('#CONNOTACION').selectize({
+                    options: opciones,
+                    valueField: 'value',
+                    labelField: 'text',
+                    searchField: 'text',
+                    placeholder: "Seleccione una o más connotaciones",
+                    render: {
+                        option: function (item, escape) {
+                            return `
+                                <div>
+                                    ${escape(item.text)}
+                                    <small>${escape(item.description)}</small>
+                                </div>
+                            `;
+                        }
+                    }
+                });
 
-			$('#CONNOTACION').html(dato.opciones);
-            $('#CONNOTACION').select2({ placeholder: "Seleccione una o mas connotaciones" }); 
-            
-           
-            
+                var selectize = $('#CONNOTACION')[0].selectize;
+
+                selectize.on('change', function () {
+                    actualizarDescripcionConnotacion();
+                });
+            }
         },
-        beforeSend: function () { 
+        beforeSend: function () {
             $('#CONNOTACION').html('<option selected>Consultando datos...</option>');
         },
         error: function (dato) {
@@ -2886,17 +2945,47 @@ $('#ENTIDAD_ID').on('change', function () {
         }
     });
 
+    function actualizarDescripcionConnotacion() {
+        var selectize = $('#CONNOTACION')[0].selectize;
+        var selectedValues = selectize.getValue();
+        var selectedOptionsHtml = '';
+        var numSustancias = 0;
+
+        selectedValues.forEach(value => {
+            var option = selectize.options[value];
+            if (option) {
+                numSustancias++;
+                selectedOptionsHtml += `
+                    <div id="descripcionConnotacion" class="mb-2">
+                        <label class="form-check-label">${option.text} : ${option.description || ''}</label>
+                    </div>
+                `;
+            }
+        });
+
+        $('#opciones_seleccionadas').html(selectedOptionsHtml);
+    }
 });
 
 
-function mostarConnotacionesSelccionadas(ID_ENTIDAD, ID_SUSTANCIA_ENTIDAD) {
 
-    $('#CONNOTACION').html('')
+function mostarConnotacionesSelccionadas(ID_ENTIDAD, ID_SUSTANCIA_ENTIDAD) {
     $('#opciones_seleccionadas').html('');
 
-    if (procesoEntidades == 0) {
 
-        procesoEntidades = 1
+    if ($('#CONNOTACION')[0].selectize) {
+        var selectize = $('#CONNOTACION')[0].selectize;
+        selectize.clear();
+    } else {
+
+        $('#CONNOTACION').html('');
+        
+    }
+
+
+    if (procesoEntidades == 0) {
+        procesoEntidades = 1;
+
         $.ajax({
             type: "get",
             dataType: "json",
@@ -2904,77 +2993,109 @@ function mostarConnotacionesSelccionadas(ID_ENTIDAD, ID_SUSTANCIA_ENTIDAD) {
             data: {},
             cache: false,
             success: function (data) {
-			
-
-                //VALIDAMOS SI EXISTE SI EXISTE ELIMINAMOS
-                if ($('#CONNOTACION').hasClass('select2-hidden-accessible')) {
-                    $('#CONNOTACION').select2('destroy');
-                }
-			
-                //RELLENAMOS EL SELECT DE LAS CONNOTACIONES 
-                $('#CONNOTACION').html(data.opciones);
-                $('#CONNOTACION').select2({ placeholder: "Seleccione una o mas connotaciones" });
-
-            
-                //ASIGNAMOS VALOR A A LAS CONNOTACIONES Y ACTUALIZAMOS
-                if (data.connotaciones != null) {
-
-                    console.log(data.connotaciones);
-
-                    $('#CONNOTACION').val(data.connotaciones);
-                    $('#CONNOTACION').trigger('change');
-
-                    //MANDAMOS A LLAMAR LA FUNCION QUE MUESTRA LA DESCRIPCIONES DE LAS CONNOTACIONES
-                    actualizarDescripcionConnotacion()
+                // Verifica si Selectize ya está inicializado y destruye la instancia
+                if ($('#CONNOTACION')[0].selectize) {
+                    $('#CONNOTACION')[0].selectize.destroy();
                 }
 
-                procesoEntidades = 0
+                // Inicializa Selectize con las opciones deseadas
+                $('#CONNOTACION').selectize({
+                    options: data.opciones,
+                    valueField: 'value',
+                    labelField: 'text',
+                    searchField: 'text',
+                    placeholder: "Seleccione una o más connotaciones",
+                    render: {
+                        option: function (item, escape) {
+                            return `
+                                <div>
+                                    ${escape(item.text)}
+                                    <small>${escape(item.description || '')}</small>
+                                </div>
+                            `;
+                        }
+                    }
+                });
 
+                // Obtener la instancia de Selectize
+                var selectize = $('#CONNOTACION')[0].selectize;
 
+                // Asignar valor a las connotaciones seleccionadas
+                if (Array.isArray(data.connotacionesSeleccionadas)) {
+                    selectize.setValue(data.connotacionesSeleccionadas);
+                }
 
+                // Llama a la función que muestra las descripciones de las connotaciones
+                actualizarDescripcionConnotacion2();
+
+                 // Ahora puedes utilizar selectize para manejar la selección y deselección
+                var selectize = $('#CONNOTACION')[0].selectize;
+
+                // Evento de cambio de selección
+                selectize.on('change', function () {
+                    actualizarDescripcionConnotacion();
+                });
+
+                function actualizarDescripcionConnotacion() {
+                    var selectedValues = selectize.getValue();
+                    var selectedOptionsHtml = '';
+                    var numSustancias = 0;
+
+                    selectedValues.forEach(value => {
+                        var option = selectize.options[value];
+                        if (option) {
+                            numSustancias++;
+                            selectedOptionsHtml += `
+                                <div id="descripcionConnotacion" class="mb-2">
+                                    <label class="form-check-label">${option.text} : ${option.description || ''} </label>
+                                </div>
+                            `;
+                        }
+                    });
+
+                    $('#opciones_seleccionadas').html(selectedOptionsHtml);
+                }
+
+                procesoEntidades = 0;
             },
             beforeSend: function () {
                 $('#CONNOTACION').html('<option selected>Consultando datos...</option>');
-
             },
             error: function (dato) {
-		
+                console.error("Error al consultar los datos:", dato);
             }
         });
     }
-	
 }
 
-
-// FUNCIONES PARA MOSTRAR LAS DESCRIPCION DE LAS CONNOTACIONES
-function actualizarDescripcionConnotacion() {
-    var selectedOptions = $('#CONNOTACION').select2('data');
+function actualizarDescripcionConnotacion2() {
+    var selectize = $('#CONNOTACION')[0].selectize;
+    var selectedValues = selectize.getValue();
     var selectedOptionsHtml = '';
-    var numSustancias = 0
-    selectedOptions.forEach(option => {
-        
-        
 
-		numSustancias++
-        selectedOptionsHtml += `
-            <div id="descripcionConnotacion" class="mb-2">
-				<label class="form-check-label" >${option.text} : ${option.element.dataset.descripcion} </label>
-            </div>
-        `;
+    selectedValues.forEach(value => {
+        var option = selectize.options[value];
+        if (option) {
+            selectedOptionsHtml += `
+                <div id="descripcionConnotacion" class="mb-2">
+                    <label class="form-check-label">${option.text} : ${option.description || ''} </label>
+                </div>
+            `;
+        }
     });
-    
+
     $('#opciones_seleccionadas').html(selectedOptionsHtml);
 }
 
-// Actualizar el texto cuando se selecciona una opción
-$('#CONNOTACION').on('select2:select', function (e) {
-    actualizarDescripcionConnotacion();
+
+// Evento de selección
+$('#CONNOTACION')[0].selectize.on('change', function () {
+    console.log('Cambio detectado');
+    actualizarDescripcionConnotacion2();
 });
 
-// Actualizar el texto cuando se elimina una opción
-$('#CONNOTACION').on('select2:unselect', function (e) {
-    actualizarDescripcionConnotacion();
-});
+
+
 
 
 
@@ -2982,6 +3103,7 @@ $('#CONNOTACION').on('select2:unselect', function (e) {
 function mostrarPorcentajeSustancia(sus) {
     
     $('#textPorcentajes').css('display', 'block');
+    $('#tablaSustanciasSeleccionadas').css('display', 'block');
     
     var selectedOptions = $('#sustancias_quimicias').select2('data');
     var selectedOptionsHtml = '';
@@ -2989,46 +3111,64 @@ function mostrarPorcentajeSustancia(sus) {
     selectedOptions.forEach(option => {
 
         if (option.id == sus) {
-            var div = $(`#sustanciaPorcentaje_${option.id}`);
-            if (!div.length) {
+            var tr = $(`#sustanciaPorcentaje_${option.id}`);
+            if (!tr.length) {
                 selectedOptionsHtml += `
-                    <div id="sustanciaPorcentaje_${option.id}" class="mb-2 divPorcentajeSustancias">
-                        <input type="hidden" class="form-control IDSustanciaQuimica text-center"  name="SUSTANCIA_QUIMICA_ID" value="${option.id}">
-                        <label class="form-check-label" for="sustancia_${option.id}">${option.text}</label>
-
-                        <select class="custom-select form-control mx-1" id="operadorSustancia_${option.id}" name="OPERADOR" style="width: 4%" required>
+                  
+                    <tr id="sustanciaPorcentaje_${option.id}">
+                        <td>
+                            <input type="hidden" class="form-control IDSustanciaQuimica text-center" style="width: 100%;" name="SUSTANCIA_QUIMICA_ID" value="${option.id}">
+                            <label class="form-check-label" for="sustancia_${option.id}">${option.text}</label>
+                        </td>
+                        <td>
+                            <select class="custom-select form-control"  id="operadorSustancia_${option.id}" name="OPERADOR" style="width: 100%;" required>
                             <option value="*" selected> * </option>
                             <option value="<"> < </option>
                             <option value=">"> > </option>
-                        </select>
-                        <input type="number" class="form-control porcentajeSustancias text-center error" id="porcentajeSustancia_${option.id}" name="PORCENTAJE" style="width: 160px!important; height: 10px!important;" placeholder="% Componente" min="0" required>
-                        
-
-                        <select class="custom-select form-control ml-2 error" id="estadoSustancia_${option.id}" name="ESTADO_FISICO" style="width: 10%" required>
+                            </select>
+                        </td>
+                        <td>
+                            <input type="number" class="form-control porcentajeSustancias text-center error" id="porcentajeSustancia_${option.id}" name="PORCENTAJE" style="width: 100%;" placeholder="% Componente" min="0" required>
+                        </td>
+                        <td>
+                            <select class="custom-select form-control error" id="estadoSustancia_${option.id}" name="ESTADO_FISICO" style="width: 100%;" required onchange="cambiarFormaSustancia('formaSustancia_${option.id}', this.value)">
                             <option value="" selected disabled> Estado Fisico </option>
                             <option value="1"> Líquido </option>
                             <option value="2"> Sólido </option>
                             <option value="6"> Gas </option>
                             <option value="100"> ND </option>
-                        </select>
-                        
-                        <input type="text" class="form-control text-center error" id="temSustancia_${option.id}" name="TEM_EBULLICION" style="width: 160px!important; height: 10px!important;" placeholder="Tem. de ebullición" min="0" required>
+                            </select>
+                        </td>
+                        <td>
+                            <select class="custom-select form-control" id="formaSustancia_${option.id}" name="FORMA_SUSTANCIA" style="width: 100%;" required>
+                                <option value="" selected disabled> Forma </option>
+                            </select>
+                        </td>
+                        <td style="display: flex; align-items: center;">
+                            <button type="button" class="btn btn-danger text-center mb-1" style="margin-right: 10px; width: 35px; height: 35px; border-radius: 9px;margin-left: 10px;" data-toggle="tooltip" title="Click para cambiar la Tem. de ebullición a °C una vez insertada en °F" onclick="cambiarGrados('temSustancia_${option.id}')">
+                                <i class="fa fa-thermometer-three-quarters" aria-hidden="true"></i>
+                            </button>
 
-                         <select class="custom-select form-control error" id="valatilidadSustancia_${option.id}" name="VOLATILIDAD" style="width: 10%" required>
+                            <input type="text" class="form-control text-center error" id="temSustancia_${option.id}" name="TEM_EBULLICION" style="flex: 1;" placeholder="Tem. de ebullición" min="0" required>
+                        </td>
+                        <td>
+                            <select class="custom-select form-control error" id="valatilidadSustancia_${option.id}" name="VOLATILIDAD" style="width: 100%;" required>
                             <option value="" selected disabled> Volatilidad </option>
                             <option value="1"> Baja </option>
                             <option value="2"> Media </option>
                             <option value="3"> Alta </option>
                             <option value="100"> ND </option>
-                        </select>
-
-                    </div>
+                            </select>
+                        </td>
+                    </tr>
+                    
                 `;
             }
         }
      })
 
-    $('#sustancias_seleccionadas').append(selectedOptionsHtml);
+    // $('#sustancias_seleccionadas').append(selectedOptionsHtml);
+     $('#tablaSustanciasSeleccionadas tbody').append(selectedOptionsHtml);
         
 }
 
@@ -3050,20 +3190,21 @@ $('#sustancias_quimicias').on('select2:unselect', function (e) {
 });
 
 
-// Función para eliminar el div correspondiente
+// Función para eliminar la fila correspondiente a una sustancia
 function eliminarPorcentajeSustancia(optionId) {
-    // Encontrar el div correspondiente a la opción deseleccionada y eliminarlo
-    var div = $(`#sustanciaPorcentaje_${optionId}`);
-    if (div.length) {
-        div.remove();
+    // Encontrar la fila correspondiente a la opción deseleccionada y eliminarla
+    var row = $(`#sustanciaPorcentaje_${optionId}`);
+    if (row.length) {
+        row.remove();
     }
 }
 
 
 function crearArregloPorcentajeSustancia(HOJA_ID) {
-    
     var porcentajes = [];
-    $(".divPorcentajeSustancias").each(function() {
+
+    // Itera sobre cada fila de la tabla
+    $('#tablaSustanciasSeleccionadas tbody tr').each(function() {
         var porcentaje = {
             'HOJA_SEGURIDAD_ID': HOJA_ID,
             'SUSTANCIA_QUIMICA_ID': $(this).find("input[name='SUSTANCIA_QUIMICA_ID']").val(),
@@ -3072,15 +3213,15 @@ function crearArregloPorcentajeSustancia(HOJA_ID) {
             'TEM_EBULLICION': $(this).find("input[name='TEM_EBULLICION']").val(),
             'ESTADO_FISICO': $(this).find("select[name='ESTADO_FISICO']").val(),
             'VOLATILIDAD': $(this).find("select[name='VOLATILIDAD']").val(),
-
+            'FORMA': $(this).find("select[name='FORMA_SUSTANCIA']").val()
         };
 
         porcentajes.push(porcentaje);
     });
 
     return porcentajes;
-
 }
+
  
 
 
@@ -3307,6 +3448,30 @@ $('#catestadofisicosustancia_id').on('change', function () {
     }
 
 });
+
+
+//FUNCION PARA EL TIPO FORMA DE UNA SUSTANCIA
+function cambiarFormaSustancia(id, opcion) {
+
+    html = ""
+
+      //LIQUIDOS
+    if (opcion == 1 ) {
+        html += '<option value="Neblina"> Neblina </option><option value="Rocío"> Rocío </option>'
+        $('#'+id).html(html)
+
+    //SOLIDO
+    } else if (opcion == 2) {
+        html += '<option value="Polvo"> Polvo </option><option value="Humo"> Humo </option><option value="Fibra"> Fibra </option>'
+        $('#'+id).html(html)
+
+    //GAS
+    } else if (opcion == 6) {
+        html += '<option value="Vapor"> Vapor </option><option value="Gas"> Gas </option>'
+        $('#'+id).html(html)
+
+    }
+}
 
 
 //FUNCION PARA EL TIPO DE  SOLIDO
@@ -4129,3 +4294,12 @@ $('input[name="catgradoriesgosalud_id"]').change(function() {
     $('#catClasificacionRiesgo').val(valor)
 
 });
+
+
+function cambiarGrados(ID) {
+
+    inputValue = $('#' + ID).val()
+    total = (inputValue - 32) / 1.8
+    $('#' + ID).val(Number(total.toFixed(2)))
+    
+}

@@ -10,6 +10,7 @@ class reporteserviciopersonalModel extends Model
     protected $fillable = [
           'proyecto_id'
         , 'catactivo_id'
+        ,'reporte_mes'
         , 'reporteserviciopersonal_fecha'
         , 'reporteserviciopersonal_instalacion'
         , 'reporteserviciopersonal_catregion_activo'

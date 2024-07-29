@@ -52,7 +52,8 @@ class proyectoModel extends Model
         'solicitudOS',
         'proyectoInterno',
         'requiereContrato',
-        'cliente_id'
+        'cliente_id',
+        'tipoServicioCliente'
     ];
 
     //=============== RELACION A TABLAS ===================

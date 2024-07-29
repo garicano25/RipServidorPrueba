@@ -186,7 +186,6 @@ class recsensorialquimicoscatalogosController extends Controller
                             $value->perfil = 0;
                             $value->boton_editar = '<button type="button" class="btn btn-secondary btn-circle" ><i class="fa fa-ban" aria-hidden="true"></i></button>';
                             $value->CheckboxEstado = '<div class="switch"><label><input type="checkbox" disabled><span class="lever switch-col-light-blue"></span></label></div>';
-
                         }
                     }
 
@@ -308,17 +307,15 @@ class recsensorialquimicoscatalogosController extends Controller
 
                         // Valida perfil
                         // $this->middleware('Superusuario,Administrador,Proveedor,Reconocimiento,Proyecto,Compras,Staff,Psicólogo,Ergónomo,CoordinadorPsicosocial,CoordinadorErgonómico,CoordinadorRN,CoordinadorRS,CoordinadorRM,CoordinadorHI,Externo');
-                      
-                      
-                      
+
+
+
                         if (auth()->user()->hasRoles(['Superusuario', 'Administrador', 'Reconocimiento', 'CoordinadorHI'])) {
                             $value->perfil = 1;
-
                         } else {
                             $value->perfil = 0;
                             $value->boton_editar = '<button type="button" class="btn btn-info btn-circle" onclick="selecciona_sustancia();"><i class="fa fa-eye"></i></button>';
                             $value->CheckboxEstado = '<div class="switch"><label><input type="checkbox" disabled><span class="lever switch-col-light-blue"></span></label></div>';
-
                         }
                     }
                     break;
@@ -339,9 +336,6 @@ class recsensorialquimicoscatalogosController extends Controller
                         } else {
                             $value['CheckboxEstado'] = '<div class="switch"><label><input type="checkbox" onclick="cambia_estado_registro(' . $num_catalogo . ', ' . $value->id . ', this);"><span class="lever switch-col-light-blue"></span></label></div>';
                         }
-
-
-                        
                     }
                     break;
                 case 3: // CATALOGO VOLATILIDAD
@@ -434,12 +428,10 @@ class recsensorialquimicoscatalogosController extends Controller
 
                         if (auth()->user()->hasRoles(['Superusuario', 'Administrador'])) {
                             $value->perfil = 1;
-
                         } else {
                             $value->perfil = 0;
                             $value['boton_editar'] = '<button type="button" class="btn btn-info btn-circle" onclick="selecciona_catvolatilidad();"><i class="fa fa-eye"></i></button>';
                             $value['CheckboxEstado'] = '<div class="switch"><label><input type="checkbox" disabled><span class="lever switch-col-light-blue"></span></label></div>';
-                
                         }
                     }
                     break;
@@ -464,12 +456,10 @@ class recsensorialquimicoscatalogosController extends Controller
 
                         if (auth()->user()->hasRoles(['Superusuario', 'Administrador', 'Reconocimiento', 'CoordinadorHI'])) {
                             $value->perfil = 1;
-
                         } else {
                             $value->perfil = 0;
                             $value->boton_editar = '<button type="button" class="btn btn-info btn-circle" onclick="selecciona_catConnotacion();"><i class="fa fa-eye"></i></button>';
                             $value->CheckboxEstado = '<div class="switch"><label><input type="checkbox" disabled><span class="lever switch-col-light-blue"></span></label></div>';
-
                         }
                     }
                     break;
@@ -492,16 +482,12 @@ class recsensorialquimicoscatalogosController extends Controller
 
                         if (auth()->user()->hasRoles(['Superusuario', 'Administrador'])) {
                             $value->perfil = 1;
-
                         } else {
                             $value->perfil = 0;
 
                             $value['boton_editar'] = '<button type="button" class="btn btn-info btn-circle" onclick="selecciona_catEntidades();"><i class="fa fa-eye"></i></button>';
                             $value['CheckboxEstado'] = '<div class="switch"><label><input type="checkbox" disabled><span class="lever switch-col-light-blue"></span></label></div>';
-                
                         }
-
-                        
                     }
                     break;
             }
@@ -578,63 +564,71 @@ class recsensorialquimicoscatalogosController extends Controller
     public function listaConnotaciones($ID_ENTIDAD)
     {
         try {
-
-
-            $opciones_select = '<option value="">&nbsp;</option>';
-
+            $opciones = [];
             $connotaciones = catConnotacionModel::where('ENTIDAD_ID', $ID_ENTIDAD)->get();
 
-            foreach ($connotaciones as $key => $value) {
-
-                $opciones_select .= '<option value="' . $value->ID_CONNOTACION . '"  data-descripcion="'.$value->DESCRIPCION.'">' . $value->ABREVIATURA . '</option>';
-                
+            foreach ($connotaciones as $value) {
+                $opciones[] = [
+                    'value' => $value->ID_CONNOTACION,
+                    'text' => $value->ABREVIATURA,
+                    'description' => $value->DESCRIPCION
+                ];
             }
 
-            // // respuesta
-            $dato['opciones'] = $opciones_select;
+            // Respuesta
+            $dato['opciones'] = $opciones;
             $dato["msj"] = 'Datos consultados correctamente';
             return response()->json($dato);
-
-
         } catch (Exception $e) {
-
             $dato["msj"] = 'Error ' . $e->getMessage();
-            $dato['opciones'] = $opciones_select;
             return response()->json($dato);
         }
     }
+
 
 
 
     public function mostarConnotacionesSelccionadas($ID_ENTIDAD, $ID_SUSTANCIA_ENTIDAD)
     {
         try {
+            // Inicializa el array para opciones
+            $opciones = [];
 
-
-            $opciones_select = '<option value="">&nbsp;</option>';
-
+            // Obtiene las connotaciones y las connotaciones seleccionadas
             $connotaciones = catConnotacionModel::where('ENTIDAD_ID', $ID_ENTIDAD)->get();
             $connotacioneSelect = sustanciaQuimicaEntidadModel::where('ID_SUSTANCIA_QUIMICA_ENTIDAD', $ID_SUSTANCIA_ENTIDAD)->get();
 
-
-            foreach ($connotaciones as $key => $value) {
-
-                $opciones_select .= '<option value="' . $value->ID_CONNOTACION . '"  data-descripcion="' . $value->DESCRIPCION . '">' . $value->ABREVIATURA . '</option>';
+            // Llena el array de opciones con los datos necesarios
+            foreach ($connotaciones as $value) {
+                $opciones[] = [
+                    'value' => $value->ID_CONNOTACION,
+                    'text' => $value->ABREVIATURA,
+                    'description' => $value->DESCRIPCION
+                ];
             }
 
-            // // respuesta
-            $dato['opciones'] = $opciones_select;
-            $dato['connotaciones'] = $connotacioneSelect[0]->CONNOTACION;
+            // Usa el valor directamente ya que ya es un array
+            $connotacionesSeleccionadas = $connotacioneSelect[0]->CONNOTACION;
 
+            // Prepara los datos para enviar
+            $dato['opciones'] = $opciones;
+            $dato['connotacionesSeleccionadas'] = $connotacionesSeleccionadas;
             $dato["msj"] = 'Datos consultados correctamente';
+
             return response()->json($dato);
         } catch (Exception $e) {
-
+            // Manejo de errores
             $dato["msj"] = 'Error ' . $e->getMessage();
-            $dato['opciones'] = $opciones_select;
+            $dato['opciones'] = [];
+            $dato['connotacionesSeleccionadas'] = [];
             return response()->json($dato);
         }
     }
+
+
+
+
+
 
 
     public function inforCartaEntidades($ID_SUSTANCIA_QUIMICA)
@@ -674,9 +668,8 @@ class recsensorialquimicoscatalogosController extends Controller
                 }
 
                 $value->listaConnotaciones = $connotacionesText;
-
             }
-           
+
 
 
             // Respuesta
@@ -777,7 +770,7 @@ class recsensorialquimicoscatalogosController extends Controller
         try {
 
             $opciones = DB::select('SELECT hoja.SUSTANCIA_QUIMICA_ID, hoja.OPERADOR, hoja.PORCENTAJE, sus.SUSTANCIA_QUIMICA, 
-                                            sus.NUM_CAS, hoja.TEM_EBULLICION, hoja.ESTADO_FISICO, hoja.VOLATILIDAD
+                                            sus.NUM_CAS, hoja.TEM_EBULLICION, hoja.ESTADO_FISICO, hoja.VOLATILIDAD, hoja.FORMA
                                     FROM catHojasSeguridad_SustanciasQuimicas hoja
                                     LEFT JOIN catsustancias_quimicas sus ON hoja.SUSTANCIA_QUIMICA_ID = sus.ID_SUSTANCIA_QUIMICA
                                     WHERE hoja.HOJA_SEGURIDAD_ID = ? AND hoja.ACTIVO = 1', [$id]);
@@ -845,7 +838,8 @@ class recsensorialquimicoscatalogosController extends Controller
                                     'PORCENTAJE' => $value['PORCENTAJE'],
                                     'TEM_EBULLICION' => $value['TEM_EBULLICION'],
                                     'VOLATILIDAD' => $value['VOLATILIDAD'],
-                                    'ESTADO_FISICO' => $value['ESTADO_FISICO']
+                                    'ESTADO_FISICO' => $value['ESTADO_FISICO'],
+                                    'FORMA' => $value['FORMA']
                                 ]);
                             }
                         } else {
@@ -867,13 +861,16 @@ class recsensorialquimicoscatalogosController extends Controller
                         $porcentajes = json_decode($request->porcentajes, true);
                         foreach ($porcentajes as $key => $value) {
 
-                            $sustancia = catHojaSeguridadSustanciaQuimicaModel::create(['HOJA_SEGURIDAD_ID' => $catalogo->id,
+                            $sustancia = catHojaSeguridadSustanciaQuimicaModel::create([
+                                'HOJA_SEGURIDAD_ID' => $catalogo->id,
                                 'SUSTANCIA_QUIMICA_ID' => $value['SUSTANCIA_QUIMICA_ID'],
                                 'OPERADOR' => $value['OPERADOR'],
                                 'PORCENTAJE' => $value['PORCENTAJE'],
                                 'TEM_EBULLICION' => $value['TEM_EBULLICION'],
                                 'VOLATILIDAD' => $value['VOLATILIDAD'],
-                                'ESTADO_FISICO' => $value['ESTADO_FISICO']
+                                'ESTADO_FISICO' => $value['ESTADO_FISICO'],
+                                'FORMA' => $value['FORMA']
+
                             ]);
                         }
                     }
@@ -933,7 +930,7 @@ class recsensorialquimicoscatalogosController extends Controller
                 case 7:
                     if ($request['ID_SUSTANCIA_QUIMICA_ENTIDAD'] == 0) {
                         // $sql = DB::select('ALTER TABLE catestadofisicosustancia AUTO_INCREMENT=1');
-                        $request['CONNOTACION'] = isset($request['CONNOTACIONES']) ? $request['CONNOTACIONES'] : null;  
+                        $request['CONNOTACION'] = isset($request['CONNOTACIONES']) ? $request['CONNOTACIONES'] : null;
                         $catalogo = sustanciaQuimicaEntidadModel::create($request->all());
 
                         //Actualizamos las pruebas del reconocimiento sensorial
@@ -948,9 +945,9 @@ class recsensorialquimicoscatalogosController extends Controller
 
                         // Verificar y ajustar el valor de CONNOTACION
                         if (!isset($request['CONNOTACIONES']) || empty($request['CONNOTACIONES']) || is_null($request['CONNOTACIONES']) || $request['CONNOTACIONES'] == '') {
-                            $request['CONNOTACION'] = null; 
-                        }else{
-                             $request['CONNOTACION'] = $request['CONNOTACIONES'];
+                            $request['CONNOTACION'] = null;
+                        } else {
+                            $request['CONNOTACION'] = $request['CONNOTACIONES'];
                         }
 
                         // Actualizar el registro
@@ -986,18 +983,16 @@ class recsensorialquimicoscatalogosController extends Controller
                                                 FROM catConnotaciones
                                                 WHERE UPPER(ABREVIATURA) = ? AND ENTIDAD_ID = ?', [$cadena_mayusculas, $request['ENTIDAD_ID']]);
 
-                        
-                        if($sql[0]->IGUAL != 0) {
+
+                        if ($sql[0]->IGUAL != 0) {
 
                             $dato["code"] = 2;
                             $dato["msj"] = 'Al parecer ya existe una Connotación con la misma Abreviatura ';
                             return response()->json($dato);
-
-                        }else{
+                        } else {
 
                             $catalogo = catConnotacionModel::create($request->all());
                         }
-
                     } else {
 
                         $cadena_mayusculas = mb_strtoupper($request['ABREVIATURA'], 'UTF-8');
@@ -1010,7 +1005,6 @@ class recsensorialquimicoscatalogosController extends Controller
                             $dato["code"] = 2;
                             $dato["msj"] = 'Al parecer ya existe una Connotación con la misma Abreviatura ';
                             return response()->json($dato);
-
                         } else {
 
                             $catalogo = catConnotacionModel::findOrFail($request['ID_CONNOTACION']);

@@ -888,6 +888,7 @@ class recsensorialController extends Controller
                                 FROM recsensorial_recursos_informes
                                 WHERE RECSENSORIAL_ID = ?', [$ID]);
 
+
             $niveles = DB::select('  SELECT 
                                         "Instalación" ETIQUETA,
                                         recsensorial_instalacion OPCION,
@@ -1300,20 +1301,28 @@ class recsensorialController extends Controller
 
 
             $infoProyecto = DB::select('SELECT p.proyecto_clienteinstalacion INSTALACION,
-                                            p.proyecto_clientedireccionservicio DIRRECCION,
-                                            p.proyecto_clientepersonacontacto REPRESENTANTE,
-                                            p.proyecto_clienterfc RFC,
-                                            p.proyecto_clienterazonsocial RAZON_SOCIAL,
-                                            IFNULL(p.cliente_id, (SELECT CLIENTE_ID FROM contratos_clientes WHERE ID_CONTRATO = p.contrato_id)) CLIENTE_ID,
-                                            IFNULL(p.contrato_id, 0) CONTRATO_ID,
-                                            IF(p.contrato_id IS NULL, "El proyecto seleccionado no tiene un contrato." , (SELECT CONCAT("[ ",NUMERO_CONTRATO, " ] ",DESCRIPCION_CONTRATO)
-                                                                                                                            FROM contratos_clientes 
-                                                                                                                            WHERE ID_CONTRATO = p.contrato_id) ) NOMBRE_CONTRATO
-			
-                                    FROM  proyecto p
-                                    LEFT JOIN cliente c ON c.id = p.cliente_id
-                                    LEFT JOIN contratos_clientes cc ON cc.ID_CONTRATO = p.CONTRATO_ID
-                                    WHERE p.proyecto_folio = ?', [$FOLIO]);
+                                                p.proyecto_clientedireccionservicio DIRRECCION,
+                                                p.proyecto_clientepersonacontacto REPRESENTANTE,
+                                                p.proyecto_clienterfc RFC,
+                                                p.proyecto_clienterazonsocial RAZON_SOCIAL,
+                                                IFNULL(p.cliente_id, (SELECT CLIENTE_ID FROM contratos_clientes WHERE ID_CONTRATO = p.contrato_id)) CLIENTE_ID,
+                                                IFNULL(p.contrato_id, 0) CONTRATO_ID,
+                                                IF(p.requiereContrato = 0, "No aplica", 
+                                                CASE p.tipoServicioCliente
+                                                    WHEN 1 THEN "Contrato"
+                                                    WHEN 2 THEN "O.S / O.C"
+                                                    ELSE "Cotización aceptada"
+                                                END) AS TIPO_SERVICIO,
+                                                            
+                                            IF(p.contrato_id IS NULL, 
+                                                "El proyecto seleccionado no tiene un contrato.", 
+                                                (SELECT CONCAT(IF(NUMERO_CONTRATO IS NULL, "" ,CONCAT("[ ",NUMERO_CONTRATO," ] ")), DESCRIPCION_CONTRATO)
+                                                FROM contratos_clientes 
+                                                WHERE ID_CONTRATO = p.contrato_id)) AS NOMBRE_CONTRATO
+                                        FROM proyecto p
+                                        LEFT JOIN cliente c ON c.id = p.cliente_id
+                                        LEFT JOIN contratos_clientes cc ON cc.ID_CONTRATO = p.CONTRATO_ID
+                                        WHERE p.proyecto_folio = ?', [$FOLIO]);
 
 
             $dato['data'] = $estructura;

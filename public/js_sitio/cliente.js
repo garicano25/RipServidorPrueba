@@ -2483,6 +2483,12 @@ function tabla_clientecontratos(cliente_id)
                         orderable: false,
                     },
                     {
+                        data: "TIPO_SERVICIO",
+                        defaultContent: "-",
+                        // className: '',
+                        orderable: false,
+                    },
+                    {
                         data: "NUMERO_CONTRATO",
                         defaultContent: "-",
                         // className: '',
@@ -2490,12 +2496,6 @@ function tabla_clientecontratos(cliente_id)
                     },
                        {
                         data: "DESCRIPCION_CONTRATO",
-                        defaultContent: "-",
-                        // className: '',
-                        orderable: false,
-                    },
-                    {
-                        data: "MONTO",
                         defaultContent: "-",
                         // className: '',
                         orderable: false,
@@ -2598,6 +2598,10 @@ $('#tabla_clientecontratos tbody').on('click', 'td>button.editar', function ()
     $("#CONTRATO_ID_PRINCIPAL").val(row.data().ID_CONTRATO);
 
     // CAMPOS
+
+
+    $("#TIPO_SERVICIO").val(row.data().TIPO_SERVICIO);
+
     $("#NOMBRE_CONTACTO").val(row.data().NOMBRE_CONTACTO);
     $("#CARGO_CONTACTO").val(row.data().CARGO_CONTACTO);
     $("#CORREO_CONTACTO").val(row.data().CORREO_CONTACTO);

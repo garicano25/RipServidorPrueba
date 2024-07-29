@@ -290,7 +290,7 @@
                                                     </form>
 
 
-                                                    @if(auth()->user()->hasRoles(['Superusuario', 'Administrador', 'Coordinador','Compras','Almacén','Operativo HI']))
+                                                    @if(auth()->user()->hasRoles(['Superusuario', 'Administrador', 'Coordinador','Compras']))
                                                     <br>
                                                     <div class="datosProveedor">
                                                         <ol class="breadcrumb m-b-10">
@@ -2138,6 +2138,38 @@
                             <input type="hidden" class="form-control" id="signatarioacreditacion_id" name="signatarioacreditacion_id" value="0">
                             <input type="hidden" class="form-control" id="acreditacion_signatario_id" name="signatario_id" value="0">
                             <input type="hidden" class="form-control" id="signatarioacreditacion_proveedor_id" name="proveedor_id" value="0">
+                        </div>
+                        <div class="col-6">
+                            <div class="form-group">
+                                <label>Tipo alcance *</label>
+                                <select class="custom-select form-control" id="acreditacionAlcance_tipo" name="acreditacionAlcance_tipo" onchange="validatipoalcance(this.value, 0);" required>
+                                    <option value=""></option>
+                                    @foreach($tipopruebas as $tipo)
+                                    <option value="{{$tipo->catPrueba_Tipo}}">{{$tipo->catPrueba_Tipo}}</option>
+                                    @endforeach
+                                </select>
+                            </div>
+                        </div>
+                        <div class="col-6" id="div_campo_factor">
+                            <div class="form-group">
+                                <label>Agente / Factor de riesgo / Servicio *</label>
+                                <select class="custom-select form-control" id="prueba_id" name="prueba_id" onchange=" (this);" required>
+                                    <option value=""></option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="col-6" id="div_campo_agente" style="display: none;">
+                            <div class="form-group">
+                                <label> Agente químico *</label>
+                                <!-- <input type="text" class="form-control" id="acreditacionAlcance_agente" name="acreditacionAlcance_agente"> -->
+
+                                <select class="custom-select form-control" id="acreditacionAlcance_agente" name="acreditacionAlcance_agente">
+                                    <option value=""></option>
+                                    @foreach($sustanciasQuimicas as $sustancia)
+                                    <option value="{{$sustancia->SUSTANCIA_QUIMICA}}">{{$sustancia->SUSTANCIA_QUIMICA}}</option>
+                                    @endforeach
+                                </select>
+                            </div>
                         </div>
                         <div class="col-8">
                             <div class="form-group">

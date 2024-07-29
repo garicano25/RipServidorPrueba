@@ -321,7 +321,7 @@ class servicioController extends Controller
                     $filas_partidas .= '
                         <td style="width: 480px; text-align: left;">
                             <b class="text-secondary">' . $value->agente_nombre . '</b>
-                            <input type="hidden" class="form-control" value="' . $value->agente_id . '~' . $value->agente_nombre . '" name="partida_alcance[]">
+                            <input type="text" class="form-control" value="' . $value->agente_id . '~' . $value->agente_nombre . '" name="partida_alcance[]">
                         </td>
                         <th></th>
                         <td style="width: 180px;">
@@ -332,7 +332,7 @@ class servicioController extends Controller
                     $filas_partidas .= '
                         <td style="width: 480px; text-align: left;">
                             <b class="text-info">' . $value->agente_nombre . '</b>
-                            <input type="hidden" class="form-control" value="' . $value->agente_nombre . '" name="partida_adicional[]">
+                            <input type="text" class="form-control" value="' . $value->agente_nombre . '" name="partida_adicional[]">
                         </td>
                         <th></th>
                         <td style="width: 180px;">
@@ -435,7 +435,6 @@ class servicioController extends Controller
                                 'agente_preciounitario' => $request->precio_alcance[$key]
                             ]);
                         }
-                       
                     }
 
                     // guardar partidas adicionales
@@ -488,9 +487,7 @@ class servicioController extends Controller
                                 'agente_preciounitario' => $request->precio_alcance[$key]
 
                             ]);
-
-                        }                      
-                       
+                        }
                     }
 
                     // guardar partidas adicionales
@@ -503,11 +500,7 @@ class servicioController extends Controller
                                 'ACTIVO_PARTIDAPROVEEDOR' => $request->ACTIVO_PARTIDAPROVEEDOR_ADICIONAL[$key],
                                 'agente_preciounitario' => $request->precio_adicional[$key]
                             ]);
-
-                   
                         }
-
-
                     }
 
 

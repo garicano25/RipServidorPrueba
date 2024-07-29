@@ -600,30 +600,106 @@ function consultar_cliente(cliente_id) {
 	}
 }
 
+function consultarIdServicio(valor) {
+
+	if (valor == 1) {
+		
+		return 'labelServicio1'
+		
+	} else if (valor == 2) { 
+
+		return 'labelServicio2'
+
+	} else if (valor == 3) {
+		
+		return 'labelServicio3'
+	}
+	
+}
+
+//Obtener la formalizaciones del servicio
+function cambiarSelectContrato(valor) {
+
+	//limpiamos los elementos de organizacion
+	$('.ORGA').prop('disabled', true);
+	$(`.NIVEL1`).css('display', 'none')
+	$(`.NIVEL2`).css('display', 'none')
+	$(`.NIVEL3`).css('display', 'none')
+	$(`.NIVEL4`).css('display', 'none')
+	$(`.NIVEL5`).css('display', 'none')
+	$(`#titleOrganizacion`).css('display', 'none')
+	
+	//Rellenamos el select que muestra los servicios disponibles
+	select_contrato(0, valor, consultarIdServicio(valor))
+
+}
 
 
 //Obtener contratos
-function select_contrato(contrato_id){
+function select_contrato(contrato_id, tipo, radio) {
+	
 	// activar campo
 	$('#contrato_id').prop('disabled', false);
 	$('#contrato_id').html('');
 
+	if (tipo == 1) {
+		texto = 'Contrato'
+	} else if (tipo == 2) {
+		texto = 'O.S / O.C'
+	} else if (tipo == 3) { 
+		texto = 'Cotización aceptada'
+	}
+
     $.ajax({
         type: "GET",
         dataType: "json",
-        url: "/proyectoselectcontrato/"+contrato_id,
+        url: "/proyectoselectcontrato/"+contrato_id + "/" +tipo,
         data:{},
         cache: false,
-        success:function(dato)
-        {
-            $('#contrato_id').html(dato.opciones);
-            $('#contrato_id').selectize(); //Activar campo tipo [Select-Search]
-			$('#requiereContrato').prop('disabled', false);
+        success:function(dato){
+			
+			if ($("#contrato_id")[0].selectize) {
+				var selectizeInstance = $('#contrato_id')[0].selectize;
+				
+
+				selectizeInstance.clear();
+				selectizeInstance.clearOptions();
+				selectizeInstance.enable();
+
+				// Parsear el HTML de las opciones
+				var $options = $(dato.opciones);
+
+				// Iterar sobre cada opción y agregarla a Selectize
+				$options.each(function() {
+					var $option = $(this);
+					var value = $option.attr('value');
+					var text = $option.text();
+					selectizeInstance.addOption({value: value, text: text});
+				});
+
+				// Refrescar las opciones para que se muestren en el dropdown
+				selectizeInstance.refreshOptions(false);
+
+			} else {
+				$('#contrato_id').prop('disabled', false);	
+				$('#contrato_id').html(dato.opciones);
+				$('#contrato_id').selectize();
+
+			} 
+			
+			$('#' + radio).html(`${texto}`)
 			
 		}, beforeSend: function () {
-        
-			$('#contrato_id').html('<option selected>Consultando contratos...</option>');
-			$('#requiereContrato').prop('disabled', true);
+			
+			if ($("#contrato_id")[0].selectize) {
+				var selectizeInstance = $('#contrato_id')[0].selectize;
+				selectizeInstance.disable();
+			} else {
+				$('#contrato_id').prop('disabled', true);	
+			} 
+			
+			$('#contrato_id').html('<option selected>Consultando información...</option>');			
+			$('#' + radio).html(`<i class="fa fa-spin fa-spinner"></i>${texto}`)
 			
 		},
 		error: function(dato){
@@ -966,11 +1042,17 @@ $("#boton_nuevo_proyecto").click(function () {
 		$('#contrato_id').val('');
 		$('#contrato_id').prop('disabled', false);
 	}
-	$('#requiereContrato').prop('disabled', false);
+	$('#requiereContrato').val(1);
 	
 	$('#opciones_hi').fadeOut(1)
 	$('#opciones_ergo').fadeOut(1)
 	$('#opciones_psico').fadeOut(1)
+
+	//Reiniciamos los radio a su estado original
+	$('.servCliente').prop('disabled', false)
+	$('.servCliente').each(function () {		
+		$(this).prop('checked', false)
+	})
 	
 	if ($("#cliente_id")[0].selectize) {
 		var selectizeInstance = $('#cliente_id')[0].selectize;
@@ -1044,7 +1126,7 @@ $("#boton_nuevo_proyecto").click(function () {
 	$( "#tab_menu2" ).click();
     
 	//Consultar los contratos
-	select_contrato(0)
+	select_contrato(0, 1, consultarIdServicio(1))
 
 	// Consulta recsensoriales no asignados a proyectos (Se quito porque eso se hace despues de guardar el ocntrato)
 	// select_recsensorial(0);
@@ -1113,8 +1195,12 @@ $('#tabla_proyectos tbody').on('click', 'td.mostrar', function()
 	//SELECT CONTRATOS
 
 	if (row.data().requiereContrato == 1) {
-		$('#requiereContrato').prop('checked', true)
-		
+
+		$('.servCliente').prop('disabled', false)
+
+		//Si requiere de un contrato seleccionamos el tipo de contrato o servicio
+		$('#tipoServicioCliente'+row.data().tipoServicioCliente).prop('checked', true)
+		$('#requiereContrato').val(1)
 		$('#proyecto_clienterazonsocial').fadeIn(1)
 		
 		if ($("#cliente_id")[0].selectize) {
@@ -1137,10 +1223,11 @@ $('#tabla_proyectos tbody').on('click', 'td.mostrar', function()
 			$("#contrato_id")[0].selectize.destroy();
 		}
 		$('#contrato_id').html('');
+
 		if (row.data().contrato_id) {
 
 				// Consulta recsensoriales no asignados a proyectos
-			select_contrato(row.data().contrato_id);
+			select_contrato(row.data().contrato_id, row.data().tipoServicioCliente, consultarIdServicio(row.data().tipoServicioCliente));
 
 			// si ya se cerró el proyecto
 			if (parseInt(row.data().proyecto_concluido) == 1)
@@ -1154,7 +1241,7 @@ $('#tabla_proyectos tbody').on('click', 'td.mostrar', function()
 			}
 			
 		} else {
-			select_contrato(0);
+			select_contrato(0, 1, consultarIdServicio(1));
 		}
 		
 	} else {
@@ -1169,8 +1256,13 @@ $('#tabla_proyectos tbody').on('click', 'td.mostrar', function()
 			$('#contrato_id').prop('disabled', true);
 			$('#contrato_id').val('');
 		}
-			$('#requiereContrato').prop('checked', false)
 
+		$('#requiereContrato').val(0)
+
+		$('.servCliente').prop('disabled', true)
+		$('.servCliente').each(function () {		
+			$(this).prop('checked', false)
+		})
 
 		if ($("#cliente_id")[0].selectize){
 			$("#cliente_id")[0].selectize.destroy();
@@ -1462,8 +1554,12 @@ $('#tabla_proyectos_internos tbody').on('click', 'td.mostrar', function()
 	//SELECT CONTRATOS
 
 	if (row.data().requiereContrato == 1) {
-		$('#requiereContrato').prop('checked', true)
+
+		$('.servCliente').prop('disabled', false)
 		
+		//Si requiere de un contrato seleccionamos el tipo de contrato o servicio
+		$('#tipoServicioCliente' + row.data().tipoServicioCliente).prop('checked', true)
+		$('#requiereContrato').val(1)
 		$('#proyecto_clienterazonsocial').fadeIn(1)
 		
 		if ($("#cliente_id")[0].selectize) {
@@ -1489,7 +1585,7 @@ $('#tabla_proyectos_internos tbody').on('click', 'td.mostrar', function()
 		if (row.data().contrato_id) {
 
 				// Consulta recsensoriales no asignados a proyectos
-			select_contrato(row.data().contrato_id);
+			select_contrato(row.data().contrato_id, row.data().tipoServicioCliente, consultarIdServicio(row.data().tipoServicioCliente));
 
 			// si ya se cerró el proyecto
 			if (parseInt(row.data().proyecto_concluido) == 1)
@@ -1503,7 +1599,7 @@ $('#tabla_proyectos_internos tbody').on('click', 'td.mostrar', function()
 			}
 			
 		} else {
-			select_contrato(0);
+			select_contrato(0, 1, consultarIdServicio(1));
 		}
 		
 	} else {
@@ -1518,7 +1614,13 @@ $('#tabla_proyectos_internos tbody').on('click', 'td.mostrar', function()
 			$('#contrato_id').prop('disabled', true);
 			$('#contrato_id').val('');
 		}
-			$('#requiereContrato').prop('checked', false)
+		
+		$('#requiereContrato').val(0)
+
+		$('.servCliente').prop('disabled', true)
+		$('.servCliente').each(function () {		
+			$(this).prop('checked', false)
+		})
 
 
 		if ($("#cliente_id")[0].selectize){
@@ -1895,18 +1997,19 @@ function cambiarFolio(element) {
 	if (element.checked || parseInt(element) == 1) {
 
 		select_cliente(0)
-
 		proyectoInterno = 1
+
+		$('#requiereContrato').val(0)
 		$('#proyectoInterno').val(1)
 		$('#contrato_id')[0].selectize.disable();
 		$('#contrato_id')[0].selectize.clear();
-		$('#requiereContrato').prop('disabled', true)
-		$('#requiereContrato').prop('checked', false)
+		$('.servCliente').prop('disabled', true)
+		$('.servCliente').each(function () {		
+			$(this).prop('checked', false)
+		})
+	
 		$('#proyecto_ordenservicio').prop('disabled', true);
-
-
 		$('#proyecto_clienterazonsocial').fadeOut(1)
-
 		
 		if ($("#cliente_id")[0].selectize) {
 			var selectizeInstance = $('#cliente_id')[0].selectize;
@@ -1927,15 +2030,14 @@ function cambiarFolio(element) {
 	} else {
 
 		proyectoInterno = 0
+		$('#requiereContrato').val(1)
 		$('#contrato_id')[0].selectize.enable();
 		$('#proyectoInterno').val(0)
-		$('#requiereContrato').prop('checked', true)
-		$('#requiereContrato').prop('disabled', false)
+		$('.servCliente').prop('disabled', false)
 		$('#proyecto_ordenservicio').prop('disabled', false);
 		
 
 		$('#proyecto_clienterazonsocial').fadeIn(1)
-		
 		if ($("#cliente_id")[0].selectize) {
 			var selectizeInstance = $('#cliente_id')[0].selectize;
 			
@@ -10449,7 +10551,7 @@ function desbloquearContrato(checkbox) {
 			
 		} else {
 			
-			select_contrato(0)
+			select_contrato(0, 1, consultarIdServicio(1))
 
 			$('#contrato_id').val('');
 			$('#contrato_id').prop('disabled', false);

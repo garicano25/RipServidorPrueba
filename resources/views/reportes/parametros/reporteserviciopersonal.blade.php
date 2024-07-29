@@ -1,9 +1,7 @@
-
 <style type="text/css">
-	.reporte_estructura
-	{
-		font-size: 14px!important;
-		line-height: 14px!important;
+	.reporte_estructura {
+		font-size: 14px !important;
+		line-height: 14px !important;
 	}
 
 
@@ -27,154 +25,135 @@
 
 
 
-	.list-group-item
-	{
+	.list-group-item {
 		padding: 2px 1px;
 		font-family: Agency FB;
 		/*font-family: Calibri;*/
-		font-size: 0.55vw!important;
+		font-size: 0.55vw !important;
 		line-height: 1;
 	}
 
-	.list-group-item.active
-	{
-		font-size: 1.2vw!important;
+	.list-group-item.active {
+		font-size: 1.2vw !important;
 	}
 
-	.list-group-item i
-	{
+	.list-group-item i {
 		color: #fc4b6c;
 	}
 
-	.list-group-item:hover
-	{
-		font-size: 1.2vw!important;
+	.list-group-item:hover {
+		font-size: 1.2vw !important;
 	}
 
-	.list-group .submenu
-	{
+	.list-group .submenu {
 		padding: 2px 1px 2px 8px;
 	}
 
-	.list-group .subsubmenu
-	{
+	.list-group .subsubmenu {
 		padding: 2px 1px 2px 20px;
 	}
 
-	.card-title{
+	.card-title {
 		margin: 20px 0px 10px 0px;
 		color: blue;
 	}
 
-	.form-group{
-        margin: 0px 0px 12px 0px!important;
-        padding: 0px!important;
-    }
+	.form-group {
+		margin: 0px 0px 12px 0px !important;
+		padding: 0px !important;
+	}
 
-    .form-group label{
-        margin: 0px!important;
-        padding: 0px 0px 3px 0px!important;
-    }
+	.form-group label {
+		margin: 0px !important;
+		padding: 0px 0px 3px 0px !important;
+	}
 
-	table
-	{
+	table {
 		width: 100%;
 		margin: 0px;
 		font-family: inherit;
 	}
 
-	table th
-	{
-		padding: 1px 2px;		
+	table th {
+		padding: 1px 2px;
 		color: #777777;
 	}
 
-	table td.justificado
-	{
-		padding: 4px!important;
-		text-align: justify!important;
+	table td.justificado {
+		padding: 4px !important;
+		text-align: justify !important;
 	}
 
-	p.justificado
-	{
-		text-align: justify!important;
-		margin: 0px!important;
-		padding: 0px!important;
+	p.justificado {
+		text-align: justify !important;
+		margin: 0px !important;
+		padding: 0px !important;
 	}
 
-	textarea{
-		text-align: justify!important;
+	textarea {
+		text-align: justify !important;
 	}
 
-	div.informacion_estatica
-	{
+	div.informacion_estatica {
 		font-size: 14px;
-		line-height: 14px!important;
+		line-height: 14px !important;
 		text-align: justify;
 	}
 
-	div.imagen_formula
-	{
+	div.imagen_formula {
 		text-align: center;
 		border: 0px #F00 solid;
 	}
 
-	div.informacion_estatica b
-	{
+	div.informacion_estatica b {
 		font-size: 13px;
 		font-weight: bold;
 		color: #777777;
 	}
 
-	.tabla_info_centrado th
-	{
+	.tabla_info_centrado th {
 		background: #F9F9F9;
-		border: 1px #E5E5E5 solid!important;
-		padding: 2px!important;
+		border: 1px #E5E5E5 solid !important;
+		padding: 2px !important;
 		text-align: center;
-		vertical-align: middle!important;
+		vertical-align: middle !important;
 	}
 
-	.tabla_info_centrado td
-	{
-		border: 1px #E5E5E5 solid!important;
-		padding: 4px!important;
+	.tabla_info_centrado td {
+		border: 1px #E5E5E5 solid !important;
+		padding: 4px !important;
 		text-align: center;
-		vertical-align: middle!important;
+		vertical-align: middle !important;
 	}
 
-	.tabla_info_justificado th
-	{
+	.tabla_info_justificado th {
 		background: #F9F9F9;
-		border: 1px #E5E5E5 solid!important;
-		padding: 2px!important;
+		border: 1px #E5E5E5 solid !important;
+		padding: 2px !important;
 		text-align: center;
-		vertical-align: middle!important;
+		vertical-align: middle !important;
 	}
 
-	.tabla_info_justificado td
-	{
-		border: 1px #E5E5E5 solid!important;
-		padding: 4px!important;
+	.tabla_info_justificado td {
+		border: 1px #E5E5E5 solid !important;
+		padding: 4px !important;
 		text-align: justify;
-		vertical-align: middle!important;
+		vertical-align: middle !important;
 	}
 
-	.tabla_reporte th
-	{
+	.tabla_reporte th {
 		background: #F9F9F9;
-		border: 1px #E5E5E5 solid!important;
-		padding: 2px!important;
+		border: 1px #E5E5E5 solid !important;
+		padding: 2px !important;
 		text-align: center;
-		vertical-align: middle!important;
+		vertical-align: middle !important;
 	}
 
-	.tabla_reporte td
-	{
-		border-bottom: 1px #E5E5E5 solid!important;
-		padding: 4px!important;
+	.tabla_reporte td {
+		border-bottom: 1px #E5E5E5 solid !important;
+		padding: 4px !important;
 		text-align: center;
-		vertical-align: middle!important;
+		vertical-align: middle !important;
 	}
 </style>
 
@@ -220,13 +199,94 @@
 	<div class="col-xlg-10 col-lg-9 col-md-12">
 		<div class="card">
 			<div class="card-body">
-				<h4 class="card-title" style="padding: 0px!important;" id="0">Portada</h4>
+				<h4 class="card-title" style="padding: 0px!important;" id="0">Portadas</h4>
 				<form method="post" enctype="multipart/form-data" name="form_reporte_portada" id="form_reporte_portada">
 					<div class="row">
 						<div class="col-12">
 							{!! csrf_field() !!}
 						</div>
-						<div class="col-1">
+
+						<div class="row w-100">
+							<div class="col-5">
+								<div class="col-12">
+									<label> Imagen Portada Exterior * </label>
+									<div class="form-group">
+										<style type="text/css" media="screen">
+											.dropify-wrapper {
+												height: 400px !important;
+												/*tamaño estatico del campo foto*/
+											}
+										</style>
+										<input type="file" accept="image/jpeg,image/x-png" id="PORTADA" name="PORTADA" data-allowed-file-extensions="jpg png JPG PNG" data-height="300" data-default-file="" required />
+									</div>
+								</div>
+							</div>
+							<div class="col-7">
+								<div class="col-12">
+									<h3 class=" mt-1 mb-4">Selecciona hasta 5 opciones (Cuerpo del Encabezado en el Informe)</h3>
+								</div>
+
+								<div class="col-12 mb-4">
+									<div class="form-group">
+										<label> Nivel 1 </label>
+										<select class="custom-select form-control" style="width: 90%;" id="NIVEL1" name="NIVEL1">
+
+										</select>
+									</div>
+								</div>
+
+								<div class="col-12 mb-4">
+									<div class="form-group">
+										<label> Nivel 2 </label>
+										<select class="custom-select form-control" style="width: 90%;" id="NIVEL2" name="NIVEL2">
+
+										</select>
+									</div>
+								</div>
+
+								<div class="col-12 mb-4">
+									<div class="form-group">
+										<label> Nivel 3 </label>
+										<select class="custom-select form-control" style="width: 90%;" id="NIVEL3" name="NIVEL3">
+
+										</select>
+									</div>
+								</div>
+
+								<div class="col-12 mb-4">
+									<div class="form-group">
+										<label> Nivel 4 </label>
+										<select class="custom-select form-control" style="width: 90%;" id="NIVEL4" name="NIVEL4">
+
+										</select>
+									</div>
+								</div>
+
+								<div class="col-12 mb-5">
+									<div class="form-group">
+										<label> Nivel 5 </label>
+										<select class="custom-select form-control" style="width: 90%;" id="NIVEL5" name="NIVEL5">
+
+										</select>
+									</div>
+								</div>
+								<div class="col-12">
+									<div class="form-group">
+										<label>Proporcionalidad y dimensionalidad</label>
+										<select class="custom-select form-control" id="reporte_alcanceinforme" name="reporte_alcanceinforme" onchange="reporte_alcance(this.value);" required>
+											<option value=""></option>
+											<option value="1">Si aplica</option>
+											<option value="0">No aplica</option>
+										</select>
+									</div>
+								</div>
+							</div>
+						</div>
+
+
+						<h3 class="mx-4 mt-5 mb-4">Seleccione las opciones que desee mostrar en la Portada Interna del Informe</h3>
+
+						<div class="col-1 d-none">
 							<div class="form-group">
 								<label class="demo-switch-title">Mostrar</label>
 								<div class="switch" style="margin-top: 6px;">
@@ -234,18 +294,18 @@
 								</div>
 							</div>
 						</div>
-						<div class="col-11">
+						<div class="col-11 d-none">
 							<div class="form-group">
 								<label>Subdirección</label>
 								<select class="custom-select form-control" id="reporte_catsubdireccion_id" name="reporte_catsubdireccion_id" disabled>
 									<option value=""></option>
 									@foreach($catsubdireccion as $subdireccion)
-										<option value="{{$subdireccion->id}}">{{$subdireccion->catsubdireccion_nombre}}</option>
+									<option value="{{$subdireccion->id}}">{{$subdireccion->catsubdireccion_nombre}}</option>
 									@endforeach
 								</select>
 							</div>
 						</div>
-						<div class="col-1">
+						<div class="col-1 d-none">
 							<div class="form-group">
 								<label class="demo-switch-title">Mostrar</label>
 								<div class="switch" style="margin-top: 6px;">
@@ -253,18 +313,18 @@
 								</div>
 							</div>
 						</div>
-						<div class="col-11">
+						<div class="col-11 d-none">
 							<div class="form-group">
 								<label>Gerencia</label>
 								<select class="custom-select form-control" id="reporte_catgerencia_id" name="reporte_catgerencia_id" disabled>
 									<option value=""></option>
 									@foreach($catgerencia as $gerencia)
-										<option value="{{$gerencia->id}}">{{$gerencia->catgerencia_nombre}}</option>
+									<option value="{{$gerencia->id}}">{{$gerencia->catgerencia_nombre}}</option>
 									@endforeach
 								</select>
 							</div>
 						</div>
-						<div class="col-1">
+						<div class="col-1 d-none">
 							<div class="form-group">
 								<label class="demo-switch-title">Mostrar</label>
 								<div class="switch" style="margin-top: 6px;">
@@ -272,25 +332,24 @@
 								</div>
 							</div>
 						</div>
-						<div class="col-11">
+						<div class="col-11 d-none">
 							<div class="form-group">
 								<label>Activo</label>
 								<select class="custom-select form-control" id="reporte_catactivo_id" name="reporte_catactivo_id" disabled>
 									<option value=""></option>
 									@foreach($catactivo as $activo)
-										<option value="{{$activo->id}}">{{$activo->catactivo_nombre}}</option>
+									<option value="{{$activo->id}}">{{$activo->catactivo_nombre}}</option>
 									@endforeach
 								</select>
 							</div>
 						</div>
-						<div class="col-12">
+						<div class="col-12 d-none">
 							<div class="form-group">
 								<label>Instalación</label>
 								<input type="text" class="form-control" id="reporte_instalacion" name="reporte_instalacion" onchange="instalacion_nombre(this.value);" readonly>
 							</div>
 						</div>
-						{{-- <div class="col-4"></div> --}}
-						<div class="col-1">
+						<div class="col-1 d-none">
 							<div class="form-group">
 								<label class="demo-switch-title">Mostrar</label>
 								<div class="switch" style="margin-top: 6px;">
@@ -298,38 +357,113 @@
 								</div>
 							</div>
 						</div>
-						<div class="col-3">
+						<div class="col-5 d-none">
 							<div class="form-group">
 								<label>Región</label>
 								<select class="custom-select form-control" id="reporte_catregion_id" name="reporte_catregion_id" disabled>
 									<option value=""></option>
 									@foreach($catregion as $region)
-										<option value="{{$region->id}}">{{$region->catregion_nombre}}</option>
+									<option value="{{$region->id}}">{{$region->catregion_nombre}}</option>
 									@endforeach
 								</select>
 							</div>
 						</div>
-						{{-- <div class="col-4"></div> --}}
-						{{-- <div class="col-4"></div> --}}
-						<div class="col-4">
-							<div class="form-group">
-								<label>Fecha</label>
-								<input type="text" class="form-control" id="reporte_fecha" name="reporte_fecha" required>
+
+						<div class="row w-100 mt-4">
+							<div class="col-8">
+								<div class="col-12 mb-2">
+									<div class="form-group">
+										<label> Opción 1 </label>
+										<select class="custom-select form-control" style="width: 80%;" id="OPCION_PORTADA1" name="OPCION_PORTADA1">
+										</select>
+									</div>
+								</div>
+
+								<div class="col-12 mb-2">
+									<div class="form-group">
+										<label> Opción 2 </label>
+										<select class="custom-select form-control" style="width: 80%;" id="OPCION_PORTADA2" name="OPCION_PORTADA2">
+										</select>
+									</div>
+								</div>
+
+								<div class="col-12 mb-2">
+									<div class="form-group">
+										<label> Opción 3 </label>
+										<select class="custom-select form-control" style="width: 80%;" id="OPCION_PORTADA3" name="OPCION_PORTADA3">
+										</select>
+									</div>
+								</div>
+
+								<div class="col-12 mb-2">
+									<div class="form-group">
+										<label> Opción 4 </label>
+										<select class="custom-select form-control" style="width: 80%;" id="OPCION_PORTADA4" name="OPCION_PORTADA4">
+										</select>
+									</div>
+								</div>
+
+								<div class="col-12 mb-2">
+									<div class="form-group">
+										<label> Opción 5 </label>
+										<select class="custom-select form-control" style="width: 80%;" id="OPCION_PORTADA5" name="OPCION_PORTADA5">
+										</select>
+									</div>
+								</div>
+								<div class="col-12 mb-2">
+									<div class="form-group">
+										<label> Opción 6 </label>
+										<select class="custom-select form-control" style="width: 80%;" id="OPCION_PORTADA6" name="OPCION_PORTADA6">
+										</select>
+									</div>
+								</div>
+							</div>
+							<div class="col-4">
+								<div class="col-12 text-center mt-4">
+									<div class="form-group">
+										<label>Mes</label>
+										<select class="custom-select form-control" id="reporte_mes" name="reporte_mes">
+											<option value="" selected disabled></option>
+											<option value="" selected disabled></option>
+											<option value="Enero">Enero</option>
+											<option value="Febrero">Febrero</option>
+											<option value="Marzo">Marzo</option>
+											<option value="Abril">Abril</option>
+											<option value="Mayo">Mayo</option>
+											<option value="Junio">Junio</option>
+											<option value="Julio">Julio</option>
+											<option value="Agosto">Agosto</option>
+											<option value="Septiembre">Septiembre</option>
+											<option value="Octubre">Octubre</option>
+											<option value="Noviembre">Noviembre</option>
+											<option value="Diciembre">Diciembre</option>
+										</select>
+									</div>
+								</div>
+								<div class="col-12 text-center mt-4 mb-4">
+									<label> <b>del</b></label>
+								</div>
+								<div class="col-12 text-center">
+									<div class="form-group">
+										<label>Año</label>
+										<select class="custom-select form-control" id="reporte_fecha" name="reporte_fecha">
+											<option value="" selected disabled></option>
+											<script>
+												$(document).ready(function() {
+													const currentYear = new Date().getFullYear();
+													for (let year = currentYear; year >= 2017; year--) {
+														$('#reporte_fecha').append(new Option(year, year));
+													}
+												});
+											</script>
+										</select>
+									</div>
+								</div>
 							</div>
 						</div>
-						<div class="col-4">
-							<div class="form-group">
-								<label>Proporcionalidad y dimensionalidad</label>
-								<select class="custom-select form-control" id="reporte_alcanceinforme" name="reporte_alcanceinforme" onchange="reporte_alcance(this.value);" required>
-									<option value=""></option>
-									<option value="1">Si aplica</option>
-									<option value="0">No aplica</option>
-								</select>
-							</div>
-						</div>
-						{{-- <div class="col-4"></div> --}}
+
 						<div class="col-12" style="text-align: right;">
-							<button type="submit" class="btn btn-danger waves-effect waves-light botoninforme" id="botonguardar_reporte_portada">Guardar portada <i class="fa fa-save"></i></button>
+							<button type="submit" class="btn btn-danger waves-effect waves-light botoninforme" id="botonguardar_reporte_portada">Guardar portadas <i class="fa fa-save"></i></button>
 						</div>
 					</div>
 				</form>
@@ -345,7 +479,7 @@
 						</div>
 						<div class="col-12">
 							<div class="form-group">
-								<textarea  class="form-control" style="margin-bottom: 0px;" rows="20" id="reporte_introduccion" name="reporte_introduccion" required></textarea>
+								<textarea class="form-control" style="margin-bottom: 0px;" rows="20" id="reporte_introduccion" name="reporte_introduccion" required></textarea>
 							</div>
 						</div>
 						<div class="col-12" style="text-align: right;">
@@ -355,6 +489,14 @@
 				</form>
 			</div>
 		</div>
+
+		<!-- ======== ELIMINAR DESPUES DE SUBIR AL SERVIDOR =============-->
+		<div class="col-12 mt-4 mb-4" style="text-align: center;">
+			<button type="submit" class="btn btn-info waves-effect waves-light" id="btn_descargar_plantilla">Descargar plantilla principal <i class="fa fa-download"></i></button>
+		</div>
+		<!-- ======== ELIMINAR DESPUES DE SUBIR AL SERVIDOR =============-->
+
+
 		<div class="card">
 			<div class="card-body">
 				<h4 class="card-title" id="2">2.- Definiciones</h4>
@@ -389,7 +531,7 @@
 						<div class="col-12">
 							<div class="form-group">
 								{!! csrf_field() !!}
-								<textarea  class="form-control" style="margin-bottom: 0px;" rows="8" id="reporte_objetivogeneral" name="reporte_objetivogeneral" required></textarea>
+								<textarea class="form-control" style="margin-bottom: 0px;" rows="8" id="reporte_objetivogeneral" name="reporte_objetivogeneral" required></textarea>
 							</div>
 						</div>
 						<div class="col-12" style="text-align: right;">
@@ -406,7 +548,7 @@
 						</div>
 						<div class="col-12">
 							<div class="form-group">
-								<textarea  class="form-control" style="margin-bottom: 0px;" rows="8" id="reporte_objetivoespecifico" name="reporte_objetivoespecifico" required></textarea>
+								<textarea class="form-control" style="margin-bottom: 0px;" rows="8" id="reporte_objetivoespecifico" name="reporte_objetivoespecifico" required></textarea>
 							</div>
 						</div>
 						<div class="col-12" style="text-align: right;">
@@ -426,7 +568,7 @@
 						</div>
 						<div class="col-12">
 							<div class="form-group">
-								<textarea  class="form-control" style="margin-bottom: 0px;" rows="14" id="reporte_metodologia_4" name="reporte_metodologia_4" required></textarea>
+								<textarea class="form-control" style="margin-bottom: 0px;" rows="14" id="reporte_metodologia_4" name="reporte_metodologia_4" required></textarea>
 							</div>
 						</div>
 						<div class="col-12" style="text-align: right;">
@@ -472,7 +614,7 @@
 					Tomando en cuenta que el límite es de 100 trabajadores al sobrepasar esta cantidad se le sumaran dos servicios más a partir de la cantidad establecida anteriormente.<br><br>
 					Cuando el centro de trabajo sean edificios u oficinas, se debe considerar que no aplica la misma cuantificación que el caso anterior, debido a que las actividades que se realizan no se encuentran dentro del listado de referencia.<br><br>
 					A continuación, se muestra una tabla de los servicios con los que se debe contar para estos centros de trabajo, así como la cantidad mínima que deben cubrir.<br><br>
-					
+
 					<div class="imagen_formula"><img src="/assets/images/reportes/serviciopersonal/img_3.jpg" width="70%" height="50%"></div><br>
 
 					Para otro tipo de instalaciones con actividades o infraestructura más específica se debe tener en cuenta los siguientes valores con lo cual se podrá determinar la cuantificación de los servicios sanitarios mínimos que esta debe cumplir, donde de igual forma es importante corroborar las actividades que estos desempeñen.<br><br>
@@ -559,7 +701,7 @@
 							<div class="row">
 								<div class="col-12">
 									{!! csrf_field() !!}
-									<textarea  class="form-control" style="margin-bottom: 0px;" rows="14" id="reporte_ubicacioninstalacion" name="reporte_ubicacioninstalacion" required></textarea>
+									<textarea class="form-control" style="margin-bottom: 0px;" rows="14" id="reporte_ubicacioninstalacion" name="reporte_ubicacioninstalacion" required></textarea>
 								</div>
 							</div>
 						</div>
@@ -586,10 +728,10 @@
 						<div class="col-12">
 							{!! csrf_field() !!}
 						</div>
-						<div class="col-12">								
+						<div class="col-12">
 							<div class="form-group">
 								<label style="color: #000000;">Descripción del proceso en la instalación</label>
-								<textarea  class="form-control" style="margin-bottom: 0px;" rows="20" id="reporte_procesoinstalacion" name="reporte_procesoinstalacion" required></textarea>
+								<textarea class="form-control" style="margin-bottom: 0px;" rows="20" id="reporte_procesoinstalacion" name="reporte_procesoinstalacion" required></textarea>
 							</div>
 						</div>
 						<div class="col-12" style="text-align: right;">
@@ -605,75 +747,75 @@
 			<div class="card-body">
 				<h4 class="card-title" id="8">8.- Evaluación</h4>
 				<h4 class="card-title" id="8_1">8.1.- Proporcionalidad y dimensionalidad</h4>
-					<div class="row div_proporcionalidad_dimencionalidad">
-						<div class="col-12">
-							<ol class="breadcrumb" style="padding: 6px; margin: 10px 0px;">
-								<button type="button" class="btn btn-default waves-effect botoninforme" data-toggle="tooltip" title="Evaluar / Editar" id="boton_reporte_evaluacionpyd">
-									<span class="btn-label"><i class="fa fa-check-square-o"></i></span>Evaluar / Editar
-								</button>
-							</ol>
-							<div id="div_proporcionalidad_dimensionalidad_resultados"></div>
-						</div>
+				<div class="row div_proporcionalidad_dimencionalidad">
+					<div class="col-12">
+						<ol class="breadcrumb" style="padding: 6px; margin: 10px 0px;">
+							<button type="button" class="btn btn-default waves-effect botoninforme" data-toggle="tooltip" title="Evaluar / Editar" id="boton_reporte_evaluacionpyd">
+								<span class="btn-label"><i class="fa fa-check-square-o"></i></span>Evaluar / Editar
+							</button>
+						</ol>
+						<div id="div_proporcionalidad_dimensionalidad_resultados"></div>
 					</div>
-					<div class="row div_proporcionalidad_dimencionalidad_NA" style="display: none;">
-						<div class="col-12">No aplica.</div>
-					</div>
+				</div>
+				<div class="row div_proporcionalidad_dimencionalidad_NA" style="display: none;">
+					<div class="col-12">No aplica.</div>
+				</div>
 				<h4 class="card-title" id="8_2">8.2.- Condiciones físicas de higiene y funcionalidad</h4>
-					<ol class="breadcrumb" style="padding: 6px; margin: 10px 0px;">
-						<button type="button" class="btn btn-default waves-effect botoninforme" data-toggle="tooltip" title="Nuevo punto de evaluación" id="boton_reporte_evaluacion">
-							<span class="btn-label"><i class="fa fa-plus"></i></span>Punto de evaluación
-						</button>
-					</ol>
-					<table class="table table-hover stylish-table tabla_reporte" width="100%" id="tabla_reporte_evaluacion">
-						<thead>
-							<tr>
-								<th width="80">Tipo</th>
-								<th width="60">No</th>
-								<th width="120">Lugar</th>
-								<th width="">Punto a verificar</th>
-								<th width="100">Cumplimiento</th>
-								<th width="60">Editar</th>
-								<th width="60">Eliminar</th>
-							</tr>
-						</thead>
-						<tbody></tbody>
-					</table><br>
+				<ol class="breadcrumb" style="padding: 6px; margin: 10px 0px;">
+					<button type="button" class="btn btn-default waves-effect botoninforme" data-toggle="tooltip" title="Nuevo punto de evaluación" id="boton_reporte_evaluacion">
+						<span class="btn-label"><i class="fa fa-plus"></i></span>Punto de evaluación
+					</button>
+				</ol>
+				<table class="table table-hover stylish-table tabla_reporte" width="100%" id="tabla_reporte_evaluacion">
+					<thead>
+						<tr>
+							<th width="80">Tipo</th>
+							<th width="60">No</th>
+							<th width="120">Lugar</th>
+							<th width="">Punto a verificar</th>
+							<th width="100">Cumplimiento</th>
+							<th width="60">Editar</th>
+							<th width="60">Eliminar</th>
+						</tr>
+					</thead>
+					<tbody></tbody>
+				</table><br>
 				<h4 class="card-title" id="8_3">8.3.- Descripción de medios de proliferación de fauna nociva</h4>
-					<form method="post" enctype="multipart/form-data" name="form_reporte_punto_8_3" id="form_reporte_punto_8_3">
-						<div class="row">
-							<div class="col-12">
-								{!! csrf_field() !!}
-							</div>
-							<div class="col-12">								
-								<div class="form-group">
-									<textarea  class="form-control" style="margin-bottom: 0px;" rows="10" id="reporte_punto_8_3" name="reporte_punto_8_3" required></textarea>
-								</div>
-							</div>
-							<div class="col-12" style="text-align: right;">
-								<div class="form-group">
-									<button type="submit" class="btn btn-danger waves-effect waves-light botoninforme" id="botonguardar_reporte_punto_8_3">Guardar punto 8.3 <i class="fa fa-save"></i></button>
-								</div>
+				<form method="post" enctype="multipart/form-data" name="form_reporte_punto_8_3" id="form_reporte_punto_8_3">
+					<div class="row">
+						<div class="col-12">
+							{!! csrf_field() !!}
+						</div>
+						<div class="col-12">
+							<div class="form-group">
+								<textarea class="form-control" style="margin-bottom: 0px;" rows="10" id="reporte_punto_8_3" name="reporte_punto_8_3" required></textarea>
 							</div>
 						</div>
-					</form>
+						<div class="col-12" style="text-align: right;">
+							<div class="form-group">
+								<button type="submit" class="btn btn-danger waves-effect waves-light botoninforme" id="botonguardar_reporte_punto_8_3">Guardar punto 8.3 <i class="fa fa-save"></i></button>
+							</div>
+						</div>
+					</div>
+				</form>
 				<h4 class="card-title" id="8_4">8.4.- Focos de desarrollo y anidación de fauna nociva</h4>
-					<form method="post" enctype="multipart/form-data" name="form_reporte_punto_8_4" id="form_reporte_punto_8_4">
-						<div class="row">
-							<div class="col-12">
-								{!! csrf_field() !!}
-							</div>
-							<div class="col-12">								
-								<div class="form-group">
-									<textarea  class="form-control" style="margin-bottom: 0px;" rows="10" id="reporte_punto_8_4" name="reporte_punto_8_4" required></textarea>
-								</div>
-							</div>
-							<div class="col-12" style="text-align: right;">
-								<div class="form-group">
-									<button type="submit" class="btn btn-danger waves-effect waves-light botoninforme" id="botonguardar_reporte_punto_8_4">Guardar punto 8.4 <i class="fa fa-save"></i></button>
-								</div>
+				<form method="post" enctype="multipart/form-data" name="form_reporte_punto_8_4" id="form_reporte_punto_8_4">
+					<div class="row">
+						<div class="col-12">
+							{!! csrf_field() !!}
+						</div>
+						<div class="col-12">
+							<div class="form-group">
+								<textarea class="form-control" style="margin-bottom: 0px;" rows="10" id="reporte_punto_8_4" name="reporte_punto_8_4" required></textarea>
 							</div>
 						</div>
-					</form>
+						<div class="col-12" style="text-align: right;">
+							<div class="form-group">
+								<button type="submit" class="btn btn-danger waves-effect waves-light botoninforme" id="botonguardar_reporte_punto_8_4">Guardar punto 8.4 <i class="fa fa-save"></i></button>
+							</div>
+						</div>
+					</div>
+				</form>
 			</div>
 		</div>
 		<div class="card">
@@ -686,7 +828,7 @@
 						</div>
 						<div class="col-12">
 							<div class="form-group">
-								<textarea  class="form-control" style="margin-bottom: 0px;" rows="18" id="reporte_conclusion" name="reporte_conclusion" required></textarea>
+								<textarea class="form-control" style="margin-bottom: 0px;" rows="18" id="reporte_conclusion" name="reporte_conclusion" required></textarea>
 							</div>
 						</div>
 						<div class="col-12" style="text-align: right;">
@@ -708,7 +850,7 @@
 						</div>
 						<div class="col-12">
 							<div class="form-group">
-								<textarea  class="form-control" style="margin-bottom: 0px;" rows="18" id="reporte_recomendaciones" name="reporte_recomendaciones" required></textarea>
+								<textarea class="form-control" style="margin-bottom: 0px;" rows="18" id="reporte_recomendaciones" name="reporte_recomendaciones" required></textarea>
 							</div>
 						</div>
 						<div class="col-12" style="text-align: right;">
@@ -792,149 +934,147 @@
 			<div class="card-body">
 				<h4 class="card-title" id="12">12.- Anexos</h4>
 				<h4 class="card-title" id="12_1">12.1.- Anexo 1.- Memoria fotográfica</h4>
-					<p class="justificado">
-						<b style="color: #333333; font-weight: bold;">Nota aclaratoria:</b> Debido a que las evidencias fotográficas se encuentran en el capítulo 8.2 “Condiciones físicas de higiene y funcionabilidad”, se atiende la omisión en este apartado.
-					</p>
+				<p class="justificado">
+					<b style="color: #333333; font-weight: bold;">Nota aclaratoria:</b> Debido a que las evidencias fotográficas se encuentran en el capítulo 8.2 “Condiciones físicas de higiene y funcionabilidad”, se atiende la omisión en este apartado.
+				</p>
 				<h4 class="card-title" id="12_2">12.2.- Anexo 2.- Valoración de riesgo de la condición insegura detectada.</h4>
-					<p class="justificado" id="nota_12_2">
-						<b style="color: #333333; font-weight: bold;">Nota aclaratoria:</b> En las áreas de la instalación <span class="div_instalacion_nombre">INSTALACION</span> no se identificaron condiciones inseguras, por consecuencia no puede ser valorado en este apartado.
-					</p>
-					<ol class="breadcrumb" style="padding: 6px; margin: 10px 0px;">
-						<button type="button" class="btn btn-default waves-effect botoninforme" data-toggle="tooltip" title="Agregar nueva condición insegura detectada" id="boton_reporte_nuevacondicionesinseguras">
-							<span class="btn-label"><i class="fa fa-plus"></i></span>Nueva condición insegura detectada
-						</button>
-					</ol>
-					<style type="text/css">
-						#tabla_reporte_condicionesinseguras th
-						{
-							font-size: 10px!important;
-/* 							display: inline-table; */
-						}
+				<p class="justificado" id="nota_12_2">
+					<b style="color: #333333; font-weight: bold;">Nota aclaratoria:</b> En las áreas de la instalación <span class="div_instalacion_nombre">INSTALACION</span> no se identificaron condiciones inseguras, por consecuencia no puede ser valorado en este apartado.
+				</p>
+				<ol class="breadcrumb" style="padding: 6px; margin: 10px 0px;">
+					<button type="button" class="btn btn-default waves-effect botoninforme" data-toggle="tooltip" title="Agregar nueva condición insegura detectada" id="boton_reporte_nuevacondicionesinseguras">
+						<span class="btn-label"><i class="fa fa-plus"></i></span>Nueva condición insegura detectada
+					</button>
+				</ol>
+				<style type="text/css">
+					#tabla_reporte_condicionesinseguras th {
+						font-size: 10px !important;
+						/* 							display: inline-table; */
+					}
 
-						#tabla_reporte_condicionesinseguras td
-						{
-							font-size: 10px!important;
-						}
-					</style>
-					{{-- <table class="table table-hover tabla_info_centrado" width="100%" data-paging="false" data-info="false" id="tabla_reporte_condicionesinseguras"> --}}
-					<table class="table table-hover tabla_info_centrado" width="100%" id="tabla_reporte_condicionesinseguras">
-						<thead>
-							<tr>
-								<th width="" rowspan="2">No</th>
-								<th width="" rowspan="2">Zona o<br>Área</th>
-								<th width="" rowspan="2">Actividad<br>general</th>
-								<th width="" rowspan="2">Rutinario<br>(Si o No)</th>
-								<th width="" colspan="2">Peligro</th>
-								<th width="" rowspan="2">Efectos<br>posibles</th>
-								<th width="" colspan="3">Controles existentes</th>
-								<th width="" colspan="2">Evaluacion del riesgo</th>
-								<th width="" colspan="2">Grado de peligrosidad</th>
-								<th width="" rowspan="2">Editar</th>
-								<th width="" rowspan="2">Eliminar</th>
-							</tr>
-							<tr>
-								<th width="">Descripción</th>
-								<th width="">Clasificación</th>
-								<th width="">Fuente</th>
-								<th width="">Medio</th>
-								<th width="">Individuo</th>
-								<th width="">Probabilidad</th>
-								<th width="">Exposición</th>
-								<th width="">Consecuencia</th>
-								<th width="">GP=PxExC</th>
-							</tr>
-						</thead>
-						<tbody></tbody>
-					</table>
-					<div class="imagen_formula" id="img_12_2"><img src="/assets/images/reportes/serviciopersonal/img_10.jpg" width="70%" height="50%"></div>
+					#tabla_reporte_condicionesinseguras td {
+						font-size: 10px !important;
+					}
+				</style>
+				{{-- <table class="table table-hover tabla_info_centrado" width="100%" data-paging="false" data-info="false" id="tabla_reporte_condicionesinseguras"> --}}
+				<table class="table table-hover tabla_info_centrado" width="100%" id="tabla_reporte_condicionesinseguras">
+					<thead>
+						<tr>
+							<th width="" rowspan="2">No</th>
+							<th width="" rowspan="2">Zona o<br>Área</th>
+							<th width="" rowspan="2">Actividad<br>general</th>
+							<th width="" rowspan="2">Rutinario<br>(Si o No)</th>
+							<th width="" colspan="2">Peligro</th>
+							<th width="" rowspan="2">Efectos<br>posibles</th>
+							<th width="" colspan="3">Controles existentes</th>
+							<th width="" colspan="2">Evaluacion del riesgo</th>
+							<th width="" colspan="2">Grado de peligrosidad</th>
+							<th width="" rowspan="2">Editar</th>
+							<th width="" rowspan="2">Eliminar</th>
+						</tr>
+						<tr>
+							<th width="">Descripción</th>
+							<th width="">Clasificación</th>
+							<th width="">Fuente</th>
+							<th width="">Medio</th>
+							<th width="">Individuo</th>
+							<th width="">Probabilidad</th>
+							<th width="">Exposición</th>
+							<th width="">Consecuencia</th>
+							<th width="">GP=PxExC</th>
+						</tr>
+					</thead>
+					<tbody></tbody>
+				</table>
+				<div class="imagen_formula" id="img_12_2"><img src="/assets/images/reportes/serviciopersonal/img_10.jpg" width="70%" height="50%"></div>
 				<h4 class="card-title" id="12_3">12.3.- Anexo 3.- Hojas de campo</h4>
-					<form method="post" enctype="multipart/form-data" name="form_reporte_anexosresultados" id="form_reporte_anexosresultados">
-						<div class="row">
-							<div class="col-12">
-								{!! csrf_field() !!}
-							</div>
-							<div class="col-12">
-								<p class="justificado"><b style="color: #333333; font-weight: bold;">Nota del software:</b> Los arhivos seleccionados se adjuntarán en la impresión del reporte en formato PDF.</p>
-								<table class="table table-hover tabla_info_centrado" width="100%" id="tabla_reporte_anexosresultados">
-									<thead>
-										<tr>
-											<th width="60">No.</th>
-											<th width="70">Seleccionado</th>
-											<th>Documento</th>
-											<th width="160">Fecha carga</th>
-											<th width="60">Mostrar</th>
-										</tr>
-									</thead>
-									<tbody></tbody>
-								</table><br><br>
-							</div>
-							<div class="col-12" style="text-align: right;">
-								<div class="form-group">
-									<button type="submit" class="btn btn-danger waves-effect waves-light botoninforme" id="botonguardar_reporte_anexosresultados">Guardar anexos <i class="fa fa-save"></i></button>
-								</div>
+				<form method="post" enctype="multipart/form-data" name="form_reporte_anexosresultados" id="form_reporte_anexosresultados">
+					<div class="row">
+						<div class="col-12">
+							{!! csrf_field() !!}
+						</div>
+						<div class="col-12">
+							<p class="justificado"><b style="color: #333333; font-weight: bold;">Nota del software:</b> Los arhivos seleccionados se adjuntarán en la impresión del reporte en formato PDF.</p>
+							<table class="table table-hover tabla_info_centrado" width="100%" id="tabla_reporte_anexosresultados">
+								<thead>
+									<tr>
+										<th width="60">No.</th>
+										<th width="70">Seleccionado</th>
+										<th>Documento</th>
+										<th width="160">Fecha carga</th>
+										<th width="60">Mostrar</th>
+									</tr>
+								</thead>
+								<tbody></tbody>
+							</table><br><br>
+						</div>
+						<div class="col-12" style="text-align: right;">
+							<div class="form-group">
+								<button type="submit" class="btn btn-danger waves-effect waves-light botoninforme" id="botonguardar_reporte_anexosresultados">Guardar anexos <i class="fa fa-save"></i></button>
 							</div>
 						</div>
-					</form>
+					</div>
+				</form>
 				<h4 class="card-title" id="12_4">12.4.- Anexo 4.- Plano de ubicación de las fuentes generadoras y puntos evaluados.</h4>
-					<p class="justificado">
-						<b style="color: #333333; font-weight: bold;">Nota aclaratoria:</b> Debido a que en la evaluación de infraestructura para servicios al personal no se consideran fuentes generadoras y/o puntos de evaluación, se atiende la omisión en este apartado.
-					</p><br>
-					<form method="post" enctype="multipart/form-data" name="form_reporte_planos" id="form_reporte_planos">
-						<div class="row">
-							<div class="col-12">
-								{!! csrf_field() !!}
-							</div>
-							<div class="col-12">
-								<p class="justificado"><b style="color: #333333; font-weight: bold;">Nota del software:</b> Los planos de las carpetas seleccionadas se agregaran en el informe de Infraestructura de servicios al Personal.</p><br>
-								<table class="table table-hover tabla_info_centrado" width="100%" id="tabla_reporte_planos">
-									<thead>
-										<tr>
-											<th width="60">Seleccionado</th>
-											<th width="">Carpeta de planos</th>
-											<th width="100">Total planos</th>
-										</tr>
-									</thead>
-									<tbody></tbody>
-								</table>
-							</div>
-							<div class="col-12" style="text-align: right;">
-								<div class="form-group">
-									<button type="submit" class="btn btn-danger waves-effect waves-light botoninforme" id="botonguardar_reporte_planos">Guardar carpeta planos <i class="fa fa-save"></i></button>
-								</div>
+				<p class="justificado">
+					<b style="color: #333333; font-weight: bold;">Nota aclaratoria:</b> Debido a que en la evaluación de infraestructura para servicios al personal no se consideran fuentes generadoras y/o puntos de evaluación, se atiende la omisión en este apartado.
+				</p><br>
+				<form method="post" enctype="multipart/form-data" name="form_reporte_planos" id="form_reporte_planos">
+					<div class="row">
+						<div class="col-12">
+							{!! csrf_field() !!}
+						</div>
+						<div class="col-12">
+							<p class="justificado"><b style="color: #333333; font-weight: bold;">Nota del software:</b> Los planos de las carpetas seleccionadas se agregaran en el informe de Infraestructura de servicios al Personal.</p><br>
+							<table class="table table-hover tabla_info_centrado" width="100%" id="tabla_reporte_planos">
+								<thead>
+									<tr>
+										<th width="60">Seleccionado</th>
+										<th width="">Carpeta de planos</th>
+										<th width="100">Total planos</th>
+									</tr>
+								</thead>
+								<tbody></tbody>
+							</table>
+						</div>
+						<div class="col-12" style="text-align: right;">
+							<div class="form-group">
+								<button type="submit" class="btn btn-danger waves-effect waves-light botoninforme" id="botonguardar_reporte_planos">Guardar carpeta planos <i class="fa fa-save"></i></button>
 							</div>
 						</div>
-					</form>
+					</div>
+				</form>
 				<h4 class="card-title" id="12_5">12.5.- Anexo 5.- Equipo utilizado en la medición</h4>
-					<p class="justificado">
-						<b style="color: #333333; font-weight: bold;">Nota aclaratoria:</b> En este estudio no se utilizaron equipos para determinar las condiciones de infraestructura; solamente se siguieron los criterios técnicos de inspección de acuerdo con la NOM-001-STPS-2008.
-					</p>
+				<p class="justificado">
+					<b style="color: #333333; font-weight: bold;">Nota aclaratoria:</b> En este estudio no se utilizaron equipos para determinar las condiciones de infraestructura; solamente se siguieron los criterios técnicos de inspección de acuerdo con la NOM-001-STPS-2008.
+				</p>
 				<h4 class="card-title" id="12_6">12.6.- Anexo 6.-Incertidumbre de la medición</h4>
-					<p class="justificado">
-						<b style="color: #333333; font-weight: bold;">Nota aclaratoria:</b> La declaración de cumplimiento correspondiente a las mediciones en la evaluación de infraestructura para servicios al personal, quedan fuera del alcance de política de la estimación de incertidumbre, dada la naturaleza de resultados, en los que se identifican cualitativos y semicuantitativos.
-					</p>
+				<p class="justificado">
+					<b style="color: #333333; font-weight: bold;">Nota aclaratoria:</b> La declaración de cumplimiento correspondiente a las mediciones en la evaluación de infraestructura para servicios al personal, quedan fuera del alcance de política de la estimación de incertidumbre, dada la naturaleza de resultados, en los que se identifican cualitativos y semicuantitativos.
+				</p>
 				<h4 class="card-title" id="12_7">12.7.- Anexo 7.-Informe de resultados</h4>
-					<p class="justificado">
-						<b style="color: #333333; font-weight: bold;">Nota aclaratoria:</b> La declaración de cumplimiento para la evaluación de infraestructura de servicio al personal en este informe no requiere de resultados emitidos por un laboratorio.
-					</p>
+				<p class="justificado">
+					<b style="color: #333333; font-weight: bold;">Nota aclaratoria:</b> La declaración de cumplimiento para la evaluación de infraestructura de servicio al personal en este informe no requiere de resultados emitidos por un laboratorio.
+				</p>
 				<h4 class="card-title" id="12_8">12.8.- Anexo 8.- Copia de aprobación/autorización del laboratorio de ensayo ante la STPS</h4>
-					<p class="justificado">
-						<b style="color: #333333; font-weight: bold;">Nota aclaratoria:</b> Para lo solicitado en el presente apartado, cabe mencionar que no requiere de una aprobación por parte de la STPS en las evaluaciones de infraestructura para servicios al personal.
-					</p>
+				<p class="justificado">
+					<b style="color: #333333; font-weight: bold;">Nota aclaratoria:</b> Para lo solicitado en el presente apartado, cabe mencionar que no requiere de una aprobación por parte de la STPS en las evaluaciones de infraestructura para servicios al personal.
+				</p>
 				<h4 class="card-title" id="12_9">12.9.- Anexo 9.- Copia del registro del laboratorio ante la entidad mexicana de acreditación (ema)</h4>
-					<p class="justificado">
-						<b style="color: #333333; font-weight: bold;">Nota aclaratoria:</b> Para lo solicitado en el presente apartado, cabe mencionar que no requiere de una acreditación por parte de la EMA en las evaluaciones de infraestructura para servicios al personal.
-					</p>
+				<p class="justificado">
+					<b style="color: #333333; font-weight: bold;">Nota aclaratoria:</b> Para lo solicitado en el presente apartado, cabe mencionar que no requiere de una acreditación por parte de la EMA en las evaluaciones de infraestructura para servicios al personal.
+				</p>
 			</div>
 		</div>
 		<div class="card">
 			<div class="card-body">
 				<h4 class="card-title" id="13">Generar informe .docx + Anexos .Zip</h4>
 				@if(auth()->user()->hasRoles(['Superusuario', 'Administrador', 'Proyecto', 'Coordinador']))
-					<ol class="breadcrumb" style="padding: 6px; margin: 10px 0px;">
-						<button type="button" class="btn btn-default waves-effect" data-toggle="tooltip" title="Nueva revisión" id="boton_reporte_nuevarevision">
-							<span class="btn-label"><i class="fa fa-plus"></i></span>Crear nueva revisión
-						</button>
-					</ol>
+				<ol class="breadcrumb" style="padding: 6px; margin: 10px 0px;">
+					<button type="button" class="btn btn-default waves-effect" data-toggle="tooltip" title="Nueva revisión" id="boton_reporte_nuevarevision">
+						<span class="btn-label"><i class="fa fa-plus"></i></span>Crear nueva revisión
+					</button>
+				</ol>
 				@endif
 				<table class="table table-hover tabla_reporte" width="100%" id="tabla_reporte_revisiones">
 					<thead>
@@ -960,20 +1100,20 @@
 <!-- MODAL-CARGANDO -->
 <!-- ============================================================== -->
 <div id="modal_cargando" class="modal fade bs-example-modal-sm" tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel" aria-hidden="true" style="display: none;">
-    <div class="modal-dialog modal-sm" style="max-width: 600px!important; margin-top: 250px;">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h4 class="modal-title" id="mySmallModalLabel">Cargando</h4>
-                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
-            </div>
-            <div class="modal-body" style="text-align: center;">
-            	<i class='fa fa-spin fa-spinner fa-5x'></i>
-            	<br><br>Por favor espere <span id="segundos_espera">0</span>
-            </div>
-        </div>
-        <!-- /.modal-content -->
-    </div>
-    <!-- /.modal-dialog -->
+	<div class="modal-dialog modal-sm" style="max-width: 600px!important; margin-top: 250px;">
+		<div class="modal-content">
+			<div class="modal-header">
+				<h4 class="modal-title" id="mySmallModalLabel">Cargando</h4>
+				<button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+			</div>
+			<div class="modal-body" style="text-align: center;">
+				<i class='fa fa-spin fa-spinner fa-5x'></i>
+				<br><br>Por favor espere <span id="segundos_espera">0</span>
+			</div>
+		</div>
+		<!-- /.modal-content -->
+	</div>
+	<!-- /.modal-dialog -->
 </div>
 <!-- ============================================================== -->
 <!-- MODAL-CARGANDO -->
@@ -984,36 +1124,36 @@
 <!-- VISOR-MODAL -->
 <!-- ============================================================== -->
 <style type="text/css" media="screen">
-    #modal_visor>.modal-dialog{
-        min-width: 900px !important;
-    }
+	#modal_visor>.modal-dialog {
+		min-width: 900px !important;
+	}
 
-    iframe{
-        width: 100%;
-        height: 600px;
-        border: 0px #fff solid;
-    }
+	iframe {
+		width: 100%;
+		height: 600px;
+		border: 0px #fff solid;
+	}
 </style>
 <div id="modal_visor" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" style="display: none;">
-    <div class="modal-dialog modal-lg">
-        <div class="modal-content">
-            <div class="modal-header">
-                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
-                <h4 class="modal-title">Documento</h4>
-            </div>
-            <div class="modal-body" style="background: #555555;">
-                <div class="row">
-                    <div class="col-12">
-                        <iframe src="/assets/images/cargando.gif" name="visor_documento" id="visor_documento" style=""></iframe>
-                    </div>
-                </div>
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-default waves-effect" data-dismiss="modal" id="botoncerrar_modalvisor_reporte">Cerrar</button>
-                {{-- <button type="button" class="btn btn-danger waves-effect waves-light">Guardar</button> --}}
-            </div>
-        </div>
-    </div>
+	<div class="modal-dialog modal-lg">
+		<div class="modal-content">
+			<div class="modal-header">
+				<button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+				<h4 class="modal-title">Documento</h4>
+			</div>
+			<div class="modal-body" style="background: #555555;">
+				<div class="row">
+					<div class="col-12">
+						<iframe src="/assets/images/cargando.gif" name="visor_documento" id="visor_documento" style=""></iframe>
+					</div>
+				</div>
+			</div>
+			<div class="modal-footer">
+				<button type="button" class="btn btn-default waves-effect" data-dismiss="modal" id="botoncerrar_modalvisor_reporte">Cerrar</button>
+				{{-- <button type="button" class="btn btn-danger waves-effect waves-light">Guardar</button> --}}
+			</div>
+		</div>
+	</div>
 </div>
 <!-- ============================================================== -->
 <!-- VISOR-MODAL -->
@@ -1024,18 +1164,18 @@
 <!-- MODAL-REPORTE-DEFINICION -->
 <!-- ============================================================== -->
 <style type="text/css" media="screen">
-	#modal_reporte_definicion>.modal-dialog{
-		min-width: 900px!important;
+	#modal_reporte_definicion>.modal-dialog {
+		min-width: 900px !important;
 	}
 
-	#modal_reporte_definicion .modal-body .form-group{
-		margin: 0px 0px 12px 0px!important;
-		padding: 0px!important;
+	#modal_reporte_definicion .modal-body .form-group {
+		margin: 0px 0px 12px 0px !important;
+		padding: 0px !important;
 	}
 
-	#modal_reporte_definicion .modal-body .form-group label{
-		margin: 0px!important;
-		padding: 0px 0px 3px 0px!important;
+	#modal_reporte_definicion .modal-body .form-group label {
+		margin: 0px !important;
+		padding: 0px 0px 3px 0px !important;
 	}
 </style>
 <div id="modal_reporte_definicion" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" style="display: none;">
@@ -1089,18 +1229,18 @@
 <!-- MODAL-REPORTE-EVALUACION P Y D -->
 <!-- ============================================================== -->
 <style type="text/css" media="screen">
-	#modal_reporte_evaluacionpyd>.modal-dialog{
-		min-width: 900px!important;
+	#modal_reporte_evaluacionpyd>.modal-dialog {
+		min-width: 900px !important;
 	}
 
-	#modal_reporte_evaluacionpyd .modal-body .form-group{
-		margin: 0px 0px 12px 0px!important;
-		padding: 0px!important;
+	#modal_reporte_evaluacionpyd .modal-body .form-group {
+		margin: 0px 0px 12px 0px !important;
+		padding: 0px !important;
 	}
 
-	#modal_reporte_evaluacionpyd .modal-body .form-group label{
-		margin: 0px!important;
-		padding: 0px 0px 3px 0px!important;
+	#modal_reporte_evaluacionpyd .modal-body .form-group label {
+		margin: 0px !important;
+		padding: 0px 0px 3px 0px !important;
 	}
 </style>
 <div id="modal_reporte_evaluacionpyd" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" style="display: none;">
@@ -1201,21 +1341,21 @@
 <!-- MODAL-REPORTE-EVALUACION -->
 <!-- ============================================================== -->
 <style type="text/css" media="screen">
-	#modal_reporte_evaluacion>.modal-dialog{
-		min-width: 90%!important;
+	#modal_reporte_evaluacion>.modal-dialog {
+		min-width: 90% !important;
 	}
 
-	#modal_reporte_evaluacion .modal-body .form-group{
-		margin: 0px 0px 12px 0px!important;
-		padding: 0px!important;
+	#modal_reporte_evaluacion .modal-body .form-group {
+		margin: 0px 0px 12px 0px !important;
+		padding: 0px !important;
 	}
 
-	#modal_reporte_evaluacion .modal-body .form-group label{
-		margin: 0px!important;
-		padding: 0px 0px 3px 0px!important;
+	#modal_reporte_evaluacion .modal-body .form-group label {
+		margin: 0px !important;
+		padding: 0px 0px 3px 0px !important;
 	}
 
-	#modal_reporte_evaluacion .modal-body .form-group .boton_eliminaevidencia{
+	#modal_reporte_evaluacion .modal-body .form-group .boton_eliminaevidencia {
 		position: absolute;
 		margin-top: 6px;
 		margin-left: 8px;
@@ -1225,8 +1365,9 @@
 		display: block;
 	}
 
-	#modal_reporte_evaluacion .modal-body .form-group  .dropify-wrapper {
-	    max-height: 220px!important; /*tamaño estatico del campo foto*/
+	#modal_reporte_evaluacion .modal-body .form-group .dropify-wrapper {
+		max-height: 220px !important;
+		/*tamaño estatico del campo foto*/
 		/* border: 1px #f00 solid; */
 	}
 </style>
@@ -1246,7 +1387,7 @@
 						</div>
 						<div class="col-2">
 							<div class="form-group">
-								<label>Número  de punto</label>
+								<label>Número de punto</label>
 								<input type="number" min="1" class="form-control" id="reporteserviciopersonalevaluacion_punto" name="reporteserviciopersonalevaluacion_punto" required>
 							</div>
 						</div>
@@ -1277,22 +1418,22 @@
 									</optgroup>
 									<?php $grupo = 'XXX'; ?>
 									@foreach($evaluacion_catalogo AS $key => $value)
-										@if($grupo != $value->reporteserviciopersonalevaluacioncatalogo_titulo)
-											@if($key > 0)
-												</optgroup>
-												<optgroup label="{{ $value->reporteserviciopersonalevaluacioncatalogo_titulo }}">
-											@else
-												<optgroup label="{{ $value->reporteserviciopersonalevaluacioncatalogo_titulo }}">
-											@endif
-											
-											<?php $grupo = $value->reporteserviciopersonalevaluacioncatalogo_titulo; ?>
+									@if($grupo != $value->reporteserviciopersonalevaluacioncatalogo_titulo)
+									@if($key > 0)
+									</optgroup>
+									<optgroup label="{{ $value->reporteserviciopersonalevaluacioncatalogo_titulo }}">
+										@else
+									<optgroup label="{{ $value->reporteserviciopersonalevaluacioncatalogo_titulo }}">
+										@endif
+
+										<?php $grupo = $value->reporteserviciopersonalevaluacioncatalogo_titulo; ?>
 										@endif
 
 										<option value="{{ $value->id }}">{{ substr($value->reporteserviciopersonalevaluacioncatalogo_descripcion, 0, 140).'...' }}</option>
 
 										@if($key == (count($evaluacion_catalogo)-1))
-											</optgroup>
-										@endif
+									</optgroup>
+									@endif
 									@endforeach
 								</select>
 							</div>
@@ -1356,24 +1497,24 @@
 <!-- MODAL-REPORTE-CONDICIONES INSEGURAS -->
 <!-- ============================================================== -->
 <style type="text/css" media="screen">
-	#modal_reporte_condicionesinseguras>.modal-dialog{
-		min-width: 80%!important;
+	#modal_reporte_condicionesinseguras>.modal-dialog {
+		min-width: 80% !important;
 	}
 
-	#modal_reporte_condicionesinseguras .modal-body .form-group{
-		margin: 0px 0px 12px 0px!important;
-		padding: 0px!important;
+	#modal_reporte_condicionesinseguras .modal-body .form-group {
+		margin: 0px 0px 12px 0px !important;
+		padding: 0px !important;
 	}
 
-	#modal_reporte_condicionesinseguras .modal-body .form-group label{
-		margin: 0px!important;
-		padding: 0px 0px 3px 0px!important;
+	#modal_reporte_condicionesinseguras .modal-body .form-group label {
+		margin: 0px !important;
+		padding: 0px 0px 3px 0px !important;
 	}
 
 	#modal_reporte_condicionesinseguras .dropify-wrapper {
 		width: 100%;
 		max-width: 100%;
-		max-height: 150px!important;
+		max-height: 150px !important;
 	}
 </style>
 <div id="modal_reporte_condicionesinseguras" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" style="display: none;">
@@ -1396,7 +1537,7 @@
 								<select class="custom-select form-control" id="condicioninsegurareportearea_id" name="reportearea_id" required>
 									<option value=""></option>
 									@foreach ($areaspoe as $area)
-										<option value="{{ $area->id }}">{{ $area->reportearea_nombre }}</option>
+									<option value="{{ $area->id }}">{{ $area->reportearea_nombre }}</option>
 									@endforeach
 								</select>
 							</div>
@@ -1516,18 +1657,18 @@
 <!-- MODAL-REPORTE-CANCELACION OBSERVACION -->
 <!-- ============================================================== -->
 <style type="text/css" media="screen">
-	#modal_reporte_cancelacionobservacion>.modal-dialog{
-		min-width: 800px!important;
+	#modal_reporte_cancelacionobservacion>.modal-dialog {
+		min-width: 800px !important;
 	}
 
-	#modal_reporte_cancelacionobservacion .modal-body .form-group{
-		margin: 0px 0px 12px 0px!important;
-		padding: 0px!important;
+	#modal_reporte_cancelacionobservacion .modal-body .form-group {
+		margin: 0px 0px 12px 0px !important;
+		padding: 0px !important;
 	}
 
-	#modal_reporte_cancelacionobservacion .modal-body .form-group label{
-		margin: 0px!important;
-		padding: 0px 0px 3px 0px!important;
+	#modal_reporte_cancelacionobservacion .modal-body .form-group label {
+		margin: 0px !important;
+		padding: 0px 0px 3px 0px !important;
 	}
 </style>
 <div id="modal_reporte_cancelacionobservacion" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" style="display: none;">

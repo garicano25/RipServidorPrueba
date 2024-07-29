@@ -10,6 +10,7 @@ class reportetemperaturaModel extends Model
     protected $fillable = [
           'proyecto_id'
         , 'catactivo_id'
+        ,'reporte_mes'
         , 'reportetemperatura_fecha'
         , 'reportetemperatura_instalacion'
         , 'reportetemperatura_catregion_activo'

@@ -23,11 +23,8 @@ use App\modelos\catalogos\Cat_pruebanormaModel;
 use App\modelos\recsensorial\catCargosInformeModel;
 use App\modelos\recsensorial\catFormatosCampo;
 use App\modelos\recsensorial\catConclusionesModel;
-
-
 use App\modelos\recsensorial\cat_descripcionarea;
-
-
+use App\modelos\recsensorial\cat_sistemailuminacionModel;
 use App\modelos\catalogos\Cat_etiquetaModel;
 use App\modelos\catalogos\CatetiquetaopcionesModel;
 
@@ -83,40 +80,40 @@ class recsensorialcatalogosController extends Controller
     public function recsensorialconsultacatalogo($num_catalogo)
     {
         switch (($num_catalogo + 0)) {
-                case 1:
-                    // consulta catalogo
-                    $lista = Cat_etiquetaModel::all();
-                
-                    // crear campos NOMBRE Y ESTADO
-                    foreach ($lista as $key => $value) {
-                        $value['ETIQUETA'] = $value->NOMBRE_ETIQUETA;
-                
-                        // Consulta las opciones relacionadas
-                        $opciones = CatetiquetaopcionesModel::where('ETIQUETA_ID', $value->ID_ETIQUETA)->pluck('NOMBRE_OPCIONES')->toArray();
-                
-                        // Generar lista HTML de opciones
-                        $opcionesHtml = '<ul>';
-                        foreach ($opciones as $opcion) {
-                            $opcionesHtml .= '<li>' . $opcion . '</li>';
-                        }
-                        $opcionesHtml .= '</ul>';
-                
-                        $value['OPCIONES'] = $opcionesHtml;
-                
-                        $value['boton_editar'] = '<button type="button" class="btn btn-danger btn-circle" onclick="editar_catalogoetiqueta();"><i class="fa fa-pencil"></i></button>';
-                
-                        if ($value->ACTIVO == 1) {
-                            $value['CheckboxEstado'] = '<div class="switch"><label><input type="checkbox" checked onclick="estado_registro(' . $num_catalogo . ', ' . $value->ID_ETIQUETA . ', this);"><span class="lever switch-col-light-blue"></span></label></div>';
-                        } else {
-                            $value['CheckboxEstado'] = '<div class="switch"><label><input type="checkbox" onclick="estado_registro(' . $num_catalogo . ', ' . $value->ID_ETIQUETA . ', this);"><span class="lever switch-col-light-blue"></span></label></div>';
-                        }
+            case 1:
+                // consulta catalogo
+                $lista = Cat_etiquetaModel::all();
+
+                // crear campos NOMBRE Y ESTADO
+                foreach ($lista as $key => $value) {
+                    $value['ETIQUETA'] = $value->NOMBRE_ETIQUETA;
+
+                    // Consulta las opciones relacionadas
+                    $opciones = CatetiquetaopcionesModel::where('ETIQUETA_ID', $value->ID_ETIQUETA)->pluck('NOMBRE_OPCIONES')->toArray();
+
+                    // Generar lista HTML de opciones
+                    $opcionesHtml = '<ul>';
+                    foreach ($opciones as $opcion) {
+                        $opcionesHtml .= '<li>' . $opcion . '</li>';
                     }
-                
-                    // Convertir la lista a JSON y enviarla a la vista
-                    break;
-                
-                  
-                
+                    $opcionesHtml .= '</ul>';
+
+                    $value['OPCIONES'] = $opcionesHtml;
+
+                    $value['boton_editar'] = '<button type="button" class="btn btn-danger btn-circle" onclick="editar_catalogoetiqueta();"><i class="fa fa-pencil"></i></button>';
+
+                    if ($value->ACTIVO == 1) {
+                        $value['CheckboxEstado'] = '<div class="switch"><label><input type="checkbox" checked onclick="estado_registro(' . $num_catalogo . ', ' . $value->ID_ETIQUETA . ', this);"><span class="lever switch-col-light-blue"></span></label></div>';
+                    } else {
+                        $value['CheckboxEstado'] = '<div class="switch"><label><input type="checkbox" onclick="estado_registro(' . $num_catalogo . ', ' . $value->ID_ETIQUETA . ', this);"><span class="lever switch-col-light-blue"></span></label></div>';
+                    }
+                }
+
+                // Convertir la lista a JSON y enviarla a la vista
+                break;
+
+
+
             case 2:
                 // consulta catalogo
                 $lista = catregionModel::all();
@@ -399,23 +396,41 @@ class recsensorialcatalogosController extends Controller
                 }
                 break;
 
-                case 17:
-                    // consulta catalogo
-                    $lista = cat_descripcionarea::all();
-    
-                    // crear campos NOMBRE Y ESTADO
-                    foreach ($lista as $key => $value) {
-                        $value['DESCRIPCION'] = $value->DESCRIPCION;
-                        $value['ID_DESCRIPCION_AREA'] = $value->ID_DESCRIPCION_AREA;
-                        $value['boton_editar'] = '<button type="button" class="btn btn-danger btn-circle" onclick="editar_catdescripcion();"><i class="fa fa-pencil"></i></button>';
-    
-                        if ($value->ACTIVO == 1) {
-                            $value['CheckboxEstado'] = '<div class="switch"><label><input type="checkbox" checked onclick="estado_registro(' . $num_catalogo . ', ' . $value->ID_DESCRIPCION_AREA . ', this);"><span class="lever switch-col-light-blue"></span></label></div>';
-                        } else {
-                            $value['CheckboxEstado'] = '<div class="switch"><label><input type="checkbox" onclick="estado_registro(' . $num_catalogo . ', ' . $value->ID_DESCRIPCION_AREA . ', this);"><span class="lever switch-col-light-blue"></span></label></div>';
-                        }
+            case 17:
+                // consulta catalogo
+                $lista = cat_descripcionarea::all();
+
+                // crear campos NOMBRE Y ESTADO
+                foreach ($lista as $key => $value) {
+                    $value['DESCRIPCION'] = $value->DESCRIPCION;
+                    $value['ID_DESCRIPCION_AREA'] = $value->ID_DESCRIPCION_AREA;
+                    $value['boton_editar'] = '<button type="button" class="btn btn-danger btn-circle" onclick="editar_catdescripcion();"><i class="fa fa-pencil"></i></button>';
+
+                    if ($value->ACTIVO == 1) {
+                        $value['CheckboxEstado'] = '<div class="switch"><label><input type="checkbox" checked onclick="estado_registro(' . $num_catalogo . ', ' . $value->ID_DESCRIPCION_AREA . ', this);"><span class="lever switch-col-light-blue"></span></label></div>';
+                    } else {
+                        $value['CheckboxEstado'] = '<div class="switch"><label><input type="checkbox" onclick="estado_registro(' . $num_catalogo . ', ' . $value->ID_DESCRIPCION_AREA . ', this);"><span class="lever switch-col-light-blue"></span></label></div>';
                     }
-                    break;
+                }
+                break;
+            case 18:
+                // consulta catalogo
+                $lista = cat_sistemailuminacionModel::all();
+
+                // crear campos NOMBRE Y ESTADO
+                foreach ($lista as $key => $value) {
+                    $value['NOMBRE'] = $value->NOMBRE;
+                    $value['DESCRIPCION'] = $value->DESCRIPCION;
+                    $value['ID_SISTEMA_ILUMINACION'] = $value->ID_SISTEMA_ILUMINACION;
+                    $value['boton_editar'] = '<button type="button" class="btn btn-danger btn-circle" onclick="editar_catsistema();"><i class="fa fa-pencil"></i></button>';
+
+                    if ($value->ACTIVO == 1) {
+                        $value['CheckboxEstado'] = '<div class="switch"><label><input type="checkbox" checked onclick="estado_registro(' . $num_catalogo . ', ' . $value->ID_SISTEMA_ILUMINACION . ', this);"><span class="lever switch-col-light-blue"></span></label></div>';
+                    } else {
+                        $value['CheckboxEstado'] = '<div class="switch"><label><input type="checkbox" onclick="estado_registro(' . $num_catalogo . ', ' . $value->ID_SISTEMA_ILUMINACION . ', this);"><span class="lever switch-col-light-blue"></span></label></div>';
+                    }
+                }
+                break;
         }
 
         // Respuesta
@@ -453,13 +468,13 @@ class recsensorialcatalogosController extends Controller
         try {
             switch (($request['catalogo'] + 0)) {
                 case 0:
-                        DB::statement('ALTER TABLE catetiquetas_opciones AUTO_INCREMENT=1');
-                        $request["ACTIVO"] = 1;
-                        $catalogo = CatetiquetaopcionesModel::create($request->all());
-                        $dato["msj"] = 'Información guardada correctamente';
+                    DB::statement('ALTER TABLE catetiquetas_opciones AUTO_INCREMENT=1');
+                    $request["ACTIVO"] = 1;
+                    $catalogo = CatetiquetaopcionesModel::create($request->all());
+                    $dato["msj"] = 'Información guardada correctamente';
                     break;
                 case 1:
-                 
+
                     if ($request['ID_ETIQUETA'] == 0) {
                         DB::statement('ALTER TABLE cat_etiquetas AUTO_INCREMENT=1');
                         $request["ACTIVO"] = 1;
@@ -704,22 +719,39 @@ class recsensorialcatalogosController extends Controller
                         $dato["msj"] = 'Información modificada correctamente';
                     }
                     break;
-                    case 17:
-                        if ($request['ID_DESCRIPCION_AREA'] == 0) {
-                            DB::statement('ALTER TABLE cat_descripcionarea AUTO_INCREMENT=1');
-    
-                            $request["ACTIVO"] = 1;
-                            $catalogo = cat_descripcionarea::create($request->all());
-    
-                            $dato["msj"] = 'Información guardada correctamente';
-                        } else {
-    
-                            $catalogo = cat_descripcionarea::findOrFail($request['ID_DESCRIPCION_AREA']);
-                            $catalogo->update($request->all());
-    
-                            $dato["msj"] = 'Información modificada correctamente';
-                        }
-                        break;
+                case 17:
+                    if ($request['ID_DESCRIPCION_AREA'] == 0) {
+                        DB::statement('ALTER TABLE cat_descripcionarea AUTO_INCREMENT=1');
+
+                        $request["ACTIVO"] = 1;
+                        $catalogo = cat_descripcionarea::create($request->all());
+
+                        $dato["msj"] = 'Información guardada correctamente';
+                    } else {
+
+                        $catalogo = cat_descripcionarea::findOrFail($request['ID_DESCRIPCION_AREA']);
+                        $catalogo->update($request->all());
+
+                        $dato["msj"] = 'Información modificada correctamente';
+                    }
+                    break;
+
+                case 18:
+                    if ($request['ID_SISTEMA_ILUMINACION'] == 0) {
+                        DB::statement('ALTER TABLE cat_sistema_iluminacion AUTO_INCREMENT=1');
+
+                        $request["ACTIVO"] = 1;
+                        $catalogo = cat_sistemailuminacionModel::create($request->all());
+
+                        $dato["msj"] = 'Información guardada correctamente';
+                    } else {
+
+                        $catalogo = cat_sistemailuminacionModel::findOrFail($request['ID_SISTEMA_ILUMINACION']);
+                        $catalogo->update($request->all());
+
+                        $dato["msj"] = 'Información modificada correctamente';
+                    }
+                    break;
             }
 
             // Respuesta
@@ -732,7 +764,8 @@ class recsensorialcatalogosController extends Controller
 
 
 
-    public function opcionesOrganizacion($id_etiqueta){
+    public function opcionesOrganizacion($id_etiqueta)
+    {
         // consulta catalogo
         $lista = CatetiquetaopcionesModel::where('ETIQUETA_ID', $id_etiqueta)->get();
         $num_catalogo = 0;
@@ -749,8 +782,8 @@ class recsensorialcatalogosController extends Controller
             }
         }
 
-    
-    // Respuesta
+
+        // Respuesta
         $catalogo['data']  = $lista;
         return response()->json($catalogo);
     }
@@ -836,8 +869,12 @@ class recsensorialcatalogosController extends Controller
                     $tabla = catConclusionesModel::findOrFail($registro);
                     $tabla->update(['ACTIVO' => $estado]);
                     break;
-                case 16:
+                case 17:
                     $tabla = cat_descripcionarea::findOrFail($registro);
+                    $tabla->update(['ACTIVO' => $estado]);
+                    break;
+                case 18:
+                    $tabla = cat_sistemailuminacionModel::findOrFail($registro);
                     $tabla->update(['ACTIVO' => $estado]);
                     break;
             }

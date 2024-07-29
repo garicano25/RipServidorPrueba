@@ -14,6 +14,7 @@ class reporteiluminacionareacategoriaModel extends Model
 		, 'reporteiluminacionareacategoria_total'
 		, 'reporteiluminacionareacategoria_geo'
 		, 'reporteiluminacionareacategoria_actividades'
+		,'niveles_minimo'
 		, 'reporteiluminacionareacategoria_tareavisual'
 	];
 }

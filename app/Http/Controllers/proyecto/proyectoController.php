@@ -20,7 +20,7 @@ use App\modelos\proyecto\proyectoproveedoresquimicosModel;
 use App\modelos\recsensorial\recsensorialModel;
 use App\modelos\proyecto\serviciosProyectoModel;
 use App\modelos\proyecto\estructuraProyectosModel;
-
+use App\modelos\clientes\clientecontratoModel;
 
 //Modelos catalogos
 use App\modelos\recsensorial\catregionModel;
@@ -147,7 +147,7 @@ class proyectoController extends Controller
                 ])
                     ->leftJoin('serviciosProyecto', 'proyecto.id', '=', 'serviciosProyecto.PROYECTO_ID')
                     ->where('proyectoInterno', 0)
-                    ->orderBy('proyecto.id', 'ASC')
+                    ->orderBy('proyecto.proyecto_folio', 'ASC')
                     ->get([
                         'proyecto.*',
                         'serviciosProyecto.*'
@@ -678,10 +678,9 @@ class proyectoController extends Controller
         }
     }
 
-    public function proyectoselectcontrato($id_contrato)
+    public function proyectoselectcontrato($id_contrato, $tipo)
     {
         try {
-            $opciones_select = '<option value="">&nbsp;</option>';
             $contratos = DB::select('SELECT cc.DESCRIPCION_CONTRATO, cc.NUMERO_CONTRATO, cc.ID_CONTRATO, cc.CLIENTE_ID,
                                             IF(cc.FECHA_FIN < DATE(NOW()), "VENCIDO", "ACTIVO") AS STATUS_CONTRATO,
                                             IF(con.id IS NULL,"SIN_CONVENIO" ,IF(con.clienteconvenio_vigencia < DATE(NOW()), "CON_CONVENIO_VENCIDO", "CON_CONVENIO_ACTIVO")) AS STATUS_CONVENIO
@@ -689,27 +688,32 @@ class proyectoController extends Controller
                                         LEFT JOIN contratos_convenios as con ON con.CONTRATO_ID = cc.ID_CONTRATO
                                         WHERE ACTIVO = 1
                                         AND CONCLUIDO = 0
-                                        ');
+                                        AND TIPO_SERVICIO = ?', [$tipo]);
+            if (count($contratos) > 0) {
+                $opciones_select = '<option value="">&nbsp;</option>';
 
-            foreach ($contratos as $key => $value) {
-                if ($value->ID_CONTRATO == $id_contrato) {
+                foreach ($contratos as $key => $value) {
+                    if ($value->ID_CONTRATO == $id_contrato) {
 
-                    $opciones_select .= '<option value="' . $value->ID_CONTRATO . '"  selected>' . $value->DESCRIPCION_CONTRATO . ' [' . $value->NUMERO_CONTRATO . ']' . '</option>';
-                } else if ($value->STATUS_CONTRATO == 'VENCIDO' && $value->STATUS_CONVENIO == 'SIN_CONVENIO') {
+                        $opciones_select .= '<option value="' . $value->ID_CONTRATO . '"  selected>' . $value->DESCRIPCION_CONTRATO . ' [' . $value->NUMERO_CONTRATO . ']' . '</option>';
+                    } else if ($value->STATUS_CONTRATO == 'VENCIDO' && $value->STATUS_CONVENIO == 'SIN_CONVENIO') {
 
-                    $opciones_select .= '<option value="' . $value->ID_CONTRATO . '" disabled>' . $value->DESCRIPCION_CONTRATO . ' [' . $value->NUMERO_CONTRATO . ']' . ' (Vencido y sin convenio)</option>';
-                } else if ($value->STATUS_CONTRATO == 'VENCIDO' && $value->STATUS_CONVENIO != 'SIN_CONVENIO') {
+                        $opciones_select .= '<option value="' . $value->ID_CONTRATO . '" disabled>' . $value->DESCRIPCION_CONTRATO . ' [' . $value->NUMERO_CONTRATO . ']' . ' (Vencido y sin convenio)</option>';
+                    } else if ($value->STATUS_CONTRATO == 'VENCIDO' && $value->STATUS_CONVENIO != 'SIN_CONVENIO') {
 
-                    if ($value->STATUS_CONVENIO == 'CON_CONVENIO_VENCIDO') {
+                        if ($value->STATUS_CONVENIO == 'CON_CONVENIO_VENCIDO') {
 
-                        $opciones_select .= '<option value="' . $value->ID_CONTRATO . '" disabled>' . $value->DESCRIPCION_CONTRATO . ' [' . $value->NUMERO_CONTRATO . ']' . ' (Vencido con convenio expirado)</option>';
+                            $opciones_select .= '<option value="' . $value->ID_CONTRATO . '" disabled>' . $value->DESCRIPCION_CONTRATO . ' [' . $value->NUMERO_CONTRATO . ']' . ' (Vencido con convenio expirado)</option>';
+                        } else {
+                            $opciones_select .= '<option value="' . $value->ID_CONTRATO . '" >' . $value->DESCRIPCION_CONTRATO . ' [' . $value->NUMERO_CONTRATO . ']' . ' (Vencido con convenio activo)</option>';
+                        }
                     } else {
-                        $opciones_select .= '<option value="' . $value->ID_CONTRATO . '" >' . $value->DESCRIPCION_CONTRATO . ' [' . $value->NUMERO_CONTRATO . ']' . ' (Vencido con convenio activo)</option>';
-                    }
-                } else {
 
-                    $opciones_select .= '<option value="' . $value->ID_CONTRATO . '"  >' . $value->DESCRIPCION_CONTRATO . ' [' . $value->STATUS_CONTRATO . ']' . ' (Activo)</option>';
+                        $opciones_select .= '<option value="' . $value->ID_CONTRATO . '"  >' . $value->DESCRIPCION_CONTRATO . ' [' . $value->STATUS_CONTRATO . ']' . ' (Activo)</option>';
+                    }
                 }
+            } else {
+                $opciones_select = '<option value="">&nbsp;</option>';
             }
 
             // // respuesta
@@ -1427,9 +1431,75 @@ class proyectoController extends Controller
                 // Consulta proyecto
                 $proyecto = proyectoModel::findOrFail($request->proyecto_id);
 
-
                 // Actualizar y consultar datos del proyecto
                 $proyecto->update($request->all());
+
+                //VALIDAMOS SI EL PROYECTO TIENE UN RECONOCIMIENTO VINCULADO EN ESE CASO VALIDAMOS LOS DATOS DEL PROYECTO Y LOS EDITAMOS PARA EL RECONOCIMIENTO
+                if (!is_null($proyecto->recsensorial_id)) {
+
+                    // Reconocimiento seleccionado
+                    $recsensorial = recsensorialModel::findOrFail($proyecto->recsensorial_id);
+                    $contrato = clientecontratoModel::findOrFail($proyecto->contrato_id);
+                    $descripcion_contrato = is_null($contrato->NUMERO_CONTRATO) ? $contrato->DESCRIPCION_CONTRATO : '[ ' . $contrato->NUMERO_CONTRATO . ' ]' . $contrato->DESCRIPCION_CONTRATO;
+
+
+                    // Modificar dependiendo si la informacion cargada en el reconocimiento es para el cliente seleccionado o no
+                    if ($recsensorial->informe_del_cliente == 1) {
+
+                        $recsensorial->update([
+                            'cliente_id' => $contrato->CLIENTE_ID,
+                            'contrato_id' => $proyecto->contrato_id,
+                            'descripcion_contrato' => $descripcion_contrato,
+                            'descripcion_cliente' => $proyecto->proyecto_clienterazonsocial,
+                            'recsensorial_empresa' => $proyecto->proyecto_clienterazonsocial,
+                            'recsensorial_rfc' => $proyecto->proyecto_clienterfc,
+                            'recsensorial_instalacion' => $proyecto->proyecto_clienteinstalacion,
+                            'recsensorial_direccion' => $proyecto->proyecto_clientedireccionservicio,
+                            'recsensorial_representanteseguridad' => $proyecto->proyecto_clientepersonadirigido
+
+                        ]);
+                    } else {
+
+                        $recsensorial->update([
+                            'cliente_id' => $contrato->CLIENTE_ID,
+                            'contrato_id' => $proyecto->contrato_id,
+                            'descripcion_contrato' => $descripcion_contrato,
+                            'descripcion_cliente' => $proyecto->proyecto_clienterazonsocial
+                        ]);
+                    }
+                }
+
+
+                // if ($proyecto->recsensorial_id) // VALIDAR SI HAY RECONOCIMIENTO Y SI ES EL MISMO (YA EL RECONOCIMIENTO NO SE VINCULA EN PROYECTO SI NO EN RECONOCIMINETO)
+                // {
+                //     if ($proyecto->recsensorial_id == $request->recsensorial_id) // MISMO RECONOCIMIENTO
+                //     {
+                //         // Reconocimiento seleccionado
+                //         $recsensorial = recsensorialModel::findOrFail($proyecto->recsensorial_id);
+
+                //         // Modificar
+                //         $recsensorial->update([
+                //             'recsensorial_fisicosimprimirbloqueado' => 0, 'recsensorial_quimicosimprimirbloqueado' => 0, 'recsensorial_bloqueado' => 0, 'proyecto_id' => $proyecto->proyecto_folio
+                //         ]);
+                //     } else // CAMBIO DE RECONOCIMIENTO
+                //     {
+                //         // Reconocimiento anterior
+                //         $recsensorial = recsensorialModel::findOrFail($proyecto->recsensorial_id);
+
+                //         // Modificar
+                //         $recsensorial->update([
+                //             'recsensorial_fisicosimprimirbloqueado' => 0, 'recsensorial_quimicosimprimirbloqueado' => 0, 'recsensorial_bloqueado' => 0, 'proyecto_id' => null,
+                //         ]);
+
+                //         // Reconocimiento actual
+                //         $recsensorial = recsensorialModel::findOrFail($request->recsensorial_id);
+
+                //         // Modificar
+                //         $recsensorial->update([
+                //             'recsensorial_fisicosimprimirbloqueado' => 0, 'recsensorial_quimicosimprimirbloqueado' => 0, 'recsensorial_bloqueado' => 0, 'proyecto_id' => $proyecto->proyecto_folio
+                //         ]);
+                //     }
+                // }
 
 
                 //Actualizamos los servicios del proyecto
@@ -1474,40 +1544,6 @@ class proyectoController extends Controller
 
 
                 $proyecto = proyectoModel::with(['recsensorial', 'recsensorial.cliente', 'recsensorial.catregion', 'recsensorial.catgerencia', 'recsensorial.catactivo'])->findOrFail($request->proyecto_id);
-
-
-                if ($proyecto->recsensorial_id) // VALIDAR SI HAY RECONOCIMIENTO Y SI ES EL MISMO
-                {
-                    if ($proyecto->recsensorial_id == $request->recsensorial_id) // MISMO RECONOCIMIENTO
-                    {
-                        // Reconocimiento seleccionado
-                        $recsensorial = recsensorialModel::findOrFail($proyecto->recsensorial_id);
-
-                        // Modificar
-                        $recsensorial->update([
-                            'recsensorial_fisicosimprimirbloqueado' => 0, 'recsensorial_quimicosimprimirbloqueado' => 0, 'recsensorial_bloqueado' => 0, 'proyecto_id' => $proyecto->proyecto_folio
-                        ]);
-                    } else // CAMBIO DE RECONOCIMIENTO
-                    {
-                        // Reconocimiento anterior
-                        $recsensorial = recsensorialModel::findOrFail($proyecto->recsensorial_id);
-
-                        // Modificar
-                        $recsensorial->update([
-                            'recsensorial_fisicosimprimirbloqueado' => 0, 'recsensorial_quimicosimprimirbloqueado' => 0, 'recsensorial_bloqueado' => 0, 'proyecto_id' => null,
-                        ]);
-
-                        // Reconocimiento actual
-                        $recsensorial = recsensorialModel::findOrFail($request->recsensorial_id);
-
-                        // Modificar
-                        $recsensorial->update([
-                            'recsensorial_fisicosimprimirbloqueado' => 0, 'recsensorial_quimicosimprimirbloqueado' => 0, 'recsensorial_bloqueado' => 0, 'proyecto_id' => $proyecto->proyecto_folio
-                        ]);
-                    }
-                }
-
-
                 // mensaje
                 $dato["msj"] = 'Informacion modificada correctamente';
             }

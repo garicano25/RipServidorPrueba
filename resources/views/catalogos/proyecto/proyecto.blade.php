@@ -306,6 +306,8 @@
                                                                                 {!! csrf_field() !!}
                                                                                 <input type="hidden" class="form-control" id="proyecto_id" name="proyecto_id">
                                                                                 <input type="hidden" class="form-control" id="proyectoInterno" name="proyectoInterno" value="0">
+                                                                                <input type="hidden" id="requiereContrato" name="requiereContrato" value="1">
+
 
                                                                             </div>
                                                                             <div class="col-3">
@@ -441,7 +443,28 @@
                                                                                                     color: #93B633 !important;
                                                                                                 }
                                                                                             </style>
-                                                                                            <div class="d-flex align-items-center mb-2 mt-2">
+                                                                                            <h3 class="clienteblock text-center">Formalización del servicio por:</h3>
+                                                                                            <div class="col-12 mt-2 p-2 d-flex justify-content-center  clienteblock">
+                                                                                                <div class="form-check mx-4 clienteblock">
+                                                                                                    <input class="form-check-input servCliente" type="radio" name="tipoServicioCliente" id="tipoServicioCliente1" value="1" onchange="cambiarSelectContrato(1)" checked>
+                                                                                                    <label class="form-check-label" for="tipoServicioCliente1" id="labelServicio1">
+                                                                                                        Contrato
+                                                                                                    </label>
+                                                                                                </div>
+                                                                                                <div class="form-check mx-4 clienteblock">
+                                                                                                    <input class="form-check-input servCliente" type="radio" name="tipoServicioCliente" id="tipoServicioCliente2" value="2" onchange="cambiarSelectContrato(2)">
+                                                                                                    <label class="form-check-label" for="tipoServicioCliente2" id="labelServicio2">
+                                                                                                        O.S / O.C
+                                                                                                    </label>
+                                                                                                </div>
+                                                                                                <div class="form-check mx-4 clienteblock">
+                                                                                                    <input class="form-check-input servCliente" type="radio" name="tipoServicioCliente" id="tipoServicioCliente3" value="3" onchange="cambiarSelectContrato(3)">
+                                                                                                    <label class="form-check-label" for="tipoServicioCliente3" id="labelServicio3">
+                                                                                                        Cotización aceptada
+                                                                                                    </label>
+                                                                                                </div>
+                                                                                            </div>
+                                                                                            <!-- <div class="d-flex align-items-center mb-2 mt-2 d-none">
                                                                                                 <div class="switch mx-1">
                                                                                                     <label>
                                                                                                         No<input type="checkbox" id="requiereContrato" name="requiereContrato" value="1" onchange="desbloquearContrato(this)" checked>
@@ -449,8 +472,8 @@
                                                                                                     </label>
                                                                                                 </div>
                                                                                                 <label style="color: #93B633; font-weight: 600;" class="mx-3" id="laberContrato">Contratos (disponibles)</label>
+                                                                                            </div> -->
 
-                                                                                            </div>
                                                                                             <select class="custom-select form-control botonnuevo_moduloproyecto" style="border: 2px #93B633 solid;" id="contrato_id" name="contrato_id" onchange="consultar_contrato(this.value);">
                                                                                                 <option value="">&nbsp;</option>
                                                                                             </select>

@@ -42,6 +42,22 @@ use App\modelos\reportes\reporteareaModel;
 use App\modelos\reportes\reporteareacategoriaModel;
 //----------------------------------------------------------
 use App\modelos\reportes\reporteequiposutilizadosModel;
+use App\modelos\proyecto\estatusReportesInformeModel;
+
+
+// RECURSOS DE LOS INFORMES
+use App\modelos\reportes\recursosPortadasInformesModel;
+use App\modelos\clientes\clientepartidasModel;
+use App\modelos\reportes\reporteaireModel;
+use App\modelos\reportes\reporteiluminacionModel;
+use App\modelos\reportes\reporteruidoModel;
+use App\modelos\reportes\reportetemperaturaModel;
+use App\modelos\reportes\reportevibracionModel;
+use App\modelos\reportes\reporteaguaModel;
+use App\modelos\reportes\reportehieloModel;
+use App\modelos\reportes\reportequimicosModel;
+use App\modelos\reportes\reporteserviciopersonalModel;
+
 
 
 //ZONA DE HORARIO
@@ -78,8 +94,6 @@ class reportesController extends Controller
         } else {
             // COPIAR CATEGORIAS DEL RECONOCIMIENTO SENSORIAL
             //===================================================
-
-
             $total_categorias = DB::select('SELECT
                                                 COUNT(reportecategoria.id) AS TOTAL
                                             FROM
@@ -144,9 +158,11 @@ class reportesController extends Controller
             $catsubdireccion = catsubdireccionModel::orderBy('catsubdireccion_nombre', 'ASC')->get();
             $catgerencia = catgerenciaModel::orderBy('catgerencia_nombre', 'ASC')->get();
             $catactivo = catactivoModel::orderBy('catactivo_nombre', 'ASC')->get();
+            $estatus = estatusReportesInformeModel::where('PROYECTO_ID', $proyecto_id)->get();
+
 
             // Vista
-            return view('reportes.parametros.reportepoe', compact('proyecto', 'recsensorial', 'catregion', 'catsubdireccion', 'catgerencia', 'catactivo'));
+            return view('reportes.parametros.reportepoe', compact('proyecto', 'recsensorial', 'catregion', 'catsubdireccion', 'catgerencia', 'catactivo', 'estatus'));
         }
     }
 
@@ -158,27 +174,28 @@ class reportesController extends Controller
             $opciones_select = '<option value="">&nbsp;</option>';
 
             $proyectos = DB::select("
-           SELECT p.proyecto_folio as ProyectoFolio,
-			p.id AS ProyectoID,
-			r.recsensorial_foliofisico as RecSensorialFolioFisico,
-			r.recsensorial_folioquimico as RecSensorialFolioQuimico
-        FROM serviciosProyecto sp 
-        LEFT JOIN proyecto p ON sp.PROYECTO_ID = p.id
-        LEFT JOIN recsensorial r ON r.id  = p.recsensorial_id
-        WHERE sp.HI_INFORME = 1
-        ");
+                SELECT p.proyecto_folio as ProyectoFolio,
+                    p.id AS ProyectoID,
+                    r.recsensorial_foliofisico as RecSensorialFolioFisico,
+                    r.recsensorial_folioquimico as RecSensorialFolioQuimico
+                FROM serviciosProyecto sp 
+                LEFT JOIN proyecto p ON sp.PROYECTO_ID = p.id
+                LEFT JOIN recsensorial r ON r.id  = p.recsensorial_id
+                WHERE sp.HI_INFORME = 1
+                ");
 
             $proyectoID = null;
             foreach ($proyectos as $proyecto) {
-                $proyectoID = $proyecto->ProyectoID;
-                $reconocimientoQuimico = $proyecto->RecSensorialFolioQuimico ? '[' . $proyecto->RecSensorialFolioQuimico . ']' : '[No tiene folio de reconocimiento químico]';
-                $reconocimientoFisico = $proyecto->RecSensorialFolioFisico ? '[' . $proyecto->RecSensorialFolioFisico . ']' : '[No tiene folio de reconocimiento físico]';
+                if ($proyecto->RecSensorialFolioFisico || $proyecto->RecSensorialFolioQuimico) { // Verifica que al menos uno de los folios exista
+                    $proyectoID = $proyecto->ProyectoID;
+                    $reconocimientoQuimico = $proyecto->RecSensorialFolioQuimico ? '[' . $proyecto->RecSensorialFolioQuimico . ']' : '[No tiene folio de reconocimiento químico]';
+                    $reconocimientoFisico = $proyecto->RecSensorialFolioFisico ? '[' . $proyecto->RecSensorialFolioFisico . ']' : '[No tiene folio de reconocimiento físico]';
 
-
-                $opciones_select .= '<option value="' . $proyectoID . '">Folio proyecto [' .
-                    $proyecto->ProyectoFolio . '], Reconocimiento ' .
-                    $reconocimientoQuimico . ', ' .
-                    $reconocimientoFisico . '</option>';
+                    $opciones_select .= '<option value="' . $proyectoID . '">Folio proyecto [' .
+                        $proyecto->ProyectoFolio . '], Reconocimiento ' .
+                        $reconocimientoQuimico . ', ' .
+                        $reconocimientoFisico . '</option>';
+                }
             }
 
             $dato['opciones'] = $opciones_select;
@@ -188,7 +205,63 @@ class reportesController extends Controller
         } catch (Exception $e) {
             $dato["msj"] = 'Error ' . $e->getMessage();
             $dato['opciones'] = $opciones_select;
+            return response()->json($dato, 500);
+        }
+    }
+
+
+    public function estatusProyecto($PROYECTO_ID)
+    {
+        // try {
+
+
+        $proyecto = estatusReportesInformeModel::where('PROYECTO_ID', $PROYECTO_ID)->first();
+
+
+        //VALIDAMOS SI EXISTE INFORMACION DEL PROYECTO
+        if ($proyecto) {
+
+            $dato['nuevo'] = 0;
+            $dato['info'] = $proyecto;
+        } else {
+
+            $dato['nuevo'] = 1;
+            $dato['info'] = '';
+        }
+
+        $dato["msj"] = 'Datos consultados correctamente';
+        return response()->json($dato);
+
+        // } catch (Exception  $e) {
+        //     $dato["msj"] = 'Error ' . $e->getMessage();
+        //     return response()->json($dato, 500);
+        // }
+    }
+
+
+    public function finalizarPOE($PROYECTO_ID, $opcion, $nuevo)
+    {
+        try {
+
+
+            if ($nuevo == 1) {
+
+                $estatus = estatusReportesInformeModel::create([
+                    'PROYECTO_ID' => $PROYECTO_ID,
+                    'POE_FINALIZADO' => 1
+                ]);
+            } else {
+
+                $estatus = estatusReportesInformeModel::where('PROYECTO_ID', $PROYECTO_ID)->update(['POE_FINALIZADO' => $opcion]);
+            }
+
+
+            $dato['estatus'] = $opcion;
+            $dato["msj"] = 'POE finalizado correctamente';
             return response()->json($dato);
+        } catch (Exception $e) {
+            $dato["msj"] = 'Error ' . $e->getMessage();
+            return response()->json($dato, 500);
         }
     }
 
@@ -256,13 +329,25 @@ class reportesController extends Controller
                                     TABLA.agente_nombre ASC', [$proyecto_id]);
 
             $opciones_menu = '<option value="">Seleccione</option>';
-            $opciones_menu .= '<option value="0">POE PROYECTO</option>';
+            // $opciones_menu .= '<option value="0">POE PROYECTO</option>';  -> EL POE ESTARA APARTE EN EL SELECT SOLO ESTARAN LOS REPORTES DE LOS AGENTES
 
-            if (!auth()->user()->hasRoles(['CoordinadorPsicosocial', 'CoordinadorErgonómico'])) {
-                foreach ($sql as $key => $value) {
-                    $opciones_menu .= '<option value="' . $value->agente_id . '">' . $value->agente_nombre . '</option>';
-                }
-            }
+            //DESCOMENTAR DESPUES DE SUBIR AL SERVIDOR
+            // foreach ($sql as $key => $value){
+            //     $opciones_menu .= '<option value="'.$value->agente_id.'">'.$value->agente_nombre.'</option>';
+            // }
+
+
+            //QUITAR DESPUES DE SUBIR AL SERVIDOR
+            $opciones_menu .= '<option value="1">Ruido</option>';
+            $opciones_menu .= '<option value="2">Vibración</option>';
+            $opciones_menu .= '<option value="3">Temperatura</option>';
+            $opciones_menu .= '<option value="4">Iluminación</option>';
+            $opciones_menu .= '<option value="8">Ventilación y calidad del aire</option>';
+            $opciones_menu .= '<option value="9">Agua</option>';
+            $opciones_menu .= '<option value="10">Hielo</option>';
+            $opciones_menu .= '<option value="15">Químicos</option>';
+            $opciones_menu .= '<option value="16">Infraestructura para servicios al personal</option>';
+
 
             $dato['opciones_menu'] = $opciones_menu;
             $dato["msj"] = 'Datos consultados correctamente';
@@ -285,6 +370,15 @@ class reportesController extends Controller
     {
         try {
             $proyecto = proyectoModel::findOrFail($proyecto_id);
+            $estatus = estatusReportesInformeModel::where('PROYECTO_ID', $proyecto_id)->first();
+
+
+            //VALIDAMOS SI EXISTE INFORMACION DEL PROYECTO
+            if ($estatus) {
+                $bloqueado = $estatus->POE_FINALIZADO;
+            } else {
+                $bloqueado = 0;
+            }
 
 
             //==========================================
@@ -302,13 +396,25 @@ class reportesController extends Controller
                 $numero_registro += 1;
                 $value->numero_registro = $numero_registro;
 
-                $value->boton_editar = '<button type="button" class="btn btn-warning waves-effect btn-circle"><i class="fa fa-pencil fa-2x"></i></button>';
+                if ($bloqueado == 0) {
 
-
-                if (($proyecto->proyecto_concluido + 0) == 0 && auth()->user()->hasRoles(['Superusuario', 'Administrador', 'Coordinador'])) {
-                    $value->boton_eliminar = '<button type="button" class="btn btn-danger waves-effect btn-circle eliminar"><i class="fa fa-trash fa-2x"></i></button>';
+                    $value->boton_editar = '<button type="button" class="btn btn-warning waves-effect btn-circle editar"><i class="fa fa-pencil"></i></button>';
                 } else {
-                    $value->boton_eliminar = '<button type="button" class="btn btn-default waves-effect btn-circle" data-toggle="tooltip" title="No disponible"><i class="fa fa-ban fa-2x"></i></button>';
+
+                    $value->boton_editar = '<button type="button" class="btn btn-default waves-effect btn-circle" data-toggle="tooltip" title="No disponible"><i class="fa fa-ban"></i></button>';
+                }
+
+
+                if ($bloqueado == 0) {
+
+                    if (($proyecto->proyecto_concluido + 0) == 0 && auth()->user()->hasRoles(['Superusuario', 'Administrador', 'Coordinador'])) {
+                        $value->boton_eliminar = '<button type="button" class="btn btn-danger waves-effect btn-circle eliminar"><i class="fa fa-trash"></i></button>';
+                    } else {
+                        $value->boton_eliminar = '<button type="button" class="btn btn-default waves-effect btn-circle" data-toggle="tooltip" title="No disponible"><i class="fa fa-ban"></i></button>';
+                    }
+                } else {
+
+                    $value->boton_eliminar = '<button type="button" class="btn btn-default waves-effect btn-circle" data-toggle="tooltip" title="No disponible"><i class="fa fa-ban"></i></button>';
                 }
 
 
@@ -506,7 +612,15 @@ class reportesController extends Controller
     {
         try {
             $proyecto = proyectoModel::findOrFail($proyecto_id);
+            $estatus = estatusReportesInformeModel::where('PROYECTO_ID', $proyecto_id)->first();
 
+
+            //VALIDAMOS SI EXISTE INFORMACION DEL PROYECTO
+            if ($estatus) {
+                $bloqueado = $estatus->POE_FINALIZADO;
+            } else {
+                $bloqueado = 0;
+            }
 
             //==========================================
 
@@ -557,14 +671,23 @@ class reportesController extends Controller
                     $value->numero_registro = $numero_registro;
                 }
 
+                if ($bloqueado == 0) {
 
-                $value->boton_editar = '<button type="button" class="btn btn-warning waves-effect btn-circle"><i class="fa fa-pencil fa-2x"></i></button>';
-
-
-                if (($proyecto->proyecto_concluido + 0) == 0 && auth()->user()->hasRoles(['Superusuario', 'Administrador', 'Coordinador'])) {
-                    $value->boton_eliminar = '<button type="button" class="btn btn-danger waves-effect btn-circle eliminar"><i class="fa fa-trash fa-2x"></i></button>';
+                    $value->boton_editar = '<button type="button" class="btn btn-warning waves-effect btn-circle editar" ><i class="fa fa-pencil"></i></button>';
                 } else {
-                    $value->boton_eliminar = '<button type="button" class="btn btn-default waves-effect btn-circle" data-toggle="tooltip" title="No disponible"><i class="fa fa-ban fa-2x"></i></button>';
+                    $value->boton_editar = '<button type="button" class="btn btn-default waves-effect btn-circle" data-toggle="tooltip" title="No disponible"><i class="fa fa-ban"></i></button>';
+                }
+
+                if ($bloqueado == 0) {
+
+                    if (($proyecto->proyecto_concluido + 0) == 0 && auth()->user()->hasRoles(['Superusuario', 'Administrador', 'Coordinador'])) {
+                        $value->boton_eliminar = '<button type="button" class="btn btn-danger waves-effect btn-circle eliminar"><i class="fa fa-trash"></i></button>';
+                    } else {
+                        $value->boton_eliminar = '<button type="button" class="btn btn-default waves-effect btn-circle" data-toggle="tooltip" title="No disponible"><i class="fa fa-ban"></i></button>';
+                    }
+                } else {
+
+                    $value->boton_eliminar = '<button type="button" class="btn btn-default waves-effect btn-circle" data-toggle="tooltip" title="No disponible"><i class="fa fa-ban"></i></button>';
                 }
             }
 
@@ -692,7 +815,7 @@ class reportesController extends Controller
                     }
 
 
-                    // Mensaje
+                    // Mensaje de salida
                     $dato["msj"] = 'Datos guardados correctamente';
                 } else {
                     $request['reporteiluminacionarea_porcientooperacion'] = $request->reportearea_porcientooperacion;
@@ -1002,6 +1125,1621 @@ class reportesController extends Controller
             // respuesta
             $dato["msj"] = 'Error ' . $e->getMessage();
             return response()->json($dato);
+        }
+    }
+
+    /// OBTENEMOS LOS DATOS DEL INFORME
+    public function obtenerDatosInformesProyecto($ID)
+    {
+        try {
+            $opciones_select = '<option value="">&nbsp;</option>';
+            $html  = '<option value="">&nbsp;</option>';
+            $info = DB::select('SELECT ID_RECURSO_INFORME,
+                                         PROYECTO_ID,
+                                         AGENTE_ID,
+                                         NORMA_ID,
+                                         RUTA_IMAGEN_PORTADA,
+                                         OPCION_PORTADA1,
+                                         OPCION_PORTADA2,
+                                         OPCION_PORTADA3,
+                                         OPCION_PORTADA4,
+                                         OPCION_PORTADA5,
+                                         OPCION_PORTADA6,                                        
+                                         NIVEL1,
+                                         NIVEL2,
+                                         NIVEL3,
+                                         NIVEL4,
+                                         NIVEL5
+                                 FROM recursosPortadasInformes
+                                 WHERE PROYECTO_ID = ?', [$ID]);
+
+            $niveles = DB::select('   SELECT 
+                                            "Instalación" ETIQUETA,
+                                            proyecto_clienteinstalacion OPCION,
+                                            0 NIVEL
+                                        FROM proyecto
+                                        WHERE id = ?
+                                        UNION
+                                        SELECT
+                                            IFNULL(ce.NOMBRE_ETIQUETA, "NO") AS ETIQUETA,
+                                            IFNULL(co.NOMBRE_OPCIONES , "NO") AS OPCION, 
+                                            IFNULL(ep.NIVEL, 0) NIVEL
+                                        FROM proyecto rs
+                                        LEFT JOIN proyecto p ON rs.proyecto_folio = p.proyecto_folio
+                                        LEFT JOIN estructuraProyectos ep ON p.id = ep.PROYECTO_ID
+                                        LEFT JOIN cat_etiquetas ce ON ep.ETIQUETA_ID = ce.ID_ETIQUETA
+                                        LEFT JOIN catetiquetas_opciones co ON ep.OPCION_ID = co.ID_OPCIONES_ETIQUETAS
+                                        WHERE rs.id = ?
+                                        UNION
+                                        SELECT 
+                                            "Folio" ETIQUETA,
+                                            proyecto_folio OPCION,
+                                            0 NIVEL
+                                        FROM proyecto
+                                        WHERE id = ?
+                                        UNION
+                                        SELECT
+                                            "Razón social" ETIQUETA,
+                                            proyecto_clienterazonsocial OPCION,
+                                            0 NIVEL
+                                        FROM proyecto
+                                        WHERE id = ?
+                                        UNION
+                                        SELECT 
+                                            "Nombre comercial" ETIQUETA,
+                                            c.cliente_NombreComercial OPCION,
+                                            0 NIVEL
+                                        FROM cliente c
+                                        LEFT JOIN proyecto r ON r.cliente_id = c.id
+                                        WHERE r.id = ?
+                                     ORDER BY NIVEL', [$ID, $ID, $ID, $ID, $ID]);
+
+
+
+            foreach ($niveles as $key => $value) {
+
+                if ($value->ETIQUETA == 'NO') {
+
+                    $opciones_select .= '<option value="" disabled> Proyecto vinculado sin Estructura organizacional para mostrar</option>';
+                } else {
+
+                    if ($value->NIVEL == 0) {
+
+                        $opciones_select .= '<option value="' . $value->OPCION . '"  >' . $value->ETIQUETA . ' : ' . $value->OPCION  . ' </option>';
+                    } else {
+
+                        $opciones_select .= '<option value="' . $value->OPCION . '"  >' . $value->ETIQUETA . ' : ' . $value->OPCION . ' [ Nivel' . $value->NIVEL . ']' . ' </option>';
+                    }
+                }
+            }
+
+
+            foreach ($niveles as $key => $value) {
+                if ($value->ETIQUETA == 'Instalación' || $value->NIVEL != 0) {
+
+                    $html .= '<option value="' . $value->OPCION . '">' . $value->ETIQUETA . " : " . $value->OPCION;
+                    if ($value->NIVEL != 0) {
+
+                        $html .= ' [ Nivel ' . $value->NIVEL . ']';
+                    }
+                    $html .= '</option>';
+                }
+            }
+
+            $dato["opciones"] = $opciones_select;
+            $dato["checks"] = $html;
+
+
+
+            if ($info) {
+
+                $dato["data"] = $info;
+                return response()->json($dato);
+            } else {
+
+                $dato["data"] = 'No se encontraron datos';
+                return response()->json($dato);
+            }
+        } catch (Exception $e) {
+
+            $dato["msj"] = 'Error ' . $e->getMessage();
+            return response()->json($dato, 500); // Se puede usar el código de estado 500 para indicar un error del servidor
+        }
+    }
+
+
+
+
+    public function descargarPortadaInformes($proyecto_id, $tipo)
+    {
+
+        function introduccion($proyecto, $texto)
+        {
+            if (count($proyecto) == 0) {
+                return $texto;
+            }
+
+            $proyecto = $proyecto[0];
+
+            $reportefecha = explode("-", $proyecto->proyecto_fechaentrega);
+            $meses = [
+                1 => 'enero', 2 => 'febrero', 3 => 'marzo', 4 => 'abril', 5 => 'mayo', 6 => 'junio',
+                7 => 'julio', 8 => 'agosto', 9 => 'septiembre', 10 => 'octubre', 11 => 'noviembre', 12 => 'diciembre'
+            ];
+
+            $texto = str_replace("INSTALACION_NOMBRE", $proyecto->proyecto_clienteinstalacion, $texto);
+            $texto = str_replace("REPORTE_FECHA_LARGA", $reportefecha[2] . " de " . $meses[(int)$reportefecha[1]] . " del año " . $reportefecha[0], $texto);
+
+            return $texto;
+        }
+
+        // ================== DATOS GENERALES =================
+        $recursos = recursosPortadasInformesModel::where('PROYECTO_ID', $proyecto_id)->where('AGENTE_ID', $tipo)->get();
+        $proyecto = proyectoModel::where('id', $proyecto_id)->get();
+        $reconocimiento = recsensorialModel::where('id', $proyecto[0]->recsensorial_id)->get();
+
+
+        if ($proyecto[0]->requiereContrato == 1) {
+
+            $contratoId = $proyecto[0]->contrato_id;
+
+            $cliente = DB::table('contratos_clientes as cc')
+                ->leftJoin('cliente as c', 'c.id', '=', 'cc.CLIENTE_ID')
+                ->where('cc.ID_CONTRATO', $contratoId)
+                ->select(
+                    'cc.NUMERO_CONTRATO',
+                    'cc.DESCRIPCION_CONTRATO',
+                    'cc.CONTRATO_PLANTILLA_LOGODERECHO',
+                    'cc.CONTRATO_PLANTILLA_LOGOIZQUIERDO',
+                    'cc.CONTRATO_PLANTILLA_PIEPAGINA',
+                    'c.cliente_RazonSocial'
+                )
+                ->get();
+        } else {
+            $cliente = clienteModel::where('id', $proyecto[0]->cliente_id)->get();
+        }
+
+
+
+        switch ($tipo) {
+            case 1: //RUIDO
+
+                $agente = reporteruidoModel::where('proyecto_id', $proyecto_id)->get();
+                $plantillaword = new TemplateProcessor(storage_path('app/plantillas_reportes/portadas/Plantilla_informe_ruido.docx')); //Ruta carpeta storage
+
+
+                // ====== PORTADA EXTERIROR
+
+                $titulo_partida = clientepartidasModel::where('CONTRATO_ID', $reconocimiento[0]->contrato_id)
+                    ->where('clientepartidas_tipo', 2) // Informe de resultados
+                    ->where('catprueba_id', 1) // ruido
+                    ->orderBy('updated_at', 'DESC')
+                    ->get();
+
+                //PARTE DEL PROYECTO
+                if (count($titulo_partida) > 0) {
+
+                    //Para el valor que lleva proyecto se utilizo: descripcion de la partida, Numero del contrato y la descripcion del contrato
+                    $plantillaword->setValue('proyecto_portada', str_replace("\n", "<w:br/>", $titulo_partida[0]->clientepartidas_descripcion) . ' - Contrato: ' . $cliente[0]->NUMERO_CONTRATO);
+
+                    $plantillaword->setValue('PARTIDA', str_replace("\n", "<w:br/>", $titulo_partida[0]->clientepartidas_descripcion));
+                } else {
+
+                    $plantillaword->setValue('PARTIDA', "");
+                    $plantillaword->setValue('proyecto_portada', 'El proyecto no esta vinculado a ningun contrato.');
+                }
+
+                $plantillaword->setValue('folio_portada', $proyecto[0]->proyecto_folio);
+                $plantillaword->setValue('razon_social_portada', $cliente[0]->cliente_RazonSocial);
+                $plantillaword->setValue('instalación_portada', $reconocimiento[0]->recsensorial_instalacion);
+
+                $fecha = $agente[0]->reporte_mes . ' del ' . $agente[0]->reporteruido_fecha;
+                $plantillaword->setValue('lugar_fecha_portada', $fecha);
+                $plantillaword->setValue('PORTADA_FECHA', $fecha);
+
+
+
+                //IMAGEN DE LA PORTADA
+                if ($recursos[0]->RUTA_IMAGEN_PORTADA) {
+                    if (file_exists(storage_path('app/' . $recursos[0]->RUTA_IMAGEN_PORTADA))) {
+
+                        $plantillaword->setImageValue('foto_portada', array('path' => storage_path('app/' . $recursos[0]->RUTA_IMAGEN_PORTADA), 'width' => 650, 'height' => 750, 'ratio' => true, 'borderColor' => '000000'));
+                    } else {
+
+                        $plantillaword->setValue('foto_portada', 'LA IMAGEN NO HA SIDO ENCONTRADA');
+                    }
+                } else {
+
+                    $plantillaword->setValue('foto_portada', 'LA IMAGEN DE LA PORTADA NO HA SIDO CARGADA');
+                }
+
+
+                // ============ PORTADA intERIOR
+                $NIVEL_PORTADA1 = is_null($recursos[0]->OPCION_PORTADA1) ? "" : $recursos[0]->OPCION_PORTADA1 . "<w:br />";
+                $NIVEL_PORTADA2 = is_null($recursos[0]->OPCION_PORTADA2) ? "" : $recursos[0]->OPCION_PORTADA2 . "<w:br />";
+                $NIVEL_PORTADA3 = is_null($recursos[0]->OPCION_PORTADA3) ? "" : $recursos[0]->OPCION_PORTADA3 . "<w:br />";
+                $NIVEL_PORTADA4 = is_null($recursos[0]->OPCION_PORTADA4) ? "" : $recursos[0]->OPCION_PORTADA4 . "<w:br />";
+                $NIVEL_PORTADA5 = is_null($recursos[0]->OPCION_PORTADA5) ? "" : $recursos[0]->OPCION_PORTADA5 . "<w:br />";
+                $NIVEL_PORTADA6 = is_null($recursos[0]->OPCION_PORTADA6) ? "" : $recursos[0]->OPCION_PORTADA6 . "<w:br />";
+                $plantillaword->setValue('ESTRUCTURA', $NIVEL_PORTADA1 . $NIVEL_PORTADA2 . $NIVEL_PORTADA3 . $NIVEL_PORTADA4 . $NIVEL_PORTADA5 . $NIVEL_PORTADA6);
+
+                if ($proyecto[0]->requiereContrato == 1) {
+
+                    $plantillaword->setValue('TITULO_CONTRATO', "Contrato:");
+                    $plantillaword->setValue('CONTRATO', $cliente[0]->NUMERO_CONTRATO);
+                    $plantillaword->setValue('DESCRIPCION_CONTRATO', $cliente[0]->DESCRIPCION_CONTRATO);
+
+                    $plantillaword->setValue('PIE_PAGINA', $cliente[0]->CONTRATO_PLANTILLA_PIEPAGINA);
+                    $plantillaword->setValue('INFORME_REVISION', "");
+                } else {
+
+                    $plantillaword->setValue('CONTRATO', "");
+                    $plantillaword->setValue('DESCRIPCION_CONTRATO', "");
+                    $plantillaword->setValue('TITULO_CONTRATO', "");
+
+                    $plantillaword->setValue('PIE_PAGINA', "");
+                    $plantillaword->setValue('INFORME_REVISION', "");
+                }
+
+
+                //============= ENCABEZADOS TITULOS
+                $NIVEL1 = is_null($recursos[0]->NIVEL1) ? "" : $recursos[0]->NIVEL1 . "<w:br />";
+                $NIVEL2 = is_null($recursos[0]->NIVEL2) ? "" : $recursos[0]->NIVEL2 . "<w:br />";
+                $NIVEL3 = is_null($recursos[0]->NIVEL3) ? "" : $recursos[0]->NIVEL3 . "<w:br />";
+                $NIVEL4 = is_null($recursos[0]->NIVEL4) ? "" : $recursos[0]->NIVEL4 . "<w:br />";
+                $NIVEL5 = is_null($recursos[0]->NIVEL5) ? "" : $recursos[0]->NIVEL5;
+
+                $plantillaword->setValue('ENCABEZADO', $NIVEL1 . $NIVEL2 . $NIVEL3 . $NIVEL4 . $NIVEL5);
+                $plantillaword->setValue('INSTALACION_NOMBRE', $NIVEL1 . $NIVEL2 . $NIVEL3 . $NIVEL4 . $NIVEL5);
+
+                //LOGOS DE AS EMPRESAS DE INFORME
+                if ($proyecto[0]->requiereContrato == 1) {
+
+                    if ($cliente[0]->CONTRATO_PLANTILLA_LOGOIZQUIERDO) {
+                        if (file_exists(storage_path('app/' . $cliente[0]->CONTRATO_PLANTILLA_LOGOIZQUIERDO))) {
+
+                            $plantillaword->setImageValue('LOGO_IZQUIERDO', array('path' => storage_path('app/' . $cliente[0]->CONTRATO_PLANTILLA_LOGOIZQUIERDO), 'width' => 120, 'height' => 150, 'ratio' => true, 'borderColor' => '000000'));
+
+                            $plantillaword->setImageValue('LOGO_IZQUIERDO_PORTADA', array('path' => storage_path('app/' . $cliente[0]->CONTRATO_PLANTILLA_LOGOIZQUIERDO), 'width' => 120, 'height' => 150, 'ratio' => true, 'borderColor' => '000000'));
+                        } else {
+
+                            $plantillaword->setValue('LOGO_IZQUIERDO', 'SIN IMAGEN');
+                            $plantillaword->setValue('LOGO_IZQUIERDO_PORTADA', 'SIN IMAGEN');
+                        }
+                    } else {
+                        $plantillaword->setValue('LOGO_IZQUIERDO', 'SIN IMAGEN');
+                        $plantillaword->setValue('LOGO_IZQUIERDO_PORTADA', 'SIN IMAGEN');
+                    }
+
+
+                    if ($cliente[0]->CONTRATO_PLANTILLA_LOGODERECHO) {
+                        if (file_exists(storage_path('app/' . $cliente[0]->CONTRATO_PLANTILLA_LOGODERECHO))) {
+
+                            $plantillaword->setImageValue('LOGO_DERECHO', array('path' => storage_path('app/' . $cliente[0]->CONTRATO_PLANTILLA_LOGODERECHO), 'width' => 120, 'height' => 150, 'ratio' => true, 'borderColor' => '000000'));
+
+                            $plantillaword->setImageValue('LOGO_DERECHO_PORTADA', array('path' => storage_path('app/' . $cliente[0]->CONTRATO_PLANTILLA_LOGODERECHO), 'width' => 120, 'height' => 150, 'ratio' => true, 'borderColor' => '000000'));
+                        } else {
+
+                            $plantillaword->setValue('LOGO_DERECHO', 'SIN IMAGEN');
+                            $plantillaword->setValue('LOGO_DERECHO_PORTADA', 'SIN IMAGEN');
+                        }
+                    } else {
+                        $plantillaword->setValue('LOGO_DERECHO', 'SIN IMAGEN');
+                        $plantillaword->setValue('LOGO_DERECHO_PORTADA', 'SIN IMAGEN');
+                    }
+                } else {
+
+                    $plantillaword->setValue('LOGO_DERECHO', 'SIN IMAGEN');
+                    $plantillaword->setValue('LOGO_IZQUIERDO', 'SIN IMAGEN');
+
+                    $plantillaword->setValue('LOGO_DERECHO_PORTADA', 'SIN IMAGEN');
+                    $plantillaword->setValue('LOGO_IZQUIERDO_PORTADA', 'SIN IMAGEN');
+                }
+
+                // ====== INTRODUCCION =====
+                // $plantillaword->setValue('INTRODUCCION', $agente[0]->reporteruido_introduccion);
+
+
+                $introduccionTexto = $agente[0]->reporteruido_introduccion;
+                $introduccionTextoModificado = introduccion($proyecto, $introduccionTexto);
+
+                // Asigna el texto modificado a la plantilla
+                $plantillaword->setValue('INTRODUCCION', $introduccionTextoModificado);
+
+
+                //=========== CREAR Y DESCARGAR EL INFORME
+                try {
+                    Storage::makeDirectory('reportes/portadas'); //crear directorio
+                    $plantillaword->saveAs(storage_path('app/reportes/portadas/Ruido.docx')); //crear archivo word
+
+                    return response()->download(storage_path('app/reportes/portadas/Ruido.docx'))->deleteFileAfterSend(true);
+                } catch (Exception $e) {
+                    $dato["msj"] = 'Error al crear reporte: ' . $e->getMessage();
+                    return response()->json($dato);
+                }
+
+                break;
+
+
+
+            case 2: // VIBRACIÓN
+
+                $agente = reportevibracionModel::where('proyecto_id', $proyecto_id)->get();
+                $plantillaword = new TemplateProcessor(storage_path('app/plantillas_reportes/portadas/Plantilla_informe_vibracion.docx')); //Ruta carpeta storage
+
+
+                // ====== PORTADA EXTERIROR
+
+                $titulo_partida = clientepartidasModel::where('CONTRATO_ID', $reconocimiento[0]->contrato_id)
+                    ->where('clientepartidas_tipo', 2) // Informe de resultados
+                    ->where('catprueba_id', 2) // Vibracion
+                    ->orderBy('updated_at', 'DESC')
+                    ->get();
+
+                //PARTE DEL PROYECTO
+                if (count($titulo_partida) > 0) {
+
+                    //Para el valor que lleva proyecto se utilizo: descripcion de la partida, Numero del contrato y la descripcion del contrato
+                    $plantillaword->setValue('proyecto_portada', str_replace("\n", "<w:br/>", $titulo_partida[0]->clientepartidas_descripcion) . ' - Contrato: ' . $cliente[0]->NUMERO_CONTRATO);
+
+                    $plantillaword->setValue('PARTIDA', str_replace("\n", "<w:br/>", $titulo_partida[0]->clientepartidas_descripcion));
+                } else {
+
+                    $plantillaword->setValue('PARTIDA', "");
+                    $plantillaword->setValue('proyecto_portada', 'El proyecto no esta vinculado a ningun contrato.');
+                }
+
+                $plantillaword->setValue('folio_portada', $proyecto[0]->proyecto_folio);
+                $plantillaword->setValue('razon_social_portada', $cliente[0]->cliente_RazonSocial);
+                $plantillaword->setValue('instalación_portada', $reconocimiento[0]->recsensorial_instalacion);
+
+                $fecha = $agente[0]->reporte_mes . ' del ' . $agente[0]->reportevibracion_fecha;
+                $plantillaword->setValue('lugar_fecha_portada', $fecha);
+                $plantillaword->setValue('PORTADA_FECHA', $fecha);
+
+
+
+                //IMAGEN DE LA PORTADA
+                if ($recursos[0]->RUTA_IMAGEN_PORTADA) {
+                    if (file_exists(storage_path('app/' . $recursos[0]->RUTA_IMAGEN_PORTADA))) {
+
+                        $plantillaword->setImageValue('foto_portada', array('path' => storage_path('app/' . $recursos[0]->RUTA_IMAGEN_PORTADA), 'width' => 650, 'height' => 750, 'ratio' => true, 'borderColor' => '000000'));
+                    } else {
+
+                        $plantillaword->setValue('foto_portada', 'LA IMAGEN NO HA SIDO ENCONTRADA');
+                    }
+                } else {
+
+                    $plantillaword->setValue('foto_portada', 'LA IMAGEN DE LA PORTADA NO HA SIDO CARGADA');
+                }
+
+
+                // ============ PORTADA INTERIOR
+                $NIVEL_PORTADA1 = is_null($recursos[0]->OPCION_PORTADA1) ? "" : $recursos[0]->OPCION_PORTADA1 . "<w:br />";
+                $NIVEL_PORTADA2 = is_null($recursos[0]->OPCION_PORTADA2) ? "" : $recursos[0]->OPCION_PORTADA2 . "<w:br />";
+                $NIVEL_PORTADA3 = is_null($recursos[0]->OPCION_PORTADA3) ? "" : $recursos[0]->OPCION_PORTADA3 . "<w:br />";
+                $NIVEL_PORTADA4 = is_null($recursos[0]->OPCION_PORTADA4) ? "" : $recursos[0]->OPCION_PORTADA4 . "<w:br />";
+                $NIVEL_PORTADA5 = is_null($recursos[0]->OPCION_PORTADA5) ? "" : $recursos[0]->OPCION_PORTADA5 . "<w:br />";
+                $NIVEL_PORTADA6 = is_null($recursos[0]->OPCION_PORTADA6) ? "" : $recursos[0]->OPCION_PORTADA6 . "<w:br />";
+                $plantillaword->setValue('ESTRUCTURA', $NIVEL_PORTADA1 . $NIVEL_PORTADA2 . $NIVEL_PORTADA3 . $NIVEL_PORTADA4 . $NIVEL_PORTADA5 . $NIVEL_PORTADA6);
+
+                if ($proyecto[0]->requiereContrato == 1) {
+
+                    $plantillaword->setValue('TITULO_CONTRATO', "Contrato:");
+                    $plantillaword->setValue('CONTRATO', $cliente[0]->NUMERO_CONTRATO);
+                    $plantillaword->setValue('DESCRIPCION_CONTRATO', $cliente[0]->DESCRIPCION_CONTRATO);
+
+                    $plantillaword->setValue('PIE_PAGINA', $cliente[0]->CONTRATO_PLANTILLA_PIEPAGINA);
+                    $plantillaword->setValue('INFORME_REVISION', "");
+                } else {
+
+                    $plantillaword->setValue('CONTRATO', "");
+                    $plantillaword->setValue('DESCRIPCION_CONTRATO', "");
+                    $plantillaword->setValue('TITULO_CONTRATO', "");
+
+                    $plantillaword->setValue('PIE_PAGINA', "");
+                    $plantillaword->setValue('INFORME_REVISION', "");
+                }
+
+
+                //============= ENCABEZADOS TITULOS
+                $NIVEL1 = is_null($recursos[0]->NIVEL1) ? "" : $recursos[0]->NIVEL1 . "<w:br />";
+                $NIVEL2 = is_null($recursos[0]->NIVEL2) ? "" : $recursos[0]->NIVEL2 . "<w:br />";
+                $NIVEL3 = is_null($recursos[0]->NIVEL3) ? "" : $recursos[0]->NIVEL3 . "<w:br />";
+                $NIVEL4 = is_null($recursos[0]->NIVEL4) ? "" : $recursos[0]->NIVEL4 . "<w:br />";
+                $NIVEL5 = is_null($recursos[0]->NIVEL5) ? "" : $recursos[0]->NIVEL5;
+
+                $plantillaword->setValue('ENCABEZADO', $NIVEL1 . $NIVEL2 . $NIVEL3 . $NIVEL4 . $NIVEL5);
+                $plantillaword->setValue('INSTALACION_NOMBRE', $NIVEL1 . $NIVEL2 . $NIVEL3 . $NIVEL4 . $NIVEL5);
+
+                //LOGOS DE AS EMPRESAS DE INFORME
+                if ($proyecto[0]->requiereContrato == 1) {
+
+                    if ($cliente[0]->CONTRATO_PLANTILLA_LOGOIZQUIERDO) {
+                        if (file_exists(storage_path('app/' . $cliente[0]->CONTRATO_PLANTILLA_LOGOIZQUIERDO))) {
+
+                            $plantillaword->setImageValue('LOGO_IZQUIERDO', array('path' => storage_path('app/' . $cliente[0]->CONTRATO_PLANTILLA_LOGOIZQUIERDO), 'width' => 120, 'height' => 150, 'ratio' => true, 'borderColor' => '000000'));
+
+                            $plantillaword->setImageValue('LOGO_IZQUIERDO_PORTADA', array('path' => storage_path('app/' . $cliente[0]->CONTRATO_PLANTILLA_LOGOIZQUIERDO), 'width' => 120, 'height' => 150, 'ratio' => true, 'borderColor' => '000000'));
+                        } else {
+
+                            $plantillaword->setValue('LOGO_IZQUIERDO', 'SIN IMAGEN');
+                            $plantillaword->setValue('LOGO_IZQUIERDO_PORTADA', 'SIN IMAGEN');
+                        }
+                    } else {
+                        $plantillaword->setValue('LOGO_IZQUIERDO', 'SIN IMAGEN');
+                        $plantillaword->setValue('LOGO_IZQUIERDO_PORTADA', 'SIN IMAGEN');
+                    }
+
+
+                    if ($cliente[0]->CONTRATO_PLANTILLA_LOGODERECHO) {
+                        if (file_exists(storage_path('app/' . $cliente[0]->CONTRATO_PLANTILLA_LOGODERECHO))) {
+
+                            $plantillaword->setImageValue('LOGO_DERECHO', array('path' => storage_path('app/' . $cliente[0]->CONTRATO_PLANTILLA_LOGODERECHO), 'width' => 120, 'height' => 150, 'ratio' => true, 'borderColor' => '000000'));
+
+                            $plantillaword->setImageValue('LOGO_DERECHO_PORTADA', array('path' => storage_path('app/' . $cliente[0]->CONTRATO_PLANTILLA_LOGODERECHO), 'width' => 120, 'height' => 150, 'ratio' => true, 'borderColor' => '000000'));
+                        } else {
+
+                            $plantillaword->setValue('LOGO_DERECHO', 'SIN IMAGEN');
+                            $plantillaword->setValue('LOGO_DERECHO_PORTADA', 'SIN IMAGEN');
+                        }
+                    } else {
+                        $plantillaword->setValue('LOGO_DERECHO', 'SIN IMAGEN');
+                        $plantillaword->setValue('LOGO_DERECHO_PORTADA', 'SIN IMAGEN');
+                    }
+                } else {
+
+                    $plantillaword->setValue('LOGO_DERECHO', 'SIN IMAGEN');
+                    $plantillaword->setValue('LOGO_IZQUIERDO', 'SIN IMAGEN');
+
+                    $plantillaword->setValue('LOGO_DERECHO_PORTADA', 'SIN IMAGEN');
+                    $plantillaword->setValue('LOGO_IZQUIERDO_PORTADA', 'SIN IMAGEN');
+                }
+
+                // ====== INTRODUCCION =====
+
+
+                $introduccionTexto = $agente[0]->reportevibracion_introduccion;
+                $introduccionTextoModificado = introduccion($proyecto, $introduccionTexto);
+
+                // Asigna el texto modificado a la plantilla
+                $plantillaword->setValue('INTRODUCCION', $introduccionTextoModificado);
+
+
+
+                // $plantillaword->setValue('INTRODUCCION', $agente[0]->reportevibracion_introduccion);
+
+
+                try {
+                    Storage::makeDirectory('reportes/portadas'); //crear directorio
+                    $plantillaword->saveAs(storage_path('app/reportes/portadas/Vibracion.docx')); //crear archivo word
+
+                    return response()->download(storage_path('app/reportes/portadas/Vibracion.docx'))->deleteFileAfterSend(true);
+                } catch (Exception $e) {
+                    $dato["msj"] = 'Error al crear reporte: ' . $e->getMessage();
+                    return response()->json($dato);
+                }
+                break;
+
+
+            case 3: // TEMPERATURA
+
+                $agente = reportetemperaturaModel::where('proyecto_id', $proyecto_id)->get();
+                $plantillaword = new TemplateProcessor(storage_path('app/plantillas_reportes/portadas/Plantilla_informe_temperatura.docx')); //Ruta carpeta storage
+
+                // ====== PORTADA EXTERIROR
+
+                $titulo_partida = clientepartidasModel::where('CONTRATO_ID', $reconocimiento[0]->contrato_id)
+                    ->where('clientepartidas_tipo', 2) // Informe de resultados
+                    ->where('catprueba_id', 3) // Temperatura
+                    ->orderBy('updated_at', 'DESC')
+                    ->get();
+
+                //PARTE DEL PROYECTO
+                if (count($titulo_partida) > 0) {
+
+                    //Para el valor que lleva proyecto se utilizo: descripcion de la partida, Numero del contrato y la descripcion del contrato
+                    $plantillaword->setValue('proyecto_portada', str_replace("\n", "<w:br/>", $titulo_partida[0]->clientepartidas_descripcion) . ' - Contrato: ' . $cliente[0]->NUMERO_CONTRATO);
+
+                    $plantillaword->setValue('PARTIDA', str_replace("\n", "<w:br/>", $titulo_partida[0]->clientepartidas_descripcion));
+                } else {
+
+                    $plantillaword->setValue('PARTIDA', "");
+                    $plantillaword->setValue('proyecto_portada', 'El proyecto no esta vinculado a ningun contrato.');
+                }
+
+                $plantillaword->setValue('folio_portada', $proyecto[0]->proyecto_folio);
+                $plantillaword->setValue('razon_social_portada', $cliente[0]->cliente_RazonSocial);
+                $plantillaword->setValue('instalación_portada', $reconocimiento[0]->recsensorial_instalacion);
+
+                $fecha = $agente[0]->reporte_mes . ' del ' . $agente[0]->reportetemperatura_fecha;
+                $plantillaword->setValue('lugar_fecha_portada', $fecha);
+                $plantillaword->setValue('PORTADA_FECHA', $fecha);
+
+
+
+                //IMAGEN DE LA PORTADA
+                if ($recursos[0]->RUTA_IMAGEN_PORTADA) {
+                    if (file_exists(storage_path('app/' . $recursos[0]->RUTA_IMAGEN_PORTADA))) {
+
+                        $plantillaword->setImageValue('foto_portada', array('path' => storage_path('app/' . $recursos[0]->RUTA_IMAGEN_PORTADA), 'width' => 650, 'height' => 750, 'ratio' => true, 'borderColor' => '000000'));
+                    } else {
+
+                        $plantillaword->setValue('foto_portada', 'LA IMAGEN NO HA SIDO ENCONTRADA');
+                    }
+                } else {
+
+                    $plantillaword->setValue('foto_portada', 'LA IMAGEN DE LA PORTADA NO HA SIDO CARGADA');
+                }
+
+
+                // ============ PORTADA INTERIOR
+                $NIVEL_PORTADA1 = is_null($recursos[0]->OPCION_PORTADA1) ? "" : $recursos[0]->OPCION_PORTADA1 . "<w:br />";
+                $NIVEL_PORTADA2 = is_null($recursos[0]->OPCION_PORTADA2) ? "" : $recursos[0]->OPCION_PORTADA2 . "<w:br />";
+                $NIVEL_PORTADA3 = is_null($recursos[0]->OPCION_PORTADA3) ? "" : $recursos[0]->OPCION_PORTADA3 . "<w:br />";
+                $NIVEL_PORTADA4 = is_null($recursos[0]->OPCION_PORTADA4) ? "" : $recursos[0]->OPCION_PORTADA4 . "<w:br />";
+                $NIVEL_PORTADA5 = is_null($recursos[0]->OPCION_PORTADA5) ? "" : $recursos[0]->OPCION_PORTADA5 . "<w:br />";
+                $NIVEL_PORTADA6 = is_null($recursos[0]->OPCION_PORTADA6) ? "" : $recursos[0]->OPCION_PORTADA6 . "<w:br />";
+                $plantillaword->setValue('ESTRUCTURA', $NIVEL_PORTADA1 . $NIVEL_PORTADA2 . $NIVEL_PORTADA3 . $NIVEL_PORTADA4 . $NIVEL_PORTADA5 . $NIVEL_PORTADA6);
+
+                if ($proyecto[0]->requiereContrato == 1) {
+
+                    $plantillaword->setValue('TITULO_CONTRATO', "Contrato:");
+                    $plantillaword->setValue('CONTRATO', $cliente[0]->NUMERO_CONTRATO);
+                    $plantillaword->setValue('DESCRIPCION_CONTRATO', $cliente[0]->DESCRIPCION_CONTRATO);
+
+                    $plantillaword->setValue('PIE_PAGINA', $cliente[0]->CONTRATO_PLANTILLA_PIEPAGINA);
+                    $plantillaword->setValue('INFORME_REVISION', "");
+                } else {
+
+                    $plantillaword->setValue('CONTRATO', "");
+                    $plantillaword->setValue('DESCRIPCION_CONTRATO', "");
+                    $plantillaword->setValue('TITULO_CONTRATO', "");
+
+                    $plantillaword->setValue('PIE_PAGINA', "");
+                    $plantillaword->setValue('INFORME_REVISION', "");
+                }
+
+
+                //============= ENCABEZADOS TITULOS
+                $NIVEL1 = is_null($recursos[0]->NIVEL1) ? "" : $recursos[0]->NIVEL1 . "<w:br />";
+                $NIVEL2 = is_null($recursos[0]->NIVEL2) ? "" : $recursos[0]->NIVEL2 . "<w:br />";
+                $NIVEL3 = is_null($recursos[0]->NIVEL3) ? "" : $recursos[0]->NIVEL3 . "<w:br />";
+                $NIVEL4 = is_null($recursos[0]->NIVEL4) ? "" : $recursos[0]->NIVEL4 . "<w:br />";
+                $NIVEL5 = is_null($recursos[0]->NIVEL5) ? "" : $recursos[0]->NIVEL5;
+
+                $plantillaword->setValue('ENCABEZADO', $NIVEL1 . $NIVEL2 . $NIVEL3 . $NIVEL4 . $NIVEL5);
+                $plantillaword->setValue('INSTALACION_NOMBRE', $NIVEL1 . $NIVEL2 . $NIVEL3 . $NIVEL4 . $NIVEL5);
+
+                //LOGOS DE AS EMPRESAS DE INFORME
+                if ($proyecto[0]->requiereContrato == 1) {
+
+                    if ($cliente[0]->CONTRATO_PLANTILLA_LOGOIZQUIERDO) {
+                        if (file_exists(storage_path('app/' . $cliente[0]->CONTRATO_PLANTILLA_LOGOIZQUIERDO))) {
+
+                            $plantillaword->setImageValue('LOGO_IZQUIERDO', array('path' => storage_path('app/' . $cliente[0]->CONTRATO_PLANTILLA_LOGOIZQUIERDO), 'width' => 120, 'height' => 150, 'ratio' => true, 'borderColor' => '000000'));
+
+                            $plantillaword->setImageValue('LOGO_IZQUIERDO_PORTADA', array('path' => storage_path('app/' . $cliente[0]->CONTRATO_PLANTILLA_LOGOIZQUIERDO), 'width' => 120, 'height' => 150, 'ratio' => true, 'borderColor' => '000000'));
+                        } else {
+
+                            $plantillaword->setValue('LOGO_IZQUIERDO', 'SIN IMAGEN');
+                            $plantillaword->setValue('LOGO_IZQUIERDO_PORTADA', 'SIN IMAGEN');
+                        }
+                    } else {
+                        $plantillaword->setValue('LOGO_IZQUIERDO', 'SIN IMAGEN');
+                        $plantillaword->setValue('LOGO_IZQUIERDO_PORTADA', 'SIN IMAGEN');
+                    }
+
+
+                    if ($cliente[0]->CONTRATO_PLANTILLA_LOGODERECHO) {
+                        if (file_exists(storage_path('app/' . $cliente[0]->CONTRATO_PLANTILLA_LOGODERECHO))) {
+
+                            $plantillaword->setImageValue('LOGO_DERECHO', array('path' => storage_path('app/' . $cliente[0]->CONTRATO_PLANTILLA_LOGODERECHO), 'width' => 120, 'height' => 150, 'ratio' => true, 'borderColor' => '000000'));
+
+                            $plantillaword->setImageValue('LOGO_DERECHO_PORTADA', array('path' => storage_path('app/' . $cliente[0]->CONTRATO_PLANTILLA_LOGODERECHO), 'width' => 120, 'height' => 150, 'ratio' => true, 'borderColor' => '000000'));
+                        } else {
+
+                            $plantillaword->setValue('LOGO_DERECHO', 'SIN IMAGEN');
+                            $plantillaword->setValue('LOGO_DERECHO_PORTADA', 'SIN IMAGEN');
+                        }
+                    } else {
+                        $plantillaword->setValue('LOGO_DERECHO', 'SIN IMAGEN');
+                        $plantillaword->setValue('LOGO_DERECHO_PORTADA', 'SIN IMAGEN');
+                    }
+                } else {
+
+                    $plantillaword->setValue('LOGO_DERECHO', 'SIN IMAGEN');
+                    $plantillaword->setValue('LOGO_IZQUIERDO', 'SIN IMAGEN');
+
+                    $plantillaword->setValue('LOGO_DERECHO_PORTADA', 'SIN IMAGEN');
+                    $plantillaword->setValue('LOGO_IZQUIERDO_PORTADA', 'SIN IMAGEN');
+                }
+
+                // ====== INTRODUCCION =====
+                // $plantillaword->setValue('INTRODUCCION', $agente[0]->reportetemperatura_introduccion);
+
+                $introduccionTexto = $agente[0]->reportetemperatura_introduccion;
+                $introduccionTextoModificado = introduccion($proyecto, $introduccionTexto);
+
+                // Asigna el texto modificado a la plantilla
+                $plantillaword->setValue('INTRODUCCION', $introduccionTextoModificado);
+
+
+
+                Storage::makeDirectory('reportes/portadas'); //crear directorio
+                $plantillaword->saveAs(storage_path('app/reportes/portadas/Temperatura.docx')); //crear archivo word
+
+                return response()->download(storage_path('app/reportes/portadas/Temperatura.docx'))->deleteFileAfterSend(true);
+                break;
+
+
+
+            case 4: // ILUMINACIÓN
+                $agente = reporteiluminacionModel::where('proyecto_id', $proyecto_id)->get();
+                $plantillaword = new TemplateProcessor(storage_path('app/plantillas_reportes/portadas/Plantilla_informe_iluminacion.docx')); //Ruta carpeta storage
+
+                // ====== PORTADA EXTERIROR
+
+                $titulo_partida = clientepartidasModel::where('CONTRATO_ID', $reconocimiento[0]->contrato_id)
+                    ->where('clientepartidas_tipo', 2) // Informe de resultados
+                    ->where('catprueba_id', 4) // Iluminacion
+                    ->orderBy('updated_at', 'DESC')
+                    ->get();
+
+                //PARTE DEL PROYECTO
+                if (count($titulo_partida) > 0) {
+
+                    //Para el valor que lleva proyecto se utilizo: descripcion de la partida, Numero del contrato y la descripcion del contrato
+                    $plantillaword->setValue('proyecto_portada', str_replace("\n", "<w:br/>", $titulo_partida[0]->clientepartidas_descripcion) . ' - Contrato: ' . $cliente[0]->NUMERO_CONTRATO);
+
+                    $plantillaword->setValue('PARTIDA', str_replace("\n", "<w:br/>", $titulo_partida[0]->clientepartidas_descripcion));
+                } else {
+
+                    $plantillaword->setValue('PARTIDA', "");
+                    $plantillaword->setValue('proyecto_portada', 'El proyecto no esta vinculado a ningun contrato.');
+                }
+
+                $plantillaword->setValue('folio_portada', $proyecto[0]->proyecto_folio);
+                $plantillaword->setValue('razon_social_portada', $cliente[0]->cliente_RazonSocial);
+                $plantillaword->setValue('instalación_portada', $reconocimiento[0]->recsensorial_instalacion);
+
+                $fecha = $agente[0]->reporteiluminacion_mes . ' del ' . $agente[0]->reporteiluminacion_fecha;
+                $plantillaword->setValue('lugar_fecha_portada', $fecha);
+                $plantillaword->setValue('PORTADA_FECHA', $fecha);
+
+
+
+                //IMAGEN DE LA PORTADA
+                if ($recursos[0]->RUTA_IMAGEN_PORTADA) {
+                    if (file_exists(storage_path('app/' . $recursos[0]->RUTA_IMAGEN_PORTADA))) {
+
+                        $plantillaword->setImageValue('foto_portada', array('path' => storage_path('app/' . $recursos[0]->RUTA_IMAGEN_PORTADA), 'width' => 650, 'height' => 750, 'ratio' => true, 'borderColor' => '000000'));
+                    } else {
+
+                        $plantillaword->setValue('foto_portada', 'LA IMAGEN NO HA SIDO ENCONTRADA');
+                    }
+                } else {
+
+                    $plantillaword->setValue('foto_portada', 'LA IMAGEN DE LA PORTADA NO HA SIDO CARGADA');
+                }
+
+
+                // ============ PORTADA INTERIOR
+                $NIVEL_PORTADA1 = is_null($recursos[0]->OPCION_PORTADA1) ? "" : $recursos[0]->OPCION_PORTADA1 . "<w:br />";
+                $NIVEL_PORTADA2 = is_null($recursos[0]->OPCION_PORTADA2) ? "" : $recursos[0]->OPCION_PORTADA2 . "<w:br />";
+                $NIVEL_PORTADA3 = is_null($recursos[0]->OPCION_PORTADA3) ? "" : $recursos[0]->OPCION_PORTADA3 . "<w:br />";
+                $NIVEL_PORTADA4 = is_null($recursos[0]->OPCION_PORTADA4) ? "" : $recursos[0]->OPCION_PORTADA4 . "<w:br />";
+                $NIVEL_PORTADA5 = is_null($recursos[0]->OPCION_PORTADA5) ? "" : $recursos[0]->OPCION_PORTADA5 . "<w:br />";
+                $NIVEL_PORTADA6 = is_null($recursos[0]->OPCION_PORTADA6) ? "" : $recursos[0]->OPCION_PORTADA6 . "<w:br />";
+                $plantillaword->setValue('ESTRUCTURA', $NIVEL_PORTADA1 . $NIVEL_PORTADA2 . $NIVEL_PORTADA3 . $NIVEL_PORTADA4 . $NIVEL_PORTADA5 . $NIVEL_PORTADA6);
+
+                if ($proyecto[0]->requiereContrato == 1) {
+
+                    $plantillaword->setValue('TITULO_CONTRATO', "Contrato:");
+                    $plantillaword->setValue('CONTRATO', $cliente[0]->NUMERO_CONTRATO);
+                    $plantillaword->setValue('DESCRIPCION_CONTRATO', $cliente[0]->DESCRIPCION_CONTRATO);
+
+                    $plantillaword->setValue('PIE_PAGINA', $cliente[0]->CONTRATO_PLANTILLA_PIEPAGINA);
+                    $plantillaword->setValue('INFORME_REVISION', "");
+                } else {
+
+                    $plantillaword->setValue('CONTRATO', "");
+                    $plantillaword->setValue('DESCRIPCION_CONTRATO', "");
+                    $plantillaword->setValue('TITULO_CONTRATO', "");
+
+                    $plantillaword->setValue('PIE_PAGINA', "");
+                    $plantillaword->setValue('INFORME_REVISION', "");
+                }
+
+
+                //============= ENCABEZADOS TITULOS
+                $NIVEL1 = is_null($recursos[0]->NIVEL1) ? "" : $recursos[0]->NIVEL1 . "<w:br />";
+                $NIVEL2 = is_null($recursos[0]->NIVEL2) ? "" : $recursos[0]->NIVEL2 . "<w:br />";
+                $NIVEL3 = is_null($recursos[0]->NIVEL3) ? "" : $recursos[0]->NIVEL3 . "<w:br />";
+                $NIVEL4 = is_null($recursos[0]->NIVEL4) ? "" : $recursos[0]->NIVEL4 . "<w:br />";
+                $NIVEL5 = is_null($recursos[0]->NIVEL5) ? "" : $recursos[0]->NIVEL5;
+
+                $plantillaword->setValue('ENCABEZADO', $NIVEL1 . $NIVEL2 . $NIVEL3 . $NIVEL4 . $NIVEL5);
+                $plantillaword->setValue('INSTALACION_NOMBRE', $NIVEL1 . $NIVEL2 . $NIVEL3 . $NIVEL4 . $NIVEL5);
+
+                //LOGOS DE AS EMPRESAS DE INFORME
+                if ($proyecto[0]->requiereContrato == 1) {
+
+                    if ($cliente[0]->CONTRATO_PLANTILLA_LOGOIZQUIERDO) {
+                        if (file_exists(storage_path('app/' . $cliente[0]->CONTRATO_PLANTILLA_LOGOIZQUIERDO))) {
+
+                            $plantillaword->setImageValue('LOGO_IZQUIERDO', array('path' => storage_path('app/' . $cliente[0]->CONTRATO_PLANTILLA_LOGOIZQUIERDO), 'width' => 120, 'height' => 150, 'ratio' => true, 'borderColor' => '000000'));
+
+                            $plantillaword->setImageValue('LOGO_IZQUIERDO_PORTADA', array('path' => storage_path('app/' . $cliente[0]->CONTRATO_PLANTILLA_LOGOIZQUIERDO), 'width' => 120, 'height' => 150, 'ratio' => true, 'borderColor' => '000000'));
+                        } else {
+
+                            $plantillaword->setValue('LOGO_IZQUIERDO', 'SIN IMAGEN');
+                            $plantillaword->setValue('LOGO_IZQUIERDO_PORTADA', 'SIN IMAGEN');
+                        }
+                    } else {
+                        $plantillaword->setValue('LOGO_IZQUIERDO', 'SIN IMAGEN');
+                        $plantillaword->setValue('LOGO_IZQUIERDO_PORTADA', 'SIN IMAGEN');
+                    }
+
+
+                    if ($cliente[0]->CONTRATO_PLANTILLA_LOGODERECHO) {
+                        if (file_exists(storage_path('app/' . $cliente[0]->CONTRATO_PLANTILLA_LOGODERECHO))) {
+
+                            $plantillaword->setImageValue('LOGO_DERECHO', array('path' => storage_path('app/' . $cliente[0]->CONTRATO_PLANTILLA_LOGODERECHO), 'width' => 120, 'height' => 150, 'ratio' => true, 'borderColor' => '000000'));
+
+                            $plantillaword->setImageValue('LOGO_DERECHO_PORTADA', array('path' => storage_path('app/' . $cliente[0]->CONTRATO_PLANTILLA_LOGODERECHO), 'width' => 120, 'height' => 150, 'ratio' => true, 'borderColor' => '000000'));
+                        } else {
+
+                            $plantillaword->setValue('LOGO_DERECHO', 'SIN IMAGEN');
+                            $plantillaword->setValue('LOGO_DERECHO_PORTADA', 'SIN IMAGEN');
+                        }
+                    } else {
+                        $plantillaword->setValue('LOGO_DERECHO', 'SIN IMAGEN');
+                        $plantillaword->setValue('LOGO_DERECHO_PORTADA', 'SIN IMAGEN');
+                    }
+                } else {
+
+                    $plantillaword->setValue('LOGO_DERECHO', 'SIN IMAGEN');
+                    $plantillaword->setValue('LOGO_IZQUIERDO', 'SIN IMAGEN');
+
+                    $plantillaword->setValue('LOGO_DERECHO_PORTADA', 'SIN IMAGEN');
+                    $plantillaword->setValue('LOGO_IZQUIERDO_PORTADA', 'SIN IMAGEN');
+                }
+
+                // ====== INTRODUCCION =====
+                // $plantillaword->setValue('INTRODUCCION', $agente[0]->reporteiluminacion_introduccion);
+
+                $introduccionTexto = $agente[0]->reporteiluminacion_introduccion;
+                $introduccionTextoModificado = introduccion($proyecto, $introduccionTexto);
+
+                // Asigna el texto modificado a la plantilla
+                $plantillaword->setValue('INTRODUCCION', $introduccionTextoModificado);
+
+
+
+                try {
+                    Storage::makeDirectory('reportes/portadas'); //crear directorio
+                    $plantillaword->saveAs(storage_path('app/reportes/portadas/Iluminacion.docx')); //crear archivo word
+
+                    return response()->download(storage_path('app/reportes/portadas/Iluminacion.docx'))->deleteFileAfterSend(true);
+                } catch (Exception $e) {
+                    $dato["msj"] = 'Error al crear reporte: ' . $e->getMessage();
+                    return response()->json($dato);
+                }
+
+                break;
+
+            case 8: // VENTILACIÓN Y CALIDAD DEL AIRE
+
+                $agente = reporteaireModel::where('proyecto_id', $proyecto_id)->get();
+                $plantillaword = new TemplateProcessor(storage_path('app/plantillas_reportes/portadas/Plantilla_informe_aire.docx')); //Ruta carpeta storage
+
+                // ====== PORTADA EXTERIROR
+
+                $titulo_partida = clientepartidasModel::where('CONTRATO_ID', $reconocimiento[0]->contrato_id)
+                    ->where('clientepartidas_tipo', 2) // Informe de resultados
+                    ->where('catprueba_id', 8) // Aire
+                    ->orderBy('updated_at', 'DESC')
+                    ->get();
+
+                //PARTE DEL PROYECTO
+
+                if (count($titulo_partida) > 0) {
+
+                    //Para el valor que lleva proyecto se utilizo: descripcion de la partida, Numero del contrato y la descripcion del contrato
+                    $plantillaword->setValue('proyecto_portada', str_replace("\n", "<w:br/>", $titulo_partida[0]->clientepartidas_descripcion) . ' - Contrato: ' . $cliente[0]->NUMERO_CONTRATO);
+
+                    $plantillaword->setValue('PARTIDA', str_replace("\n", "<w:br/>", $titulo_partida[0]->clientepartidas_descripcion));
+                } else {
+
+                    $plantillaword->setValue('PARTIDA', "");
+                    $plantillaword->setValue('proyecto_portada', 'El proyecto no esta vinculado a ningun contrato.');
+                }
+
+
+                $plantillaword->setValue('folio_portada', $proyecto[0]->proyecto_folio);
+                $plantillaword->setValue('razon_social_portada', $cliente[0]->cliente_RazonSocial);
+                $plantillaword->setValue('instalación_portada', $reconocimiento[0]->recsensorial_instalacion);
+
+                $fecha = $agente[0]->reporte_mes . ' del ' . $agente[0]->reporteaire_fecha;
+                $plantillaword->setValue('lugar_fecha_portada', $fecha);
+                $plantillaword->setValue('PORTADA_FECHA', $fecha);
+
+
+
+                //IMAGEN DE LA PORTADA
+                if ($recursos[0]->RUTA_IMAGEN_PORTADA) {
+                    if (file_exists(storage_path('app/' . $recursos[0]->RUTA_IMAGEN_PORTADA))) {
+
+                        $plantillaword->setImageValue('foto_portada', array('path' => storage_path('app/' . $recursos[0]->RUTA_IMAGEN_PORTADA), 'width' => 650, 'height' => 750, 'ratio' => true, 'borderColor' => '000000'));
+                    } else {
+
+                        $plantillaword->setValue('foto_portada', 'LA IMAGEN NO HA SIDO ENCONTRADA');
+                    }
+                } else {
+
+                    $plantillaword->setValue('foto_portada', 'LA IMAGEN DE LA PORTADA NO HA SIDO CARGADA');
+                }
+
+
+                // ============ PORTADA INTERIOR
+                $NIVEL_PORTADA1 = is_null($recursos[0]->OPCION_PORTADA1) ? "" : $recursos[0]->OPCION_PORTADA1 . "<w:br />";
+                $NIVEL_PORTADA2 = is_null($recursos[0]->OPCION_PORTADA2) ? "" : $recursos[0]->OPCION_PORTADA2 . "<w:br />";
+                $NIVEL_PORTADA3 = is_null($recursos[0]->OPCION_PORTADA3) ? "" : $recursos[0]->OPCION_PORTADA3 . "<w:br />";
+                $NIVEL_PORTADA4 = is_null($recursos[0]->OPCION_PORTADA4) ? "" : $recursos[0]->OPCION_PORTADA4 . "<w:br />";
+                $NIVEL_PORTADA5 = is_null($recursos[0]->OPCION_PORTADA5) ? "" : $recursos[0]->OPCION_PORTADA5 . "<w:br />";
+                $NIVEL_PORTADA6 = is_null($recursos[0]->OPCION_PORTADA6) ? "" : $recursos[0]->OPCION_PORTADA6 . "<w:br />";
+                $plantillaword->setValue('ESTRUCTURA', $NIVEL_PORTADA1 . $NIVEL_PORTADA2 . $NIVEL_PORTADA3 . $NIVEL_PORTADA4 . $NIVEL_PORTADA5 . $NIVEL_PORTADA6);
+
+                if (
+                    $proyecto[0]->requiereContrato == 1
+                ) {
+
+                    $plantillaword->setValue('TITULO_CONTRATO', "Contrato:");
+                    $plantillaword->setValue('CONTRATO', $cliente[0]->NUMERO_CONTRATO);
+                    $plantillaword->setValue('DESCRIPCION_CONTRATO', $cliente[0]->DESCRIPCION_CONTRATO);
+
+                    $plantillaword->setValue('PIE_PAGINA', $cliente[0]->CONTRATO_PLANTILLA_PIEPAGINA);
+                    $plantillaword->setValue('INFORME_REVISION', "");
+                } else {
+
+                    $plantillaword->setValue('CONTRATO', "");
+                    $plantillaword->setValue('DESCRIPCION_CONTRATO', "");
+                    $plantillaword->setValue('TITULO_CONTRATO', "");
+
+                    $plantillaword->setValue('PIE_PAGINA', "");
+                    $plantillaword->setValue('INFORME_REVISION', "");
+                }
+
+
+                //============= ENCABEZADOS TITULOS
+                $NIVEL1 = is_null($recursos[0]->NIVEL1) ? "" : $recursos[0]->NIVEL1 . "<w:br />";
+                $NIVEL2 = is_null($recursos[0]->NIVEL2) ? "" : $recursos[0]->NIVEL2 . "<w:br />";
+                $NIVEL3 = is_null($recursos[0]->NIVEL3) ? "" : $recursos[0]->NIVEL3 . "<w:br />";
+                $NIVEL4 = is_null($recursos[0]->NIVEL4) ? "" : $recursos[0]->NIVEL4 . "<w:br />";
+                $NIVEL5 = is_null($recursos[0]->NIVEL5) ? "" : $recursos[0]->NIVEL5;
+
+                $plantillaword->setValue('ENCABEZADO', $NIVEL1 . $NIVEL2 . $NIVEL3 . $NIVEL4 . $NIVEL5);
+                $plantillaword->setValue('INSTALACION_NOMBRE', $NIVEL1 . $NIVEL2 . $NIVEL3 . $NIVEL4 . $NIVEL5);
+
+                //LOGOS DE AS EMPRESAS DE INFORME
+                if (
+                    $proyecto[0]->requiereContrato == 1
+                ) {
+                    if ($cliente[0]->CONTRATO_PLANTILLA_LOGOIZQUIERDO) {
+                        if (file_exists(storage_path('app/' . $cliente[0]->CONTRATO_PLANTILLA_LOGOIZQUIERDO))) {
+
+                            $plantillaword->setImageValue('LOGO_IZQUIERDO', array('path' => storage_path('app/' . $cliente[0]->CONTRATO_PLANTILLA_LOGOIZQUIERDO), 'width' => 120, 'height' => 150, 'ratio' => true, 'borderColor' => '000000'));
+
+                            $plantillaword->setImageValue('LOGO_IZQUIERDO_PORTADA', array('path' => storage_path('app/' . $cliente[0]->CONTRATO_PLANTILLA_LOGOIZQUIERDO), 'width' => 120, 'height' => 150, 'ratio' => true, 'borderColor' => '000000'));
+                        } else {
+
+                            $plantillaword->setValue('LOGO_IZQUIERDO', 'SIN IMAGEN');
+                            $plantillaword->setValue('LOGO_IZQUIERDO_PORTADA', 'SIN IMAGEN');
+                        }
+                    } else {
+                        $plantillaword->setValue('LOGO_IZQUIERDO', 'SIN IMAGEN');
+                        $plantillaword->setValue('LOGO_IZQUIERDO_PORTADA', 'SIN IMAGEN');
+                    }
+
+
+                    if ($cliente[0]->CONTRATO_PLANTILLA_LOGODERECHO) {
+                        if (file_exists(storage_path('app/' . $cliente[0]->CONTRATO_PLANTILLA_LOGODERECHO))) {
+
+                            $plantillaword->setImageValue('LOGO_DERECHO', array('path' => storage_path('app/' . $cliente[0]->CONTRATO_PLANTILLA_LOGODERECHO), 'width' => 120, 'height' => 150, 'ratio' => true, 'borderColor' => '000000'));
+
+                            $plantillaword->setImageValue('LOGO_DERECHO_PORTADA', array('path' => storage_path('app/' . $cliente[0]->CONTRATO_PLANTILLA_LOGODERECHO), 'width' => 120, 'height' => 150, 'ratio' => true, 'borderColor' => '000000'));
+                        } else {
+
+                            $plantillaword->setValue('LOGO_DERECHO', 'SIN IMAGEN');
+                            $plantillaword->setValue('LOGO_DERECHO_PORTADA', 'SIN IMAGEN');
+                        }
+                    } else {
+                        $plantillaword->setValue('LOGO_DERECHO', 'SIN IMAGEN');
+                        $plantillaword->setValue('LOGO_DERECHO_PORTADA', 'SIN IMAGEN');
+                    }
+                } else {
+
+                    $plantillaword->setValue('LOGO_DERECHO', 'SIN IMAGEN');
+                    $plantillaword->setValue('LOGO_IZQUIERDO', 'SIN IMAGEN');
+
+                    $plantillaword->setValue('LOGO_DERECHO_PORTADA', 'SIN IMAGEN');
+                    $plantillaword->setValue('LOGO_IZQUIERDO_PORTADA', 'SIN IMAGEN');
+                }
+
+                // ====== INTRODUCCION =====
+                // $plantillaword->setValue('INTRODUCCION', $agente[0]->reporteaire_introduccion);
+
+                $introduccionTexto = $agente[0]->reporteaire_introduccion;
+                $introduccionTextoModificado = introduccion($proyecto, $introduccionTexto);
+
+                // Asigna el texto modificado a la plantilla
+                $plantillaword->setValue('INTRODUCCION', $introduccionTextoModificado);
+
+
+                try {
+                    Storage::makeDirectory('reportes/portadas'); //crear directorio
+                    $plantillaword->saveAs(storage_path('app/reportes/portadas/Aire.docx')); //crear archivo word
+
+                    return response()->download(storage_path('app/reportes/portadas/Aire.docx'))->deleteFileAfterSend(true);
+                } catch (Exception $e) {
+                    $dato["msj"] = 'Error al crear reporte: ' . $e->getMessage();
+                    return response()->json($dato);
+                }
+                break;
+
+
+            case 9: // AGUA
+
+                $agente = reporteaguaModel::where('proyecto_id', $proyecto_id)->get();
+                $plantillaword = new TemplateProcessor(storage_path('app/plantillas_reportes/portadas/Plantilla_informe_agua.docx')); //Ruta carpeta storage
+
+                // ====== PORTADA EXTERIROR
+
+                $titulo_partida = clientepartidasModel::where('CONTRATO_ID', $reconocimiento[0]->contrato_id)
+                    ->where('clientepartidas_tipo', 2) // Informe de resultados
+                    ->where('catprueba_id', 9) // Agua
+                    ->orderBy('updated_at', 'DESC')
+                    ->get();
+
+                //PARTE DEL PROYECTO
+                if (
+                    count($titulo_partida) > 0
+                ) {
+
+                    //Para el valor que lleva proyecto se utilizo: descripcion de la partida, Numero del contrato y la descripcion del contrato
+                    $plantillaword->setValue('proyecto_portada', str_replace("\n", "<w:br/>", $titulo_partida[0]->clientepartidas_descripcion) . ' - Contrato: ' . $cliente[0]->NUMERO_CONTRATO);
+
+                    $plantillaword->setValue('PARTIDA', str_replace("\n", "<w:br/>", $titulo_partida[0]->clientepartidas_descripcion));
+                } else {
+
+                    $plantillaword->setValue('PARTIDA', "");
+                    $plantillaword->setValue('proyecto_portada', 'El proyecto no esta vinculado a ningun contrato.');
+                }
+
+                $plantillaword->setValue('folio_portada', $proyecto[0]->proyecto_folio);
+                $plantillaword->setValue('razon_social_portada', $cliente[0]->cliente_RazonSocial);
+                $plantillaword->setValue('instalación_portada', $reconocimiento[0]->recsensorial_instalacion);
+
+                $fecha = $agente[0]->reporte_mes . ' del ' . $agente[0]->reporteagua_fecha;
+                $plantillaword->setValue('lugar_fecha_portada', $fecha);
+                $plantillaword->setValue('PORTADA_FECHA', $fecha);
+
+
+
+                //IMAGEN DE LA PORTADA
+                if ($recursos[0]->RUTA_IMAGEN_PORTADA) {
+                    if (file_exists(storage_path('app/' . $recursos[0]->RUTA_IMAGEN_PORTADA))) {
+
+                        $plantillaword->setImageValue('foto_portada', array('path' => storage_path('app/' . $recursos[0]->RUTA_IMAGEN_PORTADA), 'width' => 650, 'height' => 750, 'ratio' => true, 'borderColor' => '000000'));
+                    } else {
+
+                        $plantillaword->setValue('foto_portada', 'LA IMAGEN NO HA SIDO ENCONTRADA');
+                    }
+                } else {
+
+                    $plantillaword->setValue('foto_portada', 'LA IMAGEN DE LA PORTADA NO HA SIDO CARGADA');
+                }
+
+
+                // ============ PORTADA INTERIOR
+                $NIVEL_PORTADA1 = is_null($recursos[0]->OPCION_PORTADA1) ? "" : $recursos[0]->OPCION_PORTADA1 . "<w:br />";
+                $NIVEL_PORTADA2 = is_null($recursos[0]->OPCION_PORTADA2) ? "" : $recursos[0]->OPCION_PORTADA2 . "<w:br />";
+                $NIVEL_PORTADA3 = is_null($recursos[0]->OPCION_PORTADA3) ? "" : $recursos[0]->OPCION_PORTADA3 . "<w:br />";
+                $NIVEL_PORTADA4 = is_null($recursos[0]->OPCION_PORTADA4) ? "" : $recursos[0]->OPCION_PORTADA4 . "<w:br />";
+                $NIVEL_PORTADA5 = is_null($recursos[0]->OPCION_PORTADA5) ? "" : $recursos[0]->OPCION_PORTADA5 . "<w:br />";
+                $NIVEL_PORTADA6 = is_null($recursos[0]->OPCION_PORTADA6) ? "" : $recursos[0]->OPCION_PORTADA6 . "<w:br />";
+                $plantillaword->setValue('ESTRUCTURA', $NIVEL_PORTADA1 . $NIVEL_PORTADA2 . $NIVEL_PORTADA3 . $NIVEL_PORTADA4 . $NIVEL_PORTADA5 . $NIVEL_PORTADA6);
+
+                if ($proyecto[0]->requiereContrato == 1) {
+
+                    $plantillaword->setValue('TITULO_CONTRATO', "Contrato:");
+                    $plantillaword->setValue('CONTRATO', $cliente[0]->NUMERO_CONTRATO);
+                    $plantillaword->setValue('DESCRIPCION_CONTRATO', $cliente[0]->DESCRIPCION_CONTRATO);
+
+                    $plantillaword->setValue('PIE_PAGINA', $cliente[0]->CONTRATO_PLANTILLA_PIEPAGINA);
+                    $plantillaword->setValue('INFORME_REVISION', "");
+                } else {
+
+                    $plantillaword->setValue('CONTRATO', "");
+                    $plantillaword->setValue('DESCRIPCION_CONTRATO', "");
+                    $plantillaword->setValue('TITULO_CONTRATO', "");
+
+                    $plantillaword->setValue('PIE_PAGINA', "");
+                    $plantillaword->setValue('INFORME_REVISION', "");
+                }
+
+
+                //============= ENCABEZADOS TITULOS
+                $NIVEL1 = is_null($recursos[0]->NIVEL1) ? "" : $recursos[0]->NIVEL1 . "<w:br />";
+                $NIVEL2 = is_null($recursos[0]->NIVEL2) ? "" : $recursos[0]->NIVEL2 . "<w:br />";
+                $NIVEL3 = is_null($recursos[0]->NIVEL3) ? "" : $recursos[0]->NIVEL3 . "<w:br />";
+                $NIVEL4 = is_null($recursos[0]->NIVEL4) ? "" : $recursos[0]->NIVEL4 . "<w:br />";
+                $NIVEL5 = is_null($recursos[0]->NIVEL5) ? "" : $recursos[0]->NIVEL5;
+
+                $plantillaword->setValue('ENCABEZADO', $NIVEL1 . $NIVEL2 . $NIVEL3 . $NIVEL4 . $NIVEL5);
+                $plantillaword->setValue('INSTALACION_NOMBRE', $NIVEL1 . $NIVEL2 . $NIVEL3 . $NIVEL4 . $NIVEL5);
+
+                //LOGOS DE AS EMPRESAS DE INFORME
+                if ($proyecto[0]->requiereContrato == 1) {
+
+                    if ($cliente[0]->CONTRATO_PLANTILLA_LOGOIZQUIERDO) {
+                        if (file_exists(storage_path('app/' . $cliente[0]->CONTRATO_PLANTILLA_LOGOIZQUIERDO))) {
+
+                            $plantillaword->setImageValue('LOGO_IZQUIERDO', array('path' => storage_path('app/' . $cliente[0]->CONTRATO_PLANTILLA_LOGOIZQUIERDO), 'width' => 120, 'height' => 150, 'ratio' => true, 'borderColor' => '000000'));
+
+                            $plantillaword->setImageValue('LOGO_IZQUIERDO_PORTADA', array('path' => storage_path('app/' . $cliente[0]->CONTRATO_PLANTILLA_LOGOIZQUIERDO), 'width' => 120, 'height' => 150, 'ratio' => true, 'borderColor' => '000000'));
+                        } else {
+
+                            $plantillaword->setValue('LOGO_IZQUIERDO', 'SIN IMAGEN');
+                            $plantillaword->setValue('LOGO_IZQUIERDO_PORTADA', 'SIN IMAGEN');
+                        }
+                    } else {
+                        $plantillaword->setValue('LOGO_IZQUIERDO', 'SIN IMAGEN');
+                        $plantillaword->setValue('LOGO_IZQUIERDO_PORTADA', 'SIN IMAGEN');
+                    }
+
+
+                    if ($cliente[0]->CONTRATO_PLANTILLA_LOGODERECHO) {
+                        if (file_exists(storage_path('app/' . $cliente[0]->CONTRATO_PLANTILLA_LOGODERECHO))) {
+
+                            $plantillaword->setImageValue('LOGO_DERECHO', array('path' => storage_path('app/' . $cliente[0]->CONTRATO_PLANTILLA_LOGODERECHO), 'width' => 120, 'height' => 150, 'ratio' => true, 'borderColor' => '000000'));
+
+                            $plantillaword->setImageValue('LOGO_DERECHO_PORTADA', array('path' => storage_path('app/' . $cliente[0]->CONTRATO_PLANTILLA_LOGODERECHO), 'width' => 120, 'height' => 150, 'ratio' => true, 'borderColor' => '000000'));
+                        } else {
+
+                            $plantillaword->setValue('LOGO_DERECHO', 'SIN IMAGEN');
+                            $plantillaword->setValue('LOGO_DERECHO_PORTADA', 'SIN IMAGEN');
+                        }
+                    } else {
+                        $plantillaword->setValue('LOGO_DERECHO', 'SIN IMAGEN');
+                        $plantillaword->setValue('LOGO_DERECHO_PORTADA', 'SIN IMAGEN');
+                    }
+                } else {
+
+                    $plantillaword->setValue('LOGO_DERECHO', 'SIN IMAGEN');
+                    $plantillaword->setValue('LOGO_IZQUIERDO', 'SIN IMAGEN');
+
+                    $plantillaword->setValue('LOGO_DERECHO_PORTADA', 'SIN IMAGEN');
+                    $plantillaword->setValue('LOGO_IZQUIERDO_PORTADA', 'SIN IMAGEN');
+                }
+
+                // ====== INTRODUCCION =====
+                // $plantillaword->setValue('INTRODUCCION', $agente[0]->reporteagua_introduccion);
+
+                $introduccionTexto = $agente[0]->reporteagua_introduccion;
+                $introduccionTextoModificado = introduccion($proyecto, $introduccionTexto);
+
+                // Asigna el texto modificado a la plantilla
+                $plantillaword->setValue('INTRODUCCION', $introduccionTextoModificado);
+
+
+
+                try {
+                    Storage::makeDirectory('reportes/portadas'); //crear directorio
+                    $plantillaword->saveAs(storage_path('app/reportes/portadas/Agua.docx')); //crear archivo word
+
+                    return response()->download(storage_path('app/reportes/portadas/Agua.docx'))->deleteFileAfterSend(true);
+                } catch (Exception $e) {
+                    $dato["msj"] = 'Error al crear reporte: ' . $e->getMessage();
+                    return response()->json($dato);
+                }
+                break;
+
+
+
+            case 10: // HIELO
+                $agente = reportehieloModel::where('proyecto_id', $proyecto_id)->get();
+                $plantillaword = new TemplateProcessor(storage_path('app/plantillas_reportes/portadas/Plantilla_informe_hielo.docx')); //Ruta carpeta storage
+
+                // ====== PORTADA EXTERIROR
+
+                $titulo_partida = clientepartidasModel::where('CONTRATO_ID', $reconocimiento[0]->contrato_id)
+                    ->where('clientepartidas_tipo', 2) // Informe de resultados
+                    ->where('catprueba_id', 10) // ruido
+                    ->orderBy('updated_at', 'DESC')
+                    ->get();
+
+                //PARTE DEL PROYECTO
+                if (count($titulo_partida) > 0) {
+
+                    //Para el valor que lleva proyecto se utilizo: descripcion de la partida, Numero del contrato y la descripcion del contrato
+                    $plantillaword->setValue('proyecto_portada', str_replace("\n", "<w:br/>", $titulo_partida[0]->clientepartidas_descripcion) . ' - Contrato: ' . $cliente[0]->NUMERO_CONTRATO);
+
+                    $plantillaword->setValue('PARTIDA', str_replace("\n", "<w:br/>", $titulo_partida[0]->clientepartidas_descripcion));
+                } else {
+
+                    $plantillaword->setValue('PARTIDA', "");
+                    $plantillaword->setValue('proyecto_portada', 'El proyecto no esta vinculado a ningun contrato.');
+                }
+
+                $plantillaword->setValue('folio_portada', $proyecto[0]->proyecto_folio);
+                $plantillaword->setValue('razon_social_portada', $cliente[0]->cliente_RazonSocial);
+                $plantillaword->setValue('instalación_portada', $reconocimiento[0]->recsensorial_instalacion);
+
+                $fecha = $agente[0]->reporte_mes . ' del ' . $agente[0]->reportehielo_fecha;
+                $plantillaword->setValue('lugar_fecha_portada', $fecha);
+                $plantillaword->setValue('PORTADA_FECHA', $fecha);
+
+
+
+                //IMAGEN DE LA PORTADA
+                if ($recursos[0]->RUTA_IMAGEN_PORTADA) {
+                    if (file_exists(storage_path('app/' . $recursos[0]->RUTA_IMAGEN_PORTADA))) {
+
+                        $plantillaword->setImageValue('foto_portada', array('path' => storage_path('app/' . $recursos[0]->RUTA_IMAGEN_PORTADA), 'width' => 650, 'height' => 750, 'ratio' => true, 'borderColor' => '000000'));
+                    } else {
+
+                        $plantillaword->setValue('foto_portada', 'LA IMAGEN NO HA SIDO ENCONTRADA');
+                    }
+                } else {
+
+                    $plantillaword->setValue('foto_portada', 'LA IMAGEN DE LA PORTADA NO HA SIDO CARGADA');
+                }
+
+
+                // ============ PORTADA INTERIOR
+                $NIVEL_PORTADA1 = is_null($recursos[0]->OPCION_PORTADA1) ? "" : $recursos[0]->OPCION_PORTADA1 . "<w:br />";
+                $NIVEL_PORTADA2 = is_null($recursos[0]->OPCION_PORTADA2) ? "" : $recursos[0]->OPCION_PORTADA2 . "<w:br />";
+                $NIVEL_PORTADA3 = is_null($recursos[0]->OPCION_PORTADA3) ? "" : $recursos[0]->OPCION_PORTADA3 . "<w:br />";
+                $NIVEL_PORTADA4 = is_null($recursos[0]->OPCION_PORTADA4) ? "" : $recursos[0]->OPCION_PORTADA4 . "<w:br />";
+                $NIVEL_PORTADA5 = is_null($recursos[0]->OPCION_PORTADA5) ? "" : $recursos[0]->OPCION_PORTADA5 . "<w:br />";
+                $NIVEL_PORTADA6 = is_null($recursos[0]->OPCION_PORTADA6) ? "" : $recursos[0]->OPCION_PORTADA6 . "<w:br />";
+                $plantillaword->setValue('ESTRUCTURA', $NIVEL_PORTADA1 . $NIVEL_PORTADA2 . $NIVEL_PORTADA3 . $NIVEL_PORTADA4 . $NIVEL_PORTADA5 . $NIVEL_PORTADA6);
+
+                if ($proyecto[0]->requiereContrato == 1) {
+
+                    $plantillaword->setValue('TITULO_CONTRATO', "Contrato:");
+                    $plantillaword->setValue('CONTRATO', $cliente[0]->NUMERO_CONTRATO);
+                    $plantillaword->setValue('DESCRIPCION_CONTRATO', $cliente[0]->DESCRIPCION_CONTRATO);
+
+                    $plantillaword->setValue('PIE_PAGINA', $cliente[0]->CONTRATO_PLANTILLA_PIEPAGINA);
+                    $plantillaword->setValue('INFORME_REVISION', "");
+                } else {
+
+                    $plantillaword->setValue('CONTRATO', "");
+                    $plantillaword->setValue('DESCRIPCION_CONTRATO', "");
+                    $plantillaword->setValue('TITULO_CONTRATO', "");
+
+                    $plantillaword->setValue('PIE_PAGINA', "");
+                    $plantillaword->setValue('INFORME_REVISION', "");
+                }
+
+
+                //============= ENCABEZADOS TITULOS
+                $NIVEL1 = is_null($recursos[0]->NIVEL1) ? "" : $recursos[0]->NIVEL1 . "<w:br />";
+                $NIVEL2 = is_null($recursos[0]->NIVEL2) ? "" : $recursos[0]->NIVEL2 . "<w:br />";
+                $NIVEL3 = is_null($recursos[0]->NIVEL3) ? "" : $recursos[0]->NIVEL3 . "<w:br />";
+                $NIVEL4 = is_null($recursos[0]->NIVEL4) ? "" : $recursos[0]->NIVEL4 . "<w:br />";
+                $NIVEL5 = is_null($recursos[0]->NIVEL5) ? "" : $recursos[0]->NIVEL5;
+
+                $plantillaword->setValue('ENCABEZADO', $NIVEL1 . $NIVEL2 . $NIVEL3 . $NIVEL4 . $NIVEL5);
+                $plantillaword->setValue('INSTALACION_NOMBRE', $NIVEL1 . $NIVEL2 . $NIVEL3 . $NIVEL4 . $NIVEL5);
+
+                //LOGOS DE AS EMPRESAS DE INFORME
+                if ($proyecto[0]->requiereContrato == 1) {
+
+                    if ($cliente[0]->CONTRATO_PLANTILLA_LOGOIZQUIERDO) {
+                        if (file_exists(storage_path('app/' . $cliente[0]->CONTRATO_PLANTILLA_LOGOIZQUIERDO))) {
+
+                            $plantillaword->setImageValue('LOGO_IZQUIERDO', array('path' => storage_path('app/' . $cliente[0]->CONTRATO_PLANTILLA_LOGOIZQUIERDO), 'width' => 120, 'height' => 150, 'ratio' => true, 'borderColor' => '000000'));
+
+                            $plantillaword->setImageValue('LOGO_IZQUIERDO_PORTADA', array('path' => storage_path('app/' . $cliente[0]->CONTRATO_PLANTILLA_LOGOIZQUIERDO), 'width' => 120, 'height' => 150, 'ratio' => true, 'borderColor' => '000000'));
+                        } else {
+
+                            $plantillaword->setValue('LOGO_IZQUIERDO', 'SIN IMAGEN');
+                            $plantillaword->setValue('LOGO_IZQUIERDO_PORTADA', 'SIN IMAGEN');
+                        }
+                    } else {
+                        $plantillaword->setValue('LOGO_IZQUIERDO', 'SIN IMAGEN');
+                        $plantillaword->setValue('LOGO_IZQUIERDO_PORTADA', 'SIN IMAGEN');
+                    }
+
+
+                    if ($cliente[0]->CONTRATO_PLANTILLA_LOGODERECHO) {
+                        if (file_exists(storage_path('app/' . $cliente[0]->CONTRATO_PLANTILLA_LOGODERECHO))) {
+
+                            $plantillaword->setImageValue('LOGO_DERECHO', array('path' => storage_path('app/' . $cliente[0]->CONTRATO_PLANTILLA_LOGODERECHO), 'width' => 120, 'height' => 150, 'ratio' => true, 'borderColor' => '000000'));
+
+                            $plantillaword->setImageValue('LOGO_DERECHO_PORTADA', array('path' => storage_path('app/' . $cliente[0]->CONTRATO_PLANTILLA_LOGODERECHO), 'width' => 120, 'height' => 150, 'ratio' => true, 'borderColor' => '000000'));
+                        } else {
+
+                            $plantillaword->setValue('LOGO_DERECHO', 'SIN IMAGEN');
+                            $plantillaword->setValue('LOGO_DERECHO_PORTADA', 'SIN IMAGEN');
+                        }
+                    } else {
+                        $plantillaword->setValue('LOGO_DERECHO', 'SIN IMAGEN');
+                        $plantillaword->setValue('LOGO_DERECHO_PORTADA', 'SIN IMAGEN');
+                    }
+                } else {
+
+                    $plantillaword->setValue('LOGO_DERECHO', 'SIN IMAGEN');
+                    $plantillaword->setValue('LOGO_IZQUIERDO', 'SIN IMAGEN');
+
+                    $plantillaword->setValue('LOGO_DERECHO_PORTADA', 'SIN IMAGEN');
+                    $plantillaword->setValue('LOGO_IZQUIERDO_PORTADA', 'SIN IMAGEN');
+                }
+
+                // ====== INTRODUCCION =====
+                // $plantillaword->setValue('INTRODUCCION', $agente[0]->reportehielo_introduccion);
+
+
+                $introduccionTexto = $agente[0]->reportehielo_introduccion;
+                $introduccionTextoModificado = introduccion($proyecto, $introduccionTexto);
+
+                // Asigna el texto modificado a la plantilla
+                $plantillaword->setValue('INTRODUCCION', $introduccionTextoModificado);
+
+
+                try {
+                    Storage::makeDirectory('reportes/ejemplo'); //crear directorio
+                    $plantillaword->saveAs(storage_path('app/reportes/ejemplo/Ejemplo.docx')); //crear archivo word
+
+                    return response()->download(storage_path('app/reportes/ejemplo/Ejemplo.docx'))->deleteFileAfterSend(true);
+                } catch (Exception $e) {
+                    $dato["msj"] = 'Error al crear reporte: ' . $e->getMessage();
+                    return response()->json($dato);
+                }
+                break;
+
+
+            case 15: // QUÍMICOS
+
+                $agente = reportequimicosModel::where('proyecto_id', $proyecto_id)->get();
+                $plantillaword = new TemplateProcessor(storage_path('app/plantillas_reportes/portadas/Plantilla_informe_quimicos.docx')); //Ruta carpeta storage
+
+                // ====== PORTADA EXTERIROR
+
+                $titulo_partida = clientepartidasModel::where('CONTRATO_ID', $reconocimiento[0]->contrato_id)
+                    ->where('clientepartidas_tipo', 2) // Informe de resultados
+                    ->where('catprueba_id', 15) // ruido
+                    ->orderBy('updated_at', 'DESC')
+                    ->get();
+
+                //PARTE DEL PROYECTO
+                if (count($titulo_partida) > 0) {
+
+                    //Para el valor que lleva proyecto se utilizo: descripcion de la partida, Numero del contrato y la descripcion del contrato
+                    $plantillaword->setValue('proyecto_portada', str_replace("\n", "<w:br/>", $titulo_partida[0]->clientepartidas_descripcion) . ' - Contrato: ' . $cliente[0]->NUMERO_CONTRATO);
+
+                    $plantillaword->setValue('PARTIDA', str_replace("\n", "<w:br/>", $titulo_partida[0]->clientepartidas_descripcion));
+                } else {
+
+                    $plantillaword->setValue('PARTIDA', "");
+                    $plantillaword->setValue('proyecto_portada', 'El proyecto no esta vinculado a ningun contrato.');
+                }
+
+                $plantillaword->setValue('folio_portada', $proyecto[0]->proyecto_folio);
+                $plantillaword->setValue('razon_social_portada', $cliente[0]->cliente_RazonSocial);
+                $plantillaword->setValue('instalación_portada', $reconocimiento[0]->recsensorial_instalacion);
+
+                $fecha = $agente[0]->reporte_mes . ' del ' . $agente[0]->reportequimicos_fecha;
+                $plantillaword->setValue('lugar_fecha_portada', $fecha);
+                $plantillaword->setValue('PORTADA_FECHA', $fecha);
+
+
+
+                //IMAGEN DE LA PORTADA
+                if ($recursos[0]->RUTA_IMAGEN_PORTADA) {
+                    if (file_exists(storage_path('app/' . $recursos[0]->RUTA_IMAGEN_PORTADA))) {
+
+                        $plantillaword->setImageValue('foto_portada', array('path' => storage_path('app/' . $recursos[0]->RUTA_IMAGEN_PORTADA), 'width' => 650, 'height' => 750, 'ratio' => true, 'borderColor' => '000000'));
+                    } else {
+
+                        $plantillaword->setValue('foto_portada', 'LA IMAGEN NO HA SIDO ENCONTRADA');
+                    }
+                } else {
+
+                    $plantillaword->setValue('foto_portada', 'LA IMAGEN DE LA PORTADA NO HA SIDO CARGADA');
+                }
+
+
+                // ============ PORTADA INTERIOR
+                $NIVEL_PORTADA1 = is_null($recursos[0]->OPCION_PORTADA1) ? "" : $recursos[0]->OPCION_PORTADA1 . "<w:br />";
+                $NIVEL_PORTADA2 = is_null($recursos[0]->OPCION_PORTADA2) ? "" : $recursos[0]->OPCION_PORTADA2 . "<w:br />";
+                $NIVEL_PORTADA3 = is_null($recursos[0]->OPCION_PORTADA3) ? "" : $recursos[0]->OPCION_PORTADA3 . "<w:br />";
+                $NIVEL_PORTADA4 = is_null($recursos[0]->OPCION_PORTADA4) ? "" : $recursos[0]->OPCION_PORTADA4 . "<w:br />";
+                $NIVEL_PORTADA5 = is_null($recursos[0]->OPCION_PORTADA5) ? "" : $recursos[0]->OPCION_PORTADA5 . "<w:br />";
+                $NIVEL_PORTADA6 = is_null($recursos[0]->OPCION_PORTADA6) ? "" : $recursos[0]->OPCION_PORTADA6 . "<w:br />";
+                $plantillaword->setValue('ESTRUCTURA', $NIVEL_PORTADA1 . $NIVEL_PORTADA2 . $NIVEL_PORTADA3 . $NIVEL_PORTADA4 . $NIVEL_PORTADA5 . $NIVEL_PORTADA6);
+
+                if ($proyecto[0]->requiereContrato == 1) {
+
+                    $plantillaword->setValue('TITULO_CONTRATO', "Contrato:");
+                    $plantillaword->setValue('CONTRATO', $cliente[0]->NUMERO_CONTRATO);
+                    $plantillaword->setValue('DESCRIPCION_CONTRATO', $cliente[0]->DESCRIPCION_CONTRATO);
+
+                    $plantillaword->setValue('PIE_PAGINA', $cliente[0]->CONTRATO_PLANTILLA_PIEPAGINA);
+                    $plantillaword->setValue('INFORME_REVISION', "");
+                } else {
+
+                    $plantillaword->setValue('CONTRATO', "");
+                    $plantillaword->setValue('DESCRIPCION_CONTRATO', "");
+                    $plantillaword->setValue('TITULO_CONTRATO', "");
+
+                    $plantillaword->setValue('PIE_PAGINA', "");
+                    $plantillaword->setValue('INFORME_REVISION', "");
+                }
+
+
+                //============= ENCABEZADOS TITULOS
+                $NIVEL1 = is_null($recursos[0]->NIVEL1) ? "" : $recursos[0]->NIVEL1 . "<w:br />";
+                $NIVEL2 = is_null($recursos[0]->NIVEL2) ? "" : $recursos[0]->NIVEL2 . "<w:br />";
+                $NIVEL3 = is_null($recursos[0]->NIVEL3) ? "" : $recursos[0]->NIVEL3 . "<w:br />";
+                $NIVEL4 = is_null($recursos[0]->NIVEL4) ? "" : $recursos[0]->NIVEL4 . "<w:br />";
+                $NIVEL5 = is_null($recursos[0]->NIVEL5) ? "" : $recursos[0]->NIVEL5;
+
+                $plantillaword->setValue('ENCABEZADO', $NIVEL1 . $NIVEL2 . $NIVEL3 . $NIVEL4 . $NIVEL5);
+                $plantillaword->setValue('INSTALACION_NOMBRE', $NIVEL1 . $NIVEL2 . $NIVEL3 . $NIVEL4 . $NIVEL5);
+
+                //LOGOS DE AS EMPRESAS DE INFORME
+                if ($proyecto[0]->requiereContrato == 1) {
+
+                    if ($cliente[0]->CONTRATO_PLANTILLA_LOGOIZQUIERDO) {
+                        if (file_exists(storage_path('app/' . $cliente[0]->CONTRATO_PLANTILLA_LOGOIZQUIERDO))) {
+
+                            $plantillaword->setImageValue('LOGO_IZQUIERDO', array('path' => storage_path('app/' . $cliente[0]->CONTRATO_PLANTILLA_LOGOIZQUIERDO), 'width' => 120, 'height' => 150, 'ratio' => true, 'borderColor' => '000000'));
+
+                            $plantillaword->setImageValue('LOGO_IZQUIERDO_PORTADA', array('path' => storage_path('app/' . $cliente[0]->CONTRATO_PLANTILLA_LOGOIZQUIERDO), 'width' => 120, 'height' => 150, 'ratio' => true, 'borderColor' => '000000'));
+                        } else {
+
+                            $plantillaword->setValue('LOGO_IZQUIERDO', 'SIN IMAGEN');
+                            $plantillaword->setValue('LOGO_IZQUIERDO_PORTADA', 'SIN IMAGEN');
+                        }
+                    } else {
+                        $plantillaword->setValue('LOGO_IZQUIERDO', 'SIN IMAGEN');
+                        $plantillaword->setValue('LOGO_IZQUIERDO_PORTADA', 'SIN IMAGEN');
+                    }
+
+
+                    if ($cliente[0]->CONTRATO_PLANTILLA_LOGODERECHO) {
+                        if (file_exists(storage_path('app/' . $cliente[0]->CONTRATO_PLANTILLA_LOGODERECHO))) {
+
+                            $plantillaword->setImageValue('LOGO_DERECHO', array('path' => storage_path('app/' . $cliente[0]->CONTRATO_PLANTILLA_LOGODERECHO), 'width' => 120, 'height' => 150, 'ratio' => true, 'borderColor' => '000000'));
+
+                            $plantillaword->setImageValue('LOGO_DERECHO_PORTADA', array('path' => storage_path('app/' . $cliente[0]->CONTRATO_PLANTILLA_LOGODERECHO), 'width' => 120, 'height' => 150, 'ratio' => true, 'borderColor' => '000000'));
+                        } else {
+
+                            $plantillaword->setValue('LOGO_DERECHO', 'SIN IMAGEN');
+                            $plantillaword->setValue('LOGO_DERECHO_PORTADA', 'SIN IMAGEN');
+                        }
+                    } else {
+                        $plantillaword->setValue('LOGO_DERECHO', 'SIN IMAGEN');
+                        $plantillaword->setValue('LOGO_DERECHO_PORTADA', 'SIN IMAGEN');
+                    }
+                } else {
+
+                    $plantillaword->setValue('LOGO_DERECHO', 'SIN IMAGEN');
+                    $plantillaword->setValue('LOGO_IZQUIERDO', 'SIN IMAGEN');
+
+                    $plantillaword->setValue('LOGO_DERECHO_PORTADA', 'SIN IMAGEN');
+                    $plantillaword->setValue('LOGO_IZQUIERDO_PORTADA', 'SIN IMAGEN');
+                }
+
+                // ====== INTRODUCCION =====
+                // $plantillaword->setValue('INTRODUCCION', $agente[0]->reportequimicos_introduccion);
+
+
+                $introduccionTexto = $agente[0]->reportequimicos_introduccion;
+                $introduccionTextoModificado = introduccion($proyecto, $introduccionTexto);
+
+                // Asigna el texto modificado a la plantilla
+                $plantillaword->setValue('INTRODUCCION', $introduccionTextoModificado);
+
+
+                try {
+                    Storage::makeDirectory('reportes/portadas'); //crear directorio
+                    $plantillaword->saveAs(storage_path('app/reportes/portadas/Quimico.docx')); //crear archivo word
+
+                    return response()->download(storage_path('app/reportes/portadas/Quimico.docx'))->deleteFileAfterSend(true);
+                } catch (Exception $e) {
+                    $dato["msj"] = 'Error al crear reporte: ' . $e->getMessage();
+                    return response()->json($dato);
+                }
+
+                break;
+
+            case 16: // INFRAESTRUCTURA PARA SERVICIOS AL PERSONAL
+                $agente = reporteserviciopersonalModel::where('proyecto_id', $proyecto_id)->get();
+                $plantillaword = new TemplateProcessor(storage_path('app/plantillas_reportes/portadas/Plantilla_informe_serviciopersonal.docx')); //Ruta carpeta storage
+
+                // ====== PORTADA EXTERIROR
+
+                $titulo_partida = clientepartidasModel::where('CONTRATO_ID', $reconocimiento[0]->contrato_id)
+                    ->where('clientepartidas_tipo', 2) // Informe de resultados
+                    ->where('catprueba_id', 16) // ruido
+                    ->orderBy('updated_at', 'DESC')
+                    ->get();
+
+
+                //PARTE DEL PROYECTO
+                if (count($titulo_partida) > 0) {
+
+                    //Para el valor que lleva proyecto se utilizo: descripcion de la partida, Numero del contrato y la descripcion del contrato
+                    $plantillaword->setValue('proyecto_portada', str_replace("\n", "<w:br/>", $titulo_partida[0]->clientepartidas_descripcion) . ' - Contrato: ' . $cliente[0]->NUMERO_CONTRATO);
+
+                    $plantillaword->setValue('PARTIDA', str_replace("\n", "<w:br/>", $titulo_partida[0]->clientepartidas_descripcion));
+                } else {
+
+                    $plantillaword->setValue('PARTIDA', "");
+                    $plantillaword->setValue('proyecto_portada', 'El proyecto no esta vinculado a ningun contrato.');
+                }
+
+                $plantillaword->setValue('folio_portada', $proyecto[0]->proyecto_folio);
+                $plantillaword->setValue('razon_social_portada', $cliente[0]->cliente_RazonSocial);
+                $plantillaword->setValue(
+                    'instalación_portada',
+                    $reconocimiento[0]->recsensorial_instalacion
+                );
+
+                $fecha = $agente[0]->reporte_mes . ' del ' . $agente[0]->reporteserviciopersonal_fecha;
+                $plantillaword->setValue(
+                    'lugar_fecha_portada',
+                    $fecha
+                );
+                $plantillaword->setValue('PORTADA_FECHA', $fecha);
+
+
+
+                //IMAGEN DE LA PORTADA
+                if ($recursos[0]->RUTA_IMAGEN_PORTADA) {
+                    if (file_exists(storage_path('app/' . $recursos[0]->RUTA_IMAGEN_PORTADA))) {
+
+                        $plantillaword->setImageValue('foto_portada', array('path' => storage_path('app/' . $recursos[0]->RUTA_IMAGEN_PORTADA), 'width' => 650, 'height' => 750, 'ratio' => true, 'borderColor' => '000000'));
+                    } else {
+
+                        $plantillaword->setValue('foto_portada', 'LA IMAGEN NO HA SIDO ENCONTRADA');
+                    }
+                } else {
+
+                    $plantillaword->setValue(
+                        'foto_portada',
+                        'LA IMAGEN DE LA PORTADA NO HA SIDO CARGADA'
+                    );
+                }
+
+
+                // ============ PORTADA INTERIOR
+                $NIVEL_PORTADA1 = is_null($recursos[0]->OPCION_PORTADA1) ? "" : $recursos[0]->OPCION_PORTADA1 . "<w:br />";
+                $NIVEL_PORTADA2 = is_null($recursos[0]->OPCION_PORTADA2) ? "" : $recursos[0]->OPCION_PORTADA2 . "<w:br />";
+                $NIVEL_PORTADA3 = is_null($recursos[0]->OPCION_PORTADA3) ? "" : $recursos[0]->OPCION_PORTADA3 . "<w:br />";
+                $NIVEL_PORTADA4 = is_null($recursos[0]->OPCION_PORTADA4) ? "" : $recursos[0]->OPCION_PORTADA4 . "<w:br />";
+                $NIVEL_PORTADA5 = is_null($recursos[0]->OPCION_PORTADA5) ? "" : $recursos[0]->OPCION_PORTADA5 . "<w:br />";
+                $NIVEL_PORTADA6 = is_null($recursos[0]->OPCION_PORTADA6) ? "" : $recursos[0]->OPCION_PORTADA6 . "<w:br />";
+                $plantillaword->setValue('ESTRUCTURA', $NIVEL_PORTADA1 . $NIVEL_PORTADA2 . $NIVEL_PORTADA3 . $NIVEL_PORTADA4 . $NIVEL_PORTADA5 . $NIVEL_PORTADA6);
+
+                if ($proyecto[0]->requiereContrato == 1) {
+
+                    $plantillaword->setValue(
+                        'TITULO_CONTRATO',
+                        "Contrato:"
+                    );
+                    $plantillaword->setValue('CONTRATO', $cliente[0]->NUMERO_CONTRATO);
+                    $plantillaword->setValue('DESCRIPCION_CONTRATO', $cliente[0]->DESCRIPCION_CONTRATO);
+
+                    $plantillaword->setValue('PIE_PAGINA', $cliente[0]->CONTRATO_PLANTILLA_PIEPAGINA);
+                    $plantillaword->setValue('INFORME_REVISION', "");
+                } else {
+
+                    $plantillaword->setValue('CONTRATO', "");
+                    $plantillaword->setValue('DESCRIPCION_CONTRATO', "");
+                    $plantillaword->setValue(
+                        'TITULO_CONTRATO',
+                        ""
+                    );
+
+                    $plantillaword->setValue('PIE_PAGINA', "");
+                    $plantillaword->setValue('INFORME_REVISION', "");
+                }
+
+
+                //============= ENCABEZADOS TITULOS
+                $NIVEL1 = is_null($recursos[0]->NIVEL1) ? "" : $recursos[0]->NIVEL1 . "<w:br />";
+                $NIVEL2 = is_null($recursos[0]->NIVEL2) ? "" : $recursos[0]->NIVEL2 . "<w:br />";
+                $NIVEL3 = is_null($recursos[0]->NIVEL3) ? "" : $recursos[0]->NIVEL3 . "<w:br />";
+                $NIVEL4 = is_null($recursos[0]->NIVEL4) ? "" : $recursos[0]->NIVEL4 . "<w:br />";
+                $NIVEL5 = is_null($recursos[0]->NIVEL5) ? "" : $recursos[0]->NIVEL5;
+
+                $plantillaword->setValue('ENCABEZADO', $NIVEL1 . $NIVEL2 . $NIVEL3 . $NIVEL4 . $NIVEL5);
+                $plantillaword->setValue(
+                    'INSTALACION_NOMBRE',
+                    $NIVEL1 . $NIVEL2 . $NIVEL3 . $NIVEL4 . $NIVEL5
+                );
+
+                //LOGOS DE AS EMPRESAS DE INFORME
+                if ($proyecto[0]->requiereContrato == 1) {
+
+                    if ($cliente[0]->CONTRATO_PLANTILLA_LOGOIZQUIERDO) {
+                        if (file_exists(storage_path('app/' . $cliente[0]->CONTRATO_PLANTILLA_LOGOIZQUIERDO))) {
+
+                            $plantillaword->setImageValue('LOGO_IZQUIERDO', array('path' => storage_path('app/' . $cliente[0]->CONTRATO_PLANTILLA_LOGOIZQUIERDO), 'width' => 120, 'height' => 150, 'ratio' => true, 'borderColor' => '000000'));
+
+                            $plantillaword->setImageValue('LOGO_IZQUIERDO_PORTADA', array('path' => storage_path('app/' . $cliente[0]->CONTRATO_PLANTILLA_LOGOIZQUIERDO), 'width' => 120, 'height' => 150, 'ratio' => true, 'borderColor' => '000000'));
+                        } else {
+
+                            $plantillaword->setValue('LOGO_IZQUIERDO', 'SIN IMAGEN');
+                            $plantillaword->setValue('LOGO_IZQUIERDO_PORTADA', 'SIN IMAGEN');
+                        }
+                    } else {
+                        $plantillaword->setValue('LOGO_IZQUIERDO', 'SIN IMAGEN');
+                        $plantillaword->setValue('LOGO_IZQUIERDO_PORTADA', 'SIN IMAGEN');
+                    }
+
+
+                    if ($cliente[0]->CONTRATO_PLANTILLA_LOGODERECHO) {
+                        if (file_exists(storage_path('app/' . $cliente[0]->CONTRATO_PLANTILLA_LOGODERECHO))) {
+
+                            $plantillaword->setImageValue('LOGO_DERECHO', array('path' => storage_path('app/' . $cliente[0]->CONTRATO_PLANTILLA_LOGODERECHO), 'width' => 120, 'height' => 150, 'ratio' => true, 'borderColor' => '000000'));
+
+                            $plantillaword->setImageValue('LOGO_DERECHO_PORTADA', array('path' => storage_path('app/' . $cliente[0]->CONTRATO_PLANTILLA_LOGODERECHO), 'width' => 120, 'height' => 150, 'ratio' => true, 'borderColor' => '000000'));
+                        } else {
+
+                            $plantillaword->setValue('LOGO_DERECHO', 'SIN IMAGEN');
+                            $plantillaword->setValue('LOGO_DERECHO_PORTADA', 'SIN IMAGEN');
+                        }
+                    } else {
+                        $plantillaword->setValue('LOGO_DERECHO', 'SIN IMAGEN');
+                        $plantillaword->setValue('LOGO_DERECHO_PORTADA', 'SIN IMAGEN');
+                    }
+                } else {
+
+                    $plantillaword->setValue(
+                        'LOGO_DERECHO',
+                        'SIN IMAGEN'
+                    );
+                    $plantillaword->setValue(
+                        'LOGO_IZQUIERDO',
+                        'SIN IMAGEN'
+                    );
+
+                    $plantillaword->setValue('LOGO_DERECHO_PORTADA', 'SIN IMAGEN');
+                    $plantillaword->setValue('LOGO_IZQUIERDO_PORTADA', 'SIN IMAGEN');
+                }
+
+                // ====== INTRODUCCION =====
+                // $plantillaword->setValue('INTRODUCCION', $agente[0]->reporteserviciopersonal_introduccion); 
+
+
+                $introduccionTexto = $agente[0]->reporteserviciopersonal_introduccion;
+                $introduccionTextoModificado = introduccion($proyecto, $introduccionTexto);
+
+                // Asigna el texto modificado a la plantilla
+                $plantillaword->setValue('INTRODUCCION', $introduccionTextoModificado);
+
+
+                try {
+                    Storage::makeDirectory('reportes/portadas'); //crear directorio
+                    $plantillaword->saveAs(storage_path('app/reportes/portadas/Servicios.docx')); //crear archivo word
+
+                    return response()->download(storage_path('app/reportes/portadas/Servicios.docx'))->deleteFileAfterSend(true);
+                } catch (Exception $e) {
+                    $dato["msj"] = 'Error al crear reporte: ' . $e->getMessage();
+                    return response()->json($dato);
+                }
+                break;
+            default:
+                # code...
+                break;
         }
     }
 }

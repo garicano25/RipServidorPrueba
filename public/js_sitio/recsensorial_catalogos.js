@@ -8,7 +8,7 @@ var datatable_cargos = null;
 var datatable_formatos = null;
 var datatable_conclusiones = null;
 var datatable_descripcion = null;
-
+var datatable_sistema = null;
 var catalogo = 0;
 
 // Load CATALOGOS PROVEEDORES
@@ -582,6 +582,36 @@ function mostrar_catalogo(num_catalogo)
 
             tabla_descripcion(catalogo);
         break;
+
+        case 18:
+            // activa menu
+            $("#titulo_tabla").html('Catálogo [Sistema de iluminación]');
+            $("#tr_18").addClass("active");
+			$("#cat_18").addClass("text-info");
+
+            // Inicializar tabla
+            if(datatable_sistema != null)
+            {
+                datatable_sistema.destroy();
+                datatable_sistema = null;
+            }
+
+            // diseño tabla
+            $("#div_datatable").html('<table class="table table-hover stylish-table" id="tabla_lista_sistema" width="100%">'+
+                                        '<thead>'+
+                                            '<tr>'+
+                                                '<th>#</th>'+
+                                                '<th>Nombre</th>'+
+                                                '<th>Descripción</th>'+
+                                                '<th style="width: 90px!important;">Editar</th>'+
+                                                '<th style="width: 90px!important;">Activo</th>'+
+                                            '</tr>'+
+                                        '</thead>'+
+                                        '<tbody></tbody>'+
+                                    '</table>');
+
+            tabla_sistema(catalogo);
+        break;
     }
 }
 
@@ -752,6 +782,18 @@ $("#boton_nuevo_registro").click(function()
                 // abrir modal
                 $('#modal_descripcionarea').modal({ backdrop: false });
                 break;
+                case 18:
+                    // Borrar formulario
+                    $('#form_sistema').each(function () {
+                        this.reset();
+                    });
+        
+                    // campos hidden
+                    $("#ID_SISTEMA_ILUMINACION").val(0);
+        
+                    // abrir modal
+                    $('#modal_sistema').modal({ backdrop: false });
+                    break;
         default:
             // Borrar formulario
             $('#form_catalogo').each(function(){
@@ -1107,7 +1149,88 @@ function tabla_descripcion(num_catalogo)
     }    
 }
 
+function tabla_sistema(num_catalogo)
+{
+    var ruta = "/recsensorialconsultacatalogo/"+num_catalogo;
 
+    try
+    {
+        if (datatable_sistema != null)
+        {
+            datatable_sistema.clear().draw();
+            datatable_sistema.ajax.url(ruta).load();
+        }
+        else
+        {
+            datatable_sistema = $('#tabla_lista_sistema').DataTable({
+                "ajax": {
+                    "url": ruta,
+                    "type": "get",
+                    "cache": false,
+                    error: function (xhr, error, code)
+                    {
+                        // console.log(xhr); console.log(code);
+                        tabla_sistema(num_catalogo);
+                    },
+                    "data": {}
+                },
+                "columns": [
+                    {
+                        "data": "ID_SISTEMA_ILUMINACION" 
+                    },
+                    {
+                        "data": "NOMBRE"
+                    },
+                    {
+                        "data": "DESCRIPCION"
+                    },
+                    {
+                        "className": 'editar',
+                        "orderable": false,
+                        "data": 'boton_editar',
+                        "defaultContent": '-'
+                        // "defaultContent": '<button type="button" class="btn btn-danger btn-circle"><i class="fa fa-pencil"></i></button>'
+                    },
+                    {
+                        // "className": 'Desactivar',
+                        "orderable": false,
+                        "data": 'CheckboxEstado',
+                        "defaultContent": '-'
+                        // "defaultContent": '<button type="button" class="btn btn-danger btn-circle"><i class="fa fa-lock"></i></button>'
+                    }
+                ],
+                "lengthMenu": [[20, 50, 100, -1], [20, 50, 100, "Todos"]],
+                "order": [[ 0, "asc" ]],        
+                "searching": false,
+                "paging": false,
+                "ordering": false,
+                "processing": true,
+                "language": {
+                    "lengthMenu": "Mostrar _MENU_ Registros",
+                    "zeroRecords": "No se encontraron registros",
+                    "info": "", //Página _PAGE_ de _PAGES_
+                    "infoEmpty": "No se encontraron registros",
+                    "infoFiltered": "(Filtrado de _MAX_ registros)",
+                    "emptyTable": "No hay datos disponibles en la tabla",
+                    "loadingRecords": "Cargando datos....",
+                    "processing": "Procesando <i class='fa fa-spin fa-spinner fa-3x'></i>",
+                    "search": "Buscar",
+                    "paginate": {
+                        "first": "Primera",
+                        "last": "Ultima",
+                        "next": "Siguiente",
+                        "previous": "Anterior"
+                    }
+                }
+            });
+        }
+    }
+    catch (exception)
+    {
+        // alert("error en el ajax");
+        tabla_sistema(num_catalogo);
+    }    
+}
 
 function tabla_catalogo(num_catalogo)
 {
@@ -1414,6 +1537,65 @@ $("#boton_guardar_descripcionarea").click(function()
     }
 });
 
+$("#boton_guardar_sistemailuminacion").click(function()
+{
+    // valida campos vacios
+    var valida = this.form.checkValidity();
+    if (valida)
+    {
+        // enviar datos
+        $('#form_sistema').ajaxForm({
+            dataType: 'json',
+            type: 'POST',
+            url: '/recsensorialcatalogos',
+            data: {},
+            resetForm: false,
+            success: function(dato)
+            {
+                // actualizar tabla
+                tabla_sistema(catalogo);
+
+                // mensaje
+                swal({
+                    title: "Correcto",
+                    text: "Información guardada correctamente",
+                    type: "success", // warning, error, success, info
+                    buttons: {
+                        visible: false, // true , false
+                    },
+                    timer: 2000,
+                    showConfirmButton: false
+                });
+
+                // actualiza boton
+                $('#boton_guardar_sistemailuminacion').html('Guardar <i class="fa fa-save"></i>');
+
+                // cerrar modal
+                $('#modal_sistema').modal('hide');
+            },
+            beforeSend: function(){
+                $('#boton_guardar_sistemailuminacion').html('Guardando <i class="fa fa-spin fa-spinner"></i>');
+            },
+            error: function(dato) {
+                // actualiza boton
+                $('#boton_guardar_sistemailuminacion').html('Guardar <i class="fa fa-save"></i>');
+                // mensaje
+                swal({
+                    title: "Error",
+                    text: "Error en la acción: "+dato,
+                    type: "error", // warning, error, success, info
+                    buttons: {
+                        visible: false, // true , false
+                    },
+                    timer: 1500,
+                    showConfirmButton: false
+                });
+                return false;
+            }
+        }).submit();
+        return false;
+    }
+});
 
 
 $("#boton_guardar_cargo").click(function()
@@ -1540,6 +1722,29 @@ function editar_catdescripcion()
 
         // abrir modal
         $('#modal_descripcionarea').modal({backdrop:false});
+    });
+}
+
+function editar_catsistema()
+{
+    $('#tabla_lista_sistema tbody').on('click', 'td.editar', function() {
+        // console.log();
+        var tr = $(this).closest('tr');
+        var row = datatable_sistema.row(tr);
+
+        $('#form_sistema').each(function(){
+            this.reset();
+        });
+
+        // Llenar campo formulario
+        $("#ID_SISTEMA_ILUMINACION").val(row.data().ID_SISTEMA_ILUMINACION);
+        $("#DESCRIPCION").val(row.data().DESCRIPCION);
+        $("#NOMBRE").val(row.data().NOMBRE);
+
+        $("#catalogo").val(18);
+
+        // abrir modal
+        $('#modal_sistema').modal({backdrop:false});
     });
 }
 

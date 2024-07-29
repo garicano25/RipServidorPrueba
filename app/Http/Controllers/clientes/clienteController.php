@@ -68,46 +68,46 @@ class clienteController extends Controller
 
         $etiqueta = Cat_etiquetaModel::where('ACTIVO', 1)->orderBy('NOMBRE_ETIQUETA', 'ASC')->get();
 
-        return view('catalogos.cliente.cliente', compact('catpruebas', 'banco_img', 'catregion', 'catsubdireccion', 'catgerencia', 'catactivo','etiqueta'));
+        return view('catalogos.cliente.cliente', compact('catpruebas', 'banco_img', 'catregion', 'catsubdireccion', 'catgerencia', 'catactivo', 'etiqueta'));
     }
 
 
 
     public function obteneretiquetas($etiquetaId)
-{
-    $opciones = CatetiquetaopcionesModel::where('ETIQUETA_ID', $etiquetaId)->where('ACTIVO', 1)->orderBy('ID_OPCIONES_ETIQUETAS', 'ASC')->get();
-    return response()->json($opciones);
-}
-
-
-public function obtenerEstructuraCliente($clienteId)
-{
-    $estructuras = DB::table('estructuraclientes')
-        ->where('CLIENTES_ID', $clienteId)
-        ->orderBy('NIVEL', 'ASC')
-        ->get();
-
-    $resulta = [];
-    foreach ($estructuras as $estructura) {
-        $etiqueta = DB::table('cat_etiquetas')
-            ->where('ID_ETIQUETA', $estructura->ETIQUETA_ID)
-            ->first();
-        
-        $opcion = DB::table('catetiquetas_opciones')
-            ->where('ID_OPCIONES_ETIQUETAS', $estructura->OPCIONES_ID)
-            ->first();
-
-        $resulta[] = [
-            'nivel' => $estructura->NIVEL,
-            'etiqueta_id' => $estructura->ETIQUETA_ID,
-            'etiqueta_nombre' => $etiqueta ? $etiqueta->NOMBRE_ETIQUETA : null,
-            'opcion_id' => $estructura->OPCIONES_ID,
-            'opcion_nombre' => $opcion ? $opcion->NOMBRE_OPCIONES : null,
-        ];
+    {
+        $opciones = CatetiquetaopcionesModel::where('ETIQUETA_ID', $etiquetaId)->where('ACTIVO', 1)->orderBy('ID_OPCIONES_ETIQUETAS', 'ASC')->get();
+        return response()->json($opciones);
     }
 
-    return response()->json($resulta);
-}
+
+    public function obtenerEstructuraCliente($clienteId)
+    {
+        $estructuras = DB::table('estructuraclientes')
+            ->where('CLIENTES_ID', $clienteId)
+            ->orderBy('NIVEL', 'ASC')
+            ->get();
+
+        $resulta = [];
+        foreach ($estructuras as $estructura) {
+            $etiqueta = DB::table('cat_etiquetas')
+                ->where('ID_ETIQUETA', $estructura->ETIQUETA_ID)
+                ->first();
+
+            $opcion = DB::table('catetiquetas_opciones')
+                ->where('ID_OPCIONES_ETIQUETAS', $estructura->OPCIONES_ID)
+                ->first();
+
+            $resulta[] = [
+                'nivel' => $estructura->NIVEL,
+                'etiqueta_id' => $estructura->ETIQUETA_ID,
+                'etiqueta_nombre' => $etiqueta ? $etiqueta->NOMBRE_ETIQUETA : null,
+                'opcion_id' => $estructura->OPCIONES_ID,
+                'opcion_nombre' => $opcion ? $opcion->NOMBRE_OPCIONES : null,
+            ];
+        }
+
+        return response()->json($resulta);
+    }
 
 
     /**
@@ -280,6 +280,23 @@ public function obtenerEstructuraCliente($clienteId)
                     $value->BIT_CONVENIO = 1;
                 }
 
+                if (is_null($value->NUMERO_CONTRATO) || $value->NUMERO_CONTRATO === '') {
+                    $value->NUMERO_CONTRATO = 'N/A';
+                }
+
+                switch ($value->TIPO_SERVICIO) {
+                    case 1:
+                        $value->TIPO_SERVICIO = 'Contrato';
+                        break;
+                    case 2:
+                        $value->TIPO_SERVICIO = 'O.S / O.C';
+                        break;
+                    case 3:
+                        $value->TIPO_SERVICIO = 'Cotización aceptada';
+                        break;
+                    default:
+                        $value->TIPO_SERVICIO = 'N/A';
+                }
 
 
                 // Botones
@@ -484,7 +501,7 @@ public function obtenerEstructuraCliente($clienteId)
 
                 $value->RUTA_IMAGEN_LOGO = '<img src="/listalogo/' . $value->ID_PLANTILLA_IMAGEN . '" alt="" class="img-fluid" style="display: block; margin: auto;" width="200" height="200">';
                 // Botones
-                if (auth()->user()->hasRoles(['Superusuario', 'Administrador','Coordinador','Almacen','Operativo HI','Compras'])) {
+                if (auth()->user()->hasRoles(['Superusuario', 'Administrador', 'Coordinador', 'Almacen', 'Operativo HI', 'Compras'])) {
                     $value->accion_activa = 1;
                     $value->boton_editar = '<button type="button" class="btn btn-warning btn-circle boton_editar" ><i class="fa fa-pencil"></i></button>';
                     $value->boton_eliminar = '<button type="button" class="btn btn-danger btn-circle boton_eliminar"><i class="fa fa-trash"></i></button>';
@@ -850,50 +867,49 @@ public function obtenerEstructuraCliente($clienteId)
         try {
             // dd($request->all());
 
-         if (($request->opcion + 0) == 1) // NUEVO CLIENTE
-        {
-            if ($request['cliente_id'] == 0) {
-                // AUTO_INCREMENT
-                DB::statement('ALTER TABLE cliente AUTO_INCREMENT=1');
+            if (($request->opcion + 0) == 1) // NUEVO CLIENTE
+            {
+                if ($request['cliente_id'] == 0) {
+                    // AUTO_INCREMENT
+                    DB::statement('ALTER TABLE cliente AUTO_INCREMENT=1');
 
-                $request['cliente_Bloqueado'] = 0;
-                $request['cliente_Eliminado'] = 0;
-                $cliente = clienteModel::create($request->all());
-                $cliente = clienteModel::findOrFail($cliente->id);
-
-            } else {
-                $cliente = clienteModel::findOrFail($request['cliente_id']);
-                $cliente->update($request->all());
-                $cliente = clienteModel::findOrFail($request['cliente_id']);
-            }
-
-            // Guardar etiquetas y opciones seleccionadas
-            $etiquetas = $request->input('ETIQUETA_ID', []);
-            $opciones = $request->input('OPCIONES_ID', []);
-            $nivel = $request->input('NIVEL', []);
-
-            // Primero, eliminar las entradas existentes para este cliente
-            estructuraclientesModel::where('CLIENTES_ID', $cliente->id)->delete();
-
-            // Luego, agregar las nuevas entradas
-            foreach ($etiquetas as $index => $etiqueta_id) {
-                if (!empty($etiqueta_id)) {
-                    $opcion_id = $opciones[$index] ?? null;
-                    $nivel_id = $nivel[$index] ?? null;
-
-                    estructuraclientesModel::create([
-                        'CLIENTES_ID' => $cliente->id,
-                        'ETIQUETA_ID' => $etiqueta_id,
-                        'OPCIONES_ID' => $opcion_id,
-                        'NIVEL'=> $nivel_id,
-                    ]);
+                    $request['cliente_Bloqueado'] = 0;
+                    $request['cliente_Eliminado'] = 0;
+                    $cliente = clienteModel::create($request->all());
+                    $cliente = clienteModel::findOrFail($cliente->id);
+                } else {
+                    $cliente = clienteModel::findOrFail($request['cliente_id']);
+                    $cliente->update($request->all());
+                    $cliente = clienteModel::findOrFail($request['cliente_id']);
                 }
+
+                // Guardar etiquetas y opciones seleccionadas
+                $etiquetas = $request->input('ETIQUETA_ID', []);
+                $opciones = $request->input('OPCIONES_ID', []);
+                $nivel = $request->input('NIVEL', []);
+
+                // Primero, eliminar las entradas existentes para este cliente
+                estructuraclientesModel::where('CLIENTES_ID', $cliente->id)->delete();
+
+                // Luego, agregar las nuevas entradas
+                foreach ($etiquetas as $index => $etiqueta_id) {
+                    if (!empty($etiqueta_id)) {
+                        $opcion_id = $opciones[$index] ?? null;
+                        $nivel_id = $nivel[$index] ?? null;
+
+                        estructuraclientesModel::create([
+                            'CLIENTES_ID' => $cliente->id,
+                            'ETIQUETA_ID' => $etiqueta_id,
+                            'OPCIONES_ID' => $opcion_id,
+                            'NIVEL' => $nivel_id,
+                        ]);
+                    }
+                }
+
+                return response()->json($cliente);
             }
 
-            return response()->json($cliente);
-        }
 
-            
 
 
             if (($request->opcion + 0) == 2) // NUEVO Y EDITAR DOCUMENTOS

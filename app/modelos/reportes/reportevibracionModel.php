@@ -11,6 +11,7 @@ class reportevibracionModel extends Model
           'proyecto_id'
         , 'catactivo_id'
         , 'reportevibracion_fecha'
+        ,'reporte_mes'
         , 'reportevibracion_instalacion'
         , 'reportevibracion_catregion_activo'
         , 'reportevibracion_catsubdireccion_activo'

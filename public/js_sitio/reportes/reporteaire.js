@@ -200,6 +200,9 @@ function datosgenerales()
 
 			$('#reporte_instalacion').val(dato.reporte_portada.reporte_instalacion);
 			$('#reporte_fecha').val(dato.reporte_portada.reporte_fecha);
+
+			$('#reporte_mes').val(dato.reporte_portada.reporte_mes);
+
 			$('.div_instalacion_nombre').html(dato.reporte_portada.reporte_instalacion);
 
 
@@ -371,6 +374,8 @@ function datosgenerales()
 
 			$('#reporte_instalacion').val('Error al cargar los datos');
 			$('#reporte_fecha').val('Error al cargar los datos');
+			$('#reporte_mes').val('Error al cargar los datos');
+
 			$('#reporte_introduccion').html('Error al cargar los datos');
 			$('#reporte_objetivogeneral').html('Error al cargar los datos');
 			$('#reporte_objetivoespecifico').html('Error al cargar los datos');
@@ -661,6 +666,8 @@ $("#botonguardar_reporte_introduccion").click(function()
 
 $(document).ready(function()
 {
+
+	obtenerdatos()
 	setTimeout(function()
 	{
 		tabla_reporte_definiciones(proyecto.id, agente_nombre, reporteregistro_id);
@@ -5258,6 +5265,24 @@ $(document).ready(function()
 			'imageFormat': 'Formato no permitido, sólo (JPG, PNG).'
 		}
 	});
+	$('#PORTADA').dropify({
+		messages:
+		{
+			'default': 'Arrastre el mapa aquí o haga click',
+			'replace': 'Arrastre el mapa o haga clic para reemplazar',
+			'remove':  'Quitar',
+			'error':   'Ooops, ha ocurrido un error.'
+		},
+		error:
+		{
+			'fileSize': 'Archivo demasiado grande.',
+			'minWidth': 'Ancho demasiado pequeño.',
+			'maxWidth': 'Ancho demasiado grande.',
+			'minHeight': 'Alto demasiado pequeño.',
+			'maxHeight': 'Alto demasiado grande.',
+			'imageFormat': 'Formato no permitido, sólo (JPG, PNG).'
+		}
+	});
 });
 
 
@@ -8266,3 +8291,114 @@ $('#tabla_reporte_revisiones tbody').on('click', 'td>button.botondescarga', func
 		}
 	}, 500);
 });
+
+
+
+$('#btn_descargar_plantilla').on('click', function (e) {
+	e.preventDefault();
+	
+    swal({
+        title: "¡Confirme descargar!",
+        text: "Plantilla principal del Informe.",
+        type: "info",
+        showCancelButton: true,
+        confirmButtonColor: "#DD6B55",
+        confirmButtonText: "Descargar!",
+        cancelButtonText: "Cancelar!",
+        closeOnConfirm: false,
+        closeOnCancel: false
+    },
+    function(isConfirm) {
+        if (isConfirm) {
+            // Mostrar mensaje de carga
+            swal({
+                title: "Generando documento",
+                text: 'Espere un momento, el documento se esta documento se esta generando...',
+                type: "info",
+                showConfirmButton: false,
+                allowOutsideClick: false
+            });
+
+			url = 'descargarPortadaInformes/' + proyecto.id + '/' + 8;
+			instalacion = $('#reporte_instalacion').val();
+
+            $.ajax({
+                url: url,
+                method: 'GET',
+                xhrFields: {
+                    responseType: 'blob'
+                },
+                success: function(data) {
+                    var a = document.createElement('a');
+                    var url = window.URL.createObjectURL(data);
+                    a.href = url;
+                    a.download = `Plantilla principal (Aire) - ${instalacion}.docx`;
+                    document.body.append(a);
+                    a.click();
+                    a.remove();
+                    window.URL.revokeObjectURL(url);
+
+                    // Cerrar mensaje de carga
+                    swal.close();
+
+                    $('#btn_descargar_plantilla').prop('disabled', true);
+                },
+                error: function() {
+                    swal({
+                        title: "Hubo un problema al generar el documento.",
+                        text: "Intentelo de nuevo, o comuniquelo con el responsable",
+                        type: "error",
+                        showConfirmButton: true
+                    });
+                }
+            });
+        } else {
+            // mensaje de cancelación
+            swal({
+                title: "Cancelado",
+                text: "Acción cancelada",
+                type: "error",
+                buttons: {
+                    visible: false,
+                },
+                timer: 500,
+                showConfirmButton: false
+            });
+        }
+    });
+    return false;
+})
+
+
+function obtenerdatos() {
+	
+    // $('#PROYECTO_ID_INFORME').val($('#proyecto_id').val());
+
+    $.ajax({
+        type: "GET",
+        dataType: "json",
+        url: "/obtenerDatosInformesProyecto/" + proyecto.id,
+        data: {},
+        cache: false,
+        success: function(dato) {
+
+        
+            $("#NIVEL1").html(dato.opciones);
+            $("#NIVEL2").html(dato.opciones);
+            $("#NIVEL3").html(dato.opciones);
+            $("#NIVEL4").html(dato.opciones);
+            $("#NIVEL5").html(dato.opciones);
+
+            $("#OPCION_PORTADA1").html(dato.checks);
+            $("#OPCION_PORTADA2").html(dato.checks);
+            $("#OPCION_PORTADA3").html(dato.checks);
+            $("#OPCION_PORTADA4").html(dato.checks);
+            $("#OPCION_PORTADA5").html(dato.checks);
+            $("#OPCION_PORTADA6").html(dato.checks);
+        },
+        error: function(xhr, status, error) {
+            console.log('Error: ' + error);
+            swal('Error', 'No se pudieron obtener los datos del informe', 'error');
+        }
+    });
+}

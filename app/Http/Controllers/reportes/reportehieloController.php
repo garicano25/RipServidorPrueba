@@ -49,6 +49,7 @@ use App\modelos\reportes\reporteplanoscarpetasModel;
 use App\modelos\reportes\reporteequiposutilizadosModel;
 use App\modelos\reportes\reporteanexosModel;
 
+use App\modelos\reportes\recursosPortadasInformesModel;
 
 //Configuracion Zona horaria
 date_default_timezone_set('America/Mexico_City');
@@ -74,43 +75,34 @@ class reportehieloController extends Controller
     {
         $proyecto = proyectoModel::findOrFail($proyecto_id);
 
-        if (($proyecto->recsensorial->recsensorial_tipocliente+0) == 1 && ($proyecto->recsensorial_id == NULL || $proyecto->catregion_id == NULL || $proyecto->catsubdireccion_id == NULL || $proyecto->catgerencia_id == NULL || $proyecto->catactivo_id == NULL || $proyecto->proyecto_clienteinstalacion == NULL || $proyecto->proyecto_fechaentrega == NULL))
-        {
+        if (($proyecto->recsensorial->recsensorial_tipocliente + 0) == 1 && ($proyecto->recsensorial_id == NULL || $proyecto->catregion_id == NULL || $proyecto->catsubdireccion_id == NULL || $proyecto->catgerencia_id == NULL || $proyecto->catactivo_id == NULL || $proyecto->proyecto_clienteinstalacion == NULL || $proyecto->proyecto_fechaentrega == NULL)) {
             return '<div style="text-align: center;">
                         <p style="font-size: 24px;">Datos incompletos</p>
                         <b style="font-size: 18px;">Para ingresar al diseño del reporte de hielo primero debe completar todos los campos vacíos de la sección de datos generales del proyecto.</b>
                     </div>';
-        }
-        else
-        {
+        } else {
             // CREAR REVISION SI NO EXISTE
             //===================================================
 
 
             $revision = reporterevisionesModel::where('proyecto_id', $proyecto_id)
-                                                ->where('agente_id', 10) // Hielo
-                                                ->orderBy('reporterevisiones_revision', 'DESC')
-                                                ->get();
+                ->where('agente_id', 10) // Hielo
+                ->orderBy('reporterevisiones_revision', 'DESC')
+                ->get();
 
 
-            if(count($revision) == 0)
-            {
+            // ================ DESCOMENTAR DESPUES DE SUBIR AL SERVIDOR =========================
+
+            if (count($revision) == 0) {
                 DB::statement('ALTER TABLE reporterevisiones AUTO_INCREMENT = 1;');
 
                 $revision = reporterevisionesModel::create([
-                      'proyecto_id' => $proyecto_id
-                    , 'agente_id' => 10
-                    , 'agente_nombre' => 'Hielo'
-                    , 'reporterevisiones_revision' => 0
-                    , 'reporterevisiones_concluido' => 0
-                    , 'reporterevisiones_concluidonombre' => NULL
-                    , 'reporterevisiones_concluidofecha' => NULL
-                    , 'reporterevisiones_cancelado' => 0
-                    , 'reporterevisiones_canceladonombre' => NULL
-                    , 'reporterevisiones_canceladofecha' => NULL
-                    , 'reporterevisiones_canceladoobservacion' => NULL
+                    'proyecto_id' => $proyecto_id, 'agente_id' => 10, 'agente_nombre' => 'Hielo', 'reporterevisiones_revision' => 0, 'reporterevisiones_concluido' => 0, 'reporterevisiones_concluidonombre' => NULL, 'reporterevisiones_concluidofecha' => NULL, 'reporterevisiones_cancelado' => 0, 'reporterevisiones_canceladonombre' => NULL, 'reporterevisiones_canceladofecha' => NULL, 'reporterevisiones_canceladoobservacion' => NULL
                 ]);
             }
+            // ================ DESCOMENTAR DESPUES DE SUBIR AL SERVIDOR =========================
+
+
 
 
             //CATEGORIAS POE
@@ -126,17 +118,14 @@ class reportehieloController extends Controller
                                         FROM
                                             reportehielocategoria
                                         WHERE
-                                            reportehielocategoria.proyecto_id = '.$proyecto_id.' 
+                                            reportehielocategoria.proyecto_id = ' . $proyecto_id . ' 
                                         ORDER BY
                                             reportehielocategoria.reportehielocategoria_nombre ASC');
 
 
-            if (count($categorias) > 0)
-            {
+            if (count($categorias) > 0) {
                 $categorias_poe = 0; // NO TIENE POE GENERAL
-            }
-            else
-            {
+            } else {
                 $categorias_poe = 1; // TIENE POE GENERAL
             }
 
@@ -156,18 +145,15 @@ class reportehieloController extends Controller
                                 FROM
                                     reportehieloarea
                                 WHERE
-                                    reportehieloarea.proyecto_id = '.$proyecto_id.' 
+                                    reportehieloarea.proyecto_id = ' . $proyecto_id . ' 
                                 ORDER BY
                                     reportehieloarea.reportehieloarea_numorden ASC,
                                     reportehieloarea.reportehieloarea_nombre ASC');
 
 
-            if (count($areas) > 0)
-            {
+            if (count($areas) > 0) {
                 $areas_poe = 0; // NO TIENE POE GENERAL
-            }
-            else
-            {
+            } else {
                 $areas_poe = 1; // TIENE POE GENERAL
             }
 
@@ -261,7 +247,7 @@ class reportehieloController extends Controller
                                         FROM
                                             proyectoproveedores
                                         WHERE
-                                            proyectoproveedores.proyecto_id = '.$proyecto_id.' 
+                                            proyectoproveedores.proyecto_id = ' . $proyecto_id . ' 
                                             AND proyectoproveedores.proyectoproveedores_tipoadicional < 2
                                             AND proyectoproveedores.catprueba_id = 10
                                         ORDER BY
@@ -269,8 +255,11 @@ class reportehieloController extends Controller
                                             proyectoproveedores.catprueba_id ASC
                                         LIMIT 1');
 
+            // DESCOMENTAR DESPUES DE SUBIR AL SERVIDOR
+            // $proveedor_id = $proveedor[0]->proveedor_id;
 
-            $proveedor_id = $proveedor[0]->proveedor_id;
+            $proveedor_id = 0; //BORRAR DESPUES DE SUBIR AL SERVIDOR
+
 
 
             //===================================================
@@ -294,22 +283,20 @@ class reportehieloController extends Controller
     {
         $meses = ["Vacio", "Enero", "Febrero", "Marzo", "Abril", "Mayo", "Junio", "Julio", "Agosto", "Septiembre", "Octubre", "Noviembre", "Diciembre"];
         $reportefecha = explode("-", $proyecto->proyecto_fechaentrega);
-        
-        if (($recsensorial->recsensorial_tipocliente+0) == 1) // 1 = pemex, 0 = cliente
+
+        if (($recsensorial->recsensorial_tipocliente + 0) == 1) // 1 = pemex, 0 = cliente
         {
             $texto = str_replace($proyecto->catsubdireccion->catsubdireccion_nombre, 'SUBDIRECCION_NOMBRE', $texto);
             $texto = str_replace($proyecto->catgerencia->catgerencia_nombre, 'GERENCIA_NOMBRE', $texto);
             $texto = str_replace($proyecto->catactivo->catactivo_nombre, 'ACTIVO_NOMBRE', $texto);
-        }
-        else
-        {
+        } else {
             $texto = str_replace($recsensorial->recsensorial_empresa, 'PEMEX Exploración y Producción', $texto);
             $texto = str_replace($recsensorial->recsensorial_empresa, 'Pemex Exploración y Producción', $texto);
         }
 
         $texto = str_replace($proyecto->proyecto_clienteinstalacion, 'INSTALACION_NOMBRE', $texto);
         $texto = str_replace($proyecto->proyecto_clientedireccionservicio, 'INSTALACION_DIRECCION', $texto);
-        $texto = str_replace($reportefecha[2]." de ".$meses[($reportefecha[1]+0)]." del año ".$reportefecha[0], 'REPORTE_FECHA_LARGA', $texto);
+        $texto = str_replace($reportefecha[2] . " de " . $meses[($reportefecha[1] + 0)] . " del año " . $reportefecha[0], 'REPORTE_FECHA_LARGA', $texto);
 
         return $texto;
     }
@@ -320,14 +307,12 @@ class reportehieloController extends Controller
         $meses = ["Vacio", "Enero", "Febrero", "Marzo", "Abril", "Mayo", "Junio", "Julio", "Agosto", "Septiembre", "Octubre", "Noviembre", "Diciembre"];
         $reportefecha = explode("-", $proyecto->proyecto_fechaentrega);
 
-        if (($recsensorial->recsensorial_tipocliente+0) == 1) // 1 = pemex, 0 = cliente
+        if (($recsensorial->recsensorial_tipocliente + 0) == 1) // 1 = pemex, 0 = cliente
         {
             $texto = str_replace('SUBDIRECCION_NOMBRE', $proyecto->catsubdireccion->catsubdireccion_nombre, $texto);
             $texto = str_replace('GERENCIA_NOMBRE', $proyecto->catgerencia->catgerencia_nombre, $texto);
             $texto = str_replace('ACTIVO_NOMBRE', $proyecto->catactivo->catactivo_nombre, $texto);
-        }
-        else
-        {
+        } else {
             $texto = str_replace('SUBDIRECCION_NOMBRE', '', $texto);
             $texto = str_replace('GERENCIA_NOMBRE', '', $texto);
             $texto = str_replace('ACTIVO_NOMBRE', '', $texto);
@@ -338,9 +323,9 @@ class reportehieloController extends Controller
 
         $texto = str_replace('INSTALACION_NOMBRE', $proyecto->proyecto_clienteinstalacion, $texto);
         $texto = str_replace('INSTALACION_DIRECCION', $proyecto->proyecto_clientedireccionservicio, $texto);
-        $texto = str_replace('INSTALACION_CODIGOPOSTAL', 'C.P. '.$recsensorial->recsensorial_codigopostal, $texto);
+        $texto = str_replace('INSTALACION_CODIGOPOSTAL', 'C.P. ' . $recsensorial->recsensorial_codigopostal, $texto);
         $texto = str_replace('INSTALACION_COORDENADAS', $recsensorial->recsensorial_coordenadas, $texto);
-        $texto = str_replace('REPORTE_FECHA_LARGA', $reportefecha[2]." de ".$meses[($reportefecha[1]+0)]." del año ".$reportefecha[0], $texto);
+        $texto = str_replace('REPORTE_FECHA_LARGA', $reportefecha[2] . " de " . $meses[($reportefecha[1] + 0)] . " del año " . $reportefecha[0], $texto);
 
         return $texto;
     }
@@ -356,38 +341,32 @@ class reportehieloController extends Controller
      */
     public function reportehielodatosgenerales($proyecto_id, $agente_id, $agente_nombre)
     {
-        try
-        {
+        try {
             $proyecto = proyectoModel::with(['catregion', 'catsubdireccion', 'catgerencia', 'catactivo'])->findOrFail($proyecto_id);
             $recsensorial = recsensorialModel::with(['catregion', 'catsubdireccion', 'catgerencia', 'catactivo'])->findOrFail($proyecto->recsensorial_id);
-                
+
             $meses = ["Vacio", "Enero", "Febrero", "Marzo", "Abril", "Mayo", "Junio", "Julio", "Agosto", "Septiembre", "Octubre", "Noviembre", "Diciembre"];
             $proyectofecha = explode("-", $proyecto->proyecto_fechaentrega);
 
             $reportecatalogo = reportehielocatalogoModel::limit(1)->get();
             $reporte  = reportehieloModel::where('proyecto_id', $proyecto_id)
-                                        ->orderBy('reportehielo_revision', 'DESC')
-                                        ->limit(1)
-                                        ->get();
-                                        
+                ->orderBy('reportehielo_revision', 'DESC')
+                ->limit(1)
+                ->get();
 
-            if (count($reporte) > 0)
-            {
+
+            if (count($reporte) > 0) {
                 $reporte = $reporte[0];
                 $dato['reporteregistro_id'] = $reporte->id;
-            }
-            else
-            {
-                if (($recsensorial->recsensorial_tipocliente+0) == 1) // 1 = Pemex, 0 = cliente
+            } else {
+                if (($recsensorial->recsensorial_tipocliente + 0) == 1) // 1 = Pemex, 0 = cliente
                 {
                     $reporte = reportehieloModel::where('catactivo_id', $proyecto->catactivo_id)
-                                                ->orderBy('proyecto_id', 'DESC')
-                                                ->orderBy('reportehielo_revision', 'DESC')
-                                                ->limit(1)
-                                                ->get();
-                }
-                else
-                {
+                        ->orderBy('proyecto_id', 'DESC')
+                        ->orderBy('reportehielo_revision', 'DESC')
+                        ->limit(1)
+                        ->get();
+                } else {
                     $reporte = DB::select('SELECT
                                                 recsensorial.recsensorial_tipocliente,
                                                 recsensorial.cliente_id,
@@ -398,6 +377,8 @@ class reportehieloController extends Controller
                                                 reportehielo.catactivo_id,
                                                 reportehielo.reportehielo_revision,
                                                 reportehielo.reportehielo_fecha,
+                                                reportehielo.reporte_mes,
+
                                                 reportehielo.reportehielo_instalacion,
                                                 reportehielo.reportehielo_catregion_activo,
                                                 reportehielo.reportehielo_catsubdireccion_activo,
@@ -440,20 +421,17 @@ class reportehieloController extends Controller
                                                 LEFT JOIN proyecto ON recsensorial.id = proyecto.recsensorial_id
                                                 LEFT JOIN reportehielo ON proyecto.id = reportehielo.proyecto_id 
                                             WHERE
-                                                recsensorial.cliente_id = '.$recsensorial->cliente_id.' 
+                                                recsensorial.cliente_id = ' . $recsensorial->cliente_id . ' 
                                                 AND reportehielo.reportehielo_instalacion <> "" 
                                             ORDER BY
                                                 reportehielo.updated_at DESC');
                 }
 
 
-                if (count($reporte) > 0)
-                {
+                if (count($reporte) > 0) {
                     $reporte = $reporte[0];
                     $dato['reporteregistro_id'] = 0;
-                }
-                else
-                {
+                } else {
                     $reporte = array(0, 0);
                     $dato['reporteregistro_id'] = -1;
                 }
@@ -464,68 +442,46 @@ class reportehieloController extends Controller
 
 
             $revision = reporterevisionesModel::where('proyecto_id', $proyecto_id)
-                                                ->where('agente_id', 10) //Hielo
-                                                ->orderBy('reporterevisiones_revision', 'DESC')
-                                                ->get();
+                ->where('agente_id', 10) //Hielo
+                ->orderBy('reporterevisiones_revision', 'DESC')
+                ->get();
 
 
-            if(count($revision) > 0)
-            {
+            if (count($revision) > 0) {
                 $revision = reporterevisionesModel::findOrFail($revision[0]->id);
 
 
                 $dato['reporte_concluido'] = $revision->reporterevisiones_concluido;
                 $dato['reporte_cancelado'] = $revision->reporterevisiones_cancelado;
-            }
-            else
-            {
+            } else {
                 $dato['reporte_concluido'] = 0;
                 $dato['reporte_cancelado'] = 0;
             }
 
-            
+
             // PORTADA
             //===================================================
 
 
-            $dato['recsensorial_tipocliente'] = ($recsensorial->recsensorial_tipocliente+0);
+            $dato['recsensorial_tipocliente'] = ($recsensorial->recsensorial_tipocliente + 0);
 
 
-            if ($dato['reporteregistro_id'] >= 0 && $reporte->reportehielo_fecha != NULL && $reporte->proyecto_id == $proyecto_id)
-            {
+            if ($dato['reporteregistro_id'] >= 0 && $reporte->reportehielo_fecha != NULL && $reporte->proyecto_id == $proyecto_id) {
                 $reportefecha = $reporte->reportehielo_fecha;
                 $dato['reporte_portada_guardado'] = 1;
 
                 $dato['reporte_portada'] = array(
-                                                  'reporte_catregion_activo' => $reporte->reportehielo_catregion_activo
-                                                , 'catregion_id' => $proyecto->catregion_id
-                                                , 'reporte_catsubdireccion_activo' => $reporte->reportehielo_catsubdireccion_activo
-                                                , 'catsubdireccion_id' => $proyecto->catsubdireccion_id
-                                                , 'reporte_catgerencia_activo' => $reporte->reportehielo_catgerencia_activo
-                                                , 'catgerencia_id' => $proyecto->catgerencia_id
-                                                , 'reporte_catactivo_activo' => $reporte->reportehielo_catactivo_activo
-                                                , 'catactivo_id' => $proyecto->catactivo_id
-                                                , 'reporte_instalacion' => $proyecto->proyecto_clienteinstalacion
-                                                , 'reporte_fecha' => $reportefecha
-                                            );
-            }
-            else
-            {
-                $reportefecha = $meses[$proyectofecha[1] + 0]." del ".$proyectofecha[0];
+                    'reporte_catregion_activo' => $reporte->reportehielo_catregion_activo, 'catregion_id' => $proyecto->catregion_id, 'reporte_catsubdireccion_activo' => $reporte->reportehielo_catsubdireccion_activo, 'catsubdireccion_id' => $proyecto->catsubdireccion_id, 'reporte_catgerencia_activo' => $reporte->reportehielo_catgerencia_activo, 'catgerencia_id' => $proyecto->catgerencia_id, 'reporte_catactivo_activo' => $reporte->reportehielo_catactivo_activo, 'catactivo_id' => $proyecto->catactivo_id, 'reporte_instalacion' => $proyecto->proyecto_clienteinstalacion, 'reporte_fecha' => $reportefecha, 'reporte_mes' => $reporte->reporte_mes
+
+                );
+            } else {
+                $reportefecha = $meses[$proyectofecha[1] + 0] . " del " . $proyectofecha[0];
                 $dato['reporte_portada_guardado'] = 0;
 
                 $dato['reporte_portada'] = array(
-                                                  'reporte_catregion_activo' => 1
-                                                , 'catregion_id' => $proyecto->catregion_id
-                                                , 'reporte_catsubdireccion_activo' => 1
-                                                , 'catsubdireccion_id' => $proyecto->catsubdireccion_id
-                                                , 'reporte_catgerencia_activo' => 1
-                                                , 'catgerencia_id' => $proyecto->catgerencia_id
-                                                , 'reporte_catactivo_activo' => 1
-                                                , 'catactivo_id' => $proyecto->catactivo_id
-                                                , 'reporte_instalacion' => $proyecto->proyecto_clienteinstalacion
-                                                , 'reporte_fecha' => $reportefecha
-                                            );
+                    'reporte_catregion_activo' => 1, 'catregion_id' => $proyecto->catregion_id, 'reporte_catsubdireccion_activo' => 1, 'catsubdireccion_id' => $proyecto->catsubdireccion_id, 'reporte_catgerencia_activo' => 1, 'catgerencia_id' => $proyecto->catgerencia_id, 'reporte_catactivo_activo' => 1, 'catactivo_id' => $proyecto->catactivo_id, 'reporte_instalacion' => $proyecto->proyecto_clienteinstalacion, 'reporte_fecha' => $reportefecha, 'reporte_mes' => $reporte->reporte_mes
+
+                );
             }
 
 
@@ -533,22 +489,16 @@ class reportehieloController extends Controller
             //===================================================
 
 
-            if ($dato['reporteregistro_id'] >= 0 && $reporte->reportehielo_introduccion != NULL)
-            {
-                if ($reporte->proyecto_id == $proyecto_id)
-                {
+            if ($dato['reporteregistro_id'] >= 0 && $reporte->reportehielo_introduccion != NULL) {
+                if ($reporte->proyecto_id == $proyecto_id) {
                     $dato['reporte_introduccion_guardado'] = 1;
-                }
-                else
-                {
+                } else {
                     $dato['reporte_introduccion_guardado'] = 0;
                 }
 
                 $introduccion = $reporte->reportehielo_introduccion;
                 $introduccion2 = $reporte->reportehielo_introduccion2;
-            }
-            else
-            {
+            } else {
                 $dato['reporte_introduccion_guardado'] = 0;
                 $introduccion = $reportecatalogo[0]->reportehielocatalogo_introduccion;
                 $introduccion2 = $reportecatalogo[0]->reportehielocatalogo_introduccion2;
@@ -562,21 +512,15 @@ class reportehieloController extends Controller
             //===================================================
 
 
-            if ($dato['reporteregistro_id'] >= 0 && $reporte->reportehielo_objetivogeneral != NULL)
-            {
-                if ($reporte->proyecto_id == $proyecto_id)
-                {
+            if ($dato['reporteregistro_id'] >= 0 && $reporte->reportehielo_objetivogeneral != NULL) {
+                if ($reporte->proyecto_id == $proyecto_id) {
                     $dato['reporte_objetivogeneral_guardado'] = 1;
-                }
-                else
-                {
+                } else {
                     $dato['reporte_objetivogeneral_guardado'] = 0;
                 }
 
                 $objetivogeneral = $reporte->reportehielo_objetivogeneral;
-            }
-            else
-            {
+            } else {
                 $dato['reporte_objetivogeneral_guardado'] = 0;
                 $objetivogeneral = $reportecatalogo[0]->reportehielocatalogo_objetivogeneral;
             }
@@ -588,22 +532,16 @@ class reportehieloController extends Controller
             //===================================================
 
 
-            if ($dato['reporteregistro_id'] >= 0 && $reporte->reportehielo_objetivoespecifico != NULL)
-            {
-                if ($reporte->proyecto_id == $proyecto_id)
-                {
+            if ($dato['reporteregistro_id'] >= 0 && $reporte->reportehielo_objetivoespecifico != NULL) {
+                if ($reporte->proyecto_id == $proyecto_id) {
                     $dato['reporte_objetivoespecifico_guardado'] = 1;
-                }
-                else
-                {
+                } else {
                     $dato['reporte_objetivoespecifico_guardado'] = 0;
                 }
 
                 $objetivoespecifico = $reporte->reportehielo_objetivoespecifico;
                 $objetivoespecifico2 = $reporte->reportehielo_objetivoespecifico2;
-            }
-            else
-            {
+            } else {
                 $dato['reporte_objetivoespecifico_guardado'] = 0;
                 $objetivoespecifico = $reportecatalogo[0]->reportehielocatalogo_objetivoespecifico;
                 $objetivoespecifico2 = $reportecatalogo[0]->reportehielocatalogo_objetivoespecifico2;
@@ -617,22 +555,16 @@ class reportehieloController extends Controller
             //===================================================
 
 
-            if ($dato['reporteregistro_id'] >= 0 && $reporte->reportehielo_metodologia_4_1 != NULL)
-            {
-                if ($reporte->proyecto_id == $proyecto_id)
-                {
+            if ($dato['reporteregistro_id'] >= 0 && $reporte->reportehielo_metodologia_4_1 != NULL) {
+                if ($reporte->proyecto_id == $proyecto_id) {
                     $dato['reporte_metodologia_4_1_guardado'] = 1;
-                }
-                else
-                {
+                } else {
                     $dato['reporte_metodologia_4_1_guardado'] = 0;
                 }
 
                 $metodologia_4_1 = $reporte->reportehielo_metodologia_4_1;
                 $metodologia_4_12 = $reporte->reportehielo_metodologia_4_12;
-            }
-            else
-            {
+            } else {
                 $dato['reporte_metodologia_4_1_guardado'] = 0;
                 $metodologia_4_1 = $reportecatalogo[0]->reportehielocatalogo_metodologia_4_1;
                 $metodologia_4_12 = $reportecatalogo[0]->reportehielocatalogo_metodologia_4_12;
@@ -646,22 +578,16 @@ class reportehieloController extends Controller
             //===================================================
 
 
-            if ($dato['reporteregistro_id'] >= 0 && $reporte->reportehielo_metodologia_4_2 != NULL)
-            {
-                if ($reporte->proyecto_id == $proyecto_id)
-                {
+            if ($dato['reporteregistro_id'] >= 0 && $reporte->reportehielo_metodologia_4_2 != NULL) {
+                if ($reporte->proyecto_id == $proyecto_id) {
                     $dato['reporte_metodologia_4_2_guardado'] = 1;
-                }
-                else
-                {
+                } else {
                     $dato['reporte_metodologia_4_2_guardado'] = 0;
                 }
 
                 $metodologia_4_2 = $reporte->reportehielo_metodologia_4_2;
                 $metodologia_4_22 = $reporte->reportehielo_metodologia_4_22;
-            }
-            else
-            {
+            } else {
                 $dato['reporte_metodologia_4_2_guardado'] = 0;
                 $metodologia_4_2 = $reportecatalogo[0]->reportehielocatalogo_metodologia_4_2;
                 $metodologia_4_22 = $reportecatalogo[0]->reportehielocatalogo_metodologia_4_22;
@@ -675,22 +601,16 @@ class reportehieloController extends Controller
             //===================================================
 
 
-            if ($dato['reporteregistro_id'] >= 0 && $reporte->reportehielo_metodologia_4_3 != NULL)
-            {
-                if ($reporte->proyecto_id == $proyecto_id)
-                {
+            if ($dato['reporteregistro_id'] >= 0 && $reporte->reportehielo_metodologia_4_3 != NULL) {
+                if ($reporte->proyecto_id == $proyecto_id) {
                     $dato['reporte_metodologia_4_3_guardado'] = 1;
-                }
-                else
-                {
+                } else {
                     $dato['reporte_metodologia_4_3_guardado'] = 0;
                 }
 
                 $metodologia_4_3 = $reporte->reportehielo_metodologia_4_3;
                 $metodologia_4_32 = $reporte->reportehielo_metodologia_4_32;
-            }
-            else
-            {
+            } else {
                 $dato['reporte_metodologia_4_3_guardado'] = 0;
                 $metodologia_4_3 = $reportecatalogo[0]->reportehielocatalogo_metodologia_4_3;
                 $metodologia_4_32 = $reportecatalogo[0]->reportehielocatalogo_metodologia_4_32;
@@ -704,49 +624,38 @@ class reportehieloController extends Controller
             //===================================================
 
 
-            if ($dato['reporteregistro_id'] >= 0 && $reporte->reportehielo_ubicacioninstalacion != NULL)
-            {
-                if ($reporte->proyecto_id == $proyecto_id)
-                {
+            if ($dato['reporteregistro_id'] >= 0 && $reporte->reportehielo_ubicacioninstalacion != NULL) {
+                if ($reporte->proyecto_id == $proyecto_id) {
                     $dato['reporte_ubicacioninstalacion_guardado'] = 1;
-                }
-                else
-                {
+                } else {
                     $dato['reporte_ubicacioninstalacion_guardado'] = 0;
                 }
 
                 $ubicacion = $reporte->reportehielo_ubicacioninstalacion;
-            }
-            else
-            {
+            } else {
                 $dato['reporte_ubicacioninstalacion_guardado'] = 0;
                 $ubicacion = $reportecatalogo[0]->reportehielocatalogo_ubicacioninstalacion;
             }
 
 
             $ubicacionfoto = NULL;
-            if ($dato['reporteregistro_id'] >= 0 && $reporte->reportehielo_ubicacionfoto != NULL && $reporte->proyecto_id == $proyecto_id)
-            {
+            if ($dato['reporteregistro_id'] >= 0 && $reporte->reportehielo_ubicacionfoto != NULL && $reporte->proyecto_id == $proyecto_id) {
                 $ubicacionfoto = $reporte->reportehielo_ubicacionfoto;
             }
 
             $dato['reporte_ubicacioninstalacion'] = array(
-                                                          'ubicacion' => $this->datosproyectoreemplazartexto($proyecto, $recsensorial, $ubicacion)
-                                                        , 'ubicacionfoto' => $ubicacionfoto
-                                                    );
+                'ubicacion' => $this->datosproyectoreemplazartexto($proyecto, $recsensorial, $ubicacion), 'ubicacionfoto' => $ubicacionfoto
+            );
 
 
             // PROCESO INSTALACION
             //===================================================
 
 
-            if ($dato['reporteregistro_id'] >= 0 && $reporte->reportehielo_procesoinstalacion != NULL && $reporte->proyecto_id == $proyecto_id)
-            {
+            if ($dato['reporteregistro_id'] >= 0 && $reporte->reportehielo_procesoinstalacion != NULL && $reporte->proyecto_id == $proyecto_id) {
                 $dato['reporte_procesoinstalacion_guardado'] = 1;
                 $procesoinstalacion = $reporte->reportehielo_procesoinstalacion;
-            }
-            else
-            {
+            } else {
                 $dato['reporte_procesoinstalacion_guardado'] = 0;
                 $procesoinstalacion = $recsensorial->recsensorial_descripcionproceso;
             }
@@ -758,13 +667,10 @@ class reportehieloController extends Controller
             //===================================================
 
 
-            if ($dato['reporteregistro_id'] >= 0 && $reporte->reportehielo_procesoelaboracion != NULL && $reporte->proyecto_id == $proyecto_id)
-            {
+            if ($dato['reporteregistro_id'] >= 0 && $reporte->reportehielo_procesoelaboracion != NULL && $reporte->proyecto_id == $proyecto_id) {
                 $dato['reporte_procesoelaboracion_guardado'] = 1;
                 $procesoelaboracion = $reporte->reportehielo_procesoelaboracion;
-            }
-            else
-            {
+            } else {
                 $dato['reporte_procesoelaboracion_guardado'] = 0;
                 $procesoelaboracion = $reportecatalogo[0]->reportehielocatalogo_procesoelaboracion;
             }
@@ -776,14 +682,11 @@ class reportehieloController extends Controller
             //===================================================
 
 
-            if ($dato['reporteregistro_id'] >= 0 && $reporte->reportehielo_conclusion != NULL && $reporte->proyecto_id == $proyecto_id)
-            {
+            if ($dato['reporteregistro_id'] >= 0 && $reporte->reportehielo_conclusion != NULL && $reporte->proyecto_id == $proyecto_id) {
                 $dato['reporte_conclusion_guardado'] = 1;
                 $conclusion = $reporte->reportehielo_conclusion;
                 $conclusion2 = $reporte->reportehielo_conclusion2;
-            }
-            else
-            {
+            } else {
                 $dato['reporte_conclusion_guardado'] = 0;
                 $conclusion = $reportecatalogo[0]->reportehielocatalogo_conclusion;
                 $conclusion2 = $reportecatalogo[0]->reportehielocatalogo_conclusion2;
@@ -797,63 +700,33 @@ class reportehieloController extends Controller
             //===================================================
 
 
-            if ($dato['reporteregistro_id'] >= 0 && $reporte->reportehielo_responsable1 != NULL)
-            {
-                if ($reporte->proyecto_id == $proyecto_id)
-                {
+            if ($dato['reporteregistro_id'] >= 0 && $reporte->reportehielo_responsable1 != NULL) {
+                if ($reporte->proyecto_id == $proyecto_id) {
                     $dato['reporte_responsablesinforme_guardado'] = 1;
-                }
-                else
-                {
+                } else {
                     $dato['reporte_responsablesinforme_guardado'] = 0;
                 }
 
                 $dato['reporte_responsablesinforme'] = array(
-                                                              'responsable1' => $reporte->reportehielo_responsable1
-                                                            , 'responsable1cargo' => $reporte->reportehielo_responsable1cargo
-                                                            , 'responsable1documento' => $reporte->reportehielo_responsable1documento
-                                                            , 'responsable2' => $reporte->reportehielo_responsable2
-                                                            , 'responsable2cargo' => $reporte->reportehielo_responsable2cargo
-                                                            , 'responsable2documento' => $reporte->reportehielo_responsable2documento
-                                                            , 'proyecto_id' => $reporte->proyecto_id
-                                                            , 'registro_id' => $reporte->id
-                                                        );
-            }
-            else
-            {
+                    'responsable1' => $reporte->reportehielo_responsable1, 'responsable1cargo' => $reporte->reportehielo_responsable1cargo, 'responsable1documento' => $reporte->reportehielo_responsable1documento, 'responsable2' => $reporte->reportehielo_responsable2, 'responsable2cargo' => $reporte->reportehielo_responsable2cargo, 'responsable2documento' => $reporte->reportehielo_responsable2documento, 'proyecto_id' => $reporte->proyecto_id, 'registro_id' => $reporte->id
+                );
+            } else {
                 $dato['reporte_responsablesinforme_guardado'] = 0;
 
 
                 $reportehistorial = reportehieloModel::where('reportehielo_responsable1', '!=', '')
-                                                    ->orderBy('updated_at', 'DESC')
-                                                    ->limit(1)
-                                                    ->get();
+                    ->orderBy('updated_at', 'DESC')
+                    ->limit(1)
+                    ->get();
 
-                if (count($reportehistorial) > 0 && $reportehistorial[0]->reportehielo_responsable1 != NULL)
-                {
+                if (count($reportehistorial) > 0 && $reportehistorial[0]->reportehielo_responsable1 != NULL) {
                     $dato['reporte_responsablesinforme'] = array(
-                                                                  'responsable1' => $reportehistorial[0]->reportehielo_responsable1
-                                                                , 'responsable1cargo' => $reportehistorial[0]->reportehielo_responsable1cargo
-                                                                , 'responsable1documento' => $reportehistorial[0]->reportehielo_responsable1documento
-                                                                , 'responsable2' => $reportehistorial[0]->reportehielo_responsable2
-                                                                , 'responsable2cargo' => $reportehistorial[0]->reportehielo_responsable2cargo
-                                                                , 'responsable2documento' => $reportehistorial[0]->reportehielo_responsable2documento
-                                                                , 'proyecto_id' => $reportehistorial[0]->proyecto_id
-                                                                , 'registro_id' => $reportehistorial[0]->id
-                                                            );
-                }
-                else
-                {
+                        'responsable1' => $reportehistorial[0]->reportehielo_responsable1, 'responsable1cargo' => $reportehistorial[0]->reportehielo_responsable1cargo, 'responsable1documento' => $reportehistorial[0]->reportehielo_responsable1documento, 'responsable2' => $reportehistorial[0]->reportehielo_responsable2, 'responsable2cargo' => $reportehistorial[0]->reportehielo_responsable2cargo, 'responsable2documento' => $reportehistorial[0]->reportehielo_responsable2documento, 'proyecto_id' => $reportehistorial[0]->proyecto_id, 'registro_id' => $reportehistorial[0]->id
+                    );
+                } else {
                     $dato['reporte_responsablesinforme'] = array(
-                                                                  'responsable1' => NULL
-                                                                , 'responsable1cargo' => NULL
-                                                                , 'responsable1documento' => NULL
-                                                                , 'responsable2' => NULL
-                                                                , 'responsable2cargo' => NULL
-                                                                , 'responsable2documento' => NULL
-                                                                , 'proyecto_id' => 0
-                                                                , 'registro_id' => 0
-                                                            );
+                        'responsable1' => NULL, 'responsable1cargo' => NULL, 'responsable1documento' => NULL, 'responsable2' => NULL, 'responsable2cargo' => NULL, 'responsable2documento' => NULL, 'proyecto_id' => 0, 'registro_id' => 0
+                    );
                 }
             }
 
@@ -870,8 +743,8 @@ class reportehieloController extends Controller
                                                 FROM
                                                     proyectoevidenciafoto
                                                 WHERE
-                                                    proyectoevidenciafoto.proyecto_id = '.$proyecto_id.' 
-                                                    AND proyectoevidenciafoto.agente_nombre LIKE "%'.$agente_nombre.'%" 
+                                                    proyectoevidenciafoto.proyecto_id = ' . $proyecto_id . ' 
+                                                    AND proyectoevidenciafoto.agente_nombre LIKE "%' . $agente_nombre . '%" 
                                                 GROUP BY
                                                     proyectoevidenciafoto.proyecto_id,
                                                     proyectoevidenciafoto.agente_id,
@@ -879,17 +752,13 @@ class reportehieloController extends Controller
 
 
             $dato['reporte_memoriafotografica_lista'] = '';
-            if (count($memoriafotografica) > 0)
-            {
+            if (count($memoriafotografica) > 0) {
                 $dato['reporte_memoriafotografica_guardado'] = 1;
 
-                foreach ($memoriafotografica as $key => $value)
-                {
-                    $dato['reporte_memoriafotografica_lista'] .= '● '.$value->total.' fotos de '.$value->agente_nombre.'<br>';
+                foreach ($memoriafotografica as $key => $value) {
+                    $dato['reporte_memoriafotografica_lista'] .= '● ' . $value->total . ' fotos de ' . $value->agente_nombre . '<br>';
                 }
-            }
-            else
-            {                
+            } else {
                 $dato['reporte_memoriafotografica_guardado'] = 0;
                 $dato['reporte_memoriafotografica_lista'] = '● 0 fotos de Hielo (Fisicoquímico)<br>● 0 fotos de Hielo (Microbiológico)';
             }
@@ -901,10 +770,8 @@ class reportehieloController extends Controller
             // respuesta
             $dato["msj"] = 'Datos consultados correctamente';
             return response()->json($dato);
-        }
-        catch(Exception $e)
-        {
-            $dato["msj"] = 'Error '.$e->getMessage();
+        } catch (Exception $e) {
+            $dato["msj"] = 'Error ' . $e->getMessage();
             return response()->json($dato);
         }
     }
@@ -920,19 +787,16 @@ class reportehieloController extends Controller
      */
     public function reportehielotabladefiniciones($proyecto_id, $agente_nombre, $reporteregistro_id)
     {
-        try
-        {
+        try {
             $revision = reporterevisionesModel::where('proyecto_id', $proyecto_id)
-                                                ->where('agente_id', 10)
-                                                ->orderBy('reporterevisiones_revision', 'DESC')
-                                                ->get();
+                ->where('agente_id', 10)
+                ->orderBy('reporterevisiones_revision', 'DESC')
+                ->get();
 
 
             $edicion = 1;
-            if(count($revision) > 0)
-            {
-                if($revision[0]->reporterevisiones_concluido == 1 || $revision[0]->reporterevisiones_cancelado == 1)
-                {
+            if (count($revision) > 0) {
+                if ($revision[0]->reporterevisiones_concluido == 1 || $revision[0]->reporterevisiones_cancelado == 1) {
                     $edicion = 0;
                 }
             }
@@ -946,9 +810,9 @@ class reportehieloController extends Controller
             $recsensorial = recsensorialModel::findOrFail($proyecto->recsensorial_id);
 
             $where_definiciones = '';
-            if (($recsensorial->recsensorial_tipocliente+0) == 1) //1 = pemex, 0 = cliente
+            if (($recsensorial->recsensorial_tipocliente + 0) == 1) //1 = pemex, 0 = cliente
             {
-                $where_definiciones = 'AND reportedefiniciones.catactivo_id = '.$proyecto->catactivo_id;
+                $where_definiciones = 'AND reportedefiniciones.catactivo_id = ' . $proyecto->catactivo_id;
             }
 
             $definiciones_catalogo = collect(DB::select('SELECT
@@ -973,7 +837,7 @@ class reportehieloController extends Controller
                                                                         FROM
                                                                             reportedefinicionescatalogo
                                                                         WHERE
-                                                                            reportedefinicionescatalogo.agente_nombre LIKE "%'.$agente_nombre.'%"
+                                                                            reportedefinicionescatalogo.agente_nombre LIKE "%' . $agente_nombre . '%"
                                                                             AND reportedefinicionescatalogo.reportedefinicionescatalogo_activo = 1
                                                                         ORDER BY
                                                                             reportedefinicionescatalogo.reportedefinicionescatalogo_concepto ASC
@@ -991,8 +855,8 @@ class reportehieloController extends Controller
                                                                         FROM
                                                                             reportedefiniciones
                                                                         WHERE
-                                                                            reportedefiniciones.agente_nombre LIKE "%'.$agente_nombre.'%"
-                                                                            '.$where_definiciones.' 
+                                                                            reportedefiniciones.agente_nombre LIKE "%' . $agente_nombre . '%"
+                                                                            ' . $where_definiciones . ' 
                                                                         ORDER BY
                                                                             reportedefiniciones.agente_nombre ASC
                                                                     )
@@ -1001,26 +865,19 @@ class reportehieloController extends Controller
                                                                 -- TABLA.catactivo_id ASC,
                                                                 TABLA.concepto ASC'));
 
-            foreach ($definiciones_catalogo as $key => $value)
-            {
-                if (($value->catactivo_id+0) < 0)
-                {
-                    $value->descripcion_fuente = $value->descripcion.'<br><span style="color: #999999; font-style: italic;">Fuente: '.$value->fuente.'</span>';
+            foreach ($definiciones_catalogo as $key => $value) {
+                if (($value->catactivo_id + 0) < 0) {
+                    $value->descripcion_fuente = $value->descripcion . '<br><span style="color: #999999; font-style: italic;">Fuente: ' . $value->fuente . '</span>';
                     $value->boton_editar = '<button type="button" class="btn btn-default waves-effect btn-circle"><i class="fa fa-ban fa-2x"></i></button>';
                     $value->boton_eliminar = '<button type="button" class="btn btn-default waves-effect btn-circle" data-toggle="tooltip" title="No disponible"><i class="fa fa-ban fa-2x"></i></button>';
-                }
-                else
-                {
-                    $value->descripcion_fuente = $value->descripcion.'<br><span style="color: #999999; font-style: italic;">Fuente: '.$value->fuente.'</span>';
+                } else {
+                    $value->descripcion_fuente = $value->descripcion . '<br><span style="color: #999999; font-style: italic;">Fuente: ' . $value->fuente . '</span>';
                     $value->boton_editar = '<button type="button" class="btn btn-warning waves-effect btn-circle"><i class="fa fa-pencil fa-2x"></i></button>';
                     // $value->boton_eliminar = '<button type="button" class="btn btn-danger waves-effect btn-circle"><i class="fa fa-trash fa-2x"></i></button>';
 
-                    if ($edicion == 1)
-                    {
+                    if ($edicion == 1) {
                         $value->boton_eliminar = '<button type="button" class="btn btn-danger waves-effect btn-circle eliminar"><i class="fa fa-trash fa-2x"></i></button>';
-                    }
-                    else
-                    {
+                    } else {
                         $value->boton_eliminar = '<button type="button" class="btn btn-default waves-effect btn-circle" data-toggle="tooltip" title="No disponible"><i class="fa fa-eye fa-2x"></i></button>';
                     }
                 }
@@ -1031,11 +888,9 @@ class reportehieloController extends Controller
             $dato['data'] = $definiciones_catalogo;
             $dato["msj"] = 'Datos consultados correctamente';
             return response()->json($dato);
-        }
-        catch(Exception $e)
-        {
+        } catch (Exception $e) {
             $dato['data'] = 0;
-            $dato["msj"] = 'Error '.$e->getMessage();
+            $dato["msj"] = 'Error ' . $e->getMessage();
             return response()->json($dato);
         }
     }
@@ -1049,17 +904,14 @@ class reportehieloController extends Controller
      */
     public function reportehielodefinicioneliminar($definicion_id)
     {
-        try
-        {
+        try {
             $definicion = reportedefinicionesModel::where('id', $definicion_id)->delete();
 
             // respuesta
             $dato["msj"] = 'Definición eliminada correctamente';
             return response()->json($dato);
-        }
-        catch(Exception $e)
-        {
-            $dato["msj"] = 'Error '.$e->getMessage();
+        } catch (Exception $e) {
+            $dato["msj"] = 'Error ' . $e->getMessage();
             return response()->json($dato);
         }
     }
@@ -1071,17 +923,14 @@ class reportehieloController extends Controller
      * @param  int  $reporteregistro_id
      * @param  int  $archivo_opcion
      * @return \Illuminate\Http\Response
-    */
+     */
     public function reportehielomapaubicacion($reporteregistro_id, $archivo_opcion)
     {
         $reporte  = reportehieloModel::findOrFail($reporteregistro_id);
 
-        if ($archivo_opcion == 0)
-        {
+        if ($archivo_opcion == 0) {
             return Storage::response($reporte->reportehielo_ubicacionfoto);
-        }
-        else
-        {
+        } else {
             return Storage::download($reporte->reportehielo_ubicacionfoto);
         }
     }
@@ -1097,20 +946,17 @@ class reportehieloController extends Controller
      */
     public function reportehielocategorias($proyecto_id, $reporteregistro_id, $areas_poe)
     {
-        try
-        {
+        try {
             $total_singuardar = 0;
 
 
-            if (($areas_poe+0) == 1)
-            {
+            if (($areas_poe + 0) == 1) {
                 $categorias = reportecategoriaModel::where('proyecto_id', $proyecto_id)
-                                                    ->orderBy('reportecategoria_orden', 'ASC')
-                                                    ->get();
+                    ->orderBy('reportecategoria_orden', 'ASC')
+                    ->get();
 
 
-                foreach ($categorias as $key => $value) 
-                {
+                foreach ($categorias as $key => $value) {
                     // $numero_registro += 1;
                     // $value->numero_registro = $numero_registro;
                     $value->numero_registro = $value->reportecategoria_orden;
@@ -1123,20 +969,16 @@ class reportehieloController extends Controller
                     $value->boton_editar = '<button type="button" class="btn btn-default waves-effect btn-circle" data-toggle="tooltip" title="No disponible"><i class="fa fa-ban fa-2x"></i></button>';
                     $value->boton_eliminar = '<button type="button" class="btn btn-default waves-effect btn-circle" data-toggle="tooltip" title="No disponible"><i class="fa fa-ban fa-2x"></i></button>';
                 }
-            }
-            else
-            {
+            } else {
                 $revision = reporterevisionesModel::where('proyecto_id', $proyecto_id)
-                                                    ->where('agente_id', 10)
-                                                    ->orderBy('reporterevisiones_revision', 'DESC')
-                                                    ->get();
+                    ->where('agente_id', 10)
+                    ->orderBy('reporterevisiones_revision', 'DESC')
+                    ->get();
 
 
                 $edicion = 1;
-                if(count($revision) > 0)
-                {
-                    if($revision[0]->reporterevisiones_concluido == 1 || $revision[0]->reporterevisiones_cancelado == 1)
-                    {
+                if (count($revision) > 0) {
+                    if ($revision[0]->reporterevisiones_concluido == 1 || $revision[0]->reporterevisiones_cancelado == 1) {
                         $edicion = 0;
                     }
                 }
@@ -1146,37 +988,32 @@ class reportehieloController extends Controller
 
 
                 $categorias = reportehielocategoriaModel::where('proyecto_id', $proyecto_id)
-                                                        ->where('registro_id', $reporteregistro_id)
-                                                        ->orderBy('reportehielocategoria_nombre', 'ASC')
-                                                        ->get();
+                    ->where('registro_id', $reporteregistro_id)
+                    ->orderBy('reportehielocategoria_nombre', 'ASC')
+                    ->get();
 
-                if (count($categorias) == 0)
-                {
+                if (count($categorias) == 0) {
                     $categorias = reportehielocategoriaModel::where('proyecto_id', $proyecto_id)
-                                                            ->orderBy('reportehielocategoria_nombre', 'ASC')
-                                                            ->get();
+                        ->orderBy('reportehielocategoria_nombre', 'ASC')
+                        ->get();
                 }
 
 
-                $numero_registro = 0; $total_singuardar = 0;
-                foreach ($categorias as $key => $value) 
-                {
+                $numero_registro = 0;
+                $total_singuardar = 0;
+                foreach ($categorias as $key => $value) {
                     $numero_registro += 1;
                     $value->numero_registro = $numero_registro;
-                    
+
                     $value->boton_editar = '<button type="button" class="btn btn-warning waves-effect btn-circle editar"><i class="fa fa-pencil fa-2x"></i></button>';
 
-                    if ($edicion == 1)
-                    {
+                    if ($edicion == 1) {
                         $value->boton_eliminar = '<button type="button" class="btn btn-danger waves-effect btn-circle eliminar"><i class="fa fa-trash fa-2x"></i></button>';
-                    }
-                    else
-                    {
+                    } else {
                         $value->boton_eliminar = '<button type="button" class="btn btn-default waves-effect btn-circle" data-toggle="tooltip" title="No disponible"><i class="fa fa-ban fa-2x"></i></button>';
                     }
 
-                    if (!$value->reportehielocategoria_total)
-                    {
+                    if (!$value->reportehielocategoria_total) {
                         $total_singuardar += 1;
                     }
                 }
@@ -1187,7 +1024,7 @@ class reportehieloController extends Controller
 
 
 
-                
+
 
 
             // respuesta
@@ -1195,12 +1032,10 @@ class reportehieloController extends Controller
             $dato["total_singuardar"] = $total_singuardar;
             $dato["msj"] = 'Datos consultados correctamente';
             return response()->json($dato);
-        }
-        catch(Exception $e)
-        {
+        } catch (Exception $e) {
             $dato['data'] = 0;
             $dato["total_singuardar"] = 0;
-            $dato["msj"] = 'Error '.$e->getMessage();
+            $dato["msj"] = 'Error ' . $e->getMessage();
             return response()->json($dato);
         }
     }
@@ -1214,17 +1049,14 @@ class reportehieloController extends Controller
      */
     public function reportehielocategoriaeliminar($categoria_id)
     {
-        try
-        {
+        try {
             $categoria = reportehielocategoriaModel::where('id', $categoria_id)->delete();
 
             // respuesta
             $dato["msj"] = 'Categoría eliminada correctamente';
             return response()->json($dato);
-        }
-        catch(Exception $e)
-        {
-            $dato["msj"] = 'Error '.$e->getMessage();
+        } catch (Exception $e) {
+            $dato["msj"] = 'Error ' . $e->getMessage();
             return response()->json($dato);
         }
     }
@@ -1240,13 +1072,18 @@ class reportehieloController extends Controller
      */
     public function reportehieloareas($proyecto_id, $reporteregistro_id, $areas_poe)
     {
-        try
-        {
-            $numero_registro = 0; $numero_registro2 = 0; $total_singuardar = 0; $instalacion = 'XXX'; $area = 'XXX'; $area2 = 'XXX'; $selectareasoption = '<option value=""></option>'; $tabla_6_1 = '';
+        try {
+            $numero_registro = 0;
+            $numero_registro2 = 0;
+            $total_singuardar = 0;
+            $instalacion = 'XXX';
+            $area = 'XXX';
+            $area2 = 'XXX';
+            $selectareasoption = '<option value=""></option>';
+            $tabla_6_1 = '';
 
 
-            if (($areas_poe+0) == 1)
-            {
+            if (($areas_poe + 0) == 1) {
                 $areas = DB::select('SELECT
                                          reportearea.proyecto_id,
                                          reportearea.id,
@@ -1258,17 +1095,15 @@ class reportehieloController extends Controller
                                      FROM
                                          reportearea
                                      WHERE
-                                         reportearea.proyecto_id = '.$proyecto_id.' 
+                                         reportearea.proyecto_id = ' . $proyecto_id . ' 
                                      ORDER BY
                                          reportearea.reportearea_orden ASC,
                                          reportearea.reportearea_nombre ASC');
 
 
                 // FORMATEAR FILAS
-                foreach ($areas as $key => $value) 
-                {
-                    if ($area != $value->reportehieloarea_nombre)
-                    {
+                foreach ($areas as $key => $value) {
+                    if ($area != $value->reportehieloarea_nombre) {
                         $area = $value->reportehieloarea_nombre;
                         $value->area_nombre = $area;
 
@@ -1277,81 +1112,68 @@ class reportehieloController extends Controller
                         $value->numero_registro = $numero_registro;
 
 
-                        if ($value->reportehieloarea_porcientooperacion > 0)
-                        {
+                        if ($value->reportehieloarea_porcientooperacion > 0) {
                             $numero_registro2 += 1;
 
                             //TABLA 6.1.- Condiciones de operación durante la evaluación (representado en porcentaje)
                             //==================================================
 
                             $tabla_6_1 .= '<tr>
-                                                <td>'.$numero_registro2.'</td>
-                                                <td>'.$value->reportehieloarea_instalacion.'</td>
-                                                <td>'.$value->reportehieloarea_nombre.'</td>
-                                                <td>'.$value->reportehieloarea_porcientooperacion.' %</td>
+                                                <td>' . $numero_registro2 . '</td>
+                                                <td>' . $value->reportehieloarea_instalacion . '</td>
+                                                <td>' . $value->reportehieloarea_nombre . '</td>
+                                                <td>' . $value->reportehieloarea_porcientooperacion . ' %</td>
                                             </tr>';
                         }
-                    }
-                    else
-                    {
+                    } else {
                         $value->area_nombre = $area;
                         $value->numero_registro = $numero_registro;
                     }
 
-                    
+
                     $value->boton_editar = '<button type="button" class="btn btn-warning waves-effect btn-circle"><i class="fa fa-pencil fa-2x"></i></button>';
                     $value->boton_eliminar = '<button type="button" class="btn btn-default waves-effect btn-circle" data-toggle="tooltip" title="No disponible"><i class="fa fa-ban fa-2x"></i></button>';
 
 
-                    if ($value->reportehieloarea_porcientooperacion === NULL)
-                    {
+                    if ($value->reportehieloarea_porcientooperacion === NULL) {
                         $total_singuardar += 1;
                     }
 
 
-                    if ($value->reportehieloarea_porcientooperacion > 0)
-                    {
-                        if ($instalacion != $value->reportehieloarea_instalacion && ($key + 0) == 0)
-                        {
+                    if ($value->reportehieloarea_porcientooperacion > 0) {
+                        if ($instalacion != $value->reportehieloarea_instalacion && ($key + 0) == 0) {
                             $instalacion = $value->reportehieloarea_instalacion;
-                            $selectareasoption .= '<optgroup label="'.$instalacion.'">';
+                            $selectareasoption .= '<optgroup label="' . $instalacion . '">';
                         }
-                        
-                        if ($instalacion != $value->reportehieloarea_instalacion && ($key + 0) > 0)
-                        {
+
+                        if ($instalacion != $value->reportehieloarea_instalacion && ($key + 0) > 0) {
                             $instalacion = $value->reportehieloarea_instalacion;
-                            $selectareasoption .= '</optgroup><optgroup label="'.$instalacion.'">';
+                            $selectareasoption .= '</optgroup><optgroup label="' . $instalacion . '">';
                             $area2 = 'XXXXX';
                         }
 
 
-                        if ($area2 != $value->reportehieloarea_nombre)
-                        {
+                        if ($area2 != $value->reportehieloarea_nombre) {
                             $area2 = $value->reportehieloarea_nombre;
-                            $selectareasoption .= '<option value="'.$value->id.'">'.$area2.'</option>';
+                            $selectareasoption .= '<option value="' . $value->id . '">' . $area2 . '</option>';
                         }
 
 
-                        if ($key == (count($areas) - 1))
-                        {
+                        if ($key == (count($areas) - 1)) {
                             $selectareasoption .= '</optgroup>';
                         }
                     }
                 }
-            }
-            else
-            {
+            } else {
                 $revision = reporterevisionesModel::where('proyecto_id', $proyecto_id)
-                                                    ->where('agente_id', 10)
-                                                    ->orderBy('reporterevisiones_revision', 'DESC')
-                                                    ->get();
+                    ->where('agente_id', 10)
+                    ->orderBy('reporterevisiones_revision', 'DESC')
+                    ->get();
 
 
                 $edicion = 1;
-                if(count($revision) > 0)
-                {
-                    if($revision[0]->reporterevisiones_concluido == 1 || $revision[0]->reporterevisiones_cancelado == 1)
-                    {
+                if (count($revision) > 0) {
+                    if ($revision[0]->reporterevisiones_concluido == 1 || $revision[0]->reporterevisiones_cancelado == 1) {
                         $edicion = 0;
                     }
                 }
@@ -1361,24 +1183,21 @@ class reportehieloController extends Controller
 
 
                 $areas = reportehieloareaModel::where('proyecto_id', $proyecto_id)
-                                            ->where('registro_id', $reporteregistro_id)
-                                            ->orderBy('reportehieloarea_numorden', 'ASC')
-                                            ->orderBy('reportehieloarea_nombre', 'ASC')
-                                            ->get();
+                    ->where('registro_id', $reporteregistro_id)
+                    ->orderBy('reportehieloarea_numorden', 'ASC')
+                    ->orderBy('reportehieloarea_nombre', 'ASC')
+                    ->get();
 
-                if (count($areas) == 0)
-                {
+                if (count($areas) == 0) {
                     $areas = reportehieloareaModel::where('proyecto_id', $proyecto_id)
-                                                ->orderBy('reportehieloarea_nombre', 'ASC')
-                                                ->get();
+                        ->orderBy('reportehieloarea_nombre', 'ASC')
+                        ->get();
                 }
 
 
                 // FORMATEAR FILAS
-                foreach ($areas as $key => $value) 
-                {
-                    if ($area != $value->reportehieloarea_nombre)
-                    {
+                foreach ($areas as $key => $value) {
+                    if ($area != $value->reportehieloarea_nombre) {
                         $area = $value->reportehieloarea_nombre;
                         $value->area_nombre = $area;
 
@@ -1387,69 +1206,57 @@ class reportehieloController extends Controller
                         $value->numero_registro = $numero_registro;
 
 
-                        if ($value->reportehieloarea_porcientooperacion > 0)
-                        {
+                        if ($value->reportehieloarea_porcientooperacion > 0) {
                             $numero_registro2 += 1;
 
                             //TABLA 6.1.- Condiciones de operación durante la evaluación (representado en porcentaje)
                             //==================================================
 
                             $tabla_6_1 .= '<tr>
-                                                <td>'.$numero_registro2.'</td>
-                                                <td>'.$value->reportehieloarea_instalacion.'</td>
-                                                <td>'.$value->reportehieloarea_nombre.'</td>
-                                                <td>'.$value->reportehieloarea_porcientooperacion.' %</td>
+                                                <td>' . $numero_registro2 . '</td>
+                                                <td>' . $value->reportehieloarea_instalacion . '</td>
+                                                <td>' . $value->reportehieloarea_nombre . '</td>
+                                                <td>' . $value->reportehieloarea_porcientooperacion . ' %</td>
                                             </tr>';
                         }
-                    }
-                    else
-                    {
+                    } else {
                         $value->area_nombre = $area;
                         $value->numero_registro = $numero_registro;
                     }
 
                     $value->boton_editar = '<button type="button" class="btn btn-warning waves-effect btn-circle"><i class="fa fa-pencil fa-2x"></i></button>';
 
-                    if ($edicion == 1)
-                    {
+                    if ($edicion == 1) {
                         $value->boton_eliminar = '<button type="button" class="btn btn-danger waves-effect btn-circle eliminar"><i class="fa fa-trash fa-2x"></i></button>';
-                    }
-                    else
-                    {
+                    } else {
                         $value->boton_eliminar = '<button type="button" class="btn btn-default waves-effect btn-circle" data-toggle="tooltip" title="No disponible"><i class="fa fa-ban fa-2x"></i></button>';
                     }
 
-                    if ($value->reportehieloarea_porcientooperacion === NULL)
-                    {
+                    if ($value->reportehieloarea_porcientooperacion === NULL) {
                         $total_singuardar += 1;
                     }
 
 
-                    if ($value->reportehieloarea_porcientooperacion > 0)
-                    {
-                        if ($instalacion != $value->reportehieloarea_instalacion && ($key + 0) == 0)
-                        {
+                    if ($value->reportehieloarea_porcientooperacion > 0) {
+                        if ($instalacion != $value->reportehieloarea_instalacion && ($key + 0) == 0) {
                             $instalacion = $value->reportehieloarea_instalacion;
-                            $selectareasoption .= '<optgroup label="'.$instalacion.'">';
+                            $selectareasoption .= '<optgroup label="' . $instalacion . '">';
                         }
-                        
-                        if ($instalacion != $value->reportehieloarea_instalacion && ($key + 0) > 0)
-                        {
+
+                        if ($instalacion != $value->reportehieloarea_instalacion && ($key + 0) > 0) {
                             $instalacion = $value->reportehieloarea_instalacion;
-                            $selectareasoption .= '</optgroup><optgroup label="'.$instalacion.'">';
+                            $selectareasoption .= '</optgroup><optgroup label="' . $instalacion . '">';
                             $area2 = 'XXXXX';
                         }
 
 
-                        if ($area2 != $value->reportehieloarea_nombre)
-                        {
+                        if ($area2 != $value->reportehieloarea_nombre) {
                             $area2 = $value->reportehieloarea_nombre;
-                            $selectareasoption .= '<option value="'.$value->id.'">'.$area2.'</option>';
+                            $selectareasoption .= '<option value="' . $value->id . '">' . $area2 . '</option>';
                         }
 
 
-                        if ($key == (count($areas) - 1))
-                        {
+                        if ($key == (count($areas) - 1)) {
                             $selectareasoption .= '</optgroup>';
                         }
                     }
@@ -1464,14 +1271,12 @@ class reportehieloController extends Controller
             $dato["selectareasoption"] = $selectareasoption;
             $dato["msj"] = 'Datos consultados correctamente';
             return response()->json($dato);
-        }
-        catch(Exception $e)
-        {
+        } catch (Exception $e) {
             $dato['data'] = 0;
             $dato["total_singuardar"] = $total_singuardar;
             $dato["tabla_6_1"] = '<tr><td colspan="4">Error al consultar los datos</td></tr>';
             $dato["selectareasoption"] = '<option value="">Error al consultar áreas</option>';
-            $dato["msj"] = 'Error '.$e->getMessage();
+            $dato["msj"] = 'Error ' . $e->getMessage();
             return response()->json($dato);
         }
     }
@@ -1485,17 +1290,14 @@ class reportehieloController extends Controller
      */
     public function reportehieloareaeliminar($area_id)
     {
-        try
-        {
-            $area = reportehieloareaModel::where('id', $area_id)->delete();            
+        try {
+            $area = reportehieloareaModel::where('id', $area_id)->delete();
 
             // respuesta
             $dato["msj"] = 'Área eliminada correctamente';
             return response()->json($dato);
-        }
-        catch(Exception $e)
-        {
-            $dato["msj"] = 'Error '.$e->getMessage();
+        } catch (Exception $e) {
+            $dato["msj"] = 'Error ' . $e->getMessage();
             return response()->json($dato);
         }
     }
@@ -1511,19 +1313,16 @@ class reportehieloController extends Controller
      */
     public function reportehieloevaluaciontabla($proyecto_id, $reporteregistro_id, $areas_poe)
     {
-        try
-        {
+        try {
             $revision = reporterevisionesModel::where('proyecto_id', $proyecto_id)
-                                                ->where('agente_id', 10)
-                                                ->orderBy('reporterevisiones_revision', 'DESC')
-                                                ->get();
+                ->where('agente_id', 10)
+                ->orderBy('reporterevisiones_revision', 'DESC')
+                ->get();
 
 
             $edicion = 1;
-            if(count($revision) > 0)
-            {
-                if($revision[0]->reporterevisiones_concluido == 1 || $revision[0]->reporterevisiones_cancelado == 1)
-                {
+            if (count($revision) > 0) {
+                if ($revision[0]->reporterevisiones_concluido == 1 || $revision[0]->reporterevisiones_cancelado == 1) {
                     $edicion = 0;
                 }
             }
@@ -1532,8 +1331,7 @@ class reportehieloController extends Controller
             //==========================================
 
 
-            if (($areas_poe+0) == 1)
-            {
+            if (($areas_poe + 0) == 1) {
                 $evaluacion = DB::select('SELECT
                                                 reportehieloevaluacion.id,
                                                 reportehieloevaluacion.proyecto_id,
@@ -1566,25 +1364,22 @@ class reportehieloController extends Controller
                                                 RIGHT JOIN reportehieloevaluacionparametros ON reportehieloevaluacionparametros.reportehieloevaluacion_id = reportehieloevaluacion.id
                                                 LEFT JOIN catparametrohielocaracteristica ON reportehieloevaluacionparametros.catparametrohielocaracteristica_id = catparametrohielocaracteristica.id
                                             WHERE
-                                                reportehieloevaluacion.proyecto_id = '.$proyecto_id.' 
-                                                AND reportehieloevaluacion.registro_id = '.$reporteregistro_id.' 
+                                                reportehieloevaluacion.proyecto_id = ' . $proyecto_id . ' 
+                                                AND reportehieloevaluacion.registro_id = ' . $reporteregistro_id . ' 
                                             ORDER BY
                                                 reportehieloevaluacion.reportehieloevaluacion_punto ASC,
                                                 reportehieloevaluacion.reportehieloevaluacion_tipoevaluacion DESC,
                                                 reportehieloevaluacionparametros.catparametrohielocaracteristica_id ASC');
 
 
-                $numero_registro = 0; $dato['analisis_resultados'] = NULL;
-                foreach ($evaluacion as $key => $value) 
-                {
+                $numero_registro = 0;
+                $dato['analisis_resultados'] = NULL;
+                foreach ($evaluacion as $key => $value) {
                     $value->boton_editar = '<button type="button" class="btn btn-warning waves-effect btn-circle"><i class="fa fa-pencil fa-2x"></i></button>';
 
-                    if ($edicion == 1)
-                    {
+                    if ($edicion == 1) {
                         $value->boton_eliminar = '<button type="button" class="btn btn-danger waves-effect btn-circle eliminar"><i class="fa fa-trash fa-2x"></i></button>';
-                    }
-                    else
-                    {
+                    } else {
                         $value->boton_eliminar = '<button type="button" class="btn btn-default waves-effect btn-circle" data-toggle="tooltip" title="No disponible"><i class="fa fa-ban fa-2x"></i></button>';
                     }
 
@@ -1594,13 +1389,13 @@ class reportehieloController extends Controller
 
 
                     $dato['analisis_resultados'] .= '<tr>
-                                                        <td>'.$value->reportehieloevaluacion_punto.'</td>
-                                                        <td>'.$value->catparametrohielocaracteristica_tipo.'</td>
-                                                        <td>'.$value->catparametrohielocaracteristica_caracteristica.'</td>
-                                                        <td>'.$value->reportehieloevaluacion_ubicacion.' / '.$value->reportehieloevaluacion_suministro.'</td>
-                                                        <td>'.$value->reportehieloevaluacionparametros_obtenida.'</td>
-                                                        <td>'.$value->catparametrohielocaracteristica_concentracionpermisible.'</td>
-                                                        <td>'.$value->reportehieloevaluacionparametros_resultado.'</td>
+                                                        <td>' . $value->reportehieloevaluacion_punto . '</td>
+                                                        <td>' . $value->catparametrohielocaracteristica_tipo . '</td>
+                                                        <td>' . $value->catparametrohielocaracteristica_caracteristica . '</td>
+                                                        <td>' . $value->reportehieloevaluacion_ubicacion . ' / ' . $value->reportehieloevaluacion_suministro . '</td>
+                                                        <td>' . $value->reportehieloevaluacionparametros_obtenida . '</td>
+                                                        <td>' . $value->catparametrohielocaracteristica_concentracionpermisible . '</td>
+                                                        <td>' . $value->reportehieloevaluacionparametros_resultado . '</td>
                                                     </tr>';
                 }
 
@@ -1625,40 +1420,39 @@ class reportehieloController extends Controller
                                                     reportehieloevaluacion
                                                     LEFT JOIN reportearea ON reportehieloevaluacion.reportehieloarea_id = reportearea.id
                                                 WHERE
-                                                    reportehieloevaluacion.proyecto_id = '.$proyecto_id.' 
-                                                    AND reportehieloevaluacion.registro_id = '.$reporteregistro_id.' 
+                                                    reportehieloevaluacion.proyecto_id = ' . $proyecto_id . ' 
+                                                    AND reportehieloevaluacion.registro_id = ' . $reporteregistro_id . ' 
                                                 ORDER BY
                                                     reportehieloevaluacion.reportehieloevaluacion_punto ASC,
                                                     reportearea.reportearea_orden ASC');
 
 
-                $dato['manejo_hielo'] = NULL; $dato['dispensadores_hielo'] = NULL;
-                foreach ($evaluacion_datos as $key => $value)
-                {
+                $dato['manejo_hielo'] = NULL;
+                $dato['dispensadores_hielo'] = NULL;
+                foreach ($evaluacion_datos as $key => $value) {
                     $dato['manejo_hielo'] .= '<tr>
-                                                <td>'.$value->reportehieloevaluacion_punto.'</td>
-                                                <td>'.$value->reportehieloarea_instalacion.'</td>
-                                                <td>'.$value->reportehieloarea_nombre.'</td>
-                                                <td>'.$value->reportehieloevaluacion_tipouso.'</td>
-                                                <td>'.$value->reportehieloevaluacion_descripcionuso.'</td>
+                                                <td>' . $value->reportehieloevaluacion_punto . '</td>
+                                                <td>' . $value->reportehieloarea_instalacion . '</td>
+                                                <td>' . $value->reportehieloarea_nombre . '</td>
+                                                <td>' . $value->reportehieloevaluacion_tipouso . '</td>
+                                                <td>' . $value->reportehieloevaluacion_descripcionuso . '</td>
                                             </tr>';
 
 
                     $dato['dispensadores_hielo'] .= '<tr>
-                                                        <td>'.$value->reportehieloevaluacion_punto.'</td>
-                                                        <td>'.$value->reportehieloarea_instalacion.'</td>
-                                                        <td>'.$value->reportehieloarea_nombre.'</td>
-                                                        <td>'.$value->reportehieloevaluacion_ubicacion.'</td>
-                                                        <td>'.$value->reportehieloevaluacion_suministro.'</td>
-                                                        <td>'.$value->reportehieloevaluacion_condiciones.'</td>
+                                                        <td>' . $value->reportehieloevaluacion_punto . '</td>
+                                                        <td>' . $value->reportehieloarea_instalacion . '</td>
+                                                        <td>' . $value->reportehieloarea_nombre . '</td>
+                                                        <td>' . $value->reportehieloevaluacion_ubicacion . '</td>
+                                                        <td>' . $value->reportehieloevaluacion_suministro . '</td>
+                                                        <td>' . $value->reportehieloevaluacion_condiciones . '</td>
                                                     </tr>';
                 }
 
 
-                if (count($evaluacion_datos) > 0)
-                {
+                if (count($evaluacion_datos) > 0) {
                     $dato['dispensadores_hielo'] .= '<tr>
-                                                        <td><b>'.count($evaluacion_datos).'</b></td>
+                                                        <td><b>' . count($evaluacion_datos) . '</b></td>
                                                         <td>Total</td>
                                                         <td>columna 3</td>
                                                         <td>columna 4</td>
@@ -1689,8 +1483,8 @@ class reportehieloController extends Controller
                                                     LEFT JOIN reportearea ON reportehieloevaluacion.reportehieloarea_id = reportearea.id
                                                     LEFT JOIN catparametrohielocaracteristica ON reportehieloevaluacionparametros.catparametrohielocaracteristica_id = catparametrohielocaracteristica.id 
                                                 WHERE
-                                                    reportehieloevaluacion.proyecto_id = '.$proyecto_id.' 
-                                                    AND reportehieloevaluacion.registro_id = '.$reporteregistro_id.' 
+                                                    reportehieloevaluacion.proyecto_id = ' . $proyecto_id . ' 
+                                                    AND reportehieloevaluacion.registro_id = ' . $reporteregistro_id . ' 
                                                     -- AND catparametrohielocaracteristica.catparametrohielocaracteristica_tipo = "Fisicoquímico"
                                                 GROUP BY
                                                     reportehieloevaluacion.proyecto_id,
@@ -1710,19 +1504,16 @@ class reportehieloController extends Controller
 
 
                 $dato['metodo_evaluacion'] = NULL;
-                foreach ($metodo_evaluacion as $key => $value)
-                {
+                foreach ($metodo_evaluacion as $key => $value) {
                     $dato['metodo_evaluacion'] .= '<tr>
-                                                        <td>'.$value->reportehieloarea_instalacion.'</td>
-                                                        <td>'.$value->reportehieloarea_nombre.'</td>
-                                                        <td>'.$value->catparametrohielocaracteristica_caracteristica.'</td>
-                                                        <td>'.$value->reportehieloevaluacionparametros_metodo.'</td>
-                                                        <td>'.$value->catparametrohielocaracteristica_concentracionpermisible.'</td>
+                                                        <td>' . $value->reportehieloarea_instalacion . '</td>
+                                                        <td>' . $value->reportehieloarea_nombre . '</td>
+                                                        <td>' . $value->catparametrohielocaracteristica_caracteristica . '</td>
+                                                        <td>' . $value->reportehieloevaluacionparametros_metodo . '</td>
+                                                        <td>' . $value->catparametrohielocaracteristica_concentracionpermisible . '</td>
                                                     </tr>';
                 }
-            }
-            else
-            {
+            } else {
                 $evaluacion = DB::select('SELECT
                                                 reportehieloevaluacion.id,
                                                 reportehieloevaluacion.proyecto_id,
@@ -1755,8 +1546,8 @@ class reportehieloController extends Controller
                                                 RIGHT JOIN reportehieloevaluacionparametros ON reportehieloevaluacionparametros.reportehieloevaluacion_id = reportehieloevaluacion.id
                                                 LEFT JOIN catparametrohielocaracteristica ON reportehieloevaluacionparametros.catparametrohielocaracteristica_id = catparametrohielocaracteristica.id
                                             WHERE
-                                                reportehieloevaluacion.proyecto_id = '.$proyecto_id.' 
-                                                AND reportehieloevaluacion.registro_id = '.$reporteregistro_id.' 
+                                                reportehieloevaluacion.proyecto_id = ' . $proyecto_id . ' 
+                                                AND reportehieloevaluacion.registro_id = ' . $reporteregistro_id . ' 
                                             ORDER BY
                                                 reportehieloevaluacion.reportehieloevaluacion_punto ASC,
                                                 reportehieloarea.reportehieloarea_instalacion ASC,
@@ -1764,17 +1555,14 @@ class reportehieloController extends Controller
                                                 reportehieloevaluacionparametros.catparametrohielocaracteristica_id ASC');
 
 
-                $numero_registro = 0; $dato['analisis_resultados'] = NULL;
-                foreach ($evaluacion as $key => $value) 
-                {
+                $numero_registro = 0;
+                $dato['analisis_resultados'] = NULL;
+                foreach ($evaluacion as $key => $value) {
                     $value->boton_editar = '<button type="button" class="btn btn-warning waves-effect btn-circle"><i class="fa fa-pencil fa-2x"></i></button>';
 
-                    if ($edicion == 1)
-                    {
+                    if ($edicion == 1) {
                         $value->boton_eliminar = '<button type="button" class="btn btn-danger waves-effect btn-circle eliminar"><i class="fa fa-trash fa-2x"></i></button>';
-                    }
-                    else
-                    {
+                    } else {
                         $value->boton_eliminar = '<button type="button" class="btn btn-default waves-effect btn-circle" data-toggle="tooltip" title="No disponible"><i class="fa fa-ban fa-2x"></i></button>';
                     }
 
@@ -1784,13 +1572,13 @@ class reportehieloController extends Controller
 
 
                     $dato['analisis_resultados'] .= '<tr>
-                                                        <td>'.$value->reportehieloevaluacion_punto.'</td>
-                                                        <td>'.$value->catparametrohielocaracteristica_tipo.'</td>
-                                                        <td>'.$value->catparametrohielocaracteristica_caracteristica.'</td>
-                                                        <td>'.$value->reportehieloevaluacion_ubicacion.' / '.$value->reportehieloevaluacion_suministro.'</td>
-                                                        <td>'.$value->reportehieloevaluacionparametros_obtenida.'</td>
-                                                        <td>'.$value->catparametrohielocaracteristica_concentracionpermisible.'</td>
-                                                        <td>'.$value->reportehieloevaluacionparametros_resultado.'</td>
+                                                        <td>' . $value->reportehieloevaluacion_punto . '</td>
+                                                        <td>' . $value->catparametrohielocaracteristica_tipo . '</td>
+                                                        <td>' . $value->catparametrohielocaracteristica_caracteristica . '</td>
+                                                        <td>' . $value->reportehieloevaluacion_ubicacion . ' / ' . $value->reportehieloevaluacion_suministro . '</td>
+                                                        <td>' . $value->reportehieloevaluacionparametros_obtenida . '</td>
+                                                        <td>' . $value->catparametrohielocaracteristica_concentracionpermisible . '</td>
+                                                        <td>' . $value->reportehieloevaluacionparametros_resultado . '</td>
                                                     </tr>';
                 }
 
@@ -1815,40 +1603,39 @@ class reportehieloController extends Controller
                                                     reportehieloevaluacion
                                                     INNER JOIN reportehieloarea ON reportehieloevaluacion.reportehieloarea_id = reportehieloarea.id
                                                 WHERE
-                                                    reportehieloevaluacion.proyecto_id = '.$proyecto_id.' 
-                                                    AND reportehieloevaluacion.registro_id = '.$reporteregistro_id.' 
+                                                    reportehieloevaluacion.proyecto_id = ' . $proyecto_id . ' 
+                                                    AND reportehieloevaluacion.registro_id = ' . $reporteregistro_id . ' 
                                                 ORDER BY
                                                     reportehieloevaluacion.reportehieloevaluacion_punto ASC,
                                                     reportehieloarea.reportehieloarea_numorden ASC');
 
 
-                $dato['manejo_hielo'] = NULL; $dato['dispensadores_hielo'] = NULL;
-                foreach ($evaluacion_datos as $key => $value)
-                {
+                $dato['manejo_hielo'] = NULL;
+                $dato['dispensadores_hielo'] = NULL;
+                foreach ($evaluacion_datos as $key => $value) {
                     $dato['manejo_hielo'] .= '<tr>
-                                                <td>'.$value->reportehieloevaluacion_punto.'</td>
-                                                <td>'.$value->reportehieloarea_instalacion.'</td>
-                                                <td>'.$value->reportehieloarea_nombre.'</td>
-                                                <td>'.$value->reportehieloevaluacion_tipouso.'</td>
-                                                <td>'.$value->reportehieloevaluacion_descripcionuso.'</td>
+                                                <td>' . $value->reportehieloevaluacion_punto . '</td>
+                                                <td>' . $value->reportehieloarea_instalacion . '</td>
+                                                <td>' . $value->reportehieloarea_nombre . '</td>
+                                                <td>' . $value->reportehieloevaluacion_tipouso . '</td>
+                                                <td>' . $value->reportehieloevaluacion_descripcionuso . '</td>
                                             </tr>';
 
 
                     $dato['dispensadores_hielo'] .= '<tr>
-                                                        <td>'.$value->reportehieloevaluacion_punto.'</td>
-                                                        <td>'.$value->reportehieloarea_instalacion.'</td>
-                                                        <td>'.$value->reportehieloarea_nombre.'</td>
-                                                        <td>'.$value->reportehieloevaluacion_ubicacion.'</td>
-                                                        <td>'.$value->reportehieloevaluacion_suministro.'</td>
-                                                        <td>'.$value->reportehieloevaluacion_condiciones.'</td>
+                                                        <td>' . $value->reportehieloevaluacion_punto . '</td>
+                                                        <td>' . $value->reportehieloarea_instalacion . '</td>
+                                                        <td>' . $value->reportehieloarea_nombre . '</td>
+                                                        <td>' . $value->reportehieloevaluacion_ubicacion . '</td>
+                                                        <td>' . $value->reportehieloevaluacion_suministro . '</td>
+                                                        <td>' . $value->reportehieloevaluacion_condiciones . '</td>
                                                     </tr>';
                 }
 
 
-                if (count($evaluacion_datos) > 0)
-                {
+                if (count($evaluacion_datos) > 0) {
                     $dato['dispensadores_hielo'] .= '<tr>
-                                                        <td><b>'.count($evaluacion_datos).'</b></td>
+                                                        <td><b>' . count($evaluacion_datos) . '</b></td>
                                                         <td>Total</td>
                                                         <td>columna 3</td>
                                                         <td>columna 4</td>
@@ -1879,8 +1666,8 @@ class reportehieloController extends Controller
                                                     LEFT JOIN reportehieloarea ON reportehieloevaluacion.reportehieloarea_id = reportehieloarea.id
                                                     LEFT JOIN catparametrohielocaracteristica ON reportehieloevaluacionparametros.catparametrohielocaracteristica_id = catparametrohielocaracteristica.id 
                                                 WHERE
-                                                    reportehieloevaluacion.proyecto_id = '.$proyecto_id.' 
-                                                    AND reportehieloevaluacion.registro_id = '.$reporteregistro_id.' 
+                                                    reportehieloevaluacion.proyecto_id = ' . $proyecto_id . ' 
+                                                    AND reportehieloevaluacion.registro_id = ' . $reporteregistro_id . ' 
                                                     -- AND catparametrohielocaracteristica.catparametrohielocaracteristica_tipo = "Fisicoquímico"
                                                 GROUP BY
                                                     reportehieloevaluacion.proyecto_id,
@@ -1900,14 +1687,13 @@ class reportehieloController extends Controller
 
 
                 $dato['metodo_evaluacion'] = NULL;
-                foreach ($metodo_evaluacion as $key => $value)
-                {
+                foreach ($metodo_evaluacion as $key => $value) {
                     $dato['metodo_evaluacion'] .= '<tr>
-                                                        <td>'.$value->reportehieloarea_instalacion.'</td>
-                                                        <td>'.$value->reportehieloarea_nombre.'</td>
-                                                        <td>'.$value->catparametrohielocaracteristica_caracteristica.'</td>
-                                                        <td>'.$value->reportehieloevaluacionparametros_metodo.'</td>
-                                                        <td>'.$value->catparametrohielocaracteristica_concentracionpermisible.'</td>
+                                                        <td>' . $value->reportehieloarea_instalacion . '</td>
+                                                        <td>' . $value->reportehieloarea_nombre . '</td>
+                                                        <td>' . $value->catparametrohielocaracteristica_caracteristica . '</td>
+                                                        <td>' . $value->reportehieloevaluacionparametros_metodo . '</td>
+                                                        <td>' . $value->catparametrohielocaracteristica_concentracionpermisible . '</td>
                                                     </tr>';
                 }
             }
@@ -1921,16 +1707,14 @@ class reportehieloController extends Controller
             $dato["total"] = count($evaluacion);
             $dato["msj"] = 'Datos consultados correctamente';
             return response()->json($dato);
-        }
-        catch(Exception $e)
-        {
+        } catch (Exception $e) {
             $dato['data'] = 0;
             $dato["total"] = 0;
             $dato['analisis_resultados'] = NULL;
             $dato['metodo_evaluacion'] = NULL;
             $dato['manejo_hielo'] = NULL;
             $dato['dispensadores_hielo'] = NULL;
-            $dato["msj"] = 'Error '.$e->getMessage();
+            $dato["msj"] = 'Error ' . $e->getMessage();
             return response()->json($dato);
         }
     }
@@ -1946,12 +1730,10 @@ class reportehieloController extends Controller
      */
     public function reportehieloevaluacionparametros($reportehieloevaluacion_id, $reportehieloevaluacion_tipo, $proveedor_id)
     {
-        try
-        {
+        try {
             $where_condicion = '';
-            if ($reportehieloevaluacion_tipo != "Fisicoquímico_Microbiológico")
-            {
-                 $where_condicion = 'AND catparametrohielocaracteristica.catparametrohielocaracteristica_tipo LIKE "%'.$reportehieloevaluacion_tipo.'%"';
+            if ($reportehieloevaluacion_tipo != "Fisicoquímico_Microbiológico") {
+                $where_condicion = 'AND catparametrohielocaracteristica.catparametrohielocaracteristica_tipo LIKE "%' . $reportehieloevaluacion_tipo . '%"';
             }
 
 
@@ -1974,7 +1756,7 @@ class reportehieloController extends Controller
                                                     reportehielometodomuestreocatalogo
                                                 WHERE
                                                     reportehielometodomuestreocatalogo.catparametrohielocaracteristica_Id = catparametrohielocaracteristica.id
-                                                    AND reportehielometodomuestreocatalogo.proveedor_id = '.$proveedor_id.' 
+                                                    AND reportehielometodomuestreocatalogo.proveedor_id = ' . $proveedor_id . ' 
                                                 LIMIT 1
                                             ) AS metodo_proveedor,
                                             (
@@ -1983,7 +1765,7 @@ class reportehieloController extends Controller
                                                 FROM
                                                     reportehieloevaluacionparametros
                                                 WHERE
-                                                    reportehieloevaluacionparametros.reportehieloevaluacion_id = '.$reportehieloevaluacion_id.' 
+                                                    reportehieloevaluacionparametros.reportehieloevaluacion_id = ' . $reportehieloevaluacion_id . ' 
                                                     AND reportehieloevaluacionparametros.catparametrohielocaracteristica_id = catparametrohielocaracteristica.id
                                                 LIMIT 1
                                             ) AS metodo,
@@ -1993,7 +1775,7 @@ class reportehieloController extends Controller
                                                 FROM
                                                     reportehieloevaluacionparametros
                                                 WHERE
-                                                    reportehieloevaluacionparametros.reportehieloevaluacion_id = '.$reportehieloevaluacion_id.' 
+                                                    reportehieloevaluacionparametros.reportehieloevaluacion_id = ' . $reportehieloevaluacion_id . ' 
                                                     AND reportehieloevaluacionparametros.catparametrohielocaracteristica_id = catparametrohielocaracteristica.id
                                                 LIMIT 1
                                             ) AS obtenida,
@@ -2003,7 +1785,7 @@ class reportehieloController extends Controller
                                                 FROM
                                                     reportehieloevaluacionparametros
                                                 WHERE
-                                                    reportehieloevaluacionparametros.reportehieloevaluacion_id = '.$reportehieloevaluacion_id.' 
+                                                    reportehieloevaluacionparametros.reportehieloevaluacion_id = ' . $reportehieloevaluacion_id . ' 
                                                     AND reportehieloevaluacionparametros.catparametrohielocaracteristica_id = catparametrohielocaracteristica.id
                                                 LIMIT 1
                                             ) AS resultado
@@ -2012,14 +1794,13 @@ class reportehieloController extends Controller
                                         WHERE
                                             catparametrohielocaracteristica.catparametrohielocaracteristica_activo = 1
                                             -- AND catparametrohielocaracteristica.catparametrohielocaracteristica_tipo LIKE "%Fisicoquímico%" 
-                                            '.$where_condicion.' 
+                                            ' . $where_condicion . ' 
                                         ORDER BY
                                             catparametrohielocaracteristica.id ASC');
 
 
             $dato['parametros'] = '';
-            foreach ($parametros as $key => $value)
-            {
+            foreach ($parametros as $key => $value) {
                 $dentro_selected = '';
                 $fuera_selected = '';
                 $noaplica_selected = '';
@@ -2027,22 +1808,16 @@ class reportehieloController extends Controller
                 $color = '#888';
 
 
-                if ($value->resultado)
-                {
-                    if ($value->resultado == "Dentro de norma")
-                    {
+                if ($value->resultado) {
+                    if ($value->resultado == "Dentro de norma") {
                         $dentro_selected = 'selected';
                         $background = '#00FF00';
                         $color = '#000000';
-                    }
-                    else if ($value->resultado == "Fuera de norma")
-                    {
+                    } else if ($value->resultado == "Fuera de norma") {
                         $fuera_selected = 'selected';
                         $background = '#FF0000';
                         $color = '#FFFFFF';
-                    }
-                    else
-                    {
+                    } else {
                         $noaplica_selected = 'selected';
                         $background = '#888888';
                         $color = '#FFFFFF';
@@ -2051,28 +1826,27 @@ class reportehieloController extends Controller
 
 
                 $metodo = $value->metodo_proveedor;
-                if ($value->metodo)
-                {
+                if ($value->metodo) {
                     $metodo = $value->metodo;
                 }
 
 
                 $dato['parametros'] .= '<tr>
                                             <td>
-                                                <label>'.$value->catparametrohielocaracteristica_caracteristica.'</label>
-                                                <input type="hidden" class="form-control" name="catparametrohielocaracteristica_id[]" value="'.$value->id.'">
-                                                <select class="custom-select form-control select_alcances" style="background: '.$background.'; color: '.$color.';" name="reportehieloevaluacionparametros_resultado[]" onchange="select_background(this);" required>
+                                                <label>' . $value->catparametrohielocaracteristica_caracteristica . '</label>
+                                                <input type="hidden" class="form-control" name="catparametrohielocaracteristica_id[]" value="' . $value->id . '">
+                                                <select class="custom-select form-control select_alcances" style="background: ' . $background . '; color: ' . $color . ';" name="reportehieloevaluacionparametros_resultado[]" onchange="select_background(this);" required>
                                                     <option value="">Seleccione resultado</option>
-                                                    <option value="Dentro de norma" '.$dentro_selected.' style="background: #FFF; color: #888;">Dentro de norma</option>
-                                                    <option value="Fuera de norma" '.$fuera_selected.' style="background: #FFF; color: #888;">Fuera de norma</option>
-                                                    <option value="No aplicable" '.$noaplica_selected.' style="background: #FFF; color: #888;">No aplicable</option>
+                                                    <option value="Dentro de norma" ' . $dentro_selected . ' style="background: #FFF; color: #888;">Dentro de norma</option>
+                                                    <option value="Fuera de norma" ' . $fuera_selected . ' style="background: #FFF; color: #888;">Fuera de norma</option>
+                                                    <option value="No aplicable" ' . $noaplica_selected . ' style="background: #FFF; color: #888;">No aplicable</option>
                                                 </select>
                                             </td>
                                             <td>
-                                                <input type="text" class="form-control" name="reportehieloevaluacionparametros_metodo[]" value="'.$metodo.'" required>
+                                                <input type="text" class="form-control" name="reportehieloevaluacionparametros_metodo[]" value="' . $metodo . '" required>
                                             </td>
                                             <td>
-                                                <input type="text" class="form-control" name="reportehieloevaluacionparametros_obtenida[]" value="'.$value->obtenida.'" required>
+                                                <input type="text" class="form-control" name="reportehieloevaluacionparametros_obtenida[]" value="' . $value->obtenida . '" required>
                                             </td>
                                         </tr>';
             }
@@ -2081,11 +1855,9 @@ class reportehieloController extends Controller
             // respuesta
             $dato["msj"] = 'Datos consultados correctamente';
             return response()->json($dato);
-        }
-        catch(Exception $e)
-        {
+        } catch (Exception $e) {
             $dato['parametros'] = '<tr><td colspan="3">Error al consultar los parámetros</td></tr>';
-            $dato["msj"] = 'Error '.$e->getMessage();
+            $dato["msj"] = 'Error ' . $e->getMessage();
             return response()->json($dato);
         }
     }
@@ -2102,10 +1874,8 @@ class reportehieloController extends Controller
      */
     public function reportehieloevaluacioncategorias($proyecto_id, $reporteregistro_id, $reportehieloevaluacion_id, $areas_poe)
     {
-        try
-        {
-            if (($areas_poe+0) == 1)
-            {
+        try {
+            if (($areas_poe + 0) == 1) {
                 $categorias = DB::select('SELECT
                                                 reportecategoria.id,
                                                 reportecategoria.proyecto_id,
@@ -2119,7 +1889,7 @@ class reportehieloController extends Controller
                                                     FROM
                                                         reportehieloevaluacioncategorias
                                                     WHERE
-                                                        reportehieloevaluacioncategorias.reportehieloevaluacion_id = "'.$reportehieloevaluacion_id.'" 
+                                                        reportehieloevaluacioncategorias.reportehieloevaluacion_id = "' . $reportehieloevaluacion_id . '" 
                                                         AND reportehieloevaluacioncategorias.reportehielocategoria_id = reportecategoria.id
                                                     LIMIT 1
                                                 ), "") AS nombre,
@@ -2129,7 +1899,7 @@ class reportehieloController extends Controller
                                                     FROM
                                                         reportehieloevaluacioncategorias
                                                     WHERE
-                                                        reportehieloevaluacioncategorias.reportehieloevaluacion_id = "'.$reportehieloevaluacion_id.'" 
+                                                        reportehieloevaluacioncategorias.reportehieloevaluacion_id = "' . $reportehieloevaluacion_id . '" 
                                                         AND reportehieloevaluacioncategorias.reportehielocategoria_id = reportecategoria.id
                                                     LIMIT 1
                                                 ), "") AS ficha,
@@ -2139,20 +1909,18 @@ class reportehieloController extends Controller
                                                     FROM
                                                         reportehieloevaluacioncategorias
                                                     WHERE
-                                                        reportehieloevaluacioncategorias.reportehieloevaluacion_id = "'.$reportehieloevaluacion_id.'" 
+                                                        reportehieloevaluacioncategorias.reportehieloevaluacion_id = "' . $reportehieloevaluacion_id . '" 
                                                         AND reportehieloevaluacioncategorias.reportehielocategoria_id = reportecategoria.id
                                                     LIMIT 1
                                                 ), "") AS checked
                                             FROM
                                                 reportecategoria
                                             WHERE
-                                                reportecategoria.proyecto_id = "'.$proyecto_id.'" 
+                                                reportecategoria.proyecto_id = "' . $proyecto_id . '" 
                                             ORDER BY
                                                 reportecategoria.reportecategoria_orden ASC,
                                                 reportecategoria.reportecategoria_nombre ASC');
-            }
-            else
-            {
+            } else {
                 $categorias = DB::select('SELECT
                                                 reportehielocategoria.id,
                                                 reportehielocategoria.proyecto_id,
@@ -2166,7 +1934,7 @@ class reportehieloController extends Controller
                                                     FROM
                                                         reportehieloevaluacioncategorias
                                                     WHERE
-                                                        reportehieloevaluacioncategorias.reportehieloevaluacion_id = "'.$reportehieloevaluacion_id.'" 
+                                                        reportehieloevaluacioncategorias.reportehieloevaluacion_id = "' . $reportehieloevaluacion_id . '" 
                                                         AND reportehieloevaluacioncategorias.reportehielocategoria_id = reportehielocategoria.id
                                                     LIMIT 1
                                                 ), "") AS nombre,
@@ -2176,7 +1944,7 @@ class reportehieloController extends Controller
                                                     FROM
                                                         reportehieloevaluacioncategorias
                                                     WHERE
-                                                        reportehieloevaluacioncategorias.reportehieloevaluacion_id = "'.$reportehieloevaluacion_id.'" 
+                                                        reportehieloevaluacioncategorias.reportehieloevaluacion_id = "' . $reportehieloevaluacion_id . '" 
                                                         AND reportehieloevaluacioncategorias.reportehielocategoria_id = reportehielocategoria.id
                                                     LIMIT 1
                                                 ), "") AS ficha,
@@ -2186,29 +1954,28 @@ class reportehieloController extends Controller
                                                     FROM
                                                         reportehieloevaluacioncategorias
                                                     WHERE
-                                                        reportehieloevaluacioncategorias.reportehieloevaluacion_id = "'.$reportehieloevaluacion_id.'" 
+                                                        reportehieloevaluacioncategorias.reportehieloevaluacion_id = "' . $reportehieloevaluacion_id . '" 
                                                         AND reportehieloevaluacioncategorias.reportehielocategoria_id = reportehielocategoria.id
                                                     LIMIT 1
                                                 ), "") AS checked
                                             FROM
                                                 reportehielocategoria
                                             WHERE
-                                                reportehielocategoria.proyecto_id = "'.$proyecto_id.'" 
-                                                AND reportehielocategoria.registro_id = "'.$reporteregistro_id.'" 
+                                                reportehielocategoria.proyecto_id = "' . $proyecto_id . '" 
+                                                AND reportehielocategoria.registro_id = "' . $reporteregistro_id . '" 
                                             ORDER BY
                                                 reportehielocategoria.reportehielocategoria_nombre ASC');
             }
 
 
-            $numero_registro = 0; $dato['categorias'] = '';
-            foreach ($categorias as $key => $value)
-            {
-                $numero_registro += 1;                
+            $numero_registro = 0;
+            $dato['categorias'] = '';
+            foreach ($categorias as $key => $value) {
+                $numero_registro += 1;
 
 
                 $required_readonly = 'readonly';
-                if ($value->checked)
-                {
+                if ($value->checked) {
                     $required_readonly = 'required';
                 }
 
@@ -2217,17 +1984,17 @@ class reportehieloController extends Controller
                                             <td>
                                                 <div class="switch" style="float: left;">
                                                     <label>
-                                                        <input type="checkbox" name="reportehielocategoria_id[]" value="'.$value->id.'" '.$value->checked.' onchange="activa_hieloevaluacioncategoria(this, '.$numero_registro.');">
+                                                        <input type="checkbox" name="reportehielocategoria_id[]" value="' . $value->id . '" ' . $value->checked . ' onchange="activa_hieloevaluacioncategoria(this, ' . $numero_registro . ');">
                                                         <span class="lever switch-col-light-blue"></span>
                                                     </label>
                                                 </div>
-                                                <label class="demo-switch-title" style="float: left;">'.$value->reportehielocategoria_nombre.'</label>
+                                                <label class="demo-switch-title" style="float: left;">' . $value->reportehielocategoria_nombre . '</label>
                                             </td>
                                             <td>
-                                                <input type="text" class="form-control hieloevaluacioncategoria_'.$numero_registro.'" name="reportehieloevaluacioncategorias_nombre_'.$value->id.'" value="'.$value->nombre.'" '.$required_readonly.'>
+                                                <input type="text" class="form-control hieloevaluacioncategoria_' . $numero_registro . '" name="reportehieloevaluacioncategorias_nombre_' . $value->id . '" value="' . $value->nombre . '" ' . $required_readonly . '>
                                             </td>
                                             <td>
-                                                <input type="text" class="form-control hieloevaluacioncategoria_'.$numero_registro.'" name="reportehieloevaluacioncategorias_ficha_'.$value->id.'" value="'.$value->ficha.'" '.$required_readonly.'>
+                                                <input type="text" class="form-control hieloevaluacioncategoria_' . $numero_registro . '" name="reportehieloevaluacioncategorias_ficha_' . $value->id . '" value="' . $value->ficha . '" ' . $required_readonly . '>
                                             </td>
                                         </tr>';
             }
@@ -2236,11 +2003,9 @@ class reportehieloController extends Controller
             // respuesta
             $dato["msj"] = 'Datos consultados correctamente';
             return response()->json($dato);
-        }
-        catch(Exception $e)
-        {
+        } catch (Exception $e) {
             $dato['categorias'] = '<tr><td colspan="3">Error al consultar las categorías</td></tr>';
-            $dato["msj"] = 'Error '.$e->getMessage();
+            $dato["msj"] = 'Error ' . $e->getMessage();
             return response()->json($dato);
         }
     }
@@ -2254,8 +2019,7 @@ class reportehieloController extends Controller
      */
     public function reportehieloevaluacioneliminar($reportehieloevaluacion_id)
     {
-        try
-        {
+        try {
             $puntoevaluacion = reportehieloevaluacionModel::where('id', $reportehieloevaluacion_id)->delete();
 
             $puntoevaluacion_parametros = reportehieloevaluacionparametrosModel::where('reportehieloevaluacion_id', $reportehieloevaluacion_id)->delete();
@@ -2266,10 +2030,8 @@ class reportehieloController extends Controller
             // respuesta
             $dato["msj"] = 'Punto de evaluación eliminado correctamente';
             return response()->json($dato);
-        }
-        catch(Exception $e)
-        {
-            $dato["msj"] = 'Error '.$e->getMessage();
+        } catch (Exception $e) {
+            $dato["msj"] = 'Error ' . $e->getMessage();
             return response()->json($dato);
         }
     }
@@ -2285,15 +2047,12 @@ class reportehieloController extends Controller
      */
     public function reportehielomatriztabla($proyecto_id, $reporteregistro_id, $areas_poe)
     {
-        try
-        {
+        try {
             $proyecto = proyectoModel::findOrFail($proyecto_id);
 
 
-            if (($proyecto->catregion_id+0) == 1 || ($proyecto->catregion_id+0) == 2)
-            {
-                if (($areas_poe+0) == 1)
-                {
+            if (($proyecto->catregion_id + 0) == 1 || ($proyecto->catregion_id + 0) == 2) {
+                if (($areas_poe + 0) == 1) {
                     $matriz = DB::select('SELECT
                                             reportehieloevaluacion.id,
                                             reportehieloevaluacion.proyecto_id,
@@ -2394,16 +2153,14 @@ class reportehieloController extends Controller
                                             RIGHT OUTER JOIN reportehieloevaluacioncategorias ON reportehieloevaluacioncategorias.reportehieloevaluacion_id = reportehieloevaluacion.id
                                             LEFT JOIN reportecategoria ON reportehieloevaluacioncategorias.reportehielocategoria_id = reportecategoria.id
                                         WHERE
-                                            reportehieloevaluacion.proyecto_id =  '.$proyecto_id.' 
-                                            AND reportehieloevaluacion.registro_id = '.$reporteregistro_id.' 
+                                            reportehieloevaluacion.proyecto_id =  ' . $proyecto_id . ' 
+                                            AND reportehieloevaluacion.registro_id = ' . $reporteregistro_id . ' 
                                             -- AND (reportehieloevaluacion.reportehieloevaluacion_tipoevaluacion LIKE "%Fisicoquímico_Microbiológico%" OR reportehieloevaluacion.reportehieloevaluacion_tipoevaluacion = "%Fisicoquímico%" OR reportehieloevaluacion.reportehieloevaluacion_tipoevaluacion = "%Microbiológico%")
                                         ORDER BY
                                             reportehieloevaluacion.reportehieloevaluacion_punto ASC,
                                             reportecategoria.reportecategoria_orden ASC,
                                             reportecategoria.reportecategoria_nombre ASC');
-                }
-                else
-                {
+                } else {
                     $matriz = DB::select('SELECT
                                             reportehieloevaluacion.id,
                                             reportehieloevaluacion.proyecto_id,
@@ -2504,18 +2261,15 @@ class reportehieloController extends Controller
                                             RIGHT OUTER JOIN reportehieloevaluacioncategorias ON reportehieloevaluacioncategorias.reportehieloevaluacion_id = reportehieloevaluacion.id
                                             LEFT JOIN reportehielocategoria ON reportehieloevaluacioncategorias.reportehielocategoria_id = reportehielocategoria.id
                                         WHERE
-                                            reportehieloevaluacion.proyecto_id =  '.$proyecto_id.' 
-                                            AND reportehieloevaluacion.registro_id = '.$reporteregistro_id.' 
+                                            reportehieloevaluacion.proyecto_id =  ' . $proyecto_id . ' 
+                                            AND reportehieloevaluacion.registro_id = ' . $reporteregistro_id . ' 
                                             -- AND (reportehieloevaluacion.reportehieloevaluacion_tipoevaluacion LIKE "%Fisicoquímico_Microbiológico%" OR reportehieloevaluacion.reportehieloevaluacion_tipoevaluacion = "%Fisicoquímico%" OR reportehieloevaluacion.reportehieloevaluacion_tipoevaluacion = "%Microbiológico%")
                                         ORDER BY
                                             reportehieloevaluacion.reportehieloevaluacion_punto ASC,
                                             reportehielocategoria.reportehielocategoria_nombre ASC');
                 }
-            }
-            else
-            {
-                if (($areas_poe+0) == 1)
-                {
+            } else {
+                if (($areas_poe + 0) == 1) {
                     $matriz = DB::select('SELECT
                                                 reportehieloevaluacion.proyecto_id,
                                                 reportehieloevaluacion.registro_id,
@@ -2613,8 +2367,8 @@ class reportehieloController extends Controller
                                                 INNER JOIN reportehieloevaluacionparametros ON reportehieloevaluacionparametros.reportehieloevaluacion_id = reportehieloevaluacion.id
                                                 LEFT JOIN catparametrohielocaracteristica ON reportehieloevaluacionparametros.catparametrohielocaracteristica_id = catparametrohielocaracteristica.id 
                                             WHERE
-                                                reportehieloevaluacion.proyecto_id = '.$proyecto_id.' 
-                                                AND reportehieloevaluacion.registro_id = '.$reporteregistro_id.' 
+                                                reportehieloevaluacion.proyecto_id = ' . $proyecto_id . ' 
+                                                AND reportehieloevaluacion.registro_id = ' . $reporteregistro_id . ' 
                                                 -- AND catparametrohielocaracteristica.catparametrohielocaracteristica_tipo LIKE "%xxxxxxxx%" -- Fisicoquímico, Microbiológico
                                                 AND reportehieloevaluacionparametros.reportehieloevaluacionparametros_resultado = "Fuera de norma"
                                                 -- AND (catparametrohielocaracteristica.catparametrohielocaracteristica_caracteristica LIKE "%COLOR%" OR catparametrohielocaracteristica.catparametrohielocaracteristica_caracteristica LIKE "%OLOR%" OR catparametrohielocaracteristica.catparametrohielocaracteristica_caracteristica LIKE "%TURBIEDAD%")
@@ -2636,9 +2390,7 @@ class reportehieloController extends Controller
                                                 reportehieloevaluacion.reportehieloevaluacion_punto ASC,
                                                 reportecategoria.reportecategoria_orden ASC,
                                                 reportecategoria.reportecategoria_nombre ASC');
-                }
-                else
-                {
+                } else {
                     $matriz = DB::select('SELECT
                                             reportehieloevaluacion.proyecto_id,
                                             reportehieloevaluacion.registro_id,
@@ -2736,8 +2488,8 @@ class reportehieloController extends Controller
                                             INNER JOIN reportehieloevaluacionparametros ON reportehieloevaluacionparametros.reportehieloevaluacion_id = reportehieloevaluacion.id
                                             LEFT JOIN catparametrohielocaracteristica ON reportehieloevaluacionparametros.catparametrohielocaracteristica_id = catparametrohielocaracteristica.id 
                                         WHERE
-                                            reportehieloevaluacion.proyecto_id = '.$proyecto_id.' 
-                                            AND reportehieloevaluacion.registro_id = '.$reporteregistro_id.' 
+                                            reportehieloevaluacion.proyecto_id = ' . $proyecto_id . ' 
+                                            AND reportehieloevaluacion.registro_id = ' . $reporteregistro_id . ' 
                                             -- AND catparametrohielocaracteristica.catparametrohielocaracteristica_tipo LIKE "%xxxxxxxx%" -- Fisicoquímico, Microbiológico
                                             AND reportehieloevaluacionparametros.reportehieloevaluacionparametros_resultado = "Fuera de norma"
                                             -- AND (catparametrohielocaracteristica.catparametrohielocaracteristica_caracteristica LIKE "%COLOR%" OR catparametrohielocaracteristica.catparametrohielocaracteristica_caracteristica LIKE "%OLOR%" OR catparametrohielocaracteristica.catparametrohielocaracteristica_caracteristica LIKE "%TURBIEDAD%")
@@ -2761,14 +2513,12 @@ class reportehieloController extends Controller
                                             reportehielocategoria.reportehielocategoria_nombre ASC');
                 }
 
-    
+
                 //--------------------------
 
 
-                if (count($matriz) == 0)
-                {
-                    if (($areas_poe+0) == 1)
-                    {
+                if (count($matriz) == 0) {
+                    if (($areas_poe + 0) == 1) {
                         $matriz = DB::select('SELECT
                                                 reportehieloevaluacion.proyecto_id,
                                                 reportehieloevaluacion.registro_id,
@@ -2866,8 +2616,8 @@ class reportehieloController extends Controller
                                                 INNER JOIN reportehieloevaluacionparametros ON reportehieloevaluacionparametros.reportehieloevaluacion_id = reportehieloevaluacion.id
                                                 LEFT JOIN catparametrohielocaracteristica ON reportehieloevaluacionparametros.catparametrohielocaracteristica_id = catparametrohielocaracteristica.id 
                                             WHERE
-                                                reportehieloevaluacion.proyecto_id = '.$proyecto_id.' 
-                                                AND reportehieloevaluacion.registro_id = '.$reporteregistro_id.' 
+                                                reportehieloevaluacion.proyecto_id = ' . $proyecto_id . ' 
+                                                AND reportehieloevaluacion.registro_id = ' . $reporteregistro_id . ' 
                                                 -- AND catparametrohielocaracteristica.catparametrohielocaracteristica_tipo LIKE "%xxxxxxxx%" -- Fisicoquímico, Microbiológico
                                                 -- AND reportehieloevaluacionparametros.reportehieloevaluacionparametros_resultado = "Fuera de norma"
                                                 -- AND (catparametrohielocaracteristica.catparametrohielocaracteristica_caracteristica LIKE "%COLOR%" OR catparametrohielocaracteristica.catparametrohielocaracteristica_caracteristica LIKE "%OLOR%" OR catparametrohielocaracteristica.catparametrohielocaracteristica_caracteristica LIKE "%TURBIEDAD%")
@@ -2889,9 +2639,7 @@ class reportehieloController extends Controller
                                                 reportehieloevaluacion.reportehieloevaluacion_punto ASC,
                                                 reportecategoria.reportecategoria_orden ASC,
                                                 reportecategoria.reportecategoria_nombre ASC');
-                    }
-                    else
-                    {
+                    } else {
                         $matriz = DB::select('SELECT
                                             reportehieloevaluacion.proyecto_id,
                                             reportehieloevaluacion.registro_id,
@@ -2989,8 +2737,8 @@ class reportehieloController extends Controller
                                             INNER JOIN reportehieloevaluacionparametros ON reportehieloevaluacionparametros.reportehieloevaluacion_id = reportehieloevaluacion.id
                                             LEFT JOIN catparametrohielocaracteristica ON reportehieloevaluacionparametros.catparametrohielocaracteristica_id = catparametrohielocaracteristica.id 
                                         WHERE
-                                            reportehieloevaluacion.proyecto_id = '.$proyecto_id.' 
-                                            AND reportehieloevaluacion.registro_id = '.$reporteregistro_id.' 
+                                            reportehieloevaluacion.proyecto_id = ' . $proyecto_id . ' 
+                                            AND reportehieloevaluacion.registro_id = ' . $reporteregistro_id . ' 
                                             -- AND catparametrohielocaracteristica.catparametrohielocaracteristica_tipo LIKE "%xxxxxxxx%" -- Fisicoquímico, Microbiológico
                                             -- AND reportehieloevaluacionparametros.reportehieloevaluacionparametros_resultado = "Fuera de norma"
                                             -- AND (catparametrohielocaracteristica.catparametrohielocaracteristica_caracteristica LIKE "%COLOR%" OR catparametrohielocaracteristica.catparametrohielocaracteristica_caracteristica LIKE "%OLOR%" OR catparametrohielocaracteristica.catparametrohielocaracteristica_caracteristica LIKE "%TURBIEDAD%")
@@ -3022,12 +2770,10 @@ class reportehieloController extends Controller
             $dato["total"] = count($matriz);
             $dato["msj"] = 'Datos consultados correctamente';
             return response()->json($dato);
-        }
-        catch(Exception $e)
-        {
+        } catch (Exception $e) {
             $dato["data"] = 0;
             $dato["total"] = 0;
-            $dato["msj"] = 'Error '.$e->getMessage();
+            $dato["msj"] = 'Error ' . $e->getMessage();
             return response()->json($dato);
         }
     }
@@ -3044,8 +2790,7 @@ class reportehieloController extends Controller
      */
     public function reportehielodashboard($proyecto_id, $reporteregistro_id, $reporte_tipo, $areas_poe)
     {
-        try
-        {
+        try {
             // $reporte_tipo = 'Fisicoquímico';
             // $reporte_tipo = 'Microbiológico';
 
@@ -3056,17 +2801,15 @@ class reportehieloController extends Controller
 
             $where_condicion = '';
 
-            if ($reporte_tipo != 'Fisicoquímico_Microbiológico')
-            {
-                $where_condicion = 'AND reportehieloevaluacion.reportehieloevaluacion_tipoevaluacion LIKE "%'.$reporte_tipo.'%"';
+            if ($reporte_tipo != 'Fisicoquímico_Microbiológico') {
+                $where_condicion = 'AND reportehieloevaluacion.reportehieloevaluacion_tipoevaluacion LIKE "%' . $reporte_tipo . '%"';
             }
 
 
             //--------------------------------------
 
 
-            if (($areas_poe+0) == 1)
-            {
+            if (($areas_poe + 0) == 1) {
                 $instalaciones = DB::select('SELECT
                                                 -- reportehieloevaluacion.proyecto_id,
                                                 -- reportehieloevaluacion.registro_id,
@@ -3078,10 +2821,10 @@ class reportehieloController extends Controller
                                                 reportehieloevaluacion
                                                 LEFT JOIN reportearea ON reportehieloevaluacion.reportehieloarea_id = reportearea.id
                                             WHERE
-                                                reportehieloevaluacion.proyecto_id = '.$proyecto_id.' 
-                                                AND reportehieloevaluacion.registro_id = '.$reporteregistro_id.' 
+                                                reportehieloevaluacion.proyecto_id = ' . $proyecto_id . ' 
+                                                AND reportehieloevaluacion.registro_id = ' . $reporteregistro_id . ' 
                                                 -- AND reportehieloevaluacion.reportehieloevaluacion_tipoevaluacion LIKE "%Microbiológico%"
-                                                '.$where_condicion.' 
+                                                ' . $where_condicion . ' 
                                             GROUP BY
                                                 -- reportehieloevaluacion.proyecto_id,
                                                 -- reportehieloevaluacion.registro_id,
@@ -3089,9 +2832,7 @@ class reportehieloController extends Controller
                                                 -- reportearea.reportearea_nombre,
                                                 reportearea.reportearea_instalacion
                                                 -- reportehieloevaluacion.reportehieloevaluacion_tipoevaluacion');
-            }
-            else
-            {
+            } else {
 
 
                 $instalaciones = DB::select('SELECT
@@ -3105,10 +2846,10 @@ class reportehieloController extends Controller
                                                 reportehieloevaluacion
                                                 LEFT JOIN reportehieloarea ON reportehieloevaluacion.reportehieloarea_id = reportehieloarea.id
                                             WHERE
-                                                reportehieloevaluacion.proyecto_id = '.$proyecto_id.' 
-                                                AND reportehieloevaluacion.registro_id = '.$reporteregistro_id.' 
+                                                reportehieloevaluacion.proyecto_id = ' . $proyecto_id . ' 
+                                                AND reportehieloevaluacion.registro_id = ' . $reporteregistro_id . ' 
                                                 -- AND reportehieloevaluacion.reportehieloevaluacion_tipoevaluacion LIKE "%Microbiológico%"
-                                                '.$where_condicion.' 
+                                                ' . $where_condicion . ' 
                                             GROUP BY
                                                 -- reportehieloevaluacion.proyecto_id,
                                                 -- reportehieloevaluacion.registro_id,
@@ -3125,17 +2866,15 @@ class reportehieloController extends Controller
 
             $where_condicion = '';
 
-            if ($reporte_tipo != 'Fisicoquímico_Microbiológico')
-            {
-                $where_condicion = 'AND reportehieloevaluacion.reportehieloevaluacion_tipoevaluacion LIKE "%'.$reporte_tipo.'%"';
+            if ($reporte_tipo != 'Fisicoquímico_Microbiológico') {
+                $where_condicion = 'AND reportehieloevaluacion.reportehieloevaluacion_tipoevaluacion LIKE "%' . $reporte_tipo . '%"';
             }
 
 
             //--------------------------------------
 
 
-            if (($areas_poe+0) == 1)
-            {
+            if (($areas_poe + 0) == 1) {
                 $areas = DB::select('SELECT
                                             reportehieloevaluacion.proyecto_id,
                                             reportehieloevaluacion.registro_id,
@@ -3149,10 +2888,10 @@ class reportehieloController extends Controller
                                             reportehieloevaluacion
                                             LEFT JOIN reportearea ON reportehieloevaluacion.reportehieloarea_id = reportearea.id 
                                         WHERE
-                                            reportehieloevaluacion.proyecto_id = '.$proyecto_id.' 
-                                            AND reportehieloevaluacion.registro_id = '.$reporteregistro_id.' 
+                                            reportehieloevaluacion.proyecto_id = ' . $proyecto_id . ' 
+                                            AND reportehieloevaluacion.registro_id = ' . $reporteregistro_id . ' 
                                             -- AND reportehieloevaluacion.reportehieloevaluacion_tipoevaluacion LIKE "%Fisicoquímico%"
-                                            '.$where_condicion.' 
+                                            ' . $where_condicion . ' 
                                         GROUP BY
                                             reportehieloevaluacion.proyecto_id,
                                             reportehieloevaluacion.registro_id,
@@ -3164,9 +2903,7 @@ class reportehieloController extends Controller
                                         ORDER BY
                                             MIN(reportehieloevaluacion.reportehieloevaluacion_punto) ASC,
                                             reportearea.reportearea_orden ASC');
-            }
-            else
-            {
+            } else {
                 $areas = DB::select('SELECT
                                             reportehieloevaluacion.proyecto_id,
                                             reportehieloevaluacion.registro_id,
@@ -3180,10 +2917,10 @@ class reportehieloController extends Controller
                                             reportehieloevaluacion
                                             LEFT JOIN reportehieloarea ON reportehieloevaluacion.reportehieloarea_id = reportehieloarea.id 
                                         WHERE
-                                            reportehieloevaluacion.proyecto_id = '.$proyecto_id.' 
-                                            AND reportehieloevaluacion.registro_id = '.$reporteregistro_id.' 
+                                            reportehieloevaluacion.proyecto_id = ' . $proyecto_id . ' 
+                                            AND reportehieloevaluacion.registro_id = ' . $reporteregistro_id . ' 
                                             -- AND reportehieloevaluacion.reportehieloevaluacion_tipoevaluacion LIKE "%Fisicoquímico%"
-                                            '.$where_condicion.' 
+                                            ' . $where_condicion . ' 
                                         GROUP BY
                                             reportehieloevaluacion.proyecto_id,
                                             reportehieloevaluacion.registro_id,
@@ -3198,25 +2935,22 @@ class reportehieloController extends Controller
             }
 
 
-            $dato["dashboard_areas"] = ''; $instalacion = 'XXXXX'; $dato["dashboard_puntos_total"] = 0;
-            if (count($areas) > 0)
-            {
-                foreach ($areas as $key => $value)
-                {
-                    if ($instalacion != $value->reportehieloarea_instalacion && count($instalaciones) > 1)
-                    {
-                        $dato["dashboard_areas"] .= '<br><span style="font-weight: 550; color: #000;">'.$value->reportehieloarea_instalacion.'</span><hr style="margin: 4px 40px;">';
+            $dato["dashboard_areas"] = '';
+            $instalacion = 'XXXXX';
+            $dato["dashboard_puntos_total"] = 0;
+            if (count($areas) > 0) {
+                foreach ($areas as $key => $value) {
+                    if ($instalacion != $value->reportehieloarea_instalacion && count($instalaciones) > 1) {
+                        $dato["dashboard_areas"] .= '<br><span style="font-weight: 550; color: #000;">' . $value->reportehieloarea_instalacion . '</span><hr style="margin: 4px 40px;">';
                         $instalacion = $value->reportehieloarea_instalacion;
                     }
 
-                    
-                    $dato["dashboard_areas"] .= '<span style="font-size:0.8vw!important;">● '.$value->reportehieloarea_nombre.'</span> ('.$value->total_puntosevaluados.' puntos)<br>';
-                    
+
+                    $dato["dashboard_areas"] .= '<span style="font-size:0.8vw!important;">● ' . $value->reportehieloarea_nombre . '</span> (' . $value->total_puntosevaluados . ' puntos)<br>';
+
                     $dato["dashboard_puntos_total"] += ($value->total_puntosevaluados + 0);
                 }
-            }
-            else
-            {
+            } else {
                 $dato["dashboard_areas"] = 'No se encontraron áreas evaluadas.';
             }
 
@@ -3227,17 +2961,15 @@ class reportehieloController extends Controller
 
             $where_condicion = '';
 
-            if ($reporte_tipo != 'Fisicoquímico_Microbiológico')
-            {
-                $where_condicion = 'AND catparametrohielocaracteristica.catparametrohielocaracteristica_tipo LIKE "%'.$reporte_tipo.'%"';
+            if ($reporte_tipo != 'Fisicoquímico_Microbiológico') {
+                $where_condicion = 'AND catparametrohielocaracteristica.catparametrohielocaracteristica_tipo LIKE "%' . $reporte_tipo . '%"';
             }
 
 
             //--------------------------------------
 
 
-            if (($areas_poe+0) == 1)
-            {
+            if (($areas_poe + 0) == 1) {
                 $cumplimiento = DB::select('SELECT
                                                 TABLA.proyecto_id,
                                                 TABLA.registro_id,
@@ -3280,10 +3012,10 @@ class reportehieloController extends Controller
                                                         LEFT JOIN reportearea ON reportehieloevaluacion.reportehieloarea_id = reportearea.id 
                                                         LEFT JOIN catparametrohielocaracteristica ON reportehieloevaluacionparametros.catparametrohielocaracteristica_id = catparametrohielocaracteristica.id
                                                     WHERE
-                                                        reportehieloevaluacion.proyecto_id = '.$proyecto_id.'  
-                                                        AND reportehieloevaluacion.registro_id = '.$reporteregistro_id.' 
+                                                        reportehieloevaluacion.proyecto_id = ' . $proyecto_id . '  
+                                                        AND reportehieloevaluacion.registro_id = ' . $reporteregistro_id . ' 
                                                         -- AND catparametrohielocaracteristica.catparametrohielocaracteristica_tipo LIKE "%Microbiológico%" 
-                                                        '.$where_condicion.' 
+                                                        ' . $where_condicion . ' 
                                                     GROUP BY
                                                         reportehieloevaluacion.proyecto_id,
                                                         reportehieloevaluacion.registro_id,
@@ -3300,9 +3032,7 @@ class reportehieloController extends Controller
                                                 TABLA.tipo ASC,
                                                 TABLA.punto ASC,
                                                 TABLA.area_orden ASC');
-            }
-            else
-            {
+            } else {
                 $cumplimiento = DB::select('SELECT
                                                 TABLA.proyecto_id,
                                                 TABLA.registro_id,
@@ -3345,10 +3075,10 @@ class reportehieloController extends Controller
                                                         LEFT JOIN reportehieloarea ON reportehieloevaluacion.reportehieloarea_id = reportehieloarea.id 
                                                         LEFT JOIN catparametrohielocaracteristica ON reportehieloevaluacionparametros.catparametrohielocaracteristica_id = catparametrohielocaracteristica.id
                                                     WHERE
-                                                        reportehieloevaluacion.proyecto_id = '.$proyecto_id.'  
-                                                        AND reportehieloevaluacion.registro_id = '.$reporteregistro_id.' 
+                                                        reportehieloevaluacion.proyecto_id = ' . $proyecto_id . '  
+                                                        AND reportehieloevaluacion.registro_id = ' . $reporteregistro_id . ' 
                                                         -- AND catparametrohielocaracteristica.catparametrohielocaracteristica_tipo LIKE "%Microbiológico%" 
-                                                        '.$where_condicion.' 
+                                                        ' . $where_condicion . ' 
                                                     GROUP BY
                                                         reportehieloevaluacion.proyecto_id,
                                                         reportehieloevaluacion.registro_id,
@@ -3369,44 +3099,38 @@ class reportehieloController extends Controller
 
 
             $col = 'col-12';
-            if ((count($cumplimiento) + count($instalaciones)) > 7)
-            {
+            if ((count($cumplimiento) + count($instalaciones)) > 7) {
                 $col = 'col-6';
             }
 
 
-            $dato["dashboard_cumplimiento"] = ''; $instalacion = 'XXXXX';
-            if (count($cumplimiento) > 0)
-            {
-                foreach ($cumplimiento as $key => $value) 
-                {
-                    if ($instalacion != $value->instalacion && count($instalaciones) > 1)
-                    {
+            $dato["dashboard_cumplimiento"] = '';
+            $instalacion = 'XXXXX';
+            if (count($cumplimiento) > 0) {
+                foreach ($cumplimiento as $key => $value) {
+                    if ($instalacion != $value->instalacion && count($instalaciones) > 1) {
                         $dato["dashboard_cumplimiento"] .= '<div class="col-12" style="text-align: center;">
-                                                                <span style="font-weight: 550; color: #000;">'.$value->instalacion.'</span>
+                                                                <span style="font-weight: 550; color: #000;">' . $value->instalacion . '</span>
                                                             </div>';
 
                         $instalacion = $value->instalacion;
                     }
-                    
+
 
                     $tipo = '';
-                    if ($reporte_tipo == 'Fisicoquímico_Microbiológico')
-                    {
+                    if ($reporte_tipo == 'Fisicoquímico_Microbiológico') {
                         $tipo = $value->tipo;
                     }
 
 
-                    $dato["dashboard_cumplimiento"] .= '<div class="'.$col.'" style="display: inline-block; text-align: left;">
-                                                            <h6 class="m-t-30" style="margin: 0px; font-size:0.7vw;">Punto '.$value->punto.' '.$tipo.' ('.$value->suministro.' / '.$value->ubicacion.') <span class="pull-right">'.$value->cumplimiento.'%</span></h6>
+                    $dato["dashboard_cumplimiento"] .= '<div class="' . $col . '" style="display: inline-block; text-align: left;">
+                                                            <h6 class="m-t-30" style="margin: 0px; font-size:0.7vw;">Punto ' . $value->punto . ' ' . $tipo . ' (' . $value->suministro . ' / ' . $value->ubicacion . ') <span class="pull-right">' . $value->cumplimiento . '%</span></h6>
                                                             <div class="progress" style="margin-bottom: 8px;">
-                                                                <div class="progress-bar" role="progressbar" style="width: '.$value->cumplimiento.'%; height: 10px; background: #8ee66b;" aria-valuenow="25" aria-valuemin="0" aria-valuemax="100"></div>
+                                                                <div class="progress-bar" role="progressbar" style="width: ' . $value->cumplimiento . '%; height: 10px; background: #8ee66b;" aria-valuenow="25" aria-valuemin="0" aria-valuemax="100"></div>
                                                             </div>
                                                         </div>';
                 }
-            }
-            else
-            {
+            } else {
                 $dato["dashboard_cumplimiento"] = 'No se encontrarón puntos de evaluación.';
             }
 
@@ -3418,23 +3142,18 @@ class reportehieloController extends Controller
             $dato["dashboard_parametros"] = '';
 
 
-            if ($reporte_tipo == 'Microbiológico')
-            {
+            if ($reporte_tipo == 'Microbiológico') {
                 $dato["dashboard_parametros"] .= '<span style="font-size:0.8vw!important;">● Coliformes totales</span><br>';
                 $dato["dashboard_parametros"] .= '<span style="font-size:0.8vw!important;">● Coliformes fecales</span><br>';
                 $dato["dashboard_parametros"] .= '<span style="font-size:0.8vw!important;">● Mesófilos aerobios</span><br>';
                 $dato["dashboard_parametros"] .= '<span style="font-size:0.8vw!important;">● Fierro</span><br>';
                 $dato["dashboard_parametros"] .= '<span style="font-size:0.8vw!important;">● Cloro residual libre</span>';
-            }
-            else if ($reporte_tipo == 'Fisicoquímico')
-            {
+            } else if ($reporte_tipo == 'Fisicoquímico') {
                 $dato["dashboard_parametros"] .= '<span style="font-size:0.8vw!important;">● Color</span><br>';
                 $dato["dashboard_parametros"] .= '<span style="font-size:0.8vw!important;">● Olor</span><br>';
                 $dato["dashboard_parametros"] .= '<span style="font-size:0.8vw!important;">● Sabor</span><br>';
                 $dato["dashboard_parametros"] .= '<span style="font-size:0.8vw!important;">● Turbiedad</span>';
-            }
-            else
-            {
+            } else {
                 $dato["dashboard_parametros"] .= '<span style="font-size:0.8vw!important;">● Coliformes totales</span><br>';
                 $dato["dashboard_parametros"] .= '<span style="font-size:0.8vw!important;">● Coliformes fecales</span><br>';
                 $dato["dashboard_parametros"] .= '<span style="font-size:0.8vw!important;">● Mesófilos aerobios</span><br>';
@@ -3464,17 +3183,16 @@ class reportehieloController extends Controller
                                             FROM
                                                 reporterecomendaciones 
                                             WHERE
-                                                reporterecomendaciones.proyecto_id = '.$proyecto_id.'  
-                                                AND reporterecomendaciones.registro_id = '.$reporteregistro_id.' 
+                                                reporterecomendaciones.proyecto_id = ' . $proyecto_id . '  
+                                                AND reporterecomendaciones.registro_id = ' . $reporteregistro_id . ' 
                                                 AND reporterecomendaciones.agente_nombre LIKE "%Hielo%"');
 
 
             $dato['dashboard_recomendaciones'] = 0;
-            if (count($recomendaciones) > 0)
-            {
+            if (count($recomendaciones) > 0) {
                 $dato['dashboard_recomendaciones'] = $recomendaciones[0]->totalrecomendaciones;
             }
-            $dato['dashboard_recomendaciones'] = '<br>'.$dato['dashboard_recomendaciones'];
+            $dato['dashboard_recomendaciones'] = '<br>' . $dato['dashboard_recomendaciones'];
 
 
             //=====================================
@@ -3483,26 +3201,23 @@ class reportehieloController extends Controller
 
             $dato["dashboard_titulo"] = 'Fisicoquímico y/o Microbiológico';
 
-            if ($reporte_tipo != 'Fisicoquímico_Microbiológico')
-            {
+            if ($reporte_tipo != 'Fisicoquímico_Microbiológico') {
                 $dato["dashboard_titulo"] = $reporte_tipo;
             }
 
-            
+
             //=====================================
 
 
             $dato["msj"] = 'Datos consultados correctamente';
             return response()->json($dato);
-        }
-        catch(Exception $e)
-        {
+        } catch (Exception $e) {
             $dato["dashboard_titulo"] = 'Fisicoquímico y/o Microbiológico';
             $dato["dashboard_areas"] = 'Error al consultar las áreas evaluadas';
             $dato["dashboard_cumplimiento"] = 'Error al consultar los puntos de evaluación';
             $dato["dashboard_puntos_total"] = 0;
             $dato["dashboard_parametros"] = 'Error al consultar los párametros';
-            $dato["msj"] = 'Error '.$e->getMessage();
+            $dato["msj"] = 'Error ' . $e->getMessage();
             return response()->json($dato);
         }
     }
@@ -3513,7 +3228,7 @@ class reportehieloController extends Controller
      *
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
-    */
+     */
 
     /*
     public function reportehielodashboardgraficas(Request $request)
@@ -3562,8 +3277,7 @@ class reportehieloController extends Controller
      */
     public function reportehielorecomendacionestabla($proyecto_id, $reporteregistro_id, $agente_nombre)
     {
-        try
-        {
+        try {
             $proyecto = proyectoModel::with(['catregion', 'catsubdireccion', 'catgerencia', 'catactivo'])->findOrFail($proyecto_id);
             $recsensorial = recsensorialModel::findOrFail($proyecto->recsensorial_id);
 
@@ -3601,15 +3315,15 @@ class reportehieloController extends Controller
                                                                     FROM
                                                                         reporterecomendaciones 
                                                                     WHERE
-                                                                        reporterecomendaciones.proyecto_id = '.$proyecto_id.'
-                                                                        AND reporterecomendaciones.registro_id = '.$reporteregistro_id.'
+                                                                        reporterecomendaciones.proyecto_id = ' . $proyecto_id . '
+                                                                        AND reporterecomendaciones.registro_id = ' . $reporteregistro_id . '
                                                                         AND reporterecomendaciones.reporterecomendacionescatalogo_id = reporterecomendacionescatalogo.id
                                                                     LIMIT 1 
                                                             ), NULL) AS recomendaciones_descripcion
                                                         FROM
                                                             reporterecomendacionescatalogo
                                                         WHERE
-                                                            reporterecomendacionescatalogo.agente_nombre = "'.$agente_nombre.'"
+                                                            reporterecomendacionescatalogo.agente_nombre = "' . $agente_nombre . '"
                                                             AND reporterecomendacionescatalogo.reporterecomendacionescatalogo_activo = 1
                                                         ORDER BY
                                                             reporterecomendacionescatalogo.reporterecomendacionescatalogo_tipo DESC
@@ -3628,9 +3342,9 @@ class reportehieloController extends Controller
                                                 FROM
                                                     reporterecomendaciones
                                                 WHERE
-                                                    reporterecomendaciones.proyecto_id = '.$proyecto_id.'
-                                                    AND reporterecomendaciones.agente_nombre = "'.$agente_nombre.'"
-                                                    AND reporterecomendaciones.registro_id = '.$reporteregistro_id.'
+                                                    reporterecomendaciones.proyecto_id = ' . $proyecto_id . '
+                                                    AND reporterecomendaciones.agente_nombre = "' . $agente_nombre . '"
+                                                    AND reporterecomendaciones.registro_id = ' . $reporteregistro_id . '
                                                     AND reporterecomendaciones.reporterecomendacionescatalogo_id = 0
                                                 ORDER BY
                                                     reporterecomendaciones.id ASC
@@ -3638,55 +3352,46 @@ class reportehieloController extends Controller
                                         ) AS TABLA');
 
 
-            $numero_registro = 0; $total = 0;
-            foreach ($tabla as $key => $value) 
-            {
+            $numero_registro = 0;
+            $total = 0;
+            foreach ($tabla as $key => $value) {
                 $numero_registro += 1;
                 $value->numero_registro = $numero_registro;
 
-                if (($value->id + 0) > 0)
-                {
+                if (($value->id + 0) > 0) {
                     $required_readonly = 'readonly';
-                    if ($value->checked)
-                    {
+                    if ($value->checked) {
                         $required_readonly = 'required';
                     }
 
                     $value->checkbox = '<div class="switch">
                                             <label>
-                                                <input type="checkbox" class="recomendacion_checkbox" name="recomendacion_checkbox[]" value="'.$value->id.'" '.$value->checked.' onclick="activa_recomendacion(this);">
+                                                <input type="checkbox" class="recomendacion_checkbox" name="recomendacion_checkbox[]" value="' . $value->id . '" ' . $value->checked . ' onclick="activa_recomendacion(this);">
                                                 <span class="lever switch-col-light-blue"></span>
                                             </label>
                                         </div>';
 
-                    $value->descripcion = '<input type="hidden" class="form-control" name="recomendacion_tipo_'.$value->id.'" value="'.$value->recomendaciones_tipo.'" required>
-                                            <label>'.$value->recomendaciones_tipo.'</label>
-                                            <textarea  class="form-control" rows="5" id="recomendacion_descripcion_'.$value->id.'" name="recomendacion_descripcion_'.$value->id.'" '.$required_readonly.'>'.$this->datosproyectoreemplazartexto($proyecto, $recsensorial, $value->recomendaciones_descripcion).'</textarea>';
-                }
-                else
-                {
+                    $value->descripcion = '<input type="hidden" class="form-control" name="recomendacion_tipo_' . $value->id . '" value="' . $value->recomendaciones_tipo . '" required>
+                                            <label>' . $value->recomendaciones_tipo . '</label>
+                                            <textarea  class="form-control" rows="5" id="recomendacion_descripcion_' . $value->id . '" name="recomendacion_descripcion_' . $value->id . '" ' . $required_readonly . '>' . $this->datosproyectoreemplazartexto($proyecto, $recsensorial, $value->recomendaciones_descripcion) . '</textarea>';
+                } else {
                     $value->checkbox = '<input type="checkbox" class="recomendacionadicional_checkbox" name="recomendacionadicional_checkbox[]" value="0" checked/>
                                         <button type="button" class="btn btn-danger waves-effect btn-circle eliminar" data-toggle="tooltip" title="Eliminar recomendación"><i class="fa fa-trash fa-2x"></i></button>';
 
-                    $preventiva = ""; $correctiva = "";
-                    if ($value->recomendaciones_tipo == "Preventiva")
-                    {
+                    $preventiva = "";
+                    $correctiva = "";
+                    if ($value->recomendaciones_tipo == "Preventiva") {
                         $preventiva = "selected";
-                    }
-                    else
-                    {
+                    } else {
                         $correctiva = "selected";
                     }
 
 
 
-                    if (($value->catalogo_id+0) == 1)
-                    {
+                    if (($value->catalogo_id + 0) == 1) {
                         $fisicoquimico = 'selected';
                         $microbiologico = '';
-                    }
-                    else
-                    {
+                    } else {
                         $fisicoquimico = '';
                         $microbiologico = 'selected';
                     }
@@ -3697,28 +3402,27 @@ class reportehieloController extends Controller
                                                     <label>Tipo recomendación</label>
                                                     <select class="custom-select form-control" name="recomendacionadicional_tipo[]" required>
                                                         <option value=""></option>
-                                                        <option value="Preventiva" '.$preventiva.'>Preventiva</option>
-                                                        <option value="Correctiva" '.$correctiva.'>Correctiva</option>
+                                                        <option value="Preventiva" ' . $preventiva . '>Preventiva</option>
+                                                        <option value="Correctiva" ' . $correctiva . '>Correctiva</option>
                                                     </select>
                                                 </div>
                                                 <div class="col-6">
                                                     <label>Tipo informe</label>
                                                     <select class="custom-select form-control" name="recomendacionadicional_tipoinforme[]" required>
                                                         <option value=""></option>
-                                                        <option value="1" '.$fisicoquimico.'>Fisicoquímico</option>
-                                                        <option value="2" '.$microbiologico.'>Microbiológico</option>
+                                                        <option value="1" ' . $fisicoquimico . '>Fisicoquímico</option>
+                                                        <option value="2" ' . $microbiologico . '>Microbiológico</option>
                                                     </select>
                                                 </div>
                                                 <div class="col-12">
                                                     <br>
                                                     <label>Descripción</label>
-                                                    <textarea  class="form-control" rows="5" name="recomendacionadicional_descripcion[]" required>'.$this->datosproyectoreemplazartexto($proyecto, $recsensorial, $value->recomendaciones_descripcion).'</textarea>
+                                                    <textarea  class="form-control" rows="5" name="recomendacionadicional_descripcion[]" required>' . $this->datosproyectoreemplazartexto($proyecto, $recsensorial, $value->recomendaciones_descripcion) . '</textarea>
                                                 </div>
                                             </div>';
                 }
 
-                if ($value->checked)
-                {
+                if ($value->checked) {
                     $total += 1;
                 }
             }
@@ -3729,12 +3433,10 @@ class reportehieloController extends Controller
             $dato['total'] = $total;
             $dato["msj"] = 'Datos consultados correctamente';
             return response()->json($dato);
-        }
-        catch(Exception $e)
-        {
+        } catch (Exception $e) {
             $dato['data'] = 0;
             $dato['total'] = 0;
-            $dato["msj"] = 'Error '.$e->getMessage();
+            $dato["msj"] = 'Error ' . $e->getMessage();
             return response()->json($dato);
         }
     }
@@ -3749,19 +3451,16 @@ class reportehieloController extends Controller
      */
     public function reportehielomaterialutilizado($proyecto_id, $reporteregistro_id)
     {
-        try
-        {
+        try {
             $revision = reporterevisionesModel::where('proyecto_id', $proyecto_id)
-                                                ->where('agente_id', 10)
-                                                ->orderBy('reporterevisiones_revision', 'DESC')
-                                                ->get();
+                ->where('agente_id', 10)
+                ->orderBy('reporterevisiones_revision', 'DESC')
+                ->get();
 
 
             $edicion = 1;
-            if(count($revision) > 0)
-            {
-                if($revision[0]->reporterevisiones_concluido == 1 || $revision[0]->reporterevisiones_cancelado == 1)
-                {
+            if (count($revision) > 0) {
+                if ($revision[0]->reporterevisiones_concluido == 1 || $revision[0]->reporterevisiones_cancelado == 1) {
                     $edicion = 0;
                 }
             }
@@ -3771,25 +3470,21 @@ class reportehieloController extends Controller
 
 
             $material = reportehielomaterialModel::where('proyecto_id', $proyecto_id)
-                                                ->where('registro_id', $reporteregistro_id)
-                                                ->orderBy('id', 'ASC')
-                                                ->get();
+                ->where('registro_id', $reporteregistro_id)
+                ->orderBy('id', 'ASC')
+                ->get();
 
 
             $numero_registro = 0;
-            foreach ($material as $key => $value) 
-            {
+            foreach ($material as $key => $value) {
                 $numero_registro += 1;
                 $value->numero_registro = $numero_registro;
-                
+
                 $value->boton_editar = '<button type="button" class="btn btn-warning waves-effect btn-circle"><i class="fa fa-pencil fa-2x"></i></button>';
 
-                if ($edicion == 1)
-                {
+                if ($edicion == 1) {
                     $value->boton_eliminar = '<button type="button" class="btn btn-danger waves-effect btn-circle eliminar"><i class="fa fa-trash fa-2x"></i></button>';
-                }
-                else
-                {
+                } else {
                     $value->boton_eliminar = '<button type="button" class="btn btn-default waves-effect btn-circle" data-toggle="tooltip" title="No disponible"><i class="fa fa-ban fa-2x"></i></button>';
                 }
             }
@@ -3799,12 +3494,10 @@ class reportehieloController extends Controller
             $dato["total"] = count($material);
             $dato["msj"] = 'Datos consultados correctamente';
             return response()->json($dato);
-        }
-        catch(Exception $e)
-        {
+        } catch (Exception $e) {
             $dato['data'] = 0;
             $dato["total"] = 0;
-            $dato["msj"] = 'Error '.$e->getMessage();
+            $dato["msj"] = 'Error ' . $e->getMessage();
             return response()->json($dato);
         }
     }
@@ -3818,17 +3511,14 @@ class reportehieloController extends Controller
      */
     public function reportehielomaterialutilizadoeliminar($materialutilizado_id)
     {
-        try
-        {
+        try {
             $materialutilizado = reportehielomaterialModel::where('id', $materialutilizado_id)->delete();
 
             // respuesta
             $dato["msj"] = 'Material utilizado eliminado correctamente';
             return response()->json($dato);
-        }
-        catch(Exception $e)
-        {
-            $dato["msj"] = 'Error '.$e->getMessage();
+        } catch (Exception $e) {
+            $dato["msj"] = 'Error ' . $e->getMessage();
             return response()->json($dato);
         }
     }
@@ -3841,30 +3531,21 @@ class reportehieloController extends Controller
      * @param int $responsabledoc_tipo
      * @param int $responsabledoc_opcion
      * @return \Illuminate\Http\Response
-    */
+     */
     public function reportehieloresponsabledocumento($reporteregistro_id, $responsabledoc_tipo, $responsabledoc_opcion)
     {
         $reporte = reportehieloModel::findOrFail($reporteregistro_id);
 
-        if ($responsabledoc_tipo == 1)
-        {
-            if ($responsabledoc_opcion == 0)
-            {
+        if ($responsabledoc_tipo == 1) {
+            if ($responsabledoc_opcion == 0) {
                 return Storage::response($reporte->reportehielo_responsable1documento);
-            }
-            else
-            {
+            } else {
                 return Storage::download($reporte->reportehielo_responsable1documento);
             }
-        }
-        else
-        {
-            if ($responsabledoc_opcion == 0)
-            {
+        } else {
+            if ($responsabledoc_opcion == 0) {
                 return Storage::response($reporte->reportehielo_responsable2documento);
-            }
-            else
-            {
+            } else {
                 return Storage::download($reporte->reportehielo_responsable2documento);
             }
         }
@@ -3881,8 +3562,7 @@ class reportehieloController extends Controller
      */
     public function reportehieloplanostabla($proyecto_id, $reporteregistro_id, $agente_nombre)
     {
-        try
-        {
+        try {
             $planos = DB::select('SELECT
                                         proyectoevidenciaplano.proyecto_id,
                                         proyectoevidenciaplano.agente_id,
@@ -3896,16 +3576,16 @@ class reportehieloController extends Controller
                                                 reporteplanoscarpetas
                                             WHERE
                                                 reporteplanoscarpetas.proyecto_id = proyectoevidenciaplano.proyecto_id
-                                                AND reporteplanoscarpetas.agente_nombre LIKE "%'.$agente_nombre.'%" 
-                                                AND reporteplanoscarpetas.registro_id = '.$reporteregistro_id.' 
+                                                AND reporteplanoscarpetas.agente_nombre LIKE "%' . $agente_nombre . '%" 
+                                                AND reporteplanoscarpetas.registro_id = ' . $reporteregistro_id . ' 
                                                 AND reporteplanoscarpetas.reporteplanoscarpetas_nombre = proyectoevidenciaplano.proyectoevidenciaplano_carpeta
                                             LIMIT 1
                                         ), "") AS checked
                                     FROM
                                         proyectoevidenciaplano
                                     WHERE
-                                        proyectoevidenciaplano.proyecto_id = '.$proyecto_id.' 
-                                        AND proyectoevidenciaplano.agente_nombre LIKE "%'.$agente_nombre.'%" 
+                                        proyectoevidenciaplano.proyecto_id = ' . $proyecto_id . ' 
+                                        AND proyectoevidenciaplano.agente_nombre LIKE "%' . $agente_nombre . '%" 
                                     GROUP BY
                                         proyectoevidenciaplano.proyecto_id,
                                         proyectoevidenciaplano.agente_id,
@@ -3918,15 +3598,14 @@ class reportehieloController extends Controller
 
             $total_activos = 0;
             $numero_registro = 0;
-            foreach ($planos as $key => $value) 
-            {
+            foreach ($planos as $key => $value) {
                 $numero_registro += 1;
                 $value->numero_registro = $numero_registro;
 
 
                 $value->checkbox = '<div class="switch">
                                         <label>
-                                            <input type="checkbox" class="planoscarpeta_checkbox" name="planoscarpeta_checkbox[]" value="'.$value->proyectoevidenciaplano_carpeta.'" '.$value->checked.'>
+                                            <input type="checkbox" class="planoscarpeta_checkbox" name="planoscarpeta_checkbox[]" value="' . $value->proyectoevidenciaplano_carpeta . '" ' . $value->checked . '>
                                             <span class="lever switch-col-light-blue"></span>
                                         </label>
                                     </div>';
@@ -3936,8 +3615,7 @@ class reportehieloController extends Controller
 
 
                 // VERIFICAR SI HAY CARPETAS SELECCIONADAS
-                if ($value->checked)
-                {
+                if ($value->checked) {
                     $total_activos += 1;
                 }
             }
@@ -3947,12 +3625,10 @@ class reportehieloController extends Controller
             $dato["total"] = $total_activos;
             $dato["msj"] = 'Datos consultados correctamente';
             return response()->json($dato);
-        }
-        catch(Exception $e)
-        {
+        } catch (Exception $e) {
             $dato['data'] = 0;
             $dato["total"] = 0;
-            $dato["msj"] = 'Error '.$e->getMessage();
+            $dato["msj"] = 'Error ' . $e->getMessage();
             return response()->json($dato);
         }
     }
@@ -3965,11 +3641,10 @@ class reportehieloController extends Controller
      * @param int $reporteregistro_id
      * @param $agente_nombre
      * @return \Illuminate\Http\Response
-    */
+     */
     public function reportehieloanexosresultadostabla($proyecto_id, $reporteregistro_id, $agente_nombre)
     {
-        try
-        {
+        try {
             $anexos = DB::select('SELECT
                                         proyectoevidenciadocumento.proyecto_id,
                                         proyectoevidenciadocumento.proveedor_id,
@@ -3987,48 +3662,43 @@ class reportehieloController extends Controller
                                                 reporteanexos
                                             WHERE
                                                 reporteanexos.proyecto_id = proyectoevidenciadocumento.proyecto_id
-                                                AND reporteanexos.agente_nombre LIKE "%'.$agente_nombre.'%" 
-                                                AND reporteanexos.registro_id = '.$reporteregistro_id.'
+                                                AND reporteanexos.agente_nombre LIKE "%' . $agente_nombre . '%" 
+                                                AND reporteanexos.registro_id = ' . $reporteregistro_id . '
                                                 AND reporteanexos.reporteanexos_tipo = 1
                                                 AND reporteanexos.reporteanexos_rutaanexo = proyectoevidenciadocumento.proyectoevidenciadocumento_archivo
                                         ), "") AS checked 
                                     FROM
                                         proyectoevidenciadocumento
                                     WHERE
-                                        proyectoevidenciadocumento.proyecto_id = '.$proyecto_id.' 
-                                        AND proyectoevidenciadocumento.agente_nombre LIKE "%'.$agente_nombre.'%"
+                                        proyectoevidenciadocumento.proyecto_id = ' . $proyecto_id . ' 
+                                        AND proyectoevidenciadocumento.agente_nombre LIKE "%' . $agente_nombre . '%"
                                     ORDER BY
                                         proyectoevidenciadocumento.agente_nombre ASC,
                                         proyectoevidenciadocumento.proyectoevidenciadocumento_nombre ASC');
 
             $total_activos = 0;
             $numero_registro = 0;
-            foreach ($anexos as $key => $value) 
-            {
+            foreach ($anexos as $key => $value) {
                 $numero_registro += 1;
                 $value->numero_registro = $numero_registro;
 
                 $value->checkbox = '<div class="switch">
                                         <label>
-                                            <input type="hidden" class="form-control" name="anexoresultado_nombre_'.$value->id.'" value="'.$value->proyectoevidenciadocumento_nombre.'">
-                                            <input type="hidden" class="form-control" name="anexoresultado_archivo_'.$value->id.'" value="'.$value->proyectoevidenciadocumento_archivo.'">
-                                            <input type="checkbox" class="anexoresultado_checkbox" name="anexoresultado_checkbox[]" value="'.$value->id.'" '.$value->checked.'>
+                                            <input type="hidden" class="form-control" name="anexoresultado_nombre_' . $value->id . '" value="' . $value->proyectoevidenciadocumento_nombre . '">
+                                            <input type="hidden" class="form-control" name="anexoresultado_archivo_' . $value->id . '" value="' . $value->proyectoevidenciadocumento_archivo . '">
+                                            <input type="checkbox" class="anexoresultado_checkbox" name="anexoresultado_checkbox[]" value="' . $value->id . '" ' . $value->checked . '>
                                             <span class="lever switch-col-light-blue"></span>
                                         </label>
                                     </div>';
 
-                if ($value->proyectoevidenciadocumento_extension == '.pdf' || $value->proyectoevidenciadocumento_extension == '.PDF')
-                {
+                if ($value->proyectoevidenciadocumento_extension == '.pdf' || $value->proyectoevidenciadocumento_extension == '.PDF') {
                     $value->documento = '<button type="button" class="btn btn-info waves-effect btn-circle" data-toggle="tooltip" title="Mostrar PDF"><i class="fa fa-file-pdf-o fa-2x"></i></button>';
-                }
-                else
-                {
+                } else {
                     $value->documento = '<button type="button" class="btn btn-success waves-effect btn-circle" data-toggle="tooltip" title="Descargar archivo"><i class="fa fa-download fa-2x"></i></button>';
                 }
 
                 // VERIFICAR SI HAY DOCUMENTOS SELECCIONADOS
-                if ($value->checked)
-                {
+                if ($value->checked) {
                     $total_activos += 1;
                 }
             }
@@ -4038,29 +3708,26 @@ class reportehieloController extends Controller
             $dato["total"] = $total_activos;
             $dato["msj"] = 'Datos consultados correctamente';
             return response()->json($dato);
-        }
-        catch(Exception $e)
-        {
+        } catch (Exception $e) {
             $dato['data'] = 0;
             $dato["total"] = 0;
-            $dato["msj"] = 'Error '.$e->getMessage();
+            $dato["msj"] = 'Error ' . $e->getMessage();
             return response()->json($dato);
         }
     }
 
 
     /**
-         * Display the specified resource.
-         *
-         * @param int $proyecto_id
-         * @param int $reporteregistro_id
-         * @param $agente_nombre
-         * @return \Illuminate\Http\Response
+     * Display the specified resource.
+     *
+     * @param int $proyecto_id
+     * @param int $reporteregistro_id
+     * @param $agente_nombre
+     * @return \Illuminate\Http\Response
      */
     public function reportehieloanexosacreditacionestabla($proyecto_id, $reporteregistro_id, $agente_nombre)
     {
-        try
-        {
+        try {
             $acreditaciones = DB::select('SELECT
                                                 TABLA.proyecto_id,
                                                 TABLA.proveedor_id,
@@ -4090,7 +3757,7 @@ class reportehieloController extends Controller
                                                         reporteanexos
                                                     WHERE
                                                         reporteanexos.proyecto_id = TABLA.proyecto_id
-                                                        AND reporteanexos.registro_id = '.$reporteregistro_id.' 
+                                                        AND reporteanexos.registro_id = ' . $reporteregistro_id . ' 
                                                         AND reporteanexos.reporteanexos_tipo = 2
                                                         AND reporteanexos.reporteanexos_rutaanexo = acreditacion.acreditacion_SoportePDF
                                                     LIMIT 1
@@ -4107,7 +3774,7 @@ class reportehieloController extends Controller
                                                         proyectoproveedores
                                                         LEFT JOIN proveedor ON proyectoproveedores.proveedor_id = proveedor.id
                                                     WHERE
-                                                        proyectoproveedores.proyecto_id = '.$proyecto_id.' 
+                                                        proyectoproveedores.proyecto_id = ' . $proyecto_id . ' 
                                                         AND proyectoproveedores.catprueba_id = 9
                                                     GROUP BY
                                                         proyectoproveedores.proyecto_id,
@@ -4123,31 +3790,29 @@ class reportehieloController extends Controller
 
             $total_activos = 0;
             $numero_registro = 0;
-            foreach ($acreditaciones as $key => $value) 
-            {
+            foreach ($acreditaciones as $key => $value) {
                 $numero_registro += 1;
                 $value->numero_registro = $numero_registro;
 
                 $value->checkbox = '<div class="switch">
                                         <label>
-                                            <input type="hidden" class="form-control" name="anexoacreditacion_nombre_'.$value->id.'" value="'.$value->acreditacion_Entidad.' '.$value->acreditacion_Numero.'">
-                                            <input type="hidden" class="form-control" name="anexoacreditacion_archivo_'.$value->id.'" value="'.$value->acreditacion_SoportePDF.'">
-                                            <input type="checkbox" class="anexoacreditacion_checkbox" name="anexoacreditacion_checkbox[]" value="'.$value->id.'" '.$value->checked.'>
+                                            <input type="hidden" class="form-control" name="anexoacreditacion_nombre_' . $value->id . '" value="' . $value->acreditacion_Entidad . ' ' . $value->acreditacion_Numero . '">
+                                            <input type="hidden" class="form-control" name="anexoacreditacion_archivo_' . $value->id . '" value="' . $value->acreditacion_SoportePDF . '">
+                                            <input type="checkbox" class="anexoacreditacion_checkbox" name="anexoacreditacion_checkbox[]" value="' . $value->id . '" ' . $value->checked . '>
                                             <span class="lever switch-col-light-blue"></span>
                                         </label>
                                     </div>';
 
 
-                $value->tipo = '<span class="'.$value->vigencia_color.'">'.$value->acreditacion_Tipo.'</span>';
-                $value->entidad = '<span class="'.$value->vigencia_color.'">'.$value->acreditacion_Entidad.'</span>';
-                $value->numero = '<span class="'.$value->vigencia_color.'">'.$value->acreditacion_Numero.'</span>';
-                $value->area = '<span class="'.$value->vigencia_color.'">'.$value->vigencia_color.'</span>';
-                $value->vigencia = '<span class="'.$value->vigencia_color.'">'.$value->vigencia_texto.'</span>';
+                $value->tipo = '<span class="' . $value->vigencia_color . '">' . $value->acreditacion_Tipo . '</span>';
+                $value->entidad = '<span class="' . $value->vigencia_color . '">' . $value->acreditacion_Entidad . '</span>';
+                $value->numero = '<span class="' . $value->vigencia_color . '">' . $value->acreditacion_Numero . '</span>';
+                $value->area = '<span class="' . $value->vigencia_color . '">' . $value->vigencia_color . '</span>';
+                $value->vigencia = '<span class="' . $value->vigencia_color . '">' . $value->vigencia_texto . '</span>';
                 $value->certificado = '<button type="button" class="btn btn-info waves-effect btn-circle" data-toggle="tooltip" title="Mostrar certificado"><i class="fa fa-file-pdf-o fa-2x"></i></button>';
 
                 // VERIFICAR SI HAY ACREDITACIONES SELECCIONADOS
-                if ($value->checked)
-                {
+                if ($value->checked) {
                     $total_activos += 1;
                 }
             }
@@ -4157,12 +3822,10 @@ class reportehieloController extends Controller
             $dato["total"] = $total_activos;
             $dato["msj"] = 'Datos consultados correctamente';
             return response()->json($dato);
-        }
-        catch(Exception $e)
-        {
+        } catch (Exception $e) {
             $dato['data'] = 0;
             $dato["total"] = 0;
-            $dato["msj"] = 'Error '.$e->getMessage();
+            $dato["msj"] = 'Error ' . $e->getMessage();
             return response()->json($dato);
         }
     }
@@ -4176,8 +3839,7 @@ class reportehieloController extends Controller
      */
     public function reportehielorevisionestabla($proyecto_id)
     {
-        try
-        {
+        try {
             $revisiones = DB::select('SELECT
                                             reporterevisiones.proyecto_id,
                                             reporterevisiones.agente_id,
@@ -4194,7 +3856,7 @@ class reportehieloController extends Controller
                                         FROM
                                             reporterevisiones
                                         WHERE
-                                            reporterevisiones.proyecto_id = '.$proyecto_id.' 
+                                            reporterevisiones.proyecto_id = ' . $proyecto_id . ' 
                                             AND reporterevisiones.agente_id = 10
                                         ORDER BY
                                             reporterevisiones.reporterevisiones_revision DESC');
@@ -4209,108 +3871,87 @@ class reportehieloController extends Controller
             $dato['ultimarevision_id'] = 0;
 
 
-            foreach ($revisiones as $key => $value)
-            {
-                if ($key == 0)
-                {
+            foreach ($revisiones as $key => $value) {
+                if ($key == 0) {
                     $dato['ultimaversion_cancelada'] = $value->reporterevisiones_cancelado;
 
-                    
-                    if ($value->reporterevisiones_concluido == 1 || $value->reporterevisiones_cancelado == 1)
-                    {
+
+                    if ($value->reporterevisiones_concluido == 1 || $value->reporterevisiones_cancelado == 1) {
                         $dato['ultimaversion_estado'] = 1;
                     }
 
 
                     $value->ultima_revision = $value->id;
                     $dato['ultimarevision_id'] = $value->id;
-                }
-                else
-                {
+                } else {
                     $value->ultima_revision = 0;
                 }
 
 
-                if (auth()->user()->hasRoles(['Superusuario', 'Administrador', 'Coordinador']) && ($key+0) == 0)
-                {
+                if (auth()->user()->hasRoles(['Superusuario', 'Administrador', 'Coordinador']) && ($key + 0) == 0) {
                     $value->perfil_concluir = 1;
                     $disabled_concluir = '';
-                }
-                else
-                {
+                } else {
                     $value->perfil_concluir = 0;
                     $disabled_concluir = 'disabled';
                 }
 
 
                 $checked_concluido = '';
-                if (($value->reporterevisiones_concluido + 0) == 1)
-                {
+                if (($value->reporterevisiones_concluido + 0) == 1) {
                     $checked_concluido = 'checked';
                 }
 
 
                 $value->checkbox_concluido = '<div class="switch" data-toggle="tooltip" title="Solo Coordinadores y Administradores">
                                                     <label>
-                                                        <input type="checkbox" class="checkbox_concluido" '.$checked_concluido.' '.$disabled_concluir.' onclick="reporte_concluido('.$value->id.', '.$value->perfil_concluir.', this)">
+                                                        <input type="checkbox" class="checkbox_concluido" ' . $checked_concluido . ' ' . $disabled_concluir . ' onclick="reporte_concluido(' . $value->id . ', ' . $value->perfil_concluir . ', this)">
                                                         <span class="lever switch-col-light-blue"></span>
                                                     </label>
                                                 </div>';
 
 
-                $value->nombre_concluido = $value->reporterevisiones_concluidonombre.'<br>'.$value->reporterevisiones_concluidofecha;
+                $value->nombre_concluido = $value->reporterevisiones_concluidonombre . '<br>' . $value->reporterevisiones_concluidofecha;
 
 
-                if (auth()->user()->hasRoles(['Superusuario', 'Administrador']) && ($key+0) == 0)
-                {
+                if (auth()->user()->hasRoles(['Superusuario', 'Administrador']) && ($key + 0) == 0) {
                     $value->perfil_cancelar = 1;
                     $disabled_cancelar = '';
-                }
-                else
-                {
+                } else {
                     $value->perfil_cancelar = 0;
                     $disabled_cancelar = 'disabled';
                 }
 
 
                 $checked_cancelado = '';
-                if (($value->reporterevisiones_cancelado + 0) == 1)
-                {
+                if (($value->reporterevisiones_cancelado + 0) == 1) {
                     $checked_cancelado = 'checked';
                 }
 
                 $value->checkbox_cancelado = '<div class="switch" data-toggle="tooltip" title="Solo Administradores">
                                                     <label>
-                                                        <input type="checkbox" class="checkbox_cancelado" '.$checked_cancelado.' '.$disabled_cancelar.' onclick="reporte_cancelado('.$value->id.', '.$value->perfil_cancelar.', this)">
+                                                        <input type="checkbox" class="checkbox_cancelado" ' . $checked_cancelado . ' ' . $disabled_cancelar . ' onclick="reporte_cancelado(' . $value->id . ', ' . $value->perfil_cancelar . ', this)">
                                                         <span class="lever switch-col-red"></span>
                                                     </label>
                                                 </div>';
 
 
-                $value->nombre_cancelado = $value->reporterevisiones_canceladonombre.'<br>'.$value->reporterevisiones_canceladofecha;
+                $value->nombre_cancelado = $value->reporterevisiones_canceladonombre . '<br>' . $value->reporterevisiones_canceladofecha;
 
 
-                if (($value->reporterevisiones_concluido + 0) == 0 && ($value->reporterevisiones_cancelado + 0) == 0)
-                {
+                if (($value->reporterevisiones_concluido + 0) == 0 && ($value->reporterevisiones_cancelado + 0) == 0) {
                     $value->estado_texto = '<span class="text-info">Disponible para edición</span>';
-                }
-                else if (($value->reporterevisiones_cancelado + 0) == 1)
-                {
-                    $value->estado_texto = '<span class="text-danger">cancelado</span>: '.$value->reporterevisiones_canceladoobservacion;
-                }
-                else
-                {
+                } else if (($value->reporterevisiones_cancelado + 0) == 1) {
+                    $value->estado_texto = '<span class="text-danger">cancelado</span>: ' . $value->reporterevisiones_canceladoobservacion;
+                } else {
                     $value->estado_texto = '<span class="text-info">Concluido</span>: No disponible para edición';
                 }
 
 
                 // Boton descarga informe WORD
-                if (($value->reporterevisiones_concluido + 0) == 1 || ($value->reporterevisiones_cancelado + 0) == 1)
-                {
-                    $value->boton_descargar = '<button type="button" class="btn btn-success waves-effect btn-circle botondescarga" id="botondescarga_'.$key.'"><i class="fa fa-download fa-2x"></i></button>';
-                }
-                else
-                {
+                if (($value->reporterevisiones_concluido + 0) == 1 || ($value->reporterevisiones_cancelado + 0) == 1) {
+                    $value->boton_descargar = '<button type="button" class="btn btn-success waves-effect btn-circle botondescarga" id="botondescarga_' . $key . '"><i class="fa fa-download fa-2x"></i></button>';
+                } else {
                     $value->boton_descargar = '<button type="button" class="btn btn-default waves-effect btn-circle" data-toggle="tooltip" title="Para descargar esta revisión del informe, primero debe estar concluido ó cancelado."><i class="fa fa-ban fa-2x"></i></button>';
                 }
             }
@@ -4321,15 +3962,13 @@ class reportehieloController extends Controller
             $dato['total'] = count($revisiones);
             $dato["msj"] = 'Datos consultados correctamente';
             return response()->json($dato);
-        }
-        catch(Exception $e)
-        {
+        } catch (Exception $e) {
             $dato['ultimaversion_cancelada'] = 0;
             $dato['ultimaversion_estado'] = 0;
             $dato['ultimarevision_id'] = 0;
             $dato['data'] = 0;
             $dato['total'] = 0;
-            $dato["msj"] = 'Error '.$e->getMessage();
+            $dato["msj"] = 'Error ' . $e->getMessage();
             return response()->json($dato);
         }
     }
@@ -4343,8 +3982,7 @@ class reportehieloController extends Controller
      */
     public function reportehielorevisionconcluir($reporte_id)
     {
-        try
-        {
+        try {
             // $reporte  = reporteaguaModel::findOrFail($reporte_id);
             $revision  = reporterevisionesModel::findOrFail($reporte_id);
 
@@ -4354,35 +3992,29 @@ class reportehieloController extends Controller
             $concluidofecha = NULL;
 
 
-            if ($revision->reporterevisiones_concluido == 0)
-            {
-                $concluido = 1;                
-                $concluidonombre = auth()->user()->empleado->empleado_nombre." ".auth()->user()->empleado->empleado_apellidopaterno." ".auth()->user()->empleado->empleado_apellidomaterno;
+            if ($revision->reporterevisiones_concluido == 0) {
+                $concluido = 1;
+                $concluidonombre = auth()->user()->empleado->empleado_nombre . " " . auth()->user()->empleado->empleado_apellidopaterno . " " . auth()->user()->empleado->empleado_apellidomaterno;
                 $concluidofecha = date('Y-m-d H:i:s');
             }
 
 
             $revision->update([
-                  'reporterevisiones_concluido' => $concluido
-                , 'reporterevisiones_concluidonombre' => $concluidonombre
-                , 'reporterevisiones_concluidofecha' => $concluidofecha
+                'reporterevisiones_concluido' => $concluido, 'reporterevisiones_concluidonombre' => $concluidonombre, 'reporterevisiones_concluidofecha' => $concluidofecha
             ]);
 
 
             $dato["estado"] = 0;
-            if ($concluido == 1 || $revision->reporterevisiones_cancelado == 1)
-            {
+            if ($concluido == 1 || $revision->reporterevisiones_cancelado == 1) {
                 $dato["estado"] = 1;
             }
 
 
             $dato["msj"] = 'Datos modificados correctamente';
             return response()->json($dato);
-        }
-        catch(Exception $e)
-        {
+        } catch (Exception $e) {
             $dato["estado"] = 0;
-            $dato["msj"] = 'Error '.$e->getMessage();
+            $dato["msj"] = 'Error ' . $e->getMessage();
             return response()->json($dato);
         }
     }
@@ -4399,10 +4031,8 @@ class reportehieloController extends Controller
      */
     public function reportehielorevisionparametros($proyecto_id, $reporteregistro_id, $revision_id, $ultimarevision_id)
     {
-        try
-        {
-            if(($revision_id+0) == ($ultimarevision_id+0))
-            {
+        try {
+            if (($revision_id + 0) == ($ultimarevision_id + 0)) {
                 $parametros = DB::select('SELECT
                                                 reportehieloevaluacion.proyecto_id,
                                                 reportehieloevaluacion.registro_id,
@@ -4412,15 +4042,13 @@ class reportehieloController extends Controller
                                                 LEFT JOIN reportehieloevaluacion ON reportehieloevaluacionparametros.reportehieloevaluacion_id = reportehieloevaluacion.id
                                                 LEFT JOIN catparametrohielocaracteristica ON reportehieloevaluacionparametros.catparametrohielocaracteristica_id = catparametrohielocaracteristica.id
                                             WHERE
-                                                reportehieloevaluacion.proyecto_id = '.$proyecto_id.' 
-                                                AND reportehieloevaluacion.registro_id = '.$reporteregistro_id.' 
+                                                reportehieloevaluacion.proyecto_id = ' . $proyecto_id . ' 
+                                                AND reportehieloevaluacion.registro_id = ' . $reporteregistro_id . ' 
                                             GROUP BY
                                                 reportehieloevaluacion.proyecto_id,
                                                 reportehieloevaluacion.registro_id,
                                                 catparametrohielocaracteristica.catparametrohielocaracteristica_tipo');
-            }
-            else
-            {
+            } else {
                 $parametros = DB::select('SELECT
                                                 reporterevisiones.proyecto_id,
                                                 reporterevisiones.agente_id,
@@ -4435,15 +4063,14 @@ class reportehieloController extends Controller
                                                 reporterevisiones
                                                 LEFT JOIN reporterevisionesarchivo ON reporterevisiones.id = reporterevisionesarchivo.reporterevisiones_id
                                             WHERE
-                                                reporterevisiones.id = '.$revision_id.' 
+                                                reporterevisiones.id = ' . $revision_id . ' 
                                             ORDER BY
                                                 reporterevisionesarchivo.reporterevisionesarchivo_tipo ASC');
             }
 
 
             $dato['parametros'] = array();
-            foreach ($parametros as $key => $value)
-            {
+            foreach ($parametros as $key => $value) {
                 $dato['parametros'][] = $value->catparametrohielocaracteristica_tipo;
             }
 
@@ -4451,11 +4078,9 @@ class reportehieloController extends Controller
             // respuesta
             $dato["msj"] = 'Datos consultados correctamente';
             return response()->json($dato);
-        }
-        catch(Exception $e)
-        {
+        } catch (Exception $e) {
             $dato['parametros'] = NULL;
-            $dato["msj"] = 'Error '.$e->getMessage();
+            $dato["msj"] = 'Error ' . $e->getMessage();
             return response()->json($dato);
         }
     }
@@ -4466,7 +4091,7 @@ class reportehieloController extends Controller
      *
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
-    */
+     */
 
     /*
     public function reportehielorevisionnueva(Request $request)
@@ -4783,24 +4408,23 @@ class reportehieloController extends Controller
      */
     public function store(Request $request)
     {
-        try
-        {
+        try {
             // TABLAS
             //============================================================
-            
+
+            $proyectoRecursos = recursosPortadasInformesModel::where('PROYECTO_ID', $request->proyecto_id)->where('AGENTE_ID', $request->agente_id)->get();
 
             $proyecto = proyectoModel::with(['catregion', 'catsubdireccion', 'catgerencia', 'catactivo'])->findOrFail($request->proyecto_id);
             $recsensorial = recsensorialModel::with(['catregion', 'catsubdireccion', 'catgerencia', 'catactivo'])->findOrFail($proyecto->recsensorial_id);
-            
+
             $meses = ["Vacio", "Enero", "Febrero", "Marzo", "Abril", "Mayo", "Junio", "Julio", "Agosto", "Septiembre", "Octubre", "Noviembre", "Diciembre"];
             $reportefecha = explode("-", $proyecto->proyecto_fechaentrega);
 
-            if (($request->reporteregistro_id + 0) > 0)
-            {
+            if (($request->reporteregistro_id + 0) > 0) {
                 $reporte = reportehieloModel::findOrFail($request->reporteregistro_id);
                 $dato["reporteregistro_id"] = $reporte->id;
                 $reporte->update([
-                      'reportehielo_instalacion' => $request->reporte_instalacion
+                    'reportehielo_instalacion' => $request->reporte_instalacion
                 ]);
 
 
@@ -4808,46 +4432,31 @@ class reportehieloController extends Controller
 
 
                 $revision = reporterevisionesModel::where('proyecto_id', $request->proyecto_id)
-                                                    ->where('agente_id', $request->agente_id)
-                                                    ->orderBy('reporterevisiones_revision', 'DESC')
-                                                    ->get();
+                    ->where('agente_id', $request->agente_id)
+                    ->orderBy('reporterevisiones_revision', 'DESC')
+                    ->get();
 
 
-                if(count($revision) > 0)
-                {
+                if (count($revision) > 0) {
                     $revision = reporterevisionesModel::findOrFail($revision[0]->id);
                 }
 
 
-                if (($revision->reporterevisiones_concluido == 1 || $revision->reporterevisiones_cancelado == 1) && ($request->opcion+0) != 21) // Valida disponibilidad de esta version (21 CANCELACION REVISION)
+                if (($revision->reporterevisiones_concluido == 1 || $revision->reporterevisiones_cancelado == 1) && ($request->opcion + 0) != 21) // Valida disponibilidad de esta version (21 CANCELACION REVISION)
                 {
                     // respuesta
-                    $dato["msj"] = 'Informe de '.$request->agente_nombre.' NO disponible para edición';
+                    $dato["msj"] = 'Informe de ' . $request->agente_nombre . ' NO disponible para edición';
                     return response()->json($dato);
                 }
-            }
-            else
-            {
+            } else {
                 DB::statement('ALTER TABLE reportehielo AUTO_INCREMENT = 1;');
 
-                if (!$request->catactivo_id)
-                {
+                if (!$request->catactivo_id) {
                     $request['catactivo_id'] = 0; // es es modo cliente y viene en null se pone en cero
                 }
 
                 $reporte = reportehieloModel::create([
-                      'proyecto_id' => $request->proyecto_id
-                    , 'agente_id' => $request->agente_id
-                    , 'agente_nombre' => $request->agente_nombre
-                    , 'catactivo_id' => $request->catactivo_id
-                    , 'reportehielo_revision' => 0
-                    , 'reportehielo_instalacion' => $request->reporte_instalacion
-                    , 'reportehielo_catregion_activo' => 1
-                    , 'reportehielo_catsubdireccion_activo' => 1
-                    , 'reportehielo_catgerencia_activo' => 1
-                    , 'reportehielo_catactivo_activo' => 1
-                    , 'reportehielo_concluido' => 0
-                    , 'reportehielo_cancelado' => 0
+                    'proyecto_id' => $request->proyecto_id, 'agente_id' => $request->agente_id, 'agente_nombre' => $request->agente_nombre, 'catactivo_id' => $request->catactivo_id, 'reportehielo_revision' => 0, 'reportehielo_instalacion' => $request->reporte_instalacion, 'reportehielo_catregion_activo' => 1, 'reportehielo_catsubdireccion_activo' => 1, 'reportehielo_catgerencia_activo' => 1, 'reportehielo_catactivo_activo' => 1, 'reportehielo_concluido' => 0, 'reportehielo_cancelado' => 0
                 ]);
 
 
@@ -4858,9 +4467,9 @@ class reportehieloController extends Controller
                 DB::statement('UPDATE 
                                     reportehielocategoria
                                 SET 
-                                    registro_id = '.$reporte->id.'
+                                    registro_id = ' . $reporte->id . '
                                 WHERE 
-                                    proyecto_id = '.$request->proyecto_id.'
+                                    proyecto_id = ' . $request->proyecto_id . '
                                     AND IFNULL(registro_id, "") = "";');
 
 
@@ -4868,55 +4477,114 @@ class reportehieloController extends Controller
                 DB::statement('UPDATE 
                                     reportehieloarea
                                 SET 
-                                    registro_id = '.$reporte->id.'
+                                    registro_id = ' . $reporte->id . '
                                 WHERE 
-                                    proyecto_id = '.$request->proyecto_id.'
+                                    proyecto_id = ' . $request->proyecto_id . '
                                     AND IFNULL(registro_id, "") = "";');
             }
 
 
             //============================================================
-            
+
 
             // PORTADA
-            if (($request->opcion+0) == 0)
-            {
+            if (($request->opcion + 0) == 0) {
                 // REGION
                 $catregion_activo = 0;
-                if ($request->reporte_catregion_activo != NULL)
-                {
+                if ($request->reporte_catregion_activo != NULL) {
                     $catregion_activo = 1;
                 }
 
                 // SUBDIRECCION
                 $catsubdireccion_activo = 0;
-                if ($request->reporte_catsubdireccion_activo != NULL)
-                {
+                if ($request->reporte_catsubdireccion_activo != NULL) {
                     $catsubdireccion_activo = 1;
                 }
 
                 // GERENCIA
                 $catgerencia_activo = 0;
-                if ($request->reporte_catgerencia_activo != NULL)
-                {
+                if ($request->reporte_catgerencia_activo != NULL) {
                     $catgerencia_activo = 1;
                 }
 
                 // ACTIVO
                 $catactivo_activo = 0;
-                if ($request->reporte_catactivo_activo != NULL)
-                {
+                if ($request->reporte_catactivo_activo != NULL) {
                     $catactivo_activo = 1;
                 }
 
                 $reporte->update([
-                      'reportehielo_catregion_activo' => $catregion_activo
-                    , 'reportehielo_catsubdireccion_activo' => $catsubdireccion_activo
-                    , 'reportehielo_catgerencia_activo' => $catgerencia_activo
-                    , 'reportehielo_catactivo_activo' => $catactivo_activo
-                    , 'reportehielo_instalacion' => $request->reporte_instalacion
-                    , 'reportehielo_fecha' => $request->reporte_fecha
+                    'reportehielo_catregion_activo' => $catregion_activo, 'reportehielo_catsubdireccion_activo' => $catsubdireccion_activo, 'reportehielo_catgerencia_activo' => $catgerencia_activo, 'reportehielo_catactivo_activo' => $catactivo_activo, 'reportehielo_instalacion' => $request->reporte_instalacion, 'reportehielo_fecha' => $request->reporte_fecha, 'reporte_mes' => $request->reporte_mes
+
                 ]);
+
+
+                if (count($proyectoRecursos) == 0) {
+
+                    $recusros = recursosPortadasInformesModel::create([
+                        'PROYECTO_ID' => $request->proyecto_id,
+                        'AGENTE_ID' => $request->agente_id,
+                        'NORMA_ID' => 0,
+                        'NIVEL1' => is_null($request->NIVEL1) ? null : $request->NIVEL1,
+                        'NIVEL2' => is_null($request->NIVEL2) ? null : $request->NIVEL2,
+                        'NIVEL3' => is_null($request->NIVEL3) ? null : $request->NIVEL3,
+                        'NIVEL4' => is_null($request->NIVEL4) ? null : $request->NIVEL4,
+                        'NIVEL5' => is_null($request->NIVEL5) ? null : $request->NIVEL5,
+                        'OPCION_PORTADA1' => is_null($request->OPCION_PORTADA1) ? null : $request->OPCION_PORTADA1,
+                        'OPCION_PORTADA2' => is_null($request->OPCION_PORTADA2) ? null : $request->OPCION_PORTADA2,
+                        'OPCION_PORTADA3' => is_null($request->OPCION_PORTADA3) ? null : $request->OPCION_PORTADA3,
+                        'OPCION_PORTADA4' => is_null($request->OPCION_PORTADA4) ? null : $request->OPCION_PORTADA4,
+                        'OPCION_PORTADA5' => is_null($request->OPCION_PORTADA5) ? null : $request->OPCION_PORTADA5,
+                        'OPCION_PORTADA6' => is_null($request->OPCION_PORTADA6) ? null : $request->OPCION_PORTADA6
+                    ]);
+
+                    if ($request->file('PORTADA')) {
+                        // Eliminar IMG anterior
+                        if (Storage::exists($recusros->RUTA_IMAGEN_PORTADA)) {
+                            Storage::delete($recusros->RUTA_IMAGEN_PORTADA);
+                        }
+
+                        $extension = $request->file('PORTADA')->getClientOriginalExtension();
+                        $imgGuardada = $request->file('PORTADA')->storeAs('reportes/proyecto/' . $request->proyecto_id . '/' . $request->agente_nombre . '/' . $request->reporteregistro_id . '/imagenPortada', 'PORTADA_IAMGEN.' . $extension);
+
+                        $recusros->update(['RUTA_IMAGEN_PORTADA' => $imgGuardada]);
+                    }
+                } else {
+
+                    foreach ($proyectoRecursos as $recurso) {
+                        $recurso->update([
+                            'NORMA_ID' => 0,
+                            'NIVEL1' => is_null($request->NIVEL1) ? null : $request->NIVEL1,
+                            'NIVEL2' => is_null($request->NIVEL2) ? null : $request->NIVEL2,
+                            'NIVEL3' => is_null($request->NIVEL3) ? null : $request->NIVEL3,
+                            'NIVEL4' => is_null($request->NIVEL4) ? null : $request->NIVEL4,
+                            'NIVEL5' => is_null($request->NIVEL5) ? null : $request->NIVEL5,
+                            'OPCION_PORTADA1' => is_null($request->OPCION_PORTADA1) ? null : $request->OPCION_PORTADA1,
+                            'OPCION_PORTADA2' => is_null($request->OPCION_PORTADA2) ? null : $request->OPCION_PORTADA2,
+                            'OPCION_PORTADA3' => is_null($request->OPCION_PORTADA3) ? null : $request->OPCION_PORTADA3,
+                            'OPCION_PORTADA4' => is_null($request->OPCION_PORTADA4) ? null : $request->OPCION_PORTADA4,
+                            'OPCION_PORTADA5' => is_null($request->OPCION_PORTADA5) ? null : $request->OPCION_PORTADA5,
+                            'OPCION_PORTADA6' => is_null($request->OPCION_PORTADA6) ? null : $request->OPCION_PORTADA6
+                        ]);
+                    }
+
+                    foreach ($proyectoRecursos as $recurso) {
+                        if ($request->file('PORTADA')) {
+                            // Eliminar IMG anterior
+                            if (Storage::exists($recurso->RUTA_IMAGEN_PORTADA)) {
+                                Storage::delete($recurso->RUTA_IMAGEN_PORTADA);
+                            }
+
+                            $extension = $request->file('PORTADA')->getClientOriginalExtension();
+                            $imgGuardada = $request->file('PORTADA')->storeAs(
+                                'reportes/proyecto/' . $request->proyecto_id . '/' . $request->agente_nombre . '/' . $request->reporteregistro_id . '/imagenPortada',
+                                'PORTADA_IMAGEN.' . $extension
+                            );
+
+                            $recurso->update(['RUTA_IMAGEN_PORTADA' => $imgGuardada]);
+                        }
+                    }
+                }
 
                 // Mensaje
                 $dato["msj"] = 'Datos guardados correctamente';
@@ -4924,11 +4592,9 @@ class reportehieloController extends Controller
 
 
             // INTRODUCCION
-            if (($request->opcion+0) == 1)
-            {
+            if (($request->opcion + 0) == 1) {
                 $reporte->update([
-                    'reportehielo_introduccion' => $this->datosproyectolimpiartexto($proyecto, $recsensorial, $request->reporte_introduccion)
-                    , 'reportehielo_introduccion2' => $this->datosproyectolimpiartexto($proyecto, $recsensorial, $request->reporte_introduccion2)
+                    'reportehielo_introduccion' => $this->datosproyectolimpiartexto($proyecto, $recsensorial, $request->reporte_introduccion), 'reportehielo_introduccion2' => $this->datosproyectolimpiartexto($proyecto, $recsensorial, $request->reporte_introduccion2)
                 ]);
 
                 // Mensaje
@@ -4937,38 +4603,27 @@ class reportehieloController extends Controller
 
 
             // DEFINICIONES
-            if (($request->opcion+0) == 2)
-            {
-                if (!$request->catactivo_id)
-                {
+            if (($request->opcion + 0) == 2) {
+                if (!$request->catactivo_id) {
                     $request['catactivo_id'] = 0; // es es modo cliente y viene en null se pone en cero
                 }
-                
-                if (($request->reportedefiniciones_id+0) == 0) //NUEVO
+
+                if (($request->reportedefiniciones_id + 0) == 0) //NUEVO
                 {
                     DB::statement('ALTER TABLE reportedefiniciones AUTO_INCREMENT = 1;');
 
                     $definicion = reportedefinicionesModel::create([
-                          'agente_id' => $request->agente_id
-                        , 'agente_nombre' => $request->agente_nombre
-                        , 'catactivo_id' => $request->catactivo_id
-                        , 'reportedefiniciones_concepto' => $request->reportedefiniciones_concepto
-                        , 'reportedefiniciones_descripcion' => $request->reportedefiniciones_descripcion
-                        , 'reportedefiniciones_fuente' => $request->reportedefiniciones_fuente
+                        'agente_id' => $request->agente_id, 'agente_nombre' => $request->agente_nombre, 'catactivo_id' => $request->catactivo_id, 'reportedefiniciones_concepto' => $request->reportedefiniciones_concepto, 'reportedefiniciones_descripcion' => $request->reportedefiniciones_descripcion, 'reportedefiniciones_fuente' => $request->reportedefiniciones_fuente
                     ]);
 
                     // Mensaje
                     $dato["msj"] = 'Datos guardados correctamente';
-                }
-                else //EDITAR
+                } else //EDITAR
                 {
                     $definicion = reportedefinicionesModel::findOrFail($request->reportedefiniciones_id);
 
                     $definicion->update([
-                          'catactivo_id' => $request->catactivo_id
-                        , 'reportedefiniciones_concepto' => $request->reportedefiniciones_concepto
-                        , 'reportedefiniciones_descripcion' => $request->reportedefiniciones_descripcion
-                        , 'reportedefiniciones_fuente' => $request->reportedefiniciones_fuente
+                        'catactivo_id' => $request->catactivo_id, 'reportedefiniciones_concepto' => $request->reportedefiniciones_concepto, 'reportedefiniciones_descripcion' => $request->reportedefiniciones_descripcion, 'reportedefiniciones_fuente' => $request->reportedefiniciones_fuente
                     ]);
 
                     // Mensaje
@@ -4978,8 +4633,7 @@ class reportehieloController extends Controller
 
 
             // OBJETIVO GENERAL
-            if (($request->opcion+0) == 3)
-            {
+            if (($request->opcion + 0) == 3) {
                 $reporte->update([
                     'reportehielo_objetivogeneral' => $this->datosproyectolimpiartexto($proyecto, $recsensorial, $request->reporte_objetivogeneral)
                 ]);
@@ -4990,11 +4644,9 @@ class reportehieloController extends Controller
 
 
             // OBJETIVOS  ESPECIFICOS
-            if (($request->opcion+0) == 4)
-            {
+            if (($request->opcion + 0) == 4) {
                 $reporte->update([
-                    'reportehielo_objetivoespecifico' => $this->datosproyectolimpiartexto($proyecto, $recsensorial, $request->reporte_objetivoespecifico)
-                    , 'reportehielo_objetivoespecifico2' => $this->datosproyectolimpiartexto($proyecto, $recsensorial, $request->reporte_objetivoespecifico2)
+                    'reportehielo_objetivoespecifico' => $this->datosproyectolimpiartexto($proyecto, $recsensorial, $request->reporte_objetivoespecifico), 'reportehielo_objetivoespecifico2' => $this->datosproyectolimpiartexto($proyecto, $recsensorial, $request->reporte_objetivoespecifico2)
                 ]);
 
                 // Mensaje
@@ -5003,11 +4655,9 @@ class reportehieloController extends Controller
 
 
             // METODOLOGIA PUNTO 4.1
-            if (($request->opcion+0) == 5)
-            {
+            if (($request->opcion + 0) == 5) {
                 $reporte->update([
-                    'reportehielo_metodologia_4_1' => $this->datosproyectolimpiartexto($proyecto, $recsensorial, $request->reporte_metodologia_4_1)
-                    , 'reportehielo_metodologia_4_12' => $this->datosproyectolimpiartexto($proyecto, $recsensorial, $request->reporte_metodologia_4_12)
+                    'reportehielo_metodologia_4_1' => $this->datosproyectolimpiartexto($proyecto, $recsensorial, $request->reporte_metodologia_4_1), 'reportehielo_metodologia_4_12' => $this->datosproyectolimpiartexto($proyecto, $recsensorial, $request->reporte_metodologia_4_12)
                 ]);
 
                 // Mensaje
@@ -5016,11 +4666,9 @@ class reportehieloController extends Controller
 
 
             // METODOLOGIA PUNTO 4.2
-            if (($request->opcion+0) == 6)
-            {
+            if (($request->opcion + 0) == 6) {
                 $reporte->update([
-                    'reportehielo_metodologia_4_2' => $this->datosproyectolimpiartexto($proyecto, $recsensorial, $request->reporte_metodologia_4_2)
-                    , 'reportehielo_metodologia_4_22' => $this->datosproyectolimpiartexto($proyecto, $recsensorial, $request->reporte_metodologia_4_22)
+                    'reportehielo_metodologia_4_2' => $this->datosproyectolimpiartexto($proyecto, $recsensorial, $request->reporte_metodologia_4_2), 'reportehielo_metodologia_4_22' => $this->datosproyectolimpiartexto($proyecto, $recsensorial, $request->reporte_metodologia_4_22)
                 ]);
 
                 // Mensaje
@@ -5029,11 +4677,9 @@ class reportehieloController extends Controller
 
 
             // METODOLOGIA PUNTO 4.3
-            if (($request->opcion+0) == 7)
-            {
+            if (($request->opcion + 0) == 7) {
                 $reporte->update([
-                    'reportehielo_metodologia_4_3' => $this->datosproyectolimpiartexto($proyecto, $recsensorial, $request->reporte_metodologia_4_3)
-                    , 'reportehielo_metodologia_4_32' => $this->datosproyectolimpiartexto($proyecto, $recsensorial, $request->reporte_metodologia_4_32)
+                    'reportehielo_metodologia_4_3' => $this->datosproyectolimpiartexto($proyecto, $recsensorial, $request->reporte_metodologia_4_3), 'reportehielo_metodologia_4_32' => $this->datosproyectolimpiartexto($proyecto, $recsensorial, $request->reporte_metodologia_4_32)
                 ]);
 
                 // Mensaje
@@ -5042,22 +4688,20 @@ class reportehieloController extends Controller
 
 
             // UBICACION
-            if (($request->opcion+0) == 8)
-            {
+            if (($request->opcion + 0) == 8) {
                 $reporte->update([
                     'reportehielo_ubicacioninstalacion' => $this->datosproyectolimpiartexto($proyecto, $recsensorial, $request->reporte_ubicacioninstalacion)
                 ]);
 
                 // si envia archivo
-                if ($request->file('reporteubicacionfoto'))
-                {
+                if ($request->file('reporteubicacionfoto')) {
                     // Codificar imagen recibida como tipo base64
                     $imagen_recibida = explode(',', $request->ubicacionmapa); //Archivo foto tipo base64
                     $imagen_nueva = base64_decode($imagen_recibida[1]);
 
                     // Ruta destino archivo
-                    $destinoPath = 'reportes/proyecto/'.$request->proyecto_id.'/'.$request->agente_nombre.'/'.$reporte->id.'/ubicacionfoto/ubicacionfoto.jpg';
-                    
+                    $destinoPath = 'reportes/proyecto/' . $request->proyecto_id . '/' . $request->agente_nombre . '/' . $reporte->id . '/ubicacionfoto/ubicacionfoto.jpg';
+
                     // Guardar Foto
                     Storage::put($destinoPath, $imagen_nueva); // Guardar en storage
                     // file_put_contents(public_path('/imagen.jpg'), $imagen_nueva); // Guardar en public
@@ -5073,8 +4717,7 @@ class reportehieloController extends Controller
 
 
             // PROCESO INSTALACION
-            if (($request->opcion+0) == 9)
-            {
+            if (($request->opcion + 0) == 9) {
                 $reporte->update([
                     'reportehielo_procesoinstalacion' => $this->datosproyectolimpiartexto($proyecto, $recsensorial, $request->reporte_procesoinstalacion)
                 ]);
@@ -5085,8 +4728,7 @@ class reportehieloController extends Controller
 
 
             // PROCESO ELABORACION
-            if (($request->opcion+0) == 10)
-            {
+            if (($request->opcion + 0) == 10) {
                 $reporte->update([
                     'reportehielo_procesoelaboracion' => $this->datosproyectolimpiartexto($proyecto, $recsensorial, $request->reporte_procesoelaboracion)
                 ]);
@@ -5097,10 +4739,8 @@ class reportehieloController extends Controller
 
 
             // CATEGORIAS
-            if (($request->opcion+0) == 11)
-            {
-                if (($request->reportecategoria_id+0) == 0)
-                {
+            if (($request->opcion + 0) == 11) {
+                if (($request->reportecategoria_id + 0) == 0) {
                     DB::statement('ALTER TABLE reportehielocategoria AUTO_INCREMENT = 1;');
 
                     $request['recsensorialcategoria_id'] = 0;
@@ -5109,9 +4749,7 @@ class reportehieloController extends Controller
 
                     // Mensaje
                     $dato["msj"] = 'Datos guardados correctamente';
-                }
-                else
-                {
+                } else {
                     $request['registro_id'] = $reporte->id;
                     $categoria = reportehielocategoriaModel::findOrFail($request->reportecategoria_id);
                     $categoria->update($request->all());
@@ -5123,21 +4761,16 @@ class reportehieloController extends Controller
 
 
             // AREAS
-            if (($request->opcion+0) == 12)
-            {
-                if (($request->areas_poe+0) == 1)
-                {
+            if (($request->opcion + 0) == 12) {
+                if (($request->areas_poe + 0) == 1) {
                     $area = reporteareaModel::findOrFail($request->reportearea_id);
                     $area->update($request->all());
 
 
                     // Mensaje
                     $dato["msj"] = 'Datos modificados correctamente';
-                }
-                else
-                {
-                    if (($request->reportearea_id+0) == 0)
-                    {
+                } else {
+                    if (($request->reportearea_id + 0) == 0) {
                         DB::statement('ALTER TABLE reportehieloarea AUTO_INCREMENT = 1;');
 
                         $request['registro_id'] = $reporte->id;
@@ -5146,9 +4779,7 @@ class reportehieloController extends Controller
 
                         // Mensaje
                         $dato["msj"] = 'Datos guardados correctamente';
-                    }
-                    else
-                    {
+                    } else {
                         $request['registro_id'] = $reporte->id;
                         $area = reportehieloareaModel::findOrFail($request->reportearea_id);
                         $area->update($request->all());
@@ -5161,22 +4792,18 @@ class reportehieloController extends Controller
 
 
             // PUNTO DE EVALUACION
-            if (($request->opcion+0) == 13)
-            {
-                if (($request->puntomedicion_id+0) == 0)
-                {
+            if (($request->opcion + 0) == 13) {
+                if (($request->puntomedicion_id + 0) == 0) {
                     DB::statement('ALTER TABLE reportehieloevaluacion AUTO_INCREMENT = 1;');
 
 
-                    $request['registro_id'] = $reporte->id;                    
+                    $request['registro_id'] = $reporte->id;
                     $punto = reportehieloevaluacionModel::create($request->all());
 
 
                     // Mensaje
                     $dato["msj"] = 'Datos guardados correctamente';
-                }
-                else
-                {
+                } else {
                     $request['registro_id'] = $reporte->id;
                     $punto = reportehieloevaluacionModel::findOrFail($request->puntomedicion_id);
                     $punto->update($request->all());
@@ -5185,36 +4812,25 @@ class reportehieloController extends Controller
                     $eliminar_parametros = reportehieloevaluacionparametrosModel::where('reportehieloevaluacion_id', $request->puntomedicion_id)->delete();
                     $eliminar_categorias = reportehieloevaluacioncategoriasModel::where('reportehieloevaluacion_id', $request->puntomedicion_id)->delete();
 
-                    
+
                     // Mensaje
                     $dato["msj"] = 'Datos modificados correctamente';
                 }
 
 
-                if ($request->catparametrohielocaracteristica_id)
-                {
-                    foreach ($request->catparametrohielocaracteristica_id as $key => $value) 
-                    {
+                if ($request->catparametrohielocaracteristica_id) {
+                    foreach ($request->catparametrohielocaracteristica_id as $key => $value) {
                         $parametro = reportehieloevaluacionparametrosModel::create([
-                              'reportehieloevaluacion_id' => $punto->id
-                            , 'catparametrohielocaracteristica_id' => $value
-                            , 'reportehieloevaluacionparametros_metodo' => str_replace('<', '˂', str_replace('>', '˃', str_replace('&', 'Ց', $request['reportehieloevaluacionparametros_metodo'][$key])))
-                            , 'reportehieloevaluacionparametros_obtenida' => str_replace('<', '˂', str_replace('>', '˃', str_replace('&', 'Ց', $request['reportehieloevaluacionparametros_obtenida'][$key])))
-                            , 'reportehieloevaluacionparametros_resultado' => $request['reportehieloevaluacionparametros_resultado'][$key]
+                            'reportehieloevaluacion_id' => $punto->id, 'catparametrohielocaracteristica_id' => $value, 'reportehieloevaluacionparametros_metodo' => str_replace('<', '˂', str_replace('>', '˃', str_replace('&', 'Ց', $request['reportehieloevaluacionparametros_metodo'][$key]))), 'reportehieloevaluacionparametros_obtenida' => str_replace('<', '˂', str_replace('>', '˃', str_replace('&', 'Ց', $request['reportehieloevaluacionparametros_obtenida'][$key]))), 'reportehieloevaluacionparametros_resultado' => $request['reportehieloevaluacionparametros_resultado'][$key]
                         ]);
                     }
                 }
 
 
-                if ($request->reportehielocategoria_id)
-                {
-                    foreach ($request->reportehielocategoria_id as $key => $value) 
-                    {
+                if ($request->reportehielocategoria_id) {
+                    foreach ($request->reportehielocategoria_id as $key => $value) {
                         $categoria = reportehieloevaluacioncategoriasModel::create([
-                              'reportehieloevaluacion_id' => $punto->id
-                            , 'reportehielocategoria_id' => $value
-                            , 'reportehieloevaluacioncategorias_nombre' => $request['reportehieloevaluacioncategorias_nombre_'.$value]
-                            , 'reportehieloevaluacioncategorias_ficha' => $request['reportehieloevaluacioncategorias_ficha_'.$value]
+                            'reportehieloevaluacion_id' => $punto->id, 'reportehielocategoria_id' => $value, 'reportehieloevaluacioncategorias_nombre' => $request['reportehieloevaluacioncategorias_nombre_' . $value], 'reportehieloevaluacioncategorias_ficha' => $request['reportehieloevaluacioncategorias_ficha_' . $value]
                         ]);
                     }
                 }
@@ -5222,11 +4838,9 @@ class reportehieloController extends Controller
 
 
             // CONCLUSION
-            if (($request->opcion+0) == 14)
-            {
+            if (($request->opcion + 0) == 14) {
                 $reporte->update([
-                      'reportehielo_conclusion' => $this->datosproyectolimpiartexto($proyecto, $recsensorial, $request->reporte_conclusion)
-                    , 'reportehielo_conclusion2' => $this->datosproyectolimpiartexto($proyecto, $recsensorial, $request->reporte_conclusion2)
+                    'reportehielo_conclusion' => $this->datosproyectolimpiartexto($proyecto, $recsensorial, $request->reporte_conclusion), 'reportehielo_conclusion2' => $this->datosproyectolimpiartexto($proyecto, $recsensorial, $request->reporte_conclusion2)
                 ]);
 
                 // Mensaje
@@ -5235,29 +4849,19 @@ class reportehieloController extends Controller
 
 
             // RECOMENDACIONES
-            if (($request->opcion+0) == 15)
-            {
-                if ($request->recomendacion_checkbox)
-                {
+            if (($request->opcion + 0) == 15) {
+                if ($request->recomendacion_checkbox) {
                     $eliminar_recomendaciones = reporterecomendacionesModel::where('proyecto_id', $request->proyecto_id)
-                                                                            ->where('catactivo_id', $request->catactivo_id)
-                                                                            ->where('agente_nombre', $request->agente_nombre)
-                                                                            ->where('registro_id', $reporte->id)
-                                                                            ->delete();
+                        ->where('catactivo_id', $request->catactivo_id)
+                        ->where('agente_nombre', $request->agente_nombre)
+                        ->where('registro_id', $reporte->id)
+                        ->delete();
 
                     DB::statement('ALTER TABLE reporterecomendaciones AUTO_INCREMENT = 1;');
 
-                    foreach ($request->recomendacion_checkbox as $key => $value)
-                    {
+                    foreach ($request->recomendacion_checkbox as $key => $value) {
                         $recomendacion = reporterecomendacionesModel::create([
-                              'agente_id' => $request->agente_id
-                            , 'agente_nombre' => $request->agente_nombre
-                            , 'proyecto_id' => $request->proyecto_id
-                            , 'registro_id' => $reporte->id
-                            , 'catactivo_id' => $request->catactivo_id
-                            , 'reporterecomendacionescatalogo_id' => $value
-                            , 'reporterecomendaciones_tipo' => $request['recomendacion_tipo_'.$value]
-                            , 'reporterecomendaciones_descripcion' => $this->datosproyectolimpiartexto($proyecto, $recsensorial, $request['recomendacion_descripcion_'.$value])
+                            'agente_id' => $request->agente_id, 'agente_nombre' => $request->agente_nombre, 'proyecto_id' => $request->proyecto_id, 'registro_id' => $reporte->id, 'catactivo_id' => $request->catactivo_id, 'reporterecomendacionescatalogo_id' => $value, 'reporterecomendaciones_tipo' => $request['recomendacion_tipo_' . $value], 'reporterecomendaciones_descripcion' => $this->datosproyectolimpiartexto($proyecto, $recsensorial, $request['recomendacion_descripcion_' . $value])
                         ]);
                     }
 
@@ -5266,31 +4870,20 @@ class reportehieloController extends Controller
                 }
 
 
-                if ($request->recomendacionadicional_checkbox)
-                {
-                    if (!$request->recomendacion_checkbox)
-                    {
+                if ($request->recomendacionadicional_checkbox) {
+                    if (!$request->recomendacion_checkbox) {
                         $eliminar_recomendaciones = reporterecomendacionesModel::where('proyecto_id', $request->proyecto_id)
-                                                                                ->where('catactivo_id', $request->catactivo_id)
-                                                                                ->where('agente_nombre', $request->agente_nombre)
-                                                                                ->where('registro_id', $reporte->id)
-                                                                                ->delete();
+                            ->where('catactivo_id', $request->catactivo_id)
+                            ->where('agente_nombre', $request->agente_nombre)
+                            ->where('registro_id', $reporte->id)
+                            ->delete();
                     }
 
                     DB::statement('ALTER TABLE reporterecomendaciones AUTO_INCREMENT = 1;');
 
-                    foreach ($request->recomendacionadicional_checkbox as $key => $value)
-                    {
+                    foreach ($request->recomendacionadicional_checkbox as $key => $value) {
                         $recomendacion = reporterecomendacionesModel::create([
-                              'agente_id' => $request->agente_id
-                            , 'agente_nombre' => $request->agente_nombre
-                            , 'proyecto_id' => $request->proyecto_id
-                            , 'registro_id' => $reporte->id
-                            , 'catactivo_id' => $request->catactivo_id
-                            , 'reporterecomendacionescatalogo_id' => 0
-                            , 'reporterecomendaciones_tipo' => $request->recomendacionadicional_tipo[$key]
-                            , 'reporterecomendaciones_descripcion' => $this->datosproyectolimpiartexto($proyecto, $recsensorial, $request->recomendacionadicional_descripcion[$key])
-                            , 'catalogo_id' => $request->recomendacionadicional_tipoinforme[$key]
+                            'agente_id' => $request->agente_id, 'agente_nombre' => $request->agente_nombre, 'proyecto_id' => $request->proyecto_id, 'registro_id' => $reporte->id, 'catactivo_id' => $request->catactivo_id, 'reporterecomendacionescatalogo_id' => 0, 'reporterecomendaciones_tipo' => $request->recomendacionadicional_tipo[$key], 'reporterecomendaciones_descripcion' => $this->datosproyectolimpiartexto($proyecto, $recsensorial, $request->recomendacionadicional_descripcion[$key]), 'catalogo_id' => $request->recomendacionadicional_tipoinforme[$key]
                         ]);
                     }
 
@@ -5301,10 +4894,8 @@ class reportehieloController extends Controller
 
 
             // MATERIAL UTILIZADO
-            if (($request->opcion+0) == 16)
-            {
-                if (($request->materialutilizado_id+0) == 0)
-                {
+            if (($request->opcion + 0) == 16) {
+                if (($request->materialutilizado_id + 0) == 0) {
                     DB::statement('ALTER TABLE reportehielomaterial AUTO_INCREMENT = 1;');
 
                     $request['registro_id'] = $reporte->id;
@@ -5312,9 +4903,7 @@ class reportehieloController extends Controller
 
                     // Mensaje
                     $dato["msj"] = 'Datos guardados correctamente';
-                }
-                else
-                {
+                } else {
                     $request['registro_id'] = $reporte->id;
                     $material = reportehielomaterialModel::findOrFail($request->materialutilizado_id);
                     $material->update($request->all());
@@ -5326,39 +4915,32 @@ class reportehieloController extends Controller
 
 
             // RESPONSABLES DEL INFORME
-            if (($request->opcion+0) == 17)
-            {
+            if (($request->opcion + 0) == 17) {
                 $reporte->update([
-                      'reportehielo_responsable1' => $request->reporte_responsable1
-                    , 'reportehielo_responsable1cargo' => $request->reporte_responsable1cargo
-                    , 'reportehielo_responsable2' => $request->reporte_responsable2
-                    , 'reportehielo_responsable2cargo' => $request->reporte_responsable2cargo
+                    'reportehielo_responsable1' => $request->reporte_responsable1, 'reportehielo_responsable1cargo' => $request->reporte_responsable1cargo, 'reportehielo_responsable2' => $request->reporte_responsable2, 'reportehielo_responsable2cargo' => $request->reporte_responsable2cargo
                 ]);
 
 
-                if ($request->responsablesinforme_carpetadocumentoshistorial)
-                {
-                    $nuevo_destino = 'reportes/proyecto/'.$request->proyecto_id.'/'.$request->agente_nombre.'/'.$reporte->id.'/responsables informe/';
+                if ($request->responsablesinforme_carpetadocumentoshistorial) {
+                    $nuevo_destino = 'reportes/proyecto/' . $request->proyecto_id . '/' . $request->agente_nombre . '/' . $reporte->id . '/responsables informe/';
                     Storage::makeDirectory($nuevo_destino); //crear directorio
 
-                    File::copyDirectory(storage_path('app/'.$request->responsablesinforme_carpetadocumentoshistorial), storage_path('app/'.$nuevo_destino));
+                    File::copyDirectory(storage_path('app/' . $request->responsablesinforme_carpetadocumentoshistorial), storage_path('app/' . $nuevo_destino));
 
                     $reporte->update([
-                          'reportehielo_responsable1documento' => $nuevo_destino.'responsable1_doc.jpg'
-                        , 'reportehielo_responsable2documento' => $nuevo_destino.'responsable2_doc.jpg'
+                        'reportehielo_responsable1documento' => $nuevo_destino . 'responsable1_doc.jpg', 'reportehielo_responsable2documento' => $nuevo_destino . 'responsable2_doc.jpg'
                     ]);
                 }
 
 
-                if ($request->file('reporteresponsable1documento'))
-                {
+                if ($request->file('reporteresponsable1documento')) {
                     // Codificar imagen recibida como tipo base64
                     $imagen_recibida = explode(',', $request->reporte_responsable1_documentobase64); //Archivo foto tipo base64
                     $imagen_nueva = base64_decode($imagen_recibida[1]);
 
                     // Ruta destino archivo
-                    $destinoPath = 'reportes/proyecto/'.$request->proyecto_id.'/'.$request->agente_nombre.'/'.$reporte->id.'/responsables informe/responsable1_doc.jpg';
-                    
+                    $destinoPath = 'reportes/proyecto/' . $request->proyecto_id . '/' . $request->agente_nombre . '/' . $reporte->id . '/responsables informe/responsable1_doc.jpg';
+
                     // Guardar Foto
                     Storage::put($destinoPath, $imagen_nueva); // Guardar en storage
                     // file_put_contents(public_path('/imagen.jpg'), $imagen_nueva); // Guardar en public
@@ -5369,15 +4951,14 @@ class reportehieloController extends Controller
                 }
 
 
-                if ($request->file('reporteresponsable2documento'))
-                {
+                if ($request->file('reporteresponsable2documento')) {
                     // Codificar imagen recibida como tipo base64
                     $imagen_recibida = explode(',', $request->reporte_responsable2_documentobase64); //Archivo foto tipo base64
                     $imagen_nueva = base64_decode($imagen_recibida[1]);
 
                     // Ruta destino archivo
-                    $destinoPath = 'reportes/proyecto/'.$request->proyecto_id.'/'.$request->agente_nombre.'/'.$reporte->id.'/responsables informe/responsable2_doc.jpg';
-                    
+                    $destinoPath = 'reportes/proyecto/' . $request->proyecto_id . '/' . $request->agente_nombre . '/' . $reporte->id . '/responsables informe/responsable2_doc.jpg';
+
                     // Guardar Foto
                     Storage::put($destinoPath, $imagen_nueva); // Guardar en storage
                     // file_put_contents(public_path('/imagen.jpg'), $imagen_nueva); // Guardar en public
@@ -5393,33 +4974,24 @@ class reportehieloController extends Controller
 
 
             // PLANOS
-            if (($request->opcion+0) == 18)
-            {
+            if (($request->opcion + 0) == 18) {
                 $eliminar_carpetasplanos = reporteplanoscarpetasModel::where('proyecto_id', $request->proyecto_id)
-                                                                        ->where('agente_nombre', $request->agente_nombre)
-                                                                        ->where('registro_id', $reporte->id)
-                                                                        ->delete();
+                    ->where('agente_nombre', $request->agente_nombre)
+                    ->where('registro_id', $reporte->id)
+                    ->delete();
 
-                if ($request->planoscarpeta_checkbox)
-                {
+                if ($request->planoscarpeta_checkbox) {
                     DB::statement('ALTER TABLE reporteplanoscarpetas AUTO_INCREMENT = 1;');
 
                     $dato["total"] = 0;
-                    foreach ($request->planoscarpeta_checkbox as $key => $value)
-                    {
+                    foreach ($request->planoscarpeta_checkbox as $key => $value) {
                         $anexo = reporteplanoscarpetasModel::create([
-                              'proyecto_id' => $request->proyecto_id
-                            , 'agente_id' => $request->agente_id
-                            , 'agente_nombre' => $request->agente_nombre
-                            , 'registro_id' => $reporte->id
-                            , 'reporteplanoscarpetas_nombre' => str_replace(['\\', '/', ':', '*', '"', '?', '<', '>', '|'], '-', $value)
+                            'proyecto_id' => $request->proyecto_id, 'agente_id' => $request->agente_id, 'agente_nombre' => $request->agente_nombre, 'registro_id' => $reporte->id, 'reporteplanoscarpetas_nombre' => str_replace(['\\', '/', ':', '*', '"', '?', '<', '>', '|'], '-', $value)
                         ]);
 
                         $dato["total"] += 1;
                     }
-                }
-                else
-                {
+                } else {
                     $dato["total"] = 0;
                 }
 
@@ -5429,36 +5001,26 @@ class reportehieloController extends Controller
 
 
             // INFORMES RESULTADOS
-            if (($request->opcion+0) == 19)
-            {
+            if (($request->opcion + 0) == 19) {
                 $eliminar_anexos = reporteanexosModel::where('proyecto_id', $request->proyecto_id)
-                                                    ->where('agente_nombre', $request->agente_nombre)
-                                                    ->where('registro_id', $reporte->id)
-                                                    ->where('reporteanexos_tipo', 1) // INFORMES DE RESULTADOS
-                                                    ->delete();
+                    ->where('agente_nombre', $request->agente_nombre)
+                    ->where('registro_id', $reporte->id)
+                    ->where('reporteanexos_tipo', 1) // INFORMES DE RESULTADOS
+                    ->delete();
 
-                if ($request->anexoresultado_checkbox)
-                {
+                if ($request->anexoresultado_checkbox) {
                     DB::statement('ALTER TABLE reporteanexos AUTO_INCREMENT = 1;');
 
                     $dato["total"] = 0;
-                    foreach ($request->anexoresultado_checkbox as $key => $value)
-                    {
+                    foreach ($request->anexoresultado_checkbox as $key => $value) {
                         $anexo = reporteanexosModel::create([
-                              'proyecto_id' => $request->proyecto_id
-                            , 'agente_id' => $request->agente_id
-                            , 'agente_nombre' => $request->agente_nombre
-                            , 'registro_id' => $reporte->id
-                            , 'reporteanexos_tipo' => 1  // INFORMES DE RESULTADOS
-                            , 'reporteanexos_anexonombre' => str_replace(['\\', '/', ':', '*', '"', '?', '<', '>', '|'], '-', $request['anexoresultado_nombre_'.$value])
-                            , 'reporteanexos_rutaanexo' => $request['anexoresultado_archivo_'.$value]
+                            'proyecto_id' => $request->proyecto_id, 'agente_id' => $request->agente_id, 'agente_nombre' => $request->agente_nombre, 'registro_id' => $reporte->id, 'reporteanexos_tipo' => 1  // INFORMES DE RESULTADOS
+                            , 'reporteanexos_anexonombre' => str_replace(['\\', '/', ':', '*', '"', '?', '<', '>', '|'], '-', $request['anexoresultado_nombre_' . $value]), 'reporteanexos_rutaanexo' => $request['anexoresultado_archivo_' . $value]
                         ]);
 
                         $dato["total"] += 1;
                     }
-                }
-                else
-                {
+                } else {
                     $dato["total"] = 0;
                 }
 
@@ -5468,36 +5030,26 @@ class reportehieloController extends Controller
 
 
             // ANEXOS 7 STPS y 8 EMA
-            if (($request->opcion+0) == 20)
-            {
+            if (($request->opcion + 0) == 20) {
                 $eliminar_anexos = reporteanexosModel::where('proyecto_id', $request->proyecto_id)
-                                                    ->where('agente_nombre', $request->agente_nombre)
-                                                    ->where('registro_id', $reporte->id)
-                                                    ->where('reporteanexos_tipo', 2) // ANEXOS TIPO STPS Y EMA
-                                                    ->delete();
+                    ->where('agente_nombre', $request->agente_nombre)
+                    ->where('registro_id', $reporte->id)
+                    ->where('reporteanexos_tipo', 2) // ANEXOS TIPO STPS Y EMA
+                    ->delete();
 
-                if ($request->anexoacreditacion_checkbox)
-                {
+                if ($request->anexoacreditacion_checkbox) {
                     DB::statement('ALTER TABLE reporteanexos AUTO_INCREMENT = 1;');
 
                     $dato["total"] = 0;
-                    foreach ($request->anexoacreditacion_checkbox as $key => $value)
-                    {
+                    foreach ($request->anexoacreditacion_checkbox as $key => $value) {
                         $anexo = reporteanexosModel::create([
-                              'proyecto_id' => $request->proyecto_id
-                            , 'agente_id' => $request->agente_id
-                            , 'agente_nombre' => $request->agente_nombre
-                            , 'registro_id' => $reporte->id
-                            , 'reporteanexos_tipo' => 2  // ANEXOS TIPO STPS Y EMA
-                            , 'reporteanexos_anexonombre' => ($key+1).'.- '.str_replace(['\\', '/', ':', '*', '"', '?', '<', '>', '|'], '-', $request['anexoacreditacion_nombre_'.$value])
-                            , 'reporteanexos_rutaanexo' => $request['anexoacreditacion_archivo_'.$value]
+                            'proyecto_id' => $request->proyecto_id, 'agente_id' => $request->agente_id, 'agente_nombre' => $request->agente_nombre, 'registro_id' => $reporte->id, 'reporteanexos_tipo' => 2  // ANEXOS TIPO STPS Y EMA
+                            , 'reporteanexos_anexonombre' => ($key + 1) . '.- ' . str_replace(['\\', '/', ':', '*', '"', '?', '<', '>', '|'], '-', $request['anexoacreditacion_nombre_' . $value]), 'reporteanexos_rutaanexo' => $request['anexoacreditacion_archivo_' . $value]
                         ]);
 
                         $dato["total"] += 1;
                     }
-                }
-                else
-                {
+                } else {
                     $dato["total"] = 0;
                 }
 
@@ -5507,8 +5059,7 @@ class reportehieloController extends Controller
 
 
             // REVISION INFORME, CANCELACION
-            if (($request->opcion+0) == 21)
-            {
+            if (($request->opcion + 0) == 21) {
                 $revision = reporterevisionesModel::findOrFail($request->reporterevisiones_id);
 
 
@@ -5518,26 +5069,21 @@ class reportehieloController extends Controller
                 $canceladoobservacion = NULL;
 
 
-                if ($revision->reporterevisiones_cancelado == 0)
-                {
-                    $cancelado = 1;                
-                    $canceladonombre = auth()->user()->empleado->empleado_nombre." ".auth()->user()->empleado->empleado_apellidopaterno." ".auth()->user()->empleado->empleado_apellidomaterno;
+                if ($revision->reporterevisiones_cancelado == 0) {
+                    $cancelado = 1;
+                    $canceladonombre = auth()->user()->empleado->empleado_nombre . " " . auth()->user()->empleado->empleado_apellidopaterno . " " . auth()->user()->empleado->empleado_apellidomaterno;
                     $canceladofecha = date('Y-m-d H:i:s');
                     $canceladoobservacion = $request->reporte_canceladoobservacion;
                 }
 
 
                 $revision->update([
-                      'reporterevisiones_cancelado' => $cancelado
-                    , 'reporterevisiones_canceladonombre' => $canceladonombre
-                    , 'reporterevisiones_canceladofecha' => $canceladofecha
-                    , 'reporterevisiones_canceladoobservacion' => $canceladoobservacion
+                    'reporterevisiones_cancelado' => $cancelado, 'reporterevisiones_canceladonombre' => $canceladonombre, 'reporterevisiones_canceladofecha' => $canceladofecha, 'reporterevisiones_canceladoobservacion' => $canceladoobservacion
                 ]);
 
 
                 $dato["estado"] = 0;
-                if ($revision->reporterevisiones_concluido == 1 || $cancelado == 1)
-                {
+                if ($revision->reporterevisiones_concluido == 1 || $cancelado == 1) {
                     $dato["estado"] = 1;
                 }
 
@@ -5549,11 +5095,9 @@ class reportehieloController extends Controller
             // respuesta
             $dato["reporteregistro_id"] = $reporte->id;
             return response()->json($dato);
-        }
-        catch(Exception $e)
-        {
+        } catch (Exception $e) {
             // respuesta
-            $dato["msj"] = 'Error '.$e->getMessage();
+            $dato["msj"] = 'Error ' . $e->getMessage();
             return response()->json($dato);
         }
     }

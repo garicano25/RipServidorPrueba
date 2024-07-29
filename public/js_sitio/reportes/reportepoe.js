@@ -2,7 +2,7 @@
 //=================================================
 // LOAD PAGINA
 
-
+var opcion = 0
 var ruta_storage_guardar = '/reportes';
 // var proyecto = <?php echo json_encode($proyecto); ?>; // Variable declarada en el Blade
 // var recsensorial = <?php echo json_encode($recsensorial); ?>; // Variable declarada en el Blade
@@ -11,6 +11,32 @@ var ruta_storage_guardar = '/reportes';
 $(document).ready(function()
 {
 	$('[data-toggle="tooltip"]').tooltip(); // Activar Tooltips
+	
+	//Validamos el estatus del PORYECTO
+	if (estatus.length != 0) {
+
+		if (estatus[0].POE_FINALIZADO == 1) {
+			opcion = 0;
+			$('#boton_reporte_nuevacategoria').prop('disabled', true);
+			$('#boton_reporte_nuevaarea').prop('disabled', true);
+			$('#btnFinalizarPoe').html('<span class="btn-label"><i class="fa fa-unlock"></i></span> Activar POE')
+
+			
+		} else {
+			opcion = 1;
+			$('#boton_reporte_nuevacategoria').prop('disabled', false);
+			$('#boton_reporte_nuevaarea').prop('disabled', false);
+			$('#btnFinalizarPoe').html('<span class="btn-label"><i class="fa fa-lock"></i></span> Bloquear POE')
+
+		}
+
+	} else {
+		opcion = 1;
+		$('#btnFinalizarPoe').html('<span class="btn-label"><i class="fa fa-check-square"></i></span>Bloquear y Finalizar POE')
+		$('#boton_reporte_nuevacategoria').prop('disabled', false);
+		$('#boton_reporte_nuevaarea').prop('disabled', false);
+
+	}
 });
 
 
@@ -87,7 +113,6 @@ function tabla_categorias(proyecto_id)
 					{
 						data: "boton_editar",
 						defaultContent: "-",
-						className: 'editar',
 						orderable: false,
 					},
 					{
@@ -173,16 +198,14 @@ $("#boton_reporte_nuevacategoria").click(function()
 });
 
 
-$('#tabla_categorias tbody').on('click', 'td.editar', function()
+$('#tabla_categorias tbody').on('click', 'td>button.editar', function()
 {
 	var tr = $(this).closest('tr');
 	var row = datatable_categorias.row(tr);
 
-
 	$('#form_modal_categoria').each(function(){
 		this.reset();
 	});
-
 
 	// Campos Hidden
 	$('#reportecategoria_id').val(row.data().id);
@@ -610,7 +633,7 @@ $("#boton_reporte_nuevaarea").click(function()
 });
 
 
-$('#tabla_areas tbody').on('click', 'td.editar', function()
+$('#tabla_areas tbody').on('click', 'td>button.editar', function()
 {
 	var tr = $(this).closest('tr');
 	var row = datatable_areas.row(tr);
@@ -1092,3 +1115,183 @@ $(".boton_descarga_poe").click(function()
 		}, 5000);
 	}
 });
+
+
+$('#btnFinalizarPoe').on('click', function (e) {
+	e.preventDefault()
+
+	if (estatus.length == 0) {
+		nuevo = 1
+		title = "¡Confirme para finalizar la tabla de POE!"
+		text = "Una vez finaliza la tabla de POE esta se bloqueará, para poder generar los reportes."
+		btn = "Finalizar!"
+
+	} else {
+
+		nuevo = 0
+		title = "¡Confirme para realizar esta acción!"
+		text = "Es necesario confirmar para realizar esta acción."
+		btn = "Continuar!"
+
+	}
+
+	swal({
+		title: title,
+		text: text,
+		type: "info",
+		showCancelButton: true,
+		confirmButtonColor: "#DD6B55",
+		confirmButtonText: btn,
+		cancelButtonText: "Cancelar!",
+		closeOnConfirm: false,
+		closeOnCancel: false
+	}, function (isConfirm) {
+		if (isConfirm) {
+
+			// cerrar msj confirmacion
+			swal.close();
+
+			// Finalizar la tabla de POE
+			$.ajax({
+				type: "GET",
+				dataType: "json",
+				url: "/finalizarPOE/" + proyecto.id +'/' + opcion + '/' + nuevo,
+				data: {},
+				cache: false,
+				success: function (dato) {
+
+					//Si es primera vez que se guarda el POE actualizamos todo resetear las variables
+					if (nuevo == 1) {
+
+						swal({
+							title: "Bloqueado y finalizado exitosamente",
+							text: "La lista de reportes ha sido activada.",
+							type: "success", // warning, error, success, info
+							buttons: {
+								visible: false, // true , false
+							},
+							timer: 2000,
+							showConfirmButton: false
+						});
+						
+						//Caramos la vista de POE
+						$.ajax({
+							success: function () {
+								
+								$('#estructura_reporte').load('/reportepoevista/' + proyecto.id);
+								
+							},
+							beforeSend: function()
+							{
+								$('#estructura_reporte').html('<div style="text-align: center; font-size: 60px;"><i class="fa fa-spin fa-spinner"></i></div>');
+							},
+							error: function()
+							{
+								$('#estructura_reporte').html('<div style="text-align: center;">Error al cargar parametro</div>');
+								return false;
+							}
+						});
+
+						
+					} else {
+						
+						if (opcion == 1) {
+
+							swal({
+								title: "POE bloqueada existosamente",
+								text: "La lista de reportes ha sido activada.",
+								type: "success", // warning, error, success, info
+								buttons: {
+									visible: false, // true , false
+								},
+								timer: 2000,
+								showConfirmButton: false
+							});
+							opcion = 0;
+							$('#boton_reporte_nuevacategoria').prop('disabled', true)
+							$('#boton_reporte_nuevaarea').prop('disabled', true)
+							$('#btnFinalizarPoe').html('<span class="btn-label"><i class="fa fa-unlock"></i></span> Activar POE').prop('disabled', false);
+							
+						} else {
+							
+							swal({
+								title: "POE activada existosamente",
+								text: "La lista de reportes ha sido desactivada.",
+								type: "success", // warning, error, success, info
+								buttons: {
+									visible: false, // true , false
+								},
+								timer: 2000,
+								showConfirmButton: false
+							});
+							opcion = 1;
+							$('#btnFinalizarPoe').html('<span class="btn-label"><i class="fa fa-lock"></i></span> Bloquear POE').prop('disabled', false)
+							$('#boton_reporte_nuevacategoria').prop('disabled', false)
+							$('#boton_reporte_nuevaarea').prop('disabled', false)
+	
+						}
+	
+						//Recargamos la tablas para bloquear los botonoes
+						tabla_categorias(proyecto.id);
+						tabla_areas(proyecto.id);
+	
+						//Actalizamos el select de la lista de reportes
+						if (dato.estatus == 1) { 
+							$('#select_tiporeportes').prop('disabled', false)
+	
+						} else {
+							$('#select_tiporeportes').prop('disabled', true)
+							
+						}
+
+					}
+					
+
+
+				},	
+				beforeSend: function() {
+					$('#btnFinalizarPoe').prop('disabled', true);
+
+					//Mostramos el estutus dependiendo la accion
+					if (nuevo == 1) {
+						
+						$('#btnFinalizarPoe').html('Finalizando POE <i class="fa fa-spin fa-spinner"></i>');
+					} else {
+
+						if (opcion == 1) {
+
+							$('#btnFinalizarPoe').html('Bloqueando POE <i class="fa fa-spin fa-spinner"></i>');
+							
+						} else {
+							$('#btnFinalizarPoe').html('Activando POE <i class="fa fa-spin fa-spinner"></i>');
+							
+						}
+						
+					}
+
+
+				},
+				error: function(dato) {
+					console.error('Error:', dato.msj);
+					return false;
+				}
+			});
+			return false;
+		}
+		else {
+			// mensaje
+			swal({
+				title: "Cancelado",
+				text: "",
+				type: "error", // warning, error, success, info
+				buttons: {
+					visible: false, // true , false
+				},
+				timer: 500,
+				showConfirmButton: false
+			});
+		}
+	});
+	return false;
+
+})
