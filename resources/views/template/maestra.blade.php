@@ -556,7 +556,7 @@ use Illuminate\Support\Str;
     </script>
     <!-- Form AJAX  -->
     <script src="/js_sitio/jquery.form.js"></script>
-    <script src="/js_sitio/maestra.js"></script>
+    <script src="/js_sitio/maestra.js?v=2.0"></script>
 
 
     @if(request()->is('tablero'))
@@ -599,7 +599,7 @@ use Illuminate\Support\Str;
     <!-- Form wizard -->
     <script src="/assets/plugins/form_wizard_steps_bootstrap/form_wizard_script.js"></script>
     {{-- JS pagina --}}
-    <script src="/js_sitio/cliente.js"></script>
+    <script src="/js_sitio/cliente.js?v=2.0"></script>
     @endif
 
     @if(request()->is('proveedor'))
@@ -614,19 +614,19 @@ use Illuminate\Support\Str;
     {{-- Select search filter --}}
     <script src="/assets/plugins/select-search/selectize.js" type="text/javascript"></script>
     {{-- JS pagina --}}
-    <script src="/js_sitio/proveedor.js"></script>
+    <script src="/js_sitio/proveedor.js?v=2.0"></script>
     {{-- <script src="/assets/plugins/ViewerJS/"></script> --}}
     @endif
 
     @if(request()->is('proveedorcatalogos'))
     <script src="/assets/plugins/datatables/jquery.dataTables.min.js"></script>
-    <script src="/js_sitio/proveedor_catalogos.js"></script>
+    <script src="/js_sitio/proveedor_catalogos.js?v=2.0"></script>
     @endif
 
     @if(request()->is('banco-imagenes'))
     <script src="/assets/plugins/datatables/jquery.dataTables.min.js"></script>
     <script src="/assets/plugins/dropify/dist/js/dropify.min.js"></script>
-    <script src="/js_sitio/catalagoPlantilla.js"></script>
+    <script src="/js_sitio/catalagoPlantilla.js?v=2.0"></script>
     @endif
 
     @if(request()->is('recsensorial'))
@@ -651,7 +651,7 @@ use Illuminate\Support\Str;
     <script src="/assets/plugins/Magnific-Popup-master/dist/jquery.magnific-popup.min.js"></script>
     <script src="/assets/plugins/Magnific-Popup-master/dist/jquery.magnific-popup-init.js"></script>
     {{-- pagina --}}
-    <script src="/js_sitio/reconocimiento_sensorial.js"></script>
+    <script src="/js_sitio/reconocimiento_sensorial.js?v=2.0"></script>
     @endif
 
 
@@ -660,7 +660,7 @@ use Illuminate\Support\Str;
     {{-- datatable --}}
     <script src="/assets/plugins/datatables/jquery.dataTables.min.js"></script>
     <script src="/assets/plugins/datatables/dataTables.rowsGroup.js"></script>
-    <script src="/js_sitio/catalogoclientes.js"></script>
+    <script src="/js_sitio/catalogoclientes.js?v=2.0"></script>
     <script src="/assets/plugins/dropify/dist/js/dropify.min.js"></script>
     @endif
 
@@ -671,13 +671,13 @@ use Illuminate\Support\Str;
     {{-- datatable --}}
     <script src="/assets/plugins/datatables/jquery.dataTables.min.js"></script>
     <script src="/assets/plugins/datatables/dataTables.rowsGroup.js"></script>
-    <script src="/js_sitio/recsensorial_catalogos.js"></script>
+    <script src="/js_sitio/recsensorial_catalogos.js?v=2.0"></script>
     <script src="/assets/plugins/dropify/dist/js/dropify.min.js"></script>
     @endif
 
     @if(request()->is('recsensorialquimicoscatalogos'))
     <script src="/assets/plugins/datatables/jquery.dataTables.min.js"></script>
-    <script src="/js_sitio/recsensorialquimicos_catalogos.js"></script>
+    <script src="/js_sitio/recsensorialquimicos_catalogos.js?v=2.0"></script>
     <script src="/assets/plugins/datatables/dataTables.rowsGroup.js"></script>
     {{-- Select search filter --}}
     <script src="/assets/plugins/select-search/selectize.js" type="text/javascript"></script>
@@ -705,7 +705,7 @@ use Illuminate\Support\Str;
     {{-- Select search filter --}}
     <script src="/assets/plugins/select-search/selectize.js" type="text/javascript"></script>
     {{-- pagina --}}
-    <script src="/js_sitio/ejecucionHI.js"></script>
+    <script src="/js_sitio/ejecucionHI.js?v=2.0"></script>
 
     @endif
 
@@ -727,7 +727,7 @@ use Illuminate\Support\Str;
     {{-- Select search filter --}}
     <script src="/assets/plugins/select-search/selectize.js" type="text/javascript"></script>
     {{-- pagina --}}
-    <script src="/js_sitio/programaTrabajoHI.js"></script>
+    <script src="/js_sitio/programaTrabajoHI.js?v=2.0"></script>
 
     @endif
 
@@ -750,7 +750,7 @@ use Illuminate\Support\Str;
     {{-- Select search filter --}}
     <script src="/assets/plugins/select-search/selectize.js" type="text/javascript"></script>
     {{-- pagina --}}
-    <script src="/js_sitio/proyecto.js"></script>
+    <script src="/js_sitio/proyecto.js?v=2.0"></script>
     @endif
 
 
@@ -772,7 +772,7 @@ use Illuminate\Support\Str;
     {{-- Select search filter --}}
     <script src="/assets/plugins/select-search/selectize.js" type="text/javascript"></script>
     {{-- pagina --}}
-    <script src="/js_sitio/informesHI.js"></script>
+    <script src="/js_sitio/informesHI.js?v=2.0"></script>
     @endif
 
     @if(request()->is('usuario'))
@@ -786,8 +786,8 @@ use Illuminate\Support\Str;
     <script src="/assets/plugins/sparkline/jquery.sparkline.min.js"></script>
     <script src="js/custom.min.js"></script>
     {{-- pagina --}}
-    <script src="/js_sitio/usuario.js"></script>
-    <script src="/js_sitio/usuarioperfil.js"></script>
+    <script src="/js_sitio/usuario.js?v=2.0"></script>
+    <script src="/js_sitio/usuarioperfil.js?v=2.0"></script>
     @endif
 
     @if(request()->is('externo'))
@@ -801,7 +801,7 @@ use Illuminate\Support\Str;
     <script src="/assets/plugins/Magnific-Popup-master/dist/jquery.magnific-popup.min.js"></script>
     <script src="/assets/plugins/Magnific-Popup-master/dist/jquery.magnific-popup-init.js"></script>
     {{-- pagina --}}
-    <script src="/js_sitio/externo.js"></script>
+    <script src="/js_sitio/externo.js?v=2.0"></script>
     @endif
 
     <style>
@@ -832,7 +832,7 @@ use Illuminate\Support\Str;
     {{-- Select search filter --}}
     <script src="/assets/plugins/select-search/selectize.js" type="text/javascript"></script>
     {{-- pagina --}}
-    <script src="/js_sitio/seguimiento/seguimientoproyecto.js"></script>
+    <script src="/js_sitio/seguimiento/seguimientoproyecto.js?v=2.0"></script>
     <!--<script src="/assets/extra-libs/prism/prism.js"></script>-->
     @endif
 </body>
