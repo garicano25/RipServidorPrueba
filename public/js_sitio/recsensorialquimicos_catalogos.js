@@ -2937,7 +2937,7 @@ $('#ENTIDAD_ID').on('change', function () {
             }
         },
         beforeSend: function () {
-            $('#CONNOTACION').html('<option selected>Consultando datos...</option>');
+            // $('#CONNOTACION').html('<option selected>Consultando datos...</option>');
         },
         error: function (dato) {
             $('#CONNOTACION').html('<option value="" disabled>Error al consultar los datos</option>');
@@ -3059,7 +3059,7 @@ function mostarConnotacionesSelccionadas(ID_ENTIDAD, ID_SUSTANCIA_ENTIDAD) {
                 procesoEntidades = 0;
             },
             beforeSend: function () {
-                $('#CONNOTACION').html('<option selected>Consultando datos...</option>');
+                // $('#CONNOTACION').html('<option selected>Consultando datos...</option>');
             },
             error: function (dato) {
                 console.error("Error al consultar los datos:", dato);
@@ -3089,10 +3089,10 @@ function actualizarDescripcionConnotacion2() {
 
 
 // Evento de selección
-$('#CONNOTACION')[0].selectize.on('change', function () {
-    console.log('Cambio detectado');
-    actualizarDescripcionConnotacion2();
-});
+// $('#CONNOTACION')[0].selectize.on('change', function () {
+//     console.log('Cambio detectado');
+//     actualizarDescripcionConnotacion2();
+// });
 
 
 
