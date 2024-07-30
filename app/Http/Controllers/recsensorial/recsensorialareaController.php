@@ -247,17 +247,14 @@ class recsensorialareaController extends Controller
     {
         try {
             $opciones = '<option value=""></option>';
-            $tabla = DB::select('SELECT a.*
-                            FROM recsensorialarea a
-                            LEFT JOIN recsensorialareapruebas p ON p.recsensorialarea_id = a.id
-                            WHERE recsensorial_id = ? AND p.catprueba_id = 15', [$recsensorial_id]);
+            $tabla = recsensorialareaModel::where('recsensorial_id', $recsensorial_id)->get();
 
             // colocar numero de registro
-            foreach ($tabla as $key => $value) {
-                if ($id_seleccionado == $value->id) {
-                    $opciones .= '<option value="' . $value->id . '" selected>' . $value->recsensorialarea_nombre . '</option>';
+            foreach ($tabla  as $key => $value) {
+                if ($id_seleccionado == $value['id']) {
+                    $opciones .= '<option value="' . $value['id'] . '" selected>' . $value['recsensorialarea_nombre'] . '</option>';
                 } else {
-                    $opciones .= '<option value="' . $value->id . '">' . $value->recsensorialarea_nombre . '</option>';
+                    $opciones .= '<option value="' . $value['id'] . '">' . $value['recsensorialarea_nombre'] . '</option>';
                 }
             }
 
