@@ -179,7 +179,7 @@ class recsensorialquimicoscatalogosController extends Controller
 
                         // Valida perfil
                         // $this->middleware('Superusuario,Administrador,Proveedor,Reconocimiento,Proyecto,Compras,Staff,Psicólogo,Ergónomo,CoordinadorPsicosocial,CoordinadorErgonómico,CoordinadorRN,CoordinadorRS,CoordinadorRM,CoordinadorHI,Externo');
-                        if (auth()->user()->hasRoles(['Superusuario', 'Administrador'])) {
+                        if (auth()->user()->hasRoles(['Superusuario', 'Administrador','Coordinador'])) {
                             $value->perfil = 1;
                             $value->boton_editar = '<button type="button" class="btn btn-danger btn-circle" onclick="selecciona_sustancia_quimico();"><i class="fa fa-pencil"></i></button>';
                         } else {
@@ -310,7 +310,7 @@ class recsensorialquimicoscatalogosController extends Controller
 
 
 
-                        if (auth()->user()->hasRoles(['Superusuario', 'Administrador', 'Reconocimiento', 'CoordinadorHI'])) {
+                        if (auth()->user()->hasRoles(['Superusuario', 'Administrador', 'Reconocimiento', 'Coordinador'])) {
                             $value->perfil = 1;
                         } else {
                             $value->perfil = 0;
@@ -426,7 +426,7 @@ class recsensorialquimicoscatalogosController extends Controller
                         }
 
 
-                        if (auth()->user()->hasRoles(['Superusuario', 'Administrador'])) {
+                        if (auth()->user()->hasRoles(['Superusuario', 'Administrador','Coordinador'])) {
                             $value->perfil = 1;
                         } else {
                             $value->perfil = 0;
@@ -454,7 +454,7 @@ class recsensorialquimicoscatalogosController extends Controller
                             $value->CheckboxEstado = '<div class="switch"><label><input type="checkbox" onclick="cambia_estado_registro(' . $num_catalogo . ', ' . $value->ID_CONNOTACION . ', this);"><span class="lever switch-col-light-blue"></span></label></div>';
                         }
 
-                        if (auth()->user()->hasRoles(['Superusuario', 'Administrador', 'Reconocimiento', 'CoordinadorHI'])) {
+                        if (auth()->user()->hasRoles(['Superusuario', 'Administrador', 'Reconocimiento', 'Coordinador'])) {
                             $value->perfil = 1;
                         } else {
                             $value->perfil = 0;
@@ -480,7 +480,7 @@ class recsensorialquimicoscatalogosController extends Controller
                         }
 
 
-                        if (auth()->user()->hasRoles(['Superusuario', 'Administrador'])) {
+                        if (auth()->user()->hasRoles(['Superusuario', 'Administrador','Coordinador'])) {
                             $value->perfil = 1;
                         } else {
                             $value->perfil = 0;
@@ -542,7 +542,7 @@ class recsensorialquimicoscatalogosController extends Controller
 
                 $value->listaConnotaciones = $connotacionesText;
 
-                if (auth()->user()->hasRoles(['Superusuario', 'Administrador', 'Reconocimiento', 'CoordinadorHI'])) {
+                if (auth()->user()->hasRoles(['Superusuario', 'Administrador', 'Reconocimiento', 'Coordinador'])) {
                     $value->acciones = '<button type="button" class="btn btn-warning btn-circle EDITAR" onclick="seleccionar_sustanciaQuimicaEntidad();"><i class="fa fa-pencil"></i></button> <button type="button" class="btn btn-danger btn-circle ELIMINAR" onclick="eliminar_sustanciaQuimicaEntidad();"><i class="fa fa-trash"></i></button>';
                 } else {
                     $value->acciones = '<button type="button" class="btn btn-secondary btn-circle" ><i class="fa fa-ban" aria-hidden="true"></i></button>';

@@ -419,7 +419,7 @@
 				</div>
 				<div class="modal-footer">
 					<button type="button" class="btn btn-default waves-effect" data-dismiss="modal">Cerrar</button>
-					@if(auth()->user()->hasRoles(['Superusuario', 'Administrador']))
+					@if(auth()->user()->hasRoles(['Superusuario', 'Administrador','Coordinador']))
 					<button type="submit" class="btn btn-danger waves-effect waves-light" id="boton_guardar_sustancia">
 						Guardar <i class="fa fa-save"></i>
 					</button>
@@ -791,7 +791,7 @@
 							<ol class="breadcrumb mb-2 p-2 mt-3">
 								<h2 style="color: #ffff; margin: 0;" class="mx-2"><i class="fa fa-file-text-o" aria-hidden="true"></i> Datos por entidad </h2>
 
-								@if(auth()->user()->hasRoles(['Superusuario','Administrador', 'Reconocimiento', 'CoordinadorHI']))
+								@if(auth()->user()->hasRoles(['Superusuario','Administrador', 'Reconocimiento', 'Coordinador']))
 
 								<button type="button" class="btn btn-secondary waves-effect waves-light " data-toggle="tooltip" title="Nueva entidad" id="boton_nueva_sustanciaEntidad" style="margin-left: 13px;"> Entidad <i class="fa fa-plus"></i>
 								</button>
@@ -827,7 +827,7 @@
 				</div>
 				<div class="modal-footer">
 					<button type="button" class="btn btn-default waves-effect" data-dismiss="modal">Cerrar</button>
-					@if(auth()->user()->hasRoles(['Superusuario', 'Administrador']))
+					@if(auth()->user()->hasRoles(['Superusuario', 'Administrador','Coordinador']))
 					<button type="submit" class="btn btn-danger waves-effect waves-light" id="boton_guardar_catSustanciaQuimica">
 						Guardar <i class="fa fa-save"></i>
 					</button>
@@ -1009,7 +1009,7 @@
 				</div>
 				<div class="modal-footer">
 					<button type="button" class="btn btn-default waves-effect" data-dismiss="modal">Cerrar</button>
-					@if(auth()->user()->hasRoles(['Superusuario', 'Administrador']))
+					@if(auth()->user()->hasRoles(['Superusuario', 'Administrador','Coordinador']))
 					<button type="submit" class="btn btn-danger waves-effect waves-light" id="boton_guardar_catUnidadMedida">
 						Guardar <i class="fa fa-save"></i>
 					</button>
@@ -1063,7 +1063,7 @@
 				</div>
 				<div class="modal-footer">
 					<button type="button" class="btn btn-default waves-effect" data-dismiss="modal">Cerrar</button>
-					@if(auth()->user()->hasRoles(['Superusuario', 'Administrador']))
+					@if(auth()->user()->hasRoles(['Superusuario', 'Administrador','Coordinador']))
 					<button type="submit" class="btn btn-danger waves-effect waves-light" id="boton_guardar_catConnotacion">
 						Guardar <i class="fa fa-save"></i>
 					</button>
@@ -1107,7 +1107,7 @@
 				</div>
 				<div class="modal-footer">
 					<button type="button" class="btn btn-default waves-effect" data-dismiss="modal">Cerrar</button>
-					@if(auth()->user()->hasRoles(['Superusuario', 'Administrador']))
+					@if(auth()->user()->hasRoles(['Superusuario', 'Administrador','Coordinador']))
 					<button type="submit" class="btn btn-danger waves-effect waves-light" id="boton_guardar_catEntidades">
 						Guardar <i class="fa fa-save"></i>
 					</button>
