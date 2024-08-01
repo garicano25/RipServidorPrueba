@@ -520,6 +520,12 @@ class recsensorialquimicosreportewordController extends Controller
 
 
 
+        function sanitizeText($text)
+        {
+            return htmlspecialchars($text, ENT_QUOTES, 'UTF-8');
+        }
+
+
         // TABLA 6.1 TABLA DE CARACTERISTICAS FISICAS DE LAS SUSTANCIAS QUIMICAS
         //================================================================================
 
@@ -549,7 +555,6 @@ class recsensorialquimicosreportewordController extends Controller
 
         // encabezado tabla
         $table->addRow(200, array('tblHeader' => true));
-        // $table->addCell(2250, $encabezado_celda)->addTextRun($centrado)->addText('Área', $encabezado_texto);
         $table->addCell(3150, $encabezado_celda)->addTextRun($centrado)->addText('Sustancia química <w:br /> y/o producto', $encabezado_texto);
         $table->addCell(3150, $encabezado_celda)->addTextRun($centrado)->addText('Componentes<w:br />de la mezcla', $encabezado_texto);
         $table->addCell(1200, $encabezado_celda)->addTextRun($centrado)->addText('Número CAS', $encabezado_texto);
@@ -560,31 +565,30 @@ class recsensorialquimicosreportewordController extends Controller
         $table->addCell(1200, $encabezado_celda)->addTextRun($centrado)->addText('Volatilidad', $encabezado_texto);
 
         // registros tabla
-        // $area = 'xxx';
         $sustancia = 'xxx';
         foreach ($sql as $key => $value) {
             $table->addRow(); //fila
 
             if ($sustancia != $value->catsustancia_nombre) {
-                $table->addCell(3150, $combinar_fila)->addTextRun($centrado)->addText('[' . $productos[$value->catsustancia_nombre] . '] ' . $value->catsustancia_nombre, $texto);
-                $table->addCell(3150, $celda)->addTextRun($centrado)->addText($value->SUSTANCIA_QUIMICA, $texto);
-                $table->addCell(1200, $celda)->addTextRun($centrado)->addText($value->NUM_CAS, $texto);
-                $table->addCell(1200, $celda)->addTextRun($centrado)->addText($value->TEM_EBULLICION, $texto);
-                $table->addCell(1200, $celda)->addTextRun($centrado)->addText($value->OPERADOR . $value->PORCENTAJE, $texto);
-                $table->addCell(1200, $celda)->addTextRun($centrado)->addText($value->PM, $texto);
-                $table->addCell(1200, $celda)->addTextRun($centrado)->addText($value->catestadofisicosustancia_estado, $texto);
-                $table->addCell(1200, $celda)->addTextRun($centrado)->addText($value->catvolatilidad_tipo, $texto);
+                $table->addCell(3150, $combinar_fila)->addTextRun($centrado)->addText('[' . $productos[$value->catsustancia_nombre] . '] ' . sanitizeText($value->catsustancia_nombre), $texto);
+                $table->addCell(3150, $celda)->addTextRun($centrado)->addText(sanitizeText($value->SUSTANCIA_QUIMICA), $texto);
+                $table->addCell(1200, $celda)->addTextRun($centrado)->addText(sanitizeText($value->NUM_CAS), $texto);
+                $table->addCell(1200, $celda)->addTextRun($centrado)->addText(sanitizeText($value->TEM_EBULLICION), $texto);
+                $table->addCell(1200, $celda)->addTextRun($centrado)->addText(sanitizeText($value->OPERADOR . $value->PORCENTAJE), $texto);
+                $table->addCell(1200, $celda)->addTextRun($centrado)->addText(sanitizeText($value->PM), $texto);
+                $table->addCell(1200, $celda)->addTextRun($centrado)->addText(sanitizeText($value->catestadofisicosustancia_estado), $texto);
+                $table->addCell(1200, $celda)->addTextRun($centrado)->addText(sanitizeText($value->catvolatilidad_tipo), $texto);
 
                 $sustancia = $value->catsustancia_nombre;
             } else {
                 $table->addCell(3150, $continua_fila);
-                $table->addCell(3150, $celda)->addTextRun($centrado)->addText($value->SUSTANCIA_QUIMICA, $texto);
-                $table->addCell(1200, $celda)->addTextRun($centrado)->addText($value->NUM_CAS, $texto);
-                $table->addCell(1200, $celda)->addTextRun($centrado)->addText($value->TEM_EBULLICION, $texto);
-                $table->addCell(1200, $celda)->addTextRun($centrado)->addText($value->OPERADOR . $value->PORCENTAJE, $texto);
-                $table->addCell(1200, $celda)->addTextRun($centrado)->addText($value->PM, $texto);
-                $table->addCell(1200, $celda)->addTextRun($centrado)->addText($value->catestadofisicosustancia_estado, $texto);
-                $table->addCell(1200, $celda)->addTextRun($centrado)->addText($value->catvolatilidad_tipo, $texto);
+                $table->addCell(3150, $celda)->addTextRun($centrado)->addText(sanitizeText($value->SUSTANCIA_QUIMICA), $texto);
+                $table->addCell(1200, $celda)->addTextRun($centrado)->addText(sanitizeText($value->NUM_CAS), $texto);
+                $table->addCell(1200, $celda)->addTextRun($centrado)->addText(sanitizeText($value->TEM_EBULLICION), $texto);
+                $table->addCell(1200, $celda)->addTextRun($centrado)->addText(sanitizeText($value->OPERADOR . $value->PORCENTAJE), $texto);
+                $table->addCell(1200, $celda)->addTextRun($centrado)->addText(sanitizeText($value->PM), $texto);
+                $table->addCell(1200, $celda)->addTextRun($centrado)->addText(sanitizeText($value->catestadofisicosustancia_estado), $texto);
+                $table->addCell(1200, $celda)->addTextRun($centrado)->addText(sanitizeText($value->catvolatilidad_tipo), $texto);
             }
         }
 
