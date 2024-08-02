@@ -9868,8 +9868,14 @@ $('#tab2_informe_tabla').click(function (e) {
 
 				//HISTORIAL DE PPT Y CT
 				ppt_viejo = valor.PPT == 1 ? `<input type="number" class="form-control text-center" name="PPT_VIEJO[]" id="PPT_VIEJO_${valor.SUSTANCIA_ID}" style=" border:1px solid green; font-size:20px; width:75px" min="0" value="${valor.VAL_PUNTOS_VIEJO}" readonly>` : `<input type="number" class="form-control  bloqueado" name="PPT_VIEJO[]" id="PPT_VIEJO_${valor.SUSTANCIA_ID}"  style="background:#FADBD8; border:1px solid red; font-size:20px; width:75px" readonly >`
-				
-				ct_viejo = valor.CT == 1 ? `<input type="number" class="form-control text-center " name="CT_VIEJO[]" id="CT_VIEJO_${valor.SUSTANCIA_ID}" style=" border:1px solid green ; font-size:20px; width:75px" min="0" readonly>` : `<input type="number" class="form-control bloqueado" name="CT_VIEJO[]" id="CT_VIEJO_${valor.SUSTANCIA_ID}"  style="background:#FADBD8; border:1px solid red ; font-size:20px; width:75px" readonly>`
+
+				if (valor.PPT == 1) {
+						
+					ct_viejo = valor.CT == 1 ? `<input type="number" class="form-control text-center " name="CT_VIEJO[]" id="CT_VIEJO_${valor.SUSTANCIA_ID}" style=" border:1px solid green ; font-size:20px; width:75px" min="0" readonly>` : `<input type="number" class="form-control bloqueado" name="CT_VIEJO[]" id="CT_VIEJO_${valor.SUSTANCIA_ID}"  style="background:#FADBD8; border:1px solid red ; font-size:20px; width:75px" readonly>`
+				} else {
+
+					ct_viejo = valor.CT == 1 ? `<input type="number" class="form-control text-center " name="CT_VIEJO[]" id="CT_VIEJO_${valor.SUSTANCIA_ID}" style=" border:1px solid green ; font-size:20px; width:75px" min="0" value="${valor.VAL_PUNTOS_VIEJO}" readonly>` : `<input type="number" class="form-control bloqueado" name="CT_VIEJO[]" id="CT_VIEJO_${valor.SUSTANCIA_ID}"  style="background:#FADBD8; border:1px solid red ; font-size:20px; width:75px" readonly>`
+				}
 
 				//NUEVO VALORES DE PPT Y CT
 				ppt_nuevo = valor.PPT == 1 ? `<input type="number" class="form-control text-center PPT" name="PPT_NUEVO[]"  style=" border:1px solid green; font-size:20px; width:75px" min="0" value="${valor.VAL_PUNTOS_NUEVO}" required>` : `<input type="number" class="form-control  bloqueado" name="PPT_NUEVO[]"  style="background:#FADBD8; border:1px solid red; font-size:20px; width:75px" readonly >`
@@ -10145,6 +10151,17 @@ $("#boton_guardarTablaInformes").click(function () {
 				}
 			});
 			return false;
+		} else {
+			swal({
+			title: "Campos incompletos",
+			text: "Al parecer la existen algunos vacios, por favor verifique que todos los campos esten rellenados",
+			type: "warning", // warning, error, success, info
+			buttons: {
+				visible: false, // true , false
+			},
+			timer: 2500,
+			showConfirmButton: false
+		});
 		}
 	}
 });

@@ -181,7 +181,7 @@ class recsensorialquimicoscatalogosController extends Controller
 
                         // Valida perfil
                         // $this->middleware('Superusuario,Administrador,Proveedor,Reconocimiento,Proyecto,Compras,Staff,Psicólogo,Ergónomo,CoordinadorPsicosocial,CoordinadorErgonómico,CoordinadorRN,CoordinadorRS,CoordinadorRM,CoordinadorHI,Externo');
-                        if (auth()->user()->hasRoles(['Superusuario', 'Administrador','Coordinador'])) {
+                        if (auth()->user()->hasRoles(['Superusuario', 'Administrador', 'Coordinador'])) {
                             $value->perfil = 1;
                             $value->boton_editar = '<button type="button" class="btn btn-danger btn-circle" onclick="selecciona_sustancia_quimico();"><i class="fa fa-pencil"></i></button>';
                         } else {
@@ -428,7 +428,7 @@ class recsensorialquimicoscatalogosController extends Controller
                         }
 
 
-                        if (auth()->user()->hasRoles(['Superusuario', 'Administrador','Coordinador'])) {
+                        if (auth()->user()->hasRoles(['Superusuario', 'Administrador', 'Coordinador'])) {
                             $value->perfil = 1;
                         } else {
                             $value->perfil = 0;
@@ -481,7 +481,7 @@ class recsensorialquimicoscatalogosController extends Controller
                         }
 
 
-                        if (auth()->user()->hasRoles(['Superusuario', 'Administrador','Coordinador'])) {
+                        if (auth()->user()->hasRoles(['Superusuario', 'Administrador', 'Coordinador'])) {
                             $value->perfil = 1;
                         } else {
                             $value->perfil = 0;
@@ -509,7 +509,7 @@ class recsensorialquimicoscatalogosController extends Controller
                         }
 
 
-                        if (auth()->user()->hasRoles(['Superusuario', 'Administrador','Coordinador'])) {
+                        if (auth()->user()->hasRoles(['Superusuario', 'Administrador', 'Coordinador'])) {
                             $value->perfil = 1;
                         } else {
                             $value->perfil = 0;
@@ -536,7 +536,7 @@ class recsensorialquimicoscatalogosController extends Controller
                         }
 
 
-                        if (auth()->user()->hasRoles(['Superusuario', 'Administrador','Coordinador'])) {
+                        if (auth()->user()->hasRoles(['Superusuario', 'Administrador', 'Coordinador'])) {
                             $value->perfil = 1;
                         } else {
                             $value->perfil = 0;
@@ -1110,11 +1110,6 @@ class recsensorialquimicoscatalogosController extends Controller
                         $catalogo->update($request->all());
                     }
                     break;
-    
-
-
-
-                
             }
 
             // Respuesta
