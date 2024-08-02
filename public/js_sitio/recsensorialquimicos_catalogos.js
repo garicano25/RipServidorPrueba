@@ -870,7 +870,7 @@ function boton_nueva_sustancia() {
 //                                 showConfirmButton: false
 //                             });
 //                         }
-//                         else 
+//                         else
 //                         {
 //                             // mensaje
 //                             swal({
@@ -883,10 +883,10 @@ function boton_nueva_sustancia() {
 //                                 timer: 1000,
 //                                 showConfirmButton: false
 //                             });
-//                         } 
+//                         }
 //                     });
 //                 }
-//                 else 
+//                 else
 //                 {
 //                     // mensaje
 //                     swal({
@@ -898,14 +898,26 @@ function boton_nueva_sustancia() {
 //                         },
 //                         timer: 1000,
 //                         showConfirmButton: false
-//                     });   
-//                 } 
+//                     });
+//                 }
 //             });
 //         }
 
 //     });
 // });
 
+function validarErrores() {
+        // Selecciona todos los inputs y selects dentro de la tabla que tengan la clase 'error'
+        var elementosConError = $('#tablaSustanciasSeleccionadas .error');
+
+        if (elementosConError.length > 0) {
+            // Si hay elementos con la clase 'error', retorna true
+            return true;
+        } else {
+            // Si no hay elementos con la clase 'error', retorna false
+            return false;
+        }
+    }
 
 $("#boton_guardar_sustancia").click(function(e){
     // valida campos vacios
@@ -916,8 +928,7 @@ $("#boton_guardar_sustancia").click(function(e){
 
     if (componentes.length != 0) // valida que haya agregado componentes a la mezcla
     {
-        
-
+        if (!validarErrores()) {
             sustanciaPorcentajes = crearArregloPorcentajeSustancia($('#sustancia_id').val())
 
             // enviar datos
@@ -925,7 +936,7 @@ $("#boton_guardar_sustancia").click(function(e){
                 dataType: 'json',
                 type: 'POST',
                 url: '/recsensorialquimicoscatalogos',
-                data: { porcentajes: JSON.stringify(sustanciaPorcentajes)},
+                data: { porcentajes: JSON.stringify(sustanciaPorcentajes) },
                 resetForm: false,
                 success: function (dato) {
                 
@@ -998,7 +1009,18 @@ $("#boton_guardar_sustancia").click(function(e){
             }).submit();
             return false;
                 
-        
+        } else {
+             swal({
+            title: "¡Faltan campos por rellenar!",
+            text: "Asegurece de rellenar todos los campos pintados de ROJO",
+            type: "warning", // warning, error, success, info
+            buttons: {
+                visible: false, // true , false
+            },
+            timer: 2000,
+            showConfirmButton: false
+        });
+        }
     
     } else {
         // mensaje
@@ -1288,14 +1310,20 @@ function mostarSustanciasQuimicas(ID) {
                         <label class="form-check-label" for="sustancia_${valor.SUSTANCIA_QUIMICA_ID}">[${valor.NUM_CAS}] ${valor.SUSTANCIA_QUIMICA}</label>
                     </td>
                     <td>
-                        <select class="custom-select form-control" id="operadorSustancia_${valor.SUSTANCIA_QUIMICA_ID}" name="OPERADOR" style="width: 100%;" required>
+                        <select class="custom-select form-control" id="tipoSustancia_${valor.SUSTANCIA_QUIMICA_ID}" name="TIPO" style="width: 100%;" onchange="validarCamposRequeridos('porcentajeSustancia_${valor.SUSTANCIA_QUIMICA_ID}', 'temSustancia_${valor.SUSTANCIA_QUIMICA_ID}', this.value)" required>
+                            <option value="1">Componente</option>
+                            <option value="2">Subproducto</option>
+                        </select>
+                    </td>
+                    <td>
+                        <select class="custom-select form-control" id="operadorSustancia_${valor.SUSTANCIA_QUIMICA_ID}" name="OPERADOR" style="width: 100%;" >
                             <option value="*" > * </option>
                             <option value="<"> < </option>
                             <option value=">"> > </option>
                         </select>
                     </td>
                     <td>
-                        <input type="number" class="form-control porcentajeSustancias text-center" style="width: 100%;" id="porcentajeSustancia_${valor.SUSTANCIA_QUIMICA_ID}" name="PORCENTAJE" style="width: 100%;" placeholder="% Componente" min="0" required value="${valor.PORCENTAJE}">
+                        <input type="number" class="form-control porcentajeSustancias text-center" style="width: 100%;" id="porcentajeSustancia_${valor.SUSTANCIA_QUIMICA_ID}" name="PORCENTAJE" style="width: 100%;" placeholder="% Componente" min="0" value="${valor.PORCENTAJE}">
                     </td>
                     <td>
                         <select class="custom-select form-control" id="estadoSustancia_${valor.SUSTANCIA_QUIMICA_ID}" name="ESTADO_FISICO" style="width: 100%;" required onchange="cambiarFormaSustancia('formaSustancia_${valor.SUSTANCIA_QUIMICA_ID}', this.value)">
@@ -1307,7 +1335,7 @@ function mostarSustanciasQuimicas(ID) {
                         </select>
                     </td>
                     <td>
-                        <select class="custom-select form-control" id="formaSustancia_${valor.SUSTANCIA_QUIMICA_ID}" name="FORMA_SUSTANCIA" style="width: 100%;" required>
+                        <select class="custom-select form-control" id="formaSustancia_${valor.SUSTANCIA_QUIMICA_ID}" name="FORMA_SUSTANCIA" style="width: 100%;">
                             <option value="" selected disabled> Forma </option>
                         </select>
                     </td>
@@ -1316,7 +1344,7 @@ function mostarSustanciasQuimicas(ID) {
                                 <i class="fa fa-thermometer-three-quarters" aria-hidden="true"></i>
                             </button>
 
-                        <input type="text" class="form-control text-center" id="temSustancia_${valor.SUSTANCIA_QUIMICA_ID}" name="TEM_EBULLICION" style="width: 100%;" placeholder="Tem. de ebullición (°C)" min="0" required value="${valor.TEM_EBULLICION}">
+                        <input type="number" class="form-control text-center" id="temSustancia_${valor.SUSTANCIA_QUIMICA_ID}" name="TEM_EBULLICION" style="width: 100%;" placeholder="Tem. de ebullición (°C)" min="0"  value="${valor.TEM_EBULLICION}">
                     </td>
                     <td>
                         <select class="custom-select form-control" id="valatilidadSustancia_${valor.SUSTANCIA_QUIMICA_ID}" name="VOLATILIDAD" style="width: 100%;" required>
@@ -1340,6 +1368,7 @@ function mostarSustanciasQuimicas(ID) {
                     $(`#operadorSustancia_${valor.SUSTANCIA_QUIMICA_ID}`).val(valor.OPERADOR);
                     $(`#estadoSustancia_${valor.SUSTANCIA_QUIMICA_ID}`).val(valor.ESTADO_FISICO);
                     $(`#valatilidadSustancia_${valor.SUSTANCIA_QUIMICA_ID}`).val(valor.VOLATILIDAD);
+                    $(`#tipoSustancia_${valor.SUSTANCIA_QUIMICA_ID}`).val(valor.TIPO);
 
                     // EJECUTAMOS LA FUNCION QUE CAMBIA LAS OPCIONES DE NUESTRO SELECT DE FORMAS
                     cambiarFormaSustancia(`formaSustancia_${valor.SUSTANCIA_QUIMICA_ID}`, valor.ESTADO_FISICO)
@@ -3045,7 +3074,7 @@ $('#ENTIDAD_ID').on('change', function () {
             }
         });
 
-        $('#opciones_seleccionadas').html(selectedOptionsHtml);
+        $('#opciones_seleccionadas').html(selectedOptionsHtml); 
     }
 });
 
@@ -3203,17 +3232,23 @@ function mostrarPorcentajeSustancia(sus) {
                             <label class="form-check-label" for="sustancia_${option.id}">${option.text}</label>
                         </td>
                         <td>
-                            <select class="custom-select form-control"  id="operadorSustancia_${option.id}" name="OPERADOR" style="width: 100%;" required>
+                            <select class="custom-select form-control" id="tipoSustancia_${option.id}" name="TIPO" style="width: 100%;" onchange="validarCamposRequeridos('porcentajeSustancia_${option.id}', 'temSustancia_${option.id}', this.value)" required>
+                                <option value="1">Componente</option>
+                                <option value="2">Subproducto</option>
+                            </select>
+                        </td>
+                        <td>
+                            <select class="custom-select form-control"  id="operadorSustancia_${option.id}" name="OPERADOR" style="width: 100%;" >
                             <option value="*" selected> * </option>
                             <option value="<"> < </option>
                             <option value=">"> > </option>
                             </select>
                         </td>
                         <td>
-                            <input type="number" class="form-control porcentajeSustancias text-center error" id="porcentajeSustancia_${option.id}" name="PORCENTAJE" style="width: 100%;" placeholder="% Componente" min="0" required>
+                            <input type="number" class="form-control porcentajeSustancias text-center error" id="porcentajeSustancia_${option.id}" name="PORCENTAJE" style="width: 100%;" placeholder="% Componente" min="0" >
                         </td>
                         <td>
-                            <select class="custom-select form-control error" id="estadoSustancia_${option.id}" name="ESTADO_FISICO" style="width: 100%;" required onchange="cambiarFormaSustancia('formaSustancia_${option.id}', this.value)">
+                            <select class="custom-select form-control error" id="estadoSustancia_${option.id}" name="ESTADO_FISICO" style="width: 100%;"  onchange="cambiarFormaSustancia('formaSustancia_${option.id}', this.value)" required>
                             <option value="" selected disabled> Estado Fisico </option>
                             <option value="1"> Líquido </option>
                             <option value="2"> Sólido </option>
@@ -3222,7 +3257,7 @@ function mostrarPorcentajeSustancia(sus) {
                             </select>
                         </td>
                         <td>
-                            <select class="custom-select form-control" id="formaSustancia_${option.id}" name="FORMA_SUSTANCIA" style="width: 100%;" required>
+                            <select class="custom-select form-control" id="formaSustancia_${option.id}" name="FORMA_SUSTANCIA" style="width: 100%;"  required>
                                 <option value="" selected disabled> Forma </option>
                             </select>
                         </td>
@@ -3231,7 +3266,7 @@ function mostrarPorcentajeSustancia(sus) {
                                 <i class="fa fa-thermometer-three-quarters" aria-hidden="true"></i>
                             </button>
 
-                            <input type="text" class="form-control text-center error" id="temSustancia_${option.id}" name="TEM_EBULLICION" style="flex: 1;" placeholder="Tem. de ebullición" min="0" required>
+                            <input type="number" class="form-control text-center error" id="temSustancia_${option.id}" name="TEM_EBULLICION" style="flex: 1;" placeholder="Tem. de ebullición" min="0" >
                         </td>
                         <td>
                             <select class="custom-select form-control error" id="valatilidadSustancia_${option.id}" name="VOLATILIDAD" style="width: 100%;" required>
@@ -3281,6 +3316,23 @@ function eliminarPorcentajeSustancia(optionId) {
     }
 }
 
+//FUNCION PARA VOLVER REQUERIDOS LOS PUNTOS DE PORCENTAJE DEL COMPONENTE Y LA TEM DE EBULLICION DE ESTAS
+function validarCamposRequeridos(porcentaje, tem, opcion) {
+
+    // console.log(opcion)
+    
+    if (parseInt(opcion) == 1) { //Componente
+        $('#' + porcentaje).addClass('error').prop('required', true).val('')
+        $('#' + tem).addClass('error').prop('required', true).val('')
+    
+        
+    } else { //Subproducto
+        
+        $('#' + porcentaje).removeClass('error').prop('required', false).val(0)
+        $('#' + tem).removeClass('error').prop('required', false).val(0)
+    }
+}
+
 
 function crearArregloPorcentajeSustancia(HOJA_ID) {
     var porcentajes = [];
@@ -3290,6 +3342,7 @@ function crearArregloPorcentajeSustancia(HOJA_ID) {
         var porcentaje = {
             'HOJA_SEGURIDAD_ID': HOJA_ID,
             'SUSTANCIA_QUIMICA_ID': $(this).find("input[name='SUSTANCIA_QUIMICA_ID']").val(),
+            'TIPO': $(this).find("select[name='TIPO']").val(),
             'OPERADOR': $(this).find("select[name='OPERADOR']").val(),
             'PORCENTAJE': $(this).find("input[name='PORCENTAJE']").val(),
             'TEM_EBULLICION': $(this).find("input[name='TEM_EBULLICION']").val(),

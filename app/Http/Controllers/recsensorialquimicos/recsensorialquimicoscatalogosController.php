@@ -66,7 +66,7 @@ class recsensorialquimicoscatalogosController extends Controller
 
 
 
-        // vista
+        // vista 
         return view('catalogos.recsensorialquimicos.recsensorialquimicos_catalogos', compact('catestadofisicosustancia', 'catunidadmedidasustacia', 'catvolatilidad', 'catviaingresoorganismo', 'catcategoriapeligrosalud', 'catgradoriesgosalud', 'catSustanciasQuimicas', 'catEntidades'));
     }
 
@@ -691,9 +691,19 @@ class recsensorialquimicoscatalogosController extends Controller
     {
         try {
 
-            $entidades = DB::select('SELECT *
-                                FROM sustanciaQuimicaEntidad s
-                                WHERE SUSTANCIA_QUIMICA_ID = ?', [$ID_SUSTANCIA_QUIMICA]);
+            $entidades = DB::select('SELECT ID_SUSTANCIA_QUIMICA_ENTIDAD,
+                                            SUSTANCIA_QUIMICA_ID,
+                                            ENTIDAD_ID,
+                                            CONNOTACION,
+                                            IFNULL(VLE_PPT, "N/A") AS VLE_PPT,
+                                            IFNULL(VLE_CT_P, "N/A") AS VLE_CT_P,
+                                            DESCRIPCION_NORMATIVA,
+                                            JSON_BEIS,
+                                            TIENE_BEIS,
+                                            NOTA_SUSTANCIA_ENTIDAD,
+                                            ACTIVO
+                                    FROM sustanciaQuimicaEntidad s
+                                    WHERE SUSTANCIA_QUIMICA_ID = ?', [$ID_SUSTANCIA_QUIMICA]);
 
 
             foreach ($entidades as $key => $value) {
@@ -834,10 +844,10 @@ class recsensorialquimicoscatalogosController extends Controller
         try {
 
             $opciones = DB::select('SELECT hoja.SUSTANCIA_QUIMICA_ID, hoja.OPERADOR, hoja.PORCENTAJE, sus.SUSTANCIA_QUIMICA, 
-                                            sus.NUM_CAS, hoja.TEM_EBULLICION, hoja.ESTADO_FISICO, hoja.VOLATILIDAD, hoja.FORMA
+                                            sus.NUM_CAS, hoja.TEM_EBULLICION, hoja.ESTADO_FISICO, hoja.VOLATILIDAD, hoja.FORMA, hoja.TIPO
                                     FROM catHojasSeguridad_SustanciasQuimicas hoja
                                     LEFT JOIN catsustancias_quimicas sus ON hoja.SUSTANCIA_QUIMICA_ID = sus.ID_SUSTANCIA_QUIMICA
-                                    WHERE hoja.HOJA_SEGURIDAD_ID = ? AND hoja.ACTIVO = 1', [$id]);
+                                    WHERE hoja.HOJA_SEGURIDAD_ID = ?', [$id]);
 
             // // respuesta
             $dato['opciones'] = $opciones;
@@ -898,6 +908,7 @@ class recsensorialquimicoscatalogosController extends Controller
                                 $sustancia = catHojaSeguridadSustanciaQuimicaModel::create([
                                     'HOJA_SEGURIDAD_ID' => $catalogo->id,
                                     'SUSTANCIA_QUIMICA_ID' => $value['SUSTANCIA_QUIMICA_ID'],
+                                    'TIPO' => $value['TIPO'],
                                     'OPERADOR' => $value['OPERADOR'],
                                     'PORCENTAJE' => $value['PORCENTAJE'],
                                     'TEM_EBULLICION' => $value['TEM_EBULLICION'],
@@ -928,6 +939,7 @@ class recsensorialquimicoscatalogosController extends Controller
                             $sustancia = catHojaSeguridadSustanciaQuimicaModel::create([
                                 'HOJA_SEGURIDAD_ID' => $catalogo->id,
                                 'SUSTANCIA_QUIMICA_ID' => $value['SUSTANCIA_QUIMICA_ID'],
+                                'TIPO' => $value['TIPO'],
                                 'OPERADOR' => $value['OPERADOR'],
                                 'PORCENTAJE' => $value['PORCENTAJE'],
                                 'TEM_EBULLICION' => $value['TEM_EBULLICION'],

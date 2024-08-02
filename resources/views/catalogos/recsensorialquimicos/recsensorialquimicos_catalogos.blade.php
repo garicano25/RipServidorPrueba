@@ -376,7 +376,7 @@
 
 						<div class="col-12 mt-2">
 							<ol class="breadcrumb mb-4">
-								<h2 style="color: #ffff; margin: 0;"><i class="fa fa-list-alt" aria-hidden="true"></i> Componente de la sustancia </h2>
+								<h2 style="color: #ffff; margin: 0;"><i class="fa fa-flask"></i> Componentes / Subproductos de la sustancia </h2>
 							</ol>
 
 							<style>
@@ -417,6 +417,7 @@
 									<thead>
 										<tr>
 											<th>Componente</th>
+											<th>Tipo</th>
 											<th>Operador</th>
 											<th>Porcentaje</th>
 											<th>Estado Fisico</th>

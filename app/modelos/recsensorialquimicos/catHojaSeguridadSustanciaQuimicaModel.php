@@ -11,6 +11,7 @@ class catHojaSeguridadSustanciaQuimicaModel extends Model
     protected $fillable = [
         'HOJA_SEGURIDAD_ID',
         'SUSTANCIA_QUIMICA_ID',
+        'TIPO',
         'PORCENTAJE',
         'OPERADOR',
         'TEM_EBULLICION',
