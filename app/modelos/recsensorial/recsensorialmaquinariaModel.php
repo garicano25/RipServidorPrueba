@@ -14,7 +14,10 @@ class recsensorialmaquinariaModel extends Model
         'recsensorialmaquinaria_afecta',
         'recsensorialmaquinaria_cantidad',
         'recsensorialmaquinaria_contenido',
-        'recsensorialmaquinaria_unidadMedida'
+        'recsensorialmaquinaria_unidadMedida',
+
+        'recsensorialmaquinaria_quimica',
+        'recsensorialmaquinaria_afecta'
     ];
 
     public function recsensorialarea()

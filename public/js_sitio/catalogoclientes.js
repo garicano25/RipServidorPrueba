@@ -51,7 +51,9 @@ function mostrar_catalogo(num_catalogo)
             $("#div_datatable").html('<table class="table table-hover stylish-table" id="tabla_lista_organizacion" width="100%">'+
                                         '<thead>'+
                                             '<tr>'+
+                                            '   <th>#</th>'+
                                                 '<th>Etiqueta</th>'+
+                                                '<th>Descripción</th>'+
                                                 '<th>Opciones</th>'+
                                                 '<th style="width: 90px!important;">Editar</th>'+
                                                 '<th style="width: 90px!important;">Activo</th>'+
@@ -2482,7 +2484,15 @@ function tabla_organizacion(num_catalogo)
                 },
                 "columns": [
                     {
+                        "data": "ID_ETIQUETA",
+                        "defaultContent": '-'
+                    },
+                    {
                         "data": "ETIQUETA",
+                        "defaultContent": '-'
+                    },
+                    {
+                        "data": "DESCRIPCION_ETIQUETA",
                         "defaultContent": '-'
                     },
                     {
@@ -2616,6 +2626,7 @@ $("#boton_guardar_etiqueta_opciones").click(function() {
     var valida = this.form.checkValidity();
     if (valida) {
         $('#form_opciones').ajaxForm({
+
             dataType: 'json',
             type: 'POST',
             url: '/recsensorialcatalogos',
@@ -2635,12 +2646,16 @@ $("#boton_guardar_etiqueta_opciones").click(function() {
                 tabla_opciones($('#ID_ETIQUETA').val());
                 tabla_organizacion(1);
 
+                $('#form_opciones')[0].reset();
 
-                $('#boton_guardar_etiqueta_opciones').html('Guardar <i class="fa fa-save"></i>');
+
+            $('#boton_guardar_etiqueta_opciones').html('Guardar <i class="fa fa-save"></i>');
             },
+
             beforeSend: function() {
                 $('#boton_guardar_etiqueta_opciones').html('Guardando <i class="fa fa-spin fa-spinner"></i>');
             },
+            
             error: function(dato) {
                 $('#boton_guardar_etiqueta_opciones').html('Guardar <i class="fa fa-save"></i>');
                 swal({
@@ -2656,6 +2671,7 @@ $("#boton_guardar_etiqueta_opciones").click(function() {
     }
     return false;
 });
+
 
 
 $('#nav-opciones-tab').on('click', function () {

@@ -174,15 +174,16 @@ class reportesController extends Controller
             $opciones_select = '<option value="">&nbsp;</option>';
 
             $proyectos = DB::select("
-                SELECT p.proyecto_folio as ProyectoFolio,
-                    p.id AS ProyectoID,
-                    r.recsensorial_foliofisico as RecSensorialFolioFisico,
-                    r.recsensorial_folioquimico as RecSensorialFolioQuimico
-                FROM serviciosProyecto sp 
-                LEFT JOIN proyecto p ON sp.PROYECTO_ID = p.id
-                LEFT JOIN recsensorial r ON r.id  = p.recsensorial_id
-                WHERE sp.HI_INFORME = 1
-                ");
+            SELECT p.proyecto_folio as ProyectoFolio,
+                p.id AS ProyectoID,
+                r.recsensorial_foliofisico as RecSensorialFolioFisico,
+                r.recsensorial_folioquimico as RecSensorialFolioQuimico,
+                p.proyecto_clienteinstalacion as ProyectoClienteInstalacion
+            FROM serviciosProyecto sp 
+            LEFT JOIN proyecto p ON sp.PROYECTO_ID = p.id
+            LEFT JOIN recsensorial r ON r.id  = p.recsensorial_id
+            WHERE sp.HI_INFORME = 1
+            ");
 
             $proyectoID = null;
             foreach ($proyectos as $proyecto) {
@@ -190,11 +191,13 @@ class reportesController extends Controller
                     $proyectoID = $proyecto->ProyectoID;
                     $reconocimientoQuimico = $proyecto->RecSensorialFolioQuimico ? '[' . $proyecto->RecSensorialFolioQuimico . ']' : '[No tiene folio de reconocimiento químico]';
                     $reconocimientoFisico = $proyecto->RecSensorialFolioFisico ? '[' . $proyecto->RecSensorialFolioFisico . ']' : '[No tiene folio de reconocimiento físico]';
+                    $instalacion = $proyecto->ProyectoClienteInstalacion ? 'Instalación: ' . $proyecto->ProyectoClienteInstalacion : '[No tiene instalación]';
 
                     $opciones_select .= '<option value="' . $proyectoID . '">Folio proyecto [' .
                         $proyecto->ProyectoFolio . '], Reconocimiento ' .
                         $reconocimientoQuimico . ', ' .
-                        $reconocimientoFisico . '</option>';
+                        $reconocimientoFisico . ', ' .
+                        $instalacion . '</option>';
                 }
             }
 
@@ -208,6 +211,8 @@ class reportesController extends Controller
             return response()->json($dato, 500);
         }
     }
+
+
 
 
     public function estatusProyecto($PROYECTO_ID)

@@ -22,13 +22,6 @@ class recsensorialmaquinariaController extends Controller
         // $this->middleware('Superusuario,Administrador,Proveedor,Reconocimiento,Proyecto,Compras,Staff,Psicólogo,Ergónomo,CoordinadorPsicosocial,CoordinadorErgonómico,CoordinadorRN,CoordinadorRS,CoordinadorRM,CoordinadorHI,Externo');
     }
 
-
-
-
-
-
-
-
     /**
      * Display a listing of the resource.
      *
@@ -39,89 +32,63 @@ class recsensorialmaquinariaController extends Controller
         //
     }
 
-
-
-
-
-
-
-
-
-
-    /**
-     * Display the specified resource.
-     *
-     * @param  int  $recsensorial_id
-     * @return \Illuminate\Http\Response
-     */
     public function recsensorialmaquinariatabla($recsensorial_id)
     {
-        try
-        {
+        try {
             // Reconocimiento
             $recsensorial = recsensorialModel::findOrFail($recsensorial_id);
 
-            
-            // $tabla = recsensorialmaquinariaModel::all();
-            $tabla = recsensorialmaquinariaModel::with(['recsensorialarea'])
-                    ->where('recsensorial_id', $recsensorial_id)
-                    ->orderBy('recsensorialarea_id', 'ASC')
-                    ->get();
+            //Tabla de fuentes generadas
+            $tabla = DB::select('SELECT a.recsensorialarea_nombre,
+                                        m.id,
+                                        m.recsensorial_id,
+                                        m.recsensorialmaquinaria_afecta,
+                                        m.recsensorialmaquinaria_cantidad,
+                                        m.recsensorialmaquinaria_contenido,
+                                        m.recsensorialmaquinaria_unidadMedida,
+                                        m.recsensorialarea_id,
+                                        p.id AS PRODUCTO_ID,
+                                        IFNULL(m.recsensorialmaquinaria_nombre, p.catsustancia_nombre) as NOMBRE_FUENTE
+                            FROM recsensorialmaquinaria m
+                            LEFT JOIN recsensorialarea a ON a.id = m.recsensorialarea_id
+                            LEFT JOIN catsustancia p ON p.id = m.recsensorialmaquinaria_quimica
+                            WHERE m.recsensorial_id = ?', [$recsensorial_id]);
 
 
             // FORMATEAR FILAS
             $numero_registro = 0;
-            foreach ($tabla as $key => $value) 
-            {
+            foreach ($tabla as $key => $value) {
                 $numero_registro += 1;
                 $value->numero_registro = $numero_registro;
 
-                // switch ($value['recsensorialmaquinaria_afecta']+0)
-                // {
-                //     case 1:
-                //         $value['riesgos_provocados'] = "Factores físicos";
-                //         break;
-                //     case 2:
-                //         $value['riesgos_provocados'] = "Factores químicos";
-                //         break;
-                //     case 3:
-                //         $value['riesgos_provocados'] = "Factores físicos y químicos";
-                //         break;
-                // }
+
                 //Obtenemos el area afectada
                 $areasAfectadas = DB::select('SELECT afectan.TIPO_ALCANCE ALCANCE, prueba.catPrueba_Nombre
                             FROM areasAfectadas_fuentesGeneradoras afectan 
                             LEFT JOIN cat_prueba prueba on prueba.id = afectan.PRUEBA_ID 
                             LEFT JOIN recsensorialmaquinaria maquinaria on maquinaria.id = afectan.FUENTE_GENERADORA_ID
-                            WHERE maquinaria.id = ' . $value->id .' ');
+                            WHERE maquinaria.id = ' . $value->id . ' ');
 
                 $cadena = "";
                 foreach ($areasAfectadas  as $key => $val) {
-                    $cadena .= "<li>" . '['. $val->ALCANCE .'] '. $val->catPrueba_Nombre . "</li>";
-
-
+                    $cadena .= "<li>" . '[' . $val->ALCANCE . '] ' . $val->catPrueba_Nombre . "</li>";
                 }
 
-                $value['areasAfectan'] = $cadena;
+                $value->areasAfectan = $cadena;
 
-                
-                if($value['recsensorialmaquinaria_unidadMedida'] == 'PZ'){
-                    $value['recsensorialmaquinaria_cantidad_formateada'] =  $value['recsensorialmaquinaria_cantidad'] . ' PZ';
-                }else{
-                    $value['recsensorialmaquinaria_cantidad_formateada'] =  $value['recsensorialmaquinaria_cantidad'] . ' de '. $value['recsensorialmaquinaria_contenido'] .' '. $value['recsensorialmaquinaria_unidadMedida'];
-                    
-                }    
 
+                if ($value->recsensorialmaquinaria_unidadMedida == 'PZ') {
+                    $value->recsensorialmaquinaria_cantidad_formateada =  $value->recsensorialmaquinaria_cantidad . ' PZ';
+                } else {
+                    $value->recsensorialmaquinaria_cantidad_formateada =  $value->recsensorialmaquinaria_cantidad . ' de ' . $value->recsensorialmaquinaria_contenido . ' ' . $value->recsensorialmaquinaria_unidadMedida;
+                }
 
 
                 // Botones
-                if (auth()->user()->hasRoles(['Superusuario', 'Administrador','Coordinador','Operativo HI'])  && ($recsensorial->recsensorial_bloqueado + 0) == 0)
-                {
+                if (auth()->user()->hasRoles(['Superusuario', 'Administrador', 'Coordinador', 'Operativo HI'])  && ($recsensorial->recsensorial_bloqueado + 0) == 0) {
                     $value->accion_activa = 1;
                     $value->boton_eliminar = '<button type="button" class="btn btn-danger btn-circle"><i class="fa fa-trash"></i></button>';
-                }
-                else
-                {
+                } else {
                     $value->accion_activa = 0;
                     $value->boton_eliminar = '<button type="button" class="btn btn-secondary btn-circle"><i class="fa fa-ban"></i></button>';
                 }
@@ -131,17 +98,16 @@ class recsensorialmaquinariaController extends Controller
             $dato['data'] = $tabla;
             $dato["msj"] = 'Información consultada correctamente';
             return response()->json($dato);
-        }
-        catch(Exception $e)
-        {
-            $dato["msj"] = 'Error '.$e->getMessage();
+        } catch (Exception $e) {
+            $dato["msj"] = 'Error ' . $e->getMessage();
             $dato['data'] = 0;
             return response()->json($dato);
         }
     }
 
 
-    function recsensorialmaquinariaAreasAfectan($FUENTE_GENERADOR_ID){
+    function recsensorialmaquinariaAreasAfectan($FUENTE_GENERADOR_ID)
+    {
         try {
             $maquina = areasAfectadas_fuentesGeneradorasModel::where('FUENTE_GENERADORA_ID', $FUENTE_GENERADOR_ID)->get();
 
@@ -171,18 +137,15 @@ class recsensorialmaquinariaController extends Controller
      */
     public function recsensorialmaquinariaeliminar($maquina_id)
     {
-        try
-        {
+        try {
             $maquina = recsensorialmaquinariaModel::where('id', $maquina_id)->delete();
 
             // respuesta
             $dato['eliminado'] = $maquina;
             $dato["msj"] = 'Información eliminada correctamente';
             return response()->json($dato);
-        }
-        catch(Exception $e)
-        {
-            $dato["msj"] = 'Error '.$e->getMessage();
+        } catch (Exception $e) {
+            $dato["msj"] = 'Error ' . $e->getMessage();
             return response()->json($dato);
         }
     }
@@ -196,9 +159,8 @@ class recsensorialmaquinariaController extends Controller
      */
     public function store(Request $request)
     {
-        try
-        {
-            if ($request['maquina_id']==0) //nuevo
+        try {
+            if ($request['maquina_id'] == 0) //nuevo
             {
                 // AUTO_INCREMENT
                 DB::statement('ALTER TABLE recsensorialmaquinaria AUTO_INCREMENT=1');
@@ -210,10 +172,8 @@ class recsensorialmaquinariaController extends Controller
                 if ($request->AreaTipoAfecta) {
                     foreach ($request->AreaTipoAfecta as $key => $value) {
 
-                       
-                    
                         $guardar_areas_afectan = areasAfectadas_fuentesGeneradorasModel::create([
-                            'FUENTE_GENERADORA_ID' => $maquina->id, 
+                            'FUENTE_GENERADORA_ID' => $maquina->id,
                             'PRUEBA_ID' => $request->AgenteFactor[$key],
                             'TIPO_ALCANCE' => $request->AreaTipoAfecta[$key],
                             'TIPO' => isset($request->TipoAgente[$key]) ? $request->TipoAgente[$key] : null,
@@ -224,8 +184,7 @@ class recsensorialmaquinariaController extends Controller
 
                 // mensaje
                 $dato["msj"] = 'Información guardada correctamente';
-            }
-            else //editar
+            } else //editar
             {
                 // modificar
                 $maquina = recsensorialmaquinariaModel::findOrFail($request['maquina_id']);
@@ -237,12 +196,12 @@ class recsensorialmaquinariaController extends Controller
                     foreach ($request->AreaTipoAfecta as $key => $value) {
 
                         $guardar_areas_afectan = areasAfectadas_fuentesGeneradorasModel::create([
-                                'FUENTE_GENERADORA_ID' => $maquina->id,
-                                'PRUEBA_ID' => $request->AgenteFactor[$key],
-                                'TIPO_ALCANCE' => $request->AreaTipoAfecta[$key],
-                                'TIPO' => isset($request->TipoAgente[$key]) ? $request->TipoAgente[$key] : null,
+                            'FUENTE_GENERADORA_ID' => $maquina->id,
+                            'PRUEBA_ID' => $request->AgenteFactor[$key],
+                            'TIPO_ALCANCE' => $request->AreaTipoAfecta[$key],
+                            'TIPO' => isset($request->TipoAgente[$key]) ? $request->TipoAgente[$key] : null,
 
-                            ]);
+                        ]);
                     }
                 }
 
@@ -253,14 +212,9 @@ class recsensorialmaquinariaController extends Controller
             // respuesta
             $dato['maquina'] = $maquina;
             return response()->json($dato);
-        }
-        catch(Exception $e)
-        {
-            $dato["msj"] = 'Error '.$e->getMessage();
+        } catch (Exception $e) {
+            $dato["msj"] = 'Error ' . $e->getMessage();
             return response()->json($dato);
         }
     }
-
-
-    
 }

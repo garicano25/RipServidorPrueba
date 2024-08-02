@@ -251,11 +251,12 @@ $('.link_menuprincipal').click(function()
 			// }
 			// $('#cliente_id').select2({ placeholder: 'Seleccione un cliente...' }); //Activar campo tipo [Select-Search]
 			$('#sustancias_quimicias').select2({multiple:true}); //Activar campo tipo [Select-Search]
+			$('#recsensorialmaquinaria_quimica').selectize();
+			selectized = $('#recsensorialmaquinaria_quimica')[0].selectize;
+			selectized.$wrapper.fadeOut(1);
+
+			$("#steps_menu_tab1").click();
 			
-
-
-
-			$( "#steps_menu_tab1" ).click();
 			break; 
         case "tab_menu3":
         	$("#tab_3").css('display', 'block');
@@ -3072,100 +3073,119 @@ $("#boton_descargarquimicospdf").click(function()
 //Version actualizada de la descarga del Informe de reconocimientos
 function reporte(recsensorial_id, recsensorial_tipo, boton) {
 
-	var tipo = 'físicos';
-	var nombreInstalacion = $('#recsensorial_instalacion').val();
+	if ($('#boton_descargarquimicosdoc').hasClass('desbloqueado')) {
+
+		var tipo = 'físicos';
+		var nombreInstalacion = $('#recsensorial_instalacion').val();
+		
+		if (parseInt(recsensorial_tipo) === 2) {
+			tipo = 'químicos';
+		}
 	
-    if (parseInt(recsensorial_tipo) === 2) {
-        tipo = 'químicos';
-    }
+		swal({
+			title: "¡Confirme imprimir!",
+			text: "Reconocimiento de " + tipo + "\n\nSolo se puede descargar una vez, la siguiente debe ser con autorización del administrador",
+			type: "info",
+			showCancelButton: true,
+			confirmButtonColor: "#DD6B55",
+			confirmButtonText: "Descargar!",
+			cancelButtonText: "Cancelar!",
+			closeOnConfirm: false,
+			closeOnCancel: false
+		},
+		function(isConfirm) {
+			if (isConfirm) {
+				// Mostrar mensaje de carga
+				swal({
+					title: "Generando documento",
+					text: 'Espere un momento, el documento se esta documento se esta generando...',
+					type: "info",
+					showConfirmButton: false,
+					allowOutsideClick: false
+				});
+	
+				var url = "";
+				if (parseInt(recsensorial_tipo) === 1) {
+					if (parseInt($("#recsensorial_tipocliente").val()) === 0) { // 0 = Cliente, 1 = Pemex
+						url = "/recsensorialreporte1wordcliente/" + recsensorial_id;
+					} else {
+						url = "/recsensorialreporte1word/" + recsensorial_id;
+					}
+				} else {
+					if (parseInt($("#recsensorial_tipocliente").val()) === 0) { // 0 = Cliente, 1 = Pemex
+						url = "/recsensorialquimicosreporte1wordcliente/" + recsensorial_id;
+					} else {
+						url = "/recsensorialquimicosreporte1word/" + recsensorial_id;
+					}
+				}
+	
+				$.ajax({
+					url: url,
+					method: 'GET',
+					xhrFields: {
+						responseType: 'blob'
+					},
+					success: function(data) {
+						var a = document.createElement('a');
+						var url = window.URL.createObjectURL(data);
+						a.href = url;
+						a.download = `Informe - Reconocimiento de Químicos - ${nombreInstalacion}.docx`;
+						document.body.append(a);
+						a.click();
+						a.remove();
+						window.URL.revokeObjectURL(url);
+	
+						// Cerrar mensaje de carga
+						swal.close();
+	
+						if (parseInt(recsensorial_tipo) !== 1 && parseInt($("#recsensorial_tipocliente").val()) === 1) {
+							//Recargamos la tabla de reconocimiento para que se ajusten los cambios de que el reconocimiento ha sido finalizado
+							tabla_recsensorial.ajax.url('/tablarecsensorial').load();
+							//Mostramos la seccion para poder validar el reconocimiento
+							$('#finalizarQuimico').fadeIn(0);
+						}
+					},
+					error: function() {
+						swal({
+							title: "Hubo un problema al generar el documento.",
+							text: "Intentelo de nuevo, o comuniquelo con el responsable",
+							type: "error",
+							showConfirmButton: true
+						});
+					}
+				});
+			} else {
+				// mensaje de cancelación
+				swal({
+					title: "Cancelado",
+					text: "Acción cancelada",
+					type: "error",
+					buttons: {
+						visible: false,
+					},
+					timer: 500,
+					showConfirmButton: false
+				});
+			}
+		});
+		return false;
+	
+	} else {
 
-    swal({
-        title: "¡Confirme imprimir!",
-        text: "Reconocimiento de " + tipo + "\n\nSolo se puede descargar una vez, la siguiente debe ser con autorización del administrador",
-        type: "info",
-        showCancelButton: true,
-        confirmButtonColor: "#DD6B55",
-        confirmButtonText: "Descargar!",
-        cancelButtonText: "Cancelar!",
-        closeOnConfirm: false,
-        closeOnCancel: false
-    },
-    function(isConfirm) {
-        if (isConfirm) {
-            // Mostrar mensaje de carga
-            swal({
-                title: "Generando documento",
-                text: 'Espere un momento, el documento se esta documento se esta generando...',
-                type: "info",
-                showConfirmButton: false,
-                allowOutsideClick: false
-            });
+		swal({
+			title: "Informe no disponible",
+			text: "Es necesario guardar los datos de la portada y confirmar puntos de muestreo y POE ", 
+			type: "warning", // warning, error, success, info
+			buttons: {
+				visible: false, // true , false
+			},
+			timer: 2500,
+			showConfirmButton: false
+		});
 
-            var url = "";
-            if (parseInt(recsensorial_tipo) === 1) {
-                if (parseInt($("#recsensorial_tipocliente").val()) === 0) { // 0 = Cliente, 1 = Pemex
-                    url = "/recsensorialreporte1wordcliente/" + recsensorial_id;
-                } else {
-                    url = "/recsensorialreporte1word/" + recsensorial_id;
-                }
-            } else {
-                if (parseInt($("#recsensorial_tipocliente").val()) === 0) { // 0 = Cliente, 1 = Pemex
-                    url = "/recsensorialquimicosreporte1wordcliente/" + recsensorial_id;
-                } else {
-                    url = "/recsensorialquimicosreporte1word/" + recsensorial_id;
-                }
-            }
+	} 
 
-            $.ajax({
-                url: url,
-                method: 'GET',
-                xhrFields: {
-                    responseType: 'blob'
-                },
-                success: function(data) {
-                    var a = document.createElement('a');
-                    var url = window.URL.createObjectURL(data);
-                    a.href = url;
-                    a.download = `Informe - Reconocimiento de Químicos - ${nombreInstalacion}.docx`;
-                    document.body.append(a);
-                    a.click();
-                    a.remove();
-                    window.URL.revokeObjectURL(url);
 
-                    // Cerrar mensaje de carga
-                    swal.close();
-
-                    if (parseInt(recsensorial_tipo) !== 1 && parseInt($("#recsensorial_tipocliente").val()) === 1) {
-                        //Recargamos la tabla de reconocimiento para que se ajusten los cambios de que el reconocimiento ha sido finalizado
-                        tabla_recsensorial.ajax.url('/tablarecsensorial').load();
-                        //Mostramos la seccion para poder validar el reconocimiento
-                        $('#finalizarQuimico').fadeIn(0);
-                    }
-                },
-                error: function() {
-                    swal({
-                        title: "Hubo un problema al generar el documento.",
-                        text: "Intentelo de nuevo, o comuniquelo con el responsable",
-                        type: "error",
-                        showConfirmButton: true
-                    });
-                }
-            });
-        } else {
-            // mensaje de cancelación
-            swal({
-                title: "Cancelado",
-                text: "Acción cancelada",
-                type: "error",
-                buttons: {
-                    visible: false,
-                },
-                timer: 500,
-                showConfirmButton: false
-            });
-        }
-    });
-    return false;
 }
 
 
@@ -4846,6 +4866,11 @@ function funcion_tabla_recsensorialareas(recsensorial_id)
             '<td style="padding:2px 4px;"><input type="number" class="form-control" style="padding:0px 4px;" name="total[]" value="" placeholder="Total" required></td>' +
             '<td style="padding:2px 4px;"><input type="number" class="form-control" style="padding:0px 4px;" name="tiempo[]" value="" placeholder="Tiempo Expo." required></td>' +
             '<td style="padding:2px 4px;"><input type="number" class="form-control" style="padding:0px 4px;" name="frecuencia[]" value="" placeholder="Frec. Expo." required></td>' +
+			'<td style="padding:2px 4px;"><input type="number" class="form-control" style="padding:0px 4px;" name="tiempo_quimicos[]" value="" placeholder="Tiempo Expo." required></td>' +
+            '<td style="padding:2px 4px;"><input type="number" class="form-control" style="padding:0px 4px;" name="frecuencia_quimicos[]" value="" placeholder="Frec. Expo." required></td>' +
+
+
+
             '<td style="padding:2px 4px;" class="eliminar"><button type="button" class="btn btn-danger btn-circle"><i class="fa fa-trash"></i></button></td>' +
             '</tr>');
 
@@ -4930,6 +4955,8 @@ $("#boton_nueva_areacategoria").click(function()
 												'<td style="padding:2px 4px;"><input type="number" class="form-control" style="padding:0px 4px;" name="total[]" value="" placeholder="Total" required></td>'+
 												'<td style="padding:2px 4px;"><input type="number" class="form-control" style="padding:0px 4px;" name="tiempo[]" value="" placeholder="Tiempo Expo." required></td>'+
 												'<td style="padding:2px 4px;"><input type="number" class="form-control" style="padding:0px 4px;" name="frecuencia[]" value="" placeholder="Frec. Expo." required></td>'+
+												'<td style="padding:2px 4px;"><input type="number" class="form-control" style="padding:0px 4px;" name="tiempo_quimicos[]" value="" placeholder="Tiempo Expo." required></td>'+
+												'<td style="padding:2px 4px;"><input type="number" class="form-control" style="padding:0px 4px;" name="frecuencia_quimicos[]" value="" placeholder="Frec. Expo." required></td>'+
 												'<td style="padding:2px 4px;" class="eliminar"><button type="button" class="btn btn-danger btn-circle"><i class="fa fa-trash"></i></button></td>'+
 											'</tr>');
 
@@ -5031,6 +5058,10 @@ function consulta_areascategorias(area_id)
 	var total = '';
 	var tiempo = '';
 	var frecuencia = '';
+	var tiempo_quimicos = '';
+	var frecuencia_quimicos = '';
+
+	
 
     $.ajax({
         type: "GET",
@@ -5042,6 +5073,7 @@ function consulta_areascategorias(area_id)
         {
             // Dibujar fila categorias
             $('#tabla_areacategorias tbody').html('');
+			
 			$.each( dato.categoriaselegidas, function( key, value )
 			{
 				if (value.recsensorialareacategorias_actividad == null) {actividad = '';}else{actividad = value.recsensorialareacategorias_actividad;}
@@ -5049,6 +5081,11 @@ function consulta_areascategorias(area_id)
 				if (value.recsensorialareacategorias_total == null) {total = '';}else{total = value.recsensorialareacategorias_total;}
 				if (value.recsensorialareacategorias_tiempoexpo == null) {tiempo = '';}else{tiempo = value.recsensorialareacategorias_tiempoexpo;}
 				if (value.recsensorialareacategorias_frecuenciaexpo == null) {frecuencia = '';}else{frecuencia = value.recsensorialareacategorias_frecuenciaexpo;}
+				if (value.tiempoexpo_quimico == null) {tiempo_quimicos = '';}else{tiempo_quimicos = value.tiempoexpo_quimico;}
+				if (value.frecuenciaexpo_quimico == null) {frecuencia_quimicos = '';}else{frecuencia_quimicos = value.frecuenciaexpo_quimico;}
+
+
+				
 
 				$("#tabla_areacategorias tbody").append('<tr>'+
 															'<td style="padding:2px 4px;"><select class="custom-select form-control" style="padding:0px 4px;" id="categoria_'+key+'" name="categoria[]" required>'+select_areacategorias_opciones+'</select></td>'+
@@ -5057,6 +5094,8 @@ function consulta_areascategorias(area_id)
 															'<td style="padding:2px 4px;"><input type="number" class="form-control" style="padding:0px 4px;" name="total[]" value="'+total+'" required></td>'+
 															'<td style="padding:2px 4px;"><input type="number" class="form-control" style="padding:0px 4px;" name="tiempo[]" value="'+tiempo+'" required></td>'+
 															'<td style="padding:2px 4px;"><input type="number" class="form-control" style="padding:0px 4px;" name="frecuencia[]" value="'+frecuencia+'" required></td>'+
+															'<td style="padding:2px 4px;"><input type="number" class="form-control" style="padding:0px 4px;" name="tiempo_quimicos[]" value="'+tiempo_quimicos+'" required></td>'+
+															'<td style="padding:2px 4px;"><input type="number" class="form-control" style="padding:0px 4px;" name="frecuencia_quimicos[]" value="'+frecuencia_quimicos+'" required></td>'+
 															'<td style="padding:2px 4px;" class="eliminar"><button type="button" class="btn btn-danger btn-circle"><i class="fa fa-trash"></i></button></td>'+
 														'</tr>');
 
@@ -5260,13 +5299,13 @@ $(document).ready(function()
 });
 
 
-function consulta_areas(nombre_campo, id_seleccionado, recsensorial_id)
+function consulta_areas(nombre_campo, id_seleccionado, recsensorial_id, quimicas)
 {
 	// alert('mensaje');
     $.ajax({
         type: "GET",
         dataType: "json",
-        url: "/recsensorialconsultaareas/"+recsensorial_id+"/"+id_seleccionado,
+        url: "/recsensorialconsultaareas/"+recsensorial_id+"/"+id_seleccionado+"/"+quimicas,
         data:{},
         cache: false,
         success:function(dato){
@@ -5278,6 +5317,7 @@ function consulta_areas(nombre_campo, id_seleccionado, recsensorial_id)
         }
     });//Fin ajax
 }
+
 
 
 $(document).ready(function() {
@@ -5440,7 +5480,7 @@ $("#boton_nueva_maquina").click(function()
     $("#maquina_recsensorial_id").val($("#recsensorial_id").val());
 
     // consulta areas
-	consulta_areas('maquinaarea_id', 0, $("#recsensorial_id").val());
+	consulta_areas('maquinaarea_id', 0, $("#recsensorial_id").val(), 0);
 	
 	$("#recsensorialmaquinaria_contenido").prop('disabled', false);
 
@@ -5483,11 +5523,11 @@ function funcion_tabla_recsensorialmaquinas(recsensorial_id)
 		            //     "data": "numero_registro"
 		            // },
 		            {
-		                "data": "recsensorialarea.recsensorialarea_nombre",
+		                "data": "recsensorialarea_nombre",
 		                "defaultContent": "-"
 		            },
 		            {
-		                "data": "recsensorialmaquinaria_nombre",
+		                "data": "NOMBRE_FUENTE",
 		                "defaultContent": "-"
 		            },
 		            {
@@ -5566,7 +5606,7 @@ $("#boton_guardar_maquina").click(function()
 		$('#form_maquina').ajaxForm({
 			dataType: 'json',
 			type: 'POST',
-			url: '/recsensorialmaquinaria',
+			url: '/recsensorialmaquinaria', 
 			data: {},
 			resetForm: false,
 			success: function(dato)
@@ -5621,6 +5661,74 @@ $("#boton_guardar_maquina").click(function()
 });
 
 
+//Funcion para el selecto de Fuente Generadora pasa:
+$('#recsensorialmaquinaria_afecta').on('change', function () {
+
+	$('.listaAreasAfectadas').empty(); // Limpiamos el div
+	$('#boton_agregar_alcance').click() // Mostramos las opciones de los alcances
+	var select = $('#recsensorialmaquinaria_quimica')[0].selectize; //Mostramos el select de las sustancias quimicas 
+
+	opcion = $(this).val();
+
+	if (opcion == 2) { //Quimicos 
+		
+		$('#recsensorialmaquinaria_nombre').prop('required', false).css('display', 'none').val('');
+		select.clear()
+		select.enable()
+		select.$wrapper.fadeIn(1);
+		$('.AreaTipoAfecta').val('Químico').trigger('change');
+		$('#boton_agregar_alcance').prop('disabled', true)
+
+		//Desabilitamos algunas opcines
+		$('.AreaTipoAfecta option[value="Alimentos"]').prop('disabled', true);
+		$('.AreaTipoAfecta option[value="Biológico"]').prop('disabled', true);
+		$('.AreaTipoAfecta option[value="Consultoría"]').prop('disabled', true);
+		$('.AreaTipoAfecta option[value="Factor de riesgo"]').prop('disabled', true);
+		$('.AreaTipoAfecta option[value="Físico"]').prop('disabled', true);
+		$('.AreaTipoAfecta option[value="Químico"]').prop('disabled', false);
+
+
+	} else if (opcion == 3) { //Quimicos y Fisico
+
+		$('#recsensorialmaquinaria_nombre').prop('required', false).css('display', 'none').val('');
+		select.clear()
+		select.enable()
+		select.$wrapper.fadeIn(1);
+		$('#boton_agregar_alcance').prop('disabled', false)
+
+		$('.AreaTipoAfecta option[value="Alimentos"]').prop('disabled', false);
+		$('.AreaTipoAfecta option[value="Biológico"]').prop('disabled', false);
+		$('.AreaTipoAfecta option[value="Consultoría"]').prop('disabled', false);
+		$('.AreaTipoAfecta option[value="Factor de riesgo"]').prop('disabled', false);
+		$('.AreaTipoAfecta option[value="Físico"]').prop('disabled', false);
+		$('.AreaTipoAfecta option[value="Químico"]').prop('disabled', false);
+
+		
+	} else { // Fisico
+		
+		$('#recsensorialmaquinaria_nombre').prop('required', true).css('display', 'block').val('');
+		select.clear()
+		select.disable()
+		select.$wrapper.fadeOut(1);
+		$('.AreaTipoAfecta').prop('disabled', false);
+		$('#boton_agregar_alcance').prop('disabled', false)
+
+		$('.AreaTipoAfecta option[value="Alimentos"]').prop('disabled', false);
+		$('.AreaTipoAfecta option[value="Biológico"]').prop('disabled', false);
+		$('.AreaTipoAfecta option[value="Consultoría"]').prop('disabled', false);
+		$('.AreaTipoAfecta option[value="Factor de riesgo"]').prop('disabled', false);
+		$('.AreaTipoAfecta option[value="Físico"]').prop('disabled', false);
+		$('.AreaTipoAfecta option[value="Químico"]').prop('disabled', true);
+		
+		
+
+	}
+	
+
+})
+
+
+
 // Selecciona MAQUINARIA
 $(document).ready(function()
 {
@@ -5637,25 +5745,59 @@ $(document).ready(function()
 	        this.reset();
 		});
 
-		$("#recsensorialmaquinaria_contenido").prop('disabled', false);
 
 	    // consulta areas
-    	consulta_areas('maquinaarea_id', row.data().recsensorialarea_id, $("#recsensorial_id").val());
+    	consulta_areas('maquinaarea_id', row.data().recsensorialarea_id, $("#recsensorial_id").val(), 0);
 
         // llenar campos
         $("#maquina_id").val(row.data().id);
     	$("#maquina_recsensorial_id").val(row.data().recsensorial_id);
-        $("#recsensorialmaquinaria_nombre").val(row.data().recsensorialmaquinaria_nombre);
-        $("#recsensorialmaquinaria_afecta").val(row.data().recsensorialmaquinaria_afecta);
+		$("#recsensorialmaquinaria_nombre").val(row.data().recsensorialmaquinaria_nombre);
 		$("#recsensorialmaquinaria_cantidad").val(row.data().recsensorialmaquinaria_cantidad);
         $("#recsensorialmaquinaria_contenido").val(row.data().recsensorialmaquinaria_contenido);
 		$("#recsensorialmaquinaria_unidadMedida").val(row.data().recsensorialmaquinaria_unidadMedida);
+		
+		var opcion = row.data().recsensorialmaquinaria_afecta
+		var select = $('#recsensorialmaquinaria_quimica')[0].selectize; //Mostramos el select de las sustancias quimicas 
+		$("#recsensorialmaquinaria_afecta").val(opcion);
+		
+		if (opcion == 2) { //Quimicos
 
+			$('#recsensorialmaquinaria_nombre').prop('required', false).css('display', 'none').val('');
+			select.clear()
+			select.enable()
+			select.$wrapper.fadeIn(1);
+			select.setValue(row.data().PRODUCTO_ID);
+			$('#boton_agregar_alcance').prop('disabled', true)
+
+
+		} else if (opcion == 3) { //Quimicos y Fisico
+			$('#recsensorialmaquinaria_nombre').prop('required', false).css('display', 'none').val('');
+			select.clear()
+			select.enable()
+			select.$wrapper.fadeIn(1);
+			select.setValue(row.data().PRODUCTO_ID);
+			$('#boton_agregar_alcance').prop('disabled', false)
+
+		} else { // Fisico
+			
+			$('#recsensorialmaquinaria_nombre').prop('required', true).css('display', 'block').val(row.data().NOMBRE_FUENTE);
+			select.clear()
+			select.disable()
+			select.$wrapper.fadeOut(1);
+			$('#boton_agregar_alcance').prop('disabled', false)
+
+		}
+
+
+
+		$("#recsensorialmaquinaria_contenido").prop('disabled', false);
 		if (row.data().recsensorialmaquinaria_unidadMedida == 'PZ') {
 			$("#recsensorialmaquinaria_contenido").prop('disabled', true);
 		} else {
 			$("#recsensorialmaquinaria_contenido").prop('disabled', false);
 		}
+
 
 
 		
@@ -5714,8 +5856,6 @@ $(document).ready(function()
 						var selectAgenteTipo = $('.AgenteTipo', divTipoAlcance);
 					
 					
-					
-
 						// Agregar opciones a los selects
 						lista_alcances.forEach(function(opcion) {
 							var optionTipoAlcance = $('<option>').text(opcion.catPrueba_Tipo).val(opcion.catPrueba_Tipo);
@@ -5729,18 +5869,45 @@ $(document).ready(function()
 						var selectPruebaTipo = $(this).closest('.row').find('.AgenteTipo');
 						
 					MostratTiposAlcances(selectTipoAlcance.val(), selectAgenteFactor, selectAgenteTipo, elemento.PRUEBA_ID, elemento.TIPO);
-					
-
-				
-
-					// $(document).on('change', '.AgenteFactor', function() {
-					// 	var selectPruebaTipo = $(this).closest('.row').find('.AgenteTipo');
-					// 	var valor = parseInt($(this).val(), 10);
-					// 	MostratTiposAgentes(valor, selectPruebaTipo);
-					// });
-
-						
+										
 				});
+
+				//Esperamos que todo se complete de manera correcta, para poder darle nuevos estados a los select.
+				setTimeout(() => {
+					if (opcion == 2) { //Quimicos 
+						
+						//Desabilitamos algunas opcines
+						$('.AreaTipoAfecta option[value="Alimentos"]').prop('disabled', true);
+						$('.AreaTipoAfecta option[value="Biológico"]').prop('disabled', true);
+						$('.AreaTipoAfecta option[value="Consultoría"]').prop('disabled', true);
+						$('.AreaTipoAfecta option[value="Factor de riesgo"]').prop('disabled', true);
+						$('.AreaTipoAfecta option[value="Físico"]').prop('disabled', true);
+						$('.AreaTipoAfecta option[value="Químico"]').prop('disabled', false);
+	
+	
+					} else if (opcion == 3) { //Quimicos y Fisico
+	
+						$('.AreaTipoAfecta option[value="Alimentos"]').prop('disabled', false);
+						$('.AreaTipoAfecta option[value="Biológico"]').prop('disabled', false);
+						$('.AreaTipoAfecta option[value="Consultoría"]').prop('disabled', false);
+						$('.AreaTipoAfecta option[value="Factor de riesgo"]').prop('disabled', false);
+						$('.AreaTipoAfecta option[value="Físico"]').prop('disabled', false);
+						$('.AreaTipoAfecta option[value="Químico"]').prop('disabled', false);
+	
+						
+					} else { // Fisico
+						
+						$('.AreaTipoAfecta option[value="Alimentos"]').prop('disabled', false);
+						$('.AreaTipoAfecta option[value="Biológico"]').prop('disabled', false);
+						$('.AreaTipoAfecta option[value="Consultoría"]').prop('disabled', false);
+						$('.AreaTipoAfecta option[value="Factor de riesgo"]').prop('disabled', false);
+						$('.AreaTipoAfecta option[value="Físico"]').prop('disabled', false);
+						$('.AreaTipoAfecta option[value="Químico"]').prop('disabled', true);
+						
+						
+	
+					}
+				}, 1000);
 
 			},
 			beforeSend: function(){
@@ -7065,7 +7232,7 @@ $("#boton_nueva_sustacia").click(function()
     $("#sustancia_recsensorial_id").val($("#recsensorial_id").val());
 
     // llenar select areas
-    consulta_areas('sustancia_recsensorialarea_id', 0, $("#recsensorial_id").val())
+    consulta_areas('sustancia_recsensorialarea_id', 0, $("#recsensorial_id").val(), 1)
 
     // Vaciar seccion checkbox categorias
     // $("#checkbox_seleccionacategorias").prop('checked', false);
@@ -7187,9 +7354,11 @@ $("#boton_nuevasustancia_inventario").click(function()
 	                                    '</div>'+
 	                                '</td>'+
 	                                '<td style="width: 180px!important;">'+
+									'<label>'+'<b>'+'Exp.Minutos'+'</b>'+ '</label>'+
 	                                	'<input type="number" step="any" class="form-control" placeholder="Exp. minutos" id="tiempo_'+(sustancia_lista_total+1)+key+'" name="tiempo[]" disabled>'+
 	                                '</td>'+
 	                                '<td style="width: 180px!important;">'+
+									'<label>'+'<b>'+'Frecuencia exp.'+'</b>'+ '</label>'+
 	                                	'<input type="number" step="any" class="form-control" placeholder="Frecuencia exp." id="frecuencia_'+(sustancia_lista_total+1)+key+'" name="frecuencia[]" disabled>'+
 	                                '</td>'+
 	                            '</tr>';
@@ -7206,14 +7375,18 @@ $("#boton_nuevasustancia_inventario").click(function()
 				                                                	'<table>'+
 					                                                	'<tr>'+
 						                                                	'<td style="width: 680px!important;">'+
+																					'<label>'+'&nbsp;'+'</label>'+
+
 						                                                        '<select class="custom-select form-control select_search_sustancia" id="selectsearch_sustancia_'+sustancia_lista_total+'" name="sustancia_catalogo[]" required>'+
 						                                                            select_catsustancia_opciones+
 						                                                        '</select>'+
 							                                                '</td>'+
 							                                                '<td style="width: 180px!important;">'+
+																				'<label>'+'<b>'+'Cantidad manejada'+'</b>'+ '</label>'+
 							                                                	'<input type="number" step="any" class="form-control" placeholder="Cantidad" name="cantidad[]" required>'+
 							                                                '</td>'+
 							                                                '<td style="width: 180px!important;">'+
+																					'<label>'+'<b>'+'Unidad medida'+'</b>'+ '</label>'+
 							                                                	'<select class="custom-select form-control" name="umedida[]" required>'+
 						                                                            select_umedida_opciones+
 						                                                        '</select>'+
@@ -7234,9 +7407,28 @@ $("#boton_nuevasustancia_inventario").click(function()
     $('#tabla_catsustancias > tbody').scrollTop(0);
 
     // desplazar a la ultima fila de la tabla
-    $('#tabla_catsustancias > tbody').animate({
-        scrollTop: $('#tabla_catsustancias > tbody > tr:last').position().top //ultima fila
-    }, 1000);
+    // $('#tabla_catsustancias > tbody').animate({
+    //     scrollTop: $('#tabla_catsustancias > tbody > tr:last').position().top //ultima fila
+    // }, 1000);
+
+
+	// let $input = $('#tabla_catsustancias > tbody').find('input.form-control[name="cantidad[]"]');
+	// let $Input = $input.last(); 
+
+
+	// $('#tabla_catsustancias > tbody').animate({
+	// 	scrollTop: $Input.position().top
+	// }, 1000);
+
+
+	let $input = $('#tabla_catsustancias > tbody').find('input.form-control[name="cantidad[]"]');
+	let $targetInput = $input.last(); 
+	
+	let positionAdjustment = $targetInput.position().top + 15; 
+	
+	$('#tabla_catsustancias > tbody').animate({
+		scrollTop: positionAdjustment
+	}, 1000);
 
     // Incrementar contador
     sustancia_lista_total += 1;
@@ -7363,7 +7555,7 @@ $(document).ready(function()
 	    	$("#sustancia_recsensorial_id").val(row.data().recsensorial_id);
 
 	        // llenar select areas
-	    	consulta_areas('sustancia_recsensorialarea_id', row.data().recsensorialarea_id, row.data().recsensorial_id);
+	    	consulta_areas('sustancia_recsensorialarea_id', row.data().recsensorialarea_id, row.data().recsensorial_id, 1);
 
 	    	// llenar select categorias
 	    	// $("#checkbox_seleccionacategorias").prop('checked', false);
@@ -9376,12 +9568,6 @@ $('#boton_editarInforme').on('click', function (e) {
 			$("#OPCION_PORTADA6").html(dato.checks)
 
 
-
-			// $("#opcionesPortada").html(dato.checks)
-
-
-
-
 			//DOCUMENTO SIN EDITAR ES PRIMERA VEZ QUE SE VA A DESCARGA
 			if (dato.data == 'No se encontraron datos') {
 
@@ -9419,12 +9605,16 @@ $('#boton_editarInforme').on('click', function (e) {
 				// $('#CONCLUSION').val(`Agregar la conclusion.`);
 
 				$('#PETICION_CLIENTE').prop('checked', false);
+				$('#REQUIERE_CONCLUSION').prop('checked', false);
 				
 				$('#boton_descargarquimicosdoc').css('display', 'none')
+				$('#boton_descargarquimicosdoc').removeClass('desbloqueado').addClass('bloqueado')
 				
 
 			} else { //DOCUMENTO YA EDITADO
 				
+				$('#boton_descargarquimicosdoc').removeClass('bloqueado').addClass('desbloqueado')
+
 				$('#boton_descargarquimicosdoc').css('display', 'block')
 
 				
@@ -9475,31 +9665,18 @@ $('#boton_editarInforme').on('click', function (e) {
 				
 				if (dato.data[0].PETICION_CLIENTE == 1) {
 					$('#PETICION_CLIENTE').prop('checked', true).trigger('change');
+				} else {
+					$('#PETICION_CLIENTE').prop('checked', false).trigger('change');
+					
 				}
 
-				if (dato.data[0].CHECK1 != 0) {
-					$('#CHECK1').prop('checked', true);
-				}
-				if (dato.data[0].CHECK2 != 0) {
-					$('#CHECK2').prop('checked', true);
-				}
-				if (dato.data[0].CHECK3 != 0) {
-					$('#CHECK3').prop('checked', true);
-				}
-				if (dato.data[0].CHECK4 != 0) {
-					$('#CHECK4').prop('checked', true);
-				}
-				if (dato.data[0].CHECK5 != 0) {
-					$('#CHECK5').prop('checked', true);
-				}
-				if (dato.data[0].CHECK6 != 0) {
-					$('#CHECK6').prop('checked', true);
+				if (dato.data[0].REQUIERE_CONCLUSION == 1) {
+					$('#REQUIERE_CONCLUSION').prop('checked', true);
+				} else {
+					$('#REQUIERE_CONCLUSION').prop('checked', false);
+					
 				}
 
-			
-				
-
-				
 				$("#NIVEL1").val(dato.data[0].NIVEL1)
 				$("#NIVEL2").val(dato.data[0].NIVEL2)
 				$("#NIVEL3").val(dato.data[0].NIVEL3)
@@ -9507,22 +9684,18 @@ $('#boton_editarInforme').on('click', function (e) {
 				$("#NIVEL5").val(dato.data[0].NIVEL5)
 
 
-			$("#OPCION_PORTADA1").val(dato.data[0].OPCION_PORTADA1)
-			$("#OPCION_PORTADA2").val(dato.data[0].OPCION_PORTADA2)
-			$("#OPCION_PORTADA3").val(dato.data[0].OPCION_PORTADA3)
-			$("#OPCION_PORTADA4").val(dato.data[0].OPCION_PORTADA4)
-			$("#OPCION_PORTADA5").val(dato.data[0].OPCION_PORTADA5)
-}			$("#OPCION_PORTADA6").val(dato.data[0].OPCION_PORTADA6)
+				$("#OPCION_PORTADA1").val(dato.data[0].OPCION_PORTADA1)
+				$("#OPCION_PORTADA2").val(dato.data[0].OPCION_PORTADA2)
+				$("#OPCION_PORTADA3").val(dato.data[0].OPCION_PORTADA3)
+				$("#OPCION_PORTADA4").val(dato.data[0].OPCION_PORTADA4)
+				$("#OPCION_PORTADA5").val(dato.data[0].OPCION_PORTADA5)
+	}			$("#OPCION_PORTADA6").val(dato.data[0].OPCION_PORTADA6)
 
 
-			$("#tab1_informe_info").click();
-			
-			
-
-			$('#modal_datosInforme').modal({backdrop:false});
+				$("#tab1_informe_info").click();
+				$('#modal_datosInforme').modal({backdrop:false});
 				
 		
-			
 			// mostrar modal
 		},
 		beforeSend: function () {
@@ -9563,115 +9736,112 @@ $('#boton_editarInforme').on('click', function (e) {
 
 
 $("#boton_guardarDatosInforme").click(function () {
-	
-	//VERIFICAMOS QUE ALMENOS UN CHECKBOX DE LOS NIIVELES ESTE SELECCIONADO
-	// if ($('.checkbox_niveles:checked').length > 0) {
-	
-		// valida campos vacios
-		var valida = this.form.checkValidity();
-		if (valida) {
-			// Valida envio de datos
-			swal({
-				title: "¡Confirme guardar la información !",
-				text: "Una vez guardada la información los datos seran actualizados para el informe",
-				type: "info",
-				showCancelButton: true,
-				confirmButtonColor: "#DD6B55",
-				confirmButtonText: "Guardar!",
-				cancelButtonText: "Cancelar!",
-				closeOnConfirm: false,
-				closeOnCancel: false
-			}, function (isConfirm) {
-				if (isConfirm) {
-					// cerrar msj confirmacion
-					swal.close();
+				
+	// Validamos los campos requeridos
+	var valida = this.form.checkValidity();
+	if (valida) {
+		// Valida envio de datos
+		swal({
+			title: "¡Confirme guardar la información !",
+			text: "Una vez guardada la información los datos seran actualizados para el informe",
+			type: "info",
+			showCancelButton: true,
+			confirmButtonColor: "#DD6B55",
+			confirmButtonText: "Guardar!",
+			cancelButtonText: "Cancelar!",
+			closeOnConfirm: false,
+			closeOnCancel: false
+		}, function (isConfirm) {
+			if (isConfirm) {
+				// cerrar msj confirmacion
+				swal.close();
 
-					// enviar datos
-					$('#form_recInforme').ajaxForm({
-						dataType: 'json',
-						type: 'POST',
-						url: '/recsensorial',
-						data: {opcion: 5},
-						resetForm: false,
-						success: function (dato) {
-                       
+				// enviar datos
+				$('#form_recInforme').ajaxForm({
+					dataType: 'json',
+					type: 'POST',
+					url: '/recsensorial',
+					data: {opcion: 5},
+					resetForm: false,
+					success: function (dato) {
+					
 
-							// mensaje
-							swal({
-								title: "Correcto",
-								text: "Informacion guardada exitosamente",
-								type: "success", // warning, error, success, info
-								buttons: {
-									visible: false, // true , false
-								},
-								timer: 1500,
-								showConfirmButton: false
-							});
+						// mensaje
+						swal({
+							title: "Correcto",
+							text: "Informacion guardada exitosamente",
+							type: "success", // warning, error, success, info
+							buttons: {
+								visible: false, // true , false
+							},
+							timer: 1500,
+							showConfirmButton: false
+						});
 
 
-							$('#boton_descargarquimicosdoc').css('display', 'block')
+						$('#boton_descargarquimicosdoc').css('display', 'block')
 
-							// actualiza boton
-							$('#boton_guardarDatosInforme').html('Guardar <i class="fa fa-save"></i>');
-							$('#boton_guardarDatosInforme').attr('disabled', false);
+						// actualiza boton
+						$('#boton_guardarDatosInforme').html('Guardar <i class="fa fa-save"></i>');
+						$('#boton_guardarDatosInforme').attr('disabled', false);
 
-							// cerrar modal
-							// $('#modal_datosInforme').modal('hide');
-						},
-						beforeSend: function () {
-							$('#boton_guardarDatosInforme').html('Guardando <i class="fa fa-spin fa-spinner"></i>');
-							$('#boton_guardarDatosInforme').attr('disabled', true);
-						},
-						error: function (dato) {
-							// actualiza boton
-							$('#boton_guardarDatosInforme').html('Guardar <i class="fa fa-save"></i>');
-							$('#boton_guardarDatosInforme').attr('disabled', false);
+						// cerrar modal
+						// $('#modal_datosInforme').modal('hide');
+					},
+					beforeSend: function () {
+						$('#boton_guardarDatosInforme').html('Guardando <i class="fa fa-spin fa-spinner"></i>');
+						$('#boton_guardarDatosInforme').attr('disabled', true);
+					},
+					error: function (dato) {
+						// actualiza boton
+						$('#boton_guardarDatosInforme').html('Guardar <i class="fa fa-save"></i>');
+						$('#boton_guardarDatosInforme').attr('disabled', false);
 
-							// mensaje
-							swal({
-								title: "Error",
-								text: "" + dato.msj,
-								type: "error", // warning, error, success, info
-								buttons: {
-									visible: false, // true , false
-								},
-								timer: 1500,
-								showConfirmButton: false
-							});
-							return false;
-						}
-					}).submit();
-					return false;
-				}
-				else {
-					// mensaje
-					swal({
-						title: "Cancelado",
-						text: "",
-						type: "error", // warning, error, success, info
-						buttons: {
-							visible: false, // true , false
-						},
-						timer: 500,
-						showConfirmButton: false
-					});
-				}
-			});
-			return false;
-		}
-	// } else {
-	// 	swal({
-	// 		title: "Seleccione al menos una opción",
-	// 		text: "es necesario seleccionar al menos un opción para poder continuar", 
-	// 		type: "info", // warning, error, success, info
-	// 		buttons: {
-	// 			visible: false, // true , false
-	// 		},
-	// 		timer: 1500,
-	// 		showConfirmButton: false
-	// 	});
+						// mensaje
+						swal({
+							title: "Error",
+							text: "" + dato.msj,
+							type: "error", // warning, error, success, info
+							buttons: {
+								visible: false, // true , false
+							},
+							timer: 1500,
+							showConfirmButton: false
+						});
+						return false;
+					}
+				}).submit();
+				return false;
+			}
+			else {
+				// mensaje
+				swal({
+					title: "Cancelado",
+					text: "",
+					type: "error", // warning, error, success, info
+					buttons: {
+						visible: false, // true , false
+					},
+					timer: 500,
+					showConfirmButton: false
+				});
+			}
+		});
+		return false;
+	} else {
+		swal({
+		title: "Faltan datos por rellenear",
+		text: "Asegurece de tener todos los datos rellenados, para poder continuar", 
+		type: "warning", // warning, error, success, info
+		buttons: {
+			visible: false, // true , false
+		},
+		timer: 1500,
+		showConfirmButton: false
+	});
 		
-	// }
+	}
+	
 });
 
 
@@ -11390,3 +11560,14 @@ document.getElementById('JERARQUIACONTROL').addEventListener('change', function(
 	document.getElementById('CONTROLESJERARQUIA_DESCRIPCION').value = descripcion;
 });
 
+//Validamos si el informe requiere conclusiones o no
+function validarConclusion(check) {
+	if (check.checked) {
+		$('#ID_CATCONCLUSION').prop('disabled', false).val('').prop('required', true)
+        $('#CONCLUSION').prop('disabled', false).val('').prop('required', true)
+	} else {
+		$('#ID_CATCONCLUSION').prop('disabled', true).val('').prop('required', false)
+		$('#CONCLUSION').prop('disabled', true).val('').prop('required', false)
+	}
+	
+}

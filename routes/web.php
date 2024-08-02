@@ -211,6 +211,26 @@ Route::get('verequipodocumentopdf/{documento_id}', ['as' => 'verequipodocumentop
 
 //==============================================
 
+
+//vehiculos
+
+Route::resource('proveedorvehiculo', 'catalogos\vehiculoController');
+
+Route::get('tablaproveedorvehiculo/{proveedor_id}', ['as' => 'proveedorvehiculo.tablaproveedorvehiculo', 'uses' => 'catalogos\vehiculoController@tablaproveedorvehiculo']);
+
+
+Route::get('verequipodocumento/{equipo_id}/{documento_tipo}', ['as' => 'verequipodocumento', 'uses' => 'catalogos\equipoController@mostrarpdf']);
+
+
+Route::get('vervehiculofoto/{id}', ['as' => 'vervehiculofoto', 'uses' => 'catalogos\vehiculoController@mostrarFotoVehiculo']);
+
+Route::get('tablaequipodocumento/{equipo_id}', ['as' => 'equipoController.tablaequipodocumento', 'uses' => 'catalogos\equipoController@tablaequipodocumento']);
+
+Route::get('verequipodocumentopdf/{documento_id}', ['as' => 'verequipodocumentopdf', 'uses' => 'catalogos\equipoController@mostrarpdf']);
+
+//==============================================
+
+
 Route::resource('proveedorsignatario', 'catalogos\signatarioController');
 
 Route::get('tablaproveedorsignatario/{proveedor_id}', ['as' => 'proveedorsignatario.tablaproveedorsignatario', 'uses' => 'catalogos\signatarioController@tablaproveedorsignatario']);
@@ -359,7 +379,7 @@ Route::get('recsensorialareacategorias/{recsensorial_id}', ['as' => 'recsensoria
 
 Route::get('recsensorialareacategoriaselegidas/{area_id}', ['as' => 'recsensorialarea.recsensorialareacategoriaselegidas', 'uses' => 'recsensorial\recsensorialareaController@recsensorialareacategoriaselegidas']);
 
-Route::get('recsensorialconsultaareas/{recsensorial_id}/{id_seleccionado}', ['as' => 'recsensorialarea.recsensorialconsultaareas', 'uses' => 'recsensorial\recsensorialareaController@recsensorialconsultaareas']);
+Route::get('recsensorialconsultaareas/{recsensorial_id}/{id_seleccionado}/{quimicas}', ['as' => 'recsensorialarea.recsensorialconsultaareas', 'uses' => 'recsensorial\recsensorialareaController@recsensorialconsultaareas']);
 
 Route::get('recsensorialareaeliminar/{area_id}', ['as' => 'recsensorialarea.recsensorialareaeliminar', 'uses' => 'recsensorial\recsensorialareaController@recsensorialareaeliminar']);
 

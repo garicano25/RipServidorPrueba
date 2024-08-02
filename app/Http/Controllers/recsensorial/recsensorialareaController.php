@@ -218,7 +218,10 @@ class recsensorialareaController extends Controller
                                                     recsensorialareacategorias.recsensorialareacategorias_geh,
                                                     recsensorialareacategorias.recsensorialareacategorias_total,
                                                     recsensorialareacategorias.recsensorialareacategorias_tiempoexpo,
-                                                    recsensorialareacategorias.recsensorialareacategorias_frecuenciaexpo 
+                                                    recsensorialareacategorias.recsensorialareacategorias_frecuenciaexpo, 
+                                                    recsensorialareacategorias.tiempoexpo_quimico, 
+                                                    recsensorialareacategorias.frecuenciaexpo_quimico   
+
                                                 FROM
                                                     recsensorialareacategorias
                                                 WHERE
@@ -243,18 +246,37 @@ class recsensorialareaController extends Controller
      * @param  int  $id_seleccionado
      * @return \Illuminate\Http\Response
      */
-    public function recsensorialconsultaareas($recsensorial_id, $id_seleccionado)
+    public function recsensorialconsultaareas($recsensorial_id, $id_seleccionado, $quimicas)
     {
         try {
             $opciones = '<option value=""></option>';
-            $tabla = recsensorialareaModel::where('recsensorial_id', $recsensorial_id)->get();
 
-            // colocar numero de registro
-            foreach ($tabla  as $key => $value) {
-                if ($id_seleccionado == $value['id']) {
-                    $opciones .= '<option value="' . $value['id'] . '" selected>' . $value['recsensorialarea_nombre'] . '</option>';
-                } else {
-                    $opciones .= '<option value="' . $value['id'] . '">' . $value['recsensorialarea_nombre'] . '</option>';
+            if ($quimicas == 0) {
+
+                $tabla = recsensorialareaModel::where('recsensorial_id', $recsensorial_id)->get();
+
+                // colocar numero de registro
+                foreach ($tabla  as $key => $value) {
+                    if ($id_seleccionado == $value['id']) {
+                        $opciones .= '<option value="' . $value['id'] . '" selected>' . $value['recsensorialarea_nombre'] . '</option>';
+                    } else {
+                        $opciones .= '<option value="' . $value['id'] . '">' . $value['recsensorialarea_nombre'] . '</option>';
+                    }
+                }
+            } else {
+
+                $tabla = DB::select('SELECT a.*
+                            FROM recsensorialarea a
+                            LEFT JOIN recsensorialareapruebas p ON p.recsensorialarea_id = a.id
+                            WHERE recsensorial_id = ? AND p.catprueba_id = 15', [$recsensorial_id]);
+
+                // colocar numero de registro
+                foreach ($tabla as $key => $value) {
+                    if ($id_seleccionado == $value->id) {
+                        $opciones .= '<option value="' . $value->id . '" selected>' . $value->recsensorialarea_nombre . '</option>';
+                    } else {
+                        $opciones .= '<option value="' . $value->id . '">' . $value->recsensorialarea_nombre . '</option>';
+                    }
                 }
             }
 
@@ -328,6 +350,10 @@ class recsensorialareaController extends Controller
                         'recsensorialareacategorias_total' => $request->total[$key],
                         'recsensorialareacategorias_tiempoexpo' => $request->tiempo[$key],
                         'recsensorialareacategorias_frecuenciaexpo' => $request->frecuencia[$key],
+
+                        'tiempoexpo_quimico' => $request->tiempo_quimicos[$key],
+                        'frecuenciaexpo_quimico' => $request->frecuencia_quimicos[$key],
+
                     ]);
                 }
 
@@ -356,6 +382,11 @@ class recsensorialareaController extends Controller
                         'recsensorialareacategorias_total' => $request->total[$key],
                         'recsensorialareacategorias_tiempoexpo' => $request->tiempo[$key],
                         'recsensorialareacategorias_frecuenciaexpo' => $request->frecuencia[$key],
+
+                        'tiempoexpo_quimico' => $request->tiempo_quimicos[$key],
+                        'frecuenciaexpo_quimico' => $request->frecuencia_quimicos[$key],
+
+
                     ]);
                 }
 

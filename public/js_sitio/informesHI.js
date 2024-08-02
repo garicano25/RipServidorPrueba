@@ -71,13 +71,16 @@ function cargarFoliosProyecto(proyecto_folio) {
         cache: false,
         success: function(dato) {
             selectElement.innerHTML = dato.opciones;
-
-            if (dato.proyecto_id) {
-                consulta_menuparametros_reportes(dato.proyecto_id);
-            }
+			
+			$(selectElement).selectize({
+                create: false,
+                sortField: 'text',
+                placeholder: 'Seleccione una opción'
+            });
         },
+
         beforeSend: function() {
-            selectElement.innerHTML = '<option value="" selected>Consultando folios de proyectos...</option>';
+            selectElement.innerHTML = '<option value="" selected>Consultando folios de proyectos y reconocimientos...</option>';
         },
         error: function(dato) {
             console.error('Error:', dato.msj);
@@ -124,11 +127,14 @@ function consulta_menuparametros_reportes(proyecto_id)
 
 
 
-function seleccionar_proyectos (ProyectoID)
-{
+function seleccionar_proyectos(ProyectoID) {
+	
+	//DESBLOQUEAMOS LOS BOTONES Y SELECT PARA LOS REPORTES
+	$('#btnPoeProyecto').prop('disabled', true);
+	$('#select_tiporeportes').prop('disabled', true);
 
+	consultarEstatusProyecto(ProyectoID)
 	consulta_menuparametros_reportes(ProyectoID)
-
     document.getElementById('estructura_reporte').innerHTML = '';
 
 
@@ -221,6 +227,60 @@ var proyecto_id =  $('#informes_reco').val();
 	});//Fin ajax
 }
 
+//MOSTRAMOS EL REPORTE DE POE DEL PROYECTO
+$('#btnPoeProyecto').on('click', function (e) {
+	e.preventDefault();
+	
+	$('#select_tiporeportes').val('');
+
+	//Consultamos el reporte de POE
+	mostrar_reporte(0)
+
+})
+
+
+function consultarEstatusProyecto(ID_PROYECTO) {
+
+    $.ajax({
+        type: "GET",
+        dataType: "json",
+        url: "/estatusProyecto/" + ID_PROYECTO,
+        data: {},
+        cache: false,
+        success: function(dato) {
+            
+			if (dato.nuevo == 1) { //si es nuevo tiene que realizar el POE
+				
+				$('#btnPoeProyecto').prop('disabled', false);
+				$('#select_tiporeportes').prop('disabled', true);
+				$('#estructura_reporte').html('<p style="text-align: center; font-size: 24px;">Complete la tabla de POE para poder generar los reportes.</p>');
+
+			} else {
+
+				if (dato.info.POE_FINALIZADO == 1) {
+					$('#btnPoeProyecto').prop('disabled', false);
+					$('#select_tiporeportes').prop('disabled', false);
+					$('#estructura_reporte').html('<p style="text-align: center; font-size: 24px;">Seleccione un tipo de reporte.</p>');
+				} else {
+					$('#btnPoeProyecto').prop('disabled', false);
+					$('#select_tiporeportes').prop('disabled', true);
+					$('#estructura_reporte').html('<p style="text-align: center; font-size: 24px;">Complete la tabla de POE para poder generar los reportes.</p>');
+				}
+				
+			}
+
+        },
+        beforeSend: function() {
+           $('#btnPoeProyecto').prop('disabled', true);
+			$('#select_tiporeportes').prop('disabled', true);
+
+        },
+        error: function(dato) {
+            console.error('Error:', dato.msj);
+            return false;
+        }
+    });
+}
 
 
 

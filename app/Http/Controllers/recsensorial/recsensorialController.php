@@ -51,6 +51,7 @@ use App\modelos\recsensorial\catConclusionesModel;
 use App\modelos\recsensorial\controlCambiosModel;
 use App\modelos\recsensorial\recsensorialTablaClienteProporcionadoModel;
 use App\modelos\recsensorial\cat_descripcionarea;
+use App\modelos\recsensorialquimicos\catsustanciaModel;
 
 use App\modelos\proyecto\proyectoModel;
 
@@ -103,7 +104,7 @@ class recsensorialController extends Controller
         $catvolatilidad = catvolatilidadModel::where('catvolatilidad_activo', 1)->get();
         $catSustanciasQuimicas = catSustanciasQuimicasModel::where('ACTIVO', 1)->get();
         $catConclusiones = catConclusionesModel::where('ACTIVO', 1)->get();
-
+        $hojasSeguridad = catsustanciaModel::where('catsustancia_activo', 1)->get();
 
         $descripciones = cat_descripcionarea::where('ACTIVO', 1)->get();
 
@@ -116,22 +117,8 @@ class recsensorialController extends Controller
 
 
 
-        $proyectos = DB::select("
-        SELECT 
-            p.id, 
-            p.proyecto_folio
-        FROM 
-            proyecto p
-        LEFT JOIN 
-            serviciosProyecto sp ON p.id = sp.PROYECTO_ID
-        WHERE 
-            sp.HI = 1
-            AND p.recsensorial_id IS NULL
-    ");
-
-
         //vista RECONOCIMIENTO SENSORIAL
-        return view('catalogos.recsensorial.reconocimiento_sensorial', compact('cliente', 'catregion', 'catsubdireccion', 'catgerencia', 'catactivo', 'catprueba', 'catdepartamento', 'catmovilfijo', 'catpartecuerpo', 'catcategoriapeligrosalud', 'catgradoriesgosalud', 'catunidadmedidasustacia', 'catvolatilidad', 'catestadofisicosustancia', 'catviaingresoorganismo', 'proveedor', 'catSustanciasQuimicas', 'tipopruebas', 'cargos', 'catConclusiones', 'descripciones'));
+        return view('catalogos.recsensorial.reconocimiento_sensorial', compact('cliente', 'catregion', 'catsubdireccion', 'catgerencia', 'catactivo', 'catprueba', 'catdepartamento', 'catmovilfijo', 'catpartecuerpo', 'catcategoriapeligrosalud', 'catgradoriesgosalud', 'catunidadmedidasustacia', 'catvolatilidad', 'catestadofisicosustancia', 'catviaingresoorganismo', 'proveedor', 'catSustanciasQuimicas', 'tipopruebas', 'cargos', 'catConclusiones', 'descripciones', 'hojasSeguridad'));
     }
 
 
@@ -884,6 +871,7 @@ class recsensorialController extends Controller
                                         NIVEL4,
                                         NIVEL5,
                                         PETICION_CLIENTE,
+                                        REQUIERE_CONCLUSION,
                                         ID_CATCONCLUSION
                                 FROM recsensorial_recursos_informes
                                 WHERE RECSENSORIAL_ID = ?', [$ID]);
@@ -1119,14 +1107,14 @@ class recsensorialController extends Controller
 
 
 
-            $grupos = DB::select(' SELECT 
-                    categoria.recsensorialcategoria_nombrecategoria AS CATEGORIA,
-                    categoria.id AS CATEGORIA_ID
-            FROM recsensorialquimicosinventario inventario
-            LEFT JOIN recsensorialareacategorias areaCategoria ON inventario.recsensorialarea_id = areaCategoria.recsensorialarea_id 
-            LEFT JOIN recsensorialcategoria categoria ON areaCategoria.recsensorialcategoria_id = categoria.id
-            WHERE inventario.recsensorial_id = ?  AND inventario.recsensorialarea_id = ?', [$recsensorial_id, $area_id]);
-
+            $grupos = DB::select(' SELECT
+                                        cat.recsensorialcategoria_nombrecategoria AS CATEGORIA,
+                                        area.recsensorialcategoria_id AS CATEGORIA_ID
+                                    FROM
+                                        recsensorialareacategorias area
+                                    LEFT JOIN recsensorialcategoria cat ON cat.id = area.recsensorialcategoria_id  
+                                    WHERE
+                                        area.recsensorialarea_id = ?', [$area_id]);
 
 
 
@@ -1171,16 +1159,17 @@ class recsensorialController extends Controller
                                         FROM catsustancias_quimicas");
 
 
-            $areas = DB::select("SELECT a.recsensorialarea_nombre AREA, a.id ID_AREA
-            FROM recsensorialareacategorias ac
-            LEFT JOIN recsensorialarea a ON a.id = ac.recsensorialarea_id
-            LEFT JOIN recsensorialcategoria c ON c.id = ac.recsensorialcategoria_id
-            WHERE a.recsensorial_id = ?", [$recsensorial_id]);
+            $areas = DB::select("SELECT a.recsensorialarea_nombre, a.id 
+                                    FROM recsensorialareacategorias ac
+                                    LEFT JOIN recsensorialarea a ON a.id = ac.recsensorialarea_id
+                                    LEFT JOIN recsensorialcategoria c ON c.id = ac.recsensorialcategoria_id
+                                    WHERE a.recsensorial_id = ?
+                                    GROUP BY a.id, a.recsensorialarea_nombre", [$recsensorial_id]);
 
 
             //CREAMOS LAS OPCIONES PARA LAS AREAS
             foreach ($areas as $value) {
-                $opciones1 .= '<option value="' . $value->ID_AREA . '" >' . $value->AREA . '</option>';
+                $opciones1 .= '<option value="' . $value->id . '" >' . $value->recsensorialarea_nombre . '</option>';
             }
 
             //CREAMOS LAS OPCIONES PARA EL SELECT DE LOS COMPONENTES Y PRODUCTOS

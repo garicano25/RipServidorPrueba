@@ -87,6 +87,12 @@ class recsensorialcatalogosController extends Controller
                 // crear campos NOMBRE Y ESTADO
                 foreach ($lista as $key => $value) {
                     $value['ETIQUETA'] = $value->NOMBRE_ETIQUETA;
+                    $value['ID_ETIQUETA'] = $value->ID_ETIQUETA;
+
+                    if (is_null($value->DESCRIPCION_ETIQUETA) || $value->DESCRIPCION_ETIQUETA === '') {
+                        $value->DESCRIPCION_ETIQUETA = 'N/A';
+                    }
+
 
                     // Consulta las opciones relacionadas
                     $opciones = CatetiquetaopcionesModel::where('ETIQUETA_ID', $value->ID_ETIQUETA)->pluck('NOMBRE_OPCIONES')->toArray();
@@ -481,9 +487,12 @@ class recsensorialcatalogosController extends Controller
                         $catalogo = Cat_etiquetaModel::create($request->all());
                         $dato["etiqueta"] = $catalogo;
 
+
                         $dato["msj"] = 'Información guardada correctamente';
                     } else {
+
                         $catalogo = Cat_etiquetaModel::findOrFail($request['ID_ETIQUETA']);
+                        $dato["etiqueta"] = $catalogo;
                         $catalogo->update($request->all());
                         $dato["msj"] = 'Información modificada correctamente';
                     }

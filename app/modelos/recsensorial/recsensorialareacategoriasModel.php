@@ -14,7 +14,9 @@ class recsensorialareacategoriasModel extends Model
     'recsensorialareacategorias_geh',
     'recsensorialareacategorias_total',
     'recsensorialareacategorias_tiempoexpo',
-    'recsensorialareacategorias_frecuenciaexpo'
+    'recsensorialareacategorias_frecuenciaexpo',
+    'tiempoexpo_quimico',
+    'frecuenciaexpo_quimico'
   ];
 
   public function categorias()

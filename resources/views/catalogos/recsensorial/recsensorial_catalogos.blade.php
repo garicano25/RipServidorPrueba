@@ -175,7 +175,7 @@
 										</a>
 									</td>
 								</tr>
-								<tr id="tr_16">
+								{{-- <tr id="tr_16">
 									<td>Conclusiones para Informes</td>
 									<td>
 										<a href="#" onclick="mostrar_catalogo(16);">
@@ -190,7 +190,7 @@
 											<i class="fa fa-chevron-circle-right fa-3x text-secondary" id="cat_17"></i>
 										</a>
 									</td>
-								</tr>
+								</tr> --}}
 								<tr id="tr_18">
 									<td>Sistema de iluminación</td>
 									<td>

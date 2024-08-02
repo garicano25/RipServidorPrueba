@@ -455,7 +455,7 @@
                                 <thead>
                                     <tr>
                                         <th width="30">#</th>
-                                        <th>Tipos de servicios</th>
+                                        <th>Tipo de servicios</th>
                                         <th>No. de contrato - PO</th>
                                         <th width="500">Objeto del servicio</th>
                                         <th>Convenios</th>
@@ -1145,7 +1145,7 @@
                         </div>
                         <div class="col-12">
                             <div class="form-group">
-                                <label>Tipo de servicio*</label>
+                                <label>Tipo de servicio *</label>
                                 <select class="form-control" name="TIPO_SERVICIO" id="TIPO_SERVICIO" required>
                                     <option value=""></option>
                                     <option value="1">Contrato</option>
@@ -1188,13 +1188,13 @@
                         </div>
                         <div class="col-4">
                             <div class="form-group">
-                                <label>Número de contrato </label>
+                                <label>Número de contrato o O.S/O.C </label>
                                 <input type="text" step="any" class="form-control" name="NUMERO_CONTRATO" id="NUMERO_CONTRATO">
                             </div>
                         </div>
                         <div class="col-12">
                             <div class="form-group">
-                                <label>Objeto del servicio*</label>
+                                <label>Objeto del servicio *</label>
                                 <textarea class="form-control" rows="3" id="DESCRIPCION_CONTRATO" name="DESCRIPCION_CONTRATO" required=""></textarea>
 
                             </div>

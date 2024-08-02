@@ -694,7 +694,8 @@
                                                                             </div>
                                                                             <div class="col-6 clienteblock">
                                                                                 <div class="form-group">
-                                                                                    <label> Coordenadas *</label>
+                                                                                    <label>Coordenadas *</label>
+
                                                                                     <input type="text" class="form-control" id="recsensorial_coordenadas" name="recsensorial_coordenadas" required>
                                                                                 </div>
                                                                             </div>
@@ -1709,7 +1710,7 @@
                                                                             <th style="width: 80px!important;">Editar</th>
                                                                             <th>Áreas</th>
                                                                             <th>Categorías</th>
-                                                                            <th>Sustancias</th>
+                                                                            <th>Sustancia química y/o producto</th>
                                                                             <th>Componentes</th>
                                                                             <th style="width: 120px!important;">Est. físico</th>
                                                                             <th style="width: 120px!important;">Cantidad</th>
@@ -1777,7 +1778,7 @@
                                                                             <th>Sustancia química y/o<br>producto</th>
                                                                             <th>Componentes de la<br>mezcla</th>
                                                                             <th style="width: 130px!important;">Vía de ingreso<br>al organismo</th>
-                                                                            <th style="width: 130px!important;">Numero de<br>POE expuesto</th>
+                                                                            <th style="width: 130px!important;">Numero<br>de POE</th>
                                                                             <th style="width: 130px!important;">Tiempo de<br>Exposición</th>
                                                                             <th style="width: 100px!important;">Suma total<br>ponderación</th>
                                                                             <th style="width: 120px!important;">Prioridad de<br>muestreo</th>
@@ -2407,7 +2408,15 @@
                                                 </div>
                                                 <div class="col-12">
                                                     <div class="form-group">
-                                                        <label> Conclusiones * </label>
+                                                        <!-- <label> Conclusiones</label> -->
+
+                                                        <div class="switch">
+                                                            <label>
+                                                                <input type="checkbox" id="REQUIERE_CONCLUSION" name="REQUIERE_CONCLUSION" value="1" checked onchange="validarConclusion(this)">
+                                                                <span class="lever switch-col-light-blue" id="CHECK_CONCLUSION"></span> Conclusion
+                                                            </label>
+                                                        </div>
+
                                                         <select class="custom-select form-control mb-1" style="width: 100%;" id="ID_CATCONCLUSION" name="ID_CATCONCLUSION">
                                                             <option value="">&nbsp;</option>
                                                             @foreach($catConclusiones as $dato)
@@ -2418,7 +2427,7 @@
                                                     </div>
                                                 </div>
                                                 <div class="col-12 mx-2">
-                                                    <label class="text-danger">¿El cliente requiere puntos de muestreo adicionales? </label>
+                                                    <label class="text-danger">¿El cliente decea muestrear sustancias quimicas adicionales ? </label>
                                                     <div class="switch">
                                                         <label>
                                                             No<input type="checkbox" id="PETICION_CLIENTE" name="PETICION_CLIENTE" value="1">
@@ -2475,7 +2484,7 @@
                                                     </div>
                                                 </div>
 
-                                                
+
 
                                                 <style>
                                                     .legend {
@@ -2734,8 +2743,6 @@
                                         </form>
                                         @endif
 
-
-
                                         <div class="table-responsive" style="max-height: 410px!important;">
                                             <table class="table table-hover stylish-table mt-1" width="100%" id="tabla_control_cambios">
                                                 <thead>
@@ -2754,12 +2761,12 @@
                                                 </tbody>
                                             </table>
                                         </div>
-
-                                        @if(auth()->user()->hasRoles(['Superusuario', 'Administrador', 'Coordinador']))
-                                        <button type="button" class="btn btn-info mt-5" style="background: #1E88E6!important; float: right; display: none;" data-toggle="tooltip" title="Descargar informe sensorial de químicos .doc" id="boton_descargarquimicosdoc" onclick="reporte(form_recsensorial.recsensorial_id.value, 2, this);">
+                                        <!-- DESCOMENTAR CUANDO SE HAGA LO DE CONTROL DE CAMBIOS -->
+                                        <!--  @if(auth()->user()->hasRoles(['Superusuario', 'Administrador', 'Coordinador']))
+                                        <button type="button" class="btn btn-info mt-1" style="background: #1E88E6!important; float: right; display: none;" data-toggle="tooltip" title="Descargar informe sensorial de químicos .doc" id="boton_descargarquimicosdoc" onclick="reporte(form_recsensorial.recsensorial_id.value, 2, this);">
                                             Descargar &nbsp;&nbsp;<i class="fa fa-file-word-o fa-1x"></i>
                                         </button>
-                                        @endif
+                                        @endif -->
                                     </div>
                                 </div>
                             </div>
@@ -2768,7 +2775,7 @@
                 </div>
             </div>
 
-            <div class="modal-footer" style="display: flex; justify-content: space-between;">
+            <div class="modal-footer" style="display: flex; justify-content: end;">
 
 
                 <!-- <button type="button" class="btn btn-info" style="float: right; background: #1E88E6!important; display: none;" data-toggle="tooltip" title="Descargar informe de reconocimiento químicos autorizado .pdf" id="boton_descargarquimicospdf">
@@ -2776,12 +2783,12 @@
                 </button> -->
 
                 @if(auth()->user()->hasRoles(['Superusuario', 'Administrador', 'Coordinador']))
-                <button type="button" class="btn btn-info mt-5" style="background: #1E88E6!important; float: right; display: block;" data-toggle="tooltip" title="Descargar informe sensorial de químicos .doc" id="boton_descargarquimicosdoc" onclick="reporte(form_recsensorial.recsensorial_id.value, 2, this);">
+                <button type="button" class="btn btn-info mt-1" style="background: #1E88E6!important; float: left; display: block;" data-toggle="tooltip" title="Descargar informe sensorial de químicos .doc" id="boton_descargarquimicosdoc" onclick="reporte(form_recsensorial.recsensorial_id.value, 2, this);">
                     Descargar &nbsp;&nbsp;<i class="fa fa-file-word-o fa-1x"></i>
                 </button>
                 @endif
 
-                <button type="button" class="btn btn-default waves-effect" style="float: left;" data-dismiss="modal">Cerrar</button>
+                <button type="button" class="btn btn-default waves-effect mx-3" style="float: left;" data-dismiss="modal">Cerrar</button>
             </div>
         </div>
     </div>
@@ -2882,6 +2889,8 @@
                                             <option selected disabled>Seleccione una opción</option>
                                             <option value="1">Químico</option>
                                             <option value="2">Físico</option>
+                                            <option value="3">Químico y Físico</option>
+
                                         </select>
                                     </div>
                                 </div>
@@ -2920,8 +2929,10 @@
                                             <th>Actividades</th>
                                             <th style="width: 120px!important;">GEH</th>
                                             <th style="width: 120px!important;">Total personas</th>
-                                            <th style="width: 140px!important;">Tiempo Expo(Min).</th>
-                                            <th style="width: 120px!important;">Frec. Expo.</th>
+                                            <th style="width: 120px!important;">Tiempo Expo. Área</th>
+                                            <th style="width: 120px!important;">Frec. Expo. Área</th>
+                                            <th style="width: 120px!important;">Tiempo Expo. Químicos</th>
+                                            <th style="width: 120px!important;">Frec. Expo. Químicos</th>
                                             <th style="width: 70px!important;">Eliminar</th>
                                         </tr>
                                     </thead>
@@ -2988,10 +2999,10 @@
                         <div class="col-12">
                             <div class="form-group">
                                 <label> Descripción del área</label>
-                                <select class="custom-select form-control" id="DESCRIPCION_AREA" name="DESCRIPCION_AREA">
+                                <select class="custom-select form-control" id="DESCRIPCION_AREA" name="DESCRIPCION_AREA" required>
                                     <option value=""></option>
                                     @foreach($descripciones as $dato)
-                                    <option value="{{$dato->ID_DESCRIPCION_AREA}}">{{ $dato->DESCRIPCION }}</option>
+                                    <option value="{{$dato->DESCRIPCION}}">{{ $dato->DESCRIPCION }}</option>
                                     @endforeach
                                 </select>
                             </div>
@@ -3039,21 +3050,26 @@
                                 </select>
                             </div>
                         </div>
-                        <!-- <div class="col-12">
+                        <div class="col-12">
                             <div class="form-group">
-                                <label> Agente / factor de riesgo *</label>
+                                <label> Fuente generadora para *</label>
                                 <select class="custom-select form-control" id="recsensorialmaquinaria_afecta" name="recsensorialmaquinaria_afecta" required>
                                     <option value=""></option>
-                                    <option value="1">Factores físicos</option>
-                                    <option value="2">Factores químicos</option>
-                                    <option value="3">Factores físicos y químicos</option>
+                                    <option value="1">Físicos</option>
+                                    <option value="2">Químicos</option>
+                                    <option value="3">Físicos y Químicos</option>
                                 </select>
                             </div>
-                        </div> -->
+                        </div>
                         <div class="col-4">
                             <div class="form-group">
                                 <label> Nombre de la fuente generadora *</label>
                                 <input type="text" class="form-control" name="recsensorialmaquinaria_nombre" id="recsensorialmaquinaria_nombre" required>
+                                <select class="custom-select form-control" style="display: none;" id="recsensorialmaquinaria_quimica" name="recsensorialmaquinaria_quimica">
+                                    @foreach($hojasSeguridad as $dato)
+                                    <option value="{{$dato->id}}">{{$dato->catsustancia_nombre}}</option>
+                                    @endforeach
+                                </select>
                             </div>
                         </div>
                         <div class="col-3">
@@ -3441,9 +3457,9 @@
                                 <thead style="display: block; width: 100%!important;">
                                     <tr>
                                         <th style="width: 52px!important;">No.</th>
-                                        <th style="width: 680px!important;">Sustancia</th>
-                                        <th style="width: 180px!important;">Cantidad manejada</th>
-                                        <th style="width: 180px!important;">Uni. medida</th>
+                                        <th style="width: 680px!important;">Sustancia química y/o producto</th>
+                                        <th style="width: 180px!important;"></th>
+                                        <th style="width: 180px!important;"></th>
                                         <th style="width: auto!important;">Eliminar</th>
                                     </tr>
                                 </thead>

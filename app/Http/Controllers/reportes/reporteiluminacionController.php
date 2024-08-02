@@ -6192,7 +6192,7 @@ class reporteiluminacionController extends Controller
                             return null;
                         }
 
-
+                        //FORMATEAMO LAS FECHAS A UN VALOR ACEPTABLE EN LA BASE DE DATOOS
                         function formatearHora($hora)
                         {
 
@@ -6207,6 +6207,26 @@ class reporteiluminacionController extends Controller
                                 $minutosFormateados = str_pad($minutos, 2, '0', STR_PAD_LEFT);
 
                                 return $horasFormateadas . ':' . $minutosFormateados;
+                            }
+                        }
+
+                        //VALIDAMOS LOS PUNTOS DE REFLEXION DE PAREDES
+                        function limpiarFRP($valor)
+                        {
+                            if (is_numeric($valor)) {
+                                return intval($valor);
+                            } else {
+                                return 0;
+                            }
+                        }
+
+                        //VALIDAMOS LOS PUNTOS DE REFLEXION DE PLANO
+                        function limpiarFRPT($valor)
+                        {
+                            if (is_numeric($valor)) {
+                                return intval($valor);
+                            } else {
+                                return 0;
                             }
                         }
 
@@ -6227,14 +6247,22 @@ class reporteiluminacionController extends Controller
                                 'reporteiluminacionpuntos_horario3' => is_null($rowData['E']) ? null : formatearHora($rowData['E']),
                                 'reporteiluminacionpuntos_lux' => is_null($rowData['J']) ? null : intval($rowData['J']),
                                 'reporteiluminacionpuntos_luxmed1' => is_null($rowData['K']) ? null : puntosLimpios($rowData['K']),
-                                'reporteiluminacionpuntos_luxmed2' => is_null($rowData['L']) ? 0 : puntosLimpios($rowData['L']),
-                                'reporteiluminacionpuntos_luxmed3' => is_null($rowData['M']) ? 0 : puntosLimpios($rowData['M']),
+                                'reporteiluminacionpuntos_luxmed2' => is_null($rowData['N']) ? 0 : puntosLimpios($rowData['N']),
+                                'reporteiluminacionpuntos_luxmed3' => is_null($rowData['Q']) ? 0 : puntosLimpios($rowData['Q']),
                                 'reporteiluminacionpuntos_luxmed1menor' => 0,
                                 'reporteiluminacionpuntos_luxmed2menor' => 0,
                                 'reporteiluminacionpuntos_luxmed3menor' => 0,
                                 'reporteiluminacionpuntos_luxmed1mayor' => 0,
                                 'reporteiluminacionpuntos_luxmed2mayor' => 0,
                                 'reporteiluminacionpuntos_luxmed3mayor' => 0,
+                                'reporteiluminacionpuntos_frp' => 60,
+                                'reporteiluminacionpuntos_frpt' => 50,
+                                'reporteiluminacionpuntos_frpmed1' => is_null($rowData['L']) ? null : limpiarFRP($rowData['L']),
+                                'reporteiluminacionpuntos_frpmed2' => is_null($rowData['O']) ? null : limpiarFRP($rowData['O']),
+                                'reporteiluminacionpuntos_frpmed3' => is_null($rowData['R']) ? null : limpiarFRP($rowData['R']),
+                                'reporteiluminacionpuntos_frptmed1' => is_null($rowData['M']) ? null : limpiarFRPT($rowData['M']),
+                                'reporteiluminacionpuntos_frptmed2' => is_null($rowData['P']) ? null : limpiarFRPT($rowData['P']),
+                                'reporteiluminacionpuntos_frptmed3' => is_null($rowData['S']) ? null : limpiarFRPT($rowData['S']),
 
                             ]);
 

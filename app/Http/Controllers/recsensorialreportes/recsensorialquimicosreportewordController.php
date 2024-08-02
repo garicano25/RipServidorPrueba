@@ -415,7 +415,7 @@ class recsensorialquimicosreportewordController extends Controller
             if ($area != $value->AREA) {
                 $table->addRow(); //fila
                 $table->addCell(null, $combinar_fila)->addTextRun($centrado)->addText($value->AREA, $texto);
-                $table->addCell(null, $combinar_fila)->addTextRun($centrado)->addText($value->PROCESO, $texto);
+                $table->addCell(null, $combinar_fila)->addTextRun($justificado)->addText($value->PROCESO, $texto);
                 $table->addCell(null, $celda)->addTextRun($centrado)->addText($value->CATEGORIA, $texto);
                 $table->addCell(null, $celda)->addTextRun($centrado)->addText($value->PERSONAS, $texto);
 
@@ -771,32 +771,32 @@ class recsensorialquimicosreportewordController extends Controller
                                 recsensorialarea.recsensorialarea_caracteristica,
                                 recsensorialarea.recsensorialarea_extraccionaire,
                                 recsensorialarea.recsensorialarea_inyeccionaire,
-                                REPLACE(recsensorialarea.recsensorialarea_generacioncontaminante,",", ", ")  AS recsensorialarea_generacioncontaminante
+                                IF(REPLACE(recsensorialarea.recsensorialarea_generacioncontaminante,",", ", ") = "N/A", "Se realiza actividades administrativas, por lo cual no tiene una descripción detallada de algún proceso industrial" ,REPLACE(recsensorialarea.recsensorialarea_generacioncontaminante,",", ", "))  AS recsensorialarea_generacioncontaminante
                             FROM
                                 recsensorialarea 
                             WHERE
-                                recsensorialarea.recsensorial_id = ? 
+                                recsensorialarea.recsensorial_id = ?
                             ORDER BY
-                                recsensorialarea.id ASC', [$recsensorial_id]);
+                                    recsensorialarea.id ASC', [$recsensorial_id]);
 
         // encabezado tabla
-        $table->addRow(200, array('tblHeader' => true));
-        $table->addCell(4000, $encabezado_celda)->addTextRun($centrado)->addText('Área', $encabezado_texto);
-        $table->addCell(1375, $encabezado_celda)->addTextRun($centrado)->addText('Condición del lugar<w:br />(Abierto/Cerrado)', $encabezado_texto);
-        $table->addCell(1375, $encabezado_celda)->addTextRun($centrado)->addText('Sistema de extracción de aire<w:br />(general/localizado)', $encabezado_texto);
-        $table->addCell(1375, $encabezado_celda)->addTextRun($centrado)->addText('Sistema de inyección de aire<w:br />(general/localizado)', $encabezado_texto);
-        $table->addCell(1375, $encabezado_celda)->addTextRun($centrado)->addText('Características del proceso<w:br />(Continuo/Intermitente)', $encabezado_texto);
-        $table->addCell(4000, $encabezado_celda)->addTextRun($centrado)->addText('Condiciones del proceso', $encabezado_texto);
+        $table->addRow(300, array('tblHeader' => true));
+        $table->addCell(1600, $encabezado_celda)->addTextRun($centrado)->addText('Área', $encabezado_texto);
+        $table->addCell(1500, $encabezado_celda)->addTextRun($centrado)->addText('Condición del lugar<w:br />(Abierto/Cerrado)', $encabezado_texto);
+        $table->addCell(1500, $encabezado_celda)->addTextRun($centrado)->addText('Sistema de extracción de aire <w:br />(general/localizado)', $encabezado_texto);
+        $table->addCell(1500, $encabezado_celda)->addTextRun($centrado)->addText('Sistema de inyección de aire <w:br />(general/localizado)', $encabezado_texto);
+        $table->addCell(1500, $encabezado_celda)->addTextRun($centrado)->addText('Características del proceso<w:br />(Continuo/Intermitente)', $encabezado_texto);
+        $table->addCell(2000, $encabezado_celda)->addTextRun($centrado)->addText('Condiciones del procesos', $encabezado_texto);
 
         // registros tabla
         foreach ($sql as $key => $value) {
             $table->addRow(); //fila
-            $table->addCell(4000, $celda)->addTextRun($centrado)->addText($value->recsensorialarea_nombre, $texto);
-            $table->addCell(1375, $celda)->addTextRun($centrado)->addText($value->recsensorialarea_condicion, $texto);
-            $table->addCell(1375, $celda)->addTextRun($centrado)->addText($value->recsensorialarea_extraccionaire, $texto);
-            $table->addCell(1375, $celda)->addTextRun($centrado)->addText($value->recsensorialarea_inyeccionaire, $texto);
-            $table->addCell(1375, $celda)->addTextRun($centrado)->addText($value->recsensorialarea_caracteristica, $texto);
-            $table->addCell(4000, $celda)->addTextRun($centrado)->addText($value->recsensorialarea_generacioncontaminante, $texto);
+            $table->addCell(1600, $celda)->addTextRun($centrado)->addText($value->recsensorialarea_nombre, $texto);
+            $table->addCell(1500, $celda)->addTextRun($centrado)->addText($value->recsensorialarea_condicion, $texto);
+            $table->addCell(1500, $celda)->addTextRun($centrado)->addText($value->recsensorialarea_extraccionaire, $texto);
+            $table->addCell(1500, $celda)->addTextRun($centrado)->addText($value->recsensorialarea_inyeccionaire, $texto);
+            $table->addCell(1500, $celda)->addTextRun($centrado)->addText($value->recsensorialarea_caracteristica, $texto);
+            $table->addCell(2000, $celda)->addTextRun($centrado)->addText($value->recsensorialarea_generacioncontaminante, $texto);
         }
 
         $plantillaword->setComplexBlock('tabla_quimicos_condicionesarea', $table);

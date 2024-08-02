@@ -9,6 +9,9 @@ var tabla_catsustanciaQuimicasEntidad = null;
 var tabla_catUnidadMedida = null;
 var tabla_catConnotacion = null;
 var tabla_catEntidades = null;
+var tabla_catConclusiones = null;
+var tabla_catDescripcion = null;
+
 
 
 // Catalogo estado fisico de los sustancias [componentes]
@@ -71,6 +74,17 @@ function mostrar_catalogo(num_catalogo)
     $("#cat_10").removeClass("text-info");
     $("#cat_10").addClass("text-secondary");
     $("#tr_10").removeClass("active");
+
+
+    $("#cat_11").removeClass("text-info");
+    $("#cat_11").addClass("text-secondary");
+    $("#tr_11").removeClass("active");
+
+
+
+    $("#cat_12").removeClass("text-info");
+    $("#cat_12").addClass("text-secondary");
+    $("#tr_12").removeClass("active");
 
     $("#div_tabla_catalogo").html('');
 
@@ -406,6 +420,74 @@ function mostrar_catalogo(num_catalogo)
             // mostrar tabla catalogo
             function_tabla_catEntidad(num_catalogo);
             break;
+
+            case 11:
+                // activar menu
+                $("#titulo_tabla").html('Catálogo [Conclusiones para Informes]');
+
+                $("#tr_11").addClass("active");
+                $("#cat_11").addClass("text-info");
+    
+                // tabla encabezado
+                $("#div_tabla_catalogo").html('<h2 class="add-ct-btn" style="border: 0px #f00 solid; margin-top: -24px;">'+
+                                                    '<button type="button" class="btn btn-circle btn-lg btn-secondary waves-effect" data-toggle="tooltip" title="Nuevo registro" onclick="boton_nuevo_catConclusiones();">'+
+                                                        '<i class="fa fa-plus"></i>'+
+                                                    '</button>'+
+                                                '</h2>'+
+                                                '<div class="table-responsive m-t-20">'+
+                                                    '<table class="table table-hover stylish-table" width="100%" id="tabla_catConclusiones">'+
+                                                        '<thead>'+
+                                                            '<tr>'+
+                                                                '<th>#</th>'+
+                                                                '<th>Nombre</th>'+
+                                                                '<th>Descripción</th>'+
+                                                                '<th style="width: 80px !important;">Editar</th>'+
+                                                                '<th style="width: 80px !important;">Activo</th>'+
+                                                            '</tr>'+
+                                                        '</thead>'+
+                                                        '<tbody>'+
+                                                        '</tbody>'+
+                                                    '</table>'+
+                                                '</div>');
+    
+                // mostrar tabla catalogo
+                function_tabla_catConclusiones(num_catalogo);
+                break;
+
+
+            case 12:
+                // activar menu
+                $("#titulo_tabla").html('Catálogo [Descripciones Área]');
+
+                $("#tr_12").addClass("active");
+                $("#cat_12").addClass("text-info");
+    
+                // tabla encabezado
+                $("#div_tabla_catalogo").html('<h2 class="add-ct-btn" style="border: 0px #f00 solid; margin-top: -24px;">'+
+                                                    '<button type="button" class="btn btn-circle btn-lg btn-secondary waves-effect" data-toggle="tooltip" title="Nuevo registro" onclick="boton_nuevo_catDescripcionarea();">'+
+                                                        '<i class="fa fa-plus"></i>'+
+                                                    '</button>'+
+                                                '</h2>'+
+                                                '<div class="table-responsive m-t-20">'+
+                                                    '<table class="table table-hover stylish-table" width="100%" id="tabla_catDescripcion">'+
+                                                        '<thead>'+
+                                                            '<tr>'+
+                                                                '<th>#</th>'+
+                                                                '<th>Descripción</th>'+
+                                                                '<th style="width: 80px !important;">Editar</th>'+
+                                                                '<th style="width: 80px !important;">Activo</th>'+
+                                                            '</tr>'+
+                                                        '</thead>'+
+                                                        '<tbody>'+
+                                                        '</tbody>'+
+                                                    '</table>'+
+                                                '</div>');
+    
+                // mostrar tabla catalogo
+                function_tabla_catDescripcionarea(num_catalogo);
+                break;
+
+
         
     }
 
@@ -3512,6 +3594,9 @@ $('#catsustancia_puntoEbullicion').on('input keyup', function() {
     }
 });
 
+
+
+
 function boton_nuevo_catEntidades(){
     // Borrar formulario
     $('#form_catEntidades').each(function(){
@@ -4302,4 +4387,386 @@ function cambiarGrados(ID) {
     total = (inputValue - 32) / 1.8
     $('#' + ID).val(Number(total.toFixed(2)))
     
+}
+
+
+/// CATALOGO CONCLUSIONES 
+
+function boton_nuevo_catConclusiones(){
+    // Borrar formulario
+    $('#form_conclusion').each(function(){
+        this.reset();
+    });
+
+    // campos hidden
+    $('#ID_CATCONCLUSION').val(0);
+    $('#ACTIVO').val(1);
+
+
+    // abrir modal
+    $('#modal_conclusion').modal({backdrop:false});
+}
+
+$("#boton_guardar_conclusion").click(function()
+{
+    // valida campos vacios
+    var valida = this.form.checkValidity();
+    if (valida)
+    {
+        // enviar datos
+        $('#form_conclusion').ajaxForm({
+            dataType: 'json',
+            type: 'POST',
+            url: '/recsensorialquimicoscatalogos',
+            data: {},
+            resetForm: false,
+            success: function(dato)
+            {
+                // actualiza tabla
+                tabla_catConclusiones.ajax.url("/recsensorialquimicoscatalogostabla/11").load();
+
+                // mensaje
+                swal({
+                    title: "Correcto",
+                     text: ""+dato.msj,
+                    type: "success", // warning, error, success, info
+                    buttons: {
+                        visible: false, // true , false
+                    },
+                    timer: 1500,
+                    showConfirmButton: false
+                });
+
+                // actualiza boton
+                $('#boton_guardar_conclusion').html('Guardar <i class="fa fa-save"></i>');
+
+                // cerrar modal
+                $('#modal_conclusion').modal('hide');
+            },
+            beforeSend: function()
+            {
+                $('#boton_guardar_conclusion').html('Guardando <i class="fa fa-spin fa-spinner"></i>');
+            },
+            error: function(dato) 
+            {
+                // actualiza boton
+                $('#boton_guardar_conclusion').html('Guardar <i class="fa fa-save"></i>');
+                
+                // mensaje
+                swal({
+                    title: "Error",
+                    text: "Error en la acción: "+dato,
+                    type: "error", // warning, error, success, info
+                    buttons: {
+                        visible: false, // true , false
+                    },
+                    timer: 1500,
+                    showConfirmButton: false
+                });
+                return false;
+            }
+        }).submit();
+        return false;
+    }
+});
+
+function selecciona_catConclusiones()
+{
+    $('#tabla_catConclusiones tbody').on('click', 'td.Editar', function() {
+        // console.log();
+        var tr = $(this).closest('tr');
+        var row = tabla_catConclusiones.row(tr);
+
+        // campos hidden
+        $('#ID_CATCONCLUSION').val(row.data().ID_CATCONCLUSION);
+        $('#ACTIVO').val(row.data().ACTIVO);
+
+        $('#NOMBRE_CONCLUSION').val(row.data().NOMBRE);
+        $('#DESCRIPCION_CONCLUSION').val(row.data().DESCRIPCION);
+
+        
+        
+        
+        $('#CATALOGO_CONCLUSION').val(11);
+
+        // abrir modal
+        $('#modal_conclusion').modal({backdrop:false});
+    });
+}
+
+
+
+function function_tabla_catConclusiones(num_catalogo)
+{
+    var ruta = "/recsensorialquimicoscatalogostabla/"+num_catalogo;
+
+    try
+    {
+        // Inicializar tabla
+        if (tabla_catConclusiones != null)
+        {
+            tabla_catConclusiones.destroy();
+            tabla_catConclusiones = null;
+        }
+
+        tabla_catConclusiones = $('#tabla_catConclusiones').DataTable({
+            "ajax": {
+                "url": ruta,
+                "type": "get",
+                "cache": false,
+                error: function (xhr, error, code)
+                {
+                    // console.log(xhr); console.log(code);
+                    function_tabla_catConclusiones(num_catalogo);
+                },
+                "data": {}
+            },
+            "columns": [
+                // {
+                //     "data": "id" 
+                // },
+                {
+                    "data": "ID_CATCONCLUSION",
+                    "defaultContent": ''
+                },
+                {
+                    "data": "NOMBRE",
+                    "defaultContent": 'Sin dato'
+                },
+                {
+                    "data": "DESCRIPCION",
+                    "defaultContent": 'Sin dato'
+                },
+                {
+                    "className": 'Editar',
+                    "orderable": false,
+                    "data": 'boton_editar',
+                    "defaultContent": '<i class="fa fa-exclamation-circle fa-3x"></i>'
+                },
+                {
+                    // "className": 'Estado',
+                    // "orderable": false,
+                    "data": 'CheckboxEstado',
+                    "defaultContent": '<i class="fa fa-exclamation-circle fa-3x"></i>'
+                }
+            ],
+            // "rowsGroup": [0, 3], //agrupar filas
+            "lengthMenu": [[10, 30, 50, -1], [10, 30, 50, "Todos"]],
+            "order": [[ 0, "DESC" ]],        
+            "searching": false,
+            "paging": false,
+            "ordering": true,
+            "processing": true,
+            "language": {
+                "lengthMenu": "Mostrar _MENU_ Registros",
+                "zeroRecords": "No se encontraron registros",
+                "info": "", //Página _PAGE_ de _PAGES_
+                "infoEmpty": "No se encontraron registros",
+                "infoFiltered": "(Filtrado de _MAX_ registros)",
+                "emptyTable": "No hay datos disponibles en la tabla",
+                "loadingRecords": "Cargando datos....",
+                "processing": "Procesando <i class='fa fa-spin fa-spinner fa-3x'></i>",
+                "search": "Buscar",
+                "paginate": {
+                    "first": "Primera",
+                    "last": "Ultima",
+                    "next": "Siguiente",
+                    "previous": "Anterior"
+                }
+            }
+        });
+    }
+    catch (exception)
+    {
+        // alert('error al cargar la tabla');
+        function_tabla_catConclusiones(num_catalogo);
+    }
+}
+
+/// CATALOGO DESCRIPCION AREA
+
+
+function boton_nuevo_catDescripcionarea(){
+    // Borrar formulario
+    $('#form_descripcionarea').each(function(){
+        this.reset();
+    });
+
+    // campos hidden
+    $('#ID_DESCRIPCION_AREA').val(0);
+    $('#ACTIVO').val(1);
+
+
+    // abrir modal
+    $('#modal_descripcionarea').modal({backdrop:false});
+}
+
+$("#boton_guardar_descripcionarea").click(function()
+{
+    // valida campos vacios
+    var valida = this.form.checkValidity();
+    if (valida)
+    {
+        // enviar datos
+        $('#form_descripcionarea').ajaxForm({
+            dataType: 'json',
+            type: 'POST',
+            url: '/recsensorialquimicoscatalogos',
+            data: {},
+            resetForm: false,
+            success: function(dato)
+            {
+                // actualiza tabla
+                tabla_catDescripcion.ajax.url("/recsensorialquimicoscatalogostabla/12").load();
+
+                // mensaje
+                swal({
+                    title: "Correcto",
+                     text: ""+dato.msj,
+                    type: "success", // warning, error, success, info
+                    buttons: {
+                        visible: false, // true , false
+                    },
+                    timer: 1500,
+                    showConfirmButton: false
+                });
+
+                // actualiza boton
+                $('#boton_guardar_descripcionarea').html('Guardar <i class="fa fa-save"></i>');
+
+                // cerrar modal
+                $('#modal_descripcionarea').modal('hide');
+            },
+            beforeSend: function()
+            {
+                $('#boton_guardar_descripcionarea').html('Guardando <i class="fa fa-spin fa-spinner"></i>');
+            },
+            error: function(dato) 
+            {
+                // actualiza boton
+                $('#boton_guardar_descripcionarea').html('Guardar <i class="fa fa-save"></i>');
+                
+                // mensaje
+                swal({
+                    title: "Error",
+                    text: "Error en la acción: "+dato,
+                    type: "error", // warning, error, success, info
+                    buttons: {
+                        visible: false, // true , false
+                    },
+                    timer: 1500,
+                    showConfirmButton: false
+                });
+                return false;
+            }
+        }).submit();
+        return false;
+    }
+});
+
+function Seleccciona_catDescripcionarea()
+{
+    $('#tabla_catDescripcion tbody').on('click', 'td.Editar', function() {
+        // console.log();
+        var tr = $(this).closest('tr');
+        var row = tabla_catDescripcion.row(tr);
+
+        // campos hidden
+        $('#ID_DESCRIPCION_AREA').val(row.data().ID_DESCRIPCION_AREA);
+        $('#ACTIVO').val(row.data().ACTIVO);
+
+        $('#NOMBRE').val(row.data().NOMBRE);
+        $('#DESCRIPCION').val(row.data().DESCRIPCION);
+
+        
+        $('#CATALOGO_DESCRIPCION').val(12);
+
+        // abrir modal
+        $('#modal_descripcionarea').modal({backdrop:false});
+    });
+}
+
+
+
+function function_tabla_catDescripcionarea(num_catalogo)
+{
+    var ruta = "/recsensorialquimicoscatalogostabla/"+num_catalogo;
+
+    try
+    {
+        // Inicializar tabla
+        if (tabla_catDescripcion != null)
+        {
+            tabla_catDescripcion.destroy();
+            tabla_catDescripcion = null;
+        }
+
+        tabla_catDescripcion = $('#tabla_catDescripcion').DataTable({
+            "ajax": {
+                "url": ruta,
+                "type": "get",
+                "cache": false,
+                error: function (xhr, error, code)
+                {
+                    // console.log(xhr); console.log(code);
+                    function_tabla_catDescripcionarea(num_catalogo);
+                },
+                "data": {}
+            },
+            "columns": [
+                // {
+                //     "data": "id" 
+                // },
+                {
+                    "data": "ID_DESCRIPCION_AREA",
+                    "defaultContent": ''
+                },
+                {
+                    "data": "DESCRIPCION",
+                    "defaultContent": 'Sin dato'
+                },
+                {
+                    "className": 'Editar',
+                    "orderable": false,
+                    "data": 'boton_editar',
+                    "defaultContent": '<i class="fa fa-exclamation-circle fa-3x"></i>'
+                },
+                {
+                    // "className": 'Estado',
+                    // "orderable": false,
+                    "data": 'CheckboxEstado',
+                    "defaultContent": '<i class="fa fa-exclamation-circle fa-3x"></i>'
+                }
+            ],
+            // "rowsGroup": [0, 3], //agrupar filas
+            "lengthMenu": [[10, 30, 50, -1], [10, 30, 50, "Todos"]],
+            "order": [[ 0, "DESC" ]],        
+            "searching": false,
+            "paging": false,
+            "ordering": true,
+            "processing": true,
+            "language": {
+                "lengthMenu": "Mostrar _MENU_ Registros",
+                "zeroRecords": "No se encontraron registros",
+                "info": "", //Página _PAGE_ de _PAGES_
+                "infoEmpty": "No se encontraron registros",
+                "infoFiltered": "(Filtrado de _MAX_ registros)",
+                "emptyTable": "No hay datos disponibles en la tabla",
+                "loadingRecords": "Cargando datos....",
+                "processing": "Procesando <i class='fa fa-spin fa-spinner fa-3x'></i>",
+                "search": "Buscar",
+                "paginate": {
+                    "first": "Primera",
+                    "last": "Ultima",
+                    "next": "Siguiente",
+                    "previous": "Anterior"
+                }
+            }
+        });
+    }
+    catch (exception)
+    {
+        // alert('error al cargar la tabla');
+        function_tabla_catDescripcionarea(num_catalogo);
+    }
 }

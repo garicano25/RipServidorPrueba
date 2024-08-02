@@ -404,9 +404,11 @@ class recsensorialquimicosinventarioController extends Controller
                                                             </div>
                                                         </td>
                                                         <td style="width: 180px!important;">
+                                                        <label><b>Exp. minutos</b></label>
                                                             <input type="number" step="any" class="form-control" placeholder="Exp. minutos" id="tiempo_' . ($key + 1) . $key_categorias . '" name="tiempo[]" value="' . $value_categorias->tiempoexpo . '" ' . $disabled_required . '>
                                                         </td>
                                                         <td style="width: 180px!important;">
+                                                        <label><b>Frecuencia exp.</b></label>
                                                             <input type="number" step="any" class="form-control" placeholder="Frecuencia exp." id="frecuencia_' . ($key + 1) . $key_categorias . '" value="' . $value_categorias->frecuenciaexpo . '" name="frecuencia[]" ' . $disabled_required . '>
                                                         </td>
                                                     </tr>';
@@ -451,9 +453,11 @@ class recsensorialquimicosinventarioController extends Controller
                                                             </select>
                                                         </td>
                                                         <td style="width: 180px!important;">
+                                                        <label><b>Cantidad manejada</b></label>
                                                             <input type="number" step="any" class="form-control" placeholder="Cantidad" name="cantidad[]" value="' . $value->recsensorialquimicosinventario_cantidad . '" required>
                                                         </td>
                                                         <td style="width: 180px!important;">
+                                                        <label><b>Unidad medida</b></label>
                                                             <select class="custom-select form-control" name="umedida[]" required>
                                                                 ' . $umedida_opciones . '
                                                             </select>
