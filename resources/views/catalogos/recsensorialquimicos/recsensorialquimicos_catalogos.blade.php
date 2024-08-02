@@ -136,6 +136,22 @@
 										</a>
 									</td>
 								</tr>
+								<tr id="tr_11">
+									<td>Conclusiones para Informes</td>
+									<td>
+										<a href="#" onclick="mostrar_catalogo(11);">
+											<i class="fa fa-chevron-circle-right fa-3x text-secondary" id="cat_11"></i>
+										</a>
+									</td>
+								</tr>
+								<tr id="tr_12">
+									<td>Descripción área</td>
+									<td>
+										<a href="#" onclick="mostrar_catalogo(12);">
+											<i class="fa fa-chevron-circle-right fa-3x text-secondary" id="cat_12"></i>
+										</a>
+									</td>
+								</tr>
 							</tbody>
 						</table>
 					</div>
@@ -1158,6 +1174,90 @@
 			<div class="modal-footer">
 				<button type="button" class="btn btn-danger waves-effect" data-dismiss="modal">Cerrar</button>
 			</div>
+		</div>
+	</div>
+</div>
+
+
+<div id="modal_conclusion" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" style="display: none;">
+	<div class="modal-dialog" style="min-width: 70%;">
+		<div class="modal-content">
+			<form method="post" enctype="multipart/form-data" name="form_conclusion" id="form_conclusion">
+				<div class="modal-header">
+					<button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+					<h4 class="modal-title" id="modal_titulo">Conclusiones para Informes</h4>
+				</div>
+				<div class="modal-body">
+					<div class="row">
+						{!! csrf_field() !!}
+						<div class="col-12">
+							<input type="hidden" class="form-control" id="ID_CATCONCLUSION" name="ID_CATCONCLUSION" value="0">
+						</div>
+						<div class="col-12">
+							<div class="form-group">
+								<label>Nombre *</label>
+								<input type="text" class="form-control" id="NOMBRE_CONCLUSION" name="NOMBRE" required>
+							</div>
+						</div>
+						<div class="col-12">
+							<div class="form-group">
+								<label> Descripción * </label>
+								<textarea class="form-control" rows="5" id="DESCRIPCION_CONCLUSION" name="DESCRIPCION"></textarea>
+							</div>
+						</div>
+						<div class="col-12">
+							<input type="hidden" class="form-control" id="CATALOGO_CONCLUSION" name="catalogo" value="11">
+							<input type="hidden" class="form-control" id="ACTIVO" name="ACTIVO" value="0">
+
+						</div>
+					</div>
+				</div>
+				<div class="modal-footer">
+					<button type="button" class="btn btn-default waves-effect" data-dismiss="modal">Cerrar</button>
+					<button type="submit" class="btn btn-danger waves-effect waves-light" id="boton_guardar_conclusion">
+						Guardar <i class="fa fa-save"></i>
+					</button>
+				</div>
+			</form>
+		</div>
+	</div>
+</div>
+
+
+<div id="modal_descripcionarea" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" style="display: none;">
+	<div class="modal-dialog" style="min-width: 70%;">
+		<div class="modal-content">
+			<form method="post" enctype="multipart/form-data" name="form_descripcionarea" id="form_descripcionarea">
+				<div class="modal-header">
+					<button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+					<h4 class="modal-title" id="modal_titulo">Descripciones del área</h4>
+				</div>
+				<div class="modal-body">
+					<div class="row">
+						{!! csrf_field() !!}
+						<div class="col-12">
+							<input type="hidden" class="form-control" id="ID_DESCRIPCION_AREA" name="ID_DESCRIPCION_AREA" value="0">
+						</div>
+						<div class="col-12">
+							<div class="form-group">
+								<label> Descripción * </label>
+								<textarea class="form-control" rows="5" id="DESCRIPCION" name="DESCRIPCION" required></textarea>
+							</div>
+						</div>
+						<div class="col-12">
+							<input type="hidden" class="form-control" id="CATALOGO_DESCRIPCION" name="catalogo" value="12">
+							<input type="hidden" class="form-control" id="ACTIVO" name="ACTIVO" value="0">
+
+						</div>
+					</div>
+				</div>
+				<div class="modal-footer">
+					<button type="button" class="btn btn-default waves-effect" data-dismiss="modal">Cerrar</button>
+					<button type="submit" class="btn btn-danger waves-effect waves-light" id="boton_guardar_descripcionarea">
+						Guardar <i class="fa fa-save"></i>
+					</button>
+				</div>
+			</form>
 		</div>
 	</div>
 </div>

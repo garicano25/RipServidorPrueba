@@ -18,6 +18,8 @@ use App\modelos\recsensorialquimicos\sustanciaQuimicaEntidadModel;
 use App\modelos\recsensorialquimicos\catUnidadMedidaModel;
 use App\modelos\recsensorialquimicos\catConnotacionModel;
 use App\modelos\recsensorialquimicos\catEntidadesModel;
+use App\modelos\recsensorial\catConclusionesModel;
+use App\modelos\recsensorial\cat_descripcionarea;
 
 
 
@@ -438,8 +440,7 @@ class recsensorialquimicoscatalogosController extends Controller
                 case 9: // CATALOGO DE CONNOTACIONES
                     $catalogo = DB::select('SELECT e.ENTIDAD, c.ABREVIATURA, c.DESCRIPCION, c.ACTIVO, c.ID_CONNOTACION, e.ID_ENTIDAD
                                             FROM catConnotaciones c
-                                            LEFT JOIN catEntidades e ON e.ID_ENTIDAD = c.ENTIDAD_ID
-                                            WHERE c.ACTIVO = 1');
+                                            LEFT JOIN catEntidades e ON e.ID_ENTIDAD = c.ENTIDAD_ID');
 
                     // crear campos NOMBRE Y ESTADO
                     foreach ($catalogo as $key => $value) {
@@ -486,6 +487,61 @@ class recsensorialquimicoscatalogosController extends Controller
                             $value->perfil = 0;
 
                             $value['boton_editar'] = '<button type="button" class="btn btn-info btn-circle" onclick="selecciona_catEntidades();"><i class="fa fa-eye"></i></button>';
+                            $value['CheckboxEstado'] = '<div class="switch"><label><input type="checkbox" disabled><span class="lever switch-col-light-blue"></span></label></div>';
+                        }
+                    }
+                    break;
+
+                case 11: // CATALOGO DE CONCLUSIONES
+                    $catalogo = catConclusionesModel::orderBy('ID_CATCONCLUSION', 'ASC')->get();
+
+                    // crear campos NOMBRE Y ESTADO
+                    foreach ($catalogo as $key => $value) {
+
+
+                        $value['boton_editar'] = '<button type="button" class="btn btn-danger btn-circle" onclick="selecciona_catConclusiones();"><i class="fa fa-pencil"></i></button>';
+
+                        // Checkbox estado
+                        if ($value->ACTIVO == 1) {
+                            $value['CheckboxEstado'] = '<div class="switch"><label><input type="checkbox" checked onclick="cambia_estado_registro(' . $num_catalogo . ', ' . $value->ID_CATCONCLUSION . ', this);"><span class="lever switch-col-light-blue"></span></label></div>';
+                        } else {
+                            $value['CheckboxEstado'] = '<div class="switch"><label><input type="checkbox" onclick="cambia_estado_registro(' . $num_catalogo . ', ' . $value->ID_CATCONCLUSION . ', this);"><span class="lever switch-col-light-blue"></span></label></div>';
+                        }
+
+
+                        if (auth()->user()->hasRoles(['Superusuario', 'Administrador','Coordinador'])) {
+                            $value->perfil = 1;
+                        } else {
+                            $value->perfil = 0;
+
+                            $value['boton_editar'] = '<button type="button" class="btn btn-info btn-circle" onclick="selecciona_catConclusiones();"><i class="fa fa-eye"></i></button>';
+                            $value['CheckboxEstado'] = '<div class="switch"><label><input type="checkbox" disabled><span class="lever switch-col-light-blue"></span></label></div>';
+                        }
+                    }
+                    break;
+                case 12: // CATALOGO DE DESCRIPCION AREA 
+                    $catalogo = cat_descripcionarea::orderBy('ID_DESCRIPCION_AREA', 'ASC')->get();
+
+                    // crear campos NOMBRE Y ESTADO
+                    foreach ($catalogo as $key => $value) {
+
+
+                        $value['boton_editar'] = '<button type="button" class="btn btn-danger btn-circle" onclick="Seleccciona_catDescripcionarea();"><i class="fa fa-pencil"></i></button>';
+
+                        // Checkbox estado
+                        if ($value->ACTIVO == 1) {
+                            $value['CheckboxEstado'] = '<div class="switch"><label><input type="checkbox" checked onclick="cambia_estado_registro(' . $num_catalogo . ', ' . $value->ID_CATCONCLUSION . ', this);"><span class="lever switch-col-light-blue"></span></label></div>';
+                        } else {
+                            $value['CheckboxEstado'] = '<div class="switch"><label><input type="checkbox" onclick="cambia_estado_registro(' . $num_catalogo . ', ' . $value->ID_DESCRIPCION_AREA . ', this);"><span class="lever switch-col-light-blue"></span></label></div>';
+                        }
+
+
+                        if (auth()->user()->hasRoles(['Superusuario', 'Administrador','Coordinador'])) {
+                            $value->perfil = 1;
+                        } else {
+                            $value->perfil = 0;
+
+                            $value['boton_editar'] = '<button type="button" class="btn btn-info btn-circle" onclick="Seleccciona_catDescripcionarea();"><i class="fa fa-eye"></i></button>';
                             $value['CheckboxEstado'] = '<div class="switch"><label><input type="checkbox" disabled><span class="lever switch-col-light-blue"></span></label></div>';
                         }
                     }
@@ -748,6 +804,14 @@ class recsensorialquimicoscatalogosController extends Controller
                     break;
                 case 10:
                     $estado = catEntidadesModel::findOrFail($registro_id);
+                    $estado->update(['ACTIVO' => $estado_checkbox]);
+                    break;
+                case 11:
+                    $estado = catConclusionesModel::findOrFail($registro_id);
+                    $estado->update(['ACTIVO' => $estado_checkbox]);
+                    break;
+                case 12:
+                    $estado = cat_descripcionarea::findOrFail($registro_id);
                     $estado->update(['ACTIVO' => $estado_checkbox]);
                     break;
             }
@@ -1023,6 +1087,34 @@ class recsensorialquimicoscatalogosController extends Controller
                         $catalogo->update($request->all());
                     }
                     break;
+
+
+                case 11:
+
+                    if ($request['ID_CATCONCLUSION'] == 0) {
+                        // $sql = DB::select('ALTER TABLE catvolatilidad AUTO_INCREMENT=1');
+                        $catalogo = catConclusionesModel::create($request->all());
+                    } else {
+                        $catalogo = catConclusionesModel::findOrFail($request['ID_CATCONCLUSION']);
+                        $catalogo->update($request->all());
+                    }
+                    break;
+
+                case 12:
+
+                    if ($request['ID_DESCRIPCION_AREA'] == 0) {
+                        // $sql = DB::select('ALTER TABLE catvolatilidad AUTO_INCREMENT=1');
+                        $catalogo = cat_descripcionarea::create($request->all());
+                    } else {
+                        $catalogo = cat_descripcionarea::findOrFail($request['ID_DESCRIPCION_AREA']);
+                        $catalogo->update($request->all());
+                    }
+                    break;
+    
+
+
+
+                
             }
 
             // Respuesta
