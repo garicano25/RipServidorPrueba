@@ -443,7 +443,7 @@ class reporteiluminacionController extends Controller
                                                             , 'catactivo_id' => $proyecto->catactivo_id
                                                             , 'reporteiluminacion_instalacion' => $proyecto->proyecto_clienteinstalacion
                                                             , 'reporteiluminacion_fecha' => $reportefecha
-                                                            ,  'reporteiluminacion_mes' => $reporteiluminacion->reporteiluminacion_mes
+                                                            ,  'reporteiluminacion_mes' => ""
 
                                                         );
             }
@@ -4016,7 +4016,7 @@ class reporteiluminacionController extends Controller
                 //-------------------------------------
 
 
-                $resultados = collect(DB::select('CALL sp_reporteiluminaciondashboard_b ()', [$proyecto_id, $reporteiluminacion_id]));
+                $resultados = collect(DB::select('CALL sp_reporteiluminaciondashboard_b (?,?)', [$proyecto_id, $reporteiluminacion_id]));
 
                 if (count($resultados) > 0)
                 {
