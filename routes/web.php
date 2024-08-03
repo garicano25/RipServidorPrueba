@@ -218,15 +218,12 @@ Route::resource('proveedorvehiculo', 'catalogos\vehiculoController');
 
 Route::get('tablaproveedorvehiculo/{proveedor_id}', ['as' => 'proveedorvehiculo.tablaproveedorvehiculo', 'uses' => 'catalogos\vehiculoController@tablaproveedorvehiculo']);
 
-
-Route::get('verequipodocumento/{equipo_id}/{documento_tipo}', ['as' => 'verequipodocumento', 'uses' => 'catalogos\equipoController@mostrarpdf']);
-
-
 Route::get('vervehiculofoto/{id}', ['as' => 'vervehiculofoto', 'uses' => 'catalogos\vehiculoController@mostrarFotoVehiculo']);
 
-Route::get('tablaequipodocumento/{equipo_id}', ['as' => 'equipoController.tablaequipodocumento', 'uses' => 'catalogos\equipoController@tablaequipodocumento']);
+Route::get('tablavehiculodocumento/{vehiculo_id}', ['as' => 'vehiculoController.tablavehiculodocumento', 'uses' => 'catalogos\vehiculoController@tablavehiculodocumento']);
 
-Route::get('verequipodocumentopdf/{documento_id}', ['as' => 'verequipodocumentopdf', 'uses' => 'catalogos\equipoController@mostrarpdf']);
+Route::get('vervehiculodocumentopdf/{documento_id}', ['as' => 'vervehiculodocumentopdf', 'uses' => 'catalogos\vehiculoController@mostrarpdf']);
+
 
 //==============================================
 
@@ -1656,12 +1653,8 @@ Route::get('detalleprogramagestion/{proyecto_id}/{proyectoordentrabajo_id}/{fase
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////Route::get('/mostrar-plantilla', function () {
 
 // Catalogo de cliente
-Route::get('/banco-imagenes', function () {
-    return view('catalogos.plantilla.plantillas');
-})->name('banco-imagenes');
-Route::get('/clientecatalogo', function () {
-    return view('catalogos.cliente.catalogocliente');
-})->name('clientecatalogo');
+Route::get('/banco-imagenes', function () { return view('catalogos.plantilla.plantillas');})->name('banco-imagenes');
+Route::get('/clientecatalogo', function () { return view('catalogos.cliente.catalogocliente');})->name('clientecatalogo');
 
 
 

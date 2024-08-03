@@ -452,9 +452,20 @@ class equipoController extends Controller
                         // Extraer y guardar imágenes
                         $drawings = $sheet->getDrawingCollection();
                         $imagenes = [];
+                        $coun = 1;
+                        $processedCoordinates = []; // Para rastrear coordenadas únicas
+
                         foreach ($drawings as $drawing) {
                             // Determinar la celda en la que está la imagen
                             $coordinates = $drawing->getCoordinates();
+
+                            // Verificar si ya hemos procesado esta coordenada
+                            if (in_array($coordinates,
+                                $processedCoordinates
+                            )) {
+                                continue; // Saltar esta iteración si la coordenada ya fue procesada
+                            }
+                            $processedCoordinates[] = $coordinates; // Añadir coordenada al array de coordenadas procesadas
 
                             if ($drawing instanceof MemoryDrawing) {
                                 ob_start();
@@ -476,9 +487,9 @@ class equipoController extends Controller
                                 }
 
                                 //Creamos la ruta de la imagen
-                                $filename = 'equipo_' . uniqid() . '.' . $extension;
+                                $filename = 'equipo_' . $coun . '.' . $extension;
                                 $path = 'proveedores/' . $request['proveedor_id'] . '/equipos/imagenesExcel/' . $filename;
-                                //Almacenmos la imagen
+                                //Almacenamos la imagen
                                 Storage::put($path, $imageContents);
                             } elseif ($drawing instanceof Drawing) {
                                 $zipReader = fopen($drawing->getPath(), 'r');
@@ -490,7 +501,7 @@ class equipoController extends Controller
 
                                 //Creamos la ruta de la imagen
                                 $extension = $drawing->getExtension();
-                                $filename = 'equipo_' . uniqid() . '.' . $extension;
+                                $filename = 'equipo_' . $coun . '.' . $extension;
                                 $path = 'proveedores/' . $request['proveedor_id'] . '/equipos/imagenesExcel/' . $filename;
 
                                 //Almacenamos la imagen
@@ -499,6 +510,7 @@ class equipoController extends Controller
 
                             // Asocia la imagen a la coordenada correspondiente
                             $imagenes[] = $path;
+                            $coun++;
                         }
 
 
@@ -645,6 +657,7 @@ class equipoController extends Controller
 
                                 ]);
 
+                                $requiere[] = $posicionImagenEquipo;
                                 $posicionImagenEquipo++;
                             } else { // EN ESTE CASO (FALSE)
 
@@ -673,9 +686,12 @@ class equipoController extends Controller
                             $equipoInsertados++;
                         }
 
+                        // return response()->json(['msj' => $requiere, 'code' => 500]);
+
+
                         // Convierte el array $uso a una cadena de texto para la respuesta JSON
                         // $usoString = implode(', ', $requiere);
-                        return response()->json(['msj' => 'Total de equipos agregados : ' . $equipoInsertados . ' de ' . $totalEquipos, 'code' => 200]);
+                        return response()->json(['msj' => 'Total de equipos agregados : ' . $equipoInsertados . ' de ' . $totalEquipos, 'code' => 200, 'img' => $imagenes, 'posicion' => $requiere]);
                     } else {
 
                         return response()->json(["msj" => 'No se ha subido ningún archivo', "code" => 500]);
