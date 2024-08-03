@@ -3080,7 +3080,7 @@ function obtencionPlantilla(data) {
         }
 
 
-        $("#cliente_plantillaencabezado").val(data.CONTRATO_PLANTILLA_ENCABEZADO);
+        // $("#cliente_plantillaencabezado").val(data.CONTRATO_PLANTILLA_ENCABEZADO);
 }
 
 

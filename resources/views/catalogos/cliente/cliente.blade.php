@@ -634,12 +634,12 @@
                                                                     <input type="file" class="dropify" accept="image/jpeg,image/x-png" id="plantillalogoizquierdo" name="plantillalogoizquierdo" data-allowed-file-extensions="jpg png JPG PNG" data-height="164" data-default-file="">
                                                                 </div>
                                                             </div>
-                                                            <div class="col-md-4 col-sm-12 d-none">
-                                                                <div class="form-group">
-                                                                    <label class="mb-4" style="text-align: center!important;">Título encabezado (Portada)</label>
-                                                                    <textarea class="form-control mt-5" style="text-align: center!important;" rows="8" id="cliente_plantillaencabezado" name="CONTRATO_PLANTILLA_ENCABEZADO" placeholder="Ejemplo: Pemex Exploración y Producción Subdirección de Seguridad, Salud en el Trabajo y Protección Ambiental" required></textarea>
-                                                                </div>
-                                                            </div>
+                                                            <!-- <div class="col-md-4 col-sm-12 d-none">
+                                                                                <div class="form-group">
+                                                                                    <label class="mb-4" style="text-align: center!important;">Título encabezado (Portada)</label>
+                                                                                    <textarea class="form-control mt-5" style="text-align: center!important;" rows="8" id="cliente_plantillaencabezado" name="CONTRATO_PLANTILLA_ENCABEZADO" placeholder="Ejemplo: Pemex Exploración y Producción Subdirección de Seguridad, Salud en el Trabajo y Protección Ambiental" required></textarea>
+                                                                                </div>
+                                                                            </div> -->
                                                             <div class="col-md-6 col-sm-12">
                                                                 <div class="form-group">
                                                                     <label>Logo derecho encabezado</label>
