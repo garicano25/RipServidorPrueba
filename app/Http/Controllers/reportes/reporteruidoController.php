@@ -83,20 +83,23 @@ class reporteruidoController extends Controller
     {
         $proyecto = proyectoModel::findOrFail($proyecto_id);
 
-        if ($proyecto->proyecto_clienteinstalacion == NULL || $proyecto->proyecto_fechaentrega == NULL) {
+        if ($proyecto->proyecto_clienteinstalacion == NULL || $proyecto->proyecto_fechaentrega == NULL)
+        {
             return '<div style="text-align: center;">
                         <p style="font-size: 24px;">Datos incompletos</p>
                         <b style="font-size: 18px;">Para ingresar al diseño del reporte de Ruido primero debe completar todos los campos vacíos de la sección de datos generales del proyecto.</b>
                     </div>';
-        } else {
+        }
+        else
+        {
             // CREAR REVISION SI NO EXISTE
             //===================================================
 
 
             $revision = reporterevisionesModel::where('proyecto_id', $proyecto_id)
-                ->where('agente_id', 1) // Ruido
-                ->orderBy('reporterevisiones_revision', 'DESC')
-                ->get();
+                                                ->where('agente_id', 1) // Ruido
+                                                ->orderBy('reporterevisiones_revision', 'DESC')
+                                                ->get();
 
             //=================================================== DESCOMENTAR DESPUES DE SUBIR AL SERVIDOR
             // if(count($revision) == 0)
@@ -133,14 +136,17 @@ class reporteruidoController extends Controller
                                         FROM
                                             reporteruidocategoria
                                         WHERE
-                                            reporteruidocategoria.proyecto_id = ' . $proyecto_id . ' 
+                                            reporteruidocategoria.proyecto_id = '.$proyecto_id.' 
                                         ORDER BY
                                             reporteruidocategoria.reporteruidocategoria_nombre ASC');
 
 
-            if (count($categorias) > 0) {
+            if (count($categorias) > 0)
+            {
                 $categorias_poe = 0; // NO TIENE POE GENERAL
-            } else {
+            }
+            else
+            {
                 $categorias_poe = 1; // TIENE POE GENERAL
             }
 
@@ -160,15 +166,18 @@ class reporteruidoController extends Controller
                                 FROM
                                     reporteruidoarea
                                 WHERE
-                                    reporteruidoarea.proyecto_id = ' . $proyecto_id . ' 
+                                    reporteruidoarea.proyecto_id = '.$proyecto_id.' 
                                 ORDER BY
                                     reporteruidoarea.reporteruidoarea_numorden ASC,
                                     reporteruidoarea.reporteruidoarea_nombre ASC');
 
 
-            if (count($areas) > 0) {
+            if (count($areas) > 0)
+            {
                 $areas_poe = 0; // NO TIENE POE GENERAL
-            } else {
+            }
+            else
+            {
                 $areas_poe = 1; // TIENE POE GENERAL
             }
 
@@ -202,17 +211,19 @@ class reporteruidoController extends Controller
     {
         $meses = ["Vacio", "Enero", "Febrero", "Marzo", "Abril", "Mayo", "Junio", "Julio", "Agosto", "Septiembre", "Octubre", "Noviembre", "Diciembre"];
         $reportefecha = explode("-", $proyecto->proyecto_fechaentrega);
-
+        
         $texto = str_replace($proyecto->proyecto_clienteinstalacion, 'INSTALACION_NOMBRE', $texto);
         $texto = str_replace($proyecto->proyecto_clientedireccionservicio, 'INSTALACION_DIRECCION', $texto);
-        $texto = str_replace($reportefecha[2] . " de " . $meses[($reportefecha[1] + 0)] . " del año " . $reportefecha[0], 'REPORTE_FECHA_LARGA', $texto);
+        $texto = str_replace($reportefecha[2]." de ".$meses[($reportefecha[1]+0)]." del año ".$reportefecha[0], 'REPORTE_FECHA_LARGA', $texto);
 
-        if (($recsensorial->recsensorial_tipocliente + 0) == 1) // 1 = pemex, 0 = cliente
+        if (($recsensorial->recsensorial_tipocliente+0) == 1) // 1 = pemex, 0 = cliente
         {
             $texto = str_replace($proyecto->catsubdireccion->catsubdireccion_nombre, 'SUBDIRECCION_NOMBRE', $texto);
             $texto = str_replace($proyecto->catgerencia->catgerencia_nombre, 'GERENCIA_NOMBRE', $texto);
             $texto = str_replace($proyecto->catactivo->catactivo_nombre, 'ACTIVO_NOMBRE', $texto);
-        } else {
+        }
+        else
+        {
             $texto = str_replace($recsensorial->recsensorial_empresa, 'PEMEX Exploración y Producción', $texto);
         }
 
@@ -227,16 +238,18 @@ class reporteruidoController extends Controller
 
         $texto = str_replace('INSTALACION_NOMBRE', $proyecto->proyecto_clienteinstalacion, $texto);
         $texto = str_replace('INSTALACION_DIRECCION', $proyecto->proyecto_clientedireccionservicio, $texto);
-        $texto = str_replace('INSTALACION_CODIGOPOSTAL', 'C.P. ' . $recsensorial->recsensorial_codigopostal, $texto);
+        $texto = str_replace('INSTALACION_CODIGOPOSTAL', 'C.P. '.$recsensorial->recsensorial_codigopostal, $texto);
         $texto = str_replace('INSTALACION_COORDENADAS', $recsensorial->recsensorial_coordenadas, $texto);
-        $texto = str_replace('REPORTE_FECHA_LARGA', $reportefecha[2] . " de " . $meses[($reportefecha[1] + 0)] . " del año " . $reportefecha[0], $texto);
+        $texto = str_replace('REPORTE_FECHA_LARGA', $reportefecha[2]." de ".$meses[($reportefecha[1]+0)]." del año ".$reportefecha[0], $texto);
 
-        if (($recsensorial->recsensorial_tipocliente + 0) == 1) // 1 = pemex, 0 = cliente
+        if (($recsensorial->recsensorial_tipocliente+0) == 1) // 1 = pemex, 0 = cliente
         {
             $texto = str_replace('SUBDIRECCION_NOMBRE', $proyecto->catsubdireccion->catsubdireccion_nombre, $texto);
             $texto = str_replace('GERENCIA_NOMBRE', $proyecto->catgerencia->catgerencia_nombre, $texto);
             $texto = str_replace('ACTIVO_NOMBRE', $proyecto->catactivo->catactivo_nombre, $texto);
-        } else {
+        }
+        else
+        {
             $texto = str_replace('SUBDIRECCION_NOMBRE', '', $texto);
             $texto = str_replace('GERENCIA_NOMBRE', '', $texto);
             $texto = str_replace('ACTIVO_NOMBRE', '', $texto);
@@ -258,32 +271,38 @@ class reporteruidoController extends Controller
      */
     public function reporteruidodatosgenerales($proyecto_id, $agente_id, $agente_nombre)
     {
-        try {
+        try
+        {
             $proyecto = proyectoModel::with(['catregion', 'catsubdireccion', 'catgerencia', 'catactivo'])->findOrFail($proyecto_id);
             $recsensorial = recsensorialModel::with(['catregion', 'catsubdireccion', 'catgerencia', 'catactivo'])->findOrFail($proyecto->recsensorial_id);
-
+                
             $meses = ["Vacio", "Enero", "Febrero", "Marzo", "Abril", "Mayo", "Junio", "Julio", "Agosto", "Septiembre", "Octubre", "Noviembre", "Diciembre"];
             $proyectofecha = explode("-", $proyecto->proyecto_fechaentrega);
 
             $reportecatalogo = reporteruidocatalogoModel::limit(1)->get();
             $reporte  = reporteruidoModel::where('proyecto_id', $proyecto_id)
-                ->orderBy('reporteruido_revision', 'DESC')
-                ->limit(1)
-                ->get();
+                                                ->orderBy('reporteruido_revision', 'DESC')
+                                                ->limit(1)
+                                                ->get();
 
 
-            if (count($reporte) > 0) {
+            if (count($reporte) > 0)
+            {
                 $reporte = $reporte[0];
                 $dato['reporteregistro_id'] = $reporte->id;
-            } else {
-                if (($recsensorial->recsensorial_tipocliente + 0) == 1) // 1 = Pemex, 0 = cliente
+            }
+            else
+            {
+                if (($recsensorial->recsensorial_tipocliente+0) == 1) // 1 = Pemex, 0 = cliente
                 {
                     $reporte = reporteruidoModel::where('catactivo_id', $proyecto->catactivo_id)
-                        ->orderBy('proyecto_id', 'DESC')
-                        ->orderBy('reporteruido_revision', 'DESC')
-                        ->limit(1)
-                        ->get();
-                } else {
+                                                ->orderBy('proyecto_id', 'DESC')
+                                                ->orderBy('reporteruido_revision', 'DESC')
+                                                ->limit(1)
+                                                ->get();
+                }
+                else
+                {
                     $reporte = DB::select('SELECT
                                                 recsensorial.recsensorial_tipocliente,
                                                 recsensorial.cliente_id,
@@ -331,17 +350,20 @@ class reporteruidoController extends Controller
                                                 LEFT JOIN proyecto ON recsensorial.id = proyecto.recsensorial_id
                                                 LEFT JOIN reporteruido ON proyecto.id = reporteruido.proyecto_id 
                                             WHERE
-                                                recsensorial.cliente_id = ' . $recsensorial->cliente_id . ' 
+                                                recsensorial.cliente_id = '.$recsensorial->cliente_id.' 
                                                 AND reporteruido.reporteruido_instalacion <> "" 
                                             ORDER BY
                                                 reporteruido.updated_at DESC');
                 }
 
 
-                if (count($reporte) > 0) {
+                if (count($reporte) > 0)
+                {
                     $reporte = $reporte[0];
                     $dato['reporteregistro_id'] = 0;
-                } else {
+                }
+                else
+                {
                     $reporte = array(0, 0);
                     $dato['reporteregistro_id'] = -1;
                 }
@@ -351,45 +373,72 @@ class reporteruidoController extends Controller
 
 
             $revision = reporterevisionesModel::where('proyecto_id', $proyecto_id)
-                ->where('agente_id', 1) //Ruido
-                ->orderBy('reporterevisiones_revision', 'DESC')
-                ->get();
+                                                ->where('agente_id', 1) //Ruido
+                                                ->orderBy('reporterevisiones_revision', 'DESC')
+                                                ->get();
 
 
-            if (count($revision) > 0) {
+            if(count($revision) > 0)
+            {
                 $revision = reporterevisionesModel::findOrFail($revision[0]->id);
 
 
                 $dato['reporte_concluido'] = $revision->reporterevisiones_concluido;
                 $dato['reporte_cancelado'] = $revision->reporterevisiones_cancelado;
-            } else {
+            }
+            else
+            {
                 $dato['reporte_concluido'] = 0;
                 $dato['reporte_cancelado'] = 0;
             }
 
-
+            
             // PORTADA
             //===================================================
 
 
-            $dato['recsensorial_tipocliente'] = ($recsensorial->recsensorial_tipocliente + 0);
+            $dato['recsensorial_tipocliente'] = ($recsensorial->recsensorial_tipocliente+0);
 
 
-            if ($dato['reporteregistro_id'] >= 0 && $reporte->reporteruido_fecha != NULL && $reporte->proyecto_id == $proyecto_id) {
+            if ($dato['reporteregistro_id'] >= 0 && $reporte->reporteruido_fecha != NULL && $reporte->proyecto_id == $proyecto_id)
+            {
                 $reportefecha = $reporte->reporteruido_fecha;
                 $dato['reporte_portada_guardado'] = 1;
 
                 $dato['reporte_portada'] = array(
-                    'reporte_catregion_activo' => $reporte->reporteruido_catregion_activo, 'catregion_id' => $proyecto->catregion_id, 'reporte_catsubdireccion_activo' => $reporte->reporteruido_catsubdireccion_activo, 'catsubdireccion_id' => $proyecto->catsubdireccion_id, 'reporte_catgerencia_activo' => $reporte->reporteruido_catgerencia_activo, 'catgerencia_id' => $proyecto->catgerencia_id, 'reporte_catactivo_activo' => $reporte->reporteruido_catactivo_activo, 'catactivo_id' => $proyecto->catactivo_id, 'reporte_instalacion' => $proyecto->proyecto_clienteinstalacion, 'reporte_fecha' => $reportefecha, 'reporte_mes' => $reporte->reporte_mes
-                );
-            } else {
-                $reportefecha = $meses[$proyectofecha[1] + 0] . " del " . $proyectofecha[0];
+                                                  'reporte_catregion_activo' => $reporte->reporteruido_catregion_activo
+                                                , 'catregion_id' => $proyecto->catregion_id
+                                                , 'reporte_catsubdireccion_activo' => $reporte->reporteruido_catsubdireccion_activo
+                                                , 'catsubdireccion_id' => $proyecto->catsubdireccion_id
+                                                , 'reporte_catgerencia_activo' => $reporte->reporteruido_catgerencia_activo
+                                                , 'catgerencia_id' => $proyecto->catgerencia_id
+                                                , 'reporte_catactivo_activo' => $reporte->reporteruido_catactivo_activo
+                                                , 'catactivo_id' => $proyecto->catactivo_id
+                                                , 'reporte_instalacion' => $proyecto->proyecto_clienteinstalacion
+                                                , 'reporte_fecha' => $reportefecha
+                                                ,'reporte_mes' => $reporte->reporte_mes
+                                            );
+            }
+            else
+            {
+                $reportefecha = $meses[$proyectofecha[1] + 0]." del ".$proyectofecha[0];
                 $dato['reporte_portada_guardado'] = 0;
 
                 $dato['reporte_portada'] = array(
-                    'reporte_catregion_activo' => 1, 'catregion_id' => $proyecto->catregion_id, 'reporte_catsubdireccion_activo' => 1, 'catsubdireccion_id' => $proyecto->catsubdireccion_id, 'reporte_catgerencia_activo' => 1, 'catgerencia_id' => $proyecto->catgerencia_id, 'reporte_catactivo_activo' => 1, 'catactivo_id' => $proyecto->catactivo_id, 'reporte_instalacion' => $proyecto->proyecto_clienteinstalacion, 'reporte_fecha' => $reportefecha, 'reporte_mes' => $reporte->reporte_mes
+                                                  'reporte_catregion_activo' => 1
+                                                , 'catregion_id' => $proyecto->catregion_id
+                                                , 'reporte_catsubdireccion_activo' => 1
+                                                , 'catsubdireccion_id' => $proyecto->catsubdireccion_id
+                                                , 'reporte_catgerencia_activo' => 1
+                                                , 'catgerencia_id' => $proyecto->catgerencia_id
+                                                , 'reporte_catactivo_activo' => 1
+                                                , 'catactivo_id' => $proyecto->catactivo_id
+                                                , 'reporte_instalacion' => $proyecto->proyecto_clienteinstalacion
+                                                , 'reporte_fecha' => $reportefecha
+                                                , 'reporte_mes' => ""
+                                                
 
-                );
+                                            );
             }
 
 
@@ -397,15 +446,21 @@ class reporteruidoController extends Controller
             //===================================================
 
 
-            if ($dato['reporteregistro_id'] >= 0 && $reporte->reporteruido_introduccion != NULL) {
-                if ($reporte->proyecto_id == $proyecto_id) {
+            if ($dato['reporteregistro_id'] >= 0 && $reporte->reporteruido_introduccion != NULL)
+            {
+                if ($reporte->proyecto_id == $proyecto_id)
+                {
                     $dato['reporte_introduccion_guardado'] = 1;
-                } else {
+                }
+                else
+                {
                     $dato['reporte_introduccion_guardado'] = 0;
                 }
 
                 $introduccion = $reporte->reporteruido_introduccion;
-            } else {
+            }
+            else
+            {
                 $dato['reporte_introduccion_guardado'] = 0;
                 $introduccion = $reportecatalogo[0]->reporteruidocatalogo_introduccion;
             }
@@ -417,15 +472,21 @@ class reporteruidoController extends Controller
             //===================================================
 
 
-            if ($dato['reporteregistro_id'] >= 0 && $reporte->reporteruido_objetivogeneral != NULL) {
-                if ($reporte->proyecto_id == $proyecto_id) {
+            if ($dato['reporteregistro_id'] >= 0 && $reporte->reporteruido_objetivogeneral != NULL)
+            {
+                if ($reporte->proyecto_id == $proyecto_id)
+                {
                     $dato['reporte_objetivogeneral_guardado'] = 1;
-                } else {
+                }
+                else
+                {
                     $dato['reporte_objetivogeneral_guardado'] = 0;
                 }
 
                 $objetivogeneral = $reporte->reporteruido_objetivogeneral;
-            } else {
+            }
+            else
+            {
                 $dato['reporte_objetivogeneral_guardado'] = 0;
                 $objetivogeneral = $reportecatalogo[0]->reporteruidocatalogo_objetivogeneral;
             }
@@ -437,15 +498,21 @@ class reporteruidoController extends Controller
             //===================================================
 
 
-            if ($dato['reporteregistro_id'] >= 0 && $reporte->reporteruido_objetivoespecifico != NULL) {
-                if ($reporte->proyecto_id == $proyecto_id) {
+            if ($dato['reporteregistro_id'] >= 0 && $reporte->reporteruido_objetivoespecifico != NULL)
+            {
+                if ($reporte->proyecto_id == $proyecto_id)
+                {
                     $dato['reporte_objetivoespecifico_guardado'] = 1;
-                } else {
+                }
+                else
+                {
                     $dato['reporte_objetivoespecifico_guardado'] = 0;
                 }
 
                 $objetivoespecifico = $reporte->reporteruido_objetivoespecifico;
-            } else {
+            }
+            else
+            {
                 $dato['reporte_objetivoespecifico_guardado'] = 0;
                 $objetivoespecifico = $reportecatalogo[0]->reporteruidocatalogo_objetivoespecifico;
             }
@@ -457,15 +524,21 @@ class reporteruidoController extends Controller
             //===================================================
 
 
-            if ($dato['reporteregistro_id'] >= 0 && $reporte->reporteruido_metodologia_4_1 != NULL) {
-                if ($reporte->proyecto_id == $proyecto_id) {
+            if ($dato['reporteregistro_id'] >= 0 && $reporte->reporteruido_metodologia_4_1 != NULL)
+            {
+                if ($reporte->proyecto_id == $proyecto_id)
+                {
                     $dato['reporte_metodologia_4_1_guardado'] = 1;
-                } else {
+                }
+                else
+                {
                     $dato['reporte_metodologia_4_1_guardado'] = 0;
                 }
 
                 $metodologia_4_1 = $reporte->reporteruido_metodologia_4_1;
-            } else {
+            }
+            else
+            {
                 $dato['reporte_metodologia_4_1_guardado'] = 0;
                 $metodologia_4_1 = $reportecatalogo[0]->reporteruidocatalogo_metodologia_4_1;
             }
@@ -477,15 +550,21 @@ class reporteruidoController extends Controller
             //===================================================
 
 
-            if ($dato['reporteregistro_id'] >= 0 && $reporte->reporteruido_metodologia_4_2 != NULL) {
-                if ($reporte->proyecto_id == $proyecto_id) {
+            if ($dato['reporteregistro_id'] >= 0 && $reporte->reporteruido_metodologia_4_2 != NULL)
+            {
+                if ($reporte->proyecto_id == $proyecto_id)
+                {
                     $dato['reporte_metodologia_4_2_guardado'] = 1;
-                } else {
+                }
+                else
+                {
                     $dato['reporte_metodologia_4_2_guardado'] = 0;
                 }
 
                 $metodologia_4_2 = $reporte->reporteruido_metodologia_4_2;
-            } else {
+            }
+            else
+            {
                 $dato['reporte_metodologia_4_2_guardado'] = 0;
                 $metodologia_4_2 = $reportecatalogo[0]->reporteruidocatalogo_metodologia_4_2;
             }
@@ -497,38 +576,49 @@ class reporteruidoController extends Controller
             //===================================================
 
 
-            if ($dato['reporteregistro_id'] >= 0 && $reporte->reporteruido_ubicacioninstalacion != NULL) {
-                if ($reporte->proyecto_id == $proyecto_id) {
+            if ($dato['reporteregistro_id'] >= 0 && $reporte->reporteruido_ubicacioninstalacion != NULL)
+            {
+                if ($reporte->proyecto_id == $proyecto_id)
+                {
                     $dato['reporte_ubicacioninstalacion_guardado'] = 1;
-                } else {
+                }
+                else
+                {
                     $dato['reporte_ubicacioninstalacion_guardado'] = 0;
                 }
 
                 $ubicacion = $reporte->reporteruido_ubicacioninstalacion;
-            } else {
+            }
+            else
+            {
                 $dato['reporte_ubicacioninstalacion_guardado'] = 0;
                 $ubicacion = $reportecatalogo[0]->reporteruidocatalogo_ubicacioninstalacion;
             }
 
 
             $ubicacionfoto = NULL;
-            if ($dato['reporteregistro_id'] >= 0 && $reporte->reporteruido_ubicacionfoto != NULL && $reporte->proyecto_id == $proyecto_id) {
+            if ($dato['reporteregistro_id'] >= 0 && $reporte->reporteruido_ubicacionfoto != NULL && $reporte->proyecto_id == $proyecto_id)
+            {
                 $ubicacionfoto = $reporte->reporteruido_ubicacionfoto;
             }
 
             $dato['reporte_ubicacioninstalacion'] = array(
-                'ubicacion' => $this->datosproyectoreemplazartexto($proyecto, $recsensorial, $ubicacion), 'ubicacionfoto' => $ubicacionfoto
-            );
+                                                          'ubicacion' => $this->datosproyectoreemplazartexto($proyecto, $recsensorial, $ubicacion)
+                                                        , 'ubicacionfoto' => $ubicacionfoto
+                                                    );
 
 
             // PROCESO INSTALACION
             //===================================================
 
 
-            if ($dato['reporteregistro_id'] >= 0 && $reporte->reporteruido_procesoinstalacion != NULL && $reporte->proyecto_id == $proyecto_id) {
+            if ($dato['reporteregistro_id'] >= 0 && $reporte->reporteruido_procesoinstalacion != NULL && $reporte->proyecto_id == $proyecto_id)
+            {
                 $dato['reporte_procesoinstalacion_guardado'] = 1;
                 $procesoinstalacion = $reporte->reporteruido_procesoinstalacion;
-            } else {
+            }
+            else
+            {
                 $dato['reporte_procesoinstalacion_guardado'] = 0;
                 $procesoinstalacion = $recsensorial->recsensorial_descripcionproceso;
             }
@@ -540,9 +630,12 @@ class reporteruidoController extends Controller
             //===================================================
 
 
-            if ($dato['reporteregistro_id'] >= 0 && $reporte->reporteruido_actividadprincipal != NULL && $reporte->proyecto_id == $proyecto_id) {
+            if ($dato['reporteregistro_id'] >= 0 && $reporte->reporteruido_actividadprincipal != NULL && $reporte->proyecto_id == $proyecto_id)
+            {
                 $procesoinstalacion = $reporte->reporteruido_actividadprincipal;
-            } else {
+            }
+            else
+            {
                 $procesoinstalacion = $recsensorial->recsensorial_actividadprincipal;
             }
 
@@ -553,10 +646,13 @@ class reporteruidoController extends Controller
             //===================================================
 
 
-            if ($dato['reporteregistro_id'] >= 0 && $reporte->reporteruido_metodoevaluacion != NULL && $reporte->proyecto_id == $proyecto_id) {
+            if ($dato['reporteregistro_id'] >= 0 && $reporte->reporteruido_metodoevaluacion != NULL && $reporte->proyecto_id == $proyecto_id)
+            {
                 $dato['reporte_metodoevaluacion_guardado'] = 1;
                 $metodoevaluacion = $reporte->reporteruido_metodoevaluacion;
-            } else {
+            }
+            else
+            {
                 $dato['reporte_metodoevaluacion_guardado'] = 0;
                 $metodoevaluacion = $reportecatalogo[0]->reporteruidocatalogo_metodoevaluacion;
             }
@@ -568,10 +664,13 @@ class reporteruidoController extends Controller
             //===================================================
 
 
-            if ($dato['reporteregistro_id'] >= 0 && $reporte->reporteruido_conclusion != NULL && $reporte->proyecto_id == $proyecto_id) {
+            if ($dato['reporteregistro_id'] >= 0 && $reporte->reporteruido_conclusion != NULL && $reporte->proyecto_id == $proyecto_id)
+            {
                 $dato['reporte_conclusion_guardado'] = 1;
                 $conclusion = $reporte->reporteruido_conclusion;
-            } else {
+            }
+            else
+            {
                 $dato['reporte_conclusion_guardado'] = 0;
                 $conclusion = $reportecatalogo[0]->reporteruidocatalogo_conclusion;
             }
@@ -583,17 +682,30 @@ class reporteruidoController extends Controller
             //===================================================
 
 
-            if ($dato['reporteregistro_id'] >= 0 && $reporte->reporteruido_responsable1 != NULL) {
-                if ($reporte->proyecto_id == $proyecto_id) {
+            if ($dato['reporteregistro_id'] >= 0 && $reporte->reporteruido_responsable1 != NULL)
+            {
+                if ($reporte->proyecto_id == $proyecto_id)
+                {
                     $dato['reporte_responsablesinforme_guardado'] = 1;
-                } else {
+                }
+                else
+                {
                     $dato['reporte_responsablesinforme_guardado'] = 0;
                 }
 
                 $dato['reporte_responsablesinforme'] = array(
-                    'responsable1' => $reporte->reporteruido_responsable1, 'responsable1cargo' => $reporte->reporteruido_responsable1cargo, 'responsable1documento' => $reporte->reporteruido_responsable1documento, 'responsable2' => $reporte->reporteruido_responsable2, 'responsable2cargo' => $reporte->reporteruido_responsable2cargo, 'responsable2documento' => $reporte->reporteruido_responsable2documento, 'proyecto_id' => $reporte->proyecto_id, 'registro_id' => $reporte->id
-                );
-            } else {
+                                                              'responsable1' => $reporte->reporteruido_responsable1
+                                                            , 'responsable1cargo' => $reporte->reporteruido_responsable1cargo
+                                                            , 'responsable1documento' => $reporte->reporteruido_responsable1documento
+                                                            , 'responsable2' => $reporte->reporteruido_responsable2
+                                                            , 'responsable2cargo' => $reporte->reporteruido_responsable2cargo
+                                                            , 'responsable2documento' => $reporte->reporteruido_responsable2documento
+                                                            , 'proyecto_id' => $reporte->proyecto_id
+                                                            , 'registro_id' => $reporte->id
+                                                        );
+            }
+            else
+            {
                 $dato['reporte_responsablesinforme_guardado'] = 0;
 
                 // $reportehistorial = reporteruidoModel::where('catactivo_id', $proyecto->catactivo_id)
@@ -603,18 +715,35 @@ class reporteruidoController extends Controller
                 //                                         ->get();
 
                 $reportehistorial = reporteruidoModel::where('reporteruido_responsable1', '!=', '')
-                    ->orderBy('updated_at', 'DESC')
-                    ->limit(1)
-                    ->get();
+                                                    ->orderBy('updated_at', 'DESC')
+                                                    ->limit(1)
+                                                    ->get();
 
-                if (count($reportehistorial) > 0 && $reportehistorial[0]->reporteruido_responsable1 != NULL) {
+                if (count($reportehistorial) > 0 && $reportehistorial[0]->reporteruido_responsable1 != NULL)
+                {
                     $dato['reporte_responsablesinforme'] = array(
-                        'responsable1' => $reportehistorial[0]->reporteruido_responsable1, 'responsable1cargo' => $reportehistorial[0]->reporteruido_responsable1cargo, 'responsable1documento' => $reportehistorial[0]->reporteruido_responsable1documento, 'responsable2' => $reportehistorial[0]->reporteruido_responsable2, 'responsable2cargo' => $reportehistorial[0]->reporteruido_responsable2cargo, 'responsable2documento' => $reportehistorial[0]->reporteruido_responsable2documento, 'proyecto_id' => $reportehistorial[0]->proyecto_id, 'registro_id' => $reportehistorial[0]->id
-                    );
-                } else {
+                                                                  'responsable1' => $reportehistorial[0]->reporteruido_responsable1
+                                                                , 'responsable1cargo' => $reportehistorial[0]->reporteruido_responsable1cargo
+                                                                , 'responsable1documento' => $reportehistorial[0]->reporteruido_responsable1documento
+                                                                , 'responsable2' => $reportehistorial[0]->reporteruido_responsable2
+                                                                , 'responsable2cargo' => $reportehistorial[0]->reporteruido_responsable2cargo
+                                                                , 'responsable2documento' => $reportehistorial[0]->reporteruido_responsable2documento
+                                                                , 'proyecto_id' => $reportehistorial[0]->proyecto_id
+                                                                , 'registro_id' => $reportehistorial[0]->id
+                                                            );
+                }
+                else
+                {
                     $dato['reporte_responsablesinforme'] = array(
-                        'responsable1' => NULL, 'responsable1cargo' => NULL, 'responsable1documento' => NULL, 'responsable2' => NULL, 'responsable2cargo' => NULL, 'responsable2documento' => NULL, 'proyecto_id' => 0, 'registro_id' => 0
-                    );
+                                                                  'responsable1' => NULL
+                                                                , 'responsable1cargo' => NULL
+                                                                , 'responsable1documento' => NULL
+                                                                , 'responsable2' => NULL
+                                                                , 'responsable2cargo' => NULL
+                                                                , 'responsable2documento' => NULL
+                                                                , 'proyecto_id' => 0
+                                                                , 'registro_id' => 0
+                                                            );
                 }
             }
 
@@ -636,16 +765,19 @@ class reporteruidoController extends Controller
                                                 FROM
                                                     proyectoevidenciafoto
                                                 WHERE
-                                                    proyectoevidenciafoto.proyecto_id = ' . $proyecto_id . '
-                                                    AND proyectoevidenciafoto.agente_nombre = "' . $agente_nombre . '"
+                                                    proyectoevidenciafoto.proyecto_id = '.$proyecto_id.'
+                                                    AND proyectoevidenciafoto.agente_nombre = "'.$agente_nombre.'"
                                                 GROUP BY
                                                     proyectoevidenciafoto.proyecto_id,
                                                     proyectoevidenciafoto.agente_nombre
                                                 LIMIT 1');
 
-            if (count($memoriafotografica) > 0) {
+            if (count($memoriafotografica) > 0)
+            {
                 $dato['reporte_memoriafotografica_guardado'] = $memoriafotografica[0]->total;
-            } else {
+            }
+            else
+            {                
                 $dato['reporte_memoriafotografica_guardado'] = 0;
             }
 
@@ -668,7 +800,7 @@ class reporteruidoController extends Controller
             //                                                             ->get();
 
             //     DB::statement('ALTER TABLE reporteruidocategoria AUTO_INCREMENT = 1;');
-
+                
             //     foreach ($recsensorial_categorias as $key => $value)
             //     {
             //         $categoria = reporteruidocategoriaModel::create([
@@ -698,7 +830,7 @@ class reporteruidoController extends Controller
             //                                                 ->get();
 
             //     DB::statement('ALTER TABLE reporteruidoarea AUTO_INCREMENT = 1;');
-
+                
             //     foreach ($recsensorial_areas as $key => $value)
             //     {
             //         $area = reporteruidoareaModel::create([
@@ -717,8 +849,10 @@ class reporteruidoController extends Controller
             // respuesta
             $dato["msj"] = 'Datos consultados correctamente';
             return response()->json($dato);
-        } catch (Exception $e) {
-            $dato["msj"] = 'Error ' . $e->getMessage();
+        }
+        catch(Exception $e)
+        {
+            $dato["msj"] = 'Error '.$e->getMessage();
             return response()->json($dato);
         }
     }
@@ -734,7 +868,8 @@ class reporteruidoController extends Controller
      */
     public function reporteruidotabladefiniciones($proyecto_id, $agente_nombre, $reporteregistro_id)
     {
-        try {
+        try
+        {
             // $reporte = reporteruidoModel::where('id', $reporteregistro_id)->get();
 
             // $edicion = 1;
@@ -748,14 +883,16 @@ class reporteruidoController extends Controller
 
 
             $revision = reporterevisionesModel::where('proyecto_id', $proyecto_id)
-                ->where('agente_id', 1)
-                ->orderBy('reporterevisiones_revision', 'DESC')
-                ->get();
+                                                ->where('agente_id', 1)
+                                                ->orderBy('reporterevisiones_revision', 'DESC')
+                                                ->get();
 
 
             $edicion = 1;
-            if (count($revision) > 0) {
-                if ($revision[0]->reporterevisiones_concluido == 1 || $revision[0]->reporterevisiones_cancelado == 1) {
+            if(count($revision) > 0)
+            {
+                if($revision[0]->reporterevisiones_concluido == 1 || $revision[0]->reporterevisiones_cancelado == 1)
+                {
                     $edicion = 0;
                 }
             }
@@ -769,9 +906,9 @@ class reporteruidoController extends Controller
             $recsensorial = recsensorialModel::findOrFail($proyecto->recsensorial_id);
 
             $where_definiciones = '';
-            if (($recsensorial->recsensorial_tipocliente + 0) == 1) //1 = pemex, 0 = cliente
+            if (($recsensorial->recsensorial_tipocliente+0) == 1) //1 = pemex, 0 = cliente
             {
-                $where_definiciones = 'AND reportedefiniciones.catactivo_id = ' . $proyecto->catactivo_id;
+                $where_definiciones = 'AND reportedefiniciones.catactivo_id = '.$proyecto->catactivo_id;
             }
 
             $definiciones_catalogo = collect(DB::select('SELECT
@@ -796,7 +933,7 @@ class reporteruidoController extends Controller
                                                                         FROM
                                                                             reportedefinicionescatalogo
                                                                         WHERE
-                                                                            reportedefinicionescatalogo.agente_nombre LIKE "' . $agente_nombre . '"
+                                                                            reportedefinicionescatalogo.agente_nombre LIKE "'.$agente_nombre.'"
                                                                             AND reportedefinicionescatalogo.reportedefinicionescatalogo_activo = 1
                                                                         ORDER BY
                                                                             reportedefinicionescatalogo.reportedefinicionescatalogo_concepto ASC
@@ -814,8 +951,8 @@ class reporteruidoController extends Controller
                                                                         FROM
                                                                             reportedefiniciones
                                                                         WHERE
-                                                                            reportedefiniciones.agente_nombre LIKE "' . $agente_nombre . '"
-                                                                            ' . $where_definiciones . ' 
+                                                                            reportedefiniciones.agente_nombre LIKE "'.$agente_nombre.'"
+                                                                            '.$where_definiciones.' 
                                                                         ORDER BY
                                                                             reportedefiniciones.agente_nombre ASC
                                                                     )
@@ -824,19 +961,26 @@ class reporteruidoController extends Controller
                                                                 -- TABLA.catactivo_id ASC,
                                                                 TABLA.concepto ASC'));
 
-            foreach ($definiciones_catalogo as $key => $value) {
-                if (($value->catactivo_id + 0) < 0) {
-                    $value->descripcion_fuente = $value->descripcion . '<br><span style="color: #999999; font-style: italic;">Fuente: ' . $value->fuente . '</span>';
+            foreach ($definiciones_catalogo as $key => $value)
+            {
+                if (($value->catactivo_id+0) < 0)
+                {
+                    $value->descripcion_fuente = $value->descripcion.'<br><span style="color: #999999; font-style: italic;">Fuente: '.$value->fuente.'</span>';
                     $value->boton_editar = '<button type="button" class="btn btn-default waves-effect btn-circle"><i class="fa fa-ban fa-2x"></i></button>';
                     $value->boton_eliminar = '<button type="button" class="btn btn-default waves-effect btn-circle" data-toggle="tooltip" title="No disponible"><i class="fa fa-ban fa-2x"></i></button>';
-                } else {
-                    $value->descripcion_fuente = $value->descripcion . '<br><span style="color: #999999; font-style: italic;">Fuente: ' . $value->fuente . '</span>';
+                }
+                else
+                {
+                    $value->descripcion_fuente = $value->descripcion.'<br><span style="color: #999999; font-style: italic;">Fuente: '.$value->fuente.'</span>';
                     $value->boton_editar = '<button type="button" class="btn btn-warning waves-effect btn-circle"><i class="fa fa-pencil fa-2x"></i></button>';
                     // $value->boton_eliminar = '<button type="button" class="btn btn-danger waves-effect btn-circle"><i class="fa fa-trash fa-2x"></i></button>';
 
-                    if ($edicion == 1) {
+                    if ($edicion == 1)
+                    {
                         $value->boton_eliminar = '<button type="button" class="btn btn-danger waves-effect btn-circle eliminar"><i class="fa fa-trash fa-2x"></i></button>';
-                    } else {
+                    }
+                    else
+                    {
                         $value->boton_eliminar = '<button type="button" class="btn btn-default waves-effect btn-circle" data-toggle="tooltip" title="No disponible"><i class="fa fa-eye fa-2x"></i></button>';
                     }
                 }
@@ -846,9 +990,11 @@ class reporteruidoController extends Controller
             $dato['data'] = $definiciones_catalogo;
             $dato["msj"] = 'Datos consultados correctamente';
             return response()->json($dato);
-        } catch (Exception $e) {
+        }
+        catch(Exception $e)
+        {
             $dato['data'] = 0;
-            $dato["msj"] = 'Error ' . $e->getMessage();
+            $dato["msj"] = 'Error '.$e->getMessage();
             return response()->json($dato);
         }
     }
@@ -862,14 +1008,17 @@ class reporteruidoController extends Controller
      */
     public function reporteruidodefinicioneliminar($definicion_id)
     {
-        try {
+        try
+        {
             $definicion = reportedefinicionesModel::where('id', $definicion_id)->delete();
 
             // respuesta
             $dato["msj"] = 'Definición eliminada correctamente';
             return response()->json($dato);
-        } catch (Exception $e) {
-            $dato["msj"] = 'Error ' . $e->getMessage();
+        }
+        catch(Exception $e)
+        {
+            $dato["msj"] = 'Error '.$e->getMessage();
             return response()->json($dato);
         }
     }
@@ -881,14 +1030,17 @@ class reporteruidoController extends Controller
      * @param  int  $reporteregistro_id
      * @param  int  $archivo_opcion
      * @return \Illuminate\Http\Response
-     */
+    */
     public function reporteruidomapaubicacion($reporteregistro_id, $archivo_opcion)
     {
         $reporte  = reporteruidoModel::findOrFail($reporteregistro_id);
 
-        if ($archivo_opcion == 0) {
+        if ($archivo_opcion == 0)
+        {
             return Storage::response($reporte->reporteruido_ubicacionfoto);
-        } else {
+        }
+        else
+        {
             return Storage::download($reporte->reporteruido_ubicacionfoto);
         }
     }
@@ -904,17 +1056,20 @@ class reporteruidoController extends Controller
      */
     public function reporteruidocategorias($proyecto_id, $reporteregistro_id, $areas_poe)
     {
-        try {
+        try
+        {
             $total_singuardar = 0;
 
 
-            if (($areas_poe + 0) == 1) {
+            if (($areas_poe+0) == 1)
+            {
                 $categorias = reportecategoriaModel::where('proyecto_id', $proyecto_id)
-                    ->orderBy('reportecategoria_orden', 'ASC')
-                    ->get();
+                                                    ->orderBy('reportecategoria_orden', 'ASC')
+                                                    ->get();
 
 
-                foreach ($categorias as $key => $value) {
+                foreach ($categorias as $key => $value) 
+                {
                     // $numero_registro += 1;
                     // $value->numero_registro = $numero_registro;
                     $value->numero_registro = $value->reportecategoria_orden;
@@ -930,7 +1085,9 @@ class reporteruidoController extends Controller
 
 
                 $total_singuardar = 1;
-            } else {
+            }
+            else
+            {
                 // $reporte = reporteruidoModel::where('id', $reporteregistro_id)->get();
 
 
@@ -945,14 +1102,16 @@ class reporteruidoController extends Controller
 
 
                 $revision = reporterevisionesModel::where('proyecto_id', $proyecto_id)
-                    ->where('agente_id', 1)
-                    ->orderBy('reporterevisiones_revision', 'DESC')
-                    ->get();
+                                                ->where('agente_id', 1)
+                                                ->orderBy('reporterevisiones_revision', 'DESC')
+                                                ->get();
 
 
                 $edicion = 1;
-                if (count($revision) > 0) {
-                    if ($revision[0]->reporterevisiones_concluido == 1 || $revision[0]->reporterevisiones_cancelado == 1) {
+                if(count($revision) > 0)
+                {
+                    if($revision[0]->reporterevisiones_concluido == 1 || $revision[0]->reporterevisiones_cancelado == 1)
+                    {
                         $edicion = 0;
                     }
                 }
@@ -962,35 +1121,41 @@ class reporteruidoController extends Controller
 
 
                 $categorias = reporteruidocategoriaModel::where('proyecto_id', $proyecto_id)
-                    ->where('registro_id', $reporteregistro_id)
-                    ->orderBy('reporteruidocategoria_nombre', 'ASC')
-                    ->get();
+                                                        ->where('registro_id', $reporteregistro_id)
+                                                        ->orderBy('reporteruidocategoria_nombre', 'ASC')
+                                                        ->get();
 
 
-                if (count($categorias) == 0) {
+                if (count($categorias) == 0)
+                {
                     $categorias = reporteruidocategoriaModel::where('proyecto_id', $proyecto_id)
-                        ->orderBy('reporteruidocategoria_nombre', 'ASC')
-                        ->get();
+                                                            ->orderBy('reporteruidocategoria_nombre', 'ASC')
+                                                            ->get();
                 }
 
 
                 $numero_registro = 0;
-                foreach ($categorias as $key => $value) {
+                foreach ($categorias as $key => $value) 
+                {
                     $numero_registro += 1;
                     $value->numero_registro = $numero_registro;
 
-
+                    
                     $value->boton_editar = '<button type="button" class="btn btn-warning waves-effect btn-circle editar"><i class="fa fa-pencil fa-2x"></i></button>';
 
 
-                    if ($edicion == 1) {
+                    if ($edicion == 1)
+                    {
                         $value->boton_eliminar = '<button type="button" class="btn btn-danger waves-effect btn-circle eliminar"><i class="fa fa-trash fa-2x"></i></button>';
-                    } else {
+                    }
+                    else
+                    {
                         $value->boton_eliminar = '<button type="button" class="btn btn-default waves-effect btn-circle" data-toggle="tooltip" title="No disponible"><i class="fa fa-ban fa-2x"></i></button>';
                     }
 
 
-                    if (!$value->reporteruidocategoria_total) {
+                    if (!$value->reporteruidocategoria_total)
+                    {
                         $total_singuardar += 1;
                     }
                 }
@@ -1001,10 +1166,12 @@ class reporteruidoController extends Controller
             $dato["total_singuardar"] = $total_singuardar;
             $dato["msj"] = 'Datos consultados correctamente';
             return response()->json($dato);
-        } catch (Exception $e) {
+        }
+        catch(Exception $e)
+        {
             $dato['data'] = 0;
             $dato["total_singuardar"] = 0;
-            $dato["msj"] = 'Error ' . $e->getMessage();
+            $dato["msj"] = 'Error '.$e->getMessage();
             return response()->json($dato);
         }
     }
@@ -1018,14 +1185,17 @@ class reporteruidoController extends Controller
      */
     public function reporteruidocategoriaeliminar($categoria_id)
     {
-        try {
+        try
+        {
             $categoria = reporteruidocategoriaModel::where('id', $categoria_id)->delete();
 
             // respuesta
             $dato["msj"] = 'Categoría eliminada correctamente';
             return response()->json($dato);
-        } catch (Exception $e) {
-            $dato["msj"] = 'Error ' . $e->getMessage();
+        }
+        catch(Exception $e)
+        {
+            $dato["msj"] = 'Error '.$e->getMessage();
             return response()->json($dato);
         }
     }
@@ -1041,21 +1211,13 @@ class reporteruidoController extends Controller
      */
     public function reporteruidoareas($proyecto_id, $reporteregistro_id, $areas_poe)
     {
-        try {
-            $numero_registro = 0;
-            $total_singuardar = 0;
-            $instalacion = 'XXX';
-            $area = 'XXX';
-            $area2 = 'XXX';
-            $selectareasoption = '<option value=""></option>';
-            $tabla_5_3 = '';
-            $tabla_5_5 = '';
-            $tabla_5_8_UNO = '';
-            $tabla_5_8_DOS = '';
-            $tabla_6_1 = '';
+        try
+        {
+            $numero_registro = 0; $total_singuardar = 0; $instalacion = 'XXX'; $area = 'XXX'; $area2 = 'XXX'; $selectareasoption = '<option value=""></option>'; $tabla_5_3 = ''; $tabla_5_5 = ''; $tabla_5_8_UNO = ''; $tabla_5_8_DOS = ''; $tabla_6_1 = '';
 
 
-            if (($areas_poe + 0) == 1) {
+            if (($areas_poe+0) == 1)
+            {
                 $areas = DB::select('SELECT
                                         reportearea.proyecto_id,
                                         reportearea.id,
@@ -1089,7 +1251,7 @@ class reporteruidoController extends Controller
                                             WHERE
                                                 reporteruidoareacategoria.reporteruidoarea_id = reportearea.id
                                                 AND reporteruidoareacategoria.reporteruidocategoria_id = reporteareacategoria.reportecategoria_id
-                                                AND reporteruidoareacategoria.reporteruidoareacategoria_poe = ' . $reporteregistro_id . ' 
+                                                AND reporteruidoareacategoria.reporteruidoareacategoria_poe = '.$reporteregistro_id.' 
                                             LIMIT 1
                                         ), "") AS activo,
                                         reporteareacategoria.reporteareacategoria_total AS reporteruidoareacategoria_total,
@@ -1100,7 +1262,7 @@ class reporteruidoController extends Controller
                                         LEFT JOIN reporteareacategoria ON reportearea.id = reporteareacategoria.reportearea_id
                                         LEFT JOIN reportecategoria ON reporteareacategoria.reportecategoria_id = reportecategoria.id 
                                     WHERE
-                                        reportearea.proyecto_id = ' . $proyecto_id . ' 
+                                        reportearea.proyecto_id = '.$proyecto_id.' 
                                     ORDER BY
                                         reportearea.reportearea_orden ASC,
                                         reportearea.reportearea_nombre ASC,
@@ -1109,8 +1271,10 @@ class reporteruidoController extends Controller
 
 
                 // FORMATEAR FILAS
-                foreach ($areas as $key => $value) {
-                    if ($area != $value->reporteruidoarea_nombre) {
+                foreach ($areas as $key => $value) 
+                {
+                    if ($area != $value->reporteruidoarea_nombre)
+                    {
                         $area = $value->reporteruidoarea_nombre;
                         $value->area_nombre = $area;
 
@@ -1119,15 +1283,16 @@ class reporteruidoController extends Controller
                         $value->numero_registro = $numero_registro;
 
 
-                        if ($value->reporteruidoarea_porcientooperacion > 0) {
+                        if ($value->reporteruidoarea_porcientooperacion > 0)
+                        {
                             //TABLA 5.3.- Descripción de los procesos que generen ruido
                             //==================================================
 
 
                             $tabla_5_3 .= '<tr>
-                                                <td>' . $value->reporteruidoarea_instalacion . '</td>
-                                                <td>' . $value->reporteruidoarea_nombre . '</td>
-                                                <td class="justificado">' . $value->reporteruidoarea_proceso . '</td>
+                                                <td>'.$value->reporteruidoarea_instalacion.'</td>
+                                                <td>'.$value->reporteruidoarea_nombre.'</td>
+                                                <td class="justificado">'.$value->reporteruidoarea_proceso.'</td>
                                             </tr>';
 
 
@@ -1154,12 +1319,12 @@ class reporteruidoController extends Controller
 
 
                             $tabla_5_8_UNO .= '<tr>
-                                                    <td>' . $value->reporteruidoarea_instalacion . '</td>
-                                                    <td>' . $value->reporteruidoarea_nombre . '</td>
-                                                    <td>' . $value->reporteruidoarea_LNI_1 . '</td>
-                                                    <td>' . $value->reporteruidoarea_LNI_2 . '</td>
-                                                    <td>' . $value->reporteruidoarea_tiporuido . '</td>
-                                                    <td>' . $value->reporteruidoarea_evaluacion . '</td>
+                                                    <td>'.$value->reporteruidoarea_instalacion.'</td>
+                                                    <td>'.$value->reporteruidoarea_nombre.'</td>
+                                                    <td>'.$value->reporteruidoarea_LNI_1.'</td>
+                                                    <td>'.$value->reporteruidoarea_LNI_2.'</td>
+                                                    <td>'.$value->reporteruidoarea_tiporuido.'</td>
+                                                    <td>'.$value->reporteruidoarea_evaluacion.'</td>
                                                 </tr>';
 
 
@@ -1175,18 +1340,19 @@ class reporteruidoController extends Controller
                                                             FROM
                                                                 reporteruidoareamaquinaria
                                                             WHERE
-                                                                reporteruidoareamaquinaria.reporteruidoarea_id = ' . $value->id . ' 
+                                                                reporteruidoareamaquinaria.reporteruidoarea_id = '.$value->id.' 
                                                                 AND reporteruidoareamaquinaria.reporteruidoareamaquinaria_poe > 0
                                                             ORDER BY
                                                                 reporteruidoareamaquinaria.id ASC');
 
 
-                            foreach ($areamaquinaria as $key => $maquina) {
+                            foreach ($areamaquinaria as $key => $maquina)
+                            {
                                 $tabla_5_8_DOS .= '<tr>
-                                                        <td>' . $value->reporteruidoarea_instalacion . '</td>
-                                                        <td>' . $value->reporteruidoarea_nombre . '</td>
-                                                        <td>' . $maquina->reporteruidoareamaquinaria_nombre . '</td>
-                                                        <td>' . $maquina->reporteruidoareamaquinaria_cantidad . '</td>
+                                                        <td>'.$value->reporteruidoarea_instalacion.'</td>
+                                                        <td>'.$value->reporteruidoarea_nombre.'</td>
+                                                        <td>'.$maquina->reporteruidoareamaquinaria_nombre.'</td>
+                                                        <td>'.$maquina->reporteruidoareamaquinaria_cantidad.'</td>
                                                     </tr>';
                             }
 
@@ -1196,21 +1362,26 @@ class reporteruidoController extends Controller
 
 
                             $tabla_6_1 .= '<tr>
-                                                <td>' . $numero_registro . '</td>
-                                                <td>' . $value->reporteruidoarea_instalacion . '</td>
-                                                <td>' . $value->reporteruidoarea_nombre . '</td>
-                                                <td>' . $value->reporteruidoarea_porcientooperacion . ' %</td>
+                                                <td>'.$numero_registro.'</td>
+                                                <td>'.$value->reporteruidoarea_instalacion.'</td>
+                                                <td>'.$value->reporteruidoarea_nombre.'</td>
+                                                <td>'.$value->reporteruidoarea_porcientooperacion.' %</td>
                                             </tr>';
                         }
-                    } else {
+                    }
+                    else
+                    {
                         $value->area_nombre = $area;
                         $value->numero_registro = $numero_registro;
                     }
 
 
-                    if ($value->activo) {
-                        $value->reportecategoria_nombre_texto = '<span class="text-danger">' . $value->reporteruidocategoria_nombre . '</span>';
-                    } else {
+                    if ($value->activo)
+                    {
+                        $value->reportecategoria_nombre_texto = '<span class="text-danger">'.$value->reporteruidocategoria_nombre.'</span>';
+                    }
+                    else
+                    {
                         $value->reportecategoria_nombre_texto = $value->reporteruidocategoria_nombre;
                     }
 
@@ -1219,21 +1390,24 @@ class reporteruidoController extends Controller
                     $value->boton_eliminar = '<button type="button" class="btn btn-default waves-effect btn-circle" data-toggle="tooltip" title="No disponible"><i class="fa fa-ban fa-2x"></i></button>';
 
 
-                    if ($value->reporteruidoarea_proceso === NULL) {
+                    if ($value->reporteruidoarea_proceso === NULL)
+                    {
                         $total_singuardar += 1;
                     }
 
 
-                    if ($value->reporteruidoarea_porcientooperacion > 0) {
+                    if ($value->reporteruidoarea_porcientooperacion > 0)
+                    {
                         //TABLA 5.5.- Actividades del personal expuesto
                         //==================================================
 
-                        if ($value->activo) {
+                        if ($value->activo)
+                        {
                             $tabla_5_5 .= '<tr>
-                                                <td>' . $value->reporteruidoarea_instalacion . '</td>
-                                                <td>' . $value->reporteruidoarea_nombre . '</td>
-                                                <td>' . $value->reporteruidocategoria_nombre . '</td>
-                                                <td class="justificado">' . $value->reporteruidoareacategoria_actividades . '</td>
+                                                <td>'.$value->reporteruidoarea_instalacion.'</td>
+                                                <td>'.$value->reporteruidoarea_nombre.'</td>
+                                                <td>'.$value->reporteruidocategoria_nombre.'</td>
+                                                <td class="justificado">'.$value->reporteruidoareacategoria_actividades.'</td>
                                             </tr>';
                         }
 
@@ -1242,30 +1416,36 @@ class reporteruidoController extends Controller
                         //==================================================
 
 
-                        if ($instalacion != $value->reporteruidoarea_instalacion && ($key + 0) == 0) {
+                        if ($instalacion != $value->reporteruidoarea_instalacion && ($key + 0) == 0)
+                        {
                             $instalacion = $value->reporteruidoarea_instalacion;
-                            $selectareasoption .= '<optgroup label="' . $instalacion . '">';
+                            $selectareasoption .= '<optgroup label="'.$instalacion.'">';
                         }
-
-                        if ($instalacion != $value->reporteruidoarea_instalacion && ($key + 0) > 0) {
+                        
+                        if ($instalacion != $value->reporteruidoarea_instalacion && ($key + 0) > 0)
+                        {
                             $instalacion = $value->reporteruidoarea_instalacion;
-                            $selectareasoption .= '</optgroup><optgroup label="' . $instalacion . '">';
+                            $selectareasoption .= '</optgroup><optgroup label="'.$instalacion.'">';
                             $area2 = 'XXXXX';
                         }
 
 
-                        if ($area2 != $value->reporteruidoarea_nombre) {
+                        if ($area2 != $value->reporteruidoarea_nombre)
+                        {
                             $area2 = $value->reporteruidoarea_nombre;
-                            $selectareasoption .= '<option value="' . $value->id . '">' . $area2 . '</option>';
+                            $selectareasoption .= '<option value="'.$value->id.'">'.$area2.'</option>';
                         }
 
 
-                        if ($key == (count($areas) - 1)) {
+                        if ($key == (count($areas) - 1))
+                        {
                             $selectareasoption .= '</optgroup>';
                         }
                     }
                 }
-            } else {
+            }
+            else
+            {
                 // $reporte = reporteruidoModel::where('id', $reporteregistro_id)->get();
 
                 // $edicion = 1;
@@ -1279,14 +1459,16 @@ class reporteruidoController extends Controller
 
 
                 $revision = reporterevisionesModel::where('proyecto_id', $proyecto_id)
-                    ->where('agente_id', 1)
-                    ->orderBy('reporterevisiones_revision', 'DESC')
-                    ->get();
+                                                ->where('agente_id', 1)
+                                                ->orderBy('reporterevisiones_revision', 'DESC')
+                                                ->get();
 
 
                 $edicion = 1;
-                if (count($revision) > 0) {
-                    if ($revision[0]->reporterevisiones_concluido == 1 || $revision[0]->reporterevisiones_cancelado == 1) {
+                if(count($revision) > 0)
+                {
+                    if($revision[0]->reporterevisiones_concluido == 1 || $revision[0]->reporterevisiones_cancelado == 1)
+                    {
                         $edicion = 0;
                     }
                 }
@@ -1300,13 +1482,14 @@ class reporteruidoController extends Controller
                                         FROM
                                             reporteruidoarea
                                         WHERE
-                                            reporteruidoarea.proyecto_id = ' . $proyecto_id . '
-                                            AND reporteruidoarea.registro_id = ' . $reporteregistro_id);
+                                            reporteruidoarea.proyecto_id = '.$proyecto_id.'
+                                            AND reporteruidoarea.registro_id = '.$reporteregistro_id);
 
 
                 $where_condicion = '';
-                if (($registros[0]->total + 0) > 0) {
-                    $where_condicion = 'AND reporteruidoarea.registro_id = ' . $reporteregistro_id;
+                if (($registros[0]->total + 0) > 0)
+                {
+                    $where_condicion = 'AND reporteruidoarea.registro_id = '.$reporteregistro_id;
                 }
 
 
@@ -1343,8 +1526,8 @@ class reporteruidoController extends Controller
                                         LEFT OUTER JOIN reporteruidoareacategoria ON reporteruidoarea.id = reporteruidoareacategoria.reporteruidoarea_id
                                         LEFT JOIN reporteruidocategoria ON reporteruidoareacategoria.reporteruidocategoria_id = reporteruidocategoria.id 
                                     WHERE
-                                        reporteruidoarea.proyecto_id = ' . $proyecto_id . ' 
-                                        ' . $where_condicion . ' 
+                                        reporteruidoarea.proyecto_id = '.$proyecto_id.' 
+                                        '.$where_condicion.' 
                                         AND reporteruidoareacategoria.reporteruidoareacategoria_poe = 0 
                                     ORDER BY
                                         reporteruidoarea.reporteruidoarea_numorden ASC,
@@ -1352,8 +1535,10 @@ class reporteruidoController extends Controller
 
 
                 // FORMATEAR FILAS
-                foreach ($areas as $key => $value) {
-                    if ($area != $value->reporteruidoarea_nombre) {
+                foreach ($areas as $key => $value) 
+                {
+                    if ($area != $value->reporteruidoarea_nombre)
+                    {
                         $area = $value->reporteruidoarea_nombre;
                         $value->area_nombre = $area;
 
@@ -1362,15 +1547,16 @@ class reporteruidoController extends Controller
                         $value->numero_registro = $numero_registro;
 
 
-                        if ($value->reporteruidoarea_porcientooperacion > 0) {
+                        if ($value->reporteruidoarea_porcientooperacion > 0)
+                        {
                             //TABLA 5.3.- Descripción de los procesos que generen ruido
                             //==================================================
 
 
                             $tabla_5_3 .= '<tr>
-                                                <td>' . $value->reporteruidoarea_instalacion . '</td>
-                                                <td>' . $value->reporteruidoarea_nombre . '</td>
-                                                <td class="justificado">' . $value->reporteruidoarea_proceso . '</td>
+                                                <td>'.$value->reporteruidoarea_instalacion.'</td>
+                                                <td>'.$value->reporteruidoarea_nombre.'</td>
+                                                <td class="justificado">'.$value->reporteruidoarea_proceso.'</td>
                                             </tr>';
 
 
@@ -1397,12 +1583,12 @@ class reporteruidoController extends Controller
 
 
                             $tabla_5_8_UNO .= '<tr>
-                                                    <td>' . $value->reporteruidoarea_instalacion . '</td>
-                                                    <td>' . $value->reporteruidoarea_nombre . '</td>
-                                                    <td>' . $value->reporteruidoarea_LNI_1 . '</td>
-                                                    <td>' . $value->reporteruidoarea_LNI_2 . '</td>
-                                                    <td>' . $value->reporteruidoarea_tiporuido . '</td>
-                                                    <td>' . $value->reporteruidoarea_evaluacion . '</td>
+                                                    <td>'.$value->reporteruidoarea_instalacion.'</td>
+                                                    <td>'.$value->reporteruidoarea_nombre.'</td>
+                                                    <td>'.$value->reporteruidoarea_LNI_1.'</td>
+                                                    <td>'.$value->reporteruidoarea_LNI_2.'</td>
+                                                    <td>'.$value->reporteruidoarea_tiporuido.'</td>
+                                                    <td>'.$value->reporteruidoarea_evaluacion.'</td>
                                                 </tr>';
 
 
@@ -1418,16 +1604,17 @@ class reporteruidoController extends Controller
                                                             FROM
                                                                 reporteruidoareamaquinaria
                                                             WHERE
-                                                                reporteruidoareamaquinaria.reporteruidoarea_id = ' . $value->id . ' 
+                                                                reporteruidoareamaquinaria.reporteruidoarea_id = '.$value->id.' 
                                                             ORDER BY
                                                                 reporteruidoareamaquinaria.id ASC');
 
-                            foreach ($areamaquinaria as $key => $maquina) {
+                            foreach ($areamaquinaria as $key => $maquina)
+                            {
                                 $tabla_5_8_DOS .= '<tr>
-                                                        <td>' . $value->reporteruidoarea_instalacion . '</td>
-                                                        <td>' . $value->reporteruidoarea_nombre . '</td>
-                                                        <td>' . $maquina->reporteruidoareamaquinaria_nombre . '</td>
-                                                        <td>' . $maquina->reporteruidoareamaquinaria_cantidad . '</td>
+                                                        <td>'.$value->reporteruidoarea_instalacion.'</td>
+                                                        <td>'.$value->reporteruidoarea_nombre.'</td>
+                                                        <td>'.$maquina->reporteruidoareamaquinaria_nombre.'</td>
+                                                        <td>'.$maquina->reporteruidoareamaquinaria_cantidad.'</td>
                                                     </tr>';
                             }
 
@@ -1437,13 +1624,15 @@ class reporteruidoController extends Controller
 
 
                             $tabla_6_1 .= '<tr>
-                                                <td>' . $numero_registro . '</td>
-                                                <td>' . $value->reporteruidoarea_instalacion . '</td>
-                                                <td>' . $value->reporteruidoarea_nombre . '</td>
-                                                <td>' . $value->reporteruidoarea_porcientooperacion . ' %</td>
+                                                <td>'.$numero_registro.'</td>
+                                                <td>'.$value->reporteruidoarea_instalacion.'</td>
+                                                <td>'.$value->reporteruidoarea_nombre.'</td>
+                                                <td>'.$value->reporteruidoarea_porcientooperacion.' %</td>
                                             </tr>';
                         }
-                    } else {
+                    }
+                    else
+                    {
                         $value->area_nombre = $area;
                         $value->numero_registro = $numero_registro;
                     }
@@ -1454,28 +1643,33 @@ class reporteruidoController extends Controller
                     $value->boton_editar = '<button type="button" class="btn btn-warning waves-effect btn-circle"><i class="fa fa-pencil fa-2x"></i></button>';
 
 
-                    if ($edicion == 1) {
+                    if ($edicion == 1)
+                    {
                         $value->boton_eliminar = '<button type="button" class="btn btn-danger waves-effect btn-circle eliminar"><i class="fa fa-trash fa-2x"></i></button>';
-                    } else {
+                    }
+                    else
+                    {
                         $value->boton_eliminar = '<button type="button" class="btn btn-default waves-effect btn-circle" data-toggle="tooltip" title="No disponible"><i class="fa fa-ban fa-2x"></i></button>';
                     }
 
 
-                    if ($value->reporteruidoarea_proceso === NULL) {
+                    if ($value->reporteruidoarea_proceso === NULL)
+                    {
                         $total_singuardar += 1;
                     }
 
 
-                    if ($value->reporteruidoarea_porcientooperacion > 0) {
+                    if ($value->reporteruidoarea_porcientooperacion > 0)
+                    {
                         //TABLA 5.5.- Actividades del personal expuesto
                         //==================================================
 
 
                         $tabla_5_5 .= '<tr>
-                                            <td>' . $value->reporteruidoarea_instalacion . '</td>
-                                            <td>' . $value->reporteruidoarea_nombre . '</td>
-                                            <td>' . $value->reporteruidocategoria_nombre . '</td>
-                                            <td class="justificado">' . $value->reporteruidoareacategoria_actividades . '</td>
+                                            <td>'.$value->reporteruidoarea_instalacion.'</td>
+                                            <td>'.$value->reporteruidoarea_nombre.'</td>
+                                            <td>'.$value->reporteruidocategoria_nombre.'</td>
+                                            <td class="justificado">'.$value->reporteruidoareacategoria_actividades.'</td>
                                         </tr>';
 
 
@@ -1483,25 +1677,29 @@ class reporteruidoController extends Controller
                         //==================================================
 
 
-                        if ($instalacion != $value->reporteruidoarea_instalacion && ($key + 0) == 0) {
+                        if ($instalacion != $value->reporteruidoarea_instalacion && ($key + 0) == 0)
+                        {
                             $instalacion = $value->reporteruidoarea_instalacion;
-                            $selectareasoption .= '<optgroup label="' . $instalacion . '">';
+                            $selectareasoption .= '<optgroup label="'.$instalacion.'">';
                         }
-
-                        if ($instalacion != $value->reporteruidoarea_instalacion && ($key + 0) > 0) {
+                        
+                        if ($instalacion != $value->reporteruidoarea_instalacion && ($key + 0) > 0)
+                        {
                             $instalacion = $value->reporteruidoarea_instalacion;
-                            $selectareasoption .= '</optgroup><optgroup label="' . $instalacion . '">';
+                            $selectareasoption .= '</optgroup><optgroup label="'.$instalacion.'">';
                             $area2 = 'XXXXX';
                         }
 
 
-                        if ($area2 != $value->reporteruidoarea_nombre) {
+                        if ($area2 != $value->reporteruidoarea_nombre)
+                        {
                             $area2 = $value->reporteruidoarea_nombre;
-                            $selectareasoption .= '<option value="' . $value->id . '">' . $area2 . '</option>';
+                            $selectareasoption .= '<option value="'.$value->id.'">'.$area2.'</option>';
                         }
 
 
-                        if ($key == (count($areas) - 1)) {
+                        if ($key == (count($areas) - 1))
+                        {
                             $selectareasoption .= '</optgroup>';
                         }
                     }
@@ -1520,7 +1718,9 @@ class reporteruidoController extends Controller
             $dato["selectareasoption"] = $selectareasoption;
             $dato["msj"] = 'Datos consultados correctamente';
             return response()->json($dato);
-        } catch (Exception $e) {
+        }
+        catch(Exception $e)
+        {
             $dato['data'] = 0;
             $dato["total_singuardar"] = $total_singuardar;
             $dato["tabla_5_3"] = '<tr><td colspan="2">Error al consultar los datos</td></tr>';
@@ -1529,7 +1729,7 @@ class reporteruidoController extends Controller
             $dato["tabla_5_8_DOS"] = '<tr><td colspan="3">Error al consultar los datos</td></tr>';
             $dato["tabla_6_1"] = '<tr><td colspan="3">Error al consultar los datos</td></tr>';
             $dato["selectareasoption"] = '<option value="">Error al consultar áreas</option>';
-            $dato["msj"] = 'Error ' . $e->getMessage();
+            $dato["msj"] = 'Error '.$e->getMessage();
             return response()->json($dato);
         }
     }
@@ -1546,8 +1746,10 @@ class reporteruidoController extends Controller
      */
     public function reporteruidoareascategoriasmaquinaria($proyecto_id, $reporteregistro_id, $area_id, $areas_poe)
     {
-        try {
-            if (($areas_poe + 0) == 1) {
+        try
+        {
+            if (($areas_poe+0) == 1)
+            {
                 $areacategorias = DB::select('SELECT
                                                     reportecategoria.proyecto_id,
                                                     reporteareacategoria.reportearea_id,
@@ -1562,7 +1764,7 @@ class reporteruidoController extends Controller
                                                         WHERE
                                                             reporteruidoareacategoria.reporteruidoarea_id = reporteareacategoria.reportearea_id
                                                             AND reporteruidoareacategoria.reporteruidocategoria_id = reportecategoria.id
-                                                            AND reporteruidoareacategoria.reporteruidoareacategoria_poe = ' . $reporteregistro_id . ' 
+                                                            AND reporteruidoareacategoria.reporteruidoareacategoria_poe = '.$reporteregistro_id.' 
                                                         LIMIT 1
                                                     ), "") AS checked,
                                                     reporteareacategoria.reporteareacategoria_total AS reporteruidoareacategoria_total,
@@ -1572,8 +1774,8 @@ class reporteruidoController extends Controller
                                                     reporteareacategoria
                                                     INNER JOIN reportecategoria ON reporteareacategoria.reportecategoria_id = reportecategoria.id 
                                                 WHERE
-                                                    reportecategoria.proyecto_id = ' . $proyecto_id . ' 
-                                                    AND reporteareacategoria.reportearea_id = ' . $area_id . ' 
+                                                    reportecategoria.proyecto_id = '.$proyecto_id.' 
+                                                    AND reporteareacategoria.reportearea_id = '.$area_id.' 
                                                 ORDER BY
                                                     reportecategoria.reportecategoria_orden ASC,
                                                     reportecategoria.reportecategoria_nombre ASC');
@@ -1581,25 +1783,28 @@ class reporteruidoController extends Controller
                 $numero_registro = 0;
                 $areacategorias_lista = '';
 
-                foreach ($areacategorias as $key => $value) {
+                foreach ($areacategorias as $key => $value) 
+                {
                     $numero_registro += 1;
 
                     $areacategorias_lista .= '<tr>
                                                 <td>
                                                     <div class="switch" style="border: 0px #000 solid;">
                                                         <label>
-                                                            <input type="checkbox" name="checkbox_categoria_id[]" value="' . $value->id . '" ' . $value->checked . '/>
+                                                            <input type="checkbox" name="checkbox_categoria_id[]" value="'.$value->id.'" '.$value->checked.'/>
                                                             <span class="lever switch-col-light-blue" style="padding: 0px; margin: 0px;"></span>
                                                         </label>
                                                     </div>
                                                 </td>
                                                 <td>
-                                                    ' . $value->reporteruidocategoria_nombre . '
-                                                    <textarea rows="2" class="form-control areacategoria_' . $numero_registro . '" name="areacategoria_actividades_' . $value->id . '" readonly>' . $value->categoria_actividades . '</textarea>
+                                                    '.$value->reporteruidocategoria_nombre.'
+                                                    <textarea rows="2" class="form-control areacategoria_'.$numero_registro.'" name="areacategoria_actividades_'.$value->id.'" readonly>'.$value->categoria_actividades.'</textarea>
                                                 </td>
                                             </tr>';
                 }
-            } else {
+            }
+            else
+            {
                 $areacategorias = DB::select('SELECT
                                                     reporteruidocategoria.id,
                                                     reporteruidocategoria.proyecto_id,
@@ -1612,7 +1817,7 @@ class reporteruidoController extends Controller
                                                         FROM
                                                             reporteruidoareacategoria
                                                         WHERE
-                                                            reporteruidoareacategoria.reporteruidoarea_id = ' . $area_id . '
+                                                            reporteruidoareacategoria.reporteruidoarea_id = '.$area_id.'
                                                             AND reporteruidoareacategoria.reporteruidocategoria_id = reporteruidocategoria.id 
                                                             AND reporteruidoareacategoria.reporteruidoareacategoria_poe = 0 
                                                     ), "") AS checked,
@@ -1622,15 +1827,15 @@ class reporteruidoController extends Controller
                                                         FROM
                                                             reporteruidoareacategoria
                                                         WHERE
-                                                            reporteruidoareacategoria.reporteruidoarea_id = ' . $area_id . '
+                                                            reporteruidoareacategoria.reporteruidoarea_id = '.$area_id.'
                                                             AND reporteruidoareacategoria.reporteruidocategoria_id = reporteruidocategoria.id 
                                                             AND reporteruidoareacategoria.reporteruidoareacategoria_poe = 0 
                                                     ), "") AS categoria_actividades
                                                 FROM
                                                     reporteruidocategoria
                                                 WHERE
-                                                    reporteruidocategoria.proyecto_id = ' . $proyecto_id . '
-                                                    AND reporteruidocategoria.registro_id = ' . $reporteregistro_id . '
+                                                    reporteruidocategoria.proyecto_id = '.$proyecto_id.'
+                                                    AND reporteruidocategoria.registro_id = '.$reporteregistro_id.'
                                                 ORDER BY
                                                     reporteruidocategoria.reporteruidocategoria_nombre ASC');
 
@@ -1639,12 +1844,14 @@ class reporteruidoController extends Controller
                 $areacategorias_lista = '';
                 $readonly_required = '';
 
-                foreach ($areacategorias as $key => $value) {
+                foreach ($areacategorias as $key => $value) 
+                {
                     $numero_registro += 1;
 
-                    if ($value->checked) {
+                    if ($value->checked){
                         $readonly_required = 'required';
-                    } else {
+                    }
+                    else{
                         $readonly_required = 'readonly';
                     }
 
@@ -1652,14 +1859,14 @@ class reporteruidoController extends Controller
                                                 <td>
                                                     <div class="switch" style="border: 0px #000 solid;">
                                                         <label>
-                                                            <input type="checkbox" name="checkbox_categoria_id[]" value="' . $value->id . '" ' . $value->checked . ' onchange="activa_areacategoria(this, ' . $numero_registro . ');"/>
+                                                            <input type="checkbox" name="checkbox_categoria_id[]" value="'.$value->id.'" '.$value->checked.' onchange="activa_areacategoria(this, '.$numero_registro.');"/>
                                                             <span class="lever switch-col-light-blue" style="padding: 0px; margin: 0px;"></span>
                                                         </label>
                                                     </div>
                                                 </td>
                                                 <td>
-                                                    ' . $value->reporteruidocategoria_nombre . '
-                                                    <textarea rows="2" class="form-control areacategoria_' . $numero_registro . '" name="areacategoria_actividades_' . $value->id . '" ' . $readonly_required . '>' . $value->categoria_actividades . '</textarea>
+                                                    '.$value->reporteruidocategoria_nombre.'
+                                                    <textarea rows="2" class="form-control areacategoria_'.$numero_registro.'" name="areacategoria_actividades_'.$value->id.'" '.$readonly_required.'>'.$value->categoria_actividades.'</textarea>
                                                 </td>
                                             </tr>';
                 }
@@ -1670,7 +1877,8 @@ class reporteruidoController extends Controller
             //=====================================================
 
 
-            if (($areas_poe + 0) == 1) {
+            if (($areas_poe+0) == 1)
+            {
                 $areamaquinaria = DB::select('SELECT
                                                     reporteruidoareamaquinaria.id,
                                                     reporteruidoareamaquinaria.reporteruidoarea_id,
@@ -1680,29 +1888,35 @@ class reporteruidoController extends Controller
                                                 FROM
                                                     reporteruidoareamaquinaria
                                                 WHERE
-                                                    reporteruidoareamaquinaria.reporteruidoarea_id = ' . $area_id . ' 
-                                                    AND reporteruidoareamaquinaria.reporteruidoareamaquinaria_poe = ' . $reporteregistro_id . '
+                                                    reporteruidoareamaquinaria.reporteruidoarea_id = '.$area_id.' 
+                                                    AND reporteruidoareamaquinaria.reporteruidoareamaquinaria_poe = '.$reporteregistro_id.'
                                                 ORDER BY
                                                     reporteruidoareamaquinaria.id ASC');
 
 
                 $areamaquinaria_lista = '';
-                foreach ($areamaquinaria as $key => $value) {
-                    if (($key + 0) > 0) {
+                foreach ($areamaquinaria as $key => $value)
+                {
+                    if (($key+0) > 0)
+                    {
                         $areamaquinaria_lista .= '<tr>
-                                                        <td><input type="text" class="form-control" name="reporteruidoareamaquinaria_nombre[]" value="' . $value->reporteruidoareamaquinaria_nombre . '" required></td>
-                                                        <td><input type="number" min="1" class="form-control" name="reporteruidoareamaquinaria_cantidad[]" value="' . $value->reporteruidoareamaquinaria_cantidad . '" required></td>
+                                                        <td><input type="text" class="form-control" name="reporteruidoareamaquinaria_nombre[]" value="'.$value->reporteruidoareamaquinaria_nombre.'" required></td>
+                                                        <td><input type="number" min="1" class="form-control" name="reporteruidoareamaquinaria_cantidad[]" value="'.$value->reporteruidoareamaquinaria_cantidad.'" required></td>
                                                         <td><button type="button" class="btn btn-danger waves-effect btn-circle eliminar"><i class="fa fa-trash fa-2x"></i></button></td>
                                                     </tr>';
-                    } else {
+                    }
+                    else
+                    {
                         $areamaquinaria_lista .= '<tr>
-                                                        <td><input type="text" class="form-control" name="reporteruidoareamaquinaria_nombre[]" value="' . $value->reporteruidoareamaquinaria_nombre . '" required></td>
-                                                        <td><input type="number" min="1" class="form-control" name="reporteruidoareamaquinaria_cantidad[]" value="' . $value->reporteruidoareamaquinaria_cantidad . '" required></td>
+                                                        <td><input type="text" class="form-control" name="reporteruidoareamaquinaria_nombre[]" value="'.$value->reporteruidoareamaquinaria_nombre.'" required></td>
+                                                        <td><input type="number" min="1" class="form-control" name="reporteruidoareamaquinaria_cantidad[]" value="'.$value->reporteruidoareamaquinaria_cantidad.'" required></td>
                                                         <td><button type="button" class="btn btn-default waves-effect btn-circle" data-toggle="tooltip" title="No disponible"><i class="fa fa-ban fa-2x"></i></button></td>
                                                     </tr>';
                     }
                 }
-            } else {
+            }
+            else
+            {
                 $areamaquinaria = DB::select('SELECT
                                                     reporteruidoareamaquinaria.id,
                                                     reporteruidoareamaquinaria.reporteruidoarea_id,
@@ -1712,24 +1926,28 @@ class reporteruidoController extends Controller
                                                 FROM
                                                     reporteruidoareamaquinaria
                                                 WHERE
-                                                    reporteruidoareamaquinaria.reporteruidoarea_id = ' . $area_id . ' 
+                                                    reporteruidoareamaquinaria.reporteruidoarea_id = '.$area_id.' 
                                                     AND reporteruidoareamaquinaria.reporteruidoareamaquinaria_poe = 0
                                                 ORDER BY
                                                     reporteruidoareamaquinaria.id ASC');
 
 
                 $areamaquinaria_lista = '';
-                foreach ($areamaquinaria as $key => $value) {
-                    if (($key + 0) > 0) {
+                foreach ($areamaquinaria as $key => $value)
+                {
+                    if (($key+0) > 0)
+                    {
                         $areamaquinaria_lista .= '<tr>
-                                                        <td><input type="text" class="form-control" name="reporteruidoareamaquinaria_nombre[]" value="' . $value->reporteruidoareamaquinaria_nombre . '" required></td>
-                                                        <td><input type="number" min="1" class="form-control" name="reporteruidoareamaquinaria_cantidad[]" value="' . $value->reporteruidoareamaquinaria_cantidad . '" required></td>
+                                                        <td><input type="text" class="form-control" name="reporteruidoareamaquinaria_nombre[]" value="'.$value->reporteruidoareamaquinaria_nombre.'" required></td>
+                                                        <td><input type="number" min="1" class="form-control" name="reporteruidoareamaquinaria_cantidad[]" value="'.$value->reporteruidoareamaquinaria_cantidad.'" required></td>
                                                         <td><button type="button" class="btn btn-danger waves-effect btn-circle eliminar"><i class="fa fa-trash fa-2x"></i></button></td>
                                                     </tr>';
-                    } else {
+                    }
+                    else
+                    {
                         $areamaquinaria_lista .= '<tr>
-                                                        <td><input type="text" class="form-control" name="reporteruidoareamaquinaria_nombre[]" value="' . $value->reporteruidoareamaquinaria_nombre . '" required></td>
-                                                        <td><input type="number" min="1" class="form-control" name="reporteruidoareamaquinaria_cantidad[]" value="' . $value->reporteruidoareamaquinaria_cantidad . '" required></td>
+                                                        <td><input type="text" class="form-control" name="reporteruidoareamaquinaria_nombre[]" value="'.$value->reporteruidoareamaquinaria_nombre.'" required></td>
+                                                        <td><input type="number" min="1" class="form-control" name="reporteruidoareamaquinaria_cantidad[]" value="'.$value->reporteruidoareamaquinaria_cantidad.'" required></td>
                                                         <td><button type="button" class="btn btn-default waves-effect btn-circle" data-toggle="tooltip" title="No disponible"><i class="fa fa-ban fa-2x"></i></button></td>
                                                     </tr>';
                     }
@@ -1742,10 +1960,12 @@ class reporteruidoController extends Controller
             $dato['areamaquinaria'] = $areamaquinaria_lista;
             $dato["msj"] = 'Datos consultados correctamente';
             return response()->json($dato);
-        } catch (Exception $e) {
+        }
+        catch(Exception $e)
+        {
             $dato['areacategorias'] = '<tr><td colspan="2">Error al cargar las categorías</td></tr>';
             $dato['areamaquinaria'] = '<tr><td colspan="3">Error al cargar las fuentes generadoras</td></tr>';
-            $dato["msj"] = 'Error ' . $e->getMessage();
+            $dato["msj"] = 'Error '.$e->getMessage();
             return response()->json($dato);
         }
     }
@@ -1759,17 +1979,20 @@ class reporteruidoController extends Controller
      */
     public function reporteruidoareaeliminar($area_id)
     {
-        try {
+        try
+        {
             $area = reporteruidoareaModel::where('id', $area_id)->delete();
             $areacategorias = reporteruidoareacategoriaModel::where('reporteruidoarea_id', $area_id)
-                ->where('reporteruidoareacategoria_poe', 0)
-                ->delete();
+                                                            ->where('reporteruidoareacategoria_poe', 0)
+                                                            ->delete();
 
             // respuesta
             $dato["msj"] = 'Área eliminada correctamente';
             return response()->json($dato);
-        } catch (Exception $e) {
-            $dato["msj"] = 'Error ' . $e->getMessage();
+        }
+        catch(Exception $e)
+        {
+            $dato["msj"] = 'Error '.$e->getMessage();
             return response()->json($dato);
         }
     }
@@ -1785,7 +2008,8 @@ class reporteruidoController extends Controller
      */
     public function reporteruidoequipoauditivotabla($proyecto_id, $reporteregistro_id, $areas_poe)
     {
-        try {
+        try
+        {
             // $reporte = reporteruidoModel::where('id', $reporteregistro_id)->get();
 
             // $edicion = 1;
@@ -1799,14 +2023,16 @@ class reporteruidoController extends Controller
 
 
             $revision = reporterevisionesModel::where('proyecto_id', $proyecto_id)
-                ->where('agente_id', 1)
-                ->orderBy('reporterevisiones_revision', 'DESC')
-                ->get();
+                                                ->where('agente_id', 1)
+                                                ->orderBy('reporterevisiones_revision', 'DESC')
+                                                ->get();
 
 
             $edicion = 1;
-            if (count($revision) > 0) {
-                if ($revision[0]->reporterevisiones_concluido == 1 || $revision[0]->reporterevisiones_cancelado == 1) {
+            if(count($revision) > 0)
+            {
+                if($revision[0]->reporterevisiones_concluido == 1 || $revision[0]->reporterevisiones_cancelado == 1)
+                {
                     $edicion = 0;
                 }
             }
@@ -1826,8 +2052,8 @@ class reporteruidoController extends Controller
                                                 FROM
                                                     reporteruidoequipoauditivo
                                                 WHERE
-                                                    reporteruidoequipoauditivo.proyecto_id = ' . $proyecto_id . ' 
-                                                    AND reporteruidoequipoauditivo.registro_id = ' . $reporteregistro_id . '
+                                                    reporteruidoequipoauditivo.proyecto_id = '.$proyecto_id.' 
+                                                    AND reporteruidoequipoauditivo.registro_id = '.$reporteregistro_id.'
                                                 ORDER BY
                                                     reporteruidoequipoauditivo.reporteruidoequipoauditivo_tipo ASC,
                                                     reporteruidoequipoauditivo.reporteruidoequipoauditivo_marca ASC,
@@ -1835,14 +2061,15 @@ class reporteruidoController extends Controller
                                                     reporteruidoequipoauditivo.reporteruidoequipoauditivo_NRR ASC');
 
 
-            $t = '';
-            $equiposauditivos_datos = '<p class="justificado">No hay equipos auditivos agregados</p>';
+            $t = ''; $equiposauditivos_datos = '<p class="justificado">No hay equipos auditivos agregados</p>';
 
-            if (count($equipoauditivo_lista) > 0) {
+            if (count($equipoauditivo_lista) > 0)
+            {
                 $numero_registro = 0;
                 $equiposauditivos_datos = '';
 
-                foreach ($equipoauditivo_lista as $key => $lista) {
+                foreach ($equipoauditivo_lista as $key => $lista)
+                {
                     $numero_registro += 1;
 
                     $atenuaciones = DB::select('SELECT
@@ -1852,7 +2079,7 @@ class reporteruidoController extends Controller
                                                 FROM
                                                     reporteruidoequipoauditivoatenuacion
                                                 WHERE
-                                                    reporteruidoequipoauditivoatenuacion.reporteruidoequipoauditivo_id = ' . $lista->id . ' 
+                                                    reporteruidoequipoauditivoatenuacion.reporteruidoequipoauditivo_id = '.$lista->id.' 
                                                 ORDER BY
                                                     reporteruidoequipoauditivoatenuacion.reporteruidoequipoauditivoatenuacion_bandaNRR ASC, 
                                                     reporteruidoequipoauditivoatenuacion.reporteruidoequipoauditivoatenuacion_bandaatenuacion ASC');
@@ -1863,33 +2090,38 @@ class reporteruidoController extends Controller
                                     <tr>
                                         <th rowspan="2" width="200">Equipo</th>
                                         <th rowspan="2" width="70">NRR</th>
-                                        <th colspan="' . count($atenuaciones) . '">Atenuación por bandas de octava</th>
+                                        <th colspan="'.count($atenuaciones).'">Atenuación por bandas de octava</th>
                                         <th rowspan="2" width="60">Editar</th>
                                         <th rowspan="2" width="60">Eliminar</th>
                                     </tr>
                                     <tr>';
-                    foreach ($atenuaciones as $key => $value) {
-                        $t .= '<th >' . $value->reporteruidoequipoauditivoatenuacion_bandaNRR . '</th>';
-                    }
-                    $t .= '</tr>
+                                        foreach ($atenuaciones as $key => $value) 
+                                        {
+                                            $t .= '<th >'.$value->reporteruidoequipoauditivoatenuacion_bandaNRR.'</th>';
+                                        }
+                            $t .= '</tr>
                                 </thead>
                                 <tbody>
                                     <tr>
-                                        <td>' . $lista->reporteruidoequipoauditivo_tipo . ',<br>Marca: ' . $lista->reporteruidoequipoauditivo_marca . ',<br>Modelo: ' . $lista->reporteruidoequipoauditivo_modelo . '</th>
-                                        <td>' . $lista->reporteruidoequipoauditivo_NRR . ' dB</th>';
-                    foreach ($atenuaciones as $key => $value) {
-                        $t .= '<td>' . $value->reporteruidoequipoauditivoatenuacion_bandaatenuacion . '</td>';
-                    }
+                                        <td>'.$lista->reporteruidoequipoauditivo_tipo.',<br>Marca: '.$lista->reporteruidoequipoauditivo_marca.',<br>Modelo: '.$lista->reporteruidoequipoauditivo_modelo.'</th>
+                                        <td>'.$lista->reporteruidoequipoauditivo_NRR.' dB</th>';
+                                        foreach ($atenuaciones as $key => $value) 
+                                        {
+                                            $t .= '<td>'.$value->reporteruidoequipoauditivoatenuacion_bandaatenuacion.'</td>';
+                                        }
 
-                    $t .= '<td><button type="button" class="btn btn-warning waves-effect btn-circle" onclick="equipoauditivo_editar(' . $proyecto_id . ', ' . $reporteregistro_id . ', ' . $lista->id . ', \'' . $lista->reporteruidoequipoauditivo_tipo . '\', \'' . $lista->reporteruidoequipoauditivo_marca . '\', \'' . $lista->reporteruidoequipoauditivo_modelo . '\', \'' . $lista->reporteruidoequipoauditivo_NRR . '\');"><i class="fa fa-pencil fa-2x"></i></button></td>';
+                                $t .= '<td><button type="button" class="btn btn-warning waves-effect btn-circle" onclick="equipoauditivo_editar('.$proyecto_id.', '.$reporteregistro_id.', '.$lista->id.', \''.$lista->reporteruidoequipoauditivo_tipo.'\', \''.$lista->reporteruidoequipoauditivo_marca.'\', \''.$lista->reporteruidoequipoauditivo_modelo.'\', \''.$lista->reporteruidoequipoauditivo_NRR.'\');"><i class="fa fa-pencil fa-2x"></i></button></td>';
 
-                    if ($edicion == 1) {
-                        $t .= '<td><button type="button" class="btn btn-danger waves-effect btn-circle" onclick="equipoauditivo_eliminar(' . $lista->id . ', \'' . $lista->reporteruidoequipoauditivo_tipo . '\');"><i class="fa fa-trash fa-2x"></i></button></td>';
-                    } else {
-                        $t .= '<td><button type="button" class="btn btn-default waves-effect btn-circle" data-toggle="tooltip" title="No disponible"><i class="fa fa-ban fa-2x"></i></button></td>';
-                    }
+                                        if ($edicion == 1)
+                                        {
+                                            $t .= '<td><button type="button" class="btn btn-danger waves-effect btn-circle" onclick="equipoauditivo_eliminar('.$lista->id.', \''.$lista->reporteruidoequipoauditivo_tipo.'\');"><i class="fa fa-trash fa-2x"></i></button></td>';
+                                        }
+                                        else
+                                        {
+                                            $t .= '<td><button type="button" class="btn btn-default waves-effect btn-circle" data-toggle="tooltip" title="No disponible"><i class="fa fa-ban fa-2x"></i></button></td>';
+                                        }
 
-                    $t .= '</tr>
+                                $t .= '</tr>
                                 </tbody>
                             </table>';
 
@@ -1913,7 +2145,9 @@ class reporteruidoController extends Controller
                     //                                 <img src="/assets/images/reportes/reporteruido_figura_7.4_vacio.jpg" height="60">
                     //                             </div><br>';
                 }
-            } else {
+            }
+            else
+            {
                 $t = '<table class="table table-hover tabla_info_centrado" width="100%">
                                                 <thead>
                                                     <tr>
@@ -1940,7 +2174,8 @@ class reporteruidoController extends Controller
             //==================================================
 
 
-            if (($areas_poe + 0) == 1) {
+            if (($areas_poe+0) == 1)
+            {
                 $categorias = DB::select('SELECT
                                                 reporteruidoequipoauditivo.proyecto_id,
                                                 reportecategoria.reportecategoria_orden,
@@ -1955,7 +2190,7 @@ class reporteruidoController extends Controller
                                                 LEFT JOIN reporteruidoequipoauditivocategorias ON reporteruidoequipoauditivo.id = reporteruidoequipoauditivocategorias.reporteruidoequipoauditivo_id
                                                 RIGHT JOIN reportecategoria ON reporteruidoequipoauditivocategorias.reporteruidocategoria_id = reportecategoria.id
                                             WHERE
-                                                reporteruidoequipoauditivo.proyecto_id = ' . $proyecto_id . ' 
+                                                reporteruidoequipoauditivo.proyecto_id = '.$proyecto_id.' 
                                             ORDER BY
                                                 reportecategoria.reportecategoria_orden ASC,
                                                 reportecategoria.reportecategoria_nombre ASC,
@@ -1963,10 +2198,13 @@ class reporteruidoController extends Controller
                                                 reporteruidoequipoauditivo.reporteruidoequipoauditivo_marca ASC,
                                                 reporteruidoequipoauditivo.reporteruidoequipoauditivo_modelo ASC,
                                                 reporteruidoequipoauditivo.reporteruidoequipoauditivo_NRR ASC');
-            } else {
+            }
+            else
+            {
                 $where_condicion = '';
-                if (($reporteregistro_id + 0) > 0) {
-                    $where_condicion = 'AND reporteruidocategoria.registro_id = ' . $reporteregistro_id;
+                if (($reporteregistro_id+0) > 0)
+                {
+                    $where_condicion = 'AND reporteruidocategoria.registro_id = '.$reporteregistro_id;
                 }
 
                 $categorias = DB::select('SELECT
@@ -1982,8 +2220,8 @@ class reporteruidoController extends Controller
                                                 LEFT JOIN reporteruidoequipoauditivocategorias ON reporteruidoequipoauditivo.id = reporteruidoequipoauditivocategorias.reporteruidoequipoauditivo_id
                                                 RIGHT JOIN reporteruidocategoria ON reporteruidoequipoauditivocategorias.reporteruidocategoria_id = reporteruidocategoria.id
                                             WHERE
-                                                reporteruidoequipoauditivo.proyecto_id = ' . $proyecto_id . ' 
-                                                ' . $where_condicion . ' 
+                                                reporteruidoequipoauditivo.proyecto_id = '.$proyecto_id.' 
+                                                '.$where_condicion.' 
                                             ORDER BY
                                                 reporteruidocategoria.reporteruidocategoria_nombre ASC,
                                                 reporteruidoequipoauditivo.reporteruidoequipoauditivo_tipo ASC,
@@ -1994,13 +2232,14 @@ class reporteruidoController extends Controller
 
 
             $tabla_5_6 = '';
-            foreach ($categorias as $key => $value) {
+            foreach ($categorias as $key => $value) 
+            {
                 $tabla_5_6 .= '<tr>
-                                    <td>' . $value->reporteruidocategoria_nombre . '</td>
-                                    <td>' . $value->reporteruidoequipoauditivo_tipo . '</td>
-                                    <td>' . $value->reporteruidoequipoauditivo_marca . '</td>
-                                    <td>' . $value->reporteruidoequipoauditivo_modelo . '</td>
-                                    <td>' . $value->reporteruidoequipoauditivo_NRR . ' dB</td>
+                                    <td>'.$value->reporteruidocategoria_nombre.'</td>
+                                    <td>'.$value->reporteruidoequipoauditivo_tipo.'</td>
+                                    <td>'.$value->reporteruidoequipoauditivo_marca.'</td>
+                                    <td>'.$value->reporteruidoequipoauditivo_modelo.'</td>
+                                    <td>'.$value->reporteruidoequipoauditivo_NRR.' dB</td>
                                 </tr>';
             }
 
@@ -2011,7 +2250,9 @@ class reporteruidoController extends Controller
             // $dato['equiposauditivos_datos'] = $equiposauditivos_datos;
             $dato["msj"] = 'Datos consultados correctamente';
             return response()->json($dato);
-        } catch (Exception $e) {
+        }
+        catch(Exception $e)
+        {
             $dato["tabla_5_6"] = '<tr><td colspan="5">Error al consultar los datos</td></tr>';
             $dato['equipoauditivo_lista'] = 0;
             $dato['equiposauditivos_tablas'] = '<table class="table table-hover tabla_info_centrado" width="100%">
@@ -2032,7 +2273,7 @@ class reporteruidoController extends Controller
                                                     </tbody>
                                                 </table>';
             // $dato['equiposauditivos_datos'] = '<p class="justificado">Error al consultar los equipos auditivos</p>';
-            $dato["msj"] = 'Error ' . $e->getMessage();
+            $dato["msj"] = 'Error '.$e->getMessage();
             return response()->json($dato);
         }
     }
@@ -2046,21 +2287,26 @@ class reporteruidoController extends Controller
      */
     public function reporteruidoequipoauditivoatenuaciones($equipoauditivo_id)
     {
-        try {
+        try
+        {
             $atenuaciones = reporteruidoequipoauditivoatenuacionModel::where('reporteruidoequipoauditivo_id', $equipoauditivo_id)->get();
 
             $filas = '';
-            foreach ($atenuaciones as $key => $value) {
-                if (($key + 0) == 0) {
+            foreach ($atenuaciones as $key => $value) 
+            {
+                if (($key+0) == 0)
+                {
                     $filas .= '<tr>
-                                    <td width="40%"><input type="number" step="any" class="form-control" name="reporteruidoequipoauditivoatenuacion_bandaNRR[]" value="' . $value->reporteruidoequipoauditivoatenuacion_bandaNRR . '" required></td>
-                                    <td width="40%"><input type="number" step="any" class="form-control" name="reporteruidoequipoauditivoatenuacion_bandaatenuacion[]" value="' . $value->reporteruidoequipoauditivoatenuacion_bandaatenuacion . '" required></td>
+                                    <td width="40%"><input type="number" step="any" class="form-control" name="reporteruidoequipoauditivoatenuacion_bandaNRR[]" value="'.$value->reporteruidoequipoauditivoatenuacion_bandaNRR.'" required></td>
+                                    <td width="40%"><input type="number" step="any" class="form-control" name="reporteruidoequipoauditivoatenuacion_bandaatenuacion[]" value="'.$value->reporteruidoequipoauditivoatenuacion_bandaatenuacion.'" required></td>
                                     <td width="10%"><button type="button" class="btn btn-default waves-effect btn-circle"><i class="fa fa-ban fa-2x"></i></button></td>
                                 </tr>';
-                } else {
+                }
+                else
+                {
                     $filas .= '<tr>
-                                    <td width="40%"><input type="number" step="any" class="form-control" name="reporteruidoequipoauditivoatenuacion_bandaNRR[]" value="' . $value->reporteruidoequipoauditivoatenuacion_bandaNRR . '" required></td>
-                                    <td width="40%"><input type="number" step="any" class="form-control" name="reporteruidoequipoauditivoatenuacion_bandaatenuacion[]" value="' . $value->reporteruidoequipoauditivoatenuacion_bandaatenuacion . '" required></td>
+                                    <td width="40%"><input type="number" step="any" class="form-control" name="reporteruidoequipoauditivoatenuacion_bandaNRR[]" value="'.$value->reporteruidoequipoauditivoatenuacion_bandaNRR.'" required></td>
+                                    <td width="40%"><input type="number" step="any" class="form-control" name="reporteruidoequipoauditivoatenuacion_bandaatenuacion[]" value="'.$value->reporteruidoequipoauditivoatenuacion_bandaatenuacion.'" required></td>
                                     <td width="10%"><button type="button" class="btn btn-danger waves-effect btn-circle eliminar"><i class="fa fa-trash fa-2x"></i></button></td>
                                 </tr>';
                 }
@@ -2070,11 +2316,13 @@ class reporteruidoController extends Controller
             $dato['atenuaciones'] = $filas;
             $dato["msj"] = 'Datos consultados correctamente';
             return response()->json($dato);
-        } catch (Exception $e) {
+        }
+        catch(Exception $e)
+        {
             $dato['atenuaciones'] = '<tr>
                                         <td colspan="3">Error al consultar los datos</td>
                                     </tr>';
-            $dato["msj"] = 'Error ' . $e->getMessage();
+            $dato["msj"] = 'Error '.$e->getMessage();
             return response()->json($dato);
         }
     }
@@ -2091,8 +2339,10 @@ class reporteruidoController extends Controller
      */
     public function reporteruidoequipoauditivocategorias($proyecto_id, $reporteregistro_id, $equipoauditivo_id, $areas_poe)
     {
-        try {
-            if (($areas_poe + 0) == 1) {
+        try
+        {
+            if (($areas_poe+0) == 1)
+            {
                 $categorias = DB::select('SELECT
                                                 reportecategoria.id,
                                                 reportecategoria.proyecto_id,
@@ -2104,37 +2354,41 @@ class reporteruidoController extends Controller
                                                     FROM
                                                         reporteruidoequipoauditivocategorias
                                                     WHERE
-                                                        reporteruidoequipoauditivocategorias.reporteruidoequipoauditivo_id = ' . $equipoauditivo_id . ' 
+                                                        reporteruidoequipoauditivocategorias.reporteruidoequipoauditivo_id = '.$equipoauditivo_id.' 
                                                         AND reporteruidoequipoauditivocategorias.reporteruidocategoria_id = reportecategoria.id
                                                     LIMIT 1
                                                 ), "")  AS checked
                                             FROM
                                                 reportecategoria
                                             WHERE
-                                                reportecategoria.proyecto_id = ' . $proyecto_id . ' 
+                                                reportecategoria.proyecto_id = '.$proyecto_id.' 
                                             ORDER BY
                                                 reportecategoria.reportecategoria_orden ASC,
                                                 reportecategoria.reportecategoria_nombre ASC');
 
 
                 $filas = '';
-                foreach ($categorias as $key => $value) {
+                foreach ($categorias as $key => $value) 
+                {
                     $filas .= '<div class="col-6">
                                     <div class="form-group">
                                         <div class="switch" style="float: left;">
                                             <label>
-                                                <input type="checkbox" name="equipoauditivo_categoria[]" value="' . $value->id . '" ' . $value->checked . '>
+                                                <input type="checkbox" name="equipoauditivo_categoria[]" value="'.$value->id.'" '.$value->checked.'>
                                                 <span class="lever switch-col-light-blue"></span>
                                             </label>
                                         </div>
-                                        <label class="demo-switch-title" style="float: left; font-size: 12px;">' . $value->reportecategoria_nombre . '</label>
+                                        <label class="demo-switch-title" style="float: left; font-size: 12px;">'.$value->reportecategoria_nombre.'</label>
                                     </div>
                                 </div>';
                 }
-            } else {
+            }
+            else
+            {
                 $where_condicion = '';
-                if (($reporteregistro_id + 0) > 0) {
-                    $where_condicion = 'AND reporteruidocategoria.registro_id = ' . $reporteregistro_id;
+                if (($reporteregistro_id+0) > 0)
+                {
+                    $where_condicion = 'AND reporteruidocategoria.registro_id = '.$reporteregistro_id;
                 }
 
 
@@ -2150,30 +2404,31 @@ class reporteruidoController extends Controller
                                                     FROM
                                                         reporteruidoequipoauditivocategorias
                                                     WHERE
-                                                        reporteruidoequipoauditivocategorias.reporteruidoequipoauditivo_id = ' . $equipoauditivo_id . ' 
+                                                        reporteruidoequipoauditivocategorias.reporteruidoequipoauditivo_id = '.$equipoauditivo_id.' 
                                                         AND reporteruidoequipoauditivocategorias.reporteruidocategoria_id = reporteruidocategoria.id
                                                     LIMIT 1
                                                 ), "")  AS checked
                                             FROM
                                                 reporteruidocategoria
                                             WHERE
-                                                reporteruidocategoria.proyecto_id = ' . $proyecto_id . ' 
-                                                ' . $where_condicion . ' 
+                                                reporteruidocategoria.proyecto_id = '.$proyecto_id.' 
+                                                '.$where_condicion.' 
                                             ORDER BY
                                                 reporteruidocategoria.reporteruidocategoria_nombre ASC');
 
 
                 $filas = '';
-                foreach ($categorias as $key => $value) {
+                foreach ($categorias as $key => $value) 
+                {
                     $filas .= '<div class="col-6">
                                     <div class="form-group">
                                         <div class="switch" style="float: left;">
                                             <label>
-                                                <input type="checkbox" name="equipoauditivo_categoria[]" value="' . $value->id . '" ' . $value->checked . '>
+                                                <input type="checkbox" name="equipoauditivo_categoria[]" value="'.$value->id.'" '.$value->checked.'>
                                                 <span class="lever switch-col-light-blue"></span>
                                             </label>
                                         </div>
-                                        <label class="demo-switch-title" style="float: left; font-size: 12px;">' . $value->reporteruidocategoria_nombre . '</label>
+                                        <label class="demo-switch-title" style="float: left; font-size: 12px;">'.$value->reporteruidocategoria_nombre.'</label>
                                     </div>
                                 </div>';
                 }
@@ -2183,9 +2438,11 @@ class reporteruidoController extends Controller
             $dato['equipoauditivocategorias_lista'] = $filas;
             $dato["msj"] = 'Datos consultados correctamente';
             return response()->json($dato);
-        } catch (Exception $e) {
+        }
+        catch(Exception $e)
+        {
             $dato['equipoauditivocategorias_lista'] = 'Error al consultar las categorías';
-            $dato["msj"] = 'Error ' . $e->getMessage();
+            $dato["msj"] = 'Error '.$e->getMessage();
             return response()->json($dato);
         }
     }
@@ -2199,15 +2456,18 @@ class reporteruidoController extends Controller
      */
     public function reporteruidoequipoauditivoeliminar($equipoauditivo_id)
     {
-        try {
+        try
+        {
             $equipoauditivo = reporteruidoequipoauditivoModel::where('id', $equipoauditivo_id)->delete();
             $equipoauditivoatenuaciones = reporteruidoequipoauditivoatenuacionModel::where('reporteruidoequipoauditivo_id', $equipoauditivo_id)->delete();
 
             // respuesta
             $dato["msj"] = 'Equipo auditivo eliminado correctamente';
             return response()->json($dato);
-        } catch (Exception $e) {
-            $dato["msj"] = 'Error ' . $e->getMessage();
+        }
+        catch(Exception $e)
+        {
+            $dato["msj"] = 'Error '.$e->getMessage();
             return response()->json($dato);
         }
     }
@@ -2222,7 +2482,8 @@ class reporteruidoController extends Controller
      */
     public function reporteruidoepptabla($proyecto_id, $reporteregistro_id)
     {
-        try {
+        try
+        {
             // $reporte = reporteruidoModel::where('id', $reporteregistro_id)->get();
 
             // $edicion = 1;
@@ -2236,14 +2497,16 @@ class reporteruidoController extends Controller
 
 
             $revision = reporterevisionesModel::where('proyecto_id', $proyecto_id)
-                ->where('agente_id', 1)
-                ->orderBy('reporterevisiones_revision', 'DESC')
-                ->get();
+                                                ->where('agente_id', 1)
+                                                ->orderBy('reporterevisiones_revision', 'DESC')
+                                                ->get();
 
 
             $edicion = 1;
-            if (count($revision) > 0) {
-                if ($revision[0]->reporterevisiones_concluido == 1 || $revision[0]->reporterevisiones_cancelado == 1) {
+            if(count($revision) > 0)
+            {
+                if($revision[0]->reporterevisiones_concluido == 1 || $revision[0]->reporterevisiones_cancelado == 1)
+                {
                     $edicion = 0;
                 }
             }
@@ -2253,19 +2516,23 @@ class reporteruidoController extends Controller
 
 
             $epp = reporteruidoeppModel::where('proyecto_id', $proyecto_id)
-                ->where('registro_id', $reporteregistro_id)
-                ->get();
+                                        ->where('registro_id', $reporteregistro_id)
+                                        ->get();
 
             $numero_registro = 0;
-            foreach ($epp as $key => $value) {
+            foreach ($epp as $key => $value) 
+            {
                 $numero_registro += 1;
                 $value->numero_registro = $numero_registro;
-
+                
                 $value->boton_editar = '<button type="button" class="btn btn-warning waves-effect btn-circle"><i class="fa fa-pencil fa-2x"></i></button>';
 
-                if ($edicion == 1) {
+                if ($edicion == 1)
+                {
                     $value->boton_eliminar = '<button type="button" class="btn btn-danger waves-effect btn-circle eliminar"><i class="fa fa-trash fa-2x"></i></button>';
-                } else {
+                }
+                else
+                {
                     $value->boton_eliminar = '<button type="button" class="btn btn-default waves-effect btn-circle" data-toggle="tooltip" title="No disponible"><i class="fa fa-ban fa-2x"></i></button>';
                 }
             }
@@ -2275,10 +2542,12 @@ class reporteruidoController extends Controller
             $dato["total"] = count($epp);
             $dato["msj"] = 'Datos consultados correctamente';
             return response()->json($dato);
-        } catch (Exception $e) {
+        }
+        catch(Exception $e)
+        {
             $dato['data'] = 0;
             $dato["total"] = 0;
-            $dato["msj"] = 'Error ' . $e->getMessage();
+            $dato["msj"] = 'Error '.$e->getMessage();
             return response()->json($dato);
         }
     }
@@ -2292,14 +2561,17 @@ class reporteruidoController extends Controller
      */
     public function reporteruidoeppeliminar($epp_id)
     {
-        try {
+        try
+        {
             $epp = reporteruidoeppModel::where('id', $epp_id)->delete();
 
             // respuesta
             $dato["msj"] = 'E.P.P. eliminado correctamente';
             return response()->json($dato);
-        } catch (Exception $e) {
-            $dato["msj"] = 'Error ' . $e->getMessage();
+        }
+        catch(Exception $e)
+        {
+            $dato["msj"] = 'Error '.$e->getMessage();
             return response()->json($dato);
         }
     }
@@ -2315,7 +2587,8 @@ class reporteruidoController extends Controller
      */
     public function reporteruidoareaevaluaciontabla($proyecto_id, $reporteregistro_id, $areas_poe)
     {
-        try {
+        try
+        {
             // $reporte = reporteruidoModel::where('id', $reporteregistro_id)->get();
 
             // $edicion = 1;
@@ -2329,14 +2602,16 @@ class reporteruidoController extends Controller
 
 
             $revision = reporterevisionesModel::where('proyecto_id', $proyecto_id)
-                ->where('agente_id', 1)
-                ->orderBy('reporterevisiones_revision', 'DESC')
-                ->get();
+                                                ->where('agente_id', 1)
+                                                ->orderBy('reporterevisiones_revision', 'DESC')
+                                                ->get();
 
 
             $edicion = 1;
-            if (count($revision) > 0) {
-                if ($revision[0]->reporterevisiones_concluido == 1 || $revision[0]->reporterevisiones_cancelado == 1) {
+            if(count($revision) > 0)
+            {
+                if($revision[0]->reporterevisiones_concluido == 1 || $revision[0]->reporterevisiones_cancelado == 1)
+                {
                     $edicion = 0;
                 }
             }
@@ -2345,7 +2620,8 @@ class reporteruidoController extends Controller
             //==========================================
 
 
-            if (($areas_poe + 0) == 1) {
+            if (($areas_poe+0) == 1)
+            {
                 $areasevaluacion = DB::select('SELECT
                                                     reporteruidoareaevaluacion.id,
                                                     reporteruidoareaevaluacion.proyecto_id,
@@ -2363,13 +2639,15 @@ class reporteruidoController extends Controller
                                                     reporteruidoareaevaluacion
                                                     LEFT JOIN reportearea ON reporteruidoareaevaluacion.reporteruidoarea_id = reportearea.id
                                                 WHERE
-                                                    reporteruidoareaevaluacion.proyecto_id = ' . $proyecto_id . ' 
-                                                    AND reporteruidoareaevaluacion.registro_id = ' . $reporteregistro_id . ' 
+                                                    reporteruidoareaevaluacion.proyecto_id = '.$proyecto_id.' 
+                                                    AND reporteruidoareaevaluacion.registro_id = '.$reporteregistro_id.' 
                                                     AND reportearea.reporteruidoarea_porcientooperacion > 0
                                                 ORDER BY
                                                     reporteruidoareaevaluacion.reporteruidoareaevaluacion_nomedicion1 ASC,
                                                     reportearea.reportearea_orden ASC');
-            } else {
+            }
+            else
+            {
                 $areasevaluacion = DB::select('SELECT
                                                     reporteruidoareaevaluacion.id,
                                                     reporteruidoareaevaluacion.proyecto_id,
@@ -2387,8 +2665,8 @@ class reporteruidoController extends Controller
                                                     reporteruidoareaevaluacion
                                                     LEFT JOIN reporteruidoarea ON reporteruidoareaevaluacion.reporteruidoarea_id = reporteruidoarea.id
                                                 WHERE
-                                                    reporteruidoareaevaluacion.proyecto_id = ' . $proyecto_id . ' 
-                                                    AND reporteruidoareaevaluacion.registro_id = ' . $reporteregistro_id . ' 
+                                                    reporteruidoareaevaluacion.proyecto_id = '.$proyecto_id.' 
+                                                    AND reporteruidoareaevaluacion.registro_id = '.$reporteregistro_id.' 
                                                     AND reporteruidoarea.reporteruidoarea_porcientooperacion > 0 
                                                 ORDER BY
                                                     reporteruidoareaevaluacion.reporteruidoareaevaluacion_nomedicion1 ASC,
@@ -2396,11 +2674,12 @@ class reporteruidoController extends Controller
             }
 
 
-            $numero_registro = 0;
+            $numero_registro = 0; 
             $dato['ubicaciones_opciones'] = '<option value=""></option>';
 
 
-            foreach ($areasevaluacion as $key => $value) {
+            foreach ($areasevaluacion as $key => $value) 
+            {
                 $numero_registro += 1;
                 $value->numero_registro = $numero_registro;
 
@@ -2408,9 +2687,12 @@ class reporteruidoController extends Controller
                 $value->boton_editar = '<button type="button" class="btn btn-warning waves-effect btn-circle"><i class="fa fa-pencil fa-2x"></i></button>';
 
 
-                if ($edicion == 1) {
+                if ($edicion == 1)
+                {
                     $value->boton_eliminar = '<button type="button" class="btn btn-danger waves-effect btn-circle eliminar"><i class="fa fa-trash fa-2x"></i></button>';
-                } else {
+                }
+                else
+                {
                     $value->boton_eliminar = '<button type="button" class="btn btn-default waves-effect btn-circle" data-toggle="tooltip" title="No disponible"><i class="fa fa-ban fa-2x"></i></button>';
                 }
 
@@ -2418,7 +2700,7 @@ class reporteruidoController extends Controller
                 //----------------------------------------
 
 
-                $dato['ubicaciones_opciones'] .= '<option value="' . $value->reporteruidoareaevaluacion_ubicacion . '">Punto [' . $value->nomedicion . '] ' . $value->reporteruidoareaevaluacion_ubicacion . '</option>';
+                $dato['ubicaciones_opciones'] .= '<option value="'.$value->reporteruidoareaevaluacion_ubicacion.'">Punto ['.$value->nomedicion.'] '.$value->reporteruidoareaevaluacion_ubicacion.'</option>';
             }
 
 
@@ -2442,8 +2724,8 @@ class reporteruidoController extends Controller
                                                     FROM
                                                         reporteruidoareaevaluacion
                                                     WHERE
-                                                        reporteruidoareaevaluacion.proyecto_id = ' . $proyecto_id . ' 
-                                                        AND reporteruidoareaevaluacion.registro_id = ' . $reporteregistro_id . ' 
+                                                        reporteruidoareaevaluacion.proyecto_id = '.$proyecto_id.' 
+                                                        AND reporteruidoareaevaluacion.registro_id = '.$reporteregistro_id.' 
                                                     GROUP BY
                                                         reporteruidoareaevaluacion.proyecto_id,
                                                         reporteruidoareaevaluacion.registro_id,
@@ -2455,7 +2737,8 @@ class reporteruidoController extends Controller
                                                 TABLA.registro_id');
 
 
-            if (count($puntosevaluacion) > 0) {
+            if (count($puntosevaluacion) > 0)
+            {
                 $dato["areaevaluacion_totalpuntos"] = ($puntosevaluacion[0]->total + 0);
             }
 
@@ -2465,12 +2748,14 @@ class reporteruidoController extends Controller
             $dato["total"] = count($areasevaluacion);
             $dato["msj"] = 'Datos consultados correctamente';
             return response()->json($dato);
-        } catch (Exception $e) {
+        }
+        catch(Exception $e)
+        {
             $dato['data'] = 0;
             $dato["total"] = 0;
             $dato["areaevaluacion_totalpuntos"] = 0;
             $dato['ubicaciones_opciones'] = '<option value=""></option>';
-            $dato["msj"] = 'Error ' . $e->getMessage();
+            $dato["msj"] = 'Error '.$e->getMessage();
             return response()->json($dato);
         }
     }
@@ -2486,17 +2771,20 @@ class reporteruidoController extends Controller
      */
     public function reporteruidoareaevaluacioneliminar($proyecto_id, $reporteregistro_id, $area_id)
     {
-        try {
+        try
+        {
             $eliminar_areaevaluacion = reporteruidoareaevaluacionModel::where('proyecto_id', $proyecto_id)
-                ->where('registro_id', $reporteregistro_id)
-                ->where('reporteruidoarea_id', $area_id)
-                ->delete();
+                                                                        ->where('registro_id', $reporteregistro_id)
+                                                                        ->where('reporteruidoarea_id', $area_id)
+                                                                        ->delete();
 
             // respuesta
             $dato["msj"] = 'Área de evaluación eliminada correctamente';
             return response()->json($dato);
-        } catch (Exception $e) {
-            $dato["msj"] = 'Error ' . $e->getMessage();
+        }
+        catch(Exception $e)
+        {
+            $dato["msj"] = 'Error '.$e->getMessage();
             return response()->json($dato);
         }
     }
@@ -2511,7 +2799,8 @@ class reporteruidoController extends Controller
      */
     public function reporteruidonivelsonorotabla($proyecto_id, $reporteregistro_id)
     {
-        try {
+        try
+        {
             // $reporte = reporteruidoModel::where('id', $reporteregistro_id)->get();
 
             // $edicion = 1;
@@ -2525,14 +2814,16 @@ class reporteruidoController extends Controller
 
 
             $revision = reporterevisionesModel::where('proyecto_id', $proyecto_id)
-                ->where('agente_id', 1)
-                ->orderBy('reporterevisiones_revision', 'DESC')
-                ->get();
+                                                ->where('agente_id', 1)
+                                                ->orderBy('reporterevisiones_revision', 'DESC')
+                                                ->get();
 
 
             $edicion = 1;
-            if (count($revision) > 0) {
-                if ($revision[0]->reporterevisiones_concluido == 1 || $revision[0]->reporterevisiones_cancelado == 1) {
+            if(count($revision) > 0)
+            {
+                if($revision[0]->reporterevisiones_concluido == 1 || $revision[0]->reporterevisiones_cancelado == 1)
+                {
                     $edicion = 0;
                 }
             }
@@ -2560,109 +2851,116 @@ class reporteruidoController extends Controller
                                                 FROM
                                                     reporteruidonivelsonoro
                                                 WHERE
-                                                    reporteruidonivelsonoro.proyecto_id = ' . $proyecto_id . ' 
-                                                    AND reporteruidonivelsonoro.registro_id = ' . $reporteregistro_id . ' 
+                                                    reporteruidonivelsonoro.proyecto_id = '.$proyecto_id.' 
+                                                    AND reporteruidonivelsonoro.registro_id = '.$reporteregistro_id.' 
                                                 ORDER BY
                                                     reporteruidonivelsonoro.reporteruidonivelsonoro_punto ASC,
                                                     reporteruidonivelsonoro.id ASC'));
 
             $nivelsonoro_tabla = '';
 
-            if (count($nivelsonoro) > 0) {
+            if (count($nivelsonoro) > 0)
+            {
                 $nivelsonoro_tabla .= '<thead>
                                             <tr>
                                                 <th width="100">No. Medición</th>
                                                 <th>Ubicación</th>';
 
-                // if (($nivelsonoro[0]->reporteruidonivelsonoro_totalperiodos + 0) >= 1)
-                // {
-                //     $nivelsonoro_tabla .= '<th>Periodo 1<br>(dB)</th>';
-                // }
+                                                // if (($nivelsonoro[0]->reporteruidonivelsonoro_totalperiodos + 0) >= 1)
+                                                // {
+                                                //     $nivelsonoro_tabla .= '<th>Periodo 1<br>(dB)</th>';
+                                                // }
 
-                // if (($nivelsonoro[0]->reporteruidonivelsonoro_totalperiodos + 0) >= 2)
-                // {
-                //     $nivelsonoro_tabla .= '<th>Periodo 2<br>(dB)</th>';
-                // }
+                                                // if (($nivelsonoro[0]->reporteruidonivelsonoro_totalperiodos + 0) >= 2)
+                                                // {
+                                                //     $nivelsonoro_tabla .= '<th>Periodo 2<br>(dB)</th>';
+                                                // }
 
-                // if (($nivelsonoro[0]->reporteruidonivelsonoro_totalperiodos + 0) >= 3)
-                // {
-                //     $nivelsonoro_tabla .= '<th>Periodo 3<br>(dB)</th>';
-                // }
+                                                // if (($nivelsonoro[0]->reporteruidonivelsonoro_totalperiodos + 0) >= 3)
+                                                // {
+                                                //     $nivelsonoro_tabla .= '<th>Periodo 3<br>(dB)</th>';
+                                                // }
 
-                // if (($nivelsonoro[0]->reporteruidonivelsonoro_totalperiodos + 0) >= 4)
-                // {
-                //     $nivelsonoro_tabla .= '<th>Periodo 4<br>(dB)</th>';
-                // }
+                                                // if (($nivelsonoro[0]->reporteruidonivelsonoro_totalperiodos + 0) >= 4)
+                                                // {
+                                                //     $nivelsonoro_tabla .= '<th>Periodo 4<br>(dB)</th>';
+                                                // }
 
-                // if (($nivelsonoro[0]->reporteruidonivelsonoro_totalperiodos + 0) >= 5)
-                // {
-                //     $nivelsonoro_tabla .= '<th>Periodo 5<br>(dB)</th>';
-                // }
+                                                // if (($nivelsonoro[0]->reporteruidonivelsonoro_totalperiodos + 0) >= 5)
+                                                // {
+                                                //     $nivelsonoro_tabla .= '<th>Periodo 5<br>(dB)</th>';
+                                                // }
 
-                $nivelsonoro_tabla .= '<th>Periodo 1<br>(dB)</th>';
-                $nivelsonoro_tabla .= '<th>Periodo 2<br>(dB)</th>';
-                $nivelsonoro_tabla .= '<th>Periodo 3<br>(dB)</th>';
-                $nivelsonoro_tabla .= '<th>Periodo 4<br>(dB)</th>';
-                $nivelsonoro_tabla .= '<th>Periodo 5<br>(dB)</th>';
+                            $nivelsonoro_tabla .= '<th>Periodo 1<br>(dB)</th>';
+                            $nivelsonoro_tabla .= '<th>Periodo 2<br>(dB)</th>';
+                            $nivelsonoro_tabla .= '<th>Periodo 3<br>(dB)</th>';
+                            $nivelsonoro_tabla .= '<th>Periodo 4<br>(dB)</th>';
+                            $nivelsonoro_tabla .= '<th>Periodo 5<br>(dB)</th>';
 
-                $nivelsonoro_tabla .= '<th width="100">NSCE<sub>A, Ti</sub><br>Promedio (dB)</th>
+                          $nivelsonoro_tabla .= '<th width="100">NSCE<sub>A, Ti</sub><br>Promedio (dB)</th>
                                                 <th width="60">Editar</th>
                                                 <th width="60">Eliminar</th>
                                             </tr>
                                         </thead>';
 
                 $nivelsonoro_tabla .= '<tbody>';
-                foreach ($nivelsonoro as $key => $value) {
-                    $nivelsonoro_tabla .= '<tr>';
+                                            foreach ($nivelsonoro as $key => $value) 
+                                            {
+                                                $nivelsonoro_tabla .= '<tr>';
+                                                
+                                                    $nivelsonoro_tabla .= '<td>'.$value->reporteruidonivelsonoro_punto.'</td>';
+                                                    $nivelsonoro_tabla .= '<td>'.$value->reporteruidonivelsonoro_ubicacion.'</td>';
 
-                    $nivelsonoro_tabla .= '<td>' . $value->reporteruidonivelsonoro_punto . '</td>';
-                    $nivelsonoro_tabla .= '<td>' . $value->reporteruidonivelsonoro_ubicacion . '</td>';
+                                                    // if (($nivelsonoro[0]->reporteruidonivelsonoro_totalperiodos + 0) >= 1)
+                                                    // {
+                                                    //     $nivelsonoro_tabla .= '<td>'.$value->reporteruidonivelsonoro_periodo1.'</td>';
+                                                    // }
 
-                    // if (($nivelsonoro[0]->reporteruidonivelsonoro_totalperiodos + 0) >= 1)
-                    // {
-                    //     $nivelsonoro_tabla .= '<td>'.$value->reporteruidonivelsonoro_periodo1.'</td>';
-                    // }
+                                                    // if (($nivelsonoro[0]->reporteruidonivelsonoro_totalperiodos + 0) >= 2)
+                                                    // {
+                                                    //     $nivelsonoro_tabla .= '<td>'.$value->reporteruidonivelsonoro_periodo2.'</td>';
+                                                    // }
 
-                    // if (($nivelsonoro[0]->reporteruidonivelsonoro_totalperiodos + 0) >= 2)
-                    // {
-                    //     $nivelsonoro_tabla .= '<td>'.$value->reporteruidonivelsonoro_periodo2.'</td>';
-                    // }
+                                                    // if (($nivelsonoro[0]->reporteruidonivelsonoro_totalperiodos + 0) >= 3)
+                                                    // {
+                                                    //     $nivelsonoro_tabla .= '<td>'.$value->reporteruidonivelsonoro_periodo3.'</td>';
+                                                    // }
 
-                    // if (($nivelsonoro[0]->reporteruidonivelsonoro_totalperiodos + 0) >= 3)
-                    // {
-                    //     $nivelsonoro_tabla .= '<td>'.$value->reporteruidonivelsonoro_periodo3.'</td>';
-                    // }
+                                                    // if (($nivelsonoro[0]->reporteruidonivelsonoro_totalperiodos + 0) >= 4)
+                                                    // {
+                                                    //     $nivelsonoro_tabla .= '<td>'.$value->reporteruidonivelsonoro_periodo4.'</td>';
+                                                    // }
 
-                    // if (($nivelsonoro[0]->reporteruidonivelsonoro_totalperiodos + 0) >= 4)
-                    // {
-                    //     $nivelsonoro_tabla .= '<td>'.$value->reporteruidonivelsonoro_periodo4.'</td>';
-                    // }
+                                                    // if (($nivelsonoro[0]->reporteruidonivelsonoro_totalperiodos + 0) >= 5)
+                                                    // {
+                                                    //     $nivelsonoro_tabla .= '<td>'.$value->reporteruidonivelsonoro_periodo5.'</td>';
+                                                    // }
 
-                    // if (($nivelsonoro[0]->reporteruidonivelsonoro_totalperiodos + 0) >= 5)
-                    // {
-                    //     $nivelsonoro_tabla .= '<td>'.$value->reporteruidonivelsonoro_periodo5.'</td>';
-                    // }
-
-                    $nivelsonoro_tabla .= '<td>' . $value->reporteruidonivelsonoro_periodo1 . '</td>';
-                    $nivelsonoro_tabla .= '<td>' . $value->reporteruidonivelsonoro_periodo2 . '</td>';
-                    $nivelsonoro_tabla .= '<td>' . $value->reporteruidonivelsonoro_periodo3 . '</td>';
-                    $nivelsonoro_tabla .= '<td>' . $value->reporteruidonivelsonoro_periodo4 . '</td>';
-                    $nivelsonoro_tabla .= '<td>' . $value->reporteruidonivelsonoro_periodo5 . '</td>';
+                                                    $nivelsonoro_tabla .= '<td>'.$value->reporteruidonivelsonoro_periodo1.'</td>';
+                                                    $nivelsonoro_tabla .= '<td>'.$value->reporteruidonivelsonoro_periodo2.'</td>';
+                                                    $nivelsonoro_tabla .= '<td>'.$value->reporteruidonivelsonoro_periodo3.'</td>';
+                                                    $nivelsonoro_tabla .= '<td>'.$value->reporteruidonivelsonoro_periodo4.'</td>';
+                                                    $nivelsonoro_tabla .= '<td>'.$value->reporteruidonivelsonoro_periodo5.'</td>';
 
 
-                    $nivelsonoro_tabla .= '<td>' . $value->reporteruidonivelsonoro_promedio . '</td>';
-                    $nivelsonoro_tabla .= '<td><button type="button" class="btn btn-warning waves-effect btn-circle" onclick="nivelsonoro_editar(' . $proyecto_id . ', ' . $reporteregistro_id . ', ' . $value->reporteruidonivelsonoro_punto . ');"><i class="fa fa-pencil fa-2x"></i></button></td>';
+                                                    $nivelsonoro_tabla .= '<td>'.$value->reporteruidonivelsonoro_promedio.'</td>';
+                                                    $nivelsonoro_tabla .= '<td><button type="button" class="btn btn-warning waves-effect btn-circle" onclick="nivelsonoro_editar('.$proyecto_id.', '.$reporteregistro_id.', '.$value->reporteruidonivelsonoro_punto.');"><i class="fa fa-pencil fa-2x"></i></button></td>';
+                                                    
+                                                    if ($edicion == 1)
+                                                    {
+                                                        $nivelsonoro_tabla .= '<td><button type="button" class="btn btn-danger waves-effect btn-circle" onclick="nivelsonoro_eliminar('.$proyecto_id.', '.$reporteregistro_id.', '.$value->reporteruidonivelsonoro_punto.');"><i class="fa fa-trash fa-2x"></i></button></td>';
+                                                    }
+                                                    else
+                                                    {
+                                                        $nivelsonoro_tabla .= '<td><button type="button" class="btn btn-default waves-effect btn-circle" data-toggle="tooltip" title="No disponible"><i class="fa fa-ban fa-2x"></i></button></td>';
+                                                    }
 
-                    if ($edicion == 1) {
-                        $nivelsonoro_tabla .= '<td><button type="button" class="btn btn-danger waves-effect btn-circle" onclick="nivelsonoro_eliminar(' . $proyecto_id . ', ' . $reporteregistro_id . ', ' . $value->reporteruidonivelsonoro_punto . ');"><i class="fa fa-trash fa-2x"></i></button></td>';
-                    } else {
-                        $nivelsonoro_tabla .= '<td><button type="button" class="btn btn-default waves-effect btn-circle" data-toggle="tooltip" title="No disponible"><i class="fa fa-ban fa-2x"></i></button></td>';
-                    }
-
-                    $nivelsonoro_tabla .= '</tr>';
-                }
+                                                $nivelsonoro_tabla .= '</tr>';
+                                            }
                 $nivelsonoro_tabla .= '</tbody>';
-            } else {
+            }
+            else
+            {
                 $nivelsonoro_tabla .= '<thead>
                                             <tr>
                                                 <th width="100">No. Medición</th>
@@ -2688,7 +2986,9 @@ class reporteruidoController extends Controller
             $dato["total"] = count($nivelsonoro);
             $dato["msj"] = 'Datos consultados correctamente';
             return response()->json($dato);
-        } catch (Exception $e) {
+        }
+        catch(Exception $e)
+        {
             $dato['nivelsonoro_tabla'] = '<thead>
                                                 <tr>
                                                     <th width="100">No. Medición</th>
@@ -2706,8 +3006,8 @@ class reporteruidoController extends Controller
                                                     <td colspan="8">Error al consultar los datos</td>
                                                 </tr>
                                             </tbody>';
-            $dato["total"] = 0;
-            $dato["msj"] = 'Error ' . $e->getMessage();
+            $dato["total"] = 0;            
+            $dato["msj"] = 'Error '.$e->getMessage();
             return response()->json($dato);
         }
     }
@@ -2723,7 +3023,8 @@ class reporteruidoController extends Controller
      */
     public function reporteruidonivelsonoroconsultapunto($proyecto_id, $reporteregistro_id, $nivelsonoro_punto)
     {
-        try {
+        try
+        {
             $nivelsonoro_punto = collect(DB::select('SELECT
                                                         reporteruidonivelsonoro.id,
                                                         reporteruidonivelsonoro.proyecto_id,
@@ -2743,54 +3044,40 @@ class reporteruidoController extends Controller
                                                     FROM
                                                         reporteruidonivelsonoro
                                                     WHERE
-                                                        reporteruidonivelsonoro.proyecto_id = ' . $proyecto_id . ' 
-                                                        AND reporteruidonivelsonoro.registro_id = ' . $reporteregistro_id . ' 
-                                                        AND reporteruidonivelsonoro.reporteruidonivelsonoro_punto = ' . $nivelsonoro_punto . ' 
+                                                        reporteruidonivelsonoro.proyecto_id = '.$proyecto_id.' 
+                                                        AND reporteruidonivelsonoro.registro_id = '.$reporteregistro_id.' 
+                                                        AND reporteruidonivelsonoro.reporteruidonivelsonoro_punto = '.$nivelsonoro_punto.' 
                                                     ORDER BY
                                                         reporteruidonivelsonoro.reporteruidonivelsonoro_punto ASC,
                                                         reporteruidonivelsonoro.id ASC'));
 
             $nivelsonororesultados_tablafilas = '';
-            foreach ($nivelsonoro_punto as $key => $value) {
-                if ($key == 0) {
+            foreach ($nivelsonoro_punto as $key => $value)
+            {
+                if ($key == 0)
+                {
                     $dato['nivelsonororesultados'] = array(
-                        $value->reporteruidonivelsonoro_punto, $value->reporteruidonivelsonoro_ubicacion, $value->reporteruidonivelsonoro_promedio, $value->reporteruidonivelsonoro_totalperiodos, $value->reporteruidonivelsonoro_totalresultados
-                    );
+                                                          $value->reporteruidonivelsonoro_punto
+                                                        , $value->reporteruidonivelsonoro_ubicacion
+                                                        , $value->reporteruidonivelsonoro_promedio
+                                                        , $value->reporteruidonivelsonoro_totalperiodos
+                                                        , $value->reporteruidonivelsonoro_totalresultados
+                                                    );
                 }
 
-                if ($value->reporteruidonivelsonoro_totalperiodos >= 1) {
-                    $periodo1_estado = 'required';
-                } else {
-                    $periodo1_estado = 'disabled';
-                }
-                if ($value->reporteruidonivelsonoro_totalperiodos >= 2) {
-                    $periodo2_estado = 'required';
-                } else {
-                    $periodo2_estado = 'disabled';
-                }
-                if ($value->reporteruidonivelsonoro_totalperiodos >= 3) {
-                    $periodo3_estado = 'required';
-                } else {
-                    $periodo3_estado = 'disabled';
-                }
-                if ($value->reporteruidonivelsonoro_totalperiodos >= 4) {
-                    $periodo4_estado = 'required';
-                } else {
-                    $periodo4_estado = 'disabled';
-                }
-                if ($value->reporteruidonivelsonoro_totalperiodos >= 5) {
-                    $periodo5_estado = 'required';
-                } else {
-                    $periodo5_estado = 'disabled';
-                }
+                if ($value->reporteruidonivelsonoro_totalperiodos >= 1) {$periodo1_estado = 'required';}else{$periodo1_estado = 'disabled';}
+                if ($value->reporteruidonivelsonoro_totalperiodos >= 2) {$periodo2_estado = 'required';}else{$periodo2_estado = 'disabled';}
+                if ($value->reporteruidonivelsonoro_totalperiodos >= 3) {$periodo3_estado = 'required';}else{$periodo3_estado = 'disabled';}
+                if ($value->reporteruidonivelsonoro_totalperiodos >= 4) {$periodo4_estado = 'required';}else{$periodo4_estado = 'disabled';}
+                if ($value->reporteruidonivelsonoro_totalperiodos >= 5) {$periodo5_estado = 'required';}else{$periodo5_estado = 'disabled';}
 
                 $nivelsonororesultados_tablafilas .= '<tr>
-                                                            <td width="60">' . ($key + 1) . '</td>
-                                                            <td><input type="number" step="any" min="0" class="form-control nivel_sonoro_campo" name="reporteruidonivelsonoro_periodo1[]" value="' . $value->reporteruidonivelsonoro_periodo1 . '" ' . $periodo1_estado . '></td>
-                                                            <td><input type="number" step="any" min="0" class="form-control" name="reporteruidonivelsonoro_periodo2[]" value="' . $value->reporteruidonivelsonoro_periodo2 . '" ' . $periodo2_estado . '></td>
-                                                            <td><input type="number" step="any" min="0" class="form-control" name="reporteruidonivelsonoro_periodo3[]" value="' . $value->reporteruidonivelsonoro_periodo3 . '" ' . $periodo3_estado . '></td>
-                                                            <td><input type="number" step="any" min="0" class="form-control" name="reporteruidonivelsonoro_periodo4[]" value="' . $value->reporteruidonivelsonoro_periodo4 . '" ' . $periodo4_estado . '></td>
-                                                            <td><input type="number" step="any" min="0" class="form-control" name="reporteruidonivelsonoro_periodo5[]" value="' . $value->reporteruidonivelsonoro_periodo5 . '" ' . $periodo5_estado . '></td>
+                                                            <td width="60">'.($key + 1).'</td>
+                                                            <td><input type="number" step="any" min="0" class="form-control nivel_sonoro_campo" name="reporteruidonivelsonoro_periodo1[]" value="'.$value->reporteruidonivelsonoro_periodo1.'" '.$periodo1_estado.'></td>
+                                                            <td><input type="number" step="any" min="0" class="form-control" name="reporteruidonivelsonoro_periodo2[]" value="'.$value->reporteruidonivelsonoro_periodo2.'" '.$periodo2_estado.'></td>
+                                                            <td><input type="number" step="any" min="0" class="form-control" name="reporteruidonivelsonoro_periodo3[]" value="'.$value->reporteruidonivelsonoro_periodo3.'" '.$periodo3_estado.'></td>
+                                                            <td><input type="number" step="any" min="0" class="form-control" name="reporteruidonivelsonoro_periodo4[]" value="'.$value->reporteruidonivelsonoro_periodo4.'" '.$periodo4_estado.'></td>
+                                                            <td><input type="number" step="any" min="0" class="form-control" name="reporteruidonivelsonoro_periodo5[]" value="'.$value->reporteruidonivelsonoro_periodo5.'" '.$periodo5_estado.'></td>
                                                         </tr>';
             }
 
@@ -2798,12 +3085,14 @@ class reporteruidoController extends Controller
             $dato['nivelsonororesultados_tablafilas'] = $nivelsonororesultados_tablafilas;
             $dato["msj"] = 'Datos consultados correctamente';
             return response()->json($dato);
-        } catch (Exception $e) {
+        }
+        catch(Exception $e)
+        {
             $dato['nivelsonororesultados'] = 0;
             $dato['nivelsonororesultados_tablafilas'] = '<tr>
                                                             <td colspan="6">Error al consultar los datos</td>
                                                         </tr>';
-            $dato["msj"] = 'Error ' . $e->getMessage();
+            $dato["msj"] = 'Error '.$e->getMessage();
             return response()->json($dato);
         }
     }
@@ -2819,17 +3108,20 @@ class reporteruidoController extends Controller
      */
     public function reporteruidonivelsonoroeliminar($proyecto_id, $reporteregistro_id, $nivelsonoro_punto)
     {
-        try {
+        try
+        {
             $eliminar_nivelsonoro = reporteruidonivelsonoroModel::where('proyecto_id', $proyecto_id)
-                ->where('registro_id', $reporteregistro_id)
-                ->where('reporteruidonivelsonoro_punto', $nivelsonoro_punto)
-                ->delete();
+                                                                ->where('registro_id', $reporteregistro_id)
+                                                                ->where('reporteruidonivelsonoro_punto', $nivelsonoro_punto)
+                                                                ->delete();
 
             // respuesta
             $dato["msj"] = 'Punto de medición eliminado correctamente';
             return response()->json($dato);
-        } catch (Exception $e) {
-            $dato["msj"] = 'Error ' . $e->getMessage();
+        }
+        catch(Exception $e)
+        {
+            $dato["msj"] = 'Error '.$e->getMessage();
             return response()->json($dato);
         }
     }
@@ -2845,7 +3137,8 @@ class reporteruidoController extends Controller
      */
     public function reporteruidopuntonertabla($proyecto_id, $reporteregistro_id, $areas_poe)
     {
-        try {
+        try
+        {
             // $reporte = reporteruidoModel::where('id', $reporteregistro_id)->get();
 
             // $edicion = 1;
@@ -2859,14 +3152,16 @@ class reporteruidoController extends Controller
 
 
             $revision = reporterevisionesModel::where('proyecto_id', $proyecto_id)
-                ->where('agente_id', 1)
-                ->orderBy('reporterevisiones_revision', 'DESC')
-                ->get();
+                                                ->where('agente_id', 1)
+                                                ->orderBy('reporterevisiones_revision', 'DESC')
+                                                ->get();
 
 
             $edicion = 1;
-            if (count($revision) > 0) {
-                if ($revision[0]->reporterevisiones_concluido == 1 || $revision[0]->reporterevisiones_cancelado == 1) {
+            if(count($revision) > 0)
+            {
+                if($revision[0]->reporterevisiones_concluido == 1 || $revision[0]->reporterevisiones_cancelado == 1)
+                {
                     $edicion = 0;
                 }
             }
@@ -2875,7 +3170,8 @@ class reporteruidoController extends Controller
             //==========================================
 
 
-            if (($areas_poe + 0) == 1) {
+            if (($areas_poe+0) == 1)
+            {
                 $puntoner = DB::select('SELECT
                                             reporteruidopuntoner.proyecto_id,
                                             reporteruidopuntoner.registro_id,
@@ -2895,11 +3191,13 @@ class reporteruidoController extends Controller
                                             reporteruidopuntoner
                                             LEFT JOIN reportearea ON reporteruidopuntoner.reporteruidoarea_id = reportearea.id
                                         WHERE
-                                            reporteruidopuntoner.proyecto_id = ' . $proyecto_id . ' 
-                                            AND reporteruidopuntoner.registro_id = ' . $reporteregistro_id . ' 
+                                            reporteruidopuntoner.proyecto_id = '.$proyecto_id.' 
+                                            AND reporteruidopuntoner.registro_id = '.$reporteregistro_id.' 
                                         ORDER BY
                                             reporteruidopuntoner.reporteruidopuntoner_punto ASC');
-            } else {
+            }
+            else
+            {
                 // $puntoner = reporteruidopuntonerModel::with(['reporteruidoarea'])
                 //                                     ->where('proyecto_id', $proyecto_id)
                 //                                     ->where('registro_id', $reporteregistro_id)
@@ -2926,33 +3224,40 @@ class reporteruidoController extends Controller
                                             reporteruidopuntoner
                                             LEFT JOIN reporteruidoarea ON reporteruidopuntoner.reporteruidoarea_id = reporteruidoarea.id 
                                         WHERE
-                                            reporteruidopuntoner.proyecto_id = ' . $proyecto_id . ' 
-                                            AND reporteruidopuntoner.registro_id = ' . $reporteregistro_id . ' 
+                                            reporteruidopuntoner.proyecto_id = '.$proyecto_id.' 
+                                            AND reporteruidopuntoner.registro_id = '.$reporteregistro_id.' 
                                         ORDER BY
                                             reporteruidopuntoner.reporteruidopuntoner_punto ASC');
             }
 
 
             $numero_registro = 0;
-            foreach ($puntoner as $key => $value) {
+            foreach ($puntoner as $key => $value) 
+            {
                 $numero_registro += 1;
                 $value->numero_registro = $numero_registro;
 
-                if ($value->reporteruidopuntoner_ner <= $value->reporteruidopuntoner_lmpe) {
+                if ($value->reporteruidopuntoner_ner <= $value->reporteruidopuntoner_lmpe)
+                {
                     $value->resultadoner = 1;
                     $value->resultadoner_texto = 'Dentro de norma';
                     $value->resultadoner_color = '#00FF00';
-                } else {
+                }
+                else
+                {
                     $value->resultadoner = 0;
                     $value->resultadoner_texto = 'Fuera de norma';
                     $value->resultadoner_color = '#FF0000';
                 }
-
+                
                 $value->boton_editar = '<button type="button" class="btn btn-warning waves-effect btn-circle"><i class="fa fa-pencil fa-2x"></i></button>';
 
-                if ($edicion == 1) {
+                if ($edicion == 1)
+                {
                     $value->boton_eliminar = '<button type="button" class="btn btn-danger waves-effect btn-circle eliminar"><i class="fa fa-trash fa-2x"></i></button>';
-                } else {
+                }
+                else
+                {
                     $value->boton_eliminar = '<button type="button" class="btn btn-default waves-effect btn-circle" data-toggle="tooltip" title="No disponible"><i class="fa fa-ban fa-2x"></i></button>';
                 }
             }
@@ -2962,10 +3267,12 @@ class reporteruidoController extends Controller
             $dato["total"] = count($puntoner);
             $dato["msj"] = 'Datos consultados correctamente';
             return response()->json($dato);
-        } catch (Exception $e) {
+        }
+        catch(Exception $e)
+        {
             $dato['data'] = 0;
             $dato["total"] = 0;
-            $dato["msj"] = 'Error ' . $e->getMessage();
+            $dato["msj"] = 'Error '.$e->getMessage();
             return response()->json($dato);
         }
     }
@@ -2980,11 +3287,13 @@ class reporteruidoController extends Controller
      * @param int $puntoner_id
      * @param int $areas_poe
      * @return \Illuminate\Http\Response
-     */
+    */
     public function reporteruidopuntonerareacategorias($proyecto_id, $reporteregistro_id, $area_id, $puntoner_id, $areas_poe)
     {
-        try {
-            if (($areas_poe + 0) == 1) {
+        try
+        {
+            if (($areas_poe+0) == 1)
+            {
                 $areacategorias = DB::select('SELECT
                                                     TABLA.proyecto_id,
                                                     TABLA.reporteruidocategoria_id,
@@ -3007,7 +3316,7 @@ class reporteruidoController extends Controller
                                                             WHERE
                                                                 reporteruidoareacategoria.reporteruidoarea_id = reporteareacategoria.reportearea_id
                                                                 AND reporteruidoareacategoria.reporteruidocategoria_id = reportecategoria.id
-                                                                AND reporteruidoareacategoria.reporteruidoareacategoria_poe = ' . $reporteregistro_id . ' 
+                                                                AND reporteruidoareacategoria.reporteruidoareacategoria_poe = '.$reporteregistro_id.' 
                                                             LIMIT 1
                                                         ), "") AS checked,
                                                         reporteareacategoria.reporteareacategoria_total AS categoria_total,
@@ -3017,15 +3326,17 @@ class reporteruidoController extends Controller
                                                         reporteareacategoria
                                                         INNER JOIN reportecategoria ON reporteareacategoria.reportecategoria_id = reportecategoria.id 
                                                     WHERE
-                                                        reportecategoria.proyecto_id = ' . $proyecto_id . ' 
-                                                        AND reporteareacategoria.reportearea_id = ' . $area_id . ' 
+                                                        reportecategoria.proyecto_id = '.$proyecto_id.' 
+                                                        AND reporteareacategoria.reportearea_id = '.$area_id.' 
                                                     ORDER BY
                                                         reportecategoria.reportecategoria_orden ASC,
                                                         reportecategoria.reportecategoria_nombre ASC
                                                 ) AS TABLA
                                             WHERE
                                                 TABLA.checked != ""');
-            } else {
+            }
+            else
+            {
                 $areacategorias = DB::select('SELECT
                                                     reporteruidoareacategoria.reporteruidoarea_id,
                                                     reporteruidoareacategoria.reporteruidocategoria_id,
@@ -3034,7 +3345,7 @@ class reporteruidoController extends Controller
                                                     reporteruidoareacategoria
                                                     LEFT JOIN reporteruidocategoria ON reporteruidoareacategoria.reporteruidocategoria_id = reporteruidocategoria.id
                                                 WHERE
-                                                    reporteruidoareacategoria.reporteruidoarea_id = ' . $area_id . ' 
+                                                    reporteruidoareacategoria.reporteruidoarea_id = '.$area_id.' 
                                                     AND reporteruidoareacategoria.reporteruidoareacategoria_poe = 0 
                                                 ORDER BY
                                                     reporteruidocategoria.reporteruidocategoria_nombre ASC');
@@ -3042,9 +3353,11 @@ class reporteruidoController extends Controller
 
 
             $selectareacategorias_opciones = '<option value=""></option>';
-            if (count($areacategorias) > 0) {
-                foreach ($areacategorias as $key => $value) {
-                    $selectareacategorias_opciones .= '<option value="' . $value->reporteruidocategoria_id . '">' . $value->reporteruidocategoria_nombre . '</option>';
+            if (count($areacategorias) > 0)
+            {
+                foreach ($areacategorias as $key => $value)
+                {
+                    $selectareacategorias_opciones .= '<option value="'.$value->reporteruidocategoria_id.'">'.$value->reporteruidocategoria_nombre.'</option>';
                 }
             }
 
@@ -3062,45 +3375,57 @@ class reporteruidoController extends Controller
                                                 FROM
                                                     reporteruidopuntonercategorias
                                                 WHERE
-                                                    reporteruidopuntonercategorias.reporteruidopuntoner_id = ' . $puntoner_id);
+                                                    reporteruidopuntonercategorias.reporteruidopuntoner_id = '.$puntoner_id);
 
 
             $categorias_puntoner = '';
-            if (count($categoriaspuntoner) > 0) {
-                foreach ($categoriaspuntoner as $key => $value) {
+            if (count($categoriaspuntoner) > 0)
+            {
+                foreach ($categoriaspuntoner as $key => $value)
+                {
                     $categorias_puntoner .= '<tr>
                                                 <td width="319">
                                                     <select class="custom-select form-control" name="reporteruidocategoria_id[]" required>
                                                         <option value=""></option>';
-                    foreach ($areacategorias as $key2 => $categoria) {
-                        if (($value->reporteruidocategoria_id + 0) == ($categoria->reporteruidocategoria_id + 0)) {
-                            $categorias_puntoner .= '<option value="' . $categoria->reporteruidocategoria_id . '" selected>' . $categoria->reporteruidocategoria_nombre . '</option>';
-                        } else {
-                            $categorias_puntoner .= '<option value="' . $categoria->reporteruidocategoria_id . '">' . $categoria->reporteruidocategoria_nombre . '</option>';
-                        }
-                    }
-                    $categorias_puntoner .= '</select>
+                                                        foreach ($areacategorias as $key2 => $categoria)
+                                                        {
+                                                            if (($value->reporteruidocategoria_id + 0) == ($categoria->reporteruidocategoria_id + 0))
+                                                            {
+                                                                $categorias_puntoner .= '<option value="'.$categoria->reporteruidocategoria_id.'" selected>'.$categoria->reporteruidocategoria_nombre.'</option>';
+                                                            }
+                                                            else
+                                                            {
+                                                                $categorias_puntoner .= '<option value="'.$categoria->reporteruidocategoria_id.'">'.$categoria->reporteruidocategoria_nombre.'</option>';
+                                                            }
+                                                        }
+                            $categorias_puntoner .= '</select>
                                                 </td>
-                                                <td width="100"><input type="number" min="1" class="form-control" name="reporteruidopuntonercategorias_total[]" value="' . $value->reporteruidopuntonercategorias_total . '" required></td>
-                                                <td width="100"><input type="number" min="1" class="form-control" name="reporteruidopuntonercategorias_geo[]" value="' . $value->reporteruidopuntonercategorias_geo . '" required></td>
-                                                <td width="120"><input type="text" class="form-control" name="reporteruidopuntonercategorias_ficha[]" value="' . $value->reporteruidopuntonercategorias_ficha . '" required></td>
-                                                <td><input type="text" class="form-control" name="reporteruidopuntonercategorias_nombre[]" value="' . $value->reporteruidopuntonercategorias_nombre . '" required></td>';
-                    if (($key + 0) == 0) {
-                        $categorias_puntoner .= '<td width="60"><button type="button" class="btn btn-default waves-effect btn-circle" data-toggle="tooltip" title="No disponible"><i class="fa fa-ban fa-2x"></i></button></td>';
-                    } else {
-                        $categorias_puntoner .= '<td width="60"><button type="button" class="btn btn-danger waves-effect btn-circle eliminar"><i class="fa fa-trash fa-2x"></i></button></td>';
-                    }
+                                                <td width="100"><input type="number" min="1" class="form-control" name="reporteruidopuntonercategorias_total[]" value="'.$value->reporteruidopuntonercategorias_total.'" required></td>
+                                                <td width="100"><input type="number" min="1" class="form-control" name="reporteruidopuntonercategorias_geo[]" value="'.$value->reporteruidopuntonercategorias_geo.'" required></td>
+                                                <td width="120"><input type="text" class="form-control" name="reporteruidopuntonercategorias_ficha[]" value="'.$value->reporteruidopuntonercategorias_ficha.'" required></td>
+                                                <td><input type="text" class="form-control" name="reporteruidopuntonercategorias_nombre[]" value="'.$value->reporteruidopuntonercategorias_nombre.'" required></td>';
+                                                if (($key + 0) == 0)
+                                                {
+                                                    $categorias_puntoner .= '<td width="60"><button type="button" class="btn btn-default waves-effect btn-circle" data-toggle="tooltip" title="No disponible"><i class="fa fa-ban fa-2x"></i></button></td>';
+                                                }
+                                                else
+                                                {
+                                                    $categorias_puntoner .= '<td width="60"><button type="button" class="btn btn-danger waves-effect btn-circle eliminar"><i class="fa fa-trash fa-2x"></i></button></td>';
+                                                }
                     $categorias_puntoner .= '</tr>';
                 }
-            } else {
+            }
+            else
+            {
                 $categorias_puntoner .= '<tr>
                                             <td width="319">
                                                 <select class="custom-select form-control" name="reporteruidocategoria_id[]" required>
                                                     <option value=""></option>';
-                foreach ($areacategorias as $key2 => $categoria) {
-                    $categorias_puntoner .= '<option value="' . $categoria->reporteruidocategoria_id . '">' . $categoria->reporteruidocategoria_nombre . '</option>';
-                }
-                $categorias_puntoner .= '</select>
+                                                    foreach ($areacategorias as $key2 => $categoria)
+                                                    {
+                                                        $categorias_puntoner .= '<option value="'.$categoria->reporteruidocategoria_id.'">'.$categoria->reporteruidocategoria_nombre.'</option>';
+                                                    }
+                        $categorias_puntoner .= '</select>
                                             </td>
                                             <td width="100"><input type="number" min="1" class="form-control" name="reporteruidopuntonercategorias_total[]" value="" required></td>
                                             <td width="100"><input type="number" min="1" class="form-control" name="reporteruidopuntonercategorias_geo[]" value="" required></td>
@@ -3116,10 +3441,12 @@ class reporteruidoController extends Controller
             $dato['selectareacategorias_opciones'] = $selectareacategorias_opciones;
             $dato["msj"] = 'Datos consultados correctamente';
             return response()->json($dato);
-        } catch (Exception $e) {
+        }
+        catch(Exception $e)
+        {
             $dato['categorias_puntoner'] = '<tr><td colspan="6">Error al consultar las categorías, intentelo de nuevo.</td></tr>';
             $dato['selectareacategorias_opciones'] = '<option value=""></option>';
-            $dato["msj"] = 'Error ' . $e->getMessage();
+            $dato["msj"] = 'Error '.$e->getMessage();
             return response()->json($dato);
         }
     }
@@ -3133,7 +3460,8 @@ class reporteruidoController extends Controller
      */
     public function reporteruidopuntonereliminar($puntoner_id)
     {
-        try {
+        try
+        {
             $puntoner = reporteruidopuntonerModel::where('id', $puntoner_id)->delete();
 
             $puntoner_categorias = reporteruidopuntonercategoriasModel::where('reporteruidopuntoner_id', $puntoner_id)->delete();
@@ -3143,8 +3471,10 @@ class reporteruidoController extends Controller
             // respuesta
             $dato["msj"] = 'Punto de la determinación del NER eliminado correctamente';
             return response()->json($dato);
-        } catch (Exception $e) {
-            $dato["msj"] = 'Error ' . $e->getMessage();
+        }
+        catch(Exception $e)
+        {
+            $dato["msj"] = 'Error '.$e->getMessage();
             return response()->json($dato);
         }
     }
@@ -3160,7 +3490,8 @@ class reporteruidoController extends Controller
      */
     public function reporteruidodosisnertabla($proyecto_id, $reporteregistro_id, $areas_poe)
     {
-        try {
+        try
+        {
             // $reporte = reporteruidoModel::where('id', $reporteregistro_id)->get();
 
 
@@ -3175,14 +3506,16 @@ class reporteruidoController extends Controller
 
 
             $revision = reporterevisionesModel::where('proyecto_id', $proyecto_id)
-                ->where('agente_id', 1)
-                ->orderBy('reporterevisiones_revision', 'DESC')
-                ->get();
+                                                ->where('agente_id', 1)
+                                                ->orderBy('reporterevisiones_revision', 'DESC')
+                                                ->get();
 
 
             $edicion = 1;
-            if (count($revision) > 0) {
-                if ($revision[0]->reporterevisiones_concluido == 1 || $revision[0]->reporterevisiones_cancelado == 1) {
+            if(count($revision) > 0)
+            {
+                if($revision[0]->reporterevisiones_concluido == 1 || $revision[0]->reporterevisiones_cancelado == 1)
+                {
                     $edicion = 0;
                 }
             }
@@ -3191,7 +3524,8 @@ class reporteruidoController extends Controller
             //==========================================
 
 
-            if (($areas_poe + 0) == 1) {
+            if (($areas_poe+0) == 1)
+            {
                 $dosisner = DB::select('SELECT
                                             reporteruidodosisner.proyecto_id,
                                             reporteruidodosisner.registro_id,
@@ -3211,11 +3545,13 @@ class reporteruidoController extends Controller
                                             LEFT JOIN reportearea ON reporteruidodosisner.reporteruidoarea_id = reportearea.id
                                             LEFT JOIN reportecategoria ON reporteruidodosisner.reporteruidocategoria_id = reportecategoria.id
                                         WHERE
-                                            reporteruidodosisner.proyecto_id = ' . $proyecto_id . ' 
-                                            AND reporteruidodosisner.registro_id = ' . $reporteregistro_id . ' 
+                                            reporteruidodosisner.proyecto_id = '.$proyecto_id.' 
+                                            AND reporteruidodosisner.registro_id = '.$reporteregistro_id.' 
                                         ORDER BY
                                             reporteruidodosisner.reporteruidodosisner_punto ASC');
-            } else {
+            }
+            else
+            {
                 // $dosisner = reporteruidodosisnerModel::with(['reporteruidoarea', 'reporteruidocategoria'])
                 //                                     ->where('proyecto_id', $proyecto_id)
                 //                                     ->where('registro_id', $reporteregistro_id)
@@ -3242,33 +3578,40 @@ class reporteruidoController extends Controller
                                             LEFT JOIN reporteruidoarea ON reporteruidodosisner.reporteruidoarea_id = reporteruidoarea.id
                                             LEFT JOIN reporteruidocategoria ON reporteruidodosisner.reporteruidocategoria_id = reporteruidocategoria.id
                                         WHERE
-                                            reporteruidodosisner.proyecto_id = ' . $proyecto_id . ' 
-                                            AND reporteruidodosisner.registro_id = ' . $reporteregistro_id . ' 
+                                            reporteruidodosisner.proyecto_id = '.$proyecto_id.' 
+                                            AND reporteruidodosisner.registro_id = '.$reporteregistro_id.' 
                                         ORDER BY
                                             reporteruidodosisner.reporteruidodosisner_punto ASC');
             }
 
 
             $numero_registro = 0;
-            foreach ($dosisner as $key => $value) {
+            foreach ($dosisner as $key => $value) 
+            {
                 $numero_registro += 1;
                 $value->numero_registro = $numero_registro;
 
-                if ($value->reporteruidodosisner_ner <= $value->reporteruidodosisner_lmpe) {
+                if ($value->reporteruidodosisner_ner <= $value->reporteruidodosisner_lmpe)
+                {
                     $value->resultadoner = 1;
                     $value->resultadoner_texto = 'Dentro de norma';
                     $value->resultadoner_color = '#00FF00';
-                } else {
+                }
+                else
+                {
                     $value->resultadoner = 0;
                     $value->resultadoner_texto = 'Fuera de norma';
                     $value->resultadoner_color = '#FF0000';
                 }
-
+                
                 $value->boton_editar = '<button type="button" class="btn btn-warning waves-effect btn-circle"><i class="fa fa-pencil fa-2x"></i></button>';
 
-                if ($edicion == 1) {
+                if ($edicion == 1)
+                {
                     $value->boton_eliminar = '<button type="button" class="btn btn-danger waves-effect btn-circle eliminar"><i class="fa fa-trash fa-2x"></i></button>';
-                } else {
+                }
+                else
+                {
                     $value->boton_eliminar = '<button type="button" class="btn btn-default waves-effect btn-circle" data-toggle="tooltip" title="No disponible"><i class="fa fa-ban fa-2x"></i></button>';
                 }
             }
@@ -3279,10 +3622,12 @@ class reporteruidoController extends Controller
             $dato["total"] = count($dosisner);
             $dato["msj"] = 'Datos consultados correctamente';
             return response()->json($dato);
-        } catch (Exception $e) {
+        }
+        catch(Exception $e)
+        {
             $dato['data'] = 0;
             $dato["total"] = 0;
-            $dato["msj"] = 'Error ' . $e->getMessage();
+            $dato["msj"] = 'Error '.$e->getMessage();
             return response()->json($dato);
         }
     }
@@ -3300,14 +3645,16 @@ class reporteruidoController extends Controller
      */
     public function reporteruidodosisnerareacategorias($proyecto_id, $reporteregistro_id, $area_id, $categoria_id, $areas_poe)
     {
-        try {
+        try
+        {
             // dd($proyecto_id.' - '.$reporteregistro_id.' - '.$area_id.' - '.$categoria_id.' - '.$areas_poe);
 
 
             $categoriasoption = '<option value=""></option>';
 
 
-            if (($areas_poe + 0) == 1) {
+            if (($areas_poe+0) == 1)
+            {
                 $categorias = DB::select('SELECT
                                                 TABLA.proyecto_id,
                                                 TABLA.reporteruidocategoria_id,
@@ -3330,7 +3677,7 @@ class reporteruidoController extends Controller
                                                         WHERE
                                                             reporteruidoareacategoria.reporteruidoarea_id = reporteareacategoria.reportearea_id
                                                             AND reporteruidoareacategoria.reporteruidocategoria_id = reportecategoria.id
-                                                            AND reporteruidoareacategoria.reporteruidoareacategoria_poe = ' . $reporteregistro_id . ' 
+                                                            AND reporteruidoareacategoria.reporteruidoareacategoria_poe = '.$reporteregistro_id.' 
                                                         LIMIT 1
                                                     ), "") AS checked,
                                                     reporteareacategoria.reporteareacategoria_total AS categoria_total,
@@ -3340,15 +3687,17 @@ class reporteruidoController extends Controller
                                                     reporteareacategoria
                                                     INNER JOIN reportecategoria ON reporteareacategoria.reportecategoria_id = reportecategoria.id 
                                                 WHERE
-                                                    reportecategoria.proyecto_id = ' . $proyecto_id . ' 
-                                                    AND reporteareacategoria.reportearea_id = ' . $area_id . ' 
+                                                    reportecategoria.proyecto_id = '.$proyecto_id.' 
+                                                    AND reporteareacategoria.reportearea_id = '.$area_id.' 
                                                 ORDER BY
                                                     reportecategoria.reportecategoria_orden ASC,
                                                     reportecategoria.reportecategoria_nombre ASC
                                             ) AS TABLA
                                         WHERE
                                             TABLA.checked != ""');
-            } else {
+            }
+            else
+            {
                 $categorias = DB::select('SELECT
                                                 reporteruidoareacategoria.reporteruidoarea_id,
                                                 reporteruidoareacategoria.reporteruidocategoria_id,
@@ -3357,18 +3706,22 @@ class reporteruidoController extends Controller
                                                 reporteruidoareacategoria
                                                 LEFT JOIN reporteruidocategoria ON reporteruidoareacategoria.reporteruidocategoria_id = reporteruidocategoria.id
                                             WHERE
-                                                reporteruidoareacategoria.reporteruidoarea_id = ' . $area_id . ' 
+                                                reporteruidoareacategoria.reporteruidoarea_id = '.$area_id.' 
                                                 AND reporteruidoareacategoria.reporteruidoareacategoria_poe = 0 
                                             ORDER BY
                                                 reporteruidocategoria.reporteruidocategoria_nombre ASC');
             }
 
 
-            foreach ($categorias as $key => $value) {
-                if ($categoria_id == $value->reporteruidocategoria_id) {
-                    $categoriasoption .= '<option value="' . $value->reporteruidocategoria_id . '" selected>' . $value->reporteruidocategoria_nombre . '</option>';
-                } else {
-                    $categoriasoption .= '<option value="' . $value->reporteruidocategoria_id . '">' . $value->reporteruidocategoria_nombre . '</option>';
+            foreach ($categorias as $key => $value) 
+            {
+                if ($categoria_id == $value->reporteruidocategoria_id)
+                {
+                    $categoriasoption .= '<option value="'.$value->reporteruidocategoria_id.'" selected>'.$value->reporteruidocategoria_nombre.'</option>';
+                }
+                else
+                {
+                    $categoriasoption .= '<option value="'.$value->reporteruidocategoria_id.'">'.$value->reporteruidocategoria_nombre.'</option>';
                 }
             }
 
@@ -3377,9 +3730,11 @@ class reporteruidoController extends Controller
             $dato['categoriasoption'] = $categoriasoption;
             $dato["msj"] = 'Datos consultados correctamente';
             return response()->json($dato);
-        } catch (Exception $e) {
+        }
+        catch(Exception $e)
+        {
             $dato['categoriasoption'] = '<option value=""></option>';
-            $dato["msj"] = 'Error ' . $e->getMessage();
+            $dato["msj"] = 'Error '.$e->getMessage();
             return response()->json($dato);
         }
     }
@@ -3393,14 +3748,17 @@ class reporteruidoController extends Controller
      */
     public function reporteruidodosisnereliminar($dosisner_id)
     {
-        try {
+        try
+        {
             $dosisner = reporteruidodosisnerModel::where('id', $dosisner_id)->delete();
 
             // respuesta
             $dato["msj"] = 'Dosis de determinación del NER eliminado correctamente';
             return response()->json($dato);
-        } catch (Exception $e) {
-            $dato["msj"] = 'Error ' . $e->getMessage();
+        }
+        catch(Exception $e)
+        {
+            $dato["msj"] = 'Error '.$e->getMessage();
             return response()->json($dato);
         }
     }
@@ -3578,8 +3936,10 @@ class reporteruidoController extends Controller
      */
     public function reporteruidobandasoctavatabla($proyecto_id, $reporteregistro_id, $areas_poe)
     {
-        try {
-            if (($areas_poe + 0) == 1) {
+        try
+        {
+            if (($areas_poe+0) == 1)
+            {
                 $puntos_bandasoctava = DB::select('SELECT
                                                         reporteruidopuntoner.id,
                                                         reporteruidopuntoner.proyecto_id,
@@ -3601,13 +3961,15 @@ class reporteruidoController extends Controller
                                                         LEFT JOIN reportearea ON reporteruidopuntoner.reporteruidoarea_id = reportearea.id 
                                                         RIGHT JOIN reporteruidopuntonerfrecuencias ON reporteruidopuntoner.id = reporteruidopuntonerfrecuencias.reporteruidopuntoner_id
                                                     WHERE
-                                                        reporteruidopuntoner.proyecto_id = ' . $proyecto_id . ' 
-                                                        AND reporteruidopuntoner.registro_id = ' . $reporteregistro_id . ' 
+                                                        reporteruidopuntoner.proyecto_id = '.$proyecto_id.' 
+                                                        AND reporteruidopuntoner.registro_id = '.$reporteregistro_id.' 
                                                         AND reportearea.created_at >= "2021-06-01"
                                                     ORDER BY
                                                         reporteruidopuntoner.reporteruidopuntoner_punto ASC,
                                                         reporteruidopuntonerfrecuencias.reporteruidopuntonerfrecuencias_orden ASC');
-            } else {
+            }
+            else
+            {
                 $puntos_bandasoctava = DB::select('SELECT
                                                         reporteruidopuntoner.id,
                                                         reporteruidopuntoner.proyecto_id,
@@ -3629,8 +3991,8 @@ class reporteruidoController extends Controller
                                                         LEFT JOIN reporteruidoarea ON reporteruidopuntoner.reporteruidoarea_id = reporteruidoarea.id 
                                                         RIGHT JOIN reporteruidopuntonerfrecuencias ON reporteruidopuntoner.id = reporteruidopuntonerfrecuencias.reporteruidopuntoner_id
                                                     WHERE
-                                                        reporteruidopuntoner.proyecto_id = ' . $proyecto_id . ' 
-                                                        AND reporteruidopuntoner.registro_id = ' . $reporteregistro_id . ' 
+                                                        reporteruidopuntoner.proyecto_id = '.$proyecto_id.' 
+                                                        AND reporteruidopuntoner.registro_id = '.$reporteregistro_id.' 
                                                         AND reporteruidoarea.created_at <= "2021-05-31"
                                                     ORDER BY
                                                         reporteruidopuntoner.reporteruidopuntoner_punto ASC,
@@ -3643,13 +4005,14 @@ class reporteruidoController extends Controller
                                             FROM
                                                 reporteruidopuntoner
                                             WHERE
-                                                reporteruidopuntoner.proyecto_id = ' . $proyecto_id . ' 
-                                                AND reporteruidopuntoner.registro_id = ' . $reporteregistro_id . '
+                                                reporteruidopuntoner.proyecto_id = '.$proyecto_id.' 
+                                                AND reporteruidopuntoner.registro_id = '.$reporteregistro_id.'
                                                 AND IFNULL(reporteruidopuntoner.reporteruidopuntoner_RdB, "") = ""');
 
 
             $total = 1;
-            if (($total_singuardar[0]->total + 0) > 0) {
+            if (($total_singuardar[0]->total + 0) > 0)
+            {
                 $total = 0;
             }
 
@@ -3659,10 +4022,12 @@ class reporteruidoController extends Controller
             $dato["total"] = $total;
             $dato["msj"] = 'Datos consultados correctamente';
             return response()->json($dato);
-        } catch (Exception $e) {
+        }
+        catch(Exception $e)
+        {
             $dato["data"] = 0;
             $dato["total"] = 0;
-            $dato["msj"] = 'Error ' . $e->getMessage();
+            $dato["msj"] = 'Error '.$e->getMessage();
             return response()->json($dato);
         }
     }
@@ -3678,11 +4043,13 @@ class reporteruidoController extends Controller
      */
     public function reporteruidomatrizexposicion($proyecto_id, $reporteregistro_id, $areas_poe)
     {
-        try {
+        try
+        {
             $numero_registro = 0;
 
 
-            if (($areas_poe + 0) == 1) {
+            if (($areas_poe+0) == 1)
+            {
                 $puntos = DB::select('SELECT
                                             reporteruidopuntoner.id,
                                             reporteruidopuntoner.proyecto_id,
@@ -3747,13 +4114,15 @@ class reporteruidoController extends Controller
                                             RIGHT OUTER JOIN reporteruidopuntonercategorias ON reporteruidopuntoner.id = reporteruidopuntonercategorias.reporteruidopuntoner_id
                                             LEFT JOIN reportecategoria ON reporteruidopuntonercategorias.reporteruidocategoria_id = reportecategoria.id 
                                         WHERE
-                                            reporteruidopuntoner.proyecto_id = ' . $proyecto_id . '  
-                                            AND reporteruidopuntoner.registro_id = ' . $reporteregistro_id . '  
+                                            reporteruidopuntoner.proyecto_id = '.$proyecto_id.'  
+                                            AND reporteruidopuntoner.registro_id = '.$reporteregistro_id.'  
                                         ORDER BY
                                             reporteruidopuntoner.reporteruidopuntoner_punto ASC,
                                             reportecategoria.reportecategoria_orden ASC,
                                             reportecategoria.reportecategoria_nombre ASC');
-            } else {
+            }
+            else
+            {
                 $puntos = DB::select('SELECT
                                             reporteruidopuntoner.id,
                                             reporteruidopuntoner.proyecto_id,
@@ -3818,8 +4187,8 @@ class reporteruidoController extends Controller
                                             RIGHT OUTER JOIN reporteruidopuntonercategorias ON reporteruidopuntoner.id = reporteruidopuntonercategorias.reporteruidopuntoner_id
                                             LEFT JOIN reporteruidocategoria ON reporteruidopuntonercategorias.reporteruidocategoria_id = reporteruidocategoria.id 
                                         WHERE
-                                            reporteruidopuntoner.proyecto_id = ' . $proyecto_id . '  
-                                            AND reporteruidopuntoner.registro_id = ' . $reporteregistro_id . '  
+                                            reporteruidopuntoner.proyecto_id = '.$proyecto_id.'  
+                                            AND reporteruidopuntoner.registro_id = '.$reporteregistro_id.'  
                                         ORDER BY
                                             reporteruidopuntoner.reporteruidopuntoner_punto ASC,
                                             reporteruidocategoria.reporteruidocategoria_nombre ASC');
@@ -3828,15 +4197,16 @@ class reporteruidoController extends Controller
 
             // $proyecto = proyectoModel::findOrFail($proyecto_id);
 
-
-            foreach ($puntos as $key => $value) {
+            
+            foreach ($puntos as $key => $value) 
+            {
                 $numero_registro += 1;
                 $value->numero_registro = $numero_registro;
 
 
-                $value->resultado = $value->reporteruidopuntoner_ner . ' / ' . $value->reporteruidopuntoner_lmpe;
+                $value->resultado = $value->reporteruidopuntoner_ner.' / '.$value->reporteruidopuntoner_lmpe;
 
-
+                
                 // if (($proyecto->catregion_id + 0) != 1) //REGION NORTE
                 // {
                 //     $value->resultado = $value->reporteruidopuntoner_ner.' / '.$value->reporteruidopuntoner_lmpe;
@@ -3849,10 +4219,12 @@ class reporteruidoController extends Controller
             $dato["total"] = count($puntos);
             $dato["msj"] = 'Datos consultados correctamente';
             return response()->json($dato);
-        } catch (Exception $e) {
+        }
+        catch(Exception $e)
+        {
             $dato["data"] = 0;
             $dato["total"] = 0;
-            $dato["msj"] = 'Error ' . $e->getMessage();
+            $dato["msj"] = 'Error '.$e->getMessage();
             return response()->json($dato);
         }
     }
@@ -3868,8 +4240,10 @@ class reporteruidoController extends Controller
      */
     public function reporteruidodashboard($proyecto_id, $reporteregistro_id, $areas_poe)
     {
-        try {
-            if (($areas_poe + 0) == 1) {
+        try
+        {
+            if (($areas_poe+0) == 1)
+            {
                 //=====================================
                 // AREAS CRITICAS
 
@@ -3897,8 +4271,8 @@ class reporteruidoController extends Controller
                                         reporteruidopuntoner
                                         LEFT JOIN reportearea ON reporteruidopuntoner.reporteruidoarea_id = reportearea.id
                                     WHERE
-                                        reporteruidopuntoner.proyecto_id = ' . $proyecto_id . ' 
-                                        AND reporteruidopuntoner.registro_id = ' . $reporteregistro_id . ' 
+                                        reporteruidopuntoner.proyecto_id = '.$proyecto_id.' 
+                                        AND reporteruidopuntoner.registro_id = '.$reporteregistro_id.' 
                                         AND reporteruidopuntoner.reporteruidopuntoner_ner > reporteruidopuntoner.reporteruidopuntoner_lmpe
                                     GROUP BY
                                         reporteruidopuntoner.proyecto_id,
@@ -3910,11 +4284,15 @@ class reporteruidoController extends Controller
 
 
                 $dashboard_areas = '';
-                if (count($areas) > 0) {
-                    foreach ($areas as $key => $value) {
-                        $dashboard_areas .= '● <b>' . $value->reporteruidoarea_nombre . '</b> ' . $value->puntoscriticos . '.<br>';
+                if (count($areas) > 0)
+                {
+                    foreach ($areas as $key => $value)
+                    {
+                        $dashboard_areas .= '● <b>'.$value->reporteruidoarea_nombre.'</b> '.$value->puntoscriticos.'.<br>';
                     }
-                } else {
+                }
+                else
+                {
                     // AREAS EVALUADAS
                     $areas = DB::select('SELECT
                                                 reporteruidopuntoner.proyecto_id,
@@ -3925,8 +4303,8 @@ class reporteruidoController extends Controller
                                                 reporteruidopuntoner
                                                 LEFT JOIN reportearea ON reporteruidopuntoner.reporteruidoarea_id = reportearea.id
                                             WHERE
-                                                reporteruidopuntoner.proyecto_id = ' . $proyecto_id . ' 
-                                                AND reporteruidopuntoner.registro_id = ' . $reporteregistro_id . ' 
+                                                reporteruidopuntoner.proyecto_id = '.$proyecto_id.' 
+                                                AND reporteruidopuntoner.registro_id = '.$reporteregistro_id.' 
                                             GROUP BY
                                                 reporteruidopuntoner.proyecto_id,
                                                 reporteruidopuntoner.registro_id,
@@ -3935,11 +4313,15 @@ class reporteruidoController extends Controller
                                             ORDER BY
                                                 reportearea.reportearea_orden ASC');
 
-                    if (count($areas) > 0) {
-                        foreach ($areas as $key => $value) {
-                            $dashboard_areas .= '● <b>' . $value->reporteruidoarea_nombre . '</b><br>';
+                    if (count($areas) > 0)
+                    {
+                        foreach ($areas as $key => $value)
+                        {
+                            $dashboard_areas .= '● <b>'.$value->reporteruidoarea_nombre.'</b><br>';
                         }
-                    } else {
+                    }
+                    else
+                    {
                         $dashboard_areas = 'No se encontraron áreas evaluadas.';
                     }
                 }
@@ -3981,8 +4363,8 @@ class reporteruidoController extends Controller
                                                         reporteruidodosisner
                                                         LEFT JOIN reportecategoria ON reporteruidodosisner.reporteruidocategoria_id = reportecategoria.id 
                                                     WHERE
-                                                        reporteruidodosisner.proyecto_id = ' . $proyecto_id . ' 
-                                                        AND reporteruidodosisner.registro_id = ' . $reporteregistro_id . ' 
+                                                        reporteruidodosisner.proyecto_id = '.$proyecto_id.' 
+                                                        AND reporteruidodosisner.registro_id = '.$reporteregistro_id.' 
                                                         AND reporteruidodosisner.reporteruidodosisner_ner > reporteruidodosisner.reporteruidodosisner_lmpe
                                                     GROUP BY
                                                         reporteruidodosisner.proyecto_id,
@@ -3995,11 +4377,15 @@ class reporteruidoController extends Controller
 
 
                 $dashboard_categorias = '';
-                if (count($categorias) > 0) {
-                    foreach ($categorias as $key => $value) {
-                        $dashboard_categorias .= '● <b>' . $value->reporteruidocategoria_nombre . '</b> ' . $value->puntoscriticos . '.<br>';
+                if (count($categorias) > 0)
+                {
+                    foreach ($categorias as $key => $value)
+                    {
+                        $dashboard_categorias .= '● <b>'.$value->reporteruidocategoria_nombre.'</b> '.$value->puntoscriticos.'.<br>';
                     }
-                } else {
+                }
+                else
+                {
                     // CATEGORIAS EVALUADAS
                     $categorias = DB::select('SELECT
                                                     reporteruidodosisner.proyecto_id,
@@ -4010,8 +4396,8 @@ class reporteruidoController extends Controller
                                                     reporteruidodosisner
                                                     INNER JOIN reportecategoria ON reporteruidodosisner.reporteruidocategoria_id = reportecategoria.id
                                                 WHERE
-                                                    reporteruidodosisner.proyecto_id = ' . $proyecto_id . '  
-                                                    AND reporteruidodosisner.registro_id = ' . $reporteregistro_id . ' 
+                                                    reporteruidodosisner.proyecto_id = '.$proyecto_id.'  
+                                                    AND reporteruidodosisner.registro_id = '.$reporteregistro_id.' 
                                                 GROUP BY
                                                     reporteruidodosisner.proyecto_id,
                                                     reporteruidodosisner.registro_id,
@@ -4021,15 +4407,21 @@ class reporteruidoController extends Controller
                                                     reportecategoria.reportecategoria_orden ASC,
                                                     reportecategoria.reportecategoria_nombre ASC');
 
-                    if (count($categorias) > 0) {
-                        foreach ($categorias as $key => $value) {
-                            $dashboard_categorias .= '● <b>' . $value->reporteruidocategoria_nombre . '</b><br>';
+                    if (count($categorias) > 0)
+                    {
+                        foreach ($categorias as $key => $value)
+                        {
+                            $dashboard_categorias .= '● <b>'.$value->reporteruidocategoria_nombre.'</b><br>';
                         }
-                    } else {
+                    }
+                    else
+                    {
                         $dashboard_categorias = 'No se encontraron categorías evaluadas.';
                     }
                 }
-            } else {
+            }
+            else
+            {
                 //=====================================
                 // AREAS CRITICAS
 
@@ -4057,8 +4449,8 @@ class reporteruidoController extends Controller
                                             reporteruidopuntoner
                                             LEFT JOIN reporteruidoarea ON reporteruidopuntoner.reporteruidoarea_id = reporteruidoarea.id
                                         WHERE
-                                            reporteruidopuntoner.proyecto_id = ' . $proyecto_id . ' 
-                                            AND reporteruidopuntoner.registro_id = ' . $reporteregistro_id . ' 
+                                            reporteruidopuntoner.proyecto_id = '.$proyecto_id.' 
+                                            AND reporteruidopuntoner.registro_id = '.$reporteregistro_id.' 
                                             AND reporteruidopuntoner.reporteruidopuntoner_ner > reporteruidopuntoner.reporteruidopuntoner_lmpe
                                         GROUP BY
                                             reporteruidopuntoner.proyecto_id,
@@ -4069,11 +4461,15 @@ class reporteruidoController extends Controller
                                             MIN(reporteruidopuntoner_punto) ASC');
 
                 $dashboard_areas = '';
-                if (count($areas) > 0) {
-                    foreach ($areas as $key => $value) {
-                        $dashboard_areas .= '● <b>' . $value->reporteruidoarea_nombre . '</b> ' . $value->puntoscriticos . '.<br>';
+                if (count($areas) > 0)
+                {
+                    foreach ($areas as $key => $value)
+                    {
+                        $dashboard_areas .= '● <b>'.$value->reporteruidoarea_nombre.'</b> '.$value->puntoscriticos.'.<br>';
                     }
-                } else {
+                }
+                else
+                {
                     // AREAS EVALUADAS
                     $areas = DB::select('SELECT
                                                 reporteruidopuntoner.proyecto_id,
@@ -4084,8 +4480,8 @@ class reporteruidoController extends Controller
                                                 reporteruidopuntoner
                                                 LEFT JOIN reporteruidoarea ON reporteruidopuntoner.reporteruidoarea_id = reporteruidoarea.id
                                             WHERE
-                                                reporteruidopuntoner.proyecto_id = ' . $proyecto_id . ' 
-                                                AND reporteruidopuntoner.registro_id = ' . $reporteregistro_id . ' 
+                                                reporteruidopuntoner.proyecto_id = '.$proyecto_id.' 
+                                                AND reporteruidopuntoner.registro_id = '.$reporteregistro_id.' 
                                             GROUP BY
                                                 reporteruidopuntoner.proyecto_id,
                                                 reporteruidopuntoner.registro_id,
@@ -4094,11 +4490,15 @@ class reporteruidoController extends Controller
                                             ORDER BY
                                                 reporteruidoarea.reporteruidoarea_numorden ASC');
 
-                    if (count($areas) > 0) {
-                        foreach ($areas as $key => $value) {
-                            $dashboard_areas .= '● <b>' . $value->reporteruidoarea_nombre . '</b><br>';
+                    if (count($areas) > 0)
+                    {
+                        foreach ($areas as $key => $value)
+                        {
+                            $dashboard_areas .= '● <b>'.$value->reporteruidoarea_nombre.'</b><br>';
                         }
-                    } else {
+                    }
+                    else
+                    {
                         $dashboard_areas = 'No se encontraron áreas evaluadas.';
                     }
                 }
@@ -4140,8 +4540,8 @@ class reporteruidoController extends Controller
                                                         reporteruidodosisner
                                                         LEFT JOIN reporteruidocategoria ON reporteruidodosisner.reporteruidocategoria_id = reporteruidocategoria.id 
                                                     WHERE
-                                                        reporteruidodosisner.proyecto_id = ' . $proyecto_id . ' 
-                                                        AND reporteruidodosisner.registro_id = ' . $reporteregistro_id . ' 
+                                                        reporteruidodosisner.proyecto_id = '.$proyecto_id.' 
+                                                        AND reporteruidodosisner.registro_id = '.$reporteregistro_id.' 
                                                         AND reporteruidodosisner.reporteruidodosisner_ner > reporteruidodosisner.reporteruidodosisner_lmpe
                                                     GROUP BY
                                                         reporteruidodosisner.proyecto_id,
@@ -4154,11 +4554,15 @@ class reporteruidoController extends Controller
 
 
                 $dashboard_categorias = '';
-                if (count($categorias) > 0) {
-                    foreach ($categorias as $key => $value) {
-                        $dashboard_categorias .= '● <b>' . $value->reporteruidocategoria_nombre . '</b> ' . $value->puntoscriticos . '.<br>';
+                if (count($categorias) > 0)
+                {
+                    foreach ($categorias as $key => $value)
+                    {
+                        $dashboard_categorias .= '● <b>'.$value->reporteruidocategoria_nombre.'</b> '.$value->puntoscriticos.'.<br>';
                     }
-                } else {
+                }
+                else
+                {
                     // CATEGORIAS EVALUADAS
                     $categorias = DB::select('SELECT
                                                     reporteruidodosisner.proyecto_id,
@@ -4169,8 +4573,8 @@ class reporteruidoController extends Controller
                                                     reporteruidodosisner
                                                     INNER JOIN reporteruidocategoria ON reporteruidodosisner.reporteruidocategoria_id = reporteruidocategoria.id
                                                 WHERE
-                                                    reporteruidodosisner.proyecto_id = ' . $proyecto_id . '  
-                                                    AND reporteruidodosisner.registro_id = ' . $reporteregistro_id . ' 
+                                                    reporteruidodosisner.proyecto_id = '.$proyecto_id.'  
+                                                    AND reporteruidodosisner.registro_id = '.$reporteregistro_id.' 
                                                 GROUP BY
                                                     reporteruidodosisner.proyecto_id,
                                                     reporteruidodosisner.registro_id,
@@ -4179,11 +4583,15 @@ class reporteruidoController extends Controller
                                                 ORDER BY
                                                     reporteruidocategoria.reporteruidocategoria_nombre ASC');
 
-                    if (count($categorias) > 0) {
-                        foreach ($categorias as $key => $value) {
-                            $dashboard_categorias .= '● <b>' . $value->reporteruidocategoria_nombre . '</b><br>';
+                    if (count($categorias) > 0)
+                    {
+                        foreach ($categorias as $key => $value)
+                        {
+                            $dashboard_categorias .= '● <b>'.$value->reporteruidocategoria_nombre.'</b><br>';
                         }
-                    } else {
+                    }
+                    else
+                    {
                         $dashboard_categorias = 'No se encontraron categorías evaluadas.';
                     }
                 }
@@ -4204,8 +4612,8 @@ class reporteruidoController extends Controller
                                     FROM
                                         reporteruidoequipoauditivo
                                     WHERE
-                                        reporteruidoequipoauditivo.proyecto_id = ' . $proyecto_id . ' 
-                                        AND reporteruidoequipoauditivo.registro_id = ' . $reporteregistro_id . ' 
+                                        reporteruidoequipoauditivo.proyecto_id = '.$proyecto_id.' 
+                                        AND reporteruidoequipoauditivo.registro_id = '.$reporteregistro_id.' 
                                     ORDER BY
                                         reporteruidoequipoauditivo.reporteruidoequipoauditivo_tipo ASC,
                                         reporteruidoequipoauditivo.reporteruidoequipoauditivo_marca ASC,
@@ -4214,11 +4622,15 @@ class reporteruidoController extends Controller
 
 
             $dashboard_equipos = '';
-            if (count($equipos) > 0) {
-                foreach ($equipos as $key => $value) {
-                    $dashboard_equipos .= '● <b>' . $value->reporteruidoequipoauditivo_tipo . '</b> Marca: ' . $value->reporteruidoequipoauditivo_marca . ', Modelo: ' . $value->reporteruidoequipoauditivo_modelo . ', NRR: ' . $value->reporteruidoequipoauditivo_NRR . ' dB.<br>';
+            if (count($equipos) > 0)
+            {
+                foreach ($equipos as $key => $value)
+                {
+                    $dashboard_equipos .= '● <b>'.$value->reporteruidoequipoauditivo_tipo.'</b> Marca: '.$value->reporteruidoequipoauditivo_marca.', Modelo: '.$value->reporteruidoequipoauditivo_modelo.', NRR: '.$value->reporteruidoequipoauditivo_NRR.' dB.<br>';
                 }
-            } else {
+            }
+            else
+            {
                 $dashboard_equipos = 'No se encontraron equipos auditivos.';
             }
 
@@ -4236,19 +4648,22 @@ class reporteruidoController extends Controller
                                         FROM
                                             reporteruidopuntoner
                                         WHERE
-                                            reporteruidopuntoner.proyecto_id = ' . $proyecto_id . ' 
-                                            AND reporteruidopuntoner.registro_id = ' . $reporteregistro_id . ' 
+                                            reporteruidopuntoner.proyecto_id = '.$proyecto_id.' 
+                                            AND reporteruidopuntoner.registro_id = '.$reporteregistro_id.' 
                                         GROUP BY
                                             reporteruidopuntoner.proyecto_id,
                                             reporteruidopuntoner.registro_id');
 
 
             $dashboard_total_evaluacion = '';
-            if (count($sonometrias) > 0) {
-                $dashboard_total_evaluacion = $sonometrias[0]->totalsonometrias . ' puntos<br>Sonometría<br><br>';
+            if (count($sonometrias) > 0)
+            {
+                $dashboard_total_evaluacion = $sonometrias[0]->totalsonometrias.' puntos<br>Sonometría<br><br>';
                 $dato["dashboard_sonometria_total_dentronorma"] = $sonometrias[0]->dentronorma;
                 $dato["dashboard_sonometria_total_fueranorma"] = $sonometrias[0]->fueranorma;
-            } else {
+            }
+            else
+            {
                 $dashboard_total_evaluacion = '0 puntos<br>Sonometría<br><br>';
                 $dato["dashboard_sonometria_total_dentronorma"] = 0;
                 $dato["dashboard_sonometria_total_fueranorma"] = 0;
@@ -4269,29 +4684,35 @@ class reporteruidoController extends Controller
                                         FROM
                                             reporteruidodosisner
                                         WHERE
-                                            reporteruidodosisner.proyecto_id = ' . $proyecto_id . ' 
-                                            AND reporteruidodosisner.registro_id= ' . $reporteregistro_id . ' 
+                                            reporteruidodosisner.proyecto_id = '.$proyecto_id.' 
+                                            AND reporteruidodosisner.registro_id= '.$reporteregistro_id.' 
                                         GROUP BY
                                             reporteruidodosisner.proyecto_id,
                                             reporteruidodosisner.registro_id');
 
 
-            if (count($dosimetria) > 0) {
-                $dashboard_total_evaluacion .= $dosimetria[0]->totaldosimetrias . ' puntos<br>Dosimetría';
+            if (count($dosimetria) > 0)
+            {
+                $dashboard_total_evaluacion .= $dosimetria[0]->totaldosimetrias.' puntos<br>Dosimetría';
+                
+                $serie_grafico[] = Array(
+                                        'titulo' => "Dentro de norma"
+                                        , 'total' => $dosimetria[0]->dentronorma
+                                    );
 
-                $serie_grafico[] = array(
-                    'titulo' => "Dentro de norma", 'total' => $dosimetria[0]->dentronorma
-                );
-
-                $serie_grafico[] = array(
-                    'titulo' => "Fuera de norma", 'total' => $dosimetria[0]->fueranorma
-                );
-            } else {
+                $serie_grafico[] = Array(
+                                        'titulo' => "Fuera de norma"
+                                        , 'total' => $dosimetria[0]->fueranorma
+                                    );
+            }
+            else
+            {
                 $dashboard_total_evaluacion .= '0 puntos<br>Dosimetría';
 
-                $serie_grafico[] = array(
-                    'titulo' => "Sin evaluar", 'total' => 100
-                );
+                $serie_grafico[] = Array(
+                                        'titulo' => "Sin evaluar"
+                                        , 'total' => 100
+                                    );
             }
 
 
@@ -4312,14 +4733,15 @@ class reporteruidoController extends Controller
                                             FROM
                                                 reporterecomendaciones 
                                             WHERE
-                                                reporterecomendaciones.proyecto_id = ' . $proyecto_id . '  
-                                                AND reporterecomendaciones.registro_id = ' . $reporteregistro_id . ' 
+                                                reporterecomendaciones.proyecto_id = '.$proyecto_id.'  
+                                                AND reporterecomendaciones.registro_id = '.$reporteregistro_id.' 
                                                 AND reporterecomendaciones.agente_nombre = "Ruido"');
 
 
 
             $dato['dashboard_recomendaciones_total'] = 0;
-            if (count($recomendaciones) > 0) {
+            if (count($recomendaciones) > 0)
+            {
                 $dato['dashboard_recomendaciones_total'] = $recomendaciones[0]->totalrecomendaciones;
             }
 
@@ -4336,7 +4758,9 @@ class reporteruidoController extends Controller
 
             $dato["msj"] = 'Datos consultados correctamente';
             return response()->json($dato);
-        } catch (Exception $e) {
+        }
+        catch(Exception $e)
+        {
             $dato["dashboard_areas"] = 'Error al consultar las áreas evaluadas';
             $dato["dashboard_categorias"] = 'Error al consultar las categorías evaluadas';
             $dato["dashboard_equipos"] = 'Error al consultar los equipos auditivos';
@@ -4344,7 +4768,7 @@ class reporteruidoController extends Controller
             $dato['serie_grafico'] = 0;
             $dato['dashboard_recomendaciones_total'] = 0;
 
-            $dato["msj"] = 'Error ' . $e->getMessage();
+            $dato["msj"] = 'Error '.$e->getMessage();
             return response()->json($dato);
         }
     }
@@ -4356,8 +4780,8 @@ class reporteruidoController extends Controller
      *
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
-     */
-
+    */
+    
     /*
     public function reporteruidodashboardgraficas(Request $request)
     {
@@ -4406,7 +4830,8 @@ class reporteruidoController extends Controller
      */
     public function reporteruidorecomendacionestabla($proyecto_id, $reporteregistro_id, $agente_nombre)
     {
-        try {
+        try
+        {
             $proyecto = proyectoModel::with(['catregion', 'catsubdireccion', 'catgerencia', 'catactivo'])->findOrFail($proyecto_id);
             $recsensorial = recsensorialModel::findOrFail($proyecto->recsensorial_id);
 
@@ -4441,15 +4866,15 @@ class reporteruidoController extends Controller
                                                                     FROM
                                                                         reporterecomendaciones 
                                                                     WHERE
-                                                                        reporterecomendaciones.proyecto_id = ' . $proyecto_id . '
-                                                                        AND reporterecomendaciones.registro_id = ' . $reporteregistro_id . '
+                                                                        reporterecomendaciones.proyecto_id = '.$proyecto_id.'
+                                                                        AND reporterecomendaciones.registro_id = '.$reporteregistro_id.'
                                                                         AND reporterecomendaciones.reporterecomendacionescatalogo_id = reporterecomendacionescatalogo.id
                                                                     LIMIT 1 
                                                             ), NULL) AS recomendaciones_descripcion
                                                         FROM
                                                             reporterecomendacionescatalogo
                                                         WHERE
-                                                            reporterecomendacionescatalogo.agente_nombre = "' . $agente_nombre . '"
+                                                            reporterecomendacionescatalogo.agente_nombre = "'.$agente_nombre.'"
                                                             AND reporterecomendacionescatalogo.reporterecomendacionescatalogo_activo = 1
                                                         ORDER BY
                                                             reporterecomendacionescatalogo.reporterecomendacionescatalogo_tipo DESC
@@ -4467,46 +4892,52 @@ class reporteruidoController extends Controller
                                                 FROM
                                                     reporterecomendaciones
                                                 WHERE
-                                                    reporterecomendaciones.proyecto_id = ' . $proyecto_id . '
-                                                    AND reporterecomendaciones.agente_nombre = "' . $agente_nombre . '"
-                                                    AND reporterecomendaciones.registro_id = ' . $reporteregistro_id . '
+                                                    reporterecomendaciones.proyecto_id = '.$proyecto_id.'
+                                                    AND reporterecomendaciones.agente_nombre = "'.$agente_nombre.'"
+                                                    AND reporterecomendaciones.registro_id = '.$reporteregistro_id.'
                                                     AND reporterecomendaciones.reporterecomendacionescatalogo_id = 0
                                                 ORDER BY
                                                     reporterecomendaciones.id ASC
                                             )
                                         ) AS TABLA');
 
-            $numero_registro = 0;
-            $total = 0;
-            foreach ($tabla as $key => $value) {
+            $numero_registro = 0; $total = 0;
+            foreach ($tabla as $key => $value) 
+            {
                 $numero_registro += 1;
                 $value->numero_registro = $numero_registro;
 
-                if (($value->id + 0) > 0) {
+                if (($value->id + 0) > 0)
+                {
                     $required_readonly = 'readonly';
-                    if ($value->checked) {
+                    if ($value->checked)
+                    {
                         $required_readonly = 'required';
                     }
 
                     $value->checkbox = '<div class="switch">
                                             <label>
-                                                <input type="checkbox" class="recomendacion_checkbox" name="recomendacion_checkbox[]" value="' . $value->id . '" ' . $value->checked . ' onclick="activa_recomendacion(this);">
+                                                <input type="checkbox" class="recomendacion_checkbox" name="recomendacion_checkbox[]" value="'.$value->id.'" '.$value->checked.' onclick="activa_recomendacion(this);">
                                                 <span class="lever switch-col-light-blue"></span>
                                             </label>
                                         </div>';
 
-                    $value->descripcion = '<input type="hidden" class="form-control" name="recomendacion_tipo_' . $value->id . '" value="' . $value->recomendaciones_tipo . '" required>
-                                            <label>' . $value->recomendaciones_tipo . '</label>
-                                            <textarea  class="form-control" rows="5" id="recomendacion_descripcion_' . $value->id . '" name="recomendacion_descripcion_' . $value->id . '" ' . $required_readonly . '>' . $this->datosproyectoreemplazartexto($proyecto, $recsensorial, $value->recomendaciones_descripcion) . '</textarea>';
-                } else {
+                    $value->descripcion = '<input type="hidden" class="form-control" name="recomendacion_tipo_'.$value->id.'" value="'.$value->recomendaciones_tipo.'" required>
+                                            <label>'.$value->recomendaciones_tipo.'</label>
+                                            <textarea  class="form-control" rows="5" id="recomendacion_descripcion_'.$value->id.'" name="recomendacion_descripcion_'.$value->id.'" '.$required_readonly.'>'.$this->datosproyectoreemplazartexto($proyecto, $recsensorial, $value->recomendaciones_descripcion).'</textarea>';
+                }
+                else
+                {
                     $value->checkbox = '<input type="checkbox" class="recomendacionadicional_checkbox" name="recomendacionadicional_checkbox[]" value="0" checked/>
                                         <button type="button" class="btn btn-danger waves-effect btn-circle eliminar" data-toggle="tooltip" title="Eliminar recomendación"><i class="fa fa-trash fa-2x"></i></button>';
 
-                    $preventiva = "";
-                    $correctiva = "";
-                    if ($value->recomendaciones_tipo == "Preventiva") {
+                    $preventiva = ""; $correctiva = "";
+                    if ($value->recomendaciones_tipo == "Preventiva")
+                    {
                         $preventiva = "selected";
-                    } else {
+                    }
+                    else
+                    {
                         $correctiva = "selected";
                     }
 
@@ -4514,17 +4945,18 @@ class reporteruidoController extends Controller
                                                 <label>Tipo</label>
                                                 <select class="custom-select form-control" name="recomendacionadicional_tipo[]" required>
                                                     <option value=""></option>
-                                                    <option value="Preventiva" ' . $preventiva . '>Preventiva</option>
-                                                    <option value="Correctiva" ' . $correctiva . '>Correctiva</option>
+                                                    <option value="Preventiva" '.$preventiva.'>Preventiva</option>
+                                                    <option value="Correctiva" '.$correctiva.'>Correctiva</option>
                                                 </select>
                                             </div>
                                             <div class="form-group">
                                                 <label>Descripción</label>
-                                                <textarea  class="form-control" rows="5" name="recomendacionadicional_descripcion[]" required>' . $this->datosproyectoreemplazartexto($proyecto, $recsensorial, $value->recomendaciones_descripcion) . '</textarea>
+                                                <textarea  class="form-control" rows="5" name="recomendacionadicional_descripcion[]" required>'.$this->datosproyectoreemplazartexto($proyecto, $recsensorial, $value->recomendaciones_descripcion).'</textarea>
                                             </div>';
                 }
 
-                if ($value->checked) {
+                if ($value->checked)
+                {
                     $total += 1;
                 }
             }
@@ -4534,10 +4966,12 @@ class reporteruidoController extends Controller
             $dato['total'] = $total;
             $dato["msj"] = 'Datos consultados correctamente';
             return response()->json($dato);
-        } catch (Exception $e) {
+        }
+        catch(Exception $e)
+        {
             $dato['data'] = 0;
             $dato['total'] = 0;
-            $dato["msj"] = 'Error ' . $e->getMessage();
+            $dato["msj"] = 'Error '.$e->getMessage();
             return response()->json($dato);
         }
     }
@@ -4550,21 +4984,30 @@ class reporteruidoController extends Controller
      * @param int $responsabledoc_tipo
      * @param int $responsabledoc_opcion
      * @return \Illuminate\Http\Response
-     */
+    */
     public function reporteruidoresponsabledocumento($reporteregistro_id, $responsabledoc_tipo, $responsabledoc_opcion)
     {
         $reporte = reporteruidoModel::findOrFail($reporteregistro_id);
 
-        if ($responsabledoc_tipo == 1) {
-            if ($responsabledoc_opcion == 0) {
+        if ($responsabledoc_tipo == 1)
+        {
+            if ($responsabledoc_opcion == 0)
+            {
                 return Storage::response($reporte->reporteruido_responsable1documento);
-            } else {
+            }
+            else
+            {
                 return Storage::download($reporte->reporteruido_responsable1documento);
             }
-        } else {
-            if ($responsabledoc_opcion == 0) {
+        }
+        else
+        {
+            if ($responsabledoc_opcion == 0)
+            {
                 return Storage::response($reporte->reporteruido_responsable2documento);
-            } else {
+            }
+            else
+            {
                 return Storage::download($reporte->reporteruido_responsable2documento);
             }
         }
@@ -4581,7 +5024,8 @@ class reporteruidoController extends Controller
      */
     public function reporteruidoplanostabla($proyecto_id, $reporteregistro_id, $agente_nombre)
     {
-        try {
+        try
+        {
             $planos = collect(DB::select('SELECT
                                                 proyectoevidenciaplano.proyecto_id,
                                                 proyectoevidenciaplano.agente_id,
@@ -4596,14 +5040,14 @@ class reporteruidoController extends Controller
                                                     WHERE
                                                         reporteplanoscarpetas.proyecto_id = proyectoevidenciaplano.proyecto_id
                                                         AND reporteplanoscarpetas.agente_nombre = proyectoevidenciaplano.agente_nombre
-                                                        AND reporteplanoscarpetas.registro_id = ' . $reporteregistro_id . '
+                                                        AND reporteplanoscarpetas.registro_id = '.$reporteregistro_id.'
                                                         AND reporteplanoscarpetas.reporteplanoscarpetas_nombre = proyectoevidenciaplano.proyectoevidenciaplano_carpeta
                                                 ), "") AS checked
                                             FROM
                                                 proyectoevidenciaplano
                                             WHERE
-                                                proyectoevidenciaplano.proyecto_id = ' . $proyecto_id . '
-                                                AND proyectoevidenciaplano.agente_nombre = "' . $agente_nombre . '"
+                                                proyectoevidenciaplano.proyecto_id = '.$proyecto_id.'
+                                                AND proyectoevidenciaplano.agente_nombre = "'.$agente_nombre.'"
                                                 AND proyectoevidenciaplano.proyectoevidenciaplano_carpeta != ""
                                             GROUP BY
                                                 proyectoevidenciaplano.proyecto_id,
@@ -4615,19 +5059,21 @@ class reporteruidoController extends Controller
 
             $total_activos = 0;
             $numero_registro = 0;
-            foreach ($planos as $key => $value) {
+            foreach ($planos as $key => $value) 
+            {
                 $numero_registro += 1;
                 $value->numero_registro = $numero_registro;
 
                 $value->checkbox = '<div class="switch">
                                         <label>
-                                            <input type="checkbox" class="planoscarpeta_checkbox" name="planoscarpeta_checkbox[]" value="' . $value->proyectoevidenciaplano_carpeta . '" ' . $value->checked . '>
+                                            <input type="checkbox" class="planoscarpeta_checkbox" name="planoscarpeta_checkbox[]" value="'.$value->proyectoevidenciaplano_carpeta.'" '.$value->checked.'>
                                             <span class="lever switch-col-light-blue"></span>
                                         </label>
                                     </div>';
 
                 // VERIFICAR SI HAY CARPETAS SELECCIONADAS
-                if ($value->checked) {
+                if ($value->checked)
+                {
                     $total_activos += 1;
                 }
             }
@@ -4637,10 +5083,12 @@ class reporteruidoController extends Controller
             $dato["total"] = $total_activos;
             $dato["msj"] = 'Datos consultados correctamente';
             return response()->json($dato);
-        } catch (Exception $e) {
+        }
+        catch(Exception $e)
+        {
             $dato['data'] = 0;
             $dato["total"] = 0;
-            $dato["msj"] = 'Error ' . $e->getMessage();
+            $dato["msj"] = 'Error '.$e->getMessage();
             return response()->json($dato);
         }
     }
@@ -4656,7 +5104,8 @@ class reporteruidoController extends Controller
      */
     public function reporteruidoequipoutilizadotabla($proyecto_id, $reporteregistro_id, $agente_nombre)
     {
-        try {
+        try
+        {
             $proveedor = DB::select('SELECT
                                             proyectoproveedores.proyecto_id,
                                             proyectoproveedores.proveedor_id,
@@ -4666,7 +5115,7 @@ class reporteruidoController extends Controller
                                         FROM
                                             proyectoproveedores
                                         WHERE
-                                            proyectoproveedores.proyecto_id = ' . $proyecto_id . ' 
+                                            proyectoproveedores.proyecto_id = '.$proyecto_id.' 
                                             AND proyectoproveedores.proyectoproveedores_tipoadicional < 2
                                             AND proyectoproveedores.catprueba_id = 1 -- Ruido ------------------------------
                                         ORDER BY
@@ -4676,7 +5125,8 @@ class reporteruidoController extends Controller
 
 
             $where_condicion = '';
-            if (count($proveedor) > 0) {
+            if (count($proveedor) > 0)
+            {
                 // $where_condicion = ' AND proyectoequiposactual.proveedor_id = '.$proveedor[0]->proveedor_id;
             }
 
@@ -4711,8 +5161,8 @@ class reporteruidoController extends Controller
                                                 reporteequiposutilizados
                                             WHERE
                                                 reporteequiposutilizados.proyecto_id = proyectoequiposactual.proyecto_id
-                                                AND reporteequiposutilizados.registro_id = "' . $reporteregistro_id . '"
-                                                AND reporteequiposutilizados.agente_nombre = "' . $agente_nombre . '"
+                                                AND reporteequiposutilizados.registro_id = "'.$reporteregistro_id.'"
+                                                AND reporteequiposutilizados.agente_nombre = "'.$agente_nombre.'"
                                                 AND reporteequiposutilizados.equipo_id = proyectoequiposactual.equipo_id
                                             LIMIT 1
                                         ), NULL) AS checked,
@@ -4723,8 +5173,8 @@ class reporteruidoController extends Controller
                                                 reporteequiposutilizados
                                             WHERE
                                                 reporteequiposutilizados.proyecto_id = proyectoequiposactual.proyecto_id
-                                                AND reporteequiposutilizados.registro_id = "' . $reporteregistro_id . '"
-                                                AND reporteequiposutilizados.agente_nombre = "' . $agente_nombre . '"
+                                                AND reporteequiposutilizados.registro_id = "'.$reporteregistro_id.'"
+                                                AND reporteequiposutilizados.agente_nombre = "'.$agente_nombre.'"
                                                 AND reporteequiposutilizados.equipo_id = proyectoequiposactual.equipo_id
                                             LIMIT 1
                                         ), NULL) AS cartacalibracion,
@@ -4735,8 +5185,8 @@ class reporteruidoController extends Controller
                                                 reporteequiposutilizados
                                             WHERE
                                                 reporteequiposutilizados.proyecto_id = proyectoequiposactual.proyecto_id
-                                                AND reporteequiposutilizados.registro_id = "' . $reporteregistro_id . '"
-                                                AND reporteequiposutilizados.agente_nombre = "' . $agente_nombre . '"
+                                                AND reporteequiposutilizados.registro_id = "'.$reporteregistro_id.'"
+                                                AND reporteequiposutilizados.agente_nombre = "'.$agente_nombre.'"
                                                 AND reporteequiposutilizados.equipo_id = proyectoequiposactual.equipo_id
                                             LIMIT 1
                                         ), NULL) AS id
@@ -4745,8 +5195,8 @@ class reporteruidoController extends Controller
                                         LEFT JOIN proveedor ON proyectoequiposactual.proveedor_id = proveedor.id
                                         LEFT JOIN equipo ON proyectoequiposactual.equipo_id = equipo.id
                                     WHERE
-                                        proyectoequiposactual.proyecto_id = ' . $proyecto_id . ' 
-                                        ' . $where_condicion . ' 
+                                        proyectoequiposactual.proyecto_id = '.$proyecto_id.' 
+                                        '.$where_condicion.' 
                                     ORDER BY
                                         equipo.equipo_Descripcion,
                                         equipo.equipo_Marca,
@@ -4756,31 +5206,35 @@ class reporteruidoController extends Controller
 
             $total_activos = 0;
             $numero_registro = 0;
-            foreach ($equipos as $key => $value) {
+            foreach ($equipos as $key => $value) 
+            {
                 $numero_registro += 1;
                 $value->numero_registro = $numero_registro;
 
 
                 $value->checkbox = '<div class="switch">
                                         <label>
-                                            <input type="checkbox" class="equipoutilizado_checkbox" name="equipoutilizado_checkbox[]" value="' . $value->equipo_id . '" ' . $value->checked . ' onchange="activa_checkboxcarta(this, ' . $value->equipo_id . ');";>
+                                            <input type="checkbox" class="equipoutilizado_checkbox" name="equipoutilizado_checkbox[]" value="'.$value->equipo_id.'" '.$value->checked.' onchange="activa_checkboxcarta(this, '.$value->equipo_id.');";>
                                             <span class="lever switch-col-light-blue"></span>
                                         </label>
                                     </div>';
 
 
-                $value->equipo = '<span class="' . $value->vigencia_color . '">' . $value->equipo_Descripcion . '</span><br><small class="' . $value->vigencia_color . '">' . $value->proveedor_NombreComercial . '</small>';
+                $value->equipo = '<span class="'.$value->vigencia_color.'">'.$value->equipo_Descripcion.'</span><br><small class="'.$value->vigencia_color.'">'.$value->proveedor_NombreComercial.'</small>';
+                
+
+                $value->marca_modelo_serie = '<span class="'.$value->vigencia_color.'">'.$value->equipo_Marca.'<br>'.$value->equipo_Modelo.'<br>'.$value->equipo_Serie.'</span>';
 
 
-                $value->marca_modelo_serie = '<span class="' . $value->vigencia_color . '">' . $value->equipo_Marca . '<br>' . $value->equipo_Modelo . '<br>' . $value->equipo_Serie . '</span>';
+                $value->vigencia = '<span class="'.$value->vigencia_color.'">'.$value->vigencia_texto.'</span>';
 
 
-                $value->vigencia = '<span class="' . $value->vigencia_color . '">' . $value->vigencia_texto . '</span>';
-
-
-                if ($value->equipo_CertificadoPDF) {
+                if ($value->equipo_CertificadoPDF)
+                {
                     $value->certificado = '<button type="button" class="btn btn-info waves-effect btn-circle" data-toggle="tooltip" title="Mostrar certificado"><i class="fa fa-file-pdf-o fa-2x"></i></button>';
-                } else {
+                }
+                else
+                {
                     $value->certificado = '<button type="button" class="btn btn-default waves-effect btn-circle" data-toggle="tooltip" title="N/A certificado"><i class="fa fa-ban fa-2x"></i></button>';
                 }
 
@@ -4788,22 +5242,25 @@ class reporteruidoController extends Controller
                 //---------------------------
 
 
-                if ($value->equipo_cartaPDF) {
+                if ($value->equipo_cartaPDF)
+                {
                     $checkedcarta_disabled = 'disabled';
-                    if ($value->checked) {
+                    if ($value->checked)
+                    {
                         $checkedcarta_disabled = '';
                     }
 
 
                     $checked_carta = '';
-                    if ($value->cartacalibracion) {
+                    if ($value->cartacalibracion)
+                    {
                         $checked_carta = 'checked';
                     }
 
 
                     $value->checkbox_carta = '<div class="switch">
                                                     <label>
-                                                        <input type="checkbox" id="equipoutilizado_checkboxcarta_' . $value->equipo_id . '" name="equipoutilizado_checkboxcarta_' . $value->equipo_id . '" value="' . $value->equipo_id . '" ' . $checkedcarta_disabled . ' ' . $checked_carta . '/>
+                                                        <input type="checkbox" id="equipoutilizado_checkboxcarta_'.$value->equipo_id.'" name="equipoutilizado_checkboxcarta_'.$value->equipo_id.'" value="'.$value->equipo_id.'" '.$checkedcarta_disabled.' '.$checked_carta.'/>
                                                         <span class="lever switch-col-light-green"></span>
                                                     </label>
                                                 </div>';
@@ -4812,14 +5269,17 @@ class reporteruidoController extends Controller
                     $value->carta = '<button type="button" class="btn btn-success waves-effect btn-circle" data-toggle="tooltip" title="Mostrar carta">
                                             <i class="fa fa-file-pdf-o fa-2x"></i>
                                         </button>';
-                } else {
+                }
+                else
+                {
                     $value->checkbox_carta = 'N/A';
                     $value->carta = 'N/A';
                 }
 
 
                 // VERIFICAR SI HAY EQUIPOS SELECCIONADOS
-                if ($value->checked) {
+                if ($value->checked)
+                {
                     $total_activos += 1;
                 }
             }
@@ -4829,10 +5289,12 @@ class reporteruidoController extends Controller
             $dato["total"] = $total_activos;
             $dato["msj"] = 'Datos consultados correctamente';
             return response()->json($dato);
-        } catch (Exception $e) {
+        }
+        catch(Exception $e)
+        {
             $dato['data'] = 0;
             $dato["total"] = 0;
-            $dato["msj"] = 'Error ' . $e->getMessage();
+            $dato["msj"] = 'Error '.$e->getMessage();
             return response()->json($dato);
         }
     }
@@ -4848,7 +5310,8 @@ class reporteruidoController extends Controller
      */
     public function reporteruidoanexosresultadostabla($proyecto_id, $reporteregistro_id, $agente_nombre)
     {
-        try {
+        try
+        {
             $anexos = collect(DB::select('SELECT
                                                 proyectoevidenciadocumento.proyecto_id,
                                                 proyectoevidenciadocumento.proveedor_id,
@@ -4867,7 +5330,7 @@ class reporteruidoController extends Controller
                                                     WHERE
                                                         reporteanexos.proyecto_id = proyectoevidenciadocumento.proyecto_id
                                                         AND reporteanexos.agente_nombre = proyectoevidenciadocumento.agente_nombre
-                                                        AND reporteanexos.registro_id = ' . $reporteregistro_id . '
+                                                        AND reporteanexos.registro_id = '.$reporteregistro_id.'
                                                         AND reporteanexos.reporteanexos_tipo = 1
                                                         AND reporteanexos.reporteanexos_rutaanexo = proyectoevidenciadocumento.proyectoevidenciadocumento_archivo
                                                     LIMIT 1
@@ -4875,32 +5338,37 @@ class reporteruidoController extends Controller
                                             FROM
                                                 proyectoevidenciadocumento
                                             WHERE
-                                                proyectoevidenciadocumento.proyecto_id = ' . $proyecto_id . '
-                                                AND proyectoevidenciadocumento.agente_nombre = "' . $agente_nombre . '"'));
+                                                proyectoevidenciadocumento.proyecto_id = '.$proyecto_id.'
+                                                AND proyectoevidenciadocumento.agente_nombre = "'.$agente_nombre.'"'));
 
             $total_activos = 0;
             $numero_registro = 0;
-            foreach ($anexos as $key => $value) {
+            foreach ($anexos as $key => $value) 
+            {
                 $numero_registro += 1;
                 $value->numero_registro = $numero_registro;
 
                 $value->checkbox = '<div class="switch">
                                         <label>
-                                            <input type="hidden" class="form-control" name="anexoresultado_nombre_' . $value->id . '" value="' . $value->proyectoevidenciadocumento_nombre . '">
-                                            <input type="hidden" class="form-control" name="anexoresultado_archivo_' . $value->id . '" value="' . $value->proyectoevidenciadocumento_archivo . '">
-                                            <input type="checkbox" class="anexoresultado_checkbox" name="anexoresultado_checkbox[]" value="' . $value->id . '" ' . $value->checked . '>
+                                            <input type="hidden" class="form-control" name="anexoresultado_nombre_'.$value->id.'" value="'.$value->proyectoevidenciadocumento_nombre.'">
+                                            <input type="hidden" class="form-control" name="anexoresultado_archivo_'.$value->id.'" value="'.$value->proyectoevidenciadocumento_archivo.'">
+                                            <input type="checkbox" class="anexoresultado_checkbox" name="anexoresultado_checkbox[]" value="'.$value->id.'" '.$value->checked.'>
                                             <span class="lever switch-col-light-blue"></span>
                                         </label>
                                     </div>';
 
-                if ($value->proyectoevidenciadocumento_extension == '.pdf' || $value->proyectoevidenciadocumento_extension == '.PDF') {
+                if ($value->proyectoevidenciadocumento_extension == '.pdf' || $value->proyectoevidenciadocumento_extension == '.PDF')
+                {
                     $value->documento = '<button type="button" class="btn btn-info waves-effect btn-circle" data-toggle="tooltip" title="Mostrar PDF"><i class="fa fa-file-pdf-o fa-2x"></i></button>';
-                } else {
+                }
+                else
+                {
                     $value->documento = '<button type="button" class="btn btn-success waves-effect btn-circle" data-toggle="tooltip" title="Descargar archivo"><i class="fa fa-download fa-2x"></i></button>';
                 }
 
                 // VERIFICAR SI HAY DOCUMENTOS SELECCIONADOS
-                if ($value->checked) {
+                if ($value->checked)
+                {
                     $total_activos += 1;
                 }
             }
@@ -4910,10 +5378,12 @@ class reporteruidoController extends Controller
             $dato["total"] = $total_activos;
             $dato["msj"] = 'Datos consultados correctamente';
             return response()->json($dato);
-        } catch (Exception $e) {
+        }
+        catch(Exception $e)
+        {
             $dato['data'] = 0;
             $dato["total"] = 0;
-            $dato["msj"] = 'Error ' . $e->getMessage();
+            $dato["msj"] = 'Error '.$e->getMessage();
             return response()->json($dato);
         }
     }
@@ -4929,7 +5399,8 @@ class reporteruidoController extends Controller
      */
     public function reporteruidoanexosacreditacionestabla($proyecto_id, $reporteregistro_id, $agente_nombre)
     {
-        try {
+        try
+        {
             $acreditaciones = collect(DB::select('SELECT
                                                         proyectoproveedores.proyecto_id,
                                                         proyectoproveedores.proveedor_id,
@@ -4961,7 +5432,7 @@ class reporteruidoController extends Controller
                                                             WHERE
                                                                 reporteanexos.proyecto_id = proyectoproveedores.proyecto_id
                                                                 AND reporteanexos.agente_nombre = proyectoproveedores.proyectoproveedores_agente
-                                                                AND reporteanexos.registro_id = ' . $reporteregistro_id . '
+                                                                AND reporteanexos.registro_id = '.$reporteregistro_id.'
                                                                 AND reporteanexos.reporteanexos_tipo = 2
                                                                 AND reporteanexos.reporteanexos_rutaanexo = acreditacion.acreditacion_SoportePDF
                                                             LIMIT 1
@@ -4972,35 +5443,37 @@ class reporteruidoController extends Controller
                                                         LEFT JOIN cat_tipoacreditacion ON acreditacion.acreditacion_Tipo = cat_tipoacreditacion.id
                                                         LEFT JOIN cat_area ON acreditacion.cat_area_id = cat_area.id 
                                                     WHERE
-                                                        proyectoproveedores.proyecto_id = ' . $proyecto_id . ' 
-                                                        AND proyectoproveedores.proyectoproveedores_agente = "' . $agente_nombre . '" 
+                                                        proyectoproveedores.proyecto_id = '.$proyecto_id.' 
+                                                        AND proyectoproveedores.proyectoproveedores_agente = "'.$agente_nombre.'" 
                                                         AND acreditacion.acreditacion_Eliminado = 0
                                                         AND IFNULL(acreditacion.acreditacion_SoportePDF, "") != ""'));
 
             $total_activos = 0;
             $numero_registro = 0;
-            foreach ($acreditaciones as $key => $value) {
+            foreach ($acreditaciones as $key => $value) 
+            {
                 $numero_registro += 1;
                 $value->numero_registro = $numero_registro;
 
                 $value->checkbox = '<div class="switch">
                                         <label>
-                                            <input type="hidden" class="form-control" name="anexoacreditacion_nombre_' . $value->id . '" value="' . $value->acreditacion_Entidad . ' ' . $value->acreditacion_Numero . '">
-                                            <input type="hidden" class="form-control" name="anexoacreditacion_archivo_' . $value->id . '" value="' . $value->acreditacion_SoportePDF . '">
-                                            <input type="checkbox" class="anexoacreditacion_checkbox" name="anexoacreditacion_checkbox[]" value="' . $value->id . '" ' . $value->checked . '>
+                                            <input type="hidden" class="form-control" name="anexoacreditacion_nombre_'.$value->id.'" value="'.$value->acreditacion_Entidad.' '.$value->acreditacion_Numero.'">
+                                            <input type="hidden" class="form-control" name="anexoacreditacion_archivo_'.$value->id.'" value="'.$value->acreditacion_SoportePDF.'">
+                                            <input type="checkbox" class="anexoacreditacion_checkbox" name="anexoacreditacion_checkbox[]" value="'.$value->id.'" '.$value->checked.'>
                                             <span class="lever switch-col-light-blue"></span>
                                         </label>
                                     </div>';
 
-                $value->tipo = '<span class="' . $value->vigencia_color . '">' . $value->catTipoAcreditacion_Nombre . '</span>';
-                $value->entidad = '<span class="' . $value->vigencia_color . '">' . $value->acreditacion_Entidad . '</span>';
-                $value->numero = '<span class="' . $value->vigencia_color . '">' . $value->acreditacion_Numero . '</span>';
-                $value->area = '<span class="' . $value->vigencia_color . '">' . $value->catArea_Nombre . '</span>';
-                $value->vigencia = '<span class="' . $value->vigencia_color . '">' . $value->vigencia_texto . '</span>';
+                $value->tipo = '<span class="'.$value->vigencia_color.'">'.$value->catTipoAcreditacion_Nombre.'</span>';
+                $value->entidad = '<span class="'.$value->vigencia_color.'">'.$value->acreditacion_Entidad.'</span>';
+                $value->numero = '<span class="'.$value->vigencia_color.'">'.$value->acreditacion_Numero.'</span>';
+                $value->area = '<span class="'.$value->vigencia_color.'">'.$value->catArea_Nombre.'</span>';
+                $value->vigencia = '<span class="'.$value->vigencia_color.'">'.$value->vigencia_texto.'</span>';
                 $value->certificado = '<button type="button" class="btn btn-info waves-effect btn-circle" data-toggle="tooltip" title="Mostrar certificado"><i class="fa fa-file-pdf-o fa-2x"></i></button>';
 
                 // VERIFICAR SI HAY ACREDITACIONES SELECCIONADOS
-                if ($value->checked) {
+                if ($value->checked)
+                {
                     $total_activos += 1;
                 }
             }
@@ -5010,10 +5483,12 @@ class reporteruidoController extends Controller
             $dato["total"] = $total_activos;
             $dato["msj"] = 'Datos consultados correctamente';
             return response()->json($dato);
-        } catch (Exception $e) {
+        }
+        catch(Exception $e)
+        {
             $dato['data'] = 0;
             $dato["total"] = 0;
-            $dato["msj"] = 'Error ' . $e->getMessage();
+            $dato["msj"] = 'Error '.$e->getMessage();
             return response()->json($dato);
         }
     }
@@ -5027,7 +5502,8 @@ class reporteruidoController extends Controller
      */
     public function reporteruidorevisionestabla($proyecto_id)
     {
-        try {
+        try
+        {
             $revisiones = DB::select('SELECT
                                             reporterevisiones.proyecto_id,
                                             reporterevisiones.agente_id,
@@ -5044,7 +5520,7 @@ class reporteruidoController extends Controller
                                         FROM
                                             reporterevisiones
                                         WHERE
-                                            reporterevisiones.proyecto_id = ' . $proyecto_id . ' 
+                                            reporterevisiones.proyecto_id = '.$proyecto_id.' 
                                             AND reporterevisiones.agente_id = 1
                                         ORDER BY
                                             reporterevisiones.reporterevisiones_revision DESC');
@@ -5059,87 +5535,108 @@ class reporteruidoController extends Controller
             $dato['ultimarevision_id'] = 0;
 
 
-            foreach ($revisiones as $key => $value) {
-                if ($key == 0) {
+            foreach ($revisiones as $key => $value)
+            {
+                if ($key == 0)
+                {
                     $dato['ultimaversion_cancelada'] = $value->reporterevisiones_cancelado;
 
-
-                    if ($value->reporterevisiones_concluido == 1 || $value->reporterevisiones_cancelado == 1) {
+                    
+                    if ($value->reporterevisiones_concluido == 1 || $value->reporterevisiones_cancelado == 1)
+                    {
                         $dato['ultimaversion_estado'] = 1;
                     }
 
 
                     $value->ultima_revision = $value->id;
                     $dato['ultimarevision_id'] = $value->id;
-                } else {
+                }
+                else
+                {
                     $value->ultima_revision = 0;
                 }
 
 
-                if (auth()->user()->hasRoles(['Superusuario', 'Administrador', 'Coordinador']) && ($key + 0) == 0) {
+                if (auth()->user()->hasRoles(['Superusuario', 'Administrador', 'Coordinador']) && ($key+0) == 0)
+                {
                     $value->perfil_concluir = 1;
                     $disabled_concluir = '';
-                } else {
+                }
+                else
+                {
                     $value->perfil_concluir = 0;
                     $disabled_concluir = 'disabled';
                 }
 
 
                 $checked_concluido = '';
-                if (($value->reporterevisiones_concluido + 0) == 1) {
+                if (($value->reporterevisiones_concluido + 0) == 1)
+                {
                     $checked_concluido = 'checked';
                 }
 
 
                 $value->checkbox_concluido = '<div class="switch" data-toggle="tooltip" title="Solo Coordinadores y Administradores">
                                                     <label>
-                                                        <input type="checkbox" class="checkbox_concluido" ' . $checked_concluido . ' ' . $disabled_concluir . ' onclick="reporte_concluido(' . $value->id . ', ' . $value->perfil_concluir . ', this)">
+                                                        <input type="checkbox" class="checkbox_concluido" '.$checked_concluido.' '.$disabled_concluir.' onclick="reporte_concluido('.$value->id.', '.$value->perfil_concluir.', this)">
                                                         <span class="lever switch-col-light-blue"></span>
                                                     </label>
                                                 </div>';
 
 
-                $value->nombre_concluido = $value->reporterevisiones_concluidonombre . '<br>' . $value->reporterevisiones_concluidofecha;
+                $value->nombre_concluido = $value->reporterevisiones_concluidonombre.'<br>'.$value->reporterevisiones_concluidofecha;
 
 
-                if (auth()->user()->hasRoles(['Superusuario', 'Administrador']) && ($key + 0) == 0) {
+                if (auth()->user()->hasRoles(['Superusuario', 'Administrador']) && ($key+0) == 0)
+                {
                     $value->perfil_cancelar = 1;
                     $disabled_cancelar = '';
-                } else {
+                }
+                else
+                {
                     $value->perfil_cancelar = 0;
                     $disabled_cancelar = 'disabled';
                 }
 
 
                 $checked_cancelado = '';
-                if (($value->reporterevisiones_cancelado + 0) == 1) {
+                if (($value->reporterevisiones_cancelado + 0) == 1)
+                {
                     $checked_cancelado = 'checked';
                 }
 
                 $value->checkbox_cancelado = '<div class="switch" data-toggle="tooltip" title="Solo Administradores">
                                                     <label>
-                                                        <input type="checkbox" class="checkbox_cancelado" ' . $checked_cancelado . ' ' . $disabled_cancelar . ' onclick="reporte_cancelado(' . $value->id . ', ' . $value->perfil_cancelar . ', this)">
+                                                        <input type="checkbox" class="checkbox_cancelado" '.$checked_cancelado.' '.$disabled_cancelar.' onclick="reporte_cancelado('.$value->id.', '.$value->perfil_cancelar.', this)">
                                                         <span class="lever switch-col-red"></span>
                                                     </label>
                                                 </div>';
 
 
-                $value->nombre_cancelado = $value->reporterevisiones_canceladonombre . '<br>' . $value->reporterevisiones_canceladofecha;
+                $value->nombre_cancelado = $value->reporterevisiones_canceladonombre.'<br>'.$value->reporterevisiones_canceladofecha;
 
 
-                if (($value->reporterevisiones_concluido + 0) == 0 && ($value->reporterevisiones_cancelado + 0) == 0) {
+                if (($value->reporterevisiones_concluido + 0) == 0 && ($value->reporterevisiones_cancelado + 0) == 0)
+                {
                     $value->estado_texto = '<span class="text-info">Disponible para edición</span>';
-                } else if (($value->reporterevisiones_cancelado + 0) == 1) {
-                    $value->estado_texto = '<span class="text-danger">cancelado</span>: ' . $value->reporterevisiones_canceladoobservacion;
-                } else {
+                }
+                else if (($value->reporterevisiones_cancelado + 0) == 1)
+                {
+                    $value->estado_texto = '<span class="text-danger">cancelado</span>: '.$value->reporterevisiones_canceladoobservacion;
+                }
+                else
+                {
                     $value->estado_texto = '<span class="text-info">Concluido</span>: No disponible para edición';
                 }
 
 
                 // Boton descarga informe WORD
-                if (($value->reporterevisiones_concluido + 0) == 1 || ($value->reporterevisiones_cancelado + 0) == 1) {
-                    $value->boton_descargar = '<button type="button" class="btn btn-success waves-effect btn-circle botondescarga" id="botondescarga_' . $key . '"><i class="fa fa-download fa-2x"></i></button>';
-                } else {
+                if (($value->reporterevisiones_concluido + 0) == 1 || ($value->reporterevisiones_cancelado + 0) == 1)
+                {
+                    $value->boton_descargar = '<button type="button" class="btn btn-success waves-effect btn-circle botondescarga" id="botondescarga_'.$key.'"><i class="fa fa-download fa-2x"></i></button>';
+                }
+                else
+                {
                     $value->boton_descargar = '<button type="button" class="btn btn-default waves-effect btn-circle" data-toggle="tooltip" title="Para descargar esta revisión del informe, primero debe estar concluido ó cancelado."><i class="fa fa-ban fa-2x"></i></button>';
                 }
             }
@@ -5150,13 +5647,15 @@ class reporteruidoController extends Controller
             $dato['total'] = count($revisiones);
             $dato["msj"] = 'Datos consultados correctamente';
             return response()->json($dato);
-        } catch (Exception $e) {
+        }
+        catch(Exception $e)
+        {
             $dato['ultimaversion_cancelada'] = 0;
             $dato['ultimaversion_estado'] = 0;
             $dato['ultimarevision_id'] = 0;
             $dato['data'] = 0;
             $dato['total'] = 0;
-            $dato["msj"] = 'Error ' . $e->getMessage();
+            $dato["msj"] = 'Error '.$e->getMessage();
             return response()->json($dato);
         }
     }
@@ -5170,7 +5669,8 @@ class reporteruidoController extends Controller
      */
     public function reporteruidorevisionconcluir($reporte_id)
     {
-        try {
+        try
+        {
             // $reporte  = reporteruidoModel::findOrFail($reporte_id);
             $revision  = reporterevisionesModel::findOrFail($reporte_id);
 
@@ -5180,29 +5680,35 @@ class reporteruidoController extends Controller
             $concluidofecha = NULL;
 
 
-            if ($revision->reporterevisiones_concluido == 0) {
-                $concluido = 1;
-                $concluidonombre = auth()->user()->empleado->empleado_nombre . " " . auth()->user()->empleado->empleado_apellidopaterno . " " . auth()->user()->empleado->empleado_apellidomaterno;
+            if ($revision->reporterevisiones_concluido == 0)
+            {
+                $concluido = 1;                
+                $concluidonombre = auth()->user()->empleado->empleado_nombre." ".auth()->user()->empleado->empleado_apellidopaterno." ".auth()->user()->empleado->empleado_apellidomaterno;
                 $concluidofecha = date('Y-m-d H:i:s');
             }
 
 
             $revision->update([
-                'reporterevisiones_concluido' => $concluido, 'reporterevisiones_concluidonombre' => $concluidonombre, 'reporterevisiones_concluidofecha' => $concluidofecha
+                  'reporterevisiones_concluido' => $concluido
+                , 'reporterevisiones_concluidonombre' => $concluidonombre
+                , 'reporterevisiones_concluidofecha' => $concluidofecha
             ]);
 
 
             $dato["estado"] = 0;
-            if ($concluido == 1 || $revision->reporterevisiones_cancelado == 1) {
+            if ($concluido == 1 || $revision->reporterevisiones_cancelado == 1)
+            {
                 $dato["estado"] = 1;
             }
 
 
             $dato["msj"] = 'Datos modificados correctamente';
             return response()->json($dato);
-        } catch (Exception $e) {
+        }
+        catch(Exception $e)
+        {
             $dato["estado"] = 0;
-            $dato["msj"] = 'Error ' . $e->getMessage();
+            $dato["msj"] = 'Error '.$e->getMessage();
             return response()->json($dato);
         }
     }
@@ -5213,7 +5719,7 @@ class reporteruidoController extends Controller
      *
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
-     */
+    */
 
     /*
     public function reporteruidorevisionnueva(Request $request)
@@ -5886,24 +6392,26 @@ class reporteruidoController extends Controller
      */
     public function store(Request $request)
     {
-        try {
+        try
+        {
             // TABLAS
             //============================================================
 
             $proyectoRecursos = recursosPortadasInformesModel::where('PROYECTO_ID', $request->proyecto_id)->where('AGENTE_ID', $request->agente_id)->get();
             $proyecto = proyectoModel::with(['catregion', 'catsubdireccion', 'catgerencia', 'catactivo'])->findOrFail($request->proyecto_id);
             $recsensorial = recsensorialModel::with(['catregion', 'catsubdireccion', 'catgerencia', 'catactivo'])->findOrFail($proyecto->recsensorial_id);
-
+            
             $meses = ["Vacio", "Enero", "Febrero", "Marzo", "Abril", "Mayo", "Junio", "Julio", "Agosto", "Septiembre", "Octubre", "Noviembre", "Diciembre"];
             $reportefecha = explode("-", $proyecto->proyecto_fechaentrega);
 
 
-            if (($request->reporteregistro_id + 0) > 0) {
+            if (($request->reporteregistro_id + 0) > 0)
+            {
                 $reporte = reporteruidoModel::findOrFail($request->reporteregistro_id);
 
 
                 $reporte->update([
-                    'reporteruido_instalacion' => $request->reporte_instalacion
+                      'reporteruido_instalacion' => $request->reporte_instalacion
                 ]);
 
 
@@ -5914,31 +6422,46 @@ class reporteruidoController extends Controller
 
 
                 $revision = reporterevisionesModel::where('proyecto_id', $request->proyecto_id)
-                    ->where('agente_id', $request->agente_id)
-                    ->orderBy('reporterevisiones_revision', 'DESC')
-                    ->get();
+                                                    ->where('agente_id', $request->agente_id)
+                                                    ->orderBy('reporterevisiones_revision', 'DESC')
+                                                    ->get();
 
 
-                if (count($revision) > 0) {
+                if(count($revision) > 0)
+                {
                     $revision = reporterevisionesModel::findOrFail($revision[0]->id);
                 }
 
 
-                if (($revision->reporterevisiones_concluido == 1 || $revision->reporterevisiones_cancelado == 1) && ($request->opcion + 0) != 26) // Valida disponibilidad de esta version
+                if (($revision->reporterevisiones_concluido == 1 || $revision->reporterevisiones_cancelado == 1) && ($request->opcion+0) != 26) // Valida disponibilidad de esta version
                 {
                     // respuesta
-                    $dato["msj"] = 'Informe de ' . $request->agente_nombre . ' NO disponible para edición';
+                    $dato["msj"] = 'Informe de '.$request->agente_nombre.' NO disponible para edición';
                     return response()->json($dato);
                 }
-            } else {
+            }
+            else
+            {
                 DB::statement('ALTER TABLE reporteruido AUTO_INCREMENT = 1;');
 
-                if (!$request->catactivo_id) {
+                if (!$request->catactivo_id)
+                {
                     $request['catactivo_id'] = 0; // es es modo cliente y viene en null se pone en cero
                 }
 
                 $reporte = reporteruidoModel::create([
-                    'proyecto_id' => $request->proyecto_id, 'agente_id' => $request->agente_id, 'agente_nombre' => $request->agente_nombre, 'catactivo_id' => $request->catactivo_id, 'reporteruido_revision' => 0, 'reporteruido_instalacion' => $request->reporte_instalacion, 'reporteruido_catregion_activo' => 1, 'reporteruido_catsubdireccion_activo' => 1, 'reporteruido_catgerencia_activo' => 1, 'reporteruido_catactivo_activo' => 1, 'reporteruido_concluido' => 0, 'reporteruido_cancelado' => 0
+                      'proyecto_id' => $request->proyecto_id
+                    , 'agente_id' => $request->agente_id
+                    , 'agente_nombre' => $request->agente_nombre
+                    , 'catactivo_id' => $request->catactivo_id
+                    , 'reporteruido_revision' => 0
+                    , 'reporteruido_instalacion' => $request->reporte_instalacion
+                    , 'reporteruido_catregion_activo' => 1
+                    , 'reporteruido_catsubdireccion_activo' => 1
+                    , 'reporteruido_catgerencia_activo' => 1
+                    , 'reporteruido_catactivo_activo' => 1
+                    , 'reporteruido_concluido' => 0
+                    , 'reporteruido_cancelado' => 0
                 ]);
 
 
@@ -5949,36 +6472,43 @@ class reporteruidoController extends Controller
                 DB::statement('UPDATE 
                                     reporteruidocategoria
                                 SET 
-                                    registro_id = ' . $reporte->id . '
+                                    registro_id = '.$reporte->id.'
                                 WHERE 
-                                    proyecto_id = ' . $request->proyecto_id . '
+                                    proyecto_id = '.$request->proyecto_id.'
                                     AND IFNULL(registro_id, "") = "";');
 
-
+                
                 // ASIGNAR AREAS AL REGISTRO ACTUAL
                 DB::statement('UPDATE 
                                     reporteruidoarea
                                 SET 
-                                    registro_id = ' . $reporte->id . '
+                                    registro_id = '.$reporte->id.'
                                 WHERE 
-                                    proyecto_id = ' . $request->proyecto_id . '
+                                    proyecto_id = '.$request->proyecto_id.'
                                     AND IFNULL(registro_id, "") = "";');
             }
 
 
             //============================================================
-
+            
 
             // PORTADA
-            if (($request->opcion + 0) == 0) {
-
+            if (($request->opcion+0) == 0)
+            {
+                
 
                 $reporte->update([
-                    'reporteruido_catregion_activo' => 0, 'reporteruido_catsubdireccion_activo' => 0, 'reporteruido_catgerencia_activo' => 0, 'reporteruido_catactivo_activo' => 0, 'reporteruido_instalacion' => $request->reporte_instalacion, 'reporteruido_fecha' => $request->reporte_fecha, 'reporte_mes' => $request->reporte_mes
+                      'reporteruido_catregion_activo' => 0
+                    , 'reporteruido_catsubdireccion_activo' => 0
+                    , 'reporteruido_catgerencia_activo' => 0
+                    , 'reporteruido_catactivo_activo' => 0
+                    , 'reporteruido_instalacion' => $request->reporte_instalacion
+                    , 'reporteruido_fecha' => $request->reporte_fecha
+                    , 'reporte_mes' => $request->reporte_mes
 
                 ]);
 
-                if (count($proyectoRecursos) == 0) {
+                if(count($proyectoRecursos) == 0){
 
                     $recusros = recursosPortadasInformesModel::create([
                         'PROYECTO_ID' => $request->proyecto_id,
@@ -5996,19 +6526,20 @@ class reporteruidoController extends Controller
                         'OPCION_PORTADA5' => is_null($request->OPCION_PORTADA5) ? null : $request->OPCION_PORTADA5,
                         'OPCION_PORTADA6' => is_null($request->OPCION_PORTADA6) ? null : $request->OPCION_PORTADA6
                     ]);
-
+    
                     if ($request->file('PORTADA')) {
                         // Eliminar IMG anterior
                         if (Storage::exists($recusros->RUTA_IMAGEN_PORTADA)) {
                             Storage::delete($recusros->RUTA_IMAGEN_PORTADA);
                         }
-
+    
                         $extension = $request->file('PORTADA')->getClientOriginalExtension();
                         $imgGuardada = $request->file('PORTADA')->storeAs('reportes/proyecto/' . $request->proyecto_id . '/' . $request->agente_nombre . '/' . $request->reporteregistro_id . '/imagenPortada', 'PORTADA_IAMGEN.' . $extension);
 
                         $recusros->update(['RUTA_IMAGEN_PORTADA' => $imgGuardada]);
+
                     }
-                } else {
+                }else{
 
                     foreach ($proyectoRecursos as $recurso) {
                         $recurso->update([
@@ -6036,9 +6567,9 @@ class reporteruidoController extends Controller
 
                             $extension = $request->file('PORTADA')->getClientOriginalExtension();
                             $imgGuardada = $request->file('PORTADA')->storeAs(
-                                'reportes/proyecto/' . $request->proyecto_id . '/' . $request->agente_nombre . '/' . $request->reporteregistro_id . '/imagenPortada',
-                                'PORTADA_IMAGEN.' . $extension
-                            );
+                                    'reportes/proyecto/' . $request->proyecto_id . '/' . $request->agente_nombre . '/' . $request->reporteregistro_id . '/imagenPortada',
+                                    'PORTADA_IMAGEN.' . $extension
+                                );
 
                             $recurso->update(['RUTA_IMAGEN_PORTADA' => $imgGuardada]);
                         }
@@ -6053,9 +6584,10 @@ class reporteruidoController extends Controller
 
 
             // INTRODUCCION
-            if (($request->opcion + 0) == 1) {
+            if (($request->opcion+0) == 1)
+            {
                 $reporte->update([
-                    'reporteruido_introduccion' => $this->datosproyectolimpiartexto($proyecto, $recsensorial, $request->reporte_introduccion)
+                      'reporteruido_introduccion' => $this->datosproyectolimpiartexto($proyecto, $recsensorial, $request->reporte_introduccion)
                 ]);
 
                 // Mensaje
@@ -6064,27 +6596,38 @@ class reporteruidoController extends Controller
 
 
             // DEFINICIONES
-            if (($request->opcion + 0) == 2) {
-                if (!$request->catactivo_id) {
+            if (($request->opcion+0) == 2)
+            {
+                if (!$request->catactivo_id)
+                {
                     $request['catactivo_id'] = 0; // es es modo cliente y viene en null se pone en cero
                 }
-
-                if (($request->reportedefiniciones_id + 0) == 0) //NUEVO
+                
+                if (($request->reportedefiniciones_id+0) == 0) //NUEVO
                 {
                     DB::statement('ALTER TABLE reportedefiniciones AUTO_INCREMENT = 1;');
 
                     $definicion = reportedefinicionesModel::create([
-                        'agente_id' => $request->agente_id, 'agente_nombre' => $request->agente_nombre, 'catactivo_id' => $request->catactivo_id, 'reportedefiniciones_concepto' => $request->reportedefiniciones_concepto, 'reportedefiniciones_descripcion' => $request->reportedefiniciones_descripcion, 'reportedefiniciones_fuente' => $request->reportedefiniciones_fuente
+                          'agente_id' => $request->agente_id
+                        , 'agente_nombre' => $request->agente_nombre
+                        , 'catactivo_id' => $request->catactivo_id
+                        , 'reportedefiniciones_concepto' => $request->reportedefiniciones_concepto
+                        , 'reportedefiniciones_descripcion' => $request->reportedefiniciones_descripcion
+                        , 'reportedefiniciones_fuente' => $request->reportedefiniciones_fuente
                     ]);
 
                     // Mensaje
                     $dato["msj"] = 'Datos guardados correctamente';
-                } else //EDITAR
+                }
+                else //EDITAR
                 {
                     $definicion = reportedefinicionesModel::findOrFail($request->reportedefiniciones_id);
 
                     $definicion->update([
-                        'catactivo_id' => $request->catactivo_id, 'reportedefiniciones_concepto' => $request->reportedefiniciones_concepto, 'reportedefiniciones_descripcion' => $request->reportedefiniciones_descripcion, 'reportedefiniciones_fuente' => $request->reportedefiniciones_fuente
+                          'catactivo_id' => $request->catactivo_id
+                        , 'reportedefiniciones_concepto' => $request->reportedefiniciones_concepto
+                        , 'reportedefiniciones_descripcion' => $request->reportedefiniciones_descripcion
+                        , 'reportedefiniciones_fuente' => $request->reportedefiniciones_fuente
                     ]);
 
                     // Mensaje
@@ -6094,9 +6637,10 @@ class reporteruidoController extends Controller
 
 
             // OBJETIVO GENERAL
-            if (($request->opcion + 0) == 3) {
+            if (($request->opcion+0) == 3)
+            {
                 $reporte->update([
-                    'reporteruido_objetivogeneral' => $this->datosproyectolimpiartexto($proyecto, $recsensorial, $request->reporte_objetivogeneral)
+                      'reporteruido_objetivogeneral' => $this->datosproyectolimpiartexto($proyecto, $recsensorial, $request->reporte_objetivogeneral)
                 ]);
 
                 // Mensaje
@@ -6105,9 +6649,10 @@ class reporteruidoController extends Controller
 
 
             // OBJETIVOS  ESPECIFICOS
-            if (($request->opcion + 0) == 4) {
+            if (($request->opcion+0) == 4)
+            {
                 $reporte->update([
-                    'reporteruido_objetivoespecifico' => $this->datosproyectolimpiartexto($proyecto, $recsensorial, $request->reporte_objetivoespecifico)
+                      'reporteruido_objetivoespecifico' => $this->datosproyectolimpiartexto($proyecto, $recsensorial, $request->reporte_objetivoespecifico)
                 ]);
 
                 // Mensaje
@@ -6116,9 +6661,10 @@ class reporteruidoController extends Controller
 
 
             // METODOLOGIA PUNTO 4.1
-            if (($request->opcion + 0) == 5) {
+            if (($request->opcion+0) == 5)
+            {
                 $reporte->update([
-                    'reporteruido_metodologia_4_1' => $this->datosproyectolimpiartexto($proyecto, $recsensorial, $request->reporte_metodologia_4_1)
+                      'reporteruido_metodologia_4_1' => $this->datosproyectolimpiartexto($proyecto, $recsensorial, $request->reporte_metodologia_4_1)
                 ]);
 
                 // Mensaje
@@ -6127,9 +6673,10 @@ class reporteruidoController extends Controller
 
 
             // METODOLOGIA PUNTO 4.2
-            if (($request->opcion + 0) == 6) {
+            if (($request->opcion+0) == 6)
+            {
                 $reporte->update([
-                    'reporteruido_metodologia_4_2' => $this->datosproyectolimpiartexto($proyecto, $recsensorial, $request->reporte_metodologia_4_2)
+                      'reporteruido_metodologia_4_2' => $this->datosproyectolimpiartexto($proyecto, $recsensorial, $request->reporte_metodologia_4_2)
                 ]);
 
                 // Mensaje
@@ -6138,20 +6685,22 @@ class reporteruidoController extends Controller
 
 
             // UBICACION
-            if (($request->opcion + 0) == 7) {
+            if (($request->opcion+0) == 7)
+            {
                 $reporte->update([
                     'reporteruido_ubicacioninstalacion' => $this->datosproyectolimpiartexto($proyecto, $recsensorial, $request->reporte_ubicacioninstalacion)
                 ]);
 
                 // si envia archivo
-                if ($request->file('reporteubicacionfoto')) {
+                if ($request->file('reporteubicacionfoto'))
+                {
                     // Codificar imagen recibida como tipo base64
                     $imagen_recibida = explode(',', $request->ubicacionmapa); //Archivo foto tipo base64
                     $imagen_nueva = base64_decode($imagen_recibida[1]);
 
                     // Ruta destino archivo
-                    $destinoPath = 'reportes/proyecto/' . $request->proyecto_id . '/' . $request->agente_nombre . '/' . $reporte->id . '/ubicacionfoto/ubicacionfoto.jpg';
-
+                    $destinoPath = 'reportes/proyecto/'.$request->proyecto_id.'/'.$request->agente_nombre.'/'.$reporte->id.'/ubicacionfoto/ubicacionfoto.jpg';
+                    
                     // Guardar Foto
                     Storage::put($destinoPath, $imagen_nueva); // Guardar en storage
                     // file_put_contents(public_path('/imagen.jpg'), $imagen_nueva); // Guardar en public
@@ -6167,9 +6716,11 @@ class reporteruidoController extends Controller
 
 
             // PROCESO INSTALACION
-            if (($request->opcion + 0) == 8) {
+            if (($request->opcion+0) == 8)
+            {
                 $reporte->update([
-                    'reporteruido_procesoinstalacion' => $this->datosproyectolimpiartexto($proyecto, $recsensorial, $request->reporte_procesoinstalacion), 'reporteruido_actividadprincipal' => $this->datosproyectolimpiartexto($proyecto, $recsensorial, $request->reporte_actividadprincipal)
+                      'reporteruido_procesoinstalacion' => $this->datosproyectolimpiartexto($proyecto, $recsensorial, $request->reporte_procesoinstalacion)
+                    , 'reporteruido_actividadprincipal' => $this->datosproyectolimpiartexto($proyecto, $recsensorial, $request->reporte_actividadprincipal)
                 ]);
 
                 // Mensaje
@@ -6178,8 +6729,10 @@ class reporteruidoController extends Controller
 
 
             // CATEGORIAS
-            if (($request->opcion + 0) == 9) {
-                if (($request->reportecategoria_id + 0) == 0) {
+            if (($request->opcion+0) == 9)
+            {
+                if (($request->reportecategoria_id+0) == 0)
+                {
                     DB::statement('ALTER TABLE reporteruidocategoria AUTO_INCREMENT = 1;');
 
                     $request['recsensorialcategoria_id'] = 0;
@@ -6188,7 +6741,9 @@ class reporteruidoController extends Controller
 
                     // Mensaje
                     $dato["msj"] = 'Datos guardados correctamente';
-                } else {
+                }
+                else
+                {
                     $request['registro_id'] = $reporte->id;
                     $categoria = reporteruidocategoriaModel::findOrFail($request->reportecategoria_id);
                     $categoria->update($request->all());
@@ -6200,11 +6755,13 @@ class reporteruidoController extends Controller
 
 
             // AREAS
-            if (($request->opcion + 0) == 10) {
+            if (($request->opcion+0) == 10)
+            {
                 // dd($request->all());
 
 
-                if (($request->areas_poe + 0) == 1) {
+                if (($request->areas_poe+0) == 1)
+                {
                     $request['reportearea_proceso'] = $request->reporteruidoarea_proceso;
                     $request['reportearea_tiporuido'] = $request->reporteruidoarea_tiporuido;
                     $request['reportearea_evaluacion'] = $request->reporteruidoarea_evaluacion;
@@ -6224,33 +6781,43 @@ class reporteruidoController extends Controller
 
 
                     $eliminar_categorias = reporteruidoareacategoriaModel::where('reporteruidoarea_id', $request->reportearea_id)
-                        ->where('reporteruidoareacategoria_poe', $request->reporteregistro_id)
-                        ->delete();
+                                                                            ->where('reporteruidoareacategoria_poe', $request->reporteregistro_id)
+                                                                            ->delete();
 
 
-                    if ($request->checkbox_categoria_id) {
+                    if ($request->checkbox_categoria_id)
+                    {
                         DB::statement('ALTER TABLE reporteruidoareacategoria AUTO_INCREMENT = 1;');
 
 
-                        foreach ($request->checkbox_categoria_id as $key => $value) {
+                        foreach ($request->checkbox_categoria_id as $key => $value) 
+                        {
                             $areacategoria = reporteruidoareacategoriaModel::create([
-                                'reporteruidoarea_id' => $area->id, 'reporteruidocategoria_id' => $value, 'reporteruidoareacategoria_poe' => $request->reporteregistro_id, 'reporteruidoareacategoria_actividades' => $request['areacategoria_actividades_' . $value]
+                                  'reporteruidoarea_id' => $area->id
+                                , 'reporteruidocategoria_id' => $value
+                                , 'reporteruidoareacategoria_poe' => $request->reporteregistro_id
+                                , 'reporteruidoareacategoria_actividades' => $request['areacategoria_actividades_'.$value]
                             ]);
                         }
                     }
 
 
                     $eliminar_maquinaria = reporteruidoareamaquinariaModel::where('reporteruidoarea_id', $request->reportearea_id)
-                        ->where('reporteruidoareamaquinaria_poe', $request->reporteregistro_id)
-                        ->delete();
+                                                                                ->where('reporteruidoareamaquinaria_poe', $request->reporteregistro_id)
+                                                                                ->delete();
 
 
-                    if ($request->reporteruidoareamaquinaria_nombre) {
+                    if ($request->reporteruidoareamaquinaria_nombre)
+                    {
                         DB::statement('ALTER TABLE reporteruidoareamaquinaria AUTO_INCREMENT = 1;');
 
-                        foreach ($request->reporteruidoareamaquinaria_nombre as $key => $value) {
+                        foreach ($request->reporteruidoareamaquinaria_nombre as $key => $value) 
+                        {
                             $areamaquinaria = reporteruidoareamaquinariaModel::create([
-                                'reporteruidoarea_id' => $area->id, 'reporteruidoareamaquinaria_poe' => $request->reporteregistro_id, 'reporteruidoareamaquinaria_nombre' => $value, 'reporteruidoareamaquinaria_cantidad' => $request['reporteruidoareamaquinaria_cantidad'][$key]
+                                  'reporteruidoarea_id' => $area->id
+                                , 'reporteruidoareamaquinaria_poe' => $request->reporteregistro_id
+                                , 'reporteruidoareamaquinaria_nombre' => $value
+                                , 'reporteruidoareamaquinaria_cantidad' => $request['reporteruidoareamaquinaria_cantidad'][$key]
                             ]);
                         }
                     }
@@ -6258,8 +6825,11 @@ class reporteruidoController extends Controller
 
                     // Mensaje
                     $dato["msj"] = 'Datos modificados correctamente';
-                } else {
-                    if (($request->reportearea_id + 0) == 0) {
+                }
+                else
+                {
+                    if (($request->reportearea_id+0) == 0)
+                    {
                         DB::statement('ALTER TABLE reporteruidoarea AUTO_INCREMENT = 1;');
 
 
@@ -6268,23 +6838,33 @@ class reporteruidoController extends Controller
                         $area = reporteruidoareaModel::create($request->all());
 
 
-                        if ($request->checkbox_categoria_id) {
+                        if ($request->checkbox_categoria_id)
+                        {
                             DB::statement('ALTER TABLE reporteruidoareacategoria AUTO_INCREMENT = 1;');
 
-                            foreach ($request->checkbox_categoria_id as $key => $value) {
+                            foreach ($request->checkbox_categoria_id as $key => $value) 
+                            {
                                 $areacategoria = reporteruidoareacategoriaModel::create([
-                                    'reporteruidoarea_id' => $area->id, 'reporteruidocategoria_id' => $value, 'reporteruidoareacategoria_poe' => 0, 'reporteruidoareacategoria_actividades' => $request['areacategoria_actividades_' . $value]
+                                      'reporteruidoarea_id' => $area->id
+                                    , 'reporteruidocategoria_id' => $value
+                                    , 'reporteruidoareacategoria_poe' => 0
+                                    , 'reporteruidoareacategoria_actividades' => $request['areacategoria_actividades_'.$value]
                                 ]);
                             }
                         }
 
 
-                        if ($request->reporteruidoareamaquinaria_nombre) {
+                        if ($request->reporteruidoareamaquinaria_nombre)
+                        {
                             DB::statement('ALTER TABLE reporteruidoareamaquinaria AUTO_INCREMENT = 1;');
 
-                            foreach ($request->reporteruidoareamaquinaria_nombre as $key => $value) {
+                            foreach ($request->reporteruidoareamaquinaria_nombre as $key => $value) 
+                            {
                                 $areamaquinaria = reporteruidoareamaquinariaModel::create([
-                                    'reporteruidoarea_id' => $area->id, 'reporteruidoareamaquinaria_poe' => 0, 'reporteruidoareamaquinaria_nombre' => $value, 'reporteruidoareamaquinaria_cantidad' => $request['reporteruidoareamaquinaria_cantidad'][$key]
+                                      'reporteruidoarea_id' => $area->id
+                                    , 'reporteruidoareamaquinaria_poe' => 0
+                                    , 'reporteruidoareamaquinaria_nombre' => $value
+                                    , 'reporteruidoareamaquinaria_cantidad' => $request['reporteruidoareamaquinaria_cantidad'][$key]
                                 ]);
                             }
                         }
@@ -6292,24 +6872,31 @@ class reporteruidoController extends Controller
 
                         // Mensaje
                         $dato["msj"] = 'Datos guardados correctamente';
-                    } else {
+                    }
+                    else
+                    {
                         $request['registro_id'] = $reporte->id;
                         $area = reporteruidoareaModel::findOrFail($request->reportearea_id);
                         $area->update($request->all());
 
 
                         $eliminar_categorias = reporteruidoareacategoriaModel::where('reporteruidoarea_id', $request->reportearea_id)
-                            ->where('reporteruidoareacategoria_poe', 0)
-                            ->delete();
+                                                                                ->where('reporteruidoareacategoria_poe', 0)
+                                                                                ->delete();
 
 
-                        if ($request->checkbox_categoria_id) {
+                        if ($request->checkbox_categoria_id)
+                        {
                             DB::statement('ALTER TABLE reporteruidoareacategoria AUTO_INCREMENT = 1;');
 
 
-                            foreach ($request->checkbox_categoria_id as $key => $value) {
+                            foreach ($request->checkbox_categoria_id as $key => $value) 
+                            {
                                 $areacategoria = reporteruidoareacategoriaModel::create([
-                                    'reporteruidoarea_id' => $area->id, 'reporteruidocategoria_id' => $value, 'reporteruidoareacategoria_poe' => 0, 'reporteruidoareacategoria_actividades' => $request['areacategoria_actividades_' . $value]
+                                      'reporteruidoarea_id' => $area->id
+                                    , 'reporteruidocategoria_id' => $value
+                                    , 'reporteruidoareacategoria_poe' => 0
+                                    , 'reporteruidoareacategoria_actividades' => $request['areacategoria_actividades_'.$value]
                                 ]);
                             }
                         }
@@ -6317,16 +6904,21 @@ class reporteruidoController extends Controller
 
 
                         $eliminar_maquinaria = reporteruidoareamaquinariaModel::where('reporteruidoarea_id', $request->reportearea_id)
-                            ->where('reporteruidoareamaquinaria_poe', 0)
-                            ->delete();
+                                                                                    ->where('reporteruidoareamaquinaria_poe', 0)
+                                                                                    ->delete();
 
 
-                        if ($request->reporteruidoareamaquinaria_nombre) {
+                        if ($request->reporteruidoareamaquinaria_nombre)
+                        {
                             DB::statement('ALTER TABLE reporteruidoareamaquinaria AUTO_INCREMENT = 1;');
 
-                            foreach ($request->reporteruidoareamaquinaria_nombre as $key => $value) {
+                            foreach ($request->reporteruidoareamaquinaria_nombre as $key => $value) 
+                            {
                                 $areamaquinaria = reporteruidoareamaquinariaModel::create([
-                                    'reporteruidoarea_id' => $area->id, 'reporteruidoareamaquinaria_poe' => 0, 'reporteruidoareamaquinaria_nombre' => $value, 'reporteruidoareamaquinaria_cantidad' => $request['reporteruidoareamaquinaria_cantidad'][$key]
+                                      'reporteruidoarea_id' => $area->id
+                                    , 'reporteruidoareamaquinaria_poe' => 0
+                                    , 'reporteruidoareamaquinaria_nombre' => $value
+                                    , 'reporteruidoareamaquinaria_cantidad' => $request['reporteruidoareamaquinaria_cantidad'][$key]
                                 ]);
                             }
                         }
@@ -6340,59 +6932,77 @@ class reporteruidoController extends Controller
 
 
             // EQUIPO AUDITIVO
-            if (($request->opcion + 0) == 11) {
-                if (($request->reporteequipoauditivo_id + 0) == 0) {
+            if (($request->opcion+0) == 11)
+            {
+                if (($request->reporteequipoauditivo_id+0) == 0)
+                {
                     $request['registro_id'] = $reporte->id;
                     DB::statement('ALTER TABLE reporteruidoequipoauditivo AUTO_INCREMENT = 1;');
                     $equipoauditivo = reporteruidoequipoauditivoModel::create($request->all());
 
-                    if ($request->reporteruidoequipoauditivoatenuacion_bandaNRR) {
+                    if ($request->reporteruidoequipoauditivoatenuacion_bandaNRR)
+                    {
                         DB::statement('ALTER TABLE reporteruidoequipoauditivoatenuacion AUTO_INCREMENT = 1;');
 
-                        foreach ($request->reporteruidoequipoauditivoatenuacion_bandaNRR as $key => $value) {
+                        foreach ($request->reporteruidoequipoauditivoatenuacion_bandaNRR as $key => $value) 
+                        {
                             $atenuacion = reporteruidoequipoauditivoatenuacionModel::create([
-                                'reporteruidoequipoauditivo_id' => $equipoauditivo->id, 'reporteruidoequipoauditivoatenuacion_bandaNRR' => $value, 'reporteruidoequipoauditivoatenuacion_bandaatenuacion' => $request['reporteruidoequipoauditivoatenuacion_bandaatenuacion'][$key]
+                                  'reporteruidoequipoauditivo_id' => $equipoauditivo->id
+                                , 'reporteruidoequipoauditivoatenuacion_bandaNRR' => $value
+                                , 'reporteruidoequipoauditivoatenuacion_bandaatenuacion' => $request['reporteruidoequipoauditivoatenuacion_bandaatenuacion'][$key]
                             ]);
                         }
                     }
 
-                    if ($request->equipoauditivo_categoria) {
+                    if ($request->equipoauditivo_categoria)
+                    {
                         DB::statement('ALTER TABLE reporteruidoequipoauditivocategorias AUTO_INCREMENT = 1;');
 
-                        foreach ($request->equipoauditivo_categoria as $key => $value) {
+                        foreach ($request->equipoauditivo_categoria as $key => $value) 
+                        {
                             $categoria = reporteruidoequipoauditivocategoriasModel::create([
-                                'reporteruidoequipoauditivo_id' => $equipoauditivo->id, 'reporteruidocategoria_id' => $value
+                                  'reporteruidoequipoauditivo_id' => $equipoauditivo->id
+                                , 'reporteruidocategoria_id' => $value
                             ]);
                         }
                     }
 
                     // Mensaje
                     $dato["msj"] = 'Datos guardados correctamente';
-                } else {
+                }
+                else
+                {
                     $request['registro_id'] = $reporte->id;
                     $equipoauditivo = reporteruidoequipoauditivoModel::findOrFail($request->reporteequipoauditivo_id);
                     $equipoauditivo->update($request->all());
 
-                    if ($request->reporteruidoequipoauditivoatenuacion_bandaNRR) {
+                    if ($request->reporteruidoequipoauditivoatenuacion_bandaNRR)
+                    {
                         $eliminar_atenuaciones = reporteruidoequipoauditivoatenuacionModel::where('reporteruidoequipoauditivo_id', $request->reporteequipoauditivo_id)->delete();
 
                         DB::statement('ALTER TABLE reporteruidoequipoauditivoatenuacion AUTO_INCREMENT = 1;');
 
-                        foreach ($request->reporteruidoequipoauditivoatenuacion_bandaNRR as $key => $value) {
+                        foreach ($request->reporteruidoequipoauditivoatenuacion_bandaNRR as $key => $value) 
+                        {
                             $atenuacion = reporteruidoequipoauditivoatenuacionModel::create([
-                                'reporteruidoequipoauditivo_id' => $equipoauditivo->id, 'reporteruidoequipoauditivoatenuacion_bandaNRR' => $value, 'reporteruidoequipoauditivoatenuacion_bandaatenuacion' => $request['reporteruidoequipoauditivoatenuacion_bandaatenuacion'][$key]
+                                  'reporteruidoequipoauditivo_id' => $equipoauditivo->id
+                                , 'reporteruidoequipoauditivoatenuacion_bandaNRR' => $value
+                                , 'reporteruidoequipoauditivoatenuacion_bandaatenuacion' => $request['reporteruidoequipoauditivoatenuacion_bandaatenuacion'][$key]
                             ]);
                         }
                     }
 
-                    if ($request->equipoauditivo_categoria) {
+                    if ($request->equipoauditivo_categoria)
+                    {
                         $eliminar_categorias = reporteruidoequipoauditivocategoriasModel::where('reporteruidoequipoauditivo_id', $request->reporteequipoauditivo_id)->delete();
 
                         DB::statement('ALTER TABLE reporteruidoequipoauditivocategorias AUTO_INCREMENT = 1;');
 
-                        foreach ($request->equipoauditivo_categoria as $key => $value) {
+                        foreach ($request->equipoauditivo_categoria as $key => $value) 
+                        {
                             $categoria = reporteruidoequipoauditivocategoriasModel::create([
-                                'reporteruidoequipoauditivo_id' => $equipoauditivo->id, 'reporteruidocategoria_id' => $value
+                                  'reporteruidoequipoauditivo_id' => $equipoauditivo->id
+                                , 'reporteruidocategoria_id' => $value
                             ]);
                         }
                     }
@@ -6404,8 +7014,10 @@ class reporteruidoController extends Controller
 
 
             // EQUIPO PROTECCION PERSONAL
-            if (($request->opcion + 0) == 12) {
-                if (($request->reporteepp_id + 0) == 0) {
+            if (($request->opcion+0) == 12)
+            {
+                if (($request->reporteepp_id+0) == 0)
+                {
                     DB::statement('ALTER TABLE reporteruidoepp AUTO_INCREMENT = 1;');
 
                     $request['registro_id'] = $reporte->id;
@@ -6413,7 +7025,9 @@ class reporteruidoController extends Controller
 
                     // Mensaje
                     $dato["msj"] = 'Datos guardados correctamente';
-                } else {
+                }
+                else
+                {
                     $request['registro_id'] = $reporte->id;
                     $categoria = reporteruidoeppModel::findOrFail($request->reporteepp_id);
                     $categoria->update($request->all());
@@ -6425,18 +7039,27 @@ class reporteruidoController extends Controller
 
 
             // AREAS PUNTOS DE EVALUACION
-            if (($request->opcion + 0) == 13) {
+            if (($request->opcion+0) == 13)
+            {
                 $eliminar_areaevaluacion = reporteruidoareaevaluacionModel::where('proyecto_id', $request->proyecto_id)
-                    ->where('registro_id', $reporte->id)
-                    ->where('reporteruidoarea_id', $request->reporteruidoarea_id)
-                    ->delete();
-
-                if ($request->reporteruidoareaevaluacion_nomedicion1) {
+                                                                            ->where('registro_id', $reporte->id)
+                                                                            ->where('reporteruidoarea_id', $request->reporteruidoarea_id)
+                                                                            ->delete();
+                
+                if ($request->reporteruidoareaevaluacion_nomedicion1)
+                {
                     DB::statement('ALTER TABLE reporteruidoareaevaluacion AUTO_INCREMENT = 1;');
-
-                    foreach ($request->reporteruidoareaevaluacion_nomedicion1 as $key => $value) {
+                    
+                    foreach ($request->reporteruidoareaevaluacion_nomedicion1 as $key => $value) 
+                    {
                         $areaevaluacion = reporteruidoareaevaluacionModel::create([
-                            'proyecto_id' => $request->proyecto_id, 'registro_id' => $reporte->id, 'reporteruidoarea_id' => $request->reporteruidoarea_id, 'reporteruidoareaevaluacion_noevaluaciones' => $request->reporteruidoareaevaluacion_noevaluaciones, 'reporteruidoareaevaluacion_nomedicion1' => $value, 'reporteruidoareaevaluacion_nomedicion2' => $request['reporteruidoareaevaluacion_nomedicion2'][$key], 'reporteruidoareaevaluacion_ubicacion' => $request['reporteruidoareaevaluacion_ubicacion'][$key]
+                              'proyecto_id' => $request->proyecto_id
+                            , 'registro_id' => $reporte->id
+                            , 'reporteruidoarea_id' => $request->reporteruidoarea_id
+                            , 'reporteruidoareaevaluacion_noevaluaciones' => $request->reporteruidoareaevaluacion_noevaluaciones
+                            , 'reporteruidoareaevaluacion_nomedicion1' => $value
+                            , 'reporteruidoareaevaluacion_nomedicion2' => $request['reporteruidoareaevaluacion_nomedicion2'][$key]
+                            , 'reporteruidoareaevaluacion_ubicacion' => $request['reporteruidoareaevaluacion_ubicacion'][$key]
                         ]);
                     }
                 }
@@ -6447,9 +7070,10 @@ class reporteruidoController extends Controller
 
 
             // METODO DE EVALUACION
-            if (($request->opcion + 0) == 14) {
+            if (($request->opcion+0) == 14)
+            {
                 $reporte->update([
-                    'reporteruido_metodoevaluacion' => $this->datosproyectolimpiartexto($proyecto, $recsensorial, $request->reporte_metodoevaluacion)
+                      'reporteruido_metodoevaluacion' => $this->datosproyectolimpiartexto($proyecto, $recsensorial, $request->reporte_metodoevaluacion)
                 ]);
 
                 // Mensaje
@@ -6458,18 +7082,32 @@ class reporteruidoController extends Controller
 
 
             // PUNTO DE MEDICION NIVEL SONORO
-            if (($request->opcion + 0) == 15) {
+            if (($request->opcion+0) == 15)
+            {
                 $eliminar_nivelsonoro = reporteruidonivelsonoroModel::where('proyecto_id', $request->proyecto_id)
-                    ->where('registro_id', $reporte->id)
-                    ->where('reporteruidonivelsonoro_punto', $request->reportenivelsonoro_punto)
-                    ->delete();
-
-                if ($request->reporteruidonivelsonoro_periodo1) {
+                                                                    ->where('registro_id', $reporte->id)
+                                                                    ->where('reporteruidonivelsonoro_punto', $request->reportenivelsonoro_punto)
+                                                                    ->delete();
+                
+                if ($request->reporteruidonivelsonoro_periodo1)
+                {
                     DB::statement('ALTER TABLE reporteruidonivelsonoro AUTO_INCREMENT = 1;');
-
-                    foreach ($request->reporteruidonivelsonoro_periodo1 as $key => $value) {
+                    
+                    foreach ($request->reporteruidonivelsonoro_periodo1 as $key => $value) 
+                    {
                         $nivelsonoro = reporteruidonivelsonoroModel::create([
-                            'proyecto_id' => $request->proyecto_id, 'registro_id' => $reporte->id, 'reporteruidonivelsonoro_punto' => $request->reporteruidonivelsonoro_punto, 'reporteruidonivelsonoro_ubicacion' => $request->reporteruidonivelsonoro_ubicacion, 'reporteruidonivelsonoro_promedio' => $request->reporteruidonivelsonoro_promedio, 'reporteruidonivelsonoro_totalperiodos' => $request->reporteruidonivelsonoro_totalperiodos, 'reporteruidonivelsonoro_totalresultados' => $request->reporteruidonivelsonoro_totalresultados, 'reporteruidonivelsonoro_periodo1' => $value, 'reporteruidonivelsonoro_periodo2' => $request['reporteruidonivelsonoro_periodo2'][$key], 'reporteruidonivelsonoro_periodo3' => $request['reporteruidonivelsonoro_periodo3'][$key], 'reporteruidonivelsonoro_periodo4' => $request['reporteruidonivelsonoro_periodo4'][$key], 'reporteruidonivelsonoro_periodo5' => $request['reporteruidonivelsonoro_periodo5'][$key]
+                              'proyecto_id' => $request->proyecto_id
+                            , 'registro_id' => $reporte->id
+                            , 'reporteruidonivelsonoro_punto' => $request->reporteruidonivelsonoro_punto
+                            , 'reporteruidonivelsonoro_ubicacion' => $request->reporteruidonivelsonoro_ubicacion
+                            , 'reporteruidonivelsonoro_promedio' => $request->reporteruidonivelsonoro_promedio
+                            , 'reporteruidonivelsonoro_totalperiodos' => $request->reporteruidonivelsonoro_totalperiodos
+                            , 'reporteruidonivelsonoro_totalresultados' => $request->reporteruidonivelsonoro_totalresultados
+                            , 'reporteruidonivelsonoro_periodo1' => $value
+                            , 'reporteruidonivelsonoro_periodo2' => $request['reporteruidonivelsonoro_periodo2'][$key]
+                            , 'reporteruidonivelsonoro_periodo3' => $request['reporteruidonivelsonoro_periodo3'][$key]
+                            , 'reporteruidonivelsonoro_periodo4' => $request['reporteruidonivelsonoro_periodo4'][$key]
+                            , 'reporteruidonivelsonoro_periodo5' => $request['reporteruidonivelsonoro_periodo5'][$key]
                         ]);
                     }
                 }
@@ -6480,46 +7118,68 @@ class reporteruidoController extends Controller
 
 
             // PUNTO DE DETERMINACION DEL NER
-            if (($request->opcion + 0) == 16) {
-                if (($request->puntoner_id + 0) == 0) {
+            if (($request->opcion+0) == 16)
+            {
+                if (($request->puntoner_id+0) == 0)
+                {
                     DB::statement('ALTER TABLE reporteruidopuntoner AUTO_INCREMENT = 1;');
 
                     $request['registro_id'] = $reporte->id;
                     $puntoner = reporteruidopuntonerModel::create($request->all());
 
-                    if ($request->reporteruidocategoria_id) {
+                    if ($request->reporteruidocategoria_id)
+                    {
                         DB::statement('ALTER TABLE reporteruidopuntonercategorias AUTO_INCREMENT = 1;');
 
-                        foreach ($request->reporteruidocategoria_id as $key => $value) {
+                        foreach ($request->reporteruidocategoria_id as $key => $value) 
+                        {
                             $categoria = reporteruidopuntonercategoriasModel::create([
-                                'reporteruidopuntoner_id' => $puntoner->id, 'reporteruidocategoria_id' => $value, 'reporteruidopuntonercategorias_total' => $request['reporteruidopuntonercategorias_total'][$key], 'reporteruidopuntonercategorias_geo' => $request['reporteruidopuntonercategorias_geo'][$key], 'reporteruidopuntonercategorias_ficha' => $request['reporteruidopuntonercategorias_ficha'][$key], 'reporteruidopuntonercategorias_nombre' => $request['reporteruidopuntonercategorias_nombre'][$key]
+                                  'reporteruidopuntoner_id' => $puntoner->id
+                                , 'reporteruidocategoria_id' => $value
+                                , 'reporteruidopuntonercategorias_total' => $request['reporteruidopuntonercategorias_total'][$key]
+                                , 'reporteruidopuntonercategorias_geo' => $request['reporteruidopuntonercategorias_geo'][$key]
+                                , 'reporteruidopuntonercategorias_ficha' => $request['reporteruidopuntonercategorias_ficha'][$key]
+                                , 'reporteruidopuntonercategorias_nombre' => $request['reporteruidopuntonercategorias_nombre'][$key]
                             ]);
                         }
                     }
 
                     $frecuencias_bandasoctava = array('31.5', '63', '125', '250', '500', '1K', '2K', '4K', '8K');
 
-                    foreach ($frecuencias_bandasoctava as $key => $value) {
+                    foreach ($frecuencias_bandasoctava as $key => $value)
+                    {
                         $frecuencia = reporteruidopuntonerfrecuenciasModel::create([
-                            'reporteruidopuntoner_id' => $puntoner->id, 'reporteruidopuntonerfrecuencias_orden' => ($key + 1), 'reporteruidopuntonerfrecuencias_frecuencia' => $value, 'reporteruidopuntonerfrecuencias_nivel' => NULL
+                              'reporteruidopuntoner_id' => $puntoner->id
+                            , 'reporteruidopuntonerfrecuencias_orden' => ($key + 1)
+                            , 'reporteruidopuntonerfrecuencias_frecuencia' => $value
+                            , 'reporteruidopuntonerfrecuencias_nivel' => NULL
                         ]);
                     }
 
                     // Mensaje
                     $dato["msj"] = 'Datos guardados correctamente';
-                } else {
+                }
+                else
+                {
                     $request['registro_id'] = $reporte->id;
                     $puntoner = reporteruidopuntonerModel::findOrFail($request->puntoner_id);
                     $puntoner->update($request->all());
 
-                    if ($request->reporteruidocategoria_id) {
+                    if ($request->reporteruidocategoria_id)
+                    {
                         $eliminar_categorias = reporteruidopuntonercategoriasModel::where('reporteruidopuntoner_id', $request->puntoner_id)->delete();
 
                         DB::statement('ALTER TABLE reporteruidopuntonercategorias AUTO_INCREMENT = 1;');
 
-                        foreach ($request->reporteruidocategoria_id as $key => $value) {
+                        foreach ($request->reporteruidocategoria_id as $key => $value) 
+                        {
                             $categoria = reporteruidopuntonercategoriasModel::create([
-                                'reporteruidopuntoner_id' => $puntoner->id, 'reporteruidocategoria_id' => $value, 'reporteruidopuntonercategorias_total' => $request['reporteruidopuntonercategorias_total'][$key], 'reporteruidopuntonercategorias_geo' => $request['reporteruidopuntonercategorias_geo'][$key], 'reporteruidopuntonercategorias_ficha' => $request['reporteruidopuntonercategorias_ficha'][$key], 'reporteruidopuntonercategorias_nombre' => $request['reporteruidopuntonercategorias_nombre'][$key]
+                                  'reporteruidopuntoner_id' => $puntoner->id
+                                , 'reporteruidocategoria_id' => $value
+                                , 'reporteruidopuntonercategorias_total' => $request['reporteruidopuntonercategorias_total'][$key]
+                                , 'reporteruidopuntonercategorias_geo' => $request['reporteruidopuntonercategorias_geo'][$key]
+                                , 'reporteruidopuntonercategorias_ficha' => $request['reporteruidopuntonercategorias_ficha'][$key]
+                                , 'reporteruidopuntonercategorias_nombre' => $request['reporteruidopuntonercategorias_nombre'][$key]
                             ]);
                         }
                     }
@@ -6531,8 +7191,10 @@ class reporteruidoController extends Controller
 
 
             // DOSIS DE DETERMINACION DEL NER
-            if (($request->opcion + 0) == 17) {
-                if (($request->dosisner_id + 0) == 0) {
+            if (($request->opcion+0) == 17)
+            {
+                if (($request->dosisner_id+0) == 0)
+                {
                     DB::statement('ALTER TABLE reporteruidodosisner AUTO_INCREMENT = 1;');
 
                     $request['registro_id'] = $reporte->id;
@@ -6540,7 +7202,9 @@ class reporteruidoController extends Controller
 
                     // Mensaje
                     $dato["msj"] = 'Datos guardados correctamente';
-                } else {
+                }
+                else
+                {
                     $request['registro_id'] = $reporte->id;
                     $dosisner = reporteruidodosisnerModel::findOrFail($request->dosisner_id);
                     $dosisner->update($request->all());
@@ -6552,18 +7216,20 @@ class reporteruidoController extends Controller
 
 
             // RUIDO EFECTIVO CON MODELO POR BANDAS DE OCTAVA
-            if (($request->opcion + 0) == 18) {
+            if (($request->opcion+0) == 18)
+            {
                 $puntoner = reporteruidopuntonerModel::findOrFail($request->reporteruidopuntoner_id);
 
                 $puntoner->update([
-                    'reporteruidopuntoner_RdB' => $request->reporteruidobandaoctava_RdB
+                      'reporteruidopuntoner_RdB' => $request->reporteruidobandaoctava_RdB
                 ]);
 
-                foreach ($request->reporteruidopuntonerfrecuencias_frecuencia as $key => $value) {
+                foreach ($request->reporteruidopuntonerfrecuencias_frecuencia as $key => $value)
+                {
                     DB::statement('UPDATE reporteruidopuntonerfrecuencias
-                                    SET reporteruidopuntonerfrecuencias_nivel = ' . $request['reporteruidopuntonerfrecuencias_nivel'][$key] . ' 
-                                    WHERE reporteruidopuntoner_id = ' . $request->reporteruidopuntoner_id . '
-                                    AND reporteruidopuntonerfrecuencias_frecuencia = "' . $value . '";');
+                                    SET reporteruidopuntonerfrecuencias_nivel = '.$request['reporteruidopuntonerfrecuencias_nivel'][$key].' 
+                                    WHERE reporteruidopuntoner_id = '.$request->reporteruidopuntoner_id.'
+                                    AND reporteruidopuntonerfrecuencias_frecuencia = "'.$value.'";');
                 }
 
                 // Mensaje
@@ -6572,9 +7238,10 @@ class reporteruidoController extends Controller
 
 
             // CONCLUSION
-            if (($request->opcion + 0) == 19) {
+            if (($request->opcion+0) == 19)
+            {
                 $reporte->update([
-                    'reporteruido_conclusion' => $this->datosproyectolimpiartexto($proyecto, $recsensorial, $request->reporte_conclusion)
+                      'reporteruido_conclusion' => $this->datosproyectolimpiartexto($proyecto, $recsensorial, $request->reporte_conclusion)
                 ]);
 
                 // Mensaje
@@ -6583,19 +7250,29 @@ class reporteruidoController extends Controller
 
 
             // RECOMENDACIONES
-            if (($request->opcion + 0) == 20) {
-                if ($request->recomendacion_checkbox) {
+            if (($request->opcion+0) == 20)
+            {
+                if ($request->recomendacion_checkbox)
+                {
                     $eliminar_recomendaciones = reporterecomendacionesModel::where('proyecto_id', $request->proyecto_id)
-                        ->where('catactivo_id', $request->catactivo_id)
-                        ->where('agente_nombre', $request->agente_nombre)
-                        ->where('registro_id', $reporte->id)
-                        ->delete();
+                                                                            ->where('catactivo_id', $request->catactivo_id)
+                                                                            ->where('agente_nombre', $request->agente_nombre)
+                                                                            ->where('registro_id', $reporte->id)
+                                                                            ->delete();
 
                     DB::statement('ALTER TABLE reporterecomendaciones AUTO_INCREMENT = 1;');
 
-                    foreach ($request->recomendacion_checkbox as $key => $value) {
+                    foreach ($request->recomendacion_checkbox as $key => $value)
+                    {
                         $recomendacion = reporterecomendacionesModel::create([
-                            'agente_id' => $request->agente_id, 'agente_nombre' => $request->agente_nombre, 'proyecto_id' => $request->proyecto_id, 'registro_id' => $reporte->id, 'catactivo_id' => $request->catactivo_id, 'reporterecomendacionescatalogo_id' => $value, 'reporterecomendaciones_tipo' => $request['recomendacion_tipo_' . $value], 'reporterecomendaciones_descripcion' => $this->datosproyectolimpiartexto($proyecto, $recsensorial, $request['recomendacion_descripcion_' . $value])
+                              'agente_id' => $request->agente_id
+                            , 'agente_nombre' => $request->agente_nombre
+                            , 'proyecto_id' => $request->proyecto_id
+                            , 'registro_id' => $reporte->id
+                            , 'catactivo_id' => $request->catactivo_id
+                            , 'reporterecomendacionescatalogo_id' => $value
+                            , 'reporterecomendaciones_tipo' => $request['recomendacion_tipo_'.$value]
+                            , 'reporterecomendaciones_descripcion' => $this->datosproyectolimpiartexto($proyecto, $recsensorial, $request['recomendacion_descripcion_'.$value])
                         ]);
                     }
 
@@ -6604,20 +7281,30 @@ class reporteruidoController extends Controller
                 }
 
 
-                if ($request->recomendacionadicional_checkbox) {
-                    if (!$request->recomendacion_checkbox) {
+                if ($request->recomendacionadicional_checkbox)
+                {
+                    if (!$request->recomendacion_checkbox)
+                    {
                         $eliminar_recomendaciones = reporterecomendacionesModel::where('proyecto_id', $request->proyecto_id)
-                            ->where('catactivo_id', $request->catactivo_id)
-                            ->where('agente_nombre', $request->agente_nombre)
-                            ->where('registro_id', $reporte->id)
-                            ->delete();
+                                                                                ->where('catactivo_id', $request->catactivo_id)
+                                                                                ->where('agente_nombre', $request->agente_nombre)
+                                                                                ->where('registro_id', $reporte->id)
+                                                                                ->delete();
                     }
 
                     DB::statement('ALTER TABLE reporterecomendaciones AUTO_INCREMENT = 1;');
 
-                    foreach ($request->recomendacionadicional_checkbox as $key => $value) {
+                    foreach ($request->recomendacionadicional_checkbox as $key => $value)
+                    {
                         $recomendacion = reporterecomendacionesModel::create([
-                            'agente_id' => $request->agente_id, 'agente_nombre' => $request->agente_nombre, 'proyecto_id' => $request->proyecto_id, 'registro_id' => $reporte->id, 'catactivo_id' => $request->catactivo_id, 'reporterecomendacionescatalogo_id' => 0, 'reporterecomendaciones_tipo' => $request->recomendacionadicional_tipo[$key], 'reporterecomendaciones_descripcion' => $this->datosproyectolimpiartexto($proyecto, $recsensorial, $request->recomendacionadicional_descripcion[$key])
+                              'agente_id' => $request->agente_id
+                            , 'agente_nombre' => $request->agente_nombre
+                            , 'proyecto_id' => $request->proyecto_id
+                            , 'registro_id' => $reporte->id
+                            , 'catactivo_id' => $request->catactivo_id
+                            , 'reporterecomendacionescatalogo_id' => 0
+                            , 'reporterecomendaciones_tipo' => $request->recomendacionadicional_tipo[$key]
+                            , 'reporterecomendaciones_descripcion' => $this->datosproyectolimpiartexto($proyecto, $recsensorial, $request->recomendacionadicional_descripcion[$key])
                         ]);
                     }
 
@@ -6628,32 +7315,39 @@ class reporteruidoController extends Controller
 
 
             // RESPONSABLES DEL INFORME
-            if (($request->opcion + 0) == 21) {
+            if (($request->opcion+0) == 21)
+            {
                 $reporte->update([
-                    'reporteruido_responsable1' => $request->reporte_responsable1, 'reporteruido_responsable1cargo' => $request->reporte_responsable1cargo, 'reporteruido_responsable2' => $request->reporte_responsable2, 'reporteruido_responsable2cargo' => $request->reporte_responsable2cargo
+                      'reporteruido_responsable1' => $request->reporte_responsable1
+                    , 'reporteruido_responsable1cargo' => $request->reporte_responsable1cargo
+                    , 'reporteruido_responsable2' => $request->reporte_responsable2
+                    , 'reporteruido_responsable2cargo' => $request->reporte_responsable2cargo
                 ]);
 
 
-                if ($request->responsablesinforme_carpetadocumentoshistorial) {
-                    $nuevo_destino = 'reportes/proyecto/' . $request->proyecto_id . '/' . $request->agente_nombre . '/' . $reporte->id . '/responsables informe/';
+                if ($request->responsablesinforme_carpetadocumentoshistorial)
+                {
+                    $nuevo_destino = 'reportes/proyecto/'.$request->proyecto_id.'/'.$request->agente_nombre.'/'.$reporte->id.'/responsables informe/';
                     Storage::makeDirectory($nuevo_destino); //crear directorio
 
-                    File::copyDirectory(storage_path('app/' . $request->responsablesinforme_carpetadocumentoshistorial), storage_path('app/' . $nuevo_destino));
+                    File::copyDirectory(storage_path('app/'.$request->responsablesinforme_carpetadocumentoshistorial), storage_path('app/'.$nuevo_destino));
 
                     $reporte->update([
-                        'reporteruido_responsable1documento' => $nuevo_destino . 'responsable1_doc.jpg', 'reporteruido_responsable2documento' => $nuevo_destino . 'responsable2_doc.jpg'
+                          'reporteruido_responsable1documento' => $nuevo_destino.'responsable1_doc.jpg'
+                        , 'reporteruido_responsable2documento' => $nuevo_destino.'responsable2_doc.jpg'
                     ]);
                 }
 
 
-                if ($request->file('reporteresponsable1documento')) {
+                if ($request->file('reporteresponsable1documento'))
+                {
                     // Codificar imagen recibida como tipo base64
                     $imagen_recibida = explode(',', $request->reporte_responsable1_documentobase64); //Archivo foto tipo base64
                     $imagen_nueva = base64_decode($imagen_recibida[1]);
 
                     // Ruta destino archivo
-                    $destinoPath = 'reportes/proyecto/' . $request->proyecto_id . '/' . $request->agente_nombre . '/' . $reporte->id . '/responsables informe/responsable1_doc.jpg';
-
+                    $destinoPath = 'reportes/proyecto/'.$request->proyecto_id.'/'.$request->agente_nombre.'/'.$reporte->id.'/responsables informe/responsable1_doc.jpg';
+                    
                     // Guardar Foto
                     Storage::put($destinoPath, $imagen_nueva); // Guardar en storage
                     // file_put_contents(public_path('/imagen.jpg'), $imagen_nueva); // Guardar en public
@@ -6664,14 +7358,15 @@ class reporteruidoController extends Controller
                 }
 
 
-                if ($request->file('reporteresponsable2documento')) {
+                if ($request->file('reporteresponsable2documento'))
+                {
                     // Codificar imagen recibida como tipo base64
                     $imagen_recibida = explode(',', $request->reporte_responsable2_documentobase64); //Archivo foto tipo base64
                     $imagen_nueva = base64_decode($imagen_recibida[1]);
 
                     // Ruta destino archivo
-                    $destinoPath = 'reportes/proyecto/' . $request->proyecto_id . '/' . $request->agente_nombre . '/' . $reporte->id . '/responsables informe/responsable2_doc.jpg';
-
+                    $destinoPath = 'reportes/proyecto/'.$request->proyecto_id.'/'.$request->agente_nombre.'/'.$reporte->id.'/responsables informe/responsable2_doc.jpg';
+                    
                     // Guardar Foto
                     Storage::put($destinoPath, $imagen_nueva); // Guardar en storage
                     // file_put_contents(public_path('/imagen.jpg'), $imagen_nueva); // Guardar en public
@@ -6687,24 +7382,33 @@ class reporteruidoController extends Controller
 
 
             // PLANOS
-            if (($request->opcion + 0) == 22) {
+            if (($request->opcion+0) == 22)
+            {
                 $eliminar_carpetasplanos = reporteplanoscarpetasModel::where('proyecto_id', $request->proyecto_id)
-                    ->where('agente_nombre', $request->agente_nombre)
-                    ->where('registro_id', $reporte->id)
-                    ->delete();
+                                                                        ->where('agente_nombre', $request->agente_nombre)
+                                                                        ->where('registro_id', $reporte->id)
+                                                                        ->delete();
 
-                if ($request->planoscarpeta_checkbox) {
+                if ($request->planoscarpeta_checkbox)
+                {
                     DB::statement('ALTER TABLE reporteplanoscarpetas AUTO_INCREMENT = 1;');
 
                     $dato["total"] = 0;
-                    foreach ($request->planoscarpeta_checkbox as $key => $value) {
+                    foreach ($request->planoscarpeta_checkbox as $key => $value)
+                    {
                         $anexo = reporteplanoscarpetasModel::create([
-                            'proyecto_id' => $request->proyecto_id, 'agente_id' => $request->agente_id, 'agente_nombre' => $request->agente_nombre, 'registro_id' => $reporte->id, 'reporteplanoscarpetas_nombre' => str_replace(['\\', '/', ':', '*', '"', '?', '<', '>', '|'], '-', $value)
+                              'proyecto_id' => $request->proyecto_id
+                            , 'agente_id' => $request->agente_id
+                            , 'agente_nombre' => $request->agente_nombre
+                            , 'registro_id' => $reporte->id
+                            , 'reporteplanoscarpetas_nombre' => str_replace(['\\', '/', ':', '*', '"', '?', '<', '>', '|'], '-', $value)
                         ]);
 
                         $dato["total"] += 1;
                     }
-                } else {
+                }
+                else
+                {
                     $dato["total"] = 0;
                 }
 
@@ -6714,27 +7418,38 @@ class reporteruidoController extends Controller
 
 
             // EQUIPO UTILIZADO
-            if (($request->opcion + 0) == 23) {
-                if ($request->equipoutilizado_checkbox) {
+            if (($request->opcion+0) == 23)
+            {
+                if ($request->equipoutilizado_checkbox)
+                {
                     $eliminar_equiposutilizados = reporteequiposutilizadosModel::where('proyecto_id', $request->proyecto_id)
-                        ->where('agente_nombre', $request->agente_nombre)
-                        ->where('registro_id', $reporte->id)
-                        ->delete();
+                                                                                ->where('agente_nombre', $request->agente_nombre)
+                                                                                ->where('registro_id', $reporte->id)
+                                                                                ->delete();
 
 
                     DB::statement('ALTER TABLE reporteequiposutilizados AUTO_INCREMENT = 1;');
 
 
-                    foreach ($request->equipoutilizado_checkbox as $key => $value) {
-                        if ($request['equipoutilizado_checkboxcarta_' . $value]) {
+                    foreach ($request->equipoutilizado_checkbox as $key => $value)
+                    {
+                        if ($request['equipoutilizado_checkboxcarta_'.$value])
+                        {
                             $request->reporteequiposutilizados_cartacalibracion = 1;
-                        } else {
+                        }
+                        else
+                        {
                             $request->reporteequiposutilizados_cartacalibracion = null;
                         }
 
 
                         $equipoutilizado = reporteequiposutilizadosModel::create([
-                            'proyecto_id' => $request->proyecto_id, 'agente_id' => $request->agente_id, 'agente_nombre' => $request->agente_nombre, 'registro_id' => $reporte->id, 'equipo_id' => $value, 'reporteequiposutilizados_cartacalibracion' => $request->reporteequiposutilizados_cartacalibracion
+                              'proyecto_id' => $request->proyecto_id
+                            , 'agente_id' => $request->agente_id
+                            , 'agente_nombre' => $request->agente_nombre
+                            , 'registro_id' => $reporte->id
+                            , 'equipo_id' => $value
+                            , 'reporteequiposutilizados_cartacalibracion' => $request->reporteequiposutilizados_cartacalibracion
                         ]);
                     }
                 }
@@ -6745,26 +7460,36 @@ class reporteruidoController extends Controller
 
 
             // INFORMES RESULTADOS
-            if (($request->opcion + 0) == 24) {
+            if (($request->opcion+0) == 24)
+            {
                 $eliminar_anexos = reporteanexosModel::where('proyecto_id', $request->proyecto_id)
-                    ->where('agente_nombre', $request->agente_nombre)
-                    ->where('registro_id', $reporte->id)
-                    ->where('reporteanexos_tipo', 1) // INFORMES DE RESULTADOS
-                    ->delete();
+                                                    ->where('agente_nombre', $request->agente_nombre)
+                                                    ->where('registro_id', $reporte->id)
+                                                    ->where('reporteanexos_tipo', 1) // INFORMES DE RESULTADOS
+                                                    ->delete();
 
-                if ($request->anexoresultado_checkbox) {
+                if ($request->anexoresultado_checkbox)
+                {
                     DB::statement('ALTER TABLE reporteanexos AUTO_INCREMENT = 1;');
 
                     $dato["total"] = 0;
-                    foreach ($request->anexoresultado_checkbox as $key => $value) {
+                    foreach ($request->anexoresultado_checkbox as $key => $value)
+                    {
                         $anexo = reporteanexosModel::create([
-                            'proyecto_id' => $request->proyecto_id, 'agente_id' => $request->agente_id, 'agente_nombre' => $request->agente_nombre, 'registro_id' => $reporte->id, 'reporteanexos_tipo' => 1  // INFORMES DE RESULTADOS
-                            , 'reporteanexos_anexonombre' => str_replace(['\\', '/', ':', '*', '"', '?', '<', '>', '|'], '-', $request['anexoresultado_nombre_' . $value]), 'reporteanexos_rutaanexo' => $request['anexoresultado_archivo_' . $value]
+                              'proyecto_id' => $request->proyecto_id
+                            , 'agente_id' => $request->agente_id
+                            , 'agente_nombre' => $request->agente_nombre
+                            , 'registro_id' => $reporte->id
+                            , 'reporteanexos_tipo' => 1  // INFORMES DE RESULTADOS
+                            , 'reporteanexos_anexonombre' => str_replace(['\\', '/', ':', '*', '"', '?', '<', '>', '|'], '-', $request['anexoresultado_nombre_'.$value])
+                            , 'reporteanexos_rutaanexo' => $request['anexoresultado_archivo_'.$value]
                         ]);
 
                         $dato["total"] += 1;
                     }
-                } else {
+                }
+                else
+                {
                     $dato["total"] = 0;
                 }
 
@@ -6774,26 +7499,36 @@ class reporteruidoController extends Controller
 
 
             // ANEXOS 7 STPS y 8 EMA
-            if (($request->opcion + 0) == 25) {
+            if (($request->opcion+0) == 25)
+            {
                 $eliminar_anexos = reporteanexosModel::where('proyecto_id', $request->proyecto_id)
-                    ->where('agente_nombre', $request->agente_nombre)
-                    ->where('registro_id', $reporte->id)
-                    ->where('reporteanexos_tipo', 2) // ANEXOS TIPO STPS Y EMA
-                    ->delete();
+                                                    ->where('agente_nombre', $request->agente_nombre)
+                                                    ->where('registro_id', $reporte->id)
+                                                    ->where('reporteanexos_tipo', 2) // ANEXOS TIPO STPS Y EMA
+                                                    ->delete();
 
-                if ($request->anexoacreditacion_checkbox) {
+                if ($request->anexoacreditacion_checkbox)
+                {
                     DB::statement('ALTER TABLE reporteanexos AUTO_INCREMENT = 1;');
 
                     $dato["total"] = 0;
-                    foreach ($request->anexoacreditacion_checkbox as $key => $value) {
+                    foreach ($request->anexoacreditacion_checkbox as $key => $value)
+                    {
                         $anexo = reporteanexosModel::create([
-                            'proyecto_id' => $request->proyecto_id, 'agente_id' => $request->agente_id, 'agente_nombre' => $request->agente_nombre, 'registro_id' => $reporte->id, 'reporteanexos_tipo' => 2  // ANEXOS TIPO STPS Y EMA
-                            , 'reporteanexos_anexonombre' => ($key + 1) . '.- ' . str_replace(['\\', '/', ':', '*', '"', '?', '<', '>', '|'], '-', $request['anexoacreditacion_nombre_' . $value]), 'reporteanexos_rutaanexo' => $request['anexoacreditacion_archivo_' . $value]
+                              'proyecto_id' => $request->proyecto_id
+                            , 'agente_id' => $request->agente_id
+                            , 'agente_nombre' => $request->agente_nombre
+                            , 'registro_id' => $reporte->id
+                            , 'reporteanexos_tipo' => 2  // ANEXOS TIPO STPS Y EMA
+                            , 'reporteanexos_anexonombre' => ($key+1).'.- '.str_replace(['\\', '/', ':', '*', '"', '?', '<', '>', '|'], '-', $request['anexoacreditacion_nombre_'.$value])
+                            , 'reporteanexos_rutaanexo' => $request['anexoacreditacion_archivo_'.$value]
                         ]);
 
                         $dato["total"] += 1;
                     }
-                } else {
+                }
+                else
+                {
                     $dato["total"] = 0;
                 }
 
@@ -6803,7 +7538,8 @@ class reporteruidoController extends Controller
 
 
             // REVISION INFORME, CANCELACION
-            if (($request->opcion + 0) == 26) {
+            if (($request->opcion+0) == 26)
+            {
                 $revision = reporterevisionesModel::findOrFail($request->reporterevisiones_id);
 
 
@@ -6813,21 +7549,26 @@ class reporteruidoController extends Controller
                 $canceladoobservacion = NULL;
 
 
-                if ($revision->reporterevisiones_cancelado == 0) {
-                    $cancelado = 1;
-                    $canceladonombre = auth()->user()->empleado->empleado_nombre . " " . auth()->user()->empleado->empleado_apellidopaterno . " " . auth()->user()->empleado->empleado_apellidomaterno;
+                if ($revision->reporterevisiones_cancelado == 0)
+                {
+                    $cancelado = 1;                
+                    $canceladonombre = auth()->user()->empleado->empleado_nombre." ".auth()->user()->empleado->empleado_apellidopaterno." ".auth()->user()->empleado->empleado_apellidomaterno;
                     $canceladofecha = date('Y-m-d H:i:s');
                     $canceladoobservacion = $request->reporte_canceladoobservacion;
                 }
 
 
                 $revision->update([
-                    'reporterevisiones_cancelado' => $cancelado, 'reporterevisiones_canceladonombre' => $canceladonombre, 'reporterevisiones_canceladofecha' => $canceladofecha, 'reporterevisiones_canceladoobservacion' => $canceladoobservacion
+                      'reporterevisiones_cancelado' => $cancelado
+                    , 'reporterevisiones_canceladonombre' => $canceladonombre
+                    , 'reporterevisiones_canceladofecha' => $canceladofecha
+                    , 'reporterevisiones_canceladoobservacion' => $canceladoobservacion
                 ]);
 
 
                 $dato["estado"] = 0;
-                if ($revision->reporterevisiones_concluido == 1 || $cancelado == 1) {
+                if ($revision->reporterevisiones_concluido == 1 || $cancelado == 1)
+                {
                     $dato["estado"] = 1;
                 }
 
@@ -6867,9 +7608,11 @@ class reporteruidoController extends Controller
             // respuesta
             $dato["reporteregistro_id"] = $reporte->id;
             return response()->json($dato);
-        } catch (Exception $e) {
+        }
+        catch(Exception $e)
+        {
             // respuesta
-            $dato["msj"] = 'Error ' . $e->getMessage();
+            $dato["msj"] = 'Error '.$e->getMessage();
             return response()->json($dato);
         }
     }

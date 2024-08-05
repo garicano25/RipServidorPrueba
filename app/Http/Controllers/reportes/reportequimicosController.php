@@ -83,27 +83,41 @@ class reportequimicosController extends Controller
         $proyecto = proyectoModel::findOrFail($proyecto_id);
 
 
-        if (($proyecto->recsensorial->recsensorial_tipocliente + 0) == 1 && ($proyecto->recsensorial_id == NULL || $proyecto->catregion_id == NULL || $proyecto->catsubdireccion_id == NULL || $proyecto->catgerencia_id == NULL || $proyecto->catactivo_id == NULL || $proyecto->proyecto_clienteinstalacion == NULL || $proyecto->proyecto_fechaentrega == NULL)) {
+        if (($proyecto->recsensorial->recsensorial_tipocliente+0) == 1 && ($proyecto->recsensorial_id == NULL || $proyecto->catregion_id == NULL || $proyecto->catsubdireccion_id == NULL || $proyecto->catgerencia_id == NULL || $proyecto->catactivo_id == NULL || $proyecto->proyecto_clienteinstalacion == NULL || $proyecto->proyecto_fechaentrega == NULL))
+        {
             return '<div style="text-align: center;">
                         <p style="font-size: 24px;">Datos incompletos</p>
                         <b style="font-size: 18px;">Para ingresar al diseño del reporte de Químicos primero debe completar todos los campos vacíos de la sección de datos generales del proyecto.</b>
                     </div>';
-        } else {
+        }
+        else
+        {
             // CREAR REVISION SI NO EXISTE
             //===================================================
 
 
             $revision = reporterevisionesModel::where('proyecto_id', $proyecto_id)
-                ->where('agente_id', 15) // Químicos
-                ->orderBy('reporterevisiones_revision', 'DESC')
-                ->get();
+                                                ->where('agente_id', 15) // Químicos
+                                                ->orderBy('reporterevisiones_revision', 'DESC')
+                                                ->get();
 
 
-            if (count($revision) == 0) {
+            if(count($revision) == 0)
+            {
                 DB::statement('ALTER TABLE reporterevisiones AUTO_INCREMENT = 1;');
 
                 $revision = reporterevisionesModel::create([
-                    'proyecto_id' => $proyecto_id, 'agente_id' => 15, 'agente_nombre' => 'Químicos', 'reporterevisiones_revision' => 0, 'reporterevisiones_concluido' => 0, 'reporterevisiones_concluidonombre' => NULL, 'reporterevisiones_concluidofecha' => NULL, 'reporterevisiones_cancelado' => 0, 'reporterevisiones_canceladonombre' => NULL, 'reporterevisiones_canceladofecha' => NULL, 'reporterevisiones_canceladoobservacion' => NULL
+                      'proyecto_id' => $proyecto_id
+                    , 'agente_id' => 15
+                    , 'agente_nombre' => 'Químicos'
+                    , 'reporterevisiones_revision' => 0
+                    , 'reporterevisiones_concluido' => 0
+                    , 'reporterevisiones_concluidonombre' => NULL
+                    , 'reporterevisiones_concluidofecha' => NULL
+                    , 'reporterevisiones_cancelado' => 0
+                    , 'reporterevisiones_canceladonombre' => NULL
+                    , 'reporterevisiones_canceladofecha' => NULL
+                    , 'reporterevisiones_canceladoobservacion' => NULL
                 ]);
             }
 
@@ -117,7 +131,7 @@ class reportequimicosController extends Controller
                                             FROM
                                                 reportequimicosproyecto
                                             WHERE
-                                                reportequimicosproyecto.proyecto_id = ' . $proyecto_id);
+                                                reportequimicosproyecto.proyecto_id = '.$proyecto_id);
 
             // ================ DESCOMENTAR DESPUES DE SUBIR AL SERVIDOR =========================
             // if (($total_quimicos[0]->total + 0) == 0)
@@ -142,7 +156,7 @@ class reportequimicosController extends Controller
 
 
             //     DB::statement('ALTER TABLE reportequimicosproyecto AUTO_INCREMENT = 1;');
-
+                
 
             //     foreach ($quimicos as $key => $value)
             //     {
@@ -203,7 +217,7 @@ class reportequimicosController extends Controller
 
 
             //     DB::statement('ALTER TABLE reportequimicosproyecto AUTO_INCREMENT = 1;');
-
+                
 
             //     foreach ($quimicos as $key => $value)
             //     {
@@ -292,14 +306,17 @@ class reportequimicosController extends Controller
                                         FROM
                                             reportequimicoscategoria
                                         WHERE
-                                            reportequimicoscategoria.proyecto_id = ' . $proyecto_id . ' 
+                                            reportequimicoscategoria.proyecto_id = '.$proyecto_id.' 
                                         ORDER BY
                                             reportequimicoscategoria.reportequimicoscategoria_nombre ASC');
 
 
-            if (count($categorias) > 0) {
+            if (count($categorias) > 0)
+            {
                 $categorias_poe = 0; // NO TIENE POE GENERAL
-            } else {
+            }
+            else
+            {
                 $categorias_poe = 1; // TIENE POE GENERAL
             }
 
@@ -319,15 +336,18 @@ class reportequimicosController extends Controller
                                 FROM
                                     reportequimicosarea
                                 WHERE
-                                    reportequimicosarea.proyecto_id = ' . $proyecto_id . ' 
+                                    reportequimicosarea.proyecto_id = '.$proyecto_id.' 
                                 ORDER BY
                                     reportequimicosarea.reportequimicosarea_numorden ASC,
                                     reportequimicosarea.reportequimicosarea_nombre ASC');
 
 
-            if (count($areas) > 0) {
+            if (count($areas) > 0)
+            {
                 $areas_poe = 0; // NO TIENE POE GENERAL
-            } else {
+            }
+            else
+            {
                 $areas_poe = 1; // TIENE POE GENERAL
             }
 
@@ -360,20 +380,22 @@ class reportequimicosController extends Controller
     {
         $meses = ["Vacio", "Enero", "Febrero", "Marzo", "Abril", "Mayo", "Junio", "Julio", "Agosto", "Septiembre", "Octubre", "Noviembre", "Diciembre"];
         $reportefecha = explode("-", $proyecto->proyecto_fechaentrega);
-
+        
         $texto = str_replace($quimicos_nombre, 'QUIMICOS_NOMBRE', $texto);
         $texto = str_replace($proyecto->proyecto_clienteinstalacion, 'INSTALACION_NOMBRE', $texto);
         $texto = str_replace($proyecto->proyecto_clientedireccionservicio, 'INSTALACION_DIRECCION', $texto);
         // $texto = str_replace('C.P. '.$recsensorial->recsensorial_codigopostal, 'INSTALACION_CODIGOPOSTAL', $texto);
         // $texto = str_replace($recsensorial->recsensorial_coordenadas, 'INSTALACION_COORDENADAS', $texto);
-        $texto = str_replace($reportefecha[2] . " de " . $meses[($reportefecha[1] + 0)] . " del año " . $reportefecha[0], 'REPORTE_FECHA_LARGA', $texto);
+        $texto = str_replace($reportefecha[2]." de ".$meses[($reportefecha[1]+0)]." del año ".$reportefecha[0], 'REPORTE_FECHA_LARGA', $texto);
 
-        if (($recsensorial->recsensorial_tipocliente + 0) == 1) // 1 = pemex, 0 = cliente
+        if (($recsensorial->recsensorial_tipocliente+0) == 1) // 1 = pemex, 0 = cliente
         {
             $texto = str_replace($proyecto->catsubdireccion->catsubdireccion_nombre, 'SUBDIRECCION_NOMBRE', $texto);
             $texto = str_replace($proyecto->catgerencia->catgerencia_nombre, 'GERENCIA_NOMBRE', $texto);
             $texto = str_replace($proyecto->catactivo->catactivo_nombre, 'ACTIVO_NOMBRE', $texto);
-        } else {
+        }
+        else
+        {
             $texto = str_replace($recsensorial->recsensorial_empresa, 'PEMEX Exploración y Producción', $texto);
         }
 
@@ -389,16 +411,18 @@ class reportequimicosController extends Controller
         $texto = str_replace('QUIMICOS_NOMBRE', $quimicos_nombre, $texto);
         $texto = str_replace('INSTALACION_NOMBRE', $proyecto->proyecto_clienteinstalacion, $texto);
         $texto = str_replace('INSTALACION_DIRECCION', $proyecto->proyecto_clientedireccionservicio, $texto);
-        $texto = str_replace('INSTALACION_CODIGOPOSTAL', 'C.P. ' . $recsensorial->recsensorial_codigopostal, $texto);
+        $texto = str_replace('INSTALACION_CODIGOPOSTAL', 'C.P. '.$recsensorial->recsensorial_codigopostal, $texto);
         $texto = str_replace('INSTALACION_COORDENADAS', $recsensorial->recsensorial_coordenadas, $texto);
-        $texto = str_replace('REPORTE_FECHA_LARGA', $reportefecha[2] . " de " . $meses[($reportefecha[1] + 0)] . " del año " . $reportefecha[0], $texto);
+        $texto = str_replace('REPORTE_FECHA_LARGA', $reportefecha[2]." de ".$meses[($reportefecha[1]+0)]." del año ".$reportefecha[0], $texto);
 
-        if (($recsensorial->recsensorial_tipocliente + 0) == 1) // 1 = pemex, 0 = cliente
+        if (($recsensorial->recsensorial_tipocliente+0) == 1) // 1 = pemex, 0 = cliente
         {
             $texto = str_replace('SUBDIRECCION_NOMBRE', $proyecto->catsubdireccion->catsubdireccion_nombre, $texto);
             $texto = str_replace('GERENCIA_NOMBRE', $proyecto->catgerencia->catgerencia_nombre, $texto);
             $texto = str_replace('ACTIVO_NOMBRE', $proyecto->catactivo->catactivo_nombre, $texto);
-        } else {
+        }
+        else
+        {
             $texto = str_replace('SUBDIRECCION_NOMBRE', '', $texto);
             $texto = str_replace('GERENCIA_NOMBRE', '', $texto);
             $texto = str_replace('ACTIVO_NOMBRE', '', $texto);
@@ -428,14 +452,15 @@ class reportequimicosController extends Controller
                                     LEFT JOIN catreportequimicospartidas ON reportequimicosgrupos.catreportequimicospartidas_id = catreportequimicospartidas.id
                                     LEFT JOIN reportequimicosproyecto ON reportequimicosgrupos.reportequimicosproyecto_id = reportequimicosproyecto.id 
                                 WHERE
-                                    reportequimicosgrupos.proyecto_id = ' . $proyecto_id . ' 
-                                    AND reportequimicosgrupos.registro_id = ' . $reporteregistro_id . ' 
+                                    reportequimicosgrupos.proyecto_id = '.$proyecto_id.' 
+                                    AND reportequimicosgrupos.registro_id = '.$reporteregistro_id.' 
                                 ORDER BY
                                     reportequimicosgrupos.catreportequimicospartidas_id ASC,
                                     reportequimicosproyecto.reportequimicosproyecto_parametro ASC');
 
 
-        if (count($quimicos) == 0) {
+        if (count($quimicos) == 0)
+        {
             $quimicos = DB::select('SELECT
                                         reportequimicosproyecto.id,
                                         reportequimicosproyecto.proyecto_id,
@@ -444,13 +469,14 @@ class reportequimicosController extends Controller
                                     FROM
                                         reportequimicosproyecto 
                                     WHERE
-                                        reportequimicosproyecto.proyecto_id = ' . $proyecto_id . ' 
-                                        AND reportequimicosproyecto.registro_id = ' . $reporteregistro_id . '
+                                        reportequimicosproyecto.proyecto_id = '.$proyecto_id.' 
+                                        AND reportequimicosproyecto.registro_id = '.$reporteregistro_id.'
                                     ORDER BY
                                         reportequimicosproyecto.reportequimicosproyecto_parametro ASC');
 
 
-            if (count($quimicos) == 0) {
+            if (count($quimicos) == 0)
+            {
                 $quimicos = DB::select('SELECT
                                             reportequimicosproyecto.id,
                                             reportequimicosproyecto.proyecto_id,
@@ -459,7 +485,7 @@ class reportequimicosController extends Controller
                                         FROM
                                             reportequimicosproyecto 
                                         WHERE
-                                            reportequimicosproyecto.proyecto_id = ' . $proyecto_id . '
+                                            reportequimicosproyecto.proyecto_id = '.$proyecto_id.'
                                         ORDER BY
                                             reportequimicosproyecto.reportequimicosproyecto_parametro ASC');
             }
@@ -467,10 +493,14 @@ class reportequimicosController extends Controller
 
 
         $quimicos_nombre = '';
-        foreach ($quimicos as $key => $value) {
-            if (($key + 0) > 0) {
-                $quimicos_nombre .= ', ' . $value->reportequimicosproyecto_parametro;
-            } else {
+        foreach ($quimicos as $key => $value)
+        {
+            if (($key+0) > 0)
+            {
+                $quimicos_nombre .= ', '.$value->reportequimicosproyecto_parametro;
+            }
+            else
+            {
                 $quimicos_nombre .= $value->reportequimicosproyecto_parametro;
             }
         }
@@ -489,32 +519,38 @@ class reportequimicosController extends Controller
      */
     public function reportequimicosdatosgenerales($proyecto_id, $agente_id, $agente_nombre)
     {
-        try {
+        try
+        {
             $proyecto = proyectoModel::with(['catregion', 'catsubdireccion', 'catgerencia', 'catactivo'])->findOrFail($proyecto_id);
             $recsensorial = recsensorialModel::with(['cliente', 'catregion', 'catsubdireccion', 'catgerencia', 'catactivo'])->findOrFail($proyecto->recsensorial_id);
-
+                
             $meses = ["Vacio", "Enero", "Febrero", "Marzo", "Abril", "Mayo", "Junio", "Julio", "Agosto", "Septiembre", "Octubre", "Noviembre", "Diciembre"];
             $proyectofecha = explode("-", $proyecto->proyecto_fechaentrega);
 
             $reportecatalogo = reportequimicoscatalogoModel::limit(1)->get();
             $reporte  = reportequimicosModel::where('proyecto_id', $proyecto_id)
-                ->orderBy('reportequimicos_revision', 'DESC')
-                ->limit(1)
-                ->get();
+                                            ->orderBy('reportequimicos_revision', 'DESC')
+                                            ->limit(1)
+                                            ->get();
 
 
-            if (count($reporte) > 0) {
+            if (count($reporte) > 0)
+            {
                 $reporte = $reporte[0];
                 $dato['reporteregistro_id'] = $reporte->id;
-            } else {
-                if (($recsensorial->recsensorial_tipocliente + 0) == 1) // 1 = Pemex, 0 = cliente
+            }
+            else
+            {
+                if (($recsensorial->recsensorial_tipocliente+0) == 1) // 1 = Pemex, 0 = cliente
                 {
                     $reporte = reportequimicosModel::where('catactivo_id', $proyecto->catactivo_id)
-                        ->orderBy('proyecto_id', 'DESC')
-                        ->orderBy('reportequimicos_revision', 'DESC')
-                        ->limit(1)
-                        ->get();
-                } else {
+                                                    ->orderBy('proyecto_id', 'DESC')
+                                                    ->orderBy('reportequimicos_revision', 'DESC')
+                                                    ->limit(1)
+                                                    ->get();
+                }
+                else
+                {
                     $reporte = DB::select('SELECT
                                                 recsensorial.recsensorial_tipocliente,
                                                 recsensorial.cliente_id,
@@ -562,17 +598,20 @@ class reportequimicosController extends Controller
                                                 LEFT JOIN proyecto ON recsensorial.id = proyecto.recsensorial_id
                                                 LEFT JOIN reportequimicos ON proyecto.id = reportequimicos.proyecto_id 
                                             WHERE
-                                                recsensorial.cliente_id = ' . $recsensorial->cliente_id . '  
+                                                recsensorial.cliente_id = '.$recsensorial->cliente_id.'  
                                                 AND reportequimicos.reportequimicos_instalacion <> "" 
                                             ORDER BY
                                                 reportequimicos.updated_at DESC');
                 }
 
 
-                if (count($reporte) > 0) {
+                if (count($reporte) > 0)
+                {
                     $reporte = $reporte[0];
                     $dato['reporteregistro_id'] = 0;
-                } else {
+                }
+                else
+                {
                     $reporte = array(0, 0);
                     $dato['reporteregistro_id'] = -1;
                 }
@@ -583,51 +622,78 @@ class reportequimicosController extends Controller
 
 
             $revision = reporterevisionesModel::where('proyecto_id', $proyecto_id)
-                ->where('agente_id', 15) //Quimicos
-                ->orderBy('reporterevisiones_revision', 'DESC')
-                ->get();
+                                                ->where('agente_id', 15) //Quimicos
+                                                ->orderBy('reporterevisiones_revision', 'DESC')
+                                                ->get();
 
 
-            if (count($revision) > 0) {
+            if(count($revision) > 0)
+            {
                 $revision = reporterevisionesModel::findOrFail($revision[0]->id);
 
 
                 $dato['reporte_concluido'] = $revision->reporterevisiones_concluido;
                 $dato['reporte_cancelado'] = $revision->reporterevisiones_cancelado;
-            } else {
+            }
+            else
+            {
                 $dato['reporte_concluido'] = 0;
                 $dato['reporte_cancelado'] = 0;
             }
 
-
+            
             // QUIMICOS LISTA
             //===================================================
 
 
             $quimicos_nombre = $this->quimicosnombre($proyecto_id, $dato['reporteregistro_id']);
-
+                
 
             // PORTADA
             //===================================================
+            
+            $dato['recsensorial_tipocliente'] = ($recsensorial->recsensorial_tipocliente+0);
 
-            $dato['recsensorial_tipocliente'] = ($recsensorial->recsensorial_tipocliente + 0);
-
-            if ($dato['reporteregistro_id'] >= 0 && $reporte->reportequimicos_fecha != NULL && $reporte->proyecto_id == $proyecto_id) {
+            if ($dato['reporteregistro_id'] >= 0 && $reporte->reportequimicos_fecha != NULL && $reporte->proyecto_id == $proyecto_id)
+            {
                 $reportefecha = $reporte->reportequimicos_fecha;
                 $dato['reporte_portada_guardado'] = 1;
 
                 $dato['reporte_portada'] = array(
-                    'reporte_catregion_activo' => $reporte->reportequimicos_catregion_activo, 'catregion_id' => $proyecto->catregion_id, 'reporte_catsubdireccion_activo' => $reporte->reportequimicos_catsubdireccion_activo, 'catsubdireccion_id' => $proyecto->catsubdireccion_id, 'reporte_catgerencia_activo' => $reporte->reportequimicos_catgerencia_activo, 'catgerencia_id' => $proyecto->catgerencia_id, 'reporte_catactivo_activo' => $reporte->reportequimicos_catactivo_activo, 'catactivo_id' => $proyecto->catactivo_id, 'reporte_instalacion' => $proyecto->proyecto_clienteinstalacion, 'reporte_fecha' => $reportefecha, 'reporte_mes' => $reporte->reporte_mes
+                                                  'reporte_catregion_activo' => $reporte->reportequimicos_catregion_activo
+                                                , 'catregion_id' => $proyecto->catregion_id
+                                                , 'reporte_catsubdireccion_activo' => $reporte->reportequimicos_catsubdireccion_activo
+                                                , 'catsubdireccion_id' => $proyecto->catsubdireccion_id
+                                                , 'reporte_catgerencia_activo' => $reporte->reportequimicos_catgerencia_activo
+                                                , 'catgerencia_id' => $proyecto->catgerencia_id
+                                                , 'reporte_catactivo_activo' => $reporte->reportequimicos_catactivo_activo
+                                                , 'catactivo_id' => $proyecto->catactivo_id
+                                                , 'reporte_instalacion' => $proyecto->proyecto_clienteinstalacion
+                                                , 'reporte_fecha' => $reportefecha
+                                                , 'reporte_mes' => $reporte->reporte_mes
 
-                );
-            } else {
-                $reportefecha = $meses[($proyectofecha[1] + 0)] . " del " . $proyectofecha[0];
+                                            );
+            }
+            else
+            {
+                $reportefecha = $meses[($proyectofecha[1]+0)]." del ".$proyectofecha[0];
                 $dato['reporte_portada_guardado'] = 0;
 
                 $dato['reporte_portada'] = array(
-                    'reporte_catregion_activo' => 1, 'catregion_id' => $proyecto->catregion_id, 'reporte_catsubdireccion_activo' => 1, 'catsubdireccion_id' => $proyecto->catsubdireccion_id, 'reporte_catgerencia_activo' => 1, 'catgerencia_id' => $proyecto->catgerencia_id, 'reporte_catactivo_activo' => 1, 'catactivo_id' => $proyecto->catactivo_id, 'reporte_instalacion' => $proyecto->proyecto_clienteinstalacion, 'reporte_fecha' => $reportefecha, 'reporte_mes' => $reporte->reporte_mes
+                                                  'reporte_catregion_activo' => 1
+                                                , 'catregion_id' => $proyecto->catregion_id
+                                                , 'reporte_catsubdireccion_activo' => 1
+                                                , 'catsubdireccion_id' => $proyecto->catsubdireccion_id
+                                                , 'reporte_catgerencia_activo' => 1
+                                                , 'catgerencia_id' => $proyecto->catgerencia_id
+                                                , 'reporte_catactivo_activo' => 1
+                                                , 'catactivo_id' => $proyecto->catactivo_id
+                                                , 'reporte_instalacion' => $proyecto->proyecto_clienteinstalacion
+                                                , 'reporte_fecha' => $reportefecha
+                                                , 'reporte_mes' => ""
+                                                
 
-                );
+                                            );
             }
 
 
@@ -635,15 +701,21 @@ class reportequimicosController extends Controller
             //===================================================
 
 
-            if ($dato['reporteregistro_id'] >= 0 && $reporte->reportequimicos_introduccion != NULL) {
-                if ($reporte->proyecto_id == $proyecto_id) {
+            if ($dato['reporteregistro_id'] >= 0 && $reporte->reportequimicos_introduccion != NULL)
+            {
+                if ($reporte->proyecto_id == $proyecto_id)
+                {
                     $dato['reporte_introduccion_guardado'] = 1;
-                } else {
+                }
+                else
+                {
                     $dato['reporte_introduccion_guardado'] = 0;
                 }
 
                 $introduccion = $reporte->reportequimicos_introduccion;
-            } else {
+            }
+            else
+            {
                 $dato['reporte_introduccion_guardado'] = 0;
                 $introduccion = $reportecatalogo[0]->reportequimicoscatalogo_introduccion;
             }
@@ -655,15 +727,21 @@ class reportequimicosController extends Controller
             //===================================================
 
 
-            if ($dato['reporteregistro_id'] >= 0 && $reporte->reportequimicos_objetivogeneral != NULL) {
-                if ($reporte->proyecto_id == $proyecto_id) {
+            if ($dato['reporteregistro_id'] >= 0 && $reporte->reportequimicos_objetivogeneral != NULL)
+            {
+                if ($reporte->proyecto_id == $proyecto_id)
+                {
                     $dato['reporte_objetivogeneral_guardado'] = 1;
-                } else {
+                }
+                else
+                {
                     $dato['reporte_objetivogeneral_guardado'] = 0;
                 }
 
                 $objetivogeneral = $reporte->reportequimicos_objetivogeneral;
-            } else {
+            }
+            else
+            {
                 $dato['reporte_objetivogeneral_guardado'] = 0;
                 $objetivogeneral = $reportecatalogo[0]->reportequimicoscatalogo_objetivogeneral;
             }
@@ -675,15 +753,21 @@ class reportequimicosController extends Controller
             //===================================================
 
 
-            if ($dato['reporteregistro_id'] >= 0 && $reporte->reportequimicos_objetivoespecifico != NULL) {
-                if ($reporte->proyecto_id == $proyecto_id) {
+            if ($dato['reporteregistro_id'] >= 0 && $reporte->reportequimicos_objetivoespecifico != NULL)
+            {
+                if ($reporte->proyecto_id == $proyecto_id)
+                {
                     $dato['reporte_objetivoespecifico_guardado'] = 1;
-                } else {
+                }
+                else
+                {
                     $dato['reporte_objetivoespecifico_guardado'] = 0;
                 }
 
                 $objetivoespecifico = $reporte->reportequimicos_objetivoespecifico;
-            } else {
+            }
+            else
+            {
                 $dato['reporte_objetivoespecifico_guardado'] = 0;
                 $objetivoespecifico = $reportecatalogo[0]->reportequimicoscatalogo_objetivoespecifico;
             }
@@ -695,15 +779,21 @@ class reportequimicosController extends Controller
             //===================================================
 
 
-            if ($dato['reporteregistro_id'] >= 0 && $reporte->reportequimicos_metodologia_4_1 != NULL) {
-                if ($reporte->proyecto_id == $proyecto_id) {
+            if ($dato['reporteregistro_id'] >= 0 && $reporte->reportequimicos_metodologia_4_1 != NULL)
+            {
+                if ($reporte->proyecto_id == $proyecto_id)
+                {
                     $dato['reporte_metodologia_4_1_guardado'] = 1;
-                } else {
+                }
+                else
+                {
                     $dato['reporte_metodologia_4_1_guardado'] = 0;
                 }
 
                 $metodologia_4_1 = $reporte->reportequimicos_metodologia_4_1;
-            } else {
+            }
+            else
+            {
                 $dato['reporte_metodologia_4_1_guardado'] = 0;
                 $metodologia_4_1 = $reportecatalogo[0]->reportequimicoscatalogo_metodologia_4_1;
             }
@@ -715,15 +805,21 @@ class reportequimicosController extends Controller
             //===================================================
 
 
-            if ($dato['reporteregistro_id'] >= 0 && $reporte->reportequimicos_metodologia_4_2 != NULL) {
-                if ($reporte->proyecto_id == $proyecto_id) {
+            if ($dato['reporteregistro_id'] >= 0 && $reporte->reportequimicos_metodologia_4_2 != NULL)
+            {
+                if ($reporte->proyecto_id == $proyecto_id)
+                {
                     $dato['reporte_metodologia_4_2_guardado'] = 1;
-                } else {
+                }
+                else
+                {
                     $dato['reporte_metodologia_4_2_guardado'] = 0;
                 }
 
                 $metodologia_4_2 = $reporte->reportequimicos_metodologia_4_2;
-            } else {
+            }
+            else
+            {
                 $dato['reporte_metodologia_4_2_guardado'] = 0;
                 $metodologia_4_2 = $reportecatalogo[0]->reportequimicoscatalogo_metodologia_4_2;
             }
@@ -735,38 +831,49 @@ class reportequimicosController extends Controller
             //===================================================
 
 
-            if ($dato['reporteregistro_id'] >= 0 && $reporte->reportequimicos_ubicacioninstalacion != NULL) {
-                if ($reporte->proyecto_id == $proyecto_id) {
+            if ($dato['reporteregistro_id'] >= 0 && $reporte->reportequimicos_ubicacioninstalacion != NULL)
+            {
+                if ($reporte->proyecto_id == $proyecto_id)
+                {
                     $dato['reporte_ubicacioninstalacion_guardado'] = 1;
-                } else {
+                }
+                else
+                {
                     $dato['reporte_ubicacioninstalacion_guardado'] = 0;
                 }
 
                 $ubicacion = $reporte->reportequimicos_ubicacioninstalacion;
-            } else {
+            }
+            else
+            {
                 $dato['reporte_ubicacioninstalacion_guardado'] = 0;
                 $ubicacion = $reportecatalogo[0]->reportequimicoscatalogo_ubicacioninstalacion;
             }
 
 
             $ubicacionfoto = NULL;
-            if ($dato['reporteregistro_id'] >= 0 && $reporte->reportequimicos_ubicacionfoto != NULL && $reporte->proyecto_id == $proyecto_id) {
+            if ($dato['reporteregistro_id'] >= 0 && $reporte->reportequimicos_ubicacionfoto != NULL && $reporte->proyecto_id == $proyecto_id)
+            {
                 $ubicacionfoto = $reporte->reportequimicos_ubicacionfoto;
             }
 
             $dato['reporte_ubicacioninstalacion'] = array(
-                'ubicacion' => $this->datosproyectoreemplazartexto($proyecto, $recsensorial, $quimicos_nombre, $ubicacion), 'ubicacionfoto' => $ubicacionfoto
-            );
+                                                          'ubicacion' => $this->datosproyectoreemplazartexto($proyecto, $recsensorial, $quimicos_nombre, $ubicacion)
+                                                        , 'ubicacionfoto' => $ubicacionfoto
+                                                    );
 
 
             // PROCESO INSTALACION
             //===================================================
 
 
-            if ($dato['reporteregistro_id'] >= 0 && $reporte->reportequimicos_procesoinstalacion != NULL && $reporte->proyecto_id == $proyecto_id) {
+            if ($dato['reporteregistro_id'] >= 0 && $reporte->reportequimicos_procesoinstalacion != NULL && $reporte->proyecto_id == $proyecto_id)
+            {
                 $dato['reporte_procesoinstalacion_guardado'] = 1;
                 $procesoinstalacion = $reporte->reportequimicos_procesoinstalacion;
-            } else {
+            }
+            else
+            {
                 $dato['reporte_procesoinstalacion_guardado'] = 0;
                 $procesoinstalacion = $recsensorial->recsensorial_descripcionproceso;
             }
@@ -778,9 +885,12 @@ class reportequimicosController extends Controller
             //===================================================
 
 
-            if ($dato['reporteregistro_id'] >= 0 && $reporte->reportequimicos_actividadprincipal != NULL && $reporte->proyecto_id == $proyecto_id) {
+            if ($dato['reporteregistro_id'] >= 0 && $reporte->reportequimicos_actividadprincipal != NULL && $reporte->proyecto_id == $proyecto_id)
+            {
                 $procesoinstalacion = $reporte->reportequimicos_actividadprincipal;
-            } else {
+            }
+            else
+            {
                 $procesoinstalacion = $recsensorial->recsensorial_actividadprincipal;
             }
 
@@ -809,33 +919,63 @@ class reportequimicosController extends Controller
             //===================================================
 
 
-            if ($dato['reporteregistro_id'] >= 0 && $reporte->reportequimicos_responsable1 != NULL) {
-                if ($reporte->proyecto_id == $proyecto_id) {
+            if ($dato['reporteregistro_id'] >= 0 && $reporte->reportequimicos_responsable1 != NULL)
+            {
+                if ($reporte->proyecto_id == $proyecto_id)
+                {
                     $dato['reporte_responsablesinforme_guardado'] = 1;
-                } else {
+                }
+                else
+                {
                     $dato['reporte_responsablesinforme_guardado'] = 0;
                 }
 
                 $dato['reporte_responsablesinforme'] = array(
-                    'responsable1' => $reporte->reportequimicos_responsable1, 'responsable1cargo' => $reporte->reportequimicos_responsable1cargo, 'responsable1documento' => $reporte->reportequimicos_responsable1documento, 'responsable2' => $reporte->reportequimicos_responsable2, 'responsable2cargo' => $reporte->reportequimicos_responsable2cargo, 'responsable2documento' => $reporte->reportequimicos_responsable2documento, 'proyecto_id' => $reporte->proyecto_id, 'registro_id' => $reporte->id
-                );
-            } else {
+                                                              'responsable1' => $reporte->reportequimicos_responsable1
+                                                            , 'responsable1cargo' => $reporte->reportequimicos_responsable1cargo
+                                                            , 'responsable1documento' => $reporte->reportequimicos_responsable1documento
+                                                            , 'responsable2' => $reporte->reportequimicos_responsable2
+                                                            , 'responsable2cargo' => $reporte->reportequimicos_responsable2cargo
+                                                            , 'responsable2documento' => $reporte->reportequimicos_responsable2documento
+                                                            , 'proyecto_id' => $reporte->proyecto_id
+                                                            , 'registro_id' => $reporte->id
+                                                        );
+            }
+            else
+            {
                 $dato['reporte_responsablesinforme_guardado'] = 0;
 
 
                 $reportehistorial = reportequimicosModel::where('reportequimicos_responsable1', '!=', '')
-                    ->orderBy('updated_at', 'DESC')
-                    ->limit(1)
-                    ->get();
+                                                        ->orderBy('updated_at', 'DESC')
+                                                        ->limit(1)
+                                                        ->get();
 
-                if (count($reportehistorial) > 0 && $reportehistorial[0]->reportequimicos_responsable1 != NULL) {
+                if (count($reportehistorial) > 0 && $reportehistorial[0]->reportequimicos_responsable1 != NULL)
+                {
                     $dato['reporte_responsablesinforme'] = array(
-                        'responsable1' => $reportehistorial[0]->reportequimicos_responsable1, 'responsable1cargo' => $reportehistorial[0]->reportequimicos_responsable1cargo, 'responsable1documento' => $reportehistorial[0]->reportequimicos_responsable1documento, 'responsable2' => $reportehistorial[0]->reportequimicos_responsable2, 'responsable2cargo' => $reportehistorial[0]->reportequimicos_responsable2cargo, 'responsable2documento' => $reportehistorial[0]->reportequimicos_responsable2documento, 'proyecto_id' => $reportehistorial[0]->proyecto_id, 'registro_id' => $reportehistorial[0]->id
-                    );
-                } else {
+                                                                  'responsable1' => $reportehistorial[0]->reportequimicos_responsable1
+                                                                , 'responsable1cargo' => $reportehistorial[0]->reportequimicos_responsable1cargo
+                                                                , 'responsable1documento' => $reportehistorial[0]->reportequimicos_responsable1documento
+                                                                , 'responsable2' => $reportehistorial[0]->reportequimicos_responsable2
+                                                                , 'responsable2cargo' => $reportehistorial[0]->reportequimicos_responsable2cargo
+                                                                , 'responsable2documento' => $reportehistorial[0]->reportequimicos_responsable2documento
+                                                                , 'proyecto_id' => $reportehistorial[0]->proyecto_id
+                                                                , 'registro_id' => $reportehistorial[0]->id
+                                                            );
+                }
+                else
+                {
                     $dato['reporte_responsablesinforme'] = array(
-                        'responsable1' => NULL, 'responsable1cargo' => NULL, 'responsable1documento' => NULL, 'responsable2' => NULL, 'responsable2cargo' => NULL, 'responsable2documento' => NULL, 'proyecto_id' => 0, 'registro_id' => 0
-                    );
+                                                                  'responsable1' => NULL
+                                                                , 'responsable1cargo' => NULL
+                                                                , 'responsable1documento' => NULL
+                                                                , 'responsable2' => NULL
+                                                                , 'responsable2cargo' => NULL
+                                                                , 'responsable2documento' => NULL
+                                                                , 'proyecto_id' => 0
+                                                                , 'registro_id' => 0
+                                                            );
                 }
             }
 
@@ -857,28 +997,33 @@ class reportequimicosController extends Controller
                                                 FROM
                                                     proyectoevidenciafoto
                                                 WHERE
-                                                    proyectoevidenciafoto.proyecto_id = ' . $proyecto_id . '
-                                                    AND proyectoevidenciafoto.agente_nombre = "' . $agente_nombre . '"
+                                                    proyectoevidenciafoto.proyecto_id = '.$proyecto_id.'
+                                                    AND proyectoevidenciafoto.agente_nombre = "'.$agente_nombre.'"
                                                 GROUP BY
                                                     proyectoevidenciafoto.proyecto_id,
                                                     proyectoevidenciafoto.agente_nombre
                                                 LIMIT 1');
 
-            if (count($memoriafotografica) > 0) {
+            if (count($memoriafotografica) > 0)
+            {
                 $dato['reporte_memoriafotografica_guardado'] = $memoriafotografica[0]->total;
-            } else {
+            }
+            else
+            {                
                 $dato['reporte_memoriafotografica_guardado'] = 0;
             }
-
-
+            
+            
             //===================================================
 
 
             // respuesta
             $dato["msj"] = 'Datos consultados correctamente';
             return response()->json($dato);
-        } catch (Exception $e) {
-            $dato["msj"] = 'Error ' . $e->getMessage();
+        }
+        catch(Exception $e)
+        {
+            $dato["msj"] = 'Error '.$e->getMessage();
             return response()->json($dato);
         }
     }
@@ -893,7 +1038,8 @@ class reportequimicosController extends Controller
      */
     public function reportequimicostabla($proyecto_id, $reporteregistro_id)
     {
-        try {
+        try
+        {
             // $reporte = reportequimicosModel::where('id', $reporteregistro_id)->get();
 
             // $edicion = 1;
@@ -917,8 +1063,8 @@ class reportequimicosController extends Controller
                                     FROM
                                         reportequimicosproyecto 
                                     WHERE
-                                        reportequimicosproyecto.proyecto_id = ' . $proyecto_id . ' 
-                                        -- AND reportequimicosproyecto.registro_id = ' . $reporteregistro_id . ' 
+                                        reportequimicosproyecto.proyecto_id = '.$proyecto_id.' 
+                                        -- AND reportequimicosproyecto.registro_id = '.$reporteregistro_id.' 
                                     ORDER BY
                                         reportequimicosproyecto.reportequimicosproyecto_parametro ASC');
 
@@ -940,7 +1086,8 @@ class reportequimicosController extends Controller
 
 
             $numero_registro = 0; // $quimicos_lista = array();
-            foreach ($quimicos as $key => $value) {
+            foreach ($quimicos as $key => $value)
+            {
                 $numero_registro += 1;
                 $value->numero_registro = $numero_registro;
 
@@ -963,10 +1110,12 @@ class reportequimicosController extends Controller
             // $dato['quimicos_lista'] = $quimicos_lista;
             $dato["msj"] = 'Datos consultados correctamente';
             return response()->json($dato);
-        } catch (Exception $e) {
+        }
+        catch(Exception $e)
+        {
             $dato['data'] = 0;
             // $dato['quimicos_lista'] = 0;
-            $dato["msj"] = 'Error ' . $e->getMessage();
+            $dato["msj"] = 'Error '.$e->getMessage();
             return response()->json($dato);
         }
     }
@@ -981,7 +1130,8 @@ class reportequimicosController extends Controller
      */
     public function reportequimicosgrupostabla($proyecto_id, $reporteregistro_id)
     {
-        try {
+        try
+        {
             // $reporte = reportequimicosModel::where('id', $reporteregistro_id)->get();
 
             // $edicion = 1;
@@ -995,14 +1145,16 @@ class reportequimicosController extends Controller
 
 
             $revision = reporterevisionesModel::where('proyecto_id', $proyecto_id)
-                ->where('agente_id', 15)
-                ->orderBy('reporterevisiones_revision', 'DESC')
-                ->get();
+                                                ->where('agente_id', 15)
+                                                ->orderBy('reporterevisiones_revision', 'DESC')
+                                                ->get();
 
 
             $edicion = 1;
-            if (count($revision) > 0) {
-                if ($revision[0]->reporterevisiones_concluido == 1 || $revision[0]->reporterevisiones_cancelado == 1) {
+            if(count($revision) > 0)
+            {
+                if($revision[0]->reporterevisiones_concluido == 1 || $revision[0]->reporterevisiones_cancelado == 1)
+                {
                     $edicion = 0;
                 }
             }
@@ -1021,7 +1173,7 @@ class reportequimicosController extends Controller
                                             proyectoproveedores
                                             LEFT JOIN proveedor ON proyectoproveedores.proveedor_id = proveedor.id
                                         WHERE
-                                            proyectoproveedores.proyecto_id = ' . $proyecto_id . ' 
+                                            proyectoproveedores.proyecto_id = '.$proyecto_id.' 
                                             AND proyectoproveedores.catprueba_id = 15
                                         GROUP BY
                                             proyectoproveedores.proyecto_id,
@@ -1032,8 +1184,9 @@ class reportequimicosController extends Controller
 
 
             $dato['proveedores_opciones'] = '<option value=""></option>';
-            foreach ($proveedores as $key => $value) {
-                $dato['proveedores_opciones'] .= '<option value="' . $value->proveedor_id . '">' . $value->proveedor_NombreComercial . '</option>';
+            foreach ($proveedores as $key => $value)
+            {
+                $dato['proveedores_opciones'] .= '<option value="'.$value->proveedor_id.'">'.$value->proveedor_NombreComercial.'</option>';
             }
 
 
@@ -1074,24 +1227,24 @@ class reportequimicosController extends Controller
                                 contratos_partidas  clientepartidas
                                 LEFT JOIN contratos_clientes cc ON cc.ID_CONTRATO = clientepartidas.CONTRATO_ID
                                 WHERE
-                                cc.CLIENTE_ID = " . $proyecto->recsensorial->cliente_id . "
+                                cc.CLIENTE_ID = ".$proyecto->recsensorial->cliente_id."
                                 AND clientepartidas.clientepartidas_tipo = 2 -- 1 = RECONOCIMIENTO, 2 = INFORME
                                 AND clientepartidas.catprueba_id = 15 -- QUIMICOS
                                 ORDER BY
                                 clientepartidas.id ASC,
                                 clientepartidas.clientepartidas_descripcion ASC");
 
-            $dato['catpartidasquimicos'] = '<option value=""></option>';
+                    $dato['catpartidasquimicos'] = '<option value=""></option>';
 
-            // Verificamos si la consulta devolvió algún resultado
+                    // Verificamos si la consulta devolvió algún resultado
             if (count($partidas) > 0) {
-                foreach ($partidas as $key => $value) {
-                    $dato['catpartidasquimicos'] .= '<option value="' . $value->id . '">' . $value->clientepartidas_descripcion . '</option>';
-                }
-            } else {
-                // Si no hay partidas, agregamos una opción indicando que no hay contratos
-                $dato['catpartidasquimicos'] = '<option value="">Reconocimiento sin contrato</option>';
+                    foreach ($partidas as $key => $value) {
+                    $dato['catpartidasquimicos'] .= '<option value="'.$value->id.'">'.$value->clientepartidas_descripcion.'</option>';
             }
+                } else {
+                    // Si no hay partidas, agregamos una opción indicando que no hay contratos
+                $dato['catpartidasquimicos'] = '<option value="">Reconocimiento sin contrato</option>';
+                }
 
 
             //============================================
@@ -1105,8 +1258,8 @@ class reportequimicosController extends Controller
                                         FROM
                                             reportequimicosproyecto 
                                         WHERE
-                                            reportequimicosproyecto.proyecto_id = ' . $proyecto_id . ' 
-                                            -- AND reportequimicosproyecto.registro_id = ' . $reporteregistro_id . '
+                                            reportequimicosproyecto.proyecto_id = '.$proyecto_id.' 
+                                            -- AND reportequimicosproyecto.registro_id = '.$reporteregistro_id.'
                                         ORDER BY
                                             reportequimicosproyecto.reportequimicosproyecto_parametro ASC');
 
@@ -1128,15 +1281,16 @@ class reportequimicosController extends Controller
 
 
             $dato['parametros_checkbox'] = '';
-            foreach ($parametros as $key => $value) {
+            foreach ($parametros as $key => $value)
+            {
                 $dato['parametros_checkbox'] .= '<div class="col-6">
                                                     <div class="switch" style="float: left;">
                                                         <label>
-                                                            <input type="checkbox" class="checkbox_parametro" id="parametro_' . $value->id . '" name="parametro[]" value="' . $value->id . '">
+                                                            <input type="checkbox" class="checkbox_parametro" id="parametro_'.$value->id.'" name="parametro[]" value="'.$value->id.'">
                                                             <span class="lever switch-col-light-blue"></span>
                                                         </label>
                                                     </div>
-                                                    <label class="demo-switch-title" style="float: left;">' . $value->reportequimicosproyecto_parametro . '</label>
+                                                    <label class="demo-switch-title" style="float: left;">'.$value->reportequimicosproyecto_parametro.'</label>
                                                 </div>';
             }
 
@@ -1174,23 +1328,25 @@ class reportequimicosController extends Controller
                                         -- LEFT JOIN clientepartidas ON reportequimicosgrupos.catreportequimicospartidas_id = clientepartidas.id
                                         LEFT JOIN reportequimicosproyecto ON reportequimicosgrupos.reportequimicosproyecto_id = reportequimicosproyecto.id 
                                     WHERE
-                                        reportequimicosgrupos.proyecto_id = ' . $proyecto_id . ' 
-                                        AND reportequimicosgrupos.registro_id = ' . $reporteregistro_id . '  
+                                        reportequimicosgrupos.proyecto_id = '.$proyecto_id.' 
+                                        AND reportequimicosgrupos.registro_id = '.$reporteregistro_id.'  
                                     ORDER BY
                                         orden ASC,
                                         reportequimicosproyecto.reportequimicosproyecto_parametro ASC');
 
 
-            $quimicos_lista = array();
-            $partida = 'XXXXX';
-            $dato['catpartidasquimicos_utilizadas'] = '<option value=""></option>';
-            foreach ($grupos as $key => $value) {
-                $value->boton_editar = '<button type="button" class="btn btn-warning waves-effect btn-circle"><i class="fa fa-pencil fa-2x"></i></button>';
+            $quimicos_lista = array(); $partida = 'XXXXX'; $dato['catpartidasquimicos_utilizadas'] = '<option value=""></option>';
+            foreach ($grupos as $key => $value)
+            {
+                $value->boton_editar = '<button type="button" class="btn btn-warning waves-effect btn-circle"><i class="fa fa-pencil fa-2x"></i></button>';                    
 
 
-                if (($edicion + 0) == 1) {
+                if (($edicion+0) == 1)
+                {
                     $value->boton_eliminar = '<button type="button" class="btn btn-danger waves-effect btn-circle eliminar"><i class="fa fa-trash fa-2x"></i></button>';
-                } else {
+                }
+                else
+                {
                     $value->boton_eliminar = '<button type="button" class="btn btn-default waves-effect btn-circle" data-toggle="tooltip" title="No disponible"><i class="fa fa-ban fa-2x"></i></button>';
                 }
 
@@ -1213,7 +1369,9 @@ class reportequimicosController extends Controller
             $dato['quimicos_lista'] = $quimicos_lista;
             $dato["msj"] = 'Datos consultados correctamente';
             return response()->json($dato);
-        } catch (Exception $e) {
+        }
+        catch(Exception $e)
+        {
             $dato['data'] = 0;
             $dato["total"] = 0;
             $dato['quimicos_lista'] = 0;
@@ -1221,7 +1379,7 @@ class reportequimicosController extends Controller
             $dato['catpartidasquimicos'] = '<option value="">Error al consultar partidas</option>';
             $dato['catpartidasquimicos_utilizadas'] = '<option value="">Error al consultar partidas</option>';
             $dato['parametros_opciones'] = '<option value="">Error al consultar parametros</option>';
-            $dato["msj"] = 'Error ' . $e->getMessage();
+            $dato["msj"] = 'Error '.$e->getMessage();
             return response()->json($dato);
         }
     }
@@ -1237,17 +1395,20 @@ class reportequimicosController extends Controller
      */
     public function reportequimicosgrupoeliminar($proyecto_id, $reporteregistro_id, $partida_id)
     {
-        try {
+        try
+        {
             $eliminar_grupo = reportequimicosgruposModel::where('proyecto_id', $proyecto_id)
-                ->where('registro_id', $reporteregistro_id)
-                ->where('catreportequimicospartidas_id', $partida_id)
-                ->delete();
+                                                        ->where('registro_id', $reporteregistro_id)
+                                                        ->where('catreportequimicospartidas_id', $partida_id)
+                                                        ->delete();
 
             // respuesta
             $dato["msj"] = 'Grupo de químicos eliminado correctamente';
             return response()->json($dato);
-        } catch (Exception $e) {
-            $dato["msj"] = 'Error ' . $e->getMessage();
+        }
+        catch(Exception $e)
+        {
+            $dato["msj"] = 'Error '.$e->getMessage();
             return response()->json($dato);
         }
     }
@@ -1263,7 +1424,8 @@ class reportequimicosController extends Controller
      */
     public function reportequimicostabladefiniciones($proyecto_id, $agente_nombre, $reporteregistro_id)
     {
-        try {
+        try
+        {
             // $reporte = reportequimicosModel::where('id', $reporteregistro_id)->get();
 
 
@@ -1279,14 +1441,16 @@ class reportequimicosController extends Controller
 
 
             $revision = reporterevisionesModel::where('proyecto_id', $proyecto_id)
-                ->where('agente_id', 15)
-                ->orderBy('reporterevisiones_revision', 'DESC')
-                ->get();
+                                                ->where('agente_id', 15)
+                                                ->orderBy('reporterevisiones_revision', 'DESC')
+                                                ->get();
 
 
             $edicion = 1;
-            if (count($revision) > 0) {
-                if ($revision[0]->reporterevisiones_concluido == 1 || $revision[0]->reporterevisiones_cancelado == 1) {
+            if(count($revision) > 0)
+            {
+                if($revision[0]->reporterevisiones_concluido == 1 || $revision[0]->reporterevisiones_cancelado == 1)
+                {
                     $edicion = 0;
                 }
             }
@@ -1300,9 +1464,9 @@ class reportequimicosController extends Controller
             $recsensorial = recsensorialModel::findOrFail($proyecto->recsensorial_id);
 
             $where_definiciones = '';
-            if (($recsensorial->recsensorial_tipocliente + 0) == 1) //1 = pemex, 0 = cliente
+            if (($recsensorial->recsensorial_tipocliente+0) == 1) //1 = pemex, 0 = cliente
             {
-                $where_definiciones = 'AND reportedefiniciones.catactivo_id = ' . $proyecto->catactivo_id;
+                $where_definiciones = 'AND reportedefiniciones.catactivo_id = '.$proyecto->catactivo_id;
             }
 
 
@@ -1328,7 +1492,7 @@ class reportequimicosController extends Controller
                                                                         FROM
                                                                             reportedefinicionescatalogo
                                                                         WHERE
-                                                                            reportedefinicionescatalogo.agente_nombre LIKE "' . $agente_nombre . '"
+                                                                            reportedefinicionescatalogo.agente_nombre LIKE "'.$agente_nombre.'"
                                                                             AND reportedefinicionescatalogo.reportedefinicionescatalogo_activo = 1
                                                                         ORDER BY
                                                                             reportedefinicionescatalogo.reportedefinicionescatalogo_concepto ASC
@@ -1346,8 +1510,8 @@ class reportequimicosController extends Controller
                                                                         FROM
                                                                             reportedefiniciones
                                                                         WHERE
-                                                                            reportedefiniciones.agente_nombre LIKE "' . $agente_nombre . '"
-                                                                            ' . $where_definiciones . ' 
+                                                                            reportedefiniciones.agente_nombre LIKE "'.$agente_nombre.'"
+                                                                            '.$where_definiciones.' 
                                                                         ORDER BY
                                                                             reportedefiniciones.agente_nombre ASC
                                                                     )
@@ -1356,19 +1520,26 @@ class reportequimicosController extends Controller
                                                                 -- TABLA.catactivo_id ASC,
                                                                 TABLA.concepto ASC'));
 
-            foreach ($definiciones_catalogo as $key => $value) {
-                if (($value->catactivo_id + 0) < 0) {
-                    $value->descripcion_fuente = $value->descripcion . '<br><span style="color: #999999; font-style: italic;">Fuente: ' . $value->fuente . '</span>';
+            foreach ($definiciones_catalogo as $key => $value)
+            {
+                if (($value->catactivo_id+0) < 0)
+                {
+                    $value->descripcion_fuente = $value->descripcion.'<br><span style="color: #999999; font-style: italic;">Fuente: '.$value->fuente.'</span>';
                     $value->boton_editar = '<button type="button" class="btn btn-default waves-effect btn-circle"><i class="fa fa-ban fa-2x"></i></button>';
                     $value->boton_eliminar = '<button type="button" class="btn btn-default waves-effect btn-circle" data-toggle="tooltip" title="No disponible"><i class="fa fa-ban fa-2x"></i></button>';
-                } else {
-                    $value->descripcion_fuente = $value->descripcion . '<br><span style="color: #999999; font-style: italic;">Fuente: ' . $value->fuente . '</span>';
+                }
+                else
+                {
+                    $value->descripcion_fuente = $value->descripcion.'<br><span style="color: #999999; font-style: italic;">Fuente: '.$value->fuente.'</span>';
                     $value->boton_editar = '<button type="button" class="btn btn-warning waves-effect btn-circle"><i class="fa fa-pencil fa-2x"></i></button>';
                     // $value->boton_eliminar = '<button type="button" class="btn btn-danger waves-effect btn-circle"><i class="fa fa-trash fa-2x"></i></button>';
 
-                    if ($edicion == 1) {
+                    if ($edicion == 1)
+                    {
                         $value->boton_eliminar = '<button type="button" class="btn btn-danger waves-effect btn-circle eliminar"><i class="fa fa-trash fa-2x"></i></button>';
-                    } else {
+                    }
+                    else
+                    {
                         $value->boton_eliminar = '<button type="button" class="btn btn-default waves-effect btn-circle" data-toggle="tooltip" title="No disponible"><i class="fa fa-eye fa-2x"></i></button>';
                     }
                 }
@@ -1378,9 +1549,11 @@ class reportequimicosController extends Controller
             $dato['data'] = $definiciones_catalogo;
             $dato["msj"] = 'Datos consultados correctamente';
             return response()->json($dato);
-        } catch (Exception $e) {
+        }
+        catch(Exception $e)
+        {
             $dato['data'] = 0;
-            $dato["msj"] = 'Error ' . $e->getMessage();
+            $dato["msj"] = 'Error '.$e->getMessage();
             return response()->json($dato);
         }
     }
@@ -1394,14 +1567,17 @@ class reportequimicosController extends Controller
      */
     public function reportequimicosdefinicioneliminar($definicion_id)
     {
-        try {
+        try
+        {
             $definicion = reportedefinicionesModel::where('id', $definicion_id)->delete();
 
             // respuesta
             $dato["msj"] = 'Definición eliminada correctamente';
             return response()->json($dato);
-        } catch (Exception $e) {
-            $dato["msj"] = 'Error ' . $e->getMessage();
+        }
+        catch(Exception $e)
+        {
+            $dato["msj"] = 'Error '.$e->getMessage();
             return response()->json($dato);
         }
     }
@@ -1413,14 +1589,17 @@ class reportequimicosController extends Controller
      * @param  int  $reporteregistro_id
      * @param  int  $archivo_opcion
      * @return \Illuminate\Http\Response
-     */
+    */
     public function reportequimicosmapaubicacion($reporteregistro_id, $archivo_opcion)
     {
         $reporte  = reportequimicosModel::findOrFail($reporteregistro_id);
 
-        if ($archivo_opcion == 0) {
+        if ($archivo_opcion == 0)
+        {
             return Storage::response($reporte->reportequimicos_ubicacionfoto);
-        } else {
+        }
+        else
+        {
             return Storage::download($reporte->reportequimicos_ubicacionfoto);
         }
     }
@@ -1436,18 +1615,20 @@ class reportequimicosController extends Controller
      */
     public function reportequimicoscategorias($proyecto_id, $reporteregistro_id, $areas_poe)
     {
-        try {
-            $numero_registro = 0;
-            $total_singuardar = 0;
+        try
+        {
+            $numero_registro = 0; $total_singuardar = 0;
 
 
-            if (($areas_poe + 0) == 1) {
+            if (($areas_poe+0) == 1)
+            {
                 $categorias = reportecategoriaModel::where('proyecto_id', $proyecto_id)
-                    ->orderBy('reportecategoria_orden', 'ASC')
-                    ->get();
+                                                    ->orderBy('reportecategoria_orden', 'ASC')
+                                                    ->get();
 
 
-                foreach ($categorias as $key => $value) {
+                foreach ($categorias as $key => $value) 
+                {
                     // $numero_registro += 1;
                     // $value->numero_registro = $numero_registro;
                     $value->numero_registro = $value->reportecategoria_orden;
@@ -1463,7 +1644,9 @@ class reportequimicosController extends Controller
 
 
                 $total_singuardar = 1;
-            } else {
+            }
+            else
+            {
                 // $reporte = reportequimicosModel::where('id', $reporteregistro_id)->get();
 
 
@@ -1478,14 +1661,16 @@ class reportequimicosController extends Controller
 
 
                 $revision = reporterevisionesModel::where('proyecto_id', $proyecto_id)
-                    ->where('agente_id', 15)
-                    ->orderBy('reporterevisiones_revision', 'DESC')
-                    ->get();
+                                                ->where('agente_id', 15)
+                                                ->orderBy('reporterevisiones_revision', 'DESC')
+                                                ->get();
 
 
                 $edicion = 1;
-                if (count($revision) > 0) {
-                    if ($revision[0]->reporterevisiones_concluido == 1 || $revision[0]->reporterevisiones_cancelado == 1) {
+                if(count($revision) > 0)
+                {
+                    if($revision[0]->reporterevisiones_concluido == 1 || $revision[0]->reporterevisiones_cancelado == 1)
+                    {
                         $edicion = 0;
                     }
                 }
@@ -1495,30 +1680,36 @@ class reportequimicosController extends Controller
 
 
                 $categorias = reportequimicoscategoriaModel::where('proyecto_id', $proyecto_id)
-                    ->where('registro_id', $reporteregistro_id)
-                    ->orderBy('reportequimicoscategoria_nombre', 'ASC')
-                    ->get();
+                                                            ->where('registro_id', $reporteregistro_id)
+                                                            ->orderBy('reportequimicoscategoria_nombre', 'ASC')
+                                                            ->get();
 
-                if (count($categorias) == 0) {
+                if (count($categorias) == 0)
+                {
                     $categorias = reportequimicoscategoriaModel::where('proyecto_id', $proyecto_id)
-                        ->orderBy('reportequimicoscategoria_nombre', 'ASC')
-                        ->get();
+                                                                ->orderBy('reportequimicoscategoria_nombre', 'ASC')
+                                                                ->get();
                 }
 
 
-                foreach ($categorias as $key => $value) {
+                foreach ($categorias as $key => $value) 
+                {
                     $numero_registro += 1;
                     $value->numero_registro = $numero_registro;
-
+                    
                     $value->boton_editar = '<button type="button" class="btn btn-warning waves-effect btn-circle editar"><i class="fa fa-pencil fa-2x"></i></button>';
 
-                    if ($edicion == 1) {
+                    if ($edicion == 1)
+                    {
                         $value->boton_eliminar = '<button type="button" class="btn btn-danger waves-effect btn-circle eliminar"><i class="fa fa-trash fa-2x"></i></button>';
-                    } else {
+                    }
+                    else
+                    {
                         $value->boton_eliminar = '<button type="button" class="btn btn-default waves-effect btn-circle" data-toggle="tooltip" title="No disponible"><i class="fa fa-ban fa-2x"></i></button>';
                     }
 
-                    if (!$value->reporteruidocategoria_total) {
+                    if (!$value->reporteruidocategoria_total)
+                    {
                         $total_singuardar += 1;
                     }
                 }
@@ -1530,10 +1721,12 @@ class reportequimicosController extends Controller
             $dato["total_singuardar"] = $total_singuardar;
             $dato["msj"] = 'Datos consultados correctamente';
             return response()->json($dato);
-        } catch (Exception $e) {
+        }
+        catch(Exception $e)
+        {
             $dato['data'] = 0;
             $dato["total_singuardar"] = 0;
-            $dato["msj"] = 'Error ' . $e->getMessage();
+            $dato["msj"] = 'Error '.$e->getMessage();
             return response()->json($dato);
         }
     }
@@ -1547,14 +1740,17 @@ class reportequimicosController extends Controller
      */
     public function reportequimicoscategoriaeliminar($categoria_id)
     {
-        try {
+        try
+        {
             $categoria = reportequimicoscategoriaModel::where('id', $categoria_id)->delete();
 
             // respuesta
             $dato["msj"] = 'Categoría eliminada correctamente';
             return response()->json($dato);
-        } catch (Exception $e) {
-            $dato["msj"] = 'Error ' . $e->getMessage();
+        }
+        catch(Exception $e)
+        {
+            $dato["msj"] = 'Error '.$e->getMessage();
             return response()->json($dato);
         }
     }
@@ -1570,19 +1766,13 @@ class reportequimicosController extends Controller
      */
     public function reportequimicosareas($proyecto_id, $reporteregistro_id, $areas_poe)
     {
-        try {
-            $numero_registro = 0;
-            $total_singuardar = 0;
-            $instalacion = 'XXX';
-            $area = 'XXX';
-            $area2 = 'XXX';
-            $selectareasoption = '<option value=""></option>';
-            $tabla_5_5 = '';
-            $tabla_5_6 = '';
-            $tabla_6_1 = '';
+        try
+        {
+            $numero_registro = 0; $total_singuardar = 0; $instalacion = 'XXX'; $area = 'XXX'; $area2 = 'XXX'; $selectareasoption = '<option value=""></option>'; $tabla_5_5 = ''; $tabla_5_6 = ''; $tabla_6_1 = '';
 
 
-            if (($areas_poe + 0) == 1) {
+            if (($areas_poe+0) == 1)
+            {
                 $areas = DB::select('SELECT
                                             reportearea.proyecto_id,
                                             reportearea.id,
@@ -1606,7 +1796,7 @@ class reportequimicosController extends Controller
                                                 WHERE
                                                     reportequimicosareacategoria.reportequimicosarea_id = reportearea.id
                                                     AND reportequimicosareacategoria.reportequimicoscategoria_id = reporteareacategoria.reportecategoria_id
-                                                    AND reportequimicosareacategoria.reportequimicosareacategoria_poe = ' . $reporteregistro_id . '
+                                                    AND reportequimicosareacategoria.reportequimicosareacategoria_poe = '.$reporteregistro_id.'
                                                 LIMIT 1
                                             ), "") AS activo,
                                             reporteareacategoria.reporteareacategoria_total AS reportequimicosareacategoria_total,
@@ -1617,7 +1807,7 @@ class reportequimicosController extends Controller
                                             LEFT JOIN reporteareacategoria ON reportearea.id = reporteareacategoria.reportearea_id
                                             LEFT JOIN reportecategoria ON reporteareacategoria.reportecategoria_id = reportecategoria.id 
                                         WHERE
-                                            reportearea.proyecto_id = ' . $proyecto_id . ' 
+                                            reportearea.proyecto_id = '.$proyecto_id.' 
                                         ORDER BY
                                             reportearea.reportearea_orden ASC,
                                             reportearea.reportearea_nombre ASC,
@@ -1626,8 +1816,10 @@ class reportequimicosController extends Controller
 
 
                 // FORMATEAR FILAS
-                foreach ($areas as $key => $value) {
-                    if ($area != $value->reportequimicosarea_nombre) {
+                foreach ($areas as $key => $value) 
+                {
+                    if ($area != $value->reportequimicosarea_nombre)
+                    {
                         $area = $value->reportequimicosarea_nombre;
                         $value->area_nombre = $area;
 
@@ -1636,25 +1828,31 @@ class reportequimicosController extends Controller
                         $value->numero_registro = $numero_registro;
 
 
-                        if ($value->reportequimicosarea_porcientooperacion > 0) {
+                        if ($value->reportequimicosarea_porcientooperacion > 0)
+                        {
                             //TABLA 6.1.- Condiciones de operación durante la evaluación (representado en porcentaje)
                             //==================================================
 
                             $tabla_6_1 .= '<tr>
-                                                <td>' . $value->reportequimicosarea_instalacion . '</td>
-                                                <td>' . $value->reportequimicosarea_nombre . '</td>
-                                                <td>' . $value->reportequimicosarea_porcientooperacion . ' %</td>
+                                                <td>'.$value->reportequimicosarea_instalacion.'</td>
+                                                <td>'.$value->reportequimicosarea_nombre.'</td>
+                                                <td>'.$value->reportequimicosarea_porcientooperacion.' %</td>
                                             </tr>';
                         }
-                    } else {
+                    }
+                    else
+                    {
                         $value->area_nombre = $area;
                         $value->numero_registro = $numero_registro;
                     }
 
 
-                    if ($value->activo) {
-                        $value->reportecategoria_nombre_texto = '<span class="text-danger">' . $value->reportequimicoscategoria_nombre . '</span>';
-                    } else {
+                    if ($value->activo)
+                    {
+                        $value->reportecategoria_nombre_texto = '<span class="text-danger">'.$value->reportequimicoscategoria_nombre.'</span>';
+                    }
+                    else
+                    {
                         $value->reportecategoria_nombre_texto = $value->reportequimicoscategoria_nombre;
                     }
 
@@ -1663,22 +1861,25 @@ class reportequimicosController extends Controller
                     $value->boton_eliminar = '<button type="button" class="btn btn-default waves-effect btn-circle" data-toggle="tooltip" title="No disponible"><i class="fa fa-ban fa-2x"></i></button>';
 
 
-                    if ($value->reportequimicosarea_porcientooperacion === NULL) {
+                    if ($value->reportequimicosarea_porcientooperacion === NULL)
+                    {
                         $total_singuardar += 1;
                     }
 
 
-                    if ($value->reportequimicosarea_porcientooperacion > 0) {
-                        if ($value->activo) {
+                    if ($value->reportequimicosarea_porcientooperacion > 0)
+                    {
+                        if ($value->activo)
+                        {
                             //TABLA 5.5.- Actividades del personal expuesto
                             //==================================================
 
 
                             $tabla_5_5 .= '<tr>
-                                                <td>' . $value->reportequimicosarea_instalacion . '</td>
-                                                <td>' . $value->reportequimicosarea_nombre . '</td>
-                                                <td>' . $value->reportequimicoscategoria_nombre . '</td>
-                                                <td class="justificado">' . $value->reportequimicosareacategoria_actividades . '</td>
+                                                <td>'.$value->reportequimicosarea_instalacion.'</td>
+                                                <td>'.$value->reportequimicosarea_nombre.'</td>
+                                                <td>'.$value->reportequimicoscategoria_nombre.'</td>
+                                                <td class="justificado">'.$value->reportequimicosareacategoria_actividades.'</td>
                                             </tr>';
 
 
@@ -1687,19 +1888,22 @@ class reportequimicosController extends Controller
 
 
                             $tabla_5_6 .= '<tr>
-                                                <td>' . $value->reportequimicosarea_instalacion . '</td>
-                                                <td>' . $value->reportequimicosarea_nombre . '</td>
-                                                <td>' . $value->reportequimicosarea_maquinaria . '</td>
-                                                <td class="justificado">' . $value->reportequimicosarea_contaminante . '</td>
-                                                <td>' . $value->reportequimicoscategoria_nombre . '</td>';
+                                                <td>'.$value->reportequimicosarea_instalacion.'</td>
+                                                <td>'.$value->reportequimicosarea_nombre.'</td>
+                                                <td>'.$value->reportequimicosarea_maquinaria.'</td>
+                                                <td class="justificado">'.$value->reportequimicosarea_contaminante.'</td>
+                                                <td>'.$value->reportequimicoscategoria_nombre.'</td>';
 
-                            if (($value->reportequimicosarea_caracteristica + 0) == 0) {
-                                $tabla_5_6 .= '<td>No</td>
+                                                if (($value->reportequimicosarea_caracteristica+0) == 0)
+                                                {
+                                                    $tabla_5_6 .= '<td>No</td>
                                                                     <td>Si</td>';
-                            } else {
-                                $tabla_5_6 .= '<td>Si</td>
+                                                }
+                                                else
+                                                {
+                                                     $tabla_5_6 .= '<td>Si</td>
                                                                     <td>No</td>';
-                            }
+                                                }
 
                             $tabla_5_6 .= '</tr>';
                         }
@@ -1709,31 +1913,37 @@ class reportequimicosController extends Controller
                         //==================================================
 
 
-                        if ($instalacion != $value->reportequimicosarea_instalacion && ($key + 0) == 0) {
+                        if ($instalacion != $value->reportequimicosarea_instalacion && ($key + 0) == 0)
+                        {
                             $instalacion = $value->reportequimicosarea_instalacion;
-                            $selectareasoption .= '<optgroup label="' . $instalacion . '">';
+                            $selectareasoption .= '<optgroup label="'.$instalacion.'">';
                         }
 
-
-                        if ($instalacion != $value->reportequimicosarea_instalacion && ($key + 0) > 0) {
+                        
+                        if ($instalacion != $value->reportequimicosarea_instalacion && ($key + 0) > 0)
+                        {
                             $instalacion = $value->reportequimicosarea_instalacion;
-                            $selectareasoption .= '</optgroup><optgroup label="' . $instalacion . '">';
+                            $selectareasoption .= '</optgroup><optgroup label="'.$instalacion.'">';
                             $area2 = 'XXXXX';
                         }
 
 
-                        if ($area2 != $value->reportequimicosarea_nombre) {
+                        if ($area2 != $value->reportequimicosarea_nombre)
+                        {
                             $area2 = $value->reportequimicosarea_nombre;
-                            $selectareasoption .= '<option value="' . $value->id . '">' . $area2 . '</option>';
+                            $selectareasoption .= '<option value="'.$value->id.'">'.$area2.'</option>';
                         }
 
 
-                        if ($key == (count($areas) - 1)) {
+                        if ($key == (count($areas) - 1))
+                        {
                             $selectareasoption .= '</optgroup>';
                         }
                     }
                 }
-            } else {
+            }
+            else
+            {
                 // $reporte = reportequimicosModel::where('id', $reporteregistro_id)->get();
 
 
@@ -1748,14 +1958,16 @@ class reportequimicosController extends Controller
 
 
                 $revision = reporterevisionesModel::where('proyecto_id', $proyecto_id)
-                    ->where('agente_id', 15)
-                    ->orderBy('reporterevisiones_revision', 'DESC')
-                    ->get();
+                                                ->where('agente_id', 15)
+                                                ->orderBy('reporterevisiones_revision', 'DESC')
+                                                ->get();
 
 
                 $edicion = 1;
-                if (count($revision) > 0) {
-                    if ($revision[0]->reporterevisiones_concluido == 1 || $revision[0]->reporterevisiones_cancelado == 1) {
+                if(count($revision) > 0)
+                {
+                    if($revision[0]->reporterevisiones_concluido == 1 || $revision[0]->reporterevisiones_cancelado == 1)
+                    {
                         $edicion = 0;
                     }
                 }
@@ -1769,12 +1981,13 @@ class reportequimicosController extends Controller
                                         FROM
                                             reportequimicosarea
                                         WHERE
-                                            reportequimicosarea.proyecto_id = ' . $proyecto_id . '
-                                            AND reportequimicosarea.registro_id = ' . $reporteregistro_id);
+                                            reportequimicosarea.proyecto_id = '.$proyecto_id.'
+                                            AND reportequimicosarea.registro_id = '.$reporteregistro_id);
 
                 $where_condicion = '';
-                if (($registros[0]->total + 0) > 0) {
-                    $where_condicion = 'AND reportequimicosarea.registro_id = ' . $reporteregistro_id;
+                if (($registros[0]->total + 0) > 0)
+                {
+                    $where_condicion = 'AND reportequimicosarea.registro_id = '.$reporteregistro_id;
                 }
 
 
@@ -1803,8 +2016,8 @@ class reportequimicosController extends Controller
                                         LEFT OUTER JOIN reportequimicosareacategoria ON reportequimicosarea.id = reportequimicosareacategoria.reportequimicosarea_id
                                         LEFT JOIN reportequimicoscategoria ON reportequimicosareacategoria.reportequimicoscategoria_id = reportequimicoscategoria.id 
                                     WHERE
-                                        reportequimicosarea.proyecto_id = ' . $proyecto_id . ' 
-                                        ' . $where_condicion . ' 
+                                        reportequimicosarea.proyecto_id = '.$proyecto_id.' 
+                                        '.$where_condicion.' 
                                         AND reportequimicosareacategoria.reportequimicosareacategoria_poe = 0
                                     ORDER BY
                                         reportequimicosarea.reportequimicosarea_numorden ASC,
@@ -1813,26 +2026,31 @@ class reportequimicosController extends Controller
 
 
                 // FORMATEAR FILAS
-                foreach ($areas as $key => $value) {
-                    if ($area != $value->reportequimicosarea_nombre) {
+                foreach ($areas as $key => $value) 
+                {
+                    if ($area != $value->reportequimicosarea_nombre)
+                    {
                         $area = $value->reportequimicosarea_nombre;
                         $value->area_nombre = $area;
 
                         $numero_registro += 1;
                         $value->numero_registro = $numero_registro;
 
-                        if ($value->reportequimicosarea_porcientooperacion > 0) {
+                        if ($value->reportequimicosarea_porcientooperacion > 0)
+                        {
                             //TABLA 6.1.- Condiciones de operación durante la evaluación (representado en porcentaje)
                             //==================================================
 
 
                             $tabla_6_1 .= '<tr>
-                                                <td>' . $value->reportequimicosarea_instalacion . '</td>
-                                                <td>' . $value->reportequimicosarea_nombre . '</td>
-                                                <td>' . $value->reportequimicosarea_porcientooperacion . ' %</td>
+                                                <td>'.$value->reportequimicosarea_instalacion.'</td>
+                                                <td>'.$value->reportequimicosarea_nombre.'</td>
+                                                <td>'.$value->reportequimicosarea_porcientooperacion.' %</td>
                                             </tr>';
                         }
-                    } else {
+                    }
+                    else
+                    {
                         $value->area_nombre = $area;
                         $value->numero_registro = $numero_registro;
                     }
@@ -1842,28 +2060,33 @@ class reportequimicosController extends Controller
                     $value->boton_editar = '<button type="button" class="btn btn-warning waves-effect btn-circle"><i class="fa fa-pencil fa-2x"></i></button>';
 
 
-                    if ($edicion == 1) {
+                    if ($edicion == 1)
+                    {
                         $value->boton_eliminar = '<button type="button" class="btn btn-danger waves-effect btn-circle eliminar"><i class="fa fa-trash fa-2x"></i></button>';
-                    } else {
+                    }
+                    else
+                    {
                         $value->boton_eliminar = '<button type="button" class="btn btn-default waves-effect btn-circle" data-toggle="tooltip" title="No disponible"><i class="fa fa-ban fa-2x"></i></button>';
                     }
 
 
-                    if ($value->reportequimicosarea_porcientooperacion === NULL) {
+                    if ($value->reportequimicosarea_porcientooperacion === NULL)
+                    {
                         $total_singuardar += 1;
                     }
 
 
-                    if ($value->reportequimicosarea_porcientooperacion > 0) {
+                    if ($value->reportequimicosarea_porcientooperacion > 0)
+                    {
                         //TABLA 5.5.- Actividades del personal expuesto
                         //==================================================
 
 
                         $tabla_5_5 .= '<tr>
-                                            <td>' . $value->reportequimicosarea_instalacion . '</td>
-                                            <td>' . $value->reportequimicosarea_nombre . '</td>
-                                            <td>' . $value->reportequimicoscategoria_nombre . '</td>
-                                            <td class="justificado">' . $value->reportequimicosareacategoria_actividades . '</td>
+                                            <td>'.$value->reportequimicosarea_instalacion.'</td>
+                                            <td>'.$value->reportequimicosarea_nombre.'</td>
+                                            <td>'.$value->reportequimicoscategoria_nombre.'</td>
+                                            <td class="justificado">'.$value->reportequimicosareacategoria_actividades.'</td>
                                         </tr>';
 
 
@@ -1872,19 +2095,22 @@ class reportequimicosController extends Controller
 
 
                         $tabla_5_6 .= '<tr>
-                                            <td>' . $value->reportequimicosarea_instalacion . '</td>
-                                            <td>' . $value->reportequimicosarea_nombre . '</td>
-                                            <td>' . $value->reportequimicosarea_maquinaria . '</td>
-                                            <td class="justificado">' . $value->reportequimicosarea_contaminante . '</td>
-                                            <td>' . $value->reportequimicoscategoria_nombre . '</td>';
+                                            <td>'.$value->reportequimicosarea_instalacion.'</td>
+                                            <td>'.$value->reportequimicosarea_nombre.'</td>
+                                            <td>'.$value->reportequimicosarea_maquinaria.'</td>
+                                            <td class="justificado">'.$value->reportequimicosarea_contaminante.'</td>
+                                            <td>'.$value->reportequimicoscategoria_nombre.'</td>';
 
-                        if (($value->reportequimicosarea_caracteristica + 0) == 0) {
-                            $tabla_5_6 .= '<td>No</td>
+                                            if (($value->reportequimicosarea_caracteristica+0) == 0)
+                                            {
+                                                $tabla_5_6 .= '<td>No</td>
                                                                 <td>Si</td>';
-                        } else {
-                            $tabla_5_6 .= '<td>Si</td>
+                                            }
+                                            else
+                                            {
+                                                 $tabla_5_6 .= '<td>Si</td>
                                                                 <td>No</td>';
-                        }
+                                            }
 
                         $tabla_5_6 .= '</tr>';
 
@@ -1893,25 +2119,29 @@ class reportequimicosController extends Controller
                         //==================================================
 
 
-                        if ($instalacion != $value->reportequimicosarea_instalacion && ($key + 0) == 0) {
+                        if ($instalacion != $value->reportequimicosarea_instalacion && ($key + 0) == 0)
+                        {
                             $instalacion = $value->reportequimicosarea_instalacion;
-                            $selectareasoption .= '<optgroup label="' . $instalacion . '">';
+                            $selectareasoption .= '<optgroup label="'.$instalacion.'">';
                         }
-
-                        if ($instalacion != $value->reportequimicosarea_instalacion && ($key + 0) > 0) {
+                        
+                        if ($instalacion != $value->reportequimicosarea_instalacion && ($key + 0) > 0)
+                        {
                             $instalacion = $value->reportequimicosarea_instalacion;
-                            $selectareasoption .= '</optgroup><optgroup label="' . $instalacion . '">';
+                            $selectareasoption .= '</optgroup><optgroup label="'.$instalacion.'">';
                             $area2 = 'XXXXX';
                         }
 
 
-                        if ($area2 != $value->reportequimicosarea_nombre) {
+                        if ($area2 != $value->reportequimicosarea_nombre)
+                        {
                             $area2 = $value->reportequimicosarea_nombre;
-                            $selectareasoption .= '<option value="' . $value->id . '">' . $area2 . '</option>';
+                            $selectareasoption .= '<option value="'.$value->id.'">'.$area2.'</option>';
                         }
 
 
-                        if ($key == (count($areas) - 1)) {
+                        if ($key == (count($areas) - 1))
+                        {
                             $selectareasoption .= '</optgroup>';
                         }
                     }
@@ -1928,14 +2158,16 @@ class reportequimicosController extends Controller
             $dato["selectareasoption"] = $selectareasoption;
             $dato["msj"] = 'Datos consultados correctamente';
             return response()->json($dato);
-        } catch (Exception $e) {
+        }
+        catch(Exception $e)
+        {
             $dato['data'] = 0;
-            $dato["total_singuardar"] = $total_singuardar;
+            $dato["total_singuardar"] = $total_singuardar;            
             $dato["tabla_5_5"] = '<tr><td colspan="4">Error al consultar los datos</td></tr>';
             $dato["tabla_5_6"] = '<tr><td colspan="7">Error al consultar los datos</td></tr>';
             $dato["tabla_6_1"] = '<tr><td colspan="3">Error al consultar los datos</td></tr>';
             $dato["selectareasoption"] = '<option value="">Error al consultar áreas</option>';
-            $dato["msj"] = 'Error ' . $e->getMessage();
+            $dato["msj"] = 'Error '.$e->getMessage();
             return response()->json($dato);
         }
     }
@@ -1952,7 +2184,8 @@ class reportequimicosController extends Controller
      */
     public function reportequimicosareascategorias($proyecto_id, $reporteregistro_id, $area_id, $areas_poe)
     {
-        try {
+        try
+        {
             // dd($proyecto_id, $reporteregistro_id, $area_id, $areas_poe);
 
 
@@ -1961,7 +2194,8 @@ class reportequimicosController extends Controller
             $readonly_required = '';
 
 
-            if (($areas_poe + 0) == 1) {
+            if (($areas_poe+0) == 1)
+            {
                 $areacategorias = DB::select('SELECT
                                                     reportecategoria.proyecto_id,
                                                     reporteareacategoria.reportearea_id,
@@ -1976,7 +2210,7 @@ class reportequimicosController extends Controller
                                                         WHERE
                                                             reportequimicosareacategoria.reportequimicosarea_id = reporteareacategoria.reportearea_id
                                                             AND reportequimicosareacategoria.reportequimicoscategoria_id = reporteareacategoria.reportecategoria_id
-                                                            AND reportequimicosareacategoria.reportequimicosareacategoria_poe = ' . $reporteregistro_id . ' 
+                                                            AND reportequimicosareacategoria.reportequimicosareacategoria_poe = '.$reporteregistro_id.' 
                                                     ), "") AS checked,
                                                     reportecategoria.reportecategoria_total,
                                                     reporteareacategoria.reporteareacategoria_total AS categoria_total,
@@ -1986,37 +2220,40 @@ class reportequimicosController extends Controller
                                                     reporteareacategoria
                                                     LEFT JOIN reportecategoria ON reporteareacategoria.reportecategoria_id = reportecategoria.id
                                                 WHERE
-                                                    reportecategoria.proyecto_id = ' . $proyecto_id . ' 
-                                                    AND reporteareacategoria.reportearea_id = ' . $area_id . ' 
+                                                    reportecategoria.proyecto_id = '.$proyecto_id.' 
+                                                    AND reporteareacategoria.reportearea_id = '.$area_id.' 
                                                 ORDER BY
                                                     reportecategoria.reportecategoria_orden ASC,
                                                     reportecategoria.reportecategoria_nombre ASC');
 
 
-                foreach ($areacategorias as $key => $value) {
+                foreach ($areacategorias as $key => $value) 
+                {
                     $numero_registro += 1;
 
                     $areacategorias_lista .= '<tr>
                                                 <td with="60">
                                                     <div class="switch" style="border: 0px #000 solid;">
                                                         <label>
-                                                            <input type="checkbox" name="checkbox_categoria_id[]" value="' . $value->id . '" ' . $value->checked . '/>
+                                                            <input type="checkbox" name="checkbox_categoria_id[]" value="'.$value->id.'" '.$value->checked.'/>
                                                             <span class="lever switch-col-light-blue" style="padding: 0px; margin: 0px;"></span>
                                                         </label>
                                                     </div>
                                                 </td>
                                                 <td with="240">
-                                                    ' . $value->reportequimicoscategoria_nombre . '
+                                                    '.$value->reportequimicoscategoria_nombre.'
                                                 </td>
                                                 <td with="120">
-                                                    <input type="number" min="1" class="form-control areacategoria_' . $numero_registro . '" name="areacategoria_total_' . $value->id . '" value="' . $value->categoria_total . '" readonly>
+                                                    <input type="number" min="1" class="form-control areacategoria_'.$numero_registro.'" name="areacategoria_total_'.$value->id.'" value="'.$value->categoria_total.'" readonly>
                                                 </td>
                                                 <td with="">
-                                                    <textarea rows="2" class="form-control areacategoria_' . $numero_registro . '" name="areacategoria_actividades_' . $value->id . '" readonly>' . $value->categoria_actividades . '</textarea>
+                                                    <textarea rows="2" class="form-control areacategoria_'.$numero_registro.'" name="areacategoria_actividades_'.$value->id.'" readonly>'.$value->categoria_actividades.'</textarea>
                                                 </td>
                                             </tr>';
                 }
-            } else {
+            }
+            else
+            {
                 $areacategorias = DB::select('SELECT
                                                     reportequimicoscategoria.id,
                                                     reportequimicoscategoria.proyecto_id,
@@ -2029,7 +2266,7 @@ class reportequimicosController extends Controller
                                                         FROM
                                                             reportequimicosareacategoria
                                                         WHERE
-                                                            reportequimicosareacategoria.reportequimicosarea_id = ' . $area_id . '
+                                                            reportequimicosareacategoria.reportequimicosarea_id = '.$area_id.'
                                                             AND reportequimicosareacategoria.reportequimicoscategoria_id = reportequimicoscategoria.id
                                                             AND reportequimicosareacategoria.reportequimicosareacategoria_poe = 0 
                                                     ), "") AS checked,
@@ -2039,7 +2276,7 @@ class reportequimicosController extends Controller
                                                         FROM
                                                             reportequimicosareacategoria
                                                         WHERE
-                                                            reportequimicosareacategoria.reportequimicosarea_id = ' . $area_id . '
+                                                            reportequimicosareacategoria.reportequimicosarea_id = '.$area_id.'
                                                             AND reportequimicosareacategoria.reportequimicoscategoria_id = reportequimicoscategoria.id
                                                             AND reportequimicosareacategoria.reportequimicosareacategoria_poe = 0 
                                                     ), "") AS categoria_total,
@@ -2049,25 +2286,27 @@ class reportequimicosController extends Controller
                                                         FROM
                                                             reportequimicosareacategoria
                                                         WHERE
-                                                            reportequimicosareacategoria.reportequimicosarea_id = ' . $area_id . '
+                                                            reportequimicosareacategoria.reportequimicosarea_id = '.$area_id.'
                                                             AND reportequimicosareacategoria.reportequimicoscategoria_id = reportequimicoscategoria.id
                                                             AND reportequimicosareacategoria.reportequimicosareacategoria_poe = 0 
                                                     ), "") AS categoria_actividades
                                                 FROM
                                                     reportequimicoscategoria
                                                 WHERE
-                                                    reportequimicoscategoria.proyecto_id = ' . $proyecto_id . '
-                                                    AND reportequimicoscategoria.registro_id = ' . $reporteregistro_id . '
+                                                    reportequimicoscategoria.proyecto_id = '.$proyecto_id.'
+                                                    AND reportequimicoscategoria.registro_id = '.$reporteregistro_id.'
                                                 ORDER BY
                                                     reportequimicoscategoria.reportequimicoscategoria_nombre ASC');
 
 
-                foreach ($areacategorias as $key => $value) {
+                foreach ($areacategorias as $key => $value) 
+                {
                     $numero_registro += 1;
 
-                    if ($value->checked) {
+                    if ($value->checked){
                         $readonly_required = 'required';
-                    } else {
+                    }
+                    else{
                         $readonly_required = 'readonly';
                     }
 
@@ -2075,19 +2314,19 @@ class reportequimicosController extends Controller
                                                 <td with="60">
                                                     <div class="switch" style="border: 0px #000 solid;">
                                                         <label>
-                                                            <input type="checkbox" name="checkbox_categoria_id[]" value="' . $value->id . '" ' . $value->checked . ' onchange="activa_areacategoria(this, ' . $numero_registro . ');"/>
+                                                            <input type="checkbox" name="checkbox_categoria_id[]" value="'.$value->id.'" '.$value->checked.' onchange="activa_areacategoria(this, '.$numero_registro.');"/>
                                                             <span class="lever switch-col-light-blue" style="padding: 0px; margin: 0px;"></span>
                                                         </label>
                                                     </div>
                                                 </td>
                                                 <td with="240">
-                                                    ' . $value->reportequimicoscategoria_nombre . '
+                                                    '.$value->reportequimicoscategoria_nombre.'
                                                 </td>
                                                 <td with="120">
-                                                    <input type="number" min="1" class="form-control areacategoria_' . $numero_registro . '" name="areacategoria_total_' . $value->id . '" value="' . $value->categoria_total . '" ' . $readonly_required . '>
+                                                    <input type="number" min="1" class="form-control areacategoria_'.$numero_registro.'" name="areacategoria_total_'.$value->id.'" value="'.$value->categoria_total.'" '.$readonly_required.'>
                                                 </td>
                                                 <td with="">
-                                                    <textarea rows="2" class="form-control areacategoria_' . $numero_registro . '" name="areacategoria_actividades_' . $value->id . '" ' . $readonly_required . '>' . $value->categoria_actividades . '</textarea>
+                                                    <textarea rows="2" class="form-control areacategoria_'.$numero_registro.'" name="areacategoria_actividades_'.$value->id.'" '.$readonly_required.'>'.$value->categoria_actividades.'</textarea>
                                                 </td>
                                             </tr>';
                 }
@@ -2095,12 +2334,14 @@ class reportequimicosController extends Controller
 
 
             // respuesta
-            $dato['areacategorias'] = $areacategorias_lista;
+            $dato['areacategorias'] = $areacategorias_lista;            
             $dato["msj"] = 'Datos consultados correctamente';
             return response()->json($dato);
-        } catch (Exception $e) {
+        }
+        catch(Exception $e)
+        {
             $dato['areacategorias'] = '<tr><td colspan="2">Error al cargar las categorías</td></tr>';
-            $dato["msj"] = 'Error ' . $e->getMessage();
+            $dato["msj"] = 'Error '.$e->getMessage();
             return response()->json($dato);
         }
     }
@@ -2114,17 +2355,20 @@ class reportequimicosController extends Controller
      */
     public function reportequimicosareaeliminar($area_id)
     {
-        try {
+        try
+        {
             $area = reportequimicosareaModel::where('id', $area_id)->delete();
             $areacategorias = reportequimicosareacategoriaModel::where('reportequimicosarea_id', $area_id)
-                ->where('reportequimicosareacategoria_poe', 0)
-                ->delete();
+                                                                ->where('reportequimicosareacategoria_poe', 0)
+                                                                ->delete();
 
             // respuesta
             $dato["msj"] = 'Área eliminada correctamente';
             return response()->json($dato);
-        } catch (Exception $e) {
-            $dato["msj"] = 'Error ' . $e->getMessage();
+        }
+        catch(Exception $e)
+        {
+            $dato["msj"] = 'Error '.$e->getMessage();
             return response()->json($dato);
         }
     }
@@ -2139,7 +2383,8 @@ class reportequimicosController extends Controller
      */
     public function reportequimicosepptabla($proyecto_id, $reporteregistro_id)
     {
-        try {
+        try
+        {
             // $reporte = reportequimicosModel::where('id', $reporteregistro_id)->get();
 
             // $edicion = 1;
@@ -2153,14 +2398,16 @@ class reportequimicosController extends Controller
 
 
             $revision = reporterevisionesModel::where('proyecto_id', $proyecto_id)
-                ->where('agente_id', 15)
-                ->orderBy('reporterevisiones_revision', 'DESC')
-                ->get();
+                                                ->where('agente_id', 15)
+                                                ->orderBy('reporterevisiones_revision', 'DESC')
+                                                ->get();
 
 
             $edicion = 1;
-            if (count($revision) > 0) {
-                if ($revision[0]->reporterevisiones_concluido == 1 || $revision[0]->reporterevisiones_cancelado == 1) {
+            if(count($revision) > 0)
+            {
+                if($revision[0]->reporterevisiones_concluido == 1 || $revision[0]->reporterevisiones_cancelado == 1)
+                {
                     $edicion = 0;
                 }
             }
@@ -2170,19 +2417,23 @@ class reportequimicosController extends Controller
 
 
             $epp = reportequimicoseppModel::where('proyecto_id', $proyecto_id)
-                ->where('registro_id', $reporteregistro_id)
-                ->get();
+                                            ->where('registro_id', $reporteregistro_id)
+                                            ->get();
 
             $numero_registro = 0;
-            foreach ($epp as $key => $value) {
+            foreach ($epp as $key => $value) 
+            {
                 $numero_registro += 1;
                 $value->numero_registro = $numero_registro;
-
+                
                 $value->boton_editar = '<button type="button" class="btn btn-warning waves-effect btn-circle"><i class="fa fa-pencil fa-2x"></i></button>';
 
-                if ($edicion == 1) {
+                if ($edicion == 1)
+                {
                     $value->boton_eliminar = '<button type="button" class="btn btn-danger waves-effect btn-circle eliminar"><i class="fa fa-trash fa-2x"></i></button>';
-                } else {
+                }
+                else
+                {
                     $value->boton_eliminar = '<button type="button" class="btn btn-default waves-effect btn-circle" data-toggle="tooltip" title="No disponible"><i class="fa fa-ban fa-2x"></i></button>';
                 }
             }
@@ -2192,10 +2443,12 @@ class reportequimicosController extends Controller
             $dato["total"] = count($epp);
             $dato["msj"] = 'Datos consultados correctamente';
             return response()->json($dato);
-        } catch (Exception $e) {
+        }
+        catch(Exception $e)
+        {
             $dato['data'] = 0;
             $dato["total"] = 0;
-            $dato["msj"] = 'Error ' . $e->getMessage();
+            $dato["msj"] = 'Error '.$e->getMessage();
             return response()->json($dato);
         }
     }
@@ -2209,14 +2462,17 @@ class reportequimicosController extends Controller
      */
     public function reportequimicoseppeliminar($epp_id)
     {
-        try {
+        try
+        {
             $epp = reportequimicoseppModel::where('id', $epp_id)->delete();
 
             // respuesta
             $dato["msj"] = 'E.P.P. eliminado correctamente';
             return response()->json($dato);
-        } catch (Exception $e) {
-            $dato["msj"] = 'Error ' . $e->getMessage();
+        }
+        catch(Exception $e)
+        {
+            $dato["msj"] = 'Error '.$e->getMessage();
             return response()->json($dato);
         }
     }
@@ -2230,7 +2486,8 @@ class reportequimicosController extends Controller
      */
     public function reportequimicossustanciasreconocimiento($recsensorial_id)
     {
-        try {
+        try
+        {
             $sustancias = DB::select('SELECT    
                                             TABLA3.sustancia_nombre,
                                             catsustanciacomponente.catsustanciacomponente_nombre,
@@ -2360,7 +2617,7 @@ class reportequimicosController extends Controller
                                                                     LEFT JOIN catcategoriapeligrosalud ON catsustancia.catcategoriapeligrosalud_id = catcategoriapeligrosalud.id
                                                                     LEFT JOIN catgradoriesgosalud ON catsustancia.catgradoriesgosalud_id = catgradoriesgosalud.id 
                                                                 WHERE
-                                                                    recsensorialquimicosinventario.recsensorial_id = ' . $recsensorial_id . '  
+                                                                    recsensorialquimicosinventario.recsensorial_id = '.$recsensorial_id.'  
                                                                 GROUP BY
                                                                     recsensorialquimicosinventario.recsensorial_id,
                                                                     recsensorialquimicosinventario.id,
@@ -2405,10 +2662,12 @@ class reportequimicosController extends Controller
             $dato["total"] = count($sustancias);
             $dato["msj"] = 'Datos consultados correctamente';
             return response()->json($dato);
-        } catch (Exception $e) {
+        }
+        catch(Exception $e)
+        {
             $dato['data'] = 0;
             $dato["total"] = 0;
-            $dato["msj"] = 'Error ' . $e->getMessage();
+            $dato["msj"] = 'Error '.$e->getMessage();
             return response()->json($dato);
         }
     }
@@ -2424,8 +2683,10 @@ class reportequimicosController extends Controller
      */
     public function reportequimicosevaluacionareacategorias($area_id, $reporteregistro_id, $areas_poe)
     {
-        try {
-            if (($areas_poe + 0) == 1) {
+        try
+        {
+            if (($areas_poe+0) == 1)
+            {
                 $categorias = DB::select('SELECT
                                                 reportequimicosareacategoria.reportequimicosarea_id,
                                                 reportequimicosareacategoria.reportequimicosareacategoria_poe,
@@ -2436,12 +2697,14 @@ class reportequimicosController extends Controller
                                                 reportequimicosareacategoria
                                                 LEFT JOIN reportecategoria ON reportequimicosareacategoria.reportequimicoscategoria_id = reportecategoria.id
                                             WHERE
-                                                reportequimicosareacategoria.reportequimicosarea_id = ' . $area_id . ' 
-                                                AND reportequimicosareacategoria.reportequimicosareacategoria_poe = ' . $reporteregistro_id . ' 
+                                                reportequimicosareacategoria.reportequimicosarea_id = '.$area_id.' 
+                                                AND reportequimicosareacategoria.reportequimicosareacategoria_poe = '.$reporteregistro_id.' 
                                             ORDER BY
                                                 reportecategoria.reportecategoria_orden ASC,
                                                 reportecategoria.reportecategoria_nombre ASC');
-            } else {
+            }
+            else
+            {
                 $categorias = DB::select('SELECT
                                                 reportequimicosareacategoria.reportequimicosarea_id,
                                                 reportequimicosareacategoria.reportequimicosareacategoria_poe,
@@ -2451,7 +2714,7 @@ class reportequimicosController extends Controller
                                                 reportequimicosareacategoria
                                                 LEFT JOIN reportequimicoscategoria ON reportequimicosareacategoria.reportequimicoscategoria_id = reportequimicoscategoria.id
                                             WHERE
-                                                reportequimicosareacategoria.reportequimicosarea_id = ' . $area_id . ' 
+                                                reportequimicosareacategoria.reportequimicosarea_id = '.$area_id.' 
                                                 AND reportequimicosareacategoria.reportequimicosareacategoria_poe = 0 
                                             ORDER BY
                                                 reportequimicoscategoria.reportequimicoscategoria_nombre ASC');
@@ -2459,8 +2722,9 @@ class reportequimicosController extends Controller
 
 
             $categorias_opciones = '<option value=""></option>';
-            foreach ($categorias as $key => $value) {
-                $categorias_opciones .= '<option value="' . $value->reportequimicoscategoria_id . '">' . $value->reportequimicoscategoria_nombre . '</option>';
+            foreach ($categorias as $key => $value) 
+            {
+                $categorias_opciones .= '<option value="'.$value->reportequimicoscategoria_id.'">'.$value->reportequimicoscategoria_nombre.'</option>';
             }
             $categorias_opciones .= '<option value="0">N/A</option>';
 
@@ -2469,9 +2733,11 @@ class reportequimicosController extends Controller
             $dato["categorias_opciones"] = $categorias_opciones;
             $dato["msj"] = 'Datos consultados correctamente';
             return response()->json($dato);
-        } catch (Exception $e) {
+        }
+        catch(Exception $e)
+        {
             $dato["categorias_opciones"] = '<option value="">Error al consultar las categorías</option>';
-            $dato["msj"] = 'Error ' . $e->getMessage();
+            $dato["msj"] = 'Error '.$e->getMessage();
             return response()->json($dato);
         }
     }
@@ -2487,7 +2753,8 @@ class reportequimicosController extends Controller
      */
     public function reportequimicosevaluaciontabla($proyecto_id, $reporteregistro_id, $areas_poe)
     {
-        try {
+        try
+        {
             // $reporte = reportequimicosModel::where('id', $reporteregistro_id)->get();
 
             // $edicion = 1;
@@ -2501,14 +2768,16 @@ class reportequimicosController extends Controller
 
 
             $revision = reporterevisionesModel::where('proyecto_id', $proyecto_id)
-                ->where('agente_id', 15)
-                ->orderBy('reporterevisiones_revision', 'DESC')
-                ->get();
+                                                ->where('agente_id', 15)
+                                                ->orderBy('reporterevisiones_revision', 'DESC')
+                                                ->get();
 
 
             $edicion = 1;
-            if (count($revision) > 0) {
-                if ($revision[0]->reporterevisiones_concluido == 1 || $revision[0]->reporterevisiones_cancelado == 1) {
+            if(count($revision) > 0)
+            {
+                if($revision[0]->reporterevisiones_concluido == 1 || $revision[0]->reporterevisiones_cancelado == 1)
+                {
                     $edicion = 0;
                 }
             }
@@ -2517,7 +2786,8 @@ class reportequimicosController extends Controller
             //==========================================
 
 
-            if (($areas_poe + 0) == 1) {
+            if (($areas_poe+0) == 1)
+            {
                 $evaluacion = DB::select('SELECT
                                                 reportequimicosevaluacion.proyecto_id,
                                                 reportequimicosevaluacion.registro_id,
@@ -2566,13 +2836,15 @@ class reportequimicosController extends Controller
                                                 LEFT JOIN reportecategoria ON reportequimicosevaluacion.reportequimicoscategoria_id = reportecategoria.id
                                                 RIGHT JOIN reportequimicosevaluacionparametro ON reportequimicosevaluacion.id = reportequimicosevaluacionparametro.reportequimicosevaluacion_id
                                             WHERE
-                                                reportequimicosevaluacion.proyecto_id = ' . $proyecto_id . ' 
-                                                AND reportequimicosevaluacion.registro_id = ' . $reporteregistro_id . ' 
+                                                reportequimicosevaluacion.proyecto_id = '.$proyecto_id.' 
+                                                AND reportequimicosevaluacion.registro_id = '.$reporteregistro_id.' 
                                             ORDER BY
                                                 reportequimicosevaluacion.reportequimicosevaluacion_punto ASC,
                                                 orden ASC,
                                                 reportequimicosevaluacionparametro.id ASC');
-            } else {
+            }
+            else
+            {
                 $evaluacion = DB::select('SELECT
                                                 reportequimicosevaluacion.proyecto_id,
                                                 reportequimicosevaluacion.registro_id,
@@ -2621,8 +2893,8 @@ class reportequimicosController extends Controller
                                                 LEFT JOIN reportequimicoscategoria ON reportequimicosevaluacion.reportequimicoscategoria_id = reportequimicoscategoria.id
                                                 RIGHT JOIN reportequimicosevaluacionparametro ON reportequimicosevaluacion.id = reportequimicosevaluacionparametro.reportequimicosevaluacion_id
                                             WHERE
-                                                reportequimicosevaluacion.proyecto_id = ' . $proyecto_id . ' 
-                                                AND reportequimicosevaluacion.registro_id = ' . $reporteregistro_id . ' 
+                                                reportequimicosevaluacion.proyecto_id = '.$proyecto_id.' 
+                                                AND reportequimicosevaluacion.registro_id = '.$reporteregistro_id.' 
                                             ORDER BY
                                                 reportequimicosevaluacion.reportequimicosevaluacion_punto ASC,
                                                 orden ASC,
@@ -2630,12 +2902,16 @@ class reportequimicosController extends Controller
             }
 
 
-            foreach ($evaluacion as $key => $value) {
-                $value->boton_editar = '<button type="button" class="btn btn-warning waves-effect btn-circle"><i class="fa fa-pencil fa-2x"></i></button>';
+            foreach ($evaluacion as $key => $value)
+            {
+                $value->boton_editar = '<button type="button" class="btn btn-warning waves-effect btn-circle"><i class="fa fa-pencil fa-2x"></i></button>';                    
 
-                if ($edicion == 1) {
+                if ($edicion == 1)
+                {
                     $value->boton_eliminar = '<button type="button" class="btn btn-danger waves-effect btn-circle eliminar"><i class="fa fa-trash fa-2x"></i></button>';
-                } else {
+                }
+                else
+                {
                     $value->boton_eliminar = '<button type="button" class="btn btn-default waves-effect btn-circle" data-toggle="tooltip" title="No disponible"><i class="fa fa-ban fa-2x"></i></button>';
                 }
             }
@@ -2646,10 +2922,12 @@ class reportequimicosController extends Controller
             $dato["total"] = count($evaluacion);
             $dato["msj"] = 'Datos consultados correctamente';
             return response()->json($dato);
-        } catch (Exception $e) {
+        }
+        catch(Exception $e)
+        {
             $dato['data'] = 0;
             $dato["total"] = 0;
-            $dato["msj"] = 'Error ' . $e->getMessage();
+            $dato["msj"] = 'Error '.$e->getMessage();
             return response()->json($dato);
         }
     }
@@ -2663,16 +2941,19 @@ class reportequimicosController extends Controller
      */
     public function reportequimicosevaluacioneliminar($puntoevaluacion_id)
     {
-        try {
+        try
+        {
             $puntoner = reportequimicosevaluacionModel::where('id', $puntoevaluacion_id)->delete();
 
-            $puntoner_parametros = reportequimicosevaluacionparametroModel::where('reportequimicosevaluacion_id', $puntoevaluacion_id)->delete();
+            $puntoner_parametros = reportequimicosevaluacionparametroModel::where('reportequimicosevaluacion_id', $puntoevaluacion_id)->delete();            
 
             // respuesta
             $dato["msj"] = 'Punto de evaluación eliminado correctamente';
             return response()->json($dato);
-        } catch (Exception $e) {
-            $dato["msj"] = 'Error ' . $e->getMessage();
+        }
+        catch(Exception $e)
+        {
+            $dato["msj"] = 'Error '.$e->getMessage();
             return response()->json($dato);
         }
     }
@@ -2687,7 +2968,8 @@ class reportequimicosController extends Controller
      */
     public function reportequimicosmetodomuestreotabla($proyecto_id, $reporteregistro_id)
     {
-        try {
+        try
+        {
             // $reporte = reportequimicosModel::where('id', $reporteregistro_id)->get();
 
             // $edicion = 1;
@@ -2701,14 +2983,16 @@ class reportequimicosController extends Controller
 
 
             $revision = reporterevisionesModel::where('proyecto_id', $proyecto_id)
-                ->where('agente_id', 15)
-                ->orderBy('reporterevisiones_revision', 'DESC')
-                ->get();
+                                                ->where('agente_id', 15)
+                                                ->orderBy('reporterevisiones_revision', 'DESC')
+                                                ->get();
 
 
             $edicion = 1;
-            if (count($revision) > 0) {
-                if ($revision[0]->reporterevisiones_concluido == 1 || $revision[0]->reporterevisiones_cancelado == 1) {
+            if(count($revision) > 0)
+            {
+                if($revision[0]->reporterevisiones_concluido == 1 || $revision[0]->reporterevisiones_cancelado == 1)
+                {
                     $edicion = 0;
                 }
             }
@@ -2784,8 +3068,8 @@ class reportequimicosController extends Controller
                                                         reportequimicosevaluacion
                                                         RIGHT JOIN reportequimicosevaluacionparametro ON reportequimicosevaluacion.id = reportequimicosevaluacionparametro.reportequimicosevaluacion_id 
                                                     WHERE
-                                                        reportequimicosevaluacion.proyecto_id = ' . $proyecto_id . '  
-                                                        AND reportequimicosevaluacion.registro_id = ' . $reporteregistro_id . '
+                                                        reportequimicosevaluacion.proyecto_id = '.$proyecto_id.'  
+                                                        AND reportequimicosevaluacion.registro_id = '.$reporteregistro_id.'
                                                     GROUP BY
                                                         reportequimicosevaluacion.proyecto_id,
                                                         reportequimicosevaluacion.registro_id,  
@@ -2798,16 +3082,20 @@ class reportequimicosController extends Controller
                                             TABLA2.puntos > 0');
 
 
-            foreach ($parametros as $key => $value) {
+            foreach ($parametros as $key => $value)
+            {
                 $value->flujos = str_replace(',', '<br>', $value->reportequimicosmetodomuestreo_flujo);
 
 
-                $value->boton_editar = '<button type="button" class="btn btn-warning waves-effect btn-circle"><i class="fa fa-pencil fa-2x"></i></button>';
+                $value->boton_editar = '<button type="button" class="btn btn-warning waves-effect btn-circle"><i class="fa fa-pencil fa-2x"></i></button>';                    
 
 
-                if ($edicion == 1) {
+                if ($edicion == 1)
+                {
                     $value->boton_eliminar = '<button type="button" class="btn btn-danger waves-effect btn-circle eliminar"><i class="fa fa-trash fa-2x"></i></button>';
-                } else {
+                }
+                else
+                {
                     $value->boton_eliminar = '<button type="button" class="btn btn-default waves-effect btn-circle" data-toggle="tooltip" title="No disponible"><i class="fa fa-ban fa-2x"></i></button>';
                 }
             }
@@ -2818,10 +3106,12 @@ class reportequimicosController extends Controller
             $dato["total"] = count($parametros);
             $dato["msj"] = 'Datos consultados correctamente';
             return response()->json($dato);
-        } catch (Exception $e) {
+        }
+        catch(Exception $e)
+        {
             $dato['data'] = 0;
             $dato["total"] = 0;
-            $dato["msj"] = 'Error ' . $e->getMessage();
+            $dato["msj"] = 'Error '.$e->getMessage();
             return response()->json($dato);
         }
     }
@@ -2837,17 +3127,20 @@ class reportequimicosController extends Controller
      */
     public function reportequimicosmetodomuestreoeliminar($proyecto_id, $reporteregistro_id, $parametro)
     {
-        try {
+        try
+        {
             $metodomuestreo_eliminar = reportequimicosmetodomuestreoModel::where('proyecto_id', $proyecto_id)
-                ->where('registro_id', $reporteregistro_id)
-                ->where('reportequimicosmetodomuestreo_parametro', $parametro)
-                ->delete();
+                                                                        ->where('registro_id', $reporteregistro_id)
+                                                                        ->where('reportequimicosmetodomuestreo_parametro', $parametro)
+                                                                        ->delete();
 
             // respuesta
             $dato["msj"] = 'Punto de evaluación eliminado correctamente';
             return response()->json($dato);
-        } catch (Exception $e) {
-            $dato["msj"] = 'Error ' . $e->getMessage();
+        }
+        catch(Exception $e)
+        {
+            $dato["msj"] = 'Error '.$e->getMessage();
             return response()->json($dato);
         }
     }
@@ -2863,8 +3156,10 @@ class reportequimicosController extends Controller
      */
     public function reportequimicosmatriztabla($proyecto_id, $reporteregistro_id, $areas_poe)
     {
-        try {
-            if (($areas_poe + 0) == 1) {
+        try
+        {
+            if (($areas_poe+0) == 1)
+            {
                 $puntos = DB::select('SELECT
                                             reportequimicosevaluacion.id,
                                             reportequimicosevaluacion.proyecto_id,
@@ -2905,11 +3200,13 @@ class reportequimicosController extends Controller
                                             LEFT JOIN reportearea ON reportequimicosevaluacion.reportequimicosarea_id = reportearea.id
                                             LEFT JOIN reportecategoria ON reportequimicosevaluacion.reportequimicoscategoria_id = reportecategoria.id
                                         WHERE
-                                            reportequimicosevaluacion.proyecto_id = ' . $proyecto_id . ' 
-                                            AND reportequimicosevaluacion.registro_id = ' . $reporteregistro_id . ' 
+                                            reportequimicosevaluacion.proyecto_id = '.$proyecto_id.' 
+                                            AND reportequimicosevaluacion.registro_id = '.$reporteregistro_id.' 
                                         ORDER BY
                                             reportequimicosevaluacion.reportequimicosevaluacion_punto ASC');
-            } else {
+            }
+            else
+            {
                 $puntos = DB::select('SELECT
                                             reportequimicosevaluacion.id,
                                             reportequimicosevaluacion.proyecto_id,
@@ -2950,15 +3247,16 @@ class reportequimicosController extends Controller
                                             LEFT JOIN reportequimicosarea ON reportequimicosevaluacion.reportequimicosarea_id = reportequimicosarea.id
                                             LEFT JOIN reportequimicoscategoria ON reportequimicosevaluacion.reportequimicoscategoria_id = reportequimicoscategoria.id
                                         WHERE
-                                            reportequimicosevaluacion.proyecto_id = ' . $proyecto_id . ' 
-                                            AND reportequimicosevaluacion.registro_id = ' . $reporteregistro_id . ' 
+                                            reportequimicosevaluacion.proyecto_id = '.$proyecto_id.' 
+                                            AND reportequimicosevaluacion.registro_id = '.$reporteregistro_id.' 
                                         ORDER BY
                                             reportequimicosevaluacion.reportequimicosevaluacion_punto ASC');
             }
 
 
             $numero_registro = 0;
-            foreach ($puntos as $key => $value) {
+            foreach ($puntos as $key => $value)
+            {
                 $numero_registro += 1;
                 $value->numero_registro = $numero_registro;
             }
@@ -2969,10 +3267,12 @@ class reportequimicosController extends Controller
             $dato["total"] = count($puntos);
             $dato["msj"] = 'Datos consultados correctamente';
             return response()->json($dato);
-        } catch (Exception $e) {
+        }
+        catch(Exception $e)
+        {
             $dato["data"] = 0;
             $dato["total"] = 0;
-            $dato["msj"] = 'Error ' . $e->getMessage();
+            $dato["msj"] = 'Error '.$e->getMessage();
             return response()->json($dato);
         }
     }
@@ -2989,10 +3289,12 @@ class reportequimicosController extends Controller
      */
     public function reportequimicosdashboard($proyecto_id, $reporteregistro_id, $partida_id, $areas_poe)
     {
-        try {
+        try
+        {
             $where_condicion = '';
 
-            if (($partida_id + 0) > 0) {
+            if (($partida_id+0) > 0)
+            {
                 $parametros = DB::select('SELECT
                                                 reportequimicosgrupos.proyecto_id,
                                                 reportequimicosgrupos.registro_id,
@@ -3009,28 +3311,37 @@ class reportequimicosController extends Controller
                                                 LEFT JOIN catreportequimicospartidas ON reportequimicosgrupos.catreportequimicospartidas_id = catreportequimicospartidas.id
                                                 LEFT JOIN reportequimicosproyecto ON reportequimicosgrupos.reportequimicosproyecto_id = reportequimicosproyecto.id 
                                             WHERE
-                                                reportequimicosgrupos.proyecto_id = ' . $proyecto_id . ' 
-                                                AND reportequimicosgrupos.registro_id = ' . $reporteregistro_id . ' 
-                                                AND reportequimicosgrupos.catreportequimicospartidas_id = ' . $partida_id . ' 
+                                                reportequimicosgrupos.proyecto_id = '.$proyecto_id.' 
+                                                AND reportequimicosgrupos.registro_id = '.$reporteregistro_id.' 
+                                                AND reportequimicosgrupos.catreportequimicospartidas_id = '.$partida_id.' 
                                             ORDER BY
                                                 catreportequimicospartidas.catreportequimicospartidas_numero ASC,
                                                 reportequimicosproyecto.reportequimicosproyecto_parametro ASC');
 
 
-                foreach ($parametros as $key => $value) {
-                    if (($key + 0) == 0) {
-                        $where_condicion .= 'WHERE TABLA.parametro = "' . $value->reportequimicosproyecto_parametro . '" ';
+                foreach ($parametros as $key => $value)
+                {
+                    if (($key+0) == 0)
+                    {
+                        $where_condicion .= 'WHERE TABLA.parametro = "'.$value->reportequimicosproyecto_parametro.'" ';
 
                         $dato["dashboard_titulo"] = $value->catreportequimicospartidas_descripcion;
-                    } else {
-                        $where_condicion .= 'OR TABLA.parametro = "' . $value->reportequimicosproyecto_parametro . '" ';
+                    }
+                    else
+                    {
+                        $where_condicion .= 'OR TABLA.parametro = "'.$value->reportequimicosproyecto_parametro.'" ';
                     }
                 }
-            } else {
-                if (($reporteregistro_id + 0) > 0) {
+            }
+            else
+            {
+                if(($reporteregistro_id+0) > 0)
+                {
                     $reporte = reportequimicosModel::findOrFail($reporteregistro_id);
-                    $dato["dashboard_titulo"] = 'Evaluación de químicos en ' . $reporte->reportequimicos_instalacion;
-                } else {
+                    $dato["dashboard_titulo"] = 'Evaluación de químicos en '.$reporte->reportequimicos_instalacion;
+                }
+                else
+                {
                     $dato["dashboard_titulo"] = 'Evaluación de químicos';
                 }
             }
@@ -3040,7 +3351,8 @@ class reportequimicosController extends Controller
             // AREAS AVALUADAS
 
 
-            if (($areas_poe + 0) == 1) {
+            if (($areas_poe+0) == 1)
+            {
                 $areas = DB::select('SELECT
                                             TABLA3.proyecto_id,
                                             TABLA3.registro_id,
@@ -3093,12 +3405,12 @@ class reportequimicosController extends Controller
                                                                             reportequimicosevaluacion
                                                                             LEFT JOIN reportearea ON reportequimicosevaluacion.reportequimicosarea_id = reportearea.id
                                                                         WHERE
-                                                                            reportequimicosevaluacion.proyecto_id = ' . $proyecto_id . ' 
-                                                                            AND reportequimicosevaluacion.registro_id = ' . $reporteregistro_id . ' 
+                                                                            reportequimicosevaluacion.proyecto_id = '.$proyecto_id.' 
+                                                                            AND reportequimicosevaluacion.registro_id = '.$reporteregistro_id.' 
                                                                     ) AS TABLA0
                                                                     LEFT JOIN reportequimicosevaluacionparametro ON TABLA0.id = reportequimicosevaluacionparametro.reportequimicosevaluacion_id
                                                             ) AS TABLA
-                                                        ' . $where_condicion . ' 
+                                                        '.$where_condicion.' 
                                                         -- WHERE
                                                             -- TABLA.parametro = "Ácido sulfhídrico"
                                                             -- TABLA.parametro = "Metano"
@@ -3124,7 +3436,9 @@ class reportequimicosController extends Controller
                                         ORDER BY
                                             TABLA3.tipo_evaluacion ASC,
                                             TABLA3.area_nombre ASC');
-            } else {
+            }
+            else
+            {
                 $areas = DB::select('SELECT
                                             TABLA3.proyecto_id,
                                             TABLA3.registro_id,
@@ -3177,12 +3491,12 @@ class reportequimicosController extends Controller
                                                                             reportequimicosevaluacion
                                                                             LEFT JOIN reportequimicosarea ON reportequimicosevaluacion.reportequimicosarea_id = reportequimicosarea.id
                                                                         WHERE
-                                                                            reportequimicosevaluacion.proyecto_id = ' . $proyecto_id . ' 
-                                                                            AND reportequimicosevaluacion.registro_id = ' . $reporteregistro_id . ' 
+                                                                            reportequimicosevaluacion.proyecto_id = '.$proyecto_id.' 
+                                                                            AND reportequimicosevaluacion.registro_id = '.$reporteregistro_id.' 
                                                                     ) AS TABLA0
                                                                     LEFT JOIN reportequimicosevaluacionparametro ON TABLA0.id = reportequimicosevaluacionparametro.reportequimicosevaluacion_id
                                                             ) AS TABLA
-                                                        ' . $where_condicion . ' 
+                                                        '.$where_condicion.' 
                                                         -- WHERE
                                                             -- TABLA.parametro = "Ácido sulfhídrico"
                                                             -- TABLA.parametro = "Metano"
@@ -3211,44 +3525,49 @@ class reportequimicosController extends Controller
             }
 
 
-            $dashboard_areas = '';
-            $tipo_evaluacion = 0;
-            $dato["total_evaluacion"] = 0;
-            $dato["total_evaluacionambiental"] = 0;
-            $dato["total_evaluacionpersonal"] = 0;
-            foreach ($areas as $key => $value) {
-                if (($key + 0) > 0) {
-                    if ($tipo_evaluacion != ($value->tipo_evaluacion + 0)) {
-                        $tipo_evaluacion = ($value->tipo_evaluacion + 0);
+            $dashboard_areas = ''; $tipo_evaluacion = 0; $dato["total_evaluacion"] = 0; $dato["total_evaluacionambiental"] = 0; $dato["total_evaluacionpersonal"] = 0;
+            foreach ($areas as $key => $value)
+            {
+                if (($key+0) > 0)
+                {
+                    if ($tipo_evaluacion != ($value->tipo_evaluacion+0))
+                    {
+                        $tipo_evaluacion = ($value->tipo_evaluacion+0);
                         $dashboard_areas .= '<br><br>';
                     }
-                } else {
-                    $tipo_evaluacion = ($value->tipo_evaluacion + 0);
+                }
+                else
+                {
+                    $tipo_evaluacion = ($value->tipo_evaluacion+0);
                 }
 
 
-                $dashboard_areas .= '● <b>' . $value->area_nombre . '</b> (' . $value->total_texto . ')<br>';
+                $dashboard_areas .= '● <b>'.$value->area_nombre.'</b> ('.$value->total_texto.')<br>';
 
 
-                if (($value->tipo_evaluacion + 0) == 0) {
-                    $dato["total_evaluacionambiental"] += ($value->total + 0);
-                } else {
-                    $dato["total_evaluacionpersonal"] += ($value->total + 0);
+                if (($value->tipo_evaluacion+0) == 0)
+                {
+                    $dato["total_evaluacionambiental"] += ($value->total+0);
+                }
+                else
+                {
+                    $dato["total_evaluacionpersonal"] += ($value->total+0);
                 }
 
 
-                $dato["total_evaluacion"] += ($value->total + 0);
+                $dato["total_evaluacion"] += ($value->total+0);
             }
 
 
-            $dato["total_evaluacion"] = '<br>' . $dato["total_evaluacion"];
+            $dato["total_evaluacion"] = '<br>'.$dato["total_evaluacion"];
 
 
             //=====================================
             // CATEGORIAS AVALUADAS
 
 
-            if (($areas_poe + 0) == 1) {
+            if (($areas_poe+0) == 1)
+            {
                 $categorias = DB::select('SELECT
                                                 TABLA2.proyecto_id,
                                                 TABLA2.registro_id,
@@ -3275,12 +3594,12 @@ class reportequimicosController extends Controller
                                                                 LEFT JOIN reportecategoria ON reportequimicosevaluacion.reportequimicoscategoria_id = reportecategoria.id
                                                                 RIGHT JOIN reportequimicosevaluacionparametro ON reportequimicosevaluacion.id = reportequimicosevaluacionparametro.reportequimicosevaluacion_id
                                                             WHERE
-                                                                reportequimicosevaluacion.proyecto_id = ' . $proyecto_id . ' 
-                                                                AND reportequimicosevaluacion.registro_id = ' . $reporteregistro_id . ' 
+                                                                reportequimicosevaluacion.proyecto_id = '.$proyecto_id.' 
+                                                                AND reportequimicosevaluacion.registro_id = '.$reporteregistro_id.' 
                                                             ORDER BY
                                                                 reportequimicosevaluacion.reportequimicosevaluacion_punto ASC
                                                         ) AS TABLA
-                                                    ' . $where_condicion . ' 
+                                                    '.$where_condicion.' 
                                                     -- WHERE
                                                         -- TABLA.parametro = "Ácido sulfhídrico"
                                                         -- TABLA.parametro = "Metano"
@@ -3298,7 +3617,9 @@ class reportequimicosController extends Controller
                                                 TABLA2.reportequimicoscategoria_id > 0
                                             ORDER BY
                                                 TABLA2.reportequimicoscategoria_nombre ASC');
-            } else {
+            }
+            else
+            {
                 $categorias = DB::select('SELECT
                                                 TABLA2.proyecto_id,
                                                 TABLA2.registro_id,
@@ -3325,12 +3646,12 @@ class reportequimicosController extends Controller
                                                                 LEFT JOIN reportequimicoscategoria ON reportequimicosevaluacion.reportequimicoscategoria_id = reportequimicoscategoria.id
                                                                 RIGHT JOIN reportequimicosevaluacionparametro ON reportequimicosevaluacion.id = reportequimicosevaluacionparametro.reportequimicosevaluacion_id
                                                             WHERE
-                                                                reportequimicosevaluacion.proyecto_id = ' . $proyecto_id . ' 
-                                                                AND reportequimicosevaluacion.registro_id = ' . $reporteregistro_id . ' 
+                                                                reportequimicosevaluacion.proyecto_id = '.$proyecto_id.' 
+                                                                AND reportequimicosevaluacion.registro_id = '.$reporteregistro_id.' 
                                                             ORDER BY
                                                                 reportequimicosevaluacion.reportequimicosevaluacion_punto ASC
                                                         ) AS TABLA
-                                                    ' . $where_condicion . ' 
+                                                    '.$where_condicion.' 
                                                     -- WHERE
                                                         -- TABLA.parametro = "Ácido sulfhídrico"
                                                         -- TABLA.parametro = "Metano"
@@ -3350,11 +3671,12 @@ class reportequimicosController extends Controller
                                                 TABLA2.reportequimicoscategoria_nombre ASC');
             }
 
-
+            
             $dashboard_categorias = '';
-            foreach ($categorias as $key => $value) {
-                $dashboard_categorias .= '● <b>' . $value->reportequimicoscategoria_nombre . '</b><br>';
-            }
+            foreach ($categorias as $key => $value)
+            {
+                $dashboard_categorias .= '● <b>'.$value->reportequimicoscategoria_nombre.'</b><br>';
+            }            
 
 
             //=====================================
@@ -3374,16 +3696,17 @@ class reportequimicosController extends Controller
                                             FROM
                                                 reporterecomendaciones 
                                             WHERE
-                                                reporterecomendaciones.proyecto_id = ' . $proyecto_id . '  
-                                                AND reporterecomendaciones.registro_id = ' . $reporteregistro_id . ' 
+                                                reporterecomendaciones.proyecto_id = '.$proyecto_id.'  
+                                                AND reporterecomendaciones.registro_id = '.$reporteregistro_id.' 
                                                 AND reporterecomendaciones.agente_nombre = "Químicos"');
 
 
             $dato['dashboard_recomendaciones_total'] = 0;
-            if (count($recomendaciones) > 0) {
+            if (count($recomendaciones) > 0)
+            {
                 $dato['dashboard_recomendaciones_total'] = $recomendaciones[0]->totalrecomendaciones;
             }
-            $dato['dashboard_recomendaciones_total'] = '<br>' . $dato['dashboard_recomendaciones_total'];
+            $dato['dashboard_recomendaciones_total'] = '<br>'.$dato['dashboard_recomendaciones_total'];
 
 
             //=====================================
@@ -3434,12 +3757,12 @@ class reportequimicosController extends Controller
                                                     reportequimicosevaluacion
                                                     RIGHT JOIN reportequimicosevaluacionparametro ON reportequimicosevaluacion.id = reportequimicosevaluacionparametro.reportequimicosevaluacion_id 
                                                 WHERE
-                                                    reportequimicosevaluacion.proyecto_id = ' . $proyecto_id . '  
-                                                    AND reportequimicosevaluacion.registro_id = ' . $reporteregistro_id . ' 
+                                                    reportequimicosevaluacion.proyecto_id = '.$proyecto_id.'  
+                                                    AND reportequimicosevaluacion.registro_id = '.$reporteregistro_id.' 
                                                 ORDER BY
                                                     reportequimicosevaluacion.reportequimicosevaluacion_punto ASC
                                             ) AS TABLA
-                                        ' . $where_condicion . ' 
+                                        '.$where_condicion.' 
                                         -- WHERE
                                             -- TABLA.parametro = "Ácido sulfhídrico"
                                             -- TABLA.parametro = "Metano"
@@ -3455,17 +3778,19 @@ class reportequimicosController extends Controller
 
 
             $col = 'col-12';
-            if (count($cumplimiento) > 7) {
+            if (count($cumplimiento) > 7)
+            {
                 $col = 'col-6';
             }
 
 
             $parametros_cumplimiento = '';
-            foreach ($cumplimiento as $key => $value) {
-                $parametros_cumplimiento .= '<div class="' . $col . '" style="display: inline-block; text-align: left;">
-                                                <h6 style="margin: 0px; font-size:0.8vw;">♦ ' . $value->parametro . ' <span class="pull-right">' . $value->cumplimiento . '%</span></h6>
+            foreach ($cumplimiento as $key => $value) 
+            {
+                $parametros_cumplimiento .= '<div class="'.$col.'" style="display: inline-block; text-align: left;">
+                                                <h6 style="margin: 0px; font-size:0.8vw;">♦ '.$value->parametro.' <span class="pull-right">'.$value->cumplimiento.'%</span></h6>
                                                 <div class="progress" style="margin-bottom: 8px;">
-                                                    <div class="progress-bar" role="progressbar" style="width: ' . $value->cumplimiento . '%; height: 10px; background: #8ee66b;" aria-valuenow="25" aria-valuemin="0" aria-valuemax="100"></div>
+                                                    <div class="progress-bar" role="progressbar" style="width: '.$value->cumplimiento.'%; height: 10px; background: #8ee66b;" aria-valuenow="25" aria-valuemin="0" aria-valuemax="100"></div>
                                                 </div>
                                             </div>';
             }
@@ -3477,7 +3802,9 @@ class reportequimicosController extends Controller
             $dato["dashboard_categorias"] = $dashboard_categorias;
             $dato["msj"] = 'Datos consultados correctamente';
             return response()->json($dato);
-        } catch (Exception $e) {
+        }
+        catch(Exception $e)
+        {
             $dato["dashboard_titulo"] = 'Error al consultar';
             $dato['parametros_cumplimiento'] = '';
             $dato["dashboard_areas"] = 'Error al consultar las áreas evaluadas';
@@ -3487,7 +3814,7 @@ class reportequimicosController extends Controller
             $dato["total_evaluacionpersonal"] = 0;
             $dato['dashboard_recomendaciones_total'] = '<br>0';
 
-            $dato["msj"] = 'Error ' . $e->getMessage();
+            $dato["msj"] = 'Error '.$e->getMessage();
             return response()->json($dato);
         }
     }
@@ -3498,7 +3825,7 @@ class reportequimicosController extends Controller
      *
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
-     */
+    */
     /*
     public function reportequimicosdashboardgraficas(Request $request)
     {
@@ -3546,7 +3873,8 @@ class reportequimicosController extends Controller
      */
     public function reportequimicosconclusionestabla($proyecto_id, $reporteregistro_id)
     {
-        try {
+        try
+        {
             $proyecto = proyectoModel::with(['catregion', 'catsubdireccion', 'catgerencia', 'catactivo'])->findOrFail($proyecto_id);
             $recsensorial = recsensorialModel::findOrFail($proyecto->recsensorial_id);
             $reportecatalogo = reportequimicoscatalogoModel::limit(1)->get();
@@ -3569,14 +3897,16 @@ class reportequimicosController extends Controller
 
 
             $revision = reporterevisionesModel::where('proyecto_id', $proyecto_id)
-                ->where('agente_id', 15)
-                ->orderBy('reporterevisiones_revision', 'DESC')
-                ->get();
+                                                ->where('agente_id', 15)
+                                                ->orderBy('reporterevisiones_revision', 'DESC')
+                                                ->get();
 
 
             $edicion = 1;
-            if (count($revision) > 0) {
-                if ($revision[0]->reporterevisiones_concluido == 1 || $revision[0]->reporterevisiones_cancelado == 1) {
+            if(count($revision) > 0)
+            {
+                if($revision[0]->reporterevisiones_concluido == 1 || $revision[0]->reporterevisiones_cancelado == 1)
+                {
                     $edicion = 0;
                 }
             }
@@ -3604,32 +3934,35 @@ class reportequimicosController extends Controller
                                     reportequimicosconclusion
                                     LEFT JOIN catreportequimicospartidas ON reportequimicosconclusion.catreportequimicospartidas_id = catreportequimicospartidas.id
                                 WHERE
-                                    reportequimicosconclusion.proyecto_id = ' . $proyecto_id . ' 
-                                    AND reportequimicosconclusion.registro_id = ' . $reporteregistro_id . ' 
+                                    reportequimicosconclusion.proyecto_id = '.$proyecto_id.' 
+                                    AND reportequimicosconclusion.registro_id = '.$reporteregistro_id.' 
                                 ORDER BY
                                     reportequimicosconclusion.catreportequimicospartidas_id ASC');
 
 
 
-            $numero_registro = 0;
-            $total = 0;
-            foreach ($tabla as $key => $value) {
+            $numero_registro = 0; $total = 0;
+            foreach ($tabla as $key => $value) 
+            {
                 $numero_registro += 1;
                 $value->numero_registro = $numero_registro;
 
-
-                $value->partida = $value->catreportequimicospartidas_numero . '.- ' . $value->catreportequimicospartidas_descripcion;
-
+                
+                $value->partida = $value->catreportequimicospartidas_numero.'.- '.$value->catreportequimicospartidas_descripcion;
+                
 
                 $value->conclusion = $this->datosproyectoreemplazartexto($proyecto, $recsensorial, $quimicos_nombre, $value->reportequimicosconclusion_conclusion);
 
 
-                $value->boton_editar = '<button type="button" class="btn btn-warning waves-effect btn-circle"><i class="fa fa-pencil fa-2x"></i></button>';
+                $value->boton_editar = '<button type="button" class="btn btn-warning waves-effect btn-circle"><i class="fa fa-pencil fa-2x"></i></button>';                    
 
 
-                if ($edicion == 1) {
+                if ($edicion == 1)
+                {
                     $value->boton_eliminar = '<button type="button" class="btn btn-danger waves-effect btn-circle eliminar"><i class="fa fa-trash fa-2x"></i></button>';
-                } else {
+                }
+                else
+                {
                     $value->boton_eliminar = '<button type="button" class="btn btn-default waves-effect btn-circle" data-toggle="tooltip" title="No disponible"><i class="fa fa-ban fa-2x"></i></button>';
                 }
             }
@@ -3641,11 +3974,13 @@ class reportequimicosController extends Controller
             $dato['conclusion_catalogo'] = $this->datosproyectoreemplazartexto($proyecto, $recsensorial, $quimicos_nombre, $reportecatalogo[0]->reportequimicoscatalogo_conclusion);
             $dato["msj"] = 'Datos consultados correctamente';
             return response()->json($dato);
-        } catch (Exception $e) {
+        }
+        catch(Exception $e)
+        {
             $dato['data'] = 0;
             $dato['total'] = 0;
             $dato['conclusion_catalogo'] = 'Error al consultar la conclusión del catálogo';
-            $dato["msj"] = 'Error ' . $e->getMessage();
+            $dato["msj"] = 'Error '.$e->getMessage();
             return response()->json($dato);
         }
     }
@@ -3659,14 +3994,17 @@ class reportequimicosController extends Controller
      */
     public function reportequimicosconclusioneliminar($conclusion_id)
     {
-        try {
+        try
+        {
             $conclusion = reportequimicosconclusionModel::where('id', $conclusion_id)->delete();
 
             // respuesta
             $dato["msj"] = 'Conclusión eliminada correctamente';
             return response()->json($dato);
-        } catch (Exception $e) {
-            $dato["msj"] = 'Error ' . $e->getMessage();
+        }
+        catch(Exception $e)
+        {
+            $dato["msj"] = 'Error '.$e->getMessage();
             return response()->json($dato);
         }
     }
@@ -3682,7 +4020,8 @@ class reportequimicosController extends Controller
      */
     public function reportequimicosrecomendacionestabla($proyecto_id, $reporteregistro_id, $agente_nombre)
     {
-        try {
+        try
+        {
             // QUIMICOS
             //===================================================
 
@@ -3710,8 +4049,8 @@ class reportequimicosController extends Controller
                                         LEFT JOIN catreportequimicospartidas ON reportequimicosgrupos.catreportequimicospartidas_id = catreportequimicospartidas.id
                                         LEFT JOIN reportequimicosproyecto ON reportequimicosgrupos.reportequimicosproyecto_id = reportequimicosproyecto.id 
                                     WHERE
-                                        reportequimicosgrupos.proyecto_id = ' . $proyecto_id . ' 
-                                        AND reportequimicosgrupos.registro_id = ' . $reporteregistro_id . ' 
+                                        reportequimicosgrupos.proyecto_id = '.$proyecto_id.' 
+                                        AND reportequimicosgrupos.registro_id = '.$reporteregistro_id.' 
                                     GROUP BY
                                         reportequimicosgrupos.proyecto_id,
                                         reportequimicosgrupos.registro_id,
@@ -3762,15 +4101,15 @@ class reportequimicosController extends Controller
                                                                 FROM
                                                                     reporterecomendaciones 
                                                                 WHERE
-                                                                    reporterecomendaciones.proyecto_id = ' . $proyecto_id . '
-                                                                    AND reporterecomendaciones.registro_id = ' . $reporteregistro_id . '
+                                                                    reporterecomendaciones.proyecto_id = '.$proyecto_id.'
+                                                                    AND reporterecomendaciones.registro_id = '.$reporteregistro_id.'
                                                                     AND reporterecomendaciones.reporterecomendacionescatalogo_id = reporterecomendacionescatalogo.id
                                                                 LIMIT 1 
                                                         ), NULL) AS recomendaciones_descripcion
                                                     FROM
                                                         reporterecomendacionescatalogo
                                                     WHERE
-                                                        reporterecomendacionescatalogo.agente_nombre = "' . $agente_nombre . '"
+                                                        reporterecomendacionescatalogo.agente_nombre = "'.$agente_nombre.'"
                                                         AND reporterecomendacionescatalogo.reporterecomendacionescatalogo_activo = 1
                                                     ORDER BY
                                                         reporterecomendacionescatalogo.reporterecomendacionescatalogo_tipo DESC
@@ -3789,57 +4128,67 @@ class reportequimicosController extends Controller
                                             FROM
                                                 reporterecomendaciones
                                             WHERE
-                                                reporterecomendaciones.proyecto_id = ' . $proyecto_id . '
-                                                AND reporterecomendaciones.agente_nombre = "' . $agente_nombre . '"
-                                                AND reporterecomendaciones.registro_id = ' . $reporteregistro_id . '
+                                                reporterecomendaciones.proyecto_id = '.$proyecto_id.'
+                                                AND reporterecomendaciones.agente_nombre = "'.$agente_nombre.'"
+                                                AND reporterecomendaciones.registro_id = '.$reporteregistro_id.'
                                                 AND reporterecomendaciones.reporterecomendacionescatalogo_id = 0
                                             ORDER BY
                                                 reporterecomendaciones.id ASC
                                         )
                                     ) AS TABLA');
 
-            $numero_registro = 0;
-            $total = 0;
-            foreach ($tabla as $key => $value) {
+            $numero_registro = 0; $total = 0;
+            foreach ($tabla as $key => $value) 
+            {
                 $numero_registro += 1;
                 $value->numero_registro = $numero_registro;
 
-                if (($value->id + 0) > 0) {
+                if (($value->id + 0) > 0)
+                {
                     $required_readonly = 'readonly';
-                    if ($value->checked) {
+                    if ($value->checked)
+                    {
                         $required_readonly = 'required';
                     }
 
                     $value->checkbox = '<div class="switch">
                                             <label>
-                                                <input type="checkbox" class="recomendacion_checkbox" name="recomendacion_checkbox[]" value="' . $value->id . '" ' . $value->checked . ' onclick="activa_recomendacion(this);">
+                                                <input type="checkbox" class="recomendacion_checkbox" name="recomendacion_checkbox[]" value="'.$value->id.'" '.$value->checked.' onclick="activa_recomendacion(this);">
                                                 <span class="lever switch-col-light-blue"></span>
                                             </label>
                                         </div>';
 
-                    $value->descripcion = '<input type="hidden" class="form-control" name="recomendacion_tipo_' . $value->id . '" value="' . $value->recomendaciones_tipo . '" required>
-                                            <label>' . $value->recomendaciones_tipo . '</label>
-                                            <textarea  class="form-control" rows="5" id="recomendacion_descripcion_' . $value->id . '" name="recomendacion_descripcion_' . $value->id . '" ' . $required_readonly . '>' . $this->datosproyectoreemplazartexto($proyecto, $recsensorial, $quimicos_nombre, $value->recomendaciones_descripcion) . '</textarea>';
-                } else {
+                    $value->descripcion = '<input type="hidden" class="form-control" name="recomendacion_tipo_'.$value->id.'" value="'.$value->recomendaciones_tipo.'" required>
+                                            <label>'.$value->recomendaciones_tipo.'</label>
+                                            <textarea  class="form-control" rows="5" id="recomendacion_descripcion_'.$value->id.'" name="recomendacion_descripcion_'.$value->id.'" '.$required_readonly.'>'.$this->datosproyectoreemplazartexto($proyecto, $recsensorial, $quimicos_nombre, $value->recomendaciones_descripcion).'</textarea>';
+                }
+                else
+                {
                     $value->checkbox = '<input type="checkbox" class="recomendacionadicional_checkbox" name="recomendacionadicional_checkbox[]" value="0" checked/>
                                         <button type="button" class="btn btn-danger waves-effect btn-circle eliminar" data-toggle="tooltip" title="Eliminar recomendación"><i class="fa fa-trash fa-2x"></i></button>';
 
-                    $preventiva = "";
-                    $correctiva = "";
-                    if ($value->recomendaciones_tipo == "Preventiva") {
+                    $preventiva = ""; $correctiva = "";
+                    if ($value->recomendaciones_tipo == "Preventiva")
+                    {
                         $preventiva = "selected";
-                    } else {
+                    }
+                    else
+                    {
                         $correctiva = "selected";
                     }
 
 
 
                     $partidas_opciones = '<option value=""></option>';
-                    foreach ($partidas as $key2 => $partida) {
-                        if (($value->catalogo_id + 0) == ($partida->catreportequimicospartidas_id + 0)) {
-                            $partidas_opciones .= '<option value="' . $partida->catreportequimicospartidas_id . '" selected>' . $partida->catreportequimicospartidas_numero . '.- ' . $partida->catreportequimicospartidas_descripcion . '</option>';
-                        } else {
-                            $partidas_opciones .= '<option value="' . $partida->catreportequimicospartidas_id . '">' . $partida->catreportequimicospartidas_numero . '.- ' . $partida->catreportequimicospartidas_descripcion . '</option>';
+                    foreach ($partidas as $key2 => $partida)
+                    {
+                        if (($value->catalogo_id+0) == ($partida->catreportequimicospartidas_id+0))
+                        {
+                            $partidas_opciones .= '<option value="'.$partida->catreportequimicospartidas_id.'" selected>'.$partida->catreportequimicospartidas_numero.'.- '.$partida->catreportequimicospartidas_descripcion.'</option>';
+                        }
+                        else
+                        {
+                            $partidas_opciones .= '<option value="'.$partida->catreportequimicospartidas_id.'">'.$partida->catreportequimicospartidas_numero.'.- '.$partida->catreportequimicospartidas_descripcion.'</option>';
                         }
                     }
 
@@ -3849,25 +4198,26 @@ class reportequimicosController extends Controller
                                                     <label>Tipo</label>
                                                     <select class="custom-select form-control" name="recomendacionadicional_tipo[]" required>
                                                         <option value=""></option>
-                                                        <option value="Preventiva" ' . $preventiva . '>Preventiva</option>
-                                                        <option value="Correctiva" ' . $correctiva . '>Correctiva</option>
+                                                        <option value="Preventiva" '.$preventiva.'>Preventiva</option>
+                                                        <option value="Correctiva" '.$correctiva.'>Correctiva</option>
                                                     </select>
                                                 </div>
                                                 <div class="col-6">
                                                     <label>Partida informe</label>
                                                     <select class="custom-select form-control" name="recomendacionadicional_quimicopartida[]" required>
-                                                        ' . $partidas_opciones . '
+                                                        '.$partidas_opciones.'
                                                     </select>
                                                 </div>
                                                 <div class="col-12">
                                                     <br>
                                                     <label>Descripción</label>
-                                                    <textarea  class="form-control" rows="5" name="recomendacionadicional_descripcion[]" required>' . $this->datosproyectoreemplazartexto($proyecto, $recsensorial, $quimicos_nombre, $value->recomendaciones_descripcion) . '</textarea>
+                                                    <textarea  class="form-control" rows="5" name="recomendacionadicional_descripcion[]" required>'.$this->datosproyectoreemplazartexto($proyecto, $recsensorial, $quimicos_nombre, $value->recomendaciones_descripcion).'</textarea>
                                                 </div>
                                             </div>';
                 }
 
-                if ($value->checked) {
+                if ($value->checked)
+                {
                     $total += 1;
                 }
             }
@@ -3878,10 +4228,12 @@ class reportequimicosController extends Controller
             $dato['total'] = $total;
             $dato["msj"] = 'Datos consultados correctamente';
             return response()->json($dato);
-        } catch (Exception $e) {
+        }
+        catch(Exception $e)
+        {
             $dato['data'] = 0;
             $dato['total'] = 0;
-            $dato["msj"] = 'Error ' . $e->getMessage();
+            $dato["msj"] = 'Error '.$e->getMessage();
             return response()->json($dato);
         }
     }
@@ -3894,21 +4246,30 @@ class reportequimicosController extends Controller
      * @param int $responsabledoc_tipo
      * @param int $responsabledoc_opcion
      * @return \Illuminate\Http\Response
-     */
+    */
     public function reportequimicosresponsabledocumento($reporteregistro_id, $responsabledoc_tipo, $responsabledoc_opcion)
     {
         $reporte = reportequimicosModel::findOrFail($reporteregistro_id);
 
-        if ($responsabledoc_tipo == 1) {
-            if ($responsabledoc_opcion == 0) {
+        if ($responsabledoc_tipo == 1)
+        {
+            if ($responsabledoc_opcion == 0)
+            {
                 return Storage::response($reporte->reportequimicos_responsable1documento);
-            } else {
+            }
+            else
+            {
                 return Storage::download($reporte->reportequimicos_responsable1documento);
             }
-        } else {
-            if ($responsabledoc_opcion == 0) {
+        }
+        else
+        {
+            if ($responsabledoc_opcion == 0)
+            {
                 return Storage::response($reporte->reportequimicos_responsable2documento);
-            } else {
+            }
+            else
+            {
                 return Storage::download($reporte->reportequimicos_responsable2documento);
             }
         }
@@ -3925,7 +4286,8 @@ class reportequimicosController extends Controller
      */
     public function reportequimicosplanostabla($proyecto_id, $reporteregistro_id, $agente_nombre)
     {
-        try {
+        try
+        {
             $planos = DB::select('SELECT
                                         proyectoevidenciaplano.proyecto_id,
                                         proyectoevidenciaplano.agente_id,
@@ -3942,7 +4304,7 @@ class reportequimicosController extends Controller
                                             WHERE
                                                 reporteplanoscarpetas.proyecto_id = proyectoevidenciaplano.proyecto_id
                                                 AND reporteplanoscarpetas.agente_nombre = proyectoevidenciaplano.agente_nombre
-                                                AND reporteplanoscarpetas.registro_id = ' . $reporteregistro_id . ' 
+                                                AND reporteplanoscarpetas.registro_id = '.$reporteregistro_id.' 
                                                 AND reporteplanoscarpetas.reporteplanoscarpetas_nombre = proyectoevidenciaplano.proyectoevidenciaplano_carpeta
                                             LIMIT 1
                                         ), "") AS checked
@@ -3950,8 +4312,8 @@ class reportequimicosController extends Controller
                                         proyectoevidenciaplano
                                         LEFT JOIN contratos_partidas  ON proyectoevidenciaplano.catreportequimicospartidas_id = contratos_partidas.id 
                                     WHERE
-                                        proyectoevidenciaplano.proyecto_id = ' . $proyecto_id . ' 
-                                        AND proyectoevidenciaplano.agente_nombre = "' . $agente_nombre . '" 
+                                        proyectoevidenciaplano.proyecto_id = '.$proyecto_id.' 
+                                        AND proyectoevidenciaplano.agente_nombre = "'.$agente_nombre.'" 
                                         AND proyectoevidenciaplano.proyectoevidenciaplano_carpeta != ""
                                     GROUP BY
                                         proyectoevidenciaplano.proyecto_id,
@@ -3967,14 +4329,15 @@ class reportequimicosController extends Controller
 
             $total_activos = 0;
             $numero_registro = 0;
-            foreach ($planos as $key => $value) {
+            foreach ($planos as $key => $value) 
+            {
                 $numero_registro += 1;
                 $value->numero_registro = $numero_registro;
 
 
                 $value->checkbox = '<div class="switch">
                                         <label>
-                                            <input type="checkbox" class="planoscarpeta_checkbox" name="planoscarpeta_checkbox[]" value="' . $value->proyectoevidenciaplano_carpeta . '" ' . $value->checked . '>
+                                            <input type="checkbox" class="planoscarpeta_checkbox" name="planoscarpeta_checkbox[]" value="'.$value->proyectoevidenciaplano_carpeta.'" '.$value->checked.'>
                                             <span class="lever switch-col-light-blue"></span>
                                         </label>
                                     </div>';
@@ -3984,7 +4347,8 @@ class reportequimicosController extends Controller
 
 
                 // VERIFICAR SI HAY CARPETAS SELECCIONADAS
-                if ($value->checked) {
+                if ($value->checked)
+                {
                     $total_activos += 1;
                 }
             }
@@ -3994,10 +4358,12 @@ class reportequimicosController extends Controller
             $dato["total"] = $total_activos;
             $dato["msj"] = 'Datos consultados correctamente';
             return response()->json($dato);
-        } catch (Exception $e) {
+        }
+        catch(Exception $e)
+        {
             $dato['data'] = 0;
             $dato["total"] = 0;
-            $dato["msj"] = 'Error ' . $e->getMessage();
+            $dato["msj"] = 'Error '.$e->getMessage();
             return response()->json($dato);
         }
     }
@@ -4012,7 +4378,8 @@ class reportequimicosController extends Controller
      */
     public function reportequimicosevaluadostabla($proyecto_id, $reporteregistro_id)
     {
-        try {
+        try
+        {
             $parametros = DB::select('SELECT
                                             TABLA.proyecto_id,
                                             TABLA.registro_id,
@@ -4035,8 +4402,8 @@ class reportequimicosController extends Controller
                                                     reportequimicosevaluacion
                                                     RIGHT JOIN reportequimicosevaluacionparametro ON reportequimicosevaluacion.id = reportequimicosevaluacionparametro.reportequimicosevaluacion_id
                                                 WHERE
-                                                    reportequimicosevaluacion.proyecto_id = ' . $proyecto_id . ' 
-                                                    AND reportequimicosevaluacion.registro_id = ' . $reporteregistro_id . ' 
+                                                    reportequimicosevaluacion.proyecto_id = '.$proyecto_id.' 
+                                                    AND reportequimicosevaluacion.registro_id = '.$reporteregistro_id.' 
                                                     -- AND reportequimicosevaluacionparametro.reportequimicosevaluacionparametro_parametro = "Ácido sulfhídrico"
                                                     -- AND reportequimicosevaluacionparametro.reportequimicosevaluacionparametro_parametro = "Metano"
                                                     -- OR reportequimicosevaluacionparametro.reportequimicosevaluacionparametro_parametro = "Propano"
@@ -4054,30 +4421,33 @@ class reportequimicosController extends Controller
 
 
             $dato['tabla_reporte_11_3'] = '';
-            foreach ($parametros as $key => $value) {
+            foreach ($parametros as $key => $value) 
+            {
                 $dato['tabla_reporte_11_3'] .= '<tr>
-                                                    <td>' . $value->parametro . '</td>
-                                                    <td>' . $value->reportequimicosparametroscatalogo_cas . '</td>
-                                                    <td>' . $value->reportequimicosparametroscatalogo_ebullicion . '</td>
-                                                    <td>' . $value->reportequimicosparametroscatalogo_pesomolecular . '</td>
-                                                    <td>' . $value->reportequimicosparametroscatalogo_estadofisico . '</td>
-                                                    <td>' . $value->reportequimicosparametroscatalogo_viaingreso . '</td>
-                                                    <td>' . $value->reportequimicosparametroscatalogo_gradoriesgo . '</td>
-                                                    <td>' . $value->reportequimicosparametroscatalogo_limiteexposicion . '</td>
+                                                    <td>'.$value->parametro.'</td>
+                                                    <td>'.$value->reportequimicosparametroscatalogo_cas.'</td>
+                                                    <td>'.$value->reportequimicosparametroscatalogo_ebullicion.'</td>
+                                                    <td>'.$value->reportequimicosparametroscatalogo_pesomolecular.'</td>
+                                                    <td>'.$value->reportequimicosparametroscatalogo_estadofisico.'</td>
+                                                    <td>'.$value->reportequimicosparametroscatalogo_viaingreso.'</td>
+                                                    <td>'.$value->reportequimicosparametroscatalogo_gradoriesgo.'</td>
+                                                    <td>'.$value->reportequimicosparametroscatalogo_limiteexposicion.'</td>
                                                 </tr>';
             }
 
             // respuesta
-
+           
             $dato["total"] = count($parametros);
             $dato["msj"] = 'Datos consultados correctamente';
             return response()->json($dato);
-        } catch (Exception $e) {
+        }
+        catch(Exception $e)
+        {
             $dato['tabla_reporte_11_3'] = '<tr>
                                                 <td colspan="8">Error al consultar los químicos</td>
                                             </tr>';
             $dato["total"] = 0;
-            $dato["msj"] = 'Error ' . $e->getMessage();
+            $dato["msj"] = 'Error '.$e->getMessage();
             return response()->json($dato);
         }
     }
@@ -4093,7 +4463,8 @@ class reportequimicosController extends Controller
      */
     public function reportequimicosequipoutilizadotabla($proyecto_id, $reporteregistro_id, $agente_nombre)
     {
-        try {
+        try
+        {
             $proveedor = DB::select('SELECT
                                             proyectoproveedores.proyecto_id,
                                             proyectoproveedores.proveedor_id
@@ -4103,7 +4474,7 @@ class reportequimicosController extends Controller
                                         FROM
                                             proyectoproveedores
                                         WHERE
-                                            proyectoproveedores.proyecto_id = ' . $proyecto_id . ' 
+                                            proyectoproveedores.proyecto_id = '.$proyecto_id.' 
                                             AND proyectoproveedores.proyectoproveedores_tipoadicional < 2
                                             AND proyectoproveedores.catprueba_id = 15 -- Quimicos ------------------------------
                                         GROUP BY
@@ -4111,15 +4482,20 @@ class reportequimicosController extends Controller
                                             proyectoproveedores.proveedor_id');
 
             $where_condicion = '';
-            if (count($proveedor) > 0) {
+            if (count($proveedor) > 0)
+            {
                 $lista = '';
 
 
-                foreach ($proveedor as $key => $value) {
-                    if (($key + 0) == 0) {
+                foreach ($proveedor as $key => $value)
+                {
+                    if (($key+0) == 0)
+                    {
                         $lista .= $value->proveedor_id;
-                    } else {
-                        $lista .= ', ' . $value->proveedor_id;
+                    }
+                    else
+                    {
+                        $lista .= ', '.$value->proveedor_id;
                     }
                 }
 
@@ -4158,8 +4534,8 @@ class reportequimicosController extends Controller
                                                 reporteequiposutilizados
                                             WHERE
                                                 reporteequiposutilizados.proyecto_id = proyectoequiposactual.proyecto_id
-                                                AND reporteequiposutilizados.agente_nombre = "' . $agente_nombre . '" 
-                                                AND reporteequiposutilizados.registro_id = ' . $reporteregistro_id . ' 
+                                                AND reporteequiposutilizados.agente_nombre = "'.$agente_nombre.'" 
+                                                AND reporteequiposutilizados.registro_id = '.$reporteregistro_id.' 
                                                 AND reporteequiposutilizados.equipo_id = proyectoequiposactual.equipo_id
                                             LIMIT 1
                                         ), NULL) AS checked,
@@ -4170,8 +4546,8 @@ class reportequimicosController extends Controller
                                                 reporteequiposutilizados
                                             WHERE
                                                 reporteequiposutilizados.proyecto_id = proyectoequiposactual.proyecto_id
-                                                AND reporteequiposutilizados.agente_nombre = "' . $agente_nombre . '" 
-                                                AND reporteequiposutilizados.registro_id = ' . $reporteregistro_id . ' 
+                                                AND reporteequiposutilizados.agente_nombre = "'.$agente_nombre.'" 
+                                                AND reporteequiposutilizados.registro_id = '.$reporteregistro_id.' 
                                                 AND reporteequiposutilizados.equipo_id = proyectoequiposactual.equipo_id
                                             LIMIT 1
                                         ), NULL) AS cartacalibracion,
@@ -4182,8 +4558,8 @@ class reportequimicosController extends Controller
                                                 reporteequiposutilizados
                                             WHERE
                                                 reporteequiposutilizados.proyecto_id = proyectoequiposactual.proyecto_id
-                                                AND reporteequiposutilizados.agente_nombre = "' . $agente_nombre . '" 
-                                                AND reporteequiposutilizados.registro_id = ' . $reporteregistro_id . ' 
+                                                AND reporteequiposutilizados.agente_nombre = "'.$agente_nombre.'" 
+                                                AND reporteequiposutilizados.registro_id = '.$reporteregistro_id.' 
                                                 AND reporteequiposutilizados.equipo_id = proyectoequiposactual.equipo_id
                                             LIMIT 1
                                         ), NULL) AS id
@@ -4192,8 +4568,8 @@ class reportequimicosController extends Controller
                                         LEFT JOIN proveedor ON proyectoequiposactual.proveedor_id = proveedor.id
                                         LEFT JOIN equipo ON proyectoequiposactual.equipo_id = equipo.id
                                     WHERE
-                                        proyectoequiposactual.proyecto_id = ' . $proyecto_id . ' 
-                                        ' . $where_condicion . ' 
+                                        proyectoequiposactual.proyecto_id = '.$proyecto_id.' 
+                                        '.$where_condicion.' 
                                     ORDER BY
                                         proveedor.proveedor_NombreComercial ASC,
                                         equipo.equipo_Descripcion ASC,
@@ -4204,39 +4580,41 @@ class reportequimicosController extends Controller
 
             $total_activos = 0;
             $numero_registro = 0;
-            foreach ($equipos as $key => $value) {
+            foreach ($equipos as $key => $value) 
+            {
                 $numero_registro += 1;
                 $value->numero_registro = $numero_registro;
 
 
                 $value->checkbox = '<div class="switch">
                                         <label>
-                                            <input type="checkbox" class="equipoutilizado_checkbox" name="equipoutilizado_checkbox[]" value="' . $value->equipo_id . '" ' . $value->checked . ' onchange="activa_checkboxcarta(this, ' . $value->equipo_id . ');";>
+                                            <input type="checkbox" class="equipoutilizado_checkbox" name="equipoutilizado_checkbox[]" value="'.$value->equipo_id.'" '.$value->checked.' onchange="activa_checkboxcarta(this, '.$value->equipo_id.');";>
                                             <span class="lever switch-col-light-blue"></span>
                                         </label>
                                     </div>';
 
 
-                $value->equipo = '<span class="' . $value->vigencia_color . '">' . $value->equipo_Descripcion . '</span><br><small class="' . $value->vigencia_color . '">' . $value->proveedor_NombreComercial . '</small>';
+                $value->equipo = '<span class="'.$value->vigencia_color.'">'.$value->equipo_Descripcion.'</span><br><small class="'.$value->vigencia_color.'">'.$value->proveedor_NombreComercial.'</small>';
+                
+
+                $value->marca_modelo_serie = '<span class="'.$value->vigencia_color.'">'.$value->equipo_Marca.'<br>'.$value->equipo_Modelo.'<br>'.$value->equipo_Serie.'</span>';
 
 
-                $value->marca_modelo_serie = '<span class="' . $value->vigencia_color . '">' . $value->equipo_Marca . '<br>' . $value->equipo_Modelo . '<br>' . $value->equipo_Serie . '</span>';
+                $value->vigencia = '<span class="'.$value->vigencia_color.'">'.$value->vigencia_texto.'</span>';
 
 
-                $value->vigencia = '<span class="' . $value->vigencia_color . '">' . $value->vigencia_texto . '</span>';
-
-
-
+            
 
 
                 //---------------------------
 
 
-
+             
 
 
                 // VERIFICAR SI HAY EQUIPOS SELECCIONADOS
-                if ($value->checked) {
+                if ($value->checked)
+                {
                     $total_activos += 1;
                 }
             }
@@ -4246,10 +4624,12 @@ class reportequimicosController extends Controller
             $dato["total"] = $total_activos;
             $dato["msj"] = 'Datos consultados correctamente';
             return response()->json($dato);
-        } catch (Exception $e) {
+        }
+        catch(Exception $e)
+        {
             $dato['data'] = 0;
             $dato["total"] = 0;
-            $dato["msj"] = 'Error ' . $e->getMessage();
+            $dato["msj"] = 'Error '.$e->getMessage();
             return response()->json($dato);
         }
     }
@@ -4265,7 +4645,8 @@ class reportequimicosController extends Controller
      */
     public function reportequimicosanexosresultadostabla($proyecto_id, $reporteregistro_id, $agente_nombre)
     {
-        try {
+        try
+        {
             $anexos = collect(DB::select('SELECT
                                                 proyectoevidenciadocumento.proyecto_id,
                                                 proyectoevidenciadocumento.proveedor_id,
@@ -4284,7 +4665,7 @@ class reportequimicosController extends Controller
                                                     WHERE
                                                         reporteanexos.proyecto_id = proyectoevidenciadocumento.proyecto_id
                                                         AND reporteanexos.agente_nombre = proyectoevidenciadocumento.agente_nombre
-                                                        AND reporteanexos.registro_id = ' . $reporteregistro_id . '
+                                                        AND reporteanexos.registro_id = '.$reporteregistro_id.'
                                                         AND reporteanexos.reporteanexos_tipo = 1
                                                         AND reporteanexos.reporteanexos_rutaanexo = proyectoevidenciadocumento.proyectoevidenciadocumento_archivo
                                                     LIMIT 1
@@ -4292,32 +4673,37 @@ class reportequimicosController extends Controller
                                             FROM
                                                 proyectoevidenciadocumento
                                             WHERE
-                                                proyectoevidenciadocumento.proyecto_id = ' . $proyecto_id . '
-                                                AND proyectoevidenciadocumento.agente_nombre = "' . $agente_nombre . '"'));
+                                                proyectoevidenciadocumento.proyecto_id = '.$proyecto_id.'
+                                                AND proyectoevidenciadocumento.agente_nombre = "'.$agente_nombre.'"'));
 
             $total_activos = 0;
             $numero_registro = 0;
-            foreach ($anexos as $key => $value) {
+            foreach ($anexos as $key => $value) 
+            {
                 $numero_registro += 1;
                 $value->numero_registro = $numero_registro;
 
                 $value->checkbox = '<div class="switch">
                                         <label>
-                                            <input type="hidden" class="form-control" name="anexoresultado_nombre_' . $value->id . '" value="' . $value->proyectoevidenciadocumento_nombre . '">
-                                            <input type="hidden" class="form-control" name="anexoresultado_archivo_' . $value->id . '" value="' . $value->proyectoevidenciadocumento_archivo . '">
-                                            <input type="checkbox" class="anexoresultado_checkbox" name="anexoresultado_checkbox[]" value="' . $value->id . '" ' . $value->checked . '>
+                                            <input type="hidden" class="form-control" name="anexoresultado_nombre_'.$value->id.'" value="'.$value->proyectoevidenciadocumento_nombre.'">
+                                            <input type="hidden" class="form-control" name="anexoresultado_archivo_'.$value->id.'" value="'.$value->proyectoevidenciadocumento_archivo.'">
+                                            <input type="checkbox" class="anexoresultado_checkbox" name="anexoresultado_checkbox[]" value="'.$value->id.'" '.$value->checked.'>
                                             <span class="lever switch-col-light-blue"></span>
                                         </label>
                                     </div>';
 
-                if ($value->proyectoevidenciadocumento_extension == '.pdf' || $value->proyectoevidenciadocumento_extension == '.PDF') {
+                if ($value->proyectoevidenciadocumento_extension == '.pdf' || $value->proyectoevidenciadocumento_extension == '.PDF')
+                {
                     $value->documento = '<button type="button" class="btn btn-info waves-effect btn-circle" data-toggle="tooltip" title="Mostrar PDF"><i class="fa fa-file-pdf-o fa-2x"></i></button>';
-                } else {
+                }
+                else
+                {
                     $value->documento = '<button type="button" class="btn btn-success waves-effect btn-circle" data-toggle="tooltip" title="Descargar archivo"><i class="fa fa-download fa-2x"></i></button>';
                 }
 
                 // VERIFICAR SI HAY DOCUMENTOS SELECCIONADOS
-                if ($value->checked) {
+                if ($value->checked)
+                {
                     $total_activos += 1;
                 }
             }
@@ -4327,10 +4713,12 @@ class reportequimicosController extends Controller
             $dato["total"] = $total_activos;
             $dato["msj"] = 'Datos consultados correctamente';
             return response()->json($dato);
-        } catch (Exception $e) {
+        }
+        catch(Exception $e)
+        {
             $dato['data'] = 0;
             $dato["total"] = 0;
-            $dato["msj"] = 'Error ' . $e->getMessage();
+            $dato["msj"] = 'Error '.$e->getMessage();
             return response()->json($dato);
         }
     }
@@ -4346,7 +4734,8 @@ class reportequimicosController extends Controller
      */
     public function reportequimicosanexosacreditacionestabla($proyecto_id, $reporteregistro_id, $agente_nombre)
     {
-        try {
+        try
+        {
             $acreditaciones = DB::select('SELECT
                                                 TABLA.proyecto_id,
                                                 TABLA.proveedor_id,
@@ -4376,7 +4765,7 @@ class reportequimicosController extends Controller
                                                         reporteanexos
                                                     WHERE
                                                         reporteanexos.proyecto_id = TABLA.proyecto_id
-                                                        AND reporteanexos.registro_id = ' . $reporteregistro_id . ' 
+                                                        AND reporteanexos.registro_id = '.$reporteregistro_id.' 
                                                         AND reporteanexos.reporteanexos_tipo = 2
                                                         AND reporteanexos.reporteanexos_rutaanexo = acreditacion.acreditacion_SoportePDF
                                                     LIMIT 1
@@ -4393,7 +4782,7 @@ class reportequimicosController extends Controller
                                                         proyectoproveedores
                                                         LEFT JOIN proveedor ON proyectoproveedores.proveedor_id = proveedor.id
                                                     WHERE
-                                                        proyectoproveedores.proyecto_id = ' . $proyecto_id . ' 
+                                                        proyectoproveedores.proyecto_id = '.$proyecto_id.' 
                                                         AND proyectoproveedores.catprueba_id = 15
                                                     GROUP BY
                                                         proyectoproveedores.proyecto_id,
@@ -4409,29 +4798,31 @@ class reportequimicosController extends Controller
 
             $total_activos = 0;
             $numero_registro = 0;
-            foreach ($acreditaciones as $key => $value) {
+            foreach ($acreditaciones as $key => $value) 
+            {
                 $numero_registro += 1;
                 $value->numero_registro = $numero_registro;
 
                 $value->checkbox = '<div class="switch">
                                         <label>
-                                            <input type="hidden" class="form-control" name="anexoacreditacion_nombre_' . $value->id . '" value="' . $value->acreditacion_Entidad . ' ' . $value->acreditacion_Numero . '">
-                                            <input type="hidden" class="form-control" name="anexoacreditacion_archivo_' . $value->id . '" value="' . $value->acreditacion_SoportePDF . '">
-                                            <input type="checkbox" class="anexoacreditacion_checkbox" name="anexoacreditacion_checkbox[]" value="' . $value->id . '" ' . $value->checked . '>
+                                            <input type="hidden" class="form-control" name="anexoacreditacion_nombre_'.$value->id.'" value="'.$value->acreditacion_Entidad.' '.$value->acreditacion_Numero.'">
+                                            <input type="hidden" class="form-control" name="anexoacreditacion_archivo_'.$value->id.'" value="'.$value->acreditacion_SoportePDF.'">
+                                            <input type="checkbox" class="anexoacreditacion_checkbox" name="anexoacreditacion_checkbox[]" value="'.$value->id.'" '.$value->checked.'>
                                             <span class="lever switch-col-light-blue"></span>
                                         </label>
                                     </div>';
 
 
-                $value->tipo = '<span class="' . $value->vigencia_color . '">' . $value->acreditacion_Tipo . '</span>';
-                $value->entidad = '<span class="' . $value->vigencia_color . '">' . $value->acreditacion_Entidad . '</span>';
-                $value->numero = '<span class="' . $value->vigencia_color . '">' . $value->acreditacion_Numero . '</span>';
-                $value->area = '<span class="' . $value->vigencia_color . '">' . $value->vigencia_color . '</span>';
-                $value->vigencia = '<span class="' . $value->vigencia_color . '">' . $value->vigencia_texto . '</span>';
+                $value->tipo = '<span class="'.$value->vigencia_color.'">'.$value->acreditacion_Tipo.'</span>';
+                $value->entidad = '<span class="'.$value->vigencia_color.'">'.$value->acreditacion_Entidad.'</span>';
+                $value->numero = '<span class="'.$value->vigencia_color.'">'.$value->acreditacion_Numero.'</span>';
+                $value->area = '<span class="'.$value->vigencia_color.'">'.$value->vigencia_color.'</span>';
+                $value->vigencia = '<span class="'.$value->vigencia_color.'">'.$value->vigencia_texto.'</span>';
                 $value->certificado = '<button type="button" class="btn btn-info waves-effect btn-circle" data-toggle="tooltip" title="Mostrar certificado"><i class="fa fa-file-pdf-o fa-2x"></i></button>';
 
                 // VERIFICAR SI HAY ACREDITACIONES SELECCIONADOS
-                if ($value->checked) {
+                if ($value->checked)
+                {
                     $total_activos += 1;
                 }
             }
@@ -4441,10 +4832,12 @@ class reportequimicosController extends Controller
             $dato["total"] = $total_activos;
             $dato["msj"] = 'Datos consultados correctamente';
             return response()->json($dato);
-        } catch (Exception $e) {
+        }
+        catch(Exception $e)
+        {
             $dato['data'] = 0;
             $dato["total"] = 0;
-            $dato["msj"] = 'Error ' . $e->getMessage();
+            $dato["msj"] = 'Error '.$e->getMessage();
             return response()->json($dato);
         }
     }
@@ -4458,7 +4851,8 @@ class reportequimicosController extends Controller
      */
     public function reportequimicosrevisionestabla($proyecto_id)
     {
-        try {
+        try
+        {
             // $revisiones = DB::select('SELECT
             //                                 reportequimicos.id,
             //                                 reportequimicos.proyecto_id,
@@ -4501,7 +4895,7 @@ class reportequimicosController extends Controller
                                         FROM
                                             reporterevisiones
                                         WHERE
-                                            reporterevisiones.proyecto_id = ' . $proyecto_id . ' 
+                                            reporterevisiones.proyecto_id = '.$proyecto_id.' 
                                             AND reporterevisiones.agente_id = 15
                                         ORDER BY
                                             reporterevisiones.reporterevisiones_revision DESC');
@@ -4516,87 +4910,108 @@ class reportequimicosController extends Controller
             $dato['ultimarevision_id'] = 0;
 
 
-            foreach ($revisiones as $key => $value) {
-                if ($key == 0) {
+            foreach ($revisiones as $key => $value)
+            {
+                if ($key == 0)
+                {
                     $dato['ultimaversion_cancelada'] = $value->reporterevisiones_cancelado;
 
-
-                    if ($value->reporterevisiones_concluido == 1 || $value->reporterevisiones_cancelado == 1) {
+                    
+                    if ($value->reporterevisiones_concluido == 1 || $value->reporterevisiones_cancelado == 1)
+                    {
                         $dato['ultimaversion_estado'] = 1;
                     }
 
 
                     $value->ultima_revision = $value->id;
                     $dato['ultimarevision_id'] = $value->id;
-                } else {
+                }
+                else
+                {
                     $value->ultima_revision = 0;
                 }
 
 
-                if (auth()->user()->hasRoles(['Superusuario', 'Administrador', 'Coordinador']) && ($key + 0) == 0) {
+                if (auth()->user()->hasRoles(['Superusuario', 'Administrador', 'Coordinador']) && ($key+0) == 0)
+                {
                     $value->perfil_concluir = 1;
                     $disabled_concluir = '';
-                } else {
+                }
+                else
+                {
                     $value->perfil_concluir = 0;
                     $disabled_concluir = 'disabled';
                 }
 
 
                 $checked_concluido = '';
-                if (($value->reporterevisiones_concluido + 0) == 1) {
+                if (($value->reporterevisiones_concluido + 0) == 1)
+                {
                     $checked_concluido = 'checked';
                 }
 
 
                 $value->checkbox_concluido = '<div class="switch" data-toggle="tooltip" title="Solo Coordinadores y Administradores">
                                                     <label>
-                                                        <input type="checkbox" class="checkbox_concluido" ' . $checked_concluido . ' ' . $disabled_concluir . ' onclick="reporte_concluido(' . $value->id . ', ' . $value->perfil_concluir . ', this)">
+                                                        <input type="checkbox" class="checkbox_concluido" '.$checked_concluido.' '.$disabled_concluir.' onclick="reporte_concluido('.$value->id.', '.$value->perfil_concluir.', this)">
                                                         <span class="lever switch-col-light-blue"></span>
                                                     </label>
                                                 </div>';
 
 
-                $value->nombre_concluido = $value->reporterevisiones_concluidonombre . '<br>' . $value->reporterevisiones_concluidofecha;
+                $value->nombre_concluido = $value->reporterevisiones_concluidonombre.'<br>'.$value->reporterevisiones_concluidofecha;
 
 
-                if (auth()->user()->hasRoles(['Superusuario', 'Administrador']) && ($key + 0) == 0) {
+                if (auth()->user()->hasRoles(['Superusuario', 'Administrador']) && ($key+0) == 0)
+                {
                     $value->perfil_cancelar = 1;
                     $disabled_cancelar = '';
-                } else {
+                }
+                else
+                {
                     $value->perfil_cancelar = 0;
                     $disabled_cancelar = 'disabled';
                 }
 
 
                 $checked_cancelado = '';
-                if (($value->reporterevisiones_cancelado + 0) == 1) {
+                if (($value->reporterevisiones_cancelado + 0) == 1)
+                {
                     $checked_cancelado = 'checked';
                 }
 
                 $value->checkbox_cancelado = '<div class="switch" data-toggle="tooltip" title="Solo Administradores">
                                                     <label>
-                                                        <input type="checkbox" class="checkbox_cancelado" ' . $checked_cancelado . ' ' . $disabled_cancelar . ' onclick="reporte_cancelado(' . $value->id . ', ' . $value->perfil_cancelar . ', this)">
+                                                        <input type="checkbox" class="checkbox_cancelado" '.$checked_cancelado.' '.$disabled_cancelar.' onclick="reporte_cancelado('.$value->id.', '.$value->perfil_cancelar.', this)">
                                                         <span class="lever switch-col-red"></span>
                                                     </label>
                                                 </div>';
 
 
-                $value->nombre_cancelado = $value->reporterevisiones_canceladonombre . '<br>' . $value->reporterevisiones_canceladofecha;
+                $value->nombre_cancelado = $value->reporterevisiones_canceladonombre.'<br>'.$value->reporterevisiones_canceladofecha;
 
 
-                if (($value->reporterevisiones_concluido + 0) == 0 && ($value->reporterevisiones_cancelado + 0) == 0) {
+                if (($value->reporterevisiones_concluido + 0) == 0 && ($value->reporterevisiones_cancelado + 0) == 0)
+                {
                     $value->estado_texto = '<span class="text-info">Disponible para edición</span>';
-                } else if (($value->reporterevisiones_cancelado + 0) == 1) {
-                    $value->estado_texto = '<span class="text-danger">cancelado</span>: ' . $value->reporterevisiones_canceladoobservacion;
-                } else {
+                }
+                else if (($value->reporterevisiones_cancelado + 0) == 1)
+                {
+                    $value->estado_texto = '<span class="text-danger">cancelado</span>: '.$value->reporterevisiones_canceladoobservacion;
+                }
+                else
+                {
                     $value->estado_texto = '<span class="text-info">Concluido</span>: No disponible para edición';
                 }
 
 
                 // Boton descarga informe WORD
-                if (($value->reporterevisiones_concluido + 0) == 1 || ($value->reporterevisiones_cancelado + 0) == 1) {
-                    $value->boton_descargar = '<button type="button" class="btn btn-success waves-effect btn-circle botondescarga" id="botondescarga_' . $key . '"><i class="fa fa-download fa-2x"></i></button>';
-                } else {
+                if (($value->reporterevisiones_concluido + 0) == 1 || ($value->reporterevisiones_cancelado + 0) == 1)
+                {
+                    $value->boton_descargar = '<button type="button" class="btn btn-success waves-effect btn-circle botondescarga" id="botondescarga_'.$key.'"><i class="fa fa-download fa-2x"></i></button>';
+                }
+                else
+                {
                     $value->boton_descargar = '<button type="button" class="btn btn-default waves-effect btn-circle" data-toggle="tooltip" title="Para descargar esta revisión del informe, primero debe estar concluido ó cancelado."><i class="fa fa-ban fa-2x"></i></button>';
                 }
             }
@@ -4607,13 +5022,15 @@ class reportequimicosController extends Controller
             $dato['total'] = count($revisiones);
             $dato["msj"] = 'Datos consultados correctamente';
             return response()->json($dato);
-        } catch (Exception $e) {
+        }
+        catch(Exception $e)
+        {
             $dato['ultimaversion_cancelada'] = 0;
             $dato['ultimaversion_estado'] = 0;
             $dato['ultimarevision_id'] = 0;
             $dato['data'] = 0;
             $dato['total'] = 0;
-            $dato["msj"] = 'Error ' . $e->getMessage();
+            $dato["msj"] = 'Error '.$e->getMessage();
             return response()->json($dato);
         }
     }
@@ -4627,7 +5044,8 @@ class reportequimicosController extends Controller
      */
     public function reportequimicosrevisionconcluir($reporte_id)
     {
-        try {
+        try
+        {
             // $revision  = reportequimicosModel::findOrFail($reporte_id);
             $revision  = reporterevisionesModel::findOrFail($reporte_id);
 
@@ -4637,29 +5055,35 @@ class reportequimicosController extends Controller
             $concluidofecha = NULL;
 
 
-            if ($revision->reporterevisiones_concluido == 0) {
-                $concluido = 1;
-                $concluidonombre = auth()->user()->empleado->empleado_nombre . " " . auth()->user()->empleado->empleado_apellidopaterno . " " . auth()->user()->empleado->empleado_apellidomaterno;
+            if ($revision->reporterevisiones_concluido == 0)
+            {
+                $concluido = 1;                
+                $concluidonombre = auth()->user()->empleado->empleado_nombre." ".auth()->user()->empleado->empleado_apellidopaterno." ".auth()->user()->empleado->empleado_apellidomaterno;
                 $concluidofecha = date('Y-m-d H:i:s');
             }
 
 
             $revision->update([
-                'reporterevisiones_concluido' => $concluido, 'reporterevisiones_concluidonombre' => $concluidonombre, 'reporterevisiones_concluidofecha' => $concluidofecha
+                  'reporterevisiones_concluido' => $concluido
+                , 'reporterevisiones_concluidonombre' => $concluidonombre
+                , 'reporterevisiones_concluidofecha' => $concluidofecha
             ]);
 
 
             $dato["estado"] = 0;
-            if ($concluido == 1 || $revision->reporterevisiones_cancelado == 1) {
+            if ($concluido == 1 || $revision->reporterevisiones_cancelado == 1)
+            {
                 $dato["estado"] = 1;
             }
 
 
             $dato["msj"] = 'Datos modificados correctamente';
             return response()->json($dato);
-        } catch (Exception $e) {
+        }
+        catch(Exception $e)
+        {
             $dato["estado"] = 0;
-            $dato["msj"] = 'Error ' . $e->getMessage();
+            $dato["msj"] = 'Error '.$e->getMessage();
             return response()->json($dato);
         }
     }
@@ -4670,7 +5094,7 @@ class reportequimicosController extends Controller
      *
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
-     */
+    */
     /*
     public function reportequimicosrevisionnueva(Request $request)
     {
@@ -5125,14 +5549,16 @@ class reportequimicosController extends Controller
     public function reportequimicospartidashistorial($proyecto_id, $reporteregistro_id, $reporterevisiones_id)
     {
 
-        try {
+        try
+        {
             $revision = reporterevisionesModel::where('proyecto_id', $proyecto_id)
-                ->where('agente_id', 15)
-                ->orderBy('reporterevisiones_revision', 'DESC')
-                ->get();
+                                                ->where('agente_id', 15)
+                                                ->orderBy('reporterevisiones_revision', 'DESC')
+                                                ->get();
 
 
-            if (($revision[0]->id + 0) == ($reporterevisiones_id + 0)) {
+            if(($revision[0]->id+0) == ($reporterevisiones_id+0))
+            {
                 $partidas = DB::select('SELECT
                                             reportequimicosgrupos.proyecto_id,
                                             reportequimicosgrupos.registro_id,
@@ -5146,8 +5572,8 @@ class reportequimicosController extends Controller
                                             LEFT JOIN clientepartidas ON reportequimicosgrupos.catreportequimicospartidas_id = clientepartidas.id
                                             LEFT JOIN reportequimicosproyecto ON reportequimicosgrupos.reportequimicosproyecto_id = reportequimicosproyecto.id 
                                         WHERE
-                                            reportequimicosgrupos.proyecto_id = ' . $proyecto_id . '  
-                                            AND reportequimicosgrupos.registro_id = ' . $reporteregistro_id . '  
+                                            reportequimicosgrupos.proyecto_id = '.$proyecto_id.'  
+                                            AND reportequimicosgrupos.registro_id = '.$reporteregistro_id.'  
                                         GROUP BY
                                             reportequimicosgrupos.proyecto_id,
                                             reportequimicosgrupos.registro_id,
@@ -5158,7 +5584,9 @@ class reportequimicosController extends Controller
                                         ORDER BY
                                             clientepartidas.id ASC,
                                             clientepartidas.clientepartidas_descripcion ASC');
-            } else {
+            }
+            else
+            {
                 $partidas = DB::select('SELECT
                                             reporterevisiones.proyecto_id,
                                             reporterevisiones.agente_id,
@@ -5176,7 +5604,7 @@ class reportequimicosController extends Controller
                                             RIGHT JOIN reporterevisionesarchivo ON reporterevisiones.id = reporterevisionesarchivo.reporterevisiones_id
                                             LEFT JOIN clientepartidas ON reporterevisionesarchivo.reporterevisionesarchivo_tipo = clientepartidas.id
                                         WHERE
-                                            reporterevisiones.id = ' . $reporterevisiones_id . ' 
+                                            reporterevisiones.id = '.$reporterevisiones_id.' 
                                         ORDER BY
                                             clientepartidas.id ASC,
                                             clientepartidas.clientepartidas_descripcion ASC');
@@ -5186,11 +5614,15 @@ class reportequimicosController extends Controller
             $dato['partidas_opciones'] = '<option value=""></option>';
 
 
-            if (count($partidas) > 0) {
-                foreach ($partidas as $key => $value) {
-                    $dato['partidas_opciones'] .= '<option value="' . $value->catreportequimicospartidas_id . '">' . $value->clientepartidas_descripcion . '</option>';
+            if (count($partidas) > 0)
+            {
+                foreach ($partidas as $key => $value) 
+                {
+                    $dato['partidas_opciones'] .= '<option value="'.$value->catreportequimicospartidas_id.'">'.$value->clientepartidas_descripcion.'</option>';
                 }
-            } else {
+            }
+            else
+            {
                 $dato['partidas_opciones'] .= '<option value="0">Revisión sin partidas, Generar informe con todos los químicos evaluados</option>';
             }
 
@@ -5198,9 +5630,11 @@ class reportequimicosController extends Controller
             // respuesta
             $dato["msj"] = 'Partidas consultadas correctamente';
             return response()->json($dato);
-        } catch (Exception $e) {
+        }
+        catch(Exception $e)
+        {
             $dato['partidas_opciones'] = '<option value="">Error al consultar partidas</option>';
-            $dato["msj"] = 'Error ' . $e->getMessage();
+            $dato["msj"] = 'Error '.$e->getMessage();
             return response()->json($dato);
         }
     }
@@ -5214,23 +5648,25 @@ class reportequimicosController extends Controller
      */
     public function store(Request $request)
     {
-        try {
+        try
+        {
             // TABLAS
             //============================================================
-
+            
             $proyectoRecursos = recursosPortadasInformesModel::where('PROYECTO_ID', $request->proyecto_id)->where('AGENTE_ID', $request->agente_id)->get();
 
             $proyecto = proyectoModel::with(['catregion', 'catsubdireccion', 'catgerencia', 'catactivo'])->findOrFail($request->proyecto_id);
             $recsensorial = recsensorialModel::with(['catregion', 'catsubdireccion', 'catgerencia', 'catactivo'])->findOrFail($proyecto->recsensorial_id);
-
+            
 
             $meses = ["Vacio", "Enero", "Febrero", "Marzo", "Abril", "Mayo", "Junio", "Julio", "Agosto", "Septiembre", "Octubre", "Noviembre", "Diciembre"];
             $reportefecha = explode("-", $proyecto->proyecto_fechaentrega);
 
 
-            if (($request->reporteregistro_id + 0) > 0) {
+            if (($request->reporteregistro_id + 0) > 0)
+            {
                 $reporte = reportequimicosModel::findOrFail($request->reporteregistro_id);
-
+                
 
                 $reporte->update([
                     'reportequimicos_instalacion' => $request->reporte_instalacion
@@ -5244,33 +5680,48 @@ class reportequimicosController extends Controller
 
 
                 $revision = reporterevisionesModel::where('proyecto_id', $request->proyecto_id)
-                    ->where('agente_id', $request->agente_id)
-                    ->orderBy('reporterevisiones_revision', 'DESC')
-                    ->get();
+                                                    ->where('agente_id', $request->agente_id)
+                                                    ->orderBy('reporterevisiones_revision', 'DESC')
+                                                    ->get();
 
 
-                if (count($revision) > 0) {
+                if(count($revision) > 0)
+                {
                     $revision = reporterevisionesModel::findOrFail($revision[0]->id);
                 }
 
 
-                if (($revision->reporterevisiones_concluido == 1 || $revision->reporterevisiones_cancelado == 1) && ($request->opcion + 0) != 22) // Valida disponibilidad de esta version
+                if (($revision->reporterevisiones_concluido == 1 || $revision->reporterevisiones_cancelado == 1) && ($request->opcion+0) != 22) // Valida disponibilidad de esta version
                 {
                     // respuesta
-                    $dato["msj"] = 'Informe de ' . $request->agente_nombre . ' NO disponible para edición';
+                    $dato["msj"] = 'Informe de '.$request->agente_nombre.' NO disponible para edición';
                     return response()->json($dato);
                 }
-            } else {
+            }
+            else
+            {
                 DB::statement('ALTER TABLE reportequimicos AUTO_INCREMENT = 1;');
 
 
-                if (!$request->catactivo_id) {
+                if (!$request->catactivo_id)
+                {
                     $request['catactivo_id'] = 0; // es es modo cliente y viene en null se pone en cero
                 }
 
 
                 $reporte = reportequimicosModel::create([
-                    'proyecto_id' => $request->proyecto_id, 'agente_id' => $request->agente_id, 'agente_nombre' => $request->agente_nombre, 'catactivo_id' => $request->catactivo_id, 'reportequimicos_revision' => 0, 'reportequimicos_instalacion' => $request->reporte_instalacion, 'reportequimicos_catregion_activo' => 1, 'reportequimicos_catsubdireccion_activo' => 1, 'reportequimicos_catgerencia_activo' => 1, 'reportequimicos_catactivo_activo' => 1, 'reportequimicos_concluido' => 0, 'reportequimicos_cancelado' => 0
+                      'proyecto_id' => $request->proyecto_id
+                    , 'agente_id' => $request->agente_id
+                    , 'agente_nombre' => $request->agente_nombre
+                    , 'catactivo_id' => $request->catactivo_id
+                    , 'reportequimicos_revision' => 0
+                    , 'reportequimicos_instalacion' => $request->reporte_instalacion
+                    , 'reportequimicos_catregion_activo' => 1
+                    , 'reportequimicos_catsubdireccion_activo' => 1
+                    , 'reportequimicos_catgerencia_activo' => 1
+                    , 'reportequimicos_catactivo_activo' => 1
+                    , 'reportequimicos_concluido' => 0
+                    , 'reportequimicos_cancelado' => 0
                 ]);
 
 
@@ -5281,9 +5732,9 @@ class reportequimicosController extends Controller
                 DB::statement('UPDATE 
                                     reportequimicosproyecto
                                 SET 
-                                    registro_id = ' . $reporte->id . '
+                                    registro_id = '.$reporte->id.'
                                 WHERE 
-                                    proyecto_id = ' . $request->proyecto_id . '
+                                    proyecto_id = '.$request->proyecto_id.'
                                     AND IFNULL(registro_id, "") = "";');
 
 
@@ -5291,9 +5742,9 @@ class reportequimicosController extends Controller
                 DB::statement('UPDATE 
                                     reportequimicoscategoria
                                 SET 
-                                    registro_id = ' . $reporte->id . '
+                                    registro_id = '.$reporte->id.'
                                 WHERE 
-                                    proyecto_id = ' . $request->proyecto_id . '
+                                    proyecto_id = '.$request->proyecto_id.'
                                     AND IFNULL(registro_id, "") = "";');
 
 
@@ -5301,9 +5752,9 @@ class reportequimicosController extends Controller
                 DB::statement('UPDATE 
                                     reportequimicosarea
                                 SET 
-                                    registro_id = ' . $reporte->id . '
+                                    registro_id = '.$reporte->id.'
                                 WHERE 
-                                    proyecto_id = ' . $request->proyecto_id . '
+                                    proyecto_id = '.$request->proyecto_id.'
                                     AND IFNULL(registro_id, "") = "";');
             }
 
@@ -5316,40 +5767,51 @@ class reportequimicosController extends Controller
 
             //============================================================
 
-
+            
             // PORTADA
-            if (($request->opcion + 0) == 0) {
+            if (($request->opcion+0) == 0)
+            {
                 // REGION
                 $catregion_activo = 0;
-                if ($request->reporte_catregion_activo != NULL) {
+                if ($request->reporte_catregion_activo != NULL)
+                {
                     $catregion_activo = 1;
                 }
 
                 // SUBDIRECCION
                 $catsubdireccion_activo = 0;
-                if ($request->reporte_catsubdireccion_activo != NULL) {
+                if ($request->reporte_catsubdireccion_activo != NULL)
+                {
                     $catsubdireccion_activo = 1;
                 }
 
                 // GERENCIA
                 $catgerencia_activo = 0;
-                if ($request->reporte_catgerencia_activo != NULL) {
+                if ($request->reporte_catgerencia_activo != NULL)
+                {
                     $catgerencia_activo = 1;
                 }
 
                 // ACTIVO
                 $catactivo_activo = 0;
-                if ($request->reporte_catactivo_activo != NULL) {
+                if ($request->reporte_catactivo_activo != NULL)
+                {
                     $catactivo_activo = 1;
                 }
 
                 $reporte->update([
-                    'reportequimicos_catregion_activo' => $catregion_activo, 'reportequimicos_catsubdireccion_activo' => $catsubdireccion_activo, 'reportequimicos_catgerencia_activo' => $catgerencia_activo, 'reportequimicos_catactivo_activo' => $catactivo_activo, 'reportequimicos_instalacion' => $request->reporte_instalacion, 'reportequimicos_fecha' => $request->reporte_fecha, 'reporte_mes' => $request->reporte_mes
+                      'reportequimicos_catregion_activo' => $catregion_activo
+                    , 'reportequimicos_catsubdireccion_activo' => $catsubdireccion_activo
+                    , 'reportequimicos_catgerencia_activo' => $catgerencia_activo
+                    , 'reportequimicos_catactivo_activo' => $catactivo_activo
+                    , 'reportequimicos_instalacion' => $request->reporte_instalacion
+                    , 'reportequimicos_fecha' => $request->reporte_fecha
+                    , 'reporte_mes' => $request->reporte_mes
 
                 ]);
 
 
-                if (count($proyectoRecursos) == 0) {
+                if(count($proyectoRecursos) == 0){
 
                     $recusros = recursosPortadasInformesModel::create([
                         'PROYECTO_ID' => $request->proyecto_id,
@@ -5367,19 +5829,20 @@ class reportequimicosController extends Controller
                         'OPCION_PORTADA5' => is_null($request->OPCION_PORTADA5) ? null : $request->OPCION_PORTADA5,
                         'OPCION_PORTADA6' => is_null($request->OPCION_PORTADA6) ? null : $request->OPCION_PORTADA6
                     ]);
-
+    
                     if ($request->file('PORTADA')) {
                         // Eliminar IMG anterior
                         if (Storage::exists($recusros->RUTA_IMAGEN_PORTADA)) {
                             Storage::delete($recusros->RUTA_IMAGEN_PORTADA);
                         }
-
+    
                         $extension = $request->file('PORTADA')->getClientOriginalExtension();
                         $imgGuardada = $request->file('PORTADA')->storeAs('reportes/proyecto/' . $request->proyecto_id . '/' . $request->agente_nombre . '/' . $request->reporteregistro_id . '/imagenPortada', 'PORTADA_IAMGEN.' . $extension);
 
                         $recusros->update(['RUTA_IMAGEN_PORTADA' => $imgGuardada]);
+
                     }
-                } else {
+                }else{
 
                     foreach ($proyectoRecursos as $recurso) {
                         $recurso->update([
@@ -5407,24 +5870,25 @@ class reportequimicosController extends Controller
 
                             $extension = $request->file('PORTADA')->getClientOriginalExtension();
                             $imgGuardada = $request->file('PORTADA')->storeAs(
-                                'reportes/proyecto/' . $request->proyecto_id . '/' . $request->agente_nombre . '/' . $request->reporteregistro_id . '/imagenPortada',
-                                'PORTADA_IMAGEN.' . $extension
-                            );
+                                    'reportes/proyecto/' . $request->proyecto_id . '/' . $request->agente_nombre . '/' . $request->reporteregistro_id . '/imagenPortada',
+                                    'PORTADA_IMAGEN.' . $extension
+                                );
 
                             $recurso->update(['RUTA_IMAGEN_PORTADA' => $imgGuardada]);
                         }
                     }
                 }
-
+                
                 // Mensaje
                 $dato["msj"] = 'Datos guardados correctamente';
             }
 
 
             // INTRODUCCION
-            if (($request->opcion + 0) == 1) {
+            if (($request->opcion+0) == 1)
+            {
                 $reporte->update([
-                    'reportequimicos_introduccion' => $this->datosproyectolimpiartexto($proyecto, $recsensorial, $quimicos_nombre, $request->reporte_introduccion)
+                      'reportequimicos_introduccion' => $this->datosproyectolimpiartexto($proyecto, $recsensorial, $quimicos_nombre, $request->reporte_introduccion)
                 ]);
 
                 // Mensaje
@@ -5433,28 +5897,39 @@ class reportequimicosController extends Controller
 
 
             // DEFINICIONES
-            if (($request->opcion + 0) == 2) {
-                if (!$request->catactivo_id) {
+            if (($request->opcion+0) == 2)
+            {
+                if (!$request->catactivo_id)
+                {
                     $request['catactivo_id'] = 0; // es es modo cliente y viene en null se pone en cero
                 }
 
 
-                if (($request->reportedefiniciones_id + 0) == 0) //NUEVO
+                if (($request->reportedefiniciones_id+0) == 0) //NUEVO
                 {
                     DB::statement('ALTER TABLE reportedefiniciones AUTO_INCREMENT = 1;');
 
                     $definicion = reportedefinicionesModel::create([
-                        'agente_id' => $request->agente_id, 'agente_nombre' => $request->agente_nombre, 'catactivo_id' => $request->catactivo_id, 'reportedefiniciones_concepto' => $request->reportedefiniciones_concepto, 'reportedefiniciones_descripcion' => $request->reportedefiniciones_descripcion, 'reportedefiniciones_fuente' => $request->reportedefiniciones_fuente
+                          'agente_id' => $request->agente_id
+                        , 'agente_nombre' => $request->agente_nombre
+                        , 'catactivo_id' => $request->catactivo_id
+                        , 'reportedefiniciones_concepto' => $request->reportedefiniciones_concepto
+                        , 'reportedefiniciones_descripcion' => $request->reportedefiniciones_descripcion
+                        , 'reportedefiniciones_fuente' => $request->reportedefiniciones_fuente
                     ]);
 
                     // Mensaje
                     $dato["msj"] = 'Datos guardados correctamente';
-                } else //EDITAR
+                }
+                else //EDITAR
                 {
                     $definicion = reportedefinicionesModel::findOrFail($request->reportedefiniciones_id);
 
                     $definicion->update([
-                        'catactivo_id' => $request->catactivo_id, 'reportedefiniciones_concepto' => $request->reportedefiniciones_concepto, 'reportedefiniciones_descripcion' => $request->reportedefiniciones_descripcion, 'reportedefiniciones_fuente' => $request->reportedefiniciones_fuente
+                          'catactivo_id' => $request->catactivo_id
+                        , 'reportedefiniciones_concepto' => $request->reportedefiniciones_concepto
+                        , 'reportedefiniciones_descripcion' => $request->reportedefiniciones_descripcion
+                        , 'reportedefiniciones_fuente' => $request->reportedefiniciones_fuente
                     ]);
 
                     // Mensaje
@@ -5464,9 +5939,10 @@ class reportequimicosController extends Controller
 
 
             // OBJETIVO GENERAL
-            if (($request->opcion + 0) == 3) {
+            if (($request->opcion+0) == 3)
+            {
                 $reporte->update([
-                    'reportequimicos_objetivogeneral' => $this->datosproyectolimpiartexto($proyecto, $recsensorial, $quimicos_nombre, $request->reporte_objetivogeneral)
+                      'reportequimicos_objetivogeneral' => $this->datosproyectolimpiartexto($proyecto, $recsensorial, $quimicos_nombre, $request->reporte_objetivogeneral)
                 ]);
 
                 // Mensaje
@@ -5475,9 +5951,10 @@ class reportequimicosController extends Controller
 
 
             // OBJETIVOS  ESPECIFICOS
-            if (($request->opcion + 0) == 4) {
+            if (($request->opcion+0) == 4)
+            {
                 $reporte->update([
-                    'reportequimicos_objetivoespecifico' => $this->datosproyectolimpiartexto($proyecto, $recsensorial, $quimicos_nombre, $request->reporte_objetivoespecifico)
+                      'reportequimicos_objetivoespecifico' => $this->datosproyectolimpiartexto($proyecto, $recsensorial, $quimicos_nombre, $request->reporte_objetivoespecifico)
                 ]);
 
                 // Mensaje
@@ -5486,9 +5963,10 @@ class reportequimicosController extends Controller
 
 
             // METODOLOGIA PUNTO 4.1
-            if (($request->opcion + 0) == 5) {
+            if (($request->opcion+0) == 5)
+            {
                 $reporte->update([
-                    'reportequimicos_metodologia_4_1' => $this->datosproyectolimpiartexto($proyecto, $recsensorial, $quimicos_nombre, $request->reporte_metodologia_4_1)
+                      'reportequimicos_metodologia_4_1' => $this->datosproyectolimpiartexto($proyecto, $recsensorial, $quimicos_nombre, $request->reporte_metodologia_4_1)
                 ]);
 
                 // Mensaje
@@ -5497,9 +5975,10 @@ class reportequimicosController extends Controller
 
 
             // METODOLOGIA PUNTO 4.2
-            if (($request->opcion + 0) == 6) {
+            if (($request->opcion+0) == 6)
+            {
                 $reporte->update([
-                    'reportequimicos_metodologia_4_2' => $this->datosproyectolimpiartexto($proyecto, $recsensorial, $quimicos_nombre, $request->reporte_metodologia_4_2)
+                      'reportequimicos_metodologia_4_2' => $this->datosproyectolimpiartexto($proyecto, $recsensorial, $quimicos_nombre, $request->reporte_metodologia_4_2)
                 ]);
 
                 // Mensaje
@@ -5508,20 +5987,22 @@ class reportequimicosController extends Controller
 
 
             // UBICACION
-            if (($request->opcion + 0) == 7) {
+            if (($request->opcion+0) == 7)
+            {
                 $reporte->update([
                     'reportequimicos_ubicacioninstalacion' => $this->datosproyectolimpiartexto($proyecto, $recsensorial, $quimicos_nombre, $request->reporte_ubicacioninstalacion)
                 ]);
 
                 // si envia archivo
-                if ($request->file('reporteubicacionfoto')) {
+                if ($request->file('reporteubicacionfoto'))
+                {
                     // Codificar imagen recibida como tipo base64
                     $imagen_recibida = explode(',', $request->ubicacionmapa); //Archivo foto tipo base64
                     $imagen_nueva = base64_decode($imagen_recibida[1]);
 
                     // Ruta destino archivo
-                    $destinoPath = 'reportes/proyecto/' . $request->proyecto_id . '/' . $request->agente_nombre . '/' . $reporte->id . '/ubicacionfoto/ubicacionfoto.jpg';
-
+                    $destinoPath = 'reportes/proyecto/'.$request->proyecto_id.'/'.$request->agente_nombre.'/'.$reporte->id.'/ubicacionfoto/ubicacionfoto.jpg';
+                    
                     // Guardar Foto
                     Storage::put($destinoPath, $imagen_nueva); // Guardar en storage
                     // file_put_contents(public_path('/imagen.jpg'), $imagen_nueva); // Guardar en public
@@ -5537,9 +6018,11 @@ class reportequimicosController extends Controller
 
 
             // PROCESO INSTALACION
-            if (($request->opcion + 0) == 8) {
+            if (($request->opcion+0) == 8)
+            {
                 $reporte->update([
-                    'reportequimicos_procesoinstalacion' => $this->datosproyectolimpiartexto($proyecto, $recsensorial, $quimicos_nombre, $request->reporte_procesoinstalacion), 'reportequimicos_actividadprincipal' => $this->datosproyectolimpiartexto($proyecto, $recsensorial, $quimicos_nombre, $request->reporte_actividadprincipal)
+                      'reportequimicos_procesoinstalacion' => $this->datosproyectolimpiartexto($proyecto, $recsensorial, $quimicos_nombre, $request->reporte_procesoinstalacion)
+                    , 'reportequimicos_actividadprincipal' => $this->datosproyectolimpiartexto($proyecto, $recsensorial, $quimicos_nombre, $request->reporte_actividadprincipal)
                 ]);
 
                 // Mensaje
@@ -5548,8 +6031,10 @@ class reportequimicosController extends Controller
 
 
             // CATEGORIAS
-            if (($request->opcion + 0) == 9) {
-                if (($request->reportecategoria_id + 0) == 0) {
+            if (($request->opcion+0) == 9)
+            {
+                if (($request->reportecategoria_id+0) == 0)
+                {
                     DB::statement('ALTER TABLE reportequimicoscategoria AUTO_INCREMENT = 1;');
 
                     $request['recsensorialcategoria_id'] = 0;
@@ -5558,7 +6043,9 @@ class reportequimicosController extends Controller
 
                     // Mensaje
                     $dato["msj"] = 'Datos guardados correctamente';
-                } else {
+                }
+                else
+                {
                     $request['registro_id'] = $reporte->id;
                     $categoria = reportequimicoscategoriaModel::findOrFail($request->reportecategoria_id);
                     $categoria->update($request->all());
@@ -5570,8 +6057,10 @@ class reportequimicosController extends Controller
 
 
             // AREAS
-            if (($request->opcion + 0) == 10) {
-                if (($request->areas_poe + 0) == 1) {
+            if (($request->opcion+0) == 10)
+            {
+                if (($request->areas_poe+0) == 1)
+                {
                     $request['reportequimicosarea_porcientooperacion'] = $request->reportequimicosarea_porcientooperacion;
                     $request['reportearea_caracteristica'] = $request->reportequimicosarea_caracteristica;
                     $request['reportearea_maquinaria'] = $request->reportequimicosarea_maquinaria;
@@ -5582,16 +6071,22 @@ class reportequimicosController extends Controller
 
 
                     $eliminar_categorias = reportequimicosareacategoriaModel::where('reportequimicosarea_id', $request->reportearea_id)
-                        ->where('reportequimicosareacategoria_poe', $request->reporteregistro_id)
-                        ->delete();
+                                                                            ->where('reportequimicosareacategoria_poe', $request->reporteregistro_id)
+                                                                            ->delete();
 
 
-                    if ($request->checkbox_categoria_id) {
+                    if ($request->checkbox_categoria_id)
+                    {
                         DB::statement('ALTER TABLE reportequimicosareacategoria AUTO_INCREMENT = 1;');
 
-                        foreach ($request->checkbox_categoria_id as $key => $value) {
+                        foreach ($request->checkbox_categoria_id as $key => $value) 
+                        {
                             $areacategoria = reportequimicosareacategoriaModel::create([
-                                'reportequimicosarea_id' => $area->id, 'reportequimicosareacategoria_poe' => $request->reporteregistro_id, 'reportequimicoscategoria_id' => $value, 'reportequimicosareacategoria_total' => $request['areacategoria_total_' . $value], 'reportequimicosareacategoria_actividades' => $request['areacategoria_actividades_' . $value]
+                                  'reportequimicosarea_id' => $area->id
+                                , 'reportequimicosareacategoria_poe' => $request->reporteregistro_id
+                                , 'reportequimicoscategoria_id' => $value
+                                , 'reportequimicosareacategoria_total' => $request['areacategoria_total_'.$value]
+                                , 'reportequimicosareacategoria_actividades' => $request['areacategoria_actividades_'.$value]
                             ]);
                         }
                     }
@@ -5599,8 +6094,11 @@ class reportequimicosController extends Controller
 
                     // Mensaje
                     $dato["msj"] = 'Datos modificados correctamente';
-                } else {
-                    if (($request->reportearea_id + 0) == 0) {
+                }
+                else
+                {
+                    if (($request->reportearea_id+0) == 0)
+                    {
                         DB::statement('ALTER TABLE reportequimicosarea AUTO_INCREMENT = 1;');
 
                         $request['registro_id'] = $reporte->id;
@@ -5608,12 +6106,18 @@ class reportequimicosController extends Controller
                         $area = reportequimicosareaModel::create($request->all());
 
 
-                        if ($request->checkbox_categoria_id) {
+                        if ($request->checkbox_categoria_id)
+                        {
                             DB::statement('ALTER TABLE reportequimicosareacategoria AUTO_INCREMENT = 1;');
 
-                            foreach ($request->checkbox_categoria_id as $key => $value) {
+                            foreach ($request->checkbox_categoria_id as $key => $value) 
+                            {
                                 $areacategoria = reportequimicosareacategoriaModel::create([
-                                    'reportequimicosarea_id' => $area->id, 'reportequimicosareacategoria_poe' => 0, 'reportequimicoscategoria_id' => $value, 'reportequimicosareacategoria_total' => $request['areacategoria_total_' . $value], 'reportequimicosareacategoria_actividades' => $request['areacategoria_actividades_' . $value]
+                                      'reportequimicosarea_id' => $area->id
+                                    , 'reportequimicosareacategoria_poe' => 0
+                                    , 'reportequimicoscategoria_id' => $value
+                                    , 'reportequimicosareacategoria_total' => $request['areacategoria_total_'.$value]
+                                    , 'reportequimicosareacategoria_actividades' => $request['areacategoria_actividades_'.$value]
                                 ]);
                             }
                         }
@@ -5621,23 +6125,31 @@ class reportequimicosController extends Controller
 
                         // Mensaje
                         $dato["msj"] = 'Datos guardados correctamente';
-                    } else {
+                    }
+                    else
+                    {
                         $request['registro_id'] = $reporte->id;
                         $area = reportequimicosareaModel::findOrFail($request->reportearea_id);
                         $area->update($request->all());
 
 
                         $eliminar_categorias = reportequimicosareacategoriaModel::where('reportequimicosarea_id', $request->reportearea_id)
-                            ->where('reportequimicosareacategoria_poe', 0)
-                            ->delete();
+                                                                                ->where('reportequimicosareacategoria_poe', 0)
+                                                                                ->delete();
 
 
-                        if ($request->checkbox_categoria_id) {
+                        if ($request->checkbox_categoria_id)
+                        {
                             DB::statement('ALTER TABLE reportequimicosareacategoria AUTO_INCREMENT = 1;');
 
-                            foreach ($request->checkbox_categoria_id as $key => $value) {
+                            foreach ($request->checkbox_categoria_id as $key => $value) 
+                            {
                                 $areacategoria = reportequimicosareacategoriaModel::create([
-                                    'reportequimicosarea_id' => $area->id, 'reportequimicosareacategoria_poe' => 0, 'reportequimicoscategoria_id' => $value, 'reportequimicosareacategoria_total' => $request['areacategoria_total_' . $value], 'reportequimicosareacategoria_actividades' => $request['areacategoria_actividades_' . $value]
+                                      'reportequimicosarea_id' => $area->id
+                                    , 'reportequimicosareacategoria_poe' => 0
+                                    , 'reportequimicoscategoria_id' => $value
+                                    , 'reportequimicosareacategoria_total' => $request['areacategoria_total_'.$value]
+                                    , 'reportequimicosareacategoria_actividades' => $request['areacategoria_actividades_'.$value]
                                 ]);
                             }
                         }
@@ -5647,12 +6159,14 @@ class reportequimicosController extends Controller
                         $dato["msj"] = 'Datos modificados correctamente';
                     }
                 }
-            }
+            }        
 
 
             // EQUIPO PROTECCION PERSONAL
-            if (($request->opcion + 0) == 11) {
-                if (($request->reporteepp_id + 0) == 0) {
+            if (($request->opcion+0) == 11)
+            {
+                if (($request->reporteepp_id+0) == 0)
+                {
                     DB::statement('ALTER TABLE reportequimicosepp AUTO_INCREMENT = 1;');
 
                     $request['registro_id'] = $reporte->id;
@@ -5660,7 +6174,9 @@ class reportequimicosController extends Controller
 
                     // Mensaje
                     $dato["msj"] = 'Datos guardados correctamente';
-                } else {
+                }
+                else
+                {
                     $request['registro_id'] = $reporte->id;
                     $categoria = reportequimicoseppModel::findOrFail($request->reporteepp_id);
                     $categoria->update($request->all());
@@ -5672,45 +6188,63 @@ class reportequimicosController extends Controller
 
 
             // PUNTO DE EVALUACION
-            if (($request->opcion + 0) == 12) {
+            if (($request->opcion+0) == 12)
+            {
                 // dd($request->all());
 
 
-                if (($request->puntoevaluacion_id + 0) == 0) {
+                if (($request->puntoevaluacion_id+0) == 0)
+                {
                     DB::statement('ALTER TABLE reportequimicosevaluacion AUTO_INCREMENT = 1;');
 
                     $request['registro_id'] = $reporte->id;
                     $puntoevaluacion = reportequimicosevaluacionModel::create($request->all());
 
-                    if ($request->reportequimicosevaluacionparametro_parametro) {
+                    if ($request->reportequimicosevaluacionparametro_parametro)
+                    {
                         DB::statement('ALTER TABLE reportequimicosevaluacionparametro AUTO_INCREMENT = 1;');
 
-                        foreach ($request->reportequimicosevaluacionparametro_parametro as $key => $value) {
+                        foreach ($request->reportequimicosevaluacionparametro_parametro as $key => $value) 
+                        {
                             $parametro = reportequimicosevaluacionparametroModel::create([
-                                'reportequimicosevaluacion_id' => $puntoevaluacion->id, 'reportequimicosevaluacionparametro_parametro' => $value, 'reportequimicosevaluacionparametro_metodo' => $request['reportequimicosevaluacionparametro_metodo'][$key]
+                                  'reportequimicosevaluacion_id' => $puntoevaluacion->id
+                                , 'reportequimicosevaluacionparametro_parametro' => $value
+                                , 'reportequimicosevaluacionparametro_metodo' => $request['reportequimicosevaluacionparametro_metodo'][$key]
                                 // , 'reportequimicosevaluacionparametro_concentracion' => str_replace('<', '˂', str_replace('>', '>', $request['reportequimicosevaluacionparametro_concentracion'][$key]))
-                                , 'reportequimicosevaluacionparametro_concentracion' => $request['reportequimicosevaluacionparametro_concentracion'][$key], 'reportequimicosevaluacionparametro_valorlimite' => $request['reportequimicosevaluacionparametro_valorlimite'][$key]
+                                , 'reportequimicosevaluacionparametro_concentracion' => $request['reportequimicosevaluacionparametro_concentracion'][$key]
+                                , 'reportequimicosevaluacionparametro_valorlimite' => $request['reportequimicosevaluacionparametro_valorlimite'][$key]
                                 // , 'reportequimicosevaluacionparametro_limitesuperior' => str_replace('<', '˂', str_replace('>', '>', $request['reportequimicosevaluacionparametro_limitesuperior'][$key]))
-                                , 'reportequimicosevaluacionparametro_limitesuperior' => $request['reportequimicosevaluacionparametro_limitesuperior'][$key], 'reportequimicosevaluacionparametro_periodo' => $request['reportequimicosevaluacionparametro_periodo'][$key]
+                                , 'reportequimicosevaluacionparametro_limitesuperior' => $request['reportequimicosevaluacionparametro_limitesuperior'][$key]
+                                , 'reportequimicosevaluacionparametro_periodo' => $request['reportequimicosevaluacionparametro_periodo'][$key]
                             ]);
                         }
                     }
 
                     // Mensaje
                     $dato["msj"] = 'Datos guardados correctamente';
-                } else {
+                }
+                else
+                {
                     $request['registro_id'] = $reporte->id;
                     $puntoevaluacion = reportequimicosevaluacionModel::findOrFail($request->puntoevaluacion_id);
                     $puntoevaluacion->update($request->all());
 
-                    if ($request->reportequimicosevaluacionparametro_parametro) {
+                    if ($request->reportequimicosevaluacionparametro_parametro)
+                    {
                         $eliminar_parametros = reportequimicosevaluacionparametroModel::where('reportequimicosevaluacion_id', $request->puntoevaluacion_id)->delete();
 
                         DB::statement('ALTER TABLE reportequimicosevaluacionparametro AUTO_INCREMENT = 1;');
 
-                        foreach ($request->reportequimicosevaluacionparametro_parametro as $key => $value) {
+                        foreach ($request->reportequimicosevaluacionparametro_parametro as $key => $value) 
+                        {
                             $parametro = reportequimicosevaluacionparametroModel::create([
-                                'reportequimicosevaluacion_id' => $puntoevaluacion->id, 'reportequimicosevaluacionparametro_parametro' => $value, 'reportequimicosevaluacionparametro_metodo' => $request['reportequimicosevaluacionparametro_metodo'][$key], 'reportequimicosevaluacionparametro_concentracion' => $request['reportequimicosevaluacionparametro_concentracion'][$key], 'reportequimicosevaluacionparametro_valorlimite' => $request['reportequimicosevaluacionparametro_valorlimite'][$key], 'reportequimicosevaluacionparametro_limitesuperior' => $request['reportequimicosevaluacionparametro_limitesuperior'][$key], 'reportequimicosevaluacionparametro_periodo' => $request['reportequimicosevaluacionparametro_periodo'][$key]
+                                  'reportequimicosevaluacion_id' => $puntoevaluacion->id
+                                , 'reportequimicosevaluacionparametro_parametro' => $value
+                                , 'reportequimicosevaluacionparametro_metodo' => $request['reportequimicosevaluacionparametro_metodo'][$key]
+                                , 'reportequimicosevaluacionparametro_concentracion' => $request['reportequimicosevaluacionparametro_concentracion'][$key]
+                                , 'reportequimicosevaluacionparametro_valorlimite' => $request['reportequimicosevaluacionparametro_valorlimite'][$key]
+                                , 'reportequimicosevaluacionparametro_limitesuperior' => $request['reportequimicosevaluacionparametro_limitesuperior'][$key]
+                                , 'reportequimicosevaluacionparametro_periodo' => $request['reportequimicosevaluacionparametro_periodo'][$key]
                             ]);
                         }
                     }
@@ -5722,18 +6256,28 @@ class reportequimicosController extends Controller
 
 
             // METODO DE MUESTREO
-            if (($request->opcion + 0) == 13) {
-                if ($request->reportequimicosmetodomuestreo_flujo) {
+            if (($request->opcion+0) == 13)
+            {
+                if ($request->reportequimicosmetodomuestreo_flujo)
+                {
                     $eliminar_flujos = reportequimicosmetodomuestreoModel::where('proyecto_id', $request->proyecto_id)
-                        ->where('registro_id', $reporte->id)
-                        ->where('reportequimicosmetodomuestreo_parametro', $request->reportequimicosmetodomuestreo_parametro)
-                        ->delete();
+                                                                            ->where('registro_id', $reporte->id)
+                                                                            ->where('reportequimicosmetodomuestreo_parametro', $request->reportequimicosmetodomuestreo_parametro)
+                                                                            ->delete();
 
                     DB::statement('ALTER TABLE reportequimicosmetodomuestreo AUTO_INCREMENT = 1;');
-
-                    foreach ($request->reportequimicosmetodomuestreo_flujo as $key => $value) {
+                    
+                    foreach ($request->reportequimicosmetodomuestreo_flujo as $key => $value)
+                    {
                         $flujo = reportequimicosmetodomuestreoModel::create([
-                            'proyecto_id' => $request->proyecto_id, 'registro_id' => $reporte->id, 'reportequimicosmetodomuestreo_parametro' => $request->reportequimicosmetodomuestreo_parametro, 'reportequimicosmetodomuestreo_puntos' => $request->reportequimicosmetodomuestreo_puntos, 'reportequimicosmetodomuestreo_metodo' => $request->reportequimicosmetodomuestreo_metodo, 'reportequimicosmetodomuestreo_tipo' => $request->reportequimicosmetodomuestreo_tipo, 'reportequimicosmetodomuestreo_orden' => ($key + 1), 'reportequimicosmetodomuestreo_flujo' => $value
+                              'proyecto_id' => $request->proyecto_id
+                            , 'registro_id' => $reporte->id
+                            , 'reportequimicosmetodomuestreo_parametro' => $request->reportequimicosmetodomuestreo_parametro
+                            , 'reportequimicosmetodomuestreo_puntos' => $request->reportequimicosmetodomuestreo_puntos
+                            , 'reportequimicosmetodomuestreo_metodo' => $request->reportequimicosmetodomuestreo_metodo
+                            , 'reportequimicosmetodomuestreo_tipo' => $request->reportequimicosmetodomuestreo_tipo
+                            , 'reportequimicosmetodomuestreo_orden' => ($key+1)
+                            , 'reportequimicosmetodomuestreo_flujo' => $value
                         ]);
                     }
                 }
@@ -5744,8 +6288,10 @@ class reportequimicosController extends Controller
 
 
             // CONCLUSIONES
-            if (($request->opcion + 0) == 14) {
-                if (($request->reporteconclusion_id + 0) == 0) {
+            if (($request->opcion+0) == 14)
+            {
+                if (($request->reporteconclusion_id+0) == 0)
+                {
                     DB::statement('ALTER TABLE reportequimicosconclusion AUTO_INCREMENT = 1;');
 
                     $request['registro_id'] = $reporte->id;
@@ -5754,7 +6300,9 @@ class reportequimicosController extends Controller
 
                     // Mensaje
                     $dato["msj"] = 'Datos guardados correctamente';
-                } else {
+                }
+                else
+                {
                     $request['registro_id'] = $reporte->id;
                     $request['reportequimicosconclusion_conclusion'] = $this->datosproyectolimpiartexto($proyecto, $recsensorial, $quimicos_nombre, $request->reportequimicosconclusion_conclusion);
                     $conclusion = reportequimicosconclusionModel::findOrFail($request->reporteconclusion_id);
@@ -5767,19 +6315,29 @@ class reportequimicosController extends Controller
 
 
             // RECOMENDACIONES
-            if (($request->opcion + 0) == 15) {
-                if ($request->recomendacion_checkbox) {
+            if (($request->opcion+0) == 15)
+            {
+                if ($request->recomendacion_checkbox)
+                {
                     $eliminar_recomendaciones = reporterecomendacionesModel::where('proyecto_id', $request->proyecto_id)
-                        ->where('catactivo_id', $request->catactivo_id)
-                        ->where('agente_nombre', $request->agente_nombre)
-                        ->where('registro_id', $reporte->id)
-                        ->delete();
+                                                                            ->where('catactivo_id', $request->catactivo_id)
+                                                                            ->where('agente_nombre', $request->agente_nombre)
+                                                                            ->where('registro_id', $reporte->id)
+                                                                            ->delete();
 
                     DB::statement('ALTER TABLE reporterecomendaciones AUTO_INCREMENT = 1;');
 
-                    foreach ($request->recomendacion_checkbox as $key => $value) {
+                    foreach ($request->recomendacion_checkbox as $key => $value)
+                    {
                         $recomendacion = reporterecomendacionesModel::create([
-                            'agente_id' => $request->agente_id, 'agente_nombre' => $request->agente_nombre, 'proyecto_id' => $request->proyecto_id, 'registro_id' => $reporte->id, 'catactivo_id' => $request->catactivo_id, 'reporterecomendacionescatalogo_id' => $value, 'reporterecomendaciones_tipo' => $request['recomendacion_tipo_' . $value], 'reporterecomendaciones_descripcion' => $this->datosproyectolimpiartexto($proyecto, $recsensorial, $quimicos_nombre, $request['recomendacion_descripcion_' . $value])
+                              'agente_id' => $request->agente_id
+                            , 'agente_nombre' => $request->agente_nombre
+                            , 'proyecto_id' => $request->proyecto_id
+                            , 'registro_id' => $reporte->id
+                            , 'catactivo_id' => $request->catactivo_id
+                            , 'reporterecomendacionescatalogo_id' => $value
+                            , 'reporterecomendaciones_tipo' => $request['recomendacion_tipo_'.$value]
+                            , 'reporterecomendaciones_descripcion' => $this->datosproyectolimpiartexto($proyecto, $recsensorial, $quimicos_nombre, $request['recomendacion_descripcion_'.$value])
                         ]);
                     }
 
@@ -5788,20 +6346,31 @@ class reportequimicosController extends Controller
                 }
 
 
-                if ($request->recomendacionadicional_checkbox) {
-                    if (!$request->recomendacion_checkbox) {
+                if ($request->recomendacionadicional_checkbox)
+                {
+                    if (!$request->recomendacion_checkbox)
+                    {
                         $eliminar_recomendaciones = reporterecomendacionesModel::where('proyecto_id', $request->proyecto_id)
-                            ->where('catactivo_id', $request->catactivo_id)
-                            ->where('agente_nombre', $request->agente_nombre)
-                            ->where('registro_id', $reporte->id)
-                            ->delete();
+                                                                                ->where('catactivo_id', $request->catactivo_id)
+                                                                                ->where('agente_nombre', $request->agente_nombre)
+                                                                                ->where('registro_id', $reporte->id)
+                                                                                ->delete();
                     }
 
                     DB::statement('ALTER TABLE reporterecomendaciones AUTO_INCREMENT = 1;');
 
-                    foreach ($request->recomendacionadicional_checkbox as $key => $value) {
+                    foreach ($request->recomendacionadicional_checkbox as $key => $value)
+                    {
                         $recomendacion = reporterecomendacionesModel::create([
-                            'agente_id' => $request->agente_id, 'agente_nombre' => $request->agente_nombre, 'proyecto_id' => $request->proyecto_id, 'registro_id' => $reporte->id, 'catactivo_id' => $request->catactivo_id, 'reporterecomendacionescatalogo_id' => 0, 'reporterecomendaciones_tipo' => $request->recomendacionadicional_tipo[$key], 'reporterecomendaciones_descripcion' => $this->datosproyectolimpiartexto($proyecto, $recsensorial, $quimicos_nombre, $request->recomendacionadicional_descripcion[$key]), 'catalogo_id' => $request->recomendacionadicional_quimicopartida[$key]
+                              'agente_id' => $request->agente_id
+                            , 'agente_nombre' => $request->agente_nombre
+                            , 'proyecto_id' => $request->proyecto_id
+                            , 'registro_id' => $reporte->id
+                            , 'catactivo_id' => $request->catactivo_id
+                            , 'reporterecomendacionescatalogo_id' => 0
+                            , 'reporterecomendaciones_tipo' => $request->recomendacionadicional_tipo[$key]
+                            , 'reporterecomendaciones_descripcion' => $this->datosproyectolimpiartexto($proyecto, $recsensorial, $quimicos_nombre, $request->recomendacionadicional_descripcion[$key])
+                            , 'catalogo_id' => $request->recomendacionadicional_quimicopartida[$key]
                         ]);
                     }
 
@@ -5812,32 +6381,39 @@ class reportequimicosController extends Controller
 
 
             // RESPONSABLES DEL INFORME
-            if (($request->opcion + 0) == 16) {
+            if (($request->opcion+0) == 16)
+            {
                 $reporte->update([
-                    'reportequimicos_responsable1' => $request->reporte_responsable1, 'reportequimicos_responsable1cargo' => $request->reporte_responsable1cargo, 'reportequimicos_responsable2' => $request->reporte_responsable2, 'reportequimicos_responsable2cargo' => $request->reporte_responsable2cargo
+                      'reportequimicos_responsable1' => $request->reporte_responsable1
+                    , 'reportequimicos_responsable1cargo' => $request->reporte_responsable1cargo
+                    , 'reportequimicos_responsable2' => $request->reporte_responsable2
+                    , 'reportequimicos_responsable2cargo' => $request->reporte_responsable2cargo
                 ]);
 
 
-                if ($request->responsablesinforme_carpetadocumentoshistorial) {
-                    $nuevo_destino = 'reportes/proyecto/' . $request->proyecto_id . '/' . $request->agente_nombre . '/' . $reporte->id . '/responsables informe/';
+                if ($request->responsablesinforme_carpetadocumentoshistorial)
+                {
+                    $nuevo_destino = 'reportes/proyecto/'.$request->proyecto_id.'/'.$request->agente_nombre.'/'.$reporte->id.'/responsables informe/';
                     Storage::makeDirectory($nuevo_destino); //crear directorio
 
-                    File::copyDirectory(storage_path('app/' . $request->responsablesinforme_carpetadocumentoshistorial), storage_path('app/' . $nuevo_destino));
+                    File::copyDirectory(storage_path('app/'.$request->responsablesinforme_carpetadocumentoshistorial), storage_path('app/'.$nuevo_destino));
 
                     $reporte->update([
-                        'reportequimicos_responsable1documento' => $nuevo_destino . 'responsable1_doc.jpg', 'reportequimicos_responsable2documento' => $nuevo_destino . 'responsable2_doc.jpg'
+                          'reportequimicos_responsable1documento' => $nuevo_destino.'responsable1_doc.jpg'
+                        , 'reportequimicos_responsable2documento' => $nuevo_destino.'responsable2_doc.jpg'
                     ]);
                 }
 
 
-                if ($request->file('reporteresponsable1documento')) {
+                if ($request->file('reporteresponsable1documento'))
+                {
                     // Codificar imagen recibida como tipo base64
                     $imagen_recibida = explode(',', $request->reporte_responsable1_documentobase64); //Archivo foto tipo base64
                     $imagen_nueva = base64_decode($imagen_recibida[1]);
 
                     // Ruta destino archivo
-                    $destinoPath = 'reportes/proyecto/' . $request->proyecto_id . '/' . $request->agente_nombre . '/' . $reporte->id . '/responsables informe/responsable1_doc.jpg';
-
+                    $destinoPath = 'reportes/proyecto/'.$request->proyecto_id.'/'.$request->agente_nombre.'/'.$reporte->id.'/responsables informe/responsable1_doc.jpg';
+                    
                     // Guardar Foto
                     Storage::put($destinoPath, $imagen_nueva); // Guardar en storage
                     // file_put_contents(public_path('/imagen.jpg'), $imagen_nueva); // Guardar en public
@@ -5848,14 +6424,15 @@ class reportequimicosController extends Controller
                 }
 
 
-                if ($request->file('reporteresponsable2documento')) {
+                if ($request->file('reporteresponsable2documento'))
+                {
                     // Codificar imagen recibida como tipo base64
                     $imagen_recibida = explode(',', $request->reporte_responsable2_documentobase64); //Archivo foto tipo base64
                     $imagen_nueva = base64_decode($imagen_recibida[1]);
 
                     // Ruta destino archivo
-                    $destinoPath = 'reportes/proyecto/' . $request->proyecto_id . '/' . $request->agente_nombre . '/' . $reporte->id . '/responsables informe/responsable2_doc.jpg';
-
+                    $destinoPath = 'reportes/proyecto/'.$request->proyecto_id.'/'.$request->agente_nombre.'/'.$reporte->id.'/responsables informe/responsable2_doc.jpg';
+                    
                     // Guardar Foto
                     Storage::put($destinoPath, $imagen_nueva); // Guardar en storage
                     // file_put_contents(public_path('/imagen.jpg'), $imagen_nueva); // Guardar en public
@@ -5871,24 +6448,33 @@ class reportequimicosController extends Controller
 
 
             // PLANOS
-            if (($request->opcion + 0) == 17) {
+            if (($request->opcion+0) == 17)
+            {
                 $eliminar_carpetasplanos = reporteplanoscarpetasModel::where('proyecto_id', $request->proyecto_id)
-                    ->where('agente_nombre', $request->agente_nombre)
-                    ->where('registro_id', $reporte->id)
-                    ->delete();
+                                                                        ->where('agente_nombre', $request->agente_nombre)
+                                                                        ->where('registro_id', $reporte->id)
+                                                                        ->delete();
 
-                if ($request->planoscarpeta_checkbox) {
+                if ($request->planoscarpeta_checkbox)
+                {
                     DB::statement('ALTER TABLE reporteplanoscarpetas AUTO_INCREMENT = 1;');
 
                     $dato["total"] = 0;
-                    foreach ($request->planoscarpeta_checkbox as $key => $value) {
+                    foreach ($request->planoscarpeta_checkbox as $key => $value)
+                    {
                         $anexo = reporteplanoscarpetasModel::create([
-                            'proyecto_id' => $request->proyecto_id, 'agente_id' => $request->agente_id, 'agente_nombre' => $request->agente_nombre, 'registro_id' => $reporte->id, 'reporteplanoscarpetas_nombre' => str_replace(['\\', '/', ':', '*', '"', '?', '<', '>', '|'], '-', $value)
+                              'proyecto_id' => $request->proyecto_id
+                            , 'agente_id' => $request->agente_id
+                            , 'agente_nombre' => $request->agente_nombre
+                            , 'registro_id' => $reporte->id
+                            , 'reporteplanoscarpetas_nombre' => str_replace(['\\', '/', ':', '*', '"', '?', '<', '>', '|'], '-', $value)
                         ]);
 
                         $dato["total"] += 1;
                     }
-                } else {
+                }
+                else
+                {
                     $dato["total"] = 0;
                 }
 
@@ -5898,29 +6484,40 @@ class reportequimicosController extends Controller
 
 
             // EQUIPO UTILIZADO
-            if (($request->opcion + 0) == 18) {
+            if (($request->opcion+0) == 18)
+            {
                 // dd($request->all());
 
-                if ($request->equipoutilizado_checkbox) {
+                if ($request->equipoutilizado_checkbox)
+                {
                     $eliminar_equiposutilizados = reporteequiposutilizadosModel::where('proyecto_id', $request->proyecto_id)
-                        ->where('agente_nombre', $request->agente_nombre)
-                        ->where('registro_id', $request->reporteregistro_id)
-                        ->delete();
+                                                                                ->where('agente_nombre', $request->agente_nombre)
+                                                                                ->where('registro_id', $request->reporteregistro_id)
+                                                                                ->delete();
 
 
                     DB::statement('ALTER TABLE reporteequiposutilizados AUTO_INCREMENT = 1;');
 
 
-                    foreach ($request->equipoutilizado_checkbox as $key => $value) {
-                        if ($request['equipoutilizado_checkboxcarta_' . $value]) {
+                    foreach ($request->equipoutilizado_checkbox as $key => $value)
+                    {
+                        if ($request['equipoutilizado_checkboxcarta_'.$value])
+                        {
                             $request->reporteequiposutilizados_cartacalibracion = 1;
-                        } else {
+                        }
+                        else
+                        {
                             $request->reporteequiposutilizados_cartacalibracion = null;
                         }
 
 
                         $equipoutilizado = reporteequiposutilizadosModel::create([
-                            'proyecto_id' => $request->proyecto_id, 'agente_id' => $request->agente_id, 'agente_nombre' => $request->agente_nombre, 'registro_id' => $request->reporteregistro_id, 'equipo_id' => $value, 'reporteequiposutilizados_cartacalibracion' => $request->reporteequiposutilizados_cartacalibracion
+                              'proyecto_id' => $request->proyecto_id
+                            , 'agente_id' => $request->agente_id
+                            , 'agente_nombre' => $request->agente_nombre
+                            , 'registro_id' => $request->reporteregistro_id
+                            , 'equipo_id' => $value
+                            , 'reporteequiposutilizados_cartacalibracion' => $request->reporteequiposutilizados_cartacalibracion
                         ]);
                     }
                 }
@@ -5931,26 +6528,36 @@ class reportequimicosController extends Controller
 
 
             // INFORMES RESULTADOS
-            if (($request->opcion + 0) == 19) {
+            if (($request->opcion+0) == 19)
+            {
                 $eliminar_anexos = reporteanexosModel::where('proyecto_id', $request->proyecto_id)
-                    ->where('agente_nombre', $request->agente_nombre)
-                    ->where('registro_id', $reporte->id)
-                    ->where('reporteanexos_tipo', 1) // INFORMES DE RESULTADOS
-                    ->delete();
+                                                    ->where('agente_nombre', $request->agente_nombre)
+                                                    ->where('registro_id', $reporte->id)
+                                                    ->where('reporteanexos_tipo', 1) // INFORMES DE RESULTADOS
+                                                    ->delete();
 
-                if ($request->anexoresultado_checkbox) {
+                if ($request->anexoresultado_checkbox)
+                {
                     DB::statement('ALTER TABLE reporteanexos AUTO_INCREMENT = 1;');
 
                     $dato["total"] = 0;
-                    foreach ($request->anexoresultado_checkbox as $key => $value) {
+                    foreach ($request->anexoresultado_checkbox as $key => $value)
+                    {
                         $anexo = reporteanexosModel::create([
-                            'proyecto_id' => $request->proyecto_id, 'agente_id' => $request->agente_id, 'agente_nombre' => $request->agente_nombre, 'registro_id' => $reporte->id, 'reporteanexos_tipo' => 1  // INFORMES DE RESULTADOS
-                            , 'reporteanexos_anexonombre' => str_replace(['\\', '/', ':', '*', '"', '?', '<', '>', '|'], '-', $request['anexoresultado_nombre_' . $value]), 'reporteanexos_rutaanexo' => $request['anexoresultado_archivo_' . $value]
+                              'proyecto_id' => $request->proyecto_id
+                            , 'agente_id' => $request->agente_id
+                            , 'agente_nombre' => $request->agente_nombre
+                            , 'registro_id' => $reporte->id
+                            , 'reporteanexos_tipo' => 1  // INFORMES DE RESULTADOS
+                            , 'reporteanexos_anexonombre' => str_replace(['\\', '/', ':', '*', '"', '?', '<', '>', '|'], '-', $request['anexoresultado_nombre_'.$value])
+                            , 'reporteanexos_rutaanexo' => $request['anexoresultado_archivo_'.$value]
                         ]);
 
                         $dato["total"] += 1;
                     }
-                } else {
+                }
+                else
+                {
                     $dato["total"] = 0;
                 }
 
@@ -5960,26 +6567,36 @@ class reportequimicosController extends Controller
 
 
             // ANEXOS 7 STPS y 8 EMA
-            if (($request->opcion + 0) == 20) {
+            if (($request->opcion+0) == 20)
+            {
                 $eliminar_anexos = reporteanexosModel::where('proyecto_id', $request->proyecto_id)
-                    ->where('agente_nombre', $request->agente_nombre)
-                    ->where('registro_id', $reporte->id)
-                    ->where('reporteanexos_tipo', 2) // ANEXOS TIPO STPS Y EMA
-                    ->delete();
+                                                    ->where('agente_nombre', $request->agente_nombre)
+                                                    ->where('registro_id', $reporte->id)
+                                                    ->where('reporteanexos_tipo', 2) // ANEXOS TIPO STPS Y EMA
+                                                    ->delete();
 
-                if ($request->anexoacreditacion_checkbox) {
+                if ($request->anexoacreditacion_checkbox)
+                {
                     DB::statement('ALTER TABLE reporteanexos AUTO_INCREMENT = 1;');
 
                     $dato["total"] = 0;
-                    foreach ($request->anexoacreditacion_checkbox as $key => $value) {
+                    foreach ($request->anexoacreditacion_checkbox as $key => $value)
+                    {
                         $anexo = reporteanexosModel::create([
-                            'proyecto_id' => $request->proyecto_id, 'agente_id' => $request->agente_id, 'agente_nombre' => $request->agente_nombre, 'registro_id' => $reporte->id, 'reporteanexos_tipo' => 2  // ANEXOS TIPO STPS Y EMA
-                            , 'reporteanexos_anexonombre' => ($key + 1) . '.- ' . str_replace(['\\', '/', ':', '*', '"', '?', '<', '>', '|'], '-', $request['anexoacreditacion_nombre_' . $value]), 'reporteanexos_rutaanexo' => $request['anexoacreditacion_archivo_' . $value]
+                              'proyecto_id' => $request->proyecto_id
+                            , 'agente_id' => $request->agente_id
+                            , 'agente_nombre' => $request->agente_nombre
+                            , 'registro_id' => $reporte->id
+                            , 'reporteanexos_tipo' => 2  // ANEXOS TIPO STPS Y EMA
+                            , 'reporteanexos_anexonombre' => ($key+1).'.- '.str_replace(['\\', '/', ':', '*', '"', '?', '<', '>', '|'], '-', $request['anexoacreditacion_nombre_'.$value])
+                            , 'reporteanexos_rutaanexo' => $request['anexoacreditacion_archivo_'.$value]
                         ]);
 
                         $dato["total"] += 1;
                     }
-                } else {
+                }
+                else
+                {
                     $dato["total"] = 0;
                 }
 
@@ -5989,20 +6606,27 @@ class reportequimicosController extends Controller
 
 
             // GRUPO QUIMICOS
-            if (($request->opcion + 0) == 21) {
-                if ($request->parametro) {
+            if (($request->opcion+0) == 21)
+            {
+                if ($request->parametro)
+                {
                     $eliminar_parametros = reportequimicosgruposModel::where('proyecto_id', $request->proyecto_id)
-                        ->where('registro_id', $reporte->id)
-                        ->where('catreportequimicospartidas_id', $request->catreportequimicospartidas_id)
-                        ->delete();
+                                                                    ->where('registro_id', $reporte->id)
+                                                                    ->where('catreportequimicospartidas_id', $request->catreportequimicospartidas_id)
+                                                                    ->delete();
 
 
                     DB::statement('ALTER TABLE reportequimicosgrupos AUTO_INCREMENT = 1;');
 
 
-                    foreach ($request->parametro as $key => $value) {
+                    foreach ($request->parametro as $key => $value)
+                    {
                         $parametro = reportequimicosgruposModel::create([
-                            'proyecto_id' => $request->proyecto_id, 'registro_id' => $reporte->id, 'proveedor_id' => $request->proveedor_id, 'catreportequimicospartidas_id' => $request->catreportequimicospartidas_id, 'reportequimicosproyecto_id' => $value
+                              'proyecto_id' => $request->proyecto_id
+                            , 'registro_id' => $reporte->id
+                            , 'proveedor_id' => $request->proveedor_id
+                            , 'catreportequimicospartidas_id' => $request->catreportequimicospartidas_id
+                            , 'reportequimicosproyecto_id' => $value
                         ]);
 
 
@@ -6019,7 +6643,8 @@ class reportequimicosController extends Controller
 
 
             // REVISION INFORME, CANCELACION
-            if (($request->opcion + 0) == 22) {
+            if (($request->opcion+0) == 22)
+            {
                 $revision = reporterevisionesModel::findOrFail($request->reporterevisiones_id);
 
 
@@ -6029,21 +6654,26 @@ class reportequimicosController extends Controller
                 $canceladoobservacion = NULL;
 
 
-                if ($revision->reporterevisiones_cancelado == 0) {
-                    $cancelado = 1;
-                    $canceladonombre = auth()->user()->empleado->empleado_nombre . " " . auth()->user()->empleado->empleado_apellidopaterno . " " . auth()->user()->empleado->empleado_apellidomaterno;
+                if ($revision->reporterevisiones_cancelado == 0)
+                {
+                    $cancelado = 1;                
+                    $canceladonombre = auth()->user()->empleado->empleado_nombre." ".auth()->user()->empleado->empleado_apellidopaterno." ".auth()->user()->empleado->empleado_apellidomaterno;
                     $canceladofecha = date('Y-m-d H:i:s');
                     $canceladoobservacion = $request->reporte_canceladoobservacion;
                 }
 
 
                 $revision->update([
-                    'reporterevisiones_cancelado' => $cancelado, 'reporterevisiones_canceladonombre' => $canceladonombre, 'reporterevisiones_canceladofecha' => $canceladofecha, 'reporterevisiones_canceladoobservacion' => $canceladoobservacion
+                      'reporterevisiones_cancelado' => $cancelado
+                    , 'reporterevisiones_canceladonombre' => $canceladonombre
+                    , 'reporterevisiones_canceladofecha' => $canceladofecha
+                    , 'reporterevisiones_canceladoobservacion' => $canceladoobservacion
                 ]);
 
 
                 $dato["estado"] = 0;
-                if ($revision->reporterevisiones_concluido == 1 || $cancelado == 1) {
+                if ($revision->reporterevisiones_concluido == 1 || $cancelado == 1)
+                {
                     $dato["estado"] = 1;
                 }
 
@@ -6081,9 +6711,11 @@ class reportequimicosController extends Controller
             // respuesta
             $dato["reporteregistro_id"] = $reporte->id;
             return response()->json($dato);
-        } catch (Exception $e) {
+        }
+        catch(Exception $e)
+        {
             // respuesta
-            $dato["msj"] = 'Error ' . $e->getMessage();
+            $dato["msj"] = 'Error '.$e->getMessage();
             return response()->json($dato);
         }
     }
