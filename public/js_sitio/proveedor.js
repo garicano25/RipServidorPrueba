@@ -15,18 +15,26 @@ var TablaSignatarioExperiencia = null;
 var TablaPrecios = null;
 var TablaEquiposDocumentos = null;
 
+var TablaVehiculos = null;
+var TablaVehiculosDocumentos = null;
+var TablaVehiculos_activo = 0;
+
 // DATATABLES activo
 var TablaAcreditaciones_activo = 0;
 var TablaServicios_activo = 0;
 var TablaEquipos_activo = 0;
 var TablaSignatarios_activo = 0;
 var TablaPrecios_activo = 0;
+var TablaVehiculos_activo = 0;
+
 
 // Variables globales
 var proveedor_id = 0;
 var proveedor_tipo = 0;
 var proveedor_Bloqueado = 0;
 var equipo_id = 0;
+var vehiculo_id = 0;
+
 var signatario_id_validacion = 0;
 // Servicios
 var servicios_alcances_lista = '';
@@ -81,6 +89,8 @@ $('.multisteps-form__progress-btn').click(function()
     proveedor_id = parseInt($("#proveedor_id").val());
     proveedor_tipo = parseInt($("#cat_tipoproveedor_id").val());
     equipo_id = 0
+    vehiculo_id = 0
+
 
     switch (this.id)
     { 
@@ -119,6 +129,14 @@ $('.multisteps-form__progress-btn').click(function()
                 TablaServicios_activo = 1;
             }
             break;
+        case "steps_menu_tab8":
+            if (TablaVehiculos_activo == 0)
+            {
+                tabla_vehiculos(proveedor_id);
+                TablaVehiculos_activo = 1;
+            }
+            break;
+
         default:
             // alert(this.id);
             break;
@@ -229,6 +247,7 @@ function inicializar_datatables_proveedor()
     TablaEquipos_activo = 0;
     TablaSignatarios_activo = 0;
     TablaPrecios_activo = 0;
+    TablaVehiculos_activo = 0;
 }
 
 
@@ -249,6 +268,10 @@ $(document).ready(function()
         $( "#steps_contenido_tab2" ).css('display', 'none');
         $( "#steps_menu_tab3" ).css('display', 'none');
         $( "#steps_contenido_tab3" ).css('display', 'none');
+
+        $( "#steps_menu_tab8" ).css('display', 'none');
+        $( "#steps_contenido_tab8" ).css('display', 'none');
+
         $( "#steps_menu_tab4" ).css('display', 'none');
         $( "#steps_contenido_tab4" ).css('display', 'none');
         $( "#steps_menu_tab5" ).css('display', 'none');
@@ -381,12 +404,19 @@ function activa_forms(tipo_proveedor, modulos)
     
     $( "#steps_menu_tab2" ).css('display', 'none');
     $( "#steps_contenido_tab2" ).css('display', 'none');
+
     $( "#steps_menu_tab3" ).css('display', 'none');
     $( "#steps_contenido_tab3" ).css('display', 'none');
+
+    $( "#steps_menu_tab8" ).css('display', 'none');
+    $( "#steps_contenido_tab8" ).css('display', 'none');
+
     $( "#steps_menu_tab4" ).css('display', 'none');
     $( "#steps_contenido_tab4" ).css('display', 'none');
+
     $( "#steps_menu_tab5" ).css('display', 'none');
     $( "#steps_contenido_tab5" ).css('display', 'none');
+
     $( "#steps_menu_tab6" ).css('display', 'none');
     $( "#steps_contenido_tab6" ).css('display', 'none');
 
@@ -396,6 +426,8 @@ function activa_forms(tipo_proveedor, modulos)
         // alert( key + ": " + value.cat_tipoproveedoralcance_alcance );
         $( "#steps_menu_tab"+value.cat_tipoproveedoralcance_alcance ).css('display', 'block');
         $( "#steps_contenido_tab"+value.cat_tipoproveedoralcance_alcance ).css('display', 'block');
+        $( "#steps_menu_tab8" ).css('display', 'block');
+        $( "#steps_contenido_tab8" ).css('display', 'block');
     });
 }
 
@@ -3445,7 +3477,6 @@ $(document).ready(function()
     });
 });
 
-// precionar boton nuevo signatario documento
 $(document).ready(function() {
     $("#boton_nuevo_equipo_documento").click(function() {
         // valida si existe un signatario seleccionado
@@ -9033,4 +9064,955 @@ $(document).ready(function () {
         }
     });
 
+});
+
+/////////////////// VEHICULOS //////////////////////////
+
+$(document).ready(function()
+{
+    $("#boton_nuevo_vehiculo").click(function()
+    {   
+        vehiculo_id = 0
+        // valida si existe un proveedor seleccionado
+        if ($("#proveedor_id").val()>0)
+        {
+
+            // Mostrar Foto Mapa instalacion en el INPUT
+            if ($('#foto_vehiculo').data('dropify'))
+            {
+                $('#foto_vehiculo').dropify().data('dropify').resetPreview();
+                $('#foto_vehiculo').dropify().data('dropify').clearElement();
+                // $('#signatariofoto').dropify().data('dropify').destroy();
+                // $('#signatariofoto').dropify().data('dropify').init();
+            }
+            else
+            {
+                // $('#signatariofoto').attr('data-height', 400);
+                // $('#signatariofoto').attr('data-default-file', imagenUrl);
+                $('#foto_vehiculo').dropify({
+                    messages: {
+                        'default': 'Arrastre la imagen aquí o haga click',
+                        'replace': 'Arrastre la imagen o haga clic para reemplazar',
+                        'remove':  'Quitar',
+                        'error':   'Ooops, ha ocurrido un error.'
+                    },
+                    error: {
+                        'fileSize': 'Demasiado grande ({{ value }} max).',
+                        'minWidth': 'Ancho demasiado pequeño (min {{ value }}}px).',
+                        'maxWidth': 'Ancho demasiado grande (max {{ value }}}px).',
+                        'minHeight': 'Alto demasiado pequeño (min {{ value }}}px).',
+                        'maxHeight': 'Alto demasiado grande (max {{ value }}px max).',
+                        'imageFormat': 'Formato no permitido, sólo ({{ value }}).'
+                    }
+                });
+            }
+
+            // requerir campo FOTO
+            $('#foto_vehiculo').attr('required', false);
+
+            // Borrar formulario
+             $('#form_vehiculo').each(function(){
+                this.reset();
+            });
+
+            // actualizar campos HIDDEN
+            $("#vehiculo_id").val(0);
+            $("#vehiculo_proveedor_id").val($("#proveedor_id").val());
+            $("#vehiculo_Eliminado").val(0);
+
+         
+
+            $("#checkbox_estado_vehiculo").prop('checked', false);
+            $("#checkbox_estado_vehiculo").prop('disabled', 'disabled');
+
+
+            // seleccionar TAB1
+            $( "#tab8_equipo_info" ).click();
+
+         
+           // Abrir modal
+            $('#modal_vehiculo').modal({backdrop:false});
+        }
+        else
+        {
+            // mensaje
+            swal({
+                title: "No disponible",
+                text: "Aun no has guardado o seleccionado un proveedor",
+                type: "warning", // warning, error, success, info
+                buttons: {
+                    visible: false, // true , false
+                },
+                timer: 1500,
+                showConfirmButton: false
+            });
+        }
+    });
+});
+
+
+
+
+
+
+function tabla_vehiculos(id)
+{
+    try 
+    {
+        var ruta = "/tablaproveedorvehiculo/"+id;
+
+        if (TablaVehiculos != null)
+        {
+            TablaVehiculos.clear().draw();
+            TablaVehiculos.ajax.url(ruta).load();
+        }
+        else
+        {
+            TablaVehiculos = $('#tabla_vehiculos').DataTable({
+                "ajax": {
+                    "url": ruta,
+                    "type": "get",
+                    "cache": false,
+                    error: function (xhr, error, code)
+                    {
+                        // console.log(xhr); console.log(code);
+                        tabla_vehiculos(id);
+                    },
+                    "data": {}
+                },
+                "columns": [
+                    // {
+                    //     "data": "id" 
+                    // },
+                    {
+                        "data": "numero_registro" 
+                    },
+                    {
+                        "data": "marca",
+                        "defaultContent": "-"
+                    },
+                    {
+                        "data": "modelo",
+                        "defaultContent": "-"
+                    },
+                    {
+                        "data": "serie",
+                        "defaultContent": "-"
+                    },
+                    {
+                        "data": "placa",
+                        "defaultContent": "-"
+                    },
+                   
+                    // {
+                    //     "data": 'certificado_pdf',
+                    //     "defaultContent": "-",
+                    //     // "className": 'Pdf',
+                    //     "orderable": false,
+                    //     // "defaultContent": '<button type="button" class="btn btn-info btn-circle"><i class="fa fa-file-pdf-o"></i></button>',
+                    // },
+                    // {
+                    //     "data": 'carta_pdf',
+                    //     "defaultContent": "-",
+                    //     // "className": 'carta',
+                    //     "orderable": false,
+                    //     // "defaultContent": '<button type="button" class="btn btn-info btn-circle"><i class="fa fa-file-pdf-o"></i></button>',
+                    // },
+                    {
+                        "data": "EstadoActivo_texto",
+                        "defaultContent": "-"
+                    },
+                    {
+                        "className": 'Editar',
+                        "orderable": false,
+                        "data": 'boton_editar',
+                        "defaultContent": '-'
+                    }
+                ],
+                "lengthMenu": [[10, 20, 50, 100, -1], [10, 20, 50, 100, "Todos"]],
+                // "rowsGroup": [1], //agrupar filas
+                "order": [[ 0, "desc" ]],
+                "ordering": true,
+                "processing": true,
+                "language": {
+                    "lengthMenu": "Mostrar _MENU_ Registros",
+                    "zeroRecords": "No se encontraron registros",
+                    "info": "Página _PAGE_ de _PAGES_ (Total _TOTAL_ registros)",
+                    "infoEmpty": "No se encontraron registros",
+                    "infoFiltered": "(Filtrado de _MAX_ registros)",
+                    "emptyTable": "No hay datos disponibles en la tabla",
+                    "loadingRecords": "Cargando datos....",
+                    "processing": "Procesando <i class='fa fa-spin fa-spinner fa-3x'></i>",
+                    "search": "Buscar",
+                    "paginate": {
+                        "first": "Primera",
+                        "last": "Ultima",
+                        "next": "Siguiente",
+                        "previous": "Anterior"
+                    }
+                }
+            });
+        }
+    }
+    catch (exception)
+    {
+        tabla_vehiculos(id);
+    }
+}
+
+// Seleccionar y editar vehículos
+$(document).ready(function()
+{
+    $('#tabla_vehiculos tbody').on('click', 'td.Editar', function ()
+    {   
+        var tr = $(this).closest('tr');
+        var row = TablaVehiculos.row( tr );
+
+        if (parseInt(row.data().accion_activa) > 0)
+        {
+             // Borrar formulario
+            $('#form_vehiculo').each(function(){
+                this.reset();
+            });
+
+            vehiculo_id = row.data().id
+
+            // Llenar campos form
+            $("#vehiculo_marca").val(row.data().vehiculo_marca);
+            $("#vehiculo_linea").val(row.data().vehiculo_linea);
+            $("#vehiculo_modelo").val(row.data().vehiculo_modelo);
+            $("#vehiculo_serie").val(row.data().vehiculo_serie);
+            $("#vehiculo_placa").val(row.data().vehiculo_placa);
+        
+
+            //Mostrar la foto del equipo
+            // obtener extencion archivo
+
+            $('#foto_vehiculo').attr('required', false);
+            
+            if (row.data().vehiculo_imagen) {
+
+                var archivo = row.data().vehiculo_imagen;
+                var extension = archivo.substring(archivo.lastIndexOf("."));
+                // Obtener FOTO
+                var imagenUrl = '/vervehiculofoto/' + row.data().id + extension;
+
+                // Mostrar Foto en el INPUT
+                if ($('#foto_vehiculo').data('dropify')) {
+                    $('#foto_vehiculo').dropify().data('dropify').destroy();
+                    // $('.dropify-wrapper').css('height', 400);
+                    $('#foto_vehiculo').dropify().data('dropify').settings.defaultFile = imagenUrl;
+                    $('#foto_vehiculo').dropify().data('dropify').init();
+                }
+                else {
+                    // $('#signatariofoto').attr('data-height', 400);
+                    $('#foto_vehiculo').attr('data-default-file', imagenUrl);
+                    $('#foto_vehiculo').dropify({
+                        messages: {
+                            'default': 'Arrastre la imagen aquí o haga click',
+                            'replace': 'Arrastre la imagen o haga clic para reemplazar',
+                            'remove': 'Quitar',
+                            'error': 'Ooops, ha ocurrido un error.'
+                        },
+                        error: {
+                            'fileSize': 'Demasiado grande ({{ value }} max).',
+                            'minWidth': 'Ancho demasiado pequeño (min {{ value }}}px).',
+                            'maxWidth': 'Ancho demasiado grande (max {{ value }}}px).',
+                            'minHeight': 'Alto demasiado pequeño (min {{ value }}}px).',
+                            'maxHeight': 'Alto demasiado grande (max {{ value }}px max).',
+                            'imageFormat': 'Formato no permitido, sólo ({{ value }}).'
+                        }
+                    });
+                }
+            } else {
+                $('#foto_vehiculo').dropify().data('dropify').resetPreview();
+                $('#foto_vehiculo').dropify().data('dropify').clearElement();
+            }
+
+            if (row.data().vehiculo_EstadoActivo==1)
+            {
+                $("#checkbox_estado_vehiculo").prop('checked', true);
+            }
+            else
+            {
+                $("#checkbox_estado_vehiculo").prop('checked', false);
+            }
+        
+        
+        
+        
+        
+        
+          if (parseInt($("#boton_bloquear_proveedor").val()) == 0)
+         {
+            $("#checkbox_estado_vehiculo").attr('disabled', false);
+        }
+        else
+        {
+            $("#checkbox_estado_vehiculo").attr('disabled', true);
+        }
+
+            // actualizar campos HIDDEN
+            $("#vehiculo_id").val(row.data().id);
+            $("#vehiculo_proveedor_id").val(row.data().proveedor_id);
+            $("#vehiculo_Eliminado").val(row.data().vehiculo_Eliminado);
+
+         
+            
+            //lLAMOS NUESTRA TABLA DE DOCUMENTOS
+            tabla_vehiculos_documentos(row.data().id)
+
+             // seleccionar TAB1
+            $( "#tab8_equipo_info" ).click();
+
+            // abrir modal
+            $('#modal_vehiculo').modal({backdrop:false});
+        }
+    });
+});
+
+
+
+//Guardar y Editar vehículos
+$("#boton_guardar_vehiculo").click(function () {
+    
+    // valida campos vacios
+    var valida = this.form.checkValidity();
+    if (valida)
+    {
+        swal({   
+            title: "¿Desea guardar este vehículo?",   
+            text: "Registre un nuevo vehículo, para hacer uso de él.",   
+            type: "warning",   
+            showCancelButton: true,   
+            confirmButtonColor: "#DD6B55",   
+            confirmButtonText: "Guardar!",   
+            cancelButtonText: "Cancelar!",   
+            closeOnConfirm: false,   
+            closeOnCancel: false 
+        }, function(isConfirm){   
+            if (isConfirm)
+            {
+                // cerrar msj confirmacion
+                swal.close();
+
+                // enviar datos
+                $('#form_vehiculo').ajaxForm({
+                    dataType: 'json',
+                    type: 'POST',
+                    url: "/proveedorvehiculo",
+                    data: {
+                        api : 1
+                    },
+                    resetForm: false,
+                    success: function(data)
+                    {
+                        // Actualizar DATATABLE
+                        tabla_vehiculos(data.proveedor_id);
+
+                        // // Llenar DATATABLE alcances
+                        // if (TablaEquipos == null) {
+                        //     tabla_equipos(data.proveedor_id);
+                        // }
+                        // else{
+                        //     // TablaEquipos.destroy();
+                        //     // tabla_equipos(data.proveedor_id);
+                        //     TablaEquipos.ajax.url("/tablaproveedorequipo/"+data.proveedor_id).load();
+                        // }
+
+                        // actualiza boton
+                        $('#boton_guardar_vehiculo').html('Guardar <i class="fa fa-save"></i>');
+
+                        $("#checkbox_estado_vehiculo").prop('disabled', false);
+                        $("#checkbox_estado_vehiculo").prop('checked', true);
+
+                        // mensaje
+                        swal({
+                            title: "Correcto",
+                            text: "Información guardada correctamente",
+                            type: "success", // warning, error, success, info
+                            buttons: {
+                                visible: false, // true , false
+                            },
+                            timer: 1500,
+                            showConfirmButton: false
+                        });
+
+                        // cerrar modal
+                        $('#modal_vehiculo').modal('hide');
+                    },
+                    beforeSend: function() {
+                        $('#boton_guardar_vehiculo').html('Guardando <i class="fa fa-spin fa-spinner"></i>');
+                    },
+                    error: function(data) {
+                        
+                        // actualiza boton
+                        $('#boton_guardar_vehiculo').html('Guardar <i class="fa fa-save"></i>');
+
+                        // mensaje
+                        swal({
+                            title: "Error",
+                            text: "Error al guardar la información",
+                            type: "error", // warning, error, success, info
+                            buttons: {
+                                visible: false, // true , false
+                            },
+                            timer: 1500,
+                            showConfirmButton: false
+                        });
+
+                        return false;
+                    }
+                }).submit();
+                return false;
+            }
+            else 
+            {
+                // mensaje
+                swal({
+                    title: "Cancelado",
+                    text: "Acción cancelada",
+                    type: "error", // warning, error, success, info
+                    buttons: {
+                        visible: false, // true , false
+                    },
+                    timer: 1500,
+                    showConfirmButton: false
+                });   
+            } 
+        });
+        return false;
+        
+    }
+});
+
+
+function actualiza_estado_vehiculo()
+{
+    var mensaje = "";
+
+    if($('#checkbox_estado_vehiculo').prop("checked") == true){
+        $("#vehiculo_EstadoActivo").val(1);
+        mensaje = "vehículo activo";
+    }
+    else
+    {
+        $("#vehiculo_EstadoActivo").val(0);
+        mensaje = "vehículo Inactivo";
+    }
+
+
+    // enviar datos
+    $('#form_vehiculo').ajaxForm({
+        dataType: 'json',
+        type: 'POST',
+        url: "/proveedorvehiculo",
+         data: {
+            api:1
+        },
+        resetForm: false,
+        success: function(data) {
+
+            // Llenar DATATABLE 
+            if (TablaVehiculos == null) {
+                tabla_vehiculos(data.proveedor_id);
+            }
+            else{
+                // TablaSignatarios.destroy();
+                // tabla_signatarios(data.proveedor_id);
+                TablaVehiculos.ajax.url("/tablaproveedorvehiculo/"+data.proveedor_id).load();
+            }
+
+            // mensaje
+            swal({
+                title: "Estado modificado",
+                text: ""+mensaje,
+                type: "success", // warning, error, success, info
+                buttons: {
+                    visible: false, // true , false
+                },
+                timer: 2000,
+                showConfirmButton: false
+            });
+        },
+        beforeSend: function() {
+            //
+        },
+        error: function(data) {
+            // mensaje
+            swal({
+                title: "Error",
+                text: "Error al guardar la información",
+                type: "error", // warning, error, success, info
+                buttons: {
+                    visible: false, // true , false
+                },
+                timer: 2000,
+                showConfirmButton: false
+            });
+
+            return false;
+        }
+    }).submit();
+    return false;
+
+}
+// Documentos vehiculos
+
+$(document).ready(function() {
+    $("#boton_nuevo_vehiculo_documento").click(function() {
+        
+        if (vehiculo_id != 0)
+        {
+            // Borrar formulario
+            $('#form_vehiculo_documento').each(function(){
+                this.reset();
+            });
+
+            // actualizar campos HIDDEN
+            $("#vehiculo_doc_id").val(0);
+            $("#vehiculo_documento_id").val($("#vehiculo_id").val());
+            $("#vehiculo_documento_proveedor_id").val($("#proveedor_id").val());
+            $("#VEHICULO_DOCUMENTO_ELIMINADO").val(1);
+
+            // requerir campo DOCUMENTO
+            $('#VEHICULO_PDF').attr('required', true);
+
+            // Abrir modal
+            $('#modal_vehiculo_documento').modal({backdrop:false});
+        }
+        else
+        {
+            // mensaje
+            swal({
+                title: "No disponible",
+                text: "Aun no has guardado o seleccionado un vehiculo",
+                type: "warning", // warning, error, success, info
+                buttons: {
+                    visible: false, // true , false
+                },
+                timer: 3000,
+                showConfirmButton: false
+            });
+        }
+    });
+});
+
+
+
+
+
+
+function tabla_vehiculos_documentos(id)
+{
+    try 
+    {
+        var ruta = "/tablavehiculodocumento/"+id;
+
+        if (TablaVehiculosDocumentos  != null)
+        {
+            TablaVehiculosDocumentos .clear().draw();
+            TablaVehiculosDocumentos .ajax.url(ruta).load();
+        }
+        else
+        {
+            TablaVehiculosDocumentos  = $('#tabla_vehiculos_documentos').DataTable({
+                "ajax": {
+                    "url": ruta,
+                    "type": "get",
+                    "cache": false,
+                    error: function (xhr, error, code)
+                    {
+                        // console.log(xhr); console.log(code);
+                        tabla_vehiculos_documentos(id);
+                    },
+                    "data": {}
+                },
+                "columns": [
+                    {
+                        "data": "numero_registro" 
+                    },
+                    {
+                        "data": "NOMBRE_DOCUMENTO_VEHICULOS"
+                    },
+                    {
+                        "className": 'Pdf',
+                        "orderable": false,
+                        "data": null,
+                        "defaultContent": '<button type="button" class="btn btn-info btn-circle"><i class="fa fa-file-pdf-o"></i></button>'
+                    },
+                    {
+                        "className": 'Editar',
+                        "orderable": false,
+                        "data": 'boton_editar',
+                        "defaultContent": '-'
+                    },
+                    {
+                        "className": 'Eliminar',
+                        "orderable": false,
+                        "data": 'boton_eliminar',
+                        "defaultContent": '-'
+                    }
+                ],
+                "lengthMenu": [[5, 10, 20, 50, -1], [5, 10, 20, 50, "Todos"]],
+                // "rowsGroup": [1], //agrupar filas
+                "order": [[ 0, "desc" ]],
+                "ordering": true,
+                "processing": true,
+                "language": {
+                    "lengthMenu": "Mostrar _MENU_ Registros",
+                    "zeroRecords": "No se encontraron registros",
+                    "info": "Página _PAGE_ de _PAGES_ (Total _TOTAL_ registros)",
+                    "infoEmpty": "No se encontraron registros",
+                    "infoFiltered": "(Filtrado de _MAX_ registros)",
+                    "emptyTable": "No hay datos disponibles en la tabla",
+                    "loadingRecords": "Cargando datos....",
+                    "processing": "Procesando <i class='fa fa-spin fa-spinner fa-3x'></i>",
+                    "search": "Buscar",
+                    "paginate": {
+                        "first": "Primera",
+                        "last": "Ultima",
+                        "next": "Siguiente",
+                        "previous": "Anterior"
+                    }
+                }
+            });
+        }
+    }
+    catch (exception)
+    {
+        tabla_vehiculos_documentos(id);
+    }
+}
+
+
+
+ $('#tabla_vehiculos_documentos tbody').on('click', 'td.Pdf', function () {
+        var tr = $(this).closest('tr');
+        var row = TablaVehiculosDocumentos .row( tr );
+
+        // abrir modal
+        $('#modal_visor').modal({backdrop:false});
+
+        // TITULO DEL VISOR
+        $('#nombre_documento_visor').html(row.data().NOMBRE_DOCUMENTO_VEHICULOS);
+
+        // Mostrar PDF
+        if (parseInt(row.data().perfil) == 1 && parseInt(proveedor_Bloqueado) == 0)
+        {
+            $('#visor_documento').attr('src', '/assets/plugins/viewer-pdfjs/web/viewer.html?file=/vervehiculodocumentopdf/'+row.data().ID_VEHICULO_DOCUMENTO);
+        }
+        else
+        {
+            $('#visor_documento').attr('src', '/assets/plugins/viewer-pdfjs/web/viewer_read.html?file=/vervehiculodocumentopdf/'+row.data().ID_VEHICULO_DOCUMENTO);
+        }
+ });
+
+
+
+    
+
+$(document).ready(function()
+{
+    $('#tabla_vehiculos_documentos tbody').on('click', 'td.Editar', function ()
+    {
+        var tr = $(this).closest('tr');
+        var row = TablaVehiculosDocumentos .row( tr );
+
+        if (parseInt(row.data().accion_activa) > 0)
+        {
+            // Borrar formulario
+            $('#form_vehiculo_documento').each(function(){
+                this.reset();
+            });
+
+            // Llenar campos form
+            $("#NOMBRE_DOCUMENTO_VEHICULOS").val(row.data().NOMBRE_DOCUMENTO_VEHICULOS);
+            $("#DOCUMENTO_TIPO_VEHICULOS").val(row.data().DOCUMENTO_TIPO_VEHICULOS);
+
+           
+
+            // requerir campo DOCUMENTO
+            $('#VEHICULO_PDF').attr('required', false);
+
+            // actualizar campos HIDDEN
+            $("#vehiculo_doc_id").val(row.data().ID_VEHICULO_DOCUMENTO);
+            $("#vehiculo_documento_id").val(row.data().VEHICULO_ID);
+          
+            $("#VEHICULO_DOCUMENTO_ELIMINADO").val(1);
+
+            // abrir modal
+            $('#modal_vehiculo_documento').modal({backdrop:false});
+        }
+    });
+});
+
+
+
+$(document).ready(function()
+{
+    $('#tabla_vehiculos_documentos tbody').on('click', 'td.Eliminar', function() {
+        // Leer fila
+        var tr = $(this).closest('tr');
+        var row = TablaVehiculosDocumentos .row(tr);
+
+        if (parseInt(row.data().accion_activa) > 0)
+        {
+            swal({   
+                title: "¿Eliminar documento?",   
+                text: ""+row.data().NOMBRE_DOCUMENTO_VEHICULOS,
+                type: "warning",   
+                showCancelButton: true,   
+                confirmButtonColor: "#DD6B55",   
+                confirmButtonText: "Aceptar!",   
+                cancelButtonText: "Cancelar!",   
+                closeOnConfirm: false,   
+                closeOnCancel: false 
+            }, function(isConfirm){   
+                if (isConfirm)
+                {
+                    swal({   
+                        title: "¿Confirme eliminar documento?",   
+                        text: ""+row.data().NOMBRE_DOCUMENTO_VEHICULOS,
+                        type: "warning",   
+                        showCancelButton: true,   
+                        confirmButtonColor: "#DD6B55",   
+                        confirmButtonText: "Eliminar!",   
+                        cancelButtonText: "Cancelar!",   
+                        closeOnConfirm: false,   
+                        closeOnCancel: false 
+                    }, function(isConfirm){   
+                        if (isConfirm)
+                        {
+                            // Borrar formulario
+                            $('#form_vehiculo_documento').each(function(){
+                                this.reset();
+                            });
+
+                            // Llenar campos form
+                            $("#NOMBRE_DOCUMENTO_VEHICULOS").val(row.data().NOMBRE_DOCUMENTO_VEHICULOS);
+                            // $("#signatariodocumentopdf").val('');
+
+                            // actualizar campos HIDDEN
+                            $("#vehiculo_doc_id").val(row.data().ID_VEHICULO_DOCUMENTO)
+                            $("#vehiculo_documento_id").val(row.data().VEHICULO_ID);
+                            $("#vehiculo_documento_proveedor_id").val(proveedor_id);
+                            $("#VEHICULO_DOCUMENTO_ELIMINADO").val(0);
+
+                            // cerrar msj confirmacion
+                            swal.close();
+
+                            // enviar form
+                            $('#form_vehiculo_documento').ajaxForm({
+                                dataType: 'json',
+                                type: 'POST',
+                                url: "/proveedorvehiculo",
+                                data: {
+                                    api: 2
+                                },
+                                resetForm: false,
+                                success: function(data) {
+
+                                    // actualiza tabla
+                                    tabla_vehiculos_documentos(data.VEHICULO_ID);
+
+                                    // mensaje
+                                    swal({
+                                        title: "Eliminado",
+                                        text: "Registro eliminado correctamente",
+                                        type: "success", // warning, error, success, info
+                                        buttons: {
+                                            visible: false, // true , false
+                                        },
+                                        timer: 1500,
+                                        showConfirmButton: false
+                                    });
+                                },
+                                beforeSend: function() {
+                                    //espera
+                                },
+                                error: function(data) {
+                                    // mensaje
+                                    swal({
+                                        title: "Error",
+                                        text: "Error al eliminar la información",
+                                        type: "error", // warning, error, success, info
+                                        buttons: {
+                                            visible: false, // true , false
+                                        },
+                                        timer: 1500,
+                                        showConfirmButton: false
+                                    });
+                                }
+                            }).submit();
+                            return false;
+                        }
+                        else 
+                        {     
+                            // modificar valor del campo
+                            $('#VEHICULO_DOCUMENTO_ELIMINADO').val(1);
+                            
+                            // mensaje
+                            swal({
+                                title: "Cancelado",
+                                text: "Acción cancelada",
+                                type: "error", // warning, error, success, info
+                                buttons: {
+                                    visible: false, // true , false
+                                },
+                                timer: 500,
+                                showConfirmButton: false
+                            });   
+                        } 
+                    });
+                }
+                else 
+                {     
+                    // modificar valor del campo
+                    $('#VEHICULO_DOCUMENTO_ELIMINADO').val(1);
+                    
+                    // mensaje
+                    swal({
+                        title: "Cancelado",
+                        text: "Acción cancelada",
+                        type: "error", // warning, error, success, info
+                        buttons: {
+                            visible: false, // true , false
+                        },
+                        timer: 500,
+                        showConfirmButton: false
+                    });   
+                } 
+            });
+        }
+    });
+});
+
+//Guardar y Editar documentos de equipos
+$("#boton_guardar_vehiculo_documento").click(function() {
+    var guardar = 0;
+
+    // valida campos vacios
+    var valida = this.form.checkValidity();
+    if (valida)
+    {
+        if ($("#VEHICULO_PDF").val() != "")
+        {
+            // Tipo archivo
+            var archivo = $("#VEHICULO_PDF").val();
+            var extension = archivo.substring(archivo.lastIndexOf("."));
+
+            // valida tipo de archivo
+            if(extension == ".pdf" || extension == ".PDF")
+            {
+                guardar = 1;
+            }
+            else
+            {
+                // mensaje
+                swal({
+                    title: "Tipo de archivo incorrecto "+extension,
+                    text: "Solo se pueden cargar archivos tipo .PDF",
+                    type: "warning", // warning, error, success, info
+                    buttons: {
+                        visible: false, // true , false
+                    },
+                    timer: 3000,
+                    showConfirmButton: false
+                });
+
+                guardar = 0;
+                return false;
+            }
+        }
+        else
+        {
+            guardar = 1;
+        }
+
+        // guardar
+        if (guardar == 1)
+        {
+            // enviar datos
+            $('#form_vehiculo_documento').ajaxForm({
+                dataType: 'json',
+                type: 'POST',
+                url: "/proveedorvehiculo",
+                data: {
+                    api: 2
+                },
+                resetForm: false,
+                success: function(data)
+                {
+                    // actualiza tabla
+                    tabla_vehiculos_documentos(data.VEHICULO_ID);
+
+                    // actualiza boton
+                    $('#boton_guardar_vehiculo_documento').html('Guardar <i class="fa fa-save"></i>');
+
+                    // mensaje
+                    swal({
+                        title: "Correcto",
+                        text: "Información guardada correctamente",
+                        type: "success", // warning, error, success, info
+                        buttons: {
+                            visible: false, // true , false
+                        },
+                        timer: 1500,
+                        showConfirmButton: false
+                    });
+
+                    // cerrar modal
+                    $('#modal_vehiculo_documento').modal('hide');
+                },
+                beforeSend: function() {
+                    $('#boton_guardar_vehiculo_documento').html('Guardando <i class="fa fa-spin fa-spinner"></i>');
+                },
+                error: function(data) {
+                    
+                    // actualiza boton
+                    $('#boton_guardar_vehiculo_documento').html('Guardar <i class="fa fa-save"></i>');
+
+                    // mensaje
+                    swal({
+                        title: "Error",
+                        text: "Error al guardar la información",
+                        type: "error", // warning, error, success, info
+                        buttons: {
+                            visible: false, // true , false
+                        },
+                        timer: 1500,
+                        showConfirmButton: false
+                    });
+
+                    return false;
+                }
+            }).submit();
+            return false;
+        }
+    }
+});
+
+
+
+document.addEventListener('DOMContentLoaded', function() {
+    const tipoDocumentoSelect = document.getElementById('DOCUMENTO_TIPO_VEHICULOS');
+    const nombreDocumentoInput = document.getElementById('NOMBRE_DOCUMENTO_VEHICULOS');
+    
+    tipoDocumentoSelect.addEventListener('change', function() {
+        const opcionSeleccionada = this.value;
+        
+ 
+        const textoOpcionSeleccionada = this.options[this.selectedIndex].text;
+        
+ 
+        if (opcionSeleccionada === '5') {
+            nombreDocumentoInput.removeAttribute('readonly');
+            nombreDocumentoInput.value = '';
+        } else {
+ 
+            nombreDocumentoInput.setAttribute('readonly', true);
+            nombreDocumentoInput.value = textoOpcionSeleccionada;
+        }
+    });
 });

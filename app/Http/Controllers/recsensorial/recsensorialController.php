@@ -52,6 +52,8 @@ use App\modelos\recsensorial\controlCambiosModel;
 use App\modelos\recsensorial\recsensorialTablaClienteProporcionadoModel;
 use App\modelos\recsensorial\cat_descripcionarea;
 use App\modelos\recsensorialquimicos\catsustanciaModel;
+use App\modelos\recsensorialquimicos\gruposDeExposicionModel;
+
 
 use App\modelos\proyecto\proyectoModel;
 
@@ -977,22 +979,12 @@ class recsensorialController extends Controller
     {
         try {
 
-            $info = DB::select('CALL sp_puntos_muestreoPOE_cargados_b(?)', [$ID]);
-
-            if (!empty($info)) {
-
-                $dato["data"] = $info;
-                $dato["nuevo"] = 0;
-                return response()->json($dato);
-            } else {
-
-                $datos = DB::select('CALL sp_obtener_tabla_informe_final_b(?)', [$ID]);
+            $datos = DB::select('CALL sp_obtener_tabla_informe_final_b(?)', [$ID]);
 
 
-                $dato["data"] = $datos;
-                $dato["nuevo"] = 1;
-                return response()->json($dato);
-            }
+            $dato["data"] = $datos;
+            $dato["nuevo"] = 1;
+            return response()->json($dato);
         } catch (Exception $e) {
 
             $dato["msj"] = 'Error ' . $e->getMessage();
@@ -1166,6 +1158,10 @@ class recsensorialController extends Controller
                                     WHERE a.recsensorial_id = ?
                                     GROUP BY a.id, a.recsensorialarea_nombre", [$recsensorial_id]);
 
+            $puntos = DB::select("SELECT COUNT(*) AS PUNTOS
+                                    FROM recsensorial_tabla_informes
+                                    WHERE RECONOCIMIENTO_ID = ?", [$recsensorial_id]);
+
 
             //CREAMOS LAS OPCIONES PARA LAS AREAS
             foreach ($areas as $value) {
@@ -1179,6 +1175,7 @@ class recsensorialController extends Controller
 
 
             // respuesta
+            $dato['puntos'] = $puntos[0]->PUNTOS;
             $dato['opcionesaAreas'] = $opciones1;
             $dato['opcionesComponentes'] = $opciones2;
             $dato["msj"] = 'Informacion consultada correctamente';
@@ -2021,6 +2018,7 @@ class recsensorialController extends Controller
 
 
                     $request['PETICION_CLIENTE'] = isset($request['PETICION_CLIENTE']) ? $request['PETICION_CLIENTE'] : 0;
+                    $request['REQUIERE_CONCLUSION'] = isset($request['REQUIERE_CONCLUSION']) ? $request['REQUIERE_CONCLUSION'] : 0;
 
                     //VERIFICAMOS LAS OPCIONES DE LA PORTADA
                     $request['OPCION_PORTADA1'] = isset($request['OPCION_PORTADA1']) ? $request['OPCION_PORTADA1'] : null;
@@ -2048,63 +2046,25 @@ class recsensorialController extends Controller
 
             if (($request->opcion + 0) == 6) // GUARDAR O ACTUALIZAR INFORMACION PARA EL LA TABLA DEL INFORME
             {
-                if ($request['NUEVO'] == 1) //nuevo
-                {
-                    // AUTO_INCREMENT
-                    DB::statement('ALTER TABLE recsensorial_tabla_informes AUTO_INCREMENT=1;');
 
+                if ($request->ID_GRUPO) {
+                    foreach ($request->ID_GRUPO as $key => $value) {
 
-                    if ($request->CATEGORIA_ID) {
-                        foreach ($request->CATEGORIA_ID as $key => $value) {
-
-                            $guardar_columnas = recsensorialTablasInformesModel::create([
-                                'RECONOCIMIENTO_ID' => $request['RECONOCIMIENTO_ID'],
-                                'CATEGORIA_ID' => $value,
-                                'PRODUCTO_ID' => $request->PRODUCTO_ID[$key],
-                                'SUSTANCIA_ID' => $request->SUSTANCIA_ID[$key],
-                                'PPT_VIEJO' => $request->PPT_VIEJO[$key],
-                                'CT_VIEJO' => $request->CT_VIEJO[$key],
-                                'PUNTOS_VIEJO' => $request->PUNTOS_VIEJO[$key],
-                                'PUNTOS_NUEVO' => $request->PUNTOS_NUEVO[$key],
-                                'PPT_NUEVO' => $request->PPT_NUEVO[$key],
-                                'CT_NUEVO' => $request->CT_NUEVO[$key],
-                                'JUSTIFICACION' => $request->JUSTIFICACION[$key]
+                        $guardar_columnas = gruposDeExposicionModel::where('ID_GRUPO_EXPOSICION', $value)
+                            ->update([
+                                'PPT_VIEJO' => is_null($request->PPT_VIEJO[$key]) ? 0 : $request->PPT_VIEJO[$key],
+                                'CT_VIEJO' => is_null($request->CT_VIEJO[$key]) ? 0 : $request->CT_VIEJO[$key],
+                                'PUNTOS_VIEJO' => is_null($request->PUNTOS_VIEJO[$key]) ? 0 : $request->PUNTOS_VIEJO[$key],
+                                'PUNTOS_NUEVO' => is_null($request->PUNTOS_NUEVO[$key]) ? 0 : $request->PUNTOS_NUEVO[$key],
+                                'PPT_NUEVO' => is_null($request->PPT_NUEVO[$key]) ? 0 : $request->PPT_NUEVO[$key],
+                                'CT_NUEVO' => is_null($request->CT_NUEVO[$key]) ? 0 : $request->CT_NUEVO[$key],
+                                'JUSTIFICACION' => is_null($request->JUSTIFICACION[$key]) ? null : $request->JUSTIFICACION[$key]
 
                             ]);
-                        }
                     }
-
-                    $dato["msj"] = 'Información guardada con exito';
-                } else //editar
-                {
-
-
-
-                    $eliminar_columnas = recsensorialTablasInformesModel::where('RECONOCIMIENTO_ID', $request["RECONOCIMIENTO_ID"])->delete();
-
-                    if ($request->CATEGORIA_ID) {
-                        foreach ($request->CATEGORIA_ID as $key => $value) {
-
-                            $guardar_columnas = recsensorialTablasInformesModel::create([
-                                'RECONOCIMIENTO_ID' => $request['RECONOCIMIENTO_ID'],
-                                'CATEGORIA_ID' => $value,
-                                'PRODUCTO_ID' => $request->PRODUCTO_ID[$key],
-                                'SUSTANCIA_ID' => $request->SUSTANCIA_ID[$key],
-                                'PPT_VIEJO' => $request->PPT_VIEJO[$key],
-                                'CT_VIEJO' => $request->CT_VIEJO[$key],
-                                'PUNTOS_VIEJO' => $request->PUNTOS_VIEJO[$key],
-                                'PUNTOS_NUEVO' => $request->PUNTOS_NUEVO[$key],
-                                'PPT_NUEVO' => $request->PPT_NUEVO[$key],
-                                'CT_NUEVO' => $request->CT_NUEVO[$key],
-                                'JUSTIFICACION' => $request->JUSTIFICACION[$key]
-
-                            ]);
-                        }
-                    }
-
-
-                    $dato["msj"] = 'Información actualizada con exito';
                 }
+
+                $dato["msj"] = 'Información guardada con exito';
             }
 
             if (($request->opcion + 0) == 7) // GUARDAR O ACTUALIZAR INFORMACION PARA EL LA TABLA DEL INFORME DE LOS PUNTOS SOLICITADOS POR EL CLIENTE

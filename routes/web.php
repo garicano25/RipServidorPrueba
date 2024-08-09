@@ -697,6 +697,8 @@ Route::get('recsensorialquimicosinventarioeliminar/{recsensorial_id}/{recsensori
 
 Route::get('recsensorialselectcategoriasxareaquimicos/{recsensorialarea_id}', ['as' => 'recsensorialquimicosinventario.recsensorialselectcategoriasxareaquimicos', 'uses' => 'recsensorialquimicos\recsensorialquimicosinventarioController@recsensorialselectcategoriasxareaquimicos']);
 
+Route::get('obtenerCategoriasReconomiento/{recsensorialarea_id}/{clasificacion}/{sustancia}', ['as' => 'recsensorialquimicosinventario.obtenerCategoriasReconomiento', 'uses' => 'recsensorialquimicos\recsensorialquimicosinventarioController@obtenerCategoriasReconomiento']);
+
 Route::get('recsensorialquimicoscatsustancias/{recsensorialarea_id}/{recsensorialcategoria_id}', ['as' => 'recsensorialquimicosinventario.recsensorialquimicoscatsustancias', 'uses' => 'recsensorialquimicos\recsensorialquimicosinventarioController@recsensorialquimicoscatsustancias']);
 
 Route::get('recsensorialquimicosresumen/{recsensorial_id}/{numero_tabla}', ['as' => 'recsensorialquimicosinventario.recsensorialquimicosresumen', 'uses' => 'recsensorialquimicos\recsensorialquimicosinventarioController@recsensorialquimicosresumen']);
@@ -1653,8 +1655,12 @@ Route::get('detalleprogramagestion/{proyecto_id}/{proyectoordentrabajo_id}/{fase
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////Route::get('/mostrar-plantilla', function () {
 
 // Catalogo de cliente
-Route::get('/banco-imagenes', function () { return view('catalogos.plantilla.plantillas');})->name('banco-imagenes');
-Route::get('/clientecatalogo', function () { return view('catalogos.cliente.catalogocliente');})->name('clientecatalogo');
+Route::get('/banco-imagenes', function () {
+    return view('catalogos.plantilla.plantillas');
+})->name('banco-imagenes');
+Route::get('/clientecatalogo', function () {
+    return view('catalogos.cliente.catalogocliente');
+})->name('clientecatalogo');
 
 
 

@@ -68,6 +68,13 @@
                                     @elseif(auth()->user()->hasRoles(['Operativo HI']))
                                     <b href="#" class="btn btn-rounded btn-danger">Operativo HI</b>
 
+                                    @elseif(auth()->user()->hasRoles(['Psicólogo']))
+                                    <b href="#" class="btn btn-rounded btn-danger">Psicólogo</b>
+
+
+                                    @elseif(auth()->user()->hasRoles(['Ergónomo']))
+                                    <b href="#" class="btn btn-rounded btn-danger">Ergónomo</b>
+
 
                                     @elseif(auth()->user()->hasRoles(['Externo']))
                                     <b href="#" class="btn btn-rounded btn-info">Proveedor</b>
@@ -99,21 +106,21 @@
                 </div>
                 <h2>Recursos Administrativos</h2>
                 <div class="wrapper mt-3">
-                    @if(!auth()->user()->hasRoles(['Superusuario', 'Administrador','Coordinador','Compras','Almacén','Operativo HI']))
+                    @if(!auth()->user()->hasRoles(['Superusuario', 'Administrador','Coordinador','Compras','Almacén','Operativo HI','Psicólogo','Ergónomo']))
                     <a class="unauthorized" href="#">
                         <span>Restringido</span>
 
                         @else
-                        @if(auth()->user()->hasRoles(['Superusuario', 'Administrador','Coordinador','Compras','Almacén','Operativo HI']))
+                        @if(auth()->user()->hasRoles(['Superusuario', 'Administrador','Coordinador']))
                         <a class="cta" href="/tablero">
                             <span>Ingresar</span>
 
-                            @elseif(auth()->user()->hasRoles(['Superusuario', 'Administrador', 'Coordinador','Compras','Almacén','Operativo HI']))
+                            @elseif(auth()->user()->hasRoles(['Superusuario', 'Administrador', 'Coordinador','Compras','Almacén','Operativo HI','Psicólogo','Ergónomo']))
                             <a class="cta" href="{{route('cliente.index')}}">
                                 <span>Ingresar</span>
 
-                                @elseif(auth()->user()->hasRoles(['Superusuario', 'Administrador', 'Coordinador','Compras','Almacén','Operativo HI']))
-                                <a class="cta" href="{{route('proveedor.index')}}">
+                                @elseif(auth()->user()->hasRoles(['Psicólogo','Ergónomo']))
+                                <a class="cta" href="{{route('cliente.index')}}">
                                     <span>Ingresar</span>
 
                                     @endif
@@ -138,16 +145,16 @@
                 </div>
                 <h2>Planeación de proyectos</h2>
                 <div class="wrapper mt-3">
-                    @if(!auth()->user()->hasRoles(['Superusuario', 'Administrador','Coordinador','Compras','Almacén','Operativo HI']))
+                    @if(!auth()->user()->hasRoles(['Superusuario', 'Administrador','Coordinador','Compras','Almacén','Operativo HI','Psicólogo','Ergónomo']))
                     <a class="unauthorized" href="#">
                         <span>Restringido</span>
 
                         @else
-                        @if(auth()->user()->hasRoles(['Superusuario', 'Administrador','Coordinador','Compras','Almacén','Operativo HI']))
+                        @if(auth()->user()->hasRoles(['Superusuario', 'Administrador','Coordinador','Compras','Almacén','Operativo HI','Psicólogo','Ergónomo']))
                         <a class="cta" href="{{route('proyectos.index')}}">
                             <span>Ingresar</span>
 
-                            @elseif(auth()->user()->hasRoles(['Superusuario', 'Administrador', 'Coordinador','Compras','Almacén','Operativo HI']))
+                            @elseif(auth()->user()->hasRoles(['Superusuario', 'Administrador', 'Coordinador','Compras','Almacén','Operativo HI','Psicólogo','Ergónomo']))
                             <a class="cta" href="{{route('proyectos.index')}}">
                                 <span>Ingresar</span>
 
@@ -174,7 +181,7 @@
                 </div>
                 <h2>Higiene Industrial</h2>
                 <div class="wrapper mt-5">
-                    @if(!auth()->user()->hasRoles(['Superusuario', 'Administrador','Coordinador','Compras','Almacén','Operativo HI']))
+                    @if(!auth()->user()->hasRoles(['Superusuario', 'Administrador','Coordinador','Compras','Almacén','Operativo HI','Psicólogo','Ergónomo']))
                     <a class="unauthorized" href="#">
                         <span>Restringido</span>
 
@@ -183,8 +190,8 @@
                         <a class="cta" href="{{route('programa.index')}}">
                             <span>Ingresar</span>
 
-                            @elseif(auth()->user()->hasRoles(['Superusuario', 'Administrador', 'Coordinador','Compras','Almacén','Operativo HI']))
-                            <a class="cta" href="{{route('programa.index')}}">
+                            @elseif(auth()->user()->hasRoles(['Psicólogo','Ergónomo']))
+                            <a class="cta" href="{{route('informes.index')}}">
                                 <span>Ingresar</span>
 
                                 @endif

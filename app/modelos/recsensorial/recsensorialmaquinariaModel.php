@@ -15,7 +15,8 @@ class recsensorialmaquinariaModel extends Model
         'recsensorialmaquinaria_cantidad',
         'recsensorialmaquinaria_contenido',
         'recsensorialmaquinaria_unidadMedida',
-
+        'recsensorialmaquinaria_descripcionfuente',
+        'recsensorialmaquinaria_nombrecomun',
         'recsensorialmaquinaria_quimica',
         'recsensorialmaquinaria_afecta'
     ];

@@ -2863,7 +2863,7 @@ $(document).ready(function()
 	setTimeout(function()
 	{
 		tabla_reporte_areas(proyecto.id, reporteiluminacion_id);
-	}, 3000);
+	}, 5000);
 });
 
 
@@ -3069,7 +3069,7 @@ $("#boton_reporte_nuevaarea").click(function()
 	$.ajax({
 		type: "GET",
 		dataType: "json",
-		url: "/reporteiluminacionareascategorias/"+proyecto.id+"/"+reporteiluminacion_id+"/"+0+"/"+areas_poe,
+		url: "/reporteiluminacionareascategorias/"+proyecto.id+"/"+reporteiluminacion_id+"/"+ 0 +"/"+areas_poe,
 		data:{},
 		cache: false,
 		success:function(dato)
@@ -3831,7 +3831,7 @@ $(document).ready(function()
 		tabla_reporte_reflexionresultados(proyecto.id, reporteiluminacion_id);
 		tabla_reporte_matrizexposicion(proyecto.id, reporteiluminacion_id);
 		reporteiluminacion_dashboard(proyecto.id, reporteiluminacion_id);
-	}, 4000);
+	}, 6000);
 });
 
 
@@ -5689,7 +5689,7 @@ $(document).ready(function()
 	setTimeout(function()
 	{
 		tabla_reporte_recomendaciones(proyecto.id, reporteiluminacion_id, agente_nombre);
-	}, 4500);
+	}, 6500);
 });
 
 
@@ -6819,14 +6819,14 @@ $("#botonguardar_reporte_equipoutilizado").click(function()
 
 //=================================================
 // INFORME DE RESULTADOS LABORATORIO
-
+	
 
 $(document).ready(function()
 {
 	setTimeout(function()
 	{
 		tabla_reporte_informeresultados(proyecto.id, reporteiluminacion_id, agente_nombre);
-	}, 6000);
+	}, 10500);
 });
 
 
@@ -7243,7 +7243,7 @@ $('#tabla_reporte_anexos tbody').on('click', 'td.certificadopdf', function()
 
 	if (row.data().acreditacion_SoportePDF)
 	{
-		$('#visor_documento').attr('src', '/assets/plugins/viewer-pdfjs/web/viewer_read.html?file=/veracreditaciondocumento/'+row.data().id);
+		$('#visor_documento').attr('src', '/assets/plugins/viewer-pdfjs/web/viewer_read.html?file=/veracreditaciondocumento/'+row.data().id + '/' + 0);
 
 		// Titulo modal
 		$('#modal_visor .modal-title').html(row.data().catTipoAcreditacion_Nombre+' '+row.data().acreditacion_Entidad+' ['+row.data().acreditacion_Numero+']');
@@ -8825,3 +8825,212 @@ function obtenerdatos() {
         }
     });
 }
+
+
+
+
+//FUNCION PARA CARGAR PUNTOS POR MEDIO DE UN EXCEL
+$(document).ready(function () {
+
+    $('#boton_reporte_iluminacion_importar_area').on('click', function (e) {
+        e.preventDefault();
+
+        $('#divCargaArea').css('display', 'none');
+        $('#alertaVerificacion1').css('display', 'none');
+
+        $('#formExcelArea')[0].reset();
+
+        $('#modal_excel_areas').modal({backdrop:false});
+
+    })
+
+    $("#botonCargarExcelArea").click(function() {
+        var guardar = 0;
+
+        // valida campos vacios
+        var valida = this.form.checkValidity();
+        if (valida){
+            if ($("#excelArea").val() != ""){
+                // Tipo archivo
+                var archivo = $("#excelArea").val();
+                var extension = archivo.substring(archivo.lastIndexOf("."));
+
+                // valida tipo de archivo
+                if(extension == ".xlsx" || extension == ".XLSX"){
+                    guardar = 1;
+                }
+                else{
+                    // mensaje
+                    swal({
+                        title: "Tipo de archivo incorrecto "+extension,
+                        text: "Solo se pueden cargar archivos tipo .xlsx",
+                        type: "warning", // warning, error, success, info
+                        buttons: {
+                            visible: false, // true , false
+                        },
+                        timer: 3000,
+                        showConfirmButton: false
+                    });
+
+                    guardar = 0;
+                    return false;
+                }
+            }
+            else{
+                guardar = 0;
+            }
+
+            // guardar
+            if (guardar == 1){
+            
+                swal({   
+                    title: "¿Está  seguro de cargar este documento?",   
+                    text: "Está acción  no se puede revertir",   
+                    type: "warning",   
+                    showCancelButton: true,   
+                    confirmButtonColor: "#DD6B55",   
+                    confirmButtonText: "Guardar!",   
+                    cancelButtonText: "Cancelar!",   
+                    closeOnConfirm: false,   
+                    closeOnCancel: false 
+                }, function (isConfirm) {   
+                    
+                    if (isConfirm){
+                        // cerrar msj confirmacion
+                        swal.close();
+
+                        // enviar datos
+                        $('#formExcelArea').ajaxForm({
+                            dataType: 'json',
+                            type: 'POST',
+                            url: "/reporteiluminacion",
+                            data: {
+								opcion: 8001,
+
+								proyecto_id: proyecto.id
+
+                                
+                            },
+                            contentType: false,
+                            processData: false,
+                            success: function (dato) {
+
+                                // actualizar boton
+                                $('#botonCargarExcelArea').prop('disabled', false);
+                                $('#divCargaArea').css('display', 'none');
+                                
+                                if (dato.code == 200) {
+                                    
+                                    // cerrar modal
+                                    $('#modal_excel_areas').modal('hide');
+    
+                                    // mensaje
+                                    swal({
+                                        title: "Los datos fueron cargados exitosamente",
+                                        text: ""+dato.msj,
+                                        type: "success", // warning, error, success, info
+                                        buttons: {
+                                            visible: true, // true , false
+                                        },
+                                        showConfirmButton: true,
+                                        showCancelButton: false
+                                    });
+
+                                    //Recargamos la tabla
+                                   	menureporte_estado("menureporte_0", 1);
+
+				
+									tabla_reporte_revisiones(proyecto.id);
+									tabla_reporte_categorias(proyecto.id, reporteiluminacion_id);
+									tabla_reporte_areas(proyecto.id, reporteiluminacion_id);
+									tabla_reporte_iluminacionpuntos(proyecto.id, reporteiluminacion_id);
+									tabla_reporte_iluminacionresultados(proyecto.id, reporteiluminacion_id);
+									tabla_reporte_reflexionresultados(proyecto.id, reporteiluminacion_id);
+									tabla_reporte_matrizexposicion(proyecto.id, reporteiluminacion_id);
+									reporteiluminacion_dashboard(proyecto.id, reporteiluminacion_id);
+
+
+                                
+                                } else {
+
+                                     swal({
+                                        title: "Ocurrio un error al intentar insertar los datos.",
+                                        text: ""+dato.msj,
+                                        type: "error", // warning, error, success, info
+                                        buttons: {
+                                            visible: true, // true , false
+                                        },
+                                        showConfirmButton: true,
+                                        showCancelButton: false
+									 });
+									
+                                }
+
+                                
+                            },
+                            beforeSend: function () {
+
+                                $('#botonCargarExcelArea').prop('disabled', true);
+                                $('#divCargaArea').css('display', 'block');
+                            },
+                            error: function(dato) {
+                                
+                                // actualiza boton
+                                $('#botonCargarExcelArea').prop('disabled', false);
+                                $('#divCargaArea').css('display', 'none');
+
+                                // mensaje
+                                swal({
+                                    title: "Error al cargar los puntos.",
+                                    text: ""+dato.msj,
+                                    type: "error", // warning, error, success, info
+                                    buttons: {
+                                        visible: false, // true , false
+                                    },
+                                    timer: 1500,
+                                    showConfirmButton: false
+                                });
+
+                                return false;
+                            }
+                        }).submit();
+                        return false;
+                    }
+                    else 
+                    {
+                        // mensaje
+                        swal({
+                            title: "Cancelado",
+                            text: "Acción cancelada",
+                            type: "error", // warning, error, success, info
+                            buttons: {
+                                visible: false, // true , false
+                            },
+                            timer: 1500,
+                            showConfirmButton: false
+                        });   
+                    } 
+                });
+                return false;
+            }
+        }
+    });
+
+
+
+    $('#excelArea').change(function () {
+        
+        if ($(this).val()) {
+            
+            $('#alertaVerificacion1').css('display', 'block');
+
+        } else {
+            $('#alertaVerificacion1').css('display', 'none');
+            
+        }
+    });
+
+});
+
+
+

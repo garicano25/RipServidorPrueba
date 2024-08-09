@@ -201,8 +201,14 @@
 											<input type="text" class="form-control" id="catsustancia_nombre" name="catsustancia_nombre" required>
 										</div>
 									</div>
+									<div class="col-6">
+										<div class="form-group mt-2">
+											<label>Nombre común </label>
+											<input type="text" class="form-control" id="catsustancia_nombreComun" name="catsustancia_nombreComun">
+										</div>
+									</div>
 
-									<div class="col-12 mt-2">
+									<div class="col-6 mt-2">
 										<div class="form-group">
 											<label>Nombre del fabricante *</label>
 											<input type="text" class="form-control" id="catsustancia_fabricante" name="catsustancia_fabricante" required>

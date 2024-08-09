@@ -797,6 +797,12 @@
 							<button type="button" class="btn btn-default waves-effect botoninforme" data-toggle="tooltip" title="Nueva área" id="boton_reporte_nuevaarea">
 								<span class="btn-label"><i class="fa fa-plus"></i></span>Nueva área
 							</button>
+
+							<button type="button" class="btn btn-default waves-effect botoninforme" data-toggle="tooltip" title="Importar" id="boton_reporte_iluminacion_importar_area">
+								<span class="btn-label"><i class="fa fa-file-excel-o"></i></span>Importar
+							</button>
+
+
 						</ol>
 						<table class="table-hover tabla_info_centrado" width="100%" id="tabla_reporte_area">
 							<thead>
@@ -828,8 +834,8 @@
 									<th width="150">Área</th>
 									<th>Categoría</th>
 									<th width="200">Descripción de las actividades<br>que desarrolla</th>
-									<th width="120">luz natural</th>
-									<th width="120">Ilumi. localizada</th>
+									<th width="120">Tipo de iluminación</th>
+									{{-- <th width="120">Ilumi. localizada</th> --}}
 									<th width="80">Jornada</th>
 								</tr>
 							</thead>
@@ -849,7 +855,7 @@
 									<th width="">Área</th>
 									<th width="80">Color de<br>superficie</th>
 									<th width="80">Tipo de<br>superficie</th>
-									<th width="80">luz<br>natural</th>
+									<th width="80">Tipo<br>de iluminación</th>
 									<th width="200">Sistema de iluminación</th>
 								</tr>
 							</thead>
@@ -2023,9 +2029,9 @@
 								<label>Tipo de iluminación</label>
 								<select class="custom-select form-control" id="reportearea_tipoiluminacion" name="reportearea_tipoiluminacion" required>
 									<option value=""></option>
-									<option value="1">Natural</option>
-									<option value="2">Artificial</option>
-									<option value="3">Natural y artificial</option>
+									<option value="Natural">Natural</option>
+									<option value="Artificial">Artificial</option>
+									<option value="Natural y artificial">Natural y artificial</option>
 								</select>
 							</div>
 						</div>
@@ -2449,6 +2455,72 @@
 <!-- MODAL-IMPORTAR-PUNTOS -->
 <!-- ============================================================== -->
 
+
+<!-- ============================================================== -->
+<!-- MODAL-IMPORTAR-AREAS -->
+<!-- ============================================================== -->
+<!-- Modal Excel áreas -->
+
+<div id="modal_excel_areas" class="modal fade bs-example-modal-lg" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" style="display: none;">
+	<div class="modal-dialog modal-lg">
+		<div class="modal-content">
+			<form enctype="multipart/form-data" method="post" name="formExcelArea" id="formExcelArea">
+				<div class="modal-header">
+					<button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+					<h4 class="modal-title">Cargar áreas por medio de un Excel</h4>
+				</div>
+				<div class="modal-body">
+					<div class="row">
+						{!! csrf_field() !!}
+						<div class="col-12">
+							<div class="form-group">
+								<label> Documento Excel *</label>
+								<div class="fileinput fileinput-new input-group" data-provides="fileinput">
+									<div class="form-control" data-trigger="fileinput" id="input_file_excel_documento_areas">
+										<i class="fa fa-file fileinput-exists"></i>
+										<span class="fileinput-filename"></span>
+									</div>
+									<span class="input-group-addon btn btn-secondary btn-file">
+										<span class="fileinput-new">Seleccione</span>
+										<span class="fileinput-exists">Cambiar</span>
+										<input type="file" accept=".xls,.xlsx" name="excelArea" id="excelArea" required>
+									</span>
+									<a href="#" class="input-group-addon btn btn-secondary fileinput-exists" data-dismiss="fileinput">Quitar</a>
+								</div>
+							</div>
+						</div>
+					</div>
+					<div class="row mx-2" id="alertaVerificacion1" style="display:none">
+						<p class="text-danger"><i class="fa fa-info-circle" aria-hidden="true"></i> Por favor, asegúrese de que el archivo Excel contenga los formatos válidos </p>
+					</div>
+					<div class="row mt-3" id="divCargaArea" style="display: none;">
+
+						<div class="col-12 text-center">
+							<h2>Cargando lista de puntos espere un momento...</h2>
+						</div>
+						<div class="col-12 text-center">
+							<i class='fa fa-spin fa-spinner fa-5x'></i>
+						</div>
+
+					</div>
+				</div>
+				<div class="modal-footer">
+					<button type="button" class="btn btn-default waves-effect" data-dismiss="modal">Cerrar</button>
+
+					<button type="submit" class="btn btn-danger waves-effect waves-light" id="botonCargarExcelArea">
+						Cargar puntos <i class="fa fa-upload" aria-hidden="true"></i>
+					</button>
+
+				</div>
+			</form>
+		</div>
+	</div>
+</div>
+
+
+<!-- ============================================================== -->
+<!-- MODAL-IMPORTAR-AREAS -->
+<!-- ============================================================== -->
 
 <!-- ============================================================== -->
 <!-- MODAL-REPORTE-CANCELACION OBSERVACION -->

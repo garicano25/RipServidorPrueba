@@ -2381,7 +2381,7 @@ $(document).ready(function()
 	setTimeout(function()
 	{
 		tabla_reporte_areas(proyecto.id, reporteregistro_id);
-	}, 3000);
+	}, 6000);
 });
 
 
@@ -3249,7 +3249,7 @@ $(document).ready(function()
 	setTimeout(function()
 	{
 		tabla_reporte_5_6_equipoauditivo(proyecto.id, reporteregistro_id);
-	}, 3500);
+	}, 7000);
 });
 
 
@@ -3762,7 +3762,7 @@ $(document).ready(function()
 	setTimeout(function()
 	{
 		tabla_reporte_epp(proyecto.id, reporteregistro_id);
-	}, 4000);
+	}, 7000);
 });
 
 
@@ -4175,7 +4175,7 @@ $(document).ready(function()
 	setTimeout(function()
 	{
 		tabla_reporte_6_2(proyecto.id, reporteregistro_id);
-	}, 4500);
+	}, 6000);
 });
 
 
@@ -4824,7 +4824,7 @@ $(document).ready(function()
 	setTimeout(function()
 	{
 		tabla_reporte_7_1(proyecto.id, reporteregistro_id);
-	}, 5000);
+	}, 7000);
 });
 
 
@@ -5302,7 +5302,7 @@ $(document).ready(function()
 	setTimeout(function()
 	{
 		tabla_reporte_7_2(proyecto.id, reporteregistro_id);
-	}, 5500);
+	}, 7500);
 });
 
 
@@ -8325,23 +8325,6 @@ function tabla_reporte_equipoutilizado(proyecto_id, reporteregistro_id, agente_n
 						data: "vigencia",
 						defaultContent: "-"
 					},
-					{
-						className: 'certificadopdf',
-						orderable: false,
-						data: "certificado",
-						defaultContent: "-"
-					},
-					{
-						data: "checkbox_carta",
-						defaultContent: "-",
-						orderable: false,
-					},
-					{
-						className: 'cartapdf',
-						data: "carta",
-						defaultContent: "-",
-						orderable: false,
-					},
 				],
 				lengthMenu: [[20, 50, 100, -1], [20, 50, 100, "Todos"]],
 				// rowsGroup: [0, 1], //agrupar filas
@@ -9047,7 +9030,7 @@ $('#tabla_reporte_acreditacionaprobacion tbody').on('click', 'td.certificadopdf'
 
 	if (row.data().acreditacion_SoportePDF)
 	{
-		$('#visor_documento').attr('src', '/assets/plugins/viewer-pdfjs/web/viewer_read.html?file=/veracreditaciondocumento/'+row.data().id);
+		$('#visor_documento').attr('src', '/assets/plugins/viewer-pdfjs/web/viewer_read.html?file=/veracreditaciondocumento/'+row.data().id + '/' + 0);
 
 		// Titulo modal
 		$('#modal_visor .modal-title').html(row.data().catTipoAcreditacion_Nombre+' '+row.data().acreditacion_Entidad+' ['+row.data().acreditacion_Numero+']');

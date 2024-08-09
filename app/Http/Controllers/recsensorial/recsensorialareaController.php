@@ -11,6 +11,8 @@ use App\modelos\recsensorial\recsensorialareapruebasModel;
 use App\modelos\recsensorial\recsensorialareacategoriasModel;
 use App\modelos\recsensorial\recsensorialcategoriaModel;
 use App\modelos\clientes\clienteModel;
+use App\modelos\recsensorialquimicos\gruposDeExposicionModel;
+
 use DB;
 use Image;
 use Illuminate\Support\Facades\Auth;
@@ -388,6 +390,14 @@ class recsensorialareaController extends Controller
 
 
                     ]);
+
+                    //actualizamos el ID de los grupos de exposicion homogenea en caso de que exitan algunas relacions
+                    gruposDeExposicionModel::where('RECSENSORIAL_ID', $request['recsensorial_id'])
+                        ->where('AREA_ID', $area->id)
+                        ->where('CATEGORIA_ID', $request->categoria[$key])
+                        ->update([
+                            'RELACION_AREA_CAT_ID' => $sustancia->id
+                        ]);
                 }
 
                 // mensaje

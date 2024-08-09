@@ -147,6 +147,10 @@
                                                 <i class="fa fa-desktop"></i><br>
                                                 <span>Equipos</span>
                                             </div>
+                                            <div class="multisteps-form__progress-btn" id="steps_menu_tab8">
+                                                <i class="fa fa-car"></i><br>
+                                                <span>Vehículos</span>
+                                            </div>
                                             <div class="multisteps-form__progress-btn" id="steps_menu_tab4">
                                                 <i class="fa fa fa-vcard-o"></i><br>
                                                 <span>Personal</span>
@@ -510,6 +514,60 @@
                                                     </div> --}}
                                                 </div>
                                             </div>
+                                            <!-- STEP 8 -->
+                                            <div class="multisteps-form__panel" data-animation="scaleIn" id="steps_contenido_tab8">
+                                                <div class="multisteps-form__content">
+                                                    <div class="row">
+                                                        <div class="col-12">
+                                                            <ol class="breadcrumb m-b-10">
+                                                                @if(auth()->user()->hasRoles(['Superusuario', 'Administrador','Almacén']))
+                                                                <h2 style="color: #ffff; margin: 0;"><i class="fa fa-car"></i> Vehículos </h2>
+
+                                                                <button type="button" class="btn btn-secondary waves-effect waves-light botonnuevo_moduloproveedores d-none" data-toggle="tooltip" title="Cargar Vehículos por medio de un archivo Excel" id="boton_cargarExcelVehiculos" style="margin-left: 75%;">
+                                                                    Importar <i class="fa fa-file-excel-o" aria-hidden="true"></i>
+                                                                </button>
+
+                                                                <button type="button" class="btn btn-secondary waves-effect waves-light botonnuevo_moduloproveedores" data-toggle="tooltip" title="Nuevo Vehículos" id="boton_nuevo_vehiculo" style="margin-left: auto;">
+                                                                    Vehículo <i class="fa fa-plus p-1"></i>
+                                                                </button>
+                                                                @else
+                                                                <h2 style="color: #ffff; margin: 0;"><i class="fa fa-car"></i> Vehículos </h2>
+                                                                @endif
+                                                            </ol>
+                                                            <div class="table-responsive">
+                                                                <table class="table table-hover stylish-table" id="tabla_vehiculos" width="100%">
+                                                                    <thead>
+                                                                        <tr>
+                                                                            <th style="width: 60px!important;">No.</th>
+                                                                            {{-- <th>Factor de riesgo / Servicio</th> --}}
+                                                                            <th>Marca</th>
+                                                                            <th>Modelo</th>
+                                                                            <th>Serie</th>
+                                                                            <th>Placa</th>
+                                                                            <!-- <th style="width: 80px!important;">PDF</th>
+                                                                            <th style="width: 80px!important;">Carta</th> -->
+                                                                            <th style="width: 120px!important;">Estado</th>
+                                                                            <th style="width: 80px!important;">Editar</th>
+                                                                        </tr>
+                                                                    </thead>
+                                                                    <tbody>
+                                                                    </tbody>
+                                                                </table>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    {{-- <div class="button-row d-flex mt-4">
+                                                        <button type="button" class="btn btn-secondary js-btn-prev">
+                                                            <i class="fa fa-arrow-left"></i> Anterior
+                                                        </button>
+                                                        <button type="button" class="btn btn-secondary ml-auto js-btn-next">
+                                                            Siguiente <i class="fa fa-arrow-right"></i>
+                                                        </button>
+                                                    </div> --}}
+                                                </div>
+                                            </div>
+
+
                                             <!--STEP 4-->
                                             <div class="multisteps-form__panel" data-animation="scaleIn" id="steps_contenido_tab4">
                                                 <div class="multisteps-form__content">
@@ -1268,6 +1326,180 @@
     </div>
 </div>
 <!-- /.Modal equipos -->
+
+
+
+
+
+
+<!-- Modal Vehículos -->
+<div id="modal_vehiculo" class="modal fade bs-example-modal-lg" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" style="display: none;">
+    <div class="modal-dialog modal-lg" style="min-width: 86%;">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                <h4 class="modal-title">Equipo</h4>
+            </div>
+            <div class="modal-body">
+                <div class="row">
+                    <div class="col-12">
+                        <div class="card">
+                            <ul class="nav nav-tabs profile-tab" role="tablist">
+                                <li class="nav-item">
+                                    <a class="nav-link active" data-toggle="tab" href="#tab8_equipo" id="tab8_equipo_info" role="tab">Información del Vehículo</a>
+                                </li>
+                                <li class="nav-item">
+                                    <a class="nav-link" data-toggle="tab" href="#tab9_equipo" role="tab">Documentos</a>
+                                </li>
+                            </ul>
+
+                            <div class="tab-content">
+                                <!-- tab 1 -->
+                                <div class="tab-pane active" id="tab8_equipo" role="tabpanel">
+                                    <div class="card-body">
+                                        <style type="text/css" media="screen">
+                                            .dropify-wrapper {
+                                                height: 300px !important;
+                                                /*tamaño estatico del campo foto*/
+                                            }
+                                        </style>
+                                        <form enctype="multipart/form-data" method="post" name="form_vehiculo" id="form_vehiculo">
+                                            <div class="row">
+                                                <div class="col-3">
+                                                    <div class="row">
+                                                        <div class="col-12">
+                                                            <div class="form-group">
+                                                                <label> Foto del Vehículo </label>
+                                                                <input type="file" accept="image/jpeg,image/x-png,image/gif" id="foto_vehiculo" name="foto_vehiculo" data-allowed-file-extensions="jpg png JPG PNG" data-height="240" data-default-file="" />
+                                                            </div>
+                                                            @if(auth()->user()->hasRoles(['Superusuario', 'Administrador','Almacén']))
+
+                                                            <center>
+                                                                <label> Estado del Vehículo </label>
+                                                                <div class="switch">
+                                                                    <label>
+                                                                        Inactivo
+                                                                        <input type="checkbox" id="checkbox_estado_vehiculo" checked onclick="actualiza_estado_vehiculo();">
+                                                                        <span class="lever switch-col-light-blue"></span>
+                                                                        Activo
+                                                                    </label>
+                                                                </div>
+                                                            </center>
+                                                            @endif
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="col-9">
+                                                    <div class="row">
+                                                        <div class="col-12">
+                                                            {!! csrf_field() !!}
+                                                            <input type="hidden" class="form-control" id="vehiculo_id" name="vehiculo_id" value="0">
+                                                            <input type="hidden" class="form-control" id="vehiculo_proveedor_id" name="proveedor_id" value="0">
+                                                        </div>
+
+                                                        <div class="col-8">
+                                                            <div class="form-group">
+                                                                <label> Marca del Vehículo*</label>
+                                                                <input type="text" class="form-control" id="vehiculo_marca" name="vehiculo_marca" required>
+                                                            </div>
+                                                        </div>
+                                                        <div class="col-4">
+                                                            <div class="form-group">
+                                                                <label> Línea del Vehículo*</label>
+                                                                <input type="text" class="form-control" id="vehiculo_linea" name="vehiculo_linea" required>
+                                                            </div>
+                                                        </div>
+
+                                                        <div class="col-4">
+                                                            <div class="form-group">
+                                                                <label> Modelo *</label>
+                                                                <input type="text" class="form-control" id="vehiculo_modelo" name="vehiculo_modelo" required>
+                                                            </div>
+                                                        </div>
+                                                        <div class="col-4">
+                                                            <div class="form-group">
+                                                                <label> Serie *</label>
+                                                                <input type="text" class="form-control" id="vehiculo_serie" name="vehiculo_serie" required>
+                                                            </div>
+                                                        </div>
+                                                        <div class="col-4">
+                                                            <div class="form-group">
+                                                                <label> Placa *</label>
+                                                                <input type="text" class="form-control" id="vehiculo_placa" name="vehiculo_placa" required>
+                                                            </div>
+                                                        </div>
+
+
+                                                        <div class="col-12">
+                                                            <input type="hidden" class="form-control" id="vehiculo_EstadoActivo" name="vehiculo_EstadoActivo" value="1">
+
+                                                            <input type="hidden" class="form-control" id="vehiculo_Eliminado" name="vehiculo_Eliminado" value="0">
+                                                        </div>
+
+                                                        <div class="col-12" style="text-align: right;">
+                                                            <div class="form-group">
+                                                                @if(auth()->user()->hasRoles(['Superusuario', 'Administrador','Almacén']))
+                                                                <button type="submit" class="btn btn-danger waves-effect waves-light botonguardar_moduloproveedores" id="boton_guardar_vehiculo">
+                                                                    Guardar <i class="fa fa-save"></i>
+                                                                </button>
+                                                                @endif
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </form>
+                                    </div>
+                                </div>
+                                <!--tab 2 -->
+                                <div class="tab-pane" id="tab9_equipo" role="tabpanel">
+                                    <div class="card-body">
+                                        <div class="row">
+                                            <div class="col-12">
+                                                <ol class="breadcrumb m-b-10">
+                                                    @if(auth()->user()->hasRoles(['Superusuario', 'Administrador','Almacén']))
+                                                    <button type="button" class="btn btn-block btn-outline-secondary botonnuevo_moduloproveedores" style="width: auto;" id="boton_nuevo_vehiculo_documento">
+                                                        <span class="btn-label"><i class="fa fa-plus"></i></span> Documento
+                                                    </button>
+                                                    @else
+                                                    <h2 style="color: #ffff; margin: 0;"> Documento </h2>
+                                                    @endif
+                                                </ol><br>
+                                                <div class="table-responsive">
+                                                    <table class="table table-hover stylish-table" id="tabla_vehiculos_documentos" width="100%">
+                                                        <thead>
+                                                            <tr>
+                                                                <th width="50">No.</th>
+                                                                <th width="800">Documento</th>
+                                                                <th width="70">Pdf</th>
+                                                                <th width="70">Editar</th>
+
+                                                                <th width="70">Eliminar</th>
+                                                            </tr>
+                                                        </thead>
+                                                        <tbody></tbody>
+                                                    </table>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default waves-effect" data-dismiss="modal">Cerrar</button>
+
+            </div>
+        </div>
+    </div>
+</div>
+<!-- /.Modal Vehículos -->
+
+
+
 
 <!-- Modal signatarios -->
 <div id="modal_signatario" class="modal fade bs-example-modal-lg" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" style="display: none;">
@@ -2310,6 +2542,85 @@
     </div>
 </div>
 <!-- /.Modal equipos documentos -->
+
+
+
+<!-- Modal Vehículos documentos -->
+<div id="modal_vehiculo_documento" class="modal fade bs-example-modal-lg" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" style="display: none;">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <form enctype="multipart/form-data" method="post" name="form_vehiculo_documento" id="form_vehiculo_documento">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                    <h4 class="modal-title">Documentos</h4>
+                </div>
+                <div class="modal-body">
+                    <div class="row">
+                        <div class="col-12">
+                            {!! csrf_field() !!}
+
+                            <input type="hidden" class="form-control" id="vehiculo_doc_id" name="ID_VEHICULO_DOCUMENTO" value="0">
+                            <input type="hidden" class="form-control" id="vehiculo_documento_id" name="VEHICULO_ID" value="0">
+                            <input type="hidden" class="form-control" id="vehiculo_documento_proveedor_id" name="proveedor_id" value="0">
+                        </div>
+                        <div class="col-12">
+                            <div class="form-group">
+                                <label>Tipo de documento *</label>
+                                <select class="custom-select form-control" id="DOCUMENTO_TIPO_VEHICULOS" name="DOCUMENTO_TIPO_VEHICULOS" required>
+                                    <option disabled selected>Seleccione un tipo</option>
+                                    <option value="1">Tarjeta de circulación</option>
+                                    <option value="2">Póliza de seguro</option>
+                                    <option value="3">Verificación vehicular</option>
+                                    <option value="4">Factura</option>
+                                    <option value="5">Otro</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="col-12">
+                            <div class="form-group">
+                                <label> Nombre del documento *</label>
+                                <input type="text" class="form-control" id="NOMBRE_DOCUMENTO_VEHICULOS" name="NOMBRE_DOCUMENTO_VEHICULOS" required>
+                            </div>
+                        </div>
+
+                        <div class="col-12">
+                            <div class="form-group">
+                                <label> Soporte PDF *</label>
+                                <!-- <input type="file" id="input-file-now" class="dropify"/> -->
+                                <div class="fileinput fileinput-new input-group" data-provides="fileinput">
+                                    <div class="form-control" data-trigger="fileinput" id="input_file_vehiculo_documento">
+                                        <i class="fa fa-file fileinput-exists"></i>
+                                        <span class="fileinput-filename"></span>
+                                    </div>
+                                    <span class="input-group-addon btn btn-secondary btn-file">
+                                        <span class="fileinput-new">Seleccione</span>
+                                        <span class="fileinput-exists">Cambiar</span>
+                                        <input type="file" accept="application/pdf" name="VEHICULO_PDF" id="VEHICULO_PDF" required>
+                                    </span>
+                                    <a href="#" class="input-group-addon btn btn-secondary fileinput-exists" data-dismiss="fileinput">Quitar</a>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-12">
+                            <input type="hidden" class="form-control" id="VEHICULO_DOCUMENTO_ELIMINADO" name="ACTIVO" value="1">
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default waves-effect" data-dismiss="modal">Cerrar</button>
+                    @if(auth()->user()->hasRoles(['Superusuario', 'Administrador','Almacén']))
+                    <button type="submit" class="btn btn-danger waves-effect waves-light botonguardar_moduloproveedores" id="boton_guardar_vehiculo_documento">
+                        Guardar <i class="fa fa-save"></i>
+                    </button>
+                    @endif
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+<!-- /.Modal Vehículos  documentos -->
+
+
 
 
 <!-- Modal de documentos de validacion de cursos -->

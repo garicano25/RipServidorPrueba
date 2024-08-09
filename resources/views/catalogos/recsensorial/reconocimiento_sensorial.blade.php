@@ -1668,15 +1668,15 @@
                                             @if(auth()->user()->hasRoles(['Superusuario', 'Administrador', 'Coordinador','Operativo HI']))
                                             <div class="multisteps-form__progress-btn-3" id="steps3_menu_tab2">
                                                 <i class="fa fa-flask"></i><br>
-                                                <span>Prioridad de muestreo sustancias</span>
-                                            </div>
-                                            <div class="multisteps-form__progress-btn-3" id="steps3_menu_tab3">
-                                                <i class="fa fa-filter"></i><br>
-                                                <span>Determinación de los GEH</span>
+                                                <span>Determinación de la prioridad de muestreo de las sustancias químicas (Valor de ponderación)</span>
                                             </div>
                                             <div class="multisteps-form__progress-btn-3" id="steps3_menu_tab4">
                                                 <i class="fa fa fa-users"></i><br>
-                                                <span>Grupos de exposición homogénea</span>
+                                                <span>Identificación de los grupos de exposición homogénea</span>
+                                            </div>
+                                            <div class="multisteps-form__progress-btn-3" id="steps3_menu_tab3">
+                                                <i class="fa fa-filter"></i><br>
+                                                <span>Determinación de los grupos de exposición homogénea</span>
                                             </div>
                                             @endif
                                             <div class="multisteps-form__progress-btn-3" id="steps3_menu_tab5">
@@ -1762,60 +1762,36 @@
                                                     </div>
                                                 </div>
                                             </div>
-                                            <!--STEP 3-->
-                                            <div class="multisteps-form__panel-3" data-animation="scaleIn" id="steps3_contenido_tab3">
-                                                <div class="multisteps-form__content-3">
-                                                    <div class="row">
-                                                        <div class="col-12">
-                                                            <ol class="breadcrumb m-b-10 text-light">Determinación de los grupos de exposición homogénea.</ol>
-                                                            <div class="table-responsive">
-                                                                <table class="table table-bordered" width="100%" id="tabla_quimicosresumen_2">
-                                                                    <thead>
-                                                                        <tr>
-                                                                            {{-- <th style="width: 80px!important;">No</th> --}}
-                                                                            <th>Área/Zona</th>
-                                                                            <th>Grupo de expo. homogénea</th>
-                                                                            <th>Sustancia química y/o<br>producto</th>
-                                                                            <th>Componentes de la<br>mezcla</th>
-                                                                            <th style="width: 130px!important;">Vía de ingreso<br>al organismo</th>
-                                                                            <th style="width: 130px!important;">Numero<br>de POE</th>
-                                                                            <th style="width: 130px!important;">Tiempo de<br>Exposición</th>
-                                                                            <th style="width: 100px!important;">Suma total<br>ponderación</th>
-                                                                            <th style="width: 120px!important;">Prioridad de<br>muestreo</th>
-                                                                        </tr>
-                                                                    </thead>
-                                                                    <tbody>
-                                                                        <tr>
-                                                                            <td colspan="9">&nbsp;</td>
-                                                                        </tr>
-                                                                    </tbody>
-                                                                </table>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </div>
                                             <!--STEP 4-->
                                             <div class="multisteps-form__panel-3" data-animation="scaleIn" id="steps3_contenido_tab4">
                                                 <div class="multisteps-form__content-3">
                                                     <div class="row">
                                                         <div class="col-12">
-                                                            <ol class="breadcrumb m-b-10 text-light">Grupos de exposición homogénea.</ol>
+                                                            <ol class="breadcrumb m-b-10 text-light">
+                                                                @if(auth()->user()->hasRoles(['Superusuario', 'Administrador', 'Coordinador','Operativo HI']))
+
+                                                                <button type="button" class="btn btn-secondary waves-effect waves-light botonnuevo_modulorecsensorial" data-toggle="tooltip" title="Agregar nuevo grupo" id="boton_nuevo_grupo">
+                                                                    <span class="btn-label"><i class="fa fa-plus"></i></span>Grupo de exposición homogénea
+                                                                </button>
+
+                                                                @endif
+                                                            </ol>
                                                             <div class="table-responsive">
                                                                 <table class="table table-bordered" width="100%" id="tabla_quimicosresumen_3">
                                                                     <thead>
                                                                         <tr>
-                                                                            {{-- <th style="width: 80px!important;">No</th> --}}
+                                                                            <th>Editar</th>
+                                                                            <th>Clasificación <br> GEH</th>
+                                                                            <th>Componente<br> (Sustancia química y/o producto)</th>
                                                                             <th>Área</th>
                                                                             <th>Grupo de expo.<br>homogénea</th>
-                                                                            <th>Sustancia<br>química</th>
                                                                             <th style="width: 120px!important;">Numero de<br>trabajadores</th>
                                                                             <th style="width: 160px!important;">Tiempo de<br>Exposición (minutos)</th>
                                                                             <th style="width: 160px!important;">Frecuencia de<br>Exposición (jornada)</th>
                                                                             <th style="width: 160px!important;">Tiempo total<br>Exposición (minutos)</th>
                                                                             <th style="width: 130px!important;">Jornada de<br>trabajo (horas)</th>
-                                                                            <th style="width: 120px!important;">Prioridad de<br>muestreo</th>
-                                                                            <th style="width: 120px!important;">Num. POE a<br>Considerar</th>
+                                                                            <!-- <th style="width: 120px!important;">Prioridad de<br>muestreo</th> -->
+                                                                            <!-- <th style="width: 120px!important;">Num. POE a<br>Considerar</th> -->
                                                                         </tr>
                                                                     </thead>
                                                                     <tbody>
@@ -1829,6 +1805,40 @@
                                                     </div>
                                                 </div>
                                             </div>
+                                            <!--STEP 3-->
+                                            <div class="multisteps-form__panel-3" data-animation="scaleIn" id="steps3_contenido_tab3">
+                                                <div class="multisteps-form__content-3">
+                                                    <div class="row">
+                                                        <div class="col-12">
+                                                            <ol class="breadcrumb m-b-10 text-light">Determinación de los grupos de exposición homogénea.</ol>
+                                                            <div class="table-responsive">
+                                                                <table class="table table-bordered" width="100%" id="tabla_quimicosresumen_2">
+                                                                    <thead>
+                                                                        <tr>
+                                                                            <th>Clasificación GEH</th>
+                                                                            <th>Componente <br> (Sustancia química y/o producto)</th>
+                                                                            <th>Área/Zona</th>
+                                                                            <th>Grupo de expo. homogénea</th>
+                                                                            <th style="width: 130px!important;">Vía de ingreso<br>al organismo</th>
+                                                                            <th style="width: 130px!important;">Numero<br>de POE</th>
+                                                                            <th style="width: 130px!important;">Tiempo de<br>Exposición</th>
+                                                                            <th style="width: 100px!important;">Suma total<br>ponderación</th>
+                                                                            <th style="width: 120px!important;">Prioridad de<br>muestreo</th>
+                                                                            <th style="width: 120px!important;">Num. POE a<br>Considerar</th>
+                                                                        </tr>
+                                                                    </thead>
+                                                                    <tbody>
+                                                                        <tr>
+                                                                            <td colspan="10">&nbsp;</td>
+                                                                        </tr>
+                                                                    </tbody>
+                                                                </table>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+
                                             @endif
                                             <!--STEP 5-->
                                             <div class="multisteps-form__panel-3" data-animation="scaleIn" id="steps3_contenido_tab6">
@@ -1848,10 +1858,10 @@
                                                                 <table class="table table-bordered" width="100%" id="tabla_quimicosresumen_4">
                                                                     <thead>
                                                                         <tr>
+                                                                            <!-- Nueva columna al principio -->
+                                                                            <th rowspan="2" style="vertical-align: middle!important;">Clasificación GEH</th>
+                                                                            <th width="250" rowspan="2" style="vertical-align: middle!important;">Componente de la mezcla <br> (Sustancia química y/o producto)</th>
                                                                             <th rowspan="2" style="vertical-align: middle!important;">Grupo de expo. homogénea</th>
-                                                                            <th width="250" rowspan="2" style="vertical-align: middle!important;">Componente de la mezcla <br> (Sustancia química
-                                                                                y/o producto)
-                                                                            </th>
                                                                             <th width="360" colspan="2">Número de puntos por POE / punto a considerar</th>
                                                                             <th width="180" rowspan="2" style="vertical-align: middle!important;">Total muestras</th>
                                                                         </tr>
@@ -2427,7 +2437,7 @@
                                                     </div>
                                                 </div>
                                                 <div class="col-12 mx-2">
-                                                    <label class="text-danger">¿El cliente decea muestrear sustancias quimicas adicionales ? </label>
+                                                    <label class="text-danger">¿El cliente desea muestrear sustancias químicas adicionales ? </label>
                                                     <div class="switch">
                                                         <label>
                                                             No<input type="checkbox" id="PETICION_CLIENTE" name="PETICION_CLIENTE" value="1">
@@ -3050,9 +3060,9 @@
                                 </select>
                             </div>
                         </div>
-                        <div class="col-12">
+                        <div class="col-6">
                             <div class="form-group">
-                                <label> Fuente generadora para *</label>
+                                <label> Tipo *</label>
                                 <select class="custom-select form-control" id="recsensorialmaquinaria_afecta" name="recsensorialmaquinaria_afecta" required>
                                     <option value=""></option>
                                     <option value="1">Físicos</option>
@@ -3061,7 +3071,21 @@
                                 </select>
                             </div>
                         </div>
-                        <div class="col-4">
+                        <div class="col-6">
+                            <div class="form-group">
+                                <label> Descripción de la fuente generadora *</label>
+                                <input type="text" class="form-control" id="descripcionfuente" name="recsensorialmaquinaria_descripcionfuente">
+                            </div>
+                        </div>
+
+                        <div class="col-3">
+                            <div class="form-group">
+                                <label> Nombre común de la fuente generadora </label>
+                                <input type="text" class="form-control" id="nombrecomun" name="recsensorialmaquinaria_nombrecomun">
+                            </div>
+                        </div>
+
+                        <div class="col-3">
                             <div class="form-group">
                                 <label> Nombre de la fuente generadora *</label>
                                 <input type="text" class="form-control" name="recsensorialmaquinaria_nombre" id="recsensorialmaquinaria_nombre" required>
@@ -3072,13 +3096,13 @@
                                 </select>
                             </div>
                         </div>
-                        <div class="col-3">
+                        <div class="col-2">
                             <div class="form-group">
-                                <label> Cantidad de fuente generadora*</label>
+                                <label> Cantidad *</label>
                                 <input type="number" class="form-control" name="recsensorialmaquinaria_cantidad" id="recsensorialmaquinaria_cantidad" required>
                             </div>
                         </div>
-                        <div class="col-3">
+                        <div class="col-2">
                             <div class="form-group">
                                 <label> Contenido*</label>
                                 <input type="number" class="form-control" name="recsensorialmaquinaria_contenido" id="recsensorialmaquinaria_contenido" required>
@@ -3444,7 +3468,7 @@
                         @if(auth()->user()->hasRoles(['Superusuario', 'Administrador', 'Coordinador','Operativo HI']))
                         <div class="col-12">
                             <ol class="breadcrumb m-b-10">
-                                <button type="button" class="btn btn-secondary waves-effect waves-light botonnuevo_modulorecsensorial" data-toggle="tooltip" title="Agregar sustancia a la lista" id="boton_nuevasustancia_inventario" disabled>
+                                <button type="button" class="btn btn-secondary waves-effect waves-light botonnuevo_modulorecsensorial" data-toggle="tooltip" title="Agregar sustancia a la lista" id="boton_nuevasustancia_inventario">
                                     <span class="btn-label"><i class="fa fa-plus"></i></span> Sustancia
                                 </button>
                             </ol>
@@ -3472,6 +3496,82 @@
                     <button type="button" class="btn btn-default waves-effect" data-dismiss="modal">Cerrar</button>
                     @if(auth()->user()->hasRoles(['Superusuario', 'Administrador', 'Coordinador','Operativo HI']))
                     <button type="submit" class="btn btn-danger waves-effect waves-light botonguardar_modulorecsensorial" id="boton_guardar_sustancia">
+                        Guardar <i class="fa fa-save"></i>
+                    </button>
+                    @endif
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+
+
+<div id="modal_grupos" class="modal fade bs-example-modal-lg" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" style="display: none;">
+
+    <div class="modal-dialog modal-lg" style="min-width: 1200px!important;">
+        <div class="modal-content">
+            <form enctype="multipart/form-data" method="post" name="form_grupos" id="form_grupos">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                    <h4 class="modal-title">Grupos de exposición homogénea</h4>
+                </div>
+                <div class="modal-body">
+                    {!! csrf_field() !!}
+                    <div class="row">
+                        <div class="col-12">
+                            <input type="hidden" class="form-control" id="NUEVO_GRUPO" name="NUEVO" value="0">
+                            <input type="hidden" class="form-control" id="GRUPO_RECSENSORIAL_ID" name="RECSENSORIAL_ID" value="0">
+                            <input type="hidden" class="form-control" id="GRUPO_EDITAR" name="GRUPO_EDITAR" value="">
+                        </div>
+                        <div class="col-12 mb-3">
+                            <div class="row">
+                                <div class="col-12 p-2 d-flex justify-content-center">
+                                    <label class="labelGrupo"><b style="font-size: 19px;">Clasificación del grupo *</b></label>
+                                    <div class="form-check mx-4">
+                                        <input class="form-check-input" type="radio" name="TIPO_CLASIFICACION" id="TIPO_CLASIFICACION_ROMANOS" value="1">
+                                        <label class="form-check-label" for="TIPO_CLASIFICACION_ROMANOS">
+                                            Num. Romanos
+                                        </label>
+                                    </div>
+                                    <div class="form-check mx-4">
+                                        <input class="form-check-input" type="radio" name="TIPO_CLASIFICACION" id="TIPO_CLASIFICACION_LETRAS" value="2">
+                                        <label class="form-check-label" for="TIPO_CLASIFICACION_LETRAS">
+                                            Letras
+                                        </label>
+                                    </div>
+                                </div>
+
+                                <div class="col-12 text-center">
+                                    <input type="text" class="form-control text-center" id="CLASIFICACION_GRUPO" name="CLASIFICACION_GRUPO" readonly>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-12">
+                            <ol class="breadcrumb m-b-10 text-center">
+                                <h4 class="text-center text-light">Grupos de exposición homogénea</h4>
+                            </ol>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-12">
+                            <table class="table table-hover stylish-table" width="100%" id="tabla_grupos">
+                                <thead style="display: block; width: 100%!important;">
+                                    <tr>
+                                        <th style="width: 720px!important;">Componente de la mezcla</th>
+                                        <th style="width: 200px!important;">Numero de trabajadores</th>
+                                        <th style="width: 200px!important;">No. trabajadores expuestos</th>
+                                    </tr>
+                                </thead>
+                                <tbody style="display: block; width: 100%; height: 300px; max-height: 300px; overflow-y: auto; overflow-x: hidden;"></tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default waves-effect" data-dismiss="modal">Cerrar</button>
+                    @if(auth()->user()->hasRoles(['Superusuario', 'Administrador', 'Coordinador','Operativo HI']))
+                    <button type="submit" class="btn btn-danger waves-effect waves-light botonguardar_modulorecsensorial" id="boton_guardar_grupos">
                         Guardar <i class="fa fa-save"></i>
                     </button>
                     @endif

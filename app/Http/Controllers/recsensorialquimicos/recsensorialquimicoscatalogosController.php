@@ -221,7 +221,8 @@ class recsensorialquimicoscatalogosController extends Controller
                                                     hoja.catTipoClasificacion,
                                                     hoja.catClasificacionRiesgo,
                                                     hoja.catsustancia_puntoEbullicion,
-                                                    hoja.catTemOperacion
+                                                    hoja.catTemOperacion,
+                                                    hoja.catsustancia_nombreComun
                                                 FROM catsustancia hoja
                                                 LEFT JOIN catHojasSeguridad_SustanciasQuimicas relacion ON relacion.HOJA_SEGURIDAD_ID = hoja.id
                                                 LEFT JOIN catsustancias_quimicas sus ON sus.ID_SUSTANCIA_QUIMICA = relacion.SUSTANCIA_QUIMICA_ID

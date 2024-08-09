@@ -72,7 +72,7 @@ class reportesController extends Controller
     {
         $this->middleware('auth');
         // $this->middleware('Superusuario,Administrador,Proveedor,Reconocimiento,Proyecto,Compras,Staff,Psicólogo,Ergónomo,CoordinadorPsicosocial,CoordinadorErgonómico,CoordinadorRN,CoordinadorRS,CoordinadorRM,CoordinadorHI,Reportes,Externo');
-        $this->middleware('roles:Superusuario,Administrador,Coordinador,Operativo HI,Almacén,Compras');
+        $this->middleware('roles:Superusuario,Administrador,Coordinador,Operativo HI,Almacén,Compras,Psicólogo,Ergónomo');
     }
 
 
@@ -86,15 +86,12 @@ class reportesController extends Controller
     {
         $proyecto = proyectoModel::findOrFail($proyecto_id);
 
-        if (($proyecto->recsensorial->recsensorial_tipocliente+0) == 1 && ($proyecto->recsensorial_id == NULL || $proyecto->catregion_id == NULL || $proyecto->catsubdireccion_id == NULL || $proyecto->catgerencia_id == NULL || $proyecto->catactivo_id == NULL || $proyecto->proyecto_clienteinstalacion == NULL || $proyecto->proyecto_fechaentrega == NULL))
-        {
+        if (($proyecto->recsensorial->recsensorial_tipocliente + 0) == 1 && ($proyecto->recsensorial_id == NULL || $proyecto->catregion_id == NULL || $proyecto->catsubdireccion_id == NULL || $proyecto->catgerencia_id == NULL || $proyecto->catactivo_id == NULL || $proyecto->proyecto_clienteinstalacion == NULL || $proyecto->proyecto_fechaentrega == NULL)) {
             return '<div style="text-align: center;">
                         <p style="font-size: 24px;">Datos incompletos</p>
                         <b style="font-size: 18px;">Para ingresar al diseño de la tabla POE primero debe completar todos los campos vacíos de la sección de datos generales del proyecto.</b>
                     </div>';
-        }
-        else
-        {
+        } else {
             // COPIAR CATEGORIAS DEL RECONOCIMIENTO SENSORIAL
             //===================================================
             $total_categorias = DB::select('SELECT
@@ -102,25 +99,23 @@ class reportesController extends Controller
                                             FROM
                                                 reportecategoria
                                             WHERE
-                                                reportecategoria.proyecto_id = '.$proyecto_id);
+                                                reportecategoria.proyecto_id = ' . $proyecto_id);
 
 
-            if (($total_categorias[0]->TOTAL + 0) == 0)
-            {
+            if (($total_categorias[0]->TOTAL + 0) == 0) {
                 $recsensorial_categorias = recsensorialcategoriaModel::where('recsensorial_id', $proyecto->recsensorial_id)
-                                                                    ->orderBy('recsensorialcategoria_nombrecategoria', 'ASC')
-                                                                    ->get();
+                    ->orderBy('recsensorialcategoria_nombrecategoria', 'ASC')
+                    ->get();
 
 
                 DB::statement('ALTER TABLE reportecategoria AUTO_INCREMENT = 1;');
 
-                
-                foreach ($recsensorial_categorias as $key => $value)
-                {
+
+                foreach ($recsensorial_categorias as $key => $value) {
                     $categoria = reportecategoriaModel::create([
-                          'proyecto_id' => $proyecto_id
-                        , 'recsensorialcategoria_id' => $value->id
-                        , 'reportecategoria_nombre' => $value->recsensorialcategoria_nombrecategoria
+                        'proyecto_id' => $proyecto_id,
+                        'recsensorialcategoria_id' => $value->id,
+                        'reportecategoria_nombre' => $value->recsensorialcategoria_nombrecategoria
                     ]);
                 }
             }
@@ -135,25 +130,23 @@ class reportesController extends Controller
                                         FROM
                                             reportearea
                                         WHERE
-                                            reportearea.proyecto_id = '.$proyecto_id);
+                                            reportearea.proyecto_id = ' . $proyecto_id);
 
-            if (($total_areas[0]->TOTAL + 0) == 0)
-            {
+            if (($total_areas[0]->TOTAL + 0) == 0) {
                 $recsensorial_areas = recsensorialareaModel::where('recsensorial_id', $proyecto->recsensorial_id)
-                                                            ->orderBy('recsensorialarea_nombre', 'ASC')
-                                                            ->get();
+                    ->orderBy('recsensorialarea_nombre', 'ASC')
+                    ->get();
 
 
                 DB::statement('ALTER TABLE reportearea AUTO_INCREMENT = 1;');
 
-                
-                foreach ($recsensorial_areas as $key => $value)
-                {
+
+                foreach ($recsensorial_areas as $key => $value) {
                     $area = reporteareaModel::create([
-                          'proyecto_id' => $proyecto_id
-                        , 'recsensorialarea_id' => $value->id
-                        , 'reportearea_nombre' => $value->recsensorialarea_nombre
-                        , 'reportearea_instalacion' => $proyecto->proyecto_clienteinstalacion
+                        'proyecto_id' => $proyecto_id,
+                        'recsensorialarea_id' => $value->id,
+                        'reportearea_nombre' => $value->recsensorialarea_nombre,
+                        'reportearea_instalacion' => $proyecto->proyecto_clienteinstalacion
                     ]);
                 }
             }
@@ -181,11 +174,11 @@ class reportesController extends Controller
 
 
     public function servicioHI()
-{
-    try {
-        $opciones_select = '<option value="">&nbsp;</option>';
+    {
+        try {
+            $opciones_select = '<option value="">&nbsp;</option>';
 
-        $proyectos = DB::select("
+            $proyectos = DB::select("
             SELECT p.proyecto_folio as ProyectoFolio,
                 p.id AS ProyectoID,
                 r.recsensorial_foliofisico as RecSensorialFolioFisico,
@@ -197,7 +190,7 @@ class reportesController extends Controller
             WHERE sp.HI_INFORME = 1
             ");
 
-        $proyectoID = null;
+            $proyectoID = null;
             foreach ($proyectos as $proyecto) {
                 if ($proyecto->RecSensorialFolioFisico || $proyecto->RecSensorialFolioQuimico) { // Verifica que al menos uno de los folios exista
                     $proyectoID = $proyecto->ProyectoID;
@@ -205,26 +198,26 @@ class reportesController extends Controller
                     $reconocimientoFisico = $proyecto->RecSensorialFolioFisico ? '[' . $proyecto->RecSensorialFolioFisico . ']' : '[No tiene folio de reconocimiento físico]';
                     $instalacion = $proyecto->ProyectoClienteInstalacion ? 'Instalación: ' . $proyecto->ProyectoClienteInstalacion : '[No tiene instalación]';
 
-                    $opciones_select .= '<option value="' . $proyectoID . '">Folio proyecto [' . 
-                                        $proyecto->ProyectoFolio . '], Reconocimiento ' . 
-                                        $reconocimientoQuimico . ', ' . 
-                                        $reconocimientoFisico . ', ' . 
-                                        $instalacion . '</option>';
+                    $opciones_select .= '<option value="' . $proyectoID . '">Folio proyecto [' .
+                        $proyecto->ProyectoFolio . '], Reconocimiento ' .
+                        $reconocimientoQuimico . ', ' .
+                        $reconocimientoFisico . ', ' .
+                        $instalacion . '</option>';
                 }
             }
 
-        $dato['opciones'] = $opciones_select;
-        $dato['proyecto_id'] = $proyectoID;
-        $dato["msj"] = 'Datos consultados correctamente';
-        return response()->json($dato);
-    } catch (Exception $e) {
-        $dato["msj"] = 'Error ' . $e->getMessage();
-        $dato['opciones'] = $opciones_select;
-        return response()->json($dato, 500);
+            $dato['opciones'] = $opciones_select;
+            $dato['proyecto_id'] = $proyectoID;
+            $dato["msj"] = 'Datos consultados correctamente';
+            return response()->json($dato);
+        } catch (Exception $e) {
+            $dato["msj"] = 'Error ' . $e->getMessage();
+            $dato['opciones'] = $opciones_select;
+            return response()->json($dato, 500);
+        }
     }
-}
 
-    
+
 
 
     public function estatusProyecto($PROYECTO_ID)
@@ -232,23 +225,22 @@ class reportesController extends Controller
         // try {
 
 
-            $proyecto = estatusReportesInformeModel::where('PROYECTO_ID',$PROYECTO_ID)->first();
+        $proyecto = estatusReportesInformeModel::where('PROYECTO_ID', $PROYECTO_ID)->first();
 
 
-            //VALIDAMOS SI EXISTE INFORMACION DEL PROYECTO
-            if ($proyecto) {
+        //VALIDAMOS SI EXISTE INFORMACION DEL PROYECTO
+        if ($proyecto) {
 
-                $dato['nuevo'] = 0;
-                $dato['info'] = $proyecto;
+            $dato['nuevo'] = 0;
+            $dato['info'] = $proyecto;
+        } else {
 
-            } else {
+            $dato['nuevo'] = 1;
+            $dato['info'] = '';
+        }
 
-                $dato['nuevo'] = 1;
-                $dato['info'] = '';
-            }
-           
-            $dato["msj"] = 'Datos consultados correctamente';
-            return response()->json($dato);
+        $dato["msj"] = 'Datos consultados correctamente';
+        return response()->json($dato);
 
         // } catch (Exception  $e) {
         //     $dato["msj"] = 'Error ' . $e->getMessage();
@@ -262,15 +254,14 @@ class reportesController extends Controller
         try {
 
 
-            if($nuevo == 1){
+            if ($nuevo == 1) {
 
                 $estatus = estatusReportesInformeModel::create([
                     'PROYECTO_ID' => $PROYECTO_ID,
                     'POE_FINALIZADO' => 1
                 ]);
-            
-            }else{
-                
+            } else {
+
                 $estatus = estatusReportesInformeModel::where('PROYECTO_ID', $PROYECTO_ID)->update(['POE_FINALIZADO' => $opcion]);
             }
 
@@ -278,7 +269,6 @@ class reportesController extends Controller
             $dato['estatus'] = $opcion;
             $dato["msj"] = 'POE finalizado correctamente';
             return response()->json($dato);
-
         } catch (Exception $e) {
             $dato["msj"] = 'Error ' . $e->getMessage();
             return response()->json($dato, 500);
@@ -347,7 +337,7 @@ class reportesController extends Controller
                                     TABLA.agente_nombre
                                 ORDER BY
                                     TABLA.agente_nombre ASC', [$proyecto_id]);
-    
+
             $opciones_menu = '<option value="">Seleccione</option>';
             // $opciones_menu .= '<option value="0">POE PROYECTO</option>';  -> EL POE ESTARA APARTE EN EL SELECT SOLO ESTARAN LOS REPORTES DE LOS AGENTES
 
@@ -368,19 +358,17 @@ class reportesController extends Controller
             $opciones_menu .= '<option value="15">Químicos</option>';
             $opciones_menu .= '<option value="16">Infraestructura para servicios al personal</option>';
 
-    
+
             $dato['opciones_menu'] = $opciones_menu;
             $dato["msj"] = 'Datos consultados correctamente';
             return response()->json($dato);
-        }
-        catch(Exception $e)
-        {
-            $dato["msj"] = 'Error '.$e->getMessage();
+        } catch (Exception $e) {
+            $dato["msj"] = 'Error ' . $e->getMessage();
             $dato['opciones_menu'] = '<option value="">Error al consultar los parametros</option>';
             return response()->json($dato);
         }
     }
-    
+
 
     /**
      * Display the specified resource.
@@ -390,18 +378,16 @@ class reportesController extends Controller
      */
     public function reportecategoriatabla($proyecto_id)
     {
-        try
-        {
+        try {
             $proyecto = proyectoModel::findOrFail($proyecto_id);
             $estatus = estatusReportesInformeModel::where('PROYECTO_ID', $proyecto_id)->first();
 
 
             //VALIDAMOS SI EXISTE INFORMACION DEL PROYECTO
             if ($estatus) {
-                $bloqueado = $estatus->POE_FINALIZADO; 
+                $bloqueado = $estatus->POE_FINALIZADO;
             } else {
                 $bloqueado = 0;
-
             }
 
 
@@ -409,46 +395,40 @@ class reportesController extends Controller
 
 
             $categorias = reportecategoriaModel::where('proyecto_id', $proyecto_id)
-                                                ->orderBy('reportecategoria_orden', 'ASC')
-                                                ->orderBy('reportecategoria_nombre', 'ASC')
-                                                ->get();
+                ->orderBy('reportecategoria_orden', 'ASC')
+                ->orderBy('reportecategoria_nombre', 'ASC')
+                ->get();
 
 
-            $numero_registro = 0; $total_singuardar = 0;
-            foreach ($categorias as $key => $value) 
-            {
+            $numero_registro = 0;
+            $total_singuardar = 0;
+            foreach ($categorias as $key => $value) {
                 $numero_registro += 1;
                 $value->numero_registro = $numero_registro;
-                
-                if($bloqueado == 0){
+
+                if ($bloqueado == 0) {
 
                     $value->boton_editar = '<button type="button" class="btn btn-warning waves-effect btn-circle editar"><i class="fa fa-pencil"></i></button>';
-
-                }else{
+                } else {
 
                     $value->boton_editar = '<button type="button" class="btn btn-default waves-effect btn-circle" data-toggle="tooltip" title="No disponible"><i class="fa fa-ban"></i></button>';
                 }
 
 
-                if($bloqueado == 0){
+                if ($bloqueado == 0) {
 
-                    if (($proyecto->proyecto_concluido+0) == 0 && auth()->user()->hasRoles(['Superusuario', 'Administrador', 'Coordinador']))
-                    {
+                    if (($proyecto->proyecto_concluido + 0) == 0 && auth()->user()->hasRoles(['Superusuario', 'Administrador', 'Coordinador'])) {
                         $value->boton_eliminar = '<button type="button" class="btn btn-danger waves-effect btn-circle eliminar"><i class="fa fa-trash"></i></button>';
-                    }
-                    else
-                    {
+                    } else {
                         $value->boton_eliminar = '<button type="button" class="btn btn-default waves-effect btn-circle" data-toggle="tooltip" title="No disponible"><i class="fa fa-ban"></i></button>';
                     }
-                }else{
+                } else {
 
                     $value->boton_eliminar = '<button type="button" class="btn btn-default waves-effect btn-circle" data-toggle="tooltip" title="No disponible"><i class="fa fa-ban"></i></button>';
-
                 }
 
 
-                if (!$value->reporteairecategoria_total)
-                {
+                if (!$value->reporteairecategoria_total) {
                     $total_singuardar += 1;
                 }
             }
@@ -458,12 +438,10 @@ class reportesController extends Controller
             $dato["total_singuardar"] = $total_singuardar;
             $dato["msj"] = 'Datos consultados correctamente';
             return response()->json($dato);
-        }
-        catch(Exception $e)
-        {
+        } catch (Exception $e) {
             $dato['data'] = 0;
             $dato["total_singuardar"] = 0;
-            $dato["msj"] = 'Error '.$e->getMessage();
+            $dato["msj"] = 'Error ' . $e->getMessage();
             return response()->json($dato);
         }
     }
@@ -477,24 +455,21 @@ class reportesController extends Controller
      */
     public function reportecategoriaeliminar($reportecategoria_id)
     {
-        try
-        {
+        try {
             $categoria = reportecategoriaModel::where('id', $reportecategoria_id)->delete();
 
             // respuesta
             $dato["msj"] = 'Categoría eliminada correctamente';
             return response()->json($dato);
-        }
-        catch(Exception $e)
-        {
-            $dato["msj"] = 'Error '.$e->getMessage();
+        } catch (Exception $e) {
+            $dato["msj"] = 'Error ' . $e->getMessage();
             return response()->json($dato);
         }
     }
 
 
 
-    
+
 
 
 
@@ -508,8 +483,7 @@ class reportesController extends Controller
      */
     public function reporteareacategorias($proyecto_id, $reportearea_id)
     {
-        try
-        {
+        try {
             $areacategorias = DB::select('SELECT
                                                 reportecategoria.proyecto_id,
                                                 reportecategoria.id,
@@ -521,7 +495,7 @@ class reportesController extends Controller
                                                     FROM
                                                         reporteareacategoria
                                                     WHERE
-                                                        reporteareacategoria.reportearea_id = '.$reportearea_id.' 
+                                                        reporteareacategoria.reportearea_id = ' . $reportearea_id . ' 
                                                         AND reporteareacategoria.reportecategoria_id = reportecategoria.id
                                                     LIMIT 1
                                                 ), "") AS checked,
@@ -531,7 +505,7 @@ class reportesController extends Controller
                                                     FROM
                                                         reporteareacategoria
                                                     WHERE
-                                                        reporteareacategoria.reportearea_id = '.$reportearea_id.' 
+                                                        reporteareacategoria.reportearea_id = ' . $reportearea_id . ' 
                                                         AND reporteareacategoria.reportecategoria_id = reportecategoria.id
                                                     LIMIT 1
                                                 ) AS total,
@@ -541,7 +515,7 @@ class reportesController extends Controller
                                                     FROM
                                                         reporteareacategoria
                                                     WHERE
-                                                        reporteareacategoria.reportearea_id = '.$reportearea_id.' 
+                                                        reporteareacategoria.reportearea_id = ' . $reportearea_id . ' 
                                                         AND reporteareacategoria.reportecategoria_id = reportecategoria.id
                                                     LIMIT 1
                                                 ) AS geh,
@@ -551,14 +525,14 @@ class reportesController extends Controller
                                                     FROM
                                                         reporteareacategoria
                                                     WHERE
-                                                        reporteareacategoria.reportearea_id = '.$reportearea_id.' 
+                                                        reporteareacategoria.reportearea_id = ' . $reportearea_id . ' 
                                                         AND reporteareacategoria.reportecategoria_id = reportecategoria.id
                                                     LIMIT 1
                                                 ) AS actividades
                                             FROM
                                                 reportecategoria
                                             WHERE
-                                                reportecategoria.proyecto_id = '.$proyecto_id.' 
+                                                reportecategoria.proyecto_id = ' . $proyecto_id . ' 
                                             ORDER BY
                                                 reportecategoria.reportecategoria_orden ASC,
                                                 reportecategoria.reportecategoria_nombre ASC');
@@ -568,14 +542,12 @@ class reportesController extends Controller
             $areacategorias_lista = '';
             $readonly_required = '';
 
-            foreach ($areacategorias as $key => $value) 
-            {
+            foreach ($areacategorias as $key => $value) {
                 $numero_registro += 1;
 
-                if ($value->checked){
+                if ($value->checked) {
                     $readonly_required = 'required';
-                }
-                else{
+                } else {
                     $readonly_required = 'readonly';
                 }
 
@@ -607,36 +579,34 @@ class reportesController extends Controller
                                             <td with="">
                                                 <div class="switch" style="border: 0px #000 solid;">
                                                     <label>
-                                                        <input type="checkbox" name="checkbox_reportecategoria_id[]" value="'.$value->id.'" '.$value->checked.' onchange="activa_areacategoria(this, '.$numero_registro.');"/>
+                                                        <input type="checkbox" name="checkbox_reportecategoria_id[]" value="' . $value->id . '" ' . $value->checked . ' onchange="activa_areacategoria(this, ' . $numero_registro . ');"/>
                                                         <span class="lever switch-col-light-blue" style="padding: 0px; margin: 0px;"></span>
                                                     </label>
                                                 </div>
                                             </td>
                                             <td with="240">
-                                                '.$value->reportecategoria_nombre.'
+                                                ' . $value->reportecategoria_nombre . '
                                             </td>
                                             <td with="">
-                                                <input type="number" min="1" class="form-control areacategoria_'.$numero_registro.'" name="reporteareacategoria_total[]" value="'.$value->total.'" '.$readonly_required.'>
+                                                <input type="number" min="1" class="form-control areacategoria_' . $numero_registro . '" name="reporteareacategoria_total[]" value="' . $value->total . '" ' . $readonly_required . '>
                                             </td>
                                             <td with="">
-                                                <input type="number" min="1" class="form-control areacategoria_'.$numero_registro.'" name="reporteareacategoria_geh[]" value="'.$value->geh.'" '.$readonly_required.'>
+                                                <input type="number" min="1" class="form-control areacategoria_' . $numero_registro . '" name="reporteareacategoria_geh[]" value="' . $value->geh . '" ' . $readonly_required . '>
                                             </td>
                                             <td with="">
-                                                <textarea rows="2" class="form-control areacategoria_'.$numero_registro.'" name="reporteareacategoria_actividades[]" '.$readonly_required.'>'.$value->actividades.'</textarea>
+                                                <textarea rows="2" class="form-control areacategoria_' . $numero_registro . '" name="reporteareacategoria_actividades[]" ' . $readonly_required . '>' . $value->actividades . '</textarea>
                                             </td>
                                         </tr>';
             }
 
 
             // respuesta
-            $dato['areacategorias'] = $areacategorias_lista;            
+            $dato['areacategorias'] = $areacategorias_lista;
             $dato["msj"] = 'Datos consultados correctamente';
             return response()->json($dato);
-        }
-        catch(Exception $e)
-        {
+        } catch (Exception $e) {
             $dato['areacategorias'] = '<tr><td colspan="5">Error al cargar las categorías</td></tr>';
-            $dato["msj"] = 'Error '.$e->getMessage();
+            $dato["msj"] = 'Error ' . $e->getMessage();
             return response()->json($dato);
         }
     }
@@ -650,8 +620,7 @@ class reportesController extends Controller
      */
     public function reporteareatabla($proyecto_id)
     {
-        try
-        {
+        try {
             $proyecto = proyectoModel::findOrFail($proyecto_id);
             $estatus = estatusReportesInformeModel::where('PROYECTO_ID', $proyecto_id)->first();
 
@@ -690,7 +659,7 @@ class reportesController extends Controller
                                     LEFT JOIN reporteareacategoria ON reportearea.id = reporteareacategoria.reportearea_id
                                     LEFT JOIN reportecategoria ON reporteareacategoria.reportecategoria_id = reportecategoria.id
                                 WHERE
-                                    reportearea.proyecto_id = '.$proyecto_id.' 
+                                    reportearea.proyecto_id = ' . $proyecto_id . ' 
                                 ORDER BY
                                     reportearea.reportearea_orden ASC,
                                     reportearea.reportearea_nombre ASC,
@@ -698,40 +667,35 @@ class reportesController extends Controller
                                     reportecategoria.reportecategoria_nombre ASC');
 
 
-            $numero_registro = 0; $area = 'XXXXX'; $id = 0;
-            foreach ($areas as $key => $value) 
-            {
-                if($value->reportearea_nombre != $area || $value->id != $id)
-                {
+            $numero_registro = 0;
+            $area = 'XXXXX';
+            $id = 0;
+            foreach ($areas as $key => $value) {
+                if ($value->reportearea_nombre != $area || $value->id != $id) {
                     $numero_registro += 1;
                     $value->numero_registro = $numero_registro;
 
                     $area = $value->reportearea_nombre;
                     $id = $value->id;
-                }
-                else
-                {
+                } else {
                     $value->numero_registro = $numero_registro;
                 }
-                
-                if($bloqueado == 0){
+
+                if ($bloqueado == 0) {
 
                     $value->boton_editar = '<button type="button" class="btn btn-warning waves-effect btn-circle editar" ><i class="fa fa-pencil"></i></button>';
-                }else{
+                } else {
                     $value->boton_editar = '<button type="button" class="btn btn-default waves-effect btn-circle" data-toggle="tooltip" title="No disponible"><i class="fa fa-ban"></i></button>';
                 }
 
-                if($bloqueado == 0){
+                if ($bloqueado == 0) {
 
-                    if (($proyecto->proyecto_concluido+0) == 0 && auth()->user()->hasRoles(['Superusuario', 'Administrador', 'Coordinador']))
-                    {
+                    if (($proyecto->proyecto_concluido + 0) == 0 && auth()->user()->hasRoles(['Superusuario', 'Administrador', 'Coordinador'])) {
                         $value->boton_eliminar = '<button type="button" class="btn btn-danger waves-effect btn-circle eliminar"><i class="fa fa-trash"></i></button>';
-                    }
-                    else
-                    {
+                    } else {
                         $value->boton_eliminar = '<button type="button" class="btn btn-default waves-effect btn-circle" data-toggle="tooltip" title="No disponible"><i class="fa fa-ban"></i></button>';
                     }
-                }else{
+                } else {
 
                     $value->boton_eliminar = '<button type="button" class="btn btn-default waves-effect btn-circle" data-toggle="tooltip" title="No disponible"><i class="fa fa-ban"></i></button>';
                 }
@@ -741,11 +705,9 @@ class reportesController extends Controller
             $dato['data'] = $areas;
             $dato["msj"] = 'Datos consultados correctamente';
             return response()->json($dato);
-        }
-        catch(Exception $e)
-        {
+        } catch (Exception $e) {
             $dato['data'] = 0;
-            $dato["msj"] = 'Error '.$e->getMessage();
+            $dato["msj"] = 'Error ' . $e->getMessage();
             return response()->json($dato);
         }
     }
@@ -759,8 +721,7 @@ class reportesController extends Controller
      */
     public function reporteareaeliminar($reportearea_id)
     {
-        try
-        {
+        try {
             $area = reporteareaModel::where('id', $reportearea_id)->delete();
             $eliminar_categorias = reporteareacategoriaModel::where('reportearea_id', $reportearea_id)->delete();
 
@@ -768,10 +729,8 @@ class reportesController extends Controller
             // respuesta
             $dato["msj"] = 'Área eliminada correctamente';
             return response()->json($dato);
-        }
-        catch(Exception $e)
-        {
-            $dato["msj"] = 'Error '.$e->getMessage();
+        } catch (Exception $e) {
+            $dato["msj"] = 'Error ' . $e->getMessage();
             return response()->json($dato);
         }
     }
@@ -783,17 +742,14 @@ class reportesController extends Controller
      * @param  int  $reporteregistro_id
      * @param  int  $archivo_opcion
      * @return \Illuminate\Http\Response
-    */
+     */
     public function reportevibracionmapaubicacion($reporteregistro_id, $archivo_opcion)
     {
         $reporte  = reportevibracionModel::findOrFail($reporteregistro_id);
 
-        if ($archivo_opcion == 0)
-        {
+        if ($archivo_opcion == 0) {
             return Storage::response($reporte->reportevibracion_ubicacionfoto);
-        }
-        else
-        {
+        } else {
             return Storage::download($reporte->reportevibracion_ubicacionfoto);
         }
     }
@@ -807,16 +763,13 @@ class reportesController extends Controller
      */
     public function store(Request $request)
     {
-        try
-        {
+        try {
             // dd($request->all());
 
 
             // CATEGORIAS
-            if (($request->opcion+0) == 1)
-            {
-                if (($request->reportecategoria_id+0) == 0)
-                {
+            if (($request->opcion + 0) == 1) {
+                if (($request->reportecategoria_id + 0) == 0) {
                     DB::statement('ALTER TABLE reportecategoria AUTO_INCREMENT = 1;');
 
 
@@ -825,9 +778,7 @@ class reportesController extends Controller
 
                     // Mensaje
                     $dato["msj"] = 'Datos guardados correctamente';
-                }
-                else
-                {
+                } else {
                     $categoria = reportecategoriaModel::findOrFail($request->reportecategoria_id);
                     $categoria->update($request->all());
 
@@ -838,10 +789,8 @@ class reportesController extends Controller
 
 
             // AREAS
-            if (($request->opcion+0) == 2)
-            {
-                if (($request->reportearea_id+0) == 0)
-                {
+            if (($request->opcion + 0) == 2) {
+                if (($request->reportearea_id + 0) == 0) {
                     $request['recsensorialarea_id'] = 0;
                     $request['reporteiluminacionarea_porcientooperacion'] = $request->reportearea_porcientooperacion;
                     $request['reporteruidoarea_porcientooperacion'] = $request->reportearea_porcientooperacion;
@@ -850,27 +799,25 @@ class reportesController extends Controller
                     $request['reporteaguaarea_porcientooperacion'] = $request->reportearea_porcientooperacion;
                     $request['reportehieloarea_porcientooperacion'] = $request->reportearea_porcientooperacion;
                     $request['reportevibracionarea_porcientooperacion'] = $request->reportearea_porcientooperacion;
-                    
+
 
                     DB::statement('ALTER TABLE reportearea AUTO_INCREMENT = 1;');
                     $area = reporteareaModel::create($request->all());
 
 
-                    if ($request->checkbox_reportecategoria_id)
-                    {
+                    if ($request->checkbox_reportecategoria_id) {
                         DB::statement('ALTER TABLE reporteareacategoria AUTO_INCREMENT = 1;');
 
-                        foreach ($request->checkbox_reportecategoria_id as $key => $value) 
-                        {
+                        foreach ($request->checkbox_reportecategoria_id as $key => $value) {
                             $areacategoria = reporteareacategoriaModel::create([
-                                  'reportearea_id' => $area->id
-                                , 'reportecategoria_id' => $value["reportecategoria_id"]
-                                , 'reporteareacategoria_total' => $value["reporteareacategoria_total"]
-                                , 'reporteareacategoria_geh' => $value["reporteareacategoria_geh"]
-                                , 'reporteareacategoria_actividades' => $value["reporteareacategoria_actividades"]
+                                'reportearea_id' => $area->id,
+                                'reportecategoria_id' => $value["reportecategoria_id"],
+                                'reporteareacategoria_total' => $value["reporteareacategoria_total"],
+                                'reporteareacategoria_geh' => $value["reporteareacategoria_geh"],
+                                'reporteareacategoria_actividades' => $value["reporteareacategoria_actividades"]
                             ]);
 
-                            
+
                             // $areacategoria = reporteareacategoriaModel::create([
                             //       'reportearea_id' => $area->id
                             //     , 'reportecategoria_id' => $value
@@ -884,9 +831,7 @@ class reportesController extends Controller
 
                     // Mensaje de salida
                     $dato["msj"] = 'Datos guardados correctamente';
-                }
-                else
-                {
+                } else {
                     $request['reporteiluminacionarea_porcientooperacion'] = $request->reportearea_porcientooperacion;
                     $request['reporteruidoarea_porcientooperacion'] = $request->reportearea_porcientooperacion;
                     $request['reportequimicosarea_porcientooperacion'] = $request->reportearea_porcientooperacion;
@@ -903,16 +848,14 @@ class reportesController extends Controller
                     DB::statement('ALTER TABLE reporteareacategoria AUTO_INCREMENT = 1;');
 
 
-                    if ($request->checkbox_reportecategoria_id)
-                    {
-                        foreach ($request->checkbox_reportecategoria_id as $key => $value) 
-                        {
+                    if ($request->checkbox_reportecategoria_id) {
+                        foreach ($request->checkbox_reportecategoria_id as $key => $value) {
                             $areacategoria = reporteareacategoriaModel::create([
-                                  'reportearea_id' => $area->id
-                                , 'reportecategoria_id' => $value["reportecategoria_id"]
-                                , 'reporteareacategoria_total' => $value["reporteareacategoria_total"]
-                                , 'reporteareacategoria_geh' => $value["reporteareacategoria_geh"]
-                                , 'reporteareacategoria_actividades' => $value["reporteareacategoria_actividades"]
+                                'reportearea_id' => $area->id,
+                                'reportecategoria_id' => $value["reportecategoria_id"],
+                                'reporteareacategoria_total' => $value["reporteareacategoria_total"],
+                                'reporteareacategoria_geh' => $value["reporteareacategoria_geh"],
+                                'reporteareacategoria_actividades' => $value["reporteareacategoria_actividades"]
                             ]);
 
                             // $areacategoria = reporteareacategoriaModel::create([
@@ -934,26 +877,23 @@ class reportesController extends Controller
 
             // respuesta
             return response()->json($dato);
-        }
-        catch(Exception $e)
-        {
+        } catch (Exception $e) {
             // respuesta
-            $dato["msj"] = 'Error '.$e->getMessage();
+            $dato["msj"] = 'Error ' . $e->getMessage();
             return response()->json($dato);
         }
     }
 
 
     /**
-        * Display the specified resource.
-        *
-        * @param int $proyecto_id
-        * @return \Illuminate\Http\Response
-    */
+     * Display the specified resource.
+     *
+     * @param int $proyecto_id
+     * @return \Illuminate\Http\Response
+     */
     public function reportepoeword($proyecto_id)
     {
-        try
-        {
+        try {
             $proyecto = proyectoModel::with(['catregion', 'catsubdireccion', 'catgerencia', 'catactivo'])->findOrFail($proyecto_id);
             $recsensorial = recsensorialModel::with(['cliente', 'catregion', 'catsubdireccion', 'catgerencia', 'catactivo'])->findOrFail($proyecto->recsensorial_id);
             $cliente = clienteModel::findOrFail($recsensorial->cliente_id);
@@ -963,43 +903,31 @@ class reportesController extends Controller
             //================================================================================
 
 
-            $plantillaword = new TemplateProcessor(storage_path('app/plantillas_reportes/proyecto_infomes/Plantilla_tabla_poe.docx'));//Ruta carpeta storage
+            $plantillaword = new TemplateProcessor(storage_path('app/plantillas_reportes/proyecto_infomes/Plantilla_tabla_poe.docx')); //Ruta carpeta storage
 
 
             // LOGOS
             //================================================================================
 
 
-            if ($cliente->cliente_plantillalogoizquierdo)
-            {
-                if (file_exists(storage_path('app/'.$cliente->cliente_plantillalogoizquierdo)))
-                {
-                    $plantillaword->setImageValue('LOGO_IZQUIERDO', array('path' => storage_path('app/'.$cliente->cliente_plantillalogoizquierdo), 'height' => 39, 'width' => 580, 'ratio' => true, 'borderColor' => '000000'));
-                }
-                else
-                {
+            if ($cliente->cliente_plantillalogoizquierdo) {
+                if (file_exists(storage_path('app/' . $cliente->cliente_plantillalogoizquierdo))) {
+                    $plantillaword->setImageValue('LOGO_IZQUIERDO', array('path' => storage_path('app/' . $cliente->cliente_plantillalogoizquierdo), 'height' => 39, 'width' => 580, 'ratio' => true, 'borderColor' => '000000'));
+                } else {
                     $plantillaword->setValue('LOGO_IZQUIERDO', 'SIN IMAGEN');
                 }
-            }
-            else
-            {
+            } else {
                 $plantillaword->setValue('LOGO_IZQUIERDO', 'SIN IMAGEN');
             }
 
 
-            if ($cliente->cliente_plantillalogoderecho)
-            {
-                if (file_exists(storage_path('app/'.$cliente->cliente_plantillalogoderecho)))
-                {
-                    $plantillaword->setImageValue('LOGO_DERECHO', array('path' => storage_path('app/'.$cliente->cliente_plantillalogoderecho), 'height' => 39, 'width' => 580, 'ratio' => true, 'borderColor' => '000000'));
-                }
-                else
-                {
+            if ($cliente->cliente_plantillalogoderecho) {
+                if (file_exists(storage_path('app/' . $cliente->cliente_plantillalogoderecho))) {
+                    $plantillaword->setImageValue('LOGO_DERECHO', array('path' => storage_path('app/' . $cliente->cliente_plantillalogoderecho), 'height' => 39, 'width' => 580, 'ratio' => true, 'borderColor' => '000000'));
+                } else {
                     $plantillaword->setValue('LOGO_DERECHO', 'SIN IMAGEN');
                 }
-            }
-            else
-            {
+            } else {
                 $plantillaword->setValue('LOGO_DERECHO', 'SIN IMAGEN');
             }
 
@@ -1008,10 +936,10 @@ class reportesController extends Controller
             //================================================================================
 
 
-            $plantillaword->setValue('INSTALACION_NOMBRE', $proyecto->proyecto_clienteinstalacion.'<w:br/>'.$proyecto->proyecto_folio);
+            $plantillaword->setValue('INSTALACION_NOMBRE', $proyecto->proyecto_clienteinstalacion . '<w:br/>' . $proyecto->proyecto_folio);
             $plantillaword->setValue('INSTALACION', $proyecto->proyecto_clienteinstalacion);
 
-            setlocale(LC_ALL,"es_MX");
+            setlocale(LC_ALL, "es_MX");
             $plantillaword->setValue('FECHA_CREACION', ucfirst(strftime("%B %Y", strtotime(date("d-m-Y", strtotime($recsensorial->recsensorial_fechainicio)))))); //ucfirst = primera letra mayuscula
 
 
@@ -1056,7 +984,7 @@ class reportesController extends Controller
                                     LEFT JOIN reporteareacategoria ON reportearea.id = reporteareacategoria.reportearea_id
                                     LEFT JOIN reportecategoria ON reporteareacategoria.reportecategoria_id = reportecategoria.id
                                 WHERE
-                                    reportearea.proyecto_id = '.$proyecto_id.' 
+                                    reportearea.proyecto_id = ' . $proyecto_id . ' 
                                 ORDER BY
                                     reportearea.reportearea_orden ASC,
                                     reportearea.reportearea_nombre ASC,
@@ -1070,17 +998,17 @@ class reportesController extends Controller
             $ancho_col_5 = 3000;
 
             // Crear tabla
-            $table = null; $width_table = 9940;
+            $table = null;
+            $width_table = 9940;
             $table = new Table(array('name' => $fuente, 'width' => $width_table, 'borderSize' => 1, 'borderColor' => '000000', 'cellMargin' => 40, 'unit' => TblWidth::TWIP));
-            
 
-            $numero_fila = 0; $instalacion = 'XXXXX'; $area = 'xxxx';
-            foreach ($sql as $key => $value) 
-            {
-                if($instalacion != $value->reportearea_instalacion)
-                {
-                    if (($key+0) != 0)
-                    {
+
+            $numero_fila = 0;
+            $instalacion = 'XXXXX';
+            $area = 'xxxx';
+            foreach ($sql as $key => $value) {
+                if ($instalacion != $value->reportearea_instalacion) {
+                    if (($key + 0) != 0) {
                         $total = DB::select('SELECT
                                                 SUM(TABLA.reportecategoria_total) AS total
                                             FROM
@@ -1099,8 +1027,8 @@ class reportesController extends Controller
                                                         LEFT JOIN reportearea ON reporteareacategoria.reportearea_id = reportearea.id
                                                         LEFT JOIN reportecategoria ON reporteareacategoria.reportecategoria_id = reportecategoria.id
                                                     WHERE
-                                                        reportearea.proyecto_id = '.$proyecto_id.' 
-                                                        AND reportearea.reportearea_instalacion = "'.$instalacion.'"
+                                                        reportearea.proyecto_id = ' . $proyecto_id . ' 
+                                                        AND reportearea.reportearea_instalacion = "' . $instalacion . '"
                                                     GROUP BY
                                                         reporteareacategoria.reportecategoria_id,
                                                         reportecategoria.reportecategoria_nombre,
@@ -1108,13 +1036,13 @@ class reportesController extends Controller
                                                 ) AS TABLA');
 
 
-                            $table->addRow(); //fila
-                            $table->addCell(null, array('gridSpan' => 3, 'valign' => 'center', 'bgColor' => '0BACDB'))->addTextRun($centrado)->addText('Total de personal', $textototal); // combina columna
-                            $table->addCell(null, $celda)->addTextRun($centrado)->addText($total[0]->total, $textonegrita);
-                            $table->addCell($ancho_col_5, $continua_fila);
+                        $table->addRow(); //fila
+                        $table->addCell(null, array('gridSpan' => 3, 'valign' => 'center', 'bgColor' => '0BACDB'))->addTextRun($centrado)->addText('Total de personal', $textototal); // combina columna
+                        $table->addCell(null, $celda)->addTextRun($centrado)->addText($total[0]->total, $textonegrita);
+                        $table->addCell($ancho_col_5, $continua_fila);
 
-                            $table->addRow(); //fila
-                            $table->addCell(null, array('gridSpan' => 5, 'valign' => 'center', 'borderTopColor' =>'ffffff', 'borderTopSize' => 1, 'borderRightColor' =>'ffffff', 'borderRightSize' => 1, 'borderBottomColor' =>'ffffff', 'borderBottomSize' => 1, 'borderLeftColor' =>'ffffff', 'borderLeftSize' => 1))->addTextRun($izquierda)->addText('Nota: Las categorías repetidas en más de un área son consideradas como puesto móvil de trabajo.', $texto);
+                        $table->addRow(); //fila
+                        $table->addCell(null, array('gridSpan' => 5, 'valign' => 'center', 'borderTopColor' => 'ffffff', 'borderTopSize' => 1, 'borderRightColor' => 'ffffff', 'borderRightSize' => 1, 'borderBottomColor' => 'ffffff', 'borderBottomSize' => 1, 'borderLeftColor' => 'ffffff', 'borderLeftSize' => 1))->addTextRun($izquierda)->addText('Nota: Las categorías repetidas en más de un área son consideradas como puesto móvil de trabajo.', $texto);
                     }
 
                     // encabezado tabla
@@ -1136,24 +1064,18 @@ class reportesController extends Controller
                 $table->addRow(); //fila
 
 
-                if($area != $value->reportearea_nombre)
-                {
+                if ($area != $value->reportearea_nombre) {
                     $numero_fila += 1;
                     $table->addCell($ancho_col_1, $combinar_fila)->addTextRun($centrado)->addText($numero_fila);
-                }
-                else
-                {
+                } else {
                     $table->addCell($ancho_col_1, $continua_fila);
                 }
 
 
-                if($area != $value->reportearea_nombre)
-                {
+                if ($area != $value->reportearea_nombre) {
                     $table->addCell($ancho_col_2, $combinar_fila)->addTextRun($centrado)->addText($value->reportearea_nombre, $texto);
                     $area = $value->reportearea_nombre;
-                }
-                else
-                {
+                } else {
                     $table->addCell($ancho_col_2, $continua_fila);
                 }
 
@@ -1162,14 +1084,11 @@ class reportesController extends Controller
                 $table->addCell($ancho_col_4, $celda)->addTextRun($centrado)->addText($value->reporteareacategoria_total, $texto);
 
 
-                if($instalacion != $value->reportearea_instalacion)
-                {
+                if ($instalacion != $value->reportearea_instalacion) {
                     $table->addCell($ancho_col_5, $combinar_fila)->addTextRun($justificado)->addText($recsensorial->recsensorial_actividadprincipal, $texto);
 
                     $instalacion = $value->reportearea_instalacion;
-                }
-                else
-                {
+                } else {
                     $table->addCell($ancho_col_5, $continua_fila);
                 }
             }
@@ -1192,8 +1111,8 @@ class reportesController extends Controller
                                             LEFT JOIN reportearea ON reporteareacategoria.reportearea_id = reportearea.id
                                             LEFT JOIN reportecategoria ON reporteareacategoria.reportecategoria_id = reportecategoria.id
                                         WHERE
-                                            reportearea.proyecto_id = '.$proyecto_id.' 
-                                            AND reportearea.reportearea_instalacion = "'.$instalacion.'"
+                                            reportearea.proyecto_id = ' . $proyecto_id . ' 
+                                            AND reportearea.reportearea_instalacion = "' . $instalacion . '"
                                         GROUP BY
                                             reporteareacategoria.reportecategoria_id,
                                             reportecategoria.reportecategoria_nombre,
@@ -1207,7 +1126,7 @@ class reportesController extends Controller
             $table->addCell($ancho_col_5, $continua_fila);
 
             $table->addRow(); //fila
-            $table->addCell(null, array('gridSpan' => 5, 'valign' => 'center', 'borderTopColor' =>'ffffff', 'borderTopSize' => 1, 'borderRightColor' =>'ffffff', 'borderRightSize' => 1, 'borderBottomColor' =>'ffffff', 'borderBottomSize' => 1, 'borderLeftColor' =>'ffffff', 'borderLeftSize' => 1))->addTextRun($izquierda)->addText('Nota: Las categorías repetidas en más de un área son consideradas como puesto móvil de trabajo.', $texto);
+            $table->addCell(null, array('gridSpan' => 5, 'valign' => 'center', 'borderTopColor' => 'ffffff', 'borderTopSize' => 1, 'borderRightColor' => 'ffffff', 'borderRightSize' => 1, 'borderBottomColor' => 'ffffff', 'borderBottomSize' => 1, 'borderLeftColor' => 'ffffff', 'borderLeftSize' => 1))->addTextRun($izquierda)->addText('Nota: Las categorías repetidas en más de un área son consideradas como puesto móvil de trabajo.', $texto);
 
 
             $plantillaword->setComplexBlock('TABLA_POE', $table);
@@ -1217,14 +1136,12 @@ class reportesController extends Controller
             //================================================================================
 
 
-            $word_ruta = storage_path('app/reportes/informes/Tabla_POE_proyecto_'.$proyecto->proyecto_folio.'.docx');
+            $word_ruta = storage_path('app/reportes/informes/Tabla_POE_proyecto_' . $proyecto->proyecto_folio . '.docx');
             $plantillaword->saveAs($word_ruta); //GUARDAR Y CREAR archivo word TEMPORAL
             return response()->download($word_ruta)->deleteFileAfterSend(true);
-        }
-        catch(Exception $e)
-        {
+        } catch (Exception $e) {
             // respuesta
-            $dato["msj"] = 'Error '.$e->getMessage();
+            $dato["msj"] = 'Error ' . $e->getMessage();
             return response()->json($dato);
         }
     }
@@ -1351,58 +1268,67 @@ class reportesController extends Controller
 
 
 
-    public function descargarPortadaInformes($proyecto_id, $tipo){
+    public function descargarPortadaInformes($proyecto_id, $tipo)
+    {
 
-        function introduccion($proyecto, $texto) {
+        function introduccion($proyecto, $texto)
+        {
             if (count($proyecto) == 0) {
-                return $texto; 
+                return $texto;
             }
-    
+
             $proyecto = $proyecto[0];
-    
+
             $reportefecha = explode("-", $proyecto->proyecto_fechaentrega);
             $meses = [
-                1 => 'enero', 2 => 'febrero', 3 => 'marzo', 4 => 'abril', 5 => 'mayo', 6 => 'junio', 
-                7 => 'julio', 8 => 'agosto', 9 => 'septiembre', 10 => 'octubre', 11 => 'noviembre', 12 => 'diciembre'
+                1 => 'enero',
+                2 => 'febrero',
+                3 => 'marzo',
+                4 => 'abril',
+                5 => 'mayo',
+                6 => 'junio',
+                7 => 'julio',
+                8 => 'agosto',
+                9 => 'septiembre',
+                10 => 'octubre',
+                11 => 'noviembre',
+                12 => 'diciembre'
             ];
-    
+
             $texto = str_replace("INSTALACION_NOMBRE", $proyecto->proyecto_clienteinstalacion, $texto);
             $texto = str_replace("REPORTE_FECHA_LARGA", $reportefecha[2] . " de " . $meses[(int)$reportefecha[1]] . " del año " . $reportefecha[0], $texto);
-    
+
             return $texto;
         }
 
         // ================== DATOS GENERALES =================
-        $recursos = recursosPortadasInformesModel::where('PROYECTO_ID', $proyecto_id)->where('AGENTE_ID',$tipo)->get();
+        $recursos = recursosPortadasInformesModel::where('PROYECTO_ID', $proyecto_id)->where('AGENTE_ID', $tipo)->get();
         $proyecto = proyectoModel::where('id', $proyecto_id)->get();
         $reconocimiento = recsensorialModel::where('id', $proyecto[0]->recsensorial_id)->get();
 
 
-        if($proyecto[0]->requiereContrato == 1){
+        if ($proyecto[0]->requiereContrato == 1) {
 
             $contratoId = $proyecto[0]->contrato_id;
 
             $cliente = DB::table('contratos_clientes as cc')
-            ->leftJoin('cliente as c', 'c.id', '=', 'cc.CLIENTE_ID')
-            ->where('cc.ID_CONTRATO', $contratoId)
-            ->select(
-                'cc.NUMERO_CONTRATO',
-                'cc.DESCRIPCION_CONTRATO',
-                'cc.CONTRATO_PLANTILLA_LOGODERECHO',
-                'cc.CONTRATO_PLANTILLA_LOGOIZQUIERDO',
-                'cc.CONTRATO_PLANTILLA_PIEPAGINA',
-                'c.cliente_RazonSocial'
-            )
-            ->get();
-           
-
-        }else{
+                ->leftJoin('cliente as c', 'c.id', '=', 'cc.CLIENTE_ID')
+                ->where('cc.ID_CONTRATO', $contratoId)
+                ->select(
+                    'cc.NUMERO_CONTRATO',
+                    'cc.DESCRIPCION_CONTRATO',
+                    'cc.CONTRATO_PLANTILLA_LOGODERECHO',
+                    'cc.CONTRATO_PLANTILLA_LOGOIZQUIERDO',
+                    'cc.CONTRATO_PLANTILLA_PIEPAGINA',
+                    'c.cliente_RazonSocial'
+                )
+                ->get();
+        } else {
             $cliente = clienteModel::where('id', $proyecto[0]->cliente_id)->get();
-
         }
 
-    
-        
+
+
         switch ($tipo) {
             case 1: //RUIDO
 
@@ -1413,10 +1339,10 @@ class reportesController extends Controller
                 // ====== PORTADA EXTERIROR
 
                 $titulo_partida = clientepartidasModel::where('CONTRATO_ID', $reconocimiento[0]->contrato_id)
-                ->where('clientepartidas_tipo', 2) // Informe de resultados
-                ->where('catprueba_id', 1) // ruido
-                ->orderBy('updated_at', 'DESC')
-                ->get();
+                    ->where('clientepartidas_tipo', 2) // Informe de resultados
+                    ->where('catprueba_id', 1) // ruido
+                    ->orderBy('updated_at', 'DESC')
+                    ->get();
 
                 //PARTE DEL PROYECTO
                 if (count($titulo_partida) > 0) {
@@ -1425,7 +1351,6 @@ class reportesController extends Controller
                     $plantillaword->setValue('proyecto_portada', str_replace("\n", "<w:br/>", $titulo_partida[0]->clientepartidas_descripcion) . ' - Contrato: ' . $cliente[0]->NUMERO_CONTRATO);
 
                     $plantillaword->setValue('PARTIDA', str_replace("\n", "<w:br/>", $titulo_partida[0]->clientepartidas_descripcion));
-
                 } else {
 
                     $plantillaword->setValue('PARTIDA', "");
@@ -1436,7 +1361,7 @@ class reportesController extends Controller
                 $plantillaword->setValue('razon_social_portada', $cliente[0]->cliente_RazonSocial);
                 $plantillaword->setValue('instalación_portada', $reconocimiento[0]->recsensorial_instalacion);
 
-                $fecha = $agente[0]->reporte_mes. ' del '. $agente[0]->reporteruido_fecha;
+                $fecha = $agente[0]->reporte_mes . ' del ' . $agente[0]->reporteruido_fecha;
                 $plantillaword->setValue('lugar_fecha_portada', $fecha);
                 $plantillaword->setValue('PORTADA_FECHA', $fecha);
 
@@ -1474,8 +1399,7 @@ class reportesController extends Controller
 
                     $plantillaword->setValue('PIE_PAGINA', $cliente[0]->CONTRATO_PLANTILLA_PIEPAGINA);
                     $plantillaword->setValue('INFORME_REVISION', "");
-
-                }else{
+                } else {
 
                     $plantillaword->setValue('CONTRATO', "");
                     $plantillaword->setValue('DESCRIPCION_CONTRATO', "");
@@ -1483,8 +1407,6 @@ class reportesController extends Controller
 
                     $plantillaword->setValue('PIE_PAGINA', "");
                     $plantillaword->setValue('INFORME_REVISION', "");
-
-
                 }
 
 
@@ -1499,54 +1421,47 @@ class reportesController extends Controller
                 $plantillaword->setValue('INSTALACION_NOMBRE', $NIVEL1 . $NIVEL2 . $NIVEL3 . $NIVEL4 . $NIVEL5);
 
                 //LOGOS DE AS EMPRESAS DE INFORME
-                if($proyecto[0]->requiereContrato == 1){
+                if ($proyecto[0]->requiereContrato == 1) {
 
                     if ($cliente[0]->CONTRATO_PLANTILLA_LOGOIZQUIERDO) {
                         if (file_exists(storage_path('app/' . $cliente[0]->CONTRATO_PLANTILLA_LOGOIZQUIERDO))) {
-    
+
                             $plantillaword->setImageValue('LOGO_IZQUIERDO', array('path' => storage_path('app/' . $cliente[0]->CONTRATO_PLANTILLA_LOGOIZQUIERDO), 'width' => 120, 'height' => 150, 'ratio' => true, 'borderColor' => '000000'));
 
                             $plantillaword->setImageValue('LOGO_IZQUIERDO_PORTADA', array('path' => storage_path('app/' . $cliente[0]->CONTRATO_PLANTILLA_LOGOIZQUIERDO), 'width' => 120, 'height' => 150, 'ratio' => true, 'borderColor' => '000000'));
-    
                         } else {
-    
+
                             $plantillaword->setValue('LOGO_IZQUIERDO', 'SIN IMAGEN');
                             $plantillaword->setValue('LOGO_IZQUIERDO_PORTADA', 'SIN IMAGEN');
-
                         }
                     } else {
                         $plantillaword->setValue('LOGO_IZQUIERDO', 'SIN IMAGEN');
                         $plantillaword->setValue('LOGO_IZQUIERDO_PORTADA', 'SIN IMAGEN');
-
                     }
-    
-    
+
+
                     if ($cliente[0]->CONTRATO_PLANTILLA_LOGODERECHO) {
                         if (file_exists(storage_path('app/' . $cliente[0]->CONTRATO_PLANTILLA_LOGODERECHO))) {
-    
+
                             $plantillaword->setImageValue('LOGO_DERECHO', array('path' => storage_path('app/' . $cliente[0]->CONTRATO_PLANTILLA_LOGODERECHO), 'width' => 120, 'height' => 150, 'ratio' => true, 'borderColor' => '000000'));
 
                             $plantillaword->setImageValue('LOGO_DERECHO_PORTADA', array('path' => storage_path('app/' . $cliente[0]->CONTRATO_PLANTILLA_LOGODERECHO), 'width' => 120, 'height' => 150, 'ratio' => true, 'borderColor' => '000000'));
                         } else {
-    
+
                             $plantillaword->setValue('LOGO_DERECHO', 'SIN IMAGEN');
                             $plantillaword->setValue('LOGO_DERECHO_PORTADA', 'SIN IMAGEN');
-
                         }
                     } else {
                         $plantillaword->setValue('LOGO_DERECHO', 'SIN IMAGEN');
                         $plantillaword->setValue('LOGO_DERECHO_PORTADA', 'SIN IMAGEN');
                     }
-
-                }else{
+                } else {
 
                     $plantillaword->setValue('LOGO_DERECHO', 'SIN IMAGEN');
                     $plantillaword->setValue('LOGO_IZQUIERDO', 'SIN IMAGEN');
 
                     $plantillaword->setValue('LOGO_DERECHO_PORTADA', 'SIN IMAGEN');
                     $plantillaword->setValue('LOGO_IZQUIERDO_PORTADA', 'SIN IMAGEN');
-
-
                 }
 
                 // ====== INTRODUCCION =====
@@ -1555,25 +1470,24 @@ class reportesController extends Controller
 
                 $introduccionTexto = $agente[0]->reporteruido_introduccion;
                 $introduccionTextoModificado = introduccion($proyecto, $introduccionTexto);
-            
+
                 // Asigna el texto modificado a la plantilla
                 $plantillaword->setValue('INTRODUCCION', $introduccionTextoModificado);
 
 
                 //=========== CREAR Y DESCARGAR EL INFORME
-                try{
+                try {
                     Storage::makeDirectory('reportes/portadas'); //crear directorio
                     $plantillaword->saveAs(storage_path('app/reportes/portadas/Ruido.docx')); //crear archivo word
 
                     return response()->download(storage_path('app/reportes/portadas/Ruido.docx'))->deleteFileAfterSend(true);
-
                 } catch (Exception $e) {
                     $dato["msj"] = 'Error al crear reporte: ' . $e->getMessage();
                     return response()->json($dato);
                 }
 
                 break;
-                
+
 
 
             case 2: // VIBRACIÓN
@@ -1715,21 +1629,20 @@ class reportesController extends Controller
 
                 $introduccionTexto = $agente[0]->reportevibracion_introduccion;
                 $introduccionTextoModificado = introduccion($proyecto, $introduccionTexto);
-            
+
                 // Asigna el texto modificado a la plantilla
                 $plantillaword->setValue('INTRODUCCION', $introduccionTextoModificado);
 
 
 
                 // $plantillaword->setValue('INTRODUCCION', $agente[0]->reportevibracion_introduccion);
-                
 
-                try{
+
+                try {
                     Storage::makeDirectory('reportes/portadas'); //crear directorio
                     $plantillaword->saveAs(storage_path('app/reportes/portadas/Vibracion.docx')); //crear archivo word
 
                     return response()->download(storage_path('app/reportes/portadas/Vibracion.docx'))->deleteFileAfterSend(true);
-
                 } catch (Exception $e) {
                     $dato["msj"] = 'Error al crear reporte: ' . $e->getMessage();
                     return response()->json($dato);
@@ -1875,7 +1788,7 @@ class reportesController extends Controller
 
                 $introduccionTexto = $agente[0]->reportetemperatura_introduccion;
                 $introduccionTextoModificado = introduccion($proyecto, $introduccionTexto);
-            
+
                 // Asigna el texto modificado a la plantilla
                 $plantillaword->setValue('INTRODUCCION', $introduccionTextoModificado);
 
@@ -2026,18 +1939,17 @@ class reportesController extends Controller
 
                 $introduccionTexto = $agente[0]->reporteiluminacion_introduccion;
                 $introduccionTextoModificado = introduccion($proyecto, $introduccionTexto);
-            
+
                 // Asigna el texto modificado a la plantilla
                 $plantillaword->setValue('INTRODUCCION', $introduccionTextoModificado);
 
 
 
-                try{
+                try {
                     Storage::makeDirectory('reportes/portadas'); //crear directorio
                     $plantillaword->saveAs(storage_path('app/reportes/portadas/Iluminacion.docx')); //crear archivo word
 
                     return response()->download(storage_path('app/reportes/portadas/Iluminacion.docx'))->deleteFileAfterSend(true);
-
                 } catch (Exception $e) {
                     $dato["msj"] = 'Error al crear reporte: ' . $e->getMessage();
                     return response()->json($dato);
@@ -2053,8 +1965,8 @@ class reportesController extends Controller
                 // ====== PORTADA EXTERIROR
 
                 $titulo_partida = clientepartidasModel::where('CONTRATO_ID', $reconocimiento[0]->contrato_id)
-                ->where('clientepartidas_tipo', 2) // Informe de resultados
-                ->where('catprueba_id', 8) // Aire
+                    ->where('clientepartidas_tipo', 2) // Informe de resultados
+                    ->where('catprueba_id', 8) // Aire
                     ->orderBy('updated_at', 'DESC')
                     ->get();
 
@@ -2107,7 +2019,8 @@ class reportesController extends Controller
                 $NIVEL_PORTADA6 = is_null($recursos[0]->OPCION_PORTADA6) ? "" : $recursos[0]->OPCION_PORTADA6 . "<w:br />";
                 $plantillaword->setValue('ESTRUCTURA', $NIVEL_PORTADA1 . $NIVEL_PORTADA2 . $NIVEL_PORTADA3 . $NIVEL_PORTADA4 . $NIVEL_PORTADA5 . $NIVEL_PORTADA6);
 
-                if ($proyecto[0]->requiereContrato == 1
+                if (
+                    $proyecto[0]->requiereContrato == 1
                 ) {
 
                     $plantillaword->setValue('TITULO_CONTRATO', "Contrato:");
@@ -2138,7 +2051,8 @@ class reportesController extends Controller
                 $plantillaword->setValue('INSTALACION_NOMBRE', $NIVEL1 . $NIVEL2 . $NIVEL3 . $NIVEL4 . $NIVEL5);
 
                 //LOGOS DE AS EMPRESAS DE INFORME
-                if ($proyecto[0]->requiereContrato == 1
+                if (
+                    $proyecto[0]->requiereContrato == 1
                 ) {
                     if ($cliente[0]->CONTRATO_PLANTILLA_LOGOIZQUIERDO) {
                         if (file_exists(storage_path('app/' . $cliente[0]->CONTRATO_PLANTILLA_LOGOIZQUIERDO))) {
@@ -2186,12 +2100,12 @@ class reportesController extends Controller
 
                 $introduccionTexto = $agente[0]->reporteaire_introduccion;
                 $introduccionTextoModificado = introduccion($proyecto, $introduccionTexto);
-            
+
                 // Asigna el texto modificado a la plantilla
                 $plantillaword->setValue('INTRODUCCION', $introduccionTextoModificado);
 
 
-                try{
+                try {
                     Storage::makeDirectory('reportes/portadas'); //crear directorio
                     $plantillaword->saveAs(storage_path('app/reportes/portadas/Aire.docx')); //crear archivo word
 
@@ -2204,20 +2118,21 @@ class reportesController extends Controller
 
 
             case 9: // AGUA
-                
+
                 $agente = reporteaguaModel::where('proyecto_id', $proyecto_id)->get();
                 $plantillaword = new TemplateProcessor(storage_path('app/plantillas_reportes/portadas/Plantilla_informe_agua.docx')); //Ruta carpeta storage
 
                 // ====== PORTADA EXTERIROR
 
                 $titulo_partida = clientepartidasModel::where('CONTRATO_ID', $reconocimiento[0]->contrato_id)
-                ->where('clientepartidas_tipo', 2) // Informe de resultados
-                ->where('catprueba_id',9) // Agua
-                ->orderBy('updated_at','DESC')
-                ->get();
+                    ->where('clientepartidas_tipo', 2) // Informe de resultados
+                    ->where('catprueba_id', 9) // Agua
+                    ->orderBy('updated_at', 'DESC')
+                    ->get();
 
                 //PARTE DEL PROYECTO
-                if (count($titulo_partida) > 0
+                if (
+                    count($titulo_partida) > 0
                 ) {
 
                     //Para el valor que lleva proyecto se utilizo: descripcion de la partida, Numero del contrato y la descripcion del contrato
@@ -2342,13 +2257,13 @@ class reportesController extends Controller
 
                 $introduccionTexto = $agente[0]->reporteagua_introduccion;
                 $introduccionTextoModificado = introduccion($proyecto, $introduccionTexto);
-            
+
                 // Asigna el texto modificado a la plantilla
                 $plantillaword->setValue('INTRODUCCION', $introduccionTextoModificado);
 
-               
 
-                try{
+
+                try {
                     Storage::makeDirectory('reportes/portadas'); //crear directorio
                     $plantillaword->saveAs(storage_path('app/reportes/portadas/Agua.docx')); //crear archivo word
 
@@ -2368,10 +2283,10 @@ class reportesController extends Controller
                 // ====== PORTADA EXTERIROR
 
                 $titulo_partida = clientepartidasModel::where('CONTRATO_ID', $reconocimiento[0]->contrato_id)
-                ->where('clientepartidas_tipo', 2) // Informe de resultados
-                ->where('catprueba_id', 10) // ruido
-                ->orderBy('updated_at', 'DESC')
-                ->get();
+                    ->where('clientepartidas_tipo', 2) // Informe de resultados
+                    ->where('catprueba_id', 10) // ruido
+                    ->orderBy('updated_at', 'DESC')
+                    ->get();
 
                 //PARTE DEL PROYECTO
                 if (count($titulo_partida) > 0) {
@@ -2499,12 +2414,12 @@ class reportesController extends Controller
 
                 $introduccionTexto = $agente[0]->reportehielo_introduccion;
                 $introduccionTextoModificado = introduccion($proyecto, $introduccionTexto);
-            
+
                 // Asigna el texto modificado a la plantilla
                 $plantillaword->setValue('INTRODUCCION', $introduccionTextoModificado);
 
 
-                try{
+                try {
                     Storage::makeDirectory('reportes/ejemplo'); //crear directorio
                     $plantillaword->saveAs(storage_path('app/reportes/ejemplo/Ejemplo.docx')); //crear archivo word
 
@@ -2515,7 +2430,7 @@ class reportesController extends Controller
                 }
                 break;
 
-                
+
             case 15: // QUÍMICOS
 
                 $agente = reportequimicosModel::where('proyecto_id', $proyecto_id)->get();
@@ -2655,12 +2570,12 @@ class reportesController extends Controller
 
                 $introduccionTexto = $agente[0]->reportequimicos_introduccion;
                 $introduccionTextoModificado = introduccion($proyecto, $introduccionTexto);
-            
+
                 // Asigna el texto modificado a la plantilla
                 $plantillaword->setValue('INTRODUCCION', $introduccionTextoModificado);
 
 
-                try{
+                try {
                     Storage::makeDirectory('reportes/portadas'); //crear directorio
                     $plantillaword->saveAs(storage_path('app/reportes/portadas/Quimico.docx')); //crear archivo word
 
@@ -2669,7 +2584,7 @@ class reportesController extends Controller
                     $dato["msj"] = 'Error al crear reporte: ' . $e->getMessage();
                     return response()->json($dato);
                 }
-                
+
                 break;
 
             case 16: // INFRAESTRUCTURA PARA SERVICIOS AL PERSONAL
@@ -2679,7 +2594,7 @@ class reportesController extends Controller
                 // ====== PORTADA EXTERIROR
 
                 $titulo_partida = clientepartidasModel::where('CONTRATO_ID', $reconocimiento[0]->contrato_id)
-                ->where('clientepartidas_tipo', 2) // Informe de resultados
+                    ->where('clientepartidas_tipo', 2) // Informe de resultados
                     ->where('catprueba_id', 16) // ruido
                     ->orderBy('updated_at', 'DESC')
                     ->get();
@@ -2700,12 +2615,14 @@ class reportesController extends Controller
 
                 $plantillaword->setValue('folio_portada', $proyecto[0]->proyecto_folio);
                 $plantillaword->setValue('razon_social_portada', $cliente[0]->cliente_RazonSocial);
-                $plantillaword->setValue('instalación_portada',
+                $plantillaword->setValue(
+                    'instalación_portada',
                     $reconocimiento[0]->recsensorial_instalacion
                 );
 
                 $fecha = $agente[0]->reporte_mes . ' del ' . $agente[0]->reporteserviciopersonal_fecha;
-                $plantillaword->setValue('lugar_fecha_portada',
+                $plantillaword->setValue(
+                    'lugar_fecha_portada',
                     $fecha
                 );
                 $plantillaword->setValue('PORTADA_FECHA', $fecha);
@@ -2723,7 +2640,8 @@ class reportesController extends Controller
                     }
                 } else {
 
-                    $plantillaword->setValue('foto_portada',
+                    $plantillaword->setValue(
+                        'foto_portada',
                         'LA IMAGEN DE LA PORTADA NO HA SIDO CARGADA'
                     );
                 }
@@ -2740,7 +2658,8 @@ class reportesController extends Controller
 
                 if ($proyecto[0]->requiereContrato == 1) {
 
-                    $plantillaword->setValue('TITULO_CONTRATO',
+                    $plantillaword->setValue(
+                        'TITULO_CONTRATO',
                         "Contrato:"
                     );
                     $plantillaword->setValue('CONTRATO', $cliente[0]->NUMERO_CONTRATO);
@@ -2752,7 +2671,8 @@ class reportesController extends Controller
 
                     $plantillaword->setValue('CONTRATO', "");
                     $plantillaword->setValue('DESCRIPCION_CONTRATO', "");
-                    $plantillaword->setValue('TITULO_CONTRATO',
+                    $plantillaword->setValue(
+                        'TITULO_CONTRATO',
                         ""
                     );
 
@@ -2769,7 +2689,8 @@ class reportesController extends Controller
                 $NIVEL5 = is_null($recursos[0]->NIVEL5) ? "" : $recursos[0]->NIVEL5;
 
                 $plantillaword->setValue('ENCABEZADO', $NIVEL1 . $NIVEL2 . $NIVEL3 . $NIVEL4 . $NIVEL5);
-                $plantillaword->setValue('INSTALACION_NOMBRE',
+                $plantillaword->setValue(
+                    'INSTALACION_NOMBRE',
                     $NIVEL1 . $NIVEL2 . $NIVEL3 . $NIVEL4 . $NIVEL5
                 );
 
@@ -2810,10 +2731,12 @@ class reportesController extends Controller
                     }
                 } else {
 
-                    $plantillaword->setValue('LOGO_DERECHO',
+                    $plantillaword->setValue(
+                        'LOGO_DERECHO',
                         'SIN IMAGEN'
                     );
-                    $plantillaword->setValue('LOGO_IZQUIERDO',
+                    $plantillaword->setValue(
+                        'LOGO_IZQUIERDO',
                         'SIN IMAGEN'
                     );
 
@@ -2827,7 +2750,7 @@ class reportesController extends Controller
 
                 $introduccionTexto = $agente[0]->reporteserviciopersonal_introduccion;
                 $introduccionTextoModificado = introduccion($proyecto, $introduccionTexto);
-            
+
                 // Asigna el texto modificado a la plantilla
                 $plantillaword->setValue('INTRODUCCION', $introduccionTextoModificado);
 
@@ -2846,9 +2769,5 @@ class reportesController extends Controller
                 # code...
                 break;
         }
-
-
     }
-
-
 }

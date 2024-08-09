@@ -4862,7 +4862,7 @@ function funcion_tabla_recsensorialareas(recsensorial_id)
         $("#tabla_areacategorias tbody").append('<tr>' +
             '<td style="padding:2px 4px;"><select class="custom-select form-control" style="padding:0px 4px;" name="categoria[]" required>' + select_areacategorias_opciones + '</select></td>' +
             '<td style="padding:2px 4px;"><input type="text" class="form-control" style="padding:0px 4px;" name="actividad[]" value="" placeholder="Actividades en el área" required></td>' +
-            '<td style="padding:2px 4px;"><input type="text" class="form-control" style="padding:0px 4px;" name="geh[]" value="" placeholder="Ejem. II" required></td>' +
+            '<td style="padding:2px 4px;"><input type="number" class="form-control" style="padding:0px 4px;" name="geh[]" value="" placeholder="Ejem. II" required></td>' +
             '<td style="padding:2px 4px;"><input type="number" class="form-control" style="padding:0px 4px;" name="total[]" value="" placeholder="Total" required></td>' +
             '<td style="padding:2px 4px;"><input type="number" class="form-control" style="padding:0px 4px;" name="tiempo[]" value="" placeholder="Tiempo Expo." required></td>' +
             '<td style="padding:2px 4px;"><input type="number" class="form-control" style="padding:0px 4px;" name="frecuencia[]" value="" placeholder="Frec. Expo." required></td>' +
@@ -4951,7 +4951,7 @@ $("#boton_nueva_areacategoria").click(function()
     $("#tabla_areacategorias tbody").append('<tr>'+
 												'<td style="padding:2px 4px;"><select class="custom-select form-control" style="padding:0px 4px;" name="categoria[]" required>'+select_areacategorias_opciones+'</select></td>'+
 												'<td style="padding:2px 4px;"><input type="text" class="form-control" style="padding:0px 4px;" name="actividad[]" value="" placeholder="Actividades en el área" required></td>'+
-												'<td style="padding:2px 4px;"><input type="text" class="form-control" style="padding:0px 4px;" name="geh[]" value="" placeholder="Ejem. II" required></td>'+
+												'<td style="padding:2px 4px;"><input type="number" class="form-control" style="padding:0px 4px;" name="geh[]" value="" placeholder="Ejem. 1" required></td>'+
 												'<td style="padding:2px 4px;"><input type="number" class="form-control" style="padding:0px 4px;" name="total[]" value="" placeholder="Total" required></td>'+
 												'<td style="padding:2px 4px;"><input type="number" class="form-control" style="padding:0px 4px;" name="tiempo[]" value="" placeholder="Tiempo Expo." required></td>'+
 												'<td style="padding:2px 4px;"><input type="number" class="form-control" style="padding:0px 4px;" name="frecuencia[]" value="" placeholder="Frec. Expo." required></td>'+
@@ -5090,7 +5090,7 @@ function consulta_areascategorias(area_id)
 				$("#tabla_areacategorias tbody").append('<tr>'+
 															'<td style="padding:2px 4px;"><select class="custom-select form-control" style="padding:0px 4px;" id="categoria_'+key+'" name="categoria[]" required>'+select_areacategorias_opciones+'</select></td>'+
 															'<td style="padding:2px 4px;"><input type="text" class="form-control" style="padding:0px 4px;" name="actividad[]" value="'+actividad+'" required></td>'+
-															'<td style="padding:2px 4px;"><input type="text" class="form-control" style="padding:0px 4px;" name="geh[]" value="'+geh+'" required></td>'+
+															'<td style="padding:2px 4px;"><input type="number" class="form-control" style="padding:0px 4px;" name="geh[]" value="'+geh+'" required></td>'+
 															'<td style="padding:2px 4px;"><input type="number" class="form-control" style="padding:0px 4px;" name="total[]" value="'+total+'" required></td>'+
 															'<td style="padding:2px 4px;"><input type="number" class="form-control" style="padding:0px 4px;" name="tiempo[]" value="'+tiempo+'" required></td>'+
 															'<td style="padding:2px 4px;"><input type="number" class="form-control" style="padding:0px 4px;" name="frecuencia[]" value="'+frecuencia+'" required></td>'+
@@ -5318,6 +5318,28 @@ function consulta_areas(nombre_campo, id_seleccionado, recsensorial_id, quimicas
     });//Fin ajax
 }
 
+var categoriasEvaluadas = ''
+function consulta_categorias_evaluadas(recsensorial_id) {
+	
+	categoriasEvaluadas = '';
+    $.ajax({
+        type: "GET",
+        dataType: "json",
+        url: "/obtenerCategoriasEvaluadas/"+ recsensorial_id,
+        data:{},
+        cache: false,
+		success: function (dato) {
+
+			categoriasEvaluadas = dato.opciones;
+        	
+        },
+        error: function(dato){
+            // alert('Error: '+dato.msj);
+            return false;
+        }
+    });//Fin ajax
+}
+
 
 
 $(document).ready(function() {
@@ -5484,6 +5506,9 @@ $("#boton_nueva_maquina").click(function()
 	
 	$("#recsensorialmaquinaria_contenido").prop('disabled', false);
 
+    $("#nombrecomun").prop('disabled', false).prop('required', false); 
+    
+	$("#recsensorialmaquinaria_afecta").val("").change();  
 
     // mostrar modal
 	$('#modal_maquina').modal({backdrop:false});
@@ -5756,6 +5781,16 @@ $(document).ready(function()
 		$("#recsensorialmaquinaria_cantidad").val(row.data().recsensorialmaquinaria_cantidad);
         $("#recsensorialmaquinaria_contenido").val(row.data().recsensorialmaquinaria_contenido);
 		$("#recsensorialmaquinaria_unidadMedida").val(row.data().recsensorialmaquinaria_unidadMedida);
+		$("#descripcionfuente").val(row.data().recsensorialmaquinaria_descripcionfuente);
+		$("#nombrecomun").val(row.data().recsensorialmaquinaria_nombrecomun);
+
+
+
+		
+
+
+
+
 		
 		var opcion = row.data().recsensorialmaquinaria_afecta
 		var select = $('#recsensorialmaquinaria_quimica')[0].selectize; //Mostramos el select de las sustancias quimicas 
@@ -7250,6 +7285,160 @@ $("#boton_nueva_sustacia").click(function()
 });
 
 
+$('input[type=radio][name=TIPO_CLASIFICACION]').on('change', function () {
+	var opcion = $(this).val();
+
+	if (parseInt(opcion) == 1) {
+		$('#CLASIFICACION_GRUPO').val('I')
+	
+	} else if (parseInt(opcion) == 2) {
+
+		$('#CLASIFICACION_GRUPO').val('A')
+
+	}
+});
+
+
+//Creamos las categorias junto con sus su informacion
+$("#boton_nuevo_grupo").click(function () {
+	
+	// Borrar formulario
+	$('#form_grupos').each(function(){
+		this.reset();
+	});
+
+	// Campos Hidden
+    $("#NUEVO_GRUPO").val(1);
+    $("#GRUPO_RECSENSORIAL_ID").val($("#recsensorial_id").val());
+
+    // vaciar lista de  catalogo sustancias
+    $("#tabla_grupos> tbody").html('<tr><td colspan="3" style="width: 1143px; height: 160px;">&nbsp;</td></tr>');
+
+	//Realizamos la peticion para el esqueleto de la informacion
+	$.ajax({
+		type: "GET",
+		dataType: "json",
+		url: "/obtenerCategoriasReconomiento/"+ $("#recsensorial_id").val() + "/" + "XXXX" + "/" + 0,
+		data:{},
+		cache: false,
+		success: function (dato) {
+			// data = dato
+
+			//VALIDAMOS LA CLASIFICACION DE LOS GRUPOS DE EXPOSICION HOMOGENEA
+			if (dato.GEH.length == 0) {
+
+				$('#TIPO_CLASIFICACION_ROMANOS').prop('disabled', false);
+				$('#TIPO_CLASIFICACION_LETRAS').prop('disabled', false);
+				$('#TIPO_CLASIFICACION_ROMANOS').prop('checked', true);
+				$('#TIPO_CLASIFICACION_LETRAS').prop('checked', false);
+
+				 swal({
+					title: "Grupos de Exposición Homogénea",
+					text: "Seleccione la clasificación de los GEH (Num. Romanos o Letras), ya que despues de guardar esto no se podra editar!",
+					type: "warning", // warning, error, success, info
+					buttons: {
+						visible: true, // true , false
+					},
+					showConfirmButton: true
+				});  
+
+
+			} else {
+
+				$('#TIPO_CLASIFICACION_ROMANOS').prop('disabled', true);
+				$('#TIPO_CLASIFICACION_LETRAS').prop('disabled', true);
+
+				if (dato.GEH[0].OPCION == 1) {
+				
+					$('#TIPO_CLASIFICACION_ROMANOS').prop('checked', true);
+					$('#TIPO_CLASIFICACION_LETRAS').prop('checked', false);
+				} else {
+
+					$('#TIPO_CLASIFICACION_LETRAS').prop('checked', true);
+					$('#TIPO_CLASIFICACION_ROMANOS').prop('checked', false);
+
+				}
+
+				$('#CLASIFICACION_GRUPO').val(dato.CONSECUTIVO)
+
+
+				
+
+			}
+
+
+				
+			// Creamos lista de categorias
+			var filastr_categorias = '';
+			$.each(dato.categorias, function( key, value ){
+		
+
+			filastr_categorias += `<tr>
+										<td style="width: 700px!important;">
+											<div class="form-group">
+												<div class="switch" style="float: left;">
+													<label>
+														<input type="checkbox" onchange="activarTrabajadores(this)" name="ID_RELACION[]" value="${value.ID_RELACION}" >
+														<span class="lever switch-col-light-blue"></span>
+													</label>
+												</div>
+												<label class="demo-switch-title" style="float: left; font-size:15px;">[ ${value.AREA} ] ${value.CATEGORIA}</label>
+												<input type="hidden" class="form-control" name="ID_AREA_GRUPO[]" value="${value.AREA_ID}" disabled>
+												<input type="hidden" class="form-control" name="ID_CATEGORIA_GRUPO[]" value="${value.CATEGORIA_ID}" disabled>
+											</div>
+										</td>
+										<td style="width: 200px!important;">
+											<input type="number" step="any" class="form-control text-center" placeholder="No. Trabajadore" name="NUM_TRABAJADORES_VIEJO[]" value="${value.PERSONAL}"  disabled>
+										</td>
+										<td style="width: 200px!important;">
+											<input type="number" step="any" class="form-control text-center" placeholder="No. Trabajadores expuestos" onchange="validarTrabajadores(this)" name="NUM_TRABAJADORES_NUEVO[]" disabled>
+										</td>
+									</tr>`
+			});
+
+	        	
+			html = `<tr>
+				<td style="width: 100%px!important;">
+					<table>
+						<tr>
+							<td style="width: 720px!important;">
+								<label>&nbsp;</label>
+								<select class="custom-select form-control" id="COMPONENTE_ID" name="COMPONENTE_ID" required>
+									${dato.componentes}
+								</select>
+							</td>
+							<td style="width: 200px!important;">
+								<label>&nbsp;</label>
+							</td>
+							<td style="width: 200px!important;">
+								<label>&nbsp;</label>
+							</td>
+						</tr>
+						${filastr_categorias}
+					</table>
+				</td>
+			</tr>`
+
+
+			$('#tabla_grupos > tbody').html(html);
+		},
+		beforeSend: function()
+		{
+			$("#tabla_grupos > tbody").html('<tr><td colspan="3" style="width: 1143px; text-align: center;"><i class="fa fa-spin fa-spinner fa-5x"></i></td></tr>');
+		},
+		error: function(dato)
+		{
+			$("#tabla_grupos > tbody").html('<tr><td colspan="3" style="width: 1143px; height: 160px;">&nbsp;</td></tr>');
+			return false;
+		}
+	})
+
+
+    // mostrar modal
+	$('#modal_grupos').modal({backdrop:false});
+});
+
+
 function consulta_select_categoriasxarea(recsensorialarea_id) {
 	
 
@@ -7300,46 +7489,12 @@ function consulta_select_categoriasxarea(recsensorialarea_id) {
 }
 
 
-$("#boton_nuevasustancia_inventario").click(function()
-{
-	// Obtenemos el numero de filas de la tabla [Descontamos 1 porque empieza de 0]
-    // var rows = (parseInt(document.getElementById("tabla_catsustancias").rows.length) - 1);
-    // $("#tabla_catsustancias tbody").append('<tr>'+
-    //                                             '<td style="width: 60px!important;">'+sustancia_lista_total+'</td>'+
-    //                                             '<td style="width: 680px!important;">'+
-                                                        // '<select class="custom-select form-control select_search" id="partida_select_alcance_'+sustancia_lista_total+'" name="partida_alcance[]" required>'+
-                                                        //     '<option val="">seleccione</option>'+
-                                                        // '</select>'+
-    //                                             '</td>'+
-    //                                             '<td style="width: 180px!important;"><input type="number" step="any" class="form-control" placeholder="Cantidad" value="" name="precio_alcance[]" required></td>'+
-    //                                             '<td style="width: 180px!important;"><input type="number" step="any" class="form-control" value="" name="precio_alcance[]" required></td>'+
-    //                                             '<td style="width: auto!important;" class="eliminar"><button type="button" class="btn btn-danger btn-circle"><i class="fa fa-trash"></i></button></td>'+
-    //                                         '</tr>'+filastr_categorias);
-
-
+$("#boton_nuevasustancia_inventario").click(function(){
+	
 	// Creamos lista de categorias
 	var filastr_categorias = '';
-	$.each(categorias_lista, function( key, value )
-	{
-		// filastr_categorias += '<tr>'+
-	 //                                '<td style="width: 680px!important;">'+
-	 //                                    '<div class="form-group">'+
-	 //                                        '<div class="switch" style="float: left;">'+
-	 //                                            '<label>'+
-	 //                                                '<input type="checkbox" class="categoria_'+sustancia_lista_total+'" name="categoria_'+sustancia_lista_total+'[]" value="'+value.categoria_id+'" onchange="activa_categoria(this, '+(sustancia_lista_total+1)+key+');">'+
-	 //                                                '<span class="lever switch-col-light-blue"></span>'+
-	 //                                            '</label>'+
-	 //                                        '</div>'+
-	 //                                        '<label class="demo-switch-title" style="float: left;">'+value.categoria_nombre+'</label>'+
-	 //                                    '</div>'+
-	 //                                '</td>'+
-	 //                                '<td style="width: 180px!important;">'+
-	 //                                	'<input type="number" step="any" class="form-control" placeholder="Exp. minutos" id="tiempo_'+(sustancia_lista_total+1)+key+'" name="tiempo_'+sustancia_lista_total+'[]" disabled>'+
-	 //                                '</td>'+
-	 //                                '<td style="width: 180px!important;">'+
-	 //                                	'<input type="number" step="any" class="form-control" placeholder="Frecuencia exp." id="frecuencia_'+(sustancia_lista_total+1)+key+'" name="frecuencia_'+sustancia_lista_total+'[]" disabled>'+
-	 //                                '</td>'+
-	 //                            '</tr>';
+	$.each(categorias_lista, function( key, value ){
+		
 
 	 filastr_categorias += '<tr>'+
 	                                '<td style="width: 680px!important;">'+
@@ -7406,21 +7561,6 @@ $("#boton_nuevasustancia_inventario").click(function()
     // Desplazar a la primera fila de la tabla
     $('#tabla_catsustancias > tbody').scrollTop(0);
 
-    // desplazar a la ultima fila de la tabla
-    // $('#tabla_catsustancias > tbody').animate({
-    //     scrollTop: $('#tabla_catsustancias > tbody > tr:last').position().top //ultima fila
-    // }, 1000);
-
-
-	// let $input = $('#tabla_catsustancias > tbody').find('input.form-control[name="cantidad[]"]');
-	// let $Input = $input.last(); 
-
-
-	// $('#tabla_catsustancias > tbody').animate({
-	// 	scrollTop: $Input.position().top
-	// }, 1000);
-
-
 	let $input = $('#tabla_catsustancias > tbody').find('input.form-control[name="cantidad[]"]');
 	let $targetInput = $input.last(); 
 	
@@ -7433,6 +7573,98 @@ $("#boton_nuevasustancia_inventario").click(function()
     // Incrementar contador
     sustancia_lista_total += 1;
 });
+
+
+$("#boton_nueva_categoria_grupo").click(function(){
+
+	// Crear fila
+ 	var rows = (parseInt(document.getElementById("tabla_grupos").rows.length) - 1);
+    $('#tabla_grupos > tbody > tr').eq(rows-1).before('<tr>'+
+															'<td>'+
+																'0'+
+															'</td>'+
+															'<td style="width:750px!important">'+
+																'<select class="custom-select form-control" onchange="obtenerTrabajadores(this)" name="CATEGORIA_GRUPO[]" required>' +
+																	categoriasEvaluadas +
+																'</select>'+
+															'<td style="width:100px!important">'+
+																'<input type="hidden" class="form-control"  name="AREA_GRUPO[]" >'+
+																'<input type="number" class="form-control"  name="NUM_TRABAJADORES_VIEJO[]" required readonly>'+
+															'</td>'+
+															'<td>'+
+																'<input type="number"  class="form-control" onchange="validarTrabajadores(this)" name="NUM_TRABAJADORES_NUEVO[]" required>'+
+															'</td>'+	
+															'<td class="eliminar">'+
+																'<button type="button" class="btn btn-danger btn-circle"><i class="fa fa-trash"></i></button>'+
+															'</td>'+
+														'</tr>');
+
+    // Inicializa campo tipo select search
+    // $('#selectsearch_sustancia_'+sustancia_lista_total).selectize();
+
+    // Desplazar a la primera fila de la tabla
+    $('#tabla_grupos > tbody').scrollTop(0);
+
+
+	let $input = $('#tabla_grupos > tbody').find('input.form-control[name="NUM_TRABAJADORES_VIEJO[]"]');
+	let $targetInput = $input.last(); 
+	
+	let positionAdjustment = $targetInput.position().top + 15; 
+	
+	$('#tabla_grupos > tbody').animate({
+		scrollTop: positionAdjustment
+	}, 1000);
+
+    // Incrementar contador
+    sustancia_lista_total += 1;
+});
+
+
+function validarTrabajadores(input) {
+
+	const row = input.closest('tr');
+	const trabajadores = row.querySelector('input[name="NUM_TRABAJADORES_VIEJO[]"]');
+
+
+	if (input.value > trabajadores.value) {
+		
+		input.classList.add('error'); 
+		
+	} else {
+		
+		input.classList.remove('error'); 
+	}
+   
+}
+
+function activarTrabajadores(check) {
+
+	const row = check.closest('tr');
+	const trabajadoresViejos = row.querySelector('input[name="NUM_TRABAJADORES_VIEJO[]"]');
+	const trabajadoresNuevo = row.querySelector('input[name="NUM_TRABAJADORES_NUEVO[]"]');
+	const areas = row.querySelector('input[name="ID_AREA_GRUPO[]"]');
+	const categorias = row.querySelector('input[name="ID_CATEGORIA_GRUPO[]"]');
+
+	if (check.checked) {
+
+		trabajadoresViejos.readOnly = true;
+		trabajadoresViejos.disabled = false;
+		trabajadoresNuevo.disabled = false;
+		areas.disabled = false;
+		categorias.disabled = false;
+
+	} else {
+
+		trabajadoresViejos.readOnly = false;
+		trabajadoresViejos.disabled = true;
+		trabajadoresNuevo.disabled = true;
+		trabajadoresNuevo.value = ''
+		trabajadoresNuevo.classList.remove('error')
+		areas.disabled = true;
+		categorias.disabled = true;
+	}
+   
+}
 
 
 
@@ -7484,6 +7716,58 @@ $('#tabla_catsustancias > tbody').on('click', '.eliminar', function()
             swal({
                 title: "Correcto",
                  text: "Sustancia eliminada de la lista",
+                type: "success", // warning, error, success, info
+                buttons: {
+                    visible: false, // true , false
+                },
+                timer: 1000,
+                showConfirmButton: false
+            });
+        }
+        else 
+        {
+            // mensaje
+            swal({
+                title: "Cancelado",
+                text: "",
+                type: "error", // warning, error, success, info
+                buttons: {
+                    visible: false, // true , false
+                },
+                timer: 500,
+                showConfirmButton: false
+            });   
+        } 
+    });
+});
+
+// Eliminar fila sustancia
+$('#tabla_grupos > tbody').on('click', '.eliminar', function()
+{
+    // obtener fila tabla
+    var fila = $(this);
+    
+    // confirmar
+    swal({   
+        title: "¿Eliminar categoría?",   
+        text: "Eliminar categoría de la lista",   
+        type: "warning",   
+        showCancelButton: true,   
+        confirmButtonColor: "#DD6B55",   
+        confirmButtonText: "Eliminar!",   
+        cancelButtonText: "Cancelar!",   
+        closeOnConfirm: false,   
+        closeOnCancel: false 
+    }, function(isConfirm){   
+        if (isConfirm)
+        {
+            var tr = fila.closest('tr');
+            fila.closest("tr").remove(); // eliminar fila TR
+
+            // mensaje
+            swal({
+                title: "Categoria eliminada de la lista",
+                 text: "No se olvide de guardar, para permanecer con los cambios.",
                 type: "success", // warning, error, success, info
                 buttons: {
                     visible: false, // true , false
@@ -7571,10 +7855,7 @@ $(document).ready(function()
 });
 
 
-$("#boton_guardar_sustancia").click(function()
-{
-	// borrar campo filtro del DATATABLE
-	// tabla_catsustancias.search($(this).val()).draw();
+$("#boton_guardar_sustancia").click(function(){
 
 	var valida = this.form.checkValidity();
 
@@ -7602,7 +7883,9 @@ $("#boton_guardar_sustancia").click(function()
 					dataType: 'json',
 					type: 'POST',
 					url: '/recsensorialquimicosinventario',
-					data: {},
+					data: {
+						api: 1
+					},
 					resetForm: false,
 					success: function(dato)
 					{
@@ -7672,6 +7955,287 @@ $("#boton_guardar_sustancia").click(function()
         });
 		return false;
 	}
+});
+
+
+$("#boton_guardar_grupos").click(function (e) {
+	e.preventDefault();
+	
+ 	var elementosConError = $('#tabla_grupos .error');
+	if (elementosConError.length == 0) {
+
+		var valida = this.form.checkValidity();
+		if (valida) {
+			// confirmar
+			swal({
+				title: "¿Guardar Grupo de Exposición Homogénea?",
+				text: "Confirme para crear un nuevo grupo de Exposición",
+				type: "warning",
+				showCancelButton: true,
+				confirmButtonColor: "#DD6B55",
+				confirmButtonText: "Guardar!",
+				cancelButtonText: "Cancelar!",
+				closeOnConfirm: false,
+				closeOnCancel: false
+			}, function (isConfirm) {
+				if (isConfirm) {
+					// cerrar cuadro de dialogo
+					swal.close();
+					
+					// enviar datos
+					$('#form_grupos').ajaxForm({
+						dataType: 'json',
+						type: 'POST',
+						url: '/recsensorialquimicosinventario',
+						data: {
+							api: 2,
+						},
+						resetForm: false,
+						success: function (dato) {
+							// Campos Hidden
+							$("#ID_GRUPO").val(0);
+							$("#GRUPO_RECSENSORIAL_ID").val(dato.recsensorial_id);
+
+							// actualiza tabla GEH
+							tabla_quimicosresumen_3.ajax.reload();
+
+							// mensaje
+							swal({
+								title: "Correcto",
+								text: "" + dato.msj,
+								type: "success", // warning, error, success, info
+								buttons: {
+									visible: false, // true , false
+								},
+								timer: 1500,
+								showConfirmButton: false
+							});
+
+							// actualiza boton
+							$('#boton_guardar_grupos').html('Guardar <i class="fa fa-save"></i>');
+
+							// cerrar modal
+							$('#modal_grupos').modal('hide');
+						},
+						beforeSend: function () {
+							$('#boton_guardar_grupos').html('Guardando <i class="fa fa-spin fa-spinner"></i>');
+						},
+						error: function (dato) {
+							// actualiza boton
+							$('#boton_guardar_grupos').html('Guardar <i class="fa fa-save"></i>');
+							// mensaje
+							swal({
+								title: "Error",
+								text: "Error en la acción: " + dato,
+								type: "error", // warning, error, success, info
+								buttons: {
+									visible: false, // true , false
+								},
+								timer: 1500,
+								showConfirmButton: false
+							});
+							return false;
+						}
+					}).submit();
+					return false;
+				}
+				else {
+					// mensaje
+					swal({
+						title: "Cancelado",
+						text: "",
+						type: "error", // warning, error, success, info
+						buttons: {
+							visible: false, // true , false
+						},
+						timer: 500,
+						showConfirmButton: false
+					});
+				}
+			});
+			return false;
+		} else {
+			swal({
+				title: "Faltan datos por rellenar",
+				text: "Asegurece de rellenar todos los datos requeridos ",
+				type: "warning", // warning, error, success, info
+				buttons: {
+					visible: false, // true , false
+				},
+				timer: 2500,
+				showConfirmButton: false
+			});
+		}
+	} else {
+
+		 // mensaje
+		swal({
+			title: "Asegurece de que todos los valores esten correctos.",
+			text: "Por favor, verifique que el No. de Trabajadores expuestos no sean mayores a los No. de trabajadores del área",
+			type: "warning", // warning, error, success, info
+			buttons: {
+				visible: false, // true , false
+			},
+			timer: 2500,
+			showConfirmButton: false
+		});  
+		
+	}
+});
+
+
+// EDITAR GRUPOS DE EXPOSICION
+$(document).ready(function()
+{
+	$('#tabla_quimicosresumen_3 tbody').on('click', 'td>button.editar', function () {
+		
+		// mensaje
+		swal({
+			title: "¡Nota importante!",
+			text: "Al editar un GEH es necesario confirmar los puntos de muestreo y POE en el Informe. ¡Esto solo aplica si los puntos de muestreo y POE ya fueron confirmados!",
+			type: "info", // warning, error, success, info
+			buttons: {
+				visible: true, // true , false
+			},
+			showConfirmButton: true
+		});
+
+
+
+        var tr = $(this).closest('tr');
+        var row = tabla_quimicosresumen_3.row(tr);
+
+		// Borrar formulario
+		$('#form_grupos').each(function(){
+			this.reset();
+		});
+
+		// llenar campos
+		$("#NUEVO_GRUPO").val(0);
+		$("#GRUPO_RECSENSORIAL_ID").val(row.data().RECSENSORIAL_ID);
+
+		$("#CLASIFICACION_GRUPO").val(row.data().CLASIFICACION)
+		if (row.data().OPCION == 1) {
+			$("#TIPO_CLASIFICACION_ROMANOS").prop('checked',true).prop('disabled', true);;
+			$("#TIPO_CLASIFICACION_LETRAS").prop('checked',false).prop('disabled', true);;
+			
+		} else {
+			$("#TIPO_CLASIFICACION_ROMANOS").prop('checked',false);
+			$("#TIPO_CLASIFICACION_LETRAS").prop('checked',true);
+		}
+
+
+		// vaciar lista de  catalogo sustancias
+		$("#tabla_grupos> tbody").html('<tr><td colspan="3" style="width: 1143px; height: 160px;">&nbsp;</td></tr>');
+
+		//Realizamos la peticion para el esqueleto guardado de de la informacion
+		$.ajax({
+			type: "GET",
+			dataType: "json",
+			url: "/obtenerCategoriasReconomiento/"+ row.data().RECSENSORIAL_ID + "/" + row.data().CLASIFICACION + "/" + row.data().RELACION_HOJA_SUS_ID,
+			data:{},
+			cache: false,
+			success: function (dato) {
+			
+				// Creamos lista de categorias
+				var filastr_categorias = '';
+				$.each(dato.categorias, function( key, value ){
+					
+					//VALIDAMOS SI LA CATEGORIA CON AREA ACTUAL ESTA SELECCIONADA
+					if (value.SELECCIONADO == 1) {
+						filastr_categorias += `<tr>
+												<td style="width: 700px!important;">
+													<div class="form-group">
+														<div class="switch" style="float: left;">
+															<label>
+																<input type="checkbox" onchange="activarTrabajadores(this)" name="ID_RELACION[]" value="${value.ID_RELACION}" checked>
+																<span class="lever switch-col-light-blue"></span>
+															</label>
+														</div>
+														<label class="demo-switch-title" style="float: left; font-size:15px;">[ ${value.AREA} ] ${value.CATEGORIA}</label>
+														<input type="hidden" class="form-control" name="ID_AREA_GRUPO[]" value="${value.AREA_ID}" >
+														<input type="hidden" class="form-control" name="ID_CATEGORIA_GRUPO[]" value="${value.CATEGORIA_ID}">
+													</div>
+												</td>
+												<td style="width: 200px!important;">
+													<input type="number" step="any" class="form-control text-center" placeholder="No. Trabajadore" name="NUM_TRABAJADORES_VIEJO[]" value="${value.PERSONAL}" readonly >
+												</td>
+												<td style="width: 200px!important;">
+													<input type="number" step="any" class="form-control text-center" placeholder="No. Trabajadores expuestos" onchange="validarTrabajadores(this)" name="NUM_TRABAJADORES_NUEVO[]" value="${value.POE}">
+												</td>
+											</tr>`
+						
+					} else {
+						filastr_categorias += `<tr>
+												<td style="width: 700px!important;">
+													<div class="form-group">
+														<div class="switch" style="float: left;">
+															<label>
+																<input type="checkbox" onchange="activarTrabajadores(this)" name="ID_RELACION[]" value="${value.ID_RELACION}" >
+																<span class="lever switch-col-light-blue"></span>
+															</label>
+														</div>
+														<label class="demo-switch-title" style="float: left; font-size:15px;">[ ${value.AREA} ] ${value.CATEGORIA}</label>
+														<input type="hidden" class="form-control" name="ID_AREA_GRUPO[]" value="${value.AREA_ID}" disabled>
+														<input type="hidden" class="form-control" name="ID_CATEGORIA_GRUPO[]" value="${value.CATEGORIA_ID}" disabled>
+													</div>
+												</td>
+												<td style="width: 200px!important;">
+													<input type="number" step="any" class="form-control text-center" placeholder="No. Trabajadore" name="NUM_TRABAJADORES_VIEJO[]" value="${value.PERSONAL}"  disabled>
+												</td>
+												<td style="width: 200px!important;">
+													<input type="number" step="any" class="form-control text-center" placeholder="No. Trabajadores expuestos" onchange="validarTrabajadores(this)" name="NUM_TRABAJADORES_NUEVO[]" disabled>
+												</td>
+											</tr>`
+					}
+					
+				});
+				
+
+					
+				html = `<tr>
+					<td style="width: 100%px!important;">
+						<table>
+							<tr>
+								<td style="width: 720px!important;">
+									<label>&nbsp;</label>
+									<select class="custom-select form-control" id="COMPONENTE_ID" name="COMPONENTE_ID" required>
+										${dato.componentes}
+									</select>
+								</td>
+								<td style="width: 200px!important;">
+									<label>&nbsp;</label>
+								</td>
+								<td style="width: 200px!important;">
+									<label>&nbsp;</label>
+								</td>
+							</tr>
+							${filastr_categorias}
+						</table>
+					</td>
+				</tr>`
+
+
+				$('#tabla_grupos > tbody').html(html);
+			},
+			beforeSend: function()
+			{
+				$("#tabla_grupos > tbody").html('<tr><td colspan="3" style="width: 1143px; text-align: center;"><i class="fa fa-spin fa-spinner fa-5x"></i></td></tr>');
+			},
+			error: function(dato)
+			{
+				$("#tabla_grupos > tbody").html('<tr><td colspan="3" style="width: 1143px; height: 160px;">&nbsp;</td></tr>');
+				return false;
+			}
+		})
+
+
+		// mostrar modal
+		$('#modal_grupos').modal({backdrop:false});
+
+
+		
+	});
 });
 
 
@@ -7788,13 +8352,13 @@ $('.multisteps-form__progress-btn-3').click(function()
 		case "steps3_menu_tab2":
 			funcion_tabla_quimicosresumen_1($("#recsensorial_id").val(), 1);
 			break;
-		case "steps3_menu_tab3":
+		case "steps3_menu_tab3": //Identificacion de los grupos de exposicion homogenea
 			funcion_tabla_quimicosresumen_2($("#recsensorial_id").val(), 2);
 			break;
-		case "steps3_menu_tab4":
+		case "steps3_menu_tab4": //Determinacion de los grupos de exposicion homogenea
 			funcion_tabla_quimicosresumen_3($("#recsensorial_id").val(), 3);
 			break;
-		case "steps3_menu_tab5":
+		case "steps3_menu_tab5": // Puntos de muestreo y POE
 			funcion_tabla_quimicosresumen_4($("#recsensorial_id").val(), 4);
 			break;
 		default:
@@ -7936,23 +8500,23 @@ function funcion_tabla_quimicosresumen_2(recsensorial_id, numero_tabla)
 		            //     "defaultContent": "-"
 		            // },
 		            {
-		                "data": "AREA",
+		                "data": "CLASIFICACION",
 		                "defaultContent": "-"
 		            },
 		            {
+		                "data": "SUSTANCIA_PRODUCTO",
+		                "defaultContent": "-"
+		            },
+		            {
+		                "data": "AREA",
+		                "defaultContent": "-"
+					},
+					 {
 		                "data": "CATEGORIA",
 		                "defaultContent": "-"
 		            },
 		            {
-		                "data": "PRODUCTO",
-		                "defaultContent": "-"
-					},
-					 {
-		                "data": "COMPONENTE",
-		                "defaultContent": "-"
-		            },
-		            {
-		                "data": "PONDERACION_VIAINGRESO",
+		                "data": "PONDERACION_INGRESO",
 		                "defaultContent": "-"
 		            },
 		            {
@@ -7964,15 +8528,19 @@ function funcion_tabla_quimicosresumen_2(recsensorial_id, numero_tabla)
 		                "defaultContent": "-"
 		            },
 		            {
-		                "data": "TOTAL2",
+		                "data": "TOTAL",
 		                "defaultContent": "-"
 		            },
 		            {
-		                "data": "PRIORIDAD2",
+		                "data": "PRIORIDAD",
+		                "defaultContent": "-"
+					},
+					{
+		                "data": "NUM_POE",
 		                "defaultContent": "-"
 		            }
 		        ],
-		        "order": [[ 2, "asc" ]],
+		        "order": [[ 0, "asc" ]],
 		        "rowsGroup": [0, 1, 2], //agrupar filas
 		        "lengthMenu": [[20, 50, 100, -1], [20, 50, 100, "Todos"]],
 		        "ordering": false,
@@ -8034,10 +8602,18 @@ function funcion_tabla_quimicosresumen_3(recsensorial_id, numero_tabla)
 		            // {
 		            //     "data": "id"
 		            // },
-		            // {
-		            //     "data": "numero_registro",
-		            //     "defaultContent": "-"
-		            // },
+		            {
+		                "data": "boton_editar",
+		                "defaultContent": "-"
+		            },
+		            {
+		                "data": "CLASIFICACION",
+		                "defaultContent": "-"
+		            },
+		            {
+		                "data": "SUSTANCIA_PRODUCTO",
+		                "defaultContent": "-"
+		            },
 		            {
 		                "data": "AREA",
 		                "defaultContent": "-"
@@ -8047,11 +8623,7 @@ function funcion_tabla_quimicosresumen_3(recsensorial_id, numero_tabla)
 		                "defaultContent": "-"
 		            },
 		            {
-		                "data": "PRODUCTO_COMPONENTE",
-		                "defaultContent": "-"
-		            },
-		            {
-		                "data": "NUM_TRABAJADORES",
+		                "data": "POE",
 		                "defaultContent": "-"
 		            },
 		            {
@@ -8059,28 +8631,24 @@ function funcion_tabla_quimicosresumen_3(recsensorial_id, numero_tabla)
 		                "defaultContent": "-"
 		            },
 		            {
-		                "data": "FRECUENCIA_EXPO",
+		                "data": "FRECUENCIA",
 		                "defaultContent": "-"
 		            },
 		            {
-		                "data": "TOTAL_EXPO",
+		                "data": "TIEMPO_TOTAL",
 		                "defaultContent": "-"
 		            },
 		            {
-		                "data": "horas_jornada",
+		                "data": "JORNADA_TRABAJO",
 		                "defaultContent": "-"
 		            },
-		            {
-		                "data": "PRIORIDAD",
-		                "defaultContent": "-"
-		            },
-		            {
-		                "data": "NUM_POE",
-		                "defaultContent": "-"
-		            }
+		            // {
+		            //     "data": "NUM_POE",
+		            //     "defaultContent": "-"
+		            // }
 		        ], 
-		        "order": [[ 2, "asc" ]],
-		        "rowsGroup": [0, 1, 2], //agrupar filas
+		        "order": [[ 1, "asc" ]],
+		        "rowsGroup": [0, 1, 2, 3], //agrupar filas
 		        "lengthMenu": [[20, 50, 100, -1], [20, 50, 100, "Todos"]],
 		        "ordering": false,
 		        "processing": true,
@@ -8144,15 +8712,15 @@ function funcion_tabla_quimicosresumen_4(recsensorial_id, numero_tabla)
 		            "data": {}
 		        },
 		        "columns": [
-		            // {
-		            //     "data": "id"
-		            // },
+		            {
+		                "data": "CLASIFICACION"
+		            },
+					{
+						"data": "PRODUCTO_COMPONENTE",
+						"defaultContent": "-"
+					},
 		            {
 		                "data": "CATEGORIA",
-		                "defaultContent": "-"
-		            },
-		            {
-		                "data": "PRODUCTO_COMPONENTE",
 		                "defaultContent": "-"
 		            },
 		            {
@@ -8168,8 +8736,8 @@ function funcion_tabla_quimicosresumen_4(recsensorial_id, numero_tabla)
 		                "defaultContent": "-"
 		            }
 		        ],
-		        "order": [[ 2, "asc" ]],
-		        "rowsGroup": [0], //agrupar filas
+		        "order": [[ 0, "asc" ]],
+		        "rowsGroup": [0,1], //agrupar filas
 		        "lengthMenu": [[20, 50, 100, -1], [20, 50, 100, "Todos"]],
 		        "ordering": false,
 		        "processing": true,
@@ -9871,17 +10439,17 @@ $('#tab2_informe_tabla').click(function (e) {
 
 				if (valor.PPT == 1) {
 						
-					ct_viejo = valor.CT == 1 ? `<input type="number" class="form-control text-center " name="CT_VIEJO[]" id="CT_VIEJO_${valor.SUSTANCIA_ID}" style=" border:1px solid green ; font-size:20px; width:75px" min="0" readonly>` : `<input type="number" class="form-control bloqueado" name="CT_VIEJO[]" id="CT_VIEJO_${valor.SUSTANCIA_ID}"  style="background:#FADBD8; border:1px solid red ; font-size:20px; width:75px" readonly>`
+					ct_viejo = valor.CT == 1 ? `<input type="number" class="form-control text-center " name="CT_VIEJO[]" id="CT_VIEJO_${valor.SUSTANCIA_ID}" style=" border:1px solid green ; font-size:20px; width:75px" value="${valor.VAL_CT_VIEJO}" min="0" readonly>` : `<input type="number" class="form-control text-center bloqueado" value="${valor.VAL_CT_VIEJO}" name="CT_VIEJO[]" id="CT_VIEJO_${valor.SUSTANCIA_ID}"  style="background:#FADBD8; border:1px solid red ; font-size:20px; width:75px" readonly>`
 				} else {
 
-					ct_viejo = valor.CT == 1 ? `<input type="number" class="form-control text-center " name="CT_VIEJO[]" id="CT_VIEJO_${valor.SUSTANCIA_ID}" style=" border:1px solid green ; font-size:20px; width:75px" min="0" value="${valor.VAL_PUNTOS_VIEJO}" readonly>` : `<input type="number" class="form-control bloqueado" name="CT_VIEJO[]" id="CT_VIEJO_${valor.SUSTANCIA_ID}"  style="background:#FADBD8; border:1px solid red ; font-size:20px; width:75px" readonly>`
+					ct_viejo = valor.CT == 1 ? `<input type="number" class="form-control text-center " name="CT_VIEJO[]" id="CT_VIEJO_${valor.SUSTANCIA_ID}" style=" border:1px solid green ; font-size:20px; width:75px" min="0" value="${valor.VAL_PUNTOS_VIEJO}" readonly>` : `<input type="number" class="form-control text-center bloqueado" value="${valor.VAL_CT_VIEJO}" name="CT_VIEJO[]" id="CT_VIEJO_${valor.SUSTANCIA_ID}"  style="background:#FADBD8; border:1px solid red ; font-size:20px; width:75px" readonly>`
 				}
 
 				//NUEVO VALORES DE PPT Y CT
-				ppt_nuevo = valor.PPT == 1 ? `<input type="number" class="form-control text-center PPT" name="PPT_NUEVO[]"  style=" border:1px solid green; font-size:20px; width:75px" min="0" value="${valor.VAL_PUNTOS_NUEVO}" required>` : `<input type="number" class="form-control  bloqueado" name="PPT_NUEVO[]"  style="background:#FADBD8; border:1px solid red; font-size:20px; width:75px" readonly >`
+				ppt_nuevo = valor.PPT == 1 ? `<input type="number" class="form-control text-center PPT" name="PPT_NUEVO[]"  style=" border:1px solid green; font-size:20px; width:75px" min="0" value="${valor.VAL_PPT_NUEVO}" required>` : `<input type="number" class="form-control  bloqueado" name="PPT_NUEVO[]"  style="background:#FADBD8; border:1px solid red; font-size:20px; width:75px" value="${valor.VAL_PPT_NUEVO}" readonly >`
 				
 
-				ct_nuevo = valor.CT == 1 ? `<input type="number" class="form-control text-center CT" name="CT_NUEVO[]"  style=" border:1px solid green ; font-size:20px; width:75px" min="0"  required>` : `<input type="number" class="form-control bloqueado" name="CT_NUEVO[]" style="background:#FADBD8; border:1px solid red ; font-size:20px; width:75px" readonly>`
+				ct_nuevo = valor.CT == 1 ? `<input type="number" class="form-control text-center CT" name="CT_NUEVO[]"  style=" border:1px solid green ; font-size:20px; width:75px" min="0" value="${valor.VAL_CT_NUEVO}"  required>` : `<input type="number" class="form-control text-center bloqueado" name="CT_NUEVO[]" style="background:#FADBD8; border:1px solid red ; font-size:20px; width:75px" value="${valor.VAL_CT_NUEVO}"  readonly>`
 
 				justificacion = valor.TIENE_JUSTIFICACION == 1 ? `<textarea row="2" class="form-control JUSTIFICACION" name="JUSTIFICACION[]"  style="height:73px">${valor.JUSTIFICACION}</textarea>` : `<textarea row="2" class="form-control JUSTIFICACION" name="JUSTIFICACION[]"  style="height:73px" readonly></textarea>`
 			
@@ -9890,6 +10458,7 @@ $('#tab2_informe_tabla').click(function (e) {
 					<div class="row mb-4 padre">
 						<div class="col-2">
 							<p>${valor.CATEGORIA} - <span class="badge badge-success p-2" style="font-size: 15px"><i class="fa fa-clock-o"></i> Expo. ${valor.TIEMPO_EXPO} Min.</span></p>
+							<input type="hidden" class="form-control" id="ID_GRUPO" name="ID_GRUPO[]" value="${valor.ID_GRUPO_EXPOSICION}">
 							<input type="hidden" class="form-control" id="CATEGORIA_ID" name="CATEGORIA_ID[]" value="${valor.CATEGORIA_ID}">
 
 						</div>
@@ -10105,6 +10674,7 @@ $("#boton_guardarTablaInformes").click(function () {
 							
 
 							// actualiza boton
+							$('#boton_descargarquimicosdoc').removeClass('bloqueado').addClass('desbloqueado')
 							$('#boton_guardarTablaInformes').html('Guardar <i class="fa fa-save"></i>');
 							$('#boton_guardarTablaInformes').attr('disabled', false);
 
@@ -10192,6 +10762,15 @@ $('#modal_datosInforme').on('shown.bs.modal', function () {
 			}
 
 			$('.SUSTANCIAS').selectize()
+
+
+			if (dato.puntos == 0) {
+				$('#boton_descargarquimicosdoc').removeClass('desbloqueado').addClass('bloqueado')
+				
+			} else {
+				$('#boton_descargarquimicosdoc').removeClass('bloqueado').addClass('desbloqueado')
+				
+			}
 
 			
 		},
@@ -10429,7 +11008,6 @@ $('#tab3_informe_tabla_cliente').click(function (e) {
 										<option value=""></option>
 									</select>`;
 					
-					var ppt 
 
 					var html = ` <div class="row mt-2 padre">
 
@@ -11588,3 +12166,26 @@ function validarConclusion(check) {
 	}
 	
 }
+
+
+
+    $('#recsensorialmaquinaria_afecta').change(function() {
+        var selectedValue = $(this).val(); 
+
+        var $input = $('#nombrecomun'); 
+
+
+        if (selectedValue === '1') {
+            $input.prop('disabled', true); 
+            $input.prop('required', false); 
+			 
+        } else if (selectedValue === '2') { 
+            $input.prop('disabled', false);  
+            $input.prop('required', true); 
+
+		} else {
+            $input.prop('disabled', false);  
+            $input.prop('required', false); 
+        }
+    });
+

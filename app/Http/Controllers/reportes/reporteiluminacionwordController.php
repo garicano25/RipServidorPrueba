@@ -508,7 +508,8 @@ class reporteiluminacionwordController extends Controller
             if (count($sql) > 1) {
                 foreach ($sql as $key => $value) {
                     $definiciones_fuentes[] = array(
-                        'fuente_descripcion' => $value->fuente, 'fuente_simbolo' => ' ' . $definiciones_simbolo[$key] . '*'
+                        'fuente_descripcion' => $value->fuente,
+                        'fuente_simbolo' => ' ' . $definiciones_simbolo[$key] . '*'
                     );
 
 
@@ -520,7 +521,8 @@ class reporteiluminacionwordController extends Controller
                 }
             } else {
                 $definiciones_fuentes[] = array(
-                    'fuente_descripcion' => $sql[0]->fuente, 'fuente_simbolo' => ''
+                    'fuente_descripcion' => $sql[0]->fuente,
+                    'fuente_simbolo' => ''
                 );
 
                 $definicionesfuentes = 'Fuentes: ' . $sql[0]->fuente;
@@ -1218,6 +1220,8 @@ class reporteiluminacionwordController extends Controller
                                         TABLA.reportearea_alto,
                                         TABLA.reportecategoria_id,
                                         TABLA.reportecategoria_orden,
+
+                                        TABLA.reportearea_tipoiluminacion AS reporteiluminacionarea_tipoiluminacion,
                                         TABLA.reportecategoria_nombre AS reporteiluminacioncategoria_nombre,
                                         TABLA.checked,
                                         TABLA.reportecategoria_horas AS reporteiluminacioncategoria_horas,
@@ -1249,6 +1253,7 @@ class reporteiluminacionwordController extends Controller
                                                 reportearea.reportearea_largo,
                                                 reportearea.reportearea_ancho,
                                                 reportearea.reportearea_alto,
+                                                reportearea.reportearea_tipoiluminacion,
                                                 reporteareacategoria.reportecategoria_id,
                                                 reportecategoria.reportecategoria_orden,
                                                 reportecategoria.reportecategoria_nombre,
@@ -1311,6 +1316,7 @@ class reporteiluminacionwordController extends Controller
                                         reporteiluminacionarea.reporteiluminacionarea_luznatural,
                                         reporteiluminacionarea.reporteiluminacionarea_iluminacionlocalizada,
                                         reporteiluminacioncategoria.reporteiluminacioncategoria_horas 
+                                        reporteiluminacioncategoria.reporteiluminacionarea_tipoiluminacion
                                     FROM
                                         reporteiluminacionareacategoria
                                         RIGHT JOIN reporteiluminacionarea ON reporteiluminacionareacategoria.reporteiluminacionarea_id = reporteiluminacionarea.id
@@ -1366,8 +1372,8 @@ class reporteiluminacionwordController extends Controller
                     $table->addCell($ancho_col_3, $encabezado_celda)->addTextRun($centrado)->addText('Área', $encabezado_texto);
                     $table->addCell($ancho_col_4, $encabezado_celda)->addTextRun($centrado)->addText('Categoría', $encabezado_texto);
                     $table->addCell($ancho_col_5, $encabezado_celda)->addTextRun($centrado)->addText('Descripción de las actividades<w:br/>que desarrolla', $encabezado_texto);
-                    $table->addCell($ancho_col_6, $encabezado_celda)->addTextRun($centrado)->addText('Influencia de luz natural', $encabezado_texto);
-                    $table->addCell($ancho_col_7, $encabezado_celda)->addTextRun($centrado)->addText('Iluminación localizada', $encabezado_texto);
+                    // $table->addCell($ancho_col_6, $encabezado_celda)->addTextRun($centrado)->addText('Influencia de luz natural', $encabezado_texto);
+                    $table->addCell($ancho_col_7, $encabezado_celda)->addTextRun($centrado)->addText('Tipo de iluminación', $encabezado_texto);
                     $table->addCell($ancho_col_8, $encabezado_celda)->addTextRun($centrado)->addText('Tiempo de jornada', $encabezado_texto);
 
                     $table->addRow(); //fila
@@ -1412,11 +1418,11 @@ class reporteiluminacionwordController extends Controller
                 $table->addCell($ancho_col_5, $celda)->addTextRun($justificado)->addText($value->reporteiluminacionareacategoria_actividades, $texto);
 
                 if ($area3 != $value->reporteiluminacionarea_nombre) {
-                    $table->addCell($ancho_col_6, $combinar_fila)->addTextRun($centrado)->addText($value->reporteiluminacionarea_luznatural, $texto);
-                    $table->addCell($ancho_col_7, $combinar_fila)->addTextRun($centrado)->addText($value->reporteiluminacionarea_iluminacionlocalizada, $texto);
+                    // $table->addCell($ancho_col_6, $combinar_fila)->addTextRun($centrado)->addText($value->reporteiluminacionarea_luznatural, $texto);
+                    $table->addCell($ancho_col_7, $combinar_fila)->addTextRun($centrado)->addText($value->reporteiluminacionarea_tipoiluminacion, $texto);
                     $area3 = $value->reporteiluminacionarea_nombre;
                 } else {
-                    $table->addCell($ancho_col_6, $continua_fila);
+                    // $table->addCell($ancho_col_6, $continua_fila);
                     $table->addCell($ancho_col_7, $continua_fila);
                 }
 
@@ -1448,6 +1454,9 @@ class reporteiluminacionwordController extends Controller
                                         reportearea.reportearea_iluminacionlocalizada, 
                                         reportearea.reportearea_colorsuperficie AS reporteiluminacionarea_colorsuperficie, 
                                         reportearea.reportearea_tiposuperficie AS reporteiluminacionarea_tiposuperficie, 
+                                         reportearea.reportearea_colorpiso AS reporteiluminacionarea_colorpiso   , 
+                                        reportearea.reportearea_superficiepiso  AS  reporteiluminacionarea_superficiepiso, 
+                                        reportearea.reportearea_tipoiluminacion AS reporteiluminacionarea_tipoiluminacion,
                                         reportearea.reportearea_largo, 
                                         reportearea.reportearea_ancho, 
                                         reportearea.reportearea_alto
@@ -1467,7 +1476,10 @@ class reporteiluminacionwordController extends Controller
                                         reporteiluminacionarea.reporteiluminacionarea_colorsuperficie,
                                         reporteiluminacionarea.reporteiluminacionarea_tiposuperficie,
                                         reporteiluminacionarea.reporteiluminacionarea_luznatural,
-                                        reporteiluminacionarea.reporteiluminacionarea_sistemailuminacion 
+                                        reporteiluminacionarea.reporteiluminacionarea_sistemailuminacion, 
+                                        reporteiluminacionarea.reporteiluminacionarea_colorpiso,
+                                        reporteiluminacionarea.reporteiluminacionarea_superficiepiso,
+                                        reporteiluminacionarea.reporteiluminacionarea_tipoiluminacion
                                     FROM
                                         reporteiluminacionarea
                                     WHERE
@@ -1520,7 +1532,7 @@ class reporteiluminacionwordController extends Controller
                     // $table->addCell($ancho_col_2, $combinar_fila_encabezado)->addTextRun($centrado)->addText('instalación', $encabezado_texto);
                     $table->addCell($ancho_col_3, $combinar_fila_encabezado)->addTextRun($centrado)->addText('Áreas', $encabezado_texto);
                     $table->addCell(4000, array('gridSpan' => 2, 'valign' => 'center', 'bgColor' => '0C3F64'))->addTextRun($centrado)->addText('Descripción del área iluminada', $encabezado_texto);
-                    $table->addCell($ancho_col_6, $combinar_fila_encabezado)->addTextRun($centrado)->addText('Influencia de luz natural', $encabezado_texto);
+                    $table->addCell($ancho_col_6, $combinar_fila_encabezado)->addTextRun($centrado)->addText('Tipo de iluminación', $encabezado_texto);
                     $table->addCell($ancho_col_7, $combinar_fila_encabezado)->addTextRun($centrado)->addText('Sistema de iluminación', $encabezado_texto);
                     $table->addRow(200, array('tblHeader' => true));
                     $table->addCell($ancho_col_1, $continua_fila);
@@ -1554,10 +1566,12 @@ class reporteiluminacionwordController extends Controller
                 //     $table->addCell($ancho_col_2, $continua_fila);
                 // }
 
+
+
                 $table->addCell($ancho_col_3, $celda)->addTextRun($centrado)->addText($value->reporteiluminacionarea_nombre, $texto);
-                $table->addCell($ancho_col_4, $celda)->addTextRun($centrado)->addText($value->reporteiluminacionarea_colorsuperficie, $texto);
-                $table->addCell($ancho_col_5, $celda)->addTextRun($centrado)->addText($value->reporteiluminacionarea_tiposuperficie, $texto);
-                $table->addCell($ancho_col_6, $celda)->addTextRun($centrado)->addText($value->reporteiluminacionarea_luznatural, $texto);
+                $table->addCell($ancho_col_4, $celda)->addTextRun($centrado)->addText($value->reporteiluminacionarea_colorpiso, $texto);
+                $table->addCell($ancho_col_5, $celda)->addTextRun($centrado)->addText($value->reporteiluminacionarea_superficiepiso, $texto);
+                $table->addCell($ancho_col_6, $celda)->addTextRun($centrado)->addText($value->reporteiluminacionarea_tipoiluminacion, $texto);
                 $table->addCell($ancho_col_7, $celda)->addTextRun($justificado)->addText($value->reporteiluminacionarea_sistemailuminacion, $texto);
             }
 
@@ -5414,7 +5428,9 @@ class reporteiluminacionwordController extends Controller
 
 
                 $archivo = reporterevisionesarchivoModel::create([
-                    'reporterevisiones_id' => $request->ultimarevision_id, 'reporterevisionesarchivo_tipo' => 0, 'reporterevisionesarchivo_archivo' => $zip_ruta_servidor . '/' . $zip_nombre
+                    'reporterevisiones_id' => $request->ultimarevision_id,
+                    'reporterevisionesarchivo_tipo' => 0,
+                    'reporterevisionesarchivo_archivo' => $zip_ruta_servidor . '/' . $zip_nombre
                 ]);
 
 
@@ -5450,7 +5466,17 @@ class reporteiluminacionwordController extends Controller
 
                 DB::statement('ALTER TABLE reporterevisiones AUTO_INCREMENT = 1;');
                 $revision = reporterevisionesModel::create([
-                    'proyecto_id' => $request->proyecto_id, 'agente_id' => $request->agente_id, 'agente_nombre' => $request->agente_nombre, 'reporterevisiones_revision' => ($revisiones[0]->reporterevisiones_revision + 1), 'reporterevisiones_concluido' => 0, 'reporterevisiones_concluidonombre' => NULL, 'reporterevisiones_concluidofecha' => NULL, 'reporterevisiones_cancelado' => 0, 'reporterevisiones_canceladonombre' => NULL, 'reporterevisiones_canceladofecha' => NULL, 'reporterevisiones_canceladoobservacion' => NULL
+                    'proyecto_id' => $request->proyecto_id,
+                    'agente_id' => $request->agente_id,
+                    'agente_nombre' => $request->agente_nombre,
+                    'reporterevisiones_revision' => ($revisiones[0]->reporterevisiones_revision + 1),
+                    'reporterevisiones_concluido' => 0,
+                    'reporterevisiones_concluidonombre' => NULL,
+                    'reporterevisiones_concluidofecha' => NULL,
+                    'reporterevisiones_cancelado' => 0,
+                    'reporterevisiones_canceladonombre' => NULL,
+                    'reporterevisiones_canceladofecha' => NULL,
+                    'reporterevisiones_canceladoobservacion' => NULL
                 ]);
 
 

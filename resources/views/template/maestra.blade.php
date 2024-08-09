@@ -225,7 +225,7 @@ use Illuminate\Support\Str;
                         <!-- ============================================================== -->
                         <!-- Comment -->
                         <!-- ============================================================== -->
-                        @if(auth()->user()->hasRoles(['Superusuario', 'Administrador', 'Coordinador', 'Proyecto','Compras','Almacén', 'Operativo HI']))
+                        @if(auth()->user()->hasRoles(['Superusuario', 'Administrador', 'Coordinador', 'Proyecto','Compras','Almacén', 'Operativo HI','Psicólogo','Ergónomo']))
                         <li class="nav-item dropdown">
                             <a class="nav-link dropdown-toggle text-muted text-muted waves-effect waves-dark" href="" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                                 <i class="mdi mdi-message"></i>
@@ -278,7 +278,10 @@ use Illuminate\Support\Str;
                                                 <b href="#" class="btn btn-rounded btn-danger">Almacén</b>
                                                 @elseif(auth()->user()->hasRoles(['Operativo HI']))
                                                 <b href="#" class="btn btn-rounded btn-danger">Operativo HI</b>
-
+                                                @elseif(auth()->user()->hasRoles(['Ergónomo']))
+                                                <b href="#" class="btn btn-rounded btn-danger">Ergónomo</b>
+                                                @elseif(auth()->user()->hasRoles(['Psicólogo']))
+                                                <b href="#" class="btn btn-rounded btn-danger">Psicólogo</b>
                                                 @elseif(auth()->user()->hasRoles(['Externo']))
                                                 <b href="#" class="btn btn-rounded btn-info">Proveedor</b>
                                                 @else
@@ -323,14 +326,14 @@ use Illuminate\Support\Str;
 
                         @if (preg_match('/\btablero\b/', request()->path()) || preg_match('/\bcliente\b/', request()->path()) || preg_match('/\bproveedor\b/', request()->path()) || preg_match('/\bclientecatalogo\b/', request()->path()) || preg_match('/\bproveedorcatalogos\b/', request()->path()) || preg_match('/\bbanco-imagenes\b/', request()->path()) || preg_match('/\busuario\b/', request()->path()))
 
-                        @if(auth()->user()->hasRoles(['Superusuario', 'Administrador','Coordinador','Compras','Almacén','Operativo HI']))
+                        @if(auth()->user()->hasRoles(['Superusuario', 'Administrador','Coordinador','Compras','Almacén','Operativo HI','Psicólogo','Ergónomo']))
                         <li> {{-- class="active" --}}
                             <a class="has-arrow" href="/tablero" aria-expanded="false">
                                 <i class="mdi mdi-gauge"></i><span class="hide-menu">Tablero</span>
                             </a>
                         </li>
                         @endif
-                        @if(auth()->user()->hasRoles(['Superusuario', 'Administrador','Coordinador','Compras','Almacén','Operativo HI']))
+                        @if(auth()->user()->hasRoles(['Superusuario', 'Administrador','Coordinador','Compras','Almacén','Operativo HI','Psicólogo','Ergónomo']))
                         <li>
                             <a class="has-arrow " href="{{route('cliente.index')}}" aria-expanded="false">
                                 <i class="mdi mdi-briefcase"></i><span class="hide-menu">Clientes</span>
@@ -382,7 +385,7 @@ use Illuminate\Support\Str;
 
                         @if (preg_match('/\bproyectos\b/', request()->path()))
 
-                        @if(auth()->user()->hasRoles(['Superusuario', 'Administrador','Coordinador','Compras','Almacén','Operativo HI']))
+                        @if(auth()->user()->hasRoles(['Superusuario', 'Administrador','Coordinador','Compras','Almacén','Operativo HI','Psicólogo','Ergónomo']))
                         <li>
                             <a class="has-arrow " href="{{route('proyectos.index')}}" aria-expanded="false">
                                 <i class="mdi mdi-format-list-numbers"></i><span class="hide-menu">Proyectos</span>
@@ -431,7 +434,7 @@ use Illuminate\Support\Str;
                         </li>
                         @endif
 
-                        @if(auth()->user()->hasRoles(['Superusuario', 'Administrador', 'Coordinador']))
+                        @if(auth()->user()->hasRoles(['Superusuario', 'Administrador', 'Coordinador','Psicólogo','Ergónomo']))
                         <li>
                             <a class="has-arrow " href="{{route('informes.index')}}" aria-expanded="false">
                                 <i class="fa fa-print"></i><span class="hide-menu">Informes </span>

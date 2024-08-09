@@ -1129,6 +1129,7 @@ function selecciona_sustancia(){
 
         // Llenar campo formulario
         $("#catsustancia_nombre").val(row.data().catsustancia_nombre);
+        $("#catsustancia_nombreComun").val(row.data().catsustancia_nombreComun);
         $("#catTemOperacion").val(row.data().catTemOperacion);
         $("#catestadofisicosustancia_id").val(row.data().catestadofisicosustancia_id);
         $("#catvolatilidad_id").val(row.data().catvolatilidad_id);
@@ -1326,7 +1327,7 @@ function mostarSustanciasQuimicas(ID) {
                         <input type="number" class="form-control porcentajeSustancias text-center" style="width: 100%;" id="porcentajeSustancia_${valor.SUSTANCIA_QUIMICA_ID}" name="PORCENTAJE" style="width: 100%;" placeholder="% Componente" min="0" value="${valor.PORCENTAJE}">
                     </td>
                     <td>
-                        <select class="custom-select form-control" id="estadoSustancia_${valor.SUSTANCIA_QUIMICA_ID}" name="ESTADO_FISICO" style="width: 100%;" required onchange="cambiarFormaSustancia('formaSustancia_${valor.SUSTANCIA_QUIMICA_ID}', this.value)">
+                        <select class="custom-select form-control" id="estadoSustancia_${valor.SUSTANCIA_QUIMICA_ID}" name="ESTADO_FISICO" style="width: 100%;" required onchange="cambiarFormaSustancia('formaSustancia_${valor.SUSTANCIA_QUIMICA_ID}','valatilidadSustancia_${valor.SUSTANCIA_QUIMICA_ID}' ,this.value)">
                             <option value="" selected disabled> Estado Fisico </option>
                             <option value="1"> Líquido </option>
                             <option value="2"> Sólido </option>
@@ -1335,7 +1336,7 @@ function mostarSustanciasQuimicas(ID) {
                         </select>
                     </td>
                     <td>
-                        <select class="custom-select form-control" id="formaSustancia_${valor.SUSTANCIA_QUIMICA_ID}" name="FORMA_SUSTANCIA" style="width: 100%;">
+                        <select class="custom-select form-control" onchange="cambiarVolatilidadSustancia('valatilidadSustancia_${valor.SUSTANCIA_QUIMICA_ID}', this.value)"  id="formaSustancia_${valor.SUSTANCIA_QUIMICA_ID}" name="FORMA_SUSTANCIA" style="width: 100%;">
                             <option value="" selected disabled> Forma </option>
                         </select>
                     </td>
@@ -1344,7 +1345,7 @@ function mostarSustanciasQuimicas(ID) {
                                 <i class="fa fa-thermometer-three-quarters" aria-hidden="true"></i>
                             </button>
 
-                        <input type="number" class="form-control text-center" id="temSustancia_${valor.SUSTANCIA_QUIMICA_ID}" name="TEM_EBULLICION" style="width: 100%;" placeholder="Tem. de ebullición (°C)" min="0"  value="${valor.TEM_EBULLICION}">
+                        <input type="number" onchange="cambiarVolatilidadSustanciaTem('estadoSustancia_${valor.SUSTANCIA_QUIMICA_ID}','valatilidadSustancia_${valor.SUSTANCIA_QUIMICA_ID}' ,this.value)" class="form-control text-center" id="temSustancia_${valor.SUSTANCIA_QUIMICA_ID}" name="TEM_EBULLICION" style="width: 100%;" placeholder="Tem. de ebullición (°C)" min="0"  value="${valor.TEM_EBULLICION}">
                     </td>
                     <td>
                         <select class="custom-select form-control" id="valatilidadSustancia_${valor.SUSTANCIA_QUIMICA_ID}" name="VOLATILIDAD" style="width: 100%;" required>
@@ -3248,7 +3249,7 @@ function mostrarPorcentajeSustancia(sus) {
                             <input type="number" class="form-control porcentajeSustancias text-center error" id="porcentajeSustancia_${option.id}" name="PORCENTAJE" style="width: 100%;" placeholder="% Componente" min="0" >
                         </td>
                         <td>
-                            <select class="custom-select form-control error" id="estadoSustancia_${option.id}" name="ESTADO_FISICO" style="width: 100%;"  onchange="cambiarFormaSustancia('formaSustancia_${option.id}', this.value)" required>
+                            <select class="custom-select form-control error" id="estadoSustancia_${option.id}" name="ESTADO_FISICO" style="width: 100%;"  onchange="cambiarFormaSustancia('formaSustancia_${option.id}','valatilidadSustancia_${option.id}', this.value)" required>
                             <option value="" selected disabled> Estado Fisico </option>
                             <option value="1"> Líquido </option>
                             <option value="2"> Sólido </option>
@@ -3257,7 +3258,7 @@ function mostrarPorcentajeSustancia(sus) {
                             </select>
                         </td>
                         <td>
-                            <select class="custom-select form-control" id="formaSustancia_${option.id}" name="FORMA_SUSTANCIA" style="width: 100%;"  required>
+                            <select class="custom-select form-control" id="formaSustancia_${option.id}" name="FORMA_SUSTANCIA" style="width: 100%;" onchange="cambiarVolatilidadSustancia('valatilidadSustancia_${option.id}', this.value)"  required>
                                 <option value="" selected disabled> Forma </option>
                             </select>
                         </td>
@@ -3266,7 +3267,7 @@ function mostrarPorcentajeSustancia(sus) {
                                 <i class="fa fa-thermometer-three-quarters" aria-hidden="true"></i>
                             </button>
 
-                            <input type="number" class="form-control text-center error" id="temSustancia_${option.id}" name="TEM_EBULLICION" style="flex: 1;" placeholder="Tem. de ebullición" min="0" >
+                            <input type="number" onchange="cambiarVolatilidadSustanciaTem('estadoSustancia_${option.id}','valatilidadSustancia_${option.id}', this.value)" class="form-control text-center error" id="temSustancia_${option.id}" name="TEM_EBULLICION" style="flex: 1;" placeholder="Tem. de ebullición" min="0" >
                         </td>
                         <td>
                             <select class="custom-select form-control error" id="valatilidadSustancia_${option.id}" name="VOLATILIDAD" style="width: 100%;" required>
@@ -3586,25 +3587,67 @@ $('#catestadofisicosustancia_id').on('change', function () {
 
 
 //FUNCION PARA EL TIPO FORMA DE UNA SUSTANCIA
-function cambiarFormaSustancia(id, opcion) {
-
+function cambiarFormaSustancia(id, idVolatilidad, opcion) {
     html = ""
-
       //LIQUIDOS
     if (opcion == 1 ) {
         html += '<option value="Neblina"> Neblina </option><option value="Rocío"> Rocío </option>'
         $('#'+id).html(html)
+        $('#' + idVolatilidad).val('').addClass('error')
 
     //SOLIDO
     } else if (opcion == 2) {
         html += '<option value="Polvo"> Polvo </option><option value="Humo"> Humo </option><option value="Fibra"> Fibra </option>'
-        $('#'+id).html(html)
+        $('#' + id).html(html)
+        cambiarVolatilidadSustancia(idVolatilidad, 'Polvo')
 
     //GAS
     } else if (opcion == 6) {
         html += '<option value="Vapor"> Vapor </option><option value="Gas"> Gas </option>'
-        $('#'+id).html(html)
+        $('#' + id).html(html)
+        $('#' + idVolatilidad).val(3).removeClass('error')
 
+    }
+}
+
+function cambiarVolatilidadSustancia(id, opcion) {
+    if (opcion == 'Polvo') {       
+        $('#' + id).val(2).removeClass('error')
+
+    } else if (opcion == 'Humo') {        
+        $('#' + id).val(3).removeClass('error')
+
+    } else if (opcion == 'Fibra') {
+       
+        $('#' + id).val(1).removeClass('error')
+    }
+}
+
+
+
+
+
+function cambiarVolatilidadSustanciaTem(opcion, id,  valor) {
+    
+    var opcion = $('#' + opcion).val()
+    var inputValue = parseInt(valor);
+
+    //Realizamos la operacion solo cuando sea Liquido
+    if (opcion == 1) {
+        
+        if (inputValue > 150) {
+            $('#' + id).val(1).removeClass('error')
+            
+        } else if (inputValue > 50 && inputValue <= 150) {
+            $('#' + id).val(2).removeClass('error')
+    
+        } else if (inputValue < 50) {
+            $('#' + id).val(3).removeClass('error')
+    
+        } else {
+            $('#' + id).val('').addClass('error')
+            
+        }
     }
 }
 

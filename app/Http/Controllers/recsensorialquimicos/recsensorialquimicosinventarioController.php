@@ -15,6 +15,7 @@ use App\modelos\recsensorialquimicos\catestadofisicosustanciaModel;
 use App\modelos\recsensorialquimicos\catviaingresoorganismoModel;
 use App\modelos\recsensorialquimicos\catvolatilidadModel;
 use App\modelos\recsensorialquimicos\catsustanciaModel;
+use App\modelos\recsensorialquimicos\gruposDeExposicionModel;
 use DB;
 
 class recsensorialquimicosinventarioController extends Controller
@@ -151,7 +152,7 @@ class recsensorialquimicosinventarioController extends Controller
             }
 
 
-            // ----------------------------
+            // ---------------------------- 
 
 
             $areasquimicos = DB::select('SELECT
@@ -324,155 +325,268 @@ class recsensorialquimicosinventarioController extends Controller
                                         ORDER BY
                                             id ASC');
 
-            foreach ($sustancias as $key => $value) {
-                // Categorias del area
-                $categorias = DB::select('SELECT
-                                                recsensorialareacategorias.recsensorialarea_id,
-                                                recsensorialareacategorias.recsensorialcategoria_id,
-                                                recsensorialareacategorias.recsensorialareacategorias_geh,
-                                                recsensorialcategoria.recsensorialcategoria_nombrecategoria,
-                                                ##recsensorialcategoria.recsensorialcategoria_funcioncategoria,
-                                                IFNULL((
-                                                    SELECT
-                                                        IFNULL(recsensorialquimicosinventario.recsensorialcategoria_tiempoexpo, "")
-                                                    FROM
-                                                        recsensorialquimicosinventario
-                                                    WHERE
-                                                        recsensorialquimicosinventario.recsensorialarea_id = recsensorialareacategorias.recsensorialarea_id
-                                                        AND recsensorialquimicosinventario.recsensorialcategoria_id = recsensorialareacategorias.recsensorialcategoria_id
-                                                        AND recsensorialquimicosinventario.catsustancia_id = ' . $value->catsustancia_id . '
-                                                        AND recsensorialquimicosinventario.recsensorialquimicosinventario_cantidad = ' . $value->recsensorialquimicosinventario_cantidad . '
-                                                        AND recsensorialquimicosinventario.catunidadmedidasustacia_id = ' . $value->catunidadmedidasustacia_id . '
-                                                    LIMIT 1
-                                                ), "") AS tiempoexpo,
-                                                IFNULL((
-                                                    SELECT
-                                                        IFNULL(recsensorialquimicosinventario.recsensorialcategoria_frecuenciaexpo, "")
-                                                    FROM
-                                                        recsensorialquimicosinventario
-                                                    WHERE
-                                                        recsensorialquimicosinventario.recsensorialarea_id = recsensorialareacategorias.recsensorialarea_id
-                                                        AND recsensorialquimicosinventario.recsensorialcategoria_id = recsensorialareacategorias.recsensorialcategoria_id
-                                                        AND recsensorialquimicosinventario.catsustancia_id = ' . $value->catsustancia_id . '
-                                                        AND recsensorialquimicosinventario.recsensorialquimicosinventario_cantidad = ' . $value->recsensorialquimicosinventario_cantidad . '
-                                                        AND recsensorialquimicosinventario.catunidadmedidasustacia_id = ' . $value->catunidadmedidasustacia_id . '
-                                                    LIMIT 1
-                                                ), "") AS frecuenciaexpo,
-                                                IFNULL((
-                                                    SELECT
-                                                        IF(recsensorialquimicosinventario.recsensorialcategoria_id, "checked", "")
-                                                    FROM
-                                                        recsensorialquimicosinventario
-                                                    WHERE
-                                                        recsensorialquimicosinventario.recsensorialarea_id = recsensorialareacategorias.recsensorialarea_id
-                                                        AND recsensorialquimicosinventario.recsensorialcategoria_id = recsensorialareacategorias.recsensorialcategoria_id
-                                                        AND recsensorialquimicosinventario.catsustancia_id = ' . $value->catsustancia_id . '
-                                                        AND recsensorialquimicosinventario.recsensorialquimicosinventario_cantidad = ' . $value->recsensorialquimicosinventario_cantidad . '
-                                                        AND recsensorialquimicosinventario.catunidadmedidasustacia_id = ' . $value->catunidadmedidasustacia_id . '
-                                                    LIMIT 1
-                                                ), "") AS checked
-                                        FROM
-                                            recsensorialareacategorias
-                                            LEFT JOIN recsensorialcategoria ON recsensorialareacategorias.recsensorialcategoria_id = recsensorialcategoria.id
-                                        WHERE
-                                            recsensorialareacategorias.recsensorialarea_id = ' . $recsensorialarea_id . '
-                                            AND recsensorialcategoria.recsensorialcategoria_nombrecategoria != ""
-                                        ORDER BY
-                                            recsensorialareacategorias.recsensorialareacategorias_geh ASC,
-                                            recsensorialcategoria.recsensorialcategoria_nombrecategoria ASC');
+            //SI YA EXISTEN SUSTANCIAS GUARDADAS EN EL AREA
+            if (count($sustancias) > 0) {
+
+                foreach ($sustancias as $key => $value) {
+
+                    // Categorias del area
+                    $categorias = DB::select('SELECT
+                                                    recsensorialareacategorias.recsensorialarea_id,
+                                                    recsensorialareacategorias.recsensorialcategoria_id,
+                                                    recsensorialareacategorias.recsensorialareacategorias_geh,
+                                                    recsensorialcategoria.recsensorialcategoria_nombrecategoria,
+                                                    ##recsensorialcategoria.recsensorialcategoria_funcioncategoria,
+                                                    IFNULL((
+                                                        SELECT
+                                                            IFNULL(recsensorialquimicosinventario.recsensorialcategoria_tiempoexpo, "")
+                                                        FROM
+                                                            recsensorialquimicosinventario
+                                                        WHERE
+                                                            recsensorialquimicosinventario.recsensorialarea_id = recsensorialareacategorias.recsensorialarea_id
+                                                            AND recsensorialquimicosinventario.recsensorialcategoria_id = recsensorialareacategorias.recsensorialcategoria_id
+                                                            AND recsensorialquimicosinventario.catsustancia_id = ' . $value->catsustancia_id . '
+                                                            AND recsensorialquimicosinventario.recsensorialquimicosinventario_cantidad = ' . $value->recsensorialquimicosinventario_cantidad . '
+                                                            AND recsensorialquimicosinventario.catunidadmedidasustacia_id = ' . $value->catunidadmedidasustacia_id . '
+                                                        LIMIT 1
+                                                    ), "") AS tiempoexpo,
+                                                    IFNULL((
+                                                        SELECT
+                                                            IFNULL(recsensorialquimicosinventario.recsensorialcategoria_frecuenciaexpo, "")
+                                                        FROM
+                                                            recsensorialquimicosinventario
+                                                        WHERE
+                                                            recsensorialquimicosinventario.recsensorialarea_id = recsensorialareacategorias.recsensorialarea_id
+                                                            AND recsensorialquimicosinventario.recsensorialcategoria_id = recsensorialareacategorias.recsensorialcategoria_id
+                                                            AND recsensorialquimicosinventario.catsustancia_id = ' . $value->catsustancia_id . '
+                                                            AND recsensorialquimicosinventario.recsensorialquimicosinventario_cantidad = ' . $value->recsensorialquimicosinventario_cantidad . '
+                                                            AND recsensorialquimicosinventario.catunidadmedidasustacia_id = ' . $value->catunidadmedidasustacia_id . '
+                                                        LIMIT 1
+                                                    ), "") AS frecuenciaexpo,
+                                                    IFNULL((
+                                                        SELECT
+                                                            IF(recsensorialquimicosinventario.recsensorialcategoria_id, "checked", "")
+                                                        FROM
+                                                            recsensorialquimicosinventario
+                                                        WHERE
+                                                            recsensorialquimicosinventario.recsensorialarea_id = recsensorialareacategorias.recsensorialarea_id
+                                                            AND recsensorialquimicosinventario.recsensorialcategoria_id = recsensorialareacategorias.recsensorialcategoria_id
+                                                            AND recsensorialquimicosinventario.catsustancia_id = ' . $value->catsustancia_id . '
+                                                            AND recsensorialquimicosinventario.recsensorialquimicosinventario_cantidad = ' . $value->recsensorialquimicosinventario_cantidad . '
+                                                            AND recsensorialquimicosinventario.catunidadmedidasustacia_id = ' . $value->catunidadmedidasustacia_id . '
+                                                        LIMIT 1
+                                                    ), "") AS checked
+                                            FROM
+                                                recsensorialareacategorias
+                                                LEFT JOIN recsensorialcategoria ON recsensorialareacategorias.recsensorialcategoria_id = recsensorialcategoria.id
+                                            WHERE
+                                                recsensorialareacategorias.recsensorialarea_id = ' . $recsensorialarea_id . '
+                                                AND recsensorialcategoria.recsensorialcategoria_nombrecategoria != ""
+                                            ORDER BY
+                                                recsensorialareacategorias.recsensorialareacategorias_geh ASC,
+                                                recsensorialcategoria.recsensorialcategoria_nombrecategoria ASC');
 
 
-                $sustancia_listacategorias = '';
-                $disabled_required = '';
-                foreach ($categorias as $key_categorias => $value_categorias) {
-                    if ($value_categorias->checked) {
-                        $disabled_required = 'required';
-                    } else {
-                        $disabled_required = 'disabled';
-                    }
+                    $sustancia_listacategorias = '';
+                    $disabled_required = '';
 
-                    $sustancia_listacategorias .= '<tr>
-                                                        <td style="width: 680px!important;">
-                                                            <div class="form-group">
-                                                                <div class="switch" style="float: left;">
-                                                                    <label>
-                                                                        <input type="checkbox" name="categoria[]" value="' . $key . '~' . $value_categorias->recsensorialcategoria_id . '" onchange="activa_categoria(this, ' . ($key + 1) . $key_categorias . ');" ' . $value_categorias->checked . '>
-                                                                        <span class="lever switch-col-light-blue"></span>
-                                                                    </label>
+                    foreach ($categorias as $key_categorias => $value_categorias) {
+                        if ($value_categorias->checked) {
+                            $disabled_required = 'required';
+                        } else {
+                            $disabled_required = 'disabled';
+                        }
+
+                        $sustancia_listacategorias .= '<tr>
+                                                            <td style="width: 680px!important;">
+                                                                <div class="form-group">
+                                                                    <div class="switch" style="float: left;">
+                                                                        <label>
+                                                                            <input type="checkbox" name="categoria[]" value="' . $key . '~' . $value_categorias->recsensorialcategoria_id . '" onchange="activa_categoria(this, ' . ($key + 1) . $key_categorias . ');" ' . $value_categorias->checked . '>
+                                                                            <span class="lever switch-col-light-blue"></span>
+                                                                        </label>
+                                                                    </div>
+                                                                    <label class="demo-switch-title" style="float: left;">' . $value_categorias->recsensorialareacategorias_geh . '.- ' . $value_categorias->recsensorialcategoria_nombrecategoria . '</label>
                                                                 </div>
-                                                                <label class="demo-switch-title" style="float: left;">' . $value_categorias->recsensorialareacategorias_geh . '.- ' . $value_categorias->recsensorialcategoria_nombrecategoria . '</label>
-                                                            </div>
-                                                        </td>
-                                                        <td style="width: 180px!important;">
-                                                        <label><b>Exp. minutos</b></label>
-                                                            <input type="number" step="any" class="form-control" placeholder="Exp. minutos" id="tiempo_' . ($key + 1) . $key_categorias . '" name="tiempo[]" value="' . $value_categorias->tiempoexpo . '" ' . $disabled_required . '>
-                                                        </td>
-                                                        <td style="width: 180px!important;">
-                                                        <label><b>Frecuencia exp.</b></label>
-                                                            <input type="number" step="any" class="form-control" placeholder="Frecuencia exp." id="frecuencia_' . ($key + 1) . $key_categorias . '" value="' . $value_categorias->frecuenciaexpo . '" name="frecuencia[]" ' . $disabled_required . '>
-                                                        </td>
-                                                    </tr>';
+                                                            </td>
+                                                            <td style="width: 180px!important;">
+                                                            <label><b>Exp. minutos</b></label>
+                                                                <input type="number" step="any" class="form-control" placeholder="Exp. minutos" id="tiempo_' . ($key + 1) . $key_categorias . '" name="tiempo[]" value="' . $value_categorias->tiempoexpo . '" ' . $disabled_required . '>
+                                                            </td>
+                                                            <td style="width: 180px!important;">
+                                                            <label><b>Frecuencia exp.</b></label>
+                                                                <input type="number" step="any" class="form-control" placeholder="Frecuencia exp." id="frecuencia_' . ($key + 1) . $key_categorias . '" value="' . $value_categorias->frecuenciaexpo . '" name="frecuencia[]" ' . $disabled_required . '>
+                                                            </td>
+                                                        </tr>';
+                    }
+
+
+                    // Catalogo unidad de medida
+                    $unidadmedida = catunidadmedidasustaciaModel::where('catunidadmedidasustacia_activo', 1)->get();
+                    $umedida_opciones = '<option value="">&nbsp;</option>';
+
+
+                    foreach ($unidadmedida as $key_unidadmedida => $value_unidadmedida) {
+                        if ($value->catunidadmedidasustacia_id != $value_unidadmedida->id) {
+                            $umedida_opciones .= '<option value="' . $value_unidadmedida->id . '">' . $value_unidadmedida->catunidadmedidasustacia_descripcion . '</option>';
+                        } else {
+                            $umedida_opciones .= '<option value="' . $value_unidadmedida->id . '" selected>' . $value_unidadmedida->catunidadmedidasustacia_descripcion . '</option>';
+                        }
+                    }
+
+
+                    $catsustancia_opciones = '<option value="">Buscar</option>';
+                    foreach ($catsustancias as $key_catsustancias => $value_catsustancias) {
+                        if ($value->catsustancia_id != $value_catsustancias->id) {
+                            $catsustancia_opciones .= '<option value="' . $value_catsustancias->id . '">' . $value_catsustancias->catsustancia_nombre . ' [' . $value_catsustancias->catestadofisicosustancia_estado . ']</option>';
+                        } else {
+                            $catsustancia_opciones .= '<option value="' . $value_catsustancias->id . '" selected>' . $value_catsustancias->catsustancia_nombre . ' [' . $value_catsustancias->catestadofisicosustancia_estado . ']</option>';
+                        }
+                    }
+
+
+                    // Formatear filas
+                    $area_listasustancias .= '<tr>
+                                                <td style="width: 50px!important;">
+                                                    ' . ($key + 1) . '
+                                                </td>
+                                                <td style="width: 1040px!important;">
+                                                    <table>
+                                                        <tr>
+                                                            <td style="width: 680px!important;">
+                                                                <select class="custom-select form-control select_search_sustancia" id="selectsearch_sustancia_' . $key . '" name="sustancia_catalogo[]" required>
+                                                                    ' . $catsustancia_opciones . '
+                                                                </select>
+                                                            </td>
+                                                            <td style="width: 180px!important;">
+                                                            <label><b>Cantidad manejada</b></label>
+                                                                <input type="number" step="any" class="form-control" placeholder="Cantidad" name="cantidad[]" value="' . $value->recsensorialquimicosinventario_cantidad . '" required>
+                                                            </td>
+                                                            <td style="width: 180px!important;">
+                                                            <label><b>Unidad medida</b></label>
+                                                                <select class="custom-select form-control" name="umedida[]" required>
+                                                                    ' . $umedida_opciones . '
+                                                                </select>
+                                                            </td>
+                                                        </tr>
+                                                        ' . $sustancia_listacategorias . '
+                                                    </table>
+                                                </td>
+                                                <td style="padding-left: 12px;" class="eliminar">
+                                                    <button type="button" class="btn btn-danger btn-circle"><i class="fa fa-trash"></i></button>
+                                                </td>
+                                            </tr>';
                 }
 
+                $area_listasustancias .= '<tr><td colspan="3" style="width: 1143px; height: 160px;">&nbsp;</td></tr>';
+            } else { // SI NO EXISTEN LAS SIMULAMOS PARA QUE APARESCAN
 
-                // Catalogo unidad de medida
-                $unidadmedida = catunidadmedidasustaciaModel::where('catunidadmedidasustacia_activo', 1)->get();
-                $umedida_opciones = '<option value="">&nbsp;</option>';
+                //BUSCAMOS TODAS AQUELLAS FUENTES GENERADORAS VINCULADAS CON EL AREA SELECCIONADA Y QUE ADEMAS SEAN FUENTES PARA QUIMICO O FISICO Y QUIMICO
+                $fuentes = DB::select('SELECT recsensorialmaquinaria_quimica as ID_SUSTANCIA, recsensorialarea_id as AREA_ID
+                                        FROM recsensorialmaquinaria 
+                                        WHERE recsensorialmaquinaria_afecta <> 1 AND recsensorialarea_id = ?', [$recsensorialarea_id]);
 
 
-                foreach ($unidadmedida as $key_unidadmedida => $value_unidadmedida) {
-                    if ($value->catunidadmedidasustacia_id != $value_unidadmedida->id) {
+
+                foreach ($fuentes as $key => $value) {
+
+
+                    //CREAMOS LAS CATEGORIAS QUE ESTAN RELACIONADAS CON EL AREA SELECCIONADA
+                    $categorias = DB::select('SELECT cat.recsensorialcategoria_nombrecategoria AS NOMBRE_CAT,
+                                                    cat.id AS ID_CATEGORIA,
+                                                    relacion.tiempoexpo_quimico,
+                                                    relacion.frecuenciaexpo_quimico,
+                                                    relacion.recsensorialareacategorias_geh
+                                                FROM recsensorialareacategorias as relacion
+                                                LEFT JOIN recsensorialcategoria as cat ON cat.id = relacion.recsensorialcategoria_id
+                                                WHERE relacion.recsensorialarea_id = ?', [$recsensorialarea_id]);
+
+                    $sustancia_listacategorias = '';
+                    $disabled_required = 'disabled';
+
+                    foreach ($categorias as $key_categorias => $value_categorias) {
+
+                        $sustancia_listacategorias .= '<tr>
+                                                            <td style="width: 680px!important;">
+                                                                <div class="form-group">
+                                                                    <div class="switch" style="float: left;">
+                                                                        <label>
+                                                                            <input type="checkbox" name="categoria[]" value="' . $key . '~' . $value_categorias->ID_CATEGORIA . '" onchange="activa_categoria(this, ' . ($key + 1) . $key_categorias . ');" >
+                                                                            <span class="lever switch-col-light-blue"></span>
+                                                                        </label>
+                                                                    </div>
+                                                                    <label class="demo-switch-title" style="float: left;">' . $value_categorias->recsensorialareacategorias_geh . '.- ' . $value_categorias->NOMBRE_CAT . '</label>
+                                                                </div>
+                                                            </td>
+                                                            <td style="width: 180px!important;">
+                                                            <label><b>Exp. minutos</b></label>
+                                                                <input type="number" step="any" class="form-control" placeholder="Exp. minutos" id="tiempo_' . ($key + 1) . $key_categorias . '" name="tiempo[]" value="' . $value_categorias->tiempoexpo_quimico . '" ' . $disabled_required . '>
+                                                            </td>
+                                                            <td style="width: 180px!important;">
+                                                            <label><b>Frecuencia exp.</b></label>
+                                                                <input type="number" step="any" class="form-control" placeholder="Frecuencia exp." id="frecuencia_' . ($key + 1) . $key_categorias . '" value="' . $value_categorias->frecuenciaexpo_quimico . '" name="frecuencia[]" ' . $disabled_required . '>
+                                                            </td>
+                                                        </tr>';
+                    }
+
+                    // Creamo el select en base con catalogo unidad de medida
+                    $unidadmedida = catunidadmedidasustaciaModel::where('catunidadmedidasustacia_activo', 1)->get();
+                    $umedida_opciones = '<option value="">&nbsp;</option>';
+
+                    foreach ($unidadmedida as $key_unidadmedida => $value_unidadmedida) {
+
                         $umedida_opciones .= '<option value="' . $value_unidadmedida->id . '">' . $value_unidadmedida->catunidadmedidasustacia_descripcion . '</option>';
-                    } else {
-                        $umedida_opciones .= '<option value="' . $value_unidadmedida->id . '" selected>' . $value_unidadmedida->catunidadmedidasustacia_descripcion . '</option>';
                     }
+
+                    //Creamos los select de los productos
+                    $catsustancia_opciones = '<option value="">Buscar</option>';
+                    foreach ($catsustancias as $key_catsustancias => $value_catsustancias) {
+
+                        if ($value->ID_SUSTANCIA != $value_catsustancias->id) {
+                            $catsustancia_opciones .= '<option value="' . $value_catsustancias->id . '">' . $value_catsustancias->catsustancia_nombre . ' [' . $value_catsustancias->catestadofisicosustancia_estado . ']</option>';
+                        } else {
+                            $catsustancia_opciones .= '<option value="' . $value_catsustancias->id . '" selected>' . $value_catsustancias->catsustancia_nombre . ' [' . $value_catsustancias->catestadofisicosustancia_estado . ']</option>';
+                        }
+                    }
+
+
+                    // Formatear filas y crear esqueleto
+                    $area_listasustancias .= '<tr>
+                                                <td style="width: 50px!important;">
+                                                    ' . ($key + 1) . '
+                                                </td>
+                                                <td style="width: 1040px!important;">
+                                                    <table>
+                                                        <tr>
+                                                            <td style="width: 680px!important;">
+                                                                <select class="custom-select form-control select_search_sustancia" id="selectsearch_sustancia_' . $key . '" name="sustancia_catalogo[]" required>
+                                                                    ' . $catsustancia_opciones . '
+                                                                </select>
+                                                            </td>
+                                                            <td style="width: 180px!important;">
+                                                            <label><b>Cantidad manejada</b></label>
+                                                                <input type="number" step="any" class="form-control" placeholder="Cantidad" name="cantidad[]" value="" required>
+                                                            </td>
+                                                            <td style="width: 180px!important;">
+                                                            <label><b>Unidad medida</b></label>
+                                                                <select class="custom-select form-control" name="umedida[]" required>
+                                                                    ' . $umedida_opciones . '
+                                                                </select>
+                                                            </td>
+                                                        </tr>
+                                                        ' . $sustancia_listacategorias . '
+                                                    </table>
+                                                </td>
+                                                <td style="padding-left: 12px;" class="eliminar">
+                                                    <button type="button" class="btn btn-danger btn-circle"><i class="fa fa-trash"></i></button>
+                                                </td>
+                                            </tr>';
                 }
 
 
-                $catsustancia_opciones = '<option value="">Buscar</option>';
-                foreach ($catsustancias as $key_catsustancias => $value_catsustancias) {
-                    if ($value->catsustancia_id != $value_catsustancias->id) {
-                        $catsustancia_opciones .= '<option value="' . $value_catsustancias->id . '">' . $value_catsustancias->catsustancia_nombre . ' [' . $value_catsustancias->catestadofisicosustancia_estado . ']</option>';
-                    } else {
-                        $catsustancia_opciones .= '<option value="' . $value_catsustancias->id . '" selected>' . $value_catsustancias->catsustancia_nombre . ' [' . $value_catsustancias->catestadofisicosustancia_estado . ']</option>';
-                    }
-                }
-
-
-                // Formatear filas
-                $area_listasustancias .= '<tr>
-                                            <td style="width: 50px!important;">
-                                                ' . ($key + 1) . '
-                                            </td>
-                                            <td style="width: 1040px!important;">
-                                                <table>
-                                                    <tr>
-                                                        <td style="width: 680px!important;">
-                                                            <select class="custom-select form-control select_search_sustancia" id="selectsearch_sustancia_' . $key . '" name="sustancia_catalogo[]" required>
-                                                                ' . $catsustancia_opciones . '
-                                                            </select>
-                                                        </td>
-                                                        <td style="width: 180px!important;">
-                                                        <label><b>Cantidad manejada</b></label>
-                                                            <input type="number" step="any" class="form-control" placeholder="Cantidad" name="cantidad[]" value="' . $value->recsensorialquimicosinventario_cantidad . '" required>
-                                                        </td>
-                                                        <td style="width: 180px!important;">
-                                                        <label><b>Unidad medida</b></label>
-                                                            <select class="custom-select form-control" name="umedida[]" required>
-                                                                ' . $umedida_opciones . '
-                                                            </select>
-                                                        </td>
-                                                    </tr>
-                                                    ' . $sustancia_listacategorias . '
-                                                </table>
-                                            </td>
-                                            <td style="padding-left: 12px;" class="eliminar">
-                                                <button type="button" class="btn btn-danger btn-circle"><i class="fa fa-trash"></i></button>
-                                            </td>
-                                        </tr>';
+                $area_listasustancias .= '<tr><td colspan="3" style="width: 1143px; height: 160px;">&nbsp;</td></tr>';
             }
 
-            $area_listasustancias .= '<tr><td colspan="3" style="width: 1143px; height: 160px;">&nbsp;</td></tr>';
 
 
             // respuesta
@@ -483,6 +597,152 @@ class recsensorialquimicosinventarioController extends Controller
             return response()->json($dato);
         } catch (Exception $e) {
             $dato['opciones'] = 0;
+            $dato["msj"] = 'Error ' . $e->getMessage();
+            return response()->json($dato);
+        }
+    }
+
+
+
+
+
+    public function obtenerCategoriasReconomiento($recsensorial_id, $clasificacion, $sustancia)
+    { //Antes se llamaba obtenerCategoriasEvaluadas pero se cambio todo
+
+
+        function numberToRoman($num)
+        {
+            $n = intval($num);
+            $result = '';
+
+            $lookup = [
+                'M' => 1000,
+                'CM' => 900,
+                'D' => 500,
+                'CD' => 400,
+                'C' => 100,
+                'XC' => 90,
+                'L' => 50,
+                'XL' => 40,
+                'X' => 10,
+                'IX' => 9,
+                'V' => 5,
+                'IV' => 4,
+                'I' => 1,
+            ];
+
+            foreach ($lookup as $roman => $value) {
+                $matches = intval($n / $value);
+                $result .= str_repeat($roman, $matches);
+                $n = $n % $value;
+            }
+
+            return $result;
+        }
+
+
+        function numberToLetter($num)
+        {
+            $letters = range('A', 'Z');
+            return $letters[$num % 26];
+        }
+
+
+        try {
+
+            //VALIDAMOS SI ES EL PRIMER GEH QUE INGRESA
+            $geh = DB::select('SELECT COUNT(*) TOTAL, IFNULL(OPCION, 0) AS OPCION
+                                FROM grupos_de_exposicion 
+                                WHERE RECSENSORIAL_ID = ?
+                                GROUP BY OPCION', [$recsensorial_id]);
+
+            //SELECCIONAMOS EL CONSECUTIVO DE LA CLASIFICACION DE LOS GEH
+            $count = DB::select('SELECT COUNT(DISTINCT CLASIFICACION) AS num_clasificaciones,  IFNULL(OPCION, 0) AS OPCION
+                                        FROM grupos_de_exposicion
+                                        WHERE RECSENSORIAL_ID = ?
+                                        GROUP BY OPCION', [$recsensorial_id]);
+
+            if (!empty($count)) {
+
+                $result = $count[0];
+                $num_clasificaciones = $result->num_clasificaciones;
+                $opcion = $result->OPCION;
+
+                if ($opcion == 1) {
+                    // Convierte a número romano
+                    $output = numberToRoman($num_clasificaciones + 1); // Sumar 1 para obtener el siguiente número romano
+                } elseif ($opcion == 2) {
+                    // Convierte a letra del abecedario
+                    $output = numberToLetter($num_clasificaciones); // Sumar 1 para obtener la siguiente letra del abecedario
+                } else {
+                    $output = "Opción no válida";
+                }
+
+                $consecutivo = $output;
+            } else {
+
+                $consecutivo = 'I';
+            }
+
+
+            //MANDAMOS LAS CATEGORIAS
+            $categorias = DB::select('SELECT
+                                        relacion.id AS ID_RELACION,  
+                                        area.id AS AREA_ID,
+                                        area.recsensorialarea_nombre AS AREA,
+                                        cat.id AS CATEGORIA_ID,
+                                        cat.recsensorialcategoria_nombrecategoria AS CATEGORIA,
+                                        relacion.recsensorialareacategorias_total AS PERSONAL,
+                                        CASE 
+                                            WHEN EXISTS (
+                                                SELECT 1
+                                                FROM grupos_de_exposicion 
+                                                WHERE grupos_de_exposicion.RECSENSORIAL_ID = ?
+                                                AND grupos_de_exposicion.CLASIFICACION = ?
+                                                AND grupos_de_exposicion.RELACION_AREA_CAT_ID = relacion.id
+                                            ) 
+                                            THEN 1 
+                                            ELSE 0 
+                                        END AS SELECCIONADO,
+                                        IFNULL(grupos.POE,"") POE
+                                    FROM recsensorialareacategorias AS relacion
+                                    LEFT JOIN recsensorialarea AS area ON area.id = relacion.recsensorialarea_id
+                                    LEFT JOIN recsensorialcategoria AS cat ON cat.id = relacion.recsensorialcategoria_id
+                                    LEFT JOIN grupos_de_exposicion grupos ON grupos.RELACION_AREA_CAT_ID = relacion.id
+                                    WHERE area.recsensorial_id = ?
+                                    GROUP BY relacion.id, 
+                                            area.id,
+                                            area.recsensorialarea_nombre,
+                                            cat.id,
+                                            cat.recsensorialcategoria_nombrecategoria,
+                                            relacion.recsensorialareacategorias_total,
+                                            SELECCIONADO, POE', [$recsensorial_id, $clasificacion, $recsensorial_id]);
+
+
+            //RECUPERAMOS TODAS AQUELLAS SUSTANCIAS QUE EN SU  PONDERACION SEAN MAYORES O IGUALES A 8 (Moderada)
+            $sustancias = DB::select('CALL sp_obtenerSustancias_GEH_b(?,?)', [$recsensorial_id, $sustancia]);
+
+            $opciones = '';
+            foreach ($sustancias as $key => $value) {
+                if ($value->ID_HOJA_SUSTANCIA == $sustancia) {
+                    $opciones .= '<option value="' . $value->ID_HOJA_SUSTANCIA . '"  data-componente = ' . $value->ID_SUSTANCIA_QUIMICA . ' data-producto = ' . $value->ID_HOJA . ' selected>' . $value->COMPONENTE . '[ ' . $value->PRODUCTO . ' ] '  . '</option>';
+                } else {
+                    $opciones .= '<option value="' . $value->ID_HOJA_SUSTANCIA . '"  data-componente = ' . $value->ID_SUSTANCIA_QUIMICA . ' data-producto = ' . $value->ID_HOJA . ' >' . $value->COMPONENTE . '[ ' . $value->PRODUCTO . ' ] '  . '</option>';
+                }
+            }
+
+
+
+            // respuesta
+            $dato['componentes'] = $opciones;
+            $dato['categorias'] = $categorias;
+            $dato['GEH'] = $geh;
+            $dato['CONSECUTIVO'] = $consecutivo;
+            $dato["msj"] = 'Información consultada correctamente';
+            return response()->json($dato);
+        } catch (Exception $e) {
+
+            $dato['data'] = 0;
             $dato["msj"] = 'Error ' . $e->getMessage();
             return response()->json($dato);
         }
@@ -530,7 +790,7 @@ class recsensorialquimicosinventarioController extends Controller
 
                 case 2:
 
-                    $tabla = DB::select('CALL sp_ponderacion2_tabla9_1_b(?) ', [$recsensorial_id]);
+                    $tabla = DB::select('CALL sp_obtenerDeterminacionGEH_b(?) ', [$recsensorial_id]);
 
 
                     $numero_registro = 0;
@@ -538,44 +798,33 @@ class recsensorialquimicosinventarioController extends Controller
 
                         $value->numero_registro = $numero_registro += 1;
 
-                        switch (($value->SUMA_PONDERACIONES2)) {
-                            case ($value->SUMA_PONDERACIONES2) >= 9:
-                                $value->PRIORIDAD2 = '<p class="text-danger"><b>' . $value->PRIORIDAD . '</b></p>';
+                        switch (($value->SUMA_PONDERACIONES)) {
+                            case ($value->SUMA_PONDERACIONES) >= 9:
+                                $value->PRIORIDAD = '<p class="text-danger"><b>' . $value->PRIORIDAD . '</b></p>';
                                 break;
-                            case ($value->SUMA_PONDERACIONES2) >= 4:
-                                $value->PRIORIDAD2 = '<p class="text-warning"><b>' . $value->PRIORIDAD . '</b></p>';
+                            case ($value->SUMA_PONDERACIONES) >= 4:
+                                $value->PRIORIDAD = '<p class="text-warning"><b>' . $value->PRIORIDAD . '</b></p>';
                                 break;
                             default:
-                                $value->PRIORIDAD2 = '<p class="text-success"><b>' . $value->PRIORIDAD . '</b></p>';
+                                $value->PRIORIDAD = '<p class="text-success"><b>' . $value->PRIORIDAD . '</b></p>';
                                 break;
                         }
 
-                        $value->TOTAL2 = '<b style="color:#000000;">' . $value->SUMA_PONDERACIONES2 . '</b>';
+                        $value->TOTAL = '<b style="color:#000000;">' . $value->SUMA_PONDERACIONES . '</b>';
                     }
                     break;
 
                 case 3:
 
-                    $tabla = DB::select('CALL sp_ponderacion3_tabla10_1_b(?) ', [$recsensorial_id]);
+                    $tabla = DB::select('CALL sp_obtenerGEH_b(?) ', [$recsensorial_id]);
 
                     $numero_registro = 0;
                     foreach ($tabla as $key => $value) {
+
                         $value->numero_registro = $numero_registro += 1;
-
-                        switch (($value->SUMA_PONDERACIONES2)) {
-                            case ($value->SUMA_PONDERACIONES2) >= 9:
-                                $value->PRIORIDAD2 = '<p class="text-danger"><b>' . $value->PRIORIDAD . '</b></p>';
-                                break;
-                            case ($value->SUMA_PONDERACIONES2) >= 4:
-                                $value->PRIORIDAD2 = '<p class="text-warning"><b>' . $value->PRIORIDAD . '</b></p>';
-                                break;
-                            default:
-                                $value->PRIORIDAD2 = '<p class="text-success"><b>' . $value->PRIORIDAD . '</b></p>';
-                                break;
-                        }
-
-                        $value->NUMERO_MUESTREOS = '<b style="color:#000000;">' . $value->NUM_POE . '</b>';
+                        $value->boton_editar = '<button type="button" class="btn btn-warning btn-circle editar" id="editargeh_' . $value->CLASIFICACION . '"><i class="fa fa-pencil"></i></button>';
                     }
+
                     break;
                 case 4:
 
@@ -616,33 +865,91 @@ class recsensorialquimicosinventarioController extends Controller
     public function store(Request $request)
     {
         try {
-            // Eliminar inventario en el area
-            $sustancia = recsensorialquimicosinventarioModel::where('recsensorial_id', $request['recsensorial_id'])
-                ->where('recsensorialarea_id', $request['recsensorialarea_id'])
-                ->delete();
 
-            // AUTO_INCREMENT
-            DB::statement('ALTER TABLE recsensorialquimicosinventario AUTO_INCREMENT=1');
-            foreach ($request->sustancia_catalogo as $key1 => $value_sustancia) {
-                foreach ($request->categoria as $key => $value_categoria) {
-                    $valor = explode("~", $value_categoria);
+            if ($request['api'] == 1) {  //GUARDAMOS EL INVENTARIO DE SUSTANCIAS QUIMICAS
 
-                    if (($valor[0] + 0) == ($key1 + 0)) //Index sustancia
-                    {
-                        $sustancia = recsensorialquimicosinventarioModel::create([
-                            'recsensorial_id' => $request->recsensorial_id, 'recsensorialarea_id' => $request->recsensorialarea_id, 'catsustancia_id' => $value_sustancia, 'recsensorialquimicosinventario_cantidad' => $request->cantidad[$key1], 'catunidadmedidasustacia_id' => $request->umedida[$key1], 'recsensorialcategoria_id' => $valor[1], 'recsensorialcategoria_tiempoexpo' => $request->tiempo[$key], 'recsensorialcategoria_frecuenciaexpo' => $request->frecuencia[$key]
-                        ]);
+                // Eliminar inventario en el area
+                $sustancia = recsensorialquimicosinventarioModel::where('recsensorial_id', $request['recsensorial_id'])
+                    ->where('recsensorialarea_id', $request['recsensorialarea_id'])
+                    ->delete();
+
+                // AUTO_INCREMENT
+                DB::statement('ALTER TABLE recsensorialquimicosinventario AUTO_INCREMENT=1');
+                foreach ($request->sustancia_catalogo as $key1 => $value_sustancia) {
+                    foreach ($request->categoria as $key => $value_categoria) {
+                        $valor = explode("~", $value_categoria);
+
+                        if (($valor[0] + 0) == ($key1 + 0)) //Index sustancia
+                        {
+                            $sustancia = recsensorialquimicosinventarioModel::create([
+                                'recsensorial_id' => $request->recsensorial_id,
+                                'recsensorialarea_id' => $request->recsensorialarea_id,
+                                'catsustancia_id' => $value_sustancia,
+                                'recsensorialquimicosinventario_cantidad' => $request->cantidad[$key1],
+                                'catunidadmedidasustacia_id' => $request->umedida[$key1],
+                                'recsensorialcategoria_id' => $valor[1],
+                                'recsensorialcategoria_tiempoexpo' => $request->tiempo[$key],
+                                'recsensorialcategoria_frecuenciaexpo' => $request->frecuencia[$key]
+                            ]);
+                        }
                     }
                 }
+
+                // mensaje
+                $dato["msj"] = 'Información modificada correctamente';
+                $dato['recsensorial_id'] = $request['recsensorial_id'];
+            } else { //GUARDAMOS LOS GRUPOS DE EXPOSICION HOMOGENEA
+
+                // Verfificamos que el tipo de clasificacion llegue si no lo obtenemos de la base de datos
+                if (isset($request['TIPO_CLASIFICACION'])) {
+                    $opcion = $request['TIPO_CLASIFICACION'];
+                } else {
+                    $registro  =  gruposDeExposicionModel::where('RECSENSORIAL_ID', $request['RECSENSORIAL_ID'])->first();
+                    $opcion =  $registro->OPCION;
+                }
+
+                if ($request['NUEVO'] == 1) { //Creamos nuevos registros
+
+                    foreach ($request->ID_RELACION as $index => $val) {
+                        gruposDeExposicionModel::create([
+                            'RECSENSORIAL_ID' => $request['RECSENSORIAL_ID'],
+                            'OPCION' => $opcion,
+                            'CLASIFICACION' => $request['CLASIFICACION_GRUPO'],
+                            'RELACION_HOJA_SUS_ID' => $request['COMPONENTE_ID'],
+                            'RELACION_AREA_CAT_ID' => $val,
+                            'AREA_ID' => $request->ID_AREA_GRUPO[$index],
+                            'CATEGORIA_ID' => $request->ID_CATEGORIA_GRUPO[$index],
+                            'POE' => $request->NUM_TRABAJADORES_NUEVO[$index],
+                        ]);
+                    }
+
+                    // mensaje
+                    $dato["msj"] = 'Grupo creado correctamente';
+                    $dato['recsensorial_id'] = $request['RECSENSORIAL_ID'];
+                } else {
+
+                    //Eliminar registros que esten relacionados con el mismo grupo y el mismo reconocimiento.
+                    gruposDeExposicionModel::where('CLASIFICACION', $request['CLASIFICACION_GRUPO'])->where('RECSENSORIAL_ID', $request['RECSENSORIAL_ID'])->delete();
+
+                    foreach ($request->ID_RELACION as $index => $val) {
+                        gruposDeExposicionModel::create([
+                            'RECSENSORIAL_ID' => $request['RECSENSORIAL_ID'],
+                            'OPCION' => $opcion,
+                            'CLASIFICACION' => $request['CLASIFICACION_GRUPO'],
+                            'RELACION_HOJA_SUS_ID' => $request['COMPONENTE_ID'],
+                            'RELACION_AREA_CAT_ID' => $val,
+                            'AREA_ID' => $request->ID_AREA_GRUPO[$index],
+                            'CATEGORIA_ID' => $request->ID_CATEGORIA_GRUPO[$index],
+                            'POE' => $request->NUM_TRABAJADORES_NUEVO[$index],
+                        ]);
+                    }
+
+                    // mensaje
+                    $dato["msj"] = 'Grupo editado correctamente';
+                    $dato['recsensorial_id'] = $request['RECSENSORIAL_ID'];
+                }
             }
-
-            // mensaje
-            $dato["msj"] = 'Información modificada correctamente';
-
-
-
             // respuesta
-            $dato['recsensorial_id'] = $request['recsensorial_id'];
             return response()->json($dato);
         } catch (Exception $e) {
             $dato['sustancia'] = 0;

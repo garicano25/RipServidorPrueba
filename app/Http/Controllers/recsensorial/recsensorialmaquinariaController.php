@@ -46,6 +46,8 @@ class recsensorialmaquinariaController extends Controller
                                         m.recsensorialmaquinaria_cantidad,
                                         m.recsensorialmaquinaria_contenido,
                                         m.recsensorialmaquinaria_unidadMedida,
+                                        m.recsensorialmaquinaria_descripcionfuente,
+                                        m.recsensorialmaquinaria_nombrecomun,
                                         m.recsensorialarea_id,
                                         p.id AS PRODUCTO_ID,
                                         IFNULL(m.recsensorialmaquinaria_nombre, p.catsustancia_nombre) as NOMBRE_FUENTE

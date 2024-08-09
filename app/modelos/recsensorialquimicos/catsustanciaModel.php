@@ -9,6 +9,7 @@ class catsustanciaModel extends Model
     protected $table = 'catsustancia';
     protected $fillable = [
         'catsustancia_nombre',
+        'catsustancia_nombreComun',
         'catestadofisicosustancia_id',
         'catvolatilidad_id',
         'catviaingresoorganismo_id',

@@ -6,19 +6,22 @@ use Illuminate\Database\Eloquent\Model;
 
 class recsensorialquimicosinventarioModel extends Model
 {
+
     protected $table = 'recsensorialquimicosinventario';
-	protected $fillable = [
+    protected $fillable = [
+        'grupo',
         'recsensorial_id',
         'recsensorialarea_id',
         'catsustancia_id',
         'recsensorialquimicosinventario_cantidad',
         'catunidadmedidasustacia_id',
         'recsensorialcategoria_id',
+        'numero_trabajadores',
         'recsensorialcategoria_tiempoexpo',
         'recsensorialcategoria_frecuenciaexpo'
-	];
+    ];
 
-	//=============== RELACION A CATALOGOS ===================
+    //=============== RELACION A CATALOGOS ===================
 
     public function recsensorialarea()
     {
