@@ -311,7 +311,9 @@ class reporteruidowordController extends Controller
             $plantillaword->setValue('razon_social_portada', $cliente->cliente_RazonSocial);
             $plantillaword->setValue('instalación_portada', $recsensorial->recsensorial_instalacion);
 
-            $fecha = $agente[0]->reporteiluminacion_mes . ' del ' . $agente[0]->reporteiluminacion_fecha;
+            
+
+            $fecha = $agente[0]->reporte_mes . ' del ' . $agente[0]->reporteruido_fecha;
             $plantillaword->setValue('lugar_fecha_portada', $fecha);
             $plantillaword->setValue(
                 'PORTADA_FECHA',
