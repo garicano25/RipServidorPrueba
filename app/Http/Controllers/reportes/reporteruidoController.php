@@ -436,7 +436,8 @@ class reporteruidoController extends Controller
                                                 , 'reporte_instalacion' => $proyecto->proyecto_clienteinstalacion
                                                 , 'reporte_fecha' => $reportefecha
                                                 , 'reporte_mes' => ""
-                                                
+
+
 
                                             );
             }
@@ -5152,8 +5153,7 @@ class reporteruidoController extends Controller
                                                 ELSE "text-danger"
                                             END
                                         ) AS vigencia_color,
-                                        equipo.equipo_CertificadoPDF,
-                                        equipo.equipo_cartaPDF,
+            
                                         IFNULL((
                                             SELECT
                                                 IF(IFNULL(reporteequiposutilizados.equipo_id, ""), "checked" , "")
@@ -5229,52 +5229,13 @@ class reporteruidoController extends Controller
                 $value->vigencia = '<span class="'.$value->vigencia_color.'">'.$value->vigencia_texto.'</span>';
 
 
-                if ($value->equipo_CertificadoPDF)
-                {
-                    $value->certificado = '<button type="button" class="btn btn-info waves-effect btn-circle" data-toggle="tooltip" title="Mostrar certificado"><i class="fa fa-file-pdf-o fa-2x"></i></button>';
-                }
-                else
-                {
-                    $value->certificado = '<button type="button" class="btn btn-default waves-effect btn-circle" data-toggle="tooltip" title="N/A certificado"><i class="fa fa-ban fa-2x"></i></button>';
-                }
+               
 
 
                 //---------------------------
 
 
-                if ($value->equipo_cartaPDF)
-                {
-                    $checkedcarta_disabled = 'disabled';
-                    if ($value->checked)
-                    {
-                        $checkedcarta_disabled = '';
-                    }
-
-
-                    $checked_carta = '';
-                    if ($value->cartacalibracion)
-                    {
-                        $checked_carta = 'checked';
-                    }
-
-
-                    $value->checkbox_carta = '<div class="switch">
-                                                    <label>
-                                                        <input type="checkbox" id="equipoutilizado_checkboxcarta_'.$value->equipo_id.'" name="equipoutilizado_checkboxcarta_'.$value->equipo_id.'" value="'.$value->equipo_id.'" '.$checkedcarta_disabled.' '.$checked_carta.'/>
-                                                        <span class="lever switch-col-light-green"></span>
-                                                    </label>
-                                                </div>';
-
-
-                    $value->carta = '<button type="button" class="btn btn-success waves-effect btn-circle" data-toggle="tooltip" title="Mostrar carta">
-                                            <i class="fa fa-file-pdf-o fa-2x"></i>
-                                        </button>';
-                }
-                else
-                {
-                    $value->checkbox_carta = 'N/A';
-                    $value->carta = 'N/A';
-                }
+               
 
 
                 // VERIFICAR SI HAY EQUIPOS SELECCIONADOS
@@ -7082,39 +7043,38 @@ class reporteruidoController extends Controller
 
 
             // PUNTO DE MEDICION NIVEL SONORO
-            if (($request->opcion+0) == 15)
-            {
-                $eliminar_nivelsonoro = reporteruidonivelsonoroModel::where('proyecto_id', $request->proyecto_id)
-                                                                    ->where('registro_id', $reporte->id)
-                                                                    ->where('reporteruidonivelsonoro_punto', $request->reportenivelsonoro_punto)
-                                                                    ->delete();
+            if (($request->opcion + 0) == 15) {
                 
-                if ($request->reporteruidonivelsonoro_periodo1)
-                {
+                $eliminar_nivelsonoro = reporteruidonivelsonoroModel::where('proyecto_id', $request->proyecto_id)
+                    ->where('registro_id', $reporte->id)
+                    ->where('reporteruidonivelsonoro_punto', $request->reportenivelsonoro_punto)
+                    ->delete();
+            
+                if ($request->reporteruidonivelsonoro_periodo1) {
                     DB::statement('ALTER TABLE reporteruidonivelsonoro AUTO_INCREMENT = 1;');
-                    
-                    foreach ($request->reporteruidonivelsonoro_periodo1 as $key => $value) 
-                    {
+            
+                    foreach ($request->reporteruidonivelsonoro_periodo1 as $key => $value) {
                         $nivelsonoro = reporteruidonivelsonoroModel::create([
-                              'proyecto_id' => $request->proyecto_id
-                            , 'registro_id' => $reporte->id
-                            , 'reporteruidonivelsonoro_punto' => $request->reporteruidonivelsonoro_punto
-                            , 'reporteruidonivelsonoro_ubicacion' => $request->reporteruidonivelsonoro_ubicacion
-                            , 'reporteruidonivelsonoro_promedio' => $request->reporteruidonivelsonoro_promedio
-                            , 'reporteruidonivelsonoro_totalperiodos' => $request->reporteruidonivelsonoro_totalperiodos
-                            , 'reporteruidonivelsonoro_totalresultados' => $request->reporteruidonivelsonoro_totalresultados
-                            , 'reporteruidonivelsonoro_periodo1' => $value
-                            , 'reporteruidonivelsonoro_periodo2' => $request['reporteruidonivelsonoro_periodo2'][$key]
-                            , 'reporteruidonivelsonoro_periodo3' => $request['reporteruidonivelsonoro_periodo3'][$key]
-                            , 'reporteruidonivelsonoro_periodo4' => $request['reporteruidonivelsonoro_periodo4'][$key]
-                            , 'reporteruidonivelsonoro_periodo5' => $request['reporteruidonivelsonoro_periodo5'][$key]
+                            'proyecto_id' => $request->proyecto_id,
+                            'registro_id' => $reporte->id,
+                            'reporteruidonivelsonoro_punto' => $request->reporteruidonivelsonoro_punto,
+                            'reporteruidonivelsonoro_ubicacion' => $request->reporteruidonivelsonoro_ubicacion,
+                            'reporteruidonivelsonoro_promedio' => $request->reporteruidonivelsonoro_promedio,
+                            'reporteruidonivelsonoro_totalperiodos' => $request->reporteruidonivelsonoro_totalperiodos,
+                            'reporteruidonivelsonoro_totalresultados' => $request->reporteruidonivelsonoro_totalresultados,
+                            'reporteruidonivelsonoro_periodo1' => $value,
+                            'reporteruidonivelsonoro_periodo2' => $request['reporteruidonivelsonoro_periodo2'][$key] ?? null,
+                            'reporteruidonivelsonoro_periodo3' => $request['reporteruidonivelsonoro_periodo3'][$key] ?? null,
+                            'reporteruidonivelsonoro_periodo4' => $request['reporteruidonivelsonoro_periodo4'][$key] ?? null,
+                            'reporteruidonivelsonoro_periodo5' => $request['reporteruidonivelsonoro_periodo5'][$key] ?? null,
                         ]);
                     }
                 }
-
+            
                 // Mensaje
                 $dato["msj"] = 'Datos guardados correctamente';
             }
+            
 
 
             // PUNTO DE DETERMINACION DEL NER

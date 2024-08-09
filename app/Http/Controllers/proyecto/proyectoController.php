@@ -104,7 +104,7 @@ class proyectoController extends Controller
                     ->whereIn('id', $lista_proyectos) // ->whereIn('id', [1, 2, 3, 8, 22])
                     ->orderBy('id', 'ASC')
                     ->get();
-            } else if (auth()->user()->hasRoles(['Psicólogo', 'Ergónomo', 'ApoyoTecnico'])) {
+            } else if (auth()->user()->hasRoles(['ApoyoTecnico'])) {
                 $proyectos_signatario = collect(DB::select('SELECT
                                                                 proyectosignatariosactual.proyecto_id,
                                                                 signatario.signatario_Nombre 
@@ -1501,7 +1501,7 @@ class proyectoController extends Controller
                 //     }
                 // }
 
-
+               
                 //Actualizamos los servicios del proyecto
                 $eliminar_columnas = serviciosProyectoModel::where('PROYECTO_ID', $request->proyecto_id)->delete();
                 if ($request['HI']) {

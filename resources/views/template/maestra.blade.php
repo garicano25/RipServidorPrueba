@@ -326,7 +326,7 @@ use Illuminate\Support\Str;
 
                         @if (preg_match('/\btablero\b/', request()->path()) || preg_match('/\bcliente\b/', request()->path()) || preg_match('/\bproveedor\b/', request()->path()) || preg_match('/\bclientecatalogo\b/', request()->path()) || preg_match('/\bproveedorcatalogos\b/', request()->path()) || preg_match('/\bbanco-imagenes\b/', request()->path()) || preg_match('/\busuario\b/', request()->path()))
 
-                        @if(auth()->user()->hasRoles(['Superusuario', 'Administrador','Coordinador','Compras','Almacén','Operativo HI','Psicólogo','Ergónomo']))
+                        @if(auth()->user()->hasRoles(['Superusuario', 'Administrador','Coordinador']))
                         <li> {{-- class="active" --}}
                             <a class="has-arrow" href="/tablero" aria-expanded="false">
                                 <i class="mdi mdi-gauge"></i><span class="hide-menu">Tablero</span>

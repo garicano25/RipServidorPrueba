@@ -78,6 +78,19 @@ class inicioController extends Controller
             // return redirect()->route('proveedor.index');
             return view('principal.modulos');
         }
+        
+        else if (auth()->user()->hasRoles(['Ergónomo'])) {
+            // return redirect()->route('proveedor.index');
+            return view('principal.modulos');
+        }
+
+        else if (auth()->user()->hasRoles(['Psicólogo'])) {
+            // return redirect()->route('proveedor.index');
+            return view('principal.modulos');
+        }
+
+
+        
         else
         {
             return redirect()->route('usuario.index');
