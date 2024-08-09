@@ -4690,7 +4690,7 @@ function boton_nuevo_catDescripcionarea(){
 
     // campos hidden
     $('#ID_DESCRIPCION_AREA').val(0);
-    $('#ACTIVO').val(1);
+    $('#ACTIVO_DESCRIPCION').val(1);
 
 
     // abrir modal
@@ -4769,7 +4769,7 @@ function Seleccciona_catDescripcionarea()
 
         // campos hidden
         $('#ID_DESCRIPCION_AREA').val(row.data().ID_DESCRIPCION_AREA);
-        $('#ACTIVO').val(row.data().ACTIVO);
+        $('#ACTIVO_DESCRIPCION').val(row.data().ACTIVO);
 
         $('#NOMBRE').val(row.data().NOMBRE);
         $('#DESCRIPCION').val(row.data().DESCRIPCION);

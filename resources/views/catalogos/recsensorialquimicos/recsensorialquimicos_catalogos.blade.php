@@ -1253,7 +1253,7 @@
 						</div>
 						<div class="col-12">
 							<input type="hidden" class="form-control" id="CATALOGO_DESCRIPCION" name="catalogo" value="12">
-							<input type="hidden" class="form-control" id="ACTIVO" name="ACTIVO" value="0">
+							<input type="hidden" class="form-control" id="ACTIVO_DESCRIPCION" name="ACTIVO" value="0">
 
 						</div>
 					</div>
