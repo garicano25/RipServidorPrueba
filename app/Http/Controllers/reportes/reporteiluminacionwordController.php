@@ -55,6 +55,8 @@ use App\modelos\reportes\reporteiluminacionareacategoriaModel;
 use App\modelos\reportes\reporteanexosModel;
 use App\modelos\clientes\clientepartidasModel;
 use App\modelos\clientes\clientecontratoModel;
+use App\modelos\reportes\recursosPortadasInformesModel;
+
 
 
 class reporteiluminacionwordController extends Controller
@@ -161,6 +163,39 @@ class reporteiluminacionwordController extends Controller
     }
 
 
+
+    public function introduccion($proyecto, $texto)
+    {
+        if (!$proyecto) {
+            return $texto;
+        }
+
+
+        $proyecto = $proyecto;
+
+        $reportefecha = explode("-", $proyecto->proyecto_fechaentrega);
+        $meses = [
+            1 => 'enero',
+            2 => 'febrero',
+            3 => 'marzo',
+            4 => 'abril',
+            5 => 'mayo',
+            6 => 'junio',
+            7 => 'julio',
+            8 => 'agosto',
+            9 => 'septiembre',
+            10 => 'octubre',
+            11 => 'noviembre',
+            12 => 'diciembre'
+        ];
+
+        $texto = str_replace("INSTALACION_NOMBRE", $proyecto->proyecto_clienteinstalacion, $texto);
+        $texto = str_replace("REPORTE_FECHA_LARGA", $reportefecha[2] . " de " . $meses[(int)$reportefecha[1]] . " del año " . $reportefecha[0], $texto);
+
+        return $texto;
+    }
+
+
     /**
      * Store a newly created resource in storage.
      *
@@ -182,7 +217,7 @@ class reporteiluminacionwordController extends Controller
             date_default_timezone_set('America/Mexico_City');
             setlocale(LC_ALL, "es_MX");
 
-
+            ################ DATOS GENERALES ######################
             $agente_id = 4;
             $agente_nombre = "Iluminación";
             $proyecto = proyectoModel::with(['catregion', 'catsubdireccion', 'catgerencia', 'catactivo'])->findOrFail($proyecto_id);
@@ -190,6 +225,31 @@ class reporteiluminacionwordController extends Controller
             $cliente = clienteModel::findOrFail($recsensorial->cliente_id);
             $contrato = clientecontratoModel::findOrFail($proyecto->contrato_id);
 
+            ############# INFORMACION DE LAS PORTADAS #########
+            $recursos = recursosPortadasInformesModel::where('PROYECTO_ID', $proyecto_id)->where('AGENTE_ID', $agente_id)->get();
+            $agente = reporteiluminacionModel::where('proyecto_id', $proyecto_id)->get();
+            if ($proyecto->requiereContrato == 1) {
+
+                $contratoId = $proyecto->contrato_id;
+
+                $clienteInfo = DB::table('contratos_clientes as cc')
+                    ->leftJoin('cliente as c', 'c.id', '=', 'cc.CLIENTE_ID')
+                    ->where('cc.ID_CONTRATO', $contratoId)
+                    ->select(
+                        'cc.NUMERO_CONTRATO',
+                        'cc.DESCRIPCION_CONTRATO',
+                        'cc.CONTRATO_PLANTILLA_LOGODERECHO',
+                        'cc.CONTRATO_PLANTILLA_LOGOIZQUIERDO',
+                        'cc.CONTRATO_PLANTILLA_PIEPAGINA',
+                        'c.cliente_RazonSocial'
+                    )
+                    ->get();
+            } else {
+                $clienteInfo = clienteModel::where('id', $proyecto->cliente_id)->get();
+            }
+
+
+            ########### VALIDACION DEL RECONOCIMIENTO #################
 
             if ($reporteiluminacion_id > 0) {
                 $reporteiluminacion  = reporteiluminacionModel::findOrFail($reporteiluminacion_id);
@@ -211,213 +271,149 @@ class reporteiluminacionwordController extends Controller
             }
 
 
+            ################ PORTADA EXTERNA ####################
+            $titulo_partida = clientepartidasModel::where('CONTRATO_ID', $recsensorial->contrato_id)
+                ->where('clientepartidas_tipo', 2) // Informe de resultados
+                ->where('catprueba_id', 4) // Iluminacion
+                ->orderBy('updated_at', 'DESC')
+                ->get();
+
+            if (count($titulo_partida) > 0) {
+
+                //Para el valor que lleva proyecto se utilizo: descripcion de la partida, Numero del contrato y la descripcion del contrato
+                $plantillaword->setValue('proyecto_portada', str_replace("\n", "<w:br/>", $titulo_partida[0]->clientepartidas_descripcion) . ' - Contrato: ' . $clienteInfo[0]->NUMERO_CONTRATO);
+
+                $plantillaword->setValue('PARTIDA', str_replace("\n", "<w:br/>", $titulo_partida[0]->clientepartidas_descripcion));
+            } else {
+
+                $plantillaword->setValue('PARTIDA', "");
+                $plantillaword->setValue('proyecto_portada', 'El proyecto no esta vinculado a ningun contrato.');
+            }
+
+            $plantillaword->setValue('folio_portada', $proyecto->proyecto_folio);
+            $plantillaword->setValue('razon_social_portada', $cliente->cliente_RazonSocial);
+            $plantillaword->setValue('instalación_portada', $recsensorial->recsensorial_instalacion);
+
+            $fecha = $agente[0]->reporteiluminacion_mes . ' del ' . $agente[0]->reporteiluminacion_fecha;
+            $plantillaword->setValue('lugar_fecha_portada', $fecha);
+            $plantillaword->setValue('PORTADA_FECHA', $fecha);
+
+
+            //IMAGEN DE LA PORTADA
+            if ($recursos[0]->RUTA_IMAGEN_PORTADA) {
+                if (file_exists(storage_path('app/' . $recursos[0]->RUTA_IMAGEN_PORTADA))) {
+
+                    $plantillaword->setImageValue('foto_portada', array('path' => storage_path('app/' . $recursos[0]->RUTA_IMAGEN_PORTADA), 'width' => 650, 'height' => 750, 'ratio' => true, 'borderColor' => '000000'));
+                } else {
+
+                    $plantillaword->setValue('foto_portada', 'LA IMAGEN NO HA SIDO ENCONTRADA');
+                }
+            } else {
+
+                $plantillaword->setValue('foto_portada', 'LA IMAGEN DE LA PORTADA NO HA SIDO CARGADA');
+            }
+
+
             // PORTADA
             //================================================================================
 
+            $NIVEL_PORTADA1 = is_null($recursos[0]->OPCION_PORTADA1) ? "" : $recursos[0]->OPCION_PORTADA1 . "<w:br />";
+            $NIVEL_PORTADA2 = is_null($recursos[0]->OPCION_PORTADA2) ? "" : $recursos[0]->OPCION_PORTADA2 . "<w:br />";
+            $NIVEL_PORTADA3 = is_null($recursos[0]->OPCION_PORTADA3) ? "" : $recursos[0]->OPCION_PORTADA3 . "<w:br />";
+            $NIVEL_PORTADA4 = is_null($recursos[0]->OPCION_PORTADA4) ? "" : $recursos[0]->OPCION_PORTADA4 . "<w:br />";
+            $NIVEL_PORTADA5 = is_null($recursos[0]->OPCION_PORTADA5) ? "" : $recursos[0]->OPCION_PORTADA5 . "<w:br />";
+            $NIVEL_PORTADA6 = is_null($recursos[0]->OPCION_PORTADA6) ? "" : $recursos[0]->OPCION_PORTADA6 . "<w:br />";
+            $plantillaword->setValue(
+                'ESTRUCTURA',
+                $NIVEL_PORTADA1 . $NIVEL_PORTADA2 . $NIVEL_PORTADA3 . $NIVEL_PORTADA4 . $NIVEL_PORTADA5 . $NIVEL_PORTADA6
+            );
 
-            // LOGOS
-            //-----------------------------------------
+            if (
+                $proyecto->requiereContrato == 1
+            ) {
+
+                $plantillaword->setValue('TITULO_CONTRATO', "Contrato:");
+                $plantillaword->setValue('CONTRATO', $clienteInfo[0]->NUMERO_CONTRATO);
+                $plantillaword->setValue('DESCRIPCION_CONTRATO', $clienteInfo[0]->DESCRIPCION_CONTRATO);
+
+                $plantillaword->setValue('PIE_PAGINA', $clienteInfo[0]->CONTRATO_PLANTILLA_PIEPAGINA);
+                $plantillaword->setValue('INFORME_REVISION', "");
+            } else {
+
+                $plantillaword->setValue('CONTRATO', "");
+                $plantillaword->setValue('DESCRIPCION_CONTRATO', "");
+                $plantillaword->setValue('TITULO_CONTRATO', "");
+
+                $plantillaword->setValue('PIE_PAGINA', "");
+                $plantillaword->setValue('INFORME_REVISION', "");
+            }
 
 
-            $plantillaword->setValue('ENCABEZADO', str_replace('\n', '<w:br/>', $contrato->CONTRATO_PLANTILLA_ENCABEZADO));
+            //============= ENCABEZADOS TITULOS
+            $NIVEL1 = is_null($recursos[0]->NIVEL1) ? "" : $recursos[0]->NIVEL1 . "<w:br />";
+            $NIVEL2 = is_null($recursos[0]->NIVEL2) ? "" : $recursos[0]->NIVEL2 . "<w:br />";
+            $NIVEL3 = is_null($recursos[0]->NIVEL3) ? "" : $recursos[0]->NIVEL3 . "<w:br />";
+            $NIVEL4 = is_null($recursos[0]->NIVEL4) ? "" : $recursos[0]->NIVEL4 . "<w:br />";
+            $NIVEL5 = is_null($recursos[0]->NIVEL5) ? "" : $recursos[0]->NIVEL5;
 
+            $plantillaword->setValue(
+                'ENCABEZADO',
+                $NIVEL1 . $NIVEL2 . $NIVEL3 . $NIVEL4 . $NIVEL5
+            );
+            $plantillaword->setValue('INSTALACION_NOMBRE', $NIVEL1 . $NIVEL2 . $NIVEL3 . $NIVEL4 . $NIVEL5);
 
-            if ($contrato->CONTRATO_PLANTILLA_LOGOIZQUIERDO) {
-                if (file_exists(storage_path('app/' . $contrato->CONTRATO_PLANTILLA_LOGOIZQUIERDO))) {
-                    $plantillaword->setImageValue('LOGO_IZQUIERDO_PORTADA', array('path' => storage_path('app/' . $contrato->CONTRATO_PLANTILLA_LOGOIZQUIERDO), 'width' => 160, 'height' => 150, 'ratio' => true, 'borderColor' => '000000'));
+            //LOGOS DE AS EMPRESAS DE INFORME
+            if ($proyecto->requiereContrato == 1) {
 
-                    $plantillaword->setImageValue('LOGO_IZQUIERDO', array('path' => storage_path('app/' . $contrato->CONTRATO_PLANTILLA_LOGOIZQUIERDO), 'width' => 120, 'height' => 150, 'ratio' => true, 'borderColor' => '000000'));
+                if ($clienteInfo[0]->CONTRATO_PLANTILLA_LOGOIZQUIERDO) {
+                    if (file_exists(storage_path('app/' . $clienteInfo[0]->CONTRATO_PLANTILLA_LOGOIZQUIERDO))) {
+
+                        $plantillaword->setImageValue('LOGO_IZQUIERDO', array('path' => storage_path('app/' . $clienteInfo[0]->CONTRATO_PLANTILLA_LOGOIZQUIERDO), 'width' => 120, 'height' => 150, 'ratio' => true, 'borderColor' => '000000'));
+
+                        $plantillaword->setImageValue('LOGO_IZQUIERDO_PORTADA', array('path' => storage_path('app/' . $clienteInfo[0]->CONTRATO_PLANTILLA_LOGOIZQUIERDO), 'width' => 120, 'height' => 150, 'ratio' => true, 'borderColor' => '000000'));
+                    } else {
+
+                        $plantillaword->setValue('LOGO_IZQUIERDO', 'IMAGEN NO ENCONTRADA');
+                        $plantillaword->setValue('LOGO_IZQUIERDO_PORTADA', 'IMAGEN NO ENCONTRADA');
+                    }
                 } else {
-                    $plantillaword->setValue('LOGO_IZQUIERDO_PORTADA', 'SIN IMAGEN');
                     $plantillaword->setValue('LOGO_IZQUIERDO', 'SIN IMAGEN');
+                    $plantillaword->setValue('LOGO_IZQUIERDO_PORTADA', 'SIN IMAGEN');
                 }
-            } else {
-                $plantillaword->setValue('LOGO_IZQUIERDO_PORTADA', 'SIN IMAGEN');
-                $plantillaword->setValue('LOGO_IZQUIERDO', 'SIN IMAGEN');
-            }
 
 
-            if ($contrato->CONTRATO_PLANTILLA_LOGODERECHO) {
-                if (file_exists(storage_path('app/' . $contrato->CONTRATO_PLANTILLA_LOGODERECHO))) {
-                    $plantillaword->setImageValue('LOGO_DERECHO_PORTADA', array('path' => storage_path('app/' . $contrato->CONTRATO_PLANTILLA_LOGODERECHO), 'width' => 160, 'height' => 150, 'ratio' => true, 'borderColor' => '000000'));
+                if ($clienteInfo[0]->CONTRATO_PLANTILLA_LOGODERECHO) {
+                    if (file_exists(storage_path('app/' . $clienteInfo[0]->CONTRATO_PLANTILLA_LOGODERECHO))) {
 
-                    $plantillaword->setImageValue('LOGO_DERECHO', array('path' => storage_path('app/' . $contrato->CONTRATO_PLANTILLA_LOGODERECHO), 'width' => 120, 'height' => 150, 'ratio' => true, 'borderColor' => '000000'));
+                        $plantillaword->setImageValue('LOGO_DERECHO', array('path' => storage_path('app/' . $clienteInfo[0]->CONTRATO_PLANTILLA_LOGODERECHO), 'width' => 120, 'height' => 150, 'ratio' => true, 'borderColor' => '000000'));
+
+                        $plantillaword->setImageValue('LOGO_DERECHO_PORTADA', array('path' => storage_path('app/' . $clienteInfo[0]->CONTRATO_PLANTILLA_LOGODERECHO), 'width' => 120, 'height' => 150, 'ratio' => true, 'borderColor' => '000000'));
+                    } else {
+
+                        $plantillaword->setValue('LOGO_DERECHO', 'IMAGEN NO ENCONTRATA');
+                        $plantillaword->setValue('LOGO_DERECHO_PORTADA', 'IMAGEN NO ENCONTRATA');
+                    }
                 } else {
-                    $plantillaword->setValue('LOGO_DERECHO_PORTADA', 'SIN IMAGEN');
                     $plantillaword->setValue('LOGO_DERECHO', 'SIN IMAGEN');
+                    $plantillaword->setValue('LOGO_DERECHO_PORTADA', 'SIN IMAGEN');
                 }
             } else {
-                $plantillaword->setValue('LOGO_DERECHO_PORTADA', 'SIN IMAGEN');
-                $plantillaword->setValue('LOGO_DERECHO', 'SIN IMAGEN');
+
+                $plantillaword->setValue('LOGO_DERECHO', 'SIN CONTRATO');
+                $plantillaword->setValue('LOGO_IZQUIERDO', 'SIN CONTRATO');
+
+                $plantillaword->setValue('LOGO_DERECHO_PORTADA', 'SIN CONTRATO');
+                $plantillaword->setValue('LOGO_IZQUIERDO_PORTADA', 'SIN CONTRATO');
             }
 
-
-            if ($recsensorial->recsensorial_fotoinstalacion) {
-                if (file_exists(storage_path('app/' . $recsensorial->recsensorial_fotoinstalacion))) {
-                    $plantillaword->setImageValue('INSTALACION_FOTO', array('path' => storage_path('app/' . $recsensorial->recsensorial_fotoinstalacion), 'height' => 280, 'width' => 580, 'ratio' => true, 'borderColor' => '000000'));
-                } else {
-                    $plantillaword->setValue('INSTALACION_FOTO', 'SIN IMAGEN');
-                }
-            } else {
-                $plantillaword->setValue('INSTALACION_FOTO', 'SIN IMAGEN');
-            }
 
 
             //-----------------------------------------
-
-
+            ##### REVISIONES ###################
             $cancelado_texto = '';
             if ($revision->reporterevisiones_cancelado == 1) {
                 $cancelado_texto = '<w:br/>INFORME REVISIÓN ' . $revision->reporterevisiones_revision . ' CANCELADA';
             }
-
-
-            if (($recsensorial->recsensorial_tipocliente + 0) == 1) // 1 = pemex, 0 = cliente
-            {
-                if ($reporteiluminacion->reporteiluminacion_catsubdireccion_activo == 1) {
-                    $plantillaword->setValue('SUBDIRECCION', $proyecto->catsubdireccion->catsubdireccion_nombre . '<w:br/>');
-                } else {
-                    $plantillaword->setValue('SUBDIRECCION', '');
-                }
-
-
-                if ($reporteiluminacion->reporteiluminacion_catgerencia_activo == 1) {
-                    $plantillaword->setValue('GERENCIA', $proyecto->catgerencia->catgerencia_nombre . '<w:br/>');
-                } else {
-                    $plantillaword->setValue('GERENCIA', '');
-                }
-
-
-                if ($reporteiluminacion->reporteiluminacion_catactivo_activo == 1) {
-                    $plantillaword->setValue('ACTIVO', $proyecto->catactivo->catactivo_nombre . '<w:br/>');
-                } else {
-                    $plantillaword->setValue('ACTIVO', '');
-                }
-
-
-                if ($reporteiluminacion->reporteiluminacion_catregion_activo == 1) {
-                    $plantillaword->setValue('REGION', 'Región ' . $proyecto->catregion->catregion_nombre . '<w:br/>');
-                } else {
-                    $plantillaword->setValue('REGION', '');
-                }
-            } else {
-                $plantillaword->setValue('SUBDIRECCION', '');
-                $plantillaword->setValue('GERENCIA', '');
-                $plantillaword->setValue('ACTIVO', '');
-                $plantillaword->setValue('REGION', '');
-            }
-
-
-            if ($reporteiluminacion->reporteiluminacion_instalacion) {
-                $plantillaword->setValue('INSTALACION_NOMBRE', $reporteiluminacion->reporteiluminacion_instalacion . $cancelado_texto);
-            } else {
-                $plantillaword->setValue('INSTALACION_NOMBRE', $proyecto->proyecto_clienteinstalacion . $cancelado_texto);
-            }
-
-
-            // //TITULO INFORME
-            // $partida = clientepartidasModel::where('cliente_id', $recsensorial->cliente_id)
-            //                                 ->where('clientepartidas_tipo', 2) // 1 = reconocimiento, 2 = Informes 
-            //                                 ->where('catprueba_id', $agente_id) // Iluminacion
-            //                                 ->orderBy('updated_at', 'DESC')
-            //                                 ->limit(1)
-            //                                 ->get();
-
-
-            // if (count($partida) > 0)
-            // {
-            //     $plantillaword->setValue('TITULO_INFORME', $partida[0]->clientepartidas_descripcion);
-            //     $plantillaword->setValue('PARTIDA', $partida[0]->clientepartidas_descripcion);
-            // }
-            // else
-            // {
-            //     $plantillaword->setValue('TITULO_INFORME', 'FALTA AGREGAR TÍTULO DEL INFORME DE ILUMINACIÓN EN EL MÓDULO CLIENTES');
-            //     $plantillaword->setValue('PARTIDA', 'FALTA AGREGAR TÍTULO DEL INFORME DE ILUMINACIÓN EN EL MÓDULO CLIENTES');
-            // }
-
-
-            //-----------------------------------------
-            // TITULO DEL INFORME (PARTIDA)
-
-            $evaluacion = reporteiluminacionpuntosModel::where('proyecto_id', $proyecto_id)
-                ->where('registro_id', $reporteiluminacion_id)
-                ->get();
-
-            $tipoinstacion = '';
-            switch (true) {
-                case (count($evaluacion) > 150 && ($recsensorial->cliente_id + 0) != 2): // cliente_id [2 = senegas]
-                    $tipoinstacion = 'instalación extra grande';
-                    break;
-                case (count($evaluacion) > 80):
-                    $tipoinstacion = 'instalación grande';
-                    break;
-                case (count($evaluacion) > 40):
-                    $tipoinstacion = 'instalación mediana';
-                    break;
-                case (count($evaluacion) > 20):
-                    $tipoinstacion = 'instalación chica';
-                    break;
-                default:
-                    $tipoinstacion = 'instalación extra chica';
-                    break;
-            }
-
-
-            $partidainforme = DB::select('SELECT
-                                                cc.CLIENTE_ID, 
-                                                clientepartidas.clientepartidas_tipo, 
-                                                clientepartidas.catprueba_id, 
-                                                clientepartidas.clientepartidas_nombre, 
-                                                clientepartidas.clientepartidas_descripcion
-                                            FROM
-                                                contratos_partidas  clientepartidas
-                                                LEFT JOIN contratos_clientes cc ON cc.ID_CONTRATO = clientepartidas.CONTRATO_ID
-                                            WHERE
-                                                cc.CLIENTE_ID = ' . $recsensorial->cliente_id . '
-                                                AND clientepartidas.clientepartidas_tipo = 2 -- 1 = reconocimiento, 2 = informes
-                                                AND clientepartidas.catprueba_id = ' . $agente_id . '
-                                                AND clientepartidas.clientepartidas_descripcion LIKE "%' . $tipoinstacion . '%"
-                                            ORDER BY
-                                                clientepartidas.updated_at DESC
-                                            LIMIT 1');
-
-
-            if (count($partidainforme) == 0) {
-                $partidainforme = DB::select('SELECT
-                                                cc.CLIENTE_ID, 
-                                                clientepartidas.clientepartidas_tipo, 
-                                                clientepartidas.catprueba_id, 
-                                                clientepartidas.clientepartidas_nombre, 
-                                                clientepartidas.clientepartidas_descripcion
-                                            FROM
-                                                contratos_partidas  clientepartidas
-                                                LEFT JOIN contratos_clientes cc ON cc.ID_CONTRATO = clientepartidas.CONTRATO_ID
-                                            WHERE
-                                                cc.CLIENTE_ID = ' . $recsensorial->cliente_id . '
-                                                AND clientepartidas.clientepartidas_tipo = 2 -- 1 = reconocimiento, 2 = informes
-                                                AND clientepartidas.catprueba_id = ' . $agente_id . '
-                                                -- AND clientepartidas.clientepartidas_descripcion LIKE "%' . $tipoinstacion . '%"
-                                            ORDER BY
-                                                clientepartidas.updated_at DESC
-                                            LIMIT 1');
-            }
-
-
-            if (count($partidainforme) > 0) {
-                $plantillaword->setValue('TITULO_INFORME', $partidainforme[0]->clientepartidas_descripcion);
-                $plantillaword->setValue('PARTIDA', $partidainforme[0]->clientepartidas_descripcion);
-            } else {
-                $plantillaword->setValue('TITULO_INFORME', '<w:rPr><w:color w:val="ff0000"/><w:t>FALTA AGREGAR TÍTULO (PARTIDA) DEL INFORME DE ILUMINACIÓN EN EL MÓDULO CLIENTES, CONSULTE CON EL ADMINISTRADOR</w:t></w:rPr>');
-                $plantillaword->setValue('PARTIDA', '<w:rPr><w:color w:val="ff0000"/><w:t>FALTA AGREGAR TÍTULO (PARTIDA) DEL INFORME DE ILUMINACIÓN EN EL MÓDULO CLIENTES, CONSULTE CON EL ADMINISTRADOR</w:t></w:rPr>');
-            }
-
-            //-----------------------------------------
-
-            $plantillaword->setValue('CONTRATO', $cliente->cliente_numerocontrato);
-            $plantillaword->setValue('DESCRIPCION_CONTRATO', $cliente->cliente_descripcioncontrato);
-            $plantillaword->setValue('EMPRESA_RESPONSABLE', $cliente->cliente_plantillaempresaresponsable);
-            $plantillaword->setValue('PORTADA_FECHA', $reporteiluminacion->reporteiluminacion_fecha);
-            $plantillaword->setValue('PIE_PAGINA', str_replace("\r\n", "<w:br/>", str_replace("\n\n", "<w:br/>", $cliente->cliente_plantillapiepagina)));
 
 
             if (($revision->reporterevisiones_revision + 0) > 0) {
@@ -427,14 +423,22 @@ class reporteiluminacionwordController extends Controller
             }
 
 
-            // INTRODUCCION
-            //================================================================================
+
+            ##### INTRODUCCION ###################
+
+            $introduccionTexto = $agente[0]->reporteiluminacion_introduccion;
+            $introduccionTextoModificado = $this->introduccion($proyecto, $introduccionTexto);
+
+            // Asigna el texto modificado a la plantilla
+            $plantillaword->setValue('INTRODUCCION', $introduccionTextoModificado);
+
+            if (($revision->reporterevisiones_revision + 0) > 0) {
+                $plantillaword->setValue('INFORME_REVISION', $proyecto->proyecto_folio . ' - Informe de ' . $agente_nombre . ' Rev-' . $revision->reporterevisiones_revision);
+            } else {
+                $plantillaword->setValue('INFORME_REVISION', $proyecto->proyecto_folio . ' - Informe de ' . $agente_nombre);
+            }
 
 
-            // dd($this->datosproyectoreemplazartexto($proyecto, $recsensorial, $reporteiluminacion->reporteiluminacion_introduccion));
-            // dd(str_replace("\n\n", "<w:br/><w:br/>", $this->datosproyectoreemplazartexto($proyecto, $recsensorial, $reporteiluminacion->reporteiluminacion_introduccion)));
-
-            $plantillaword->setValue('INTRODUCCION', $this->datosproyectoreemplazartexto($proyecto, $recsensorial, $reporteiluminacion->reporteiluminacion_introduccion));
 
 
             // DEFINICIONES
