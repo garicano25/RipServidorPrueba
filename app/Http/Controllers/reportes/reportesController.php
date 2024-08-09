@@ -342,21 +342,21 @@ class reportesController extends Controller
             // $opciones_menu .= '<option value="0">POE PROYECTO</option>';  -> EL POE ESTARA APARTE EN EL SELECT SOLO ESTARAN LOS REPORTES DE LOS AGENTES
 
             //DESCOMENTAR DESPUES DE SUBIR AL SERVIDOR
-            // foreach ($sql as $key => $value){
-            //     $opciones_menu .= '<option value="'.$value->agente_id.'">'.$value->agente_nombre.'</option>';
-            // }
+            foreach ($sql as $key => $value){
+                $opciones_menu .= '<option value="'.$value->agente_id.'">'.$value->agente_nombre.'</option>';
+            }
 
 
             //QUITAR DESPUES DE SUBIR AL SERVIDOR
-            $opciones_menu .= '<option value="1">Ruido</option>';
-            $opciones_menu .= '<option value="2">Vibración</option>';
-            $opciones_menu .= '<option value="3">Temperatura</option>';
-            $opciones_menu .= '<option value="4">Iluminación</option>';
-            $opciones_menu .= '<option value="8">Ventilación y calidad del aire</option>';
-            $opciones_menu .= '<option value="9">Agua</option>';
-            $opciones_menu .= '<option value="10">Hielo</option>';
-            $opciones_menu .= '<option value="15">Químicos</option>';
-            $opciones_menu .= '<option value="16">Infraestructura para servicios al personal</option>';
+            // $opciones_menu .= '<option value="1">Ruido</option>';
+            // $opciones_menu .= '<option value="2">Vibración</option>';
+            // $opciones_menu .= '<option value="3">Temperatura</option>';
+            // $opciones_menu .= '<option value="4">Iluminación</option>';
+            // $opciones_menu .= '<option value="8">Ventilación y calidad del aire</option>';
+            // $opciones_menu .= '<option value="9">Agua</option>';
+            // $opciones_menu .= '<option value="10">Hielo</option>';
+            // $opciones_menu .= '<option value="15">Químicos</option>';
+            // $opciones_menu .= '<option value="16">Infraestructura para servicios al personal</option>';
 
 
             $dato['opciones_menu'] = $opciones_menu;
