@@ -256,11 +256,9 @@
 <!-- ============================================================== -->
 <script type="text/javascript" charset="utf-8" async defer>
     // Variables
-    var recsensorial_id = ({
-        {
-            $recsensorial_id
-        }
-    } + 0);
+    var recsensorial = <?php echo $recsensorial_id; ?>;
+    var recsensorial_id = recsensorial + 0;
+
     var tabla_parametro = null;
 
 

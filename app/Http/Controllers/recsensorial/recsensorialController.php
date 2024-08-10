@@ -413,7 +413,7 @@ class recsensorialController extends Controller
             $categorias = DB::select('SELECT
                                             recsensorialcategoria.recsensorial_id,
                                             recsensorialcategoria.id,
-                                            CONCAT(recsensorialcategoria.recsensorialcategoria_nombrecategoria, " (", recsensorialcategoria.recsensorialcategoria_funcioncategoria, ")") AS recsensorialcategoria_nombrecategoria
+                                            CONCAT(recsensorialcategoria.recsensorialcategoria_nombrecategoria) AS recsensorialcategoria_nombrecategoria
                                         FROM
                                             recsensorialcategoria
                                         WHERE
