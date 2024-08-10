@@ -1,11 +1,11 @@
 {{-- ========================================================================= --}}
 <div class="tab-pane active" role="tabpanel" id="tab_parametro_1">
     @if(auth()->user()->hasRoles(['Superusuario', 'Administrador', 'Coordinador','Operativo HI']) && ($recsensorial->recsensorial_bloqueado + 0) == 0 && ($recsensorial->recsensorial_fisicosimprimirbloqueado + 0) == 0)
-        <ol class="breadcrumb m-b-10">
-            <button type="button" class="btn btn-secondary waves-effect waves-light" data-toggle="tooltip" title="Nuevo registro" id="boton_nuevo_parametro">
-                <span class="btn-label"><i class="fa fa-plus"></i></span>Nuevo registro
-            </button>
-        </ol>
+    <ol class="breadcrumb m-b-10">
+        <button type="button" class="btn btn-secondary waves-effect waves-light" data-toggle="tooltip" title="Nuevo registro" id="boton_nuevo_parametro">
+            <span class="btn-label"><i class="fa fa-plus"></i></span>Nuevo registro
+        </button>
+    </ol>
     @endif
     <table class="table table-hover stylish-table" width="100%" id="tabla_parametro">
         <thead>
@@ -61,10 +61,10 @@
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-default waves-effect" data-dismiss="modal">Cerrar</button>
-                    @if(auth()->user()->hasRoles(['Superusuario', 'Administrador', 'Coordinador','Operativo HI'])  && ($recsensorial->recsensorial_bloqueado + 0) == 0)
-                        <button type="submit" class="btn btn-danger waves-effect waves-light" id="boton_guardar_parametro">
-                            Guardar <i class="fa fa-save"></i>
-                        </button>
+                    @if(auth()->user()->hasRoles(['Superusuario', 'Administrador', 'Coordinador','Operativo HI']) && ($recsensorial->recsensorial_bloqueado + 0) == 0)
+                    <button type="submit" class="btn btn-danger waves-effect waves-light" id="boton_guardar_parametro">
+                        Guardar <i class="fa fa-save"></i>
+                    </button>
                     @endif
                 </div>
             </form>
@@ -81,32 +81,32 @@
 <!-- SCRIPT -->
 <!-- ============================================================== -->
 <script type="text/javascript" charset="utf-8" async defer>
-    
     // Variables
-    var recsensorial_id = ({{($recsensorial_id+0)}});
+    var recsensorial_id = ({
+        {
+            ($recsensorial_id + 0)
+        }
+    });
     var tabla_parametro = null;
 
 
     // Load pagina
-    $(document).ready(function()
-    {
+    $(document).ready(function() {
         funcion_tabla_parametro(recsensorial_id);
         $('[data-toggle="tooltip"]').tooltip();
     });
 
 
-    function funcion_tabla_parametro(recsensorial_id)
-    {
+    function funcion_tabla_parametro(recsensorial_id) {
         tabla_parametro = $('#tabla_parametro').DataTable({
             "ajax": {
-                "url": "/parametromapariesgotabla/"+recsensorial_id,
+                "url": "/parametromapariesgotabla/" + recsensorial_id,
                 "type": "get",
                 "cache": false,
-                error: function (xhr, error, code)
-                {
+                error: function(xhr, error, code) {
                     // console.log(xhr); console.log(code);
                     // funcion_tabla_parametro(recsensorial_id);
-                    tabla_parametro.ajax.url("/parametromapariesgotabla/"+recsensorial_id).load();
+                    tabla_parametro.ajax.url("/parametromapariesgotabla/" + recsensorial_id).load();
                 },
                 "data": {}
             },
@@ -140,9 +140,14 @@
                 }
 
             ],
-            "lengthMenu": [[5, 10, 30, -1], [5, 10, 30, "Todos"]],
+            "lengthMenu": [
+                [5, 10, 30, -1],
+                [5, 10, 30, "Todos"]
+            ],
             // "rowsGroup": [0, 1], //agrupar filas
-            "order": [[ 0, "DESC" ]],
+            "order": [
+                [0, "DESC"]
+            ],
             "ordering": true,
             "processing": true,
             "language": {
@@ -166,10 +171,9 @@
     }
 
 
-    $("#boton_nuevo_parametro").click(function()
-    {
+    $("#boton_nuevo_parametro").click(function() {
         // Borrar formulario
-        $('#form_parametro').each(function(){
+        $('#form_parametro').each(function() {
             this.reset();
         });
 
@@ -178,22 +182,21 @@
         $("#parametro_recsensorial_id").val(recsensorial_id);
 
         // mostrar modal
-        $('#modal_parametro').modal({backdrop:false});
+        $('#modal_parametro').modal({
+            backdrop: false
+        });
     });
 
 
     // Selecciona REGISTRO
-    $(document).ready(function()
-    {
-        $('#tabla_parametro tbody').on('click', 'td.editar', function() 
-        {
+    $(document).ready(function() {
+        $('#tabla_parametro tbody').on('click', 'td.editar', function() {
             var tr = $(this).closest('tr');
             var row = tabla_parametro.row(tr);
 
-            if (parseInt(row.data().accion_activa) > 0)
-            {
+            if (parseInt(row.data().accion_activa) > 0) {
                 // Borrar formulario
-                $('#form_parametro').each(function(){
+                $('#form_parametro').each(function() {
                     this.reset();
                 });
 
@@ -204,19 +207,19 @@
                 $("#parametromapariesgo_tipo2").val(row.data().parametromapariesgo_tipo2);
 
                 // mostrar modal
-                $('#modal_parametro').modal({backdrop:false});
+                $('#modal_parametro').modal({
+                    backdrop: false
+                });
             }
         });
     });
 
 
     // GUARDAR REGISTRO
-    $("#boton_guardar_parametro").click(function()
-    {
+    $("#boton_guardar_parametro").click(function() {
         // valida campos vacios
         var valida = this.form.checkValidity();
-        if (valida)
-        {
+        if (valida) {
             // enviar datos
             $('#form_parametro').ajaxForm({
                 dataType: 'json',
@@ -224,8 +227,7 @@
                 url: '/parametromapariesgo',
                 data: {},
                 resetForm: false,
-                success: function(dato)
-                {
+                success: function(dato) {
                     // actualiza tabla
                     tabla_parametro.destroy();
                     funcion_tabla_parametro(recsensorial_id);
@@ -233,7 +235,7 @@
                     // mensaje
                     swal({
                         title: "Correcto",
-                        text: ""+dato.msj,
+                        text: "" + dato.msj,
                         type: "success", // warning, error, success, info
                         buttons: {
                             visible: false, // true , false
@@ -248,7 +250,7 @@
                     // cerrar modal
                     $('#modal_parametro').modal('hide');
                 },
-                beforeSend: function(){
+                beforeSend: function() {
                     $('#boton_guardar_parametro').html('Guardando <i class="fa fa-spin fa-spinner"></i>');
                 },
                 error: function(dato) {
@@ -257,7 +259,7 @@
                     // mensaje
                     swal({
                         title: "Error",
-                        text: "Error en la acción: "+dato,
+                        text: "Error en la acción: " + dato,
                         type: "error", // warning, error, success, info
                         buttons: {
                             visible: false, // true , false
@@ -274,51 +276,47 @@
 
 
     // eliminar REGISTRO
-    $(document).ready(function()
-    {
+    $(document).ready(function() {
         $('#tabla_parametro tbody').on('click', 'td.eliminar', function() {
             var tr = $(this).closest('tr');
             var row = tabla_parametro.row(tr);
 
-            if (parseInt(row.data().accion_activa) > 0)
-            {
-                swal({   
-                    title: "¿Eliminar registo?",   
-                    text: "Registro: "+row.data().numero_registro,
-                    type: "warning",   
-                    showCancelButton: true,   
-                    confirmButtonColor: "#DD6B55",   
-                    confirmButtonText: "Eliminar!",   
-                    cancelButtonText: "Cancelar!",   
-                    closeOnConfirm: false,   
-                    closeOnCancel: false 
-                }, function(isConfirm){   
-                    if (isConfirm)
-                    {
-                        swal({   
+            if (parseInt(row.data().accion_activa) > 0) {
+                swal({
+                    title: "¿Eliminar registo?",
+                    text: "Registro: " + row.data().numero_registro,
+                    type: "warning",
+                    showCancelButton: true,
+                    confirmButtonColor: "#DD6B55",
+                    confirmButtonText: "Eliminar!",
+                    cancelButtonText: "Cancelar!",
+                    closeOnConfirm: false,
+                    closeOnCancel: false
+                }, function(isConfirm) {
+                    if (isConfirm) {
+                        swal({
                             title: "¡Confirme nuevamente que desea eliminar el registro!",
-                            text: "Registro: "+row.data().numero_registro,
-                            type: "warning",   
-                            showCancelButton: true,   
-                            confirmButtonColor: "#DD6B55",   
-                            confirmButtonText: "Eliminar!",   
-                            cancelButtonText: "Cancelar!",   
-                            closeOnConfirm: false,   
-                            closeOnCancel: false 
-                        }, function(isConfirm){   
-                            if (isConfirm)
-                            {
+                            text: "Registro: " + row.data().numero_registro,
+                            type: "warning",
+                            showCancelButton: true,
+                            confirmButtonColor: "#DD6B55",
+                            confirmButtonText: "Eliminar!",
+                            cancelButtonText: "Cancelar!",
+                            closeOnConfirm: false,
+                            closeOnCancel: false
+                        }, function(isConfirm) {
+                            if (isConfirm) {
                                 // cerrar msj confirmacion
                                 swal.close();
-                                
+
                                 // eliminar
                                 $.ajax({
                                     type: "GET",
                                     dataType: "json",
-                                    url: "/parametromapariesgoeliminar/"+row.data().id,
-                                    data:{},
+                                    url: "/parametromapariesgoeliminar/" + row.data().id,
+                                    data: {},
                                     cache: false,
-                                    success:function(dato){
+                                    success: function(dato) {
                                         // actualiza tabla
                                         tabla_parametro.destroy();
                                         funcion_tabla_parametro(recsensorial_id);
@@ -326,7 +324,7 @@
                                         // mensaje
                                         swal({
                                             title: "Correcto",
-                                             text: ""+dato.msj,
+                                            text: "" + dato.msj,
                                             type: "success", // warning, error, success, info
                                             buttons: {
                                                 visible: false, // true , false
@@ -335,14 +333,12 @@
                                             showConfirmButton: false
                                         });
                                     },
-                                    error: function(dato){
+                                    error: function(dato) {
                                         // alert('Error: '+dato.msj);
                                         return false;
                                     }
-                                });//Fin ajax
-                            }
-                            else 
-                            {
+                                }); //Fin ajax
+                            } else {
                                 // mensaje
                                 swal({
                                     title: "Cancelado",
@@ -353,12 +349,10 @@
                                     },
                                     timer: 500,
                                     showConfirmButton: false
-                                });   
-                            } 
+                                });
+                            }
                         });
-                    }
-                    else 
-                    {
+                    } else {
                         // mensaje
                         swal({
                             title: "Cancelado",
@@ -369,13 +363,12 @@
                             },
                             timer: 500,
                             showConfirmButton: false
-                        });   
-                    } 
+                        });
+                    }
                 });
             }
         });
     });
-    
 </script>
 <!-- ============================================================== -->
 <!-- SCRIPT -->

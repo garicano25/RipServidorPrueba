@@ -526,7 +526,7 @@
         $.ajax({
             type: "GET",
             dataType: "json",
-            url: "/recsensorialconsultaareas/" + recsensorial_id + "/" + seleccionado_id,
+            url: "/recsensorialconsultaareas/" + recsensorial_id + "/" + seleccionado_id + "/" + 0,
             data: {},
             cache: false,
             success: function(dato) {
@@ -1798,7 +1798,12 @@
                             // className: '',
                             orderable: false,
                         },
-                      
+                        {
+                            data: "boton_mostrar",
+                            defaultContent: "-",
+                            // className: '',
+                            orderable: false,
+                        },
                         {
                             data: "boton_eliminar",
                             defaultContent: "-",

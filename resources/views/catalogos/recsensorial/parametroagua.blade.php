@@ -4,29 +4,28 @@
 {{-- ========================================================================= --}}
 <div class="tab-pane active" role="tabpanel" id="tab_parametro_1">
     @if(auth()->user()->hasRoles(['Superusuario', 'Administrador', 'Coordinador','Operativo HI']) && ($recsensorial->recsensorial_bloqueado + 0) == 0 && ($recsensorial->recsensorial_fisicosimprimirbloqueado + 0) == 0)
-        <ol class="breadcrumb m-b-10">
-            <button type="button" class="btn btn-secondary waves-effect waves-light" data-toggle="tooltip" title="Nueva evidencia <br> fotográfica / Plano" data-html="true" id="boton_nueva_fotoevidencia">
-                <span class="btn-label"><i class="fa fa-plus"></i></span>Evidencia fotográfica / Plano
-            </button>
-        </ol>
+    <ol class="breadcrumb m-b-10">
+        <button type="button" class="btn btn-secondary waves-effect waves-light" data-toggle="tooltip" title="Nueva evidencia <br> fotográfica / Plano" data-html="true" id="boton_nueva_fotoevidencia">
+            <span class="btn-label"><i class="fa fa-plus"></i></span>Evidencia fotográfica / Plano
+        </button>
+    </ol>
     @else
-        <ol class="breadcrumb m-b-10">
-            Evidencia fotográfica / Planos
-        </ol>
+    <ol class="breadcrumb m-b-10">
+        Evidencia fotográfica / Planos
+    </ol>
     @endif
     <div class="row">
         <div class="col-12">
             <div class="card">
                 <div class="card-body cardbody_galeria">
                     <style type="text/css">
-                        #image-popups .foto_galeria:hover i
-                        {
-                            opacity: 1!important;
+                        #image-popups .foto_galeria:hover i {
+                            opacity: 1 !important;
                             cursor: pointer;
                         }
                     </style>
                     <div class="row galeria" id="image-popups" style="height: auto; max-height: 230px; overflow-y: auto; overflow-x: none;">
-                        {{-- 
+                        {{--
                         <div class="col-xl-2 col-lg-3 col-md-4 col-sm-6 foto_galeria">
                             <span style="font-size: 13px; color: #FFFFFF; text-shadow: 0 0 3px #000000, 0 0 3px #000000; position: absolute; left: 20px;">Foto Motogeneradores</span>
                             <i class="fa fa-trash text-danger" style="font-size: 26px; text-shadow: 2px 2px 4px #000000; opacity: 0; position: absolute; top: 24px;" data-toggle="tooltip" title="Eliminar" onclick="foto_eliminar(0);"></i>
@@ -42,11 +41,11 @@
         </div>
     </div>
     @if(auth()->user()->hasRoles(['Superusuario', 'Administrador', 'Coordinador','Operativo HI']) && ($recsensorial->recsensorial_bloqueado + 0) == 0 && ($recsensorial->recsensorial_fisicosimprimirbloqueado + 0) == 0)
-        <ol class="breadcrumb m-b-10">
-            <button type="button" class="btn btn-secondary waves-effect waves-light" data-toggle="tooltip" title="Nuevo Punto de medición" id="boton_nuevo_parametro">
-                <span class="btn-label"><i class="fa fa-plus"></i></span>Punto de medición
-            </button>
-        </ol>
+    <ol class="breadcrumb m-b-10">
+        <button type="button" class="btn btn-secondary waves-effect waves-light" data-toggle="tooltip" title="Nuevo Punto de medición" id="boton_nuevo_parametro">
+            <span class="btn-label"><i class="fa fa-plus"></i></span>Punto de medición
+        </button>
+    </ol>
     @endif
     <table class="table table-hover stylish-table" width="100%" id="tabla_parametro">
         <thead>
@@ -143,10 +142,10 @@
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-default waves-effect" data-dismiss="modal">Cerrar</button>
-                    @if(auth()->user()->hasRoles(['Superusuario', 'Administrador', 'Coordinador','Operativo HI'])  && ($recsensorial->recsensorial_bloqueado + 0) == 0)
-                        <button type="submit" class="btn btn-danger waves-effect waves-light" id="boton_guardar_parametro">
-                            Guardar <i class="fa fa-save"></i>
-                        </button>
+                    @if(auth()->user()->hasRoles(['Superusuario', 'Administrador', 'Coordinador','Operativo HI']) && ($recsensorial->recsensorial_bloqueado + 0) == 0)
+                    <button type="submit" class="btn btn-danger waves-effect waves-light" id="boton_guardar_parametro">
+                        Guardar <i class="fa fa-save"></i>
+                    </button>
                     @endif
                 </div>
             </form>
@@ -161,15 +160,15 @@
 <!-- ============================================================== -->
 <!-- MODAL-EVIDENCIA-FOTOS -->
 <!-- ============================================================== -->
-<style type="text/css" media="screen">    
-    #modal_evidencia_fotos .modal-body .form-group{
-        margin: 0px 0px 12px 0px!important;
-        padding: 0px!important;
+<style type="text/css" media="screen">
+    #modal_evidencia_fotos .modal-body .form-group {
+        margin: 0px 0px 12px 0px !important;
+        padding: 0px !important;
     }
 
-    #modal_evidencia_fotos .modal-body .form-group label{
-        margin: 0px!important;
-        padding: 0px 0px 3px 0px!important;
+    #modal_evidencia_fotos .modal-body .form-group label {
+        margin: 0px !important;
+        padding: 0px 0px 3px 0px !important;
     }
 </style>
 <div id="modal_evidencia_fotos" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" style="display: none;">
@@ -192,7 +191,8 @@
                                 <label> Foto evidencia / Plano *</label>
                                 <style type="text/css" media="screen">
                                     .dropify-wrapper {
-                                        height: 292px!important; /*tamaño estatico del campo foto*/
+                                        height: 292px !important;
+                                        /*tamaño estatico del campo foto*/
                                     }
                                 </style>
                                 <input type="file" class="dropify" accept="image/jpeg,image/x-png" id="inputevidenciafoto" name="inputevidenciafoto" data-allowed-file-extensions="jpg png JPG PNG" data-height="296" data-default-file="" onchange="redimencionar_fotoevidencia();" required>
@@ -216,7 +216,7 @@
                                         <select class="custom-select form-control" id="recsensorialevidencias_recsensorialarea_id" name="recsensorialarea_id" onchange="descripcion_foto()" required>
                                             <option value=""></option>
                                             @foreach($recsensorialareas as $dato)
-                                                <option value="{{$dato->id}}">{{$dato->recsensorialarea_nombre}}</option>
+                                            <option value="{{$dato->id}}">{{$dato->recsensorialarea_nombre}}</option>
                                             @endforeach
                                         </select>
                                     </div>
@@ -224,7 +224,7 @@
                                 <div class="col-12">
                                     <div class="form-group">
                                         <label>Descripción de la (foto / plano) en el reporte</label>
-                                        <textarea  class="form-control" rows="6" id="recsensorialevidencias_descripcion" name="recsensorialevidencias_descripcion" required></textarea>
+                                        <textarea class="form-control" rows="6" id="recsensorialevidencias_descripcion" name="recsensorialevidencias_descripcion" required></textarea>
                                     </div>
                                 </div>
                             </div>
@@ -238,10 +238,10 @@
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-default waves-effect" data-dismiss="modal">Cerrar</button>
-                    @if(auth()->user()->hasRoles(['Superusuario', 'Administrador', 'Coordinador','Operativo HI'])  && ($recsensorial->recsensorial_bloqueado + 0) == 0)
-                        <button type="submit" class="btn btn-danger" id="boton_guardar_evidencia_fotos">
-                            Guardar <i class="fa fa-save"></i>
-                        </button>
+                    @if(auth()->user()->hasRoles(['Superusuario', 'Administrador', 'Coordinador','Operativo HI']) && ($recsensorial->recsensorial_bloqueado + 0) == 0)
+                    <button type="submit" class="btn btn-danger" id="boton_guardar_evidencia_fotos">
+                        Guardar <i class="fa fa-save"></i>
+                    </button>
                     @endif
                 </div>
             </div>
@@ -258,130 +258,120 @@
 <!-- ============================================================== -->
 <script type="text/javascript" charset="utf-8" async defer>
     // Variables
-    var recsensorial_id = ({{$recsensorial_id}}+0);
+    var recsensorial_id = ({
+        {
+            $recsensorial_id
+        }
+    } + 0);
     var tabla_parametro = null;
 
     // Load pagina
-    $(document).ready(function()
-    {
+    $(document).ready(function() {
         funcion_tabla_parametro(recsensorial_id);
         consulta_select_caracteristicas(0);
         $('[data-toggle="tooltip"]').tooltip();
     });
 
 
-    function consulta_select_areas(recsensorial_id, seleccionado_id)
-    {
+    function consulta_select_areas(recsensorial_id, seleccionado_id) {
         $.ajax({
             type: "GET",
             dataType: "json",
-            url: "/recsensorialconsultaareas/"+recsensorial_id+"/"+seleccionado_id,
-            data:{},
+            url: "/recsensorialconsultaareas/" + recsensorial_id + "/" + seleccionado_id + "/" + 0,
+            data: {},
             cache: false,
-            success:function(dato){
+            success: function(dato) {
                 $("#select_area").html(dato.opciones);
             },
-            error: function(dato){
+            error: function(dato) {
                 // alert('Error: '+dato.msj);
                 return false;
             }
-        });//Fin ajax
+        }); //Fin ajax
     }
 
 
-    function consulta_select_caracteristicas(seleccionado_id)
-    {
+    function consulta_select_caracteristicas(seleccionado_id) {
         $.ajax({
             type: "GET",
             dataType: "json",
-            url: "/parametroaguaselectcaracteristicas/"+seleccionado_id,
-            data:{},
+            url: "/parametroaguaselectcaracteristicas/" + seleccionado_id,
+            data: {},
             cache: false,
-            success:function(dato){
+            success: function(dato) {
                 $("#catparametroaguacaracteristica_id").html(dato.opciones);
             },
-            error: function(dato){
+            error: function(dato) {
                 // alert('Error: '+dato.msj);
                 return false;
             }
-        });//Fin ajax
+        }); //Fin ajax
     }
 
 
-    function consulta_opciones_caracteristicas(caracteristica_id, lista_seleccionados)
-    {
-        if(caracteristica_id)
-        {
+    function consulta_opciones_caracteristicas(caracteristica_id, lista_seleccionados) {
+        if (caracteristica_id) {
             $.ajax({
                 type: "GET",
                 dataType: "json",
-                url: "/parametroaguacaracteristicas/"+$("#catparametroaguacaracteristica_id option[value='"+caracteristica_id+"']").text(),
-                data:{},
+                url: "/parametroaguacaracteristicas/" + $("#catparametroaguacaracteristica_id option[value='" + caracteristica_id + "']").text(),
+                data: {},
                 cache: false,
-                success:function(dato)
-                {
+                success: function(dato) {
                     $("#chekbox_caracteristicas").html('');
-                    $.each( dato.opciones, function( key, value ) 
-                    {
+                    $.each(dato.opciones, function(key, value) {
                         var seleccionado = "";
-                        if (parseInt(lista_seleccionados.length) > 0)
-                        {
+                        if (parseInt(lista_seleccionados.length) > 0) {
                             // Buscar seleccionados
-                            $.each( lista_seleccionados, function( key, valor ){
+                            $.each(lista_seleccionados, function(key, valor) {
                                 if (value.id == valor.id) {
                                     seleccionado = "checked";
                                 }
                             });
-                        }
-                        else
-                        {
+                        } else {
                             seleccionado = "checked";
-                        }                            
+                        }
 
                         // Dibujar checkboxs
-                        $("#chekbox_caracteristicas").append('<div class="col-4">'+
-                                                                '<div class="form-group">'+
-                                                                    '<div class="switch" style="float: left;">'+
-                                                                        '<label>'+
-                                                                            '<input type="checkbox" name="caracteristica[]" id="chekbox_caracteristica_'+value.id+'" value="'+value.id+'" '+seleccionado+'>'+
-                                                                            '<span class="lever switch-col-light-blue"></span>'+
-                                                                        '</label>'+
-                                                                    '</div>'+
-                                                                    '<label class="demo-switch-title" style="float: left;">'+value.catparametroaguacaracteristica_caracteristica+'</label>'+
-                                                                '</div>'+
-                                                            '</div>');
+                        $("#chekbox_caracteristicas").append('<div class="col-4">' +
+                            '<div class="form-group">' +
+                            '<div class="switch" style="float: left;">' +
+                            '<label>' +
+                            '<input type="checkbox" name="caracteristica[]" id="chekbox_caracteristica_' + value.id + '" value="' + value.id + '" ' + seleccionado + '>' +
+                            '<span class="lever switch-col-light-blue"></span>' +
+                            '</label>' +
+                            '</div>' +
+                            '<label class="demo-switch-title" style="float: left;">' + value.catparametroaguacaracteristica_caracteristica + '</label>' +
+                            '</div>' +
+                            '</div>');
                     });
 
                 },
-                beforeSend: function(){
+                beforeSend: function() {
                     $('#chekbox_caracteristicas').html('<i class="fa fa-spin fa-spinner fa-5x"></i>');
                 },
-                error: function(dato){
+                error: function(dato) {
                     // alert('Error: '+dato.msj);
                     $("#chekbox_caracteristicas").html('');
                     return false;
                 }
-            });//Fin ajax
-        }
-        else
-        {
+            }); //Fin ajax
+        } else {
             $("#chekbox_caracteristicas").html('');
         }
     }
 
 
-    function funcion_tabla_parametro(recsensorial_id)
-    {
+    function funcion_tabla_parametro(recsensorial_id) {
         tabla_parametro = $('#tabla_parametro').DataTable({
             "ajax": {
-                "url": "/parametroaguatabla/"+recsensorial_id,
+                "url": "/parametroaguatabla/" + recsensorial_id,
                 "type": "get",
                 "cache": false,
-                error: function (xhr, error, code)
-                {
+                error: function(xhr, error, code) {
                     // console.log(xhr); console.log(code);
                     // funcion_tabla_parametro(recsensorial_id);
-                    tabla_parametro.ajax.url("/parametroaguatabla/"+recsensorial_id).load();
+                    tabla_parametro.ajax.url("/parametroaguatabla/" + recsensorial_id).load();
                 },
                 "data": {}
             },
@@ -431,9 +421,14 @@
                 }
 
             ],
-            "lengthMenu": [[10, 25, 50, -1], [10, 25, 50, "Todos"]],
+            "lengthMenu": [
+                [10, 25, 50, -1],
+                [10, 25, 50, "Todos"]
+            ],
             // "rowsGroup": [0, 1], //agrupar filas
-            "order": [[ 0, "DESC" ]],
+            "order": [
+                [0, "DESC"]
+            ],
             "ordering": true,
             "processing": true,
             "language": {
@@ -457,14 +452,13 @@
     }
 
 
-    $("#boton_nuevo_parametro").click(function()
-    {
+    $("#boton_nuevo_parametro").click(function() {
         $("#chekbox_caracteristicas").html('');
         consulta_select_areas(recsensorial_id, 0);
         // consulta_select_categorias(recsensorial_id, 0);
 
         // Borrar formulario
-        $('#form_parametro').each(function(){
+        $('#form_parametro').each(function() {
             this.reset();
         });
 
@@ -473,22 +467,21 @@
         $("#parametro_recsensorial_id").val(recsensorial_id);
 
         // mostrar modal
-        $('#modal_parametro').modal({backdrop:false});
+        $('#modal_parametro').modal({
+            backdrop: false
+        });
     });
 
 
     // Selecciona REGISTRO
-    $(document).ready(function()
-    {
-        $('#tabla_parametro tbody').on('click', 'td.editar', function() 
-        {
+    $(document).ready(function() {
+        $('#tabla_parametro tbody').on('click', 'td.editar', function() {
             var tr = $(this).closest('tr');
             var row = tabla_parametro.row(tr);
 
-            if (parseInt(row.data().accion_activa) > 0)
-            {
+            if (parseInt(row.data().accion_activa) > 0) {
                 // Borrar formulario
-                $('#form_parametro').each(function(){
+                $('#form_parametro').each(function() {
                     this.reset();
                 });
 
@@ -503,29 +496,28 @@
                 consulta_opciones_caracteristicas(row.data().catparametroaguacaracteristica_id, row.data().lista_seleccionados);
 
                 // mostrar modal
-                $('#modal_parametro').modal({backdrop:false});
+                $('#modal_parametro').modal({
+                    backdrop: false
+                });
             }
         });
     });
 
 
     // GUARDAR REGISTRO
-    $("#boton_guardar_parametro").click(function()
-    {
+    $("#boton_guardar_parametro").click(function() {
         // valida campos vacios
         var valida = this.form.checkValidity();
-        if (valida)
-        {
+        if (valida) {
             // validar checkbox vacios
-            var seleccionados = 0;    
-            $('#form_parametro input[type=checkbox]').each(function(){
+            var seleccionados = 0;
+            $('#form_parametro input[type=checkbox]').each(function() {
                 if (this.checked) {
                     seleccionados += 1;
                 }
             });
 
-            if (seleccionados>0)
-            {
+            if (seleccionados > 0) {
                 // enviar datos
                 $('#form_parametro').ajaxForm({
                     dataType: 'json',
@@ -535,8 +527,7 @@
                         opcion: 1,
                     },
                     resetForm: false,
-                    success: function(dato)
-                    {
+                    success: function(dato) {
                         // Campos Hidden
                         $("#registro_id").val(dato.parametro.id);
                         $("#parametro_recsensorial_id").val(dato.parametro.recsensorial_id);
@@ -548,7 +539,7 @@
                         // mensaje
                         swal({
                             title: "Correcto",
-                            text: ""+dato.msj,
+                            text: "" + dato.msj,
                             type: "success", // warning, error, success, info
                             buttons: {
                                 visible: false, // true , false
@@ -563,7 +554,7 @@
                         // cerrar modal
                         $('#modal_parametro').modal('hide');
                     },
-                    beforeSend: function(){
+                    beforeSend: function() {
                         $('#boton_guardar_parametro').html('Guardando <i class="fa fa-spin fa-spinner"></i>');
                     },
                     error: function(dato) {
@@ -572,7 +563,7 @@
                         // mensaje
                         swal({
                             title: "Error",
-                            text: "Error en la acción: "+dato,
+                            text: "Error en la acción: " + dato,
                             type: "error", // warning, error, success, info
                             buttons: {
                                 visible: false, // true , false
@@ -584,9 +575,7 @@
                     }
                 }).submit();
                 return false;
-            }
-            else
-            {
+            } else {
                 // mensaje
                 swal({
                     title: "Seleccione el alcance del análisis",
@@ -605,41 +594,36 @@
 
 
     // eliminar REGISTRO
-    $(document).ready(function()
-    {
-        $('#tabla_parametro tbody').on('click', 'td.eliminar', function()
-        {
+    $(document).ready(function() {
+        $('#tabla_parametro tbody').on('click', 'td.eliminar', function() {
             var tr = $(this).closest('tr');
             var row = tabla_parametro.row(tr);
 
-            if (parseInt(row.data().accion_activa) > 0)
-            {
-                swal({   
-                    title: "¿Eliminar registo?",   
-                    text: "Registro: "+row.data().numero_registro,
-                    type: "warning",   
-                    showCancelButton: true,   
-                    confirmButtonColor: "#DD6B55",   
-                    confirmButtonText: "Eliminar!",   
-                    cancelButtonText: "Cancelar!",   
-                    closeOnConfirm: false,   
-                    closeOnCancel: false 
-                }, function(isConfirm){   
-                    if (isConfirm)
-                    {
-                        swal({   
+            if (parseInt(row.data().accion_activa) > 0) {
+                swal({
+                    title: "¿Eliminar registo?",
+                    text: "Registro: " + row.data().numero_registro,
+                    type: "warning",
+                    showCancelButton: true,
+                    confirmButtonColor: "#DD6B55",
+                    confirmButtonText: "Eliminar!",
+                    cancelButtonText: "Cancelar!",
+                    closeOnConfirm: false,
+                    closeOnCancel: false
+                }, function(isConfirm) {
+                    if (isConfirm) {
+                        swal({
                             title: "¡Confirme nuevamente que desea eliminar el registro!",
-                            text: "Registro: "+row.data().numero_registro,
-                            type: "warning",   
-                            showCancelButton: true,   
-                            confirmButtonColor: "#DD6B55",   
-                            confirmButtonText: "Eliminar!",   
-                            cancelButtonText: "Cancelar!",   
-                            closeOnConfirm: false,   
-                            closeOnCancel: false 
-                        }, function(isConfirm){   
-                            if (isConfirm)
-                            {
+                            text: "Registro: " + row.data().numero_registro,
+                            type: "warning",
+                            showCancelButton: true,
+                            confirmButtonColor: "#DD6B55",
+                            confirmButtonText: "Eliminar!",
+                            cancelButtonText: "Cancelar!",
+                            closeOnConfirm: false,
+                            closeOnCancel: false
+                        }, function(isConfirm) {
+                            if (isConfirm) {
                                 // cerrar msj confirmacion
                                 swal.close();
 
@@ -647,10 +631,10 @@
                                 $.ajax({
                                     type: "GET",
                                     dataType: "json",
-                                    url: "/parametroaguaeliminar/"+row.data().id,
-                                    data:{},
+                                    url: "/parametroaguaeliminar/" + row.data().id,
+                                    data: {},
                                     cache: false,
-                                    success:function(dato){
+                                    success: function(dato) {
                                         // actualiza tabla
                                         tabla_parametro.destroy();
                                         funcion_tabla_parametro(row.data().recsensorial_id);
@@ -658,7 +642,7 @@
                                         // mensaje
                                         swal({
                                             title: "Correcto",
-                                             text: ""+dato.msj,
+                                            text: "" + dato.msj,
                                             type: "success", // warning, error, success, info
                                             buttons: {
                                                 visible: false, // true , false
@@ -667,14 +651,12 @@
                                             showConfirmButton: false
                                         });
                                     },
-                                    error: function(dato){
+                                    error: function(dato) {
                                         // alert('Error: '+dato.msj);
                                         return false;
                                     }
-                                });//Fin ajax
-                            }
-                            else 
-                            {
+                                }); //Fin ajax
+                            } else {
                                 // mensaje
                                 swal({
                                     title: "Cancelado",
@@ -685,12 +667,10 @@
                                     },
                                     timer: 500,
                                     showConfirmButton: false
-                                });   
-                            } 
+                                });
+                            }
                         });
-                    }
-                    else 
-                    {
+                    } else {
                         // mensaje
                         swal({
                             title: "Cancelado",
@@ -701,8 +681,8 @@
                             },
                             timer: 500,
                             showConfirmButton: false
-                        });   
-                    } 
+                        });
+                    }
                 });
             }
         });
@@ -719,15 +699,14 @@
 
 
     // Load pagina
-    $(document).ready(function()
-    {
+    $(document).ready(function() {
         // inicializar campo FOTO mapa ubicacion
         $('#inputevidenciafoto').dropify({
             messages: {
                 'default': 'Arrastre la imagen aquí o haga click',
                 'replace': 'Arrastre la imagen o haga clic para reemplazar',
-                'remove':  'Quitar',
-                'error':   'Ooops, ha ocurrido un error.'
+                'remove': 'Quitar',
+                'error': 'Ooops, ha ocurrido un error.'
             },
             error: {
                 'fileSize': 'Demasiado grande (5MB max).',
@@ -743,10 +722,9 @@
     });
 
 
-    $("#boton_nueva_fotoevidencia").click(function()
-    {
+    $("#boton_nueva_fotoevidencia").click(function() {
         // Borrar formulario
-        $('#form_evidencia_fotos').each(function(){
+        $('#form_evidencia_fotos').each(function() {
             this.reset();
         });
 
@@ -767,12 +745,13 @@
         foto_resizebase64 = "";
 
         // mostrar modal
-        $('#modal_evidencia_fotos').modal({backdrop:false});
+        $('#modal_evidencia_fotos').modal({
+            backdrop: false
+        });
     });
 
 
-    function redimencionar_fotoevidencia()
-    {
+    function redimencionar_fotoevidencia() {
         // Mostrar mensaje de espera
         $('#mensaje_cargando_fotos').css('display', 'block');
         $('#boton_guardar_evidencia_fotos').attr('disabled', true);
@@ -791,14 +770,12 @@
         reader.readAsDataURL(file);
 
         // Set the image once loaded into file reader
-        reader.onload = function(e)
-        {
+        reader.onload = function(e) {
             //img.src = e.target.result;
             var img = new Image();
             img.src = this.result;
-            
-            setTimeout(function()
-            {
+
+            setTimeout(function() {
                 var canvas = document.createElement("canvas");
                 //var canvas = $("<canvas>", {"id":"testing"})[0];
                 //var ctx = canvas.getContext("2d");
@@ -809,30 +786,22 @@
                 var height = img.height;
 
                 // Dimensiones Nuevas
-                if (parseInt(width) > 8000)
-                {
+                if (parseInt(width) > 8000) {
                     var MAX_WIDTH = 4000; //Ancho de la imagen
                     var MAX_HEIGHT = 3000; //Alto de la imagen
-                }
-                else
-                {
+                } else {
                     var MAX_WIDTH = 1200; //Ancho de la imagen
                     var MAX_HEIGHT = 900; //Alto de la imagen
                 }
 
                 // Dimensionar con respecto a la relacion de aspecto
-                if (width > height)
-                {
-                    if (width > MAX_WIDTH)
-                    {
+                if (width > height) {
+                    if (width > MAX_WIDTH) {
                         height *= MAX_WIDTH / width;
                         width = MAX_WIDTH;
                     }
-                }
-                else
-                {
-                    if (height > MAX_HEIGHT)
-                    {
+                } else {
+                    if (height > MAX_HEIGHT) {
                         width *= MAX_HEIGHT / height;
                         height = MAX_HEIGHT;
                     }
@@ -842,7 +811,7 @@
                 canvas.height = height;
                 var ctx = canvas.getContext("2d");
                 ctx.drawImage(img, 0, 0, width, height);
-                console.log("Nuevas dimensiones ",width, height);
+                console.log("Nuevas dimensiones ", width, height);
 
                 // Resultado
                 var dataurl = canvas.toDataURL("image/jpeg");
@@ -857,35 +826,25 @@
     }
 
 
-    function descripcion_foto()
-    {
-        if(parseInt($("#recsensorialevidencias_tipo").val()) > 0)
-        {
-            if(parseInt($("#recsensorialevidencias_tipo").val()) == 1)
-            {
+    function descripcion_foto() {
+        if (parseInt($("#recsensorialevidencias_tipo").val()) > 0) {
+            if (parseInt($("#recsensorialevidencias_tipo").val()) == 1) {
                 $("#recsensorialevidencias_descripcion").attr('disabled', false);
                 $("#recsensorialevidencias_recsensorialarea_id").attr('disabled', false);
 
-                if(parseInt($("#recsensorialevidencias_recsensorialarea_id").val()) > 0)
-                {
-                    $("#recsensorialevidencias_descripcion").val('Evidencia de reconocimiento de la calidad del '+parametro_nombre+' en '+$("#recsensorialevidencias_recsensorialarea_id option:selected").text());
+                if (parseInt($("#recsensorialevidencias_recsensorialarea_id").val()) > 0) {
+                    $("#recsensorialevidencias_descripcion").val('Evidencia de reconocimiento de la calidad del ' + parametro_nombre + ' en ' + $("#recsensorialevidencias_recsensorialarea_id option:selected").text());
+                } else {
+                    $("#recsensorialevidencias_descripcion").val('Evidencia de reconocimiento de la calidad del ' + parametro_nombre);
                 }
-                else
-                {
-                    $("#recsensorialevidencias_descripcion").val('Evidencia de reconocimiento de la calidad del '+parametro_nombre);
-                }
-            }
-            else
-            {
+            } else {
                 $("#recsensorialevidencias_recsensorialarea_id").val('');
                 $("#recsensorialevidencias_recsensorialarea_id").attr('disabled', true);
 
-                $("#recsensorialevidencias_descripcion").val('Ubicación de puntos de '+parametro_nombre);
+                $("#recsensorialevidencias_descripcion").val('Ubicación de puntos de ' + parametro_nombre);
                 $("#recsensorialevidencias_descripcion").attr('disabled', false);
             }
-        }
-        else
-        {
+        } else {
             $("#recsensorialevidencias_recsensorialarea_id").val('');
             $("#recsensorialevidencias_recsensorialarea_id").attr('disabled', true);
             $("#recsensorialevidencias_descripcion").val('');
@@ -894,15 +853,13 @@
     }
 
 
-    $("#boton_guardar_evidencia_fotos").click(function()
-    {
+    $("#boton_guardar_evidencia_fotos").click(function() {
         // valida campos vacios
         var valida = this.form.checkValidity();
-        if (valida)
-        {
+        if (valida) {
             // Valida envio de datos
-            swal({   
-                title: "¡Confirme guardar "+$("#recsensorialevidencias_tipo option:selected").text()+"!",
+            swal({
+                title: "¡Confirme guardar " + $("#recsensorialevidencias_tipo option:selected").text() + "!",
                 text: "",
                 type: "info",
                 showCancelButton: true,
@@ -911,9 +868,8 @@
                 cancelButtonText: "Cancelar!",
                 closeOnConfirm: false,
                 closeOnCancel: false
-            }, function(isConfirm){
-                if (isConfirm)
-                {
+            }, function(isConfirm) {
+                if (isConfirm) {
                     // cerrar msj confirmacion
                     swal.close();
 
@@ -930,15 +886,14 @@
                             foto_base64: foto_resizebase64,
                         },
                         resetForm: false,
-                        success: function(dato)
-                        {
+                        success: function(dato) {
                             // Actualiza galeria de fotos
                             consulta_evidencia_fotos(recsensorial_id, parametro_id);
 
                             // mensaje
                             swal({
                                 title: "Correcto",
-                                text: ""+dato.msj,
+                                text: "" + dato.msj,
                                 type: "success", // warning, error, success, info
                                 buttons: {
                                     visible: false, // true , false
@@ -954,13 +909,11 @@
                             // cerrar modal
                             $('#modal_evidencia_fotos').modal('hide');
                         },
-                        beforeSend: function()
-                        {
+                        beforeSend: function() {
                             $('#boton_guardar_evidencia_fotos').html('Guardando <i class="fa fa-spin fa-spinner"></i>');
                             $('#boton_guardar_evidencia_fotos').attr('disabled', true);
                         },
-                        error: function(dato)
-                        {
+                        error: function(dato) {
                             // actualiza boton
                             $('#boton_guardar_evidencia_fotos').html('Guardar <i class="fa fa-save"></i>');
                             $('#boton_guardar_evidencia_fotos').attr('disabled', false);
@@ -968,7 +921,7 @@
                             // mensaje
                             swal({
                                 title: "Error",
-                                text: ""+dato.msj,
+                                text: "" + dato.msj,
                                 type: "error", // warning, error, success, info
                                 buttons: {
                                     visible: false, // true , false
@@ -980,9 +933,7 @@
                         }
                     }).submit();
                     return false;
-                }
-                else 
-                {
+                } else {
                     // mensaje
                     swal({
                         title: "Cancelado",
@@ -1001,55 +952,48 @@
     });
 
 
-    function consulta_evidencia_fotos(recsensorial_id, parametro_id)
-    {
+    function consulta_evidencia_fotos(recsensorial_id, parametro_id) {
         $.ajax({
             type: "GET",
             dataType: "json",
-            url: "/recsensorialevidenciagaleria/"+recsensorial_id+"/"+parametro_id,
-            data:{},
+            url: "/recsensorialevidenciagaleria/" + recsensorial_id + "/" + parametro_id,
+            data: {},
             cache: false,
-            success:function(dato)
-            {
+            success: function(dato) {
                 // Vaciar contenido
                 $('.galeria').html('');
 
-               // validar si trae datos
-                if (dato.galeria)
-                {
+                // validar si trae datos
+                if (dato.galeria) {
                     // GALERIA DE FOTOS
                     $(".galeria").html(dato.galeria);
-                }
-                else
-                {
+                } else {
                     $('.galeria').html('<div class="col-12" style="text-align: center;">No hay fotos que mostrar</div>');
                 }
 
                 // Inicializar tooltip
                 $('[data-toggle="tooltip"]').tooltip();
             },
-            beforeSend: function(){
+            beforeSend: function() {
                 $('.galeria').html('<div class="col-12" style="text-align: center;"><i class="fa fa-spin fa-spinner fa-5x"></i></div>');
             },
-            error: function(dato){          
+            error: function(dato) {
                 $('.galeria').html('<div class="col-12" style="text-align: center;">Error al cargar las fotos</div>');
                 return false;
             }
-        });//Fin ajax
+        }); //Fin ajax
     }
 
 
-    function foto_descargar(foto_id)
-    {
-        window.open("/recsensorialevidenciafotomostrar/"+foto_id+"/1");
+    function foto_descargar(foto_id) {
+        window.open("/recsensorialevidenciafotomostrar/" + foto_id + "/1");
     }
 
 
-    function foto_eliminar(foto_id, tipo_nombre)
-    {
+    function foto_eliminar(foto_id, tipo_nombre) {
         // Valida envio de datos
-        swal({   
-            title: "¡Confirme eliminar "+tipo_nombre+"!",
+        swal({
+            title: "¡Confirme eliminar " + tipo_nombre + "!",
             text: "",
             type: "warning",
             showCancelButton: true,
@@ -1058,18 +1002,16 @@
             cancelButtonText: "Cancelar!",
             closeOnConfirm: false,
             closeOnCancel: false
-        }, function(isConfirm){
-            if (isConfirm)
-            {
+        }, function(isConfirm) {
+            if (isConfirm) {
                 // Enviar datos
                 $.ajax({
                     type: "GET",
                     dataType: "json",
-                    url: "/recsensorialevidenciafotoeliminar/"+foto_id,
-                    data:{},
+                    url: "/recsensorialevidenciafotoeliminar/" + foto_id,
+                    data: {},
                     cache: false,
-                    success:function(dato)
-                    {
+                    success: function(dato) {
                         // Actualiza galeria de fotos
                         consulta_evidencia_fotos(recsensorial_id, parametro_id);
 
@@ -1079,7 +1021,7 @@
                         // mensaje
                         swal({
                             title: "Correcto",
-                            text: ""+dato.msj,
+                            text: "" + dato.msj,
                             type: "success", // warning, error, success, info
                             buttons: {
                                 visible: false, // true , false
@@ -1088,12 +1030,11 @@
                             showConfirmButton: false
                         });
                     },
-                    error: function(dato)
-                    {
+                    error: function(dato) {
                         // mensaje
                         swal({
                             title: "Error",
-                            text: ""+dato.msj,
+                            text: "" + dato.msj,
                             type: "error", // warning, error, success, info
                             buttons: {
                                 visible: false, // true , false
@@ -1103,10 +1044,8 @@
                         });
                         return false;
                     }
-                });//Fin ajax
-            }
-            else 
-            {
+                }); //Fin ajax
+            } else {
                 // mensaje
                 swal({
                     title: "Cancelado",
