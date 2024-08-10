@@ -994,13 +994,17 @@ Route::get('/finalizarPOE/{PROYECTO_ID}/{OPCION}/{NUEVO}', ['as' => 'reportes.fi
 
 Route::get('obtenerDatosInformesProyecto/{ID}', ['as' => 'reportes.obtenerDatosInformesProyecto', 'uses' => 'reportes\reportesController@obtenerDatosInformesProyecto']);
 
+Route::get('logoPortada/{ID}', ['as' => 'reportes.logoPortada', 'uses' => 'reportes\reportesController@logoPortada']);
+
+Route::get('portadaInfo/{proyecto}/{agente}', ['as' => 'reportes.portadaInfo', 'uses' => 'reportes\reportesController@portadaInfo']);
+
 Route::get('reportepoevista/{proyecto_id}', ['as' => 'reportes.reportepoevista', 'uses' => 'reportes\reportesController@reportepoevista']);
 
 Route::get('reportecategoriatabla/{proyecto_id}', ['as' => 'reportes.reportecategoriatabla', 'uses' => 'reportes\reportesController@reportecategoriatabla']);
 
 Route::get('reportecategoriaeliminar/{reportecategoria_id}', ['as' => 'reportes.reportecategoriaeliminar', 'uses' => 'reportes\reportesController@reportecategoriaeliminar']);
 
-Route::get('reporteareacategorias/{proyecto_id}/{reportearea_id}', ['as' => 'reportes.reporteareacategorias', 'uses' => 'reportes\reportesController@reporteareacategorias']);
+Route::get('reporteareacategorias/{proyecto_id}/{reportearea_id}/{recsensorialarea_id}', ['as' => 'reportes.reporteareacategorias', 'uses' => 'reportes\reportesController@reporteareacategorias']);
 
 Route::get('reporteareatabla/{proyecto_id}', ['as' => 'reportes.reporteareatabla', 'uses' => 'reportes\reportesController@reporteareatabla']);
 

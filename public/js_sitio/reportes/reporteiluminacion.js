@@ -107,6 +107,8 @@ $(document).ready(function()
 	updateClock(); // Ejecutar tiempo de espera
 
 	datosgenerales(); // Datos generales
+	portadaInfo(); // Portada
+ 
 
 	// Inicializar campos datepicker
     jQuery('.mydatepicker').datepicker({
@@ -390,6 +392,27 @@ function datosgenerales()
 			return false;
 		}
 	});//Fin ajax
+}
+
+
+var portada = ''
+function portadaInfo() {
+	$.ajax({
+		url: 'portadaInfo/' + proyecto.id + '/' + agente_id,
+		type: 'GET',
+		dataType: 'json',
+		data: {},
+		cache: false,
+		success: function (dato) {
+
+			portada = dato.data[0]
+
+		},
+		error: function (dato) {
+			console.log('Error al cargar los datos');
+		}
+	})
+	
 }
 
 
@@ -8664,57 +8687,48 @@ $(document).ready(function () {
 });
 
 
+function cambiarTareaVisual(opcion, id) {
+
+	switch (parseInt(opcion)) {
+		case 1:
+		descripcion = 'En exteriores: distinguir el área de tránsito, desplazarse caminando, vigilancia, movimiento de vehículos.';
+		break;
+	case 2:
+		descripcion = 'En interiores: distinguir el área de tránsito, desplazarse caminando. Vigilancia, movimiento de vehículos.';
+		break;
+	case 3:
+		descripcion = 'En interiores.';
+		break;
+	case 4:
+		descripcion = 'Requerimiento visual simple: inspección visual, recuento de piezas, trabajo en banco y máquina.';
+		break;
+	case 5:
+	descripcion = 'Distinción moderada de detalles: ensamble simple, trabajo medio en banco y máquina, inspección simple, empaque y trabajos de oficina.';
+		break;
+	case 6:
+		descripcion = 'Distinción clara de detalles: maquinado y acabados delicados, ensamble de inspección moderadamente difícil, captura y procesamiento de información, manejo de instrumentos y equipo de laboratorio.';
+		break;
+	case 7:
+		descripcion = 'Distinción fina de detalles: maquinado de precisión, ensamble e inspección de trabajos delicados, manejo de instrumentos y equipo de precisión, manejo de piezas pequeñas.';
+		break;
+	case 8:
+		descripcion = 'Alta exactitud en la distinción de detalles: ensamble, proceso e inspección de piezas pequeñas y complejas, acabado con pulidos finos.';
+		break;
+	case 9:
+		descripcion = 'Alto grado de especialización en la distinción de detalles.';
+		break;
+	default:
+		descripcion = '';
+		break;
+	}
+
+	$('#textarea_tareavisual_' + id).val(descripcion);
+
+}
 
 
-document.addEventListener('DOMContentLoaded', function() {
 
-    document.querySelectorAll('.custom-select').forEach(function(select) {
-		
-        select.addEventListener('change', function() {
-            var numero = this.id.split('_')[2]; 
-            var descripcion = '';
-            switch (this.value) {
-				case '1':
-				descripcion = 'En exteriores: distinguir el área de tránsito, desplazarse caminando, vigilancia, movimiento de vehículos.';
-				break;
-			case '2':
-				descripcion = 'En interiores: distinguir el área de tránsito, desplazarse caminando. Vigilancia, movimiento de vehículos.';
-				break;
-			case '3':
-				descripcion = 'En interiores.';
-				break;
-			case '4':
-				descripcion = 'Requerimiento visual simple: inspección visual, recuento de piezas, trabajo en banco y máquina.';
-				break;
-			case '5':
-			descripcion = 'Distinción moderada de detalles: ensamble simple, trabajo medio en banco y máquina, inspección simple, empaque y trabajos de oficina.';
-				break;
-			case '6':
-				descripcion = 'Distinción clara de detalles: maquinado y acabados delicados, ensamble de inspección moderadamente difícil, captura y procesamiento de información, manejo de instrumentos y equipo de laboratorio.';
-				break;
-			case '7':
-				descripcion = 'Distinción fina de detalles: maquinado de precisión, ensamble e inspección de trabajos delicados, manejo de instrumentos y equipo de precisión, manejo de piezas pequeñas.';
-				break;
-			case '8':
-				descripcion = 'Alta exactitud en la distinción de detalles: ensamble, proceso e inspección de piezas pequeñas y complejas, acabado con pulidos finos.';
-				break;
-			case '9':
-				descripcion = 'Alto grado de especialización en la distinción de detalles.';
-				break;
-			default:
-				descripcion = '';
-				break;
-            }
-            var textareaId = 'textarea_tareavisual_' + numero;
-            var textarea = document.getElementById(textareaId);
-            if (textarea) {
-                textarea.value = descripcion;
-            } else {
-                console.log('No se encontró el textarea con ID:', textareaId);
-            }
-        });
-    });
-});
+
 
 
 $('#btn_descargar_plantilla').on('click', function (e) {
@@ -8817,7 +8831,64 @@ function obtenerdatos() {
             $("#OPCION_PORTADA3").html(dato.checks);
             $("#OPCION_PORTADA4").html(dato.checks);
             $("#OPCION_PORTADA5").html(dato.checks);
-            $("#OPCION_PORTADA6").html(dato.checks);
+			$("#OPCION_PORTADA6").html(dato.checks);
+			
+
+
+			setTimeout(() => {
+				$("#NIVEL1").val(portada.NIVEL1);
+				$("#NIVEL2").val(portada.NIVEL2);
+				$("#NIVEL3").val(portada.NIVEL3);
+				$("#NIVEL4").val(portada.NIVEL4);
+				$("#NIVEL5").val(portada.NIVEL5);
+
+
+				$("#OPCION_PORTADA1").val(portada.OPCION_PORTADA1);
+				$("#OPCION_PORTADA2").val(portada.OPCION_PORTADA2);
+				$("#OPCION_PORTADA3").val(portada.OPCION_PORTADA3);
+				$("#OPCION_PORTADA4").val(portada.OPCION_PORTADA4);
+				$("#OPCION_PORTADA5").val(portada.OPCION_PORTADA5);
+				$("#OPCION_PORTADA6").val(portada.OPCION_PORTADA6);
+
+				if (portada.RUTA_IMAGEN_PORTADA) {
+           			
+					var archivo = portada.RUTA_IMAGEN_PORTADA;
+					var extension = archivo.substring(archivo.lastIndexOf("."));
+					var imagenUrl = '/logoPortada/' + portada.ID_RECURSO_INFORME + extension;
+
+					$('#PORTADA').val('')
+					if ($('#PORTADA').data('dropify')) {
+
+						$('#PORTADA').dropify().data('dropify').destroy();
+						// $('.dropify-wrapper').css('height', 400);
+						$('#PORTADA').dropify().data('dropify').settings.defaultFile = imagenUrl;
+						$('#PORTADA').dropify().data('dropify').init();
+					}
+					else {
+				
+					
+						$('#PORTADA').attr('data-default-file', imagenUrl);
+						$('#PORTADA').dropify({
+							messages: {
+								'default': 'Arrastre la imagen aquí o haga click',
+								'replace': 'Arrastre la imagen o haga clic para reemplazar',
+								'remove': 'Quitar',
+								'error': 'Ooops, ha ocurrido un error.'
+							},
+							error: {
+								'fileSize': 'Demasiado grande ({{ value }} max).',
+								'minWidth': 'Ancho demasiado pequeño (min {{ value }}}px).',
+								'maxWidth': 'Ancho demasiado grande (max {{ value }}}px).',
+								'minHeight': 'Alto demasiado pequeño (min {{ value }}}px).',
+								'maxHeight': 'Alto demasiado grande (max {{ value }}px max).',
+								'imageFormat': 'Formato no permitido, sólo ({{ value }}).'
+							}
+						});
+
+					}
+				}			
+
+			}, 1000);
         },
         error: function(xhr, status, error) {
             console.log('Error: ' + error);

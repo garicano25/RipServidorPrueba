@@ -114,6 +114,7 @@ $(document).ready(function()
 
 
 	datosgenerales(); // Cargar datos
+	portadaInfo() // Info portada
 
 
 	// Inicializar campos datepicker
@@ -389,6 +390,27 @@ function datosgenerales()
 			return false;
 		}
 	});//Fin ajax
+}
+
+
+var portada = ''
+function portadaInfo() {
+	$.ajax({
+		url: 'portadaInfo/' + proyecto.id + '/' + agente_id,
+		type: 'GET',
+		dataType: 'json',
+		data: {},
+		cache: false,
+		success: function (dato) {
+
+			portada = dato.data[0]
+
+		},
+		error: function (dato) {
+			console.log('Error al cargar los datos');
+		}
+	})
+	
 }
 
 
@@ -5819,23 +5841,7 @@ function tabla_reporte_equipoutilizado(proyecto_id, reporteregistro_id, agente_n
 						data: "vigencia",
 						defaultContent: "-"
 					},
-					{
-						className: 'certificadopdf',
-						orderable: false,
-						data: "certificado",
-						defaultContent: "-"
-					},
-					{
-						data: "checkbox_carta",
-						defaultContent: "-",
-						orderable: false,
-					},
-					{
-						className: 'cartapdf',
-						data: "carta",
-						defaultContent: "-",
-						orderable: false,
-					},
+				
 				],
 				lengthMenu: [[20, 50, 100, -1], [20, 50, 100, "Todos"]],
 				// rowsGroup: [0, 1], //agrupar filas
@@ -8394,7 +8400,64 @@ function obtenerdatos() {
             $("#OPCION_PORTADA3").html(dato.checks);
             $("#OPCION_PORTADA4").html(dato.checks);
             $("#OPCION_PORTADA5").html(dato.checks);
-            $("#OPCION_PORTADA6").html(dato.checks);
+			$("#OPCION_PORTADA6").html(dato.checks);
+			
+
+
+			setTimeout(() => {
+				$("#NIVEL1").val(portada.NIVEL1);
+				$("#NIVEL2").val(portada.NIVEL2);
+				$("#NIVEL3").val(portada.NIVEL3);
+				$("#NIVEL4").val(portada.NIVEL4);
+				$("#NIVEL5").val(portada.NIVEL5);
+
+
+				$("#OPCION_PORTADA1").val(portada.OPCION_PORTADA1);
+				$("#OPCION_PORTADA2").val(portada.OPCION_PORTADA2);
+				$("#OPCION_PORTADA3").val(portada.OPCION_PORTADA3);
+				$("#OPCION_PORTADA4").val(portada.OPCION_PORTADA4);
+				$("#OPCION_PORTADA5").val(portada.OPCION_PORTADA5);
+				$("#OPCION_PORTADA6").val(portada.OPCION_PORTADA6);
+
+				if (portada.RUTA_IMAGEN_PORTADA) {
+           			
+					var archivo = portada.RUTA_IMAGEN_PORTADA;
+					var extension = archivo.substring(archivo.lastIndexOf("."));
+					var imagenUrl = '/logoPortada/' + portada.ID_RECURSO_INFORME + extension;
+
+					$('#PORTADA').val('')
+					if ($('#PORTADA').data('dropify')) {
+
+						$('#PORTADA').dropify().data('dropify').destroy();
+						// $('.dropify-wrapper').css('height', 400);
+						$('#PORTADA').dropify().data('dropify').settings.defaultFile = imagenUrl;
+						$('#PORTADA').dropify().data('dropify').init();
+					}
+					else {
+				
+					
+						$('#PORTADA').attr('data-default-file', imagenUrl);
+						$('#PORTADA').dropify({
+							messages: {
+								'default': 'Arrastre la imagen aquí o haga click',
+								'replace': 'Arrastre la imagen o haga clic para reemplazar',
+								'remove': 'Quitar',
+								'error': 'Ooops, ha ocurrido un error.'
+							},
+							error: {
+								'fileSize': 'Demasiado grande ({{ value }} max).',
+								'minWidth': 'Ancho demasiado pequeño (min {{ value }}}px).',
+								'maxWidth': 'Ancho demasiado grande (max {{ value }}}px).',
+								'minHeight': 'Alto demasiado pequeño (min {{ value }}}px).',
+								'maxHeight': 'Alto demasiado grande (max {{ value }}px max).',
+								'imageFormat': 'Formato no permitido, sólo ({{ value }}).'
+							}
+						});
+
+					}
+				}			
+
+			}, 1000);
         },
         error: function(xhr, status, error) {
             console.log('Error: ' + error);

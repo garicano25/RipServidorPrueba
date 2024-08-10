@@ -1360,9 +1360,7 @@
 										<th>Equipo</th>
 										<th width="200">Marca / Modelo / Serie</th>
 										<th width="160">Vigencia</th>
-										<th width="60">Certificado</th>
-										<th width="60">Aplica Carta</th>
-										<th width="120">Carta PDF</th>
+
 									</tr>
 								</thead>
 								<tbody></tbody>

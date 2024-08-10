@@ -86,12 +86,13 @@ class reportesController extends Controller
     {
         $proyecto = proyectoModel::findOrFail($proyecto_id);
 
-        if (($proyecto->recsensorial->recsensorial_tipocliente + 0) == 1 && ($proyecto->recsensorial_id == NULL || $proyecto->catregion_id == NULL || $proyecto->catsubdireccion_id == NULL || $proyecto->catgerencia_id == NULL || $proyecto->catactivo_id == NULL || $proyecto->proyecto_clienteinstalacion == NULL || $proyecto->proyecto_fechaentrega == NULL)) {
+        if (($proyecto->recsensorial->recsensorial_tipocliente + 0) == 1 && ($proyecto->recsensorial_id == NULL || $proyecto->proyecto_clienteinstalacion == NULL || $proyecto->proyecto_fechaentrega == NULL)) {
             return '<div style="text-align: center;">
                         <p style="font-size: 24px;">Datos incompletos</p>
                         <b style="font-size: 18px;">Para ingresar al diseño de la tabla POE primero debe completar todos los campos vacíos de la sección de datos generales del proyecto.</b>
                     </div>';
         } else {
+
             // COPIAR CATEGORIAS DEL RECONOCIMIENTO SENSORIAL
             //===================================================
             $total_categorias = DB::select('SELECT
@@ -102,7 +103,9 @@ class reportesController extends Controller
                                                 reportecategoria.proyecto_id = ' . $proyecto_id);
 
 
+            //INSERTAMOS LA CATEGORIAS POR PRIMERA VEZ
             if (($total_categorias[0]->TOTAL + 0) == 0) {
+
                 $recsensorial_categorias = recsensorialcategoriaModel::where('recsensorial_id', $proyecto->recsensorial_id)
                     ->orderBy('recsensorialcategoria_nombrecategoria', 'ASC')
                     ->get();
@@ -110,21 +113,25 @@ class reportesController extends Controller
 
                 DB::statement('ALTER TABLE reportecategoria AUTO_INCREMENT = 1;');
 
-
+                $num_orden = 1;
                 foreach ($recsensorial_categorias as $key => $value) {
                     $categoria = reportecategoriaModel::create([
                         'proyecto_id' => $proyecto_id,
                         'recsensorialcategoria_id' => $value->id,
-                        'reportecategoria_nombre' => $value->recsensorialcategoria_nombrecategoria
+                        'reportecategoria_nombre' => $value->recsensorialcategoria_nombrecategoria,
+                        'reportecategoria_orden' => $num_orden
                     ]);
+
+                    $num_orden++;
                 }
+            } else { // VALIDAMOS AQUELLAS CATEGORIAS QUE NO ESTAN AGREGADAS Y LAS AGREGAMOS
+
+                $inserciones = DB::select('CALL sp_insertar_categoriasFaltantes_g(?,?)', [$proyecto->recsensorial_id, $proyecto_id]);
             }
 
 
             // COPIAR AREAS DEL RECONOCIMIENTO SENSORIAL
-            //===================================================
-
-
+            //==================================================
             $total_areas = DB::select('SELECT
                                             COUNT(reportearea.id) AS TOTAL
                                         FROM
@@ -140,15 +147,21 @@ class reportesController extends Controller
 
                 DB::statement('ALTER TABLE reportearea AUTO_INCREMENT = 1;');
 
-
+                $num_orden = 1;
                 foreach ($recsensorial_areas as $key => $value) {
                     $area = reporteareaModel::create([
                         'proyecto_id' => $proyecto_id,
                         'recsensorialarea_id' => $value->id,
                         'reportearea_nombre' => $value->recsensorialarea_nombre,
-                        'reportearea_instalacion' => $proyecto->proyecto_clienteinstalacion
+                        'reportearea_instalacion' => $proyecto->proyecto_clienteinstalacion,
+                        'reportearea_orden' => $num_orden
                     ]);
+
+                    $num_orden++;
                 }
+            } else {
+
+                $inserciones = DB::select('CALL sp_insertar_areasFaltantes_g(?,?, ?)', [$proyecto->recsensorial_id, $proyecto_id, $proyecto->proyecto_clienteinstalacion]);
             }
 
 
@@ -342,21 +355,21 @@ class reportesController extends Controller
             // $opciones_menu .= '<option value="0">POE PROYECTO</option>';  -> EL POE ESTARA APARTE EN EL SELECT SOLO ESTARAN LOS REPORTES DE LOS AGENTES
 
             //DESCOMENTAR DESPUES DE SUBIR AL SERVIDOR
-            foreach ($sql as $key => $value){
-                $opciones_menu .= '<option value="'.$value->agente_id.'">'.$value->agente_nombre.'</option>';
-            }
+            // foreach ($sql as $key => $value){
+            //     $opciones_menu .= '<option value="'.$value->agente_id.'">'.$value->agente_nombre.'</option>';
+            // }
 
 
             //QUITAR DESPUES DE SUBIR AL SERVIDOR
-            // $opciones_menu .= '<option value="1">Ruido</option>';
-            // $opciones_menu .= '<option value="2">Vibración</option>';
-            // $opciones_menu .= '<option value="3">Temperatura</option>';
-            // $opciones_menu .= '<option value="4">Iluminación</option>';
-            // $opciones_menu .= '<option value="8">Ventilación y calidad del aire</option>';
-            // $opciones_menu .= '<option value="9">Agua</option>';
-            // $opciones_menu .= '<option value="10">Hielo</option>';
-            // $opciones_menu .= '<option value="15">Químicos</option>';
-            // $opciones_menu .= '<option value="16">Infraestructura para servicios al personal</option>';
+            $opciones_menu .= '<option value="1">Ruido</option>';
+            $opciones_menu .= '<option value="2">Vibración</option>';
+            $opciones_menu .= '<option value="3">Temperatura</option>';
+            $opciones_menu .= '<option value="4">Iluminación</option>';
+            $opciones_menu .= '<option value="8">Ventilación y calidad del aire</option>';
+            $opciones_menu .= '<option value="9">Agua</option>';
+            $opciones_menu .= '<option value="10">Hielo</option>';
+            $opciones_menu .= '<option value="15">Químicos</option>';
+            $opciones_menu .= '<option value="16">Infraestructura para servicios al personal</option>';
 
 
             $dato['opciones_menu'] = $opciones_menu;
@@ -418,7 +431,7 @@ class reportesController extends Controller
                 if ($bloqueado == 0) {
 
                     if (($proyecto->proyecto_concluido + 0) == 0 && auth()->user()->hasRoles(['Superusuario', 'Administrador', 'Coordinador'])) {
-                        $value->boton_eliminar = '<button type="button" class="btn btn-danger waves-effect btn-circle eliminar"><i class="fa fa-trash"></i></button>';
+                        $value->boton_eliminar = '<button type="button" class="btn btn-default waves-effect btn-circle" data-toggle="tooltip" title="No disponible"><i class="fa fa-ban"></i></button>';
                     } else {
                         $value->boton_eliminar = '<button type="button" class="btn btn-default waves-effect btn-circle" data-toggle="tooltip" title="No disponible"><i class="fa fa-ban"></i></button>';
                     }
@@ -481,61 +494,10 @@ class reportesController extends Controller
      * @param  int $reportearea_id
      * @return \Illuminate\Http\Response
      */
-    public function reporteareacategorias($proyecto_id, $reportearea_id)
+    public function reporteareacategorias($proyecto_id, $reportearea_id, $recsensorialarea_id)
     {
         try {
-            $areacategorias = DB::select('SELECT
-                                                reportecategoria.proyecto_id,
-                                                reportecategoria.id,
-                                                reportecategoria.reportecategoria_nombre,
-                                                reportecategoria.reportecategoria_orden,
-                                                IFNULL((
-                                                    SELECT
-                                                        IF(reporteareacategoria.reportecategoria_id, "checked", "")
-                                                    FROM
-                                                        reporteareacategoria
-                                                    WHERE
-                                                        reporteareacategoria.reportearea_id = ' . $reportearea_id . ' 
-                                                        AND reporteareacategoria.reportecategoria_id = reportecategoria.id
-                                                    LIMIT 1
-                                                ), "") AS checked,
-                                                (
-                                                    SELECT
-                                                        reporteareacategoria.reporteareacategoria_total
-                                                    FROM
-                                                        reporteareacategoria
-                                                    WHERE
-                                                        reporteareacategoria.reportearea_id = ' . $reportearea_id . ' 
-                                                        AND reporteareacategoria.reportecategoria_id = reportecategoria.id
-                                                    LIMIT 1
-                                                ) AS total,
-                                                (
-                                                    SELECT
-                                                        reporteareacategoria.reporteareacategoria_geh
-                                                    FROM
-                                                        reporteareacategoria
-                                                    WHERE
-                                                        reporteareacategoria.reportearea_id = ' . $reportearea_id . ' 
-                                                        AND reporteareacategoria.reportecategoria_id = reportecategoria.id
-                                                    LIMIT 1
-                                                ) AS geh,
-                                                (
-                                                    SELECT
-                                                        reporteareacategoria.reporteareacategoria_actividades 
-                                                    FROM
-                                                        reporteareacategoria
-                                                    WHERE
-                                                        reporteareacategoria.reportearea_id = ' . $reportearea_id . ' 
-                                                        AND reporteareacategoria.reportecategoria_id = reportecategoria.id
-                                                    LIMIT 1
-                                                ) AS actividades
-                                            FROM
-                                                reportecategoria
-                                            WHERE
-                                                reportecategoria.proyecto_id = ' . $proyecto_id . ' 
-                                            ORDER BY
-                                                reportecategoria.reportecategoria_orden ASC,
-                                                reportecategoria.reportecategoria_nombre ASC');
+            $areacategorias = DB::select('CALL sp_obtenerCategoriasArea_POE_b(?,?,?)', [$proyecto_id, $reportearea_id, $recsensorialarea_id]);
 
 
             $numero_registro = 0;
@@ -550,29 +512,6 @@ class reportesController extends Controller
                 } else {
                     $readonly_required = 'readonly';
                 }
-
-                // $areacategorias_lista .= '<tr>
-                //                             <td with="">
-                //                                 <div class="switch" style="border: 0px #000 solid;">
-                //                                     <label>
-                //                                         <input type="checkbox" name="checkbox_reportecategoria_id[]" value="'.$value->id.'" '.$value->checked.' onchange="activa_areacategoria(this, '.$numero_registro.');"/>
-                //                                         <span class="lever switch-col-light-blue" style="padding: 0px; margin: 0px;"></span>
-                //                                     </label>
-                //                                 </div>
-                //                             </td>
-                //                             <td with="240">
-                //                                 '.$value->reportecategoria_nombre.'
-                //                             </td>
-                //                             <td with="">
-                //                                 <input type="number" min="1" class="form-control areacategoria_'.$numero_registro.'" name="reporteareacategoria_total_'.$value->id.'" value="'.$value->total.'" '.$readonly_required.'>
-                //                             </td>
-                //                             <td with="">
-                //                                 <input type="number" min="1" class="form-control areacategoria_'.$numero_registro.'" name="reporteareacategoria_geh_'.$value->id.'" value="'.$value->geh.'" '.$readonly_required.'>
-                //                             </td>
-                //                             <td with="">
-                //                                 <textarea rows="2" class="form-control areacategoria_'.$numero_registro.'" name="reporteareacategoria_actividades_'.$value->id.'" '.$readonly_required.'>'.$value->actividades.'</textarea>
-                //                             </td>
-                //                         </tr>';
 
 
                 $areacategorias_lista .= '<tr>
@@ -643,6 +582,7 @@ class reportesController extends Controller
             $areas = DB::select('SELECT
                                     reportearea.proyecto_id,
                                     reportearea.id,
+                                    reportearea.recsensorialarea_id,
                                     reportearea.reportearea_instalacion,
                                     reportearea.reportearea_nombre,
                                     reportearea.reportearea_orden,
@@ -691,7 +631,7 @@ class reportesController extends Controller
                 if ($bloqueado == 0) {
 
                     if (($proyecto->proyecto_concluido + 0) == 0 && auth()->user()->hasRoles(['Superusuario', 'Administrador', 'Coordinador'])) {
-                        $value->boton_eliminar = '<button type="button" class="btn btn-danger waves-effect btn-circle eliminar"><i class="fa fa-trash"></i></button>';
+                        $value->boton_eliminar = '<button type="button" class="btn btn-default waves-effect btn-circle" data-toggle="tooltip" title="No disponible"><i class="fa fa-ban"></i></button>';
                     } else {
                         $value->boton_eliminar = '<button type="button" class="btn btn-default waves-effect btn-circle" data-toggle="tooltip" title="No disponible"><i class="fa fa-ban"></i></button>';
                     }
@@ -1263,6 +1203,32 @@ class reportesController extends Controller
             $dato["msj"] = 'Error ' . $e->getMessage();
             return response()->json($dato, 500); // Se puede usar el código de estado 500 para indicar un error del servidor
         }
+    }
+
+
+    /// OBTENEMOS LOS DATOS DE LAS PORTADAS PARA TODOS LOS INFORMES
+    public function portadaInfo($PROYECTO, $AGENTE)
+    {
+        try {
+
+            //Obtenemos
+            $recursos = recursosPortadasInformesModel::where('PROYECTO_ID', $PROYECTO)->where('AGENTE_ID', $AGENTE)->get();
+
+            //Enviamos
+            $dato["data"] = $recursos;
+            return response()->json($dato);
+        } catch (Exception $e) {
+
+            $dato["msj"] = 'Error ' . $e->getMessage();
+            return response()->json($dato, 500); // Se puede usar el código de estado 500 para indicar un error del servidor
+        }
+    }
+
+    public function logoPortada($ID_RECUROS)
+    {
+
+        $logo = recursosPortadasInformesModel::findOrFail($ID_RECUROS);
+        return Storage::response($logo->RUTA_IMAGEN_PORTADA);
     }
 
 

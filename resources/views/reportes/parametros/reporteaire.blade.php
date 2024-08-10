@@ -1462,9 +1462,6 @@
 										<th>Equipo</th>
 										<th width="200">Marca / Modelo / Serie</th>
 										<th width="160">Vigencia</th>
-										<th width="60">Certificado</th>
-										<th width="60">Aplica Carta</th>
-										<th width="120">Carta PDF</th>
 									</tr>
 								</thead>
 								<tbody></tbody>
@@ -1902,7 +1899,7 @@
 					</div>
 					<div class="row">
 						<div class="col-12">
-							<ol class="breadcrumb" style="padding: 6px; margin: 0px 0px 10px 0px; text-align: center;">Categorías en el área</ol>
+							<ol class="breadcrumb text-light" style="padding: 6px; margin: 0px 0px 10px 0px; text-align: center;">Categorías en el área</ol>
 							<div style="margin: -25px 0px 0px 0px!important; padding: 0px!important;">
 								{{-- <style type="text/css">
 									#tabla_areacategorias td
@@ -1995,7 +1992,7 @@
 					</div>
 					<div class="row">
 						<div class="col-12">
-							<ol class="breadcrumb" style="padding: 4px; margin: 0px 0px 10px 0px; text-align: center;">Resultados</ol>
+							<ol class="breadcrumb text-light" style="padding: 4px; margin: 0px 0px 10px 0px; text-align: center;">Resultados</ol>
 						</div>
 						<div class="col-3">
 							<div class="form-group">
@@ -2064,7 +2061,7 @@
 					</div>
 					<div class="row">
 						<div class="col-12">
-							<ol class="breadcrumb" style="padding: 4px; margin: 0px 0px 10px 0px; text-align: center;">Categorías expuestas</ol>
+							<ol class="breadcrumb text-light" style="padding: 4px; margin: 0px 0px 10px 0px; text-align: center;">Categorías expuestas</ol>
 						</div>
 						<div class="col-12">
 							<div style="margin-top: -8px;">

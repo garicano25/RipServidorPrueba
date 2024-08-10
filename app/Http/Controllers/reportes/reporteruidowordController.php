@@ -311,8 +311,6 @@ class reporteruidowordController extends Controller
             $plantillaword->setValue('razon_social_portada', $cliente->cliente_RazonSocial);
             $plantillaword->setValue('instalación_portada', $recsensorial->recsensorial_instalacion);
 
-            
-
             $fecha = $agente[0]->reporte_mes . ' del ' . $agente[0]->reporteruido_fecha;
             $plantillaword->setValue('lugar_fecha_portada', $fecha);
             $plantillaword->setValue(
@@ -453,7 +451,7 @@ class reporteruidowordController extends Controller
 
             ##### INTRODUCCION ###################
 
-            $introduccionTexto = $agente[0]->reporteiluminacion_introduccion;
+            $introduccionTexto = $agente[0]->reporteruido_introduccion;
             $introduccionTextoModificado = $this->introduccion($proyecto, $introduccionTexto);
 
             // Asigna el texto modificado a la plantilla
@@ -4515,51 +4513,55 @@ class reporteruidowordController extends Controller
             // ARCHIVO PDF's ANEXOS
             //================================================================================
 
-
             $anexos_lista = DB::select('SELECT
-                                            REPLACE(ANEXO.nombre, "/", "-") AS nombre,
-                                            ANEXO.archivo
-                                        FROM
+                                        REPLACE(ANEXO.nombre, "/", "-") AS nombre,
+                                        ANEXO.archivo
+                                    FROM
+                                        (
                                             (
-                                                (
-                                                    SELECT
-                                                        CONCAT("Certificado equipo ", equipo.equipo_Descripcion, " (", equipo.equipo_Serie, ")") AS nombre,
-                                                          NULL AS archivo
-                                                    FROM
-                                                        reporteequiposutilizados
-                                                        INNER JOIN equipo ON reporteequiposutilizados.equipo_id = equipo.id 
-                                                    WHERE
-                                                        reporteequiposutilizados.proyecto_id = ' . $proyecto_id . ' 
-                                                        AND reporteequiposutilizados.registro_id = ' . $reporteregistro_id . ' 
-                                                        AND reporteequiposutilizados.agente_nombre = "' . $agente_nombre . '"
-                                                )
-                                                UNION ALL
-                                                (
-                                                    SELECT
-                                                        CONCAT("Carta vigencia - ", equipo.equipo_Descripcion, " (", equipo.equipo_Serie, ")") AS nombre,
-                                                          NULL AS archivo
-                                                    FROM
-                                                        reporteequiposutilizados
-                                                        INNER JOIN equipo ON reporteequiposutilizados.equipo_id = equipo.id 
-                                                    WHERE
-                                                        reporteequiposutilizados.proyecto_id = ' . $proyecto_id . ' 
-                                                        AND reporteequiposutilizados.registro_id = ' . $reporteregistro_id . ' 
-                                                        AND reporteequiposutilizados.agente_nombre = "' . $agente_nombre . '"
-                                                        AND reporteequiposutilizados.reporteequiposutilizados_cartacalibracion = 1
-                                                )
-                                                UNION ALL
-                                                (
-                                                    SELECT
-                                                        reporteanexos.reporteanexos_anexonombre AS nombre,
-                                                        reporteanexos.reporteanexos_rutaanexo AS archivo 
-                                                    FROM
-                                                        reporteanexos
-                                                    WHERE
-                                                        reporteanexos.proyecto_id = ' . $proyecto_id . '
-                                                        AND reporteanexos.registro_id = ' . $reporteregistro_id . ' 
-                                                        AND reporteanexos.agente_nombre = "' . $agente_nombre . '"
-                                                )
-                                            ) AS ANEXO');
+                                                SELECT
+                                                    CONCAT("Certificado equipo ", equipo.equipo_Descripcion, " (", equipo.equipo_Serie, ")") AS nombre,
+                                                    equipos_documentos.RUTA_DOCUMENTO AS archivo
+                                                FROM
+                                                    reporteequiposutilizados
+                                                INNER JOIN equipo ON reporteequiposutilizados.equipo_id = equipo.id
+                                                INNER JOIN equipos_documentos ON equipos_documentos.EQUIPO_ID = equipo.id
+                                                WHERE
+                                                    reporteequiposutilizados.proyecto_id = ' . $proyecto_id . '
+                                                    AND reporteequiposutilizados.registro_id = ' . $reporteregistro_id . '
+                                                    AND reporteequiposutilizados.agente_nombre = "' . $agente_nombre . '"
+                                                    AND equipos_documentos.DOCUMENTO_TIPO = 4
+                                            )
+                                            UNION ALL
+                                            (
+                                                SELECT
+                                                    CONCAT("Carta vigencia - ", equipo.equipo_Descripcion, " (", equipo.equipo_Serie, ")") AS nombre,
+                                                    equipos_documentos.RUTA_DOCUMENTO AS archivo
+                                                FROM
+                                                    reporteequiposutilizados
+                                                INNER JOIN equipo ON reporteequiposutilizados.equipo_id = equipo.id
+                                                INNER JOIN equipos_documentos ON equipos_documentos.EQUIPO_ID = equipo.id
+                                                WHERE
+                                                    reporteequiposutilizados.proyecto_id = ' . $proyecto_id . '
+                                                    AND reporteequiposutilizados.registro_id = ' . $reporteregistro_id . '
+                                                    AND reporteequiposutilizados.agente_nombre = "' . $agente_nombre . '"
+                                                    #AND reporteequiposutilizados.reporteequiposutilizados_cartacalibracion = 1
+                                                    AND equipos_documentos.DOCUMENTO_TIPO = 5
+                                            )
+                                            UNION ALL
+                                            (
+                                                SELECT
+                                                    reporteanexos.reporteanexos_anexonombre AS nombre,
+                                                    reporteanexos.reporteanexos_rutaanexo AS archivo 
+                                                FROM
+                                                    reporteanexos
+                                                WHERE
+                                                    reporteanexos.proyecto_id = ' . $proyecto_id . '
+                                                    AND reporteanexos.registro_id = ' . $reporteregistro_id . '
+                                                    AND reporteanexos.agente_nombre = "' . $agente_nombre . '"
+                                            )
+                                        ) AS ANEXO');
+
 
 
             /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////

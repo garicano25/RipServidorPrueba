@@ -690,6 +690,7 @@ class recsensorialquimicosreportewordController extends Controller
         $sql = DB::select('SELECT
                                 recsensorialmaquinaria.recsensorial_id,
                                 recsensorialmaquinaria.recsensorialarea_id,
+                                sus.catsustancia_nombre as agente,
                                 IFNULL(recsensorialarea.recsensorialarea_nombre, "Sin dato") AS recsensorialarea_nombre,
                                 recsensorialmaquinaria.id,
                                 recsensorialmaquinaria.recsensorialmaquinaria_descripcionfuente AS recsensorialmaquinaria_nombre,
@@ -717,26 +718,26 @@ class recsensorialquimicosreportewordController extends Controller
         $area = 'xxx';
         foreach ($sql as $key => $value) {
 
-            $agentes = DB::select('SELECT
-                                        IFNULL(CONCAT("● ", REPLACE(GROUP_CONCAT(TABLA.catsustancia_nombre), ",", "<w:br />● ")), "Sin dato") AS agentes_quimicos
-                                    FROM
-                                        (
-                                            SELECT  
-                                                catsustancia.catsustancia_nombre
-                                            FROM
-                                                recsensorialquimicosinventario
-                                                LEFT JOIN catsustancia ON recsensorialquimicosinventario.catsustancia_id = catsustancia.id 
-                                            WHERE
-                                                recsensorialquimicosinventario.recsensorialarea_id = ?
-                                            GROUP BY
-                                                catsustancia.catsustancia_nombre
-                                        ) AS TABLA', [$value->recsensorialarea_id]);
+            // $agentes = DB::select('SELECT
+            //                             IFNULL(CONCAT("● ", REPLACE(GROUP_CONCAT(TABLA.catsustancia_nombre), ",", "<w:br />● ")), "Sin dato") AS agentes_quimicos
+            //                         FROM
+            //                             (
+            //                                 SELECT  
+            //                                     catsustancia.catsustancia_nombre
+            //                                 FROM
+            //                                     recsensorialquimicosinventario
+            //                                     LEFT JOIN catsustancia ON recsensorialquimicosinventario.catsustancia_id = catsustancia.id 
+            //                                 WHERE
+            //                                     recsensorialquimicosinventario.recsensorialarea_id = ?
+            //                                 GROUP BY
+            //                                     catsustancia.catsustancia_nombre
+            //                             ) AS TABLA', [$value->recsensorialarea_id]);
 
 
             if ($area != $value->recsensorialarea_nombre) {
                 $table->addRow(); //fila
                 $table->addCell(null, $combinar_fila)->addTextRun($centrado)->addText($value->recsensorialarea_nombre, $texto);
-                $table->addCell(null, $combinar_fila)->addTextRun($izquierda)->addText($agentes[0]->agentes_quimicos, $texto);
+                $table->addCell(null, $celda)->addTextRun($centrado)->addText($value->agente, $texto);
                 $table->addCell(null, $celda)->addTextRun($centrado)->addText($value->recsensorialmaquinaria_nombre, $texto);
                 $table->addCell(null, $celda)->addTextRun($centrado)->addText($value->recsensorialmaquinaria_cantidad, $texto);
 
@@ -744,7 +745,7 @@ class recsensorialquimicosreportewordController extends Controller
             } else {
                 $table->addRow(); //fila
                 $table->addCell(null, $continua_fila);
-                $table->addCell(null, $continua_fila);
+                $table->addCell(null, $celda)->addTextRun($centrado)->addText($value->agente, $texto);
                 $table->addCell(null, $celda)->addTextRun($centrado)->addText($value->recsensorialmaquinaria_nombre, $texto);
                 $table->addCell(null, $celda)->addTextRun($centrado)->addText($value->recsensorialmaquinaria_cantidad, $texto);
             }

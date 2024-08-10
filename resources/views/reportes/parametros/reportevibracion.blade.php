@@ -1233,9 +1233,7 @@
 										<th>Equipo</th>
 										<th width="200">Marca / Modelo / Serie</th>
 										<th width="160">Vigencia</th>
-										<th width="60">Certificado</th>
-										<th width="60">Aplica Carta</th>
-										<th width="120">Carta PDF</th>
+
 									</tr>
 								</thead>
 								<tbody></tbody>
@@ -1564,7 +1562,7 @@
 					</div>
 					<div class="row">
 						<div class="col-12">
-							<ol class="breadcrumb" style="padding: 6px; margin: 0px 0px 10px 0px; text-align: center;">Categorías en el área</ol>
+							<ol class="breadcrumb text-light" style="padding: 6px; margin: 0px 0px 10px 0px; text-align: center;">Categorías en el área</ol>
 							<div style="margin: -25px 0px 0px 0px!important; padding: 0px!important;">
 								<table class="table table-hover tabla_info_centrado" width="100%" id="tabla_areacategorias">
 									<thead>
@@ -1741,7 +1739,7 @@
 					</div>
 					<div class="row">
 						<div class="col-12">
-							<ol class="breadcrumb" style="padding: 4px; margin: 0px 0px 10px 0px; text-align: center;">Resultados del punto de medición</ol>
+							<ol class="breadcrumb text-light" style="padding: 4px; margin: 0px 0px 10px 0px; text-align: center;">Resultados del punto de medición</ol>
 							<style type="text/css">
 								#tabla_evaluacion_puntodatos th {
 									padding: 2px 1px !important;

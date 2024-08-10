@@ -57,6 +57,8 @@ use App\modelos\reportes\reporteplanoscarpetasModel;
 use App\modelos\reportes\reporteequiposutilizadosModel;
 use App\modelos\reportes\reporteanexosModel;
 use App\modelos\clientes\clientepartidasModel;
+use App\modelos\clientes\clientecontratoModel;
+use App\modelos\reportes\recursosPortadasInformesModel;
 
 
 class reportevibracionwordController extends Controller
@@ -73,14 +75,12 @@ class reportevibracionwordController extends Controller
         $meses = ["Vacio", "Enero", "Febrero", "Marzo", "Abril", "Mayo", "Junio", "Julio", "Agosto", "Septiembre", "Octubre", "Noviembre", "Diciembre"];
         $reportefecha = explode("-", $proyecto->proyecto_fechaentrega);
 
-        if (($recsensorial->recsensorial_tipocliente+0) == 1) // 1 = pemex, 0 = cliente
+        if (($recsensorial->recsensorial_tipocliente + 0) == 1) // 1 = pemex, 0 = cliente
         {
             $texto = str_replace('SUBDIRECCION_NOMBRE', $proyecto->catsubdireccion->catsubdireccion_nombre, $texto);
             $texto = str_replace('GERENCIA_NOMBRE', $proyecto->catgerencia->catgerencia_nombre, $texto);
             $texto = str_replace('ACTIVO_NOMBRE', $proyecto->catactivo->catactivo_nombre, $texto);
-        }
-        else
-        {
+        } else {
             $texto = str_replace('SUBDIRECCION_NOMBRE', '', $texto);
             $texto = str_replace('GERENCIA_NOMBRE', '', $texto);
             $texto = str_replace('ACTIVO_NOMBRE', '', $texto);
@@ -90,9 +90,9 @@ class reportevibracionwordController extends Controller
 
         $texto = str_replace("INSTALACION_NOMBRE", $proyecto->proyecto_clienteinstalacion, $texto);
         $texto = str_replace("INSTALACION_DIRECCION", $proyecto->proyecto_clientedireccionservicio, $texto);
-        $texto = str_replace("INSTALACION_CODIGOPOSTAL", "C.P. ".$recsensorial->recsensorial_codigopostal, $texto);
+        $texto = str_replace("INSTALACION_CODIGOPOSTAL", "C.P. " . $recsensorial->recsensorial_codigopostal, $texto);
         $texto = str_replace("INSTALACION_COORDENADAS", $recsensorial->recsensorial_coordenadas, $texto);
-        $texto = str_replace("REPORTE_FECHA_LARGA", $reportefecha[2]." de ".$meses[($reportefecha[1]+0)]." del año ".$reportefecha[0], $texto);
+        $texto = str_replace("REPORTE_FECHA_LARGA", $reportefecha[2] . " de " . $meses[($reportefecha[1] + 0)] . " del año " . $reportefecha[0], $texto);
         // $texto = str_replace("\n\n", "<w:br/><w:br/>", $texto);
         // $texto = str_replace("\n", "<w:br/>", $texto);
 
@@ -103,16 +103,12 @@ class reportevibracionwordController extends Controller
         $texto_nuevo = '';
 
 
-        foreach($parrafos as $key => $parrafo)
-        {
-            if (($key+0) < (count($parrafos) -1))
-            {
+        foreach ($parrafos as $key => $parrafo) {
+            if (($key + 0) < (count($parrafos) - 1)) {
                 $text = explode("\n", $parrafo);
 
-                foreach($text as $key2 => $parrafo2)
-                {
-                    if (($key2+0) < (count($text) -1))
-                    {
+                foreach ($text as $key2 => $parrafo2) {
+                    if (($key2 + 0) < (count($text) - 1)) {
                         // $formato = '<w:rPr>
                         //                 <!-- <w:u w:val="single"/>  -->
                         //                 <!-- <w:u w:val="none"/>  -->
@@ -131,40 +127,32 @@ class reportevibracionwordController extends Controller
                                                 <w:jc w:val="both"/>
                                                 <w:spacing w:before="0" w:after="0" w:line="240" w:lineRule="exactly" w:beforeAutospacing="0" w:afterAutospacing="0"/>
                                             </w:pPr>
-                                            <w:t>'.htmlspecialchars($parrafo2).'</w:t>
+                                            <w:t>' . htmlspecialchars($parrafo2) . '</w:t>
                                         </w:p>';
-                    }
-                    else
-                    {
+                    } else {
                         $texto_nuevo .= '<w:p>
                                             <w:pPr>
                                                 <w:jc w:val="both"/>
                                                 <w:spacing w:before="0" w:after="0" w:line="240" w:lineRule="exactly" w:beforeAutospacing="0" w:afterAutospacing="0"/>
                                             </w:pPr>
-                                            <w:t>'.htmlspecialchars($parrafo2).'</w:t>
+                                            <w:t>' . htmlspecialchars($parrafo2) . '</w:t>
                                         </w:p><w:br/>';
                     }
                 }
-            }
-            else
-            {
+            } else {
                 $text = explode("\n", $parrafo);
 
-                foreach($text as $key2 => $parrafo2)
-                {
-                    if (($key2+0) < (count($text) -1))
-                    {
+                foreach ($text as $key2 => $parrafo2) {
+                    if (($key2 + 0) < (count($text) - 1)) {
                         $texto_nuevo .= '<w:p>
                                             <w:pPr>
                                                 <w:jc w:val="both"/>
                                                 <w:spacing w:before="0" w:after="0" w:line="240" w:lineRule="exactly" w:beforeAutospacing="0" w:afterAutospacing="0"/>
                                             </w:pPr>
-                                            <w:t>'.htmlspecialchars($parrafo2).'</w:t>
+                                            <w:t>' . htmlspecialchars($parrafo2) . '</w:t>
                                         </w:p>';
-                    }
-                    else
-                    {
-                        $texto_nuevo .= '<w:t>'.htmlspecialchars($parrafo2).'</w:t>';
+                    } else {
+                        $texto_nuevo .= '<w:t>' . htmlspecialchars($parrafo2) . '</w:t>';
                     }
                 }
             }
@@ -175,16 +163,46 @@ class reportevibracionwordController extends Controller
     }
 
 
+    public function introduccion($proyecto, $texto)
+    {
+        if (!$proyecto) {
+            return $texto;
+        }
+
+
+        $proyecto = $proyecto;
+
+        $reportefecha = explode("-", $proyecto->proyecto_fechaentrega);
+        $meses = [
+            1 => 'enero',
+            2 => 'febrero',
+            3 => 'marzo',
+            4 => 'abril',
+            5 => 'mayo',
+            6 => 'junio',
+            7 => 'julio',
+            8 => 'agosto',
+            9 => 'septiembre',
+            10 => 'octubre',
+            11 => 'noviembre',
+            12 => 'diciembre'
+        ];
+
+        $texto = str_replace("INSTALACION_NOMBRE", $proyecto->proyecto_clienteinstalacion, $texto);
+        $texto = str_replace("REPORTE_FECHA_LARGA", $reportefecha[2] . " de " . $meses[(int)$reportefecha[1]] . " del año " . $reportefecha[0], $texto);
+
+        return $texto;
+    }
+
     /**
      * Store a newly created resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
-    */
+     */
     public function reportevibracionword(Request $request)
     {
-        try
-        {
+        try {
             // dd($request->all());
 
 
@@ -194,9 +212,9 @@ class reportevibracionwordController extends Controller
 
             //Zona horaria local
             date_default_timezone_set('America/Mexico_City');
-            setlocale(LC_ALL,"es_MX");
+            setlocale(LC_ALL, "es_MX");
 
-
+            ################ DATOS GENERALES ######################
             $agente_id = 2;
             $agente_nombre = "Vibración";
             $proyecto = proyectoModel::with(['catregion', 'catsubdireccion', 'catgerencia', 'catactivo'])->findOrFail($proyecto_id);
@@ -204,14 +222,36 @@ class reportevibracionwordController extends Controller
             $cliente = clienteModel::findOrFail($recsensorial->cliente_id);
 
 
-            if ($reporteregistro_id > 0)
-            {
+            ############# INFORMACION DE LAS PORTADAS #########
+            $recursos = recursosPortadasInformesModel::where('PROYECTO_ID', $proyecto_id)->where('AGENTE_ID', $agente_id)->get();
+            $agente = reportevibracionModel::where('proyecto_id', $proyecto_id)->get();
+            if ($proyecto->requiereContrato == 1) {
+
+                $contratoId = $proyecto->contrato_id;
+
+                $clienteInfo = DB::table('contratos_clientes as cc')
+                    ->leftJoin('cliente as c', 'c.id', '=', 'cc.CLIENTE_ID')
+                    ->where('cc.ID_CONTRATO', $contratoId)
+                    ->select(
+                        'cc.NUMERO_CONTRATO',
+                        'cc.DESCRIPCION_CONTRATO',
+                        'cc.CONTRATO_PLANTILLA_LOGODERECHO',
+                        'cc.CONTRATO_PLANTILLA_LOGOIZQUIERDO',
+                        'cc.CONTRATO_PLANTILLA_PIEPAGINA',
+                        'c.cliente_RazonSocial'
+                    )
+                    ->get();
+            } else {
+                $clienteInfo = clienteModel::where('id', $proyecto->cliente_id)->get();
+            }
+
+            ########### VALIDACION DEL RECONOCIMIENTO #################
+
+            if ($reporteregistro_id > 0) {
                 $reporte  = reportevibracionModel::findOrFail($reporteregistro_id);
                 $revision = reporterevisionesModel::findOrFail($request->ultimarevision_id);
-            }
-            else
-            {
-                return '<h3>Aun no se ha guardado nada para este informe de '.$agente_nombre.', primero debe llenar los datos para poder generarlo.</h3>';
+            } else {
+                return '<h3>Aun no se ha guardado nada para este informe de ' . $agente_nombre . ', primero debe llenar los datos para poder generarlo.</h3>';
             }
 
 
@@ -219,258 +259,202 @@ class reportevibracionwordController extends Controller
             //================================================================================
 
 
-            if (($recsensorial->cliente_id+0) != 2) // cliente_id [2 = senegas]
+            if (($recsensorial->cliente_id + 0) != 2) // cliente_id [2 = senegas]
             {
-                $plantillaword = new TemplateProcessor(storage_path('app/plantillas_reportes/proyecto_infomes/Plantilla_informe_vibracion.docx'));//Ruta carpeta storage
+                $plantillaword = new TemplateProcessor(storage_path('app/plantillas_reportes/proyecto_infomes/Plantilla_informe_vibracion.docx')); //Ruta carpeta storage
+            } else {
+                $plantillaword = new TemplateProcessor(storage_path('app/plantillas_reportes/proyecto_infomes/Plantilla_informe_vibracioncliente.docx')); //Ruta carpeta storage
             }
-            else
-            {
-                $plantillaword = new TemplateProcessor(storage_path('app/plantillas_reportes/proyecto_infomes/Plantilla_informe_vibracioncliente.docx'));//Ruta carpeta storage
+
+
+            ################ PORTADA EXTERNA ####################
+            $titulo_partida = clientepartidasModel::where('CONTRATO_ID', $recsensorial->contrato_id)
+                ->where('clientepartidas_tipo', 2) // Informe de resultados
+                ->where('catprueba_id', 2) // Vibracion
+                ->orderBy('updated_at', 'DESC')
+                ->get();
+
+            if (count($titulo_partida) > 0) {
+
+                //Para el valor que lleva proyecto se utilizo: descripcion de la partida, Numero del contrato y la descripcion del contrato
+                $plantillaword->setValue('proyecto_portada', str_replace("\n", "<w:br/>", $titulo_partida[0]->clientepartidas_descripcion) . ' - Contrato: ' . $clienteInfo[0]->NUMERO_CONTRATO);
+
+                $plantillaword->setValue(
+                    'PARTIDA',
+                    str_replace("\n", "<w:br/>", $titulo_partida[0]->clientepartidas_descripcion)
+                );
+            } else {
+
+                $plantillaword->setValue(
+                    'PARTIDA',
+                    ""
+                );
+                $plantillaword->setValue('proyecto_portada', 'El proyecto no esta vinculado a ningun contrato.');
             }
+
+            $plantillaword->setValue(
+                'folio_portada',
+                $proyecto->proyecto_folio
+            );
+            $plantillaword->setValue('razon_social_portada', $cliente->cliente_RazonSocial);
+            $plantillaword->setValue('instalación_portada', $recsensorial->recsensorial_instalacion);
+
+            $fecha = $agente[0]->reporte_mes . ' del ' . $agente[0]->reportevibracion_fecha;
+            $plantillaword->setValue('lugar_fecha_portada', $fecha);
+            $plantillaword->setValue(
+                'PORTADA_FECHA',
+                $fecha
+            );
+
+
+            //IMAGEN DE LA PORTADA
+            if ($recursos[0]->RUTA_IMAGEN_PORTADA) {
+                if (file_exists(storage_path('app/' . $recursos[0]->RUTA_IMAGEN_PORTADA))) {
+
+                    $plantillaword->setImageValue('foto_portada', array('path' => storage_path('app/' . $recursos[0]->RUTA_IMAGEN_PORTADA), 'width' => 650, 'height' => 750, 'ratio' => true, 'borderColor' => '000000'));
+                } else {
+
+                    $plantillaword->setValue('foto_portada', 'LA IMAGEN NO HA SIDO ENCONTRADA');
+                }
+            } else {
+
+                $plantillaword->setValue('foto_portada', 'LA IMAGEN DE LA PORTADA NO HA SIDO CARGADA');
+            }
+
 
 
             // PORTADA
             //================================================================================
 
+            $NIVEL_PORTADA1 = is_null($recursos[0]->OPCION_PORTADA1) ? "" : $recursos[0]->OPCION_PORTADA1 . "<w:br />";
+            $NIVEL_PORTADA2 = is_null($recursos[0]->OPCION_PORTADA2) ? "" : $recursos[0]->OPCION_PORTADA2 . "<w:br />";
+            $NIVEL_PORTADA3 = is_null($recursos[0]->OPCION_PORTADA3) ? "" : $recursos[0]->OPCION_PORTADA3 . "<w:br />";
+            $NIVEL_PORTADA4 = is_null($recursos[0]->OPCION_PORTADA4) ? "" : $recursos[0]->OPCION_PORTADA4 . "<w:br />";
+            $NIVEL_PORTADA5 = is_null($recursos[0]->OPCION_PORTADA5) ? "" : $recursos[0]->OPCION_PORTADA5 . "<w:br />";
+            $NIVEL_PORTADA6 = is_null($recursos[0]->OPCION_PORTADA6) ? "" : $recursos[0]->OPCION_PORTADA6 . "<w:br />";
+            $plantillaword->setValue(
+                'ESTRUCTURA',
+                $NIVEL_PORTADA1 . $NIVEL_PORTADA2 . $NIVEL_PORTADA3 . $NIVEL_PORTADA4 . $NIVEL_PORTADA5 . $NIVEL_PORTADA6
+            );
 
-            // LOGOS
-            //-----------------------------------------
+            if (
+                $proyecto->requiereContrato == 1
+            ) {
 
+                $plantillaword->setValue('TITULO_CONTRATO', "Contrato:");
+                $plantillaword->setValue('CONTRATO', $clienteInfo[0]->NUMERO_CONTRATO);
+                $plantillaword->setValue('DESCRIPCION_CONTRATO', $clienteInfo[0]->DESCRIPCION_CONTRATO);
 
-            $plantillaword->setValue('ENCABEZADO', str_replace('\n', '<w:br/>', $cliente->cliente_plantillaencabezado));
+                $plantillaword->setValue(
+                    'PIE_PAGINA',
+                    $clienteInfo[0]->CONTRATO_PLANTILLA_PIEPAGINA
+                );
+                $plantillaword->setValue('INFORME_REVISION', "");
+            } else {
 
+                $plantillaword->setValue(
+                    'CONTRATO',
+                    ""
+                );
+                $plantillaword->setValue('DESCRIPCION_CONTRATO', "");
+                $plantillaword->setValue('TITULO_CONTRATO', "");
 
-            if ($cliente->cliente_plantillalogoizquierdo)
-            {
-                if (file_exists(storage_path('app/'.$cliente->cliente_plantillalogoizquierdo)))
-                {
-                    $plantillaword->setImageValue('LOGO_IZQUIERDO_PORTADA', array('path' => storage_path('app/'.$cliente->cliente_plantillalogoizquierdo), 'width' => 160, 'height' => 150, 'ratio' => true, 'borderColor' => '000000'));
-                    
-                    $plantillaword->setImageValue('LOGO_IZQUIERDO', array('path' => storage_path('app/'.$cliente->cliente_plantillalogoizquierdo), 'width' => 120, 'height' => 150, 'ratio' => true, 'borderColor' => '000000'));
-                }
-                else
-                {
-                    $plantillaword->setValue('LOGO_IZQUIERDO_PORTADA', 'SIN IMAGEN');
+                $plantillaword->setValue(
+                    'PIE_PAGINA',
+                    ""
+                );
+                $plantillaword->setValue('INFORME_REVISION', "");
+            }
+
+            //============= ENCABEZADOS TITULOS
+            $NIVEL1 = is_null($recursos[0]->NIVEL1) ? "" : $recursos[0]->NIVEL1 . "<w:br />";
+            $NIVEL2 = is_null($recursos[0]->NIVEL2) ? "" : $recursos[0]->NIVEL2 . "<w:br />";
+            $NIVEL3 = is_null($recursos[0]->NIVEL3) ? "" : $recursos[0]->NIVEL3 . "<w:br />";
+            $NIVEL4 = is_null($recursos[0]->NIVEL4) ? "" : $recursos[0]->NIVEL4 . "<w:br />";
+            $NIVEL5 = is_null($recursos[0]->NIVEL5) ? "" : $recursos[0]->NIVEL5;
+
+            $plantillaword->setValue(
+                'ENCABEZADO',
+                $NIVEL1 . $NIVEL2 . $NIVEL3 . $NIVEL4 . $NIVEL5
+            );
+            $plantillaword->setValue('INSTALACION_NOMBRE', $NIVEL1 . $NIVEL2 . $NIVEL3 . $NIVEL4 . $NIVEL5);
+
+            //LOGOS DE AS EMPRESAS DE INFORME
+            if ($proyecto->requiereContrato == 1) {
+
+                if ($clienteInfo[0]->CONTRATO_PLANTILLA_LOGOIZQUIERDO) {
+                    if (file_exists(storage_path('app/' . $clienteInfo[0]->CONTRATO_PLANTILLA_LOGOIZQUIERDO))) {
+
+                        $plantillaword->setImageValue('LOGO_IZQUIERDO', array('path' => storage_path('app/' . $clienteInfo[0]->CONTRATO_PLANTILLA_LOGOIZQUIERDO), 'width' => 120, 'height' => 150, 'ratio' => true, 'borderColor' => '000000'));
+
+                        $plantillaword->setImageValue('LOGO_IZQUIERDO_PORTADA', array('path' => storage_path('app/' . $clienteInfo[0]->CONTRATO_PLANTILLA_LOGOIZQUIERDO), 'width' => 120, 'height' => 150, 'ratio' => true, 'borderColor' => '000000'));
+                    } else {
+
+                        $plantillaword->setValue('LOGO_IZQUIERDO', 'IMAGEN NO ENCONTRADA');
+                        $plantillaword->setValue('LOGO_IZQUIERDO_PORTADA', 'IMAGEN NO ENCONTRADA');
+                    }
+                } else {
                     $plantillaword->setValue('LOGO_IZQUIERDO', 'SIN IMAGEN');
+                    $plantillaword->setValue('LOGO_IZQUIERDO_PORTADA', 'SIN IMAGEN');
                 }
-            }
-            else
-            {
-                $plantillaword->setValue('LOGO_IZQUIERDO_PORTADA', 'SIN IMAGEN');
-                $plantillaword->setValue('LOGO_IZQUIERDO', 'SIN IMAGEN');
-            }
 
 
-            if ($cliente->cliente_plantillalogoderecho)
-            {
-                if (file_exists(storage_path('app/'.$cliente->cliente_plantillalogoderecho)))
-                {
-                    $plantillaword->setImageValue('LOGO_DERECHO_PORTADA', array('path' => storage_path('app/'.$cliente->cliente_plantillalogoderecho), 'width' => 160, 'height' => 150, 'ratio' => true, 'borderColor' => '000000'));
-                    
-                    $plantillaword->setImageValue('LOGO_DERECHO', array('path' => storage_path('app/'.$cliente->cliente_plantillalogoderecho), 'width' => 120, 'height' => 150, 'ratio' => true, 'borderColor' => '000000'));
-                }
-                else
-                {
-                    $plantillaword->setValue('LOGO_DERECHO_PORTADA', 'SIN IMAGEN');
+                if ($clienteInfo[0]->CONTRATO_PLANTILLA_LOGODERECHO) {
+                    if (file_exists(storage_path('app/' . $clienteInfo[0]->CONTRATO_PLANTILLA_LOGODERECHO))) {
+
+                        $plantillaword->setImageValue('LOGO_DERECHO', array('path' => storage_path('app/' . $clienteInfo[0]->CONTRATO_PLANTILLA_LOGODERECHO), 'width' => 120, 'height' => 150, 'ratio' => true, 'borderColor' => '000000'));
+
+                        $plantillaword->setImageValue('LOGO_DERECHO_PORTADA', array('path' => storage_path('app/' . $clienteInfo[0]->CONTRATO_PLANTILLA_LOGODERECHO), 'width' => 120, 'height' => 150, 'ratio' => true, 'borderColor' => '000000'));
+                    } else {
+
+                        $plantillaword->setValue('LOGO_DERECHO', 'IMAGEN NO ENCONTRATA');
+                        $plantillaword->setValue('LOGO_DERECHO_PORTADA', 'IMAGEN NO ENCONTRATA');
+                    }
+                } else {
                     $plantillaword->setValue('LOGO_DERECHO', 'SIN IMAGEN');
+                    $plantillaword->setValue('LOGO_DERECHO_PORTADA', 'SIN IMAGEN');
                 }
-            }
-            else
-            {
-                $plantillaword->setValue('LOGO_DERECHO_PORTADA', 'SIN IMAGEN');
-                $plantillaword->setValue('LOGO_DERECHO', 'SIN IMAGEN');
+            } else {
+
+                $plantillaword->setValue('LOGO_DERECHO', 'SIN CONTRATO');
+                $plantillaword->setValue('LOGO_IZQUIERDO', 'SIN CONTRATO');
+
+                $plantillaword->setValue('LOGO_DERECHO_PORTADA', 'SIN CONTRATO');
+                $plantillaword->setValue('LOGO_IZQUIERDO_PORTADA', 'SIN CONTRATO');
             }
 
-
-            if ($recsensorial->recsensorial_fotoinstalacion)
-            {
-                if (file_exists(storage_path('app/'.$recsensorial->recsensorial_fotoinstalacion)))
-                {
-                    $plantillaword->setImageValue('INSTALACION_FOTO', array('path' => storage_path('app/'.$recsensorial->recsensorial_fotoinstalacion), 'height' => 280, 'width' => 580, 'ratio' => true, 'borderColor' => '000000'));
-                }
-                else
-                {
-                    $plantillaword->setValue('INSTALACION_FOTO', 'SIN IMAGEN');
-                }
-            }
-            else
-            {
-                $plantillaword->setValue('INSTALACION_FOTO', 'SIN IMAGEN');
-            }
 
 
             //-----------------------------------------
-
+            ##### REVISIONES ###################
 
             $cancelado_texto = '';
-            if ($revision->reporterevisiones_cancelado == 1)
-            {
-                $cancelado_texto = '<w:br/>INFORME REVISIÓN '.$revision->reporterevisiones_revision.' CANCELADO';
+            if ($revision->reporterevisiones_cancelado == 1) {
+                $cancelado_texto = '<w:br/>INFORME REVISIÓN ' . $revision->reporterevisiones_revision . ' CANCELADO';
             }
-
-
-            if (($recsensorial->recsensorial_tipocliente+0) == 1) // 1 = pemex, 0 = cliente
-            {
-                if ($reporte->reportevibracion_catsubdireccion_activo == 1)
-                {
-                    $plantillaword->setValue('SUBDIRECCION', $proyecto->catsubdireccion->catsubdireccion_nombre.'<w:br/>');
-                }
-                else
-                {
-                    $plantillaword->setValue('SUBDIRECCION', '');
-                }
-
-
-                if ($reporte->reportevibracion_catgerencia_activo == 1)
-                {
-                    $plantillaword->setValue('GERENCIA', $proyecto->catgerencia->catgerencia_nombre.'<w:br/>');
-                }
-                else
-                {
-                    $plantillaword->setValue('GERENCIA', '');
-                }
-
-
-                if ($reporte->reportevibracion_catactivo_activo == 1)
-                {
-                    $plantillaword->setValue('ACTIVO', $proyecto->catactivo->catactivo_nombre.'<w:br/>');
-                }
-                else
-                {
-                    $plantillaword->setValue('ACTIVO', '');
-                }
-
-
-                if ($reporte->reportevibracion_catregion_activo == 1)
-                {
-                    $plantillaword->setValue('REGION', 'Región '.$proyecto->catregion->catregion_nombre.'<w:br/>');
-                }
-                else
-                {
-                    $plantillaword->setValue('REGION', '');
-                }
-            }
-            else
-            {
-                $plantillaword->setValue('SUBDIRECCION', '');
-                $plantillaword->setValue('GERENCIA', '');
-                $plantillaword->setValue('ACTIVO', '');
-                $plantillaword->setValue('REGION', '');
+            if (($revision->reporterevisiones_revision + 0) > 0) {
+                $plantillaword->setValue('INFORME_REVISION', $proyecto->proyecto_folio . ' - Informe de ' . $agente_nombre . ' Rev-' . $revision->reporterevisiones_revision);
+            } else {
+                $plantillaword->setValue('INFORME_REVISION', $proyecto->proyecto_folio . ' - Informe de ' . $agente_nombre);
             }
 
 
 
-            if ($reporte->reportevibracion_instalacion)
-            {
-                $plantillaword->setValue('INSTALACION_NOMBRE', $reporte->reportevibracion_instalacion.$cancelado_texto);
+
+
+            ##### INTRODUCCION ###################
+
+            $introduccionTexto = $agente[0]->reportevibracion_introduccion;
+            $introduccionTextoModificado = $this->introduccion($proyecto, $introduccionTexto);
+
+            // Asigna el texto modificado a la plantilla
+            $plantillaword->setValue('INTRODUCCION', $introduccionTextoModificado);
+
+            if (($revision->reporterevisiones_revision + 0) > 0) {
+                $plantillaword->setValue('INFORME_REVISION', $proyecto->proyecto_folio . ' - Informe de ' . $agente_nombre . ' Rev-' . $revision->reporterevisiones_revision);
+            } else {
+                $plantillaword->setValue('INFORME_REVISION', $proyecto->proyecto_folio . ' - Informe de ' . $agente_nombre);
             }
-            else
-            {
-                $plantillaword->setValue('INSTALACION_NOMBRE', $proyecto->proyecto_clienteinstalacion.$cancelado_texto);
-            }
-
-
-            //-----------------------------------------
-            // TITULO DEL INFORME (PARTIDA)
-
-            $evaluacion = reportevibracionevaluacionModel::where('proyecto_id', $proyecto_id)->get();
-
-            $tipoinstacion = '';
-            switch (true)
-            {
-                case (count($evaluacion) > 150 && ($recsensorial->cliente_id+0) != 2): // cliente_id [2 = senegas]
-                    $tipoinstacion = 'instalación extra grande';
-                    break;
-                case (count($evaluacion) > 80):
-                    $tipoinstacion = 'instalación grande';
-                    break;
-                case (count($evaluacion) > 40):
-                    $tipoinstacion = 'instalación mediana';
-                    break;
-                case (count($evaluacion) > 20):
-                    $tipoinstacion = 'instalación chica';
-                    break;
-                default:
-                    $tipoinstacion = 'instalación extra chica';
-                    break;
-            }
-
-
-            $partidainforme = DB::select('SELECT
-                                                clientepartidas.cliente_id, 
-                                                clientepartidas.clientepartidas_tipo, 
-                                                clientepartidas.catprueba_id, 
-                                                clientepartidas.clientepartidas_nombre, 
-                                                clientepartidas.clientepartidas_descripcion
-                                            FROM
-                                                clientepartidas
-                                            WHERE
-                                                clientepartidas.cliente_id = '.$recsensorial->cliente_id.'
-                                                AND clientepartidas.clientepartidas_tipo = 2 -- 1 = reconocimiento, 2 = informes
-                                                AND clientepartidas.catprueba_id = '.$agente_id.'
-                                                AND clientepartidas.clientepartidas_descripcion LIKE "%'.$tipoinstacion.'%"
-                                            ORDER BY
-                                                updated_at DESC
-                                            LIMIT 1');
-
-
-            if (count($partidainforme) == 0)
-            {
-                $partidainforme = DB::select('SELECT
-                                                clientepartidas.cliente_id, 
-                                                clientepartidas.clientepartidas_tipo, 
-                                                clientepartidas.catprueba_id, 
-                                                clientepartidas.clientepartidas_nombre, 
-                                                clientepartidas.clientepartidas_descripcion
-                                            FROM
-                                                clientepartidas
-                                            WHERE
-                                                clientepartidas.cliente_id = '.$recsensorial->cliente_id.'
-                                                AND clientepartidas.clientepartidas_tipo = 2 -- 1 = reconocimiento, 2 = informes
-                                                AND clientepartidas.catprueba_id = '.$agente_id.'
-                                                -- AND clientepartidas.clientepartidas_descripcion LIKE "%'.$tipoinstacion.'%"
-                                            ORDER BY
-                                                updated_at DESC
-                                            LIMIT 1');
-            }
-
-
-            if (count($partidainforme) > 0)
-            {
-                $plantillaword->setValue('TITULO_INFORME', $partidainforme[0]->clientepartidas_descripcion);
-                $plantillaword->setValue('PARTIDA', $partidainforme[0]->clientepartidas_descripcion);
-            }
-            else
-            {
-                $plantillaword->setValue('TITULO_INFORME', '<w:rPr><w:color w:val="ff0000"/><w:t>FALTA AGREGAR TÍTULO (PARTIDA) DEL INFORME DE VIBRACIÓN EN EL MÓDULO CLIENTES, CONSULTE CON EL ADMINISTRADOR</w:t></w:rPr>');
-                $plantillaword->setValue('PARTIDA', '<w:rPr><w:color w:val="ff0000"/><w:t>FALTA AGREGAR TÍTULO (PARTIDA) DEL INFORME DE VIBRACIÓN EN EL MÓDULO CLIENTES, CONSULTE CON EL ADMINISTRADOR</w:t></w:rPr>');
-            }
-
-            //-----------------------------------------
-
-
-            $plantillaword->setValue('CONTRATO', $cliente->cliente_numerocontrato);
-            $plantillaword->setValue('PORTADA_FECHA', $reporte->reportevibracion_fecha);
-            $plantillaword->setValue('DESCRIPCION_CONTRATO', $cliente->cliente_descripcioncontrato);
-            $plantillaword->setValue('EMPRESA_RESPONSABLE', $cliente->cliente_plantillaempresaresponsable);
-            $plantillaword->setValue('PIE_PAGINA', str_replace("\r\n", "<w:br/>", str_replace("\n\n", "<w:br/>", $cliente->cliente_plantillapiepagina)));
-
-
-            if (($revision->reporterevisiones_revision+0) > 0)
-            {
-                $plantillaword->setValue('INFORME_REVISION', $proyecto->proyecto_folio.' - Informe de '.$agente_nombre.' Rev-'.$revision->reporterevisiones_revision);
-            }
-            else
-            {
-                $plantillaword->setValue('INFORME_REVISION', $proyecto->proyecto_folio.' - Informe de '.$agente_nombre);
-            }
-
-
-            // INTRODUCCION
-            //================================================================================
-
-            
-            $plantillaword->setValue('INTRODUCCION', $this->datosproyectoreemplazartexto($proyecto, $recsensorial, $reporte->reportevibracion_introduccion));
 
 
             // DEFINICIONES
@@ -479,15 +463,15 @@ class reportevibracionwordController extends Controller
 
             $definiciones_simbolo = ["¹", "²", "³", "⁴", "⁵", "⁶", "⁷", "⁸", "⁹", "*", "●", "♦", "~", "°", "¨", "#"];
             $definiciones_fuentes;
-            
+
 
             $where_definiciones = '';
-            if (($recsensorial->recsensorial_tipocliente+0) == 1) // 1 = pemex, 0 = cliente
+            if (($recsensorial->recsensorial_tipocliente + 0) == 1) // 1 = pemex, 0 = cliente
             {
-                $where_definiciones = 'AND reportedefiniciones.catactivo_id = '.$proyecto->catactivo_id;
+                $where_definiciones = 'AND reportedefiniciones.catactivo_id = ' . $proyecto->catactivo_id;
             }
 
-            
+
             $sql = collect(DB::select('SELECT
                                             -- TABLA.id,
                                             -- TABLA.agente_id,
@@ -510,7 +494,7 @@ class reportevibracionwordController extends Controller
                                                     FROM
                                                         reportedefinicionescatalogo
                                                     WHERE
-                                                        reportedefinicionescatalogo.agente_nombre LIKE "'.$agente_nombre.'"
+                                                        reportedefinicionescatalogo.agente_nombre LIKE "' . $agente_nombre . '"
                                                         AND reportedefinicionescatalogo.reportedefinicionescatalogo_activo = 1
                                                     ORDER BY
                                                         reportedefinicionescatalogo.reportedefinicionescatalogo_concepto ASC
@@ -528,8 +512,8 @@ class reportevibracionwordController extends Controller
                                                     FROM
                                                         reportedefiniciones
                                                     WHERE
-                                                        reportedefiniciones.agente_nombre LIKE "'.$agente_nombre.'"
-                                                        '.$where_definiciones.' 
+                                                        reportedefiniciones.agente_nombre LIKE "' . $agente_nombre . '"
+                                                        ' . $where_definiciones . ' 
                                                     ORDER BY
                                                         reportedefiniciones.agente_nombre ASC
                                                 )
@@ -541,35 +525,28 @@ class reportevibracionwordController extends Controller
 
 
             $definicionesfuentes = '';
-            if (count($sql) > 1)
-            {
-                foreach ($sql as $key => $value)
-                {
+            if (count($sql) > 1) {
+                foreach ($sql as $key => $value) {
                     $definiciones_fuentes[] = array(
-                                                  'fuente_descripcion' => $value->fuente
-                                                , 'fuente_simbolo' => ' '.$definiciones_simbolo[$key].'*'
-                                            );
+                        'fuente_descripcion' => $value->fuente,
+                        'fuente_simbolo' => ' ' . $definiciones_simbolo[$key] . '*'
+                    );
 
 
-                    if (($key+0) < (count($sql) -1))
-                    {
-                        $definicionesfuentes .= 'Fuentes '.$definiciones_simbolo[$key].'*: '.$value->fuente.'<w:br/>';
-                    }
-                    else
-                    {
-                        $definicionesfuentes .= 'Fuentes '.$definiciones_simbolo[$key].'*: '.$value->fuente;
+                    if (($key + 0) < (count($sql) - 1)) {
+                        $definicionesfuentes .= 'Fuentes ' . $definiciones_simbolo[$key] . '*: ' . $value->fuente . '<w:br/>';
+                    } else {
+                        $definicionesfuentes .= 'Fuentes ' . $definiciones_simbolo[$key] . '*: ' . $value->fuente;
                     }
                 }
-            }
-            else
-            {
+            } else {
                 $definiciones_fuentes[] = array(
-                                                  'fuente_descripcion' => $sql[0]->fuente
-                                                , 'fuente_simbolo' => ''
-                                            );
+                    'fuente_descripcion' => $sql[0]->fuente,
+                    'fuente_simbolo' => ''
+                );
 
 
-                $definicionesfuentes = 'Fuentes: '.$sql[0]->fuente;
+                $definicionesfuentes = 'Fuentes: ' . $sql[0]->fuente;
             }
 
 
@@ -598,7 +575,7 @@ class reportevibracionwordController extends Controller
                                                     FROM
                                                         reportedefinicionescatalogo
                                                     WHERE
-                                                        reportedefinicionescatalogo.agente_nombre LIKE "'.$agente_nombre.'"
+                                                        reportedefinicionescatalogo.agente_nombre LIKE "' . $agente_nombre . '"
                                                         AND reportedefinicionescatalogo.reportedefinicionescatalogo_activo = 1
                                                     ORDER BY
                                                         reportedefinicionescatalogo.reportedefinicionescatalogo_concepto ASC
@@ -616,8 +593,8 @@ class reportevibracionwordController extends Controller
                                                     FROM
                                                         reportedefiniciones
                                                     WHERE
-                                                        reportedefiniciones.agente_nombre LIKE "'.$agente_nombre.'"
-                                                        '.$where_definiciones.' 
+                                                        reportedefiniciones.agente_nombre LIKE "' . $agente_nombre . '"
+                                                        ' . $where_definiciones . ' 
                                                     ORDER BY
                                                         reportedefiniciones.agente_nombre ASC
                                                 )
@@ -628,14 +605,10 @@ class reportevibracionwordController extends Controller
 
 
             $definiciones = '';
-            foreach ($sql as $key => $value)
-            {
-                foreach ($definiciones_fuentes as $key2 => $dato)
-                {
-                    if ($value->fuente == $dato['fuente_descripcion'])
-                    {
-                        if (($key+0) < (count($sql) -1))
-                        {
+            foreach ($sql as $key => $value) {
+                foreach ($definiciones_fuentes as $key2 => $dato) {
+                    if ($value->fuente == $dato['fuente_descripcion']) {
+                        if (($key + 0) < (count($sql) - 1)) {
                             $definiciones .= '<w:p>
                                                 <w:pPr>
                                                     <w:jc w:val="both"/>
@@ -645,18 +618,16 @@ class reportevibracionwordController extends Controller
                                                     <w:b w:val="true"/>
                                                 </w:rPr>
                                                 <w:t>
-                                                    '.$value->concepto.'
+                                                    ' . $value->concepto . '
                                                 </w:t>
                                                 <w:rPr>
                                                     <w:b w:val="false"/>
                                                 </w:rPr>
                                                 <w:t>
-                                                    '.htmlspecialchars($value->descripcion).''.$dato['fuente_simbolo'].'
+                                                    ' . htmlspecialchars($value->descripcion) . '' . $dato['fuente_simbolo'] . '
                                                 </w:t>
                                             </w:p><w:br/>';
-                        }
-                        else
-                        {
+                        } else {
                             $definiciones .= '<w:p>
                                                 <w:pPr>
                                                     <w:jc w:val="both"/>
@@ -666,13 +637,13 @@ class reportevibracionwordController extends Controller
                                                     <w:b w:val="true"/>
                                                 </w:rPr>
                                                 <w:t>
-                                                    '.$value->concepto.'
+                                                    ' . $value->concepto . '
                                                 </w:t>
                                                 <w:rPr>
                                                     <w:b w:val="false"/>
                                                 </w:rPr>
                                                 <w:t>
-                                                    '.htmlspecialchars($value->descripcion).''.$dato['fuente_simbolo'].'
+                                                    ' . htmlspecialchars($value->descripcion) . '' . $dato['fuente_simbolo'] . '
                                                 </w:t>
                                             </w:p>';
                         }
@@ -709,22 +680,21 @@ class reportevibracionwordController extends Controller
             //--------------------------------
 
 
-            if (($reporte->reportevibracion_alcanceinforme+0) == 1 || ($reporte->reportevibracion_alcanceinforme+0) == 3)
-            {
+            if (($reporte->reportevibracion_alcanceinforme + 0) == 1 || ($reporte->reportevibracion_alcanceinforme + 0) == 3) {
                 $texto = '<w:br/>
                             <w:p>
                                 <w:pPr>
                                     <w:jc w:val="both"/>
                                     <w:spacing w:before="0" w:after="0" w:line="240" w:lineRule="exactly" w:beforeAutospacing="0" w:afterAutospacing="0"/>
                                 </w:pPr>
-                                <w:t>'.htmlspecialchars('Para la evaluación de vibraciones se realizó en cada ciclo de exposición la medición correspondiente al POE usando los procedimientos de evaluación para cuerpo entero.').'</w:t>
+                                <w:t>' . htmlspecialchars('Para la evaluación de vibraciones se realizó en cada ciclo de exposición la medición correspondiente al POE usando los procedimientos de evaluación para cuerpo entero.') . '</w:t>
                             </w:p><w:br/>
                             <w:p>
                                 <w:pPr>
                                     <w:jc w:val="both"/>
                                     <w:spacing w:before="0" w:after="0" w:line="240" w:lineRule="exactly" w:beforeAutospacing="0" w:afterAutospacing="0"/>
                                 </w:pPr>
-                                <w:t>'.htmlspecialchars('Para la evaluación en cuerpo entero en cada punto de medición, se localizan tres ejes ortogonales de acuerdo con la figura 1 (NOM-024-STPS-2001), en los que se realizan las mediciones continuas de la aceleración y se registran al menos durante un minuto en cada una de las bandas de tercios de octava.').'</w:t>
+                                <w:t>' . htmlspecialchars('Para la evaluación en cuerpo entero en cada punto de medición, se localizan tres ejes ortogonales de acuerdo con la figura 1 (NOM-024-STPS-2001), en los que se realizan las mediciones continuas de la aceleración y se registran al menos durante un minuto en cada una de las bandas de tercios de octava.') . '</w:t>
                             </w:p>';
 
                 $plantillaword->setValue('4_2_CUERPO_PARRAFO1', $texto);
@@ -732,7 +702,7 @@ class reportevibracionwordController extends Controller
                 $plantillaword->setImageValue('4_2_CUERPO_FIGURA1', array('path' => storage_path('assets/images/reportes/reportevibracion_fig_4.2_1.jpg'), 'width' => 380, 'height' => 400, 'ratio' => true));
 
                 $plantillaword->setValue('4_2_CUERPO_PARRAFO2', '</w:t></w:r><w:r><w:rPr><w:b/></w:rPr><w:t>Figura 1</w:t></w:r><w:r><w:t>. Direcciones de incidencia de las vibraciones sobre el cuerpo humano (NOM-024-STPS-2001).<w:br/>');
-                
+
                 $plantillaword->setValue('4_2_CUERPO_PARRAFO3', '</w:t></w:r><w:r><w:rPr><w:b/></w:rPr><w:t>ax, ay, az</w:t></w:r><w:r><w:t>: Son las direcciones de la aceleración en los ejes x, y, z.<w:br/>
                                                                 </w:t></w:r><w:r><w:rPr><w:b/></w:rPr><w:t>eje x</w:t></w:r><w:r><w:t>: Es la dirección de espalda a pecho.<w:br/>
                                                                 </w:t></w:r><w:r><w:rPr><w:b/></w:rPr><w:t>eje y</w:t></w:r><w:r><w:t>: Es la dirección de lado derecho a izquierdo.<w:br/>
@@ -742,14 +712,13 @@ class reportevibracionwordController extends Controller
             }
 
 
-            if (($reporte->reportevibracion_alcanceinforme+0) == 2 || ($reporte->reportevibracion_alcanceinforme+0) == 3)
-            {
+            if (($reporte->reportevibracion_alcanceinforme + 0) == 2 || ($reporte->reportevibracion_alcanceinforme + 0) == 3) {
                 $texto = '<w:p>
                                 <w:pPr>
                                     <w:jc w:val="both"/>
                                     <w:spacing w:before="0" w:after="0" w:line="240" w:lineRule="exactly" w:beforeAutospacing="0" w:afterAutospacing="0"/>
                                 </w:pPr>
-                                <w:t>'.htmlspecialchars('Para la evaluación en extremidades superiores (mano-brazo) en cada punto de medición, se localizan tres ejes ortogonales, cercanos al punto de contacto de las vibraciones con la mano, de acuerdo con lo mostrado por los sistemas de coordenadas biodinámicas y basicéntricas de la figura 2, en los que se realizan las mediciones continuas de la aceleración y se registran al menos durante un minuto, en cada una de las bandas de tercios de octava.').'</w:t>
+                                <w:t>' . htmlspecialchars('Para la evaluación en extremidades superiores (mano-brazo) en cada punto de medición, se localizan tres ejes ortogonales, cercanos al punto de contacto de las vibraciones con la mano, de acuerdo con lo mostrado por los sistemas de coordenadas biodinámicas y basicéntricas de la figura 2, en los que se realizan las mediciones continuas de la aceleración y se registran al menos durante un minuto, en cada una de las bandas de tercios de octava.') . '</w:t>
                             </w:p>';
 
                 $plantillaword->setValue('4_2_EXTREMIDADES_PARRAFO1', $texto);
@@ -757,13 +726,13 @@ class reportevibracionwordController extends Controller
                 $plantillaword->setImageValue('4_2_EXTREMIDADES_FIGURA1', array('path' => storage_path('assets/images/reportes/reportevibracion_fig_4.2_2.jpg'), 'width' => 380, 'height' => 240, 'ratio' => true));
 
                 $plantillaword->setValue('4_2_EXTREMIDADES_PARRAFO2', '</w:t></w:r><w:r><w:rPr><w:b/></w:rPr><w:t>Figura 2</w:t></w:r><w:r><w:t>. Sistemas biodinámico y basicéntrico de coordenadas (NOM-024-STPS-2001).<w:br/>');
-                
+
                 $texto = '<w:p>
                                 <w:pPr>
                                     <w:jc w:val="both"/>
                                     <w:spacing w:before="0" w:after="0" w:line="240" w:lineRule="exactly" w:beforeAutospacing="0" w:afterAutospacing="0"/>
                                 </w:pPr>
-                                <w:t>'.htmlspecialchars('Se realiza un análisis espectral en bandas de tercios de octava (de 8 a 1600 Hz) por cada eje y se calculó el componente direccional de la aceleración ponderada conforme a la siguiente ecuación:').'</w:t>
+                                <w:t>' . htmlspecialchars('Se realiza un análisis espectral en bandas de tercios de octava (de 8 a 1600 Hz) por cada eje y se calculó el componente direccional de la aceleración ponderada conforme a la siguiente ecuación:') . '</w:t>
                             </w:p>';
 
                 $plantillaword->setValue('4_2_EXTREMIDADES_PARRAFO3', $texto);
@@ -781,8 +750,7 @@ class reportevibracionwordController extends Controller
             //--------------------------------
 
 
-            if (($reporte->reportevibracion_alcanceinforme+0) == 1 || ($reporte->reportevibracion_alcanceinforme+0) == 3)
-            {
+            if (($reporte->reportevibracion_alcanceinforme + 0) == 1 || ($reporte->reportevibracion_alcanceinforme + 0) == 3) {
                 $texto = '<w:p>
                                 <w:rPr>
                                     <w:jc w:val="left"/>
@@ -799,7 +767,7 @@ class reportevibracionwordController extends Controller
                                     <w:spacing w:before="0" w:after="0" w:line="240" w:lineRule="exactly" w:beforeAutospacing="0" w:afterAutospacing="0"/>
                                     <w:b w:val="false"/>
                                 </w:pPr>
-                                <w:t>'.htmlspecialchars('Cuando se conoce la frecuencia de un mecanismo que genera vibración y se relaciona con la aceleración en m/s² ya sea en el eje de aceleración longitudinal az, o en los ejes de aceleración transversal ax y ay, se obtiene el tiempo de exposición que puede variar de un minuto a veinticuatro horas. Los límites de exposición a vibraciones en el eje longitudinal az y en los ejes transversales ax y ay, se establecen en las Tablas 1 y 2 de la norma, respectivamente.').'</w:t>
+                                <w:t>' . htmlspecialchars('Cuando se conoce la frecuencia de un mecanismo que genera vibración y se relaciona con la aceleración en m/s² ya sea en el eje de aceleración longitudinal az, o en los ejes de aceleración transversal ax y ay, se obtiene el tiempo de exposición que puede variar de un minuto a veinticuatro horas. Los límites de exposición a vibraciones en el eje longitudinal az y en los ejes transversales ax y ay, se establecen en las Tablas 1 y 2 de la norma, respectivamente.') . '</w:t>
                             </w:p>';
 
                 $plantillaword->setValue('4_3_CUERPO_PARRAFO1', $texto);
@@ -814,8 +782,7 @@ class reportevibracionwordController extends Controller
             }
 
 
-            if (($reporte->reportevibracion_alcanceinforme+0) == 2 || ($reporte->reportevibracion_alcanceinforme+0) == 3)
-            {
+            if (($reporte->reportevibracion_alcanceinforme + 0) == 2 || ($reporte->reportevibracion_alcanceinforme + 0) == 3) {
                 $texto = '<w:p>
                                 <w:rPr>
                                     <w:jc w:val="left"/>
@@ -834,7 +801,7 @@ class reportevibracionwordController extends Controller
                                     <w:spacing w:before="0" w:after="0" w:line="240" w:lineRule="exactly" w:beforeAutospacing="0" w:afterAutospacing="0"/>
                                     <w:b w:val="false"/>
                                 </w:pPr>
-                                <w:t>'.htmlspecialchars('Dependiendo del tiempo de exposición, se establecen los valores permitidos de aceleración ponderada (que se deben calcular según se establece en los Apartados 8.3.2.2.1 al 8.3.2.2.6, y en la Tabla 3).').'</w:t>
+                                <w:t>' . htmlspecialchars('Dependiendo del tiempo de exposición, se establecen los valores permitidos de aceleración ponderada (que se deben calcular según se establece en los Apartados 8.3.2.2.1 al 8.3.2.2.6, y en la Tabla 3).') . '</w:t>
                             </w:p>';
 
                 $plantillaword->setValue('4_3_EXTREMIDADES_PARRAFO1', $texto);
@@ -848,9 +815,8 @@ class reportevibracionwordController extends Controller
             //--------------------------------
 
 
-            if (($reporte->reportevibracion_alcanceinforme+0) == 1)
-            {
-                $plantillaword->setValue('4_2_PARRAFO_ADICIONAL', '<w:br/>En '.$reporte->reportevibracion_instalacion.' se realizó la metodología de cuerpo entero y de acuerdo al reconocimiento inicial realizado, para las mediciones de extremidades superiores (mano-brazo) no se encontraron puestos de trabajo que tengan este tipo de exposición, por lo que esta metodología no será aplicada.');
+            if (($reporte->reportevibracion_alcanceinforme + 0) == 1) {
+                $plantillaword->setValue('4_2_PARRAFO_ADICIONAL', '<w:br/>En ' . $reporte->reportevibracion_instalacion . ' se realizó la metodología de cuerpo entero y de acuerdo al reconocimiento inicial realizado, para las mediciones de extremidades superiores (mano-brazo) no se encontraron puestos de trabajo que tengan este tipo de exposición, por lo que esta metodología no será aplicada.');
 
                 $plantillaword->setValue('4_2_EXTREMIDADES_PARRAFO1', '');
                 $plantillaword->setValue('4_2_EXTREMIDADES_FIGURA1', '');
@@ -867,9 +833,7 @@ class reportevibracionwordController extends Controller
                 $plantillaword->setValue('4_3_EXTREMIDADES_PARRAFO1', '');
                 $plantillaword->setValue('4_3_EXTREMIDADES_FIGURA1', '');
                 $plantillaword->setValue('4_3_EXTREMIDADES_PARRAFO2', '');
-            }
-            else if (($reporte->reportevibracion_alcanceinforme+0) == 2)
-            {
+            } else if (($reporte->reportevibracion_alcanceinforme + 0) == 2) {
                 $plantillaword->setValue('4_2_PARRAFO_ADICIONAL', '');
 
                 $plantillaword->setValue('4_2_CUERPO_PARRAFO1', '');
@@ -885,9 +849,7 @@ class reportevibracionwordController extends Controller
                 $plantillaword->setValue('4_3_CUERPO_FIGURA2_PIE', '');
                 $plantillaword->setValue('4_3_CUERPO_FIGURA3', '');
                 $plantillaword->setValue('4_3_CUERPO_FIGURA4', '');
-            }
-            else
-            {
+            } else {
                 $plantillaword->setValue('4_3_CUERPO_FIGURA2_PIE', '</w:t></w:r><w:r><w:rPr><w:b/></w:rPr><w:t>Figura 3</w:t></w:r><w:r><w:t>. Límites de aceleración longitudinal (az) como función de la frecuencia y del tiempo de exposición (NOM-024-STPS-2001)');
                 $plantillaword->setValue('4_3_CUERPO_FIGURA4_PIE', '</w:t></w:r><w:r><w:rPr><w:b/></w:rPr><w:t>Figura 4</w:t></w:r><w:r><w:t>. Límites de aceleración transversal (ax, ay) como función de la frecuencia y del tiempo de exposición (NOM-024-STPS-2001)');
                 $plantillaword->setValue('4_2_PARRAFO_ADICIONAL', '');
@@ -902,22 +864,16 @@ class reportevibracionwordController extends Controller
 
 
             // Imagen FOTO
-            if ($reporte->reportevibracion_ubicacionfoto)
-            {
-                if (file_exists(storage_path('app/'.$reporte->reportevibracion_ubicacionfoto)))
-                {
-                    $plantillaword->setImageValue('UBICACION_FOTO', array('path' => storage_path('app/'.$reporte->reportevibracion_ubicacionfoto), 'width' => 580, 'height' => 400, 'ratio' => true, 'borderColor' => '000000'));
-                }
-                else
-                {
+            if ($reporte->reportevibracion_ubicacionfoto) {
+                if (file_exists(storage_path('app/' . $reporte->reportevibracion_ubicacionfoto))) {
+                    $plantillaword->setImageValue('UBICACION_FOTO', array('path' => storage_path('app/' . $reporte->reportevibracion_ubicacionfoto), 'width' => 580, 'height' => 400, 'ratio' => true, 'borderColor' => '000000'));
+                } else {
                     $plantillaword->setValue('UBICACION_FOTO', 'FALTA CARGAR IMAGEN DESDE EL SISTEMA.');
                 }
-            }
-            else
-            {
+            } else {
                 $plantillaword->setValue('UBICACION_FOTO', 'FALTA CARGAR IMAGEN DESDE EL SISTEMA.');
             }
-                
+
 
             // PROCESO INSTALACION
             //================================================================================
@@ -931,13 +887,11 @@ class reportevibracionwordController extends Controller
             //================================================================================
 
 
-            if (($recsensorial->recsensorial_tipocliente+0) == 1) // 1 = Pemex, 0 = Cliente
+            if (($recsensorial->recsensorial_tipocliente + 0) == 1) // 1 = Pemex, 0 = Cliente
             {
                 $fuente = 'Arial';
                 $font_size = 10;
-            }
-            else
-            {
+            } else {
                 $fuente = 'Montserrat';
                 $font_size = 10;
             }
@@ -998,7 +952,7 @@ class reportevibracionwordController extends Controller
                                     LEFT JOIN reporteareacategoria ON reportearea.id = reporteareacategoria.reportearea_id
                                     LEFT JOIN reportecategoria ON reporteareacategoria.reportecategoria_id = reportecategoria.id 
                                 WHERE
-                                    reportearea.proyecto_id = '.$proyecto_id.' 
+                                    reportearea.proyecto_id = ' . $proyecto_id . ' 
                                 ORDER BY
                                     reportearea.reportearea_orden ASC,
                                     reportearea.reportearea_nombre ASC,
@@ -1016,17 +970,16 @@ class reportevibracionwordController extends Controller
 
 
             // Crear tabla
-            $table = null;            
+            $table = null;
             $table = new Table(array('name' => $fuente, 'borderSize' => 1, 'borderColor' => '000000', 'cellMargin' => 40, 'unit' => TblWidth::TWIP));
 
 
-            $numero_fila = 0; $instalacion = 'XXXXX'; $area = 'xxxx';
-            foreach ($sql as $key => $value) 
-            {
-                if($instalacion != $value->reportearea_instalacion)
-                {
-                    if (($key+0) != 0)
-                    {
+            $numero_fila = 0;
+            $instalacion = 'XXXXX';
+            $area = 'xxxx';
+            foreach ($sql as $key => $value) {
+                if ($instalacion != $value->reportearea_instalacion) {
+                    if (($key + 0) != 0) {
                         $total = DB::select('SELECT
                                                     IFNULL(SUM( TABLA.reportecategoria_total ), 0) AS total 
                                                 FROM
@@ -1042,8 +995,8 @@ class reportevibracionwordController extends Controller
                                                             LEFT JOIN reportearea ON reporteareacategoria.reportearea_id = reportearea.id
                                                             LEFT JOIN reportecategoria ON reporteareacategoria.reportecategoria_id = reportecategoria.id
                                                         WHERE
-                                                            reportearea.proyecto_id = '.$proyecto_id.' 
-                                                            AND REPLACE(reportearea.reportearea_instalacion, "\"", "") = "'.$instalacion.'" 
+                                                            reportearea.proyecto_id = ' . $proyecto_id . ' 
+                                                            AND REPLACE(reportearea.reportearea_instalacion, "\"", "") = "' . $instalacion . '" 
                                                         GROUP BY
                                                             reportearea.proyecto_id,
                                                             reportearea.reportearea_instalacion,
@@ -1059,7 +1012,7 @@ class reportevibracionwordController extends Controller
                         $table->addCell($ancho_col_5, $continua_fila);
 
                         $table->addRow(); //fila
-                        $table->addCell(null, array('gridSpan' => 5, 'valign' => 'center', 'borderTopColor' =>'ffffff', 'borderTopSize' => 1, 'borderRightColor' =>'ffffff', 'borderRightSize' => 1, 'borderBottomColor' =>'ffffff', 'borderBottomSize' => 1, 'borderLeftColor' =>'ffffff', 'borderLeftSize' => 1))->addTextRun($izquierda)->addText('Nota: Las categorías repetidas en más de un área son consideradas como puesto móvil de trabajo.', $texto);
+                        $table->addCell(null, array('gridSpan' => 5, 'valign' => 'center', 'borderTopColor' => 'ffffff', 'borderTopSize' => 1, 'borderRightColor' => 'ffffff', 'borderRightSize' => 1, 'borderBottomColor' => 'ffffff', 'borderBottomSize' => 1, 'borderLeftColor' => 'ffffff', 'borderLeftSize' => 1))->addTextRun($izquierda)->addText('Nota: Las categorías repetidas en más de un área son consideradas como puesto móvil de trabajo.', $texto);
                     }
 
 
@@ -1083,24 +1036,18 @@ class reportevibracionwordController extends Controller
                 $table->addRow(); //fila
 
 
-                if($area != $value->reportearea_nombre)
-                {
+                if ($area != $value->reportearea_nombre) {
                     $numero_fila += 1;
                     $table->addCell($ancho_col_1, $combinar_fila)->addTextRun($centrado)->addText($numero_fila, $texto);
-                }
-                else
-                {
+                } else {
                     $table->addCell($ancho_col_1, $continua_fila);
                 }
 
 
-                if($area != $value->reportearea_nombre)
-                {
+                if ($area != $value->reportearea_nombre) {
                     $table->addCell($ancho_col_3, $combinar_fila)->addTextRun($centrado)->addText($value->reportearea_nombre, $texto);
                     $area = $value->reportearea_nombre;
-                }
-                else
-                {
+                } else {
                     $table->addCell($ancho_col_3, $continua_fila);
                 }
 
@@ -1109,14 +1056,11 @@ class reportevibracionwordController extends Controller
                 $table->addCell($ancho_col_5, $celda)->addTextRun($centrado)->addText($value->reporteareacategoria_total, $texto);
 
 
-                if($instalacion != $value->reportearea_instalacion)
-                {
+                if ($instalacion != $value->reportearea_instalacion) {
                     $table->addCell($ancho_col_6, $combinar_fila)->addTextRun($justificado)->addText($this->datosproyectoreemplazartexto($proyecto, $recsensorial, $value->actividad_principal_instalacion), $texto);
 
                     $instalacion = $value->reportearea_instalacion;
-                }
-                else
-                {
+                } else {
                     $table->addCell($ancho_col_6, $continua_fila);
                 }
             }
@@ -1137,8 +1081,8 @@ class reportevibracionwordController extends Controller
                                                 LEFT JOIN reportearea ON reporteareacategoria.reportearea_id = reportearea.id
                                                 LEFT JOIN reportecategoria ON reporteareacategoria.reportecategoria_id = reportecategoria.id
                                             WHERE
-                                                reportearea.proyecto_id = '.$proyecto_id.' 
-                                                AND REPLACE(reportearea.reportearea_instalacion, "\"", "") = "'.$instalacion.'" 
+                                                reportearea.proyecto_id = ' . $proyecto_id . ' 
+                                                AND REPLACE(reportearea.reportearea_instalacion, "\"", "") = "' . $instalacion . '" 
                                             GROUP BY
                                                 reportearea.proyecto_id,
                                                 reportearea.reportearea_instalacion,
@@ -1155,9 +1099,9 @@ class reportevibracionwordController extends Controller
 
 
             $table->addRow(); //fila
-            $table->addCell(null, array('gridSpan' => 5, 'valign' => 'center', 'borderTopColor' =>'ffffff', 'borderTopSize' => 1, 'borderRightColor' =>'ffffff', 'borderRightSize' => 1, 'borderBottomColor' =>'ffffff', 'borderBottomSize' => 1, 'borderLeftColor' =>'ffffff', 'borderLeftSize' => 1))->addTextRun($justificado)->addText('Nota: Las categorías repetidas en más de un área son consideradas como puesto móvil de trabajo.', $texto);
+            $table->addCell(null, array('gridSpan' => 5, 'valign' => 'center', 'borderTopColor' => 'ffffff', 'borderTopSize' => 1, 'borderRightColor' => 'ffffff', 'borderRightSize' => 1, 'borderBottomColor' => 'ffffff', 'borderBottomSize' => 1, 'borderLeftColor' => 'ffffff', 'borderLeftSize' => 1))->addTextRun($justificado)->addText('Nota: Las categorías repetidas en más de un área son consideradas como puesto móvil de trabajo.', $texto);
 
-            
+
             $plantillaword->setComplexBlock('TABLA_5_3', $table);
 
 
@@ -1220,7 +1164,7 @@ class reportevibracionwordController extends Controller
                                             LEFT JOIN reporteareacategoria ON reportearea.id = reporteareacategoria.reportearea_id
                                             LEFT JOIN reportecategoria ON reporteareacategoria.reportecategoria_id = reportecategoria.id 
                                         WHERE
-                                            reportearea.proyecto_id = '.$proyecto_id.' 
+                                            reportearea.proyecto_id = ' . $proyecto_id . ' 
                                         -- ORDER BY
                                            -- reportearea.reportearea_orden ASC,
                                            -- reportearea.reportearea_nombre ASC,
@@ -1246,16 +1190,16 @@ class reportevibracionwordController extends Controller
 
 
             // Crear tabla
-            $table = null;            
+            $table = null;
             $table = new Table(array('name' => $fuente, 'borderSize' => 1, 'borderColor' => '000000', 'cellMargin' => 40, 'unit' => TblWidth::TWIP));
-            
+
 
             $numero_fila = 0;
-            $instalacion = 'xxxx'; $area = 'xxxx'; $actividad = 'xxxx';
-            foreach ($sql as $key => $value) 
-            {
-                if($instalacion != $value->reportearea_instalacion)
-                {
+            $instalacion = 'xxxx';
+            $area = 'xxxx';
+            $actividad = 'xxxx';
+            foreach ($sql as $key => $value) {
+                if ($instalacion != $value->reportearea_instalacion) {
                     // encabezado tabla
                     $table->addRow(200, array('tblHeader' => true));
                     $table->addCell($ancho_col_1, $encabezado_celda)->addTextRun($centrado)->addText('No.', $encabezado_texto);
@@ -1276,24 +1220,18 @@ class reportevibracionwordController extends Controller
                 $table->addRow(); //fila
 
 
-                if($area != $value->reportearea_nombre)
-                {
+                if ($area != $value->reportearea_nombre) {
                     $numero_fila += 1;
                     $table->addCell($ancho_col_1, $combinar_fila)->addTextRun($centrado)->addText($numero_fila, $texto);
-                }
-                else
-                {
+                } else {
                     $table->addCell($ancho_col_1, $continua_fila);
                 }
 
 
-                if($area != $value->reportearea_nombre)
-                {
+                if ($area != $value->reportearea_nombre) {
                     $table->addCell($ancho_col_3, $combinar_fila)->addTextRun($centrado)->addText($value->reportearea_nombre, $texto);
                     $area = $value->reportearea_nombre;
-                }
-                else
-                {
+                } else {
                     $table->addCell($ancho_col_3, $continua_fila);
                 }
 
@@ -1324,7 +1262,7 @@ class reportevibracionwordController extends Controller
                                     reportevibracionmaquinaria
                                     LEFT JOIN reportearea ON reportevibracionmaquinaria.reportearea_id = reportearea.id
                                 WHERE
-                                    reportearea.proyecto_id = '.$proyecto_id.' 
+                                    reportearea.proyecto_id = ' . $proyecto_id . ' 
                                     AND reportearea.reportevibracionarea_porcientooperacion > 0
                                 ORDER BY
                                     reportearea.reportearea_orden ASC,
@@ -1342,16 +1280,16 @@ class reportevibracionwordController extends Controller
 
 
             // Crear tabla
-            $table = null;            
+            $table = null;
             $table = new Table(array('name' => $fuente, 'borderSize' => 1, 'borderColor' => '000000', 'cellMargin' => 40, 'unit' => TblWidth::TWIP));
 
 
             $numero_fila = 0;
-            $instalacion = 'xxxx'; $area = 'xxxx'; $tipoexposicion = 'xxxx';
-            foreach ($sql as $key => $value) 
-            {
-                if($instalacion != $value->reportearea_instalacion)
-                {
+            $instalacion = 'xxxx';
+            $area = 'xxxx';
+            $tipoexposicion = 'xxxx';
+            foreach ($sql as $key => $value) {
+                if ($instalacion != $value->reportearea_instalacion) {
                     // encabezado tabla
                     $table->addRow(200, array('tblHeader' => true));
                     $table->addCell($ancho_col_1, $combinar_fila_encabezado)->addTextRun($centrado)->addText('No.', $encabezado_texto);
@@ -1373,33 +1311,27 @@ class reportevibracionwordController extends Controller
                 $table->addRow(); //fila
 
 
-                if($area != $value->reportearea_nombre)
-                {
+                if ($area != $value->reportearea_nombre) {
                     $numero_fila += 1;
                     $table->addCell($ancho_col_1, $combinar_fila)->addTextRun($centrado)->addText($numero_fila, $texto);
                     $table->addCell($ancho_col_3, $combinar_fila)->addTextRun($centrado)->addText($value->reportearea_nombre, $texto);
 
                     $area = $value->reportearea_nombre;
-                }
-                else
-                {
+                } else {
                     $table->addCell($ancho_col_1, $continua_fila);
                     $table->addCell($ancho_col_3, $continua_fila);
                 }
 
-                
+
                 $table->addCell($ancho_col_4, $celda)->addTextRun($centrado)->addText($value->reportevibracionmaquinaria_nombre, $texto);
                 $table->addCell($ancho_col_5, $celda)->addTextRun($centrado)->addText($value->reportevibracionmaquinaria_cantidad, $texto);
 
 
-                if($tipoexposicion != $value->reportearea_tipoexposicion)
-                {
+                if ($tipoexposicion != $value->reportearea_tipoexposicion) {
                     $table->addCell($ancho_col_6, $combinar_fila)->addTextRun($centrado)->addText($value->reportearea_tipoexposicion, $texto);
 
                     $tipoexposicion = $value->reportearea_tipoexposicion;
-                }
-                else
-                {
+                } else {
                     $table->addCell($ancho_col_6, $continua_fila);
                 }
             }
@@ -1421,13 +1353,13 @@ class reportevibracionwordController extends Controller
                                 FROM
                                     reportearea
                                 WHERE
-                                    reportearea.proyecto_id = '.$proyecto_id.' 
+                                    reportearea.proyecto_id = ' . $proyecto_id . ' 
                                     AND reportearea.reportevibracionarea_porcientooperacion > 0 
                                 ORDER BY
                                     reportearea.reportearea_orden ASC,
                                     reportearea.reportearea_nombre ASC');
 
-            
+
             // Columnas
             $ancho_col_1 = 1000;
             // $ancho_col_2 = 2000;
@@ -1436,15 +1368,14 @@ class reportevibracionwordController extends Controller
 
 
             // Crear tabla
-            $table = null;            
+            $table = null;
             $table = new Table(array('name' => $fuente, 'borderSize' => 1, 'borderColor' => '000000', 'cellMargin' => 40, 'unit' => TblWidth::TWIP));
 
 
-            $instalacion = 'xxxx'; $total = 'XXXX';
-            foreach ($sql as $key => $value)
-            {
-                if($instalacion != $value->reportearea_instalacion)
-                {
+            $instalacion = 'xxxx';
+            $total = 'XXXX';
+            foreach ($sql as $key => $value) {
+                if ($instalacion != $value->reportearea_instalacion) {
                     // encabezado tabla
                     $table->addRow(200, array('tblHeader' => true));
                     $table->addCell($ancho_col_1, $encabezado_celda)->addTextRun($centrado)->addText('No.', $encabezado_texto);
@@ -1469,16 +1400,13 @@ class reportevibracionwordController extends Controller
                 $table->addCell($ancho_col_3, $celda)->addTextRun($centrado)->addText($value->reportearea_nombre, $texto);
 
 
-                if($instalacion != $value->reportearea_instalacion || $total != $value->reportevibracionarea_porcientooperacion)
-                {
-                    $table->addCell($ancho_col_4, $combinar_fila)->addTextRun($centrado)->addText($value->reportevibracionarea_porcientooperacion.'%', $texto);
-                    
+                if ($instalacion != $value->reportearea_instalacion || $total != $value->reportevibracionarea_porcientooperacion) {
+                    $table->addCell($ancho_col_4, $combinar_fila)->addTextRun($centrado)->addText($value->reportevibracionarea_porcientooperacion . '%', $texto);
+
 
                     $instalacion = $value->reportearea_instalacion;
                     $total = $value->reportevibracionarea_porcientooperacion;
-                }
-                else
-                {
+                } else {
                     $table->addCell($ancho_col_4, $continua_fila);
                 }
             }
@@ -1520,14 +1448,14 @@ class reportevibracionwordController extends Controller
                                     LEFT JOIN reportearea ON reportevibracionevaluacion.reportearea_id = reportearea.id
                                     LEFT JOIN reportecategoria ON reportevibracionevaluacion.reportecategoria_id = reportecategoria.id
                                 WHERE
-                                    reportevibracionevaluacion.proyecto_id = '.$proyecto_id.' 
+                                    reportevibracionevaluacion.proyecto_id = ' . $proyecto_id . ' 
                                 ORDER BY
                                     reportearea.reportearea_orden ASC,
                                     reportearea.reportearea_nombre ASC,
                                     reportecategoria.reportecategoria_orden ASC,
                                     reportecategoria.reportecategoria_nombre ASC');
 
-            
+
             // Columnas
             $ancho_col_1 = 1000;
             $ancho_col_2 = 2000;
@@ -1537,17 +1465,17 @@ class reportevibracionwordController extends Controller
 
 
             // Crear tabla
-            $table = null;            
+            $table = null;
             $table = new Table(array('name' => $fuente, 'borderSize' => 1, 'borderColor' => '000000', 'cellMargin' => 40, 'unit' => TblWidth::TWIP));
 
 
-            $numero_fila = 0; $instalacion = 'xxxx'; $area = 'XXXX'; $tipoexposicion = 'XXXX';
-            foreach ($sql as $key => $value)
-            {
-                if($instalacion != $value->reportearea_instalacion)
-                {
-                    if (($key+0) != 0)
-                    {
+            $numero_fila = 0;
+            $instalacion = 'xxxx';
+            $area = 'XXXX';
+            $tipoexposicion = 'XXXX';
+            foreach ($sql as $key => $value) {
+                if ($instalacion != $value->reportearea_instalacion) {
+                    if (($key + 0) != 0) {
                         $total = DB::select('SELECT
                                                 reportevibracionevaluacion.proyecto_id,
                                                 reportearea.reportearea_instalacion,
@@ -1558,8 +1486,8 @@ class reportevibracionwordController extends Controller
                                                 reportevibracionevaluacion
                                                 LEFT JOIN reportearea ON reportevibracionevaluacion.reportearea_id = reportearea.id
                                             WHERE
-                                                reportevibracionevaluacion.proyecto_id = '.$proyecto_id.' 
-                                                AND REPLACE(reportearea.reportearea_instalacion, "\"", "") = "'.$instalacion.'" 
+                                                reportevibracionevaluacion.proyecto_id = ' . $proyecto_id . ' 
+                                                AND REPLACE(reportearea.reportearea_instalacion, "\"", "") = "' . $instalacion . '" 
                                             GROUP BY
                                                 reportevibracionevaluacion.proyecto_id,
                                                 reportearea.reportearea_instalacion');
@@ -1591,16 +1519,13 @@ class reportevibracionwordController extends Controller
                 $table->addRow(); //fila
 
 
-                if($area != $value->reportearea_nombre)
-                {
+                if ($area != $value->reportearea_nombre) {
                     $numero_fila += 1;
                     $table->addCell($ancho_col_1, $combinar_fila)->addTextRun($centrado)->addText($numero_fila, $texto);
                     $table->addCell($ancho_col_2, $combinar_fila)->addTextRun($centrado)->addText($value->reportearea_nombre, $texto);
 
                     // $area = $value->reportearea_nombre;
-                }
-                else
-                {
+                } else {
                     $table->addCell($ancho_col_1, $continua_fila);
                     $table->addCell($ancho_col_2, $continua_fila);
                 }
@@ -1609,26 +1534,20 @@ class reportevibracionwordController extends Controller
                 $table->addCell($ancho_col_3, $celda)->addTextRun($centrado)->addText($value->reportecategoria_nombre, $texto);
 
 
-                if($tipoexposicion != $value->reportearea_tipoexposicion)
-                {
+                if ($tipoexposicion != $value->reportearea_tipoexposicion) {
                     $table->addCell($ancho_col_4, $combinar_fila)->addTextRun($centrado)->addText($value->reportearea_tipoexposicion, $texto);
 
                     $tipoexposicion = $value->reportearea_tipoexposicion;
-                }
-                else
-                {
+                } else {
                     $table->addCell($ancho_col_4, $continua_fila);
                 }
 
 
-                if($area != $value->reportearea_nombre)
-                {
+                if ($area != $value->reportearea_nombre) {
                     $table->addCell($ancho_col_5, $combinar_fila)->addTextRun($centrado)->addText($value->total_puntosarea, $texto);
 
                     $area = $value->reportearea_nombre;
-                }
-                else
-                {
+                } else {
                     $table->addCell($ancho_col_5, $continua_fila);
                 }
             }
@@ -1644,16 +1563,15 @@ class reportevibracionwordController extends Controller
                                         reportevibracionevaluacion
                                         LEFT JOIN reportearea ON reportevibracionevaluacion.reportearea_id = reportearea.id
                                     WHERE
-                                        reportevibracionevaluacion.proyecto_id = '.$proyecto_id.' 
-                                        AND REPLACE(reportearea.reportearea_instalacion, "\"", "") = "'.$instalacion.'" 
+                                        reportevibracionevaluacion.proyecto_id = ' . $proyecto_id . ' 
+                                        AND REPLACE(reportearea.reportearea_instalacion, "\"", "") = "' . $instalacion . '" 
                                     GROUP BY
                                         reportevibracionevaluacion.proyecto_id,
                                         reportearea.reportearea_instalacion');
 
 
             $total_evaluacion = 0;
-            if (count($total) > 0)
-            {
+            if (count($total) > 0) {
                 $total_evaluacion = $total[0]->total;
             }
 
@@ -1699,16 +1617,14 @@ class reportevibracionwordController extends Controller
                                             LEFT JOIN reportearea ON reportevibracionevaluacion.reportearea_id = reportearea.id
                                             LEFT JOIN reportecategoria ON reportevibracionevaluacion.reportecategoria_id = reportecategoria.id
                                         WHERE
-                                            reportevibracionevaluacion.proyecto_id = '.$proyecto_id.' 
+                                            reportevibracionevaluacion.proyecto_id = ' . $proyecto_id . ' 
                                         ORDER BY
                                             reportevibracionevaluacion.reportevibracionevaluacion_punto ASC');
 
 
-            if (count($evaluacion) > 0)
-            {
-                switch (($evaluacion[0]->reportevibracionevaluacion_tipoevaluacion+0))
-                {
-                    case (($evaluacion[0]->reportevibracionevaluacion_tipoevaluacion+0) <= 2):
+            if (count($evaluacion) > 0) {
+                switch (($evaluacion[0]->reportevibracionevaluacion_tipoevaluacion + 0)) {
+                    case (($evaluacion[0]->reportevibracionevaluacion_tipoevaluacion + 0) <= 2):
 
 
                         $datos = DB::select('SELECT
@@ -1800,14 +1716,13 @@ class reportevibracionwordController extends Controller
                                                 LEFT JOIN reportecategoria ON reportevibracionevaluacion.reportecategoria_id = reportecategoria.id
                                                 RIGHT JOIN reportevibracionevaluaciondatos ON reportevibracionevaluacion.id = reportevibracionevaluaciondatos.reportevibracionevaluacion_id
                                             WHERE
-                                                reportevibracionevaluacion.proyecto_id = '.$proyecto_id.' 
+                                                reportevibracionevaluacion.proyecto_id = ' . $proyecto_id . ' 
                                             ORDER BY
                                                 reportevibracionevaluacion.reportevibracionevaluacion_punto ASC,
                                                 (reportevibracionevaluaciondatos.reportevibracionevaluaciondatos_frecuencia+0) ASC');
 
 
-                        if (($evaluacion[0]->reportevibracionevaluacion_numeromediciones+0) == 1)
-                        {
+                        if (($evaluacion[0]->reportevibracionevaluacion_numeromediciones + 0) == 1) {
                             $font_size = 8;
                             $bgColor_encabezado = '#0C3F64';
                             $encabezado_celda = array('bgColor' => $bgColor_encabezado, 'valign' => 'center', 'cellMargin' => 100);
@@ -1835,36 +1750,34 @@ class reportevibracionwordController extends Controller
 
 
                             // Crear tabla
-                            $table = null;            
+                            $table = null;
                             $table = new Table(array('name' => $fuente, 'borderSize' => 1, 'borderColor' => '000000', 'cellMargin' => 40, 'unit' => TblWidth::TWIP));
 
 
                             $punto = 'XXXXX';
-                            foreach ($datos as $key => $value)
-                            {
-                                if($punto != $value->reportevibracionevaluacion_punto)
-                                {
+                            foreach ($datos as $key => $value) {
+                                if ($punto != $value->reportevibracionevaluacion_punto) {
                                     // $punto = $value->reportevibracionevaluacion_punto;
 
 
                                     // Encabezado
                                     $table->addRow(); //fila
-                                    $table->addCell(($ancho_col_1+$ancho_col_2), array('gridSpan' => 2, 'valign' => 'center', 'bgColor' => '0C3F64'))->addTextRun($izquierda)->addText('No. de medición:', $encabezado_texto);
-                                    $table->addCell(($ancho_col_3+$ancho_col_4), array('gridSpan' => 2, 'valign' => 'center'))->addTextRun($izquierda)->addText($value->reportevibracionevaluacion_punto, $texto);
+                                    $table->addCell(($ancho_col_1 + $ancho_col_2), array('gridSpan' => 2, 'valign' => 'center', 'bgColor' => '0C3F64'))->addTextRun($izquierda)->addText('No. de medición:', $encabezado_texto);
+                                    $table->addCell(($ancho_col_3 + $ancho_col_4), array('gridSpan' => 2, 'valign' => 'center'))->addTextRun($izquierda)->addText($value->reportevibracionevaluacion_punto, $texto);
                                     $table->addCell($ancho_col_5, $encabezado_celda)->addTextRun($izquierda)->addText('Área:', $encabezado_texto);
-                                    $table->addCell(($ancho_col_6+$ancho_col_7), array('gridSpan' => 2, 'valign' => 'center'))->addTextRun($izquierda)->addText($value->reportearea_nombre, $texto);
+                                    $table->addCell(($ancho_col_6 + $ancho_col_7), array('gridSpan' => 2, 'valign' => 'center'))->addTextRun($izquierda)->addText($value->reportearea_nombre, $texto);
                                     $table->addRow(); //fila
-                                    $table->addCell(($ancho_col_1+$ancho_col_2), array('gridSpan' => 2, 'valign' => 'center', 'bgColor' => '0C3F64'))->addTextRun($izquierda)->addText('Punto de evaluación:', $encabezado_texto);
-                                    $table->addCell(($ancho_col_3+$ancho_col_4), array('gridSpan' => 2, 'valign' => 'center'))->addTextRun($izquierda)->addText($value->reportevibracionevaluacion_puntoevaluacion, $texto);
+                                    $table->addCell(($ancho_col_1 + $ancho_col_2), array('gridSpan' => 2, 'valign' => 'center', 'bgColor' => '0C3F64'))->addTextRun($izquierda)->addText('Punto de evaluación:', $encabezado_texto);
+                                    $table->addCell(($ancho_col_3 + $ancho_col_4), array('gridSpan' => 2, 'valign' => 'center'))->addTextRun($izquierda)->addText($value->reportevibracionevaluacion_puntoevaluacion, $texto);
                                     $table->addCell($ancho_col_5, $encabezado_celda)->addTextRun($izquierda)->addText('Categoría:', $encabezado_texto);
-                                    $table->addCell(($ancho_col_6+$ancho_col_7), array('gridSpan' => 2, 'valign' => 'center'))->addTextRun($izquierda)->addText($value->reportecategoria_nombre, $texto);
+                                    $table->addCell(($ancho_col_6 + $ancho_col_7), array('gridSpan' => 2, 'valign' => 'center'))->addTextRun($izquierda)->addText($value->reportecategoria_nombre, $texto);
                                     $table->addRow(); //fila
                                     $table->addCell($ancho_col_1, $encabezado_celda)->addTextRun($centrado)->addText('Frecuencia central de tercio de octava (Hz)', $encabezado_texto);
                                     $table->addCell($ancho_col_2, $encabezado_celda)->addTextRun($centrado)->addText('Medición de aceleración longitudinal en (az) (m/s²)', $encabezado_texto);
-                                    $table->addCell($ancho_col_3, $encabezado_celda)->addTextRun($centrado)->addText('Límite de aceleración longitudinal en (az) (m/s²) para '.$value->reportevibracionevaluacion_tiempoexposicion.' de exposición', $encabezado_texto);
+                                    $table->addCell($ancho_col_3, $encabezado_celda)->addTextRun($centrado)->addText('Límite de aceleración longitudinal en (az) (m/s²) para ' . $value->reportevibracionevaluacion_tiempoexposicion . ' de exposición', $encabezado_texto);
                                     $table->addCell($ancho_col_4, $encabezado_celda)->addTextRun($centrado)->addText('Medición de aceleración transversal en (ax) (m/s²)', $encabezado_texto);
                                     $table->addCell($ancho_col_5, $encabezado_celda)->addTextRun($centrado)->addText('Medición de aceleración transversal (ay) (m/s²)', $encabezado_texto);
-                                    $table->addCell($ancho_col_6, $encabezado_celda)->addTextRun($centrado)->addText('Límite de aceleración transversal en (ax, ay) (m/s²) para '.$value->reportevibracionevaluacion_tiempoexposicion.' de exposición', $encabezado_texto);
+                                    $table->addCell($ancho_col_6, $encabezado_celda)->addTextRun($centrado)->addText('Límite de aceleración transversal en (ax, ay) (m/s²) para ' . $value->reportevibracionevaluacion_tiempoexposicion . ' de exposición', $encabezado_texto);
                                     $table->addCell($ancho_col_7, $encabezado_celda)->addTextRun($centrado)->addText('Cumplimiento normativo', $encabezado_texto);
                                 }
 
@@ -1876,19 +1789,16 @@ class reportevibracionwordController extends Controller
                                 $table->addCell($ancho_col_4, $celda)->addTextRun($centrado)->addText($value->reportevibracionevaluaciondatos_ax1, array('color' => $value->ax1_color, 'size' => $font_size, 'bold' => false, 'name' => $fuente));
                                 $table->addCell($ancho_col_5, $celda)->addTextRun($centrado)->addText($value->reportevibracionevaluaciondatos_ay1, array('color' => $value->ay1_color, 'size' => $font_size, 'bold' => false, 'name' => $fuente));
                                 $table->addCell($ancho_col_6, $celda)->addTextRun($centrado)->addText($value->reportevibracionevaluaciondatos_axylimite, array('color' => '#000000', 'size' => $font_size, 'bold' => true, 'name' => $fuente));
-                                
 
-                                if($punto != $value->reportevibracionevaluacion_punto)
-                                {
+
+                                if ($punto != $value->reportevibracionevaluacion_punto) {
                                     if ($value->resultado == "Dentro de norma") //Verde
                                     {
                                         $text_color = "#000000";
                                         $bgColor = "#00FF00";
 
                                         $table->addCell($ancho_col_7, array('vMerge' => 'restart', 'bgColor' => $bgColor, 'valign' => 'center'))->addTextRun($centrado)->addText($value->resultado, array('color' => $text_color, 'size' => $font_size, 'bold' => true, 'name' => $fuente));
-                                    }
-                                    else
-                                    {
+                                    } else {
                                         $text_color = "#FFFFFF";
                                         $bgColor = "#FF0000";
 
@@ -1897,15 +1807,11 @@ class reportevibracionwordController extends Controller
 
 
                                     $punto = $value->reportevibracionevaluacion_punto;
-                                }
-                                else
-                                {
+                                } else {
                                     $table->addCell($ancho_col_7, $continua_fila);
                                 }
                             }
-                        }
-                        else
-                        {
+                        } else {
                             $font_size = 7;
                             $bgColor_encabezado = '#0C3F64';
                             $encabezado_celda = array('bgColor' => $bgColor_encabezado, 'valign' => 'center', 'cellMargin' => 100);
@@ -1939,15 +1845,13 @@ class reportevibracionwordController extends Controller
 
 
                             // Crear tabla
-                            $table = null;            
+                            $table = null;
                             $table = new Table(array('name' => $fuente, 'borderSize' => 1, 'borderColor' => '000000', 'cellMargin' => 40, 'unit' => TblWidth::TWIP));
 
 
                             $punto = 'XXXXX';
-                            foreach ($datos as $key => $value)
-                            {
-                                if($punto != $value->reportevibracionevaluacion_punto)
-                                {
+                            foreach ($datos as $key => $value) {
+                                if ($punto != $value->reportevibracionevaluacion_punto) {
                                     // $punto = $value->reportevibracionevaluacion_punto;
 
 
@@ -1965,10 +1869,10 @@ class reportevibracionwordController extends Controller
                                     $table->addRow(); //fila
                                     $table->addCell(null, $encabezado_celda)->addTextRun($centrado)->addText('Frecuencia central de tercio de octava (Hz)', $encabezado_texto);
                                     $table->addCell(null, array('gridSpan' => 3, 'valign' => 'center', 'bgColor' => '0C3F64'))->addTextRun($centrado)->addText('Medición de aceleración longitudinal en (az) (m/s²)', $encabezado_texto);
-                                    $table->addCell(null, $encabezado_celda)->addTextRun($centrado)->addText('Límite de aceleración longitudinal en (az) (m/s²) para '.$value->reportevibracionevaluacion_tiempoexposicion.' de exposición', $encabezado_texto);
+                                    $table->addCell(null, $encabezado_celda)->addTextRun($centrado)->addText('Límite de aceleración longitudinal en (az) (m/s²) para ' . $value->reportevibracionevaluacion_tiempoexposicion . ' de exposición', $encabezado_texto);
                                     $table->addCell(null, array('gridSpan' => 3, 'valign' => 'center', 'bgColor' => '0C3F64'))->addTextRun($centrado)->addText('Medición de aceleración transversal en (ax) (m/s²)', $encabezado_texto);
                                     $table->addCell(null, array('gridSpan' => 3, 'valign' => 'center', 'bgColor' => '0C3F64'))->addTextRun($centrado)->addText('Medición de aceleración transversal (ay) (m/s²)', $encabezado_texto);
-                                    $table->addCell(null, $encabezado_celda)->addTextRun($centrado)->addText('Límite de aceleración transversal en (ax, ay) (m/s²) para '.$value->reportevibracionevaluacion_tiempoexposicion.' de exposición', $encabezado_texto);
+                                    $table->addCell(null, $encabezado_celda)->addTextRun($centrado)->addText('Límite de aceleración transversal en (ax, ay) (m/s²) para ' . $value->reportevibracionevaluacion_tiempoexposicion . ' de exposición', $encabezado_texto);
                                     $table->addCell(null, $encabezado_celda)->addTextRun($centrado)->addText('Cumplimiento normativo', $encabezado_texto);
                                 }
 
@@ -1986,19 +1890,16 @@ class reportevibracionwordController extends Controller
                                 $table->addCell($ancho_col_10, $celda)->addTextRun($centrado)->addText($value->reportevibracionevaluaciondatos_ay2, array('color' => $value->ay2_color, 'size' => $font_size, 'bold' => false, 'name' => $fuente));
                                 $table->addCell($ancho_col_11, $celda)->addTextRun($centrado)->addText($value->reportevibracionevaluaciondatos_ay3, array('color' => $value->ay3_color, 'size' => $font_size, 'bold' => false, 'name' => $fuente));
                                 $table->addCell($ancho_col_12, $celda)->addTextRun($centrado)->addText($value->reportevibracionevaluaciondatos_axylimite, array('color' => '#000000', 'size' => $font_size, 'bold' => true, 'name' => $fuente));
-                                
 
-                                if($punto != $value->reportevibracionevaluacion_punto)
-                                {
+
+                                if ($punto != $value->reportevibracionevaluacion_punto) {
                                     if ($value->resultado == "Dentro de norma") //Verde
                                     {
                                         $text_color = "#000000";
                                         $bgColor = "#00FF00";
 
                                         $table->addCell($ancho_col_13, array('vMerge' => 'restart', 'bgColor' => $bgColor, 'valign' => 'center'))->addTextRun($centrado)->addText($value->resultado, array('color' => $text_color, 'size' => $font_size, 'bold' => true, 'name' => $fuente));
-                                    }
-                                    else
-                                    {
+                                    } else {
                                         $text_color = "#FFFFFF";
                                         $bgColor = "#FF0000";
 
@@ -2007,9 +1908,7 @@ class reportevibracionwordController extends Controller
 
 
                                     $punto = $value->reportevibracionevaluacion_punto;
-                                }
-                                else
-                                {
+                                } else {
                                     $table->addCell($ancho_col_13, $continua_fila);
                                 }
                             }
@@ -2047,7 +1946,7 @@ class reportevibracionwordController extends Controller
 
 
                         // Crear tabla
-                        $table = null;            
+                        $table = null;
                         $table = new Table(array('name' => $fuente, 'borderSize' => 1, 'borderColor' => '000000', 'cellMargin' => 40, 'unit' => TblWidth::TWIP));
 
 
@@ -2065,8 +1964,7 @@ class reportevibracionwordController extends Controller
                         $table->addCell($ancho_col_8, $encabezado_celda)->addTextRun($centrado)->addText('Cumplimiento normativo', $encabezado_texto);
 
 
-                        foreach ($evaluacion as $key => $value)
-                        {
+                        foreach ($evaluacion as $key => $value) {
                             $table->addRow(); //fila
                             $table->addCell($ancho_col_1, $celda)->addTextRun($centrado)->addText($value->reportevibracionevaluacion_punto, $texto);
                             $table->addCell($ancho_col_2, $celda)->addTextRun($centrado)->addText($value->reportevibracionevaluacion_fecha, $texto);
@@ -2083,9 +1981,7 @@ class reportevibracionwordController extends Controller
                                 $bgColor = "#00FF00";
 
                                 $table->addCell($ancho_col_8, array('bgColor' => $bgColor, 'valign' => 'center'))->addTextRun($centrado)->addText($value->resultado, array('color' => $text_color, 'size' => $font_size, 'bold' => true, 'name' => $fuente));
-                            }
-                            else
-                            {
+                            } else {
                                 $text_color = "#FFFFFF";
                                 $bgColor = "#FF0000";
 
@@ -2096,9 +1992,7 @@ class reportevibracionwordController extends Controller
 
                         break;
                 }
-            }
-            else
-            {
+            } else {
                 // Columnas
                 $ancho_col_1 = 1300;
                 $ancho_col_2 = 1300;
@@ -2110,21 +2004,21 @@ class reportevibracionwordController extends Controller
 
 
                 // Crear tabla
-                $table = null;            
+                $table = null;
                 $table = new Table(array('name' => $fuente, 'borderSize' => 1, 'borderColor' => '000000', 'cellMargin' => 40, 'unit' => TblWidth::TWIP));
 
 
                 // Encabezado
                 $table->addRow(200, array('tblHeader' => true));
-                $table->addCell(($ancho_col_1+$ancho_col_2), array('gridSpan' => 2, 'valign' => 'center', 'bgColor' => '0C3F64'))->addTextRun($izquierda)->addText('No. de medición:', $encabezado_texto);
-                $table->addCell(($ancho_col_3+$ancho_col_4), array('gridSpan' => 2, 'valign' => 'center'))->addTextRun($izquierda)->addText('', $encabezado_texto);
+                $table->addCell(($ancho_col_1 + $ancho_col_2), array('gridSpan' => 2, 'valign' => 'center', 'bgColor' => '0C3F64'))->addTextRun($izquierda)->addText('No. de medición:', $encabezado_texto);
+                $table->addCell(($ancho_col_3 + $ancho_col_4), array('gridSpan' => 2, 'valign' => 'center'))->addTextRun($izquierda)->addText('', $encabezado_texto);
                 $table->addCell($ancho_col_5, $encabezado_celda)->addTextRun($izquierda)->addText('Área:', $encabezado_texto);
-                $table->addCell(($ancho_col_6+$ancho_col_7), array('gridSpan' => 2, 'valign' => 'center'))->addTextRun($izquierda)->addText('', $encabezado_texto);
+                $table->addCell(($ancho_col_6 + $ancho_col_7), array('gridSpan' => 2, 'valign' => 'center'))->addTextRun($izquierda)->addText('', $encabezado_texto);
                 $table->addRow(200, array('tblHeader' => true));
-                $table->addCell(($ancho_col_1+$ancho_col_2), array('gridSpan' => 2, 'valign' => 'center', 'bgColor' => '0C3F64'))->addTextRun($izquierda)->addText('Punto de evaluación:', $encabezado_texto);
-                $table->addCell(($ancho_col_3+$ancho_col_4), array('gridSpan' => 2, 'valign' => 'center'))->addTextRun($izquierda)->addText('', $encabezado_texto);
+                $table->addCell(($ancho_col_1 + $ancho_col_2), array('gridSpan' => 2, 'valign' => 'center', 'bgColor' => '0C3F64'))->addTextRun($izquierda)->addText('Punto de evaluación:', $encabezado_texto);
+                $table->addCell(($ancho_col_3 + $ancho_col_4), array('gridSpan' => 2, 'valign' => 'center'))->addTextRun($izquierda)->addText('', $encabezado_texto);
                 $table->addCell($ancho_col_5, $encabezado_celda)->addTextRun($izquierda)->addText('Categoría:', $encabezado_texto);
-                $table->addCell(($ancho_col_6+$ancho_col_7), array('gridSpan' => 2, 'valign' => 'center'))->addTextRun($izquierda)->addText('', $encabezado_texto);
+                $table->addCell(($ancho_col_6 + $ancho_col_7), array('gridSpan' => 2, 'valign' => 'center'))->addTextRun($izquierda)->addText('', $encabezado_texto);
                 $table->addRow(200, array('tblHeader' => true));
                 $table->addCell($ancho_col_1, $combinar_fila_encabezado)->addTextRun($centrado)->addText('Frecuencia central de tercio de octava (Hz)', $encabezado_texto);
                 $table->addCell($ancho_col_2, $combinar_fila_encabezado)->addTextRun($centrado)->addText('Medición de aceleración longitudinal en (az) (m/s²)', $encabezado_texto);
@@ -2143,13 +2037,11 @@ class reportevibracionwordController extends Controller
             //================================================================================
 
 
-            if (($recsensorial->recsensorial_tipocliente+0) == 1) // 1 = Pemex, 0 = Cliente
+            if (($recsensorial->recsensorial_tipocliente + 0) == 1) // 1 = Pemex, 0 = Cliente
             {
                 $fuente = 'Arial';
                 $font_size = 6;
-            }
-            else
-            {
+            } else {
                 $fuente = 'Montserrat';
                 $font_size = 6;
             }
@@ -2174,21 +2066,16 @@ class reportevibracionwordController extends Controller
 
             $perforacion = 0;
 
-            if (($recsensorial->recsensorial_tipocliente+0) == 1) // 1 = pemex, 0 = cliente
+            if (($recsensorial->recsensorial_tipocliente + 0) == 1) // 1 = pemex, 0 = cliente
             {
-                if (str_contains($proyecto->catsubdireccion->catsubdireccion_nombre, ['Perforación', 'perforación', 'Perforacion', 'perforacion']) == 1 || str_contains($proyecto->catgerencia->catgerencia_nombre, ['Perforación', 'perforación', 'Perforacion', 'perforacion']) == 1)
-                {
+                if (str_contains($proyecto->catsubdireccion->catsubdireccion_nombre, ['Perforación', 'perforación', 'Perforacion', 'perforacion']) == 1 || str_contains($proyecto->catgerencia->catgerencia_nombre, ['Perforación', 'perforación', 'Perforacion', 'perforacion']) == 1) {
                     $plantillaword->setValue('MATRIZ_TEXTO', '</w:t></w:r><w:r><w:rPr><w:b/></w:rPr><w:t>Se anexa en formato digital.</w:t></w:r><w:r><w:t>');
 
                     $perforacion = 1;
-                }
-                else
-                {
+                } else {
                     $plantillaword->setValue('MATRIZ_TEXTO', 'La matriz de exposición laboral contiene un concentrado de los resultados de la evaluación del agente físico vibraciones en cuerpo entero, así como información del área física y de la plantilla laboral de la instalación en cuestión.');
                 }
-            }
-            else
-            {
+            } else {
                 $plantillaword->setValue('MATRIZ_TEXTO', 'La matriz de exposición laboral contiene un concentrado de los resultados de la evaluación del agente físico vibraciones en cuerpo entero, así como información del área física y de la plantilla laboral de la instalación en cuestión.');
             }
 
@@ -2199,10 +2086,8 @@ class reportevibracionwordController extends Controller
             // $evaluacion[0]->reportevibracionevaluacion_numeromediciones = 1;
 
 
-            if (count($evaluacion) > 0 && ($proyecto->catregion_id+0) == 1 && $perforacion == 0)
-            {
-                if (($evaluacion[0]->reportevibracionevaluacion_tipoevaluacion+0) <= 2)
-                {
+            if (count($evaluacion) > 0 && ($proyecto->catregion_id + 0) == 1 && $perforacion == 0) {
+                if (($evaluacion[0]->reportevibracionevaluacion_tipoevaluacion + 0) <= 2) {
                     $matriz = DB::select('SELECT
                                                 reportevibracionevaluacion.proyecto_id,
                                                 reportevibracionevaluacion.id,
@@ -2330,14 +2215,13 @@ class reportevibracionwordController extends Controller
                                                 LEFT JOIN reportecategoria ON reportevibracionevaluacion.reportecategoria_id = reportecategoria.id
                                                 RIGHT JOIN reportevibracionevaluaciondatos ON reportevibracionevaluacion.id = reportevibracionevaluaciondatos.reportevibracionevaluacion_id
                                             WHERE
-                                                reportevibracionevaluacion.proyecto_id = '.$proyecto_id.' 
+                                                reportevibracionevaluacion.proyecto_id = ' . $proyecto_id . ' 
                                             ORDER BY
                                                 reportevibracionevaluacion.reportevibracionevaluacion_punto ASC,
                                                 (reportevibracionevaluaciondatos.reportevibracionevaluaciondatos_frecuencia+0) ASC');
 
 
-                    if (($evaluacion[0]->reportevibracionevaluacion_numeromediciones+0) == 1)
-                    {
+                    if (($evaluacion[0]->reportevibracionevaluacion_numeromediciones + 0) == 1) {
                         // encabezado tabla
                         $ancho_col_1 = 500;
                         $ancho_col_2 = 1000;
@@ -2362,33 +2246,32 @@ class reportevibracionwordController extends Controller
                         $table = new Table(array('name' => $fuente, 'borderSize' => 1, 'borderColor' => '000000', 'cellMargin' => 40, 'unit' => TblWidth::TWIP));
 
 
-                        $numero_registro = 0; $punto = 'X'; $punto2 = 'X';
-                        foreach ($matriz as $key => $value)
-                        {
-                            if ($punto != $value->reportevibracionevaluacion_punto)
-                            {
-                                if (($key+0) > 0)
-                                {
+                        $numero_registro = 0;
+                        $punto = 'X';
+                        $punto2 = 'X';
+                        foreach ($matriz as $key => $value) {
+                            if ($punto != $value->reportevibracionevaluacion_punto) {
+                                if (($key + 0) > 0) {
                                     $table->addRow(); //fila
-                                    $table->addCell(NULL, array('gridSpan' => 17, 'valign' => 'center', 'bgColor' => 'FFFFFF', 'borderTopColor' =>'ffffff', 'borderTopSize' => 1, 'borderRightColor' =>'ffffff', 'borderRightSize' => 1, 'borderBottomColor' =>'ffffff', 'borderBottomSize' => 1, 'borderLeftColor' =>'ffffff', 'borderLeftSize' => 1))->addTextRun($izquierda3)->addText('N/P: No Proporcionado<w:br/>N/A: No Aplica', $texto3);
+                                    $table->addCell(NULL, array('gridSpan' => 17, 'valign' => 'center', 'bgColor' => 'FFFFFF', 'borderTopColor' => 'ffffff', 'borderTopSize' => 1, 'borderRightColor' => 'ffffff', 'borderRightSize' => 1, 'borderBottomColor' => 'ffffff', 'borderBottomSize' => 1, 'borderLeftColor' => 'ffffff', 'borderLeftSize' => 1))->addTextRun($izquierda3)->addText('N/P: No Proporcionado<w:br/>N/A: No Aplica', $texto3);
                                 }
 
 
                                 $punto = $value->reportevibracionevaluacion_punto;
                                 $numero_registro += 1;
-                                
+
                                 $table->addRow(); //fila
-                                $table->addCell($ancho_col_1, array('vMerge' => 'restart', 'valign' => 'center', 'bgColor' => '0C3F64', 'textDirection'=>\PhpOffice\PhpWord\Style\Cell::TEXT_DIR_BTLR))->addTextRun($centrado3)->addText('Contador', $encabezado_texto3);
-                                $table->addCell(NULL, array('gridSpan' => 4, 'valign' => 'center', 'bgColor' => 'FFFFFF'))->addTextRun($centrado3)->addText('Área física', $textonegrita3);                
+                                $table->addCell($ancho_col_1, array('vMerge' => 'restart', 'valign' => 'center', 'bgColor' => '0C3F64', 'textDirection' => \PhpOffice\PhpWord\Style\Cell::TEXT_DIR_BTLR))->addTextRun($centrado3)->addText('Contador', $encabezado_texto3);
+                                $table->addCell(NULL, array('gridSpan' => 4, 'valign' => 'center', 'bgColor' => 'FFFFFF'))->addTextRun($centrado3)->addText('Área física', $textonegrita3);
                                 $table->addCell(NULL, array('gridSpan' => 5, 'valign' => 'center', 'bgColor' => 'FFFFFF'))->addTextRun($centrado3)->addText('Plantilla laboral, unidad de implantación', $textonegrita3);
                                 $table->addCell(NULL, array('gridSpan' => 7, 'valign' => 'center', 'bgColor' => 'FFFFFF'))->addTextRun($centrado3)->addText('Agentes físicos', $textonegrita3);
-                                
+
                                 $table->addRow(); //fila
                                 $table->addCell($ancho_col_1, $continua_fila3);
                                 $table->addCell(NULL, array('gridSpan' => 4, 'valign' => 'center', 'bgColor' => '0C3F64'))->addTextRun($centrado3)->addText('Localización', $encabezado_texto3);
                                 $table->addCell(NULL, array('gridSpan' => 5, 'valign' => 'center', 'bgColor' => '0C3F64'))->addTextRun($centrado3)->addText('Datos demográficos', $encabezado_texto3);
                                 $table->addCell(NULL, array('gridSpan' => 7, 'valign' => 'center', 'bgColor' => '0C3F64'))->addTextRun($centrado3)->addText('Vibraciones', $encabezado_texto3);
-                                
+
                                 $table->addRow(); //fila
                                 $table->addCell($ancho_col_1, $continua_fila3);
                                 $table->addCell($ancho_col_2, $combinar_fila_encabezado3_celeste)->addTextRun($centrado3)->addText('Subdirección o<w:br/>corporativo', $encabezado_texto3);
@@ -2443,8 +2326,7 @@ class reportevibracionwordController extends Controller
                             $table->addRow(); //fila
 
 
-                            if ($punto2 != $value->reportevibracionevaluacion_punto)
-                            {
+                            if ($punto2 != $value->reportevibracionevaluacion_punto) {
                                 $punto2 = $value->reportevibracionevaluacion_punto;
 
 
@@ -2459,10 +2341,7 @@ class reportevibracionwordController extends Controller
                                 $table->addCell($ancho_col_9, $combinar_fila3)->addTextRun($centrado3)->addText($value->personas_area, $texto3);
                                 $table->addCell($ancho_col_10, $combinar_fila3)->addTextRun($centrado3)->addText($value->geh, $texto3);
                                 $table->addCell($ancho_col_11, $combinar_fila3)->addTextRun($centrado3)->addText('N/A', $texto3);
-                                
-                            }
-                            else
-                            {
+                            } else {
                                 $table->addCell($ancho_col_1, $continua_fila3);
                                 $table->addCell($ancho_col_2, $continua_fila3);
                                 $table->addCell($ancho_col_3, $continua_fila3);
@@ -2487,10 +2366,8 @@ class reportevibracionwordController extends Controller
 
 
                         $table->addRow(); //fila
-                        $table->addCell(NULL, array('gridSpan' => 17, 'valign' => 'center', 'bgColor' => 'FFFFFF', 'borderTopColor' =>'ffffff', 'borderTopSize' => 1, 'borderRightColor' =>'ffffff', 'borderRightSize' => 1, 'borderBottomColor' =>'ffffff', 'borderBottomSize' => 1, 'borderLeftColor' =>'ffffff', 'borderLeftSize' => 1))->addTextRun($izquierda3)->addText('N/P: No Proporcionado<w:br/>N/A: No Aplica', $texto3);
-                    }
-                    else
-                    {
+                        $table->addCell(NULL, array('gridSpan' => 17, 'valign' => 'center', 'bgColor' => 'FFFFFF', 'borderTopColor' => 'ffffff', 'borderTopSize' => 1, 'borderRightColor' => 'ffffff', 'borderRightSize' => 1, 'borderBottomColor' => 'ffffff', 'borderBottomSize' => 1, 'borderLeftColor' => 'ffffff', 'borderLeftSize' => 1))->addTextRun($izquierda3)->addText('N/P: No Proporcionado<w:br/>N/A: No Aplica', $texto3);
+                    } else {
                         // encabezado tabla
                         $ancho_col_1 = 500;
                         $ancho_col_2 = 1000;
@@ -2521,34 +2398,33 @@ class reportevibracionwordController extends Controller
                         $table = new Table(array('name' => $fuente, 'borderSize' => 1, 'borderColor' => '000000', 'cellMargin' => 40, 'unit' => TblWidth::TWIP));
 
 
-                        $numero_registro = 0; $punto = 'X'; $punto2 = 'X';
-                        foreach ($matriz as $key => $value)
-                        {
-                            if ($punto != $value->reportevibracionevaluacion_punto)
-                            {
-                                if (($key+0) > 0)
-                                {
+                        $numero_registro = 0;
+                        $punto = 'X';
+                        $punto2 = 'X';
+                        foreach ($matriz as $key => $value) {
+                            if ($punto != $value->reportevibracionevaluacion_punto) {
+                                if (($key + 0) > 0) {
                                     $table->addRow(); //fila
-                                    $table->addCell(NULL, array('gridSpan' => 23, 'valign' => 'center', 'bgColor' => 'FFFFFF', 'borderTopColor' =>'ffffff', 'borderTopSize' => 1, 'borderRightColor' =>'ffffff', 'borderRightSize' => 1, 'borderBottomColor' =>'ffffff', 'borderBottomSize' => 1, 'borderLeftColor' =>'ffffff', 'borderLeftSize' => 1))->addTextRun($izquierda3)->addText('N/P: No Proporcionado<w:br/>N/A: No Aplica', $texto3);
+                                    $table->addCell(NULL, array('gridSpan' => 23, 'valign' => 'center', 'bgColor' => 'FFFFFF', 'borderTopColor' => 'ffffff', 'borderTopSize' => 1, 'borderRightColor' => 'ffffff', 'borderRightSize' => 1, 'borderBottomColor' => 'ffffff', 'borderBottomSize' => 1, 'borderLeftColor' => 'ffffff', 'borderLeftSize' => 1))->addTextRun($izquierda3)->addText('N/P: No Proporcionado<w:br/>N/A: No Aplica', $texto3);
                                 }
 
 
                                 $punto = $value->reportevibracionevaluacion_punto;
                                 $numero_registro += 1;
 
-                                
+
                                 $table->addRow(); //fila
-                                $table->addCell($ancho_col_1, array('vMerge' => 'restart', 'valign' => 'center', 'bgColor' => '0C3F64', 'textDirection'=>\PhpOffice\PhpWord\Style\Cell::TEXT_DIR_BTLR))->addTextRun($centrado3)->addText('Contador', $encabezado_texto3);
-                                $table->addCell(NULL, array('gridSpan' => 4, 'valign' => 'center', 'bgColor' => 'FFFFFF'))->addTextRun($centrado3)->addText('Área física', $textonegrita3);                
+                                $table->addCell($ancho_col_1, array('vMerge' => 'restart', 'valign' => 'center', 'bgColor' => '0C3F64', 'textDirection' => \PhpOffice\PhpWord\Style\Cell::TEXT_DIR_BTLR))->addTextRun($centrado3)->addText('Contador', $encabezado_texto3);
+                                $table->addCell(NULL, array('gridSpan' => 4, 'valign' => 'center', 'bgColor' => 'FFFFFF'))->addTextRun($centrado3)->addText('Área física', $textonegrita3);
                                 $table->addCell(NULL, array('gridSpan' => 5, 'valign' => 'center', 'bgColor' => 'FFFFFF'))->addTextRun($centrado3)->addText('Plantilla laboral, unidad de implantación', $textonegrita3);
                                 $table->addCell(NULL, array('gridSpan' => 13, 'valign' => 'center', 'bgColor' => 'FFFFFF'))->addTextRun($centrado3)->addText('Agentes físicos', $textonegrita3);
-                                
+
                                 $table->addRow(); //fila
                                 $table->addCell($ancho_col_1, $continua_fila3);
                                 $table->addCell(NULL, array('gridSpan' => 4, 'valign' => 'center', 'bgColor' => '0C3F64'))->addTextRun($centrado3)->addText('Localización', $encabezado_texto3);
                                 $table->addCell(NULL, array('gridSpan' => 5, 'valign' => 'center', 'bgColor' => '0C3F64'))->addTextRun($centrado3)->addText('Datos demográficos', $encabezado_texto3);
                                 $table->addCell(NULL, array('gridSpan' => 13, 'valign' => 'center', 'bgColor' => '0C3F64'))->addTextRun($centrado3)->addText('Vibraciones', $encabezado_texto3);
-                                
+
                                 $table->addRow(); //fila
                                 $table->addCell($ancho_col_1, $continua_fila3);
                                 $table->addCell($ancho_col_2, $combinar_fila_encabezado3_celeste)->addTextRun($centrado3)->addText('Subdirección o<w:br/>corporativo', $encabezado_texto3);
@@ -2603,8 +2479,7 @@ class reportevibracionwordController extends Controller
                             $table->addRow(); //fila
 
 
-                            if ($punto2 != $value->reportevibracionevaluacion_punto)
-                            {
+                            if ($punto2 != $value->reportevibracionevaluacion_punto) {
                                 $punto2 = $value->reportevibracionevaluacion_punto;
 
 
@@ -2619,10 +2494,7 @@ class reportevibracionwordController extends Controller
                                 $table->addCell($ancho_col_9, $combinar_fila3)->addTextRun($centrado3)->addText($value->personas_area, $texto3);
                                 $table->addCell($ancho_col_10, $combinar_fila3)->addTextRun($centrado3)->addText($value->geh, $texto3);
                                 $table->addCell($ancho_col_11, $combinar_fila3)->addTextRun($centrado3)->addText('N/A', $texto3);
-                                
-                            }
-                            else
-                            {
+                            } else {
                                 $table->addCell($ancho_col_1, $continua_fila3);
                                 $table->addCell($ancho_col_2, $continua_fila3);
                                 $table->addCell($ancho_col_3, $continua_fila3);
@@ -2653,11 +2525,9 @@ class reportevibracionwordController extends Controller
 
 
                         $table->addRow(); //fila
-                        $table->addCell(NULL, array('gridSpan' => 23, 'valign' => 'center', 'bgColor' => 'FFFFFF', 'borderTopColor' =>'ffffff', 'borderTopSize' => 1, 'borderRightColor' =>'ffffff', 'borderRightSize' => 1, 'borderBottomColor' =>'ffffff', 'borderBottomSize' => 1, 'borderLeftColor' =>'ffffff', 'borderLeftSize' => 1))->addTextRun($izquierda3)->addText('N/P: No Proporcionado<w:br/>N/A: No Aplica', $texto3);
+                        $table->addCell(NULL, array('gridSpan' => 23, 'valign' => 'center', 'bgColor' => 'FFFFFF', 'borderTopColor' => 'ffffff', 'borderTopSize' => 1, 'borderRightColor' => 'ffffff', 'borderRightSize' => 1, 'borderBottomColor' => 'ffffff', 'borderBottomSize' => 1, 'borderLeftColor' => 'ffffff', 'borderLeftSize' => 1))->addTextRun($izquierda3)->addText('N/P: No Proporcionado<w:br/>N/A: No Aplica', $texto3);
                     }
-                }
-                else
-                {
+                } else {
                     $matriz = DB::select('SELECT
                                                 reportevibracionevaluacion.proyecto_id,
                                                 reportevibracionevaluacion.id,
@@ -2727,11 +2597,11 @@ class reportevibracionwordController extends Controller
                                                 LEFT JOIN reportearea ON reportevibracionevaluacion.reportearea_id = reportearea.id
                                                 LEFT JOIN reportecategoria ON reportevibracionevaluacion.reportecategoria_id = reportecategoria.id
                                             WHERE
-                                                reportevibracionevaluacion.proyecto_id = '.$proyecto_id.' 
+                                                reportevibracionevaluacion.proyecto_id = ' . $proyecto_id . ' 
                                             ORDER BY
                                                 reportevibracionevaluacion.reportevibracionevaluacion_punto ASC');
 
-    
+
                     // encabezado tabla
                     $ancho_col_1 = 500;
                     $ancho_col_2 = 1000;
@@ -2753,17 +2623,17 @@ class reportevibracionwordController extends Controller
 
 
                     $table->addRow(200, array('tblHeader' => true));
-                    $table->addCell($ancho_col_1, array('vMerge' => 'restart', 'valign' => 'center', 'bgColor' => '0C3F64', 'textDirection'=>\PhpOffice\PhpWord\Style\Cell::TEXT_DIR_BTLR))->addTextRun($centrado3)->addText('Contador', $encabezado_texto3);
-                    $table->addCell(NULL, array('gridSpan' => 4, 'valign' => 'center', 'bgColor' => 'FFFFFF'))->addTextRun($centrado3)->addText('Área física', $textonegrita3);                
+                    $table->addCell($ancho_col_1, array('vMerge' => 'restart', 'valign' => 'center', 'bgColor' => '0C3F64', 'textDirection' => \PhpOffice\PhpWord\Style\Cell::TEXT_DIR_BTLR))->addTextRun($centrado3)->addText('Contador', $encabezado_texto3);
+                    $table->addCell(NULL, array('gridSpan' => 4, 'valign' => 'center', 'bgColor' => 'FFFFFF'))->addTextRun($centrado3)->addText('Área física', $textonegrita3);
                     $table->addCell(NULL, array('gridSpan' => 5, 'valign' => 'center', 'bgColor' => 'FFFFFF'))->addTextRun($centrado3)->addText('Plantilla laboral, unidad de implantación', $textonegrita3);
                     $table->addCell(NULL, array('gridSpan' => 3, 'valign' => 'center', 'bgColor' => 'FFFFFF'))->addTextRun($centrado3)->addText('Agentes físicos', $textonegrita3);
-                    
+
                     $table->addRow(200, array('tblHeader' => true));
                     $table->addCell($ancho_col_1, $continua_fila3);
                     $table->addCell(NULL, array('gridSpan' => 4, 'valign' => 'center', 'bgColor' => '0C3F64'))->addTextRun($centrado3)->addText('Localización', $encabezado_texto3);
                     $table->addCell(NULL, array('gridSpan' => 5, 'valign' => 'center', 'bgColor' => '0C3F64'))->addTextRun($centrado3)->addText('Datos demográficos', $encabezado_texto3);
                     $table->addCell(NULL, array('gridSpan' => 3, 'valign' => 'center', 'bgColor' => '0C3F64'))->addTextRun($centrado3)->addText('Vibraciones', $encabezado_texto3);
-                    
+
                     $table->addRow(200, array('tblHeader' => true));
                     $table->addCell($ancho_col_1, $continua_fila3);
                     $table->addCell($ancho_col_2, $combinar_fila_encabezado3_celeste)->addTextRun($centrado3)->addText('Subdirección o<w:br/>corporativo', $encabezado_texto3);
@@ -2806,10 +2676,16 @@ class reportevibracionwordController extends Controller
                     $table->addCell($ancho_col_12, $encabezado_celda3_celeste)->addTextRun($centrado3)->addText('Promedio (m/seg²)', $encabezado_texto3);
                     $table->addCell($ancho_col_13, $encabezado_celda3_celeste)->addTextRun($centrado3)->addText('Valor Máximo Permisible (m/seg²)', $encabezado_texto3);
 
-    
-                    $numero_registro = 0; $subdir = 'XXXX'; $activo = 'XXXX'; $instalacion = 'XXXX'; $area = 'XXXX'; $trabajador = 'XXXX'; $ficha = 'XXXX'; $categoria = 'XXXX';
-                    foreach ($matriz as $key => $value)
-                    {
+
+                    $numero_registro = 0;
+                    $subdir = 'XXXX';
+                    $activo = 'XXXX';
+                    $instalacion = 'XXXX';
+                    $area = 'XXXX';
+                    $trabajador = 'XXXX';
+                    $ficha = 'XXXX';
+                    $categoria = 'XXXX';
+                    foreach ($matriz as $key => $value) {
                         $numero_registro += 1;
 
 
@@ -2817,97 +2693,73 @@ class reportevibracionwordController extends Controller
                         $table->addCell($ancho_col_1, $celda3)->addTextRun($centrado3)->addText($numero_registro, $texto3);
 
 
-                        if($subdir != $value->catsubdireccion_nombre)
-                        {
+                        if ($subdir != $value->catsubdireccion_nombre) {
                             $table->addCell($ancho_col_2, $combinar_fila3)->addTextRun($centrado3)->addText($value->catsubdireccion_nombre, $texto3);
                             $subdir = $value->catsubdireccion_nombre;
-                        }
-                        else
-                        {
+                        } else {
                             $table->addCell($ancho_col_2, $continua_fila3);
                         }
 
 
-                        if($activo != $value->gerencia_activo)
-                        {
+                        if ($activo != $value->gerencia_activo) {
                             $table->addCell($ancho_col_3, $combinar_fila3)->addTextRun($centrado3)->addText($value->gerencia_activo, $texto3);
                             $activo = $value->gerencia_activo;
-                        }
-                        else
-                        {
+                        } else {
                             $table->addCell($ancho_col_3, $continua_fila3);
                         }
 
 
-                        if($instalacion != $value->reportearea_instalacion)
-                        {
+                        if ($instalacion != $value->reportearea_instalacion) {
                             $table->addCell($ancho_col_4, $combinar_fila3)->addTextRun($centrado3)->addText($value->reportearea_instalacion, $texto3);
                             $instalacion = $value->reportearea_instalacion;
-                        }
-                        else
-                        {
+                        } else {
                             $table->addCell($ancho_col_4, $continua_fila3);
                         }
 
 
-                        if($area != $value->reportearea_nombre)
-                        {
+                        if ($area != $value->reportearea_nombre) {
                             $table->addCell($ancho_col_5, $combinar_fila3)->addTextRun($centrado3)->addText($value->reportearea_nombre, $texto3);
-                            
+
                             // $area = $value->reportearea_nombre;
-                        }
-                        else
-                        {
+                        } else {
                             $table->addCell($ancho_col_5, $continua_fila3);
                         }
 
 
-                        if($trabajador != $value->reportevibracionevaluacion_nombre)
-                        {
+                        if ($trabajador != $value->reportevibracionevaluacion_nombre) {
                             $table->addCell($ancho_col_6, $combinar_fila3)->addTextRun($centrado3)->addText($value->reportevibracionevaluacion_nombre, $texto3);
-                            
+
                             $trabajador = $value->reportevibracionevaluacion_nombre;
-                        }
-                        else
-                        {
+                        } else {
                             $table->addCell($ancho_col_6, $continua_fila3);
                         }
 
 
-                        if($ficha != $value->reportevibracionevaluacion_ficha)
-                        {
+                        if ($ficha != $value->reportevibracionevaluacion_ficha) {
                             $table->addCell($ancho_col_7, $combinar_fila3)->addTextRun($centrado3)->addText($value->reportevibracionevaluacion_ficha, $texto3);
-                            
+
                             $ficha = $value->reportevibracionevaluacion_ficha;
-                        }
-                        else
-                        {
+                        } else {
                             $table->addCell($ancho_col_7, $continua_fila3);
                         }
 
 
-                        if($categoria != $value->reportecategoria_nombre)
-                        {
+                        if ($categoria != $value->reportecategoria_nombre) {
                             $table->addCell($ancho_col_8, $combinar_fila3)->addTextRun($centrado3)->addText($value->reportecategoria_nombre, $texto3);
-                            
+
                             $categoria = $value->reportecategoria_nombre;
-                        }
-                        else
-                        {
+                        } else {
                             $table->addCell($ancho_col_8, $continua_fila3);
                         }
 
 
-                        if($area != $value->reportearea_nombre)
-                        {
+                        if ($area != $value->reportearea_nombre) {
                             $table->addCell($ancho_col_9, $combinar_fila3)->addTextRun($centrado3)->addText($value->personas_area, $texto3);
                             $table->addCell($ancho_col_10, $combinar_fila3)->addTextRun($centrado3)->addText($value->geh, $texto3);
                             $table->addCell($ancho_col_11, $combinar_fila3)->addTextRun($centrado3)->addText('N/A', $texto3);
-                            
+
                             $area = $value->reportearea_nombre;
-                        }
-                        else
-                        {
+                        } else {
                             $table->addCell($ancho_col_9, $continua_fila3);
                             $table->addCell($ancho_col_10, $continua_fila3);
                             $table->addCell($ancho_col_11, $continua_fila3);
@@ -2920,13 +2772,10 @@ class reportevibracionwordController extends Controller
 
 
                     $table->addRow(); //fila
-                    $table->addCell(NULL, array('gridSpan' => 13, 'valign' => 'center', 'bgColor' => 'FFFFFF', 'borderTopColor' =>'ffffff', 'borderTopSize' => 1, 'borderRightColor' =>'ffffff', 'borderRightSize' => 1, 'borderBottomColor' =>'ffffff', 'borderBottomSize' => 1, 'borderLeftColor' =>'ffffff', 'borderLeftSize' => 1))->addTextRun($izquierda3)->addText('N/P: No Proporcionado<w:br/>N/A: No Aplica', $texto3);
+                    $table->addCell(NULL, array('gridSpan' => 13, 'valign' => 'center', 'bgColor' => 'FFFFFF', 'borderTopColor' => 'ffffff', 'borderTopSize' => 1, 'borderRightColor' => 'ffffff', 'borderRightSize' => 1, 'borderBottomColor' => 'ffffff', 'borderBottomSize' => 1, 'borderLeftColor' => 'ffffff', 'borderLeftSize' => 1))->addTextRun($izquierda3)->addText('N/P: No Proporcionado<w:br/>N/A: No Aplica', $texto3);
                 }
-            }
-            else if (count($evaluacion) > 0 && ($proyecto->catregion_id+0) == 2 && $perforacion == 0)
-            {
-                if (($evaluacion[0]->reportevibracionevaluacion_tipoevaluacion+0) <= 2)
-                {
+            } else if (count($evaluacion) > 0 && ($proyecto->catregion_id + 0) == 2 && $perforacion == 0) {
+                if (($evaluacion[0]->reportevibracionevaluacion_tipoevaluacion + 0) <= 2) {
                     $matriz = DB::select('SELECT
                                                 reportevibracionevaluacion.proyecto_id,
                                                 reportevibracionevaluacion.id,
@@ -3054,14 +2903,13 @@ class reportevibracionwordController extends Controller
                                                 LEFT JOIN reportecategoria ON reportevibracionevaluacion.reportecategoria_id = reportecategoria.id
                                                 RIGHT JOIN reportevibracionevaluaciondatos ON reportevibracionevaluacion.id = reportevibracionevaluaciondatos.reportevibracionevaluacion_id
                                             WHERE
-                                                reportevibracionevaluacion.proyecto_id = '.$proyecto_id.' 
+                                                reportevibracionevaluacion.proyecto_id = ' . $proyecto_id . ' 
                                             ORDER BY
                                                 reportevibracionevaluacion.reportevibracionevaluacion_punto ASC,
                                                 (reportevibracionevaluaciondatos.reportevibracionevaluaciondatos_frecuencia+0) ASC');
 
 
-                    if (($evaluacion[0]->reportevibracionevaluacion_numeromediciones+0) == 1)
-                    {
+                    if (($evaluacion[0]->reportevibracionevaluacion_numeromediciones + 0) == 1) {
                         // encabezado tabla
                         $ancho_col_1 = 500;
                         $ancho_col_2 = 1000;
@@ -3084,33 +2932,32 @@ class reportevibracionwordController extends Controller
                         $table = new Table(array('name' => $fuente, 'borderSize' => 1, 'borderColor' => '000000', 'cellMargin' => 40, 'unit' => TblWidth::TWIP));
 
 
-                        $numero_registro = 0; $punto = 'X'; $punto2 = 'X';
-                        foreach ($matriz as $key => $value)
-                        {
-                            if ($punto != $value->reportevibracionevaluacion_punto)
-                            {
-                                if (($key+0) > 0)
-                                {
+                        $numero_registro = 0;
+                        $punto = 'X';
+                        $punto2 = 'X';
+                        foreach ($matriz as $key => $value) {
+                            if ($punto != $value->reportevibracionevaluacion_punto) {
+                                if (($key + 0) > 0) {
                                     $table->addRow(); //fila
-                                    $table->addCell(NULL, array('gridSpan' => 15, 'valign' => 'center', 'bgColor' => 'FFFFFF', 'borderTopColor' =>'ffffff', 'borderTopSize' => 1, 'borderRightColor' =>'ffffff', 'borderRightSize' => 1, 'borderBottomColor' =>'ffffff', 'borderBottomSize' => 1, 'borderLeftColor' =>'ffffff', 'borderLeftSize' => 1))->addTextRun($izquierda3)->addText('N/P: No Proporcionado<w:br/>N/A: No Aplica', $texto3);
+                                    $table->addCell(NULL, array('gridSpan' => 15, 'valign' => 'center', 'bgColor' => 'FFFFFF', 'borderTopColor' => 'ffffff', 'borderTopSize' => 1, 'borderRightColor' => 'ffffff', 'borderRightSize' => 1, 'borderBottomColor' => 'ffffff', 'borderBottomSize' => 1, 'borderLeftColor' => 'ffffff', 'borderLeftSize' => 1))->addTextRun($izquierda3)->addText('N/P: No Proporcionado<w:br/>N/A: No Aplica', $texto3);
                                 }
 
 
                                 $punto = $value->reportevibracionevaluacion_punto;
                                 $numero_registro += 1;
-                                
+
                                 $table->addRow(); //fila
-                                $table->addCell($ancho_col_1, array('vMerge' => 'restart', 'valign' => 'center', 'bgColor' => '0C3F64', 'textDirection'=>\PhpOffice\PhpWord\Style\Cell::TEXT_DIR_BTLR))->addTextRun($centrado3)->addText('Contador', $encabezado_texto3);
-                                $table->addCell(NULL, array('gridSpan' => 4, 'valign' => 'center', 'bgColor' => 'FFFFFF'))->addTextRun($centrado3)->addText('Área física', $textonegrita3);                
+                                $table->addCell($ancho_col_1, array('vMerge' => 'restart', 'valign' => 'center', 'bgColor' => '0C3F64', 'textDirection' => \PhpOffice\PhpWord\Style\Cell::TEXT_DIR_BTLR))->addTextRun($centrado3)->addText('Contador', $encabezado_texto3);
+                                $table->addCell(NULL, array('gridSpan' => 4, 'valign' => 'center', 'bgColor' => 'FFFFFF'))->addTextRun($centrado3)->addText('Área física', $textonegrita3);
                                 $table->addCell(NULL, array('gridSpan' => 3, 'valign' => 'center', 'bgColor' => 'FFFFFF'))->addTextRun($centrado3)->addText('Plantilla laboral, unidad de implantación', $textonegrita3);
                                 $table->addCell(NULL, array('gridSpan' => 7, 'valign' => 'center', 'bgColor' => 'FFFFFF'))->addTextRun($centrado3)->addText('Agentes físicos', $textonegrita3);
-                                
+
                                 $table->addRow(); //fila
                                 $table->addCell($ancho_col_1, $continua_fila3);
                                 $table->addCell(NULL, array('gridSpan' => 4, 'valign' => 'center', 'bgColor' => '0C3F64'))->addTextRun($centrado3)->addText('Localización', $encabezado_texto3);
                                 $table->addCell(NULL, array('gridSpan' => 3, 'valign' => 'center', 'bgColor' => '0C3F64'))->addTextRun($centrado3)->addText('Datos demográficos', $encabezado_texto3);
                                 $table->addCell(NULL, array('gridSpan' => 7, 'valign' => 'center', 'bgColor' => '0C3F64'))->addTextRun($centrado3)->addText('Vibraciones', $encabezado_texto3);
-                                
+
                                 $table->addRow(); //fila
                                 $table->addCell($ancho_col_1, $continua_fila3);
                                 $table->addCell($ancho_col_2, $combinar_fila_encabezado3_celeste)->addTextRun($centrado3)->addText('Subdirección o<w:br/>corporativo', $encabezado_texto3);
@@ -3159,8 +3006,7 @@ class reportevibracionwordController extends Controller
                             $table->addRow(); //fila
 
 
-                            if ($punto2 != $value->reportevibracionevaluacion_punto)
-                            {
+                            if ($punto2 != $value->reportevibracionevaluacion_punto) {
                                 $punto2 = $value->reportevibracionevaluacion_punto;
 
 
@@ -3173,10 +3019,7 @@ class reportevibracionwordController extends Controller
                                 $table->addCell($ancho_col_7, $combinar_fila3)->addTextRun($centrado3)->addText($value->reportevibracionevaluacion_ficha, $texto3);
                                 $table->addCell($ancho_col_8, $combinar_fila3)->addTextRun($centrado3)->addText($value->reportecategoria_nombre, $texto3);
                                 $table->addCell($ancho_col_9, $combinar_fila3)->addTextRun($centrado3)->addText('N/A', $texto3);
-                                
-                            }
-                            else
-                            {
+                            } else {
                                 $table->addCell($ancho_col_1, $continua_fila3);
                                 $table->addCell($ancho_col_2, $continua_fila3);
                                 $table->addCell($ancho_col_3, $continua_fila3);
@@ -3199,10 +3042,8 @@ class reportevibracionwordController extends Controller
 
 
                         $table->addRow(); //fila
-                        $table->addCell(NULL, array('gridSpan' => 15, 'valign' => 'center', 'bgColor' => 'FFFFFF', 'borderTopColor' =>'ffffff', 'borderTopSize' => 1, 'borderRightColor' =>'ffffff', 'borderRightSize' => 1, 'borderBottomColor' =>'ffffff', 'borderBottomSize' => 1, 'borderLeftColor' =>'ffffff', 'borderLeftSize' => 1))->addTextRun($izquierda3)->addText('N/P: No Proporcionado<w:br/>N/A: No Aplica', $texto3);
-                    }
-                    else
-                    {
+                        $table->addCell(NULL, array('gridSpan' => 15, 'valign' => 'center', 'bgColor' => 'FFFFFF', 'borderTopColor' => 'ffffff', 'borderTopSize' => 1, 'borderRightColor' => 'ffffff', 'borderRightSize' => 1, 'borderBottomColor' => 'ffffff', 'borderBottomSize' => 1, 'borderLeftColor' => 'ffffff', 'borderLeftSize' => 1))->addTextRun($izquierda3)->addText('N/P: No Proporcionado<w:br/>N/A: No Aplica', $texto3);
+                    } else {
                         // encabezado tabla
                         $ancho_col_1 = 500;
                         $ancho_col_2 = 1000;
@@ -3231,34 +3072,33 @@ class reportevibracionwordController extends Controller
                         $table = new Table(array('name' => $fuente, 'borderSize' => 1, 'borderColor' => '000000', 'cellMargin' => 40, 'unit' => TblWidth::TWIP));
 
 
-                        $numero_registro = 0; $punto = 'X'; $punto2 = 'X';
-                        foreach ($matriz as $key => $value)
-                        {
-                            if ($punto != $value->reportevibracionevaluacion_punto)
-                            {
-                                if (($key+0) > 0)
-                                {
+                        $numero_registro = 0;
+                        $punto = 'X';
+                        $punto2 = 'X';
+                        foreach ($matriz as $key => $value) {
+                            if ($punto != $value->reportevibracionevaluacion_punto) {
+                                if (($key + 0) > 0) {
                                     $table->addRow(); //fila
-                                    $table->addCell(NULL, array('gridSpan' => 21, 'valign' => 'center', 'bgColor' => 'FFFFFF', 'borderTopColor' =>'ffffff', 'borderTopSize' => 1, 'borderRightColor' =>'ffffff', 'borderRightSize' => 1, 'borderBottomColor' =>'ffffff', 'borderBottomSize' => 1, 'borderLeftColor' =>'ffffff', 'borderLeftSize' => 1))->addTextRun($izquierda3)->addText('N/P: No Proporcionado<w:br/>N/A: No Aplica', $texto3);
+                                    $table->addCell(NULL, array('gridSpan' => 21, 'valign' => 'center', 'bgColor' => 'FFFFFF', 'borderTopColor' => 'ffffff', 'borderTopSize' => 1, 'borderRightColor' => 'ffffff', 'borderRightSize' => 1, 'borderBottomColor' => 'ffffff', 'borderBottomSize' => 1, 'borderLeftColor' => 'ffffff', 'borderLeftSize' => 1))->addTextRun($izquierda3)->addText('N/P: No Proporcionado<w:br/>N/A: No Aplica', $texto3);
                                 }
 
 
                                 $punto = $value->reportevibracionevaluacion_punto;
                                 $numero_registro += 1;
 
-                                
+
                                 $table->addRow(); //fila
-                                $table->addCell($ancho_col_1, array('vMerge' => 'restart', 'valign' => 'center', 'bgColor' => '0C3F64', 'textDirection'=>\PhpOffice\PhpWord\Style\Cell::TEXT_DIR_BTLR))->addTextRun($centrado3)->addText('Contador', $encabezado_texto3);
-                                $table->addCell(NULL, array('gridSpan' => 4, 'valign' => 'center', 'bgColor' => 'FFFFFF'))->addTextRun($centrado3)->addText('Área física', $textonegrita3);                
+                                $table->addCell($ancho_col_1, array('vMerge' => 'restart', 'valign' => 'center', 'bgColor' => '0C3F64', 'textDirection' => \PhpOffice\PhpWord\Style\Cell::TEXT_DIR_BTLR))->addTextRun($centrado3)->addText('Contador', $encabezado_texto3);
+                                $table->addCell(NULL, array('gridSpan' => 4, 'valign' => 'center', 'bgColor' => 'FFFFFF'))->addTextRun($centrado3)->addText('Área física', $textonegrita3);
                                 $table->addCell(NULL, array('gridSpan' => 3, 'valign' => 'center', 'bgColor' => 'FFFFFF'))->addTextRun($centrado3)->addText('Plantilla laboral, unidad de implantación', $textonegrita3);
                                 $table->addCell(NULL, array('gridSpan' => 13, 'valign' => 'center', 'bgColor' => 'FFFFFF'))->addTextRun($centrado3)->addText('Agentes físicos', $textonegrita3);
-                                
+
                                 $table->addRow(); //fila
                                 $table->addCell($ancho_col_1, $continua_fila3);
                                 $table->addCell(NULL, array('gridSpan' => 4, 'valign' => 'center', 'bgColor' => '0C3F64'))->addTextRun($centrado3)->addText('Localización', $encabezado_texto3);
                                 $table->addCell(NULL, array('gridSpan' => 3, 'valign' => 'center', 'bgColor' => '0C3F64'))->addTextRun($centrado3)->addText('Datos demográficos', $encabezado_texto3);
                                 $table->addCell(NULL, array('gridSpan' => 13, 'valign' => 'center', 'bgColor' => '0C3F64'))->addTextRun($centrado3)->addText('Vibraciones', $encabezado_texto3);
-                                
+
                                 $table->addRow(); //fila
                                 $table->addCell($ancho_col_1, $continua_fila3);
                                 $table->addCell($ancho_col_2, $combinar_fila_encabezado3_celeste)->addTextRun($centrado3)->addText('Subdirección o<w:br/>corporativo', $encabezado_texto3);
@@ -3307,8 +3147,7 @@ class reportevibracionwordController extends Controller
                             $table->addRow(); //fila
 
 
-                            if ($punto2 != $value->reportevibracionevaluacion_punto)
-                            {
+                            if ($punto2 != $value->reportevibracionevaluacion_punto) {
                                 $punto2 = $value->reportevibracionevaluacion_punto;
 
 
@@ -3321,10 +3160,7 @@ class reportevibracionwordController extends Controller
                                 $table->addCell($ancho_col_7, $combinar_fila3)->addTextRun($centrado3)->addText($value->reportevibracionevaluacion_ficha, $texto3);
                                 $table->addCell($ancho_col_8, $combinar_fila3)->addTextRun($centrado3)->addText($value->reportecategoria_nombre, $texto3);
                                 $table->addCell($ancho_col_9, $combinar_fila3)->addTextRun($centrado3)->addText('N/A', $texto3);
-                                
-                            }
-                            else
-                            {
+                            } else {
                                 $table->addCell($ancho_col_1, $continua_fila3);
                                 $table->addCell($ancho_col_2, $continua_fila3);
                                 $table->addCell($ancho_col_3, $continua_fila3);
@@ -3353,11 +3189,9 @@ class reportevibracionwordController extends Controller
 
 
                         $table->addRow(); //fila
-                        $table->addCell(NULL, array('gridSpan' => 21, 'valign' => 'center', 'bgColor' => 'FFFFFF', 'borderTopColor' =>'ffffff', 'borderTopSize' => 1, 'borderRightColor' =>'ffffff', 'borderRightSize' => 1, 'borderBottomColor' =>'ffffff', 'borderBottomSize' => 1, 'borderLeftColor' =>'ffffff', 'borderLeftSize' => 1))->addTextRun($izquierda3)->addText('N/P: No Proporcionado<w:br/>N/A: No Aplica', $texto3);
+                        $table->addCell(NULL, array('gridSpan' => 21, 'valign' => 'center', 'bgColor' => 'FFFFFF', 'borderTopColor' => 'ffffff', 'borderTopSize' => 1, 'borderRightColor' => 'ffffff', 'borderRightSize' => 1, 'borderBottomColor' => 'ffffff', 'borderBottomSize' => 1, 'borderLeftColor' => 'ffffff', 'borderLeftSize' => 1))->addTextRun($izquierda3)->addText('N/P: No Proporcionado<w:br/>N/A: No Aplica', $texto3);
                     }
-                }
-                else
-                {
+                } else {
                     $matriz = DB::select('SELECT
                                                 reportevibracionevaluacion.proyecto_id,
                                                 reportevibracionevaluacion.id,
@@ -3427,11 +3261,11 @@ class reportevibracionwordController extends Controller
                                                 LEFT JOIN reportearea ON reportevibracionevaluacion.reportearea_id = reportearea.id
                                                 LEFT JOIN reportecategoria ON reportevibracionevaluacion.reportecategoria_id = reportecategoria.id
                                             WHERE
-                                                reportevibracionevaluacion.proyecto_id = '.$proyecto_id.' 
+                                                reportevibracionevaluacion.proyecto_id = ' . $proyecto_id . ' 
                                             ORDER BY
                                                 reportevibracionevaluacion.reportevibracionevaluacion_punto ASC');
 
-    
+
                     // encabezado tabla
                     $ancho_col_1 = 500;
                     $ancho_col_2 = 1000;
@@ -3450,17 +3284,17 @@ class reportevibracionwordController extends Controller
 
 
                     $table->addRow(200, array('tblHeader' => true));
-                    $table->addCell($ancho_col_1, array('vMerge' => 'restart', 'valign' => 'center', 'bgColor' => '0C3F64', 'textDirection'=>\PhpOffice\PhpWord\Style\Cell::TEXT_DIR_BTLR))->addTextRun($centrado3)->addText('Contador', $encabezado_texto3);
-                    $table->addCell(NULL, array('gridSpan' => 4, 'valign' => 'center', 'bgColor' => 'FFFFFF'))->addTextRun($centrado3)->addText('Área física', $textonegrita3);                
+                    $table->addCell($ancho_col_1, array('vMerge' => 'restart', 'valign' => 'center', 'bgColor' => '0C3F64', 'textDirection' => \PhpOffice\PhpWord\Style\Cell::TEXT_DIR_BTLR))->addTextRun($centrado3)->addText('Contador', $encabezado_texto3);
+                    $table->addCell(NULL, array('gridSpan' => 4, 'valign' => 'center', 'bgColor' => 'FFFFFF'))->addTextRun($centrado3)->addText('Área física', $textonegrita3);
                     $table->addCell(NULL, array('gridSpan' => 3, 'valign' => 'center', 'bgColor' => 'FFFFFF'))->addTextRun($centrado3)->addText('Plantilla laboral, unidad de implantación', $textonegrita3);
                     $table->addCell(NULL, array('gridSpan' => 2, 'valign' => 'center', 'bgColor' => 'FFFFFF'))->addTextRun($centrado3)->addText('Agentes físicos', $textonegrita3);
-                    
+
                     $table->addRow(200, array('tblHeader' => true));
                     $table->addCell($ancho_col_1, $continua_fila3);
                     $table->addCell(NULL, array('gridSpan' => 4, 'valign' => 'center', 'bgColor' => '0C3F64'))->addTextRun($centrado3)->addText('Localización', $encabezado_texto3);
                     $table->addCell(NULL, array('gridSpan' => 3, 'valign' => 'center', 'bgColor' => '0C3F64'))->addTextRun($centrado3)->addText('Datos demográficos', $encabezado_texto3);
                     $table->addCell(NULL, array('gridSpan' => 2, 'valign' => 'center', 'bgColor' => '0C3F64'))->addTextRun($centrado3)->addText('Vibraciones', $encabezado_texto3);
-                    
+
                     $table->addRow(200, array('tblHeader' => true));
                     $table->addCell($ancho_col_1, $continua_fila3);
                     $table->addCell($ancho_col_2, $combinar_fila_encabezado3_celeste)->addTextRun($centrado3)->addText('Subdirección o<w:br/>corporativo', $encabezado_texto3);
@@ -3484,10 +3318,16 @@ class reportevibracionwordController extends Controller
                     $table->addCell($ancho_col_9, $encabezado_celda3_celeste)->addTextRun($centrado3)->addText('Extremidad superior', $encabezado_texto3);
                     $table->addCell($ancho_col_10, $encabezado_celda3_celeste)->addTextRun($centrado3)->addText('Cuerpo entero', $encabezado_texto3);
 
-    
-                    $numero_registro = 0; $subdir = 'XXXX'; $activo = 'XXXX'; $instalacion = 'XXXX'; $area = 'XXXX'; $trabajador = 'XXXX'; $ficha = 'XXXX'; $categoria = 'XXXX';
-                    foreach ($matriz as $key => $value)
-                    {
+
+                    $numero_registro = 0;
+                    $subdir = 'XXXX';
+                    $activo = 'XXXX';
+                    $instalacion = 'XXXX';
+                    $area = 'XXXX';
+                    $trabajador = 'XXXX';
+                    $ficha = 'XXXX';
+                    $categoria = 'XXXX';
+                    foreach ($matriz as $key => $value) {
                         $numero_registro += 1;
 
 
@@ -3495,108 +3335,82 @@ class reportevibracionwordController extends Controller
                         $table->addCell($ancho_col_1, $celda3)->addTextRun($centrado3)->addText($numero_registro, $texto3);
 
 
-                        if($subdir != $value->catsubdireccion_nombre)
-                        {
+                        if ($subdir != $value->catsubdireccion_nombre) {
                             $table->addCell($ancho_col_2, $combinar_fila3)->addTextRun($centrado3)->addText($value->catsubdireccion_nombre, $texto3);
                             $subdir = $value->catsubdireccion_nombre;
-                        }
-                        else
-                        {
+                        } else {
                             $table->addCell($ancho_col_2, $continua_fila3);
                         }
 
 
-                        if($activo != $value->gerencia_activo)
-                        {
+                        if ($activo != $value->gerencia_activo) {
                             $table->addCell($ancho_col_3, $combinar_fila3)->addTextRun($centrado3)->addText($value->gerencia_activo, $texto3);
                             $activo = $value->gerencia_activo;
-                        }
-                        else
-                        {
+                        } else {
                             $table->addCell($ancho_col_3, $continua_fila3);
                         }
 
 
-                        if($instalacion != $value->reportearea_instalacion)
-                        {
+                        if ($instalacion != $value->reportearea_instalacion) {
                             $table->addCell($ancho_col_4, $combinar_fila3)->addTextRun($centrado3)->addText($value->reportearea_instalacion, $texto3);
                             $instalacion = $value->reportearea_instalacion;
-                        }
-                        else
-                        {
+                        } else {
                             $table->addCell($ancho_col_4, $continua_fila3);
                         }
 
 
-                        if($area != $value->reportearea_nombre)
-                        {
+                        if ($area != $value->reportearea_nombre) {
                             $table->addCell($ancho_col_5, $combinar_fila3)->addTextRun($centrado3)->addText($value->reportearea_nombre, $texto3);
-                            
+
                             // $area = $value->reportearea_nombre;
-                        }
-                        else
-                        {
+                        } else {
                             $table->addCell($ancho_col_5, $continua_fila3);
                         }
 
 
-                        if($trabajador != $value->reportevibracionevaluacion_nombre)
-                        {
+                        if ($trabajador != $value->reportevibracionevaluacion_nombre) {
                             $table->addCell($ancho_col_6, $combinar_fila3)->addTextRun($centrado3)->addText($value->reportevibracionevaluacion_nombre, $texto3);
-                            
+
                             $trabajador = $value->reportevibracionevaluacion_nombre;
-                        }
-                        else
-                        {
+                        } else {
                             $table->addCell($ancho_col_6, $continua_fila3);
                         }
 
 
-                        if($ficha != $value->reportevibracionevaluacion_ficha)
-                        {
+                        if ($ficha != $value->reportevibracionevaluacion_ficha) {
                             $table->addCell($ancho_col_7, $combinar_fila3)->addTextRun($centrado3)->addText($value->reportevibracionevaluacion_ficha, $texto3);
-                            
+
                             $ficha = $value->reportevibracionevaluacion_ficha;
-                        }
-                        else
-                        {
+                        } else {
                             $table->addCell($ancho_col_7, $continua_fila3);
                         }
 
 
-                        if($categoria != $value->reportecategoria_nombre)
-                        {
+                        if ($categoria != $value->reportecategoria_nombre) {
                             $table->addCell($ancho_col_8, $combinar_fila3)->addTextRun($centrado3)->addText($value->reportecategoria_nombre, $texto3);
-                            
+
                             $categoria = $value->reportecategoria_nombre;
-                        }
-                        else
-                        {
+                        } else {
                             $table->addCell($ancho_col_8, $continua_fila3);
                         }
 
 
-                        if($area != $value->reportearea_nombre)
-                        {
+                        if ($area != $value->reportearea_nombre) {
                             $table->addCell($ancho_col_9, $combinar_fila3)->addTextRun($centrado3)->addText('N/A', $texto3);
-                            
+
                             $area = $value->reportearea_nombre;
-                        }
-                        else
-                        {
+                        } else {
                             $table->addCell($ancho_col_9, $continua_fila3);
                         }
 
 
-                        $table->addCell($ancho_col_10, $celda3)->addTextRun($centrado3)->addText($value->reportevibracionevaluacion_promedio.' / '.$value->reportevibracionevaluacion_valormaximo, $texto3);
+                        $table->addCell($ancho_col_10, $celda3)->addTextRun($centrado3)->addText($value->reportevibracionevaluacion_promedio . ' / ' . $value->reportevibracionevaluacion_valormaximo, $texto3);
                     }
 
                     $table->addRow(); //fila
-                    $table->addCell(NULL, array('gridSpan' => 10, 'valign' => 'center', 'bgColor' => 'FFFFFF', 'borderTopColor' =>'ffffff', 'borderTopSize' => 1, 'borderRightColor' =>'ffffff', 'borderRightSize' => 1, 'borderBottomColor' =>'ffffff', 'borderBottomSize' => 1, 'borderLeftColor' =>'ffffff', 'borderLeftSize' => 1))->addTextRun($izquierda3)->addText('N/P: No Proporcionado<w:br/>N/A: No Aplica', $texto3);
+                    $table->addCell(NULL, array('gridSpan' => 10, 'valign' => 'center', 'bgColor' => 'FFFFFF', 'borderTopColor' => 'ffffff', 'borderTopSize' => 1, 'borderRightColor' => 'ffffff', 'borderRightSize' => 1, 'borderBottomColor' => 'ffffff', 'borderBottomSize' => 1, 'borderLeftColor' => 'ffffff', 'borderLeftSize' => 1))->addTextRun($izquierda3)->addText('N/P: No Proporcionado<w:br/>N/A: No Aplica', $texto3);
                 }
-            }
-            else if (count($evaluacion) > 0)
-            {
+            } else if (count($evaluacion) > 0) {
                 $categorias_evaluadas = DB::select('SELECT
                                                         reportevibracionevaluacion.proyecto_id,
                                                         reportevibracionevaluacion.reportecategoria_id,
@@ -3607,7 +3421,7 @@ class reportevibracionwordController extends Controller
                                                         reportevibracionevaluacion
                                                         LEFT JOIN reportecategoria ON reportevibracionevaluacion.reportecategoria_id = reportecategoria.id 
                                                     WHERE
-                                                        reportevibracionevaluacion.proyecto_id = '.$proyecto_id.' 
+                                                        reportevibracionevaluacion.proyecto_id = ' . $proyecto_id . ' 
                                                     GROUP BY
                                                         reportevibracionevaluacion.proyecto_id,
                                                         reportevibracionevaluacion.reportecategoria_id,
@@ -3625,10 +3439,8 @@ class reportevibracionwordController extends Controller
                 $numero_registro = 0;
 
 
-                if (($evaluacion[0]->reportevibracionevaluacion_tipoevaluacion+0) <= 2)
-                {
-                    foreach ($categorias_evaluadas as $key1 => $categoria)
-                    {
+                if (($evaluacion[0]->reportevibracionevaluacion_tipoevaluacion + 0) <= 2) {
+                    foreach ($categorias_evaluadas as $key1 => $categoria) {
                         $numero_registro += 1;
 
 
@@ -3795,17 +3607,16 @@ class reportevibracionwordController extends Controller
                                                     LEFT JOIN reportecategoria ON reportevibracionevaluacion.reportecategoria_id = reportecategoria.id
                                                     RIGHT JOIN reportevibracionevaluaciondatos ON reportevibracionevaluacion.id = reportevibracionevaluaciondatos.reportevibracionevaluacion_id
                                                 WHERE
-                                                    reportevibracionevaluacion.proyecto_id = '.$proyecto_id.' 
-                                                    AND reportevibracionevaluacion.reportecategoria_id = '.$categoria->reportecategoria_id.' 
+                                                    reportevibracionevaluacion.proyecto_id = ' . $proyecto_id . ' 
+                                                    AND reportevibracionevaluacion.reportecategoria_id = ' . $categoria->reportecategoria_id . ' 
                                                 ORDER BY
                                                     mediciones_fueranorma DESC,
                                                     reportevibracionevaluacion.reportevibracionevaluacion_punto ASC,
                                                     (reportevibracionevaluaciondatos.reportevibracionevaluaciondatos_frecuencia+0) ASC
                                                 LIMIT 20');
 
-                        
-                        if (($evaluacion[0]->reportevibracionevaluacion_numeromediciones+0) == 1)
-                        {
+
+                        if (($evaluacion[0]->reportevibracionevaluacion_numeromediciones + 0) == 1) {
                             // encabezado tabla
                             $ancho_col_1 = 500;
                             $ancho_col_2 = 1000;
@@ -3824,17 +3635,17 @@ class reportevibracionwordController extends Controller
 
 
                             $table->addRow(); //fila
-                            $table->addCell($ancho_col_1, array('vMerge' => 'restart', 'valign' => 'center', 'bgColor' => '0C3F64', 'textDirection'=>\PhpOffice\PhpWord\Style\Cell::TEXT_DIR_BTLR))->addTextRun($centrado3)->addText('Contador', $encabezado_texto3);
-                            $table->addCell(NULL, array('gridSpan' => 3, 'valign' => 'center', 'bgColor' => 'FFFFFF'))->addTextRun($centrado3)->addText('Área física', $textonegrita3);                
+                            $table->addCell($ancho_col_1, array('vMerge' => 'restart', 'valign' => 'center', 'bgColor' => '0C3F64', 'textDirection' => \PhpOffice\PhpWord\Style\Cell::TEXT_DIR_BTLR))->addTextRun($centrado3)->addText('Contador', $encabezado_texto3);
+                            $table->addCell(NULL, array('gridSpan' => 3, 'valign' => 'center', 'bgColor' => 'FFFFFF'))->addTextRun($centrado3)->addText('Área física', $textonegrita3);
                             $table->addCell(NULL, array('gridSpan' => 3, 'valign' => 'center', 'bgColor' => 'FFFFFF'))->addTextRun($centrado3)->addText('Plantilla laboral, unidad de implantación', $textonegrita3);
                             $table->addCell(NULL, array('gridSpan' => 7, 'valign' => 'center', 'bgColor' => 'FFFFFF'))->addTextRun($centrado3)->addText('Agentes físicos', $textonegrita3);
-                            
+
                             $table->addRow(); //fila
                             $table->addCell($ancho_col_1, $continua_fila3);
                             $table->addCell(NULL, array('gridSpan' => 3, 'valign' => 'center', 'bgColor' => '0C3F64'))->addTextRun($centrado3)->addText('Localización', $encabezado_texto3);
                             $table->addCell(NULL, array('gridSpan' => 3, 'valign' => 'center', 'bgColor' => '0C3F64'))->addTextRun($centrado3)->addText('Datos demográficos', $encabezado_texto3);
                             $table->addCell(NULL, array('gridSpan' => 7, 'valign' => 'center', 'bgColor' => '0C3F64'))->addTextRun($centrado3)->addText('Vibraciones', $encabezado_texto3);
-                            
+
                             $table->addRow(); //fila
                             $table->addCell($ancho_col_1, $continua_fila3);
                             $table->addCell($ancho_col_2, $combinar_fila_encabezado3_celeste)->addTextRun($centrado3)->addText('Subdirección o<w:br/>corporativo', $encabezado_texto3);
@@ -3876,13 +3687,11 @@ class reportevibracionwordController extends Controller
                             $table->addCell($ancho_col_14, $encabezado_celda3_celeste)->addTextRun($centrado3)->addText('Límite (ax, ay)', $encabezado_texto3);
 
 
-                            foreach ($matriz as $key => $value)
-                            {
+                            foreach ($matriz as $key => $value) {
                                 $table->addRow(); //fila
 
 
-                                if (($key+0) == 0)
-                                {
+                                if (($key + 0) == 0) {
                                     $table->addCell($ancho_col_1, $combinar_fila3)->addTextRun($centrado3)->addText($numero_registro, $texto3);
                                     $table->addCell($ancho_col_2, $combinar_fila3)->addTextRun($centrado3)->addText($value->catsubdireccion_nombre, $texto3);
                                     $table->addCell($ancho_col_3, $combinar_fila3)->addTextRun($centrado3)->addText($value->gerencia_activo, $texto3);
@@ -3891,10 +3700,7 @@ class reportevibracionwordController extends Controller
                                     $table->addCell($ancho_col_6, $combinar_fila3)->addTextRun($centrado3)->addText($value->reportevibracionevaluacion_ficha, $texto3);
                                     $table->addCell($ancho_col_7, $combinar_fila3)->addTextRun($centrado3)->addText($value->reportecategoria_nombre, $texto3);
                                     $table->addCell($ancho_col_8, $combinar_fila3)->addTextRun($centrado3)->addText('N/A', $texto3);
-                                    
-                                }
-                                else
-                                {
+                                } else {
                                     $table->addCell($ancho_col_1, $continua_fila3);
                                     $table->addCell($ancho_col_2, $continua_fila3);
                                     $table->addCell($ancho_col_3, $continua_fila3);
@@ -3916,10 +3722,8 @@ class reportevibracionwordController extends Controller
 
 
                             $table->addRow(); //fila
-                            $table->addCell(NULL, array('gridSpan' => 14, 'valign' => 'center', 'bgColor' => 'FFFFFF', 'borderTopColor' =>'ffffff', 'borderTopSize' => 1, 'borderRightColor' =>'ffffff', 'borderRightSize' => 1, 'borderBottomColor' =>'ffffff', 'borderBottomSize' => 1, 'borderLeftColor' =>'ffffff', 'borderLeftSize' => 1))->addTextRun($izquierda3)->addText('N/P: No Proporcionado<w:br/>N/A: No Aplica', $texto3);
-                        }
-                        else
-                        {
+                            $table->addCell(NULL, array('gridSpan' => 14, 'valign' => 'center', 'bgColor' => 'FFFFFF', 'borderTopColor' => 'ffffff', 'borderTopSize' => 1, 'borderRightColor' => 'ffffff', 'borderRightSize' => 1, 'borderBottomColor' => 'ffffff', 'borderBottomSize' => 1, 'borderLeftColor' => 'ffffff', 'borderLeftSize' => 1))->addTextRun($izquierda3)->addText('N/P: No Proporcionado<w:br/>N/A: No Aplica', $texto3);
+                        } else {
                             // encabezado tabla
                             $ancho_col_1 = 500;
                             $ancho_col_2 = 1000;
@@ -3944,17 +3748,17 @@ class reportevibracionwordController extends Controller
 
 
                             $table->addRow(); //fila
-                            $table->addCell($ancho_col_1, array('vMerge' => 'restart', 'valign' => 'center', 'bgColor' => '0C3F64', 'textDirection'=>\PhpOffice\PhpWord\Style\Cell::TEXT_DIR_BTLR))->addTextRun($centrado3)->addText('Contador', $encabezado_texto3);
-                            $table->addCell(NULL, array('gridSpan' => 4, 'valign' => 'center', 'bgColor' => 'FFFFFF'))->addTextRun($centrado3)->addText('Área física', $textonegrita3);                
+                            $table->addCell($ancho_col_1, array('vMerge' => 'restart', 'valign' => 'center', 'bgColor' => '0C3F64', 'textDirection' => \PhpOffice\PhpWord\Style\Cell::TEXT_DIR_BTLR))->addTextRun($centrado3)->addText('Contador', $encabezado_texto3);
+                            $table->addCell(NULL, array('gridSpan' => 4, 'valign' => 'center', 'bgColor' => 'FFFFFF'))->addTextRun($centrado3)->addText('Área física', $textonegrita3);
                             $table->addCell(NULL, array('gridSpan' => 3, 'valign' => 'center', 'bgColor' => 'FFFFFF'))->addTextRun($centrado3)->addText('Plantilla laboral, unidad de implantación', $textonegrita3);
                             $table->addCell(NULL, array('gridSpan' => 13, 'valign' => 'center', 'bgColor' => 'FFFFFF'))->addTextRun($centrado3)->addText('Agentes físicos', $textonegrita3);
-                            
+
                             $table->addRow(); //fila
                             $table->addCell($ancho_col_1, $continua_fila3);
                             $table->addCell(NULL, array('gridSpan' => 4, 'valign' => 'center', 'bgColor' => '0C3F64'))->addTextRun($centrado3)->addText('Localización', $encabezado_texto3);
                             $table->addCell(NULL, array('gridSpan' => 3, 'valign' => 'center', 'bgColor' => '0C3F64'))->addTextRun($centrado3)->addText('Datos demográficos', $encabezado_texto3);
                             $table->addCell(NULL, array('gridSpan' => 13, 'valign' => 'center', 'bgColor' => '0C3F64'))->addTextRun($centrado3)->addText('Vibraciones', $encabezado_texto3);
-                            
+
                             $table->addRow(); //fila
                             $table->addCell($ancho_col_1, $continua_fila3);
                             $table->addCell($ancho_col_2, $combinar_fila_encabezado3_celeste)->addTextRun($centrado3)->addText('Subdirección o<w:br/>corporativo', $encabezado_texto3);
@@ -3995,13 +3799,11 @@ class reportevibracionwordController extends Controller
                             $table->addCell(null, array('gridSpan' => 3, 'valign' => 'center', 'bgColor' => '0BACDB'))->addTextRun($centrado3)->addText('Medición (ay)', $encabezado_texto3);
                             $table->addCell($ancho_col_20, $encabezado_celda3_celeste)->addTextRun($centrado3)->addText('Límite (ax, ay)', $encabezado_texto3);
 
-                            foreach ($matriz as $key => $value)
-                            {
+                            foreach ($matriz as $key => $value) {
                                 $table->addRow(); //fila
 
 
-                                if (($key+0) == 0)
-                                {
+                                if (($key + 0) == 0) {
                                     $table->addCell($ancho_col_1, $combinar_fila3)->addTextRun($centrado3)->addText($numero_registro, $texto3);
                                     $table->addCell($ancho_col_2, $combinar_fila3)->addTextRun($centrado3)->addText($value->catsubdireccion_nombre, $texto3);
                                     $table->addCell($ancho_col_3, $combinar_fila3)->addTextRun($centrado3)->addText($value->gerencia_activo, $texto3);
@@ -4010,10 +3812,7 @@ class reportevibracionwordController extends Controller
                                     $table->addCell($ancho_col_6, $combinar_fila3)->addTextRun($centrado3)->addText($value->reportevibracionevaluacion_ficha, $texto3);
                                     $table->addCell($ancho_col_7, $combinar_fila3)->addTextRun($centrado3)->addText($value->reportecategoria_nombre, $texto3);
                                     $table->addCell($ancho_col_8, $combinar_fila3)->addTextRun($centrado3)->addText('N/A', $texto3);
-                                    
-                                }
-                                else
-                                {
+                                } else {
                                     $table->addCell($ancho_col_1, $continua_fila3);
                                     $table->addCell($ancho_col_2, $continua_fila3);
                                     $table->addCell($ancho_col_3, $continua_fila3);
@@ -4041,12 +3840,10 @@ class reportevibracionwordController extends Controller
 
 
                             $table->addRow(); //fila
-                            $table->addCell(NULL, array('gridSpan' => 20, 'valign' => 'center', 'bgColor' => 'FFFFFF', 'borderTopColor' =>'ffffff', 'borderTopSize' => 1, 'borderRightColor' =>'ffffff', 'borderRightSize' => 1, 'borderBottomColor' =>'ffffff', 'borderBottomSize' => 1, 'borderLeftColor' =>'ffffff', 'borderLeftSize' => 1))->addTextRun($izquierda3)->addText('N/P: No Proporcionado<w:br/>N/A: No Aplica', $texto3);
+                            $table->addCell(NULL, array('gridSpan' => 20, 'valign' => 'center', 'bgColor' => 'FFFFFF', 'borderTopColor' => 'ffffff', 'borderTopSize' => 1, 'borderRightColor' => 'ffffff', 'borderRightSize' => 1, 'borderBottomColor' => 'ffffff', 'borderBottomSize' => 1, 'borderLeftColor' => 'ffffff', 'borderLeftSize' => 1))->addTextRun($izquierda3)->addText('N/P: No Proporcionado<w:br/>N/A: No Aplica', $texto3);
                         }
-                    } 
-                }
-                else
-                {
+                    }
+                } else {
                     // encabezado tabla
                     $ancho_col_1 = 500;
                     $ancho_col_2 = 1500;
@@ -4064,17 +3861,17 @@ class reportevibracionwordController extends Controller
 
 
                     $table->addRow(200, array('tblHeader' => true));
-                    $table->addCell($ancho_col_1, array('vMerge' => 'restart', 'valign' => 'center', 'bgColor' => '0C3F64', 'textDirection'=>\PhpOffice\PhpWord\Style\Cell::TEXT_DIR_BTLR))->addTextRun($centrado3)->addText('Contador', $encabezado_texto3);
-                    $table->addCell(NULL, array('gridSpan' => 3, 'valign' => 'center', 'bgColor' => 'FFFFFF'))->addTextRun($centrado3)->addText('Área física', $textonegrita3);                
+                    $table->addCell($ancho_col_1, array('vMerge' => 'restart', 'valign' => 'center', 'bgColor' => '0C3F64', 'textDirection' => \PhpOffice\PhpWord\Style\Cell::TEXT_DIR_BTLR))->addTextRun($centrado3)->addText('Contador', $encabezado_texto3);
+                    $table->addCell(NULL, array('gridSpan' => 3, 'valign' => 'center', 'bgColor' => 'FFFFFF'))->addTextRun($centrado3)->addText('Área física', $textonegrita3);
                     $table->addCell(NULL, array('gridSpan' => 3, 'valign' => 'center', 'bgColor' => 'FFFFFF'))->addTextRun($centrado3)->addText('Plantilla laboral, unidad de implantación', $textonegrita3);
                     $table->addCell(NULL, array('gridSpan' => 2, 'valign' => 'center', 'bgColor' => 'FFFFFF'))->addTextRun($centrado3)->addText('Agentes físicos', $textonegrita3);
-                    
+
                     $table->addRow(200, array('tblHeader' => true));
                     $table->addCell($ancho_col_1, $continua_fila3);
                     $table->addCell(NULL, array('gridSpan' => 3, 'valign' => 'center', 'bgColor' => '0C3F64'))->addTextRun($centrado3)->addText('Localización', $encabezado_texto3);
                     $table->addCell(NULL, array('gridSpan' => 3, 'valign' => 'center', 'bgColor' => '0C3F64'))->addTextRun($centrado3)->addText('Datos demográficos', $encabezado_texto3);
                     $table->addCell(NULL, array('gridSpan' => 2, 'valign' => 'center', 'bgColor' => '0C3F64'))->addTextRun($centrado3)->addText('Vibraciones', $encabezado_texto3);
-                    
+
                     $table->addRow(200, array('tblHeader' => true));
                     $table->addCell($ancho_col_1, $continua_fila3);
                     $table->addCell($ancho_col_2, $combinar_fila_encabezado3_celeste)->addTextRun($centrado3)->addText('Subdirección o<w:br/>corporativo', $encabezado_texto3);
@@ -4097,9 +3894,14 @@ class reportevibracionwordController extends Controller
                     $table->addCell($ancho_col_9, $encabezado_celda3_celeste)->addTextRun($centrado3)->addText('Cuerpo entero', $encabezado_texto3);
 
 
-                    $subdir = 'XXXX'; $activo = 'XXXX'; $instalacion = 'XXXX'; $area = 'XXXX'; $trabajador = 'XXXX'; $ficha = 'XXXX'; $categoria = 'XXXX';
-                    foreach ($categorias_evaluadas as $key1 => $categoria)
-                    {
+                    $subdir = 'XXXX';
+                    $activo = 'XXXX';
+                    $instalacion = 'XXXX';
+                    $area = 'XXXX';
+                    $trabajador = 'XXXX';
+                    $ficha = 'XXXX';
+                    $categoria = 'XXXX';
+                    foreach ($categorias_evaluadas as $key1 => $categoria) {
                         $matriz = DB::select('SELECT
                                                     reportevibracionevaluacion.proyecto_id,
                                                     reportevibracionevaluacion.id,
@@ -4169,15 +3971,14 @@ class reportevibracionwordController extends Controller
                                                     LEFT JOIN reportearea ON reportevibracionevaluacion.reportearea_id = reportearea.id
                                                     LEFT JOIN reportecategoria ON reportevibracionevaluacion.reportecategoria_id = reportecategoria.id
                                                 WHERE
-                                                    reportevibracionevaluacion.proyecto_id = '.$proyecto_id.' 
-                                                    AND reportevibracionevaluacion.reportecategoria_id = '.$categoria->reportecategoria_id.' 
+                                                    reportevibracionevaluacion.proyecto_id = ' . $proyecto_id . ' 
+                                                    AND reportevibracionevaluacion.reportecategoria_id = ' . $categoria->reportecategoria_id . ' 
                                                 ORDER BY
                                                     (reportevibracionevaluacion.reportevibracionevaluacion_promedio+0) DESC
                                                 LIMIT 1');
 
 
-                        if (count($matriz) > 0)
-                        {
+                        if (count($matriz) > 0) {
                             $numero_registro += 1;
 
 
@@ -4185,98 +3986,75 @@ class reportevibracionwordController extends Controller
                             $table->addCell($ancho_col_1, $celda3)->addTextRun($centrado3)->addText($numero_registro, $texto3);
 
 
-                            if($subdir != $matriz[0]->catsubdireccion_nombre)
-                            {
+                            if ($subdir != $matriz[0]->catsubdireccion_nombre) {
                                 $table->addCell($ancho_col_2, $combinar_fila3)->addTextRun($centrado3)->addText($matriz[0]->catsubdireccion_nombre, $texto3);
                                 $subdir = $matriz[0]->catsubdireccion_nombre;
-                            }
-                            else
-                            {
+                            } else {
                                 $table->addCell($ancho_col_2, $continua_fila3);
                             }
 
 
-                            if($activo != $matriz[0]->gerencia_activo)
-                            {
+                            if ($activo != $matriz[0]->gerencia_activo) {
                                 $table->addCell($ancho_col_3, $combinar_fila3)->addTextRun($centrado3)->addText($matriz[0]->gerencia_activo, $texto3);
                                 $activo = $matriz[0]->gerencia_activo;
-                            }
-                            else
-                            {
+                            } else {
                                 $table->addCell($ancho_col_3, $continua_fila3);
                             }
 
 
-                            if($instalacion != $matriz[0]->reportearea_instalacion)
-                            {
+                            if ($instalacion != $matriz[0]->reportearea_instalacion) {
                                 $table->addCell($ancho_col_4, $combinar_fila3)->addTextRun($centrado3)->addText($matriz[0]->reportearea_instalacion, $texto3);
                                 $instalacion = $matriz[0]->reportearea_instalacion;
-                            }
-                            else
-                            {
+                            } else {
                                 $table->addCell($ancho_col_4, $continua_fila3);
                             }
 
 
-                            if($trabajador != $matriz[0]->reportevibracionevaluacion_nombre)
-                            {
+                            if ($trabajador != $matriz[0]->reportevibracionevaluacion_nombre) {
                                 $table->addCell($ancho_col_5, $combinar_fila3)->addTextRun($centrado3)->addText($matriz[0]->reportevibracionevaluacion_nombre, $texto3);
-                                
+
                                 $trabajador = $matriz[0]->reportevibracionevaluacion_nombre;
-                            }
-                            else
-                            {
+                            } else {
                                 $table->addCell($ancho_col_5, $continua_fila3);
                             }
 
 
-                            if($ficha != $matriz[0]->reportevibracionevaluacion_ficha)
-                            {
+                            if ($ficha != $matriz[0]->reportevibracionevaluacion_ficha) {
                                 $table->addCell($ancho_col_6, $combinar_fila3)->addTextRun($centrado3)->addText($matriz[0]->reportevibracionevaluacion_ficha, $texto3);
-                                
+
                                 $ficha = $matriz[0]->reportevibracionevaluacion_ficha;
-                            }
-                            else
-                            {
+                            } else {
                                 $table->addCell($ancho_col_6, $continua_fila3);
                             }
 
 
-                            if($categoria != $matriz[0]->reportecategoria_nombre)
-                            {
+                            if ($categoria != $matriz[0]->reportecategoria_nombre) {
                                 $table->addCell($ancho_col_7, $combinar_fila3)->addTextRun($centrado3)->addText($matriz[0]->reportecategoria_nombre, $texto3);
-                                
+
                                 $categoria = $matriz[0]->reportecategoria_nombre;
-                            }
-                            else
-                            {
+                            } else {
                                 $table->addCell($ancho_col_7, $continua_fila3);
                             }
 
 
-                            if($area != $matriz[0]->reportearea_nombre)
-                            {
+                            if ($area != $matriz[0]->reportearea_nombre) {
                                 $table->addCell($ancho_col_8, $combinar_fila3)->addTextRun($centrado3)->addText('N/A', $texto3);
-                                
+
                                 $area = $matriz[0]->reportearea_nombre;
-                            }
-                            else
-                            {
+                            } else {
                                 $table->addCell($ancho_col_8, $continua_fila3);
                             }
 
 
-                            $table->addCell($ancho_col_9, $celda3)->addTextRun($centrado3)->addText($matriz[0]->reportevibracionevaluacion_promedio.' / '.$matriz[0]->reportevibracionevaluacion_valormaximo, $texto3);
+                            $table->addCell($ancho_col_9, $celda3)->addTextRun($centrado3)->addText($matriz[0]->reportevibracionevaluacion_promedio . ' / ' . $matriz[0]->reportevibracionevaluacion_valormaximo, $texto3);
                         }
                     }
 
 
                     $table->addRow(); //fila
-                    $table->addCell(NULL, array('gridSpan' => 9, 'valign' => 'center', 'bgColor' => 'FFFFFF', 'borderTopColor' =>'ffffff', 'borderTopSize' => 1, 'borderRightColor' =>'ffffff', 'borderRightSize' => 1, 'borderBottomColor' =>'ffffff', 'borderBottomSize' => 1, 'borderLeftColor' =>'ffffff', 'borderLeftSize' => 1))->addTextRun($izquierda3)->addText('N/P: No Proporcionado<w:br/>N/A: No Aplica', $texto3);
+                    $table->addCell(NULL, array('gridSpan' => 9, 'valign' => 'center', 'bgColor' => 'FFFFFF', 'borderTopColor' => 'ffffff', 'borderTopSize' => 1, 'borderRightColor' => 'ffffff', 'borderRightSize' => 1, 'borderBottomColor' => 'ffffff', 'borderBottomSize' => 1, 'borderLeftColor' => 'ffffff', 'borderLeftSize' => 1))->addTextRun($izquierda3)->addText('N/P: No Proporcionado<w:br/>N/A: No Aplica', $texto3);
                 }
-            }
-            else
-            {
+            } else {
                 // encabezado tabla
                 $ancho_col_1 = 500;
                 $ancho_col_2 = 1000;
@@ -4299,19 +4077,19 @@ class reportevibracionwordController extends Controller
                 // Crear tabla
                 $table = null;
                 $table = new Table(array('name' => $fuente, 'borderSize' => 1, 'borderColor' => '000000', 'cellMargin' => 40, 'unit' => TblWidth::TWIP));
-                
+
                 $table->addRow(); //fila
-                $table->addCell($ancho_col_1, array('vMerge' => 'restart', 'valign' => 'center', 'bgColor' => '0C3F64', 'textDirection'=>\PhpOffice\PhpWord\Style\Cell::TEXT_DIR_BTLR))->addTextRun($centrado3)->addText('Contador', $encabezado_texto3);
-                $table->addCell(NULL, array('gridSpan' => 4, 'valign' => 'center', 'bgColor' => 'FFFFFF'))->addTextRun($centrado3)->addText('Área física', $textonegrita3);                
+                $table->addCell($ancho_col_1, array('vMerge' => 'restart', 'valign' => 'center', 'bgColor' => '0C3F64', 'textDirection' => \PhpOffice\PhpWord\Style\Cell::TEXT_DIR_BTLR))->addTextRun($centrado3)->addText('Contador', $encabezado_texto3);
+                $table->addCell(NULL, array('gridSpan' => 4, 'valign' => 'center', 'bgColor' => 'FFFFFF'))->addTextRun($centrado3)->addText('Área física', $textonegrita3);
                 $table->addCell(NULL, array('gridSpan' => 5, 'valign' => 'center', 'bgColor' => 'FFFFFF'))->addTextRun($centrado3)->addText('Plantilla laboral, unidad de implantación', $textonegrita3);
                 $table->addCell(NULL, array('gridSpan' => 7, 'valign' => 'center', 'bgColor' => 'FFFFFF'))->addTextRun($centrado3)->addText('Agentes físicos', $textonegrita3);
-                
+
                 $table->addRow(); //fila
                 $table->addCell($ancho_col_1, $continua_fila3);
                 $table->addCell(NULL, array('gridSpan' => 4, 'valign' => 'center', 'bgColor' => '0C3F64'))->addTextRun($centrado3)->addText('Localización', $encabezado_texto3);
                 $table->addCell(NULL, array('gridSpan' => 5, 'valign' => 'center', 'bgColor' => '0C3F64'))->addTextRun($centrado3)->addText('Datos demográficos', $encabezado_texto3);
                 $table->addCell(NULL, array('gridSpan' => 7, 'valign' => 'center', 'bgColor' => '0C3F64'))->addTextRun($centrado3)->addText('Vibraciones', $encabezado_texto3);
-                
+
                 $table->addRow(); //fila
                 $table->addCell($ancho_col_1, $continua_fila3);
                 $table->addCell($ancho_col_2, $combinar_fila_encabezado3_celeste)->addTextRun($centrado3)->addText('Subdirección o<w:br/>corporativo', $encabezado_texto3);
@@ -4377,27 +4155,21 @@ class reportevibracionwordController extends Controller
             //================================================================================
 
 
-            if ($request->grafica_dashboard)
-            {
+            if ($request->grafica_dashboard) {
                 $imagen_base64 = base64_decode(str_replace("data:image/jpeg;base64,", "", $request->grafica_dashboard));
-                $imagen_temporal_ruta = 'reportes/informes/dashboard_'.$agente_nombre.'_'.$proyecto->proyecto_folio.'.jpg';
+                $imagen_temporal_ruta = 'reportes/informes/dashboard_' . $agente_nombre . '_' . $proyecto->proyecto_folio . '.jpg';
                 Storage::put($imagen_temporal_ruta, $imagen_base64); // Guardar en storage
 
 
-                if (Storage::exists($imagen_temporal_ruta))
-                {
-                    $plantillaword->setImageValue('DASHBOARD', array('path' => storage_path('app/'.$imagen_temporal_ruta), 'height' => 500, 'width' => 860, 'ratio' => false, 'borderColor' => '000000'));
+                if (Storage::exists($imagen_temporal_ruta)) {
+                    $plantillaword->setImageValue('DASHBOARD', array('path' => storage_path('app/' . $imagen_temporal_ruta), 'height' => 500, 'width' => 860, 'ratio' => false, 'borderColor' => '000000'));
 
 
                     Storage::delete($imagen_temporal_ruta); // Eliminar imagen temporal
-                }
-                else
-                {
+                } else {
                     $plantillaword->setValue('DASHBOARD', 'NO SE ENCONTRÓ DASHBOARD PARA ESTE INFORME.');
                 }
-            }
-            else
-            {
+            } else {
                 $plantillaword->setValue('DASHBOARD', 'NO SE ENCONTRÓ DASHBOARD PARA ESTE INFORME.');
             }
 
@@ -4437,14 +4209,14 @@ class reportevibracionwordController extends Controller
                                                                         FROM
                                                                             reporterecomendaciones 
                                                                         WHERE
-                                                                            reporterecomendaciones.proyecto_id = '.$proyecto_id.' 
+                                                                            reporterecomendaciones.proyecto_id = ' . $proyecto_id . ' 
                                                                             AND reporterecomendaciones.reporterecomendacionescatalogo_id = reporterecomendacionescatalogo.id
                                                                         LIMIT 1 
                                                                 ), NULL) AS recomendaciones_descripcion
                                                             FROM
                                                                 reporterecomendacionescatalogo
                                                             WHERE
-                                                                reporterecomendacionescatalogo.agente_nombre LIKE "%'.$agente_nombre.'%"
+                                                                reporterecomendacionescatalogo.agente_nombre LIKE "%' . $agente_nombre . '%"
                                                                 AND reporterecomendacionescatalogo.reporterecomendacionescatalogo_activo = 1
                                                             ORDER BY
                                                                 reporterecomendacionescatalogo.reporterecomendacionescatalogo_tipo DESC
@@ -4462,8 +4234,8 @@ class reportevibracionwordController extends Controller
                                                     FROM
                                                         reporterecomendaciones
                                                     WHERE
-                                                        reporterecomendaciones.proyecto_id = '.$proyecto_id.'
-                                                        AND reporterecomendaciones.agente_nombre LIKE "%'.$agente_nombre.'%" 
+                                                        reporterecomendaciones.proyecto_id = ' . $proyecto_id . '
+                                                        AND reporterecomendaciones.agente_nombre LIKE "%' . $agente_nombre . '%" 
                                                         AND reporterecomendaciones.reporterecomendacionescatalogo_id = 0
                                                     ORDER BY
                                                         reporterecomendaciones.id ASC
@@ -4476,14 +4248,10 @@ class reportevibracionwordController extends Controller
 
 
             $recomendacion = '';
-            foreach ($sql as $key => $value)
-            {
-                if (($key+0) < (count($sql) -1))
-                {
-                    $recomendacion .= $value->recomendaciones_descripcion.'\n\n';
-                }
-                else
-                {
+            foreach ($sql as $key => $value) {
+                if (($key + 0) < (count($sql) - 1)) {
+                    $recomendacion .= $value->recomendaciones_descripcion . '\n\n';
+                } else {
                     $recomendacion .= $value->recomendaciones_descripcion;
                 }
             }
@@ -4497,45 +4265,33 @@ class reportevibracionwordController extends Controller
 
 
             // RESPONSABLE 1, FOTO DOCUMENTO
-            if ($reporte->reportevibracion_responsable1documento)
-            {
-                if (file_exists(storage_path('app/'.$reporte->reportevibracion_responsable1documento)))
-                {
-                    $plantillaword->setImageValue('REPONSABLE1_DOCUMENTO', array('path' => storage_path('app/'.$reporte->reportevibracion_responsable1documento), 'height' => 300, 'width' => 580, 'ratio' => true, 'borderColor' => '000000'));
-                }
-                else
-                {
+            if ($reporte->reportevibracion_responsable1documento) {
+                if (file_exists(storage_path('app/' . $reporte->reportevibracion_responsable1documento))) {
+                    $plantillaword->setImageValue('REPONSABLE1_DOCUMENTO', array('path' => storage_path('app/' . $reporte->reportevibracion_responsable1documento), 'height' => 300, 'width' => 580, 'ratio' => true, 'borderColor' => '000000'));
+                } else {
                     $plantillaword->setValue('REPONSABLE1_DOCUMENTO', 'FALTA CARGAR IMAGEN DESDE EL SISTEMA.');
                 }
-            }
-            else
-            {
+            } else {
                 $plantillaword->setValue('REPONSABLE1_DOCUMENTO', 'FALTA CARGAR IMAGEN DESDE EL SISTEMA.');
             }
-                
 
-            $plantillaword->setValue('REPONSABLE1', $reporte->reportevibracion_responsable1."<w:br/>".$reporte->reportevibracion_responsable1cargo);
+
+            $plantillaword->setValue('REPONSABLE1', $reporte->reportevibracion_responsable1 . "<w:br/>" . $reporte->reportevibracion_responsable1cargo);
 
 
             // RESPONSABLE 2, FOTO DOCUMENTO
-            if ($reporte->reportevibracion_responsable2documento)
-            {
-                if (file_exists(storage_path('app/'.$reporte->reportevibracion_responsable2documento)))
-                {
-                    $plantillaword->setImageValue('REPONSABLE2_DOCUMENTO', array('path' => storage_path('app/'.$reporte->reportevibracion_responsable2documento), 'height' => 300, 'width' => 580, 'ratio' => true, 'borderColor' => '000000'));
-                }
-                else
-                {
+            if ($reporte->reportevibracion_responsable2documento) {
+                if (file_exists(storage_path('app/' . $reporte->reportevibracion_responsable2documento))) {
+                    $plantillaword->setImageValue('REPONSABLE2_DOCUMENTO', array('path' => storage_path('app/' . $reporte->reportevibracion_responsable2documento), 'height' => 300, 'width' => 580, 'ratio' => true, 'borderColor' => '000000'));
+                } else {
                     $plantillaword->setValue('REPONSABLE2_DOCUMENTO', 'FALTA CARGAR IMAGEN DESDE EL SISTEMA.');
                 }
-            }
-            else
-            {
+            } else {
                 $plantillaword->setValue('REPONSABLE2_DOCUMENTO', 'FALTA CARGAR IMAGEN DESDE EL SISTEMA.');
             }
-                
 
-            $plantillaword->setValue('REPONSABLE2', $reporte->reportevibracion_responsable2."<w:br/>".$reporte->reportevibracion_responsable2cargo);
+
+            $plantillaword->setValue('REPONSABLE2', $reporte->reportevibracion_responsable2 . "<w:br/>" . $reporte->reportevibracion_responsable2cargo);
 
 
             // TABLA ANEXO 1, Memoria fotográfica  - CREAR VARIABLES
@@ -4555,8 +4311,8 @@ class reportevibracionwordController extends Controller
                                 FROM
                                     proyectoevidenciafoto
                                 WHERE
-                                    proyectoevidenciafoto.proyecto_id = '.$proyecto_id.'
-                                    AND proyectoevidenciafoto.agente_nombre LIKE "%'.$agente_nombre.'%" 
+                                    proyectoevidenciafoto.proyecto_id = ' . $proyecto_id . '
+                                    AND proyectoevidenciafoto.agente_nombre LIKE "%' . $agente_nombre . '%" 
                                 ORDER BY
                                     proyectoevidenciafoto.proyectoevidenciafoto_nopunto ASC');
 
@@ -4565,46 +4321,44 @@ class reportevibracionwordController extends Controller
             $ancho_col_2 = 4750;
 
             // Crear tabla
-            $table = null;            
+            $table = null;
             $table = new Table(array('name' => $fuente, 'borderSize' => 1, 'borderColor' => '000000', 'cellMargin' => 40, 'unit' => TblWidth::TWIP));
 
 
             $table->addRow(400, array('tblHeader' => true));
-            $table->addCell(($ancho_col_1 + $ancho_col_2), array('gridSpan' => 2, 'valign' => 'center', 'borderTopColor' =>'ffffff', 'borderTopSize' => 1, 'borderRightColor' =>'ffffff', 'borderRightSize' => 1, 'borderBottomColor' =>'000000', 'borderBottomSize' => 1, 'borderLeftColor' =>'ffffff', 'borderLeftSize' => 1,))->addTextRun($centrado)->addText('Memoria fotográfica', array('color' => '000000', 'size' => 12, 'bold' => true, 'name' => $fuente));
+            $table->addCell(($ancho_col_1 + $ancho_col_2), array('gridSpan' => 2, 'valign' => 'center', 'borderTopColor' => 'ffffff', 'borderTopSize' => 1, 'borderRightColor' => 'ffffff', 'borderRightSize' => 1, 'borderBottomColor' => '000000', 'borderBottomSize' => 1, 'borderLeftColor' => 'ffffff', 'borderLeftSize' => 1,))->addTextRun($centrado)->addText('Memoria fotográfica', array('color' => '000000', 'size' => 12, 'bold' => true, 'name' => $fuente));
             $table->addRow(400, array('tblHeader' => true));
-            $table->addCell(($ancho_col_1 + $ancho_col_2), array('gridSpan' => 2, 'valign' => 'center', 'bgColor' => '0C3F64'))->addTextRun($centrado)->addText('Evaluación de '.$agente_nombre, $encabezado_texto);
+            $table->addCell(($ancho_col_1 + $ancho_col_2), array('gridSpan' => 2, 'valign' => 'center', 'bgColor' => '0C3F64'))->addTextRun($centrado)->addText('Evaluación de ' . $agente_nombre, $encabezado_texto);
 
 
-            if (count($fotos) > 0)
-            {
-                for ($i = 0; $i < count($fotos); $i += 4)
-                {
-                    $foto1 = ''; $descripcion1 = '';
-                    if ($i < count($fotos))
-                    {
-                        $foto1 = '${PUNTO_'.$i.'_FOTO}';
-                        $descripcion1 = '${PUNTO_'.$i.'_DESCRIPCION}';
+            if (count($fotos) > 0) {
+                for ($i = 0; $i < count($fotos); $i += 4) {
+                    $foto1 = '';
+                    $descripcion1 = '';
+                    if ($i < count($fotos)) {
+                        $foto1 = '${PUNTO_' . $i . '_FOTO}';
+                        $descripcion1 = '${PUNTO_' . $i . '_DESCRIPCION}';
                     }
 
-                    $foto2 = ''; $descripcion2 = '';
-                    if (($i+1) < count($fotos))
-                    {
-                        $foto2 = '${PUNTO_'.($i+1).'_FOTO}';
-                        $descripcion2 = '${PUNTO_'.($i+1).'_DESCRIPCION}';
+                    $foto2 = '';
+                    $descripcion2 = '';
+                    if (($i + 1) < count($fotos)) {
+                        $foto2 = '${PUNTO_' . ($i + 1) . '_FOTO}';
+                        $descripcion2 = '${PUNTO_' . ($i + 1) . '_DESCRIPCION}';
                     }
 
-                    $foto3 = ''; $descripcion3 = '';
-                    if (($i+2) < count($fotos))
-                    {
-                        $foto3 = '${PUNTO_'.($i+2).'_FOTO}';
-                        $descripcion3 = '${PUNTO_'.($i+2).'_DESCRIPCION}';
+                    $foto3 = '';
+                    $descripcion3 = '';
+                    if (($i + 2) < count($fotos)) {
+                        $foto3 = '${PUNTO_' . ($i + 2) . '_FOTO}';
+                        $descripcion3 = '${PUNTO_' . ($i + 2) . '_DESCRIPCION}';
                     }
 
-                    $foto4 = ''; $descripcion4 = '';
-                    if (($i+3) < count($fotos))
-                    {
-                        $foto4 = '${PUNTO_'.($i+3).'_FOTO}';
-                        $descripcion4 = '${PUNTO_'.($i+3).'_DESCRIPCION}';
+                    $foto4 = '';
+                    $descripcion4 = '';
+                    if (($i + 3) < count($fotos)) {
+                        $foto4 = '${PUNTO_' . ($i + 3) . '_FOTO}';
+                        $descripcion4 = '${PUNTO_' . ($i + 3) . '_DESCRIPCION}';
                     }
 
                     $table->addRow(); //fila
@@ -4613,9 +4367,8 @@ class reportevibracionwordController extends Controller
                     $table->addRow(1000); //fila
                     $table->addCell($ancho_col_1, $celda)->addTextRun($centrado)->addText($descripcion1, $texto);
                     $table->addCell($ancho_col_2, $celda)->addTextRun($centrado)->addText($descripcion2, $texto);
-                    
-                    if (($i+2) < count($fotos))
-                    {
+
+                    if (($i + 2) < count($fotos)) {
                         $table->addRow(); //fila
                         $table->addCell($ancho_col_1, $celda)->addTextRun($centrado)->addText($foto3, $texto);
                         $table->addCell($ancho_col_2, $celda)->addTextRun($centrado)->addText($foto4, $texto);
@@ -4623,13 +4376,11 @@ class reportevibracionwordController extends Controller
                         $table->addCell($ancho_col_1, $celda)->addTextRun($centrado)->addText($descripcion3, $texto);
                         $table->addCell($ancho_col_2, $celda)->addTextRun($centrado)->addText($descripcion4, $texto);
                     }
-                }            
+                }
 
 
                 $plantillaword->setComplexBlock('TABLA_MEMORIA_FOTOGRAFICA', $table);
-            }
-            else
-            {
+            } else {
                 $plantillaword->setValue('TABLA_MEMORIA_FOTOGRAFICA', 'NO SE ENCONTRARON FOTOS QUE MOSTRAR.');
             }
 
@@ -4647,15 +4398,15 @@ class reportevibracionwordController extends Controller
                                             FROM
                                                 reporteplanoscarpetas
                                             WHERE
-                                                reporteplanoscarpetas.proyecto_id = '.$proyecto_id.' 
-                                                AND reporteplanoscarpetas.agente_nombre LIKE "%'.$agente_nombre.'%"');
+                                                reporteplanoscarpetas.proyecto_id = ' . $proyecto_id . ' 
+                                                AND reporteplanoscarpetas.agente_nombre LIKE "%' . $agente_nombre . '%"');
 
 
-            $planoscarpetasvariales = ''; $planocontador = 0; $plano_archivo = array();
-            if (count($planoscarpetas) > 0)
-            {
-                foreach ($planoscarpetas as $key => $carpeta)
-                {
+            $planoscarpetasvariales = '';
+            $planocontador = 0;
+            $plano_archivo = array();
+            if (count($planoscarpetas) > 0) {
+                foreach ($planoscarpetas as $key => $carpeta) {
                     $planos = DB::select('SELECT
                                                 proyectoevidenciaplano.proyecto_id,
                                                 proyectoevidenciaplano.agente_id,
@@ -4665,29 +4416,26 @@ class reportevibracionwordController extends Controller
                                             FROM
                                                 proyectoevidenciaplano 
                                             WHERE
-                                                proyectoevidenciaplano.proyecto_id = '.$carpeta->proyecto_id.' 
-                                                AND proyectoevidenciaplano.agente_nombre LIKE "%'.$carpeta->agente_nombre.'%" 
-                                                AND proyectoevidenciaplano.proyectoevidenciaplano_carpeta = "'.$carpeta->reporteplanoscarpetas_nombre.'" 
+                                                proyectoevidenciaplano.proyecto_id = ' . $carpeta->proyecto_id . ' 
+                                                AND proyectoevidenciaplano.agente_nombre LIKE "%' . $carpeta->agente_nombre . '%" 
+                                                AND proyectoevidenciaplano.proyectoevidenciaplano_carpeta = "' . $carpeta->reporteplanoscarpetas_nombre . '" 
                                             ORDER BY
                                                 proyectoevidenciaplano.proyectoevidenciaplano_carpeta ASC,
                                                 proyectoevidenciaplano.proyectoevidenciaplano_archivo ASC');
 
-                    foreach ($planos as $key => $plano)
-                    {
-                        $planoscarpetasvariales .= '${PLANO_'.$planocontador.'_FOTO}';
+                    foreach ($planos as $key => $plano) {
+                        $planoscarpetasvariales .= '${PLANO_' . $planocontador . '_FOTO}';
 
                         $plano_archivo[] = $plano->proyectoevidenciaplano_archivo;
 
                         $planocontador += 1;
                     }
                 }
-            }
-            else
-            {
+            } else {
                 $plano_archivo = array();
                 $planoscarpetasvariales = 'NO SE ENCONTRARÓN PLANOS QUE MOSTRAR.';
             }
-                
+
 
             $plantillaword->setValue('PLANOS', $planoscarpetasvariales);
 
@@ -4719,20 +4467,19 @@ class reportevibracionwordController extends Controller
                                             WHEN IFNULL(DATEDIFF(equipo.equipo_VigenciaCalibracion, CURDATE()) + 1, 0) >= 30 THEN "text-warning"
                                             ELSE "text-danger"
                                         END
-                                    ) AS vigencia_color,
-                                    equipo.equipo_CertificadoPDF 
+                                    ) AS vigencia_color
                                 FROM
                                     reporteequiposutilizados
                                     LEFT JOIN equipo ON reporteequiposutilizados.equipo_id = equipo.id
                                 WHERE
-                                    reporteequiposutilizados.proyecto_id = '.$proyecto_id.' 
-                                    AND reporteequiposutilizados.agente_nombre = "'.$agente_nombre.'"
+                                    reporteequiposutilizados.proyecto_id = ' . $proyecto_id . ' 
+                                    AND reporteequiposutilizados.agente_nombre = "' . $agente_nombre . '"
                                 ORDER BY
                                     equipo.equipo_Descripcion ASC,
                                     equipo.equipo_Marca ASC,
                                     equipo.equipo_Modelo ASC,
                                     equipo.equipo_Serie ASC');
-            
+
 
             // Columnas
             $ancho_col_1 = 1800;
@@ -4743,7 +4490,7 @@ class reportevibracionwordController extends Controller
 
 
             // Crear tabla
-            $table = null;            
+            $table = null;
             $table = new Table(array('name' => $fuente, 'borderSize' => 1, 'borderColor' => '000000', 'cellMargin' => 40, 'unit' => TblWidth::TWIP));
 
 
@@ -4756,18 +4503,15 @@ class reportevibracionwordController extends Controller
             $table->addCell($ancho_col_5, $encabezado_celda)->addTextRun($centrado)->addText('Vigencia de<w:br/>calibración', $encabezado_texto);
 
 
-            $numero_fila = 0; $total_cartas = 0;
-            foreach ($sql as $key => $value) 
-            {
+            $numero_fila = 0;
+            $total_cartas = 0;
+            foreach ($sql as $key => $value) {
                 $table->addRow(); //fila
 
-                if ($value->reporteequiposutilizados_cartacalibracion)
-                {
-                    $table->addCell($ancho_col_1, $celda)->addTextRun($centrado)->addText(htmlspecialchars('* '.$value->equipo_Descripcion), $texto);
+                if ($value->reporteequiposutilizados_cartacalibracion) {
+                    $table->addCell($ancho_col_1, $celda)->addTextRun($centrado)->addText(htmlspecialchars('* ' . $value->equipo_Descripcion), $texto);
                     $total_cartas += 1;
-                }
-                else
-                {
+                } else {
                     $table->addCell($ancho_col_1, $celda)->addTextRun($centrado)->addText(htmlspecialchars($value->equipo_Descripcion), $texto);
                 }
 
@@ -4781,8 +4525,7 @@ class reportevibracionwordController extends Controller
             $plantillaword->setComplexBlock('EQUIPO_UTILIZADO', $table);
 
 
-            if ($total_cartas > 0)
-            {
+            if ($total_cartas > 0) {
                 $plantillaword->setValue('EQUIPO_UTILIZADO_NOTA', '<w:br/>
                                                                     <w:rPr>
                                                                         <w:b w:val="true"/>
@@ -4792,9 +4535,7 @@ class reportevibracionwordController extends Controller
                                                                         <w:b w:val="false"/>
                                                                         <w:t xml:space="preserve">La calibración tiene una extensión en el tiempo de vigencia avalada mediante una carta emitida por el laboratorio acreditado misma que se encuentra disponible para consulta en el anexo 5.</w:t>
                                                                     </w:rPr>');
-            }
-            else
-            {
+            } else {
                 $plantillaword->setValue('EQUIPO_UTILIZADO_NOTA', '');
             }
 
@@ -4805,12 +4546,12 @@ class reportevibracionwordController extends Controller
 
             // GUARDAR
             Storage::makeDirectory('reportes/informes'); //crear directorio
-            $plantillaword->saveAs(storage_path('app/reportes/informes/Informe_'.$agente_nombre.'_'.$proyecto->proyecto_folio.'_TEMPORAL.docx')); //GUARDAR Y CREAR archivo word TEMPORAL
+            $plantillaword->saveAs(storage_path('app/reportes/informes/Informe_' . $agente_nombre . '_' . $proyecto->proyecto_folio . '_TEMPORAL.docx')); //GUARDAR Y CREAR archivo word TEMPORAL
 
             // sleep(1);
 
             // ABRIR NUEVA PLANTILLA
-            $plantillaword = new TemplateProcessor(storage_path('app/reportes/informes/Informe_'.$agente_nombre.'_'.$proyecto->proyecto_folio.'_TEMPORAL.docx'));//Abrir plantilla TEMPORAL
+            $plantillaword = new TemplateProcessor(storage_path('app/reportes/informes/Informe_' . $agente_nombre . '_' . $proyecto->proyecto_folio . '_TEMPORAL.docx')); //Abrir plantilla TEMPORAL
 
 
             /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -4819,65 +4560,48 @@ class reportevibracionwordController extends Controller
             // TABLA ANEXO 1, Memoria fotográfica - AGREGAR FOTOS
             //================================================================================
 
-            for ($i = 0; $i < count($fotos); $i += 4)
-            {
-                if ($i < count($fotos))
-                {
-                    if (Storage::exists($fotos[$i]->proyectoevidenciafoto_archivo))
-                    {
-                        $plantillaword->setImageValue('PUNTO_'.$i.'_FOTO', array('path' => storage_path('app/'.$fotos[$i]->proyectoevidenciafoto_archivo), 'height' => 284, 'width' => 284, 'ratio' => false, 'borderColor' => '000000'));
-                    }
-                    else
-                    {
-                        $plantillaword->setValue('PUNTO_'.$i.'_FOTO', 'NO SE ENCONTRÓ LA FOTO');
+            for ($i = 0; $i < count($fotos); $i += 4) {
+                if ($i < count($fotos)) {
+                    if (Storage::exists($fotos[$i]->proyectoevidenciafoto_archivo)) {
+                        $plantillaword->setImageValue('PUNTO_' . $i . '_FOTO', array('path' => storage_path('app/' . $fotos[$i]->proyectoevidenciafoto_archivo), 'height' => 284, 'width' => 284, 'ratio' => false, 'borderColor' => '000000'));
+                    } else {
+                        $plantillaword->setValue('PUNTO_' . $i . '_FOTO', 'NO SE ENCONTRÓ LA FOTO');
                     }
 
-                    $plantillaword->setValue('PUNTO_'.$i.'_DESCRIPCION', "Punto ".$fotos[$i]->proyectoevidenciafoto_nopunto." ".$fotos[$i]->proyectoevidenciafoto_descripcion);
+                    $plantillaword->setValue('PUNTO_' . $i . '_DESCRIPCION', "Punto " . $fotos[$i]->proyectoevidenciafoto_nopunto . " " . $fotos[$i]->proyectoevidenciafoto_descripcion);
                 }
 
 
-                if (($i+1) < count($fotos))
-                {
-                    if (Storage::exists($fotos[$i]->proyectoevidenciafoto_archivo))
-                    {
-                        $plantillaword->setImageValue('PUNTO_'.($i+1).'_FOTO', array('path' => storage_path('app/'.$fotos[($i+1)]->proyectoevidenciafoto_archivo), 'height' => 284, 'width' => 284, 'ratio' => false, 'borderColor' => '000000'));
-                    }
-                    else
-                    {
-                        $plantillaword->setValue('PUNTO_'.($i+1).'_FOTO', 'NO SE ENCONTRÓ LA FOTO');
+                if (($i + 1) < count($fotos)) {
+                    if (Storage::exists($fotos[$i]->proyectoevidenciafoto_archivo)) {
+                        $plantillaword->setImageValue('PUNTO_' . ($i + 1) . '_FOTO', array('path' => storage_path('app/' . $fotos[($i + 1)]->proyectoevidenciafoto_archivo), 'height' => 284, 'width' => 284, 'ratio' => false, 'borderColor' => '000000'));
+                    } else {
+                        $plantillaword->setValue('PUNTO_' . ($i + 1) . '_FOTO', 'NO SE ENCONTRÓ LA FOTO');
                     }
 
-                    $plantillaword->setValue('PUNTO_'.($i+1).'_DESCRIPCION', "Punto ".$fotos[($i+1)]->proyectoevidenciafoto_nopunto." ".$fotos[($i+1)]->proyectoevidenciafoto_descripcion);
+                    $plantillaword->setValue('PUNTO_' . ($i + 1) . '_DESCRIPCION', "Punto " . $fotos[($i + 1)]->proyectoevidenciafoto_nopunto . " " . $fotos[($i + 1)]->proyectoevidenciafoto_descripcion);
                 }
 
 
-                if (($i+2) < count($fotos))
-                {
-                    if (Storage::exists($fotos[$i]->proyectoevidenciafoto_archivo))
-                    {
-                        $plantillaword->setImageValue('PUNTO_'.($i+2).'_FOTO', array('path' => storage_path('app/'.$fotos[($i+2)]->proyectoevidenciafoto_archivo), 'height' => 284, 'width' => 284, 'ratio' => false, 'borderColor' => '000000'));
-                    }
-                    else
-                    {
-                        $plantillaword->setValue('PUNTO_'.($i+2).'_FOTO', 'NO SE ENCONTRÓ LA FOTO');
+                if (($i + 2) < count($fotos)) {
+                    if (Storage::exists($fotos[$i]->proyectoevidenciafoto_archivo)) {
+                        $plantillaword->setImageValue('PUNTO_' . ($i + 2) . '_FOTO', array('path' => storage_path('app/' . $fotos[($i + 2)]->proyectoevidenciafoto_archivo), 'height' => 284, 'width' => 284, 'ratio' => false, 'borderColor' => '000000'));
+                    } else {
+                        $plantillaword->setValue('PUNTO_' . ($i + 2) . '_FOTO', 'NO SE ENCONTRÓ LA FOTO');
                     }
 
-                    $plantillaword->setValue('PUNTO_'.($i+2).'_DESCRIPCION', "Punto ".$fotos[($i+2)]->proyectoevidenciafoto_nopunto." ".$fotos[($i+2)]->proyectoevidenciafoto_descripcion);
+                    $plantillaword->setValue('PUNTO_' . ($i + 2) . '_DESCRIPCION', "Punto " . $fotos[($i + 2)]->proyectoevidenciafoto_nopunto . " " . $fotos[($i + 2)]->proyectoevidenciafoto_descripcion);
                 }
 
 
-                if (($i+3) < count($fotos))
-                {
-                    if (Storage::exists($fotos[$i]->proyectoevidenciafoto_archivo))
-                    {
-                        $plantillaword->setImageValue('PUNTO_'.($i+3).'_FOTO', array('path' => storage_path('app/'.$fotos[($i+3)]->proyectoevidenciafoto_archivo), 'height' => 284, 'width' => 284, 'ratio' => false, 'borderColor' => '000000'));
-                    }
-                    else
-                    {
-                        $plantillaword->setValue('PUNTO_'.($i+3).'_FOTO', 'NO SE ENCONTRÓ LA FOTO');
+                if (($i + 3) < count($fotos)) {
+                    if (Storage::exists($fotos[$i]->proyectoevidenciafoto_archivo)) {
+                        $plantillaword->setImageValue('PUNTO_' . ($i + 3) . '_FOTO', array('path' => storage_path('app/' . $fotos[($i + 3)]->proyectoevidenciafoto_archivo), 'height' => 284, 'width' => 284, 'ratio' => false, 'borderColor' => '000000'));
+                    } else {
+                        $plantillaword->setValue('PUNTO_' . ($i + 3) . '_FOTO', 'NO SE ENCONTRÓ LA FOTO');
                     }
 
-                    $plantillaword->setValue('PUNTO_'.($i+3).'_DESCRIPCION', "Punto ".$fotos[($i+3)]->proyectoevidenciafoto_nopunto." ".$fotos[($i+3)]->proyectoevidenciafoto_descripcion);
+                    $plantillaword->setValue('PUNTO_' . ($i + 3) . '_DESCRIPCION', "Punto " . $fotos[($i + 3)]->proyectoevidenciafoto_nopunto . " " . $fotos[($i + 3)]->proyectoevidenciafoto_descripcion);
                 }
             }
 
@@ -4886,15 +4610,11 @@ class reportevibracionwordController extends Controller
             //================================================================================
 
 
-            for ($i = 0; $i < count($plano_archivo); $i ++)
-            {
-                if (Storage::exists($plano_archivo[$i]))
-                {
-                    $plantillaword->setImageValue('PLANO_'.$i.'_FOTO', array('path' => storage_path('app/'.$plano_archivo[$i]), 'height' => 690, 'width' => 588, 'ratio' => false, 'borderColor' => '000000'));
-                }
-                else
-                {
-                    $plantillaword->setValue('PLANO_'.$i.'_FOTO', 'NO SE ENCONTRÓ EL PLANO');
+            for ($i = 0; $i < count($plano_archivo); $i++) {
+                if (Storage::exists($plano_archivo[$i])) {
+                    $plantillaword->setImageValue('PLANO_' . $i . '_FOTO', array('path' => storage_path('app/' . $plano_archivo[$i]), 'height' => 690, 'width' => 588, 'ratio' => false, 'borderColor' => '000000'));
+                } else {
+                    $plantillaword->setValue('PLANO_' . $i . '_FOTO', 'NO SE ENCONTRÓ EL PLANO');
                 }
             }
 
@@ -4904,67 +4624,69 @@ class reportevibracionwordController extends Controller
 
 
             $anexos_lista = DB::select('SELECT
-                                            REPLACE(ANEXO.nombre, "/", "-") AS nombre,
-                                            ANEXO.archivo
+                                REPLACE(ANEXO.nombre, "/", "-") AS nombre,
+                                ANEXO.archivo
+                            FROM
+                                (
+                                    (
+                                        SELECT
+                                            CONCAT("Certificado equipo - ", equipo.equipo_Descripcion, " (", equipo.equipo_Serie, ")") AS nombre,
+                                            equipos_documentos.RUTA_DOCUMENTO AS archivo
                                         FROM
-                                            (
-                                                (
-                                                    SELECT
-                                                        CONCAT("Certificado equipo - ", equipo.equipo_Descripcion, " (", equipo.equipo_Serie, ")") AS nombre,
-                                                        equipo.equipo_CertificadoPDF AS archivo
-                                                    FROM
-                                                        reporteequiposutilizados
-                                                        LEFT JOIN equipo ON reporteequiposutilizados.equipo_id = equipo.id 
-                                                    WHERE
-                                                        reporteequiposutilizados.proyecto_id = '.$proyecto_id.' 
-                                                        AND reporteequiposutilizados.agente_nombre = "'.$agente_nombre.'"
-                                                        AND equipo.equipo_CertificadoPDF <> ""
-                                                )
-                                                UNION ALL
-                                                (
-                                                    SELECT
-                                                        CONCAT("Carta vigencia - ", equipo.equipo_Descripcion, " (", equipo.equipo_Serie, ")") AS nombre,
-                                                        equipo.equipo_cartaPDF AS archivo
-                                                    FROM
-                                                        reporteequiposutilizados
-                                                        LEFT JOIN equipo ON reporteequiposutilizados.equipo_id = equipo.id 
-                                                    WHERE
-                                                        reporteequiposutilizados.proyecto_id = '.$proyecto_id.' 
-                                                        AND reporteequiposutilizados.agente_nombre = "'.$agente_nombre.'"
-                                                        AND reporteequiposutilizados.reporteequiposutilizados_cartacalibracion = 1
-                                                )
-                                                UNION ALL
-                                                (
-                                                    SELECT
-                                                        reporteanexos.reporteanexos_anexonombre AS nombre,
-                                                        reporteanexos.reporteanexos_rutaanexo AS archivo 
-                                                    FROM
-                                                        reporteanexos
-                                                    WHERE
-                                                        reporteanexos.proyecto_id = '.$proyecto_id.'
-                                                        AND reporteanexos.agente_nombre = "'.$agente_nombre.'"
-                                                )
-                                            ) AS ANEXO');
-
+                                            reporteequiposutilizados
+                                        LEFT JOIN equipo ON reporteequiposutilizados.equipo_id = equipo.id
+                                        LEFT JOIN equipos_documentos ON equipos_documentos.EQUIPO_ID = equipo.id
+                                        WHERE
+                                            reporteequiposutilizados.proyecto_id = ' . $proyecto_id . '
+                                            AND reporteequiposutilizados.agente_nombre = "' . $agente_nombre . '"
+                                            AND equipos_documentos.DOCUMENTO_TIPO = 4
+                                            AND equipos_documentos.RUTA_DOCUMENTO <> ""
+                                    )
+                                    UNION ALL
+                                    (
+                                        SELECT
+                                            CONCAT("Carta vigencia - ", equipo.equipo_Descripcion, " (", equipo.equipo_Serie, ")") AS nombre,
+                                            equipos_documentos.RUTA_DOCUMENTO AS archivo
+                                        FROM
+                                            reporteequiposutilizados
+                                        LEFT JOIN equipo ON reporteequiposutilizados.equipo_id = equipo.id
+                                        LEFT JOIN equipos_documentos ON equipos_documentos.EQUIPO_ID = equipo.id
+                                        WHERE
+                                            reporteequiposutilizados.proyecto_id = ' . $proyecto_id . '
+                                            AND reporteequiposutilizados.agente_nombre = "' . $agente_nombre . '"
+                                            #AND reporteequiposutilizados.reporteequiposutilizados_cartacalibracion = 1
+                                            AND equipos_documentos.DOCUMENTO_TIPO = 5
+                                    )
+                                    UNION ALL
+                                    (
+                                        SELECT
+                                            reporteanexos.reporteanexos_anexonombre AS nombre,
+                                            reporteanexos.reporteanexos_rutaanexo AS archivo 
+                                        FROM
+                                            reporteanexos
+                                        WHERE
+                                            reporteanexos.proyecto_id = ' . $proyecto_id . '
+                                            AND reporteanexos.agente_nombre = "' . $agente_nombre . '"
+                                    )
+                                ) AS ANEXO');
 
             /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
             // GUARDAR Y DESCARGAR INFORME FINAL
 
 
-            $informe_nombre = 'Informe de '.$agente_nombre.' - '.$proyecto->proyecto_folio.' ('.$proyecto->proyecto_clienteinstalacion.').docx';
+            $informe_nombre = 'Informe de ' . $agente_nombre . ' - ' . $proyecto->proyecto_folio . ' (' . $proyecto->proyecto_clienteinstalacion . ').docx';
 
 
             // GUARDAR WORD FINAL
-            $plantillaword->saveAs(storage_path('app/reportes/informes/'.$informe_nombre)); //crear archivo word
+            $plantillaword->saveAs(storage_path('app/reportes/informes/' . $informe_nombre)); //crear archivo word
 
-            
+
             // ELIMINAR TEMPORAL
-            if (Storage::exists('reportes/informes/Informe_'.$agente_nombre.'_'.$proyecto->proyecto_folio.'_TEMPORAL.docx'))
-            {
-                Storage::delete('reportes/informes/Informe_'.$agente_nombre.'_'.$proyecto->proyecto_folio.'_TEMPORAL.docx');
+            if (Storage::exists('reportes/informes/Informe_' . $agente_nombre . '_' . $proyecto->proyecto_folio . '_TEMPORAL.docx')) {
+                Storage::delete('reportes/informes/Informe_' . $agente_nombre . '_' . $proyecto->proyecto_folio . '_TEMPORAL.docx');
             }
 
-            
+
             /*
             //================================================================================
             // CREAR .ZIP
@@ -5029,7 +4751,7 @@ class reportevibracionwordController extends Controller
             // $plantillaword->saveAs($word_ruta); //GUARDAR Y CREAR archivo word TEMPORAL
             return response()->download($word_ruta)->deleteFileAfterSend(true);
             */
-            
+
 
 
             //--------------------------------------------------------------------------------
@@ -5044,23 +4766,20 @@ class reportevibracionwordController extends Controller
                 // Define Dir Folder
                 $zip_ruta = storage_path('app/reportes/informes');
                 // Zip File Name
-                $zip_nombre = 'Informe de '.$agente_nombre.' - '.$proyecto->proyecto_folio.' ('.$proyecto->proyecto_clienteinstalacion.') + Anexos.zip';
+                $zip_nombre = 'Informe de ' . $agente_nombre . ' - ' . $proyecto->proyecto_folio . ' (' . $proyecto->proyecto_clienteinstalacion . ') + Anexos.zip';
                 // Create ZipArchive Obj
                 $zip = new ZipArchive;
 
 
-                if ($zip->open($zip_ruta . '/' . $zip_nombre, ZipArchive::CREATE) === TRUE)
-                {
+                if ($zip->open($zip_ruta . '/' . $zip_nombre, ZipArchive::CREATE) === TRUE) {
                     // Add File in ZipArchive
-                    $zip->addFile(storage_path('app/reportes/informes/'.$informe_nombre), $informe_nombre); //Word
+                    $zip->addFile(storage_path('app/reportes/informes/' . $informe_nombre), $informe_nombre); //Word
 
 
-                    foreach($anexos_lista as $key => $file)
-                    {
-                        if (Storage::exists($file->archivo))
-                        {
+                    foreach ($anexos_lista as $key => $file) {
+                        if (Storage::exists($file->archivo)) {
                             $extencion = explode(".", $file->archivo);
-                            $zip->addFile(storage_path('app/'.$file->archivo), ($key+1).'.- '.$file->nombre.'.'.$extencion[1]); // Pdf Anexos
+                            $zip->addFile(storage_path('app/' . $file->archivo), ($key + 1) . '.- ' . $file->nombre . '.' . $extencion[1]); // Pdf Anexos
                         }
                     }
 
@@ -5074,55 +4793,50 @@ class reportevibracionwordController extends Controller
 
 
                 // ELIMINAR INFORME word (PORQUE YA ESTÁ EN EL ZIP)
-                if (Storage::exists('reportes/informes/'.$informe_nombre))
-                {
-                    Storage::delete('reportes/informes/'.$informe_nombre);
+                if (Storage::exists('reportes/informes/' . $informe_nombre)) {
+                    Storage::delete('reportes/informes/' . $informe_nombre);
                 }
 
 
                 $dato["msj"] = 'Informe creado correctamente';
-            }
-            else // Crear informes historial y guardar en base de datos
+            } else // Crear informes historial y guardar en base de datos
             {
                 //================================================================================
                 // CREAR .ZIP INFORME
 
 
                 // Define Dir Folder
-                $zip_ruta_servidor = 'reportes/proyecto/'.$proyecto_id.'/'.$agente_nombre.'/'.$reporteregistro_id.'/revisiones/'.$request->ultimarevision_id;
+                $zip_ruta_servidor = 'reportes/proyecto/' . $proyecto_id . '/' . $agente_nombre . '/' . $reporteregistro_id . '/revisiones/' . $request->ultimarevision_id;
                 Storage::makeDirectory($zip_ruta_servidor); //crear directorio
-                $zip_ruta_completa = storage_path('app/reportes/proyecto/'.$proyecto_id.'/'.$agente_nombre.'/'.$reporteregistro_id.'/revisiones/'.$request->ultimarevision_id);
+                $zip_ruta_completa = storage_path('app/reportes/proyecto/' . $proyecto_id . '/' . $agente_nombre . '/' . $reporteregistro_id . '/revisiones/' . $request->ultimarevision_id);
                 // Zip File Name
-                $zip_nombre = 'Informe de '.$agente_nombre.' - '.$proyecto->proyecto_folio.' ('.$proyecto->proyecto_clienteinstalacion.') + Anexos.zip';
+                $zip_nombre = 'Informe de ' . $agente_nombre . ' - ' . $proyecto->proyecto_folio . ' (' . $proyecto->proyecto_clienteinstalacion . ') + Anexos.zip';
                 // Create ZipArchive Obj
                 $zip = new ZipArchive;
 
 
-                if ($zip->open($zip_ruta_completa . '/' . $zip_nombre, ZipArchive::CREATE) === TRUE)
-                {
+                if ($zip->open($zip_ruta_completa . '/' . $zip_nombre, ZipArchive::CREATE) === TRUE) {
                     // Add File in ZipArchive
-                    $zip->addFile(storage_path('app/reportes/informes/'.$informe_nombre), $informe_nombre); //Word
+                    $zip->addFile(storage_path('app/reportes/informes/' . $informe_nombre), $informe_nombre); //Word
 
 
-                    foreach($anexos_lista as $key => $file)
-                    {
-                        if (Storage::exists($file->archivo))
-                        {
+                    foreach ($anexos_lista as $key => $file) {
+                        if (Storage::exists($file->archivo)) {
                             $extencion = explode(".", $file->archivo);
-                            $zip->addFile(storage_path('app/'.$file->archivo), ($key+1).'.- '.$file->nombre.'.'.$extencion[1]); // Pdf Anexos
+                            $zip->addFile(storage_path('app/' . $file->archivo), ($key + 1) . '.- ' . $file->nombre . '.' . $extencion[1]); // Pdf Anexos
                         }
                     }
 
 
                     $zip->close(); // Close ZipArchive
                 }
-                
+
 
                 // $headers = array('Content-Type' => 'application/octet-stream'); // Set Header
                 // $zip_rutacompleta = $zip_ruta_completa.'/'.$zip_nombre;
                 // if(file_exists($zip_rutacompleta))
                 // {
-                    // return response()->download($zip_rutacompleta, $zip_nombre, $headers)->deleteFileAfterSend(true); // DESCARGAR ZIP
+                // return response()->download($zip_rutacompleta, $zip_nombre, $headers)->deleteFileAfterSend(true); // DESCARGAR ZIP
                 // }
 
 
@@ -5130,9 +4844,8 @@ class reportevibracionwordController extends Controller
 
 
                 // ELIMINAR INFORME word (PORQUE YA ESTÁ EN EL ZIP)
-                if (Storage::exists('reportes/informes/'.$informe_nombre))
-                {
-                    Storage::delete('reportes/informes/'.$informe_nombre);
+                if (Storage::exists('reportes/informes/' . $informe_nombre)) {
+                    Storage::delete('reportes/informes/' . $informe_nombre);
                 }
 
 
@@ -5141,9 +4854,9 @@ class reportevibracionwordController extends Controller
 
 
                 $archivo = reporterevisionesarchivoModel::create([
-                      'reporterevisiones_id' => $request->ultimarevision_id
-                    , 'reporterevisionesarchivo_tipo' => 0
-                    , 'reporterevisionesarchivo_archivo' => $zip_ruta_servidor.'/'.$zip_nombre
+                    'reporterevisiones_id' => $request->ultimarevision_id,
+                    'reporterevisionesarchivo_tipo' => 0,
+                    'reporterevisionesarchivo_archivo' => $zip_ruta_servidor . '/' . $zip_nombre
                 ]);
 
 
@@ -5167,7 +4880,7 @@ class reportevibracionwordController extends Controller
                                             FROM
                                                 reporterevisiones
                                             WHERE
-                                                reporterevisiones.proyecto_id = '.$proyecto_id.' 
+                                                reporterevisiones.proyecto_id = ' . $proyecto_id . ' 
                                                 AND reporterevisiones.agente_id = 2 -- Vibracion
                                             ORDER BY
                                                 reporterevisiones.reporterevisiones_revision DESC');
@@ -5179,33 +4892,31 @@ class reportevibracionwordController extends Controller
 
                 DB::statement('ALTER TABLE reporterevisiones AUTO_INCREMENT = 1;');
                 $revision = reporterevisionesModel::create([
-                      'proyecto_id' => $request->proyecto_id
-                    , 'agente_id' => $request->agente_id
-                    , 'agente_nombre' => $request->agente_nombre
-                    , 'reporterevisiones_revision' => ($revisiones[0]->reporterevisiones_revision + 1)
-                    , 'reporterevisiones_concluido' => 0
-                    , 'reporterevisiones_concluidonombre' => NULL
-                    , 'reporterevisiones_concluidofecha' => NULL
-                    , 'reporterevisiones_cancelado' => 0
-                    , 'reporterevisiones_canceladonombre' => NULL
-                    , 'reporterevisiones_canceladofecha' => NULL
-                    , 'reporterevisiones_canceladoobservacion' => NULL
+                    'proyecto_id' => $request->proyecto_id,
+                    'agente_id' => $request->agente_id,
+                    'agente_nombre' => $request->agente_nombre,
+                    'reporterevisiones_revision' => ($revisiones[0]->reporterevisiones_revision + 1),
+                    'reporterevisiones_concluido' => 0,
+                    'reporterevisiones_concluidonombre' => NULL,
+                    'reporterevisiones_concluidofecha' => NULL,
+                    'reporterevisiones_cancelado' => 0,
+                    'reporterevisiones_canceladonombre' => NULL,
+                    'reporterevisiones_canceladofecha' => NULL,
+                    'reporterevisiones_canceladoobservacion' => NULL
                 ]);
 
 
                 $dato["msj"] = 'Nueva revisión creada correctamente';
             }
 
-            
+
             //--------------------------------------------------------------------------------
 
 
             return response()->json($dato);
-        }
-        catch(Exception $e)
-        {
+        } catch (Exception $e) {
             // respuesta
-            $dato["msj"] = 'Error '.$e->getMessage();
+            $dato["msj"] = 'Error ' . $e->getMessage();
             return response()->json($dato);
         }
     }
@@ -5218,27 +4929,24 @@ class reportevibracionwordController extends Controller
      * @param  int $revision_id
      * @param  int $ultima_revision
      * @return \Illuminate\Http\Response
-    */
+     */
     public function reportevibracionworddescargar($proyecto_id, $revision_id, $ultima_revision)
     {
         $agente_nombre = 'Vibración';
 
 
-        if (($revision_id+0) == ($ultima_revision+0)) //Descargar y eliminar .ZIP de la carpeta temporal
+        if (($revision_id + 0) == ($ultima_revision + 0)) //Descargar y eliminar .ZIP de la carpeta temporal
         {
             $proyecto = proyectoModel::findOrFail($proyecto_id);
             $revision = reporterevisionesModel::findOrFail($revision_id);
 
-            $zip_nombre = 'Informe de '.$agente_nombre.' - '.$proyecto->proyecto_folio.' ('.$proyecto->proyecto_clienteinstalacion.') + Anexos.zip';
+            $zip_nombre = 'Informe de ' . $agente_nombre . ' - ' . $proyecto->proyecto_folio . ' (' . $proyecto->proyecto_clienteinstalacion . ') + Anexos.zip';
 
 
-            if (Storage::exists('reportes/informes/'.$zip_nombre))
-            {
-                return response()->download(storage_path('app/reportes/informes/'.$zip_nombre), $zip_nombre, array('Content-Type' => 'application/octet-stream'))->deleteFileAfterSend(true);
-            }
-            else
-            {
-                return '<h3>No se encontró el informe de '.$agente_nombre.', intentelo de nuevo</h3>';
+            if (Storage::exists('reportes/informes/' . $zip_nombre)) {
+                return response()->download(storage_path('app/reportes/informes/' . $zip_nombre), $zip_nombre, array('Content-Type' => 'application/octet-stream'))->deleteFileAfterSend(true);
+            } else {
+                return '<h3>No se encontró el informe de ' . $agente_nombre . ', intentelo de nuevo</h3>';
             }
 
 
@@ -5247,9 +4955,7 @@ class reportevibracionwordController extends Controller
             // $informe_nombre = 'Informe - 1.4 Evaluación de Vibraciones - Proyecto '.$proyecto->proyecto_folio.' Rev-'.$revision->reporterevisiones_revision.'.docx';
             // // return response()->download(storage_path('app/reportes/informes/'.$informe_nombre))->deleteFileAfterSend(true);
             // return response()->download(storage_path('app/reportes/informes/'.$informe_nombre), $informe_nombre, array('Content-Type' => 'application/octet-stream'))->deleteFileAfterSend(true);
-        }
-        else
-        {
+        } else {
             $archivo_historial = DB::select('SELECT
                                                 reporterevisiones.proyecto_id,
                                                 reporterevisiones.agente_id,
@@ -5264,23 +4970,17 @@ class reportevibracionwordController extends Controller
                                                 reporterevisiones
                                                 LEFT JOIN reporterevisionesarchivo ON reporterevisiones.id = reporterevisionesarchivo.reporterevisiones_id
                                             WHERE
-                                                reporterevisiones.id = '.$revision_id);
+                                                reporterevisiones.id = ' . $revision_id);
 
 
-            if (count($archivo_historial) > 0)
-            {
-                if (Storage::exists($archivo_historial[0]->reporterevisionesarchivo_archivo))
-                {
-                    return response()->download(storage_path('app/'.$archivo_historial[0]->reporterevisionesarchivo_archivo), "", array('Content-Type' => 'application/octet-stream'))->deleteFileAfterSend(false);
+            if (count($archivo_historial) > 0) {
+                if (Storage::exists($archivo_historial[0]->reporterevisionesarchivo_archivo)) {
+                    return response()->download(storage_path('app/' . $archivo_historial[0]->reporterevisionesarchivo_archivo), "", array('Content-Type' => 'application/octet-stream'))->deleteFileAfterSend(false);
+                } else {
+                    return '<h3>No se encontró el archivo historial del informe de ' . $agente_nombre . '</h3>';
                 }
-                else
-                {
-                    return '<h3>No se encontró el archivo historial del informe de '.$agente_nombre.'</h3>';
-                }
-            }
-            else
-            {
-                return '<h3>No se encontró el archivo historial del informe de '.$agente_nombre.'</h3>';
+            } else {
+                return '<h3>No se encontró el archivo historial del informe de ' . $agente_nombre . '</h3>';
             }
         }
     }

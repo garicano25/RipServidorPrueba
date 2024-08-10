@@ -1889,7 +1889,7 @@ class reporteiluminacionController extends Controller
                                                     <textarea rows="2" class="form-control" name="reporteareacategoria_actividades_' . $value->id . '" readonly>' . $value->categoria_actividades . '</textarea>
                                                 </td>
                                                 <td width="80">
-                                                <select class="custom-select form-control" id="select_niveles_' . $numero_registro . '" name="niveles_minimo_' . $value->id . '"  value="' . $value->niveles . '" >
+                                                <select class="custom-select form-control" onchange="cambiarTareaVisual(this.value, ' . $numero_registro . ')" id="select_niveles_' . $numero_registro . '" name="niveles_minimo_' . $value->id . '"  value="' . $value->niveles . '" >
                                                     <option value=""></option>
                                                     <option value="1">20</option>
                                                     <option value="2">50</option>

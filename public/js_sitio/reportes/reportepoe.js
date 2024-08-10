@@ -664,7 +664,7 @@ $('#tabla_areas tbody').on('click', 'td>button.editar', function()
 
 
 	// Categorías
-	area_categorias(proyecto.id, row.data().id);
+	area_categorias(proyecto.id, row.data().id, row.data().recsensorialarea_id);
 });
 
 
@@ -1013,13 +1013,13 @@ $("#botonguardar_modal_area").click(function()
 });
 
 
-function area_categorias(proyecto_id, reportearea_id)
+function area_categorias(proyecto_id, reportearea_id, $recsensorialarea_id)
 {
 	// Consultar categorias
 	$.ajax({
 		type: "GET",
 		dataType: "json",
-		url: "/reporteareacategorias/"+proyecto_id+"/"+reportearea_id,
+		url: "/reporteareacategorias/"+proyecto_id+"/"+reportearea_id + "/" + $recsensorialarea_id,
 		data:{},
 		cache: false,
 		success:function(dato)

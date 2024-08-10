@@ -954,7 +954,7 @@
                                                                             <th>Categoría</th>
                                                                             <th style="width: 100px!important;">Tipo</th>
                                                                             <th style="width: 100px!important;">Editar</th>
-                                                                            <th style="width: 100px!important;">Eliminar</th>
+                                                                            <!-- <th style="width: 100px!important;">Eliminar</th> -->
                                                                         </tr>
                                                                     </thead>
                                                                     <tbody>
@@ -992,7 +992,7 @@
                                                                             <th>Factores de riesgos</th>
                                                                             <th>Categorías</th>
                                                                             <th style="width: 80px!important;">Editar</th>
-                                                                            <th style="width: 80px!important;">Eliminar</th>
+                                                                            <!-- <th style="width: 80px!important;">Eliminar</th> -->
                                                                         </tr>
                                                                     </thead>
                                                                     <tbody>

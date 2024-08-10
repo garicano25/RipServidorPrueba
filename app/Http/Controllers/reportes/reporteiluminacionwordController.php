@@ -5235,24 +5235,39 @@ class reporteiluminacionwordController extends Controller
             // ARCHIVO ZIP ANEXOS
             //================================================================================
 
-
             $anexos_lista = DB::select('SELECT
-                                            REPLACE(ANEXO.nombre, "/", "-") AS nombre,
-                                            ANEXO.archivo
-                                        FROM
+                                        REPLACE(ANEXO.nombre, "/", "-") AS nombre,
+                                        ANEXO.archivo
+                                    FROM
+                                        (
                                             (
-                                               
-                                                    SELECT
-                                                        reporteanexos.reporteanexos_anexonombre AS nombre,
-                                                        reporteanexos.reporteanexos_rutaanexo AS archivo 
-                                                    FROM
-                                                        reporteanexos
-                                                    WHERE
-                                                        reporteanexos.proyecto_id = ' . $proyecto_id . '
-                                                        AND reporteanexos.registro_id = ' . $reporteiluminacion_id . ' 
-                                                        AND reporteanexos.agente_nombre = "' . $agente_nombre . '"
-                                                
-                                            ) AS ANEXO');
+                                                SELECT
+                                                    CONCAT("Certificado de calibración - ", equipo.equipo_Descripcion, " (", equipo.equipo_Serie, ")") AS nombre,
+                                                    equipos_documentos.RUTA_DOCUMENTO AS archivo
+                                                FROM
+                                                    reporteequiposutilizados
+                                                INNER JOIN equipo ON reporteequiposutilizados.equipo_id = equipo.id
+                                                INNER JOIN equipos_documentos ON equipos_documentos.EQUIPO_ID = equipo.id
+                                                WHERE
+                                                    reporteequiposutilizados.proyecto_id = ' . $proyecto_id . '
+                                                    AND reporteequiposutilizados.registro_id = ' . $reporteiluminacion_id . '
+                                                    AND reporteequiposutilizados.agente_nombre = "' . $agente_nombre . '"
+                                                    AND equipos_documentos.DOCUMENTO_TIPO = 4
+                                            )
+                                            UNION ALL
+                                            (
+                                                SELECT
+                                                    reporteanexos.reporteanexos_anexonombre AS nombre,
+                                                    reporteanexos.reporteanexos_rutaanexo AS archivo 
+                                                FROM
+                                                    reporteanexos
+                                                WHERE
+                                                    reporteanexos.proyecto_id = ' . $proyecto_id . '
+                                                    AND reporteanexos.registro_id = ' . $reporteiluminacion_id . '
+                                                    AND reporteanexos.agente_nombre = "' . $agente_nombre . '"
+                                            )
+                                        ) AS ANEXO');
+
 
 
             /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////

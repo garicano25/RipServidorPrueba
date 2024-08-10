@@ -45,34 +45,29 @@ class recsensorialcategoriaController extends Controller
      */
     public function recsensorialcategoriatabla($recsensorial_id)
     {
-        try
-        {
+        try {
             // Reconocimiento
             $recsensorial = recsensorialModel::findOrFail($recsensorial_id);
 
             $tabla = recsensorialcategoriaModel::with(['catdepartamento', 'catmovilfijo'])
-                                                ->where('recsensorial_id', $recsensorial_id)
-                                                ->orderBy('catdepartamento_id', 'ASC')
-                                                ->orderBy('recsensorialcategoria_nombrecategoria', 'ASC')
-                                                ->get();
+                ->where('recsensorial_id', $recsensorial_id)
+                ->orderBy('catdepartamento_id', 'ASC')
+                ->orderBy('recsensorialcategoria_nombrecategoria', 'ASC')
+                ->get();
 
             // FORMATEAR FILAS
             $numero_registro = 0;
-            foreach ($tabla  as $key => $value) 
-            {
+            foreach ($tabla  as $key => $value) {
                 $numero_registro += 1;
                 $value->numero_registro = $numero_registro;
 
                 // Botones
-                if (auth()->user()->hasRoles(['Superusuario', 'Administrador', 'Coordinador','Operativo HI'])  && ($recsensorial->recsensorial_bloqueado + 0) == 0)
-                {
+                if (auth()->user()->hasRoles(['Superusuario', 'Administrador', 'Coordinador', 'Operativo HI'])  && ($recsensorial->recsensorial_bloqueado + 0) == 0) {
                     $value->accion_activa = 1;
-                    $value->boton_eliminar = '<button type="button" class="btn btn-danger btn-circle"><i class="fa fa-trash"></i></button>';
-                }
-                else
-                {
+                    $value->boton_eliminar = '<button type="button" class="btn btn-default waves-effect btn-circle" data-toggle="tooltip" title="No disponible"><i class="fa fa-ban"></i></button>';
+                } else {
                     $value->accion_activa = 0;
-                    $value->boton_eliminar = '<button type="button" class="btn btn-secondary btn-circle"><i class="fa fa-ban"></i></button>';
+                    $value->boton_eliminar = '<button type="button" class="btn btn-default waves-effect btn-circle" data-toggle="tooltip" title="No disponible"><i class="fa fa-ban"></i></button>';
                 }
             }
 
@@ -80,10 +75,8 @@ class recsensorialcategoriaController extends Controller
             $dato['data'] = $tabla;
             $dato["msj"] = 'Informacion consultada correctamente';
             return response()->json($dato);
-        }
-        catch(Exception $e)
-        {
-            $dato["msj"] = 'Error '.$e->getMessage();
+        } catch (Exception $e) {
+            $dato["msj"] = 'Error ' . $e->getMessage();
             $dato['data'] = 0;
             return response()->json($dato);
         }
@@ -106,18 +99,15 @@ class recsensorialcategoriaController extends Controller
      */
     public function recsensorialcategoriaeliminar($categoria_id)
     {
-        try
-        {
+        try {
             $categoria = recsensorialcategoriaModel::where('id', $categoria_id)->delete();
 
             // respuesta
             $dato['eliminado'] = $categoria;
             $dato["msj"] = 'Información eliminada correctamente';
             return response()->json($dato);
-        }
-        catch(Exception $e)
-        {
-            $dato["msj"] = 'Error '.$e->getMessage();
+        } catch (Exception $e) {
+            $dato["msj"] = 'Error ' . $e->getMessage();
             return response()->json($dato);
         }
     }
@@ -137,20 +127,18 @@ class recsensorialcategoriaController extends Controller
      */
     public function store(Request $request)
     {
-        try
-        {
-            if ($request['categoria_id']==0) //nuevo
+        try {
+            if ($request['categoria_id'] == 0) //nuevo
             {
                 // AUTO_INCREMENT
                 DB::statement('ALTER TABLE recsensorialcategoria AUTO_INCREMENT=1');
-                
+
                 // guardar
                 $categoria = recsensorialcategoriaModel::create($request->all());
 
                 // mensaje
                 $dato["msj"] = 'Informacion guardada correctamente';
-            }
-            else //editar
+            } else //editar
             {
                 // modificar
                 $categoria = recsensorialcategoriaModel::findOrFail($request['categoria_id']);
@@ -163,15 +151,9 @@ class recsensorialcategoriaController extends Controller
             // respuesta
             $dato['categoria'] = $categoria;
             return response()->json($dato);
-        }
-        catch(Exception $e)
-        {
-            $dato["msj"] = 'Error '.$e->getMessage();
+        } catch (Exception $e) {
+            $dato["msj"] = 'Error ' . $e->getMessage();
             return response()->json($dato);
         }
     }
-
-
-
-
 }

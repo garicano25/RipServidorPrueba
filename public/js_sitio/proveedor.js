@@ -8588,7 +8588,7 @@ $('#tabla_listapartidas tbody').on('click', 'td>button.boton_activar', function 
             const textoOpcionSeleccionada = this.options[this.selectedIndex].text;
             
             // Si se selecciona la opción 'Otro', desbloquear el input y limpiar su valor
-            if (opcionSeleccionada === '5') {
+            if (opcionSeleccionada === '6') {
                 nombreDocumentoInput.removeAttribute('readonly');
                 nombreDocumentoInput.value = '';
             } else {

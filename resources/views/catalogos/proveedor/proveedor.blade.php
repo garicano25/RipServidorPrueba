@@ -2493,9 +2493,10 @@
                                     <option disabled selected>Seleccione un tipo</option>
                                     <option value="1">Factura</option>
                                     <option value="2">Ficha técnica</option>
-                                    <option value="3">Certificado</option>
-                                    <option value="4">Validación de la factura</option>
-                                    <option value="5">Otro</option>
+                                    <option value="3">Validación de la factura</option>
+                                    <option value="4">Certificado de calibración</option>
+                                    <option value="5">Carta de calibración</option>
+                                    <option value="6">Otro</option>
                                 </select>
                             </div>
                         </div>

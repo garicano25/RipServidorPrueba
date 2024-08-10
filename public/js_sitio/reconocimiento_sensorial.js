@@ -4347,12 +4347,11 @@ function funcion_tabla_recsensorialcategorias(recsensorial_id)
 		                // "data": 'IconoBloqueo',
 		                "defaultContent": '<button type="button" class="btn btn-warning btn-circle"><i class="fa fa-pencil"></i></button>'
 		            },
-		            {
-		                "className": 'eliminar',
-		                "orderable": false,
-		                "data": 'boton_eliminar',
-		                "defaultContent": '-'
-		            }
+		            // {
+		            //     "orderable": false,
+		            //     "data": 'boton_eliminar',
+		            //     "defaultContent": '-'
+		            // }
 
 		        ],
 		        "lengthMenu": [[20, 50, 100, -1], [20, 50, 100, "Todos"]],
@@ -4796,12 +4795,11 @@ function funcion_tabla_recsensorialareas(recsensorial_id)
 							return '<button type="button" class="btn btn-warning btn-circle editar" data-options="' + row.recensorialarea_generacioncontaminante + '"><i class="fa fa-pencil"></i></button>';
 						}
 					},
-					{
-						"className": 'eliminar',
-						"orderable": false,
-						"data": 'boton_eliminar',
-						"defaultContent": '-'
-					}
+					// {
+					// 	"orderable": false,
+					// 	"data": 'boton_eliminar',
+					// 	"defaultContent": '-'
+					// }
 				
 
 		        ],

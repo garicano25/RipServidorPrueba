@@ -6852,8 +6852,11 @@ class reporteruidoController extends Controller
 
                     foreach ($request->equipoutilizado_checkbox as $key => $value) {
                         if ($request['equipoutilizado_checkboxcarta_' . $value]) {
+
                             $request->reporteequiposutilizados_cartacalibracion = 1;
                         } else {
+
+
                             $request->reporteequiposutilizados_cartacalibracion = null;
                         }
 
