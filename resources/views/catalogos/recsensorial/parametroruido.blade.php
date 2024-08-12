@@ -1723,12 +1723,12 @@
         try {
             var ruta = "/parametroruidoequipotabla/" + recsensorial_id;
 
-            if (datatable_ruidoequipos != null) {
-                // datatable_ruidoequipos.clear().draw();
-                // datatable_ruidoequipos.ajax.url(ruta).load();
+           
+            if (tabla_ruidoequipos != null) {
+            // Destruir la tabla existente antes de crear una nueva
+            tabla_ruidoequipos.destroy();
+            }
 
-                datatable_ruidoequipos.ajax.reload();
-            } else {
                 var numeroejecucion = 1;
                 datatable_ruidoequipos = $('#tabla_ruidoequipos').DataTable({
                     ajax: {
@@ -1821,11 +1821,11 @@
                     paging: false,
                     responsive: true,
                     language: {
-                        lengthMenu: "Mostrar _MENU_ Registros",
+                        lengthMenu: "Mostrar MENU Registros",
                         zeroRecords: "No se encontraron registros",
-                        info: "Página _PAGE_ de _PAGES_ (Total _TOTAL_ registros)",
+                        info: "Página PAGE de PAGES (Total TOTAL registros)",
                         infoEmpty: "No se encontraron registros",
-                        infoFiltered: "(Filtrado de _MAX_ registros)",
+                        infoFiltered: "(Filtrado de MAX registros)",
                         emptyTable: "No hay datos disponibles en la tabla",
                         loadingRecords: "Cargando datos....",
                         processing: "Procesando <i class='fa fa-spin fa-spinner fa-3x'></i>",
@@ -1857,7 +1857,7 @@
                         // $(row).find('td:eq(15)').css('color', '#FFFFFF');
                     },
                 });
-            }
+            
 
             // Tooltip en DataTable
             datatable_ruidoequipos.on('draw', function() {
