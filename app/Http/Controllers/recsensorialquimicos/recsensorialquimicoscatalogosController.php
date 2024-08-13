@@ -201,76 +201,7 @@ class recsensorialquimicoscatalogosController extends Controller
                     //                             ->get();
 
 
-                    $catalogo = DB::select('SELECT hoja.id , 
-                                                    hoja.catsustancia_nombre, 
-                                                    hoja.catsustancia_fabricante,
-                                                    hoja.catsustancia_hojaseguridadpdf, 
-                                                    hoja.catsustancia_activo,
-                                                    IFNULL(GROUP_CONCAT(CONCAT("<li>", sus.SUSTANCIA_QUIMICA) SEPARATOR "</li>"), "Sin componente") AS sustancias_quimicas,
-                                                    estado.catestadofisicosustancia_estado,
-                                                    vol.catvolatilidad_tipo,
-                                                    ingreso.catviaingresoorganismo_viaingreso,
-                                                    peligro.id AS peligroID,
-                                                    grado.id AS gradoID,
-                                                    hoja.catestadofisicosustancia_id,
-                                                    hoja.catvolatilidad_id,
-                                                    hoja.catviaingresoorganismo_id,
-                                                    hoja.catcategoriapeligrosalud_id,
-                                                    hoja.catgradoriesgosalud_id,
-                                                    hoja.catsustancia_solidoTipo,
-                                                    hoja.catTipoClasificacion,
-                                                    hoja.catClasificacionRiesgo,
-                                                    hoja.catsustancia_puntoEbullicion,
-                                                    hoja.catTemOperacion,
-                                                    hoja.catsustancia_nombreComun
-                                                FROM catsustancia hoja
-                                                LEFT JOIN catHojasSeguridad_SustanciasQuimicas relacion ON relacion.HOJA_SEGURIDAD_ID = hoja.id
-                                                LEFT JOIN catsustancias_quimicas sus ON sus.ID_SUSTANCIA_QUIMICA = relacion.SUSTANCIA_QUIMICA_ID
-                                                LEFT JOIN catestadofisicosustancia estado ON estado.id = hoja.catestadofisicosustancia_id
-                                                LEFT JOIN catvolatilidad vol ON vol.id = hoja.catvolatilidad_id
-                                                LEFT JOIN catviaingresoorganismo ingreso ON ingreso.id = hoja.catviaingresoorganismo_id
-                                                LEFT JOIN catcategoriapeligrosalud peligro ON peligro.id = hoja.catcategoriapeligrosalud_id
-                                                LEFT JOIN catgradoriesgosalud grado ON grado.id = hoja.catgradoriesgosalud_id
-                                                GROUP BY hoja.id, 
-                                                        hoja.catsustancia_nombre, 
-                                                    hoja.catsustancia_fabricante,
-                                                    hoja.catsustancia_hojaseguridadpdf, 
-                                                    hoja.catsustancia_activo,
-                                                    estado.catestadofisicosustancia_estado,
-                                                    vol.catvolatilidad_tipo,
-                                                    ingreso.catviaingresoorganismo_viaingreso,
-                                                    peligro.id,
-                                                    grado.id,
-                                                    hoja.catestadofisicosustancia_id,
-                                                    hoja.catvolatilidad_id,
-                                                    hoja.catviaingresoorganismo_id,
-                                                    hoja.catcategoriapeligrosalud_id,
-                                                    hoja.catgradoriesgosalud_id,
-                                                    hoja.catsustancia_solidoTipo,
-                                                    hoja.catTipoClasificacion,
-                                                    hoja.catClasificacionRiesgo,
-                                                    hoja.catsustancia_puntoEbullicion,
-                                                    hoja.catTemOperacion
-                                                ORDER BY hoja.id,
-                                                    hoja.catsustancia_nombre, 
-                                                    hoja.catsustancia_fabricante,
-                                                    hoja.catsustancia_hojaseguridadpdf, 
-                                                    hoja.catsustancia_activo,
-                                                    estado.catestadofisicosustancia_estado,
-                                                    vol.catvolatilidad_tipo,
-                                                    ingreso.catviaingresoorganismo_viaingreso,
-                                                    peligro.id,
-                                                    grado.id,
-                                                    hoja.catestadofisicosustancia_id,
-                                                    hoja.catvolatilidad_id,
-                                                    hoja.catviaingresoorganismo_id,
-                                                    hoja.catcategoriapeligrosalud_id,
-                                                    hoja.catgradoriesgosalud_id,
-                                                    hoja.catsustancia_solidoTipo,
-                                                    hoja.catTipoClasificacion,
-                                                    hoja.catClasificacionRiesgo,
-                                                    hoja.catsustancia_puntoEbullicion,
-                                                    hoja.catTemOperacion');
+                    $catalogo = DB::select('CALL sp_obtener_hojas_seguridad_b()');
 
                     // crear campos NOMBRE Y ESTADO
                     foreach ($catalogo as $key => $value) {
