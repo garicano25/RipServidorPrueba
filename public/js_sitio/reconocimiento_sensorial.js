@@ -5770,6 +5770,10 @@ $(document).ready(function()
 		});
 
 
+
+
+
+
 	    // consulta areas
     	consulta_areas('maquinaarea_id', row.data().recsensorialarea_id, $("#recsensorial_id").val(), 0);
 
@@ -5803,6 +5807,8 @@ $(document).ready(function()
 			select.$wrapper.fadeIn(1);
 			select.setValue(row.data().PRODUCTO_ID);
 			$('#boton_agregar_alcance').prop('disabled', true)
+		    $("#nombrecomun").prop('disabled', false).prop('required', false); 
+
 
 
 		} else if (opcion == 3) { //Quimicos y Fisico
@@ -5812,6 +5818,8 @@ $(document).ready(function()
 			select.$wrapper.fadeIn(1);
 			select.setValue(row.data().PRODUCTO_ID);
 			$('#boton_agregar_alcance').prop('disabled', false)
+			$("#nombrecomun").prop('disabled', false).prop('required', false); 
+
 
 		} else { // Fisico
 			
@@ -5820,6 +5828,7 @@ $(document).ready(function()
 			select.disable()
 			select.$wrapper.fadeOut(1);
 			$('#boton_agregar_alcance').prop('disabled', false)
+			$('#nombrecomun').prop('disabled', true);
 
 		}
 
@@ -12180,7 +12189,7 @@ function validarConclusion(check) {
 			 
         } else if (selectedValue === '2') { 
             $input.prop('disabled', false);  
-            $input.prop('required', true); 
+            $input.prop('required', false); 
 
 		} else {
             $input.prop('disabled', false);  

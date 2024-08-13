@@ -3080,7 +3080,7 @@
 
                         <div class="col-3">
                             <div class="form-group">
-                                <label> Nombre común de la fuente generadora </label>
+                                <label> Nombre común</label>
                                 <input type="text" class="form-control" id="nombrecomun" name="recsensorialmaquinaria_nombrecomun">
                             </div>
                         </div>
