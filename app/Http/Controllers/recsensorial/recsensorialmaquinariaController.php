@@ -169,8 +169,10 @@ class recsensorialmaquinariaController extends Controller
                 // AUTO_INCREMENT
                 DB::statement('ALTER TABLE recsensorialmaquinaria AUTO_INCREMENT=1');
 
+
                 // guardar
                 $maquina = recsensorialmaquinariaModel::create($request->all());
+
 
 
                 if ($request->AreaTipoAfecta) {
@@ -180,7 +182,7 @@ class recsensorialmaquinariaController extends Controller
                             'FUENTE_GENERADORA_ID' => $maquina->id,
                             'PRUEBA_ID' => $request->AgenteFactor[$key],
                             'TIPO_ALCANCE' => $request->AreaTipoAfecta[$key],
-                            'TIPO' => isset($request->TipoAgente[$key]) ? $request->TipoAgente[$key] : null,
+                            'TIPO' => is_null($request->TipoAgente[$key]) ?  null : $request->TipoAgente[$key],
 
                         ]);
                     }
@@ -203,7 +205,7 @@ class recsensorialmaquinariaController extends Controller
                             'FUENTE_GENERADORA_ID' => $maquina->id,
                             'PRUEBA_ID' => $request->AgenteFactor[$key],
                             'TIPO_ALCANCE' => $request->AreaTipoAfecta[$key],
-                            'TIPO' => isset($request->TipoAgente[$key]) ? $request->TipoAgente[$key] : null,
+                            'TIPO' => is_null($request->TipoAgente[$key]) ?  null : $request->TipoAgente[$key],
 
                         ]);
                     }

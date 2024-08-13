@@ -5911,7 +5911,11 @@ $(document).ready(function()
 						var selectPruebaID = $(this).closest('.row').find('.AgenteFactor');
 						var selectPruebaTipo = $(this).closest('.row').find('.AgenteTipo');
 						
-					MostratTiposAlcances(selectTipoAlcance.val(), selectAgenteFactor, selectAgenteTipo, elemento.PRUEBA_ID, elemento.TIPO);
+				
+						
+						MostratTiposAlcances(selectTipoAlcance.val(), selectAgenteFactor, selectAgenteTipo, elemento.PRUEBA_ID, elemento.TIPO);
+					
+					
 										
 				});
 
@@ -9816,10 +9820,10 @@ function MostratTiposAgentes(valor, selectPruebaTipo) {
 		
         default:
             // llenar select tipo de alcance agente
-            selectPruebaTipo.html('<option value=""></option>');
+            selectPruebaTipo.html('<option value="" disabled selected>No hay opciones disponibles</option>');
             // DESACTIVAR campo
             selectPruebaTipo.prop('required', false);
-            selectPruebaTipo.prop('disabled', true);
+            selectPruebaTipo.prop('disabled', false);
             break;
     }
 }
