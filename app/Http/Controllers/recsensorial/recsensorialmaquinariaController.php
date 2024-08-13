@@ -81,10 +81,34 @@ class recsensorialmaquinariaController extends Controller
                 $value->areasAfectan = $cadena;
 
 
-                if ($value->recsensorialmaquinaria_unidadMedida == 'PZ') {
+                if ($value->recsensorialmaquinaria_unidadMedida == 7) {
                     $value->recsensorialmaquinaria_cantidad_formateada =  $value->recsensorialmaquinaria_cantidad . ' PZ';
                 } else {
-                    $value->recsensorialmaquinaria_cantidad_formateada =  $value->recsensorialmaquinaria_cantidad . ' de ' . $value->recsensorialmaquinaria_contenido . ' ' . $value->recsensorialmaquinaria_unidadMedida;
+
+                    switch ($value->recsensorialmaquinaria_unidadMedida) {
+                        case 1:
+                            $value->recsensorialmaquinaria_cantidad_formateada =  $value->recsensorialmaquinaria_cantidad . ' de ' . $value->recsensorialmaquinaria_contenido . ' MM';
+                            break;
+                        case 2:
+                            $value->recsensorialmaquinaria_cantidad_formateada =  $value->recsensorialmaquinaria_cantidad . ' de ' . $value->recsensorialmaquinaria_contenido . ' L';
+                            break;
+                        case 3:
+                            $value->recsensorialmaquinaria_cantidad_formateada =  $value->recsensorialmaquinaria_cantidad . ' de ' . $value->recsensorialmaquinaria_contenido . ' M³';
+                            break;
+                        case 4:
+                            $value->recsensorialmaquinaria_cantidad_formateada =  $value->recsensorialmaquinaria_cantidad . ' de ' . $value->recsensorialmaquinaria_contenido . ' G';
+                            break;
+                        case 5:
+                            $value->recsensorialmaquinaria_cantidad_formateada =  $value->recsensorialmaquinaria_cantidad . ' de ' . $value->recsensorialmaquinaria_contenido . ' Kl';
+                            break;
+                        case 6:
+                            $value->recsensorialmaquinaria_cantidad_formateada =  $value->recsensorialmaquinaria_cantidad . ' de ' . $value->recsensorialmaquinaria_contenido . ' T';
+                            break;
+                        default:
+                            $value->recsensorialmaquinaria_cantidad_formateada =  'ND';
+
+                            break;
+                    }
                 }
 
 

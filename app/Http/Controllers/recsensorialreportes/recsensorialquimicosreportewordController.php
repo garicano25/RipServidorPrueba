@@ -179,6 +179,9 @@ class recsensorialquimicosreportewordController extends Controller
         $cliente = clienteModel::findOrFail($recsensorial[0]->cliente_id);
         $contrato = clientecontratoModel::findOrFail($recsensorial[0]->contrato_id);
         $recursos = recsensorialRecursosInformesModel::where('RECSENSORIAL_ID', $recsensorial[0]->id)->get();
+        $numeros = DB::select('SELECT COUNT(DISTINCT catsustancia_id) AS total_catsustancias
+                                    FROM recsensorialquimicosinventario
+                                    WHERE recsensorial_id = ?', [$recsensorial_id]);
 
 
         //IMAGEN DE LA PORTADA
@@ -688,24 +691,37 @@ class recsensorialquimicosreportewordController extends Controller
         $table = new Table(array('name' => 'Arial', 'width' => 13500, 'borderSize' => 10, 'borderColor' => '000000', 'cellMargin' => 0, 'spaceAfter' => 0, 'unit' => TblWidth::TWIP));
 
         $sql = DB::select('SELECT
-                                recsensorialmaquinaria.recsensorial_id,
-                                recsensorialmaquinaria.recsensorialarea_id,
-                                sus.catsustancia_nombre as agente,
-                                IFNULL(recsensorialarea.recsensorialarea_nombre, "Sin dato") AS recsensorialarea_nombre,
-                                recsensorialmaquinaria.id,
-                                recsensorialmaquinaria.recsensorialmaquinaria_descripcionfuente AS recsensorialmaquinaria_nombre,
-                                IF(recsensorialmaquinaria.recsensorialmaquinaria_unidadMedida = "PZ",CONCAT(recsensorialmaquinaria.recsensorialmaquinaria_cantidad, " " , recsensorialmaquinaria.recsensorialmaquinaria_unidadMedida),CONCAT(recsensorialmaquinaria.recsensorialmaquinaria_cantidad, " de ",recsensorialmaquinaria.recsensorialmaquinaria_contenido , " " , recsensorialmaquinaria.recsensorialmaquinaria_unidadMedida)) AS recsensorialmaquinaria_cantidad,
-                                recsensorialmaquinaria.recsensorialmaquinaria_afecta 
-                            FROM
-                                recsensorialmaquinaria
-                                LEFT JOIN recsensorialarea ON recsensorialmaquinaria.recsensorialarea_id = recsensorialarea.id 
-                                LEFT JOIN catsustancia sus ON sus.id = recsensorialmaquinaria.recsensorialmaquinaria_quimica
-                            WHERE
-                                recsensorialmaquinaria.recsensorial_id = ?
-                                AND (recsensorialmaquinaria.recsensorialmaquinaria_afecta = 2 OR recsensorialmaquinaria.recsensorialmaquinaria_afecta = 3) 
-                            ORDER BY
-                                recsensorialarea.id ASC,
-                                recsensorialmaquinaria.recsensorialmaquinaria_nombre ASC;', [$recsensorial_id]);
+                            recsensorialmaquinaria.recsensorial_id,
+                            recsensorialmaquinaria.recsensorialarea_id,
+                            sus.catsustancia_nombre AS agente,
+                            IFNULL(recsensorialarea.recsensorialarea_nombre, "Sin dato") AS recsensorialarea_nombre,
+                            recsensorialmaquinaria.id,
+                            recsensorialmaquinaria.recsensorialmaquinaria_descripcionfuente AS recsensorialmaquinaria_nombre,
+                            IF(recsensorialmaquinaria.recsensorialmaquinaria_unidadMedida = 7,
+                                CONCAT(recsensorialmaquinaria.recsensorialmaquinaria_cantidad, " PZ"),
+                                CONCAT(recsensorialmaquinaria.recsensorialmaquinaria_cantidad, " de ", recsensorialmaquinaria.recsensorialmaquinaria_contenido , " " , 
+                                    CASE recsensorialmaquinaria.recsensorialmaquinaria_unidadMedida
+                                        WHEN 1 THEN "MM"
+                                        WHEN 2 THEN "L"
+                                        WHEN 3 THEN "M³"
+                                        WHEN 4 THEN "G"
+                                        WHEN 5 THEN "Kl"
+                                        WHEN 6 THEN "T"
+                                        ELSE "ND"
+                                    END
+                                )
+                            ) AS recsensorialmaquinaria_cantidad,
+                            recsensorialmaquinaria.recsensorialmaquinaria_afecta 
+                        FROM
+                            recsensorialmaquinaria
+                            LEFT JOIN recsensorialarea ON recsensorialmaquinaria.recsensorialarea_id = recsensorialarea.id 
+                            LEFT JOIN catsustancia sus ON sus.id = recsensorialmaquinaria.recsensorialmaquinaria_quimica
+                        WHERE
+                            recsensorialmaquinaria.recsensorial_id = ?
+                            AND (recsensorialmaquinaria.recsensorialmaquinaria_afecta = 2 OR recsensorialmaquinaria.recsensorialmaquinaria_afecta = 3) 
+                        ORDER BY
+                            recsensorialarea.id ASC,
+                            recsensorialmaquinaria.recsensorialmaquinaria_nombre ASC;', [$recsensorial_id]);
 
         // encabezado tabla
         $table->addRow(200, array('tblHeader' => true));
@@ -836,44 +852,58 @@ class recsensorialquimicosreportewordController extends Controller
         $table->addCell(null, $continua_fila);
         $table->addCell(null, $continua_fila);
 
-        // registros tabla
-        $area = 'xxx';
-        $sustancia = 'xxx';
-        foreach ($sql as $key => $value) {
-            if ($area != $value->AREA) {
-                $table->addRow(); // fila para el nuevo área
-                $table->addCell(null, $combinar_fila)->addTextRun($centrado)->addText($value->AREA, $texto);
-                $table->addCell(null, $combinar_fila)->addTextRun($centrado)->addText('[' . $productos[$value->PRODUCTO] . '] ' . $value->PRODUCTO, $texto);
-                $table->addCell(null, $celda)->addTextRun($centrado)->addText($value->COMPONENTE, $texto);
-                $table->addCell(null, $celda)->addTextRun($centrado)->addText($value->PONDERACION_CANTIDAD, $texto);
-                $table->addCell(null, $celda)->addTextRun($centrado)->addText($value->PONDERACION_CLASIFICACION, $texto);
-                $table->addCell(null, $celda)->addTextRun($centrado)->addText($value->PONDERACION_VOLATILIDAD, $texto);
-                $table->addCell(null, $celda)->addTextRun($centrado)->addText($value->SUMA_PONDERACIONES, $texto);
-                $table->addCell(null, array('bgColor' => $value->COLOR, 'valign' => 'center'))->addTextRun($centrado)->addText($value->PRIORIDAD, $texto);
-                $area = $value->AREA;
-                $sustancia = $value->PRODUCTO;
-            } else if ($sustancia != $value->PRODUCTO) {
-                $table->addRow(); // fila para el nuevo producto dentro del área actual
-                $table->addCell(null, $continua_fila);
-                $table->addCell(null, $combinar_fila)->addTextRun($centrado)->addText('[' . $productos[$value->PRODUCTO] . '] ' . $value->PRODUCTO, $texto);
-                $table->addCell(null, $celda)->addTextRun($centrado)->addText($value->COMPONENTE, $texto);
-                $table->addCell(null, $celda)->addTextRun($centrado)->addText($value->PONDERACION_CANTIDAD, $texto);
-                $table->addCell(null, $celda)->addTextRun($centrado)->addText($value->PONDERACION_CLASIFICACION, $texto);
-                $table->addCell(null, $celda)->addTextRun($centrado)->addText($value->PONDERACION_VOLATILIDAD, $texto);
-                $table->addCell(null, $celda)->addTextRun($centrado)->addText($value->SUMA_PONDERACIONES, $texto);
-                $table->addCell(null, array('bgColor' => $value->COLOR, 'valign' => 'center'))->addTextRun($centrado)->addText($value->PRIORIDAD, $texto);
-                $sustancia = $value->PRODUCTO;
-            } else {
-                $table->addRow(); // fila para el nuevo componente dentro del producto actual
-                $table->addCell(null, $continua_fila);
-                $table->addCell(null, $continua_fila);
-                $table->addCell(null, $celda)->addTextRun($centrado)->addText($value->COMPONENTE, $texto);
-                $table->addCell(null, $celda)->addTextRun($centrado)->addText($value->PONDERACION_CANTIDAD, $texto);
-                $table->addCell(null, $celda)->addTextRun($centrado)->addText($value->PONDERACION_CLASIFICACION, $texto);
-                $table->addCell(null, $celda)->addTextRun($centrado)->addText($value->PONDERACION_VOLATILIDAD, $texto);
-                $table->addCell(null, $celda)->addTextRun($centrado)->addText($value->SUMA_PONDERACIONES, $texto);
-                $table->addCell(null, array('bgColor' => $value->COLOR, 'valign' => 'center'))->addTextRun($centrado)->addText($value->PRIORIDAD, $texto);
+        if (!empty($sql)) {
+
+
+            // registros tabla
+            $area = 'xxx';
+            $sustancia = 'xxx';
+            foreach ($sql as $key => $value) {
+                if ($area != $value->AREA) {
+                    $table->addRow(); // fila para el nuevo área
+                    $table->addCell(null, $combinar_fila)->addTextRun($centrado)->addText($value->AREA, $texto);
+                    $table->addCell(null, $combinar_fila)->addTextRun($centrado)->addText('[' . $productos[$value->PRODUCTO] . '] ' . $value->PRODUCTO, $texto);
+                    $table->addCell(null, $celda)->addTextRun($centrado)->addText($value->COMPONENTE, $texto);
+                    $table->addCell(null, $celda)->addTextRun($centrado)->addText($value->PONDERACION_CANTIDAD, $texto);
+                    $table->addCell(null, $celda)->addTextRun($centrado)->addText($value->PONDERACION_CLASIFICACION, $texto);
+                    $table->addCell(null, $celda)->addTextRun($centrado)->addText($value->PONDERACION_VOLATILIDAD, $texto);
+                    $table->addCell(null, $celda)->addTextRun($centrado)->addText($value->SUMA_PONDERACIONES, $texto);
+                    $table->addCell(null, array('bgColor' => $value->COLOR, 'valign' => 'center'))->addTextRun($centrado)->addText($value->PRIORIDAD, $texto);
+                    $area = $value->AREA;
+                    $sustancia = $value->PRODUCTO;
+                } else if ($sustancia != $value->PRODUCTO) {
+                    $table->addRow(); // fila para el nuevo producto dentro del área actual
+                    $table->addCell(null, $continua_fila);
+                    $table->addCell(null, $combinar_fila)->addTextRun($centrado)->addText('[' . $productos[$value->PRODUCTO] . '] ' . $value->PRODUCTO, $texto);
+                    $table->addCell(null, $celda)->addTextRun($centrado)->addText($value->COMPONENTE, $texto);
+                    $table->addCell(null, $celda)->addTextRun($centrado)->addText($value->PONDERACION_CANTIDAD, $texto);
+                    $table->addCell(null, $celda)->addTextRun($centrado)->addText($value->PONDERACION_CLASIFICACION, $texto);
+                    $table->addCell(null, $celda)->addTextRun($centrado)->addText($value->PONDERACION_VOLATILIDAD, $texto);
+                    $table->addCell(null, $celda)->addTextRun($centrado)->addText($value->SUMA_PONDERACIONES, $texto);
+                    $table->addCell(null, array('bgColor' => $value->COLOR, 'valign' => 'center'))->addTextRun($centrado)->addText($value->PRIORIDAD, $texto);
+                    $sustancia = $value->PRODUCTO;
+                } else {
+                    $table->addRow(); // fila para el nuevo componente dentro del producto actual
+                    $table->addCell(null, $continua_fila);
+                    $table->addCell(null, $continua_fila);
+                    $table->addCell(null, $celda)->addTextRun($centrado)->addText($value->COMPONENTE, $texto);
+                    $table->addCell(null, $celda)->addTextRun($centrado)->addText($value->PONDERACION_CANTIDAD, $texto);
+                    $table->addCell(null, $celda)->addTextRun($centrado)->addText($value->PONDERACION_CLASIFICACION, $texto);
+                    $table->addCell(null, $celda)->addTextRun($centrado)->addText($value->PONDERACION_VOLATILIDAD, $texto);
+                    $table->addCell(null, $celda)->addTextRun($centrado)->addText($value->SUMA_PONDERACIONES, $texto);
+                    $table->addCell(null, array('bgColor' => $value->COLOR, 'valign' => 'center'))->addTextRun($centrado)->addText($value->PRIORIDAD, $texto);
+                }
             }
+        } else {
+
+
+
+            // Agrega una fila completa con el mensaje
+            $table->addRow(); // Agrega una nueva fila para el mensaje
+            $table->addCell(null, array('gridSpan' => 8, 'valign' => 'center'))->addTextRun($centrado)->addText(
+                'Se cuenta con ' . $numeros[0]->total_catsustancias . ' productos con una proporción  de componentes que incluyen diferentes sustancias químicas. Según el análisis realizado, no es necesario muestrear las sustancias químicas presentes en los productos de la empresa, debido a que las prioridades de muestreo obtenidas son bajas o muy bajas, por lo que no existe riesgo de exposición a sustancias químicas para los trabajadores.',
+                $texto
+            );
         }
 
         $plantillaword->setComplexBlock('tabla_quimicos_resumen1', $table);
@@ -921,130 +951,140 @@ class recsensorialquimicosreportewordController extends Controller
 
 
         // registros tabla
-        $grupo = 'xxx';
-        $sustancia = 'xxx';
-        $area = 'xxx';
-        foreach ($sql as $key => $value) {
-            if ($grupo != $value->CLASIFICACION) {
-                // Si cambia de area, reinicia la categoria y sustancia
-                $sustancia = 'xxx';
-                $area = 'xxx';
+        if (!empty($sql)) {
+            $grupo = 'xxx';
+            $sustancia = 'xxx';
+            $area = 'xxx';
+            foreach ($sql as $key => $value) {
+                if ($grupo != $value->CLASIFICACION) {
+                    // Si cambia de area, reinicia la categoria y sustancia
+                    $sustancia = 'xxx';
+                    $area = 'xxx';
 
-                $table->addRow(); //fila
-                $table->addCell(2300, $combinar_fila)->addTextRun($centrado)->addText($value->CLASIFICACION, $texto);
+                    $table->addRow(); //fila
+                    $table->addCell(2300, $combinar_fila)->addTextRun($centrado)->addText($value->CLASIFICACION, $texto);
 
-                if ($sustancia != $value->SUSTANCIA_PRODUCTO) {
-                    $table->addCell(2300, $combinar_fila)->addTextRun($centrado)->addText($value->SUSTANCIA_PRODUCTO, $textonegrita);
+                    if ($sustancia != $value->SUSTANCIA_PRODUCTO) {
+                        $table->addCell(2300, $combinar_fila)->addTextRun($centrado)->addText($value->SUSTANCIA_PRODUCTO, $textonegrita);
 
-                    if ($area != $value->AREA) {
-                        $table->addCell(2300, $combinar_fila)->addTextRun($centrado)->addText($value->AREA, $texto);
-                        $table->addCell(null, $celda)->addTextRun($centrado)->addText($value->CATEGORIA, $texto);
-                        $table->addCell(null, $celda)->addTextRun($centrado)->addText($value->PONDERACION_INGRESO, $texto);
-                        $table->addCell(null, $celda)->addTextRun($centrado)->addText($value->PONDERACION_POE, $texto);
-                        $table->addCell(null, $celda)->addTextRun($centrado)->addText($value->PONDERACION_EXPOSICION, $texto);
-                        $table->addCell(null, $celda)->addTextRun($centrado)->addText($value->SUMA_PONDERACIONES, $texto);
-                        $table->addCell(null, array('bgColor' => $value->COLOR, 'valign' => 'center'))->addTextRun($centrado)->addText($value->PRIORIDAD, $texto);
-                        $table->addCell(null, $celda)->addTextRun($centrado)->addText($value->NUM_POE, $texto);
+                        if ($area != $value->AREA) {
+                            $table->addCell(2300, $combinar_fila)->addTextRun($centrado)->addText($value->AREA, $texto);
+                            $table->addCell(null, $celda)->addTextRun($centrado)->addText($value->CATEGORIA, $texto);
+                            $table->addCell(null, $celda)->addTextRun($centrado)->addText($value->PONDERACION_INGRESO, $texto);
+                            $table->addCell(null, $celda)->addTextRun($centrado)->addText($value->PONDERACION_POE, $texto);
+                            $table->addCell(null, $celda)->addTextRun($centrado)->addText($value->PONDERACION_EXPOSICION, $texto);
+                            $table->addCell(null, $celda)->addTextRun($centrado)->addText($value->SUMA_PONDERACIONES, $texto);
+                            $table->addCell(null, array('bgColor' => $value->COLOR, 'valign' => 'center'))->addTextRun($centrado)->addText($value->PRIORIDAD, $texto);
+                            $table->addCell(null, $celda)->addTextRun($centrado)->addText($value->NUM_POE, $texto);
 
 
-                        $area = $value->AREA;
+                            $area = $value->AREA;
+                        } else {
+                            $table->addCell(2300, $continua_fila);
+                            $table->addCell(null, $celda)->addTextRun($centrado)->addText($value->CATEGORIA, $texto);
+                            $table->addCell(null, $celda)->addTextRun($centrado)->addText($value->PONDERACION_INGRESO, $texto);
+                            $table->addCell(null, $celda)->addTextRun($centrado)->addText($value->PONDERACION_POE, $texto);
+                            $table->addCell(null, $celda)->addTextRun($centrado)->addText($value->PONDERACION_EXPOSICION, $texto);
+                            $table->addCell(null, $celda)->addTextRun($centrado)->addText($value->SUMA_PONDERACIONES, $texto);
+                            $table->addCell(null, array('bgColor' => $value->COLOR, 'valign' => 'center'))->addTextRun($centrado)->addText($value->PRIORIDAD, $texto);
+                            $table->addCell(null, $celda)->addTextRun($centrado)->addText($value->NUM_POE, $texto);
+                        }
+
+                        $sustancia = $value->SUSTANCIA_PRODUCTO;
                     } else {
                         $table->addCell(2300, $continua_fila);
-                        $table->addCell(null, $celda)->addTextRun($centrado)->addText($value->CATEGORIA, $texto);
-                        $table->addCell(null, $celda)->addTextRun($centrado)->addText($value->PONDERACION_INGRESO, $texto);
-                        $table->addCell(null, $celda)->addTextRun($centrado)->addText($value->PONDERACION_POE, $texto);
-                        $table->addCell(null, $celda)->addTextRun($centrado)->addText($value->PONDERACION_EXPOSICION, $texto);
-                        $table->addCell(null, $celda)->addTextRun($centrado)->addText($value->SUMA_PONDERACIONES, $texto);
-                        $table->addCell(null, array('bgColor' => $value->COLOR, 'valign' => 'center'))->addTextRun($centrado)->addText($value->PRIORIDAD, $texto);
-                        $table->addCell(null, $celda)->addTextRun($centrado)->addText($value->NUM_POE, $texto);
+
+                        if ($area != $value->AREA) {
+                            $table->addCell(2300, $combinar_fila)->addTextRun($centrado)->addText($value->AREA, $texto);
+                            $table->addCell(null, $celda)->addTextRun($centrado)->addText($value->CATEGORIA, $texto);
+                            $table->addCell(null, $celda)->addTextRun($centrado)->addText($value->PONDERACION_INGRESO, $texto);
+                            $table->addCell(null, $celda)->addTextRun($centrado)->addText($value->PONDERACION_POE, $texto);
+                            $table->addCell(null, $celda)->addTextRun($centrado)->addText($value->PONDERACION_EXPOSICION, $texto);
+                            $table->addCell(null, $celda)->addTextRun($centrado)->addText($value->SUMA_PONDERACIONES, $texto);
+                            $table->addCell(null, array('bgColor' => $value->COLOR, 'valign' => 'center'))->addTextRun($centrado)->addText($value->PRIORIDAD, $texto);
+                            $table->addCell(null, $celda)->addTextRun($centrado)->addText($value->NUM_POE, $texto);
+
+
+                            $area = $value->AREA;
+                        } else {
+                            $table->addCell(2300, $continua_fila);
+                            $table->addCell(null, $celda)->addTextRun($centrado)->addText($value->CATEGORIA, $texto);
+                            $table->addCell(null, $celda)->addTextRun($centrado)->addText($value->PONDERACION_INGRESO, $texto);
+                            $table->addCell(null, $celda)->addTextRun($centrado)->addText($value->PONDERACION_POE, $texto);
+                            $table->addCell(null, $celda)->addTextRun($centrado)->addText($value->PONDERACION_EXPOSICION, $texto);
+                            $table->addCell(null, $celda)->addTextRun($centrado)->addText($value->SUMA_PONDERACIONES, $texto);
+                            $table->addCell(null, array('bgColor' => $value->COLOR, 'valign' => 'center'))->addTextRun($centrado)->addText($value->PRIORIDAD, $texto);
+                            $table->addCell(null, $celda)->addTextRun($centrado)->addText($value->NUM_POE, $texto);
+                        }
                     }
 
-                    $sustancia = $value->SUSTANCIA_PRODUCTO;
+                    $grupo = $value->CLASIFICACION;
                 } else {
+                    $table->addRow(); //fila
                     $table->addCell(2300, $continua_fila);
 
-                    if ($area != $value->AREA) {
-                        $table->addCell(2300, $combinar_fila)->addTextRun($centrado)->addText($value->AREA, $texto);
-                        $table->addCell(null, $celda)->addTextRun($centrado)->addText($value->CATEGORIA, $texto);
-                        $table->addCell(null, $celda)->addTextRun($centrado)->addText($value->PONDERACION_INGRESO, $texto);
-                        $table->addCell(null, $celda)->addTextRun($centrado)->addText($value->PONDERACION_POE, $texto);
-                        $table->addCell(null, $celda)->addTextRun($centrado)->addText($value->PONDERACION_EXPOSICION, $texto);
-                        $table->addCell(null, $celda)->addTextRun($centrado)->addText($value->SUMA_PONDERACIONES, $texto);
-                        $table->addCell(null, array('bgColor' => $value->COLOR, 'valign' => 'center'))->addTextRun($centrado)->addText($value->PRIORIDAD, $texto);
-                        $table->addCell(null, $celda)->addTextRun($centrado)->addText($value->NUM_POE, $texto);
+                    if ($sustancia != $value->SUSTANCIA_PRODUCTO) {
+                        $table->addCell(2300, $combinar_fila)->addTextRun($centrado)->addText($value->SUSTANCIA_PRODUCTO, $textonegrita);
 
+                        if ($area != $value->AREA) {
+                            $table->addCell(2300, $combinar_fila)->addTextRun($centrado)->addText($value->AREA, $texto);
+                            $table->addCell(null, $celda)->addTextRun($centrado)->addText($value->CATEGORIA, $texto);
+                            $table->addCell(null, $celda)->addTextRun($centrado)->addText($value->PONDERACION_INGRESO, $texto);
+                            $table->addCell(null, $celda)->addTextRun($centrado)->addText($value->PONDERACION_POE, $texto);
+                            $table->addCell(null, $celda)->addTextRun($centrado)->addText($value->PONDERACION_EXPOSICION, $texto);
+                            $table->addCell(null, $celda)->addTextRun($centrado)->addText($value->SUMA_PONDERACIONES, $texto);
+                            $table->addCell(null, array('bgColor' => $value->COLOR, 'valign' => 'center'))->addTextRun($centrado)->addText($value->PRIORIDAD, $texto);
+                            $table->addCell(null, $celda)->addTextRun($centrado)->addText($value->NUM_POE, $texto);
 
-                        $area = $value->AREA;
+                            $area = $value->AREA;
+                        } else {
+                            $table->addCell(2300, $continua_fila);
+                            $table->addCell(null, $celda)->addTextRun($centrado)->addText($value->CATEGORIA, $texto);
+                            $table->addCell(null, $celda)->addTextRun($centrado)->addText($value->PONDERACION_INGRESO, $texto);
+                            $table->addCell(null, $celda)->addTextRun($centrado)->addText($value->PONDERACION_POE, $texto);
+                            $table->addCell(null, $celda)->addTextRun($centrado)->addText($value->PONDERACION_EXPOSICION, $texto);
+                            $table->addCell(null, $celda)->addTextRun($centrado)->addText($value->SUMA_PONDERACIONES, $texto);
+                            $table->addCell(null, array('bgColor' => $value->COLOR, 'valign' => 'center'))->addTextRun($centrado)->addText($value->PRIORIDAD, $texto);
+                            $table->addCell(null, $celda)->addTextRun($centrado)->addText($value->NUM_POE, $texto);
+                        }
+
+                        $sustancia = $value->SUSTANCIA_PRODUCTO;
                     } else {
                         $table->addCell(2300, $continua_fila);
-                        $table->addCell(null, $celda)->addTextRun($centrado)->addText($value->CATEGORIA, $texto);
-                        $table->addCell(null, $celda)->addTextRun($centrado)->addText($value->PONDERACION_INGRESO, $texto);
-                        $table->addCell(null, $celda)->addTextRun($centrado)->addText($value->PONDERACION_POE, $texto);
-                        $table->addCell(null, $celda)->addTextRun($centrado)->addText($value->PONDERACION_EXPOSICION, $texto);
-                        $table->addCell(null, $celda)->addTextRun($centrado)->addText($value->SUMA_PONDERACIONES, $texto);
-                        $table->addCell(null, array('bgColor' => $value->COLOR, 'valign' => 'center'))->addTextRun($centrado)->addText($value->PRIORIDAD, $texto);
-                        $table->addCell(null, $celda)->addTextRun($centrado)->addText($value->NUM_POE, $texto);
+
+                        if ($area != $value->AREA) {
+                            $table->addCell(2300, $combinar_fila)->addTextRun($centrado)->addText($value->AREA, $texto);
+                            $table->addCell(null, $celda)->addTextRun($centrado)->addText($value->CATEGORIA, $texto);
+                            $table->addCell(null, $celda)->addTextRun($centrado)->addText($value->PONDERACION_INGRESO, $texto);
+                            $table->addCell(null, $celda)->addTextRun($centrado)->addText($value->PONDERACION_POE, $texto);
+                            $table->addCell(null, $celda)->addTextRun($centrado)->addText($value->PONDERACION_EXPOSICION, $texto);
+                            $table->addCell(null, $celda)->addTextRun($centrado)->addText($value->SUMA_PONDERACIONES, $texto);
+                            $table->addCell(null, array('bgColor' => $value->COLOR, 'valign' => 'center'))->addTextRun($centrado)->addText($value->PRIORIDAD, $texto);
+                            $table->addCell(null, $celda)->addTextRun($centrado)->addText($value->NUM_POE, $texto);
+
+
+                            $area = $value->AREA;
+                        } else {
+                            $table->addCell(2300, $continua_fila);
+                            $table->addCell(null, $celda)->addTextRun($centrado)->addText($value->CATEGORIA, $texto);
+                            $table->addCell(null, $celda)->addTextRun($centrado)->addText($value->PONDERACION_INGRESO, $texto);
+                            $table->addCell(null, $celda)->addTextRun($centrado)->addText($value->PONDERACION_POE, $texto);
+                            $table->addCell(null, $celda)->addTextRun($centrado)->addText($value->PONDERACION_EXPOSICION, $texto);
+                            $table->addCell(null, $celda)->addTextRun($centrado)->addText($value->SUMA_PONDERACIONES, $texto);
+                            $table->addCell(null, array('bgColor' => $value->COLOR, 'valign' => 'center'))->addTextRun($centrado)->addText($value->PRIORIDAD, $texto);
+                            $table->addCell(null, $celda)->addTextRun($centrado)->addText($value->NUM_POE, $texto);
+                        }
                     }
                 }
+            };
+        } else {
 
-                $grupo = $value->CLASIFICACION;
-            } else {
-                $table->addRow(); //fila
-                $table->addCell(2300, $continua_fila);
-
-                if ($sustancia != $value->SUSTANCIA_PRODUCTO) {
-                    $table->addCell(2300, $combinar_fila)->addTextRun($centrado)->addText($value->SUSTANCIA_PRODUCTO, $textonegrita);
-
-                    if ($area != $value->AREA) {
-                        $table->addCell(2300, $combinar_fila)->addTextRun($centrado)->addText($value->AREA, $texto);
-                        $table->addCell(null, $celda)->addTextRun($centrado)->addText($value->CATEGORIA, $texto);
-                        $table->addCell(null, $celda)->addTextRun($centrado)->addText($value->PONDERACION_INGRESO, $texto);
-                        $table->addCell(null, $celda)->addTextRun($centrado)->addText($value->PONDERACION_POE, $texto);
-                        $table->addCell(null, $celda)->addTextRun($centrado)->addText($value->PONDERACION_EXPOSICION, $texto);
-                        $table->addCell(null, $celda)->addTextRun($centrado)->addText($value->SUMA_PONDERACIONES, $texto);
-                        $table->addCell(null, array('bgColor' => $value->COLOR, 'valign' => 'center'))->addTextRun($centrado)->addText($value->PRIORIDAD, $texto);
-                        $table->addCell(null, $celda)->addTextRun($centrado)->addText($value->NUM_POE, $texto);
-
-                        $area = $value->AREA;
-                    } else {
-                        $table->addCell(2300, $continua_fila);
-                        $table->addCell(null, $celda)->addTextRun($centrado)->addText($value->CATEGORIA, $texto);
-                        $table->addCell(null, $celda)->addTextRun($centrado)->addText($value->PONDERACION_INGRESO, $texto);
-                        $table->addCell(null, $celda)->addTextRun($centrado)->addText($value->PONDERACION_POE, $texto);
-                        $table->addCell(null, $celda)->addTextRun($centrado)->addText($value->PONDERACION_EXPOSICION, $texto);
-                        $table->addCell(null, $celda)->addTextRun($centrado)->addText($value->SUMA_PONDERACIONES, $texto);
-                        $table->addCell(null, array('bgColor' => $value->COLOR, 'valign' => 'center'))->addTextRun($centrado)->addText($value->PRIORIDAD, $texto);
-                        $table->addCell(null, $celda)->addTextRun($centrado)->addText($value->NUM_POE, $texto);
-                    }
-
-                    $sustancia = $value->SUSTANCIA_PRODUCTO;
-                } else {
-                    $table->addCell(2300, $continua_fila);
-
-                    if ($area != $value->AREA) {
-                        $table->addCell(2300, $combinar_fila)->addTextRun($centrado)->addText($value->AREA, $texto);
-                        $table->addCell(null, $celda)->addTextRun($centrado)->addText($value->CATEGORIA, $texto);
-                        $table->addCell(null, $celda)->addTextRun($centrado)->addText($value->PONDERACION_INGRESO, $texto);
-                        $table->addCell(null, $celda)->addTextRun($centrado)->addText($value->PONDERACION_POE, $texto);
-                        $table->addCell(null, $celda)->addTextRun($centrado)->addText($value->PONDERACION_EXPOSICION, $texto);
-                        $table->addCell(null, $celda)->addTextRun($centrado)->addText($value->SUMA_PONDERACIONES, $texto);
-                        $table->addCell(null, array('bgColor' => $value->COLOR, 'valign' => 'center'))->addTextRun($centrado)->addText($value->PRIORIDAD, $texto);
-                        $table->addCell(null, $celda)->addTextRun($centrado)->addText($value->NUM_POE, $texto);
-
-
-                        $area = $value->AREA;
-                    } else {
-                        $table->addCell(2300, $continua_fila);
-                        $table->addCell(null, $celda)->addTextRun($centrado)->addText($value->CATEGORIA, $texto);
-                        $table->addCell(null, $celda)->addTextRun($centrado)->addText($value->PONDERACION_INGRESO, $texto);
-                        $table->addCell(null, $celda)->addTextRun($centrado)->addText($value->PONDERACION_POE, $texto);
-                        $table->addCell(null, $celda)->addTextRun($centrado)->addText($value->PONDERACION_EXPOSICION, $texto);
-                        $table->addCell(null, $celda)->addTextRun($centrado)->addText($value->SUMA_PONDERACIONES, $texto);
-                        $table->addCell(null, array('bgColor' => $value->COLOR, 'valign' => 'center'))->addTextRun($centrado)->addText($value->PRIORIDAD, $texto);
-                        $table->addCell(null, $celda)->addTextRun($centrado)->addText($value->NUM_POE, $texto);
-                    }
-                }
-            }
+            // Agrega una fila completa con el mensaje
+            $table->addRow(); // Agrega una nueva fila para el mensaje
+            $table->addCell(null, array('gridSpan' => 8, 'valign' => 'center'))->addTextRun($centrado)->addText(
+                'Se cuenta con ' . $numeros[0]->total_catsustancias . ' productos con una proporción  de componentes que incluyen diferentes sustancias químicas. Según el análisis realizado, no es necesario muestrear las sustancias químicas presentes en los productos de la empresa, debido a que las prioridades de muestreo obtenidas son bajas o muy bajas, por lo que no existe riesgo de exposición a sustancias químicas para los trabajadores.',
+                $texto
+            );
         }
 
         $plantillaword->setComplexBlock('tabla_quimicos_resumen2', $table);
@@ -1075,122 +1115,133 @@ class recsensorialquimicosreportewordController extends Controller
         $table->addCell(1200, $encabezado_celda)->addTextRun($centrado)->addText('Jornada de trabajo (horas)', $encabezado_texto);
 
         // registros tabla
-        $grupo = 'xxx';
-        $sustancia = 'xxx';
-        $area = 'xxx';
-        foreach ($sql as $key => $value) {
-            if ($grupo != $value->CLASIFICACION) {
-                // Si cambia de area, reinicia la categoria y sustancia
-                $sustancia = 'xxx';
-                $area = 'xxx';
 
-                $table->addRow(); //fila
-                $table->addCell(2300, $combinar_fila)->addTextRun($centrado)->addText($value->CLASIFICACION, $texto);
+        if (!empty($sql)) {
+            $grupo = 'xxx';
+            $sustancia = 'xxx';
+            $area = 'xxx';
+            foreach ($sql as $key => $value) {
+                if ($grupo != $value->CLASIFICACION) {
+                    // Si cambia de area, reinicia la categoria y sustancia
+                    $sustancia = 'xxx';
+                    $area = 'xxx';
 
-                if ($sustancia != $value->SUSTANCIA_PRODUCTO) {
-                    $table->addCell(2300, $combinar_fila)->addTextRun($centrado)->addText($value->SUSTANCIA_PRODUCTO, $textonegrita);
+                    $table->addRow(); //fila
+                    $table->addCell(2300, $combinar_fila)->addTextRun($centrado)->addText($value->CLASIFICACION, $texto);
 
-                    if ($area != $value->AREA) {
-                        $table->addCell(2300, $combinar_fila)->addTextRun($centrado)->addText($value->AREA, $texto);
-                        $table->addCell(null, $celda)->addTextRun($centrado)->addText($value->CATEGORIA, $texto);
-                        $table->addCell(null, $celda)->addTextRun($centrado)->addText($value->POE, $texto);
-                        $table->addCell(null, $celda)->addTextRun($centrado)->addText($value->TIEMPO_EXPO, $texto);
-                        $table->addCell(null, $celda)->addTextRun($centrado)->addText($value->FRECUENCIA, $texto);
-                        $table->addCell(null, $celda)->addTextRun($centrado)->addText($value->TIEMPO_TOTAL, $texto);
-                        $table->addCell(null, $celda)->addTextRun($centrado)->addText($value->JORNADA_TRABAJO, $texto);
+                    if ($sustancia != $value->SUSTANCIA_PRODUCTO) {
+                        $table->addCell(2300, $combinar_fila)->addTextRun($centrado)->addText($value->SUSTANCIA_PRODUCTO, $textonegrita);
+
+                        if ($area != $value->AREA) {
+                            $table->addCell(2300, $combinar_fila)->addTextRun($centrado)->addText($value->AREA, $texto);
+                            $table->addCell(null, $celda)->addTextRun($centrado)->addText($value->CATEGORIA, $texto);
+                            $table->addCell(null, $celda)->addTextRun($centrado)->addText($value->POE, $texto);
+                            $table->addCell(null, $celda)->addTextRun($centrado)->addText($value->TIEMPO_EXPO, $texto);
+                            $table->addCell(null, $celda)->addTextRun($centrado)->addText($value->FRECUENCIA, $texto);
+                            $table->addCell(null, $celda)->addTextRun($centrado)->addText($value->TIEMPO_TOTAL, $texto);
+                            $table->addCell(null, $celda)->addTextRun($centrado)->addText($value->JORNADA_TRABAJO, $texto);
 
 
-                        $area = $value->AREA;
+                            $area = $value->AREA;
+                        } else {
+                            $table->addCell(2300, $continua_fila);
+                            $table->addCell(null, $celda)->addTextRun($centrado)->addText($value->CATEGORIA, $texto);
+                            $table->addCell(null, $celda)->addTextRun($centrado)->addText($value->POE, $texto);
+                            $table->addCell(null, $celda)->addTextRun($centrado)->addText($value->TIEMPO_EXPO, $texto);
+                            $table->addCell(null, $celda)->addTextRun($centrado)->addText($value->FRECUENCIA, $texto);
+                            $table->addCell(null, $celda)->addTextRun($centrado)->addText($value->TIEMPO_TOTAL, $texto);
+                            $table->addCell(null, $celda)->addTextRun($centrado)->addText($value->JORNADA_TRABAJO, $texto);
+                        }
+
+                        $sustancia = $value->SUSTANCIA_PRODUCTO;
                     } else {
                         $table->addCell(2300, $continua_fila);
-                        $table->addCell(null, $celda)->addTextRun($centrado)->addText($value->CATEGORIA, $texto);
-                        $table->addCell(null, $celda)->addTextRun($centrado)->addText($value->POE, $texto);
-                        $table->addCell(null, $celda)->addTextRun($centrado)->addText($value->TIEMPO_EXPO, $texto);
-                        $table->addCell(null, $celda)->addTextRun($centrado)->addText($value->FRECUENCIA, $texto);
-                        $table->addCell(null, $celda)->addTextRun($centrado)->addText($value->TIEMPO_TOTAL, $texto);
-                        $table->addCell(null, $celda)->addTextRun($centrado)->addText($value->JORNADA_TRABAJO, $texto);
+
+                        if ($area != $value->AREA) {
+                            $table->addCell(2300, $combinar_fila)->addTextRun($centrado)->addText($value->AREA, $texto);
+                            $table->addCell(null, $celda)->addTextRun($centrado)->addText($value->CATEGORIA, $texto);
+                            $table->addCell(null, $celda)->addTextRun($centrado)->addText($value->POE, $texto);
+                            $table->addCell(null, $celda)->addTextRun($centrado)->addText($value->TIEMPO_EXPO, $texto);
+                            $table->addCell(null, $celda)->addTextRun($centrado)->addText($value->FRECUENCIA, $texto);
+                            $table->addCell(null, $celda)->addTextRun($centrado)->addText($value->TIEMPO_TOTAL, $texto);
+                            $table->addCell(null, $celda)->addTextRun($centrado)->addText($value->JORNADA_TRABAJO, $texto);
+
+
+                            $area = $value->AREA;
+                        } else {
+                            $table->addCell(2300, $continua_fila);
+                            $table->addCell(null, $celda)->addTextRun($centrado)->addText($value->CATEGORIA, $texto);
+                            $table->addCell(null, $celda)->addTextRun($centrado)->addText($value->POE, $texto);
+                            $table->addCell(null, $celda)->addTextRun($centrado)->addText($value->TIEMPO_EXPO, $texto);
+                            $table->addCell(null, $celda)->addTextRun($centrado)->addText($value->FRECUENCIA, $texto);
+                            $table->addCell(null, $celda)->addTextRun($centrado)->addText($value->TIEMPO_TOTAL, $texto);
+                            $table->addCell(null, $celda)->addTextRun($centrado)->addText($value->JORNADA_TRABAJO, $texto);
+                        }
                     }
 
-                    $sustancia = $value->SUSTANCIA_PRODUCTO;
+                    $grupo = $value->CLASIFICACION;
                 } else {
+                    $table->addRow(); //fila
                     $table->addCell(2300, $continua_fila);
 
-                    if ($area != $value->AREA) {
-                        $table->addCell(2300, $combinar_fila)->addTextRun($centrado)->addText($value->AREA, $texto);
-                        $table->addCell(null, $celda)->addTextRun($centrado)->addText($value->CATEGORIA, $texto);
-                        $table->addCell(null, $celda)->addTextRun($centrado)->addText($value->POE, $texto);
-                        $table->addCell(null, $celda)->addTextRun($centrado)->addText($value->TIEMPO_EXPO, $texto);
-                        $table->addCell(null, $celda)->addTextRun($centrado)->addText($value->FRECUENCIA, $texto);
-                        $table->addCell(null, $celda)->addTextRun($centrado)->addText($value->TIEMPO_TOTAL, $texto);
-                        $table->addCell(null, $celda)->addTextRun($centrado)->addText($value->JORNADA_TRABAJO, $texto);
+                    if ($sustancia != $value->SUSTANCIA_PRODUCTO) {
+                        $table->addCell(2300, $combinar_fila)->addTextRun($centrado)->addText($value->SUSTANCIA_PRODUCTO, $textonegrita);
 
+                        if ($area != $value->AREA) {
+                            $table->addCell(2300, $combinar_fila)->addTextRun($centrado)->addText($value->AREA, $texto);
+                            $table->addCell(null, $celda)->addTextRun($centrado)->addText($value->CATEGORIA, $texto);
+                            $table->addCell(null, $celda)->addTextRun($centrado)->addText($value->POE, $texto);
+                            $table->addCell(null, $celda)->addTextRun($centrado)->addText($value->TIEMPO_EXPO, $texto);
+                            $table->addCell(null, $celda)->addTextRun($centrado)->addText($value->FRECUENCIA, $texto);
+                            $table->addCell(null, $celda)->addTextRun($centrado)->addText($value->TIEMPO_TOTAL, $texto);
+                            $table->addCell(null, $celda)->addTextRun($centrado)->addText($value->JORNADA_TRABAJO, $texto);
 
-                        $area = $value->AREA;
+                            $area = $value->AREA;
+                        } else {
+                            $table->addCell(2300, $continua_fila);
+                            $table->addCell(null, $celda)->addTextRun($centrado)->addText($value->CATEGORIA, $texto);
+                            $table->addCell(null, $celda)->addTextRun($centrado)->addText($value->POE, $texto);
+                            $table->addCell(null, $celda)->addTextRun($centrado)->addText($value->TIEMPO_EXPO, $texto);
+                            $table->addCell(null, $celda)->addTextRun($centrado)->addText($value->FRECUENCIA, $texto);
+                            $table->addCell(null, $celda)->addTextRun($centrado)->addText($value->TIEMPO_TOTAL, $texto);
+                            $table->addCell(null, $celda)->addTextRun($centrado)->addText($value->JORNADA_TRABAJO, $texto);
+                        }
+
+                        $sustancia = $value->SUSTANCIA_PRODUCTO;
                     } else {
                         $table->addCell(2300, $continua_fila);
-                        $table->addCell(null, $celda)->addTextRun($centrado)->addText($value->CATEGORIA, $texto);
-                        $table->addCell(null, $celda)->addTextRun($centrado)->addText($value->POE, $texto);
-                        $table->addCell(null, $celda)->addTextRun($centrado)->addText($value->TIEMPO_EXPO, $texto);
-                        $table->addCell(null, $celda)->addTextRun($centrado)->addText($value->FRECUENCIA, $texto);
-                        $table->addCell(null, $celda)->addTextRun($centrado)->addText($value->TIEMPO_TOTAL, $texto);
-                        $table->addCell(null, $celda)->addTextRun($centrado)->addText($value->JORNADA_TRABAJO, $texto);
-                    }
-                }
 
-                $grupo = $value->CLASIFICACION;
-            } else {
-                $table->addRow(); //fila
-                $table->addCell(2300, $continua_fila);
-
-                if ($sustancia != $value->SUSTANCIA_PRODUCTO) {
-                    $table->addCell(2300, $combinar_fila)->addTextRun($centrado)->addText($value->SUSTANCIA_PRODUCTO, $textonegrita);
-
-                    if ($area != $value->AREA) {
-                        $table->addCell(2300, $combinar_fila)->addTextRun($centrado)->addText($value->AREA, $texto);
-                        $table->addCell(null, $celda)->addTextRun($centrado)->addText($value->CATEGORIA, $texto);
-                        $table->addCell(null, $celda)->addTextRun($centrado)->addText($value->POE, $texto);
-                        $table->addCell(null, $celda)->addTextRun($centrado)->addText($value->TIEMPO_EXPO, $texto);
-                        $table->addCell(null, $celda)->addTextRun($centrado)->addText($value->FRECUENCIA, $texto);
-                        $table->addCell(null, $celda)->addTextRun($centrado)->addText($value->TIEMPO_TOTAL, $texto);
-                        $table->addCell(null, $celda)->addTextRun($centrado)->addText($value->JORNADA_TRABAJO, $texto);
-
-                        $area = $value->AREA;
-                    } else {
-                        $table->addCell(2300, $continua_fila);
-                        $table->addCell(null, $celda)->addTextRun($centrado)->addText($value->CATEGORIA, $texto);
-                        $table->addCell(null, $celda)->addTextRun($centrado)->addText($value->POE, $texto);
-                        $table->addCell(null, $celda)->addTextRun($centrado)->addText($value->TIEMPO_EXPO, $texto);
-                        $table->addCell(null, $celda)->addTextRun($centrado)->addText($value->FRECUENCIA, $texto);
-                        $table->addCell(null, $celda)->addTextRun($centrado)->addText($value->TIEMPO_TOTAL, $texto);
-                        $table->addCell(null, $celda)->addTextRun($centrado)->addText($value->JORNADA_TRABAJO, $texto);
-                    }
-
-                    $sustancia = $value->SUSTANCIA_PRODUCTO;
-                } else {
-                    $table->addCell(2300, $continua_fila);
-
-                    if ($area != $value->AREA) {
-                        $table->addCell(2300, $combinar_fila)->addTextRun($centrado)->addText($value->AREA, $texto);
-                        $table->addCell(null, $celda)->addTextRun($centrado)->addText($value->CATEGORIA, $texto);
-                        $table->addCell(null, $celda)->addTextRun($centrado)->addText($value->POE, $texto);
-                        $table->addCell(null, $celda)->addTextRun($centrado)->addText($value->TIEMPO_EXPO, $texto);
-                        $table->addCell(null, $celda)->addTextRun($centrado)->addText($value->FRECUENCIA, $texto);
-                        $table->addCell(null, $celda)->addTextRun($centrado)->addText($value->TIEMPO_TOTAL, $texto);
-                        $table->addCell(null, $celda)->addTextRun($centrado)->addText($value->JORNADA_TRABAJO, $texto);
+                        if ($area != $value->AREA) {
+                            $table->addCell(2300, $combinar_fila)->addTextRun($centrado)->addText($value->AREA, $texto);
+                            $table->addCell(null, $celda)->addTextRun($centrado)->addText($value->CATEGORIA, $texto);
+                            $table->addCell(null, $celda)->addTextRun($centrado)->addText($value->POE, $texto);
+                            $table->addCell(null, $celda)->addTextRun($centrado)->addText($value->TIEMPO_EXPO, $texto);
+                            $table->addCell(null, $celda)->addTextRun($centrado)->addText($value->FRECUENCIA, $texto);
+                            $table->addCell(null, $celda)->addTextRun($centrado)->addText($value->TIEMPO_TOTAL, $texto);
+                            $table->addCell(null, $celda)->addTextRun($centrado)->addText($value->JORNADA_TRABAJO, $texto);
 
 
-                        $area = $value->AREA;
-                    } else {
-                        $table->addCell(2300, $continua_fila);
-                        $table->addCell(null, $celda)->addTextRun($centrado)->addText($value->CATEGORIA, $texto);
-                        $table->addCell(null, $celda)->addTextRun($centrado)->addText($value->POE, $texto);
-                        $table->addCell(null, $celda)->addTextRun($centrado)->addText($value->TIEMPO_EXPO, $texto);
-                        $table->addCell(null, $celda)->addTextRun($centrado)->addText($value->FRECUENCIA, $texto);
-                        $table->addCell(null, $celda)->addTextRun($centrado)->addText($value->TIEMPO_TOTAL, $texto);
-                        $table->addCell(null, $celda)->addTextRun($centrado)->addText($value->JORNADA_TRABAJO, $texto);
+                            $area = $value->AREA;
+                        } else {
+                            $table->addCell(2300, $continua_fila);
+                            $table->addCell(null, $celda)->addTextRun($centrado)->addText($value->CATEGORIA, $texto);
+                            $table->addCell(null, $celda)->addTextRun($centrado)->addText($value->POE, $texto);
+                            $table->addCell(null, $celda)->addTextRun($centrado)->addText($value->TIEMPO_EXPO, $texto);
+                            $table->addCell(null, $celda)->addTextRun($centrado)->addText($value->FRECUENCIA, $texto);
+                            $table->addCell(null, $celda)->addTextRun($centrado)->addText($value->TIEMPO_TOTAL, $texto);
+                            $table->addCell(null, $celda)->addTextRun($centrado)->addText($value->JORNADA_TRABAJO, $texto);
+                        }
                     }
                 }
             }
+        } else {
+
+            // Agrega una fila completa con el mensaje
+            $table->addRow(); // Agrega una nueva fila para el mensaje
+            $table->addCell(null, array('gridSpan' => 8, 'valign' => 'center'))->addTextRun($centrado)->addText(
+                'Se cuenta con ' . $numeros[0]->total_catsustancias . ' productos con una proporción  de componentes que incluyen diferentes sustancias químicas. Según el análisis realizado, no es necesario muestrear las sustancias químicas presentes en los productos de la empresa, debido a que las prioridades de muestreo obtenidas son bajas o muy bajas, por lo que no existe riesgo de exposición a sustancias químicas para los trabajadores.',
+                $texto
+            );
         }
 
         $plantillaword->setComplexBlock('tabla_quimicos_resumen3', $table);
@@ -1343,38 +1394,49 @@ class recsensorialquimicosreportewordController extends Controller
         $table->addCell(1500, $continua_fila);
 
         // registros tabla
-        $grupo = 'xxx';
-        $sustancia = 'xxx';
-        foreach ($sql as $key => $value) {
-            if ($grupo != $value->CLASIFICACION) {
-                $table->addRow(); // fila para el nuevo área
-                $table->addCell(null, $combinar_fila)->addTextRun($centrado)->addText($value->CLASIFICACION, $texto);
-                $table->addCell(null, $combinar_fila)->addTextRun($centrado)->addText($value->PRODUCTO_COMPONENTE, $texto);
-                $table->addCell(null, $celda)->addTextRun($centrado)->addText($value->CATEGORIA, $texto);
-                $table->addCell(null, $celda)->addTextRun($centrado)->addText($value->MUESTREO_PPT, $texto);
-                $table->addCell(null, $celda)->addTextRun($centrado)->addText($value->MUESTREO_CT, $texto);
-                $table->addCell(null, $celda)->addTextRun($centrado)->addText($value->TOTAL_MUESTREOS, $textonegrita);
+        if (!empty($sql)) {
+
+            $grupo = 'xxx';
+            $sustancia = 'xxx';
+            foreach ($sql as $key => $value) {
+                if ($grupo != $value->CLASIFICACION) {
+                    $table->addRow(); // fila para el nuevo área
+                    $table->addCell(null, $combinar_fila)->addTextRun($centrado)->addText($value->CLASIFICACION, $texto);
+                    $table->addCell(null, $combinar_fila)->addTextRun($centrado)->addText($value->PRODUCTO_COMPONENTE, $texto);
+                    $table->addCell(null, $celda)->addTextRun($centrado)->addText($value->CATEGORIA, $texto);
+                    $table->addCell(null, $celda)->addTextRun($centrado)->addText($value->MUESTREO_PPT, $texto);
+                    $table->addCell(null, $celda)->addTextRun($centrado)->addText($value->MUESTREO_CT, $texto);
+                    $table->addCell(null, $celda)->addTextRun($centrado)->addText($value->TOTAL_MUESTREOS, $textonegrita);
 
 
-                $grupo = $value->CLASIFICACION;
-                $sustancia = $value->PRODUCTO_COMPONENTE;
-            } else if ($sustancia != $value->PRODUCTO_COMPONENTE) {
-                $table->addRow(); // fila para el nuevo producto dentro del área actual
-                $table->addCell(null, $continua_fila);
-                $table->addCell(null, $combinar_fila)->addTextRun($centrado)->addText($value->PRODUCTO_COMPONENTE, $texto);
-                $table->addCell(null, $celda)->addTextRun($centrado)->addText($value->CATEGORIA, $texto);
-                $table->addCell(null, $celda)->addTextRun($centrado)->addText($value->MUESTREO_PPT, $texto);
-                $table->addCell(null, $celda)->addTextRun($centrado)->addText($value->MUESTREO_CT, $texto);
-                $table->addCell(null, $celda)->addTextRun($centrado)->addText($value->TOTAL_MUESTREOS, $textonegrita);
-            } else {
-                $table->addRow(); // fila para el nuevo componente dentro del producto actual
-                $table->addCell(null, $continua_fila);
-                $table->addCell(null, $continua_fila);
-                $table->addCell(null, $celda)->addTextRun($centrado)->addText($value->CATEGORIA, $texto);
-                $table->addCell(null, $celda)->addTextRun($centrado)->addText($value->MUESTREO_PPT, $texto);
-                $table->addCell(null, $celda)->addTextRun($centrado)->addText($value->MUESTREO_CT, $texto);
-                $table->addCell(null, $celda)->addTextRun($centrado)->addText($value->TOTAL_MUESTREOS, $textonegrita);
+                    $grupo = $value->CLASIFICACION;
+                    $sustancia = $value->PRODUCTO_COMPONENTE;
+                } else if ($sustancia != $value->PRODUCTO_COMPONENTE) {
+                    $table->addRow(); // fila para el nuevo producto dentro del área actual
+                    $table->addCell(null, $continua_fila);
+                    $table->addCell(null, $combinar_fila)->addTextRun($centrado)->addText($value->PRODUCTO_COMPONENTE, $texto);
+                    $table->addCell(null, $celda)->addTextRun($centrado)->addText($value->CATEGORIA, $texto);
+                    $table->addCell(null, $celda)->addTextRun($centrado)->addText($value->MUESTREO_PPT, $texto);
+                    $table->addCell(null, $celda)->addTextRun($centrado)->addText($value->MUESTREO_CT, $texto);
+                    $table->addCell(null, $celda)->addTextRun($centrado)->addText($value->TOTAL_MUESTREOS, $textonegrita);
+                } else {
+                    $table->addRow(); // fila para el nuevo componente dentro del producto actual
+                    $table->addCell(null, $continua_fila);
+                    $table->addCell(null, $continua_fila);
+                    $table->addCell(null, $celda)->addTextRun($centrado)->addText($value->CATEGORIA, $texto);
+                    $table->addCell(null, $celda)->addTextRun($centrado)->addText($value->MUESTREO_PPT, $texto);
+                    $table->addCell(null, $celda)->addTextRun($centrado)->addText($value->MUESTREO_CT, $texto);
+                    $table->addCell(null, $celda)->addTextRun($centrado)->addText($value->TOTAL_MUESTREOS, $textonegrita);
+                }
             }
+        } else {
+
+            // Agrega una fila completa con el mensaje
+            $table->addRow(); // Agrega una nueva fila para el mensaje
+            $table->addCell(null, array('gridSpan' => 8, 'valign' => 'center'))->addTextRun($centrado)->addText(
+                'Se cuenta con ' . $numeros[0]->total_catsustancias . ' productos con una proporción  de componentes que incluyen diferentes sustancias químicas. Según el análisis realizado, no es necesario muestrear las sustancias químicas presentes en los productos de la empresa, debido a que las prioridades de muestreo obtenidas son bajas o muy bajas, por lo que no existe riesgo de exposición a sustancias químicas para los trabajadores.',
+                $texto
+            );
         }
 
 
@@ -1443,14 +1505,24 @@ class recsensorialquimicosreportewordController extends Controller
         $table->addCell(1200, $continua_fila);
         $table->addCell(2500, $continua_fila);
 
-        // registros tabla
-        foreach ($sql as $key => $value) {
-            $table->addRow(); //fila
-            $table->addCell(3450, $celda)->addTextRun($centrado)->addText($value->PRODUCTO_COMPONENTE, $texto);
-            $table->addCell(1400, $celda)->addTextRun($centrado)->addText($value->SUMA_MUESTREO_PPT, $texto);
-            $table->addCell(1400, $celda)->addTextRun($centrado)->addText($value->SUMA_MUESTREO_CT, $texto);
-            $table->addCell(1200, $celda)->addTextRun($centrado)->addText($value->TOTAL_MUESTREO, $textonegrita);
-            // $table->addCell(2500, $celda)->addTextRun($centrado)->addText($value->tipoinstalacion, $texto);
+        if (!empty($sql)) {
+            // registros tabla
+            foreach ($sql as $key => $value) {
+                $table->addRow(); //fila
+                $table->addCell(3450, $celda)->addTextRun($centrado)->addText($value->PRODUCTO_COMPONENTE, $texto);
+                $table->addCell(1400, $celda)->addTextRun($centrado)->addText($value->SUMA_MUESTREO_PPT, $texto);
+                $table->addCell(1400, $celda)->addTextRun($centrado)->addText($value->SUMA_MUESTREO_CT, $texto);
+                $table->addCell(1200, $celda)->addTextRun($centrado)->addText($value->TOTAL_MUESTREO, $textonegrita);
+                // $table->addCell(2500, $celda)->addTextRun($centrado)->addText($value->tipoinstalacion, $texto);
+            }
+        } else {
+
+            // Agrega una fila completa con el mensaje
+            $table->addRow(); // Agrega una nueva fila para el mensaje
+            $table->addCell(null, array('gridSpan' => 8, 'valign' => 'center'))->addTextRun($centrado)->addText(
+                'Se cuenta con ' . $numeros[0]->total_catsustancias . ' productos con una proporción  de componentes que incluyen diferentes sustancias químicas. Según el análisis realizado, no es necesario muestrear las sustancias químicas presentes en los productos de la empresa, debido a que las prioridades de muestreo obtenidas son bajas o muy bajas, por lo que no existe riesgo de exposición a sustancias químicas para los trabajadores.',
+                $texto
+            );
         }
 
         $plantillaword->setComplexBlock('tabla_resumen_quimicos1', $table);
