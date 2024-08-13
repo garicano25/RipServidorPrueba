@@ -63,6 +63,8 @@ class recsensorialmaquinariaController extends Controller
                 $numero_registro += 1;
                 $value->numero_registro = $numero_registro;
 
+                $value->nombre_completo = $value->NOMBRE_FUENTE . '<br> <small class="text-muted">' . $value->recsensorialmaquinaria_descripcionfuente . '</small>';
+
 
                 //Obtenemos el area afectada
                 $areasAfectadas = DB::select('SELECT afectan.TIPO_ALCANCE ALCANCE, prueba.catPrueba_Nombre

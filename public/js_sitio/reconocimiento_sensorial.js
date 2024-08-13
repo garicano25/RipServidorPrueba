@@ -1840,57 +1840,6 @@ $('#tabla_reconocimiento_sensorial tbody').on('click', 'td.mostrar', function()
 		}
 
 
-		// OBTENER FOTO PLANO
-	    if (row.data().recsensorial_fotoplano)
-	    {
-	        var archivo = row.data().recsensorial_fotoplano;
-	        var extension = archivo.substring(archivo.lastIndexOf("."));
-			var imagenUrl = '/mostrarplano/0/' + row.data().id + extension;
-			
-			rutaMapa = imagenUrl
-
-
-	        // INPUT FOTO PLANO
-			if ($('#inputfotoplano').data('dropify'))
-			{
-				$('#inputfotoplano').dropify().data('dropify').destroy();
-				// $('.dropify-wrapper').css('height', 400);
-				$('#inputfotoplano').dropify().data('dropify').settings.defaultFile = imagenUrl;
-				$('#inputfotoplano').dropify().data('dropify').init();
-			}
-			else
-			{
-				// $('#inputfotoplano').attr('data-height', 400);
-				$('#inputfotoplano').attr('data-default-file', imagenUrl);
-				$('#inputfotoplano').dropify({
-					messages: {
-			            'default': 'Arrastre la imagen aquí o haga click',
-			            'replace': 'Arrastre la imagen o haga clic para reemplazar',
-			            'remove':  'Quitar',
-			            'error':   'Ooops, ha ocurrido un error.'
-			        },
-			        error: {
-			            'fileSize': 'Demasiado grande ({{ value }} max).',
-			            'minWidth': 'Ancho demasiado pequeño (min {{ value }}}px).',
-			            'maxWidth': 'Ancho demasiado grande (max {{ value }}}px).',
-			            'minHeight': 'Alto demasiado pequeño (min {{ value }}}px).',
-			            'maxHeight': 'Alto demasiado grande (max {{ value }}px max).',
-			            'imageFormat': 'Formato no permitido, sólo ({{ value }}).'
-			        }
-			    });
-			}
-
-			// No requerir campo FOTO
-			$('#inputfotoplano').attr('required', false);
-
-			// Activar boton descarga
-			$("#boton_descargarplanoinstalacion").css('display', 'block');
-		}
-		else
-		{
-			$("#boton_descargarplanoinstalacion").css('display', 'none');
-		}
-
 		// ACTIVAR BOTON DESCARGA DE QUIMICOS AUTORIZADO PDF
 		if (row.data().recsensorial_reconocimientoquimicospdf)
 		{
@@ -1900,6 +1849,58 @@ $('#tabla_reconocimiento_sensorial tbody').on('click', 'td.mostrar', function()
 		{
 			$('#boton_descargarquimicospdf').css('display', 'none');
 		}
+	}
+
+
+	// OBTENER FOTO PLANO
+	if (row.data().recsensorial_fotoplano)
+	{
+		var archivo = row.data().recsensorial_fotoplano;
+		var extension = archivo.substring(archivo.lastIndexOf("."));
+		var imagenUrl = '/mostrarplano/0/' + row.data().id + extension;
+		
+		rutaMapa = imagenUrl
+
+
+		// INPUT FOTO PLANO
+		if ($('#inputfotoplano').data('dropify'))
+		{
+			$('#inputfotoplano').dropify().data('dropify').destroy();
+			// $('.dropify-wrapper').css('height', 400);
+			$('#inputfotoplano').dropify().data('dropify').settings.defaultFile = imagenUrl;
+			$('#inputfotoplano').dropify().data('dropify').init();
+		}
+		else
+		{
+			// $('#inputfotoplano').attr('data-height', 400);
+			$('#inputfotoplano').attr('data-default-file', imagenUrl);
+			$('#inputfotoplano').dropify({
+				messages: {
+					'default': 'Arrastre la imagen aquí o haga click',
+					'replace': 'Arrastre la imagen o haga clic para reemplazar',
+					'remove':  'Quitar',
+					'error':   'Ooops, ha ocurrido un error.'
+				},
+				error: {
+					'fileSize': 'Demasiado grande ({{ value }} max).',
+					'minWidth': 'Ancho demasiado pequeño (min {{ value }}}px).',
+					'maxWidth': 'Ancho demasiado grande (max {{ value }}}px).',
+					'minHeight': 'Alto demasiado pequeño (min {{ value }}}px).',
+					'maxHeight': 'Alto demasiado grande (max {{ value }}px max).',
+					'imageFormat': 'Formato no permitido, sólo ({{ value }}).'
+				}
+			});
+		}
+
+		// No requerir campo FOTO
+		$('#inputfotoplano').attr('required', false);
+
+		// Activar boton descarga
+		$("#boton_descargarplanoinstalacion").css('display', 'block');
+	}
+	else
+	{
+		$("#boton_descargarplanoinstalacion").css('display', 'none');
 	}
 
 
@@ -5550,7 +5551,7 @@ function funcion_tabla_recsensorialmaquinas(recsensorial_id)
 		                "defaultContent": "-"
 		            },
 		            {
-		                "data": "NOMBRE_FUENTE",
+		                "data": "nombre_completo",
 		                "defaultContent": "-"
 		            },
 		            {
