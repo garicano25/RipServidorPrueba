@@ -5610,7 +5610,7 @@ function funcion_tabla_recsensorialmaquinas(recsensorial_id)
 
 $('#recsensorialmaquinaria_unidadMedida').on('change', function () {
 	
-	if ($(this).val() == "PZ") {
+	if ($(this).val() == 7) {
 		$("#recsensorialmaquinaria_contenido").prop('disabled', true);
         $("#recsensorialmaquinaria_contenido").val('');
 	} else {
@@ -6737,6 +6737,11 @@ function tabla_recsensorialanexos(recsensorial_id)
 					//     data: "id" 
 					// },
 					{
+						data: "recsensorialanexo_orden",
+						defaultContent: "-",
+						orderable: false,
+					},
+					{
 						data: "anexo_tipo",
 						defaultContent: "-",
 						// className: '',
@@ -6748,22 +6753,12 @@ function tabla_recsensorialanexos(recsensorial_id)
 						orderable: false,
 					},
 					{
-						data: "numero_registro",
-						defaultContent: "-",
-						orderable: false,
-						// className: 'checkbox_concluido',
-					},
-					{
 						data: "acreditacion_Entidad",
 						defaultContent: "-",
 						orderable: false,
 						// className: 'checkbox_cancelado',
 					},
-					{
-						data: "acreditacion_Numero",
-						defaultContent: "-",
-						orderable: false,
-					},
+					
 					{
 						data: "acreditacion_Vigencia",
 						defaultContent: "-",
@@ -6783,7 +6778,7 @@ function tabla_recsensorialanexos(recsensorial_id)
 					}
 				],
 				lengthMenu: [[10, 20, 50, -1], [10, 20, 50, "Todos"]],
-				rowsGroup: [0, 1], //agrupar filas
+					// rowsGroup: [1], //agrupar filas
 				// order: [[ 0, "ASC" ]],
 				ordering: false,
 				processing: true,

@@ -1257,11 +1257,10 @@
                                                                 <table class="table table-bordered table-hover stylish-table" width="100%" id="tabla_recsensorialanexos">
                                                                     <thead>
                                                                         <tr>
+                                                                            <th style="width: 80px!important;">No.</th>
                                                                             <th style="width: 120px!important;">Tipo informe</th>
                                                                             <th>Laboratorio o Nombre del anexo</th>
-                                                                            <th style="width: 80px!important;">No.</th>
                                                                             <th>Entidad</th>
-                                                                            <th>Numero</th>
                                                                             <th style="width: 120px!important;">Vigencia</th>
                                                                             <th style="width: 80px!important;">Mostrar</th>
                                                                             <th style="width: 80px!important;">Eliminar</th>
@@ -3009,7 +3008,7 @@
                         <div class="col-12">
                             <div class="form-group">
                                 <label> Descripción del área</label>
-                                <select class="custom-select form-control" id="DESCRIPCION_AREA" name="DESCRIPCION_AREA" required>
+                                <select class="custom-select form-control" id="DESCRIPCION_AREA" name="DESCRIPCION_AREA">
                                     <option value=""></option>
                                     @foreach($descripciones as $dato)
                                     <option value="{{$dato->ID_DESCRIPCION_AREA}}">{{ $dato->DESCRIPCION }}</option>
@@ -3112,23 +3111,14 @@
                             <div class="form-group">
                                 <label> Unidad de medida *</label>
                                 <select class="custom-select form-control" id="recsensorialmaquinaria_unidadMedida" name="recsensorialmaquinaria_unidadMedida" required>
-                                    <option value=""></option>
-                                    <option value="MM">Milímetros (mm)</option>
-                                    <option value="CM">Centímetros (cm)</option>
-                                    <option value="M">Metros (m)</option>
-                                    <option value="KM">Kilómetros (km)</option>
-                                    <option value="MG">Miligramos (mg)</option>
-                                    <option value="G">Gramos (g)</option>
-                                    <option value="KG">Kilogramos (kg)</option>
-                                    <option value="OZ">Onzas (oz)</option>
-                                    <option value="LB">Libras (lb)</option>
-                                    <option value="L">Litros (L)</option>
-                                    <option value="ML">Mililitros (ml)</option>
-                                    <option value="GAL">Galones (gal)</option>
-                                    <option value="FT">Pies (ft)</option>
-                                    <option value="IN">Pulgadas (in)</option>
-                                    <option value="PZ">Piezas (pz)</option>
-
+                                    <option value="">&nbsp;</option>
+                                    <option value="1">Mililitros (mm)</option>
+                                    <option value="2">Litros (L)</option>
+                                    <option value="3">Metros cúbicos </option>
+                                    <option value="4">Gramos (g)</option>
+                                    <option value="5">Kilos (Kl)</option>
+                                    <option value="6">Toneladas (T)</option>
+                                    <option value="7">Piezas (pz)</option>
                                 </select>
                             </div>
                         </div>
@@ -3285,6 +3275,12 @@
                     <div class="row">
                         <div class="col-12">
                             <input type="hidden" class="form-control" id="anexo_recsensorial_id" name="recsensorial_id" value="0">
+                        </div>
+                        <div class="col-12">
+                            <div class="form-group">
+                                <label> Anexo para el informe de *</label>
+                                <input type="number" class="form-control text-center" id="recsensorialanexo_orden" name="recsensorialanexo_orden">
+                            </div>
                         </div>
                         <div class="col-6">
                             <div class="form-group">
@@ -3465,8 +3461,8 @@
                                 </select>
                             </div>
                         </div>
-                        @if(auth()->user()->hasRoles(['Superusuario', 'Administrador', 'Coordinador','Operativo HI']))
-                        <div class="col-12">
+                        @if(auth()->user()->hasRoles(['Superusuario']))
+                        <div class="col-12 d-none">
                             <ol class="breadcrumb m-b-10">
                                 <button type="button" class="btn btn-secondary waves-effect waves-light botonnuevo_modulorecsensorial" data-toggle="tooltip" title="Agregar sustancia a la lista" id="boton_nuevasustancia_inventario">
                                     <span class="btn-label"><i class="fa fa-plus"></i></span> Sustancia
