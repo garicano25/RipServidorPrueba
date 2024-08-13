@@ -5835,7 +5835,7 @@ $(document).ready(function()
 
 
 		$("#recsensorialmaquinaria_contenido").prop('disabled', false);
-		if (row.data().recsensorialmaquinaria_unidadMedida == 'PZ') {
+		if (row.data().recsensorialmaquinaria_unidadMedida == 7) {
 			$("#recsensorialmaquinaria_contenido").prop('disabled', true);
 		} else {
 			$("#recsensorialmaquinaria_contenido").prop('disabled', false);
@@ -10060,7 +10060,7 @@ $('#boton_mapa_maquina').on('click', function (e) {
 });
 
 function formatearFechas(fecha1, fecha2) {
-    const meses = ["Enero", "Febrero", "Marzo", "Abril", "Mayo", "Junio", "Julio", "Agosto", "Septiembre", "Octubre", "Noviembre", "Diciembre"];
+    const meses = ["enero", "febrero", "marzo", "abril", "mayo", "junio", "julio", "agosto", "septiembre", "octubre", "noviembre", "diciembre"];
 
     // Convertir las cadenas de texto a objetos de fecha usando UTC
     const date1 = new Date(Date.parse(fecha1 + 'T00:00:00Z'));
