@@ -3012,7 +3012,7 @@
                                 <select class="custom-select form-control" id="DESCRIPCION_AREA" name="DESCRIPCION_AREA" required>
                                     <option value=""></option>
                                     @foreach($descripciones as $dato)
-                                    <option value="{{$dato->DESCRIPCION}}">{{ $dato->DESCRIPCION }}</option>
+                                    <option value="{{$dato->ID_DESCRIPCION_AREA}}">{{ $dato->DESCRIPCION }}</option>
                                     @endforeach
                                 </select>
                             </div>
