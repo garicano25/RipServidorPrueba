@@ -429,7 +429,7 @@ Route::resource('recsensorialanexo', 'recsensorial\recsensorialanexoController')
 
 Route::get('recsensorialanexolista/{proveedor_id}', ['as' => 'recsensorialanexo.recsensorialanexolista', 'uses' => 'recsensorial\recsensorialanexoController@recsensorialanexolista']);
 
-Route::get('recsensorialanexotabla/{recsensorial_id}', ['as' => 'recsensorialanexo.recsensorialanexotabla', 'uses' => 'recsensorial\recsensorialanexoController@recsensorialanexotabla']);
+Route::get('recsensorialanexotabla/{recsensorial_id}/{tipo}', ['as' => 'recsensorialanexo.recsensorialanexotabla', 'uses' => 'recsensorial\recsensorialanexoController@recsensorialanexotabla']);
 
 Route::get('recsensorialanexoeliminar/{recsensorialanexo_id}/{contrato_anexo_id}', ['as' => 'recsensorialanexo.recsensorialanexoeliminar', 'uses' => 'recsensorial\recsensorialanexoController@recsensorialanexoeliminar']);
 
