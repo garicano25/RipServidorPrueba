@@ -9,9 +9,10 @@ class recsensorialanexoModel extends Model
   protected $table = 'recsensorialanexo';
   protected $fillable = [
     'recsensorial_id',
-     'proveedor_id', 
-     'acreditacion_id',
-      'recsensorialanexo_tipo',
+    'proveedor_id',
+    'acreditacion_id',
+    'recsensorialanexo_tipo',
+    'recsensorialanexo_orden',
     'ruta_anexo',
     'contrato_anexo_id'
   ];

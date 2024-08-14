@@ -26,8 +26,7 @@ class recsensorialanexoController extends Controller
      */
     public function recsensorialanexolista($proveedor_id)
     {
-        try
-        {
+        try {
             $sql = DB::select('SELECT
                                     acreditacion.proveedor_id, 
                                     acreditacion.id, 
@@ -39,7 +38,7 @@ class recsensorialanexoController extends Controller
                                 FROM
                                     acreditacion
                                 WHERE
-                                    acreditacion.proveedor_id = '.$proveedor_id.' 
+                                    acreditacion.proveedor_id = ' . $proveedor_id . ' 
                                     AND acreditacion.acreditacion_Eliminado = 0 
                                     AND acreditacion.acreditacion_SoportePDF != "" 
                                 ORDER BY
@@ -48,20 +47,17 @@ class recsensorialanexoController extends Controller
 
             $opciones = '<option value=""></option>';
 
-            foreach ($sql as $key => $value) 
-            {
-                $opciones .= '<option value="'.$value->id.'">'.$value->acreditacion_Entidad.' ('.$value->acreditacion_Numero.')</option>';
+            foreach ($sql as $key => $value) {
+                $opciones .= '<option value="' . $value->id . '">' . $value->acreditacion_Entidad . ' (' . $value->acreditacion_Numero . ')</option>';
             }
 
             // respuesta
             $dato['opciones'] = $opciones;
             $dato["msj"] = 'Información consultada correctamente';
             return response()->json($dato);
-        }
-        catch(Exception $e)
-        {
+        } catch (Exception $e) {
             $dato['opciones'] = 0;
-            $dato["msj"] = 'Error '.$e->getMessage();
+            $dato["msj"] = 'Error ' . $e->getMessage();
             return response()->json($dato);
         }
     }
@@ -73,10 +69,9 @@ class recsensorialanexoController extends Controller
      * @param  int  $recsensorial_id
      * @return \Illuminate\Http\Response
      */
-    public function recsensorialanexotabla($recsensorial_id)
+    public function recsensorialanexotabla($recsensorial_id, $tipo)
     {
-        try
-        {
+        try {
             // Reconocimiento
             $recsensorial = recsensorialModel::findOrFail($recsensorial_id);
 
@@ -90,6 +85,7 @@ class recsensorialanexoController extends Controller
                                 acreditacion.acreditacion_Tipo,
                                 recsensorialanexo.contrato_anexo_id,
                                 ca.TIPO,
+                                recsensorialanexo.recsensorialanexo_orden,
                                 IFNULL(acreditacion.acreditacion_Entidad, "NA") acreditacion_Entidad,
                                 IFNULL(acreditacion.acreditacion_Numero, "NA") acreditacion_Numero,
                                 IFNULL(acreditacion.acreditacion_Vigencia, "NA") acreditacion_Vigencia,
@@ -100,47 +96,36 @@ class recsensorialanexoController extends Controller
                                 LEFT JOIN acreditacion ON recsensorialanexo.acreditacion_id = acreditacion.id
                                 LEFT JOIN contratros_anexos ca ON ca.ID_CONTRATO_ANEXO = recsensorialanexo.contrato_anexo_id
                             WHERE
-                                recsensorialanexo.recsensorial_id = ' . $recsensorial_id . '
-                                ORDER BY
-                                recsensorialanexo.recsensorialanexo_tipo ASC,
-                                proveedor.proveedor_RazonSocial ASC,
-                                acreditacion.acreditacion_Tipo ASC,
-                                acreditacion.acreditacion_Entidad ASC,
-                                acreditacion.acreditacion_Numero ASC');
+                                recsensorialanexo.recsensorial_id =  ?
+                                AND recsensorialanexo.recsensorialanexo_tipo = ?
+                            ORDER BY
+                                recsensorialanexo.recsensorialanexo_orden ASC', [$recsensorial_id, $tipo]);
 
             // FORMATEAR FILAS
             $numero_registro = 0;
-            foreach ($sql as $key => $value) 
-            {
+            foreach ($sql as $key => $value) {
                 $numero_registro += 1;
                 $value->numero_registro = $numero_registro;
 
 
-                if (($value->recsensorialanexo_tipo+0) == 1)
-                {
+                if (($value->recsensorialanexo_tipo + 0) == 1) {
                     $value->anexo_tipo = 'Físicos';
-                }
-                else
-                {
+                } else {
                     $value->anexo_tipo = 'Químicos';
                 }
 
-                if ($value->TIPO == 'IMAGEN'){
+                if ($value->TIPO == 'IMAGEN') {
                     $value->boton_pdf = '<button type="button" class="btn btn-info btn-circle anexo_pdf"><i class="fa fa-file-image-o"></i></button>';
-
-                }else{
+                } else {
 
                     $value->boton_pdf = '<button type="button" class="btn btn-info btn-circle anexo_pdf"><i class="fa fa-file-pdf-o"></i></button>';
                 }
-                
+
 
                 // Botones
-                if (auth()->user()->hasRoles(['Superusuario', 'Administrador', 'Coordinador','Operativo HI'])  && ($recsensorial->recsensorial_bloqueado + 0) == 0)
-                {
+                if (auth()->user()->hasRoles(['Superusuario', 'Administrador', 'Coordinador', 'Operativo HI'])  && ($recsensorial->recsensorial_bloqueado + 0) == 0) {
                     $value->boton_eliminar = '<button type="button" class="btn btn-danger btn-circle elimina_anexo"><i class="fa fa-trash"></i></button>';
-                }
-                else
-                {
+                } else {
                     $value->boton_eliminar = '<button type="button" class="btn btn-secondary btn-circle"><i class="fa fa-ban"></i></button>';
                 }
             }
@@ -149,10 +134,8 @@ class recsensorialanexoController extends Controller
             $dato['data'] = $sql;
             $dato["msj"] = 'Información consultada correctamente';
             return response()->json($dato);
-        }
-        catch(Exception $e)
-        {
-            $dato["msj"] = 'Error '.$e->getMessage();
+        } catch (Exception $e) {
+            $dato["msj"] = 'Error ' . $e->getMessage();
             $dato['data'] = 0;
             return response()->json($dato);
         }
@@ -166,7 +149,7 @@ class recsensorialanexoController extends Controller
         return Storage::response($foto->ruta_anexo);
     }
 
-    
+
     /**
      * Store a newly created resource in storage.
      *
@@ -175,8 +158,7 @@ class recsensorialanexoController extends Controller
      */
     public function store(Request $request)
     {
-        try
-        {
+        try {
             if ($request->opcion == 1) // Nuevo
             {
                 // AUTO_INCREMENT
@@ -210,10 +192,8 @@ class recsensorialanexoController extends Controller
             // respuesta
             $dato['recsensorial_id'] = $request->recsensorial_id;
             return response()->json($dato);
-        }
-        catch(Exception $e)
-        {
-            $dato["msj"] = 'Error '.$e->getMessage();
+        } catch (Exception $e) {
+            $dato["msj"] = 'Error ' . $e->getMessage();
             return response()->json($dato);
         }
     }
@@ -227,8 +207,7 @@ class recsensorialanexoController extends Controller
      */
     public function recsensorialanexoeliminar($recsensorialanexo_id, $contrato_anexo_id)
     {
-        try
-        {
+        try {
             $anexo = recsensorialanexoModel::where('id', $recsensorialanexo_id)->delete();
 
             //INDICAMOS QUE EL ANEXO DEL CONTRATO AUN NO SE HA USADAO (YA NO SE USA)
@@ -239,10 +218,8 @@ class recsensorialanexoController extends Controller
             // respuesta
             $dato["msj"] = 'Anexo eliminado correctamente';
             return response()->json($dato);
-        }
-        catch(Exception $e)
-        {
-            $dato["msj"] = 'Error '.$e->getMessage();
+        } catch (Exception $e) {
+            $dato["msj"] = 'Error ' . $e->getMessage();
             return response()->json($dato);
         }
     }

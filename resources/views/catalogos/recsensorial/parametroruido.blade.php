@@ -1709,26 +1709,26 @@
 
 
     var equipos = <?php echo $equipos; ?>;
-
+    var datatable_ruidoequipos = null;
 
     // Load pagina
     $(document).ready(function() {
+
         tabla_ruidoequipos(recsensorial_id);
+
     });
 
-
-    var datatable_ruidoequipos = null;
-
     function tabla_ruidoequipos(recsensorial_id) {
+
         try {
+
             var ruta = "/parametroruidoequipotabla/" + recsensorial_id;
 
-           
-            if (tabla_ruidoequipos != null) {
-            // Destruir la tabla existente antes de crear una nueva
-            tabla_ruidoequipos.destroy();
-            }
+            if (datatable_ruidoequipos != null) {
+                datatable_ruidoequipos.clear().draw();
+                datatable_ruidoequipos.ajax.url(ruta).load();
 
+            } else {
                 var numeroejecucion = 1;
                 datatable_ruidoequipos = $('#tabla_ruidoequipos').DataTable({
                     ajax: {
@@ -1738,67 +1738,49 @@
                         dataType: "json",
                         data: {},
                         dataSrc: function(json) {
-                            // alert("Done! "+json.msj);
                             return json.data;
                         },
                         error: function(xhr, error, code) {
                             console.log('error en datatable_ruidoequipos ' + code);
                             if (numeroejecucion <= 1) {
-                                tabla_ruidoequipos(recsensorial_id);
+                                tabla_ruidoequipos(recsensorial_id)
                                 numeroejecucion += 1;
                             }
                         }
                     },
-                    columns: [
-                        // {
-                        //     data: "id" 
-                        // },
-                        {
+                    columns: [{
                             data: "numero_registro",
                             defaultContent: "-",
-                            // className: '',
                             orderable: false,
                         },
                         {
                             data: "proveedor_RazonSocial",
                             defaultContent: "-",
-                            // className: '',
                             orderable: false,
                         },
                         {
                             data: "equipo_Descripcion",
                             defaultContent: "-",
-                            // className: '',
                             orderable: false,
                         },
                         {
                             data: "equipo_Marca",
                             defaultContent: "-",
-                            // className: '',
                             orderable: false,
                         },
                         {
                             data: "equipo_Modelo",
                             defaultContent: "-",
-                            // className: '',
                             orderable: false,
                         },
                         {
                             data: "equipo_Serie",
                             defaultContent: "-",
-                            // className: '',
                             orderable: false,
                         },
                         {
                             data: "equipo_VigenciaCalibracion",
                             defaultContent: "-",
-                            // className: '',
-                            orderable: false,
-                        },
-                        {
-                            data: "boton_mostrar",
-                            defaultContent: "-",
-                            // className: '',
                             orderable: false,
                         },
                         {
@@ -1811,7 +1793,6 @@
                         [20, 50, 100, -1],
                         [20, 50, 100, "Todos"]
                     ],
-                    // rowsGroup: [1, 2, 3], //agrupar filas
                     order: [
                         [0, "ASC"]
                     ],
@@ -1838,36 +1819,22 @@
                         }
                     },
                     rowCallback: function(row, data, index) {
-                        // console.log(index+' - '+data.reporteiluminacionpuntos_nopunto);
-
-                        // if(data.reporteiluminacionpuntos_nopunto == 2)
-                        // {
-                        //  $(row).find('td:eq(12)').css('background', 'red');
-                        //  $(row).find('td:eq(12)').css('color', 'white');
-                        // }
-
-                        // $(row).find('td:eq(9)').css('color', ''+data.frpmed1_color);
-                        // $(row).find('td:eq(10)').css('color', ''+data.frptmed1_color);
-                        // $(row).find('td:eq(11)').css('color', ''+data.frpmed2_color);
-                        // $(row).find('td:eq(12)').css('color', ''+data.frptmed2_color);
-                        // $(row).find('td:eq(13)').css('color', ''+data.frpmed3_color);
-                        // $(row).find('td:eq(14)').css('color', ''+data.frptmed3_color);
-
-                        // $(row).find('td:eq(15)').css('background', ''+data.fr_resultado_color);
-                        // $(row).find('td:eq(15)').css('color', '#FFFFFF');
+                        // Personaliza el estilo de las filas aquí si es necesario
                     },
                 });
-            
 
-            // Tooltip en DataTable
-            datatable_ruidoequipos.on('draw', function() {
-                $('[data-toggle="tooltip"]').tooltip();
-            });
+                // Tooltip en DataTable
+                datatable_ruidoequipos.on('draw', function() {
+                    $('[data-toggle="tooltip"]').tooltip();
+                });
+
+            }
+
         } catch (exception) {
-            tabla_ruidoequipos(recsensorial_id);
+            console.log('Exception in tabla_ruidoequipos: ', exception);
+            tabla_ruidoequipos(recsensorial_id); // Llamar la función nuevamente en caso de error.
         }
     }
-
 
     $("#boton_nuevo_equiporuido").click(function() {
         if ($("#equiporuidoequipo_id")[0].selectize) {

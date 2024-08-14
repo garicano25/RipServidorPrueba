@@ -411,11 +411,11 @@ class recsensorialquimicosinventarioController extends Controller
                                                             </td>
                                                             <td style="width: 180px!important;">
                                                             <label><b>Exp. minutos</b></label>
-                                                                <input type="number" step="any" class="form-control" placeholder="Exp. minutos" id="tiempo_' . ($key + 1) . $key_categorias . '" name="tiempo[]" value="' . $value_categorias->tiempoexpo . '" ' . $disabled_required . '>
+                                                                <input type="number" step="any" class="form-control text-center" placeholder="Exp. minutos" id="tiempo_' . ($key + 1) . $key_categorias . '" name="tiempo[]" value="' . $value_categorias->tiempoexpo . '" ' . $disabled_required . '>
                                                             </td>
                                                             <td style="width: 180px!important;">
                                                             <label><b>Frecuencia exp.</b></label>
-                                                                <input type="number" step="any" class="form-control" placeholder="Frecuencia exp." id="frecuencia_' . ($key + 1) . $key_categorias . '" value="' . $value_categorias->frecuenciaexpo . '" name="frecuencia[]" ' . $disabled_required . '>
+                                                                <input type="number" step="any" class="form-control text-center" placeholder="Frecuencia exp." id="frecuencia_' . ($key + 1) . $key_categorias . '" value="' . $value_categorias->frecuenciaexpo . '" name="frecuencia[]" ' . $disabled_required . '>
                                                             </td>
                                                         </tr>';
                     }
@@ -454,13 +454,14 @@ class recsensorialquimicosinventarioController extends Controller
                                                     <table>
                                                         <tr>
                                                             <td style="width: 680px!important;">
+                                                            <label><b>Nombre</b></label>
                                                                 <select class="custom-select form-control select_search_sustancia" id="selectsearch_sustancia_' . $key . '" name="sustancia_catalogo[]" required>
                                                                     ' . $catsustancia_opciones . '
                                                                 </select>
                                                             </td>
                                                             <td style="width: 180px!important;">
                                                             <label><b>Cantidad manejada</b></label>
-                                                                <input type="number" step="any" class="form-control" placeholder="Cantidad" name="cantidad[]" value="' . $value->recsensorialquimicosinventario_cantidad . '" required>
+                                                                <input type="number" step="any" class="form-control text-center" placeholder="Cantidad" name="cantidad[]" value="' . $value->recsensorialquimicosinventario_cantidad . '" required>
                                                             </td>
                                                             <td style="width: 180px!important;">
                                                             <label><b>Unidad medida</b></label>
@@ -482,7 +483,10 @@ class recsensorialquimicosinventarioController extends Controller
             } else { // SI NO EXISTEN LAS SIMULAMOS PARA QUE APARESCAN
 
                 //BUSCAMOS TODAS AQUELLAS FUENTES GENERADORAS VINCULADAS CON EL AREA SELECCIONADA Y QUE ADEMAS SEAN FUENTES PARA QUIMICO O FISICO Y QUIMICO
-                $fuentes = DB::select('SELECT recsensorialmaquinaria_quimica as ID_SUSTANCIA, recsensorialarea_id as AREA_ID
+                $fuentes = DB::select('SELECT recsensorialmaquinaria_quimica as ID_SUSTANCIA,
+                                            recsensorialarea_id as AREA_ID,
+                                            (recsensorialmaquinaria_cantidad * recsensorialmaquinaria_contenido) AS CANTIDAD,
+                                            recsensorialmaquinaria_unidadMedida AS UNIDAD_MEDIDA
                                         FROM recsensorialmaquinaria 
                                         WHERE recsensorialmaquinaria_afecta <> 1 AND recsensorialarea_id = ?', [$recsensorialarea_id]);
 
@@ -520,11 +524,11 @@ class recsensorialquimicosinventarioController extends Controller
                                                             </td>
                                                             <td style="width: 180px!important;">
                                                             <label><b>Exp. minutos</b></label>
-                                                                <input type="number" step="any" class="form-control" placeholder="Exp. minutos" id="tiempo_' . ($key + 1) . $key_categorias . '" name="tiempo[]" value="' . $value_categorias->tiempoexpo_quimico . '" ' . $disabled_required . '>
+                                                                <input type="number" step="any" class="form-control text-center" placeholder="Exp. minutos" id="tiempo_' . ($key + 1) . $key_categorias . '" name="tiempo[]" value="' . $value_categorias->tiempoexpo_quimico . '" ' . $disabled_required . '>
                                                             </td>
                                                             <td style="width: 180px!important;">
                                                             <label><b>Frecuencia exp.</b></label>
-                                                                <input type="number" step="any" class="form-control" placeholder="Frecuencia exp." id="frecuencia_' . ($key + 1) . $key_categorias . '" value="' . $value_categorias->frecuenciaexpo_quimico . '" name="frecuencia[]" ' . $disabled_required . '>
+                                                                <input type="number" step="any" class="form-control text-center" placeholder="Frecuencia exp." id="frecuencia_' . ($key + 1) . $key_categorias . '" value="' . $value_categorias->frecuenciaexpo_quimico . '" name="frecuencia[]" ' . $disabled_required . '>
                                                             </td>
                                                         </tr>';
                     }
@@ -535,7 +539,13 @@ class recsensorialquimicosinventarioController extends Controller
 
                     foreach ($unidadmedida as $key_unidadmedida => $value_unidadmedida) {
 
-                        $umedida_opciones .= '<option value="' . $value_unidadmedida->id . '">' . $value_unidadmedida->catunidadmedidasustacia_descripcion . '</option>';
+
+                        if ($value->UNIDAD_MEDIDA != $value_unidadmedida->id) {
+                            $umedida_opciones .= '<option value="' . $value_unidadmedida->id . '">' . $value_unidadmedida->catunidadmedidasustacia_descripcion . '</option>';
+                        } else {
+
+                            $umedida_opciones .= '<option value="' . $value_unidadmedida->id . '" selected>' . $value_unidadmedida->catunidadmedidasustacia_descripcion . '</option>';
+                        }
                     }
 
                     //Creamos los select de los productos
@@ -559,17 +569,18 @@ class recsensorialquimicosinventarioController extends Controller
                                                     <table>
                                                         <tr>
                                                             <td style="width: 680px!important;">
+                                                            <label><b>Nombre</b></label>
                                                                 <select class="custom-select form-control select_search_sustancia" id="selectsearch_sustancia_' . $key . '" name="sustancia_catalogo[]" required>
                                                                     ' . $catsustancia_opciones . '
                                                                 </select>
                                                             </td>
                                                             <td style="width: 180px!important;">
                                                             <label><b>Cantidad manejada</b></label>
-                                                                <input type="number" step="any" class="form-control" placeholder="Cantidad" name="cantidad[]" value="" required>
+                                                                <input type="number" step="any" class="form-control text-center" placeholder="Cantidad" name="cantidad[]" value="' . $value->CANTIDAD . '" required readonly>
                                                             </td>
                                                             <td style="width: 180px!important;">
                                                             <label><b>Unidad medida</b></label>
-                                                                <select class="custom-select form-control" name="umedida[]" required>
+                                                                <select class="custom-select form-control" name="umedida[]" required readonly>
                                                                     ' . $umedida_opciones . '
                                                                 </select>
                                                             </td>

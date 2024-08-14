@@ -422,6 +422,8 @@ $('.multisteps-form__progress-btn').click(function()
 			break;
 		case "steps_menu_tab7":
 			tabla_recsensorialanexos($("#recsensorial_id").val());
+			tabla_recsensorialanexos2($("#recsensorial_id").val());
+
 			break;
 		default:
 		    // alert(Tab);
@@ -5728,6 +5730,8 @@ $('#recsensorialmaquinaria_afecta').on('change', function () {
 		$('.AreaTipoAfecta option[value="Físico"]').prop('disabled', true);
 		$('.AreaTipoAfecta option[value="Químico"]').prop('disabled', false);
 
+		$('#recsensorialmaquinaria_unidadMedida option[value="7"]').prop('disabled', true);
+
 
 	} else if (opcion == 3) { //Quimicos y Fisico
 
@@ -5743,6 +5747,9 @@ $('#recsensorialmaquinaria_afecta').on('change', function () {
 		$('.AreaTipoAfecta option[value="Factor de riesgo"]').prop('disabled', false);
 		$('.AreaTipoAfecta option[value="Físico"]').prop('disabled', false);
 		$('.AreaTipoAfecta option[value="Químico"]').prop('disabled', false);
+
+		$('#recsensorialmaquinaria_unidadMedida option[value="7"]').prop('disabled', true);
+
 
 		
 	} else { // Fisico
@@ -5760,9 +5767,11 @@ $('#recsensorialmaquinaria_afecta').on('change', function () {
 		$('.AreaTipoAfecta option[value="Factor de riesgo"]').prop('disabled', false);
 		$('.AreaTipoAfecta option[value="Físico"]').prop('disabled', false);
 		$('.AreaTipoAfecta option[value="Químico"]').prop('disabled', true);
-		
-		
 
+
+		$('#recsensorialmaquinaria_unidadMedida option[value="7"]').prop('disabled', false);
+
+		
 	}
 	
 
@@ -6664,10 +6673,17 @@ $("#boton_guardar_anexo").click(function()
 				RECSENSORIAL_ID : $('#recsensorial_id').val()
 			},
 			resetForm: false,
-			success: function(dato)
-			{
-				// actualiza tabla
-				tabla_recsensorialanexos(dato.recsensorial_id);
+			success: function (dato) {
+				
+				if ($('#recsensorialanexo_tipo').val() == 1) {
+					// actualiza tabla
+					tabla_recsensorialanexos2(dato.recsensorial_id);
+					
+				} else {
+
+					tabla_recsensorialanexos(dato.recsensorial_id);
+					
+				}
 
 				// mensaje
 				swal({
@@ -6717,7 +6733,7 @@ function tabla_recsensorialanexos(recsensorial_id)
 {
 	try 
 	{
-		var ruta = "/recsensorialanexotabla/"+recsensorial_id;
+		var ruta = "/recsensorialanexotabla/"+recsensorial_id +	"/" + 2;
 
 		if (datatable_recsensorialanexos != null)
 		{
@@ -6845,6 +6861,143 @@ function tabla_recsensorialanexos(recsensorial_id)
 		tabla_recsensorialanexos(recsensorial_id);
     }
 }
+
+
+var datatable_recsensorialanexos2 = null;
+function tabla_recsensorialanexos2(recsensorial_id)
+{
+	try 
+	{
+		var ruta = "/recsensorialanexotabla/"+recsensorial_id +	"/" + 1;
+
+		if (datatable_recsensorialanexos2 != null)
+		{
+			datatable_recsensorialanexos2.clear().draw();
+			datatable_recsensorialanexos2.ajax.url(ruta).load();
+		}
+		else
+		{
+		    var numeroejecucion = 1;
+			datatable_recsensorialanexos2 = $('#tabla_recsensorialanexos2').DataTable({
+				ajax: {
+					url: ruta,
+					type: "get",
+					cache: false,
+					dataType: "json",
+					data: {},
+					dataSrc: function (json)
+					{
+						// alert(json.msj);
+						return json.data;
+					},
+					error: function (xhr, error, code)
+					{						
+						console.log('error en datatable_recsensorialanexos2 '+code);
+						if (numeroejecucion <= 1)
+						{
+							tabla_recsensorialanexos2(recsensorial_id)
+							numeroejecucion += 1;
+						}
+					}
+				},
+				columns: [
+					// {
+					//     data: "id" 
+					// },
+					{
+						data: "recsensorialanexo_orden",
+						defaultContent: "-",
+						orderable: false,
+					},
+					{
+						data: "anexo_tipo",
+						defaultContent: "-",
+						// className: '',
+						orderable: false,
+					},
+					{
+						data: "proveedor_RazonSocial",
+						defaultContent: "-",
+						orderable: false,
+					},
+					{
+						data: "acreditacion_Entidad",
+						defaultContent: "-",
+						orderable: false,
+						// className: 'checkbox_cancelado',
+					},
+					
+					{
+						data: "acreditacion_Vigencia",
+						defaultContent: "-",
+						orderable: false,
+					},
+					{
+						data: "boton_pdf",
+						defaultContent: "-",
+						orderable: false,
+						// className: 'anexo_pdf',
+					},
+					{
+						data: "boton_eliminar",
+						defaultContent: "-",
+						orderable: false,
+						// className: 'elimina_anexo',
+					}
+				],
+				lengthMenu: [[10, 20, 50, -1], [10, 20, 50, "Todos"]],
+					// rowsGroup: [1], //agrupar filas
+				// order: [[ 0, "ASC" ]],
+				ordering: false,
+				processing: true,
+				searching: true,
+				paging: true,
+				language: {
+					lengthMenu: "Mostrar _MENU_ Registros",
+					zeroRecords: "No se encontraron registros",
+					info: "Página _PAGE_ de _PAGES_ (Total _TOTAL_ registros)",
+					infoEmpty: "No se encontraron registros",
+					infoFiltered: "(Filtrado de _MAX_ registros)",
+					emptyTable: "No hay datos disponibles en la tabla",
+					loadingRecords: "Cargando datos....",
+					processing: "Procesando <i class='fa fa-spin fa-spinner fa-3x'></i>",
+					search: "Buscar",
+					paginate: {
+						first: "Primera",
+						last: "Ultima",
+						next: "Siguiente",
+						previous: "Anterior"
+					}
+				},
+				rowCallback: function(row, data, index)
+				{
+					// console.log(index+' - '+data.reporteiluminacionpuntos_nopunto);
+
+					// if(data.reporteiluminacionpuntos_nopunto == 2)
+					// {
+					// 	$(row).find('td:eq(12)').css('background', 'red');
+					// 	$(row).find('td:eq(12)').css('color', 'white');
+					// }
+
+					// $(row).find('td:eq(15)').css('background', ''+data.fr_resultado_color);
+					// $(row).find('td:eq(15)').css('color', '#FFFFFF');
+				},
+			});
+		}
+
+		// Tooltip en DataTable
+		datatable_recsensorialanexos2.on('draw', function ()
+		{
+			$('[data-toggle="tooltip"]').tooltip();
+		});
+	}
+	catch (exception)
+	{
+		tabla_recsensorialanexos2(recsensorial_id);
+    }
+}
+
+
 
 
 $('#tabla_recsensorialanexos tbody').on('click', 'td>button.anexo_pdf', function()
@@ -7008,6 +7161,168 @@ $('#tabla_recsensorialanexos tbody').on('click', 'td>button.elimina_anexo', func
 	return false;
 });
 
+
+
+$('#tabla_recsensorialanexos2 tbody').on('click', 'td>button.anexo_pdf', function()
+{
+	var tr = $(this).closest('tr');
+	var row = datatable_recsensorialanexos2.row(tr)
+
+	if (row.data().TIPO === 'IMAGEN') {
+
+		var archivo = row.data().acreditacion_SoportePDF;
+		var extension = archivo.substring(archivo.lastIndexOf("."));
+		// Obtener FOTO
+		var imagenUrl = '/mostrarFotoAnexo/' + row.data().contrato_anexo_id + extension;
+
+		// Mostrar Foto en el INPUT
+		if ($('#contrato_anexo_imagen').data('dropify')) {
+
+			$('#imagen_titulo').text(row.data().proveedor_RazonSocial);
+
+			$('#contrato_anexo_imagen').dropify().data('dropify').destroy();
+			// $('.dropify-wrapper').css('height', 400);
+			$('#contrato_anexo_imagen').dropify().data('dropify').settings.defaultFile = imagenUrl;
+			$('#contrato_anexo_imagen').dropify().data('dropify').init();
+		}
+		else {
+			// $('#signatariofoto').attr('data-height', 400);
+			$('#imagen_titulo').text(row.data().proveedor_RazonSocial);
+			$('#contrato_anexo_imagen').attr('data-default-file', imagenUrl);
+			$('#contrato_anexo_imagen').dropify({
+				messages: {
+					'default': 'Arrastre la imagen aquí o haga click',
+					'replace': 'Arrastre la imagen o haga clic para reemplazar',
+					'remove': 'Quitar',
+					'error': 'Ooops, ha ocurrido un error.'
+				},
+				error: {
+					'fileSize': 'Demasiado grande ({{ value }} max).',
+					'minWidth': 'Ancho demasiado pequeño (min {{ value }}}px).',
+					'maxWidth': 'Ancho demasiado grande (max {{ value }}}px).',
+					'minHeight': 'Alto demasiado pequeño (min {{ value }}}px).',
+					'maxHeight': 'Alto demasiado grande (max {{ value }}px max).',
+					'imageFormat': 'Formato no permitido, sólo ({{ value }}).'
+				}
+			});
+		}
+
+		$('#modal_anexo_imagen').modal({ backdrop: false });
+		
+	} else {
+		
+	
+
+		if (row.data().acreditacion_id === null) {
+		
+		
+			$('#visor_documento').attr('src', '/assets/plugins/viewer-pdfjs/web/viewer_read.html?file=/veracreditaciondocumento/' + row.data().contrato_anexo_id + '/' + 1);
+
+			// Titulo modal
+			$('#modal_visor .modal-title').html('Anexo: ' + row.data().proveedor_RazonSocial);
+
+			// Abrir modal
+			$('#modal_visor').modal({ backdrop: false });
+	
+		} else {
+
+			$('#visor_documento').attr('src', '/assets/plugins/viewer-pdfjs/web/viewer_read.html?file=/veracreditaciondocumento/' + row.data().acreditacion_id + '/' + 0);
+
+			// Titulo modal
+			$('#modal_visor .modal-title').html('Anexo: ' + row.data().acreditacion_Entidad + ' [' + row.data().acreditacion_Numero + ']');
+
+			// Abrir modal
+			$('#modal_visor').modal({ backdrop: false });
+		}
+	}
+});
+
+
+$('#tabla_recsensorialanexos2 tbody').on('click', 'td>button.elimina_anexo', function()
+{
+	var tr = $(this).closest('tr');
+	var row = datatable_recsensorialanexos2.row(tr);
+
+	swal({
+		title: "¡Confirme que desea eliminar!",
+		text: "El anexo: \n"+row.data().acreditacion_Entidad+' ['+row.data().acreditacion_Numero+']\nde la lista.',
+		type: "warning",
+		showCancelButton: true,
+		confirmButtonColor: "#DD6B55",
+		confirmButtonText: "Aceptar!",
+		cancelButtonText: "Cancelar!",
+		closeOnConfirm: false,
+		closeOnCancel: false
+	},
+	function(isConfirm)
+	{
+		if (isConfirm)
+		{
+			// cerrar msj confirmacion
+			swal.close();
+
+			$.ajax({
+				type: "GET",
+				dataType: "json",
+				url: "/recsensorialanexoeliminar/"+row.data().id+"/"+row.data().contrato_anexo_id,
+				data:{},
+				cache: false,
+				success:function(dato)
+				{
+					// Actualizar tabla
+					tabla_recsensorialanexos2(recsensorial);
+
+					// mensaje
+					swal({
+						title: "Correcto",
+						text: ""+dato.msj,
+						type: "success", // warning, error, success, info
+						buttons: {
+							visible: false, // true , false
+						},
+						timer: 1500,
+						showConfirmButton: false
+					});
+				},
+				beforeSend: function()
+				{
+					// $('#tabla_recsensorialanexos tbody').html('<tr><td colspan="8"><i class="fa fa-spin fa-spinner" style="font-size: 40px!important;"></i></td></tr>');
+				},
+				error: function(dato)
+				{
+					// mensaje
+					swal({
+						title: "Error",
+						text: ""+dato.msj,
+						type: "error", // warning, error, success, info
+						buttons: {
+							visible: false, // true , false
+						},
+						timer: 1500,
+						showConfirmButton: false
+					});
+
+					return false;
+				}
+			});//Fin ajax
+		}
+		else 
+		{
+			// mensaje
+			swal({
+				title: "Cancelado",
+				text: "Acción cancelada",
+				type: "error", // warning, error, success, info
+				buttons: {
+					visible: false, // true , false
+				},
+				timer: 500,
+				showConfirmButton: false
+			});
+		}
+	});
+	return false;
+});
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 ///////////////////////////////////////////////////PARAMETROS///////////////////////////////////////////////////
@@ -7694,21 +8009,17 @@ function activarTrabajadores(check) {
 
 function activa_categoria(checkbox, campo_categoria)
 {
-	if (checkbox.checked) 
-    {
-        $('#tiempo_'+campo_categoria).attr('disabled', false);
-        $('#frecuencia_'+campo_categoria).attr('disabled', false);
+	if (checkbox.checked) {
+        $('#tiempo_'+campo_categoria).prop('disabled', false);
+        $('#frecuencia_'+campo_categoria).prop('disabled', false);
 
-        $('#tiempo_'+campo_categoria).attr('required', true);
-        $('#frecuencia_'+campo_categoria).attr('required', true);
+        $('#tiempo_'+campo_categoria).prop('required', true).prop('readonly', true);
+        $('#frecuencia_'+campo_categoria).prop('required', true).prop('readonly', true);
     }
-    else
-    {
-    	$('#tiempo_'+campo_categoria).val('');
-        $('#frecuencia_'+campo_categoria).val('');
-
-    	$('#tiempo_'+campo_categoria).attr('disabled', true);
-        $('#frecuencia_'+campo_categoria).attr('disabled', true);
+    else{
+    
+    	$('#tiempo_'+campo_categoria).prop('disabled', true).prop('readonly', false);
+        $('#frecuencia_'+campo_categoria).prop('disabled', true).prop('readonly', false);
     }
 }
 

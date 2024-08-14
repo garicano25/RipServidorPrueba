@@ -1247,14 +1247,45 @@
                                                     <div class="row">
                                                         <div class="col-12">
                                                             @if(auth()->user()->hasRoles(['Superusuario', 'Administrador', 'Coordinador','Operativo HI']))
+
                                                             <ol class="breadcrumb m-b-10">
-                                                                <button type="button" class="btn btn-secondary waves-effect waves-light botonnuevo_modulorecsensorial" data-toggle="tooltip" title="Agregar anexo al reconocimiento" id="boton_nuevo_anexo">
+                                                                <h2 style="color: #ffff; margin: 0;"><i class="fa fa-file-text-o"></i> Anexos para Físicos y Químicos </h2>
+
+                                                                <button type="button" class="btn btn-secondary waves-effect waves-light botonnuevo_modulorecsensorial" data-toggle="tooltip" title="Agregar anexo al reconocimiento" style="margin-left: auto;" id="boton_nuevo_anexo">
                                                                     <span class="btn-label"><i class="fa fa-plus"></i></span>Anexo
                                                                 </button>
                                                             </ol>
+                                                            @else
+                                                            <ol class="breadcrumb m-b-10">
+                                                                <h2 style="color: #ffff; margin: 0;"><i class="fa fa-file-text-o"></i> Anexos para Físicos y Químicos </h2>
+                                                            </ol>
                                                             @endif
+                                                        </div>
+                                                        <div class="col-6">
                                                             <div class="table-responsive">
                                                                 <table class="table table-bordered table-hover stylish-table" width="100%" id="tabla_recsensorialanexos">
+                                                                    <thead>
+                                                                        <tr>
+                                                                            <th style="width: 80px!important;">No.</th>
+                                                                            <th style="width: 120px!important;">Tipo informe</th>
+                                                                            <th>Laboratorio o Nombre del anexo</th>
+                                                                            <th>Entidad</th>
+                                                                            <th style="width: 120px!important;">Vigencia</th>
+                                                                            <th style="width: 80px!important;">Mostrar</th>
+                                                                            <th style="width: 80px!important;">Eliminar</th>
+                                                                        </tr>
+                                                                    </thead>
+                                                                    <tbody>
+                                                                        <tr>
+                                                                            <td colspan="8">&nbsp;</td>
+                                                                        </tr>
+                                                                    </tbody>
+                                                                </table>
+                                                            </div>
+                                                        </div>
+                                                        <div class="col-6">
+                                                            <div class="table-responsive">
+                                                                <table class="table table-bordered table-hover stylish-table" width="100%" id="tabla_recsensorialanexos2">
                                                                     <thead>
                                                                         <tr>
                                                                             <th style="width: 80px!important;">No.</th>
@@ -3278,8 +3309,8 @@
                         </div>
                         <div class="col-12">
                             <div class="form-group">
-                                <label> Anexo para el informe de *</label>
-                                <input type="number" class="form-control text-center" id="recsensorialanexo_orden" name="recsensorialanexo_orden">
+                                <label> Numero de orden*</label>
+                                <input type="number" class="form-control text-center" id="recsensorialanexo_orden" name="recsensorialanexo_orden" required>
                             </div>
                         </div>
                         <div class="col-6">
