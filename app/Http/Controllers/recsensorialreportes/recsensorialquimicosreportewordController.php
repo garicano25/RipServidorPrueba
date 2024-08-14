@@ -1238,7 +1238,7 @@ class recsensorialquimicosreportewordController extends Controller
 
             // Agrega una fila completa con el mensaje
             $table->addRow(); // Agrega una nueva fila para el mensaje
-            $table->addCell(null, array('gridSpan' => 8, 'valign' => 'center'))->addTextRun($centrado)->addText(
+            $table->addCell(null, array('gridSpan' => 9, 'valign' => 'center'))->addTextRun($centrado)->addText(
                 'Se cuenta con ' . $numeros[0]->total_catsustancias . ' productos con una proporción  de componentes que incluyen diferentes sustancias químicas. Según el análisis realizado, no es necesario muestrear las sustancias químicas presentes en los productos de la empresa, debido a que las prioridades de muestreo obtenidas son bajas o muy bajas, por lo que no existe riesgo de exposición a sustancias químicas para los trabajadores.',
                 $texto
             );
