@@ -894,15 +894,19 @@ class recsensorialquimicosreportewordController extends Controller
                     $table->addCell(null, array('bgColor' => $value->COLOR, 'valign' => 'center'))->addTextRun($centrado)->addText($value->PRIORIDAD, $texto);
                 }
             }
-
-            $plantillaword->setComplexBlock('tabla_quimicos_resumen1', $table);
         } else {
 
 
 
-            $plantillaword->setValue('tabla_quimicos_resumen1', 'Se cuenta con ' . $numeros[0]->total_catsustancias . ' productos con una proporción  de componentes que incluyen diferentes sustancias químicas. Según el análisis realizado, no es necesario muestrear las sustancias químicas presentes en los productos de la empresa, debido a que las prioridades de muestreo obtenidas son bajas o muy bajas, por lo que no existe riesgo de exposición a sustancias químicas para los trabajadores.');
+            // Agrega una fila completa con el mensaje
+            $table->addRow(); // Agrega una nueva fila para el mensaje
+            $table->addCell(null, array('gridSpan' => 9, 'valign' => 'center'))->addTextRun($centrado)->addText(
+                'Se cuenta con ' . $numeros[0]->total_catsustancias . ' productos con una proporción  de componentes que incluyen diferentes sustancias químicas. Según el análisis realizado, no es necesario muestrear las sustancias químicas presentes en los productos de la empresa, debido a que las prioridades de muestreo obtenidas son bajas o muy bajas, por lo que no existe riesgo de exposición a sustancias químicas para los trabajadores.',
+                $texto
+            );
         }
 
+        $plantillaword->setComplexBlock('tabla_quimicos_resumen1', $table);
 
 
         // TABLA 10.1 - (DETERMINACION DE LOS GRUPOS DE EXPOSICION HOMOGENEA) PONDERACION 3
@@ -1073,13 +1077,17 @@ class recsensorialquimicosreportewordController extends Controller
                     }
                 }
             };
-
-            $plantillaword->setComplexBlock('tabla_quimicos_resumen2', $table);
         } else {
 
-            $plantillaword->setValue('tabla_quimicos_resumen2', 'Se cuenta con ' . $numeros[0]->total_catsustancias . ' productos con una proporción  de componentes que incluyen diferentes sustancias químicas. Según el análisis realizado, no es necesario muestrear las sustancias químicas presentes en los productos de la empresa, debido a que las prioridades de muestreo obtenidas son bajas o muy bajas, por lo que no existe riesgo de exposición a sustancias químicas para los trabajadores.');
+            // Agrega una fila completa con el mensaje
+            $table->addRow(); // Agrega una nueva fila para el mensaje
+            $table->addCell(null, array('gridSpan' => 10, 'valign' => 'center'))->addTextRun($centrado)->addText(
+                'Se cuenta con ' . $numeros[0]->total_catsustancias . ' productos con una proporción  de componentes que incluyen diferentes sustancias químicas. Según el análisis realizado, no es necesario muestrear las sustancias químicas presentes en los productos de la empresa, debido a que las prioridades de muestreo obtenidas son bajas o muy bajas, por lo que no existe riesgo de exposición a sustancias químicas para los trabajadores.',
+                $texto
+            );
         }
 
+        $plantillaword->setComplexBlock('tabla_quimicos_resumen2', $table);
 
 
         // TABLA 9.1 - (TABLA DE GRUPO DE EXPOSICION HOMOGENEA) PONDERACION 2
@@ -1226,14 +1234,17 @@ class recsensorialquimicosreportewordController extends Controller
                     }
                 }
             }
-
-            $plantillaword->setComplexBlock('tabla_quimicos_resumen3', $table);
         } else {
 
-            $plantillaword->setValue('tabla_quimicos_resumen3', 'Se cuenta con ' . $numeros[0]->total_catsustancias . ' productos con una proporción  de componentes que incluyen diferentes sustancias químicas. Según el análisis realizado, no es necesario muestrear las sustancias químicas presentes en los productos de la empresa, debido a que las prioridades de muestreo obtenidas son bajas o muy bajas, por lo que no existe riesgo de exposición a sustancias químicas para los trabajadores.');
+            // Agrega una fila completa con el mensaje
+            $table->addRow(); // Agrega una nueva fila para el mensaje
+            $table->addCell(null, array('gridSpan' => 8, 'valign' => 'center'))->addTextRun($centrado)->addText(
+                'Se cuenta con ' . $numeros[0]->total_catsustancias . ' productos con una proporción  de componentes que incluyen diferentes sustancias químicas. Según el análisis realizado, no es necesario muestrear las sustancias químicas presentes en los productos de la empresa, debido a que las prioridades de muestreo obtenidas son bajas o muy bajas, por lo que no existe riesgo de exposición a sustancias químicas para los trabajadores.',
+                $texto
+            );
         }
 
-
+        $plantillaword->setComplexBlock('tabla_quimicos_resumen3', $table);
 
 
         // TABLA 10.2 TABLA DE ACTIVIDADES DEL PERSONAL EXPUESTO
@@ -1418,15 +1429,18 @@ class recsensorialquimicosreportewordController extends Controller
                     $table->addCell(null, $celda)->addTextRun($centrado)->addText($value->TOTAL_MUESTREOS, $textonegrita);
                 }
             }
-
-            $plantillaword->setComplexBlock('tabla_quimicos_resumen4-1', $table);
         } else {
 
-            $plantillaword->setValue('tabla_quimicos_resumen4-1', 'Se cuenta con ' . $numeros[0]->total_catsustancias . ' productos con una proporción  de componentes que incluyen diferentes sustancias químicas. Según el análisis realizado, no es necesario muestrear las sustancias químicas presentes en los productos de la empresa, debido a que las prioridades de muestreo obtenidas son bajas o muy bajas, por lo que no existe riesgo de exposición a sustancias químicas para los trabajadores.');
+            // Agrega una fila completa con el mensaje
+            $table->addRow(); // Agrega una nueva fila para el mensaje
+            $table->addCell(null, array('gridSpan' => 8, 'valign' => 'center'))->addTextRun($centrado)->addText(
+                'Se cuenta con ' . $numeros[0]->total_catsustancias . ' productos con una proporción  de componentes que incluyen diferentes sustancias químicas. Según el análisis realizado, no es necesario muestrear las sustancias químicas presentes en los productos de la empresa, debido a que las prioridades de muestreo obtenidas son bajas o muy bajas, por lo que no existe riesgo de exposición a sustancias químicas para los trabajadores.',
+                $texto
+            );
         }
 
 
-
+        $plantillaword->setComplexBlock('tabla_quimicos_resumen4-1', $table);
 
 
         // TABLA 13.1 Controles para agentes químicos con los que cuenta el área
@@ -1501,13 +1515,17 @@ class recsensorialquimicosreportewordController extends Controller
                 $table->addCell(1200, $celda)->addTextRun($centrado)->addText($value->TOTAL_MUESTREO, $textonegrita);
                 // $table->addCell(2500, $celda)->addTextRun($centrado)->addText($value->tipoinstalacion, $texto);
             }
-
-            $plantillaword->setComplexBlock('tabla_resumen_quimicos1', $table);
         } else {
 
-            $plantillaword->setValue('tabla_resumen_quimicos1', 'Se cuenta con ' . $numeros[0]->total_catsustancias . ' productos con una proporción  de componentes que incluyen diferentes sustancias químicas. Según el análisis realizado, no es necesario muestrear las sustancias químicas presentes en los productos de la empresa, debido a que las prioridades de muestreo obtenidas son bajas o muy bajas, por lo que no existe riesgo de exposición a sustancias químicas para los trabajadores.');
+            // Agrega una fila completa con el mensaje
+            $table->addRow(); // Agrega una nueva fila para el mensaje
+            $table->addCell(null, array('gridSpan' => 8, 'valign' => 'center'))->addTextRun($centrado)->addText(
+                'Se cuenta con ' . $numeros[0]->total_catsustancias . ' productos con una proporción  de componentes que incluyen diferentes sustancias químicas. Según el análisis realizado, no es necesario muestrear las sustancias químicas presentes en los productos de la empresa, debido a que las prioridades de muestreo obtenidas son bajas o muy bajas, por lo que no existe riesgo de exposición a sustancias químicas para los trabajadores.',
+                $texto
+            );
         }
 
+        $plantillaword->setComplexBlock('tabla_resumen_quimicos1', $table);
 
 
 
