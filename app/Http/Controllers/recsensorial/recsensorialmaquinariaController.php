@@ -150,12 +150,22 @@ class recsensorialmaquinariaController extends Controller
     }
 
 
+    function validarComponentesMaquinaria($id)
+    {
+        try {
+            $total =  DB::select('SELECT COUNT(*) TOTAL
+                                FROM catHojasSeguridad_SustanciasQuimicas 
+                                WHERE HOJA_SEGURIDAD_ID = ?', [$id]);
 
-
-
-
-
-
+            // respuesta
+            $dato['total'] = $total[0]->TOTAL;
+            $dato["msj"] = 'Información consultada correctamente';
+            return response()->json($dato);
+        } catch (Exception $e) {
+            $dato["msj"] = 'Error ' . $e->getMessage();
+            return response()->json($dato);
+        }
+    }
 
     /**
      * Display the specified resource.

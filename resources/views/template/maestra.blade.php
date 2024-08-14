@@ -617,7 +617,7 @@ use Illuminate\Support\Str;
     {{-- Select search filter --}}
     <script src="/assets/plugins/select-search/selectize.js" type="text/javascript"></script>
     {{-- JS pagina --}}
-    <script src="/js_sitio/proveedor.js?v=3.0"></script>
+    <script src="/js_sitio/proveedor.js?v=2.0"></script>
     {{-- <script src="/assets/plugins/ViewerJS/"></script> --}}
     @endif
 
@@ -654,7 +654,7 @@ use Illuminate\Support\Str;
     <script src="/assets/plugins/Magnific-Popup-master/dist/jquery.magnific-popup.min.js"></script>
     <script src="/assets/plugins/Magnific-Popup-master/dist/jquery.magnific-popup-init.js"></script>
     {{-- pagina --}}
-    <script src="/js_sitio/reconocimiento_sensorial.js?v=4.0"></script>
+    <script src="/js_sitio/reconocimiento_sensorial.js?v=7.0"></script>
     @endif
 
 
@@ -663,7 +663,7 @@ use Illuminate\Support\Str;
     {{-- datatable --}}
     <script src="/assets/plugins/datatables/jquery.dataTables.min.js"></script>
     <script src="/assets/plugins/datatables/dataTables.rowsGroup.js"></script>
-    <script src="/js_sitio/catalogoclientes.js?v=3.0"></script>
+    <script src="/js_sitio/catalogoclientes.js?v=2.0"></script>
     <script src="/assets/plugins/dropify/dist/js/dropify.min.js"></script>
     @endif
 

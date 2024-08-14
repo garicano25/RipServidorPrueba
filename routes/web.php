@@ -396,6 +396,8 @@ Route::resource('recsensorialmaquinaria', 'recsensorial\recsensorialmaquinariaCo
 
 Route::get('recsensorialmaquinariatabla/{recsensorial_id}', ['as' => 'recsensorialmaquinaria.recsensorialmaquinariatabla', 'uses' => 'recsensorial\recsensorialmaquinariaController@recsensorialmaquinariatabla']);
 
+Route::get('validarComponentesMaquinaria/{id}', ['as' => 'recsensorialmaquinaria.validarComponentesMaquinaria', 'uses' => 'recsensorial\recsensorialmaquinariaController@validarComponentesMaquinaria']);
+
 Route::get('recsensorialmaquinariaeliminar/{maquina_id}', ['as' => 'recsensorialmaquinaria.recsensorialmaquinariaeliminar', 'uses' => 'recsensorial\recsensorialmaquinariaController@recsensorialmaquinariaeliminar']);
 
 
