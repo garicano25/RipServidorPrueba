@@ -304,6 +304,7 @@ $('.link_menuprincipal').click(function()
 
 			if (recsensorial_alcancequimico > 0) {
 				actualiza_tabla_recsensorialquimicos_resumen($("#recsensorial_id").val());
+				actualiza_tabla_recsensorialquimicos_resumen_cliente($("#recsensorial_id").val());
 			}
 			break;
 		case "tab_menu6":
@@ -7448,6 +7449,30 @@ function actualiza_tabla_recsensorialquimicos_resumen(recsensorial_id)
         },
         beforeSend: function(){
 			$('#tabla_recsensorialquimicos_resumen tbody').html('<tr><td colspan="3" align="center"><i class="fa fa-spin fa-spinner fa-3x"></i></td></tr>');
+        },
+        error: function(dato){
+            // alert('Error: '+dato.msj);
+            return false;
+        }
+    });//Fin ajax
+}
+
+
+
+function actualiza_tabla_recsensorialquimicos_resumen_cliente(recsensorial_id)
+{
+    $.ajax({
+        type: "GET",
+        dataType: "json",
+        url: "/recsensorialquimicosresumentabla_cliente/"+recsensorial_id,
+        data:{},
+        cache: false,
+        success:function(dato){
+			// actualiza tabla
+			$('#tabla_recsensorialquimicos_resumen_cliente tbody').html(dato.tabla);
+        },
+        beforeSend: function(){
+			$('#tabla_recsensorialquimicos_resumen_cliente tbody').html('<tr><td colspan="3" align="center"><i class="fa fa-spin fa-spinner fa-3x"></i></td></tr>');
         },
         error: function(dato){
             // alert('Error: '+dato.msj);

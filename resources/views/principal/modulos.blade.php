@@ -191,7 +191,7 @@
                             <span>Ingresar</span>
 
                             @elseif(auth()->user()->hasRoles(['Psicólogo','Ergónomo']))
-                            <a class="cta" href="{{route('informes.index')}}">
+                            <a class="cta" href="{{route('recsensorial.index')}}">
                                 <span>Ingresar</span>
 
                                 @endif

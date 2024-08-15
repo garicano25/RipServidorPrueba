@@ -1151,12 +1151,13 @@ class proyectoController extends Controller
 
 
                 $quimicos_cliente = DB::select(' SELECT 
-                                                sus.SUSTANCIA_QUIMICA COMPONENTE,
-                                                cliente.PUNTOS
-                                        FROM recsensorial_tablaClientes_informes cliente
-                                        LEFT JOIN catsustancias_quimicas sus ON sus.ID_SUSTANCIA_QUIMICA = cliente.SUSTANCIA_ID
-                                        WHERE cliente.RECONOCIMIENTO_ID = ?
-                                        ORDER BY COMPONENTE, cliente.PUNTOS', [$recsensorial_id]);
+                                                    sus.SUSTANCIA_QUIMICA PRODUCTO_COMPONENTE,
+                                                    SUM(cliente.PUNTOS) TOTAL_MUESTREO,
+                                                    COUNT(cliente.ID_TABLA_INFORME_CLIENTE) AS TOTAL_REGISTROS
+                                                FROM recsensorial_tablaClientes_informes cliente
+                                                LEFT JOIN catsustancias_quimicas sus ON sus.ID_SUSTANCIA_QUIMICA = cliente.SUSTANCIA_ID
+                                                WHERE cliente.RECONOCIMIENTO_ID = ?
+                                                ORDER BY PRODUCTO_COMPONENTE', [$recsensorial_id]);
 
 
                 // Dibujar filas
@@ -1169,8 +1170,8 @@ class proyectoController extends Controller
                         $numero_registro += 1;
                         $filas_quimicos_cliente .= '<tr>
                                                             <td>' . $numero_registro . '</td>
-                                                            <td>' . $value->COMPONENTE . '</td>
-                                                            <td>' . $value->PUNTOS . '</td>
+                                                            <td>' . $value->PRODUCTO_COMPONENTE . '</td>
+                                                            <td>' . $value->TOTAL_MUESTREO . '</td>
                                                         </tr>';
                     }
                 }
@@ -1501,7 +1502,7 @@ class proyectoController extends Controller
                 //     }
                 // }
 
-               
+
                 //Actualizamos los servicios del proyecto
                 $eliminar_columnas = serviciosProyectoModel::where('PROYECTO_ID', $request->proyecto_id)->delete();
                 if ($request['HI']) {

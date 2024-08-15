@@ -752,6 +752,8 @@ Route::get('recsensorialresumentabla/{recsensorial_id}', ['as' => 'recsensorialr
 Route::get('recsensorialquimicosresumentabla/{recsensorial_id}', ['as' => 'recsensorialresumen.recsensorialquimicosresumentabla', 'uses' => 'recsensorial\recsensorialresumenController@recsensorialquimicosresumentabla']);
 
 
+Route::get('recsensorialquimicosresumentabla_cliente/{recsensorial_id}', ['as' => 'recsensorialresumen.recsensorialquimicosresumentabla_cliente', 'uses' => 'recsensorial\recsensorialresumenController@recsensorialquimicosresumentabla_cliente']);
+
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////REPORTES//////////////////////////////////////////////////////////////////
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////

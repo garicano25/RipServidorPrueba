@@ -3,7 +3,7 @@
 
 {{-- ========================================================================= --}}
 <div class="tab-pane active" role="tabpanel" id="tab_parametro_1">
-    @if(auth()->user()->hasRoles(['Superusuario', 'Administrador', 'Coordinador','Operativo HI']) && ($recsensorial->recsensorial_bloqueado + 0) == 0 && ($recsensorial->recsensorial_fisicosimprimirbloqueado + 0) == 0)
+    @if(auth()->user()->hasRoles(['Superusuario', 'Administrador', 'Coordinador','Operativo HI','Psicólogo']) && ($recsensorial->recsensorial_bloqueado + 0) == 0 && ($recsensorial->recsensorial_fisicosimprimirbloqueado + 0) == 0)
     <ol class="breadcrumb m-b-10">
         <button type="button" class="btn btn-secondary waves-effect waves-light" data-toggle="tooltip" title="Nueva evidencia <br> fotográfica / Plano" data-html="true" id="boton_nueva_fotoevidencia">
             <span class="btn-label"><i class="fa fa-plus"></i></span>Evidencia fotográfica / Plano
@@ -40,7 +40,7 @@
             </div>
         </div>
     </div>
-    @if(auth()->user()->hasRoles(['Superusuario', 'Administrador', 'Coordinador','Operativo HI']) && ($recsensorial->recsensorial_bloqueado + 0) == 0 && ($recsensorial->recsensorial_fisicosimprimirbloqueado + 0) == 0)
+    @if(auth()->user()->hasRoles(['Superusuario', 'Administrador', 'Coordinador','Operativo HI','Psicólogo']) && ($recsensorial->recsensorial_bloqueado + 0) == 0 && ($recsensorial->recsensorial_fisicosimprimirbloqueado + 0) == 0)
     <ol class="breadcrumb m-b-10">
         <button type="button" class="btn btn-secondary waves-effect waves-light" data-toggle="tooltip" title="Nuevo registro" id="boton_nuevo_parametro">
             <span class="btn-label"><i class="fa fa-plus"></i></span>Nuevo registro
@@ -112,7 +112,7 @@
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-default waves-effect" data-dismiss="modal">Cerrar</button>
-                    @if(auth()->user()->hasRoles(['Superusuario', 'Administrador', 'Coordinador','Operativo HI']) && ($recsensorial->recsensorial_bloqueado + 0) == 0)
+                    @if(auth()->user()->hasRoles(['Superusuario', 'Administrador', 'Coordinador','Operativo HI','Psicólogo']) && ($recsensorial->recsensorial_bloqueado + 0) == 0)
                     <button type="submit" class="btn btn-danger waves-effect waves-light" id="boton_guardar_parametro">
                         Guardar <i class="fa fa-save"></i>
                     </button>
@@ -208,7 +208,7 @@
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-default waves-effect" data-dismiss="modal">Cerrar</button>
-                    @if(auth()->user()->hasRoles(['Superusuario', 'Administrador', 'Coordinador','Operativo HI']) && ($recsensorial->recsensorial_bloqueado + 0) == 0)
+                    @if(auth()->user()->hasRoles(['Superusuario', 'Administrador', 'Coordinador','Operativo HI','Psicólogo']) && ($recsensorial->recsensorial_bloqueado + 0) == 0)
                     <button type="submit" class="btn btn-danger" id="boton_guardar_evidencia_fotos">
                         Guardar <i class="fa fa-save"></i>
                     </button>

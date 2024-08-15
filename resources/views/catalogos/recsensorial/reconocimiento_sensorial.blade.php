@@ -131,6 +131,10 @@
                             Reconocimiento <i class="fa fa-plus p-1"></i>
                         </button>
                     </ol>
+                    @else
+                    <ol class="breadcrumb m-b-10">
+                        <h2 style="color: #ffff; margin: 0;"> <i class="fa fa-braille" aria-hidden="true"></i> Lista de Reconocimientos </h2>
+                    </ol>
                     @endif
                     <div class="table-responsive">
                         <table class="table table-hover stylish-table" width="100%" id="tabla_reconocimiento_sensorial">
@@ -944,6 +948,10 @@
                                                                     Categoría Personal <i class="fa fa-plus"></i>
                                                                 </button>
                                                             </ol>
+                                                            @else
+                                                            <ol class="breadcrumb m-b-10">
+                                                                <h2 style="color: #ffff; margin: 0;"><i class="fa fa-user"></i> Categoría personal </h2>
+                                                            </ol>
                                                             @endif
                                                             <div class="table-responsive">
                                                                 <table class="table table-bordered table-hover stylish-table" width="100%" id="tabla_recsensorialcategorias">
@@ -981,6 +989,10 @@
                                                                 <button type="button" class="btn btn-success waves-effect boton_descarga_poe" style="float: right;" data-toggle="tooltip" title="Descargar tabla POE.docx">
                                                                     <span class="btn-label"><i class="fa fa-file-word-o"></i></span>Descargar tabla POE .docx
                                                                 </button>
+                                                            </ol>
+                                                            @else
+                                                            <ol class="breadcrumb m-b-10">
+                                                                <h2 style="color: #ffff; margin: 0;"><i class="fa fa-user"></i> Área instalación </h2>
                                                             </ol>
                                                             @endif
                                                             <div class="table-responsive">
@@ -1023,6 +1035,11 @@
                                                                     Fuente generadora <i class="fa fa-plus"></i>
                                                                 </button>
                                                             </ol>
+                                                            @else
+                                                            <ol class="breadcrumb m-b-10">
+                                                                <h2 style="color: #ffff; margin: 0;"><i class="fa fa fa-industry"></i> Fuentes generadoras </h2>
+                                                            </ol>
+
                                                             @endif
                                                             <div class="table-responsive">
                                                                 <table class="table table-bordered table-hover stylish-table" width="100%" id="tabla_recsensorialmaquinas">
@@ -1059,6 +1076,10 @@
                                                                 <button type="button" class="btn btn-secondary waves-effect waves-light   botonnuevo_modulorecsensorial" data-toggle="tooltip" title="Nueva equipo de protección personal" id="boton_nueva_equipopp" style="margin-left: auto;">
                                                                     E.P.P <i class="fa fa-plus"></i>
                                                                 </button>
+                                                            </ol>
+                                                            @else
+                                                            <ol class="breadcrumb m-b-10">
+                                                                <h2 style="color: #ffff; margin: 0;"><i class="fa fa-handshake-o"></i> E.P.P </h2>
                                                             </ol>
                                                             @endif
                                                             <div class="table-responsive">
@@ -1358,12 +1379,41 @@
                                         <div class="vtabs" style="width: 100% !important">
                                             <ul class="nav nav-tabs tabs-vertical" role="tablist" style="border-right: none;">
                                                 @foreach($catprueba as $dato)
+
+                                                @if(auth()->user()->hasRoles(['Superusuario', 'Administrador', 'Coordinador','Operativo HI']))
+
                                                 <li class="nav-item" style="border-bottom: 1px #F0F0F0 solid;">
-                                                    <a class="nav-link link_menuparametro" data-toggle="tab" role="tab" href="#" id="menutab_parametro_{{$dato->id}}" onclick="mostrar_vista_parametro('{{$dato->catPrueba_Nombre}}', form_recsensorial.recsensorial_id.value, {{$dato->id}});">
+                                                    <a class="nav-link link_menuparametro" data-toggle="tab" role="tab" href="#" id="menutab_parametro_{{$dato->id}}" onclick="mostrar_vista_parametro('{{$dato->catPrueba_Nombre}}', form_recsensorial.recsensorial_id.value, {{$dato->id}})">
                                                         <span class="hidden-sm-up"><i class="ti-home"></i></span>
                                                         <span class="hidden-xs-down">{{$dato->catPrueba_Nombre}}</span>
                                                     </a>
                                                 </li>
+
+                                                @else
+                                                @if(auth()->user()->hasRoles(['Psicólogo']))
+
+                                                @if(trim($dato->catPrueba_Nombre) == "Riesgo psicosociales")
+                                                <li class="nav-item" style="border-bottom: 1px #F0F0F0 solid;">
+                                                    <a class="nav-link link_menuparametro" data-toggle="tab" role="tab" href="#" id="menutab_parametro_{{$dato->id}}" onclick="mostrar_vista_parametro('{{$dato->catPrueba_Nombre}}', form_recsensorial.recsensorial_id.value, {{$dato->id}})">
+                                                        <span class="hidden-sm-up"><i class="ti-home"></i></span>
+                                                        <span class="hidden-xs-down">{{$dato->catPrueba_Nombre}}</span>
+                                                    </a>
+                                                </li>
+
+                                                @endif
+                                                @else
+                                                @if(trim($dato->catPrueba_Nombre) == "Riesgos ergonómicos")
+                                                <li class="nav-item" style="border-bottom: 1px #F0F0F0 solid;">
+                                                    <a class="nav-link link_menuparametro" data-toggle="tab" role="tab" href="#" id="menutab_parametro_{{$dato->id}}"
+                                                        onclick="mostrar_vista_parametro('{{$dato->catPrueba_Nombre}}', form_recsensorial.recsensorial_id.value, {{$dato->id}} )">
+                                                        <span class="hidden-sm-up"><i class="ti-home"></i></span>
+                                                        <span class="hidden-xs-down">{{$dato->catPrueba_Nombre}}</span>
+                                                    </a>
+                                                </li>
+
+                                                @endif
+                                                @endif
+                                                @endif
                                                 @endforeach
                                             </ul>
                                         </div>
@@ -2180,6 +2230,28 @@
                                         <div class="col-12">
                                             <div class="table-responsive" id="tabla_resumen_puntos">
                                                 <table class="table table-hover stylish-table" width="100%" id="tabla_recsensorialquimicos_resumen">
+                                                    <thead>
+                                                        <tr>
+                                                            <th>Agentes</th>
+                                                            <th style="width:80px!important;">Total</th>
+                                                        </tr>
+                                                    </thead>
+                                                    <tbody></tbody>
+                                                </table>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="card-body">
+                                    <h4 class="card-title">
+                                        Resumen de sustancias químicas adicionales solicitadas por el cliente
+                                    </h4>
+                                    <hr>
+                                    <div class="row">
+                                        <div class="col-12">
+                                            <div class="table-responsive" id="tabla_resumen_puntos_cliente">
+                                                <table class="table table-hover stylish-table" width="100%" id="tabla_recsensorialquimicos_resumen_cliente">
                                                     <thead>
                                                         <tr>
                                                             <th>Agentes</th>

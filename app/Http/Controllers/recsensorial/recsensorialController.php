@@ -70,7 +70,7 @@ class recsensorialController extends Controller
     {
         $this->middleware('auth');
         // $this->middleware('Superusuario,Administrador,Proveedor,Reconocimiento,Proyecto,Compras,Staff,Psicólogo,Ergónomo,CoordinadorPsicosocial,CoordinadorErgonómico,CoordinadorRN,CoordinadorRS,CoordinadorRM,CoordinadorHI,ApoyoTecnico,Reportes,Externo');
-        $this->middleware('roles:Superusuario,Administrador,Coordinador,Operativo HI,Almacén,Compras');
+        $this->middleware('roles:Superusuario,Administrador,Coordinador,Operativo HI,Almacén,Compras,Psicólogo,Ergónomo');
     }
 
 
@@ -985,7 +985,6 @@ class recsensorialController extends Controller
             $dato["data"] = $datos;
             $dato["nuevo"] = 1;
             return response()->json($dato);
-            
         } catch (Exception $e) {
 
             $dato["msj"] = 'Error ' . $e->getMessage();
@@ -1748,7 +1747,7 @@ class recsensorialController extends Controller
                             ]);
                         }
                     }
-                    
+
 
                     $recquimico = $request['recsensorial_alcancequimico'] == 0 ? 0 : 1;
                     if ($recquimico == 1) {
@@ -2057,26 +2056,25 @@ class recsensorialController extends Controller
 
             if (($request->opcion + 0) == 6) // GUARDAR O ACTUALIZAR INFORMACION PARA EL LA TABLA DEL INFORME
             {
-                
+
                 if ($request->ID_GRUPO) {
                     foreach ($request->ID_GRUPO as $key => $value) {
 
                         $guardar_columnas = gruposDeExposicionModel::where('ID_GRUPO_EXPOSICION', $value)
                             ->update([
-                            'PPT_VIEJO' => is_null($request->PPT_VIEJO[$key]) ? 0 : $request->PPT_VIEJO[$key],
-                            'CT_VIEJO' => is_null($request->CT_VIEJO[$key]) ? 0 : $request->CT_VIEJO[$key],
-                            'PUNTOS_VIEJO' => is_null($request->PUNTOS_VIEJO[$key]) ? 0 : $request->PUNTOS_VIEJO[$key],
-                            'PUNTOS_NUEVO' => is_null($request->PUNTOS_NUEVO[$key]) ? 0 : $request->PUNTOS_NUEVO[$key],
-                            'PPT_NUEVO' => is_null($request->PPT_NUEVO[$key]) ? 0 : $request->PPT_NUEVO[$key],
-                            'CT_NUEVO' => is_null($request->CT_NUEVO[$key]) ? 0 : $request->CT_NUEVO[$key],
-                            'JUSTIFICACION' => is_null($request->JUSTIFICACION[$key]) ? null : $request->JUSTIFICACION[$key]
+                                'PPT_VIEJO' => is_null($request->PPT_VIEJO[$key]) ? 0 : $request->PPT_VIEJO[$key],
+                                'CT_VIEJO' => is_null($request->CT_VIEJO[$key]) ? 0 : $request->CT_VIEJO[$key],
+                                'PUNTOS_VIEJO' => is_null($request->PUNTOS_VIEJO[$key]) ? 0 : $request->PUNTOS_VIEJO[$key],
+                                'PUNTOS_NUEVO' => is_null($request->PUNTOS_NUEVO[$key]) ? 0 : $request->PUNTOS_NUEVO[$key],
+                                'PPT_NUEVO' => is_null($request->PPT_NUEVO[$key]) ? 0 : $request->PPT_NUEVO[$key],
+                                'CT_NUEVO' => is_null($request->CT_NUEVO[$key]) ? 0 : $request->CT_NUEVO[$key],
+                                'JUSTIFICACION' => is_null($request->JUSTIFICACION[$key]) ? null : $request->JUSTIFICACION[$key]
 
-                        ]);
+                            ]);
                     }
                 }
 
                 $dato["msj"] = 'Información guardada con exito';
-                
             }
 
             if (($request->opcion + 0) == 7) // GUARDAR O ACTUALIZAR INFORMACION PARA EL LA TABLA DEL INFORME DE LOS PUNTOS SOLICITADOS POR EL CLIENTE

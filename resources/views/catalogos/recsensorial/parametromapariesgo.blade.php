@@ -47,13 +47,13 @@
                         </div>
                         <div class="col-6">
                             <div class="form-group">
-                                <label>Mapa de riesgos Tipo 1 (cantidad) *</label>
+                                <label>Mapa de riesgos Tipo 1 (60 X 90) *</label>
                                 <input type="number" class="form-control" name="parametromapariesgo_tipo1" id="parametromapariesgo_tipo1" required>
                             </div>
                         </div>
                         <div class="col-6">
                             <div class="form-group">
-                                <label>Mapa de riesgos Tipo 2 (cantidad) *</label>
+                                <label>Mapa de riesgos Tipo 2 (90 X 120) *</label>
                                 <input type="number" class="form-control" name="parametromapariesgo_tipo2" id="parametromapariesgo_tipo2" required>
                             </div>
                         </div>
