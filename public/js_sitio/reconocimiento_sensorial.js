@@ -7668,8 +7668,10 @@ $("#boton_nuevo_grupo").click(function () {
 
 				$('#TIPO_CLASIFICACION_ROMANOS').prop('disabled', false);
 				$('#TIPO_CLASIFICACION_LETRAS').prop('disabled', false);
-				$('#TIPO_CLASIFICACION_ROMANOS').prop('checked', true);
+				$('#TIPO_CLASIFICACION_ROMANOS').prop('checked', false);
 				$('#TIPO_CLASIFICACION_LETRAS').prop('checked', false);
+				
+
 
 				 swal({
 					title: "Grupos de Exposición Homogénea",
