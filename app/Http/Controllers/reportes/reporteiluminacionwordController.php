@@ -4423,7 +4423,7 @@ class reporteiluminacionwordController extends Controller
                                                         ) AS TABLA
                                                 ) AS RESULTADO
                                             GROUP BY
-                                                proyecto_id');
+                                                RESULTADO.proyecto_id');
             } else {
                 $resultados = DB::select('SELECT
                                                 RESULTADO.proyecto_id,
@@ -4699,7 +4699,7 @@ class reporteiluminacionwordController extends Controller
                                                         ) AS TABLA
                                                 ) AS RESULTADO
                                             GROUP BY
-                                                proyecto_id');
+                                                RESULTADO.proyecto_id');
             }
 
 
