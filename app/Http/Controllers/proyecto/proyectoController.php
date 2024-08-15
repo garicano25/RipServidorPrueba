@@ -1157,6 +1157,7 @@ class proyectoController extends Controller
                                                 FROM recsensorial_tablaClientes_informes cliente
                                                 LEFT JOIN catsustancias_quimicas sus ON sus.ID_SUSTANCIA_QUIMICA = cliente.SUSTANCIA_ID
                                                 WHERE cliente.RECONOCIMIENTO_ID = ?
+                                                GROUP BY sus.SUSTANCIA_QUIMICA
                                                 ORDER BY PRODUCTO_COMPONENTE', [$recsensorial_id]);
 
 
