@@ -112,14 +112,14 @@
 									</td>
 								</tr>
 								<!-- Hacemos uso del catalago 8 ya que el 7 fue ocupado para otra cosa -->
-								<!-- <tr id="tr_8" class="">
+								<tr id="tr_8" class="">
 									<td>Unidad de medida</td>
 									<td>
 										<a href="#" onclick="mostrar_catalogo(8);">
 											<i class="fa fa-chevron-circle-right fa-3x text-secondary" id="cat_8"></i>
 										</a>
 									</td>
-								</tr> -->
+								</tr>
 								<tr id="tr_9" class="">
 									<td>Connotaciones</td>
 									<td>
