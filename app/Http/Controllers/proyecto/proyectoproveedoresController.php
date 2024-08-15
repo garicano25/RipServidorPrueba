@@ -261,93 +261,105 @@ class proyectoproveedoresController extends Controller
                 //MANDAMOS A LLAMAR NUESTRO SP QUE NOS TRAE TODA LA INFORMACION NECESARIA PARA COMPLETAR LA TABLA
                 $quimicos = DB::select('CALL sp_obtener_puntos_proveedores_proyecto_b(?, ?)', [$recsensorial_id, $proyecto_id]);
 
-                if (count($quimicos) != 0 || !is_null($quimicos)) {
-                    foreach ($quimicos as $key => $value) {
-                        $lista = '';
-                        $readonly_required = '';
-                        $required_campo = '';
-                        $checked = '';
-                        $puntos = 0;
+                if (!is_null($quimicos) && !empty($quimicos)) {
 
-                        // select proveedores
-                        $opciones = DB::select('SELECT
-                                                    acreditacionalcance.proveedor_id
-                                                    ,proveedor.proveedor_NombreComercial
-                                                    -- ,acreditacionalcance.prueba_id
-                                                    -- ,IF(IFNULL(acreditacionalcance.acreditacionAlcance_agentetipo, "") = "", acreditacionalcance.acreditacionAlcance_agente, CONCAT(acreditacionalcance.acreditacionAlcance_agente, " (", acreditacionalcance.acreditacionAlcance_agentetipo,")")) AS agente_nombre
-                                                FROM
-                                                    acreditacionalcance
-                                                    LEFT JOIN proveedor ON acreditacionalcance.proveedor_id = proveedor.id
-                                                WHERE
-                                                    acreditacionalcance.prueba_id = 15
-                                                    AND acreditacionalcance.acreditacionAlcance_Eliminado = 0
-                                                    AND proveedor.proveedor_Eliminado = 0
-                                                GROUP BY
-                                                    acreditacionalcance.proveedor_id
-                                                    ,proveedor.proveedor_NombreComercial
-                                                    -- ,acreditacionalcance.prueba_id
-                                                ');
+                    // Filtrar los elementos donde todos los campos relevantes son nulos
+                    $quimicosSinNulos = array_filter($quimicos, function ($value) {
+                        // Aquí, asegúrate de verificar las propiedades dentro de cada objeto
+                        // Si cualquier propiedad que necesitas es null, excluye ese elemento
+                        return !is_null($value->componente) || !is_null($value->TOTAL_MUESTREOS); // reemplaza 'campo1', 'campo2', etc. con las propiedades que necesitas verificar
+                    });
 
-                        foreach ($opciones as $key2 => $value2) {
-                            if ($value->agente != null) {
-                                if ($value->proveedor == $value2->proveedor_id) {
-                                    $lista .= '<option value="' . $value2->proveedor_id . '" selected>' . $value2->proveedor_NombreComercial . '</option>';
+                    // Verificar si el array filtrado está vacío
+                    if (!empty($quimicosSinNulos)) {
+
+                        foreach ($quimicosSinNulos as $key => $value) {
+                            $lista = '';
+                            $readonly_required = '';
+                            $required_campo = '';
+                            $checked = '';
+                            $puntos = 0;
+
+                            // select proveedores
+                            $opciones = DB::select('SELECT
+                                                        acreditacionalcance.proveedor_id
+                                                        ,proveedor.proveedor_NombreComercial
+                                                        -- ,acreditacionalcance.prueba_id
+                                                        -- ,IF(IFNULL(acreditacionalcance.acreditacionAlcance_agentetipo, "") = "", acreditacionalcance.acreditacionAlcance_agente, CONCAT(acreditacionalcance.acreditacionAlcance_agente, " (", acreditacionalcance.acreditacionAlcance_agentetipo,")")) AS agente_nombre
+                                                    FROM
+                                                        acreditacionalcance
+                                                        LEFT JOIN proveedor ON acreditacionalcance.proveedor_id = proveedor.id
+                                                    WHERE
+                                                        acreditacionalcance.prueba_id = 15
+                                                        AND acreditacionalcance.acreditacionAlcance_Eliminado = 0
+                                                        AND proveedor.proveedor_Eliminado = 0
+                                                    GROUP BY
+                                                        acreditacionalcance.proveedor_id
+                                                        ,proveedor.proveedor_NombreComercial
+                                                        -- ,acreditacionalcance.prueba_id
+                                                    ');
+
+                            foreach ($opciones as $key2 => $value2) {
+                                if ($value->agente != null) {
+                                    if ($value->proveedor == $value2->proveedor_id) {
+                                        $lista .= '<option value="' . $value2->proveedor_id . '" selected>' . $value2->proveedor_NombreComercial . '</option>';
+                                    } else {
+                                        $lista .= '<option value="' . $value2->proveedor_id . '">' . $value2->proveedor_NombreComercial . '</option>';
+                                    }
                                 } else {
                                     $lista .= '<option value="' . $value2->proveedor_id . '">' . $value2->proveedor_NombreComercial . '</option>';
                                 }
-                            } else {
-                                $lista .= '<option value="' . $value2->proveedor_id . '">' . $value2->proveedor_NombreComercial . '</option>';
                             }
-                        }
 
-                        //Total puntos y Observacion
-                        if ($value->agente) {
-                            $checked = 'checked';
-                            $puntos = $value->puntos;
-                            $required_campo = 'required';
+                            //Total puntos y Observacion
+                            if ($value->agente) {
+                                $checked = 'checked';
+                                $puntos = $value->puntos;
+                                $required_campo = 'required';
 
-                            if ($value->TOTAL_MUESTREOS == $value->puntos) {
+                                if ($value->TOTAL_MUESTREOS == $value->puntos) {
+                                    $readonly_required = 'readonly';
+                                } else {
+                                    $readonly_required = 'required';
+                                }
+                            } else {
+                                // $puntos = $value->TOTAL_MUESTREOS;
+                                $puntos = '';
+
                                 $readonly_required = 'readonly';
-                            } else {
-                                $readonly_required = 'required';
                             }
-                        } else {
-                            // $puntos = $value->TOTAL_MUESTREOS;
-                            $puntos = '';
 
-                            $readonly_required = 'readonly';
+                            $filas .= '<tr>
+                                            <td>' . ($numero_registros + 1) . '</td>
+                                            <td>
+                                                <div class="switch" style="border: 0px #000 solid;">
+                                                    <label>
+                                                        <input type="checkbox" name="agente_activo[]" value="' . $numero_registros . '" onchange="valida_requiere_agente_activo(this)" ' . $checked . '/>
+                                                        <span class="lever switch-col-light-blue" style="paddin: 0px; margin: 0px;"></span>
+                                                    </label>
+                                                </div>
+                                            </td>
+                                            <td>
+                                                <select class="custom-select form-control" name="proveedor_id[]" id="select_proveedor_' . $numero_registros . '" ' . $required_campo . '>
+                                                    <option value="">&nbsp;</option>
+                                                    ' . $lista . '
+                                                </select>
+                                            </td>
+                                            <td>' . $value->componente . '</td>
+                                            <td><div class="round" style="background-color: #999999;"><i>' . $value->TOTAL_MUESTREOS . '</i></div></td>
+                                            <td>
+                                                <input type="hidden" class="form-control" name="agente_tipo[]" value="0">
+                                                <input type="hidden" class="form-control" name="agente_id[]" value="15">
+                                                <input type="hidden" class="form-control" name="agente_nombre[]" value="' . $value->componente . '">
+                                                <input type="number" class="form-control" name="agente_puntos[]" value="' . $puntos . '" id="puntos_agente_' . $numero_registros . '" onchange="requiere_obs(' . $numero_registros . ', ' . $value->TOTAL_MUESTREOS . ', this.value);" ' . $required_campo . '>
+                                            </td>
+                                            <td>
+                                                <input type="text" class="form-control" name="agente_obs[]" id="agente_obs_' . $numero_registros . '" value="' . $value->observacion . '" ' . $readonly_required . '>
+                                            </td>
+                                        </tr>';
+
+                            $numero_registros += 1;
                         }
-
-                        $filas .= '<tr>
-                                        <td>' . ($numero_registros + 1) . '</td>
-                                        <td>
-                                            <div class="switch" style="border: 0px #000 solid;">
-                                                <label>
-                                                    <input type="checkbox" name="agente_activo[]" value="' . $numero_registros . '" onchange="valida_requiere_agente_activo(this)" ' . $checked . '/>
-                                                    <span class="lever switch-col-light-blue" style="paddin: 0px; margin: 0px;"></span>
-                                                </label>
-                                            </div>
-                                        </td>
-                                        <td>
-                                            <select class="custom-select form-control" name="proveedor_id[]" id="select_proveedor_' . $numero_registros . '" ' . $required_campo . '>
-                                                <option value="">&nbsp;</option>
-                                                ' . $lista . '
-                                            </select>
-                                        </td>
-                                        <td>' . $value->componente . '</td>
-                                        <td><div class="round" style="background-color: #999999;"><i>' . $value->TOTAL_MUESTREOS . '</i></div></td>
-                                        <td>
-                                            <input type="hidden" class="form-control" name="agente_tipo[]" value="0">
-                                            <input type="hidden" class="form-control" name="agente_id[]" value="15">
-                                            <input type="hidden" class="form-control" name="agente_nombre[]" value="' . $value->componente . '">
-                                            <input type="number" class="form-control" name="agente_puntos[]" value="' . $puntos . '" id="puntos_agente_' . $numero_registros . '" onchange="requiere_obs(' . $numero_registros . ', ' . $value->TOTAL_MUESTREOS . ', this.value);" ' . $required_campo . '>
-                                        </td>
-                                        <td>
-                                            <input type="text" class="form-control" name="agente_obs[]" id="agente_obs_' . $numero_registros . '" value="' . $value->observacion . '" ' . $readonly_required . '>
-                                        </td>
-                                    </tr>';
-
-                        $numero_registros += 1;
                     }
                 }
             }
