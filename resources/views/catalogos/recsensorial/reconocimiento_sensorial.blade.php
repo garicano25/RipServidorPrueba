@@ -3556,13 +3556,13 @@
                                 <div class="col-12 p-2 d-flex justify-content-center">
                                     <label class="labelGrupo"><b style="font-size: 19px;">Clasificación del grupo *</b></label>
                                     <div class="form-check mx-4">
-                                        <input class="form-check-input" type="radio" name="TIPO_CLASIFICACION" id="TIPO_CLASIFICACION_ROMANOS" value="1">
+                                        <input class="form-check-input" type="radio" name="TIPO_CLASIFICACION" id="TIPO_CLASIFICACION_ROMANOS" value="1" required>
                                         <label class="form-check-label" for="TIPO_CLASIFICACION_ROMANOS">
                                             Num. Romanos
                                         </label>
                                     </div>
                                     <div class="form-check mx-4">
-                                        <input class="form-check-input" type="radio" name="TIPO_CLASIFICACION" id="TIPO_CLASIFICACION_LETRAS" value="2">
+                                        <input class="form-check-input" type="radio" name="TIPO_CLASIFICACION" id="TIPO_CLASIFICACION_LETRAS" value="2" required>
                                         <label class="form-check-label" for="TIPO_CLASIFICACION_LETRAS">
                                             Letras
                                         </label>
