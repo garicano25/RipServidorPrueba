@@ -330,6 +330,27 @@ class acreditacionalcanceController extends Controller
                 return response()->json($proveedor);
             } else {
                 $proveedor = AcreditacionalcanceModel::findOrFail($request['alcance_id']);
+
+                $request['acreditacionAlcance_agentetipo'] = isset($request['acreditacionAlcance_agentetipo']) ? $request['acreditacionAlcance_agentetipo'] : null;
+
+                if ($request['acreditacionAlcance_tipo'] === "Químico") {
+                    $request['prueba_id'] = 15;
+                } else {
+
+                    $id_prueba = intval($request['prueba_id']);
+                    $alcance = DB::select('SELECT
+                                    p.catPrueba_Nombre
+                                FROM
+                                    cat_prueba p
+                                WHERE
+                                    p.id = ' . $id_prueba . '
+                                    AND p.catPrueba_Activo = 1');
+
+
+                    $request['acreditacionAlcance_agente'] = $alcance[0]->catPrueba_Nombre;
+                }
+
+
                 $proveedor->update($request->all());
                 return response()->json($proveedor);
             }
