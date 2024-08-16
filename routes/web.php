@@ -653,6 +653,8 @@ Route::get('parametropsicosocialtabla/{recsensorial_id}', ['as' => 'parametropsi
 
 Route::get('parametropsicosocialeliminar/{recsensorial_id}', ['as' => 'parametropsicosocial.parametropsicosocialeliminar', 'uses' => 'recsensorial\parametropsicosocialController@parametropsicosocialeliminar']);
 
+Route::get('recsensorialConsultarPuntos/{recsensorial_id}', ['as' => 'parametropsicosocial.recsensorialConsultarPuntos', 'uses' => 'recsensorial\parametropsicosocialController@recsensorialConsultarPuntos']);
+
 
 //==============================================
 

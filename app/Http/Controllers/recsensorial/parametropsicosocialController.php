@@ -44,33 +44,28 @@ class parametropsicosocialController extends Controller
      */
     public function parametropsicosocialtabla($recsensorial_id)
     {
-        try
-        {
+        try {
             // Reconocimiento
             $recsensorial = recsensorialModel::findOrFail($recsensorial_id);
 
             $numero_registro = 1;
             // $tabla = recsensorialareaModel::all();
             $tabla = parametropsicosocialModel::with(['recsensorialarea', 'recsensorialcategoria'])
-                    ->where('recsensorial_id', $recsensorial_id)
-                    ->orderBy('id', 'asc')
-                    ->get();
+                ->where('recsensorial_id', $recsensorial_id)
+                ->orderBy('id', 'asc')
+                ->get();
 
             // agrupar pruebas por area
-            foreach ($tabla  as $key => $value) 
-            {
+            foreach ($tabla  as $key => $value) {
                 $value->numero_registro = $numero_registro;
                 $numero_registro += 1;
 
                 // Botones
-                if (auth()->user()->hasRoles(['Superusuario', 'Administrador', 'Coordinador', 'Operativo HI']) && ($recsensorial->recsensorial_bloqueado + 0) == 0 && ($recsensorial->recsensorial_fisicosimprimirbloqueado + 0) == 0)
-                {
+                if (auth()->user()->hasRoles(['Superusuario', 'Administrador', 'Coordinador', 'Operativo HI']) && ($recsensorial->recsensorial_bloqueado + 0) == 0 && ($recsensorial->recsensorial_fisicosimprimirbloqueado + 0) == 0) {
                     $value->accion_activa = 1;
                     $value->boton_editar = '<button type="button" class="btn btn-warning btn-circle"><i class="fa fa-pencil"></i></button>';
                     $value->boton_eliminar = '<button type="button" class="btn btn-danger btn-circle"><i class="fa fa-trash"></i></button>';
-                }
-                else
-                {
+                } else {
                     $value->accion_activa = 0;
                     $value->boton_editar = '<button type="button" class="btn btn-secondary btn-circle"><i class="fa fa-ban"></i></button>';
                     $value->boton_eliminar = '<button type="button" class="btn btn-secondary btn-circle"><i class="fa fa-ban"></i></button>';
@@ -81,10 +76,8 @@ class parametropsicosocialController extends Controller
             $dato['data'] = $tabla;
             $dato["msj"] = 'Información consultada correctamente';
             return response()->json($dato);
-        }
-        catch(Exception $e)
-        {
-            $dato["msj"] = 'Error '.$e->getMessage();
+        } catch (Exception $e) {
+            $dato["msj"] = 'Error ' . $e->getMessage();
             $dato['data'] = 0;
             return response()->json($dato);
         }
@@ -99,17 +92,15 @@ class parametropsicosocialController extends Controller
      */
     public function store(Request $request)
     {
-        try
-        {
-            if ($request['registro_id']==0) //nuevo
+        try {
+            if ($request['registro_id'] == 0) //nuevo
             {
                 // guardar
                 $parametro = parametropsicosocialModel::create($request->all());
 
                 // mensaje
                 $dato["msj"] = 'Información guardada correctamente';
-            }
-            else //editar
+            } else //editar
             {
                 // modificar
                 $parametro = parametropsicosocialModel::findOrFail($request['registro_id']);
@@ -122,14 +113,30 @@ class parametropsicosocialController extends Controller
             // respuesta
             $dato['parametro'] = $parametro;
             return response()->json($dato);
-        }
-        catch(Exception $e)
-        {
-            $dato["msj"] = 'Error '.$e->getMessage();
+        } catch (Exception $e) {
+            $dato["msj"] = 'Error ' . $e->getMessage();
             return response()->json($dato);
         }
     }
-    
+
+
+    public function recsensorialConsultarPuntos($registro_id)
+    {
+        try {
+            $total = DB::select('SELECT IFNULL(SUM(parametropsicosocial_nopersonas),0) TOTAL
+                                FROM parametropsicosocial
+                                WHERE recsensorial_id = ?', [$registro_id]);
+
+            // respuesta
+            $dato['total'] = $total[0]->TOTAL;
+            $dato["msj"] = 'Información eliminada correctamente';
+            return response()->json($dato);
+        } catch (Exception $e) {
+            $dato["msj"] = 'Error ' . $e->getMessage();
+            return response()->json($dato);
+        }
+    }
+
 
     /**
      * Display the specified resource.
@@ -139,18 +146,15 @@ class parametropsicosocialController extends Controller
      */
     public function parametropsicosocialeliminar($registro_id)
     {
-        try
-        {
+        try {
             $parametro = parametropsicosocialModel::where('id', $registro_id)->delete();
 
             // respuesta
             $dato['eliminado'] = $parametro;
             $dato["msj"] = 'Información eliminada correctamente';
             return response()->json($dato);
-        }
-        catch(Exception $e)
-        {
-            $dato["msj"] = 'Error '.$e->getMessage();
+        } catch (Exception $e) {
+            $dato["msj"] = 'Error ' . $e->getMessage();
             return response()->json($dato);
         }
     }

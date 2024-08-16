@@ -45,6 +45,7 @@
         <button type="button" class="btn btn-secondary waves-effect waves-light" data-toggle="tooltip" title="Nuevo registro" id="boton_nuevo_parametro">
             <span class="btn-label"><i class="fa fa-plus"></i></span>Nuevo registro
         </button>
+        <h3 id="puntosEvaluar" class="text-light"></h3>
     </ol>
     @endif
     <table class="table table-hover stylish-table" width="100%" id="tabla_parametro">
@@ -104,7 +105,7 @@
                         </div>
                         <div class="col-12">
                             <div class="form-group">
-                                <label>No. personas a evaluar (puntos) *</label>
+                                <label>No. personas a evaluar *</label>
                                 <input type="number" class="form-control" name="parametropsicosocial_nopersonas" id="parametropsicosocial_nopersonas" required>
                             </div>
                         </div>
@@ -236,11 +237,29 @@
     // Load pagina
     $(document).ready(function() {
         funcion_tabla_parametro(recsensorial_id);
-        // consulta_select_areas(recsensorial_id, 0);
+        consulta_puntos_evaluar(recsensorial_id);
         // consulta_select_categorias(recsensorial_id, 0);
         $('[data-toggle="tooltip"]').tooltip();
     });
 
+    function consulta_puntos_evaluar(recsensorial_id) {
+        $.ajax({
+            type: "GET",
+            dataType: "json",
+            url: "/recsensorialConsultarPuntos/" + recsensorial_id,
+            data: {},
+            cache: false,
+            success: function(dato) {
+                if (dato.total != 0) {
+                    $('#puntosEvaluar').text(`Puntos totales a evaluar: ${dato.total}`)
+                }
+            },
+            error: function(dato) {
+                // alert('Error: '+dato.msj);
+                return false;
+            }
+        }); //Fin ajax
+    }
 
     function consulta_select_areas(recsensorial_id, seleccionado_id) {
         $.ajax({
@@ -448,6 +467,7 @@
 
                     // actualiza tabla
                     tabla_parametro.destroy();
+                    consulta_puntos_evaluar(recsensorial_id);
                     funcion_tabla_parametro(dato.parametro.recsensorial_id);
 
                     // mensaje

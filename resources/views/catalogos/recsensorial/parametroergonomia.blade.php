@@ -120,7 +120,6 @@
                             <h4 class="card-title">Riesgos</h4>
                             <hr>
                         </div>
-                        <div class="col-1"></div>
                         <div class="col-2">
                             <div class="form-group">
                                 <label>Mov. Repetitivo *</label>
@@ -151,9 +150,9 @@
                                 </select>
                             </div>
                         </div>
-                        <div class="col-2">
+                        <div class="col-4">
                             <div class="form-group">
-                                <label>Carga manual *</label>
+                                <label>Levantamiento de cargas y/o transporte *</label>
                                 <select class="custom-select form-control" id="parametroergonomia_cargamanual" name="parametroergonomia_cargamanual" required>
                                     <option value=""></option>
                                     <option value="1">Si</option>
@@ -171,7 +170,6 @@
                                 </select>
                             </div>
                         </div>
-                        <div class="col-1"></div>
                     </div>
                     <div class="row">
                         <div class="col-12">
@@ -379,10 +377,10 @@
                     "data": "posturaforzada"
                 },
                 {
-                    "data": "fuerza"
+                    "data": "cargamanual"
                 },
                 {
-                    "data": "cargamanual"
+                    "data": "fuerza"
                 },
                 // {
                 //     "data": "evaluar"
