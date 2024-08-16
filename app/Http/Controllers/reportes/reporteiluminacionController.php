@@ -6060,6 +6060,8 @@ class reporteiluminacionController extends Controller
                             reporteiluminacionpuntosModel::create([
                                 'proyecto_id' => $request['proyecto_id'],
                                 'registro_id' => $request['registro_id'],
+                                'reporteiluminacionpuntos_nombre' => 'NP',
+                                'reporteiluminacionpuntos_ficha' => 'NP',
                                 'reporteiluminacionpuntos_nopunto' => is_null($rowData['A']) ? null : intval($rowData['A']),
                                 'reporteiluminacionpuntos_fechaeval' => is_null($rowData['B']) ? null : validarFecha($rowData['B']),
                                 'reporteiluminacionpuntos_horario1' => is_null($rowData['C']) ? null : formatearHora($rowData['C']),

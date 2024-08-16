@@ -88,7 +88,7 @@ class acreditacionalcanceController extends Controller
                 $value->normas = "<li>" . str_replace(",", "</li><li>", $value->acreditacionAlcance_Norma) . "</li>";
 
                 // Botones
-                if (auth()->user()->hasRoles  (['Superusuario', 'Administrador','Compras']) && ($proveedor->proveedor_Bloqueado + 0) == 0) {
+                if (auth()->user()->hasRoles(['Superusuario', 'Administrador', 'Compras']) && ($proveedor->proveedor_Bloqueado + 0) == 0) {
                     $value->accion_activa = 1;
                     $value->boton_editar = '<button type="button" class="btn btn-warning btn-circle"><i class="fa fa-pencil"></i></button>';
                 } else {
@@ -261,7 +261,7 @@ class acreditacionalcanceController extends Controller
             // }
 
             // // respuesta
-            $dato['normas'] = $normas;        
+            $dato['normas'] = $normas;
             $dato["msj"] = 'Datos consultados correctamente';
             return response()->json($dato);
         } catch (Exception $e) {
@@ -309,16 +309,16 @@ class acreditacionalcanceController extends Controller
                                     AND p.catPrueba_Activo = 1');
 
 
-                    // $request['acreditacionAlcance_agente'] = $alcance[0]->catPrueba_Nombre;;
+                    $request['acreditacionAlcance_agente'] = $alcance[0]->catPrueba_Nombre;
                 }
 
-                
+
 
                 //Valida si llega norma o un metodo
                 $request['acreditacion_id'] = $request['acreditacion'];
                 $request['alcace_aprovacion_id'] = $request['aprovacion'];
 
-                
+
                 $request['acreditacionAlcance_Norma'] = $request['Norma'];
                 $request['acreditacionAlcance_Procedimiento'] = $request['Procedimiento'];
                 $request['acreditacionAlcance_Metodo'] = $request['Metodo'];
@@ -338,4 +338,3 @@ class acreditacionalcanceController extends Controller
         }
     }
 }
-
