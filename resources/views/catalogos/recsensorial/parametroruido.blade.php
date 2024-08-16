@@ -1801,21 +1801,21 @@
                     searching: false,
                     paging: false,
                     responsive: true,
-                    language: {
-                        lengthMenu: "Mostrar MENU Registros",
-                        zeroRecords: "No se encontraron registros",
-                        info: "Página PAGE de PAGES (Total TOTAL registros)",
-                        infoEmpty: "No se encontraron registros",
-                        infoFiltered: "(Filtrado de MAX registros)",
-                        emptyTable: "No hay datos disponibles en la tabla",
-                        loadingRecords: "Cargando datos....",
-                        processing: "Procesando <i class='fa fa-spin fa-spinner fa-3x'></i>",
-                        search: "Buscar",
-                        paginate: {
-                            first: "Primera",
-                            last: "Ultima",
-                            next: "Siguiente",
-                            previous: "Anterior"
+                    "language": {
+                        "lengthMenu": "Mostrar _MENU_ Registros",
+                        "zeroRecords": "No se encontraron registros",
+                        "info": "Página _PAGE_ de _PAGES_ (Total _MAX_ registros)",
+                        "infoEmpty": "No se encontraron registros",
+                        "infoFiltered": "(Filtrado de _MAX_ registros)",
+                        "emptyTable": "No hay datos disponibles en la tabla",
+                        "loadingRecords": "Cargando datos....",
+                        "processing": "Procesando <i class='fa fa-spin fa-spinner'></i>",
+                        "search": "Buscar",
+                        "paginate": {
+                            "first": "Primera",
+                            "last": "Ultima",
+                            "next": "Siguiente",
+                            "previous": "Anterior"
                         }
                     },
                     rowCallback: function(row, data, index) {
