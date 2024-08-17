@@ -20,6 +20,7 @@ use App\modelos\recsensorialquimicos\catConnotacionModel;
 use App\modelos\recsensorialquimicos\catEntidadesModel;
 use App\modelos\recsensorial\catConclusionesModel;
 use App\modelos\recsensorial\cat_descripcionarea;
+use App\modelos\recsensorialquimicos\gruposDeExposicionModel;
 
 
 
@@ -859,13 +860,33 @@ class recsensorialquimicoscatalogosController extends Controller
 
                         $catalogo = catsustanciaModel::findOrFail($request['sustancia_id']);
                         $catalogo->update($request->all());
-                        $componenteseliminar = catHojaSeguridadSustanciaQuimicaModel::where('HOJA_SEGURIDAD_ID', $request['sustancia_id'])->delete(); //eliminar componentes anteriores
+                        $porcentajes = json_decode($request->porcentajes, true);
+
+                        $arregloClaveValor = [];
+                        foreach ($porcentajes as $key => $value) {
+
+                            $sustanciaaa = catHojaSeguridadSustanciaQuimicaModel::where('HOJA_SEGURIDAD_ID', $catalogo->id)
+                                ->where('SUSTANCIA_QUIMICA_ID', $value['SUSTANCIA_QUIMICA_ID'])->first();;
+
+
+                            if ($sustanciaaa) {
+                                $clave = $catalogo->id . '-' . $value['SUSTANCIA_QUIMICA_ID'];
+                                $arregloClaveValor[$clave] = $sustanciaaa->ID_HOJA_SUSTANCIA;
+                            }
+                        }
+
+                        // $dato["msj"] = $arregloClaveValor;
+                        // return response()->json($dato);
+
+
+
+
 
                         // AUTO_INCREMENT
                         DB::statement('ALTER TABLE catHojasSeguridad_SustanciasQuimicas AUTO_INCREMENT=1');
+                        $componenteseliminar = catHojaSeguridadSustanciaQuimicaModel::where('HOJA_SEGURIDAD_ID', $request['sustancia_id'])->delete(); //eliminar componentes anteriores
 
                         // guardar componentes
-                        $porcentajes = json_decode($request->porcentajes, true);
                         foreach ($porcentajes as $key => $value) {
 
                             $sustancia = catHojaSeguridadSustanciaQuimicaModel::create([
@@ -880,6 +901,20 @@ class recsensorialquimicoscatalogosController extends Controller
                                 'FORMA' => $value['FORMA']
 
                             ]);
+
+
+
+                            //Actualizamos en la tabla de grupos de exposicion
+                            $claveBuscada = $catalogo->id . '-' . $value['SUSTANCIA_QUIMICA_ID'];
+
+                            if (isset($arregloClaveValor[$claveBuscada])) {
+
+                                $IDViejo = $arregloClaveValor[$claveBuscada];
+                                $IDNuevo = $sustancia->ID_HOJA_SUSTANCIA;
+
+                                gruposDeExposicionModel::where('RELACION_HOJA_SUS_ID', $IDViejo)
+                                    ->update(['RELACION_HOJA_SUS_ID' => $IDNuevo]);
+                            }
                         }
                     }
 
