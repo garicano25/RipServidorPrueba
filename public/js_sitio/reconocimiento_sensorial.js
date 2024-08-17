@@ -10559,14 +10559,18 @@ $('#boton_editarInforme').on('click', function (e) {
 				
 				$('#boton_descargarquimicosdoc').css('display', 'none')
 				$('#boton_descargarquimicosdoc').removeClass('desbloqueado').addClass('bloqueado')
+
+				$('#boton_descargarquimicosdoc_final').css('display', 'none')
+				$('#boton_descargarquimicosdoc_final').removeClass('desbloqueado').addClass('bloqueado')
 				
 
 			} else { //DOCUMENTO YA EDITADO
 				
 				$('#boton_descargarquimicosdoc').removeClass('bloqueado').addClass('desbloqueado')
-
 				$('#boton_descargarquimicosdoc').css('display', 'block')
 
+				$('#boton_descargarquimicosdoc_final').removeClass('bloqueado').addClass('desbloqueado')
+				$('#boton_descargarquimicosdoc_final').css('display', 'block')
 				
 				// obtener extencion archivo
 				var archivo = dato.data[0].IMAGEN_PORTADA;

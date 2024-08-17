@@ -2899,8 +2899,8 @@
                     Descargar previa &nbsp;&nbsp;<i class="fa fa-eye fa-1x"></i>
                 </button>
 
-                <button type="button" class="btn btn-info mt-1" style="background: #94B732!important; float: left; display: block;" data-toggle="tooltip" title="Descargar informe sensorial de químicos .doc" id="boton_descargarquimicosdoc" onclick="reporte(form_recsensorial.recsensorial_id.value, 2, this, 2);">
-                    Descargar final &nbsp;&nbsp;<i class="fa fa-file-word-o fa-1x"></i>
+                <button type="button" class="btn btn-info mt-1" style="background: #94B732!important; float: left; display: block;" data-toggle="tooltip" title="Descargar informe sensorial de químicos y anexos .zip" id="boton_descargarquimicosdoc_final" onclick="reporte(form_recsensorial.recsensorial_id.value, 2, this, 2);">
+                    Descargar final &nbsp;&nbsp;<i class="fa fa-file-archive-o fa-1x"></i>
                 </button>
                 @endif
 
