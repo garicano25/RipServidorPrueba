@@ -82,10 +82,11 @@
                                 <tr>
                                     <th>No.</th>
                                     <th>Folio Proyecto</th>
+                                    <th width="600">Intalación / Dirrección</th>
                                     <th>Fecha inicio</th>
                                     <th>Fecha fin</th>
                                     <th>Reconocimiento vinculado</th>
-                                    <th>Mostrar</th>
+                                    <th width="60">Mostrar</th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -201,7 +202,7 @@
                                                                 </div>
                                                             </div>
                                                             <div class="tab-pane p-20" id="tab_evidencia_2" role="tabpanel">
-                                                                @if (auth()->user()->hasRoles(['Superusuario', 'Administrador',  'Coordinador']))
+                                                                @if (auth()->user()->hasRoles(['Superusuario', 'Administrador', 'Coordinador']))
                                                                 <ol class="breadcrumb m-b-10">
                                                                     <button type="button" class="btn btn-secondary waves-effect waves-light botonnuevo_moduloproyecto" data-toggle="tooltip" title="Agregar fotos" id="boton_nuevo_fotosevidencia">
                                                                         <span class="btn-label"><i class="fa fa-plus"></i></span>Foto (s)

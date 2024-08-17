@@ -126,6 +126,10 @@ function tabla_ejecucion()
 					    "defaultContent": "-"
 					},
 					{
+					    "data": "instalacion_y_direccion",
+					    "defaultContent": "-"
+					},
+					{
 					    "data": "FECHA_INICIO",
 					    "defaultContent": "-"
 					},

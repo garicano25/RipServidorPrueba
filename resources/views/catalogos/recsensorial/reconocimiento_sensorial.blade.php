@@ -2895,8 +2895,12 @@
                 </button> -->
 
                 @if(auth()->user()->hasRoles(['Superusuario', 'Administrador', 'Coordinador']))
-                <button type="button" class="btn btn-info mt-1" style="background: #1E88E6!important; float: left; display: block;" data-toggle="tooltip" title="Descargar informe sensorial de químicos .doc" id="boton_descargarquimicosdoc" onclick="reporte(form_recsensorial.recsensorial_id.value, 2, this);">
-                    Descargar &nbsp;&nbsp;<i class="fa fa-file-word-o fa-1x"></i>
+                <button type="button" class="btn btn-info mt-1" style="background: #1E88E6!important; float: left; display: block;" data-toggle="tooltip" title="Descargar informe sensorial de químicos .doc" id="boton_descargarquimicosdoc" onclick="reporte(form_recsensorial.recsensorial_id.value, 2, this, 1);">
+                    Descargar previa &nbsp;&nbsp;<i class="fa fa-eye fa-1x"></i>
+                </button>
+
+                <button type="button" class="btn btn-info mt-1" style="background: #94B732!important; float: left; display: block;" data-toggle="tooltip" title="Descargar informe sensorial de químicos .doc" id="boton_descargarquimicosdoc" onclick="reporte(form_recsensorial.recsensorial_id.value, 2, this, 2);">
+                    Descargar final &nbsp;&nbsp;<i class="fa fa-file-word-o fa-1x"></i>
                 </button>
                 @endif
 
@@ -3439,6 +3443,15 @@
                                     </span>
                                     <a href="#" class="input-group-addon btn btn-secondary fileinput-exists" data-dismiss="fileinput">Quitar</a>
                                 </div>
+                            </div>
+                        </div>
+                        <div class="col-4" data-toggle="tooltip" title="Seleccione esta opción si el anexo a agregar son las Hojas de seguridad">
+                            <label class="text-danger">Hojas de seguridad </label>
+                            <div class="switch">
+                                <label>
+                                    No<input type="checkbox" id="hojas_seguridad" name="hojas_seguridad" value="1" onchange="validarHojaSeguridad(this);">
+                                    <span class="lever switch-col-light-blue" id="checkbox_hojaSeguridad"></span>Si
+                                </label>
                             </div>
                         </div>
                     </div>

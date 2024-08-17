@@ -14,6 +14,8 @@ class recsensorialanexoModel extends Model
     'recsensorialanexo_tipo',
     'recsensorialanexo_orden',
     'ruta_anexo',
-    'contrato_anexo_id'
+    'contrato_anexo_id',
+    'hojas_seguridad'
+
   ];
 }

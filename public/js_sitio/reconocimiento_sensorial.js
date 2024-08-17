@@ -3092,7 +3092,9 @@ $("#boton_descargarquimicospdf").click(function()
 
 
 //Version actualizada de la descarga del Informe de reconocimientos
-function reporte(recsensorial_id, recsensorial_tipo, boton) {
+function reporte(recsensorial_id, recsensorial_tipo, boton, tipo) {
+
+	tipodoc = parseInt(tipo)
 
 	if ($('#boton_descargarquimicosdoc').hasClass('desbloqueado')) {
 
@@ -3128,16 +3130,23 @@ function reporte(recsensorial_id, recsensorial_tipo, boton) {
 				var url = "";
 				if (parseInt(recsensorial_tipo) === 1) {
 					if (parseInt($("#recsensorial_tipocliente").val()) === 0) { // 0 = Cliente, 1 = Pemex
-						url = "/recsensorialreporte1wordcliente/" + recsensorial_id;
+						url = "/recsensorialreporte1wordcliente/" + recsensorial_id +"/"+ tipodoc;
 					} else {
-						url = "/recsensorialreporte1word/" + recsensorial_id;
+						url = "/recsensorialreporte1word/" + recsensorial_id+"/"+ tipodoc;
 					}
 				} else {
 					if (parseInt($("#recsensorial_tipocliente").val()) === 0) { // 0 = Cliente, 1 = Pemex
-						url = "/recsensorialquimicosreporte1wordcliente/" + recsensorial_id;
+						url = "/recsensorialquimicosreporte1wordcliente/" + recsensorial_id+"/"+ tipodoc;
 					} else {
-						url = "/recsensorialquimicosreporte1word/" + recsensorial_id;
+						url = "/recsensorialquimicosreporte1word/" + recsensorial_id +"/"+ tipodoc;
 					}
+				}
+
+
+				if (tipodoc == 1) {
+					ext = '.docx'
+				} else {
+					ext = '.zip'
 				}
 	
 				$.ajax({
@@ -3150,7 +3159,7 @@ function reporte(recsensorial_id, recsensorial_tipo, boton) {
 						var a = document.createElement('a');
 						var url = window.URL.createObjectURL(data);
 						a.href = url;
-						a.download = `Informe - Reconocimiento de Químicos - ${nombreInstalacion}.docx`;
+						a.download = `Informe - Reconocimiento de Químicos - ${nombreInstalacion}${ext}`;
 						document.body.append(a);
 						a.click();
 						a.remove();
@@ -3209,7 +3218,18 @@ function reporte(recsensorial_id, recsensorial_tipo, boton) {
 
 }
 
+function validarHojaSeguridad(check) {
 
+	if (check.checked) {
+		$('#anexo_archivo').prop('required', false).prop('disabled', true).val('');
+	
+	} else {
+
+		$('#anexo_archivo').prop('required', true).prop('disabled', false);
+		
+	}
+	
+}
 
 
 

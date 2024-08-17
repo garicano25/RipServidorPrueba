@@ -770,7 +770,7 @@ Route::get('recsensorialreporte1word/{recsensorial_id}', ['as' => 'recsensorialr
 
 Route::get('recsensorialreporte1wordcliente/{recsensorial_id}', ['as' => 'recsensorialreporte1.recsensorialreporte1wordcliente', 'uses' => 'recsensorialreportes\recsensorialreportewordController@recsensorialreporte1wordcliente']);
 
-Route::get('recsensorialquimicosreporte1word/{recsensorial_id}', ['as' => 'recsensorialreporte1.recsensorialquimicosreporte1word', 'uses' => 'recsensorialreportes\recsensorialquimicosreportewordController@recsensorialquimicosreporte1word']);
+Route::get('recsensorialquimicosreporte1word/{recsensorial_id}/{tipo}', ['as' => 'recsensorialreporte1.recsensorialquimicosreporte1word', 'uses' => 'recsensorialreportes\recsensorialquimicosreportewordController@recsensorialquimicosreporte1word']);
 
 Route::get('recsensorialquimicosreporte1wordcliente/{recsensorial_id}', ['as' => 'recsensorialreporte1.recsensorialquimicosreporte1wordcliente', 'uses' => 'recsensorialreportes\recsensorialquimicosreportewordController@recsensorialquimicosreporte1wordcliente']);
 

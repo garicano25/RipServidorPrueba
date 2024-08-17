@@ -15,8 +15,10 @@ use PhpOffice\PhpWord\TemplateProcessor;
 use PhpOffice\PhpWord\Shared\Html;
 use PhpOffice\PhpWord\IOFactory;
 use Illuminate\Support\Facades\Storage;
+use PhpOffice\PhpWord\Element\TextRun;
 use DB;
 use ZipArchive;
+
 
 // Modelos
 use App\modelos\recsensorial\recsensorialModel;
@@ -56,13 +58,65 @@ class recsensorialquimicosreportewordController extends Controller
     }
 
 
+    public function convertirEnNegritas($texto)
+    {
+        // Crear el resultado formateado en XML
+        $resultado = '';
+
+        // Dividir el texto en párrafos
+        $parrafos = explode("\n\n", $texto);
+
+        foreach ($parrafos as $parrafo) {
+            // Dividir cada párrafo en líneas
+            $lineas = explode("\n", $parrafo);
+
+            foreach ($lineas as $linea) {
+                // Aplicar negritas al texto de la línea
+                $lineaConNegritas = $this->aplicarNegritas($linea);
+
+                // Añadir la línea al resultado con formato XML
+                $resultado .= '<w:p>
+                                <w:pPr>
+                                    <w:jc w:val="both"/>
+                                    <w:spacing w:before="0" w:after="0" w:line="240" w:lineRule="exactly"/>
+                                </w:pPr>
+                                ' . $lineaConNegritas . '
+                            </w:p>';
+            }
+
+            // Añadir un salto de párrafo después de cada párrafo
+            $resultado .= '<w:p><w:r><w:t/></w:t></w:r></w:p>';
+        }
+
+        return $resultado;
+    }
+
+    private function aplicarNegritas($texto)
+    {
+        // Patrón para detectar texto entre **doble asterisco**
+        $pattern = '/\*\*(.*?)\*\*/';
+
+        // Reemplazar las coincidencias con el formato de negritas para Word
+        $textoConNegritas = preg_replace($pattern, '<w:r><w:rPr><w:b/></w:rPr><w:t>$1</w:t></w:r>', htmlspecialchars($texto));
+
+        // Convertir el texto normal en formato XML
+        $textoNormal = '<w:r><w:rPr/><w:t>' . $textoConNegritas . '</w:t></w:r>';
+
+        return $textoNormal;
+    }
+
+
+
+
+
+
     /**
      * Display the specified resource.
      *
      * @param  int  $recsensorial_id
      * @return \Illuminate\Http\Response
      */
-    public function recsensorialquimicosreporte1word($recsensorial_id)
+    public function recsensorialquimicosreporte1word($recsensorial_id, $tipo)
     {
         $No = 1;
 
@@ -172,6 +226,10 @@ class recsensorialquimicosreportewordController extends Controller
         // $plantillaword = new TemplateProcessor(public_path('/plantillas_reportes/reconocimiento_sensorial/Informe_de_reconocimiento_quimicos.docx'));  //Ruta carpeta public
         $plantillaword = new TemplateProcessor(storage_path('app/plantillas_reportes/reconocimiento_sensorial/Plantilla_reconocimiento_quimicos_nuevo.docx')); //Ruta carpeta storage
 
+        function sanitizeText($text)
+        {
+            return htmlspecialchars($text, ENT_QUOTES, 'UTF-8');
+        }
 
         // ESCRIBIR DATOS GENERALES
         //================================================================================
@@ -182,6 +240,9 @@ class recsensorialquimicosreportewordController extends Controller
         $numeros = DB::select('SELECT COUNT(DISTINCT catsustancia_id) AS total_catsustancias
                                     FROM recsensorialquimicosinventario
                                     WHERE recsensorial_id = ?', [$recsensorial_id]);
+
+        //NOTA EN CASO DE QUE NO EXISTAN SUSTANCIAS QUIMICAS A EVALUAR
+        $nota = 'Se cuenta con ' . $numeros[0]->total_catsustancias . ' producto(s) con una proporción  de componentes que incluyen una o varias sustancia(s) química(s). Según el análisis realizado, no es necesario muestrear la(s) sustancia(s) química(s) presente(s) en el(los) producto(s) de la empresa, debido a que las prioridades de muestreo obtenidas son bajas o muy bajas, por lo que no existe riesgo de exposición a sustancias químicas para los trabajadores.';
 
 
         //IMAGEN DE LA PORTADA
@@ -347,7 +408,15 @@ class recsensorialquimicosreportewordController extends Controller
                 }
             }
         }
+        // Convertir el texto y obtener un formato XML
+        // Convertir el texto y obtener un formato XML
+        // $proceso = $this->convertirEnNegritas($recsensorial[0]->recsensorial_descripcionproceso);
+
+        // Usar setComplexBlock para insertar el texto formateado
+        // $plantillaword->setComplexBlock('descripción_proceso', $proceso);
+
         $plantillaword->setValue('descripción_proceso', $texto);
+
 
 
         // $plantillaword->setValue('fecha', $recsensorial[0]->fechainicio_texto.' al '.$recsensorial[0]->fechafin_texto);
@@ -521,12 +590,6 @@ class recsensorialquimicosreportewordController extends Controller
         // Dibujar tabla en el word
         $plantillaword->setComplexBlock('tabla_quimicos_inventario', $table);
 
-
-
-        function sanitizeText($text)
-        {
-            return htmlspecialchars($text, ENT_QUOTES, 'UTF-8');
-        }
 
 
         // TABLA 6.1 TABLA DE CARACTERISTICAS FISICAS DE LAS SUSTANCIAS QUIMICAS
@@ -900,10 +963,7 @@ class recsensorialquimicosreportewordController extends Controller
 
             // Agrega una fila completa con el mensaje
             $table->addRow(); // Agrega una nueva fila para el mensaje
-            $table->addCell(null, array('gridSpan' => 9, 'valign' => 'center'))->addTextRun($centrado)->addText(
-                'Se cuenta con ' . $numeros[0]->total_catsustancias . ' productos con una proporción  de componentes que incluyen diferentes sustancias químicas. Según el análisis realizado, no es necesario muestrear las sustancias químicas presentes en los productos de la empresa, debido a que las prioridades de muestreo obtenidas son bajas o muy bajas, por lo que no existe riesgo de exposición a sustancias químicas para los trabajadores.',
-                $texto
-            );
+            $table->addCell(null, array('gridSpan' => 9, 'valign' => 'center'))->addTextRun($centrado)->addText($nota, $texto);
         }
 
         $plantillaword->setComplexBlock('tabla_quimicos_resumen1', $table);
@@ -1081,10 +1141,7 @@ class recsensorialquimicosreportewordController extends Controller
 
             // Agrega una fila completa con el mensaje
             $table->addRow(); // Agrega una nueva fila para el mensaje
-            $table->addCell(null, array('gridSpan' => 10, 'valign' => 'center'))->addTextRun($centrado)->addText(
-                'Se cuenta con ' . $numeros[0]->total_catsustancias . ' productos con una proporción  de componentes que incluyen diferentes sustancias químicas. Según el análisis realizado, no es necesario muestrear las sustancias químicas presentes en los productos de la empresa, debido a que las prioridades de muestreo obtenidas son bajas o muy bajas, por lo que no existe riesgo de exposición a sustancias químicas para los trabajadores.',
-                $texto
-            );
+            $table->addCell(null, array('gridSpan' => 10, 'valign' => 'center'))->addTextRun($centrado)->addText($nota, $texto);
         }
 
         $plantillaword->setComplexBlock('tabla_quimicos_resumen2', $table);
@@ -1238,10 +1295,7 @@ class recsensorialquimicosreportewordController extends Controller
 
             // Agrega una fila completa con el mensaje
             $table->addRow(); // Agrega una nueva fila para el mensaje
-            $table->addCell(null, array('gridSpan' => 9, 'valign' => 'center'))->addTextRun($centrado)->addText(
-                'Se cuenta con ' . $numeros[0]->total_catsustancias . ' productos con una proporción  de componentes que incluyen diferentes sustancias químicas. Según el análisis realizado, no es necesario muestrear las sustancias químicas presentes en los productos de la empresa, debido a que las prioridades de muestreo obtenidas son bajas o muy bajas, por lo que no existe riesgo de exposición a sustancias químicas para los trabajadores.',
-                $texto
-            );
+            $table->addCell(null, array('gridSpan' => 9, 'valign' => 'center'))->addTextRun($centrado)->addText($nota, $texto);
         }
 
         $plantillaword->setComplexBlock('tabla_quimicos_resumen3', $table);
@@ -1433,10 +1487,7 @@ class recsensorialquimicosreportewordController extends Controller
 
             // Agrega una fila completa con el mensaje
             $table->addRow(); // Agrega una nueva fila para el mensaje
-            $table->addCell(null, array('gridSpan' => 8, 'valign' => 'center'))->addTextRun($centrado)->addText(
-                'Se cuenta con ' . $numeros[0]->total_catsustancias . ' productos con una proporción  de componentes que incluyen diferentes sustancias químicas. Según el análisis realizado, no es necesario muestrear las sustancias químicas presentes en los productos de la empresa, debido a que las prioridades de muestreo obtenidas son bajas o muy bajas, por lo que no existe riesgo de exposición a sustancias químicas para los trabajadores.',
-                $texto
-            );
+            $table->addCell(null, array('gridSpan' => 8, 'valign' => 'center'))->addTextRun($centrado)->addText($nota, $texto);
         }
 
 
@@ -1519,10 +1570,7 @@ class recsensorialquimicosreportewordController extends Controller
 
             // Agrega una fila completa con el mensaje
             $table->addRow(); // Agrega una nueva fila para el mensaje
-            $table->addCell(null, array('gridSpan' => 8, 'valign' => 'center'))->addTextRun($centrado)->addText(
-                'Se cuenta con ' . $numeros[0]->total_catsustancias . ' productos con una proporción  de componentes que incluyen diferentes sustancias químicas. Según el análisis realizado, no es necesario muestrear las sustancias químicas presentes en los productos de la empresa, debido a que las prioridades de muestreo obtenidas son bajas o muy bajas, por lo que no existe riesgo de exposición a sustancias químicas para los trabajadores.',
-                $texto
-            );
+            $table->addCell(null, array('gridSpan' => 8, 'valign' => 'center'))->addTextRun($centrado)->addText($nota, $texto);
         }
 
         $plantillaword->setComplexBlock('tabla_resumen_quimicos1', $table);
@@ -1751,25 +1799,163 @@ class recsensorialquimicosreportewordController extends Controller
         }
 
 
+        //VALIDAMOS SI EL RECONOCIMIENTO CONTIENEN ANEXOS
+        $anexos = DB::select('SELECT contrato.NOMBRE_ANEXO, anexo.recsensorialanexo_orden, anexo.hojas_seguridad
+                                FROM recsensorialanexo anexo
+                                LEFT JOIN contratros_anexos contrato ON contrato.ID_CONTRATO_ANEXO = anexo.contrato_anexo_id
+                                WHERE anexo.recsensorial_id = ? AND anexo.recsensorialanexo_tipo = 2
+                                ORDER BY anexo.recsensorialanexo_orden', [$recsensorial_id]);
 
         try {
-            Storage::makeDirectory('reportes/recsensorial'); //crear directorio
-            $plantillaword->saveAs(storage_path('app/reportes/recsensorial/Informe - Reconocimiento de Químicos - ' . $recsensorial[0]->recsensorial_instalacion . '.docx')); //crear archivo word
-            // $plantillaword->saveAs(public_path('app/reportes/recsensorial/reporte1_recsensorialword.docx'));
 
-            // respuesta
-            // $dato["msj"] = 'Informacion consultada correctamente';
-            // return response()->json($dato);
+            if ($tipo == 1) { //DESCARGA PREVIA SOLO EL  .DOCX
+
+                Storage::makeDirectory('reportes/recsensorial'); //crear directorio
+                $plantillaword->saveAs(storage_path('app/reportes/recsensorial/Informe - Reconocimiento de Químicos - ' . $recsensorial[0]->recsensorial_instalacion . '.docx')); //crear archivo word
+
+                //Marcamos en la Base de datos que el reconocimiento ha sido descargado para que pueda ser validad
+                $rec = recsensorialModel::findOrFail($recsensorial_id);
+                $rec->recsensorial_quimicoFinalizado = 1;
+                $rec->save();
+
+                return response()->download(storage_path('app/reportes/recsensorial/Informe - Reconocimiento de Químicos - ' . $recsensorial[0]->recsensorial_instalacion . '.docx'))->deleteFileAfterSend(true);
+            } else { // DESCARGA FINAL CON ANEZOS .ZIP
+
+                // Crear los directorios necesarios
+                Storage::makeDirectory('reportes/recsensorial');
+                Storage::makeDirectory('reportes/anexosTem');
+
+                // Guardar el archivo Word original
+                $archivoCompleto = 'reportes/recsensorial/Informe - Reconocimiento de Químicos - ' . $recsensorial[0]->recsensorial_instalacion . '.docx';
+                $plantillaword->saveAs(storage_path('app/' . $archivoCompleto));
+
+                // Crear un array para almacenar las rutas de los archivos a comprimir
+                $archivosParaZip = [storage_path('app/' . $archivoCompleto)];
+
+                // Verificar si hay anexos y crearlos
+                if (count($anexos) != 0) {
+                    foreach ($anexos as $key => $val) {
+                        // Cargar la plantilla de anexos
+                        $anexo = new TemplateProcessor(storage_path('app/plantillas_reportes/reconocimiento_sensorial/Plantilla_anexos.docx'));
+
+                        // Reemplazar los valores de los marcadores en la plantilla de anexo
+                        $anexo->setValue('numero', $val->recsensorialanexo_orden);
+                        $anexo->setValue('nombre_anexo', $val->NOMBRE_ANEXO);
+                        $anexo->setValue('ENCABEZADO', $NIVEL1 . $NIVEL2 . $NIVEL3 . $NIVEL4 . $NIVEL5);
+
+                        //LOGOS DE AS EMPRESAS DE INFORME
+                        if ($contrato->CONTRATO_PLANTILLA_LOGOIZQUIERDO) {
+                            if (file_exists(storage_path('app/' . $contrato->CONTRATO_PLANTILLA_LOGOIZQUIERDO))) {
+
+                                $anexo->setImageValue('LOGO_IZQUIERDO', array('path' => storage_path('app/' . $contrato->CONTRATO_PLANTILLA_LOGOIZQUIERDO), 'width' => 120, 'height' => 150, 'ratio' => true, 'borderColor' => '000000'));
+                            } else {
+
+                                $anexo->setValue(
+                                    'LOGO_IZQUIERDO',
+                                    'SIN IMAGEN'
+                                );
+                            }
+                        } else {
+
+                            $anexo->setValue('LOGO_IZQUIERDO', 'SIN IMAGEN');
+                        }
+
+
+                        if ($contrato->CONTRATO_PLANTILLA_LOGODERECHO) {
+                            if (file_exists(storage_path('app/' . $contrato->CONTRATO_PLANTILLA_LOGODERECHO))) {
+                                $anexo->setImageValue('LOGO_DERECHO', array('path' => storage_path('app/' . $contrato->CONTRATO_PLANTILLA_LOGODERECHO), 'width' => 120, 'height' => 150, 'ratio' => true, 'borderColor' => '000000'));
+                            } else {
+
+                                $anexo->setValue('LOGO_DERECHO', 'SIN IMAGEN');
+                            }
+                        } else {
+                            $anexo->setValue('LOGO_DERECHO', 'SIN IMAGEN');
+                        }
 
 
 
-            //Marcamos en la Base de datos que el reconocimiento ha sido descargado para que pueda ser validad
-            $rec = recsensorialModel::findOrFail($recsensorial_id);
-            $rec->recsensorial_quimicoFinalizado = 1;
-            $rec->save();
+                        // Guardar el anexo temporalmente
+                        $anexoPath = 'reportes/anexosTem/Anexo - ' . $val->recsensorialanexo_orden . '.docx';
+                        $anexo->saveAs(storage_path('app/' . $anexoPath));
 
+                        // Añadir el anexo al array de archivos para el ZIP
+                        $archivosParaZip[] = storage_path('app/' . $anexoPath);
+                    }
+                }
 
-            return response()->download(storage_path('app/reportes/recsensorial/Informe - Reconocimiento de Químicos - ' . $recsensorial[0]->recsensorial_instalacion . '.docx'))->deleteFileAfterSend(true);
+                // Crear el archivo ZIP
+                $zipFilePath = storage_path('app/reportes/recsensorial/Informe_y_Anexos.zip');
+                $zip = new ZipArchive;
+
+                if ($zip->open($zipFilePath, ZipArchive::CREATE | ZipArchive::OVERWRITE) === TRUE) {
+                    // Añadir los archivos iniciales al ZIP
+                    foreach ($archivosParaZip as $archivo) {
+                        if (file_exists($archivo)) {
+                            $zip->addFile($archivo, basename($archivo));
+                            Storage::delete($archivo);
+                        }
+                    }
+
+                    // Verificar si hay hojas de seguridad y añadirlas al ZIP
+                    if (count($anexos) != 0) {
+
+                        foreach ($anexos as $key => $val) {
+
+                            if ($val->hojas_seguridad == 1) {
+
+                                $hojas = DB::select('SELECT hoja.catsustancia_nombre,
+                                             hoja.catsustancia_hojaseguridadpdf
+                                      FROM recsensorialquimicosinventario inventario
+                                      LEFT JOIN catHojasSeguridad_SustanciasQuimicas relacion ON relacion.HOJA_SEGURIDAD_ID = inventario.catsustancia_id
+                                      LEFT JOIN catsustancia hoja ON hoja.id = relacion.HOJA_SEGURIDAD_ID
+                                      LEFT JOIN catsustancias_quimicas sus ON sus.ID_SUSTANCIA_QUIMICA = relacion.SUSTANCIA_QUIMICA_ID
+                                      LEFT JOIN catestadofisicosustancia estado ON estado.id = relacion.ESTADO_FISICO
+                                      LEFT JOIN catvolatilidad volatilidad ON volatilidad.id = relacion.VOLATILIDAD
+                                      WHERE inventario.recsensorial_id = ?
+                                      GROUP BY hoja.catsustancia_nombre, hoja.catsustancia_hojaseguridadpdf
+                                      ORDER BY hoja.catsustancia_nombre', [$recsensorial_id]);
+
+                                foreach ($hojas as $key => $hoja) {
+                                    $archivo = storage_path('app/' . $hoja->catsustancia_hojaseguridadpdf);
+
+                                    if (file_exists($archivo)) {
+
+                                        $nombrePersonalizado = 'Anexo ' . $val->recsensorialanexo_orden . ' HDS - ' . $hoja->catsustancia_nombre . '.pdf';
+                                        $zip->addFile($archivo, $nombrePersonalizado);
+                                    }
+                                }
+                            } else {
+
+                                $adicionales = DB::select('SELECT contrato.NOMBRE_ANEXO, IFNULL(anexo.ruta_anexo, acre.acreditacion_SoportePDF) AS RUTA, anexo.recsensorialanexo_orden 
+                                                            FROM recsensorialanexo anexo
+                                                            LEFT JOIN contratros_anexos contrato ON contrato.ID_CONTRATO_ANEXO = anexo.contrato_anexo_id
+                                                            LEFT JOIN acreditacion acre ON acre.id = anexo.acreditacion_id
+                                                            WHERE anexo.recsensorial_id = ? AND anexo.recsensorialanexo_tipo = 2 AND anexo.hojas_seguridad = 0
+                                                            ORDER BY anexo.recsensorialanexo_orden', [$recsensorial_id]);
+
+                                foreach ($adicionales as $key => $doc) {
+                                    $archivo = storage_path('app/' . $doc->RUTA);
+
+                                    if (file_exists($archivo)) {
+
+                                        $nombrePersonalizado = 'Anexo ' . $doc->recsensorialanexo_orden . ' - ' . $doc->NOMBRE_ANEXO . '.pdf';
+                                        $zip->addFile($archivo, $nombrePersonalizado);
+                                    }
+                                }
+                            }
+                        }
+                    }
+
+                    // Cerrar el ZIP
+                    $zip->close();
+                } else {
+
+                    throw new Exception("No se pudo crear el archivo ZIP.");
+                }
+
+                // Retornar el archivo ZIP para su descarga
+                return response()->download($zipFilePath)->deleteFileAfterSend(true);
+            }
         } catch (Exception $e) {
             $dato["msj"] = 'Error al crear reporte: ' . $e->getMessage();
             return response()->json($dato);

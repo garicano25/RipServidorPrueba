@@ -89,7 +89,8 @@ class recsensorialanexoController extends Controller
                                 IFNULL(acreditacion.acreditacion_Entidad, "NA") acreditacion_Entidad,
                                 IFNULL(acreditacion.acreditacion_Numero, "NA") acreditacion_Numero,
                                 IFNULL(acreditacion.acreditacion_Vigencia, "NA") acreditacion_Vigencia,
-                                IFNULL(acreditacion.acreditacion_SoportePDF, recsensorialanexo.ruta_anexo) acreditacion_SoportePDF 
+                                IFNULL(acreditacion.acreditacion_SoportePDF, recsensorialanexo.ruta_anexo) acreditacion_SoportePDF,
+                                recsensorialanexo.hojas_seguridad
                             FROM
                                 recsensorialanexo
                                 LEFT JOIN proveedor ON recsensorialanexo.proveedor_id = proveedor.id
@@ -118,7 +119,13 @@ class recsensorialanexoController extends Controller
                     $value->boton_pdf = '<button type="button" class="btn btn-info btn-circle anexo_pdf"><i class="fa fa-file-image-o"></i></button>';
                 } else {
 
-                    $value->boton_pdf = '<button type="button" class="btn btn-info btn-circle anexo_pdf"><i class="fa fa-file-pdf-o"></i></button>';
+                    if ($value->hojas_seguridad == 1) {
+
+                        $value->boton_pdf = '<button type="button" class="btn btn-secondary btn-circle"><i class="fa fa-ban"></i></button>';
+                    } else {
+
+                        $value->boton_pdf = '<button type="button" class="btn btn-info btn-circle anexo_pdf"><i class="fa fa-file-pdf-o"></i></button>';
+                    }
                 }
 
 

@@ -708,7 +708,7 @@ use Illuminate\Support\Str;
     {{-- Select search filter --}}
     <script src="/assets/plugins/select-search/selectize.js" type="text/javascript"></script>
     {{-- pagina --}}
-    <script src="/js_sitio/ejecucionHI.js?v=2.0"></script>
+    <script src="/js_sitio/ejecucionHI.js?v=4.0"></script>
 
     @endif
 
