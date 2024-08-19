@@ -1160,6 +1160,16 @@ $('#btnFinalizarPoe').on('click', function (e) {
 				cache: false,
 				success: function (dato) {
 
+					//Actalizamos el select de la lista de reportes
+						
+						if (dato.estatus == 1) { 
+							$('#select_tiporeportes').prop('disabled', false)
+	
+						} else {
+							$('#select_tiporeportes').prop('disabled', true)
+							
+						}
+
 					//Si es primera vez que se guarda el POE actualizamos todo resetear las variables
 					if (nuevo == 1) {
 
@@ -1235,14 +1245,7 @@ $('#btnFinalizarPoe').on('click', function (e) {
 						tabla_categorias(proyecto.id);
 						tabla_areas(proyecto.id);
 	
-						//Actalizamos el select de la lista de reportes
-						if (dato.estatus == 1) { 
-							$('#select_tiporeportes').prop('disabled', false)
-	
-						} else {
-							$('#select_tiporeportes').prop('disabled', true)
-							
-						}
+						
 
 					}
 					
