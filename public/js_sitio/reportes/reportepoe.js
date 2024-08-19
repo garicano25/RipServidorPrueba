@@ -1160,19 +1160,14 @@ $('#btnFinalizarPoe').on('click', function (e) {
 				cache: false,
 				success: function (dato) {
 
-					//Actalizamos el select de la lista de reportes
-						
-						if (dato.estatus == 1) { 
-							$('#select_tiporeportes').prop('disabled', false)
-	
-						} else {
-							$('#select_tiporeportes').prop('disabled', true)
-							
-						}
+					
 
 					//Si es primera vez que se guarda el POE actualizamos todo resetear las variables
 					if (nuevo == 1) {
 
+						$('#select_tiporeportes').prop('disabled', false)
+
+						
 						swal({
 							title: "Bloqueado y finalizado exitosamente",
 							text: "La lista de reportes ha sido activada.",
@@ -1207,6 +1202,9 @@ $('#btnFinalizarPoe').on('click', function (e) {
 						
 						if (opcion == 1) {
 
+							$('#select_tiporeportes').prop('disabled', false)
+
+
 							swal({
 								title: "POE bloqueada existosamente",
 								text: "La lista de reportes ha sido activada.",
@@ -1223,6 +1221,9 @@ $('#btnFinalizarPoe').on('click', function (e) {
 							$('#btnFinalizarPoe').html('<span class="btn-label"><i class="fa fa-unlock"></i></span> Activar POE').prop('disabled', false);
 							
 						} else {
+
+							$('#select_tiporeportes').prop('disabled', true)
+
 							
 							swal({
 								title: "POE activada existosamente",
@@ -1238,6 +1239,8 @@ $('#btnFinalizarPoe').on('click', function (e) {
 							$('#btnFinalizarPoe').html('<span class="btn-label"><i class="fa fa-lock"></i></span> Bloquear POE').prop('disabled', false)
 							$('#boton_reporte_nuevacategoria').prop('disabled', false)
 							$('#boton_reporte_nuevaarea').prop('disabled', false)
+
+
 	
 						}
 	
