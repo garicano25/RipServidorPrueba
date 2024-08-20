@@ -267,7 +267,7 @@ class reporteiluminacionwordController extends Controller
             {
                 $plantillaword = new TemplateProcessor(storage_path('app/plantillas_reportes/proyecto_infomes/Plantilla_informe_iluminacion.docx')); //Ruta carpeta storage
             } else {
-                $plantillaword = new TemplateProcessor(storage_path('app/plantillas_reportes/proyecto_infomes/Plantilla_informe_iluminacioncliente.docx')); //Ruta carpeta storage
+                $plantillaword = new TemplateProcessor(storage_path('app/plantillas_reportes/proyecto_infomes/Plantilla_informe_iluminacion.docx')); //Ruta carpeta storage
             }
 
 
@@ -4145,7 +4145,6 @@ class reporteiluminacionwordController extends Controller
                 $resultados = DB::select('CALL sp_puntos_iluminacion_inform_b(?,?,?)', [1, $proyecto_id, $reporteiluminacion_id]);
             } else {
                 $resultados = DB::select('CALL sp_puntos_iluminacion_inform_b(?,?,?)', [2, $proyecto_id, $reporteiluminacion_id]);
-
             }
 
 
