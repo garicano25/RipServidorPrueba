@@ -1252,8 +1252,8 @@
                                                             <div class="col-sm-12">
                                                                 @if(auth()->user()->hasRoles(['Superusuario', 'Administrador', 'Coordinador','Operativo HI']))
                                                                 <div class="form-group" style="text-align: right;">
-                                                                    <button type="submit" class="btn btn-danger botonguardar_modulorecsensorial" id="boton_guardar_responsables">
-                                                                        Guardar <i class="fa fa-save"></i>
+                                                                    <button type="submit" class="btn btn-danger botonguardar_modulorecsensorial w-100 p-3" id="boton_guardar_responsables">
+                                                                        Guardar responsables <i class="fa fa-save"></i>
                                                                     </button>
                                                                 </div>
                                                                 @endif

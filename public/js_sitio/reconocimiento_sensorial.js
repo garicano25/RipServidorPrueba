@@ -12575,3 +12575,32 @@ function validarConclusion(check) {
         }
     });
 
+
+$(document).ready(function() {
+    var isFormChanged = false;
+
+    // Detectar cambios en cualquier campo del formulario
+    $('#form_responsables :input').on('change', function() {
+        isFormChanged = true;
+    });
+
+   
+    $('.multisteps-form__progress-btn').on('click', function(e) {
+        if (isFormChanged) {
+           
+			swal({
+				title: "Responsables no guardados",
+				text: "Ups... Al parecer no ha guardado la información de los responsables, asegurese de guardar la información para poder ser usada en el informe",
+				type: "warning",
+				buttons: { visible: false },
+				timer: 2000,
+				showConfirmButton: false
+			});
+        }
+    });
+
+    // Restablecer el estado de isFormChanged cuando se haga clic en "Guardar"
+    $('#boton_guardar_responsables').on('click', function() {
+        isFormChanged = false; // Se resetea el estado cuando se guarda el formulario
+    });
+});
