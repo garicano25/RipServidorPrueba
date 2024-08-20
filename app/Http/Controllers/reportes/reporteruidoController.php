@@ -99,24 +99,23 @@ class reporteruidoController extends Controller
                 ->get();
 
             //=================================================== DESCOMENTAR DESPUES DE SUBIR AL SERVIDOR
-            // if(count($revision) == 0)
-            // {
-            //     DB::statement('ALTER TABLE reporterevisiones AUTO_INCREMENT = 1;');
+            if (count($revision) == 0) {
+                DB::statement('ALTER TABLE reporterevisiones AUTO_INCREMENT = 1;');
 
-            //     $revision = reporterevisionesModel::create([
-            //           'proyecto_id' => $proyecto_id
-            //         , 'agente_id' => 1
-            //         , 'agente_nombre' => 'Ruido'
-            //         , 'reporterevisiones_revision' => 0
-            //         , 'reporterevisiones_concluido' => 0
-            //         , 'reporterevisiones_concluidonombre' => NULL
-            //         , 'reporterevisiones_concluidofecha' => NULL
-            //         , 'reporterevisiones_cancelado' => 0
-            //         , 'reporterevisiones_canceladonombre' => NULL
-            //         , 'reporterevisiones_canceladofecha' => NULL
-            //         , 'reporterevisiones_canceladoobservacion' => NULL
-            //     ]);
-            // }
+                $revision = reporterevisionesModel::create([
+                    'proyecto_id' => $proyecto_id,
+                    'agente_id' => 1,
+                    'agente_nombre' => 'Ruido',
+                    'reporterevisiones_revision' => 0,
+                    'reporterevisiones_concluido' => 0,
+                    'reporterevisiones_concluidonombre' => NULL,
+                    'reporterevisiones_concluidofecha' => NULL,
+                    'reporterevisiones_cancelado' => 0,
+                    'reporterevisiones_canceladonombre' => NULL,
+                    'reporterevisiones_canceladofecha' => NULL,
+                    'reporterevisiones_canceladoobservacion' => NULL
+                ]);
+            }
             //=================================================== DESCOMENTAR DESPUES DE SUBIR AL SERVIDOR
 
 
