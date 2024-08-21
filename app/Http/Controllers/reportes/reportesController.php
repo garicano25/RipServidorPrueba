@@ -119,7 +119,8 @@ class reportesController extends Controller
                         'proyecto_id' => $proyecto_id,
                         'recsensorialcategoria_id' => $value->id,
                         'reportecategoria_nombre' => $value->recsensorialcategoria_nombrecategoria,
-                        'reportecategoria_orden' => $num_orden
+                        'reportecategoria_orden' => $num_orden,
+                        'reportecategoria_horas' => $value->sumaHorasJornada
                     ]);
 
                     $num_orden++;
@@ -154,7 +155,8 @@ class reportesController extends Controller
                         'recsensorialarea_id' => $value->id,
                         'reportearea_nombre' => $value->recsensorialarea_nombre,
                         'reportearea_instalacion' => $proyecto->proyecto_clienteinstalacion,
-                        'reportearea_orden' => $num_orden
+                        'reportearea_orden' => $num_orden,
+                        'reportearea_proceso' => $value->RECSENSORIALAREA_PROCESO
                     ]);
 
                     $num_orden++;
@@ -360,7 +362,7 @@ class reportesController extends Controller
             }
 
 
-            //QUITAR DESPUES DE SUBIR AL SERVIDOR
+            // QUITAR DESPUES DE SUBIR AL SERVIDOR
             // $opciones_menu .= '<option value="1">Ruido</option>';
             // $opciones_menu .= '<option value="2">Vibración</option>';
             // $opciones_menu .= '<option value="3">Temperatura</option>';

@@ -1844,26 +1844,38 @@
 						</div>
 						<div class="col-2">
 							<div class="form-group">
-								<label>% de operacion</label>
+								<label>% de operacion*</label>
 								<input type="number" step="any" min="0" max="100" class="form-control" id="reporteruidoarea_porcientooperacion" name="reporteruidoarea_porcientooperacion" required>
 							</div>
 						</div>
 						<div class="col-12">
 							<div class="form-group">
-								<label>Proceso</label>
+								<label>Proceso*</label>
 								<input type="text" class="form-control" id="reporteruidoarea_proceso" name="reporteruidoarea_proceso" required>
 							</div>
 						</div>
 						<div class="col-2">
 							<div class="form-group">
-								<label>Tipo de ruido</label>
-								<input type="text" class="form-control" id="reporteruidoarea_tiporuido" name="reporteruidoarea_tiporuido" required>
+								<label>Tipo de ruido*</label>
+								<!-- <input type="text" class="form-control" id="reporteruidoarea_tiporuido" name="reporteruidoarea_tiporuido" required> -->
+								<select class="custom-select form-control" id="reporteruidoarea_tiporuido" name="reporteruidoarea_tiporuido" required>
+									<option value=""></option>
+									<option value="Ruido estable">Ruido estable</option>
+									<option value="Ruido inestable">Ruido inestable</option>
+									<option value="Ruido impulsivo">Ruido impulsivo</option>
+								</select>
 							</div>
 						</div>
 						<div class="col-2">
 							<div class="form-group">
-								<label>Evaluación</label>
-								<input type="text" class="form-control" id="reporteruidoarea_evaluacion" name="reporteruidoarea_evaluacion" required>
+								<label>Evaluación*</label>
+								<!-- <input type="text" class="form-control" id="reporteruidoarea_evaluacion" name="reporteruidoarea_evaluacion" required>-->
+								<select class="custom-select form-control" id="reporteruidoarea_evaluacion" name="reporteruidoarea_evaluacion" required>
+									<option value=""></option>
+									<option value="GPS">GPS</option>
+									<option value="PAE">PAE</option>
+									<option value="PFT">PFT</option>
+								</select>
 							</div>
 						</div>
 						<div class="col-4">

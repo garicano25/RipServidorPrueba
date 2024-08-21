@@ -220,7 +220,8 @@ class reporteiluminacionController extends Controller
 
         $texto = str_replace('INSTALACION_NOMBRE', $proyecto->proyecto_clienteinstalacion, $texto);
         $texto = str_replace('INSTALACION_DIRECCION', $proyecto->proyecto_clientedireccionservicio, $texto);
-        $texto = str_replace('INSTALACION_CODIGOPOSTAL', 'C.P. ' . $recsensorial->recsensorial_codigopostal, $texto);
+        // $texto = str_replace('INSTALACION_CODIGOPOSTAL', 'C.P. '.$recsensorial->recsensorial_codigopostal, $texto); 
+        $texto = str_replace('INSTALACION_CODIGOPOSTAL', '', $texto);
         $texto = str_replace('INSTALACION_COORDENADAS', $recsensorial->recsensorial_coordenadas, $texto);
         $texto = str_replace('REPORTE_FECHA_LARGA', $reportefecha[2] . " de " . $meses[($reportefecha[1] + 0)] . " del año " . $reportefecha[0], $texto);
 
@@ -5981,18 +5982,27 @@ class reporteiluminacionController extends Controller
                         function puntosLimpios($punto)
                         {
 
-                            if ($punto == ' ---' || $punto == '---' || $punto == ' --- ' || $punto == '--- ') {
+                            $punto = trim($punto);
+                            if ($punto == ' ---' || $punto == '---' || $punto == ' --- ' || $punto == '--- ' || $punto == 'No aplica' || $punto == 'NA' || $punto == 'N/A' || $punto == 'NO APLICA') {
 
-                                $subcadena = null;
+                                $subcadena = 0;
                             } else {
 
-                                // Obtener los primeros tres caracteres de la cadena
-                                $subcadena = substr($punto, 0, 3);
+                                $subcadena = substr($punto, 0, 4);
 
-                                // Verificar si el tercer carácter es un espacio vacío o ±
-                                if (isset($subcadena[2]) && ($subcadena[2] === ' ' || $subcadena[2] === '±')) {
-                                    // Retornar solo los primeros dos caracteres
+                                // Verificar si el tercer carácter es un espacio vacío
+                                if (isset($subcadena[2]) && $subcadena[2] === ' ' || $subcadena[2] === '±') {
+
                                     return substr($subcadena, 0, 2);
+                                } else {
+
+                                    if (isset($subcadena[3]) && is_numeric($subcadena[3])) {
+
+                                        return substr($subcadena, 0, 4);
+                                    } else {
+
+                                        return substr($subcadena, 0, 3);
+                                    }
                                 }
                             }
 
@@ -6051,6 +6061,17 @@ class reporteiluminacionController extends Controller
                         }
 
 
+                        //VALIDAMOS LOS NUMERO DE POE
+                        function limpiarPOE($valor)
+                        {
+                            if (is_numeric($valor)) {
+                                return intval($valor);
+                            } else {
+                                return 0;
+                            }
+                        }
+
+
                         //Reiniciamos el Autoincrements de la  tabla de puntos
                         DB::statement('ALTER TABLE reporteiluminacionpuntos AUTO_INCREMENT = 1;');
 
@@ -6062,13 +6083,14 @@ class reporteiluminacionController extends Controller
                                 'registro_id' => $request['registro_id'],
                                 'reporteiluminacionpuntos_nombre' => 'NP',
                                 'reporteiluminacionpuntos_ficha' => 'NP',
+                                'reporteiluminacionpuntos_nopoe' => is_null($rowData['H']) ? 0 : limpiarPOE($rowData['H']),
                                 'reporteiluminacionpuntos_nopunto' => is_null($rowData['A']) ? null : intval($rowData['A']),
                                 'reporteiluminacionpuntos_fechaeval' => is_null($rowData['B']) ? null : validarFecha($rowData['B']),
                                 'reporteiluminacionpuntos_horario1' => is_null($rowData['C']) ? null : formatearHora($rowData['C']),
                                 'reporteiluminacionpuntos_horario2' => is_null($rowData['D']) ? null :  formatearHora($rowData['D']),
                                 'reporteiluminacionpuntos_horario3' => is_null($rowData['E']) ? null : formatearHora($rowData['E']),
                                 'reporteiluminacionpuntos_lux' => is_null($rowData['J']) ? null : intval($rowData['J']),
-                                'reporteiluminacionpuntos_luxmed1' => is_null($rowData['K']) ? null : puntosLimpios($rowData['K']),
+                                'reporteiluminacionpuntos_luxmed1' => is_null($rowData['K']) ? 0 : puntosLimpios($rowData['K']),
                                 'reporteiluminacionpuntos_luxmed2' => is_null($rowData['N']) ? 0 : puntosLimpios($rowData['N']),
                                 'reporteiluminacionpuntos_luxmed3' => is_null($rowData['Q']) ? 0 : puntosLimpios($rowData['Q']),
                                 'reporteiluminacionpuntos_luxmed1menor' => 0,

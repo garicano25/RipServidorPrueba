@@ -559,8 +559,8 @@
                             <div class="row">
                                 <div class="col-12" id="fotosfisicos_campo_punto">
                                     <div class="form-group">
-                                        <label>Numero del punto (fuera de norma) *</label>
-                                        <input type="number" class="form-control" id="proyectoevidenciafoto_nopunto" name="proyectoevidenciafoto_nopunto" required>
+                                        <label>Numero del punto (opcional) </label>
+                                        <input type="number" class="form-control" id="proyectoevidenciafoto_nopunto" name="proyectoevidenciafoto_nopunto">
                                     </div>
                                 </div>
                                 <div class="col-12" id="fotosfisicos_campo_partida" style="display: none;">

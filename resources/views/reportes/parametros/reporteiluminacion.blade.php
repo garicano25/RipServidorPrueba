@@ -2014,7 +2014,7 @@
 						<div class="col-4">
 							<div class="form-group">
 								<label>(h) Altura (m) *</label>
-								<input type="number" class="form-control" id="reportearea_alturalamparas" name="reportearea_alturalamparas" required>
+								<input type="text" class="form-control" id="reportearea_alturalamparas" name="reportearea_alturalamparas" required>
 							</div>
 						</div>
 						<div class="col-4">

@@ -1262,7 +1262,7 @@ class reporteruidoController extends Controller
                     $value->boton_eliminar = '<button type="button" class="btn btn-default waves-effect btn-circle" data-toggle="tooltip" title="No disponible"><i class="fa fa-ban fa-1x"></i></button>';
 
 
-                    if ($value->reporteruidoarea_proceso === NULL) {
+                    if ($value->reporteruidoarea_tiporuido === NULL) {
                         $total_singuardar += 1;
                     }
 
@@ -1504,7 +1504,7 @@ class reporteruidoController extends Controller
                     }
 
 
-                    if ($value->reporteruidoarea_proceso === NULL) {
+                    if ($value->reporteruidoarea_tiporuido === NULL) {
                         $total_singuardar += 1;
                     }
 
