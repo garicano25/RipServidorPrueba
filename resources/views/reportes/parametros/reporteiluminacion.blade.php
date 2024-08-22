@@ -1004,7 +1004,7 @@
 							<th width="150">Instalación</th>
 							<th width="150">Área</th>
 							<th width="">Categoría</th>
-							<th width="80">Concepto</th>
+							<th width="80">Ubicación</th>
 							<th width="60">Editar</th>
 							<th width="60">Eliminar</th>
 						</tr>
@@ -1040,8 +1040,8 @@
 								<tr>
 									<th rowspan="2" width="60">No.<br>Medición</th>
 									<th colspan="3" width="120">Periodos de medición</th>
-									<th rowspan="2" width="130">Ubicación</th>
-									<th rowspan="2" width="80">Concepto</th>
+									<th rowspan="2" width="130">Área</th>
+									<th rowspan="2" width="80">Ubicación</th>
 									<th rowspan="2" width="50">No.<br>POE</th>
 									<th rowspan="2" width="">Categoría</th>
 									<th rowspan="2" width="50">NIMR (Lux)</th>
@@ -1099,7 +1099,7 @@
 								<tr>
 									<th rowspan="3" width="60">No.<br>Medición</th>
 									<th rowspan="2" colspan="3" width="120">Periodos de<br>medición</th>
-									<th rowspan="3" width="130">Ubicación</th>
+									<th rowspan="3" width="130">Área</th>
 									<th rowspan="3" width="50">No.<br>POE</th>
 									<th rowspan="3">Categoría</th>
 									<th rowspan="2" colspan="2">NMPR, K<sub>f</sub> (%)</th>
@@ -2167,7 +2167,7 @@
 								<input type="number" class="form-control" id="reporteiluminacionpuntos_nopoe" name="reporteiluminacionpuntos_nopoe" required>
 							</div>
 						</div>
-						<div class="col-5">
+						<div class="col-4">
 							<div class="form-group">
 								<label>Nombre</label>
 								<input type="text" class="form-control" id="reporteiluminacionpuntos_nombre" name="reporteiluminacionpuntos_nombre" required>
@@ -2179,14 +2179,16 @@
 								<input type="text" class="form-control" id="reporteiluminacionpuntos_ficha" name="reporteiluminacionpuntos_ficha" required>
 							</div>
 						</div>
-						<div class="col-3">
+						<div class="col-4">
 							<div class="form-group">
-								<label>Concepto</label>
-								<select class="custom-select form-control" id="reporteiluminacionpuntos_concepto" name="reporteiluminacionpuntos_concepto" required>
+								<label>Ubicación</label>
+								<input type="text" class="form-control" id="reporteiluminacionpuntos_concepto" name="reporteiluminacionpuntos_concepto" required>
+
+								<!-- <select class="custom-select form-control" id="reporteiluminacionpuntos_concepto" name="reporteiluminacionpuntos_concepto" required>
 									<option value=""></option>
 									<option value="Índice de Área (IC)">Índice de Área (IC)</option>
 									<option value="Puesto de Trabajo">Puesto de Trabajo</option>
-								</select>
+								</select> -->
 							</div>
 						</div>
 					</div>
