@@ -726,9 +726,7 @@ class reporteiluminacionController extends Controller
                     'reporteiluminacion_responsable2cargo' => $reporteiluminacion->reporteiluminacion_responsable2cargo,
                     'reporteiluminacion_responsable2documento' => $reporteiluminacion->reporteiluminacion_responsable2documento,
                     'proyecto_id' => $reporteiluminacion->proyecto_id,
-                    'registro_id' => $reporteiluminacion->id,
-                    'tipo1' => 1,
-                    'tipo2' => 2
+                    'registro_id' => $reporteiluminacion->id
                 );
             } else {
                 $dato['reporteiluminacion_responsablesinforme_guardado'] = 0;
@@ -739,43 +737,35 @@ class reporteiluminacionController extends Controller
                 //                                                         ->limit(1)
                 //                                                         ->get();
 
-                // $reporteiluminacionhistorial = reporteiluminacionModel::where('reporteiluminacion_responsable1', '!=', '')
-                //                                                         ->orderBy('updated_at', 'DESC')
-                //                                                         ->limit(1)
-                //                                                         ->get();
+                $reporteiluminacionhistorial = reporteiluminacionModel::where('reporteiluminacion_responsable1', '!=', '')
+                    ->orderBy('updated_at', 'DESC')
+                    ->limit(1)
+                    ->get();
 
 
-                // if (count($reporteiluminacionhistorial) > 0 && $reporteiluminacionhistorial[0]->reporteiluminacion_responsable1 != NULL)
-                // {
-                //     $dato['reporteiluminacion_responsablesinforme'] = array(
-                //                                                         'reporteiluminacion_responsable1' => $reporteiluminacionhistorial[0]->reporteiluminacion_responsable1
-                //                                                         , 'reporteiluminacion_responsable1cargo' => $reporteiluminacionhistorial[0]->reporteiluminacion_responsable1cargo
-                //                                                         , 'reporteiluminacion_responsable1documento' => $reporteiluminacionhistorial[0]->reporteiluminacion_responsable1documento
-                //                                                         , 'reporteiluminacion_responsable2' => $reporteiluminacionhistorial[0]->reporteiluminacion_responsable2
-                //                                                         , 'reporteiluminacion_responsable2cargo' => $reporteiluminacionhistorial[0]->reporteiluminacion_responsable2cargo
-                //                                                         , 'reporteiluminacion_responsable2documento' => $reporteiluminacionhistorial[0]->reporteiluminacion_responsable2documento
-                //                                                         , 'proyecto_id' => $reporteiluminacionhistorial[0]->proyecto_id
-                //                                                         , 'registro_id' => $reporteiluminacionhistorial[0]->id
-                //                                                         , 'tipo1' => 1
-                //                                                         , 'tipo2' => 2
-                //                                                     );
-                // }
-                // else
-                // {
-                $dato['reporteiluminacion_responsablesinforme'] = array(
-                    'reporteiluminacion_responsable1' => $recsensorial->recsensorial_repfisicos1nombre,
-                    'reporteiluminacion_responsable1cargo' => $recsensorial->recsensorial_repfisicos1cargo,
-                    'reporteiluminacion_responsable1documento' => $recsensorial->recsensorial_repfisicos1doc,
-                    'reporteiluminacion_responsable2' => $recsensorial->recsensorial_repfisicos2nombre,
-                    'reporteiluminacion_responsable2cargo' => $recsensorial->recsensorial_repfisicos2cargo,
-                    'reporteiluminacion_responsable2documento' => $recsensorial->recsensorial_repfisicos2doc,
-                    'proyecto_id' => 0,
-                    'registro_id' => 0,
-                    'recsensorial_id' => $recsensorial->id,
-                    'tipo1' => 3,
-                    'tipo2' => 4
-                );
-                // }
+                if (count($reporteiluminacionhistorial) > 0 && $reporteiluminacionhistorial[0]->reporteiluminacion_responsable1 != NULL) {
+                    $dato['reporteiluminacion_responsablesinforme'] = array(
+                        'reporteiluminacion_responsable1' => $reporteiluminacionhistorial[0]->reporteiluminacion_responsable1,
+                        'reporteiluminacion_responsable1cargo' => $reporteiluminacionhistorial[0]->reporteiluminacion_responsable1cargo,
+                        'reporteiluminacion_responsable1documento' => $reporteiluminacionhistorial[0]->reporteiluminacion_responsable1documento,
+                        'reporteiluminacion_responsable2' => $reporteiluminacionhistorial[0]->reporteiluminacion_responsable2,
+                        'reporteiluminacion_responsable2cargo' => $reporteiluminacionhistorial[0]->reporteiluminacion_responsable2cargo,
+                        'reporteiluminacion_responsable2documento' => $reporteiluminacionhistorial[0]->reporteiluminacion_responsable2documento,
+                        'proyecto_id' => $reporteiluminacionhistorial[0]->proyecto_id,
+                        'registro_id' => $reporteiluminacionhistorial[0]->id
+                    );
+                } else {
+                    $dato['reporteiluminacion_responsablesinforme'] = array(
+                        'reporteiluminacion_responsable1' => NULL,
+                        'reporteiluminacion_responsable1cargo' => NULL,
+                        'reporteiluminacion_responsable1documento' => NULL,
+                        'reporteiluminacion_responsable2' => NULL,
+                        'reporteiluminacion_responsable2cargo' => NULL,
+                        'reporteiluminacion_responsable2documento' => NULL,
+                        'proyecto_id' => 0,
+                        'registro_id' => 0
+                    );
+                }
             }
 
 
@@ -1557,6 +1547,11 @@ class reporteiluminacionController extends Controller
                                         reporteiluminacionarea.reporteiluminacionarea_tipoiluminacion AS reportearea_tipoiluminacion,
                                         reporteiluminacionarea.reporteiluminacionarea_descripcionilimunaciona AS reportearea_descripcionilimunacion,
 
+
+
+
+                                     
+
                                         IF(reporteiluminacionarea.reporteiluminacionarea_largo > 0, reporteiluminacionarea.reporteiluminacionarea_largo, 1) AS reportearea_largo,
                                         IF(reporteiluminacionarea.reporteiluminacionarea_ancho > 0, reporteiluminacionarea.reporteiluminacionarea_ancho, 1) AS reportearea_ancho,
                                         IF(reporteiluminacionarea.reporteiluminacionarea_alto > 0, reporteiluminacionarea.reporteiluminacionarea_alto, 1) AS reportearea_alto,
@@ -1566,7 +1561,7 @@ class reporteiluminacionController extends Controller
                                         reporteiluminacionareacategoria.reporteiluminacionareacategoria_geo AS reporteareacategoria_geh,
                                         reporteiluminacioncategoria.reporteiluminacioncategoria_horas AS reportecategoria_horas,
                                         reporteiluminacionareacategoria.reporteiluminacionareacategoria_actividades AS reporteareacategoria_actividades,
-                                        reporteiluminacionareacategoria.reporteiluminacionareacategoria_tareavisual AS reporteareacategoria_tareavisual, 
+                                        reporteiluminacionareacategoria.reporteiluminacionareacategoria_tareavisual AS reporteareacategoria_tareavisual 
                                         reporteiluminacionareacategoria.niveles_minimo AS niveles_minimo 
 
                                     FROM
@@ -4891,46 +4886,19 @@ class reporteiluminacionController extends Controller
      */
     public function reporteiluminacionresponsabledocumento($reporteiluminacion_id, $responsabledoc_tipo, $responsabledoc_opcion)
     {
+        $reporteiluminacion  = reporteiluminacionModel::findOrFail($reporteiluminacion_id);
 
         if ($responsabledoc_tipo == 1) {
-
-            $reporteiluminacion  = reporteiluminacionModel::findOrFail($reporteiluminacion_id);
-
             if ($responsabledoc_opcion == 0) {
                 return Storage::response($reporteiluminacion->reporteiluminacion_responsable1documento);
             } else {
                 return Storage::download($reporteiluminacion->reporteiluminacion_responsable1documento);
             }
-        } else if ($responsabledoc_tipo == 2) {
-
-            $reporteiluminacion  = reporteiluminacionModel::findOrFail($reporteiluminacion_id);
-
+        } else {
             if ($responsabledoc_opcion == 0) {
                 return Storage::response($reporteiluminacion->reporteiluminacion_responsable2documento);
             } else {
                 return Storage::download($reporteiluminacion->reporteiluminacion_responsable2documento);
-            }
-        } else if ($responsabledoc_tipo == 3) {
-
-            $recsensorial  = recsensorialModel::findOrFail($reporteiluminacion_id);
-
-            if ($responsabledoc_opcion == 0) {
-
-                return Storage::response($recsensorial->recsensorial_repfisicos1doc);
-            } else {
-
-                return Storage::download($recsensorial->recsensorial_repfisicos1doc);
-            }
-        } else if ($responsabledoc_tipo == 4) {
-
-            $recsensorial  = recsensorialModel::findOrFail($reporteiluminacion_id);
-
-            if ($responsabledoc_opcion == 0) {
-
-                return Storage::response($recsensorial->recsensorial_repfisicos2doc);
-            } else {
-
-                return Storage::download($recsensorial->recsensorial_repfisicos2doc);
             }
         }
     }
@@ -6121,7 +6089,6 @@ class reporteiluminacionController extends Controller
                                 'reporteiluminacionpuntos_horario1' => is_null($rowData['C']) ? null : formatearHora($rowData['C']),
                                 'reporteiluminacionpuntos_horario2' => is_null($rowData['D']) ? null :  formatearHora($rowData['D']),
                                 'reporteiluminacionpuntos_horario3' => is_null($rowData['E']) ? null : formatearHora($rowData['E']),
-                                'reporteiluminacionpuntos_concepto' => is_null($rowData['G']) ? 'NA' : $rowData['G'],
                                 'reporteiluminacionpuntos_lux' => is_null($rowData['J']) ? null : intval($rowData['J']),
                                 'reporteiluminacionpuntos_luxmed1' => is_null($rowData['K']) ? 0 : puntosLimpios($rowData['K']),
                                 'reporteiluminacionpuntos_luxmed2' => is_null($rowData['N']) ? 0 : puntosLimpios($rowData['N']),
