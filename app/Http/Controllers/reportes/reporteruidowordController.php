@@ -3555,39 +3555,7 @@ class reporteruidowordController extends Controller
                 // AREAS CRITICAS
 
 
-                $areas = DB::select('SELECT
-                                        reporteruidopuntoner.proyecto_id AS proyecto,
-                                        reporteruidopuntoner.registro_id AS registro,
-                                        reporteruidopuntoner.reporteruidoarea_id AS area,
-                                        reportearea.reportearea_nombre AS reporteruidoarea_nombre,
-                                        MIN(reporteruidopuntoner_punto) AS puntominimo,
-                                        (
-                                            SELECT
-                                                REPLACE(GROUP_CONCAT(CONCAT("Punto ", reporteruidopuntoner_punto, " (", reporteruidopuntoner_ner, " dB)")), ",", ", ")
-                                            FROM
-                                                reporteruidopuntoner
-                                            WHERE
-                                                reporteruidopuntoner.proyecto_id = proyecto
-                                                AND reporteruidopuntoner.registro_id = registro
-                                                AND reporteruidopuntoner.reporteruidoarea_id = area
-                                                AND reporteruidopuntoner.reporteruidopuntoner_ner > reporteruidopuntoner.reporteruidopuntoner_lmpe
-                                            ORDER BY
-                                                reporteruidopuntoner.reporteruidopuntoner_punto ASC
-                                        ) AS puntoscriticos
-                                    FROM
-                                        reporteruidopuntoner
-                                        LEFT JOIN reportearea ON reporteruidopuntoner.reporteruidoarea_id = reportearea.id
-                                    WHERE
-                                        reporteruidopuntoner.proyecto_id = ' . $proyecto_id . ' 
-                                        AND reporteruidopuntoner.registro_id = ' . $reporteregistro_id . ' 
-                                        AND reporteruidopuntoner.reporteruidopuntoner_ner > reporteruidopuntoner.reporteruidopuntoner_lmpe
-                                    GROUP BY
-                                        reporteruidopuntoner.proyecto_id,
-                                        reporteruidopuntoner.registro_id,
-                                        reporteruidopuntoner.reporteruidoarea_id,
-                                        reportearea.reportearea_nombre
-                                    ORDER BY
-                                        MIN(reporteruidopuntoner_punto) ASC');
+                $areas = DB::select('CALL sp_areas_criticas_ruido_b(?,?, ?)', [$proyecto_id, $reporteregistro_id, 1]);
 
 
                 $dashboard_areas = '';
@@ -3734,39 +3702,7 @@ class reporteruidowordController extends Controller
                 // AREAS CRITICAS
 
 
-                $areas = DB::select('SELECT
-                                            reporteruidopuntoner.proyecto_id AS proyecto,
-                                            reporteruidopuntoner.registro_id AS registro,
-                                            reporteruidopuntoner.reporteruidoarea_id AS area,
-                                            reporteruidoarea.reporteruidoarea_nombre,
-                                            MIN(reporteruidopuntoner_punto) AS puntominimo,
-                                            (
-                                                SELECT
-                                                    REPLACE(GROUP_CONCAT(CONCAT("Punto ", reporteruidopuntoner_punto, " (", reporteruidopuntoner_ner, " dB)")), ",", ", ")
-                                                FROM
-                                                    reporteruidopuntoner
-                                                WHERE
-                                                    reporteruidopuntoner.proyecto_id = proyecto
-                                                    AND reporteruidopuntoner.registro_id = registro
-                                                    AND reporteruidopuntoner.reporteruidoarea_id = area
-                                                    AND reporteruidopuntoner.reporteruidopuntoner_ner > reporteruidopuntoner.reporteruidopuntoner_lmpe
-                                                ORDER BY
-                                                    reporteruidopuntoner.reporteruidopuntoner_punto ASC
-                                            ) AS puntoscriticos
-                                        FROM
-                                            reporteruidopuntoner
-                                            LEFT JOIN reporteruidoarea ON reporteruidopuntoner.reporteruidoarea_id = reporteruidoarea.id
-                                        WHERE
-                                            reporteruidopuntoner.proyecto_id = ' . $proyecto_id . ' 
-                                            AND reporteruidopuntoner.registro_id = ' . $reporteregistro_id . ' 
-                                            AND reporteruidopuntoner.reporteruidopuntoner_ner > reporteruidopuntoner.reporteruidopuntoner_lmpe
-                                        GROUP BY
-                                            reporteruidopuntoner.proyecto_id,
-                                            reporteruidopuntoner.registro_id,
-                                            reporteruidopuntoner.reporteruidoarea_id,
-                                            reporteruidoarea.reporteruidoarea_nombre
-                                        ORDER BY
-                                            MIN(reporteruidopuntoner_punto) ASC');
+                $areas = DB::select('CALL sp_areas_criticas_ruido_b(?,?,?)', [$proyecto_id, $reporteregistro_id, 2]);
 
                 $dashboard_areas = '';
                 if (count($areas) > 0) {
