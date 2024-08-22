@@ -249,9 +249,12 @@ function datosgenerales()
 				$('#reporteiluminacion_responsable1cargo').val(dato.reporteiluminacion_responsablesinforme.reporteiluminacion_responsable1cargo);
 				$('#reporteiluminacion_responsable1documento').val('');
 				$('#reporteiluminacionresponsable1documento').val('');
+
 				var archivo = dato.reporteiluminacion_responsablesinforme.reporteiluminacion_responsable1documento;
+				var tipo1 = dato.reporteiluminacion_responsablesinforme.tipo1
+				var id1 = dato.reporteiluminacion_responsablesinforme.registro_id == 0 ? dato.reporteiluminacion_responsablesinforme.recsensorial_id : dato.reporteiluminacion_responsablesinforme.registro_id 
 				var extension = archivo.substring(archivo.lastIndexOf("."));
-				var imagenUrl = '/reporteiluminacionresponsabledocumento/'+dato.reporteiluminacion_responsablesinforme.registro_id+'/'+1+'/'+0;
+				var imagenUrl = '/reporteiluminacionresponsabledocumento/'+ id1 +'/'+ tipo1 +'/'+0;
 				$('#reporteiluminacionresponsable1documento').dropify().data('dropify').destroy();
 				$('#reporteiluminacionresponsable1documento').dropify().data('dropify').settings.defaultFile = imagenUrl+extension;
 				$('#reporteiluminacionresponsable1documento').dropify().data('dropify').init();
@@ -262,9 +265,12 @@ function datosgenerales()
 				$('#reporteiluminacion_responsable2cargo').val(dato.reporteiluminacion_responsablesinforme.reporteiluminacion_responsable2cargo);
 				$('#reporteiluminacion_responsable2documento').val('');
 				$('#reporteiluminacionresponsable2documento').val('');
+
 				var archivo = dato.reporteiluminacion_responsablesinforme.reporteiluminacion_responsable2documento;
+				var tipo2 = dato.reporteiluminacion_responsablesinforme.tipo2
+				var id2 = dato.reporteiluminacion_responsablesinforme.registro_id == 0 ? dato.reporteiluminacion_responsablesinforme.recsensorial_id : dato.reporteiluminacion_responsablesinforme.registro_id 
 				var extension = archivo.substring(archivo.lastIndexOf("."));
-				var imagenUrl = '/reporteiluminacionresponsabledocumento/'+dato.reporteiluminacion_responsablesinforme.registro_id+'/'+2+'/'+0;
+				var imagenUrl = '/reporteiluminacionresponsabledocumento/'+ id2 +'/'+ tipo2 +'/'+0;
 				$('#reporteiluminacionresponsable2documento').dropify().data('dropify').destroy();
 				$('#reporteiluminacionresponsable2documento').dropify().data('dropify').settings.defaultFile = imagenUrl+extension;
 				$('#reporteiluminacionresponsable2documento').dropify().data('dropify').init();
