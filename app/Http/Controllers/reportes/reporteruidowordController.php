@@ -3606,50 +3606,51 @@ class reporteruidowordController extends Controller
                 //=====================================
                 // CATEGORIAS CRITICAS
 
+                $categorias = DB::select('CALL sp_categorias_criticas_ruido_b(?,?,?)', [$proyecto_id, $reporteregistro_id, 1]);
 
-                $categorias = DB::select('SELECT
-                                                TABLA.proyecto,
-                                                TABLA.registro,
-                                                TABLA.categoria,
-                                                TABLA.reporteruidocategoria_nombre,
-                                                TABLA.puntominimo,
-                                                TABLA.puntoscriticos
-                                            FROM
-                                                (
-                                                    SELECT
-                                                        reporteruidodosisner.proyecto_id AS proyecto,
-                                                        reporteruidodosisner.registro_id AS registro,
-                                                        reporteruidodosisner.reporteruidocategoria_id AS categoria,
-                                                        reportecategoria.reportecategoria_nombre AS reporteruidocategoria_nombre,
-                                                        MIN(reporteruidodosisner.reporteruidodosisner_punto) AS puntominimo,
-                                                        (
-                                                            SELECT
-                                                                REPLACE(GROUP_CONCAT(CONCAT("Punto ", reporteruidodosisner_punto, " (", reporteruidodosisner_ner, " dB)")), ",", ", ")
-                                                            FROM
-                                                                reporteruidodosisner
-                                                            WHERE
-                                                                reporteruidodosisner.proyecto_id = proyecto 
-                                                                AND reporteruidodosisner.registro_id = registro
-                                                                AND reporteruidodosisner.reporteruidocategoria_id = categoria
-                                                                AND reporteruidodosisner.reporteruidodosisner_ner > reporteruidodosisner.reporteruidodosisner_lmpe
-                                                            ORDER BY
-                                                                reporteruidodosisner.reporteruidodosisner_punto ASC
-                                                        ) AS puntoscriticos
-                                                    FROM
-                                                        reporteruidodosisner
-                                                        LEFT JOIN reportecategoria ON reporteruidodosisner.reporteruidocategoria_id = reportecategoria.id 
-                                                    WHERE
-                                                        reporteruidodosisner.proyecto_id = ' . $proyecto_id . ' 
-                                                        AND reporteruidodosisner.registro_id = ' . $reporteregistro_id . ' 
-                                                        AND reporteruidodosisner.reporteruidodosisner_ner > reporteruidodosisner.reporteruidodosisner_lmpe
-                                                    GROUP BY
-                                                        reporteruidodosisner.proyecto_id,
-                                                        reporteruidodosisner.registro_id,
-                                                        reporteruidodosisner.reporteruidocategoria_id,
-                                                        reportecategoria.reportecategoria_nombre
-                                                ) AS TABLA
-                                            ORDER BY
-                                                TABLA.puntominimo ASC');
+                // $categorias = DB::select('SELECT
+                //                                 TABLA.proyecto,
+                //                                 TABLA.registro,
+                //                                 TABLA.categoria,
+                //                                 TABLA.reporteruidocategoria_nombre,
+                //                                 TABLA.puntominimo,
+                //                                 TABLA.puntoscriticos
+                //                             FROM
+                //                                 (
+                //                                     SELECT
+                //                                         reporteruidodosisner.proyecto_id AS proyecto,
+                //                                         reporteruidodosisner.registro_id AS registro,
+                //                                         reporteruidodosisner.reporteruidocategoria_id AS categoria,
+                //                                         reportecategoria.reportecategoria_nombre AS reporteruidocategoria_nombre,
+                //                                         MIN(reporteruidodosisner.reporteruidodosisner_punto) AS puntominimo,
+                //                                         (
+                //                                             SELECT
+                //                                                 REPLACE(GROUP_CONCAT(CONCAT("Punto ", reporteruidodosisner_punto, " (", reporteruidodosisner_ner, " dB)")), ",", ", ")
+                //                                             FROM
+                //                                                 reporteruidodosisner
+                //                                             WHERE
+                //                                                 reporteruidodosisner.proyecto_id = proyecto 
+                //                                                 AND reporteruidodosisner.registro_id = registro
+                //                                                 AND reporteruidodosisner.reporteruidocategoria_id = categoria
+                //                                                 AND reporteruidodosisner.reporteruidodosisner_ner > reporteruidodosisner.reporteruidodosisner_lmpe
+                //                                             ORDER BY
+                //                                                 reporteruidodosisner.reporteruidodosisner_punto ASC
+                //                                         ) AS puntoscriticos
+                //                                     FROM
+                //                                         reporteruidodosisner
+                //                                         LEFT JOIN reportecategoria ON reporteruidodosisner.reporteruidocategoria_id = reportecategoria.id 
+                //                                     WHERE
+                //                                         reporteruidodosisner.proyecto_id = ' . $proyecto_id . ' 
+                //                                         AND reporteruidodosisner.registro_id = ' . $reporteregistro_id . ' 
+                //                                         AND reporteruidodosisner.reporteruidodosisner_ner > reporteruidodosisner.reporteruidodosisner_lmpe
+                //                                     GROUP BY
+                //                                         reporteruidodosisner.proyecto_id,
+                //                                         reporteruidodosisner.registro_id,
+                //                                         reporteruidodosisner.reporteruidocategoria_id,
+                //                                         reportecategoria.reportecategoria_nombre
+                //                                 ) AS TABLA
+                //                             ORDER BY
+                //                                 TABLA.puntominimo ASC');
 
 
                 $dashboard_categorias = '';
@@ -3753,50 +3754,51 @@ class reporteruidowordController extends Controller
                 //=====================================
                 // CATEGORIAS CRITICAS
 
+                $categorias = DB::select('CALL sp_categorias_criticas_ruido_b(?,?,?)', [$proyecto_id, $reporteregistro_id, 2]);
 
-                $categorias = DB::select('SELECT
-                                                TABLA.proyecto,
-                                                TABLA.registro,
-                                                TABLA.categoria,
-                                                TABLA.reporteruidocategoria_nombre,
-                                                TABLA.puntominimo,
-                                                TABLA.puntoscriticos
-                                            FROM
-                                                (
-                                                    SELECT
-                                                        reporteruidodosisner.proyecto_id AS proyecto,
-                                                        reporteruidodosisner.registro_id AS registro,
-                                                        reporteruidodosisner.reporteruidocategoria_id AS categoria,
-                                                        reporteruidocategoria.reporteruidocategoria_nombre,
-                                                        MIN(reporteruidodosisner.reporteruidodosisner_punto) AS puntominimo,
-                                                        (
-                                                            SELECT
-                                                                REPLACE(GROUP_CONCAT(CONCAT("Punto ", reporteruidodosisner_punto, " (", reporteruidodosisner_ner, " dB)")), ",", ", ")
-                                                            FROM
-                                                                reporteruidodosisner
-                                                            WHERE
-                                                                reporteruidodosisner.proyecto_id = proyecto 
-                                                                AND reporteruidodosisner.registro_id = registro
-                                                                AND reporteruidodosisner.reporteruidocategoria_id = categoria
-                                                                AND reporteruidodosisner.reporteruidodosisner_ner > reporteruidodosisner.reporteruidodosisner_lmpe
-                                                            ORDER BY
-                                                                reporteruidodosisner.reporteruidodosisner_punto ASC
-                                                        ) AS puntoscriticos
-                                                    FROM
-                                                        reporteruidodosisner
-                                                        LEFT JOIN reporteruidocategoria ON reporteruidodosisner.reporteruidocategoria_id = reporteruidocategoria.id 
-                                                    WHERE
-                                                        reporteruidodosisner.proyecto_id = ' . $proyecto_id . ' 
-                                                        AND reporteruidodosisner.registro_id = ' . $reporteregistro_id . ' 
-                                                        AND reporteruidodosisner.reporteruidodosisner_ner > reporteruidodosisner.reporteruidodosisner_lmpe
-                                                    GROUP BY
-                                                        reporteruidodosisner.proyecto_id,
-                                                        reporteruidodosisner.registro_id,
-                                                        reporteruidodosisner.reporteruidocategoria_id,
-                                                        reporteruidocategoria.reporteruidocategoria_nombre
-                                                ) AS TABLA
-                                            ORDER BY
-                                                TABLA.puntominimo ASC');
+                // $categorias = DB::select('SELECT
+                //                                 TABLA.proyecto,
+                //                                 TABLA.registro,
+                //                                 TABLA.categoria,
+                //                                 TABLA.reporteruidocategoria_nombre,
+                //                                 TABLA.puntominimo,
+                //                                 TABLA.puntoscriticos
+                //                             FROM
+                //                                 (
+                //                                     SELECT
+                //                                         reporteruidodosisner.proyecto_id AS proyecto,
+                //                                         reporteruidodosisner.registro_id AS registro,
+                //                                         reporteruidodosisner.reporteruidocategoria_id AS categoria,
+                //                                         reporteruidocategoria.reporteruidocategoria_nombre,
+                //                                         MIN(reporteruidodosisner.reporteruidodosisner_punto) AS puntominimo,
+                //                                         (
+                //                                             SELECT
+                //                                                 REPLACE(GROUP_CONCAT(CONCAT("Punto ", reporteruidodosisner_punto, " (", reporteruidodosisner_ner, " dB)")), ",", ", ")
+                //                                             FROM
+                //                                                 reporteruidodosisner
+                //                                             WHERE
+                //                                                 reporteruidodosisner.proyecto_id = proyecto 
+                //                                                 AND reporteruidodosisner.registro_id = registro
+                //                                                 AND reporteruidodosisner.reporteruidocategoria_id = categoria
+                //                                                 AND reporteruidodosisner.reporteruidodosisner_ner > reporteruidodosisner.reporteruidodosisner_lmpe
+                //                                             ORDER BY
+                //                                                 reporteruidodosisner.reporteruidodosisner_punto ASC
+                //                                         ) AS puntoscriticos
+                //                                     FROM
+                //                                         reporteruidodosisner
+                //                                         LEFT JOIN reporteruidocategoria ON reporteruidodosisner.reporteruidocategoria_id = reporteruidocategoria.id 
+                //                                     WHERE
+                //                                         reporteruidodosisner.proyecto_id = ' . $proyecto_id . ' 
+                //                                         AND reporteruidodosisner.registro_id = ' . $reporteregistro_id . ' 
+                //                                         AND reporteruidodosisner.reporteruidodosisner_ner > reporteruidodosisner.reporteruidodosisner_lmpe
+                //                                     GROUP BY
+                //                                         reporteruidodosisner.proyecto_id,
+                //                                         reporteruidodosisner.registro_id,
+                //                                         reporteruidodosisner.reporteruidocategoria_id,
+                //                                         reporteruidocategoria.reporteruidocategoria_nombre
+                //                                 ) AS TABLA
+                //                             ORDER BY
+                //                                 TABLA.puntominimo ASC');
 
 
                 $dashboard_categorias = '';
