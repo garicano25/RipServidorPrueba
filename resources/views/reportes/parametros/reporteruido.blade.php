@@ -1860,9 +1860,16 @@
 								<!-- <input type="text" class="form-control" id="reporteruidoarea_tiporuido" name="reporteruidoarea_tiporuido" required> -->
 								<select class="custom-select form-control" id="reporteruidoarea_tiporuido" name="reporteruidoarea_tiporuido" required>
 									<option value=""></option>
-									<option value="Ruido estable">Ruido estable</option>
-									<option value="Ruido inestable">Ruido inestable</option>
-									<option value="Ruido impulsivo">Ruido impulsivo</option>
+									<option value="Inestable">Inestable</option>
+									<option value="Impulsivo">Impulsivo</option>
+									<option value="Estable">Estable</option>
+									<option value="Estable/Inestable">Estable / Inestable</option>
+									<option value="Estable/Impulsivo">Estable / Impulsivo</option>
+									<option value="Inestable/Estable">Inestable / Estable</option>
+									<option value="Inestable/Impulsivo">Inestable / Impulsivo</option>
+									<option value="Impulsivo/Estable">Impulsivo / Estable</option>
+									<option value="Impulsivo/Inestable">Impulsivo / Inestable</option>
+
 								</select>
 							</div>
 						</div>
