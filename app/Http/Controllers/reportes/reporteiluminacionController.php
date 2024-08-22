@@ -370,11 +370,15 @@ class reporteiluminacionController extends Controller
             }
 
 
+            $dato['recsensorial_tipocliente'] = ($recsensorial->recsensorial_tipocliente + 0);
+
+
+
+
+
+
             // PORTADA
             //===================================================
-
-
-            $dato['recsensorial_tipocliente'] = ($recsensorial->recsensorial_tipocliente + 0);
 
 
             if ($dato['reporteiluminacion_id'] >= 0 && $reporteiluminacion->reporteiluminacion_fecha != NULL && $reporteiluminacion->proyecto_id == $proyecto_id) {
@@ -5983,27 +5987,23 @@ class reporteiluminacionController extends Controller
                         {
 
                             $punto = trim($punto);
-                            if ($punto == ' ---' || $punto == '---' || $punto == ' --- ' || $punto == '--- ' || $punto == 'No aplica' || $punto == 'NA' || $punto == 'N/A' || $punto == 'NO APLICA') {
+                            if ($punto == ' ---' || $punto == '---' || $punto == ' --- ' || $punto == '--- ' || $punto == 'No aplica' || $punto == 'NA' || $punto == 'N/A' || $punto == 'NO APLICA' || $punto == '') {
 
                                 $subcadena = 0;
                             } else {
 
+                                // Tomar los primeros cuatro caracteres
                                 $subcadena = substr($punto, 0, 4);
 
-                                // Verificar si el tercer carácter es un espacio vacío
-                                if (isset($subcadena[2]) && $subcadena[2] === ' ' || $subcadena[2] === '±') {
-
-                                    return substr($subcadena, 0, 2);
-                                } else {
-
-                                    if (isset($subcadena[3]) && is_numeric($subcadena[3])) {
-
-                                        return substr($subcadena, 0, 4);
-                                    } else {
-
-                                        return substr($subcadena, 0, 3);
+                                // Evaluar cada carácter y validar que el siguiente no sea un espacio en blanco o un caracter de ±
+                                for ($i = 0; $i < strlen($subcadena); $i++) {
+                                    if (isset($subcadena[$i + 1]) && ($subcadena[$i + 1] == ' '  || $subcadena[$i + 1] == '±')) {
+                                        return substr($subcadena, 0, $i + 1);
                                     }
                                 }
+
+                                // Si no hay espacios en blanco en los caracteres evaluados, devolver los cuatro caracteres
+                                return $subcadena;
                             }
 
                             return $subcadena;
