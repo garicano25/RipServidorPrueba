@@ -274,7 +274,7 @@ class reporteruidowordController extends Controller
             {
                 $plantillaword = new TemplateProcessor(storage_path('app/plantillas_reportes/proyecto_infomes/Plantilla_informe_ruido.docx')); //Ruta carpeta storage
             } else {
-                $plantillaword = new TemplateProcessor(storage_path('app/plantillas_reportes/proyecto_infomes/Plantilla_informe_ruidocliente.docx')); //Ruta carpeta storage
+                $plantillaword = new TemplateProcessor(storage_path('app/plantillas_reportes/proyecto_infomes/Plantilla_informe_ruido.docx')); //Ruta carpeta storage
             }
 
 
