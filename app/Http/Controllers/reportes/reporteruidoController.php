@@ -3895,7 +3895,9 @@ class reporteruidoController extends Controller
 
             // respuesta
             $dato["data"] = $puntos;
-            $dato["total"] = count($puntos);
+            // $dato["total"] = count($puntos);
+            $dato["total"] = 1;
+
             $dato["msj"] = 'Datos consultados correctamente';
             return response()->json($dato);
         } catch (Exception $e) {
