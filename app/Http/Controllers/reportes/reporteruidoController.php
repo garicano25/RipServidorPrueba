@@ -3644,7 +3644,8 @@ class reporteruidoController extends Controller
                                                         reporteruidopuntonerfrecuencias.reporteruidopuntonerfrecuencias_orden,
                                                         reporteruidopuntonerfrecuencias.reporteruidopuntonerfrecuencias_frecuencia,
                                                         IFNULL(reporteruidopuntonerfrecuencias.reporteruidopuntonerfrecuencias_nivel, "") AS reporteruidopuntonerfrecuencias_nivel,
-                                                        ROUND((reporteruidopuntoner.reporteruidopuntoner_ner - IFNULL(reporteruidopuntoner.reporteruidopuntoner_RdB, 0)), 1) AS resultado
+                                                        IFNULL(reporteruidopuntoner.reporteruidopuntoner_NRE, "") AS resultado
+                                                        -- ROUND((reporteruidopuntoner.reporteruidopuntoner_ner - IFNULL(reporteruidopuntoner.reporteruidopuntoner_RdB, 0)), 1) AS resultado
                                                     FROM
                                                         reporteruidopuntoner
                                                         LEFT JOIN reportearea ON reporteruidopuntoner.reporteruidoarea_id = reportearea.id 
@@ -3672,7 +3673,8 @@ class reporteruidoController extends Controller
                                                         reporteruidopuntonerfrecuencias.reporteruidopuntonerfrecuencias_orden,
                                                         reporteruidopuntonerfrecuencias.reporteruidopuntonerfrecuencias_frecuencia,
                                                         IFNULL(reporteruidopuntonerfrecuencias.reporteruidopuntonerfrecuencias_nivel, "") AS reporteruidopuntonerfrecuencias_nivel,
-                                                        ROUND((reporteruidopuntoner.reporteruidopuntoner_ner - IFNULL(reporteruidopuntoner.reporteruidopuntoner_RdB, 0)), 1) AS resultado
+                                                        IFNULL(reporteruidopuntoner.reporteruidopuntoner_NRE, "") AS resultado
+                                                        --ROUND((reporteruidopuntoner.reporteruidopuntoner_ner - IFNULL(reporteruidopuntoner.reporteruidopuntoner_RdB, 0)), 1) AS resultado
                                                     FROM
                                                         reporteruidopuntoner
                                                         LEFT JOIN reporteruidoarea ON reporteruidopuntoner.reporteruidoarea_id = reporteruidoarea.id 
@@ -3685,6 +3687,9 @@ class reporteruidoController extends Controller
                                                         reporteruidopuntoner.reporteruidopuntoner_punto ASC,
                                                         reporteruidopuntonerfrecuencias.reporteruidopuntonerfrecuencias_orden ASC');
             }
+
+
+
 
 
             $total_singuardar = DB::select('SELECT
@@ -5385,14 +5390,10 @@ class reporteruidoController extends Controller
                                             }
                                         }
                                     }
+
+
+                                    $puntosInsertados++;
                                 }
-
-
-
-
-
-
-
 
                                 break;
                             case 2: // 7.2.- Tabla de resultados de la determinación del NER
@@ -6223,7 +6224,8 @@ class reporteruidoController extends Controller
                 $puntoner = reporteruidopuntonerModel::findOrFail($request->reporteruidopuntoner_id);
 
                 $puntoner->update([
-                    'reporteruidopuntoner_RdB' => $request->reporteruidobandaoctava_RdB
+                    'reporteruidopuntoner_RdB' => $request->reporteruidobandaoctava_RdB,
+                    'reporteruidopuntoner_NRE' => $request->reporteruidobandaoctava_NRE
                 ]);
 
                 foreach ($request->reporteruidopuntonerfrecuencias_frecuencia as $key => $value) {

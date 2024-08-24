@@ -841,6 +841,11 @@
 							<button type="button" class="btn btn-default waves-effect botoninforme" data-toggle="tooltip" title="Nuevo punto de medición" id="boton_reporte_nuevopuntomedicion">
 								<span class="btn-label"><i class="fa fa-plus"></i></span>Punto de medición
 							</button>
+
+							<button type="button" class="btn btn-default waves-effect botoninforme" data-toggle="tooltip" title="Importar" id="boton_reporte_vibracion_importar_resultados">
+								<span class="btn-label"><i class="fa fa-file-excel-o"></i></span>Importar
+							</button>
+
 						</ol>
 						<style type="text/css">
 							.tabla_evaluacion th {
@@ -2075,6 +2080,69 @@
 <!-- ============================================================== -->
 
 
+
+<!-- ============================================================== -->
+<!-- MODAL-IMPORTAR-RESULTADOS -->
+<!-- ============================================================== -->
+
+<div id="modal_excel_resultados" class="modal fade bs-example-modal-lg" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" style="display: none;">
+	<div class="modal-dialog modal-lg">
+		<div class="modal-content">
+			<form enctype="multipart/form-data" method="post" name="formExcelResultado" id="formExcelResultado">
+				<div class="modal-header">
+					<button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+					<h4 class="modal-title">Cargar resultados por medio de un Excel</h4>
+				</div>
+				<div class="modal-body">
+					<div class="row">
+						{!! csrf_field() !!}
+						<div class="col-12">
+							<div class="form-group">
+								<label> Documento Excel *</label>
+								<div class="fileinput fileinput-new input-group" data-provides="fileinput">
+									<div class="form-control" data-trigger="fileinput" id="input_file_excel_documento_resultado">
+										<i class="fa fa-file fileinput-exists"></i>
+										<span class="fileinput-filename"></span>
+									</div>
+									<span class="input-group-addon btn btn-secondary btn-file">
+										<span class="fileinput-new">Seleccione</span>
+										<span class="fileinput-exists">Cambiar</span>
+										<input type="file" accept=".xls,.xlsx" name="excelResultado" id="excelResultado" required>
+									</span>
+									<a href="#" class="input-group-addon btn btn-secondary fileinput-exists" data-dismiss="fileinput">Quitar</a>
+								</div>
+							</div>
+						</div>
+					</div>
+					<div class="row mx-2" id="alertaVerificacion1" style="display:none">
+						<p class="text-danger"><i class="fa fa-info-circle" aria-hidden="true"></i> Por favor, asegúrese de que el archivo Excel contenga los formatos válidos </p>
+					</div>
+					<div class="row mt-3" id="divCargaResultados" style="display: none;">
+
+						<div class="col-12 text-center">
+							<h2>Cargando lista de puntos espere un momento...</h2>
+						</div>
+						<div class="col-12 text-center">
+							<i class='fa fa-spin fa-spinner fa-5x'></i>
+						</div>
+
+					</div>
+				</div>
+				<div class="modal-footer">
+					<button type="button" class="btn btn-default waves-effect" data-dismiss="modal">Cerrar</button>
+
+					<button type="submit" class="btn btn-danger waves-effect waves-light" id="botonCargarExcelResultados">
+						Cargar puntos <i class="fa fa-upload" aria-hidden="true"></i>
+					</button>
+
+				</div>
+			</form>
+		</div>
+	</div>
+</div>
+
+
+
 <!-- ============================================================== -->
 <!-- MODAL-REPORTE-CANCELACION OBSERVACION -->
 <!-- ============================================================== -->
@@ -2149,4 +2217,4 @@
 	var recsensorial = <?php echo json_encode($recsensorial); ?>;
 </script>
 <script src="/js_sitio/html2canvas.js"></script>
-<script src="/js_sitio/reportes/reportevibracion.js"></script>
+<script src="/js_sitio/reportes/reportevibracion.js?v=1.0"></script>
