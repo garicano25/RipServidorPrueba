@@ -371,7 +371,7 @@ class reporteruidoController extends Controller
 
             // PORTADA
             //===================================================
-
+            $dato['reporteruido_lmpe'] = $reporte->reporteruido_lmpe;
 
             $dato['recsensorial_tipocliente'] = ($recsensorial->recsensorial_tipocliente + 0);
 
