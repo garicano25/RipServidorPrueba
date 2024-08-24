@@ -5227,6 +5227,16 @@ class reporteruidoController extends Controller
                         $totalPuntos = count($datosGenerales);
                         $puntosInsertados = 0;
 
+
+                        //BUCAMOS Y ARMAMOS EL ARRAY PARA OBTENER LAS CATEGORIAS CON SU ID
+                        $IdCategorias = [];
+                        $caategorias = reportecategoriaModel::where('proyecto_id', $proyecto_id)->get();
+                        foreach ($caategorias as $cat) {
+                            $clave = $cat->reportecategoria_nombre;
+                            $IdCategorias[$clave] = $cat->id;
+                        }
+
+
                         //BUCAMOS Y ARMAMOS EL ARRAY PARA OBTENER LAS AREAS CON SU ID
                         $IdAreas = [];
                         $areas = reporteareaModel::where('proyecto_id', $proyecto_id)->get();
@@ -5356,6 +5366,29 @@ class reporteruidoController extends Controller
 
                                 break;
                             case 3: // Excel con el formato de puntos de la LMPE, la fecha de evaluación y la fecha de entrega
+
+                                DB::statement('ALTER TABLE reporteruidodosisner AUTO_INCREMENT = 1;');
+
+                                //Limpiamos, Validamos y Insertamos todos los datos del Excel
+                                foreach ($datosGenerales as $rowData) {
+
+
+                                    $punto = reporteruidodosisnerModel::create([
+                                        'proyecto_id' => $proyecto_id,
+                                        'registro_id' => $registro_id,
+                                        'reporteruidodosisner_punto' => is_null($rowData['A']) ? null : $rowData['A'],
+                                        'reporteruidodosisner_dosis' => is_null($rowData['B']) ? null : $rowData['B'],
+                                        'reporteruidodosisner_ner' => is_null($rowData['C']) ? null : $rowData['C'],
+                                        'reporteruidoarea_id' => isset($IdAreas[$rowData['D']]) ? $IdAreas[$rowData['D']] : null,
+                                        'reporteruidocategoria_id' => isset($IdCategorias[$rowData['E']]) ?  $IdCategorias[$rowData['E']] : null,
+                                        'reporteruidodosisner_lmpe' => $lmpe,
+                                        'reporteruidodosisner_tmpe' => is_null($rowData['C']) ? 'NA' : calculartmpe($rowData['C']),
+
+                                    ]);
+
+
+                                    $puntosInsertados++;
+                                }
 
                                 break;
                         }
