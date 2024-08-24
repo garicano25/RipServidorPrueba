@@ -704,7 +704,7 @@ class reporteiluminacionwordController extends Controller
                 $fuente = 'Arial';
                 $font_size = 10;
             } else {
-                $fuente = 'Montserrat';
+                $fuente = 'Arial';
                 $font_size = 10;
             }
 
@@ -2315,7 +2315,7 @@ class reporteiluminacionwordController extends Controller
                 $fuente = 'Arial';
                 $font_size = 8;
             } else {
-                $fuente = 'Montserrat';
+                $fuente = 'Arial';
                 $font_size = 8;
             }
 
@@ -3031,7 +3031,7 @@ class reporteiluminacionwordController extends Controller
                 $fuente = 'Arial';
                 $font_size = 6;
             } else {
-                $fuente = 'Montserrat';
+                $fuente = 'Arial';
                 $font_size = 6;
             }
 
