@@ -10654,20 +10654,23 @@ $("#botonCargarPuntos").click(function() {
 									showCancelButton: false
 								});
 
-
-								//Recargamos las tabla correspondientes
-								if (tipo == 1) { //Punto 7.1
-									tabla_reporte_7_3(proyecto.id, reporteregistro_id);
+								setTimeout(() => {
 									
-								} else if (tipo == 2) { //Punto 7.2
-
-									tabla_reporte_7_2(proyecto.id, reporteregistro_id);
- 
-								} else if (tipo == 3) { //Punto 7.3
+									//Recar	gamos las tabla correspondientes
+									if (tipo == 1) { //Punto 7.1
+										tabla_reporte_7_1(proyecto.id, reporteregistro_id);
+										
+									} else if (tipo == 2) { //Punto 7.2
+	
+										tabla_reporte_7_2(proyecto.id, reporteregistro_id);
+	 
+									} else if (tipo == 3) { //Punto 7.3
+										
+										tabla_reporte_7_3(proyecto.id, reporteregistro_id);
+	
+									}
 									
-									tabla_reporte_7_3(proyecto.id, reporteregistro_id);
-
-								}
+								}, 2000);
 
 							
 							} else {
