@@ -2709,6 +2709,12 @@
 										<input type="number" step="any" class="form-control" id="reporteruidobandaoctava_RdB" name="reporteruidobandaoctava_RdB" required>
 									</div>
 								</div>
+								<div class="col-12">
+									<div class="form-group">
+										<label>NRE dB (A) </label>
+										<input type="number" step="any" class="form-control" id="reporteruidobandaoctava_NRE" name="reporteruidobandaoctava_NRE" required>
+									</div>
+								</div>
 							</div>
 						</div>
 						<div class="col-5">

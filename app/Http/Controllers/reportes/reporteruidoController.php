@@ -3644,7 +3644,8 @@ class reporteruidoController extends Controller
                                                         reporteruidopuntonerfrecuencias.reporteruidopuntonerfrecuencias_orden,
                                                         reporteruidopuntonerfrecuencias.reporteruidopuntonerfrecuencias_frecuencia,
                                                         IFNULL(reporteruidopuntonerfrecuencias.reporteruidopuntonerfrecuencias_nivel, "") AS reporteruidopuntonerfrecuencias_nivel,
-                                                        ROUND((reporteruidopuntoner.reporteruidopuntoner_ner - IFNULL(reporteruidopuntoner.reporteruidopuntoner_RdB, 0)), 1) AS resultado
+                                                        IFNULL(reporteruidopuntoner.reporteruidopuntoner_NRE, "") AS resultado
+                                                        -- ROUND((reporteruidopuntoner.reporteruidopuntoner_ner - IFNULL(reporteruidopuntoner.reporteruidopuntoner_RdB, 0)), 1) AS resultado
                                                     FROM
                                                         reporteruidopuntoner
                                                         LEFT JOIN reportearea ON reporteruidopuntoner.reporteruidoarea_id = reportearea.id 
@@ -3672,7 +3673,8 @@ class reporteruidoController extends Controller
                                                         reporteruidopuntonerfrecuencias.reporteruidopuntonerfrecuencias_orden,
                                                         reporteruidopuntonerfrecuencias.reporteruidopuntonerfrecuencias_frecuencia,
                                                         IFNULL(reporteruidopuntonerfrecuencias.reporteruidopuntonerfrecuencias_nivel, "") AS reporteruidopuntonerfrecuencias_nivel,
-                                                        ROUND((reporteruidopuntoner.reporteruidopuntoner_ner - IFNULL(reporteruidopuntoner.reporteruidopuntoner_RdB, 0)), 1) AS resultado
+                                                        IFNULL(reporteruidopuntoner.reporteruidopuntoner_NRE, "") AS resultado
+                                                        --ROUND((reporteruidopuntoner.reporteruidopuntoner_ner - IFNULL(reporteruidopuntoner.reporteruidopuntoner_RdB, 0)), 1) AS resultado
                                                     FROM
                                                         reporteruidopuntoner
                                                         LEFT JOIN reporteruidoarea ON reporteruidopuntoner.reporteruidoarea_id = reporteruidoarea.id 
@@ -3685,6 +3687,9 @@ class reporteruidoController extends Controller
                                                         reporteruidopuntoner.reporteruidopuntoner_punto ASC,
                                                         reporteruidopuntonerfrecuencias.reporteruidopuntonerfrecuencias_orden ASC');
             }
+
+
+
 
 
             $total_singuardar = DB::select('SELECT
@@ -5251,6 +5256,7 @@ class reporteruidoController extends Controller
                         $lmpeQuery = DB::select('SELECT reporteruido_lmpe FROM reporteruido WHERE id = ? AND proyecto_id = ?', [$registro_id, $proyecto_id]);
                         $lmpe = $lmpeQuery[0]->reporteruido_lmpe;
 
+
                         //BUSCAMOS Y CREAMOS EL ARRAY DE LAS UBICACIONES
                         $ubicacionesQuery = DB::select('SELECT reporteruidoareaevaluacion_nomedicion1 AS num1,
                                                                 reporteruidoareaevaluacion_nomedicion2 as num2,
@@ -5259,14 +5265,11 @@ class reporteruidoController extends Controller
 
                         // Crear el arreglo de ubicaciones
                         $ubicaciones = [];
-
-                        // Recorrer cada fila de resultados
                         foreach ($ubicacionesQuery as $fila) {
                             $num1 = $fila->num1;
                             $num2 = $fila->num2;
                             $ubicacion = $fila->ubicacion;
 
-                            // Rellenar el arreglo con el rango de números
                             for ($i = $num1; $i <= $num2; $i++) {
 
                                 $ubicaciones[intval($i)] = $ubicacion;
@@ -5282,10 +5285,8 @@ class reporteruidoController extends Controller
                         // =========================================================================================================================
                         function calculartmpe($valor)
                         {
-                            // Convierte el valor a un número flotante
-                            $numero = floatval($valor);
 
-                            // Redondea el número al entero más cercano
+                            $numero = floatval($valor);
                             $numeroRedondeado = intval(round($numero));
 
                             // Tabla de correspondencia
@@ -5307,7 +5308,6 @@ class reporteruidoController extends Controller
                                 105 => 0.25
                             ];
 
-                            // Verifica si el número redondeado existe en la tabla
                             if (array_key_exists($numeroRedondeado, $tabla)) {
                                 return $tabla[$numeroRedondeado];
                             } else {
@@ -5327,6 +5327,75 @@ class reporteruidoController extends Controller
                         switch (intval($request['tipoArchivo'])) {
                             case 1: // Excel con el formato de puntos de la LMPE
 
+                                DB::statement('ALTER TABLE reporteruidonivelsonoro AUTO_INCREMENT = 1;');
+
+                                foreach ($datosGenerales as $rowData) {
+                                    //Columna en donde empiezan los resultados
+                                    $columnaInicial = 'E';
+                                    $puntosId = [];
+
+
+                                    //Variables unicas
+                                    $numPunto = $rowData['A'];
+                                    $promedio = is_numeric($rowData['B']) ? $rowData['B'] : null;
+                                    $periodos = is_null($rowData['C']) ? 0 : intval($rowData['C']);
+                                    $resultados = is_null($rowData['D']) ? 0 : intval($rowData['D']);
+                                    $ubicacion = isset($ubicaciones[$rowData['A']]) ? $ubicaciones[$rowData['A']] : null;
+
+                                    //Recorremos todos los resultados de manera dinamica conforme a los periodos y los resultados de cada punto
+                                    for ($i = 1; $i <= $periodos; $i++) {
+
+                                        //Cuando se inserta por primera vez creamos los registros para obtener sus IDs y despues poder actualizarlos
+                                        if ($i == 1) {
+
+                                            for ($j = 1; $j <= $resultados; $j++) {
+
+                                                $punto = reporteruidonivelsonoroModel::create([
+                                                    'proyecto_id' => $proyecto_id,
+                                                    'registro_id' => $registro_id,
+                                                    'reporteruidonivelsonoro_punto' => $numPunto,
+                                                    'reporteruidonivelsonoro_promedio' => $promedio,
+                                                    'reporteruidonivelsonoro_totalperiodos' => $periodos,
+                                                    'reporteruidonivelsonoro_totalresultados' => $resultados,
+                                                    'reporteruidonivelsonoro_ubicacion' => $ubicacion,
+                                                    'reporteruidonivelsonoro_periodo1' => $rowData[$columnaInicial],
+                                                ]);
+
+
+                                                // Guardmos el ID de los insertados en el arreglo usando $j como clave para luego poder obtenerlos y actualizarlos
+                                                $puntosId[$j] = $punto->id;
+
+
+                                                $columnaInicial++;
+                                            }
+
+                                            //Una vez creado el areglo donde estan los puntos 
+                                        } else {
+
+                                            for ($j = 1; $j <= $resultados; $j++) {
+
+
+                                                $punto = reporteruidonivelsonoroModel::where('id', $puntosId[$j])
+                                                    ->update([
+                                                        'proyecto_id' => $proyecto_id,
+                                                        'registro_id' => $registro_id,
+                                                        'reporteruidonivelsonoro_punto' => $numPunto,
+                                                        'reporteruidonivelsonoro_promedio' => $promedio,
+                                                        'reporteruidonivelsonoro_totalperiodos' => $periodos,
+                                                        'reporteruidonivelsonoro_totalresultados' => $resultados,
+                                                        'reporteruidonivelsonoro_ubicacion' => $ubicacion,
+                                                        'reporteruidonivelsonoro_periodo' . $i => $rowData[$columnaInicial],
+                                                    ]);
+
+
+                                                $columnaInicial++;
+                                            }
+                                        }
+                                    }
+
+
+                                    $puntosInsertados++;
+                                }
 
                                 break;
                             case 2: // 7.2.- Tabla de resultados de la determinación del NER
@@ -6157,7 +6226,8 @@ class reporteruidoController extends Controller
                 $puntoner = reporteruidopuntonerModel::findOrFail($request->reporteruidopuntoner_id);
 
                 $puntoner->update([
-                    'reporteruidopuntoner_RdB' => $request->reporteruidobandaoctava_RdB
+                    'reporteruidopuntoner_RdB' => $request->reporteruidobandaoctava_RdB,
+                    'reporteruidopuntoner_NRE' => $request->reporteruidobandaoctava_NRE
                 ]);
 
                 foreach ($request->reporteruidopuntonerfrecuencias_frecuencia as $key => $value) {

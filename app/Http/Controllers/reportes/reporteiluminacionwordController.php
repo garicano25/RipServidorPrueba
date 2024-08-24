@@ -302,10 +302,10 @@ class reporteiluminacionwordController extends Controller
             $OPCION_PORTADA6 = is_null($recursos[0]->OPCION_PORTADA6) ? "" : $recursos[0]->OPCION_PORTADA6;
 
             $plantillaword->setValue('instalación_portada', $OPCION_PORTADA1 . $OPCION_PORTADA2 . $OPCION_PORTADA3 . $OPCION_PORTADA4 . $OPCION_PORTADA5 . $OPCION_PORTADA6);
-           
+
 
             $fecha = $agente[0]->reporteiluminacion_mes . ' del ' . $agente[0]->reporteiluminacion_fecha;
-            $plantillaword->setValue('lugar_fecha_portada', $recsensorial->recsensorial_direccion . ' ' .$fecha);
+            $plantillaword->setValue('lugar_fecha_portada', $recsensorial->recsensorial_direccion . ' ' . $fecha);
             $plantillaword->setValue('PORTADA_FECHA', $fecha);
 
 
@@ -4636,7 +4636,8 @@ class reporteiluminacionwordController extends Controller
                         $plantillaword->setValue('PUNTO_' . $i . '_FOTO', 'NO SE ENCONTRÓ LA FOTO');
                     }
 
-                    $plantillaword->setValue('PUNTO_' . $i . '_DESCRIPCION', "Punto " . $fotos[$i]->proyectoevidenciafoto_nopunto . " " . $fotos[$i]->proyectoevidenciafoto_descripcion);
+                    // $plantillaword->setValue('PUNTO_' . $i . '_DESCRIPCION', "Punto " . $fotos[$i]->proyectoevidenciafoto_nopunto . " " . $fotos[$i]->proyectoevidenciafoto_descripcion);
+                    $plantillaword->setValue('PUNTO_' . $i . '_DESCRIPCION', $fotos[$i]->proyectoevidenciafoto_descripcion);
                 }
 
 
@@ -4647,7 +4648,8 @@ class reporteiluminacionwordController extends Controller
                         $plantillaword->setValue('PUNTO_' . ($i + 1) . '_FOTO', 'NO SE ENCONTRÓ LA FOTO');
                     }
 
-                    $plantillaword->setValue('PUNTO_' . ($i + 1) . '_DESCRIPCION', "Punto " . $fotos[($i + 1)]->proyectoevidenciafoto_nopunto . " " . $fotos[($i + 1)]->proyectoevidenciafoto_descripcion);
+                    // $plantillaword->setValue('PUNTO_' . ($i + 1) . '_DESCRIPCION', "Punto " . $fotos[($i + 1)]->proyectoevidenciafoto_nopunto . " " . $fotos[($i + 1)]->proyectoevidenciafoto_descripcion);
+                    $plantillaword->setValue('PUNTO_' . ($i + 1) . '_DESCRIPCION', $fotos[($i + 1)]->proyectoevidenciafoto_descripcion);
                 }
 
 
@@ -4658,7 +4660,8 @@ class reporteiluminacionwordController extends Controller
                         $plantillaword->setValue('PUNTO_' . ($i + 2) . '_FOTO', 'NO SE ENCONTRÓ LA FOTO');
                     }
 
-                    $plantillaword->setValue('PUNTO_' . ($i + 2) . '_DESCRIPCION', "Punto " . $fotos[($i + 2)]->proyectoevidenciafoto_nopunto . " " . $fotos[($i + 2)]->proyectoevidenciafoto_descripcion);
+                    // $plantillaword->setValue('PUNTO_' . ($i + 2) . '_DESCRIPCION', "Punto " . $fotos[($i + 2)]->proyectoevidenciafoto_nopunto . " " . $fotos[($i + 2)]->proyectoevidenciafoto_descripcion);
+                    $plantillaword->setValue('PUNTO_' . ($i + 2) . '_DESCRIPCION', $fotos[($i + 2)]->proyectoevidenciafoto_descripcion);
                 }
 
 
@@ -4669,7 +4672,8 @@ class reporteiluminacionwordController extends Controller
                         $plantillaword->setValue('PUNTO_' . ($i + 3) . '_FOTO', 'NO SE ENCONTRÓ LA FOTO');
                     }
 
-                    $plantillaword->setValue('PUNTO_' . ($i + 3) . '_DESCRIPCION', "Punto " . $fotos[($i + 3)]->proyectoevidenciafoto_nopunto . " " . $fotos[($i + 3)]->proyectoevidenciafoto_descripcion);
+                    // $plantillaword->setValue('PUNTO_' . ($i + 3) . '_DESCRIPCION', "Punto " . $fotos[($i + 3)]->proyectoevidenciafoto_nopunto . " " . $fotos[($i + 3)]->proyectoevidenciafoto_descripcion);
+                    $plantillaword->setValue('PUNTO_' . ($i + 3) . '_DESCRIPCION', $fotos[($i + 3)]->proyectoevidenciafoto_descripcion);
                 }
             }
 

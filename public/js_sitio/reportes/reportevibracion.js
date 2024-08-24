@@ -2659,7 +2659,7 @@ function tipo_evaluacion(tipo_evaluacion)
 
 
 				$("#reportevibracionevaluacion_fecha").val('');
-				$("#reportevibracionevaluacion_fecha").attr({'disabled': true, 'required': false});
+				$("#reportevibracionevaluacion_fecha").attr({'disabled': false, 'required': false});
 
 
 				break;
@@ -2715,7 +2715,7 @@ function tipo_evaluacion(tipo_evaluacion)
 
 
 				$("#reportevibracionevaluacion_fecha").val('');
-				$("#reportevibracionevaluacion_fecha").attr({'disabled': true, 'required': false});
+				$("#reportevibracionevaluacion_fecha").attr({'disabled': false, 'required': false});
 
 
 				break;
@@ -2771,7 +2771,7 @@ function tipo_evaluacion(tipo_evaluacion)
 
 
 				$("#reportevibracionevaluacion_fecha").val('');
-				$("#reportevibracionevaluacion_fecha").attr({'disabled': false, 'required': true});
+				$("#reportevibracionevaluacion_fecha").attr({'disabled': false, 'required': false});
 
 
 				break;
@@ -2829,7 +2829,7 @@ function tipo_evaluacion(tipo_evaluacion)
 
 
 		$("#reportevibracionevaluacion_fecha").val('');
-		$("#reportevibracionevaluacion_fecha").attr({'disabled': true, 'required': false});
+		$("#reportevibracionevaluacion_fecha").attr({'disabled': false, 'required': false});
 	}
 }
 
@@ -6691,3 +6691,202 @@ function obtenerdatos() {
         }
     });
 }
+
+
+
+//FUNCION PARA CARGAR PUNTOS POR MEDIO DE UN EXCEL
+$(document).ready(function () {
+
+    $('#boton_reporte_vibracion_importar_resultados').on('click', function (e) {
+        e.preventDefault();
+
+        $('#divCargaResultados').css('display', 'none');
+        $('#alertaVerificacion1').css('display', 'none');
+
+        $('#formExcelResultado')[0].reset();
+
+        $('#modal_excel_resultados').modal({backdrop:false});
+
+    })
+
+    $("#botonCargarExcelResultados").click(function() {
+        var guardar = 0;
+
+        // valida campos vacios
+        var valida = this.form.checkValidity();
+        if (valida){
+            if ($("#excelResultado").val() != ""){
+                // Tipo archivo
+                var archivo = $("#excelResultado").val();
+                var extension = archivo.substring(archivo.lastIndexOf("."));
+
+                // valida tipo de archivo
+                if(extension == ".xlsx" || extension == ".XLSX"){
+                    guardar = 1;
+                }
+                else{
+                    // mensaje
+                    swal({
+                        title: "Tipo de archivo incorrecto "+extension,
+                        text: "Solo se pueden cargar archivos tipo .xlsx",
+                        type: "warning", // warning, error, success, info
+                        buttons: {
+                            visible: false, // true , false
+                        },
+                        timer: 3000,
+                        showConfirmButton: false
+                    });
+
+                    guardar = 0;
+                    return false;
+                }
+            }
+            else{
+                guardar = 0;
+            }
+
+            // guardar
+            if (guardar == 1){
+            
+                swal({   
+                    title: "¿Está  seguro de cargar este documento?",   
+                    text: "Está acción  no se puede revertir",   
+                    type: "warning",   
+                    showCancelButton: true,   
+                    confirmButtonColor: "#DD6B55",   
+                    confirmButtonText: "Guardar!",   
+                    cancelButtonText: "Cancelar!",   
+                    closeOnConfirm: false,   
+                    closeOnCancel: false 
+                }, function (isConfirm) {   
+                    
+                    if (isConfirm){
+                        // cerrar msj confirmacion
+                        swal.close();
+
+                        // enviar datos
+                        $('#formExcelResultado').ajaxForm({
+                            dataType: 'json',
+                            type: 'POST',
+                            url: ''+ruta_storage_guardar,
+                            data: {
+								opcion: 1000,
+
+								proyecto_id: proyecto.id
+
+                                
+                            },
+                            contentType: false,
+                            processData: false,
+                            success: function (dato) {
+
+                                // actualizar boton
+                                $('#botonCargarExcelResultados').prop('disabled', false);
+                                $('#divCargaResultados').css('display', 'none');
+                                
+                                if (dato.code == 200) {
+                                    
+                                    // cerrar modal
+                                    $('#modal_excel_resultados').modal('hide');
+    
+                                    // mensaje
+                                    swal({
+                                        title: "Los datos fueron cargados exitosamente",
+                                        text: ""+dato.msj,
+                                        type: "success", // warning, error, success, info
+                                        buttons: {
+                                            visible: true, // true , false
+                                        },
+                                        showConfirmButton: true,
+                                        showCancelButton: false
+                                    });
+
+                                    //Recargamos la tabla
+
+									tabla_reporte_puntos(proyecto.id);
+									tabla_reporte_matriz(proyecto.id);
+									reporte_dashboard(proyecto.id);
+
+
+                                
+                                } else {
+
+                                     swal({
+                                        title: "Ocurrio un error al intentar insertar los datos.",
+                                        text: ""+dato.msj,
+                                        type: "error", // warning, error, success, info
+                                        buttons: {
+                                            visible: true, // true , false
+                                        },
+                                        showConfirmButton: true,
+                                        showCancelButton: false
+									 });
+									
+                                }
+
+                                
+                            },
+                            beforeSend: function () {
+
+                                $('#botonCargarExcelResultados').prop('disabled', true);
+                                $('#divCargaResultados').css('display', 'block');
+                            },
+                            error: function(dato) {
+                                
+                                // actualiza boton
+                                $('#botonCargarExcelResultados').prop('disabled', false);
+                                $('#divCargaResultados').css('display', 'none');
+
+                                // mensaje
+                                swal({
+                                    title: "Error al cargar los puntos.",
+                                    text: ""+dato.msj,
+                                    type: "error", // warning, error, success, info
+                                    buttons: {
+                                        visible: false, // true , false
+                                    },
+                                    timer: 1500,
+                                    showConfirmButton: false
+                                });
+
+                                return false;
+                            }
+                        }).submit();
+                        return false;
+                    }
+                    else 
+                    {
+                        // mensaje
+                        swal({
+                            title: "Cancelado",
+                            text: "Acción cancelada",
+                            type: "error", // warning, error, success, info
+                            buttons: {
+                                visible: false, // true , false
+                            },
+                            timer: 1500,
+                            showConfirmButton: false
+                        });   
+                    } 
+                });
+                return false;
+            }
+        }
+    });
+
+
+
+    $('#excelResultado').change(function () {
+        
+        if ($(this).val()) {
+            
+            $('#alertaVerificacion1').css('display', 'block');
+
+        } else {
+            $('#alertaVerificacion1').css('display', 'none');
+            
+        }
+    });
+
+});
+
