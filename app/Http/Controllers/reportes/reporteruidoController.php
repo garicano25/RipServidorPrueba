@@ -54,9 +54,11 @@ use App\modelos\reportes\reporterecomendacionesModel;
 use App\modelos\reportes\reporteplanoscarpetasModel;
 use App\modelos\reportes\reporteequiposutilizadosModel;
 use App\modelos\reportes\reporteanexosModel;
-
 use App\modelos\reportes\recursosPortadasInformesModel;
 
+//Recursos para abrir el Excel
+use PhpOffice\PhpSpreadsheet\IOFactory;
+use PhpOffice\PhpSpreadsheet\Spreadsheet;
 
 
 //Configuracion Zona horaria
@@ -5147,674 +5149,25 @@ class reporteruidoController extends Controller
     }
 
 
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
-
-    /*
-    public function reporteruidorevisionnueva(Request $request)
+    public function guardarCampolmpe($proyecto_id, $reporte_id, $valor)
     {
-        try
-        {
-            // dd($request->all());
+        try {
 
+            $reporte  = reporteruidoModel::where('id', $reporte_id)
+                ->where('proyecto_id', $proyecto_id)
+                ->update(['reporteruido_lmpe' => $valor]);
 
-            // OBTENER ULTIMA REVISION
-            // -------------------------------------------------
 
-
-            $revision = DB::select('SELECT
-                                        reporteruido.id,
-                                        reporteruido.proyecto_id,
-                                        reporteruido.reporteruido_revision 
-                                    FROM
-                                        reporteruido 
-                                    WHERE
-                                        reporteruido.proyecto_id = '.$request->proyecto_id.' 
-                                    ORDER BY
-                                        reporteruido.reporteruido_revision DESC
-                                    LIMIT 1');
-
-
-            // CLONAR REGISTRO REPORTE
-            // -------------------------------------------------
-
-
-            $revisionfinal  = reporteruidoModel::findOrFail($revision[0]->id);
-
-            DB::statement('ALTER TABLE reporteruido AUTO_INCREMENT = 1;');
-
-            // $revisionnueva = $revisionfinal->replicate();
-            $revisionnueva = $revisionfinal->replicate()->fill([
-                  'reporteruido_revision' => ($revision[0]->reporteruido_revision + 1)
-                , 'reporteruido_concluido' => 0
-                , 'reporteruido_concluidonombre' => NULL
-                , 'reporteruido_concluidofecha' => NULL
-                , 'reporteruido_cancelado' => 0
-                , 'reporteruido_canceladonombre' => NULL
-                , 'reporteruido_canceladofecha' => NULL
-                , 'reporteruido_canceladoobservacion' => NULL
-            ]);
-
-            $revisionnueva->save();
-
-
-            // CLONAR REGISTROS TABLA ANEXOS
-            // -------------------------------------------------
-
-
-            $anexos_historial = reporteanexosModel::where('proyecto_id', $request->proyecto_id)
-                                                    ->where('agente_nombre', $request->agente_nombre)
-                                                    ->where('registro_id', $revision[0]->id)
-                                                    ->get();
-
-            DB::statement('ALTER TABLE reporteanexos AUTO_INCREMENT = 1;');
-            foreach ($anexos_historial as $key => $value)
-            {                
-                $anexo = $value->replicate()->fill([
-                    'registro_id' => $revisionnueva->id
-                ]);
-
-                $anexo->save();
-            }
-            
-
-            // CLONAR REGISTROS TABLA EQUIPOS UTILIZADOS
-            // -------------------------------------------------
-
-
-            $equipos_historial = reporteequiposutilizadosModel::where('proyecto_id', $request->proyecto_id)
-                                                                ->where('agente_nombre', $request->agente_nombre)
-                                                                ->where('registro_id', $revision[0]->id)
-                                                                ->get();
-
-            DB::statement('ALTER TABLE reporteequiposutilizados AUTO_INCREMENT = 1;');
-            foreach ($equipos_historial as $key => $value)
-            {                
-                $equipo = $value->replicate()->fill([
-                    'registro_id' => $revisionnueva->id
-                ]);
-
-                $equipo->save();
-            }
-
-
-            // CLONAR REGISTROS TABLA PLANOS CARPETAS
-            // -------------------------------------------------
-
-
-            $planoscarpetas_historial = reporteplanoscarpetasModel::where('proyecto_id', $request->proyecto_id)
-                                                            ->where('agente_nombre', $request->agente_nombre)
-                                                            ->where('registro_id', $revision[0]->id)
-                                                            ->get();
-
-            DB::statement('ALTER TABLE reporteplanoscarpetas AUTO_INCREMENT = 1;');
-            foreach ($planoscarpetas_historial as $key => $value)
-            {                
-                $carpeta = $value->replicate()->fill([
-                    'registro_id' => $revisionnueva->id
-                ]);
-
-                $carpeta->save();
-            }
-
-
-            // CLONAR REGISTROS TABLA RECOMENDACIONES
-            // -------------------------------------------------
-
-
-            $recomendaciones_historial = reporterecomendacionesModel::where('proyecto_id', $request->proyecto_id)
-                                                                    ->where('agente_nombre', $request->agente_nombre)
-                                                                    ->where('registro_id', $revision[0]->id)
-                                                                    ->get();
-
-            DB::statement('ALTER TABLE reporterecomendaciones AUTO_INCREMENT = 1;');
-            foreach ($recomendaciones_historial as $key => $value)
-            {                
-                $recomendacion = $value->replicate()->fill([
-                    'registro_id' => $revisionnueva->id
-                ]);
-
-                $recomendacion->save();
-            }
-
-
-            // CLONAR REGISTROS TABLA CATEGORÍAS
-            // -------------------------------------------------
-
-
-            if (($request->areas_poe+0) == 0) // Que las categorias no pertenezcan al POE general
-            {
-                $categorias_historial = reporteruidocategoriaModel::where('proyecto_id', $request->proyecto_id)
-                                                                    ->where('registro_id', $revision[0]->id)
-                                                                    ->get();
-
-
-                $categorias_nuevosid = array();
-                DB::statement('ALTER TABLE reporteruidocategoria AUTO_INCREMENT = 1;');
-                foreach ($categorias_historial as $key => $value)
-                {                
-                    $categoria = $value->replicate()->fill([
-                        'registro_id' => $revisionnueva->id
-                    ]);
-
-                    $categoria->save();
-
-                    $categorias_nuevosid['id_'.$value->id] = $categoria->id;
-                }
-                // dd($categorias_nuevosid);
-            }
-
-
-            // CLONAR REGISTROS TABLA AREAS
-            // -------------------------------------------------
-
-            
-            if (($request->areas_poe+0) == 0) // Que las categorias no pertenezcan al POE general
-            {
-                $areas_historial = reporteruidoareaModel::where('proyecto_id', $request->proyecto_id)
-                                                                ->where('registro_id', $revision[0]->id)
-                                                                ->get();
-
-                $areas_nuevosid = array();
-                DB::statement('ALTER TABLE reporteruidoarea AUTO_INCREMENT = 1;');
-                foreach ($areas_historial as $key => $value)
-                {                
-                    $area = $value->replicate()->fill([
-                        'registro_id' => $revisionnueva->id
-                    ]);
-
-                    $area->save();
-
-                    $areas_nuevosid['id_'.$value->id] = $area->id;
-                }
-                // dd($areas_nuevosid);
-            }
-
-
-            // CLONAR REGISTROS TABLA AREAS CATEGORIAS
-            // -------------------------------------------------
-
-
-            if (($request->areas_poe+0) == 0) // Que las areas no pertenezcan al POE general
-            {
-                $areacategorias = DB::select('SELECT
-                                                    reporteruidoarea.proyecto_id,
-                                                    reporteruidoarea.registro_id,
-                                                    reporteruidoareacategoria.id,
-                                                    reporteruidoareacategoria.reporteruidoareacategoria_poe,
-                                                    reporteruidoareacategoria.reporteruidoarea_id,
-                                                    reporteruidoareacategoria.reporteruidocategoria_id,
-                                                    reporteruidoareacategoria.reporteruidoareacategoria_actividades 
-                                                FROM
-                                                    reporteruidoareacategoria
-                                                    LEFT JOIN reporteruidoarea ON reporteruidoareacategoria.reporteruidoarea_id = reporteruidoarea.id
-                                                WHERE
-                                                    reporteruidoarea.proyecto_id = '.$request->proyecto_id.' 
-                                                    AND reporteruidoarea.registro_id = '.$revision[0]->id.'
-                                                    AND reporteruidoareacategoria.reporteruidoareacategoria_poe = 0
-                                                ');
-
-
-                DB::statement('ALTER TABLE reporteruidoareacategoria AUTO_INCREMENT = 1;');
-                foreach ($areacategorias as $key => $value)
-                {
-                    if (array_key_exists('id_'.$value->reporteruidoarea_id, $areas_nuevosid) == 1 && array_key_exists('id_'.$value->reporteruidocategoria_id, $categorias_nuevosid) == 1)
-                    {
-                        $registro = reporteruidoareacategoriaModel::create([
-                              'reporteruidoarea_id' => $areas_nuevosid['id_'.$value->reporteruidoarea_id]
-                            , 'reporteruidoareacategoria_poe' => 0
-                            , 'reporteruidocategoria_id' => $categorias_nuevosid['id_'.$value->reporteruidocategoria_id]
-                            , 'reporteruidoareacategoria_actividades' => $value->reporteruidoareacategoria_actividades
-                        ]);
-                    }
-                    else
-                    {
-                        $registro = reporteruidoareacategoriaModel::create([
-                              'reporteruidoarea_id' => $value->reporteruidoarea_id
-                            , 'reporteruidoareacategoria_poe' => 0
-                            , 'reporteruidocategoria_id' => $value->reporteruidocategoria_id
-                            , 'reporteruidoareacategoria_actividades' => $value->reporteruidoareacategoria_actividades
-                        ]);
-                    }
-                }
-                // dd($areacategorias);
-            }
-            else
-            {
-                $areacategorias = DB::select('SELECT
-                                                    reportecategoria.proyecto_id,
-                                                    reporteruidoareacategoria.reporteruidoareacategoria_poe,
-                                                    reporteruidoareacategoria.reporteruidoarea_id,
-                                                    reporteruidoareacategoria.reporteruidocategoria_id,
-                                                    reportecategoria.reportecategoria_nombre,
-                                                    reporteruidoareacategoria.reporteruidoareacategoria_actividades 
-                                                FROM
-                                                    reporteruidoareacategoria
-                                                    LEFT JOIN reportecategoria ON reporteruidoareacategoria.reporteruidocategoria_id = reportecategoria.id 
-                                                WHERE
-                                                    reportecategoria.proyecto_id = '.$request->proyecto_id.' 
-                                                    AND reporteruidoareacategoria.reporteruidoareacategoria_poe = '.$revision[0]->id);
-
-
-                DB::statement('ALTER TABLE reporteruidoareacategoria AUTO_INCREMENT = 1;');
-                foreach ($areacategorias as $key => $value)
-                {
-                    $registro = reporteruidoareacategoriaModel::create([
-                          'reporteruidoarea_id' => $value->reporteruidoarea_id
-                        , 'reporteruidocategoria_id' => $value->reporteruidocategoria_id
-                        , 'reporteruidoareacategoria_poe' => $revisionnueva->id
-                        , 'reporteruidoareacategoria_actividades' => $value->reporteruidoareacategoria_actividades
-                    ]);
-                }
-                // dd($areacategorias);
-            }
-
-
-            // CLONAR REGISTROS TABLA AREAS MAQUINARIA
-            // -------------------------------------------------
-
-
-            if (($request->areas_poe+0) == 0) // Que las areas no pertenezcan al POE general
-            {
-                $areamaquinaria = DB::select('SELECT
-                                                    reporteruidoarea.proyecto_id,
-                                                    reporteruidoarea.registro_id,
-                                                    reporteruidoareamaquinaria.reporteruidoareamaquinaria_poe,
-                                                    reporteruidoareamaquinaria.reporteruidoarea_id,
-                                                    reporteruidoareamaquinaria.reporteruidoareamaquinaria_nombre,
-                                                    reporteruidoareamaquinaria.reporteruidoareamaquinaria_cantidad 
-                                                FROM
-                                                    reporteruidoareamaquinaria
-                                                    LEFT JOIN reporteruidoarea ON reporteruidoareamaquinaria.reporteruidoarea_id = reporteruidoarea.id
-                                                WHERE
-                                                    reporteruidoarea.proyecto_id = '.$request->proyecto_id.' 
-                                                    AND reporteruidoarea.registro_id = '.$revision[0]->id.'
-                                                    AND reporteruidoareamaquinaria.reporteruidoareamaquinaria_poe = 0');
-
-
-                DB::statement('ALTER TABLE reporteruidoareamaquinaria AUTO_INCREMENT = 1;');
-                foreach ($areamaquinaria as $key => $value)
-                {
-                    if (array_key_exists('id_'.$value->reporteruidoarea_id, $areas_nuevosid) == 1)
-                    {
-                        $registro = reporteruidoareamaquinariaModel::create([
-                              'reporteruidoarea_id' => $areas_nuevosid['id_'.$value->reporteruidoarea_id]
-                            , 'reporteruidoareamaquinaria_poe' => 0
-                            , 'reporteruidoareamaquinaria_nombre' => $value->reporteruidoareamaquinaria_nombre
-                            , 'reporteruidoareamaquinaria_cantidad' => $value->reporteruidoareamaquinaria_cantidad
-                        ]);
-                    }
-                    else
-                    {
-                        $registro = reporteruidoareamaquinariaModel::create([
-                              'reporteruidoarea_id' => $value->reporteruidoarea_id
-                            , 'reporteruidoareamaquinaria_poe' => 0
-                            , 'reporteruidoareamaquinaria_nombre' => $value->reporteruidoareamaquinaria_nombre
-                            , 'reporteruidoareamaquinaria_cantidad' => $value->reporteruidoareamaquinaria_cantidad
-                        ]);
-                    }
-                }
-                // dd($areamaquinaria);
-            }
-            else
-            {
-                $areamaquinaria = DB::select('SELECT
-                                                    reportearea.proyecto_id,
-                                                    reporteruidoareamaquinaria.reporteruidoarea_id,
-                                                    reporteruidoareamaquinaria.reporteruidoareamaquinaria_poe,
-                                                    reporteruidoareamaquinaria.reporteruidoareamaquinaria_nombre,
-                                                    reporteruidoareamaquinaria.reporteruidoareamaquinaria_cantidad 
-                                                FROM
-                                                    reporteruidoareamaquinaria
-                                                    LEFT JOIN reportearea ON reporteruidoareamaquinaria.reporteruidoarea_id = reportearea.id
-                                                WHERE
-                                                    reportearea.proyecto_id = '.$request->proyecto_id.' 
-                                                    AND reporteruidoareamaquinaria.reporteruidoareamaquinaria_poe = '.$revision[0]->id);
-
-
-                DB::statement('ALTER TABLE reporteruidoareamaquinaria AUTO_INCREMENT = 1;');
-                foreach ($areamaquinaria as $key => $value)
-                {
-                    $registro = reporteruidoareamaquinariaModel::create([
-                          'reporteruidoarea_id' => $value->reporteruidoarea_id
-                        , 'reporteruidoareamaquinaria_poe' => $revisionnueva->id
-                        , 'reporteruidoareamaquinaria_nombre' => $value->reporteruidoareamaquinaria_nombre
-                        , 'reporteruidoareamaquinaria_cantidad' => $value->reporteruidoareamaquinaria_cantidad
-                    ]);
-                }
-                // dd($areamaquinaria);
-            }
-
-
-            // CLONAR REGISTROS TABLA PUNTOS NER
-            // -------------------------------------------------
-
-
-            $puntos_ner = reporteruidopuntonerModel::where('proyecto_id', $request->proyecto_id)
-                                                    ->where('registro_id', $revision[0]->id)
-                                                    ->get();
-
-
-            DB::statement('ALTER TABLE reporteruidopuntoner AUTO_INCREMENT = 1;');
-
-
-            foreach ($puntos_ner as $key => $value)
-            {
-                if (($request->areas_poe+0) == 0 && array_key_exists('id_'.$value->reporteruidoarea_id, $areas_nuevosid) == 1)
-                {
-                    $punto = $value->replicate()->fill([
-                          'registro_id' => $revisionnueva->id
-                        , 'reporteruidoarea_id' => $areas_nuevosid['id_'.$value->reporteruidoarea_id]
-                    ]);
-                }
-                else
-                {
-                    $punto = $value->replicate()->fill([
-                        'registro_id' => $revisionnueva->id
-                    ]);
-                }
-
-                $punto->save();
-
-
-                //--------------------------------------------------
-
-
-                // CLONAR REGISTROS TABLA PUNTOS NER CATEGORIAS
-                $puntoner_categorias = reporteruidopuntonercategoriasModel::where('reporteruidopuntoner_id', $value->id)->get();
-                
-
-                foreach ($puntoner_categorias as $key2 => $value2)
-                {
-                    if (($request->areas_poe+0) == 0 && array_key_exists('id_'.$value2->reporteruidocategoria_id, $categorias_nuevosid) == 1)
-                    {
-                        $nercategoria = $value2->replicate()->fill([
-                              'reporteruidopuntoner_id' => $punto->id
-                            , 'reporteruidocategoria_id' => $categorias_nuevosid['id_'.$value2->reporteruidocategoria_id]
-                        ]);
-                    }
-                    else
-                    {
-                        $nercategoria = $value2->replicate()->fill([
-                            'reporteruidopuntoner_id' => $punto->id
-                        ]);
-                    }
-
-
-                    $nercategoria->save();
-                }
-
-
-                //--------------------------------------------------
-
-
-                // CLONAR REGISTROS TABLA PUNTOS NER FRECUENCIAS
-                $puntoner_frecuencias = reporteruidopuntonerfrecuenciasModel::where('reporteruidopuntoner_id', $value->id)->get();
-                
-
-                foreach ($puntoner_frecuencias as $key2 => $value2)
-                {
-                    $nerfrecuencia = $value2->replicate()->fill([
-                        'reporteruidopuntoner_id' => $punto->id
-                    ]);
-
-                    $nerfrecuencia->save();
-                }
-            }
-            // dd($puntos_ner);
-
-
-            // CLONAR REGISTROS TABLA DOSIS NER
-            // -------------------------------------------------
-
-
-            $dosis_ner = reporteruidodosisnerModel::where('proyecto_id', $request->proyecto_id)
-                                                    ->where('registro_id', $revision[0]->id)
-                                                    ->get();
-
-
-            DB::statement('ALTER TABLE reporteruidodosisner AUTO_INCREMENT = 1;');
-
-
-            foreach ($dosis_ner as $key => $value)
-            {
-                if (($request->areas_poe+0) == 0 && array_key_exists('id_'.$value->reporteruidoarea_id, $areas_nuevosid) == 1 && array_key_exists('id_'.$value->reporteruidocategoria_id, $categorias_nuevosid) == 1)
-                {
-                    $dosis = $value->replicate()->fill([
-                          'registro_id' => $revisionnueva->id
-                        , 'reporteruidoarea_id' => $areas_nuevosid['id_'.$value->reporteruidoarea_id]
-                        , 'reporteruidocategoria_id' => $categorias_nuevosid['id_'.$value->reporteruidocategoria_id]
-                    ]);
-                }
-                else
-                {
-                    $dosis = $value->replicate()->fill([
-                        'registro_id' => $revisionnueva->id
-                    ]);
-                }
-
-                $dosis->save();
-            }
-            // dd($dosis_ner);
-
-
-            // CLONAR REGISTROS TABLA EQUIPO AUDITIVO
-            // -------------------------------------------------
-
-
-            $equipos_auditivos = reporteruidoequipoauditivoModel::where('proyecto_id', $request->proyecto_id)
-                                                                ->where('registro_id', $revision[0]->id)
-                                                                ->get();
-
-
-            DB::statement('ALTER TABLE reporteruidoequipoauditivo AUTO_INCREMENT = 1;');
-            foreach ($equipos_auditivos as $key => $value)
-            {
-                $equipo = $value->replicate()->fill([
-                    'registro_id' => $revisionnueva->id
-                ]);
-
-                $equipo->save();
-
-
-                //---------------------------------
-
-
-                // CLONAR REGISTROS TABLA EQUIPOS AUDITIVOS ATENUACIONES
-                $equipo_atenuaciones = reporteruidoequipoauditivoatenuacionModel::where('reporteruidoequipoauditivo_id', $value->id)->get();
-                foreach ($equipo_atenuaciones as $key2 => $value2)
-                {
-                    $atenuacion = $value2->replicate()->fill([
-                        'reporteruidoequipoauditivo_id' => $equipo->id
-                    ]);
-
-                    $atenuacion->save();
-                }
-
-
-                //---------------------------------
-
-
-                // CLONAR REGISTROS TABLA EQUIPOS AUDITIVOS CATEGORIAS
-                $equipo_categorias = reporteruidoequipoauditivocategoriasModel::where('reporteruidoequipoauditivo_id', $value->id)->get();
-                foreach ($equipo_categorias as $key2 => $value2)
-                {
-                    if (($request->areas_poe+0) == 0 && array_key_exists('id_'.$value2->reporteruidocategoria_id, $categorias_nuevosid) == 1)
-                    {
-                        $categoria = $value2->replicate()->fill([
-                              'reporteruidoequipoauditivo_id' => $equipo->id
-                            , 'reporteruidocategoria_id' => $categorias_nuevosid['id_'.$value2->reporteruidocategoria_id]
-                        ]);
-                    }
-                    else
-                    {
-                        $categoria = $value2->replicate()->fill([
-                            'reporteruidoequipoauditivo_id' => $equipo->id
-                        ]);
-                    }
-
-                    $categoria->save();
-                }
-            }
-            // dd($equipos_auditivos);
-
-
-            // CLONAR REGISTROS TABLA EQUIPO PROTECCION PERSONAL
-            // -------------------------------------------------
-
-
-            $equipo_epp = reporteruidoeppModel::where('proyecto_id', $request->proyecto_id)
-                                                ->where('registro_id', $revision[0]->id)
-                                                ->get();
-
-
-            DB::statement('ALTER TABLE reporteruidoepp AUTO_INCREMENT = 1;');
-            foreach ($equipo_epp as $key => $value)
-            {
-                $epp = $value->replicate()->fill([
-                    'registro_id' => $revisionnueva->id
-                ]);
-
-                $epp->save();
-            }
-            // dd($equipo_epp);
-
-
-            // CLONAR REGISTROS TABLA AREAS Y PUNTOS DE EVALACION
-            // -------------------------------------------------
-
-
-            $area_evaluacion = reporteruidoareaevaluacionModel::where('proyecto_id', $request->proyecto_id)
-                                                                ->where('registro_id', $revision[0]->id)
-                                                                ->get();
-
-
-            DB::statement('ALTER TABLE reporteruidoareaevaluacion AUTO_INCREMENT = 1;');
-
-
-            foreach ($area_evaluacion as $key => $value)
-            {
-                if (($request->areas_poe+0) == 0 && array_key_exists('id_'.$value->reporteruidoarea_id, $areas_nuevosid) == 1)
-                {
-                    $evaluacion = $value->replicate()->fill([
-                          'registro_id' => $revisionnueva->id
-                        , 'reporteruidoarea_id' => $areas_nuevosid['id_'.$value->reporteruidoarea_id]
-                    ]);
-                }
-                else
-                {
-                    $evaluacion = $value->replicate()->fill([
-                        'registro_id' => $revisionnueva->id
-                    ]);
-                }
-
-                $evaluacion->save();
-            }
-            // dd($area_evaluacion);
-
-
-            // CLONAR REGISTROS TABLA NIVEL SONORO CONTINUO
-            // -------------------------------------------------
-
-
-            $nivelsonoro_continuo = reporteruidonivelsonoroModel::where('proyecto_id', $request->proyecto_id)
-                                                                ->where('registro_id', $revision[0]->id)
-                                                                ->get();
-
-            DB::statement('ALTER TABLE reporteruidonivelsonoro AUTO_INCREMENT = 1;');
-            foreach ($nivelsonoro_continuo as $key => $value)
-            {
-                $nivelsonoro = $value->replicate()->fill([
-                    'registro_id' => $revisionnueva->id
-                ]);
-
-                $nivelsonoro->save();
-            }
-            // dd($nivelsonoro_continuo);
-
-
-            // GUARDAR GRAFICAS IMAGENES Y CLONAR CARPETA
-            // -------------------------------------------------
-
-
-            if ($request->grafica_dashboard)
-            {
-                // Codificar imagen recibida como tipo base64
-                $imagen_recibida = explode(',', $request->grafica_dashboard); //Archivo foto tipo base64
-                $imagen_nueva = base64_decode($imagen_recibida[1]);
-
-                // Ruta destino archivo
-                $destinoPath = 'reportes/proyecto/'.$request->proyecto_id.'/'.$request->agente_nombre.'/'.$revision[0]->id.'/graficas/grafica_1.jpg'; // DASHBOARD
-
-                // Guardar Foto
-                Storage::put($destinoPath, $imagen_nueva); // Guardar en storage
-                // file_put_contents(public_path('/imagen.jpg'), $imagen_nueva); // Guardar en public
-            }
-            // dd($destinoPath);
-
-        
-            // CLONAR CARPETA ARCHIVOS, PLANO UBICACION, RESPONSABLES DEL INFORME, GRAFICAS
-            // -------------------------------------------------
-
-
-            $carpetaarchivos_historial = 'reportes/proyecto/'.$request->proyecto_id.'/'.$request->agente_nombre.'/'.$revision[0]->id;
-            $carpetaarchivos_destino = 'reportes/proyecto/'.$request->proyecto_id.'/'.$request->agente_nombre.'/'.$revisionnueva->id;
-            
-
-            Storage::makeDirectory($carpetaarchivos_destino); //crear directorio
-            File::copyDirectory(storage_path('app/'.$carpetaarchivos_historial), storage_path('app/'.$carpetaarchivos_destino)); //Copiar contenido directorio
-
-
-            if (Storage::exists($carpetaarchivos_destino.'/ubicacionfoto/ubicacionfoto.jpg'))
-            {
-                $revisionnueva->update([
-                    'reporteruido_ubicacionfoto' => $carpetaarchivos_destino.'/ubicacionfoto/ubicacionfoto.jpg'
-                ]);
-            }
-            else
-            {
-                $revisionnueva->update([
-                    'reporteruido_ubicacionfoto' => NULL
-                ]);
-            }
-
-
-            if (Storage::exists($carpetaarchivos_destino.'/responsables informe/responsable1_doc.jpg'))
-            {
-                $revisionnueva->update([
-                      'reporteruido_responsable1documento' => $carpetaarchivos_destino.'/responsables informe/responsable1_doc.jpg'
-                    , 'reporteruido_responsable2documento' => $carpetaarchivos_destino.'/responsables informe/responsable2_doc.jpg'
-                ]);
-            }
-            else
-            {
-                $revisionnueva->update([
-                      'reporteruido_responsable1documento' => NULL
-                    , 'reporteruido_responsable2documento' => NULL
-                ]);
-            }
-
-
-            // -------------------------------------------------
-
-
-            // respuesta
-            $dato["reporteregistro_id"] = $revisionnueva->id;
-            $dato["msj"] = 'Revisión creada correctamente';
+            $dato["msj"] = 'Datos guardados correctamente';
             return response()->json($dato);
-        }
-        catch(Exception $e)
-        {
-            $dato["reporteregistro_id"] = $request->reporteregistro_id;
-            $dato["msj"] = 'Error '.$e->getMessage();
+        } catch (Exception $e) {
+            $dato["msj"] = 'Error ' . $e->getMessage();
             return response()->json($dato);
         }
     }
-    */
+
+
+
 
 
     /**
@@ -5826,6 +5179,205 @@ class reporteruidoController extends Controller
     public function store(Request $request)
     {
         try {
+
+            //IMPORTACION DE DATOS POR MEDIO DE EXEL
+            if ($request->opcion == 1000) {
+
+                //VARIABLES GLOBALES
+                $proyecto_id = $request['proyecto_id'];
+                $registro_id = $request['registro_id'];
+
+                try {
+
+                    // Verificar si hay un archivo en la solicitud
+                    if ($request->hasFile('excelPuntos')) {
+
+                        // Obtenemos el Excel de los personales
+                        $excel = $request->file('excelPuntos');
+
+                        // Cargamos el archivo usando la libreria de PhpSpreadsheet
+                        $spreadsheet = IOFactory::load($excel->getPathname());
+                        $sheet = $spreadsheet->getActiveSheet();
+                        $data = $sheet->toArray(null, true, true, true);
+
+                        // Eliminar los encabezados dependiendo el tipo de documento
+                        if (intval($request['tipoArchivo']) == 1) {
+                            $data = array_slice($data, 4);
+                        } else if (intval($request['tipoArchivo']) == 2) {
+                            $data = array_slice($data, 2);
+                        } else if (intval($request['tipoArchivo']) == 3) {
+                            $data = array_slice($data, 2);
+                        }
+
+
+                        $datosGenerales = [];
+                        foreach ($data as $row) {
+                            // Verificar si la fila no está completamente vacía
+                            if (!empty(array_filter($row))) {
+
+                                $datosGenerales[] = $row;
+                            }
+                        }
+
+                        // return response()->json(['msj' => $datosGenerales, "code" => 500]);
+
+                        // ========================================================== DATOS GENERALES ===============================================================
+                        // =========================================================================================================================
+                        //Puntos totales
+                        $totalPuntos = count($datosGenerales);
+                        $puntosInsertados = 0;
+
+                        //BUCAMOS Y ARMAMOS EL ARRAY PARA OBTENER LAS AREAS CON SU ID
+                        $IdAreas = [];
+                        $areas = reporteareaModel::where('proyecto_id', $proyecto_id)->get();
+                        foreach ($areas as $area) {
+                            $clave = $area->reportearea_nombre;
+                            $IdAreas[$clave] = $area->id;
+                        }
+
+                        //BUCAMOS EL LMPE EN LA TABLA DE REPORTERUIDO
+                        $lmpeQuery = DB::select('SELECT reporteruido_lmpe FROM reporteruido WHERE id = ? AND proyecto_id = ?', [$registro_id, $proyecto_id]);
+                        $lmpe = $lmpeQuery[0]->reporteruido_lmpe;
+
+                        //BUSCAMOS Y CREAMOS EL ARRAY DE LAS UBICACIONES
+                        $ubicacionesQuery = DB::select('SELECT reporteruidoareaevaluacion_nomedicion1 AS num1,
+                                                                reporteruidoareaevaluacion_nomedicion2 as num2,
+                                                                 reporteruidoareaevaluacion_ubicacion as ubicacion
+                                                        FROM reporteruidoareaevaluacion WHERE registro_id = ? AND proyecto_id = ?', [$registro_id, $proyecto_id]);
+
+                        // Crear el arreglo de ubicaciones
+                        $ubicaciones = [];
+
+                        // Recorrer cada fila de resultados
+                        foreach ($ubicacionesQuery as $fila) {
+                            $num1 = $fila->num1;
+                            $num2 = $fila->num2;
+                            $ubicacion = $fila->ubicacion;
+
+                            // Rellenar el arreglo con el rango de números
+                            for ($i = $num1; $i <= $num2; $i++) {
+
+                                $ubicaciones[intval($i)] = $ubicacion;
+                            }
+                        }
+
+
+                        // =========================================================================================================================
+                        // =========================================================================================================================
+
+
+                        // ====================================================== FUNCIONES ===================================================================
+                        // =========================================================================================================================
+                        function calculartmpe($valor)
+                        {
+                            // Convierte el valor a un número flotante
+                            $numero = floatval($valor);
+
+                            // Redondea el número al entero más cercano
+                            $numeroRedondeado = intval(round($numero));
+
+                            // Tabla de correspondencia
+                            $tabla = [
+                                91 => 6.35,
+                                92 => 5.04,
+                                93 => 4.00,
+                                94 => 3.17,
+                                95 => 2.52,
+                                96 => 2.00,
+                                97 => 1.59,
+                                98 => 1.26,
+                                99 => 1.00,
+                                100 => 0.79,
+                                101 => 0.63,
+                                102 => 0.50,
+                                103 => 0.40,
+                                104 => 0.31,
+                                105 => 0.25
+                            ];
+
+                            // Verifica si el número redondeado existe en la tabla
+                            if (array_key_exists($numeroRedondeado, $tabla)) {
+                                return $tabla[$numeroRedondeado];
+                            } else {
+                                return 'NA';
+                            }
+                        }
+
+
+
+                        // =========================================================================================================================
+                        // =========================================================================================================================
+
+
+                        // ====================================================== INSERCION DE DATOS ===================================================================
+                        // =========================================================================================================================
+
+                        switch (intval($request['tipoArchivo'])) {
+                            case 1: // Excel con el formato de puntos de la LMPE
+
+
+                                break;
+                            case 2: // 7.2.- Tabla de resultados de la determinación del NER
+
+                                DB::statement('ALTER TABLE reporteruidopuntoner AUTO_INCREMENT = 1;');
+
+
+                                //Limpiamos, Validamos y Insertamos todos los datos del Excel
+                                foreach ($datosGenerales as $rowData) {
+
+                                    $punto = reporteruidopuntonerModel::create([
+                                        'proyecto_id' => $proyecto_id,
+                                        'registro_id' => $registro_id,
+                                        'reporteruidoarea_id' => isset($IdAreas[$rowData['C']]) ? $IdAreas[$rowData['C']] : null,
+                                        'reporteruidopuntoner_punto' => is_null($rowData['A']) ? null : $rowData['A'],
+                                        'reporteruidopuntoner_identificacion' => is_null($rowData['D']) ? null : $rowData['D'],
+                                        'reporteruidopuntoner_ner' => is_null($rowData['B']) ? null : $rowData['B'],
+                                        'reporteruidopuntoner_RdB' => NULL,
+                                        'reporteruidopuntoner_lmpe' => $lmpe,
+                                        'reporteruidopuntoner_tmpe' => is_null($rowData['B']) ? 'NA' : calculartmpe($rowData['B']),
+                                        'reporteruidopuntoner_ubicacion' => $ubicaciones[$rowData['A']],
+
+                                    ]);
+
+
+
+                                    $frecuencias_bandasoctava = array('31.5', '63', '125', '250', '500', '1K', '2K', '4K', '8K');
+                                    foreach ($frecuencias_bandasoctava as $key => $value) {
+                                        $frecuencia = reporteruidopuntonerfrecuenciasModel::create([
+                                            'reporteruidopuntoner_id' => $punto->id,
+                                            'reporteruidopuntonerfrecuencias_orden' => ($key + 1),
+                                            'reporteruidopuntonerfrecuencias_frecuencia' => $value,
+                                            'reporteruidopuntonerfrecuencias_nivel' => NULL
+                                        ]);
+                                    }
+
+                                    $puntosInsertados++;
+                                }
+
+                                break;
+                            case 3: // Excel con el formato de puntos de la LMPE, la fecha de evaluación y la fecha de entrega
+
+                                break;
+                        }
+
+                        //RETORNAMOS UN MENSAJE DE CUANTOS INSERTO 
+                        return response()->json(['msj' => 'Total de puntos insertados : ' . $puntosInsertados . ' de ' . $totalPuntos, 'code' => 200]);
+                    } else {
+
+                        return response()->json(["msj" => 'No se ha subido ningún archivo Excel', "code" => 500]);
+                    }
+                } catch (Exception $e) {
+
+                    return response()->json(['msj' => 'Se produjo un error al intentar cargar los puntos, inténtelo de nuevo o comuníquelo con el responsable ' . ' ---- ' . $e->getMessage(), 'code' => 500]);
+                }
+            }
+
+
+
+
+
+
+
             // TABLAS
             //============================================================
 
@@ -6495,23 +6047,18 @@ class reporteruidoController extends Controller
                     $request['registro_id'] = $reporte->id;
                     $puntoner = reporteruidopuntonerModel::create($request->all());
 
-                    if ($request->reporteruidocategoria_id) {
-                        DB::statement('ALTER TABLE reporteruidopuntonercategorias AUTO_INCREMENT = 1;');
+                    //====================== DESACTIVAMOS LA INSERCION DE LAS CATEGORIAS YA QUE NO ES NECSARIO PARA ESTE PUNTO
+                    // if ($request->reporteruidocategoria_id) {
+                    //     DB::statement('ALTER TABLE reporteruidopuntonercategorias AUTO_INCREMENT = 1;');
 
-                        foreach ($request->reporteruidocategoria_id as $key => $value) {
-                            $categoria = reporteruidopuntonercategoriasModel::create([
-                                'reporteruidopuntoner_id' => $puntoner->id,
-                                'reporteruidocategoria_id' => $value,
-                                'reporteruidopuntonercategorias_total' => $request['reporteruidopuntonercategorias_total'][$key],
-                                'reporteruidopuntonercategorias_geo' => $request['reporteruidopuntonercategorias_geo'][$key],
-                                'reporteruidopuntonercategorias_ficha' => $request['reporteruidopuntonercategorias_ficha'][$key],
-                                'reporteruidopuntonercategorias_nombre' => $request['reporteruidopuntonercategorias_nombre'][$key]
-                            ]);
-                        }
-                    }
+                    //     foreach ($request->reporteruidocategoria_id as $key => $value) {
+                    //         $categoria = reporteruidopuntonercategoriasModel::create([
+                    //             'reporteruidopuntoner_id' => $puntoner->id, 'reporteruidocategoria_id' => $value, 'reporteruidopuntonercategorias_total' => $request['reporteruidopuntonercategorias_total'][$key], 'reporteruidopuntonercategorias_geo' => $request['reporteruidopuntonercategorias_geo'][$key], 'reporteruidopuntonercategorias_ficha' => $request['reporteruidopuntonercategorias_ficha'][$key], 'reporteruidopuntonercategorias_nombre' => $request['reporteruidopuntonercategorias_nombre'][$key]
+                    //         ]);
+                    //     }
+                    // }
 
                     $frecuencias_bandasoctava = array('31.5', '63', '125', '250', '500', '1K', '2K', '4K', '8K');
-
                     foreach ($frecuencias_bandasoctava as $key => $value) {
                         $frecuencia = reporteruidopuntonerfrecuenciasModel::create([
                             'reporteruidopuntoner_id' => $puntoner->id,
@@ -6528,22 +6075,20 @@ class reporteruidoController extends Controller
                     $puntoner = reporteruidopuntonerModel::findOrFail($request->puntoner_id);
                     $puntoner->update($request->all());
 
-                    if ($request->reporteruidocategoria_id) {
-                        $eliminar_categorias = reporteruidopuntonercategoriasModel::where('reporteruidopuntoner_id', $request->puntoner_id)->delete();
+                    //====================== DESACTIVAMOS LA INSERCION DE LAS CATEGORIAS YA QUE NO ES NECESARIO PARA ESTE PUNTO
 
-                        DB::statement('ALTER TABLE reporteruidopuntonercategorias AUTO_INCREMENT = 1;');
+                    // if ($request->reporteruidocategoria_id) {
+                    //     $eliminar_categorias = reporteruidopuntonercategoriasModel::where('reporteruidopuntoner_id', $request->puntoner_id)->delete();
 
-                        foreach ($request->reporteruidocategoria_id as $key => $value) {
-                            $categoria = reporteruidopuntonercategoriasModel::create([
-                                'reporteruidopuntoner_id' => $puntoner->id,
-                                'reporteruidocategoria_id' => $value,
-                                'reporteruidopuntonercategorias_total' => $request['reporteruidopuntonercategorias_total'][$key],
-                                'reporteruidopuntonercategorias_geo' => $request['reporteruidopuntonercategorias_geo'][$key],
-                                'reporteruidopuntonercategorias_ficha' => $request['reporteruidopuntonercategorias_ficha'][$key],
-                                'reporteruidopuntonercategorias_nombre' => $request['reporteruidopuntonercategorias_nombre'][$key]
-                            ]);
-                        }
-                    }
+                    //     DB::statement('ALTER TABLE reporteruidopuntonercategorias AUTO_INCREMENT = 1;');
+
+                    //     foreach ($request->reporteruidocategoria_id as $key => $value) {
+                    //         $categoria = reporteruidopuntonercategoriasModel::create([
+                    //             'reporteruidopuntoner_id' => $puntoner->id, 'reporteruidocategoria_id' => $value, 'reporteruidopuntonercategorias_total' => $request['reporteruidopuntonercategorias_total'][$key], 'reporteruidopuntonercategorias_geo' => $request['reporteruidopuntonercategorias_geo'][$key], 'reporteruidopuntonercategorias_ficha' => $request['reporteruidopuntonercategorias_ficha'][$key], 'reporteruidopuntonercategorias_nombre' => $request['reporteruidopuntonercategorias_nombre'][$key]
+                    //         ]);
+                    //     }
+                    // }
+
 
                     // Mensaje
                     $dato["msj"] = 'Datos modificados correctamente';

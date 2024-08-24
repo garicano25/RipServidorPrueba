@@ -927,6 +927,9 @@
 							<button type="button" class="btn btn-default waves-effect botoninforme" data-toggle="tooltip" title="Nuevo punto de medición de nivel sonoro continuo" id="boton_reporte_nuevonivelsonoro">
 								<span class="btn-label"><i class="fa fa-plus"></i></span>Punto de medición de nivel sonoro continuo
 							</button>
+							<button type="button" class="btn btn-default waves-effect botoninforme" data-toggle="tooltip" title="Importar puntos de medición de nivel sonoro continuo" id="boton_importar_puntos_71" onclick="abrirModalPuntos(1)">
+								<span class="btn-label"><i class="fa fa-file-excel-o" aria-hidden="true"></i></span> Importar
+							</button>
 						</ol>
 						<table class="table table-hover tabla_info_centrado" width="100%" id="tabla_reporte_7_1">
 							<thead>
@@ -950,9 +953,13 @@
 				<div class="row">
 					<div class="col-12">
 						<ol class="breadcrumb" style="padding: 6px; margin: 10px 0px;">
-							<button type="button" class="btn btn-default waves-effect botoninforme" data-toggle="tooltip" title="Nuevo punto de determinación del NER " id="boton_reporte_nuevopuntoner">
+							<button type="button" class="btn btn-default waves-effect botoninforme LMPE" data-toggle="tooltip" title="Nuevo punto de determinación del NER " id="boton_reporte_nuevopuntoner">
 								<span class="btn-label"><i class="fa fa-plus"></i></span>Punto de determinación del NER
 							</button>
+							<button type="button" class="btn btn-default waves-effect botoninforme LMPE" data-toggle="tooltip" title="Importar puntos de determinación del NER" id="boton_importar_puntos_72" onclick="abrirModalPuntos(2)">
+								<span class="btn-label"><i class="fa fa-file-excel-o" aria-hidden="true"></i></span> Importar
+							</button>
+							<input type="number" class="form-control w-25 text-center" min="1" placeholder="Agrege el LMPE dB(A)" id="reporteruido_lmpe" name="reporteruido_lmpe">
 						</ol>
 						<style type="text/css">
 							#tabla_reporte_7_2 th {
@@ -997,8 +1004,11 @@
 				<div class="row">
 					<div class="col-12">
 						<ol class="breadcrumb" style="padding: 6px; margin: 10px 0px;">
-							<button type="button" class="btn btn-default waves-effect botoninforme" data-toggle="tooltip" title="Nueva dosis de determinación del NER al personal" id="boton_reporte_nuevadosisner">
+							<button type="button" class="btn btn-default waves-effect botoninforme LMPE" data-toggle="tooltip" title="Nueva dosis de determinación del NER al personal" id="boton_reporte_nuevadosisner">
 								<span class="btn-label"><i class="fa fa-plus"></i></span>Dosis de determinación del NER al personal
+							</button>
+							<button type="button" class="btn btn-default waves-effect botoninforme LMPE" data-toggle="tooltip" title="Importar dosis de determinación del NER al personal" id="boton_importar_puntos_73" onclick="abrirModalPuntos(3)">
+								<span class="btn-label"><i class="fa fa-file-excel-o" aria-hidden="true"></i></span> Importar
 							</button>
 						</ol>
 						<style type="text/css">
@@ -2466,7 +2476,9 @@
 							</div>
 						</div>
 					</div>
-					<div class="row">
+					<!-- NO SE HACE USO DE LAS CATEGORIAS PARA ESTE CAMPO -->
+
+					<!-- <div class="row">
 						<div class="col-12">
 							<ol class="breadcrumb" style="padding: 6px; margin: 10px 0px;">
 								<button type="button" class="btn btn-default waves-effect botoninforme" data-toggle="tooltip" title="Agregar categoría evaluada" id="boton_puntoner_nuevacategoria">
@@ -2508,7 +2520,7 @@
 								</table>
 							</div>
 						</div>
-					</div>
+					</div> -->
 				</div>
 				<div class="modal-footer">
 					<button type="button" class="btn btn-default waves-effect" data-dismiss="modal">Cerrar</button>
@@ -2777,6 +2789,68 @@
 </div>
 <!-- ============================================================== -->
 <!-- MODAL-REPORTE-CANCELACION OBSERVACION -->
+<!-- ============================================================== -->
+
+
+<!-- ============================================================== -->
+<!-- MODAL CARGA DE RESULTADOS POR EXCEL-->
+<!-- ============================================================== -->
+<div id="modal_excel_puntos" class="modal fade bs-example-modal-lg" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" style="display: none;">
+	<div class="modal-dialog modal-lg">
+		<div class="modal-content">
+			<form enctype="multipart/form-data" method="post" name="formExcelPuntos" id="formExcelPuntos">
+				<div class="modal-header">
+					<button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+					<h4 class="modal-title">Importar resultador por medio de Excel</h4>
+				</div>
+				<div class="modal-body">
+					<div class="row">
+						{!! csrf_field() !!}
+						<div class="col-12">
+							<input type="hidden" name="tipoArchivo" id="tipoArchivo" value="0">
+							<div class="form-group">
+								<label> Documento Excel *</label>
+								<div class="fileinput fileinput-new input-group" data-provides="fileinput">
+									<div class="form-control" data-trigger="fileinput" id="input_file_excel_documento_puntos">
+										<i class="fa fa-file fileinput-exists"></i>
+										<span class="fileinput-filename"></span>
+									</div>
+									<span class="input-group-addon btn btn-secondary btn-file">
+										<span class="fileinput-new">Seleccione</span>
+										<span class="fileinput-exists">Cambiar</span>
+										<input type="file" accept=".xls,.xlsx" name="excelPuntos" id="excelPuntos" required>
+									</span>
+									<a href="#" class="input-group-addon btn btn-secondary fileinput-exists" data-dismiss="fileinput">Quitar</a>
+								</div>
+							</div>
+						</div>
+					</div>
+					<div class="row mx-2" id="alertaVerificacion" style="display:none">
+						<p class="text-danger"><i class="fa fa-info-circle" aria-hidden="true"></i> Por favor, asegúrese de que el nombre de las Áreas y/o categorías a insertar corresponda con las que están cargadas en el Software. </p>
+					</div>
+					<div class="row mt-3" id="divCargarPuntos" style="display: none;">
+
+						<div class="col-12 text-center">
+							<h2>Cargando datos del EXCEL espere un momento...</h2>
+						</div>
+						<div class="col-12 text-center">
+							<i class='fa fa-spin fa-spinner fa-5x'></i>
+						</div>
+
+					</div>
+				</div>
+				<div class="modal-footer">
+					<button type="button" class="btn btn-default waves-effect" data-dismiss="modal">Cerrar</button>
+					<button type="submit" class="btn btn-danger waves-effect waves-light" id="botonCargarPuntos">
+						Importar datos <i class="fa fa-upload" aria-hidden="true"></i>
+					</button>
+				</div>
+			</form>
+		</div>
+	</div>
+</div>
+<!-- ============================================================== -->
+<!-- MODAL PUNTO 7.1 CARGA DE PUNTOS POR EXCEL -->
 <!-- ============================================================== -->
 
 

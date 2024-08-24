@@ -5479,33 +5479,50 @@ function tabla_reporte_7_2(proyecto_id, reporteregistro_id)
 }
 
 
-$("#boton_reporte_nuevopuntoner").click(function()
-{
-	$('#form_modal_puntoner').each(function(){
-		this.reset();
-	});
+$("#boton_reporte_nuevopuntoner").click(function (e) {
 
-	// Campos Hidden
-	$('#puntoner_id').val(0);
+	valor = $('#reporteruido_lmpe').val();
 
-	// LLenar campos
-	$('#reporteruidopuntoner_lmpe').val(90);
+	if (valor == '') { 
 
-	// Campo ubicaciones
-	$('#reporteruidopuntoner_ubicacion').html(ubicaciones_opciones);
+		e.preventDefault()
+		swal({
+			title: "No existe un LMPA dB(A) para evaluar.",
+			text: "Por favor ingrese un valor en el campo de LMPA dB(A) para evaluar",
+			type: "info",
+			showConfirmButton: true
+		});
 
-	// Campo select areas
-	$('#reporteruidopuntoner_areaid').html(selectareas);
-	mostrar_categoriasarea_puntoner(0, 0);
+	} else {
+		
+		$('#form_modal_puntoner').each(function(){
+			this.reset();
+		});
+	
+		// Campos Hidden
+		$('#puntoner_id').val(0);
+	
+		// LLenar campos
+		$('#reporteruidopuntoner_lmpe').val(valor);
+	
+		// Campo ubicaciones
+		$('#reporteruidopuntoner_ubicacion').html(ubicaciones_opciones);
+	
+		// Campo select areas
+		$('#reporteruidopuntoner_areaid').html(selectareas);
+		mostrar_categoriasarea_puntoner(0, 0);
+	
+		// Campo select categorias
+		$('#puntoner_categorias').html('');
+	
+		// Titulo del modal
+		$('#modal_reporte_puntoner .modal-title').html('Punto de resultado de la determinación del NER');
+	
+		// mostrar modal
+		$('#modal_reporte_puntoner').modal({ backdrop: false });
+		
+	}
 
-	// Campo select categorias
-	$('#puntoner_categorias').html('');
-
-	// Titulo del modal
-	$('#modal_reporte_puntoner .modal-title').html('Punto de resultado de la determinación del NER');
-
-	// mostrar modal
-	$('#modal_reporte_puntoner').modal({backdrop:false});
 });
 
 
@@ -6070,29 +6087,43 @@ function tabla_reporte_7_3(proyecto_id, reporteregistro_id)
 }
 
 
-$("#boton_reporte_nuevadosisner").click(function()
-{
-	$('#form_modal_dosisner').each(function(){
-		this.reset();
-	});
+$("#boton_reporte_nuevadosisner").click(function (e) {
+	
+	valor = $('#reporteruido_lmpe').val();
 
-	// Campos Hidden
-	$('#dosisner_id').val(0);
+	if (valor == '') {
 
-	// LLenar campos
-	$('#reporteruidodosisner_lmpe').val(90);	
-
-	// Campo select areas
-	$('#reporteruidodosisner_areaid').html(selectareas);
-
-	// Campo select categorias
-	$('#reporteruidodosisner_categoriaid').html('<option value=""></option>');
-
-	// Titulo del modal
-	$('#modal_reporte_dosisner .modal-title').html('Dosis de determinación del NER al personal');
-
-	// mostrar modal
-	$('#modal_reporte_dosisner').modal({backdrop:false});
+		e.preventDefault()
+		swal({
+			title: "No existe un LMPA dB(A) para evaluar.",
+			text: "Por favor ingrese un valor en el campo de LMPA dB(A) para evaluar",
+			type: "info",
+			showConfirmButton: true
+		});
+	} else {
+		
+		$('#form_modal_dosisner').each(function(){
+			this.reset();
+		});
+	
+		// Campos Hidden
+		$('#dosisner_id').val(0);
+	
+		// LLenar campos
+		$('#reporteruidodosisner_lmpe').val(valor);	
+	
+		// Campo select areas
+		$('#reporteruidodosisner_areaid').html(selectareas);
+	
+		// Campo select categorias
+		$('#reporteruidodosisner_categoriaid').html('<option value=""></option>');
+	
+		// Titulo del modal
+		$('#modal_reporte_dosisner .modal-title').html('Dosis de determinación del NER al personal');
+	
+		// mostrar modal
+		$('#modal_reporte_dosisner').modal({backdrop:false});
+	}
 });
 
 
@@ -10448,3 +10479,261 @@ function obtenerdatos() {
         }
     });
 }
+
+// CAMPO DE LMPE 
+
+
+$('#reporteruido_lmpe').on('change', function () {
+
+	if ($(this).val() != '') {
+		
+		$.ajax({
+			type: "GET",
+			dataType: "json",
+			url: "/guardarCampolmpe/" + proyecto.id + "/" + reporteregistro_id +"/"+ $('#reporteruido_lmpe').val(),
+			data: {},
+			cache: false,
+			success: function(dato) {
+			},
+
+			error: function(xhr, status, error) {
+				console.log('Error: ' + error);
+				swal('Error', 'Datos no cargados LMPE', 'error');
+			}
+		});
+	}
+ 
+});
+
+///FUNCION BOTONES DE INSERCION POR MEDIO DE EXCEL
+function abrirModalPuntos(tipo) {
+
+	valor = $('#reporteruido_lmpe').val();
+	if (tipo == 1) {
+		$('#formExcelPuntos')[0].reset();
+		
+		// Campos Hidden
+		$('#tipoArchivo').val(tipo);
+	
+		$('#divCargarPuntos').css('display', 'none');
+		$('#alertaVerificacion').css('display', 'none');
+	
+	
+		$('#modal_excel_puntos').modal({backdrop:false});
+		
+	} else {
+		
+		if (valor == '') {
+	
+			e.preventDefault()
+			swal({
+				title: "No existe un LMPA dB(A) para evaluar.",
+				text: "Por favor ingrese un valor en el campo de LMPA dB(A) para evaluar",
+				type: "info",
+				showConfirmButton: true
+			});
+	
+		} else { 
+	
+			$('#formExcelPuntos')[0].reset();
+			
+			// Campos Hidden
+			$('#tipoArchivo').val(tipo);
+		
+			$('#divCargarPuntos').css('display', 'none');
+			$('#alertaVerificacion').css('display', 'none');
+		
+		
+			$('#modal_excel_puntos').modal({backdrop:false});
+	
+		}
+
+	}
+
+}
+
+
+ $('#excelPuntos').change(function () {
+        
+	if ($(this).val()) {
+		
+		$('#alertaVerificacion').css('display', 'block');
+
+	} else {
+		$('#alertaVerificacion').css('display', 'none');
+		
+	}
+});
+
+
+$("#botonCargarPuntos").click(function() {
+	var guardar = 0;
+
+	// valida campos vacios
+	var valida = this.form.checkValidity();
+	if (valida){
+		if ($("#excelPersonal").val() != ""){
+			// Tipo archivo
+			var archivo = $("#excelPuntos").val();
+			var extension = archivo.substring(archivo.lastIndexOf("."));
+
+			// valida tipo de archivo
+			if(extension == ".xlsx" || extension == ".XLSX"){
+				guardar = 1;
+			}
+			else{
+				// mensaje
+				swal({
+					title: "Tipo de archivo incorrecto "+extension,
+					text: "Solo se pueden cargar archivos tipo .xlsx",
+					type: "warning", // warning, error, success, info
+					buttons: {
+						visible: false, // true , false
+					},
+					timer: 3000,
+					showConfirmButton: false
+				});
+
+				guardar = 0;
+				return false;
+			}
+		}
+		else{
+			guardar = 0;
+		}
+
+		// guardar
+		if (guardar == 1){
+		
+			swal({   
+				title: "¿Está  seguro de cargar este documento?",   
+				text: "Está acción  no se puede revertir",   
+				type: "warning",   
+				showCancelButton: true,   
+				confirmButtonColor: "#DD6B55",   
+				confirmButtonText: "Guardar!",   
+				cancelButtonText: "Cancelar!",   
+				closeOnConfirm: false,   
+				closeOnCancel: false 
+			}, function (isConfirm) {   
+				
+				if (isConfirm){
+					// cerrar msj confirmacion
+					swal.close();
+
+					// enviar datos
+					$('#formExcelPuntos').ajaxForm({
+						dataType: 'json',
+						type: 'POST',
+						url: "/reporteruido",
+						data: {
+							opcion: 1000,
+							registro_id: reporteregistro_id,
+							proyecto_id: proyecto.id
+						},
+						contentType: false,
+						processData: false,
+						success: function (dato) {
+
+							// actualizar boton
+							$('#botonCargarPuntos').prop('disabled', false);
+							$('#divCargarPuntos').css('display', 'none');
+							
+							if (dato.code == 200) {
+								
+								// cerrar modal
+								$('#modal_excel_puntos').modal('hide');
+
+								// mensaje
+								swal({
+									title: "Los datos fueron importados exitosamente",
+									text: ""+dato.msj,
+									type: "success", 
+									buttons: {visible: true},
+									showConfirmButton: true,
+									showCancelButton: false
+								});
+
+
+								//Recargamos las tabla correspondientes
+								if (tipo == 1) { //Punto 7.1
+									tabla_reporte_7_3(proyecto.id, reporteregistro_id);
+									
+								} else if (tipo == 2) { //Punto 7.2
+
+									tabla_reporte_7_2(proyecto.id, reporteregistro_id);
+ 
+								} else if (tipo == 3) { //Punto 7.3
+									
+									tabla_reporte_7_3(proyecto.id, reporteregistro_id);
+
+								}
+
+							
+							} else {
+
+								swal({
+									title: "Ocurrio un error al intentar importar los datos.",
+									// text: ""+dato.msj,
+									type: "error", // warning, error, success, info
+									buttons: {visible: true},
+									showConfirmButton: true,
+									showCancelButton: false
+								});
+							}
+
+							
+						},
+						beforeSend: function () {
+
+							$('#botonCargarPuntos').prop('disabled', true);
+							$('#divCargarPuntos').css('display', 'block');
+						},
+						error: function(dato) {
+							
+							// actualiza boton
+							$('#botonCargarPuntos').prop('disabled', false);
+							$('#divCargarPuntos').css('display', 'none');
+
+							// mensaje
+							swal({
+								title: "Error al cargar los datos.",
+								text: ""+dato.msj,
+								type: "error", // warning, error, success, info
+								buttons: {
+									visible: false, // true , false
+								},
+								timer: 1500,
+								showConfirmButton: false
+							});
+
+							return false;
+						}
+					}).submit();
+					return false;
+				}
+				else 
+				{
+					// mensaje
+					swal({
+						title: "Cancelado",
+						text: "Acción cancelada",
+						type: "error", // warning, error, success, info
+						buttons: {
+							visible: false, // true , false
+						},
+						timer: 1500,
+						showConfirmButton: false
+					});   
+				} 
+			});
+			return false;
+		}
+	}
+});
+
+
+
+
+
+

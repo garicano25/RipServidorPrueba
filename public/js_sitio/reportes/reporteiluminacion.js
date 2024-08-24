@@ -4674,6 +4674,11 @@ function tabla_reporte_reflexionresultados(proyecto_id, reporteiluminacion_id)
 						orderable: false,
 					},
 					{
+						data: "reporteiluminacionpuntos_concepto",
+						defaultContent: "-",
+						orderable: false,
+					},
+					{
 						data: "reporteiluminacionpuntos_nopoe",
 						defaultContent: "-",
 						orderable: false,
@@ -4818,8 +4823,8 @@ function tabla_reporte_matrizexposicion(proyecto_id, reporteiluminacion_id)
 				$('#tabla_reporte_matrizexposicion').html('<thead>'+
 																'<tr>'+
 																	'<th rowspan="3"><span class="rotartexto">Contador</span></th>'+
-																	'<th rowspan="3">Subdirección o<br>corporativo</th>'+
-																	'<th rowspan="3">Gerencia o<br>activo</th>'+
+																	// '<th rowspan="3">Subdirección o<br>corporativo</th>'+
+																	// '<th rowspan="3">Gerencia o<br>activo</th>'+
 																	'<th rowspan="3">Instalación</th>'+
 																	'<th rowspan="3">Área de<br>referencia<br>en atlas<br>de riesgo</th>'+
 																	'<th rowspan="3">Nombre</th>'+
@@ -4889,16 +4894,16 @@ function tabla_reporte_matrizexposicion(proyecto_id, reporteiluminacion_id)
 							// className: '',
 							orderable: false,
 						},
-						{
-							data: "catsubdireccion_nombre",
-							defaultContent: "-",
-							orderable: false,
-						},
-						{
-							data: "gerencia_activo",
-							defaultContent: "-",
-							orderable: false,
-						},
+						// {
+						// 	data: "catsubdireccion_nombre",
+						// 	defaultContent: "-",
+						// 	orderable: false,
+						// },
+						// {
+						// 	data: "gerencia_activo",
+						// 	defaultContent: "-",
+						// 	orderable: false,
+						// },
 						{
 							data: "reporteiluminacionarea_instalacion",
 							defaultContent: "-",
@@ -5053,8 +5058,8 @@ function tabla_reporte_matrizexposicion(proyecto_id, reporteiluminacion_id)
 				$('#tabla_reporte_matrizexposicion').html('<thead>'+
 																'<tr>'+
 																	'<th><span class="rotartexto">Contador</span></th>'+
-																	'<th>Subdirección o<br>corporativo</th>'+
-																	'<th>Gerencia o<br>activo</th>'+
+																	// '<th>Subdirección o<br>corporativo</th>'+
+																	// '<th>Gerencia o<br>activo</th>'+
 																	'<th>Instalación</th>'+
 																	'<th>Área de referencia<br>en atlas de riesgo</th>'+
 																	'<th>Nombre</th>'+
@@ -5104,16 +5109,16 @@ function tabla_reporte_matrizexposicion(proyecto_id, reporteiluminacion_id)
 							// className: '',
 							orderable: false,
 						},
-						{
-							data: "catsubdireccion_nombre",
-							defaultContent: "-",
-							orderable: false,
-						},
-						{
-							data: "gerencia_activo",
-							defaultContent: "-",
-							orderable: false,
-						},
+						// {
+						// 	data: "catsubdireccion_nombre",
+						// 	defaultContent: "-",
+						// 	orderable: false,
+						// },
+						// {
+						// 	data: "gerencia_activo",
+						// 	defaultContent: "-",
+						// 	orderable: false,
+						// },
 						{
 							data: "reporteiluminacionarea_instalacion",
 							defaultContent: "-",

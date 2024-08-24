@@ -1100,6 +1100,7 @@
 									<th rowspan="3" width="60">No.<br>Medición</th>
 									<th rowspan="2" colspan="3" width="120">Periodos de<br>medición</th>
 									<th rowspan="3" width="130">Área</th>
+									<th rowspan="3" width="130">Ubicación</th>
 									<th rowspan="3" width="50">No.<br>POE</th>
 									<th rowspan="3">Categoría</th>
 									<th rowspan="2" colspan="2">NMPR, K<sub>f</sub> (%)</th>
@@ -1181,8 +1182,8 @@
 							{{-- <thead>
 									<tr>
 										<th rowspan="3"><span class="rotartexto">Contador</span></th>
-										<th rowspan="3">Subdirección o<br>corporativo</th>
-										<th rowspan="3">Gerencia o<br>activo</th>
+										<!-- <th rowspan="3">Subdirección o<br>corporativo</th>
+										<th rowspan="3">Gerencia o<br>activo</th> -->
 										<th rowspan="3">Instalación</th>
 										<th rowspan="3">Área de<br>referencia<br>en atlas<br>de riesgo</th>
 										<th rowspan="3">Nombre</th>

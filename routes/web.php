@@ -1096,7 +1096,7 @@ Route::get('reporteruidovista/{proyecto_id}', ['as' => 'reporteruido.reporteruid
 
 Route::get('reporteruidodatosgenerales/{proyecto_id}/{agente_id}/{agente_nombre}', ['as' => 'reporteruido.reporteruidodatosgenerales', 'uses' => 'reportes\reporteruidoController@reporteruidodatosgenerales']);
 
-
+Route::get('guardarCampolmpe/{proyecto_id}/{id}/{valor}', ['as' => 'reporteruido.guardarCampolmpe', 'uses' => 'reportes\reporteruidoController@guardarCampolmpe']);
 
 
 Route::get('reporteruidotabladefiniciones/{proyecto_id}/{agente_nombre}/{reporteregistro_id}', ['as' => 'reporteruido.reporteruidotabladefiniciones', 'uses' => 'reportes\reporteruidoController@reporteruidotabladefiniciones']);
