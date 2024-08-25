@@ -723,7 +723,7 @@ class reporteruidowordController extends Controller
                 $fuente = 'Arial';
                 $font_size = 10;
             } else {
-                $fuente = 'Montserrat';
+                $fuente = 'Arial';
                 $font_size = 10;
             }
 
@@ -3062,7 +3062,7 @@ class reporteruidowordController extends Controller
                 $fuente = 'Arial';
                 $font_size = 6;
             } else {
-                $fuente = 'Montserrat';
+                $fuente = 'Arial';
                 $font_size = 6;
             }
 
