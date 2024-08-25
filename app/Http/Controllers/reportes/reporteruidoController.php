@@ -325,6 +325,7 @@ class reporteruidoController extends Controller
                                                 reporteruido.reporteruido_canceladonombre,
                                                 reporteruido.reporteruido_canceladofecha,
                                                 reporteruido.reporteruido_canceladoobservacion,
+                                                reporteruido.reporteruido_lmpe,
                                                 reporteruido.created_at,
                                                 reporteruido.updated_at 
                                             FROM

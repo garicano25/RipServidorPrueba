@@ -2848,8 +2848,8 @@ class reporteiluminacionwordController extends Controller
             $table->addRow(200, array('tblHeader' => true));
             $table->addCell($ancho_col_1, $combinar_fila_encabezado2)->addTextRun($centrado2)->addText('No. Medición', $encabezado_texto2);
             $table->addCell(2100, array('gridSpan' => 3, 'valign' => 'center', 'bgColor' => '0BACDB'))->addTextRun($centrado2)->addText('Hora de medición', $encabezado_texto2);
-            $table->addCell($ancho_col_5, $combinar_fila_encabezado2_celeste)->addTextRun($centrado2)->addText('Ubicación', $encabezado_texto2);
-            $table->addCell($ancho_col_6, $combinar_fila_encabezado2_celeste)->addTextRun($centrado2)->addText('Concepto', $encabezado_texto2);
+            $table->addCell($ancho_col_5, $combinar_fila_encabezado2_celeste)->addTextRun($centrado2)->addText('Área', $encabezado_texto2);
+            $table->addCell($ancho_col_6, $combinar_fila_encabezado2_celeste)->addTextRun($centrado2)->addText('Ubicación', $encabezado_texto2);
             $table->addCell($ancho_col_7, $combinar_fila_encabezado2_celeste)->addTextRun($centrado2)->addText('No. de POE', $encabezado_texto2);
             $table->addCell($ancho_col_8, $combinar_fila_encabezado2_celeste)->addTextRun($centrado2)->addText('Categoría', $encabezado_texto2);
             $table->addCell($ancho_col_9, $combinar_fila_encabezado2_celeste)->addTextRun($centrado2)->addText('NIMR (Lux)', $encabezado_texto2);
@@ -2956,7 +2956,7 @@ class reporteiluminacionwordController extends Controller
             $table->addRow(200, array('tblHeader' => true));
             $table->addCell($ancho_col_1, $combinar_fila_encabezado2)->addTextRun($centrado2)->addText('No. Medición', $encabezado_texto2);
             $table->addCell(2100, array('gridSpan' => 3, 'valign' => 'center', 'bgColor' => '0BACDB'))->addTextRun($centrado2)->addText('Hora de medición', $encabezado_texto2);
-            $table->addCell($ancho_col_5, $combinar_fila_encabezado2_celeste)->addTextRun($centrado2)->addText('Ubicación', $encabezado_texto2);
+            $table->addCell($ancho_col_5, $combinar_fila_encabezado2_celeste)->addTextRun($centrado2)->addText('Área', $encabezado_texto2);
             $table->addCell($ancho_col_6, $combinar_fila_encabezado2_celeste)->addTextRun($centrado2)->addText('No. de POE', $encabezado_texto2);
             $table->addCell($ancho_col_7, $combinar_fila_encabezado2_celeste)->addTextRun($centrado2)->addText('Categoría', $encabezado_texto2);
             $table->addCell(1000, array('gridSpan' => 2, 'valign' => 'center', 'bgColor' => '0BACDB', 'vMerge' => 'restart'))->addTextRun($centrado2)->addText('NMPR, Kf<w:br/>(%)', $encabezado_texto2);
