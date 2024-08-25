@@ -3710,7 +3710,8 @@ class reporteruidoController extends Controller
 
             // respuesta
             $dato["data"] = $puntos_bandasoctava;
-            $dato["total"] = $total;
+            // $dato["total"] = $total; //DESCOMENTAR DESPUES DE CORREGIR TODO
+            $dato["total"] = 0;
             $dato["msj"] = 'Datos consultados correctamente';
             return response()->json($dato);
         } catch (Exception $e) {
