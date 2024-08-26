@@ -3044,7 +3044,7 @@ class reporteruidowordController extends Controller
 
                     $table->addCell($ancho_col_8, $combinar_fila)->addTextRun($centrado)->addText($value->reporteruidopuntoner_ner, $texto);
                     $table->addCell($ancho_col_9, $combinar_fila)->addTextRun($centrado)->addText($value->reporteruidopuntoner_RdB, $texto);
-                    $table->addCell($ancho_col_10, $combinar_fila)->addTextRun($centrado)->addText($resultado, $texto);
+                    $table->addCell($ancho_col_10, $combinar_fila)->addTextRun($centrado)->addText($value->resultado, $texto);
 
                     $punto2 = $value->reporteruidopuntoner_punto;
                 } else {
