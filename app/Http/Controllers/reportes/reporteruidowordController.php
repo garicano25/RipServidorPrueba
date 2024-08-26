@@ -183,8 +183,18 @@ class reporteruidowordController extends Controller
 
         $reportefecha = explode("-", $proyecto->proyecto_fechaentrega);
         $meses = [
-            1 => 'enero', 2 => 'febrero', 3 => 'marzo', 4 => 'abril', 5 => 'mayo', 6 => 'junio',
-            7 => 'julio', 8 => 'agosto', 9 => 'septiembre', 10 => 'octubre', 11 => 'noviembre', 12 => 'diciembre'
+            1 => 'enero',
+            2 => 'febrero',
+            3 => 'marzo',
+            4 => 'abril',
+            5 => 'mayo',
+            6 => 'junio',
+            7 => 'julio',
+            8 => 'agosto',
+            9 => 'septiembre',
+            10 => 'octubre',
+            11 => 'noviembre',
+            12 => 'diciembre'
         ];
 
         $texto = str_replace("INSTALACION_NOMBRE", $proyecto->proyecto_clienteinstalacion, $texto);
@@ -232,8 +242,8 @@ class reporteruidowordController extends Controller
                 $contratoId = $proyecto->contrato_id;
 
                 $clienteInfo = DB::table('contratos_clientes as cc')
-                ->leftJoin('cliente as c', 'c.id', '=', 'cc.CLIENTE_ID')
-                ->where('cc.ID_CONTRATO', $contratoId)
+                    ->leftJoin('cliente as c', 'c.id', '=', 'cc.CLIENTE_ID')
+                    ->where('cc.ID_CONTRATO', $contratoId)
                     ->select(
                         'cc.NUMERO_CONTRATO',
                         'cc.DESCRIPCION_CONTRATO',
@@ -270,8 +280,8 @@ class reporteruidowordController extends Controller
 
             // PORTADA EXTERNA
             $titulo_partida = clientepartidasModel::where('CONTRATO_ID', $recsensorial->contrato_id)
-            ->where('clientepartidas_tipo', 2) // Informe de resultados
-            ->where('catprueba_id', 1) // ruido
+                ->where('clientepartidas_tipo', 2) // Informe de resultados
+                ->where('catprueba_id', 1) // ruido
                 ->orderBy('updated_at', 'DESC')
                 ->get();
 
@@ -281,18 +291,21 @@ class reporteruidowordController extends Controller
                 //Para el valor que lleva proyecto se utilizo: descripcion de la partida, Numero del contrato y la descripcion del contrato
                 $plantillaword->setValue('proyecto_portada', str_replace("\n", "<w:br/>", $titulo_partida[0]->clientepartidas_descripcion) . ' - Contrato: ' . $clienteInfo[0]->NUMERO_CONTRATO);
 
-                $plantillaword->setValue('PARTIDA',
+                $plantillaword->setValue(
+                    'PARTIDA',
                     str_replace("\n", "<w:br/>", $titulo_partida[0]->clientepartidas_descripcion)
                 );
             } else {
 
-                $plantillaword->setValue('PARTIDA',
+                $plantillaword->setValue(
+                    'PARTIDA',
                     ""
                 );
                 $plantillaword->setValue('proyecto_portada', 'El proyecto no esta vinculado a ningun contrato.');
             }
 
-            $plantillaword->setValue('folio_portada',
+            $plantillaword->setValue(
+                'folio_portada',
                 $proyecto->proyecto_folio
             );
             $plantillaword->setValue('razon_social_portada', $cliente->cliente_RazonSocial);
@@ -307,7 +320,7 @@ class reporteruidowordController extends Controller
             $plantillaword->setValue('instalación_portada', $OPCION_PORTADA1 . $OPCION_PORTADA2 . $OPCION_PORTADA3 . $OPCION_PORTADA4 . $OPCION_PORTADA5 . $OPCION_PORTADA6);
 
             $fecha = $agente[0]->reporte_mes . ' del ' . $agente[0]->reporteruido_fecha;
-            $plantillaword->setValue('lugar_fecha_portada', $recsensorial->recsensorial_direccion . ' '. $fecha);
+            $plantillaword->setValue('lugar_fecha_portada', $recsensorial->recsensorial_direccion . ' ' . $fecha);
             $plantillaword->setValue('PORTADA_FECHA', $fecha);
 
             //IMAGEN DE LA PORTADA
@@ -334,7 +347,7 @@ class reporteruidowordController extends Controller
             $NIVEL_PORTADA4 = is_null($recursos[0]->OPCION_PORTADA4) ? "" : $recursos[0]->OPCION_PORTADA4 . "<w:br />";
             $NIVEL_PORTADA5 = is_null($recursos[0]->OPCION_PORTADA5) ? "" : $recursos[0]->OPCION_PORTADA5 . "<w:br />";
             $NIVEL_PORTADA6 = is_null($recursos[0]->OPCION_PORTADA6) ? "" : $recursos[0]->OPCION_PORTADA6 . "<w:br />";
-            $plantillaword->setValue('ESTRUCTURA',$NIVEL_PORTADA1 . $NIVEL_PORTADA2 . $NIVEL_PORTADA3 . $NIVEL_PORTADA4 . $NIVEL_PORTADA5 . $NIVEL_PORTADA6);
+            $plantillaword->setValue('ESTRUCTURA', $NIVEL_PORTADA1 . $NIVEL_PORTADA2 . $NIVEL_PORTADA3 . $NIVEL_PORTADA4 . $NIVEL_PORTADA5 . $NIVEL_PORTADA6);
 
             if (
                 $proyecto->requiereContrato == 1
@@ -344,19 +357,22 @@ class reporteruidowordController extends Controller
                 $plantillaword->setValue('CONTRATO', $clienteInfo[0]->NUMERO_CONTRATO);
                 $plantillaword->setValue('DESCRIPCION_CONTRATO', $clienteInfo[0]->DESCRIPCION_CONTRATO);
 
-                $plantillaword->setValue('PIE_PAGINA',
+                $plantillaword->setValue(
+                    'PIE_PAGINA',
                     $clienteInfo[0]->CONTRATO_PLANTILLA_PIEPAGINA
                 );
                 $plantillaword->setValue('INFORME_REVISION', "");
             } else {
 
-                $plantillaword->setValue('CONTRATO',
+                $plantillaword->setValue(
+                    'CONTRATO',
                     ""
                 );
                 $plantillaword->setValue('DESCRIPCION_CONTRATO', "");
                 $plantillaword->setValue('TITULO_CONTRATO', "");
 
-                $plantillaword->setValue('PIE_PAGINA',
+                $plantillaword->setValue(
+                    'PIE_PAGINA',
                     ""
                 );
                 $plantillaword->setValue('INFORME_REVISION', "");
@@ -448,7 +464,7 @@ class reporteruidowordController extends Controller
             } else {
                 $plantillaword->setValue('INFORME_REVISION', $proyecto->proyecto_folio . ' - Informe de ' . $agente_nombre);
             }
-           
+
 
 
             // DEFINICIONES
@@ -521,7 +537,8 @@ class reporteruidowordController extends Controller
             if (count($sql) > 1) {
                 foreach ($sql as $key => $value) {
                     $definiciones_fuentes[] = array(
-                        'fuente_descripcion' => $value->fuente, 'fuente_simbolo' => ' ' . $definiciones_simbolo[$key] . '*'
+                        'fuente_descripcion' => $value->fuente,
+                        'fuente_simbolo' => ' ' . $definiciones_simbolo[$key] . '*'
                     );
 
 
@@ -533,7 +550,8 @@ class reporteruidowordController extends Controller
                 }
             } else {
                 $definiciones_fuentes[] = array(
-                    'fuente_descripcion' => $sql[0]->fuente, 'fuente_simbolo' => ''
+                    'fuente_descripcion' => $sql[0]->fuente,
+                    'fuente_simbolo' => ''
                 );
 
                 $definicionesfuentes = 'Fuentes: ' . $sql[0]->fuente;
@@ -2870,18 +2888,21 @@ class reporteruidowordController extends Controller
                                         reporteruidopuntonerfrecuencias.reporteruidopuntonerfrecuencias_orden,
                                         reporteruidopuntonerfrecuencias.reporteruidopuntonerfrecuencias_frecuencia,
                                         IFNULL(reporteruidopuntonerfrecuencias.reporteruidopuntonerfrecuencias_nivel, "") AS reporteruidopuntonerfrecuencias_nivel,
-                                        ROUND((reporteruidopuntoner.reporteruidopuntoner_ner - IFNULL(reporteruidopuntoner.reporteruidopuntoner_RdB, 0)), 1) AS resultado
+                                        -- ROUND((reporteruidopuntoner.reporteruidopuntoner_ner - IFNULL(reporteruidopuntoner.reporteruidopuntoner_RdB, 0)), 1) AS resultado
+                                        IFNULL(reporteruidopuntoner.reporteruidopuntoner_NRE, "NO ESPECIFICADO") AS resultado
+
                                     FROM
                                         reporteruidopuntoner
                                         LEFT JOIN reportearea ON reporteruidopuntoner.reporteruidoarea_id = reportearea.id 
                                         RIGHT JOIN reporteruidopuntonerfrecuencias ON reporteruidopuntoner.id = reporteruidopuntonerfrecuencias.reporteruidopuntoner_id
                                     WHERE
-                                        reporteruidopuntoner.proyecto_id = ' . $proyecto_id . ' 
-                                        AND reporteruidopuntoner.registro_id = ' . $reporteregistro_id . ' 
+                                        reporteruidopuntoner.proyecto_id = ? 
+                                        AND reporteruidopuntoner.registro_id = ?
+                                        AND (reporteruidopuntoner.reporteruidopuntoner_RdB IS NOT NULL OR reporteruidopuntoner.reporteruidopuntoner_RdB <> "")
                                         AND reportearea.created_at >= "2021-06-01"
                                     ORDER BY
                                         reporteruidopuntoner.reporteruidopuntoner_punto ASC,
-                                        reporteruidopuntonerfrecuencias.reporteruidopuntonerfrecuencias_orden ASC');
+                                        reporteruidopuntonerfrecuencias.reporteruidopuntonerfrecuencias_orden ASC', [$proyecto_id, $reporteregistro_id]);
             } else {
                 $sql = DB::select('SELECT
                                         reporteruidopuntoner.id,
@@ -2899,18 +2920,20 @@ class reporteruidowordController extends Controller
                                         reporteruidopuntonerfrecuencias.reporteruidopuntonerfrecuencias_orden,
                                         reporteruidopuntonerfrecuencias.reporteruidopuntonerfrecuencias_frecuencia,
                                         IFNULL(reporteruidopuntonerfrecuencias.reporteruidopuntonerfrecuencias_nivel, "") AS reporteruidopuntonerfrecuencias_nivel,
-                                        ROUND((reporteruidopuntoner.reporteruidopuntoner_ner - IFNULL(reporteruidopuntoner.reporteruidopuntoner_RdB, 0)), 1) AS resultado
+                                        -- ROUND((reporteruidopuntoner.reporteruidopuntoner_ner - IFNULL(reporteruidopuntoner.reporteruidopuntoner_RdB, 0)), 1) AS resultado
+                                        IFNULL(reporteruidopuntoner.reporteruidopuntoner_NRE, "NO ESPECIFICADO") AS resultado
                                     FROM
                                         reporteruidopuntoner
                                         LEFT JOIN reporteruidoarea ON reporteruidopuntoner.reporteruidoarea_id = reporteruidoarea.id 
                                         RIGHT JOIN reporteruidopuntonerfrecuencias ON reporteruidopuntoner.id = reporteruidopuntonerfrecuencias.reporteruidopuntoner_id
                                     WHERE
-                                        reporteruidopuntoner.proyecto_id = ' . $proyecto_id . ' 
-                                        AND reporteruidopuntoner.registro_id = ' . $reporteregistro_id . ' 
+                                        reporteruidopuntoner.proyecto_id = ?
+                                        AND reporteruidopuntoner.registro_id = ? 
+                                        AND (reporteruidopuntoner.reporteruidopuntoner_RdB IS NOT NULL OR reporteruidopuntoner.reporteruidopuntoner_RdB <> "")
                                         AND reporteruidoarea.created_at <= "2021-05-31"
                                     ORDER BY
                                         reporteruidopuntoner.reporteruidopuntoner_punto ASC,
-                                        reporteruidopuntonerfrecuencias.reporteruidopuntonerfrecuencias_orden ASC');
+                                        reporteruidopuntonerfrecuencias.reporteruidopuntonerfrecuencias_orden ASC', [$proyecto_id, $reporteregistro_id]);
             }
 
 
@@ -3739,7 +3762,7 @@ class reporteruidowordController extends Controller
                 // CATEGORIAS CRITICAS
 
                 $categorias = DB::select('CALL sp_categorias_criticas_ruido_b(?,?,?)', [$proyecto_id, $reporteregistro_id, 2]);
-                
+
                 // $categorias = DB::select('SELECT
                 //                                 TABLA.proyecto,
                 //                                 TABLA.registro,
@@ -4383,8 +4406,6 @@ class reporteruidowordController extends Controller
 
                     // $plantillaword->setValue('PUNTO_' . $i . '_DESCRIPCION', "Punto " . $fotos[$i]->proyectoevidenciafoto_nopunto . " " . $fotos[$i]->proyectoevidenciafoto_descripcion);
                     $plantillaword->setValue('PUNTO_' . $i . '_DESCRIPCION', $fotos[$i]->proyectoevidenciafoto_descripcion);
-
-                
                 }
 
 
@@ -4397,7 +4418,6 @@ class reporteruidowordController extends Controller
 
                     // $plantillaword->setValue('PUNTO_' . ($i + 1) . '_DESCRIPCION', "Punto " . $fotos[($i + 1)]->proyectoevidenciafoto_nopunto . " " . $fotos[($i + 1)]->proyectoevidenciafoto_descripcion);
                     $plantillaword->setValue('PUNTO_' . ($i + 1) . '_DESCRIPCION', $fotos[($i + 1)]->proyectoevidenciafoto_descripcion);
-
                 }
 
 
@@ -4456,9 +4476,9 @@ class reporteruidowordController extends Controller
                                                 INNER JOIN equipo ON reporteequiposutilizados.equipo_id = equipo.id
                                                 INNER JOIN equipos_documentos ON equipos_documentos.EQUIPO_ID = equipo.id
                                                 WHERE
-                                                    reporteequiposutilizados.proyecto_id = '.$proyecto_id.'
-                                                    AND reporteequiposutilizados.registro_id = '.$reporteregistro_id.'
-                                                    AND reporteequiposutilizados.agente_nombre = "'.$agente_nombre.'"
+                                                    reporteequiposutilizados.proyecto_id = ' . $proyecto_id . '
+                                                    AND reporteequiposutilizados.registro_id = ' . $reporteregistro_id . '
+                                                    AND reporteequiposutilizados.agente_nombre = "' . $agente_nombre . '"
                                                     AND equipos_documentos.DOCUMENTO_TIPO = 4
                                             )
                                             UNION ALL
@@ -4471,9 +4491,9 @@ class reporteruidowordController extends Controller
                                                 INNER JOIN equipo ON reporteequiposutilizados.equipo_id = equipo.id
                                                 INNER JOIN equipos_documentos ON equipos_documentos.EQUIPO_ID = equipo.id
                                                 WHERE
-                                                    reporteequiposutilizados.proyecto_id = '.$proyecto_id.'
-                                                    AND reporteequiposutilizados.registro_id = '.$reporteregistro_id.'
-                                                    AND reporteequiposutilizados.agente_nombre = "'.$agente_nombre.'"
+                                                    reporteequiposutilizados.proyecto_id = ' . $proyecto_id . '
+                                                    AND reporteequiposutilizados.registro_id = ' . $reporteregistro_id . '
+                                                    AND reporteequiposutilizados.agente_nombre = "' . $agente_nombre . '"
                                                     #AND reporteequiposutilizados.reporteequiposutilizados_cartacalibracion = 1
                                                     AND equipos_documentos.DOCUMENTO_TIPO = 5
                                             )
@@ -4485,12 +4505,12 @@ class reporteruidowordController extends Controller
                                                 FROM
                                                     reporteanexos
                                                 WHERE
-                                                    reporteanexos.proyecto_id = '.$proyecto_id.'
-                                                    AND reporteanexos.registro_id = '.$reporteregistro_id.'
-                                                    AND reporteanexos.agente_nombre = "'.$agente_nombre.'"
+                                                    reporteanexos.proyecto_id = ' . $proyecto_id . '
+                                                    AND reporteanexos.registro_id = ' . $reporteregistro_id . '
+                                                    AND reporteanexos.agente_nombre = "' . $agente_nombre . '"
                                             )
                                         ) AS ANEXO');
-        
+
 
 
             /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -4670,7 +4690,9 @@ class reporteruidowordController extends Controller
 
 
                 $archivo = reporterevisionesarchivoModel::create([
-                    'reporterevisiones_id' => $request->ultimarevision_id, 'reporterevisionesarchivo_tipo' => 0, 'reporterevisionesarchivo_archivo' => $zip_ruta_servidor . '/' . $zip_nombre
+                    'reporterevisiones_id' => $request->ultimarevision_id,
+                    'reporterevisionesarchivo_tipo' => 0,
+                    'reporterevisionesarchivo_archivo' => $zip_ruta_servidor . '/' . $zip_nombre
                 ]);
 
 
@@ -4706,7 +4728,17 @@ class reporteruidowordController extends Controller
 
                 DB::statement('ALTER TABLE reporterevisiones AUTO_INCREMENT = 1;');
                 $revision = reporterevisionesModel::create([
-                    'proyecto_id' => $request->proyecto_id, 'agente_id' => $request->agente_id, 'agente_nombre' => $request->agente_nombre, 'reporterevisiones_revision' => ($revisiones[0]->reporterevisiones_revision + 1), 'reporterevisiones_concluido' => 0, 'reporterevisiones_concluidonombre' => NULL, 'reporterevisiones_concluidofecha' => NULL, 'reporterevisiones_cancelado' => 0, 'reporterevisiones_canceladonombre' => NULL, 'reporterevisiones_canceladofecha' => NULL, 'reporterevisiones_canceladoobservacion' => NULL
+                    'proyecto_id' => $request->proyecto_id,
+                    'agente_id' => $request->agente_id,
+                    'agente_nombre' => $request->agente_nombre,
+                    'reporterevisiones_revision' => ($revisiones[0]->reporterevisiones_revision + 1),
+                    'reporterevisiones_concluido' => 0,
+                    'reporterevisiones_concluidonombre' => NULL,
+                    'reporterevisiones_concluidofecha' => NULL,
+                    'reporterevisiones_cancelado' => 0,
+                    'reporterevisiones_canceladonombre' => NULL,
+                    'reporterevisiones_canceladofecha' => NULL,
+                    'reporterevisiones_canceladoobservacion' => NULL
                 ]);
 
 
