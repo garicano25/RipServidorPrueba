@@ -261,9 +261,9 @@ class reportetemperaturawordController extends Controller
 
             if (($recsensorial->cliente_id + 0) != 2) // cliente_id [2 = senegas]
             {
-                $plantillaword = new TemplateProcessor(storage_path('app/plantillas_reportes/proyecto_infomes/Plantilla_informe_temperatura.docx')); //Ruta carpeta storage
+                $plantillaword = new TemplateProcessor(storage_path('app/plantillas_reportes/proyecto_infomes/Plantilla_informe_temperatura_sin_MEL.docx')); //Ruta carpeta storage
             } else {
-                $plantillaword = new TemplateProcessor(storage_path('app/plantillas_reportes/proyecto_infomes/Plantilla_informe_temperaturacliente.docx')); //Ruta carpeta storage
+                $plantillaword = new TemplateProcessor(storage_path('app/plantillas_reportes/proyecto_infomes/Plantilla_informe_temperatura_sin_MEL.docx')); //Ruta carpeta storage
             }
 
 
@@ -297,10 +297,17 @@ class reportetemperaturawordController extends Controller
                 $proyecto->proyecto_folio
             );
             $plantillaword->setValue('razon_social_portada', $cliente->cliente_RazonSocial);
-            $plantillaword->setValue('instalación_portada', $recsensorial->recsensorial_instalacion);
+            // PARTE INTALACION PORTADA
+            $OPCION_PORTADA1 = is_null($recursos[0]->OPCION_PORTADA1) ? "" : $recursos[0]->OPCION_PORTADA1 . " | ";
+            $OPCION_PORTADA2 = is_null($recursos[0]->OPCION_PORTADA2) ? "" : $recursos[0]->OPCION_PORTADA2 . " | ";
+            $OPCION_PORTADA3 = is_null($recursos[0]->OPCION_PORTADA3) ? "" : $recursos[0]->OPCION_PORTADA3 . " | ";
+            $OPCION_PORTADA4 = is_null($recursos[0]->OPCION_PORTADA4) ? "" : $recursos[0]->OPCION_PORTADA4 . " | ";
+            $OPCION_PORTADA5 = is_null($recursos[0]->OPCION_PORTADA5) ? "" : $recursos[0]->OPCION_PORTADA5 . " | ";
+            $OPCION_PORTADA6 = is_null($recursos[0]->OPCION_PORTADA6) ? "" : $recursos[0]->OPCION_PORTADA6;
+            $plantillaword->setValue('instalación_portada', $OPCION_PORTADA1 . $OPCION_PORTADA2 . $OPCION_PORTADA3 . $OPCION_PORTADA4 . $OPCION_PORTADA5 . $OPCION_PORTADA6);
 
             $fecha = $agente[0]->reporte_mes . ' del ' . $agente[0]->reportetemperatura_fecha;
-            $plantillaword->setValue('lugar_fecha_portada', $fecha);
+            $plantillaword->setValue('lugar_fecha_portada', $recsensorial->recsensorial_direccion . ' ' . $fecha);
             $plantillaword->setValue(
                 'PORTADA_FECHA',
                 $fecha
@@ -708,7 +715,7 @@ class reportetemperaturawordController extends Controller
                 $fuente = 'Arial';
                 $font_size = 10;
             } else {
-                $fuente = 'Montserrat';
+                $fuente = 'Arial';
                 $font_size = 10;
             }
 
@@ -1493,7 +1500,7 @@ class reportetemperaturawordController extends Controller
                 $fuente = 'Arial';
                 $font_size = 9;
             } else {
-                $fuente = 'Montserrat';
+                $fuente = 'Arial';
                 $font_size = 9;
             }
 
@@ -1709,7 +1716,7 @@ class reportetemperaturawordController extends Controller
                 $fuente = 'Arial';
                 $font_size = 6;
             } else {
-                $fuente = 'Montserrat';
+                $fuente = 'Arial';
                 $font_size = 6;
             }
 
