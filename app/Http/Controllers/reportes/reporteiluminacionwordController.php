@@ -372,6 +372,9 @@ class reporteiluminacionwordController extends Controller
             );
             $plantillaword->setValue('INSTALACION_NOMBRE', $NIVEL1 . $NIVEL2 . $NIVEL3 . $NIVEL4 . $NIVEL5);
 
+            $plantillaword->setValue('INSTALACION_NOMBRE_TEXTO', $proyecto->proyecto_clienteinstalacion);
+
+
             //LOGOS DE AS EMPRESAS DE INFORME
             if ($proyecto->requiereContrato == 1) {
 
