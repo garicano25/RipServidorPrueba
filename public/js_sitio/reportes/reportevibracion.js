@@ -8,10 +8,11 @@ $(".stickyside").stick_in_parent({
 });
 
 
-$('.stickyside a').click(function () {
+$('.stickyside a').click(function()
+{
 	// $('.list-group-item').removeClass('active');
 	// $(this).addClass('active');
-
+	
 	$('html, body').animate({
 		scrollTop: $($(this).attr('href')).offset().top - 150 // Margin TOP del DIV al que hace referencia el menu
 	}, 1200);
@@ -21,7 +22,7 @@ $('.stickyside a').click(function () {
 
 // This is auto select left sidebar
 var lastId,
-	topMenu = $(".stickyside");
+topMenu = $(".stickyside");
 topMenuHeight = topMenu.outerHeight();
 
 
@@ -30,7 +31,8 @@ menuItems = topMenu.find("a");
 
 
 // Anchors corresponding to menu items
-scrollItems = menuItems.map(function () {
+scrollItems = menuItems.map(function()
+{
 	var item = $($(this).attr("href"));
 	if (item.length) {
 		return item;
@@ -39,22 +41,24 @@ scrollItems = menuItems.map(function () {
 
 
 // Menu al mover el scroll
-$(window).scroll(function () {
+$(window).scroll(function()
+{
 	// Get container scroll position
 	var fromTop = $(this).scrollTop() + topMenuHeight - 0;
 	// var fromTop = $(this).scrollTop() + topMenuHeight;
 
 	// Get id of current scroll item
-	var cur = scrollItems.map(function () {
+	var cur = scrollItems.map(function() {
 		if ($(this).offset().top < fromTop)
-			return this;
+		return this;
 	});
 
 	// Get the id of the current element
 	cur = cur[cur.length - 1];
 	var id = cur && cur.length ? cur[0].id : "";
 
-	if (lastId !== id) {
+	if (lastId !== id)
+	{
 		lastId = id;
 		// Set/remove active class
 		menuItems.removeClass("active").filter("[href='#" + id + "']").addClass("active");
@@ -79,28 +83,35 @@ $('[data-toggle="tooltip"]').tooltip();
 
 
 var tiempoespera = 10; // Segundos
-function updateClock() {
-	if (parseInt(tiempoespera) > 0) {
+function updateClock()
+{
+	if (parseInt(tiempoespera) > 0)
+	{
 		$('#segundos_espera').html((tiempoespera - 1));
 
 		tiempoespera = (parseInt(tiempoespera) - 1);
 
-		setTimeout(function () {
+		setTimeout(function()
+		{
 			updateClock();
 		}, 1000);
 	}
-	else {
+	else
+	{
 		$('#modal_cargando').modal('hide');
 	}
 }
 
 
-$(document).ready(function () {
+$(document).ready(function()
 
 
+{
 
+	
+	
 	// Modal cargando
-	$('#modal_cargando .modal-title').html('Cargando informe de ' + agente_nombre); // Titulo modal
+	$('#modal_cargando .modal-title').html('Cargando informe de '+agente_nombre); // Titulo modal
 	$('#modal_cargando').modal(); // Abrir modal
 	updateClock(); // Ejecutar tiempo de espera
 
@@ -110,26 +121,27 @@ $(document).ready(function () {
 	obtenerdatos()
 
 	// Inicializar campos datepicker
-	jQuery('.mydatepicker').datepicker({
-		format: 'yyyy-mm-dd', //'dd-mm-yyyy'
-		weekStart: 1, //dia que inicia la semana, 1 = Lunes
-		// startDate: new Date('11/17/2020'), // deshabilitar dias anteriores con fecha
-		// startDate: '-3d', // deshabilitar dias anteriores del dia actual
-		// endDate: '+3d', //deshabilitar dias despues del dia actual
-		calendarWeeks: true,
-		autoclose: true,
-		todayHighlight: true, //Dia de hoy marcado en el calendario
-		toggleActive: true,
-		// setDate: new Date('11/17/2020'), // "2020/11/25", //Fecha marcada en el caledario
-		forceParse: false, //mantiene la fecha del input si no se selecciona otra
-		showOnFocus: true
-	});
+    jQuery('.mydatepicker').datepicker({
+        format: 'yyyy-mm-dd', //'dd-mm-yyyy'
+        weekStart: 1, //dia que inicia la semana, 1 = Lunes
+        // startDate: new Date('11/17/2020'), // deshabilitar dias anteriores con fecha
+        // startDate: '-3d', // deshabilitar dias anteriores del dia actual
+        // endDate: '+3d', //deshabilitar dias despues del dia actual
+        calendarWeeks: true,
+        autoclose: true,
+        todayHighlight: true, //Dia de hoy marcado en el calendario
+        toggleActive: true,
+        // setDate: new Date('11/17/2020'), // "2020/11/25", //Fecha marcada en el caledario
+        forceParse: false, //mantiene la fecha del input si no se selecciona otra
+        showOnFocus: true
+    });
 
 
-	// Si selecciona un campo tipo datepicker
-	$('.mydatepicker').on('click', function () {
-		$(this).datepicker('setDate', $(this).val());// Mostrar fecha del input y marcar en el calendario
-	});
+    // Si selecciona un campo tipo datepicker
+    $('.mydatepicker').on('click', function()
+    {
+        $(this).datepicker('setDate', $(this).val());// Mostrar fecha del input y marcar en el calendario
+    });
 });
 
 
@@ -138,23 +150,28 @@ $(document).ready(function () {
 
 
 var datosgenerales_ejecusiones = 0;
-function datosgenerales() {
+function datosgenerales()
+{
 	$.ajax({
 		type: "GET",
 		dataType: "json",
-		url: "/reportevibraciondatosgenerales/" + proyecto.id + "/" + agente_id + "/" + agente_nombre,
-		data: {},
+		url: "/reportevibraciondatosgenerales/"+proyecto.id+"/"+agente_id+"/"+agente_nombre,
+		data:{},
 		cache: false,
-		success: function (dato) {
-			if (parseInt(dato.reporte_concluido) == 1 || parseInt(dato.reporte_cancelado) == 1) {
+		success:function(dato)
+		{
+			if (parseInt(dato.reporte_concluido) == 1 || parseInt(dato.reporte_cancelado) == 1)
+			{
 				botoninforme_estado(1);
 			}
-			else {
+			else
+			{
 				botoninforme_estado(0);
 			}
 
 
-			if (parseInt(dato.reporteregistro_id) > 0) {
+			if (parseInt(dato.reporteregistro_id) > 0)
+			{
 				reporteregistro_id = parseInt(dato.reporteregistro_id);
 				// $('#reporteregistro_id').html(reporteregistro_id);
 			}
@@ -171,7 +188,8 @@ function datosgenerales() {
 				$('#reporte_catregion_activo').prop('checked', dato.reporte_portada.reporte_catregion_activo);
 				$('#reporte_catregion_id').val(dato.reporte_portada.catregion_id);
 			}
-			else {
+			else
+			{
 				$('#reporte_catsubdireccion_id').val('');
 				$('#reporte_catgerencia_id').val('');
 				$('#reporte_catactivo_id').val('');
@@ -202,19 +220,21 @@ function datosgenerales() {
 
 
 			$('#reporte_ubicacioninstalacion').html(dato.reporte_ubicacioninstalacion.ubicacion);
-			if (dato.reporte_ubicacioninstalacion.ubicacionfoto) {
+			if (dato.reporte_ubicacioninstalacion.ubicacionfoto)
+			{
 				var archivo = dato.reporte_ubicacioninstalacion.ubicacionfoto;
 				var extension = archivo.substring(archivo.lastIndexOf("."));
-				var imagenUrl = '/reportevibracionmapaubicacion/' + reporteregistro_id + '/' + 0;
+				var imagenUrl = '/reportevibracionmapaubicacion/'+reporteregistro_id+'/'+0;
 				$('#reporteubicacionfoto').dropify().data('dropify').destroy();
-				$('#reporteubicacionfoto').dropify().data('dropify').settings.defaultFile = imagenUrl + extension;
+				$('#reporteubicacionfoto').dropify().data('dropify').settings.defaultFile = imagenUrl+extension;
 				$('#reporteubicacionfoto').dropify().data('dropify').init();
 				$('#reporteubicacionfoto').attr('required', false);
-
+				
 				// Boton descargar mapa ubicacion
 				$('#boton_descargarmapaubicacion').css('display', 'block');
 			}
-			else {
+			else
+			{
 				$('#reporteubicacionfoto').val('');
 				$('#reporteubicacionfoto').attr('required', true);
 				$('#reporteubicacionfoto').dropify().data('dropify').resetPreview();
@@ -230,7 +250,8 @@ function datosgenerales() {
 			$('#reporte_conclusion').html(dato.reporte_conclusion);
 
 
-			if (dato.reporte_responsablesinforme.responsable1) {
+			if (dato.reporte_responsablesinforme.responsable1)
+			{
 				// Responsable 1
 				$('#reporte_responsable1').val(dato.reporte_responsablesinforme.responsable1);
 				$('#reporte_responsable1cargo').val(dato.reporte_responsablesinforme.responsable1cargo);
@@ -238,12 +259,12 @@ function datosgenerales() {
 				$('#reporteresponsable1documento').val('');
 				var archivo = dato.reporte_responsablesinforme.responsable1documento;
 				var extension = archivo.substring(archivo.lastIndexOf("."));
-				var imagenUrl = '/reportevibracionresponsabledocumento/' + dato.reporte_responsablesinforme.registro_id + '/' + 1 + '/' + 0;
+				var imagenUrl = '/reportevibracionresponsabledocumento/'+dato.reporte_responsablesinforme.registro_id+'/'+1+'/'+0;
 				$('#reporteresponsable1documento').dropify().data('dropify').destroy();
-				$('#reporteresponsable1documento').dropify().data('dropify').settings.defaultFile = imagenUrl + extension;
+				$('#reporteresponsable1documento').dropify().data('dropify').settings.defaultFile = imagenUrl+extension;
 				$('#reporteresponsable1documento').dropify().data('dropify').init();
 				$('#reporteresponsable1documento').attr('required', false);
-
+				
 				// Responsable 2
 				$('#reporte_responsable2').val(dato.reporte_responsablesinforme.responsable2);
 				$('#reporte_responsable2cargo').val(dato.reporte_responsablesinforme.responsable2cargo);
@@ -251,23 +272,25 @@ function datosgenerales() {
 				$('#reporteresponsable2documento').val('');
 				var archivo = dato.reporte_responsablesinforme.responsable2documento;
 				var extension = archivo.substring(archivo.lastIndexOf("."));
-				var imagenUrl = '/reportevibracionresponsabledocumento/' + dato.reporte_responsablesinforme.registro_id + '/' + 2 + '/' + 0;
+				var imagenUrl = '/reportevibracionresponsabledocumento/'+dato.reporte_responsablesinforme.registro_id+'/'+2+'/'+0;
 				$('#reporteresponsable2documento').dropify().data('dropify').destroy();
-				$('#reporteresponsable2documento').dropify().data('dropify').settings.defaultFile = imagenUrl + extension;
+				$('#reporteresponsable2documento').dropify().data('dropify').settings.defaultFile = imagenUrl+extension;
 				$('#reporteresponsable2documento').dropify().data('dropify').init();
 				$('#reporteresponsable2documento').attr('required', false);
 
 				// Botones de descarga
 				$('#boton_descargarresponsabledoc1').css('display', 'none');
 				$('#boton_descargarresponsabledoc2').css('display', 'none');
-				$('#responsablesinforme_carpetadocumentoshistorial').val('reportes/proyecto/' + dato.reporte_responsablesinforme.proyecto_id + '/' + agente_nombre + '/' + dato.reporte_responsablesinforme.registro_id + '/responsables informe');
-				if (parseInt(dato.reporte_responsablesinforme_guardado) == 1) {
+				$('#responsablesinforme_carpetadocumentoshistorial').val('reportes/proyecto/'+dato.reporte_responsablesinforme.proyecto_id+'/'+agente_nombre+'/'+dato.reporte_responsablesinforme.registro_id+'/responsables informe');
+				if (parseInt(dato.reporte_responsablesinforme_guardado) == 1)
+				{
 					$('#boton_descargarresponsabledoc1').css('display', 'block');
 					$('#boton_descargarresponsabledoc2').css('display', 'block');
 					$('#responsablesinforme_carpetadocumentoshistorial').val('');
 				}
 			}
-			else {
+			else
+			{
 				$('#reporte_responsable1').val('');
 				$('#reporte_responsable1cargo').val('');
 				$('#reporte_responsable1_documentobase64').val('');
@@ -276,7 +299,7 @@ function datosgenerales() {
 				$('#reporteresponsable1documento').dropify().data('dropify').resetPreview();
 				$('#reporteresponsable1documento').dropify().data('dropify').clearElement();
 				$('#boton_descargarresponsabledoc1').css('display', 'none');
-
+				
 				$('#reporte_responsable2').val('');
 				$('#reporte_responsable2cargo').val('');
 				$('#reporte_responsable2_documentobase64').val('');
@@ -313,12 +336,14 @@ function datosgenerales() {
 		// {
 		// 	// $('#tabla_reporte_definiciones tbody').html('<tr><td colspan="5"><i class="fa fa-spin fa-spinner" style="font-size: 40px!important;"></i></td></tr>');
 		// },
-		error: function (dato) {
-			if (datosgenerales_ejecusiones == 0) {
+		error: function(dato)
+		{
+			if (datosgenerales_ejecusiones == 0)
+			{
 				datosgenerales();
 				datosgenerales_ejecusiones += 1;
 			}
-
+			
 
 			$('#reporte_instalacion').val('Error al cargar los datos');
 			$('#reporte_fecha').val('Error al cargar los datos');
@@ -357,12 +382,15 @@ function portadaInfo() {
 			console.log('Error al cargar los datos');
 		}
 	})
-
+	
 }
 
-function reporte_alcance(alcance) {
-	if (alcance) {
-		switch (parseInt(alcance)) {
+function reporte_alcance(alcance)
+{
+	if (alcance)
+	{
+		switch (parseInt(alcance))
+		{
 			case 1:
 				$('.info_cuerpoentero').css('display', 'inline-block');
 				$('.info_extremidades').css('display', 'none');
@@ -380,7 +408,8 @@ function reporte_alcance(alcance) {
 				break;
 		}
 	}
-	else {
+	else
+	{
 		$('.info_cuerpoentero').css('display', 'inline-block');
 		$('.info_extremidades').css('display', 'inline-block');
 		$('.info_adicional').css('display', 'none');
@@ -388,14 +417,17 @@ function reporte_alcance(alcance) {
 }
 
 
-function botoninforme_estado(boton_estado) {
-	if (parseInt(boton_estado) == 1) {
+function botoninforme_estado(boton_estado)
+{
+	if (parseInt(boton_estado) == 1)
+	{
 		$(".botoninforme").attr('disabled', true);
 
 		$(".botoninforme>i").removeClass('fa-save');
 		$(".botoninforme>i").addClass('fa-ban');
 	}
-	else {
+	else
+	{
 		$(".botoninforme").attr('disabled', false);
 
 		$(".botoninforme>i").removeClass('fa-ban');
@@ -404,23 +436,27 @@ function botoninforme_estado(boton_estado) {
 }
 
 
-function menureporte_estado(menu_nombre, menu_estado) {
-	if (parseInt(menu_estado) > 0) {
-		$('#' + menu_nombre).css('color', '#64bd44'); // Verde
+function menureporte_estado(menu_nombre, menu_estado)
+{
+	if (parseInt(menu_estado) > 0)
+	{
+		$('#'+menu_nombre).css('color', '#64bd44'); // Verde
 
-		$('#' + menu_nombre).removeClass('fa fa-times');
-		$('#' + menu_nombre).addClass('fa fa-check');
+		$('#'+menu_nombre).removeClass('fa fa-times');
+		$('#'+menu_nombre).addClass('fa fa-check');
 	}
-	else {
-		$('#' + menu_nombre).css('color', '#fc4b6c'); // Rojo
+	else
+	{
+		$('#'+menu_nombre).css('color', '#fc4b6c'); // Rojo
 
-		$('#' + menu_nombre).removeClass('fa fa-check');
-		$('#' + menu_nombre).addClass('fa fa-times');
+		$('#'+menu_nombre).removeClass('fa fa-check');
+		$('#'+menu_nombre).addClass('fa fa-times');
 	}
 }
 
 
-function instalacion_nombre(reporte_instalacion) {
+function instalacion_nombre(reporte_instalacion)
+{
 	$('.div_instalacion_nombre').html(reporte_instalacion);
 }
 
@@ -429,9 +465,11 @@ function instalacion_nombre(reporte_instalacion) {
 // PORTADA
 
 
-$("#botonguardar_reporte_portada").click(function () {
+$("#botonguardar_reporte_portada").click(function()
+{
 	var valida = this.form.checkValidity();
-	if (valida) {
+	if (valida)
+	{
 		swal({
 			title: "¡Confirme guardar la portada!",
 			text: "",
@@ -443,86 +481,92 @@ $("#botonguardar_reporte_portada").click(function () {
 			closeOnConfirm: false,
 			closeOnCancel: false
 		},
-			function (isConfirm) {
-				if (isConfirm) {
-					// cerrar msj confirmacion
-					swal.close();
+		function(isConfirm)
+		{
+			if (isConfirm)
+			{
+				// cerrar msj confirmacion
+				swal.close();
 
-					// enviar datos
-					$('#form_reporte_portada').ajaxForm({
-						dataType: 'json',
-						type: 'POST',
-						url: '' + ruta_storage_guardar,
-						data: {
-							opcion: 0,
-							proyecto_id: proyecto.id,
-							agente_id: agente_id,
-							agente_nombre: agente_nombre,
-							reporteregistro_id: reporteregistro_id,
-							catactivo_id: $("#reporte_catactivo_id").val()
-						},
-						resetForm: false,
-						success: function (dato) {
-							// Actualizar ID reporte
-							reporteregistro_id = dato.reporteregistro_id;
+				// enviar datos
+				$('#form_reporte_portada').ajaxForm({
+					dataType: 'json',
+					type: 'POST',
+					url: ''+ruta_storage_guardar,
+					data: {
+						opcion: 0,
+						proyecto_id: proyecto.id,
+						agente_id: agente_id,
+						agente_nombre: agente_nombre,
+						reporteregistro_id: reporteregistro_id,
+						catactivo_id: $("#reporte_catactivo_id").val()
+					},
+					resetForm: false,
+					success: function(dato)
+					{
+						// Actualizar ID reporte
+						reporteregistro_id = dato.reporteregistro_id;
 
-							menureporte_estado("menureporte_0", 1);
+						menureporte_estado("menureporte_0", 1);
 
-							// mensaje
-							swal({
-								title: "Correcto",
-								text: "" + dato.msj,
-								type: "success", // warning, error, success, info
-								buttons: {
-									visible: false, // true , false
-								},
-								timer: 1500,
-								showConfirmButton: false
-							});
+						// mensaje
+						swal({
+							title: "Correcto",
+							text: ""+dato.msj,
+							type: "success", // warning, error, success, info
+							buttons: {
+								visible: false, // true , false
+							},
+							timer: 1500,
+							showConfirmButton: false
+						});
 
-							// actualiza boton
-							$('#botonguardar_reporte_portada').html('Guardar portada <i class="fa fa-save"></i>');
-							$('#botonguardar_reporte_portada').attr('disabled', false);
-						},
-						beforeSend: function () {
-							$('#botonguardar_reporte_portada').html('Guardando portada <i class="fa fa-spin fa-spinner"></i>');
-							$('#botonguardar_reporte_portada').attr('disabled', true);
-						},
-						error: function (dato) {
-							// actualiza boton
-							$('#botonguardar_reporte_portada').html('Guardar portada <i class="fa fa-save"></i>');
-							$('#botonguardar_reporte_portada').attr('disabled', false);
+						// actualiza boton
+						$('#botonguardar_reporte_portada').html('Guardar portada <i class="fa fa-save"></i>');
+						$('#botonguardar_reporte_portada').attr('disabled', false);
+					},
+					beforeSend: function()
+					{
+						$('#botonguardar_reporte_portada').html('Guardando portada <i class="fa fa-spin fa-spinner"></i>');
+						$('#botonguardar_reporte_portada').attr('disabled', true);
+					},
+					error: function(dato)
+					{
+						// actualiza boton
+						$('#botonguardar_reporte_portada').html('Guardar portada <i class="fa fa-save"></i>');
+						$('#botonguardar_reporte_portada').attr('disabled', false);
 
-							// mensaje
-							swal({
-								title: "Error",
-								text: "" + dato.msj,
-								type: "error", // warning, error, success, info
-								buttons: {
-									visible: false, // true , false
-								},
-								timer: 1500,
-								showConfirmButton: false
-							});
-							return false;
-						}
-					}).submit();
-					return false;
-				}
-				else {
-					// mensaje
-					swal({
-						title: "Cancelado",
-						text: "Acción cancelada",
-						type: "error", // warning, error, success, info
-						buttons: {
-							visible: false, // true , false
-						},
-						timer: 500,
-						showConfirmButton: false
-					});
-				}
-			});
+						// mensaje
+						swal({
+							title: "Error",
+							text: ""+dato.msj,
+							type: "error", // warning, error, success, info
+							buttons: {
+								visible: false, // true , false
+							},
+							timer: 1500,
+							showConfirmButton: false
+						});
+						return false;
+					}
+				}).submit();
+				return false;
+			}
+			else 
+			{
+				// mensaje
+				swal({
+					title: "Cancelado",
+					text: "Acción cancelada",
+					type: "error", // warning, error, success, info
+					buttons: {
+						visible: false, // true , false
+					},
+					timer: 500,
+					showConfirmButton: false
+				});
+			}
+		});
 		return false;
 	}
 });
@@ -532,10 +576,12 @@ $("#botonguardar_reporte_portada").click(function () {
 // INTRODUCCION
 
 
-$("#botonguardar_reporte_introduccion").click(function () {
+$("#botonguardar_reporte_introduccion").click(function()
+{
 	// valida campos vacios
 	var valida = this.form.checkValidity();
-	if (valida) {
+	if (valida)
+	{
 		swal({
 			title: "¡Confirme que desea guardar!",
 			text: "Introducción",
@@ -547,87 +593,93 @@ $("#botonguardar_reporte_introduccion").click(function () {
 			closeOnConfirm: false,
 			closeOnCancel: false
 		},
-			function (isConfirm) {
-				if (isConfirm) {
-					// cerrar msj confirmacion
-					swal.close();
+		function(isConfirm)
+		{
+			if (isConfirm)
+			{
+				// cerrar msj confirmacion
+				swal.close();
 
-					// enviar datos
-					$('#form_reporte_introduccion').ajaxForm({
-						dataType: 'json',
-						type: 'POST',
-						url: '' + ruta_storage_guardar,
-						data: {
-							opcion: 1,
-							proyecto_id: proyecto.id,
-							agente_id: agente_id,
-							agente_nombre: agente_nombre,
-							reporteregistro_id: reporteregistro_id,
-							catactivo_id: $("#reporte_catactivo_id").val(),
-							reporte_instalacion: $("#reporte_instalacion").val()
-						},
-						resetForm: false,
-						success: function (dato) {
-							// Actualizar ID reporte						
-							reporteregistro_id = dato.reporteregistro_id;
+				// enviar datos
+				$('#form_reporte_introduccion').ajaxForm({
+					dataType: 'json',
+					type: 'POST',
+					url: ''+ruta_storage_guardar,
+					data: {
+						opcion: 1,
+						proyecto_id: proyecto.id,
+						agente_id: agente_id,
+						agente_nombre: agente_nombre,
+						reporteregistro_id: reporteregistro_id,
+						catactivo_id: $("#reporte_catactivo_id").val(),
+						reporte_instalacion: $("#reporte_instalacion").val()
+					},
+					resetForm: false,
+					success: function(dato)
+					{
+						// Actualizar ID reporte						
+						reporteregistro_id = dato.reporteregistro_id;
 
-							menureporte_estado("menureporte_1", 1);
+						menureporte_estado("menureporte_1", 1);
 
-							// mensaje
-							swal({
-								title: "Correcto",
-								text: "" + dato.msj,
-								type: "success", // warning, error, success, info
-								buttons: {
-									visible: false, // true , false
-								},
-								timer: 1500,
-								showConfirmButton: false
-							});
+						// mensaje
+						swal({
+							title: "Correcto",
+							text: ""+dato.msj,
+							type: "success", // warning, error, success, info
+							buttons: {
+								visible: false, // true , false
+							},
+							timer: 1500,
+							showConfirmButton: false
+						});
 
-							// actualiza boton
-							$('#botonguardar_reporte_introduccion').html('Guardar introducción <i class="fa fa-save"></i>');
-							$('#botonguardar_reporte_introduccion').attr('disabled', false);
-						},
-						beforeSend: function () {
-							$('#botonguardar_reporte_introduccion').html('Guardando introducción <i class="fa fa-spin fa-spinner"></i>');
-							$('#botonguardar_reporte_introduccion').attr('disabled', true);
-						},
-						error: function (dato) {
-							// actualiza boton
-							$('#botonguardar_reporte_introduccion').html('Guardar introducción <i class="fa fa-save"></i>');
-							$('#botonguardar_reporte_introduccion').attr('disabled', false);
+						// actualiza boton
+						$('#botonguardar_reporte_introduccion').html('Guardar introducción <i class="fa fa-save"></i>');
+						$('#botonguardar_reporte_introduccion').attr('disabled', false);
+					},
+					beforeSend: function()
+					{
+						$('#botonguardar_reporte_introduccion').html('Guardando introducción <i class="fa fa-spin fa-spinner"></i>');
+						$('#botonguardar_reporte_introduccion').attr('disabled', true);
+					},
+					error: function(dato)
+					{
+						// actualiza boton
+						$('#botonguardar_reporte_introduccion').html('Guardar introducción <i class="fa fa-save"></i>');
+						$('#botonguardar_reporte_introduccion').attr('disabled', false);
 
-							// mensaje
-							swal({
-								title: "Error",
-								text: "" + dato.msj,
-								type: "error", // warning, error, success, info
-								buttons: {
-									visible: false, // true , false
-								},
-								timer: 1500,
-								showConfirmButton: false
-							});
-							return false;
-						}
-					}).submit();
-					return false;
-				}
-				else {
-					// mensaje
-					swal({
-						title: "Cancelado",
-						text: "Acción cancelada",
-						type: "error", // warning, error, success, info
-						buttons: {
-							visible: false, // true , false
-						},
-						timer: 500,
-						showConfirmButton: false
-					});
-				}
-			});
+						// mensaje
+						swal({
+							title: "Error",
+							text: ""+dato.msj,
+							type: "error", // warning, error, success, info
+							buttons: {
+								visible: false, // true , false
+							},
+							timer: 1500,
+							showConfirmButton: false
+						});
+						return false;
+					}
+				}).submit();
+				return false;
+			}
+			else 
+			{
+				// mensaje
+				swal({
+					title: "Cancelado",
+					text: "Acción cancelada",
+					type: "error", // warning, error, success, info
+					buttons: {
+						visible: false, // true , false
+					},
+					timer: 500,
+					showConfirmButton: false
+				});
+			}
+		});
 		return false;
 	}
 });
@@ -637,40 +689,48 @@ $("#botonguardar_reporte_introduccion").click(function () {
 // DEFINICIONES
 
 
-$(document).ready(function () {
-	setTimeout(function () {
+$(document).ready(function()
+{
+	setTimeout(function()
+	{
 		tabla_reporte_definiciones(proyecto.id, agente_nombre, reporteregistro_id);
 	}, 2000);
 });
 
 
 var datatable_reportedefiniciones = null;
-function tabla_reporte_definiciones(proyecto_id, agente_nombre, reporteregistro_id) {
-	try {
-		var ruta = "/reportevibraciontabladefiniciones/" + proyecto_id + "/" + agente_nombre + "/" + reporteregistro_id;
+function tabla_reporte_definiciones(proyecto_id, agente_nombre, reporteregistro_id)
+{
+	try 
+	{
+		var ruta = "/reportevibraciontabladefiniciones/"+proyecto_id+"/"+agente_nombre+"/"+reporteregistro_id;
 
-		if (datatable_reportedefiniciones != null) {
+		if (datatable_reportedefiniciones != null)
+		{
 			datatable_reportedefiniciones.clear().draw();
 			datatable_reportedefiniciones.ajax.url(ruta).load();
 		}
-		else {
+		else
+		{
 			var numeroejecucion = 1;
 			datatable_reportedefiniciones = $('#tabla_reporte_definiciones').DataTable({
 				"ajax": {
-					"url": ruta,
-					"type": "get",
-					"cache": false,
-					error: function (xhr, error, code) {
-						// console.log(xhr); console.log(code);
-						console.log('error en datatable_reportedefiniciones');
-						if (numeroejecucion <= 1) {
-							tabla_reporte_definiciones(proyecto_id, agente_nombre, reporteregistro_id);
-							numeroejecucion += 1;
-						}
+						"url": ruta,
+						"type": "get",
+						"cache": false,
+						error: function (xhr, error, code)
+						{
+							// console.log(xhr); console.log(code);
+							console.log('error en datatable_reportedefiniciones');
+							if (numeroejecucion <= 1)
+							{
+								tabla_reporte_definiciones(proyecto_id, agente_nombre, reporteregistro_id);
+								numeroejecucion += 1;
+							}
+						},
+						"data": {}
 					},
-					"data": {}
-				},
-				"columns": [
+					"columns": [
 					// {
 					//     "data": "id" 
 					// },
@@ -699,7 +759,7 @@ function tabla_reporte_definiciones(proyecto_id, agente_nombre, reporteregistro_
 				],
 				"lengthMenu": [[10, 30, 60, -1], [10, 30, 60, "Todos"]],
 				// "rowsGroup": [0, 1], //agrupar filas
-				"order": [[0, "DESC"]],
+				"order": [[ 0, "DESC" ]],
 				"ordering": false,
 				"processing": true,
 				"paging": true,
@@ -720,22 +780,25 @@ function tabla_reporte_definiciones(proyecto_id, agente_nombre, reporteregistro_
 						"previous": "Anterior"
 					}
 				}
-			});
+		    });
 		}
 
 		// Tooltip en DataTable
-		datatable_reportedefiniciones.on('draw', function () {
+		datatable_reportedefiniciones.on('draw', function ()
+		{
 			$('[data-toggle="tooltip"]').tooltip();
 		});
 	}
-	catch (exception) {
+	catch (exception)
+	{
 		tabla_reporte_definiciones(proyecto_id, agente_nombre, reporteregistro_id);
-	}
+    }
 }
 
 
-$("#boton_reporte_nuevadefinicion").click(function () {
-	$('#form_modal_definicion').each(function () {
+$("#boton_reporte_nuevadefinicion").click(function()
+{
+	$('#form_modal_definicion').each(function(){
 		this.reset();
 	});
 
@@ -746,16 +809,18 @@ $("#boton_reporte_nuevadefinicion").click(function () {
 	$('#modal_reporte_definicion .modal-title').html('Nueva definición');
 
 	// mostrar modal
-	$('#modal_reporte_definicion').modal({ backdrop: false });
+	$('#modal_reporte_definicion').modal({backdrop:false});
 });
 
 
-$('#tabla_reporte_definiciones tbody').on('click', 'td.editar', function () {
+$('#tabla_reporte_definiciones tbody').on('click', 'td.editar', function()
+{
 	var tr = $(this).closest('tr');
 	var row = datatable_reportedefiniciones.row(tr);
 
-	if (parseInt(row.data().catactivo_id) >= 0) {
-		$('#form_modal_definicion').each(function () {
+	if (parseInt(row.data().catactivo_id) >= 0)
+	{
+		$('#form_modal_definicion').each(function(){
 			this.reset();
 		});
 
@@ -771,19 +836,21 @@ $('#tabla_reporte_definiciones tbody').on('click', 'td.editar', function () {
 		$('#modal_reporte_definicion .modal-title').html('Definición');
 
 		// mostrar modal
-		$('#modal_reporte_definicion').modal({ backdrop: false });
+		$('#modal_reporte_definicion').modal({backdrop:false});
 	}
 });
 
 
-$('#tabla_reporte_definiciones tbody').on('click', 'td>button.eliminar', function () {
+$('#tabla_reporte_definiciones tbody').on('click', 'td>button.eliminar', function()
+{
 	var tr = $(this).closest('tr');
 	var row = datatable_reportedefiniciones.row(tr);
 
-	if (parseInt(row.data().catactivo_id) >= 0) {
+	if (parseInt(row.data().catactivo_id) >= 0)
+	{
 		swal({
 			title: "¡Confirme que desea eliminar!",
-			text: "La definición: " + row.data().concepto,
+			text: "La definición: "+row.data().concepto,
 			type: "warning",
 			showCancelButton: true,
 			confirmButtonColor: "#DD6B55",
@@ -792,107 +859,118 @@ $('#tabla_reporte_definiciones tbody').on('click', 'td>button.eliminar', functio
 			closeOnConfirm: false,
 			closeOnCancel: false
 		},
-			function (isConfirm) {
-				if (isConfirm) {
-					swal({
-						title: "¡Por seguridad confirme nuevamente que desea eliminar!",
-						text: "La definición: " + row.data().concepto,
-						type: "warning",
-						showCancelButton: true,
-						confirmButtonColor: "#DD6B55",
-						confirmButtonText: "Eliminar!",
-						cancelButtonText: "Cancelar!",
-						closeOnConfirm: false,
-						closeOnCancel: false
-					},
-						function (isConfirm) {
-							if (isConfirm) {
-								// cerrar msj confirmacion
-								swal.close();
+		function(isConfirm)
+		{
+			if (isConfirm)
+			{
+				swal({
+					title: "¡Por seguridad confirme nuevamente que desea eliminar!",
+					text: "La definición: "+row.data().concepto,
+					type: "warning",
+					showCancelButton: true,
+					confirmButtonColor: "#DD6B55",
+					confirmButtonText: "Eliminar!",
+					cancelButtonText: "Cancelar!",
+					closeOnConfirm: false,
+					closeOnCancel: false
+				},
+				function(isConfirm)
+				{
+					if (isConfirm)
+					{
+						// cerrar msj confirmacion
+						swal.close();
 
-								$.ajax({
-									type: "GET",
-									dataType: "json",
-									url: "/reportevibraciondefinicioneliminar/" + row.data().id,
-									data: {},
-									cache: false,
-									success: function (dato) {
-										// Actualizar tabla
-										tabla_reporte_definiciones(proyecto.id, agente_nombre);
+						$.ajax({
+							type: "GET",
+							dataType: "json",
+							url: "/reportevibraciondefinicioneliminar/"+row.data().id,
+							data:{},
+							cache: false,
+							success:function(dato)
+							{
+								// Actualizar tabla
+								tabla_reporte_definiciones(proyecto.id, agente_nombre);
 
-										// mensaje
-										swal({
-											title: "Correcto",
-											text: "" + dato.msj,
-											type: "success", // warning, error, success, info
-											buttons: {
-												visible: false, // true , false
-											},
-											timer: 1500,
-											showConfirmButton: false
-										});
-									},
-									beforeSend: function () {
-										// $('#tabla_reporte_definiciones tbody').html('<tr><td colspan="5"><i class="fa fa-spin fa-spinner" style="font-size: 40px!important;"></i></td></tr>');
-									},
-									error: function (dato) {
-										// mensaje
-										swal({
-											title: "Error",
-											text: "" + dato.msj,
-											type: "error", // warning, error, success, info
-											buttons: {
-												visible: false, // true , false
-											},
-											timer: 1500,
-											showConfirmButton: false
-										});
-
-										return false;
-									}
-								});//Fin ajax
-							}
-							else {
 								// mensaje
 								swal({
-									title: "Cancelado",
-									text: "Acción cancelada",
+									title: "Correcto",
+									text: ""+dato.msj,
+									type: "success", // warning, error, success, info
+									buttons: {
+										visible: false, // true , false
+									},
+									timer: 1500,
+									showConfirmButton: false
+								});
+							},
+							beforeSend: function()
+							{
+								// $('#tabla_reporte_definiciones tbody').html('<tr><td colspan="5"><i class="fa fa-spin fa-spinner" style="font-size: 40px!important;"></i></td></tr>');
+							},
+							error: function(dato)
+							{
+								// mensaje
+								swal({
+									title: "Error",
+									text: ""+dato.msj,
 									type: "error", // warning, error, success, info
 									buttons: {
 										visible: false, // true , false
 									},
-									timer: 500,
+									timer: 1500,
 									showConfirmButton: false
 								});
+
+								return false;
 							}
+						});//Fin ajax
+					}
+					else 
+					{
+						// mensaje
+						swal({
+							title: "Cancelado",
+							text: "Acción cancelada",
+							type: "error", // warning, error, success, info
+							buttons: {
+								visible: false, // true , false
+							},
+							timer: 500,
+							showConfirmButton: false
 						});
-				}
-				else {
-					// mensaje
-					swal({
-						title: "Cancelado",
-						text: "Acción cancelada",
-						type: "error", // warning, error, success, info
-						buttons: {
-							visible: false, // true , false
-						},
-						timer: 500,
-						showConfirmButton: false
-					});
-				}
-			});
+					}
+				});
+			}
+			else 
+			{
+				// mensaje
+				swal({
+					title: "Cancelado",
+					text: "Acción cancelada",
+					type: "error", // warning, error, success, info
+					buttons: {
+						visible: false, // true , false
+					},
+					timer: 500,
+					showConfirmButton: false
+				});
+			}
+		});
 		return false;
 	}
 });
 
 
-$("#botonguardar_modal_definicion").click(function () {
+$("#botonguardar_modal_definicion").click(function()
+{
 	// valida campos vacios
 	var valida = this.form.checkValidity();
-	if (valida) {
+	if (valida)
+	{
 		swal({
 			title: "¡Confirme que desea guardar!",
-			text: "Definición: " + $('#reportedefiniciones_concepto').val(),
+			text: "Definición: "+$('#reportedefiniciones_concepto').val(),
 			type: "warning",
 			showCancelButton: true,
 			confirmButtonColor: "#DD6B55",
@@ -901,92 +979,98 @@ $("#botonguardar_modal_definicion").click(function () {
 			closeOnConfirm: false,
 			closeOnCancel: false
 		},
-			function (isConfirm) {
-				if (isConfirm) {
-					// cerrar msj confirmacion
-					swal.close();
+		function(isConfirm)
+		{
+			if (isConfirm)
+			{
+				// cerrar msj confirmacion
+				swal.close();
 
-					// enviar datos
-					$('#form_modal_definicion').ajaxForm({
-						dataType: 'json',
-						type: 'POST',
-						url: '' + ruta_storage_guardar,
-						data: {
-							opcion: 2,
-							proyecto_id: proyecto.id,
-							agente_id: agente_id,
-							agente_nombre: agente_nombre,
-							reporteregistro_id: reporteregistro_id,
-							catactivo_id: $("#reporte_catactivo_id").val(),
-							reporte_instalacion: $("#reporte_instalacion").val()
-						},
-						resetForm: false,
-						success: function (dato) {
-							// Actualizar ID reporte
-							reporteregistro_id = dato.reporteregistro_id;
+				// enviar datos
+				$('#form_modal_definicion').ajaxForm({
+					dataType: 'json',
+					type: 'POST',
+					url: ''+ruta_storage_guardar,
+					data: {
+						opcion: 2,
+						proyecto_id: proyecto.id,
+						agente_id: agente_id,
+						agente_nombre: agente_nombre,
+						reporteregistro_id: reporteregistro_id,
+						catactivo_id: $("#reporte_catactivo_id").val(),
+						reporte_instalacion: $("#reporte_instalacion").val()
+					},
+					resetForm: false,
+					success: function(dato)
+					{
+						// Actualizar ID reporte
+						reporteregistro_id = dato.reporteregistro_id;
 
-							// Actualizar tabla
-							tabla_reporte_definiciones(proyecto.id, agente_nombre, reporteregistro_id);
+						// Actualizar tabla
+						tabla_reporte_definiciones(proyecto.id, agente_nombre, reporteregistro_id);
 
 
-							// mensaje
-							swal({
-								title: "Correcto",
-								text: "" + dato.msj,
-								type: "success", // warning, error, success, info
-								buttons: {
-									visible: false, // true , false
-								},
-								timer: 1500,
-								showConfirmButton: false
-							});
+						// mensaje
+						swal({
+							title: "Correcto",
+							text: ""+dato.msj,
+							type: "success", // warning, error, success, info
+							buttons: {
+								visible: false, // true , false
+							},
+							timer: 1500,
+							showConfirmButton: false
+						});
 
-							// actualiza boton
-							$('#botonguardar_modal_definicion').html('Guardar <i class="fa fa-save"></i>');
-							$('#botonguardar_modal_definicion').attr('disabled', false);
+						// actualiza boton
+						$('#botonguardar_modal_definicion').html('Guardar <i class="fa fa-save"></i>');
+						$('#botonguardar_modal_definicion').attr('disabled', false);
 
-							// cerrar modal
-							$('#modal_reporte_definicion').modal('hide');
-						},
-						beforeSend: function () {
-							$('#botonguardar_modal_definicion').html('Guardando <i class="fa fa-spin fa-spinner"></i>');
-							$('#botonguardar_modal_definicion').attr('disabled', true);
-						},
-						error: function (dato) {
-							// actualiza boton
-							$('#botonguardar_modal_definicion').html('Guardar <i class="fa fa-save"></i>');
-							$('#botonguardar_modal_definicion').attr('disabled', false);
+						// cerrar modal
+						$('#modal_reporte_definicion').modal('hide');
+					},
+					beforeSend: function()
+					{
+						$('#botonguardar_modal_definicion').html('Guardando <i class="fa fa-spin fa-spinner"></i>');
+						$('#botonguardar_modal_definicion').attr('disabled', true);
+					},
+					error: function(dato)
+					{
+						// actualiza boton
+						$('#botonguardar_modal_definicion').html('Guardar <i class="fa fa-save"></i>');
+						$('#botonguardar_modal_definicion').attr('disabled', false);
 
-							// mensaje
-							swal({
-								title: "Error",
-								text: "" + dato.msj,
-								type: "error", // warning, error, success, info
-								buttons: {
-									visible: false, // true , false
-								},
-								timer: 1500,
-								showConfirmButton: false
-							});
-							return false;
-						}
-					}).submit();
-					return false;
-				}
-				else {
-					// mensaje
-					swal({
-						title: "Cancelado",
-						text: "Acción cancelada",
-						type: "error", // warning, error, success, info
-						buttons: {
-							visible: false, // true , false
-						},
-						timer: 500,
-						showConfirmButton: false
-					});
-				}
-			});
+						// mensaje
+						swal({
+							title: "Error",
+							text: ""+dato.msj,
+							type: "error", // warning, error, success, info
+							buttons: {
+								visible: false, // true , false
+							},
+							timer: 1500,
+							showConfirmButton: false
+						});
+						return false;
+					}
+				}).submit();
+				return false;
+			}
+			else 
+			{
+				// mensaje
+				swal({
+					title: "Cancelado",
+					text: "Acción cancelada",
+					type: "error", // warning, error, success, info
+					buttons: {
+						visible: false, // true , false
+					},
+					timer: 500,
+					showConfirmButton: false
+				});
+			}
+		});
 		return false;
 	}
 });
@@ -996,10 +1080,12 @@ $("#botonguardar_modal_definicion").click(function () {
 // OBJETIVO GENERAL
 
 
-$("#botonguardar_reporte_objetivogeneral").click(function () {
+$("#botonguardar_reporte_objetivogeneral").click(function()
+{
 	// valida campos vacios
 	var valida = this.form.checkValidity();
-	if (valida) {
+	if (valida)
+	{
 		swal({
 			title: "¡Confirme que desea guardar!",
 			text: "Objetivo general",
@@ -1011,87 +1097,93 @@ $("#botonguardar_reporte_objetivogeneral").click(function () {
 			closeOnConfirm: false,
 			closeOnCancel: false
 		},
-			function (isConfirm) {
-				if (isConfirm) {
-					// cerrar msj confirmacion
-					swal.close();
+		function(isConfirm)
+		{
+			if (isConfirm)
+			{
+				// cerrar msj confirmacion
+				swal.close();
 
-					// enviar datos
-					$('#form_reporte_objetivogeneral').ajaxForm({
-						dataType: 'json',
-						type: 'POST',
-						url: '' + ruta_storage_guardar,
-						data: {
-							opcion: 3,
-							proyecto_id: proyecto.id,
-							agente_id: agente_id,
-							agente_nombre: agente_nombre,
-							reporteregistro_id: reporteregistro_id,
-							catactivo_id: $("#reporte_catactivo_id").val(),
-							reporte_instalacion: $("#reporte_instalacion").val()
-						},
-						resetForm: false,
-						success: function (dato) {
-							// Actualizar ID reporte						
-							reporteregistro_id = dato.reporteregistro_id;
+				// enviar datos
+				$('#form_reporte_objetivogeneral').ajaxForm({
+					dataType: 'json',
+					type: 'POST',
+					url: ''+ruta_storage_guardar,
+					data: {
+						opcion: 3,
+						proyecto_id: proyecto.id,
+						agente_id: agente_id,
+						agente_nombre: agente_nombre,
+						reporteregistro_id: reporteregistro_id,
+						catactivo_id: $("#reporte_catactivo_id").val(),
+						reporte_instalacion: $("#reporte_instalacion").val()
+					},
+					resetForm: false,
+					success: function(dato)
+					{
+						// Actualizar ID reporte						
+						reporteregistro_id = dato.reporteregistro_id;
 
-							menureporte_estado("menureporte_3_1", 1);
+						menureporte_estado("menureporte_3_1", 1);
 
-							// mensaje
-							swal({
-								title: "Correcto",
-								text: "" + dato.msj,
-								type: "success", // warning, error, success, info
-								buttons: {
-									visible: false, // true , false
-								},
-								timer: 1500,
-								showConfirmButton: false
-							});
+						// mensaje
+						swal({
+							title: "Correcto",
+							text: ""+dato.msj,
+							type: "success", // warning, error, success, info
+							buttons: {
+								visible: false, // true , false
+							},
+							timer: 1500,
+							showConfirmButton: false
+						});
 
-							// actualiza boton
-							$('#botonguardar_reporte_objetivogeneral').html('Guardar objetivo general <i class="fa fa-save"></i>');
-							$('#botonguardar_reporte_objetivogeneral').attr('disabled', false);
-						},
-						beforeSend: function () {
-							$('#botonguardar_reporte_objetivogeneral').html('Guardando objetivo general <i class="fa fa-spin fa-spinner"></i>');
-							$('#botonguardar_reporte_objetivogeneral').attr('disabled', true);
-						},
-						error: function (dato) {
-							// actualiza boton
-							$('#botonguardar_reporte_objetivogeneral').html('Guardar objetivo general <i class="fa fa-save"></i>');
-							$('#botonguardar_reporte_objetivogeneral').attr('disabled', false);
+						// actualiza boton
+						$('#botonguardar_reporte_objetivogeneral').html('Guardar objetivo general <i class="fa fa-save"></i>');
+						$('#botonguardar_reporte_objetivogeneral').attr('disabled', false);
+					},
+					beforeSend: function()
+					{
+						$('#botonguardar_reporte_objetivogeneral').html('Guardando objetivo general <i class="fa fa-spin fa-spinner"></i>');
+						$('#botonguardar_reporte_objetivogeneral').attr('disabled', true);
+					},
+					error: function(dato)
+					{
+						// actualiza boton
+						$('#botonguardar_reporte_objetivogeneral').html('Guardar objetivo general <i class="fa fa-save"></i>');
+						$('#botonguardar_reporte_objetivogeneral').attr('disabled', false);
 
-							// mensaje
-							swal({
-								title: "Error",
-								text: "" + dato.msj,
-								type: "error", // warning, error, success, info
-								buttons: {
-									visible: false, // true , false
-								},
-								timer: 1500,
-								showConfirmButton: false
-							});
-							return false;
-						}
-					}).submit();
-					return false;
-				}
-				else {
-					// mensaje
-					swal({
-						title: "Cancelado",
-						text: "Acción cancelada",
-						type: "error", // warning, error, success, info
-						buttons: {
-							visible: false, // true , false
-						},
-						timer: 500,
-						showConfirmButton: false
-					});
-				}
-			});
+						// mensaje
+						swal({
+							title: "Error",
+							text: ""+dato.msj,
+							type: "error", // warning, error, success, info
+							buttons: {
+								visible: false, // true , false
+							},
+							timer: 1500,
+							showConfirmButton: false
+						});
+						return false;
+					}
+				}).submit();
+				return false;
+			}
+			else 
+			{
+				// mensaje
+				swal({
+					title: "Cancelado",
+					text: "Acción cancelada",
+					type: "error", // warning, error, success, info
+					buttons: {
+						visible: false, // true , false
+					},
+					timer: 500,
+					showConfirmButton: false
+				});
+			}
+		});
 		return false;
 	}
 });
@@ -1101,10 +1193,12 @@ $("#botonguardar_reporte_objetivogeneral").click(function () {
 // OBJETIVOS ESPECIFICOS
 
 
-$("#botonguardar_reporte_objetivoespecifico").click(function () {
+$("#botonguardar_reporte_objetivoespecifico").click(function()
+{
 	// valida campos vacios
 	var valida = this.form.checkValidity();
-	if (valida) {
+	if (valida)
+	{
 		swal({
 			title: "¡Confirme que desea guardar!",
 			text: "Objetivos específicos",
@@ -1116,87 +1210,93 @@ $("#botonguardar_reporte_objetivoespecifico").click(function () {
 			closeOnConfirm: false,
 			closeOnCancel: false
 		},
-			function (isConfirm) {
-				if (isConfirm) {
-					// cerrar msj confirmacion
-					swal.close();
+		function(isConfirm)
+		{
+			if (isConfirm)
+			{
+				// cerrar msj confirmacion
+				swal.close();
 
-					// enviar datos
-					$('#form_reporte_objetivoespecifico').ajaxForm({
-						dataType: 'json',
-						type: 'POST',
-						url: '' + ruta_storage_guardar,
-						data: {
-							opcion: 4,
-							proyecto_id: proyecto.id,
-							agente_id: agente_id,
-							agente_nombre: agente_nombre,
-							reporteregistro_id: reporteregistro_id,
-							catactivo_id: $("#reporte_catactivo_id").val(),
-							reporte_instalacion: $("#reporte_instalacion").val()
-						},
-						resetForm: false,
-						success: function (dato) {
-							// Actualizar ID reporte						
-							reporteregistro_id = dato.reporteregistro_id;
+				// enviar datos
+				$('#form_reporte_objetivoespecifico').ajaxForm({
+					dataType: 'json',
+					type: 'POST',
+					url: ''+ruta_storage_guardar,
+					data: {
+						opcion: 4,
+						proyecto_id: proyecto.id,
+						agente_id: agente_id,
+						agente_nombre: agente_nombre,
+						reporteregistro_id: reporteregistro_id,
+						catactivo_id: $("#reporte_catactivo_id").val(),
+						reporte_instalacion: $("#reporte_instalacion").val()
+					},
+					resetForm: false,
+					success: function(dato)
+					{
+						// Actualizar ID reporte						
+						reporteregistro_id = dato.reporteregistro_id;
 
-							menureporte_estado("menureporte_3_2", 1);
+						menureporte_estado("menureporte_3_2", 1);
 
-							// mensaje
-							swal({
-								title: "Correcto",
-								text: "" + dato.msj,
-								type: "success", // warning, error, success, info
-								buttons: {
-									visible: false, // true , false
-								},
-								timer: 1500,
-								showConfirmButton: false
-							});
+						// mensaje
+						swal({
+							title: "Correcto",
+							text: ""+dato.msj,
+							type: "success", // warning, error, success, info
+							buttons: {
+								visible: false, // true , false
+							},
+							timer: 1500,
+							showConfirmButton: false
+						});
 
-							// actualiza boton
-							$('#botonguardar_reporte_objetivoespecifico').html('Guardar objetivos específicos <i class="fa fa-save"></i>');
-							$('#botonguardar_reporte_objetivoespecifico').attr('disabled', false);
-						},
-						beforeSend: function () {
-							$('#botonguardar_reporte_objetivoespecifico').html('Guardando objetivos específicos <i class="fa fa-spin fa-spinner"></i>');
-							$('#botonguardar_reporte_objetivoespecifico').attr('disabled', true);
-						},
-						error: function (dato) {
-							// actualiza boton
-							$('#botonguardar_reporte_objetivoespecifico').html('Guardar objetivos específicos <i class="fa fa-save"></i>');
-							$('#botonguardar_reporte_objetivoespecifico').attr('disabled', false);
+						// actualiza boton
+						$('#botonguardar_reporte_objetivoespecifico').html('Guardar objetivos específicos <i class="fa fa-save"></i>');
+						$('#botonguardar_reporte_objetivoespecifico').attr('disabled', false);
+					},
+					beforeSend: function()
+					{
+						$('#botonguardar_reporte_objetivoespecifico').html('Guardando objetivos específicos <i class="fa fa-spin fa-spinner"></i>');
+						$('#botonguardar_reporte_objetivoespecifico').attr('disabled', true);
+					},
+					error: function(dato)
+					{
+						// actualiza boton
+						$('#botonguardar_reporte_objetivoespecifico').html('Guardar objetivos específicos <i class="fa fa-save"></i>');
+						$('#botonguardar_reporte_objetivoespecifico').attr('disabled', false);
 
-							// mensaje
-							swal({
-								title: "Error",
-								text: "" + dato.msj,
-								type: "error", // warning, error, success, info
-								buttons: {
-									visible: false, // true , false
-								},
-								timer: 1500,
-								showConfirmButton: false
-							});
-							return false;
-						}
-					}).submit();
-					return false;
-				}
-				else {
-					// mensaje
-					swal({
-						title: "Cancelado",
-						text: "Acción cancelada",
-						type: "error", // warning, error, success, info
-						buttons: {
-							visible: false, // true , false
-						},
-						timer: 500,
-						showConfirmButton: false
-					});
-				}
-			});
+						// mensaje
+						swal({
+							title: "Error",
+							text: ""+dato.msj,
+							type: "error", // warning, error, success, info
+							buttons: {
+								visible: false, // true , false
+							},
+							timer: 1500,
+							showConfirmButton: false
+						});
+						return false;
+					}
+				}).submit();
+				return false;
+			}
+			else 
+			{
+				// mensaje
+				swal({
+					title: "Cancelado",
+					text: "Acción cancelada",
+					type: "error", // warning, error, success, info
+					buttons: {
+						visible: false, // true , false
+					},
+					timer: 500,
+					showConfirmButton: false
+				});
+			}
+		});
 		return false;
 	}
 });
@@ -1206,10 +1306,12 @@ $("#botonguardar_reporte_objetivoespecifico").click(function () {
 // METODOLOGÍA PUNTO 4.1
 
 
-$("#botonguardar_reporte_metodologia_4_1").click(function () {
+$("#botonguardar_reporte_metodologia_4_1").click(function()
+{
 	// valida campos vacios
 	var valida = this.form.checkValidity();
-	if (valida) {
+	if (valida)
+	{
 		swal({
 			title: "¡Confirme que desea guardar!",
 			text: "Metodológía punto 4.1",
@@ -1221,87 +1323,93 @@ $("#botonguardar_reporte_metodologia_4_1").click(function () {
 			closeOnConfirm: false,
 			closeOnCancel: false
 		},
-			function (isConfirm) {
-				if (isConfirm) {
-					// cerrar msj confirmacion
-					swal.close();
+		function(isConfirm)
+		{
+			if (isConfirm)
+			{
+				// cerrar msj confirmacion
+				swal.close();
 
-					// enviar datos
-					$('#form_reporte_metodologia_4_1').ajaxForm({
-						dataType: 'json',
-						type: 'POST',
-						url: '' + ruta_storage_guardar,
-						data: {
-							opcion: 5,
-							proyecto_id: proyecto.id,
-							agente_id: agente_id,
-							agente_nombre: agente_nombre,
-							reporteregistro_id: reporteregistro_id,
-							catactivo_id: $("#reporte_catactivo_id").val(),
-							reporte_instalacion: $("#reporte_instalacion").val()
-						},
-						resetForm: false,
-						success: function (dato) {
-							// Actualizar ID reporte						
-							reporteregistro_id = dato.reporteregistro_id;
+				// enviar datos
+				$('#form_reporte_metodologia_4_1').ajaxForm({
+					dataType: 'json',
+					type: 'POST',
+					url: ''+ruta_storage_guardar,
+					data: {
+						opcion: 5,
+						proyecto_id: proyecto.id,
+						agente_id: agente_id,
+						agente_nombre: agente_nombre,
+						reporteregistro_id: reporteregistro_id,
+						catactivo_id: $("#reporte_catactivo_id").val(),
+						reporte_instalacion: $("#reporte_instalacion").val()
+					},
+					resetForm: false,
+					success: function(dato)
+					{
+						// Actualizar ID reporte						
+						reporteregistro_id = dato.reporteregistro_id;
 
-							menureporte_estado("menureporte_4_1", 1);
+						menureporte_estado("menureporte_4_1", 1);
 
-							// mensaje
-							swal({
-								title: "Correcto",
-								text: "" + dato.msj,
-								type: "success", // warning, error, success, info
-								buttons: {
-									visible: false, // true , false
-								},
-								timer: 1500,
-								showConfirmButton: false
-							});
+						// mensaje
+						swal({
+							title: "Correcto",
+							text: ""+dato.msj,
+							type: "success", // warning, error, success, info
+							buttons: {
+								visible: false, // true , false
+							},
+							timer: 1500,
+							showConfirmButton: false
+						});
 
-							// actualiza boton
-							$('#botonguardar_reporte_metodologia_4_1').html('Guardar metodología punto 4.1 <i class="fa fa-save"></i>');
-							$('#botonguardar_reporte_metodologia_4_1').attr('disabled', false);
-						},
-						beforeSend: function () {
-							$('#botonguardar_reporte_metodologia_4_1').html('Guardando metodología punto 4.1 <i class="fa fa-spin fa-spinner"></i>');
-							$('#botonguardar_reporte_metodologia_4_1').attr('disabled', true);
-						},
-						error: function (dato) {
-							// actualiza boton
-							$('#botonguardar_reporte_metodologia_4_1').html('Guardar metodología punto 4.1 <i class="fa fa-save"></i>');
-							$('#botonguardar_reporte_metodologia_4_1').attr('disabled', false);
+						// actualiza boton
+						$('#botonguardar_reporte_metodologia_4_1').html('Guardar metodología punto 4.1 <i class="fa fa-save"></i>');
+						$('#botonguardar_reporte_metodologia_4_1').attr('disabled', false);
+					},
+					beforeSend: function()
+					{
+						$('#botonguardar_reporte_metodologia_4_1').html('Guardando metodología punto 4.1 <i class="fa fa-spin fa-spinner"></i>');
+						$('#botonguardar_reporte_metodologia_4_1').attr('disabled', true);
+					},
+					error: function(dato)
+					{
+						// actualiza boton
+						$('#botonguardar_reporte_metodologia_4_1').html('Guardar metodología punto 4.1 <i class="fa fa-save"></i>');
+						$('#botonguardar_reporte_metodologia_4_1').attr('disabled', false);
 
-							// mensaje
-							swal({
-								title: "Error",
-								text: "" + dato.msj,
-								type: "error", // warning, error, success, info
-								buttons: {
-									visible: false, // true , false
-								},
-								timer: 1500,
-								showConfirmButton: false
-							});
-							return false;
-						}
-					}).submit();
-					return false;
-				}
-				else {
-					// mensaje
-					swal({
-						title: "Cancelado",
-						text: "Acción cancelada",
-						type: "error", // warning, error, success, info
-						buttons: {
-							visible: false, // true , false
-						},
-						timer: 500,
-						showConfirmButton: false
-					});
-				}
-			});
+						// mensaje
+						swal({
+							title: "Error",
+							text: ""+dato.msj,
+							type: "error", // warning, error, success, info
+							buttons: {
+								visible: false, // true , false
+							},
+							timer: 1500,
+							showConfirmButton: false
+						});
+						return false;
+					}
+				}).submit();
+				return false;
+			}
+			else 
+			{
+				// mensaje
+				swal({
+					title: "Cancelado",
+					text: "Acción cancelada",
+					type: "error", // warning, error, success, info
+					buttons: {
+						visible: false, // true , false
+					},
+					timer: 500,
+					showConfirmButton: false
+				});
+			}
+		});
 		return false;
 	}
 });
@@ -1314,14 +1422,15 @@ $("#botonguardar_reporte_metodologia_4_1").click(function () {
 var ubicacionmapa = '';
 
 
-$(document).ready(function () {
+$(document).ready(function()
+{
 	$('#reporteubicacionfoto').dropify({
 		messages:
 		{
 			'default': 'Arrastre el mapa aquí o haga click',
 			'replace': 'Arrastre el mapa o haga clic para reemplazar',
-			'remove': 'Quitar',
-			'error': 'Ooops, ha ocurrido un error.'
+			'remove':  'Quitar',
+			'error':   'Ooops, ha ocurrido un error.'
 		},
 		error:
 		{
@@ -1336,7 +1445,8 @@ $(document).ready(function () {
 });
 
 
-function redimencionar_mapaubicacion() {
+function redimencionar_mapaubicacion()
+{
 	// Bloquear boton
 	$('#botonguardar_reporte_ubicacion').attr('disabled', true);
 
@@ -1354,12 +1464,14 @@ function redimencionar_mapaubicacion() {
 	reader.readAsDataURL(file);
 
 	// Set the image once loaded into file reader
-	reader.onload = function (e) {
-		//img.src = e.target.result;
+	reader.onload = function(e)
+	{
+	    //img.src = e.target.result;
 		var img = new Image();
 		img.src = this.result;
-
-		setTimeout(function () {
+		
+	    setTimeout(function()
+	    {
 			var canvas = document.createElement("canvas");
 			//var canvas = $("<canvas>", {"id":"testing"})[0];
 			//var ctx = canvas.getContext("2d");
@@ -1370,24 +1482,30 @@ function redimencionar_mapaubicacion() {
 			var height = img.height;
 
 			// Dimensiones Nuevas
-			if (parseInt(width) > 8000) {
+			if (parseInt(width) > 8000)
+			{
 				var MAX_WIDTH = 4000; //Ancho de la imagen
 				var MAX_HEIGHT = 3000; //Alto de la imagen
 			}
-			else {
+			else
+			{
 				var MAX_WIDTH = 1200; //Ancho de la imagen
 				var MAX_HEIGHT = 900; //Alto de la imagen
 			}
 
 			// Dimensionar con respecto a la relacion de aspecto
-			if (width > height) {
-				if (width > MAX_WIDTH) {
+			if (width > height)
+			{
+				if (width > MAX_WIDTH)
+				{
 					height *= MAX_WIDTH / width;
 					width = MAX_WIDTH;
 				}
 			}
-			else {
-				if (height > MAX_HEIGHT) {
+			else
+			{
+				if (height > MAX_HEIGHT)
+				{
 					width *= MAX_HEIGHT / height;
 					height = MAX_HEIGHT;
 				}
@@ -1397,7 +1515,7 @@ function redimencionar_mapaubicacion() {
 			canvas.height = height;
 			var ctx = canvas.getContext("2d");
 			ctx.drawImage(img, 0, 0, width, height);
-			console.log("Nuevas dimensiones ", width, height);
+			console.log("Nuevas dimensiones ",width, height);
 
 			// Resultado
 			var dataurl = canvas.toDataURL("image/jpeg");
@@ -1411,10 +1529,12 @@ function redimencionar_mapaubicacion() {
 }
 
 
-$("#botonguardar_reporte_ubicacion").click(function () {
+$("#botonguardar_reporte_ubicacion").click(function()
+{
 	// valida campos vacios
 	var valida = this.form.checkValidity();
-	if (valida) {
+	if (valida)
+	{
 		swal({
 			title: "¡Confirme que desea guardar!",
 			text: "Datos de la ubicación",
@@ -1426,99 +1546,106 @@ $("#botonguardar_reporte_ubicacion").click(function () {
 			closeOnConfirm: false,
 			closeOnCancel: false
 		},
-			function (isConfirm) {
-				if (isConfirm) {
-					// cerrar msj confirmacion
-					swal.close();
+		function(isConfirm)
+		{
+			if (isConfirm)
+			{
+				// cerrar msj confirmacion
+				swal.close();
 
-					// enviar datos
-					$('#form_reporte_ubicacion').ajaxForm({
-						dataType: 'json',
-						type: 'POST',
-						url: '' + ruta_storage_guardar,
-						data: {
-							opcion: 6,
-							proyecto_id: proyecto.id,
-							agente_id: agente_id,
-							agente_nombre: agente_nombre,
-							reporteregistro_id: reporteregistro_id,
-							catactivo_id: $("#reporte_catactivo_id").val(),
-							reporte_instalacion: $("#reporte_instalacion").val(),
-							ubicacionmapa: ubicacionmapa
-						},
-						resetForm: false,
-						success: function (dato) {
-							// Actualizar ID reporte						
-							reporteregistro_id = dato.reporteregistro_id;
+				// enviar datos
+				$('#form_reporte_ubicacion').ajaxForm({
+					dataType: 'json',
+					type: 'POST',
+					url: ''+ruta_storage_guardar,
+					data: {
+						opcion: 6,
+						proyecto_id: proyecto.id,
+						agente_id: agente_id,
+						agente_nombre: agente_nombre,
+						reporteregistro_id: reporteregistro_id,
+						catactivo_id: $("#reporte_catactivo_id").val(),
+						reporte_instalacion: $("#reporte_instalacion").val(),
+						ubicacionmapa: ubicacionmapa
+					},
+					resetForm: false,
+					success: function(dato)
+					{
+						// Actualizar ID reporte						
+						reporteregistro_id = dato.reporteregistro_id;
 
-							menureporte_estado("menureporte_5_1", 1);
+						menureporte_estado("menureporte_5_1", 1);
 
-							$('#reporteubicacionfoto').val('');
-							$('#reporteubicacionfoto').attr('required', false);
-							$('#boton_descargarmapaubicacion').css('display', 'block');
+						$('#reporteubicacionfoto').val('');
+						$('#reporteubicacionfoto').attr('required', false);
+						$('#boton_descargarmapaubicacion').css('display', 'block');
 
-							// mensaje
-							swal({
-								title: "Correcto",
-								text: "" + dato.msj,
-								type: "success", // warning, error, success, info
-								buttons: {
-									visible: false, // true , false
-								},
-								timer: 1500,
-								showConfirmButton: false
-							});
+						// mensaje
+						swal({
+							title: "Correcto",
+							text: ""+dato.msj,
+							type: "success", // warning, error, success, info
+							buttons: {
+								visible: false, // true , false
+							},
+							timer: 1500,
+							showConfirmButton: false
+						});
 
-							// actualiza boton
-							$('#botonguardar_reporte_ubicacion').html('Guardar ubicación <i class="fa fa-save"></i>');
-							$('#botonguardar_reporte_ubicacion').attr('disabled', false);
-						},
-						beforeSend: function () {
-							$('#botonguardar_reporte_ubicacion').html('Guardando ubicación <i class="fa fa-spin fa-spinner"></i>');
-							$('#botonguardar_reporte_ubicacion').attr('disabled', true);
-						},
-						error: function (dato) {
-							// actualiza boton
-							$('#botonguardar_reporte_ubicacion').html('Guardar ubicación <i class="fa fa-save"></i>');
-							$('#botonguardar_reporte_ubicacion').attr('disabled', false);
+						// actualiza boton
+						$('#botonguardar_reporte_ubicacion').html('Guardar ubicación <i class="fa fa-save"></i>');
+						$('#botonguardar_reporte_ubicacion').attr('disabled', false);
+					},
+					beforeSend: function()
+					{
+						$('#botonguardar_reporte_ubicacion').html('Guardando ubicación <i class="fa fa-spin fa-spinner"></i>');
+						$('#botonguardar_reporte_ubicacion').attr('disabled', true);
+					},
+					error: function(dato)
+					{
+						// actualiza boton
+						$('#botonguardar_reporte_ubicacion').html('Guardar ubicación <i class="fa fa-save"></i>');
+						$('#botonguardar_reporte_ubicacion').attr('disabled', false);
 
-							// mensaje
-							swal({
-								title: "Error",
-								text: "" + dato.msj,
-								type: "error", // warning, error, success, info
-								buttons: {
-									visible: false, // true , false
-								},
-								timer: 1500,
-								showConfirmButton: false
-							});
-							return false;
-						}
-					}).submit();
-					return false;
-				}
-				else {
-					// mensaje
-					swal({
-						title: "Cancelado",
-						text: "Acción cancelada",
-						type: "error", // warning, error, success, info
-						buttons: {
-							visible: false, // true , false
-						},
-						timer: 500,
-						showConfirmButton: false
-					});
-				}
-			});
+						// mensaje
+						swal({
+							title: "Error",
+							text: ""+dato.msj,
+							type: "error", // warning, error, success, info
+							buttons: {
+								visible: false, // true , false
+							},
+							timer: 1500,
+							showConfirmButton: false
+						});
+						return false;
+					}
+				}).submit();
+				return false;
+			}
+			else 
+			{
+				// mensaje
+				swal({
+					title: "Cancelado",
+					text: "Acción cancelada",
+					type: "error", // warning, error, success, info
+					buttons: {
+						visible: false, // true , false
+					},
+					timer: 500,
+					showConfirmButton: false
+				});
+			}
+		});
 		return false;
 	}
 });
 
 
-$("#boton_descargarmapaubicacion").click(function () {
-	window.open('/reportevibracionmapaubicacion/' + reporteregistro_id + '/' + 1);
+$("#boton_descargarmapaubicacion").click(function()
+{
+	window.open('/reportevibracionmapaubicacion/'+reporteregistro_id+'/'+1);
 });
 
 
@@ -1526,10 +1653,12 @@ $("#boton_descargarmapaubicacion").click(function () {
 // PROCESO INSTALACIÓN
 
 
-$("#botonguardar_reporte_procesoinstalacion").click(function () {
+$("#botonguardar_reporte_procesoinstalacion").click(function()
+{
 	// valida campos vacios
 	var valida = this.form.checkValidity();
-	if (valida) {
+	if (valida)
+	{
 		swal({
 			title: "¡Confirme que desea guardar!",
 			text: "Proceso y actividad principal de la instalación",
@@ -1541,87 +1670,93 @@ $("#botonguardar_reporte_procesoinstalacion").click(function () {
 			closeOnConfirm: false,
 			closeOnCancel: false
 		},
-			function (isConfirm) {
-				if (isConfirm) {
-					// cerrar msj confirmacion
-					swal.close();
+		function(isConfirm)
+		{
+			if (isConfirm)
+			{
+				// cerrar msj confirmacion
+				swal.close();
 
-					// enviar datos
-					$('#form_reporte_procesoinstalacion').ajaxForm({
-						dataType: 'json',
-						type: 'POST',
-						url: '' + ruta_storage_guardar,
-						data: {
-							opcion: 7,
-							proyecto_id: proyecto.id,
-							agente_id: agente_id,
-							agente_nombre: agente_nombre,
-							reporteregistro_id: reporteregistro_id,
-							catactivo_id: $("#reporte_catactivo_id").val(),
-							reporte_instalacion: $("#reporte_instalacion").val(),
-						},
-						resetForm: false,
-						success: function (dato) {
-							// Actualizar ID reporte						
-							reporteregistro_id = dato.reporteregistro_id;
+				// enviar datos
+				$('#form_reporte_procesoinstalacion').ajaxForm({
+					dataType: 'json',
+					type: 'POST',
+					url: ''+ruta_storage_guardar,
+					data: {
+						opcion: 7,
+						proyecto_id: proyecto.id,
+						agente_id: agente_id,
+						agente_nombre: agente_nombre,
+						reporteregistro_id: reporteregistro_id,
+						catactivo_id: $("#reporte_catactivo_id").val(),
+						reporte_instalacion: $("#reporte_instalacion").val(),
+					},
+					resetForm: false,
+					success: function(dato)
+					{
+						// Actualizar ID reporte						
+						reporteregistro_id = dato.reporteregistro_id;
 
-							menureporte_estado("menureporte_5_2", 1);
+						menureporte_estado("menureporte_5_2", 1);
 
-							// mensaje
-							swal({
-								title: "Correcto",
-								text: "" + dato.msj,
-								type: "success", // warning, error, success, info
-								buttons: {
-									visible: false, // true , false
-								},
-								timer: 1500,
-								showConfirmButton: false
-							});
+						// mensaje
+						swal({
+							title: "Correcto",
+							text: ""+dato.msj,
+							type: "success", // warning, error, success, info
+							buttons: {
+								visible: false, // true , false
+							},
+							timer: 1500,
+							showConfirmButton: false
+						});
 
-							// actualiza boton
-							$('#botonguardar_reporte_procesoinstalacion').html('Guardar proceso instalación <i class="fa fa-save"></i>');
-							$('#botonguardar_reporte_procesoinstalacion').attr('disabled', false);
-						},
-						beforeSend: function () {
-							$('#botonguardar_reporte_procesoinstalacion').html('Guardando proceso instalación <i class="fa fa-spin fa-spinner"></i>');
-							$('#botonguardar_reporte_procesoinstalacion').attr('disabled', true);
-						},
-						error: function (dato) {
-							// actualiza boton
-							$('#botonguardar_reporte_procesoinstalacion').html('Guardar proceso instalación <i class="fa fa-save"></i>');
-							$('#botonguardar_reporte_procesoinstalacion').attr('disabled', false);
+						// actualiza boton
+						$('#botonguardar_reporte_procesoinstalacion').html('Guardar proceso instalación <i class="fa fa-save"></i>');
+						$('#botonguardar_reporte_procesoinstalacion').attr('disabled', false);
+					},
+					beforeSend: function()
+					{
+						$('#botonguardar_reporte_procesoinstalacion').html('Guardando proceso instalación <i class="fa fa-spin fa-spinner"></i>');
+						$('#botonguardar_reporte_procesoinstalacion').attr('disabled', true);
+					},
+					error: function(dato)
+					{
+						// actualiza boton
+						$('#botonguardar_reporte_procesoinstalacion').html('Guardar proceso instalación <i class="fa fa-save"></i>');
+						$('#botonguardar_reporte_procesoinstalacion').attr('disabled', false);
 
-							// mensaje
-							swal({
-								title: "Error",
-								text: "" + dato.msj,
-								type: "error", // warning, error, success, info
-								buttons: {
-									visible: false, // true , false
-								},
-								timer: 1500,
-								showConfirmButton: false
-							});
-							return false;
-						}
-					}).submit();
-					return false;
-				}
-				else {
-					// mensaje
-					swal({
-						title: "Cancelado",
-						text: "Acción cancelada",
-						type: "error", // warning, error, success, info
-						buttons: {
-							visible: false, // true , false
-						},
-						timer: 500,
-						showConfirmButton: false
-					});
-				}
-			});
+						// mensaje
+						swal({
+							title: "Error",
+							text: ""+dato.msj,
+							type: "error", // warning, error, success, info
+							buttons: {
+								visible: false, // true , false
+							},
+							timer: 1500,
+							showConfirmButton: false
+						});
+						return false;
+					}
+				}).submit();
+				return false;
+			}
+			else 
+			{
+				// mensaje
+				swal({
+					title: "Cancelado",
+					text: "Acción cancelada",
+					type: "error", // warning, error, success, info
+					buttons: {
+						visible: false, // true , false
+					},
+					timer: 500,
+					showConfirmButton: false
+				});
+			}
+		});
 		return false;
 	}
 });
@@ -1634,23 +1769,29 @@ $("#botonguardar_reporte_procesoinstalacion").click(function () {
 var selectareas = '';
 
 
-$(document).ready(function () {
-	setTimeout(function () {
+$(document).ready(function()
+{
+	setTimeout(function()
+	{
 		tabla_reporte_areas(proyecto.id);
 	}, 2500);
 });
 
 
 var datatable_reporteareas = null;
-function tabla_reporte_areas(proyecto_id) {
-	try {
-		var ruta = "/reportevibracionareas/" + proyecto_id;
+function tabla_reporte_areas(proyecto_id)
+{
+	try 
+	{
+		var ruta = "/reportevibracionareas/"+proyecto_id;
 
-		if (datatable_reporteareas != null) {
+		if (datatable_reporteareas != null)
+		{
 			datatable_reporteareas.clear().draw();
 			datatable_reporteareas.ajax.url(ruta).load();
 		}
-		else {
+		else
+		{
 			var numeroejecucion = 1;
 			datatable_reporteareas = $('#tabla_reporte_area').DataTable({
 				"ajax": {
@@ -1659,14 +1800,17 @@ function tabla_reporte_areas(proyecto_id) {
 					"cache": false,
 					dataType: "json",
 					data: {},
-					dataSrc: function (json) {
-						if (parseInt(json.data.length) > 0 && parseInt(json.total_singuardar) == 0) {
+					dataSrc: function (json)
+					{
+						if (parseInt(json.data.length) > 0 && parseInt(json.total_singuardar) == 0)
+						{
 							menureporte_estado("menureporte_5_3", 1);
 							menureporte_estado("menureporte_5_4", 1);
 							menureporte_estado("menureporte_5_5", 1);
 							menureporte_estado("menureporte_6_1", 1);
 						}
-						else {
+						else
+						{
 							menureporte_estado("menureporte_5_3", 0);
 							menureporte_estado("menureporte_5_4", 0);
 							menureporte_estado("menureporte_5_5", 0);
@@ -1687,10 +1831,12 @@ function tabla_reporte_areas(proyecto_id) {
 						// alert("Done! "+json.msj);
 						return json.data;
 					},
-					error: function (xhr, error, code) {
+					error: function (xhr, error, code)
+					{
 						// console.log(xhr); console.log(code);
 						console.log('error en datatable_reporteareas');
-						if (numeroejecucion <= 1) {
+						if (numeroejecucion <= 1)
+						{
 							tabla_reporte_areas(proyecto_id)
 							numeroejecucion += 1;
 						}
@@ -1735,7 +1881,7 @@ function tabla_reporte_areas(proyecto_id) {
 				],
 				"lengthMenu": [[20, 50, 100, -1], [20, 50, 100, "Todos"]],
 				"rowsGroup": [1, 0, 2, 5], //agrupar filas
-				"order": [[0, "DESC"]],
+				"order": [[ 0, "DESC" ]],
 				"ordering": false,
 				"processing": true,
 				"paging": true,
@@ -1756,23 +1902,27 @@ function tabla_reporte_areas(proyecto_id) {
 						"previous": "Anterior"
 					}
 				}
-			});
+		    });
 		}
 
 		// Tooltip en DataTable
-		datatable_reporteareas.on('draw', function () {
+		datatable_reporteareas.on('draw', function ()
+		{
 			$('[data-toggle="tooltip"]').tooltip();
 		});
 	}
-	catch (exception) {
+	catch (exception)
+	{
 		tabla_reporte_areas(proyecto_id);
-	}
+    }
 }
 
 
 var datatable_areacategoria = null;
-function tabla_areacategorias(tbody) {
-	if (datatable_areacategoria != null) {
+function tabla_areacategorias(tbody)
+{
+	if (datatable_areacategoria != null)
+	{
 		datatable_areacategoria.destroy();
 	}
 
@@ -1780,10 +1930,10 @@ function tabla_areacategorias(tbody) {
 
 	datatable_areacategoria = $('#tabla_areacategorias').DataTable({
 		"scrollY": "200px",
-		"scrollCollapse": true,
+        "scrollCollapse": true,
 		"lengthMenu": [[20, 50, 100, -1], [20, 50, 100, "Todos"]],
 		// "rowsGroup": [0], //agrupar filas
-		"order": [[0, "DESC"]],
+		"order": [[ 0, "DESC" ]],
 		"ordering": false,
 		"searching": true,
 		"processing": true,
@@ -1809,90 +1959,98 @@ function tabla_areacategorias(tbody) {
 }
 
 
-function activa_areacategoria(checkbox, num_registro) {
-	if (checkbox.checked) {
-		$(".areacategoria_" + num_registro).attr('readonly', false);
-		$(".areacategoria_" + num_registro).attr('required', true);
+function activa_areacategoria(checkbox, num_registro)
+{
+	if (checkbox.checked)
+	{
+		$(".areacategoria_"+num_registro).attr('readonly', false);
+		$(".areacategoria_"+num_registro).attr('required', true);
 	}
-	else {
-		$(".areacategoria_" + num_registro).val('');
-		$(".areacategoria_" + num_registro).attr('required', false);
-		$(".areacategoria_" + num_registro).attr('readonly', true);
+	else
+	{
+		$(".areacategoria_"+num_registro).val('');
+		$(".areacategoria_"+num_registro).attr('required', false);
+		$(".areacategoria_"+num_registro).attr('readonly', true);
 	}
 }
 
 
-$("#botonnueva_areamaquina").click(function () {
-	$('#tabla_areamaquinaria > tbody').append('<tr>' +
-		'<td><input type="text" class="form-control" name="reportevibracionmaquinaria_nombre[]" required></td>' +
-		'<td><input type="number" min="1" class="form-control" name="reportevibracionmaquinaria_cantidad[]" required></td>' +
-		'<td><button type="button" class="btn btn-danger waves-effect btn-circle eliminar"><i class="fa fa-trash fa-2x"></i></button></td>' +
-		'</tr>');
+$("#botonnueva_areamaquina").click(function()
+{
+    $('#tabla_areamaquinaria > tbody').append('<tr>'+
+													'<td><input type="text" class="form-control" name="reportevibracionmaquinaria_nombre[]" required></td>'+
+													'<td><input type="number" min="1" class="form-control" name="reportevibracionmaquinaria_cantidad[]" required></td>'+
+													'<td><button type="button" class="btn btn-danger waves-effect btn-circle eliminar"><i class="fa fa-trash fa-2x"></i></button></td>'+
+												'</tr>');
 
-	// desplazar a la ultima fila de la tabla
-	$('#div_tabla_areamaquinaria').animate({
-		scrollTop: $('#tabla_areamaquinaria > tbody > tr:last').position().top //ultima fila
-	}, 500);
+    // desplazar a la ultima fila de la tabla
+    $('#div_tabla_areamaquinaria').animate({
+    	scrollTop: $('#tabla_areamaquinaria > tbody > tr:last').position().top //ultima fila
+    }, 500);
 });
 
 
-$('#tabla_areamaquinaria tbody').on('click', 'td>button.eliminar', function () {
-	// obtener fila tabla
-	var fila = $(this);
-
-	// confirmar
-	swal({
-		title: "¿Eliminar maquinaria?",
-		text: "Quitar de la lista",
-		type: "warning",
-		showCancelButton: true,
-		confirmButtonColor: "#DD6B55",
-		confirmButtonText: "Eliminar!",
-		cancelButtonText: "Cancelar!",
-		closeOnConfirm: false,
-		closeOnCancel: false
-	}, function (isConfirm) {
-		if (isConfirm) {
-			// cerrar msj confirmacion
+$('#tabla_areamaquinaria tbody').on('click', 'td>button.eliminar', function()
+{
+    // obtener fila tabla
+    var fila = $(this);
+    
+    // confirmar
+    swal({   
+        title: "¿Eliminar maquinaria?",   
+        text: "Quitar de la lista",   
+        type: "warning",   
+        showCancelButton: true,   
+        confirmButtonColor: "#DD6B55",   
+        confirmButtonText: "Eliminar!",   
+        cancelButtonText: "Cancelar!",   
+        closeOnConfirm: false,   
+        closeOnCancel: false 
+    }, function(isConfirm){   
+        if (isConfirm)
+        {
+        	// cerrar msj confirmacion
 			swal.close();
 
-			var tr = fila.closest('tr');
-			fila.closest("tr").remove(); // eliminar fila TR
+            var tr = fila.closest('tr');
+            fila.closest("tr").remove(); // eliminar fila TR
 
-			// mensaje
-			swal({
-				title: "Correcto",
-				text: "Maquinaria eliminada de la lista",
-				type: "success", // warning, error, success, info
-				buttons: {
-					visible: false, // true , false
-				},
-				timer: 1000,
-				showConfirmButton: false
-			});
-		}
-		else {
-			// mensaje
-			swal({
-				title: "Cancelado",
-				text: "",
-				type: "error", // warning, error, success, info
-				buttons: {
-					visible: false, // true , false
-				},
-				timer: 500,
-				showConfirmButton: false
-			});
-		}
-	});
+            // mensaje
+            swal({
+                title: "Correcto",
+                 text: "Maquinaria eliminada de la lista",
+                type: "success", // warning, error, success, info
+                buttons: {
+                    visible: false, // true , false
+                },
+                timer: 1000,
+                showConfirmButton: false
+            });
+        }
+        else 
+        {
+            // mensaje
+            swal({
+                title: "Cancelado",
+                text: "",
+                type: "error", // warning, error, success, info
+                buttons: {
+                    visible: false, // true , false
+                },
+                timer: 500,
+                showConfirmButton: false
+            });   
+        } 
+    });
 });
 
 
-$('#tabla_reporte_area tbody').on('click', 'td.editar', function () {
+$('#tabla_reporte_area tbody').on('click', 'td.editar', function()
+{
 	var tr = $(this).closest('tr');
 	var row = datatable_reporteareas.row(tr);
 
-	$('#form_reporte_area').each(function () {
+	$('#form_reporte_area').each(function(){
 		this.reset();
 	});
 
@@ -1904,7 +2062,7 @@ $('#tabla_reporte_area tbody').on('click', 'td.editar', function () {
 	// Llenar campos
 	$('#reportearea_instalacion').val(row.data().reportearea_instalacion);
 	$('#reportearea_nombre').val(row.data().reportearea_nombre);
-	$('#reportearea_orden').val(row.data().reportearea_orden);
+	$('#reportearea_orden').val(row.data().reportearea_orden);	
 	$('#reportevibracionarea_porcientooperacion').val(row.data().reportevibracionarea_porcientooperacion);
 	$('#reportearea_tipoexposicion').val(row.data().reportearea_tipoexposicion);
 
@@ -1923,18 +2081,21 @@ $('#tabla_reporte_area tbody').on('click', 'td.editar', function () {
 	$.ajax({
 		type: "GET",
 		dataType: "json",
-		url: "/reportevibracionareacategorias/" + proyecto.id + "/" + row.data().id,
-		data: {},
+		url: "/reportevibracionareacategorias/"+proyecto.id+"/"+row.data().id,
+		data:{},
 		cache: false,
-		success: function (dato) {
+		success:function(dato)
+		{
 			tabla_areacategorias(dato.areacategorias);
 			$('#div_tabla_areamaquinaria tbody').html(dato.areamaqinarias);
 		},
-		beforeSend: function () {
+		beforeSend: function()
+		{
 			$('#tabla_areacategorias tbody').html('<tr><td colspan="5" style="text-align: center;"><i class="fa fa-spin fa-spinner" style="font-size: 40px!important;"></i></td></tr>');
 		},
-		error: function (dato) {
-			$('#tabla_areacategorias tbody').html('<tr><td colspan="5" style="text-align: center;">Error al cargar las categorías</td></tr>');
+		error: function(dato)
+		{
+			$('#tabla_areacategorias tbody').html('<tr><td colspan="5" style="text-align: center;">Error al cargar las categorías</td></tr>');			
 			return false;
 		}
 	});//Fin ajax
@@ -1945,7 +2106,7 @@ $('#tabla_reporte_area tbody').on('click', 'td.editar', function () {
 
 
 	// mostrar modal
-	$('#modal_reporte_area').modal({ backdrop: false });
+	$('#modal_reporte_area').modal({backdrop:false});
 });
 
 function validarCampos() {
@@ -1963,7 +2124,7 @@ function validarCampos() {
 			},
 			showConfirmButton: true
 		})
-		return false;
+		return false; 
 	}
 
 
@@ -1980,16 +2141,18 @@ function validarCampos() {
 			},
 			showConfirmButton: true
 		})
-		return false;
+		return false; 
 	}
 
 	return true;
 }
 
-$("#botonguardar_modal_area").click(function () {
+$("#botonguardar_modal_area").click(function (e){
 	// borrar campo filtro del DATATABLE'S
 	// datatable_areacategoria.search($(this).val()).draw();
 	datatable_areacategoria.search("").draw();
+
+	e.preventDefault()	
 
 	if (validarCampos()) {
 		// valida campos vacios
@@ -2010,7 +2173,7 @@ $("#botonguardar_modal_area").click(function () {
 					if (isConfirm) {
 						// cerrar msj confirmacion
 						swal.close();
-
+	
 						// enviar datos
 						$('#form_reporte_area').ajaxForm({
 							dataType: 'json',
@@ -2029,15 +2192,15 @@ $("#botonguardar_modal_area").click(function () {
 							success: function (dato) {
 								// Actualizar ID reporte						
 								reporteregistro_id = dato.reporteregistro_id;
-
-
+	
+	
 								// Actualizar tabla
 								tabla_reporte_areas(proyecto.id);
 								tabla_reporte_puntos(proyecto.id);
 								tabla_reporte_matriz(proyecto.id);
 								reporte_dashboard(proyecto.id);
-
-
+	
+	
 								// mensaje
 								swal({
 									title: "Correcto",
@@ -2049,11 +2212,11 @@ $("#botonguardar_modal_area").click(function () {
 									timer: 1500,
 									showConfirmButton: false
 								});
-
+	
 								// actualiza boton
 								$('#botonguardar_modal_area').html('Guardar <i class="fa fa-save"></i>');
 								$('#botonguardar_modal_area').attr('disabled', false);
-
+	
 								// cerrar modal
 								$('#modal_reporte_area').modal('hide');
 							},
@@ -2065,7 +2228,7 @@ $("#botonguardar_modal_area").click(function () {
 								// actualiza boton
 								$('#botonguardar_modal_area').html('Guardar <i class="fa fa-save"></i>');
 								$('#botonguardar_modal_area').attr('disabled', false);
-
+	
 								// mensaje
 								swal({
 									title: "Error",
@@ -2099,14 +2262,16 @@ $("#botonguardar_modal_area").click(function () {
 			return false;
 		}
 
-	}
+	} 
 });
 
 
 
 var datatable_reporte_5_4 = null;
-function tabla_reporte_5_4(tbody) {
-	if (datatable_reporte_5_4 != null) {
+function tabla_reporte_5_4(tbody)
+{
+	if (datatable_reporte_5_4 != null)
+	{
 		datatable_reporte_5_4.destroy();
 	}
 
@@ -2115,7 +2280,7 @@ function tabla_reporte_5_4(tbody) {
 	datatable_reporte_5_4 = $('#tabla_reporte_5_4').DataTable({
 		"lengthMenu": [[20, 50, 100, -1], [20, 50, 100, "Todos"]],
 		"rowsGroup": [1, 2, 0], //agrupar filas
-		"order": [[0, "DESC"]],
+		"order": [[ 0, "DESC" ]],
 		"ordering": false,
 		"searching": true,
 		"processing": true,
@@ -2142,8 +2307,10 @@ function tabla_reporte_5_4(tbody) {
 
 
 var datatable_reporte_5_5 = null;
-function tabla_reporte_5_5(tbody) {
-	if (datatable_reporte_5_5 != null) {
+function tabla_reporte_5_5(tbody)
+{
+	if (datatable_reporte_5_5 != null)
+	{
 		datatable_reporte_5_5.destroy();
 	}
 
@@ -2152,7 +2319,7 @@ function tabla_reporte_5_5(tbody) {
 	datatable_reporte_5_5 = $('#tabla_reporte_5_5').DataTable({
 		"lengthMenu": [[20, 50, 100, -1], [20, 50, 100, "Todos"]],
 		"rowsGroup": [1, 5, 2, 0], //agrupar filas
-		"order": [[0, "DESC"]],
+		"order": [[ 0, "DESC" ]],
 		"ordering": false,
 		"searching": true,
 		"processing": true,
@@ -2179,8 +2346,10 @@ function tabla_reporte_5_5(tbody) {
 
 
 var datatable_reporte_6_1 = null;
-function tabla_reporte_6_1(tbody) {
-	if (datatable_reporte_6_1 != null) {
+function tabla_reporte_6_1(tbody)
+{
+	if (datatable_reporte_6_1 != null)
+	{
 		datatable_reporte_6_1.destroy();
 	}
 
@@ -2189,7 +2358,7 @@ function tabla_reporte_6_1(tbody) {
 	datatable_reporte_6_1 = $('#tabla_reporte_6_1').DataTable({
 		"lengthMenu": [[20, 50, 100, -1], [20, 50, 100, "Todos"]],
 		"rowsGroup": [1, 3, 0], //agrupar filas
-		"order": [[0, "DESC"]],
+		"order": [[ 0, "DESC" ]],
 		"ordering": false,
 		"searching": true,
 		"processing": true,
@@ -2222,23 +2391,29 @@ function tabla_reporte_6_1(tbody) {
 var selectcategorias = '';
 
 
-$(document).ready(function () {
-	setTimeout(function () {
+$(document).ready(function()
+{
+	setTimeout(function()
+	{
 		tabla_reporte_puntos(proyecto.id);
 	}, 3500);
 });
 
 
 var datatable_reporte_puntos = null;
-function tabla_reporte_puntos(proyecto_id) {
-	try {
-		var ruta = "/reportevibracionevaluaciontabla/" + proyecto_id;
+function tabla_reporte_puntos(proyecto_id)
+{
+	try 
+	{
+		var ruta = "/reportevibracionevaluaciontabla/"+proyecto_id;
 
-		if (datatable_reporte_puntos != null) {
+		if (datatable_reporte_puntos != null)
+		{
 			datatable_reporte_puntos.clear().draw();
 			datatable_reporte_puntos.ajax.url(ruta).load();
 		}
-		else {
+		else
+		{
 			var numeroejecucion = 1;
 			datatable_reporte_puntos = $('#tabla_reporte_puntos').DataTable({
 				ajax: {
@@ -2247,7 +2422,8 @@ function tabla_reporte_puntos(proyecto_id) {
 					cache: false,
 					dataType: "json",
 					data: {},
-					dataSrc: function (json) {
+					dataSrc: function (json)
+					{
 						// Tablas
 						menureporte_estado("menureporte_6_2", parseInt(json.total));
 						tabla_reporte_6_2(json.tabla_reporte_6_2);
@@ -2260,9 +2436,11 @@ function tabla_reporte_puntos(proyecto_id) {
 
 						return json.data;
 					},
-					error: function (xhr, error, code) {
-						console.log('error en datatable_reporte_puntos ' + code);
-						if (numeroejecucion <= 1) {
+					error: function (xhr, error, code)
+					{						
+						console.log('error en datatable_reporte_puntos '+code);
+						if (numeroejecucion <= 1)
+						{
 							tabla_reporte_puntos(proyecto_id)
 							numeroejecucion += 1;
 						}
@@ -2348,16 +2526,19 @@ function tabla_reporte_puntos(proyecto_id) {
 						previous: "Anterior"
 					}
 				},
-				rowCallback: function (row, data, index) {
+				rowCallback: function(row, data, index)
+				{
 					// // console.log(index+' - '+data.reporteiluminacionpuntos_nopunto);
 					// $(row).find('td:eq(7)').css('background', data.resultadoner_color);
 
-					if (data.reportehieloevaluacionparametros_resultado == "Dentro de norma") {
+					if(data.reportehieloevaluacionparametros_resultado == "Dentro de norma")
+					{
 						$(row).find('td:eq(13)').css('background', "#00FF00");
 						$(row).find('td:eq(13)').css('color', '#000000');
 						$(row).find('td:eq(13)').css('font-weight', 'bold');
 					}
-					else {
+					else
+					{
 						$(row).find('td:eq(13)').css('background', "#FF0000");
 						$(row).find('td:eq(13)').css('color', '#FFFFFF');
 						$(row).find('td:eq(13)').css('font-weight', 'bold');
@@ -2367,18 +2548,21 @@ function tabla_reporte_puntos(proyecto_id) {
 		}
 
 		// Tooltip en DataTable
-		datatable_reporte_puntos.on('draw', function () {
+		datatable_reporte_puntos.on('draw', function ()
+		{
 			$('[data-toggle="tooltip"]').tooltip();
 		});
 	}
-	catch (exception) {
+	catch (exception)
+	{
 		tabla_reporte_puntos(proyecto_id);
-	}
+    }
 }
 
 
-$("#boton_reporte_nuevopuntomedicion").click(function () {
-	$('#form_modal_puntomedicion').each(function () {
+$("#boton_reporte_nuevopuntomedicion").click(function()
+{
+	$('#form_modal_puntomedicion').each(function(){
 		this.reset();
 	});
 
@@ -2403,64 +2587,74 @@ $("#boton_reporte_nuevopuntomedicion").click(function () {
 
 
 	// mostrar modal
-	$('#modal_reporte_puntomedicion').modal({ backdrop: false });
+	$('#modal_reporte_puntomedicion').modal({backdrop:false});
 });
 
 
-function reportevibracionevaluacioncategorias(reportearea_id, reportecategoria_id) {
-	if (parseInt(reportearea_id) > 0) {
+function reportevibracionevaluacioncategorias(reportearea_id, reportecategoria_id)
+{
+	if (parseInt(reportearea_id) > 0)
+	{
 		$.ajax({
 			type: "GET",
 			dataType: "json",
-			url: "/reportevibracionevaluacioncategorias/" + reportearea_id + "/" + reportecategoria_id,
-			data: {},
+			url: "/reportevibracionevaluacioncategorias/"+reportearea_id+"/"+reportecategoria_id,
+			data:{},
 			cache: false,
-			success: function (dato) {
+			success:function(dato)
+			{
 				// Campo select categorias
 				$('#reportevibracioncategoria_id').html(dato.select_areacategorias);
 			},
-			beforeSend: function () {
+			beforeSend: function()
+			{
 				$('#reportevibracioncategoria_id').html('<option value=""></option>');
 			},
-			error: function (dato) {
+			error: function(dato)
+			{
 				$('#reportevibracioncategoria_id').html('<option value="">Error al consultar las categorías</option>');
 				return false;
 			}
 		});//Fin ajax
 	}
-	else {
+	else
+	{
 		// Campo select categorias
 		$('#reportevibracioncategoria_id').html('<option value=""></option>');
 	}
 }
 
 
-function tipo_evaluacion(tipo_evaluacion) {
+function tipo_evaluacion(tipo_evaluacion)
+{
 	$('.punto_tiempoexposicion').html(0);
 
 
-	if (parseInt(tipo_evaluacion) > 0) {
-		switch (parseInt(tipo_evaluacion)) {
+	if (parseInt(tipo_evaluacion) > 0)
+	{
+		switch (parseInt(tipo_evaluacion))
+		{ 
 			case 1:
-				$('input[name^="reportevibracionevaluaciondatos_frecuencia"]').each(function (key, value) {
+				$('input[name^="reportevibracionevaluaciondatos_frecuencia"]').each(function(key, value)
+				{
 					// $(this).attr('readonly', true);
 					// $(this).val(key);
 
-					$('input[name^="reportevibracionevaluaciondatos_az1"]').eq(key).attr({ 'readonly': false, 'required': true });
-					$('input[name^="reportevibracionevaluaciondatos_az2"]').eq(key).attr({ 'readonly': false, 'required': true });
-					$('input[name^="reportevibracionevaluaciondatos_az3"]').eq(key).attr({ 'readonly': false, 'required': true });
-					$('input[name^="reportevibracionevaluaciondatos_azlimite"]').eq(key).attr({ 'readonly': true, 'required': true });
+					$('input[name^="reportevibracionevaluaciondatos_az1"]').eq(key).attr({'readonly': false, 'required': true});
+					$('input[name^="reportevibracionevaluaciondatos_az2"]').eq(key).attr({'readonly': false, 'required': true});
+					$('input[name^="reportevibracionevaluaciondatos_az3"]').eq(key).attr({'readonly': false, 'required': true});
+					$('input[name^="reportevibracionevaluaciondatos_azlimite"]').eq(key).attr({'readonly': true, 'required': true});
 					$('input[name^="reportevibracionevaluaciondatos_azlimite"]').eq(key).val('');
-					$('input[name^="reportevibracionevaluaciondatos_ax1"]').eq(key).attr({ 'readonly': false, 'required': true });
-					$('input[name^="reportevibracionevaluaciondatos_ax2"]').eq(key).attr({ 'readonly': false, 'required': true });
-					$('input[name^="reportevibracionevaluaciondatos_ax3"]').eq(key).attr({ 'readonly': false, 'required': true });
-					$('input[name^="reportevibracionevaluaciondatos_ay1"]').eq(key).attr({ 'readonly': false, 'required': true });
-					$('input[name^="reportevibracionevaluaciondatos_ay2"]').eq(key).attr({ 'readonly': false, 'required': true });
-					$('input[name^="reportevibracionevaluaciondatos_ay3"]').eq(key).attr({ 'readonly': false, 'required': true });
-					$('input[name^="reportevibracionevaluaciondatos_axylimite"]').eq(key).attr({ 'readonly': true, 'required': true });
+					$('input[name^="reportevibracionevaluaciondatos_ax1"]').eq(key).attr({'readonly': false, 'required': true});
+					$('input[name^="reportevibracionevaluaciondatos_ax2"]').eq(key).attr({'readonly': false, 'required': true});
+					$('input[name^="reportevibracionevaluaciondatos_ax3"]').eq(key).attr({'readonly': false, 'required': true});
+					$('input[name^="reportevibracionevaluaciondatos_ay1"]').eq(key).attr({'readonly': false, 'required': true});
+					$('input[name^="reportevibracionevaluaciondatos_ay2"]').eq(key).attr({'readonly': false, 'required': true});
+					$('input[name^="reportevibracionevaluaciondatos_ay3"]').eq(key).attr({'readonly': false, 'required': true});
+					$('input[name^="reportevibracionevaluaciondatos_axylimite"]').eq(key).attr({'readonly': true, 'required': true});
 					$('input[name^="reportevibracionevaluaciondatos_axylimite"]').eq(key).val('');
 
-
+					
 					// $('input[name^="reportevibracionevaluaciondatos_azlimite"]').eq(key).attr('readonly', true);
 					// $('input[name^="reportevibracionevaluaciondatos_axylimite"]').eq(key).attr('readonly', true);
 				});
@@ -2498,24 +2692,25 @@ function tipo_evaluacion(tipo_evaluacion) {
 
 
 				$("#reportevibracionevaluacion_fecha").val('');
-				$("#reportevibracionevaluacion_fecha").attr({ 'disabled': false, 'required': false });
+				$("#reportevibracionevaluacion_fecha").attr({'disabled': false, 'required': false});
 
 
 				break;
 			case 2:
-				$('input[name^="reportevibracionevaluaciondatos_frecuencia"]').each(function (key, value) {
-					$('input[name^="reportevibracionevaluaciondatos_az1"]').eq(key).attr({ 'readonly': false, 'required': true });
-					$('input[name^="reportevibracionevaluaciondatos_az2"]').eq(key).attr({ 'readonly': false, 'required': true });
-					$('input[name^="reportevibracionevaluaciondatos_az3"]').eq(key).attr({ 'readonly': false, 'required': true });
-					$('input[name^="reportevibracionevaluaciondatos_azlimite"]').eq(key).attr({ 'readonly': false, 'required': true });
+				$('input[name^="reportevibracionevaluaciondatos_frecuencia"]').each(function(key, value)
+				{
+					$('input[name^="reportevibracionevaluaciondatos_az1"]').eq(key).attr({'readonly': false, 'required': true});
+					$('input[name^="reportevibracionevaluaciondatos_az2"]').eq(key).attr({'readonly': false, 'required': true});
+					$('input[name^="reportevibracionevaluaciondatos_az3"]').eq(key).attr({'readonly': false, 'required': true});
+					$('input[name^="reportevibracionevaluaciondatos_azlimite"]').eq(key).attr({'readonly': false, 'required': true});
 					$('input[name^="reportevibracionevaluaciondatos_azlimite"]').eq(key).val('');
-					$('input[name^="reportevibracionevaluaciondatos_ax1"]').eq(key).attr({ 'readonly': false, 'required': true });
-					$('input[name^="reportevibracionevaluaciondatos_ax2"]').eq(key).attr({ 'readonly': false, 'required': true });
-					$('input[name^="reportevibracionevaluaciondatos_ax3"]').eq(key).attr({ 'readonly': false, 'required': true });
-					$('input[name^="reportevibracionevaluaciondatos_ay1"]').eq(key).attr({ 'readonly': false, 'required': true });
-					$('input[name^="reportevibracionevaluaciondatos_ay2"]').eq(key).attr({ 'readonly': false, 'required': true });
-					$('input[name^="reportevibracionevaluaciondatos_ay3"]').eq(key).attr({ 'readonly': false, 'required': true });
-					$('input[name^="reportevibracionevaluaciondatos_axylimite"]').eq(key).attr({ 'readonly': false, 'required': true });
+					$('input[name^="reportevibracionevaluaciondatos_ax1"]').eq(key).attr({'readonly': false, 'required': true});
+					$('input[name^="reportevibracionevaluaciondatos_ax2"]').eq(key).attr({'readonly': false, 'required': true});
+					$('input[name^="reportevibracionevaluaciondatos_ax3"]').eq(key).attr({'readonly': false, 'required': true});
+					$('input[name^="reportevibracionevaluaciondatos_ay1"]').eq(key).attr({'readonly': false, 'required': true});
+					$('input[name^="reportevibracionevaluaciondatos_ay2"]').eq(key).attr({'readonly': false, 'required': true});
+					$('input[name^="reportevibracionevaluaciondatos_ay3"]').eq(key).attr({'readonly': false, 'required': true});
+					$('input[name^="reportevibracionevaluaciondatos_axylimite"]').eq(key).attr({'readonly': false, 'required': true});
 					$('input[name^="reportevibracionevaluaciondatos_axylimite"]').eq(key).val('');
 				});
 
@@ -2553,24 +2748,25 @@ function tipo_evaluacion(tipo_evaluacion) {
 
 
 				$("#reportevibracionevaluacion_fecha").val('');
-				$("#reportevibracionevaluacion_fecha").attr({ 'disabled': false, 'required': false });
+				$("#reportevibracionevaluacion_fecha").attr({'disabled': false, 'required': false});
 
 
 				break;
 			default:
-				$('input[name^="reportevibracionevaluaciondatos_frecuencia"]').each(function (key, value) {
-					$('input[name^="reportevibracionevaluaciondatos_az1"]').eq(key).attr({ 'readonly': true, 'required': false });
-					$('input[name^="reportevibracionevaluaciondatos_az2"]').eq(key).attr({ 'readonly': true, 'required': false });
-					$('input[name^="reportevibracionevaluaciondatos_az3"]').eq(key).attr({ 'readonly': true, 'required': false });
-					$('input[name^="reportevibracionevaluaciondatos_azlimite"]').eq(key).attr({ 'readonly': true, 'required': false });
+				$('input[name^="reportevibracionevaluaciondatos_frecuencia"]').each(function(key, value)
+				{
+					$('input[name^="reportevibracionevaluaciondatos_az1"]').eq(key).attr({'readonly': true, 'required': false});
+					$('input[name^="reportevibracionevaluaciondatos_az2"]').eq(key).attr({'readonly': true, 'required': false});
+					$('input[name^="reportevibracionevaluaciondatos_az3"]').eq(key).attr({'readonly': true, 'required': false});
+					$('input[name^="reportevibracionevaluaciondatos_azlimite"]').eq(key).attr({'readonly': true, 'required': false});
 					$('input[name^="reportevibracionevaluaciondatos_azlimite"]').eq(key).val('');
-					$('input[name^="reportevibracionevaluaciondatos_ax1"]').eq(key).attr({ 'readonly': true, 'required': false });
-					$('input[name^="reportevibracionevaluaciondatos_ax2"]').eq(key).attr({ 'readonly': true, 'required': false });
-					$('input[name^="reportevibracionevaluaciondatos_ax3"]').eq(key).attr({ 'readonly': true, 'required': false });
-					$('input[name^="reportevibracionevaluaciondatos_ay1"]').eq(key).attr({ 'readonly': true, 'required': false });
-					$('input[name^="reportevibracionevaluaciondatos_ay2"]').eq(key).attr({ 'readonly': true, 'required': false });
-					$('input[name^="reportevibracionevaluaciondatos_ay3"]').eq(key).attr({ 'readonly': true, 'required': false });
-					$('input[name^="reportevibracionevaluaciondatos_axylimite"]').eq(key).attr({ 'readonly': true, 'required': false });
+					$('input[name^="reportevibracionevaluaciondatos_ax1"]').eq(key).attr({'readonly': true, 'required': false});
+					$('input[name^="reportevibracionevaluaciondatos_ax2"]').eq(key).attr({'readonly': true, 'required': false});
+					$('input[name^="reportevibracionevaluaciondatos_ax3"]').eq(key).attr({'readonly': true, 'required': false});
+					$('input[name^="reportevibracionevaluaciondatos_ay1"]').eq(key).attr({'readonly': true, 'required': false});
+					$('input[name^="reportevibracionevaluaciondatos_ay2"]').eq(key).attr({'readonly': true, 'required': false});
+					$('input[name^="reportevibracionevaluaciondatos_ay3"]').eq(key).attr({'readonly': true, 'required': false});
+					$('input[name^="reportevibracionevaluaciondatos_axylimite"]').eq(key).attr({'readonly': true, 'required': false});
 					$('input[name^="reportevibracionevaluaciondatos_axylimite"]').eq(key).val('');
 				});
 
@@ -2592,7 +2788,7 @@ function tipo_evaluacion(tipo_evaluacion) {
 
 				//-------------------------------------
 
-
+				
 				$("#reportevibracionevaluacion_numeromediciones").prop("selectedIndex", 0);
 				$("#reportevibracionevaluacion_numeromediciones").attr('required', false);
 				$("#reportevibracionevaluacion_numeromediciones").css('display', 'none');
@@ -2608,26 +2804,28 @@ function tipo_evaluacion(tipo_evaluacion) {
 
 
 				$("#reportevibracionevaluacion_fecha").val('');
-				$("#reportevibracionevaluacion_fecha").attr({ 'disabled': false, 'required': false });
+				$("#reportevibracionevaluacion_fecha").attr({'disabled': false, 'required': false});
 
 
 				break;
 		}
 	}
-	else {
-		$('input[name^="reportevibracionevaluaciondatos_frecuencia"]').each(function (key, value) {
-			$('input[name^="reportevibracionevaluaciondatos_az1"]').eq(key).attr({ 'readonly': true, 'required': false });
-			$('input[name^="reportevibracionevaluaciondatos_az2"]').eq(key).attr({ 'readonly': true, 'required': false });
-			$('input[name^="reportevibracionevaluaciondatos_az3"]').eq(key).attr({ 'readonly': true, 'required': false });
-			$('input[name^="reportevibracionevaluaciondatos_azlimite"]').eq(key).attr({ 'readonly': true, 'required': false });
+	else
+	{
+		$('input[name^="reportevibracionevaluaciondatos_frecuencia"]').each(function(key, value)
+		{
+			$('input[name^="reportevibracionevaluaciondatos_az1"]').eq(key).attr({'readonly': true, 'required': false});
+			$('input[name^="reportevibracionevaluaciondatos_az2"]').eq(key).attr({'readonly': true, 'required': false});
+			$('input[name^="reportevibracionevaluaciondatos_az3"]').eq(key).attr({'readonly': true, 'required': false});
+			$('input[name^="reportevibracionevaluaciondatos_azlimite"]').eq(key).attr({'readonly': true, 'required': false});
 			$('input[name^="reportevibracionevaluaciondatos_azlimite"]').eq(key).val('');
-			$('input[name^="reportevibracionevaluaciondatos_ax1"]').eq(key).attr({ 'readonly': true, 'required': false });
-			$('input[name^="reportevibracionevaluaciondatos_ax2"]').eq(key).attr({ 'readonly': true, 'required': false });
-			$('input[name^="reportevibracionevaluaciondatos_ax3"]').eq(key).attr({ 'readonly': true, 'required': false });
-			$('input[name^="reportevibracionevaluaciondatos_ay1"]').eq(key).attr({ 'readonly': true, 'required': false });
-			$('input[name^="reportevibracionevaluaciondatos_ay2"]').eq(key).attr({ 'readonly': true, 'required': false });
-			$('input[name^="reportevibracionevaluaciondatos_ay3"]').eq(key).attr({ 'readonly': true, 'required': false });
-			$('input[name^="reportevibracionevaluaciondatos_axylimite"]').eq(key).attr({ 'readonly': true, 'required': false });
+			$('input[name^="reportevibracionevaluaciondatos_ax1"]').eq(key).attr({'readonly': true, 'required': false});
+			$('input[name^="reportevibracionevaluaciondatos_ax2"]').eq(key).attr({'readonly': true, 'required': false});
+			$('input[name^="reportevibracionevaluaciondatos_ax3"]').eq(key).attr({'readonly': true, 'required': false});
+			$('input[name^="reportevibracionevaluaciondatos_ay1"]').eq(key).attr({'readonly': true, 'required': false});
+			$('input[name^="reportevibracionevaluaciondatos_ay2"]').eq(key).attr({'readonly': true, 'required': false});
+			$('input[name^="reportevibracionevaluaciondatos_ay3"]').eq(key).attr({'readonly': true, 'required': false});
+			$('input[name^="reportevibracionevaluaciondatos_axylimite"]').eq(key).attr({'readonly': true, 'required': false});
 			$('input[name^="reportevibracionevaluaciondatos_axylimite"]').eq(key).val('');
 		});
 
@@ -2664,13 +2862,15 @@ function tipo_evaluacion(tipo_evaluacion) {
 
 
 		$("#reportevibracionevaluacion_fecha").val('');
-		$("#reportevibracionevaluacion_fecha").attr({ 'disabled': false, 'required': false });
+		$("#reportevibracionevaluacion_fecha").attr({'disabled': false, 'required': false});
 	}
 }
 
 
-function tiempo_exposicion(tiempo_exposicion) {
-	switch (tiempo_exposicion) {
+function tiempo_exposicion(tiempo_exposicion)
+{
+	switch (tiempo_exposicion)
+	{ 
 		case '1 min':
 			var limite_az = Array('5.60', '5.00', '4.50', '4.00', '3.55', '3.15', '2.80', '2.80', '2.80', '2.80', '3.55', '4.50', '5.60', '7.10', '9.00', '11.2', '14.00', '18.0', '22.4', '28.0');
 			var limite_axy = Array('2.0', '2.0', '2.0', '2.0', '2.5', '3.15', '4.0', '5.0', '6.3', '8.0', '10.0', '12.5', '16.0', '20.0', '25.0', '31.5', '40.0', '50.0', '63.0', '80.0');
@@ -2710,7 +2910,8 @@ function tiempo_exposicion(tiempo_exposicion) {
 		default:
 			$('.punto_tiempoexposicion').html(0);
 
-			$('input[name^="reportevibracionevaluaciondatos_frecuencia"]').each(function (key, value) {
+			$('input[name^="reportevibracionevaluaciondatos_frecuencia"]').each(function(key, value)
+			{
 				$('input[name^="reportevibracionevaluaciondatos_azlimite"]').eq(key).val('');
 				$('input[name^="reportevibracionevaluaciondatos_axylimite"]').eq(key).val('');
 			});
@@ -2719,11 +2920,13 @@ function tiempo_exposicion(tiempo_exposicion) {
 
 
 
-	if (tiempo_exposicion) {
+	if(tiempo_exposicion)
+	{
 		$('.punto_tiempoexposicion').html(tiempo_exposicion);
 
 
-		$('input[name^="reportevibracionevaluaciondatos_frecuencia"]').each(function (key, value) {
+		$('input[name^="reportevibracionevaluaciondatos_frecuencia"]').each(function(key, value)
+		{
 			$('input[name^="reportevibracionevaluaciondatos_azlimite"]').eq(key).val(limite_az[key]);
 			$('input[name^="reportevibracionevaluaciondatos_azlimite"]').eq(key).attr('readonly', true);
 
@@ -2734,25 +2937,31 @@ function tiempo_exposicion(tiempo_exposicion) {
 }
 
 
-function tiempo_exposicion2(tiempo_exposicion, tipo_evaluacion) {
+function tiempo_exposicion2(tiempo_exposicion, tipo_evaluacion)
+{
 	// alert(tiempo_exposicion+' - '+tipo_evaluacion);
-	if (tiempo_exposicion != null && parseInt(tipo_evaluacion) == 2) {
+	if (tiempo_exposicion != null && parseInt(tipo_evaluacion) == 2)
+	{
 		$('.punto_tiempoexposicion').html(tiempo_exposicion);
 	}
-	else {
+	else
+	{
 		$('.punto_tiempoexposicion').html(0);
 	}
 }
 
 
-function numero_mediciones(numero_mediciones) {
-	if (parseInt(numero_mediciones) == 1) {
-		$('input[name^="reportevibracionevaluaciondatos_frecuencia"]').each(function (key, value) {
+function numero_mediciones(numero_mediciones)
+{
+	if (parseInt(numero_mediciones) == 1)
+	{
+		$('input[name^="reportevibracionevaluaciondatos_frecuencia"]').each(function(key, value)
+		{
 			$('input[name^="reportevibracionevaluaciondatos_az2"]').eq(key).val('');
 			$('input[name^="reportevibracionevaluaciondatos_az2"]').eq(key).attr('required', false);
 			$('input[name^="reportevibracionevaluaciondatos_az2"]').eq(key).attr('disabled', false);
 			$('input[name^="reportevibracionevaluaciondatos_az2"]').eq(key).attr('readonly', true);
-
+			
 			$('input[name^="reportevibracionevaluaciondatos_az3"]').eq(key).val('');
 			$('input[name^="reportevibracionevaluaciondatos_az3"]').eq(key).attr('required', false);
 			$('input[name^="reportevibracionevaluaciondatos_az3"]').eq(key).attr('disabled', false);
@@ -2784,13 +2993,15 @@ function numero_mediciones(numero_mediciones) {
 			$('input[name^="reportevibracionevaluaciondatos_ay3"]').eq(key).attr('readonly', true);
 		});
 	}
-	else {
-		$('input[name^="reportevibracionevaluaciondatos_frecuencia"]').each(function (key, value) {
+	else
+	{
+		$('input[name^="reportevibracionevaluaciondatos_frecuencia"]').each(function(key, value)
+		{
 			$('input[name^="reportevibracionevaluaciondatos_az2"]').eq(key).attr('disabled', false);
 			$('input[name^="reportevibracionevaluaciondatos_az2"]').eq(key).attr('readonly', false);
 			$('input[name^="reportevibracionevaluaciondatos_az2"]').eq(key).attr('required', true);
 			$('input[name^="reportevibracionevaluaciondatos_az2"]').eq(key).val('');
-
+			
 			$('input[name^="reportevibracionevaluaciondatos_az3"]').eq(key).attr('disabled', false);
 			$('input[name^="reportevibracionevaluaciondatos_az3"]').eq(key).attr('readonly', false);
 			$('input[name^="reportevibracionevaluaciondatos_az3"]').eq(key).attr('required', true);
@@ -2825,12 +3036,13 @@ function numero_mediciones(numero_mediciones) {
 }
 
 
-$('#tabla_reporte_puntos tbody').on('click', 'td.editar', function () {
+$('#tabla_reporte_puntos tbody').on('click', 'td.editar', function()
+{
 	var tr = $(this).closest('tr');
 	var row = datatable_reporte_puntos.row(tr);
 
 
-	$('#form_modal_puntomedicion').each(function () {
+	$('#form_modal_puntomedicion').each(function(){
 		this.reset();
 	});
 
@@ -2862,7 +3074,8 @@ $('#tabla_reporte_puntos tbody').on('click', 'td.editar', function () {
 	$('#reportevibracionevaluacion_fecha').val(row.data().reportevibracionevaluacion_fecha);
 
 
-	switch (parseInt(row.data().reportevibracionevaluacion_tipoevaluacion)) {
+	switch (parseInt(row.data().reportevibracionevaluacion_tipoevaluacion))
+	{ 
 		case 1:
 			$('#reportevibracionevaluacion_tiempoexposicion').val(row.data().reportevibracionevaluacion_tiempoexposicion);
 			$('#reportevibracionevaluacion_numeromediciones').val(row.data().reportevibracionevaluacion_numeromediciones);
@@ -2884,19 +3097,23 @@ $('#tabla_reporte_puntos tbody').on('click', 'td.editar', function () {
 	}
 
 
-	if (parseInt(row.data().reportevibracionevaluacion_tipoevaluacion) <= 2) {
+	if (parseInt(row.data().reportevibracionevaluacion_tipoevaluacion) <= 2)
+	{
 		$.ajax({
 			type: "GET",
 			dataType: "json",
-			url: "/reportevibracionevaluaciondatos/" + row.data().id,
-			data: {},
+			url: "/reportevibracionevaluaciondatos/"+row.data().id,
+			data:{},
 			cache: false,
-			success: function (dato) {
+			success:function(dato)
+			{
 				// Campo select categorias
 				// $('#reportevibracioncategoria_id').html(dato.select_areacategorias);
 
-				if (parseInt(dato.datos.length) > 0) {
-					$.each(dato.datos, function (key, value) {
+				if (parseInt(dato.datos.length) > 0)
+				{
+					$.each( dato.datos, function( key, value )
+					{
 						$('input[name^="reportevibracionevaluaciondatos_az1"]').eq(key).val(value.reportevibracionevaluaciondatos_az1);
 						$('input[name^="reportevibracionevaluaciondatos_az2"]').eq(key).val(value.reportevibracionevaluaciondatos_az2);
 						$('input[name^="reportevibracionevaluaciondatos_az3"]').eq(key).val(value.reportevibracionevaluaciondatos_az3);
@@ -2911,10 +3128,12 @@ $('#tabla_reporte_puntos tbody').on('click', 'td.editar', function () {
 					});
 				}
 			},
-			beforeSend: function () {
+			beforeSend: function()
+			{
 				// $('#reportevibracioncategoria_id').html('<option value=""></option>');
 			},
-			error: function (dato) {
+			error: function(dato)
+			{
 				// $('#reportevibracioncategoria_id').html('<option value="">Error al consultar las categorías</option>');
 				return false;
 			}
@@ -2927,17 +3146,18 @@ $('#tabla_reporte_puntos tbody').on('click', 'td.editar', function () {
 
 
 	// mostrar modal
-	$('#modal_reporte_puntomedicion').modal({ backdrop: false });
+	$('#modal_reporte_puntomedicion').modal({backdrop:false});
 });
 
 
-$('#tabla_reporte_puntos tbody').on('click', 'td>button.eliminar', function () {
+$('#tabla_reporte_puntos tbody').on('click', 'td>button.eliminar', function()
+{
 	var tr = $(this).closest('tr');
 	var row = datatable_reporte_puntos.row(tr);
 
 	swal({
 		title: "¡Confirme que desea eliminar!",
-		text: "Punto " + row.data().reportevibracionevaluacion_punto + " de medición de " + agente_nombre,
+		text: "Punto "+row.data().reportevibracionevaluacion_punto+" de medición de "+agente_nombre,
 		type: "warning",
 		showCancelButton: true,
 		confirmButtonColor: "#DD6B55",
@@ -2946,138 +3166,36 @@ $('#tabla_reporte_puntos tbody').on('click', 'td>button.eliminar', function () {
 		closeOnConfirm: false,
 		closeOnCancel: false
 	},
-		function (isConfirm) {
-			if (isConfirm) {
-				swal({
-					title: "¡Por seguridad confirme nuevamente que desea eliminar!",
-					text: "Punto " + row.data().reportevibracionevaluacion_punto + " de medición de " + agente_nombre,
-					type: "warning",
-					showCancelButton: true,
-					confirmButtonColor: "#DD6B55",
-					confirmButtonText: "Eliminar!",
-					cancelButtonText: "Cancelar!",
-					closeOnConfirm: false,
-					closeOnCancel: false
-				},
-					function (isConfirm) {
-						if (isConfirm) {
-							// cerrar msj confirmacion
-							swal.close();
-
-							$.ajax({
-								type: "GET",
-								dataType: "json",
-								url: "/reportevibracionevaluacioneliminar/" + row.data().id,
-								data: {},
-								cache: false,
-								success: function (dato) {
-									// Actualizar tabla
-									tabla_reporte_puntos(proyecto.id);
-									tabla_reporte_matriz(proyecto.id);
-									reporte_dashboard(proyecto.id);
-
-
-									// mensaje
-									swal({
-										title: "Correcto",
-										text: "" + dato.msj,
-										type: "success", // warning, error, success, info
-										buttons: {
-											visible: false, // true , false
-										},
-										timer: 1500,
-										showConfirmButton: false
-									});
-								},
-								beforeSend: function () {
-									// $('#tabla_reporte_definiciones tbody').html('<tr><td colspan="5"><i class="fa fa-spin fa-spinner" style="font-size: 40px!important;"></i></td></tr>');
-								},
-								error: function (dato) {
-									// mensaje
-									swal({
-										title: "Error",
-										text: "" + dato.msj,
-										type: "error", // warning, error, success, info
-										buttons: {
-											visible: false, // true , false
-										},
-										timer: 1500,
-										showConfirmButton: false
-									});
-
-									return false;
-								}
-							});//Fin ajax
-						}
-						else {
-							// mensaje
-							swal({
-								title: "Cancelado",
-								text: "Acción cancelada",
-								type: "error", // warning, error, success, info
-								buttons: {
-									visible: false, // true , false
-								},
-								timer: 500,
-								showConfirmButton: false
-							});
-						}
-					});
-			}
-			else {
-				// mensaje
-				swal({
-					title: "Cancelado",
-					text: "Acción cancelada",
-					type: "error", // warning, error, success, info
-					buttons: {
-						visible: false, // true , false
-					},
-					timer: 500,
-					showConfirmButton: false
-				});
-			}
-		});
-	return false;
-});
-
-
-$("#botonguardar_modal_puntomedicion").click(function () {
-	// valida campos vacios
-	var valida = this.form.checkValidity();
-	if (valida) {
-		swal({
-			title: "¡Confirme que desea guardar!",
-			text: "Punto de medición de " + agente_nombre,
-			type: "warning",
-			showCancelButton: true,
-			confirmButtonColor: "#DD6B55",
-			confirmButtonText: "Guardar!",
-			cancelButtonText: "Cancelar!",
-			closeOnConfirm: false,
-			closeOnCancel: false
-		},
-			function (isConfirm) {
-				if (isConfirm) {
+	function(isConfirm)
+	{
+		if (isConfirm)
+		{
+			swal({
+				title: "¡Por seguridad confirme nuevamente que desea eliminar!",
+				text: "Punto "+row.data().reportevibracionevaluacion_punto+" de medición de "+agente_nombre,
+				type: "warning",
+				showCancelButton: true,
+				confirmButtonColor: "#DD6B55",
+				confirmButtonText: "Eliminar!",
+				cancelButtonText: "Cancelar!",
+				closeOnConfirm: false,
+				closeOnCancel: false
+			},
+			function(isConfirm)
+			{
+				if (isConfirm)
+				{
 					// cerrar msj confirmacion
 					swal.close();
 
-					// enviar datos
-					$('#form_modal_puntomedicion').ajaxForm({
-						dataType: 'json',
-						type: 'POST',
-						url: '' + ruta_storage_guardar,
-						data: {
-							opcion: 9,
-							proyecto_id: proyecto.id,
-							agente_id: agente_id,
-							agente_nombre: agente_nombre,
-							reporteregistro_id: reporteregistro_id,
-							catactivo_id: $("#reporte_catactivo_id").val(),
-							reporte_instalacion: $("#reporte_instalacion").val(),
-						},
-						resetForm: false,
-						success: function (dato) {
+					$.ajax({
+						type: "GET",
+						dataType: "json",
+						url: "/reportevibracionevaluacioneliminar/"+row.data().id,
+						data:{},
+						cache: false,
+						success:function(dato)
+						{
 							// Actualizar tabla
 							tabla_reporte_puntos(proyecto.id);
 							tabla_reporte_matriz(proyecto.id);
@@ -3087,7 +3205,7 @@ $("#botonguardar_modal_puntomedicion").click(function () {
 							// mensaje
 							swal({
 								title: "Correcto",
-								text: "" + dato.msj,
+								text: ""+dato.msj,
 								type: "success", // warning, error, success, info
 								buttons: {
 									visible: false, // true , false
@@ -3095,29 +3213,17 @@ $("#botonguardar_modal_puntomedicion").click(function () {
 								timer: 1500,
 								showConfirmButton: false
 							});
-
-
-							// actualiza boton
-							$('#botonguardar_modal_puntomedicion').html('Guardar <i class="fa fa-save"></i>');
-							$('#botonguardar_modal_puntomedicion').attr('disabled', false);
-
-
-							// cerrar modal
-							$('#modal_reporte_puntomedicion').modal('hide');
 						},
-						beforeSend: function () {
-							$('#botonguardar_modal_puntomedicion').html('Guardando <i class="fa fa-spin fa-spinner"></i>');
-							$('#botonguardar_modal_puntomedicion').attr('disabled', true);
+						beforeSend: function()
+						{
+							// $('#tabla_reporte_definiciones tbody').html('<tr><td colspan="5"><i class="fa fa-spin fa-spinner" style="font-size: 40px!important;"></i></td></tr>');
 						},
-						error: function (dato) {
-							// actualiza boton
-							$('#botonguardar_modal_puntomedicion').html('Guardar <i class="fa fa-save"></i>');
-							$('#botonguardar_modal_puntomedicion').attr('disabled', false);
-
+						error: function(dato)
+						{
 							// mensaje
 							swal({
 								title: "Error",
-								text: "" + dato.msj,
+								text: ""+dato.msj,
 								type: "error", // warning, error, success, info
 								buttons: {
 									visible: false, // true , false
@@ -3125,12 +3231,13 @@ $("#botonguardar_modal_puntomedicion").click(function () {
 								timer: 1500,
 								showConfirmButton: false
 							});
+
 							return false;
 						}
-					}).submit();
-					return false;
+					});//Fin ajax
 				}
-				else {
+				else 
+				{
 					// mensaje
 					swal({
 						title: "Cancelado",
@@ -3144,14 +3251,146 @@ $("#botonguardar_modal_puntomedicion").click(function () {
 					});
 				}
 			});
+		}
+		else 
+		{
+			// mensaje
+			swal({
+				title: "Cancelado",
+				text: "Acción cancelada",
+				type: "error", // warning, error, success, info
+				buttons: {
+					visible: false, // true , false
+				},
+				timer: 500,
+				showConfirmButton: false
+			});
+		}
+	});
+	return false;
+});
+
+
+$("#botonguardar_modal_puntomedicion").click(function()
+{
+	// valida campos vacios
+	var valida = this.form.checkValidity();
+	if (valida)
+	{
+		swal({
+			title: "¡Confirme que desea guardar!",
+			text: "Punto de medición de "+agente_nombre,
+			type: "warning",
+			showCancelButton: true,
+			confirmButtonColor: "#DD6B55",
+			confirmButtonText: "Guardar!",
+			cancelButtonText: "Cancelar!",
+			closeOnConfirm: false,
+			closeOnCancel: false
+		},
+		function(isConfirm)
+		{
+			if (isConfirm)
+			{
+				// cerrar msj confirmacion
+				swal.close();
+
+				// enviar datos
+				$('#form_modal_puntomedicion').ajaxForm({
+					dataType: 'json',
+					type: 'POST',
+					url: ''+ruta_storage_guardar,
+					data: {
+						opcion: 9,
+						proyecto_id: proyecto.id,
+						agente_id: agente_id,
+						agente_nombre: agente_nombre,
+						reporteregistro_id: reporteregistro_id,
+						catactivo_id: $("#reporte_catactivo_id").val(),
+						reporte_instalacion: $("#reporte_instalacion").val(),
+					},
+					resetForm: false,
+					success: function(dato)
+					{
+						// Actualizar tabla
+						tabla_reporte_puntos(proyecto.id);
+						tabla_reporte_matriz(proyecto.id);
+						reporte_dashboard(proyecto.id);
+
+
+						// mensaje
+						swal({
+							title: "Correcto",
+							text: ""+dato.msj,
+							type: "success", // warning, error, success, info
+							buttons: {
+								visible: false, // true , false
+							},
+							timer: 1500,
+							showConfirmButton: false
+						});
+
+
+						// actualiza boton
+						$('#botonguardar_modal_puntomedicion').html('Guardar <i class="fa fa-save"></i>');
+						$('#botonguardar_modal_puntomedicion').attr('disabled', false);
+
+
+						// cerrar modal
+						$('#modal_reporte_puntomedicion').modal('hide');
+					},
+					beforeSend: function()
+					{
+						$('#botonguardar_modal_puntomedicion').html('Guardando <i class="fa fa-spin fa-spinner"></i>');
+						$('#botonguardar_modal_puntomedicion').attr('disabled', true);
+					},
+					error: function(dato)
+					{
+						// actualiza boton
+						$('#botonguardar_modal_puntomedicion').html('Guardar <i class="fa fa-save"></i>');
+						$('#botonguardar_modal_puntomedicion').attr('disabled', false);
+
+						// mensaje
+						swal({
+							title: "Error",
+							text: ""+dato.msj,
+							type: "error", // warning, error, success, info
+							buttons: {
+								visible: false, // true , false
+							},
+							timer: 1500,
+							showConfirmButton: false
+						});
+						return false;
+					}
+				}).submit();
+				return false;
+			}
+			else 
+			{
+				// mensaje
+				swal({
+					title: "Cancelado",
+					text: "Acción cancelada",
+					type: "error", // warning, error, success, info
+					buttons: {
+						visible: false, // true , false
+					},
+					timer: 500,
+					showConfirmButton: false
+				});
+			}
+		});
 		return false;
 	}
 });
 
 
 var datatable_reporte_6_2 = null;
-function tabla_reporte_6_2(tbody) {
-	if (datatable_reporte_6_2 != null) {
+function tabla_reporte_6_2(tbody)
+{
+	if (datatable_reporte_6_2 != null)
+	{
 		datatable_reporte_6_2.destroy();
 	}
 
@@ -3161,7 +3400,7 @@ function tabla_reporte_6_2(tbody) {
 	datatable_reporte_6_2 = $('#tabla_reporte_6_2').DataTable({
 		lengthMenu: [[20, 50, 100, -1], [20, 50, 100, "Todos"]],
 		rowsGroup: [1, 4, 2, 0, 5], //agrupar filas
-		order: [[0, "DESC"]],
+		order: [[ 0, "DESC" ]],
 		ordering: false,
 		searching: true,
 		processing: true,
@@ -3183,7 +3422,8 @@ function tabla_reporte_6_2(tbody) {
 				previous: "Anterior"
 			}
 		},
-		rowCallback: function (row, data, index) {
+		rowCallback: function(row, data, index)
+		{
 			// // console.log(index+' - '+data.reporteiluminacionpuntos_nopunto);
 			// $(row).find('td:eq(7)').css('background', data.resultadoner_color);
 
@@ -3205,8 +3445,10 @@ function tabla_reporte_6_2(tbody) {
 
 
 var datatable_reporte_7_1 = null;
-function tabla_reporte_7_1(tbody, rowsGroup, columnaresultado) {
-	if (datatable_reporte_7_1 != null) {
+function tabla_reporte_7_1(tbody, rowsGroup, columnaresultado)
+{
+	if (datatable_reporte_7_1 != null)
+	{
 		datatable_reporte_7_1.destroy();
 	}
 
@@ -3218,7 +3460,7 @@ function tabla_reporte_7_1(tbody, rowsGroup, columnaresultado) {
 		lengthMenu: [[40, 80, 100, -1], [40, 80, 100, "Todos"]],
 		// rowsGroup: [0, 1, 2, 3, 10], //agrupar filas
 		rowsGroup: rowsGroup, //agrupar filas
-		order: [[0, "DESC"]],
+		order: [[ 0, "DESC" ]],
 		ordering: false,
 		searching: true,
 		processing: true,
@@ -3240,19 +3482,22 @@ function tabla_reporte_7_1(tbody, rowsGroup, columnaresultado) {
 				previous: "Anterior"
 			}
 		},
-		rowCallback: function (row, data, index) {
+		rowCallback: function(row, data, index)
+		{
 			// // console.log(index+' - '+data.reporteiluminacionpuntos_nopunto);
 			// $(row).find('td:eq(7)').css('background', data.resultadoner_color);
 
-			if ($(row).find('td:eq(' + columnaresultado + ')').text() == "Dentro de norma") {
-				$(row).find('td:eq(' + columnaresultado + ')').css('background', "#00FF00");
-				$(row).find('td:eq(' + columnaresultado + ')').css('color', '#000000');
-				$(row).find('td:eq(' + columnaresultado + ')').css('font-weight', 'bold');
+			if($(row).find('td:eq('+columnaresultado+')').text() == "Dentro de norma")
+			{
+				$(row).find('td:eq('+columnaresultado+')').css('background', "#00FF00");
+				$(row).find('td:eq('+columnaresultado+')').css('color', '#000000');
+				$(row).find('td:eq('+columnaresultado+')').css('font-weight', 'bold');
 			}
-			else {
-				$(row).find('td:eq(' + columnaresultado + ')').css('background', "#FF0000");
-				$(row).find('td:eq(' + columnaresultado + ')').css('color', '#FFFFFF');
-				$(row).find('td:eq(' + columnaresultado + ')').css('font-weight', 'bold');
+			else
+			{
+				$(row).find('td:eq('+columnaresultado+')').css('background', "#FF0000");
+				$(row).find('td:eq('+columnaresultado+')').css('color', '#FFFFFF');
+				$(row).find('td:eq('+columnaresultado+')').css('font-weight', 'bold');
 			}
 		},
 	});
@@ -3263,8 +3508,10 @@ function tabla_reporte_7_1(tbody, rowsGroup, columnaresultado) {
 // TABLA 7.7 MATRIZ DE EXPOSICIÓN LABORAL
 
 
-$(document).ready(function () {
-	setTimeout(function () {
+$(document).ready(function()
+{
+	setTimeout(function()
+	{
 		tabla_reporte_matriz(proyecto.id);
 	}, 4500);
 });
@@ -3272,16 +3519,20 @@ $(document).ready(function () {
 
 var matriz_ejecusiones = 0;
 var datatable_reporte_matriz = null;
-function tabla_reporte_matriz(proyecto_id) {
-	try {
+function tabla_reporte_matriz(proyecto_id)
+{
+	try 
+	{
 		$.ajax({
 			type: "GET",
 			dataType: "json",
-			url: "/reportevibracionmatriztabla/" + proyecto_id,
-			data: {},
+			url: "/reportevibracionmatriztabla/"+proyecto_id,
+			data:{},
 			cache: false,
-			success: function (dato) {
-				if (datatable_reporte_matriz != null) {
+			success:function(dato)
+			{
+				if (datatable_reporte_matriz != null)
+				{
 					datatable_reporte_matriz.destroy();
 				}
 
@@ -3294,7 +3545,7 @@ function tabla_reporte_matriz(proyecto_id) {
 					lengthMenu: [[40, 80, 100, -1], [40, 80, 100, "Todos"]],
 					// rowsGroup: [0, 1, 2, 3, 10], //agrupar filas
 					rowsGroup: dato.tabla_matriz_rowsGroup, //agrupar filas
-					order: [[0, "DESC"]],
+					order: [[ 0, "DESC" ]],
 					ordering: false,
 					searching: true,
 					processing: true,
@@ -3316,7 +3567,8 @@ function tabla_reporte_matriz(proyecto_id) {
 							previous: "Anterior"
 						}
 					},
-					rowCallback: function (row, data, index) {
+					rowCallback: function(row, data, index)
+					{
 						// // console.log(index+' - '+data.reporteiluminacionpuntos_nopunto);
 						// $(row).find('td:eq(7)').css('background', data.resultadoner_color);
 
@@ -3335,23 +3587,28 @@ function tabla_reporte_matriz(proyecto_id) {
 					},
 				});
 			},
-			beforeSend: function () {
+			beforeSend: function()
+			{
 				$('#tabla_reporte_matriz').html('<i class="fa fa-spin fa-spinner fa-3x"></i>');
 			},
-			error: function (dato) {
-				if (matriz_ejecusiones == 0) {
+			error: function(dato)
+			{
+				if (matriz_ejecusiones == 0)
+				{
 					matriz_ejecusiones += 1;
 					tabla_reporte_matriz(proyecto.id);
 				}
 			}
 		});//Fin ajax
 	}
-	catch (exception) {
-		if (matriz_ejecusiones == 0) {
+	catch (exception)
+	{
+		if (matriz_ejecusiones == 0)
+		{
 			matriz_ejecusiones += 1;
 			tabla_reporte_matriz(proyecto.id);
 		}
-	}
+    }
 }
 
 
@@ -3359,10 +3616,12 @@ function tabla_reporte_matriz(proyecto_id) {
 // CONCLUSION
 
 
-$("#botonguardar_reporte_conclusion").click(function () {
+$("#botonguardar_reporte_conclusion").click(function()
+{
 	// valida campos vacios
 	var valida = this.form.checkValidity();
-	if (valida) {
+	if (valida)
+	{
 		swal({
 			title: "¡Confirme que desea guardar!",
 			text: "Conclusión",
@@ -3374,87 +3633,93 @@ $("#botonguardar_reporte_conclusion").click(function () {
 			closeOnConfirm: false,
 			closeOnCancel: false
 		},
-			function (isConfirm) {
-				if (isConfirm) {
-					// cerrar msj confirmacion
-					swal.close();
+		function(isConfirm)
+		{
+			if (isConfirm)
+			{
+				// cerrar msj confirmacion
+				swal.close();
 
-					// enviar datos
-					$('#form_reporte_conclusion').ajaxForm({
-						dataType: 'json',
-						type: 'POST',
-						url: '' + ruta_storage_guardar,
-						data: {
-							opcion: 10,
-							proyecto_id: proyecto.id,
-							agente_id: agente_id,
-							agente_nombre: agente_nombre,
-							reporteregistro_id: reporteregistro_id,
-							catactivo_id: $("#reporte_catactivo_id").val(),
-							reporte_instalacion: $("#reporte_instalacion").val(),
-						},
-						resetForm: false,
-						success: function (dato) {
-							// Actualizar ID reporte						
-							reporteregistro_id = dato.reporteregistro_id;
+				// enviar datos
+				$('#form_reporte_conclusion').ajaxForm({
+					dataType: 'json',
+					type: 'POST',
+					url: ''+ruta_storage_guardar,
+					data: {
+						opcion: 10,
+						proyecto_id: proyecto.id,
+						agente_id: agente_id,
+						agente_nombre: agente_nombre,
+						reporteregistro_id: reporteregistro_id,
+						catactivo_id: $("#reporte_catactivo_id").val(),
+						reporte_instalacion: $("#reporte_instalacion").val(),
+					},
+					resetForm: false,
+					success: function(dato)
+					{
+						// Actualizar ID reporte						
+						reporteregistro_id = dato.reporteregistro_id;
 
-							menureporte_estado("menureporte_8", 1);
+						menureporte_estado("menureporte_8", 1);
 
-							// mensaje
-							swal({
-								title: "Correcto",
-								text: "" + dato.msj,
-								type: "success", // warning, error, success, info
-								buttons: {
-									visible: false, // true , false
-								},
-								timer: 1500,
-								showConfirmButton: false
-							});
+						// mensaje
+						swal({
+							title: "Correcto",
+							text: ""+dato.msj,
+							type: "success", // warning, error, success, info
+							buttons: {
+								visible: false, // true , false
+							},
+							timer: 1500,
+							showConfirmButton: false
+						});
 
-							// actualiza boton
-							$('#botonguardar_reporte_conclusion').html('Guardar conclusión <i class="fa fa-save"></i>');
-							$('#botonguardar_reporte_conclusion').attr('disabled', false);
-						},
-						beforeSend: function () {
-							$('#botonguardar_reporte_conclusion').html('Guardando conclusión <i class="fa fa-spin fa-spinner"></i>');
-							$('#botonguardar_reporte_conclusion').attr('disabled', true);
-						},
-						error: function (dato) {
-							// actualiza boton
-							$('#botonguardar_reporte_conclusion').html('Guardar conclusión <i class="fa fa-save"></i>');
-							$('#botonguardar_reporte_conclusion').attr('disabled', false);
+						// actualiza boton
+						$('#botonguardar_reporte_conclusion').html('Guardar conclusión <i class="fa fa-save"></i>');
+						$('#botonguardar_reporte_conclusion').attr('disabled', false);
+					},
+					beforeSend: function()
+					{
+						$('#botonguardar_reporte_conclusion').html('Guardando conclusión <i class="fa fa-spin fa-spinner"></i>');
+						$('#botonguardar_reporte_conclusion').attr('disabled', true);
+					},
+					error: function(dato)
+					{
+						// actualiza boton
+						$('#botonguardar_reporte_conclusion').html('Guardar conclusión <i class="fa fa-save"></i>');
+						$('#botonguardar_reporte_conclusion').attr('disabled', false);
 
-							// mensaje
-							swal({
-								title: "Error",
-								text: "" + dato.msj,
-								type: "error", // warning, error, success, info
-								buttons: {
-									visible: false, // true , false
-								},
-								timer: 1500,
-								showConfirmButton: false
-							});
-							return false;
-						}
-					}).submit();
-					return false;
-				}
-				else {
-					// mensaje
-					swal({
-						title: "Cancelado",
-						text: "Acción cancelada",
-						type: "error", // warning, error, success, info
-						buttons: {
-							visible: false, // true , false
-						},
-						timer: 500,
-						showConfirmButton: false
-					});
-				}
-			});
+						// mensaje
+						swal({
+							title: "Error",
+							text: ""+dato.msj,
+							type: "error", // warning, error, success, info
+							buttons: {
+								visible: false, // true , false
+							},
+							timer: 1500,
+							showConfirmButton: false
+						});
+						return false;
+					}
+				}).submit();
+				return false;
+			}
+			else 
+			{
+				// mensaje
+				swal({
+					title: "Cancelado",
+					text: "Acción cancelada",
+					type: "error", // warning, error, success, info
+					buttons: {
+						visible: false, // true , false
+					},
+					timer: 500,
+					showConfirmButton: false
+				});
+			}
+		});
 		return false;
 	}
 });
@@ -3464,23 +3729,27 @@ $("#botonguardar_reporte_conclusion").click(function () {
 // DASHBOARD
 
 
-$(document).ready(function () {
-	setTimeout(function () {
+$(document).ready(function()
+{
+	setTimeout(function()
+	{
 		reporte_dashboard(proyecto.id);
 	}, 5500);
 });
 
 
 var dashboard_ejecusiones = 0;
-function reporte_dashboard(proyecto_id) {
+function reporte_dashboard(proyecto_id)
+{
 	// Enviar datos
 	$.ajax({
 		type: "GET",
 		dataType: "json",
-		url: "/reportevibraciondashboard/" + proyecto_id,
-		data: {},
+		url: "/reportevibraciondashboard/"+proyecto_id,
+		data:{},
 		cache: false,
-		success: function (dato) {
+		success:function(dato)
+		{
 			$("#dashboard_puntos").html(dato.dashboard_puntos);
 			$("#dashboard_cumplimiento").html(dato.dashboard_cumplimiento);
 			$("#dashboard_recomendaciones").html(dato.dashboard_recomendaciones);
@@ -3501,8 +3770,10 @@ function reporte_dashboard(proyecto_id) {
 
 			dashboard_ejecusiones = 0;
 		},
-		error: function (dato) {
-			if (dashboard_ejecusiones == 0) {
+		error: function(dato)
+		{
+			if (dashboard_ejecusiones == 0)
+			{
 				reporte_dashboard(proyecto_id);
 				dashboard_ejecusiones += 1;
 			}
@@ -3517,40 +3788,49 @@ function reporte_dashboard(proyecto_id) {
 // RECOMENDACIONES
 
 
-$(document).ready(function () {
-	setTimeout(function () {
+$(document).ready(function()
+{
+	setTimeout(function()
+	{
 		tabla_reporte_recomendaciones(proyecto.id, agente_nombre);
 	}, 6000);
 });
 
 
 var datatable_recomendaciones = null;
-function tabla_reporte_recomendaciones(proyecto_id, agente_nombre) {
-	try {
-		var ruta = "/reportevibracionrecomendacionestabla/" + proyecto_id + "/" + agente_nombre;
+function tabla_reporte_recomendaciones(proyecto_id, agente_nombre)
+{
+	try 
+	{
+		var ruta = "/reportevibracionrecomendacionestabla/"+proyecto_id+"/"+agente_nombre;
 
-		if (datatable_recomendaciones != null) {
+		if (datatable_recomendaciones != null)
+		{
 			datatable_recomendaciones.clear().draw();
 			datatable_recomendaciones.ajax.url(ruta).load();
 		}
-		else {
+		else
+		{
 			var numeroejecucion = 1;
-			datatable_recomendaciones = $('#tabla_reporte_recomendaciones').DataTable({
+		    datatable_recomendaciones = $('#tabla_reporte_recomendaciones').DataTable({
 				ajax: {
 					url: ruta,
 					type: "get",
 					cache: false,
 					dataType: "json",
 					data: {},
-					dataSrc: function (json) {
+					dataSrc: function (json)
+					{
 						menureporte_estado("menureporte_9", parseInt(json.total));
 
 						// alert("Done! "+json.msj);
 						return json.data;
 					},
-					error: function (xhr, error, code) {
-						console.log('error en datatable_recomendaciones ' + code);
-						if (numeroejecucion <= 1) {
+					error: function (xhr, error, code)
+					{						
+						console.log('error en datatable_recomendaciones '+code);
+						if (numeroejecucion <= 1)
+						{
 							tabla_reporte_recomendaciones(proyecto_id, agente_nombre);
 							numeroejecucion += 1;
 						}
@@ -3580,7 +3860,7 @@ function tabla_reporte_recomendaciones(proyecto_id, agente_nombre) {
 				],
 				lengthMenu: [[20, 50, 100, -1], [20, 50, 100, "Todos"]],
 				// rowsGroup: [1, 2, 3], //agrupar filas
-				order: [[0, "ASC"]],
+				order: [[ 0, "ASC" ]],
 				ordering: false,
 				processing: true,
 				searching: false,
@@ -3602,7 +3882,8 @@ function tabla_reporte_recomendaciones(proyecto_id, agente_nombre) {
 						previous: "Anterior"
 					}
 				},
-				rowCallback: function (row, data, index) {
+				rowCallback: function(row, data, index)
+				{
 					// console.log(index+' - '+data.reporteiluminacionpuntos_nopunto);
 
 					// if(data.reporteiluminacionpuntos_nopunto == 2)
@@ -3625,137 +3906,153 @@ function tabla_reporte_recomendaciones(proyecto_id, agente_nombre) {
 		}
 
 		// Tooltip en DataTable
-		datatable_recomendaciones.on('draw', function () {
+		datatable_recomendaciones.on('draw', function ()
+		{
 			$('[data-toggle="tooltip"]').tooltip();
 		});
 	}
-	catch (exception) {
+	catch (exception)
+	{
 		tabla_reporte_recomendaciones(proyecto_id, agente_nombre);
-	}
+    }
 }
 
 
-$("#boton_reporte_nuevarecomendacion").click(function () {
-	$("#tabla_reporte_recomendaciones tbody").append('<tr>' +
-		'<td>0</td>' +
-		'<td style="text-align: center;">' +
-		'<input type="checkbox" class="recomendacionadicional_checkbox" name="recomendacionadicional_checkbox[]" value="0" checked/>' +
-		'<br><button type="button" class="btn btn-danger waves-effect btn-circle eliminar" data-toggle="tooltip" title="Eliminar recomendación"><i class="fa fa-trash fa-2x"></i></button>' +
-		'</td>' +
-		'<td style="text-align: left;">' +
-		'<div class="row">' +
-		'<div class="col-12">' +
-		'<label>Tipo recomendación</label>' +
-		'<select class="custom-select form-control" name="recomendacionadicional_tipo[]" required>' +
-		'<option value=""></option>' +
-		'<option value="Preventiva">Preventiva</option>' +
-		'<option value="Correctiva">Correctiva</option>' +
-		'</select>' +
-		'</div>' +
-		'<div class="col-12">' +
-		'<br>' +
-		'<label>Descripción</label>' +
-		'<textarea  class="form-control"style="margin-bottom: 0px;" rows="5" name="recomendacionadicional_descripcion[]" required></textarea>' +
-		'</div>' +
-		'</div>' +
-		'</td>' +
-		'</tr>');
+$("#boton_reporte_nuevarecomendacion").click(function()
+{
+    $("#tabla_reporte_recomendaciones tbody").append('<tr>'+
+															'<td>0</td>'+
+															'<td style="text-align: center;">'+
+																'<input type="checkbox" class="recomendacionadicional_checkbox" name="recomendacionadicional_checkbox[]" value="0" checked/>'+
+																'<br><button type="button" class="btn btn-danger waves-effect btn-circle eliminar" data-toggle="tooltip" title="Eliminar recomendación"><i class="fa fa-trash fa-2x"></i></button>'+
+															'</td>'+
+															'<td style="text-align: left;">'+
+																'<div class="row">'+
+																	'<div class="col-12">'+
+																		'<label>Tipo recomendación</label>'+
+																		'<select class="custom-select form-control" name="recomendacionadicional_tipo[]" required>'+
+																			'<option value=""></option>'+
+																			'<option value="Preventiva">Preventiva</option>'+
+																			'<option value="Correctiva">Correctiva</option>'+
+																		'</select>'+
+																	'</div>'+
+																	'<div class="col-12">'+
+																		'<br>'+
+																		'<label>Descripción</label>'+
+																		'<textarea  class="form-control"style="margin-bottom: 0px;" rows="5" name="recomendacionadicional_descripcion[]" required></textarea>'+
+																	'</div>'+
+																'</div>'+
+															'</td>'+
+														'</tr>');
 
-	var posicion = $("#tabla_reporte_recomendaciones > tbody > tr").eq((parseInt(document.getElementById("tabla_reporte_recomendaciones").rows.length) - 1) - 2).offset().top;
-	$('html, body').animate({
-		scrollTop: posicion
-	}, 1000);
+    var posicion = $("#tabla_reporte_recomendaciones > tbody > tr").eq((parseInt(document.getElementById("tabla_reporte_recomendaciones").rows.length) - 1) - 2).offset().top;
+    $('html, body').animate({
+        scrollTop: posicion
+    }, 1000);
 
-	$('[data-toggle="tooltip"]').tooltip();
+    $('[data-toggle="tooltip"]').tooltip();
 });
 
 
-function activa_recomendacion(checkbox) {
-	if (checkbox.checked) {
-		$('#recomendacion_descripcion_' + checkbox.value).attr('readonly', false);
-		$('#recomendacion_descripcion_' + checkbox.value).attr('required', true);
+function activa_recomendacion(checkbox)
+{
+	if (checkbox.checked)
+	{
+		$('#recomendacion_descripcion_'+checkbox.value).attr('readonly', false);
+		$('#recomendacion_descripcion_'+checkbox.value).attr('required', true);
 	}
-	else {
-		$('#recomendacion_descripcion_' + checkbox.value).attr('required', false);
-		$('#recomendacion_descripcion_' + checkbox.value).attr('readonly', true);
+	else
+	{
+		$('#recomendacion_descripcion_'+checkbox.value).attr('required', false);
+		$('#recomendacion_descripcion_'+checkbox.value).attr('readonly', true);
 	}
 }
 
 
-$('#tabla_reporte_recomendaciones tbody').on('click', 'td>button.eliminar', function () {
-	// obtener fila tabla
-	var fila = $(this);
-
-	// confirmar
-	swal({
-		title: "¿Eliminar recomendación?",
-		text: "Quitar de la lista de recomendaciones",
-		type: "warning",
-		showCancelButton: true,
-		confirmButtonColor: "#DD6B55",
-		confirmButtonText: "Eliminar!",
-		cancelButtonText: "Cancelar!",
-		closeOnConfirm: false,
-		closeOnCancel: false
-	}, function (isConfirm) {
-		if (isConfirm) {
-			// cerrar msj confirmacion
+$('#tabla_reporte_recomendaciones tbody').on('click', 'td>button.eliminar', function()
+{
+    // obtener fila tabla
+    var fila = $(this);
+    
+    // confirmar
+    swal({   
+        title: "¿Eliminar recomendación?",   
+        text: "Quitar de la lista de recomendaciones",   
+        type: "warning",   
+        showCancelButton: true,   
+        confirmButtonColor: "#DD6B55",   
+        confirmButtonText: "Eliminar!",   
+        cancelButtonText: "Cancelar!",   
+        closeOnConfirm: false,   
+        closeOnCancel: false 
+    }, function(isConfirm){   
+        if (isConfirm)
+        {
+        	// cerrar msj confirmacion
 			// swal.close();
 
-			var tr = fila.closest('tr');
-			fila.closest("tr").remove(); // eliminar fila TR
+            var tr = fila.closest('tr');
+            fila.closest("tr").remove(); // eliminar fila TR
 
-			// mensaje
-			swal({
-				title: "Correcto",
-				text: "Recomendación eliminada de la lista",
-				type: "success", // warning, error, success, info
-				buttons: {
-					visible: false, // true , false
-				},
-				timer: 1500,
-				showConfirmButton: false
-			});
-		}
-		else {
-			// mensaje
-			swal({
-				title: "Cancelado",
-				text: "",
-				type: "error", // warning, error, success, info
-				buttons: {
-					visible: false, // true , false
-				},
-				timer: 500,
-				showConfirmButton: false
-			});
-		}
-	});
-	return false;
+            // mensaje
+            swal({
+                title: "Correcto",
+                 text: "Recomendación eliminada de la lista",
+                type: "success", // warning, error, success, info
+                buttons: {
+                    visible: false, // true , false
+                },
+                timer: 1500,
+                showConfirmButton: false
+            });
+        }
+        else 
+        {
+            // mensaje
+            swal({
+                title: "Cancelado",
+                text: "",
+                type: "error", // warning, error, success, info
+                buttons: {
+                    visible: false, // true , false
+                },
+                timer: 500,
+                showConfirmButton: false
+            });   
+        } 
+    });
+    return false;
 });
 
 
-$("#botonguardar_reporte_recomendaciones").click(function () {
+$("#botonguardar_reporte_recomendaciones").click(function()
+{
 	// valida campos vacios
 	var seleccionados = 0;
-	$('.recomendacion_checkbox').each(function () {
-		if (this.checked) {
+	$('.recomendacion_checkbox').each(function()
+	{
+		if (this.checked)
+		{
 			seleccionados += 1;
 		}
 	});
 
 
-	$('.recomendacionadicional_checkbox').each(function () {
-		if (this.checked) {
+	$('.recomendacionadicional_checkbox').each(function()
+	{
+		if (this.checked)
+		{
 			seleccionados += 1;
 		}
 	});
 
 
-	if (seleccionados > 0) {
+	if (seleccionados > 0)
+	{
 		// valida campos vacios
 		var valida = this.form.checkValidity();
-		if (valida) {
+		if (valida)
+		{
 			swal({
 				title: "¡Confirme que desea guardar!",
 				text: "Recomendaciones",
@@ -3767,97 +4064,104 @@ $("#botonguardar_reporte_recomendaciones").click(function () {
 				closeOnConfirm: false,
 				closeOnCancel: false
 			},
-				function (isConfirm) {
-					if (isConfirm) {
-						// cerrar msj confirmacion
-						swal.close();
+			function(isConfirm)
+			{
+				if (isConfirm)
+				{
+					// cerrar msj confirmacion
+					swal.close();
 
-						// enviar datos
-						$('#form_reporte_recomendaciones').ajaxForm({
-							dataType: 'json',
-							type: 'POST',
-							url: '' + ruta_storage_guardar,
-							data: {
-								opcion: 11,
-								proyecto_id: proyecto.id,
-								agente_id: agente_id,
-								agente_nombre: agente_nombre,
-								reporteregistro_id: reporteregistro_id,
-								catactivo_id: $("#reporte_catactivo_id").val(),
-								reporte_instalacion: $("#reporte_instalacion").val(),
-							},
-							resetForm: false,
-							success: function (dato) {
-								// Actualizar ID reporte
-								reporteregistro_id = dato.reporteregistro_id;
-
-
-								menureporte_estado("menureporte_9", 1);
-
-
-								$("#dashboard_recomendaciones").html(parseInt(dato.dashboard_recomendaciones));
+					// enviar datos
+					$('#form_reporte_recomendaciones').ajaxForm({
+						dataType: 'json',
+						type: 'POST',
+						url: ''+ruta_storage_guardar,
+						data: {
+							opcion: 11,
+							proyecto_id: proyecto.id,
+							agente_id: agente_id,
+							agente_nombre: agente_nombre,
+							reporteregistro_id: reporteregistro_id,
+							catactivo_id: $("#reporte_catactivo_id").val(),
+							reporte_instalacion: $("#reporte_instalacion").val(),
+						},
+						resetForm: false,
+						success: function(dato)
+						{
+							// Actualizar ID reporte
+							reporteregistro_id = dato.reporteregistro_id;
 
 
-								// mensaje
-								swal({
-									title: "Correcto",
-									text: "" + dato.msj,
-									type: "success", // warning, error, success, info
-									buttons: {
-										visible: false, // true , false
-									},
-									timer: 1500,
-									showConfirmButton: false
-								});
+							menureporte_estado("menureporte_9", 1);
 
 
-								// actualiza boton
-								$('#botonguardar_reporte_recomendaciones').html('Guardar recomendaciones <i class="fa fa-save"></i>');
-								$('#botonguardar_reporte_recomendaciones').attr('disabled', false);
-							},
-							beforeSend: function () {
-								$('#botonguardar_reporte_recomendaciones').html('Guardando recomendaciones <i class="fa fa-spin fa-spinner"></i>');
-								$('#botonguardar_reporte_recomendaciones').attr('disabled', true);
-							},
-							error: function (dato) {
-								// actualiza boton
-								$('#botonguardar_reporte_recomendaciones').html('Guardar recomendaciones <i class="fa fa-save"></i>');
-								$('#botonguardar_reporte_recomendaciones').attr('disabled', false);
+							$("#dashboard_recomendaciones").html(parseInt(dato.dashboard_recomendaciones));
 
-								// mensaje
-								swal({
-									title: "Error",
-									text: "" + dato.msj,
-									type: "error", // warning, error, success, info
-									buttons: {
-										visible: false, // true , false
-									},
-									timer: 1500,
-									showConfirmButton: false
-								});
-								return false;
-							}
-						}).submit();
-						return false;
-					}
-					else {
-						// mensaje
-						swal({
-							title: "Cancelado",
-							text: "Acción cancelada",
-							type: "error", // warning, error, success, info
-							buttons: {
-								visible: false, // true , false
-							},
-							timer: 500,
-							showConfirmButton: false
-						});
-					}
-				});
+
+							// mensaje
+							swal({
+								title: "Correcto",
+								text: ""+dato.msj,
+								type: "success", // warning, error, success, info
+								buttons: {
+									visible: false, // true , false
+								},
+								timer: 1500,
+								showConfirmButton: false
+							});
+
+
+							// actualiza boton
+							$('#botonguardar_reporte_recomendaciones').html('Guardar recomendaciones <i class="fa fa-save"></i>');
+							$('#botonguardar_reporte_recomendaciones').attr('disabled', false);
+						},
+						beforeSend: function()
+						{
+							$('#botonguardar_reporte_recomendaciones').html('Guardando recomendaciones <i class="fa fa-spin fa-spinner"></i>');
+							$('#botonguardar_reporte_recomendaciones').attr('disabled', true);
+						},
+						error: function(dato)
+						{
+							// actualiza boton
+							$('#botonguardar_reporte_recomendaciones').html('Guardar recomendaciones <i class="fa fa-save"></i>');
+							$('#botonguardar_reporte_recomendaciones').attr('disabled', false);
+
+							// mensaje
+							swal({
+								title: "Error",
+								text: ""+dato.msj,
+								type: "error", // warning, error, success, info
+								buttons: {
+									visible: false, // true , false
+								},
+								timer: 1500,
+								showConfirmButton: false
+							});
+							return false;
+						}
+					}).submit();
+					return false;
+				}
+				else 
+				{
+					// mensaje
+					swal({
+						title: "Cancelado",
+						text: "Acción cancelada",
+						type: "error", // warning, error, success, info
+						buttons: {
+							visible: false, // true , false
+						},
+						timer: 500,
+						showConfirmButton: false
+					});
+				}
+			});
 			return false;
 		}
 	}
-	else {
+	else
+	{
 		// mensaje
 		swal({
 			title: "Seleccione recomendaciones",
@@ -3878,14 +4182,15 @@ $("#botonguardar_reporte_recomendaciones").click(function () {
 // RESPONSABLES DEL INFORME
 
 
-$(document).ready(function () {
+$(document).ready(function()
+{
 	$('#reporteresponsable1documento').dropify({
 		messages:
 		{
 			'default': 'Arrastre el mapa aquí o haga click',
 			'replace': 'Arrastre el mapa o haga clic para reemplazar',
-			'remove': 'Quitar',
-			'error': 'Ooops, ha ocurrido un error.'
+			'remove':  'Quitar',
+			'error':   'Ooops, ha ocurrido un error.'
 		},
 		error:
 		{
@@ -3903,8 +4208,8 @@ $(document).ready(function () {
 		{
 			'default': 'Arrastre el mapa aquí o haga click',
 			'replace': 'Arrastre el mapa o haga clic para reemplazar',
-			'remove': 'Quitar',
-			'error': 'Ooops, ha ocurrido un error.'
+			'remove':  'Quitar',
+			'error':   'Ooops, ha ocurrido un error.'
 		},
 		error:
 		{
@@ -3921,8 +4226,8 @@ $(document).ready(function () {
 		{
 			'default': 'Arrastre el mapa aquí o haga click',
 			'replace': 'Arrastre el mapa o haga clic para reemplazar',
-			'remove': 'Quitar',
-			'error': 'Ooops, ha ocurrido un error.'
+			'remove':  'Quitar',
+			'error':   'Ooops, ha ocurrido un error.'
 		},
 		error:
 		{
@@ -3937,10 +4242,11 @@ $(document).ready(function () {
 });
 
 
-function redimencionar_foto(campo_file, campo_filehidden, boton_guardar) {
+function redimencionar_foto(campo_file, campo_filehidden, boton_guardar)
+{
 	// Bloquear boton guardar
-	$('#' + boton_guardar).attr('disabled', true);
-	$('#' + campo_filehidden).val('');
+	$('#'+boton_guardar).attr('disabled', true);
+	$('#'+campo_filehidden).val('');
 
 	foto_resize_fisicos = "";
 	var filesToUpload = document.getElementById(campo_file).files;
@@ -3956,12 +4262,14 @@ function redimencionar_foto(campo_file, campo_filehidden, boton_guardar) {
 	reader.readAsDataURL(file);
 
 	// Set the image once loaded into file reader
-	reader.onload = function (e) {
-		//img.src = e.target.result;
+	reader.onload = function(e)
+	{
+	    //img.src = e.target.result;
 		var img = new Image();
 		img.src = this.result;
-
-		setTimeout(function () {
+		
+	    setTimeout(function()
+	    {
 			var canvas = document.createElement("canvas");
 			//var canvas = $("<canvas>", {"id":"testing"})[0];
 			//var ctx = canvas.getContext("2d");
@@ -3972,24 +4280,30 @@ function redimencionar_foto(campo_file, campo_filehidden, boton_guardar) {
 			var height = img.height;
 
 			// Dimensiones Nuevas
-			if (parseInt(width) > 8000) {
+			if (parseInt(width) > 8000)
+			{
 				var MAX_WIDTH = 4000; //Ancho de la imagen
 				var MAX_HEIGHT = 3000; //Alto de la imagen
 			}
-			else {
+			else
+			{
 				var MAX_WIDTH = 1200; //Ancho de la imagen
 				var MAX_HEIGHT = 900; //Alto de la imagen
 			}
 
 			// Dimensionar con respecto a la relacion de aspecto
-			if (width > height) {
-				if (width > MAX_WIDTH) {
+			if (width > height)
+			{
+				if (width > MAX_WIDTH)
+				{
 					height *= MAX_WIDTH / width;
 					width = MAX_WIDTH;
 				}
 			}
-			else {
-				if (height > MAX_HEIGHT) {
+			else
+			{
+				if (height > MAX_HEIGHT)
+				{
 					width *= MAX_HEIGHT / height;
 					height = MAX_HEIGHT;
 				}
@@ -3999,7 +4313,7 @@ function redimencionar_foto(campo_file, campo_filehidden, boton_guardar) {
 			canvas.height = height;
 			var ctx = canvas.getContext("2d");
 			ctx.drawImage(img, 0, 0, width, height);
-			console.log("Nuevas dimensiones ", width, height);
+			console.log("Nuevas dimensiones ",width, height);
 
 			// Resultado
 			var dataurl = canvas.toDataURL("image/jpeg");
@@ -4007,19 +4321,21 @@ function redimencionar_foto(campo_file, campo_filehidden, boton_guardar) {
 			// ubicacionmapa = dataurl; //Guardar en una variable
 
 			// Resultado
-			$('#' + campo_filehidden).val(dataurl);
+			$('#'+campo_filehidden).val(dataurl);
 
 			// Desbloquear boton guardar
-			$('#' + boton_guardar).attr('disabled', false);
+			$('#'+boton_guardar).attr('disabled', false);
 		}, 100);
 	}
 }
 
 
-$("#botonguardar_reporte_responsablesinforme").click(function () {
+$("#botonguardar_reporte_responsablesinforme").click(function()
+{
 	// valida campos vacios
 	var valida = this.form.checkValidity();
-	if (valida) {
+	if (valida)
+	{
 		swal({
 			title: "¡Confirme que desea guardar!",
 			text: "Responsables del informe",
@@ -4031,104 +4347,112 @@ $("#botonguardar_reporte_responsablesinforme").click(function () {
 			closeOnConfirm: false,
 			closeOnCancel: false
 		},
-			function (isConfirm) {
-				if (isConfirm) {
-					// cerrar msj confirmacion
-					swal.close();
+		function(isConfirm)
+		{
+			if (isConfirm)
+			{
+				// cerrar msj confirmacion
+				swal.close();
 
-					// enviar datos
-					$('#form_reporte_responsablesinforme').ajaxForm({
-						dataType: 'json',
-						type: 'POST',
-						url: '' + ruta_storage_guardar,
-						data: {
-							opcion: 12,
-							proyecto_id: proyecto.id,
-							agente_id: agente_id,
-							agente_nombre: agente_nombre,
-							reporteregistro_id: reporteregistro_id,
-							catactivo_id: $("#reporte_catactivo_id").val(),
-							reporte_instalacion: $("#reporte_instalacion").val(),
-						},
-						resetForm: false,
-						success: function (dato) {
-							// Actualizar ID reporte
-							reporteregistro_id = dato.reporteregistro_id;
+				// enviar datos
+				$('#form_reporte_responsablesinforme').ajaxForm({
+					dataType: 'json',
+					type: 'POST',
+					url: ''+ruta_storage_guardar,
+					data: {
+						opcion: 12,
+						proyecto_id: proyecto.id,
+						agente_id: agente_id,
+						agente_nombre: agente_nombre,
+						reporteregistro_id: reporteregistro_id,
+						catactivo_id: $("#reporte_catactivo_id").val(),
+						reporte_instalacion: $("#reporte_instalacion").val(),
+					},
+					resetForm: false,
+					success: function(dato)
+					{
+						// Actualizar ID reporte
+						reporteregistro_id = dato.reporteregistro_id;
 
-							menureporte_estado("menureporte_10", 1);
-
-
-							$('#boton_descargarresponsabledoc1').css('display', 'block');
-							$('#boton_descargarresponsabledoc2').css('display', 'block');
+						menureporte_estado("menureporte_10", 1);
 
 
-							// mensaje
-							swal({
-								title: "Correcto",
-								text: "" + dato.msj,
-								type: "success", // warning, error, success, info
-								buttons: {
-									visible: false, // true , false
-								},
-								timer: 1500,
-								showConfirmButton: false
-							});
+						$('#boton_descargarresponsabledoc1').css('display', 'block');
+						$('#boton_descargarresponsabledoc2').css('display', 'block');
 
-							// actualiza boton
-							$('#botonguardar_reporte_responsablesinforme').html('Guardar responsables del informe <i class="fa fa-save"></i>');
-							$('#botonguardar_reporte_responsablesinforme').attr('disabled', false);
-						},
-						beforeSend: function () {
-							$('#botonguardar_reporte_responsablesinforme').html('Guardando responsables del informe <i class="fa fa-spin fa-spinner"></i>');
-							$('#botonguardar_reporte_responsablesinforme').attr('disabled', true);
-						},
-						error: function (dato) {
-							// actualiza boton
-							$('#botonguardar_reporte_responsablesinforme').html('Guardar responsables del informe <i class="fa fa-save"></i>');
-							$('#botonguardar_reporte_responsablesinforme').attr('disabled', false);
 
-							// mensaje
-							swal({
-								title: "Error",
-								text: "" + dato.msj,
-								type: "error", // warning, error, success, info
-								buttons: {
-									visible: false, // true , false
-								},
-								timer: 1500,
-								showConfirmButton: false
-							});
-							return false;
-						}
-					}).submit();
-					return false;
-				}
-				else {
-					// mensaje
-					swal({
-						title: "Cancelado",
-						text: "Acción cancelada",
-						type: "error", // warning, error, success, info
-						buttons: {
-							visible: false, // true , false
-						},
-						timer: 500,
-						showConfirmButton: false
-					});
-				}
-			});
+						// mensaje
+						swal({
+							title: "Correcto",
+							text: ""+dato.msj,
+							type: "success", // warning, error, success, info
+							buttons: {
+								visible: false, // true , false
+							},
+							timer: 1500,
+							showConfirmButton: false
+						});
+
+						// actualiza boton
+						$('#botonguardar_reporte_responsablesinforme').html('Guardar responsables del informe <i class="fa fa-save"></i>');
+						$('#botonguardar_reporte_responsablesinforme').attr('disabled', false);
+					},
+					beforeSend: function()
+					{
+						$('#botonguardar_reporte_responsablesinforme').html('Guardando responsables del informe <i class="fa fa-spin fa-spinner"></i>');
+						$('#botonguardar_reporte_responsablesinforme').attr('disabled', true);
+					},
+					error: function(dato)
+					{
+						// actualiza boton
+						$('#botonguardar_reporte_responsablesinforme').html('Guardar responsables del informe <i class="fa fa-save"></i>');
+						$('#botonguardar_reporte_responsablesinforme').attr('disabled', false);
+
+						// mensaje
+						swal({
+							title: "Error",
+							text: ""+dato.msj,
+							type: "error", // warning, error, success, info
+							buttons: {
+								visible: false, // true , false
+							},
+							timer: 1500,
+							showConfirmButton: false
+						});
+						return false;
+					}
+				}).submit();
+				return false;
+			}
+			else 
+			{
+				// mensaje
+				swal({
+					title: "Cancelado",
+					text: "Acción cancelada",
+					type: "error", // warning, error, success, info
+					buttons: {
+						visible: false, // true , false
+					},
+					timer: 500,
+					showConfirmButton: false
+				});
+			}
+		});
 		return false;
 	}
 });
 
 
-$("#boton_descargarresponsabledoc1").click(function () {
-	window.open('/reportevibracionresponsabledocumento/' + reporteregistro_id + '/' + 1 + '/' + 1);
+$("#boton_descargarresponsabledoc1").click(function()
+{
+	window.open('/reportevibracionresponsabledocumento/'+reporteregistro_id+'/'+1+'/'+1);
 });
 
 
-$("#boton_descargarresponsabledoc2").click(function () {
-	window.open('/reportevibracionresponsabledocumento/' + reporteregistro_id + '/' + 2 + '/' + 1);
+$("#boton_descargarresponsabledoc2").click(function()
+{
+	window.open('/reportevibracionresponsabledocumento/'+reporteregistro_id+'/'+2+'/'+1);
 });
 
 
@@ -4136,23 +4460,29 @@ $("#boton_descargarresponsabledoc2").click(function () {
 // PLANOS
 
 
-$(document).ready(function () {
-	setTimeout(function () {
+$(document).ready(function()
+{
+	setTimeout(function()
+	{
 		tabla_reporte_planos(proyecto.id, agente_nombre);
 	}, 6500);
 });
 
 
 var datatable_planos = null;
-function tabla_reporte_planos(proyecto_id, agente_nombre) {
-	try {
-		var ruta = "/reportevibracionplanostabla/" + proyecto_id + "/" + agente_nombre;
+function tabla_reporte_planos(proyecto_id, agente_nombre)
+{
+	try 
+	{
+		var ruta = "/reportevibracionplanostabla/"+proyecto_id+"/"+agente_nombre;
 
-		if (datatable_planos != null) {
+		if (datatable_planos != null)
+		{
 			datatable_planos.clear().draw();
 			datatable_planos.ajax.url(ruta).load();
 		}
-		else {
+		else
+		{
 			var numeroejecucion = 1;
 			datatable_planos = $('#tabla_reporte_planos').DataTable({
 				ajax: {
@@ -4161,16 +4491,19 @@ function tabla_reporte_planos(proyecto_id, agente_nombre) {
 					cache: false,
 					dataType: "json",
 					data: {},
-					dataSrc: function (json) {
+					dataSrc: function (json)
+					{
 						// Actualiza menu
 						menureporte_estado("menureporte_11_2", json.total);
 
 						// alert("Done! "+json.msj);
 						return json.data;
 					},
-					error: function (xhr, error, code) {
-						console.log('error en datatable_planos ' + code);
-						if (numeroejecucion <= 1) {
+					error: function (xhr, error, code)
+					{						
+						console.log('error en datatable_planos '+code);
+						if (numeroejecucion <= 1)
+						{
 							tabla_reporte_planos(proyecto_id, agente_nombre);
 							numeroejecucion += 1;
 						}
@@ -4202,7 +4535,7 @@ function tabla_reporte_planos(proyecto_id, agente_nombre) {
 				],
 				lengthMenu: [[20, 50, 100, -1], [20, 50, 100, "Todos"]],
 				rowsGroup: [2], //agrupar filas
-				order: [[0, "ASC"]],
+				order: [[ 0, "ASC" ]],
 				ordering: false,
 				processing: true,
 				searching: false,
@@ -4224,7 +4557,8 @@ function tabla_reporte_planos(proyecto_id, agente_nombre) {
 						previous: "Anterior"
 					}
 				},
-				rowCallback: function (row, data, index) {
+				rowCallback: function(row, data, index)
+				{
 					// console.log(index+' - '+data.reporteiluminacionpuntos_nopunto);
 
 					// if(data.reporteiluminacionpuntos_nopunto == 2)
@@ -4240,20 +4574,24 @@ function tabla_reporte_planos(proyecto_id, agente_nombre) {
 		}
 
 		// Tooltip en DataTable
-		datatable_planos.on('draw', function () {
+		datatable_planos.on('draw', function ()
+		{
 			$('[data-toggle="tooltip"]').tooltip();
 		});
 	}
-	catch (exception) {
+	catch (exception)
+	{
 		tabla_reporte_planos(proyecto_id, agente_nombre);
-	}
+    }
 }
 
 
-$("#botonguardar_reporte_planos").click(function () {
+$("#botonguardar_reporte_planos").click(function()
+{
 	// valida campos vacios
 	var valida = this.form.checkValidity();
-	if (valida) {
+	if (valida)
+	{
 		swal({
 			title: "¡Confirme que desea guardar!",
 			text: "Carpeta planos seleccionados",
@@ -4265,88 +4603,94 @@ $("#botonguardar_reporte_planos").click(function () {
 			closeOnConfirm: false,
 			closeOnCancel: false
 		},
-			function (isConfirm) {
-				if (isConfirm) {
-					// cerrar msj confirmacion
-					swal.close();
+		function(isConfirm)
+		{
+			if (isConfirm)
+			{
+				// cerrar msj confirmacion
+				swal.close();
 
-					// enviar datos
-					$('#form_reporte_planos').ajaxForm({
-						dataType: 'json',
-						type: 'POST',
-						url: '' + ruta_storage_guardar,
-						data: {
-							opcion: 13,
-							proyecto_id: proyecto.id,
-							agente_id: agente_id,
-							agente_nombre: agente_nombre,
-							reporteregistro_id: reporteregistro_id,
-							catactivo_id: $("#reporte_catactivo_id").val(),
-							reporte_instalacion: $("#reporte_instalacion").val(),
-						},
-						resetForm: false,
-						success: function (dato) {
-							// Actualizar ID reporte
-							reporteregistro_id = dato.reporteregistro_id;
+				// enviar datos
+				$('#form_reporte_planos').ajaxForm({
+					dataType: 'json',
+					type: 'POST',
+					url: ''+ruta_storage_guardar,
+					data: {
+						opcion: 13,
+						proyecto_id: proyecto.id,
+						agente_id: agente_id,
+						agente_nombre: agente_nombre,
+						reporteregistro_id: reporteregistro_id,
+						catactivo_id: $("#reporte_catactivo_id").val(),
+						reporte_instalacion: $("#reporte_instalacion").val(),
+					},
+					resetForm: false,
+					success: function(dato)
+					{
+						// Actualizar ID reporte
+						reporteregistro_id = dato.reporteregistro_id;
 
-							// Actualiza menu
-							menureporte_estado("menureporte_11_2", dato.total);
+						// Actualiza menu
+						menureporte_estado("menureporte_11_2", dato.total);
 
-							// mensaje
-							swal({
-								title: "Correcto",
-								text: "" + dato.msj,
-								type: "success", // warning, error, success, info
-								buttons: {
-									visible: false, // true , false
-								},
-								timer: 1500,
-								showConfirmButton: false
-							});
+						// mensaje
+						swal({
+							title: "Correcto",
+							text: ""+dato.msj,
+							type: "success", // warning, error, success, info
+							buttons: {
+								visible: false, // true , false
+							},
+							timer: 1500,
+							showConfirmButton: false
+						});
 
-							// actualiza boton
-							$('#botonguardar_reporte_planos').html('Guardar carpeta planos <i class="fa fa-save"></i>');
-							$('#botonguardar_reporte_planos').attr('disabled', false);
-						},
-						beforeSend: function () {
-							$('#botonguardar_reporte_planos').html('Guardando carpeta planos <i class="fa fa-spin fa-spinner"></i>');
-							$('#botonguardar_reporte_planos').attr('disabled', true);
-						},
-						error: function (dato) {
-							// actualiza boton
-							$('#botonguardar_reporte_planos').html('Guardar carpeta planos <i class="fa fa-save"></i>');
-							$('#botonguardar_reporte_planos').attr('disabled', false);
+						// actualiza boton
+						$('#botonguardar_reporte_planos').html('Guardar carpeta planos <i class="fa fa-save"></i>');
+						$('#botonguardar_reporte_planos').attr('disabled', false);
+					},
+					beforeSend: function()
+					{
+						$('#botonguardar_reporte_planos').html('Guardando carpeta planos <i class="fa fa-spin fa-spinner"></i>');
+						$('#botonguardar_reporte_planos').attr('disabled', true);
+					},
+					error: function(dato)
+					{
+						// actualiza boton
+						$('#botonguardar_reporte_planos').html('Guardar carpeta planos <i class="fa fa-save"></i>');
+						$('#botonguardar_reporte_planos').attr('disabled', false);
 
-							// mensaje
-							swal({
-								title: "Error",
-								text: "" + dato.msj,
-								type: "error", // warning, error, success, info
-								buttons: {
-									visible: false, // true , false
-								},
-								timer: 1500,
-								showConfirmButton: false
-							});
-							return false;
-						}
-					}).submit();
-					return false;
-				}
-				else {
-					// mensaje
-					swal({
-						title: "Cancelado",
-						text: "Acción cancelada",
-						type: "error", // warning, error, success, info
-						buttons: {
-							visible: false, // true , false
-						},
-						timer: 500,
-						showConfirmButton: false
-					});
-				}
-			});
+						// mensaje
+						swal({
+							title: "Error",
+							text: ""+dato.msj,
+							type: "error", // warning, error, success, info
+							buttons: {
+								visible: false, // true , false
+							},
+							timer: 1500,
+							showConfirmButton: false
+						});
+						return false;
+					}
+				}).submit();
+				return false;
+			}
+			else 
+			{
+				// mensaje
+				swal({
+					title: "Cancelado",
+					text: "Acción cancelada",
+					type: "error", // warning, error, success, info
+					buttons: {
+						visible: false, // true , false
+					},
+					timer: 500,
+					showConfirmButton: false
+				});
+			}
+		});
 		return false;
 	}
 });
@@ -4356,23 +4700,29 @@ $("#botonguardar_reporte_planos").click(function () {
 // EQUIPO UTILIZADO
 
 
-$(document).ready(function () {
-	setTimeout(function () {
+$(document).ready(function()
+{
+	setTimeout(function()
+	{
 		tabla_reporte_equipoutilizado(proyecto.id, agente_nombre);
 	}, 7500);
 });
 
 
 var datatable_equipoutilizado = null;
-function tabla_reporte_equipoutilizado(proyecto_id, agente_nombre) {
-	try {
-		var ruta = "/reportevibracionequipoutilizadotabla/" + proyecto_id + "/" + agente_nombre;
+function tabla_reporte_equipoutilizado(proyecto_id, agente_nombre)
+{
+	try 
+	{
+		var ruta = "/reportevibracionequipoutilizadotabla/"+proyecto_id+"/"+agente_nombre;
 
-		if (datatable_equipoutilizado != null) {
+		if (datatable_equipoutilizado != null)
+		{
 			datatable_equipoutilizado.clear().draw();
 			datatable_equipoutilizado.ajax.url(ruta).load();
 		}
-		else {
+		else
+		{
 			var numeroejecucion = 1;
 			datatable_equipoutilizado = $('#tabla_reporte_equipoutilizado').DataTable({
 				ajax: {
@@ -4381,16 +4731,19 @@ function tabla_reporte_equipoutilizado(proyecto_id, agente_nombre) {
 					cache: false,
 					dataType: "json",
 					data: {},
-					dataSrc: function (json) {
+					dataSrc: function (json)
+					{
 						menureporte_estado("menureporte_11_5", parseInt(json.total));
 						menureporte_estado("menureporte_11_6", parseInt(json.total));
 
 						// alert("Done! "+json.msj);
 						return json.data;
 					},
-					error: function (xhr, error, code) {
-						console.log('error en datatable_equipoutilizado ' + code);
-						if (numeroejecucion <= 1) {
+					error: function (xhr, error, code)
+					{						
+						console.log('error en datatable_equipoutilizado '+code);
+						if (numeroejecucion <= 1)
+						{
 							tabla_reporte_equipoutilizado(proyecto_id, agente_nombre);
 							numeroejecucion += 1;
 						}
@@ -4420,11 +4773,11 @@ function tabla_reporte_equipoutilizado(proyecto_id, agente_nombre) {
 						data: "vigencia",
 						defaultContent: "-"
 					},
-
+					
 				],
 				lengthMenu: [[20, 50, 100, -1], [20, 50, 100, "Todos"]],
 				// rowsGroup: [0, 1], //agrupar filas
-				order: [[0, "ASC"]],
+				order: [[ 0, "ASC" ]],
 				ordering: false,
 				processing: true,
 				searching: true,
@@ -4450,70 +4803,81 @@ function tabla_reporte_equipoutilizado(proyecto_id, agente_nombre) {
 		}
 
 		// Tooltip en DataTable
-		datatable_equipoutilizado.on('draw', function () {
+		datatable_equipoutilizado.on('draw', function ()
+		{
 			$('[data-toggle="tooltip"]').tooltip();
 		});
 	}
-	catch (exception) {
+	catch (exception)
+	{
 		tabla_reporte_equipoutilizado(proyecto_id, agente_nombre);
 	}
 }
 
 
-function activa_checkboxcarta(checkbox, equipo_id) {
-	if (checkbox.checked) {
-		$('#equipoutilizado_checkboxcarta_' + equipo_id).attr('disabled', false);
+function activa_checkboxcarta(checkbox, equipo_id)
+{
+	if (checkbox.checked)
+	{
+		$('#equipoutilizado_checkboxcarta_'+equipo_id).attr('disabled', false);
 	}
-	else {
-		$('#equipoutilizado_checkboxcarta_' + equipo_id).prop("checked", false);
-		$('#equipoutilizado_checkboxcarta_' + equipo_id).attr('disabled', true);
+	else
+	{
+		$('#equipoutilizado_checkboxcarta_'+equipo_id).prop("checked", false);
+		$('#equipoutilizado_checkboxcarta_'+equipo_id).attr('disabled', true);
 	}
 }
 
 
-$('#tabla_reporte_equipoutilizado tbody').on('click', 'td.cartapdf', function () {
+$('#tabla_reporte_equipoutilizado tbody').on('click', 'td.cartapdf', function()
+{
 	var tr = $(this).closest('tr');
 	var row = datatable_equipoutilizado.row(tr);
 
-	if (row.data().equipo_cartaPDF) {
-		$('#visor_documento').attr('src', '/assets/plugins/viewer-pdfjs/web/viewer_read.html?file=/verequipodocumento/' + row.data().equipo_id + '/' + 2);
+	if (row.data().equipo_cartaPDF)
+	{
+		$('#visor_documento').attr('src', '/assets/plugins/viewer-pdfjs/web/viewer_read.html?file=/verequipodocumento/'+row.data().equipo_id+'/'+2);
 
 		// Titulo modal
-		$('#modal_visor .modal-title').html('Carta ' + row.data().equipo_Descripcion + ' [' + row.data().equipo_Serie + ']');
+		$('#modal_visor .modal-title').html('Carta '+row.data().equipo_Descripcion+' ['+row.data().equipo_Serie+']');
 
 		// Abrir modal
-		$('#modal_visor').modal({ backdrop: false });
+		$('#modal_visor').modal({backdrop:false});
 	}
 });
 
 
 
-$('#tabla_reporte_equipoutilizado tbody').on('click', 'td.certificadopdf', function () {
+$('#tabla_reporte_equipoutilizado tbody').on('click', 'td.certificadopdf', function()
+{
 	var tr = $(this).closest('tr');
 	var row = datatable_equipoutilizado.row(tr);
 
-	if (row.data().equipo_CertificadoPDF) {
-		$('#visor_documento').attr('src', '/assets/plugins/viewer-pdfjs/web/viewer_read.html?file=/verequipodocumento/' + row.data().equipo_id + '/' + 1);
+	if (row.data().equipo_CertificadoPDF)
+	{
+		$('#visor_documento').attr('src', '/assets/plugins/viewer-pdfjs/web/viewer_read.html?file=/verequipodocumento/'+row.data().equipo_id+'/'+1);
 
 		// Titulo modal
-		$('#modal_visor .modal-title').html('Certificado de calibración ' + row.data().equipo_Descripcion + ' [' + row.data().equipo_Serie + ']');
+		$('#modal_visor .modal-title').html('Certificado de calibración '+row.data().equipo_Descripcion+' ['+row.data().equipo_Serie+']');
 
 		// Abrir modal
-		$('#modal_visor').modal({ backdrop: false });
+		$('#modal_visor').modal({backdrop:false});
 	}
 });
 
 
-$("#botoncerrar_modalvisor_reporte").click(function () {
+$("#botoncerrar_modalvisor_reporte").click(function()
+{
 	// Titulo modal
-	$('#modal_visor .modal-title').html('Documento');
+    $('#modal_visor .modal-title').html('Documento');
 
 	// Visor
 	$('#visor_documento').attr('src', '/assets/images/cargando.gif');
 });
 
 
-$("#botonguardar_reporte_equipoutilizado").click(function () {
+$("#botonguardar_reporte_equipoutilizado").click(function()
+{
 	// borrar campo filtro del DATATABLE
 	// datatable_equipoutilizado.search($(this).val()).draw();
 	datatable_equipoutilizado.search("").draw();
@@ -4521,17 +4885,21 @@ $("#botonguardar_reporte_equipoutilizado").click(function () {
 
 	// valida campos vacios
 	var seleccionados = 0;
-	$('.equipoutilizado_checkbox').each(function () {
-		if (this.checked) {
+	$('.equipoutilizado_checkbox').each(function()
+	{
+		if (this.checked)
+		{
 			seleccionados += 1;
 		}
 	});
 
 
-	if (seleccionados > 0) {
+	if (seleccionados > 0)
+	{
 		// valida campos vacios
 		var valida = this.form.checkValidity();
-		if (valida) {
+		if (valida)
+		{
 			swal({
 				title: "¡Confirme que desea guardar!",
 				text: "Equipo (s) utilizado (s)",
@@ -4543,97 +4911,104 @@ $("#botonguardar_reporte_equipoutilizado").click(function () {
 				closeOnConfirm: false,
 				closeOnCancel: false
 			},
-				function (isConfirm) {
-					if (isConfirm) {
-						// cerrar msj confirmacion
-						swal.close();
+			function(isConfirm)
+			{
+				if (isConfirm)
+				{
+					// cerrar msj confirmacion
+					swal.close();
 
-						// enviar datos
-						$('#form_reporte_equipoutilizado').ajaxForm({
-							dataType: 'json',
-							type: 'POST',
-							url: '' + ruta_storage_guardar,
-							data: {
-								opcion: 14,
-								proyecto_id: proyecto.id,
-								agente_id: agente_id,
-								agente_nombre: agente_nombre,
-								reporteregistro_id: reporteregistro_id,
-								catactivo_id: $("#reporte_catactivo_id").val(),
-								reporte_instalacion: $("#reporte_instalacion").val(),
-							},
-							resetForm: false,
-							success: function (dato) {
-								// Actualizar ID reporte
-								reporteregistro_id = dato.reporteregistro_id;
+					// enviar datos
+					$('#form_reporte_equipoutilizado').ajaxForm({
+						dataType: 'json',
+						type: 'POST',
+						url: ''+ruta_storage_guardar,
+						data: {
+							opcion: 14,
+							proyecto_id: proyecto.id,
+							agente_id: agente_id,
+							agente_nombre: agente_nombre,
+							reporteregistro_id: reporteregistro_id,
+							catactivo_id: $("#reporte_catactivo_id").val(),
+							reporte_instalacion: $("#reporte_instalacion").val(),
+						},
+						resetForm: false,
+						success: function(dato)
+						{
+							// Actualizar ID reporte
+							reporteregistro_id = dato.reporteregistro_id;
 
-								menureporte_estado("menureporte_11_5", 1);
-								menureporte_estado("menureporte_11_6", 1);
-
-
-								// datatable_equipoutilizado.ajax.reload();
-
-
-								// mensaje
-								swal({
-									title: "Correcto",
-									text: "" + dato.msj,
-									type: "success", // warning, error, success, info
-									buttons: {
-										visible: false, // true , false
-									},
-									timer: 1500,
-									showConfirmButton: false
-								});
+							menureporte_estado("menureporte_11_5", 1);
+							menureporte_estado("menureporte_11_6", 1);
 
 
-								// actualiza boton
-								$('#botonguardar_reporte_equipoutilizado').html('Guardar equipo utilizado <i class="fa fa-save"></i>');
-								$('#botonguardar_reporte_equipoutilizado').attr('disabled', false);
-							},
-							beforeSend: function () {
-								$('#botonguardar_reporte_equipoutilizado').html('Guardando equipo utilizado <i class="fa fa-spin fa-spinner"></i>');
-								$('#botonguardar_reporte_equipoutilizado').attr('disabled', true);
-							},
-							error: function (dato) {
-								// actualiza boton
-								$('#botonguardar_reporte_equipoutilizado').html('Guardar equipo utilizado <i class="fa fa-save"></i>');
-								$('#botonguardar_reporte_equipoutilizado').attr('disabled', false);
+							// datatable_equipoutilizado.ajax.reload();
 
-								// mensaje
-								swal({
-									title: "Error",
-									text: "" + dato.msj,
-									type: "error", // warning, error, success, info
-									buttons: {
-										visible: false, // true , false
-									},
-									timer: 1500,
-									showConfirmButton: false
-								});
-								return false;
-							}
-						}).submit();
-						return false;
-					}
-					else {
-						// mensaje
-						swal({
-							title: "Cancelado",
-							text: "Acción cancelada",
-							type: "error", // warning, error, success, info
-							buttons: {
-								visible: false, // true , false
-							},
-							timer: 500,
-							showConfirmButton: false
-						});
-					}
-				});
+
+							// mensaje
+							swal({
+								title: "Correcto",
+								text: ""+dato.msj,
+								type: "success", // warning, error, success, info
+								buttons: {
+									visible: false, // true , false
+								},
+								timer: 1500,
+								showConfirmButton: false
+							});
+
+
+							// actualiza boton
+							$('#botonguardar_reporte_equipoutilizado').html('Guardar equipo utilizado <i class="fa fa-save"></i>');
+							$('#botonguardar_reporte_equipoutilizado').attr('disabled', false);
+						},
+						beforeSend: function()
+						{
+							$('#botonguardar_reporte_equipoutilizado').html('Guardando equipo utilizado <i class="fa fa-spin fa-spinner"></i>');
+							$('#botonguardar_reporte_equipoutilizado').attr('disabled', true);
+						},
+						error: function(dato)
+						{
+							// actualiza boton
+							$('#botonguardar_reporte_equipoutilizado').html('Guardar equipo utilizado <i class="fa fa-save"></i>');
+							$('#botonguardar_reporte_equipoutilizado').attr('disabled', false);
+
+							// mensaje
+							swal({
+								title: "Error",
+								text: ""+dato.msj,
+								type: "error", // warning, error, success, info
+								buttons: {
+									visible: false, // true , false
+								},
+								timer: 1500,
+								showConfirmButton: false
+							});
+							return false;
+						}
+					}).submit();
+					return false;
+				}
+				else 
+				{
+					// mensaje
+					swal({
+						title: "Cancelado",
+						text: "Acción cancelada",
+						type: "error", // warning, error, success, info
+						buttons: {
+							visible: false, // true , false
+						},
+						timer: 500,
+						showConfirmButton: false
+					});
+				}
+			});
 			return false;
 		}
 	}
-	else {
+	else
+	{
 		// mensaje
 		swal({
 			title: "Seleccione equipo (s)",
@@ -4654,23 +5029,29 @@ $("#botonguardar_reporte_equipoutilizado").click(function () {
 // INFORME DE RESULTADOS LABORATORIO
 
 
-$(document).ready(function () {
-	setTimeout(function () {
+$(document).ready(function()
+{
+	setTimeout(function()
+	{
 		tabla_reporte_anexosresultados(proyecto.id, agente_nombre);
 	}, 8500);
 });
 
 
 var datatable_informeresultados = null;
-function tabla_reporte_anexosresultados(proyecto_id, agente_nombre) {
-	try {
-		var ruta = "/reportevibracionanexosresultadostabla/" + proyecto_id + "/" + agente_nombre;
+function tabla_reporte_anexosresultados(proyecto_id, agente_nombre)
+{
+	try 
+	{
+		var ruta = "/reportevibracionanexosresultadostabla/"+proyecto_id+"/"+agente_nombre;
 
-		if (datatable_informeresultados != null) {
+		if (datatable_informeresultados != null)
+		{
 			datatable_informeresultados.clear().draw();
 			datatable_informeresultados.ajax.url(ruta).load();
 		}
-		else {
+		else
+		{
 			var numeroejecucion = 1;
 			datatable_informeresultados = $('#tabla_reporte_anexosresultados').DataTable({
 				ajax: {
@@ -4679,7 +5060,8 @@ function tabla_reporte_anexosresultados(proyecto_id, agente_nombre) {
 					cache: false,
 					dataType: "json",
 					data: {},
-					dataSrc: function (json) {
+					dataSrc: function (json)
+					{
 						// Actualiza menu
 						menureporte_estado("menureporte_11_3", json.total);
 						menureporte_estado("menureporte_11_4", json.total);
@@ -4688,9 +5070,11 @@ function tabla_reporte_anexosresultados(proyecto_id, agente_nombre) {
 						// alert("Done! "+json.msj);
 						return json.data;
 					},
-					error: function (xhr, error, code) {
-						console.log('error en datatable_informeresultados ' + code);
-						if (numeroejecucion <= 1) {
+					error: function (xhr, error, code)
+					{						
+						console.log('error en datatable_informeresultados '+code);
+						if (numeroejecucion <= 1)
+						{
 							tabla_reporte_anexosresultados(proyecto_id, agente_nombre);
 							numeroejecucion += 1;
 						}
@@ -4728,7 +5112,7 @@ function tabla_reporte_anexosresultados(proyecto_id, agente_nombre) {
 				],
 				lengthMenu: [[20, 50, 100, -1], [20, 50, 100, "Todos"]],
 				rowsGroup: [3], //agrupar filas
-				order: [[0, "ASC"]],
+				order: [[ 0, "ASC" ]],
 				ordering: false,
 				processing: true,
 				searching: true,
@@ -4754,17 +5138,20 @@ function tabla_reporte_anexosresultados(proyecto_id, agente_nombre) {
 		}
 
 		// Tooltip en DataTable
-		datatable_informeresultados.on('draw', function () {
+		datatable_informeresultados.on('draw', function ()
+		{
 			$('[data-toggle="tooltip"]').tooltip();
 		});
 	}
-	catch (exception) {
+	catch (exception)
+	{
 		tabla_reporte_anexosresultados(proyecto_id, agente_nombre);
-	}
+    }
 }
 
 
-$("#botonguardar_reporte_anexosresultados").click(function () {
+$("#botonguardar_reporte_anexosresultados").click(function()
+{
 	// borrar campo filtro del DATATABLE
 	// datatable_informeresultados.search($(this).val()).draw();
 	datatable_informeresultados.search("").draw();
@@ -4772,17 +5159,21 @@ $("#botonguardar_reporte_anexosresultados").click(function () {
 
 	// valida campos vacios
 	var seleccionados = 0;
-	$('.anexoresultado_checkbox').each(function () {
-		if (this.checked) {
+	$('.anexoresultado_checkbox').each(function()
+	{
+		if (this.checked)
+		{
 			seleccionados += 1;
 		}
 	});
 
 
-	if (seleccionados > 0) {
+	if (seleccionados > 0)
+	{
 		// valida campos vacios
 		var valida = this.form.checkValidity();
-		if (valida) {
+		if (valida)
+		{
 			swal({
 				title: "¡Confirme que desea guardar!",
 				text: "Lista de anexos de resultados",
@@ -4794,94 +5185,101 @@ $("#botonguardar_reporte_anexosresultados").click(function () {
 				closeOnConfirm: false,
 				closeOnCancel: false
 			},
-				function (isConfirm) {
-					if (isConfirm) {
-						// cerrar msj confirmacion
-						swal.close();
+			function(isConfirm)
+			{
+				if (isConfirm)
+				{
+					// cerrar msj confirmacion
+					swal.close();
 
-						// enviar datos
-						$('#form_reporte_anexosresultados').ajaxForm({
-							dataType: 'json',
-							type: 'POST',
-							url: '' + ruta_storage_guardar,
-							data: {
-								opcion: 15,
-								proyecto_id: proyecto.id,
-								agente_id: agente_id,
-								agente_nombre: agente_nombre,
-								reporteregistro_id: reporteregistro_id,
-								catactivo_id: $("#reporte_catactivo_id").val(),
-								reporte_instalacion: $("#reporte_instalacion").val(),
-							},
-							resetForm: false,
-							success: function (dato) {
-								// Actualizar ID reporte
-								reporteregistro_id = dato.reporteregistro_id;
+					// enviar datos
+					$('#form_reporte_anexosresultados').ajaxForm({
+						dataType: 'json',
+						type: 'POST',
+						url: ''+ruta_storage_guardar,
+						data: {
+							opcion: 15,
+							proyecto_id: proyecto.id,
+							agente_id: agente_id,
+							agente_nombre: agente_nombre,
+							reporteregistro_id: reporteregistro_id,
+							catactivo_id: $("#reporte_catactivo_id").val(),
+							reporte_instalacion: $("#reporte_instalacion").val(),
+						},
+						resetForm: false,
+						success: function(dato)
+						{
+							// Actualizar ID reporte
+							reporteregistro_id = dato.reporteregistro_id;
 
-								// Actualiza menu
-								menureporte_estado("menureporte_11_3", dato.total);
-								menureporte_estado("menureporte_11_4", dato.total);
-								menureporte_estado("menureporte_11_7", dato.total);
+							// Actualiza menu
+							menureporte_estado("menureporte_11_3", dato.total);
+							menureporte_estado("menureporte_11_4", dato.total);
+							menureporte_estado("menureporte_11_7", dato.total);
 
-								// mensaje
-								swal({
-									title: "Correcto",
-									text: "" + dato.msj,
-									type: "success", // warning, error, success, info
-									buttons: {
-										visible: false, // true , false
-									},
-									timer: 1500,
-									showConfirmButton: false
-								});
+							// mensaje
+							swal({
+								title: "Correcto",
+								text: ""+dato.msj,
+								type: "success", // warning, error, success, info
+								buttons: {
+									visible: false, // true , false
+								},
+								timer: 1500,
+								showConfirmButton: false
+							});
 
-								// actualiza boton
-								$('#botonguardar_reporte_anexosresultados').html('Guardar anexos resultados <i class="fa fa-save"></i>');
-								$('#botonguardar_reporte_anexosresultados').attr('disabled', false);
-							},
-							beforeSend: function () {
-								$('#botonguardar_reporte_anexosresultados').html('Guardando anexos resultados <i class="fa fa-spin fa-spinner"></i>');
-								$('#botonguardar_reporte_anexosresultados').attr('disabled', true);
-							},
-							error: function (dato) {
-								// actualiza boton
-								$('#botonguardar_reporte_anexosresultados').html('Guardar anexos resultados <i class="fa fa-save"></i>');
-								$('#botonguardar_reporte_anexosresultados').attr('disabled', false);
+							// actualiza boton
+							$('#botonguardar_reporte_anexosresultados').html('Guardar anexos resultados <i class="fa fa-save"></i>');
+							$('#botonguardar_reporte_anexosresultados').attr('disabled', false);
+						},
+						beforeSend: function()
+						{
+							$('#botonguardar_reporte_anexosresultados').html('Guardando anexos resultados <i class="fa fa-spin fa-spinner"></i>');
+							$('#botonguardar_reporte_anexosresultados').attr('disabled', true);
+						},
+						error: function(dato)
+						{
+							// actualiza boton
+							$('#botonguardar_reporte_anexosresultados').html('Guardar anexos resultados <i class="fa fa-save"></i>');
+							$('#botonguardar_reporte_anexosresultados').attr('disabled', false);
 
-								// mensaje
-								swal({
-									title: "Error",
-									text: "" + dato.msj,
-									type: "error", // warning, error, success, info
-									buttons: {
-										visible: false, // true , false
-									},
-									timer: 1500,
-									showConfirmButton: false
-								});
-								return false;
-							}
-						}).submit();
-						return false;
-					}
-					else {
-						// mensaje
-						swal({
-							title: "Cancelado",
-							text: "Acción cancelada",
-							type: "error", // warning, error, success, info
-							buttons: {
-								visible: false, // true , false
-							},
-							timer: 500,
-							showConfirmButton: false
-						});
-					}
-				});
+							// mensaje
+							swal({
+								title: "Error",
+								text: ""+dato.msj,
+								type: "error", // warning, error, success, info
+								buttons: {
+									visible: false, // true , false
+								},
+								timer: 1500,
+								showConfirmButton: false
+							});
+							return false;
+						}
+					}).submit();
+					return false;
+				}
+				else 
+				{
+					// mensaje
+					swal({
+						title: "Cancelado",
+						text: "Acción cancelada",
+						type: "error", // warning, error, success, info
+						buttons: {
+							visible: false, // true , false
+						},
+						timer: 500,
+						showConfirmButton: false
+					});
+				}
+			});
 			return false;
 		}
 	}
-	else {
+	else
+	{
 		// mensaje
 		swal({
 			title: "Seleccione anexos (s)",
@@ -4898,21 +5296,24 @@ $("#botonguardar_reporte_anexosresultados").click(function () {
 });
 
 
-$('#tabla_reporte_anexosresultados tbody').on('click', 'td.documentopdf', function () {
+$('#tabla_reporte_anexosresultados tbody').on('click', 'td.documentopdf', function()
+{
 	var tr = $(this).closest('tr');
 	var row = datatable_informeresultados.row(tr);
 
-	if (row.data().proyectoevidenciadocumento_extension == ".pdf" || row.data().proyectoevidenciadocumento_extension == ".PDF") {
-		$('#visor_documento').attr('src', '/assets/plugins/viewer-pdfjs/web/viewer_read.html?file=/proyectoevidenciadocumentodescargar/' + row.data().id + '/' + 0); // 0 mostrar
+	if (row.data().proyectoevidenciadocumento_extension == ".pdf" || row.data().proyectoevidenciadocumento_extension == ".PDF")
+	{
+		$('#visor_documento').attr('src', '/assets/plugins/viewer-pdfjs/web/viewer_read.html?file=/proyectoevidenciadocumentodescargar/'+row.data().id+'/'+0); // 0 mostrar
 
 		// Titulo modal
 		$('#modal_visor .modal-title').html(row.data().proyectoevidenciadocumento_nombre);
 
 		// Abrir modal
-		$('#modal_visor').modal({ backdrop: false });
+		$('#modal_visor').modal({backdrop:false});
 	}
-	else {
-		window.open("/proyectoevidenciadocumentodescargar/" + row.data().id + "/" + 1); //1 descargar
+	else
+	{
+		window.open("/proyectoevidenciadocumentodescargar/"+row.data().id+"/"+1); //1 descargar
 	}
 });
 
@@ -4921,23 +5322,29 @@ $('#tabla_reporte_anexosresultados tbody').on('click', 'td.documentopdf', functi
 // ANEXOS - ACREDITACIONES Y / O APROBACIONES
 
 
-$(document).ready(function () {
-	setTimeout(function () {
+$(document).ready(function()
+{
+	setTimeout(function()
+	{
 		tabla_reporte_acreditacionaprobacion(proyecto.id, agente_nombre);
 	}, 9500);
 });
 
 
 var datatable_acreditacionaprobacion = null;
-function tabla_reporte_acreditacionaprobacion(proyecto_id, agente_nombre) {
-	try {
-		var ruta = "/reportevibracionanexosacreditacionestabla/" + proyecto_id + "/" + agente_nombre;
+function tabla_reporte_acreditacionaprobacion(proyecto_id, agente_nombre)
+{
+	try 
+	{
+		var ruta = "/reportevibracionanexosacreditacionestabla/"+proyecto_id+"/"+agente_nombre;
 
-		if (datatable_acreditacionaprobacion != null) {
+		if (datatable_acreditacionaprobacion != null)
+		{
 			datatable_acreditacionaprobacion.clear().draw();
 			datatable_acreditacionaprobacion.ajax.url(ruta).load();
 		}
-		else {
+		else
+		{
 			var numeroejecucion = 1;
 			datatable_acreditacionaprobacion = $('#tabla_reporte_acreditacionaprobacion').DataTable({
 				ajax: {
@@ -4946,8 +5353,10 @@ function tabla_reporte_acreditacionaprobacion(proyecto_id, agente_nombre) {
 					cache: false,
 					dataType: "json",
 					data: {},
-					dataSrc: function (json) {
-						if (parseInt(json.total) > 0) {
+					dataSrc: function (json)
+					{
+						if (parseInt(json.total) > 0)
+						{
 							menureporte_estado("menureporte_11_8", 1);
 							menureporte_estado("menureporte_11_9", 1);
 							menureporte_estado("menureporte_12", 1);
@@ -4956,9 +5365,11 @@ function tabla_reporte_acreditacionaprobacion(proyecto_id, agente_nombre) {
 						// alert("Done! "+json.msj);
 						return json.data;
 					},
-					error: function (xhr, error, code) {
-						console.log('error en datatable_acreditacionaprobacion ' + code);
-						if (numeroejecucion <= 1) {
+					error: function (xhr, error, code)
+					{						
+						console.log('error en datatable_acreditacionaprobacion '+code);
+						if (numeroejecucion <= 1)
+						{
 							tabla_reporte_acreditacionaprobacion(proyecto_id);
 							numeroejecucion += 1;
 						}
@@ -5040,7 +5451,8 @@ function tabla_reporte_acreditacionaprobacion(proyecto_id, agente_nombre) {
 						previous: "Anterior"
 					}
 				},
-				rowCallback: function (row, data, index) {
+				rowCallback: function(row, data, index)
+				{
 					// console.log(index+' - '+data.reporteiluminacionpuntos_nopunto);
 
 					// if(data.reporteiluminacionpuntos_nopunto == 2)
@@ -5056,33 +5468,38 @@ function tabla_reporte_acreditacionaprobacion(proyecto_id, agente_nombre) {
 		}
 
 		// Tooltip en DataTable
-		datatable_acreditacionaprobacion.on('draw', function () {
+		datatable_acreditacionaprobacion.on('draw', function ()
+		{
 			$('[data-toggle="tooltip"]').tooltip();
 		});
 	}
-	catch (exception) {
+	catch (exception)
+	{
 		tabla_reporte_acreditacionaprobacion(proyecto_id, agente_nombre);
-	}
+    }
 }
 
 
-$('#tabla_reporte_acreditacionaprobacion tbody').on('click', 'td.certificadopdf', function () {
+$('#tabla_reporte_acreditacionaprobacion tbody').on('click', 'td.certificadopdf', function()
+{
 	var tr = $(this).closest('tr');
 	var row = datatable_acreditacionaprobacion.row(tr);
 
-	if (row.data().acreditacion_SoportePDF) {
-		$('#visor_documento').attr('src', '/assets/plugins/viewer-pdfjs/web/viewer_read.html?file=/veracreditaciondocumento/' + row.data().id);
+	if (row.data().acreditacion_SoportePDF)
+	{
+		$('#visor_documento').attr('src', '/assets/plugins/viewer-pdfjs/web/viewer_read.html?file=/veracreditaciondocumento/'+row.data().id);
 
 		// Titulo modal
-		$('#modal_visor .modal-title').html(row.data().catTipoAcreditacion_Nombre + ' ' + row.data().acreditacion_Entidad + ' [' + row.data().acreditacion_Numero + ']');
+		$('#modal_visor .modal-title').html(row.data().catTipoAcreditacion_Nombre+' '+row.data().acreditacion_Entidad+' ['+row.data().acreditacion_Numero+']');
 
 		// Abrir modal
-		$('#modal_visor').modal({ backdrop: false });
+		$('#modal_visor').modal({backdrop:false});
 	}
 });
 
 
-$("#botonguardar_reporte_acreditacionaprobacion").click(function () {
+$("#botonguardar_reporte_acreditacionaprobacion").click(function()
+{
 	// borrar campo filtro del DATATABLE
 	// datatable_acreditacionaprobacion.search($(this).val()).draw();
 	datatable_acreditacionaprobacion.search("").draw();
@@ -5090,17 +5507,21 @@ $("#botonguardar_reporte_acreditacionaprobacion").click(function () {
 
 	// valida campos vacios
 	var seleccionados = 0;
-	$('.anexoacreditacion_checkbox').each(function () {
-		if (this.checked) {
+	$('.anexoacreditacion_checkbox').each(function()
+	{
+		if (this.checked)
+		{
 			seleccionados += 1;
 		}
 	});
 
 
-	if (seleccionados > 0) {
+	if (seleccionados > 0)
+	{
 		// valida campos vacios
 		var valida = this.form.checkValidity();
-		if (valida) {
+		if (valida)
+		{
 			swal({
 				title: "¡Confirme que desea guardar!",
 				text: "Lista de anexos acreditaciones y/o aprobaciones",
@@ -5112,94 +5533,101 @@ $("#botonguardar_reporte_acreditacionaprobacion").click(function () {
 				closeOnConfirm: false,
 				closeOnCancel: false
 			},
-				function (isConfirm) {
-					if (isConfirm) {
-						// cerrar msj confirmacion
-						swal.close();
+			function(isConfirm)
+			{
+				if (isConfirm)
+				{
+					// cerrar msj confirmacion
+					swal.close();
 
-						// enviar datos
-						$('#form_reporte_acreditacionaprobacion').ajaxForm({
-							dataType: 'json',
-							type: 'POST',
-							url: '' + ruta_storage_guardar,
-							data: {
-								opcion: 16,
-								proyecto_id: proyecto.id,
-								agente_id: agente_id,
-								agente_nombre: agente_nombre,
-								reporteregistro_id: reporteregistro_id,
-								catactivo_id: $("#reporte_catactivo_id").val(),
-								reporte_instalacion: $("#reporte_instalacion").val(),
-							},
-							resetForm: false,
-							success: function (dato) {
-								// Actualizar ID reporte
-								reporteregistro_id = dato.reporteregistro_id;
+					// enviar datos
+					$('#form_reporte_acreditacionaprobacion').ajaxForm({
+						dataType: 'json',
+						type: 'POST',
+						url: ''+ruta_storage_guardar,
+						data: {
+							opcion: 16,
+							proyecto_id: proyecto.id,
+							agente_id: agente_id,
+							agente_nombre: agente_nombre,
+							reporteregistro_id: reporteregistro_id,
+							catactivo_id: $("#reporte_catactivo_id").val(),
+							reporte_instalacion: $("#reporte_instalacion").val(),
+						},
+						resetForm: false,
+						success: function(dato)
+						{
+							// Actualizar ID reporte
+							reporteregistro_id = dato.reporteregistro_id;
 
-								// Actualiza menu
-								menureporte_estado("menureporte_11_8", dato.total);
-								menureporte_estado("menureporte_11_9", dato.total);
-								menureporte_estado("menureporte_12", dato.total);
+							// Actualiza menu
+							menureporte_estado("menureporte_11_8", dato.total);
+							menureporte_estado("menureporte_11_9", dato.total);
+							menureporte_estado("menureporte_12", dato.total);
 
-								// mensaje
-								swal({
-									title: "Correcto",
-									text: "" + dato.msj,
-									type: "success", // warning, error, success, info
-									buttons: {
-										visible: false, // true , false
-									},
-									timer: 1500,
-									showConfirmButton: false
-								});
+							// mensaje
+							swal({
+								title: "Correcto",
+								text: ""+dato.msj,
+								type: "success", // warning, error, success, info
+								buttons: {
+									visible: false, // true , false
+								},
+								timer: 1500,
+								showConfirmButton: false
+							});
 
-								// actualiza boton
-								$('#botonguardar_reporte_acreditacionaprobacion').html('Guardar anexos 7 (STPS) y 8 (EMA) <i class="fa fa-save"></i>');
-								$('#botonguardar_reporte_acreditacionaprobacion').attr('disabled', false);
-							},
-							beforeSend: function () {
-								$('#botonguardar_reporte_acreditacionaprobacion').html('Guardando anexos 7 (STPS) y 8 (EMA) <i class="fa fa-spin fa-spinner"></i>');
-								$('#botonguardar_reporte_acreditacionaprobacion').attr('disabled', true);
-							},
-							error: function (dato) {
-								// actualiza boton
-								$('#botonguardar_reporte_acreditacionaprobacion').html('Guardar anexos 7 (STPS) y 8 (EMA) <i class="fa fa-save"></i>');
-								$('#botonguardar_reporte_acreditacionaprobacion').attr('disabled', false);
+							// actualiza boton
+							$('#botonguardar_reporte_acreditacionaprobacion').html('Guardar anexos 7 (STPS) y 8 (EMA) <i class="fa fa-save"></i>');
+							$('#botonguardar_reporte_acreditacionaprobacion').attr('disabled', false);
+						},
+						beforeSend: function()
+						{
+							$('#botonguardar_reporte_acreditacionaprobacion').html('Guardando anexos 7 (STPS) y 8 (EMA) <i class="fa fa-spin fa-spinner"></i>');
+							$('#botonguardar_reporte_acreditacionaprobacion').attr('disabled', true);
+						},
+						error: function(dato)
+						{
+							// actualiza boton
+							$('#botonguardar_reporte_acreditacionaprobacion').html('Guardar anexos 7 (STPS) y 8 (EMA) <i class="fa fa-save"></i>');
+							$('#botonguardar_reporte_acreditacionaprobacion').attr('disabled', false);
 
-								// mensaje
-								swal({
-									title: "Error",
-									text: "" + dato.msj,
-									type: "error", // warning, error, success, info
-									buttons: {
-										visible: false, // true , false
-									},
-									timer: 1500,
-									showConfirmButton: false
-								});
-								return false;
-							}
-						}).submit();
-						return false;
-					}
-					else {
-						// mensaje
-						swal({
-							title: "Cancelado",
-							text: "Acción cancelada",
-							type: "error", // warning, error, success, info
-							buttons: {
-								visible: false, // true , false
-							},
-							timer: 500,
-							showConfirmButton: false
-						});
-					}
-				});
+							// mensaje
+							swal({
+								title: "Error",
+								text: ""+dato.msj,
+								type: "error", // warning, error, success, info
+								buttons: {
+									visible: false, // true , false
+								},
+								timer: 1500,
+								showConfirmButton: false
+							});
+							return false;
+						}
+					}).submit();
+					return false;
+				}
+				else 
+				{
+					// mensaje
+					swal({
+						title: "Cancelado",
+						text: "Acción cancelada",
+						type: "error", // warning, error, success, info
+						buttons: {
+							visible: false, // true , false
+						},
+						timer: 500,
+						showConfirmButton: false
+					});
+				}
+			});
 			return false;
 		}
 	}
-	else {
+	else
+	{
 		// mensaje
 		swal({
 			title: "Seleccione anexos (s)",
@@ -5224,15 +5652,19 @@ var ultimaversion_cancelada = 0;
 var ultimarevision_id = 0;
 
 
-$(document).ready(function () {
-	setTimeout(function () {
+$(document).ready(function()
+{
+	setTimeout(function()
+	{
 		tabla_reporte_revisiones(proyecto.id);
 	}, 1000);
 });
 
 
-$(document).on('submit', function () {
-	setTimeout(function () {
+$(document).on('submit', function()
+{
+	setTimeout(function()
+	{
 		// alert('Guardaste algo');
 		tabla_reporte_revisiones(proyecto.id);
 	}, 6000);
@@ -5240,15 +5672,19 @@ $(document).on('submit', function () {
 
 
 var datatable_reporterevisiones = null;
-function tabla_reporte_revisiones(proyecto_id) {
-	try {
-		var ruta = "/reportevibracionrevisionestabla/" + proyecto_id;
+function tabla_reporte_revisiones(proyecto_id)
+{
+	try 
+	{
+		var ruta = "/reportevibracionrevisionestabla/"+proyecto_id;
 
-		if (datatable_reporterevisiones != null) {
+		if (datatable_reporterevisiones != null)
+		{
 			datatable_reporterevisiones.clear().draw();
 			datatable_reporterevisiones.ajax.url(ruta).load();
 		}
-		else {
+		else
+		{
 			var numeroejecucion = 1;
 			datatable_reporterevisiones = $('#tabla_reporte_revisiones').DataTable({
 				ajax: {
@@ -5257,11 +5693,14 @@ function tabla_reporte_revisiones(proyecto_id) {
 					cache: false,
 					dataType: "json",
 					data: {},
-					dataSrc: function (json) {
-						if (parseInt(json.total) > 0) {
+					dataSrc: function (json)
+					{
+						if (parseInt(json.total) > 0)
+						{
 							$("#boton_reporte_nuevarevision").attr('disabled', false);
 						}
-						else {
+						else
+						{
 							$("#boton_reporte_nuevarevision").attr('disabled', true);
 						}
 
@@ -5273,9 +5712,11 @@ function tabla_reporte_revisiones(proyecto_id) {
 
 						return json.data;
 					},
-					error: function (xhr, error, code) {
-						console.log('error en datatable_reporterevisiones ' + code);
-						if (numeroejecucion <= 1) {
+					error: function (xhr, error, code)
+					{						
+						console.log('error en datatable_reporterevisiones '+code);
+						if (numeroejecucion <= 1)
+						{
 							tabla_reporte_revisiones(proyecto_id)
 							numeroejecucion += 1;
 						}
@@ -5349,7 +5790,8 @@ function tabla_reporte_revisiones(proyecto_id) {
 						previous: "Anterior"
 					}
 				},
-				rowCallback: function (row, data, index) {
+				rowCallback: function(row, data, index)
+				{
 					// console.log(index+' - '+data.reporteiluminacionpuntos_nopunto);
 
 					// if(data.reporteiluminacionpuntos_nopunto == 2)
@@ -5365,28 +5807,33 @@ function tabla_reporte_revisiones(proyecto_id) {
 		}
 
 		// Tooltip en DataTable
-		datatable_reporterevisiones.on('draw', function () {
+		datatable_reporterevisiones.on('draw', function ()
+		{
 			$('[data-toggle="tooltip"]').tooltip();
 		});
 	}
-	catch (exception) {
+	catch (exception)
+	{
 		tabla_reporte_revisiones(proyecto_id);
-	}
+    }
 }
 
 
-function reporte_concluido(reporte_id, perfil, checkbox) {
-	if (parseInt(perfil) == 1) {
+function reporte_concluido(reporte_id, perfil, checkbox)
+{
+	if (parseInt(perfil) == 1)
+	{
 		var pregunta_texto = '';
 
-
+		
 		if (checkbox.checked) // Activado
 		{
 			$(checkbox).prop('checked', false);
 
 			pregunta_texto = '¿Concluir informe?';
 		}
-		else {
+		else
+		{
 			$(checkbox).prop('checked', true);
 
 			pregunta_texto = '¿Quitar concluido?';
@@ -5398,21 +5845,23 @@ function reporte_concluido(reporte_id, perfil, checkbox) {
 
 		var pendientes = 0;
 		var pendientes_puntos = '';
-		$('#top-menu .fa-times').each(function () {
+		$('#top-menu .fa-times').each(function()
+		{
 			pendientes += 1;
 
 			var texto = this.id;
 			texto = texto.replace("menureporte_", "");
 			texto = texto.replace("_", ".");
-			pendientes_puntos += '\nPunto: ' + texto;
+			pendientes_puntos += '\nPunto: '+texto;
 		});
 
 
-		if ((checkbox.checked) || parseInt(pendientes) == 0) {
+		if ((checkbox.checked) || parseInt(pendientes) == 0)
+		{
 			// Confirmar
 			swal({
-				title: "" + pregunta_texto,
-				text: "Ultima revisión del informe de " + agente_nombre,
+				title: ""+pregunta_texto,
+				text: "Ultima revisión del informe de "+agente_nombre,
 				type: "warning",
 				showCancelButton: true,
 				confirmButtonColor: "#DD6B55",
@@ -5421,87 +5870,94 @@ function reporte_concluido(reporte_id, perfil, checkbox) {
 				closeOnConfirm: false,
 				closeOnCancel: false
 			},
-				function (isConfirm) {
-					if (isConfirm) {
-						// cerrar msj confirmacion
-						swal.close();
+			function(isConfirm)
+			{
+				if (isConfirm)
+				{
+					// cerrar msj confirmacion
+					swal.close();
+
+					
+					// Enviar datos
+					$.ajax({
+						type: "GET",
+						dataType: "json",
+						url: "/reportevibracionrevisionconcluir/"+reporte_id,
+						data:{},
+						cache: false,
+						success:function(dato)
+						{
+							// Actualizar tablas
+							tabla_reporte_revisiones(proyecto.id);
+							botoninforme_estado(dato.estado);
+
+							tabla_reporte_definiciones(proyecto.id, agente_nombre, reporteregistro_id)
+							tabla_reporte_puntos(proyecto.id);
 
 
-						// Enviar datos
-						$.ajax({
-							type: "GET",
-							dataType: "json",
-							url: "/reportevibracionrevisionconcluir/" + reporte_id,
-							data: {},
-							cache: false,
-							success: function (dato) {
-								// Actualizar tablas
-								tabla_reporte_revisiones(proyecto.id);
-								botoninforme_estado(dato.estado);
-
-								tabla_reporte_definiciones(proyecto.id, agente_nombre, reporteregistro_id)
-								tabla_reporte_puntos(proyecto.id);
+							// desplazar a la ultima fila de la tabla
+							setTimeout(function()
+							{
+								$('html, body').animate({
+									scrollTop: $('#tabla_reporte_revisiones').offset().top //ultima fila
+								}, 1000);
+							}, 2000);
 
 
-								// desplazar a la ultima fila de la tabla
-								setTimeout(function () {
-									$('html, body').animate({
-										scrollTop: $('#tabla_reporte_revisiones').offset().top //ultima fila
-									}, 1000);
-								}, 2000);
+							// mensaje
+							swal({
+								title: "Correcto",
+								text: ""+dato.msj,
+								type: "success", // warning, error, success, info
+								buttons: {
+									visible: false, // true , false
+								},
+								timer: 1500,
+								showConfirmButton: false
+							});
+						},
+						error: function(dato)
+						{
+							tabla_reporte_revisiones(proyecto.id);
 
+							// mensaje
+							swal({
+								title: "Correcto",
+								text: ""+dato.msj,
+								type: "error", // warning, error, success, info
+								buttons: {
+									visible: false, // true , false
+								},
+								timer: 1500,
+								showConfirmButton: false
+							});
 
-								// mensaje
-								swal({
-									title: "Correcto",
-									text: "" + dato.msj,
-									type: "success", // warning, error, success, info
-									buttons: {
-										visible: false, // true , false
-									},
-									timer: 1500,
-									showConfirmButton: false
-								});
-							},
-							error: function (dato) {
-								tabla_reporte_revisiones(proyecto.id);
-
-								// mensaje
-								swal({
-									title: "Correcto",
-									text: "" + dato.msj,
-									type: "error", // warning, error, success, info
-									buttons: {
-										visible: false, // true , false
-									},
-									timer: 1500,
-									showConfirmButton: false
-								});
-
-								return false;
-							}
-						});//Fin ajax
-					}
-					else {
-						// mensaje
-						swal({
-							title: "Cancelado",
-							text: "Acción cancelada",
-							type: "error", // warning, error, success, info
-							buttons: {
-								visible: false, // true , false
-							},
-							timer: 500,
-							showConfirmButton: false
-						});
-					}
-				});
+							return false;
+						}
+					});//Fin ajax
+				}
+				else 
+				{
+					// mensaje
+					swal({
+						title: "Cancelado",
+						text: "Acción cancelada",
+						type: "error", // warning, error, success, info
+						buttons: {
+							visible: false, // true , false
+						},
+						timer: 500,
+						showConfirmButton: false
+					});
+				}
+			});
 		}
-		else {
+		else
+		{
 			// mensaje
 			swal({
 				title: "No disponible",
-				text: 'Esta revisión del informe aún no ha sido completada, se encontraron ' + pendientes + ' punto(s) pendiente(s) en todo el contenido por guardar.\n' + pendientes_puntos,
+				text: 'Esta revisión del informe aún no ha sido completada, se encontraron '+pendientes+' punto(s) pendiente(s) en todo el contenido por guardar.\n'+pendientes_puntos,
 				type: "info", // warning, error, success, info
 				buttons: {
 					visible: false, // true , false
@@ -5517,9 +5973,11 @@ function reporte_concluido(reporte_id, perfil, checkbox) {
 }
 
 
-function reporte_cancelado(reporte_id, perfil, checkbox) {
-	if (parseInt(perfil) == 1) {
-		$('#form_modal_cancelacionobservacion').each(function () {
+function reporte_cancelado(reporte_id, perfil, checkbox)
+{
+	if (parseInt(perfil) == 1)
+	{
+		$('#form_modal_cancelacionobservacion').each(function(){
 			this.reset();
 		});
 
@@ -5534,9 +5992,10 @@ function reporte_cancelado(reporte_id, perfil, checkbox) {
 			// alert('Cancelado '+checkbox.checked);
 
 			// mostrar modal observacion
-			$('#modal_reporte_cancelacionobservacion').modal({ backdrop: false, keyboard: false });
+			$('#modal_reporte_cancelacionobservacion').modal({backdrop:false, keyboard:false});
 		}
-		else {
+		else
+		{
 			$(checkbox).prop('checked', true);
 			// alert('Descancelado '+checkbox.checked);
 
@@ -5544,7 +6003,7 @@ function reporte_cancelado(reporte_id, perfil, checkbox) {
 			// Confirmar
 			swal({
 				title: "¿Quitar cancelación?",
-				text: "Ultima revisión del informe de " + agente_nombre,
+				text: "Ultima revisión del informe de "+agente_nombre,
 				type: "warning",
 				showCancelButton: true,
 				confirmButtonColor: "#DD6B55",
@@ -5553,135 +6012,19 @@ function reporte_cancelado(reporte_id, perfil, checkbox) {
 				closeOnConfirm: false,
 				closeOnCancel: false
 			},
-				function (isConfirm) {
-					if (isConfirm) {
-						// cerrar msj confirmacion
-						swal.close();
-
-
-						// enviar datos
-						$('#form_modal_cancelacionobservacion').ajaxForm({
-							dataType: 'json',
-							type: 'POST',
-							url: '' + ruta_storage_guardar,
-							data: {
-								opcion: 17,
-								proyecto_id: proyecto.id,
-								agente_id: agente_id,
-								agente_nombre: agente_nombre,
-								reporteregistro_id: reporteregistro_id,
-								catactivo_id: $("#reporte_catactivo_id").val(),
-								reporte_instalacion: $("#reporte_instalacion").val(),
-							},
-							resetForm: false,
-							success: function (dato) {
-								// Actualizar tablas
-								tabla_reporte_revisiones(proyecto.id);
-								botoninforme_estado(dato.estado);
-
-								tabla_reporte_definiciones(proyecto.id, agente_nombre, reporteregistro_id)
-								tabla_reporte_areas(proyecto.id);
-								tabla_reporte_puntos(proyecto.id);
-
-
-								// desplazar a la ultima fila de la tabla
-								setTimeout(function () {
-									$('html, body').animate({
-										scrollTop: $('#tabla_reporte_revisiones').offset().top //ultima fila
-									}, 1000);
-								}, 2000);
-
-
-								// mensaje
-								swal({
-									title: "Correcto",
-									text: "" + dato.msj,
-									type: "success", // warning, error, success, info
-									buttons: {
-										visible: false, // true , false
-									},
-									timer: 1500,
-									showConfirmButton: false
-								});
-
-
-								// actualiza boton
-								// $('#botonguardar_modal_cancelacionobservacion').html('Guardar observación y cancelar revisión <i class="fa fa-save"></i>');
-								// $('#botonguardar_modal_cancelacionobservacion').attr('disabled', false);
-
-								// cerrar modal
-								// $('#modal_reporte_cancelacionobservacion').modal('hide');
-							},
-							beforeSend: function () {
-								// $('#botonguardar_modal_cancelacionobservacion').html('Guardando observación y cancelar revisión <i class="fa fa-spin fa-spinner"></i>');
-								// $('#botonguardar_modal_cancelacionobservacion').attr('disabled', true);
-							},
-							error: function (dato) {
-								// actualiza boton
-								// $('#botonguardar_modal_cancelacionobservacion').html('Guardar observación y cancelar revisión <i class="fa fa-save"></i>');
-								// $('#botonguardar_modal_cancelacionobservacion').attr('disabled', false);
-
-								// mensaje
-								swal({
-									title: "Error",
-									text: "" + dato.msj,
-									type: "error", // warning, error, success, info
-									buttons: {
-										visible: false, // true , false
-									},
-									timer: 1500,
-									showConfirmButton: false
-								});
-								return false;
-							}
-						}).submit();
-						return false;
-					}
-					else {
-						// mensaje
-						swal({
-							title: "Cancelado",
-							text: "Acción cancelada",
-							type: "error", // warning, error, success, info
-							buttons: {
-								visible: false, // true , false
-							},
-							timer: 500,
-							showConfirmButton: false
-						});
-					}
-				});
-			return false;
-		}
-	}
-}
-
-
-$("#botonguardar_modal_cancelacionobservacion").click(function () {
-	// valida campos vacios
-	var valida = this.form.checkValidity();
-	if (valida) {
-		swal({
-			title: "¡Confirme que desea cancelar!",
-			text: "Ultima revisión del informe de " + agente_nombre,
-			type: "warning",
-			showCancelButton: true,
-			confirmButtonColor: "#DD6B55",
-			confirmButtonText: "Aceptar!",
-			cancelButtonText: "Cancelar!",
-			closeOnConfirm: false,
-			closeOnCancel: false
-		},
-			function (isConfirm) {
-				if (isConfirm) {
+			function(isConfirm)
+			{
+				if (isConfirm)
+				{
 					// cerrar msj confirmacion
 					swal.close();
 
+					
 					// enviar datos
 					$('#form_modal_cancelacionobservacion').ajaxForm({
 						dataType: 'json',
 						type: 'POST',
-						url: '' + ruta_storage_guardar,
+						url: ''+ruta_storage_guardar,
 						data: {
 							opcion: 17,
 							proyecto_id: proyecto.id,
@@ -5692,7 +6035,8 @@ $("#botonguardar_modal_cancelacionobservacion").click(function () {
 							reporte_instalacion: $("#reporte_instalacion").val(),
 						},
 						resetForm: false,
-						success: function (dato) {
+						success: function(dato)
+						{
 							// Actualizar tablas
 							tabla_reporte_revisiones(proyecto.id);
 							botoninforme_estado(dato.estado);
@@ -5700,10 +6044,11 @@ $("#botonguardar_modal_cancelacionobservacion").click(function () {
 							tabla_reporte_definiciones(proyecto.id, agente_nombre, reporteregistro_id)
 							tabla_reporte_areas(proyecto.id);
 							tabla_reporte_puntos(proyecto.id);
-
+							
 
 							// desplazar a la ultima fila de la tabla
-							setTimeout(function () {
+							setTimeout(function()
+							{
 								$('html, body').animate({
 									scrollTop: $('#tabla_reporte_revisiones').offset().top //ultima fila
 								}, 1000);
@@ -5713,7 +6058,7 @@ $("#botonguardar_modal_cancelacionobservacion").click(function () {
 							// mensaje
 							swal({
 								title: "Correcto",
-								text: "" + dato.msj,
+								text: ""+dato.msj,
 								type: "success", // warning, error, success, info
 								buttons: {
 									visible: false, // true , false
@@ -5722,26 +6067,29 @@ $("#botonguardar_modal_cancelacionobservacion").click(function () {
 								showConfirmButton: false
 							});
 
+
 							// actualiza boton
-							$('#botonguardar_modal_cancelacionobservacion').html('Guardar observación y cancelar revisión <i class="fa fa-save"></i>');
-							$('#botonguardar_modal_cancelacionobservacion').attr('disabled', false);
+							// $('#botonguardar_modal_cancelacionobservacion').html('Guardar observación y cancelar revisión <i class="fa fa-save"></i>');
+							// $('#botonguardar_modal_cancelacionobservacion').attr('disabled', false);
 
 							// cerrar modal
-							$('#modal_reporte_cancelacionobservacion').modal('hide');
+							// $('#modal_reporte_cancelacionobservacion').modal('hide');
 						},
-						beforeSend: function () {
-							$('#botonguardar_modal_cancelacionobservacion').html('Guardando observación y cancelar revisión <i class="fa fa-spin fa-spinner"></i>');
-							$('#botonguardar_modal_cancelacionobservacion').attr('disabled', true);
+						beforeSend: function()
+						{
+							// $('#botonguardar_modal_cancelacionobservacion').html('Guardando observación y cancelar revisión <i class="fa fa-spin fa-spinner"></i>');
+							// $('#botonguardar_modal_cancelacionobservacion').attr('disabled', true);
 						},
-						error: function (dato) {
+						error: function(dato)
+						{
 							// actualiza boton
-							$('#botonguardar_modal_cancelacionobservacion').html('Guardar observación y cancelar revisión <i class="fa fa-save"></i>');
-							$('#botonguardar_modal_cancelacionobservacion').attr('disabled', false);
+							// $('#botonguardar_modal_cancelacionobservacion').html('Guardar observación y cancelar revisión <i class="fa fa-save"></i>');
+							// $('#botonguardar_modal_cancelacionobservacion').attr('disabled', false);
 
 							// mensaje
 							swal({
 								title: "Error",
-								text: "" + dato.msj,
+								text: ""+dato.msj,
 								type: "error", // warning, error, success, info
 								buttons: {
 									visible: false, // true , false
@@ -5754,7 +6102,8 @@ $("#botonguardar_modal_cancelacionobservacion").click(function () {
 					}).submit();
 					return false;
 				}
-				else {
+				else 
+				{
 					// mensaje
 					swal({
 						title: "Cancelado",
@@ -5768,17 +6117,146 @@ $("#botonguardar_modal_cancelacionobservacion").click(function () {
 					});
 				}
 			});
+			return false;
+		}
+	}
+}
+
+
+$("#botonguardar_modal_cancelacionobservacion").click(function()
+{
+	// valida campos vacios
+	var valida = this.form.checkValidity();
+	if (valida)
+	{
+		swal({
+			title: "¡Confirme que desea cancelar!",
+			text: "Ultima revisión del informe de "+agente_nombre,
+			type: "warning",
+			showCancelButton: true,
+			confirmButtonColor: "#DD6B55",
+			confirmButtonText: "Aceptar!",
+			cancelButtonText: "Cancelar!",
+			closeOnConfirm: false,
+			closeOnCancel: false
+		},
+		function(isConfirm)
+		{
+			if (isConfirm)
+			{
+				// cerrar msj confirmacion
+				swal.close();
+
+				// enviar datos
+				$('#form_modal_cancelacionobservacion').ajaxForm({
+					dataType: 'json',
+					type: 'POST',
+					url: ''+ruta_storage_guardar,
+					data: {
+						opcion: 17,
+						proyecto_id: proyecto.id,
+						agente_id: agente_id,
+						agente_nombre: agente_nombre,
+						reporteregistro_id: reporteregistro_id,
+						catactivo_id: $("#reporte_catactivo_id").val(),
+						reporte_instalacion: $("#reporte_instalacion").val(),
+					},
+					resetForm: false,
+					success: function(dato)
+					{
+						// Actualizar tablas
+						tabla_reporte_revisiones(proyecto.id);
+						botoninforme_estado(dato.estado);
+
+						tabla_reporte_definiciones(proyecto.id, agente_nombre, reporteregistro_id)
+						tabla_reporte_areas(proyecto.id);
+						tabla_reporte_puntos(proyecto.id);
+
+
+						// desplazar a la ultima fila de la tabla
+						setTimeout(function()
+						{
+							$('html, body').animate({
+								scrollTop: $('#tabla_reporte_revisiones').offset().top //ultima fila
+							}, 1000);
+						}, 2000);
+
+
+						// mensaje
+						swal({
+							title: "Correcto",
+							text: ""+dato.msj,
+							type: "success", // warning, error, success, info
+							buttons: {
+								visible: false, // true , false
+							},
+							timer: 1500,
+							showConfirmButton: false
+						});
+
+						// actualiza boton
+						$('#botonguardar_modal_cancelacionobservacion').html('Guardar observación y cancelar revisión <i class="fa fa-save"></i>');
+						$('#botonguardar_modal_cancelacionobservacion').attr('disabled', false);
+
+						// cerrar modal
+						$('#modal_reporte_cancelacionobservacion').modal('hide');
+					},
+					beforeSend: function()
+					{
+						$('#botonguardar_modal_cancelacionobservacion').html('Guardando observación y cancelar revisión <i class="fa fa-spin fa-spinner"></i>');
+						$('#botonguardar_modal_cancelacionobservacion').attr('disabled', true);
+					},
+					error: function(dato)
+					{
+						// actualiza boton
+						$('#botonguardar_modal_cancelacionobservacion').html('Guardar observación y cancelar revisión <i class="fa fa-save"></i>');
+						$('#botonguardar_modal_cancelacionobservacion').attr('disabled', false);
+
+						// mensaje
+						swal({
+							title: "Error",
+							text: ""+dato.msj,
+							type: "error", // warning, error, success, info
+							buttons: {
+								visible: false, // true , false
+							},
+							timer: 1500,
+							showConfirmButton: false
+						});
+						return false;
+					}
+				}).submit();
+				return false;
+			}
+			else 
+			{
+				// mensaje
+				swal({
+					title: "Cancelado",
+					text: "Acción cancelada",
+					type: "error", // warning, error, success, info
+					buttons: {
+						visible: false, // true , false
+					},
+					timer: 500,
+					showConfirmButton: false
+				});
+			}
+		});
 		return false;
 	}
 });
 
 
-$("#boton_reporte_nuevarevision").click(function () {
-	if (ultimaversion_cancelada == 1) {
-		if (parseInt(datatable_reporte_puntos.data().count()) > 0) {
+$("#boton_reporte_nuevarevision").click(function()
+{
+	if (ultimaversion_cancelada == 1)
+	{
+		if (parseInt(datatable_reporte_puntos.data().count()) > 0)
+		{
 			swal({
 				title: "¿Generar nueva revision?",
-				text: "Informe de " + agente_nombre,
+				text: "Informe de "+agente_nombre,
 				type: "info",
 				showCancelButton: true,
 				confirmButtonColor: "#DD6B55",
@@ -5786,8 +6264,9 @@ $("#boton_reporte_nuevarevision").click(function () {
 				cancelButtonText: "Cancelar!",
 				closeOnConfirm: false,
 				closeOnCancel: false
-			}, function (isConfirm) {
-				if (isConfirm) {
+			}, function(isConfirm){
+				if (isConfirm)
+				{
 					// cerrar msj confirmacion
 					swal.close();
 
@@ -5796,19 +6275,22 @@ $("#boton_reporte_nuevarevision").click(function () {
 					$('#boton_reporte_nuevarevision').attr('disabled', true);
 
 
-					setTimeout(function () {
-						html2canvas(document.querySelector("#tabla_dashboard"), { scale: 6 }).then(canvas => {
+					setTimeout(function()
+					{
+						html2canvas(document.querySelector("#tabla_dashboard"), { scale: 6}).then(canvas =>
+						{
 							// document.getElementById("captura").appendChild(canvas)
 							var img64 = canvas.toDataURL('image/jpeg');
+							
 
-
-							setTimeout(function () {
+							setTimeout(function()
+							{
 								// Enviar imagenes imagenes
 								$.ajax({
 									type: "POST",
 									dataType: "json",
 									url: "/reportevibracionword",
-									data: {
+									data:{
 										_token: document.querySelector('meta[name="csrf-token"]')['content'],
 										proyecto_id: proyecto.id,
 										agente_id: agente_id,
@@ -5819,7 +6301,8 @@ $("#boton_reporte_nuevarevision").click(function () {
 										grafica_dashboard: img64,
 									},
 									cache: false,
-									success: function (dato) {
+									success:function(dato)
+									{
 										// Actualizar tablas
 										tabla_reporte_revisiones(proyecto.id);
 										botoninforme_estado(dato.estado);
@@ -5834,7 +6317,8 @@ $("#boton_reporte_nuevarevision").click(function () {
 
 
 										// desplazar a la ultima fila de la tabla
-										setTimeout(function () {
+										setTimeout(function()
+										{
 											$('html, body').animate({
 												scrollTop: $('#tabla_reporte_revisiones').offset().top //ultima fila
 											}, 1000);
@@ -5844,7 +6328,7 @@ $("#boton_reporte_nuevarevision").click(function () {
 										// mensaje
 										swal({
 											title: "Correcto",
-											text: "" + dato.msj,
+											text: ""+dato.msj,
 											type: "success", // warning, error, success, info
 											buttons: {
 												visible: false, // true , false
@@ -5853,7 +6337,8 @@ $("#boton_reporte_nuevarevision").click(function () {
 											showConfirmButton: false
 										});
 									},
-									error: function (dato) {
+									error: function(dato)
+									{
 										console.log("Error al crear nueva revisión");
 
 										// mensaje
@@ -5879,7 +6364,8 @@ $("#boton_reporte_nuevarevision").click(function () {
 						});
 					}, 500);
 				}
-				else {
+				else 
+				{
 					// mensaje
 					swal({
 						title: "Cancelado",
@@ -5894,7 +6380,8 @@ $("#boton_reporte_nuevarevision").click(function () {
 				}
 			});
 		}
-		else {
+		else
+		{
 			// mensaje
 			swal({
 				title: "No disponible",
@@ -5908,7 +6395,8 @@ $("#boton_reporte_nuevarevision").click(function () {
 			});
 		}
 	}
-	else {
+	else
+	{
 		// mensaje
 		swal({
 			title: "No disponible",
@@ -5928,7 +6416,8 @@ $("#boton_reporte_nuevarevision").click(function () {
 // GENERAR WORD
 
 
-$('#tabla_reporte_revisiones tbody').on('click', 'td>button.botondescarga', function () {
+$('#tabla_reporte_revisiones tbody').on('click', 'td>button.botondescarga', function()
+{
 	var botondescarga = this;
 
 	var tr = $(this).closest('tr');
@@ -5936,24 +6425,28 @@ $('#tabla_reporte_revisiones tbody').on('click', 'td>button.botondescarga', func
 
 
 	// Boton descarga
-	$("#" + botondescarga.id).html('<i class="fa fa-spin fa-spinner fa-2x"></i>');
+	$("#"+botondescarga.id).html('<i class="fa fa-spin fa-spinner fa-2x"></i>');
 
 
-	setTimeout(function () {
-		if (parseInt(row.data().id) == parseInt(ultimarevision_id)) {
-			html2canvas(document.querySelector("#tabla_dashboard"), { scale: 6 }).then(canvas => {
+	setTimeout(function()
+	{
+		if (parseInt(row.data().id) == parseInt(ultimarevision_id))
+		{
+			html2canvas(document.querySelector("#tabla_dashboard"), { scale: 6}).then(canvas =>
+			{
 				// document.getElementById("captura").appendChild(canvas)
 				var img64 = canvas.toDataURL('image/jpeg');
 				// var img64 = null;
-
-
-				setTimeout(function () {
+			
+				
+				setTimeout(function()
+				{
 					// Enviar datos
 					$.ajax({
 						type: "POST",
 						dataType: "json",
 						url: "/reportevibracionword",
-						data: {
+						data:{
 							_token: document.querySelector('meta[name="csrf-token"]')['content'],
 							proyecto_id: proyecto.id,
 							agente_id: agente_id,
@@ -5964,21 +6457,25 @@ $('#tabla_reporte_revisiones tbody').on('click', 'td>button.botondescarga', func
 							grafica_dashboard: img64,
 						},
 						cache: false,
-						success: function (dato) {
-							ventana = window.open('/reportevibracionworddescargar/' + proyecto.id + "/" + row.data().id + "/" + ultimarevision_id);
+						success:function(dato)
+						{
+							ventana = window.open('/reportevibracionworddescargar/'+proyecto.id+"/"+row.data().id+"/"+ultimarevision_id);
 
 
 							// // Boton descarga
 							// $("#"+botondescarga.id).html('<i class="fa fa-download fa-2x"></i>');
 
 
-							setTimeout(function () {
+							setTimeout(function()
+							{
 								tabla_reporte_revisiones(proyecto.id);
 							}, 6000);
 
 
-							setTimeout(function () {
-								if (ventana.window) {
+							setTimeout(function()
+							{
+								if (ventana.window)
+								{
 									ventana.window.close();
 								}
 							}, 15000);
@@ -5996,7 +6493,8 @@ $('#tabla_reporte_revisiones tbody').on('click', 'td>button.botondescarga', func
 							// 	showConfirmButton: false
 							// });
 						},
-						error: function (dato) {
+						error: function(dato)
+						{
 							// mensaje
 							swal({
 								title: "Error",
@@ -6014,21 +6512,25 @@ $('#tabla_reporte_revisiones tbody').on('click', 'td>button.botondescarga', func
 				}, 1000);
 			});
 		}
-		else {
-			ventana = window.open('/reportevibracionworddescargar/' + proyecto.id + "/" + row.data().id + "/" + ultimarevision_id);
+		else
+		{
+			ventana = window.open('/reportevibracionworddescargar/'+proyecto.id+"/"+row.data().id+"/"+ultimarevision_id);
 
 
 			// // Boton descarga
 			// $("#"+botondescarga.id).html('<i class="fa fa-download fa-2x"></i>');
 
 
-			setTimeout(function () {
+			setTimeout(function()
+			{
 				tabla_reporte_revisiones(proyecto.id);
 			}, 6000);
 
 
-			setTimeout(function () {
-				if (ventana.window) {
+			setTimeout(function()
+			{
+				if (ventana.window)
+				{
 					ventana.window.close();
 				}
 			}, 15000);
@@ -6055,106 +6557,106 @@ $('#tabla_reporte_revisiones tbody').on('click', 'td>button.botondescarga', func
 
 $('#btn_descargar_plantilla').on('click', function (e) {
 	e.preventDefault();
+	
+    swal({
+        title: "¡Confirme descargar!",
+        text: "Plantilla principal del Informe.",
+        type: "info",
+        showCancelButton: true,
+        confirmButtonColor: "#DD6B55",
+        confirmButtonText: "Descargar!",
+        cancelButtonText: "Cancelar!",
+        closeOnConfirm: false,
+        closeOnCancel: false
+    },
+    function(isConfirm) {
+        if (isConfirm) {
+            // Mostrar mensaje de carga
+            swal({
+                title: "Generando documento",
+                text: 'Espere un momento, el documento se esta documento se esta generando...',
+                type: "info",
+                showConfirmButton: false,
+                allowOutsideClick: false
+            });
 
-	swal({
-		title: "¡Confirme descargar!",
-		text: "Plantilla principal del Informe.",
-		type: "info",
-		showCancelButton: true,
-		confirmButtonColor: "#DD6B55",
-		confirmButtonText: "Descargar!",
-		cancelButtonText: "Cancelar!",
-		closeOnConfirm: false,
-		closeOnCancel: false
-	},
-		function (isConfirm) {
-			if (isConfirm) {
-				// Mostrar mensaje de carga
-				swal({
-					title: "Generando documento",
-					text: 'Espere un momento, el documento se esta documento se esta generando...',
-					type: "info",
-					showConfirmButton: false,
-					allowOutsideClick: false
-				});
+			url = 'descargarPortadaInformes/' + proyecto.id + '/' + 2;
+			instalacion = $('#reporte_instalacion').val();
 
-				url = 'descargarPortadaInformes/' + proyecto.id + '/' + 2;
-				instalacion = $('#reporte_instalacion').val();
+            $.ajax({
+                url: url,
+                method: 'GET',
+                xhrFields: {
+                    responseType: 'blob'
+                },
+                success: function(data) {
+                    var a = document.createElement('a');
+                    var url = window.URL.createObjectURL(data);
+                    a.href = url;
+                    a.download = `Plantilla principal (Vibración) - ${instalacion}.docx`;
+                    document.body.append(a);
+                    a.click();
+                    a.remove();
+                    window.URL.revokeObjectURL(url);
 
-				$.ajax({
-					url: url,
-					method: 'GET',
-					xhrFields: {
-						responseType: 'blob'
-					},
-					success: function (data) {
-						var a = document.createElement('a');
-						var url = window.URL.createObjectURL(data);
-						a.href = url;
-						a.download = `Plantilla principal (Vibración) - ${instalacion}.docx`;
-						document.body.append(a);
-						a.click();
-						a.remove();
-						window.URL.revokeObjectURL(url);
+                    // Cerrar mensaje de carga
+                    swal.close();
 
-						// Cerrar mensaje de carga
-						swal.close();
-
-						$('#btn_descargar_plantilla').prop('disabled', true);
-					},
-					error: function () {
-						swal({
-							title: "Hubo un problema al generar el documento.",
-							text: "Intentelo de nuevo, o comuniquelo con el responsable",
-							type: "error",
-							showConfirmButton: true
-						});
-					}
-				});
-			} else {
-				// mensaje de cancelación
-				swal({
-					title: "Cancelado",
-					text: "Acción cancelada",
-					type: "error",
-					buttons: {
-						visible: false,
-					},
-					timer: 500,
-					showConfirmButton: false
-				});
-			}
-		});
-	return false;
+                    $('#btn_descargar_plantilla').prop('disabled', true);
+                },
+                error: function() {
+                    swal({
+                        title: "Hubo un problema al generar el documento.",
+                        text: "Intentelo de nuevo, o comuniquelo con el responsable",
+                        type: "error",
+                        showConfirmButton: true
+                    });
+                }
+            });
+        } else {
+            // mensaje de cancelación
+            swal({
+                title: "Cancelado",
+                text: "Acción cancelada",
+                type: "error",
+                buttons: {
+                    visible: false,
+                },
+                timer: 500,
+                showConfirmButton: false
+            });
+        }
+    });
+    return false;
 })
 
 
 function obtenerdatos() {
+	
+    // $('#PROYECTO_ID_INFORME').val($('#proyecto_id').val());
 
-	// $('#PROYECTO_ID_INFORME').val($('#proyecto_id').val());
+    $.ajax({
+        type: "GET",
+        dataType: "json",
+        url: "/obtenerDatosInformesProyecto/" + proyecto.id,
+        data: {},
+        cache: false,
+        success: function(dato) {
 
-	$.ajax({
-		type: "GET",
-		dataType: "json",
-		url: "/obtenerDatosInformesProyecto/" + proyecto.id,
-		data: {},
-		cache: false,
-		success: function (dato) {
+        
+            $("#NIVEL1").html(dato.opciones);
+            $("#NIVEL2").html(dato.opciones);
+            $("#NIVEL3").html(dato.opciones);
+            $("#NIVEL4").html(dato.opciones);
+            $("#NIVEL5").html(dato.opciones);
 
-
-			$("#NIVEL1").html(dato.opciones);
-			$("#NIVEL2").html(dato.opciones);
-			$("#NIVEL3").html(dato.opciones);
-			$("#NIVEL4").html(dato.opciones);
-			$("#NIVEL5").html(dato.opciones);
-
-			$("#OPCION_PORTADA1").html(dato.checks);
-			$("#OPCION_PORTADA2").html(dato.checks);
-			$("#OPCION_PORTADA3").html(dato.checks);
-			$("#OPCION_PORTADA4").html(dato.checks);
-			$("#OPCION_PORTADA5").html(dato.checks);
+            $("#OPCION_PORTADA1").html(dato.checks);
+            $("#OPCION_PORTADA2").html(dato.checks);
+            $("#OPCION_PORTADA3").html(dato.checks);
+            $("#OPCION_PORTADA4").html(dato.checks);
+            $("#OPCION_PORTADA5").html(dato.checks);
 			$("#OPCION_PORTADA6").html(dato.checks);
-
+			
 
 
 			setTimeout(() => {
@@ -6176,7 +6678,7 @@ function obtenerdatos() {
 				$("#OPCION_PORTADA6").val(portada.OPCION_PORTADA6);
 
 				if (portada.RUTA_IMAGEN_PORTADA) {
-
+           			
 					var archivo = portada.RUTA_IMAGEN_PORTADA;
 					var extension = archivo.substring(archivo.lastIndexOf("."));
 					var imagenUrl = '/logoPortada/' + portada.ID_RECURSO_INFORME + extension;
@@ -6190,8 +6692,8 @@ function obtenerdatos() {
 						$('#PORTADA').dropify().data('dropify').init();
 					}
 					else {
-
-
+				
+					
 						$('#PORTADA').attr('data-default-file', imagenUrl);
 						$('#PORTADA').dropify({
 							messages: {
@@ -6211,16 +6713,16 @@ function obtenerdatos() {
 						});
 
 					}
-				}
+				}			
 
 			}, 5000);
 
-		},
-		error: function (xhr, status, error) {
-			console.log('Error: ' + error);
-			swal('Error', 'No se pudieron obtener los datos del informe', 'error');
-		}
-	});
+        },
+        error: function(xhr, status, error) {
+            console.log('Error: ' + error);
+            swal('Error', 'No se pudieron obtener los datos del informe', 'error');
+        }
+    });
 }
 
 
@@ -6228,195 +6730,196 @@ function obtenerdatos() {
 //FUNCION PARA CARGAR PUNTOS POR MEDIO DE UN EXCEL
 $(document).ready(function () {
 
-	$('#boton_reporte_vibracion_importar_resultados').on('click', function (e) {
-		e.preventDefault();
+    $('#boton_reporte_vibracion_importar_resultados').on('click', function (e) {
+        e.preventDefault();
 
-		$('#divCargaResultados').css('display', 'none');
-		$('#alertaVerificacion1').css('display', 'none');
+        $('#divCargaResultados').css('display', 'none');
+        $('#alertaVerificacion1').css('display', 'none');
 
-		$('#formExcelResultado')[0].reset();
+        $('#formExcelResultado')[0].reset();
 
-		$('#modal_excel_resultados').modal({ backdrop: false });
+        $('#modal_excel_resultados').modal({backdrop:false});
 
-	})
+    })
 
-	$("#botonCargarExcelResultados").click(function () {
-		var guardar = 0;
+    $("#botonCargarExcelResultados").click(function() {
+        var guardar = 0;
 
-		// valida campos vacios
-		var valida = this.form.checkValidity();
-		if (valida) {
-			if ($("#excelResultado").val() != "") {
-				// Tipo archivo
-				var archivo = $("#excelResultado").val();
-				var extension = archivo.substring(archivo.lastIndexOf("."));
+        // valida campos vacios
+        var valida = this.form.checkValidity();
+        if (valida){
+            if ($("#excelResultado").val() != ""){
+                // Tipo archivo
+                var archivo = $("#excelResultado").val();
+                var extension = archivo.substring(archivo.lastIndexOf("."));
 
-				// valida tipo de archivo
-				if (extension == ".xlsx" || extension == ".XLSX") {
-					guardar = 1;
-				}
-				else {
-					// mensaje
-					swal({
-						title: "Tipo de archivo incorrecto " + extension,
-						text: "Solo se pueden cargar archivos tipo .xlsx",
-						type: "warning", // warning, error, success, info
-						buttons: {
-							visible: false, // true , false
-						},
-						timer: 3000,
-						showConfirmButton: false
-					});
+                // valida tipo de archivo
+                if(extension == ".xlsx" || extension == ".XLSX"){
+                    guardar = 1;
+                }
+                else{
+                    // mensaje
+                    swal({
+                        title: "Tipo de archivo incorrecto "+extension,
+                        text: "Solo se pueden cargar archivos tipo .xlsx",
+                        type: "warning", // warning, error, success, info
+                        buttons: {
+                            visible: false, // true , false
+                        },
+                        timer: 3000,
+                        showConfirmButton: false
+                    });
 
-					guardar = 0;
-					return false;
-				}
-			}
-			else {
-				guardar = 0;
-			}
+                    guardar = 0;
+                    return false;
+                }
+            }
+            else{
+                guardar = 0;
+            }
 
-			// guardar
-			if (guardar == 1) {
+            // guardar
+            if (guardar == 1){
+            
+                swal({   
+                    title: "¿Está  seguro de cargar este documento?",   
+                    text: "Está acción  no se puede revertir",   
+                    type: "warning",   
+                    showCancelButton: true,   
+                    confirmButtonColor: "#DD6B55",   
+                    confirmButtonText: "Guardar!",   
+                    cancelButtonText: "Cancelar!",   
+                    closeOnConfirm: false,   
+                    closeOnCancel: false 
+                }, function (isConfirm) {   
+                    
+                    if (isConfirm){
+                        // cerrar msj confirmacion
+                        swal.close();
 
-				swal({
-					title: "¿Está  seguro de cargar este documento?",
-					text: "Está acción  no se puede revertir",
-					type: "warning",
-					showCancelButton: true,
-					confirmButtonColor: "#DD6B55",
-					confirmButtonText: "Guardar!",
-					cancelButtonText: "Cancelar!",
-					closeOnConfirm: false,
-					closeOnCancel: false
-				}, function (isConfirm) {
-
-					if (isConfirm) {
-						// cerrar msj confirmacion
-						swal.close();
-
-						// enviar datos
-						$('#formExcelResultado').ajaxForm({
-							dataType: 'json',
-							type: 'POST',
-							url: '' + ruta_storage_guardar,
-							data: {
+                        // enviar datos
+                        $('#formExcelResultado').ajaxForm({
+                            dataType: 'json',
+                            type: 'POST',
+                            url: ''+ruta_storage_guardar,
+                            data: {
 								opcion: 1000,
 
 								proyecto_id: proyecto.id
 
+                                
+                            },
+                            contentType: false,
+                            processData: false,
+                            success: function (dato) {
 
-							},
-							contentType: false,
-							processData: false,
-							success: function (dato) {
+                                // actualizar boton
+                                $('#botonCargarExcelResultados').prop('disabled', false);
+                                $('#divCargaResultados').css('display', 'none');
+                                
+                                if (dato.code == 200) {
+                                    
+                                    // cerrar modal
+                                    $('#modal_excel_resultados').modal('hide');
+    
+                                    // mensaje
+                                    swal({
+                                        title: "Los datos fueron cargados exitosamente",
+                                        text: ""+dato.msj,
+                                        type: "success", // warning, error, success, info
+                                        buttons: {
+                                            visible: true, // true , false
+                                        },
+                                        showConfirmButton: true,
+                                        showCancelButton: false
+                                    });
 
-								// actualizar boton
-								$('#botonCargarExcelResultados').prop('disabled', false);
-								$('#divCargaResultados').css('display', 'none');
-
-								if (dato.code == 200) {
-
-									// cerrar modal
-									$('#modal_excel_resultados').modal('hide');
-
-									// mensaje
-									swal({
-										title: "Los datos fueron cargados exitosamente",
-										text: "" + dato.msj,
-										type: "success", // warning, error, success, info
-										buttons: {
-											visible: true, // true , false
-										},
-										showConfirmButton: true,
-										showCancelButton: false
-									});
-
-									//Recargamos la tabla
+                                    //Recargamos la tabla
 
 									tabla_reporte_puntos(proyecto.id);
 									tabla_reporte_matriz(proyecto.id);
 									reporte_dashboard(proyecto.id);
 
 
+                                
+                                } else {
 
-								} else {
+                                     swal({
+                                        title: "Ocurrio un error al intentar insertar los datos.",
+                                        text: ""+dato.msj,
+                                        type: "error", // warning, error, success, info
+                                        buttons: {
+                                            visible: true, // true , false
+                                        },
+                                        showConfirmButton: true,
+                                        showCancelButton: false
+									 });
+									
+                                }
 
-									swal({
-										title: "Ocurrio un error al intentar insertar los datos.",
-										text: "" + dato.msj,
-										type: "error", // warning, error, success, info
-										buttons: {
-											visible: true, // true , false
-										},
-										showConfirmButton: true,
-										showCancelButton: false
-									});
+                                
+                            },
+                            beforeSend: function () {
 
-								}
+                                $('#botonCargarExcelResultados').prop('disabled', true);
+                                $('#divCargaResultados').css('display', 'block');
+                            },
+                            error: function(dato) {
+                                
+                                // actualiza boton
+                                $('#botonCargarExcelResultados').prop('disabled', false);
+                                $('#divCargaResultados').css('display', 'none');
 
+                                // mensaje
+                                swal({
+                                    title: "Error al cargar los puntos.",
+                                    text: ""+dato.msj,
+                                    type: "error", // warning, error, success, info
+                                    buttons: {
+                                        visible: false, // true , false
+                                    },
+                                    timer: 1500,
+                                    showConfirmButton: false
+                                });
 
-							},
-							beforeSend: function () {
-
-								$('#botonCargarExcelResultados').prop('disabled', true);
-								$('#divCargaResultados').css('display', 'block');
-							},
-							error: function (dato) {
-
-								// actualiza boton
-								$('#botonCargarExcelResultados').prop('disabled', false);
-								$('#divCargaResultados').css('display', 'none');
-
-								// mensaje
-								swal({
-									title: "Error al cargar los puntos.",
-									text: "" + dato.msj,
-									type: "error", // warning, error, success, info
-									buttons: {
-										visible: false, // true , false
-									},
-									timer: 1500,
-									showConfirmButton: false
-								});
-
-								return false;
-							}
-						}).submit();
-						return false;
-					}
-					else {
-						// mensaje
-						swal({
-							title: "Cancelado",
-							text: "Acción cancelada",
-							type: "error", // warning, error, success, info
-							buttons: {
-								visible: false, // true , false
-							},
-							timer: 1500,
-							showConfirmButton: false
-						});
-					}
-				});
-				return false;
-			}
-		}
-	});
-
+                                return false;
+                            }
+                        }).submit();
+                        return false;
+                    }
+                    else 
+                    {
+                        // mensaje
+                        swal({
+                            title: "Cancelado",
+                            text: "Acción cancelada",
+                            type: "error", // warning, error, success, info
+                            buttons: {
+                                visible: false, // true , false
+                            },
+                            timer: 1500,
+                            showConfirmButton: false
+                        });   
+                    } 
+                });
+                return false;
+            }
+        }
+    });
 
 
-	$('#excelResultado').change(function () {
 
-		if ($(this).val()) {
+    $('#excelResultado').change(function () {
+        
+        if ($(this).val()) {
+            
+            $('#alertaVerificacion1').css('display', 'block');
 
-			$('#alertaVerificacion1').css('display', 'block');
-
-		} else {
-			$('#alertaVerificacion1').css('display', 'none');
-
-		}
-	});
+        } else {
+            $('#alertaVerificacion1').css('display', 'none');
+            
+        }
+    });
 
 });
 
