@@ -78,13 +78,15 @@ class reporteairewordController extends Controller
         $meses = ["Vacio", "Enero", "Febrero", "Marzo", "Abril", "Mayo", "Junio", "Julio", "Agosto", "Septiembre", "Octubre", "Noviembre", "Diciembre"];
         $reportefecha = explode("-", $proyecto->proyecto_fechaentrega);
 
-
-        if (($recsensorial->recsensorial_tipocliente + 0) == 1) // 1 = pemex, 0 = cliente
+        
+        if (($recsensorial->recsensorial_tipocliente+0) == 1) // 1 = pemex, 0 = cliente
         {
             $texto = str_replace('SUBDIRECCION_NOMBRE', $proyecto->catsubdireccion->catsubdireccion_nombre, $texto);
             $texto = str_replace('GERENCIA_NOMBRE', $proyecto->catgerencia->catgerencia_nombre, $texto);
             $texto = str_replace('ACTIVO_NOMBRE', $proyecto->catactivo->catactivo_nombre, $texto);
-        } else {
+        }
+        else
+        {
             $texto = str_replace('SUBDIRECCION_NOMBRE', '', $texto);
             $texto = str_replace('GERENCIA_NOMBRE', '', $texto);
             $texto = str_replace('ACTIVO_NOMBRE', '', $texto);
@@ -95,9 +97,9 @@ class reporteairewordController extends Controller
 
         $texto = str_replace("INSTALACION_NOMBRE", $proyecto->proyecto_clienteinstalacion, $texto);
         $texto = str_replace("INSTALACION_DIRECCION", $proyecto->proyecto_clientedireccionservicio, $texto);
-        $texto = str_replace("INSTALACION_CODIGOPOSTAL", "C.P. " . $recsensorial->recsensorial_codigopostal, $texto);
+        $texto = str_replace("INSTALACION_CODIGOPOSTAL", "C.P. ".$recsensorial->recsensorial_codigopostal, $texto);
         $texto = str_replace("INSTALACION_COORDENADAS", $recsensorial->recsensorial_coordenadas, $texto);
-        $texto = str_replace("REPORTE_FECHA_LARGA", $reportefecha[2] . " de " . $meses[($reportefecha[1] + 0)] . " del año " . $reportefecha[0], $texto);
+        $texto = str_replace("REPORTE_FECHA_LARGA", $reportefecha[2]." de ".$meses[($reportefecha[1]+0)]." del año ".$reportefecha[0], $texto);
         // $texto = str_replace("\n\n", "<w:br/><w:br/>", $texto);
         // $texto = str_replace("\n", "<w:br/>", $texto);
 
@@ -108,12 +110,16 @@ class reporteairewordController extends Controller
         $texto_nuevo = '';
 
 
-        foreach ($parrafos as $key => $parrafo) {
-            if (($key + 0) < (count($parrafos) - 1)) {
+        foreach($parrafos as $key => $parrafo)
+        {
+            if (($key+0) < (count($parrafos) -1))
+            {
                 $text = explode("\n", $parrafo);
 
-                foreach ($text as $key2 => $parrafo2) {
-                    if (($key2 + 0) < (count($text) - 1)) {
+                foreach($text as $key2 => $parrafo2)
+                {
+                    if (($key2+0) < (count($text) -1))
+                    {
                         // $formato = '<w:rPr>
                         //                 <!-- <w:u w:val="single"/>  -->
                         //                 <!-- <w:u w:val="none"/>  -->
@@ -126,38 +132,46 @@ class reporteairewordController extends Controller
                         //             </w:rPr>';
 
                         // SALTO DE PAGINA (<w:br/></w:t></w:r><w:r ><w:br w:type="page"/></w:r><w:r><w:t><w:br/>)
-
+                        
                         $texto_nuevo .= '<w:p>
                                             <w:pPr>
                                                 <w:jc w:val="both"/>
                                                 <w:spacing w:before="0" w:after="0" w:line="240" w:lineRule="exactly" w:beforeAutospacing="0" w:afterAutospacing="0"/>
                                             </w:pPr>
-                                            <w:t>' . htmlspecialchars($parrafo2) . '</w:t>
+                                            <w:t>'.htmlspecialchars($parrafo2).'</w:t>
                                         </w:p>';
-                    } else {
+                    }
+                    else
+                    {
                         $texto_nuevo .= '<w:p>
                                             <w:pPr>
                                                 <w:jc w:val="both"/>
                                                 <w:spacing w:before="0" w:after="0" w:line="240" w:lineRule="exactly" w:beforeAutospacing="0" w:afterAutospacing="0"/>
                                             </w:pPr>
-                                            <w:t>' . htmlspecialchars($parrafo2) . '</w:t>
+                                            <w:t>'.htmlspecialchars($parrafo2).'</w:t>
                                         </w:p><w:br/>';
                     }
                 }
-            } else {
+            }
+            else
+            {
                 $text = explode("\n", $parrafo);
 
-                foreach ($text as $key2 => $parrafo2) {
-                    if (($key2 + 0) < (count($text) - 1)) {
+                foreach($text as $key2 => $parrafo2)
+                {
+                    if (($key2+0) < (count($text) -1))
+                    {
                         $texto_nuevo .= '<w:p>
                                             <w:pPr>
                                                 <w:jc w:val="both"/>
                                                 <w:spacing w:before="0" w:after="0" w:line="240" w:lineRule="exactly" w:beforeAutospacing="0" w:afterAutospacing="0"/>
                                             </w:pPr>
-                                            <w:t>' . htmlspecialchars($parrafo2) . '</w:t>
+                                            <w:t>'.htmlspecialchars($parrafo2).'</w:t>
                                         </w:p>';
-                    } else {
-                        $texto_nuevo .= '<w:t>' . htmlspecialchars($parrafo2) . '</w:t>';
+                    }
+                    else
+                    {
+                        $texto_nuevo .= '<w:t>'.htmlspecialchars($parrafo2).'</w:t>';
                     }
                 }
             }
@@ -204,10 +218,11 @@ class reporteairewordController extends Controller
      *
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
-     */
+    */
     public function reporteaireword(Request $request)
     {
-        try {
+        try
+        {
             // dd($request->all());
 
 
@@ -218,7 +233,7 @@ class reporteairewordController extends Controller
 
             //Zona horaria local
             date_default_timezone_set('America/Mexico_City');
-            setlocale(LC_ALL, "es_MX");
+            setlocale(LC_ALL,"es_MX");
 
             ############## DATOS GENERALES #########
 
@@ -236,8 +251,8 @@ class reporteairewordController extends Controller
                 $contratoId = $proyecto->contrato_id;
 
                 $clienteInfo = DB::table('contratos_clientes as cc')
-                    ->leftJoin('cliente as c', 'c.id', '=', 'cc.CLIENTE_ID')
-                    ->where('cc.ID_CONTRATO', $contratoId)
+                ->leftJoin('cliente as c', 'c.id', '=', 'cc.CLIENTE_ID')
+                ->where('cc.ID_CONTRATO', $contratoId)
                     ->select(
                         'cc.NUMERO_CONTRATO',
                         'cc.DESCRIPCION_CONTRATO',
@@ -254,11 +269,14 @@ class reporteairewordController extends Controller
 
             ######## VALIDACION DEL INFORME ###############
 
-            if ($reporteregistro_id > 0) {
+            if ($reporteregistro_id > 0)
+            {
                 $reporte  = reporteaireModel::findOrFail($reporteregistro_id);
                 $revision = reporterevisionesModel::findOrFail($request->ultimarevision_id);
-            } else {
-                return '<h3>Aun no se ha guardado nada para este informe de ' . $agente_nombre . ', primero debe llenar los datos para poder generarlo.</h3>';
+            }
+            else
+            {
+                return '<h3>Aun no se ha guardado nada para este informe de '.$agente_nombre.', primero debe llenar los datos para poder generarlo.</h3>';
             }
 
 
@@ -266,17 +284,19 @@ class reporteairewordController extends Controller
             //================================================================================
 
 
-            if (($recsensorial->cliente_id + 0) != 2) // cliente_id [2 = senegas]
+            if (($recsensorial->cliente_id+0) != 2) // cliente_id [2 = senegas]
             {
-                $plantillaword = new TemplateProcessor(storage_path('app/plantillas_reportes/proyecto_infomes/Plantilla_informe_aire_sin_MEL.docx')); //Ruta carpeta storage
-            } else {
-                $plantillaword = new TemplateProcessor(storage_path('app/plantillas_reportes/proyecto_infomes/Plantilla_informe_aire_sin_MEL.docx')); //Ruta carpeta storage
+                $plantillaword = new TemplateProcessor(storage_path('app/plantillas_reportes/proyecto_infomes/Plantilla_informe_aire_sin_MEL.docx'));//Ruta carpeta storage
+            }
+            else
+            {
+                $plantillaword = new TemplateProcessor(storage_path('app/plantillas_reportes/proyecto_infomes/Plantilla_informe_aire_sin_MEL.docx'));//Ruta carpeta storage
             }
 
 
             // PORTADA EXTERNA
             $titulo_partida = clientepartidasModel::where('CONTRATO_ID', $recsensorial->contrato_id)
-                ->where('clientepartidas_tipo', 2) // Informe de resultados
+            ->where('clientepartidas_tipo', 2) // Informe de resultados
                 ->where('catprueba_id', 8) // ruido
                 ->orderBy('updated_at', 'DESC')
                 ->get();
@@ -316,7 +336,7 @@ class reporteairewordController extends Controller
 
             $fecha = $agente[0]->reporte_mes . ' del ' . $agente[0]->reporteaire_fecha;
             $plantillaword->setValue('lugar_fecha_portada', $recsensorial->recsensorial_direccion . ' ' . $fecha);
-            $plantillaword->setValue('PORTADA_FECHA', $fecha);
+            $plantillaword->setValue('PORTADA_FECHA',$fecha);
 
             //IMAGEN DE LA PORTADA
             if ($recursos[0]->RUTA_IMAGEN_PORTADA) {
@@ -440,14 +460,18 @@ class reporteairewordController extends Controller
 
 
             $cancelado_texto = '';
-            if ($revision->reporterevisiones_cancelado == 1) {
-                $cancelado_texto = '<w:br/>INFORME REVISIÓN ' . $revision->reporterevisiones_revision . ' CANCELADA';
+            if ($revision->reporterevisiones_cancelado == 1)
+            {
+                $cancelado_texto = '<w:br/>INFORME REVISIÓN '.$revision->reporterevisiones_revision.' CANCELADA';
             }
 
-            if (($revision->reporterevisiones_revision + 0) > 0) {
-                $plantillaword->setValue('INFORME_REVISION', $proyecto->proyecto_folio . ' - Informe de ' . $agente_nombre . ' Rev-' . $revision->reporterevisiones_revision);
-            } else {
-                $plantillaword->setValue('INFORME_REVISION', $proyecto->proyecto_folio . ' - Informe de ' . $agente_nombre);
+            if (($revision->reporterevisiones_revision+0) > 0)
+            {
+                $plantillaword->setValue('INFORME_REVISION', $proyecto->proyecto_folio.' - Informe de '.$agente_nombre.' Rev-'.$revision->reporterevisiones_revision);
+            }
+            else
+            {
+                $plantillaword->setValue('INFORME_REVISION', $proyecto->proyecto_folio.' - Informe de '.$agente_nombre);
             }
 
 
@@ -464,7 +488,7 @@ class reporteairewordController extends Controller
             } else {
                 $plantillaword->setValue('INFORME_REVISION', $proyecto->proyecto_folio . ' - Informe de ' . $agente_nombre);
             }
-
+           
 
 
             // DEFINICIONES
@@ -473,15 +497,15 @@ class reporteairewordController extends Controller
 
             $definiciones_simbolo = ["¹", "²", "³", "⁴", "⁵", "⁶", "⁷", "⁸", "⁹", "*", "●", "♦", "~", "°", "¨", "#"];
             $definiciones_fuentes;
-
+            
 
             $where_definiciones = '';
-            if (($recsensorial->recsensorial_tipocliente + 0) == 1) // 1 = pemex, 0 = cliente
+            if (($recsensorial->recsensorial_tipocliente+0) == 1) // 1 = pemex, 0 = cliente
             {
-                $where_definiciones = 'AND reportedefiniciones.catactivo_id = ' . $proyecto->catactivo_id;
+                $where_definiciones = 'AND reportedefiniciones.catactivo_id = '.$proyecto->catactivo_id;
             }
 
-
+            
             $sql = collect(DB::select('SELECT
                                             -- TABLA.id,
                                             -- TABLA.agente_id,
@@ -504,7 +528,7 @@ class reporteairewordController extends Controller
                                                     FROM
                                                         reportedefinicionescatalogo
                                                     WHERE
-                                                        reportedefinicionescatalogo.agente_nombre LIKE "' . $agente_nombre . '"
+                                                        reportedefinicionescatalogo.agente_nombre LIKE "'.$agente_nombre.'"
                                                         AND reportedefinicionescatalogo.reportedefinicionescatalogo_activo = 1
                                                     ORDER BY
                                                         reportedefinicionescatalogo.reportedefinicionescatalogo_concepto ASC
@@ -522,8 +546,8 @@ class reporteairewordController extends Controller
                                                     FROM
                                                         reportedefiniciones
                                                     WHERE
-                                                        reportedefiniciones.agente_nombre LIKE "' . $agente_nombre . '"
-                                                        ' . $where_definiciones . ' 
+                                                        reportedefiniciones.agente_nombre LIKE "'.$agente_nombre.'"
+                                                        '.$where_definiciones.' 
                                                     ORDER BY
                                                         reportedefiniciones.agente_nombre ASC
                                                 )
@@ -535,28 +559,35 @@ class reporteairewordController extends Controller
 
 
             $definicionesfuentes = '';
-            if (count($sql) > 1) {
-                foreach ($sql as $key => $value) {
+            if (count($sql) > 1)
+            {
+                foreach ($sql as $key => $value)
+                {
                     $definiciones_fuentes[] = array(
-                        'fuente_descripcion' => $value->fuente,
-                        'fuente_simbolo' => ' ' . $definiciones_simbolo[$key] . '*'
-                    );
+                                                  'fuente_descripcion' => $value->fuente
+                                                , 'fuente_simbolo' => ' '.$definiciones_simbolo[$key].'*'
+                                            );
 
 
-                    if (($key + 0) < (count($sql) - 1)) {
-                        $definicionesfuentes .= 'Fuentes ' . $definiciones_simbolo[$key] . '*: ' . $value->fuente . '<w:br/>';
-                    } else {
-                        $definicionesfuentes .= 'Fuentes ' . $definiciones_simbolo[$key] . '*: ' . $value->fuente;
+                    if (($key+0) < (count($sql) -1))
+                    {
+                        $definicionesfuentes .= 'Fuentes '.$definiciones_simbolo[$key].'*: '.$value->fuente.'<w:br/>';
+                    }
+                    else
+                    {
+                        $definicionesfuentes .= 'Fuentes '.$definiciones_simbolo[$key].'*: '.$value->fuente;
                     }
                 }
-            } else {
+            }
+            else
+            {
                 $definiciones_fuentes[] = array(
-                    'fuente_descripcion' => $sql[0]->fuente,
-                    'fuente_simbolo' => ''
-                );
+                                                  'fuente_descripcion' => $sql[0]->fuente
+                                                , 'fuente_simbolo' => ''
+                                            );
 
 
-                $definicionesfuentes = 'Fuentes: ' . $sql[0]->fuente;
+                $definicionesfuentes = 'Fuentes: '.$sql[0]->fuente;
             }
 
 
@@ -585,7 +616,7 @@ class reporteairewordController extends Controller
                                                     FROM
                                                         reportedefinicionescatalogo
                                                     WHERE
-                                                        reportedefinicionescatalogo.agente_nombre LIKE "' . $agente_nombre . '"
+                                                        reportedefinicionescatalogo.agente_nombre LIKE "'.$agente_nombre.'"
                                                         AND reportedefinicionescatalogo.reportedefinicionescatalogo_activo = 1
                                                     ORDER BY
                                                         reportedefinicionescatalogo.reportedefinicionescatalogo_concepto ASC
@@ -603,8 +634,8 @@ class reporteairewordController extends Controller
                                                     FROM
                                                         reportedefiniciones
                                                     WHERE
-                                                        reportedefiniciones.agente_nombre LIKE "' . $agente_nombre . '"
-                                                        ' . $where_definiciones . ' 
+                                                        reportedefiniciones.agente_nombre LIKE "'.$agente_nombre.'"
+                                                        '.$where_definiciones.' 
                                                     ORDER BY
                                                         reportedefiniciones.agente_nombre ASC
                                                 )
@@ -615,10 +646,14 @@ class reporteairewordController extends Controller
 
 
             $definiciones = '';
-            foreach ($sql as $key => $value) {
-                foreach ($definiciones_fuentes as $key2 => $dato) {
-                    if ($value->fuente == $dato['fuente_descripcion']) {
-                        if (($key + 0) < (count($sql) - 1)) {
+            foreach ($sql as $key => $value)
+            {
+                foreach ($definiciones_fuentes as $key2 => $dato)
+                {
+                    if ($value->fuente == $dato['fuente_descripcion'])
+                    {
+                        if (($key+0) < (count($sql) -1))
+                        {
                             $definiciones .= '<w:p>
                                                 <w:pPr>
                                                     <w:jc w:val="both"/>
@@ -628,16 +663,18 @@ class reporteairewordController extends Controller
                                                     <w:b w:val="true"/>
                                                 </w:rPr>
                                                 <w:t>
-                                                    ' . $value->concepto . '
+                                                    '.$value->concepto.'
                                                 </w:t>
                                                 <w:rPr>
                                                     <w:b w:val="false"/>
                                                 </w:rPr>
                                                 <w:t>
-                                                    ' . htmlspecialchars($value->descripcion) . '' . $dato['fuente_simbolo'] . '
+                                                    '.htmlspecialchars($value->descripcion).''.$dato['fuente_simbolo'].'
                                                 </w:t>
                                             </w:p><w:br/>';
-                        } else {
+                        }
+                        else
+                        {
                             $definiciones .= '<w:p>
                                                 <w:pPr>
                                                     <w:jc w:val="both"/>
@@ -647,13 +684,13 @@ class reporteairewordController extends Controller
                                                     <w:b w:val="true"/>
                                                 </w:rPr>
                                                 <w:t>
-                                                    ' . $value->concepto . '
+                                                    '.$value->concepto.'
                                                 </w:t>
                                                 <w:rPr>
                                                     <w:b w:val="false"/>
                                                 </w:rPr>
                                                 <w:t>
-                                                    ' . htmlspecialchars($value->descripcion) . '' . $dato['fuente_simbolo'] . '
+                                                    '.htmlspecialchars($value->descripcion).''.$dato['fuente_simbolo'].'
                                                 </w:t>
                                             </w:p>';
                         }
@@ -695,16 +732,22 @@ class reporteairewordController extends Controller
 
 
             // Imagen FOTO
-            if ($reporte->reporteaire_ubicacionfoto) {
-                if (file_exists(storage_path('app/' . $reporte->reporteaire_ubicacionfoto))) {
-                    $plantillaword->setImageValue('UBICACION_FOTO', array('path' => storage_path('app/' . $reporte->reporteaire_ubicacionfoto), 'width' => 580, 'height' => 400, 'ratio' => true, 'borderColor' => '000000'));
-                } else {
+            if ($reporte->reporteaire_ubicacionfoto)
+            {
+                if (file_exists(storage_path('app/'.$reporte->reporteaire_ubicacionfoto)))
+                {
+                    $plantillaword->setImageValue('UBICACION_FOTO', array('path' => storage_path('app/'.$reporte->reporteaire_ubicacionfoto), 'width' => 580, 'height' => 400, 'ratio' => true, 'borderColor' => '000000'));
+                }
+                else
+                {
                     $plantillaword->setValue('UBICACION_FOTO', 'FALTA CARGAR IMAGEN DESDE EL SISTEMA.');
                 }
-            } else {
+            }
+            else
+            {
                 $plantillaword->setValue('UBICACION_FOTO', 'FALTA CARGAR IMAGEN DESDE EL SISTEMA.');
             }
-
+                
 
             // PROCESO INSTALACION
             //================================================================================
@@ -718,11 +761,13 @@ class reporteairewordController extends Controller
             //================================================================================
 
 
-            if (($recsensorial->recsensorial_tipocliente + 0) == 1) // 1 = Pemex, 0 = Cliente
+            if (($recsensorial->recsensorial_tipocliente+0) == 1) // 1 = Pemex, 0 = Cliente
             {
                 $fuente = 'Arial';
                 $font_size = 10;
-            } else {
+            }
+            else
+            {
                 $fuente = 'Arial';
                 $font_size = 10;
             }
@@ -746,7 +791,7 @@ class reporteairewordController extends Controller
             // $areas_poe = 0;
 
 
-            if (($areas_poe + 0) == 1) // TIENE TABLA POE GENERAL
+            if (($areas_poe+0) == 1) // TIENE TABLA POE GENERAL
             {
                 $sql = DB::select('SELECT
                                         reportearea.proyecto_id,
@@ -770,7 +815,7 @@ class reporteairewordController extends Controller
                                             WHERE
                                                 reporteaireareacategoria.reporteairearea_id = reportearea.id
                                                 AND reporteaireareacategoria.reporteairecategoria_id = reporteareacategoria.reportecategoria_id
-                                                AND reporteaireareacategoria.reporteaireareacategoria_poe = ' . $reporteregistro_id . ' 
+                                                AND reporteaireareacategoria.reporteaireareacategoria_poe = '.$reporteregistro_id.' 
                                             LIMIT 1
                                         ), "") AS activo,
                                         reporteareacategoria.reporteareacategoria_total AS reporteairecategoria_total,
@@ -782,7 +827,7 @@ class reporteairewordController extends Controller
                                             FROM
                                                 reporteaire
                                             WHERE
-                                                reporteaire.id = ' . $reporteregistro_id . ' 
+                                                reporteaire.id = '.$reporteregistro_id.' 
                                             LIMIT 1
                                         ) AS actividad_principal_instalacion 
                                     FROM
@@ -790,13 +835,15 @@ class reporteairewordController extends Controller
                                         LEFT JOIN reporteareacategoria ON reportearea.id = reporteareacategoria.reportearea_id
                                         LEFT JOIN reportecategoria ON reporteareacategoria.reportecategoria_id = reportecategoria.id 
                                     WHERE
-                                        reportearea.proyecto_id = ' . $proyecto_id . ' 
+                                        reportearea.proyecto_id = '.$proyecto_id.' 
                                     ORDER BY
                                         reportearea.reportearea_orden ASC,
                                         reportearea.reportearea_nombre ASC,
                                         reportecategoria.reportecategoria_orden ASC,
                                         reportecategoria.reportecategoria_nombre ASC');
-            } else {
+            }
+            else
+            {
                 $sql = DB::select('SELECT
                                         reporteairearea.id,
                                         reporteairearea.proyecto_id,
@@ -821,8 +868,8 @@ class reporteairewordController extends Controller
                                         LEFT OUTER JOIN reporteaireareacategoria ON reporteairearea.id = reporteaireareacategoria.reporteairearea_id
                                         LEFT JOIN reporteairecategoria ON reporteaireareacategoria.reporteairecategoria_id = reporteairecategoria.id
                                     WHERE
-                                        reporteairearea.proyecto_id = ' . $proyecto_id . ' 
-                                        AND reporteairearea.registro_id = ' . $reporteregistro_id . ' 
+                                        reporteairearea.proyecto_id = '.$proyecto_id.' 
+                                        AND reporteairearea.registro_id = '.$reporteregistro_id.' 
                                         AND reporteaireareacategoria.reporteaireareacategoria_poe = 0 
                                     ORDER BY
                                         reporteairearea.reporteairearea_numorden ASC,
@@ -840,7 +887,7 @@ class reporteairewordController extends Controller
 
 
             // Crear tabla
-            $table = null;
+            $table = null;            
             $table = new Table(array('name' => $fuente, 'borderSize' => 1, 'borderColor' => '000000', 'cellMargin' => 40, 'unit' => TblWidth::TWIP));
 
 
@@ -854,13 +901,14 @@ class reporteairewordController extends Controller
             // $table->addCell($ancho_col_6, $encabezado_celda)->addTextRun($centrado)->addText('Descripción de la actividad<w:br/>principal de la instalación', $encabezado_texto);
 
 
-            $numero_fila = 0;
-            $instalacion = 'XXXXX';
-            $area = 'xxxx';
-            foreach ($sql as $key => $value) {
-                if ($instalacion != $value->reporteairearea_instalacion) {
-                    if (($key + 0) != 0) {
-                        if (($areas_poe + 0) == 1) // TIENE TABLA POE GENERAL
+            $numero_fila = 0; $instalacion = 'XXXXX'; $area = 'xxxx';
+            foreach ($sql as $key => $value) 
+            {
+                if($instalacion != $value->reporteairearea_instalacion)
+                {
+                    if (($key+0) != 0)
+                    {
+                        if (($areas_poe+0) == 1) // TIENE TABLA POE GENERAL
                         {
                             $total = DB::select('SELECT
                                                     IFNULL(SUM( TABLA.reportecategoria_total ), 0) AS total 
@@ -877,8 +925,8 @@ class reporteairewordController extends Controller
                                                             LEFT JOIN reportearea ON reporteareacategoria.reportearea_id = reportearea.id
                                                             LEFT JOIN reportecategoria ON reporteareacategoria.reportecategoria_id = reportecategoria.id
                                                         WHERE
-                                                            reportearea.proyecto_id = ' . $proyecto_id . ' 
-                                                            AND REPLACE(reportearea.reportearea_instalacion, "\"", "") = "' . $instalacion . '" 
+                                                            reportearea.proyecto_id = '.$proyecto_id.' 
+                                                            AND REPLACE(reportearea.reportearea_instalacion, "\"", "") = "'.$instalacion.'" 
                                                         GROUP BY
                                                             reportearea.proyecto_id,
                                                             reportearea.reportearea_instalacion,
@@ -886,7 +934,9 @@ class reporteairewordController extends Controller
                                                             reportecategoria.reportecategoria_nombre,
                                                             reportecategoria.reportecategoria_total
                                                     ) AS TABLA');
-                        } else {
+                        }
+                        else
+                        {
                             $total = DB::select('SELECT
                                                         IFNULL(SUM( TABLA.reporteairecategoria_total ), 0) AS total 
                                                     FROM
@@ -903,10 +953,10 @@ class reporteairewordController extends Controller
                                                                 LEFT JOIN reporteairearea ON reporteaireareacategoria.reporteairearea_id = reporteairearea.id
                                                                 LEFT JOIN reporteairecategoria ON reporteaireareacategoria.reporteairecategoria_id = reporteairecategoria.id 
                                                             WHERE
-                                                                reporteairearea.proyecto_id = ' . $proyecto_id . ' 
-                                                                AND reporteairearea.registro_id = ' . $reporteregistro_id . ' 
+                                                                reporteairearea.proyecto_id = '.$proyecto_id.' 
+                                                                AND reporteairearea.registro_id = '.$reporteregistro_id.' 
                                                                 AND reporteaireareacategoria.reporteaireareacategoria_poe = 0
-                                                                AND REPLACE(reporteairearea.reporteairearea_instalacion, "\"", "") = "' . $instalacion . '" 
+                                                                AND REPLACE(reporteairearea.reporteairearea_instalacion, "\"", "") = "'.$instalacion.'" 
                                                             GROUP BY
                                                                 reporteairecategoria.proyecto_id,
                                                                 reporteairecategoria.registro_id,
@@ -924,7 +974,7 @@ class reporteairewordController extends Controller
                         $table->addCell($ancho_col_5, $continua_fila);
 
                         $table->addRow(); //fila
-                        $table->addCell(null, array('gridSpan' => 5, 'valign' => 'center', 'borderTopColor' => 'ffffff', 'borderTopSize' => 1, 'borderRightColor' => 'ffffff', 'borderRightSize' => 1, 'borderBottomColor' => 'ffffff', 'borderBottomSize' => 1, 'borderLeftColor' => 'ffffff', 'borderLeftSize' => 1))->addTextRun($izquierda)->addText('Nota: Las categorías repetidas en más de un área son consideradas como puesto móvil de trabajo.', $texto);
+                        $table->addCell(null, array('gridSpan' => 5, 'valign' => 'center', 'borderTopColor' =>'ffffff', 'borderTopSize' => 1, 'borderRightColor' =>'ffffff', 'borderRightSize' => 1, 'borderBottomColor' =>'ffffff', 'borderBottomSize' => 1, 'borderLeftColor' =>'ffffff', 'borderLeftSize' => 1))->addTextRun($izquierda)->addText('Nota: Las categorías repetidas en más de un área son consideradas como puesto móvil de trabajo.', $texto);
                     }
 
 
@@ -948,10 +998,13 @@ class reporteairewordController extends Controller
                 $table->addRow(); //fila
 
 
-                if ($area != $value->reporteairearea_nombre) {
+                if($area != $value->reporteairearea_nombre)
+                {
                     $numero_fila += 1;
                     $table->addCell($ancho_col_1, $combinar_fila)->addTextRun($centrado)->addText($numero_fila);
-                } else {
+                }
+                else
+                {
                     $table->addCell($ancho_col_1, $continua_fila);
                 }
 
@@ -967,10 +1020,13 @@ class reporteairewordController extends Controller
                 // }
 
 
-                if ($area != $value->reporteairearea_nombre) {
+                if($area != $value->reporteairearea_nombre)
+                {
                     $table->addCell($ancho_col_3, $combinar_fila)->addTextRun($centrado)->addText($value->reporteairearea_nombre, $texto);
                     $area = $value->reporteairearea_nombre;
-                } else {
+                }
+                else
+                {
                     $table->addCell($ancho_col_3, $continua_fila);
                 }
 
@@ -979,17 +1035,20 @@ class reporteairewordController extends Controller
                 $table->addCell($ancho_col_5, $celda)->addTextRun($centrado)->addText($value->reporteairecategoria_total, $texto);
 
 
-                if ($instalacion != $value->reporteairearea_instalacion) {
+                if($instalacion != $value->reporteairearea_instalacion)
+                {
                     $table->addCell($ancho_col_6, $combinar_fila)->addTextRun($justificado)->addText($this->datosproyectoreemplazartexto($proyecto, $recsensorial, $value->actividad_principal_instalacion), $texto);
 
                     $instalacion = $value->reporteairearea_instalacion;
-                } else {
+                }
+                else
+                {
                     $table->addCell($ancho_col_6, $continua_fila);
                 }
             }
 
 
-            if (($areas_poe + 0) == 1) // TIENE TABLA POE GENERAL
+            if (($areas_poe+0) == 1) // TIENE TABLA POE GENERAL
             {
                 $total = DB::select('SELECT
                                         IFNULL(SUM( TABLA.reportecategoria_total ), 0) AS total 
@@ -1006,8 +1065,8 @@ class reporteairewordController extends Controller
                                                 LEFT JOIN reportearea ON reporteareacategoria.reportearea_id = reportearea.id
                                                 LEFT JOIN reportecategoria ON reporteareacategoria.reportecategoria_id = reportecategoria.id
                                             WHERE
-                                                reportearea.proyecto_id = ' . $proyecto_id . ' 
-                                                AND REPLACE(reportearea.reportearea_instalacion, "\"", "") = "' . $instalacion . '" 
+                                                reportearea.proyecto_id = '.$proyecto_id.' 
+                                                AND REPLACE(reportearea.reportearea_instalacion, "\"", "") = "'.$instalacion.'" 
                                             GROUP BY
                                                 reportearea.proyecto_id,
                                                 reportearea.reportearea_instalacion,
@@ -1015,7 +1074,9 @@ class reporteairewordController extends Controller
                                                 reportecategoria.reportecategoria_nombre,
                                                 reportecategoria.reportecategoria_total
                                         ) AS TABLA');
-            } else {
+            }
+            else
+            {
                 $total = DB::select('SELECT
                                             IFNULL(SUM( TABLA.reporteairecategoria_total ), 0) AS total 
                                         FROM
@@ -1032,10 +1093,10 @@ class reporteairewordController extends Controller
                                                     LEFT JOIN reporteairearea ON reporteaireareacategoria.reporteairearea_id = reporteairearea.id
                                                     LEFT JOIN reporteairecategoria ON reporteaireareacategoria.reporteairecategoria_id = reporteairecategoria.id 
                                                 WHERE
-                                                    reporteairearea.proyecto_id = ' . $proyecto_id . ' 
-                                                    AND reporteairearea.registro_id = ' . $reporteregistro_id . ' 
+                                                    reporteairearea.proyecto_id = '.$proyecto_id.' 
+                                                    AND reporteairearea.registro_id = '.$reporteregistro_id.' 
                                                     AND reporteaireareacategoria.reporteaireareacategoria_poe = 0
-                                                    AND REPLACE(reporteairearea.reporteairearea_instalacion, "\"", "") = "' . $instalacion . '" 
+                                                    AND REPLACE(reporteairearea.reporteairearea_instalacion, "\"", "") = "'.$instalacion.'" 
                                                 GROUP BY
                                                     reporteairecategoria.proyecto_id,
                                                     reporteairecategoria.registro_id,
@@ -1054,9 +1115,9 @@ class reporteairewordController extends Controller
 
 
             $table->addRow(); //fila
-            $table->addCell(null, array('gridSpan' => 5, 'valign' => 'center', 'borderTopColor' => 'ffffff', 'borderTopSize' => 1, 'borderRightColor' => 'ffffff', 'borderRightSize' => 1, 'borderBottomColor' => 'ffffff', 'borderBottomSize' => 1, 'borderLeftColor' => 'ffffff', 'borderLeftSize' => 1))->addTextRun($izquierda)->addText('Nota: Las categorías repetidas en más de un área son consideradas como puesto móvil de trabajo.', $texto);
+            $table->addCell(null, array('gridSpan' => 5, 'valign' => 'center', 'borderTopColor' =>'ffffff', 'borderTopSize' => 1, 'borderRightColor' =>'ffffff', 'borderRightSize' => 1, 'borderBottomColor' =>'ffffff', 'borderBottomSize' => 1, 'borderLeftColor' =>'ffffff', 'borderLeftSize' => 1))->addTextRun($izquierda)->addText('Nota: Las categorías repetidas en más de un área son consideradas como puesto móvil de trabajo.', $texto);
 
-
+            
             $plantillaword->setComplexBlock('TABLA_5_3', $table);
 
 
@@ -1067,7 +1128,7 @@ class reporteairewordController extends Controller
             // $areas_poe = 0;
 
 
-            if (($areas_poe + 0) == 1) // TIENE TABLA POE GENERAL
+            if (($areas_poe+0) == 1) // TIENE TABLA POE GENERAL
             {
                 $sql = DB::select('SELECT
                                         TABLA.proyecto_id,
@@ -1111,7 +1172,7 @@ class reporteairewordController extends Controller
                                                     WHERE
                                                         reporteaireareacategoria.reporteairearea_id = reportearea.id
                                                         AND reporteaireareacategoria.reporteairecategoria_id = reporteareacategoria.reportecategoria_id
-                                                        AND reporteaireareacategoria.reporteaireareacategoria_poe = ' . $reporteregistro_id . ' 
+                                                        AND reporteaireareacategoria.reporteaireareacategoria_poe = '.$reporteregistro_id.' 
                                                     LIMIT 1
                                                 ), "") AS activo,
                                                 reporteareacategoria.reporteareacategoria_total AS reporteairecategoria_total,
@@ -1123,7 +1184,7 @@ class reporteairewordController extends Controller
                                                     FROM
                                                         reporteaire
                                                     WHERE
-                                                        reporteaire.id = ' . $reporteregistro_id . ' 
+                                                        reporteaire.id = '.$reporteregistro_id.' 
                                                     LIMIT 1
                                                 ) AS actividad_principal_instalacion 
                                             FROM
@@ -1131,7 +1192,7 @@ class reporteairewordController extends Controller
                                                 LEFT JOIN reporteareacategoria ON reportearea.id = reporteareacategoria.reportearea_id
                                                 LEFT JOIN reportecategoria ON reporteareacategoria.reportecategoria_id = reportecategoria.id 
                                             WHERE
-                                                reportearea.proyecto_id = ' . $proyecto_id . ' 
+                                                reportearea.proyecto_id = '.$proyecto_id.' 
                                             -- ORDER BY
                                                 -- reportearea.reportearea_orden ASC,
                                                 -- reportearea.reportearea_nombre ASC,
@@ -1146,7 +1207,9 @@ class reporteairewordController extends Controller
                                         TABLA.reporteairearea_nombre ASC,
                                         TABLA.reporteairecategoria_orden ASC,
                                         TABLA.reporteairecategoria_nombre ASC');
-            } else {
+            }
+            else
+            {
                 $sql = DB::select('SELECT
                                         reporteairearea.proyecto_id,
                                         reporteairearea.registro_id,
@@ -1163,8 +1226,8 @@ class reporteairewordController extends Controller
                                         LEFT JOIN reporteairearea ON reporteaireareacategoria.reporteairearea_id = reporteairearea.id
                                         LEFT JOIN reporteairecategoria ON reporteaireareacategoria.reporteairecategoria_id = reporteairecategoria.id
                                     WHERE
-                                        reporteairearea.proyecto_id = ' . $proyecto_id . ' 
-                                        AND reporteairearea.registro_id = ' . $reporteregistro_id . ' 
+                                        reporteairearea.proyecto_id = '.$proyecto_id.' 
+                                        AND reporteairearea.registro_id = '.$reporteregistro_id.' 
                                         AND reporteairearea.reporteairearea_porcientooperacion > 0 
                                         AND reporteaireareacategoria.reporteaireareacategoria_poe = 0 
                                     ORDER BY
@@ -1182,9 +1245,9 @@ class reporteairewordController extends Controller
 
 
             // Crear tabla
-            $table = null;
+            $table = null;            
             $table = new Table(array('name' => $fuente, 'borderSize' => 1, 'borderColor' => '000000', 'cellMargin' => 40, 'unit' => TblWidth::TWIP));
-
+            
 
             // // encabezado tabla
             // $table->addRow(200, array('tblHeader' => true));
@@ -1196,11 +1259,11 @@ class reporteairewordController extends Controller
 
 
             $numero_fila = 0;
-            $instalacion = 'xxxx';
-            $area = 'xxxx';
-            $actividad = 'xxxx';
-            foreach ($sql as $key => $value) {
-                if ($instalacion != $value->reporteairearea_instalacion) {
+            $instalacion = 'xxxx'; $area = 'xxxx'; $actividad = 'xxxx';
+            foreach ($sql as $key => $value) 
+            {
+                if($instalacion != $value->reporteairearea_instalacion)
+                {
                     // encabezado tabla
                     $table->addRow(200, array('tblHeader' => true));
                     $table->addCell($ancho_col_1, $encabezado_celda)->addTextRun($centrado)->addText('No.', $encabezado_texto);
@@ -1221,10 +1284,13 @@ class reporteairewordController extends Controller
                 $table->addRow(); //fila
 
 
-                if ($area != $value->reporteairearea_nombre) {
+                if($area != $value->reporteairearea_nombre)
+                {
                     $numero_fila += 1;
                     $table->addCell($ancho_col_1, $combinar_fila)->addTextRun($centrado)->addText($numero_fila);
-                } else {
+                }
+                else
+                {
                     $table->addCell($ancho_col_1, $continua_fila);
                 }
 
@@ -1240,10 +1306,13 @@ class reporteairewordController extends Controller
                 // }
 
 
-                if ($area != $value->reporteairearea_nombre) {
+                if($area != $value->reporteairearea_nombre)
+                {
                     $table->addCell($ancho_col_3, $combinar_fila)->addTextRun($centrado)->addText($value->reporteairearea_nombre, $texto);
                     $area = $value->reporteairearea_nombre;
-                } else {
+                }
+                else
+                {
                     $table->addCell($ancho_col_3, $continua_fila);
                 }
 
@@ -1263,7 +1332,7 @@ class reporteairewordController extends Controller
             // $areas_poe = 0;
 
 
-            if (($areas_poe + 0) == 1) // TIENE TABLA POE GENERAL
+            if (($areas_poe+0) == 1) // TIENE TABLA POE GENERAL
             {
                 $sql = DB::select('SELECT
                                         reportearea.proyecto_id,
@@ -1278,12 +1347,14 @@ class reporteairewordController extends Controller
                                     FROM
                                         reportearea
                                     WHERE
-                                        reportearea.proyecto_id = ' . $proyecto_id . ' 
+                                        reportearea.proyecto_id = '.$proyecto_id.' 
                                         AND reportearea.reporteairearea_porcientooperacion > 0 
                                     ORDER BY
                                         reportearea.reportearea_orden ASC,
                                         reportearea.reportearea_nombre ASC');
-            } else {
+            }
+            else
+            {
                 $sql = DB::select('SELECT
                                         reporteairearea.proyecto_id,
                                         reporteairearea.registro_id,
@@ -1297,8 +1368,8 @@ class reporteairewordController extends Controller
                                     FROM
                                         reporteairearea
                                     WHERE
-                                        reporteairearea.proyecto_id = ' . $proyecto_id . ' 
-                                        AND reporteairearea.registro_id = ' . $reporteregistro_id . ' 
+                                        reporteairearea.proyecto_id = '.$proyecto_id.' 
+                                        AND reporteairearea.registro_id = '.$reporteregistro_id.' 
                                         AND reporteairearea.reporteairearea_porcientooperacion > 0
                                     ORDER BY
                                         reporteairearea.reporteairearea_numorden,
@@ -1316,7 +1387,7 @@ class reporteairewordController extends Controller
 
 
             // Crear tabla
-            $table = null;
+            $table = null;            
             $table = new Table(array('name' => $fuente, 'borderSize' => 1, 'borderColor' => '000000', 'cellMargin' => 40, 'unit' => TblWidth::TWIP));
 
 
@@ -1331,11 +1402,12 @@ class reporteairewordController extends Controller
 
 
             $numero_fila = 0;
-            $instalacion = 'xxxx';
-            $area = 'xxxx';
-            foreach ($sql as $key => $value) {
-                if ($instalacion != $value->reporteairearea_instalacion) {
-                    // encabezado tabla
+            $instalacion = 'xxxx'; $area = 'xxxx';
+            foreach ($sql as $key => $value) 
+            {
+                if($instalacion != $value->reporteairearea_instalacion)
+                {
+                   // encabezado tabla
                     $table->addRow(200, array('tblHeader' => true));
                     $table->addCell($ancho_col_1, $encabezado_celda)->addTextRun($centrado)->addText('No.', $encabezado_texto);
                     $table->addCell($ancho_col_3, $encabezado_celda)->addTextRun($centrado)->addText('Área', $encabezado_texto);
@@ -1356,10 +1428,13 @@ class reporteairewordController extends Controller
                 $table->addRow(); //fila
 
 
-                if ($area != $value->reporteairearea_nombre) {
+                if($area != $value->reporteairearea_nombre)
+                {
                     $numero_fila += 1;
                     $table->addCell($ancho_col_1, $combinar_fila)->addTextRun($centrado)->addText($numero_fila);
-                } else {
+                }
+                else
+                {
                     $table->addCell($ancho_col_1, $continua_fila);
                 }
 
@@ -1392,7 +1467,7 @@ class reporteairewordController extends Controller
             // $areas_poe = 0;
 
 
-            if (($areas_poe + 0) == 1) // TIENE TABLA POE GENERAL
+            if (($areas_poe+0) == 1) // TIENE TABLA POE GENERAL
             {
                 $sql = DB::select('SELECT
                                         reportearea.proyecto_id,
@@ -1407,12 +1482,14 @@ class reporteairewordController extends Controller
                                     FROM
                                         reportearea
                                     WHERE
-                                        reportearea.proyecto_id = ' . $proyecto_id . ' 
+                                        reportearea.proyecto_id = '.$proyecto_id.' 
                                         AND reportearea.reporteairearea_porcientooperacion > 0 
                                     ORDER BY
                                         reportearea.reportearea_orden ASC,
                                         reportearea.reportearea_nombre ASC');
-            } else {
+            }
+            else
+            {
                 $sql = DB::select('SELECT
                                         reporteairearea.proyecto_id,
                                         reporteairearea.registro_id,
@@ -1423,15 +1500,15 @@ class reporteairewordController extends Controller
                                     FROM
                                         reporteairearea
                                     WHERE
-                                        reporteairearea.proyecto_id = ' . $proyecto_id . ' 
-                                        AND reporteairearea.registro_id = ' . $reporteregistro_id . ' 
+                                        reporteairearea.proyecto_id = '.$proyecto_id.' 
+                                        AND reporteairearea.registro_id = '.$reporteregistro_id.' 
                                         AND reporteairearea.reporteairearea_porcientooperacion > 0
                                     ORDER BY
                                         reporteairearea.reporteairearea_numorden ASC,
                                         reporteairearea.reporteairearea_nombre ASC');
             }
 
-
+            
             // Columnas
             $ancho_col_1 = 1000;
             // $ancho_col_2 = 2000;
@@ -1440,7 +1517,7 @@ class reporteairewordController extends Controller
 
 
             // Crear tabla
-            $table = null;
+            $table = null;            
             $table = new Table(array('name' => $fuente, 'borderSize' => 1, 'borderColor' => '000000', 'cellMargin' => 40, 'unit' => TblWidth::TWIP));
 
 
@@ -1452,10 +1529,11 @@ class reporteairewordController extends Controller
             // $table->addCell($ancho_col_4, $encabezado_celda)->addTextRun($centrado)->addText('Porcentaje de operación', $encabezado_texto);
 
 
-            $instalacion = 'xxxx';
-            $total = 'XXXX';
-            foreach ($sql as $key => $value) {
-                if ($instalacion != $value->reporteairearea_instalacion) {
+            $instalacion = 'xxxx'; $total = 'XXXX';
+            foreach ($sql as $key => $value)
+            {
+                if($instalacion != $value->reporteairearea_instalacion)
+                {
                     // encabezado tabla
                     $table->addRow(200, array('tblHeader' => true));
                     $table->addCell($ancho_col_1, $encabezado_celda)->addTextRun($centrado)->addText('No.', $encabezado_texto);
@@ -1494,13 +1572,16 @@ class reporteairewordController extends Controller
 
 
 
-                if ($instalacion != $value->reporteairearea_instalacion || $total != $value->reporteairearea_porcientooperacion) {
-                    $table->addCell($ancho_col_4, $combinar_fila)->addTextRun($centrado)->addText($value->reporteairearea_porcientooperacion . '%', $texto);
-
+                if($instalacion != $value->reporteairearea_instalacion || $total != $value->reporteairearea_porcientooperacion)
+                {
+                    $table->addCell($ancho_col_4, $combinar_fila)->addTextRun($centrado)->addText($value->reporteairearea_porcientooperacion.'%', $texto);
+                    
 
                     $instalacion = $value->reporteairearea_instalacion;
                     $total = $value->reporteairearea_porcientooperacion;
-                } else {
+                }
+                else
+                {
                     $table->addCell($ancho_col_4, $continua_fila);
                 }
             }
@@ -1513,11 +1594,13 @@ class reporteairewordController extends Controller
             //================================================================================
 
 
-            if (($recsensorial->recsensorial_tipocliente + 0) == 1) // 1 = Pemex, 0 = Cliente
+            if (($recsensorial->recsensorial_tipocliente+0) == 1) // 1 = Pemex, 0 = Cliente
             {
                 $fuente = 'Arial';
                 $font_size = 9;
-            } else {
+            }
+            else
+            {
                 $fuente = 'Arial';
                 $font_size = 9;
             }
@@ -1541,7 +1624,7 @@ class reporteairewordController extends Controller
             // $areas_poe = 0;
 
 
-            if (($areas_poe + 0) == 1) // TIENE TABLA POE GENERAL
+            if (($areas_poe+0) == 1) // TIENE TABLA POE GENERAL
             {
                 $sql = DB::select('SELECT
                                         reporteaireevaluacion.id,
@@ -1676,12 +1759,14 @@ class reporteairewordController extends Controller
                                         reporteaireevaluacion
                                         LEFT JOIN reportearea ON reporteaireevaluacion.reporteairearea_id = reportearea.id
                                     WHERE
-                                        reporteaireevaluacion.proyecto_id = ' . $proyecto_id . ' 
-                                        AND reporteaireevaluacion.registro_id = ' . $reporteregistro_id . ' 
+                                        reporteaireevaluacion.proyecto_id = '.$proyecto_id.' 
+                                        AND reporteaireevaluacion.registro_id = '.$reporteregistro_id.' 
                                     ORDER BY
                                         reporteaireevaluacion.reporteaireevaluacion_punto ASC,
                                         reportearea.reportearea_orden ASC');
-            } else {
+            }
+            else
+            {
                 $sql = DB::select('SELECT
                                         reporteaireevaluacion.id,
                                         reporteaireevaluacion.proyecto_id,
@@ -1815,8 +1900,8 @@ class reporteairewordController extends Controller
                                         reporteaireevaluacion
                                         LEFT JOIN reporteairearea ON reporteaireevaluacion.reporteairearea_id = reporteairearea.id
                                     WHERE
-                                        reporteaireevaluacion.proyecto_id = ' . $proyecto_id . ' 
-                                        AND reporteaireevaluacion.registro_id = ' . $reporteregistro_id . ' 
+                                        reporteaireevaluacion.proyecto_id = '.$proyecto_id.' 
+                                        AND reporteaireevaluacion.registro_id = '.$reporteregistro_id.' 
                                     ORDER BY
                                         reporteaireevaluacion.reporteaireevaluacion_punto ASC,
                                         reporteairearea.reporteairearea_numorden ASC');
@@ -1837,7 +1922,7 @@ class reporteairewordController extends Controller
 
 
             // Crear tabla
-            $table = null;
+            $table = null;            
             $table = new Table(array('name' => $fuente, 'borderSize' => 1, 'borderColor' => '000000', 'cellMargin' => 40, 'unit' => TblWidth::TWIP));
 
 
@@ -1855,26 +1940,31 @@ class reporteairewordController extends Controller
             $table->addCell($ancho_col_10, $encabezado_celda)->addTextRun($centrado)->addText('Cumplimiento<w:br/>normativo', $encabezado_texto);
 
 
-            $instalacion = 'XXXXX';
-            $area = 'XXXXX';
-            $total = 'XXXXX';
-            foreach ($sql as $key => $value) {
+            $instalacion = 'XXXXX'; $area = 'XXXXX'; $total = 'XXXXX';
+            foreach ($sql as $key => $value)
+            {
                 $table->addRow(); //fila
                 $table->addCell($ancho_col_1, $combinar_fila)->addTextRun($centrado)->addText($value->reporteaireevaluacion_punto, $texto);
 
-                if ($instalacion != $value->reporteairearea_instalacion) {
+                if($instalacion != $value->reporteairearea_instalacion)
+                {
                     $table->addCell($ancho_col_2, $combinar_fila)->addTextRun($centrado)->addText($value->reporteairearea_instalacion, $texto);
                     $instalacion = $value->reporteairearea_instalacion;
-                } else {
+                }
+                else
+                {
                     $table->addCell($ancho_col_2, $continua_fila);
                 }
 
 
-                if ($area != $value->reporteairearea_nombre) {
+                if($area != $value->reporteairearea_nombre)
+                {
                     $table->addCell($ancho_col_3, $combinar_fila)->addTextRun($centrado)->addText($value->reporteairearea_nombre, $texto);
                     $table->addCell($ancho_col_4, $combinar_fila)->addTextRun($centrado)->addText($value->total_puntosarea, $texto);
                     $area = $value->reporteairearea_nombre;
-                } else {
+                }
+                else
+                {
                     $table->addCell($ancho_col_3, $continua_fila);
                     $table->addCell($ancho_col_4, $continua_fila);
                 }
@@ -1890,7 +1980,9 @@ class reporteairewordController extends Controller
                     $bgColor = "#00FF00";
 
                     $table->addCell($ancho_col_10, array('bgColor' => $bgColor, 'valign' => 'center'))->addTextRun($centrado)->addText($value->ct_resultado, array('color' => $text_color, 'size' => $font_size, 'bold' => true, 'name' => $fuente));
-                } else {
+                }
+                else
+                {
                     $text_color = "#FFFFFF";
                     $bgColor = "#FF0000";
 
@@ -1914,13 +2006,15 @@ class reporteairewordController extends Controller
                     $bgColor = "#00FF00";
 
                     $table->addCell($ancho_col_10, array('bgColor' => $bgColor, 'valign' => 'center'))->addTextRun($centrado)->addText($value->ctma_resultado, array('color' => $text_color, 'size' => $font_size, 'bold' => true, 'name' => $fuente));
-                } else {
+                }
+                else
+                {
                     $text_color = "#FFFFFF";
                     $bgColor = "#FF0000";
 
                     $table->addCell($ancho_col_10, array('bgColor' => $bgColor, 'valign' => 'center'))->addTextRun($centrado)->addText($value->ctma_resultado, array('color' => $text_color, 'size' => $font_size, 'bold' => true, 'name' => $fuente));
                 }
-
+                
 
                 $table->addRow(); //fila
                 $table->addCell($ancho_col_1, $continua_fila);
@@ -1938,13 +2032,15 @@ class reporteairewordController extends Controller
                     $bgColor = "#00FF00";
 
                     $table->addCell($ancho_col_10, array('bgColor' => $bgColor, 'valign' => 'center'))->addTextRun($centrado)->addText($value->hongos_resultado, array('color' => $text_color, 'size' => $font_size, 'bold' => true, 'name' => $fuente));
-                } else {
+                }
+                else
+                {
                     $text_color = "#FFFFFF";
                     $bgColor = "#FF0000";
 
                     $table->addCell($ancho_col_10, array('bgColor' => $bgColor, 'valign' => 'center'))->addTextRun($centrado)->addText($value->hongos_resultado, array('color' => $text_color, 'size' => $font_size, 'bold' => true, 'name' => $fuente));
                 }
-
+                
 
                 $table->addRow(); //fila
                 $table->addCell($ancho_col_1, $continua_fila);
@@ -1962,7 +2058,9 @@ class reporteairewordController extends Controller
                     $bgColor = "#00FF00";
 
                     $table->addCell($ancho_col_10, array('bgColor' => $bgColor, 'valign' => 'center'))->addTextRun($centrado)->addText($value->levaduras_resultado, array('color' => $text_color, 'size' => $font_size, 'bold' => true, 'name' => $fuente));
-                } else {
+                }
+                else
+                {
                     $text_color = "#FFFFFF";
                     $bgColor = "#FF0000";
 
@@ -1979,9 +2077,9 @@ class reporteairewordController extends Controller
 
 
             // Crear tabla
-            $table = null;
+            $table = null;            
             $table = new Table(array('name' => $fuente, 'borderSize' => 1, 'borderColor' => '000000', 'cellMargin' => 40, 'unit' => TblWidth::TWIP));
-
+            
             // encabezado tabla
             $ancho_col_1 = 1000;
             $ancho_col_2 = 1500;
@@ -2003,23 +2101,26 @@ class reporteairewordController extends Controller
             $table->addCell($ancho_col_8, $encabezado_celda)->addTextRun($centrado)->addText('Cumplimiento<w:br/>normativo', $encabezado_texto);
 
 
-            $instalacion = 'XXXXX';
-            $area = 'XXXXX';
-            $ubicacion = 'XXXXX';
-            foreach ($sql as $key => $value) {
+            $instalacion = 'XXXXX'; $area = 'XXXXX'; $ubicacion = 'XXXXX';
+            foreach ($sql as $key => $value)
+            {
                 $table->addRow(); //fila
                 $table->addCell($ancho_col_1, $celda)->addTextRun($centrado)->addText($value->reporteaireevaluacion_punto, $texto);
 
 
-                if ($instalacion != $value->reporteairearea_instalacion) {
+                if($instalacion != $value->reporteairearea_instalacion)
+                {
                     $table->addCell($ancho_col_2, $combinar_fila)->addTextRun($centrado)->addText($value->reporteairearea_instalacion, $texto);
                     $instalacion = $value->reporteairearea_instalacion;
-                } else {
+                }
+                else
+                {
                     $table->addCell($ancho_col_2, $continua_fila);
                 }
 
 
-                if ($area != $value->reporteairearea_nombre) {
+                if($area != $value->reporteairearea_nombre)
+                {
                     $table->addCell($ancho_col_3, $combinar_fila)->addTextRun($centrado)->addText($value->reporteairearea_nombre, $texto);
                     $area = $value->reporteairearea_nombre;
 
@@ -2027,15 +2128,20 @@ class reporteairewordController extends Controller
                     $ubicacion = $value->reporteaireevaluacion_ubicacion;
 
                     $table->addCell($ancho_col_5, $combinar_fila)->addTextRun($centrado)->addText($value->total_puntosubicacion, $texto);
-                } else {
+                }
+                else
+                {
                     $table->addCell($ancho_col_3, $continua_fila);
 
-                    if ($ubicacion != $value->reporteaireevaluacion_ubicacion) {
+                    if($ubicacion != $value->reporteaireevaluacion_ubicacion)
+                    {
                         $table->addCell($ancho_col_4, $combinar_fila)->addTextRun($centrado)->addText($value->reporteaireevaluacion_ubicacion, $texto);
                         $ubicacion = $value->reporteaireevaluacion_ubicacion;
 
                         $table->addCell($ancho_col_5, $combinar_fila)->addTextRun($centrado)->addText($value->total_puntosubicacion, $texto);
-                    } else {
+                    }
+                    else
+                    {
                         $table->addCell($ancho_col_4, $continua_fila);
                         $table->addCell($ancho_col_5, $continua_fila);
                     }
@@ -2052,7 +2158,9 @@ class reporteairewordController extends Controller
                     $bgColor = "#00FF00";
 
                     $table->addCell($ancho_col_8, array('bgColor' => $bgColor, 'valign' => 'center'))->addTextRun($centrado)->addText($value->temperatura_resultado, array('color' => $text_color, 'size' => $font_size, 'bold' => true, 'name' => $fuente));
-                } else {
+                }
+                else
+                {
                     $text_color = "#FFFFFF";
                     $bgColor = "#FF0000";
 
@@ -2069,9 +2177,9 @@ class reporteairewordController extends Controller
 
 
             // Crear tabla
-            $table = null;
+            $table = null;            
             $table = new Table(array('name' => $fuente, 'borderSize' => 1, 'borderColor' => '000000', 'cellMargin' => 40, 'unit' => TblWidth::TWIP));
-
+            
             // encabezado tabla
             $ancho_col_1 = 1000;
             $ancho_col_2 = 1500;
@@ -2093,23 +2201,26 @@ class reporteairewordController extends Controller
             $table->addCell($ancho_col_8, $encabezado_celda)->addTextRun($centrado)->addText('Cumplimiento<w:br/>normativo', $encabezado_texto);
 
 
-            $instalacion = 'XXXXX';
-            $area = 'XXXXX';
-            $ubicacion = 'XXXXX';
-            foreach ($sql as $key => $value) {
+            $instalacion = 'XXXXX'; $area = 'XXXXX'; $ubicacion = 'XXXXX';
+            foreach ($sql as $key => $value)
+            {
                 $table->addRow(); //fila
                 $table->addCell($ancho_col_1, $celda)->addTextRun($centrado)->addText($value->reporteaireevaluacion_punto, $texto);
 
 
-                if ($instalacion != $value->reporteairearea_instalacion) {
+                if($instalacion != $value->reporteairearea_instalacion)
+                {
                     $table->addCell($ancho_col_2, $combinar_fila)->addTextRun($centrado)->addText($value->reporteairearea_instalacion, $texto);
                     $instalacion = $value->reporteairearea_instalacion;
-                } else {
+                }
+                else
+                {
                     $table->addCell($ancho_col_2, $continua_fila);
                 }
 
 
-                if ($area != $value->reporteairearea_nombre) {
+                if($area != $value->reporteairearea_nombre)
+                {
                     $table->addCell($ancho_col_3, $combinar_fila)->addTextRun($centrado)->addText($value->reporteairearea_nombre, $texto);
                     $area = $value->reporteairearea_nombre;
 
@@ -2117,15 +2228,20 @@ class reporteairewordController extends Controller
                     $ubicacion = $value->reporteaireevaluacion_ubicacion;
 
                     $table->addCell($ancho_col_5, $combinar_fila)->addTextRun($centrado)->addText($value->total_puntosubicacion, $texto);
-                } else {
+                }
+                else
+                {
                     $table->addCell($ancho_col_3, $continua_fila);
 
-                    if ($ubicacion != $value->reporteaireevaluacion_ubicacion) {
+                    if($ubicacion != $value->reporteaireevaluacion_ubicacion)
+                    {
                         $table->addCell($ancho_col_4, $combinar_fila)->addTextRun($centrado)->addText($value->reporteaireevaluacion_ubicacion, $texto);
                         $ubicacion = $value->reporteaireevaluacion_ubicacion;
 
                         $table->addCell($ancho_col_5, $combinar_fila)->addTextRun($centrado)->addText($value->total_puntosubicacion, $texto);
-                    } else {
+                    }
+                    else
+                    {
                         $table->addCell($ancho_col_4, $continua_fila);
                         $table->addCell($ancho_col_5, $continua_fila);
                     }
@@ -2142,7 +2258,9 @@ class reporteairewordController extends Controller
                     $bgColor = "#00FF00";
 
                     $table->addCell($ancho_col_8, array('bgColor' => $bgColor, 'valign' => 'center'))->addTextRun($centrado)->addText($value->velocidad_resultado, array('color' => $text_color, 'size' => $font_size, 'bold' => true, 'name' => $fuente));
-                } else {
+                }
+                else
+                {
                     $text_color = "#FFFFFF";
                     $bgColor = "#FF0000";
 
@@ -2159,9 +2277,9 @@ class reporteairewordController extends Controller
 
 
             // Crear tabla
-            $table = null;
+            $table = null;            
             $table = new Table(array('name' => $fuente, 'borderSize' => 1, 'borderColor' => '000000', 'cellMargin' => 40, 'unit' => TblWidth::TWIP));
-
+            
             // encabezado tabla
             $ancho_col_1 = 1000;
             $ancho_col_2 = 1500;
@@ -2183,23 +2301,26 @@ class reporteairewordController extends Controller
             $table->addCell($ancho_col_8, $encabezado_celda)->addTextRun($centrado)->addText('Cumplimiento<w:br/>normativo', $encabezado_texto);
 
 
-            $instalacion = 'XXXXX';
-            $area = 'XXXXX';
-            $ubicacion = 'XXXXX';
-            foreach ($sql as $key => $value) {
+            $instalacion = 'XXXXX'; $area = 'XXXXX'; $ubicacion = 'XXXXX';
+            foreach ($sql as $key => $value)
+            {
                 $table->addRow(); //fila
                 $table->addCell($ancho_col_1, $celda)->addTextRun($centrado)->addText($value->reporteaireevaluacion_punto, $texto);
 
 
-                if ($instalacion != $value->reporteairearea_instalacion) {
+                if($instalacion != $value->reporteairearea_instalacion)
+                {
                     $table->addCell($ancho_col_2, $combinar_fila)->addTextRun($centrado)->addText($value->reporteairearea_instalacion, $texto);
                     $instalacion = $value->reporteairearea_instalacion;
-                } else {
+                }
+                else
+                {
                     $table->addCell($ancho_col_2, $continua_fila);
                 }
 
 
-                if ($area != $value->reporteairearea_nombre) {
+                if($area != $value->reporteairearea_nombre)
+                {
                     $table->addCell($ancho_col_3, $combinar_fila)->addTextRun($centrado)->addText($value->reporteairearea_nombre, $texto);
                     $area = $value->reporteairearea_nombre;
 
@@ -2207,15 +2328,20 @@ class reporteairewordController extends Controller
                     $ubicacion = $value->reporteaireevaluacion_ubicacion;
 
                     $table->addCell($ancho_col_5, $combinar_fila)->addTextRun($centrado)->addText($value->total_puntosubicacion, $texto);
-                } else {
+                }
+                else
+                {
                     $table->addCell($ancho_col_3, $continua_fila);
 
-                    if ($ubicacion != $value->reporteaireevaluacion_ubicacion) {
+                    if($ubicacion != $value->reporteaireevaluacion_ubicacion)
+                    {
                         $table->addCell($ancho_col_4, $combinar_fila)->addTextRun($centrado)->addText($value->reporteaireevaluacion_ubicacion, $texto);
                         $ubicacion = $value->reporteaireevaluacion_ubicacion;
 
                         $table->addCell($ancho_col_5, $combinar_fila)->addTextRun($centrado)->addText($value->total_puntosubicacion, $texto);
-                    } else {
+                    }
+                    else
+                    {
                         $table->addCell($ancho_col_4, $continua_fila);
                         $table->addCell($ancho_col_5, $continua_fila);
                     }
@@ -2232,7 +2358,9 @@ class reporteairewordController extends Controller
                     $bgColor = "#00FF00";
 
                     $table->addCell($ancho_col_8, array('bgColor' => $bgColor, 'valign' => 'center'))->addTextRun($centrado)->addText($value->humedad_resultado, array('color' => $text_color, 'size' => $font_size, 'bold' => true, 'name' => $fuente));
-                } else {
+                }
+                else
+                {
                     $text_color = "#FFFFFF";
                     $bgColor = "#FF0000";
 
@@ -2249,9 +2377,9 @@ class reporteairewordController extends Controller
 
 
             // Crear tabla
-            $table = null;
+            $table = null;            
             $table = new Table(array('name' => $fuente, 'borderSize' => 1, 'borderColor' => '000000', 'cellMargin' => 40, 'unit' => TblWidth::TWIP));
-
+            
             // encabezado tabla
             $ancho_col_1 = 1000;
             $ancho_col_2 = 1500;
@@ -2273,23 +2401,26 @@ class reporteairewordController extends Controller
             $table->addCell($ancho_col_8, $encabezado_celda)->addTextRun($centrado)->addText('Cumplimiento<w:br/>normativo', $encabezado_texto);
 
 
-            $instalacion = 'XXXXX';
-            $area = 'XXXXX';
-            $ubicacion = 'XXXXX';
-            foreach ($sql as $key => $value) {
+            $instalacion = 'XXXXX'; $area = 'XXXXX'; $ubicacion = 'XXXXX';
+            foreach ($sql as $key => $value)
+            {
                 $table->addRow(); //fila
                 $table->addCell($ancho_col_1, $celda)->addTextRun($centrado)->addText($value->reporteaireevaluacion_punto, $texto);
 
 
-                if ($instalacion != $value->reporteairearea_instalacion) {
+                if($instalacion != $value->reporteairearea_instalacion)
+                {
                     $table->addCell($ancho_col_2, $combinar_fila)->addTextRun($centrado)->addText($value->reporteairearea_instalacion, $texto);
                     $instalacion = $value->reporteairearea_instalacion;
-                } else {
+                }
+                else
+                {
                     $table->addCell($ancho_col_2, $continua_fila);
                 }
 
 
-                if ($area != $value->reporteairearea_nombre) {
+                if($area != $value->reporteairearea_nombre)
+                {
                     $table->addCell($ancho_col_3, $combinar_fila)->addTextRun($centrado)->addText($value->reporteairearea_nombre, $texto);
                     $area = $value->reporteairearea_nombre;
 
@@ -2297,15 +2428,20 @@ class reporteairewordController extends Controller
                     $ubicacion = $value->reporteaireevaluacion_ubicacion;
 
                     $table->addCell($ancho_col_5, $combinar_fila)->addTextRun($centrado)->addText($value->total_puntosubicacion, $texto);
-                } else {
+                }
+                else
+                {
                     $table->addCell($ancho_col_3, $continua_fila);
 
-                    if ($ubicacion != $value->reporteaireevaluacion_ubicacion) {
+                    if($ubicacion != $value->reporteaireevaluacion_ubicacion)
+                    {
                         $table->addCell($ancho_col_4, $combinar_fila)->addTextRun($centrado)->addText($value->reporteaireevaluacion_ubicacion, $texto);
                         $ubicacion = $value->reporteaireevaluacion_ubicacion;
 
                         $table->addCell($ancho_col_5, $combinar_fila)->addTextRun($centrado)->addText($value->total_puntosubicacion, $texto);
-                    } else {
+                    }
+                    else
+                    {
                         $table->addCell($ancho_col_4, $continua_fila);
                         $table->addCell($ancho_col_5, $continua_fila);
                     }
@@ -2322,7 +2458,9 @@ class reporteairewordController extends Controller
                     $bgColor = "#00FF00";
 
                     $table->addCell($ancho_col_8, array('bgColor' => $bgColor, 'valign' => 'center'))->addTextRun($centrado)->addText($value->co_resultado, array('color' => $text_color, 'size' => $font_size, 'bold' => true, 'name' => $fuente));
-                } else {
+                }
+                else
+                {
                     $text_color = "#FFFFFF";
                     $bgColor = "#FF0000";
 
@@ -2339,9 +2477,9 @@ class reporteairewordController extends Controller
 
 
             // Crear tabla
-            $table = null;
+            $table = null;            
             $table = new Table(array('name' => $fuente, 'borderSize' => 1, 'borderColor' => '000000', 'cellMargin' => 40, 'unit' => TblWidth::TWIP));
-
+            
             // encabezado tabla
             $ancho_col_1 = 1000;
             $ancho_col_2 = 1500;
@@ -2363,23 +2501,26 @@ class reporteairewordController extends Controller
             $table->addCell($ancho_col_8, $encabezado_celda)->addTextRun($centrado)->addText('Cumplimiento<w:br/>normativo', $encabezado_texto);
 
 
-            $instalacion = 'XXXXX';
-            $area = 'XXXXX';
-            $ubicacion = 'XXXXX';
-            foreach ($sql as $key => $value) {
+            $instalacion = 'XXXXX'; $area = 'XXXXX'; $ubicacion = 'XXXXX';
+            foreach ($sql as $key => $value)
+            {
                 $table->addRow(); //fila
                 $table->addCell($ancho_col_1, $celda)->addTextRun($centrado)->addText($value->reporteaireevaluacion_punto, $texto);
 
 
-                if ($instalacion != $value->reporteairearea_instalacion) {
+                if($instalacion != $value->reporteairearea_instalacion)
+                {
                     $table->addCell($ancho_col_2, $combinar_fila)->addTextRun($centrado)->addText($value->reporteairearea_instalacion, $texto);
                     $instalacion = $value->reporteairearea_instalacion;
-                } else {
+                }
+                else
+                {
                     $table->addCell($ancho_col_2, $continua_fila);
                 }
 
 
-                if ($area != $value->reporteairearea_nombre) {
+                if($area != $value->reporteairearea_nombre)
+                {
                     $table->addCell($ancho_col_3, $combinar_fila)->addTextRun($centrado)->addText($value->reporteairearea_nombre, $texto);
                     $area = $value->reporteairearea_nombre;
 
@@ -2387,15 +2528,20 @@ class reporteairewordController extends Controller
                     $ubicacion = $value->reporteaireevaluacion_ubicacion;
 
                     $table->addCell($ancho_col_5, $combinar_fila)->addTextRun($centrado)->addText($value->total_puntosubicacion, $texto);
-                } else {
+                }
+                else
+                {
                     $table->addCell($ancho_col_3, $continua_fila);
 
-                    if ($ubicacion != $value->reporteaireevaluacion_ubicacion) {
+                    if($ubicacion != $value->reporteaireevaluacion_ubicacion)
+                    {
                         $table->addCell($ancho_col_4, $combinar_fila)->addTextRun($centrado)->addText($value->reporteaireevaluacion_ubicacion, $texto);
                         $ubicacion = $value->reporteaireevaluacion_ubicacion;
 
                         $table->addCell($ancho_col_5, $combinar_fila)->addTextRun($centrado)->addText($value->total_puntosubicacion, $texto);
-                    } else {
+                    }
+                    else
+                    {
                         $table->addCell($ancho_col_4, $continua_fila);
                         $table->addCell($ancho_col_5, $continua_fila);
                     }
@@ -2412,7 +2558,9 @@ class reporteairewordController extends Controller
                     $bgColor = "#00FF00";
 
                     $table->addCell($ancho_col_8, array('bgColor' => $bgColor, 'valign' => 'center'))->addTextRun($centrado)->addText($value->co2_resultado, array('color' => $text_color, 'size' => $font_size, 'bold' => true, 'name' => $fuente));
-                } else {
+                }
+                else
+                {
                     $text_color = "#FFFFFF";
                     $bgColor = "#FF0000";
 
@@ -2428,11 +2576,13 @@ class reporteairewordController extends Controller
             //================================================================================
 
 
-            if (($recsensorial->recsensorial_tipocliente + 0) == 1) // 1 = Pemex, 0 = Cliente
+            if (($recsensorial->recsensorial_tipocliente+0) == 1) // 1 = Pemex, 0 = Cliente
             {
                 $fuente = 'Arial';
                 $font_size = 6;
-            } else {
+            }
+            else
+            {
                 $fuente = 'Arial';
                 $font_size = 6;
             }
@@ -2458,7 +2608,7 @@ class reporteairewordController extends Controller
             // $areas_poe = 0;
 
 
-            if (($areas_poe + 0) == 1) // TIENE TABLA POE GENERAL
+            if (($areas_poe+0) == 1) // TIENE TABLA POE GENERAL
             {
                 $sql = DB::select('SELECT
                                         reporteaireevaluacion.proyecto_id,
@@ -2522,13 +2672,15 @@ class reporteairewordController extends Controller
                                         INNER JOIN reporteaireevaluacioncategorias ON reporteaireevaluacion.id = reporteaireevaluacioncategorias.reporteaireevaluacion_id
                                         LEFT JOIN reportecategoria ON reporteaireevaluacioncategorias.reporteairecategoria_id = reportecategoria.id 
                                     WHERE
-                                        reporteaireevaluacion.proyecto_id = ' . $proyecto_id . '  
-                                        AND reporteaireevaluacion.registro_id = ' . $reporteregistro_id . ' 
+                                        reporteaireevaluacion.proyecto_id = '.$proyecto_id.'  
+                                        AND reporteaireevaluacion.registro_id = '.$reporteregistro_id.' 
                                         AND reportecategoria.reportecategoria_nombre != "" 
                                     ORDER BY
                                         reporteaireevaluacion.reporteaireevaluacion_punto ASC,
                                         reportearea.reportearea_orden ASC');
-            } else {
+            }
+            else
+            {
                 $sql = DB::select('SELECT
                                         reporteaireevaluacion.proyecto_id,
                                         reporteaireevaluacion.registro_id,
@@ -2591,8 +2743,8 @@ class reporteairewordController extends Controller
                                         INNER JOIN reporteaireevaluacioncategorias ON reporteaireevaluacion.id = reporteaireevaluacioncategorias.reporteaireevaluacion_id
                                         LEFT JOIN reporteairecategoria ON reporteaireevaluacioncategorias.reporteairecategoria_id = reporteairecategoria.id 
                                     WHERE
-                                        reporteaireevaluacion.proyecto_id = ' . $proyecto_id . '  
-                                        AND reporteaireevaluacion.registro_id = ' . $reporteregistro_id . ' 
+                                        reporteaireevaluacion.proyecto_id = '.$proyecto_id.'  
+                                        AND reporteaireevaluacion.registro_id = '.$reporteregistro_id.' 
                                         AND reporteairecategoria.reporteairecategoria_nombre != "" 
                                     ORDER BY
                                         reporteaireevaluacion.reporteaireevaluacion_punto ASC,
@@ -2603,7 +2755,7 @@ class reporteairewordController extends Controller
             if (($proyecto->catregion_id + 0) == 1) //REGION NORTE
             {
                 // Crear tabla
-                $table = null;
+                $table = null;            
                 $table = new Table(array('name' => $fuente, 'borderSize' => 1, 'borderColor' => '000000', 'cellMargin' => 40, 'unit' => TblWidth::TWIP));
 
                 // encabezado tabla
@@ -2626,17 +2778,17 @@ class reporteairewordController extends Controller
                 $ancho_col_17 = 500;
                 $ancho_col_18 = 500;
                 $ancho_col_19 = 500;
-
+                
                 $table->addRow(200, array('tblHeader' => true));
-                $table->addCell($ancho_col_1, array('vMerge' => 'restart', 'valign' => 'center', 'bgColor' => '0C3F64', 'textDirection' => \PhpOffice\PhpWord\Style\Cell::TEXT_DIR_BTLR))->addTextRun($centrado3)->addText('Contador', $encabezado_texto3);
-                $table->addCell(NULL, array('gridSpan' => 9, 'valign' => 'center', 'bgColor' => 'FFFFFF'))->addTextRun($centrado3)->addText('Área física', $textonegrita3);
+                $table->addCell($ancho_col_1, array('vMerge' => 'restart', 'valign' => 'center', 'bgColor' => '0C3F64', 'textDirection'=>\PhpOffice\PhpWord\Style\Cell::TEXT_DIR_BTLR))->addTextRun($centrado3)->addText('Contador', $encabezado_texto3);
+                $table->addCell(NULL, array('gridSpan' => 9, 'valign' => 'center', 'bgColor' => 'FFFFFF'))->addTextRun($centrado3)->addText('Área física', $textonegrita3);                
                 $table->addCell(NULL, array('gridSpan' => 9, 'valign' => 'center', 'bgColor' => 'FFFFFF'))->addTextRun($centrado3)->addText('Agentes físicos', $textonegrita3);
-
+                
                 $table->addRow(200, array('tblHeader' => true));
                 $table->addCell($ancho_col_1, $continua_fila3);
                 $table->addCell(NULL, array('gridSpan' => 9, 'valign' => 'center', 'bgColor' => '0C3F64'))->addTextRun($centrado3)->addText('Localización', $encabezado_texto3);
                 $table->addCell(NULL, array('gridSpan' => 9, 'valign' => 'center', 'bgColor' => '0C3F64'))->addTextRun($centrado3)->addText('Ventilación y Calidad del Aire', $encabezado_texto3);
-
+                
                 $table->addRow(200, array('tblHeader' => true));
                 $table->addCell($ancho_col_1, $continua_fila3);
                 $table->addCell($ancho_col_2, $encabezado_celda3_celeste)->addTextRun($centrado3)->addText('Subdirección o<w:br/>corporativo', $encabezado_texto3);
@@ -2659,51 +2811,63 @@ class reporteairewordController extends Controller
                 $table->addCell($ancho_col_19, $encabezado_celda3_celeste)->addTextRun($centrado3)->addText('Levaduras (UFC)', $encabezado_texto3);
 
 
-                $punto = 'XXXX';
-                $subdir = 'XXXX';
-                $activo = 'XXXX';
-                $instalacion = 'XXXX';
-                $area = 'XXXX';
-                foreach ($sql as $key => $value) {
+                $punto = 'XXXX'; $subdir = 'XXXX'; $activo = 'XXXX'; $instalacion = 'XXXX'; $area = 'XXXX';
+                foreach ($sql as $key => $value)
+                {
                     $table->addRow(); //fila
 
 
-                    if ($punto != $value->reporteaireevaluacion_punto) {
+                    if($punto != $value->reporteaireevaluacion_punto)
+                    {
                         $table->addCell($ancho_col_1, $combinar_fila3)->addTextRun($centrado3)->addText($value->reporteaireevaluacion_punto, $texto3);
                         // $punto = $value->reporteaireevaluacion_punto;
-                    } else {
+                    }
+                    else
+                    {
                         $table->addCell($ancho_col_1, $continua_fila3);
                     }
 
 
-                    if ($subdir != $value->catsubdireccion_nombre) {
+                    if($subdir != $value->catsubdireccion_nombre)
+                    {
                         $table->addCell($ancho_col_2, $combinar_fila3)->addTextRun($centrado3)->addText($value->catsubdireccion_nombre, $texto3);
                         $subdir = $value->catsubdireccion_nombre;
-                    } else {
+                    }
+                    else
+                    {
                         $table->addCell($ancho_col_2, $continua_fila3);
                     }
 
 
-                    if ($activo != $value->gerencia_activo) {
+                    if($activo != $value->gerencia_activo)
+                    {
                         $table->addCell($ancho_col_3, $combinar_fila3)->addTextRun($centrado3)->addText($value->gerencia_activo, $texto3);
                         $activo = $value->gerencia_activo;
-                    } else {
+                    }
+                    else
+                    {
                         $table->addCell($ancho_col_3, $continua_fila3);
                     }
 
 
-                    if ($instalacion != $value->reporteairearea_instalacion) {
+                    if($instalacion != $value->reporteairearea_instalacion)
+                    {
                         $table->addCell($ancho_col_4, $combinar_fila3)->addTextRun($centrado3)->addText($value->reporteairearea_instalacion, $texto3);
                         $instalacion = $value->reporteairearea_instalacion;
-                    } else {
+                    }
+                    else
+                    {
                         $table->addCell($ancho_col_4, $continua_fila3);
                     }
 
 
-                    if ($area != $value->reporteairearea_nombre) {
+                    if($area != $value->reporteairearea_nombre)
+                    {
                         $table->addCell($ancho_col_5, $combinar_fila3)->addTextRun($centrado3)->addText($value->reporteairearea_nombre, $texto3);
                         $area = $value->reporteairearea_nombre;
-                    } else {
+                    }
+                    else
+                    {
                         $table->addCell($ancho_col_5, $continua_fila3);
                     }
 
@@ -2713,10 +2877,11 @@ class reporteairewordController extends Controller
                     $table->addCell($ancho_col_8, $celda3)->addTextRun($centrado3)->addText($value->reporteairecategoria_nombre, $texto3);
 
 
-                    if ($punto != $value->reporteaireevaluacion_punto) {
+                    if($punto != $value->reporteaireevaluacion_punto)
+                    {
                         $table->addCell($ancho_col_9, $combinar_fila3)->addTextRun($centrado3)->addText($value->total_por_punto, $texto3);
                         $table->addCell($ancho_col_10, $combinar_fila3)->addTextRun($centrado3)->addText($value->reporteaireevaluacioncategorias_geo, $texto3);
-
+                        
                         $table->addCell($ancho_col_11, $combinar_fila3)->addTextRun($centrado3)->addText($value->reporteaireevaluacion_temperatura, $texto3);
                         $table->addCell($ancho_col_12, $combinar_fila3)->addTextRun($centrado3)->addText($value->reporteaireevaluacion_velocidad, $texto3);
                         $table->addCell($ancho_col_13, $combinar_fila3)->addTextRun($centrado3)->addText($value->reporteaireevaluacion_humedad, $texto3);
@@ -2728,7 +2893,9 @@ class reporteairewordController extends Controller
                         $table->addCell($ancho_col_19, $combinar_fila3)->addTextRun($centrado3)->addText($value->reporteaireevaluacion_levaduras, $texto3);
 
                         $punto = $value->reporteaireevaluacion_punto;
-                    } else {
+                    }
+                    else
+                    {
                         $table->addCell($ancho_col_9, $continua_fila3);
                         $table->addCell($ancho_col_10, $continua_fila3);
 
@@ -2743,10 +2910,11 @@ class reporteairewordController extends Controller
                         $table->addCell($ancho_col_19, $continua_fila3);
                     }
                 }
-            } else if (($proyecto->catregion_id + 0) == 2) //SUR
+            }
+            else if (($proyecto->catregion_id + 0) == 2) //SUR
             {
                 // Crear tabla
-                $table = null;
+                $table = null;            
                 $table = new Table(array('name' => $fuente, 'borderSize' => 1, 'borderColor' => '000000', 'cellMargin' => 40, 'unit' => TblWidth::TWIP));
 
                 // encabezado tabla
@@ -2767,17 +2935,17 @@ class reporteairewordController extends Controller
                 $ancho_col_15 = 500;
                 $ancho_col_16 = 500;
                 $ancho_col_17 = 500;
-
+                
                 $table->addRow(200, array('tblHeader' => true));
-                $table->addCell($ancho_col_1, array('vMerge' => 'restart', 'valign' => 'center', 'bgColor' => '0C3F64', 'textDirection' => \PhpOffice\PhpWord\Style\Cell::TEXT_DIR_BTLR))->addTextRun($centrado3)->addText('Contador', $encabezado_texto3);
-                $table->addCell(NULL, array('gridSpan' => 7, 'valign' => 'center', 'bgColor' => 'FFFFFF'))->addTextRun($centrado3)->addText('Área física', $textonegrita3);
+                $table->addCell($ancho_col_1, array('vMerge' => 'restart', 'valign' => 'center', 'bgColor' => '0C3F64', 'textDirection'=>\PhpOffice\PhpWord\Style\Cell::TEXT_DIR_BTLR))->addTextRun($centrado3)->addText('Contador', $encabezado_texto3);
+                $table->addCell(NULL, array('gridSpan' => 7, 'valign' => 'center', 'bgColor' => 'FFFFFF'))->addTextRun($centrado3)->addText('Área física', $textonegrita3);                
                 $table->addCell(NULL, array('gridSpan' => 9, 'valign' => 'center', 'bgColor' => 'FFFFFF'))->addTextRun($centrado3)->addText('Agentes físicos', $textonegrita3);
-
+                
                 $table->addRow(200, array('tblHeader' => true));
                 $table->addCell($ancho_col_1, $continua_fila3);
                 $table->addCell(NULL, array('gridSpan' => 7, 'valign' => 'center', 'bgColor' => '0C3F64'))->addTextRun($centrado3)->addText('Localización', $encabezado_texto3);
                 $table->addCell(NULL, array('gridSpan' => 9, 'valign' => 'center', 'bgColor' => '0C3F64'))->addTextRun($centrado3)->addText('Ventilación y Calidad del Aire', $encabezado_texto3);
-
+                
                 $table->addRow(200, array('tblHeader' => true));
                 $table->addCell($ancho_col_1, $continua_fila3);
                 $table->addCell($ancho_col_2, $encabezado_celda3_celeste)->addTextRun($centrado3)->addText('Subdirección o<w:br/>corporativo', $encabezado_texto3);
@@ -2797,52 +2965,64 @@ class reporteairewordController extends Controller
                 $table->addCell($ancho_col_16, $encabezado_celda3_celeste)->addTextRun($centrado3)->addText('Hongos (UFC)', $encabezado_texto3);
                 $table->addCell($ancho_col_17, $encabezado_celda3_celeste)->addTextRun($centrado3)->addText('Levaduras (UFC)', $encabezado_texto3);
 
-
-                $punto = 'XXXX';
-                $subdir = 'XXXX';
-                $activo = 'XXXX';
-                $instalacion = 'XXXX';
-                $area = 'XXXX';
-                foreach ($sql as $key => $value) {
+                
+                $punto = 'XXXX'; $subdir = 'XXXX'; $activo = 'XXXX'; $instalacion = 'XXXX'; $area = 'XXXX';
+                foreach ($sql as $key => $value)
+                {
                     $table->addRow(); //fila
 
 
-                    if ($punto != $value->reporteaireevaluacion_punto) {
+                    if($punto != $value->reporteaireevaluacion_punto)
+                    {
                         $table->addCell($ancho_col_1, $combinar_fila3)->addTextRun($centrado3)->addText($value->reporteaireevaluacion_punto, $texto3);
                         // $punto = $value->reporteaireevaluacion_punto;
-                    } else {
+                    }
+                    else
+                    {
                         $table->addCell($ancho_col_1, $continua_fila3);
                     }
 
 
-                    if ($subdir != $value->catsubdireccion_nombre) {
+                    if($subdir != $value->catsubdireccion_nombre)
+                    {
                         $table->addCell($ancho_col_2, $combinar_fila3)->addTextRun($centrado3)->addText($value->catsubdireccion_nombre, $texto3);
                         $subdir = $value->catsubdireccion_nombre;
-                    } else {
+                    }
+                    else
+                    {
                         $table->addCell($ancho_col_2, $continua_fila3);
                     }
 
 
-                    if ($activo != $value->gerencia_activo) {
+                    if($activo != $value->gerencia_activo)
+                    {
                         $table->addCell($ancho_col_3, $combinar_fila3)->addTextRun($centrado3)->addText($value->gerencia_activo, $texto3);
                         $activo = $value->gerencia_activo;
-                    } else {
+                    }
+                    else
+                    {
                         $table->addCell($ancho_col_3, $continua_fila3);
                     }
 
 
-                    if ($instalacion != $value->reporteairearea_instalacion) {
+                    if($instalacion != $value->reporteairearea_instalacion)
+                    {
                         $table->addCell($ancho_col_4, $combinar_fila3)->addTextRun($centrado3)->addText($value->reporteairearea_instalacion, $texto3);
                         $instalacion = $value->reporteairearea_instalacion;
-                    } else {
+                    }
+                    else
+                    {
                         $table->addCell($ancho_col_4, $continua_fila3);
                     }
 
 
-                    if ($area != $value->reporteairearea_nombre) {
+                    if($area != $value->reporteairearea_nombre)
+                    {
                         $table->addCell($ancho_col_5, $combinar_fila3)->addTextRun($centrado3)->addText($value->reporteairearea_nombre, $texto3);
                         $area = $value->reporteairearea_nombre;
-                    } else {
+                    }
+                    else
+                    {
                         $table->addCell($ancho_col_5, $continua_fila3);
                     }
 
@@ -2852,7 +3032,8 @@ class reporteairewordController extends Controller
                     $table->addCell($ancho_col_8, $celda3)->addTextRun($centrado3)->addText($value->reporteairecategoria_nombre, $texto3);
 
 
-                    if ($punto != $value->reporteaireevaluacion_punto) {
+                    if($punto != $value->reporteaireevaluacion_punto)
+                    {
                         $table->addCell($ancho_col_9, $combinar_fila3)->addTextRun($centrado3)->addText($value->reporteaireevaluacion_temperatura, $texto3);
                         $table->addCell($ancho_col_10, $combinar_fila3)->addTextRun($centrado3)->addText($value->reporteaireevaluacion_velocidad, $texto3);
                         $table->addCell($ancho_col_11, $combinar_fila3)->addTextRun($centrado3)->addText($value->reporteaireevaluacion_humedad, $texto3);
@@ -2864,7 +3045,9 @@ class reporteairewordController extends Controller
                         $table->addCell($ancho_col_17, $combinar_fila3)->addTextRun($centrado3)->addText($value->reporteaireevaluacion_levaduras, $texto3);
 
                         $punto = $value->reporteaireevaluacion_punto;
-                    } else {
+                    }
+                    else
+                    {
                         $table->addCell($ancho_col_9, $continua_fila3);
                         $table->addCell($ancho_col_10, $continua_fila3);
                         $table->addCell($ancho_col_11, $continua_fila3);
@@ -2876,9 +3059,10 @@ class reporteairewordController extends Controller
                         $table->addCell($ancho_col_17, $continua_fila3);
                     }
                 }
-            } else //MARINA
+            }
+            else //MARINA
             {
-                if (($areas_poe + 0) == 1) // TIENE TABLA POE GENERAL
+                if (($areas_poe+0) == 1) // TIENE TABLA POE GENERAL
                 {
                     $categorias = DB::select('SELECT
                                                     reporteaireevaluacion.proyecto_id,
@@ -2903,8 +3087,8 @@ class reporteairewordController extends Controller
                                                     INNER JOIN reporteaireevaluacioncategorias ON reporteaireevaluacion.id = reporteaireevaluacioncategorias.reporteaireevaluacion_id
                                                     LEFT JOIN reportecategoria ON reporteaireevaluacioncategorias.reporteairecategoria_id = reportecategoria.id 
                                                 WHERE
-                                                    reporteaireevaluacion.proyecto_id = ' . $proyecto_id . ' 
-                                                    AND reporteaireevaluacion.registro_id = ' . $reporteregistro_id . ' 
+                                                    reporteaireevaluacion.proyecto_id = '.$proyecto_id.' 
+                                                    AND reporteaireevaluacion.registro_id = '.$reporteregistro_id.' 
                                                     AND reportecategoria.reportecategoria_nombre != "" 
                                                 GROUP BY
                                                     reporteaireevaluacion.proyecto_id,
@@ -2916,7 +3100,9 @@ class reporteairewordController extends Controller
                                                     reportearea.reportearea_instalacion ASC,
                                                     reportecategoria.reportecategoria_orden ASC,
                                                     reportecategoria.reportecategoria_nombre ASC');
-                } else {
+                }
+                else
+                {
                     $categorias = DB::select('SELECT
                                                     reporteaireevaluacion.proyecto_id,
                                                     reporteaireevaluacion.registro_id,
@@ -2940,8 +3126,8 @@ class reporteairewordController extends Controller
                                                     INNER JOIN reporteaireevaluacioncategorias ON reporteaireevaluacion.id = reporteaireevaluacioncategorias.reporteaireevaluacion_id
                                                     LEFT JOIN reporteairecategoria ON reporteaireevaluacioncategorias.reporteairecategoria_id = reporteairecategoria.id 
                                                 WHERE
-                                                    reporteaireevaluacion.proyecto_id = ' . $proyecto_id . '  
-                                                    AND reporteaireevaluacion.registro_id = ' . $reporteregistro_id . ' 
+                                                    reporteaireevaluacion.proyecto_id = '.$proyecto_id.'  
+                                                    AND reporteaireevaluacion.registro_id = '.$reporteregistro_id.' 
                                                     AND reporteairecategoria.reporteairecategoria_nombre != "" 
                                                 GROUP BY
                                                     reporteaireevaluacion.proyecto_id,
@@ -2956,7 +3142,7 @@ class reporteairewordController extends Controller
 
 
                 // Crear tabla
-                $table = null;
+                $table = null;            
                 $table = new Table(array('name' => $fuente, 'borderSize' => 1, 'borderColor' => '000000', 'cellMargin' => 40, 'unit' => TblWidth::TWIP));
 
                 // encabezado tabla
@@ -2973,19 +3159,19 @@ class reporteairewordController extends Controller
                 $ancho_col_11 = 500;
                 $ancho_col_12 = 500;
                 $ancho_col_13 = 1500;
-
+                
                 $table->addRow(200, array('tblHeader' => true));
-                $table->addCell($ancho_col_1, array('vMerge' => 'restart', 'valign' => 'center', 'bgColor' => '0C3F64', 'textDirection' => \PhpOffice\PhpWord\Style\Cell::TEXT_DIR_BTLR))->addTextRun($centrado3)->addText('Contador', $encabezado_texto3);
+                $table->addCell($ancho_col_1, array('vMerge' => 'restart', 'valign' => 'center', 'bgColor' => '0C3F64', 'textDirection'=>\PhpOffice\PhpWord\Style\Cell::TEXT_DIR_BTLR))->addTextRun($centrado3)->addText('Contador', $encabezado_texto3);
                 $table->addCell(NULL, array('gridSpan' => 3, 'valign' => 'center', 'bgColor' => 'FFFFFF'))->addTextRun($centrado3)->addText('Área física', $textonegrita3);
                 $table->addCell(NULL, array('gridSpan' => 3, 'valign' => 'center', 'bgColor' => 'FFFFFF'))->addTextRun($centrado3)->addText('Plantilla', $textonegrita3);
                 $table->addCell(NULL, array('gridSpan' => 6, 'valign' => 'center', 'bgColor' => 'FFFFFF'))->addTextRun($centrado3)->addText('Agentes físicos', $textonegrita3);
-
+                
                 $table->addRow(200, array('tblHeader' => true));
                 $table->addCell($ancho_col_1, $continua_fila3);
                 $table->addCell(NULL, array('gridSpan' => 3, 'valign' => 'center', 'bgColor' => '0C3F64'))->addTextRun($centrado3)->addText('Localización', $encabezado_texto3);
                 $table->addCell(NULL, array('gridSpan' => 3, 'valign' => 'center', 'bgColor' => '0C3F64'))->addTextRun($centrado3)->addText('laboral', $encabezado_texto3);
                 $table->addCell(NULL, array('gridSpan' => 6, 'valign' => 'center', 'bgColor' => '0C3F64'))->addTextRun($centrado3)->addText('Ventilación y Calidad del Aire', $encabezado_texto3);
-
+                
                 $table->addRow(200, array('tblHeader' => true));
                 $table->addCell($ancho_col_1, $continua_fila3);
                 $table->addCell($ancho_col_2, $encabezado_celda3_celeste)->addTextRun($centrado3)->addText('Subdirección o<w:br/>corporativo', $encabezado_texto3);
@@ -3003,14 +3189,10 @@ class reporteairewordController extends Controller
                 $table->addCell($ancho_col_13, $encabezado_celda3_celeste)->addTextRun($centrado3)->addText('Bioaerosoles "CT, CTMA, hongos, levaduras" (UFC/mtra)', $encabezado_texto3);
 
 
-                $fila = 0;
-                $punto = 'XXXX';
-                $subdir = 'XXXX';
-                $activo = 'XXXX';
-                $instalacion = 'XXXX';
-                $area = 'XXXX';
-                foreach ($categorias as $key => $categoria) {
-                    if (($areas_poe + 0) == 1) // TIENE TABLA POE GENERAL
+                $fila = 0; $punto = 'XXXX'; $subdir = 'XXXX'; $activo = 'XXXX'; $instalacion = 'XXXX'; $area = 'XXXX';
+                foreach ($categorias as $key => $categoria)
+                {
+                    if (($areas_poe+0) == 1) // TIENE TABLA POE GENERAL
                     {
                         $datos = DB::select('SELECT
                                                 TABLA.proyecto_id,
@@ -3200,9 +3382,9 @@ class reporteairewordController extends Controller
                                                         INNER JOIN reporteaireevaluacioncategorias ON reporteaireevaluacion.id = reporteaireevaluacioncategorias.reporteaireevaluacion_id
                                                         LEFT JOIN reportecategoria ON reporteaireevaluacioncategorias.reporteairecategoria_id = reportecategoria.id 
                                                     WHERE
-                                                        reporteaireevaluacion.proyecto_id = ' . $categoria->proyecto_id . ' 
-                                                        AND reporteaireevaluacion.registro_id = ' . $categoria->registro_id . ' 
-                                                        AND reporteaireevaluacioncategorias.reporteairecategoria_id = ' . $categoria->reporteairecategoria_id . '
+                                                        reporteaireevaluacion.proyecto_id = '.$categoria->proyecto_id.' 
+                                                        AND reporteaireevaluacion.registro_id = '.$categoria->registro_id.' 
+                                                        AND reporteaireevaluacioncategorias.reporteairecategoria_id = '.$categoria->reporteairecategoria_id.'
                                                     ORDER BY
                                                         reporteaireevaluacion.reporteaireevaluacion_punto ASC,
                                                         reportecategoria.reportecategoria_nombre ASC
@@ -3210,7 +3392,9 @@ class reporteairewordController extends Controller
                                             ORDER BY
                                                 cumplimiento ASC
                                             LIMIT 1');
-                    } else {
+                    }
+                    else
+                    {
                         $datos = DB::select('SELECT
                                                 TABLA.proyecto_id,
                                                 TABLA.registro_id,
@@ -3399,9 +3583,9 @@ class reporteairewordController extends Controller
                                                         INNER JOIN reporteaireevaluacioncategorias ON reporteaireevaluacion.id = reporteaireevaluacioncategorias.reporteaireevaluacion_id
                                                         LEFT JOIN reporteairecategoria ON reporteaireevaluacioncategorias.reporteairecategoria_id = reporteairecategoria.id 
                                                     WHERE
-                                                        reporteaireevaluacion.proyecto_id = ' . $categoria->proyecto_id . ' 
-                                                        AND reporteaireevaluacion.registro_id = ' . $categoria->registro_id . ' 
-                                                        AND reporteaireevaluacioncategorias.reporteairecategoria_id = ' . $categoria->reporteairecategoria_id . '
+                                                        reporteaireevaluacion.proyecto_id = '.$categoria->proyecto_id.' 
+                                                        AND reporteaireevaluacion.registro_id = '.$categoria->registro_id.' 
+                                                        AND reporteaireevaluacioncategorias.reporteairecategoria_id = '.$categoria->reporteairecategoria_id.'
                                                     ORDER BY
                                                         reporteaireevaluacion.reporteaireevaluacion_punto ASC,
                                                         reporteairecategoria.reporteairecategoria_nombre ASC
@@ -3412,15 +3596,16 @@ class reporteairewordController extends Controller
                     }
 
 
-                    foreach ($datos as $key => $value) {
+                    foreach ($datos as $key => $value) 
+                    {
                         $table->addRow(); //fila
 
 
                         // if($punto != $value->reporteaireevaluacion_punto)
                         // {
-                        $fila += 1;
-                        $table->addCell($ancho_col_1, $combinar_fila3)->addTextRun($centrado3)->addText($fila, $texto3);
-                        // $punto = $value->reporteaireevaluacion_punto;
+                            $fila += 1;
+                            $table->addCell($ancho_col_1, $combinar_fila3)->addTextRun($centrado3)->addText($fila, $texto3);
+                            // $punto = $value->reporteaireevaluacion_punto;
                         // }
                         // else
                         // {
@@ -3428,26 +3613,35 @@ class reporteairewordController extends Controller
                         // }
 
 
-                        if ($subdir != $value->catsubdireccion_nombre) {
+                        if($subdir != $value->catsubdireccion_nombre)
+                        {
                             $table->addCell($ancho_col_2, $combinar_fila3)->addTextRun($centrado3)->addText($value->catsubdireccion_nombre, $texto3);
                             $subdir = $value->catsubdireccion_nombre;
-                        } else {
+                        }
+                        else
+                        {
                             $table->addCell($ancho_col_2, $continua_fila3);
                         }
 
 
-                        if ($activo != $value->gerencia_activo) {
+                        if($activo != $value->gerencia_activo)
+                        {
                             $table->addCell($ancho_col_3, $combinar_fila3)->addTextRun($centrado3)->addText($value->gerencia_activo, $texto3);
                             $activo = $value->gerencia_activo;
-                        } else {
+                        }
+                        else
+                        {
                             $table->addCell($ancho_col_3, $continua_fila3);
                         }
 
 
-                        if ($instalacion != $value->reporteairearea_instalacion) {
+                        if($instalacion != $value->reporteairearea_instalacion)
+                        {
                             $table->addCell($ancho_col_4, $combinar_fila3)->addTextRun($centrado3)->addText($value->reporteairearea_instalacion, $texto3);
                             $instalacion = $value->reporteairearea_instalacion;
-                        } else {
+                        }
+                        else
+                        {
                             $table->addCell($ancho_col_4, $continua_fila3);
                         }
 
@@ -3462,20 +3656,25 @@ class reporteairewordController extends Controller
                         $table->addCell($ancho_col_10, $combinar_fila3)->addTextRun($centrado3)->addText($value->reporteaireevaluacion_humedad, $texto3);
                         $table->addCell($ancho_col_11, $combinar_fila3)->addTextRun($centrado3)->addText($value->reporteaireevaluacion_co, $texto3);
                         $table->addCell($ancho_col_12, $combinar_fila3)->addTextRun($centrado3)->addText($value->reporteaireevaluacion_co2, $texto3);
-                        $table->addCell($ancho_col_13, $combinar_fila3)->addTextRun($centrado3)->addText('CT: ' . $value->reporteaireevaluacion_ct . '<w:br/>CTMA: ' . $value->reporteaireevaluacion_ctma . '<w:br/>Hongos: ' . $value->reporteaireevaluacion_hongos . '<w:br/>Levaduras: ' . $value->reporteaireevaluacion_levaduras, $texto3);
+                        $table->addCell($ancho_col_13, $combinar_fila3)->addTextRun($centrado3)->addText('CT: '.$value->reporteaireevaluacion_ct.'<w:br/>CTMA: '.$value->reporteaireevaluacion_ctma.'<w:br/>Hongos: '.$value->reporteaireevaluacion_hongos.'<w:br/>Levaduras: '.$value->reporteaireevaluacion_levaduras, $texto3);
                     }
                 }
             }
 
 
-            if (($recsensorial->recsensorial_tipocliente + 0) == 1) // 1 = pemex, 0 = cliente
+            if (($recsensorial->recsensorial_tipocliente+0) == 1) // 1 = pemex, 0 = cliente
             {
-                if (str_contains($proyecto->catsubdireccion->catsubdireccion_nombre, ['Perforación', 'perforación', 'Perforacion', 'perforacion']) == 1 || str_contains($proyecto->catgerencia->catgerencia_nombre, ['Perforación', 'perforación', 'Perforacion', 'perforacion']) == 1) {
+                if (str_contains($proyecto->catsubdireccion->catsubdireccion_nombre, ['Perforación', 'perforación', 'Perforacion', 'perforacion']) == 1 || str_contains($proyecto->catgerencia->catgerencia_nombre, ['Perforación', 'perforación', 'Perforacion', 'perforacion']) == 1)
+                {
                     $plantillaword->setValue('MATRIZ_TEXTO', '<w:br/>Se anexa en formato digital.<w:br/>');
-                } else {
+                }
+                else
+                {
                     $plantillaword->setValue('MATRIZ_TEXTO', '');
                 }
-            } else {
+            }
+            else
+            {
                 $plantillaword->setValue('MATRIZ_TEXTO', '');
             }
 
@@ -3510,21 +3709,27 @@ class reporteairewordController extends Controller
             //--------------------------------
 
 
-            if ($request->grafica_dashboard) {
+            if ($request->grafica_dashboard)
+            {
                 $imagen_base64 = base64_decode(str_replace("data:image/jpeg;base64,", "", $request->grafica_dashboard));
-                $imagen_temporal_ruta = 'reportes/informes/dashboard_' . $agente_nombre . '_' . $proyecto->proyecto_folio . '.jpg';
+                $imagen_temporal_ruta = 'reportes/informes/dashboard_'.$agente_nombre.'_'.$proyecto->proyecto_folio.'.jpg';
                 Storage::put($imagen_temporal_ruta, $imagen_base64); // Guardar en storage
 
 
-                if (Storage::exists($imagen_temporal_ruta)) {
-                    $plantillaword->setImageValue('DASHBOARD', array('path' => storage_path('app/' . $imagen_temporal_ruta), 'height' => 500, 'width' => 860, 'ratio' => false, 'borderColor' => '000000'));
+                if (Storage::exists($imagen_temporal_ruta))
+                {
+                    $plantillaword->setImageValue('DASHBOARD', array('path' => storage_path('app/'.$imagen_temporal_ruta), 'height' => 500, 'width' => 860, 'ratio' => false, 'borderColor' => '000000'));
 
 
                     Storage::delete($imagen_temporal_ruta); // Eliminar imagen temporal
-                } else {
+                }
+                else
+                {
                     $plantillaword->setValue('DASHBOARD', 'NO SE ENCONTRÓ DASHBOARD PARA ESTE INFORME.');
                 }
-            } else {
+            }
+            else
+            {
                 $plantillaword->setValue('DASHBOARD', 'NO SE ENCONTRÓ DASHBOARD PARA ESTE INFORME.');
             }
 
@@ -3564,15 +3769,15 @@ class reporteairewordController extends Controller
                                                                         FROM
                                                                             reporterecomendaciones 
                                                                         WHERE
-                                                                            reporterecomendaciones.proyecto_id = ' . $proyecto_id . ' 
-                                                                            AND reporterecomendaciones.registro_id = ' . $reporteregistro_id . ' 
+                                                                            reporterecomendaciones.proyecto_id = '.$proyecto_id.' 
+                                                                            AND reporterecomendaciones.registro_id = '.$reporteregistro_id.' 
                                                                             AND reporterecomendaciones.reporterecomendacionescatalogo_id = reporterecomendacionescatalogo.id
                                                                         LIMIT 1 
                                                                 ), NULL) AS recomendaciones_descripcion
                                                             FROM
                                                                 reporterecomendacionescatalogo
                                                             WHERE
-                                                                reporterecomendacionescatalogo.agente_nombre LIKE "%' . $agente_nombre . '%"
+                                                                reporterecomendacionescatalogo.agente_nombre LIKE "%'.$agente_nombre.'%"
                                                                 AND reporterecomendacionescatalogo.reporterecomendacionescatalogo_activo = 1
                                                             ORDER BY
                                                                 reporterecomendacionescatalogo.reporterecomendacionescatalogo_tipo DESC
@@ -3590,9 +3795,9 @@ class reporteairewordController extends Controller
                                                     FROM
                                                         reporterecomendaciones
                                                     WHERE
-                                                        reporterecomendaciones.proyecto_id = ' . $proyecto_id . '
-                                                        AND reporterecomendaciones.agente_nombre LIKE "%' . $agente_nombre . '%" 
-                                                        AND reporterecomendaciones.registro_id = ' . $reporteregistro_id . ' 
+                                                        reporterecomendaciones.proyecto_id = '.$proyecto_id.'
+                                                        AND reporterecomendaciones.agente_nombre LIKE "%'.$agente_nombre.'%" 
+                                                        AND reporterecomendaciones.registro_id = '.$reporteregistro_id.' 
                                                         AND reporterecomendaciones.reporterecomendacionescatalogo_id = 0
                                                     ORDER BY
                                                         reporterecomendaciones.id ASC
@@ -3605,10 +3810,14 @@ class reporteairewordController extends Controller
 
 
             $recomendacion = '';
-            foreach ($sql as $key => $value) {
-                if (($key + 0) < (count($sql) - 1)) {
-                    $recomendacion .= $value->recomendaciones_descripcion . '\n\n';
-                } else {
+            foreach ($sql as $key => $value)
+            {
+                if (($key+0) < (count($sql) -1))
+                {
+                    $recomendacion .= $value->recomendaciones_descripcion.'\n\n';
+                }
+                else
+                {
                     $recomendacion .= $value->recomendaciones_descripcion;
                 }
             }
@@ -3622,33 +3831,45 @@ class reporteairewordController extends Controller
 
 
             // RESPONSABLE 1, FOTO DOCUMENTO
-            if ($reporte->reporteaire_responsable1documento) {
-                if (file_exists(storage_path('app/' . $reporte->reporteaire_responsable1documento))) {
-                    $plantillaword->setImageValue('REPONSABLE1_DOCUMENTO', array('path' => storage_path('app/' . $reporte->reporteaire_responsable1documento), 'height' => 300, 'width' => 580, 'ratio' => true, 'borderColor' => '000000'));
-                } else {
+            if ($reporte->reporteaire_responsable1documento)
+            {
+                if (file_exists(storage_path('app/'.$reporte->reporteaire_responsable1documento)))
+                {
+                    $plantillaword->setImageValue('REPONSABLE1_DOCUMENTO', array('path' => storage_path('app/'.$reporte->reporteaire_responsable1documento), 'height' => 300, 'width' => 580, 'ratio' => true, 'borderColor' => '000000'));
+                }
+                else
+                {
                     $plantillaword->setValue('REPONSABLE1_DOCUMENTO', 'FALTA CARGAR IMAGEN DESDE EL SISTEMA.');
                 }
-            } else {
+            }
+            else
+            {
                 $plantillaword->setValue('REPONSABLE1_DOCUMENTO', 'FALTA CARGAR IMAGEN DESDE EL SISTEMA.');
             }
+                
 
-
-            $plantillaword->setValue('REPONSABLE1', $reporte->reporteaire_responsable1 . "<w:br/>" . $reporte->reporteaire_responsable1cargo);
+            $plantillaword->setValue('REPONSABLE1', $reporte->reporteaire_responsable1."<w:br/>".$reporte->reporteaire_responsable1cargo);
 
 
             // RESPONSABLE 2, FOTO DOCUMENTO
-            if ($reporte->reporteaire_responsable2documento) {
-                if (file_exists(storage_path('app/' . $reporte->reporteaire_responsable2documento))) {
-                    $plantillaword->setImageValue('REPONSABLE2_DOCUMENTO', array('path' => storage_path('app/' . $reporte->reporteaire_responsable2documento), 'height' => 300, 'width' => 580, 'ratio' => true, 'borderColor' => '000000'));
-                } else {
+            if ($reporte->reporteaire_responsable2documento)
+            {
+                if (file_exists(storage_path('app/'.$reporte->reporteaire_responsable2documento)))
+                {
+                    $plantillaword->setImageValue('REPONSABLE2_DOCUMENTO', array('path' => storage_path('app/'.$reporte->reporteaire_responsable2documento), 'height' => 300, 'width' => 580, 'ratio' => true, 'borderColor' => '000000'));
+                }
+                else
+                {
                     $plantillaword->setValue('REPONSABLE2_DOCUMENTO', 'FALTA CARGAR IMAGEN DESDE EL SISTEMA.');
                 }
-            } else {
+            }
+            else
+            {
                 $plantillaword->setValue('REPONSABLE2_DOCUMENTO', 'FALTA CARGAR IMAGEN DESDE EL SISTEMA.');
             }
+                
 
-
-            $plantillaword->setValue('REPONSABLE2', $reporte->reporteaire_responsable2 . "<w:br/>" . $reporte->reporteaire_responsable2cargo);
+            $plantillaword->setValue('REPONSABLE2', $reporte->reporteaire_responsable2."<w:br/>".$reporte->reporteaire_responsable2cargo);
 
 
             // TABLA ANEXO 1, Memoria fotográfica  - CREAR VARIABLES
@@ -3668,8 +3889,8 @@ class reporteairewordController extends Controller
                                 FROM
                                     proyectoevidenciafoto
                                 WHERE
-                                    proyectoevidenciafoto.proyecto_id = ' . $proyecto_id . '
-                                    AND proyectoevidenciafoto.agente_nombre LIKE "%' . $agente_nombre . '%" 
+                                    proyectoevidenciafoto.proyecto_id = '.$proyecto_id.'
+                                    AND proyectoevidenciafoto.agente_nombre LIKE "%'.$agente_nombre.'%" 
                                 ORDER BY
                                     proyectoevidenciafoto.proyectoevidenciafoto_nopunto ASC');
 
@@ -3678,44 +3899,46 @@ class reporteairewordController extends Controller
             $ancho_col_2 = 4750;
 
             // Crear tabla
-            $table = null;
+            $table = null;            
             $table = new Table(array('name' => $fuente, 'borderSize' => 1, 'borderColor' => '000000', 'cellMargin' => 40, 'unit' => TblWidth::TWIP));
 
 
             $table->addRow(400, array('tblHeader' => true));
-            $table->addCell(($ancho_col_1 + $ancho_col_2), array('gridSpan' => 2, 'valign' => 'center', 'borderTopColor' => 'ffffff', 'borderTopSize' => 1, 'borderRightColor' => 'ffffff', 'borderRightSize' => 1, 'borderBottomColor' => '000000', 'borderBottomSize' => 1, 'borderLeftColor' => 'ffffff', 'borderLeftSize' => 1,))->addTextRun($centrado)->addText('Memoria fotográfica', array('color' => '000000', 'size' => 12, 'bold' => true, 'name' => $fuente));
+            $table->addCell(($ancho_col_1 + $ancho_col_2), array('gridSpan' => 2, 'valign' => 'center', 'borderTopColor' =>'ffffff', 'borderTopSize' => 1, 'borderRightColor' =>'ffffff', 'borderRightSize' => 1, 'borderBottomColor' =>'000000', 'borderBottomSize' => 1, 'borderLeftColor' =>'ffffff', 'borderLeftSize' => 1,))->addTextRun($centrado)->addText('Memoria fotográfica', array('color' => '000000', 'size' => 12, 'bold' => true, 'name' => $fuente));
             $table->addRow(400, array('tblHeader' => true));
-            $table->addCell(($ancho_col_1 + $ancho_col_2), array('gridSpan' => 2, 'valign' => 'center', 'bgColor' => '0C3F64'))->addTextRun($centrado)->addText('Evaluación de ' . $agente_nombre, $encabezado_texto);
+            $table->addCell(($ancho_col_1 + $ancho_col_2), array('gridSpan' => 2, 'valign' => 'center', 'bgColor' => '0C3F64'))->addTextRun($centrado)->addText('Evaluación de '.$agente_nombre, $encabezado_texto);
 
 
-            if (count($fotos) > 0) {
-                for ($i = 0; $i < count($fotos); $i += 4) {
-                    $foto1 = '';
-                    $descripcion1 = '';
-                    if ($i < count($fotos)) {
-                        $foto1 = '${PUNTO_' . $i . '_FOTO}';
-                        $descripcion1 = '${PUNTO_' . $i . '_DESCRIPCION}';
+            if (count($fotos) > 0)
+            {
+                for ($i = 0; $i < count($fotos); $i += 4)
+                {
+                    $foto1 = ''; $descripcion1 = '';
+                    if ($i < count($fotos))
+                    {
+                        $foto1 = '${PUNTO_'.$i.'_FOTO}';
+                        $descripcion1 = '${PUNTO_'.$i.'_DESCRIPCION}';
                     }
 
-                    $foto2 = '';
-                    $descripcion2 = '';
-                    if (($i + 1) < count($fotos)) {
-                        $foto2 = '${PUNTO_' . ($i + 1) . '_FOTO}';
-                        $descripcion2 = '${PUNTO_' . ($i + 1) . '_DESCRIPCION}';
+                    $foto2 = ''; $descripcion2 = '';
+                    if (($i+1) < count($fotos))
+                    {
+                        $foto2 = '${PUNTO_'.($i+1).'_FOTO}';
+                        $descripcion2 = '${PUNTO_'.($i+1).'_DESCRIPCION}';
                     }
 
-                    $foto3 = '';
-                    $descripcion3 = '';
-                    if (($i + 2) < count($fotos)) {
-                        $foto3 = '${PUNTO_' . ($i + 2) . '_FOTO}';
-                        $descripcion3 = '${PUNTO_' . ($i + 2) . '_DESCRIPCION}';
+                    $foto3 = ''; $descripcion3 = '';
+                    if (($i+2) < count($fotos))
+                    {
+                        $foto3 = '${PUNTO_'.($i+2).'_FOTO}';
+                        $descripcion3 = '${PUNTO_'.($i+2).'_DESCRIPCION}';
                     }
 
-                    $foto4 = '';
-                    $descripcion4 = '';
-                    if (($i + 3) < count($fotos)) {
-                        $foto4 = '${PUNTO_' . ($i + 3) . '_FOTO}';
-                        $descripcion4 = '${PUNTO_' . ($i + 3) . '_DESCRIPCION}';
+                    $foto4 = ''; $descripcion4 = '';
+                    if (($i+3) < count($fotos))
+                    {
+                        $foto4 = '${PUNTO_'.($i+3).'_FOTO}';
+                        $descripcion4 = '${PUNTO_'.($i+3).'_DESCRIPCION}';
                     }
 
                     $table->addRow(); //fila
@@ -3724,8 +3947,9 @@ class reporteairewordController extends Controller
                     $table->addRow(1000); //fila
                     $table->addCell($ancho_col_1, $celda)->addTextRun($centrado)->addText($descripcion1, $texto);
                     $table->addCell($ancho_col_2, $celda)->addTextRun($centrado)->addText($descripcion2, $texto);
-
-                    if (($i + 2) < count($fotos)) {
+                    
+                    if (($i+2) < count($fotos))
+                    {
                         $table->addRow(); //fila
                         $table->addCell($ancho_col_1, $celda)->addTextRun($centrado)->addText($foto3, $texto);
                         $table->addCell($ancho_col_2, $celda)->addTextRun($centrado)->addText($foto4, $texto);
@@ -3733,11 +3957,13 @@ class reporteairewordController extends Controller
                         $table->addCell($ancho_col_1, $celda)->addTextRun($centrado)->addText($descripcion3, $texto);
                         $table->addCell($ancho_col_2, $celda)->addTextRun($centrado)->addText($descripcion4, $texto);
                     }
-                }
+                }            
 
 
                 $plantillaword->setComplexBlock('TABLA_MEMORIA_FOTOGRAFICA', $table);
-            } else {
+            }
+            else
+            {
                 $plantillaword->setValue('TABLA_MEMORIA_FOTOGRAFICA', 'NO SE ENCONTRARON FOTOS QUE MOSTRAR.');
             }
 
@@ -3755,16 +3981,16 @@ class reporteairewordController extends Controller
                                             FROM
                                                 reporteplanoscarpetas
                                             WHERE
-                                                reporteplanoscarpetas.proyecto_id = ' . $proyecto_id . ' 
-                                                AND reporteplanoscarpetas.registro_id = ' . $reporteregistro_id . ' 
-                                                AND reporteplanoscarpetas.agente_nombre LIKE "%' . $agente_nombre . '%"');
+                                                reporteplanoscarpetas.proyecto_id = '.$proyecto_id.' 
+                                                AND reporteplanoscarpetas.registro_id = '.$reporteregistro_id.' 
+                                                AND reporteplanoscarpetas.agente_nombre LIKE "%'.$agente_nombre.'%"');
 
 
-            $planoscarpetasvariales = '';
-            $planocontador = 0;
-            $plano_archivo = array();
-            if (count($planoscarpetas) > 0) {
-                foreach ($planoscarpetas as $key => $carpeta) {
+            $planoscarpetasvariales = ''; $planocontador = 0; $plano_archivo = array();
+            if (count($planoscarpetas) > 0)
+            {
+                foreach ($planoscarpetas as $key => $carpeta)
+                {
                     $planos = DB::select('SELECT
                                                 proyectoevidenciaplano.proyecto_id,
                                                 proyectoevidenciaplano.agente_id,
@@ -3774,26 +4000,29 @@ class reporteairewordController extends Controller
                                             FROM
                                                 proyectoevidenciaplano 
                                             WHERE
-                                                proyectoevidenciaplano.proyecto_id = ' . $carpeta->proyecto_id . ' 
-                                                AND proyectoevidenciaplano.agente_nombre LIKE "%' . $carpeta->agente_nombre . '%" 
-                                                AND proyectoevidenciaplano.proyectoevidenciaplano_carpeta = "' . $carpeta->reporteplanoscarpetas_nombre . '" 
+                                                proyectoevidenciaplano.proyecto_id = '.$carpeta->proyecto_id.' 
+                                                AND proyectoevidenciaplano.agente_nombre LIKE "%'.$carpeta->agente_nombre.'%" 
+                                                AND proyectoevidenciaplano.proyectoevidenciaplano_carpeta = "'.$carpeta->reporteplanoscarpetas_nombre.'" 
                                             ORDER BY
                                                 proyectoevidenciaplano.proyectoevidenciaplano_carpeta ASC,
                                                 proyectoevidenciaplano.proyectoevidenciaplano_archivo ASC');
 
-                    foreach ($planos as $key => $plano) {
-                        $planoscarpetasvariales .= '${PLANO_' . $planocontador . '_FOTO}';
+                    foreach ($planos as $key => $plano)
+                    {
+                        $planoscarpetasvariales .= '${PLANO_'.$planocontador.'_FOTO}';
 
                         $plano_archivo[] = $plano->proyectoevidenciaplano_archivo;
 
                         $planocontador += 1;
                     }
                 }
-            } else {
+            }
+            else
+            {
                 $plano_archivo = array();
                 $planoscarpetasvariales = 'NO SE ENCONTRARÓN PLANOS QUE MOSTRAR.';
             }
-
+                
 
             $plantillaword->setValue('PLANOS', $planoscarpetasvariales);
 
@@ -3803,7 +4032,7 @@ class reporteairewordController extends Controller
 
 
             // Crear tabla
-            $table = null;
+            $table = null;            
             $table = new Table(array('name' => $fuente, 'borderSize' => 1, 'borderColor' => '000000', 'cellMargin' => 40, 'unit' => TblWidth::TWIP));
 
 
@@ -3835,15 +4064,15 @@ class reporteairewordController extends Controller
                                         reporteequiposutilizados
                                         LEFT JOIN equipo ON reporteequiposutilizados.equipo_id = equipo.id
                                     WHERE
-                                        reporteequiposutilizados.proyecto_id = ' . $proyecto_id . ' 
-                                        AND reporteequiposutilizados.registro_id = ' . $reporteregistro_id . ' 
-                                        AND reporteequiposutilizados.agente_nombre = "' . $agente_nombre . '"
+                                        reporteequiposutilizados.proyecto_id = '.$proyecto_id.' 
+                                        AND reporteequiposutilizados.registro_id = '.$reporteregistro_id.' 
+                                        AND reporteequiposutilizados.agente_nombre = "'.$agente_nombre.'"
                                     ORDER BY
                                         equipo.equipo_Descripcion ASC,
                                         equipo.equipo_Marca ASC,
                                         equipo.equipo_Modelo ASC,
                                         equipo.equipo_Serie ASC');
-
+            
 
             // encabezado tabla
             $table->addRow(200, array('tblHeader' => true));
@@ -3857,17 +4086,20 @@ class reporteairewordController extends Controller
             $table->addCell($ancho_col_3, $encabezado_celda)->addTextRun($centrado)->addText('Modelo', $encabezado_texto);
             $table->addCell($ancho_col_4, $encabezado_celda)->addTextRun($centrado)->addText('No. de serie', $encabezado_texto);
             $table->addCell($ancho_col_5, $encabezado_celda)->addTextRun($centrado)->addText('Vigencia de<w:br/>calibración', $encabezado_texto);
+            
 
-
-            $numero_fila = 0;
-            $total_cartas = 0;
-            foreach ($sql as $key => $value) {
+            $numero_fila = 0; $total_cartas = 0;
+            foreach ($sql as $key => $value) 
+            {
                 $table->addRow(); //fila
 
-                if ($value->reporteequiposutilizados_cartacalibracion) {
-                    $table->addCell($ancho_col_1, $celda)->addTextRun($centrado)->addText(htmlspecialchars('* ' . $value->equipo_Descripcion), $texto);
+                if ($value->reporteequiposutilizados_cartacalibracion)
+                {
+                    $table->addCell($ancho_col_1, $celda)->addTextRun($centrado)->addText(htmlspecialchars('* '.$value->equipo_Descripcion), $texto);
                     $total_cartas += 1;
-                } else {
+                }
+                else
+                {
                     $table->addCell($ancho_col_1, $celda)->addTextRun($centrado)->addText(htmlspecialchars($value->equipo_Descripcion), $texto);
                 }
 
@@ -3881,7 +4113,8 @@ class reporteairewordController extends Controller
             $plantillaword->setComplexBlock('EQUIPO_UTILIZADO', $table);
 
 
-            if ($total_cartas > 0) {
+            if ($total_cartas > 0)
+            {
                 $plantillaword->setValue('EQUIPO_UTILIZADO_NOTA', '<w:br/>
                                                                     <w:rPr>
                                                                         <w:b w:val="true"/>
@@ -3891,7 +4124,9 @@ class reporteairewordController extends Controller
                                                                         <w:b w:val="false"/>
                                                                         <w:t xml:space="preserve">La calibración tiene una extensión en el tiempo de vigencia avalada mediante una carta emitida por el laboratorio acreditado misma que se encuentra disponible para consulta en el anexo 5.</w:t>
                                                                     </w:rPr>');
-            } else {
+            }
+            else
+            {
                 $plantillaword->setValue('EQUIPO_UTILIZADO_NOTA', '');
             }
 
@@ -3911,8 +4146,8 @@ class reporteairewordController extends Controller
                                 FROM
                                     reportenotas
                                 WHERE
-                                    reportenotas.proyecto_id = ' . $proyecto_id . ' 
-                                    AND reportenotas.registro_id = ' . $reporteregistro_id . ' 
+                                    reportenotas.proyecto_id = '.$proyecto_id.' 
+                                    AND reportenotas.registro_id = '.$reporteregistro_id.' 
                                     AND reportenotas.agente_id = 8
                                 ORDER BY
                                     reportenotas.reportenotas_tipo ASC,
@@ -3930,33 +4165,41 @@ class reporteairewordController extends Controller
             $total_stps = 0;
             $total_ema = 0;
 
-            foreach ($sql as $key => $value) {
-                if (($value->reportenotas_tipo + 0) == 1) // STPS
+            foreach ($sql as $key => $value)
+            {
+                if (($value->reportenotas_tipo+0) == 1) // STPS
                 {
                     $total_stps += 1;
 
                     $table->addRow(12300); //fila
-                    $table->addCell($ancho_col_1, array('gridSpan' => 2, 'valign' => 'center', 'borderTopColor' => 'ffffff', 'borderTopSize' => 1, 'borderRightColor' => 'ffffff', 'borderRightSize' => 1, 'borderBottomColor' => 'ffffff', 'borderBottomSize' => 1, 'borderLeftColor' => 'ffffff', 'borderLeftSize' => 1))->addTextRun(array('align' => 'center', 'spaceBefore' => 0, 'spaceAfter' => 0, 'lineHeight' => 1.15))->addText('</w:t></w:r><w:r><w:rPr><w:b/></w:rPr><w:t>Nota aclaratoria</w:t></w:r><w:r><w:t>:<w:br/><w:br/>' . $value->reportenotas_descripcion, array('color' => '000000', 'size' => 12, 'bold' => false, 'name' => $fuente));
-                } else //EMA
+                    $table->addCell($ancho_col_1, array('gridSpan' => 2, 'valign' => 'center', 'borderTopColor' =>'ffffff', 'borderTopSize' => 1, 'borderRightColor' =>'ffffff', 'borderRightSize' => 1, 'borderBottomColor' =>'ffffff', 'borderBottomSize' => 1, 'borderLeftColor' =>'ffffff', 'borderLeftSize' => 1))->addTextRun(array('align' => 'center', 'spaceBefore' => 0, 'spaceAfter' => 0, 'lineHeight' => 1.15))->addText('</w:t></w:r><w:r><w:rPr><w:b/></w:rPr><w:t>Nota aclaratoria</w:t></w:r><w:r><w:t>:<w:br/><w:br/>'.$value->reportenotas_descripcion, array('color' => '000000', 'size' => 12, 'bold' => false, 'name' => $fuente));
+                }
+                else //EMA
                 {
                     $total_ema += 1;
 
                     $table2->addRow(12300); //fila
-                    $table2->addCell($ancho_col_1, array('gridSpan' => 2, 'valign' => 'center', 'borderTopColor' => 'ffffff', 'borderTopSize' => 1, 'borderRightColor' => 'ffffff', 'borderRightSize' => 1, 'borderBottomColor' => 'ffffff', 'borderBottomSize' => 1, 'borderLeftColor' => 'ffffff', 'borderLeftSize' => 1))->addTextRun(array('align' => 'center', 'spaceBefore' => 0, 'spaceAfter' => 0, 'lineHeight' => 1.15))->addText('</w:t></w:r><w:r><w:rPr><w:b/></w:rPr><w:t>Nota aclaratoria</w:t></w:r><w:r><w:t>:<w:br/><w:br/>' . $value->reportenotas_descripcion, array('color' => '000000', 'size' => 12, 'bold' => false, 'name' => $fuente));
-                }
+                    $table2->addCell($ancho_col_1, array('gridSpan' => 2, 'valign' => 'center', 'borderTopColor' =>'ffffff', 'borderTopSize' => 1, 'borderRightColor' =>'ffffff', 'borderRightSize' => 1, 'borderBottomColor' =>'ffffff', 'borderBottomSize' => 1, 'borderLeftColor' =>'ffffff', 'borderLeftSize' => 1))->addTextRun(array('align' => 'center', 'spaceBefore' => 0, 'spaceAfter' => 0, 'lineHeight' => 1.15))->addText('</w:t></w:r><w:r><w:rPr><w:b/></w:rPr><w:t>Nota aclaratoria</w:t></w:r><w:r><w:t>:<w:br/><w:br/>'.$value->reportenotas_descripcion, array('color' => '000000', 'size' => 12, 'bold' => false, 'name' => $fuente));
+                }                
             }
 
 
-            if ($total_stps > 0) {
+            if ($total_stps > 0)
+            {
                 $plantillaword->setComplexBlock('NOTA_ACLARATORIA_STPS', $table);
-            } else {
+            }
+            else
+            {
                 $plantillaword->setValue('NOTA_ACLARATORIA_STPS', 'No se encontraron notas aclaratorías');
             }
 
 
-            if ($total_ema > 0) {
+            if ($total_ema > 0)
+            {
                 $plantillaword->setComplexBlock('NOTA_ACLARATORIA_EMA', $table2);
-            } else {
+            }
+            else
+            {
                 $plantillaword->setValue('NOTA_ACLARATORIA_EMA', 'No se encontraron notas aclaratorías');
             }
 
@@ -3970,12 +4213,12 @@ class reporteairewordController extends Controller
 
             // GUARDAR
             Storage::makeDirectory('reportes/informes'); //crear directorio
-            $plantillaword->saveAs(storage_path('app/reportes/informes/Informe_' . $agente_nombre . '_' . $proyecto->proyecto_folio . '_TEMPORAL.docx')); //GUARDAR Y CREAR archivo word TEMPORAL
+            $plantillaword->saveAs(storage_path('app/reportes/informes/Informe_'.$agente_nombre.'_'.$proyecto->proyecto_folio.'_TEMPORAL.docx')); //GUARDAR Y CREAR archivo word TEMPORAL
 
             // sleep(1);
 
             // ABRIR NUEVA PLANTILLA
-            $plantillaword = new TemplateProcessor(storage_path('app/reportes/informes/Informe_' . $agente_nombre . '_' . $proyecto->proyecto_folio . '_TEMPORAL.docx')); //Abrir plantilla TEMPORAL
+            $plantillaword = new TemplateProcessor(storage_path('app/reportes/informes/Informe_'.$agente_nombre.'_'.$proyecto->proyecto_folio.'_TEMPORAL.docx'));//Abrir plantilla TEMPORAL
 
 
             /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -3984,48 +4227,76 @@ class reporteairewordController extends Controller
             // TABLA ANEXO 1, Memoria fotográfica - AGREGAR FOTOS
             //================================================================================
 
-            for ($i = 0; $i < count($fotos); $i += 4) {
-                if ($i < count($fotos)) {
-                    if (Storage::exists($fotos[$i]->proyectoevidenciafoto_archivo)) {
-                        $plantillaword->setImageValue('PUNTO_' . $i . '_FOTO', array('path' => storage_path('app/' . $fotos[$i]->proyectoevidenciafoto_archivo), 'height' => 284, 'width' => 284, 'ratio' => false, 'borderColor' => '000000'));
-                    } else {
-                        $plantillaword->setValue('PUNTO_' . $i . '_FOTO', 'NO SE ENCONTRÓ LA FOTO');
+            for ($i = 0; $i < count($fotos); $i += 4)
+            {
+                if ($i < count($fotos))
+                {
+                    if (Storage::exists($fotos[$i]->proyectoevidenciafoto_archivo))
+                    {
+                        $plantillaword->setImageValue('PUNTO_'.$i.'_FOTO', array('path' => storage_path('app/'.$fotos[$i]->proyectoevidenciafoto_archivo), 'height' => 284, 'width' => 284, 'ratio' => false, 'borderColor' => '000000'));
+                    }
+                    else
+                    {
+                        $plantillaword->setValue('PUNTO_'.$i.'_FOTO', 'NO SE ENCONTRÓ LA FOTO');
                     }
 
-                    $plantillaword->setValue('PUNTO_' . $i . '_DESCRIPCION', "Punto " . $fotos[$i]->proyectoevidenciafoto_nopunto . " " . $fotos[$i]->proyectoevidenciafoto_descripcion);
+                    // $plantillaword->setValue('PUNTO_'.$i.'_DESCRIPCION', "Punto ".$fotos[$i]->proyectoevidenciafoto_nopunto." ".$fotos[$i]->proyectoevidenciafoto_descripcion);
+                    $plantillaword->setValue('PUNTO_' . $i . '_DESCRIPCION', $fotos[$i]->proyectoevidenciafoto_descripcion);
+                
                 }
 
 
-                if (($i + 1) < count($fotos)) {
-                    if (Storage::exists($fotos[$i]->proyectoevidenciafoto_archivo)) {
-                        $plantillaword->setImageValue('PUNTO_' . ($i + 1) . '_FOTO', array('path' => storage_path('app/' . $fotos[($i + 1)]->proyectoevidenciafoto_archivo), 'height' => 284, 'width' => 284, 'ratio' => false, 'borderColor' => '000000'));
-                    } else {
-                        $plantillaword->setValue('PUNTO_' . ($i + 1) . '_FOTO', 'NO SE ENCONTRÓ LA FOTO');
+                if (($i+1) < count($fotos))
+                {
+                    if (Storage::exists($fotos[$i]->proyectoevidenciafoto_archivo))
+                    {
+                        $plantillaword->setImageValue('PUNTO_'.($i+1).'_FOTO', array('path' => storage_path('app/'.$fotos[($i+1)]->proyectoevidenciafoto_archivo), 'height' => 284, 'width' => 284, 'ratio' => false, 'borderColor' => '000000'));
+                    }
+                    else
+                    {
+                        $plantillaword->setValue('PUNTO_'.($i+1).'_FOTO', 'NO SE ENCONTRÓ LA FOTO');
                     }
 
-                    $plantillaword->setValue('PUNTO_' . ($i + 1) . '_DESCRIPCION', "Punto " . $fotos[($i + 1)]->proyectoevidenciafoto_nopunto . " " . $fotos[($i + 1)]->proyectoevidenciafoto_descripcion);
+                    // $plantillaword->setValue('PUNTO_'.($i+1).'_DESCRIPCION', "Punto ".$fotos[($i+1)]->proyectoevidenciafoto_nopunto." ".$fotos[($i+1)]->proyectoevidenciafoto_descripcion);
+                    $plantillaword->setValue('PUNTO_' . ($i + 1) . '_DESCRIPCION', $fotos[($i + 1)]->proyectoevidenciafoto_descripcion);
+                
                 }
 
 
-                if (($i + 2) < count($fotos)) {
-                    if (Storage::exists($fotos[$i]->proyectoevidenciafoto_archivo)) {
-                        $plantillaword->setImageValue('PUNTO_' . ($i + 2) . '_FOTO', array('path' => storage_path('app/' . $fotos[($i + 2)]->proyectoevidenciafoto_archivo), 'height' => 284, 'width' => 284, 'ratio' => false, 'borderColor' => '000000'));
-                    } else {
-                        $plantillaword->setValue('PUNTO_' . ($i + 2) . '_FOTO', 'NO SE ENCONTRÓ LA FOTO');
+                if (($i+2) < count($fotos))
+                {
+                    if (Storage::exists($fotos[$i]->proyectoevidenciafoto_archivo))
+                    {
+                        $plantillaword->setImageValue('PUNTO_'.($i+2).'_FOTO', array('path' => storage_path('app/'.$fotos[($i+2)]->proyectoevidenciafoto_archivo), 'height' => 284, 'width' => 284, 'ratio' => false, 'borderColor' => '000000'));
+                    }
+                    else
+                    {
+                        $plantillaword->setValue('PUNTO_'.($i+2).'_FOTO', 'NO SE ENCONTRÓ LA FOTO');
                     }
 
-                    $plantillaword->setValue('PUNTO_' . ($i + 2) . '_DESCRIPCION', "Punto " . $fotos[($i + 2)]->proyectoevidenciafoto_nopunto . " " . $fotos[($i + 2)]->proyectoevidenciafoto_descripcion);
+                    // $plantillaword->setValue('PUNTO_'.($i+2).'_DESCRIPCION', "Punto ".$fotos[($i+2)]->proyectoevidenciafoto_nopunto." ".$fotos[($i+2)]->proyectoevidenciafoto_descripcion);
+                    $plantillaword->setValue('PUNTO_' . ($i + 2) . '_DESCRIPCION', $fotos[($i + 2)]->proyectoevidenciafoto_descripcion);
+                
+                
+                
                 }
 
 
-                if (($i + 3) < count($fotos)) {
-                    if (Storage::exists($fotos[$i]->proyectoevidenciafoto_archivo)) {
-                        $plantillaword->setImageValue('PUNTO_' . ($i + 3) . '_FOTO', array('path' => storage_path('app/' . $fotos[($i + 3)]->proyectoevidenciafoto_archivo), 'height' => 284, 'width' => 284, 'ratio' => false, 'borderColor' => '000000'));
-                    } else {
-                        $plantillaword->setValue('PUNTO_' . ($i + 3) . '_FOTO', 'NO SE ENCONTRÓ LA FOTO');
+                if (($i+3) < count($fotos))
+                {
+                    if (Storage::exists($fotos[$i]->proyectoevidenciafoto_archivo))
+                    {
+                        $plantillaword->setImageValue('PUNTO_'.($i+3).'_FOTO', array('path' => storage_path('app/'.$fotos[($i+3)]->proyectoevidenciafoto_archivo), 'height' => 284, 'width' => 284, 'ratio' => false, 'borderColor' => '000000'));
+                    }
+                    else
+                    {
+                        $plantillaword->setValue('PUNTO_'.($i+3).'_FOTO', 'NO SE ENCONTRÓ LA FOTO');
                     }
 
-                    $plantillaword->setValue('PUNTO_' . ($i + 3) . '_DESCRIPCION', "Punto " . $fotos[($i + 3)]->proyectoevidenciafoto_nopunto . " " . $fotos[($i + 3)]->proyectoevidenciafoto_descripcion);
+                    // $plantillaword->setValue('PUNTO_'.($i+3).'_DESCRIPCION', "Punto ".$fotos[($i+3)]->proyectoevidenciafoto_nopunto." ".$fotos[($i+3)]->proyectoevidenciafoto_descripcion);
+                    $plantillaword->setValue('PUNTO_' . ($i + 3) . '_DESCRIPCION', $fotos[($i + 3)]->proyectoevidenciafoto_descripcion);
+                
+                
                 }
             }
 
@@ -4034,11 +4305,15 @@ class reporteairewordController extends Controller
             //================================================================================
 
 
-            for ($i = 0; $i < count($plano_archivo); $i++) {
-                if (Storage::exists($plano_archivo[$i])) {
-                    $plantillaword->setImageValue('PLANO_' . $i . '_FOTO', array('path' => storage_path('app/' . $plano_archivo[$i]), 'height' => 690, 'width' => 588, 'ratio' => false, 'borderColor' => '000000'));
-                } else {
-                    $plantillaword->setValue('PLANO_' . $i . '_FOTO', 'NO SE ENCONTRÓ EL PLANO');
+            for ($i = 0; $i < count($plano_archivo); $i ++)
+            {
+                if (Storage::exists($plano_archivo[$i]))
+                {
+                    $plantillaword->setImageValue('PLANO_'.$i.'_FOTO', array('path' => storage_path('app/'.$plano_archivo[$i]), 'height' => 690, 'width' => 588, 'ratio' => false, 'borderColor' => '000000'));
+                }
+                else
+                {
+                    $plantillaword->setValue('PLANO_'.$i.'_FOTO', 'NO SE ENCONTRÓ EL PLANO');
                 }
             }
 
@@ -4061,9 +4336,9 @@ class reporteairewordController extends Controller
                                         INNER JOIN equipo ON reporteequiposutilizados.equipo_id = equipo.id
                                         INNER JOIN equipos_documentos ON equipos_documentos.EQUIPO_ID = equipo.id
                                         WHERE
-                                            reporteequiposutilizados.proyecto_id = ' . $proyecto_id . '
-                                            AND reporteequiposutilizados.registro_id = ' . $reporteregistro_id . '
-                                            AND reporteequiposutilizados.agente_nombre = "' . $agente_nombre . '"
+                                            reporteequiposutilizados.proyecto_id = '.$proyecto_id.'
+                                            AND reporteequiposutilizados.registro_id = '.$reporteregistro_id.'
+                                            AND reporteequiposutilizados.agente_nombre = "'.$agente_nombre.'"
                                             AND equipos_documentos.DOCUMENTO_TIPO = 4
                                             AND equipos_documentos.RUTA_DOCUMENTO <> ""
                                     )
@@ -4077,9 +4352,9 @@ class reporteairewordController extends Controller
                                         INNER JOIN equipo ON reporteequiposutilizados.equipo_id = equipo.id
                                         INNER JOIN equipos_documentos ON equipos_documentos.EQUIPO_ID = equipo.id
                                         WHERE
-                                            reporteequiposutilizados.proyecto_id = ' . $proyecto_id . '
-                                            AND reporteequiposutilizados.registro_id = ' . $reporteregistro_id . '
-                                            AND reporteequiposutilizados.agente_nombre = "' . $agente_nombre . '"
+                                            reporteequiposutilizados.proyecto_id = '.$proyecto_id.'
+                                            AND reporteequiposutilizados.registro_id = '.$reporteregistro_id.'
+                                            AND reporteequiposutilizados.agente_nombre = "'.$agente_nombre.'"
                                             #AND reporteequiposutilizados.reporteequiposutilizados_cartacalibracion = 1
                                             AND equipos_documentos.DOCUMENTO_TIPO = 5
                                     )
@@ -4091,30 +4366,31 @@ class reporteairewordController extends Controller
                                         FROM
                                             reporteanexos
                                         WHERE
-                                            reporteanexos.proyecto_id = ' . $proyecto_id . '
-                                            AND reporteanexos.registro_id = ' . $reporteregistro_id . '
-                                            AND reporteanexos.agente_nombre = "' . $agente_nombre . '"
+                                            reporteanexos.proyecto_id = '.$proyecto_id.'
+                                            AND reporteanexos.registro_id = '.$reporteregistro_id.'
+                                            AND reporteanexos.agente_nombre = "'.$agente_nombre.'"
                                     )
                                 ) AS ANEXO');
-
+        
 
             /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
             // GUARDAR Y DESCARGAR INFORME FINAL
 
-
-            $informe_nombre = 'Informe de ' . $agente_nombre . ' - ' . $proyecto->proyecto_folio . ' (' . $proyecto->proyecto_clienteinstalacion . ').docx';
+            
+            $informe_nombre = 'Informe de '.$agente_nombre.' - '.$proyecto->proyecto_folio.' ('.$proyecto->proyecto_clienteinstalacion.').docx';
 
 
             // GUARDAR WORD FINAL
-            $plantillaword->saveAs(storage_path('app/reportes/informes/' . $informe_nombre)); //crear archivo word
+            $plantillaword->saveAs(storage_path('app/reportes/informes/'.$informe_nombre)); //crear archivo word
 
-
+            
             // ELIMINAR TEMPORAL
-            if (Storage::exists('reportes/informes/Informe_' . $agente_nombre . '_' . $proyecto->proyecto_folio . '_TEMPORAL.docx')) {
-                Storage::delete('reportes/informes/Informe_' . $agente_nombre . '_' . $proyecto->proyecto_folio . '_TEMPORAL.docx');
+            if (Storage::exists('reportes/informes/Informe_'.$agente_nombre.'_'.$proyecto->proyecto_folio.'_TEMPORAL.docx'))
+            {
+                Storage::delete('reportes/informes/Informe_'.$agente_nombre.'_'.$proyecto->proyecto_folio.'_TEMPORAL.docx');
             }
 
-
+            
             /*
             //================================================================================
             // CREAR .ZIP
@@ -4193,19 +4469,22 @@ class reporteairewordController extends Controller
                 // Define Dir Folder
                 $zip_ruta = storage_path('app/reportes/informes');
                 // Zip File Name
-                $zip_nombre = 'Informe de ' . $agente_nombre . ' - ' . $proyecto->proyecto_folio . ' (' . $proyecto->proyecto_clienteinstalacion . ') + Anexos.zip';
+                $zip_nombre = 'Informe de '.$agente_nombre.' - '.$proyecto->proyecto_folio.' ('.$proyecto->proyecto_clienteinstalacion.') + Anexos.zip';
                 // Create ZipArchive Obj
                 $zip = new ZipArchive;
 
-                if ($zip->open($zip_ruta . '/' . $zip_nombre, ZipArchive::CREATE) === TRUE) {
+                if ($zip->open($zip_ruta . '/' . $zip_nombre, ZipArchive::CREATE) === TRUE)
+                {
                     // Add File in ZipArchive
-                    $zip->addFile(storage_path('app/reportes/informes/' . $informe_nombre), $informe_nombre); //Word
+                    $zip->addFile(storage_path('app/reportes/informes/'.$informe_nombre), $informe_nombre); //Word
 
 
-                    foreach ($anexos_lista as $key => $file) {
-                        if (Storage::exists($file->archivo)) {
+                    foreach($anexos_lista as $key => $file)
+                    {
+                        if (Storage::exists($file->archivo))
+                        {
                             $extencion = explode(".", $file->archivo);
-                            $zip->addFile(storage_path('app/' . $file->archivo), ($key + 1) . '.- ' . $file->nombre . '.' . $extencion[1]); // Pdf Anexos
+                            $zip->addFile(storage_path('app/'.$file->archivo), ($key+1).'.- '.$file->nombre.'.'.$extencion[1]); // Pdf Anexos
                         }
                     }
 
@@ -4219,51 +4498,56 @@ class reporteairewordController extends Controller
 
 
                 // ELIMINAR INFORME word (PORQUE YA ESTÁ EN EL ZIP)
-                if (Storage::exists('reportes/informes/' . $informe_nombre)) {
-                    Storage::delete('reportes/informes/' . $informe_nombre);
+                if (Storage::exists('reportes/informes/'.$informe_nombre))
+                {
+                    Storage::delete('reportes/informes/'.$informe_nombre);
                 }
 
 
                 $dato["msj"] = 'Informe creado correctamente';
-            } else // Crear informes historial y guardar en base de datos
+            }
+            else // Crear informes historial y guardar en base de datos
             {
                 //================================================================================
                 // CREAR .ZIP INFORME
 
 
                 // Define Dir Folder
-                $zip_ruta_servidor = 'reportes/proyecto/' . $proyecto_id . '/' . $agente_nombre . '/' . $reporteregistro_id . '/revisiones/' . $request->ultimarevision_id;
+                $zip_ruta_servidor = 'reportes/proyecto/'.$proyecto_id.'/'.$agente_nombre.'/'.$reporteregistro_id.'/revisiones/'.$request->ultimarevision_id;
                 Storage::makeDirectory($zip_ruta_servidor); //crear directorio
-                $zip_ruta_completa = storage_path('app/reportes/proyecto/' . $proyecto_id . '/' . $agente_nombre . '/' . $reporteregistro_id . '/revisiones/' . $request->ultimarevision_id);
-
+                $zip_ruta_completa = storage_path('app/reportes/proyecto/'.$proyecto_id.'/'.$agente_nombre.'/'.$reporteregistro_id.'/revisiones/'.$request->ultimarevision_id);
+                
                 // Zip File Name
-                $zip_nombre = 'Informe de ' . $agente_nombre . ' - ' . $proyecto->proyecto_folio . ' (' . $proyecto->proyecto_clienteinstalacion . ') + Anexos.zip';
-
+                $zip_nombre = 'Informe de '.$agente_nombre.' - '.$proyecto->proyecto_folio.' ('.$proyecto->proyecto_clienteinstalacion.') + Anexos.zip';
+                
                 // Create ZipArchive Obj
                 $zip = new ZipArchive;
 
-                if ($zip->open($zip_ruta_completa . '/' . $zip_nombre, ZipArchive::CREATE) === TRUE) {
+                if ($zip->open($zip_ruta_completa . '/' . $zip_nombre, ZipArchive::CREATE) === TRUE)
+                {
                     // Add File in ZipArchive
-                    $zip->addFile(storage_path('app/reportes/informes/' . $informe_nombre), $informe_nombre); //Word
+                    $zip->addFile(storage_path('app/reportes/informes/'.$informe_nombre), $informe_nombre); //Word
 
 
-                    foreach ($anexos_lista as $key => $file) {
-                        if (Storage::exists($file->archivo)) {
+                    foreach($anexos_lista as $key => $file)
+                    {
+                        if (Storage::exists($file->archivo))
+                        {
                             $extencion = explode(".", $file->archivo);
-                            $zip->addFile(storage_path('app/' . $file->archivo), ($key + 1) . '.- ' . $file->nombre . '.' . $extencion[1]); // Pdf Anexos
+                            $zip->addFile(storage_path('app/'.$file->archivo), ($key+1).'.- '.$file->nombre.'.'.$extencion[1]); // Pdf Anexos
                         }
                     }
 
 
                     $zip->close(); // Close ZipArchive
                 }
-
+                
 
                 // $headers = array('Content-Type' => 'application/octet-stream'); // Set Header
                 // $zip_rutacompleta = $zip_ruta_completa.'/'.$zip_nombre;
                 // if(file_exists($zip_rutacompleta))
                 // {
-                // return response()->download($zip_rutacompleta, $zip_nombre, $headers)->deleteFileAfterSend(true); // DESCARGAR ZIP
+                    // return response()->download($zip_rutacompleta, $zip_nombre, $headers)->deleteFileAfterSend(true); // DESCARGAR ZIP
                 // }
 
 
@@ -4271,8 +4555,9 @@ class reporteairewordController extends Controller
 
 
                 // ELIMINAR INFORME word (PORQUE YA ESTÁ EN EL ZIP)
-                if (Storage::exists('reportes/informes/' . $informe_nombre)) {
-                    Storage::delete('reportes/informes/' . $informe_nombre);
+                if (Storage::exists('reportes/informes/'.$informe_nombre))
+                {
+                    Storage::delete('reportes/informes/'.$informe_nombre);
                 }
 
 
@@ -4281,9 +4566,9 @@ class reporteairewordController extends Controller
 
 
                 $archivo = reporterevisionesarchivoModel::create([
-                    'reporterevisiones_id' => $request->ultimarevision_id,
-                    'reporterevisionesarchivo_tipo' => 0,
-                    'reporterevisionesarchivo_archivo' => $zip_ruta_servidor . '/' . $zip_nombre
+                      'reporterevisiones_id' => $request->ultimarevision_id
+                    , 'reporterevisionesarchivo_tipo' => 0
+                    , 'reporterevisionesarchivo_archivo' => $zip_ruta_servidor.'/'.$zip_nombre
                 ]);
 
 
@@ -4307,7 +4592,7 @@ class reporteairewordController extends Controller
                                             FROM
                                                 reporterevisiones
                                             WHERE
-                                                reporterevisiones.proyecto_id = ' . $proyecto_id . ' 
+                                                reporterevisiones.proyecto_id = '.$proyecto_id.' 
                                                 AND reporterevisiones.agente_id = 8 -- Aire
                                             ORDER BY
                                                 reporterevisiones.reporterevisiones_revision DESC');
@@ -4319,31 +4604,33 @@ class reporteairewordController extends Controller
 
                 DB::statement('ALTER TABLE reporterevisiones AUTO_INCREMENT = 1;');
                 $revision = reporterevisionesModel::create([
-                    'proyecto_id' => $request->proyecto_id,
-                    'agente_id' => $request->agente_id,
-                    'agente_nombre' => $request->agente_nombre,
-                    'reporterevisiones_revision' => ($revisiones[0]->reporterevisiones_revision + 1),
-                    'reporterevisiones_concluido' => 0,
-                    'reporterevisiones_concluidonombre' => NULL,
-                    'reporterevisiones_concluidofecha' => NULL,
-                    'reporterevisiones_cancelado' => 0,
-                    'reporterevisiones_canceladonombre' => NULL,
-                    'reporterevisiones_canceladofecha' => NULL,
-                    'reporterevisiones_canceladoobservacion' => NULL
+                      'proyecto_id' => $request->proyecto_id
+                    , 'agente_id' => $request->agente_id
+                    , 'agente_nombre' => $request->agente_nombre
+                    , 'reporterevisiones_revision' => ($revisiones[0]->reporterevisiones_revision + 1)
+                    , 'reporterevisiones_concluido' => 0
+                    , 'reporterevisiones_concluidonombre' => NULL
+                    , 'reporterevisiones_concluidofecha' => NULL
+                    , 'reporterevisiones_cancelado' => 0
+                    , 'reporterevisiones_canceladonombre' => NULL
+                    , 'reporterevisiones_canceladofecha' => NULL
+                    , 'reporterevisiones_canceladoobservacion' => NULL
                 ]);
 
 
                 $dato["msj"] = 'Nueva revisión creada correctamente';
             }
 
-
+            
             //--------------------------------------------------------------------------------
 
 
             return response()->json($dato);
-        } catch (Exception $e) {
+        }
+        catch(Exception $e)
+        {
             // respuesta
-            $dato["msj"] = 'Error ' . $e->getMessage();
+            $dato["msj"] = 'Error '.$e->getMessage();
             return response()->json($dato);
         }
     }
@@ -4356,26 +4643,31 @@ class reporteairewordController extends Controller
      * @param  int $revision_id
      * @param  int $ultima_revision
      * @return \Illuminate\Http\Response
-     */
+    */
     public function reporteaireworddescargar($proyecto_id, $revision_id, $ultima_revision)
     {
         $agente_nombre = 'Ventilación y calidad del aire';
 
 
-        if (($revision_id + 0) == ($ultima_revision + 0)) //Descargar y eliminar .ZIP de la carpeta temporal
+        if (($revision_id+0) == ($ultima_revision+0)) //Descargar y eliminar .ZIP de la carpeta temporal
         {
             $proyecto = proyectoModel::findOrFail($proyecto_id);
 
 
-            $zip_nombre = 'Informe de ' . $agente_nombre . ' - ' . $proyecto->proyecto_folio . ' (' . $proyecto->proyecto_clienteinstalacion . ') + Anexos.zip';
+            $zip_nombre = 'Informe de '.$agente_nombre.' - '.$proyecto->proyecto_folio.' ('.$proyecto->proyecto_clienteinstalacion.') + Anexos.zip';
 
 
-            if (Storage::exists('reportes/informes/' . $zip_nombre)) {
-                return response()->download(storage_path('app/reportes/informes/' . $zip_nombre), $zip_nombre, array('Content-Type' => 'application/octet-stream'))->deleteFileAfterSend(true);
-            } else {
-                return '<h3>No se encontró el informe de ' . $agente_nombre . ', intentelo de nuevo</h3>';
+            if (Storage::exists('reportes/informes/'.$zip_nombre))
+            {
+                return response()->download(storage_path('app/reportes/informes/'.$zip_nombre), $zip_nombre, array('Content-Type' => 'application/octet-stream'))->deleteFileAfterSend(true);
             }
-        } else {
+            else
+            {
+                return '<h3>No se encontró el informe de '.$agente_nombre.', intentelo de nuevo</h3>';
+            }
+        }
+        else
+        {
             $archivo_historial = DB::select('SELECT
                                                 reporterevisiones.proyecto_id,
                                                 reporterevisiones.agente_id,
@@ -4390,17 +4682,23 @@ class reporteairewordController extends Controller
                                                 reporterevisiones
                                                 LEFT JOIN reporterevisionesarchivo ON reporterevisiones.id = reporterevisionesarchivo.reporterevisiones_id
                                             WHERE
-                                                reporterevisiones.id = ' . $revision_id);
+                                                reporterevisiones.id = '.$revision_id);
 
 
-            if (count($archivo_historial) > 0) {
-                if (Storage::exists($archivo_historial[0]->reporterevisionesarchivo_archivo)) {
-                    return response()->download(storage_path('app/' . $archivo_historial[0]->reporterevisionesarchivo_archivo), "", array('Content-Type' => 'application/octet-stream'))->deleteFileAfterSend(false);
-                } else {
-                    return '<h3>No se encontró el archivo historial del informe de ' . $agente_nombre . ' 1</h3>';
+            if (count($archivo_historial) > 0)
+            {
+                if (Storage::exists($archivo_historial[0]->reporterevisionesarchivo_archivo))
+                {
+                    return response()->download(storage_path('app/'.$archivo_historial[0]->reporterevisionesarchivo_archivo), "", array('Content-Type' => 'application/octet-stream'))->deleteFileAfterSend(false);
                 }
-            } else {
-                return '<h3>No se encontró el archivo historial del informe de ' . $agente_nombre . ' 2</h3>';
+                else
+                {
+                    return '<h3>No se encontró el archivo historial del informe de '.$agente_nombre.' 1</h3>';
+                }
+            }
+            else
+            {
+                return '<h3>No se encontró el archivo historial del informe de '.$agente_nombre.' 2</h3>';
             }
         }
     }
