@@ -4,7 +4,7 @@ namespace App\modelos\reportes;
 
 use Illuminate\Database\Eloquent\Model;
 
-class reporteaireevaluacionModel extends Model
+class reporteaireevaluacionModel   extends Model
 {
     protected $table = 'reporteaireevaluacion';
 	protected $fillable = [
@@ -23,5 +23,6 @@ class reporteaireevaluacionModel extends Model
 		, 'reporteaireevaluacion_humedad'
 		, 'reporteaireevaluacion_co'
 		, 'reporteaireevaluacion_co2'
+		, 'reporteaireevaluacion_so2'
 	];
 }

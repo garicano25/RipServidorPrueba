@@ -693,7 +693,7 @@ $(document).ready(function()
 	setTimeout(function()
 	{
 		tabla_reporte_definiciones(proyecto.id, agente_nombre, reporteregistro_id);
-	}, 2000);
+	}, 4000);
 });
 
 
@@ -1883,7 +1883,7 @@ $(document).ready(function()
 	setTimeout(function()
 	{
 		tabla_reporte_categorias(proyecto.id, reporteregistro_id);
-	}, 2500);
+	}, 4500);
 });
 
 
@@ -2319,7 +2319,7 @@ $(document).ready(function()
 	setTimeout(function()
 	{
 		tabla_reporte_areas(proyecto.id, reporteregistro_id);
-	}, 3000);
+	}, 5000);
 });
 
 
@@ -3025,7 +3025,7 @@ $(document).ready(function()
 	setTimeout(function()
 	{
 		tabla_reporte_puntos(proyecto.id, reporteregistro_id);
-	}, 4000);
+	}, 6000);
 });
 
 
@@ -3312,6 +3312,9 @@ $('#tabla_reporte_puntos tbody').on('click', 'td.editar', function()
 	$('#reporteaireevaluacion_humedad').val(row.data().reporteaireevaluacion_humedad);
 	$('#reporteaireevaluacion_co').val(row.data().reporteaireevaluacion_co);
 	$('#reporteaireevaluacion_co2').val(row.data().reporteaireevaluacion_co2);
+	
+	$('#reporteaireevaluacion_so2').val(row.data().reporteaireevaluacion_so2);
+
 
 
 	// Titulo del modal
@@ -3929,7 +3932,7 @@ $(document).ready(function()
 	setTimeout(function()
 	{
 		tabla_reporte_matriz(proyecto.id, reporteregistro_id);
-	}, 5000);
+	}, 6000);
 });
 
 
@@ -4796,7 +4799,7 @@ $(document).ready(function()
 	setTimeout(function()
 	{
 		reporte_dashboard(proyecto.id, reporteregistro_id);
-	}, 6000);
+	}, 8000);
 });
 
 
@@ -4859,7 +4862,7 @@ $(document).ready(function()
 	setTimeout(function()
 	{
 		tabla_reporte_recomendaciones(proyecto.id, reporteregistro_id, agente_nombre);
-	}, 7000);
+	}, 9000);
 });
 
 
@@ -5533,7 +5536,7 @@ $(document).ready(function()
 	setTimeout(function()
 	{
 		tabla_reporte_planos(proyecto.id, reporteregistro_id, agente_nombre);
-	}, 7500);
+	}, 8500);
 });
 
 
@@ -5773,7 +5776,7 @@ $(document).ready(function()
 	setTimeout(function()
 	{
 		tabla_reporte_equipoutilizado(proyecto.id, reporteregistro_id, agente_nombre);
-	}, 8000);
+	}, 9500);
 });
 
 
@@ -6099,7 +6102,7 @@ $(document).ready(function()
 	setTimeout(function()
 	{
 		tabla_reporte_anexosresultados(proyecto.id, reporteregistro_id, agente_nombre);
-	}, 8500);
+	}, 9500);
 });
 
 
@@ -6388,7 +6391,7 @@ $(document).ready(function()
 	setTimeout(function()
 	{
 		tabla_reporte_acreditacionaprobacion(proyecto.id, reporteregistro_id, agente_nombre);
-	}, 9000);
+	}, 10500);
 });
 
 
@@ -6711,7 +6714,7 @@ $(document).ready(function()
 	{
 		tabla_notas_stps(proyecto_id, reporteregistro_id, agente_nombre);
 		tabla_notas_ema(proyecto_id, reporteregistro_id, agente_nombre);
-	}, 9500);
+	}, 10500);
 });
 
 
@@ -7380,7 +7383,7 @@ $(document).ready(function()
 	setTimeout(function()
 	{
 		tabla_reporte_revisiones(proyecto.id);
-	}, 10000);
+	}, 10500);
 });
 
 
@@ -7390,7 +7393,7 @@ $(document).on('submit', function()
 	{
 		// alert('Guardaste algo');
 		tabla_reporte_revisiones(proyecto.id);
-	}, 6000);
+	}, 7500);
 });
 
 
