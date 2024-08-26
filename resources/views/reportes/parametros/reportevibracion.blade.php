@@ -1561,6 +1561,7 @@
 									<option value=""></option>
 									<option value="Cuerpo entero">Cuerpo entero</option>
 									<option value="Extremidades superiores">Extremidades superiores</option>
+									<option value="Cuerpo entero y extremidades superiores">Cuerpo entero y extremidades superiores</option>
 								</select>
 							</div>
 						</div>
@@ -1658,7 +1659,7 @@
 						</div>
 						<div class="col-4">
 							<div class="form-group">
-								<label>Punto de evaluación</label>
+								<label>Punto de evaluación (Ubicación)</label>
 								<input type="text" class="form-control" id="reportevibracionevaluacion_puntoevaluacion" name="reportevibracionevaluacion_puntoevaluacion" placeholder="Ej. Cobertizo de bombas" required>
 							</div>
 						</div>
@@ -1690,7 +1691,7 @@
 						</div>
 						<div class="col-3">
 							<div class="form-group">
-								<label>Tipo de evaluación</label>
+								<label>Criterio de evaluación</label>
 								<select class="custom-select form-control" id="reportevibracionevaluacion_tipoevaluacion" name="reportevibracionevaluacion_tipoevaluacion" onchange="tipo_evaluacion(this.value);" required>
 									<option value=""></option>
 									<option value="1">Límites por NOM-024-STPS-2001</option>
@@ -2217,4 +2218,4 @@
 	var recsensorial = <?php echo json_encode($recsensorial); ?>;
 </script>
 <script src="/js_sitio/html2canvas.js"></script>
-<script src="/js_sitio/reportes/reportevibracion.js?v=1.0"></script>
+<script src="/js_sitio/reportes/reportevibracion.js?v=2.0"></script>
