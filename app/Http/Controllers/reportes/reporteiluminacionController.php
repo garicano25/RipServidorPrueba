@@ -5046,7 +5046,7 @@ class reporteiluminacionController extends Controller
             }
 
 
-            $equipos = DB::select('SELECT
+            $equipos = DB::select('SELECT DISTINCT
                                         proyectoequiposactual.proyecto_id,
                                         proyectoequiposactual.proveedor_id,
                                         proveedor.proveedor_NombreComercial,
