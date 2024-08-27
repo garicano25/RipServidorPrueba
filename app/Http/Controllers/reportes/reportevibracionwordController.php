@@ -742,33 +742,11 @@ class reportevibracionwordController extends Controller
 
                 $plantillaword->setValue('4_2_CUERPO_PARRAFO2', '</w:t></w:r><w:r><w:rPr><w:b/></w:rPr><w:t>Figura 1</w:t></w:r><w:r><w:t>. Direcciones de incidencia de las vibraciones sobre el cuerpo humano (NOM-024-STPS-2001).<w:br/>');
                 
-                $plantillaword->setValue('4_2_CUERPO_PARRAFO3', '
-                <w:r><w:rPr><w:b/></w:rPr><w:t>ax, ay, az</w:t></w:r>
-                <w:r><w:t>: Son las direcciones de la aceleración en los ejes x, y, z.</w:t></w:r>
-                <w:br/>
-                <w:r>
-                    <w:rPr><w:b/></w:rPr><w:t>eje x</w:t>
-                </w:r>
-                <w:r>
-                    <w:t>: Es la dirección de espalda a pecho.</w:t>
-                </w:r>
-                <w:br/>
-                <w:r>
-                    <w:rPr><w:b/></w:rPr><w:t>eje y</w:t>
-                </w:r>
-                <w:r>
-                    <w:t>: Es la dirección de lado derecho a izquierdo.</w:t>
-                </w:r>
-                <w:br/>
-                <w:r>
-                    <w:rPr><w:b/></w:rPr><w:t>eje z</w:t>
-                </w:r>
-                <w:r>
-                    <w:t>: Es la dirección de los pies o parte inferior, a la cabeza.</w:t>
-                </w:r>
-                <w:br/>
-            ');
-            
+                $plantillaword->setValue('4_2_CUERPO_PARRAFO3', '</w:t></w:r><w:r><w:rPr><w:b/></w:rPr><w:t>ax, ay, az</w:t></w:r><w:r><w:t>: Son las direcciones de la aceleración en los ejes x, y, z.<w:br/>
+                                                                </w:t></w:r><w:r><w:rPr><w:b/></w:rPr><w:t>eje x</w:t></w:r><w:r><w:t>: Es la dirección de espalda a pecho.<w:br/>
+                                                                </w:t></w:r><w:r><w:rPr><w:b/></w:rPr><w:t>eje y</w:t></w:r><w:r><w:t>: Es la dirección de lado derecho a izquierdo.<w:br/>
+                                                                </w:t></w:r><w:r><w:rPr><w:b/></w:rPr><w:t>eje z</w:t></w:r><w:r><w:t>: Es la dirección de los pies o parte inferior, a la cabeza.<w:br/>');
+
                 $plantillaword->setValue('4_2_CUERPO_PARRAFO4', 'La evaluación se realizó de acuerdo con el procedimiento establecido en el punto 8.3.2.1. Procedimiento de evaluación de vibraciones para cuerpo entero de la NOM-024-STPS-2001 “Vibraciones-Condiciones de seguridad e higiene en los centros de trabajo”.');
             }
 
@@ -814,27 +792,24 @@ class reportevibracionwordController extends Controller
 
             if (($reporte->reportevibracion_alcanceinforme+0) == 1 || ($reporte->reportevibracion_alcanceinforme+0) == 3)
             {
-                $texto = '
-                <w:p>
-                    <w:pPr>
-                        <w:jc w:val="center"/> <!-- Alineación centrada -->
-                        <w:spacing w:before="0" w:after="0" w:line="240" w:lineRule="exactly" w:beforeAutospacing="0" w:afterAutospacing="0"/>
-                        <w:b w:val="true"/> <!-- Texto en negrita -->
-                    </w:pPr>
-                    <w:r>
-                        <w:t>En cuerpo entero</w:t>
-                    </w:r>
-                </w:p>
-                <w:p>
-                    <w:pPr>
-                        <w:jc w:val="both"/> <!-- Justificación de texto -->
-                        <w:spacing w:before="0" w:after="0" w:line="240" w:lineRule="exactly" w:beforeAutospacing="0" w:afterAutospacing="0"/>
-                    </w:pPr>
-                    <w:r>
-                        <w:t>'.htmlspecialchars('Cuando se conoce la frecuencia de un mecanismo que genera vibración y se relaciona con la aceleración en m/s² ya sea en el eje de aceleración longitudinal az, o en los ejes de aceleración transversal ax y ay, se obtiene el tiempo de exposición que puede variar de un minuto a veinticuatro horas. Los límites de exposición a vibraciones en el eje longitudinal az y en los ejes transversales ax y ay, se establecen en las Tablas 1 y 2 de la norma, respectivamente.').'</w:t>
-                    </w:r>
-                </w:p>';
-                
+                $texto = '<w:p>
+                                <w:rPr>
+                                    <w:jc w:val="left"/>
+                                    <w:spacing w:before="0" w:after="0" w:line="240" w:lineRule="exactly" w:beforeAutospacing="0" w:afterAutospacing="0"/>
+                                    <w:b w:val="true"/>
+                                </w:rPr>
+                                <w:t>
+                                    <w:br/>En cuerpo entero
+                                </w:t><w:br/>
+                            </w:p>
+                            <w:p>
+                                <w:pPr>
+                                    <w:jc w:val="both"/>
+                                    <w:spacing w:before="0" w:after="0" w:line="240" w:lineRule="exactly" w:beforeAutospacing="0" w:afterAutospacing="0"/>
+                                    <w:b w:val="false"/>
+                                </w:pPr>
+                                <w:t>'.htmlspecialchars('Cuando se conoce la frecuencia de un mecanismo que genera vibración y se relaciona con la aceleración en m/s² ya sea en el eje de aceleración longitudinal az, o en los ejes de aceleración transversal ax y ay, se obtiene el tiempo de exposición que puede variar de un minuto a veinticuatro horas. Los límites de exposición a vibraciones en el eje longitudinal az y en los ejes transversales ax y ay, se establecen en las Tablas 1 y 2 de la norma, respectivamente.').'</w:t>
+                            </w:p>';
 
                 $plantillaword->setValue('4_3_CUERPO_PARRAFO1', $texto);
 
