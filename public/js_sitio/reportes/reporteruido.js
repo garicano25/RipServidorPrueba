@@ -501,6 +501,10 @@ function redimencionar_foto(campo_file, campo_filehidden, boton_guardar)
 			canvas.width = width;
 			canvas.height = height;
 			var ctx = canvas.getContext("2d");
+			// Establecer un fondo blanco
+			ctx.fillStyle = "white";
+			ctx.fillRect(0, 0, canvas.width, canvas.height);
+			
 			ctx.drawImage(img, 0, 0, width, height);
 			console.log("Nuevas dimensiones ",width, height);
 
