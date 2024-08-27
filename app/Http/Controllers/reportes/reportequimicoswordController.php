@@ -273,9 +273,9 @@ class reportequimicoswordController extends Controller
 
             if (($recsensorial->cliente_id + 0) != 2) // cliente_id [2 = senegas]
             {
-                $plantillaword = new TemplateProcessor(storage_path('app/plantillas_reportes/proyecto_infomes/Plantilla_informe_quimicos.docx')); //Ruta carpeta storage
+                $plantillaword = new TemplateProcessor(storage_path('app/plantillas_reportes/proyecto_infomes/Plantilla_informe_quimicos_sin_MEL.docx')); //Ruta carpeta storage
             } else {
-                $plantillaword = new TemplateProcessor(storage_path('app/plantillas_reportes/proyecto_infomes/Plantilla_informe_quimicoscliente.docx')); //Ruta carpeta storage
+                $plantillaword = new TemplateProcessor(storage_path('app/plantillas_reportes/proyecto_infomes/Plantilla_informe_quimicos_sin_MEL.docx')); //Ruta carpeta storage
             }
 
 
@@ -840,7 +840,7 @@ class reportequimicoswordController extends Controller
                 $fuente = 'Arial';
                 $font_size = 10;
             } else {
-                $fuente = 'Montserrat';
+                $fuente = 'Arial';
                 $font_size = 10;
             }
 
@@ -2370,7 +2370,7 @@ class reportequimicoswordController extends Controller
                 $fuente = 'Arial';
                 $font_size = 6;
             } else {
-                $fuente = 'Montserrat';
+                $fuente = 'Arial';
                 $font_size = 6;
             }
 
