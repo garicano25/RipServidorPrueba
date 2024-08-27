@@ -130,99 +130,94 @@ class reportequimicosController extends Controller
                                                 reportequimicosproyecto.proyecto_id = ' . $proyecto_id);
 
             // ================ DESCOMENTAR DESPUES DE SUBIR AL SERVIDOR =========================
-            // if (($total_quimicos[0]->total + 0) == 0)
-            // {
-            //     $quimicos = DB::select('SELECT
-            //                                 proyectoproveedores.id,
-            //                                 proyectoproveedores.proyecto_id,
-            //                                 proyectoproveedores.proveedor_id,
-            //                                 proyectoproveedores.proyectoproveedores_tipoadicional,
-            //                                 proyectoproveedores.catprueba_id,
-            //                                 proyectoproveedores.proyectoproveedores_agente,
-            //                                 proyectoproveedores.proyectoproveedores_puntos,
-            //                                 proyectoproveedores.proyectoproveedores_observacion 
-            //                             FROM
-            //                                 proyectoproveedores 
-            //                             WHERE
-            //                                 proyectoproveedores.proyecto_id = '.$proyecto_id.' 
-            //                                 AND proyectoproveedores.catprueba_id = 15
-            //                                 AND proyectoproveedores.proyectoproveedores_agente NOT LIKE "%blanco%"
-            //                             ORDER BY
-            //                                 proyectoproveedores.proyectoproveedores_agente ASC');
+            if (($total_quimicos[0]->total + 0) == 0) {
+                $quimicos = DB::select('SELECT
+                                            proyectoproveedores.id,
+                                            proyectoproveedores.proyecto_id,
+                                            proyectoproveedores.proveedor_id,
+                                            proyectoproveedores.proyectoproveedores_tipoadicional,
+                                            proyectoproveedores.catprueba_id,
+                                            proyectoproveedores.proyectoproveedores_agente,
+                                            proyectoproveedores.proyectoproveedores_puntos,
+                                            proyectoproveedores.proyectoproveedores_observacion 
+                                        FROM
+                                            proyectoproveedores 
+                                        WHERE
+                                            proyectoproveedores.proyecto_id = ' . $proyecto_id . ' 
+                                            AND proyectoproveedores.catprueba_id = 15
+                                            AND proyectoproveedores.proyectoproveedores_agente NOT LIKE "%blanco%"
+                                        ORDER BY
+                                            proyectoproveedores.proyectoproveedores_agente ASC');
 
 
-            //     DB::statement('ALTER TABLE reportequimicosproyecto AUTO_INCREMENT = 1;');
+                DB::statement('ALTER TABLE reportequimicosproyecto AUTO_INCREMENT = 1;');
 
 
-            //     foreach ($quimicos as $key => $value)
-            //     {
-            //         $quimico = reportequimicosproyectoModel::create([
-            //               'proyecto_id' => $proyecto_id
-            //             , 'reportequimicosproyecto_parametro' => $value->proyectoproveedores_agente
-            //         ]);
-            //     }
-            // }
-            // else
-            // {
-            //     $quimicos = DB::select('SELECT
-            //                                 TABLA.id,
-            //                                 TABLA.proyecto_id,
-            //                                 TABLA.proveedor_id,
-            //                                 TABLA.proyectoproveedores_tipoadicional,
-            //                                 TABLA.catprueba_id,
-            //                                 TABLA.proyectoproveedores_agente,
-            //                                 TABLA.proyectoproveedores_puntos,
-            //                                 TABLA.proyectoproveedores_observacion,
-            //                                 TABLA.activo
-            //                             FROM
-            //                                 (
-            //                                     SELECT
-            //                                         proyectoproveedores.id,
-            //                                         proyectoproveedores.proyecto_id,
-            //                                         proyectoproveedores.proveedor_id,
-            //                                         proyectoproveedores.proyectoproveedores_tipoadicional,
-            //                                         proyectoproveedores.catprueba_id,
-            //                                         proyectoproveedores.proyectoproveedores_agente,
-            //                                         proyectoproveedores.proyectoproveedores_puntos,
-            //                                         proyectoproveedores.proyectoproveedores_observacion,
-            //                                         IFNULL((
-            //                                             SELECT
-            //                                                 -- reportequimicosproyecto.proyecto_id, 
-            //                                                 -- reportequimicosproyecto.id, 
-            //                                                 IF(IFNULL(reportequimicosproyecto.reportequimicosproyecto_parametro, "") = "", 0, 1)
-            //                                             FROM
-            //                                                 reportequimicosproyecto
-            //                                             WHERE
-            //                                                 reportequimicosproyecto.proyecto_id = proyectoproveedores.proyecto_id
-            //                                                 AND reportequimicosproyecto.reportequimicosproyecto_parametro = proyectoproveedores.proyectoproveedores_agente
-            //                                             LIMIT 1
-            //                                         ), 0) AS activo
-            //                                     FROM
-            //                                         proyectoproveedores 
-            //                                     WHERE
-            //                                         proyectoproveedores.proyecto_id = '.$proyecto_id.'  
-            //                                         AND proyectoproveedores.catprueba_id = 15
-            //                                         AND proyectoproveedores.proyectoproveedores_agente NOT LIKE "%blanco%"
-            //                                     ORDER BY
-            //                                         proyectoproveedores.proyectoproveedores_agente ASC
-            //                                 ) AS TABLA
-            //                             WHERE
-            //                                 TABLA.activo = 0
-            //                             ORDER BY
-            //                                 TABLA.proyectoproveedores_agente ASC');
+                foreach ($quimicos as $key => $value) {
+                    $quimico = reportequimicosproyectoModel::create([
+                        'proyecto_id' => $proyecto_id,
+                        'reportequimicosproyecto_parametro' => $value->proyectoproveedores_agente
+                    ]);
+                }
+            } else {
+                $quimicos = DB::select('SELECT
+                                            TABLA.id,
+                                            TABLA.proyecto_id,
+                                            TABLA.proveedor_id,
+                                            TABLA.proyectoproveedores_tipoadicional,
+                                            TABLA.catprueba_id,
+                                            TABLA.proyectoproveedores_agente,
+                                            TABLA.proyectoproveedores_puntos,
+                                            TABLA.proyectoproveedores_observacion,
+                                            TABLA.activo
+                                        FROM
+                                            (
+                                                SELECT
+                                                    proyectoproveedores.id,
+                                                    proyectoproveedores.proyecto_id,
+                                                    proyectoproveedores.proveedor_id,
+                                                    proyectoproveedores.proyectoproveedores_tipoadicional,
+                                                    proyectoproveedores.catprueba_id,
+                                                    proyectoproveedores.proyectoproveedores_agente,
+                                                    proyectoproveedores.proyectoproveedores_puntos,
+                                                    proyectoproveedores.proyectoproveedores_observacion,
+                                                    IFNULL((
+                                                        SELECT
+                                                            -- reportequimicosproyecto.proyecto_id, 
+                                                            -- reportequimicosproyecto.id, 
+                                                            IF(IFNULL(reportequimicosproyecto.reportequimicosproyecto_parametro, "") = "", 0, 1)
+                                                        FROM
+                                                            reportequimicosproyecto
+                                                        WHERE
+                                                            reportequimicosproyecto.proyecto_id = proyectoproveedores.proyecto_id
+                                                            AND reportequimicosproyecto.reportequimicosproyecto_parametro = proyectoproveedores.proyectoproveedores_agente
+                                                        LIMIT 1
+                                                    ), 0) AS activo
+                                                FROM
+                                                    proyectoproveedores 
+                                                WHERE
+                                                    proyectoproveedores.proyecto_id = ' . $proyecto_id . '  
+                                                    AND proyectoproveedores.catprueba_id = 15
+                                                    AND proyectoproveedores.proyectoproveedores_agente NOT LIKE "%blanco%"
+                                                ORDER BY
+                                                    proyectoproveedores.proyectoproveedores_agente ASC
+                                            ) AS TABLA
+                                        WHERE
+                                            TABLA.activo = 0
+                                        ORDER BY
+                                            TABLA.proyectoproveedores_agente ASC');
 
 
-            //     DB::statement('ALTER TABLE reportequimicosproyecto AUTO_INCREMENT = 1;');
+                DB::statement('ALTER TABLE reportequimicosproyecto AUTO_INCREMENT = 1;');
 
 
-            //     foreach ($quimicos as $key => $value)
-            //     {
-            //         $quimico = reportequimicosproyectoModel::create([
-            //               'proyecto_id' => $proyecto_id
-            //             , 'reportequimicosproyecto_parametro' => $value->proyectoproveedores_agente
-            //         ]);
-            //     }
-            // }
+                foreach ($quimicos as $key => $value) {
+                    $quimico = reportequimicosproyectoModel::create([
+                        'proyecto_id' => $proyecto_id,
+                        'reportequimicosproyecto_parametro' => $value->proyectoproveedores_agente
+                    ]);
+                }
+            }
             // ================ DESCOMENTAR DESPUES DE SUBIR AL SERVIDOR =========================
 
 
