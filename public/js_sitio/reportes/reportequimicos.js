@@ -474,13 +474,13 @@ function instalacion_nombre(reporte_instalacion)
 // LISTA DE QUIMICOS A EVALUAR
 
 
-// $(document).ready(function()
-// {
-// 	setTimeout(function()
-// 	{
-// 		tabla_reporte_quimicos(proyecto.id, reporteregistro_id);
-// 	}, 2000);
-// });
+$(document).ready(function()
+{
+	setTimeout(function()
+	{
+		tabla_reporte_quimicos(proyecto.id, reporteregistro_id);
+	}, 2000);
+});
 
 
 var datatable_quimicos = null;
@@ -518,7 +518,7 @@ function tabla_reporte_quimicos(proyecto_id, reporteregistro_id)
 						console.log('error en datatable_quimicos '+code);
 						if (numeroejecucion <= 1)
 						{
-							tabla_reporte_quimicos(proyecto_id);
+							tabla_reporte_quimicos(proyecto_id, reporteregistro_id);
 							numeroejecucion += 1;
 						}
 					}
@@ -597,7 +597,7 @@ function tabla_reporte_quimicos(proyecto_id, reporteregistro_id)
 	}
 	catch (exception)
 	{
-		tabla_reporte_quimicos(proyecto_id);
+		tabla_reporte_quimicos(proyecto_id, reporteregistro_id);
 	}
 }
 
