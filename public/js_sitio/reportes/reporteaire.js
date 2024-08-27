@@ -4862,7 +4862,7 @@ $(document).ready(function()
 	setTimeout(function()
 	{
 		tabla_reporte_recomendaciones(proyecto.id, reporteregistro_id, agente_nombre);
-	}, 9000);
+	}, 6000);
 });
 
 
@@ -5512,7 +5512,7 @@ $(document).ready(function()
 	setTimeout(function()
 	{
 		tabla_reporte_planos(proyecto.id, reporteregistro_id, agente_nombre);
-	}, 8500);
+	}, 7500);
 });
 
 
@@ -5752,7 +5752,7 @@ $(document).ready(function()
 	setTimeout(function()
 	{
 		tabla_reporte_equipoutilizado(proyecto.id, reporteregistro_id, agente_nombre);
-	}, 9500);
+	}, 8500);
 });
 
 
@@ -6078,7 +6078,7 @@ $(document).ready(function()
 	setTimeout(function()
 	{
 		tabla_reporte_anexosresultados(proyecto.id, reporteregistro_id, agente_nombre);
-	}, 9500);
+	}, 8500);
 });
 
 
@@ -6367,7 +6367,7 @@ $(document).ready(function()
 	setTimeout(function()
 	{
 		tabla_reporte_acreditacionaprobacion(proyecto.id, reporteregistro_id, agente_nombre);
-	}, 10500);
+	}, 6500);
 });
 
 
@@ -6688,9 +6688,9 @@ $(document).ready(function()
 {
 	setTimeout(function()
 	{
-		tabla_notas_stps(proyecto_id, reporteregistro_id, agente_nombre);
-		tabla_notas_ema(proyecto_id, reporteregistro_id, agente_nombre);
-	}, 10500);
+		tabla_notas_stps(proyecto.id, reporteregistro_id, agente_nombre);
+		tabla_notas_ema(proyecto.id, reporteregistro_id, agente_nombre);
+	}, 6500);
 });
 
 
@@ -7359,7 +7359,7 @@ $(document).ready(function()
 	setTimeout(function()
 	{
 		tabla_reporte_revisiones(proyecto.id);
-	}, 10500);
+	}, 9500);
 });
 
 
