@@ -313,7 +313,7 @@ class reportequimicoswordController extends Controller
             $plantillaword->setValue('instalación_portada', $recsensorial->recsensorial_instalacion);
 
             $fecha = $agente[0]->reporte_mes . ' del ' . $agente[0]->reportequimicos_fecha;
-            $plantillaword->setValue('lugar_fecha_portada', $fecha);
+            $plantillaword->setValue('lugar_fecha_portada', $recsensorial->recsensorial_direccion . ' ' . $fecha);
             $plantillaword->setValue(
                 'PORTADA_FECHA',
                 $fecha
@@ -390,6 +390,8 @@ class reportequimicoswordController extends Controller
                 $NIVEL1 . $NIVEL2 . $NIVEL3 . $NIVEL4 . $NIVEL5
             );
             $plantillaword->setValue('INSTALACION_NOMBRE', $NIVEL1 . $NIVEL2 . $NIVEL3 . $NIVEL4 . $NIVEL5);
+            $plantillaword->setValue('INSTALACION_NOMBRE_TEXTO', $proyecto->proyecto_clienteinstalacion);
+
 
             //LOGOS DE AS EMPRESAS DE INFORME
             if ($proyecto->requiereContrato == 1) {
