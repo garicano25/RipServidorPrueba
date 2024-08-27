@@ -6679,91 +6679,68 @@ $("#botonguardar_reporte_responsablesinforme").click(function()
 });
 
 
-function redimencionar_foto(campo_file, campo_filehidden, boton_guardar)
-{
-	// Bloquear boton guardar
-	$('#'+boton_guardar).attr('disabled', true);
-	$('#'+campo_filehidden).val('');
+function redimencionar_foto(campo_file, campo_filehidden, boton_guardar) {
+    // Bloquear botón guardar
+    $('#' + boton_guardar).attr('disabled', true);
+    $('#' + campo_filehidden).val('');
 
-	foto_resize_fisicos = "";
-	var filesToUpload = document.getElementById(campo_file).files;
-	var file = filesToUpload[0];
+    var filesToUpload = document.getElementById(campo_file).files;
+    var file = filesToUpload[0];
 
-	// Create an image
-	var img = document.createElement("img");
+    // Crear un lector de archivos
+    var reader = new FileReader();
 
-	// Create a file reader
-	var reader = new FileReader();
+    // Cargar archivos en el lector de archivos
+    reader.readAsDataURL(file);
 
-	// Load files into file reader
-	reader.readAsDataURL(file);
+    // Configurar la imagen una vez que se carga en el lector de archivos
+    reader.onload = function(e) {
+        var img = new Image();
+        img.onload = function() {
+            var canvas = document.createElement("canvas");
 
-	// Set the image once loaded into file reader
-	reader.onload = function(e)
-	{
-	    //img.src = e.target.result;
-		var img = new Image();
-		img.src = this.result;
-		
-	    setTimeout(function()
-	    {
-			var canvas = document.createElement("canvas");
-			//var canvas = $("<canvas>", {"id":"testing"})[0];
-			//var ctx = canvas.getContext("2d");
-			//ctx.drawImage(img, 0, 0);
+            // Dimensiones reales
+            var width = img.width;
+            var height = img.height;
 
-			// Dimensiones reales
-			var width = img.width;
-			var height = img.height;
+            // Dimensiones Nuevas
+            var MAX_WIDTH = (width > 8000) ? 4000 : 1200;
+            var MAX_HEIGHT = (width > 8000) ? 3000 : 900;
 
-			// Dimensiones Nuevas
-			if (parseInt(width) > 8000)
-			{
-				var MAX_WIDTH = 4000; //Ancho de la imagen
-				var MAX_HEIGHT = 3000; //Alto de la imagen
-			}
-			else
-			{
-				var MAX_WIDTH = 1200; //Ancho de la imagen
-				var MAX_HEIGHT = 900; //Alto de la imagen
-			}
+            // Dimensionar con respecto a la relación de aspecto
+            if (width > height) {
+                if (width > MAX_WIDTH) {
+                    height *= MAX_WIDTH / width;
+                    width = MAX_WIDTH;
+                }
+            } else {
+                if (height > MAX_HEIGHT) {
+                    width *= MAX_HEIGHT / height;
+                    height = MAX_HEIGHT;
+                }
+            }
 
-			// Dimensionar con respecto a la relacion de aspecto
-			if (width > height)
-			{
-				if (width > MAX_WIDTH)
-				{
-					height *= MAX_WIDTH / width;
-					width = MAX_WIDTH;
-				}
-			}
-			else
-			{
-				if (height > MAX_HEIGHT)
-				{
-					width *= MAX_HEIGHT / height;
-					height = MAX_HEIGHT;
-				}
-			}
+            canvas.width = width;
+            canvas.height = height;
+            var ctx = canvas.getContext("2d");
 
-			canvas.width = width;
-			canvas.height = height;
-			var ctx = canvas.getContext("2d");
-			ctx.drawImage(img, 0, 0, width, height);
-			console.log("Nuevas dimensiones ",width, height);
+            // Establecer un fondo blanco
+            ctx.fillStyle = "white";
+            ctx.fillRect(0, 0, canvas.width, canvas.height);
 
-			// Resultado
-			var dataurl = canvas.toDataURL("image/jpeg");
-			// document.getElementById('imagen_nueva').src = dataurl; //Mostrar en una imagen
-			// ubicacionmapa = dataurl; //Guardar en una variable
+            // Dibujar la imagen redimensionada sobre el fondo blanco
+            ctx.drawImage(img, 0, 0, width, height);
 
-			// Resultado
-			$('#'+campo_filehidden).val(dataurl);
+            // Resultado
+            var dataurl = canvas.toDataURL("image/jpeg");
+            $('#' + campo_filehidden).val(dataurl);
 
-			// Desbloquear boton guardar
-			$('#'+boton_guardar).attr('disabled', false);
-		}, 100);
-	}
+            // Desbloquear botón guardar
+            $('#' + boton_guardar).attr('disabled', false);
+        };
+
+        img.src = e.target.result;
+    };
 }
 
 

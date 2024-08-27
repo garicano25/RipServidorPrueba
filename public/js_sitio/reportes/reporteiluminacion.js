@@ -7,10 +7,11 @@ $(".stickyside").stick_in_parent({
 });
 
 
-$('.stickyside a').click(function () {
+$('.stickyside a').click(function()
+{
 	// $('.list-group-item').removeClass('active');
 	// $(this).addClass('active');
-
+	
 	$('html, body').animate({
 		scrollTop: $($(this).attr('href')).offset().top - 150 // Margin TOP del DIV al que hace referencia el menu
 	}, 1200);
@@ -20,7 +21,7 @@ $('.stickyside a').click(function () {
 
 // This is auto select left sidebar
 var lastId,
-	topMenu = $(".stickyside");
+topMenu = $(".stickyside");
 topMenuHeight = topMenu.outerHeight();
 
 
@@ -29,7 +30,8 @@ menuItems = topMenu.find("a");
 
 
 // Anchors corresponding to menu items
-scrollItems = menuItems.map(function () {
+scrollItems = menuItems.map(function()
+{
 	var item = $($(this).attr("href"));
 	if (item.length) {
 		return item;
@@ -38,22 +40,24 @@ scrollItems = menuItems.map(function () {
 
 
 // Menu al mover el scroll
-$(window).scroll(function () {
+$(window).scroll(function()
+{
 	// Get container scroll position
 	// var fromTop = $(this).scrollTop() + topMenuHeight - 100;
 	var fromTop = $(this).scrollTop() + topMenuHeight;
 
 	// Get id of current scroll item
-	var cur = scrollItems.map(function () {
+	var cur = scrollItems.map(function() {
 		if ($(this).offset().top < fromTop)
-			return this;
+		return this;
 	});
 
 	// Get the id of the current element
 	cur = cur[cur.length - 1];
 	var id = cur && cur.length ? cur[0].id : "";
 
-	if (lastId !== id) {
+	if (lastId !== id)
+	{
 		lastId = id;
 		// Set/remove active class
 		menuItems.removeClass("active").filter("[href='#" + id + "']").addClass("active");
@@ -75,78 +79,89 @@ $('[data-toggle="tooltip"]').tooltip();
 
 
 var tiempoespera = 10; // Segundos
-function updateClock() {
-	if (parseInt(tiempoespera) > 0) {
+function updateClock()
+{
+	if (parseInt(tiempoespera) > 0)
+	{
 		$('#segundos_espera').html((tiempoespera - 1));
 
 		tiempoespera = (parseInt(tiempoespera) - 1);
 
-		setTimeout(function () {
+		setTimeout(function()
+		{
 			updateClock();
 		}, 1000);
 	}
-	else {
+	else
+	{
 		$('#modal_cargando').modal('hide');
 	}
 }
 
 
-$(document).ready(function () {
+$(document).ready(function()
+{
 	// Modal cargando
-	$('#modal_cargando .modal-title').html('Cargando informe de ' + agente_nombre); // Titulo modal
+	$('#modal_cargando .modal-title').html('Cargando informe de '+agente_nombre); // Titulo modal
 	$('#modal_cargando').modal(); // Abrir modal
 	updateClock(); // Ejecutar tiempo de espera
 
 	datosgenerales(); // Datos generales
 	portadaInfo(); // Portada
-
+ 
 
 	// Inicializar campos datepicker
-	jQuery('.mydatepicker').datepicker({
-		format: 'yyyy-mm-dd', //'dd-mm-yyyy'
-		weekStart: 1, //dia que inicia la semana, 1 = Lunes
-		// startDate: new Date('11/17/2020'), // deshabilitar dias anteriores con fecha
-		// startDate: '-3d', // deshabilitar dias anteriores del dia actual
-		// endDate: '+3d', //deshabilitar dias despues del dia actual
-		calendarWeeks: true,
-		autoclose: true,
-		todayHighlight: true, //Dia de hoy marcado en el calendario
-		toggleActive: true,
-		// setDate: new Date('11/17/2020'), // "2020/11/25", //Fecha marcada en el caledario
-		forceParse: false, //mantiene la fecha del input si no se selecciona otra
-		showOnFocus: true
-	});
+    jQuery('.mydatepicker').datepicker({
+        format: 'yyyy-mm-dd', //'dd-mm-yyyy'
+        weekStart: 1, //dia que inicia la semana, 1 = Lunes
+        // startDate: new Date('11/17/2020'), // deshabilitar dias anteriores con fecha
+        // startDate: '-3d', // deshabilitar dias anteriores del dia actual
+        // endDate: '+3d', //deshabilitar dias despues del dia actual
+        calendarWeeks: true,
+        autoclose: true,
+        todayHighlight: true, //Dia de hoy marcado en el calendario
+        toggleActive: true,
+        // setDate: new Date('11/17/2020'), // "2020/11/25", //Fecha marcada en el caledario
+        forceParse: false, //mantiene la fecha del input si no se selecciona otra
+        showOnFocus: true
+    });
 
-	// Si selecciona un campo tipo datepicker
-	$('.mydatepicker').on('click', function () {
-		$(this).datepicker('setDate', $(this).val());// Mostrar fecha del input y marcar en el calendario
-	});
+    // Si selecciona un campo tipo datepicker
+    $('.mydatepicker').on('click', function()
+    {
+        $(this).datepicker('setDate', $(this).val());// Mostrar fecha del input y marcar en el calendario
+    });
 });
-
+ 
 
 //=================================================
 // DATOS GENERALES
 
 
 var datosgenerales_ejecusiones = 0;
-function datosgenerales() {
+function datosgenerales()
+{
 	$.ajax({
 		type: "GET",
 		dataType: "json",
-		url: "/reporteiluminaciondatosgenerales/" + proyecto.id + "/" + agente_id + "/" + agente_nombre,
-		data: {},
+		url: "/reporteiluminaciondatosgenerales/"+proyecto.id+"/"+agente_id+"/"+agente_nombre,
+		data:{},
 		cache: false,
-		success: function (dato) {
+		success:function(dato)
+		{
 			reporteiluminacion_id = 0;
-			if (parseInt(dato.reporteiluminacion_id) > 0) {
+			if (parseInt(dato.reporteiluminacion_id) > 0)
+			{
 				reporteiluminacion_id = parseInt(dato.reporteiluminacion_id);
 				// $('#reporteiluminacion_id').html(reporteiluminacion_id);
 			}
 
-			if (parseInt(dato.reporteiluminacion_concluido) == 1 || parseInt(dato.reporteiluminacion_cancelado) == 1) {
+			if (parseInt(dato.reporteiluminacion_concluido) == 1 || parseInt(dato.reporteiluminacion_cancelado) == 1)
+			{
 				botoninforme_estado(1);
 			}
-			else {
+			else
+			{
 				botoninforme_estado(0);
 			}
 
@@ -162,7 +177,8 @@ function datosgenerales() {
 				$('#reporteiluminacion_catregion_activo').prop('checked', dato.reporteiluminacion_portada.reporteiluminacion_catregion_activo);
 				$('#reporteiluminacion_catregion_id').val(dato.reporteiluminacion_portada.catregion_id);
 			}
-			else {
+			else
+			{
 				$('#reporteiluminacion_catsubdireccion_id').val('');
 				$('#reporteiluminacion_catgerencia_id').val('');
 				$('#reporteiluminacion_catactivo_id').val('');
@@ -173,8 +189,8 @@ function datosgenerales() {
 				$('#reporteiluminacion_catactivo_activo').prop('checked', 0);
 				$('#reporteiluminacion_catregion_activo').prop('checked', 0);
 			}
-
-
+			
+			
 			$('#reporteiluminacion_instalacion').val(dato.reporteiluminacion_portada.reporteiluminacion_instalacion);
 
 			$('#reporteiluminacion_fecha').val(dato.reporteiluminacion_portada.reporteiluminacion_fecha);
@@ -197,19 +213,21 @@ function datosgenerales() {
 			$('#reporteiluminacion_metodologia_4_2_4').html(dato.reporteiluminacion_metodologia_4_2_4);
 
 			$('#reporteiluminacion_ubicacioninstalacion').html(dato.reporteiluminacion_ubicacioninstalacion.ubicacion);
-			if (dato.reporteiluminacion_ubicacioninstalacion.ubicacionfoto) {
+			if (dato.reporteiluminacion_ubicacioninstalacion.ubicacionfoto)
+			{
 				var archivo = dato.reporteiluminacion_ubicacioninstalacion.ubicacionfoto;
 				var extension = archivo.substring(archivo.lastIndexOf("."));
-				var imagenUrl = '/reporteiluminacionmapaubicacion/' + reporteiluminacion_id + '/' + 0;
+				var imagenUrl = '/reporteiluminacionmapaubicacion/'+reporteiluminacion_id+'/'+0;
 				$('#reporteiluminacionubicacionfoto').dropify().data('dropify').destroy();
-				$('#reporteiluminacionubicacionfoto').dropify().data('dropify').settings.defaultFile = imagenUrl + extension;
+				$('#reporteiluminacionubicacionfoto').dropify().data('dropify').settings.defaultFile = imagenUrl+extension;
 				$('#reporteiluminacionubicacionfoto').dropify().data('dropify').init();
 				$('#reporteiluminacionubicacionfoto').attr('required', false);
-
+				
 				// Boton descargar mapa ubicacion
 				$('#boton_descargarmapaubicacion').css('display', 'block');
 			}
-			else {
+			else
+			{
 				$('#reporteiluminacionubicacionfoto').val('');
 				$('#reporteiluminacionubicacionfoto').attr('required', true);
 				$('#reporteiluminacionubicacionfoto').dropify().data('dropify').resetPreview();
@@ -224,7 +242,8 @@ function datosgenerales() {
 			$('#reporteiluminacion_criterioseleccion').html(dato.reporteiluminacion_criterioseleccion);
 			$('#reporteiluminacion_conclusion').html(dato.reporteiluminacion_conclusion);
 
-			if (dato.reporteiluminacion_responsablesinforme.reporteiluminacion_responsable1) {
+			if (dato.reporteiluminacion_responsablesinforme.reporteiluminacion_responsable1)
+			{
 				// Responsable 1
 				$('#reporteiluminacion_responsable1').val(dato.reporteiluminacion_responsablesinforme.reporteiluminacion_responsable1);
 				$('#reporteiluminacion_responsable1cargo').val(dato.reporteiluminacion_responsablesinforme.reporteiluminacion_responsable1cargo);
@@ -233,14 +252,14 @@ function datosgenerales() {
 
 				var archivo = dato.reporteiluminacion_responsablesinforme.reporteiluminacion_responsable1documento;
 				var tipo1 = dato.reporteiluminacion_responsablesinforme.tipo1
-				var id1 = dato.reporteiluminacion_responsablesinforme.registro_id == 0 ? dato.reporteiluminacion_responsablesinforme.recsensorial_id : dato.reporteiluminacion_responsablesinforme.registro_id
+				var id1 = dato.reporteiluminacion_responsablesinforme.registro_id == 0 ? dato.reporteiluminacion_responsablesinforme.recsensorial_id : dato.reporteiluminacion_responsablesinforme.registro_id 
 				var extension = archivo.substring(archivo.lastIndexOf("."));
-				var imagenUrl = '/reporteiluminacionresponsabledocumento/' + id1 + '/' + tipo1 + '/' + 0;
+				var imagenUrl = '/reporteiluminacionresponsabledocumento/'+ id1 +'/'+ tipo1 +'/'+0;
 				$('#reporteiluminacionresponsable1documento').dropify().data('dropify').destroy();
-				$('#reporteiluminacionresponsable1documento').dropify().data('dropify').settings.defaultFile = imagenUrl + extension;
+				$('#reporteiluminacionresponsable1documento').dropify().data('dropify').settings.defaultFile = imagenUrl+extension;
 				$('#reporteiluminacionresponsable1documento').dropify().data('dropify').init();
 				$('#reporteiluminacionresponsable1documento').attr('required', false);
-
+				
 				// Responsable 2
 				$('#reporteiluminacion_responsable2').val(dato.reporteiluminacion_responsablesinforme.reporteiluminacion_responsable2);
 				$('#reporteiluminacion_responsable2cargo').val(dato.reporteiluminacion_responsablesinforme.reporteiluminacion_responsable2cargo);
@@ -249,25 +268,27 @@ function datosgenerales() {
 
 				var archivo = dato.reporteiluminacion_responsablesinforme.reporteiluminacion_responsable2documento;
 				var tipo2 = dato.reporteiluminacion_responsablesinforme.tipo2
-				var id2 = dato.reporteiluminacion_responsablesinforme.registro_id == 0 ? dato.reporteiluminacion_responsablesinforme.recsensorial_id : dato.reporteiluminacion_responsablesinforme.registro_id
+				var id2 = dato.reporteiluminacion_responsablesinforme.registro_id == 0 ? dato.reporteiluminacion_responsablesinforme.recsensorial_id : dato.reporteiluminacion_responsablesinforme.registro_id 
 				var extension = archivo.substring(archivo.lastIndexOf("."));
-				var imagenUrl = '/reporteiluminacionresponsabledocumento/' + id2 + '/' + tipo2 + '/' + 0;
+				var imagenUrl = '/reporteiluminacionresponsabledocumento/'+ id2 +'/'+ tipo2 +'/'+0;
 				$('#reporteiluminacionresponsable2documento').dropify().data('dropify').destroy();
-				$('#reporteiluminacionresponsable2documento').dropify().data('dropify').settings.defaultFile = imagenUrl + extension;
+				$('#reporteiluminacionresponsable2documento').dropify().data('dropify').settings.defaultFile = imagenUrl+extension;
 				$('#reporteiluminacionresponsable2documento').dropify().data('dropify').init();
 				$('#reporteiluminacionresponsable2documento').attr('required', false);
 
 				// Botones de descarga
 				$('#boton_descargarresponsabledoc1').css('display', 'none');
 				$('#boton_descargarresponsabledoc2').css('display', 'none');
-				$('#reporteiluminacion_carpetadocumentoshistorial').val('reportes/proyecto/' + dato.reporteiluminacion_responsablesinforme.proyecto_id + '/' + agente_nombre + '/' + dato.reporteiluminacion_responsablesinforme.registro_id + '/responsables informe');
-				if (parseInt(dato.reporteiluminacion_responsablesinforme.proyecto_id) == parseInt(proyecto.id)) {
+				$('#reporteiluminacion_carpetadocumentoshistorial').val('reportes/proyecto/'+dato.reporteiluminacion_responsablesinforme.proyecto_id+'/'+agente_nombre+'/'+dato.reporteiluminacion_responsablesinforme.registro_id+'/responsables informe');
+				if (parseInt(dato.reporteiluminacion_responsablesinforme.proyecto_id) == parseInt(proyecto.id))
+				{
 					$('#boton_descargarresponsabledoc1').css('display', 'block');
 					$('#boton_descargarresponsabledoc2').css('display', 'block');
 					$('#reporteiluminacion_carpetadocumentoshistorial').val('');
 				}
 			}
-			else {
+			else
+			{
 				$('#reporteiluminacion_responsable1').val('');
 				$('#reporteiluminacion_responsable1cargo').val('');
 				$('#reporteiluminacion_responsable1documento').val('');
@@ -276,7 +297,7 @@ function datosgenerales() {
 				$('#reporteiluminacionresponsable1documento').dropify().data('dropify').resetPreview();
 				$('#reporteiluminacionresponsable1documento').dropify().data('dropify').clearElement();
 				$('#boton_descargarresponsabledoc1').css('display', 'none');
-
+				
 				$('#reporteiluminacion_responsable2').val('');
 				$('#reporteiluminacion_responsable2cargo').val('');
 				$('#reporteiluminacion_responsable2documento').val('');
@@ -324,16 +345,20 @@ function datosgenerales() {
 			// }
 
 
-			if (areas_poe == 1) {
-				setTimeout(function () {
+			if (areas_poe == 1)
+			{
+				setTimeout(function()
+				{
 					$("#boton_reporte_nuevacategoria").attr('disabled', true);
 					$("#boton_reporte_nuevaarea").attr('disabled', true);
 				}, 5000);
 			}
 
 
-			if (areas_poe == 1) {
-				setTimeout(function () {
+			if (areas_poe == 1)
+			{
+				setTimeout(function()
+				{
 					$("#boton_reporte_nuevacategoria").attr('disabled', true);
 					$("#boton_reporte_nuevaarea").attr('disabled', true);
 				}, 10000);
@@ -343,14 +368,16 @@ function datosgenerales() {
 		// {
 		// 	// $('#tabla_reporte_definiciones tbody').html('<tr><td colspan="5"><i class="fa fa-spin fa-spinner" style="font-size: 40px!important;"></i></td></tr>');
 		// },
-		error: function (dato) {
-			if (datosgenerales_ejecusiones == 0) {
+		error: function(dato)
+		{
+			if (datosgenerales_ejecusiones == 0)
+			{
 				datosgenerales();
 				datosgenerales_ejecusiones += 1;
 			}
 
 			reporteiluminacion_id = 0;
-
+			
 			$('#reporteiluminacion_instalacion').val('Error al cargar los datos');
 			$('#reporteiluminacion_fecha').val('Error al cargar los datos');
 			$('#reporteiluminacion_mes').val('Error al cargar los datos');
@@ -391,117 +418,108 @@ function portadaInfo() {
 			console.log('Error al cargar los datos');
 		}
 	})
-
+	
 }
 
 
-function menureporte_estado(menu_nombre, menu_estado) {
-	if (parseInt(menu_estado) > 0) {
-		$('#' + menu_nombre).css('color', '#64bd44'); // Verde
+function menureporte_estado(menu_nombre, menu_estado)
+{
+	if (parseInt(menu_estado) > 0)
+	{
+		$('#'+menu_nombre).css('color', '#64bd44'); // Verde
 
-		$('#' + menu_nombre).removeClass('fa fa-times');
-		$('#' + menu_nombre).addClass('fa fa-check');
+		$('#'+menu_nombre).removeClass('fa fa-times');
+		$('#'+menu_nombre).addClass('fa fa-check');
 	}
-	else {
-		$('#' + menu_nombre).css('color', '#fc4b6c'); // Rojo
+	else
+	{
+		$('#'+menu_nombre).css('color', '#fc4b6c'); // Rojo
 
-		$('#' + menu_nombre).removeClass('fa fa-check');
-		$('#' + menu_nombre).addClass('fa fa-times');
+		$('#'+menu_nombre).removeClass('fa fa-check');
+		$('#'+menu_nombre).addClass('fa fa-times');
 	}
 }
 
 
-function instalacion_nombre(reporte_instalacion) {
+function instalacion_nombre(reporte_instalacion)
+{
 	$('.div_instalacion_nombre').html(reporte_instalacion);
 }
 
 
 function redimencionar_foto(campo_file, campo_filehidden, boton_guardar) {
-	// Bloquear boton guardar
-	$('#' + boton_guardar).attr('disabled', true);
-	$('#' + campo_filehidden).val('');
+    // Bloquear botón guardar
+    $('#' + boton_guardar).attr('disabled', true);
+    $('#' + campo_filehidden).val('');
 
-	foto_resize_fisicos = "";
-	var filesToUpload = document.getElementById(campo_file).files;
-	var file = filesToUpload[0];
+    var filesToUpload = document.getElementById(campo_file).files;
+    var file = filesToUpload[0];
 
-	// Create an image
-	var img = document.createElement("img");
+    // Crear un lector de archivos
+    var reader = new FileReader();
 
-	// Create a file reader
-	var reader = new FileReader();
+    // Cargar archivos en el lector de archivos
+    reader.readAsDataURL(file);
 
-	// Load files into file reader
-	reader.readAsDataURL(file);
+    // Configurar la imagen una vez que se carga en el lector de archivos
+    reader.onload = function(e) {
+        var img = new Image();
+        img.onload = function() {
+            var canvas = document.createElement("canvas");
 
-	// Set the image once loaded into file reader
-	reader.onload = function (e) {
-		//img.src = e.target.result;
-		var img = new Image();
-		img.src = this.result;
+            // Dimensiones reales
+            var width = img.width;
+            var height = img.height;
 
-		setTimeout(function () {
-			var canvas = document.createElement("canvas");
-			//var canvas = $("<canvas>", {"id":"testing"})[0];
-			//var ctx = canvas.getContext("2d");
-			//ctx.drawImage(img, 0, 0);
+            // Dimensiones Nuevas
+            var MAX_WIDTH = (width > 8000) ? 4000 : 1200;
+            var MAX_HEIGHT = (width > 8000) ? 3000 : 900;
 
-			// Dimensiones reales
-			var width = img.width;
-			var height = img.height;
+            // Dimensionar con respecto a la relación de aspecto
+            if (width > height) {
+                if (width > MAX_WIDTH) {
+                    height *= MAX_WIDTH / width;
+                    width = MAX_WIDTH;
+                }
+            } else {
+                if (height > MAX_HEIGHT) {
+                    width *= MAX_HEIGHT / height;
+                    height = MAX_HEIGHT;
+                }
+            }
 
-			// Dimensiones Nuevas
-			if (parseInt(width) > 8000) {
-				var MAX_WIDTH = 4000; //Ancho de la imagen
-				var MAX_HEIGHT = 3000; //Alto de la imagen
-			}
-			else {
-				var MAX_WIDTH = 1200; //Ancho de la imagen
-				var MAX_HEIGHT = 900; //Alto de la imagen
-			}
+            canvas.width = width;
+            canvas.height = height;
+            var ctx = canvas.getContext("2d");
 
-			// Dimensionar con respecto a la relacion de aspecto
-			if (width > height) {
-				if (width > MAX_WIDTH) {
-					height *= MAX_WIDTH / width;
-					width = MAX_WIDTH;
-				}
-			}
-			else {
-				if (height > MAX_HEIGHT) {
-					width *= MAX_HEIGHT / height;
-					height = MAX_HEIGHT;
-				}
-			}
+            // Establecer un fondo blanco
+            ctx.fillStyle = "white";
+            ctx.fillRect(0, 0, canvas.width, canvas.height);
 
-			canvas.width = width;
-			canvas.height = height;
-			var ctx = canvas.getContext("2d");
-			ctx.drawImage(img, 0, 0, width, height);
-			console.log("Nuevas dimensiones ", width, height);
+            // Dibujar la imagen redimensionada sobre el fondo blanco
+            ctx.drawImage(img, 0, 0, width, height);
 
-			// Resultado
-			var dataurl = canvas.toDataURL("image/jpeg");
-			// document.getElementById('imagen_nueva').src = dataurl; //Mostrar en una imagen
-			// ubicacionmapa = dataurl; //Guardar en una variable
+            // Resultado
+            var dataurl = canvas.toDataURL("image/jpeg");
+            $('#' + campo_filehidden).val(dataurl);
 
-			// Resultado
-			$('#' + campo_filehidden).val(dataurl);
+            // Desbloquear botón guardar
+            $('#' + boton_guardar).attr('disabled', false);
+        };
 
-			// Desbloquear boton guardar
-			$('#' + boton_guardar).attr('disabled', false);
-		}, 100);
-	}
+        img.src = e.target.result;
+    };
 }
-
 
 //=================================================
 // PORTADA
 
 
-$("#botonguardar_reporte_portada").click(function () {
+$("#botonguardar_reporte_portada").click(function()
+{
 	var valida = this.form.checkValidity();
-	if (valida) {
+	if (valida)
+	{
 		swal({
 			title: "¡Confirme guardar la portada!",
 			text: "",
@@ -513,91 +531,97 @@ $("#botonguardar_reporte_portada").click(function () {
 			closeOnConfirm: false,
 			closeOnCancel: false
 		},
-			function (isConfirm) {
-				if (isConfirm) {
-					// cerrar msj confirmacion
-					swal.close();
+		function(isConfirm)
+		{
+			if (isConfirm)
+			{
+				// cerrar msj confirmacion
+				swal.close();
 
-					// enviar datos
-					$('#form_reporte_portada').ajaxForm({
-						dataType: 'json',
-						type: 'POST',
-						url: '/reporteiluminacion',
-						data: {
-							opcion: 0,
-							proyecto_id: proyecto.id,
-							agente_id: agente_id,
-							agente_nombre: agente_nombre,
-							reporteiluminacion_id: reporteiluminacion_id,
-							catregion_id: $("#reporteiluminacion_catregion_id").val(),
-							catsubdireccion_id: $("#reporteiluminacion_catsubdireccion_id").val(),
-							catgerencia_id: $("#reporteiluminacion_catgerencia_id").val(),
-							catactivo_id: $("#reporteiluminacion_catactivo_id").val(),
-						},
-						resetForm: false,
-						success: function (dato) {
-							// Actualizar ID reporte
-							reporteiluminacion_id = dato.reporteiluminacion_id;
+				// enviar datos
+				$('#form_reporte_portada').ajaxForm({
+					dataType: 'json',
+					type: 'POST',
+					url: '/reporteiluminacion',
+					data: {
+						opcion: 0,
+						proyecto_id: proyecto.id,
+						agente_id: agente_id,
+						agente_nombre: agente_nombre,
+						reporteiluminacion_id: reporteiluminacion_id,
+						catregion_id: $("#reporteiluminacion_catregion_id").val(),
+						catsubdireccion_id: $("#reporteiluminacion_catsubdireccion_id").val(),
+						catgerencia_id: $("#reporteiluminacion_catgerencia_id").val(),
+						catactivo_id: $("#reporteiluminacion_catactivo_id").val(),
+					},
+					resetForm: false,
+					success: function(dato)
+					{
+						// Actualizar ID reporte
+						reporteiluminacion_id = dato.reporteiluminacion_id;
 
-							menureporte_estado("menureporte_0", 1);
+						menureporte_estado("menureporte_0", 1);
 
-							tabla_reporte_revisiones(proyecto.id);
+						tabla_reporte_revisiones(proyecto.id);
 
-							// mensaje
-							swal({
-								title: "Correcto",
-								text: "" + dato.msj,
-								type: "success", // warning, error, success, info
-								buttons: {
-									visible: false, // true , false
-								},
-								timer: 1500,
-								showConfirmButton: false
-							});
+						// mensaje
+						swal({
+							title: "Correcto",
+							text: ""+dato.msj,
+							type: "success", // warning, error, success, info
+							buttons: {
+								visible: false, // true , false
+							},
+							timer: 1500,
+							showConfirmButton: false
+						});
 
-							// actualiza boton
-							$('#botonguardar_reporte_portada').html('Guardar portada <i class="fa fa-save"></i>');
-							$('#botonguardar_reporte_portada').attr('disabled', false);
-						},
-						beforeSend: function () {
-							$('#botonguardar_reporte_portada').html('Guardando portada <i class="fa fa-spin fa-spinner"></i>');
-							$('#botonguardar_reporte_portada').attr('disabled', true);
-						},
-						error: function (dato) {
-							// actualiza boton
-							$('#botonguardar_reporte_portada').html('Guardar portada <i class="fa fa-save"></i>');
-							$('#botonguardar_reporte_portada').attr('disabled', false);
+						// actualiza boton
+						$('#botonguardar_reporte_portada').html('Guardar portada <i class="fa fa-save"></i>');
+						$('#botonguardar_reporte_portada').attr('disabled', false);
+					},
+					beforeSend: function()
+					{
+						$('#botonguardar_reporte_portada').html('Guardando portada <i class="fa fa-spin fa-spinner"></i>');
+						$('#botonguardar_reporte_portada').attr('disabled', true);
+					},
+					error: function(dato)
+					{
+						// actualiza boton
+						$('#botonguardar_reporte_portada').html('Guardar portada <i class="fa fa-save"></i>');
+						$('#botonguardar_reporte_portada').attr('disabled', false);
 
-							// mensaje
-							swal({
-								title: "Error",
-								text: "" + dato.msj,
-								type: "error", // warning, error, success, info
-								buttons: {
-									visible: false, // true , false
-								},
-								timer: 1500,
-								showConfirmButton: false
-							});
-							return false;
-						}
-					}).submit();
-					return false;
-				}
-				else {
-					// mensaje
-					swal({
-						title: "Cancelado",
-						text: "Acción cancelada",
-						type: "error", // warning, error, success, info
-						buttons: {
-							visible: false, // true , false
-						},
-						timer: 500,
-						showConfirmButton: false
-					});
-				}
-			});
+						// mensaje
+						swal({
+							title: "Error",
+							text: ""+dato.msj,
+							type: "error", // warning, error, success, info
+							buttons: {
+								visible: false, // true , false
+							},
+							timer: 1500,
+							showConfirmButton: false
+						});
+						return false;
+					}
+				}).submit();
+				return false;
+			}
+			else 
+			{
+				// mensaje
+				swal({
+					title: "Cancelado",
+					text: "Acción cancelada",
+					type: "error", // warning, error, success, info
+					buttons: {
+						visible: false, // true , false
+					},
+					timer: 500,
+					showConfirmButton: false
+				});
+			}
+		});
 		return false;
 	}
 });
@@ -607,10 +631,12 @@ $("#botonguardar_reporte_portada").click(function () {
 // INTRODUCCION
 
 
-$("#botonguardar_reporte_introduccion").click(function () {
+$("#botonguardar_reporte_introduccion").click(function()
+{
 	// valida campos vacios
 	var valida = this.form.checkValidity();
-	if (valida) {
+	if (valida)
+	{
 		swal({
 			title: "¡Confirme que desea guardar!",
 			text: "Introducción",
@@ -622,89 +648,95 @@ $("#botonguardar_reporte_introduccion").click(function () {
 			closeOnConfirm: false,
 			closeOnCancel: false
 		},
-			function (isConfirm) {
-				if (isConfirm) {
-					// cerrar msj confirmacion
-					swal.close();
+		function(isConfirm)
+		{
+			if (isConfirm)
+			{
+				// cerrar msj confirmacion
+				swal.close();
 
-					// enviar datos
-					$('#form_reporte_introduccion').ajaxForm({
-						dataType: 'json',
-						type: 'POST',
-						url: '/reporteiluminacion',
-						data: {
-							opcion: 1,
-							proyecto_id: proyecto.id,
-							agente_id: agente_id,
-							agente_nombre: agente_nombre,
-							reporteiluminacion_id: reporteiluminacion_id,
-							catactivo_id: $("#reporteiluminacion_catactivo_id").val(),
-							reporteiluminacion_instalacion: $("#reporteiluminacion_instalacion").val()
-						},
-						resetForm: false,
-						success: function (dato) {
-							// Actualizar ID reporte						
-							reporteiluminacion_id = dato.reporteiluminacion_id;
+				// enviar datos
+				$('#form_reporte_introduccion').ajaxForm({
+					dataType: 'json',
+					type: 'POST',
+					url: '/reporteiluminacion',
+					data: {
+						opcion: 1,
+						proyecto_id: proyecto.id,
+						agente_id: agente_id,
+						agente_nombre: agente_nombre,
+						reporteiluminacion_id: reporteiluminacion_id,
+						catactivo_id: $("#reporteiluminacion_catactivo_id").val(),
+						reporteiluminacion_instalacion: $("#reporteiluminacion_instalacion").val()
+					},
+					resetForm: false,
+					success: function(dato)
+					{
+						// Actualizar ID reporte						
+						reporteiluminacion_id = dato.reporteiluminacion_id;
 
-							menureporte_estado("menureporte_1", 1);
+						menureporte_estado("menureporte_1", 1);
 
-							tabla_reporte_revisiones(proyecto.id);
+						tabla_reporte_revisiones(proyecto.id);
 
-							// mensaje
-							swal({
-								title: "Correcto",
-								text: "" + dato.msj,
-								type: "success", // warning, error, success, info
-								buttons: {
-									visible: false, // true , false
-								},
-								timer: 1500,
-								showConfirmButton: false
-							});
+						// mensaje
+						swal({
+							title: "Correcto",
+							text: ""+dato.msj,
+							type: "success", // warning, error, success, info
+							buttons: {
+								visible: false, // true , false
+							},
+							timer: 1500,
+							showConfirmButton: false
+						});
 
-							// actualiza boton
-							$('#botonguardar_reporte_introduccion').html('Guardar introducción <i class="fa fa-save"></i>');
-							$('#botonguardar_reporte_introduccion').attr('disabled', false);
-						},
-						beforeSend: function () {
-							$('#botonguardar_reporte_introduccion').html('Guardando introducción <i class="fa fa-spin fa-spinner"></i>');
-							$('#botonguardar_reporte_introduccion').attr('disabled', true);
-						},
-						error: function (dato) {
-							// actualiza boton
-							$('#botonguardar_reporte_introduccion').html('Guardar introducción <i class="fa fa-save"></i>');
-							$('#botonguardar_reporte_introduccion').attr('disabled', false);
+						// actualiza boton
+						$('#botonguardar_reporte_introduccion').html('Guardar introducción <i class="fa fa-save"></i>');
+						$('#botonguardar_reporte_introduccion').attr('disabled', false);
+					},
+					beforeSend: function()
+					{
+						$('#botonguardar_reporte_introduccion').html('Guardando introducción <i class="fa fa-spin fa-spinner"></i>');
+						$('#botonguardar_reporte_introduccion').attr('disabled', true);
+					},
+					error: function(dato)
+					{
+						// actualiza boton
+						$('#botonguardar_reporte_introduccion').html('Guardar introducción <i class="fa fa-save"></i>');
+						$('#botonguardar_reporte_introduccion').attr('disabled', false);
 
-							// mensaje
-							swal({
-								title: "Error",
-								text: "" + dato.msj,
-								type: "error", // warning, error, success, info
-								buttons: {
-									visible: false, // true , false
-								},
-								timer: 1500,
-								showConfirmButton: false
-							});
-							return false;
-						}
-					}).submit();
-					return false;
-				}
-				else {
-					// mensaje
-					swal({
-						title: "Cancelado",
-						text: "Acción cancelada",
-						type: "error", // warning, error, success, info
-						buttons: {
-							visible: false, // true , false
-						},
-						timer: 500,
-						showConfirmButton: false
-					});
-				}
-			});
+						// mensaje
+						swal({
+							title: "Error",
+							text: ""+dato.msj,
+							type: "error", // warning, error, success, info
+							buttons: {
+								visible: false, // true , false
+							},
+							timer: 1500,
+							showConfirmButton: false
+						});
+						return false;
+					}
+				}).submit();
+				return false;
+			}
+			else 
+			{
+				// mensaje
+				swal({
+					title: "Cancelado",
+					text: "Acción cancelada",
+					type: "error", // warning, error, success, info
+					buttons: {
+						visible: false, // true , false
+					},
+					timer: 500,
+					showConfirmButton: false
+				});
+			}
+		});
 		return false;
 	}
 });
@@ -714,43 +746,51 @@ $("#botonguardar_reporte_introduccion").click(function () {
 // DEFINICION
 
 
-$(document).ready(function () {
+$(document).ready(function()
+{
 
 	obtenerdatos()
-
-	setTimeout(function () {
+	
+	setTimeout(function()
+	{
 		tabla_reporte_definiciones(proyecto.id, agente_nombre, reporteiluminacion_id);
 	}, 2000);
 });
 
 
 var datatable_reportedefiniciones = null;
-function tabla_reporte_definiciones(proyecto_id, agente_nombre, reporteiluminacion_id) {
-	try {
-		var ruta = "/reporteiluminaciontabladefiniciones/" + proyecto_id + "/" + agente_nombre + "/" + reporteiluminacion_id;
+function tabla_reporte_definiciones(proyecto_id, agente_nombre, reporteiluminacion_id)
+{
+	try 
+	{
+		var ruta = "/reporteiluminaciontabladefiniciones/"+proyecto_id+"/"+agente_nombre+"/"+reporteiluminacion_id;
 
-		if (datatable_reportedefiniciones != null) {
+		if (datatable_reportedefiniciones != null)
+		{
 			datatable_reportedefiniciones.clear().draw();
 			datatable_reportedefiniciones.ajax.url(ruta).load();
 		}
-		else {
+		else
+		{
 			var numeroejecucion = 1;
 			datatable_reportedefiniciones = $('#tabla_reporte_definiciones').DataTable({
 				"ajax": {
-					"url": ruta,
-					"type": "get",
-					"cache": false,
-					error: function (xhr, error, code) {
-						// console.log(xhr); console.log(code);
-						console.log('error en datatable_reportedefiniciones');
-						if (numeroejecucion <= 1) {
-							tabla_reporte_definiciones(proyecto_id, agente_nombre, reporteiluminacion_id);
-							numeroejecucion += 1;
-						}
+						"url": ruta,
+						"type": "get",
+						"cache": false,
+						error: function (xhr, error, code)
+						{
+							// console.log(xhr); console.log(code);
+							console.log('error en datatable_reportedefiniciones');
+							if (numeroejecucion <= 1)
+							{
+								tabla_reporte_definiciones(proyecto_id, agente_nombre, reporteiluminacion_id);
+								numeroejecucion += 1;
+							}
+						},
+						"data": {}
 					},
-					"data": {}
-				},
-				"columns": [
+					"columns": [
 					// {
 					//     "data": "id" 
 					// },
@@ -778,7 +818,7 @@ function tabla_reporte_definiciones(proyecto_id, agente_nombre, reporteiluminaci
 				],
 				"lengthMenu": [[20, 50, 100, -1], [20, 50, 100, "Todos"]],
 				// "rowsGroup": [0, 1], //agrupar filas
-				"order": [[0, "DESC"]],
+				"order": [[ 0, "DESC" ]],
 				"ordering": false,
 				"processing": true,
 				"paging": true,
@@ -799,22 +839,25 @@ function tabla_reporte_definiciones(proyecto_id, agente_nombre, reporteiluminaci
 						"previous": "Anterior"
 					}
 				}
-			});
+		    });
 		}
 
 		// Tooltip en DataTable
-		datatable_reportedefiniciones.on('draw', function () {
+		datatable_reportedefiniciones.on('draw', function ()
+		{
 			$('[data-toggle="tooltip"]').tooltip();
 		});
 	}
-	catch (exception) {
+	catch (exception)
+	{
 		tabla_reporte_definiciones(proyecto_id, agente_nombre, reporteiluminacion_id);
-	}
+    }
 }
 
 
-$("#boton_reporte_nuevadefinicion").click(function () {
-	$('#form_modal_definicion').each(function () {
+$("#boton_reporte_nuevadefinicion").click(function()
+{
+	$('#form_modal_definicion').each(function(){
 		this.reset();
 	});
 
@@ -825,16 +868,18 @@ $("#boton_reporte_nuevadefinicion").click(function () {
 	$('#modal_reporte_definicion .modal-title').html('Nueva definición');
 
 	// mostrar modal
-	$('#modal_reporte_definicion').modal({ backdrop: false });
+	$('#modal_reporte_definicion').modal({backdrop:false});
 });
 
 
-$('#tabla_reporte_definiciones tbody').on('click', 'td.editar', function () {
+$('#tabla_reporte_definiciones tbody').on('click', 'td.editar', function()
+{
 	var tr = $(this).closest('tr');
 	var row = datatable_reportedefiniciones.row(tr);
 
-	if (parseInt(row.data().catactivo_id) >= 0) {
-		$('#form_modal_definicion').each(function () {
+	if (parseInt(row.data().catactivo_id) >= 0)
+	{
+		$('#form_modal_definicion').each(function(){
 			this.reset();
 		});
 
@@ -850,19 +895,21 @@ $('#tabla_reporte_definiciones tbody').on('click', 'td.editar', function () {
 		$('#modal_reporte_definicion .modal-title').html(row.data().concepto);
 
 		// mostrar modal
-		$('#modal_reporte_definicion').modal({ backdrop: false });
+		$('#modal_reporte_definicion').modal({backdrop:false});
 	}
 });
 
 
-$('#tabla_reporte_definiciones tbody').on('click', 'td>button.eliminar', function () {
+$('#tabla_reporte_definiciones tbody').on('click', 'td>button.eliminar', function()
+{
 	var tr = $(this).closest('tr');
 	var row = datatable_reportedefiniciones.row(tr);
 
-	if (parseInt(row.data().catactivo_id) >= 0) {
+	if (parseInt(row.data().catactivo_id) >= 0)
+	{
 		swal({
 			title: "¡Confirme que desea eliminar!",
-			text: "La definición: " + row.data().concepto,
+			text: "La definición: "+row.data().concepto,
 			type: "warning",
 			showCancelButton: true,
 			confirmButtonColor: "#DD6B55",
@@ -871,107 +918,118 @@ $('#tabla_reporte_definiciones tbody').on('click', 'td>button.eliminar', functio
 			closeOnConfirm: false,
 			closeOnCancel: false
 		},
-			function (isConfirm) {
-				if (isConfirm) {
-					swal({
-						title: "¡Por seguridad confirme nuevamente que desea eliminar!",
-						text: "La definición: " + row.data().concepto,
-						type: "warning",
-						showCancelButton: true,
-						confirmButtonColor: "#DD6B55",
-						confirmButtonText: "Eliminar!",
-						cancelButtonText: "Cancelar!",
-						closeOnConfirm: false,
-						closeOnCancel: false
-					},
-						function (isConfirm) {
-							if (isConfirm) {
-								// cerrar msj confirmacion
-								swal.close();
+		function(isConfirm)
+		{
+			if (isConfirm)
+			{
+				swal({
+					title: "¡Por seguridad confirme nuevamente que desea eliminar!",
+					text: "La definición: "+row.data().concepto,
+					type: "warning",
+					showCancelButton: true,
+					confirmButtonColor: "#DD6B55",
+					confirmButtonText: "Eliminar!",
+					cancelButtonText: "Cancelar!",
+					closeOnConfirm: false,
+					closeOnCancel: false
+				},
+				function(isConfirm)
+				{
+					if (isConfirm)
+					{
+						// cerrar msj confirmacion
+						swal.close();
 
-								$.ajax({
-									type: "GET",
-									dataType: "json",
-									url: "/reporteiluminaciondefinicioneliminar/" + row.data().id,
-									data: {},
-									cache: false,
-									success: function (dato) {
-										// Actualizar tabla
-										tabla_reporte_definiciones(proyecto.id, agente_nombre);
+						$.ajax({
+							type: "GET",
+							dataType: "json",
+							url: "/reporteiluminaciondefinicioneliminar/"+row.data().id,
+							data:{},
+							cache: false,
+							success:function(dato)
+							{
+								// Actualizar tabla
+								tabla_reporte_definiciones(proyecto.id, agente_nombre);
 
-										// mensaje
-										swal({
-											title: "Correcto",
-											text: "" + dato.msj,
-											type: "success", // warning, error, success, info
-											buttons: {
-												visible: false, // true , false
-											},
-											timer: 1500,
-											showConfirmButton: false
-										});
-									},
-									beforeSend: function () {
-										// $('#tabla_reporte_definiciones tbody').html('<tr><td colspan="5"><i class="fa fa-spin fa-spinner" style="font-size: 40px!important;"></i></td></tr>');
-									},
-									error: function (dato) {
-										// mensaje
-										swal({
-											title: "Error",
-											text: "" + dato.msj,
-											type: "error", // warning, error, success, info
-											buttons: {
-												visible: false, // true , false
-											},
-											timer: 1500,
-											showConfirmButton: false
-										});
-
-										return false;
-									}
-								});//Fin ajax
-							}
-							else {
 								// mensaje
 								swal({
-									title: "Cancelado",
-									text: "Acción cancelada",
+									title: "Correcto",
+									text: ""+dato.msj,
+									type: "success", // warning, error, success, info
+									buttons: {
+										visible: false, // true , false
+									},
+									timer: 1500,
+									showConfirmButton: false
+								});
+							},
+							beforeSend: function()
+							{
+								// $('#tabla_reporte_definiciones tbody').html('<tr><td colspan="5"><i class="fa fa-spin fa-spinner" style="font-size: 40px!important;"></i></td></tr>');
+							},
+							error: function(dato)
+							{
+								// mensaje
+								swal({
+									title: "Error",
+									text: ""+dato.msj,
 									type: "error", // warning, error, success, info
 									buttons: {
 										visible: false, // true , false
 									},
-									timer: 500,
+									timer: 1500,
 									showConfirmButton: false
 								});
+
+								return false;
 							}
+						});//Fin ajax
+					}
+					else 
+					{
+						// mensaje
+						swal({
+							title: "Cancelado",
+							text: "Acción cancelada",
+							type: "error", // warning, error, success, info
+							buttons: {
+								visible: false, // true , false
+							},
+							timer: 500,
+							showConfirmButton: false
 						});
-				}
-				else {
-					// mensaje
-					swal({
-						title: "Cancelado",
-						text: "Acción cancelada",
-						type: "error", // warning, error, success, info
-						buttons: {
-							visible: false, // true , false
-						},
-						timer: 500,
-						showConfirmButton: false
-					});
-				}
-			});
+					}
+				});
+			}
+			else 
+			{
+				// mensaje
+				swal({
+					title: "Cancelado",
+					text: "Acción cancelada",
+					type: "error", // warning, error, success, info
+					buttons: {
+						visible: false, // true , false
+					},
+					timer: 500,
+					showConfirmButton: false
+				});
+			}
+		});
 		return false;
 	}
 });
 
 
-$("#botonguardar_modal_definicion").click(function () {
+$("#botonguardar_modal_definicion").click(function()
+{
 	// valida campos vacios
 	var valida = this.form.checkValidity();
-	if (valida) {
+	if (valida)
+	{
 		swal({
 			title: "¡Confirme que desea guardar!",
-			text: "Definición: " + $('#reportedefiniciones_concepto').val(),
+			text: "Definición: "+$('#reportedefiniciones_concepto').val(),
 			type: "warning",
 			showCancelButton: true,
 			confirmButtonColor: "#DD6B55",
@@ -980,92 +1038,98 @@ $("#botonguardar_modal_definicion").click(function () {
 			closeOnConfirm: false,
 			closeOnCancel: false
 		},
-			function (isConfirm) {
-				if (isConfirm) {
-					// cerrar msj confirmacion
-					swal.close();
+		function(isConfirm)
+		{
+			if (isConfirm)
+			{
+				// cerrar msj confirmacion
+				swal.close();
 
-					// enviar datos
-					$('#form_modal_definicion').ajaxForm({
-						dataType: 'json',
-						type: 'POST',
-						url: '/reporteiluminacion',
-						data: {
-							opcion: 2,
-							proyecto_id: proyecto.id,
-							agente_id: agente_id,
-							agente_nombre: agente_nombre,
-							reporteiluminacion_id: reporteiluminacion_id,
-							catactivo_id: $("#reporteiluminacion_catactivo_id").val()
-						},
-						resetForm: false,
-						success: function (dato) {
-							// Actualizar ID reporte
-							reporteiluminacion_id = dato.reporteiluminacion_id;
+				// enviar datos
+				$('#form_modal_definicion').ajaxForm({
+					dataType: 'json',
+					type: 'POST',
+					url: '/reporteiluminacion',
+					data: {
+						opcion: 2,
+						proyecto_id: proyecto.id,
+						agente_id: agente_id,
+						agente_nombre: agente_nombre,
+						reporteiluminacion_id: reporteiluminacion_id,
+						catactivo_id: $("#reporteiluminacion_catactivo_id").val()
+					},
+					resetForm: false,
+					success: function(dato)
+					{
+						// Actualizar ID reporte
+						reporteiluminacion_id = dato.reporteiluminacion_id;
 
-							// Actualizar tabla
-							tabla_reporte_definiciones(proyecto.id, agente_nombre, reporteiluminacion_id);
+						// Actualizar tabla
+						tabla_reporte_definiciones(proyecto.id, agente_nombre, reporteiluminacion_id);
 
-							tabla_reporte_revisiones(proyecto.id);
+						tabla_reporte_revisiones(proyecto.id);
 
-							// mensaje
-							swal({
-								title: "Correcto",
-								text: "" + dato.msj,
-								type: "success", // warning, error, success, info
-								buttons: {
-									visible: false, // true , false
-								},
-								timer: 1500,
-								showConfirmButton: false
-							});
+						// mensaje
+						swal({
+							title: "Correcto",
+							text: ""+dato.msj,
+							type: "success", // warning, error, success, info
+							buttons: {
+								visible: false, // true , false
+							},
+							timer: 1500,
+							showConfirmButton: false
+						});
 
-							// actualiza boton
-							$('#botonguardar_modal_definicion').html('Guardar <i class="fa fa-save"></i>');
-							$('#botonguardar_modal_definicion').attr('disabled', false);
+						// actualiza boton
+						$('#botonguardar_modal_definicion').html('Guardar <i class="fa fa-save"></i>');
+						$('#botonguardar_modal_definicion').attr('disabled', false);
 
-							// cerrar modal
-							$('#modal_reporte_definicion').modal('hide');
-						},
-						beforeSend: function () {
-							$('#botonguardar_modal_definicion').html('Guardando <i class="fa fa-spin fa-spinner"></i>');
-							$('#botonguardar_modal_definicion').attr('disabled', true);
-						},
-						error: function (dato) {
-							// actualiza boton
-							$('#botonguardar_modal_definicion').html('Guardar <i class="fa fa-save"></i>');
-							$('#botonguardar_modal_definicion').attr('disabled', false);
+						// cerrar modal
+						$('#modal_reporte_definicion').modal('hide');
+					},
+					beforeSend: function()
+					{
+						$('#botonguardar_modal_definicion').html('Guardando <i class="fa fa-spin fa-spinner"></i>');
+						$('#botonguardar_modal_definicion').attr('disabled', true);
+					},
+					error: function(dato)
+					{
+						// actualiza boton
+						$('#botonguardar_modal_definicion').html('Guardar <i class="fa fa-save"></i>');
+						$('#botonguardar_modal_definicion').attr('disabled', false);
 
-							// mensaje
-							swal({
-								title: "Error",
-								text: "" + dato.msj,
-								type: "error", // warning, error, success, info
-								buttons: {
-									visible: false, // true , false
-								},
-								timer: 1500,
-								showConfirmButton: false
-							});
-							return false;
-						}
-					}).submit();
-					return false;
-				}
-				else {
-					// mensaje
-					swal({
-						title: "Cancelado",
-						text: "Acción cancelada",
-						type: "error", // warning, error, success, info
-						buttons: {
-							visible: false, // true , false
-						},
-						timer: 500,
-						showConfirmButton: false
-					});
-				}
-			});
+						// mensaje
+						swal({
+							title: "Error",
+							text: ""+dato.msj,
+							type: "error", // warning, error, success, info
+							buttons: {
+								visible: false, // true , false
+							},
+							timer: 1500,
+							showConfirmButton: false
+						});
+						return false;
+					}
+				}).submit();
+				return false;
+			}
+			else 
+			{
+				// mensaje
+				swal({
+					title: "Cancelado",
+					text: "Acción cancelada",
+					type: "error", // warning, error, success, info
+					buttons: {
+						visible: false, // true , false
+					},
+					timer: 500,
+					showConfirmButton: false
+				});
+			}
+		});
 		return false;
 	}
 });
@@ -1075,10 +1139,12 @@ $("#botonguardar_modal_definicion").click(function () {
 // OBJETIVO GENERAL
 
 
-$("#botonguardar_reporte_objetivogeneral").click(function () {
+$("#botonguardar_reporte_objetivogeneral").click(function()
+{
 	// valida campos vacios
 	var valida = this.form.checkValidity();
-	if (valida) {
+	if (valida)
+	{
 		swal({
 			title: "¡Confirme que desea guardar!",
 			text: "Objetivo general",
@@ -1090,89 +1156,95 @@ $("#botonguardar_reporte_objetivogeneral").click(function () {
 			closeOnConfirm: false,
 			closeOnCancel: false
 		},
-			function (isConfirm) {
-				if (isConfirm) {
-					// cerrar msj confirmacion
-					swal.close();
+		function(isConfirm)
+		{
+			if (isConfirm)
+			{
+				// cerrar msj confirmacion
+				swal.close();
 
-					// enviar datos
-					$('#form_reporte_objetivogeneral').ajaxForm({
-						dataType: 'json',
-						type: 'POST',
-						url: '/reporteiluminacion',
-						data: {
-							opcion: 3,
-							proyecto_id: proyecto.id,
-							agente_id: agente_id,
-							agente_nombre: agente_nombre,
-							reporteiluminacion_id: reporteiluminacion_id,
-							catactivo_id: $("#reporteiluminacion_catactivo_id").val(),
-							reporteiluminacion_instalacion: $("#reporteiluminacion_instalacion").val()
-						},
-						resetForm: false,
-						success: function (dato) {
-							// Actualizar ID reporte						
-							reporteiluminacion_id = dato.reporteiluminacion_id;
+				// enviar datos
+				$('#form_reporte_objetivogeneral').ajaxForm({
+					dataType: 'json',
+					type: 'POST',
+					url: '/reporteiluminacion',
+					data: {
+						opcion: 3,
+						proyecto_id: proyecto.id,
+						agente_id: agente_id,
+						agente_nombre: agente_nombre,
+						reporteiluminacion_id: reporteiluminacion_id,
+						catactivo_id: $("#reporteiluminacion_catactivo_id").val(),
+						reporteiluminacion_instalacion: $("#reporteiluminacion_instalacion").val()
+					},
+					resetForm: false,
+					success: function(dato)
+					{
+						// Actualizar ID reporte						
+						reporteiluminacion_id = dato.reporteiluminacion_id;
 
-							menureporte_estado("menureporte_3_1", 1);
+						menureporte_estado("menureporte_3_1", 1);
 
-							tabla_reporte_revisiones(proyecto.id);
+						tabla_reporte_revisiones(proyecto.id);
 
-							// mensaje
-							swal({
-								title: "Correcto",
-								text: "" + dato.msj,
-								type: "success", // warning, error, success, info
-								buttons: {
-									visible: false, // true , false
-								},
-								timer: 1500,
-								showConfirmButton: false
-							});
+						// mensaje
+						swal({
+							title: "Correcto",
+							text: ""+dato.msj,
+							type: "success", // warning, error, success, info
+							buttons: {
+								visible: false, // true , false
+							},
+							timer: 1500,
+							showConfirmButton: false
+						});
 
-							// actualiza boton
-							$('#botonguardar_reporte_objetivogeneral').html('Guardar objetivo general <i class="fa fa-save"></i>');
-							$('#botonguardar_reporte_objetivogeneral').attr('disabled', false);
-						},
-						beforeSend: function () {
-							$('#botonguardar_reporte_objetivogeneral').html('Guardando objetivo general <i class="fa fa-spin fa-spinner"></i>');
-							$('#botonguardar_reporte_objetivogeneral').attr('disabled', true);
-						},
-						error: function (dato) {
-							// actualiza boton
-							$('#botonguardar_reporte_objetivogeneral').html('Guardar objetivo general <i class="fa fa-save"></i>');
-							$('#botonguardar_reporte_objetivogeneral').attr('disabled', false);
+						// actualiza boton
+						$('#botonguardar_reporte_objetivogeneral').html('Guardar objetivo general <i class="fa fa-save"></i>');
+						$('#botonguardar_reporte_objetivogeneral').attr('disabled', false);
+					},
+					beforeSend: function()
+					{
+						$('#botonguardar_reporte_objetivogeneral').html('Guardando objetivo general <i class="fa fa-spin fa-spinner"></i>');
+						$('#botonguardar_reporte_objetivogeneral').attr('disabled', true);
+					},
+					error: function(dato)
+					{
+						// actualiza boton
+						$('#botonguardar_reporte_objetivogeneral').html('Guardar objetivo general <i class="fa fa-save"></i>');
+						$('#botonguardar_reporte_objetivogeneral').attr('disabled', false);
 
-							// mensaje
-							swal({
-								title: "Error",
-								text: "" + dato.msj,
-								type: "error", // warning, error, success, info
-								buttons: {
-									visible: false, // true , false
-								},
-								timer: 1500,
-								showConfirmButton: false
-							});
-							return false;
-						}
-					}).submit();
-					return false;
-				}
-				else {
-					// mensaje
-					swal({
-						title: "Cancelado",
-						text: "Acción cancelada",
-						type: "error", // warning, error, success, info
-						buttons: {
-							visible: false, // true , false
-						},
-						timer: 500,
-						showConfirmButton: false
-					});
-				}
-			});
+						// mensaje
+						swal({
+							title: "Error",
+							text: ""+dato.msj,
+							type: "error", // warning, error, success, info
+							buttons: {
+								visible: false, // true , false
+							},
+							timer: 1500,
+							showConfirmButton: false
+						});
+						return false;
+					}
+				}).submit();
+				return false;
+			}
+			else 
+			{
+				// mensaje
+				swal({
+					title: "Cancelado",
+					text: "Acción cancelada",
+					type: "error", // warning, error, success, info
+					buttons: {
+						visible: false, // true , false
+					},
+					timer: 500,
+					showConfirmButton: false
+				});
+			}
+		});
 		return false;
 	}
 });
@@ -1182,10 +1254,12 @@ $("#botonguardar_reporte_objetivogeneral").click(function () {
 // OBJETIVOS ESPECIFICOS
 
 
-$("#botonguardar_reporte_objetivoespecifico").click(function () {
+$("#botonguardar_reporte_objetivoespecifico").click(function()
+{
 	// valida campos vacios
 	var valida = this.form.checkValidity();
-	if (valida) {
+	if (valida)
+	{
 		swal({
 			title: "¡Confirme que desea guardar!",
 			text: "Objetivos específicos",
@@ -1197,89 +1271,95 @@ $("#botonguardar_reporte_objetivoespecifico").click(function () {
 			closeOnConfirm: false,
 			closeOnCancel: false
 		},
-			function (isConfirm) {
-				if (isConfirm) {
-					// cerrar msj confirmacion
-					swal.close();
+		function(isConfirm)
+		{
+			if (isConfirm)
+			{
+				// cerrar msj confirmacion
+				swal.close();
 
-					// enviar datos
-					$('#form_reporte_objetivoespecifico').ajaxForm({
-						dataType: 'json',
-						type: 'POST',
-						url: '/reporteiluminacion',
-						data: {
-							opcion: 4,
-							proyecto_id: proyecto.id,
-							agente_id: agente_id,
-							agente_nombre: agente_nombre,
-							reporteiluminacion_id: reporteiluminacion_id,
-							catactivo_id: $("#reporteiluminacion_catactivo_id").val(),
-							reporteiluminacion_instalacion: $("#reporteiluminacion_instalacion").val()
-						},
-						resetForm: false,
-						success: function (dato) {
-							// Actualizar ID reporte						
-							reporteiluminacion_id = dato.reporteiluminacion_id;
+				// enviar datos
+				$('#form_reporte_objetivoespecifico').ajaxForm({
+					dataType: 'json',
+					type: 'POST',
+					url: '/reporteiluminacion',
+					data: {
+						opcion: 4,
+						proyecto_id: proyecto.id,
+						agente_id: agente_id,
+						agente_nombre: agente_nombre,
+						reporteiluminacion_id: reporteiluminacion_id,
+						catactivo_id: $("#reporteiluminacion_catactivo_id").val(),
+						reporteiluminacion_instalacion: $("#reporteiluminacion_instalacion").val()
+					},
+					resetForm: false,
+					success: function(dato)
+					{
+						// Actualizar ID reporte						
+						reporteiluminacion_id = dato.reporteiluminacion_id;
 
-							menureporte_estado("menureporte_3_2", 1);
+						menureporte_estado("menureporte_3_2", 1);
 
-							tabla_reporte_revisiones(proyecto.id);
+						tabla_reporte_revisiones(proyecto.id);
 
-							// mensaje
-							swal({
-								title: "Correcto",
-								text: "" + dato.msj,
-								type: "success", // warning, error, success, info
-								buttons: {
-									visible: false, // true , false
-								},
-								timer: 1500,
-								showConfirmButton: false
-							});
+						// mensaje
+						swal({
+							title: "Correcto",
+							text: ""+dato.msj,
+							type: "success", // warning, error, success, info
+							buttons: {
+								visible: false, // true , false
+							},
+							timer: 1500,
+							showConfirmButton: false
+						});
 
-							// actualiza boton
-							$('#botonguardar_reporte_objetivoespecifico').html('Guardar objetivos específicos <i class="fa fa-save"></i>');
-							$('#botonguardar_reporte_objetivoespecifico').attr('disabled', false);
-						},
-						beforeSend: function () {
-							$('#botonguardar_reporte_objetivoespecifico').html('Guardando objetivos específicos <i class="fa fa-spin fa-spinner"></i>');
-							$('#botonguardar_reporte_objetivoespecifico').attr('disabled', true);
-						},
-						error: function (dato) {
-							// actualiza boton
-							$('#botonguardar_reporte_objetivoespecifico').html('Guardar objetivos específicos <i class="fa fa-save"></i>');
-							$('#botonguardar_reporte_objetivoespecifico').attr('disabled', false);
+						// actualiza boton
+						$('#botonguardar_reporte_objetivoespecifico').html('Guardar objetivos específicos <i class="fa fa-save"></i>');
+						$('#botonguardar_reporte_objetivoespecifico').attr('disabled', false);
+					},
+					beforeSend: function()
+					{
+						$('#botonguardar_reporte_objetivoespecifico').html('Guardando objetivos específicos <i class="fa fa-spin fa-spinner"></i>');
+						$('#botonguardar_reporte_objetivoespecifico').attr('disabled', true);
+					},
+					error: function(dato)
+					{
+						// actualiza boton
+						$('#botonguardar_reporte_objetivoespecifico').html('Guardar objetivos específicos <i class="fa fa-save"></i>');
+						$('#botonguardar_reporte_objetivoespecifico').attr('disabled', false);
 
-							// mensaje
-							swal({
-								title: "Error",
-								text: "" + dato.msj,
-								type: "error", // warning, error, success, info
-								buttons: {
-									visible: false, // true , false
-								},
-								timer: 1500,
-								showConfirmButton: false
-							});
-							return false;
-						}
-					}).submit();
-					return false;
-				}
-				else {
-					// mensaje
-					swal({
-						title: "Cancelado",
-						text: "Acción cancelada",
-						type: "error", // warning, error, success, info
-						buttons: {
-							visible: false, // true , false
-						},
-						timer: 500,
-						showConfirmButton: false
-					});
-				}
-			});
+						// mensaje
+						swal({
+							title: "Error",
+							text: ""+dato.msj,
+							type: "error", // warning, error, success, info
+							buttons: {
+								visible: false, // true , false
+							},
+							timer: 1500,
+							showConfirmButton: false
+						});
+						return false;
+					}
+				}).submit();
+				return false;
+			}
+			else 
+			{
+				// mensaje
+				swal({
+					title: "Cancelado",
+					text: "Acción cancelada",
+					type: "error", // warning, error, success, info
+					buttons: {
+						visible: false, // true , false
+					},
+					timer: 500,
+					showConfirmButton: false
+				});
+			}
+		});
 		return false;
 	}
 });
@@ -1289,10 +1369,12 @@ $("#botonguardar_reporte_objetivoespecifico").click(function () {
 // METODOLOGÍA PUNTO 4.1
 
 
-$("#botonguardar_reporte_metodologia_4_1").click(function () {
+$("#botonguardar_reporte_metodologia_4_1").click(function()
+{
 	// valida campos vacios
 	var valida = this.form.checkValidity();
-	if (valida) {
+	if (valida)
+	{
 		swal({
 			title: "¡Confirme que desea guardar!",
 			text: "Metodológía punto 4.1",
@@ -1304,89 +1386,95 @@ $("#botonguardar_reporte_metodologia_4_1").click(function () {
 			closeOnConfirm: false,
 			closeOnCancel: false
 		},
-			function (isConfirm) {
-				if (isConfirm) {
-					// cerrar msj confirmacion
-					swal.close();
+		function(isConfirm)
+		{
+			if (isConfirm)
+			{
+				// cerrar msj confirmacion
+				swal.close();
 
-					// enviar datos
-					$('#form_reporte_metodologia_4_1').ajaxForm({
-						dataType: 'json',
-						type: 'POST',
-						url: '/reporteiluminacion',
-						data: {
-							opcion: 5,
-							proyecto_id: proyecto.id,
-							agente_id: agente_id,
-							agente_nombre: agente_nombre,
-							reporteiluminacion_id: reporteiluminacion_id,
-							catactivo_id: $("#reporteiluminacion_catactivo_id").val(),
-							reporteiluminacion_instalacion: $("#reporteiluminacion_instalacion").val()
-						},
-						resetForm: false,
-						success: function (dato) {
-							// Actualizar ID reporte						
-							reporteiluminacion_id = dato.reporteiluminacion_id;
+				// enviar datos
+				$('#form_reporte_metodologia_4_1').ajaxForm({
+					dataType: 'json',
+					type: 'POST',
+					url: '/reporteiluminacion',
+					data: {
+						opcion: 5,
+						proyecto_id: proyecto.id,
+						agente_id: agente_id,
+						agente_nombre: agente_nombre,
+						reporteiluminacion_id: reporteiluminacion_id,
+						catactivo_id: $("#reporteiluminacion_catactivo_id").val(),
+						reporteiluminacion_instalacion: $("#reporteiluminacion_instalacion").val()
+					},
+					resetForm: false,
+					success: function(dato)
+					{
+						// Actualizar ID reporte						
+						reporteiluminacion_id = dato.reporteiluminacion_id;
 
-							menureporte_estado("menureporte_4_1", 1);
+						menureporte_estado("menureporte_4_1", 1);
 
-							tabla_reporte_revisiones(proyecto.id);
+						tabla_reporte_revisiones(proyecto.id);
 
-							// mensaje
-							swal({
-								title: "Correcto",
-								text: "" + dato.msj,
-								type: "success", // warning, error, success, info
-								buttons: {
-									visible: false, // true , false
-								},
-								timer: 1500,
-								showConfirmButton: false
-							});
+						// mensaje
+						swal({
+							title: "Correcto",
+							text: ""+dato.msj,
+							type: "success", // warning, error, success, info
+							buttons: {
+								visible: false, // true , false
+							},
+							timer: 1500,
+							showConfirmButton: false
+						});
 
-							// actualiza boton
-							$('#botonguardar_reporte_metodologia_4_1').html('Guardar metodología punto 4.1 <i class="fa fa-save"></i>');
-							$('#botonguardar_reporte_metodologia_4_1').attr('disabled', false);
-						},
-						beforeSend: function () {
-							$('#botonguardar_reporte_metodologia_4_1').html('Guardando metodología punto 4.1 <i class="fa fa-spin fa-spinner"></i>');
-							$('#botonguardar_reporte_metodologia_4_1').attr('disabled', true);
-						},
-						error: function (dato) {
-							// actualiza boton
-							$('#botonguardar_reporte_metodologia_4_1').html('Guardar metodología punto 4.1 <i class="fa fa-save"></i>');
-							$('#botonguardar_reporte_metodologia_4_1').attr('disabled', false);
+						// actualiza boton
+						$('#botonguardar_reporte_metodologia_4_1').html('Guardar metodología punto 4.1 <i class="fa fa-save"></i>');
+						$('#botonguardar_reporte_metodologia_4_1').attr('disabled', false);
+					},
+					beforeSend: function()
+					{
+						$('#botonguardar_reporte_metodologia_4_1').html('Guardando metodología punto 4.1 <i class="fa fa-spin fa-spinner"></i>');
+						$('#botonguardar_reporte_metodologia_4_1').attr('disabled', true);
+					},
+					error: function(dato)
+					{
+						// actualiza boton
+						$('#botonguardar_reporte_metodologia_4_1').html('Guardar metodología punto 4.1 <i class="fa fa-save"></i>');
+						$('#botonguardar_reporte_metodologia_4_1').attr('disabled', false);
 
-							// mensaje
-							swal({
-								title: "Error",
-								text: "" + dato.msj,
-								type: "error", // warning, error, success, info
-								buttons: {
-									visible: false, // true , false
-								},
-								timer: 1500,
-								showConfirmButton: false
-							});
-							return false;
-						}
-					}).submit();
-					return false;
-				}
-				else {
-					// mensaje
-					swal({
-						title: "Cancelado",
-						text: "Acción cancelada",
-						type: "error", // warning, error, success, info
-						buttons: {
-							visible: false, // true , false
-						},
-						timer: 500,
-						showConfirmButton: false
-					});
-				}
-			});
+						// mensaje
+						swal({
+							title: "Error",
+							text: ""+dato.msj,
+							type: "error", // warning, error, success, info
+							buttons: {
+								visible: false, // true , false
+							},
+							timer: 1500,
+							showConfirmButton: false
+						});
+						return false;
+					}
+				}).submit();
+				return false;
+			}
+			else 
+			{
+				// mensaje
+				swal({
+					title: "Cancelado",
+					text: "Acción cancelada",
+					type: "error", // warning, error, success, info
+					buttons: {
+						visible: false, // true , false
+					},
+					timer: 500,
+					showConfirmButton: false
+				});
+			}
+		});
 		return false;
 	}
 });
@@ -1396,10 +1484,12 @@ $("#botonguardar_reporte_metodologia_4_1").click(function () {
 // METODOLOGÍA PUNTO 4.2
 
 
-$("#botonguardar_reporte_metodologia_4_2").click(function () {
+$("#botonguardar_reporte_metodologia_4_2").click(function()
+{
 	// valida campos vacios
 	var valida = this.form.checkValidity();
-	if (valida) {
+	if (valida)
+	{
 		swal({
 			title: "¡Confirme que desea guardar!",
 			text: "Metodológía punto 4.2",
@@ -1411,89 +1501,95 @@ $("#botonguardar_reporte_metodologia_4_2").click(function () {
 			closeOnConfirm: false,
 			closeOnCancel: false
 		},
-			function (isConfirm) {
-				if (isConfirm) {
-					// cerrar msj confirmacion
-					swal.close();
+		function(isConfirm)
+		{
+			if (isConfirm)
+			{
+				// cerrar msj confirmacion
+				swal.close();
 
-					// enviar datos
-					$('#form_reporte_metodologia_4_2').ajaxForm({
-						dataType: 'json',
-						type: 'POST',
-						url: '/reporteiluminacion',
-						data: {
-							opcion: 6,
-							proyecto_id: proyecto.id,
-							agente_id: agente_id,
-							agente_nombre: agente_nombre,
-							reporteiluminacion_id: reporteiluminacion_id,
-							catactivo_id: $("#reporteiluminacion_catactivo_id").val(),
-							reporteiluminacion_instalacion: $("#reporteiluminacion_instalacion").val()
-						},
-						resetForm: false,
-						success: function (dato) {
-							// Actualizar ID reporte						
-							reporteiluminacion_id = dato.reporteiluminacion_id;
+				// enviar datos
+				$('#form_reporte_metodologia_4_2').ajaxForm({
+					dataType: 'json',
+					type: 'POST',
+					url: '/reporteiluminacion',
+					data: {
+						opcion: 6,
+						proyecto_id: proyecto.id,
+						agente_id: agente_id,
+						agente_nombre: agente_nombre,
+						reporteiluminacion_id: reporteiluminacion_id,
+						catactivo_id: $("#reporteiluminacion_catactivo_id").val(),
+						reporteiluminacion_instalacion: $("#reporteiluminacion_instalacion").val()
+					},
+					resetForm: false,
+					success: function(dato)
+					{
+						// Actualizar ID reporte						
+						reporteiluminacion_id = dato.reporteiluminacion_id;
 
-							menureporte_estado("menureporte_4_2", 1);
+						menureporte_estado("menureporte_4_2", 1);
 
-							tabla_reporte_revisiones(proyecto.id);
+						tabla_reporte_revisiones(proyecto.id);
 
-							// mensaje
-							swal({
-								title: "Correcto",
-								text: "" + dato.msj,
-								type: "success", // warning, error, success, info
-								buttons: {
-									visible: false, // true , false
-								},
-								timer: 1500,
-								showConfirmButton: false
-							});
+						// mensaje
+						swal({
+							title: "Correcto",
+							text: ""+dato.msj,
+							type: "success", // warning, error, success, info
+							buttons: {
+								visible: false, // true , false
+							},
+							timer: 1500,
+							showConfirmButton: false
+						});
 
-							// actualiza boton
-							$('#botonguardar_reporte_metodologia_4_2').html('Guardar metodología punto 4.2 <i class="fa fa-save"></i>');
-							$('#botonguardar_reporte_metodologia_4_2').attr('disabled', false);
-						},
-						beforeSend: function () {
-							$('#botonguardar_reporte_metodologia_4_2').html('Guardando metodología punto 4.2 <i class="fa fa-spin fa-spinner"></i>');
-							$('#botonguardar_reporte_metodologia_4_2').attr('disabled', true);
-						},
-						error: function (dato) {
-							// actualiza boton
-							$('#botonguardar_reporte_metodologia_4_2').html('Guardar metodología punto 4.2 <i class="fa fa-save"></i>');
-							$('#botonguardar_reporte_metodologia_4_2').attr('disabled', false);
+						// actualiza boton
+						$('#botonguardar_reporte_metodologia_4_2').html('Guardar metodología punto 4.2 <i class="fa fa-save"></i>');
+						$('#botonguardar_reporte_metodologia_4_2').attr('disabled', false);
+					},
+					beforeSend: function()
+					{
+						$('#botonguardar_reporte_metodologia_4_2').html('Guardando metodología punto 4.2 <i class="fa fa-spin fa-spinner"></i>');
+						$('#botonguardar_reporte_metodologia_4_2').attr('disabled', true);
+					},
+					error: function(dato)
+					{
+						// actualiza boton
+						$('#botonguardar_reporte_metodologia_4_2').html('Guardar metodología punto 4.2 <i class="fa fa-save"></i>');
+						$('#botonguardar_reporte_metodologia_4_2').attr('disabled', false);
 
-							// mensaje
-							swal({
-								title: "Error",
-								text: "" + dato.msj,
-								type: "error", // warning, error, success, info
-								buttons: {
-									visible: false, // true , false
-								},
-								timer: 1500,
-								showConfirmButton: false
-							});
-							return false;
-						}
-					}).submit();
-					return false;
-				}
-				else {
-					// mensaje
-					swal({
-						title: "Cancelado",
-						text: "Acción cancelada",
-						type: "error", // warning, error, success, info
-						buttons: {
-							visible: false, // true , false
-						},
-						timer: 500,
-						showConfirmButton: false
-					});
-				}
-			});
+						// mensaje
+						swal({
+							title: "Error",
+							text: ""+dato.msj,
+							type: "error", // warning, error, success, info
+							buttons: {
+								visible: false, // true , false
+							},
+							timer: 1500,
+							showConfirmButton: false
+						});
+						return false;
+					}
+				}).submit();
+				return false;
+			}
+			else 
+			{
+				// mensaje
+				swal({
+					title: "Cancelado",
+					text: "Acción cancelada",
+					type: "error", // warning, error, success, info
+					buttons: {
+						visible: false, // true , false
+					},
+					timer: 500,
+					showConfirmButton: false
+				});
+			}
+		});
 		return false;
 	}
 });
@@ -1503,10 +1599,12 @@ $("#botonguardar_reporte_metodologia_4_2").click(function () {
 // METODOLOGÍA PUNTO 4.2.1
 
 
-$("#botonguardar_reporte_metodologia_4_2_1").click(function () {
+$("#botonguardar_reporte_metodologia_4_2_1").click(function()
+{
 	// valida campos vacios
 	var valida = this.form.checkValidity();
-	if (valida) {
+	if (valida)
+	{
 		swal({
 			title: "¡Confirme que desea guardar!",
 			text: "Metodológía punto 4.2.1",
@@ -1518,89 +1616,95 @@ $("#botonguardar_reporte_metodologia_4_2_1").click(function () {
 			closeOnConfirm: false,
 			closeOnCancel: false
 		},
-			function (isConfirm) {
-				if (isConfirm) {
-					// cerrar msj confirmacion
-					swal.close();
+		function(isConfirm)
+		{
+			if (isConfirm)
+			{
+				// cerrar msj confirmacion
+				swal.close();
 
-					// enviar datos
-					$('#form_reporte_metodologia_4_2_1').ajaxForm({
-						dataType: 'json',
-						type: 'POST',
-						url: '/reporteiluminacion',
-						data: {
-							opcion: 7,
-							proyecto_id: proyecto.id,
-							agente_id: agente_id,
-							agente_nombre: agente_nombre,
-							reporteiluminacion_id: reporteiluminacion_id,
-							catactivo_id: $("#reporteiluminacion_catactivo_id").val(),
-							reporteiluminacion_instalacion: $("#reporteiluminacion_instalacion").val()
-						},
-						resetForm: false,
-						success: function (dato) {
-							// Actualizar ID reporte						
-							reporteiluminacion_id = dato.reporteiluminacion_id;
+				// enviar datos
+				$('#form_reporte_metodologia_4_2_1').ajaxForm({
+					dataType: 'json',
+					type: 'POST',
+					url: '/reporteiluminacion',
+					data: {
+						opcion: 7,
+						proyecto_id: proyecto.id,
+						agente_id: agente_id,
+						agente_nombre: agente_nombre,
+						reporteiluminacion_id: reporteiluminacion_id,
+						catactivo_id: $("#reporteiluminacion_catactivo_id").val(),
+						reporteiluminacion_instalacion: $("#reporteiluminacion_instalacion").val()
+					},
+					resetForm: false,
+					success: function(dato)
+					{
+						// Actualizar ID reporte						
+						reporteiluminacion_id = dato.reporteiluminacion_id;
 
-							menureporte_estado("menureporte_4_2_1", 1);
+						menureporte_estado("menureporte_4_2_1", 1);
 
-							tabla_reporte_revisiones(proyecto.id);
+						tabla_reporte_revisiones(proyecto.id);
 
-							// mensaje
-							swal({
-								title: "Correcto",
-								text: "" + dato.msj,
-								type: "success", // warning, error, success, info
-								buttons: {
-									visible: false, // true , false
-								},
-								timer: 1500,
-								showConfirmButton: false
-							});
+						// mensaje
+						swal({
+							title: "Correcto",
+							text: ""+dato.msj,
+							type: "success", // warning, error, success, info
+							buttons: {
+								visible: false, // true , false
+							},
+							timer: 1500,
+							showConfirmButton: false
+						});
 
-							// actualiza boton
-							$('#botonguardar_reporte_metodologia_4_2_1').html('Guardar metodología punto 4.2.1 <i class="fa fa-save"></i>');
-							$('#botonguardar_reporte_metodologia_4_2_1').attr('disabled', false);
-						},
-						beforeSend: function () {
-							$('#botonguardar_reporte_metodologia_4_2_1').html('Guardando metodología punto 4.2.1 <i class="fa fa-spin fa-spinner"></i>');
-							$('#botonguardar_reporte_metodologia_4_2_1').attr('disabled', true);
-						},
-						error: function (dato) {
-							// actualiza boton
-							$('#botonguardar_reporte_metodologia_4_2_1').html('Guardar metodología punto 4.2.1 <i class="fa fa-save"></i>');
-							$('#botonguardar_reporte_metodologia_4_2_1').attr('disabled', false);
+						// actualiza boton
+						$('#botonguardar_reporte_metodologia_4_2_1').html('Guardar metodología punto 4.2.1 <i class="fa fa-save"></i>');
+						$('#botonguardar_reporte_metodologia_4_2_1').attr('disabled', false);
+					},
+					beforeSend: function()
+					{
+						$('#botonguardar_reporte_metodologia_4_2_1').html('Guardando metodología punto 4.2.1 <i class="fa fa-spin fa-spinner"></i>');
+						$('#botonguardar_reporte_metodologia_4_2_1').attr('disabled', true);
+					},
+					error: function(dato)
+					{
+						// actualiza boton
+						$('#botonguardar_reporte_metodologia_4_2_1').html('Guardar metodología punto 4.2.1 <i class="fa fa-save"></i>');
+						$('#botonguardar_reporte_metodologia_4_2_1').attr('disabled', false);
 
-							// mensaje
-							swal({
-								title: "Error",
-								text: "" + dato.msj,
-								type: "error", // warning, error, success, info
-								buttons: {
-									visible: false, // true , false
-								},
-								timer: 1500,
-								showConfirmButton: false
-							});
-							return false;
-						}
-					}).submit();
-					return false;
-				}
-				else {
-					// mensaje
-					swal({
-						title: "Cancelado",
-						text: "Acción cancelada",
-						type: "error", // warning, error, success, info
-						buttons: {
-							visible: false, // true , false
-						},
-						timer: 500,
-						showConfirmButton: false
-					});
-				}
-			});
+						// mensaje
+						swal({
+							title: "Error",
+							text: ""+dato.msj,
+							type: "error", // warning, error, success, info
+							buttons: {
+								visible: false, // true , false
+							},
+							timer: 1500,
+							showConfirmButton: false
+						});
+						return false;
+					}
+				}).submit();
+				return false;
+			}
+			else 
+			{
+				// mensaje
+				swal({
+					title: "Cancelado",
+					text: "Acción cancelada",
+					type: "error", // warning, error, success, info
+					buttons: {
+						visible: false, // true , false
+					},
+					timer: 500,
+					showConfirmButton: false
+				});
+			}
+		});
 		return false;
 	}
 });
@@ -1610,10 +1714,12 @@ $("#botonguardar_reporte_metodologia_4_2_1").click(function () {
 // METODOLOGÍA PUNTO 4.2.2
 
 
-$("#botonguardar_reporte_metodologia_4_2_2").click(function () {
+$("#botonguardar_reporte_metodologia_4_2_2").click(function()
+{
 	// valida campos vacios
 	var valida = this.form.checkValidity();
-	if (valida) {
+	if (valida)
+	{
 		swal({
 			title: "¡Confirme que desea guardar!",
 			text: "Metodológía punto 4.2.2",
@@ -1625,89 +1731,95 @@ $("#botonguardar_reporte_metodologia_4_2_2").click(function () {
 			closeOnConfirm: false,
 			closeOnCancel: false
 		},
-			function (isConfirm) {
-				if (isConfirm) {
-					// cerrar msj confirmacion
-					swal.close();
+		function(isConfirm)
+		{
+			if (isConfirm)
+			{
+				// cerrar msj confirmacion
+				swal.close();
 
-					// enviar datos
-					$('#form_reporte_metodologia_4_2_2').ajaxForm({
-						dataType: 'json',
-						type: 'POST',
-						url: '/reporteiluminacion',
-						data: {
-							opcion: 8,
-							proyecto_id: proyecto.id,
-							agente_id: agente_id,
-							agente_nombre: agente_nombre,
-							reporteiluminacion_id: reporteiluminacion_id,
-							catactivo_id: $("#reporteiluminacion_catactivo_id").val(),
-							reporteiluminacion_instalacion: $("#reporteiluminacion_instalacion").val()
-						},
-						resetForm: false,
-						success: function (dato) {
-							// Actualizar ID reporte						
-							reporteiluminacion_id = dato.reporteiluminacion_id;
+				// enviar datos
+				$('#form_reporte_metodologia_4_2_2').ajaxForm({
+					dataType: 'json',
+					type: 'POST',
+					url: '/reporteiluminacion',
+					data: {
+						opcion: 8,
+						proyecto_id: proyecto.id,
+						agente_id: agente_id,
+						agente_nombre: agente_nombre,
+						reporteiluminacion_id: reporteiluminacion_id,
+						catactivo_id: $("#reporteiluminacion_catactivo_id").val(),
+						reporteiluminacion_instalacion: $("#reporteiluminacion_instalacion").val()
+					},
+					resetForm: false,
+					success: function(dato)
+					{
+						// Actualizar ID reporte						
+						reporteiluminacion_id = dato.reporteiluminacion_id;
 
-							menureporte_estado("menureporte_4_2_2", 1);
+						menureporte_estado("menureporte_4_2_2", 1);
 
-							tabla_reporte_revisiones(proyecto.id);
+						tabla_reporte_revisiones(proyecto.id);
 
-							// mensaje
-							swal({
-								title: "Correcto",
-								text: "" + dato.msj,
-								type: "success", // warning, error, success, info
-								buttons: {
-									visible: false, // true , false
-								},
-								timer: 1500,
-								showConfirmButton: false
-							});
+						// mensaje
+						swal({
+							title: "Correcto",
+							text: ""+dato.msj,
+							type: "success", // warning, error, success, info
+							buttons: {
+								visible: false, // true , false
+							},
+							timer: 1500,
+							showConfirmButton: false
+						});
 
-							// actualiza boton
-							$('#botonguardar_reporte_metodologia_4_2_2').html('Guardar metodología punto 4.2.2 <i class="fa fa-save"></i>');
-							$('#botonguardar_reporte_metodologia_4_2_2').attr('disabled', false);
-						},
-						beforeSend: function () {
-							$('#botonguardar_reporte_metodologia_4_2_2').html('Guardando metodología punto 4.2.2 <i class="fa fa-spin fa-spinner"></i>');
-							$('#botonguardar_reporte_metodologia_4_2_2').attr('disabled', true);
-						},
-						error: function (dato) {
-							// actualiza boton
-							$('#botonguardar_reporte_metodologia_4_2_2').html('Guardar metodología punto 4.2.2 <i class="fa fa-save"></i>');
-							$('#botonguardar_reporte_metodologia_4_2_2').attr('disabled', false);
+						// actualiza boton
+						$('#botonguardar_reporte_metodologia_4_2_2').html('Guardar metodología punto 4.2.2 <i class="fa fa-save"></i>');
+						$('#botonguardar_reporte_metodologia_4_2_2').attr('disabled', false);
+					},
+					beforeSend: function()
+					{
+						$('#botonguardar_reporte_metodologia_4_2_2').html('Guardando metodología punto 4.2.2 <i class="fa fa-spin fa-spinner"></i>');
+						$('#botonguardar_reporte_metodologia_4_2_2').attr('disabled', true);
+					},
+					error: function(dato)
+					{
+						// actualiza boton
+						$('#botonguardar_reporte_metodologia_4_2_2').html('Guardar metodología punto 4.2.2 <i class="fa fa-save"></i>');
+						$('#botonguardar_reporte_metodologia_4_2_2').attr('disabled', false);
 
-							// mensaje
-							swal({
-								title: "Error",
-								text: "" + dato.msj,
-								type: "error", // warning, error, success, info
-								buttons: {
-									visible: false, // true , false
-								},
-								timer: 1500,
-								showConfirmButton: false
-							});
-							return false;
-						}
-					}).submit();
-					return false;
-				}
-				else {
-					// mensaje
-					swal({
-						title: "Cancelado",
-						text: "Acción cancelada",
-						type: "error", // warning, error, success, info
-						buttons: {
-							visible: false, // true , false
-						},
-						timer: 500,
-						showConfirmButton: false
-					});
-				}
-			});
+						// mensaje
+						swal({
+							title: "Error",
+							text: ""+dato.msj,
+							type: "error", // warning, error, success, info
+							buttons: {
+								visible: false, // true , false
+							},
+							timer: 1500,
+							showConfirmButton: false
+						});
+						return false;
+					}
+				}).submit();
+				return false;
+			}
+			else 
+			{
+				// mensaje
+				swal({
+					title: "Cancelado",
+					text: "Acción cancelada",
+					type: "error", // warning, error, success, info
+					buttons: {
+						visible: false, // true , false
+					},
+					timer: 500,
+					showConfirmButton: false
+				});
+			}
+		});
 		return false;
 	}
 });
@@ -1717,10 +1829,12 @@ $("#botonguardar_reporte_metodologia_4_2_2").click(function () {
 // METODOLOGÍA PUNTO 4.2.3
 
 
-$("#botonguardar_reporte_metodologia_4_2_3").click(function () {
+$("#botonguardar_reporte_metodologia_4_2_3").click(function()
+{
 	// valida campos vacios
 	var valida = this.form.checkValidity();
-	if (valida) {
+	if (valida)
+	{
 		swal({
 			title: "¡Confirme que desea guardar!",
 			text: "Metodológía punto 4.2.3",
@@ -1732,89 +1846,95 @@ $("#botonguardar_reporte_metodologia_4_2_3").click(function () {
 			closeOnConfirm: false,
 			closeOnCancel: false
 		},
-			function (isConfirm) {
-				if (isConfirm) {
-					// cerrar msj confirmacion
-					swal.close();
+		function(isConfirm)
+		{
+			if (isConfirm)
+			{
+				// cerrar msj confirmacion
+				swal.close();
 
-					// enviar datos
-					$('#form_reporte_metodologia_4_2_3').ajaxForm({
-						dataType: 'json',
-						type: 'POST',
-						url: '/reporteiluminacion',
-						data: {
-							opcion: 9,
-							proyecto_id: proyecto.id,
-							agente_id: agente_id,
-							agente_nombre: agente_nombre,
-							reporteiluminacion_id: reporteiluminacion_id,
-							catactivo_id: $("#reporteiluminacion_catactivo_id").val(),
-							reporteiluminacion_instalacion: $("#reporteiluminacion_instalacion").val()
-						},
-						resetForm: false,
-						success: function (dato) {
-							// Actualizar ID reporte						
-							reporteiluminacion_id = dato.reporteiluminacion_id;
+				// enviar datos
+				$('#form_reporte_metodologia_4_2_3').ajaxForm({
+					dataType: 'json',
+					type: 'POST',
+					url: '/reporteiluminacion',
+					data: {
+						opcion: 9,
+						proyecto_id: proyecto.id,
+						agente_id: agente_id,
+						agente_nombre: agente_nombre,
+						reporteiluminacion_id: reporteiluminacion_id,
+						catactivo_id: $("#reporteiluminacion_catactivo_id").val(),
+						reporteiluminacion_instalacion: $("#reporteiluminacion_instalacion").val()
+					},
+					resetForm: false,
+					success: function(dato)
+					{
+						// Actualizar ID reporte						
+						reporteiluminacion_id = dato.reporteiluminacion_id;
 
-							menureporte_estado("menureporte_4_2_3", 1);
+						menureporte_estado("menureporte_4_2_3", 1);
 
-							tabla_reporte_revisiones(proyecto.id);
+						tabla_reporte_revisiones(proyecto.id);
 
-							// mensaje
-							swal({
-								title: "Correcto",
-								text: "" + dato.msj,
-								type: "success", // warning, error, success, info
-								buttons: {
-									visible: false, // true , false
-								},
-								timer: 1500,
-								showConfirmButton: false
-							});
+						// mensaje
+						swal({
+							title: "Correcto",
+							text: ""+dato.msj,
+							type: "success", // warning, error, success, info
+							buttons: {
+								visible: false, // true , false
+							},
+							timer: 1500,
+							showConfirmButton: false
+						});
 
-							// actualiza boton
-							$('#botonguardar_reporte_metodologia_4_2_3').html('Guardar metodología punto 4.2.3 <i class="fa fa-save"></i>');
-							$('#botonguardar_reporte_metodologia_4_2_3').attr('disabled', false);
-						},
-						beforeSend: function () {
-							$('#botonguardar_reporte_metodologia_4_2_3').html('Guardando metodología punto 4.2.3 <i class="fa fa-spin fa-spinner"></i>');
-							$('#botonguardar_reporte_metodologia_4_2_3').attr('disabled', true);
-						},
-						error: function (dato) {
-							// actualiza boton
-							$('#botonguardar_reporte_metodologia_4_2_3').html('Guardar metodología punto 4.2.3 <i class="fa fa-save"></i>');
-							$('#botonguardar_reporte_metodologia_4_2_3').attr('disabled', false);
+						// actualiza boton
+						$('#botonguardar_reporte_metodologia_4_2_3').html('Guardar metodología punto 4.2.3 <i class="fa fa-save"></i>');
+						$('#botonguardar_reporte_metodologia_4_2_3').attr('disabled', false);
+					},
+					beforeSend: function()
+					{
+						$('#botonguardar_reporte_metodologia_4_2_3').html('Guardando metodología punto 4.2.3 <i class="fa fa-spin fa-spinner"></i>');
+						$('#botonguardar_reporte_metodologia_4_2_3').attr('disabled', true);
+					},
+					error: function(dato)
+					{
+						// actualiza boton
+						$('#botonguardar_reporte_metodologia_4_2_3').html('Guardar metodología punto 4.2.3 <i class="fa fa-save"></i>');
+						$('#botonguardar_reporte_metodologia_4_2_3').attr('disabled', false);
 
-							// mensaje
-							swal({
-								title: "Error",
-								text: "" + dato.msj,
-								type: "error", // warning, error, success, info
-								buttons: {
-									visible: false, // true , false
-								},
-								timer: 1500,
-								showConfirmButton: false
-							});
-							return false;
-						}
-					}).submit();
-					return false;
-				}
-				else {
-					// mensaje
-					swal({
-						title: "Cancelado",
-						text: "Acción cancelada",
-						type: "error", // warning, error, success, info
-						buttons: {
-							visible: false, // true , false
-						},
-						timer: 500,
-						showConfirmButton: false
-					});
-				}
-			});
+						// mensaje
+						swal({
+							title: "Error",
+							text: ""+dato.msj,
+							type: "error", // warning, error, success, info
+							buttons: {
+								visible: false, // true , false
+							},
+							timer: 1500,
+							showConfirmButton: false
+						});
+						return false;
+					}
+				}).submit();
+				return false;
+			}
+			else 
+			{
+				// mensaje
+				swal({
+					title: "Cancelado",
+					text: "Acción cancelada",
+					type: "error", // warning, error, success, info
+					buttons: {
+						visible: false, // true , false
+					},
+					timer: 500,
+					showConfirmButton: false
+				});
+			}
+		});
 		return false;
 	}
 });
@@ -1824,10 +1944,12 @@ $("#botonguardar_reporte_metodologia_4_2_3").click(function () {
 // METODOLOGÍA PUNTO 4.2.4
 
 
-$("#botonguardar_reporte_metodologia_4_2_4").click(function () {
+$("#botonguardar_reporte_metodologia_4_2_4").click(function()
+{
 	// valida campos vacios
 	var valida = this.form.checkValidity();
-	if (valida) {
+	if (valida)
+	{
 		swal({
 			title: "¡Confirme que desea guardar!",
 			text: "Metodológía punto 4.2.4",
@@ -1839,89 +1961,95 @@ $("#botonguardar_reporte_metodologia_4_2_4").click(function () {
 			closeOnConfirm: false,
 			closeOnCancel: false
 		},
-			function (isConfirm) {
-				if (isConfirm) {
-					// cerrar msj confirmacion
-					swal.close();
+		function(isConfirm)
+		{
+			if (isConfirm)
+			{
+				// cerrar msj confirmacion
+				swal.close();
 
-					// enviar datos
-					$('#form_reporte_metodologia_4_2_4').ajaxForm({
-						dataType: 'json',
-						type: 'POST',
-						url: '/reporteiluminacion',
-						data: {
-							opcion: 10,
-							proyecto_id: proyecto.id,
-							agente_id: agente_id,
-							agente_nombre: agente_nombre,
-							reporteiluminacion_id: reporteiluminacion_id,
-							catactivo_id: $("#reporteiluminacion_catactivo_id").val(),
-							reporteiluminacion_instalacion: $("#reporteiluminacion_instalacion").val()
-						},
-						resetForm: false,
-						success: function (dato) {
-							// Actualizar ID reporte						
-							reporteiluminacion_id = dato.reporteiluminacion_id;
+				// enviar datos
+				$('#form_reporte_metodologia_4_2_4').ajaxForm({
+					dataType: 'json',
+					type: 'POST',
+					url: '/reporteiluminacion',
+					data: {
+						opcion: 10,
+						proyecto_id: proyecto.id,
+						agente_id: agente_id,
+						agente_nombre: agente_nombre,
+						reporteiluminacion_id: reporteiluminacion_id,
+						catactivo_id: $("#reporteiluminacion_catactivo_id").val(),
+						reporteiluminacion_instalacion: $("#reporteiluminacion_instalacion").val()
+					},
+					resetForm: false,
+					success: function(dato)
+					{
+						// Actualizar ID reporte						
+						reporteiluminacion_id = dato.reporteiluminacion_id;
 
-							menureporte_estado("menureporte_4_2_4", 1);
+						menureporte_estado("menureporte_4_2_4", 1);
 
-							tabla_reporte_revisiones(proyecto.id);
+						tabla_reporte_revisiones(proyecto.id);
 
-							// mensaje
-							swal({
-								title: "Correcto",
-								text: "" + dato.msj,
-								type: "success", // warning, error, success, info
-								buttons: {
-									visible: false, // true , false
-								},
-								timer: 1500,
-								showConfirmButton: false
-							});
+						// mensaje
+						swal({
+							title: "Correcto",
+							text: ""+dato.msj,
+							type: "success", // warning, error, success, info
+							buttons: {
+								visible: false, // true , false
+							},
+							timer: 1500,
+							showConfirmButton: false
+						});
 
-							// actualiza boton
-							$('#botonguardar_reporte_metodologia_4_2_4').html('Guardar metodología punto 4.2.4 <i class="fa fa-save"></i>');
-							$('#botonguardar_reporte_metodologia_4_2_4').attr('disabled', false);
-						},
-						beforeSend: function () {
-							$('#botonguardar_reporte_metodologia_4_2_4').html('Guardando metodología punto 4.2.4 <i class="fa fa-spin fa-spinner"></i>');
-							$('#botonguardar_reporte_metodologia_4_2_4').attr('disabled', true);
-						},
-						error: function (dato) {
-							// actualiza boton
-							$('#botonguardar_reporte_metodologia_4_2_4').html('Guardar metodología punto 4.2.4 <i class="fa fa-save"></i>');
-							$('#botonguardar_reporte_metodologia_4_2_4').attr('disabled', false);
+						// actualiza boton
+						$('#botonguardar_reporte_metodologia_4_2_4').html('Guardar metodología punto 4.2.4 <i class="fa fa-save"></i>');
+						$('#botonguardar_reporte_metodologia_4_2_4').attr('disabled', false);
+					},
+					beforeSend: function()
+					{
+						$('#botonguardar_reporte_metodologia_4_2_4').html('Guardando metodología punto 4.2.4 <i class="fa fa-spin fa-spinner"></i>');
+						$('#botonguardar_reporte_metodologia_4_2_4').attr('disabled', true);
+					},
+					error: function(dato)
+					{
+						// actualiza boton
+						$('#botonguardar_reporte_metodologia_4_2_4').html('Guardar metodología punto 4.2.4 <i class="fa fa-save"></i>');
+						$('#botonguardar_reporte_metodologia_4_2_4').attr('disabled', false);
 
-							// mensaje
-							swal({
-								title: "Error",
-								text: "" + dato.msj,
-								type: "error", // warning, error, success, info
-								buttons: {
-									visible: false, // true , false
-								},
-								timer: 1500,
-								showConfirmButton: false
-							});
-							return false;
-						}
-					}).submit();
-					return false;
-				}
-				else {
-					// mensaje
-					swal({
-						title: "Cancelado",
-						text: "Acción cancelada",
-						type: "error", // warning, error, success, info
-						buttons: {
-							visible: false, // true , false
-						},
-						timer: 500,
-						showConfirmButton: false
-					});
-				}
-			});
+						// mensaje
+						swal({
+							title: "Error",
+							text: ""+dato.msj,
+							type: "error", // warning, error, success, info
+							buttons: {
+								visible: false, // true , false
+							},
+							timer: 1500,
+							showConfirmButton: false
+						});
+						return false;
+					}
+				}).submit();
+				return false;
+			}
+			else 
+			{
+				// mensaje
+				swal({
+					title: "Cancelado",
+					text: "Acción cancelada",
+					type: "error", // warning, error, success, info
+					buttons: {
+						visible: false, // true , false
+					},
+					timer: 500,
+					showConfirmButton: false
+				});
+			}
+		});
 		return false;
 	}
 });
@@ -1933,14 +2061,15 @@ $("#botonguardar_reporte_metodologia_4_2_4").click(function () {
 
 var ubicacionmapa = '';
 
-$(document).ready(function () {
+$(document).ready(function()
+{
 	$('#reporteiluminacionubicacionfoto').dropify({
 		messages:
 		{
 			'default': 'Arrastre el mapa aquí o haga click',
 			'replace': 'Arrastre el mapa o haga clic para reemplazar',
-			'remove': 'Quitar',
-			'error': 'Ooops, ha ocurrido un error.'
+			'remove':  'Quitar',
+			'error':   'Ooops, ha ocurrido un error.'
 		},
 		error:
 		{
@@ -1955,7 +2084,8 @@ $(document).ready(function () {
 });
 
 
-function redimencionar_mapaubicacion() {
+function redimencionar_mapaubicacion()
+{
 	// Bloquear boton
 	$('#botonguardar_reporte_ubicacion').attr('disabled', true);
 
@@ -1973,12 +2103,14 @@ function redimencionar_mapaubicacion() {
 	reader.readAsDataURL(file);
 
 	// Set the image once loaded into file reader
-	reader.onload = function (e) {
-		//img.src = e.target.result;
+	reader.onload = function(e)
+	{
+	    //img.src = e.target.result;
 		var img = new Image();
 		img.src = this.result;
-
-		setTimeout(function () {
+		
+	    setTimeout(function()
+	    {
 			var canvas = document.createElement("canvas");
 			//var canvas = $("<canvas>", {"id":"testing"})[0];
 			//var ctx = canvas.getContext("2d");
@@ -1989,24 +2121,30 @@ function redimencionar_mapaubicacion() {
 			var height = img.height;
 
 			// Dimensiones Nuevas
-			if (parseInt(width) > 8000) {
+			if (parseInt(width) > 8000)
+			{
 				var MAX_WIDTH = 4000; //Ancho de la imagen
 				var MAX_HEIGHT = 3000; //Alto de la imagen
 			}
-			else {
+			else
+			{
 				var MAX_WIDTH = 1200; //Ancho de la imagen
 				var MAX_HEIGHT = 900; //Alto de la imagen
 			}
 
 			// Dimensionar con respecto a la relacion de aspecto
-			if (width > height) {
-				if (width > MAX_WIDTH) {
+			if (width > height)
+			{
+				if (width > MAX_WIDTH)
+				{
 					height *= MAX_WIDTH / width;
 					width = MAX_WIDTH;
 				}
 			}
-			else {
-				if (height > MAX_HEIGHT) {
+			else
+			{
+				if (height > MAX_HEIGHT)
+				{
 					width *= MAX_HEIGHT / height;
 					height = MAX_HEIGHT;
 				}
@@ -2016,7 +2154,7 @@ function redimencionar_mapaubicacion() {
 			canvas.height = height;
 			var ctx = canvas.getContext("2d");
 			ctx.drawImage(img, 0, 0, width, height);
-			console.log("Nuevas dimensiones ", width, height);
+			console.log("Nuevas dimensiones ",width, height);
 
 			// Resultado
 			var dataurl = canvas.toDataURL("image/jpeg");
@@ -2030,10 +2168,12 @@ function redimencionar_mapaubicacion() {
 }
 
 
-$("#botonguardar_reporte_ubicacion").click(function () {
+$("#botonguardar_reporte_ubicacion").click(function()
+{
 	// valida campos vacios
 	var valida = this.form.checkValidity();
-	if (valida) {
+	if (valida)
+	{
 		swal({
 			title: "¡Confirme que desea guardar!",
 			text: "Datos de la ubicación",
@@ -2045,101 +2185,108 @@ $("#botonguardar_reporte_ubicacion").click(function () {
 			closeOnConfirm: false,
 			closeOnCancel: false
 		},
-			function (isConfirm) {
-				if (isConfirm) {
-					// cerrar msj confirmacion
-					swal.close();
+		function(isConfirm)
+		{
+			if (isConfirm)
+			{
+				// cerrar msj confirmacion
+				swal.close();
 
-					// enviar datos
-					$('#form_reporte_ubicacion').ajaxForm({
-						dataType: 'json',
-						type: 'POST',
-						url: '/reporteiluminacion',
-						data: {
-							opcion: 11,
-							proyecto_id: proyecto.id,
-							agente_id: agente_id,
-							agente_nombre: agente_nombre,
-							reporteiluminacion_id: reporteiluminacion_id,
-							catactivo_id: $("#reporteiluminacion_catactivo_id").val(),
-							reporteiluminacion_instalacion: $("#reporteiluminacion_instalacion").val(),
-							ubicacionmapa: ubicacionmapa
-						},
-						resetForm: false,
-						success: function (dato) {
-							// Actualizar ID reporte						
-							reporteiluminacion_id = dato.reporteiluminacion_id;
+				// enviar datos
+				$('#form_reporte_ubicacion').ajaxForm({
+					dataType: 'json',
+					type: 'POST',
+					url: '/reporteiluminacion',
+					data: {
+						opcion: 11,
+						proyecto_id: proyecto.id,
+						agente_id: agente_id,
+						agente_nombre: agente_nombre,
+						reporteiluminacion_id: reporteiluminacion_id,
+						catactivo_id: $("#reporteiluminacion_catactivo_id").val(),
+						reporteiluminacion_instalacion: $("#reporteiluminacion_instalacion").val(),
+						ubicacionmapa: ubicacionmapa
+					},
+					resetForm: false,
+					success: function(dato)
+					{
+						// Actualizar ID reporte						
+						reporteiluminacion_id = dato.reporteiluminacion_id;
 
-							menureporte_estado("menureporte_5_1", 1);
+						menureporte_estado("menureporte_5_1", 1);
 
-							tabla_reporte_revisiones(proyecto.id);
+						tabla_reporte_revisiones(proyecto.id);
 
-							$('#reporteiluminacionubicacionfoto').val('');
-							$('#reporteiluminacionubicacionfoto').attr('required', false);
-							$('#boton_descargarmapaubicacion').css('display', 'block');
+						$('#reporteiluminacionubicacionfoto').val('');
+						$('#reporteiluminacionubicacionfoto').attr('required', false);
+						$('#boton_descargarmapaubicacion').css('display', 'block');
 
-							// mensaje
-							swal({
-								title: "Correcto",
-								text: "" + dato.msj,
-								type: "success", // warning, error, success, info
-								buttons: {
-									visible: false, // true , false
-								},
-								timer: 1500,
-								showConfirmButton: false
-							});
+						// mensaje
+						swal({
+							title: "Correcto",
+							text: ""+dato.msj,
+							type: "success", // warning, error, success, info
+							buttons: {
+								visible: false, // true , false
+							},
+							timer: 1500,
+							showConfirmButton: false
+						});
 
-							// actualiza boton
-							$('#botonguardar_reporte_ubicacion').html('Guardar ubicación <i class="fa fa-save"></i>');
-							$('#botonguardar_reporte_ubicacion').attr('disabled', false);
-						},
-						beforeSend: function () {
-							$('#botonguardar_reporte_ubicacion').html('Guardando ubicación <i class="fa fa-spin fa-spinner"></i>');
-							$('#botonguardar_reporte_ubicacion').attr('disabled', true);
-						},
-						error: function (dato) {
-							// actualiza boton
-							$('#botonguardar_reporte_ubicacion').html('Guardar ubicación <i class="fa fa-save"></i>');
-							$('#botonguardar_reporte_ubicacion').attr('disabled', false);
+						// actualiza boton
+						$('#botonguardar_reporte_ubicacion').html('Guardar ubicación <i class="fa fa-save"></i>');
+						$('#botonguardar_reporte_ubicacion').attr('disabled', false);
+					},
+					beforeSend: function()
+					{
+						$('#botonguardar_reporte_ubicacion').html('Guardando ubicación <i class="fa fa-spin fa-spinner"></i>');
+						$('#botonguardar_reporte_ubicacion').attr('disabled', true);
+					},
+					error: function(dato)
+					{
+						// actualiza boton
+						$('#botonguardar_reporte_ubicacion').html('Guardar ubicación <i class="fa fa-save"></i>');
+						$('#botonguardar_reporte_ubicacion').attr('disabled', false);
 
-							// mensaje
-							swal({
-								title: "Error",
-								text: "" + dato.msj,
-								type: "error", // warning, error, success, info
-								buttons: {
-									visible: false, // true , false
-								},
-								timer: 1500,
-								showConfirmButton: false
-							});
-							return false;
-						}
-					}).submit();
-					return false;
-				}
-				else {
-					// mensaje
-					swal({
-						title: "Cancelado",
-						text: "Acción cancelada",
-						type: "error", // warning, error, success, info
-						buttons: {
-							visible: false, // true , false
-						},
-						timer: 500,
-						showConfirmButton: false
-					});
-				}
-			});
+						// mensaje
+						swal({
+							title: "Error",
+							text: ""+dato.msj,
+							type: "error", // warning, error, success, info
+							buttons: {
+								visible: false, // true , false
+							},
+							timer: 1500,
+							showConfirmButton: false
+						});
+						return false;
+					}
+				}).submit();
+				return false;
+			}
+			else 
+			{
+				// mensaje
+				swal({
+					title: "Cancelado",
+					text: "Acción cancelada",
+					type: "error", // warning, error, success, info
+					buttons: {
+						visible: false, // true , false
+					},
+					timer: 500,
+					showConfirmButton: false
+				});
+			}
+		});
 		return false;
 	}
 });
 
 
-$("#boton_descargarmapaubicacion").click(function () {
-	window.open('/reporteiluminacionmapaubicacion/' + reporteiluminacion_id + '/' + 1);
+$("#boton_descargarmapaubicacion").click(function()
+{
+	window.open('/reporteiluminacionmapaubicacion/'+reporteiluminacion_id+'/'+1);
 });
 
 
@@ -2147,10 +2294,12 @@ $("#boton_descargarmapaubicacion").click(function () {
 // PROCESO INSTALACIÓN
 
 
-$("#botonguardar_reporte_procesoinstalacion").click(function () {
+$("#botonguardar_reporte_procesoinstalacion").click(function()
+{
 	// valida campos vacios
 	var valida = this.form.checkValidity();
-	if (valida) {
+	if (valida)
+	{
 		swal({
 			title: "¡Confirme que desea guardar!",
 			text: "Proceso de la instalación",
@@ -2162,89 +2311,95 @@ $("#botonguardar_reporte_procesoinstalacion").click(function () {
 			closeOnConfirm: false,
 			closeOnCancel: false
 		},
-			function (isConfirm) {
-				if (isConfirm) {
-					// cerrar msj confirmacion
-					swal.close();
+		function(isConfirm)
+		{
+			if (isConfirm)
+			{
+				// cerrar msj confirmacion
+				swal.close();
 
-					// enviar datos
-					$('#form_reporte_procesoinstalacion').ajaxForm({
-						dataType: 'json',
-						type: 'POST',
-						url: '/reporteiluminacion',
-						data: {
-							opcion: 12,
-							proyecto_id: proyecto.id,
-							agente_id: agente_id,
-							agente_nombre: agente_nombre,
-							reporteiluminacion_id: reporteiluminacion_id,
-							catactivo_id: $("#reporteiluminacion_catactivo_id").val(),
-							reporteiluminacion_instalacion: $("#reporteiluminacion_instalacion").val(),
-						},
-						resetForm: false,
-						success: function (dato) {
-							// Actualizar ID reporte						
-							reporteiluminacion_id = dato.reporteiluminacion_id;
+				// enviar datos
+				$('#form_reporte_procesoinstalacion').ajaxForm({
+					dataType: 'json',
+					type: 'POST',
+					url: '/reporteiluminacion',
+					data: {
+						opcion: 12,
+						proyecto_id: proyecto.id,
+						agente_id: agente_id,
+						agente_nombre: agente_nombre,
+						reporteiluminacion_id: reporteiluminacion_id,
+						catactivo_id: $("#reporteiluminacion_catactivo_id").val(),
+						reporteiluminacion_instalacion: $("#reporteiluminacion_instalacion").val(),
+					},
+					resetForm: false,
+					success: function(dato)
+					{
+						// Actualizar ID reporte						
+						reporteiluminacion_id = dato.reporteiluminacion_id;
 
-							menureporte_estado("menureporte_5_2", 1);
+						menureporte_estado("menureporte_5_2", 1);
 
-							tabla_reporte_revisiones(proyecto.id);
+						tabla_reporte_revisiones(proyecto.id);
 
-							// mensaje
-							swal({
-								title: "Correcto",
-								text: "" + dato.msj,
-								type: "success", // warning, error, success, info
-								buttons: {
-									visible: false, // true , false
-								},
-								timer: 1500,
-								showConfirmButton: false
-							});
+						// mensaje
+						swal({
+							title: "Correcto",
+							text: ""+dato.msj,
+							type: "success", // warning, error, success, info
+							buttons: {
+								visible: false, // true , false
+							},
+							timer: 1500,
+							showConfirmButton: false
+						});
 
-							// actualiza boton
-							$('#botonguardar_reporte_procesoinstalacion').html('Guardar proceso instalación <i class="fa fa-save"></i>');
-							$('#botonguardar_reporte_procesoinstalacion').attr('disabled', false);
-						},
-						beforeSend: function () {
-							$('#botonguardar_reporte_procesoinstalacion').html('Guardando proceso instalación <i class="fa fa-spin fa-spinner"></i>');
-							$('#botonguardar_reporte_procesoinstalacion').attr('disabled', true);
-						},
-						error: function (dato) {
-							// actualiza boton
-							$('#botonguardar_reporte_procesoinstalacion').html('Guardar proceso instalación <i class="fa fa-save"></i>');
-							$('#botonguardar_reporte_procesoinstalacion').attr('disabled', false);
+						// actualiza boton
+						$('#botonguardar_reporte_procesoinstalacion').html('Guardar proceso instalación <i class="fa fa-save"></i>');
+						$('#botonguardar_reporte_procesoinstalacion').attr('disabled', false);
+					},
+					beforeSend: function()
+					{
+						$('#botonguardar_reporte_procesoinstalacion').html('Guardando proceso instalación <i class="fa fa-spin fa-spinner"></i>');
+						$('#botonguardar_reporte_procesoinstalacion').attr('disabled', true);
+					},
+					error: function(dato)
+					{
+						// actualiza boton
+						$('#botonguardar_reporte_procesoinstalacion').html('Guardar proceso instalación <i class="fa fa-save"></i>');
+						$('#botonguardar_reporte_procesoinstalacion').attr('disabled', false);
 
-							// mensaje
-							swal({
-								title: "Error",
-								text: "" + dato.msj,
-								type: "error", // warning, error, success, info
-								buttons: {
-									visible: false, // true , false
-								},
-								timer: 1500,
-								showConfirmButton: false
-							});
-							return false;
-						}
-					}).submit();
-					return false;
-				}
-				else {
-					// mensaje
-					swal({
-						title: "Cancelado",
-						text: "Acción cancelada",
-						type: "error", // warning, error, success, info
-						buttons: {
-							visible: false, // true , false
-						},
-						timer: 500,
-						showConfirmButton: false
-					});
-				}
-			});
+						// mensaje
+						swal({
+							title: "Error",
+							text: ""+dato.msj,
+							type: "error", // warning, error, success, info
+							buttons: {
+								visible: false, // true , false
+							},
+							timer: 1500,
+							showConfirmButton: false
+						});
+						return false;
+					}
+				}).submit();
+				return false;
+			}
+			else 
+			{
+				// mensaje
+				swal({
+					title: "Cancelado",
+					text: "Acción cancelada",
+					type: "error", // warning, error, success, info
+					buttons: {
+						visible: false, // true , false
+					},
+					timer: 500,
+					showConfirmButton: false
+				});
+			}
+		});
 		return false;
 	}
 });
@@ -2254,23 +2409,29 @@ $("#botonguardar_reporte_procesoinstalacion").click(function () {
 // CATEGORIAS
 
 
-$(document).ready(function () {
-	setTimeout(function () {
+$(document).ready(function()
+{
+	setTimeout(function()
+	{
 		tabla_reporte_categorias(proyecto.id, reporteiluminacion_id);
 	}, 2500);
 });
 
 
 var datatable_reportecategorias = null;
-function tabla_reporte_categorias(proyecto_id, reporteiluminacion_id) {
-	try {
-		var ruta = "/reporteiluminacioncategorias/" + proyecto_id + "/" + reporteiluminacion_id + "/" + areas_poe;
+function tabla_reporte_categorias(proyecto_id, reporteiluminacion_id)
+{
+	try 
+	{
+		var ruta = "/reporteiluminacioncategorias/"+proyecto_id+"/"+reporteiluminacion_id+"/"+areas_poe;
 
-		if (datatable_reportecategorias != null) {
+		if (datatable_reportecategorias != null)
+		{
 			datatable_reportecategorias.clear().draw();
 			datatable_reportecategorias.ajax.url(ruta).load();
 		}
-		else {
+		else
+		{
 			var numeroejecucion = 1;
 			datatable_reportecategorias = $('#tabla_reporte_categoria').DataTable({
 				"ajax": {
@@ -2279,17 +2440,21 @@ function tabla_reporte_categorias(proyecto_id, reporteiluminacion_id) {
 					"cache": false,
 					dataType: "json",
 					data: {},
-					dataSrc: function (json) {
-						if (parseInt(areas_poe) == 1) {
+					dataSrc: function (json)
+					{
+						if (parseInt(areas_poe) == 1)
+						{
 							$("#boton_reporte_nuevacategoria").attr('disabled', true);
 							$("#boton_reporte_nuevaarea").attr('disabled', true);
 						}
 
 
-						if (parseInt(json.data.length) > 0 && parseInt(json.total_singuardar) == 0) {
+						if (parseInt(json.data.length) > 0 && parseInt(json.total_singuardar) == 0)
+						{
 							menureporte_estado("menureporte_5_3", 1);
 						}
-						else {
+						else
+						{
 							menureporte_estado("menureporte_5_3", 0);
 						}
 
@@ -2297,10 +2462,12 @@ function tabla_reporte_categorias(proyecto_id, reporteiluminacion_id) {
 						// alert("Done! "+json.msj);
 						return json.data;
 					},
-					error: function (xhr, error, code) {
+					error: function (xhr, error, code)
+					{
 						// console.log(xhr); console.log(code);
 						console.log('error en datatable_reportecategorias');
-						if (numeroejecucion <= 1) {
+						if (numeroejecucion <= 1)
+						{
 							tabla_reporte_categorias(proyecto_id, reporteiluminacion_id);
 							numeroejecucion += 1;
 						}
@@ -2342,7 +2509,7 @@ function tabla_reporte_categorias(proyecto_id, reporteiluminacion_id) {
 				],
 				"lengthMenu": [[20, 50, 100, -1], [20, 50, 100, "Todos"]],
 				// "rowsGroup": [0, 1], //agrupar filas
-				"order": [[0, "DESC"]],
+				"order": [[ 0, "DESC" ]],
 				"ordering": false,
 				"processing": true,
 				"paging": true,
@@ -2363,22 +2530,25 @@ function tabla_reporte_categorias(proyecto_id, reporteiluminacion_id) {
 						"previous": "Anterior"
 					}
 				}
-			});
+		    });
 		}
 
 		// Tooltip en DataTable
-		datatable_reportecategorias.on('draw', function () {
+		datatable_reportecategorias.on('draw', function ()
+		{
 			$('[data-toggle="tooltip"]').tooltip();
 		});
 	}
-	catch (exception) {
+	catch (exception)
+	{
 		tabla_reporte_categorias(proyecto_id, reporteiluminacion_id);
-	}
+    }
 }
 
 
-$("#boton_reporte_nuevacategoria").click(function () {
-	$('#form_modal_categoria').each(function () {
+$("#boton_reporte_nuevacategoria").click(function()
+{
+	$('#form_modal_categoria').each(function(){
 		this.reset();
 	});
 
@@ -2392,15 +2562,16 @@ $("#boton_reporte_nuevacategoria").click(function () {
 
 
 	// mostrar modal
-	$('#modal_reporte_categoria').modal({ backdrop: false });
+	$('#modal_reporte_categoria').modal({backdrop:false});
 });
 
 
-$('#tabla_reporte_categoria tbody').on('click', 'td.editar', function () {
+$('#tabla_reporte_categoria tbody').on('click', 'td.editar', function()
+{
 	var tr = $(this).closest('tr');
 	var row = datatable_reportecategorias.row(tr);
 
-	$('#form_modal_categoria').each(function () {
+	$('#form_modal_categoria').each(function(){
 		this.reset();
 	});
 
@@ -2413,14 +2584,16 @@ $('#tabla_reporte_categoria tbody').on('click', 'td.editar', function () {
 	$('#reportecategoria_horas').val(row.data().reportecategoria_horas);
 
 
-	if (areas_poe == 1) {
+	if (areas_poe == 1)
+	{
 		$('#reportecategoria_nombre').attr('required', false);
 		$('#reportecategoria_nombre').attr('disabled', true);
 
 		$('#reportecategoria_total').attr('required', false);
 		$('#reportecategoria_total').attr('disabled', true);
 	}
-	else {
+	else
+	{
 		$('#reportecategoria_nombre').attr('disabled', false);
 		$('#reportecategoria_nombre').attr('required', true);
 
@@ -2433,17 +2606,18 @@ $('#tabla_reporte_categoria tbody').on('click', 'td.editar', function () {
 	$('#modal_reporte_categoria .modal-title').html(row.data().reportecategoria_nombre);
 
 	// mostrar modal
-	$('#modal_reporte_categoria').modal({ backdrop: false });
+	$('#modal_reporte_categoria').modal({backdrop:false});
 });
 
 
-$('#tabla_reporte_categoria tbody').on('click', 'td>button.eliminar', function () {
+$('#tabla_reporte_categoria tbody').on('click', 'td>button.eliminar', function()
+{
 	var tr = $(this).closest('tr');
 	var row = datatable_reportecategorias.row(tr);
 
 	swal({
 		title: "¡Confirme que desea eliminar!",
-		text: "La categoría: " + row.data().reporteiluminacioncategoria_nombre,
+		text: "La categoría: "+row.data().reporteiluminacioncategoria_nombre,
 		type: "warning",
 		showCancelButton: true,
 		confirmButtonColor: "#DD6B55",
@@ -2452,147 +2626,36 @@ $('#tabla_reporte_categoria tbody').on('click', 'td>button.eliminar', function (
 		closeOnConfirm: false,
 		closeOnCancel: false
 	},
-		function (isConfirm) {
-			if (isConfirm) {
-				swal({
-					title: "¡Por seguridad confirme nuevamente que desea eliminar!",
-					text: "La categoría: " + row.data().reporteiluminacioncategoria_nombre,
-					type: "warning",
-					showCancelButton: true,
-					confirmButtonColor: "#DD6B55",
-					confirmButtonText: "Eliminar!",
-					cancelButtonText: "Cancelar!",
-					closeOnConfirm: false,
-					closeOnCancel: false
-				},
-					function (isConfirm) {
-						if (isConfirm) {
-							// cerrar msj confirmacion
-							swal.close();
-
-							$.ajax({
-								type: "GET",
-								dataType: "json",
-								url: "/reporteiluminacioncategoriaeliminar/" + row.data().id,
-								data: {},
-								cache: false,
-								success: function (dato) {
-									// Actualizar tabla
-									tabla_reporte_categorias(proyecto.id, reporteiluminacion_id);
-									tabla_reporte_areas(proyecto.id, reporteiluminacion_id);
-									tabla_reporte_iluminacionpuntos(proyecto.id, reporteiluminacion_id);
-									tabla_reporte_iluminacionresultados(proyecto.id, reporteiluminacion_id);
-									tabla_reporte_reflexionresultados(proyecto.id, reporteiluminacion_id);
-									tabla_reporte_matrizexposicion(proyecto.id, reporteiluminacion_id);
-									reporteiluminacion_dashboard(proyecto.id, reporteiluminacion_id);
-
-									// mensaje
-									swal({
-										title: "Correcto",
-										text: "" + dato.msj,
-										type: "success", // warning, error, success, info
-										buttons: {
-											visible: false, // true , false
-										},
-										timer: 1500,
-										showConfirmButton: false
-									});
-								},
-								beforeSend: function () {
-									// $('#tabla_reporte_definiciones tbody').html('<tr><td colspan="5"><i class="fa fa-spin fa-spinner" style="font-size: 40px!important;"></i></td></tr>');
-								},
-								error: function (dato) {
-									// mensaje
-									swal({
-										title: "Error",
-										text: "" + dato.msj,
-										type: "error", // warning, error, success, info
-										buttons: {
-											visible: false, // true , false
-										},
-										timer: 1500,
-										showConfirmButton: false
-									});
-
-									return false;
-								}
-							});//Fin ajax
-						}
-						else {
-							// mensaje
-							swal({
-								title: "Cancelado",
-								text: "Acción cancelada",
-								type: "error", // warning, error, success, info
-								buttons: {
-									visible: false, // true , false
-								},
-								timer: 500,
-								showConfirmButton: false
-							});
-						}
-					});
-			}
-			else {
-				// mensaje
-				swal({
-					title: "Cancelado",
-					text: "Acción cancelada",
-					type: "error", // warning, error, success, info
-					buttons: {
-						visible: false, // true , false
-					},
-					timer: 500,
-					showConfirmButton: false
-				});
-			}
-		});
-	return false;
-});
-
-
-$("#botonguardar_modal_categoria").click(function () {
-	// valida campos vacios
-	var valida = this.form.checkValidity();
-	if (valida) {
-		swal({
-			title: "¡Confirme que desea guardar!",
-			text: "Categoría: " + $("#reportecategoria_nombre").val(),
-			type: "warning",
-			showCancelButton: true,
-			confirmButtonColor: "#DD6B55",
-			confirmButtonText: "Guardar!",
-			cancelButtonText: "Cancelar!",
-			closeOnConfirm: false,
-			closeOnCancel: false
-		},
-			function (isConfirm) {
-				if (isConfirm) {
+	function(isConfirm)
+	{
+		if (isConfirm)
+		{
+			swal({
+				title: "¡Por seguridad confirme nuevamente que desea eliminar!",
+				text: "La categoría: "+row.data().reporteiluminacioncategoria_nombre,
+				type: "warning",
+				showCancelButton: true,
+				confirmButtonColor: "#DD6B55",
+				confirmButtonText: "Eliminar!",
+				cancelButtonText: "Cancelar!",
+				closeOnConfirm: false,
+				closeOnCancel: false
+			},
+			function(isConfirm)
+			{
+				if (isConfirm)
+				{
 					// cerrar msj confirmacion
 					swal.close();
 
-					// enviar datos
-					$('#form_modal_categoria').ajaxForm({
-						dataType: 'json',
-						type: 'POST',
-						url: '/reporteiluminacion',
-						data: {
-							opcion: 13,
-							proyecto_id: proyecto.id,
-							agente_id: agente_id,
-							agente_nombre: agente_nombre,
-							reporteiluminacion_id: reporteiluminacion_id,
-							catactivo_id: $("#reporteiluminacion_catactivo_id").val(),
-							reporteiluminacion_instalacion: $("#reporteiluminacion_instalacion").val(),
-							categorias_poe: categorias_poe
-						},
-						resetForm: false,
-						success: function (dato) {
-							// Actualizar ID reporte						
-							reporteiluminacion_id = dato.reporteiluminacion_id;
-
-							tabla_reporte_revisiones(proyecto.id);
-
+					$.ajax({
+						type: "GET",
+						dataType: "json",
+						url: "/reporteiluminacioncategoriaeliminar/"+row.data().id,
+						data:{},
+						cache: false,
+						success:function(dato)
+						{
 							// Actualizar tabla
 							tabla_reporte_categorias(proyecto.id, reporteiluminacion_id);
 							tabla_reporte_areas(proyecto.id, reporteiluminacion_id);
@@ -2605,7 +2668,7 @@ $("#botonguardar_modal_categoria").click(function () {
 							// mensaje
 							swal({
 								title: "Correcto",
-								text: "" + dato.msj,
+								text: ""+dato.msj,
 								type: "success", // warning, error, success, info
 								buttons: {
 									visible: false, // true , false
@@ -2613,27 +2676,17 @@ $("#botonguardar_modal_categoria").click(function () {
 								timer: 1500,
 								showConfirmButton: false
 							});
-
-							// actualiza boton
-							$('#botonguardar_modal_categoria').html('Guardar <i class="fa fa-save"></i>');
-							$('#botonguardar_modal_categoria').attr('disabled', false);
-
-							// cerrar modal
-							$('#modal_reporte_categoria').modal('hide');
 						},
-						beforeSend: function () {
-							$('#botonguardar_modal_categoria').html('Guardando <i class="fa fa-spin fa-spinner"></i>');
-							$('#botonguardar_modal_categoria').attr('disabled', true);
+						beforeSend: function()
+						{
+							// $('#tabla_reporte_definiciones tbody').html('<tr><td colspan="5"><i class="fa fa-spin fa-spinner" style="font-size: 40px!important;"></i></td></tr>');
 						},
-						error: function (dato) {
-							// actualiza boton
-							$('#botonguardar_modal_categoria').html('Guardar <i class="fa fa-save"></i>');
-							$('#botonguardar_modal_categoria').attr('disabled', false);
-
+						error: function(dato)
+						{
 							// mensaje
 							swal({
 								title: "Error",
-								text: "" + dato.msj,
+								text: ""+dato.msj,
 								type: "error", // warning, error, success, info
 								buttons: {
 									visible: false, // true , false
@@ -2641,12 +2694,13 @@ $("#botonguardar_modal_categoria").click(function () {
 								timer: 1500,
 								showConfirmButton: false
 							});
+
 							return false;
 						}
-					}).submit();
-					return false;
+					});//Fin ajax
 				}
-				else {
+				else 
+				{
 					// mensaje
 					swal({
 						title: "Cancelado",
@@ -2660,6 +2714,143 @@ $("#botonguardar_modal_categoria").click(function () {
 					});
 				}
 			});
+		}
+		else 
+		{
+			// mensaje
+			swal({
+				title: "Cancelado",
+				text: "Acción cancelada",
+				type: "error", // warning, error, success, info
+				buttons: {
+					visible: false, // true , false
+				},
+				timer: 500,
+				showConfirmButton: false
+			});
+		}
+	});
+	return false;
+});
+
+
+$("#botonguardar_modal_categoria").click(function()
+{
+	// valida campos vacios
+	var valida = this.form.checkValidity();
+	if (valida)
+	{
+		swal({
+			title: "¡Confirme que desea guardar!",
+			text: "Categoría: "+$("#reportecategoria_nombre").val(),
+			type: "warning",
+			showCancelButton: true,
+			confirmButtonColor: "#DD6B55",
+			confirmButtonText: "Guardar!",
+			cancelButtonText: "Cancelar!",
+			closeOnConfirm: false,
+			closeOnCancel: false
+		},
+		function(isConfirm)
+		{
+			if (isConfirm)
+			{
+				// cerrar msj confirmacion
+				swal.close();
+
+				// enviar datos
+				$('#form_modal_categoria').ajaxForm({
+					dataType: 'json',
+					type: 'POST',
+					url: '/reporteiluminacion',
+					data: {
+						opcion: 13,
+						proyecto_id: proyecto.id,
+						agente_id: agente_id,
+						agente_nombre: agente_nombre,
+						reporteiluminacion_id: reporteiluminacion_id,
+						catactivo_id: $("#reporteiluminacion_catactivo_id").val(),
+						reporteiluminacion_instalacion: $("#reporteiluminacion_instalacion").val(),
+						categorias_poe: categorias_poe
+					},
+					resetForm: false,
+					success: function(dato)
+					{
+						// Actualizar ID reporte						
+						reporteiluminacion_id = dato.reporteiluminacion_id;
+
+						tabla_reporte_revisiones(proyecto.id);
+
+						// Actualizar tabla
+						tabla_reporte_categorias(proyecto.id, reporteiluminacion_id);
+						tabla_reporte_areas(proyecto.id, reporteiluminacion_id);
+						tabla_reporte_iluminacionpuntos(proyecto.id, reporteiluminacion_id);
+						tabla_reporte_iluminacionresultados(proyecto.id, reporteiluminacion_id);
+						tabla_reporte_reflexionresultados(proyecto.id, reporteiluminacion_id);
+						tabla_reporte_matrizexposicion(proyecto.id, reporteiluminacion_id);
+						reporteiluminacion_dashboard(proyecto.id, reporteiluminacion_id);
+
+						// mensaje
+						swal({
+							title: "Correcto",
+							text: ""+dato.msj,
+							type: "success", // warning, error, success, info
+							buttons: {
+								visible: false, // true , false
+							},
+							timer: 1500,
+							showConfirmButton: false
+						});
+
+						// actualiza boton
+						$('#botonguardar_modal_categoria').html('Guardar <i class="fa fa-save"></i>');
+						$('#botonguardar_modal_categoria').attr('disabled', false);
+
+						// cerrar modal
+						$('#modal_reporte_categoria').modal('hide');
+					},
+					beforeSend: function()
+					{
+						$('#botonguardar_modal_categoria').html('Guardando <i class="fa fa-spin fa-spinner"></i>');
+						$('#botonguardar_modal_categoria').attr('disabled', true);
+					},
+					error: function(dato)
+					{
+						// actualiza boton
+						$('#botonguardar_modal_categoria').html('Guardar <i class="fa fa-save"></i>');
+						$('#botonguardar_modal_categoria').attr('disabled', false);
+
+						// mensaje
+						swal({
+							title: "Error",
+							text: ""+dato.msj,
+							type: "error", // warning, error, success, info
+							buttons: {
+								visible: false, // true , false
+							},
+							timer: 1500,
+							showConfirmButton: false
+						});
+						return false;
+					}
+				}).submit();
+				return false;
+			}
+			else 
+			{
+				// mensaje
+				swal({
+					title: "Cancelado",
+					text: "Acción cancelada",
+					type: "error", // warning, error, success, info
+					buttons: {
+						visible: false, // true , false
+					},
+					timer: 500,
+					showConfirmButton: false
+				});
+			}
+		});
 		return false;
 	}
 });
@@ -2672,23 +2863,29 @@ $("#botonguardar_modal_categoria").click(function () {
 var selectareas = '';
 
 
-$(document).ready(function () {
-	setTimeout(function () {
+$(document).ready(function()
+{
+	setTimeout(function()
+	{
 		tabla_reporte_areas(proyecto.id, reporteiluminacion_id);
 	}, 5000);
 });
 
 
 var datatable_reporteareas = null;
-function tabla_reporte_areas(proyecto_id, reporteiluminacion_id) {
-	try {
-		var ruta = "/reporteiluminacionareas/" + proyecto_id + "/" + reporteiluminacion_id + "/" + areas_poe;
+function tabla_reporte_areas(proyecto_id, reporteiluminacion_id)
+{
+	try 
+	{
+		var ruta = "/reporteiluminacionareas/"+proyecto_id+"/"+reporteiluminacion_id+"/"+areas_poe;
 
-		if (datatable_reporteareas != null) {
+		if (datatable_reporteareas != null)
+		{
 			datatable_reporteareas.clear().draw();
 			datatable_reporteareas.ajax.url(ruta).load();
 		}
-		else {
+		else
+		{
 			var numeroejecucion = 1;
 			datatable_reporteareas = $('#tabla_reporte_area').DataTable({
 				"ajax": {
@@ -2697,8 +2894,10 @@ function tabla_reporte_areas(proyecto_id, reporteiluminacion_id) {
 					"cache": false,
 					dataType: "json",
 					data: {},
-					dataSrc: function (json) {
-						if (parseInt(json.data.length) > 0 && parseInt(json.total_singuardar) == 0) {
+					dataSrc: function (json)
+					{
+						if (parseInt(json.data.length) > 0 && parseInt(json.total_singuardar) == 0)
+						{
 							menureporte_estado("menureporte_5_4", 1);
 							menureporte_estado("menureporte_5_5", 1);
 							menureporte_estado("menureporte_6_1", 1);
@@ -2707,7 +2906,8 @@ function tabla_reporte_areas(proyecto_id, reporteiluminacion_id) {
 						}
 
 
-						if (parseInt(areas_poe) == 1) {
+						if (parseInt(areas_poe) == 1)
+						{
 							$("#boton_reporte_nuevacategoria").attr('disabled', true);
 							$("#boton_reporte_nuevaarea").attr('disabled', true);
 						}
@@ -2723,11 +2923,13 @@ function tabla_reporte_areas(proyecto_id, reporteiluminacion_id) {
 
 						$('#total_ic').html(json.total_ic);
 
-						if (parseInt(json.total_ic) > 0) {
+						if (parseInt(json.total_ic) > 0)
+						{
 							$("#indicearea_descripcion_2").css('display', 'none');
 							$("#indicearea_descripcion_1").css('display', 'block');
 						}
-						else {
+						else
+						{
 							$("#indicearea_descripcion_1").css('display', 'none');
 							$("#indicearea_descripcion_2").css('display', 'block');
 						}
@@ -2735,11 +2937,13 @@ function tabla_reporte_areas(proyecto_id, reporteiluminacion_id) {
 
 						$('#total_pt').html(json.total_pt);
 
-						if (parseInt(json.total_pt) > 0) {
+						if (parseInt(json.total_pt) > 0)
+						{
 							$("#puestotrabajo_descripcion_2").css('display', 'none');
 							$("#puestotrabajo_descripcion_1").css('display', 'block');
 						}
-						else {
+						else
+						{
 							$("#puestotrabajo_descripcion_1").css('display', 'none');
 							$("#puestotrabajo_descripcion_2").css('display', 'block');
 						}
@@ -2752,10 +2956,12 @@ function tabla_reporte_areas(proyecto_id, reporteiluminacion_id) {
 						// alert("Done! "+json.msj);
 						return json.data;
 					},
-					error: function (xhr, error, code) {
+					error: function (xhr, error, code)
+					{
 						// console.log(xhr); console.log(code);
 						console.log('error en datatable_reporteareas');
-						if (numeroejecucion <= 1) {
+						if (numeroejecucion <= 1)
+						{
 							tabla_reporte_areas(proyecto_id, reporteiluminacion_id)
 							numeroejecucion += 1;
 						}
@@ -2808,7 +3014,7 @@ function tabla_reporte_areas(proyecto_id, reporteiluminacion_id) {
 				],
 				"lengthMenu": [[20, 50, 100, -1], [20, 50, 100, "Todos"]],
 				"rowsGroup": [1, 0, 2, 5, 6, 7, 8], //agrupar filas
-				"order": [[0, "DESC"]],
+				"order": [[ 0, "DESC" ]],
 				"ordering": false,
 				"processing": true,
 				"paging": true,
@@ -2834,18 +3040,21 @@ function tabla_reporte_areas(proyecto_id, reporteiluminacion_id) {
 
 
 		// Tooltip en DataTable
-		datatable_reporteareas.on('draw', function () {
+		datatable_reporteareas.on('draw', function ()
+		{
 			$('[data-toggle="tooltip"]').tooltip();
 		});
 	}
-	catch (exception) {
+	catch (exception)
+	{
 		tabla_reporte_areas(proyecto_id, reporteiluminacion_id);
-	}
+    }
 }
 
 
-$("#boton_reporte_nuevaarea").click(function () {
-	$('#form_reporte_area').each(function () {
+$("#boton_reporte_nuevaarea").click(function()
+{
+	$('#form_reporte_area').each(function(){
 		this.reset();
 	});
 
@@ -2858,24 +3067,27 @@ $("#boton_reporte_nuevaarea").click(function () {
 
 
 	// mostrar modal
-	$('#modal_reporte_area').modal({ backdrop: false });
+	$('#modal_reporte_area').modal({backdrop:false});
 
 
 	// Consultar categorias
 	$.ajax({
 		type: "GET",
 		dataType: "json",
-		url: "/reporteiluminacionareascategorias/" + proyecto.id + "/" + reporteiluminacion_id + "/" + 0 + "/" + areas_poe,
-		data: {},
+		url: "/reporteiluminacionareascategorias/"+proyecto.id+"/"+reporteiluminacion_id+"/"+ 0 +"/"+areas_poe,
+		data:{},
 		cache: false,
-		success: function (dato) {
+		success:function(dato)
+		{
 			// $('#tabla_areacategorias tbody').html(dato.areacategorias);
 			tabla_areacategorias(dato.areacategorias);
 		},
-		beforeSend: function () {
+		beforeSend: function()
+		{
 			$('#tabla_areacategorias tbody').html('<tr><td colspan="7" style="text-align: center;"><i class="fa fa-spin fa-spinner" style="font-size: 40px!important;"></i></td></tr>');
 		},
-		error: function (dato) {
+		error: function(dato)
+		{
 			$('#tabla_areacategorias tbody').html('<tr><td colspan="7" style="text-align: center;">Error al cargar las categorías</td></tr>');
 			return false;
 		}
@@ -2884,8 +3096,10 @@ $("#boton_reporte_nuevaarea").click(function () {
 
 
 var datatable_areacategoria = null;
-function tabla_areacategorias(tbody) {
-	if (datatable_areacategoria != null) {
+function tabla_areacategorias(tbody)
+{
+	if (datatable_areacategoria != null)
+	{
 		datatable_areacategoria.destroy();
 	}
 
@@ -2893,10 +3107,10 @@ function tabla_areacategorias(tbody) {
 
 	datatable_areacategoria = $('#tabla_areacategorias').DataTable({
 		"scrollY": "185px",
-		"scrollCollapse": true,
+        "scrollCollapse": true,
 		"lengthMenu": [[20, 50, 100, -1], [20, 50, 100, "Todos"]],
 		// "rowsGroup": [0], //agrupar filas
-		"order": [[0, "DESC"]],
+		"order": [[ 0, "DESC" ]],
 		"ordering": false,
 		"searching": true,
 		"processing": true,
@@ -2922,25 +3136,29 @@ function tabla_areacategorias(tbody) {
 }
 
 
-function activa_areacategoria(checkbox, num_registro) {
-	if (checkbox.checked) {
-		$(".areacategoria_" + num_registro).attr('readonly', false);
-		$(".areacategoria_" + num_registro).attr('required', true);
+function activa_areacategoria(checkbox, num_registro)
+{
+	if (checkbox.checked)
+	{
+		$(".areacategoria_"+num_registro).attr('readonly', false);
+		$(".areacategoria_"+num_registro).attr('required', true);
 	}
-	else {
-		$(".areacategoria_" + num_registro).val('');
-		$(".areacategoria_" + num_registro).attr('required', false);
-		$(".areacategoria_" + num_registro).attr('readonly', true);
+	else
+	{
+		$(".areacategoria_"+num_registro).val('');
+		$(".areacategoria_"+num_registro).attr('required', false);
+		$(".areacategoria_"+num_registro).attr('readonly', true);
 	}
 }
 
 
-$('#tabla_reporte_area tbody').on('click', 'td.editar', function () {
+$('#tabla_reporte_area tbody').on('click', 'td.editar', function()
+{
 	var tr = $(this).closest('tr');
 	var row = datatable_reporteareas.row(tr);
 
 
-	$('#form_reporte_area').each(function () {
+	$('#form_reporte_area').each(function(){
 		this.reset();
 	});
 
@@ -2982,7 +3200,8 @@ $('#tabla_reporte_area tbody').on('click', 'td.editar', function () {
 
 
 
-	if (areas_poe == 1) {
+	if (areas_poe == 1)
+	{
 		$('#reportearea_instalacion').attr('required', false);
 		$('#reportearea_instalacion').attr('disabled', true);
 
@@ -2995,7 +3214,8 @@ $('#tabla_reporte_area tbody').on('click', 'td.editar', function () {
 		// $('#reporteiluminacionarea_porcientooperacion').attr('required', false);
 		// $('#reporteiluminacionarea_porcientooperacion').attr('disabled', true);
 	}
-	else {
+	else
+	{
 		$('#reportearea_instalacion').attr('disabled', false);
 		$('#reportearea_instalacion').attr('required', true);
 
@@ -3014,17 +3234,20 @@ $('#tabla_reporte_area tbody').on('click', 'td.editar', function () {
 	$.ajax({
 		type: "GET",
 		dataType: "json",
-		url: "/reporteiluminacionareascategorias/" + proyecto.id + "/" + reporteiluminacion_id + "/" + row.data().id + "/" + areas_poe,
-		data: {},
+		url: "/reporteiluminacionareascategorias/"+proyecto.id+"/"+reporteiluminacion_id+"/"+row.data().id+"/"+areas_poe,
+		data:{},
 		cache: false,
-		success: function (dato) {
+		success:function(dato)
+		{
 			// $('#tabla_areacategorias tbody').html(dato.areacategorias);
 			tabla_areacategorias(dato.areacategorias);
 		},
-		beforeSend: function () {
+		beforeSend: function()
+		{
 			$('#tabla_areacategorias tbody').html('<tr><td colspan="7" style="text-align: center;"><i class="fa fa-spin fa-spinner" style="font-size: 40px!important;"></i></td></tr>');
 		},
-		error: function (dato) {
+		error: function(dato)
+		{
 			$('#tabla_areacategorias tbody').html('<tr><td colspan="7" style="text-align: center;">Error al cargar las categorías</td></tr>');
 			return false;
 		}
@@ -3036,17 +3259,18 @@ $('#tabla_reporte_area tbody').on('click', 'td.editar', function () {
 
 
 	// mostrar modal
-	$('#modal_reporte_area').modal({ backdrop: false });
+	$('#modal_reporte_area').modal({backdrop:false});
 });
 
 
-$('#tabla_reporte_area tbody').on('click', 'td>button.eliminar', function () {
+$('#tabla_reporte_area tbody').on('click', 'td>button.eliminar', function()
+{
 	var tr = $(this).closest('tr');
 	var row = datatable_reporteareas.row(tr);
 
 	swal({
 		title: "¡Confirme que desea eliminar!",
-		text: "El área: " + row.data().reportarea_nombre,
+		text: "El área: "+row.data().reportarea_nombre,
 		type: "warning",
 		showCancelButton: true,
 		confirmButtonColor: "#DD6B55",
@@ -3055,152 +3279,36 @@ $('#tabla_reporte_area tbody').on('click', 'td>button.eliminar', function () {
 		closeOnConfirm: false,
 		closeOnCancel: false
 	},
-		function (isConfirm) {
-			if (isConfirm) {
-				swal({
-					title: "¡Por seguridad confirme nuevamente que desea eliminar!",
-					text: "El área: " + row.data().reportarea_nombre,
-					type: "warning",
-					showCancelButton: true,
-					confirmButtonColor: "#DD6B55",
-					confirmButtonText: "Eliminar!",
-					cancelButtonText: "Cancelar!",
-					closeOnConfirm: false,
-					closeOnCancel: false
-				},
-					function (isConfirm) {
-						if (isConfirm) {
-							// cerrar msj confirmacion
-							swal.close();
-
-							$.ajax({
-								type: "GET",
-								dataType: "json",
-								url: "/reporteiluminacionareaeliminar/" + row.data().id,
-								data: {},
-								cache: false,
-								success: function (dato) {
-									// Actualizar tabla
-									tabla_reporte_areas(proyecto.id, reporteiluminacion_id);
-									tabla_reporte_iluminacionpuntos(proyecto.id, reporteiluminacion_id);
-									tabla_reporte_iluminacionresultados(proyecto.id, reporteiluminacion_id);
-									tabla_reporte_reflexionresultados(proyecto.id, reporteiluminacion_id);
-									tabla_reporte_matrizexposicion(proyecto.id, reporteiluminacion_id);
-									reporteiluminacion_dashboard(proyecto.id, reporteiluminacion_id);
-
-
-									// mensaje
-									swal({
-										title: "Correcto",
-										text: "" + dato.msj,
-										type: "success", // warning, error, success, info
-										buttons: {
-											visible: false, // true , false
-										},
-										timer: 1500,
-										showConfirmButton: false
-									});
-								},
-								beforeSend: function () {
-									// $('#tabla_reporte_definiciones tbody').html('<tr><td colspan="5"><i class="fa fa-spin fa-spinner" style="font-size: 40px!important;"></i></td></tr>');
-								},
-								error: function (dato) {
-									// mensaje
-									swal({
-										title: "Error",
-										text: "" + dato.msj,
-										type: "error", // warning, error, success, info
-										buttons: {
-											visible: false, // true , false
-										},
-										timer: 1500,
-										showConfirmButton: false
-									});
-
-									return false;
-								}
-							});//Fin ajax
-						}
-						else {
-							// mensaje
-							swal({
-								title: "Cancelado",
-								text: "Acción cancelada",
-								type: "error", // warning, error, success, info
-								buttons: {
-									visible: false, // true , false
-								},
-								timer: 500,
-								showConfirmButton: false
-							});
-						}
-					});
-			}
-			else {
-				// mensaje
-				swal({
-					title: "Cancelado",
-					text: "Acción cancelada",
-					type: "error", // warning, error, success, info
-					buttons: {
-						visible: false, // true , false
-					},
-					timer: 500,
-					showConfirmButton: false
-				});
-			}
-		});
-	return false;
-});
-
-
-$("#botonguardar_modal_area").click(function () {
-	// borrar campo filtro del DATATABLE
-	// datatable_areacategoria.search($(this).val()).draw();
-	datatable_areacategoria.search("").draw();
-
-
-	// valida campos vacios
-	var valida = this.form.checkValidity();
-	if (valida) {
-		swal({
-			title: "¡Confirme que desea guardar!",
-			text: "Área: " + $("#reportearea_nombre").val(),
-			type: "warning",
-			showCancelButton: true,
-			confirmButtonColor: "#DD6B55",
-			confirmButtonText: "Guardar!",
-			cancelButtonText: "Cancelar!",
-			closeOnConfirm: false,
-			closeOnCancel: false
-		},
-			function (isConfirm) {
-				if (isConfirm) {
+	function(isConfirm)
+	{
+		if (isConfirm)
+		{
+			swal({
+				title: "¡Por seguridad confirme nuevamente que desea eliminar!",
+				text: "El área: "+row.data().reportarea_nombre,
+				type: "warning",
+				showCancelButton: true,
+				confirmButtonColor: "#DD6B55",
+				confirmButtonText: "Eliminar!",
+				cancelButtonText: "Cancelar!",
+				closeOnConfirm: false,
+				closeOnCancel: false
+			},
+			function(isConfirm)
+			{
+				if (isConfirm)
+				{
 					// cerrar msj confirmacion
 					swal.close();
 
-					// enviar datos
-					$('#form_reporte_area').ajaxForm({
-						dataType: 'json',
-						type: 'POST',
-						url: '/reporteiluminacion',
-						data: {
-							opcion: 14,
-							proyecto_id: proyecto.id,
-							agente_id: agente_id,
-							agente_nombre: agente_nombre,
-							reporteiluminacion_id: reporteiluminacion_id,
-							catactivo_id: $("#reporteiluminacion_catactivo_id").val(),
-							reporteiluminacion_instalacion: $("#reporteiluminacion_instalacion").val(),
-							areas_poe: areas_poe,
-						},
-						resetForm: false,
-						success: function (dato) {
-							// Actualizar ID reporte						
-							reporteiluminacion_id = dato.reporteiluminacion_id;
-
-							tabla_reporte_revisiones(proyecto.id);
-
+					$.ajax({
+						type: "GET",
+						dataType: "json",
+						url: "/reporteiluminacionareaeliminar/"+row.data().id,
+						data:{},
+						cache: false,
+						success:function(dato)
+						{
 							// Actualizar tabla
 							tabla_reporte_areas(proyecto.id, reporteiluminacion_id);
 							tabla_reporte_iluminacionpuntos(proyecto.id, reporteiluminacion_id);
@@ -3209,10 +3317,11 @@ $("#botonguardar_modal_area").click(function () {
 							tabla_reporte_matrizexposicion(proyecto.id, reporteiluminacion_id);
 							reporteiluminacion_dashboard(proyecto.id, reporteiluminacion_id);
 
+
 							// mensaje
 							swal({
 								title: "Correcto",
-								text: "" + dato.msj,
+								text: ""+dato.msj,
 								type: "success", // warning, error, success, info
 								buttons: {
 									visible: false, // true , false
@@ -3220,27 +3329,17 @@ $("#botonguardar_modal_area").click(function () {
 								timer: 1500,
 								showConfirmButton: false
 							});
-
-							// actualiza boton
-							$('#botonguardar_modal_area').html('Guardar <i class="fa fa-save"></i>');
-							$('#botonguardar_modal_area').attr('disabled', false);
-
-							// cerrar modal
-							$('#modal_reporte_area').modal('hide');
 						},
-						beforeSend: function () {
-							$('#botonguardar_modal_area').html('Guardando <i class="fa fa-spin fa-spinner"></i>');
-							$('#botonguardar_modal_area').attr('disabled', true);
+						beforeSend: function()
+						{
+							// $('#tabla_reporte_definiciones tbody').html('<tr><td colspan="5"><i class="fa fa-spin fa-spinner" style="font-size: 40px!important;"></i></td></tr>');
 						},
-						error: function (dato) {
-							// actualiza boton
-							$('#botonguardar_modal_area').html('Guardar <i class="fa fa-save"></i>');
-							$('#botonguardar_modal_area').attr('disabled', false);
-
+						error: function(dato)
+						{
 							// mensaje
 							swal({
 								title: "Error",
-								text: "" + dato.msj,
+								text: ""+dato.msj,
 								type: "error", // warning, error, success, info
 								buttons: {
 									visible: false, // true , false
@@ -3248,12 +3347,13 @@ $("#botonguardar_modal_area").click(function () {
 								timer: 1500,
 								showConfirmButton: false
 							});
+
 							return false;
 						}
-					}).submit();
-					return false;
+					});//Fin ajax
 				}
-				else {
+				else 
+				{
 					// mensaje
 					swal({
 						title: "Cancelado",
@@ -3267,14 +3367,157 @@ $("#botonguardar_modal_area").click(function () {
 					});
 				}
 			});
+		}
+		else 
+		{
+			// mensaje
+			swal({
+				title: "Cancelado",
+				text: "Acción cancelada",
+				type: "error", // warning, error, success, info
+				buttons: {
+					visible: false, // true , false
+				},
+				timer: 500,
+				showConfirmButton: false
+			});
+		}
+	});
+	return false;
+});
+
+
+$("#botonguardar_modal_area").click(function()
+{
+	// borrar campo filtro del DATATABLE
+	// datatable_areacategoria.search($(this).val()).draw();
+	datatable_areacategoria.search("").draw();
+
+
+	// valida campos vacios
+	var valida = this.form.checkValidity();
+	if (valida)
+	{
+		swal({
+			title: "¡Confirme que desea guardar!",
+			text: "Área: "+$("#reportearea_nombre").val(),
+			type: "warning",
+			showCancelButton: true,
+			confirmButtonColor: "#DD6B55",
+			confirmButtonText: "Guardar!",
+			cancelButtonText: "Cancelar!",
+			closeOnConfirm: false,
+			closeOnCancel: false
+		},
+		function(isConfirm)
+		{
+			if (isConfirm)
+			{
+				// cerrar msj confirmacion
+				swal.close();
+
+				// enviar datos
+				$('#form_reporte_area').ajaxForm({
+					dataType: 'json',
+					type: 'POST',
+					url: '/reporteiluminacion',
+					data: {
+						opcion: 14,
+						proyecto_id: proyecto.id,
+						agente_id: agente_id,
+						agente_nombre: agente_nombre,
+						reporteiluminacion_id: reporteiluminacion_id,
+						catactivo_id: $("#reporteiluminacion_catactivo_id").val(),
+						reporteiluminacion_instalacion: $("#reporteiluminacion_instalacion").val(),
+						areas_poe: areas_poe,
+					},
+					resetForm: false,
+					success: function(dato)
+					{
+						// Actualizar ID reporte						
+						reporteiluminacion_id = dato.reporteiluminacion_id;
+
+						tabla_reporte_revisiones(proyecto.id);
+
+						// Actualizar tabla
+						tabla_reporte_areas(proyecto.id, reporteiluminacion_id);
+						tabla_reporte_iluminacionpuntos(proyecto.id, reporteiluminacion_id);
+						tabla_reporte_iluminacionresultados(proyecto.id, reporteiluminacion_id);
+						tabla_reporte_reflexionresultados(proyecto.id, reporteiluminacion_id);
+						tabla_reporte_matrizexposicion(proyecto.id, reporteiluminacion_id);
+						reporteiluminacion_dashboard(proyecto.id, reporteiluminacion_id);
+
+						// mensaje
+						swal({
+							title: "Correcto",
+							text: ""+dato.msj,
+							type: "success", // warning, error, success, info
+							buttons: {
+								visible: false, // true , false
+							},
+							timer: 1500,
+							showConfirmButton: false
+						});
+
+						// actualiza boton
+						$('#botonguardar_modal_area').html('Guardar <i class="fa fa-save"></i>');
+						$('#botonguardar_modal_area').attr('disabled', false);
+
+						// cerrar modal
+						$('#modal_reporte_area').modal('hide');
+					},
+					beforeSend: function()
+					{
+						$('#botonguardar_modal_area').html('Guardando <i class="fa fa-spin fa-spinner"></i>');
+						$('#botonguardar_modal_area').attr('disabled', true);
+					},
+					error: function(dato)
+					{
+						// actualiza boton
+						$('#botonguardar_modal_area').html('Guardar <i class="fa fa-save"></i>');
+						$('#botonguardar_modal_area').attr('disabled', false);
+
+						// mensaje
+						swal({
+							title: "Error",
+							text: ""+dato.msj,
+							type: "error", // warning, error, success, info
+							buttons: {
+								visible: false, // true , false
+							},
+							timer: 1500,
+							showConfirmButton: false
+						});
+						return false;
+					}
+				}).submit();
+				return false;
+			}
+			else 
+			{
+				// mensaje
+				swal({
+					title: "Cancelado",
+					text: "Acción cancelada",
+					type: "error", // warning, error, success, info
+					buttons: {
+						visible: false, // true , false
+					},
+					timer: 500,
+					showConfirmButton: false
+				});
+			}
+		});
 		return false;
 	}
 });
 
 
 var datatable_reporte_5_4 = null;
-function tabla_reporte_5_4(tbody) {
-	if (datatable_reporte_5_4 != null) {
+function tabla_reporte_5_4(tbody)
+{
+	if (datatable_reporte_5_4 != null)
+	{
 		datatable_reporte_5_4.destroy();
 	}
 
@@ -3283,7 +3526,7 @@ function tabla_reporte_5_4(tbody) {
 	datatable_reporte_5_4 = $('#tabla_reporte_5_4').DataTable({
 		"lengthMenu": [[20, 50, 100, -1], [20, 50, 100, "Todos"]],
 		"rowsGroup": [1, 0, 2, 5, 6], //agrupar filas
-		"order": [[0, "DESC"]],
+		"order": [[ 0, "DESC" ]],
 		"ordering": false,
 		"searching": false,
 		"processing": true,
@@ -3310,8 +3553,10 @@ function tabla_reporte_5_4(tbody) {
 
 
 var datatable_reporte_5_5 = null;
-function tabla_reporte_5_5(tbody) {
-	if (datatable_reporte_5_5 != null) {
+function tabla_reporte_5_5(tbody)
+{
+	if (datatable_reporte_5_5 != null)
+	{
 		datatable_reporte_5_5.destroy();
 	}
 
@@ -3320,7 +3565,7 @@ function tabla_reporte_5_5(tbody) {
 	datatable_reporte_5_5 = $('#tabla_reporte_5_5').DataTable({
 		"lengthMenu": [[20, 50, 100, -1], [20, 50, 100, "Todos"]],
 		"rowsGroup": [1], //agrupar filas
-		"order": [[0, "DESC"]],
+		"order": [[ 0, "DESC" ]],
 		"ordering": false,
 		"searching": false,
 		"processing": true,
@@ -3347,8 +3592,10 @@ function tabla_reporte_5_5(tbody) {
 
 
 var datatable_reporte_6_1 = null;
-function tabla_reporte_6_1(tbody) {
-	if (datatable_reporte_6_1 != null) {
+function tabla_reporte_6_1(tbody)
+{
+	if (datatable_reporte_6_1 != null)
+	{
 		datatable_reporte_6_1.destroy();
 	}
 
@@ -3357,7 +3604,7 @@ function tabla_reporte_6_1(tbody) {
 	datatable_reporte_6_1 = $('#tabla_reporte_6_1').DataTable({
 		"lengthMenu": [[20, 50, 100, -1], [20, 50, 100, "Todos"]],
 		"rowsGroup": [1, 3], //agrupar filas
-		"order": [[0, "DESC"]],
+		"order": [[ 0, "DESC" ]],
 		"ordering": false,
 		"searching": false,
 		"processing": true,
@@ -3384,8 +3631,10 @@ function tabla_reporte_6_1(tbody) {
 
 
 var datatable_reporte_6_2_1 = null;
-function tabla_reporte_6_2_1(tbody) {
-	if (datatable_reporte_6_2_1 != null) {
+function tabla_reporte_6_2_1(tbody)
+{
+	if (datatable_reporte_6_2_1 != null)
+	{
 		datatable_reporte_6_2_1.destroy();
 	}
 
@@ -3394,7 +3643,7 @@ function tabla_reporte_6_2_1(tbody) {
 	datatable_reporte_6_2_1 = $('#tabla_reporte_6_2_1').DataTable({
 		"lengthMenu": [[20, 50, 100, -1], [20, 50, 100, "Todos"]],
 		"rowsGroup": [1, 2, 0, 5, 6, 7], //agrupar filas
-		"order": [[0, "DESC"]],
+		"order": [[ 0, "DESC" ]],
 		"ordering": false,
 		"searching": false,
 		"processing": true,
@@ -3421,8 +3670,10 @@ function tabla_reporte_6_2_1(tbody) {
 
 
 var datatable_reporte_6_2_2 = null;
-function tabla_reporte_6_2_2(tbody) {
-	if (datatable_reporte_6_2_2 != null) {
+function tabla_reporte_6_2_2(tbody)
+{
+	if (datatable_reporte_6_2_2 != null)
+	{
 		datatable_reporte_6_2_2.destroy();
 	}
 
@@ -3431,7 +3682,7 @@ function tabla_reporte_6_2_2(tbody) {
 	datatable_reporte_6_2_2 = $('#tabla_reporte_6_2_2').DataTable({
 		"lengthMenu": [[20, 50, 100, -1], [20, 50, 100, "Todos"]],
 		"rowsGroup": [1, 2, 0], //agrupar filas
-		"order": [[0, "DESC"]],
+		"order": [[ 0, "DESC" ]],
 		"ordering": false,
 		"searching": false,
 		"processing": true,
@@ -3461,10 +3712,12 @@ function tabla_reporte_6_2_2(tbody) {
 // CRITERIO DE SELECCION
 
 
-$("#botonguardar_reporte_criterioseleccion").click(function () {
+$("#botonguardar_reporte_criterioseleccion").click(function()
+{
 	// valida campos vacios
 	var valida = this.form.checkValidity();
-	if (valida) {
+	if (valida)
+	{
 		swal({
 			title: "¡Confirme que desea guardar!",
 			text: "Método empleado y criterio de selección",
@@ -3476,89 +3729,95 @@ $("#botonguardar_reporte_criterioseleccion").click(function () {
 			closeOnConfirm: false,
 			closeOnCancel: false
 		},
-			function (isConfirm) {
-				if (isConfirm) {
-					// cerrar msj confirmacion
-					swal.close();
+		function(isConfirm)
+		{
+			if (isConfirm)
+			{
+				// cerrar msj confirmacion
+				swal.close();
 
-					// enviar datos
-					$('#form_reporte_criterioseleccion').ajaxForm({
-						dataType: 'json',
-						type: 'POST',
-						url: '/reporteiluminacion',
-						data: {
-							opcion: 15,
-							proyecto_id: proyecto.id,
-							agente_id: agente_id,
-							agente_nombre: agente_nombre,
-							reporteiluminacion_id: reporteiluminacion_id,
-							catactivo_id: $("#reporteiluminacion_catactivo_id").val(),
-							reporteiluminacion_instalacion: $("#reporteiluminacion_instalacion").val(),
-						},
-						resetForm: false,
-						success: function (dato) {
-							// Actualizar ID reporte						
-							reporteiluminacion_id = dato.reporteiluminacion_id;
+				// enviar datos
+				$('#form_reporte_criterioseleccion').ajaxForm({
+					dataType: 'json',
+					type: 'POST',
+					url: '/reporteiluminacion',
+					data: {
+						opcion: 15,
+						proyecto_id: proyecto.id,
+						agente_id: agente_id,
+						agente_nombre: agente_nombre,
+						reporteiluminacion_id: reporteiluminacion_id,
+						catactivo_id: $("#reporteiluminacion_catactivo_id").val(),
+						reporteiluminacion_instalacion: $("#reporteiluminacion_instalacion").val(),
+					},
+					resetForm: false,
+					success: function(dato)
+					{
+						// Actualizar ID reporte						
+						reporteiluminacion_id = dato.reporteiluminacion_id;
 
-							menureporte_estado("menureporte_6_2", 1);
+						menureporte_estado("menureporte_6_2", 1);
 
-							tabla_reporte_revisiones(proyecto.id);
+						tabla_reporte_revisiones(proyecto.id);
 
-							// mensaje
-							swal({
-								title: "Correcto",
-								text: "" + dato.msj,
-								type: "success", // warning, error, success, info
-								buttons: {
-									visible: false, // true , false
-								},
-								timer: 1500,
-								showConfirmButton: false
-							});
+						// mensaje
+						swal({
+							title: "Correcto",
+							text: ""+dato.msj,
+							type: "success", // warning, error, success, info
+							buttons: {
+								visible: false, // true , false
+							},
+							timer: 1500,
+							showConfirmButton: false
+						});
 
-							// actualiza boton
-							$('#botonguardar_reporte_criterioseleccion').html('Guardar criterio de selección <i class="fa fa-save"></i>');
-							$('#botonguardar_reporte_criterioseleccion').attr('disabled', false);
-						},
-						beforeSend: function () {
-							$('#botonguardar_reporte_criterioseleccion').html('Guardando criterio de selección <i class="fa fa-spin fa-spinner"></i>');
-							$('#botonguardar_reporte_criterioseleccion').attr('disabled', true);
-						},
-						error: function (dato) {
-							// actualiza boton
-							$('#botonguardar_reporte_criterioseleccion').html('Guardar criterio de selección <i class="fa fa-save"></i>');
-							$('#botonguardar_reporte_criterioseleccion').attr('disabled', false);
+						// actualiza boton
+						$('#botonguardar_reporte_criterioseleccion').html('Guardar criterio de selección <i class="fa fa-save"></i>');
+						$('#botonguardar_reporte_criterioseleccion').attr('disabled', false);
+					},
+					beforeSend: function()
+					{
+						$('#botonguardar_reporte_criterioseleccion').html('Guardando criterio de selección <i class="fa fa-spin fa-spinner"></i>');
+						$('#botonguardar_reporte_criterioseleccion').attr('disabled', true);
+					},
+					error: function(dato)
+					{
+						// actualiza boton
+						$('#botonguardar_reporte_criterioseleccion').html('Guardar criterio de selección <i class="fa fa-save"></i>');
+						$('#botonguardar_reporte_criterioseleccion').attr('disabled', false);
 
-							// mensaje
-							swal({
-								title: "Error",
-								text: "" + dato.msj,
-								type: "error", // warning, error, success, info
-								buttons: {
-									visible: false, // true , false
-								},
-								timer: 1500,
-								showConfirmButton: false
-							});
-							return false;
-						}
-					}).submit();
-					return false;
-				}
-				else {
-					// mensaje
-					swal({
-						title: "Cancelado",
-						text: "Acción cancelada",
-						type: "error", // warning, error, success, info
-						buttons: {
-							visible: false, // true , false
-						},
-						timer: 500,
-						showConfirmButton: false
-					});
-				}
-			});
+						// mensaje
+						swal({
+							title: "Error",
+							text: ""+dato.msj,
+							type: "error", // warning, error, success, info
+							buttons: {
+								visible: false, // true , false
+							},
+							timer: 1500,
+							showConfirmButton: false
+						});
+						return false;
+					}
+				}).submit();
+				return false;
+			}
+			else 
+			{
+				// mensaje
+				swal({
+					title: "Cancelado",
+					text: "Acción cancelada",
+					type: "error", // warning, error, success, info
+					buttons: {
+						visible: false, // true , false
+					},
+					timer: 500,
+					showConfirmButton: false
+				});
+			}
+		});
 		return false;
 	}
 });
@@ -3568,8 +3827,10 @@ $("#botonguardar_reporte_criterioseleccion").click(function () {
 // PUNTOS DE EVALUACION ILUMINACION
 
 
-$(document).ready(function () {
-	setTimeout(function () {
+$(document).ready(function()
+{
+	setTimeout(function()
+	{
 		tabla_reporte_iluminacionpuntos(proyecto.id, reporteiluminacion_id);
 		tabla_reporte_iluminacionresultados(proyecto.id, reporteiluminacion_id);
 		tabla_reporte_reflexionresultados(proyecto.id, reporteiluminacion_id);
@@ -3580,15 +3841,19 @@ $(document).ready(function () {
 
 
 var datatable_iluminacionpuntos = null;
-function tabla_reporte_iluminacionpuntos(proyecto_id, reporteiluminacion_id) {
-	try {
-		var ruta = "/reporteiluminaciontablapuntos/" + proyecto_id + "/" + reporteiluminacion_id + "/" + areas_poe;
+function tabla_reporte_iluminacionpuntos(proyecto_id, reporteiluminacion_id)
+{
+	try 
+	{
+		var ruta = "/reporteiluminaciontablapuntos/"+proyecto_id+"/"+reporteiluminacion_id+"/"+areas_poe;
 
-		if (datatable_iluminacionpuntos != null) {
+		if (datatable_iluminacionpuntos != null)
+		{
 			datatable_iluminacionpuntos.clear().draw();
 			datatable_iluminacionpuntos.ajax.url(ruta).load();
 		}
-		else {
+		else
+		{
 			var numeroejecucion = 1;
 			datatable_iluminacionpuntos = $('#tabla_reporte_iluminacionpuntos').DataTable({
 				ajax: {
@@ -3597,13 +3862,16 @@ function tabla_reporte_iluminacionpuntos(proyecto_id, reporteiluminacion_id) {
 					cache: false,
 					dataType: "json",
 					data: {},
-					dataSrc: function (json) {
-						if (parseInt(json.total) > 0) {
+					dataSrc: function (json)
+					{
+						if (parseInt(json.total) > 0)
+						{
 							menureporte_estado("menureporte_7_1", 1);
 							menureporte_estado("menureporte_7_2", 1);
 							menureporte_estado("menureporte_7_3", 1);
 						}
-						else {
+						else
+						{
 							menureporte_estado("menureporte_7_1", 0);
 							menureporte_estado("menureporte_7_2", 0);
 							menureporte_estado("menureporte_7_3", 0);
@@ -3612,9 +3880,11 @@ function tabla_reporte_iluminacionpuntos(proyecto_id, reporteiluminacion_id) {
 						// alert("Done! "+json.msj);
 						return json.data;
 					},
-					error: function (xhr, error, code) {
-						console.log('error en datatable_iluminacionpuntos ' + code);
-						if (numeroejecucion <= 1) {
+					error: function (xhr, error, code)
+					{						
+						console.log('error en datatable_iluminacionpuntos '+code);
+						if (numeroejecucion <= 1)
+						{
 							tabla_reporte_iluminacionpuntos(proyecto_id, reporteiluminacion_id);
 							numeroejecucion += 1;
 						}
@@ -3665,7 +3935,7 @@ function tabla_reporte_iluminacionpuntos(proyecto_id, reporteiluminacion_id) {
 				],
 				lengthMenu: [[20, 50, 100, -1], [20, 50, 100, "Todos"]],
 				rowsGroup: [1, 2, 0], //agrupar filas
-				order: [[0, "ASC"]],
+				order: [[ 0, "ASC" ]],
 				ordering: false,
 				processing: true,
 				searching: true,
@@ -3691,18 +3961,21 @@ function tabla_reporte_iluminacionpuntos(proyecto_id, reporteiluminacion_id) {
 		}
 
 		// Tooltip en DataTable
-		datatable_iluminacionpuntos.on('draw', function () {
+		datatable_iluminacionpuntos.on('draw', function ()
+		{
 			$('[data-toggle="tooltip"]').tooltip();
 		});
 	}
-	catch (exception) {
+	catch (exception)
+	{
 		tabla_reporte_iluminacionpuntos(proyecto_id, reporteiluminacion_id);
-	}
+    }
 }
 
 
-$("#boton_reporte_nuevoiluminacionpunto").click(function () {
-	$('#form_reporte_iluminacionpunto').each(function () {
+$("#boton_reporte_nuevoiluminacionpunto").click(function()
+{
+	$('#form_reporte_iluminacionpunto').each(function(){
 		this.reset();
 	});
 
@@ -3710,7 +3983,7 @@ $("#boton_reporte_nuevoiluminacionpunto").click(function () {
 	$('#reporteiluminacionpunto_id').val(0);
 
 	// Llenar campo area select
-	$('#reporteiluminacionpuntos_area_id').html('<option value=""></option>' + selectareas)
+	$('#reporteiluminacionpuntos_area_id').html('<option value=""></option>'+selectareas)
 
 	// Llenar campo categoria select
 	$('#reporteiluminacionpuntos_categoria_id').html('<option value=""></option>');
@@ -3719,100 +3992,123 @@ $("#boton_reporte_nuevoiluminacionpunto").click(function () {
 	$('#modal_reporte_iluminacionpunto .modal-title').html('Nuevo punto de iluminación');
 
 	// mostrar modal
-	$('#modal_reporte_iluminacionpunto').modal({ backdrop: false });
+	$('#modal_reporte_iluminacionpunto').modal({backdrop:false});
 });
 
 
-function mostrar_categoriasarea(area_id, categoria_id) {
-	if (parseInt(area_id) > 0) {
+function mostrar_categoriasarea(area_id, categoria_id)
+{
+	if (parseInt(area_id) > 0)
+	{
 		$.ajax({
 			type: "GET",
 			dataType: "json",
-			url: "/reporteiluminacionareascategoriasconsultar/" + area_id + "/" + categoria_id + "/" + reporteiluminacion_id + "/" + areas_poe,
-			data: {},
+			url: "/reporteiluminacionareascategoriasconsultar/"+area_id+"/"+categoria_id+"/"+reporteiluminacion_id+"/"+areas_poe,
+			data:{},
 			cache: false,
-			success: function (dato) {
+			success:function(dato)
+			{
 				$('#reporteiluminacionpuntos_categoria_id').attr('disabled', false);
 				$('#reporteiluminacionpuntos_categoria_id').html(dato.categoriasoption);
 			},
-			beforeSend: function () {
+			beforeSend: function()
+			{
 				$('#reporteiluminacionpuntos_categoria_id').html('<option value=""></option>');
 				$('#reporteiluminacionpuntos_categoria_id').attr('disabled', true);
 			},
-			error: function (dato) {
+			error: function(dato)
+			{
 				$('#reporteiluminacionpuntos_categoria_id').attr('disabled', false);
 				$('#reporteiluminacionpuntos_categoria_id').html('<option value=""></option>');
 				return false;
 			}
 		});//Fin ajax
 	}
-	else {
+	else
+	{
 		$('#reporteiluminacionpuntos_categoria_id').html('<option value=""></option>');
 	}
 }
 
 
-function calcula_resultado_iluminacion(campo_limite, campos_resultados, msj_noaplica) {
+function calcula_resultado_iluminacion(campo_limite, campos_resultados, msj_noaplica)
+{
 	var nocumple = 0;
 	var campovalores = 0;
 
-	if ($('.' + campo_limite).val() != "" && parseInt($('.' + campo_limite).val()) > 0) {
-		$('.' + campos_resultados).each(function () {
-			if (this.value == "" || parseInt(this.value) < 0 || (parseInt(this.value) > 0 && parseInt(this.value) < parseInt($('.' + campo_limite).val()))) {
+	if ($('.'+campo_limite).val() != "" && parseInt($('.'+campo_limite).val()) > 0)
+	{
+		$('.'+campos_resultados).each(function()
+		{
+			if (this.value == "" || parseInt(this.value) < 0 || (parseInt(this.value) > 0 && parseInt(this.value) < parseInt($('.'+campo_limite).val())))
+			{
 				nocumple += 1;
 			}
 
-			if (this.value != "" && parseInt(this.value) > 0) {
+			if (this.value != "" && parseInt(this.value) > 0)
+			{
 				campovalores += parseInt(this.value);
 			}
 		});
 
-		if (nocumple == 0 && campovalores > 0) {
-			$('#' + campos_resultados).html('<b class="text-success"><i class="fa fa-check"></i> Dentro de norma</b>');
+		if (nocumple == 0 && campovalores > 0)
+		{
+			$('#'+campos_resultados).html('<b class="text-success"><i class="fa fa-check"></i> Dentro de norma</b>');
 		}
-		else {
-			$('#' + campos_resultados).html('<b class="text-danger"><i class="fa fa-ban"></i> Fuera de norma</b>');
+		else
+		{
+			$('#'+campos_resultados).html('<b class="text-danger"><i class="fa fa-ban"></i> Fuera de norma</b>');
 		}
 	}
-	else {
-		$('#' + campos_resultados).html('<b class="text-secondary">' + msj_noaplica + '</b>');
+	else
+	{
+		$('#'+campos_resultados).html('<b class="text-secondary">'+msj_noaplica+'</b>');
 	}
 }
 
 
-function calcula_resultado_reflexion(campo_limite, campos_resultados, msj_noaplica) {
+function calcula_resultado_reflexion(campo_limite, campos_resultados, msj_noaplica)
+{
 	var nocumple = 0;
 	var campovalores = 0;
 
-	$('.' + campos_resultados).each(function () {
-		if (this.value == "" || parseInt(this.value) < 0 || (parseInt(this.value) > 0 && parseInt(this.value) > parseInt($('.' + campo_limite).val()))) {
+	$('.'+campos_resultados).each(function()
+	{
+		if (this.value == "" || parseInt(this.value) < 0 || (parseInt(this.value) > 0 && parseInt(this.value) > parseInt($('.'+campo_limite).val())))
+		{
 			nocumple += 1;
 		}
 
-		if (this.value != "" && parseInt(this.value) > 0) {
+		if (this.value != "" && parseInt(this.value) > 0)
+		{
 			campovalores += parseInt(this.value);
 		}
 	});
 
-	if (nocumple == 0) {
-		if (campovalores > 0) {
-			$('#' + campos_resultados).html('<b class="text-success"><i class="fa fa-check"></i> Dentro de norma</b>');
+	if (nocumple == 0)
+	{
+		if (campovalores > 0)
+		{
+			$('#'+campos_resultados).html('<b class="text-success"><i class="fa fa-check"></i> Dentro de norma</b>');
 		}
-		else {
-			$('#' + campos_resultados).html('<b class="text-secondary">' + msj_noaplica + '</b>');
+		else
+		{
+			$('#'+campos_resultados).html('<b class="text-secondary">'+msj_noaplica+'</b>');
 		}
 	}
-	else {
-		$('#' + campos_resultados).html('<b class="text-danger"><i class="fa fa-ban"></i> Fuera de norma</b>');
+	else
+	{
+		$('#'+campos_resultados).html('<b class="text-danger"><i class="fa fa-ban"></i> Fuera de norma</b>');
 	}
 }
 
 
-$('#tabla_reporte_iluminacionpuntos tbody').on('click', 'td.editar', function () {
+$('#tabla_reporte_iluminacionpuntos tbody').on('click', 'td.editar', function()
+{
 	var tr = $(this).closest('tr');
 	var row = datatable_iluminacionpuntos.row(tr);
 
-	$('#form_reporte_iluminacionpunto').each(function () {
+	$('#form_reporte_iluminacionpunto').each(function(){
 		this.reset();
 	});
 
@@ -3820,60 +4116,61 @@ $('#tabla_reporte_iluminacionpuntos tbody').on('click', 'td.editar', function ()
 	$('#reporteiluminacionpunto_id').val(row.data().id);
 
 	// Llenar campos
-	$('#reporteiluminacionpuntos_nopunto').val(row.data().reporteiluminacionpuntos_nopunto);
-	$('#reporteiluminacionpuntos_area_id').html('<option value=""></option>' + selectareas)
-	$('#reporteiluminacionpuntos_area_id').val(row.data().reporteiluminacionpuntos_area_id);
-	// $('#reporteiluminacionpuntos_categoria_id').val(row.data().reporteiluminacionpuntos_categoria_id);
-	mostrar_categoriasarea(row.data().reporteiluminacionpuntos_area_id, row.data().reporteiluminacionpuntos_categoria_id);
-	$('#reporteiluminacionpuntos_nopoe').val(row.data().reporteiluminacionpuntos_nopoe);
-	$('#reporteiluminacionpuntos_nombre').val(row.data().reporteiluminacionpuntos_nombre);
-	$('#reporteiluminacionpuntos_ficha').val(row.data().reporteiluminacionpuntos_ficha);
-	$('#reporteiluminacionpuntos_concepto').val(row.data().reporteiluminacionpuntos_concepto);
-	$('#reporteiluminacionpuntos_fechaeval').val(row.data().reporteiluminacionpuntos_fechaeval);
-	$('#reporteiluminacionpuntos_horario1').val(row.data().reporteiluminacionpuntos_horario1);
-	$('#reporteiluminacionpuntos_horario2').val(row.data().reporteiluminacionpuntos_horario2);
-	$('#reporteiluminacionpuntos_horario3').val(row.data().reporteiluminacionpuntos_horario3);
-	$('#reporteiluminacionpuntos_lux').val(row.data().reporteiluminacionpuntos_lux);
-	$('#reporteiluminacionpuntos_luxmed1').val(row.data().reporteiluminacionpuntos_luxmed1);
-	$('#reporteiluminacionpuntos_luxmed2').val(row.data().reporteiluminacionpuntos_luxmed2);
-	$('#reporteiluminacionpuntos_luxmed3').val(row.data().reporteiluminacionpuntos_luxmed3);
-	$('#reporteiluminacionpuntos_luxmed1menor').prop('checked', parseInt(row.data().reporteiluminacionpuntos_luxmed1menor));
-	$('#reporteiluminacionpuntos_luxmed2menor').prop('checked', parseInt(row.data().reporteiluminacionpuntos_luxmed2menor));
-	$('#reporteiluminacionpuntos_luxmed3menor').prop('checked', parseInt(row.data().reporteiluminacionpuntos_luxmed3menor));
+    $('#reporteiluminacionpuntos_nopunto').val(row.data().reporteiluminacionpuntos_nopunto);
+    $('#reporteiluminacionpuntos_area_id').html('<option value=""></option>'+selectareas)
+    $('#reporteiluminacionpuntos_area_id').val(row.data().reporteiluminacionpuntos_area_id);
+    // $('#reporteiluminacionpuntos_categoria_id').val(row.data().reporteiluminacionpuntos_categoria_id);
+    mostrar_categoriasarea(row.data().reporteiluminacionpuntos_area_id, row.data().reporteiluminacionpuntos_categoria_id);
+    $('#reporteiluminacionpuntos_nopoe').val(row.data().reporteiluminacionpuntos_nopoe);
+    $('#reporteiluminacionpuntos_nombre').val(row.data().reporteiluminacionpuntos_nombre);
+    $('#reporteiluminacionpuntos_ficha').val(row.data().reporteiluminacionpuntos_ficha);
+    $('#reporteiluminacionpuntos_concepto').val(row.data().reporteiluminacionpuntos_concepto);
+    $('#reporteiluminacionpuntos_fechaeval').val(row.data().reporteiluminacionpuntos_fechaeval);
+    $('#reporteiluminacionpuntos_horario1').val(row.data().reporteiluminacionpuntos_horario1);
+    $('#reporteiluminacionpuntos_horario2').val(row.data().reporteiluminacionpuntos_horario2);
+    $('#reporteiluminacionpuntos_horario3').val(row.data().reporteiluminacionpuntos_horario3);
+    $('#reporteiluminacionpuntos_lux').val(row.data().reporteiluminacionpuntos_lux);
+    $('#reporteiluminacionpuntos_luxmed1').val(row.data().reporteiluminacionpuntos_luxmed1);
+    $('#reporteiluminacionpuntos_luxmed2').val(row.data().reporteiluminacionpuntos_luxmed2);
+    $('#reporteiluminacionpuntos_luxmed3').val(row.data().reporteiluminacionpuntos_luxmed3);
+    $('#reporteiluminacionpuntos_luxmed1menor').prop('checked', parseInt(row.data().reporteiluminacionpuntos_luxmed1menor));
+    $('#reporteiluminacionpuntos_luxmed2menor').prop('checked', parseInt(row.data().reporteiluminacionpuntos_luxmed2menor));
+    $('#reporteiluminacionpuntos_luxmed3menor').prop('checked', parseInt(row.data().reporteiluminacionpuntos_luxmed3menor));
+    
+    $('#reporteiluminacionpuntos_luxmed1mayor').prop('checked', parseInt(row.data().reporteiluminacionpuntos_luxmed1mayor));
+    $('#reporteiluminacionpuntos_luxmed2mayor').prop('checked', parseInt(row.data().reporteiluminacionpuntos_luxmed2mayor));
+    $('#reporteiluminacionpuntos_luxmed3mayor').prop('checked', parseInt(row.data().reporteiluminacionpuntos_luxmed3mayor));
+    $('#reporteiluminacionpuntos_frp').val(row.data().reporteiluminacionpuntos_frp);
+    $('#reporteiluminacionpuntos_frpmed1').val(row.data().reporteiluminacionpuntos_frpmed1);
+    $('#reporteiluminacionpuntos_frpmed2').val(row.data().reporteiluminacionpuntos_frpmed2);
+    $('#reporteiluminacionpuntos_frpmed3').val(row.data().reporteiluminacionpuntos_frpmed3);
+    $('#reporteiluminacionpuntos_frpt').val(row.data().reporteiluminacionpuntos_frpt);
+    $('#reporteiluminacionpuntos_frptmed1').val(row.data().reporteiluminacionpuntos_frptmed1);
+    $('#reporteiluminacionpuntos_frptmed2').val(row.data().reporteiluminacionpuntos_frptmed2);
+    $('#reporteiluminacionpuntos_frptmed3').val(row.data().reporteiluminacionpuntos_frptmed3);
 
-	$('#reporteiluminacionpuntos_luxmed1mayor').prop('checked', parseInt(row.data().reporteiluminacionpuntos_luxmed1mayor));
-	$('#reporteiluminacionpuntos_luxmed2mayor').prop('checked', parseInt(row.data().reporteiluminacionpuntos_luxmed2mayor));
-	$('#reporteiluminacionpuntos_luxmed3mayor').prop('checked', parseInt(row.data().reporteiluminacionpuntos_luxmed3mayor));
-	$('#reporteiluminacionpuntos_frp').val(row.data().reporteiluminacionpuntos_frp);
-	$('#reporteiluminacionpuntos_frpmed1').val(row.data().reporteiluminacionpuntos_frpmed1);
-	$('#reporteiluminacionpuntos_frpmed2').val(row.data().reporteiluminacionpuntos_frpmed2);
-	$('#reporteiluminacionpuntos_frpmed3').val(row.data().reporteiluminacionpuntos_frpmed3);
-	$('#reporteiluminacionpuntos_frpt').val(row.data().reporteiluminacionpuntos_frpt);
-	$('#reporteiluminacionpuntos_frptmed1').val(row.data().reporteiluminacionpuntos_frptmed1);
-	$('#reporteiluminacionpuntos_frptmed2').val(row.data().reporteiluminacionpuntos_frptmed2);
-	$('#reporteiluminacionpuntos_frptmed3').val(row.data().reporteiluminacionpuntos_frptmed3);
-
-	// Mostrar resultados medicion
-	calcula_resultado_iluminacion('limite_lux', 'resultado_lux', 'N/A (NIMR)');
-	calcula_resultado_reflexion('limite_frp', 'resultado_frp', 'N/A (FR-P)');
-	calcula_resultado_reflexion('limite_frpt', 'resultado_frpt', 'N/A (FR-PT)');
+    // Mostrar resultados medicion
+    calcula_resultado_iluminacion('limite_lux', 'resultado_lux', 'N/A (NIMR)');
+    calcula_resultado_reflexion('limite_frp', 'resultado_frp', 'N/A (FR-P)');
+    calcula_resultado_reflexion('limite_frpt', 'resultado_frpt', 'N/A (FR-PT)');
 
 	// Titulo del modal
-	$('#modal_reporte_iluminacionpunto .modal-title').html('Punto de iluminación ' + row.data().reporteiluminacionpuntos_nopunto);
+	$('#modal_reporte_iluminacionpunto .modal-title').html('Punto de iluminación '+row.data().reporteiluminacionpuntos_nopunto);
 
 	// mostrar modal
-	$('#modal_reporte_iluminacionpunto').modal({ backdrop: false });
+	$('#modal_reporte_iluminacionpunto').modal({backdrop:false});
 });
 
 
-$('#tabla_reporte_iluminacionpuntos tbody').on('click', 'td>button.eliminar', function () {
+$('#tabla_reporte_iluminacionpuntos tbody').on('click', 'td>button.eliminar', function()
+{
 	var tr = $(this).closest('tr');
 	var row = datatable_iluminacionpuntos.row(tr);
 
 	// Valida envio de datos
-	swal({
+	swal({   
 		title: "¡Confirme eliminar!",
-		text: "Punto de iluminación " + row.data().reporteiluminacionpuntos_nopunto,
+		text: "Punto de iluminación "+row.data().reporteiluminacionpuntos_nopunto,
 		type: "warning",
 		showCancelButton: true,
 		confirmButtonColor: "#DD6B55",
@@ -3882,141 +4179,36 @@ $('#tabla_reporte_iluminacionpuntos tbody').on('click', 'td>button.eliminar', fu
 		closeOnConfirm: false,
 		closeOnCancel: false
 	},
-		function (isConfirm) {
-			if (isConfirm) {
-				swal({
-					title: "¡Confirme nuevamente eliminar!",
-					text: "Punto de iluminación " + row.data().reporteiluminacionpuntos_nopunto,
-					type: "warning",
-					showCancelButton: true,
-					confirmButtonColor: "#DD6B55",
-					confirmButtonText: "Eliminar!",
-					cancelButtonText: "Cancelar!",
-					closeOnConfirm: false,
-					closeOnCancel: false
-				}, function (isConfirm) {
-					if (isConfirm) {
-						// cerrar msj confirmacion
-						swal.close();
-
-						// Enviar datos
-						$.ajax({
-							type: "GET",
-							dataType: "json",
-							url: "/reporteiluminaciontablapuntoseliminar/" + row.data().id,
-							data: {},
-							cache: false,
-							success: function (dato) {
-								// Actualizar tablas
-								tabla_reporte_iluminacionpuntos(proyecto.id, reporteiluminacion_id);
-								tabla_reporte_iluminacionresultados(proyecto.id, reporteiluminacion_id);
-								tabla_reporte_reflexionresultados(proyecto.id, reporteiluminacion_id);
-								tabla_reporte_matrizexposicion(proyecto.id, reporteiluminacion_id);
-								reporteiluminacion_dashboard(proyecto.id, reporteiluminacion_id);
-
-								// mensaje
-								swal({
-									title: "Correcto",
-									text: "" + dato.msj,
-									type: "success", // warning, error, success, info
-									buttons: {
-										visible: false, // true , false
-									},
-									timer: 1500,
-									showConfirmButton: false
-								});
-							},
-							error: function (dato) {
-								// mensaje
-								swal({
-									title: "Error",
-									text: "" + dato.msj,
-									type: "error", // warning, error, success, info
-									buttons: {
-										visible: false, // true , false
-									},
-									timer: 1500,
-									showConfirmButton: false
-								});
-								return false;
-							}
-						});//Fin ajax
-					}
-					else {
-						// mensaje
-						swal({
-							title: "Cancelado",
-							text: "",
-							type: "error", // warning, error, success, info
-							buttons: {
-								visible: false, // true , false
-							},
-							timer: 500,
-							showConfirmButton: false
-						});
-					}
-				});
-			}
-			else {
-				// mensaje
-				swal({
-					title: "Cancelado",
-					text: "",
-					type: "error", // warning, error, success, info
-					buttons: {
-						visible: false, // true , false
-					},
-					timer: 500,
-					showConfirmButton: false
-				});
-			}
-		});
-	return false;
-});
-
-
-$("#botonguardar_modal_iluminacionpunto").click(function () {
-	// valida campos vacios
-	var valida = this.form.checkValidity();
-	if (valida) {
-		swal({
-			title: "¡Confirme que desea guardar!",
-			text: "Punto de iluminación " + $('#reporteiluminacionpuntos_nopunto').val(),
-			type: "warning",
-			showCancelButton: true,
-			confirmButtonColor: "#DD6B55",
-			confirmButtonText: "Guardar!",
-			cancelButtonText: "Cancelar!",
-			closeOnConfirm: false,
-			closeOnCancel: false
-		},
-			function (isConfirm) {
-				if (isConfirm) {
+	function(isConfirm)
+	{
+		if (isConfirm)
+		{
+			swal({
+				title: "¡Confirme nuevamente eliminar!",
+				text: "Punto de iluminación "+row.data().reporteiluminacionpuntos_nopunto,
+				type: "warning",
+				showCancelButton: true,
+				confirmButtonColor: "#DD6B55",
+				confirmButtonText: "Eliminar!",
+				cancelButtonText: "Cancelar!",
+				closeOnConfirm: false,
+				closeOnCancel: false
+			}, function(isConfirm){
+				if (isConfirm)
+				{
 					// cerrar msj confirmacion
 					swal.close();
 
-					// enviar datos
-					$('#form_reporte_iluminacionpunto').ajaxForm({
-						dataType: 'json',
-						type: 'POST',
-						url: '/reporteiluminacion',
-						data: {
-							opcion: 16,
-							proyecto_id: proyecto.id,
-							agente_id: agente_id,
-							agente_nombre: agente_nombre,
-							reporteiluminacion_id: reporteiluminacion_id,
-							catactivo_id: $("#reporteiluminacion_catactivo_id").val(),
-							reporteiluminacion_instalacion: $("#reporteiluminacion_instalacion").val(),
-						},
-						resetForm: false,
-						success: function (dato) {
-							// Actualizar ID reporte
-							reporteiluminacion_id = dato.reporteiluminacion_id;
-
-							tabla_reporte_revisiones(proyecto.id);
-
-							// Actualizar tabla
+					// Enviar datos
+					$.ajax({
+						type: "GET",
+						dataType: "json",
+						url: "/reporteiluminaciontablapuntoseliminar/"+row.data().id,
+						data:{},
+						cache: false,
+						success:function(dato)
+						{
+							// Actualizar tablas
 							tabla_reporte_iluminacionpuntos(proyecto.id, reporteiluminacion_id);
 							tabla_reporte_iluminacionresultados(proyecto.id, reporteiluminacion_id);
 							tabla_reporte_reflexionresultados(proyecto.id, reporteiluminacion_id);
@@ -4026,7 +4218,7 @@ $("#botonguardar_modal_iluminacionpunto").click(function () {
 							// mensaje
 							swal({
 								title: "Correcto",
-								text: "" + dato.msj,
+								text: ""+dato.msj,
 								type: "success", // warning, error, success, info
 								buttons: {
 									visible: false, // true , false
@@ -4034,27 +4226,13 @@ $("#botonguardar_modal_iluminacionpunto").click(function () {
 								timer: 1500,
 								showConfirmButton: false
 							});
-
-							// actualiza boton
-							$('#botonguardar_modal_iluminacionpunto').html('Guardar <i class="fa fa-save"></i>');
-							$('#botonguardar_modal_iluminacionpunto').attr('disabled', false);
-
-							// cerrar modal
-							$('#modal_reporte_iluminacionpunto').modal('hide');
 						},
-						beforeSend: function () {
-							$('#botonguardar_modal_iluminacionpunto').html('Guardando <i class="fa fa-spin fa-spinner"></i>');
-							$('#botonguardar_modal_iluminacionpunto').attr('disabled', true);
-						},
-						error: function (dato) {
-							// actualiza boton
-							$('#botonguardar_modal_iluminacionpunto').html('Guardar <i class="fa fa-save"></i>');
-							$('#botonguardar_modal_iluminacionpunto').attr('disabled', false);
-
+						error: function(dato)
+						{
 							// mensaje
 							swal({
 								title: "Error",
-								text: "" + dato.msj,
+								text: ""+dato.msj,
 								type: "error", // warning, error, success, info
 								buttons: {
 									visible: false, // true , false
@@ -4064,14 +4242,14 @@ $("#botonguardar_modal_iluminacionpunto").click(function () {
 							});
 							return false;
 						}
-					}).submit();
-					return false;
+					});//Fin ajax
 				}
-				else {
+				else 
+				{
 					// mensaje
 					swal({
 						title: "Cancelado",
-						text: "Acción cancelada",
+						text: "",
 						type: "error", // warning, error, success, info
 						buttons: {
 							visible: false, // true , false
@@ -4081,21 +4259,159 @@ $("#botonguardar_modal_iluminacionpunto").click(function () {
 					});
 				}
 			});
+		}
+		else 
+		{
+			// mensaje
+			swal({
+				title: "Cancelado",
+				text: "",
+				type: "error", // warning, error, success, info
+				buttons: {
+					visible: false, // true , false
+				},
+				timer: 500,
+				showConfirmButton: false
+			});
+		}
+	});
+	return false;
+});
+
+
+$("#botonguardar_modal_iluminacionpunto").click(function()
+{
+	// valida campos vacios
+	var valida = this.form.checkValidity();
+	if (valida)
+	{
+		swal({
+			title: "¡Confirme que desea guardar!",
+			text: "Punto de iluminación "+$('#reporteiluminacionpuntos_nopunto').val(),
+			type: "warning",
+			showCancelButton: true,
+			confirmButtonColor: "#DD6B55",
+			confirmButtonText: "Guardar!",
+			cancelButtonText: "Cancelar!",
+			closeOnConfirm: false,
+			closeOnCancel: false
+		},
+		function(isConfirm)
+		{
+			if (isConfirm)
+			{
+				// cerrar msj confirmacion
+				swal.close();
+
+				// enviar datos
+				$('#form_reporte_iluminacionpunto').ajaxForm({
+					dataType: 'json',
+					type: 'POST',
+					url: '/reporteiluminacion',
+					data: {
+						opcion: 16,
+						proyecto_id: proyecto.id,
+						agente_id: agente_id,
+						agente_nombre: agente_nombre,
+						reporteiluminacion_id: reporteiluminacion_id,
+						catactivo_id: $("#reporteiluminacion_catactivo_id").val(),
+						reporteiluminacion_instalacion: $("#reporteiluminacion_instalacion").val(),
+					},
+					resetForm: false,
+					success: function(dato)
+					{
+						// Actualizar ID reporte
+						reporteiluminacion_id = dato.reporteiluminacion_id;
+
+						tabla_reporte_revisiones(proyecto.id);
+
+						// Actualizar tabla
+						tabla_reporte_iluminacionpuntos(proyecto.id, reporteiluminacion_id);
+						tabla_reporte_iluminacionresultados(proyecto.id, reporteiluminacion_id);
+						tabla_reporte_reflexionresultados(proyecto.id, reporteiluminacion_id);
+						tabla_reporte_matrizexposicion(proyecto.id, reporteiluminacion_id);
+						reporteiluminacion_dashboard(proyecto.id, reporteiluminacion_id);
+						
+						// mensaje
+						swal({
+							title: "Correcto",
+							text: ""+dato.msj,
+							type: "success", // warning, error, success, info
+							buttons: {
+								visible: false, // true , false
+							},
+							timer: 1500,
+							showConfirmButton: false
+						});
+
+						// actualiza boton
+						$('#botonguardar_modal_iluminacionpunto').html('Guardar <i class="fa fa-save"></i>');
+						$('#botonguardar_modal_iluminacionpunto').attr('disabled', false);
+
+						// cerrar modal
+						$('#modal_reporte_iluminacionpunto').modal('hide');
+					},
+					beforeSend: function()
+					{
+						$('#botonguardar_modal_iluminacionpunto').html('Guardando <i class="fa fa-spin fa-spinner"></i>');
+						$('#botonguardar_modal_iluminacionpunto').attr('disabled', true);
+					},
+					error: function(dato)
+					{
+						// actualiza boton
+						$('#botonguardar_modal_iluminacionpunto').html('Guardar <i class="fa fa-save"></i>');
+						$('#botonguardar_modal_iluminacionpunto').attr('disabled', false);
+
+						// mensaje
+						swal({
+							title: "Error",
+							text: ""+dato.msj,
+							type: "error", // warning, error, success, info
+							buttons: {
+								visible: false, // true , false
+							},
+							timer: 1500,
+							showConfirmButton: false
+						});
+						return false;
+					}
+				}).submit();
+				return false;
+			}
+			else 
+			{
+				// mensaje
+				swal({
+					title: "Cancelado",
+					text: "Acción cancelada",
+					type: "error", // warning, error, success, info
+					buttons: {
+						visible: false, // true , false
+					},
+					timer: 500,
+					showConfirmButton: false
+				});
+			}
+		});
 		return false;
 	}
 });
 
 
 var datatable_iluminacionresultados = null;
-function tabla_reporte_iluminacionresultados(proyecto_id, reporteiluminacion_id) {
-	try {
-		var ruta = "/reporteiluminaciontablaresultados/" + proyecto_id + "/" + reporteiluminacion_id + "/" + areas_poe;
+function tabla_reporte_iluminacionresultados(proyecto_id, reporteiluminacion_id)
+{
+	try 
+	{
+		var ruta = "/reporteiluminaciontablaresultados/"+proyecto_id+"/"+reporteiluminacion_id+"/"+areas_poe;
 
-		if (datatable_iluminacionresultados != null) {
+		if (datatable_iluminacionresultados != null)
+		{
 			datatable_iluminacionresultados.clear().draw();
 			datatable_iluminacionresultados.ajax.url(ruta).load();
 		}
-		else {
+		else
+		{
 			var numeroejecucion = 1;
 			datatable_iluminacionresultados = $('#tabla_reporte_iluminacionresultados').DataTable({
 				ajax: {
@@ -4104,7 +4420,8 @@ function tabla_reporte_iluminacionresultados(proyecto_id, reporteiluminacion_id)
 					cache: false,
 					dataType: "json",
 					data: {},
-					dataSrc: function (json) {
+					dataSrc: function (json)
+					{
 						// if (parseInt(json.total) > 0)
 						// {
 						// 	alert("Total! "+json.total);
@@ -4113,9 +4430,11 @@ function tabla_reporte_iluminacionresultados(proyecto_id, reporteiluminacion_id)
 						// alert("Done! "+json.msj);
 						return json.data;
 					},
-					error: function (xhr, error, code) {
-						console.log('error en datatable_iluminacionresultados ' + code);
-						if (numeroejecucion <= 1) {
+					error: function (xhr, error, code)
+					{						
+						console.log('error en datatable_iluminacionresultados '+code);
+						if (numeroejecucion <= 1)
+						{
 							tabla_reporte_iluminacionresultados(proyecto_id, reporteiluminacion_id);
 							numeroejecucion += 1;
 						}
@@ -4216,7 +4535,8 @@ function tabla_reporte_iluminacionresultados(proyecto_id, reporteiluminacion_id)
 						previous: "Anterior"
 					}
 				},
-				rowCallback: function (row, data, index) {
+				rowCallback: function(row, data, index)
+				{
 					// console.log(index+' - '+data.reporteiluminacionpuntos_nopunto);
 
 					// if(data.reporteiluminacionpuntos_nopunto == 2)
@@ -4225,19 +4545,20 @@ function tabla_reporte_iluminacionresultados(proyecto_id, reporteiluminacion_id)
 					// 	$(row).find('td:eq(12)').css('color', 'white');
 					// }
 
-					$(row).find('td:eq(9)').css('color', '' + data.luxmed1_color);
-					$(row).find('td:eq(10)').css('color', '' + data.luxmed2_color);
-					$(row).find('td:eq(11)').css('color', '' + data.luxmed3_color);
+					$(row).find('td:eq(9)').css('color', ''+data.luxmed1_color);
+					$(row).find('td:eq(10)').css('color', ''+data.luxmed2_color);
+					$(row).find('td:eq(11)').css('color', ''+data.luxmed3_color);
 
-					$(row).find('td:eq(12)').css('background', '' + data.lux_resultado_color);
+					$(row).find('td:eq(12)').css('background', ''+data.lux_resultado_color);
+					
 
-
-					if (data.lux_resultado == "Fuera de norma") // Color texto
+					if(data.lux_resultado == "Fuera de norma") // Color texto
 					{
-
+						
 						$(row).find('td:eq(12)').css('color', '#FFFFFF');
 					}
-					else {
+					else
+					{
 						$(row).find('td:eq(12)').css('color', '#000000');
 					}
 				},
@@ -4245,26 +4566,32 @@ function tabla_reporte_iluminacionresultados(proyecto_id, reporteiluminacion_id)
 		}
 
 		// Tooltip en DataTable
-		datatable_iluminacionresultados.on('draw', function () {
+		datatable_iluminacionresultados.on('draw', function ()
+		{
 			$('[data-toggle="tooltip"]').tooltip();
 		});
 	}
-	catch (exception) {
+	catch (exception)
+	{
 		tabla_reporte_iluminacionresultados(proyecto_id, reporteiluminacion_id);
-	}
+    }
 }
 
 
 var datatable_reflexionresultados = null;
-function tabla_reporte_reflexionresultados(proyecto_id, reporteiluminacion_id) {
-	try {
-		var ruta = "/reporteiluminaciontablaresultados/" + proyecto_id + "/" + reporteiluminacion_id + "/" + areas_poe;
+function tabla_reporte_reflexionresultados(proyecto_id, reporteiluminacion_id)
+{
+	try 
+	{
+		var ruta = "/reporteiluminaciontablaresultados/"+proyecto_id+"/"+reporteiluminacion_id+"/"+areas_poe;
 
-		if (datatable_reflexionresultados != null) {
+		if (datatable_reflexionresultados != null)
+		{
 			datatable_reflexionresultados.clear().draw();
 			datatable_reflexionresultados.ajax.url(ruta).load();
 		}
-		else {
+		else
+		{
 			var numeroejecucion = 1;
 			datatable_reflexionresultados = $('#tabla_reporte_reflexionresultados').DataTable({
 				ajax: {
@@ -4273,7 +4600,8 @@ function tabla_reporte_reflexionresultados(proyecto_id, reporteiluminacion_id) {
 					cache: false,
 					dataType: "json",
 					data: {},
-					dataSrc: function (json) {
+					dataSrc: function (json)
+					{
 						// if (parseInt(json.total) > 0)
 						// {
 						// 	alert("Total! "+json.total);
@@ -4282,9 +4610,11 @@ function tabla_reporte_reflexionresultados(proyecto_id, reporteiluminacion_id) {
 						// alert("Done! "+json.msj);
 						return json.data;
 					},
-					error: function (xhr, error, code) {
-						console.log('error en datatable_reflexionresultados ' + code);
-						if (numeroejecucion <= 1) {
+					error: function (xhr, error, code)
+					{						
+						console.log('error en datatable_reflexionresultados '+code);
+						if (numeroejecucion <= 1)
+						{
 							tabla_reporte_reflexionresultados(proyecto_id, reporteiluminacion_id);
 							numeroejecucion += 1;
 						}
@@ -4405,7 +4735,8 @@ function tabla_reporte_reflexionresultados(proyecto_id, reporteiluminacion_id) {
 						previous: "Anterior"
 					}
 				},
-				rowCallback: function (row, data, index) {
+				rowCallback: function(row, data, index)
+				{
 					// console.log(index+' - '+data.reporteiluminacionpuntos_nopunto);
 
 					// if(data.reporteiluminacionpuntos_nopunto == 2)
@@ -4414,21 +4745,22 @@ function tabla_reporte_reflexionresultados(proyecto_id, reporteiluminacion_id) {
 					// 	$(row).find('td:eq(12)').css('color', 'white');
 					// }
 
-					$(row).find('td:eq(10)').css('color', '' + data.frpmed1_color);
-					$(row).find('td:eq(11)').css('color', '' + data.frptmed1_color);
-					$(row).find('td:eq(12)').css('color', '' + data.frpmed2_color);
-					$(row).find('td:eq(13)').css('color', '' + data.frptmed2_color);
-					$(row).find('td:eq(14)').css('color', '' + data.frpmed3_color);
-					$(row).find('td:eq(15)').css('color', '' + data.frptmed3_color);
+					$(row).find('td:eq(10)').css('color', ''+data.frpmed1_color);
+					$(row).find('td:eq(11)').css('color', ''+data.frptmed1_color);
+					$(row).find('td:eq(12)').css('color', ''+data.frpmed2_color);
+					$(row).find('td:eq(13)').css('color', ''+data.frptmed2_color);
+					$(row).find('td:eq(14)').css('color', ''+data.frpmed3_color);
+					$(row).find('td:eq(15)').css('color', ''+data.frptmed3_color);
 
-					$(row).find('td:eq(16)').css('background', '' + data.fr_resultado_color);
+					$(row).find('td:eq(16)').css('background', ''+data.fr_resultado_color);
 
-					if (data.fr_resultado == "Fuera de norma") // Color texto
+					if(data.fr_resultado == "Fuera de norma") // Color texto
 					{
-
+						
 						$(row).find('td:eq(16)').css('color', '#FFFFFF');
 					}
-					else {
+					else
+					{
 						$(row).find('td:eq(16)').css('color', '#000000');
 					}
 				},
@@ -4436,63 +4768,69 @@ function tabla_reporte_reflexionresultados(proyecto_id, reporteiluminacion_id) {
 		}
 
 		// Tooltip en DataTable
-		datatable_reflexionresultados.on('draw', function () {
+		datatable_reflexionresultados.on('draw', function ()
+		{
 			$('[data-toggle="tooltip"]').tooltip();
 		});
 	}
-	catch (exception) {
+	catch (exception)
+	{
 		tabla_reporte_reflexionresultados(proyecto_id, reporteiluminacion_id);
-	}
+    }
 }
 
 
 var datatable_matrizexposicion = null;
-function tabla_reporte_matrizexposicion(proyecto_id, reporteiluminacion_id) {
-	try {
-		var ruta = "/reporteiluminaciontablamatrizexposicion/" + proyecto_id + "/" + reporteiluminacion_id + "/" + areas_poe;
+function tabla_reporte_matrizexposicion(proyecto_id, reporteiluminacion_id)
+{
+	try 
+	{
+		var ruta = "/reporteiluminaciontablamatrizexposicion/"+proyecto_id+"/"+reporteiluminacion_id+"/"+areas_poe;
 
 		if (parseInt(proyecto.catregion_id) == 1) //REGION NORTE
 		{
-			if (datatable_matrizexposicion != null) {
+			if (datatable_matrizexposicion != null)
+			{
 				datatable_matrizexposicion.clear().draw();
 				datatable_matrizexposicion.ajax.url(ruta).load();
 			}
-			else {
-				$('#tabla_reporte_matrizexposicion').html('<thead>' +
-					'<tr>' +
-					'<th rowspan="3"><span class="rotartexto">Contador</span></th>' +
-					// '<th rowspan="3">Subdirección o<br>corporativo</th>'+
-					// '<th rowspan="3">Gerencia o<br>activo</th>'+
-					'<th rowspan="3">Instalación</th>' +
-					'<th rowspan="3">Área de<br>referencia<br>en atlas<br>de riesgo</th>' +
-					'<th rowspan="3">Nombre</th>' +
-					'<th rowspan="3">Ficha</th>' +
-					'<th rowspan="3">Categoría</th>' +
-					'<th rowspan="3">Número<br>de<br>personas<br>en el área</th>' +
-					'<th rowspan="3">Grupo de<br>exposición<br>homogénea</th>' +
-					'<th rowspan="3">Niveles<br>mínimos de<br>iluminación<br>(lux)</th>' +
-					'<th colspan="3">Nivel de<br>iluminación<br>(E2)(lux)</th>' +
-					'<th colspan="3">Niveles<br>máximos<br>permisibles<br>de reflexión<br>plano de<br>trabajo (50%)</th>' +
-					'<th colspan="3">Niveles<br>máximos<br>permisibles<br>de reflexión<br>paredes (60%)</th>' +
-					'</tr>' +
-					'<tr>' +
-					'<th colspan="3">Periodo</th>' +
-					'<th colspan="3">Periodo</th>' +
-					'<th colspan="3">Periodo</th>' +
-					'</tr>' +
-					'<tr>' +
-					'<th>I</th>' +
-					'<th>II</th>' +
-					'<th>III</th>' +
-					'<th>I</th>' +
-					'<th>II</th>' +
-					'<th>III</th>' +
-					'<th>I</th>' +
-					'<th>II</th>' +
-					'<th>III</th>' +
-					'</tr>' +
-					'</thead>' +
-					'<tbody></tbody>');
+			else
+			{
+				$('#tabla_reporte_matrizexposicion').html('<thead>'+
+																'<tr>'+
+																	'<th rowspan="3"><span class="rotartexto">Contador</span></th>'+
+																	// '<th rowspan="3">Subdirección o<br>corporativo</th>'+
+																	// '<th rowspan="3">Gerencia o<br>activo</th>'+
+																	'<th rowspan="3">Instalación</th>'+
+																	'<th rowspan="3">Área de<br>referencia<br>en atlas<br>de riesgo</th>'+
+																	'<th rowspan="3">Nombre</th>'+
+																	'<th rowspan="3">Ficha</th>'+
+																	'<th rowspan="3">Categoría</th>'+
+																	'<th rowspan="3">Número<br>de<br>personas<br>en el área</th>'+
+																	'<th rowspan="3">Grupo de<br>exposición<br>homogénea</th>'+
+																	'<th rowspan="3">Niveles<br>mínimos de<br>iluminación<br>(lux)</th>'+
+																	'<th colspan="3">Nivel de<br>iluminación<br>(E2)(lux)</th>'+
+																	'<th colspan="3">Niveles<br>máximos<br>permisibles<br>de reflexión<br>plano de<br>trabajo (50%)</th>'+
+																	'<th colspan="3">Niveles<br>máximos<br>permisibles<br>de reflexión<br>paredes (60%)</th>'+
+																'</tr>'+
+																'<tr>'+
+																	'<th colspan="3">Periodo</th>'+
+																	'<th colspan="3">Periodo</th>'+
+																	'<th colspan="3">Periodo</th>'+
+																'</tr>'+
+																'<tr>'+
+																	'<th>I</th>'+
+																	'<th>II</th>'+
+																	'<th>III</th>'+
+																	'<th>I</th>'+
+																	'<th>II</th>'+
+																	'<th>III</th>'+
+																	'<th>I</th>'+
+																	'<th>II</th>'+
+																	'<th>III</th>'+
+																'</tr>'+
+															'</thead>'+
+															'<tbody></tbody>');
 
 				var numeroejecucion = 1;
 				datatable_matrizexposicion = $('#tabla_reporte_matrizexposicion').DataTable({
@@ -4502,7 +4840,8 @@ function tabla_reporte_matrizexposicion(proyecto_id, reporteiluminacion_id) {
 						cache: false,
 						dataType: "json",
 						data: {},
-						dataSrc: function (json) {
+						dataSrc: function (json)
+						{
 							// if (parseInt(json.total) > 0)
 							// {
 							// 	alert("Total! "+json.total);
@@ -4511,9 +4850,11 @@ function tabla_reporte_matrizexposicion(proyecto_id, reporteiluminacion_id) {
 							// alert("Done! "+json.msj);
 							return json.data;
 						},
-						error: function (xhr, error, code) {
-							console.log('error en datatable_matrizexposicion ' + code);
-							if (numeroejecucion <= 1) {
+						error: function (xhr, error, code)
+						{						
+							console.log('error en datatable_matrizexposicion '+code);
+							if (numeroejecucion <= 1)
+							{
 								tabla_reporte_matrizexposicion(proyecto_id, reporteiluminacion_id);
 								numeroejecucion += 1;
 							}
@@ -4627,7 +4968,7 @@ function tabla_reporte_matrizexposicion(proyecto_id, reporteiluminacion_id) {
 					],
 					lengthMenu: [[20, 50, 100, -1], [20, 50, 100, "Todos"]],
 					rowsGroup: [1, 2, 3, 4, 0], //agrupar filas
-					order: [[0, "ASC"]],
+					order: [[ 0, "ASC" ]],
 					ordering: false,
 					processing: true,
 					searching: true,
@@ -4649,7 +4990,8 @@ function tabla_reporte_matrizexposicion(proyecto_id, reporteiluminacion_id) {
 							previous: "Anterior"
 						}
 					},
-					rowCallback: function (row, data, index) {
+					rowCallback: function(row, data, index)
+					{
 						// console.log(index+' - '+data.reporteiluminacionpuntos_nopunto);
 
 						// if(data.reporteiluminacionpuntos_nopunto == 2)
@@ -4672,33 +5014,37 @@ function tabla_reporte_matrizexposicion(proyecto_id, reporteiluminacion_id) {
 			}
 
 			// Tooltip en DataTable
-			datatable_matrizexposicion.on('draw', function () {
+			datatable_matrizexposicion.on('draw', function ()
+			{
 				$('[data-toggle="tooltip"]').tooltip();
 			});
 		}
-		else {
+		else
+		{
 			// alert('sur');
 
-			if (datatable_matrizexposicion != null) {
+			if (datatable_matrizexposicion != null)
+			{
 				datatable_matrizexposicion.clear().draw();
 				datatable_matrizexposicion.ajax.url(ruta).load();
 			}
-			else {
+			else
+			{
 
-				$('#tabla_reporte_matrizexposicion').html('<thead>' +
-					'<tr>' +
-					'<th><span class="rotartexto">Contador</span></th>' +
-					// '<th>Subdirección o<br>corporativo</th>'+
-					// '<th>Gerencia o<br>activo</th>'+
-					'<th>Instalación</th>' +
-					'<th>Área de referencia<br>en atlas de riesgo</th>' +
-					'<th>Nombre</th>' +
-					'<th>Ficha</th>' +
-					'<th>Categoría</th>' +
-					'<th width="130">Iluminación<br>Lux (E 2c) / NMI</th>' +
-					'</tr>' +
-					'</thead>' +
-					'<tbody></tbody>');
+				$('#tabla_reporte_matrizexposicion').html('<thead>'+
+																'<tr>'+
+																	'<th><span class="rotartexto">Contador</span></th>'+
+																	// '<th>Subdirección o<br>corporativo</th>'+
+																	// '<th>Gerencia o<br>activo</th>'+
+																	'<th>Instalación</th>'+
+																	'<th>Área de referencia<br>en atlas de riesgo</th>'+
+																	'<th>Nombre</th>'+
+																	'<th>Ficha</th>'+
+																	'<th>Categoría</th>'+
+																	'<th width="130">Iluminación<br>Lux (E 2c) / NMI</th>'+
+																'</tr>'+
+															'</thead>'+
+															'<tbody></tbody>');
 
 
 				var numeroejecucion = 1;
@@ -4709,7 +5055,8 @@ function tabla_reporte_matrizexposicion(proyecto_id, reporteiluminacion_id) {
 						cache: false,
 						dataType: "json",
 						data: {},
-						dataSrc: function (json) {
+						dataSrc: function (json)
+						{
 							// if (parseInt(json.total) > 0)
 							// {
 							// 	alert("Total! "+json.total);
@@ -4718,9 +5065,11 @@ function tabla_reporte_matrizexposicion(proyecto_id, reporteiluminacion_id) {
 							// alert("Done! "+json.msj);
 							return json.data;
 						},
-						error: function (xhr, error, code) {
-							console.log('error en datatable_matrizexposicion ' + code);
-							if (numeroejecucion <= 1) {
+						error: function (xhr, error, code)
+						{						
+							console.log('error en datatable_matrizexposicion '+code);
+							if (numeroejecucion <= 1)
+							{
 								tabla_reporte_matrizexposicion(proyecto_id, reporteiluminacion_id);
 								numeroejecucion += 1;
 							}
@@ -4779,7 +5128,7 @@ function tabla_reporte_matrizexposicion(proyecto_id, reporteiluminacion_id) {
 					],
 					lengthMenu: [[20, 50, 100, -1], [20, 50, 100, "Todos"]],
 					rowsGroup: [1, 2, 3, 4, 0], //agrupar filas
-					order: [[0, "ASC"]],
+					order: [[ 0, "ASC" ]],
 					ordering: false,
 					processing: true,
 					searching: true,
@@ -4801,7 +5150,8 @@ function tabla_reporte_matrizexposicion(proyecto_id, reporteiluminacion_id) {
 							previous: "Anterior"
 						}
 					},
-					rowCallback: function (row, data, index) {
+					rowCallback: function(row, data, index)
+					{
 						// console.log(index+' - '+data.reporteiluminacionpuntos_nopunto);
 
 						// if(data.reporteiluminacionpuntos_nopunto == 2)
@@ -4824,14 +5174,16 @@ function tabla_reporte_matrizexposicion(proyecto_id, reporteiluminacion_id) {
 			}
 
 			// Tooltip en DataTable
-			datatable_matrizexposicion.on('draw', function () {
+			datatable_matrizexposicion.on('draw', function ()
+			{
 				$('[data-toggle="tooltip"]').tooltip();
 			});
 		}
 	}
-	catch (exception) {
+	catch (exception)
+	{
 		tabla_reporte_matrizexposicion(proyecto_id, reporteiluminacion_id);
-	}
+    }
 }
 
 
@@ -4839,10 +5191,12 @@ function tabla_reporte_matrizexposicion(proyecto_id, reporteiluminacion_id) {
 // CONCLUSION
 
 
-$("#botonguardar_reporte_conclusion").click(function () {
+$("#botonguardar_reporte_conclusion").click(function()
+{
 	// valida campos vacios
 	var valida = this.form.checkValidity();
-	if (valida) {
+	if (valida)
+	{
 		swal({
 			title: "¡Confirme que desea guardar!",
 			text: "Conclusión",
@@ -4854,104 +5208,112 @@ $("#botonguardar_reporte_conclusion").click(function () {
 			closeOnConfirm: false,
 			closeOnCancel: false
 		},
-			function (isConfirm) {
-				if (isConfirm) {
-					// cerrar msj confirmacion
-					swal.close();
+		function(isConfirm)
+		{
+			if (isConfirm)
+			{
+				// cerrar msj confirmacion
+				swal.close();
 
-					// enviar datos
-					$('#form_reporte_conclusion').ajaxForm({
-						dataType: 'json',
-						type: 'POST',
-						url: '/reporteiluminacion',
-						data: {
-							opcion: 20,
-							proyecto_id: proyecto.id,
-							agente_id: agente_id,
-							agente_nombre: agente_nombre,
-							reporteiluminacion_id: reporteiluminacion_id,
-							catactivo_id: $("#reporteiluminacion_catactivo_id").val(),
-							reporteiluminacion_instalacion: $("#reporteiluminacion_instalacion").val(),
-						},
-						resetForm: false,
-						success: function (dato) {
-							// Actualizar ID reporte						
-							reporteiluminacion_id = dato.reporteiluminacion_id;
+				// enviar datos
+				$('#form_reporte_conclusion').ajaxForm({
+					dataType: 'json',
+					type: 'POST',
+					url: '/reporteiluminacion',
+					data: {
+						opcion: 20,
+						proyecto_id: proyecto.id,
+						agente_id: agente_id,
+						agente_nombre: agente_nombre,
+						reporteiluminacion_id: reporteiluminacion_id,
+						catactivo_id: $("#reporteiluminacion_catactivo_id").val(),
+						reporteiluminacion_instalacion: $("#reporteiluminacion_instalacion").val(),
+					},
+					resetForm: false,
+					success: function(dato)
+					{
+						// Actualizar ID reporte						
+						reporteiluminacion_id = dato.reporteiluminacion_id;
 
-							menureporte_estado("menureporte_8", 1);
+						menureporte_estado("menureporte_8", 1);
 
-							tabla_reporte_revisiones(proyecto.id);
+						tabla_reporte_revisiones(proyecto.id);
 
-							// mensaje
-							swal({
-								title: "Correcto",
-								text: "" + dato.msj,
-								type: "success", // warning, error, success, info
-								buttons: {
-									visible: false, // true , false
-								},
-								timer: 1500,
-								showConfirmButton: false
-							});
+						// mensaje
+						swal({
+							title: "Correcto",
+							text: ""+dato.msj,
+							type: "success", // warning, error, success, info
+							buttons: {
+								visible: false, // true , false
+							},
+							timer: 1500,
+							showConfirmButton: false
+						});
 
-							// actualiza boton
-							$('#botonguardar_reporte_conclusion').html('Guardar conclusión <i class="fa fa-save"></i>');
-							$('#botonguardar_reporte_conclusion').attr('disabled', false);
-						},
-						beforeSend: function () {
-							$('#botonguardar_reporte_conclusion').html('Guardando conclusión <i class="fa fa-spin fa-spinner"></i>');
-							$('#botonguardar_reporte_conclusion').attr('disabled', true);
-						},
-						error: function (dato) {
-							// actualiza boton
-							$('#botonguardar_reporte_conclusion').html('Guardar conclusión <i class="fa fa-save"></i>');
-							$('#botonguardar_reporte_conclusion').attr('disabled', false);
+						// actualiza boton
+						$('#botonguardar_reporte_conclusion').html('Guardar conclusión <i class="fa fa-save"></i>');
+						$('#botonguardar_reporte_conclusion').attr('disabled', false);
+					},
+					beforeSend: function()
+					{
+						$('#botonguardar_reporte_conclusion').html('Guardando conclusión <i class="fa fa-spin fa-spinner"></i>');
+						$('#botonguardar_reporte_conclusion').attr('disabled', true);
+					},
+					error: function(dato)
+					{
+						// actualiza boton
+						$('#botonguardar_reporte_conclusion').html('Guardar conclusión <i class="fa fa-save"></i>');
+						$('#botonguardar_reporte_conclusion').attr('disabled', false);
 
-							// mensaje
-							swal({
-								title: "Error",
-								text: "" + dato.msj,
-								type: "error", // warning, error, success, info
-								buttons: {
-									visible: false, // true , false
-								},
-								timer: 1500,
-								showConfirmButton: false
-							});
-							return false;
-						}
-					}).submit();
-					return false;
-				}
-				else {
-					// mensaje
-					swal({
-						title: "Cancelado",
-						text: "Acción cancelada",
-						type: "error", // warning, error, success, info
-						buttons: {
-							visible: false, // true , false
-						},
-						timer: 500,
-						showConfirmButton: false
-					});
-				}
-			});
+						// mensaje
+						swal({
+							title: "Error",
+							text: ""+dato.msj,
+							type: "error", // warning, error, success, info
+							buttons: {
+								visible: false, // true , false
+							},
+							timer: 1500,
+							showConfirmButton: false
+						});
+						return false;
+					}
+				}).submit();
+				return false;
+			}
+			else 
+			{
+				// mensaje
+				swal({
+					title: "Cancelado",
+					text: "Acción cancelada",
+					type: "error", // warning, error, success, info
+					buttons: {
+						visible: false, // true , false
+					},
+					timer: 500,
+					showConfirmButton: false
+				});
+			}
+		});
 		return false;
 	}
 });
 
 
 var dashboard_ejecusiones = 0;
-function reporteiluminacion_dashboard(proyecto_id, reporteiluminacion_id) {
+function reporteiluminacion_dashboard(proyecto_id, reporteiluminacion_id)
+{
 	// Enviar datos
 	$.ajax({
 		type: "GET",
 		dataType: "json",
-		url: "/reporteiluminaciondashboard/" + proyecto_id + "/" + reporteiluminacion_id + "/" + areas_poe,
-		data: {},
+		url: "/reporteiluminaciondashboard/"+proyecto_id+"/"+reporteiluminacion_id+"/"+areas_poe,
+		data:{},
 		cache: false,
-		success: function (dato) {
+		success:function(dato)
+		{
 			$("#areas_cumplimiento").html(dato.areas_cumplimiento);
 			$("#categorias_criticas").html(dato.categorias_criticas);
 			$("#nivel_iluminacion").html(dato.datos.nivel_iluminacion);
@@ -4977,8 +5339,10 @@ function reporteiluminacion_dashboard(proyecto_id, reporteiluminacion_id) {
 			// 	showConfirmButton: false
 			// });
 		},
-		error: function (dato) {
-			if (dashboard_ejecusiones == 0) {
+		error: function(dato)
+		{
+			if (dashboard_ejecusiones == 0)
+			{
 				reporteiluminacion_dashboard(proyecto_id, reporteiluminacion_id);
 				dashboard_ejecusiones += 1;
 			}
@@ -4990,7 +5354,8 @@ function reporteiluminacion_dashboard(proyecto_id, reporteiluminacion_id) {
 
 
 var graficapastel_iluminacion = null;
-function grafico_iluminacion(serie_grafico) {
+function grafico_iluminacion(serie_grafico)
+{
 	graficapastel_iluminacion = AmCharts.makeChart("grafica_iluminacion", {
 		"type": "pie",
 		"startDuration": 1,
@@ -5027,12 +5392,12 @@ function grafico_iluminacion(serie_grafico) {
 				}
 			}]
 		},
-		"legend": {
+		"legend":{
 			'enabled': false,
-			"position": "bottom",
-			"marginRight": 0,
-			"marginLeft": 0,
-			"autoMargins": false,
+			"position":"bottom",
+			"marginRight":0,
+			"marginLeft":0,
+			"autoMargins":false,
 			"valueText": "[[description]]" //"[[description]] [[value]]"
 		},
 		"export": {
@@ -5148,7 +5513,8 @@ function grafico_iluminacion(serie_grafico) {
 
 
 var graficapastel_reflexion = null;
-function grafico_reflexion(serie_grafico) {
+function grafico_reflexion(serie_grafico)
+{
 	graficapastel_reflexion = AmCharts.makeChart("grafica_reflexion", {
 		"type": "pie",
 		"startDuration": 1,
@@ -5185,14 +5551,14 @@ function grafico_reflexion(serie_grafico) {
 				}
 			}]
 		},
-		"legend": {
+		"legend":{
 			'enabled': false,
-			"position": "bottom",
-			"marginRight": 0,
-			"marginLeft": 0,
-			"autoMargins": false,
+			"position":"bottom",
+			"marginRight":0,
+			"marginLeft":0,
+			"autoMargins":false,
 			"valueText": "[[description]]" //"[[description]] [[value]]"
-		}, "export": {
+		},"export": {
 			"enabled": true,
 			'position': 'top-right'
 		},
@@ -5249,10 +5615,13 @@ function grafico_reflexion(serie_grafico) {
 }
 
 
-$("#botonguardar_generargraficas").click(function () {
+$("#botonguardar_generargraficas").click(function()
+{
 	var grafica_iluminacion_imgbase64 = '';
-	graficapastel_iluminacion.export.capture({}, function () {
-		this.toPNG({}, function (img_base64) {
+	graficapastel_iluminacion.export.capture({}, function ()
+	{
+		this.toPNG({}, function (img_base64)
+		{
 			// var image = new Image();
 			// image.src = data;
 			// document.getElementById("captura").appendChild(image);
@@ -5264,8 +5633,10 @@ $("#botonguardar_generargraficas").click(function () {
 
 
 	var grafica_reflexion_imgbase64 = '';
-	graficapastel_reflexion.export.capture({}, function () {
-		this.toPNG({}, function (img_base64) {
+	graficapastel_reflexion.export.capture({}, function ()
+	{
+		this.toPNG({}, function (img_base64)
+		{
 			// var image = new Image();
 			// image.src = img_base64;
 			// document.getElementById("captura").appendChild(image);
@@ -5273,10 +5644,11 @@ $("#botonguardar_generargraficas").click(function () {
 
 			grafica_reflexion_imgbase64 = img_base64;
 		});
-	});
+	}); 
 
 
-	html2canvas(document.querySelector("#areas_cumplimiento"), { scale: 6 }).then(canvas => {
+	html2canvas(document.querySelector("#areas_cumplimiento"), { scale: 6}).then(canvas =>
+	{
 		// document.getElementById("captura").appendChild(canvas)
 		var imgData = canvas.toDataURL('image/jpeg');
 
@@ -5285,7 +5657,7 @@ $("#botonguardar_generargraficas").click(function () {
 			type: "POST",
 			dataType: "json",
 			url: "/reporteiluminaciondashboardgraficas",
-			data: {
+			data:{
 				_token: document.querySelector('meta[name="csrf-token"]')['content'],
 				reporteiluminacion_id: reporteiluminacion_id,
 				grafica1: imgData,
@@ -5293,11 +5665,12 @@ $("#botonguardar_generargraficas").click(function () {
 				grafica_reflexion: grafica_reflexion_imgbase64,
 			},
 			cache: false,
-			success: function (dato) {
+			success:function(dato)
+			{
 				// mensaje
 				swal({
 					title: "Correcto",
-					text: "" + dato.msj,
+					text: ""+dato.msj,
 					type: "success", // warning, error, success, info
 					buttons: {
 						visible: false, // true , false
@@ -5306,7 +5679,8 @@ $("#botonguardar_generargraficas").click(function () {
 					showConfirmButton: false
 				});
 			},
-			error: function (dato) {
+			error: function(dato)
+			{
 				alert('Error');
 				return false;
 			}
@@ -5320,23 +5694,29 @@ $("#botonguardar_generargraficas").click(function () {
 // RECOMENDACIONES
 
 
-$(document).ready(function () {
-	setTimeout(function () {
+$(document).ready(function()
+{
+	setTimeout(function()
+	{
 		tabla_reporte_recomendaciones(proyecto.id, reporteiluminacion_id, agente_nombre);
 	}, 6500);
 });
 
 
 var datatable_recomendaciones = null;
-function tabla_reporte_recomendaciones(proyecto_id, reporteiluminacion_id, agente_nombre) {
-	try {
-		var ruta = "/reporteiluminaciontablarecomendaciones/" + proyecto_id + "/" + reporteiluminacion_id + "/" + agente_nombre;
+function tabla_reporte_recomendaciones(proyecto_id, reporteiluminacion_id, agente_nombre)
+{
+	try 
+	{
+		var ruta = "/reporteiluminaciontablarecomendaciones/"+proyecto_id+"/"+reporteiluminacion_id+"/"+agente_nombre;
 
-		if (datatable_recomendaciones != null) {
+		if (datatable_recomendaciones != null)
+		{
 			datatable_recomendaciones.clear().draw();
 			datatable_recomendaciones.ajax.url(ruta).load();
 		}
-		else {
+		else
+		{
 			var numeroejecucion = 1;
 			datatable_recomendaciones = $('#tabla_reporte_recomendaciones').DataTable({
 				"ajax": {
@@ -5345,18 +5725,22 @@ function tabla_reporte_recomendaciones(proyecto_id, reporteiluminacion_id, agent
 					"cache": false,
 					dataType: "json",
 					data: {},
-					dataSrc: function (json) {
-						if (parseInt(json.total) > 0) {
+					dataSrc: function (json)
+					{
+						if (parseInt(json.total) > 0)
+						{
 							menureporte_estado("menureporte_9", 1);
 						}
 
 						// alert("Done! "+json.msj);
 						return json.data;
 					},
-					error: function (xhr, error, code) {
+					error: function (xhr, error, code)
+					{
 						// console.log(xhr); console.log(code);
 						console.log('error en datatable_recomendaciones');
-						if (numeroejecucion <= 1) {
+						if (numeroejecucion <= 1)
+						{
 							tabla_reporte_recomendaciones(proyecto_id, reporteiluminacion_id, agente_nombre);
 							numeroejecucion += 1;
 						}
@@ -5382,7 +5766,7 @@ function tabla_reporte_recomendaciones(proyecto_id, reporteiluminacion_id, agent
 				],
 				"lengthMenu": [[20, 50, 100, -1], [20, 50, 100, "Todos"]],
 				// "rowsGroup": [0, 1], //agrupar filas
-				"order": [[0, "ASC"]],
+				"order": [[ 0, "ASC" ]],
 				"ordering": false,
 				"processing": true,
 				"searching": false,
@@ -5404,140 +5788,156 @@ function tabla_reporte_recomendaciones(proyecto_id, reporteiluminacion_id, agent
 						"previous": "Anterior"
 					}
 				}
-			});
+		    });
 		}
 
 		// Tooltip en DataTable
-		datatable_recomendaciones.on('draw', function () {
+		datatable_recomendaciones.on('draw', function ()
+		{
 			$('[data-toggle="tooltip"]').tooltip();
 		});
 	}
-	catch (exception) {
+	catch (exception)
+	{
 		tabla_reporte_recomendaciones(proyecto_id, reporteiluminacion_id, agente_nombre);
-	}
+    }
 }
 
 
-$("#boton_reporte_nuevarecomendacion").click(function () {
-	$("#tabla_reporte_recomendaciones tbody").append('<tr>' +
-		'<td>0</td>' +
-		'<td style="text-align: center;">' +
-		'<input type="checkbox" class="recomendacionadicional_checkbox" name="recomendacionadicional_checkbox[]" value="0" checked/>' +
-		'<br><button type="button" class="btn btn-danger waves-effect btn-circle eliminar" data-toggle="tooltip" title="Eliminar recomendación"><i class="fa fa-trash fa-2x"></i></button>' +
-		'</td>' +
-		'<td>' +
-		'<div class="form-group">' +
-		'<label>Tipo</label>' +
-		'<select class="custom-select form-control" name="recomendacionadicional_tipo[]" required>' +
-		'<option value=""></option>' +
-		'<option value="Preventiva">Preventiva</option>' +
-		'<option value="Correctiva">Correctiva</option>' +
-		'</select>' +
-		'</div>' +
-		'<div class="form-group">' +
-		'<label>Descripción</label>' +
-		'<textarea  class="form-control" style="margin-bottom: 0px;" rows="5" name="recomendacionadicional_descripcion[]" required></textarea>' +
-		'</div>' +
-		'</td>' +
-		'</tr>');
+$("#boton_reporte_nuevarecomendacion").click(function()
+{
+    $("#tabla_reporte_recomendaciones tbody").append( '<tr>'+
+															'<td>0</td>'+
+															'<td style="text-align: center;">'+
+																'<input type="checkbox" class="recomendacionadicional_checkbox" name="recomendacionadicional_checkbox[]" value="0" checked/>'+
+																'<br><button type="button" class="btn btn-danger waves-effect btn-circle eliminar" data-toggle="tooltip" title="Eliminar recomendación"><i class="fa fa-trash fa-2x"></i></button>'+
+															'</td>'+
+															'<td>'+
+																'<div class="form-group">'+
+																	'<label>Tipo</label>'+
+																	'<select class="custom-select form-control" name="recomendacionadicional_tipo[]" required>'+
+																		'<option value=""></option>'+
+																		'<option value="Preventiva">Preventiva</option>'+
+																		'<option value="Correctiva">Correctiva</option>'+
+																	'</select>'+
+																'</div>'+
+																'<div class="form-group">'+
+																	'<label>Descripción</label>'+
+																	'<textarea  class="form-control" style="margin-bottom: 0px;" rows="5" name="recomendacionadicional_descripcion[]" required></textarea>'+
+																'</div>'+
+															'</td>'+
+														'</tr>');
 
-	var posicion = $("#tabla_reporte_recomendaciones > tbody > tr").eq((parseInt(document.getElementById("tabla_reporte_recomendaciones").rows.length) - 1) - 2).offset().top;
-	$('html, body').animate({
-		scrollTop: posicion
-	}, 1000);
+    var posicion = $("#tabla_reporte_recomendaciones > tbody > tr").eq((parseInt(document.getElementById("tabla_reporte_recomendaciones").rows.length) - 1) - 2).offset().top;
+    $('html, body').animate({
+        scrollTop: posicion
+    }, 1000);
 
-	$('[data-toggle="tooltip"]').tooltip();
+    $('[data-toggle="tooltip"]').tooltip();
 });
 
 
-function activa_recomendacion(checkbox) {
-	if (checkbox.checked) {
-		$('#recomendacion_descripcion_' + checkbox.value).attr('readonly', false);
-		$('#recomendacion_descripcion_' + checkbox.value).attr('required', true);
+function activa_recomendacion(checkbox)
+{
+	if (checkbox.checked)
+	{
+		$('#recomendacion_descripcion_'+checkbox.value).attr('readonly', false);
+		$('#recomendacion_descripcion_'+checkbox.value).attr('required', true);
 	}
-	else {
-		$('#recomendacion_descripcion_' + checkbox.value).attr('required', false);
-		$('#recomendacion_descripcion_' + checkbox.value).attr('readonly', true);
+	else
+	{
+		$('#recomendacion_descripcion_'+checkbox.value).attr('required', false);
+		$('#recomendacion_descripcion_'+checkbox.value).attr('readonly', true);
 	}
 }
 
 
-$('#tabla_reporte_recomendaciones tbody').on('click', '.eliminar', function () {
-	// obtener fila tabla
-	var fila = $(this);
-
-	// confirmar
-	swal({
-		title: "¿Eliminar recomendación?",
-		text: "de la lista de recomendaciones",
-		type: "warning",
-		showCancelButton: true,
-		confirmButtonColor: "#DD6B55",
-		confirmButtonText: "Eliminar!",
-		cancelButtonText: "Cancelar!",
-		closeOnConfirm: false,
-		closeOnCancel: false
-	}, function (isConfirm) {
-		if (isConfirm) {
-			// cerrar msj confirmacion
+$('#tabla_reporte_recomendaciones tbody').on('click', '.eliminar', function()
+{
+    // obtener fila tabla
+    var fila = $(this);
+    
+    // confirmar
+    swal({   
+        title: "¿Eliminar recomendación?",   
+        text: "de la lista de recomendaciones",   
+        type: "warning",   
+        showCancelButton: true,   
+        confirmButtonColor: "#DD6B55",   
+        confirmButtonText: "Eliminar!",   
+        cancelButtonText: "Cancelar!",   
+        closeOnConfirm: false,   
+        closeOnCancel: false 
+    }, function(isConfirm){   
+        if (isConfirm)
+        {
+        	// cerrar msj confirmacion
 			// swal.close();
 
-			var tr = fila.closest('tr');
-			fila.closest("tr").remove(); // eliminar fila TR
+            var tr = fila.closest('tr');
+            fila.closest("tr").remove(); // eliminar fila TR
 
-			// mensaje
-			swal({
-				title: "Correcto",
-				text: "Recomendación eliminada de la lista",
-				type: "success", // warning, error, success, info
-				buttons: {
-					visible: false, // true , false
-				},
-				timer: 1500,
-				showConfirmButton: false
-			});
-		}
-		else {
-			// mensaje
-			swal({
-				title: "Cancelado",
-				text: "",
-				type: "error", // warning, error, success, info
-				buttons: {
-					visible: false, // true , false
-				},
-				timer: 500,
-				showConfirmButton: false
-			});
-		}
-	});
-	return false;
+            // mensaje
+            swal({
+                title: "Correcto",
+                 text: "Recomendación eliminada de la lista",
+                type: "success", // warning, error, success, info
+                buttons: {
+                    visible: false, // true , false
+                },
+                timer: 1500,
+                showConfirmButton: false
+            });
+        }
+        else 
+        {
+            // mensaje
+            swal({
+                title: "Cancelado",
+                text: "",
+                type: "error", // warning, error, success, info
+                buttons: {
+                    visible: false, // true , false
+                },
+                timer: 500,
+                showConfirmButton: false
+            });   
+        } 
+    });
+    return false;
 });
 
 
-$("#botonguardar_reporte_recomendaciones").click(function () {
+$("#botonguardar_reporte_recomendaciones").click(function()
+{
 	// borrar campo filtro del DATATABLE
 	// datatable_recomendaciones.search("").draw();
 
 	// valida campos vacios
 	var seleccionados = 0;
-	$('.recomendacion_checkbox').each(function () {
-		if (this.checked) {
+	$('.recomendacion_checkbox').each(function()
+	{
+		if (this.checked)
+		{
 			seleccionados += 1;
 		}
 	});
 
-	$('.recomendacionadicional_checkbox').each(function () {
-		if (this.checked) {
+	$('.recomendacionadicional_checkbox').each(function()
+	{
+		if (this.checked)
+		{
 			seleccionados += 1;
 		}
 	});
 
 
-	if (seleccionados > 0) {
+	if (seleccionados > 0)
+	{
 		// valida campos vacios
 		var valida = this.form.checkValidity();
-		if (valida) {
+		if (valida)
+		{
 			swal({
 				title: "¡Confirme que desea guardar!",
 				text: "Recomendaciones",
@@ -5549,93 +5949,100 @@ $("#botonguardar_reporte_recomendaciones").click(function () {
 				closeOnConfirm: false,
 				closeOnCancel: false
 			},
-				function (isConfirm) {
-					if (isConfirm) {
-						// cerrar msj confirmacion
-						swal.close();
+			function(isConfirm)
+			{
+				if (isConfirm)
+				{
+					// cerrar msj confirmacion
+					swal.close();
 
-						// enviar datos
-						$('#form_reporte_recomendaciones').ajaxForm({
-							dataType: 'json',
-							type: 'POST',
-							url: '/reporteiluminacion',
-							data: {
-								opcion: 30,
-								proyecto_id: proyecto.id,
-								agente_id: agente_id,
-								agente_nombre: agente_nombre,
-								reporteiluminacion_id: reporteiluminacion_id,
-								catactivo_id: $("#reporteiluminacion_catactivo_id").val(),
-								reporteiluminacion_instalacion: $("#reporteiluminacion_instalacion").val(),
-							},
-							resetForm: false,
-							success: function (dato) {
-								// Actualizar ID reporte						
-								reporteiluminacion_id = dato.reporteiluminacion_id;
+					// enviar datos
+					$('#form_reporte_recomendaciones').ajaxForm({
+						dataType: 'json',
+						type: 'POST',
+						url: '/reporteiluminacion',
+						data: {
+							opcion: 30,
+							proyecto_id: proyecto.id,
+							agente_id: agente_id,
+							agente_nombre: agente_nombre,
+							reporteiluminacion_id: reporteiluminacion_id,
+							catactivo_id: $("#reporteiluminacion_catactivo_id").val(),
+							reporteiluminacion_instalacion: $("#reporteiluminacion_instalacion").val(),
+						},
+						resetForm: false,
+						success: function(dato)
+						{
+							// Actualizar ID reporte						
+							reporteiluminacion_id = dato.reporteiluminacion_id;
 
-								menureporte_estado("menureporte_9", 1);
+							menureporte_estado("menureporte_9", 1);
 
-								tabla_reporte_revisiones(proyecto.id);
+							tabla_reporte_revisiones(proyecto.id);
 
-								// mensaje
-								swal({
-									title: "Correcto",
-									text: "" + dato.msj,
-									type: "success", // warning, error, success, info
-									buttons: {
-										visible: false, // true , false
-									},
-									timer: 1500,
-									showConfirmButton: false
-								});
+							// mensaje
+							swal({
+								title: "Correcto",
+								text: ""+dato.msj,
+								type: "success", // warning, error, success, info
+								buttons: {
+									visible: false, // true , false
+								},
+								timer: 1500,
+								showConfirmButton: false
+							});
 
-								// actualiza boton
-								$('#botonguardar_reporte_recomendaciones').html('Guardar recomendaciones <i class="fa fa-save"></i>');
-								$('#botonguardar_reporte_recomendaciones').attr('disabled', false);
-							},
-							beforeSend: function () {
-								$('#botonguardar_reporte_recomendaciones').html('Guardando recomendaciones <i class="fa fa-spin fa-spinner"></i>');
-								$('#botonguardar_reporte_recomendaciones').attr('disabled', true);
-							},
-							error: function (dato) {
-								// actualiza boton
-								$('#botonguardar_reporte_recomendaciones').html('Guardar recomendaciones <i class="fa fa-save"></i>');
-								$('#botonguardar_reporte_recomendaciones').attr('disabled', false);
+							// actualiza boton
+							$('#botonguardar_reporte_recomendaciones').html('Guardar recomendaciones <i class="fa fa-save"></i>');
+							$('#botonguardar_reporte_recomendaciones').attr('disabled', false);
+						},
+						beforeSend: function()
+						{
+							$('#botonguardar_reporte_recomendaciones').html('Guardando recomendaciones <i class="fa fa-spin fa-spinner"></i>');
+							$('#botonguardar_reporte_recomendaciones').attr('disabled', true);
+						},
+						error: function(dato)
+						{
+							// actualiza boton
+							$('#botonguardar_reporte_recomendaciones').html('Guardar recomendaciones <i class="fa fa-save"></i>');
+							$('#botonguardar_reporte_recomendaciones').attr('disabled', false);
 
-								// mensaje
-								swal({
-									title: "Error",
-									text: "" + dato.msj,
-									type: "error", // warning, error, success, info
-									buttons: {
-										visible: false, // true , false
-									},
-									timer: 1500,
-									showConfirmButton: false
-								});
-								return false;
-							}
-						}).submit();
-						return false;
-					}
-					else {
-						// mensaje
-						swal({
-							title: "Cancelado",
-							text: "Acción cancelada",
-							type: "error", // warning, error, success, info
-							buttons: {
-								visible: false, // true , false
-							},
-							timer: 500,
-							showConfirmButton: false
-						});
-					}
-				});
+							// mensaje
+							swal({
+								title: "Error",
+								text: ""+dato.msj,
+								type: "error", // warning, error, success, info
+								buttons: {
+									visible: false, // true , false
+								},
+								timer: 1500,
+								showConfirmButton: false
+							});
+							return false;
+						}
+					}).submit();
+					return false;
+				}
+				else 
+				{
+					// mensaje
+					swal({
+						title: "Cancelado",
+						text: "Acción cancelada",
+						type: "error", // warning, error, success, info
+						buttons: {
+							visible: false, // true , false
+						},
+						timer: 500,
+						showConfirmButton: false
+					});
+				}
+			});
 			return false;
 		}
 	}
-	else {
+	else
+	{
 		// mensaje
 		swal({
 			title: "Seleccione recomendaciones",
@@ -5656,14 +6063,15 @@ $("#botonguardar_reporte_recomendaciones").click(function () {
 // RESPONSABLES DEL INFORME
 
 
-$(document).ready(function () {
+$(document).ready(function()
+{
 	$('#reporteiluminacionresponsable1documento').dropify({
 		messages:
 		{
 			'default': 'Arrastre el mapa aquí o haga click',
 			'replace': 'Arrastre el mapa o haga clic para reemplazar',
-			'remove': 'Quitar',
-			'error': 'Ooops, ha ocurrido un error.'
+			'remove':  'Quitar',
+			'error':   'Ooops, ha ocurrido un error.'
 		},
 		error:
 		{
@@ -5681,8 +6089,8 @@ $(document).ready(function () {
 		{
 			'default': 'Arrastre el mapa aquí o haga click',
 			'replace': 'Arrastre el mapa o haga clic para reemplazar',
-			'remove': 'Quitar',
-			'error': 'Ooops, ha ocurrido un error.'
+			'remove':  'Quitar',
+			'error':   'Ooops, ha ocurrido un error.'
 		},
 		error:
 		{
@@ -5699,8 +6107,8 @@ $(document).ready(function () {
 		{
 			'default': 'Arrastre el mapa aquí o haga click',
 			'replace': 'Arrastre el mapa o haga clic para reemplazar',
-			'remove': 'Quitar',
-			'error': 'Ooops, ha ocurrido un error.'
+			'remove':  'Quitar',
+			'error':   'Ooops, ha ocurrido un error.'
 		},
 		error:
 		{
@@ -5715,10 +6123,12 @@ $(document).ready(function () {
 });
 
 
-$("#botonguardar_reporte_responsablesinforme").click(function () {
+$("#botonguardar_reporte_responsablesinforme").click(function()
+{
 	// valida campos vacios
 	var valida = this.form.checkValidity();
-	if (valida) {
+	if (valida)
+	{
 		swal({
 			title: "¡Confirme que desea guardar!",
 			text: "Responsables del informe",
@@ -5730,107 +6140,115 @@ $("#botonguardar_reporte_responsablesinforme").click(function () {
 			closeOnConfirm: false,
 			closeOnCancel: false
 		},
-			function (isConfirm) {
-				if (isConfirm) {
-					// cerrar msj confirmacion
-					swal.close();
+		function(isConfirm)
+		{
+			if (isConfirm)
+			{
+				// cerrar msj confirmacion
+				swal.close();
 
-					// enviar datos
-					$('#form_reporte_responsablesinforme').ajaxForm({
-						dataType: 'json',
-						type: 'POST',
-						url: '/reporteiluminacion',
-						data: {
-							opcion: 40,
-							proyecto_id: proyecto.id,
-							agente_id: agente_id,
-							agente_nombre: agente_nombre,
-							reporteiluminacion_id: reporteiluminacion_id,
-							catactivo_id: $("#reporteiluminacion_catactivo_id").val(),
-							reporteiluminacion_instalacion: $("#reporteiluminacion_instalacion").val(),
-						},
-						resetForm: false,
-						success: function (dato) {
-							// Actualizar ID reporte						
-							reporteiluminacion_id = dato.reporteiluminacion_id;
+				// enviar datos
+				$('#form_reporte_responsablesinforme').ajaxForm({
+					dataType: 'json',
+					type: 'POST',
+					url: '/reporteiluminacion',
+					data: {
+						opcion: 40,
+						proyecto_id: proyecto.id,
+						agente_id: agente_id,
+						agente_nombre: agente_nombre,
+						reporteiluminacion_id: reporteiluminacion_id,
+						catactivo_id: $("#reporteiluminacion_catactivo_id").val(),
+						reporteiluminacion_instalacion: $("#reporteiluminacion_instalacion").val(),
+					},
+					resetForm: false,
+					success: function(dato)
+					{
+						// Actualizar ID reporte						
+						reporteiluminacion_id = dato.reporteiluminacion_id;
 
-							menureporte_estado("menureporte_10", 1);
+						menureporte_estado("menureporte_10", 1);
 
-							tabla_reporte_revisiones(proyecto.id);
+						tabla_reporte_revisiones(proyecto.id);
 
-							$('#boton_descargarresponsabledoc1').css('display', 'block');
-							$('#boton_descargarresponsabledoc2').css('display', 'block');
+						$('#boton_descargarresponsabledoc1').css('display', 'block');
+						$('#boton_descargarresponsabledoc2').css('display', 'block');
 
-							// Carpeta ubicacion documentos historial
-							$('#reporteiluminacion_carpetadocumentoshistorial').val('');
+						// Carpeta ubicacion documentos historial
+						$('#reporteiluminacion_carpetadocumentoshistorial').val('');
 
-							// mensaje
-							swal({
-								title: "Correcto",
-								text: "" + dato.msj,
-								type: "success", // warning, error, success, info
-								buttons: {
-									visible: false, // true , false
-								},
-								timer: 1500,
-								showConfirmButton: false
-							});
+						// mensaje
+						swal({
+							title: "Correcto",
+							text: ""+dato.msj,
+							type: "success", // warning, error, success, info
+							buttons: {
+								visible: false, // true , false
+							},
+							timer: 1500,
+							showConfirmButton: false
+						});
 
-							// actualiza boton
-							$('#botonguardar_reporte_responsablesinforme').html('Guardar responsables del informe <i class="fa fa-save"></i>');
-							$('#botonguardar_reporte_responsablesinforme').attr('disabled', false);
-						},
-						beforeSend: function () {
-							$('#botonguardar_reporte_responsablesinforme').html('Guardando responsables del informe <i class="fa fa-spin fa-spinner"></i>');
-							$('#botonguardar_reporte_responsablesinforme').attr('disabled', true);
-						},
-						error: function (dato) {
-							// actualiza boton
-							$('#botonguardar_reporte_responsablesinforme').html('Guardar responsables del informe <i class="fa fa-save"></i>');
-							$('#botonguardar_reporte_responsablesinforme').attr('disabled', false);
+						// actualiza boton
+						$('#botonguardar_reporte_responsablesinforme').html('Guardar responsables del informe <i class="fa fa-save"></i>');
+						$('#botonguardar_reporte_responsablesinforme').attr('disabled', false);
+					},
+					beforeSend: function()
+					{
+						$('#botonguardar_reporte_responsablesinforme').html('Guardando responsables del informe <i class="fa fa-spin fa-spinner"></i>');
+						$('#botonguardar_reporte_responsablesinforme').attr('disabled', true);
+					},
+					error: function(dato)
+					{
+						// actualiza boton
+						$('#botonguardar_reporte_responsablesinforme').html('Guardar responsables del informe <i class="fa fa-save"></i>');
+						$('#botonguardar_reporte_responsablesinforme').attr('disabled', false);
 
-							// mensaje
-							swal({
-								title: "Error",
-								text: "" + dato.msj,
-								type: "error", // warning, error, success, info
-								buttons: {
-									visible: false, // true , false
-								},
-								timer: 1500,
-								showConfirmButton: false
-							});
-							return false;
-						}
-					}).submit();
-					return false;
-				}
-				else {
-					// mensaje
-					swal({
-						title: "Cancelado",
-						text: "Acción cancelada",
-						type: "error", // warning, error, success, info
-						buttons: {
-							visible: false, // true , false
-						},
-						timer: 500,
-						showConfirmButton: false
-					});
-				}
-			});
+						// mensaje
+						swal({
+							title: "Error",
+							text: ""+dato.msj,
+							type: "error", // warning, error, success, info
+							buttons: {
+								visible: false, // true , false
+							},
+							timer: 1500,
+							showConfirmButton: false
+						});
+						return false;
+					}
+				}).submit();
+				return false;
+			}
+			else 
+			{
+				// mensaje
+				swal({
+					title: "Cancelado",
+					text: "Acción cancelada",
+					type: "error", // warning, error, success, info
+					buttons: {
+						visible: false, // true , false
+					},
+					timer: 500,
+					showConfirmButton: false
+				});
+			}
+		});
 		return false;
 	}
 });
 
 
-$("#boton_descargarresponsabledoc1").click(function () {
-	window.open('/reporteiluminacionresponsabledocumento/' + reporteiluminacion_id + '/' + 1 + '/' + 1);
+$("#boton_descargarresponsabledoc1").click(function()
+{
+	window.open('/reporteiluminacionresponsabledocumento/'+reporteiluminacion_id+'/'+1+'/'+1);
 });
 
 
-$("#boton_descargarresponsabledoc2").click(function () {
-	window.open('/reporteiluminacionresponsabledocumento/' + reporteiluminacion_id + '/' + 2 + '/' + 1);
+$("#boton_descargarresponsabledoc2").click(function()
+{
+	window.open('/reporteiluminacionresponsabledocumento/'+reporteiluminacion_id+'/'+2+'/'+1);
 });
 
 
@@ -5838,23 +6256,29 @@ $("#boton_descargarresponsabledoc2").click(function () {
 // PLANOS
 
 
-$(document).ready(function () {
-	setTimeout(function () {
+$(document).ready(function()
+{
+	setTimeout(function()
+	{
 		tabla_reporte_planos(proyecto.id, reporteiluminacion_id, agente_nombre);
 	}, 5000);
 });
 
 
 var datatable_planos = null;
-function tabla_reporte_planos(proyecto_id, reporteiluminacion_id, agente_nombre) {
-	try {
-		var ruta = "/reporteiluminaciontablaplanos/" + proyecto_id + "/" + reporteiluminacion_id + "/" + agente_nombre;
+function tabla_reporte_planos(proyecto_id, reporteiluminacion_id, agente_nombre)
+{
+	try 
+	{
+		var ruta = "/reporteiluminaciontablaplanos/"+proyecto_id+"/"+reporteiluminacion_id+"/"+agente_nombre;
 
-		if (datatable_planos != null) {
+		if (datatable_planos != null)
+		{
 			datatable_planos.clear().draw();
 			datatable_planos.ajax.url(ruta).load();
 		}
-		else {
+		else
+		{
 			var numeroejecucion = 1;
 			datatable_planos = $('#tabla_reporte_planos').DataTable({
 				ajax: {
@@ -5863,16 +6287,19 @@ function tabla_reporte_planos(proyecto_id, reporteiluminacion_id, agente_nombre)
 					cache: false,
 					dataType: "json",
 					data: {},
-					dataSrc: function (json) {
+					dataSrc: function (json)
+					{
 						// Actualiza menu
 						menureporte_estado("menureporte_11_2", json.total);
 
 						// alert("Done! "+json.msj);
 						return json.data;
 					},
-					error: function (xhr, error, code) {
-						console.log('error en datatable_planos ' + code);
-						if (numeroejecucion <= 1) {
+					error: function (xhr, error, code)
+					{						
+						console.log('error en datatable_planos '+code);
+						if (numeroejecucion <= 1)
+						{
 							tabla_reporte_planos(proyecto_id, reporteiluminacion_id, agente_nombre);
 							numeroejecucion += 1;
 						}
@@ -5905,7 +6332,7 @@ function tabla_reporte_planos(proyecto_id, reporteiluminacion_id, agente_nombre)
 				],
 				lengthMenu: [[20, 50, 100, -1], [20, 50, 100, "Todos"]],
 				// rowsGroup: [0, 1], //agrupar filas
-				order: [[0, "ASC"]],
+				order: [[ 0, "ASC" ]],
 				ordering: false,
 				processing: true,
 				searching: false,
@@ -5931,20 +6358,24 @@ function tabla_reporte_planos(proyecto_id, reporteiluminacion_id, agente_nombre)
 		}
 
 		// Tooltip en DataTable
-		datatable_planos.on('draw', function () {
+		datatable_planos.on('draw', function ()
+		{
 			$('[data-toggle="tooltip"]').tooltip();
 		});
 	}
-	catch (exception) {
+	catch (exception)
+	{
 		tabla_reporte_planos(proyecto_id, reporteiluminacion_id, agente_nombre);
-	}
+    }
 }
 
 
-$("#botonguardar_reporte_planos").click(function () {
+$("#botonguardar_reporte_planos").click(function()
+{
 	// valida campos vacios
 	var valida = this.form.checkValidity();
-	if (valida) {
+	if (valida)
+	{
 		swal({
 			title: "¡Confirme que desea guardar!",
 			text: "Carpeta planos seleccionados",
@@ -5956,90 +6387,96 @@ $("#botonguardar_reporte_planos").click(function () {
 			closeOnConfirm: false,
 			closeOnCancel: false
 		},
-			function (isConfirm) {
-				if (isConfirm) {
-					// cerrar msj confirmacion
-					swal.close();
+		function(isConfirm)
+		{
+			if (isConfirm)
+			{
+				// cerrar msj confirmacion
+				swal.close();
 
-					// enviar datos
-					$('#form_reporte_planos').ajaxForm({
-						dataType: 'json',
-						type: 'POST',
-						url: '/reporteiluminacion',
-						data: {
-							opcion: 45,
-							proyecto_id: proyecto.id,
-							agente_id: agente_id,
-							agente_nombre: agente_nombre,
-							reporteiluminacion_id: reporteiluminacion_id,
-							catactivo_id: $("#reporteiluminacion_catactivo_id").val(),
-							reporteiluminacion_instalacion: $("#reporteiluminacion_instalacion").val(),
-						},
-						resetForm: false,
-						success: function (dato) {
-							// Actualizar ID reporte						
-							reporteiluminacion_id = dato.reporteiluminacion_id;
+				// enviar datos
+				$('#form_reporte_planos').ajaxForm({
+					dataType: 'json',
+					type: 'POST',
+					url: '/reporteiluminacion',
+					data: {
+						opcion: 45,
+						proyecto_id: proyecto.id,
+						agente_id: agente_id,
+						agente_nombre: agente_nombre,
+						reporteiluminacion_id: reporteiluminacion_id,
+						catactivo_id: $("#reporteiluminacion_catactivo_id").val(),
+						reporteiluminacion_instalacion: $("#reporteiluminacion_instalacion").val(),
+					},
+					resetForm: false,
+					success: function(dato)
+					{
+						// Actualizar ID reporte						
+						reporteiluminacion_id = dato.reporteiluminacion_id;
 
-							// Actualiza menu
-							menureporte_estado("menureporte_11_2", dato.total);
+						// Actualiza menu
+						menureporte_estado("menureporte_11_2", dato.total);
 
-							tabla_reporte_revisiones(proyecto.id);
+						tabla_reporte_revisiones(proyecto.id);
 
-							// mensaje
-							swal({
-								title: "Correcto",
-								text: "" + dato.msj,
-								type: "success", // warning, error, success, info
-								buttons: {
-									visible: false, // true , false
-								},
-								timer: 1500,
-								showConfirmButton: false
-							});
+						// mensaje
+						swal({
+							title: "Correcto",
+							text: ""+dato.msj,
+							type: "success", // warning, error, success, info
+							buttons: {
+								visible: false, // true , false
+							},
+							timer: 1500,
+							showConfirmButton: false
+						});
 
-							// actualiza boton
-							$('#botonguardar_reporte_planos').html('Guardar carpeta planos seleccionados <i class="fa fa-save"></i>');
-							$('#botonguardar_reporte_planos').attr('disabled', false);
-						},
-						beforeSend: function () {
-							$('#botonguardar_reporte_planos').html('Guardando carpeta planos seleccionados <i class="fa fa-spin fa-spinner"></i>');
-							$('#botonguardar_reporte_planos').attr('disabled', true);
-						},
-						error: function (dato) {
-							// actualiza boton
-							$('#botonguardar_reporte_planos').html('Guardar carpeta planos seleccionados <i class="fa fa-save"></i>');
-							$('#botonguardar_reporte_planos').attr('disabled', false);
+						// actualiza boton
+						$('#botonguardar_reporte_planos').html('Guardar carpeta planos seleccionados <i class="fa fa-save"></i>');
+						$('#botonguardar_reporte_planos').attr('disabled', false);
+					},
+					beforeSend: function()
+					{
+						$('#botonguardar_reporte_planos').html('Guardando carpeta planos seleccionados <i class="fa fa-spin fa-spinner"></i>');
+						$('#botonguardar_reporte_planos').attr('disabled', true);
+					},
+					error: function(dato)
+					{
+						// actualiza boton
+						$('#botonguardar_reporte_planos').html('Guardar carpeta planos seleccionados <i class="fa fa-save"></i>');
+						$('#botonguardar_reporte_planos').attr('disabled', false);
 
-							// mensaje
-							swal({
-								title: "Error",
-								text: "" + dato.msj,
-								type: "error", // warning, error, success, info
-								buttons: {
-									visible: false, // true , false
-								},
-								timer: 1500,
-								showConfirmButton: false
-							});
-							return false;
-						}
-					}).submit();
-					return false;
-				}
-				else {
-					// mensaje
-					swal({
-						title: "Cancelado",
-						text: "Acción cancelada",
-						type: "error", // warning, error, success, info
-						buttons: {
-							visible: false, // true , false
-						},
-						timer: 500,
-						showConfirmButton: false
-					});
-				}
-			});
+						// mensaje
+						swal({
+							title: "Error",
+							text: ""+dato.msj,
+							type: "error", // warning, error, success, info
+							buttons: {
+								visible: false, // true , false
+							},
+							timer: 1500,
+							showConfirmButton: false
+						});
+						return false;
+					}
+				}).submit();
+				return false;
+			}
+			else 
+			{
+				// mensaje
+				swal({
+					title: "Cancelado",
+					text: "Acción cancelada",
+					type: "error", // warning, error, success, info
+					buttons: {
+						visible: false, // true , false
+					},
+					timer: 500,
+					showConfirmButton: false
+				});
+			}
+		});
 		return false;
 	}
 });
@@ -6049,23 +6486,29 @@ $("#botonguardar_reporte_planos").click(function () {
 // EQUIPO UTILIZADO
 
 
-$(document).ready(function () {
-	setTimeout(function () {
+$(document).ready(function()
+{
+	setTimeout(function()
+	{
 		tabla_reporte_equipoutilizado(proyecto.id, reporteiluminacion_id, agente_nombre);
-	}, 5500);
+	},5500);
 });
 
 
 var datatable_equipoutilizado = null;
-function tabla_reporte_equipoutilizado(proyecto_id, reporteiluminacion_id, agente_nombre) {
-	try {
-		var ruta = "/reporteiluminaciontablaequipoutilizado/" + proyecto_id + "/" + reporteiluminacion_id + "/" + agente_nombre;
+function tabla_reporte_equipoutilizado(proyecto_id, reporteiluminacion_id, agente_nombre)
+{
+	try 
+	{
+		var ruta = "/reporteiluminaciontablaequipoutilizado/"+proyecto_id+"/"+reporteiluminacion_id+"/"+agente_nombre;
 
-		if (datatable_equipoutilizado != null) {
+		if (datatable_equipoutilizado != null)
+		{
 			datatable_equipoutilizado.clear().draw();
 			datatable_equipoutilizado.ajax.url(ruta).load();
 		}
-		else {
+		else
+		{
 			var numeroejecucion = 1;
 			datatable_equipoutilizado = $('#tabla_reporte_equipoutilizado').DataTable({
 				ajax: {
@@ -6074,8 +6517,10 @@ function tabla_reporte_equipoutilizado(proyecto_id, reporteiluminacion_id, agent
 					cache: false,
 					dataType: "json",
 					data: {},
-					dataSrc: function (json) {
-						if (parseInt(json.total) > 0) {
+					dataSrc: function (json)
+					{
+						if (parseInt(json.total) > 0)
+						{
 							menureporte_estado("menureporte_11_3", 1);
 							menureporte_estado("menureporte_11_5", 1);
 						}
@@ -6083,9 +6528,11 @@ function tabla_reporte_equipoutilizado(proyecto_id, reporteiluminacion_id, agent
 						// alert("Done! "+json.msj);
 						return json.data;
 					},
-					error: function (xhr, error, code) {
-						console.log('error en datatable_equipoutilizado ' + code);
-						if (numeroejecucion <= 1) {
+					error: function (xhr, error, code)
+					{						
+						console.log('error en datatable_equipoutilizado '+code);
+						if (numeroejecucion <= 1)
+						{
 							tabla_reporte_equipoutilizado(proyecto_id, reporteiluminacion_id, agente_nombre);
 							numeroejecucion += 1;
 						}
@@ -6135,7 +6582,7 @@ function tabla_reporte_equipoutilizado(proyecto_id, reporteiluminacion_id, agent
 				],
 				lengthMenu: [[20, 50, 100, -1], [20, 50, 100, "Todos"]],
 				// rowsGroup: [0, 1], //agrupar filas
-				order: [[0, "ASC"]],
+				order: [[ 0, "ASC" ]],
 				ordering: false,
 				processing: true,
 				searching: true,
@@ -6161,70 +6608,81 @@ function tabla_reporte_equipoutilizado(proyecto_id, reporteiluminacion_id, agent
 		}
 
 		// Tooltip en DataTable
-		datatable_equipoutilizado.on('draw', function () {
+		datatable_equipoutilizado.on('draw', function ()
+		{
 			$('[data-toggle="tooltip"]').tooltip();
 		});
 	}
-	catch (exception) {
+	catch (exception)
+	{
 		tabla_reporte_equipoutilizado(proyecto_id, reporteiluminacion_id, agente_nombre);
+    }
+}
+
+
+function activa_checkboxcarta(checkbox, equipo_id)
+{
+	if (checkbox.checked)
+	{
+		$('#equipoutilizado_checkboxcarta_'+equipo_id).attr('disabled', false);
+	}
+	else
+	{
+		$('#equipoutilizado_checkboxcarta_'+equipo_id).prop("checked", false);
+		$('#equipoutilizado_checkboxcarta_'+equipo_id).attr('disabled', true);
 	}
 }
 
 
-function activa_checkboxcarta(checkbox, equipo_id) {
-	if (checkbox.checked) {
-		$('#equipoutilizado_checkboxcarta_' + equipo_id).attr('disabled', false);
-	}
-	else {
-		$('#equipoutilizado_checkboxcarta_' + equipo_id).prop("checked", false);
-		$('#equipoutilizado_checkboxcarta_' + equipo_id).attr('disabled', true);
-	}
-}
-
-
-$('#tabla_reporte_equipoutilizado tbody').on('click', 'td.cartapdf', function () {
+$('#tabla_reporte_equipoutilizado tbody').on('click', 'td.cartapdf', function()
+{
 	var tr = $(this).closest('tr');
 	var row = datatable_equipoutilizado.row(tr);
 
-	if (row.data().equipo_cartaPDF) {
-		$('#visor_documento').attr('src', '/assets/plugins/viewer-pdfjs/web/viewer_read.html?file=/verequipodocumento/' + row.data().equipo_id + '/' + 2);
+	if (row.data().equipo_cartaPDF)
+	{
+		$('#visor_documento').attr('src', '/assets/plugins/viewer-pdfjs/web/viewer_read.html?file=/verequipodocumento/'+row.data().equipo_id+'/'+2);
 
 		// Titulo modal
-		$('#modal_visor .modal-title').html('Carta ' + row.data().equipo_Descripcion + ' [' + row.data().equipo_Serie + ']');
+		$('#modal_visor .modal-title').html('Carta '+row.data().equipo_Descripcion+' ['+row.data().equipo_Serie+']');
 
 		// Abrir modal
-		$('#modal_visor').modal({ backdrop: false });
+		$('#modal_visor').modal({backdrop:false});
 	}
 });
 
 
 
-$('#tabla_reporte_equipoutilizado tbody').on('click', 'td.certificadopdf', function () {
+$('#tabla_reporte_equipoutilizado tbody').on('click', 'td.certificadopdf', function()
+{
 	var tr = $(this).closest('tr');
 	var row = datatable_equipoutilizado.row(tr);
 
-	if (row.data().equipo_CertificadoPDF) {
-		$('#visor_documento').attr('src', '/assets/plugins/viewer-pdfjs/web/viewer_read.html?file=/verequipodocumento/' + row.data().equipo_id + '/' + 1);
+	if (row.data().equipo_CertificadoPDF)
+	{
+		$('#visor_documento').attr('src', '/assets/plugins/viewer-pdfjs/web/viewer_read.html?file=/verequipodocumento/'+row.data().equipo_id+'/'+1);
 
 		// Titulo modal
-		$('#modal_visor .modal-title').html('Certificado de calibración ' + row.data().equipo_Descripcion + ' [' + row.data().equipo_Serie + ']');
+		$('#modal_visor .modal-title').html('Certificado de calibración '+row.data().equipo_Descripcion+' ['+row.data().equipo_Serie+']');
 
 		// Abrir modal
-		$('#modal_visor').modal({ backdrop: false });
+		$('#modal_visor').modal({backdrop:false});
 	}
 });
 
 
-$("#botoncerrar_modalvisor_reporteiluminacion").click(function () {
+$("#botoncerrar_modalvisor_reporteiluminacion").click(function()
+{
 	// Titulo modal
-	$('#modal_visor .modal-title').html('Documento');
+    $('#modal_visor .modal-title').html('Documento');
 
 	// Visor
 	$('#visor_documento').attr('src', '/assets/images/cargando.gif');
 });
 
 
-$("#botonguardar_reporte_equipoutilizado").click(function () {
+$("#botonguardar_reporte_equipoutilizado").click(function()
+{
 	// borrar campo filtro del DATATABLE
 	// datatable_equipoutilizado.search($(this).val()).draw();
 	datatable_equipoutilizado.search("").draw();
@@ -6232,17 +6690,21 @@ $("#botonguardar_reporte_equipoutilizado").click(function () {
 
 	// valida campos vacios
 	var seleccionados = 0;
-	$('.reporteiluminacion_equipoutilizadocheckbox').each(function () {
-		if (this.checked) {
+	$('.reporteiluminacion_equipoutilizadocheckbox').each(function()
+	{
+		if (this.checked)
+		{
 			seleccionados += 1;
 		}
 	});
 
 
-	if (seleccionados > 0) {
+	if (seleccionados > 0)
+	{
 		// valida campos vacios
 		var valida = this.form.checkValidity();
-		if (valida) {
+		if (valida)
+		{
 			swal({
 				title: "¡Confirme que desea guardar!",
 				text: "Equipo (s) utilizado (s)",
@@ -6254,94 +6716,101 @@ $("#botonguardar_reporte_equipoutilizado").click(function () {
 				closeOnConfirm: false,
 				closeOnCancel: false
 			},
-				function (isConfirm) {
-					if (isConfirm) {
-						// cerrar msj confirmacion
-						swal.close();
+			function(isConfirm)
+			{
+				if (isConfirm)
+				{
+					// cerrar msj confirmacion
+					swal.close();
 
-						// enviar datos
-						$('#form_reporte_equipoutilizado').ajaxForm({
-							dataType: 'json',
-							type: 'POST',
-							url: '/reporteiluminacion',
-							data: {
-								opcion: 50,
-								proyecto_id: proyecto.id,
-								agente_id: agente_id,
-								agente_nombre: agente_nombre,
-								reporteiluminacion_id: reporteiluminacion_id,
-								catactivo_id: $("#reporteiluminacion_catactivo_id").val(),
-								reporteiluminacion_instalacion: $("#reporteiluminacion_instalacion").val(),
-							},
-							resetForm: false,
-							success: function (dato) {
-								// Actualizar ID reporte							
-								reporteiluminacion_id = dato.reporteiluminacion_id;
+					// enviar datos
+					$('#form_reporte_equipoutilizado').ajaxForm({
+						dataType: 'json',
+						type: 'POST',
+						url: '/reporteiluminacion',
+						data: {
+							opcion: 50,
+							proyecto_id: proyecto.id,
+							agente_id: agente_id,
+							agente_nombre: agente_nombre,
+							reporteiluminacion_id: reporteiluminacion_id,
+							catactivo_id: $("#reporteiluminacion_catactivo_id").val(),
+							reporteiluminacion_instalacion: $("#reporteiluminacion_instalacion").val(),
+						},
+						resetForm: false,
+						success: function(dato)
+						{
+							// Actualizar ID reporte							
+							reporteiluminacion_id = dato.reporteiluminacion_id;
 
-								menureporte_estado("menureporte_11_3", 1);
-								menureporte_estado("menureporte_11_5", 1);
+							menureporte_estado("menureporte_11_3", 1);
+							menureporte_estado("menureporte_11_5", 1);
 
-								// datatable_equipoutilizado.ajax.reload();
+							// datatable_equipoutilizado.ajax.reload();
 
-								// mensaje
-								swal({
-									title: "Correcto",
-									text: "" + dato.msj,
-									type: "success", // warning, error, success, info
-									buttons: {
-										visible: false, // true , false
-									},
-									timer: 1500,
-									showConfirmButton: false
-								});
+							// mensaje
+							swal({
+								title: "Correcto",
+								text: ""+dato.msj,
+								type: "success", // warning, error, success, info
+								buttons: {
+									visible: false, // true , false
+								},
+								timer: 1500,
+								showConfirmButton: false
+							});
 
-								// actualiza boton
-								$('#botonguardar_reporte_equipoutilizado').html('Guardar equipo utilizado <i class="fa fa-save"></i>');
-								$('#botonguardar_reporte_equipoutilizado').attr('disabled', false);
-							},
-							beforeSend: function () {
-								$('#botonguardar_reporte_equipoutilizado').html('Guardando equipo utilizado <i class="fa fa-spin fa-spinner"></i>');
-								$('#botonguardar_reporte_equipoutilizado').attr('disabled', true);
-							},
-							error: function (dato) {
-								// actualiza boton
-								$('#botonguardar_reporte_equipoutilizado').html('Guardar equipo utilizado <i class="fa fa-save"></i>');
-								$('#botonguardar_reporte_equipoutilizado').attr('disabled', false);
+							// actualiza boton
+							$('#botonguardar_reporte_equipoutilizado').html('Guardar equipo utilizado <i class="fa fa-save"></i>');
+							$('#botonguardar_reporte_equipoutilizado').attr('disabled', false);
+						},
+						beforeSend: function()
+						{
+							$('#botonguardar_reporte_equipoutilizado').html('Guardando equipo utilizado <i class="fa fa-spin fa-spinner"></i>');
+							$('#botonguardar_reporte_equipoutilizado').attr('disabled', true);
+						},
+						error: function(dato)
+						{
+							// actualiza boton
+							$('#botonguardar_reporte_equipoutilizado').html('Guardar equipo utilizado <i class="fa fa-save"></i>');
+							$('#botonguardar_reporte_equipoutilizado').attr('disabled', false);
 
-								// mensaje
-								swal({
-									title: "Error",
-									text: "" + dato.msj,
-									type: "error", // warning, error, success, info
-									buttons: {
-										visible: false, // true , false
-									},
-									timer: 1500,
-									showConfirmButton: false
-								});
-								return false;
-							}
-						}).submit();
-						return false;
-					}
-					else {
-						// mensaje
-						swal({
-							title: "Cancelado",
-							text: "Acción cancelada",
-							type: "error", // warning, error, success, info
-							buttons: {
-								visible: false, // true , false
-							},
-							timer: 500,
-							showConfirmButton: false
-						});
-					}
-				});
+							// mensaje
+							swal({
+								title: "Error",
+								text: ""+dato.msj,
+								type: "error", // warning, error, success, info
+								buttons: {
+									visible: false, // true , false
+								},
+								timer: 1500,
+								showConfirmButton: false
+							});
+							return false;
+						}
+					}).submit();
+					return false;
+				}
+				else 
+				{
+					// mensaje
+					swal({
+						title: "Cancelado",
+						text: "Acción cancelada",
+						type: "error", // warning, error, success, info
+						buttons: {
+							visible: false, // true , false
+						},
+						timer: 500,
+						showConfirmButton: false
+					});
+				}
+			});
 			return false;
 		}
 	}
-	else {
+	else
+	{
 		// mensaje
 		swal({
 			title: "Seleccione equipo (s)",
@@ -6360,25 +6829,31 @@ $("#botonguardar_reporte_equipoutilizado").click(function () {
 
 //=================================================
 // INFORME DE RESULTADOS LABORATORIO
+	
 
-
-$(document).ready(function () {
-	setTimeout(function () {
+$(document).ready(function()
+{
+	setTimeout(function()
+	{
 		tabla_reporte_informeresultados(proyecto.id, reporteiluminacion_id, agente_nombre);
 	}, 10500);
 });
 
 
 var datatable_informeresultados = null;
-function tabla_reporte_informeresultados(proyecto_id, reporteiluminacion_id, agente_nombre) {
-	try {
-		var ruta = "/reporteiluminaciontablainformeresultados/" + proyecto_id + "/" + reporteiluminacion_id + "/" + agente_nombre;
+function tabla_reporte_informeresultados(proyecto_id, reporteiluminacion_id, agente_nombre)
+{
+	try 
+	{
+		var ruta = "/reporteiluminaciontablainformeresultados/"+proyecto_id+"/"+reporteiluminacion_id+"/"+agente_nombre;
 
-		if (datatable_informeresultados != null) {
+		if (datatable_informeresultados != null)
+		{
 			datatable_informeresultados.clear().draw();
 			datatable_informeresultados.ajax.url(ruta).load();
 		}
-		else {
+		else
+		{
 			var numeroejecucion = 1;
 			datatable_informeresultados = $('#tabla_reporte_informeresultados').DataTable({
 				ajax: {
@@ -6387,16 +6862,19 @@ function tabla_reporte_informeresultados(proyecto_id, reporteiluminacion_id, age
 					cache: false,
 					dataType: "json",
 					data: {},
-					dataSrc: function (json) {
+					dataSrc: function (json)
+					{
 						// Actualiza menu
 						menureporte_estado("menureporte_11_6", json.total);
 
 						// alert("Done! "+json.msj);
 						return json.data;
 					},
-					error: function (xhr, error, code) {
-						console.log('error en datatable_informeresultados ' + code);
-						if (numeroejecucion <= 1) {
+					error: function (xhr, error, code)
+					{						
+						console.log('error en datatable_informeresultados '+code);
+						if (numeroejecucion <= 1)
+						{
 							tabla_reporte_informeresultados(proyecto_id, reporteiluminacion_id, agente_nombre);
 							numeroejecucion += 1;
 						}
@@ -6439,7 +6917,7 @@ function tabla_reporte_informeresultados(proyecto_id, reporteiluminacion_id, age
 				],
 				lengthMenu: [[20, 50, 100, -1], [20, 50, 100, "Todos"]],
 				// rowsGroup: [0, 1], //agrupar filas
-				order: [[0, "ASC"]],
+				order: [[ 0, "ASC" ]],
 				ordering: false,
 				processing: true,
 				searching: false,
@@ -6465,20 +6943,24 @@ function tabla_reporte_informeresultados(proyecto_id, reporteiluminacion_id, age
 		}
 
 		// Tooltip en DataTable
-		datatable_informeresultados.on('draw', function () {
+		datatable_informeresultados.on('draw', function ()
+		{
 			$('[data-toggle="tooltip"]').tooltip();
 		});
 	}
-	catch (exception) {
+	catch (exception)
+	{
 		tabla_reporte_informeresultados(proyecto_id, reporteiluminacion_id, agente_nombre);
-	}
+    }
 }
 
 
-$("#botonguardar_reporte_informeresultados").click(function () {
+$("#botonguardar_reporte_informeresultados").click(function()
+{
 	// valida campos vacios
 	var valida = this.form.checkValidity();
-	if (valida) {
+	if (valida)
+	{
 		swal({
 			title: "¡Confirme que desea guardar!",
 			text: "Informe de resultados",
@@ -6490,110 +6972,119 @@ $("#botonguardar_reporte_informeresultados").click(function () {
 			closeOnConfirm: false,
 			closeOnCancel: false
 		},
-			function (isConfirm) {
-				if (isConfirm) {
-					// cerrar msj confirmacion
-					swal.close();
+		function(isConfirm)
+		{
+			if (isConfirm)
+			{
+				// cerrar msj confirmacion
+				swal.close();
 
-					// enviar datos
-					$('#form_reporte_informeresultados').ajaxForm({
-						dataType: 'json',
-						type: 'POST',
-						url: '/reporteiluminacion',
-						data: {
-							opcion: 55,
-							proyecto_id: proyecto.id,
-							agente_id: agente_id,
-							agente_nombre: agente_nombre,
-							reporteiluminacion_id: reporteiluminacion_id,
-							catactivo_id: $("#reporteiluminacion_catactivo_id").val(),
-							reporteiluminacion_instalacion: $("#reporteiluminacion_instalacion").val(),
-						},
-						resetForm: false,
-						success: function (dato) {
-							// Actualizar ID reporte						
-							reporteiluminacion_id = dato.reporteiluminacion_id;
+				// enviar datos
+				$('#form_reporte_informeresultados').ajaxForm({
+					dataType: 'json',
+					type: 'POST',
+					url: '/reporteiluminacion',
+					data: {
+						opcion: 55,
+						proyecto_id: proyecto.id,
+						agente_id: agente_id,
+						agente_nombre: agente_nombre,
+						reporteiluminacion_id: reporteiluminacion_id,
+						catactivo_id: $("#reporteiluminacion_catactivo_id").val(),
+						reporteiluminacion_instalacion: $("#reporteiluminacion_instalacion").val(),
+					},
+					resetForm: false,
+					success: function(dato)
+					{
+						// Actualizar ID reporte						
+						reporteiluminacion_id = dato.reporteiluminacion_id;
 
-							// Actualiza menu
-							menureporte_estado("menureporte_11_6", dato.total);
+						// Actualiza menu
+						menureporte_estado("menureporte_11_6", dato.total);
 
-							tabla_reporte_revisiones(proyecto.id);
+						tabla_reporte_revisiones(proyecto.id);
 
-							// mensaje
-							swal({
-								title: "Correcto",
-								text: "" + dato.msj,
-								type: "success", // warning, error, success, info
-								buttons: {
-									visible: false, // true , false
-								},
-								timer: 1500,
-								showConfirmButton: false
-							});
+						// mensaje
+						swal({
+							title: "Correcto",
+							text: ""+dato.msj,
+							type: "success", // warning, error, success, info
+							buttons: {
+								visible: false, // true , false
+							},
+							timer: 1500,
+							showConfirmButton: false
+						});
 
-							// actualiza boton
-							$('#botonguardar_reporte_informeresultados').html('Guardar anexo informe de resultados <i class="fa fa-save"></i>');
-							$('#botonguardar_reporte_informeresultados').attr('disabled', false);
-						},
-						beforeSend: function () {
-							$('#botonguardar_reporte_informeresultados').html('Guardando anexo informe de resultados <i class="fa fa-spin fa-spinner"></i>');
-							$('#botonguardar_reporte_informeresultados').attr('disabled', true);
-						},
-						error: function (dato) {
-							// actualiza boton
-							$('#botonguardar_reporte_informeresultados').html('Guardar anexo informe de resultados <i class="fa fa-save"></i>');
-							$('#botonguardar_reporte_informeresultados').attr('disabled', false);
+						// actualiza boton
+						$('#botonguardar_reporte_informeresultados').html('Guardar anexo informe de resultados <i class="fa fa-save"></i>');
+						$('#botonguardar_reporte_informeresultados').attr('disabled', false);
+					},
+					beforeSend: function()
+					{
+						$('#botonguardar_reporte_informeresultados').html('Guardando anexo informe de resultados <i class="fa fa-spin fa-spinner"></i>');
+						$('#botonguardar_reporte_informeresultados').attr('disabled', true);
+					},
+					error: function(dato)
+					{
+						// actualiza boton
+						$('#botonguardar_reporte_informeresultados').html('Guardar anexo informe de resultados <i class="fa fa-save"></i>');
+						$('#botonguardar_reporte_informeresultados').attr('disabled', false);
 
-							// mensaje
-							swal({
-								title: "Error",
-								text: "" + dato.msj,
-								type: "error", // warning, error, success, info
-								buttons: {
-									visible: false, // true , false
-								},
-								timer: 1500,
-								showConfirmButton: false
-							});
-							return false;
-						}
-					}).submit();
-					return false;
-				}
-				else {
-					// mensaje
-					swal({
-						title: "Cancelado",
-						text: "Acción cancelada",
-						type: "error", // warning, error, success, info
-						buttons: {
-							visible: false, // true , false
-						},
-						timer: 500,
-						showConfirmButton: false
-					});
-				}
-			});
+						// mensaje
+						swal({
+							title: "Error",
+							text: ""+dato.msj,
+							type: "error", // warning, error, success, info
+							buttons: {
+								visible: false, // true , false
+							},
+							timer: 1500,
+							showConfirmButton: false
+						});
+						return false;
+					}
+				}).submit();
+				return false;
+			}
+			else 
+			{
+				// mensaje
+				swal({
+					title: "Cancelado",
+					text: "Acción cancelada",
+					type: "error", // warning, error, success, info
+					buttons: {
+						visible: false, // true , false
+					},
+					timer: 500,
+					showConfirmButton: false
+				});
+			}
+		});
 		return false;
 	}
 });
 
 
-$('#tabla_reporte_informeresultados tbody').on('click', 'td.documentopdf', function () {
+$('#tabla_reporte_informeresultados tbody').on('click', 'td.documentopdf', function()
+{
 	var tr = $(this).closest('tr');
 	var row = datatable_informeresultados.row(tr);
 
-	if (row.data().proyectoevidenciadocumento_extension == ".pdf" || row.data().proyectoevidenciadocumento_extension == ".PDF") {
-		$('#visor_documento').attr('src', '/assets/plugins/viewer-pdfjs/web/viewer_read.html?file=/proyectoevidenciadocumentodescargar/' + row.data().id + '/' + 0); // 0 mostrar
+	if (row.data().proyectoevidenciadocumento_extension == ".pdf" || row.data().proyectoevidenciadocumento_extension == ".PDF")
+	{
+		$('#visor_documento').attr('src', '/assets/plugins/viewer-pdfjs/web/viewer_read.html?file=/proyectoevidenciadocumentodescargar/'+row.data().id+'/'+0); // 0 mostrar
 
 		// Titulo modal
 		$('#modal_visor .modal-title').html(row.data().proyectoevidenciadocumento_nombre);
 
 		// Abrir modal
-		$('#modal_visor').modal({ backdrop: false });
+		$('#modal_visor').modal({backdrop:false});
 	}
-	else {
-		window.open("/proyectoevidenciadocumentodescargar/" + row.data().id + "/" + 1); //1 descargar
+	else
+	{
+		window.open("/proyectoevidenciadocumentodescargar/"+row.data().id+"/"+1); //1 descargar
 	}
 });
 
@@ -6602,23 +7093,29 @@ $('#tabla_reporte_informeresultados tbody').on('click', 'td.documentopdf', funct
 // ANEXOS PDF
 
 
-$(document).ready(function () {
-	setTimeout(function () {
+$(document).ready(function()
+{
+	setTimeout(function()
+	{
 		tabla_reporte_anexos(proyecto.id, reporteiluminacion_id, agente_nombre);
 	}, 6500);
 });
 
 
 var datatable_anexos = null;
-function tabla_reporte_anexos(proyecto_id, reporteiluminacion_id, agente_nombre) {
-	try {
-		var ruta = "/reporteiluminaciontablaanexos/" + proyecto_id + "/" + reporteiluminacion_id + "/" + agente_nombre;
+function tabla_reporte_anexos(proyecto_id, reporteiluminacion_id, agente_nombre)
+{
+	try 
+	{
+		var ruta = "/reporteiluminaciontablaanexos/"+proyecto_id+"/"+reporteiluminacion_id+"/"+agente_nombre;
 
-		if (datatable_anexos != null) {
+		if (datatable_anexos != null)
+		{
 			datatable_anexos.clear().draw();
 			datatable_anexos.ajax.url(ruta).load();
 		}
-		else {
+		else
+		{
 			var numeroejecucion = 1;
 			datatable_anexos = $('#tabla_reporte_anexos').DataTable({
 				ajax: {
@@ -6627,8 +7124,10 @@ function tabla_reporte_anexos(proyecto_id, reporteiluminacion_id, agente_nombre)
 					cache: false,
 					dataType: "json",
 					data: {},
-					dataSrc: function (json) {
-						if (parseInt(json.total) > 0) {
+					dataSrc: function (json)
+					{
+						if (parseInt(json.total) > 0)
+						{
 							menureporte_estado("menureporte_11_7", 1);
 							menureporte_estado("menureporte_11_8", 1);
 							menureporte_estado("menureporte_12", 1);
@@ -6637,9 +7136,11 @@ function tabla_reporte_anexos(proyecto_id, reporteiluminacion_id, agente_nombre)
 						// alert("Done! "+json.msj);
 						return json.data;
 					},
-					error: function (xhr, error, code) {
-						console.log('error en datatable_anexos ' + code);
-						if (numeroejecucion <= 1) {
+					error: function (xhr, error, code)
+					{						
+						console.log('error en datatable_anexos '+code);
+						if (numeroejecucion <= 1)
+						{
 							tabla_reporte_anexos(proyecto_id);
 							numeroejecucion += 1;
 						}
@@ -6716,7 +7217,8 @@ function tabla_reporte_anexos(proyecto_id, reporteiluminacion_id, agente_nombre)
 						previous: "Anterior"
 					}
 				},
-				rowCallback: function (row, data, index) {
+				rowCallback: function(row, data, index)
+				{
 					// console.log(index+' - '+data.reporteiluminacionpuntos_nopunto);
 
 					// if(data.reporteiluminacionpuntos_nopunto == 2)
@@ -6732,33 +7234,38 @@ function tabla_reporte_anexos(proyecto_id, reporteiluminacion_id, agente_nombre)
 		}
 
 		// Tooltip en DataTable
-		datatable_anexos.on('draw', function () {
+		datatable_anexos.on('draw', function ()
+		{
 			$('[data-toggle="tooltip"]').tooltip();
 		});
 	}
-	catch (exception) {
+	catch (exception)
+	{
 		tabla_reporte_anexos(proyecto_id, reporteiluminacion_id, agente_nombre);
-	}
+    }
 }
 
 
-$('#tabla_reporte_anexos tbody').on('click', 'td.certificadopdf', function () {
+$('#tabla_reporte_anexos tbody').on('click', 'td.certificadopdf', function()
+{
 	var tr = $(this).closest('tr');
 	var row = datatable_anexos.row(tr);
 
-	if (row.data().acreditacion_SoportePDF) {
-		$('#visor_documento').attr('src', '/assets/plugins/viewer-pdfjs/web/viewer_read.html?file=/veracreditaciondocumento/' + row.data().id + '/' + 0);
+	if (row.data().acreditacion_SoportePDF)
+	{
+		$('#visor_documento').attr('src', '/assets/plugins/viewer-pdfjs/web/viewer_read.html?file=/veracreditaciondocumento/'+row.data().id + '/' + 0);
 
 		// Titulo modal
-		$('#modal_visor .modal-title').html(row.data().catTipoAcreditacion_Nombre + ' ' + row.data().acreditacion_Entidad + ' [' + row.data().acreditacion_Numero + ']');
+		$('#modal_visor .modal-title').html(row.data().catTipoAcreditacion_Nombre+' '+row.data().acreditacion_Entidad+' ['+row.data().acreditacion_Numero+']');
 
 		// Abrir modal
-		$('#modal_visor').modal({ backdrop: false });
+		$('#modal_visor').modal({backdrop:false});
 	}
 });
 
 
-$("#botonguardar_reporte_anexos").click(function () {
+$("#botonguardar_reporte_anexos").click(function()
+{
 	// borrar campo filtro del DATATABLE
 	// datatable_anexos.search($(this).val()).draw();
 	datatable_anexos.search("").draw();
@@ -6766,7 +7273,8 @@ $("#botonguardar_reporte_anexos").click(function () {
 
 	// valida campos vacios
 	var valida = this.form.checkValidity();
-	if (valida) {
+	if (valida)
+	{
 		swal({
 			title: "¡Confirme que desea guardar!",
 			text: "Anexos",
@@ -6778,92 +7286,98 @@ $("#botonguardar_reporte_anexos").click(function () {
 			closeOnConfirm: false,
 			closeOnCancel: false
 		},
-			function (isConfirm) {
-				if (isConfirm) {
-					// cerrar msj confirmacion
-					swal.close();
+		function(isConfirm)
+		{
+			if (isConfirm)
+			{
+				// cerrar msj confirmacion
+				swal.close();
 
-					// enviar datos
-					$('#form_reporte_anexos').ajaxForm({
-						dataType: 'json',
-						type: 'POST',
-						url: '/reporteiluminacion',
-						data: {
-							opcion: 60,
-							proyecto_id: proyecto.id,
-							agente_id: agente_id,
-							agente_nombre: agente_nombre,
-							reporteiluminacion_id: reporteiluminacion_id,
-							catactivo_id: $("#reporteiluminacion_catactivo_id").val(),
-							reporteiluminacion_instalacion: $("#reporteiluminacion_instalacion").val(),
-						},
-						resetForm: false,
-						success: function (dato) {
-							// Actualizar ID reporte
-							reporteiluminacion_id = dato.reporteiluminacion_id;
+				// enviar datos
+				$('#form_reporte_anexos').ajaxForm({
+					dataType: 'json',
+					type: 'POST',
+					url: '/reporteiluminacion',
+					data: {
+						opcion: 60,
+						proyecto_id: proyecto.id,
+						agente_id: agente_id,
+						agente_nombre: agente_nombre,
+						reporteiluminacion_id: reporteiluminacion_id,
+						catactivo_id: $("#reporteiluminacion_catactivo_id").val(),
+						reporteiluminacion_instalacion: $("#reporteiluminacion_instalacion").val(),
+					},
+					resetForm: false,
+					success: function(dato)
+					{
+						// Actualizar ID reporte
+						reporteiluminacion_id = dato.reporteiluminacion_id;
 
-							// Actualiza menu
-							menureporte_estado("menureporte_11_7", dato.total);
-							menureporte_estado("menureporte_11_8", dato.total);
-							menureporte_estado("menureporte_12", dato.total);
+						// Actualiza menu
+						menureporte_estado("menureporte_11_7", dato.total);
+						menureporte_estado("menureporte_11_8", dato.total);
+						menureporte_estado("menureporte_12", dato.total);
 
-							tabla_reporte_revisiones(proyecto.id);
+						tabla_reporte_revisiones(proyecto.id);
 
-							// mensaje
-							swal({
-								title: "Correcto",
-								text: "" + dato.msj,
-								type: "success", // warning, error, success, info
-								buttons: {
-									visible: false, // true , false
-								},
-								timer: 1500,
-								showConfirmButton: false
-							});
+						// mensaje
+						swal({
+							title: "Correcto",
+							text: ""+dato.msj,
+							type: "success", // warning, error, success, info
+							buttons: {
+								visible: false, // true , false
+							},
+							timer: 1500,
+							showConfirmButton: false
+						});
 
-							// actualiza boton
-							$('#botonguardar_reporte_anexos').html('Guardar anexos 7 (STPS) y 8 (EMA) <i class="fa fa-save"></i>');
-							$('#botonguardar_reporte_anexos').attr('disabled', false);
-						},
-						beforeSend: function () {
-							$('#botonguardar_reporte_anexos').html('Guardando anexos 7 (STPS) y 8 (EMA) <i class="fa fa-spin fa-spinner"></i>');
-							$('#botonguardar_reporte_anexos').attr('disabled', true);
-						},
-						error: function (dato) {
-							// actualiza boton
-							$('#botonguardar_reporte_anexos').html('Guardar anexos 7 (STPS) y 8 (EMA) <i class="fa fa-save"></i>');
-							$('#botonguardar_reporte_anexos').attr('disabled', false);
+						// actualiza boton
+						$('#botonguardar_reporte_anexos').html('Guardar anexos 7 (STPS) y 8 (EMA) <i class="fa fa-save"></i>');
+						$('#botonguardar_reporte_anexos').attr('disabled', false);
+					},
+					beforeSend: function()
+					{
+						$('#botonguardar_reporte_anexos').html('Guardando anexos 7 (STPS) y 8 (EMA) <i class="fa fa-spin fa-spinner"></i>');
+						$('#botonguardar_reporte_anexos').attr('disabled', true);
+					},
+					error: function(dato)
+					{
+						// actualiza boton
+						$('#botonguardar_reporte_anexos').html('Guardar anexos 7 (STPS) y 8 (EMA) <i class="fa fa-save"></i>');
+						$('#botonguardar_reporte_anexos').attr('disabled', false);
 
-							// mensaje
-							swal({
-								title: "Error",
-								text: "" + dato.msj,
-								type: "error", // warning, error, success, info
-								buttons: {
-									visible: false, // true , false
-								},
-								timer: 1500,
-								showConfirmButton: false
-							});
-							return false;
-						}
-					}).submit();
-					return false;
-				}
-				else {
-					// mensaje
-					swal({
-						title: "Cancelado",
-						text: "Acción cancelada",
-						type: "error", // warning, error, success, info
-						buttons: {
-							visible: false, // true , false
-						},
-						timer: 500,
-						showConfirmButton: false
-					});
-				}
-			});
+						// mensaje
+						swal({
+							title: "Error",
+							text: ""+dato.msj,
+							type: "error", // warning, error, success, info
+							buttons: {
+								visible: false, // true , false
+							},
+							timer: 1500,
+							showConfirmButton: false
+						});
+						return false;
+					}
+				}).submit();
+				return false;
+			}
+			else 
+			{
+				// mensaje
+				swal({
+					title: "Cancelado",
+					text: "Acción cancelada",
+					type: "error", // warning, error, success, info
+					buttons: {
+						visible: false, // true , false
+					},
+					timer: 500,
+					showConfirmButton: false
+				});
+			}
+		});
 		return false;
 	}
 });
@@ -6877,23 +7391,29 @@ var ultimaversion_cancelada = 0;
 var ultimarevision_id = 0;
 
 
-$(document).ready(function () {
-	setTimeout(function () {
+$(document).ready(function()
+{
+	setTimeout(function()
+	{
 		tabla_reporte_revisiones(proyecto.id);
 	}, 8500);
 });
 
 
 var datatable_reporterevisiones = null;
-function tabla_reporte_revisiones(proyecto_id) {
-	try {
-		var ruta = "/reporteiluminaciontablarevisiones/" + proyecto_id;
+function tabla_reporte_revisiones(proyecto_id)
+{
+	try 
+	{
+		var ruta = "/reporteiluminaciontablarevisiones/"+proyecto_id;
 
-		if (datatable_reporterevisiones != null) {
+		if (datatable_reporterevisiones != null)
+		{
 			datatable_reporterevisiones.clear().draw();
 			datatable_reporterevisiones.ajax.url(ruta).load();
 		}
-		else {
+		else
+		{
 			var numeroejecucion = 1;
 			datatable_reporterevisiones = $('#tabla_reporte_revisiones').DataTable({
 				ajax: {
@@ -6902,11 +7422,14 @@ function tabla_reporte_revisiones(proyecto_id) {
 					cache: false,
 					dataType: "json",
 					data: {},
-					dataSrc: function (json) {
-						if (parseInt(json.total) > 0) {
+					dataSrc: function (json)
+					{
+						if (parseInt(json.total) > 0)
+						{
 							$("#boton_reporte_nuevarevision").attr('disabled', false);
 						}
-						else {
+						else
+						{
 							$("#boton_reporte_nuevarevision").attr('disabled', true);
 						}
 
@@ -6916,8 +7439,10 @@ function tabla_reporte_revisiones(proyecto_id) {
 						botoninforme_estado(json.ultimaversion_estado);
 
 
-						if (areas_poe == 1) {
-							setTimeout(function () {
+						if (areas_poe == 1)
+						{
+							setTimeout(function()
+							{
 								$("#boton_reporte_nuevacategoria").attr('disabled', true);
 								$("#boton_reporte_nuevaarea").attr('disabled', true);
 							}, 5000);
@@ -6926,9 +7451,11 @@ function tabla_reporte_revisiones(proyecto_id) {
 
 						return json.data;
 					},
-					error: function (xhr, error, code) {
-						console.log('error en datatable_reporterevisiones ' + code);
-						if (numeroejecucion <= 1) {
+					error: function (xhr, error, code)
+					{						
+						console.log('error en datatable_reporterevisiones '+code);
+						if (numeroejecucion <= 1)
+						{
 							tabla_reporte_revisiones(proyecto_id)
 							numeroejecucion += 1;
 						}
@@ -7002,7 +7529,8 @@ function tabla_reporte_revisiones(proyecto_id) {
 						previous: "Anterior"
 					}
 				},
-				rowCallback: function (row, data, index) {
+				rowCallback: function(row, data, index)
+				{
 					// console.log(index+' - '+data.reporteiluminacionpuntos_nopunto);
 
 					// if(data.reporteiluminacionpuntos_nopunto == 2)
@@ -7018,19 +7546,24 @@ function tabla_reporte_revisiones(proyecto_id) {
 		}
 
 		// Tooltip en DataTable
-		datatable_reporterevisiones.on('draw', function () {
+		datatable_reporterevisiones.on('draw', function ()
+		{
 			$('[data-toggle="tooltip"]').tooltip();
 		});
 	}
-	catch (exception) {
+	catch (exception)
+	{
 		tabla_reporte_revisiones(proyecto_id);
-	}
+    }
 }
 
 
-$("#boton_reporte_nuevarevision").click(function () {
-	if (ultimaversion_cancelada == 1) {
-		if (parseInt(datatable_iluminacionpuntos.data().count()) > 0) {
+$("#boton_reporte_nuevarevision").click(function()
+{
+	if (ultimaversion_cancelada == 1)
+	{
+		if (parseInt(datatable_iluminacionpuntos.data().count()) > 0)
+		{
 			swal({
 				title: "¿Generar nueva revision?",
 				text: "Informe de Iluminación",
@@ -7041,18 +7574,22 @@ $("#boton_reporte_nuevarevision").click(function () {
 				cancelButtonText: "Cancelar!",
 				closeOnConfirm: false,
 				closeOnCancel: false
-			}, function (isConfirm) {
-				if (isConfirm) {
+			}, function(isConfirm){
+				if (isConfirm)
+				{
 					// cerrar msj confirmacion
 					swal.close();
 
 					$('#boton_reporte_nuevarevision').html('<span class="btn-label"><i class="fa fa-spin fa-spinner"></i></span>Copiando revisión, por favor espere...');
 					$('#boton_reporte_nuevarevision').attr('disabled', true);
 
-					setTimeout(function () {
+					setTimeout(function()
+					{
 						var grafica_iluminacion_imgbase64 = '';
-						graficapastel_iluminacion.export.capture({}, function () {
-							this.toPNG({ quality: 1, multiplier: 6 }, function (img_base64) {
+						graficapastel_iluminacion.export.capture({}, function ()
+						{
+							this.toPNG({quality: 1, multiplier: 6}, function (img_base64)
+							{
 								// var image = new Image();
 								// image.src = data;
 								// document.getElementById("captura").appendChild(image);
@@ -7064,8 +7601,10 @@ $("#boton_reporte_nuevarevision").click(function () {
 
 
 						var grafica_reflexion_imgbase64 = '';
-						graficapastel_reflexion.export.capture({}, function () {
-							this.toPNG({ quality: 1, multiplier: 6 }, function (img_base64) {
+						graficapastel_reflexion.export.capture({}, function ()
+						{
+							this.toPNG({quality: 1, multiplier: 6}, function (img_base64)
+							{
 								// var image = new Image();
 								// image.src = img_base64;
 								// document.getElementById("captura").appendChild(image);
@@ -7076,17 +7615,19 @@ $("#boton_reporte_nuevarevision").click(function () {
 						});
 
 
-						html2canvas(document.querySelector("#areas_cumplimiento"), { scale: 6 }).then(canvas => {
+						html2canvas(document.querySelector("#areas_cumplimiento"), { scale: 6}).then(canvas =>
+						{
 							// document.getElementById("captura").appendChild(canvas)
 							var imgData = canvas.toDataURL('image/jpeg');
 
-							setTimeout(function () {
+							setTimeout(function()
+							{
 								// Enviar datos
 								$.ajax({
 									type: "POST",
 									dataType: "json",
 									url: "/reporteiluminacionword",
-									data: {
+									data:{
 										_token: document.querySelector('meta[name="csrf-token"]')['content'],
 										proyecto_id: proyecto.id,
 										agente_id: agente_id,
@@ -7100,7 +7641,8 @@ $("#boton_reporte_nuevarevision").click(function () {
 										grafica_reflexion: grafica_reflexion_imgbase64,
 									},
 									cache: false,
-									success: function (dato) {
+									success:function(dato)
+									{
 										botoninforme_estado(0); //Desbloquear
 
 
@@ -7117,7 +7659,8 @@ $("#boton_reporte_nuevarevision").click(function () {
 
 
 										// desplazar a la ultima fila de la tabla
-										setTimeout(function () {
+										setTimeout(function()
+										{
 											$('html, body').animate({
 												scrollTop: $('#tabla_reporte_revisiones').offset().top //ultima fila
 											}, 1000);
@@ -7127,7 +7670,7 @@ $("#boton_reporte_nuevarevision").click(function () {
 										// mensaje
 										swal({
 											title: "Correcto",
-											text: "" + dato.msj,
+											text: ""+dato.msj,
 											type: "success", // warning, error, success, info
 											buttons: {
 												visible: false, // true , false
@@ -7145,7 +7688,8 @@ $("#boton_reporte_nuevarevision").click(function () {
 									// 	$('#boton_reporte_nuevarevision').html('<span class="btn-label"><i class="fa fa-spin fa-spinner"></i></span>Copiando revisión, por favor espere...');
 									// 	$('#boton_reporte_nuevarevision').attr('disabled', true);
 									// },
-									error: function (dato) {
+									error: function(dato)
+									{
 										// Boton
 										$('#boton_reporte_nuevarevision').html('<span class="btn-label"><i class="fa fa-plus"></i></span>Crear nueva revisión');
 										$('#boton_reporte_nuevarevision').attr('disabled', false);
@@ -7172,7 +7716,8 @@ $("#boton_reporte_nuevarevision").click(function () {
 						});
 					}, 500);
 				}
-				else {
+				else 
+				{
 					// mensaje
 					swal({
 						title: "Cancelado",
@@ -7187,7 +7732,8 @@ $("#boton_reporte_nuevarevision").click(function () {
 				}
 			});
 		}
-		else {
+		else
+		{
 			// mensaje
 			swal({
 				title: "No disponible",
@@ -7201,7 +7747,8 @@ $("#boton_reporte_nuevarevision").click(function () {
 			});
 		}
 	}
-	else {
+	else
+	{
 		// mensaje
 		swal({
 			title: "No disponible",
@@ -7217,14 +7764,17 @@ $("#boton_reporte_nuevarevision").click(function () {
 });
 
 
-function botoninforme_estado(boton_estado) {
-	if (parseInt(boton_estado) > 0) {
+function botoninforme_estado(boton_estado)
+{
+	if (parseInt(boton_estado) > 0)
+	{
 		$(".botoninforme").attr('disabled', true);
 
 		$(".botoninforme>i").removeClass('fa-save');
 		$(".botoninforme>i").addClass('fa-ban');
 	}
-	else {
+	else
+	{
 		$(".botoninforme").attr('disabled', false);
 
 		$(".botoninforme>i").removeClass('fa-ban');
@@ -7233,8 +7783,10 @@ function botoninforme_estado(boton_estado) {
 }
 
 
-function reporte_concluido(revision_id, perfil, checkbox) {
-	if (parseInt(perfil) == 1) {
+function reporte_concluido(revision_id, perfil, checkbox)
+{
+	if (parseInt(perfil) == 1)
+	{
 		if (checkbox.checked) // Activado
 		{
 			$(checkbox).prop('checked', false);
@@ -7242,21 +7794,23 @@ function reporte_concluido(revision_id, perfil, checkbox) {
 
 			var pendientes = 0;
 			var pendientes_puntos = '';
-			$('#top-menu .fa-times').each(function () {
+			$('#top-menu .fa-times').each(function()
+			{
 				pendientes += 1;
 
 				var texto = this.id;
 				texto = texto.replace("menureporte_", "");
 				texto = texto.replace("_", ".");
-				pendientes_puntos += '\nPunto: ' + texto;
+				pendientes_puntos += '\nPunto: '+texto;
 			});
 
 
-			if (parseInt(pendientes) == 0) {
+			if (parseInt(pendientes) == 0)
+			{
 				// Confirmar
 				swal({
 					title: "¿Concluir informe?",
-					text: "Ultima revisión del informe de " + agente_nombre,
+					text: "Ultima revisión del informe de "+agente_nombre,
 					type: "warning",
 					showCancelButton: true,
 					confirmButtonColor: "#DD6B55",
@@ -7265,137 +7819,23 @@ function reporte_concluido(revision_id, perfil, checkbox) {
 					closeOnConfirm: false,
 					closeOnCancel: false
 				},
-					function (isConfirm) {
-						if (isConfirm) {
-							// cerrar msj confirmacion
-							swal.close();
-
-
-							// Enviar datos
-							$.ajax({
-								type: "GET",
-								dataType: "json",
-								url: "/reporteiluminacionconcluirrevision/" + revision_id,
-								data: {},
-								cache: false,
-								success: function (dato) {
-									// Actualizar tablas
-									tabla_reporte_revisiones(proyecto.id);
-									botoninforme_estado(dato.estado);
-
-									tabla_reporte_definiciones(proyecto.id, agente_nombre, reporteiluminacion_id);
-									tabla_reporte_categorias(proyecto.id, reporteiluminacion_id);
-									tabla_reporte_areas(proyecto.id, reporteiluminacion_id);
-									tabla_reporte_iluminacionpuntos(proyecto.id, reporteiluminacion_id);
-
-
-									// desplazar a la ultima fila de la tabla
-									setTimeout(function () {
-										$('html, body').animate({
-											scrollTop: $('#tabla_reporte_revisiones').offset().top //ultima fila
-										}, 1000);
-									}, 2000);
-
-
-									// mensaje
-									swal({
-										title: "Correcto",
-										text: "" + dato.msj,
-										type: "success", // warning, error, success, info
-										buttons: {
-											visible: false, // true , false
-										},
-										timer: 1500,
-										showConfirmButton: false
-									});
-								},
-								error: function (dato) {
-									tabla_reporte_revisiones(proyecto.id);
-
-									// mensaje
-									swal({
-										title: "Correcto",
-										text: "" + dato.msj,
-										type: "error", // warning, error, success, info
-										buttons: {
-											visible: false, // true , false
-										},
-										timer: 1500,
-										showConfirmButton: false
-									});
-
-									return false;
-								}
-							});//Fin ajax
-						}
-						else {
-							// mensaje
-							swal({
-								title: "Cancelado",
-								text: "Acción cancelada",
-								type: "error", // warning, error, success, info
-								buttons: {
-									visible: false, // true , false
-								},
-								timer: 500,
-								showConfirmButton: false
-							});
-						}
-					});
-			}
-			else {
-				// mensaje
-				swal({
-					title: "No disponible",
-					text: 'Esta revisión del informe aún no ha sido completada, se encontraron ' + pendientes + ' punto(s) pendiente(s) en todo el contenido por guardar.\n' + pendientes_puntos,
-					type: "info", // warning, error, success, info
-					buttons: {
-						visible: false, // true , false
-					},
-					timer: 6000,
-					showConfirmButton: false
-				});
-			}
-
-			return false;
-		}
-		else {
-			$(checkbox).prop('checked', true);
-
-			// Confirmar
-			swal({
-				title: "¿Quitar concluido?",
-				text: "Ultima revisión del informe de " + agente_nombre,
-				type: "warning",
-				showCancelButton: true,
-				confirmButtonColor: "#DD6B55",
-				confirmButtonText: "Aceptar!",
-				cancelButtonText: "Cancelar!",
-				closeOnConfirm: false,
-				closeOnCancel: false
-			},
-				function (isConfirm) {
-					if (isConfirm) {
+				function(isConfirm)
+				{
+					if (isConfirm)
+					{
 						// cerrar msj confirmacion
 						swal.close();
 
-
+						
 						// Enviar datos
 						$.ajax({
 							type: "GET",
 							dataType: "json",
-							url: "/reporteiluminacionconcluirrevision/" + revision_id,
-							data: {},
+							url: "/reporteiluminacionconcluirrevision/"+revision_id,
+							data:{},
 							cache: false,
-							success: function (dato) {
-								// desplazar a la ultima fila de la tabla
-								setTimeout(function () {
-									$('html, body').animate({
-										scrollTop: $('#tabla_reporte_revisiones').offset().top //ultima fila
-									}, 1000);
-								}, 2000);
-
-
+							success:function(dato)
+							{
 								// Actualizar tablas
 								tabla_reporte_revisiones(proyecto.id);
 								botoninforme_estado(dato.estado);
@@ -7406,10 +7846,19 @@ function reporte_concluido(revision_id, perfil, checkbox) {
 								tabla_reporte_iluminacionpuntos(proyecto.id, reporteiluminacion_id);
 
 
+								// desplazar a la ultima fila de la tabla
+								setTimeout(function()
+								{
+									$('html, body').animate({
+										scrollTop: $('#tabla_reporte_revisiones').offset().top //ultima fila
+									}, 1000);
+								}, 2000);
+
+
 								// mensaje
 								swal({
 									title: "Correcto",
-									text: "" + dato.msj,
+									text: ""+dato.msj,
 									type: "success", // warning, error, success, info
 									buttons: {
 										visible: false, // true , false
@@ -7418,13 +7867,14 @@ function reporte_concluido(revision_id, perfil, checkbox) {
 									showConfirmButton: false
 								});
 							},
-							error: function (dato) {
+							error: function(dato)
+							{
 								tabla_reporte_revisiones(proyecto.id);
 
 								// mensaje
 								swal({
 									title: "Correcto",
-									text: "" + dato.msj,
+									text: ""+dato.msj,
 									type: "error", // warning, error, success, info
 									buttons: {
 										visible: false, // true , false
@@ -7437,7 +7887,8 @@ function reporte_concluido(revision_id, perfil, checkbox) {
 							}
 						});//Fin ajax
 					}
-					else {
+					else 
+					{
 						// mensaje
 						swal({
 							title: "Cancelado",
@@ -7451,15 +7902,134 @@ function reporte_concluido(revision_id, perfil, checkbox) {
 						});
 					}
 				});
+			}
+			else
+			{
+				// mensaje
+				swal({
+					title: "No disponible",
+					text: 'Esta revisión del informe aún no ha sido completada, se encontraron '+pendientes+' punto(s) pendiente(s) en todo el contenido por guardar.\n'+pendientes_puntos,
+					type: "info", // warning, error, success, info
+					buttons: {
+						visible: false, // true , false
+					},
+					timer: 6000,
+					showConfirmButton: false
+				});
+			}
+
 			return false;
 		}
+		else
+		{
+			$(checkbox).prop('checked', true);
+
+			// Confirmar
+			swal({
+				title: "¿Quitar concluido?",
+				text: "Ultima revisión del informe de "+agente_nombre,
+				type: "warning",
+				showCancelButton: true,
+				confirmButtonColor: "#DD6B55",
+				confirmButtonText: "Aceptar!",
+				cancelButtonText: "Cancelar!",
+				closeOnConfirm: false,
+				closeOnCancel: false
+			},
+			function(isConfirm)
+			{
+				if (isConfirm)
+				{
+					// cerrar msj confirmacion
+					swal.close();
+
+					
+					// Enviar datos
+					$.ajax({
+						type: "GET",
+						dataType: "json",
+						url: "/reporteiluminacionconcluirrevision/"+revision_id,
+						data:{},
+						cache: false,
+						success:function(dato)
+						{
+							// desplazar a la ultima fila de la tabla
+							setTimeout(function()
+							{
+								$('html, body').animate({
+									scrollTop: $('#tabla_reporte_revisiones').offset().top //ultima fila
+								}, 1000);
+							}, 2000);
+
+
+							// Actualizar tablas
+							tabla_reporte_revisiones(proyecto.id);
+							botoninforme_estado(dato.estado);
+
+							tabla_reporte_definiciones(proyecto.id, agente_nombre, reporteiluminacion_id);
+							tabla_reporte_categorias(proyecto.id, reporteiluminacion_id);
+							tabla_reporte_areas(proyecto.id, reporteiluminacion_id);
+							tabla_reporte_iluminacionpuntos(proyecto.id, reporteiluminacion_id);
+
+
+							// mensaje
+							swal({
+								title: "Correcto",
+								text: ""+dato.msj,
+								type: "success", // warning, error, success, info
+								buttons: {
+									visible: false, // true , false
+								},
+								timer: 1500,
+								showConfirmButton: false
+							});
+						},
+						error: function(dato)
+						{
+							tabla_reporte_revisiones(proyecto.id);
+
+							// mensaje
+							swal({
+								title: "Correcto",
+								text: ""+dato.msj,
+								type: "error", // warning, error, success, info
+								buttons: {
+									visible: false, // true , false
+								},
+								timer: 1500,
+								showConfirmButton: false
+							});
+
+							return false;
+						}
+					});//Fin ajax
+				}
+				else 
+				{
+					// mensaje
+					swal({
+						title: "Cancelado",
+						text: "Acción cancelada",
+						type: "error", // warning, error, success, info
+						buttons: {
+							visible: false, // true , false
+						},
+						timer: 500,
+						showConfirmButton: false
+					});
+				}
+			});
+			return false;
+		}	
 	}
 }
 
 
-function reporte_cancelado(revision_id, perfil, checkbox) {
-	if (parseInt(perfil) == 1) {
-		$('#form_modal_cancelacionobservacion').each(function () {
+function reporte_cancelado(revision_id, perfil, checkbox)
+{
+	if (parseInt(perfil) == 1)
+	{
+		$('#form_modal_cancelacionobservacion').each(function(){
 			this.reset();
 		});
 
@@ -7474,9 +8044,10 @@ function reporte_cancelado(revision_id, perfil, checkbox) {
 			// alert('Cancelado '+checkbox.checked);
 
 			// mostrar modal observacion
-			$('#modal_reporte_cancelacionobservacion').modal({ backdrop: false, keyboard: false });
+			$('#modal_reporte_cancelacionobservacion').modal({backdrop:false, keyboard:false});
 		}
-		else {
+		else
+		{
 			$(checkbox).prop('checked', true);
 			// alert('Descancelado '+checkbox.checked);
 
@@ -7484,7 +8055,7 @@ function reporte_cancelado(revision_id, perfil, checkbox) {
 			// Confirmar
 			swal({
 				title: "¿Quitar cancelación?",
-				text: "Ultima revisión del informe de " + agente_nombre,
+				text: "Ultima revisión del informe de "+agente_nombre,
 				type: "warning",
 				showCancelButton: true,
 				confirmButtonColor: "#DD6B55",
@@ -7493,118 +8064,126 @@ function reporte_cancelado(revision_id, perfil, checkbox) {
 				closeOnConfirm: false,
 				closeOnCancel: false
 			},
-				function (isConfirm) {
-					if (isConfirm) {
-						// cerrar msj confirmacion
-						swal.close();
+			function(isConfirm)
+			{
+				if (isConfirm)
+				{
+					// cerrar msj confirmacion
+					swal.close();
+
+					
+					// enviar datos
+					$('#form_modal_cancelacionobservacion').ajaxForm({
+						dataType: 'json',
+						type: 'POST',
+						url: '/reporteiluminacion',
+						data: {
+							opcion: 70,
+							proyecto_id: proyecto.id,
+							agente_id: agente_id,
+							agente_nombre: agente_nombre,
+							reporteiluminacion_id: reporteiluminacion_id,
+							catactivo_id: $("#reporteiluminacion_catactivo_id").val(),
+							reporteiluminacion_instalacion: $("#reporteiluminacion_instalacion").val(),
+						},
+						resetForm: false,
+						success: function(dato)
+						{
+							// Actualizar ID reporte
+							reporteiluminacion_id = dato.reporteiluminacion_id;
 
 
-						// enviar datos
-						$('#form_modal_cancelacionobservacion').ajaxForm({
-							dataType: 'json',
-							type: 'POST',
-							url: '/reporteiluminacion',
-							data: {
-								opcion: 70,
-								proyecto_id: proyecto.id,
-								agente_id: agente_id,
-								agente_nombre: agente_nombre,
-								reporteiluminacion_id: reporteiluminacion_id,
-								catactivo_id: $("#reporteiluminacion_catactivo_id").val(),
-								reporteiluminacion_instalacion: $("#reporteiluminacion_instalacion").val(),
-							},
-							resetForm: false,
-							success: function (dato) {
-								// Actualizar ID reporte
-								reporteiluminacion_id = dato.reporteiluminacion_id;
+							// Actualizar tablas
+							botoninforme_estado(dato.estado);
+							tabla_reporte_revisiones(proyecto.id);
+
+							tabla_reporte_definiciones(proyecto.id, agente_nombre, reporteiluminacion_id);
+							tabla_reporte_categorias(proyecto.id, reporteiluminacion_id);
+							tabla_reporte_areas(proyecto.id, reporteiluminacion_id);
+							tabla_reporte_iluminacionpuntos(proyecto.id, reporteiluminacion_id);
+
+							
+							// desplazar a la ultima fila de la tabla
+							setTimeout(function()
+							{
+								$('html, body').animate({
+									scrollTop: $('#tabla_reporte_revisiones').offset().top //ultima fila
+								}, 1000);
+							}, 2000);
 
 
-								// Actualizar tablas
-								botoninforme_estado(dato.estado);
-								tabla_reporte_revisiones(proyecto.id);
+							// mensaje
+							swal({
+								title: "Correcto",
+								text: ""+dato.msj,
+								type: "success", // warning, error, success, info
+								buttons: {
+									visible: false, // true , false
+								},
+								timer: 1500,
+								showConfirmButton: false
+							});
 
-								tabla_reporte_definiciones(proyecto.id, agente_nombre, reporteiluminacion_id);
-								tabla_reporte_categorias(proyecto.id, reporteiluminacion_id);
-								tabla_reporte_areas(proyecto.id, reporteiluminacion_id);
-								tabla_reporte_iluminacionpuntos(proyecto.id, reporteiluminacion_id);
+							// actualiza boton
+							// $('#botonguardar_modal_cancelacionobservacion').html('Guardar observación y cancelar revisión <i class="fa fa-save"></i>');
+							// $('#botonguardar_modal_cancelacionobservacion').attr('disabled', false);
 
+							// cerrar modal
+							// $('#modal_reporte_cancelacionobservacion').modal('hide');
+						},
+						beforeSend: function()
+						{
+							// $('#botonguardar_modal_cancelacionobservacion').html('Guardando observación y cancelar revisión <i class="fa fa-spin fa-spinner"></i>');
+							// $('#botonguardar_modal_cancelacionobservacion').attr('disabled', true);
+						},
+						error: function(dato)
+						{
+							// actualiza boton
+							// $('#botonguardar_modal_cancelacionobservacion').html('Guardar observación y cancelar revisión <i class="fa fa-save"></i>');
+							// $('#botonguardar_modal_cancelacionobservacion').attr('disabled', false);
 
-								// desplazar a la ultima fila de la tabla
-								setTimeout(function () {
-									$('html, body').animate({
-										scrollTop: $('#tabla_reporte_revisiones').offset().top //ultima fila
-									}, 1000);
-								}, 2000);
-
-
-								// mensaje
-								swal({
-									title: "Correcto",
-									text: "" + dato.msj,
-									type: "success", // warning, error, success, info
-									buttons: {
-										visible: false, // true , false
-									},
-									timer: 1500,
-									showConfirmButton: false
-								});
-
-								// actualiza boton
-								// $('#botonguardar_modal_cancelacionobservacion').html('Guardar observación y cancelar revisión <i class="fa fa-save"></i>');
-								// $('#botonguardar_modal_cancelacionobservacion').attr('disabled', false);
-
-								// cerrar modal
-								// $('#modal_reporte_cancelacionobservacion').modal('hide');
-							},
-							beforeSend: function () {
-								// $('#botonguardar_modal_cancelacionobservacion').html('Guardando observación y cancelar revisión <i class="fa fa-spin fa-spinner"></i>');
-								// $('#botonguardar_modal_cancelacionobservacion').attr('disabled', true);
-							},
-							error: function (dato) {
-								// actualiza boton
-								// $('#botonguardar_modal_cancelacionobservacion').html('Guardar observación y cancelar revisión <i class="fa fa-save"></i>');
-								// $('#botonguardar_modal_cancelacionobservacion').attr('disabled', false);
-
-								// mensaje
-								swal({
-									title: "Error",
-									text: "" + dato.msj,
-									type: "error", // warning, error, success, info
-									buttons: {
-										visible: false, // true , false
-									},
-									timer: 1500,
-									showConfirmButton: false
-								});
-								return false;
-							}
-						}).submit();
-						return false;
-					}
-					else {
-						// mensaje
-						swal({
-							title: "Cancelado",
-							text: "Acción cancelada",
-							type: "error", // warning, error, success, info
-							buttons: {
-								visible: false, // true , false
-							},
-							timer: 500,
-							showConfirmButton: false
-						});
-					}
-				});
+							// mensaje
+							swal({
+								title: "Error",
+								text: ""+dato.msj,
+								type: "error", // warning, error, success, info
+								buttons: {
+									visible: false, // true , false
+								},
+								timer: 1500,
+								showConfirmButton: false
+							});
+							return false;
+						}
+					}).submit();
+					return false;
+				}
+				else 
+				{
+					// mensaje
+					swal({
+						title: "Cancelado",
+						text: "Acción cancelada",
+						type: "error", // warning, error, success, info
+						buttons: {
+							visible: false, // true , false
+						},
+						timer: 500,
+						showConfirmButton: false
+					});
+				}
+			});
 			return false;
 		}
 	}
 }
 
 
-$("#botonguardar_modal_cancelacionobservacion").click(function () {
+$("#botonguardar_modal_cancelacionobservacion").click(function()
+{
 	swal({
 		title: "¡Confirme que desea cancelar!",
-		text: "Ultima revisión del informe de " + agente_nombre,
+		text: "Ultima revisión del informe de "+agente_nombre,
 		type: "warning",
 		showCancelButton: true,
 		confirmButtonColor: "#DD6B55",
@@ -7613,106 +8192,113 @@ $("#botonguardar_modal_cancelacionobservacion").click(function () {
 		closeOnConfirm: false,
 		closeOnCancel: false
 	},
-		function (isConfirm) {
-			if (isConfirm) {
-				// cerrar msj confirmacion
-				swal.close();
+	function(isConfirm)
+	{
+		if (isConfirm)
+		{
+			// cerrar msj confirmacion
+			swal.close();
 
-				// enviar datos
-				$('#form_modal_cancelacionobservacion').ajaxForm({
-					dataType: 'json',
-					type: 'POST',
-					url: '/reporteiluminacion',
-					data: {
-						opcion: 70,
-						proyecto_id: proyecto.id,
-						agente_id: agente_id,
-						agente_nombre: agente_nombre,
-						reporteiluminacion_id: reporteiluminacion_id,
-						catactivo_id: $("#reporteiluminacion_catactivo_id").val(),
-						reporteiluminacion_instalacion: $("#reporteiluminacion_instalacion").val(),
-					},
-					resetForm: false,
-					success: function (dato) {
-						// Actualizar ID reporte
-						reporteiluminacion_id = dato.reporteiluminacion_id;
+			// enviar datos
+			$('#form_modal_cancelacionobservacion').ajaxForm({
+				dataType: 'json',
+				type: 'POST',
+				url: '/reporteiluminacion',
+				data: {
+					opcion: 70,
+					proyecto_id: proyecto.id,
+					agente_id: agente_id,
+					agente_nombre: agente_nombre,
+					reporteiluminacion_id: reporteiluminacion_id,
+					catactivo_id: $("#reporteiluminacion_catactivo_id").val(),
+					reporteiluminacion_instalacion: $("#reporteiluminacion_instalacion").val(),
+				},
+				resetForm: false,
+				success: function(dato)
+				{
+					// Actualizar ID reporte
+					reporteiluminacion_id = dato.reporteiluminacion_id;
 
-						// Actualizar tablas
-						botoninforme_estado(dato.estado);
-						tabla_reporte_revisiones(proyecto.id);
+					// Actualizar tablas
+					botoninforme_estado(dato.estado);
+					tabla_reporte_revisiones(proyecto.id);
 
-						tabla_reporte_definiciones(proyecto.id, agente_nombre, reporteiluminacion_id);
-						tabla_reporte_categorias(proyecto.id, reporteiluminacion_id);
-						tabla_reporte_areas(proyecto.id, reporteiluminacion_id);
-						tabla_reporte_iluminacionpuntos(proyecto.id, reporteiluminacion_id);
+					tabla_reporte_definiciones(proyecto.id, agente_nombre, reporteiluminacion_id);
+					tabla_reporte_categorias(proyecto.id, reporteiluminacion_id);
+					tabla_reporte_areas(proyecto.id, reporteiluminacion_id);
+					tabla_reporte_iluminacionpuntos(proyecto.id, reporteiluminacion_id);
+
+					
+					// desplazar a la ultima fila de la tabla
+					setTimeout(function()
+					{
+						$('html, body').animate({
+							scrollTop: $('#tabla_reporte_revisiones').offset().top //ultima fila
+						}, 1000);
+					}, 2000);
 
 
-						// desplazar a la ultima fila de la tabla
-						setTimeout(function () {
-							$('html, body').animate({
-								scrollTop: $('#tabla_reporte_revisiones').offset().top //ultima fila
-							}, 1000);
-						}, 2000);
+					// mensaje
+					swal({
+						title: "Correcto",
+						text: ""+dato.msj,
+						type: "success", // warning, error, success, info
+						buttons: {
+							visible: false, // true , false
+						},
+						timer: 1500,
+						showConfirmButton: false
+					});
 
+					// actualiza boton
+					$('#botonguardar_modal_cancelacionobservacion').html('Guardar observación y cancelar revisión <i class="fa fa-save"></i>');
+					$('#botonguardar_modal_cancelacionobservacion').attr('disabled', false);
 
-						// mensaje
-						swal({
-							title: "Correcto",
-							text: "" + dato.msj,
-							type: "success", // warning, error, success, info
-							buttons: {
-								visible: false, // true , false
-							},
-							timer: 1500,
-							showConfirmButton: false
-						});
+					// cerrar modal
+					$('#modal_reporte_cancelacionobservacion').modal('hide');
+				},
+				beforeSend: function()
+				{
+					$('#botonguardar_modal_cancelacionobservacion').html('Guardando observación y cancelar revisión <i class="fa fa-spin fa-spinner"></i>');
+					$('#botonguardar_modal_cancelacionobservacion').attr('disabled', true);
+				},
+				error: function(dato)
+				{
+					// actualiza boton
+					$('#botonguardar_modal_cancelacionobservacion').html('Guardar observación y cancelar revisión <i class="fa fa-save"></i>');
+					$('#botonguardar_modal_cancelacionobservacion').attr('disabled', false);
 
-						// actualiza boton
-						$('#botonguardar_modal_cancelacionobservacion').html('Guardar observación y cancelar revisión <i class="fa fa-save"></i>');
-						$('#botonguardar_modal_cancelacionobservacion').attr('disabled', false);
-
-						// cerrar modal
-						$('#modal_reporte_cancelacionobservacion').modal('hide');
-					},
-					beforeSend: function () {
-						$('#botonguardar_modal_cancelacionobservacion').html('Guardando observación y cancelar revisión <i class="fa fa-spin fa-spinner"></i>');
-						$('#botonguardar_modal_cancelacionobservacion').attr('disabled', true);
-					},
-					error: function (dato) {
-						// actualiza boton
-						$('#botonguardar_modal_cancelacionobservacion').html('Guardar observación y cancelar revisión <i class="fa fa-save"></i>');
-						$('#botonguardar_modal_cancelacionobservacion').attr('disabled', false);
-
-						// mensaje
-						swal({
-							title: "Error",
-							text: "" + dato.msj,
-							type: "error", // warning, error, success, info
-							buttons: {
-								visible: false, // true , false
-							},
-							timer: 1500,
-							showConfirmButton: false
-						});
-						return false;
-					}
-				}).submit();
-				return false;
-			}
-			else {
-				// mensaje
-				swal({
-					title: "Cancelado",
-					text: "Acción cancelada",
-					type: "error", // warning, error, success, info
-					buttons: {
-						visible: false, // true , false
-					},
-					timer: 500,
-					showConfirmButton: false
-				});
-			}
-		});
+					// mensaje
+					swal({
+						title: "Error",
+						text: ""+dato.msj,
+						type: "error", // warning, error, success, info
+						buttons: {
+							visible: false, // true , false
+						},
+						timer: 1500,
+						showConfirmButton: false
+					});
+					return false;
+				}
+			}).submit();
+			return false;
+		}
+		else 
+		{
+			// mensaje
+			swal({
+				title: "Cancelado",
+				text: "Acción cancelada",
+				type: "error", // warning, error, success, info
+				buttons: {
+					visible: false, // true , false
+				},
+				timer: 500,
+				showConfirmButton: false
+			});
+		}
+	});
 	return false;
 });
 
@@ -7721,7 +8307,8 @@ $("#botonguardar_modal_cancelacionobservacion").click(function () {
 // GENERAR WORD
 
 
-$('#tabla_reporte_revisiones tbody').on('click', 'td>button.botondescarga', function () {
+$('#tabla_reporte_revisiones tbody').on('click', 'td>button.botondescarga', function()
+{
 	var botondescarga = this;
 
 
@@ -7730,14 +8317,18 @@ $('#tabla_reporte_revisiones tbody').on('click', 'td>button.botondescarga', func
 
 
 	// Boton descarga
-	$("#" + botondescarga.id).html('<i class="fa fa-spin fa-spinner fa-2x"></i>');
+	$("#"+botondescarga.id).html('<i class="fa fa-spin fa-spinner fa-2x"></i>');
 
 
-	setTimeout(function () {
-		if (parseInt(row.data().id) == parseInt(ultimarevision_id)) {
+	setTimeout(function()
+	{
+		if (parseInt(row.data().id) == parseInt(ultimarevision_id))
+		{
 			var grafica_iluminacion_imgbase64 = '';
-			graficapastel_iluminacion.export.capture({}, function () {
-				this.toPNG({ quality: 1, multiplier: 6 }, function (img_base64) {
+			graficapastel_iluminacion.export.capture({}, function ()
+			{
+				this.toPNG({quality: 1, multiplier: 6}, function (img_base64)
+				{
 					// var image = new Image();
 					// image.src = data;
 					// document.getElementById("captura").appendChild(image);
@@ -7750,8 +8341,10 @@ $('#tabla_reporte_revisiones tbody').on('click', 'td>button.botondescarga', func
 
 
 			var grafica_reflexion_imgbase64 = '';
-			graficapastel_reflexion.export.capture({}, function () {
-				this.toPNG({ quality: 1, multiplier: 6 }, function (img_base64) {
+			graficapastel_reflexion.export.capture({}, function ()
+			{
+				this.toPNG({quality: 1, multiplier: 6}, function (img_base64)
+				{
 					// var image = new Image();
 					// image.src = img_base64;
 					// document.getElementById("captura").appendChild(image);
@@ -7762,17 +8355,19 @@ $('#tabla_reporte_revisiones tbody').on('click', 'td>button.botondescarga', func
 			});
 
 
-			html2canvas(document.querySelector("#areas_cumplimiento"), { scale: 6 }).then(canvas => {
+			html2canvas(document.querySelector("#areas_cumplimiento"), { scale: 6}).then(canvas =>
+			{
 				// document.getElementById("captura").appendChild(canvas)
 				var imgData = canvas.toDataURL('image/jpeg');
 
-				setTimeout(function () {
+				setTimeout(function()
+				{
 					// Enviar datos
 					$.ajax({
 						type: "POST",
 						dataType: "json",
 						url: "/reporteiluminacionword",
-						data: {
+						data:{
 							_token: document.querySelector('meta[name="csrf-token"]')['content'],
 							proyecto_id: proyecto.id,
 							agente_id: agente_id,
@@ -7786,21 +8381,25 @@ $('#tabla_reporte_revisiones tbody').on('click', 'td>button.botondescarga', func
 							grafica_reflexion: grafica_reflexion_imgbase64,
 						},
 						cache: false,
-						success: function (dato) {
-							ventana = window.open('/reporteiluminacionworddescargar/' + proyecto.id + "/" + row.data().id + "/" + ultimarevision_id);
+						success:function(dato)
+						{
+							ventana = window.open('/reporteiluminacionworddescargar/'+proyecto.id+"/"+row.data().id+"/"+ultimarevision_id);
 
 
 							// // Boton descarga
 							// $("#"+botondescarga.id).html('<i class="fa fa-download fa-2x"></i>');
 
 
-							setTimeout(function () {
+							setTimeout(function()
+							{
 								tabla_reporte_revisiones(proyecto.id);
 							}, 6000);
 
 
-							setTimeout(function () {
-								if (ventana.window) {
+							setTimeout(function()
+							{
+								if (ventana.window)
+								{
 									ventana.window.close();
 								}
 							}, 15000);
@@ -7818,11 +8417,12 @@ $('#tabla_reporte_revisiones tbody').on('click', 'td>button.botondescarga', func
 							// 	showConfirmButton: false
 							// });
 						},
-						error: function (dato) {
+						error: function(dato)
+						{
 							// mensaje
 							swal({
 								title: "Error",
-								text: "Al intentar crear informe, intentelo de nuevo.\n" + dato,
+								text: "Al intentar crear informe, intentelo de nuevo.\n"+dato,
 								type: "error", // warning, error, success, info
 								buttons: {
 									visible: false, // true , false
@@ -7836,21 +8436,25 @@ $('#tabla_reporte_revisiones tbody').on('click', 'td>button.botondescarga', func
 				}, 1000);
 			});
 		}
-		else {
-			ventana = window.open('/reporteiluminacionworddescargar/' + proyecto.id + "/" + row.data().id + "/" + ultimarevision_id);
+		else
+		{
+			ventana = window.open('/reporteiluminacionworddescargar/'+proyecto.id+"/"+row.data().id+"/"+ultimarevision_id);
 
 
 			// // Boton descarga
 			// $("#"+botondescarga.id).html('<i class="fa fa-download fa-2x"></i>');
 
 
-			setTimeout(function () {
+			setTimeout(function()
+			{
 				tabla_reporte_revisiones(proyecto.id);
 			}, 6000);
 
 
-			setTimeout(function () {
-				if (ventana.window) {
+			setTimeout(function()
+			{
+				if (ventana.window)
+				{
 					ventana.window.close();
 				}
 			}, 15000);
@@ -7874,112 +8478,112 @@ $('#tabla_reporte_revisiones tbody').on('click', 'td>button.botondescarga', func
 //FUNCION PARA CARGAR PUNTOS POR MEDIO DE UN EXCEL
 $(document).ready(function () {
 
-	$('#boton_reporte_iluminacion_importar').on('click', function (e) {
-		e.preventDefault();
+    $('#boton_reporte_iluminacion_importar').on('click', function (e) {
+        e.preventDefault();
 
-		$('#divCargaPuntos').css('display', 'none');
-		$('#alertaVerificacion2').css('display', 'none');
+        $('#divCargaPuntos').css('display', 'none');
+        $('#alertaVerificacion2').css('display', 'none');
 
-		$('#formExcelPuntos')[0].reset();
+        $('#formExcelPuntos')[0].reset();
 
-		$('#modal_excel_puntos').modal({ backdrop: false });
+        $('#modal_excel_puntos').modal({backdrop:false});
 
-	})
+    })
 
-	$("#botonCargarExcelPuntos").click(function () {
-		var guardar = 0;
+    $("#botonCargarExcelPuntos").click(function() {
+        var guardar = 0;
 
-		// valida campos vacios
-		var valida = this.form.checkValidity();
-		if (valida) {
-			if ($("#excelPuntos").val() != "") {
-				// Tipo archivo
-				var archivo = $("#excelPuntos").val();
-				var extension = archivo.substring(archivo.lastIndexOf("."));
+        // valida campos vacios
+        var valida = this.form.checkValidity();
+        if (valida){
+            if ($("#excelPuntos").val() != ""){
+                // Tipo archivo
+                var archivo = $("#excelPuntos").val();
+                var extension = archivo.substring(archivo.lastIndexOf("."));
 
-				// valida tipo de archivo
-				if (extension == ".xlsx" || extension == ".XLSX") {
-					guardar = 1;
-				}
-				else {
-					// mensaje
-					swal({
-						title: "Tipo de archivo incorrecto " + extension,
-						text: "Solo se pueden cargar archivos tipo .xlsx",
-						type: "warning", // warning, error, success, info
-						buttons: {
-							visible: false, // true , false
-						},
-						timer: 3000,
-						showConfirmButton: false
-					});
+                // valida tipo de archivo
+                if(extension == ".xlsx" || extension == ".XLSX"){
+                    guardar = 1;
+                }
+                else{
+                    // mensaje
+                    swal({
+                        title: "Tipo de archivo incorrecto "+extension,
+                        text: "Solo se pueden cargar archivos tipo .xlsx",
+                        type: "warning", // warning, error, success, info
+                        buttons: {
+                            visible: false, // true , false
+                        },
+                        timer: 3000,
+                        showConfirmButton: false
+                    });
 
-					guardar = 0;
-					return false;
-				}
-			}
-			else {
-				guardar = 0;
-			}
+                    guardar = 0;
+                    return false;
+                }
+            }
+            else{
+                guardar = 0;
+            }
 
-			// guardar
-			if (guardar == 1) {
+            // guardar
+            if (guardar == 1){
+            
+                swal({   
+                    title: "¿Está  seguro de cargar este documento?",   
+                    text: "Está acción  no se puede revertir",   
+                    type: "warning",   
+                    showCancelButton: true,   
+                    confirmButtonColor: "#DD6B55",   
+                    confirmButtonText: "Guardar!",   
+                    cancelButtonText: "Cancelar!",   
+                    closeOnConfirm: false,   
+                    closeOnCancel: false 
+                }, function (isConfirm) {   
+                    
+                    if (isConfirm){
+                        // cerrar msj confirmacion
+                        swal.close();
 
-				swal({
-					title: "¿Está  seguro de cargar este documento?",
-					text: "Está acción  no se puede revertir",
-					type: "warning",
-					showCancelButton: true,
-					confirmButtonColor: "#DD6B55",
-					confirmButtonText: "Guardar!",
-					cancelButtonText: "Cancelar!",
-					closeOnConfirm: false,
-					closeOnCancel: false
-				}, function (isConfirm) {
-
-					if (isConfirm) {
-						// cerrar msj confirmacion
-						swal.close();
-
-						// enviar datos
-						$('#formExcelPuntos').ajaxForm({
-							dataType: 'json',
-							type: 'POST',
-							url: "/reporteiluminacion",
-							data: {
+                        // enviar datos
+                        $('#formExcelPuntos').ajaxForm({
+                            dataType: 'json',
+                            type: 'POST',
+                            url: "/reporteiluminacion",
+                            data: {
 								opcion: 8000,
 								registro_id: reporteiluminacion_id,
 								proyecto_id: proyecto.id,
 
+                                
+                            },
+                            contentType: false,
+                            processData: false,
+                            success: function (dato) {
 
-							},
-							contentType: false,
-							processData: false,
-							success: function (dato) {
+                                // actualizar boton
+                                $('#botonCargarExcelPuntos').prop('disabled', false);
+                                $('#divCargaPuntos').css('display', 'none');
+                                
+                                if (dato.code == 200) {
+                                    
+                                    // cerrar modal
+                                    $('#modal_excel_puntos').modal('hide');
+    
+                                    // mensaje
+                                    swal({
+                                        title: "Los puntos fueron cargados exitosamente",
+                                        text: ""+dato.msj,
+                                        type: "success", // warning, error, success, info
+                                        buttons: {
+                                            visible: true, // true , false
+                                        },
+                                        showConfirmButton: true,
+                                        showCancelButton: false
+                                    });
 
-								// actualizar boton
-								$('#botonCargarExcelPuntos').prop('disabled', false);
-								$('#divCargaPuntos').css('display', 'none');
-
-								if (dato.code == 200) {
-
-									// cerrar modal
-									$('#modal_excel_puntos').modal('hide');
-
-									// mensaje
-									swal({
-										title: "Los puntos fueron cargados exitosamente",
-										text: "" + dato.msj,
-										type: "success", // warning, error, success, info
-										buttons: {
-											visible: true, // true , false
-										},
-										showConfirmButton: true,
-										showCancelButton: false
-									});
-
-									//Recargamos la tabla
-									menureporte_estado("menureporte_0", 1);
+                                    //Recargamos la tabla
+                                   	menureporte_estado("menureporte_0", 1);
 
 									tabla_reporte_revisiones(proyecto.id);
 									tabla_reporte_iluminacionpuntos(proyecto.id, reporteiluminacion_id);
@@ -7987,84 +8591,85 @@ $(document).ready(function () {
 									tabla_reporte_reflexionresultados(proyecto.id, reporteiluminacion_id);
 									tabla_reporte_matrizexposicion(proyecto.id, reporteiluminacion_id);
 									reporteiluminacion_dashboard(proyecto.id, reporteiluminacion_id);
+                                
+                                } else {
 
-								} else {
+                                     swal({
+                                        title: "Ocurrio un error al intentar insertar los puntos.",
+                                        text: ""+dato.msj,
+                                        type: "error", // warning, error, success, info
+                                        buttons: {
+                                            visible: true, // true , false
+                                        },
+                                        showConfirmButton: true,
+                                        showCancelButton: false
+									 });
+									
+                                }
 
-									swal({
-										title: "Ocurrio un error al intentar insertar los puntos.",
-										text: "" + dato.msj,
-										type: "error", // warning, error, success, info
-										buttons: {
-											visible: true, // true , false
-										},
-										showConfirmButton: true,
-										showCancelButton: false
-									});
+                                
+                            },
+                            beforeSend: function () {
 
-								}
+                                $('#botonCargarExcelPuntos').prop('disabled', true);
+                                $('#divCargaPuntos').css('display', 'block');
+                            },
+                            error: function(dato) {
+                                
+                                // actualiza boton
+                                $('#botonCargarExcelPuntos').prop('disabled', false);
+                                $('#divCargaPuntos').css('display', 'none');
 
+                                // mensaje
+                                swal({
+                                    title: "Error al cargar los puntos.",
+                                    text: ""+dato.msj,
+                                    type: "error", // warning, error, success, info
+                                    buttons: {
+                                        visible: false, // true , false
+                                    },
+                                    timer: 1500,
+                                    showConfirmButton: false
+                                });
 
-							},
-							beforeSend: function () {
-
-								$('#botonCargarExcelPuntos').prop('disabled', true);
-								$('#divCargaPuntos').css('display', 'block');
-							},
-							error: function (dato) {
-
-								// actualiza boton
-								$('#botonCargarExcelPuntos').prop('disabled', false);
-								$('#divCargaPuntos').css('display', 'none');
-
-								// mensaje
-								swal({
-									title: "Error al cargar los puntos.",
-									text: "" + dato.msj,
-									type: "error", // warning, error, success, info
-									buttons: {
-										visible: false, // true , false
-									},
-									timer: 1500,
-									showConfirmButton: false
-								});
-
-								return false;
-							}
-						}).submit();
-						return false;
-					}
-					else {
-						// mensaje
-						swal({
-							title: "Cancelado",
-							text: "Acción cancelada",
-							type: "error", // warning, error, success, info
-							buttons: {
-								visible: false, // true , false
-							},
-							timer: 1500,
-							showConfirmButton: false
-						});
-					}
-				});
-				return false;
-			}
-		}
-	});
-
+                                return false;
+                            }
+                        }).submit();
+                        return false;
+                    }
+                    else 
+                    {
+                        // mensaje
+                        swal({
+                            title: "Cancelado",
+                            text: "Acción cancelada",
+                            type: "error", // warning, error, success, info
+                            buttons: {
+                                visible: false, // true , false
+                            },
+                            timer: 1500,
+                            showConfirmButton: false
+                        });   
+                    } 
+                });
+                return false;
+            }
+        }
+    });
 
 
-	$('#excelPuntos').change(function () {
 
-		if ($(this).val()) {
+    $('#excelPuntos').change(function () {
+        
+        if ($(this).val()) {
+            
+            $('#alertaVerificacion2').css('display', 'block');
 
-			$('#alertaVerificacion2').css('display', 'block');
-
-		} else {
-			$('#alertaVerificacion2').css('display', 'none');
-
-		}
-	});
+        } else {
+            $('#alertaVerificacion2').css('display', 'none');
+            
+        }
+    });
 
 });
 
@@ -8073,35 +8678,35 @@ function cambiarTareaVisual(opcion, id) {
 
 	switch (parseInt(opcion)) {
 		case 1:
-			descripcion = 'En exteriores: distinguir el área de tránsito, desplazarse caminando, vigilancia, movimiento de vehículos.';
-			break;
-		case 2:
-			descripcion = 'En interiores: distinguir el área de tránsito, desplazarse caminando. Vigilancia, movimiento de vehículos.';
-			break;
-		case 3:
-			descripcion = 'En interiores.';
-			break;
-		case 4:
-			descripcion = 'Requerimiento visual simple: inspección visual, recuento de piezas, trabajo en banco y máquina.';
-			break;
-		case 5:
-			descripcion = 'Distinción moderada de detalles: ensamble simple, trabajo medio en banco y máquina, inspección simple, empaque y trabajos de oficina.';
-			break;
-		case 6:
-			descripcion = 'Distinción clara de detalles: maquinado y acabados delicados, ensamble de inspección moderadamente difícil, captura y procesamiento de información, manejo de instrumentos y equipo de laboratorio.';
-			break;
-		case 7:
-			descripcion = 'Distinción fina de detalles: maquinado de precisión, ensamble e inspección de trabajos delicados, manejo de instrumentos y equipo de precisión, manejo de piezas pequeñas.';
-			break;
-		case 8:
-			descripcion = 'Alta exactitud en la distinción de detalles: ensamble, proceso e inspección de piezas pequeñas y complejas, acabado con pulidos finos.';
-			break;
-		case 9:
-			descripcion = 'Alto grado de especialización en la distinción de detalles.';
-			break;
-		default:
-			descripcion = '';
-			break;
+		descripcion = 'En exteriores: distinguir el área de tránsito, desplazarse caminando, vigilancia, movimiento de vehículos.';
+		break;
+	case 2:
+		descripcion = 'En interiores: distinguir el área de tránsito, desplazarse caminando. Vigilancia, movimiento de vehículos.';
+		break;
+	case 3:
+		descripcion = 'En interiores.';
+		break;
+	case 4:
+		descripcion = 'Requerimiento visual simple: inspección visual, recuento de piezas, trabajo en banco y máquina.';
+		break;
+	case 5:
+	descripcion = 'Distinción moderada de detalles: ensamble simple, trabajo medio en banco y máquina, inspección simple, empaque y trabajos de oficina.';
+		break;
+	case 6:
+		descripcion = 'Distinción clara de detalles: maquinado y acabados delicados, ensamble de inspección moderadamente difícil, captura y procesamiento de información, manejo de instrumentos y equipo de laboratorio.';
+		break;
+	case 7:
+		descripcion = 'Distinción fina de detalles: maquinado de precisión, ensamble e inspección de trabajos delicados, manejo de instrumentos y equipo de precisión, manejo de piezas pequeñas.';
+		break;
+	case 8:
+		descripcion = 'Alta exactitud en la distinción de detalles: ensamble, proceso e inspección de piezas pequeñas y complejas, acabado con pulidos finos.';
+		break;
+	case 9:
+		descripcion = 'Alto grado de especialización en la distinción de detalles.';
+		break;
+	default:
+		descripcion = '';
+		break;
 	}
 
 	$('#textarea_tareavisual_' + id).val(descripcion);
@@ -8115,106 +8720,106 @@ function cambiarTareaVisual(opcion, id) {
 
 $('#btn_descargar_plantilla').on('click', function (e) {
 	e.preventDefault();
+	
+    swal({
+        title: "¡Confirme descargar!",
+        text: "Plantilla principal del Informe.",
+        type: "info",
+        showCancelButton: true,
+        confirmButtonColor: "#DD6B55",
+        confirmButtonText: "Descargar!",
+        cancelButtonText: "Cancelar!",
+        closeOnConfirm: false,
+        closeOnCancel: false
+    },
+    function(isConfirm) {
+        if (isConfirm) {
+            // Mostrar mensaje de carga
+            swal({
+                title: "Generando documento",
+                text: 'Espere un momento, el documento se esta documento se esta generando...',
+                type: "info",
+                showConfirmButton: false,
+                allowOutsideClick: false
+            });
 
-	swal({
-		title: "¡Confirme descargar!",
-		text: "Plantilla principal del Informe.",
-		type: "info",
-		showCancelButton: true,
-		confirmButtonColor: "#DD6B55",
-		confirmButtonText: "Descargar!",
-		cancelButtonText: "Cancelar!",
-		closeOnConfirm: false,
-		closeOnCancel: false
-	},
-		function (isConfirm) {
-			if (isConfirm) {
-				// Mostrar mensaje de carga
-				swal({
-					title: "Generando documento",
-					text: 'Espere un momento, el documento se esta documento se esta generando...',
-					type: "info",
-					showConfirmButton: false,
-					allowOutsideClick: false
-				});
+			url = 'descargarPortadaInformes/' + proyecto.id + '/' + 4;
+			instalacion = $('#reporte_instalacion').val();
 
-				url = 'descargarPortadaInformes/' + proyecto.id + '/' + 4;
-				instalacion = $('#reporte_instalacion').val();
+            $.ajax({
+                url: url,
+                method: 'GET',
+                xhrFields: {
+                    responseType: 'blob'
+                },
+                success: function(data) {
+                    var a = document.createElement('a');
+                    var url = window.URL.createObjectURL(data);
+                    a.href = url;
+                    a.download = `Plantilla principal (Iluminación) - ${instalacion}.docx`;
+                    document.body.append(a);
+                    a.click();
+                    a.remove();
+                    window.URL.revokeObjectURL(url);
 
-				$.ajax({
-					url: url,
-					method: 'GET',
-					xhrFields: {
-						responseType: 'blob'
-					},
-					success: function (data) {
-						var a = document.createElement('a');
-						var url = window.URL.createObjectURL(data);
-						a.href = url;
-						a.download = `Plantilla principal (Iluminación) - ${instalacion}.docx`;
-						document.body.append(a);
-						a.click();
-						a.remove();
-						window.URL.revokeObjectURL(url);
+                    // Cerrar mensaje de carga
+                    swal.close();
 
-						// Cerrar mensaje de carga
-						swal.close();
-
-						$('#btn_descargar_plantilla').prop('disabled', true);
-					},
-					error: function () {
-						swal({
-							title: "Hubo un problema al generar el documento.",
-							text: "Intentelo de nuevo, o comuniquelo con el responsable",
-							type: "error",
-							showConfirmButton: true
-						});
-					}
-				});
-			} else {
-				// mensaje de cancelación
-				swal({
-					title: "Cancelado",
-					text: "Acción cancelada",
-					type: "error",
-					buttons: {
-						visible: false,
-					},
-					timer: 500,
-					showConfirmButton: false
-				});
-			}
-		});
-	return false;
+                    $('#btn_descargar_plantilla').prop('disabled', true);
+                },
+                error: function() {
+                    swal({
+                        title: "Hubo un problema al generar el documento.",
+                        text: "Intentelo de nuevo, o comuniquelo con el responsable",
+                        type: "error",
+                        showConfirmButton: true
+                    });
+                }
+            });
+        } else {
+            // mensaje de cancelación
+            swal({
+                title: "Cancelado",
+                text: "Acción cancelada",
+                type: "error",
+                buttons: {
+                    visible: false,
+                },
+                timer: 500,
+                showConfirmButton: false
+            });
+        }
+    });
+    return false;
 })
 
 
 function obtenerdatos() {
+	
+    // $('#PROYECTO_ID_INFORME').val($('#proyecto_id').val());
 
-	// $('#PROYECTO_ID_INFORME').val($('#proyecto_id').val());
+    $.ajax({
+        type: "GET",
+        dataType: "json",
+        url: "/obtenerDatosInformesProyecto/" + proyecto.id,
+        data: {},
+        cache: false,
+        success: function(dato) {
 
-	$.ajax({
-		type: "GET",
-		dataType: "json",
-		url: "/obtenerDatosInformesProyecto/" + proyecto.id,
-		data: {},
-		cache: false,
-		success: function (dato) {
+        
+            $("#NIVEL1").html(dato.opciones);
+            $("#NIVEL2").html(dato.opciones);
+            $("#NIVEL3").html(dato.opciones);
+            $("#NIVEL4").html(dato.opciones);
+            $("#NIVEL5").html(dato.opciones);
 
-
-			$("#NIVEL1").html(dato.opciones);
-			$("#NIVEL2").html(dato.opciones);
-			$("#NIVEL3").html(dato.opciones);
-			$("#NIVEL4").html(dato.opciones);
-			$("#NIVEL5").html(dato.opciones);
-
-			$("#OPCION_PORTADA1").html(dato.checks);
-			$("#OPCION_PORTADA2").html(dato.checks);
-			$("#OPCION_PORTADA3").html(dato.checks);
-			$("#OPCION_PORTADA4").html(dato.checks);
-			$("#OPCION_PORTADA5").html(dato.checks);
+            $("#OPCION_PORTADA1").html(dato.checks);
+            $("#OPCION_PORTADA2").html(dato.checks);
+            $("#OPCION_PORTADA3").html(dato.checks);
+            $("#OPCION_PORTADA4").html(dato.checks);
+            $("#OPCION_PORTADA5").html(dato.checks);
 			$("#OPCION_PORTADA6").html(dato.checks);
-
+			
 
 
 			setTimeout(() => {
@@ -8233,7 +8838,7 @@ function obtenerdatos() {
 				$("#OPCION_PORTADA6").val(portada.OPCION_PORTADA6);
 
 				if (portada.RUTA_IMAGEN_PORTADA) {
-
+           			
 					var archivo = portada.RUTA_IMAGEN_PORTADA;
 					var extension = archivo.substring(archivo.lastIndexOf("."));
 					var imagenUrl = '/logoPortada/' + portada.ID_RECURSO_INFORME + extension;
@@ -8247,8 +8852,8 @@ function obtenerdatos() {
 						$('#PORTADA').dropify().data('dropify').init();
 					}
 					else {
-
-
+				
+					
 						$('#PORTADA').attr('data-default-file', imagenUrl);
 						$('#PORTADA').dropify({
 							messages: {
@@ -8268,15 +8873,15 @@ function obtenerdatos() {
 						});
 
 					}
-				}
+				}			
 
 			}, 1000);
-		},
-		error: function (xhr, status, error) {
-			console.log('Error: ' + error);
-			swal('Error', 'No se pudieron obtener los datos del informe', 'error');
-		}
-	});
+        },
+        error: function(xhr, status, error) {
+            console.log('Error: ' + error);
+            swal('Error', 'No se pudieron obtener los datos del informe', 'error');
+        }
+    });
 }
 
 
@@ -8285,114 +8890,114 @@ function obtenerdatos() {
 //FUNCION PARA CARGAR PUNTOS POR MEDIO DE UN EXCEL
 $(document).ready(function () {
 
-	$('#boton_reporte_iluminacion_importar_area').on('click', function (e) {
-		e.preventDefault();
+    $('#boton_reporte_iluminacion_importar_area').on('click', function (e) {
+        e.preventDefault();
 
-		$('#divCargaArea').css('display', 'none');
-		$('#alertaVerificacion1').css('display', 'none');
+        $('#divCargaArea').css('display', 'none');
+        $('#alertaVerificacion1').css('display', 'none');
 
-		$('#formExcelArea')[0].reset();
+        $('#formExcelArea')[0].reset();
 
-		$('#modal_excel_areas').modal({ backdrop: false });
+        $('#modal_excel_areas').modal({backdrop:false});
 
-	})
+    })
 
-	$("#botonCargarExcelArea").click(function () {
-		var guardar = 0;
+    $("#botonCargarExcelArea").click(function() {
+        var guardar = 0;
 
-		// valida campos vacios
-		var valida = this.form.checkValidity();
-		if (valida) {
-			if ($("#excelArea").val() != "") {
-				// Tipo archivo
-				var archivo = $("#excelArea").val();
-				var extension = archivo.substring(archivo.lastIndexOf("."));
+        // valida campos vacios
+        var valida = this.form.checkValidity();
+        if (valida){
+            if ($("#excelArea").val() != ""){
+                // Tipo archivo
+                var archivo = $("#excelArea").val();
+                var extension = archivo.substring(archivo.lastIndexOf("."));
 
-				// valida tipo de archivo
-				if (extension == ".xlsx" || extension == ".XLSX") {
-					guardar = 1;
-				}
-				else {
-					// mensaje
-					swal({
-						title: "Tipo de archivo incorrecto " + extension,
-						text: "Solo se pueden cargar archivos tipo .xlsx",
-						type: "warning", // warning, error, success, info
-						buttons: {
-							visible: false, // true , false
-						},
-						timer: 3000,
-						showConfirmButton: false
-					});
+                // valida tipo de archivo
+                if(extension == ".xlsx" || extension == ".XLSX"){
+                    guardar = 1;
+                }
+                else{
+                    // mensaje
+                    swal({
+                        title: "Tipo de archivo incorrecto "+extension,
+                        text: "Solo se pueden cargar archivos tipo .xlsx",
+                        type: "warning", // warning, error, success, info
+                        buttons: {
+                            visible: false, // true , false
+                        },
+                        timer: 3000,
+                        showConfirmButton: false
+                    });
 
-					guardar = 0;
-					return false;
-				}
-			}
-			else {
-				guardar = 0;
-			}
+                    guardar = 0;
+                    return false;
+                }
+            }
+            else{
+                guardar = 0;
+            }
 
-			// guardar
-			if (guardar == 1) {
+            // guardar
+            if (guardar == 1){
+            
+                swal({   
+                    title: "¿Está  seguro de cargar este documento?",   
+                    text: "Está acción  no se puede revertir",   
+                    type: "warning",   
+                    showCancelButton: true,   
+                    confirmButtonColor: "#DD6B55",   
+                    confirmButtonText: "Guardar!",   
+                    cancelButtonText: "Cancelar!",   
+                    closeOnConfirm: false,   
+                    closeOnCancel: false 
+                }, function (isConfirm) {   
+                    
+                    if (isConfirm){
+                        // cerrar msj confirmacion
+                        swal.close();
 
-				swal({
-					title: "¿Está  seguro de cargar este documento?",
-					text: "Está acción  no se puede revertir",
-					type: "warning",
-					showCancelButton: true,
-					confirmButtonColor: "#DD6B55",
-					confirmButtonText: "Guardar!",
-					cancelButtonText: "Cancelar!",
-					closeOnConfirm: false,
-					closeOnCancel: false
-				}, function (isConfirm) {
-
-					if (isConfirm) {
-						// cerrar msj confirmacion
-						swal.close();
-
-						// enviar datos
-						$('#formExcelArea').ajaxForm({
-							dataType: 'json',
-							type: 'POST',
-							url: "/reporteiluminacion",
-							data: {
+                        // enviar datos
+                        $('#formExcelArea').ajaxForm({
+                            dataType: 'json',
+                            type: 'POST',
+                            url: "/reporteiluminacion",
+                            data: {
 								opcion: 8001,
 
 								proyecto_id: proyecto.id
 
+                                
+                            },
+                            contentType: false,
+                            processData: false,
+                            success: function (dato) {
 
-							},
-							contentType: false,
-							processData: false,
-							success: function (dato) {
+                                // actualizar boton
+                                $('#botonCargarExcelArea').prop('disabled', false);
+                                $('#divCargaArea').css('display', 'none');
+                                
+                                if (dato.code == 200) {
+                                    
+                                    // cerrar modal
+                                    $('#modal_excel_areas').modal('hide');
+    
+                                    // mensaje
+                                    swal({
+                                        title: "Los datos fueron cargados exitosamente",
+                                        text: ""+dato.msj,
+                                        type: "success", // warning, error, success, info
+                                        buttons: {
+                                            visible: true, // true , false
+                                        },
+                                        showConfirmButton: true,
+                                        showCancelButton: false
+                                    });
 
-								// actualizar boton
-								$('#botonCargarExcelArea').prop('disabled', false);
-								$('#divCargaArea').css('display', 'none');
+                                    //Recargamos la tabla
+                                   	menureporte_estado("menureporte_0", 1);
 
-								if (dato.code == 200) {
-
-									// cerrar modal
-									$('#modal_excel_areas').modal('hide');
-
-									// mensaje
-									swal({
-										title: "Los datos fueron cargados exitosamente",
-										text: "" + dato.msj,
-										type: "success", // warning, error, success, info
-										buttons: {
-											visible: true, // true , false
-										},
-										showConfirmButton: true,
-										showCancelButton: false
-									});
-
-									//Recargamos la tabla
-									menureporte_estado("menureporte_0", 1);
-
-
+				
 									tabla_reporte_revisiones(proyecto.id);
 									tabla_reporte_categorias(proyecto.id, reporteiluminacion_id);
 									tabla_reporte_areas(proyecto.id, reporteiluminacion_id);
@@ -8403,84 +9008,85 @@ $(document).ready(function () {
 									reporteiluminacion_dashboard(proyecto.id, reporteiluminacion_id);
 
 
+                                
+                                } else {
 
-								} else {
+                                     swal({
+                                        title: "Ocurrio un error al intentar insertar los datos.",
+                                        text: ""+dato.msj,
+                                        type: "error", // warning, error, success, info
+                                        buttons: {
+                                            visible: true, // true , false
+                                        },
+                                        showConfirmButton: true,
+                                        showCancelButton: false
+									 });
+									
+                                }
 
-									swal({
-										title: "Ocurrio un error al intentar insertar los datos.",
-										text: "" + dato.msj,
-										type: "error", // warning, error, success, info
-										buttons: {
-											visible: true, // true , false
-										},
-										showConfirmButton: true,
-										showCancelButton: false
-									});
+                                
+                            },
+                            beforeSend: function () {
 
-								}
+                                $('#botonCargarExcelArea').prop('disabled', true);
+                                $('#divCargaArea').css('display', 'block');
+                            },
+                            error: function(dato) {
+                                
+                                // actualiza boton
+                                $('#botonCargarExcelArea').prop('disabled', false);
+                                $('#divCargaArea').css('display', 'none');
 
+                                // mensaje
+                                swal({
+                                    title: "Error al cargar los puntos.",
+                                    text: ""+dato.msj,
+                                    type: "error", // warning, error, success, info
+                                    buttons: {
+                                        visible: false, // true , false
+                                    },
+                                    timer: 1500,
+                                    showConfirmButton: false
+                                });
 
-							},
-							beforeSend: function () {
-
-								$('#botonCargarExcelArea').prop('disabled', true);
-								$('#divCargaArea').css('display', 'block');
-							},
-							error: function (dato) {
-
-								// actualiza boton
-								$('#botonCargarExcelArea').prop('disabled', false);
-								$('#divCargaArea').css('display', 'none');
-
-								// mensaje
-								swal({
-									title: "Error al cargar los puntos.",
-									text: "" + dato.msj,
-									type: "error", // warning, error, success, info
-									buttons: {
-										visible: false, // true , false
-									},
-									timer: 1500,
-									showConfirmButton: false
-								});
-
-								return false;
-							}
-						}).submit();
-						return false;
-					}
-					else {
-						// mensaje
-						swal({
-							title: "Cancelado",
-							text: "Acción cancelada",
-							type: "error", // warning, error, success, info
-							buttons: {
-								visible: false, // true , false
-							},
-							timer: 1500,
-							showConfirmButton: false
-						});
-					}
-				});
-				return false;
-			}
-		}
-	});
-
+                                return false;
+                            }
+                        }).submit();
+                        return false;
+                    }
+                    else 
+                    {
+                        // mensaje
+                        swal({
+                            title: "Cancelado",
+                            text: "Acción cancelada",
+                            type: "error", // warning, error, success, info
+                            buttons: {
+                                visible: false, // true , false
+                            },
+                            timer: 1500,
+                            showConfirmButton: false
+                        });   
+                    } 
+                });
+                return false;
+            }
+        }
+    });
 
 
-	$('#excelArea').change(function () {
 
-		if ($(this).val()) {
+    $('#excelArea').change(function () {
+        
+        if ($(this).val()) {
+            
+            $('#alertaVerificacion1').css('display', 'block');
 
-			$('#alertaVerificacion1').css('display', 'block');
-
-		} else {
-			$('#alertaVerificacion1').css('display', 'none');
-
-		}
-	});
+        } else {
+            $('#alertaVerificacion1').css('display', 'none');
+            
+        }
+    });
 
 });
 

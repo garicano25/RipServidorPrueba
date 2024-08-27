@@ -2602,4 +2602,4 @@
 </script>
 
 <script src="/js_sitio/html2canvas.js"></script>
-<script src="/js_sitio/reportes/reporteiluminacion.js"></script>
+<script src="/js_sitio/reportes/reporteiluminacion.js?v=1.0"></script>
