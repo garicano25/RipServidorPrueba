@@ -7274,8 +7274,8 @@ $("#botonguardar_modal_notas").click(function()
 
 
 						// Actualizar tablas
-						tabla_notas_stps(proyecto_id, reporteregistro_id, agente_nombre);
-						tabla_notas_ema(proyecto_id, reporteregistro_id, agente_nombre);
+						tabla_notas_stps(proyecto.id, reporteregistro_id, agente_nombre);
+						tabla_notas_ema(proyecto.id, reporteregistro_id, agente_nombre);
 
 
 						// mensaje
@@ -7344,6 +7344,12 @@ $("#botonguardar_modal_notas").click(function()
 		return false;
 	}
 });
+
+
+
+
+
+
 
 
 //=================================================
