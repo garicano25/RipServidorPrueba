@@ -908,8 +908,8 @@ $("#boton_nuevo_fotosevidencia").click(function()
 			$("#fotosfisicos_campo_punto").css('display', 'none');
 			$("#proyectoevidenciafoto_nopunto").attr('required', false);
 
-			$("#fotosfisicos_campo_partida").css('display', 'inline-block');
-			$("#catreportequimicospartidas_id").attr('required', true);
+			$("#fotosfisicos_campo_partida").css('display', 'none');
+			$("#catreportequimicospartidas_id").attr('required', false);
 		}
 		else
 		{
@@ -1002,7 +1002,7 @@ function evidenciafoto_mostrardatos(foto_id, foto_ruta, foto_punto, foto_descrip
 		$("#proyectoevidenciafoto_nopunto").attr('required', false);
 
 		$("#fotosfisicos_campo_partida").css('display', 'inline-block');
-		$("#catreportequimicospartidas_id").attr('required', true);
+		$("#catreportequimicospartidas_id").attr('required', false);
 
 		$("#catreportequimicospartidas_id").val(foto_punto);
 		$("#proyectoevidenciafoto_carpeta").val($('#catreportequimicospartidas_id').find(":selected").text());

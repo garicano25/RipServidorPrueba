@@ -2059,13 +2059,13 @@
 						</div>
 						<div class="col-4">
 							<div class="form-group">
-								<label>Temperatura (°C)</label>
+								<label>Temperatura del aire(°C)</label>
 								<input type="number" step="any" min="0" class="form-control" id="reporteaireevaluacion_temperatura" name="reporteaireevaluacion_temperatura" placeholder="22 - 24.5" required>
 							</div>
 						</div>
 						<div class="col-4">
 							<div class="form-group">
-								<label>Velocidad (m/s)</label>
+								<label>Velocidad del aire(m/s)</label>
 								<input type="number" step="any" min="0" class="form-control" id="reporteaireevaluacion_velocidad" name="reporteaireevaluacion_velocidad" placeholder="" required>
 							</div>
 						</div>
@@ -2081,7 +2081,7 @@
 						</div>
 						<div class="col-3">
 							<div class="form-group">
-								<label>Humedad (%)</label>
+								<label>Humedad del aire(%)</label>
 								<input type="number" step="any" min="0" class="form-control" id="reporteaireevaluacion_humedad" name="reporteaireevaluacion_humedad" placeholder="20 - 60" required>
 							</div>
 						</div>

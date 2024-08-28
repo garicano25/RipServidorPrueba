@@ -4905,8 +4905,8 @@ function funcion_tabla_recsensorialareas(recsensorial_id)
             '<td style="padding:2px 4px;"><input type="number" class="form-control" style="padding:0px 4px;" name="total[]" value="" placeholder="Total" required></td>' +
             '<td style="padding:2px 4px;"><input type="number" class="form-control" style="padding:0px 4px;" name="tiempo[]" value="" placeholder="Tiempo Expo." required></td>' +
             '<td style="padding:2px 4px;"><input type="number" class="form-control" style="padding:0px 4px;" name="frecuencia[]" value="" placeholder="Frec. Expo." required></td>' +
-			'<td style="padding:2px 4px;"><input type="number" class="form-control" style="padding:0px 4px;" name="tiempo_quimicos[]" value="" placeholder="Tiempo Expo." required></td>' +
-            '<td style="padding:2px 4px;"><input type="number" class="form-control" style="padding:0px 4px;" name="frecuencia_quimicos[]" value="" placeholder="Frec. Expo." required></td>' +
+			'<td style="padding:2px 4px;"><input type="number" class="form-control" style="padding:0px 4px;" name="tiempo_quimicos[]" value="0" placeholder="Tiempo Expo." required></td>' +
+            '<td style="padding:2px 4px;"><input type="number" class="form-control" style="padding:0px 4px;" name="frecuencia_quimicos[]" value="0" placeholder="Frec. Expo." required></td>' +
 
 
 
@@ -4924,41 +4924,94 @@ function funcion_tabla_recsensorialareas(recsensorial_id)
 
 
 
-function consulta_parametros(recsensorial_id, area_id)
-{
+// function consulta_parametros(recsensorial_id, area_id)
+// {
+//     $.ajax({
+//         type: "GET",
+//         dataType: "json",
+//         url: "/recsensorialareaparametros/"+recsensorial_id+"/"+area_id,
+//         data:{},
+//         cache: false,
+//         success:function(dato)
+//         {
+//         	$('#checkbox_areaagentes').html('');
+//             $.each( dato.parametros, function( key, value ) {
+// 				$("#checkbox_areaagentes").append('<div class="col-12">'+
+// 														'<div class="form-group">'+
+// 															'<div class="switch" style="float: left;">'+
+// 																'<label>'+
+// 																	'<input type="checkbox" name="parametro[]" value="'+value.catprueba_id+'" '+value.checked+'>'+
+// 																	'<span class="lever switch-col-light-blue"></span>'+
+// 																'</label>'+
+// 															'</div>'+
+// 															'<label class="demo-switch-title" style="float: left;">'+value.catPrueba_Nombre+'</label>'+
+// 														'</div>'+
+// 													'</div>');
+// 			});
+//         },
+//         beforeSend: function()
+//         {
+//             $('#checkbox_areaagentes').html('<i class="fa fa-spin fa-spinner fa-3x" style="margin: 0px auto;"></i>');
+//         },
+//         error: function(dato){
+//         	$('#checkbox_areaagentes').html('');
+//             return false;
+//         }
+//     });//Fin ajax
+// }
+
+
+
+
+function consulta_parametros(recsensorial_id, area_id) {
     $.ajax({
         type: "GET",
         dataType: "json",
-        url: "/recsensorialareaparametros/"+recsensorial_id+"/"+area_id,
-        data:{},
+        url: "/recsensorialareaparametros/" + recsensorial_id + "/" + area_id,
+        data: {},
         cache: false,
-        success:function(dato)
-        {
-        	$('#checkbox_areaagentes').html('');
-            $.each( dato.parametros, function( key, value ) {
-				$("#checkbox_areaagentes").append('<div class="col-12">'+
-														'<div class="form-group">'+
-															'<div class="switch" style="float: left;">'+
-																'<label>'+
-																	'<input type="checkbox" name="parametro[]" value="'+value.catprueba_id+'" '+value.checked+'>'+
-																	'<span class="lever switch-col-light-blue"></span>'+
-																'</label>'+
-															'</div>'+
-															'<label class="demo-switch-title" style="float: left;">'+value.catPrueba_Nombre+'</label>'+
-														'</div>'+
-													'</div>');
-			});
+        success: function(dato) {
+            $('#checkbox_areaagentes').html('');
+            $.each(dato.parametros, function(key, value) {
+                let switchElement = 
+                    '<div class="col-12">' +
+                        '<div class="form-group">' +
+                            '<div class="switch" style="float: left;">' +
+                                '<label>' +
+                                    '<input type="checkbox" name="parametro[]" value="' + value.catprueba_id + '" ' + value.checked + '>' +
+                                    '<span class="lever switch-col-light-blue"></span>' +
+                                '</label>' +
+                            '</div>' +
+                            '<label class="demo-switch-title" style="float: left;">' + value.catPrueba_Nombre + '</label>' +
+                        '</div>' +
+                    '</div>';
+
+                $("#checkbox_areaagentes").append(switchElement);
+
+                $('input[name="parametro[]"][value="' + value.catprueba_id + '"]').change(function() {
+                    if ($(this).is(':checked') && value.catprueba_id == 15) {
+                        $('input[name="tiempo_quimicos[]"]').val(''); 
+                        $('input[name="frecuencia_quimicos[]"]').val(''); 
+                    } else if 
+						(!$(this).is(':checked') && value.catprueba_id == 15) {
+                        $('input[name="tiempo_quimicos[]"]').val('0'); 
+                        $('input[name="frecuencia_quimicos[]"]').val('0'); 
+                    }
+                });
+            });
         },
-        beforeSend: function()
-        {
+        beforeSend: function() {
             $('#checkbox_areaagentes').html('<i class="fa fa-spin fa-spinner fa-3x" style="margin: 0px auto;"></i>');
         },
-        error: function(dato){
-        	$('#checkbox_areaagentes').html('');
+        error: function(dato) {
+            $('#checkbox_areaagentes').html('');
             return false;
         }
-    });//Fin ajax
+    }); // Fin ajax
 }
+
+
+
 
 
 function consulta_categorias(recsensorial_id)
@@ -4994,8 +5047,8 @@ $("#boton_nueva_areacategoria").click(function()
 												'<td style="padding:2px 4px;"><input type="number" class="form-control" style="padding:0px 4px;" name="total[]" value="" placeholder="Total" required></td>'+
 												'<td style="padding:2px 4px;"><input type="number" class="form-control" style="padding:0px 4px;" name="tiempo[]" value="" placeholder="Tiempo Expo." required></td>'+
 												'<td style="padding:2px 4px;"><input type="number" class="form-control" style="padding:0px 4px;" name="frecuencia[]" value="" placeholder="Frec. Expo." required></td>'+
-												'<td style="padding:2px 4px;"><input type="number" class="form-control" style="padding:0px 4px;" name="tiempo_quimicos[]" value="" placeholder="Tiempo Expo." required></td>'+
-												'<td style="padding:2px 4px;"><input type="number" class="form-control" style="padding:0px 4px;" name="frecuencia_quimicos[]" value="" placeholder="Frec. Expo." required></td>'+
+												'<td style="padding:2px 4px;"><input type="number" class="form-control" style="padding:0px 4px;" name="tiempo_quimicos[]" value="0" placeholder="Tiempo Expo." required></td>'+
+												'<td style="padding:2px 4px;"><input type="number" class="form-control" style="padding:0px 4px;" name="frecuencia_quimicos[]" value="0" placeholder="Frec. Expo." required></td>'+
 												'<td style="padding:2px 4px;" class="eliminar"><button type="button" class="btn btn-danger btn-circle"><i class="fa fa-trash"></i></button></td>'+
 											'</tr>');
 

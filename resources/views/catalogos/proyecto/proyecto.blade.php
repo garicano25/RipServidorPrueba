@@ -2995,7 +2995,7 @@
                                     <div class="form-group">
                                         <label>Tipo de evaluación *</label>
                                         <select class="custom-select form-control" id="catreportequimicospartidas_id" name="catreportequimicospartidas_id" required onchange="evidenciafoto_carpetanombre(this);">
-                                            <option value=""></option>
+                                            <option value="0" selected></option>
                                         </select>
                                     </div>
                                 </div>
@@ -3074,7 +3074,8 @@
                             <div class="form-group">
                                 <label>Tipo de evaluación *</label>
                                 <select class="custom-select form-control" id="nombrecarpetacatreportequimicospartidas_id" name="catreportequimicospartidas_id" required>
-                                    <option value=""></option>
+                                    <option value="0" selected></option>
+
                                 </select>
                             </div>
                         </div>
@@ -3133,7 +3134,7 @@
                             <div class="form-group">
                                 <label>Tipo de evaluación *</label>
                                 <select class="custom-select form-control" id="planoscatreportequimicospartidas_id" name="catreportequimicospartidas_id" required>
-                                    <option value=""></option>
+                                    <option value="0" selected></option>
                                 </select>
                             </div>
                         </div>
