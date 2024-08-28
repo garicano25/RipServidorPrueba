@@ -965,8 +965,8 @@
 							<thead>
 								<tr>
 									<th width="60">Contador</th>
-									<th>Subdirección o<br>corporativo</th>
-									<th>Gerencia o<br>activo</th>
+									<!-- <th>Subdirección o<br>corporativo</th> -->
+									<!-- <th>Gerencia o<br>activo</th> -->
 									<th>Instalación</th>
 									<th>Área de<br>referencia<br>en atlas<br>de riesgo</th>
 									<th>Nombre</th>
@@ -1238,7 +1238,7 @@
 									<tr>
 										<th width="60">Seleccionado</th>
 										<th width="">Carpeta</th>
-										<th width="">Partida</th>
+										<!-- <th width="">Partida</th> -->
 										<th width="120">Total planos</th>
 									</tr>
 								</thead>
@@ -2277,4 +2277,4 @@
 	var areas_poe = <?php echo json_encode($areas_poe); ?>;
 </script>
 <script src="/js_sitio/html2canvas.js"></script>
-<script src="/js_sitio/reportes/reportequimicos.js?v=1.0"></script>
+<script src="/js_sitio/reportes/reportequimicos.js?v=2.0"></script>
