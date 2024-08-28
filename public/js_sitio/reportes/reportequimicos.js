@@ -212,6 +212,9 @@ function datosgenerales()
 			$('#reporte_objetivoespecifico').html(dato.reporte_objetivoespecifico);
 			$('#reporte_metodologia_4_1').html(dato.reporte_metodologia_4_1);
 			$('#reporte_metodologia_4_2').html(dato.reporte_metodologia_4_2);
+			$('#reporte_conclusion').val(dato.reporte_conclusion);
+			$('#reporteconclusion_id').val(dato.reporte_conclusion_id);
+
 
 			$('#reporte_ubicacioninstalacion').html(dato.reporte_ubicacioninstalacion.ubicacion);
 			if (dato.reporte_ubicacioninstalacion.ubicacionfoto)
@@ -321,6 +324,7 @@ function datosgenerales()
 			menureporte_estado("menureporte_10", dato.reporte_responsablesinforme_guardado);
 			menureporte_estado("menureporte_11_1", dato.reporte_memoriafotografica_guardado);
 			menureporte_estado("menureporte_11_5", 1); //Incertidumbre de la medición
+			menureporte_estado("menureporte_8", dato.reporte_conclusion_guardado); //Conclusiones del Informe
 
 
 			//Bloquear botones nuevas categorias y nuevas areas si este proyecto tiene POE general
@@ -611,7 +615,7 @@ $(document).ready(function()
 	setTimeout(function()
 	{
 		tabla_reporte_gruposquimicos(proyecto.id, reporteregistro_id);
-	}, 1000);
+	}, 6000);
 });
 
 
@@ -677,7 +681,7 @@ function tabla_reporte_gruposquimicos(proyecto_id, reporteregistro_id)
 					// 	orderable: false,
 					// },
 					{
-						data: "clientepartidas_descripcion",
+						data: "proveedor_NombreComercial",
 						defaultContent: "-",
 						orderable: false,
 					},
@@ -858,7 +862,7 @@ $('#tabla_reporte_gruposquimicos tbody').on('click', 'td>button.eliminar', funct
 
 
 							datosgenerales_actualizar();
-							tabla_reporte_conclusiones(proyecto.id, reporteregistro_id);
+							// tabla_reporte_conclusiones(proyecto.id, reporteregistro_id);
 							tabla_reporte_recomendaciones(proyecto.id, reporteregistro_id, agente_nombre);
 
 
@@ -994,7 +998,7 @@ $("#botonguardar_modal_grupoquimicos").click(function()
 
 
 							datosgenerales_actualizar();
-							tabla_reporte_conclusiones(proyecto.id, reporteregistro_id);
+							// tabla_reporte_conclusiones(proyecto.id, reporteregistro_id);
 							tabla_reporte_recomendaciones(proyecto.id, reporteregistro_id, agente_nombre);
 
 
@@ -4129,33 +4133,33 @@ function tabla_reporte_5_7(recsensorial_id)
 					//     data: "id" 
 					// },
 					{
-						data: "sustancia_nombre",
+						data: "PRODUCTO",
 						defaultContent: "-",
 						// className: '',
 						orderable: false,
 					},
 					{
-						data: "catsustanciacomponente_nombre",
+						data: "COMPONENTE",
 						defaultContent: "-",
 						orderable: false,
 					},
 					{
-						data: "ponderacion_cantidad",
+						data: "PONDERACION_CANTIDAD",
 						defaultContent: "-",
 						orderable: false,
 					},
 					{
-						data: "ponderacion_riesgo",
+						data: "PONDERACION_CLASIFICACION",
 						defaultContent: "-",
 						orderable: false,
 					},
 					{
-						data: "ponderacion_volatilidad",
+						data: "PONDERACION_VOLATILIDAD",
 						defaultContent: "-",
 						orderable: false,
 					},
 					{
-						data: "TOTAL",
+						data: "SUMA_PONDERACIONES",
 						defaultContent: "-",
 						orderable: false,
 					},
@@ -4193,7 +4197,7 @@ function tabla_reporte_5_7(recsensorial_id)
 				{
 					// console.log(index+' - '+data.reporteiluminacionpuntos_nopunto);
 
-					if(data.COLOR == "#FF0000")
+					if(data.COLOR == "#8E44AD" || data.COLOR == "#E74C3C")
 					{
 						$(row).find('td:eq(6)').css('color', '#FFFFFF');
 					}
@@ -5624,137 +5628,137 @@ function tabla_reporte_matriz(proyecto_id, reporteregistro_id)
 var conclusion_catalogo = '';
 
 
-$(document).ready(function()
-{
-	setTimeout(function()
-	{
-		tabla_reporte_conclusiones(proyecto.id, reporteregistro_id);
-	}, 6000);
-});
+// $(document).ready(function()
+// {
+// 	setTimeout(function()
+// 	{
+// 		tabla_reporte_conclusiones(proyecto.id, reporteregistro_id);
+// 	}, 6000);
+// });
 
 
-var datatable_conclusiones = null;
-function tabla_reporte_conclusiones(proyecto_id, reporteregistro_id)
-{
-	try 
-	{
-		var ruta = "/reportequimicosconclusionestabla/"+proyecto_id+"/"+reporteregistro_id;
+// var datatable_conclusiones = null;
+// function tabla_reporte_conclusiones(proyecto_id, reporteregistro_id)
+// {
+// 	try 
+// 	{
+// 		var ruta = "/reportequimicosconclusionestabla/"+proyecto_id+"/"+reporteregistro_id;
 
-		if (datatable_conclusiones != null)
-		{
-			datatable_conclusiones.clear().draw();
-			datatable_conclusiones.ajax.url(ruta).load();
-		}
-		else
-		{
-			var numeroejecucion = 1;
-		    datatable_conclusiones = $('#tabla_reporte_conclusiones').DataTable({
-				ajax: {
-					url: ruta,
-					type: "get",
-					cache: false,
-					dataType: "json",
-					data: {},
-					dataSrc: function (json)
-					{
-						conclusion_catalogo = json.conclusion_catalogo;
+// 		if (datatable_conclusiones != null)
+// 		{
+// 			datatable_conclusiones.clear().draw();
+// 			datatable_conclusiones.ajax.url(ruta).load();
+// 		}
+// 		else
+// 		{
+// 			var numeroejecucion = 1;
+// 		    datatable_conclusiones = $('#tabla_reporte_conclusiones').DataTable({
+// 				ajax: {
+// 					url: ruta,
+// 					type: "get",
+// 					cache: false,
+// 					dataType: "json",
+// 					data: {},
+// 					dataSrc: function (json)
+// 					{
+// 						conclusion_catalogo = json.conclusion_catalogo;
 
-						menureporte_estado("menureporte_8", parseInt(json.total));
+// 						menureporte_estado("menureporte_8", parseInt(json.total));
 
-						// alert("Done! "+json.msj);
-						return json.data;
-					},
-					error: function (xhr, error, code)
-					{						
-						console.log('error en tabla_reporte_conclusiones '+code);
-						if (numeroejecucion <= 1)
-						{
-							tabla_reporte_conclusiones(proyecto_id, reporteregistro_id);
-							numeroejecucion += 1;
-						}
-					}
-				},
-				columns: [
-					// {
-					//     data: "id" 
-					// },
-					{
-						data: "numero_registro",
-						defaultContent: "-",
-						// className: '',
-						orderable: false,
-					},
-					{
-						data: "partida",
-						defaultContent: "-",
-						orderable: false,
-					},
-					{
-						data: "conclusion",
-						defaultContent: "-",
-						className: 'justificado',
-						orderable: false,
-					},
-					{
-						data: "boton_editar",
-						defaultContent: "-",
-						className: 'editar',
-						orderable: false,
-					},
-					{
-						data: "boton_eliminar",
-						defaultContent: "-",
-						orderable: false,
-					}
-				],
-				lengthMenu: [[20, 50, 100, -1], [20, 50, 100, "Todos"]],
-				// rowsGroup: [1, 2, 3], //agrupar filas
-				order: [[ 0, "ASC" ]],
-				ordering: false,
-				processing: true,
-				searching: false,
-				paging: false,
-				language: {
-					lengthMenu: "Mostrar _MENU_ Registros",
-					zeroRecords: "No se encontraron registros",
-					info: "Página _PAGE_ de _PAGES_ (Total _TOTAL_ registros)",
-					infoEmpty: "No se encontraron registros",
-					infoFiltered: "(Filtrado de _MAX_ registros)",
-					emptyTable: "No hay datos disponibles en la tabla",
-					loadingRecords: "Cargando datos....",
-					processing: "Procesando <i class='fa fa-spin fa-spinner fa-3x'></i>",
-					search: "Buscar",
-					paginate: {
-						first: "Primera",
-						last: "Ultima",
-						next: "Siguiente",
-						previous: "Anterior"
-					}
-				},
-				rowCallback: function(row, data, index)
-				{
-					// console.log(index+' - '+data.reporteiluminacionpuntos_nopunto);
+// 						// alert("Done! "+json.msj);
+// 						return json.data;
+// 					},
+// 					error: function (xhr, error, code)
+// 					{						
+// 						console.log('error en tabla_reporte_conclusiones '+code);
+// 						if (numeroejecucion <= 1)
+// 						{
+// 							tabla_reporte_conclusiones(proyecto_id, reporteregistro_id);
+// 							numeroejecucion += 1;
+// 						}
+// 					}
+// 				},
+// 				columns: [
+// 					// {
+// 					//     data: "id" 
+// 					// },
+// 					{
+// 						data: "numero_registro",
+// 						defaultContent: "-",
+// 						// className: '',
+// 						orderable: false,
+// 					},
+// 					{
+// 						data: "partida",
+// 						defaultContent: "-",
+// 						orderable: false,
+// 					},
+// 					{
+// 						data: "conclusion",
+// 						defaultContent: "-",
+// 						className: 'justificado',
+// 						orderable: false,
+// 					},
+// 					{
+// 						data: "boton_editar",
+// 						defaultContent: "-",
+// 						className: 'editar',
+// 						orderable: false,
+// 					},
+// 					{
+// 						data: "boton_eliminar",
+// 						defaultContent: "-",
+// 						orderable: false,
+// 					}
+// 				],
+// 				lengthMenu: [[20, 50, 100, -1], [20, 50, 100, "Todos"]],
+// 				// rowsGroup: [1, 2, 3], //agrupar filas
+// 				order: [[ 0, "ASC" ]],
+// 				ordering: false,
+// 				processing: true,
+// 				searching: false,
+// 				paging: false,
+// 				language: {
+// 					lengthMenu: "Mostrar _MENU_ Registros",
+// 					zeroRecords: "No se encontraron registros",
+// 					info: "Página _PAGE_ de _PAGES_ (Total _TOTAL_ registros)",
+// 					infoEmpty: "No se encontraron registros",
+// 					infoFiltered: "(Filtrado de _MAX_ registros)",
+// 					emptyTable: "No hay datos disponibles en la tabla",
+// 					loadingRecords: "Cargando datos....",
+// 					processing: "Procesando <i class='fa fa-spin fa-spinner fa-3x'></i>",
+// 					search: "Buscar",
+// 					paginate: {
+// 						first: "Primera",
+// 						last: "Ultima",
+// 						next: "Siguiente",
+// 						previous: "Anterior"
+// 					}
+// 				},
+// 				rowCallback: function(row, data, index)
+// 				{
+// 					// console.log(index+' - '+data.reporteiluminacionpuntos_nopunto);
 
-					// if(data.reporteiluminacionpuntos_nopunto == 2)
-					// {
-					// 	$(row).find('td:eq(12)').css('background', 'red');
-					// 	$(row).find('td:eq(12)').css('color', 'white');
-					// }
-				},
-			});
-		}
+// 					// if(data.reporteiluminacionpuntos_nopunto == 2)
+// 					// {
+// 					// 	$(row).find('td:eq(12)').css('background', 'red');
+// 					// 	$(row).find('td:eq(12)').css('color', 'white');
+// 					// }
+// 				},
+// 			});
+// 		}
 
-		// Tooltip en DataTable
-		datatable_conclusiones.on('draw', function ()
-		{
-			$('[data-toggle="tooltip"]').tooltip();
-		});
-	}
-	catch (exception)
-	{
-		tabla_reporte_conclusiones(proyecto_id, reporteregistro_id);
-    }
-}
+// 		// Tooltip en DataTable
+// 		datatable_conclusiones.on('draw', function ()
+// 		{
+// 			$('[data-toggle="tooltip"]').tooltip();
+// 		});
+// 	}
+// 	catch (exception)
+// 	{
+// 		tabla_reporte_conclusiones(proyecto_id, reporteregistro_id);
+//     }
+// }
 
 
 $("#boton_reporte_nuevaconclusion").click(function()
@@ -5861,7 +5865,7 @@ $('#tabla_reporte_conclusiones tbody').on('click', 'td>button.eliminar', functio
 						success:function(dato)
 						{
 							// Actualizar tabla
-							tabla_reporte_conclusiones(proyecto.id, reporteregistro_id);
+							// tabla_reporte_conclusiones(proyecto.id, reporteregistro_id);
 
 							// mensaje
 							swal({
@@ -5966,19 +5970,20 @@ $("#botonguardar_modal_conclusion").click(function()
 						proyecto_id: proyecto.id,
 						agente_id: agente_id,
 						agente_nombre: agente_nombre,
-						reporteregistro_id: reporteregistro_id,
-						catactivo_id: $("#reporte_catactivo_id").val(),
-						reporte_instalacion: $("#reporte_instalacion").val(),
+						reporteregistro_id: reporteregistro_id
 					},
 					resetForm: false,
-					success: function(dato)
-					{
-						// Actualizar ID reporte						
+					success: function (dato) {
+						
+						// Actualizar ID reporte y asignar valor al id de conclusiones					
 						reporteregistro_id = dato.reporteregistro_id;
+
+						$('#reporteconclusion_id').val(dato.conclusion_id)
 
 
 						// Actualizar tabla
-						tabla_reporte_conclusiones(proyecto.id, reporteregistro_id);
+						menureporte_estado("menureporte_8", 1);
+						
 
 
 						// mensaje
@@ -5998,8 +6003,7 @@ $("#botonguardar_modal_conclusion").click(function()
 						$('#botonguardar_modal_conclusion').attr('disabled', false);
 
 
-						// cerrar modal
-						$('#modal_reporte_conclusion').modal('hide');
+					
 					},
 					beforeSend: function()
 					{
@@ -8262,7 +8266,7 @@ function reporte_concluido(reporte_id, perfil, checkbox)
 								tabla_reporte_epp(proyecto.id, reporteregistro_id);
 								tabla_reporte_7(proyecto.id, reporteregistro_id);
 								tabla_reporte_7_1(proyecto.id, reporteregistro_id);
-								tabla_reporte_conclusiones(proyecto.id, reporteregistro_id);
+								// tabla_reporte_conclusiones(proyecto.id, reporteregistro_id);
 
 
 								// desplazar a la ultima fila de la tabla
@@ -8384,7 +8388,7 @@ function reporte_concluido(reporte_id, perfil, checkbox)
 							tabla_reporte_epp(proyecto.id, reporteregistro_id);
 							tabla_reporte_7(proyecto.id, reporteregistro_id);
 							tabla_reporte_7_1(proyecto.id, reporteregistro_id);
-							tabla_reporte_conclusiones(proyecto.id, reporteregistro_id);
+							// tabla_reporte_conclusiones(proyecto.id, reporteregistro_id);
 
 
 							// desplazar a la ultima fila de la tabla
@@ -8528,7 +8532,7 @@ function reporte_cancelado(reporte_id, perfil, checkbox)
 							tabla_reporte_epp(proyecto.id, reporteregistro_id);
 							tabla_reporte_7(proyecto.id, reporteregistro_id);
 							tabla_reporte_7_1(proyecto.id, reporteregistro_id);
-							tabla_reporte_conclusiones(proyecto.id, reporteregistro_id);
+							// tabla_reporte_conclusiones(proyecto.id, reporteregistro_id);
 
 							
 							// desplazar a la ultima fila de la tabla
@@ -8663,7 +8667,7 @@ $("#botonguardar_modal_cancelacionobservacion").click(function()
 						tabla_reporte_epp(proyecto.id, reporteregistro_id);
 						tabla_reporte_7(proyecto.id, reporteregistro_id);
 						tabla_reporte_7_1(proyecto.id, reporteregistro_id);
-						tabla_reporte_conclusiones(proyecto.id, reporteregistro_id);
+						// tabla_reporte_conclusiones(proyecto.id, reporteregistro_id);
 
 						
 						// desplazar a la ultima fila de la tabla
@@ -8958,7 +8962,7 @@ function crear_informe()
 						tabla_reporte_epp(proyecto.id, reporteregistro_id);
 						tabla_reporte_7(proyecto.id, reporteregistro_id);
 						tabla_reporte_7_1(proyecto.id, reporteregistro_id);
-						tabla_reporte_conclusiones(proyecto.id, reporteregistro_id);
+						// tabla_reporte_conclusiones(proyecto.id, reporteregistro_id);
 
 
 						// desplazar a la ultima fila de la tabla

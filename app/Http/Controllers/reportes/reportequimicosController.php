@@ -156,7 +156,8 @@ class reportequimicosController extends Controller
                 foreach ($quimicos as $key => $value) {
                     $quimico = reportequimicosproyectoModel::create([
                         'proyecto_id' => $proyecto_id,
-                        'reportequimicosproyecto_parametro' => $value->proyectoproveedores_agente
+                        'reportequimicosproyecto_parametro' => $value->proyectoproveedores_agente,
+                        'cantidad' => $value->proyectoproveedores_puntos
                     ]);
                 }
             } else {
@@ -816,20 +817,22 @@ class reportequimicosController extends Controller
 
             // CONCLUSION
             //===================================================
+            $idConclusion = DB::select('SELECT * FROM reportequimicosconclusion WHERE proyecto_id = ? LIMIT 1', [$proyecto_id]);
 
+            if (count($idConclusion) > 0) {
 
-            // if ($dato['reporteregistro_id'] >= 0 && $reporte->reportequimicos_conclusion != NULL && $reporte->proyecto_id == $proyecto_id)
-            // {
-            //     $dato['reporte_conclusion_guardado'] = 1;
-            //     $conclusion = $reporte->reportequimicos_conclusion;
-            // }
-            // else
-            // {
-            //     $dato['reporte_conclusion_guardado'] = 0;
-            //     $conclusion = $reportecatalogo[0]->reportequimicoscatalogo_conclusion;
-            // }
+                $dato['reporte_conclusion_guardado'] = 1;
+                $dato['reporte_conclusion_id'] = $idConclusion[0]->id;
+                $conclusion = $idConclusion[0]->reportequimicosconclusion_conclusion;
+                $dato['reporte_conclusion'] = $conclusion;
+            } else {
 
-            // $dato['reporte_conclusion'] = $this->datosproyectoreemplazartexto($proyecto, $recsensorial, $quimicos_nombre, $conclusion);
+                $dato['reporte_conclusion_guardado'] = 0;
+                $dato['reporte_conclusion_id'] = 0;
+                $conclusion = $reportecatalogo[0]->reportequimicoscatalogo_conclusion;
+                $dato['reporte_conclusion'] = $this->datosproyectoreemplazartexto($proyecto, $recsensorial, $quimicos_nombre, $conclusion);
+            }
+
 
 
             // RESPONSABLES DEL INFORME
@@ -1149,7 +1152,8 @@ class reportequimicosController extends Controller
                                             reportequimicosproyecto.id,
                                             reportequimicosproyecto.proyecto_id,
                                             reportequimicosproyecto.registro_id,
-                                            reportequimicosproyecto.reportequimicosproyecto_parametro 
+                                            reportequimicosproyecto.reportequimicosproyecto_parametro ,
+                                            reportequimicosproyecto.cantidad 
                                         FROM
                                             reportequimicosproyecto 
                                         WHERE
@@ -1159,32 +1163,18 @@ class reportequimicosController extends Controller
                                             reportequimicosproyecto.reportequimicosproyecto_parametro ASC');
 
 
-            // if (count($parametros) == 0)
-            // {
-            //     $parametros = DB::select('SELECT
-            //                                     reportequimicosproyecto.id,
-            //                                     reportequimicosproyecto.proyecto_id,
-            //                                     reportequimicosproyecto.registro_id,
-            //                                     reportequimicosproyecto.reportequimicosproyecto_parametro 
-            //                                 FROM
-            //                                     reportequimicosproyecto 
-            //                                 WHERE
-            //                                     reportequimicosproyecto.proyecto_id = '.$proyecto_id.'
-            //                                 ORDER BY
-            //                                     reportequimicosproyecto.reportequimicosproyecto_parametro ASC');
-            // }
-
 
             $dato['parametros_checkbox'] = '';
             foreach ($parametros as $key => $value) {
                 $dato['parametros_checkbox'] .= '<div class="col-6">
                                                     <div class="switch" style="float: left;">
                                                         <label>
-                                                            <input type="checkbox" class="checkbox_parametro" id="parametro_' . $value->id . '" name="parametro[]" value="' . $value->id . '">
+                                                            <input type="hidden" class="checkbox_parametro" id="parametro_' . $value->id . '" name="parametro[]" value="' . $value->id . '">
+                                                            <input type="checkbox" class="checkbox_parametro" value="' . $value->id . '" checked disabled>
                                                             <span class="lever switch-col-light-blue"></span>
                                                         </label>
                                                     </div>
-                                                    <label class="demo-switch-title" style="float: left;">' . $value->reportequimicosproyecto_parametro . '</label>
+                                                    <label class="demo-switch-title" style="float: left;">' . $value->reportequimicosproyecto_parametro . ' [ Cantidad: ' . $value->cantidad . '] </label>
                                                 </div>';
             }
 
@@ -2279,173 +2269,7 @@ class reportequimicosController extends Controller
     public function reportequimicossustanciasreconocimiento($recsensorial_id)
     {
         try {
-            $sustancias = DB::select('SELECT    
-                                            TABLA3.sustancia_nombre,
-                                            catsustanciacomponente.catsustanciacomponente_nombre,
-                                            TABLA3.ponderacion_cantidad,
-                                            TABLA3.ponderacion_riesgo,
-                                            TABLA3.ponderacion_volatilidad,
-                                            TABLA3.TOTAL,
-                                            TABLA3.PRIORIDAD,
-                                            TABLA3.COLOR
-                                        FROM
-                                            (
-                                                SELECT
-                                                    sustancia_id,
-                                                    TABLA2.sustancia_nombre,
-                                                    MAX(TABLA2.ponderacion_cantidad) AS ponderacion_cantidad,
-                                                    MAX(TABLA2.ponderacion_riesgo) AS ponderacion_riesgo,
-                                                    MAX(TABLA2.ponderacion_volatilidad) AS ponderacion_volatilidad,
-                                                    (MAX(ponderacion_cantidad) + MAX(ponderacion_riesgo) + MAX(ponderacion_volatilidad)) AS TOTAL,
-                                                    (
-                                                        CASE
-                                                            WHEN (MAX(ponderacion_cantidad) + MAX(ponderacion_riesgo) + MAX(ponderacion_volatilidad)) >= 12 THEN "Muy alta"
-                                                            WHEN (MAX(ponderacion_cantidad) + MAX(ponderacion_riesgo) + MAX(ponderacion_volatilidad)) >= 10 THEN "Alta"
-                                                            WHEN (MAX(ponderacion_cantidad) + MAX(ponderacion_riesgo) + MAX(ponderacion_volatilidad)) >= 8 THEN "Moderada"
-                                                            WHEN (MAX(ponderacion_cantidad) + MAX(ponderacion_riesgo) + MAX(ponderacion_volatilidad)) >= 5 THEN "Baja"
-                                                            ELSE "Muy baja"
-                                                        END
-                                                    ) AS PRIORIDAD,
-                                                    (
-                                                        CASE
-                                                            WHEN (MAX(ponderacion_cantidad) + MAX(ponderacion_riesgo) + MAX(ponderacion_volatilidad)) >= 10 THEN "#FF0000"
-                                                            WHEN (MAX(ponderacion_cantidad) + MAX(ponderacion_riesgo) + MAX(ponderacion_volatilidad)) >= 8 THEN "#f3f900"
-                                                            ELSE "#00FF00"
-                                                        END
-                                                    ) AS COLOR
-                                                FROM
-                                                    (
-                                                        SELECT
-                                                            sustancia_id,
-                                                            IFNULL(sustancia_nombre, "Sin dato") AS sustancia_nombre,
-                                                            cancerigeno,
-                                                            IF(cancerigeno = 0, IFNULL(ponderacion_cantidad, 0), 5) AS ponderacion_cantidad,
-                                                            IFNULL(ponderacion_riesgo, 0) AS ponderacion_riesgo,
-                                                            IFNULL(ponderacion_volatilidad, 0) AS ponderacion_volatilidad
-                                                        FROM
-                                                            (
-                                                                SELECT
-                                                                    recsensorialquimicosinventario.recsensorial_id,
-                                                                    recsensorialquimicosinventario.id,
-                                                                    recsensorialquimicosinventario.recsensorialarea_id AS area_id,
-                                                                    recsensorialarea.recsensorialarea_nombre AS area_nombre,
-                                                                    recsensorialquimicosinventario.recsensorialcategoria_id AS categoria_id,
-                                                                    recsensorialcategoria.recsensorialcategoria_nombrecategoria AS categoria_nombre,
-                                                                    -- recsensorialcategoria.recsensorialcategoria_funcioncategoria AS categoria_funcion,
-                                                                    recsensorialareacategorias.recsensorialareacategorias_actividad AS categoria_actividad,
-                                                                    recsensorialareacategorias.recsensorialareacategorias_geh AS categoria_geh,
-                                                                    -- recsensorialcategoria.recsensorialcategoria_horasjornada AS horas_jornada,
-                                                                    recsensorialareacategorias.recsensorialareacategorias_total AS tot_trabajadores,
-                                                                    -- recsensorialareacategorias.recsensorialareacategorias_tiempoexpo AS tiempo_expo,
-                                                                    -- recsensorialareacategorias.recsensorialareacategorias_frecuenciaexpo AS frecuencia_expo,
-                                                                    IFNULL(recsensorialquimicosinventario.recsensorialcategoria_tiempoexpo, 0) AS tiempo_expo,
-                                                                    IFNULL(recsensorialquimicosinventario.recsensorialcategoria_frecuenciaexpo, 0) AS frecuencia_expo,
-                                                                    -- recsensorialcategoria.recsensorialcategoria_horarioentrada AS horario_entrada,
-                                                                    -- recsensorialcategoria.recsensorialcategoria_horariosalida AS horario_salida,
-                                                                    recsensorialquimicosinventario.catsustancia_id AS sustancia_id,
-                                                                    catsustancia.catsustancia_nombre AS sustancia_nombre,
-                                                                    recsensorialquimicosinventario.recsensorialquimicosinventario_cantidad AS sustancia_cantidad,
-                                                                    recsensorialquimicosinventario.catunidadmedidasustacia_id AS Umedida_ID,
-                                                                    catunidadmedidasustacia.catunidadmedidasustacia_descripcion AS Umedida,
-                                                                    catunidadmedidasustacia.catunidadmedidasustacia_abreviacion AS UmedidaAbrev,
-                                                                    catunidadmedidasustacia.catunidadmedidasustacia_ponderacion AS PONDERACION_ORIGINAL,
-                                                                    IFNULL((
-                                                                        SELECT
-                                                                            COUNT(catsustanciacomponente.catsustanciacomponente_connotacion)
-                                                                        FROM
-                                                                            catsustanciacomponente 
-                                                                        WHERE
-                                                                            catsustanciacomponente.catsustancia_id = recsensorialquimicosinventario.catsustancia_id
-                                                                            AND (catsustanciacomponente.catsustanciacomponente_connotacion LIKE "%A1%" OR 
-                                                                            catsustanciacomponente.catsustanciacomponente_connotacion LIKE "%A2%" OR 
-                                                                            catsustanciacomponente.catsustanciacomponente_connotacion LIKE "%Teratogenica%" OR 
-                                                                            catsustanciacomponente.catsustanciacomponente_connotacion LIKE "%Mutagenica%")
-                                                                    ), 0) AS cancerigeno,
-                                                                    (
-                                                                        CASE
-                                                                            WHEN recsensorialquimicosinventario.catunidadmedidasustacia_id = 6 THEN catunidadmedidasustacia.catunidadmedidasustacia_ponderacion
-                                                                            WHEN recsensorialquimicosinventario.catunidadmedidasustacia_id = 5 AND recsensorialquimicosinventario.recsensorialquimicosinventario_cantidad > 250 THEN 3
-                                                                            WHEN recsensorialquimicosinventario.catunidadmedidasustacia_id = 5 THEN catunidadmedidasustacia.catunidadmedidasustacia_ponderacion
-                                                                            WHEN recsensorialquimicosinventario.catunidadmedidasustacia_id = 4 THEN catunidadmedidasustacia.catunidadmedidasustacia_ponderacion
-                                                                            WHEN recsensorialquimicosinventario.catunidadmedidasustacia_id = 3 THEN catunidadmedidasustacia.catunidadmedidasustacia_ponderacion
-                                                                            WHEN recsensorialquimicosinventario.catunidadmedidasustacia_id = 2 AND recsensorialquimicosinventario.recsensorialquimicosinventario_cantidad > 250 THEN 3
-                                                                            WHEN recsensorialquimicosinventario.catunidadmedidasustacia_id = 2 THEN catunidadmedidasustacia.catunidadmedidasustacia_ponderacion
-                                                                            WHEN recsensorialquimicosinventario.catunidadmedidasustacia_id = 1 THEN catunidadmedidasustacia.catunidadmedidasustacia_ponderacion
-                                                                            ELSE 0
-                                                                        END
-                                                                    ) AS ponderacion_cantidad,
-                                                                    catgradoriesgosalud.catgradoriesgosalud_ponderacion AS ponderacion_riesgo,
-                                                                    catvolatilidad.catvolatilidad_ponderacion AS ponderacion_volatilidad,
-                                                                    catviaingresoorganismo.catviaingresoorganismo_ponderacion AS tot_ingresoorganismo,
-                                                                    (
-                                                                        CASE
-                                                                            WHEN recsensorialareacategorias.recsensorialareacategorias_total > 100 THEN 8
-                                                                            WHEN recsensorialareacategorias.recsensorialareacategorias_total >= 25 THEN 4
-                                                                            WHEN recsensorialareacategorias.recsensorialareacategorias_total >= 5 THEN 2
-                                                                            ELSE 1
-                                                                        END
-                                                                    ) AS tot_personalexposicion,
-                                                                    (
-                                                                        CASE
-                                                                            WHEN ((IFNULL(recsensorialquimicosinventario.recsensorialcategoria_tiempoexpo, 0) * IFNULL(recsensorialquimicosinventario.recsensorialcategoria_frecuenciaexpo, 0))/60) >= 7 THEN 8
-                                                                            WHEN ((IFNULL(recsensorialquimicosinventario.recsensorialcategoria_tiempoexpo, 0) * IFNULL(recsensorialquimicosinventario.recsensorialcategoria_frecuenciaexpo, 0))/60) >= 3 THEN 4
-                                                                            WHEN ((IFNULL(recsensorialquimicosinventario.recsensorialcategoria_tiempoexpo, 0) * IFNULL(recsensorialquimicosinventario.recsensorialcategoria_frecuenciaexpo, 0))/60) >= 1 THEN 2
-                                                                            ELSE 1
-                                                                        END
-                                                                    ) AS tot_tiempoexposicion,
-                                                                    (IFNULL(recsensorialquimicosinventario.recsensorialcategoria_tiempoexpo, 0) * IFNULL(recsensorialquimicosinventario.recsensorialcategoria_frecuenciaexpo, 0)) AS suma_tiempoexposicion
-                                                                FROM
-                                                                    recsensorialquimicosinventario
-                                                                    LEFT JOIN recsensorialarea ON recsensorialquimicosinventario.recsensorialarea_id = recsensorialarea.id
-                                                                    LEFT JOIN recsensorialareacategorias ON recsensorialquimicosinventario.recsensorialarea_id = recsensorialareacategorias.recsensorialarea_id 
-                                                                    AND recsensorialquimicosinventario.recsensorialcategoria_id = recsensorialareacategorias.recsensorialcategoria_id
-                                                                    LEFT JOIN recsensorialcategoria ON recsensorialareacategorias.recsensorialcategoria_id = recsensorialcategoria.id
-                                                                    LEFT JOIN catsustancia ON recsensorialquimicosinventario.catsustancia_id = catsustancia.id
-                                                                    LEFT JOIN catunidadmedidasustacia ON recsensorialquimicosinventario.catunidadmedidasustacia_id = catunidadmedidasustacia.id
-                                                                    LEFT JOIN catestadofisicosustancia ON catsustancia.catestadofisicosustancia_id = catestadofisicosustancia.id
-                                                                    LEFT JOIN catvolatilidad ON catsustancia.catvolatilidad_id = catvolatilidad.id
-                                                                    LEFT JOIN catviaingresoorganismo ON catsustancia.catviaingresoorganismo_id = catviaingresoorganismo.id
-                                                                    LEFT JOIN catcategoriapeligrosalud ON catsustancia.catcategoriapeligrosalud_id = catcategoriapeligrosalud.id
-                                                                    LEFT JOIN catgradoriesgosalud ON catsustancia.catgradoriesgosalud_id = catgradoriesgosalud.id 
-                                                                WHERE
-                                                                    recsensorialquimicosinventario.recsensorial_id = ' . $recsensorial_id . '  
-                                                                GROUP BY
-                                                                    recsensorialquimicosinventario.recsensorial_id,
-                                                                    recsensorialquimicosinventario.id,
-                                                                    recsensorialquimicosinventario.recsensorialarea_id,
-                                                                    recsensorialarea.recsensorialarea_nombre,
-                                                                    recsensorialquimicosinventario.recsensorialcategoria_id,
-                                                                    recsensorialcategoria.recsensorialcategoria_nombrecategoria,
-                                                                  
-                                                                    recsensorialareacategorias.recsensorialareacategorias_actividad,
-                                                                    recsensorialareacategorias.recsensorialareacategorias_geh,
-                                                                    recsensorialareacategorias.recsensorialareacategorias_total,
-                                                                    recsensorialquimicosinventario.catsustancia_id,
-                                                                    catsustancia.catsustancia_nombre,
-                                                                    recsensorialquimicosinventario.recsensorialquimicosinventario_cantidad,
-                                                                    recsensorialquimicosinventario.catunidadmedidasustacia_id,
-                                                                    recsensorialquimicosinventario.recsensorialcategoria_tiempoexpo,
-                                                                    recsensorialquimicosinventario.recsensorialcategoria_frecuenciaexpo,
-                                                                    catunidadmedidasustacia.catunidadmedidasustacia_descripcion,
-                                                                    catunidadmedidasustacia.catunidadmedidasustacia_abreviacion,
-                                                                    catunidadmedidasustacia.catunidadmedidasustacia_ponderacion,
-                                                                    catgradoriesgosalud.catgradoriesgosalud_ponderacion,
-                                                                    catvolatilidad.catvolatilidad_ponderacion,
-                                                                    catviaingresoorganismo.catviaingresoorganismo_ponderacion
-                                                            ) AS TABLA1
-                                                    ) AS TABLA2
-                                                GROUP BY
-                                                    TABLA2.sustancia_id,
-                                                    TABLA2.sustancia_nombre,
-                                                    TABLA2.cancerigeno,
-                                                    TABLA2.ponderacion_cantidad,
-                                                    TABLA2.ponderacion_riesgo,
-                                                    TABLA2.ponderacion_volatilidad
-                                            ) AS TABLA3
-                                            LEFT JOIN catsustanciacomponente ON catsustanciacomponente.catsustancia_id = sustancia_id
-                                        ORDER BY
-                                            TABLA3.sustancia_nombre ASC,
-                                            catsustanciacomponente.catsustanciacomponente_nombre ASC');
+            $sustancias = DB::select("CALL sp_ponderacion1_tabla8_1_b(?)", [$recsensorial_id]);
 
 
             // respuesta
@@ -4061,57 +3885,57 @@ class reportequimicosController extends Controller
     public function reportequimicosevaluadostabla($proyecto_id, $reporteregistro_id)
     {
         try {
-            $parametros = DB::select('SELECT
-                                            TABLA.proyecto_id,
-                                            TABLA.registro_id,
-                                            TABLA.parametro,
-                                            reportequimicosparametroscatalogo.reportequimicosparametroscatalogo_cas,
-                                            reportequimicosparametroscatalogo.reportequimicosparametroscatalogo_ebullicion,
-                                            reportequimicosparametroscatalogo.reportequimicosparametroscatalogo_pesomolecular,
-                                            reportequimicosparametroscatalogo.reportequimicosparametroscatalogo_estadofisico,
-                                            reportequimicosparametroscatalogo.reportequimicosparametroscatalogo_viaingreso,
-                                            reportequimicosparametroscatalogo.reportequimicosparametroscatalogo_gradoriesgo,
-                                            reportequimicosparametroscatalogo.reportequimicosparametroscatalogo_limiteexposicion
-                                        FROM
-                                            (
-                                                SELECT
-                                                    reportequimicosevaluacion.proyecto_id,
-                                                    reportequimicosevaluacion.registro_id,
-                                                    -- reportequimicosevaluacion.reportequimicosevaluacion_punto,
-                                                    reportequimicosevaluacionparametro.reportequimicosevaluacionparametro_parametro AS parametro
-                                                FROM
-                                                    reportequimicosevaluacion
-                                                    RIGHT JOIN reportequimicosevaluacionparametro ON reportequimicosevaluacion.id = reportequimicosevaluacionparametro.reportequimicosevaluacion_id
-                                                WHERE
-                                                    reportequimicosevaluacion.proyecto_id = ' . $proyecto_id . ' 
-                                                    AND reportequimicosevaluacion.registro_id = ' . $reporteregistro_id . ' 
-                                                    -- AND reportequimicosevaluacionparametro.reportequimicosevaluacionparametro_parametro = "Ácido sulfhídrico"
-                                                    -- AND reportequimicosevaluacionparametro.reportequimicosevaluacionparametro_parametro = "Metano"
-                                                    -- OR reportequimicosevaluacionparametro.reportequimicosevaluacionparametro_parametro = "Propano"
-                                                    -- OR reportequimicosevaluacionparametro.reportequimicosevaluacionparametro_parametro = "Butano"
-                                                    -- OR reportequimicosevaluacionparametro.reportequimicosevaluacionparametro_parametro = "Pentano"
-                                                    -- OR reportequimicosevaluacionparametro.reportequimicosevaluacionparametro_parametro = "Etano"
-                                                GROUP BY
-                                                    reportequimicosevaluacion.proyecto_id,
-                                                    reportequimicosevaluacion.registro_id,
-                                                    reportequimicosevaluacionparametro.reportequimicosevaluacionparametro_parametro
-                                            ) AS TABLA
-                                            LEFT JOIN reportequimicosparametroscatalogo ON TABLA.parametro = reportequimicosparametroscatalogo.reportequimicosparametroscatalogo_parametro
-                                        ORDER BY
-                                            TABLA.parametro ASC');
+            // $parametros = DB::select('SELECT
+            //                                 TABLA.proyecto_id,
+            //                                 TABLA.registro_id,
+            //                                 TABLA.parametro,
+            //                                 reportequimicosparametroscatalogo.reportequimicosparametroscatalogo_cas,
+            //                                 reportequimicosparametroscatalogo.reportequimicosparametroscatalogo_ebullicion,
+            //                                 reportequimicosparametroscatalogo.reportequimicosparametroscatalogo_pesomolecular,
+            //                                 reportequimicosparametroscatalogo.reportequimicosparametroscatalogo_estadofisico,
+            //                                 reportequimicosparametroscatalogo.reportequimicosparametroscatalogo_viaingreso,
+            //                                 reportequimicosparametroscatalogo.reportequimicosparametroscatalogo_gradoriesgo,
+            //                                 reportequimicosparametroscatalogo.reportequimicosparametroscatalogo_limiteexposicion
+            //                             FROM
+            //                                 (
+            //                                     SELECT
+            //                                         reportequimicosevaluacion.proyecto_id,
+            //                                         reportequimicosevaluacion.registro_id,
+            //                                         -- reportequimicosevaluacion.reportequimicosevaluacion_punto,
+            //                                         reportequimicosevaluacionparametro.reportequimicosevaluacionparametro_parametro AS parametro
+            //                                     FROM
+            //                                         reportequimicosevaluacion
+            //                                         RIGHT JOIN reportequimicosevaluacionparametro ON reportequimicosevaluacion.id = reportequimicosevaluacionparametro.reportequimicosevaluacion_id
+            //                                     WHERE
+            //                                         reportequimicosevaluacion.proyecto_id = '.$proyecto_id.' 
+            //                                         AND reportequimicosevaluacion.registro_id = '.$reporteregistro_id.' 
+            //                                         -- AND reportequimicosevaluacionparametro.reportequimicosevaluacionparametro_parametro = "Ácido sulfhídrico"
+            //                                         -- AND reportequimicosevaluacionparametro.reportequimicosevaluacionparametro_parametro = "Metano"
+            //                                         -- OR reportequimicosevaluacionparametro.reportequimicosevaluacionparametro_parametro = "Propano"
+            //                                         -- OR reportequimicosevaluacionparametro.reportequimicosevaluacionparametro_parametro = "Butano"
+            //                                         -- OR reportequimicosevaluacionparametro.reportequimicosevaluacionparametro_parametro = "Pentano"
+            //                                         -- OR reportequimicosevaluacionparametro.reportequimicosevaluacionparametro_parametro = "Etano"
+            //                                     GROUP BY
+            //                                         reportequimicosevaluacion.proyecto_id,
+            //                                         reportequimicosevaluacion.registro_id,
+            //                                         reportequimicosevaluacionparametro.reportequimicosevaluacionparametro_parametro
+            //                                 ) AS TABLA
+            //                                 LEFT JOIN reportequimicosparametroscatalogo ON TABLA.parametro = reportequimicosparametroscatalogo.reportequimicosparametroscatalogo_parametro
+            //                             ORDER BY
+            //                                 TABLA.parametro ASC');
+
+            $parametros = DB::select('CALL sp_anexo3_11_3_informe_quimico_b(?)', [$proyecto_id]);
 
 
             $dato['tabla_reporte_11_3'] = '';
             foreach ($parametros as $key => $value) {
                 $dato['tabla_reporte_11_3'] .= '<tr>
-                                                    <td>' . $value->parametro . '</td>
-                                                    <td>' . $value->reportequimicosparametroscatalogo_cas . '</td>
-                                                    <td>' . $value->reportequimicosparametroscatalogo_ebullicion . '</td>
-                                                    <td>' . $value->reportequimicosparametroscatalogo_pesomolecular . '</td>
-                                                    <td>' . $value->reportequimicosparametroscatalogo_estadofisico . '</td>
-                                                    <td>' . $value->reportequimicosparametroscatalogo_viaingreso . '</td>
-                                                    <td>' . $value->reportequimicosparametroscatalogo_gradoriesgo . '</td>
-                                                    <td>' . $value->reportequimicosparametroscatalogo_limiteexposicion . '</td>
+                                                    <td>' . $value->NOMBRE . '</td>
+                                                    <td>' . $value->NUM_CAS . '</td>
+                                                    <td>' . $value->PM . '</td>
+                                                    <td>' . $value->INGRESO . '</td>
+                                                    <td>' . $value->RIESGO . '</td>
+                                                    <td>' . $value->VLE . '</td>
                                                 </tr>';
             }
 
@@ -5860,6 +5684,7 @@ class reportequimicosController extends Controller
                     $conclusion = reportequimicosconclusionModel::create($request->all());
 
                     // Mensaje
+                    $dato["conclusion_id"] = $conclusion->id;
                     $dato["msj"] = 'Datos guardados correctamente';
                 } else {
                     $request['registro_id'] = $reporte->id;
@@ -5868,6 +5693,7 @@ class reportequimicosController extends Controller
                     $conclusion->update($request->all());
 
                     // Mensaje
+                    $dato["conclusion_id"] = $conclusion->id;
                     $dato["msj"] = 'Datos modificados correctamente';
                 }
             }
@@ -6140,7 +5966,7 @@ class reportequimicosController extends Controller
                 if ($request->parametro) {
                     $eliminar_parametros = reportequimicosgruposModel::where('proyecto_id', $request->proyecto_id)
                         ->where('registro_id', $reporte->id)
-                        ->where('catreportequimicospartidas_id', $request->catreportequimicospartidas_id)
+                        // ->where('catreportequimicospartidas_id', $request->catreportequimicospartidas_id)
                         ->delete();
 
 
@@ -6152,7 +5978,7 @@ class reportequimicosController extends Controller
                             'proyecto_id' => $request->proyecto_id,
                             'registro_id' => $reporte->id,
                             'proveedor_id' => $request->proveedor_id,
-                            'catreportequimicospartidas_id' => $request->catreportequimicospartidas_id,
+                            'catreportequimicospartidas_id' => null,
                             'reportequimicosproyecto_id' => $value
                         ]);
 

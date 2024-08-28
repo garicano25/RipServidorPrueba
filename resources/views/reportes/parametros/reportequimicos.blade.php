@@ -169,7 +169,7 @@
 		<div class="stickyside">
 			<div class="list-group" id="top-menu">
 				<a href="#-2" class="list-group-item active">Químicos del proyecto</i></a>
-				<a href="#-1" class="list-group-item">Partidas para impresión de los informes <i class="fa fa-times" id="menureporte-1"></i></a>
+				<!-- <a href="#-1" class="list-group-item">Partidas para impresión de los informes <i class="fa fa-times" id="menureporte-1"></i></a> -->
 				<a href="#0" class="list-group-item">Portada <i class="fa fa-times" id="menureporte_0"></i></a>
 				<a href="#1" class="list-group-item">1.- Introducción <i class="fa fa-times" id="menureporte_1"></i></a>
 				<a href="#2" class="list-group-item">2.- Definiciones <i class="fa fa-times" id="menureporte_2"></i></a>
@@ -216,37 +216,15 @@
 				<h4 class="card-title" style="padding: 0px!important;" id="-2">Químicos del proyecto</h4>
 				<div class="row">
 					<div class="col-12">
-						{{-- <p class="justificado">A continuación, se describe el procedimiento o método utilizado durante la evaluación.</p><br>
-							<ol class="breadcrumb" style="padding: 6px; margin: 10px 0px;">
-								<button type="button" class="btn btn-default waves-effect botoninforme" data-toggle="tooltip" title="Nuevo Parámetro" id="boton_reporte_metodomuestreo">
-									<span class="btn-label"><i class="fa fa-plus"></i></span>Parámetro
-								</button>
-							</ol> --}}
-						<table class="table table-hover tabla_info_centrado" width="100%" id="tabla_reporte_quimicos">
-							<thead>
-								<tr>
-									<th width="100">No.</th>
-									<th>Parámetro</th>
-									{{-- <th width="60">Eliminar</th> --}}
-								</tr>
-							</thead>
-							<tbody></tbody>
-						</table>
-					</div>
-				</div>
-				<h4 class="card-title" id="-1">Partidas para impresión de los informes</h4>
-				<div class="row">
-					<div class="col-12">
 						<ol class="breadcrumb" style="padding: 6px; margin: 10px 0px;">
 							<button type="button" class="btn btn-default waves-effect botoninforme" data-toggle="tooltip" title="Nueva partida" id="boton_reporte_nuevogrupoquimico">
-								<span class="btn-label"><i class="fa fa-plus"></i></span>Crear partidas informe
+								<span class="btn-label"><i class="fa fa-plus"></i></span>Asignar laboratorio
 							</button>
 						</ol>
 						<table class="table table-hover tabla_info_centrado" width="100%" id="tabla_reporte_gruposquimicos">
 							<thead>
 								<tr>
-									{{-- <th width="80">Partida</th> --}}
-									<th width="">Partidas</th>
+									<th width="">Laboratorio</th>
 									<th width="180">Parametros</th>
 									<th width="60">Editar</th>
 									<th width="60">Eliminar</th>
@@ -1004,28 +982,39 @@
 					</div>
 				</div>
 				<h4 class="card-title" id="8">8.- Conclusiones</h4>
-				<div class="row">
-					<div class="col-12">
-						<ol class="breadcrumb" style="padding: 6px; margin: 10px 0px;">
-							<button type="button" class="btn btn-default waves-effect botoninforme" data-toggle="tooltip" title="Agregar nueva conclusión" id="boton_reporte_nuevaconclusion">
-								<span class="btn-label"><i class="fa fa-plus"></i></span>Nueva conclusión
-							</button>
-						</ol>
-						<table class="table table-hover tabla_info_centrado" width="100%" id="tabla_reporte_conclusiones">
-							<thead>
-								<tr>
-									<th width="60">No.</th>
-									<th width="200">Partida</th>
-									<th>Descripción</th>
-									<th width="60">Editar</th>
-									<th width="60">Eliminar</th>
-								</tr>
-							</thead>
-							<tbody></tbody>
-						</table>
-					</div>
+				<div class="form-group mb-4">
+					<form action="" id="form_modal_conclusion" name="form_modal_conclusion">
+						{!! csrf_field() !!}
+
+						<input type="hidden" name="catreportequimicospartidas_id" value="0">
+						<input type="hidden" class="form-control" id="reporteconclusion_id" name="reporteconclusion_id" value="0">
+						<textarea class="form-control" style="margin-bottom: 0px;" rows="15" id="reporte_conclusion" name="reportequimicosconclusion_conclusion" required></textarea>
+						<button type="submit" style="float: right;" class="btn btn-danger waves-effect waves-light" id="botonguardar_modal_conclusion">Guardar conclusión <i class="fa fa-save"></i></button>
+
+					</form>
 				</div>
-				<div class="row">
+				<!-- <div class="row">
+						<div class="col-12">
+							<ol class="breadcrumb" style="padding: 6px; margin: 10px 0px;">
+								<button type="button" class="btn btn-default waves-effect botoninforme" data-toggle="tooltip" title="Agregar nueva conclusión" id="boton_reporte_nuevaconclusion">
+									<span class="btn-label"><i class="fa fa-plus"></i></span>Nueva conclusión
+								</button>
+							</ol>
+							<table class="table table-hover tabla_info_centrado" width="100%" id="tabla_reporte_conclusiones">
+								<thead>
+									<tr>
+										<th width="60">No.</th>
+										<th width="200">Partida</th>
+										<th>Descripción</th>
+										<th width="60">Editar</th>
+										<th width="60">Eliminar</th>
+									</tr>
+								</thead>
+								<tbody></tbody>
+							</table>
+						</div>
+					</div> -->
+				<div class="row mt-5">
 					<div class="col-12">
 						<p class="justificado">A continuación, se plasman los resultados en la siguiente figura:</p><br>
 						<style type="text/css">
@@ -1271,11 +1260,9 @@
 								<tr>
 									<th>Nombre</th>
 									<th>No. de CAS</th>
-									<th>Temperatura de<br>ebullición ° C</th>
 									<th>Peso molecular<br>gr/mol</th>
-									<th>Estado físico</th>
 									<th>Vías de ingreso<br>al organismo</th>
-									<th>Grado de riesgo<br>a la salud</th>
+									<th>Clasificación de riesgo<br>a la salud</th>
 									<th>Valor Límite de<br>Exposición (VLE)</th>
 								</tr>
 							</thead>
@@ -1549,24 +1536,24 @@
 								</div>
 								<div class="col-12">
 									<div class="form-group">
-										<label>Laboratorio responsable</label>
+										<label>Laboratorio responsable *</label>
 										<select class="custom-select form-control" id="metodomuestreo_proveedor_id" name="proveedor_id" required>
 											<option value=""></option>
 										</select>
 									</div>
 								</div>
-								<div class="col-12">
+								<!-- <div class="col-12">
 									<div class="form-group">
 										<label>Partida</label>
 										<select class="custom-select form-control" id="catreportequimicospartidas_id" name="catreportequimicospartidas_id" required>
 											<option value=""></option>
 										</select>
 									</div>
-								</div>
+								</div> -->
 							</div>
 						</div>
 						<div class="col-12">
-							<ol class="breadcrumb text-light" style="padding: 6px; margin: 0px 0px 10px 0px; text-align: center;">Parámetros</ol>
+							<ol class="breadcrumb text-light" style="padding: 6px; margin: 0px 0px 10px 0px; text-align: center;">Parámetros evaluados</ol>
 						</div>
 						<div class="col-12">
 							<div class="row" id="quimicos_lista"></div>
@@ -2115,7 +2102,7 @@
 		padding: 0px 0px 3px 0px !important;
 	}
 </style>
-<div id="modal_reporte_conclusion" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" style="display: none;">
+<!-- <div id="modal_reporte_conclusion" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" style="display: none;">
 	<div class="modal-dialog modal-lg">
 		<div class="modal-content">
 			<form method="post" enctype="multipart/form-data" name="form_modal_conclusion" id="form_modal_conclusion">
@@ -2152,7 +2139,7 @@
 			</form>
 		</div>
 	</div>
-</div>
+</div> -->
 <!-- ============================================================== -->
 <!-- MODAL-REPORTE-CANCELACION OBSERVACION -->
 <!-- ============================================================== -->
@@ -2290,4 +2277,4 @@
 	var areas_poe = <?php echo json_encode($areas_poe); ?>;
 </script>
 <script src="/js_sitio/html2canvas.js"></script>
-<script src="/js_sitio/reportes/reportequimicos.js"></script>
+<script src="/js_sitio/reportes/reportequimicos.js?v=1.0"></script>
