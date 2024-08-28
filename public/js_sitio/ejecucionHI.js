@@ -1833,9 +1833,9 @@ $("#boton_nuevo_planosevidencia").click(function()
 
     if (parseInt(evidencia_agente_id) == 15)
 	{
-		$("#planos_campo_partida").css('display', 'inline-block');
+		$("#planos_campo_partida").css('display', 'none');
 		$("#planoscatreportequimicospartidas_id").attr('disabled', false);
-		$("#planoscatreportequimicospartidas_id").attr('required', true);
+		$("#planoscatreportequimicospartidas_id").attr('required', false);
 	}
 	else
 	{
