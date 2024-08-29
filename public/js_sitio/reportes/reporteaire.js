@@ -7039,7 +7039,7 @@ $('#tabla_notas_stps tbody').on('click', 'td>button.eliminar', function()
 						success:function(dato)
 						{
 							// Actualizar tablas
-							tabla_notas_stps(proyecto_id, reporteregistro_id, agente_nombre);
+							tabla_notas_stps(proyecto.id, reporteregistro_id, agente_nombre);
 
 							// mensaje
 							swal({
@@ -7157,7 +7157,7 @@ $('#tabla_notas_ema tbody').on('click', 'td>button.eliminar', function()
 						success:function(dato)
 						{
 							// Actualizar tablas
-							tabla_notas_ema(proyecto_id, reporteregistro_id, agente_nombre);
+							tabla_notas_ema(proyecto.id, reporteregistro_id, agente_nombre);
 
 							// mensaje
 							swal({
@@ -7613,8 +7613,8 @@ function reporte_concluido(reporte_id, perfil, checkbox)
 							tabla_reporte_categorias(proyecto.id, reporteregistro_id);
 							tabla_reporte_areas(proyecto.id, reporteregistro_id);
 							tabla_reporte_puntos(proyecto.id, reporteregistro_id);
-							tabla_notas_stps(proyecto_id, reporteregistro_id, agente_nombre);
-							tabla_notas_ema(proyecto_id, reporteregistro_id, agente_nombre);
+							tabla_notas_stps(proyecto.id, reporteregistro_id, agente_nombre);
+							tabla_notas_ema(proyecto.id, reporteregistro_id, agente_nombre);
 
 
 							// desplazar a la ultima fila de la tabla
@@ -7766,8 +7766,8 @@ function reporte_cancelado(reporte_id, perfil, checkbox)
 							tabla_reporte_categorias(proyecto.id, reporteregistro_id);
 							tabla_reporte_areas(proyecto.id, reporteregistro_id);
 							tabla_reporte_puntos(proyecto.id, reporteregistro_id);
-							tabla_notas_stps(proyecto_id, reporteregistro_id, agente_nombre);
-							tabla_notas_ema(proyecto_id, reporteregistro_id, agente_nombre);
+							tabla_notas_stps(proyecto.id, reporteregistro_id, agente_nombre);
+							tabla_notas_ema(proyecto.id, reporteregistro_id, agente_nombre);
 							
 
 							// desplazar a la ultima fila de la tabla
@@ -7896,8 +7896,8 @@ $("#botonguardar_modal_cancelacionobservacion").click(function()
 						tabla_reporte_categorias(proyecto.id, reporteregistro_id);
 						tabla_reporte_areas(proyecto.id, reporteregistro_id);
 						tabla_reporte_puntos(proyecto.id, reporteregistro_id);
-						tabla_notas_stps(proyecto_id, reporteregistro_id, agente_nombre);
-						tabla_notas_ema(proyecto_id, reporteregistro_id, agente_nombre);
+						tabla_notas_stps(proyecto.id, reporteregistro_id, agente_nombre);
+						tabla_notas_ema(proyecto.id, reporteregistro_id, agente_nombre);
 
 
 						// desplazar a la ultima fila de la tabla
@@ -8039,8 +8039,8 @@ $("#boton_reporte_nuevarevision").click(function()
 										tabla_reporte_categorias(proyecto.id, reporteregistro_id);
 										tabla_reporte_areas(proyecto.id, reporteregistro_id);
 										tabla_reporte_puntos(proyecto.id, reporteregistro_id);
-										tabla_notas_stps(proyecto_id, reporteregistro_id, agente_nombre);
-										tabla_notas_ema(proyecto_id, reporteregistro_id, agente_nombre);
+										tabla_notas_stps(proyecto.id, reporteregistro_id, agente_nombre);
+										tabla_notas_ema(proyecto.id, reporteregistro_id, agente_nombre);
 
 
 										// Boton

@@ -79,42 +79,38 @@ class reportevibracionController extends Controller
         $proyecto = proyectoModel::with(['catregion', 'catsubdireccion', 'catgerencia', 'catactivo'])->findOrFail($proyecto_id);
 
 
-        if (($proyecto->recsensorial->recsensorial_tipocliente+0) == 1 && ($proyecto->recsensorial_id == NULL || $proyecto->catregion_id == NULL || $proyecto->catsubdireccion_id == NULL || $proyecto->catgerencia_id == NULL || $proyecto->catactivo_id == NULL || $proyecto->proyecto_clienteinstalacion == NULL || $proyecto->proyecto_fechaentrega == NULL))
-        {
+        if (($proyecto->recsensorial->recsensorial_tipocliente + 0) == 1 && ($proyecto->recsensorial_id == NULL || $proyecto->catregion_id == NULL || $proyecto->catsubdireccion_id == NULL || $proyecto->catgerencia_id == NULL || $proyecto->catactivo_id == NULL || $proyecto->proyecto_clienteinstalacion == NULL || $proyecto->proyecto_fechaentrega == NULL)) {
             return '<div style="text-align: center;">
                         <p style="font-size: 24px;">Datos incompletos</p>
                         <b style="font-size: 18px;">Para ingresar al diseño del reporte de Vibración primero debe completar todos los campos vacíos de la sección de datos generales del proyecto.</b>
                     </div>';
-        }
-        else
-        {
+        } else {
             // CREAR REVISION SI NO EXISTE
             //===================================================
 
 
             $revision = reporterevisionesModel::where('proyecto_id', $proyecto_id)
-                                                ->where('agente_id', 2) // Vibracion
-                                                ->orderBy('reporterevisiones_revision', 'DESC')
-                                                ->get();
+                ->where('agente_id', 2) // Vibracion
+                ->orderBy('reporterevisiones_revision', 'DESC')
+                ->get();
 
             // ================ DESCOMENTAR DESPUES DE SUBIR AL SERVIDOR =========================
 
-            if(count($revision) == 0)
-            {
+            if (count($revision) == 0) {
                 DB::statement('ALTER TABLE reporterevisiones AUTO_INCREMENT = 1;');
 
                 $revision = reporterevisionesModel::create([
-                      'proyecto_id' => $proyecto_id
-                    , 'agente_id' => 2
-                    , 'agente_nombre' => 'Vibración'
-                    , 'reporterevisiones_revision' => 0
-                    , 'reporterevisiones_concluido' => 0
-                    , 'reporterevisiones_concluidonombre' => NULL
-                    , 'reporterevisiones_concluidofecha' => NULL
-                    , 'reporterevisiones_cancelado' => 0
-                    , 'reporterevisiones_canceladonombre' => NULL
-                    , 'reporterevisiones_canceladofecha' => NULL
-                    , 'reporterevisiones_canceladoobservacion' => NULL
+                    'proyecto_id' => $proyecto_id,
+                    'agente_id' => 2,
+                    'agente_nombre' => 'Vibración',
+                    'reporterevisiones_revision' => 0,
+                    'reporterevisiones_concluido' => 0,
+                    'reporterevisiones_concluidonombre' => NULL,
+                    'reporterevisiones_concluidofecha' => NULL,
+                    'reporterevisiones_cancelado' => 0,
+                    'reporterevisiones_canceladonombre' => NULL,
+                    'reporterevisiones_canceladofecha' => NULL,
+                    'reporterevisiones_canceladoobservacion' => NULL
                 ]);
             }
             // ================ DESCOMENTAR DESPUES DE SUBIR AL SERVIDOR =========================
@@ -133,7 +129,7 @@ class reportevibracionController extends Controller
                                         FROM
                                             proyectoproveedores
                                         WHERE
-                                            proyectoproveedores.proyecto_id = '.$proyecto_id.' 
+                                            proyectoproveedores.proyecto_id = ' . $proyecto_id . ' 
                                             AND proyectoproveedores.proyectoproveedores_tipoadicional < 2
                                             AND proyectoproveedores.catprueba_id = 2 -- Vibración
                                         ORDER BY
@@ -171,20 +167,18 @@ class reportevibracionController extends Controller
     {
         $meses = ["Vacio", "Enero", "Febrero", "Marzo", "Abril", "Mayo", "Junio", "Julio", "Agosto", "Septiembre", "Octubre", "Noviembre", "Diciembre"];
         $reportefecha = explode("-", $proyecto->proyecto_fechaentrega);
-        
-        
+
+
         $texto = str_replace($proyecto->proyecto_clienteinstalacion, 'INSTALACION_NOMBRE', $texto);
         $texto = str_replace($proyecto->proyecto_clientedireccionservicio, 'INSTALACION_DIRECCION', $texto);
-        $texto = str_replace($reportefecha[2]." de ".$meses[($reportefecha[1]+0)]." del año ".$reportefecha[0], 'REPORTE_FECHA_LARGA', $texto);
+        $texto = str_replace($reportefecha[2] . " de " . $meses[($reportefecha[1] + 0)] . " del año " . $reportefecha[0], 'REPORTE_FECHA_LARGA', $texto);
 
-        if (($recsensorial->recsensorial_tipocliente+0) == 1) // 1 = pemex, 0 = cliente
+        if (($recsensorial->recsensorial_tipocliente + 0) == 1) // 1 = pemex, 0 = cliente
         {
             $texto = str_replace($proyecto->catsubdireccion->catsubdireccion_nombre, 'SUBDIRECCION_NOMBRE', $texto);
             $texto = str_replace($proyecto->catgerencia->catgerencia_nombre, 'GERENCIA_NOMBRE', $texto);
             $texto = str_replace($proyecto->catactivo->catactivo_nombre, 'ACTIVO_NOMBRE', $texto);
-        }
-        else
-        {
+        } else {
             $texto = str_replace($recsensorial->recsensorial_empresa, 'PEMEX Exploración y Producción', $texto);
         }
 
@@ -199,18 +193,16 @@ class reportevibracionController extends Controller
 
         $texto = str_replace('INSTALACION_NOMBRE', $proyecto->proyecto_clienteinstalacion, $texto);
         $texto = str_replace('INSTALACION_DIRECCION', $proyecto->proyecto_clientedireccionservicio, $texto);
-        $texto = str_replace('INSTALACION_CODIGOPOSTAL', 'C.P. '.$recsensorial->recsensorial_codigopostal, $texto);
+        $texto = str_replace('INSTALACION_CODIGOPOSTAL', 'C.P. ' . $recsensorial->recsensorial_codigopostal, $texto);
         $texto = str_replace('INSTALACION_COORDENADAS', $recsensorial->recsensorial_coordenadas, $texto);
-        $texto = str_replace('REPORTE_FECHA_LARGA', $reportefecha[2]." de ".$meses[($reportefecha[1]+0)]." del año ".$reportefecha[0], $texto);
+        $texto = str_replace('REPORTE_FECHA_LARGA', $reportefecha[2] . " de " . $meses[($reportefecha[1] + 0)] . " del año " . $reportefecha[0], $texto);
 
-        if (($recsensorial->recsensorial_tipocliente+0) == 1) // 1 = pemex, 0 = cliente
+        if (($recsensorial->recsensorial_tipocliente + 0) == 1) // 1 = pemex, 0 = cliente
         {
             $texto = str_replace('SUBDIRECCION_NOMBRE', $proyecto->catsubdireccion->catsubdireccion_nombre, $texto);
             $texto = str_replace('GERENCIA_NOMBRE', $proyecto->catgerencia->catgerencia_nombre, $texto);
             $texto = str_replace('ACTIVO_NOMBRE', $proyecto->catactivo->catactivo_nombre, $texto);
-        }
-        else
-        {
+        } else {
             $texto = str_replace('SUBDIRECCION_NOMBRE', '', $texto);
             $texto = str_replace('GERENCIA_NOMBRE', '', $texto);
             $texto = str_replace('ACTIVO_NOMBRE', '', $texto);
@@ -229,11 +221,10 @@ class reportevibracionController extends Controller
      * @param  int $agente_id
      * @param  $agente_nombre
      * @return \Illuminate\Http\Response
-    */
+     */
     public function reportevibraciondatosgenerales($proyecto_id, $agente_id, $agente_nombre)
     {
-        try
-        {
+        try {
             $proyecto = proyectoModel::with(['catregion', 'catsubdireccion', 'catgerencia', 'catactivo'])->findOrFail($proyecto_id);
             $recsensorial = recsensorialModel::with(['catregion', 'catsubdireccion', 'catgerencia', 'catactivo'])->findOrFail($proyecto->recsensorial_id);
 
@@ -242,23 +233,18 @@ class reportevibracionController extends Controller
 
             $reportecatalogo = reportevibracioncatalogoModel::findOrFail(1);
             $reporte = reportevibracionModel::where('proyecto_id', $proyecto_id)->get();
-                                        
 
-            if (count($reporte) > 0)
-            {
+
+            if (count($reporte) > 0) {
                 $reporte = $reporte[0];
-                $dato['reporteregistro_id'] = ($reporte->id+0);
-            }
-            else
-            {
-                if (($recsensorial->recsensorial_tipocliente+0) == 1) // 1 = Pemex, 0 = cliente
+                $dato['reporteregistro_id'] = ($reporte->id + 0);
+            } else {
+                if (($recsensorial->recsensorial_tipocliente + 0) == 1) // 1 = Pemex, 0 = cliente
                 {
                     $reporte = reportevibracionModel::where('catactivo_id', $proyecto->catactivo_id)
-                                                    ->orderBy('updated_at', 'DESC')
-                                                    ->get();
-                }
-                else
-                {
+                        ->orderBy('updated_at', 'DESC')
+                        ->get();
+                } else {
                     $reporte = DB::select('SELECT
                                                 recsensorial.recsensorial_tipocliente,
                                                 recsensorial.cliente_id,
@@ -296,20 +282,17 @@ class reportevibracionController extends Controller
                                                 LEFT JOIN proyecto ON recsensorial.id = proyecto.recsensorial_id
                                                 LEFT JOIN reportevibracion ON proyecto.id = reportevibracion.proyecto_id
                                             WHERE
-                                                recsensorial.cliente_id = '.$recsensorial->cliente_id.'
+                                                recsensorial.cliente_id = ' . $recsensorial->cliente_id . '
                                                 AND reportevibracion.reportevibracion_instalacion != ""
                                             ORDER BY
                                                 reportevibracion.updated_at DESC');
                 }
 
 
-                if (count($reporte) > 0)
-                {
+                if (count($reporte) > 0) {
                     $reporte = $reporte[0];
                     $dato['reporteregistro_id'] = 0;
-                }
-                else
-                {
+                } else {
                     $reporte = array(0, 0);
                     $dato['reporteregistro_id'] = -1;
                 }
@@ -320,72 +303,66 @@ class reportevibracionController extends Controller
 
 
             $revision = reporterevisionesModel::where('proyecto_id', $proyecto_id)
-                                                ->where('agente_id', 2) //vibracion
-                                                ->orderBy('reporterevisiones_revision', 'DESC')
-                                                ->get();
+                ->where('agente_id', 2) //vibracion
+                ->orderBy('reporterevisiones_revision', 'DESC')
+                ->get();
 
 
-            if(count($revision) > 0)
-            {
+            if (count($revision) > 0) {
                 $revision = reporterevisionesModel::findOrFail($revision[0]->id);
 
 
                 $dato['reporte_concluido'] = $revision->reporterevisiones_concluido;
                 $dato['reporte_cancelado'] = $revision->reporterevisiones_cancelado;
-            }
-            else
-            {
+            } else {
                 $dato['reporte_concluido'] = 0;
                 $dato['reporte_cancelado'] = 0;
             }
 
-            
+
             // PORTADA
             //===================================================
 
 
-            $dato['recsensorial_tipocliente'] = ($recsensorial->recsensorial_tipocliente+0);
+            $dato['recsensorial_tipocliente'] = ($recsensorial->recsensorial_tipocliente + 0);
 
 
-            if ($dato['reporteregistro_id'] > 0 && $reporte->reportevibracion_fecha != NULL)
-            {
+            if ($dato['reporteregistro_id'] > 0 && $reporte->reportevibracion_fecha != NULL) {
                 $reportefecha = $reporte->reportevibracion_fecha;
                 $dato['reporte_portada_guardado'] = 1;
 
                 $dato['reporte_portada'] = array(
-                                                  'reporte_catregion_activo' => $reporte->reportevibracion_catregion_activo
-                                                , 'catregion_id' => $proyecto->catregion_id
-                                                , 'reporte_catsubdireccion_activo' => $reporte->reportevibracion_catsubdireccion_activo
-                                                , 'catsubdireccion_id' => $proyecto->catsubdireccion_id
-                                                , 'reporte_catgerencia_activo' => $reporte->reportevibracion_catgerencia_activo
-                                                , 'catgerencia_id' => $proyecto->catgerencia_id
-                                                , 'reporte_catactivo_activo' => $reporte->reportevibracion_catactivo_activo
-                                                , 'catactivo_id' => $proyecto->catactivo_id
-                                                , 'reporte_instalacion' => $proyecto->proyecto_clienteinstalacion
-                                                , 'reporte_fecha' => $reportefecha
-                                                , 'reporte_mes' => $reporte->reporte_mes
-                                                , 'reporte_alcanceinforme' => $reporte->reportevibracion_alcanceinforme
-                                            );
-            }
-            else
-            {
-                $reportefecha = $meses[$proyectofecha[1] + 0]." del ".$proyectofecha[0];
+                    'reporte_catregion_activo' => $reporte->reportevibracion_catregion_activo,
+                    'catregion_id' => $proyecto->catregion_id,
+                    'reporte_catsubdireccion_activo' => $reporte->reportevibracion_catsubdireccion_activo,
+                    'catsubdireccion_id' => $proyecto->catsubdireccion_id,
+                    'reporte_catgerencia_activo' => $reporte->reportevibracion_catgerencia_activo,
+                    'catgerencia_id' => $proyecto->catgerencia_id,
+                    'reporte_catactivo_activo' => $reporte->reportevibracion_catactivo_activo,
+                    'catactivo_id' => $proyecto->catactivo_id,
+                    'reporte_instalacion' => $proyecto->proyecto_clienteinstalacion,
+                    'reporte_fecha' => $reportefecha,
+                    'reporte_mes' => $reporte->reporte_mes,
+                    'reporte_alcanceinforme' => $reporte->reportevibracion_alcanceinforme
+                );
+            } else {
+                $reportefecha = $meses[$proyectofecha[1] + 0] . " del " . $proyectofecha[0];
                 $dato['reporte_portada_guardado'] = 0;
 
                 $dato['reporte_portada'] = array(
-                                                  'reporte_catregion_activo' => 1
-                                                , 'catregion_id' => $proyecto->catregion_id
-                                                , 'reporte_catsubdireccion_activo' => 1
-                                                , 'catsubdireccion_id' => $proyecto->catsubdireccion_id
-                                                , 'reporte_catgerencia_activo' => 1
-                                                , 'catgerencia_id' => $proyecto->catgerencia_id
-                                                , 'reporte_catactivo_activo' => 1
-                                                , 'catactivo_id' => $proyecto->catactivo_id
-                                                , 'reporte_instalacion' => $proyecto->proyecto_clienteinstalacion
-                                                , 'reporte_fecha' => $reportefecha
-                                                , 'reporte_mes' => ""
-                                                , 'reporte_alcanceinforme' => 0
-                                            );
+                    'reporte_catregion_activo' => 1,
+                    'catregion_id' => $proyecto->catregion_id,
+                    'reporte_catsubdireccion_activo' => 1,
+                    'catsubdireccion_id' => $proyecto->catsubdireccion_id,
+                    'reporte_catgerencia_activo' => 1,
+                    'catgerencia_id' => $proyecto->catgerencia_id,
+                    'reporte_catactivo_activo' => 1,
+                    'catactivo_id' => $proyecto->catactivo_id,
+                    'reporte_instalacion' => $proyecto->proyecto_clienteinstalacion,
+                    'reporte_fecha' => $reportefecha,
+                    'reporte_mes' => "",
+                    'reporte_alcanceinforme' => 0
+                );
             }
 
 
@@ -393,21 +370,15 @@ class reportevibracionController extends Controller
             //===================================================
 
 
-            if ($dato['reporteregistro_id'] >= 0 && $reporte->reportevibracion_introduccion != NULL)
-            {
-                if ($reporte->proyecto_id == $proyecto_id)
-                {
+            if ($dato['reporteregistro_id'] >= 0 && $reporte->reportevibracion_introduccion != NULL) {
+                if ($reporte->proyecto_id == $proyecto_id) {
                     $dato['reporte_introduccion_guardado'] = 1;
-                }
-                else
-                {
+                } else {
                     $dato['reporte_introduccion_guardado'] = 0;
                 }
 
                 $introduccion = $reporte->reportevibracion_introduccion;
-            }
-            else
-            {
+            } else {
                 $dato['reporte_introduccion_guardado'] = 0;
                 $introduccion = $reportecatalogo->reportevibracioncatalogo_introduccion;
             }
@@ -419,21 +390,15 @@ class reportevibracionController extends Controller
             //===================================================
 
 
-            if ($dato['reporteregistro_id'] >= 0 && $reporte->reportevibracion_objetivogeneral != NULL)
-            {
-                if ($reporte->proyecto_id == $proyecto_id)
-                {
+            if ($dato['reporteregistro_id'] >= 0 && $reporte->reportevibracion_objetivogeneral != NULL) {
+                if ($reporte->proyecto_id == $proyecto_id) {
                     $dato['reporte_objetivogeneral_guardado'] = 1;
-                }
-                else
-                {
+                } else {
                     $dato['reporte_objetivogeneral_guardado'] = 0;
                 }
 
                 $objetivogeneral = $reporte->reportevibracion_objetivogeneral;
-            }
-            else
-            {
+            } else {
                 $dato['reporte_objetivogeneral_guardado'] = 0;
                 $objetivogeneral = $reportecatalogo->reportevibracioncatalogo_objetivogeneral;
             }
@@ -445,21 +410,15 @@ class reportevibracionController extends Controller
             //===================================================
 
 
-            if ($dato['reporteregistro_id'] >= 0 && $reporte->reportevibracion_objetivoespecifico != NULL)
-            {
-                if ($reporte->proyecto_id == $proyecto_id)
-                {
+            if ($dato['reporteregistro_id'] >= 0 && $reporte->reportevibracion_objetivoespecifico != NULL) {
+                if ($reporte->proyecto_id == $proyecto_id) {
                     $dato['reporte_objetivoespecifico_guardado'] = 1;
-                }
-                else
-                {
+                } else {
                     $dato['reporte_objetivoespecifico_guardado'] = 0;
                 }
 
                 $objetivoespecifico = $reporte->reportevibracion_objetivoespecifico;
-            }
-            else
-            {
+            } else {
                 $dato['reporte_objetivoespecifico_guardado'] = 0;
                 $objetivoespecifico = $reportecatalogo->reportevibracioncatalogo_objetivoespecifico;
             }
@@ -471,21 +430,15 @@ class reportevibracionController extends Controller
             //===================================================
 
 
-            if ($dato['reporteregistro_id'] >= 0 && $reporte->reportevibracion_metodologia_4_1 != NULL)
-            {
-                if ($reporte->proyecto_id == $proyecto_id)
-                {
+            if ($dato['reporteregistro_id'] >= 0 && $reporte->reportevibracion_metodologia_4_1 != NULL) {
+                if ($reporte->proyecto_id == $proyecto_id) {
                     $dato['reporte_metodologia_4_1_guardado'] = 1;
-                }
-                else
-                {
+                } else {
                     $dato['reporte_metodologia_4_1_guardado'] = 0;
                 }
 
                 $metodologia_4_1 = $reporte->reportevibracion_metodologia_4_1;
-            }
-            else
-            {
+            } else {
                 $dato['reporte_metodologia_4_1_guardado'] = 0;
                 $metodologia_4_1 = $reportecatalogo->reportevibracioncatalogo_metodologia_4_1;
             }
@@ -497,50 +450,40 @@ class reportevibracionController extends Controller
             //===================================================
 
 
-            if ($dato['reporteregistro_id'] >= 0 && $reporte->reportevibracion_ubicacioninstalacion != NULL)
-            {
-                if ($reporte->proyecto_id == $proyecto_id)
-                {
+            if ($dato['reporteregistro_id'] >= 0 && $reporte->reportevibracion_ubicacioninstalacion != NULL) {
+                if ($reporte->proyecto_id == $proyecto_id) {
                     $dato['reporte_ubicacioninstalacion_guardado'] = 1;
-                }
-                else
-                {
+                } else {
                     $dato['reporte_ubicacioninstalacion_guardado'] = 0;
                 }
 
                 $ubicacion = $reporte->reportevibracion_ubicacioninstalacion;
-            }
-            else
-            {
+            } else {
                 $dato['reporte_ubicacioninstalacion_guardado'] = 0;
                 $ubicacion = $reportecatalogo->reportevibracioncatalogo_ubicacioninstalacion;
             }
 
 
             $ubicacionfoto = NULL;
-            if ($dato['reporteregistro_id'] > 0 && $reporte->reportevibracion_ubicacionfoto != NULL)
-            {
+            if ($dato['reporteregistro_id'] > 0 && $reporte->reportevibracion_ubicacionfoto != NULL) {
                 $ubicacionfoto = $reporte->reportevibracion_ubicacionfoto;
             }
 
 
             $dato['reporte_ubicacioninstalacion'] = array(
-                                                          'ubicacion' => $this->datosproyectoreemplazartexto($proyecto, $recsensorial, $ubicacion)
-                                                        , 'ubicacionfoto' => $ubicacionfoto
-                                                    );
+                'ubicacion' => $this->datosproyectoreemplazartexto($proyecto, $recsensorial, $ubicacion),
+                'ubicacionfoto' => $ubicacionfoto
+            );
 
 
             // PROCESO INSTALACION
             //===================================================
 
 
-            if ($dato['reporteregistro_id'] > 0 && $reporte->reportevibracion_procesoinstalacion != NULL)
-            {
+            if ($dato['reporteregistro_id'] > 0 && $reporte->reportevibracion_procesoinstalacion != NULL) {
                 $dato['reporte_procesoinstalacion_guardado'] = 1;
                 $procesoinstalacion = $reporte->reportevibracion_procesoinstalacion;
-            }
-            else
-            {
+            } else {
                 $dato['reporte_procesoinstalacion_guardado'] = 0;
                 $procesoinstalacion = $recsensorial->recsensorial_descripcionproceso;
             }
@@ -553,12 +496,9 @@ class reportevibracionController extends Controller
             //===================================================
 
 
-            if ($dato['reporteregistro_id'] > 0 && $reporte->reportevibracion_actividadprincipal != NULL)
-            {
+            if ($dato['reporteregistro_id'] > 0 && $reporte->reportevibracion_actividadprincipal != NULL) {
                 $actividadprincipal = $reporte->reportevibracion_actividadprincipal;
-            }
-            else
-            {
+            } else {
                 $actividadprincipal = $recsensorial->recsensorial_actividadprincipal;
             }
 
@@ -570,13 +510,10 @@ class reportevibracionController extends Controller
             //===================================================
 
 
-            if ($dato['reporteregistro_id'] > 0 && $reporte->reportevibracion_conclusion != NULL)
-            {
+            if ($dato['reporteregistro_id'] > 0 && $reporte->reportevibracion_conclusion != NULL) {
                 $dato['reporte_conclusion_guardado'] = 1;
                 $conclusion = $reporte->reportevibracion_conclusion;
-            }
-            else
-            {
+            } else {
                 $dato['reporte_conclusion_guardado'] = 0;
                 $conclusion = $reportecatalogo->reportevibracioncatalogo_conclusion;
             }
@@ -589,64 +526,55 @@ class reportevibracionController extends Controller
             //===================================================
 
 
-            if ($dato['reporteregistro_id'] >= 0 && $reporte->reportevibracion_responsable1 != NULL)
-            {
-                if ($reporte->proyecto_id == $proyecto_id)
-                {
+            if ($dato['reporteregistro_id'] >= 0 && $reporte->reportevibracion_responsable1 != NULL) {
+                if ($reporte->proyecto_id == $proyecto_id) {
                     $dato['reporte_responsablesinforme_guardado'] = 1;
-                }
-                else
-                {
+                } else {
                     $dato['reporte_responsablesinforme_guardado'] = 0;
                 }
 
                 $dato['reporte_responsablesinforme'] = array(
-                                                              'responsable1' => $reporte->reportevibracion_responsable1
-                                                            , 'responsable1cargo' => $reporte->reportevibracion_responsable1cargo
-                                                            , 'responsable1documento' => $reporte->reportevibracion_responsable1documento
-                                                            , 'responsable2' => $reporte->reportevibracion_responsable2
-                                                            , 'responsable2cargo' => $reporte->reportevibracion_responsable2cargo
-                                                            , 'responsable2documento' => $reporte->reportevibracion_responsable2documento
-                                                            , 'proyecto_id' => $reporte->proyecto_id
-                                                            , 'registro_id' => $reporte->id
-                                                        );
-            }
-            else
-            {
+                    'responsable1' => $reporte->reportevibracion_responsable1,
+                    'responsable1cargo' => $reporte->reportevibracion_responsable1cargo,
+                    'responsable1documento' => $reporte->reportevibracion_responsable1documento,
+                    'responsable2' => $reporte->reportevibracion_responsable2,
+                    'responsable2cargo' => $reporte->reportevibracion_responsable2cargo,
+                    'responsable2documento' => $reporte->reportevibracion_responsable2documento,
+                    'proyecto_id' => $reporte->proyecto_id,
+                    'registro_id' => $reporte->id
+                );
+            } else {
                 $dato['reporte_responsablesinforme_guardado'] = 0;
 
 
                 $reportehistorial = reportevibracionModel::where('reportevibracion_responsable1', '!=', '')
-                                                            ->orderBy('updated_at', 'DESC')
-                                                            ->limit(1)
-                                                            ->get();
+                    ->orderBy('updated_at', 'DESC')
+                    ->limit(1)
+                    ->get();
 
 
-                if (count($reportehistorial) > 0 && $reportehistorial[0]->reportevibracion_responsable1 != NULL)
-                {
+                if (count($reportehistorial) > 0 && $reportehistorial[0]->reportevibracion_responsable1 != NULL) {
                     $dato['reporte_responsablesinforme'] = array(
-                                                                  'responsable1' => $reportehistorial[0]->reportevibracion_responsable1
-                                                                , 'responsable1cargo' => $reportehistorial[0]->reportevibracion_responsable1cargo
-                                                                , 'responsable1documento' => $reportehistorial[0]->reportevibracion_responsable1documento
-                                                                , 'responsable2' => $reportehistorial[0]->reportevibracion_responsable2
-                                                                , 'responsable2cargo' => $reportehistorial[0]->reportevibracion_responsable2cargo
-                                                                , 'responsable2documento' => $reportehistorial[0]->reportevibracion_responsable2documento
-                                                                , 'proyecto_id' => $reportehistorial[0]->proyecto_id
-                                                                , 'registro_id' => $reportehistorial[0]->id
-                                                            );
-                }
-                else
-                {
+                        'responsable1' => $reportehistorial[0]->reportevibracion_responsable1,
+                        'responsable1cargo' => $reportehistorial[0]->reportevibracion_responsable1cargo,
+                        'responsable1documento' => $reportehistorial[0]->reportevibracion_responsable1documento,
+                        'responsable2' => $reportehistorial[0]->reportevibracion_responsable2,
+                        'responsable2cargo' => $reportehistorial[0]->reportevibracion_responsable2cargo,
+                        'responsable2documento' => $reportehistorial[0]->reportevibracion_responsable2documento,
+                        'proyecto_id' => $reportehistorial[0]->proyecto_id,
+                        'registro_id' => $reportehistorial[0]->id
+                    );
+                } else {
                     $dato['reporte_responsablesinforme'] = array(
-                                                                  'responsable1' => NULL
-                                                                , 'responsable1cargo' => NULL
-                                                                , 'responsable1documento' => NULL
-                                                                , 'responsable2' => NULL
-                                                                , 'responsable2cargo' => NULL
-                                                                , 'responsable2documento' => NULL
-                                                                , 'proyecto_id' => 0
-                                                                , 'registro_id' => 0
-                                                            );
+                        'responsable1' => NULL,
+                        'responsable1cargo' => NULL,
+                        'responsable1documento' => NULL,
+                        'responsable2' => NULL,
+                        'responsable2cargo' => NULL,
+                        'responsable2documento' => NULL,
+                        'proyecto_id' => 0,
+                        'registro_id' => 0
+                    );
                 }
             }
 
@@ -668,20 +596,17 @@ class reportevibracionController extends Controller
                                                 FROM
                                                     proyectoevidenciafoto
                                                 WHERE
-                                                    proyectoevidenciafoto.proyecto_id = '.$proyecto_id.'
-                                                    AND proyectoevidenciafoto.agente_nombre = "'.$agente_nombre.'"
+                                                    proyectoevidenciafoto.proyecto_id = ' . $proyecto_id . '
+                                                    AND proyectoevidenciafoto.agente_nombre = "' . $agente_nombre . '"
                                                 GROUP BY
                                                     proyectoevidenciafoto.proyecto_id,
                                                     proyectoevidenciafoto.agente_nombre
                                                 LIMIT 1');
 
 
-            if (count($memoriafotografica) > 0)
-            {
+            if (count($memoriafotografica) > 0) {
                 $dato['reporte_memoriafotografica_guardado'] = $memoriafotografica[0]->total;
-            }
-            else
-            {                
+            } else {
                 $dato['reporte_memoriafotografica_guardado'] = 0;
             }
 
@@ -692,10 +617,8 @@ class reportevibracionController extends Controller
             // respuesta
             $dato["msj"] = 'Datos consultados correctamente';
             return response()->json($dato);
-        }
-        catch(Exception $e)
-        {
-            $dato["msj"] = 'Error '.$e->getMessage();
+        } catch (Exception $e) {
+            $dato["msj"] = 'Error ' . $e->getMessage();
             return response()->json($dato);
         }
     }
@@ -711,19 +634,16 @@ class reportevibracionController extends Controller
      */
     public function reportevibraciontabladefiniciones($proyecto_id, $agente_nombre, $reporteregistro_id)
     {
-        try
-        {
+        try {
             $revision = reporterevisionesModel::where('proyecto_id', $proyecto_id)
-                                                ->where('agente_id', 2)
-                                                ->orderBy('reporterevisiones_revision', 'DESC')
-                                                ->get();
+                ->where('agente_id', 2)
+                ->orderBy('reporterevisiones_revision', 'DESC')
+                ->get();
 
 
             $edicion = 1;
-            if(count($revision) > 0)
-            {
-                if($revision[0]->reporterevisiones_concluido == 1 || $revision[0]->reporterevisiones_cancelado == 1)
-                {
+            if (count($revision) > 0) {
+                if ($revision[0]->reporterevisiones_concluido == 1 || $revision[0]->reporterevisiones_cancelado == 1) {
                     $edicion = 0;
                 }
             }
@@ -737,9 +657,9 @@ class reportevibracionController extends Controller
             $recsensorial = recsensorialModel::findOrFail($proyecto->recsensorial_id);
 
             $where_definiciones = '';
-            if (($recsensorial->recsensorial_tipocliente+0) == 1) //1 = pemex, 0 = cliente
+            if (($recsensorial->recsensorial_tipocliente + 0) == 1) //1 = pemex, 0 = cliente
             {
-                $where_definiciones = 'AND reportedefiniciones.catactivo_id = '.$proyecto->catactivo_id;
+                $where_definiciones = 'AND reportedefiniciones.catactivo_id = ' . $proyecto->catactivo_id;
             }
 
             $definiciones_catalogo = collect(DB::select('SELECT
@@ -764,7 +684,7 @@ class reportevibracionController extends Controller
                                                                         FROM
                                                                             reportedefinicionescatalogo
                                                                         WHERE
-                                                                            reportedefinicionescatalogo.agente_nombre LIKE "'.$agente_nombre.'"
+                                                                            reportedefinicionescatalogo.agente_nombre LIKE "' . $agente_nombre . '"
                                                                             AND reportedefinicionescatalogo.reportedefinicionescatalogo_activo = 1
                                                                         ORDER BY
                                                                             reportedefinicionescatalogo.reportedefinicionescatalogo_concepto ASC
@@ -782,8 +702,8 @@ class reportevibracionController extends Controller
                                                                         FROM
                                                                             reportedefiniciones
                                                                         WHERE
-                                                                            reportedefiniciones.agente_nombre LIKE "'.$agente_nombre.'"
-                                                                            '.$where_definiciones.' 
+                                                                            reportedefiniciones.agente_nombre LIKE "' . $agente_nombre . '"
+                                                                            ' . $where_definiciones . ' 
                                                                         ORDER BY
                                                                             reportedefiniciones.agente_nombre ASC
                                                                     )
@@ -792,26 +712,19 @@ class reportevibracionController extends Controller
                                                                 -- TABLA.catactivo_id ASC,
                                                                 TABLA.concepto ASC'));
 
-            foreach ($definiciones_catalogo as $key => $value)
-            {
-                if (($value->catactivo_id+0) < 0)
-                {
-                    $value->descripcion_fuente = $value->descripcion.'<br><span style="color: #999999; font-style: italic;">Fuente: '.$value->fuente.'</span>';
+            foreach ($definiciones_catalogo as $key => $value) {
+                if (($value->catactivo_id + 0) < 0) {
+                    $value->descripcion_fuente = $value->descripcion . '<br><span style="color: #999999; font-style: italic;">Fuente: ' . $value->fuente . '</span>';
                     $value->boton_editar = '<button type="button" class="btn btn-default waves-effect btn-circle"><i class="fa fa-ban fa-2x"></i></button>';
                     $value->boton_eliminar = '<button type="button" class="btn btn-default waves-effect btn-circle" data-toggle="tooltip" title="No disponible"><i class="fa fa-ban fa-2x"></i></button>';
-                }
-                else
-                {
-                    $value->descripcion_fuente = $value->descripcion.'<br><span style="color: #999999; font-style: italic;">Fuente: '.$value->fuente.'</span>';
+                } else {
+                    $value->descripcion_fuente = $value->descripcion . '<br><span style="color: #999999; font-style: italic;">Fuente: ' . $value->fuente . '</span>';
                     $value->boton_editar = '<button type="button" class="btn btn-warning waves-effect btn-circle"><i class="fa fa-pencil fa-2x"></i></button>';
                     // $value->boton_eliminar = '<button type="button" class="btn btn-danger waves-effect btn-circle"><i class="fa fa-trash fa-2x"></i></button>';
 
-                    if ($edicion == 1)
-                    {
+                    if ($edicion == 1) {
                         $value->boton_eliminar = '<button type="button" class="btn btn-danger waves-effect btn-circle eliminar"><i class="fa fa-trash fa-2x"></i></button>';
-                    }
-                    else
-                    {
+                    } else {
                         $value->boton_eliminar = '<button type="button" class="btn btn-default waves-effect btn-circle" data-toggle="tooltip" title="No disponible"><i class="fa fa-eye fa-2x"></i></button>';
                     }
                 }
@@ -822,11 +735,9 @@ class reportevibracionController extends Controller
             $dato['data'] = $definiciones_catalogo;
             $dato["msj"] = 'Datos consultados correctamente';
             return response()->json($dato);
-        }
-        catch(Exception $e)
-        {
+        } catch (Exception $e) {
             $dato['data'] = 0;
-            $dato["msj"] = 'Error '.$e->getMessage();
+            $dato["msj"] = 'Error ' . $e->getMessage();
             return response()->json($dato);
         }
     }
@@ -840,17 +751,14 @@ class reportevibracionController extends Controller
      */
     public function reportevibraciondefinicioneliminar($definicion_id)
     {
-        try
-        {
+        try {
             $definicion = reportedefinicionesModel::where('id', $definicion_id)->delete();
 
             // respuesta
             $dato["msj"] = 'Definición eliminada correctamente';
             return response()->json($dato);
-        }
-        catch(Exception $e)
-        {
-            $dato["msj"] = 'Error '.$e->getMessage();
+        } catch (Exception $e) {
+            $dato["msj"] = 'Error ' . $e->getMessage();
             return response()->json($dato);
         }
     }
@@ -862,17 +770,14 @@ class reportevibracionController extends Controller
      * @param  int  $reporteregistro_id
      * @param  int  $archivo_opcion
      * @return \Illuminate\Http\Response
-    */
+     */
     public function reportevibracionmapaubicacion($reporteregistro_id, $archivo_opcion)
     {
         $reporte  = reportevibracionModel::findOrFail($reporteregistro_id);
 
-        if ($archivo_opcion == 0)
-        {
+        if ($archivo_opcion == 0) {
             return Storage::response($reporte->reportevibracion_ubicacionfoto);
-        }
-        else
-        {
+        } else {
             return Storage::download($reporte->reportevibracion_ubicacionfoto);
         }
     }
@@ -886,9 +791,19 @@ class reportevibracionController extends Controller
      */
     public function reportevibracionareas($proyecto_id)
     {
-        try
-        {
-            $numero_registro = 0; $numero_registro2 = 0; $numero_registro3 = 0; $total_singuardar = 0; $instalacion = 'XXX'; $area = 'XXX'; $area2 = 'XXX'; $area3 = 'XXX'; $selectareasoption = '<option value=""></option>'; $tabla_5_4 = ''; $tabla_5_5 = ''; $tabla_6_1 = '';
+        try {
+            $numero_registro = 0;
+            $numero_registro2 = 0;
+            $numero_registro3 = 0;
+            $total_singuardar = 0;
+            $instalacion = 'XXX';
+            $area = 'XXX';
+            $area2 = 'XXX';
+            $area3 = 'XXX';
+            $selectareasoption = '<option value=""></option>';
+            $tabla_5_4 = '';
+            $tabla_5_5 = '';
+            $tabla_6_1 = '';
 
 
             $areas = DB::select('SELECT
@@ -921,7 +836,7 @@ class reportevibracionController extends Controller
                                      LEFT JOIN reporteareacategoria ON reportearea.id = reporteareacategoria.reportearea_id
                                      LEFT JOIN reportecategoria ON reporteareacategoria.reportecategoria_id = reportecategoria.id 
                                  WHERE
-                                     reportearea.proyecto_id = '.$proyecto_id.' 
+                                     reportearea.proyecto_id = ' . $proyecto_id . ' 
                                  ORDER BY
                                      reportearea.reportearea_orden ASC,
                                      reportearea.reportearea_nombre ASC,
@@ -929,10 +844,8 @@ class reportevibracionController extends Controller
                                      reportecategoria.reportecategoria_nombre ASC');
 
 
-            foreach ($areas as $key => $value) 
-            {
-                if ($area != $value->reportearea_nombre)
-                {
+            foreach ($areas as $key => $value) {
+                if ($area != $value->reportearea_nombre) {
                     $area = $value->reportearea_nombre;
                     $value->area_nombre = $area;
 
@@ -941,34 +854,28 @@ class reportevibracionController extends Controller
                     $value->numero_registro = $numero_registro;
 
 
-                    if ($value->reportevibracionarea_porcientooperacion > 0)
-                    {
+                    if ($value->reportevibracionarea_porcientooperacion > 0) {
                         $numero_registro2 += 1;
 
                         //TABLA 6.1.- Condiciones de operación durante la evaluación (representado en porcentaje)
                         //==================================================
 
                         $tabla_6_1 .= '<tr>
-                                            <td>'.$numero_registro2.'</td>
-                                            <td>'.$value->reportearea_instalacion.'</td>
-                                            <td>'.$value->reportearea_nombre.'</td>
-                                            <td>'.$value->reportevibracionarea_porcientooperacion.'%</td>
+                                            <td>' . $numero_registro2 . '</td>
+                                            <td>' . $value->reportearea_instalacion . '</td>
+                                            <td>' . $value->reportearea_nombre . '</td>
+                                            <td>' . $value->reportevibracionarea_porcientooperacion . '%</td>
                                         </tr>';
                     }
-                }
-                else
-                {
+                } else {
                     $value->area_nombre = $area;
                     $value->numero_registro = $numero_registro;
                 }
 
 
-                if ($value->activo)
-                {
-                    $value->reportecategoria_nombre_texto = '<span class="text-danger">'.$value->reportecategoria_nombre.'</span>';
-                }
-                else
-                {
+                if ($value->activo) {
+                    $value->reportecategoria_nombre_texto = '<span class="text-danger">' . $value->reportecategoria_nombre . '</span>';
+                } else {
                     $value->reportecategoria_nombre_texto = $value->reportecategoria_nombre;
                 }
 
@@ -977,33 +884,29 @@ class reportevibracionController extends Controller
                 // $value->boton_eliminar = '<button type="button" class="btn btn-default waves-effect btn-circle" data-toggle="tooltip" title="No disponible"><i class="fa fa-ban fa-2x"></i></button>';
 
 
-                if ($value->reportearea_tipoexposicion === NULL)
-                {
+                if ($value->reportearea_tipoexposicion === NULL) {
                     $total_singuardar += 1;
                 }
 
 
-                if ($value->reportevibracionarea_porcientooperacion > 0)
-                {
-                    if ($value->activo)
-                    {
+                if ($value->reportevibracionarea_porcientooperacion > 0) {
+                    if ($value->activo) {
                         //TABLA 5.4.- Actividades del personal expuesto
                         //==================================================
 
 
-                        if ($area3 != $value->reportearea_nombre)
-                        {
+                        if ($area3 != $value->reportearea_nombre) {
                             $area3 = $value->reportearea_nombre;
                             $numero_registro3 += 1;
                         }
 
 
                         $tabla_5_4 .= '<tr>
-                                            <td>'.$numero_registro3.'</td>
-                                            <td>'.$value->reportearea_instalacion.'</td>
-                                            <td>'.$value->reportearea_nombre.'</td>
-                                            <td>'.$value->reportecategoria_nombre.'</td>
-                                            <td class="justificado">'.$value->reporteareacategoria_actividades.'</td>
+                                            <td>' . $numero_registro3 . '</td>
+                                            <td>' . $value->reportearea_instalacion . '</td>
+                                            <td>' . $value->reportearea_nombre . '</td>
+                                            <td>' . $value->reportecategoria_nombre . '</td>
+                                            <td class="justificado">' . $value->reporteareacategoria_actividades . '</td>
                                         </tr>';
                     }
 
@@ -1012,27 +915,23 @@ class reportevibracionController extends Controller
                     //==================================================
 
 
-                    if ($instalacion != $value->reportearea_instalacion && ($key + 0) == 0)
-                    {
+                    if ($instalacion != $value->reportearea_instalacion && ($key + 0) == 0) {
                         $instalacion = $value->reportearea_instalacion;
-                        $selectareasoption .= '<optgroup label="'.$instalacion.'">';
+                        $selectareasoption .= '<optgroup label="' . $instalacion . '">';
                     }
-                    
-                    if ($instalacion != $value->reportearea_instalacion && ($key + 0) > 0)
-                    {
+
+                    if ($instalacion != $value->reportearea_instalacion && ($key + 0) > 0) {
                         $instalacion = $value->reportearea_instalacion;
-                        $selectareasoption .= '</optgroup><optgroup label="'.$instalacion.'">';
+                        $selectareasoption .= '</optgroup><optgroup label="' . $instalacion . '">';
                         $area2 = 'XXXXX';
                     }
 
-                    if ($area2 != $value->reportearea_nombre)
-                    {
+                    if ($area2 != $value->reportearea_nombre) {
                         $area2 = $value->reportearea_nombre;
-                        $selectareasoption .= '<option value="'.$value->id.'">'.$area2.'</option>';
+                        $selectareasoption .= '<option value="' . $value->id . '">' . $area2 . '</option>';
                     }
 
-                    if (($key + 0) == (count($areas) - 1))
-                    {
+                    if (($key + 0) == (count($areas) - 1)) {
                         $selectareasoption .= '</optgroup>';
                     }
                 }
@@ -1057,7 +956,7 @@ class reportevibracionController extends Controller
                                                 reportevibracionmaquinaria
                                                 LEFT JOIN reportearea ON reportevibracionmaquinaria.reportearea_id = reportearea.id
                                             WHERE
-                                                reportearea.proyecto_id = '.$proyecto_id.' 
+                                                reportearea.proyecto_id = ' . $proyecto_id . ' 
                                                 AND reportearea.reportevibracionarea_porcientooperacion > 0
                                             ORDER BY
                                                 reportearea.reportearea_orden ASC,
@@ -1065,23 +964,22 @@ class reportevibracionController extends Controller
                                                 reportevibracionmaquinaria.reportevibracionmaquinaria_nombre ASC');
 
 
-            $numero_registro = 0; $area = 'XXX';
-            foreach ($areasmaquinaria as $key => $value)
-            {
-                if ($area != $value->reportearea_nombre)
-                {
+            $numero_registro = 0;
+            $area = 'XXX';
+            foreach ($areasmaquinaria as $key => $value) {
+                if ($area != $value->reportearea_nombre) {
                     $area = $value->reportearea_nombre;
                     $numero_registro += 1;
                 }
 
 
                 $tabla_5_5 .= '<tr>
-                                    <td>'.$numero_registro.'</td>
-                                    <td>'.$value->reportearea_instalacion.'</td>
-                                    <td>'.$value->reportearea_nombre.'</td>
-                                    <td>'.$value->reportevibracionmaquinaria_nombre.'</td>
-                                    <td>'.$value->reportevibracionmaquinaria_cantidad.'</td>
-                                    <td>'.$value->reportearea_tipoexposicion.'</td>
+                                    <td>' . $numero_registro . '</td>
+                                    <td>' . $value->reportearea_instalacion . '</td>
+                                    <td>' . $value->reportearea_nombre . '</td>
+                                    <td>' . $value->reportevibracionmaquinaria_nombre . '</td>
+                                    <td>' . $value->reportevibracionmaquinaria_cantidad . '</td>
+                                    <td>' . $value->reportearea_tipoexposicion . '</td>
                                 </tr>';
             }
 
@@ -1098,16 +996,14 @@ class reportevibracionController extends Controller
             $dato["selectareasoption"] = $selectareasoption;
             $dato["msj"] = 'Datos consultados correctamente';
             return response()->json($dato);
-        }
-        catch(Exception $e)
-        {
+        } catch (Exception $e) {
             $dato['data'] = 0;
             $dato["total_singuardar"] = $total_singuardar;
             $dato["tabla_5_4"] = '<tr><td colspan="5">Error al consultar los datos</td></tr>';
             $dato["tabla_5_5"] = '<tr><td colspan="6">Error al consultar los datos</td></tr>';
             $dato["tabla_6_1"] = '<tr><td colspan="4">Error al consultar los datos</td></tr>';
             $dato["selectareasoption"] = '<option value="">Error al consultar áreas</option>';
-            $dato["msj"] = 'Error '.$e->getMessage();
+            $dato["msj"] = 'Error ' . $e->getMessage();
             return response()->json($dato);
         }
     }
@@ -1122,8 +1018,7 @@ class reportevibracionController extends Controller
      */
     public function reportevibracionareacategorias($proyecto_id, $area_id)
     {
-        try
-        {
+        try {
             $areacategorias = DB::select('SELECT
                                                 reportecategoria.proyecto_id,
                                                 reporteareacategoria.reportearea_id,
@@ -1147,8 +1042,8 @@ class reportevibracionController extends Controller
                                                 reporteareacategoria
                                                 INNER JOIN reportecategoria ON reporteareacategoria.reportecategoria_id = reportecategoria.id 
                                             WHERE
-                                                reportecategoria.proyecto_id = '.$proyecto_id.' 
-                                                AND reporteareacategoria.reportearea_id = '.$area_id.' 
+                                                reportecategoria.proyecto_id = ' . $proyecto_id . ' 
+                                                AND reporteareacategoria.reportearea_id = ' . $area_id . ' 
                                             ORDER BY
                                                 reportecategoria.reportecategoria_orden ASC,
                                                 reportecategoria.reportecategoria_nombre ASC');
@@ -1158,8 +1053,7 @@ class reportevibracionController extends Controller
             $areacategorias_lista = '';
 
 
-            foreach ($areacategorias as $key => $value) 
-            {
+            foreach ($areacategorias as $key => $value) {
                 $numero_registro += 1;
 
 
@@ -1167,22 +1061,22 @@ class reportevibracionController extends Controller
                                             <td with="60">
                                                 <div class="switch" style="border: 0px #000 solid;">
                                                     <label>
-                                                        <input type="checkbox" name="checkbox_categoria_id[]" value="'.$value->id.'" '.$value->checked.'/>
+                                                        <input type="checkbox" name="checkbox_categoria_id[]" value="' . $value->id . '" ' . $value->checked . '/>
                                                         <span class="lever switch-col-light-blue" style="padding: 0px; margin: 0px;"></span>
                                                     </label>
                                                 </div>
                                             </td>
                                             <td with="240">
-                                                '.$value->reportecategoria_nombre.'
+                                                ' . $value->reportecategoria_nombre . '
                                             </td>
                                             <td with="100">
-                                                <input type="number" min="1" class="form-control areacategoria_'.$numero_registro.'" name="areacategoria_total_'.$value->id.'" value="'.$value->reporteareacategoria_total.'" readonly>
+                                                <input type="number" min="1" class="form-control areacategoria_' . $numero_registro . '" name="areacategoria_total_' . $value->id . '" value="' . $value->reporteareacategoria_total . '" readonly>
                                             </td>
                                             <td with="100">
-                                                <input type="number" min="1" class="form-control areacategoria_'.$numero_registro.'" name="areacategoria_geh_'.$value->id.'" value="'.$value->reporteareacategoria_geh.'" readonly>
+                                                <input type="number" min="1" class="form-control areacategoria_' . $numero_registro . '" name="areacategoria_geh_' . $value->id . '" value="' . $value->reporteareacategoria_geh . '" readonly>
                                             </td>
                                             <td with="">
-                                                <textarea rows="2" class="form-control areacategoria_'.$numero_registro.'" name="areacategoria_actividades_'.$value->id.'" readonly>'.$value->reporteareacategoria_actividades.'</textarea>
+                                                <textarea rows="2" class="form-control areacategoria_' . $numero_registro . '" name="areacategoria_actividades_' . $value->id . '" readonly>' . $value->reporteareacategoria_actividades . '</textarea>
                                             </td>
                                         </tr>';
             }
@@ -1204,17 +1098,16 @@ class reportevibracionController extends Controller
                                                 reportevibracionmaquinaria
                                                 LEFT JOIN reportearea ON reportevibracionmaquinaria.reportearea_id = reportearea.id
                                             WHERE
-                                                reportearea.id = '.$area_id);
+                                                reportearea.id = ' . $area_id);
 
 
             $areamaquinarias_lista = '';
 
 
-            foreach ($areamaquinarias as $key => $value) 
-            {
+            foreach ($areamaquinarias as $key => $value) {
                 $areamaquinarias_lista .= '<tr>
-                                                <td><input type="text" class="form-control" name="reportevibracionmaquinaria_nombre[]" value="'.$value->reportevibracionmaquinaria_nombre.'" required></td>
-                                                <td><input type="number" min="1" class="form-control" name="reportevibracionmaquinaria_cantidad[]" value="'.$value->reportevibracionmaquinaria_cantidad.'" required></td>
+                                                <td><input type="text" class="form-control" name="reportevibracionmaquinaria_nombre[]" value="' . $value->reportevibracionmaquinaria_nombre . '" required></td>
+                                                <td><input type="number" min="1" class="form-control" name="reportevibracionmaquinaria_cantidad[]" value="' . $value->reportevibracionmaquinaria_cantidad . '" required></td>
                                                 <td><button type="button" class="btn btn-danger waves-effect btn-circle eliminar"><i class="fa fa-trash fa-2x"></i></button></td>
                                             </tr>';
             }
@@ -1224,16 +1117,14 @@ class reportevibracionController extends Controller
 
 
             // respuesta
-            $dato['areacategorias'] = $areacategorias_lista;            
-            $dato['areamaqinarias'] = $areamaquinarias_lista;            
+            $dato['areacategorias'] = $areacategorias_lista;
+            $dato['areamaqinarias'] = $areamaquinarias_lista;
             $dato["msj"] = 'Datos consultados correctamente';
             return response()->json($dato);
-        }
-        catch(Exception $e)
-        {
+        } catch (Exception $e) {
             $dato['areacategorias'] = '<tr><td colspan="5">Error al cargar las categorías</td></tr>';
             $dato['areamaqinarias'] = '<tr><td colspan="3">Error al cargar las maquinarías</td></tr>';
-            $dato["msj"] = 'Error '.$e->getMessage();
+            $dato["msj"] = 'Error ' . $e->getMessage();
             return response()->json($dato);
         }
     }
@@ -1247,8 +1138,7 @@ class reportevibracionController extends Controller
      */
     public function reportevibracionevaluaciontabla($proyecto_id)
     {
-        try
-        {
+        try {
             // PUNTOS DE EVALACION POR AREA
             //==========================================
 
@@ -1282,7 +1172,7 @@ class reportevibracionController extends Controller
                                                 LEFT JOIN reportearea ON reportevibracionevaluacion.reportearea_id = reportearea.id
                                                 LEFT JOIN reportecategoria ON reportevibracionevaluacion.reportecategoria_id = reportecategoria.id
                                             WHERE
-                                                reportevibracionevaluacion.proyecto_id = '.$proyecto_id.' 
+                                                reportevibracionevaluacion.proyecto_id = ' . $proyecto_id . ' 
                                             ORDER BY
                                                 reportearea.reportearea_orden ASC,
                                                 reportearea.reportearea_nombre ASC,
@@ -1290,25 +1180,26 @@ class reportevibracionController extends Controller
                                                 reportecategoria.reportecategoria_nombre ASC');
 
 
-            $numero_registro = 0; $area = 'XXXXX'; $dato['tabla_reporte_6_2'] = NULL; $dato['total_puntosmedicion'] = 0;
-            foreach ($areas_evaluadas as $key => $value)
-            {
-                if ($area != $value->reportearea_nombre)
-                {
+            $numero_registro = 0;
+            $area = 'XXXXX';
+            $dato['tabla_reporte_6_2'] = NULL;
+            $dato['total_puntosmedicion'] = 0;
+            foreach ($areas_evaluadas as $key => $value) {
+                if ($area != $value->reportearea_nombre) {
                     $area = $value->reportearea_nombre;
-                    $dato['total_puntosmedicion'] += ($value->total_puntosarea+0);
+                    $dato['total_puntosmedicion'] += ($value->total_puntosarea + 0);
 
                     $numero_registro += 1;
                 }
 
 
                 $dato['tabla_reporte_6_2'] .= '<tr>
-                                                    <td>'.$numero_registro.'</td>
-                                                    <td>'.$value->reportearea_instalacion.'</td>
-                                                    <td>'.$value->reportearea_nombre.'</td>
-                                                    <td>'.$value->reportecategoria_nombre.'</td>
-                                                    <td>'.$value->reportearea_tipoexposicion.'</td>
-                                                    <td>'.$value->total_puntosarea.'</td>
+                                                    <td>' . $numero_registro . '</td>
+                                                    <td>' . $value->reportearea_instalacion . '</td>
+                                                    <td>' . $value->reportearea_nombre . '</td>
+                                                    <td>' . $value->reportecategoria_nombre . '</td>
+                                                    <td>' . $value->reportearea_tipoexposicion . '</td>
+                                                    <td>' . $value->total_puntosarea . '</td>
                                                 </tr>';
             }
 
@@ -1318,16 +1209,14 @@ class reportevibracionController extends Controller
 
 
             $revision = reporterevisionesModel::where('proyecto_id', $proyecto_id)
-                                                ->where('agente_id', 2)
-                                                ->orderBy('reporterevisiones_revision', 'DESC')
-                                                ->get();
+                ->where('agente_id', 2)
+                ->orderBy('reporterevisiones_revision', 'DESC')
+                ->get();
 
 
             $edicion = 1;
-            if(count($revision) > 0)
-            {
-                if($revision[0]->reporterevisiones_concluido == 1 || $revision[0]->reporterevisiones_cancelado == 1)
-                {
+            if (count($revision) > 0) {
+                if ($revision[0]->reporterevisiones_concluido == 1 || $revision[0]->reporterevisiones_cancelado == 1) {
                     $edicion = 0;
                 }
             }
@@ -1370,7 +1259,7 @@ class reportevibracionController extends Controller
                                             LEFT JOIN reportearea ON reportevibracionevaluacion.reportearea_id = reportearea.id
                                             LEFT JOIN reportecategoria ON reportevibracionevaluacion.reportecategoria_id = reportecategoria.id
                                         WHERE
-                                            reportevibracionevaluacion.proyecto_id = '.$proyecto_id.' 
+                                            reportevibracionevaluacion.proyecto_id = ' . $proyecto_id . ' 
                                         ORDER BY
                                             reportevibracionevaluacion.reportevibracionevaluacion_punto ASC,
                                             reportearea.reportearea_orden ASC,
@@ -1380,17 +1269,13 @@ class reportevibracionController extends Controller
                                             reportevibracionevaluacion.reportevibracionevaluacion_nombre ASC');
 
 
-            foreach ($evaluacion as $key => $value) 
-            {
+            foreach ($evaluacion as $key => $value) {
                 $value->boton_editar = '<button type="button" class="btn btn-warning waves-effect btn-circle"><i class="fa fa-pencil fa-2x"></i></button>';
 
 
-                if ($edicion == 1)
-                {
+                if ($edicion == 1) {
                     $value->boton_eliminar = '<button type="button" class="btn btn-danger waves-effect btn-circle eliminar"><i class="fa fa-trash fa-2x"></i></button>';
-                }
-                else
-                {
+                } else {
                     $value->boton_eliminar = '<button type="button" class="btn btn-default waves-effect btn-circle" data-toggle="tooltip" title="No disponible"><i class="fa fa-ban fa-2x"></i></button>';
                 }
             }
@@ -1403,18 +1288,15 @@ class reportevibracionController extends Controller
             $dato['tabla_reporte_7_1'] = NULL;
 
 
-            if (count($evaluacion) > 0)
-            {
-                switch (($evaluacion[0]->reportevibracionevaluacion_tipoevaluacion+0))
-                {
-                    case (($evaluacion[0]->reportevibracionevaluacion_tipoevaluacion+0) <= 2):
-                        
+            if (count($evaluacion) > 0) {
+                switch (($evaluacion[0]->reportevibracionevaluacion_tipoevaluacion + 0)) {
+                    case (($evaluacion[0]->reportevibracionevaluacion_tipoevaluacion + 0) <= 2):
+
                         //ENCABEADO TABLA
                         //======================================
 
 
-                        if (($evaluacion[0]->reportevibracionevaluacion_numeromediciones+0) == 1)
-                        {
+                        if (($evaluacion[0]->reportevibracionevaluacion_numeromediciones + 0) == 1) {
                             $dato['tabla_reporte_7_1'] .= '<thead>
                                                                 <tr>
                                                                     <th width="3%">No. de medición</th>
@@ -1435,9 +1317,7 @@ class reportevibracionController extends Controller
 
                             $dato['tabla_reporte_7_1_rowsGroup'] = array(0, 1, 2, 3, 4, 11);
                             $dato['tabla_reporte_7_1_columnaresultado'] = 11;
-                        }
-                        else
-                        {
+                        } else {
                             $dato['tabla_reporte_7_1'] .= '<thead>
                                                                 <tr>
                                                                     <th width="3%" rowspan="2">No. de medición</th>
@@ -1565,7 +1445,7 @@ class reportevibracionController extends Controller
                                                 LEFT JOIN reportecategoria ON reportevibracionevaluacion.reportecategoria_id = reportecategoria.id
                                                 RIGHT JOIN reportevibracionevaluaciondatos ON reportevibracionevaluacion.id = reportevibracionevaluaciondatos.reportevibracionevaluacion_id
                                             WHERE
-                                                reportevibracionevaluacion.proyecto_id = '.$proyecto_id.' 
+                                                reportevibracionevaluacion.proyecto_id = ' . $proyecto_id . ' 
                                             ORDER BY
                                                 reportevibracionevaluacion.reportevibracionevaluacion_punto ASC,
                                                 (reportevibracionevaluaciondatos.reportevibracionevaluaciondatos_frecuencia+0) ASC');
@@ -1573,55 +1453,50 @@ class reportevibracionController extends Controller
 
                         $dato['tabla_reporte_7_1'] .= '<tbody>';
 
-                            if (($evaluacion[0]->reportevibracionevaluacion_numeromediciones+0) == 1)
-                            {
-                                foreach ($datos as $key => $value)
-                                {
-                                    $dato['tabla_reporte_7_1'] .= '<tr>
-                                                                        <td>'.$value->reportevibracionevaluacion_punto.'</td>
-                                                                        <td>'.$value->reportearea_nombre.'</td>
-                                                                        <td>'.$value->reportevibracionevaluacion_puntoevaluacion.'</td>
-                                                                        <td>'.$value->reportecategoria_nombre.'</td>
-                                                                        <td>'.$value->reportevibracionevaluacion_tiempoexposicion.'</td>
-                                                                        <td style="color: #555555;">'.$value->reportevibracionevaluaciondatos_frecuencia.'</td>
-                                                                        <td style="color: '.$value->az1_color.';">'.$value->reportevibracionevaluaciondatos_az1.'</td>
-                                                                        <td style="color: #555555;">'.$value->reportevibracionevaluaciondatos_azlimite.'</td>
-                                                                        <td style="color: '.$value->ax1_color.';">'.$value->reportevibracionevaluaciondatos_ax1.'</td>
-                                                                        <td style="color: '.$value->ay1_color.';">'.$value->reportevibracionevaluaciondatos_ay1.'</td>
-                                                                        <td style="color: #555555;">'.$value->reportevibracionevaluaciondatos_axylimite.'</td>
-                                                                        <td>'.$value->resultado.'</td>
+                        if (($evaluacion[0]->reportevibracionevaluacion_numeromediciones + 0) == 1) {
+                            foreach ($datos as $key => $value) {
+                                $dato['tabla_reporte_7_1'] .= '<tr>
+                                                                        <td>' . $value->reportevibracionevaluacion_punto . '</td>
+                                                                        <td>' . $value->reportearea_nombre . '</td>
+                                                                        <td>' . $value->reportevibracionevaluacion_puntoevaluacion . '</td>
+                                                                        <td>' . $value->reportecategoria_nombre . '</td>
+                                                                        <td>' . $value->reportevibracionevaluacion_tiempoexposicion . '</td>
+                                                                        <td style="color: #555555;">' . $value->reportevibracionevaluaciondatos_frecuencia . '</td>
+                                                                        <td style="color: ' . $value->az1_color . ';">' . $value->reportevibracionevaluaciondatos_az1 . '</td>
+                                                                        <td style="color: #555555;">' . $value->reportevibracionevaluaciondatos_azlimite . '</td>
+                                                                        <td style="color: ' . $value->ax1_color . ';">' . $value->reportevibracionevaluaciondatos_ax1 . '</td>
+                                                                        <td style="color: ' . $value->ay1_color . ';">' . $value->reportevibracionevaluaciondatos_ay1 . '</td>
+                                                                        <td style="color: #555555;">' . $value->reportevibracionevaluaciondatos_axylimite . '</td>
+                                                                        <td>' . $value->resultado . '</td>
                                                                     </tr>';
-                                }
                             }
-                            else
-                            {
-                                foreach ($datos as $key => $value)
-                                {
-                                    $dato['tabla_reporte_7_1'] .= '<tr>
-                                                                        <td>'.$value->reportevibracionevaluacion_punto.'</td>
-                                                                        <td>'.$value->reportearea_nombre.'</td>
-                                                                        <td>'.$value->reportevibracionevaluacion_puntoevaluacion.'</td>
-                                                                        <td>'.$value->reportecategoria_nombre.'</td>
-                                                                        <td>'.$value->reportevibracionevaluacion_tiempoexposicion.'</td>
-                                                                        <td>'.$value->reportevibracionevaluaciondatos_frecuencia.'</td>
-                                                                        <td style="color: '.$value->az1_color.';">'.$value->reportevibracionevaluaciondatos_az1.'</td>
-                                                                        <td style="color: '.$value->az2_color.';">'.$value->reportevibracionevaluaciondatos_az2.'</td>
-                                                                        <td style="color: '.$value->az3_color.';">'.$value->reportevibracionevaluaciondatos_az3.'</td>
-                                                                        <td>'.$value->reportevibracionevaluaciondatos_azlimite.'</td>
-                                                                        <td style="color: '.$value->ax1_color.';">'.$value->reportevibracionevaluaciondatos_ax1.'</td>
-                                                                        <td style="color: '.$value->ax2_color.';">'.$value->reportevibracionevaluaciondatos_ax2.'</td>
-                                                                        <td style="color: '.$value->ax3_color.';">'.$value->reportevibracionevaluaciondatos_ax3.'</td>
-                                                                        <td style="color: '.$value->ay1_color.';">'.$value->reportevibracionevaluaciondatos_ay1.'</td>
-                                                                        <td style="color: '.$value->ay2_color.';">'.$value->reportevibracionevaluaciondatos_ay2.'</td>
-                                                                        <td style="color: '.$value->ay3_color.';">'.$value->reportevibracionevaluaciondatos_ay3.'</td>
-                                                                        <td>'.$value->reportevibracionevaluaciondatos_axylimite.'</td>
-                                                                        <td>'.$value->resultado.'</td>
+                        } else {
+                            foreach ($datos as $key => $value) {
+                                $dato['tabla_reporte_7_1'] .= '<tr>
+                                                                        <td>' . $value->reportevibracionevaluacion_punto . '</td>
+                                                                        <td>' . $value->reportearea_nombre . '</td>
+                                                                        <td>' . $value->reportevibracionevaluacion_puntoevaluacion . '</td>
+                                                                        <td>' . $value->reportecategoria_nombre . '</td>
+                                                                        <td>' . $value->reportevibracionevaluacion_tiempoexposicion . '</td>
+                                                                        <td>' . $value->reportevibracionevaluaciondatos_frecuencia . '</td>
+                                                                        <td style="color: ' . $value->az1_color . ';">' . $value->reportevibracionevaluaciondatos_az1 . '</td>
+                                                                        <td style="color: ' . $value->az2_color . ';">' . $value->reportevibracionevaluaciondatos_az2 . '</td>
+                                                                        <td style="color: ' . $value->az3_color . ';">' . $value->reportevibracionevaluaciondatos_az3 . '</td>
+                                                                        <td>' . $value->reportevibracionevaluaciondatos_azlimite . '</td>
+                                                                        <td style="color: ' . $value->ax1_color . ';">' . $value->reportevibracionevaluaciondatos_ax1 . '</td>
+                                                                        <td style="color: ' . $value->ax2_color . ';">' . $value->reportevibracionevaluaciondatos_ax2 . '</td>
+                                                                        <td style="color: ' . $value->ax3_color . ';">' . $value->reportevibracionevaluaciondatos_ax3 . '</td>
+                                                                        <td style="color: ' . $value->ay1_color . ';">' . $value->reportevibracionevaluaciondatos_ay1 . '</td>
+                                                                        <td style="color: ' . $value->ay2_color . ';">' . $value->reportevibracionevaluaciondatos_ay2 . '</td>
+                                                                        <td style="color: ' . $value->ay3_color . ';">' . $value->reportevibracionevaluaciondatos_ay3 . '</td>
+                                                                        <td>' . $value->reportevibracionevaluaciondatos_axylimite . '</td>
+                                                                        <td>' . $value->resultado . '</td>
                                                                     </tr>';
-                                }
                             }
+                        }
 
                         $dato['tabla_reporte_7_1'] .= '</tbody>';
-                        
+
 
                         break;
                     default:
@@ -1682,35 +1557,32 @@ class reportevibracionController extends Controller
                                                 LEFT JOIN reportearea ON reportevibracionevaluacion.reportearea_id = reportearea.id
                                                 LEFT JOIN reportecategoria ON reportevibracionevaluacion.reportecategoria_id = reportecategoria.id
                                             WHERE
-                                                reportevibracionevaluacion.proyecto_id = '.$proyecto_id.' 
+                                                reportevibracionevaluacion.proyecto_id = ' . $proyecto_id . ' 
                                             ORDER BY
                                                 reportevibracionevaluacion.reportevibracionevaluacion_punto ASC');
 
 
                         $dato['tabla_reporte_7_1'] .= '<tbody>';
 
-                            foreach ($datos as $key => $value)
-                            {
-                                $dato['tabla_reporte_7_1'] .= '<tr>
-                                                                    <td>'.$value->reportevibracionevaluacion_punto.'</td>
-                                                                    <td>'.$value->reportevibracionevaluacion_fecha.'</td>
-                                                                    <td>'.$value->reportearea_nombre.'</td>
-                                                                    <td>'.$value->reportecategoria_nombre.'</td>
-                                                                    <td>'.$value->reportevibracionevaluacion_puntoevaluacion.'</td>
-                                                                    <td>'.$value->reportevibracionevaluacion_promedio.'</td>
-                                                                    <td>'.$value->reportevibracionevaluacion_valormaximo.'</td>
-                                                                    <td>'.$value->resultado.'</td>
+                        foreach ($datos as $key => $value) {
+                            $dato['tabla_reporte_7_1'] .= '<tr>
+                                                                    <td>' . $value->reportevibracionevaluacion_punto . '</td>
+                                                                    <td>' . $value->reportevibracionevaluacion_fecha . '</td>
+                                                                    <td>' . $value->reportearea_nombre . '</td>
+                                                                    <td>' . $value->reportecategoria_nombre . '</td>
+                                                                    <td>' . $value->reportevibracionevaluacion_puntoevaluacion . '</td>
+                                                                    <td>' . $value->reportevibracionevaluacion_promedio . '</td>
+                                                                    <td>' . $value->reportevibracionevaluacion_valormaximo . '</td>
+                                                                    <td>' . $value->resultado . '</td>
                                                                 </tr>';
-                            }
-                        
+                        }
+
                         $dato['tabla_reporte_7_1'] .= '</tbody>';
 
-                        
+
                         break;
                 }
-            }
-            else
-            {
+            } else {
                 $dato['tabla_reporte_7_1_rowsGroup'] = array(0);
                 $dato['tabla_reporte_7_1_columnaresultado'] = 0;
 
@@ -1742,9 +1614,7 @@ class reportevibracionController extends Controller
             $dato["total"] = count($evaluacion);
             $dato["msj"] = 'Datos consultados correctamente';
             return response()->json($dato);
-        }
-        catch(Exception $e)
-        {
+        } catch (Exception $e) {
             $dato['data'] = 0;
             $dato["total"] = 0;
             $dato['tabla_reporte_6_2'] = NULL;
@@ -1752,7 +1622,7 @@ class reportevibracionController extends Controller
             $dato['tabla_reporte_7_1'] = NULL;
             $dato['tabla_reporte_7_1_rowsGroup'] = array(0);
             $dato['tabla_reporte_7_1_columnaresultado'] = 0;
-            $dato["msj"] = 'Error '.$e->getMessage();
+            $dato["msj"] = 'Error ' . $e->getMessage();
             return response()->json($dato);
         }
     }
@@ -1767,8 +1637,7 @@ class reportevibracionController extends Controller
      */
     public function reportevibracionevaluacioncategorias($reportearea_id, $reportecategoria_id)
     {
-        try
-        {
+        try {
             $areacategorias = DB::select('SELECT
                                                 reportecategoria.proyecto_id,
                                                 reporteareacategoria.reportearea_id,
@@ -1782,21 +1651,17 @@ class reportevibracionController extends Controller
                                                 RIGHT JOIN reportevibracionareacategoria ON reporteareacategoria.reportearea_id = reportevibracionareacategoria.reportearea_id 
                                                 AND reportecategoria.id = reportevibracionareacategoria.reportecategoria_id 
                                             WHERE
-                                                reporteareacategoria.reportearea_id = '.$reportearea_id.' 
+                                                reporteareacategoria.reportearea_id = ' . $reportearea_id . ' 
                                             ORDER BY
                                                 reportecategoria.reportecategoria_nombre ASC');
 
 
             $dato['select_areacategorias'] = '<option value=""></option>';
-            foreach ($areacategorias as $key => $value) 
-            {
-                if (($reportecategoria_id+0) == ($value->reportecategoria_id+0))
-                {
-                    $dato['select_areacategorias'] .= '<option value="'.$value->reportecategoria_id.'" selected>'.$value->reportecategoria_nombre.'</option>';
-                }
-                else
-                {
-                    $dato['select_areacategorias'] .= '<option value="'.$value->reportecategoria_id.'">'.$value->reportecategoria_nombre.'</option>';
+            foreach ($areacategorias as $key => $value) {
+                if (($reportecategoria_id + 0) == ($value->reportecategoria_id + 0)) {
+                    $dato['select_areacategorias'] .= '<option value="' . $value->reportecategoria_id . '" selected>' . $value->reportecategoria_nombre . '</option>';
+                } else {
+                    $dato['select_areacategorias'] .= '<option value="' . $value->reportecategoria_id . '">' . $value->reportecategoria_nombre . '</option>';
                 }
             }
 
@@ -1807,11 +1672,9 @@ class reportevibracionController extends Controller
             // respuesta
             $dato["msj"] = 'Datos consultados correctamente';
             return response()->json($dato);
-        }
-        catch(Exception $e)
-        {
+        } catch (Exception $e) {
             $dato['select_areacategorias'] = '<option value="">Error al consultar las categorías</option>';
-            $dato["msj"] = 'Error '.$e->getMessage();
+            $dato["msj"] = 'Error ' . $e->getMessage();
             return response()->json($dato);
         }
     }
@@ -1825,8 +1688,7 @@ class reportevibracionController extends Controller
      */
     public function reportevibracionevaluaciondatos($reportevibracionevaluacion_id)
     {
-        try
-        {
+        try {
             $datos = DB::select('SELECT
                                     reportevibracionevaluaciondatos.reportevibracionevaluacion_id,
                                     reportevibracionevaluaciondatos.reportevibracionevaluaciondatos_frecuencia,
@@ -1844,7 +1706,7 @@ class reportevibracionController extends Controller
                                 FROM
                                     reportevibracionevaluaciondatos
                                 WHERE
-                                    reportevibracionevaluaciondatos.reportevibracionevaluacion_id = '.$reportevibracionevaluacion_id.' 
+                                    reportevibracionevaluaciondatos.reportevibracionevaluacion_id = ' . $reportevibracionevaluacion_id . ' 
                                 ORDER BY
                                     (reportevibracionevaluaciondatos.reportevibracionevaluaciondatos_frecuencia+0) ASC');
 
@@ -1853,11 +1715,9 @@ class reportevibracionController extends Controller
             $dato["datos"] = $datos;
             $dato["msj"] = 'Datos consultados correctamente';
             return response()->json($dato);
-        }
-        catch(Exception $e)
-        {
+        } catch (Exception $e) {
             $dato['datos'] = 0;
-            $dato["msj"] = 'Error '.$e->getMessage();
+            $dato["msj"] = 'Error ' . $e->getMessage();
             return response()->json($dato);
         }
     }
@@ -1871,8 +1731,7 @@ class reportevibracionController extends Controller
      */
     public function reportevibracionevaluacioneliminar($reportevibracionevaluacion_id)
     {
-        try
-        {
+        try {
             $punto = reportevibracionevaluacionModel::where('id', $reportevibracionevaluacion_id)->delete();
             $punto_datos = reportevibracionevaluaciondatosModel::where('reportevibracionevaluacion_id', $reportevibracionevaluacion_id)->delete();
 
@@ -1880,10 +1739,8 @@ class reportevibracionController extends Controller
             // respuesta
             $dato["msj"] = 'Punto de medición eliminado correctamente';
             return response()->json($dato);
-        }
-        catch(Exception $e)
-        {
-            $dato["msj"] = 'Error '.$e->getMessage();
+        } catch (Exception $e) {
+            $dato["msj"] = 'Error ' . $e->getMessage();
             return response()->json($dato);
         }
     }
@@ -1897,18 +1754,18 @@ class reportevibracionController extends Controller
      */
     public function reportevibracionmatriztabla($proyecto_id)
     {
-        try
-        {
-            $numero_registro = 0; $dato["tabla_matriz"] = null; $dato['tabla_matriz_rowsGroup'] = array(0);
+        try {
+            $numero_registro = 0;
+            $dato["tabla_matriz"] = null;
+            $dato['tabla_matriz_rowsGroup'] = array(0);
             $proyecto = proyectoModel::with(['recsensorial'])->findOrFail($proyecto_id);
 
 
             $perforacion = 0;
 
-            if (($proyecto->recsensorial->recsensorial_tipocliente+0) == 1) // 1 = pemex, 0 = cliente
+            if (($proyecto->recsensorial->recsensorial_tipocliente + 0) == 1) // 1 = pemex, 0 = cliente
             {
-                if (str_contains($proyecto->catsubdireccion->catsubdireccion_nombre, ['Perforación', 'perforación', 'Perforacion', 'perforacion']) == 1 || str_contains($proyecto->catgerencia->catgerencia_nombre, ['Perforación', 'perforación', 'Perforacion', 'perforacion']) == 1)
-                {
+                if (str_contains($proyecto->catsubdireccion->catsubdireccion_nombre, ['Perforación', 'perforación', 'Perforacion', 'perforacion']) == 1 || str_contains($proyecto->catgerencia->catgerencia_nombre, ['Perforación', 'perforación', 'Perforacion', 'perforacion']) == 1) {
                     $perforacion = 1;
                 }
             }
@@ -1931,7 +1788,7 @@ class reportevibracionController extends Controller
                                         FROM
                                             reportevibracionevaluacion
                                         WHERE
-                                            reportevibracionevaluacion.proyecto_id = '.$proyecto_id.' 
+                                            reportevibracionevaluacion.proyecto_id = ' . $proyecto_id . ' 
                                         ORDER BY
                                             reportevibracionevaluacion.reportevibracionevaluacion_punto ASC');
 
@@ -1946,12 +1803,9 @@ class reportevibracionController extends Controller
             //======================================================
 
 
-            if (count($evaluacion) > 0 && ($proyecto->catregion_id+0) == 1 && $perforacion == 0)
-            {
-                if (($evaluacion[0]->reportevibracionevaluacion_tipoevaluacion+0) <= 2)
-                {
-                    if (($evaluacion[0]->reportevibracionevaluacion_numeromediciones+0) == 1)
-                    {
+            if (count($evaluacion) > 0 && ($proyecto->catregion_id + 0) == 1 && $perforacion == 0) {
+                if (($evaluacion[0]->reportevibracionevaluacion_tipoevaluacion + 0) <= 2) {
+                    if (($evaluacion[0]->reportevibracionevaluacion_numeromediciones + 0) == 1) {
                         $dato["tabla_matriz"] = '<thead>
                                                         <tr>
                                                             <th rowspan="3" width="1%">Contador</th>
@@ -1980,9 +1834,7 @@ class reportevibracionController extends Controller
                                                             <th width="3%">Límite<br>(a<sub>x</sub>, a<sub>y</sub>)</th>
                                                         </tr>
                                                 </thead>';
-                    }
-                    else
-                    {
+                    } else {
                         $dato["tabla_matriz"] = '<thead>
                                                         <tr>
                                                             <th rowspan="3" width="1%">Contador</th>
@@ -2018,9 +1870,7 @@ class reportevibracionController extends Controller
                                                         </tr>
                                                 </thead>';
                     }
-                }
-                else
-                {
+                } else {
                     $dato["tabla_matriz"] = '<thead>
                                                     <tr>
                                                         <th rowspan="2" width="1%">Contador</th>
@@ -2041,13 +1891,9 @@ class reportevibracionController extends Controller
                                                     </tr>
                                             </thead>';
                 }
-            }
-            else if (count($evaluacion) > 0 && ($proyecto->catregion_id+0) == 2 && $perforacion == 0)
-            {
-                if (($evaluacion[0]->reportevibracionevaluacion_tipoevaluacion+0) <= 2)
-                {
-                    if (($evaluacion[0]->reportevibracionevaluacion_numeromediciones+0) == 1)
-                    {
+            } else if (count($evaluacion) > 0 && ($proyecto->catregion_id + 0) == 2 && $perforacion == 0) {
+                if (($evaluacion[0]->reportevibracionevaluacion_tipoevaluacion + 0) <= 2) {
+                    if (($evaluacion[0]->reportevibracionevaluacion_numeromediciones + 0) == 1) {
                         $dato["tabla_matriz"] = '<thead>
                                                         <tr>
                                                             <th rowspan="3" width="1%">Contador</th>
@@ -2074,9 +1920,7 @@ class reportevibracionController extends Controller
                                                             <th width="3%">Límite<br>(a<sub>x</sub>, a<sub>y</sub>)</th>
                                                         </tr>
                                                 </thead>';
-                    }
-                    else
-                    {
+                    } else {
                         $dato["tabla_matriz"] = '<thead>
                                                         <tr>
                                                             <th rowspan="3" width="1%">Contador</th>
@@ -2110,9 +1954,7 @@ class reportevibracionController extends Controller
                                                         </tr>
                                                 </thead>';
                     }
-                }
-                else
-                {
+                } else {
                     $dato["tabla_matriz"] = '<thead>
                                                     <tr>
                                                         <th rowspan="2" width="1%">Contador</th>
@@ -2131,13 +1973,9 @@ class reportevibracionController extends Controller
                                                     </tr>
                                             </thead>';
                 }
-            }
-            else if (count($evaluacion) > 0)
-            {
-                if (($evaluacion[0]->reportevibracionevaluacion_tipoevaluacion+0) <= 2)
-                {
-                    if (($evaluacion[0]->reportevibracionevaluacion_numeromediciones+0) == 1)
-                    {
+            } else if (count($evaluacion) > 0) {
+                if (($evaluacion[0]->reportevibracionevaluacion_tipoevaluacion + 0) <= 2) {
+                    if (($evaluacion[0]->reportevibracionevaluacion_numeromediciones + 0) == 1) {
                         $dato["tabla_matriz"] = '<thead>
                                                         <tr>
                                                             <th rowspan="3" width="1%">Contador</th>
@@ -2163,9 +2001,7 @@ class reportevibracionController extends Controller
                                                             <th width="3%">Límite<br>(a<sub>x</sub>, a<sub>y</sub>)</th>
                                                         </tr>
                                                 </thead>';
-                    }
-                    else
-                    {
+                    } else {
                         $dato["tabla_matriz"] = '<thead>
                                                         <tr>
                                                             <th rowspan="3" width="1%">Contador</th>
@@ -2198,9 +2034,7 @@ class reportevibracionController extends Controller
                                                         </tr>
                                                 </thead>';
                     }
-                }
-                else
-                {
+                } else {
                     $dato["tabla_matriz"] = '<thead>
                                                     <tr>
                                                         <th rowspan="2" width="1%">Contador</th>
@@ -2218,9 +2052,7 @@ class reportevibracionController extends Controller
                                                     </tr>
                                             </thead>';
                 }
-            }
-            else
-            {
+            } else {
                 $dato["tabla_matriz"] = '<thead>
                                                 <tr>
                                                     <th rowspan="3" width="1%">Contador</th>
@@ -2258,10 +2090,8 @@ class reportevibracionController extends Controller
 
             $dato["tabla_matriz"] .= '<tbody>';
 
-            if (count($evaluacion) > 0 && ($proyecto->catregion_id+0) == 1 && $perforacion == 0)
-            {
-                if (($evaluacion[0]->reportevibracionevaluacion_tipoevaluacion+0) <= 2)
-                {
+            if (count($evaluacion) > 0 && ($proyecto->catregion_id + 0) == 1 && $perforacion == 0) {
+                if (($evaluacion[0]->reportevibracionevaluacion_tipoevaluacion + 0) <= 2) {
                     $matriz = DB::select('SELECT
                                                 reportevibracionevaluacion.proyecto_id,
                                                 reportevibracionevaluacion.id,
@@ -2389,93 +2219,86 @@ class reportevibracionController extends Controller
                                                 LEFT JOIN reportecategoria ON reportevibracionevaluacion.reportecategoria_id = reportecategoria.id
                                                 RIGHT JOIN reportevibracionevaluaciondatos ON reportevibracionevaluacion.id = reportevibracionevaluaciondatos.reportevibracionevaluacion_id
                                             WHERE
-                                                reportevibracionevaluacion.proyecto_id = '.$proyecto_id.' 
+                                                reportevibracionevaluacion.proyecto_id = ' . $proyecto_id . ' 
                                             ORDER BY
                                                 reportevibracionevaluacion.reportevibracionevaluacion_punto ASC,
                                                 (reportevibracionevaluaciondatos.reportevibracionevaluaciondatos_frecuencia+0) ASC');
 
 
-                    if (($evaluacion[0]->reportevibracionevaluacion_numeromediciones+0) == 1)
-                    {
-                        $numero_registro = 0; $punto = 'X';
-                        foreach ($matriz as $key => $value)
-                        {
-                            if ($punto != $value->reportevibracionevaluacion_punto)
-                            {
+                    if (($evaluacion[0]->reportevibracionevaluacion_numeromediciones + 0) == 1) {
+                        $numero_registro = 0;
+                        $punto = 'X';
+                        foreach ($matriz as $key => $value) {
+                            if ($punto != $value->reportevibracionevaluacion_punto) {
                                 $punto = $value->reportevibracionevaluacion_punto;
                                 $numero_registro += 1;
                             }
 
 
                             $dato["tabla_matriz"] .=    '<tr>
-                                                            <td>'.$numero_registro.'</td>
-                                                            <td>'.$value->catsubdireccion_nombre.'</td>
-                                                            <td>'.$value->gerencia_activo.'</td>
-                                                            <td>'.$value->reportearea_instalacion.'</td>
-                                                            <td>'.$value->reportearea_nombre.'</td>
-                                                            <td>'.$value->reportevibracionevaluacion_nombre.'</td>
-                                                            <td>'.$value->reportevibracionevaluacion_ficha.'</td>
-                                                            <td>'.$value->reportecategoria_nombre.'</td>
-                                                            <td>'.$value->personas_area.'</td>
-                                                            <td>'.$value->geh.'</td>
+                                                            <td>' . $numero_registro . '</td>
+                                                            <td>' . $value->catsubdireccion_nombre . '</td>
+                                                            <td>' . $value->gerencia_activo . '</td>
+                                                            <td>' . $value->reportearea_instalacion . '</td>
+                                                            <td>' . $value->reportearea_nombre . '</td>
+                                                            <td>' . $value->reportevibracionevaluacion_nombre . '</td>
+                                                            <td>' . $value->reportevibracionevaluacion_ficha . '</td>
+                                                            <td>' . $value->reportecategoria_nombre . '</td>
+                                                            <td>' . $value->personas_area . '</td>
+                                                            <td>' . $value->geh . '</td>
                                                             <td>N/A</td>
-                                                            <td>'.$value->reportevibracionevaluaciondatos_frecuencia.'</td>
-                                                            <td>'.$value->reportevibracionevaluaciondatos_az1.'</td>
-                                                            <td>'.$value->reportevibracionevaluaciondatos_azlimite.'</td>
-                                                            <td>'.$value->reportevibracionevaluaciondatos_ax1.'</td>
-                                                            <td>'.$value->reportevibracionevaluaciondatos_ay1.'</td>
-                                                            <td>'.$value->reportevibracionevaluaciondatos_axylimite.'</td>
+                                                            <td>' . $value->reportevibracionevaluaciondatos_frecuencia . '</td>
+                                                            <td>' . $value->reportevibracionevaluaciondatos_az1 . '</td>
+                                                            <td>' . $value->reportevibracionevaluaciondatos_azlimite . '</td>
+                                                            <td>' . $value->reportevibracionevaluaciondatos_ax1 . '</td>
+                                                            <td>' . $value->reportevibracionevaluaciondatos_ay1 . '</td>
+                                                            <td>' . $value->reportevibracionevaluaciondatos_axylimite . '</td>
                                                         </tr>';
                         }
 
 
                         $dato['tabla_matriz_rowsGroup'] = array(1, 2, 3, 4, 8, 9, 0, 5, 6, 7, 10);
-                    }
-                    else
-                    {
-                        $numero_registro = 0; $punto = 'X';
-                        foreach ($matriz as $key => $value)
-                        {
-                            if ($punto != $value->reportevibracionevaluacion_punto)
-                            {
+                    } else {
+                        $numero_registro = 0;
+                        $punto = 'X';
+                        foreach ($matriz as $key => $value) {
+                            if ($punto != $value->reportevibracionevaluacion_punto) {
                                 $punto = $value->reportevibracionevaluacion_punto;
                                 $numero_registro += 1;
                             }
 
 
                             $dato["tabla_matriz"] .=    '<tr>
-                                                            <td>'.$numero_registro.'</td>
-                                                            <td>'.$value->catsubdireccion_nombre.'</td>
-                                                            <td>'.$value->gerencia_activo.'</td>
-                                                            <td>'.$value->reportearea_instalacion.'</td>
-                                                            <td>'.$value->reportearea_nombre.'</td>
-                                                            <td>'.$value->reportevibracionevaluacion_nombre.'</td>
-                                                            <td>'.$value->reportevibracionevaluacion_ficha.'</td>
-                                                            <td>'.$value->reportecategoria_nombre.'</td>
-                                                            <td>'.$value->personas_area.'</td>
-                                                            <td>'.$value->geh.'</td>
+                                                            <td>' . $numero_registro . '</td>
+                                                            <td>' . $value->catsubdireccion_nombre . '</td>
+                                                            <td>' . $value->gerencia_activo . '</td>
+                                                            <td>' . $value->reportearea_instalacion . '</td>
+                                                            <td>' . $value->reportearea_nombre . '</td>
+                                                            <td>' . $value->reportevibracionevaluacion_nombre . '</td>
+                                                            <td>' . $value->reportevibracionevaluacion_ficha . '</td>
+                                                            <td>' . $value->reportecategoria_nombre . '</td>
+                                                            <td>' . $value->personas_area . '</td>
+                                                            <td>' . $value->geh . '</td>
                                                             <td>N/A</td>
-                                                            <td>'.$value->reportevibracionevaluaciondatos_frecuencia.'</td>
-                                                            <td>'.$value->reportevibracionevaluaciondatos_az1.'</td>
-                                                            <td>'.$value->reportevibracionevaluaciondatos_az2.'</td>
-                                                            <td>'.$value->reportevibracionevaluaciondatos_az3.'</td>
-                                                            <td>'.$value->reportevibracionevaluaciondatos_azlimite.'</td>
-                                                            <td>'.$value->reportevibracionevaluaciondatos_ax1.'</td>
-                                                            <td>'.$value->reportevibracionevaluaciondatos_ax2.'</td>
-                                                            <td>'.$value->reportevibracionevaluaciondatos_ax3.'</td>
-                                                            <td>'.$value->reportevibracionevaluaciondatos_ay1.'</td>
-                                                            <td>'.$value->reportevibracionevaluaciondatos_ay2.'</td>
-                                                            <td>'.$value->reportevibracionevaluaciondatos_ay3.'</td>
-                                                            <td>'.$value->reportevibracionevaluaciondatos_axylimite.'</td>
+                                                            <td>' . $value->reportevibracionevaluaciondatos_frecuencia . '</td>
+                                                            <td>' . $value->reportevibracionevaluaciondatos_az1 . '</td>
+                                                            <td>' . $value->reportevibracionevaluaciondatos_az2 . '</td>
+                                                            <td>' . $value->reportevibracionevaluaciondatos_az3 . '</td>
+                                                            <td>' . $value->reportevibracionevaluaciondatos_azlimite . '</td>
+                                                            <td>' . $value->reportevibracionevaluaciondatos_ax1 . '</td>
+                                                            <td>' . $value->reportevibracionevaluaciondatos_ax2 . '</td>
+                                                            <td>' . $value->reportevibracionevaluaciondatos_ax3 . '</td>
+                                                            <td>' . $value->reportevibracionevaluaciondatos_ay1 . '</td>
+                                                            <td>' . $value->reportevibracionevaluaciondatos_ay2 . '</td>
+                                                            <td>' . $value->reportevibracionevaluaciondatos_ay3 . '</td>
+                                                            <td>' . $value->reportevibracionevaluaciondatos_axylimite . '</td>
                                                         </tr>';
                         }
 
 
                         $dato['tabla_matriz_rowsGroup'] = array(1, 2, 3, 4, 8, 9, 0, 5, 6, 7, 10);
                     }
-                }
-                else
-                {
+                } else {
                     $matriz = DB::select('SELECT
                                                 reportevibracionevaluacion.proyecto_id,
                                                 reportevibracionevaluacion.id,
@@ -2545,41 +2368,38 @@ class reportevibracionController extends Controller
                                                 LEFT JOIN reportearea ON reportevibracionevaluacion.reportearea_id = reportearea.id
                                                 LEFT JOIN reportecategoria ON reportevibracionevaluacion.reportecategoria_id = reportecategoria.id
                                             WHERE
-                                                reportevibracionevaluacion.proyecto_id = '.$proyecto_id.' 
+                                                reportevibracionevaluacion.proyecto_id = ' . $proyecto_id . ' 
                                             ORDER BY
                                                 reportevibracionevaluacion.reportevibracionevaluacion_punto ASC');
 
-    
-                    $numero_registro = 0; $punto = 'X';
-                    foreach ($matriz as $key => $value)
-                    {
+
+                    $numero_registro = 0;
+                    $punto = 'X';
+                    foreach ($matriz as $key => $value) {
                         $numero_registro += 1;
 
 
                         $dato["tabla_matriz"] .=    '<tr>
-                                                        <td>'.$numero_registro.'</td>
-                                                        <td>'.$value->catsubdireccion_nombre.'</td>
-                                                        <td>'.$value->gerencia_activo.'</td>
-                                                        <td>'.$value->reportearea_instalacion.'</td>
-                                                        <td>'.$value->reportearea_nombre.'</td>
-                                                        <td>'.$value->reportevibracionevaluacion_nombre.'</td>
-                                                        <td>'.$value->reportevibracionevaluacion_ficha.'</td>
-                                                        <td>'.$value->reportecategoria_nombre.'</td>
-                                                        <td>'.$value->personas_area.'</td>
-                                                        <td>'.$value->geh.'</td>
+                                                        <td>' . $numero_registro . '</td>
+                                                        <td>' . $value->catsubdireccion_nombre . '</td>
+                                                        <td>' . $value->gerencia_activo . '</td>
+                                                        <td>' . $value->reportearea_instalacion . '</td>
+                                                        <td>' . $value->reportearea_nombre . '</td>
+                                                        <td>' . $value->reportevibracionevaluacion_nombre . '</td>
+                                                        <td>' . $value->reportevibracionevaluacion_ficha . '</td>
+                                                        <td>' . $value->reportecategoria_nombre . '</td>
+                                                        <td>' . $value->personas_area . '</td>
+                                                        <td>' . $value->geh . '</td>
                                                         <td>N/A</td>
-                                                        <td>'.$value->reportevibracionevaluacion_promedio.' / '.$value->reportevibracionevaluacion_valormaximo.'</td>
+                                                        <td>' . $value->reportevibracionevaluacion_promedio . ' / ' . $value->reportevibracionevaluacion_valormaximo . '</td>
                                                     </tr>';
                     }
 
 
                     $dato['tabla_matriz_rowsGroup'] = array(1, 2, 3, 5, 6, 7, 4, 8, 9, 0);
                 }
-            }
-            else if (count($evaluacion) > 0 && ($proyecto->catregion_id+0) == 2 && $perforacion == 0)
-            {
-                if (($evaluacion[0]->reportevibracionevaluacion_tipoevaluacion+0) <= 2)
-                {
+            } else if (count($evaluacion) > 0 && ($proyecto->catregion_id + 0) == 2 && $perforacion == 0) {
+                if (($evaluacion[0]->reportevibracionevaluacion_tipoevaluacion + 0) <= 2) {
                     $matriz = DB::select('SELECT
                                                 reportevibracionevaluacion.proyecto_id,
                                                 reportevibracionevaluacion.id,
@@ -2707,89 +2527,82 @@ class reportevibracionController extends Controller
                                                 LEFT JOIN reportecategoria ON reportevibracionevaluacion.reportecategoria_id = reportecategoria.id
                                                 RIGHT JOIN reportevibracionevaluaciondatos ON reportevibracionevaluacion.id = reportevibracionevaluaciondatos.reportevibracionevaluacion_id
                                             WHERE
-                                                reportevibracionevaluacion.proyecto_id = '.$proyecto_id.' 
+                                                reportevibracionevaluacion.proyecto_id = ' . $proyecto_id . ' 
                                             ORDER BY
                                                 reportevibracionevaluacion.reportevibracionevaluacion_punto ASC,
                                                 (reportevibracionevaluaciondatos.reportevibracionevaluaciondatos_frecuencia+0) ASC');
 
 
-                    if (($evaluacion[0]->reportevibracionevaluacion_numeromediciones+0) == 1)
-                    {
-                        $numero_registro = 0; $punto = 'X';
-                        foreach ($matriz as $key => $value)
-                        {
-                            if ($punto != $value->reportevibracionevaluacion_punto)
-                            {
+                    if (($evaluacion[0]->reportevibracionevaluacion_numeromediciones + 0) == 1) {
+                        $numero_registro = 0;
+                        $punto = 'X';
+                        foreach ($matriz as $key => $value) {
+                            if ($punto != $value->reportevibracionevaluacion_punto) {
                                 $punto = $value->reportevibracionevaluacion_punto;
                                 $numero_registro += 1;
                             }
 
 
                             $dato["tabla_matriz"] .=    '<tr>
-                                                            <td>'.$numero_registro.'</td>
-                                                            <td>'.$value->catsubdireccion_nombre.'</td>
-                                                            <td>'.$value->gerencia_activo.'</td>
-                                                            <td>'.$value->reportearea_instalacion.'</td>
-                                                            <td>'.$value->reportearea_nombre.'</td>
-                                                            <td>'.$value->reportevibracionevaluacion_nombre.'</td>
-                                                            <td>'.$value->reportevibracionevaluacion_ficha.'</td>
-                                                            <td>'.$value->reportecategoria_nombre.'</td>
+                                                            <td>' . $numero_registro . '</td>
+                                                            <td>' . $value->catsubdireccion_nombre . '</td>
+                                                            <td>' . $value->gerencia_activo . '</td>
+                                                            <td>' . $value->reportearea_instalacion . '</td>
+                                                            <td>' . $value->reportearea_nombre . '</td>
+                                                            <td>' . $value->reportevibracionevaluacion_nombre . '</td>
+                                                            <td>' . $value->reportevibracionevaluacion_ficha . '</td>
+                                                            <td>' . $value->reportecategoria_nombre . '</td>
                                                             <td>N/A</td>
-                                                            <td>'.$value->reportevibracionevaluaciondatos_frecuencia.'</td>
-                                                            <td>'.$value->reportevibracionevaluaciondatos_az1.'</td>
-                                                            <td>'.$value->reportevibracionevaluaciondatos_azlimite.'</td>
-                                                            <td>'.$value->reportevibracionevaluaciondatos_ax1.'</td>
-                                                            <td>'.$value->reportevibracionevaluaciondatos_ay1.'</td>
-                                                            <td>'.$value->reportevibracionevaluaciondatos_axylimite.'</td>
+                                                            <td>' . $value->reportevibracionevaluaciondatos_frecuencia . '</td>
+                                                            <td>' . $value->reportevibracionevaluaciondatos_az1 . '</td>
+                                                            <td>' . $value->reportevibracionevaluaciondatos_azlimite . '</td>
+                                                            <td>' . $value->reportevibracionevaluaciondatos_ax1 . '</td>
+                                                            <td>' . $value->reportevibracionevaluaciondatos_ay1 . '</td>
+                                                            <td>' . $value->reportevibracionevaluaciondatos_axylimite . '</td>
                                                         </tr>';
                         }
 
 
                         $dato['tabla_matriz_rowsGroup'] = array(1, 2, 3, 4, 0, 5, 6, 7);
-                    }
-                    else
-                    {
-                        $numero_registro = 0; $punto = 'X';
-                        foreach ($matriz as $key => $value)
-                        {
-                            if ($punto != $value->reportevibracionevaluacion_punto)
-                            {
+                    } else {
+                        $numero_registro = 0;
+                        $punto = 'X';
+                        foreach ($matriz as $key => $value) {
+                            if ($punto != $value->reportevibracionevaluacion_punto) {
                                 $punto = $value->reportevibracionevaluacion_punto;
                                 $numero_registro += 1;
                             }
 
 
                             $dato["tabla_matriz"] .=    '<tr>
-                                                            <td>'.$numero_registro.'</td>
-                                                            <td>'.$value->catsubdireccion_nombre.'</td>
-                                                            <td>'.$value->gerencia_activo.'</td>
-                                                            <td>'.$value->reportearea_instalacion.'</td>
-                                                            <td>'.$value->reportearea_nombre.'</td>
-                                                            <td>'.$value->reportevibracionevaluacion_nombre.'</td>
-                                                            <td>'.$value->reportevibracionevaluacion_ficha.'</td>
-                                                            <td>'.$value->reportecategoria_nombre.'</td>
+                                                            <td>' . $numero_registro . '</td>
+                                                            <td>' . $value->catsubdireccion_nombre . '</td>
+                                                            <td>' . $value->gerencia_activo . '</td>
+                                                            <td>' . $value->reportearea_instalacion . '</td>
+                                                            <td>' . $value->reportearea_nombre . '</td>
+                                                            <td>' . $value->reportevibracionevaluacion_nombre . '</td>
+                                                            <td>' . $value->reportevibracionevaluacion_ficha . '</td>
+                                                            <td>' . $value->reportecategoria_nombre . '</td>
                                                             <td>N/A</td>
-                                                            <td>'.$value->reportevibracionevaluaciondatos_frecuencia.'</td>
-                                                            <td>'.$value->reportevibracionevaluaciondatos_az1.'</td>
-                                                            <td>'.$value->reportevibracionevaluaciondatos_az2.'</td>
-                                                            <td>'.$value->reportevibracionevaluaciondatos_az3.'</td>
-                                                            <td>'.$value->reportevibracionevaluaciondatos_azlimite.'</td>
-                                                            <td>'.$value->reportevibracionevaluaciondatos_ax1.'</td>
-                                                            <td>'.$value->reportevibracionevaluaciondatos_ax2.'</td>
-                                                            <td>'.$value->reportevibracionevaluaciondatos_ax3.'</td>
-                                                            <td>'.$value->reportevibracionevaluaciondatos_ay1.'</td>
-                                                            <td>'.$value->reportevibracionevaluaciondatos_ay2.'</td>
-                                                            <td>'.$value->reportevibracionevaluaciondatos_ay3.'</td>
-                                                            <td>'.$value->reportevibracionevaluaciondatos_axylimite.'</td>
+                                                            <td>' . $value->reportevibracionevaluaciondatos_frecuencia . '</td>
+                                                            <td>' . $value->reportevibracionevaluaciondatos_az1 . '</td>
+                                                            <td>' . $value->reportevibracionevaluaciondatos_az2 . '</td>
+                                                            <td>' . $value->reportevibracionevaluaciondatos_az3 . '</td>
+                                                            <td>' . $value->reportevibracionevaluaciondatos_azlimite . '</td>
+                                                            <td>' . $value->reportevibracionevaluaciondatos_ax1 . '</td>
+                                                            <td>' . $value->reportevibracionevaluaciondatos_ax2 . '</td>
+                                                            <td>' . $value->reportevibracionevaluaciondatos_ax3 . '</td>
+                                                            <td>' . $value->reportevibracionevaluaciondatos_ay1 . '</td>
+                                                            <td>' . $value->reportevibracionevaluaciondatos_ay2 . '</td>
+                                                            <td>' . $value->reportevibracionevaluaciondatos_ay3 . '</td>
+                                                            <td>' . $value->reportevibracionevaluaciondatos_axylimite . '</td>
                                                         </tr>';
                         }
 
 
                         $dato['tabla_matriz_rowsGroup'] = array(1, 2, 3, 4, 0, 5, 6, 7, 8);
                     }
-                }
-                else
-                {
+                } else {
                     $matriz = DB::select('SELECT
                                                 reportevibracionevaluacion.proyecto_id,
                                                 reportevibracionevaluacion.id,
@@ -2859,37 +2672,35 @@ class reportevibracionController extends Controller
                                                 LEFT JOIN reportearea ON reportevibracionevaluacion.reportearea_id = reportearea.id
                                                 LEFT JOIN reportecategoria ON reportevibracionevaluacion.reportecategoria_id = reportecategoria.id
                                             WHERE
-                                                reportevibracionevaluacion.proyecto_id = '.$proyecto_id.' 
+                                                reportevibracionevaluacion.proyecto_id = ' . $proyecto_id . ' 
                                             ORDER BY
                                                 reportevibracionevaluacion.reportevibracionevaluacion_punto ASC');
 
-    
-                    $numero_registro = 0; $punto = 'X';
-                    foreach ($matriz as $key => $value)
-                    {
+
+                    $numero_registro = 0;
+                    $punto = 'X';
+                    foreach ($matriz as $key => $value) {
                         $numero_registro += 1;
 
 
                         $dato["tabla_matriz"] .=    '<tr>
-                                                        <td>'.$numero_registro.'</td>
-                                                        <td>'.$value->catsubdireccion_nombre.'</td>
-                                                        <td>'.$value->gerencia_activo.'</td>
-                                                        <td>'.$value->reportearea_instalacion.'</td>
-                                                        <td>'.$value->reportearea_nombre.'</td>
-                                                        <td>'.$value->reportevibracionevaluacion_nombre.'</td>
-                                                        <td>'.$value->reportevibracionevaluacion_ficha.'</td>
-                                                        <td>'.$value->reportecategoria_nombre.'</td>
+                                                        <td>' . $numero_registro . '</td>
+                                                        <td>' . $value->catsubdireccion_nombre . '</td>
+                                                        <td>' . $value->gerencia_activo . '</td>
+                                                        <td>' . $value->reportearea_instalacion . '</td>
+                                                        <td>' . $value->reportearea_nombre . '</td>
+                                                        <td>' . $value->reportevibracionevaluacion_nombre . '</td>
+                                                        <td>' . $value->reportevibracionevaluacion_ficha . '</td>
+                                                        <td>' . $value->reportecategoria_nombre . '</td>
                                                         <td>N/A</td>
-                                                        <td>'.$value->reportevibracionevaluacion_promedio.' / '.$value->reportevibracionevaluacion_valormaximo.'</td>
+                                                        <td>' . $value->reportevibracionevaluacion_promedio . ' / ' . $value->reportevibracionevaluacion_valormaximo . '</td>
                                                     </tr>';
                     }
 
 
                     $dato['tabla_matriz_rowsGroup'] = array(1, 2, 3, 5, 6, 7, 4, 0);
                 }
-            }
-            else if (count($evaluacion) > 0)
-            {
+            } else if (count($evaluacion) > 0) {
                 $categorias_evaluadas = DB::select('SELECT
                                                         reportevibracionevaluacion.proyecto_id,
                                                         reportevibracionevaluacion.reportecategoria_id,
@@ -2900,7 +2711,7 @@ class reportevibracionController extends Controller
                                                         reportevibracionevaluacion
                                                         LEFT JOIN reportecategoria ON reportevibracionevaluacion.reportecategoria_id = reportecategoria.id 
                                                     WHERE
-                                                        reportevibracionevaluacion.proyecto_id = '.$proyecto_id.' 
+                                                        reportevibracionevaluacion.proyecto_id = ' . $proyecto_id . ' 
                                                     GROUP BY
                                                         reportevibracionevaluacion.proyecto_id,
                                                         reportevibracionevaluacion.reportecategoria_id,
@@ -2910,12 +2721,10 @@ class reportevibracionController extends Controller
                                                         reportecategoria.reportecategoria_orden ASC');
 
 
-                if (($evaluacion[0]->reportevibracionevaluacion_tipoevaluacion+0) <= 2)
-                {
-                    
+                if (($evaluacion[0]->reportevibracionevaluacion_tipoevaluacion + 0) <= 2) {
+
                     $numero_registro = 0;
-                    foreach ($categorias_evaluadas as $key1 => $categoria)
-                    {
+                    foreach ($categorias_evaluadas as $key1 => $categoria) {
                         $matriz = DB::select('SELECT
                                                     reportevibracionevaluacion.proyecto_id,
                                                     reportevibracionevaluacion.id,
@@ -3079,8 +2888,8 @@ class reportevibracionController extends Controller
                                                     LEFT JOIN reportecategoria ON reportevibracionevaluacion.reportecategoria_id = reportecategoria.id
                                                     RIGHT JOIN reportevibracionevaluaciondatos ON reportevibracionevaluacion.id = reportevibracionevaluaciondatos.reportevibracionevaluacion_id
                                                 WHERE
-                                                    reportevibracionevaluacion.proyecto_id = '.$proyecto_id.' 
-                                                    AND reportevibracionevaluacion.reportecategoria_id = '.$categoria->reportecategoria_id.' 
+                                                    reportevibracionevaluacion.proyecto_id = ' . $proyecto_id . ' 
+                                                    AND reportevibracionevaluacion.reportecategoria_id = ' . $categoria->reportecategoria_id . ' 
                                                 ORDER BY
                                                     mediciones_fueranorma DESC,
                                                     reportevibracionevaluacion.reportevibracionevaluacion_punto ASC,
@@ -3089,50 +2898,46 @@ class reportevibracionController extends Controller
 
 
                         $numero_registro += 1;
-                        foreach ($matriz as $key => $value)
-                        {
-                            if (($evaluacion[0]->reportevibracionevaluacion_numeromediciones+0) == 1)
-                            {
+                        foreach ($matriz as $key => $value) {
+                            if (($evaluacion[0]->reportevibracionevaluacion_numeromediciones + 0) == 1) {
                                 $dato["tabla_matriz"] .=    '<tr>
-                                                                <td>'.$numero_registro.'</td>
-                                                                <td>'.$value->catsubdireccion_nombre.'</td>
-                                                                <td>'.$value->gerencia_activo.'</td>
-                                                                <td>'.$value->reportearea_instalacion.'</td>
-                                                                <td>'.$value->reportevibracionevaluacion_nombre.'</td>
-                                                                <td>'.$value->reportevibracionevaluacion_ficha.'</td>
-                                                                <td>'.$value->reportecategoria_nombre.'</td>
+                                                                <td>' . $numero_registro . '</td>
+                                                                <td>' . $value->catsubdireccion_nombre . '</td>
+                                                                <td>' . $value->gerencia_activo . '</td>
+                                                                <td>' . $value->reportearea_instalacion . '</td>
+                                                                <td>' . $value->reportevibracionevaluacion_nombre . '</td>
+                                                                <td>' . $value->reportevibracionevaluacion_ficha . '</td>
+                                                                <td>' . $value->reportecategoria_nombre . '</td>
                                                                 <td>N/A</td>
-                                                                <td>'.$value->reportevibracionevaluaciondatos_frecuencia.'</td>
-                                                                <td>'.$value->reportevibracionevaluaciondatos_az1.'</td>
-                                                                <td>'.$value->reportevibracionevaluaciondatos_azlimite.'</td>
-                                                                <td>'.$value->reportevibracionevaluaciondatos_ax1.'</td>
-                                                                <td>'.$value->reportevibracionevaluaciondatos_ay1.'</td>
-                                                                <td>'.$value->reportevibracionevaluaciondatos_axylimite.'</td>
+                                                                <td>' . $value->reportevibracionevaluaciondatos_frecuencia . '</td>
+                                                                <td>' . $value->reportevibracionevaluaciondatos_az1 . '</td>
+                                                                <td>' . $value->reportevibracionevaluaciondatos_azlimite . '</td>
+                                                                <td>' . $value->reportevibracionevaluaciondatos_ax1 . '</td>
+                                                                <td>' . $value->reportevibracionevaluaciondatos_ay1 . '</td>
+                                                                <td>' . $value->reportevibracionevaluaciondatos_axylimite . '</td>
                                                             </tr>';
-                            }
-                            else
-                            {
+                            } else {
                                 $dato["tabla_matriz"] .=    '<tr>
-                                                                <td>'.$numero_registro.'</td>
-                                                                <td>'.$value->catsubdireccion_nombre.'</td>
-                                                                <td>'.$value->gerencia_activo.'</td>
-                                                                <td>'.$value->reportearea_instalacion.'</td>
-                                                                <td>'.$value->reportevibracionevaluacion_nombre.'</td>
-                                                                <td>'.$value->reportevibracionevaluacion_ficha.'</td>
-                                                                <td>'.$value->reportecategoria_nombre.'</td>
+                                                                <td>' . $numero_registro . '</td>
+                                                                <td>' . $value->catsubdireccion_nombre . '</td>
+                                                                <td>' . $value->gerencia_activo . '</td>
+                                                                <td>' . $value->reportearea_instalacion . '</td>
+                                                                <td>' . $value->reportevibracionevaluacion_nombre . '</td>
+                                                                <td>' . $value->reportevibracionevaluacion_ficha . '</td>
+                                                                <td>' . $value->reportecategoria_nombre . '</td>
                                                                 <td>N/A</td>
-                                                                <td>'.$value->reportevibracionevaluaciondatos_frecuencia.'</td>
-                                                                <td>'.$value->reportevibracionevaluaciondatos_az1.'</td>
-                                                                <td>'.$value->reportevibracionevaluaciondatos_az2.'</td>
-                                                                <td>'.$value->reportevibracionevaluaciondatos_az3.'</td>
-                                                                <td>'.$value->reportevibracionevaluaciondatos_azlimite.'</td>
-                                                                <td>'.$value->reportevibracionevaluaciondatos_ax1.'</td>
-                                                                <td>'.$value->reportevibracionevaluaciondatos_ax2.'</td>
-                                                                <td>'.$value->reportevibracionevaluaciondatos_ax3.'</td>
-                                                                <td>'.$value->reportevibracionevaluaciondatos_ay1.'</td>
-                                                                <td>'.$value->reportevibracionevaluaciondatos_ay2.'</td>
-                                                                <td>'.$value->reportevibracionevaluaciondatos_ay3.'</td>
-                                                                <td>'.$value->reportevibracionevaluaciondatos_axylimite.'</td>
+                                                                <td>' . $value->reportevibracionevaluaciondatos_frecuencia . '</td>
+                                                                <td>' . $value->reportevibracionevaluaciondatos_az1 . '</td>
+                                                                <td>' . $value->reportevibracionevaluaciondatos_az2 . '</td>
+                                                                <td>' . $value->reportevibracionevaluaciondatos_az3 . '</td>
+                                                                <td>' . $value->reportevibracionevaluaciondatos_azlimite . '</td>
+                                                                <td>' . $value->reportevibracionevaluaciondatos_ax1 . '</td>
+                                                                <td>' . $value->reportevibracionevaluaciondatos_ax2 . '</td>
+                                                                <td>' . $value->reportevibracionevaluaciondatos_ax3 . '</td>
+                                                                <td>' . $value->reportevibracionevaluaciondatos_ay1 . '</td>
+                                                                <td>' . $value->reportevibracionevaluaciondatos_ay2 . '</td>
+                                                                <td>' . $value->reportevibracionevaluaciondatos_ay3 . '</td>
+                                                                <td>' . $value->reportevibracionevaluaciondatos_axylimite . '</td>
                                                             </tr>';
                             }
                         }
@@ -3140,12 +2945,9 @@ class reportevibracionController extends Controller
 
 
                     $dato['tabla_matriz_rowsGroup'] = array(1, 2, 3, 0, 4, 5, 6, 7);
-                }
-                else
-                {
+                } else {
                     $numero_registro = 0;
-                    foreach ($categorias_evaluadas as $key1 => $categoria)
-                    {
+                    foreach ($categorias_evaluadas as $key1 => $categoria) {
                         $matriz = DB::select('SELECT
                                                     reportevibracionevaluacion.proyecto_id,
                                                     reportevibracionevaluacion.id,
@@ -3215,26 +3017,25 @@ class reportevibracionController extends Controller
                                                     LEFT JOIN reportearea ON reportevibracionevaluacion.reportearea_id = reportearea.id
                                                     LEFT JOIN reportecategoria ON reportevibracionevaluacion.reportecategoria_id = reportecategoria.id
                                                 WHERE
-                                                    reportevibracionevaluacion.proyecto_id = '.$proyecto_id.' 
-                                                    AND reportevibracionevaluacion.reportecategoria_id = '.$categoria->reportecategoria_id.' 
+                                                    reportevibracionevaluacion.proyecto_id = ' . $proyecto_id . ' 
+                                                    AND reportevibracionevaluacion.reportecategoria_id = ' . $categoria->reportecategoria_id . ' 
                                                 ORDER BY
                                                     (reportevibracionevaluacion.reportevibracionevaluacion_promedio+0) DESC
                                                 LIMIT 1');
 
 
-                        if (count($matriz) > 0)
-                        {
+                        if (count($matriz) > 0) {
                             $numero_registro += 1;
                             $dato["tabla_matriz"] .=    '<tr>
-                                                            <td>'.$numero_registro.'</td>
-                                                            <td>'.$matriz[0]->catsubdireccion_nombre.'</td>
-                                                            <td>'.$matriz[0]->gerencia_activo.'</td>
-                                                            <td>'.$matriz[0]->reportearea_instalacion.'</td>
-                                                            <td>'.$matriz[0]->reportevibracionevaluacion_nombre.'</td>
-                                                            <td>'.$matriz[0]->reportevibracionevaluacion_ficha.'</td>
-                                                            <td>'.$matriz[0]->reportecategoria_nombre.'</td>
+                                                            <td>' . $numero_registro . '</td>
+                                                            <td>' . $matriz[0]->catsubdireccion_nombre . '</td>
+                                                            <td>' . $matriz[0]->gerencia_activo . '</td>
+                                                            <td>' . $matriz[0]->reportearea_instalacion . '</td>
+                                                            <td>' . $matriz[0]->reportevibracionevaluacion_nombre . '</td>
+                                                            <td>' . $matriz[0]->reportevibracionevaluacion_ficha . '</td>
+                                                            <td>' . $matriz[0]->reportecategoria_nombre . '</td>
                                                             <td>N/A</td>
-                                                            <td>'.$matriz[0]->reportevibracionevaluacion_promedio.' / '.$matriz[0]->reportevibracionevaluacion_valormaximo.'</td>
+                                                            <td>' . $matriz[0]->reportevibracionevaluacion_promedio . ' / ' . $matriz[0]->reportevibracionevaluacion_valormaximo . '</td>
                                                         </tr>';
                         }
                     }
@@ -3242,9 +3043,7 @@ class reportevibracionController extends Controller
 
                     $dato['tabla_matriz_rowsGroup'] = array(1, 2, 3, 4, 5, 6, 0, 7);
                 }
-            }
-            else
-            {
+            } else {
                 $dato["tabla_matriz"] .= '';
             }
 
@@ -3258,12 +3057,10 @@ class reportevibracionController extends Controller
             $dato["total_registros"] = count($evaluacion);
             $dato["msj"] = 'Datos consultados correctamente';
             return response()->json($dato);
-        }
-        catch(Exception $e)
-        {
+        } catch (Exception $e) {
             $dato["tabla_matriz"] = null;
             $dato["total_registros"] = 0;
-            $dato["msj"] = 'Error '.$e->getMessage();
+            $dato["msj"] = 'Error ' . $e->getMessage();
             return response()->json($dato);
         }
     }
@@ -3277,8 +3074,7 @@ class reportevibracionController extends Controller
      */
     public function reportevibraciondashboard($proyecto_id)
     {
-        try
-        {
+        try {
             $dato["dashboard_puntos"] = ' 0';
             $dato["dashboard_cumplimiento"] = '0%';
             $dato["dashboard_recomendaciones"] = ' 0';
@@ -3303,7 +3099,7 @@ class reportevibracionController extends Controller
                                         FROM
                                             reportevibracionevaluacion
                                         WHERE
-                                            reportevibracionevaluacion.proyecto_id = '.$proyecto_id.' 
+                                            reportevibracionevaluacion.proyecto_id = ' . $proyecto_id . ' 
                                         ORDER BY
                                             reportevibracionevaluacion.reportevibracionevaluacion_punto ASC');
 
@@ -3385,7 +3181,7 @@ class reportevibracionController extends Controller
                                                     LEFT JOIN reportearea ON reportevibracionevaluacion.reportearea_id = reportearea.id
                                                     LEFT JOIN reportecategoria ON reportevibracionevaluacion.reportecategoria_id = reportecategoria.id
                                                 WHERE
-                                                    reportevibracionevaluacion.proyecto_id = '.$proyecto_id.' 
+                                                    reportevibracionevaluacion.proyecto_id = ' . $proyecto_id . ' 
                                                 ORDER BY
                                                     reportevibracionevaluacion.reportevibracionevaluacion_punto ASC,
                                                     reportearea.reportearea_orden ASC,
@@ -3398,17 +3194,13 @@ class reportevibracionController extends Controller
                                             TABLA.proyecto_id');
 
 
-            if (count($cumplimiento) > 0)
-            {
-                $dato["dashboard_puntos"] = ' '.$cumplimiento[0]->total_puntos;
+            if (count($cumplimiento) > 0) {
+                $dato["dashboard_puntos"] = ' ' . $cumplimiento[0]->total_puntos;
 
-                if (($evaluacion[0]->reportevibracionevaluacion_tipoevaluacion+0) <= 2)
-                {
-                    $dato["dashboard_cumplimiento"] = $cumplimiento[0]->cumplimiento_evaluacioncompleta.'%';
-                }
-                else
-                {
-                    $dato["dashboard_cumplimiento"] = $cumplimiento[0]->cumplimiento_evaluacionsimple.'%';
+                if (($evaluacion[0]->reportevibracionevaluacion_tipoevaluacion + 0) <= 2) {
+                    $dato["dashboard_cumplimiento"] = $cumplimiento[0]->cumplimiento_evaluacioncompleta . '%';
+                } else {
+                    $dato["dashboard_cumplimiento"] = $cumplimiento[0]->cumplimiento_evaluacionsimple . '%';
                 }
             }
 
@@ -3430,12 +3222,11 @@ class reportevibracionController extends Controller
                                             FROM
                                                 reporterecomendaciones 
                                             WHERE
-                                                reporterecomendaciones.proyecto_id = '.$proyecto_id.' 
+                                                reporterecomendaciones.proyecto_id = ' . $proyecto_id . ' 
                                                 AND reporterecomendaciones.agente_nombre LIKE "%Vibración%"');
 
 
-            if (count($recomendaciones) > 0)
-            {
+            if (count($recomendaciones) > 0) {
                 $dato['dashboard_recomendaciones'] = $recomendaciones[0]->totalrecomendaciones;
             }
 
@@ -3452,7 +3243,7 @@ class reportevibracionController extends Controller
                                                     reportevibracionevaluacion
                                                     LEFT JOIN reportearea ON reportevibracionevaluacion.reportearea_id = reportearea.id
                                                 WHERE
-                                                    reportevibracionevaluacion.proyecto_id = '.$proyecto_id.' 
+                                                    reportevibracionevaluacion.proyecto_id = ' . $proyecto_id . ' 
                                                 GROUP BY
                                                     reportevibracionevaluacion.proyecto_id,
                                                     -- reportevibracionevaluacion.reportearea_id,
@@ -3470,7 +3261,7 @@ class reportevibracionController extends Controller
                                                     reportevibracionevaluacion
                                                     LEFT JOIN reportearea ON reportevibracionevaluacion.reportearea_id = reportearea.id
                                                 WHERE
-                                                    reportevibracionevaluacion.proyecto_id = '.$proyecto_id.' 
+                                                    reportevibracionevaluacion.proyecto_id = ' . $proyecto_id . ' 
                                                 GROUP BY
                                                     reportevibracionevaluacion.proyecto_id,
                                                     reportevibracionevaluacion.reportearea_id,
@@ -3482,9 +3273,10 @@ class reportevibracionController extends Controller
                                                     reportearea.reportearea_nombre ASC');
 
 
-            $col = 'col-12'; $align = 'center'; $size = '0.85vw!important';
-            if ((count($distribucion_puntos) + count($total_instalaciones)) > 13)
-            {
+            $col = 'col-12';
+            $align = 'center';
+            $size = '0.85vw!important';
+            if ((count($distribucion_puntos) + count($total_instalaciones)) > 13) {
                 $col = 'col-6';
                 $align = 'left';
                 $size = '0.7vw!important';
@@ -3492,33 +3284,28 @@ class reportevibracionController extends Controller
 
 
             $instalacion = 'XXXXX';
-            foreach ($distribucion_puntos as $key => $value)
-            {
-                if (($key+0) == 0)
-                {
+            foreach ($distribucion_puntos as $key => $value) {
+                if (($key + 0) == 0) {
                     $dato["dashboard_distribucionpuntos"] = '';
                 }
 
 
-                if (count($total_instalaciones) > 1 && $instalacion != $value->reportearea_instalacion)
-                {
-                    if (($key+0) > 0)
-                    {
-                        $dato["dashboard_distribucionpuntos"] .= '<div class="col-12" style="display: inline-block; padding: 0px 1px; font-size: '.$size.'; text-align: center; color: #0BACDB;">&nbsp;</div>';
+                if (count($total_instalaciones) > 1 && $instalacion != $value->reportearea_instalacion) {
+                    if (($key + 0) > 0) {
+                        $dato["dashboard_distribucionpuntos"] .= '<div class="col-12" style="display: inline-block; padding: 0px 1px; font-size: ' . $size . '; text-align: center; color: #0BACDB;">&nbsp;</div>';
                     }
 
 
-                    $dato["dashboard_distribucionpuntos"] .= '<div class="col-12" style="display: inline-block; padding: 0px 1px; font-size: '.$size.'; text-align: center; color: #0BACDB;"><b>'.$value->reportearea_instalacion.'</b></div>';
+                    $dato["dashboard_distribucionpuntos"] .= '<div class="col-12" style="display: inline-block; padding: 0px 1px; font-size: ' . $size . '; text-align: center; color: #0BACDB;"><b>' . $value->reportearea_instalacion . '</b></div>';
                     $instalacion = $value->reportearea_instalacion;
                 }
 
 
-                $dato["dashboard_distribucionpuntos"] .= '<div class="'.$col.'" style="display: inline-block; padding: 0px 1px; font-size: '.$size.'; text-align: '.$align.';">● <b style="color: #333333;">'.$value->total_puntos.' puntos</b> - '.$value->reportearea_nombre.'</div>';
+                $dato["dashboard_distribucionpuntos"] .= '<div class="' . $col . '" style="display: inline-block; padding: 0px 1px; font-size: ' . $size . '; text-align: ' . $align . ';">● <b style="color: #333333;">' . $value->total_puntos . ' puntos</b> - ' . $value->reportearea_nombre . '</div>';
 
 
-                if (($key+1) == count($distribucion_puntos))
-                {
-                    $dato["dashboard_distribucionpuntos"] .= '<div class="col-6" style="display: inline-block; padding: 0px 1px; font-size: '.$size.'; text-align: '.$align.';">&nbsp;</div>';
+                if (($key + 1) == count($distribucion_puntos)) {
+                    $dato["dashboard_distribucionpuntos"] .= '<div class="col-6" style="display: inline-block; padding: 0px 1px; font-size: ' . $size . '; text-align: ' . $align . ';">&nbsp;</div>';
                 }
             }
 
@@ -3587,7 +3374,7 @@ class reportevibracionController extends Controller
                                                             reportevibracionevaluacion
                                                             LEFT JOIN reportecategoria ON reportevibracionevaluacion.reportecategoria_id = reportecategoria.id
                                                         WHERE
-                                                            reportevibracionevaluacion.proyecto_id = '.$proyecto_id.' 
+                                                            reportevibracionevaluacion.proyecto_id = ' . $proyecto_id . ' 
                                                     ) AS TABLA
                                                 GROUP BY
                                                     TABLA.proyecto_id,
@@ -3599,54 +3386,47 @@ class reportevibracionController extends Controller
                                                     reportecategoria_nombre ASC');
 
 
-            $col = 'col-12'; $align = 'center'; $size = '0.85vw!important';
-            if (count($categorias_evaluadas) > 15)
-            {
+            $col = 'col-12';
+            $align = 'center';
+            $size = '0.85vw!important';
+            if (count($categorias_evaluadas) > 15) {
                 $col = 'col-6';
                 $align = 'left';
                 $size = '0.7vw!important';
             }
 
 
-            foreach ($categorias_evaluadas as $key => $value)
-            {
-                if (($key+0) == 0)
-                {
+            foreach ($categorias_evaluadas as $key => $value) {
+                if (($key + 0) == 0) {
                     $dato["dashboard_categoriasevaluadas"] = '';
                 }
 
 
-                if (($evaluacion[0]->reportevibracionevaluacion_tipoevaluacion+0) <= 2)
-                {
-                    $dato["dashboard_categoriasevaluadas"] .= '<div class="'.$col.'" style="display: inline-block; padding: 0px 1px; font-size: '.$size.'; text-align: '.$align.'; color: '.$value->color_evaluacioncompleta.'">● '.$value->reportecategoria_nombre.'</div>';
-                }
-                else
-                {
-                    $dato["dashboard_categoriasevaluadas"] .= '<div class="'.$col.'" style="display: inline-block; padding: 0px 1px; font-size: '.$size.'; text-align: '.$align.'; color: '.$value->color_evaluacionsimple.'">● '.$value->reportecategoria_nombre.'</div>';
+                if (($evaluacion[0]->reportevibracionevaluacion_tipoevaluacion + 0) <= 2) {
+                    $dato["dashboard_categoriasevaluadas"] .= '<div class="' . $col . '" style="display: inline-block; padding: 0px 1px; font-size: ' . $size . '; text-align: ' . $align . '; color: ' . $value->color_evaluacioncompleta . '">● ' . $value->reportecategoria_nombre . '</div>';
+                } else {
+                    $dato["dashboard_categoriasevaluadas"] .= '<div class="' . $col . '" style="display: inline-block; padding: 0px 1px; font-size: ' . $size . '; text-align: ' . $align . '; color: ' . $value->color_evaluacionsimple . '">● ' . $value->reportecategoria_nombre . '</div>';
                 }
 
 
-                if (($key+1) == count($categorias_evaluadas))
-                {
-                    $dato["dashboard_categoriasevaluadas"] .= '<div class="col-6" style="display: inline-block; padding: 0px 1px; font-size: '.$size.'; text-align: '.$align.';">&nbsp;</div>';
+                if (($key + 1) == count($categorias_evaluadas)) {
+                    $dato["dashboard_categoriasevaluadas"] .= '<div class="col-6" style="display: inline-block; padding: 0px 1px; font-size: ' . $size . '; text-align: ' . $align . ';">&nbsp;</div>';
                 }
             }
 
-            
+
             //=====================================
 
 
             $dato["msj"] = 'Datos consultados correctamente';
             return response()->json($dato);
-        }
-        catch(Exception $e)
-        {
+        } catch (Exception $e) {
             $dato["dashboard_puntos"] = ' 0';
             $dato["dashboard_cumplimiento"] = '0%';
             $dato["dashboard_recomendaciones"] = ' 0';
             $dato["dashboard_distribucionpuntos"] = '<b style="font-weight: 600; color: #000000;">Sin resultados</b>';
             $dato["dashboard_categoriasevaluadas"] = '<b style="font-weight: 600; color: #000000;">Sin resultados</b>';
-            $dato["msj"] = 'Error '.$e->getMessage();
+            $dato["msj"] = 'Error ' . $e->getMessage();
             return response()->json($dato);
         }
     }
@@ -3661,8 +3441,7 @@ class reportevibracionController extends Controller
      */
     public function reportevibracionrecomendacionestabla($proyecto_id, $agente_nombre)
     {
-        try
-        {
+        try {
             $proyecto = proyectoModel::with(['catregion', 'catsubdireccion', 'catgerencia', 'catactivo'])->findOrFail($proyecto_id);
             $recsensorial = recsensorialModel::findOrFail($proyecto->recsensorial_id);
 
@@ -3700,14 +3479,14 @@ class reportevibracionController extends Controller
                                                                     FROM
                                                                         reporterecomendaciones 
                                                                     WHERE
-                                                                        reporterecomendaciones.proyecto_id = '.$proyecto_id.'
+                                                                        reporterecomendaciones.proyecto_id = ' . $proyecto_id . '
                                                                         AND reporterecomendaciones.reporterecomendacionescatalogo_id = reporterecomendacionescatalogo.id
                                                                     LIMIT 1 
                                                             ), NULL) AS recomendaciones_descripcion
                                                         FROM
                                                             reporterecomendacionescatalogo
                                                         WHERE
-                                                            reporterecomendacionescatalogo.agente_nombre = "'.$agente_nombre.'"
+                                                            reporterecomendacionescatalogo.agente_nombre = "' . $agente_nombre . '"
                                                             AND reporterecomendacionescatalogo.reporterecomendacionescatalogo_activo = 1
                                                         ORDER BY
                                                             reporterecomendacionescatalogo.reporterecomendacionescatalogo_tipo DESC
@@ -3726,8 +3505,8 @@ class reportevibracionController extends Controller
                                                 FROM
                                                     reporterecomendaciones
                                                 WHERE
-                                                    reporterecomendaciones.proyecto_id = '.$proyecto_id.'
-                                                    AND reporterecomendaciones.agente_nombre = "'.$agente_nombre.'"
+                                                    reporterecomendaciones.proyecto_id = ' . $proyecto_id . '
+                                                    AND reporterecomendaciones.agente_nombre = "' . $agente_nombre . '"
                                                     AND reporterecomendaciones.reporterecomendacionescatalogo_id = 0
                                                 ORDER BY
                                                     reporterecomendaciones.id ASC
@@ -3735,43 +3514,37 @@ class reportevibracionController extends Controller
                                         ) AS TABLA');
 
 
-            $numero_registro = 0; $total = 0;
-            foreach ($tabla as $key => $value) 
-            {
+            $numero_registro = 0;
+            $total = 0;
+            foreach ($tabla as $key => $value) {
                 $numero_registro += 1;
                 $value->numero_registro = $numero_registro;
 
-                if (($value->id + 0) > 0)
-                {
+                if (($value->id + 0) > 0) {
                     $required_readonly = 'readonly';
-                    if ($value->checked)
-                    {
+                    if ($value->checked) {
                         $required_readonly = 'required';
                     }
 
                     $value->checkbox = '<div class="switch">
                                             <label>
-                                                <input type="checkbox" class="recomendacion_checkbox" name="recomendacion_checkbox[]" value="'.$value->id.'" '.$value->checked.' onclick="activa_recomendacion(this);">
+                                                <input type="checkbox" class="recomendacion_checkbox" name="recomendacion_checkbox[]" value="' . $value->id . '" ' . $value->checked . ' onclick="activa_recomendacion(this);">
                                                 <span class="lever switch-col-light-blue"></span>
                                             </label>
                                         </div>';
 
-                    $value->descripcion = '<input type="hidden" class="form-control" name="recomendacion_tipo_'.$value->id.'" value="'.$value->recomendaciones_tipo.'" required>
-                                            <label>'.$value->recomendaciones_tipo.'</label>
-                                            <textarea  class="form-control" rows="5" id="recomendacion_descripcion_'.$value->id.'" name="recomendacion_descripcion_'.$value->id.'" '.$required_readonly.'>'.$this->datosproyectoreemplazartexto($proyecto, $recsensorial, $value->recomendaciones_descripcion).'</textarea>';
-                }
-                else
-                {
+                    $value->descripcion = '<input type="hidden" class="form-control" name="recomendacion_tipo_' . $value->id . '" value="' . $value->recomendaciones_tipo . '" required>
+                                            <label>' . $value->recomendaciones_tipo . '</label>
+                                            <textarea  class="form-control" rows="5" id="recomendacion_descripcion_' . $value->id . '" name="recomendacion_descripcion_' . $value->id . '" ' . $required_readonly . '>' . $this->datosproyectoreemplazartexto($proyecto, $recsensorial, $value->recomendaciones_descripcion) . '</textarea>';
+                } else {
                     $value->checkbox = '<input type="checkbox" class="recomendacionadicional_checkbox" name="recomendacionadicional_checkbox[]" value="0" checked/>
                                         <button type="button" class="btn btn-danger waves-effect btn-circle eliminar" data-toggle="tooltip" title="Eliminar recomendación"><i class="fa fa-trash fa-2x"></i></button>';
 
-                    $preventiva = ""; $correctiva = "";
-                    if ($value->recomendaciones_tipo == "Preventiva")
-                    {
+                    $preventiva = "";
+                    $correctiva = "";
+                    if ($value->recomendaciones_tipo == "Preventiva") {
                         $preventiva = "selected";
-                    }
-                    else
-                    {
+                    } else {
                         $correctiva = "selected";
                     }
 
@@ -3781,20 +3554,19 @@ class reportevibracionController extends Controller
                                                     <label>Tipo recomendación</label>
                                                     <select class="custom-select form-control" name="recomendacionadicional_tipo[]" required>
                                                         <option value=""></option>
-                                                        <option value="Preventiva" '.$preventiva.'>Preventiva</option>
-                                                        <option value="Correctiva" '.$correctiva.'>Correctiva</option>
+                                                        <option value="Preventiva" ' . $preventiva . '>Preventiva</option>
+                                                        <option value="Correctiva" ' . $correctiva . '>Correctiva</option>
                                                     </select>
                                                 </div>
                                                 <div class="col-12">
                                                     <br>
                                                     <label>Descripción</label>
-                                                    <textarea  class="form-control" rows="5" name="recomendacionadicional_descripcion[]" required>'.$this->datosproyectoreemplazartexto($proyecto, $recsensorial, $value->recomendaciones_descripcion).'</textarea>
+                                                    <textarea  class="form-control" rows="5" name="recomendacionadicional_descripcion[]" required>' . $this->datosproyectoreemplazartexto($proyecto, $recsensorial, $value->recomendaciones_descripcion) . '</textarea>
                                                 </div>
                                             </div>';
                 }
 
-                if ($value->checked)
-                {
+                if ($value->checked) {
                     $total += 1;
                 }
             }
@@ -3805,12 +3577,10 @@ class reportevibracionController extends Controller
             $dato['total'] = $total;
             $dato["msj"] = 'Datos consultados correctamente';
             return response()->json($dato);
-        }
-        catch(Exception $e)
-        {
+        } catch (Exception $e) {
             $dato['data'] = 0;
             $dato['total'] = 0;
-            $dato["msj"] = 'Error '.$e->getMessage();
+            $dato["msj"] = 'Error ' . $e->getMessage();
             return response()->json($dato);
         }
     }
@@ -3823,30 +3593,21 @@ class reportevibracionController extends Controller
      * @param int $responsabledoc_tipo
      * @param int $responsabledoc_opcion
      * @return \Illuminate\Http\Response
-    */
+     */
     public function reportevibracionresponsabledocumento($reporteregistro_id, $responsabledoc_tipo, $responsabledoc_opcion)
     {
         $reporte = reportevibracionModel::findOrFail($reporteregistro_id);
 
-        if ($responsabledoc_tipo == 1)
-        {
-            if ($responsabledoc_opcion == 0)
-            {
+        if ($responsabledoc_tipo == 1) {
+            if ($responsabledoc_opcion == 0) {
                 return Storage::response($reporte->reportevibracion_responsable1documento);
-            }
-            else
-            {
+            } else {
                 return Storage::download($reporte->reportevibracion_responsable1documento);
             }
-        }
-        else
-        {
-            if ($responsabledoc_opcion == 0)
-            {
+        } else {
+            if ($responsabledoc_opcion == 0) {
                 return Storage::response($reporte->reportevibracion_responsable2documento);
-            }
-            else
-            {
+            } else {
                 return Storage::download($reporte->reportevibracion_responsable2documento);
             }
         }
@@ -3862,8 +3623,7 @@ class reportevibracionController extends Controller
      */
     public function reportevibracionplanostabla($proyecto_id, $agente_nombre)
     {
-        try
-        {
+        try {
             $planos = DB::select('SELECT
                                         proyectoevidenciaplano.proyecto_id,
                                         proyectoevidenciaplano.agente_id,
@@ -3877,15 +3637,15 @@ class reportevibracionController extends Controller
                                                 reporteplanoscarpetas
                                             WHERE
                                                 reporteplanoscarpetas.proyecto_id = proyectoevidenciaplano.proyecto_id
-                                                AND reporteplanoscarpetas.agente_nombre LIKE "%'.$agente_nombre.'%" 
+                                                AND reporteplanoscarpetas.agente_nombre LIKE "%' . $agente_nombre . '%" 
                                                 AND reporteplanoscarpetas.reporteplanoscarpetas_nombre = proyectoevidenciaplano.proyectoevidenciaplano_carpeta
                                             LIMIT 1
                                         ), "") AS checked
                                     FROM
                                         proyectoevidenciaplano
                                     WHERE
-                                        proyectoevidenciaplano.proyecto_id = '.$proyecto_id.' 
-                                        AND proyectoevidenciaplano.agente_nombre LIKE "%'.$agente_nombre.'%" 
+                                        proyectoevidenciaplano.proyecto_id = ' . $proyecto_id . ' 
+                                        AND proyectoevidenciaplano.agente_nombre LIKE "%' . $agente_nombre . '%" 
                                     GROUP BY
                                         proyectoevidenciaplano.proyecto_id,
                                         proyectoevidenciaplano.agente_id,
@@ -3898,23 +3658,21 @@ class reportevibracionController extends Controller
 
             $total_activos = 0;
             $numero_registro = 0;
-            foreach ($planos as $key => $value) 
-            {
+            foreach ($planos as $key => $value) {
                 $numero_registro += 1;
                 $value->numero_registro = $numero_registro;
 
 
                 $value->checkbox = '<div class="switch">
                                         <label>
-                                            <input type="checkbox" class="planoscarpeta_checkbox" name="planoscarpeta_checkbox[]" value="'.$value->proyectoevidenciaplano_carpeta.'" '.$value->checked.'>
+                                            <input type="checkbox" class="planoscarpeta_checkbox" name="planoscarpeta_checkbox[]" value="' . $value->proyectoevidenciaplano_carpeta . '" ' . $value->checked . '>
                                             <span class="lever switch-col-light-blue"></span>
                                         </label>
                                     </div>';
 
 
                 // VERIFICAR SI HAY CARPETAS SELECCIONADAS
-                if ($value->checked)
-                {
+                if ($value->checked) {
                     $total_activos += 1;
                 }
             }
@@ -3924,12 +3682,10 @@ class reportevibracionController extends Controller
             $dato["total"] = $total_activos;
             $dato["msj"] = 'Datos consultados correctamente';
             return response()->json($dato);
-        }
-        catch(Exception $e)
-        {
+        } catch (Exception $e) {
             $dato['data'] = 0;
             $dato["total"] = 0;
-            $dato["msj"] = 'Error '.$e->getMessage();
+            $dato["msj"] = 'Error ' . $e->getMessage();
             return response()->json($dato);
         }
     }
@@ -3944,8 +3700,7 @@ class reportevibracionController extends Controller
      */
     public function reportevibracionequipoutilizadotabla($proyecto_id, $agente_nombre)
     {
-        try
-        {
+        try {
             $proveedor = DB::select('SELECT
                                             proyectoproveedores.proyecto_id,
                                             proyectoproveedores.proveedor_id
@@ -3955,7 +3710,7 @@ class reportevibracionController extends Controller
                                         FROM
                                             proyectoproveedores
                                         WHERE
-                                            proyectoproveedores.proyecto_id = '.$proyecto_id.' 
+                                            proyectoproveedores.proyecto_id = ' . $proyecto_id . ' 
                                             AND proyectoproveedores.proyectoproveedores_tipoadicional < 2
                                             AND proyectoproveedores.catprueba_id = 2 -- Vibración ------------------------------
                                         GROUP BY
@@ -3964,20 +3719,15 @@ class reportevibracionController extends Controller
 
 
             $where_condicion = '';
-            if (count($proveedor) > 0)
-            {
+            if (count($proveedor) > 0) {
                 $lista = '';
 
 
-                foreach ($proveedor as $key => $value)
-                {
-                    if (($key+0) == 0)
-                    {
+                foreach ($proveedor as $key => $value) {
+                    if (($key + 0) == 0) {
                         $lista .= $value->proveedor_id;
-                    }
-                    else
-                    {
-                        $lista .= ', '.$value->proveedor_id;
+                    } else {
+                        $lista .= ', ' . $value->proveedor_id;
                     }
                 }
 
@@ -4015,7 +3765,7 @@ class reportevibracionController extends Controller
                                                 reporteequiposutilizados
                                             WHERE
                                                 reporteequiposutilizados.proyecto_id = proyectoequiposactual.proyecto_id
-                                                AND reporteequiposutilizados.agente_nombre = "'.$agente_nombre.'"
+                                                AND reporteequiposutilizados.agente_nombre = "' . $agente_nombre . '"
                                                 AND reporteequiposutilizados.equipo_id = proyectoequiposactual.equipo_id
                                             LIMIT 1
                                         ), NULL) AS checked,
@@ -4026,7 +3776,7 @@ class reportevibracionController extends Controller
                                                 reporteequiposutilizados
                                             WHERE
                                                 reporteequiposutilizados.proyecto_id = proyectoequiposactual.proyecto_id
-                                                AND reporteequiposutilizados.agente_nombre = "'.$agente_nombre.'"
+                                                AND reporteequiposutilizados.agente_nombre = "' . $agente_nombre . '"
                                                 AND reporteequiposutilizados.equipo_id = proyectoequiposactual.equipo_id
                                             LIMIT 1
                                         ), NULL) AS cartacalibracion,
@@ -4037,7 +3787,7 @@ class reportevibracionController extends Controller
                                                 reporteequiposutilizados
                                             WHERE
                                                 reporteequiposutilizados.proyecto_id = proyectoequiposactual.proyecto_id
-                                                AND reporteequiposutilizados.agente_nombre = "'.$agente_nombre.'"
+                                                AND reporteequiposutilizados.agente_nombre = "' . $agente_nombre . '"
                                                 AND reporteequiposutilizados.equipo_id = proyectoequiposactual.equipo_id
                                             LIMIT 1
                                         ), NULL) AS id
@@ -4046,8 +3796,8 @@ class reportevibracionController extends Controller
                                         LEFT JOIN proveedor ON proyectoequiposactual.proveedor_id = proveedor.id
                                         LEFT JOIN equipo ON proyectoequiposactual.equipo_id = equipo.id
                                     WHERE
-                                        proyectoequiposactual.proyecto_id = '.$proyecto_id.' 
-                                        '.$where_condicion.' 
+                                        proyectoequiposactual.proyecto_id = ' . $proyecto_id . ' 
+                                        ' . $where_condicion . ' 
                                     ORDER BY
                                         equipo.equipo_Descripcion,
                                         equipo.equipo_Marca,
@@ -4055,8 +3805,7 @@ class reportevibracionController extends Controller
                                         equipo.equipo_Serie');
 
 
-            if (count($equipos) == 0)
-            {
+            if (count($equipos) == 0) {
                 $equipos = DB::select('SELECT
                                         proyectoequiposactual.proyecto_id,
                                         proyectoequiposactual.proveedor_id,
@@ -4086,7 +3835,7 @@ class reportevibracionController extends Controller
                                                 reporteequiposutilizados
                                             WHERE
                                                 reporteequiposutilizados.proyecto_id = proyectoequiposactual.proyecto_id
-                                                AND reporteequiposutilizados.agente_nombre = "'.$agente_nombre.'"
+                                                AND reporteequiposutilizados.agente_nombre = "' . $agente_nombre . '"
                                                 AND reporteequiposutilizados.equipo_id = proyectoequiposactual.equipo_id
                                             LIMIT 1
                                         ), NULL) AS checked,
@@ -4097,7 +3846,7 @@ class reportevibracionController extends Controller
                                                 reporteequiposutilizados
                                             WHERE
                                                 reporteequiposutilizados.proyecto_id = proyectoequiposactual.proyecto_id
-                                                AND reporteequiposutilizados.agente_nombre = "'.$agente_nombre.'"
+                                                AND reporteequiposutilizados.agente_nombre = "' . $agente_nombre . '"
                                                 AND reporteequiposutilizados.equipo_id = proyectoequiposactual.equipo_id
                                             LIMIT 1
                                         ), NULL) AS cartacalibracion,
@@ -4108,7 +3857,7 @@ class reportevibracionController extends Controller
                                                 reporteequiposutilizados
                                             WHERE
                                                 reporteequiposutilizados.proyecto_id = proyectoequiposactual.proyecto_id
-                                                AND reporteequiposutilizados.agente_nombre = "'.$agente_nombre.'"
+                                                AND reporteequiposutilizados.agente_nombre = "' . $agente_nombre . '"
                                                 AND reporteequiposutilizados.equipo_id = proyectoequiposactual.equipo_id
                                             LIMIT 1
                                         ), NULL) AS id
@@ -4117,7 +3866,7 @@ class reportevibracionController extends Controller
                                         LEFT JOIN proveedor ON proyectoequiposactual.proveedor_id = proveedor.id
                                         LEFT JOIN equipo ON proyectoequiposactual.equipo_id = equipo.id
                                     WHERE
-                                        proyectoequiposactual.proyecto_id = '.$proyecto_id.' 
+                                        proyectoequiposactual.proyecto_id = ' . $proyecto_id . ' 
                                     ORDER BY
                                         equipo.equipo_Descripcion,
                                         equipo.equipo_Marca,
@@ -4128,37 +3877,35 @@ class reportevibracionController extends Controller
 
             $total_activos = 0;
             $numero_registro = 0;
-            foreach ($equipos as $key => $value) 
-            {
+            foreach ($equipos as $key => $value) {
                 $numero_registro += 1;
                 $value->numero_registro = $numero_registro;
 
 
                 $value->checkbox = '<div class="switch">
                                         <label>
-                                            <input type="checkbox" class="equipoutilizado_checkbox" name="equipoutilizado_checkbox[]" value="'.$value->equipo_id.'" '.$value->checked.' onchange="activa_checkboxcarta(this, '.$value->equipo_id.');";>
+                                            <input type="checkbox" class="equipoutilizado_checkbox" name="equipoutilizado_checkbox[]" value="' . $value->equipo_id . '" ' . $value->checked . ' onchange="activa_checkboxcarta(this, ' . $value->equipo_id . ');";>
                                             <span class="lever switch-col-light-blue"></span>
                                         </label>
                                     </div>';
 
 
-                $value->equipo = '<span class="'.$value->vigencia_color.'">'.$value->equipo_Descripcion.'</span><br><small class="'.$value->vigencia_color.'">'.$value->proveedor_NombreComercial.'</small>';
-                
-
-                $value->marca_modelo_serie = '<span class="'.$value->vigencia_color.'">'.$value->equipo_Marca.'<br>'.$value->equipo_Modelo.'<br>'.$value->equipo_Serie.'</span>';
+                $value->equipo = '<span class="' . $value->vigencia_color . '">' . $value->equipo_Descripcion . '</span><br><small class="' . $value->vigencia_color . '">' . $value->proveedor_NombreComercial . '</small>';
 
 
-                $value->vigencia = '<span class="'.$value->vigencia_color.'">'.$value->vigencia_texto.'</span>';
+                $value->marca_modelo_serie = '<span class="' . $value->vigencia_color . '">' . $value->equipo_Marca . '<br>' . $value->equipo_Modelo . '<br>' . $value->equipo_Serie . '</span>';
 
 
-             
+                $value->vigencia = '<span class="' . $value->vigencia_color . '">' . $value->vigencia_texto . '</span>';
 
 
-             
+
+
+
+
 
                 // VERIFICAR SI HAY EQUIPOS SELECCIONADOS
-                if ($value->checked)
-                {
+                if ($value->checked) {
                     $total_activos += 1;
                 }
             }
@@ -4168,28 +3915,25 @@ class reportevibracionController extends Controller
             $dato["total"] = $total_activos;
             $dato["msj"] = 'Datos consultados correctamente';
             return response()->json($dato);
-        }
-        catch(Exception $e)
-        {
+        } catch (Exception $e) {
             $dato['data'] = 0;
             $dato["total"] = 0;
-            $dato["msj"] = 'Error '.$e->getMessage();
+            $dato["msj"] = 'Error ' . $e->getMessage();
             return response()->json($dato);
         }
     }
 
 
     /**
-         * Display the specified resource.
-         *
-         * @param int $proyecto_id
-         * @param $agente_nombre
-         * @return \Illuminate\Http\Response
+     * Display the specified resource.
+     *
+     * @param int $proyecto_id
+     * @param $agente_nombre
+     * @return \Illuminate\Http\Response
      */
     public function reportevibracionanexosresultadostabla($proyecto_id, $agente_nombre)
     {
-        try
-        {
+        try {
             $anexos = DB::select('SELECT
                                         proyectoevidenciadocumento.proyecto_id,
                                         proyectoevidenciadocumento.proveedor_id,
@@ -4207,47 +3951,42 @@ class reportevibracionController extends Controller
                                                 reporteanexos
                                             WHERE
                                                 reporteanexos.proyecto_id = proyectoevidenciadocumento.proyecto_id
-                                                AND reporteanexos.agente_nombre LIKE "%'.$agente_nombre.'%" 
+                                                AND reporteanexos.agente_nombre LIKE "%' . $agente_nombre . '%" 
                                                 AND reporteanexos.reporteanexos_tipo = 1
                                                 AND reporteanexos.reporteanexos_rutaanexo = proyectoevidenciadocumento.proyectoevidenciadocumento_archivo
                                         ), "") AS checked 
                                     FROM
                                         proyectoevidenciadocumento
                                     WHERE
-                                        proyectoevidenciadocumento.proyecto_id = '.$proyecto_id.' 
-                                        AND proyectoevidenciadocumento.agente_nombre LIKE "%'.$agente_nombre.'%"
+                                        proyectoevidenciadocumento.proyecto_id = ' . $proyecto_id . ' 
+                                        AND proyectoevidenciadocumento.agente_nombre LIKE "%' . $agente_nombre . '%"
                                     ORDER BY
                                         proyectoevidenciadocumento.agente_nombre ASC,
                                         proyectoevidenciadocumento.proyectoevidenciadocumento_nombre ASC');
 
             $total_activos = 0;
             $numero_registro = 0;
-            foreach ($anexos as $key => $value) 
-            {
+            foreach ($anexos as $key => $value) {
                 $numero_registro += 1;
                 $value->numero_registro = $numero_registro;
 
                 $value->checkbox = '<div class="switch">
                                         <label>
-                                            <input type="hidden" class="form-control" name="anexoresultado_nombre_'.$value->id.'" value="'.$value->proyectoevidenciadocumento_nombre.'">
-                                            <input type="hidden" class="form-control" name="anexoresultado_archivo_'.$value->id.'" value="'.$value->proyectoevidenciadocumento_archivo.'">
-                                            <input type="checkbox" class="anexoresultado_checkbox" name="anexoresultado_checkbox[]" value="'.$value->id.'" '.$value->checked.'>
+                                            <input type="hidden" class="form-control" name="anexoresultado_nombre_' . $value->id . '" value="' . $value->proyectoevidenciadocumento_nombre . '">
+                                            <input type="hidden" class="form-control" name="anexoresultado_archivo_' . $value->id . '" value="' . $value->proyectoevidenciadocumento_archivo . '">
+                                            <input type="checkbox" class="anexoresultado_checkbox" name="anexoresultado_checkbox[]" value="' . $value->id . '" ' . $value->checked . '>
                                             <span class="lever switch-col-light-blue"></span>
                                         </label>
                                     </div>';
 
-                if ($value->proyectoevidenciadocumento_extension == '.pdf' || $value->proyectoevidenciadocumento_extension == '.PDF')
-                {
+                if ($value->proyectoevidenciadocumento_extension == '.pdf' || $value->proyectoevidenciadocumento_extension == '.PDF') {
                     $value->documento = '<button type="button" class="btn btn-info waves-effect btn-circle" data-toggle="tooltip" title="Mostrar PDF"><i class="fa fa-file-pdf-o fa-2x"></i></button>';
-                }
-                else
-                {
+                } else {
                     $value->documento = '<button type="button" class="btn btn-success waves-effect btn-circle" data-toggle="tooltip" title="Descargar archivo"><i class="fa fa-download fa-2x"></i></button>';
                 }
 
                 // VERIFICAR SI HAY DOCUMENTOS SELECCIONADOS
-                if ($value->checked)
-                {
+                if ($value->checked) {
                     $total_activos += 1;
                 }
             }
@@ -4257,28 +3996,25 @@ class reportevibracionController extends Controller
             $dato["total"] = $total_activos;
             $dato["msj"] = 'Datos consultados correctamente';
             return response()->json($dato);
-        }
-        catch(Exception $e)
-        {
+        } catch (Exception $e) {
             $dato['data'] = 0;
             $dato["total"] = 0;
-            $dato["msj"] = 'Error '.$e->getMessage();
+            $dato["msj"] = 'Error ' . $e->getMessage();
             return response()->json($dato);
         }
     }
 
 
     /**
-         * Display the specified resource.
-         *
-         * @param int $proyecto_id
-         * @param $agente_nombre
-         * @return \Illuminate\Http\Response
+     * Display the specified resource.
+     *
+     * @param int $proyecto_id
+     * @param $agente_nombre
+     * @return \Illuminate\Http\Response
      */
     public function reportevibracionanexosacreditacionestabla($proyecto_id, $agente_nombre)
     {
-        try
-        {
+        try {
             $acreditaciones = DB::select('SELECT
                                                 TABLA.proyecto_id,
                                                 TABLA.proveedor_id,
@@ -4308,7 +4044,7 @@ class reportevibracionController extends Controller
                                                         reporteanexos
                                                     WHERE
                                                         reporteanexos.proyecto_id = TABLA.proyecto_id
-                                                        AND reporteanexos.agente_nombre = "'.$agente_nombre.'" 
+                                                        AND reporteanexos.agente_nombre = "' . $agente_nombre . '" 
                                                         AND reporteanexos.reporteanexos_tipo = 2
                                                         AND reporteanexos.reporteanexos_rutaanexo = acreditacion.acreditacion_SoportePDF
                                                     LIMIT 1
@@ -4325,7 +4061,7 @@ class reportevibracionController extends Controller
                                                         proyectoproveedores
                                                         LEFT JOIN proveedor ON proyectoproveedores.proveedor_id = proveedor.id
                                                     WHERE
-                                                        proyectoproveedores.proyecto_id = '.$proyecto_id.' 
+                                                        proyectoproveedores.proyecto_id = ' . $proyecto_id . ' 
                                                         AND proyectoproveedores.catprueba_id = 2 
                                                     GROUP BY
                                                         proyectoproveedores.proyecto_id,
@@ -4341,31 +4077,29 @@ class reportevibracionController extends Controller
 
             $total_activos = 0;
             $numero_registro = 0;
-            foreach ($acreditaciones as $key => $value) 
-            {
+            foreach ($acreditaciones as $key => $value) {
                 $numero_registro += 1;
                 $value->numero_registro = $numero_registro;
 
                 $value->checkbox = '<div class="switch">
                                         <label>
-                                            <input type="hidden" class="form-control" name="anexoacreditacion_nombre_'.$value->id.'" value="'.$value->acreditacion_Entidad.' '.$value->acreditacion_Numero.'">
-                                            <input type="hidden" class="form-control" name="anexoacreditacion_archivo_'.$value->id.'" value="'.$value->acreditacion_SoportePDF.'">
-                                            <input type="checkbox" class="anexoacreditacion_checkbox" name="anexoacreditacion_checkbox[]" value="'.$value->id.'" '.$value->checked.'>
+                                            <input type="hidden" class="form-control" name="anexoacreditacion_nombre_' . $value->id . '" value="' . $value->acreditacion_Entidad . ' ' . $value->acreditacion_Numero . '">
+                                            <input type="hidden" class="form-control" name="anexoacreditacion_archivo_' . $value->id . '" value="' . $value->acreditacion_SoportePDF . '">
+                                            <input type="checkbox" class="anexoacreditacion_checkbox" name="anexoacreditacion_checkbox[]" value="' . $value->id . '" ' . $value->checked . '>
                                             <span class="lever switch-col-light-blue"></span>
                                         </label>
                                     </div>';
 
 
-                $value->tipo = '<span class="'.$value->vigencia_color.'">'.$value->acreditacion_Tipo.'</span>';
-                $value->entidad = '<span class="'.$value->vigencia_color.'">'.$value->acreditacion_Entidad.'</span>';
-                $value->numero = '<span class="'.$value->vigencia_color.'">'.$value->acreditacion_Numero.'</span>';
-                $value->area = '<span class="'.$value->vigencia_color.'">'.$value->vigencia_color.'</span>';
-                $value->vigencia = '<span class="'.$value->vigencia_color.'">'.$value->vigencia_texto.'</span>';
+                $value->tipo = '<span class="' . $value->vigencia_color . '">' . $value->acreditacion_Tipo . '</span>';
+                $value->entidad = '<span class="' . $value->vigencia_color . '">' . $value->acreditacion_Entidad . '</span>';
+                $value->numero = '<span class="' . $value->vigencia_color . '">' . $value->acreditacion_Numero . '</span>';
+                $value->area = '<span class="' . $value->vigencia_color . '">' . $value->vigencia_color . '</span>';
+                $value->vigencia = '<span class="' . $value->vigencia_color . '">' . $value->vigencia_texto . '</span>';
                 $value->certificado = '<button type="button" class="btn btn-info waves-effect btn-circle" data-toggle="tooltip" title="Mostrar certificado"><i class="fa fa-file-pdf-o fa-2x"></i></button>';
 
                 // VERIFICAR SI HAY ACREDITACIONES SELECCIONADOS
-                if ($value->checked)
-                {
+                if ($value->checked) {
                     $total_activos += 1;
                 }
             }
@@ -4375,12 +4109,10 @@ class reportevibracionController extends Controller
             $dato["total"] = $total_activos;
             $dato["msj"] = 'Datos consultados correctamente';
             return response()->json($dato);
-        }
-        catch(Exception $e)
-        {
+        } catch (Exception $e) {
             $dato['data'] = 0;
             $dato["total"] = 0;
-            $dato["msj"] = 'Error '.$e->getMessage();
+            $dato["msj"] = 'Error ' . $e->getMessage();
             return response()->json($dato);
         }
     }
@@ -4394,8 +4126,7 @@ class reportevibracionController extends Controller
      */
     public function reportevibracionrevisionestabla($proyecto_id)
     {
-        try
-        {
+        try {
             $revisiones = DB::select('SELECT
                                             reporterevisiones.proyecto_id,
                                             reporterevisiones.agente_id,
@@ -4412,7 +4143,7 @@ class reportevibracionController extends Controller
                                         FROM
                                             reporterevisiones
                                         WHERE
-                                            reporterevisiones.proyecto_id = '.$proyecto_id.' 
+                                            reporterevisiones.proyecto_id = ' . $proyecto_id . ' 
                                             AND reporterevisiones.agente_id = 2
                                         ORDER BY
                                             reporterevisiones.reporterevisiones_revision DESC');
@@ -4427,108 +4158,87 @@ class reportevibracionController extends Controller
             $dato['ultimarevision_id'] = 0;
 
 
-            foreach ($revisiones as $key => $value)
-            {
-                if ($key == 0)
-                {
+            foreach ($revisiones as $key => $value) {
+                if ($key == 0) {
                     $dato['ultimaversion_cancelada'] = $value->reporterevisiones_cancelado;
 
-                    
-                    if ($value->reporterevisiones_concluido == 1 || $value->reporterevisiones_cancelado == 1)
-                    {
+
+                    if ($value->reporterevisiones_concluido == 1 || $value->reporterevisiones_cancelado == 1) {
                         $dato['ultimaversion_estado'] = 1;
                     }
 
 
                     $value->ultima_revision = $value->id;
                     $dato['ultimarevision_id'] = $value->id;
-                }
-                else
-                {
+                } else {
                     $value->ultima_revision = 0;
                 }
 
 
-                if (auth()->user()->hasRoles(['Superusuario', 'Administrador', 'Coordinador']) && ($key+0) == 0)
-                {
+                if (auth()->user()->hasRoles(['Superusuario', 'Administrador', 'Coordinador']) && ($key + 0) == 0) {
                     $value->perfil_concluir = 1;
                     $disabled_concluir = '';
-                }
-                else
-                {
+                } else {
                     $value->perfil_concluir = 0;
                     $disabled_concluir = 'disabled';
                 }
 
 
                 $checked_concluido = '';
-                if (($value->reporterevisiones_concluido + 0) == 1)
-                {
+                if (($value->reporterevisiones_concluido + 0) == 1) {
                     $checked_concluido = 'checked';
                 }
 
 
                 $value->checkbox_concluido = '<div class="switch" data-toggle="tooltip" title="Solo Coordinadores y Administradores">
                                                     <label>
-                                                        <input type="checkbox" class="checkbox_concluido" '.$checked_concluido.' '.$disabled_concluir.' onclick="reporte_concluido('.$value->id.', '.$value->perfil_concluir.', this)">
+                                                        <input type="checkbox" class="checkbox_concluido" ' . $checked_concluido . ' ' . $disabled_concluir . ' onclick="reporte_concluido(' . $value->id . ', ' . $value->perfil_concluir . ', this)">
                                                         <span class="lever switch-col-light-blue"></span>
                                                     </label>
                                                 </div>';
 
 
-                $value->nombre_concluido = $value->reporterevisiones_concluidonombre.'<br>'.$value->reporterevisiones_concluidofecha;
+                $value->nombre_concluido = $value->reporterevisiones_concluidonombre . '<br>' . $value->reporterevisiones_concluidofecha;
 
 
-                if (auth()->user()->hasRoles(['Superusuario', 'Administrador']) && ($key+0) == 0)
-                {
+                if (auth()->user()->hasRoles(['Superusuario', 'Administrador']) && ($key + 0) == 0) {
                     $value->perfil_cancelar = 1;
                     $disabled_cancelar = '';
-                }
-                else
-                {
+                } else {
                     $value->perfil_cancelar = 0;
                     $disabled_cancelar = 'disabled';
                 }
 
 
                 $checked_cancelado = '';
-                if (($value->reporterevisiones_cancelado + 0) == 1)
-                {
+                if (($value->reporterevisiones_cancelado + 0) == 1) {
                     $checked_cancelado = 'checked';
                 }
 
                 $value->checkbox_cancelado = '<div class="switch" data-toggle="tooltip" title="Solo Administradores">
                                                     <label>
-                                                        <input type="checkbox" class="checkbox_cancelado" '.$checked_cancelado.' '.$disabled_cancelar.' onclick="reporte_cancelado('.$value->id.', '.$value->perfil_cancelar.', this)">
+                                                        <input type="checkbox" class="checkbox_cancelado" ' . $checked_cancelado . ' ' . $disabled_cancelar . ' onclick="reporte_cancelado(' . $value->id . ', ' . $value->perfil_cancelar . ', this)">
                                                         <span class="lever switch-col-red"></span>
                                                     </label>
                                                 </div>';
 
 
-                $value->nombre_cancelado = $value->reporterevisiones_canceladonombre.'<br>'.$value->reporterevisiones_canceladofecha;
+                $value->nombre_cancelado = $value->reporterevisiones_canceladonombre . '<br>' . $value->reporterevisiones_canceladofecha;
 
 
-                if (($value->reporterevisiones_concluido + 0) == 0 && ($value->reporterevisiones_cancelado + 0) == 0)
-                {
+                if (($value->reporterevisiones_concluido + 0) == 0 && ($value->reporterevisiones_cancelado + 0) == 0) {
                     $value->estado_texto = '<span class="text-info">Disponible para edición</span>';
-                }
-                else if (($value->reporterevisiones_cancelado + 0) == 1)
-                {
-                    $value->estado_texto = '<span class="text-danger">cancelado</span>: '.$value->reporterevisiones_canceladoobservacion;
-                }
-                else
-                {
+                } else if (($value->reporterevisiones_cancelado + 0) == 1) {
+                    $value->estado_texto = '<span class="text-danger">cancelado</span>: ' . $value->reporterevisiones_canceladoobservacion;
+                } else {
                     $value->estado_texto = '<span class="text-info">Concluido</span>: No disponible para edición';
                 }
 
 
                 // Boton descarga informe WORD
-                if (($value->reporterevisiones_concluido + 0) == 1 || ($value->reporterevisiones_cancelado + 0) == 1)
-                {
-                    $value->boton_descargar = '<button type="button" class="btn btn-success waves-effect btn-circle botondescarga" id="botondescarga_'.$key.'"><i class="fa fa-download fa-2x"></i></button>';
-                }
-                else
-                {
+                if (($value->reporterevisiones_concluido + 0) == 1 || ($value->reporterevisiones_cancelado + 0) == 1) {
+                    $value->boton_descargar = '<button type="button" class="btn btn-success waves-effect btn-circle botondescarga" id="botondescarga_' . $key . '"><i class="fa fa-download fa-2x"></i></button>';
+                } else {
                     $value->boton_descargar = '<button type="button" class="btn btn-default waves-effect btn-circle" data-toggle="tooltip" title="Para descargar esta revisión del informe, primero debe estar concluido ó cancelado."><i class="fa fa-ban fa-2x"></i></button>';
                 }
             }
@@ -4539,15 +4249,13 @@ class reportevibracionController extends Controller
             $dato['total'] = count($revisiones);
             $dato["msj"] = 'Datos consultados correctamente';
             return response()->json($dato);
-        }
-        catch(Exception $e)
-        {
+        } catch (Exception $e) {
             $dato['ultimaversion_cancelada'] = 0;
             $dato['ultimaversion_estado'] = 0;
             $dato['ultimarevision_id'] = 0;
             $dato['data'] = 0;
             $dato['total'] = 0;
-            $dato["msj"] = 'Error '.$e->getMessage();
+            $dato["msj"] = 'Error ' . $e->getMessage();
             return response()->json($dato);
         }
     }
@@ -4561,8 +4269,7 @@ class reportevibracionController extends Controller
      */
     public function reportevibracionrevisionconcluir($reporte_id)
     {
-        try
-        {
+        try {
             // $reporte  = reporteaireModel::findOrFail($reporte_id);
             $revision  = reporterevisionesModel::findOrFail($reporte_id);
 
@@ -4572,35 +4279,31 @@ class reportevibracionController extends Controller
             $concluidofecha = NULL;
 
 
-            if ($revision->reporterevisiones_concluido == 0)
-            {
-                $concluido = 1;                
-                $concluidonombre = auth()->user()->empleado->empleado_nombre." ".auth()->user()->empleado->empleado_apellidopaterno." ".auth()->user()->empleado->empleado_apellidomaterno;
+            if ($revision->reporterevisiones_concluido == 0) {
+                $concluido = 1;
+                $concluidonombre = auth()->user()->empleado->empleado_nombre . " " . auth()->user()->empleado->empleado_apellidopaterno . " " . auth()->user()->empleado->empleado_apellidomaterno;
                 $concluidofecha = date('Y-m-d H:i:s');
             }
 
 
             $revision->update([
-                  'reporterevisiones_concluido' => $concluido
-                , 'reporterevisiones_concluidonombre' => $concluidonombre
-                , 'reporterevisiones_concluidofecha' => $concluidofecha
+                'reporterevisiones_concluido' => $concluido,
+                'reporterevisiones_concluidonombre' => $concluidonombre,
+                'reporterevisiones_concluidofecha' => $concluidofecha
             ]);
 
 
             $dato["estado"] = 0;
-            if ($concluido == 1 || $revision->reporterevisiones_cancelado == 1)
-            {
+            if ($concluido == 1 || $revision->reporterevisiones_cancelado == 1) {
                 $dato["estado"] = 1;
             }
 
 
             $dato["msj"] = 'Datos modificados correctamente';
             return response()->json($dato);
-        }
-        catch(Exception $e)
-        {
+        } catch (Exception $e) {
             $dato["estado"] = 0;
-            $dato["msj"] = 'Error '.$e->getMessage();
+            $dato["msj"] = 'Error ' . $e->getMessage();
             return response()->json($dato);
         }
     }
@@ -4614,13 +4317,12 @@ class reportevibracionController extends Controller
      */
     public function store(Request $request)
     {
-        try
-        {
+        try {
             // TABLAS
             //============================================================
 
 
-              /// INSERTAR POR MEDIO DE EXCEL LO DATOS DEL RESULTADO  
+            /// INSERTAR POR MEDIO DE EXCEL LO DATOS DEL RESULTADO  
 
 
             // INSERTAR PUNTOS POR MEDIO DE UN EXCEL
@@ -4629,7 +4331,7 @@ class reportevibracionController extends Controller
 
 
                 $proyecto_id = $request['proyecto_id'];
-             
+
 
 
                 // Empezamos a guardar los puntos de iluminacion
@@ -4670,11 +4372,11 @@ class reportevibracionController extends Controller
                         $puntosInsertados = 0;
 
                         //================================= Funciones de limpieaza de datos =================================
-                        
 
 
 
-                        
+
+
                         //BUCAMOS Y ARMAMOS EL ARRAY PARA OBTENER LAS CATEGORIAS CON SU ID
                         $IdCategorias = [];
                         $caategorias = reportecategoriaModel::where('proyecto_id', $proyecto_id)->get();
@@ -4712,15 +4414,15 @@ class reportevibracionController extends Controller
                         function tipoevaluacion($uso)
                         {
                             $usoModificado = trim(mb_strtoupper($uso, 'UTF-8'));
-                            
+
                             $usoModificado = preg_replace('/\s+/', ' ', $usoModificado);
-                            
+
                             // Comprobar y retornar el valor correspondiente
                             if ($usoModificado == 'NOM-024' || $usoModificado == 'NOM-024-STPS-2001'  || $usoModificado == 'LÍMITES POR NOM-024-STPS-2001' || $usoModificado == 'LIMITES POR NOM-024-STPS-2001') {
                                 return 1;
-                            } elseif ($usoModificado == 'LÍMITES POR INTERPOLACIÓN' || $usoModificado == 'INTERPOLACIÓN' ||  $usoModificado == 'LIMITES POR INTERPOLACION' || $usoModificado == 'INTERPOLACION' ) {
+                            } elseif ($usoModificado == 'LÍMITES POR INTERPOLACIÓN' || $usoModificado == 'INTERPOLACIÓN' ||  $usoModificado == 'LIMITES POR INTERPOLACION' || $usoModificado == 'INTERPOLACION') {
                                 return 2;
-                            } elseif ($usoModificado === 'MÉTODO ISO'  || $usoModificado == 'ISO' || $usoModificado == 'METODO ISO' ) {
+                            } elseif ($usoModificado === 'MÉTODO ISO'  || $usoModificado == 'ISO' || $usoModificado == 'METODO ISO') {
                                 return 3;
                             } else {
                                 return 0;
@@ -4732,29 +4434,29 @@ class reportevibracionController extends Controller
                         function tiempoexposicion($uso)
                         {
                             $usoModificado = trim(mb_strtoupper($uso, 'UTF-8'));
-                            
+
                             $usoModificado = preg_replace('/\s+/', ' ', $usoModificado);
-                            
+
                             // Comprobar y retornar el valor correspondiente
                             if ($usoModificado == '1 MINUTOS' || $usoModificado == '1 MIN' || $usoModificado == '1 MINUTO') {
                                 return "1 min";
                             } elseif ($usoModificado == '16 MINUTOS' || $usoModificado == '16 MIN' || $usoModificado == '16 MINUTO') {
                                 return "16 min";
-                            } elseif ($usoModificado === '25 MINUTOS'  || $usoModificado == '25 MIN' || $usoModificado == '25 MINUTO' ) {
+                            } elseif ($usoModificado === '25 MINUTOS'  || $usoModificado == '25 MIN' || $usoModificado == '25 MINUTO') {
                                 return "25 min";
-                            }  elseif ($usoModificado === '1 HORA'  || $usoModificado == '1 H' || $usoModificado == '1 HORAS' ) {
+                            } elseif ($usoModificado === '1 HORA'  || $usoModificado == '1 H' || $usoModificado == '1 HORAS') {
                                 return "1 h";
-                            } elseif ($usoModificado === '2.5 HORA'  || $usoModificado == '2.5 H' || $usoModificado == '2.5 HORAS' ) {
+                            } elseif ($usoModificado === '2.5 HORA'  || $usoModificado == '2.5 H' || $usoModificado == '2.5 HORAS') {
                                 return "2.5 h";
-                            } elseif ($usoModificado === '4 HORA'  || $usoModificado == '4 H' || $usoModificado == '4 HORAS' ) {
+                            } elseif ($usoModificado === '4 HORA'  || $usoModificado == '4 H' || $usoModificado == '4 HORAS') {
                                 return "4 h";
-                            } elseif ($usoModificado === '8 HORA'  || $usoModificado == '8 H' || $usoModificado == '8 HORAS' ) {
+                            } elseif ($usoModificado === '8 HORA'  || $usoModificado == '8 H' || $usoModificado == '8 HORAS') {
                                 return "8 h";
-                            } elseif ($usoModificado === '16 HORA'  || $usoModificado == '16 H' || $usoModificado == '16 HORAS' ) {
+                            } elseif ($usoModificado === '16 HORA'  || $usoModificado == '16 H' || $usoModificado == '16 HORAS') {
                                 return "16 h";
-                            } elseif ($usoModificado === '24 HORA'  || $usoModificado == '24 H' || $usoModificado == '24 HORAS' ) {
+                            } elseif ($usoModificado === '24 HORA'  || $usoModificado == '24 H' || $usoModificado == '24 HORAS') {
                                 return "24 h";
-                            }else {
+                            } else {
                                 return 0;
                             }
                         }
@@ -4763,13 +4465,13 @@ class reportevibracionController extends Controller
                         function medicioneje($uso)
                         {
                             $usoModificado = trim(mb_strtoupper($uso, 'UTF-8'));
-                            
+
                             $usoModificado = preg_replace('/\s+/', ' ', $usoModificado);
-                            
+
                             // Comprobar y retornar el valor correspondiente
                             if ($usoModificado == '1') {
                                 return 1;
-                            } elseif ($usoModificado == '3' ) {
+                            } elseif ($usoModificado == '3') {
                                 return 3;
                             } else {
                                 return 0;
@@ -4777,7 +4479,8 @@ class reportevibracionController extends Controller
                         }
 
 
-                        function obtenerLimites($tiempo_exposicion) {
+                        function obtenerLimites($tiempo_exposicion)
+                        {
                             switch ($tiempo_exposicion) {
                                 case '1 min':
                                     return [
@@ -4831,29 +4534,46 @@ class reportevibracionController extends Controller
                                     ];
                             }
                         }
-                        
+
 
                         $frecuencias = [
-                            '1.00', '1.25', '1.60', '2.00', '2.50', '3.15', '4.00', '5.00', '6.30',
-                            '8.00', '10.00', '12.50', '16.00', '20.00', '25.00', '31.50', '40.00',
-                            '50.00', '63.00', '80.00'
+                            '1.00',
+                            '1.25',
+                            '1.60',
+                            '2.00',
+                            '2.50',
+                            '3.15',
+                            '4.00',
+                            '5.00',
+                            '6.30',
+                            '8.00',
+                            '10.00',
+                            '12.50',
+                            '16.00',
+                            '20.00',
+                            '25.00',
+                            '31.50',
+                            '40.00',
+                            '50.00',
+                            '63.00',
+                            '80.00'
                         ];
-                        
+
                         $columnasX1 = ['K', 'T', 'AC', 'AL', 'AU', 'BD', 'BM', 'BV', 'CE', 'CN', 'CW', 'DF', 'DO', 'DX', 'EG', 'EP', 'EY', 'FH', 'FQ', 'FZ'];
                         $columnasX2 = ['N', 'W', 'AF', 'AO', 'AX', 'BG', 'BP', 'BY', 'CH', 'CQ', 'CZ', 'DI', 'DR', 'EA', 'EJ', 'ES', 'FB', 'FK', 'FT', 'GC'];
                         $columnasX3 = ['Q', 'Z', 'AI', 'AR', 'BA', 'BJ', 'BS', 'CB', 'CK', 'CT', 'DC', 'DL', 'DU', 'ED', 'EK', 'EV', 'FE', 'FN', 'FW', 'GF'];
-                        
+
                         $columnasY1 = ['L', 'U', 'AD', 'AM', 'AV', 'BE', 'BN', 'BW', 'CF', 'CO', 'CX', 'DG', 'DP', 'DY', 'EH', 'EQ', 'EZ', 'FI', 'FR', 'GA'];
                         $columnasY2 = ['O', 'X', 'AG', 'AP', 'AY', 'BH', 'BQ', 'BZ', 'CI', 'CR', 'DA', 'DJ', 'DS', 'EB', 'EK', 'ET', 'FC', 'FL', 'FU', 'GD'];
                         $columnasY3 = ['R', 'AA', 'AJ', 'AS', 'BB', 'BK', 'BT', 'CC', 'CL', 'CU', 'DD', 'DM', 'DV', 'EE', 'EN', 'EW', 'FF', 'FO', 'FX', 'GG'];
-                        
+
                         $columnasZ1 = ['M', 'V', 'AE', 'AN', 'AW', 'BF', 'BO', 'BX', 'CG', 'CP', 'CY', 'DH', 'DQ', 'DZ', 'EI', 'ER', 'FA', 'FJ', 'FS', 'GB'];
                         $columnasZ2 = ['P', 'Y', 'AH', 'AQ', 'AZ', 'BI', 'BR', 'CA', 'CJ', 'CS', 'DB', 'DK', 'DT', 'EC', 'EL', 'EU', 'FD', 'FM', 'FV', 'GE'];
                         $columnasZ3 = ['S', 'AB', 'AK', 'AT', 'BC', 'BL', 'BU', 'CD', 'CM', 'CV', 'DE', 'DN', 'DW', 'EF', 'EO', 'EX', 'FG', 'FP', 'FY', 'GH'];
-                        
+
                         // Reiniciamos el AUTO_INCREMENT de la tabla principal
-                        DB::statement('ALTER TABLE reportevibracionevaluacion AUTO_INCREMENT = 1;');
-                        
+                        // DB::statement('ALTER TABLE reportevibracionevaluacion AUTO_INCREMENT = 1;');
+
                         // Limpiamos, validamos e insertamos todos los datos del Excel
                         foreach ($datosGenerales as $rowData) {
                             // Inserción en la tabla principal
@@ -4870,13 +4590,13 @@ class reportevibracionController extends Controller
                                 'reportevibracionevaluacion_numeromediciones' => is_null($rowData['I']) ? null : medicioneje($rowData['I']),
                                 'reportevibracionevaluacion_fecha' => is_null($rowData['J']) ? null : validarFecha($rowData['J']),
                             ]);
-                        
+
                             // Obtener límites basados en el tiempo de exposición
                             $tiempoExposicion = tiempoexposicion($rowData['H']);
                             $limites = obtenerLimites($tiempoExposicion);
                             $limiteAz = $limites['az'];
                             $limiteAxy = $limites['axy'];
-                        
+
                             // Inserción en la tabla de detalles para cada frecuencia
                             foreach ($frecuencias as $key => $frecuencia) {
                                 reportevibracionevaluaciondatosModel::create([
@@ -4884,24 +4604,24 @@ class reportevibracionController extends Controller
                                     'reportevibracionevaluaciondatos_frecuencia' => $frecuencia,
                                     'reportevibracionevaluaciondatos_azlimite' => isset($limiteAz[$key]) ? $limiteAz[$key] : null,
                                     'reportevibracionevaluaciondatos_axylimite' => isset($limiteAxy[$key]) ? $limiteAxy[$key] : null,
-                        
+
                                     // Valores de los ejes Z
                                     'reportevibracionevaluaciondatos_az1' => isset($rowData[$columnasZ1[$key]]) ? $rowData[$columnasZ1[$key]] : null,
                                     'reportevibracionevaluaciondatos_az2' => isset($rowData[$columnasZ2[$key]]) ? $rowData[$columnasZ2[$key]] : null,
                                     'reportevibracionevaluaciondatos_az3' => isset($rowData[$columnasZ3[$key]]) ? $rowData[$columnasZ3[$key]] : null,
-                        
+
                                     // Valores de los ejes X
                                     'reportevibracionevaluaciondatos_ax1' => isset($rowData[$columnasX1[$key]]) ? $rowData[$columnasX1[$key]] : null,
                                     'reportevibracionevaluaciondatos_ax2' => isset($rowData[$columnasX2[$key]]) ? $rowData[$columnasX2[$key]] : null,
                                     'reportevibracionevaluaciondatos_ax3' => isset($rowData[$columnasX3[$key]]) ? $rowData[$columnasX3[$key]] : null,
-                        
+
                                     // Valores de los ejes Y
                                     'reportevibracionevaluaciondatos_ay1' => isset($rowData[$columnasY1[$key]]) ? $rowData[$columnasY1[$key]] : null,
                                     'reportevibracionevaluaciondatos_ay2' => isset($rowData[$columnasY2[$key]]) ? $rowData[$columnasY2[$key]] : null,
                                     'reportevibracionevaluaciondatos_ay3' => isset($rowData[$columnasY3[$key]]) ? $rowData[$columnasY3[$key]] : null,
                                 ]);
                             }
-                        
+
                             $puntosInsertados++;
                         }
 
@@ -4922,17 +4642,16 @@ class reportevibracionController extends Controller
 
 
             $proyectoRecursos = recursosPortadasInformesModel::where('PROYECTO_ID', $request->proyecto_id)->where('AGENTE_ID', $request->agente_id)->get();
-            
+
 
             $proyecto = proyectoModel::with(['catregion', 'catsubdireccion', 'catgerencia', 'catactivo'])->findOrFail($request->proyecto_id);
             $recsensorial = recsensorialModel::with(['catregion', 'catsubdireccion', 'catgerencia', 'catactivo'])->findOrFail($proyecto->recsensorial_id);
-            
+
             $meses = ["Vacio", "Enero", "Febrero", "Marzo", "Abril", "Mayo", "Junio", "Julio", "Agosto", "Septiembre", "Octubre", "Noviembre", "Diciembre"];
             $reportefecha = explode("-", $proyecto->proyecto_fechaentrega);
 
 
-            if (($request->reporteregistro_id + 0) > 0)
-            {
+            if (($request->reporteregistro_id + 0) > 0) {
                 $reporte = reportevibracionModel::findOrFail($request->reporteregistro_id);
 
                 $dato["reporteregistro_id"] = $reporte->id;
@@ -4946,96 +4665,86 @@ class reportevibracionController extends Controller
 
 
                 $revision = reporterevisionesModel::where('proyecto_id', $request->proyecto_id)
-                                                    ->where('agente_id', $request->agente_id)
-                                                    ->orderBy('reporterevisiones_revision', 'DESC')
-                                                    ->get();
+                    ->where('agente_id', $request->agente_id)
+                    ->orderBy('reporterevisiones_revision', 'DESC')
+                    ->get();
 
 
-                if(count($revision) > 0)
-                {
+                if (count($revision) > 0) {
                     $revision = reporterevisionesModel::findOrFail($revision[0]->id);
                 }
 
 
-                if (($revision->reporterevisiones_concluido == 1 || $revision->reporterevisiones_cancelado == 1) && ($request->opcion+0) != 17) // Valida disponibilidad de esta version (17 CANCELACION REVISION)
+                if (($revision->reporterevisiones_concluido == 1 || $revision->reporterevisiones_cancelado == 1) && ($request->opcion + 0) != 17) // Valida disponibilidad de esta version (17 CANCELACION REVISION)
                 {
                     // respuesta
-                    $dato["msj"] = 'Informe de '.$request->agente_nombre.' NO disponible para edición';
+                    $dato["msj"] = 'Informe de ' . $request->agente_nombre . ' NO disponible para edición';
                     return response()->json($dato);
                 }
-            }
-            else
-            {
+            } else {
                 DB::statement('ALTER TABLE reportevibracion AUTO_INCREMENT = 1;');
 
-                if (!$request->catactivo_id)
-                {
+                if (!$request->catactivo_id) {
                     $request['catactivo_id'] = 0; // es es modo cliente y viene en null se pone en cero
                 }
 
                 $reporte = reportevibracionModel::create([
-                      'proyecto_id' => $request->proyecto_id
-                    , 'agente_id' => $request->agente_id
-                    , 'agente_nombre' => $request->agente_nombre
-                    , 'catactivo_id' => $request->catactivo_id
-                    , 'reportevibracion_instalacion' => $request->reporte_instalacion
-                    , 'reportevibracion_catregion_activo' => 1
-                    , 'reportevibracion_catsubdireccion_activo' => 1
-                    , 'reportevibracion_catgerencia_activo' => 1
-                    , 'reportevibracion_catactivo_activo' => 1
-                    , 'reportevibracion_concluido' => 0
-                    , 'reportevibracion_cancelado' => 0
+                    'proyecto_id' => $request->proyecto_id,
+                    'agente_id' => $request->agente_id,
+                    'agente_nombre' => $request->agente_nombre,
+                    'catactivo_id' => $request->catactivo_id,
+                    'reportevibracion_instalacion' => $request->reporte_instalacion,
+                    'reportevibracion_catregion_activo' => 1,
+                    'reportevibracion_catsubdireccion_activo' => 1,
+                    'reportevibracion_catgerencia_activo' => 1,
+                    'reportevibracion_catactivo_activo' => 1,
+                    'reportevibracion_concluido' => 0,
+                    'reportevibracion_cancelado' => 0
                 ]);
             }
 
 
             //============================================================
-            
+
             // PORTADA
-            if (($request->opcion+0) == 0)
-            {
+            if (($request->opcion + 0) == 0) {
                 // REGION
                 $catregion_activo = 0;
-                if ($request->reporte_catregion_activo != NULL)
-                {
+                if ($request->reporte_catregion_activo != NULL) {
                     $catregion_activo = 1;
                 }
 
                 // SUBDIRECCION
                 $catsubdireccion_activo = 0;
-                if ($request->reporte_catsubdireccion_activo != NULL)
-                {
+                if ($request->reporte_catsubdireccion_activo != NULL) {
                     $catsubdireccion_activo = 1;
                 }
 
                 // GERENCIA
                 $catgerencia_activo = 0;
-                if ($request->reporte_catgerencia_activo != NULL)
-                {
+                if ($request->reporte_catgerencia_activo != NULL) {
                     $catgerencia_activo = 1;
                 }
 
                 // ACTIVO
                 $catactivo_activo = 0;
-                if ($request->reporte_catactivo_activo != NULL)
-                {
+                if ($request->reporte_catactivo_activo != NULL) {
                     $catactivo_activo = 1;
                 }
 
                 $reporte->update([
-                      'reportevibracion_catregion_activo' => $catregion_activo
-                    , 'reportevibracion_catsubdireccion_activo' => $catsubdireccion_activo
-                    , 'reportevibracion_catgerencia_activo' => $catgerencia_activo
-                    , 'reportevibracion_catactivo_activo' => $catactivo_activo
-                    , 'reportevibracion_instalacion' => $request->reporte_instalacion
-                    , 'reportevibracion_fecha' => $request->reporte_fecha
-                    , 'reporte_mes' => $request->reporte_mes
-
-                    , 'reportevibracion_alcanceinforme' => $request->reporte_alcanceinforme
+                    'reportevibracion_catregion_activo' => $catregion_activo,
+                    'reportevibracion_catsubdireccion_activo' => $catsubdireccion_activo,
+                    'reportevibracion_catgerencia_activo' => $catgerencia_activo,
+                    'reportevibracion_catactivo_activo' => $catactivo_activo,
+                    'reportevibracion_instalacion' => $request->reporte_instalacion,
+                    'reportevibracion_fecha' => $request->reporte_fecha,
+                    'reporte_mes' => $request->reporte_mes,
+                    'reportevibracion_alcanceinforme' => $request->reporte_alcanceinforme
                 ]);
-                
 
-                if(count($proyectoRecursos) == 0){
+
+                if (count($proyectoRecursos) == 0) {
 
                     $recusros = recursosPortadasInformesModel::create([
                         'PROYECTO_ID' => $request->proyecto_id,
@@ -5053,20 +4762,19 @@ class reportevibracionController extends Controller
                         'OPCION_PORTADA5' => is_null($request->OPCION_PORTADA5) ? null : $request->OPCION_PORTADA5,
                         'OPCION_PORTADA6' => is_null($request->OPCION_PORTADA6) ? null : $request->OPCION_PORTADA6
                     ]);
-    
+
                     if ($request->file('PORTADA')) {
                         // Eliminar IMG anterior
                         if (Storage::exists($recusros->RUTA_IMAGEN_PORTADA)) {
                             Storage::delete($recusros->RUTA_IMAGEN_PORTADA);
                         }
-    
+
                         $extension = $request->file('PORTADA')->getClientOriginalExtension();
                         $imgGuardada = $request->file('PORTADA')->storeAs('reportes/proyecto/' . $request->proyecto_id . '/' . $request->agente_nombre . '/' . $request->reporteregistro_id . '/imagenPortada', 'PORTADA_IAMGEN.' . $extension);
 
                         $recusros->update(['RUTA_IMAGEN_PORTADA' => $imgGuardada]);
-
                     }
-                }else{
+                } else {
 
                     foreach ($proyectoRecursos as $recurso) {
                         $recurso->update([
@@ -5094,9 +4802,9 @@ class reportevibracionController extends Controller
 
                             $extension = $request->file('PORTADA')->getClientOriginalExtension();
                             $imgGuardada = $request->file('PORTADA')->storeAs(
-                                    'reportes/proyecto/' . $request->proyecto_id . '/' . $request->agente_nombre . '/' . $request->reporteregistro_id . '/imagenPortada',
-                                    'PORTADA_IMAGEN.' . $extension
-                                );
+                                'reportes/proyecto/' . $request->proyecto_id . '/' . $request->agente_nombre . '/' . $request->reporteregistro_id . '/imagenPortada',
+                                'PORTADA_IMAGEN.' . $extension
+                            );
 
                             $recurso->update(['RUTA_IMAGEN_PORTADA' => $imgGuardada]);
                         }
@@ -5111,8 +4819,7 @@ class reportevibracionController extends Controller
 
 
             // INTRODUCCION
-            if (($request->opcion+0) == 1)
-            {
+            if (($request->opcion + 0) == 1) {
                 $reporte->update([
                     'reportevibracion_introduccion' => $this->datosproyectolimpiartexto($proyecto, $recsensorial, $request->reporte_introduccion)
                 ]);
@@ -5123,38 +4830,35 @@ class reportevibracionController extends Controller
 
 
             // DEFINICIONES
-            if (($request->opcion+0) == 2)
-            {
-                if (!$request->catactivo_id)
-                {
+            if (($request->opcion + 0) == 2) {
+                if (!$request->catactivo_id) {
                     $request['catactivo_id'] = 0; // es es modo cliente y viene en null se pone en cero
                 }
 
-                if (($request->reportedefiniciones_id+0) == 0) //NUEVO
+                if (($request->reportedefiniciones_id + 0) == 0) //NUEVO
                 {
                     DB::statement('ALTER TABLE reportedefiniciones AUTO_INCREMENT = 1;');
 
                     $definicion = reportedefinicionesModel::create([
-                          'agente_id' => $request->agente_id
-                        , 'agente_nombre' => $request->agente_nombre
-                        , 'catactivo_id' => $request->catactivo_id
-                        , 'reportedefiniciones_concepto' => $request->reportedefiniciones_concepto
-                        , 'reportedefiniciones_descripcion' => $request->reportedefiniciones_descripcion
-                        , 'reportedefiniciones_fuente' => $request->reportedefiniciones_fuente
+                        'agente_id' => $request->agente_id,
+                        'agente_nombre' => $request->agente_nombre,
+                        'catactivo_id' => $request->catactivo_id,
+                        'reportedefiniciones_concepto' => $request->reportedefiniciones_concepto,
+                        'reportedefiniciones_descripcion' => $request->reportedefiniciones_descripcion,
+                        'reportedefiniciones_fuente' => $request->reportedefiniciones_fuente
                     ]);
 
                     // Mensaje
                     $dato["msj"] = 'Datos guardados correctamente';
-                }
-                else //EDITAR
+                } else //EDITAR
                 {
                     $definicion = reportedefinicionesModel::findOrFail($request->reportedefiniciones_id);
 
                     $definicion->update([
-                          'catactivo_id' => $request->catactivo_id
-                        , 'reportedefiniciones_concepto' => $request->reportedefiniciones_concepto
-                        , 'reportedefiniciones_descripcion' => $request->reportedefiniciones_descripcion
-                        , 'reportedefiniciones_fuente' => $request->reportedefiniciones_fuente
+                        'catactivo_id' => $request->catactivo_id,
+                        'reportedefiniciones_concepto' => $request->reportedefiniciones_concepto,
+                        'reportedefiniciones_descripcion' => $request->reportedefiniciones_descripcion,
+                        'reportedefiniciones_fuente' => $request->reportedefiniciones_fuente
                     ]);
 
                     // Mensaje
@@ -5164,8 +4868,7 @@ class reportevibracionController extends Controller
 
 
             // OBJETIVO GENERAL
-            if (($request->opcion+0) == 3)
-            {
+            if (($request->opcion + 0) == 3) {
                 $reporte->update([
                     'reportevibracion_objetivogeneral' => $this->datosproyectolimpiartexto($proyecto, $recsensorial, $request->reporte_objetivogeneral)
                 ]);
@@ -5176,8 +4879,7 @@ class reportevibracionController extends Controller
 
 
             // OBJETIVOS  ESPECIFICOS
-            if (($request->opcion+0) == 4)
-            {
+            if (($request->opcion + 0) == 4) {
                 $reporte->update([
                     'reportevibracion_objetivoespecifico' => $this->datosproyectolimpiartexto($proyecto, $recsensorial, $request->reporte_objetivoespecifico)
                 ]);
@@ -5188,8 +4890,7 @@ class reportevibracionController extends Controller
 
 
             // METODOLOGIA PUNTO 4.1
-            if (($request->opcion+0) == 5)
-            {
+            if (($request->opcion + 0) == 5) {
                 $reporte->update([
                     'reportevibracion_metodologia_4_1' => $this->datosproyectolimpiartexto($proyecto, $recsensorial, $request->reporte_metodologia_4_1)
                 ]);
@@ -5200,22 +4901,20 @@ class reportevibracionController extends Controller
 
 
             // UBICACION
-            if (($request->opcion+0) == 6)
-            {
+            if (($request->opcion + 0) == 6) {
                 $reporte->update([
                     'reportevibracion_ubicacioninstalacion' => $this->datosproyectolimpiartexto($proyecto, $recsensorial, $request->reporte_ubicacioninstalacion)
                 ]);
 
                 // si envia archivo
-                if ($request->file('reporteubicacionfoto'))
-                {
+                if ($request->file('reporteubicacionfoto')) {
                     // Codificar imagen recibida como tipo base64
                     $imagen_recibida = explode(',', $request->ubicacionmapa); //Archivo foto tipo base64
                     $imagen_nueva = base64_decode($imagen_recibida[1]);
 
                     // Ruta destino archivo
-                    $destinoPath = 'reportes/proyecto/'.$request->proyecto_id.'/'.$request->agente_nombre.'/'.$reporte->id.'/ubicacionfoto/ubicacionfoto.jpg';
-                    
+                    $destinoPath = 'reportes/proyecto/' . $request->proyecto_id . '/' . $request->agente_nombre . '/' . $reporte->id . '/ubicacionfoto/ubicacionfoto.jpg';
+
                     // Guardar Foto
                     Storage::put($destinoPath, $imagen_nueva); // Guardar en storage
                     // file_put_contents(public_path('/imagen.jpg'), $imagen_nueva); // Guardar en public
@@ -5231,11 +4930,10 @@ class reportevibracionController extends Controller
 
 
             // PROCESO INSTALACION
-            if (($request->opcion+0) == 7)
-            {
+            if (($request->opcion + 0) == 7) {
                 $reporte->update([
-                    'reportevibracion_procesoinstalacion' => $this->datosproyectolimpiartexto($proyecto, $recsensorial, $request->reporte_procesoinstalacion)
-                    , 'reportevibracion_actividadprincipal' => $this->datosproyectolimpiartexto($proyecto, $recsensorial, $request->reporte_actividadprincipal)
+                    'reportevibracion_procesoinstalacion' => $this->datosproyectolimpiartexto($proyecto, $recsensorial, $request->reporte_procesoinstalacion),
+                    'reportevibracion_actividadprincipal' => $this->datosproyectolimpiartexto($proyecto, $recsensorial, $request->reporte_actividadprincipal)
                 ]);
 
                 // Mensaje
@@ -5243,8 +4941,7 @@ class reportevibracionController extends Controller
             }
 
             // AREAS
-            if (($request->opcion+0) == 8)
-            {
+            if (($request->opcion + 0) == 8) {
                 // dd($request->all());
 
 
@@ -5255,15 +4952,13 @@ class reportevibracionController extends Controller
                 $eliminar_categorias = reportevibracionareacategoriaModel::where('reportearea_id', $request->reportearea_id)->delete();
 
 
-                if ($request->checkbox_categoria_id)
-                {
+                if ($request->checkbox_categoria_id) {
                     DB::statement('ALTER TABLE reportevibracionareacategoria AUTO_INCREMENT = 1;');
 
-                    foreach ($request->checkbox_categoria_id as $key => $value) 
-                    {
+                    foreach ($request->checkbox_categoria_id as $key => $value) {
                         $areacategoria = reportevibracionareacategoriaModel::create([
-                              'reportearea_id' => $area->id
-                            , 'reportecategoria_id' => $value
+                            'reportearea_id' => $area->id,
+                            'reportecategoria_id' => $value
                         ]);
                     }
                 }
@@ -5272,16 +4967,14 @@ class reportevibracionController extends Controller
                 $eliminar_maquinaria = reportevibracionareamaquinariaModel::where('reportearea_id', $request->reportearea_id)->delete();
 
 
-                if ($request->reportevibracionmaquinaria_nombre)
-                {
+                if ($request->reportevibracionmaquinaria_nombre) {
                     DB::statement('ALTER TABLE reportevibracionmaquinaria AUTO_INCREMENT = 1;');
 
-                    foreach ($request->reportevibracionmaquinaria_nombre as $key => $value) 
-                    {
+                    foreach ($request->reportevibracionmaquinaria_nombre as $key => $value) {
                         $areamaquinaria = reportevibracionareamaquinariaModel::create([
-                              'reportearea_id' => $area->id
-                            , 'reportevibracionmaquinaria_nombre' => $value
-                            , 'reportevibracionmaquinaria_cantidad' => $request['reportevibracionmaquinaria_cantidad'][$key]
+                            'reportearea_id' => $area->id,
+                            'reportevibracionmaquinaria_nombre' => $value,
+                            'reportevibracionmaquinaria_cantidad' => $request['reportevibracionmaquinaria_cantidad'][$key]
                         ]);
                     }
                 }
@@ -5293,21 +4986,18 @@ class reportevibracionController extends Controller
 
 
             // PUNTO DE EVALUACION
-            if (($request->opcion+0) == 9)
-            {
+            if (($request->opcion + 0) == 9) {
                 // dd($request->all());
 
 
-                if (($request->reportevibracionevaluacion_tipoevaluacion+0) == 1)
-                {
+                if (($request->reportevibracionevaluacion_tipoevaluacion + 0) == 1) {
                     $request['reportevibracionevaluacion_promedio'] = null;
                     $request['reportevibracionevaluacion_valormaximo'] = null;
                     $request['reportevibracionevaluacion_fecha'] = null;
                 }
 
 
-                if (($request->reportevibracionevaluacion_tipoevaluacion+0) == 2)
-                {
+                if (($request->reportevibracionevaluacion_tipoevaluacion + 0) == 2) {
                     $request['reportevibracionevaluacion_tiempoexposicion'] = $request->reportevibracionevaluacion_promedio;
                     $request['reportevibracionevaluacion_promedio'] = null;
                     $request['reportevibracionevaluacion_valormaximo'] = null;
@@ -5315,8 +5005,7 @@ class reportevibracionController extends Controller
                 }
 
 
-                if (($request->reportevibracionevaluacion_tipoevaluacion+0) == 3)
-                {
+                if (($request->reportevibracionevaluacion_tipoevaluacion + 0) == 3) {
                     $request['reportevibracionevaluacion_tiempoexposicion'] = null;
                     $request['reportevibracionevaluacion_numeromediciones'] = null;
                 }
@@ -5325,17 +5014,14 @@ class reportevibracionController extends Controller
                 //----------------------------------------
 
 
-                if (($request->reportevibracionevaluacion_id+0) == 0)
-                {
+                if (($request->reportevibracionevaluacion_id + 0) == 0) {
                     DB::statement('ALTER TABLE reportevibracionevaluacion AUTO_INCREMENT = 1;');
                     $punto = reportevibracionevaluacionModel::create($request->all());
 
 
                     // Mensaje
                     $dato["msj"] = 'Datos guardados correctamente';
-                }
-                else
-                {
+                } else {
                     $punto = reportevibracionevaluacionModel::findOrFail($request->reportevibracionevaluacion_id);
                     $punto->update($request->all());
 
@@ -5352,24 +5038,22 @@ class reportevibracionController extends Controller
                 DB::statement('ALTER TABLE reportevibracionevaluaciondatos AUTO_INCREMENT = 1;');
 
 
-                if (($request->reportevibracionevaluacion_tipoevaluacion+0) <= 2)
-                {
-                    foreach ($request->reportevibracionevaluaciondatos_frecuencia as $key => $value) 
-                    {
+                if (($request->reportevibracionevaluacion_tipoevaluacion + 0) <= 2) {
+                    foreach ($request->reportevibracionevaluaciondatos_frecuencia as $key => $value) {
                         $datos = reportevibracionevaluaciondatosModel::create([
-                              'reportevibracionevaluacion_id' => $punto->id
-                            , 'reportevibracionevaluaciondatos_frecuencia' => $value
-                            , 'reportevibracionevaluaciondatos_az1' => $request['reportevibracionevaluaciondatos_az1'][$key]
-                            , 'reportevibracionevaluaciondatos_az2' => $request['reportevibracionevaluaciondatos_az2'][$key]
-                            , 'reportevibracionevaluaciondatos_az3' => $request['reportevibracionevaluaciondatos_az3'][$key]
-                            , 'reportevibracionevaluaciondatos_azlimite' => $request['reportevibracionevaluaciondatos_azlimite'][$key]
-                            , 'reportevibracionevaluaciondatos_ax1' => $request['reportevibracionevaluaciondatos_ax1'][$key]
-                            , 'reportevibracionevaluaciondatos_ax2' => $request['reportevibracionevaluaciondatos_ax2'][$key]
-                            , 'reportevibracionevaluaciondatos_ax3' => $request['reportevibracionevaluaciondatos_ax3'][$key]
-                            , 'reportevibracionevaluaciondatos_ay1' => $request['reportevibracionevaluaciondatos_ay1'][$key]
-                            , 'reportevibracionevaluaciondatos_ay2' => $request['reportevibracionevaluaciondatos_ay2'][$key]
-                            , 'reportevibracionevaluaciondatos_ay3' => $request['reportevibracionevaluaciondatos_ay3'][$key]
-                            , 'reportevibracionevaluaciondatos_axylimite' => $request['reportevibracionevaluaciondatos_axylimite'][$key]
+                            'reportevibracionevaluacion_id' => $punto->id,
+                            'reportevibracionevaluaciondatos_frecuencia' => $value,
+                            'reportevibracionevaluaciondatos_az1' => $request['reportevibracionevaluaciondatos_az1'][$key],
+                            'reportevibracionevaluaciondatos_az2' => $request['reportevibracionevaluaciondatos_az2'][$key],
+                            'reportevibracionevaluaciondatos_az3' => $request['reportevibracionevaluaciondatos_az3'][$key],
+                            'reportevibracionevaluaciondatos_azlimite' => $request['reportevibracionevaluaciondatos_azlimite'][$key],
+                            'reportevibracionevaluaciondatos_ax1' => $request['reportevibracionevaluaciondatos_ax1'][$key],
+                            'reportevibracionevaluaciondatos_ax2' => $request['reportevibracionevaluaciondatos_ax2'][$key],
+                            'reportevibracionevaluaciondatos_ax3' => $request['reportevibracionevaluaciondatos_ax3'][$key],
+                            'reportevibracionevaluaciondatos_ay1' => $request['reportevibracionevaluaciondatos_ay1'][$key],
+                            'reportevibracionevaluaciondatos_ay2' => $request['reportevibracionevaluaciondatos_ay2'][$key],
+                            'reportevibracionevaluaciondatos_ay3' => $request['reportevibracionevaluaciondatos_ay3'][$key],
+                            'reportevibracionevaluaciondatos_axylimite' => $request['reportevibracionevaluaciondatos_axylimite'][$key]
                         ]);
                     }
                 }
@@ -5377,8 +5061,7 @@ class reportevibracionController extends Controller
 
 
             // CONCLUSION
-            if (($request->opcion+0) == 10)
-            {
+            if (($request->opcion + 0) == 10) {
                 $reporte->update([
                     'reportevibracion_conclusion' => $this->datosproyectolimpiartexto($proyecto, $recsensorial, $request->reporte_conclusion)
                 ]);
@@ -5389,28 +5072,25 @@ class reportevibracionController extends Controller
 
 
             // RECOMENDACIONES
-            if (($request->opcion+0) == 11)
-            {
-                if ($request->recomendacion_checkbox)
-                {
+            if (($request->opcion + 0) == 11) {
+                if ($request->recomendacion_checkbox) {
                     $eliminar_recomendaciones = reporterecomendacionesModel::where('proyecto_id', $request->proyecto_id)
-                                                                            ->where('catactivo_id', $request->catactivo_id)
-                                                                            ->where('agente_nombre', $request->agente_nombre)
-                                                                            ->delete();
+                        ->where('catactivo_id', $request->catactivo_id)
+                        ->where('agente_nombre', $request->agente_nombre)
+                        ->delete();
 
                     DB::statement('ALTER TABLE reporterecomendaciones AUTO_INCREMENT = 1;');
 
-                    foreach ($request->recomendacion_checkbox as $key => $value)
-                    {
+                    foreach ($request->recomendacion_checkbox as $key => $value) {
                         $recomendacion = reporterecomendacionesModel::create([
-                              'agente_id' => $request->agente_id
-                            , 'agente_nombre' => $request->agente_nombre
-                            , 'proyecto_id' => $request->proyecto_id
-                            , 'registro_id' => $reporte->id
-                            , 'catactivo_id' => $request->catactivo_id
-                            , 'reporterecomendacionescatalogo_id' => $value
-                            , 'reporterecomendaciones_tipo' => $request['recomendacion_tipo_'.$value]
-                            , 'reporterecomendaciones_descripcion' => $this->datosproyectolimpiartexto($proyecto, $recsensorial, $request['recomendacion_descripcion_'.$value])
+                            'agente_id' => $request->agente_id,
+                            'agente_nombre' => $request->agente_nombre,
+                            'proyecto_id' => $request->proyecto_id,
+                            'registro_id' => $reporte->id,
+                            'catactivo_id' => $request->catactivo_id,
+                            'reporterecomendacionescatalogo_id' => $value,
+                            'reporterecomendaciones_tipo' => $request['recomendacion_tipo_' . $value],
+                            'reporterecomendaciones_descripcion' => $this->datosproyectolimpiartexto($proyecto, $recsensorial, $request['recomendacion_descripcion_' . $value])
                         ]);
                     }
 
@@ -5419,29 +5099,26 @@ class reportevibracionController extends Controller
                 }
 
 
-                if ($request->recomendacionadicional_checkbox)
-                {
-                    if (!$request->recomendacion_checkbox)
-                    {
+                if ($request->recomendacionadicional_checkbox) {
+                    if (!$request->recomendacion_checkbox) {
                         $eliminar_recomendaciones = reporterecomendacionesModel::where('proyecto_id', $request->proyecto_id)
-                                                                                ->where('catactivo_id', $request->catactivo_id)
-                                                                                ->where('agente_nombre', $request->agente_nombre)
-                                                                                ->delete();
+                            ->where('catactivo_id', $request->catactivo_id)
+                            ->where('agente_nombre', $request->agente_nombre)
+                            ->delete();
                     }
 
                     DB::statement('ALTER TABLE reporterecomendaciones AUTO_INCREMENT = 1;');
 
-                    foreach ($request->recomendacionadicional_checkbox as $key => $value)
-                    {
+                    foreach ($request->recomendacionadicional_checkbox as $key => $value) {
                         $recomendacion = reporterecomendacionesModel::create([
-                              'agente_id' => $request->agente_id
-                            , 'agente_nombre' => $request->agente_nombre
-                            , 'proyecto_id' => $request->proyecto_id
-                            , 'registro_id' => $reporte->id
-                            , 'catactivo_id' => $request->catactivo_id
-                            , 'reporterecomendacionescatalogo_id' => 0
-                            , 'reporterecomendaciones_tipo' => $request->recomendacionadicional_tipo[$key]
-                            , 'reporterecomendaciones_descripcion' => $this->datosproyectolimpiartexto($proyecto, $recsensorial, $request->recomendacionadicional_descripcion[$key])
+                            'agente_id' => $request->agente_id,
+                            'agente_nombre' => $request->agente_nombre,
+                            'proyecto_id' => $request->proyecto_id,
+                            'registro_id' => $reporte->id,
+                            'catactivo_id' => $request->catactivo_id,
+                            'reporterecomendacionescatalogo_id' => 0,
+                            'reporterecomendaciones_tipo' => $request->recomendacionadicional_tipo[$key],
+                            'reporterecomendaciones_descripcion' => $this->datosproyectolimpiartexto($proyecto, $recsensorial, $request->recomendacionadicional_descripcion[$key])
                         ]);
                     }
 
@@ -5452,8 +5129,8 @@ class reportevibracionController extends Controller
 
                 // total recomendaciones
                 $recomendaciones = reporterecomendacionesModel::where('proyecto_id', $request->proyecto_id)
-                                                                ->where('agente_nombre', $request->agente_nombre)
-                                                                ->get();
+                    ->where('agente_nombre', $request->agente_nombre)
+                    ->get();
 
 
                 $dato["dashboard_recomendaciones"] = count($recomendaciones);
@@ -5461,39 +5138,36 @@ class reportevibracionController extends Controller
 
 
             // RESPONSABLES DEL INFORME
-            if (($request->opcion+0) == 12)
-            {
+            if (($request->opcion + 0) == 12) {
                 $reporte->update([
-                      'reportevibracion_responsable1' => $request->reporte_responsable1
-                    , 'reportevibracion_responsable1cargo' => $request->reporte_responsable1cargo
-                    , 'reportevibracion_responsable2' => $request->reporte_responsable2
-                    , 'reportevibracion_responsable2cargo' => $request->reporte_responsable2cargo
+                    'reportevibracion_responsable1' => $request->reporte_responsable1,
+                    'reportevibracion_responsable1cargo' => $request->reporte_responsable1cargo,
+                    'reportevibracion_responsable2' => $request->reporte_responsable2,
+                    'reportevibracion_responsable2cargo' => $request->reporte_responsable2cargo
                 ]);
 
 
-                if ($request->responsablesinforme_carpetadocumentoshistorial)
-                {
-                    $nuevo_destino = 'reportes/proyecto/'.$request->proyecto_id.'/'.$request->agente_nombre.'/'.$reporte->id.'/responsables informe/';
+                if ($request->responsablesinforme_carpetadocumentoshistorial) {
+                    $nuevo_destino = 'reportes/proyecto/' . $request->proyecto_id . '/' . $request->agente_nombre . '/' . $reporte->id . '/responsables informe/';
                     Storage::makeDirectory($nuevo_destino); //crear directorio
 
-                    File::copyDirectory(storage_path('app/'.$request->responsablesinforme_carpetadocumentoshistorial), storage_path('app/'.$nuevo_destino));
+                    File::copyDirectory(storage_path('app/' . $request->responsablesinforme_carpetadocumentoshistorial), storage_path('app/' . $nuevo_destino));
 
                     $reporte->update([
-                          'reportevibracion_responsable1documento' => $nuevo_destino.'responsable1_doc.jpg'
-                        , 'reportevibracion_responsable2documento' => $nuevo_destino.'responsable2_doc.jpg'
+                        'reportevibracion_responsable1documento' => $nuevo_destino . 'responsable1_doc.jpg',
+                        'reportevibracion_responsable2documento' => $nuevo_destino . 'responsable2_doc.jpg'
                     ]);
                 }
 
 
-                if ($request->file('reporteresponsable1documento'))
-                {
+                if ($request->file('reporteresponsable1documento')) {
                     // Codificar imagen recibida como tipo base64
                     $imagen_recibida = explode(',', $request->reporte_responsable1_documentobase64); //Archivo foto tipo base64
                     $imagen_nueva = base64_decode($imagen_recibida[1]);
 
                     // Ruta destino archivo
-                    $destinoPath = 'reportes/proyecto/'.$request->proyecto_id.'/'.$request->agente_nombre.'/'.$reporte->id.'/responsables informe/responsable1_doc.jpg';
-                    
+                    $destinoPath = 'reportes/proyecto/' . $request->proyecto_id . '/' . $request->agente_nombre . '/' . $reporte->id . '/responsables informe/responsable1_doc.jpg';
+
                     // Guardar Foto
                     Storage::put($destinoPath, $imagen_nueva); // Guardar en storage
                     // file_put_contents(public_path('/imagen.jpg'), $imagen_nueva); // Guardar en public
@@ -5504,15 +5178,14 @@ class reportevibracionController extends Controller
                 }
 
 
-                if ($request->file('reporteresponsable2documento'))
-                {
+                if ($request->file('reporteresponsable2documento')) {
                     // Codificar imagen recibida como tipo base64
                     $imagen_recibida = explode(',', $request->reporte_responsable2_documentobase64); //Archivo foto tipo base64
                     $imagen_nueva = base64_decode($imagen_recibida[1]);
 
                     // Ruta destino archivo
-                    $destinoPath = 'reportes/proyecto/'.$request->proyecto_id.'/'.$request->agente_nombre.'/'.$reporte->id.'/responsables informe/responsable2_doc.jpg';
-                    
+                    $destinoPath = 'reportes/proyecto/' . $request->proyecto_id . '/' . $request->agente_nombre . '/' . $reporte->id . '/responsables informe/responsable2_doc.jpg';
+
                     // Guardar Foto
                     Storage::put($destinoPath, $imagen_nueva); // Guardar en storage
                     // file_put_contents(public_path('/imagen.jpg'), $imagen_nueva); // Guardar en public
@@ -5528,33 +5201,28 @@ class reportevibracionController extends Controller
 
 
             // PLANOS
-            if (($request->opcion+0) == 13)
-            {
+            if (($request->opcion + 0) == 13) {
                 $eliminar_carpetasplanos = reporteplanoscarpetasModel::where('proyecto_id', $request->proyecto_id)
-                                                                        ->where('agente_nombre', $request->agente_nombre)
-                                                                        ->delete();
+                    ->where('agente_nombre', $request->agente_nombre)
+                    ->delete();
 
 
-                if ($request->planoscarpeta_checkbox)
-                {
+                if ($request->planoscarpeta_checkbox) {
                     DB::statement('ALTER TABLE reporteplanoscarpetas AUTO_INCREMENT = 1;');
 
                     $dato["total"] = 0;
-                    foreach ($request->planoscarpeta_checkbox as $key => $value)
-                    {
+                    foreach ($request->planoscarpeta_checkbox as $key => $value) {
                         $anexo = reporteplanoscarpetasModel::create([
-                              'proyecto_id' => $request->proyecto_id
-                            , 'agente_id' => $request->agente_id
-                            , 'agente_nombre' => $request->agente_nombre
-                            , 'registro_id' => $reporte->id
-                            , 'reporteplanoscarpetas_nombre' => str_replace(['\\', '/', ':', '*', '"', '?', '<', '>', '|'], '-', $value)
+                            'proyecto_id' => $request->proyecto_id,
+                            'agente_id' => $request->agente_id,
+                            'agente_nombre' => $request->agente_nombre,
+                            'registro_id' => $reporte->id,
+                            'reporteplanoscarpetas_nombre' => str_replace(['\\', '/', ':', '*', '"', '?', '<', '>', '|'], '-', $value)
                         ]);
 
                         $dato["total"] += 1;
                     }
-                }
-                else
-                {
+                } else {
                     $dato["total"] = 0;
                 }
 
@@ -5564,46 +5232,40 @@ class reportevibracionController extends Controller
 
 
             // EQUIPO UTILIZADO
-            if (($request->opcion+0) == 14)
-            {
+            if (($request->opcion + 0) == 14) {
                 // dd($request->all());
 
-                if ($request->equipoutilizado_checkbox)
-                {
+                if ($request->equipoutilizado_checkbox) {
                     $eliminar_equiposutilizados = reporteequiposutilizadosModel::where('proyecto_id', $request->proyecto_id)
-                                                                                ->where('agente_nombre', $request->agente_nombre)
-                                                                                ->where('registro_id', $request->reporteregistro_id)
-                                                                                ->delete();
+                        ->where('agente_nombre', $request->agente_nombre)
+                        ->where('registro_id', $request->reporteregistro_id)
+                        ->delete();
 
 
                     DB::statement('ALTER TABLE reporteequiposutilizados AUTO_INCREMENT = 1;');
 
 
-                    foreach ($request->equipoutilizado_checkbox as $key => $value)
-                    {
-                        if ($request['equipoutilizado_checkboxcarta_'.$value])
-                        {
+                    foreach ($request->equipoutilizado_checkbox as $key => $value) {
+                        if ($request['equipoutilizado_checkboxcarta_' . $value]) {
                             $request->reporteequiposutilizados_cartacalibracion = 1;
-                        }
-                        else
-                        {
+                        } else {
                             $request->reporteequiposutilizados_cartacalibracion = null;
                         }
 
 
                         $equipoutilizado = reporteequiposutilizadosModel::create([
-                              'proyecto_id' => $request->proyecto_id
-                            , 'agente_id' => $request->agente_id
-                            , 'agente_nombre' => $request->agente_nombre
-                            , 'registro_id' => $reporte->id
-                            , 'equipo_id' => $value
-                            , 'reporteequiposutilizados_cartacalibracion' => $request->reporteequiposutilizados_cartacalibracion
+                            'proyecto_id' => $request->proyecto_id,
+                            'agente_id' => $request->agente_id,
+                            'agente_nombre' => $request->agente_nombre,
+                            'registro_id' => $reporte->id,
+                            'equipo_id' => $value,
+                            'reporteequiposutilizados_cartacalibracion' => $request->reporteequiposutilizados_cartacalibracion
                         ]);
                     }
 
 
                     // $files = Storage::disk('local')->files('reportes/proyecto/'.$request->proyecto_id.'/'.$request->agente_nombre.'/'.$request->reporteregistro_id.'/equipos utilizados cartas');
-                    
+
                     // foreach ($files as $file)
                     // {
                     //     $carta = reporteequiposutilizadosModel::where('proyecto_id', $request->proyecto_id)
@@ -5628,37 +5290,33 @@ class reportevibracionController extends Controller
 
 
             // INFORMES RESULTADOS
-            if (($request->opcion+0) == 15)
-            {
+            if (($request->opcion + 0) == 15) {
                 $eliminar_anexos = reporteanexosModel::where('proyecto_id', $request->proyecto_id)
-                                                    ->where('agente_nombre', $request->agente_nombre)
-                                                    ->where('reporteanexos_tipo', 1) // INFORMES DE RESULTADOS
-                                                    ->delete();
+                    ->where('agente_nombre', $request->agente_nombre)
+                    ->where('reporteanexos_tipo', 1) // INFORMES DE RESULTADOS
+                    ->delete();
 
 
-                if ($request->anexoresultado_checkbox)
-                {
+                if ($request->anexoresultado_checkbox) {
                     DB::statement('ALTER TABLE reporteanexos AUTO_INCREMENT = 1;');
 
 
                     $dato["total"] = 0;
-                    foreach ($request->anexoresultado_checkbox as $key => $value)
-                    {
+                    foreach ($request->anexoresultado_checkbox as $key => $value) {
                         $anexo = reporteanexosModel::create([
-                              'proyecto_id' => $request->proyecto_id
-                            , 'agente_id' => $request->agente_id
-                            , 'agente_nombre' => $request->agente_nombre
-                            , 'registro_id' => $reporte->id
-                            , 'reporteanexos_tipo' => 1  // INFORMES DE RESULTADOS
-                            , 'reporteanexos_anexonombre' => str_replace(['\\', '/', ':', '*', '"', '?', '<', '>', '|'], '-', $request['anexoresultado_nombre_'.$value])
-                            , 'reporteanexos_rutaanexo' => $request['anexoresultado_archivo_'.$value]
+                            'proyecto_id' => $request->proyecto_id,
+                            'agente_id' => $request->agente_id,
+                            'agente_nombre' => $request->agente_nombre,
+                            'registro_id' => $reporte->id,
+                            'reporteanexos_tipo' => 1  // INFORMES DE RESULTADOS
+                            ,
+                            'reporteanexos_anexonombre' => str_replace(['\\', '/', ':', '*', '"', '?', '<', '>', '|'], '-', $request['anexoresultado_nombre_' . $value]),
+                            'reporteanexos_rutaanexo' => $request['anexoresultado_archivo_' . $value]
                         ]);
 
                         $dato["total"] += 1;
                     }
-                }
-                else
-                {
+                } else {
                     $dato["total"] = 0;
                 }
 
@@ -5669,37 +5327,33 @@ class reportevibracionController extends Controller
 
 
             // ANEXOS 7 STPS y 8 EMA
-            if (($request->opcion+0) == 16)
-            {
+            if (($request->opcion + 0) == 16) {
                 $eliminar_anexos = reporteanexosModel::where('proyecto_id', $request->proyecto_id)
-                                                    ->where('agente_nombre', $request->agente_nombre)
-                                                    ->where('reporteanexos_tipo', 2) // ANEXOS TIPO STPS Y EMA
-                                                    ->delete();
+                    ->where('agente_nombre', $request->agente_nombre)
+                    ->where('reporteanexos_tipo', 2) // ANEXOS TIPO STPS Y EMA
+                    ->delete();
 
 
-                if ($request->anexoacreditacion_checkbox)
-                {
+                if ($request->anexoacreditacion_checkbox) {
                     DB::statement('ALTER TABLE reporteanexos AUTO_INCREMENT = 1;');
 
 
                     $dato["total"] = 0;
-                    foreach ($request->anexoacreditacion_checkbox as $key => $value)
-                    {
+                    foreach ($request->anexoacreditacion_checkbox as $key => $value) {
                         $anexo = reporteanexosModel::create([
-                              'proyecto_id' => $request->proyecto_id
-                            , 'agente_id' => $request->agente_id
-                            , 'agente_nombre' => $request->agente_nombre
-                            , 'registro_id' => $reporte->id
-                            , 'reporteanexos_tipo' => 2  // ANEXOS TIPO STPS Y EMA
-                            , 'reporteanexos_anexonombre' => ($key+1).'.- '.str_replace(['\\', '/', ':', '*', '"', '?', '<', '>', '|'], '-', $request['anexoacreditacion_nombre_'.$value])
-                            , 'reporteanexos_rutaanexo' => $request['anexoacreditacion_archivo_'.$value]
+                            'proyecto_id' => $request->proyecto_id,
+                            'agente_id' => $request->agente_id,
+                            'agente_nombre' => $request->agente_nombre,
+                            'registro_id' => $reporte->id,
+                            'reporteanexos_tipo' => 2  // ANEXOS TIPO STPS Y EMA
+                            ,
+                            'reporteanexos_anexonombre' => ($key + 1) . '.- ' . str_replace(['\\', '/', ':', '*', '"', '?', '<', '>', '|'], '-', $request['anexoacreditacion_nombre_' . $value]),
+                            'reporteanexos_rutaanexo' => $request['anexoacreditacion_archivo_' . $value]
                         ]);
 
                         $dato["total"] += 1;
                     }
-                }
-                else
-                {
+                } else {
                     $dato["total"] = 0;
                 }
 
@@ -5709,8 +5363,7 @@ class reportevibracionController extends Controller
 
 
             // REVISION INFORME, CANCELACION
-            if (($request->opcion+0) == 17)
-            {
+            if (($request->opcion + 0) == 17) {
                 $revision = reporterevisionesModel::findOrFail($request->reporterevisiones_id);
 
 
@@ -5720,26 +5373,24 @@ class reportevibracionController extends Controller
                 $canceladoobservacion = NULL;
 
 
-                if ($revision->reporterevisiones_cancelado == 0)
-                {
-                    $cancelado = 1;                
-                    $canceladonombre = auth()->user()->empleado->empleado_nombre." ".auth()->user()->empleado->empleado_apellidopaterno." ".auth()->user()->empleado->empleado_apellidomaterno;
+                if ($revision->reporterevisiones_cancelado == 0) {
+                    $cancelado = 1;
+                    $canceladonombre = auth()->user()->empleado->empleado_nombre . " " . auth()->user()->empleado->empleado_apellidopaterno . " " . auth()->user()->empleado->empleado_apellidomaterno;
                     $canceladofecha = date('Y-m-d H:i:s');
                     $canceladoobservacion = $request->reporte_canceladoobservacion;
                 }
 
 
                 $revision->update([
-                      'reporterevisiones_cancelado' => $cancelado
-                    , 'reporterevisiones_canceladonombre' => $canceladonombre
-                    , 'reporterevisiones_canceladofecha' => $canceladofecha
-                    , 'reporterevisiones_canceladoobservacion' => $canceladoobservacion
+                    'reporterevisiones_cancelado' => $cancelado,
+                    'reporterevisiones_canceladonombre' => $canceladonombre,
+                    'reporterevisiones_canceladofecha' => $canceladofecha,
+                    'reporterevisiones_canceladoobservacion' => $canceladoobservacion
                 ]);
 
 
                 $dato["estado"] = 0;
-                if ($revision->reporterevisiones_concluido == 1 || $cancelado == 1)
-                {
+                if ($revision->reporterevisiones_concluido == 1 || $cancelado == 1) {
                     $dato["estado"] = 1;
                 }
 
@@ -5751,11 +5402,9 @@ class reportevibracionController extends Controller
             // respuesta
             $dato["reporteregistro_id"] = $reporte->id;
             return response()->json($dato);
-        }
-        catch(Exception $e)
-        {
+        } catch (Exception $e) {
             // respuesta
-            $dato["msj"] = 'Error '.$e->getMessage();
+            $dato["msj"] = 'Error ' . $e->getMessage();
             return response()->json($dato);
         }
     }
