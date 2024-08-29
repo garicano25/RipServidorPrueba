@@ -1188,7 +1188,7 @@ class reportequimicosController extends Controller
                                         reportequimicosgrupos.proveedor_id,
                                         proveedor.proveedor_NombreComercial,
                                         reportequimicosgrupos.catreportequimicospartidas_id,
-                                        -- clientepartidas.clientepartidas_descripcion,
+                                        reportequimicosproyecto.cantidad,
                                         reportequimicosgrupos.reportequimicosproyecto_id,
                                         reportequimicosproyecto.reportequimicosproyecto_parametro,
                                         (
@@ -2422,14 +2422,22 @@ class reportequimicosController extends Controller
                                                     END
                                                 ) AS orden,
                                                 reportequimicosevaluacionparametro.reportequimicosevaluacionparametro_metodo,
-                                                reportequimicosevaluacionparametro.reportequimicosevaluacionparametro_concentracion AS concentracion_texto,
-                                                -- (REPLACE(REPLACE(REPLACE(reportequimicosevaluacionparametro.reportequimicosevaluacionparametro_concentracion, "<", ""), ">", ""), " ", "") + 0) AS concentracion,
+                                                CONCAT(reportequimicosevaluacionparametro.reportequimicosevaluacionparametro_concentracion," ", reportequimicosevaluacionparametro.reportequimicosevaluacionparametro_unidad) AS concentracion_texto,
+
+                                                (REPLACE(REPLACE(REPLACE(reportequimicosevaluacionparametro.reportequimicosevaluacionparametro_concentracion, "<", ""), ">", ""), " ", "") + 0) AS concentracion,
+                                                
                                                 (REPLACE(REPLACE(reportequimicosevaluacionparametro.reportequimicosevaluacionparametro_concentracion, "<", "reportequimicosevaluacionparametro_valorlimite - "), ">", "reportequimicosevaluacionparametro_valorlimite + ") + 0) AS concentracion,
+                                                
+                                                CONCAT(reportequimicosevaluacionparametro.reportequimicosevaluacionparametro_valorlimite," ", reportequimicosevaluacionparametro.reportequimicosevaluacionparametro_unidad) AS valorlimiteTexto,
+
                                                 reportequimicosevaluacionparametro.reportequimicosevaluacionparametro_valorlimite AS valorlimite,
+                                                
+                                                CONCAT(reportequimicosevaluacionparametro.reportequimicosevaluacionparametro_limitesuperior, " ", reportequimicosevaluacionparametro.reportequimicosevaluacionparametro_unidad) AS limitesuperiorTexto,
+
                                                 reportequimicosevaluacionparametro.reportequimicosevaluacionparametro_limitesuperior AS limitesuperior,
+                                                
                                                 reportequimicosevaluacionparametro.reportequimicosevaluacionparametro_periodo,
-                                                -- IF((REPLACE(REPLACE(REPLACE(reportequimicosevaluacionparametro.reportequimicosevaluacionparametro_concentracion, "<", ""), ">", ""), " ", "") + 0) <= reportequimicosevaluacionparametro.reportequimicosevaluacionparametro_valorlimite, "Dentro de norma", "Fuera de norma") AS resultado_texto,
-                                                -- IF((REPLACE(REPLACE(REPLACE(reportequimicosevaluacionparametro.reportequimicosevaluacionparametro_concentracion, "<", ""), ">", ""), " ", "") + 0) <= reportequimicosevaluacionparametro.reportequimicosevaluacionparametro_valorlimite, "#00FF00", "#FF0000") AS resultado_color
+                                               
                                                 IF((REPLACE(REPLACE(reportequimicosevaluacionparametro.reportequimicosevaluacionparametro_concentracion, "<", "reportequimicosevaluacionparametro_valorlimite - "), ">", "reportequimicosevaluacionparametro_valorlimite + ") + 0) <= reportequimicosevaluacionparametro.reportequimicosevaluacionparametro_valorlimite, "Dentro de norma", "Fuera de norma") AS resultado_texto,
                                                 IF((REPLACE(REPLACE(reportequimicosevaluacionparametro.reportequimicosevaluacionparametro_concentracion, "<", "reportequimicosevaluacionparametro_valorlimite - "), ">", "reportequimicosevaluacionparametro_valorlimite + ") + 0) <= reportequimicosevaluacionparametro.reportequimicosevaluacionparametro_valorlimite, "#00FF00", "#FF0000") AS resultado_color
                                             FROM
@@ -2477,14 +2485,16 @@ class reportequimicosController extends Controller
                                                     END
                                                 ) AS orden,
                                                 reportequimicosevaluacionparametro.reportequimicosevaluacionparametro_metodo,
-                                                reportequimicosevaluacionparametro.reportequimicosevaluacionparametro_concentracion AS concentracion_texto,
-                                                -- (REPLACE(REPLACE(REPLACE(reportequimicosevaluacionparametro.reportequimicosevaluacionparametro_concentracion, "<", ""), ">", ""), " ", "") + 0) AS concentracion,
+                                                 CONCAT(reportequimicosevaluacionparametro.reportequimicosevaluacionparametro_concentracion," ", reportequimicosevaluacionparametro.reportequimicosevaluacionparametro_unidad) AS concentracion_texto,
                                                 (REPLACE(REPLACE(reportequimicosevaluacionparametro.reportequimicosevaluacionparametro_concentracion, "<", "reportequimicosevaluacionparametro_valorlimite - "), ">", "reportequimicosevaluacionparametro_valorlimite + ") + 0) AS concentracion,
+                                                CONCAT(reportequimicosevaluacionparametro.reportequimicosevaluacionparametro_valorlimite," ", reportequimicosevaluacionparametro.reportequimicosevaluacionparametro_unidad) AS valorlimiteTexto,
+
                                                 reportequimicosevaluacionparametro.reportequimicosevaluacionparametro_valorlimite AS valorlimite,
+                                                
+                                                CONCAT(reportequimicosevaluacionparametro.reportequimicosevaluacionparametro_limitesuperior, " ", reportequimicosevaluacionparametro.reportequimicosevaluacionparametro_unidad) AS limitesuperiorTexto,
+
                                                 reportequimicosevaluacionparametro.reportequimicosevaluacionparametro_limitesuperior AS limitesuperior,
                                                 reportequimicosevaluacionparametro.reportequimicosevaluacionparametro_periodo,
-                                                -- IF((REPLACE(REPLACE(REPLACE(reportequimicosevaluacionparametro.reportequimicosevaluacionparametro_concentracion, "<", ""), ">", ""), " ", "") + 0) <= reportequimicosevaluacionparametro.reportequimicosevaluacionparametro_valorlimite, "Dentro de norma", "Fuera de norma") AS resultado_texto,
-                                                -- IF((REPLACE(REPLACE(REPLACE(reportequimicosevaluacionparametro.reportequimicosevaluacionparametro_concentracion, "<", ""), ">", ""), " ", "") + 0) <= reportequimicosevaluacionparametro.reportequimicosevaluacionparametro_valorlimite, "#00FF00", "#FF0000") AS resultado_color
                                                 IF((REPLACE(REPLACE(reportequimicosevaluacionparametro.reportequimicosevaluacionparametro_concentracion, "<", "reportequimicosevaluacionparametro_valorlimite - "), ">", "reportequimicosevaluacionparametro_valorlimite + ") + 0) <= reportequimicosevaluacionparametro.reportequimicosevaluacionparametro_valorlimite, "Dentro de norma", "Fuera de norma") AS resultado_texto,
                                                 IF((REPLACE(REPLACE(reportequimicosevaluacionparametro.reportequimicosevaluacionparametro_concentracion, "<", "reportequimicosevaluacionparametro_valorlimite - "), ">", "reportequimicosevaluacionparametro_valorlimite + ") + 0) <= reportequimicosevaluacionparametro.reportequimicosevaluacionparametro_valorlimite, "#00FF00", "#FF0000") AS resultado_color
                                             FROM
@@ -5601,13 +5611,10 @@ class reportequimicosController extends Controller
                             $parametro = reportequimicosevaluacionparametroModel::create([
                                 'reportequimicosevaluacion_id' => $puntoevaluacion->id,
                                 'reportequimicosevaluacionparametro_parametro' => $value,
-                                'reportequimicosevaluacionparametro_metodo' => $request['reportequimicosevaluacionparametro_metodo'][$key]
-                                // , 'reportequimicosevaluacionparametro_concentracion' => str_replace('<', '˂', str_replace('>', '>', $request['reportequimicosevaluacionparametro_concentracion'][$key]))
-                                ,
+                                'reportequimicosevaluacionparametro_metodo' => $request['reportequimicosevaluacionparametro_metodo'][$key],
+                                'reportequimicosevaluacionparametro_unidad' => $request['reportequimicosevaluacionparametro_unidad'][$key],
                                 'reportequimicosevaluacionparametro_concentracion' => $request['reportequimicosevaluacionparametro_concentracion'][$key],
-                                'reportequimicosevaluacionparametro_valorlimite' => $request['reportequimicosevaluacionparametro_valorlimite'][$key]
-                                // , 'reportequimicosevaluacionparametro_limitesuperior' => str_replace('<', '˂', str_replace('>', '>', $request['reportequimicosevaluacionparametro_limitesuperior'][$key]))
-                                ,
+                                'reportequimicosevaluacionparametro_valorlimite' => $request['reportequimicosevaluacionparametro_valorlimite'][$key],
                                 'reportequimicosevaluacionparametro_limitesuperior' => $request['reportequimicosevaluacionparametro_limitesuperior'][$key],
                                 'reportequimicosevaluacionparametro_periodo' => $request['reportequimicosevaluacionparametro_periodo'][$key]
                             ]);
@@ -5631,6 +5638,7 @@ class reportequimicosController extends Controller
                                 'reportequimicosevaluacion_id' => $puntoevaluacion->id,
                                 'reportequimicosevaluacionparametro_parametro' => $value,
                                 'reportequimicosevaluacionparametro_metodo' => $request['reportequimicosevaluacionparametro_metodo'][$key],
+                                'reportequimicosevaluacionparametro_unidad' => $request['reportequimicosevaluacionparametro_unidad'][$key],
                                 'reportequimicosevaluacionparametro_concentracion' => $request['reportequimicosevaluacionparametro_concentracion'][$key],
                                 'reportequimicosevaluacionparametro_valorlimite' => $request['reportequimicosevaluacionparametro_valorlimite'][$key],
                                 'reportequimicosevaluacionparametro_limitesuperior' => $request['reportequimicosevaluacionparametro_limitesuperior'][$key],

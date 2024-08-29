@@ -226,6 +226,7 @@
 								<tr>
 									<th width="">Laboratorio</th>
 									<th width="180">Parametros</th>
+									<th width="180">Cantidad</th>
 									<th width="60">Editar</th>
 									<th width="60">Eliminar</th>
 								</tr>
@@ -884,9 +885,9 @@
 									<th width="">Categoría</th>
 									<th width="">Parámetro</th>
 									<th width="">Método</th>
-									<th width="80">Concentración<br>medida del ambiente<br>(ppm)</th>
-									<th width="80">Valor límite<br>de exposición<br>(ppm)</th>
-									<th width="80">Límite superior<br>de confianza<br>(ppm)</th>
+									<th width="80">Concentración<br>medida del ambiente</th>
+									<th width="80">Valor límite<br>de exposición</th>
+									<th width="80">Límite superior<br>de confianza</th>
 									<th width="80">Periodo de<br>muestreo y<br>evaluación</th>
 									<th width="80">Cumplimiento<br>normativo</th>
 									<th width="60">Editar</th>
@@ -1872,7 +1873,7 @@
 <!-- ============================================================== -->
 <style type="text/css" media="screen">
 	#modal_reporte_puntoevaluacion>.modal-dialog {
-		min-width: 1200px !important;
+		min-width: 1500px !important;
 	}
 
 	#modal_reporte_puntoevaluacion .modal-body .form-group {
@@ -1959,9 +1960,10 @@
 										<tr>
 											<th width="250">Parámetro</th>
 											<th width="">Método</th>
-											<th width="130">Concentración<br>medida del<br>ambiente (ppm)</th>
-											<th width="130">Valor límite<br>de exposición<br>(ppm)</th>
-											<th width="130">Límite superior<br>de confianza<br>(ppm)</th>
+											<th width="">Unidad de <br> medida</th>
+											<th width="130">Concentración<br>medida del<br>ambiente</th>
+											<th width="130">Valor límite<br>de exposición</th>
+											<th width="130">Límite superior<br>de confianza</th>
 											<th width="180">Periodo de<br>muestreo y<br>evaluación</th>
 											<th width="60">Eliminar</th>
 										</tr>
