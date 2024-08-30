@@ -1641,35 +1641,41 @@ class reportetemperaturawordController extends Controller
             $categoria = 'XXXXX';
             $regimen = 'XXXXX';
             $exposicion = 'XXXXX';
+
             foreach ($sql as $key => $value) {
                 $table->addRow(); //fila
+
                 $table->addCell($ancho_col_1, $combinar_fila)->addTextRun($centrado)->addText($value->reportetemperaturaevaluacion_punto, $texto);
 
-
-                if ($trabajador != $value->reportetemperaturaevaluacion_trabajador) {
+                // Si el trabajador o la categoría o el área cambian, crea una nueva celda para el trabajador
+                if ($trabajador != $value->reportetemperaturaevaluacion_trabajador || $categoria != $value->reportecategoria_nombre || $area != $value->reportearea_nombre) {
                     $table->addCell($ancho_col_2, $combinar_fila)->addTextRun($centrado)->addText($value->reportetemperaturaevaluacion_trabajador, $texto);
                     $trabajador = $value->reportetemperaturaevaluacion_trabajador;
                 } else {
                     $table->addCell($ancho_col_2, $continua_fila);
                 }
 
-
-                if ($categoria != $value->reportecategoria_nombre) {
+                // Condición para categoría
+                if (
+                    $categoria != $value->reportecategoria_nombre || $area != $value->reportearea_nombre
+                ) {
                     $table->addCell($ancho_col_3, $combinar_fila)->addTextRun($centrado)->addText($value->reportecategoria_nombre, $texto);
                     $categoria = $value->reportecategoria_nombre;
                 } else {
                     $table->addCell($ancho_col_3, $continua_fila);
                 }
 
-
-                if ($area != $value->reportearea_nombre) {
+                // Condición para área
+                if (
+                    $area != $value->reportearea_nombre
+                ) {
                     $table->addCell($ancho_col_4, $combinar_fila)->addTextRun($centrado)->addText($value->reportearea_nombre, $texto);
                     $area = $value->reportearea_nombre;
                 } else {
                     $table->addCell($ancho_col_4, $continua_fila);
                 }
 
-
+                // Condición para régimen
                 if ($regimen != $value->regimen_texto) {
                     $table->addCell($ancho_col_5, $combinar_fila)->addTextRun($centrado)->addText($value->regimen_texto, $texto);
                     $regimen = $value->regimen_texto;
@@ -1677,34 +1683,33 @@ class reportetemperaturawordController extends Controller
                     $table->addCell($ancho_col_5, $continua_fila);
                 }
 
-
-                if ($exposicion != $value->porcentaje_texto) {
+                // Condición para exposición
+                if (
+                    $exposicion != $value->porcentaje_texto
+                ) {
                     $table->addCell($ancho_col_6, $combinar_fila)->addTextRun($centrado)->addText($value->porcentaje_texto, $texto);
                     $exposicion = $value->porcentaje_texto;
                 } else {
                     $table->addCell($ancho_col_6, $continua_fila);
                 }
 
-
+                // Celdas para I, II, III
                 $table->addCell(($ancho_col_7 / 3), $celda)->addTextRun($centrado)->addText($value->reportetemperaturaevaluacion_I, $texto);
                 $table->addCell(($ancho_col_7 / 3), $celda)->addTextRun($centrado)->addText($value->reportetemperaturaevaluacion_II, $texto);
                 $table->addCell(($ancho_col_7 / 3), $celda)->addTextRun($centrado)->addText($value->reportetemperaturaevaluacion_III, $texto);
                 $table->addCell($ancho_col_8, $celda)->addTextRun($centrado)->addText($value->reportetemperaturaevaluacion_LMPE, $texto);
 
-
-                if ($value->resultado == "Dentro de norma") //Verde
-                {
+                // Condición para resultado
+                if ($value->resultado == "Dentro de norma") { // Verde
                     $text_color = "#000000";
                     $bgColor = "#00FF00";
-
-                    $table->addCell($ancho_col_9, array('bgColor' => $bgColor, 'valign' => 'center'))->addTextRun($centrado)->addText($value->resultado, array('color' => $text_color, 'size' => $font_size, 'bold' => true, 'name' => $fuente));
-                } else {
+                } else { // Rojo
                     $text_color = "#FFFFFF";
                     $bgColor = "#FF0000";
-
-                    $table->addCell($ancho_col_9, array('bgColor' => $bgColor, 'valign' => 'center'))->addTextRun($centrado)->addText($value->resultado, array('color' => $text_color, 'size' => $font_size, 'bold' => true, 'name' => $fuente));
                 }
+                $table->addCell($ancho_col_9, array('bgColor' => $bgColor, 'valign' => 'center'))->addTextRun($centrado)->addText($value->resultado, array('color' => $text_color, 'size' => $font_size, 'bold' => true, 'name' => $fuente));
             }
+
 
 
             $plantillaword->setComplexBlock('TABLA_7_1', $table);
