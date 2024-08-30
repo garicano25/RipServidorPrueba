@@ -1464,7 +1464,7 @@ class reportequimicoswordController extends Controller
                                                 -- reportecategoria.reportecategoria_nombre ASC
                                         ) AS TABLA
                                     WHERE
-                                        TABLA.TABLA.reportequimicosarea_porcientooperacion >= 0
+                                        TABLA.reportequimicosarea_porcientooperacion >= 0
                                         AND TABLA.activo != ""
                                     ORDER BY
                                         TABLA.reportequimicosarea_numorden ASC,
