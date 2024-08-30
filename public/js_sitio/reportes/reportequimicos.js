@@ -9108,85 +9108,27 @@ $('#tabla_reporte_revisiones tbody').on('click', 'td>button.botondescarga', func
 	
 	// Boton descarga
 	$("#"+botondescarga.id).html('<i class="fa fa-spin fa-spinner fa-2x"></i>');
+	$("#"+botondescarga.id).prop('disabled', true);
 
 
-	// Limpiar form
+	// Limpiar form el cual contiene la informacion de las partidas
 	$('#form_modal_imprimirpartida').each(function(){
 		this.reset();
 	});
 
 
-	// Campos Hidden
+	// Campos Hidden - Asignamos valor para poder tener informacion
 	$('#imprimirpartida_registro_id').val(reporteregistro_id);
 	$('#imprimirpartida_revision_id').val(row.data().id);
 	$('#imprimirpartida_ultima_revision').val(row.data().ultima_revision);
 
 
-	// CONSULTA PARTIDAS
-	$.ajax({
-		type: "GET",
-		dataType: "json",
-		url: "/reportequimicospartidashistorial/"+proyecto.id+"/"+reporteregistro_id+"/"+row.data().id,
-		data:{},
-		cache: false,
-		success:function(dato)
-		{
-			$('#imprimirpartida_partida_id').html(dato.partidas_opciones);
-
-
-			// // mensaje
-			// swal({
-			// 	title: "Correcto",
-			// 	text: ""+dato.msj,
-			// 	type: "success", // warning, error, success, info
-			// 	buttons: {
-			// 		visible: false, // true , false
-			// 	},
-			// 	timer: 1500,
-			// 	showConfirmButton: false
-			// });
-
-
-			$("#"+botondescarga.id).html('<i class="fa fa-download fa-2x"></i>');
-		},
-		error: function(dato)
-		{
-			// dashboard_actualizar(proyecto_id, reporteregistro_id, partida_id);
-			console.log("Error al CONSULTAR PARTIDAS HISTORIAL");
-			$('#imprimirpartida_partida_id').html('<option value="">Error al consultar partidas</option>');
-			return false;
-		}
-	});//Fin ajax
-
-
-	// Titulo del modal
-	$('#modal_reporte_imprimirpartida .modal-title').html('Descargar informe de químicos revisión '+row.data().reporterevisiones_revision);
-
-
-	// mostrar modal
-	$('#modal_reporte_imprimirpartida').modal({backdrop:false});
-});
-
-
-$("#botonguardar_modal_imprimirpartida").click(function()
-{
-	// valida campos vacios
-	var valida = this.form.checkValidity();
-	if (valida)
-	{
-		// alert(proyecto.id+' - '+$("#imprimirpartida_registro_id").val()+' - '+$("#imprimirpartida_partida_id").val());
-
-		$('#botonguardar_modal_imprimirpartida').html('Descargando, por favor espere <i class="fa fa-spin fa-spinner"></i>');
-		$('#botonguardar_modal_imprimirpartida').attr('disabled', true);
-
-
-		if (parseInt($("#imprimirpartida_ultima_revision").val()) > 0)
-		{
+	if (parseInt($("#imprimirpartida_ultima_revision").val()) > 0){
 			// ACTUALIZA DASHBOARD
 			$.ajax({
 				type: "GET",
 				dataType: "json",
-				url: "/reportequimicosdashboard/"+proyecto.id+"/"+$("#imprimirpartida_registro_id").val()+"/"+$("#imprimirpartida_partida_id").val()+"/"+areas_poe,
+				url: "/reportequimicosdashboard/"+proyecto.id+"/"+$("#imprimirpartida_registro_id").val()+"/"+ 0 +"/"+areas_poe,
 				data:{},
 				cache: false,
 				success:function(dato)
@@ -9201,22 +9143,8 @@ $("#botonguardar_modal_imprimirpartida").click(function()
 					$("#dashboard_recomendaciones_total").html(dato.dashboard_recomendaciones_total);					
 
 
-					// // mensaje dashboard actualizado
-					// swal({
-					// 	title: "Correcto",
-					// 	text: ""+dato.msj,
-					// 	type: "success", // warning, error, success, info
-					// 	buttons: {
-					// 		visible: false, // true , false
-					// 	},
-					// 	timer: 1500,
-					// 	showConfirmButton: false
-					// });
-
-
-					html2canvas(document.querySelector("#tabla_dashboard"), { scale: 6}).then(canvas =>
-					{
-						// document.getElementById("captura").appendChild(canvas)
+					html2canvas(document.querySelector("#tabla_dashboard"), { scale: 6}).then(canvas =>{
+						
 						var img64 = canvas.toDataURL('image/jpeg');
 
 						// Guardar imagen
@@ -9224,18 +9152,6 @@ $("#botonguardar_modal_imprimirpartida").click(function()
 						{
 							// Enviar datos
 							$.ajax({
-								// type: "POST",
-								// dataType: "json",
-								// url: "/reportequimicosdashboardgraficas",
-								// data:{
-								// 	_token: document.querySelector('meta[name="csrf-token"]')['content'],
-								// 	proyecto_id: proyecto.id,
-								// 	agente_id: agente_id,
-								// 	agente_nombre: agente_nombre,
-								// 	reporteregistro_id: reporteregistro_id,
-								// 	partida_id: $("#imprimirpartida_partida_id").val(),
-								// 	grafica_dashboard: img64,
-								// },
 								type: "POST",
 								dataType: "json",
 								url: "/reportequimicosword",
@@ -9245,21 +9161,19 @@ $("#botonguardar_modal_imprimirpartida").click(function()
 									agente_id: agente_id,
 									agente_nombre: agente_nombre,
 									reporteregistro_id: reporteregistro_id,
-									partida_id: $("#imprimirpartida_partida_id").val(),
+									partida_id: 0,
 									areas_poe: areas_poe,
 									ultimarevision_id: ultimarevision_id,
 									crear_revision: 0,
 									grafica_dashboard: img64,
 								},
 								cache: false,
-								success:function(dato)
-								{
-									// ventana = window.open("/reportequimicosword/"+proyecto.id+"/"+$("#imprimirpartida_registro_id").val()+"/"+$("#imprimirpartida_partida_id").val()+"/"+areas_poe);
-									ventana = window.open('/reportequimicosworddescargar/'+proyecto.id+"/"+$("#imprimirpartida_revision_id").val()+"/"+$("#imprimirpartida_partida_id").val()+"/"+$('#imprimirpartida_ultima_revision').val());
+								success:function(dato){
+									ventana = window.open('/reportequimicosworddescargar/'+proyecto.id+"/"+$("#imprimirpartida_revision_id").val()+"/"+ 0 +"/"+$('#imprimirpartida_ultima_revision').val());
 
 
-									setTimeout(function()
-									{
+									setTimeout(function () {
+										
 										if (ventana.window)
 										{
 											ventana.window.close();
@@ -9267,22 +9181,10 @@ $("#botonguardar_modal_imprimirpartida").click(function()
 									}, 15000);
 
 
-									// // mensaje
-									// swal({
-									// 	title: "Correcto",
-									// 	text: ""+dato.msj,
-									// 	type: "success", // warning, error, success, info
-									// 	buttons: {
-									// 		visible: false, // true , false
-									// 	},
-									// 	timer: 1500,
-									// 	showConfirmButton: false
-									// });
 
-
-									// Boton
-									$('#botonguardar_modal_imprimirpartida').html('Descargar <i class="fa fa-download"></i>');
-									$('#botonguardar_modal_imprimirpartida').attr('disabled', false);
+									// Boton de descaga
+									$("#"+botondescarga.id).html('<i class="fa fa-download"></i>');
+									$("#"+botondescarga.id).prop('disabled', false);
 
 
 									// Actualizar tablas
@@ -9318,11 +9220,11 @@ $("#botonguardar_modal_imprimirpartida").click(function()
 					return false;
 				}
 			});//Fin ajax
-		}
-		else
-		{
-			// ventana = window.open("/reportequimicosword/"+proyecto.id+"/"+$("#imprimirpartida_registro_id").val()+"/"+$("#imprimirpartida_partida_id").val()+"/"+areas_poe);
-			ventana = window.open('/reportequimicosworddescargar/'+proyecto.id+"/"+$("#imprimirpartida_revision_id").val()+"/"+$("#imprimirpartida_partida_id").val()+"/"+$('#imprimirpartida_ultima_revision').val());
+		
+		} else {
+		
+
+			ventana = window.open('/reportequimicosworddescargar/'+proyecto.id+"/"+$("#imprimirpartida_revision_id").val()+"/"+ 0 +"/"+$('#imprimirpartida_ultima_revision').val());
 
 
 			setTimeout(function()
@@ -9336,8 +9238,8 @@ $("#botonguardar_modal_imprimirpartida").click(function()
 
 
 			// Boton
-			$('#botonguardar_modal_imprimirpartida').html('Descargar <i class="fa fa-download"></i>');
-			$('#botonguardar_modal_imprimirpartida').attr('disabled', false);
+			$("#"+botondescarga.id).html('<i class="fa fa-download"></i>');
+			$("#"+botondescarga.id).prop('disabled', false);
 
 
 			// Actualizar tablas
@@ -9345,8 +9247,12 @@ $("#botonguardar_modal_imprimirpartida").click(function()
 		}
 
 		return false;
-	}
+
+
+	
 });
+
+
 
 
 

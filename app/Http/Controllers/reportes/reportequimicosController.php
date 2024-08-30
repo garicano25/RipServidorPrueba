@@ -2781,12 +2781,12 @@ class reportequimicosController extends Controller
                                                 LEFT JOIN catreportequimicospartidas ON reportequimicosgrupos.catreportequimicospartidas_id = catreportequimicospartidas.id
                                                 LEFT JOIN reportequimicosproyecto ON reportequimicosgrupos.reportequimicosproyecto_id = reportequimicosproyecto.id 
                                             WHERE
-                                                reportequimicosgrupos.proyecto_id = ' . $proyecto_id . ' 
-                                                AND reportequimicosgrupos.registro_id = ' . $reporteregistro_id . ' 
-                                                AND reportequimicosgrupos.catreportequimicospartidas_id = ' . $partida_id . ' 
+                                                reportequimicosgrupos.proyecto_id = ? 
+                                                AND reportequimicosgrupos.registro_id = ? 
                                             ORDER BY
                                                 catreportequimicospartidas.catreportequimicospartidas_numero ASC,
-                                                reportequimicosproyecto.reportequimicosproyecto_parametro ASC');
+                                                reportequimicosproyecto.reportequimicosproyecto_parametro ASC
+                                            LIMIT 1', [$proyecto_id, $reporteregistro_id]);
 
 
                 foreach ($parametros as $key => $value) {
