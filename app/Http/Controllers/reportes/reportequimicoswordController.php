@@ -3110,7 +3110,7 @@ class reportequimicoswordController extends Controller
             // TABLA ANEXO 3, DATOS DE LOS CONTAMINANTES EVALUADOS
             //================================================================================
 
-            $parametros = DB::select('CALL sp_anexo3_11_3_informe_quimico_b(?)', [$proyecto_id]);
+            $sql = DB::select('CALL sp_anexo3_11_3_informe_quimico_b(?)', [$proyecto_id]);
 
             $ancho_col_1 = 1500;
             $ancho_col_2 = 1500;
