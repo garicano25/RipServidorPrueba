@@ -3902,65 +3902,73 @@ class reporteairewordController extends Controller
             //================================================================================
 
 
-            $sql = DB::select('SELECT
-                                    reportenotas.id,
-                                    reportenotas.proyecto_id,
-                                    reportenotas.registro_id,
-                                    reportenotas.agente_id,
-                                    reportenotas.agente_nombre,
-                                    reportenotas.reportenotas_tipo,
-                                    reportenotas.reportenotas_descripcion 
-                                FROM
-                                    reportenotas
-                                WHERE
-                                    reportenotas.proyecto_id = ' . $proyecto_id . ' 
-                                    AND reportenotas.registro_id = ' . $reporteregistro_id . ' 
-                                    AND reportenotas.agente_id = 8
-                                ORDER BY
-                                    reportenotas.reportenotas_tipo ASC,
-                                    reportenotas.id ASC');
+            // $sql = DB::select('SELECT
+            //                         reportenotas.id,
+            //                         reportenotas.proyecto_id,
+            //                         reportenotas.registro_id,
+            //                         reportenotas.agente_id,
+            //                         reportenotas.agente_nombre,
+            //                         reportenotas.reportenotas_tipo,
+            //                         reportenotas.reportenotas_descripcion 
+            //                     FROM
+            //                         reportenotas
+            //                     WHERE
+            //                         reportenotas.proyecto_id = '.$proyecto_id.' 
+            //                         AND reportenotas.registro_id = '.$reporteregistro_id.' 
+            //                         AND reportenotas.agente_id = 8
+            //                     ORDER BY
+            //                         reportenotas.reportenotas_tipo ASC,
+            //                         reportenotas.id ASC');
 
 
-            // Crear tablas
-            $table = null;
-            $table = new Table(array('name' => $fuente, 'borderSize' => 1, 'borderColor' => '000000', 'cellMargin' => 40, 'unit' => TblWidth::TWIP));
-            $table2 = new Table(array('name' => $fuente, 'borderSize' => 1, 'borderColor' => '000000', 'cellMargin' => 40, 'unit' => TblWidth::TWIP));
+            // // Crear tablas
+            // $table = null;
+            // $table = new Table(array('name' => $fuente, 'borderSize' => 1, 'borderColor' => '000000', 'cellMargin' => 40, 'unit' => TblWidth::TWIP));
+            // $table2 = new Table(array('name' => $fuente, 'borderSize' => 1, 'borderColor' => '000000', 'cellMargin' => 40, 'unit' => TblWidth::TWIP));
 
-            // encabezado tabla
-            $ancho_col_1 = 9500;
+            // // encabezado tabla
+            // $ancho_col_1 = 9500;
 
-            $total_stps = 0;
-            $total_ema = 0;
+            // $total_stps = 0;
+            // $total_ema = 0;
 
-            foreach ($sql as $key => $value) {
-                if (($value->reportenotas_tipo + 0) == 1) // STPS
-                {
-                    $total_stps += 1;
+            // foreach ($sql as $key => $value)
+            // {
+            //     if (($value->reportenotas_tipo+0) == 1) // STPS
+            //     {
+            //         $total_stps += 1;
 
-                    $table->addRow(12300); //fila
-                    $table->addCell($ancho_col_1, array('gridSpan' => 2, 'valign' => 'center', 'borderTopColor' => 'ffffff', 'borderTopSize' => 1, 'borderRightColor' => 'ffffff', 'borderRightSize' => 1, 'borderBottomColor' => 'ffffff', 'borderBottomSize' => 1, 'borderLeftColor' => 'ffffff', 'borderLeftSize' => 1))->addTextRun(array('align' => 'center', 'spaceBefore' => 0, 'spaceAfter' => 0, 'lineHeight' => 1.15))->addText('</w:t></w:r><w:r><w:rPr><w:b/></w:rPr><w:t>Nota aclaratoria</w:t></w:r><w:r><w:t>:<w:br/><w:br/>' . $value->reportenotas_descripcion, array('color' => '000000', 'size' => 12, 'bold' => false, 'name' => $fuente));
-                } else //EMA
-                {
-                    $total_ema += 1;
+            //         $table->addRow(12300); //fila
+            //         $table->addCell($ancho_col_1, array('gridSpan' => 2, 'valign' => 'center', 'borderTopColor' =>'ffffff', 'borderTopSize' => 1, 'borderRightColor' =>'ffffff', 'borderRightSize' => 1, 'borderBottomColor' =>'ffffff', 'borderBottomSize' => 1, 'borderLeftColor' =>'ffffff', 'borderLeftSize' => 1))->addTextRun(array('align' => 'center', 'spaceBefore' => 0, 'spaceAfter' => 0, 'lineHeight' => 1.15))->addText('</w:t></w:r><w:r><w:rPr><w:b/></w:rPr><w:t>Nota aclaratoria</w:t></w:r><w:r><w:t>:<w:br/><w:br/>'.$value->reportenotas_descripcion, array('color' => '000000', 'size' => 12, 'bold' => false, 'name' => $fuente));
+            //     }
+            //     else //EMA
+            //     {
+            //         $total_ema += 1;
 
-                    $table2->addRow(12300); //fila
-                    $table2->addCell($ancho_col_1, array('gridSpan' => 2, 'valign' => 'center', 'borderTopColor' => 'ffffff', 'borderTopSize' => 1, 'borderRightColor' => 'ffffff', 'borderRightSize' => 1, 'borderBottomColor' => 'ffffff', 'borderBottomSize' => 1, 'borderLeftColor' => 'ffffff', 'borderLeftSize' => 1))->addTextRun(array('align' => 'center', 'spaceBefore' => 0, 'spaceAfter' => 0, 'lineHeight' => 1.15))->addText('</w:t></w:r><w:r><w:rPr><w:b/></w:rPr><w:t>Nota aclaratoria</w:t></w:r><w:r><w:t>:<w:br/><w:br/>' . $value->reportenotas_descripcion, array('color' => '000000', 'size' => 12, 'bold' => false, 'name' => $fuente));
-                }
-            }
-
-
-            if ($total_stps > 0) {
-                $plantillaword->setComplexBlock('NOTA_ACLARATORIA_STPS', $table);
-            } else {
-                $plantillaword->setValue('NOTA_ACLARATORIA_STPS', 'No se encontraron notas aclaratorías');
-            }
+            //         $table2->addRow(12300); //fila
+            //         $table2->addCell($ancho_col_1, array('gridSpan' => 2, 'valign' => 'center', 'borderTopColor' =>'ffffff', 'borderTopSize' => 1, 'borderRightColor' =>'ffffff', 'borderRightSize' => 1, 'borderBottomColor' =>'ffffff', 'borderBottomSize' => 1, 'borderLeftColor' =>'ffffff', 'borderLeftSize' => 1))->addTextRun(array('align' => 'center', 'spaceBefore' => 0, 'spaceAfter' => 0, 'lineHeight' => 1.15))->addText('</w:t></w:r><w:r><w:rPr><w:b/></w:rPr><w:t>Nota aclaratoria</w:t></w:r><w:r><w:t>:<w:br/><w:br/>'.$value->reportenotas_descripcion, array('color' => '000000', 'size' => 12, 'bold' => false, 'name' => $fuente));
+            //     }                
+            // }
 
 
-            if ($total_ema > 0) {
-                $plantillaword->setComplexBlock('NOTA_ACLARATORIA_EMA', $table2);
-            } else {
-                $plantillaword->setValue('NOTA_ACLARATORIA_EMA', 'No se encontraron notas aclaratorías');
-            }
+            // if ($total_stps > 0)
+            // {
+            //     $plantillaword->setComplexBlock('NOTA_ACLARATORIA_STPS', $table);
+            // }
+            // else
+            // {
+            //     $plantillaword->setValue('NOTA_ACLARATORIA_STPS', 'No se encontraron notas aclaratorías');
+            // }
+
+
+            // if ($total_ema > 0)
+            // {
+            //     $plantillaword->setComplexBlock('NOTA_ACLARATORIA_EMA', $table2);
+            // }
+            // else
+            // {
+            //     $plantillaword->setValue('NOTA_ACLARATORIA_EMA', 'No se encontraron notas aclaratorías');
+            // }
 
 
             // $definiciones .= '</w:t></w:r><w:r><w:rPr><w:b/></w:rPr><w:t>'.$value->concepto.'</w:t></w:r><w:r><w:t>'.$value->descripcion.''.$dato['fuente_simbolo'].'<w:br/>';

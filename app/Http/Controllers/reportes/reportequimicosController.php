@@ -131,6 +131,7 @@ class reportequimicosController extends Controller
 
             // ================ DESCOMENTAR DESPUES DE SUBIR AL SERVIDOR =========================
             if (($total_quimicos[0]->total + 0) == 0) {
+
                 $quimicos = DB::select('SELECT
                                             proyectoproveedores.id,
                                             proyectoproveedores.proyecto_id,
@@ -143,11 +144,11 @@ class reportequimicosController extends Controller
                                         FROM
                                             proyectoproveedores 
                                         WHERE
-                                            proyectoproveedores.proyecto_id = ' . $proyecto_id . ' 
+                                            proyectoproveedores.proyecto_id = ? 
                                             AND proyectoproveedores.catprueba_id = 15
                                             AND proyectoproveedores.proyectoproveedores_agente NOT LIKE "%blanco%"
                                         ORDER BY
-                                            proyectoproveedores.proyectoproveedores_agente ASC');
+                                            proyectoproveedores.proyectoproveedores_agente ASC', [$proyecto_id]);
 
 
                 DB::statement('ALTER TABLE reportequimicosproyecto AUTO_INCREMENT = 1;');
@@ -161,129 +162,18 @@ class reportequimicosController extends Controller
                     ]);
                 }
             } else {
-                $quimicos = DB::select('SELECT
-                                            TABLA.id,
-                                            TABLA.proyecto_id,
-                                            TABLA.proveedor_id,
-                                            TABLA.proyectoproveedores_tipoadicional,
-                                            TABLA.catprueba_id,
-                                            TABLA.proyectoproveedores_agente,
-                                            TABLA.proyectoproveedores_puntos,
-                                            TABLA.proyectoproveedores_observacion,
-                                            TABLA.activo
-                                        FROM
-                                            (
-                                                SELECT
-                                                    proyectoproveedores.id,
-                                                    proyectoproveedores.proyecto_id,
-                                                    proyectoproveedores.proveedor_id,
-                                                    proyectoproveedores.proyectoproveedores_tipoadicional,
-                                                    proyectoproveedores.catprueba_id,
-                                                    proyectoproveedores.proyectoproveedores_agente,
-                                                    proyectoproveedores.proyectoproveedores_puntos,
-                                                    proyectoproveedores.proyectoproveedores_observacion,
-                                                    IFNULL((
-                                                        SELECT
-                                                            -- reportequimicosproyecto.proyecto_id, 
-                                                            -- reportequimicosproyecto.id, 
-                                                            IF(IFNULL(reportequimicosproyecto.reportequimicosproyecto_parametro, "") = "", 0, 1)
-                                                        FROM
-                                                            reportequimicosproyecto
-                                                        WHERE
-                                                            reportequimicosproyecto.proyecto_id = proyectoproveedores.proyecto_id
-                                                            AND reportequimicosproyecto.reportequimicosproyecto_parametro = proyectoproveedores.proyectoproveedores_agente
-                                                        LIMIT 1
-                                                    ), 0) AS activo
-                                                FROM
-                                                    proyectoproveedores 
-                                                WHERE
-                                                    proyectoproveedores.proyecto_id = ' . $proyecto_id . '  
-                                                    AND proyectoproveedores.catprueba_id = 15
-                                                    AND proyectoproveedores.proyectoproveedores_agente NOT LIKE "%blanco%"
-                                                ORDER BY
-                                                    proyectoproveedores.proyectoproveedores_agente ASC
-                                            ) AS TABLA
-                                        WHERE
-                                            TABLA.activo = 0
-                                        ORDER BY
-                                            TABLA.proyectoproveedores_agente ASC');
 
-
-                DB::statement('ALTER TABLE reportequimicosproyecto AUTO_INCREMENT = 1;');
-
-
-                foreach ($quimicos as $key => $value) {
-                    $quimico = reportequimicosproyectoModel::create([
-                        'proyecto_id' => $proyecto_id,
-                        'reportequimicosproyecto_parametro' => $value->proyectoproveedores_agente
-                    ]);
-                }
+                $faltantes = DB::select('CALL sp_validar_parametros_faltantes_g(?,?)', [$proyecto_id, $proyecto->recsensorial_id]);
             }
+
             // ================ DESCOMENTAR DESPUES DE SUBIR AL SERVIDOR =========================
 
 
 
 
-            // COPIAR CATEGORIAS DEL RECONOCIMIENTO SENSORIAL
-            //===================================================
 
-            /*
-            $total_categorias = collect(DB::select('SELECT
-                                                        COUNT(reportequimicoscategoria.id) AS TOTAL
-                                                    FROM
-                                                        reportequimicoscategoria
-                                                    WHERE
-                                                        reportequimicoscategoria.proyecto_id = '.$proyecto_id));
 
-            if (($total_categorias[0]->TOTAL + 0) == 0)
-            {
-                $recsensorial_categorias = recsensorialcategoriaModel::where('recsensorial_id', $proyecto->recsensorial_id)
-                                                                        ->orderBy('recsensorialcategoria_nombrecategoria', 'ASC')
-                                                                        ->get();
 
-                DB::statement('ALTER TABLE reportequimicoscategoria AUTO_INCREMENT = 1;');
-                
-                foreach ($recsensorial_categorias as $key => $value)
-                {
-                    $categoria = reportequimicoscategoriaModel::create([
-                          'proyecto_id' => $proyecto_id
-                        , 'recsensorialcategoria_id' => $value->id
-                        , 'reportequimicoscategoria_nombre' => $value->recsensorialcategoria_nombrecategoria
-                    ]);
-                }
-            }
-            */
-
-            // COPIAR AREAS DEL RECONOCIMIENTO SENSORIAL
-            //===================================================
-
-            /*
-            $total_areas = collect(DB::select('SELECT
-                                                    COUNT(reportequimicosarea.id) AS TOTAL
-                                                FROM
-                                                    reportequimicosarea
-                                                WHERE
-                                                    reportequimicosarea.proyecto_id = '.$proyecto_id));
-
-            if (($total_areas[0]->TOTAL + 0) == 0)
-            {
-                $recsensorial_areas = recsensorialareaModel::where('recsensorial_id', $proyecto->recsensorial_id)
-                                                            ->orderBy('recsensorialarea_nombre', 'ASC')
-                                                            ->get();
-
-                DB::statement('ALTER TABLE reportequimicosarea AUTO_INCREMENT = 1;');
-                
-                foreach ($recsensorial_areas as $key => $value)
-                {
-                    $area = reportequimicosareaModel::create([
-                          'proyecto_id' => $proyecto_id
-                        , 'recsensorialarea_id' => $value->id
-                        , 'reportequimicosarea_nombre' => $value->recsensorialarea_nombre
-                        , 'reportequimicosarea_instalacion' => $proyecto->proyecto_clienteinstalacion
-                    ]);
-                }
-            }
-            */
 
             //CATEGORIAS POE
             //===================================================

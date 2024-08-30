@@ -6718,7 +6718,7 @@ function tabla_notas_stps(proyecto_id, reporteregistro_id, agente_nombre)
 					data: {},
 					dataSrc: function (json)
 					{
-						menureporte_estado("menureporte_11_6", parseInt(json.total));
+						menureporte_estado("menureporte_11_6", parseInt(1));
 
 						// alert("Done! "+json.msj);
 						return json.data;
@@ -6822,7 +6822,7 @@ function tabla_notas_ema(proyecto_id, reporteregistro_id, agente_nombre)
 					data: {},
 					dataSrc: function (json)
 					{
-						menureporte_estado("menureporte_11_7", parseInt(json.total));
+						menureporte_estado("menureporte_11_7", parseInt(1));
 
 						// alert("Done! "+json.msj);
 						return json.data;
