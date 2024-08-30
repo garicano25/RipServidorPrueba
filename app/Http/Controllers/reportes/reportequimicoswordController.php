@@ -1636,43 +1636,43 @@ class reportequimicoswordController extends Controller
             $table->addCell($ancho_col_7, $continua_fila);
 
 
-            $sustancia = 'xxxx';
+            $sustancia = null;  // Inicializa $sustancia fuera del bucle
             foreach ($sql as $key => $value) {
-                $table->addRow(); //fila
+                $table->addRow(); // Agrega una fila para cada registro
 
-
+                // Si el producto cambia, entonces agrega una nueva celda para el producto
                 if ($sustancia != $value->PRODUCTO) {
                     $table->addCell($ancho_col_1, $combinar_fila)->addTextRun($centrado)->addText($value->PRODUCTO, $texto);
-                } else {
-                    $table->addCell($ancho_col_1, $continua_fila);
-                }
 
-
-                $table->addCell($ancho_col_2, $celda)->addTextRun($centrado)->addText($value->COMPONENTE, $texto);
-
-
-                if ($sustancia != $value->PRODUCTO) {
+                    // Combina las celdas para las columnas de ponderaciones y prioridad
                     $table->addCell($ancho_col_3, $combinar_fila)->addTextRun($centrado)->addText($value->PONDERACION_CANTIDAD, $texto);
                     $table->addCell($ancho_col_4, $combinar_fila)->addTextRun($centrado)->addText($value->PONDERACION_CLASIFICACION, $texto);
                     $table->addCell($ancho_col_5, $combinar_fila)->addTextRun($centrado)->addText($value->PONDERACION_VOLATILIDAD, $texto);
                     $table->addCell($ancho_col_6, $combinar_fila)->addTextRun($centrado)->addText($value->SUMA_PONDERACIONES, $texto);
 
+                    // Aplica el color y el estilo a la celda de prioridad
                     $texto_color = "#000000";
-                    if ($value->COLOR == "#E74C3C") //Rojo
+                    if ($value->COLOR == "#E74C3C") // Rojo
                     {
                         $texto_color = "#FFFFFF";
                     }
 
                     $table->addCell($ancho_col_7, array('vMerge' => 'restart', 'valign' => 'center', 'bgColor' => $value->COLOR))->addTextRun($centrado)->addText($value->PRIORIDAD, array('color' => $texto_color, 'size' => 10, 'bold' => true, 'name' => $fuente));
 
+                    // Actualiza $sustancia con el nuevo producto
                     $sustancia = $value->PRODUCTO;
                 } else {
+                    // Si el producto es el mismo, las celdas se continúan
+                    $table->addCell($ancho_col_1, $continua_fila);
                     $table->addCell($ancho_col_3, $continua_fila);
                     $table->addCell($ancho_col_4, $continua_fila);
                     $table->addCell($ancho_col_5, $continua_fila);
                     $table->addCell($ancho_col_6, $continua_fila);
                     $table->addCell($ancho_col_7, $continua_fila);
                 }
+
+                // Independientemente del producto, el componente siempre se muestra en una nueva celda
+                $table->addCell($ancho_col_2, $celda)->addTextRun($centrado)->addText($value->COMPONENTE, $texto);
             }
 
 
@@ -3114,12 +3114,12 @@ class reportequimicoswordController extends Controller
 
             $ancho_col_1 = 1500;
             $ancho_col_2 = 1500;
-            $ancho_col_3 = 1600;
-            $ancho_col_4 = 1250;
-            $ancho_col_5 = 1250;
+            // $ancho_col_3 = 1600;
+            $ancho_col_4 = 2850;
+            // $ancho_col_5 = 1250;
             $ancho_col_6 = 2200;
             $ancho_col_7 = 2200;
-            $ancho_col_8 = 1500;
+            $ancho_col_8 = 2750;
 
             // Crear tabla
             $table = null;
