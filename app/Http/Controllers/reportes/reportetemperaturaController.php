@@ -3141,7 +3141,8 @@ class reportetemperaturaController extends Controller
             // INTRODUCCION
             if (($request->opcion + 0) == 1) {
                 $reporte->update([
-                    'reportetemperatura_introduccion' => $this->datosproyectolimpiartexto($proyecto, $recsensorial, $request->reporte_introduccion)
+                    // 'reportetemperatura_introduccion' => $this->datosproyectolimpiartexto($proyecto, $recsensorial, $request->reporte_introduccion)
+                    'reportetemperatura_introduccion' => $request->reporte_introduccion
                 ]);
 
                 // Mensaje
