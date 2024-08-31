@@ -1832,6 +1832,8 @@ class reportequimicoswordController extends Controller
                                         TABLA.periodo,
                                         TABLA.resultado_texto,
                                         TABLA.resultado_color,
+                                        TABLA.valorlimiteTexto, 
+                                        TABLA.limitesuperiorTexto
                                         (
                                             CASE
                                                 WHEN TABLA.parametro LIKE "Benceno%" THEN 1
@@ -1868,6 +1870,7 @@ class reportequimicoswordController extends Controller
                                                 reportequimicosevaluacionparametro.reportequimicosevaluacionparametro_concentracion AS concentracion_texto,
                                                 -- (REPLACE(REPLACE(REPLACE(reportequimicosevaluacionparametro.reportequimicosevaluacionparametro_concentracion, "˂", ""), ">", ""), " ", "") + 0) AS concentracion,
                                                 (REPLACE(REPLACE(reportequimicosevaluacionparametro.reportequimicosevaluacionparametro_concentracion, "<", "reportequimicosevaluacionparametro_valorlimite - "), ">", "reportequimicosevaluacionparametro_valorlimite + ") + 0) AS concentracion,
+
                                                  CONCAT(reportequimicosevaluacionparametro.reportequimicosevaluacionparametro_valorlimite," ", reportequimicosevaluacionparametro.reportequimicosevaluacionparametro_unidad) AS valorlimiteTexto,
 
                                                 reportequimicosevaluacionparametro.reportequimicosevaluacionparametro_valorlimite AS valorlimite,
@@ -1926,6 +1929,8 @@ class reportequimicoswordController extends Controller
                                         TABLA.periodo,
                                         TABLA.resultado_texto,
                                         TABLA.resultado_color,
+                                        TABLA.valorlimiteTexto, 
+                                        TABLA.limitesuperiorTexto
                                         (
                                             CASE
                                                 WHEN TABLA.parametro LIKE "Benceno%" THEN 1
