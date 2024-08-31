@@ -3900,7 +3900,7 @@ class reportequimicosController extends Controller
             }
 
 
-            $equipos = DB::select('SELECT
+            $equipos = DB::select('SELECT DISTINCT
                                         proyectoequiposactual.proyecto_id,
                                         proyectoequiposactual.proveedor_id,
                                         proveedor.proveedor_NombreComercial,
@@ -3965,7 +3965,6 @@ class reportequimicosController extends Controller
                                         LEFT JOIN equipo ON proyectoequiposactual.equipo_id = equipo.id
                                     WHERE
                                         proyectoequiposactual.proyecto_id = ' . $proyecto_id . ' 
-                                        ' . $where_condicion . ' 
                                     ORDER BY
                                         proveedor.proveedor_NombreComercial ASC,
                                         equipo.equipo_Descripcion ASC,

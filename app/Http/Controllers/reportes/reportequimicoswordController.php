@@ -3171,7 +3171,7 @@ class reportequimicoswordController extends Controller
             $table = new Table(array('name' => $fuente, 'borderSize' => 1, 'borderColor' => '000000', 'cellMargin' => 40, 'unit' => TblWidth::TWIP));
 
 
-            $sql = DB::select('SELECT
+            $sql = DB::select('SELECT DISTINCT
                                     reporteequiposutilizados.proyecto_id,
                                     reporteequiposutilizados.registro_id,
                                     reporteequiposutilizados.agente_nombre,
@@ -3353,7 +3353,7 @@ class reportequimicoswordController extends Controller
                                     FROM
                                         (
                                             (
-                                                SELECT
+                                                SELECT DISTINCT
                                                     CONCAT("Certificado equipo ", equipo.equipo_Descripcion, " (", equipo.equipo_Serie, ")") AS nombre,
                                                     equipos_documentos.RUTA_DOCUMENTO AS archivo
                                                 FROM
