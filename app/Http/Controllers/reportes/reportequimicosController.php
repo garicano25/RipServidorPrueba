@@ -5215,7 +5215,7 @@ class reportequimicosController extends Controller
             // INTRODUCCION
             if (($request->opcion + 0) == 1) {
                 $reporte->update([
-                    'reportequimicos_introduccion' => $this->datosproyectolimpiartexto($proyecto, $recsensorial, $quimicos_nombre, $request->reporte_introduccion)
+                    'reportequimicos_introduccion' => $request->reporte_introduccion
                 ]);
 
                 // Mensaje

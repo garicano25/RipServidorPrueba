@@ -1832,6 +1832,7 @@ class reportequimicoswordController extends Controller
                                         TABLA.periodo,
                                         TABLA.resultado_texto,
                                         TABLA.resultado_color,
+                                        TABLA.concentracion_texto,
                                         TABLA.valorlimiteTexto, 
                                         TABLA.limitesuperiorTexto,
                                         (
@@ -1867,7 +1868,9 @@ class reportequimicoswordController extends Controller
                                                 reportequimicosevaluacionparametro.id AS parametro_id,
                                                 reportequimicosevaluacionparametro.reportequimicosevaluacionparametro_parametro AS parametro,
                                                 reportequimicosevaluacionparametro.reportequimicosevaluacionparametro_metodo AS metodo,
-                                                reportequimicosevaluacionparametro.reportequimicosevaluacionparametro_concentracion AS concentracion_texto,
+                                              
+
+                                                CONCAT(reportequimicosevaluacionparametro.reportequimicosevaluacionparametro_concentracion," ", reportequimicosevaluacionparametro.reportequimicosevaluacionparametro_unidad) AS concentracion_texto,
                                                 -- (REPLACE(REPLACE(REPLACE(reportequimicosevaluacionparametro.reportequimicosevaluacionparametro_concentracion, "˂", ""), ">", ""), " ", "") + 0) AS concentracion,
                                                 (REPLACE(REPLACE(reportequimicosevaluacionparametro.reportequimicosevaluacionparametro_concentracion, "<", "reportequimicosevaluacionparametro_valorlimite - "), ">", "reportequimicosevaluacionparametro_valorlimite + ") + 0) AS concentracion,
 
@@ -1930,6 +1933,7 @@ class reportequimicoswordController extends Controller
                                         TABLA.resultado_texto,
                                         TABLA.resultado_color,
                                         TABLA.valorlimiteTexto, 
+                                        TABLA.concentracion_texto,
                                         TABLA.limitesuperiorTexto,
                                         (
                                             CASE
@@ -1964,7 +1968,7 @@ class reportequimicoswordController extends Controller
                                                 reportequimicosevaluacionparametro.id AS parametro_id,
                                                 reportequimicosevaluacionparametro.reportequimicosevaluacionparametro_parametro AS parametro,
                                                 reportequimicosevaluacionparametro.reportequimicosevaluacionparametro_metodo AS metodo,
-                                                reportequimicosevaluacionparametro.reportequimicosevaluacionparametro_concentracion AS concentracion_texto,
+                                                CONCAT(reportequimicosevaluacionparametro.reportequimicosevaluacionparametro_concentracion," ", reportequimicosevaluacionparametro.reportequimicosevaluacionparametro_unidad) AS concentracion_texto,
                                                 -- (REPLACE(REPLACE(REPLACE(reportequimicosevaluacionparametro.reportequimicosevaluacionparametro_concentracion, "˂", ""), ">", ""), " ", "") + 0) AS concentracion,
                                                 (REPLACE(REPLACE(reportequimicosevaluacionparametro.reportequimicosevaluacionparametro_concentracion, "<", "reportequimicosevaluacionparametro_valorlimite - "), ">", "reportequimicosevaluacionparametro_valorlimite + ") + 0) AS concentracion,
                                                 CONCAT(reportequimicosevaluacionparametro.reportequimicosevaluacionparametro_valorlimite," ", reportequimicosevaluacionparametro.reportequimicosevaluacionparametro_unidad) AS valorlimiteTexto,
