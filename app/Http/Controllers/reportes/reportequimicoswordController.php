@@ -17,7 +17,7 @@ use PhpOffice\PhpWord\Style\TablePosition;
 use PhpOffice\PhpWord\TemplateProcessor;
 
 use Illuminate\Support\Facades\Storage;
-use DB;
+use DB; 
 use ZipArchive;
 
 
@@ -84,25 +84,27 @@ class reportequimicoswordController extends Controller
         $reportefecha = explode("-", $proyecto->proyecto_fechaentrega);
 
         $texto = str_replace("QUIMICOS_NOMBRE", $quimicos, $texto);
-
-        if (($recsensorial->recsensorial_tipocliente + 0) == 1) // 1 = pemex, 0 = cliente
+        
+        if (($recsensorial->recsensorial_tipocliente+0) == 1) // 1 = pemex, 0 = cliente
         {
             $texto = str_replace('SUBDIRECCION_NOMBRE', $proyecto->catsubdireccion->catsubdireccion_nombre, $texto);
             $texto = str_replace('GERENCIA_NOMBRE', $proyecto->catgerencia->catgerencia_nombre, $texto);
             $texto = str_replace('ACTIVO_NOMBRE', $proyecto->catactivo->catactivo_nombre, $texto);
-        } else {
+        }
+        else
+        {
             $texto = str_replace('SUBDIRECCION_NOMBRE', '', $texto);
             $texto = str_replace('GERENCIA_NOMBRE', '', $texto);
             $texto = str_replace('ACTIVO_NOMBRE', '', $texto);
 
             $texto = str_replace('PEMEX Exploración y Producción', $recsensorial->recsensorial_empresa, $texto);
         }
-
+        
         $texto = str_replace("INSTALACION_NOMBRE", $proyecto->proyecto_clienteinstalacion, $texto);
         $texto = str_replace("INSTALACION_DIRECCION", $proyecto->proyecto_clientedireccionservicio, $texto);
-        $texto = str_replace("INSTALACION_CODIGOPOSTAL", "C.P. " . $recsensorial->recsensorial_codigopostal, $texto);
+        $texto = str_replace("INSTALACION_CODIGOPOSTAL", "C.P. ".$recsensorial->recsensorial_codigopostal, $texto);
         $texto = str_replace("INSTALACION_COORDENADAS", $recsensorial->recsensorial_coordenadas, $texto);
-        $texto = str_replace("REPORTE_FECHA_LARGA", $reportefecha[2] . " de " . $meses[($reportefecha[1] + 0)] . " del año " . $reportefecha[0], $texto);
+        $texto = str_replace("REPORTE_FECHA_LARGA", $reportefecha[2]." de ".$meses[($reportefecha[1]+0)]." del año ".$reportefecha[0], $texto);
         // $texto = str_replace("\n\n", "<w:br/><w:br/>", $texto);
         // $texto = str_replace("\n", "<w:br/>", $texto);
 
@@ -113,12 +115,16 @@ class reportequimicoswordController extends Controller
         $texto_nuevo = '';
 
 
-        foreach ($parrafos as $key => $parrafo) {
-            if (($key + 0) < (count($parrafos) - 1)) {
+        foreach($parrafos as $key => $parrafo)
+        {
+            if (($key+0) < (count($parrafos) -1))
+            {
                 $text = explode("\n", $parrafo);
 
-                foreach ($text as $key2 => $parrafo2) {
-                    if (($key2 + 0) < (count($text) - 1)) {
+                foreach($text as $key2 => $parrafo2)
+                {
+                    if (($key2+0) < (count($text) -1))
+                    {
                         // $formato = '<w:rPr>
                         //                 <!-- <w:u w:val="single"/>  -->
                         //                 <!-- <w:u w:val="none"/>  -->
@@ -131,38 +137,46 @@ class reportequimicoswordController extends Controller
                         //             </w:rPr>';
 
                         // SALTO DE PAGINA (<w:br/></w:t></w:r><w:r ><w:br w:type="page"/></w:r><w:r><w:t><w:br/>)
-
+                        
                         $texto_nuevo .= '<w:p>
                                             <w:pPr>
                                                 <w:jc w:val="both"/>
                                                 <w:spacing w:before="0" w:after="0" w:line="240" w:lineRule="exactly" w:beforeAutospacing="0" w:afterAutospacing="0"/>
                                             </w:pPr>
-                                            <w:t>' . htmlspecialchars($parrafo2) . '</w:t>
+                                            <w:t>'.htmlspecialchars($parrafo2).'</w:t>
                                         </w:p>';
-                    } else {
+                    }
+                    else
+                    {
                         $texto_nuevo .= '<w:p>
                                             <w:pPr>
                                                 <w:jc w:val="both"/>
                                                 <w:spacing w:before="0" w:after="0" w:line="240" w:lineRule="exactly" w:beforeAutospacing="0" w:afterAutospacing="0"/>
                                             </w:pPr>
-                                            <w:t>' . htmlspecialchars($parrafo2) . '</w:t>
+                                            <w:t>'.htmlspecialchars($parrafo2).'</w:t>
                                         </w:p><w:br/>';
                     }
                 }
-            } else {
+            }
+            else
+            {
                 $text = explode("\n", $parrafo);
 
-                foreach ($text as $key2 => $parrafo2) {
-                    if (($key2 + 0) < (count($text) - 1)) {
+                foreach($text as $key2 => $parrafo2)
+                {
+                    if (($key2+0) < (count($text) -1))
+                    {
                         $texto_nuevo .= '<w:p>
                                             <w:pPr>
                                                 <w:jc w:val="both"/>
                                                 <w:spacing w:before="0" w:after="0" w:line="240" w:lineRule="exactly" w:beforeAutospacing="0" w:afterAutospacing="0"/>
                                             </w:pPr>
-                                            <w:t>' . htmlspecialchars($parrafo2) . '</w:t>
+                                            <w:t>'.htmlspecialchars($parrafo2).'</w:t>
                                         </w:p>';
-                    } else {
-                        $texto_nuevo .= '<w:t>' . htmlspecialchars($parrafo2) . '</w:t>';
+                    }
+                    else
+                    {
+                        $texto_nuevo .= '<w:t>'.htmlspecialchars($parrafo2).'</w:t>';
                     }
                 }
             }
@@ -209,14 +223,14 @@ class reportequimicoswordController extends Controller
      *
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
-     */
+    */
     public function reportequimicosword(Request $request)
     {
-        try {
+        try
+        {
             // dd($request->all());
 
-            function sanitizeText($text)
-            {
+            function sanitizeText($text){
                 return htmlspecialchars($text, ENT_QUOTES, 'UTF-8');
             }
 
@@ -229,7 +243,7 @@ class reportequimicoswordController extends Controller
 
             //Zona horaria local
             date_default_timezone_set('America/Mexico_City');
-            setlocale(LC_ALL, "es_MX");
+            setlocale(LC_ALL,"es_MX");
 
             ################ DATOS GENERALES ######################
             $agente_id = 15;
@@ -246,8 +260,8 @@ class reportequimicoswordController extends Controller
                 $contratoId = $proyecto->contrato_id;
 
                 $clienteInfo = DB::table('contratos_clientes as cc')
-                    ->leftJoin('cliente as c', 'c.id', '=', 'cc.CLIENTE_ID')
-                    ->where('cc.ID_CONTRATO', $contratoId)
+                ->leftJoin('cliente as c', 'c.id', '=', 'cc.CLIENTE_ID')
+                ->where('cc.ID_CONTRATO', $contratoId)
                     ->select(
                         'cc.NUMERO_CONTRATO',
                         'cc.DESCRIPCION_CONTRATO',
@@ -264,11 +278,14 @@ class reportequimicoswordController extends Controller
 
             ########### VALIDACION DEL RECONOCIMIENTO #################
 
-            if ($reporteregistro_id > 0) {
+            if ($reporteregistro_id > 0)
+            {
                 $reporte  = reportequimicosModel::findOrFail($reporteregistro_id);
                 $revision = reporterevisionesModel::findOrFail($request->ultimarevision_id);
-            } else {
-                return '<h3>Aun no se ha guardado nada para este informe de ' . $agente_nombre . ', primero debe llenar los datos para poder generarlo.</h3>';
+            }
+            else
+            {
+                return '<h3>Aun no se ha guardado nada para este informe de '.$agente_nombre.', primero debe llenar los datos para poder generarlo.</h3>';
             }
 
 
@@ -276,18 +293,20 @@ class reportequimicoswordController extends Controller
             //================================================================================
 
 
-            if (($recsensorial->cliente_id + 0) != 2) // cliente_id [2 = senegas]
+            if (($recsensorial->cliente_id+0) != 2) // cliente_id [2 = senegas]
             {
-                $plantillaword = new TemplateProcessor(storage_path('app/plantillas_reportes/proyecto_infomes/Plantilla_informe_quimicos_sin_MEL.docx')); //Ruta carpeta storage
-            } else {
-                $plantillaword = new TemplateProcessor(storage_path('app/plantillas_reportes/proyecto_infomes/Plantilla_informe_quimicos_sin_MEL.docx')); //Ruta carpeta storage
+                $plantillaword = new TemplateProcessor(storage_path('app/plantillas_reportes/proyecto_infomes/Plantilla_informe_quimicos_sin_MEL.docx'));//Ruta carpeta storage
+            }
+            else
+            {
+                $plantillaword = new TemplateProcessor(storage_path('app/plantillas_reportes/proyecto_infomes/Plantilla_informe_quimicos_sin_MEL.docx'));//Ruta carpeta storage
             }
 
 
 
             ################ PORTADA EXTERNA ####################
             $titulo_partida = clientepartidasModel::where('CONTRATO_ID', $recsensorial->contrato_id)
-                ->where('clientepartidas_tipo', 2) // Informe de resultados
+            ->where('clientepartidas_tipo', 2) // Informe de resultados
                 ->where('catprueba_id', 15) // Quimicos
                 ->orderBy('updated_at', 'DESC')
                 ->get();
@@ -297,21 +316,18 @@ class reportequimicoswordController extends Controller
                 //Para el valor que lleva proyecto se utilizo: descripcion de la partida, Numero del contrato y la descripcion del contrato
                 $plantillaword->setValue('proyecto_portada', str_replace("\n", "<w:br/>", $titulo_partida[0]->clientepartidas_descripcion) . ' - Contrato: ' . $clienteInfo[0]->NUMERO_CONTRATO);
 
-                $plantillaword->setValue(
-                    'PARTIDA',
+                $plantillaword->setValue('PARTIDA',
                     str_replace("\n", "<w:br/>", $titulo_partida[0]->clientepartidas_descripcion)
                 );
             } else {
 
-                $plantillaword->setValue(
-                    'PARTIDA',
+                $plantillaword->setValue('PARTIDA',
                     ""
                 );
                 $plantillaword->setValue('proyecto_portada', 'El proyecto no esta vinculado a ningun contrato.');
             }
 
-            $plantillaword->setValue(
-                'folio_portada',
+            $plantillaword->setValue('folio_portada',
                 $proyecto->proyecto_folio
             );
             $plantillaword->setValue('razon_social_portada', $cliente->cliente_RazonSocial);
@@ -319,8 +335,7 @@ class reportequimicoswordController extends Controller
 
             $fecha = $agente[0]->reporte_mes . ' del ' . $agente[0]->reportequimicos_fecha;
             $plantillaword->setValue('lugar_fecha_portada', $recsensorial->recsensorial_direccion . ' ' . $fecha);
-            $plantillaword->setValue(
-                'PORTADA_FECHA',
+            $plantillaword->setValue('PORTADA_FECHA',
                 $fecha
             );
 
@@ -362,22 +377,19 @@ class reportequimicoswordController extends Controller
                 $plantillaword->setValue('CONTRATO', $clienteInfo[0]->NUMERO_CONTRATO);
                 $plantillaword->setValue('DESCRIPCION_CONTRATO', $clienteInfo[0]->DESCRIPCION_CONTRATO);
 
-                $plantillaword->setValue(
-                    'PIE_PAGINA',
+                $plantillaword->setValue('PIE_PAGINA',
                     $clienteInfo[0]->CONTRATO_PLANTILLA_PIEPAGINA
                 );
                 $plantillaword->setValue('INFORME_REVISION', "");
             } else {
 
-                $plantillaword->setValue(
-                    'CONTRATO',
+                $plantillaword->setValue('CONTRATO',
                     ""
                 );
                 $plantillaword->setValue('DESCRIPCION_CONTRATO', "");
                 $plantillaword->setValue('TITULO_CONTRATO', "");
 
-                $plantillaword->setValue(
-                    'PIE_PAGINA',
+                $plantillaword->setValue('PIE_PAGINA',
                     ""
                 );
                 $plantillaword->setValue('INFORME_REVISION', "");
@@ -448,8 +460,9 @@ class reportequimicoswordController extends Controller
             ##### REVISIONES ###################
 
             $cancelado_texto = '';
-            if ($revision->reporterevisiones_cancelado == 1) {
-                $cancelado_texto = '<w:br/>INFORME REVISIÓN ' . $revision->reporterevisiones_revision . ' CANCELADA';
+            if ($revision->reporterevisiones_cancelado == 1)
+            {
+                $cancelado_texto = '<w:br/>INFORME REVISIÓN '.$revision->reporterevisiones_revision.' CANCELADA';
             }
 
             ##### INTRODUCCION ###################
@@ -465,23 +478,27 @@ class reportequimicoswordController extends Controller
             } else {
                 $plantillaword->setValue('INFORME_REVISION', $proyecto->proyecto_folio . ' - Informe de ' . $agente_nombre);
             }
+          
 
 
+    
 
 
-
-
-            if (($partida_id + 0) > 0) {
+            if (($partida_id+0) > 0)
+            {
                 // $partida = catreportequimicospartidasModel::findOrFail($partida_id);
                 // $partida = clientepartidasModel::findOrFail($partida_id);
 
 
-                if (($revision->reporterevisiones_revision + 0) > 0) {
+                if (($revision->reporterevisiones_revision+0) > 0)
+                {
                     // $plantillaword->setValue('INFORME_REVISION', $proyecto->proyecto_folio.' - Informe de '.$agente_nombre.' Rev-'.$revision->reporterevisiones_revision.' ('.$partida->clientepartidas_descripcion.')');
-                    $plantillaword->setValue('INFORME_REVISION', $proyecto->proyecto_folio . ' - Informe de ' . $agente_nombre . ' - Rev-' . $revision->reporterevisiones_revision);
-                } else {
+                    $plantillaword->setValue('INFORME_REVISION', $proyecto->proyecto_folio.' - Informe de '.$agente_nombre.' - Rev-'.$revision->reporterevisiones_revision);
+                }
+                else
+                {
                     // $plantillaword->setValue('INFORME_REVISION', $proyecto->proyecto_folio.' - Informe de '.$agente_nombre.' ('.$partida->clientepartidas_descripcion.')');
-                    $plantillaword->setValue('INFORME_REVISION', $proyecto->proyecto_folio . ' - Informe de ' . $agente_nombre);
+                    $plantillaword->setValue('INFORME_REVISION', $proyecto->proyecto_folio.' - Informe de '.$agente_nombre);
                 }
 
 
@@ -510,28 +527,36 @@ class reportequimicoswordController extends Controller
                                                 reportequimicosgrupos
                                                 LEFT JOIN reportequimicosproyecto ON reportequimicosgrupos.reportequimicosproyecto_id = reportequimicosproyecto.id 
                                             WHERE
-                                                reportequimicosgrupos.proyecto_id = ' . $proyecto_id . ' 
-                                                AND reportequimicosgrupos.registro_id = ' . $reporteregistro_id . ' 
+                                                reportequimicosgrupos.proyecto_id = '.$proyecto_id.' 
+                                                AND reportequimicosgrupos.registro_id = '.$reporteregistro_id.' 
                                             ORDER BY
                                                 orden ASC,
                                                 reportequimicosproyecto.reportequimicosproyecto_parametro ASC');
 
 
-                if (count($parametros) > 0) {
-                    $proveedor_id = ($parametros[0]->proveedor_id + 0);
-                } else {
+                if (count($parametros) > 0)
+                {
+                    $proveedor_id = ($parametros[0]->proveedor_id+0);
+                }
+                else
+                {
                     $proveedor_id = 0;
                 }
-            } else {
+            }
+            else
+            {
                 // $plantillaword->setValue('PARTIDA', '--- PARTIDA NO SELECCIONADA ---');
 
 
-                if (($revision->reporterevisiones_revision + 0) > 0) {
+                if (($revision->reporterevisiones_revision+0) > 0)
+                {
                     // $plantillaword->setValue('INFORME_REVISION', $proyecto->proyecto_folio.' - Informe de '.$agente_nombre.' (PARTIDA NO SELECCIONADA) Rev-'.$revision->reporterevisiones_revision);
-                    $plantillaword->setValue('INFORME_REVISION', $proyecto->proyecto_folio . ' - Informe de ' . $agente_nombre . ' - Rev-' . $revision->reporterevisiones_revision);
-                } else {
+                    $plantillaword->setValue('INFORME_REVISION', $proyecto->proyecto_folio.' - Informe de '.$agente_nombre. ' - Rev-'.$revision->reporterevisiones_revision);
+                }
+                else
+                {
                     // $plantillaword->setValue('INFORME_REVISION', $proyecto->proyecto_folio.' - Informe de '.$agente_nombre.' (PARTIDA NO SELECCIONADA)');
-                    $plantillaword->setValue('INFORME_REVISION', $proyecto->proyecto_folio . ' - Informe de ' . $agente_nombre);
+                    $plantillaword->setValue('INFORME_REVISION', $proyecto->proyecto_folio.' - Informe de '.$agente_nombre);
                 }
 
 
@@ -558,8 +583,8 @@ class reportequimicoswordController extends Controller
                                                 reportequimicosevaluacion
                                                 RIGHT JOIN reportequimicosevaluacionparametro ON reportequimicosevaluacion.id = reportequimicosevaluacionparametro.reportequimicosevaluacion_id
                                             WHERE
-                                                reportequimicosevaluacion.proyecto_id = ' . $proyecto_id . ' 
-                                                AND reportequimicosevaluacion.registro_id = ' . $reporteregistro_id . ' 
+                                                reportequimicosevaluacion.proyecto_id = '.$proyecto_id.' 
+                                                AND reportequimicosevaluacion.registro_id = '.$reporteregistro_id.' 
                                             GROUP BY
                                                 reportequimicosevaluacion.proyecto_id,
                                                 reportequimicosevaluacion.registro_id,
@@ -574,11 +599,15 @@ class reportequimicoswordController extends Controller
 
 
             $quimicos = '';
-            foreach ($parametros as $key => $value) {
-                if (($key + 0) == 0) {
+            foreach ($parametros as $key => $value)
+            {
+                if (($key+0) == 0)
+                {
                     $quimicos = $value->parametro;
-                } else {
-                    $quimicos .= ', ' . $value->parametro;
+                }
+                else
+                {
+                    $quimicos .= ', '.$value->parametro;
                 }
             }
 
@@ -593,9 +622,9 @@ class reportequimicoswordController extends Controller
 
 
             $where_definiciones = '';
-            if (($recsensorial->recsensorial_tipocliente + 0) == 1) // 1 = pemex, 0 = cliente
+            if (($recsensorial->recsensorial_tipocliente+0) == 1) // 1 = pemex, 0 = cliente
             {
-                $where_definiciones = 'AND reportedefiniciones.catactivo_id = ' . $proyecto->catactivo_id;
+                $where_definiciones = 'AND reportedefiniciones.catactivo_id = '.$proyecto->catactivo_id;
             }
 
 
@@ -622,7 +651,7 @@ class reportequimicoswordController extends Controller
                                             FROM
                                                 reportedefinicionescatalogo
                                             WHERE
-                                                reportedefinicionescatalogo.agente_nombre LIKE "' . $agente_nombre . '"
+                                                reportedefinicionescatalogo.agente_nombre LIKE "'.$agente_nombre.'"
                                                 AND reportedefinicionescatalogo.reportedefinicionescatalogo_activo = 1
                                             ORDER BY
                                                 reportedefinicionescatalogo.reportedefinicionescatalogo_concepto ASC
@@ -640,8 +669,8 @@ class reportequimicoswordController extends Controller
                                             FROM
                                                 reportedefiniciones
                                             WHERE
-                                                reportedefiniciones.agente_nombre LIKE "' . $agente_nombre . '"
-                                                ' . $where_definiciones . ' 
+                                                reportedefiniciones.agente_nombre LIKE "'.$agente_nombre.'"
+                                                '.$where_definiciones.' 
                                             ORDER BY
                                                 reportedefiniciones.agente_nombre ASC
                                         )
@@ -653,28 +682,35 @@ class reportequimicoswordController extends Controller
 
 
             $definicionesfuentes = '';
-            if (count($sql) > 1) {
-                foreach ($sql as $key => $value) {
+            if (count($sql) > 1)
+            {
+                foreach ($sql as $key => $value)
+                {
                     $definiciones_fuentes[] = array(
-                        'fuente_descripcion' => $value->fuente,
-                        'fuente_simbolo' => ' ' . $definiciones_simbolo[$key] . '*'
-                    );
+                                                  'fuente_descripcion' => $value->fuente
+                                                , 'fuente_simbolo' => ' '.$definiciones_simbolo[$key].'*'
+                                            );
 
-
-                    if (($key + 0) < (count($sql) - 1)) {
-                        $definicionesfuentes .= 'Fuentes ' . $definiciones_simbolo[$key] . '*: ' . $value->fuente . '<w:br/>';
-                    } else {
-                        $definicionesfuentes .= 'Fuentes ' . $definiciones_simbolo[$key] . '*: ' . $value->fuente;
+                    
+                    if (($key+0) < (count($sql) -1))
+                    {
+                        $definicionesfuentes .= 'Fuentes '.$definiciones_simbolo[$key].'*: '.$value->fuente.'<w:br/>';
+                    }
+                    else
+                    {
+                        $definicionesfuentes .= 'Fuentes '.$definiciones_simbolo[$key].'*: '.$value->fuente;
                     }
                 }
-            } else {
+            }
+            else
+            {
                 $definiciones_fuentes[] = array(
-                    'fuente_descripcion' => $sql[0]->fuente,
-                    'fuente_simbolo' => ''
-                );
+                                                  'fuente_descripcion' => $sql[0]->fuente
+                                                , 'fuente_simbolo' => ''
+                                            );
 
 
-                $definicionesfuentes = 'Fuentes: ' . $sql[0]->fuente;
+                $definicionesfuentes = 'Fuentes: '.$sql[0]->fuente;
             }
 
 
@@ -706,7 +742,7 @@ class reportequimicoswordController extends Controller
                                                     FROM
                                                         reportedefinicionescatalogo
                                                     WHERE
-                                                        reportedefinicionescatalogo.agente_nombre LIKE "' . $agente_nombre . '"
+                                                        reportedefinicionescatalogo.agente_nombre LIKE "'.$agente_nombre.'"
                                                         AND reportedefinicionescatalogo.reportedefinicionescatalogo_activo = 1
                                                     ORDER BY
                                                         reportedefinicionescatalogo.reportedefinicionescatalogo_concepto ASC
@@ -724,8 +760,8 @@ class reportequimicoswordController extends Controller
                                                     FROM
                                                         reportedefiniciones
                                                     WHERE
-                                                        reportedefiniciones.agente_nombre LIKE "' . $agente_nombre . '"
-                                                        ' . $where_definiciones . ' 
+                                                        reportedefiniciones.agente_nombre LIKE "'.$agente_nombre.'"
+                                                        '.$where_definiciones.' 
                                                     ORDER BY
                                                         reportedefiniciones.agente_nombre ASC
                                                 )
@@ -736,10 +772,14 @@ class reportequimicoswordController extends Controller
 
 
             $definiciones = '';
-            foreach ($sql as $key => $value) {
-                foreach ($definiciones_fuentes as $key2 => $dato) {
-                    if ($value->fuente == $dato['fuente_descripcion']) {
-                        if (($key + 0) < (count($sql) - 1)) {
+            foreach ($sql as $key => $value)
+            {
+                foreach ($definiciones_fuentes as $key2 => $dato)
+                {
+                    if ($value->fuente == $dato['fuente_descripcion'])
+                    {
+                        if (($key+0) < (count($sql) -1))
+                        {
                             $definiciones .= '<w:p>
                                                 <w:pPr>
                                                     <w:jc w:val="both"/>
@@ -749,16 +789,18 @@ class reportequimicoswordController extends Controller
                                                     <w:b w:val="true"/>
                                                 </w:rPr>
                                                 <w:t>
-                                                    ' . $value->concepto . '
+                                                    '.$value->concepto.'
                                                 </w:t>
                                                 <w:rPr>
                                                     <w:b w:val="false"/>
                                                 </w:rPr>
                                                 <w:t>
-                                                    ' . htmlspecialchars($value->descripcion) . '' . $dato['fuente_simbolo'] . '
+                                                    '.htmlspecialchars($value->descripcion).''.$dato['fuente_simbolo'].'
                                                 </w:t>
                                             </w:p><w:br/>';
-                        } else {
+                        }
+                        else
+                        {
                             $definiciones .= '<w:p>
                                                 <w:pPr>
                                                     <w:jc w:val="both"/>
@@ -768,13 +810,13 @@ class reportequimicoswordController extends Controller
                                                     <w:b w:val="true"/>
                                                 </w:rPr>
                                                 <w:t>
-                                                    ' . $value->concepto . '
+                                                    '.$value->concepto.'
                                                 </w:t>
                                                 <w:rPr>
                                                     <w:b w:val="false"/>
                                                 </w:rPr>
                                                 <w:t>
-                                                    ' . htmlspecialchars($value->descripcion) . '' . $dato['fuente_simbolo'] . '
+                                                    '.htmlspecialchars($value->descripcion).''.$dato['fuente_simbolo'].'
                                                 </w:t>
                                             </w:p>';
                         }
@@ -816,16 +858,22 @@ class reportequimicoswordController extends Controller
 
 
             // Imagen FOTO
-            if ($reporte->reportequimicos_ubicacionfoto) {
-                if (file_exists(storage_path('app/' . $reporte->reportequimicos_ubicacionfoto))) {
-                    $plantillaword->setImageValue('UBICACION_FOTO', array('path' => storage_path('app/' . $reporte->reportequimicos_ubicacionfoto), 'width' => 580, 'height' => 400, 'ratio' => true, 'borderColor' => '000000'));
-                } else {
+            if ($reporte->reportequimicos_ubicacionfoto)
+            {
+                if (file_exists(storage_path('app/'.$reporte->reportequimicos_ubicacionfoto)))
+                {
+                    $plantillaword->setImageValue('UBICACION_FOTO', array('path' => storage_path('app/'.$reporte->reportequimicos_ubicacionfoto), 'width' => 580, 'height' => 400, 'ratio' => true, 'borderColor' => '000000'));
+                }
+                else
+                {
                     $plantillaword->setValue('UBICACION_FOTO', 'FALTA CARGAR IMAGEN DESDE EL SISTEMA.');
                 }
-            } else {
+            }
+            else
+            {
                 $plantillaword->setValue('UBICACION_FOTO', 'FALTA CARGAR IMAGEN DESDE EL SISTEMA.');
             }
-
+                
 
             // PROCESO INSTALACION
             //================================================================================
@@ -839,11 +887,13 @@ class reportequimicoswordController extends Controller
             //================================================================================
 
 
-            if (($recsensorial->recsensorial_tipocliente + 0) == 1) // 1 = Pemex, 0 = Cliente
+            if (($recsensorial->recsensorial_tipocliente+0) == 1) // 1 = Pemex, 0 = Cliente
             {
                 $fuente = 'Arial';
                 $font_size = 10;
-            } else {
+            }
+            else
+            {
                 $fuente = 'Arial';
                 $font_size = 10;
             }
@@ -864,7 +914,7 @@ class reportequimicoswordController extends Controller
             $textototal = array('color' => 'FFFFFF', 'size' => $font_size, 'bold' => false, 'name' => $fuente);
 
 
-            if (($areas_poe + 0) == 1) // TIENE TABLA POE GENERAL
+            if (($areas_poe+0) == 1) // TIENE TABLA POE GENERAL
             {
                 $sql = DB::select('SELECT
                                         reportearea.proyecto_id,
@@ -889,7 +939,7 @@ class reportequimicoswordController extends Controller
                                             WHERE
                                                 reportequimicosareacategoria.reportequimicosarea_id = reportearea.id
                                                 AND reportequimicosareacategoria.reportequimicoscategoria_id = reporteareacategoria.reportecategoria_id
-                                                AND reportequimicosareacategoria.reportequimicosareacategoria_poe = ' . $reporteregistro_id . ' 
+                                                AND reportequimicosareacategoria.reportequimicosareacategoria_poe = '.$reporteregistro_id.' 
                                             LIMIT 1
                                         ), "") AS activo,
                                         reporteareacategoria.reporteareacategoria_total AS reportequimicoscategoria_total,
@@ -901,20 +951,22 @@ class reportequimicoswordController extends Controller
                                             FROM
                                                 reportequimicos
                                             WHERE
-                                                reportequimicos.id = ' . $reporteregistro_id . ' 
+                                                reportequimicos.id = '.$reporteregistro_id.' 
                                         ) AS actividad_principal_instalacion 
                                     FROM
                                         reportearea
                                         LEFT JOIN reporteareacategoria ON reportearea.id = reporteareacategoria.reportearea_id
                                         LEFT JOIN reportecategoria ON reporteareacategoria.reportecategoria_id = reportecategoria.id 
                                     WHERE
-                                        reportearea.proyecto_id = ' . $proyecto_id . ' 
+                                        reportearea.proyecto_id = '.$proyecto_id.' 
                                     ORDER BY
                                         reportearea.reportearea_orden ASC,
                                         reportearea.reportearea_nombre ASC,
                                         reportecategoria.reportecategoria_orden ASC,
                                         reportecategoria.reportecategoria_nombre ASC');
-            } else {
+            }
+            else
+            {
                 $sql = DB::select('SELECT
                                         reportequimicosarea.proyecto_id,
                                         reportequimicosarea.registro_id,
@@ -939,8 +991,8 @@ class reportequimicoswordController extends Controller
                                         LEFT JOIN reportequimicosarea ON reportequimicosareacategoria.reportequimicosarea_id = reportequimicosarea.id
                                         LEFT JOIN reportequimicoscategoria ON reportequimicosareacategoria.reportequimicoscategoria_id = reportequimicoscategoria.id
                                     WHERE
-                                        reportequimicosarea.proyecto_id = ' . $proyecto_id . ' 
-                                        AND reportequimicosarea.registro_id = ' . $reporteregistro_id . ' 
+                                        reportequimicosarea.proyecto_id = '.$proyecto_id.' 
+                                        AND reportequimicosarea.registro_id = '.$reporteregistro_id.' 
                                     ORDER BY
                                         reportequimicosarea.reportequimicosarea_numorden ASC,
                                         reportequimicoscategoria.reportequimicoscategoria_nombre ASC');
@@ -955,9 +1007,9 @@ class reportequimicoswordController extends Controller
             $ancho_col_5 = 1000;
             $ancho_col_6 = 2500;
 
-
+            
             // Crear tabla
-            $table = null;
+            $table = null;            
             $table = new Table(array('name' => $fuente, 'borderSize' => 1, 'borderColor' => '000000', 'cellMargin' => 40, 'unit' => TblWidth::TWIP));
 
 
@@ -971,13 +1023,14 @@ class reportequimicoswordController extends Controller
             // $table->addCell($ancho_col_6, $encabezado_celda)->addTextRun($centrado)->addText('Descripción de la actividad<w:br/>principal de la instalación', $encabezado_texto);
 
 
-            $numero_fila = 0;
-            $instalacion = 'XXXXX';
-            $area = 'xxxx';
-            foreach ($sql as $key => $value) {
-                if ($instalacion != $value->reportequimicosarea_instalacion) {
-                    if (($key + 0) != 0) {
-                        if (($areas_poe + 0) == 1) // TIENE TABLA POE GENERAL
+            $numero_fila = 0; $instalacion = 'XXXXX'; $area = 'xxxx';
+            foreach ($sql as $key => $value) 
+            {
+                if($instalacion != $value->reportequimicosarea_instalacion)
+                {
+                    if (($key+0) != 0)
+                    {
+                        if (($areas_poe+0) == 1) // TIENE TABLA POE GENERAL
                         {
                             $total = DB::select('SELECT
                                                     IFNULL(SUM( TABLA.reportecategoria_total ), 0) AS total 
@@ -994,8 +1047,8 @@ class reportequimicoswordController extends Controller
                                                             LEFT JOIN reportearea ON reporteareacategoria.reportearea_id = reportearea.id
                                                             LEFT JOIN reportecategoria ON reporteareacategoria.reportecategoria_id = reportecategoria.id
                                                         WHERE
-                                                            reportearea.proyecto_id = ' . $proyecto_id . ' 
-                                                            AND REPLACE(reportearea.reportearea_instalacion, "\"", "") = "' . $instalacion . '" 
+                                                            reportearea.proyecto_id = '.$proyecto_id.' 
+                                                            AND REPLACE(reportearea.reportearea_instalacion, "\"", "") = "'.$instalacion.'" 
                                                         GROUP BY
                                                             reportearea.proyecto_id,
                                                             reportearea.reportearea_instalacion,
@@ -1003,7 +1056,9 @@ class reportequimicoswordController extends Controller
                                                             reportecategoria.reportecategoria_nombre,
                                                             reportecategoria.reportecategoria_total
                                                     ) AS TABLA');
-                        } else {
+                        }
+                        else
+                        {
                             $total = DB::select('SELECT
                                                     IFNULL(SUM( TABLA.reportequimicoscategoria_total ), 0) AS total 
                                                 FROM
@@ -1020,10 +1075,10 @@ class reportequimicoswordController extends Controller
                                                             LEFT JOIN reportequimicosarea ON reportequimicosareacategoria.reportequimicosarea_id = reportequimicosarea.id
                                                             LEFT JOIN reportequimicoscategoria ON reportequimicosareacategoria.reportequimicoscategoria_id = reportequimicoscategoria.id 
                                                         WHERE
-                                                            reportequimicosarea.proyecto_id = ' . $proyecto_id . ' 
-                                                            AND reportequimicosarea.registro_id = ' . $reporteregistro_id . ' 
+                                                            reportequimicosarea.proyecto_id = '.$proyecto_id.' 
+                                                            AND reportequimicosarea.registro_id = '.$reporteregistro_id.' 
                                                             AND reportequimicosareacategoria.reportequimicosareacategoria_poe = 0
-                                                            AND REPLACE(reportequimicosarea.reportequimicosarea_instalacion, "\"", "") = "' . $instalacion . '" 
+                                                            AND REPLACE(reportequimicosarea.reportequimicosarea_instalacion, "\"", "") = "'.$instalacion.'" 
                                                         GROUP BY
                                                             reportequimicoscategoria.proyecto_id,
                                                             reportequimicoscategoria.registro_id,
@@ -1041,7 +1096,7 @@ class reportequimicoswordController extends Controller
                         $table->addCell($ancho_col_6, $continua_fila);
 
                         $table->addRow(); //fila
-                        $table->addCell(null, array('gridSpan' => 5, 'valign' => 'center', 'borderTopColor' => 'ffffff', 'borderTopSize' => 1, 'borderRightColor' => 'ffffff', 'borderRightSize' => 1, 'borderBottomColor' => 'ffffff', 'borderBottomSize' => 1, 'borderLeftColor' => 'ffffff', 'borderLeftSize' => 1))->addTextRun($izquierda)->addText('Nota: Las categorías repetidas en más de un área son consideradas como puesto móvil de trabajo.', $texto);
+                        $table->addCell(null, array('gridSpan' => 5, 'valign' => 'center', 'borderTopColor' =>'ffffff', 'borderTopSize' => 1, 'borderRightColor' =>'ffffff', 'borderRightSize' => 1, 'borderBottomColor' =>'ffffff', 'borderBottomSize' => 1, 'borderLeftColor' =>'ffffff', 'borderLeftSize' => 1))->addTextRun($izquierda)->addText('Nota: Las categorías repetidas en más de un área son consideradas como puesto móvil de trabajo.', $texto);
                     }
 
 
@@ -1065,10 +1120,13 @@ class reportequimicoswordController extends Controller
                 $table->addRow(); //fila
 
 
-                if ($area != $value->reportequimicosarea_nombre) {
+                if($area != $value->reportequimicosarea_nombre)
+                {
                     $numero_fila += 1;
                     $table->addCell($ancho_col_1, $combinar_fila)->addTextRun($centrado)->addText($numero_fila);
-                } else {
+                }
+                else
+                {
                     $table->addCell($ancho_col_1, $continua_fila);
                 }
 
@@ -1084,10 +1142,13 @@ class reportequimicoswordController extends Controller
                 // }
 
 
-                if ($area != $value->reportequimicosarea_nombre) {
+                if($area != $value->reportequimicosarea_nombre)
+                {
                     $table->addCell($ancho_col_3, $combinar_fila)->addTextRun($centrado)->addText($value->reportequimicosarea_nombre, $texto);
                     $area = $value->reportequimicosarea_nombre;
-                } else {
+                }
+                else
+                {
                     $table->addCell($ancho_col_3, $continua_fila);
                 }
 
@@ -1096,16 +1157,19 @@ class reportequimicoswordController extends Controller
                 $table->addCell($ancho_col_5, $celda)->addTextRun($centrado)->addText($value->reportequimicoscategoria_total, $texto);
 
 
-                if ($instalacion != $value->reportequimicosarea_instalacion) {
+                if($instalacion != $value->reportequimicosarea_instalacion)
+                {
                     $table->addCell($ancho_col_6, $combinar_fila)->addTextRun($justificado)->addText($this->datosproyectoreemplazartexto($proyecto, $recsensorial, $quimicos, $value->actividad_principal_instalacion), $texto);
                     $instalacion = $value->reportequimicosarea_instalacion;
-                } else {
+                }
+                else
+                {
                     $table->addCell($ancho_col_6, $continua_fila);
                 }
             }
 
 
-            if (($areas_poe + 0) == 1) // TIENE TABLA POE GENERAL
+            if (($areas_poe+0) == 1) // TIENE TABLA POE GENERAL
             {
                 $total = DB::select('SELECT
                                         IFNULL(SUM( TABLA.reportecategoria_total ), 0) AS total 
@@ -1122,8 +1186,8 @@ class reportequimicoswordController extends Controller
                                                 LEFT JOIN reportearea ON reporteareacategoria.reportearea_id = reportearea.id
                                                 LEFT JOIN reportecategoria ON reporteareacategoria.reportecategoria_id = reportecategoria.id
                                             WHERE
-                                                reportearea.proyecto_id = ' . $proyecto_id . ' 
-                                                AND REPLACE(reportearea.reportearea_instalacion, "\"", "") = "' . $instalacion . '" 
+                                                reportearea.proyecto_id = '.$proyecto_id.' 
+                                                AND REPLACE(reportearea.reportearea_instalacion, "\"", "") = "'.$instalacion.'" 
                                             GROUP BY
                                                 reportearea.proyecto_id,
                                                 reportearea.reportearea_instalacion,
@@ -1131,7 +1195,9 @@ class reportequimicoswordController extends Controller
                                                 reportecategoria.reportecategoria_nombre,
                                                 reportecategoria.reportecategoria_total
                                         ) AS TABLA');
-            } else {
+            }
+            else
+            {
                 $total = DB::select('SELECT
                                         IFNULL(SUM( TABLA.reportequimicoscategoria_total ), 0) AS total 
                                     FROM
@@ -1148,10 +1214,10 @@ class reportequimicoswordController extends Controller
                                                 LEFT JOIN reportequimicosarea ON reportequimicosareacategoria.reportequimicosarea_id = reportequimicosarea.id
                                                 LEFT JOIN reportequimicoscategoria ON reportequimicosareacategoria.reportequimicoscategoria_id = reportequimicoscategoria.id 
                                             WHERE
-                                                reportequimicosarea.proyecto_id = ' . $proyecto_id . ' 
-                                                AND reportequimicosarea.registro_id = ' . $reporteregistro_id . ' 
+                                                reportequimicosarea.proyecto_id = '.$proyecto_id.' 
+                                                AND reportequimicosarea.registro_id = '.$reporteregistro_id.' 
                                                 AND reportequimicosareacategoria.reportequimicosareacategoria_poe = 0
-                                                AND REPLACE(reportequimicosarea.reportequimicosarea_instalacion, "\"", "") = "' . $instalacion . '" 
+                                                AND REPLACE(reportequimicosarea.reportequimicosarea_instalacion, "\"", "") = "'.$instalacion.'" 
                                             GROUP BY
                                                 reportequimicoscategoria.proyecto_id,
                                                 reportequimicoscategoria.registro_id,
@@ -1185,14 +1251,14 @@ class reportequimicoswordController extends Controller
                                 FROM
                                     reportequimicosepp
                                 WHERE
-                                    reportequimicosepp.proyecto_id = ' . $proyecto_id . ' 
-                                    AND reportequimicosepp.registro_id = ' . $reporteregistro_id . ' 
+                                    reportequimicosepp.proyecto_id = '.$proyecto_id.' 
+                                    AND reportequimicosepp.registro_id = '.$reporteregistro_id.' 
                                 ORDER BY
                                     reportequimicosepp.id ASC');
 
 
             // Crear tabla
-            $table = null;
+            $table = null;            
             $table = new Table(array('name' => $fuente, 'borderSize' => 1, 'borderColor' => '000000', 'cellMargin' => 40, 'unit' => TblWidth::TWIP));
 
             // encabezado tabla
@@ -1202,7 +1268,8 @@ class reportequimicoswordController extends Controller
             $table->addCell($ancho_col_1, $encabezado_celda)->addTextRun($centrado)->addText('Parte del cuerpo', $encabezado_texto);
             $table->addCell($ancho_col_2, $encabezado_celda)->addTextRun($centrado)->addText('Equipo de protección personal básico proporcionado', $encabezado_texto);
 
-            foreach ($sql as $key => $value) {
+            foreach ($sql as $key => $value)
+            {
                 $table->addRow(); //fila
                 $table->addCell($ancho_col_1, $celda)->addTextRun($centrado)->addText($value->reportequimicosepp_partecuerpo, $texto);
                 $table->addCell($ancho_col_2, $celda)->addTextRun($centrado)->addText($value->reportequimicosepp_equipo, $texto);
@@ -1216,7 +1283,7 @@ class reportequimicoswordController extends Controller
             //================================================================================
 
 
-            if (($areas_poe + 0) == 1) // TIENE TABLA POE GENERAL
+            if (($areas_poe+0) == 1) // TIENE TABLA POE GENERAL
             {
                 $sql = DB::select('SELECT
                                         TABLA.proyecto_id,
@@ -1262,7 +1329,7 @@ class reportequimicoswordController extends Controller
                                                     WHERE
                                                         reportequimicosareacategoria.reportequimicosarea_id = reportearea.id
                                                         AND reportequimicosareacategoria.reportequimicoscategoria_id = reporteareacategoria.reportecategoria_id
-                                                        AND reportequimicosareacategoria.reportequimicosareacategoria_poe = ' . $reporteregistro_id . ' 
+                                                        AND reportequimicosareacategoria.reportequimicosareacategoria_poe = '.$reporteregistro_id.' 
                                                     LIMIT 1
                                                 ), "") AS activo,
                                                 reporteareacategoria.reporteareacategoria_total AS reportequimicoscategoria_total,
@@ -1273,7 +1340,7 @@ class reportequimicoswordController extends Controller
                                                 LEFT JOIN reporteareacategoria ON reportearea.id = reporteareacategoria.reportearea_id
                                                 LEFT JOIN reportecategoria ON reporteareacategoria.reportecategoria_id = reportecategoria.id 
                                             WHERE
-                                                reportearea.proyecto_id = ' . $proyecto_id . ' 
+                                                reportearea.proyecto_id = '.$proyecto_id.' 
                                             -- ORDER BY
                                                 -- reportearea.reportearea_orden ASC,
                                                 -- reportearea.reportearea_nombre ASC,
@@ -1288,7 +1355,9 @@ class reportequimicoswordController extends Controller
                                         TABLA.reportequimicosarea_nombre ASC,
                                         TABLA.reportequimicoscategoria_orden ASC,
                                         TABLA.reportequimicoscategoria_nombre ASC');
-            } else {
+            }
+            else
+            {
                 $sql = DB::select('SELECT
                                         reportequimicosarea.proyecto_id,
                                         reportequimicosarea.registro_id,
@@ -1305,8 +1374,8 @@ class reportequimicoswordController extends Controller
                                         LEFT JOIN reportequimicosarea ON reportequimicosareacategoria.reportequimicosarea_id = reportequimicosarea.id
                                         LEFT JOIN reportequimicoscategoria ON reportequimicosareacategoria.reportequimicoscategoria_id = reportequimicoscategoria.id
                                     WHERE
-                                        reportequimicosarea.proyecto_id = ' . $proyecto_id . ' 
-                                        AND reportequimicosarea.registro_id = ' . $reporteregistro_id . ' 
+                                        reportequimicosarea.proyecto_id = '.$proyecto_id.' 
+                                        AND reportequimicosarea.registro_id = '.$reporteregistro_id.' 
                                         AND reportequimicosarea.reportequimicosarea_porcientooperacion > 0 
                                         AND reportequimicosareacategoria.reportequimicosareacategoria_poe = 0
                                     ORDER BY
@@ -1316,10 +1385,10 @@ class reportequimicoswordController extends Controller
 
 
             // Crear tabla
-            $table = null;
+            $table = null;            
             $table = new Table(array('name' => $fuente, 'borderSize' => 1, 'borderColor' => '000000', 'cellMargin' => 40, 'unit' => TblWidth::TWIP));
 
-
+            
             // Columnas
             $ancho_col_1 = 500;
             // $ancho_col_2 = 1500;
@@ -1336,13 +1405,13 @@ class reportequimicoswordController extends Controller
             // $table->addCell($ancho_col_4, $encabezado_celda)->addTextRun($centrado)->addText('Categoría', $encabezado_texto);
             // $table->addCell($ancho_col_5, $encabezado_celda)->addTextRun($centrado)->addText('Actividades', $encabezado_texto);
 
-
+            
             $numero_fila = 0;
-            $instalacion = 'xxxx';
-            $area = 'xxxx';
-            $actividad = 'xxxx';
-            foreach ($sql as $key => $value) {
-                if ($instalacion != $value->reportequimicosarea_instalacion) {
+            $instalacion = 'xxxx'; $area = 'xxxx'; $actividad = 'xxxx';
+            foreach ($sql as $key => $value) 
+            {
+                if($instalacion != $value->reportequimicosarea_instalacion)
+                {
                     // encabezado tabla
                     $table->addRow(200, array('tblHeader' => true));
                     $table->addCell($ancho_col_1, $encabezado_celda)->addTextRun($centrado)->addText('No.', $encabezado_texto);
@@ -1359,14 +1428,17 @@ class reportequimicoswordController extends Controller
                     $numero_fila = 0;
                 }
 
-
+                
                 $table->addRow(); //fila
 
 
-                if ($area != $value->reportequimicosarea_nombre) {
+                if($area != $value->reportequimicosarea_nombre)
+                {
                     $numero_fila += 1;
                     $table->addCell($ancho_col_1, $combinar_fila)->addTextRun($centrado)->addText($numero_fila);
-                } else {
+                }
+                else
+                {
                     $table->addCell($ancho_col_1, $continua_fila);
                 }
 
@@ -1382,10 +1454,13 @@ class reportequimicoswordController extends Controller
                 // }
 
 
-                if ($area != $value->reportequimicosarea_nombre) {
+                if($area != $value->reportequimicosarea_nombre)
+                {
                     $table->addCell($ancho_col_3, $combinar_fila)->addTextRun($centrado)->addText($value->reportequimicosarea_nombre, $texto);
                     $area = $value->reportequimicosarea_nombre;
-                } else {
+                }
+                else
+                {
                     $table->addCell($ancho_col_3, $continua_fila);
                 }
 
@@ -1402,7 +1477,7 @@ class reportequimicoswordController extends Controller
             //================================================================================
 
 
-            if (($areas_poe + 0) == 1) // TIENE TABLA POE GENERAL
+            if (($areas_poe+0) == 1) // TIENE TABLA POE GENERAL
             {
                 $sql = DB::select('SELECT
                                         TABLA.proyecto_id,
@@ -1450,7 +1525,7 @@ class reportequimicoswordController extends Controller
                                                     WHERE
                                                         reportequimicosareacategoria.reportequimicosarea_id = reportearea.id
                                                         AND reportequimicosareacategoria.reportequimicoscategoria_id = reporteareacategoria.reportecategoria_id
-                                                        AND reportequimicosareacategoria.reportequimicosareacategoria_poe = ' . $reporteregistro_id . ' 
+                                                        AND reportequimicosareacategoria.reportequimicosareacategoria_poe = '.$reporteregistro_id.' 
                                                     LIMIT 1
                                                 ), "") AS activo,
                                                 reporteareacategoria.reporteareacategoria_total AS reportequimicoscategoria_total,
@@ -1461,7 +1536,7 @@ class reportequimicoswordController extends Controller
                                                 LEFT JOIN reporteareacategoria ON reportearea.id = reporteareacategoria.reportearea_id
                                                 LEFT JOIN reportecategoria ON reporteareacategoria.reportecategoria_id = reportecategoria.id 
                                             WHERE
-                                                reportearea.proyecto_id = ' . $proyecto_id . ' 
+                                                reportearea.proyecto_id = '.$proyecto_id.' 
                                             -- ORDER BY
                                                 -- reportearea.reportearea_orden ASC,
                                                 -- reportearea.reportearea_nombre ASC,
@@ -1476,7 +1551,9 @@ class reportequimicoswordController extends Controller
                                         TABLA.reportequimicosarea_nombre ASC,
                                         TABLA.reportequimicoscategoria_orden ASC,
                                         TABLA.reportequimicoscategoria_nombre ASC');
-            } else {
+            }
+            else
+            {
                 $sql = DB::select('SELECT
                                         reportequimicosarea.proyecto_id,
                                         reportequimicosarea.registro_id,
@@ -1499,8 +1576,8 @@ class reportequimicoswordController extends Controller
                                         LEFT JOIN reportequimicosarea ON reportequimicosareacategoria.reportequimicosarea_id = reportequimicosarea.id
                                         LEFT JOIN reportequimicoscategoria ON reportequimicosareacategoria.reportequimicoscategoria_id = reportequimicoscategoria.id 
                                     WHERE
-                                        reportequimicosarea.proyecto_id = ' . $proyecto_id . ' 
-                                        AND reportequimicosarea.registro_id = ' . $reporteregistro_id . ' 
+                                        reportequimicosarea.proyecto_id = '.$proyecto_id.' 
+                                        AND reportequimicosarea.registro_id = '.$reporteregistro_id.' 
                                         AND reportequimicosarea.reportequimicosarea_porcientooperacion > 0 
                                         AND reportequimicosareacategoria.reportequimicosareacategoria_poe = 0
                                     ORDER BY
@@ -1518,7 +1595,7 @@ class reportequimicoswordController extends Controller
             $ancho_col_6 = 1000;
 
             // Crear tabla
-            $table = null;
+            $table = null;            
             $table = new Table(array('name' => $fuente, 'borderSize' => 1, 'borderColor' => '000000', 'cellMargin' => 40, 'unit' => TblWidth::TWIP));
 
 
@@ -1539,18 +1616,18 @@ class reportequimicoswordController extends Controller
             // $table->addCell($ancho_col_6, $encabezado_celda)->addTextRun($centrado)->addText('Cerrada', $encabezado_texto);
 
 
-            $fila = 0;
-            $instalacion = 'xxxx';
-            $fuente = 'xxxx';
-            foreach ($sql as $key => $value) {
-                if ($instalacion != $value->reportequimicosarea_instalacion) {
+            $fila = 0; $instalacion = 'xxxx'; $fuente = 'xxxx';
+            foreach ($sql as $key => $value)
+            {
+                if($instalacion != $value->reportequimicosarea_instalacion)
+                {
                     // Encabezado
                     $table->addRow(200, array('tblHeader' => true));
                     $table->addCell($ancho_col_1, $combinar_fila_encabezado)->addTextRun($centrado)->addText('No.', $encabezado_texto);
                     $table->addCell($ancho_col_2, $combinar_fila_encabezado)->addTextRun($centrado)->addText('Fuentes generadoras', $encabezado_texto);
                     $table->addCell($ancho_col_3, $combinar_fila_encabezado)->addTextRun($centrado)->addText('Generación del contaminante', $encabezado_texto);
                     $table->addCell($ancho_col_4, $combinar_fila_encabezado)->addTextRun($centrado)->addText('Puesto de trabajo', $encabezado_texto);
-                    $table->addCell(($ancho_col_5 + $ancho_col_6), array('gridSpan' => 2, 'valign' => 'center', 'bgColor' => '0C3F64'))->addTextRun($centrado)->addText('Características<w:br/>del área', $encabezado_texto);
+                    $table->addCell(($ancho_col_5+$ancho_col_6), array('gridSpan' => 2, 'valign' => 'center', 'bgColor' => '0C3F64'))->addTextRun($centrado)->addText('Características<w:br/>del área', $encabezado_texto);
 
                     $table->addRow(200, array('tblHeader' => true));
                     $table->addCell($ancho_col_1, $continua_fila);
@@ -1572,14 +1649,17 @@ class reportequimicoswordController extends Controller
                 $table->addRow(); //fila
 
 
-                if ($fuente != $value->reportequimicosarea_maquinaria) {
+                if($fuente != $value->reportequimicosarea_maquinaria)
+                {
                     $fila += 1;
                     $table->addCell($ancho_col_1, $combinar_fila)->addTextRun($centrado)->addText($fila, $texto);
                     $table->addCell($ancho_col_2, $combinar_fila)->addTextRun($centrado)->addText($value->reportequimicosarea_maquinaria, $texto);
                     $table->addCell($ancho_col_3, $combinar_fila)->addTextRun($justificado)->addText($value->reportequimicosarea_contaminante, $texto);
-
+                    
                     // $fuente = $value->reportequimicosarea_maquinaria;
-                } else {
+                }
+                else
+                {
                     $table->addCell($ancho_col_1, $continua_fila);
                     $table->addCell($ancho_col_2, $continua_fila);
                     $table->addCell($ancho_col_3, $continua_fila);
@@ -1589,15 +1669,18 @@ class reportequimicoswordController extends Controller
                 $table->addCell($ancho_col_4, $celda)->addTextRun($centrado)->addText($value->reportequimicoscategoria_nombre, $texto);
 
 
-                if ($fuente != $value->reportequimicosarea_maquinaria) {
+                if($fuente != $value->reportequimicosarea_maquinaria)
+                {
                     $table->addCell($ancho_col_5, $combinar_fila)->addTextRun($centrado)->addText($value->abierta, $texto);
                     $table->addCell($ancho_col_6, $combinar_fila)->addTextRun($centrado)->addText($value->cerrada, $texto);
-
+                    
                     $fuente = $value->reportequimicosarea_maquinaria;
-                } else {
+                }
+                else
+                {
                     $table->addCell($ancho_col_5, $continua_fila);
                     $table->addCell($ancho_col_6, $continua_fila);
-                }
+                }             
             }
 
 
@@ -1609,10 +1692,10 @@ class reportequimicoswordController extends Controller
 
 
             $sql = DB::select("CALL sp_ponderacion1_tabla8_1_b(?)", [$proyecto->recsensorial_id]);
-
+            
 
             // Crear tabla
-            $table = null;
+            $table = null;            
             $table = new Table(array('name' => $fuente, 'borderSize' => 1, 'borderColor' => '000000', 'cellMargin' => 40, 'unit' => TblWidth::TWIP));
 
             // encabezado tabla
@@ -1627,10 +1710,10 @@ class reportequimicoswordController extends Controller
             $table->addRow(200, array('tblHeader' => true));
             $table->addCell($ancho_col_1, $combinar_fila_encabezado)->addTextRun($centrado)->addText('Sustancia química', $encabezado_texto);
             $table->addCell($ancho_col_2, $combinar_fila_encabezado)->addTextRun($centrado)->addText('Componentes a evaluar', $encabezado_texto);
-            $table->addCell(($ancho_col_3 + $ancho_col_4 + $ancho_col_5), array('gridSpan' => 3, 'valign' => 'center', 'bgColor' => '0C3F64'))->addTextRun($centrado)->addText('Valor de ponderación', $encabezado_texto);
+            $table->addCell(($ancho_col_3+$ancho_col_4+$ancho_col_5), array('gridSpan' => 3, 'valign' => 'center', 'bgColor' => '0C3F64'))->addTextRun($centrado)->addText('Valor de ponderación', $encabezado_texto);
             $table->addCell($ancho_col_6, $combinar_fila_encabezado)->addTextRun($centrado)->addText('TOTAL<w:br/>(Suma de los valores de<w:br/>ponderación)', $encabezado_texto);
             $table->addCell($ancho_col_7, $combinar_fila_encabezado)->addTextRun($centrado)->addText('Prioridad<w:br/>de muestreo', $encabezado_texto);
-
+            
             $table->addRow(200, array('tblHeader' => true));
             $table->addCell($ancho_col_1, $continua_fila);
             $table->addCell($ancho_col_2, $continua_fila);
@@ -1639,16 +1722,20 @@ class reportequimicoswordController extends Controller
             $table->addCell($ancho_col_5, $encabezado_celda)->addTextRun($centrado)->addText('Volatilidad', $encabezado_texto);
             $table->addCell($ancho_col_6, $continua_fila);
             $table->addCell($ancho_col_7, $continua_fila);
-
+            
 
             $sustancia = 'xxxx';
-            foreach ($sql as $key => $value) {
+            foreach ($sql as $key => $value)
+            {
                 $table->addRow(); //fila
 
 
-                if ($sustancia != $value->PRODUCTO) {
+                if($sustancia != $value->PRODUCTO)
+                {
                     $table->addCell($ancho_col_1, $combinar_fila)->addTextRun($centrado)->addText($value->PRODUCTO, $texto);
-                } else {
+                }
+                else
+                {
                     $table->addCell($ancho_col_1, $continua_fila);
                 }
 
@@ -1656,7 +1743,7 @@ class reportequimicoswordController extends Controller
                 $table->addCell($ancho_col_2, $celda)->addTextRun($centrado)->addText($value->COMPONENTE, $texto);
 
 
-
+            
                 $table->addCell($ancho_col_3, $combinar_fila)->addTextRun($centrado)->addText($value->PONDERACION_CANTIDAD, $texto);
                 $table->addCell($ancho_col_4, $combinar_fila)->addTextRun($centrado)->addText($value->PONDERACION_CLASIFICACION, $texto);
                 $table->addCell($ancho_col_5, $combinar_fila)->addTextRun($centrado)->addText($value->PONDERACION_VOLATILIDAD, $texto);
@@ -1669,8 +1756,9 @@ class reportequimicoswordController extends Controller
                 }
 
                 $table->addCell($ancho_col_7, array('vMerge' => 'restart', 'valign' => 'center', 'bgColor' => $value->COLOR))->addTextRun($centrado)->addText($value->PRIORIDAD, array('color' => $texto_color, 'size' => 10, 'bold' => true, 'name' => $fuente));
-
+                
                 $sustancia = $value->PRODUCTO;
+                
             }
 
 
@@ -1681,7 +1769,7 @@ class reportequimicoswordController extends Controller
             //================================================================================
 
 
-            if (($areas_poe + 0) == 1) // TIENE TABLA POE GENERAL
+            if (($areas_poe+0) == 1) // TIENE TABLA POE GENERAL
             {
                 $sql = DB::select('SELECT
                                         reportearea.proyecto_id,
@@ -1697,11 +1785,13 @@ class reportequimicoswordController extends Controller
                                     FROM
                                         reportearea
                                     WHERE
-                                        reportearea.proyecto_id = ' . $proyecto_id . ' 
+                                        reportearea.proyecto_id = '.$proyecto_id.' 
                                         AND reportearea.reportequimicosarea_porcientooperacion > 0
                                     ORDER BY
                                         reportearea.reportearea_orden ASC');
-            } else {
+            }
+            else
+            {
                 $sql = DB::select('SELECT
                                         reportequimicosarea.proyecto_id,
                                         reportequimicosarea.registro_id,
@@ -1712,8 +1802,8 @@ class reportequimicoswordController extends Controller
                                     FROM
                                         reportequimicosarea 
                                     WHERE
-                                        reportequimicosarea.proyecto_id = ' . $proyecto_id . ' 
-                                        AND reportequimicosarea.registro_id = ' . $reporteregistro_id . ' 
+                                        reportequimicosarea.proyecto_id = '.$proyecto_id.' 
+                                        AND reportequimicosarea.registro_id = '.$reporteregistro_id.' 
                                         AND reportequimicosarea.reportequimicosarea_porcientooperacion > 0 
                                     ORDER BY
                                         reportequimicosarea.reportequimicosarea_numorden ASC,
@@ -1729,7 +1819,7 @@ class reportequimicoswordController extends Controller
 
 
             // Crear tabla
-            $table = null;
+            $table = null;            
             $table = new Table(array('name' => $fuente, 'borderSize' => 1, 'borderColor' => '000000', 'cellMargin' => 40, 'unit' => TblWidth::TWIP));
 
 
@@ -1741,11 +1831,11 @@ class reportequimicoswordController extends Controller
             // $table->addCell($ancho_col_4, $encabezado_celda)->addTextRun($centrado)->addText('Porcentaje de operación', $encabezado_texto);
 
 
-            $numero_fila = 0;
-            $total = 'XXXX';
-            $instalacion = 'xxxx';
-            foreach ($sql as $key => $value) {
-                if ($instalacion != $value->reportequimicosarea_instalacion) {
+            $numero_fila = 0; $total = 'XXXX'; $instalacion = 'xxxx';
+            foreach ($sql as $key => $value)
+            {
+                if($instalacion != $value->reportequimicosarea_instalacion)
+                {
                     // encabezado tabla
                     $table->addRow(200, array('tblHeader' => true));
                     $table->addCell($ancho_col_1, $encabezado_celda)->addTextRun($centrado)->addText('No.', $encabezado_texto);
@@ -1783,13 +1873,16 @@ class reportequimicoswordController extends Controller
                 $table->addCell($ancho_col_3, $celda)->addTextRun($centrado)->addText($value->reportequimicosarea_nombre, $texto);
 
 
-                if ($instalacion != $value->reportequimicosarea_instalacion || $total != $value->reportequimicosarea_porcientooperacion) {
-                    $table->addCell($ancho_col_4, $combinar_fila)->addTextRun($centrado)->addText($value->reportequimicosarea_porcientooperacion . '%', $texto);
-
+                if($instalacion != $value->reportequimicosarea_instalacion || $total != $value->reportequimicosarea_porcientooperacion)
+                {
+                    $table->addCell($ancho_col_4, $combinar_fila)->addTextRun($centrado)->addText($value->reportequimicosarea_porcientooperacion.'%', $texto);
+                    
 
                     $instalacion = $value->reportequimicosarea_instalacion;
                     $total = $value->reportequimicosarea_porcientooperacion;
-                } else {
+                }
+                else
+                {
                     $table->addCell($ancho_col_4, $continua_fila);
                 }
             }
@@ -1802,16 +1895,20 @@ class reportequimicoswordController extends Controller
             //================================================================================
 
             $where_condicion = '';
-            foreach ($parametros as $key => $value) {
-                if (($key + 0) == 0) {
-                    $where_condicion = 'WHERE TABLA.parametro = "' . $value->parametro . '" ';
-                } else {
-                    $where_condicion .= 'OR TABLA.parametro = "' . $value->parametro . '" ';
+            foreach ($parametros as $key => $value)
+            {
+                if (($key+0) == 0)
+                {
+                    $where_condicion = 'WHERE TABLA.parametro = "'.$value->parametro.'" ';
+                }
+                else
+                {
+                    $where_condicion .= 'OR TABLA.parametro = "'.$value->parametro.'" ';
                 }
             }
 
 
-            if (($areas_poe + 0) == 1) // TIENE TABLA POE GENERAL
+            if (($areas_poe+0) == 1) // TIENE TABLA POE GENERAL
             {
                 $sql = DB::select('SELECT
                                         TABLA.proyecto_id,
@@ -1897,10 +1994,10 @@ class reportequimicoswordController extends Controller
                                                 LEFT JOIN reportecategoria ON reportequimicosevaluacion.reportequimicoscategoria_id = reportecategoria.id
                                                 RIGHT JOIN reportequimicosevaluacionparametro ON reportequimicosevaluacion.id = reportequimicosevaluacionparametro.reportequimicosevaluacion_id
                                             WHERE
-                                                reportequimicosevaluacion.proyecto_id = ' . $proyecto_id . ' 
-                                                AND reportequimicosevaluacion.registro_id = ' . $reporteregistro_id . ' 
+                                                reportequimicosevaluacion.proyecto_id = '.$proyecto_id.' 
+                                                AND reportequimicosevaluacion.registro_id = '.$reporteregistro_id.' 
                                         ) AS TABLA
-                                    ' . $where_condicion . ' 
+                                    '.$where_condicion.' 
                                     -- WHERE
                                         -- TABLA.parametro = "Ácido sulfhídrico"
                                         -- TABLA.parametro = "Metano"
@@ -1912,7 +2009,9 @@ class reportequimicoswordController extends Controller
                                         orden ASC,
                                         TABLA.parametro ASC,
                                         TABLA.punto ASC');
-            } else {
+            }
+            else
+            {
                 $sql = DB::select('SELECT
                                         TABLA.proyecto_id,
                                         TABLA.registro_id,
@@ -1994,10 +2093,10 @@ class reportequimicoswordController extends Controller
                                                 LEFT JOIN reportequimicoscategoria ON reportequimicosevaluacion.reportequimicoscategoria_id = reportequimicoscategoria.id
                                                 RIGHT JOIN reportequimicosevaluacionparametro ON reportequimicosevaluacion.id = reportequimicosevaluacionparametro.reportequimicosevaluacion_id
                                             WHERE
-                                                reportequimicosevaluacion.proyecto_id = ' . $proyecto_id . ' 
-                                                AND reportequimicosevaluacion.registro_id = ' . $reporteregistro_id . ' 
+                                                reportequimicosevaluacion.proyecto_id = '.$proyecto_id.' 
+                                                AND reportequimicosevaluacion.registro_id = '.$reporteregistro_id.' 
                                         ) AS TABLA
-                                    ' . $where_condicion . ' 
+                                    '.$where_condicion.' 
                                     -- WHERE
                                         -- TABLA.parametro = "Ácido sulfhídrico"
                                         -- TABLA.parametro = "Metano"
@@ -2013,7 +2112,7 @@ class reportequimicoswordController extends Controller
 
 
             // Crear tabla
-            $table = null;
+            $table = null;            
             $table = new Table(array('name' => $fuente, 'borderSize' => 1, 'borderColor' => '000000', 'cellMargin' => 40, 'unit' => TblWidth::TWIP));
 
             // encabezado tabla
@@ -2041,14 +2140,15 @@ class reportequimicoswordController extends Controller
             // $table->addCell($ancho_col_8, $encabezado_celda)->addTextRun($centrado)->addText('Cumplimiento normativo', $encabezado_texto);
 
 
-            $parametro = 'XXXX';
-            $area = 'XXXX';
-            foreach ($sql as $key => $value) {
-                if ($parametro != $value->parametro) {
+            $parametro = 'XXXX'; $area = 'XXXX';
+            foreach ($sql as $key => $value)
+            {
+                if($parametro != $value->parametro)
+                {
                     $table->addRow(); //fila
-                    $table->addCell(13000, array('gridSpan' => 8, 'valign' => 'center', 'bgColor' => '#FFFFFF'))->addTextRun($izquierda)->addText('</w:t></w:r><w:r><w:rPr><w:b/></w:rPr><w:t>Parámetro</w:t></w:r><w:r><w:t>' . $value->parametro, $texto);
+                    $table->addCell(13000, array('gridSpan' => 8, 'valign' => 'center', 'bgColor' => '#FFFFFF'))->addTextRun($izquierda)->addText('</w:t></w:r><w:r><w:rPr><w:b/></w:rPr><w:t>Parámetro</w:t></w:r><w:r><w:t>'.$value->parametro, $texto);
                     $table->addRow(); //fila
-                    $table->addCell(13000, array('gridSpan' => 8, 'valign' => 'center', 'bgColor' => '#FFFFFF'))->addTextRun($izquierda)->addText('</w:t></w:r><w:r><w:rPr><w:b/></w:rPr><w:t>Método</w:t></w:r><w:r><w:t>' . $value->metodo, $texto);
+                    $table->addCell(13000, array('gridSpan' => 8, 'valign' => 'center', 'bgColor' => '#FFFFFF'))->addTextRun($izquierda)->addText('</w:t></w:r><w:r><w:rPr><w:b/></w:rPr><w:t>Método</w:t></w:r><w:r><w:t>'.$value->metodo, $texto);
                     $table->addRow(); //fila
                     $table->addCell($ancho_col_1, $encabezado_celda)->addTextRun($centrado)->addText('Punto de evaluación', $encabezado_texto);
                     $table->addCell($ancho_col_2, $encabezado_celda)->addTextRun($centrado)->addText('Área', $encabezado_texto);
@@ -2064,15 +2164,18 @@ class reportequimicoswordController extends Controller
 
 
                 $table->addRow(); //fila
-
+                
 
                 $table->addCell($ancho_col_1, $celda)->addTextRun($centrado)->addText(sanitizeText($value->punto), $texto);
 
-
-                if ($area != $value->area_nombre) {
+                
+                if($area != $value->area_nombre)
+                {
                     $table->addCell($ancho_col_2, $combinar_fila)->addTextRun($centrado)->addText(sanitizeText($value->area_nombre), $texto);
                     $area = $value->area_nombre;
-                } else {
+                }
+                else
+                {
                     $table->addCell($ancho_col_2, $continua_fila);
                 }
 
@@ -2082,7 +2185,7 @@ class reportequimicoswordController extends Controller
                 $table->addCell($ancho_col_5, $celda)->addTextRun($centrado)->addText(sanitizeText($value->valorlimiteTexto), $texto);
                 $table->addCell($ancho_col_6, $celda)->addTextRun($centrado)->addText(sanitizeText($value->limitesuperiorTexto), $texto);
                 $table->addCell($ancho_col_7, $celda)->addTextRun($centrado)->addText(sanitizeText($value->periodo, $texto));
-
+                
 
                 $texto_color = "#000000";
                 if ($value->resultado_color == "#FF0000") //Rojo
@@ -2105,16 +2208,21 @@ class reportequimicoswordController extends Controller
             $where_condicion = '';
 
 
-            foreach ($parametros as $key => $value) {
-                if (($key + 0) == 0) {
-                    $where_condicion = ' AND (reportequimicosmetodomuestreo.reportequimicosmetodomuestreo_parametro = "' . $value->parametro . '" ';
-                } else {
-                    $where_condicion .= 'OR reportequimicosmetodomuestreo.reportequimicosmetodomuestreo_parametro = "' . $value->parametro . '" ';
+            foreach ($parametros as $key => $value)
+            {
+                if (($key+0) == 0)
+                {
+                    $where_condicion = ' AND (reportequimicosmetodomuestreo.reportequimicosmetodomuestreo_parametro = "'.$value->parametro.'" ';
+                }
+                else
+                {
+                    $where_condicion .= 'OR reportequimicosmetodomuestreo.reportequimicosmetodomuestreo_parametro = "'.$value->parametro.'" ';
                 }
             }
 
 
-            if (count($parametros) > 0) {
+            if (count($parametros) > 0)
+            {
                 $where_condicion .= ') ';
             }
 
@@ -2147,16 +2255,16 @@ class reportequimicoswordController extends Controller
                                 FROM
                                     reportequimicosmetodomuestreo
                                 WHERE
-                                    reportequimicosmetodomuestreo.proyecto_id = ' . $proyecto_id . ' 
-                                    AND reportequimicosmetodomuestreo.registro_id = ' . $reporteregistro_id . ' 
-                                    ' . $where_condicion . '
+                                    reportequimicosmetodomuestreo.proyecto_id = '.$proyecto_id.' 
+                                    AND reportequimicosmetodomuestreo.registro_id = '.$reporteregistro_id.' 
+                                    '.$where_condicion.'
                                 ORDER BY
                                     orden ASC,
                                     reportequimicosmetodomuestreo.reportequimicosmetodomuestreo_parametro ASC');
 
 
             // Crear tabla
-            $table = null;
+            $table = null;            
             $table = new Table(array('name' => $fuente, 'borderSize' => 1, 'borderColor' => '000000', 'cellMargin' => 40, 'unit' => TblWidth::TWIP));
 
             // encabezado tabla
@@ -2170,7 +2278,7 @@ class reportequimicoswordController extends Controller
             $table->addCell($ancho_col_1, $combinar_fila_encabezado)->addTextRun($centrado)->addText('Parámetro', $encabezado_texto);
             $table->addCell($ancho_col_2, $combinar_fila_encabezado)->addTextRun($centrado)->addText('Procedimiento o método', $encabezado_texto);
             $table->addCell($ancho_col_3, $combinar_fila_encabezado)->addTextRun($centrado)->addText('Puntos evaluados', $encabezado_texto);
-            $table->addCell(($ancho_col_4 + $ancho_col_5), array('gridSpan' => 2, 'valign' => 'center', 'bgColor' => '#0C3F64'))->addTextRun($centrado)->addText('Datos del muestreo: ', $encabezado_texto);
+            $table->addCell(($ancho_col_4+$ancho_col_5), array('gridSpan' => 2, 'valign' => 'center', 'bgColor' => '#0C3F64'))->addTextRun($centrado)->addText('Datos del muestreo: ', $encabezado_texto);
             $table->addRow(200, array('tblHeader' => true));
             $table->addCell($ancho_col_1, $continua_fila);
             $table->addCell($ancho_col_2, $continua_fila);
@@ -2180,18 +2288,22 @@ class reportequimicoswordController extends Controller
 
 
             $parametro = 'XXXXX';
-            foreach ($sql as $key => $value) {
+            foreach ($sql as $key => $value)
+            {
                 $table->addRow(); //fila
 
 
-                if ($parametro != $value->parametro) {
+                if($parametro != $value->parametro)
+                {
                     $table->addCell($ancho_col_1, $combinar_fila)->addTextRun($centrado)->addText($value->parametro, $texto);
                     $table->addCell($ancho_col_2, $combinar_fila)->addTextRun($centrado)->addText($value->metodo, $texto);
                     $table->addCell($ancho_col_3, $combinar_fila)->addTextRun($centrado)->addText($value->puntos, $texto);
                     $table->addCell($ancho_col_4, $combinar_fila)->addTextRun($centrado)->addText($value->tipo, $texto);
 
                     $parametro = $value->parametro;
-                } else {
+                }
+                else
+                {
                     $table->addCell($ancho_col_1, $continua_fila);
                     $table->addCell($ancho_col_2, $continua_fila);
                     $table->addCell($ancho_col_3, $continua_fila);
@@ -2210,11 +2322,13 @@ class reportequimicoswordController extends Controller
             //================================================================================
 
 
-            if (($recsensorial->recsensorial_tipocliente + 0) == 1) // 1 = Pemex, 0 = Cliente
+            if (($recsensorial->recsensorial_tipocliente+0) == 1) // 1 = Pemex, 0 = Cliente
             {
                 $fuente = 'Arial';
                 $font_size = 6;
-            } else {
+            }
+            else
+            {
                 $fuente = 'Arial';
                 $font_size = 6;
             }
@@ -2238,16 +2352,20 @@ class reportequimicoswordController extends Controller
 
 
             $where_condicion = '';
-            foreach ($parametros as $key => $value) {
-                if (($key + 0) == 0) {
-                    $where_condicion = ' WHERE TABLA.parametro = "' . $value->parametro . '" ';
-                } else {
-                    $where_condicion .= 'OR TABLA.parametro = "' . $value->parametro . '" ';
+            foreach ($parametros as $key => $value)
+            {
+                if (($key+0) == 0)
+                {
+                    $where_condicion = ' WHERE TABLA.parametro = "'.$value->parametro.'" ';
+                }
+                else
+                {
+                    $where_condicion .= 'OR TABLA.parametro = "'.$value->parametro.'" ';
                 }
             }
 
 
-            if (($areas_poe + 0) == 1) // TIENE TABLA POE GENERAL
+            if (($areas_poe+0) == 1) // TIENE TABLA POE GENERAL
             {
                 $sql = DB::select('SELECT
                                         TABLA.id,
@@ -2303,12 +2421,12 @@ class reportequimicoswordController extends Controller
                                                 LEFT JOIN reportecategoria ON reportequimicosevaluacion.reportequimicoscategoria_id = reportecategoria.id
                                                 RIGHT JOIN reportequimicosevaluacionparametro ON reportequimicosevaluacion.id = reportequimicosevaluacionparametro.reportequimicosevaluacion_id 
                                             WHERE
-                                                reportequimicosevaluacion.proyecto_id = ' . $proyecto_id . ' 
-                                                AND reportequimicosevaluacion.registro_id = ' . $reporteregistro_id . ' 
+                                                reportequimicosevaluacion.proyecto_id = '.$proyecto_id.' 
+                                                AND reportequimicosevaluacion.registro_id = '.$reporteregistro_id.' 
                                             ORDER BY
                                                 reportequimicosevaluacion.reportequimicosevaluacion_punto ASC
                                         ) AS TABLA
-                                    ' . $where_condicion . ' 
+                                    '.$where_condicion.' 
                                     -- WHERE
                                         -- TABLA.parametro = "Ácido sulfhídrico"
                                         -- TABLA.parametro = "Metano"
@@ -2335,7 +2453,9 @@ class reportequimicoswordController extends Controller
                                         TABLA.punto
                                     ORDER BY
                                         TABLA.punto ASC');
-            } else {
+            }
+            else
+            {
                 $sql = DB::select('SELECT
                                         TABLA.id,
                                         TABLA.proyecto_id,
@@ -2390,12 +2510,12 @@ class reportequimicoswordController extends Controller
                                                 LEFT JOIN reportequimicoscategoria ON reportequimicosevaluacion.reportequimicoscategoria_id = reportequimicoscategoria.id
                                                 RIGHT JOIN reportequimicosevaluacionparametro ON reportequimicosevaluacion.id = reportequimicosevaluacionparametro.reportequimicosevaluacion_id 
                                             WHERE
-                                                reportequimicosevaluacion.proyecto_id = ' . $proyecto_id . ' 
-                                                AND reportequimicosevaluacion.registro_id = ' . $reporteregistro_id . ' 
+                                                reportequimicosevaluacion.proyecto_id = '.$proyecto_id.' 
+                                                AND reportequimicosevaluacion.registro_id = '.$reporteregistro_id.' 
                                             ORDER BY
                                                 reportequimicosevaluacion.reportequimicosevaluacion_punto ASC
                                         ) AS TABLA
-                                    ' . $where_condicion . ' 
+                                    '.$where_condicion.' 
                                     -- WHERE
                                         -- TABLA.parametro = "Ácido sulfhídrico"
                                         -- TABLA.parametro = "Metano"
@@ -2429,7 +2549,7 @@ class reportequimicoswordController extends Controller
             if (($proyecto->catregion_id + 0) == 1) //REGION NORTE
             {
                 // Crear tabla
-                $table = null;
+                $table = null;            
                 $table = new Table(array('name' => $fuente, 'borderSize' => 1, 'borderColor' => '000000', 'cellMargin' => 40, 'unit' => TblWidth::TWIP));
 
                 // encabezado tabla
@@ -2445,19 +2565,19 @@ class reportequimicoswordController extends Controller
                 $ancho_col_10 = NULL; // 1000;
                 $ancho_col_11 = NULL; // 500;
                 $ancho_col_12 = NULL; // 500;
-
+                
                 $table->addRow(200, array('tblHeader' => true));
-                $table->addCell($ancho_col_1, array('vMerge' => 'restart', 'valign' => 'center', 'bgColor' => '0C3F64', 'textDirection' => \PhpOffice\PhpWord\Style\Cell::TEXT_DIR_BTLR))->addTextRun($centrado3)->addText('Contador', $encabezado_texto3);
+                $table->addCell($ancho_col_1, array('vMerge' => 'restart', 'valign' => 'center', 'bgColor' => '0C3F64', 'textDirection'=>\PhpOffice\PhpWord\Style\Cell::TEXT_DIR_BTLR))->addTextRun($centrado3)->addText('Contador', $encabezado_texto3);
                 $table->addCell($ancho_col_2, array('gridSpan' => 4, 'valign' => 'center', 'bgColor' => 'FFFFFF'))->addTextRun($centrado3)->addText('Área física', $textonegrita3);
                 $table->addCell($ancho_col_3, array('gridSpan' => 5, 'valign' => 'center', 'bgColor' => 'FFFFFF'))->addTextRun($centrado3)->addText('Plantilla laboral, unidad de implantación', $textonegrita3);
-                $table->addCell($ancho_col_4, array('gridSpan' => (count($parametros) * 2), 'valign' => 'center', 'bgColor' => 'FFFFFF'))->addTextRun($centrado3)->addText('Agentes químicos', $textonegrita3);
-
+                $table->addCell($ancho_col_4, array('gridSpan' => (count($parametros)*2), 'valign' => 'center', 'bgColor' => 'FFFFFF'))->addTextRun($centrado3)->addText('Agentes químicos', $textonegrita3);
+                
                 $table->addRow(200, array('tblHeader' => true));
                 $table->addCell($ancho_col_1, $continua_fila3);
                 $table->addCell($ancho_col_2, array('gridSpan' => 4, 'valign' => 'center', 'bgColor' => '0C3F64'))->addTextRun($centrado3)->addText('Localización', $encabezado_texto3);
                 $table->addCell($ancho_col_3, array('gridSpan' => 5, 'valign' => 'center', 'bgColor' => '0C3F64'))->addTextRun($centrado3)->addText('Datos demográficos', $encabezado_texto3);
-                $table->addCell($ancho_col_4, array('gridSpan' => (count($parametros) * 2), 'valign' => 'center', 'bgColor' => '0C3F64'))->addTextRun($centrado3)->addText('COV´S', $encabezado_texto3);
-
+                $table->addCell($ancho_col_4, array('gridSpan' => (count($parametros)*2), 'valign' => 'center', 'bgColor' => '0C3F64'))->addTextRun($centrado3)->addText('COV´S', $encabezado_texto3);
+                
                 $table->addRow(200, array('tblHeader' => true));
                 $table->addCell($ancho_col_1, $continua_fila3);
                 $table->addCell(NULL, $combinar_fila_encabezado3_celeste)->addTextRun($centrado3)->addText('Subdirección o corporativo', $encabezado_texto3);
@@ -2469,7 +2589,8 @@ class reportequimicoswordController extends Controller
                 $table->addCell(NULL, $combinar_fila_encabezado3_celeste)->addTextRun($centrado3)->addText('Categoría', $encabezado_texto3);
                 $table->addCell(NULL, $combinar_fila_encabezado3_celeste)->addTextRun($centrado3)->addText('Número de personas', $encabezado_texto3);
                 $table->addCell(NULL, $combinar_fila_encabezado3_celeste)->addTextRun($centrado3)->addText('Grupo de exposición homogénea', $encabezado_texto3);
-                foreach ($parametros as $key => $value) {
+                foreach ($parametros as $key => $value)
+                {
                     $table->addCell(NULL, array('gridSpan' => 2, 'valign' => 'center', 'bgColor' => '0BACDB'))->addTextRun($centrado3)->addText($value->parametro, $encabezado_texto3);
                 }
 
@@ -2484,77 +2605,93 @@ class reportequimicoswordController extends Controller
                 $table->addCell(NULL, $continua_fila3);
                 $table->addCell(NULL, $continua_fila3);
                 $table->addCell(NULL, $continua_fila3);
-                foreach ($parametros as $key => $value) {
+                foreach ($parametros as $key => $value)
+                {
                     $table->addCell(NULL, $encabezado_celda3_celeste)->addTextRun($centrado3)->addText('Referencia<w:br/>(VLE-PPT)<w:br/>ppm', $encabezado_texto3);
                     $table->addCell(NULL, $encabezado_celda3_celeste)->addTextRun($centrado3)->addText('Resultado<w:br/>(Concentración)<w:br/>ppm', $encabezado_texto3);
                 }
 
 
-                $punto = 'XXXX';
-                $subdir = 'XXXX';
-                $activo = 'XXXX';
-                $instalacion = 'XXXX';
-                $area = 'XXXX';
-                $nombre = 'XXXX';
-                $ficha = 'XXXX';
-                $geo = 'XXXX'; //$punto2 = 'XXXX';  $dosimentria = 'XXXX';
-                foreach ($sql as $key => $value) {
+                $punto = 'XXXX'; $subdir = 'XXXX'; $activo = 'XXXX'; $instalacion = 'XXXX'; $area = 'XXXX'; $nombre = 'XXXX'; $ficha = 'XXXX'; $geo = 'XXXX'; //$punto2 = 'XXXX';  $dosimentria = 'XXXX';
+                foreach ($sql as $key => $value)
+                {
                     $table->addRow(); //fila
 
 
-                    if ($punto != $value->punto) {
+                    if($punto != $value->punto)
+                    {
                         $numero_fila += 1;
                         $table->addCell($ancho_col_1, $combinar_fila3)->addTextRun($centrado3)->addText($numero_fila, $texto3);
                         $punto = $value->punto;
-                    } else {
+                    }
+                    else
+                    {
                         $table->addCell($ancho_col_1, $continua_fila3);
                     }
 
 
-                    if ($subdir != $value->catsubdireccion_nombre) {
+                    if($subdir != $value->catsubdireccion_nombre)
+                    {
                         $table->addCell($ancho_col_2, $combinar_fila3)->addTextRun($centrado3)->addText($value->catsubdireccion_nombre, $texto3);
                         $subdir = $value->catsubdireccion_nombre;
-                    } else {
+                    }
+                    else
+                    {
                         $table->addCell($ancho_col_2, $continua_fila3);
                     }
 
 
-                    if ($activo != $value->gerencia_activo) {
+                    if($activo != $value->gerencia_activo)
+                    {
                         $table->addCell($ancho_col_3, $combinar_fila3)->addTextRun($centrado3)->addText($value->gerencia_activo, $texto3);
                         $activo = $value->gerencia_activo;
-                    } else {
+                    }
+                    else
+                    {
                         $table->addCell($ancho_col_3, $continua_fila3);
                     }
 
 
-                    if ($instalacion != $value->instalacion) {
+                    if($instalacion != $value->instalacion)
+                    {
                         $table->addCell($ancho_col_4, $combinar_fila3)->addTextRun($centrado3)->addText($value->instalacion, $texto3);
                         $instalacion = $value->instalacion;
-                    } else {
+                    }
+                    else
+                    {
                         $table->addCell($ancho_col_4, $continua_fila3);
                     }
 
 
-                    if ($area != $value->area) {
+                    if($area != $value->area)
+                    {
                         $table->addCell($ancho_col_5, $combinar_fila3)->addTextRun($centrado3)->addText($value->area, $texto3);
                         $area = $value->area;
-                    } else {
+                    }
+                    else
+                    {
                         $table->addCell($ancho_col_5, $continua_fila3);
                     }
 
 
-                    if ($nombre != $value->nombre) {
+                    if($nombre != $value->nombre)
+                    {
                         $table->addCell($ancho_col_6, $combinar_fila3)->addTextRun($centrado3)->addText($value->nombre, $texto3);
                         $nombre = $value->nombre;
-                    } else {
+                    }
+                    else
+                    {
                         $table->addCell($ancho_col_6, $continua_fila3);
                     }
 
 
-                    if ($ficha != $value->ficha) {
+                    if($ficha != $value->ficha)
+                    {
                         $table->addCell($ancho_col_7, $combinar_fila3)->addTextRun($centrado3)->addText($value->ficha, $texto3);
                         $ficha = $value->ficha;
-                    } else {
+                    }
+                    else
+                    {
                         $table->addCell($ancho_col_7, $continua_fila3);
                     }
 
@@ -2564,7 +2701,8 @@ class reportequimicoswordController extends Controller
                     $table->addCell($ancho_col_10, $celda3)->addTextRun($centrado3)->addText($value->geo, $texto3);
 
 
-                    foreach ($parametros as $key2 => $parametro) {
+                    foreach ($parametros as $key2 => $parametro)
+                    {
                         $agentes = DB::select('SELECT
                                                     TABLA.proyecto_id,
                                                     TABLA.registro_id,
@@ -2587,12 +2725,12 @@ class reportequimicoswordController extends Controller
                                                             reportequimicosevaluacionparametro
                                                             LEFT JOIN reportequimicosevaluacion ON reportequimicosevaluacionparametro.reportequimicosevaluacion_id = reportequimicosevaluacion.id
                                                         WHERE
-                                                            reportequimicosevaluacion.proyecto_id = ' . $proyecto_id . ' 
-                                                            AND reportequimicosevaluacion.registro_id = ' . $reporteregistro_id . ' 
-                                                            AND reportequimicosevaluacion.reportequimicosevaluacion_punto = ' . $value->punto . ' 
+                                                            reportequimicosevaluacion.proyecto_id = '.$proyecto_id.' 
+                                                            AND reportequimicosevaluacion.registro_id = '.$reporteregistro_id.' 
+                                                            AND reportequimicosevaluacion.reportequimicosevaluacion_punto = '.$value->punto.' 
                                                     ) AS TABLA                                                
                                                 WHERE
-                                                    TABLA.parametro = "' . $parametro->parametro . '"
+                                                    TABLA.parametro = "'.$parametro->parametro.'"
                                                     -- TABLA.parametro = "Ácido sulfhídrico"
                                                     -- TABLA.parametro = "Metano"
                                                     -- OR TABLA.parametro = "Etano"
@@ -2603,18 +2741,23 @@ class reportequimicoswordController extends Controller
                                                     TABLA.parametro ASC
                                                 LIMIT 1');
 
-                        if (count($agentes) > 0) {
+                        if (count($agentes) > 0)
+                        {
                             $table->addCell(NULL, $celda3)->addTextRun($centrado3)->addText($agentes[0]->limite, $texto3);
                             $table->addCell(NULL, $celda3)->addTextRun($centrado3)->addText($agentes[0]->concentracion, $texto3);
-                        } else {
+                        }
+                        else
+                        {
                             $table->addCell(NULL, $celda3)->addTextRun($centrado3)->addText('', $texto3);
                             $table->addCell(NULL, $celda3)->addTextRun($centrado3)->addText('', $texto3);
                         }
                     }
                 }
-            } else {
+            }
+            else
+            {
                 // Crear tabla
-                $table = null;
+                $table = null;            
                 $table = new Table(array('name' => $fuente, 'borderSize' => 1, 'borderColor' => '000000', 'cellMargin' => 40, 'unit' => TblWidth::TWIP));
 
                 // encabezado tabla
@@ -2627,19 +2770,19 @@ class reportequimicoswordController extends Controller
                 $ancho_col_7 = 1000;
                 $ancho_col_8 = 2000;
                 $ancho_col_9 = 1500;
-
+                
                 $table->addRow(200, array('tblHeader' => true));
-                $table->addCell($ancho_col_1, array('vMerge' => 'restart', 'valign' => 'center', 'bgColor' => '0C3F64', 'textDirection' => \PhpOffice\PhpWord\Style\Cell::TEXT_DIR_BTLR))->addTextRun($centrado3)->addText('Contador', $encabezado_texto3);
-                $table->addCell(($ancho_col_2 + $ancho_col_3 + $ancho_col_4 + $ancho_col_5), array('gridSpan' => 4, 'valign' => 'center', 'bgColor' => 'FFFFFF'))->addTextRun($centrado3)->addText('Área física', $textonegrita3);
-                $table->addCell(($ancho_col_6 + $ancho_col_7 + $ancho_col_8), array('gridSpan' => 3, 'valign' => 'center', 'bgColor' => 'FFFFFF'))->addTextRun($centrado3)->addText('Plantilla laboral, unidad de implantación', $textonegrita3);
+                $table->addCell($ancho_col_1, array('vMerge' => 'restart', 'valign' => 'center', 'bgColor' => '0C3F64', 'textDirection'=>\PhpOffice\PhpWord\Style\Cell::TEXT_DIR_BTLR))->addTextRun($centrado3)->addText('Contador', $encabezado_texto3);
+                $table->addCell(($ancho_col_2+$ancho_col_3+$ancho_col_4+$ancho_col_5), array('gridSpan' => 4, 'valign' => 'center', 'bgColor' => 'FFFFFF'))->addTextRun($centrado3)->addText('Área física', $textonegrita3);
+                $table->addCell(($ancho_col_6+$ancho_col_7+$ancho_col_8), array('gridSpan' => 3, 'valign' => 'center', 'bgColor' => 'FFFFFF'))->addTextRun($centrado3)->addText('Plantilla laboral, unidad de implantación', $textonegrita3);
                 $table->addCell($ancho_col_9, array('gridSpan' => count($parametros), 'valign' => 'center', 'bgColor' => 'FFFFFF'))->addTextRun($centrado3)->addText('Agentes químicos', $textonegrita3);
-
+                
                 $table->addRow(200, array('tblHeader' => true));
                 $table->addCell($ancho_col_1, $continua_fila3);
-                $table->addCell(($ancho_col_2 + $ancho_col_3 + $ancho_col_4 + $ancho_col_5), array('gridSpan' => 4, 'valign' => 'center', 'bgColor' => '0C3F64'))->addTextRun($centrado3)->addText('Localización', $encabezado_texto3);
-                $table->addCell(($ancho_col_6 + $ancho_col_7 + $ancho_col_8), array('gridSpan' => 3, 'valign' => 'center', 'bgColor' => '0C3F64'))->addTextRun($centrado3)->addText('Datos demográficos', $encabezado_texto3);
+                $table->addCell(($ancho_col_2+$ancho_col_3+$ancho_col_4+$ancho_col_5), array('gridSpan' => 4, 'valign' => 'center', 'bgColor' => '0C3F64'))->addTextRun($centrado3)->addText('Localización', $encabezado_texto3);
+                $table->addCell(($ancho_col_6+$ancho_col_7+$ancho_col_8), array('gridSpan' => 3, 'valign' => 'center', 'bgColor' => '0C3F64'))->addTextRun($centrado3)->addText('Datos demográficos', $encabezado_texto3);
                 $table->addCell($ancho_col_9, array('gridSpan' => count($parametros), 'valign' => 'center', 'bgColor' => '0C3F64'))->addTextRun($centrado3)->addText('COV´S<w:br/>(Medición/VLE)', $encabezado_texto3);
-
+                
                 $table->addRow(200, array('tblHeader' => true));
                 $table->addCell($ancho_col_1, $continua_fila3);
                 $table->addCell($ancho_col_2, $encabezado_celda3_celeste)->addTextRun($centrado3)->addText('Subdirección o corporativo', $encabezado_texto3);
@@ -2650,77 +2793,93 @@ class reportequimicoswordController extends Controller
                 $table->addCell($ancho_col_7, $encabezado_celda3_celeste)->addTextRun($centrado3)->addText('Ficha', $encabezado_texto3);
                 $table->addCell($ancho_col_8, $encabezado_celda3_celeste)->addTextRun($centrado3)->addText('Categoría', $encabezado_texto3);
 
-                foreach ($parametros as $key => $value) {
+                foreach ($parametros as $key => $value)
+                {
                     $table->addCell($ancho_col_9, $encabezado_celda3_celeste)->addTextRun($centrado3)->addText($value->parametro, $encabezado_texto3);
                 }
 
 
-                $punto = 'XXXX';
-                $subdir = 'XXXX';
-                $activo = 'XXXX';
-                $instalacion = 'XXXX';
-                $area = 'XXXX';
-                $nombre = 'XXXX';
-                $ficha = 'XXXX';
-                $punto2 = 'XXXX';
-                foreach ($sql as $key => $value) {
+                $punto = 'XXXX'; $subdir = 'XXXX'; $activo = 'XXXX'; $instalacion = 'XXXX'; $area = 'XXXX'; $nombre = 'XXXX'; $ficha = 'XXXX'; $punto2 = 'XXXX';
+                foreach ($sql as $key => $value)
+                {
                     $table->addRow(); //fila
 
 
-                    if ($punto != $value->punto) {
+                    if($punto != $value->punto)
+                    {
                         $numero_fila += 1;
 
                         $table->addCell($ancho_col_1, $combinar_fila3)->addTextRun($centrado3)->addText($numero_fila, $texto3);
                         $punto = $value->punto;
-                    } else {
+                    }
+                    else
+                    {
                         $table->addCell($ancho_col_1, $continua_fila3);
                     }
 
 
-                    if ($subdir != $value->catsubdireccion_nombre) {
+                    if($subdir != $value->catsubdireccion_nombre)
+                    {
                         $table->addCell($ancho_col_2, $combinar_fila3)->addTextRun($centrado3)->addText($value->catsubdireccion_nombre, $texto3);
                         $subdir = $value->catsubdireccion_nombre;
-                    } else {
+                    }
+                    else
+                    {
                         $table->addCell($ancho_col_2, $continua_fila3);
                     }
 
 
-                    if ($activo != $value->gerencia_activo) {
+                    if($activo != $value->gerencia_activo)
+                    {
                         $table->addCell($ancho_col_3, $combinar_fila3)->addTextRun($centrado3)->addText($value->gerencia_activo, $texto3);
                         $activo = $value->gerencia_activo;
-                    } else {
+                    }
+                    else
+                    {
                         $table->addCell($ancho_col_3, $continua_fila3);
                     }
 
 
-                    if ($instalacion != $value->instalacion) {
+                    if($instalacion != $value->instalacion)
+                    {
                         $table->addCell($ancho_col_4, $combinar_fila3)->addTextRun($centrado3)->addText($value->instalacion, $texto3);
                         $instalacion = $value->instalacion;
-                    } else {
+                    }
+                    else
+                    {
                         $table->addCell($ancho_col_4, $continua_fila3);
                     }
 
 
-                    if ($area != $value->area) {
+                    if($area != $value->area)
+                    {
                         $table->addCell($ancho_col_5, $combinar_fila3)->addTextRun($centrado3)->addText($value->area, $texto3);
                         $area = $value->area;
-                    } else {
+                    }
+                    else
+                    {
                         $table->addCell($ancho_col_5, $continua_fila3);
                     }
 
 
-                    if ($nombre != $value->nombre) {
+                    if($nombre != $value->nombre)
+                    {
                         $table->addCell($ancho_col_6, $combinar_fila3)->addTextRun($centrado3)->addText($value->nombre, $texto3);
                         $nombre = $value->nombre;
-                    } else {
+                    }
+                    else
+                    {
                         $table->addCell($ancho_col_6, $continua_fila3);
                     }
 
 
-                    if ($ficha != $value->ficha) {
+                    if($ficha != $value->ficha)
+                    {
                         $table->addCell($ancho_col_7, $combinar_fila3)->addTextRun($centrado3)->addText($value->ficha, $texto3);
                         $ficha = $value->ficha;
-                    } else {
+                    }
+                    else
+                    {
                         $table->addCell($ancho_col_7, $continua_fila3);
                     }
 
@@ -2728,7 +2887,8 @@ class reportequimicoswordController extends Controller
                     $table->addCell($ancho_col_8, $celda3)->addTextRun($centrado3)->addText($value->categoria, $texto3);
 
 
-                    foreach ($parametros as $key2 => $parametro) {
+                    foreach ($parametros as $key2 => $parametro)
+                    {
                         $agentes = DB::select('SELECT
                                                     TABLA.proyecto_id,
                                                     TABLA.registro_id,
@@ -2751,12 +2911,12 @@ class reportequimicoswordController extends Controller
                                                             reportequimicosevaluacionparametro
                                                             LEFT JOIN reportequimicosevaluacion ON reportequimicosevaluacionparametro.reportequimicosevaluacion_id = reportequimicosevaluacion.id
                                                         WHERE
-                                                            reportequimicosevaluacion.proyecto_id = ' . $proyecto_id . ' 
-                                                            AND reportequimicosevaluacion.registro_id = ' . $reporteregistro_id . ' 
-                                                            AND reportequimicosevaluacion.reportequimicosevaluacion_punto = ' . $value->punto . ' 
+                                                            reportequimicosevaluacion.proyecto_id = '.$proyecto_id.' 
+                                                            AND reportequimicosevaluacion.registro_id = '.$reporteregistro_id.' 
+                                                            AND reportequimicosevaluacion.reportequimicosevaluacion_punto = '.$value->punto.' 
                                                     ) AS TABLA
                                                 WHERE
-                                                    TABLA.parametro = "' . $parametro->parametro . '"
+                                                    TABLA.parametro = "'.$parametro->parametro.'"
                                                     -- TABLA.parametro = "Ácido sulfhídrico"
                                                     -- TABLA.parametro = "Metano"
                                                     -- OR TABLA.parametro = "Etano"
@@ -2767,9 +2927,12 @@ class reportequimicoswordController extends Controller
                                                         TABLA.parametro ASC');
 
 
-                        if (count($agentes) > 0) {
-                            $table->addCell(NULL, $celda3)->addTextRun($centrado3)->addText($agentes[0]->concentracion . ' / ' . $agentes[0]->limite, $texto3);
-                        } else {
+                        if (count($agentes) > 0)
+                        {
+                            $table->addCell(NULL, $celda3)->addTextRun($centrado3)->addText($agentes[0]->concentracion.' / '.$agentes[0]->limite, $texto3);
+                        }
+                        else
+                        {
                             $table->addCell(NULL, $celda3)->addTextRun($centrado3)->addText('', $texto3);
                         }
                     }
@@ -2777,14 +2940,19 @@ class reportequimicoswordController extends Controller
             }
 
 
-            if (($recsensorial->recsensorial_tipocliente + 0) == 1) // 1 = pemex, 0 = cliente
+            if (($recsensorial->recsensorial_tipocliente+0) == 1) // 1 = pemex, 0 = cliente
             {
-                if (str_contains($proyecto->catsubdireccion->catsubdireccion_nombre, ['Perforación', 'perforación', 'Perforacion', 'perforacion']) == 1 || str_contains($proyecto->catgerencia->catgerencia_nombre, ['Perforación', 'perforación', 'Perforacion', 'perforacion']) == 1) {
+                if (str_contains($proyecto->catsubdireccion->catsubdireccion_nombre, ['Perforación', 'perforación', 'Perforacion', 'perforacion']) == 1 || str_contains($proyecto->catgerencia->catgerencia_nombre, ['Perforación', 'perforación', 'Perforacion', 'perforacion']) == 1)
+                {
                     $plantillaword->setValue('MATRIZ_TEXTO', '<w:br/>Se anexa en formato digital.<w:br/>');
-                } else {
+                }
+                else
+                {
                     $plantillaword->setValue('MATRIZ_TEXTO', '');
                 }
-            } else {
+            }
+            else
+            {
                 $plantillaword->setValue('MATRIZ_TEXTO', '');
             }
 
@@ -2797,8 +2965,9 @@ class reportequimicoswordController extends Controller
 
 
             $where_conclusion = '';
-            if (($partida_id + 0) > 0) {
-                $where_conclusion = 'AND reportequimicosconclusion.catreportequimicospartidas_id = ' . $partida_id;
+            if (($partida_id+0) > 0)
+            {
+                $where_conclusion = 'AND reportequimicosconclusion.catreportequimicospartidas_id = '.$partida_id;
             }
 
 
@@ -2811,22 +2980,30 @@ class reportequimicoswordController extends Controller
                                 FROM
                                     reportequimicosconclusion
                                 WHERE
-                                    reportequimicosconclusion.proyecto_id = ' . $proyecto_id . ' 
-                                    AND reportequimicosconclusion.registro_id = ' . $reporteregistro_id . '');
+                                    reportequimicosconclusion.proyecto_id = '.$proyecto_id.' 
+                                    AND reportequimicosconclusion.registro_id = '.$reporteregistro_id.'
+                                LIMIT 1');
 
-
-            if (count($sql) > 0) {
-                if (count($sql) == 1) {
+            
+            if (count($sql) > 0)
+            {
+                if (count($sql) == 1)
+                {
                     $plantillaword->setValue('CONCLUSION', $this->datosproyectoreemplazartexto($proyecto, $recsensorial, $quimicos, $sql[0]->reportequimicosconclusion_conclusion));
-                } else {
+                }
+                else
+                {
                     $conclusiones = '';
-                    foreach ($sql as $key => $value) {
-                        $conclusiones .= ($key + 1) . '.- ' . $this->datosproyectoreemplazartexto($proyecto, $recsensorial, $quimicos, $value->reportequimicosconclusion_conclusion) . '<w:br/><w:br/><w:br/>';
+                    foreach ($sql as $key => $value)
+                    {
+                        $conclusiones .= ($key+1).'.- '.$this->datosproyectoreemplazartexto($proyecto, $recsensorial, $quimicos, $value->reportequimicosconclusion_conclusion).'<w:br/><w:br/><w:br/>';
                     }
 
                     $plantillaword->setValue('CONCLUSION', $conclusiones);
                 }
-            } else {
+            }
+            else
+            {
                 $plantillaword->setValue('CONCLUSION', 'NO SE ENCONTRÓ CONCLUSIÓN PARA ESTE INFORME O PARTIDA.');
             }
 
@@ -2851,25 +3028,31 @@ class reportequimicoswordController extends Controller
             //--------------------------------
 
 
-            if ($request->grafica_dashboard) {
+            if ($request->grafica_dashboard)
+            {
                 $imagen_base64 = base64_decode(str_replace("data:image/jpeg;base64,", "", $request->grafica_dashboard));
                 // $imagen_temporal_ruta = 'reportes/informes/dashboard_'.$agente_nombre.$partida_id.'_'.$proyecto->proyecto_folio.'.jpg';
-                $imagen_temporal_ruta = 'reportes/informes/dashboard_' . $agente_nombre . '_' . $proyecto->proyecto_folio . '.jpg';
+                $imagen_temporal_ruta = 'reportes/informes/dashboard_'.$agente_nombre.'_'.$proyecto->proyecto_folio.'.jpg';
                 Storage::put($imagen_temporal_ruta, $imagen_base64); // Guardar en storage
 
 
-                if (Storage::exists($imagen_temporal_ruta)) {
-                    $plantillaword->setImageValue('DASHBOARD', array('path' => storage_path('app/' . $imagen_temporal_ruta), 'height' => 500, 'width' => 860, 'ratio' => false, 'borderColor' => '000000'));
+                if (Storage::exists($imagen_temporal_ruta))
+                {
+                    $plantillaword->setImageValue('DASHBOARD', array('path' => storage_path('app/'.$imagen_temporal_ruta), 'height' => 500, 'width' => 860, 'ratio' => false, 'borderColor' => '000000'));
 
 
                     Storage::delete($imagen_temporal_ruta); // Eliminar imagen temporal
-                } else {
+                }
+                else
+                {
                     $plantillaword->setValue('DASHBOARD', 'NO SE ENCONTRÓ DASHBOARD PARA ESTE INFORME.');
                 }
-            } else {
+            }
+            else
+            {
                 $plantillaword->setValue('DASHBOARD', 'NO SE ENCONTRÓ DASHBOARD PARA ESTE INFORME.');
             }
-
+                
 
 
             // RECOMENDACIONES
@@ -2888,18 +3071,22 @@ class reportequimicoswordController extends Controller
                                 FROM
                                     reporterecomendaciones
                                 WHERE
-                                    reporterecomendaciones.proyecto_id = ' . $proyecto_id . ' 
-                                    AND reporterecomendaciones.registro_id = ' . $reporteregistro_id . ' 
-                                    AND reporterecomendaciones.agente_nombre = "' . $agente_nombre . '" 
+                                    reporterecomendaciones.proyecto_id = '.$proyecto_id.' 
+                                    AND reporterecomendaciones.registro_id = '.$reporteregistro_id.' 
+                                    AND reporterecomendaciones.agente_nombre = "'.$agente_nombre.'" 
                                 ORDER BY
                                     reporterecomendaciones.reporterecomendaciones_tipo ASC');
 
 
             $recomendacion = '';
-            foreach ($sql as $key => $value) {
-                if (($key + 0) < (count($sql) - 1)) {
-                    $recomendacion .= $value->reporterecomendaciones_descripcion . '\n\n';
-                } else {
+            foreach ($sql as $key => $value)
+            {
+                if (($key+0) < (count($sql) -1))
+                {
+                    $recomendacion .= $value->reporterecomendaciones_descripcion.'\n\n';
+                }
+                else
+                {
                     $recomendacion .= $value->reporterecomendaciones_descripcion;
                 }
             }
@@ -2913,33 +3100,45 @@ class reportequimicoswordController extends Controller
 
 
             // RESPONSABLE 1, FOTO DOCUMENTO
-            if ($reporte->reportequimicos_responsable1documento) {
-                if (file_exists(storage_path('app/' . $reporte->reportequimicos_responsable1documento))) {
-                    $plantillaword->setImageValue('REPONSABLE1_DOCUMENTO', array('path' => storage_path('app/' . $reporte->reportequimicos_responsable1documento), 'height' => 300, 'width' => 580, 'ratio' => true, 'borderColor' => '000000'));
-                } else {
+            if ($reporte->reportequimicos_responsable1documento)
+            {
+                if (file_exists(storage_path('app/'.$reporte->reportequimicos_responsable1documento)))
+                {
+                    $plantillaword->setImageValue('REPONSABLE1_DOCUMENTO', array('path' => storage_path('app/'.$reporte->reportequimicos_responsable1documento), 'height' => 300, 'width' => 580, 'ratio' => true, 'borderColor' => '000000'));
+                }
+                else
+                {
                     $plantillaword->setValue('REPONSABLE1_DOCUMENTO', 'FALTA CARGAR IMAGEN DESDE EL SISTEMA.');
                 }
-            } else {
+            }
+            else
+            {
                 $plantillaword->setValue('REPONSABLE1_DOCUMENTO', 'FALTA CARGAR IMAGEN DESDE EL SISTEMA.');
             }
+                
 
-
-            $plantillaword->setValue('REPONSABLE1', $reporte->reportequimicos_responsable1 . "<w:br/>" . $reporte->reportequimicos_responsable1cargo);
+            $plantillaword->setValue('REPONSABLE1', $reporte->reportequimicos_responsable1."<w:br/>".$reporte->reportequimicos_responsable1cargo);
 
 
             // RESPONSABLE 2, FOTO DOCUMENTO
-            if ($reporte->reportequimicos_responsable2documento) {
-                if (file_exists(storage_path('app/' . $reporte->reportequimicos_responsable2documento))) {
-                    $plantillaword->setImageValue('REPONSABLE2_DOCUMENTO', array('path' => storage_path('app/' . $reporte->reportequimicos_responsable2documento), 'height' => 300, 'width' => 580, 'ratio' => true, 'borderColor' => '000000'));
-                } else {
+            if ($reporte->reportequimicos_responsable2documento)
+            {
+                if (file_exists(storage_path('app/'.$reporte->reportequimicos_responsable2documento)))
+                {
+                    $plantillaword->setImageValue('REPONSABLE2_DOCUMENTO', array('path' => storage_path('app/'.$reporte->reportequimicos_responsable2documento), 'height' => 300, 'width' => 580, 'ratio' => true, 'borderColor' => '000000'));
+                }
+                else
+                {
                     $plantillaword->setValue('REPONSABLE2_DOCUMENTO', 'FALTA CARGAR IMAGEN DESDE EL SISTEMA.');
                 }
-            } else {
+            }
+            else
+            {
                 $plantillaword->setValue('REPONSABLE2_DOCUMENTO', 'FALTA CARGAR IMAGEN DESDE EL SISTEMA.');
             }
+                
 
-
-            $plantillaword->setValue('REPONSABLE2', $reporte->reportequimicos_responsable2 . "<w:br/>" . $reporte->reportequimicos_responsable2cargo);
+            $plantillaword->setValue('REPONSABLE2', $reporte->reportequimicos_responsable2."<w:br/>".$reporte->reportequimicos_responsable2cargo);
 
 
             // TABLA ANEXO 1, Memoria fotográfica  - CREAR VARIABLES
@@ -2947,8 +3146,9 @@ class reportequimicoswordController extends Controller
 
 
             $where_condicion = '';
-            if (($partida_id + 0) > 0) {
-                $where_condicion = 'AND proyectoevidenciafoto.proyectoevidenciafoto_nopunto = ' . $partida_id;
+            if (($partida_id+0) > 0)
+            {
+                $where_condicion = 'AND proyectoevidenciafoto.proyectoevidenciafoto_nopunto = '.$partida_id;
             }
 
 
@@ -2965,8 +3165,8 @@ class reportequimicoswordController extends Controller
                                 FROM
                                     proyectoevidenciafoto
                                 WHERE
-                                    proyectoevidenciafoto.proyecto_id = ' . $proyecto_id . '
-                                    AND proyectoevidenciafoto.agente_nombre = "' . $agente_nombre . '" 
+                                    proyectoevidenciafoto.proyecto_id = '.$proyecto_id.'
+                                    AND proyectoevidenciafoto.agente_nombre = "'.$agente_nombre.'" 
                                    
                                 ORDER BY
                                     proyectoevidenciafoto.proyectoevidenciafoto_nopunto ASC');
@@ -2975,45 +3175,46 @@ class reportequimicoswordController extends Controller
             $ancho_col_1 = 4750;
             $ancho_col_2 = 4750;
 
-
+            
             // Crear tabla
-            $table = null;
+            $table = null;            
             $table = new Table(array('name' => $fuente, 'borderSize' => 1, 'borderColor' => '000000', 'cellMargin' => 40, 'unit' => TblWidth::TWIP));
 
 
             $table->addRow(400, array('tblHeader' => true));
-            $table->addCell(($ancho_col_1 + $ancho_col_2), array('gridSpan' => 2, 'valign' => 'center', 'borderTopColor' => 'ffffff', 'borderTopSize' => 1, 'borderRightColor' => 'ffffff', 'borderRightSize' => 1, 'borderBottomColor' => '000000', 'borderBottomSize' => 1, 'borderLeftColor' => 'ffffff', 'borderLeftSize' => 1,))->addTextRun($centrado)->addText('Memoria fotográfica', array('color' => '000000', 'size' => 12, 'bold' => true, 'name' => $fuente));
+            $table->addCell(($ancho_col_1 + $ancho_col_2), array('gridSpan' => 2, 'valign' => 'center', 'borderTopColor' =>'ffffff', 'borderTopSize' => 1, 'borderRightColor' =>'ffffff', 'borderRightSize' => 1, 'borderBottomColor' =>'000000', 'borderBottomSize' => 1, 'borderLeftColor' =>'ffffff', 'borderLeftSize' => 1,))->addTextRun($centrado)->addText('Memoria fotográfica', array('color' => '000000', 'size' => 12, 'bold' => true, 'name' => $fuente));
             $table->addRow(400, array('tblHeader' => true));
             $table->addCell(($ancho_col_1 + $ancho_col_2), array('gridSpan' => 2, 'valign' => 'center', 'bgColor' => '0C3F64'))->addTextRun($centrado)->addText('Evaluación de agentes químicos', $encabezado_texto);
 
 
-            for ($i = 0; $i < count($fotos); $i += 4) {
-                $foto1 = '';
-                $descripcion1 = '';
-                if ($i < count($fotos)) {
-                    $foto1 = '${PUNTO_' . $i . '_FOTO}';
-                    $descripcion1 = '${PUNTO_' . $i . '_DESCRIPCION}';
+            for ($i = 0; $i < count($fotos); $i += 4)
+            {
+                $foto1 = ''; $descripcion1 = '';
+                if ($i < count($fotos))
+                {
+                    $foto1 = '${PUNTO_'.$i.'_FOTO}';
+                    $descripcion1 = '${PUNTO_'.$i.'_DESCRIPCION}';
                 }
 
-                $foto2 = '';
-                $descripcion2 = '';
-                if (($i + 1) < count($fotos)) {
-                    $foto2 = '${PUNTO_' . ($i + 1) . '_FOTO}';
-                    $descripcion2 = '${PUNTO_' . ($i + 1) . '_DESCRIPCION}';
+                $foto2 = ''; $descripcion2 = '';
+                if (($i+1) < count($fotos))
+                {
+                    $foto2 = '${PUNTO_'.($i+1).'_FOTO}';
+                    $descripcion2 = '${PUNTO_'.($i+1).'_DESCRIPCION}';
                 }
 
-                $foto3 = '';
-                $descripcion3 = '';
-                if (($i + 2) < count($fotos)) {
-                    $foto3 = '${PUNTO_' . ($i + 2) . '_FOTO}';
-                    $descripcion3 = '${PUNTO_' . ($i + 2) . '_DESCRIPCION}';
+                $foto3 = ''; $descripcion3 = '';
+                if (($i+2) < count($fotos))
+                {
+                    $foto3 = '${PUNTO_'.($i+2).'_FOTO}';
+                    $descripcion3 = '${PUNTO_'.($i+2).'_DESCRIPCION}';
                 }
 
-                $foto4 = '';
-                $descripcion4 = '';
-                if (($i + 3) < count($fotos)) {
-                    $foto4 = '${PUNTO_' . ($i + 3) . '_FOTO}';
-                    $descripcion4 = '${PUNTO_' . ($i + 3) . '_DESCRIPCION}';
+                $foto4 = ''; $descripcion4 = '';
+                if (($i+3) < count($fotos))
+                {
+                    $foto4 = '${PUNTO_'.($i+3).'_FOTO}';
+                    $descripcion4 = '${PUNTO_'.($i+3).'_DESCRIPCION}';
                 }
 
                 $table->addRow(); //fila
@@ -3022,8 +3223,9 @@ class reportequimicoswordController extends Controller
                 $table->addRow(1000); //fila
                 $table->addCell($ancho_col_1, $celda)->addTextRun($centrado)->addText($descripcion1, $texto);
                 $table->addCell($ancho_col_2, $celda)->addTextRun($centrado)->addText($descripcion2, $texto);
-
-                if (($i + 2) < count($fotos)) {
+                
+                if (($i+2) < count($fotos))
+                {
                     $table->addRow(); //fila
                     $table->addCell($ancho_col_1, $celda)->addTextRun($centrado)->addText($foto3, $texto);
                     $table->addCell($ancho_col_2, $celda)->addTextRun($centrado)->addText($foto4, $texto);
@@ -3031,7 +3233,7 @@ class reportequimicoswordController extends Controller
                     $table->addCell($ancho_col_1, $celda)->addTextRun($centrado)->addText($descripcion3, $texto);
                     $table->addCell($ancho_col_2, $celda)->addTextRun($centrado)->addText($descripcion4, $texto);
                 }
-            }
+            }            
 
 
             $plantillaword->setComplexBlock('TABLA_MEMORIA_FOTOGRAFICA', $table);
@@ -3042,7 +3244,8 @@ class reportequimicoswordController extends Controller
 
 
             $where_condicion = '';
-            if (($partida_id + 0) > 0) {
+            if (($partida_id+0) > 0)
+            {
                 $where_condicion = 'WHERE (TABLA.catreportequimicospartidas_id = "" AND )';
             }
 
@@ -3077,9 +3280,9 @@ class reportequimicoswordController extends Controller
                                                     FROM
                                                         reporteplanoscarpetas
                                                     WHERE
-                                                        reporteplanoscarpetas.proyecto_id = ' . $proyecto_id . ' 
-                                                        AND reporteplanoscarpetas.registro_id = ' . $reporteregistro_id . ' 
-                                                        AND reporteplanoscarpetas.agente_nombre = "' . $agente_nombre . '"
+                                                        reporteplanoscarpetas.proyecto_id = '.$proyecto_id.' 
+                                                        AND reporteplanoscarpetas.registro_id = '.$reporteregistro_id.' 
+                                                        AND reporteplanoscarpetas.agente_nombre = "'.$agente_nombre.'"
                                                 ) AS TABLA
                                             -- WHERE
                                                 -- TABLA.catreportequimicospartidas_id = 3
@@ -3087,11 +3290,11 @@ class reportequimicoswordController extends Controller
                                                 TABLA.reporteplanoscarpetas_nombre ASC');
 
 
-            $planoscarpetasvariales = '';
-            $planocontador = 0;
-            $plano_archivo = array();
-            if (count($planoscarpetas) > 0) {
-                foreach ($planoscarpetas as $key => $carpeta) {
+            $planoscarpetasvariales = ''; $planocontador = 0; $plano_archivo = array();
+            if (count($planoscarpetas) > 0)
+            {
+                foreach ($planoscarpetas as $key => $carpeta)
+                {
                     $planos = DB::select('SELECT
                                                 proyectoevidenciaplano.proyecto_id,
                                                 proyectoevidenciaplano.agente_id,
@@ -3101,25 +3304,28 @@ class reportequimicoswordController extends Controller
                                             FROM
                                                 proyectoevidenciaplano 
                                             WHERE
-                                                proyectoevidenciaplano.proyecto_id = ' . $carpeta->proyecto_id . ' 
-                                                AND proyectoevidenciaplano.agente_nombre = "' . $carpeta->agente_nombre . '" 
-                                                AND proyectoevidenciaplano.proyectoevidenciaplano_carpeta = "' . $carpeta->reporteplanoscarpetas_nombre . '" 
+                                                proyectoevidenciaplano.proyecto_id = '.$carpeta->proyecto_id.' 
+                                                AND proyectoevidenciaplano.agente_nombre = "'.$carpeta->agente_nombre.'" 
+                                                AND proyectoevidenciaplano.proyectoevidenciaplano_carpeta = "'.$carpeta->reporteplanoscarpetas_nombre.'" 
                                             ORDER BY
                                                 proyectoevidenciaplano.proyectoevidenciaplano_carpeta ASC');
 
-                    foreach ($planos as $key => $plano) {
-                        $planoscarpetasvariales .= '${PLANO_' . $planocontador . '_FOTO}';
+                    foreach ($planos as $key => $plano)
+                    {
+                        $planoscarpetasvariales .= '${PLANO_'.$planocontador.'_FOTO}';
 
                         $plano_archivo[] = $plano->proyectoevidenciaplano_archivo;
 
                         $planocontador += 1;
                     }
                 }
-            } else {
+            }
+            else
+            {
                 $plano_archivo = array();
                 $planoscarpetasvariales = 'NO HAY PLANOS QUE MOSTRAR.';
             }
-
+                
 
             $plantillaword->setValue('PLANOS', $planoscarpetasvariales);
 
@@ -3128,7 +3334,7 @@ class reportequimicoswordController extends Controller
             //================================================================================
 
             $sql = DB::select('CALL sp_anexo3_11_3_informe_quimico_b(?)', [$proyecto_id]);
-
+            
             $ancho_col_1 = 1500;
             $ancho_col_2 = 1500;
             // $ancho_col_3 = 1600;
@@ -3139,7 +3345,7 @@ class reportequimicoswordController extends Controller
             $ancho_col_8 = 2750;
 
             // Crear tabla
-            $table = null;
+            $table = null;            
             $table = new Table(array('name' => $fuente, 'borderSize' => 1, 'borderColor' => '000000', 'cellMargin' => 40, 'unit' => TblWidth::TWIP));
 
             // encabezado tabla
@@ -3152,7 +3358,8 @@ class reportequimicoswordController extends Controller
             $table->addCell($ancho_col_8, $encabezado_celda)->addTextRun($centrado)->addText('Valor Límite<w:br/>de Exposición<w:br/>(VLE)', $encabezado_texto);
 
             $numero_fila = 0;
-            foreach ($sql as $key => $value) {
+            foreach ($sql as $key => $value) 
+            {
                 $table->addRow(); //fila
 
                 $table->addCell($ancho_col_1, $celda)->addTextRun($centrado)->addText($value->NOMBRE, $texto);
@@ -3172,7 +3379,7 @@ class reportequimicoswordController extends Controller
 
 
             // Crear tabla
-            $table = null;
+            $table = null;            
             $table = new Table(array('name' => $fuente, 'borderSize' => 1, 'borderColor' => '000000', 'cellMargin' => 40, 'unit' => TblWidth::TWIP));
 
 
@@ -3203,9 +3410,9 @@ class reportequimicoswordController extends Controller
                                     reporteequiposutilizados
                                     LEFT JOIN equipo ON reporteequiposutilizados.equipo_id = equipo.id
                                 WHERE
-                                    reporteequiposutilizados.proyecto_id = ' . $proyecto_id . ' 
-                                    AND reporteequiposutilizados.registro_id = ' . $reporteregistro_id . ' 
-                                    AND reporteequiposutilizados.agente_nombre = "' . $agente_nombre . '" 
+                                    reporteequiposutilizados.proyecto_id = '.$proyecto_id.' 
+                                    AND reporteequiposutilizados.registro_id = '.$reporteregistro_id.' 
+                                    AND reporteequiposutilizados.agente_nombre = "'.$agente_nombre.'" 
                                 ORDER BY
                                     equipo.equipo_Descripcion ASC,
                                     equipo.equipo_Marca ASC,
@@ -3226,15 +3433,18 @@ class reportequimicoswordController extends Controller
             $table->addCell($ancho_col_4, $encabezado_celda)->addTextRun($centrado)->addText('No. de serie', $encabezado_texto);
             $table->addCell($ancho_col_5, $encabezado_celda)->addTextRun($centrado)->addText('Vigencia de<w:br/>calibración', $encabezado_texto);
 
-            $numero_fila = 0;
-            $total_cartas = 0;
-            foreach ($sql as $key => $value) {
+            $numero_fila = 0;  $total_cartas = 0;
+            foreach ($sql as $key => $value) 
+            {
                 $table->addRow(); //fila
-
-                if ($value->reporteequiposutilizados_cartacalibracion) {
-                    $table->addCell($ancho_col_1, $celda)->addTextRun($centrado)->addText(htmlspecialchars('* ' . $value->equipo_Descripcion), $texto);
+                
+                if ($value->reporteequiposutilizados_cartacalibracion)
+                {
+                    $table->addCell($ancho_col_1, $celda)->addTextRun($centrado)->addText(htmlspecialchars('* '.$value->equipo_Descripcion), $texto);
                     $total_cartas += 1;
-                } else {
+                }
+                else
+                {
                     $table->addCell($ancho_col_1, $celda)->addTextRun($centrado)->addText(htmlspecialchars($value->equipo_Descripcion), $texto);
                 }
 
@@ -3248,7 +3458,8 @@ class reportequimicoswordController extends Controller
             $plantillaword->setComplexBlock('EQUIPO_UTILIZADO', $table);
 
 
-            if ($total_cartas > 0) {
+            if ($total_cartas > 0)
+            {
                 $plantillaword->setValue('EQUIPO_UTILIZADO_NOTA', '<w:br/>
                                                                     <w:rPr>
                                                                         <w:b w:val="true"/>
@@ -3258,7 +3469,9 @@ class reportequimicoswordController extends Controller
                                                                         <w:b w:val="false"/>
                                                                         <w:t xml:space="preserve">La calibración tiene una extensión en el tiempo de vigencia avalada mediante una carta emitida por el laboratorio acreditado misma que se encuentra disponible para consulta en el anexo 5.</w:t>
                                                                     </w:rPr>');
-            } else {
+            }
+            else
+            {
                 $plantillaword->setValue('EQUIPO_UTILIZADO_NOTA', '');
             }
 
@@ -3269,12 +3482,12 @@ class reportequimicoswordController extends Controller
 
             // GUARDAR
             Storage::makeDirectory('reportes/informes'); //crear directorio
-            $plantillaword->saveAs(storage_path('app/reportes/informes/Informe_de_' . $agente_nombre . '_proyecto_' . $proyecto->proyecto_folio . '_TEMPORAL.docx')); //GUARDAR Y CREAR archivo word TEMPORAL
+            $plantillaword->saveAs(storage_path('app/reportes/informes/Informe_de_'.$agente_nombre.'_proyecto_'.$proyecto->proyecto_folio.'_TEMPORAL.docx')); //GUARDAR Y CREAR archivo word TEMPORAL
 
             // sleep(1);
 
             // ABRIR NUEVA PLANTILLA
-            $plantillaword = new TemplateProcessor(storage_path('app/reportes/informes/Informe_de_' . $agente_nombre . '_proyecto_' . $proyecto->proyecto_folio . '_TEMPORAL.docx')); //Abrir plantilla TEMPORAL
+            $plantillaword = new TemplateProcessor(storage_path('app/reportes/informes/Informe_de_'.$agente_nombre.'_proyecto_'.$proyecto->proyecto_folio.'_TEMPORAL.docx'));//Abrir plantilla TEMPORAL
 
 
             /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -3283,48 +3496,65 @@ class reportequimicoswordController extends Controller
             // TABLA ANEXO 1, Memoria fotográfica - AGREGAR FOTOS
             //================================================================================
 
-            for ($i = 0; $i < count($fotos); $i += 4) {
-                if ($i < count($fotos)) {
-                    if (Storage::exists($fotos[$i]->proyectoevidenciafoto_archivo)) {
-                        $plantillaword->setImageValue('PUNTO_' . $i . '_FOTO', array('path' => storage_path('app/' . $fotos[$i]->proyectoevidenciafoto_archivo), 'height' => 284, 'width' => 284, 'ratio' => false, 'borderColor' => '000000'));
-                    } else {
-                        $plantillaword->setValue('PUNTO_' . $i . '_FOTO', 'NO SE ENCONTRÓ LA FOTO');
+            for ($i = 0; $i < count($fotos); $i += 4)
+            {
+                if ($i < count($fotos))
+                {
+                    if (Storage::exists($fotos[$i]->proyectoevidenciafoto_archivo))
+                    {
+                        $plantillaword->setImageValue('PUNTO_'.$i.'_FOTO', array('path' => storage_path('app/'.$fotos[$i]->proyectoevidenciafoto_archivo), 'height' => 284, 'width' => 284, 'ratio' => false, 'borderColor' => '000000'));
+                    }
+                    else
+                    {
+                        $plantillaword->setValue('PUNTO_'.$i.'_FOTO', 'NO SE ENCONTRÓ LA FOTO');
                     }
 
-                    $plantillaword->setValue('PUNTO_' . $i . '_DESCRIPCION', $fotos[$i]->proyectoevidenciafoto_descripcion);
+                    $plantillaword->setValue('PUNTO_'.$i.'_DESCRIPCION', $fotos[$i]->proyectoevidenciafoto_descripcion);
                 }
 
 
-                if (($i + 1) < count($fotos)) {
-                    if (Storage::exists($fotos[$i]->proyectoevidenciafoto_archivo)) {
-                        $plantillaword->setImageValue('PUNTO_' . ($i + 1) . '_FOTO', array('path' => storage_path('app/' . $fotos[($i + 1)]->proyectoevidenciafoto_archivo), 'height' => 284, 'width' => 284, 'ratio' => false, 'borderColor' => '000000'));
-                    } else {
-                        $plantillaword->setValue('PUNTO_' . ($i + 1) . '_FOTO', 'NO SE ENCONTRÓ LA FOTO');
+                if (($i+1) < count($fotos))
+                {
+                    if (Storage::exists($fotos[$i]->proyectoevidenciafoto_archivo))
+                    {
+                        $plantillaword->setImageValue('PUNTO_'.($i+1).'_FOTO', array('path' => storage_path('app/'.$fotos[($i+1)]->proyectoevidenciafoto_archivo), 'height' => 284, 'width' => 284, 'ratio' => false, 'borderColor' => '000000'));
+                    }
+                    else
+                    {
+                        $plantillaword->setValue('PUNTO_'.($i+1).'_FOTO', 'NO SE ENCONTRÓ LA FOTO');
                     }
 
-                    $plantillaword->setValue('PUNTO_' . ($i + 1) . '_DESCRIPCION', $fotos[($i + 1)]->proyectoevidenciafoto_descripcion);
+                    $plantillaword->setValue('PUNTO_'.($i+1).'_DESCRIPCION', $fotos[($i+1)]->proyectoevidenciafoto_descripcion);
                 }
 
 
-                if (($i + 2) < count($fotos)) {
-                    if (Storage::exists($fotos[$i]->proyectoevidenciafoto_archivo)) {
-                        $plantillaword->setImageValue('PUNTO_' . ($i + 2) . '_FOTO', array('path' => storage_path('app/' . $fotos[($i + 2)]->proyectoevidenciafoto_archivo), 'height' => 284, 'width' => 284, 'ratio' => false, 'borderColor' => '000000'));
-                    } else {
-                        $plantillaword->setValue('PUNTO_' . ($i + 2) . '_FOTO', 'NO SE ENCONTRÓ LA FOTO');
+                if (($i+2) < count($fotos))
+                {
+                    if (Storage::exists($fotos[$i]->proyectoevidenciafoto_archivo))
+                    {
+                        $plantillaword->setImageValue('PUNTO_'.($i+2).'_FOTO', array('path' => storage_path('app/'.$fotos[($i+2)]->proyectoevidenciafoto_archivo), 'height' => 284, 'width' => 284, 'ratio' => false, 'borderColor' => '000000'));
+                    }
+                    else
+                    {
+                        $plantillaword->setValue('PUNTO_'.($i+2).'_FOTO', 'NO SE ENCONTRÓ LA FOTO');
                     }
 
-                    $plantillaword->setValue('PUNTO_' . ($i + 2) . '_DESCRIPCION', $fotos[($i + 2)]->proyectoevidenciafoto_descripcion);
+                    $plantillaword->setValue('PUNTO_'.($i+2).'_DESCRIPCION', $fotos[($i+2)]->proyectoevidenciafoto_descripcion);
                 }
 
 
-                if (($i + 3) < count($fotos)) {
-                    if (Storage::exists($fotos[$i]->proyectoevidenciafoto_archivo)) {
-                        $plantillaword->setImageValue('PUNTO_' . ($i + 3) . '_FOTO', array('path' => storage_path('app/' . $fotos[($i + 3)]->proyectoevidenciafoto_archivo), 'height' => 284, 'width' => 284, 'ratio' => false, 'borderColor' => '000000'));
-                    } else {
-                        $plantillaword->setValue('PUNTO_' . ($i + 3) . '_FOTO', 'NO SE ENCONTRÓ LA FOTO');
+                if (($i+3) < count($fotos))
+                {
+                    if (Storage::exists($fotos[$i]->proyectoevidenciafoto_archivo))
+                    {
+                        $plantillaword->setImageValue('PUNTO_'.($i+3).'_FOTO', array('path' => storage_path('app/'.$fotos[($i+3)]->proyectoevidenciafoto_archivo), 'height' => 284, 'width' => 284, 'ratio' => false, 'borderColor' => '000000'));
+                    }
+                    else
+                    {
+                        $plantillaword->setValue('PUNTO_'.($i+3).'_FOTO', 'NO SE ENCONTRÓ LA FOTO');
                     }
 
-                    $plantillaword->setValue('PUNTO_' . ($i + 3) . '_DESCRIPCION', $fotos[($i + 3)]->proyectoevidenciafoto_descripcion);
+                    $plantillaword->setValue('PUNTO_'.($i+3).'_DESCRIPCION', $fotos[($i+3)]->proyectoevidenciafoto_descripcion);
                 }
             }
 
@@ -3333,11 +3563,15 @@ class reportequimicoswordController extends Controller
             //================================================================================
 
 
-            for ($i = 0; $i < count($plano_archivo); $i++) {
-                if (Storage::exists($plano_archivo[$i])) {
-                    $plantillaword->setImageValue('PLANO_' . $i . '_FOTO', array('path' => storage_path('app/' . $plano_archivo[$i]), 'height' => 690, 'width' => 588, 'ratio' => false, 'borderColor' => '000000'));
-                } else {
-                    $plantillaword->setValue('PLANO_' . $i . '_FOTO', 'NO SE ENCONTRÓ LA FOTO');
+            for ($i = 0; $i < count($plano_archivo); $i ++)
+            {
+                if (Storage::exists($plano_archivo[$i]))
+                {
+                    $plantillaword->setImageValue('PLANO_'.$i.'_FOTO', array('path' => storage_path('app/'.$plano_archivo[$i]), 'height' => 690, 'width' => 588, 'ratio' => false, 'borderColor' => '000000'));
+                }
+                else
+                {
+                    $plantillaword->setValue('PLANO_'.$i.'_FOTO', 'NO SE ENCONTRÓ LA FOTO');
                 }
             }
 
@@ -3345,10 +3579,11 @@ class reportequimicoswordController extends Controller
             // ARCHIVO PDF's ANEXOS
             //================================================================================
 
-
+            
             $where_anexos = '';
-            if (($proveedor_id + 0) > 0) {
-                $where_anexos = ' AND TABLA2.proveedor_id = ' . $proveedor_id;
+            if (($proveedor_id+0) > 0)
+            {
+                $where_anexos = ' AND TABLA2.proveedor_id = '.$proveedor_id;
             }
 
 
@@ -3366,9 +3601,9 @@ class reportequimicoswordController extends Controller
                                                 LEFT JOIN equipo ON reporteequiposutilizados.equipo_id = equipo.id
                                                 LEFT JOIN equipos_documentos ON equipos_documentos.EQUIPO_ID = equipo.id
                                                 WHERE
-                                                    reporteequiposutilizados.proyecto_id = ' . $proyecto_id . '
-                                                    AND reporteequiposutilizados.registro_id = ' . $reporteregistro_id . '
-                                                    AND reporteequiposutilizados.agente_nombre = "' . $agente_nombre . '"
+                                                    reporteequiposutilizados.proyecto_id = '.$proyecto_id.'
+                                                    AND reporteequiposutilizados.registro_id = '.$reporteregistro_id.'
+                                                    AND reporteequiposutilizados.agente_nombre = "'.$agente_nombre.'"
                                                     AND equipos_documentos.DOCUMENTO_TIPO = 4
                                                     AND IFNULL(equipos_documentos.RUTA_DOCUMENTO, "") != ""
                                             )
@@ -3382,9 +3617,9 @@ class reportequimicoswordController extends Controller
                                                 LEFT JOIN equipo ON reporteequiposutilizados.equipo_id = equipo.id
                                                 LEFT JOIN equipos_documentos ON equipos_documentos.EQUIPO_ID = equipo.id
                                                 WHERE
-                                                    reporteequiposutilizados.proyecto_id = ' . $proyecto_id . '
-                                                    AND reporteequiposutilizados.registro_id = ' . $reporteregistro_id . '
-                                                    AND reporteequiposutilizados.agente_nombre = "' . $agente_nombre . '"
+                                                    reporteequiposutilizados.proyecto_id = '.$proyecto_id.'
+                                                    AND reporteequiposutilizados.registro_id = '.$reporteregistro_id.'
+                                                    AND reporteequiposutilizados.agente_nombre = "'.$agente_nombre.'"
                                                     #AND reporteequiposutilizados.reporteequiposutilizados_cartacalibracion = 1
                                                     AND equipos_documentos.DOCUMENTO_TIPO = 5
                                             )
@@ -3438,7 +3673,7 @@ class reportequimicoswordController extends Controller
                                                                     proyectoproveedores
                                                                     LEFT JOIN proveedor ON proyectoproveedores.proveedor_id = proveedor.id
                                                                 WHERE
-                                                                    proyectoproveedores.proyecto_id = ' . $proyecto_id . '
+                                                                    proyectoproveedores.proyecto_id = '.$proyecto_id.'
                                                                     AND proyectoproveedores.catprueba_id = 15
                                                                 GROUP BY
                                                                     proyectoproveedores.proyecto_id,
@@ -3453,7 +3688,7 @@ class reportequimicoswordController extends Controller
                                                     ) AS TABLA2
                                                 WHERE
                                                     TABLA2.checked = "checked"
-                                                    ' . $where_anexos . '
+                                                    '.$where_anexos.'
                                                 ORDER BY
                                                     TABLA2.acreditacion_Entidad ASC
                                             )
@@ -3465,30 +3700,31 @@ class reportequimicoswordController extends Controller
                                                 FROM
                                                     reporteanexos
                                                 WHERE
-                                                    reporteanexos.proyecto_id = ' . $proyecto_id . '
-                                                    AND reporteanexos.registro_id = ' . $reporteregistro_id . '
-                                                    AND reporteanexos.agente_nombre = "' . $agente_nombre . '"
+                                                    reporteanexos.proyecto_id = '.$proyecto_id.'
+                                                    AND reporteanexos.registro_id = '.$reporteregistro_id.'
+                                                    AND reporteanexos.agente_nombre = "'.$agente_nombre.'"
                                                     AND reporteanexos.reporteanexos_tipo = 1
                                             )
                                         ) AS ANEXO');
-
+        
 
 
             /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
             // GUARDAR Y DESCARGAR INFORME FINAL
-
+                                                
 
             // $partida = clientepartidasModel::findOrFail($partida_id);
             // $pda = explode(' ', $partida->clientepartidas_descripcion);
-            $informe_nombre = 'Informe de ' . $agente_nombre . ' - ' . $proyecto->proyecto_folio . ' (' . $proyecto->proyecto_clienteinstalacion . ').docx';
+            $informe_nombre = 'Informe de '.$agente_nombre.' - '.$proyecto->proyecto_folio.' ('.$proyecto->proyecto_clienteinstalacion.').docx';
 
             // GUARDAR WORD FINAL
-            $plantillaword->saveAs(storage_path('app/reportes/informes/' . $informe_nombre)); //crear archivo word
+            $plantillaword->saveAs(storage_path('app/reportes/informes/'.$informe_nombre)); //crear archivo word
 
-
+            
             // ELIMINAR TEMPORAL
-            if (Storage::exists('reportes/informes/Informe_de_' . $agente_nombre . '_proyecto_' . $proyecto->proyecto_folio . '_TEMPORAL.docx')) {
-                Storage::delete('reportes/informes/Informe_de_' . $agente_nombre . '_proyecto_' . $proyecto->proyecto_folio . '_TEMPORAL.docx');
+            if (Storage::exists('reportes/informes/Informe_de_'.$agente_nombre.'_proyecto_'.$proyecto->proyecto_folio.'_TEMPORAL.docx'))
+            {
+                Storage::delete('reportes/informes/Informe_de_'.$agente_nombre.'_proyecto_'.$proyecto->proyecto_folio.'_TEMPORAL.docx');
             }
 
 
@@ -3500,22 +3736,25 @@ class reportequimicoswordController extends Controller
 
                 // Define Dir Folder
                 $zip_ruta = storage_path('app/reportes/informes');
-
+                
                 // Zip File Name
-                $zip_nombre = 'Informe de ' . $agente_nombre . ' - ' . $proyecto->proyecto_folio . ' (' . $proyecto->proyecto_clienteinstalacion . ') + Anexos.zip';
+                $zip_nombre = 'Informe de '.$agente_nombre.' - '.$proyecto->proyecto_folio.' ('.$proyecto->proyecto_clienteinstalacion.') + Anexos.zip';
 
                 // Create ZipArchive Obj
                 $zip = new ZipArchive;
 
-                if ($zip->open($zip_ruta . '/' . $zip_nombre, ZipArchive::CREATE) === TRUE) {
+                if ($zip->open($zip_ruta . '/' . $zip_nombre, ZipArchive::CREATE) === TRUE)
+                {
                     // Add File in ZipArchive
-                    $zip->addFile(storage_path('app/reportes/informes/' . $informe_nombre), $informe_nombre); //Word
+                    $zip->addFile(storage_path('app/reportes/informes/'.$informe_nombre), $informe_nombre); //Word
 
 
-                    foreach ($anexos_lista as $key => $file) {
-                        if (Storage::exists($file->archivo)) {
+                    foreach($anexos_lista as $key => $file)
+                    {
+                        if (Storage::exists($file->archivo))
+                        {
                             $extencion = explode(".", $file->archivo);
-                            $zip->addFile(storage_path('app/' . $file->archivo), ($key + 1) . '.- ' . $file->nombre . '.' . $extencion[1]); // Pdf Anexos
+                            $zip->addFile(storage_path('app/'.$file->archivo), ($key+1).'.- '.$file->nombre.'.'.$extencion[1]); // Pdf Anexos
                         }
                     }
 
@@ -3529,51 +3768,56 @@ class reportequimicoswordController extends Controller
 
 
                 // ELIMINAR INFORME word (PORQUE YA ESTÁ EN EL ZIP)
-                if (Storage::exists('reportes/informes/' . $informe_nombre)) {
-                    Storage::delete('reportes/informes/' . $informe_nombre);
+                if (Storage::exists('reportes/informes/'.$informe_nombre))
+                {
+                    Storage::delete('reportes/informes/'.$informe_nombre);
                 }
 
 
                 $dato["msj"] = 'Informe creado correctamente';
-            } else // Crear informes historial y guardar en base de datos
+            }
+            else // Crear informes historial y guardar en base de datos
             {
                 //================================================================================
                 // CREAR .ZIP INFORME
 
 
                 // Define Dir Folder
-                $zip_ruta_servidor = 'reportes/proyecto/' . $proyecto_id . '/' . $agente_nombre . '/' . $reporteregistro_id . '/revisiones/' . $request->ultimarevision_id;
+                $zip_ruta_servidor = 'reportes/proyecto/'.$proyecto_id.'/'.$agente_nombre.'/'.$reporteregistro_id.'/revisiones/'.$request->ultimarevision_id;
                 Storage::makeDirectory($zip_ruta_servidor); //crear directorio
-                $zip_ruta_completa = storage_path('app/reportes/proyecto/' . $proyecto_id . '/' . $agente_nombre . '/' . $reporteregistro_id . '/revisiones/' . $request->ultimarevision_id);
-
+                $zip_ruta_completa = storage_path('app/reportes/proyecto/'.$proyecto_id.'/'.$agente_nombre.'/'.$reporteregistro_id.'/revisiones/'.$request->ultimarevision_id);
+                
                 // Zip File Name
-                $zip_nombre = 'Informe de ' . $agente_nombre . ' - ' . $proyecto->proyecto_folio . ' (' . $proyecto->proyecto_clienteinstalacion . ') + Anexos.zip';
+                $zip_nombre = 'Informe de '.$agente_nombre.' - '.$proyecto->proyecto_folio.' ('.$proyecto->proyecto_clienteinstalacion.') + Anexos.zip';
 
                 // Create ZipArchive Obj
                 $zip = new ZipArchive;
 
-                if ($zip->open($zip_ruta_completa . '/' . $zip_nombre, ZipArchive::CREATE) === TRUE) {
+                if ($zip->open($zip_ruta_completa . '/' . $zip_nombre, ZipArchive::CREATE) === TRUE)
+                {
                     // Add File in ZipArchive
-                    $zip->addFile(storage_path('app/reportes/informes/' . $informe_nombre), $informe_nombre); //Word
+                    $zip->addFile(storage_path('app/reportes/informes/'.$informe_nombre), $informe_nombre); //Word
 
 
-                    foreach ($anexos_lista as $key => $file) {
-                        if (Storage::exists($file->archivo)) {
+                    foreach($anexos_lista as $key => $file)
+                    {
+                        if (Storage::exists($file->archivo))
+                        {
                             $extencion = explode(".", $file->archivo);
-                            $zip->addFile(storage_path('app/' . $file->archivo), ($key + 1) . '.- ' . $file->nombre . '.' . $extencion[1]); // Pdf Anexos
+                            $zip->addFile(storage_path('app/'.$file->archivo), ($key+1).'.- '.$file->nombre.'.'.$extencion[1]); // Pdf Anexos
                         }
                     }
 
 
                     $zip->close(); // Close ZipArchive
                 }
-
+                
 
                 // $headers = array('Content-Type' => 'application/octet-stream'); // Set Header
                 // $zip_rutacompleta = $zip_ruta_completa.'/'.$zip_nombre;
                 // if(file_exists($zip_rutacompleta))
                 // {
-                // return response()->download($zip_rutacompleta, $zip_nombre, $headers)->deleteFileAfterSend(true); // DESCARGAR ZIP
+                    // return response()->download($zip_rutacompleta, $zip_nombre, $headers)->deleteFileAfterSend(true); // DESCARGAR ZIP
                 // }
 
 
@@ -3581,8 +3825,9 @@ class reportequimicoswordController extends Controller
 
 
                 // ELIMINAR INFORME word (PORQUE YA ESTÁ EN EL ZIP)
-                if (Storage::exists('reportes/informes/' . $informe_nombre)) {
-                    Storage::delete('reportes/informes/' . $informe_nombre);
+                if (Storage::exists('reportes/informes/'.$informe_nombre))
+                {
+                    Storage::delete('reportes/informes/'.$informe_nombre);
                 }
 
 
@@ -3591,9 +3836,9 @@ class reportequimicoswordController extends Controller
 
 
                 $archivo = reporterevisionesarchivoModel::create([
-                    'reporterevisiones_id' => $request->ultimarevision_id,
-                    'reporterevisionesarchivo_tipo' => $request->partida_id,
-                    'reporterevisionesarchivo_archivo' => $zip_ruta_servidor . '/' . $zip_nombre
+                      'reporterevisiones_id' => $request->ultimarevision_id
+                    , 'reporterevisionesarchivo_tipo' => $request->partida_id
+                    , 'reporterevisionesarchivo_archivo' => $zip_ruta_servidor.'/'.$zip_nombre
                 ]);
 
 
@@ -3617,7 +3862,7 @@ class reportequimicoswordController extends Controller
                                             FROM
                                                 reporterevisiones
                                             WHERE
-                                                reporterevisiones.proyecto_id = ' . $proyecto_id . ' 
+                                                reporterevisiones.proyecto_id = '.$proyecto_id.' 
                                                 AND reporterevisiones.agente_id = 15 -- Químicos 
                                             ORDER BY
                                                 reporterevisiones.reporterevisiones_revision DESC');
@@ -3627,22 +3872,23 @@ class reportequimicoswordController extends Controller
                 // -------------------------------------------------
 
 
-                if (($revisiones[0]->id + 0) == ($request->ultimarevision_id + 0)) {
+                if (($revisiones[0]->id + 0) == ($request->ultimarevision_id + 0))
+                {
                     DB::statement('ALTER TABLE reporterevisiones AUTO_INCREMENT = 1;');
 
 
                     $revision = reporterevisionesModel::create([
-                        'proyecto_id' => $request->proyecto_id,
-                        'agente_id' => $request->agente_id,
-                        'agente_nombre' => $request->agente_nombre,
-                        'reporterevisiones_revision' => ($revisiones[0]->reporterevisiones_revision + 1),
-                        'reporterevisiones_concluido' => 0,
-                        'reporterevisiones_concluidonombre' => NULL,
-                        'reporterevisiones_concluidofecha' => NULL,
-                        'reporterevisiones_cancelado' => 0,
-                        'reporterevisiones_canceladonombre' => NULL,
-                        'reporterevisiones_canceladofecha' => NULL,
-                        'reporterevisiones_canceladoobservacion' => NULL
+                          'proyecto_id' => $request->proyecto_id
+                        , 'agente_id' => $request->agente_id
+                        , 'agente_nombre' => $request->agente_nombre
+                        , 'reporterevisiones_revision' => ($revisiones[0]->reporterevisiones_revision + 1)
+                        , 'reporterevisiones_concluido' => 0
+                        , 'reporterevisiones_concluidonombre' => NULL
+                        , 'reporterevisiones_concluidofecha' => NULL
+                        , 'reporterevisiones_cancelado' => 0
+                        , 'reporterevisiones_canceladonombre' => NULL
+                        , 'reporterevisiones_canceladofecha' => NULL
+                        , 'reporterevisiones_canceladoobservacion' => NULL
                     ]);
                 }
 
@@ -3655,38 +3901,45 @@ class reportequimicoswordController extends Controller
 
 
             return response()->json($dato);
+
         } catch (Exception $e) {
 
             // respuesta
-            $dato["msj"] = 'Error ' . $e->getMessage();
+            $dato["msj"] = 'Error '.$e->getMessage();
             return response()->json($dato);
+        
         }
     }
 
-
+    
     public function reportequimicosworddescargar($proyecto_id, $revision_id, $partida_id, $ultima_revision)
     {
         $agente_nombre = 'Químicos';
 
-
-        if (($revision_id + 0) == ($ultima_revision + 0)) //Descargar y eliminar .ZIP de la carpeta temporal
+        
+        if (($revision_id+0) == ($ultima_revision+0)) //Descargar y eliminar .ZIP de la carpeta temporal
         {
             $proyecto = proyectoModel::findOrFail($proyecto_id);
 
 
             // $partida = clientepartidasModel::findOrFail($partida_id);
             // $pda = explode(' ', $partida->clientepartidas_descripcion);
+           
+            $zip_nombre = 'Informe de Químicos - '. $proyecto->proyecto_folio.' ('.$proyecto->proyecto_clienteinstalacion.') + Anexos.zip';
 
-            $zip_nombre = 'Informe de Químicos - ' . $proyecto->proyecto_folio . ' (' . $proyecto->proyecto_clienteinstalacion . ') + Anexos.zip';
 
 
-
-            if (Storage::exists('reportes/informes/' . $zip_nombre)) {
-                return response()->download(storage_path('app/reportes/informes/' . $zip_nombre), $zip_nombre, array('Content-Type' => 'application/octet-stream'))->deleteFileAfterSend(true);
-            } else {
-                return '<h3>No se encontró el informe  de - ' . $agente_nombre . ' , intentelo de nuevo</h3>';
+            if (Storage::exists('reportes/informes/'.$zip_nombre))
+            {
+                return response()->download(storage_path('app/reportes/informes/'.$zip_nombre), $zip_nombre, array('Content-Type' => 'application/octet-stream'))->deleteFileAfterSend(true);
             }
-        } else {
+            else
+            {
+                return '<h3>No se encontró el informe  de - '.$agente_nombre. ' , intentelo de nuevo</h3>';
+            }
+        }
+        else
+        {
             $archivo_historial = DB::select('SELECT
                                                 reporterevisiones.proyecto_id,
                                                 reporterevisiones.agente_id,
@@ -3701,17 +3954,23 @@ class reportequimicoswordController extends Controller
                                                 reporterevisiones
                                                 LEFT JOIN reporterevisionesarchivo ON reporterevisiones.id = reporterevisionesarchivo.reporterevisiones_id
                                             WHERE
-                                                reporterevisiones.id = ?', [$revision_id]);
+                                                reporterevisiones.id = ?' , [$revision_id]);
 
-
-            if (count($archivo_historial) > 0) {
-                if (Storage::exists($archivo_historial[0]->reporterevisionesarchivo_archivo)) {
-                    return response()->download(storage_path('app/' . $archivo_historial[0]->reporterevisionesarchivo_archivo), "", array('Content-Type' => 'application/octet-stream'))->deleteFileAfterSend(false);
-                } else {
-                    return '<h3>No se encontró el archivo historial del informe de ' . $agente_nombre . '</h3>';
+            
+            if (count($archivo_historial) > 0)
+            {
+                if (Storage::exists($archivo_historial[0]->reporterevisionesarchivo_archivo))
+                {
+                    return response()->download(storage_path('app/'.$archivo_historial[0]->reporterevisionesarchivo_archivo), "", array('Content-Type' => 'application/octet-stream'))->deleteFileAfterSend(false);
                 }
-            } else {
-                return '<h3>No se encontró el archivo historial del informe de ' . $agente_nombre . '</h3>';
+                else
+                {
+                    return '<h3>No se encontró el archivo historial del informe de '.$agente_nombre.'</h3>';
+                }
+            }
+            else
+            {
+                return '<h3>No se encontró el archivo historial del informe de '.$agente_nombre.'</h3>';
             }
         }
     }
