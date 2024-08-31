@@ -215,6 +215,11 @@ class reportequimicoswordController extends Controller
         try {
             // dd($request->all());
 
+            function sanitizeText($text)
+            {
+                return htmlspecialchars($text, ENT_QUOTES, 'UTF-8');
+            }
+
 
             $proyecto_id = $request->proyecto_id;
             $reporteregistro_id = $request->reporteregistro_id;
@@ -2061,22 +2066,22 @@ class reportequimicoswordController extends Controller
                 $table->addRow(); //fila
 
 
-                $table->addCell($ancho_col_1, $celda)->addTextRun($centrado)->addText($value->punto, $texto);
+                $table->addCell($ancho_col_1, $celda)->addTextRun($centrado)->addText(sanitizeText($value->punto), $texto);
 
 
                 if ($area != $value->area_nombre) {
-                    $table->addCell($ancho_col_2, $combinar_fila)->addTextRun($centrado)->addText($value->area_nombre, $texto);
+                    $table->addCell($ancho_col_2, $combinar_fila)->addTextRun($centrado)->addText(sanitizeText($value->area_nombre), $texto);
                     $area = $value->area_nombre;
                 } else {
                     $table->addCell($ancho_col_2, $continua_fila);
                 }
 
 
-                $table->addCell($ancho_col_3, $celda)->addTextRun($centrado)->addText($value->categoria_nombre, $texto);
-                $table->addCell($ancho_col_4, $celda)->addTextRun($centrado)->addText($value->concentracion_texto, $texto);
-                $table->addCell($ancho_col_5, $celda)->addTextRun($centrado)->addText($value->valorlimiteTexto, $texto);
-                $table->addCell($ancho_col_6, $celda)->addTextRun($centrado)->addText($value->limitesuperiorTexto, $texto);
-                $table->addCell($ancho_col_7, $celda)->addTextRun($centrado)->addText($value->periodo, $texto);
+                $table->addCell($ancho_col_3, $celda)->addTextRun($centrado)->addText(sanitizeText($value->categoria_nombre), $texto);
+                $table->addCell($ancho_col_4, $celda)->addTextRun($centrado)->addText(sanitizeText($value->concentracion_texto), $texto);
+                $table->addCell($ancho_col_5, $celda)->addTextRun($centrado)->addText(sanitizeText($value->valorlimiteTexto), $texto);
+                $table->addCell($ancho_col_6, $celda)->addTextRun($centrado)->addText(sanitizeText($value->limitesuperiorTexto), $texto);
+                $table->addCell($ancho_col_7, $celda)->addTextRun($centrado)->addText(sanitizeText($value->periodo, $texto));
 
 
                 $texto_color = "#000000";
