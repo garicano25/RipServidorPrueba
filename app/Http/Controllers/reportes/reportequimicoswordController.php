@@ -1868,7 +1868,12 @@ class reportequimicoswordController extends Controller
                                                 reportequimicosevaluacionparametro.reportequimicosevaluacionparametro_concentracion AS concentracion_texto,
                                                 -- (REPLACE(REPLACE(REPLACE(reportequimicosevaluacionparametro.reportequimicosevaluacionparametro_concentracion, "˂", ""), ">", ""), " ", "") + 0) AS concentracion,
                                                 (REPLACE(REPLACE(reportequimicosevaluacionparametro.reportequimicosevaluacionparametro_concentracion, "<", "reportequimicosevaluacionparametro_valorlimite - "), ">", "reportequimicosevaluacionparametro_valorlimite + ") + 0) AS concentracion,
+                                                 CONCAT(reportequimicosevaluacionparametro.reportequimicosevaluacionparametro_valorlimite," ", reportequimicosevaluacionparametro.reportequimicosevaluacionparametro_unidad) AS valorlimiteTexto,
+
                                                 reportequimicosevaluacionparametro.reportequimicosevaluacionparametro_valorlimite AS valorlimite,
+                                                
+                                                CONCAT(reportequimicosevaluacionparametro.reportequimicosevaluacionparametro_limitesuperior, " ", reportequimicosevaluacionparametro.reportequimicosevaluacionparametro_unidad) AS limitesuperiorTexto,
+
                                                 reportequimicosevaluacionparametro.reportequimicosevaluacionparametro_limitesuperior AS limitesuperior,
                                                 reportequimicosevaluacionparametro.reportequimicosevaluacionparametro_periodo AS periodo,
                                                 -- IF((REPLACE(REPLACE(REPLACE(reportequimicosevaluacionparametro.reportequimicosevaluacionparametro_concentracion, "˂", ""), ">", ""), " ", "") + 0) <= reportequimicosevaluacionparametro.reportequimicosevaluacionparametro_valorlimite, "Dentro de norma", "Fuera de norma") AS resultado_texto,
@@ -1957,7 +1962,12 @@ class reportequimicoswordController extends Controller
                                                 reportequimicosevaluacionparametro.reportequimicosevaluacionparametro_concentracion AS concentracion_texto,
                                                 -- (REPLACE(REPLACE(REPLACE(reportequimicosevaluacionparametro.reportequimicosevaluacionparametro_concentracion, "˂", ""), ">", ""), " ", "") + 0) AS concentracion,
                                                 (REPLACE(REPLACE(reportequimicosevaluacionparametro.reportequimicosevaluacionparametro_concentracion, "<", "reportequimicosevaluacionparametro_valorlimite - "), ">", "reportequimicosevaluacionparametro_valorlimite + ") + 0) AS concentracion,
+                                                CONCAT(reportequimicosevaluacionparametro.reportequimicosevaluacionparametro_valorlimite," ", reportequimicosevaluacionparametro.reportequimicosevaluacionparametro_unidad) AS valorlimiteTexto,
+
                                                 reportequimicosevaluacionparametro.reportequimicosevaluacionparametro_valorlimite AS valorlimite,
+                                                
+                                                CONCAT(reportequimicosevaluacionparametro.reportequimicosevaluacionparametro_limitesuperior, " ", reportequimicosevaluacionparametro.reportequimicosevaluacionparametro_unidad) AS limitesuperiorTexto,
+
                                                 reportequimicosevaluacionparametro.reportequimicosevaluacionparametro_limitesuperior AS limitesuperior,
                                                 reportequimicosevaluacionparametro.reportequimicosevaluacionparametro_periodo AS periodo,
                                                 -- IF((REPLACE(REPLACE(REPLACE(reportequimicosevaluacionparametro.reportequimicosevaluacionparametro_concentracion, "˂", ""), ">", ""), " ", "") + 0) <= reportequimicosevaluacionparametro.reportequimicosevaluacionparametro_valorlimite, "Dentro de norma", "Fuera de norma") AS resultado_texto,
@@ -2029,9 +2039,9 @@ class reportequimicoswordController extends Controller
                     $table->addCell($ancho_col_1, $encabezado_celda)->addTextRun($centrado)->addText('Punto de evaluación', $encabezado_texto);
                     $table->addCell($ancho_col_2, $encabezado_celda)->addTextRun($centrado)->addText('Área', $encabezado_texto);
                     $table->addCell($ancho_col_3, $encabezado_celda)->addTextRun($centrado)->addText('Categoría', $encabezado_texto);
-                    $table->addCell($ancho_col_4, $encabezado_celda)->addTextRun($centrado)->addText('Concentración medida del ambiente (ppm)', $encabezado_texto);
-                    $table->addCell($ancho_col_5, $encabezado_celda)->addTextRun($centrado)->addText('Valor límite de exposición (ppm)', $encabezado_texto);
-                    $table->addCell($ancho_col_6, $encabezado_celda)->addTextRun($centrado)->addText('Límite superior de confianza (ppm)', $encabezado_texto);
+                    $table->addCell($ancho_col_4, $encabezado_celda)->addTextRun($centrado)->addText('Concentración medida del ambiente', $encabezado_texto);
+                    $table->addCell($ancho_col_5, $encabezado_celda)->addTextRun($centrado)->addText('Valor límite de exposición', $encabezado_texto);
+                    $table->addCell($ancho_col_6, $encabezado_celda)->addTextRun($centrado)->addText('Límite superior de confianza', $encabezado_texto);
                     $table->addCell($ancho_col_7, $encabezado_celda)->addTextRun($centrado)->addText('Periodo de muestreo y evaluación', $encabezado_texto);
                     $table->addCell($ancho_col_8, $encabezado_celda)->addTextRun($centrado)->addText('Cumplimiento normativo', $encabezado_texto);
 
@@ -2055,8 +2065,8 @@ class reportequimicoswordController extends Controller
 
                 $table->addCell($ancho_col_3, $celda)->addTextRun($centrado)->addText($value->categoria_nombre, $texto);
                 $table->addCell($ancho_col_4, $celda)->addTextRun($centrado)->addText($value->concentracion_texto, $texto);
-                $table->addCell($ancho_col_5, $celda)->addTextRun($centrado)->addText($value->valorlimite, $texto);
-                $table->addCell($ancho_col_6, $celda)->addTextRun($centrado)->addText($value->limitesuperior, $texto);
+                $table->addCell($ancho_col_5, $celda)->addTextRun($centrado)->addText($value->valorlimiteTexto, $texto);
+                $table->addCell($ancho_col_6, $celda)->addTextRun($centrado)->addText($value->limitesuperiorTexto, $texto);
                 $table->addCell($ancho_col_7, $celda)->addTextRun($centrado)->addText($value->periodo, $texto);
 
 
