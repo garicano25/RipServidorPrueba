@@ -5578,15 +5578,16 @@ class reportequimicosController extends Controller
                     DB::statement('ALTER TABLE reportequimicosconclusion AUTO_INCREMENT = 1;');
 
                     $request['registro_id'] = $reporte->id;
-                    $request['reportequimicosconclusion_conclusion'] = $this->datosproyectolimpiartexto($proyecto, $recsensorial, $quimicos_nombre, $request->reportequimicosconclusion_conclusion);
+                    $request['reportequimicosconclusion_conclusion'] = $request->reportequimicosconclusion_conclusion;
                     $conclusion = reportequimicosconclusionModel::create($request->all());
 
                     // Mensaje
                     $dato["conclusion_id"] = $conclusion->id;
                     $dato["msj"] = 'Datos guardados correctamente';
                 } else {
+
                     $request['registro_id'] = $reporte->id;
-                    $request['reportequimicosconclusion_conclusion'] = $this->datosproyectolimpiartexto($proyecto, $recsensorial, $quimicos_nombre, $request->reportequimicosconclusion_conclusion);
+                    $request['reportequimicosconclusion_conclusion'] = $request->reportequimicosconclusion_conclusion;
                     $conclusion = reportequimicosconclusionModel::findOrFail($request->reporteconclusion_id);
                     $conclusion->update($request->all());
 
