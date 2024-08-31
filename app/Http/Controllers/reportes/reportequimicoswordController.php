@@ -1833,7 +1833,7 @@ class reportequimicoswordController extends Controller
                                         TABLA.resultado_texto,
                                         TABLA.resultado_color,
                                         TABLA.valorlimiteTexto, 
-                                        TABLA.limitesuperiorTexto
+                                        TABLA.limitesuperiorTexto,
                                         (
                                             CASE
                                                 WHEN TABLA.parametro LIKE "Benceno%" THEN 1
@@ -1930,7 +1930,7 @@ class reportequimicoswordController extends Controller
                                         TABLA.resultado_texto,
                                         TABLA.resultado_color,
                                         TABLA.valorlimiteTexto, 
-                                        TABLA.limitesuperiorTexto
+                                        TABLA.limitesuperiorTexto,
                                         (
                                             CASE
                                                 WHEN TABLA.parametro LIKE "Benceno%" THEN 1
