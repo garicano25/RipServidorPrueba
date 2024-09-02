@@ -24,7 +24,7 @@
 	}*/
 
 
-
+	/* Subidos al servidor */
 	.list-group-item {
 		padding: 2px 1px;
 		font-family: Agency FB;
