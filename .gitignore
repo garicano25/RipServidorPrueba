@@ -13,3 +13,4 @@ yarn-error.log
 *.JPG
 *.jpg
 *.png
+/storage
