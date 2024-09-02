@@ -3772,6 +3772,7 @@ $("#boton_imprimir_bitacoramuestreo").click(function()
 	$('#modal_visor').modal({backdrop:false});
 });
 
+// hola
 
 $("#boton_bloquear_bitacoramuestreo").click(function()
 {
