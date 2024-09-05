@@ -179,7 +179,7 @@
                 <div class="image-container">
                     <img src="/assets/images/imagen.jpg" alt="Reserva">
                 </div>
-                <h2>Higiene Industrial</h2>
+                <h2>Higiene Industrial Editada</h2>
                 <div class="wrapper mt-5">
                     @if(!auth()->user()->hasRoles(['Superusuario', 'Administrador','Coordinador','Compras','Almacén','Operativo HI','Psicólogo','Ergónomo']))
                     <a class="unauthorized" href="#">
