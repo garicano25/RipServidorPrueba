@@ -6058,8 +6058,10 @@ class reporteiluminacionController extends Controller
                         function formatearHora($hora)
                         {
 
-                            if ($hora == 'N/A' || $hora == 'n/a' || $hora == 'NP') {
+                            if ($hora == 'N/A' || $hora == 'n/a' || $hora =='NP' || $hora == '---'|| $hora == '' ) {
+                                
                                 return null;
+
                             } else {
 
                                 // Separar la hora y los minutos
