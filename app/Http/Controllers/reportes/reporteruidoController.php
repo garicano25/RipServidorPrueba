@@ -676,7 +676,7 @@ class reporteruidoController extends Controller
                                                     -- proyectoevidenciafoto.agente_id,
                                                     proyectoevidenciafoto.agente_nombre,
                                                     -- proyectoevidenciafoto.proyectoevidenciafoto_carpeta,
-                                                    IFNULL(COUNT(proyectoevidenciafoto.proyectoevidenciafoto_nopunto), 0) AS total
+                                                    IFNULL(COUNT(proyectoevidenciafoto.proyectoevidenciafoto_descripcion), 0) AS total
                                                     -- ,proyectoevidenciafoto.proyectoevidenciafoto_archivo,
                                                     -- proyectoevidenciafoto.proyectoevidenciafoto_descripcion 
                                                 FROM
