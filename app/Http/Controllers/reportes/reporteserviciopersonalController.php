@@ -2425,7 +2425,7 @@ class reporteserviciopersonalController extends Controller
             if (($request->opcion+0) == 1)
             {
                 $reporte->update([
-                    'reporteserviciopersonal_introduccion' => $this->datosproyectolimpiartexto($proyecto, $recsensorial, $request->reporte_introduccion)
+                    'reporteserviciopersonal_introduccion' => $request->reporte_introduccion,
                 ]);
 
                 // Mensaje

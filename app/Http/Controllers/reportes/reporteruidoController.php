@@ -5669,7 +5669,7 @@ class reporteruidoController extends Controller
             // INTRODUCCION
             if (($request->opcion + 0) == 1) {
                 $reporte->update([
-                    'reporteruido_introduccion' => $this->datosproyectolimpiartexto($proyecto, $recsensorial, $request->reporte_introduccion)
+                    'reporteruido_introduccion' => $request->reporte_introduccion,
                 ]);
 
                 // Mensaje
