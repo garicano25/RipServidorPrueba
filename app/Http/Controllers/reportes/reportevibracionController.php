@@ -4821,7 +4821,8 @@ class reportevibracionController extends Controller
             // INTRODUCCION
             if (($request->opcion + 0) == 1) {
                 $reporte->update([
-                    'reportevibracion_introduccion' => $this->datosproyectolimpiartexto($proyecto, $recsensorial, $request->reporte_introduccion)
+                    // 'reportevibracion_introduccion' => $this->datosproyectolimpiartexto($proyecto, $recsensorial, $request->reporte_introduccion)
+                    'reportevibracion_introduccion' => $request->reporte_introduccion,
                 ]);
 
                 // Mensaje

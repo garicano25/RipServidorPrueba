@@ -6505,7 +6505,7 @@ class reporteiluminacionController extends Controller
                 // dd($request->reporteiluminacion_introduccion);
 
                 $reporteiluminacion->update([
-                    'reporteiluminacion_introduccion' => $this->datosproyectolimpiartexto($proyecto, $recsensorial, $request->reporteiluminacion_introduccion)
+                    'reporteiluminacion_introduccion' =>  $request->reporteiluminacion_introduccion,
                 ]);
 
                 // Mensaje
