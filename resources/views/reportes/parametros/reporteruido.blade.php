@@ -1585,11 +1585,19 @@
 				<div class="row">
 					<div class="col-12">
 						@if(auth()->user()->hasRoles(['Superusuario', 'Administrador', 'Proyecto', 'Coordinador']))
-						<ol class="breadcrumb" style="padding: 6px; margin: 10px 0px;">
-							<button type="button" class="btn btn-default waves-effect" data-toggle="tooltip" title="Nueva revisión" id="boton_reporte_nuevarevision">
-								<span class="btn-label"><i class="fa fa-plus"></i></span>Crear nueva revisión
-							</button>
-						</ol>
+						<div style="padding: 8px;margin: 10px 0px;display: flex;justify-content: space-between;background: #0098C7;border-radius: 10px;">
+							<div>
+								<button type="button" class="btn btn-default waves-effect" data-toggle="tooltip" title="Nueva revisión" id="boton_reporte_nuevarevision">
+									<span class="btn-label"><i class="fa fa-plus"></i></span>Crear nueva revisión
+								</button>
+
+							</div>
+							<div>
+								<button type="button" class="btn btn-default waves-effect" data-toggle="tooltip" title="Generar Programa de Conservación de la Audición" id="boton_reporte_pca">
+									<span class="btn-label"><i class="fa fa-file-excel-o"></i></span> Generar PCA
+								</button>
+							</div>
+						</div>
 						@endif
 						<table class="table table-hover tabla_reporte" width="100%" id="tabla_reporte_revisiones">
 							<thead>
@@ -2569,37 +2577,37 @@
 						</div>
 						<div class="col-2">
 							<div class="form-group">
-								<label>No. de medición</label>
+								<label>No. de medición *</label>
 								<input type="number" class="form-control" min="1" id="reporteruidodosisner_punto" name="reporteruidodosisner_punto" required>
 							</div>
 						</div>
 						<div class="col-2">
 							<div class="form-group">
-								<label>% dosis</label>
+								<label>% dosis *</label>
 								<input type="number" step="any" class="form-control" id="reporteruidodosisner_dosis" name="reporteruidodosisner_dosis" required>
 							</div>
 						</div>
 						<div class="col-2">
 							<div class="form-group">
-								<label>NER dB(A)</label>
+								<label>NER dB(A) *</label>
 								<input type="number" step="any" class="form-control" id="reporteruidodosisner_ner" name="reporteruidodosisner_ner" required>
 							</div>
 						</div>
 						<div class="col-2">
 							<div class="form-group">
-								<label>LMPE dB(A)</label>
+								<label>LMPE dB(A) *</label>
 								<input type="number" step="any" class="form-control" id="reporteruidodosisner_lmpe" name="reporteruidodosisner_lmpe" required>
 							</div>
 						</div>
 						<div class="col-4">
 							<div class="form-group">
-								<label>TMPE horas</label>
+								<label>TMPE horas *</label>
 								<input type="text" class="form-control" id="reporteruidodosisner_tmpe" name="reporteruidodosisner_tmpe" required>
 							</div>
 						</div>
 						<div class="col-6">
 							<div class="form-group">
-								<label>Área</label>
+								<label>Área *</label>
 								<select class="custom-select form-control" id="reporteruidodosisner_areaid" name="reporteruidoarea_id" onchange="mostrar_categoriasarea(this.value, 0, 'reporteruidodosisner_categoriaid');" required>
 									<option value=""></option>
 								</select>
@@ -2607,8 +2615,22 @@
 						</div>
 						<div class="col-6">
 							<div class="form-group">
-								<label>Categoría</label>
+								<label>Categoría *</label>
 								<select class="custom-select form-control" id="reporteruidodosisner_categoriaid" name="reporteruidocategoria_id" required>
+									<option value=""></option>
+								</select>
+							</div>
+						</div>
+						<div class="col-6">
+							<div class="form-group">
+								<label>Nombre *</label>
+								<input type="text" class="form-control" id="reporteruidodosisner_nombre" name="reporteruidodosisner_nombre" required>
+							</div>
+						</div>
+						<div class="col-6">
+							<div class="form-group">
+								<label>Equipo utilizado *</label>
+								<select class="custom-select form-control" id="reporteruidodosisner_equipo" name="reporteruidodosisner_equipo" required>
 									<option value=""></option>
 								</select>
 							</div>
@@ -2695,6 +2717,14 @@
 									<div class="form-group">
 										<label>Identificación</label>
 										<input type="text" class="form-control" id="reporteruidobandaoctava_identificacion" readonly>
+									</div>
+								</div>
+								<div class="col-12">
+									<div class="form-group">
+										<label>Equipo auditivo</label>
+										<select class="custom-select form-control" id="reporteruidobandaoctava_equipo" name="reporteruidobandaoctava_equipo" required>
+											<option value=""></option>
+										</select>
 									</div>
 								</div>
 								<div class="col-6">

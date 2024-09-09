@@ -2376,6 +2376,7 @@ $("#botonguardar_modal_categoria").click(function()
 
 
 var selectareas = '';
+var selectequipos = '';
 
 
 $(document).ready(function()
@@ -2446,6 +2447,7 @@ function tabla_reporte_areas(proyecto_id, reporteregistro_id)
 
 						// Actualizar select areas
 						selectareas = json.selectareasoption;
+						selectequipos = json.selectequiposoption;
 
 
 						// alert("Done! "+json.msj);
@@ -4328,6 +4330,7 @@ $("#boton_reporte_areaevaluacion").click(function()
 
 	// Campo select areas
 	$('#reporteruidoarea_id').html(selectareas);
+	
 
 	// Tabla ubicaciones
 	$('#tabla_areaevaluacion_ubicaciones > tbody').html('<tr>'+
@@ -6093,6 +6096,8 @@ $("#boton_reporte_nuevadosisner").click(function (e) {
 	
 		// Campo select areas
 		$('#reporteruidodosisner_areaid').html(selectareas);
+		$('#reporteruidodosisner_equipo').html(selectequipos);
+
 	
 		// Campo select categorias
 		$('#reporteruidodosisner_categoriaid').html('<option value=""></option>');
@@ -6155,9 +6160,12 @@ $('#tabla_reporte_7_3 tbody').on('click', 'td.editar', function()
 
 	// Campo select areas
 	$('#reporteruidodosisner_areaid').html(selectareas);
+	$('#reporteruidodosisner_equipo').html(selectequipos);
 
 	// Llenar campos
 	$('#reporteruidodosisner_areaid').val(row.data().reporteruidoarea_id);
+	$('#reporteruidodosisner_equipo').val(row.data().reporteruidodosisner_equipo);
+	$('#reporteruidodosisner_nombre').val(row.data().reporteruidodosisner_nombre);
 	// $('#reporteruidodosisner_categoriaid').val(row.data().reporteruidocategoria_id);
 	mostrar_categoriasarea(row.data().reporteruidoarea_id, row.data().reporteruidocategoria_id, 'reporteruidodosisner_categoriaid');
 	$('#reporteruidodosisner_punto').val(row.data().reporteruidodosisner_punto);
@@ -6691,11 +6699,33 @@ $('#tabla_reporte_7_6 tbody').on('click', 'td.editar', function()
 	// // Campos Hidden
 	$('#reporteruidopuntoner_id').val(row.data().id);
 
+	//Obtenemos la lista de Equipos de protecion que ya fueron cargados
+	$.ajax({
+		type: "GET",
+		dataType: "json",
+		url: "/consultarListaEquiposProteccion/"+proyecto.id+"/"+ row.data().reporteruidobandaoctava_equipo, //agregar el valor que viene en la base de datos osea lo que ya esta seleccionado
+		data:{},
+		cache: false,
+		success: function (dato) {
+			
+			$("#reporteruidobandaoctava_equipo").html(dato.opciones);
+			
+		}, beforeSend: function () {
+			
+			$("#reporteruidobandaoctava_equipo").html('<option selected>Consultando equipos...</option>');
+			
+		},
+		error: function(dato){
+			return false;
+		}
+	})
+
 	// Llenar campos
 	$('#reporteruidobandaoctava_punto').val(row.data().reporteruidopuntoner_punto);
 	$('#reporteruidobandaoctava_area').val(row.data().reporteruidoarea_nombre);
 	$('#reporteruidobandaoctava_ubicacion').val(row.data().reporteruidopuntoner_ubicacion);
 	$('#reporteruidobandaoctava_identificacion').val(row.data().reporteruidopuntoner_identificacion);
+	$('#reporteruidobandaoctava_equipo').val(row.data().reporteruidobandaoctava_equipo);
 	$('#reporteruidobandaoctava_ner').val(row.data().reporteruidopuntoner_ner);
 	$('#reporteruidobandaoctava_RdB').val(row.data().reporteruidopuntoner_RdB);
 	$('#reporteruidobandaoctava_NRE').val(row.data().resultado);
@@ -10314,7 +10344,7 @@ $('#btn_descargar_plantilla').on('click', function (e) {
             // Mostrar mensaje de carga
             swal({
                 title: "Generando documento",
-                text: 'Espere un momento, el documento se esta documento se esta generando...',
+                text: 'Espere un momento, el documento se esta generando...',
                 type: "info",
                 showConfirmButton: false,
                 allowOutsideClick: false
@@ -10342,8 +10372,87 @@ $('#btn_descargar_plantilla').on('click', function (e) {
                     // Cerrar mensaje de carga
                     swal.close();
 
-                    $('#btn_descargar_plantilla').prop('disabled', true);
+                    $('#btn_descargar_plantilla').prop('disabled', false);
                 },
+                error: function() {
+                    swal({
+                        title: "Hubo un problema al generar el documento.",
+                        text: "Intentelo de nuevo, o comuniquelo con el responsable",
+                        type: "error",
+                        showConfirmButton: true
+                    });
+                }
+            });
+        } else {
+            // mensaje de cancelación
+            swal({
+                title: "Cancelado",
+                text: "Acción cancelada",
+                type: "error",
+                buttons: {
+                    visible: false,
+                },
+                timer: 500,
+                showConfirmButton: false
+            });
+        }
+    });
+    return false;
+})
+
+
+//DESCARGAR PCA
+$('#boton_reporte_pca').on('click', function (e) {
+	e.preventDefault();
+	
+    swal({
+        title: "¡Confirme para Generar PCA!",
+        text: "Programa de Conservación de la Audición.",
+        type: "info",
+        showCancelButton: true,
+        confirmButtonColor: "#DD6B55",
+        confirmButtonText: "Descargar!",
+        cancelButtonText: "Cancelar!",
+        closeOnConfirm: false,
+        closeOnCancel: false
+    },
+    function(isConfirm) {
+        if (isConfirm) {
+			// Mostrar mensaje de carga
+
+            $('#boton_reporte_pca').prop('disabled', true);
+            swal({
+                title: "Generando documento PCA...",
+                text: 'Espere un momento, el documento se esta generando...',
+                type: "info",
+                showConfirmButton: false,
+                allowOutsideClick: false
+            });
+
+			url = 'generarPCA/' + proyecto.id ;
+			instalacion = $('#reporte_instalacion').val();
+
+            $.ajax({
+                url: url,
+                method: 'GET',
+                xhrFields: {
+                    responseType: 'blob'
+                },
+                success: function(data) {
+                    var a = document.createElement('a');
+                    var url = window.URL.createObjectURL(data);
+                    a.href = url;
+                    a.download = `Programa de Conservación de la Audición - ${instalacion}.xls`;
+                    document.body.append(a);
+                    a.click();
+                    a.remove();
+                    window.URL.revokeObjectURL(url);
+
+                    // Cerrar mensaje de carga
+                    swal.close();
+
+                    $('#boton_reporte_pca').prop('disabled', false);
+				},
                 error: function() {
                     swal({
                         title: "Hubo un problema al generar el documento.",
@@ -10716,7 +10825,7 @@ $("#botonCargarPuntos").click(function() {
 			return false;
 		}
 	}
-});
+}); 
 
 
 

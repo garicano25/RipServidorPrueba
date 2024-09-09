@@ -17,6 +17,8 @@ class reporteruidodosisnerModel extends Model
 		, 'reporteruidodosisner_ner'
 		, 'reporteruidodosisner_lmpe'
 		, 'reporteruidodosisner_tmpe'
+		,'reporteruidodosisner_nombre'
+		,'reporteruidodosisner_equipo'
 	];
 
 	public function reporteruidoarea()

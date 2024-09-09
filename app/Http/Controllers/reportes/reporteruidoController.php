@@ -59,6 +59,13 @@ use App\modelos\reportes\recursosPortadasInformesModel;
 //Recursos para abrir el Excel
 use PhpOffice\PhpSpreadsheet\IOFactory;
 use PhpOffice\PhpSpreadsheet\Spreadsheet;
+use PhpOffice\PhpSpreadsheet\Writer\Xlsx;
+use PhpOffice\PhpSpreadsheet\Style\Alignment;
+use PhpOffice\PhpSpreadsheet\Style\Border;
+use PhpOffice\PhpSpreadsheet\Style\Color;
+use PhpOffice\PhpSpreadsheet\Style\Fill;
+use Illuminate\Support\Facades\Response;
+
 
 
 //Configuracion Zona horaria
@@ -1094,6 +1101,7 @@ class reporteruidoController extends Controller
             $area = 'XXX';
             $area2 = 'XXX';
             $selectareasoption = '<option value=""></option>';
+            $selectequiposoption = '<option value=""></option>';
             $tabla_5_3 = '';
             $tabla_5_5 = '';
             $tabla_5_8_UNO = '';
@@ -1152,6 +1160,27 @@ class reporteruidoController extends Controller
                                         reportearea.reportearea_nombre ASC,
                                         reportecategoria.reportecategoria_orden ASC,
                                         reportecategoria.reportecategoria_nombre ASC');
+
+
+
+                $equipoUtilizado = DB::select('SELECT
+                                        equipo.equipo_Descripcion AS INSTRUMENTO,
+                                        equipo.equipo_Marca AS MARCA,
+                                        equipo.equipo_Serie AS SERIE,
+                                        IFNULL(equipo.equipo_certificadoCalibracion, "NA") as CERTIFICACION,
+                                        "Calibración vigente" AS CALIBRACION,
+                                        equipo.id
+                                    FROM
+                                        reporteequiposutilizados
+                                    INNER JOIN equipo ON reporteequiposutilizados.equipo_id = equipo.id
+                                    WHERE
+                                        reporteequiposutilizados.proyecto_id = ?
+                                        AND reporteequiposutilizados.agente_nombre = "Ruido" ', [$proyecto_id]);
+
+                foreach ($equipoUtilizado as $equipo){
+                    $selectequiposoption .= '<option value="' . $equipo->id . '">' . $equipo->INSTRUMENTO .' - '. $equipo->MARCA .' [ '. $equipo->SERIE .' ]' . '</option>';
+                    
+                }
 
 
                 // FORMATEAR FILAS
@@ -1397,6 +1426,25 @@ class reporteruidoController extends Controller
                                         reporteruidoarea.reporteruidoarea_nombre ASC');
 
 
+
+                $equipoUtilizado = DB::select('SELECT
+                                        equipo.equipo_Descripcion AS INSTRUMENTO,
+                                        equipo.equipo_Marca AS MARCA,
+                                        equipo.equipo_Serie AS SERIE,
+                                        IFNULL(equipo.equipo_certificadoCalibracion, "NA") as CERTIFICACION,
+                                        "Calibración vigente" AS CALIBRACION,
+                                        equipo.id
+                                    FROM
+                                        reporteequiposutilizados
+                                    INNER JOIN equipo ON reporteequiposutilizados.equipo_id = equipo.id
+                                    WHERE
+                                        reporteequiposutilizados.proyecto_id = ?
+                                        AND reporteequiposutilizados.agente_nombre = "Ruido" ', [$proyecto_id]);
+
+                foreach ($equipoUtilizado as $equipo) {
+                    $selectequiposoption .= '<option value="' . $equipo->id . '">' . $equipo->INSTRUMENTO . ' - ' . $equipo->MARCA . ' [ ' . $equipo->SERIE . ' ]' . '</option>';
+                }
+
                 // FORMATEAR FILAS
                 foreach ($areas as $key => $value) {
                     if ($area != $value->reporteruidoarea_nombre) {
@@ -1564,6 +1612,7 @@ class reporteruidoController extends Controller
             $dato["tabla_5_8_DOS"] = $tabla_5_8_DOS;
             $dato["tabla_6_1"] = $tabla_6_1;
             $dato["selectareasoption"] = $selectareasoption;
+            $dato["selectequiposoption"] = $selectequiposoption;
             $dato["msj"] = 'Datos consultados correctamente';
             return response()->json($dato);
         } catch (Exception $e) {
@@ -3255,7 +3304,9 @@ class reporteruidoController extends Controller
                                             reporteruidodosisner.reporteruidodosisner_dosis,
                                             reporteruidodosisner.reporteruidodosisner_ner,
                                             reporteruidodosisner.reporteruidodosisner_lmpe,
-                                            reporteruidodosisner.reporteruidodosisner_tmpe 
+                                            reporteruidodosisner.reporteruidodosisner_tmpe,
+                                            reporteruidodosisner.reporteruidodosisner_nombre, 
+                                            reporteruidodosisner.reporteruidodosisner_equipo 
                                         FROM
                                             reporteruidodosisner
                                             LEFT JOIN reportearea ON reporteruidodosisner.reporteruidoarea_id = reportearea.id
@@ -3286,7 +3337,9 @@ class reporteruidoController extends Controller
                                             reporteruidodosisner.reporteruidodosisner_dosis,
                                             reporteruidodosisner.reporteruidodosisner_ner,
                                             reporteruidodosisner.reporteruidodosisner_lmpe,
-                                            reporteruidodosisner.reporteruidodosisner_tmpe 
+                                             reporteruidodosisner.reporteruidodosisner_tmpe,
+                                            reporteruidodosisner.reporteruidodosisner_nombre, 
+                                            reporteruidodosisner.reporteruidodosisner_equipo 
                                         FROM
                                             reporteruidodosisner
                                             LEFT JOIN reporteruidoarea ON reporteruidodosisner.reporteruidoarea_id = reporteruidoarea.id
@@ -3641,6 +3694,7 @@ class reporteruidoController extends Controller
                                                         reporteruidopuntoner.reporteruidopuntoner_tmpe,
                                                         reporteruidopuntoner.reporteruidopuntoner_ner,
                                                         reporteruidopuntoner.reporteruidopuntoner_lmpe,
+                                                        reporteruidopuntoner.reporteruidobandaoctava_equipo,
                                                         IFNULL(reporteruidopuntoner.reporteruidopuntoner_RdB, "") AS reporteruidopuntoner_RdB,
                                                         reporteruidopuntonerfrecuencias.reporteruidopuntonerfrecuencias_orden,
                                                         reporteruidopuntonerfrecuencias.reporteruidopuntonerfrecuencias_frecuencia,
@@ -3670,6 +3724,7 @@ class reporteruidoController extends Controller
                                                         reporteruidopuntoner.reporteruidopuntoner_tmpe,
                                                         reporteruidopuntoner.reporteruidopuntoner_ner,
                                                         reporteruidopuntoner.reporteruidopuntoner_lmpe,
+                                                        reporteruidopuntoner.reporteruidobandaoctava_equipo,
                                                         IFNULL(reporteruidopuntoner.reporteruidopuntoner_RdB, "") AS reporteruidopuntoner_RdB,
                                                         reporteruidopuntonerfrecuencias.reporteruidopuntonerfrecuencias_orden,
                                                         reporteruidopuntonerfrecuencias.reporteruidopuntonerfrecuencias_frecuencia,
@@ -5176,15 +5231,914 @@ class reporteruidoController extends Controller
     }
 
 
+    public function consultarListaEquiposProteccion($proyecto_id, $equipo_seleccionado)
+    {
+        try {
+
+            $equipo = DB::select('SELECT CONCAT(reporteruidoequipoauditivo.reporteruidoequipoauditivo_tipo, " ", reporteruidoequipoauditivo.reporteruidoequipoauditivo_marca, " ",reporteruidoequipoauditivo.reporteruidoequipoauditivo_modelo) AS TIPO,
+            CONCAT(reporteruidoequipoauditivo.reporteruidoequipoauditivo_tipo, " - ", reporteruidoequipoauditivo.reporteruidoequipoauditivo_marca, " - ",reporteruidoequipoauditivo.reporteruidoequipoauditivo_modelo) AS TIPODESCRIPCION
+                                    FROM
+                                        reporteruidoequipoauditivo
+                                    WHERE
+                                        reporteruidoequipoauditivo.proyecto_id = ?', [$proyecto_id]);
 
 
 
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
+            if (count($equipo) != 0) {
+
+                $lista_equipo = '<option value="">&nbsp;</option>';
+                foreach ($equipo as  $value) {
+
+                    if ($value->TIPO != $equipo_seleccionado) {
+
+                        $lista_equipo .= '<option value="' . $value->TIPO . '">' . $value->TIPODESCRIPCION . '</option>';
+                    } else {
+                        $lista_equipo .= '<option value="' . $value->TIPO . '" selected>' . $value->TIPODESCRIPCION . '</option>';
+                    }
+                }
+            } else {
+
+                $lista_equipo = '<option value="" disabled>No existen equipos auditivos cargados</option>';
+            }
+
+
+            // respuesta
+            $dato['opciones'] = $lista_equipo;
+            return response()->json($dato);
+        } catch (Exception $e) {
+            $dato["msj"] = 'Error ' . $e->getMessage();
+            $dato['catsustancias'] = 0;
+            return response()->json($dato);
+        }
+    }
+
+
+    public function generarPCA($proyecto_id)
+    {
+        try {
+
+            //=============================================================== FUNCIONES GENERALES ===============================================================
+            function centrarContenido($sheet, $celda, $numero)
+            {
+                $style = $sheet->getStyle($celda . $numero);
+                $style->getAlignment()->setHorizontal(Alignment::HORIZONTAL_CENTER);
+
+                $style2 = $sheet->getStyle($celda . $numero);
+                $style2->getAlignment()->setVertical(Alignment::VERTICAL_CENTER);
+            }
+
+            function insertarImagen($sheet, $spreadsheet, $celda, $numero)
+            {
+
+                $imagePath = storage_path('app/plantillas_reportes/proyecto_infomes/pemex_pca.png');
+
+                $drawing = new \PhpOffice\PhpSpreadsheet\Worksheet\Drawing();
+                $drawing->setName('Logo PEMEX');
+                $drawing->setDescription('Logo PEMEX');
+                $drawing->setPath($imagePath);
+                $drawing->setCoordinates($celda . $numero);
+
+                // Ajustar el tamaño de la imagen para que sea grande
+                // $drawing->setHeight($sheet->getRowDimension(144)->getRowHeight() * 175);
+                // $drawing->setWidth($sheet->getColumnDimension($celda)->getWidth() * 175);
+
+                // Centrar la imagen en la celda
+                // $drawing->setOffsetX(($sheet->getColumnDimension($celda)->getWidth() * 370 - $drawing->getWidth()) / 2);
+                // $drawing->setOffsetY(($sheet->getRowDimension(144)->getRowHeight() * 250 - $drawing->getHeight()) / 2);
+
+                $drawing->setWorksheet($sheet);
+            }
+
+
+            function colocarFormulas1($sheet, $numeroObservacion){
+
+                $imagePath = storage_path('app/plantillas_reportes/proyecto_infomes/formula1.png');
+                
+                $drawing = new \PhpOffice\PhpSpreadsheet\Worksheet\Drawing();
+                $drawing->setName('Formula 1');
+                $drawing->setDescription('Formula 1');
+                $drawing->setPath($imagePath);
+                $drawing->setCoordinates('J' . ($numeroObservacion + 10));
+                $drawing->setWorksheet($sheet);
+
+            }
+
+            function colocarFormulas2($sheet, $numeroObservacion){
+
+                $imagePath = storage_path('app/plantillas_reportes/proyecto_infomes/formula2.png');
+
+                $drawing = new \PhpOffice\PhpSpreadsheet\Worksheet\Drawing();
+               
+                $drawing->setName('Formula 2');
+                $drawing->setDescription('Formula 2');
+                $drawing->setPath($imagePath);
+                $drawing->setCoordinates('M' . ($numeroObservacion + 13));
+                $drawing->setWorksheet($sheet);
+            }
+
+            function Negritas($sheet, $celda, $numero)
+            {
+                $style = $sheet->getStyle($celda . $numero);
+                $style->getFont()->setBold(true);
+            }
+
+            function ajustarTexto($sheet, $celda, $numero)
+            {
+                $sheet->getStyle($celda . $numero)->getAlignment()->setWrapText(true);
+            }
+
+            function mergeSetValue($sheet, $inicioMerge, $finMerge, $celdaValor, $numero1, $numero2, $incremento, $valor)
+            {
+                $sheet->mergeCells($inicioMerge . ($numero1 + $incremento) . ':' . $finMerge . ($numero2 + $incremento));
+                $sheet->setCellValue($celdaValor . ($numero1 + $incremento), $valor);
+            }
+
+            function mergeSetValueCenter($sheet, $inicioMerge, $finMerge, $celdaValor, $numero1, $numero2, $incremento, $valor)
+            {
+
+                $sheet->mergeCells($inicioMerge . ($numero1 + $incremento) . ':' . $finMerge . ($numero2 + $incremento));
+                $sheet->setCellValue($celdaValor . ($numero1 + $incremento), $valor);
+                $style = $sheet->getStyle($celdaValor . ($numero1 + $incremento));
+                $style->getAlignment()->setHorizontal(Alignment::HORIZONTAL_CENTER);
+
+                $style2 = $sheet->getStyle($celdaValor . ($numero1 + $incremento));
+                $style2->getAlignment()->setVertical(Alignment::VERTICAL_CENTER);
+            }
+
+            function pintarCelda($sheet, $celda, $numero)
+            {
+
+                $style = $sheet->getStyle($celda . $numero);
+                $style->getFill()
+                    ->setFillType(Fill::FILL_SOLID)
+                    ->getStartColor()
+                    ->setRGB('D3D3D3');
+            }
+
+            function pintarCeldaCustom($sheet, $celda, $numero, $color)
+            {
+
+                $style = $sheet->getStyle($celda . $numero);
+                $style->getFill()
+                    ->setFillType(Fill::FILL_SOLID)
+                    ->getStartColor()
+                    ->setRGB($color);
+            }
+
+
+            //=============================================================== CARGAMOS EL EXCEL ===============================================================
+            $ruta = storage_path('app/plantillas_reportes/proyecto_infomes/Plantilla_pca.xls');
+            $spreadsheet = IOFactory::load($ruta);
+            $PORTADA = $spreadsheet->getSheet(0);
+            $NER = $spreadsheet->getSheet(1);
+            $NPA = $spreadsheet->getSheet(2);
+            $EPP = $spreadsheet->getSheet(3);
+            $CAPACITACION = $spreadsheet->getSheet(4);
+            $VIGILANCIA = $spreadsheet->getSheet(5);
+            $CONTROL = $spreadsheet->getSheet(6);
+            $DOSIMETRIA = $spreadsheet->getSheet(7);
+
+
+            //=============================================================== OBTENEMOS LOS DATOS GENERALES DEL PROYECTO ===============================================================
+            $proyecto = proyectoModel::findOrFail($proyecto_id);
+            $equipoUtilizado = DB::select('SELECT
+                                        equipo.equipo_Descripcion AS INSTRUMENTO,
+                                        equipo.equipo_Marca AS MARCA,
+                                        equipo.equipo_Serie AS SERIE,
+                                        IFNULL(equipo.equipo_certificadoCalibracion, "NA") as CERTIFICACION,
+                                        "Calibración vigente" AS CALIBRACION
+                                    FROM
+                                        reporteequiposutilizados
+                                    INNER JOIN equipo ON reporteequiposutilizados.equipo_id = equipo.id
+                                    WHERE
+                                        reporteequiposutilizados.proyecto_id = ?
+                                        AND reporteequiposutilizados.agente_nombre = "Ruido" ', [$proyecto_id]);
+            $areasUbicaciones = DB::select('CALL sp_obtener_ubicacion_identificacion_pca_b(?)', [$proyecto_id]);
+            $fecha = date('d/m/Y', strtotime($proyecto->proyecto_fechaentrega));
+            $borderStyle = [
+                'borders' => [
+                    'allBorders' => [
+                        'borderStyle' => Border::BORDER_THIN,
+
+                    ],
+                ]
+            ];
+            $borderStyleBottom = [
+                'borders' => [
+                    'bottom' => [
+                        'borderStyle' => Border::BORDER_THIN,
+                    ],
+                ],
+            ];
+            //=============================================================== CONFIGURACION DE LA PORTADA ===============================================================
+            $PORTADA->setCellValue('C6', strtoupper($proyecto->proyecto_clientenombrecomercial));
+            $PORTADA->setCellValue('C16', "SECTOR XXX: " . strtoupper($proyecto->proyecto_clienteinstalacion));
+            $PORTADA->setCellValue('C20', "ESPECIFICAR NOMBRE DE LA REFINERIA");
+            $PORTADA->setCellValue('C22', $proyecto->proyecto_clientedireccionservicio);
+            #Insertamos la imagen en la portada
+            insertarImagen($PORTADA, $spreadsheet, "D", 2);
+
+
+
+            // =============================================================== CONFIGURACION DE LA PAGINA NER ==============================================================
+
+            #Pintamos las primer tabla
+            pintarCelda($NER, 'B', 10);
+            pintarCelda($NER, 'H', 10);
+            pintarCelda($NER, 'Y', 10);
+            pintarCelda($NER, 'AE', 10);
+            pintarCelda($NER, 'AK', 10);
+            pintarCelda($NER, 'AA', 10);
+            pintarCelda($NER, 'O', 10);
+            pintarCelda($NER, 'O', 11);
+            pintarCelda($NER, 'Q', 11);
+            pintarCelda($NER, 'S', 11);
+            pintarCelda($NER, 'U', 11);
+            pintarCelda($NER, 'W', 11);
+
+
+
+            #Plantas y ubicaciones
+            $area = 'xxx';
+            $colInicio = 'H';
+            $colFin = 'N';
+            $rowInicio = 12;
+            $celdaFin = '';
+            $areaLast = '';
+            $turnoLast = '';
+            $otroLast = '';
+            $totalLast = 0;
+            $nivelLast = '';
+            $responsableLast = '';
+            $observacionLast = '';
+            $inicioMerge2 = 0;
+            foreach ($areasUbicaciones as $key => $val) {
+
+                if ($key == 0) {
+                    $inicioMerge1 = 12;
+                    $area = $val->AREA;
+                }
+
+                //Verficamos si el area sigue siendo la misma esto para agrupar
+                if ($val->AREA == $area) {
+                    //Insertamos todas las ubicaciones del area actual
+                    $NER->mergeCells($colInicio . $rowInicio . ':' . $colFin . $rowInicio); //Juntamos las celdas de Fuentes generadoras
+                    $NER->setCellValue($colInicio . $rowInicio, $val->IDENTIFICACION);
+                    centrarContenido($NER, $colInicio, $rowInicio);
+
+                    //Almacenamos informacion para que cuando se Agrupen las celdas se inserte
+                    $areaLast = $val->AREA;
+                    $turnoLast = $val->TOTAL_CATEGORIAS;
+                    $otroLast = "N/A";
+                    $totalLast = $val->TOTAL_CATEGORIAS * 3;
+                    $nivelLast = "XXX";
+                    $responsableLast = "José Roberto Torres Rodríguez";
+                    $observacionLast = "Evaluación realizada por laboratorio del Grupo Microanálisis S.A. de C.V.";
+
+                    $rowInicio++;
+                    $area = $val->AREA;
+                } else {
+
+                    //Agrupamos celdas y asignamos valores almacenamos
+                    $finMerge = $rowInicio - 1;
+
+                    mergeSetValueCenter($NER, 'B', 'G', 'B', $inicioMerge1, $finMerge, 0, $areaLast);
+                    mergeSetValueCenter($NER, 'O', 'P', 'O', $inicioMerge1, $finMerge, 0, $turnoLast);
+                    mergeSetValueCenter($NER, 'Q', 'R', 'Q', $inicioMerge1, $finMerge, 0, $turnoLast);
+                    mergeSetValueCenter($NER, 'S', 'T', 'S', $inicioMerge1, $finMerge, 0, $turnoLast);
+                    mergeSetValueCenter($NER, 'U', 'V', 'U', $inicioMerge1, $finMerge, 0, $otroLast);
+                    mergeSetValueCenter($NER, 'W', 'X', 'W', $inicioMerge1, $finMerge, 0, $totalLast);
+                    mergeSetValueCenter($NER, 'Y', 'Z', 'Y', $inicioMerge1, $finMerge, 0, $nivelLast);
+                    mergeSetValueCenter($NER, 'AA', 'AD', 'AA', $inicioMerge1, $finMerge, 0, $fecha);
+                    mergeSetValueCenter($NER, 'AE', 'AJ', 'AE', $inicioMerge1, $finMerge, 0, $responsableLast);
+                    mergeSetValueCenter($NER, 'AK', 'AP', 'AK', $inicioMerge1, $finMerge, 0, $observacionLast);
+
+
+                    ajustarTexto($NER, 'AE', $inicioMerge1);
+                    ajustarTexto($NER, 'AK', $inicioMerge1);
+
+
+
+                    //Insertamos todas las ubicaciones del area actual
+                    $NER->mergeCells($colInicio . $rowInicio . ':' . $colFin . $rowInicio); //Juntamos las celdas de Fuentes generadoras
+                    $NER->setCellValue($colInicio . $rowInicio, $val->IDENTIFICACION);
+                    centrarContenido($NER, $colInicio, $rowInicio);
+
+                    //Almacenamos informacion para que cuando se Agrupen las celdas se inserte
+                    $areaLast = $val->AREA;
+                    $turnoLast = $val->TOTAL_CATEGORIAS;
+                    $otroLast = "N/A";
+                    $totalLast = $val->TOTAL_CATEGORIAS * 3;
+                    $nivelLast = "XXX";
+                    $responsableLast = "José Roberto Torres Rodríguez";
+                    $observacionLast = "Evaluación realizada por laboratorio del Grupo Microanálisis S.A. de C.V.";
+
+
+                    //Asignamos valor para que regrese al if
+                    $rowInicio++;
+                    $inicioMerge1 = $rowInicio;
+                    $area = $val->AREA;
+                }
+            }
+
+
+            if ($rowInicio > 0) {
+                //Agrupamos celdas y asignamos valores almacenamos
+                $finMerge = $rowInicio - 1;
+                $inicioMerge1 = $inicioMerge1 - 1;
+
+                mergeSetValueCenter($NER, 'B', 'G', 'B', $inicioMerge1, $finMerge, 0, $areaLast); // Área
+                mergeSetValueCenter($NER, 'O', 'P', 'O', $inicioMerge1, $finMerge, 0, $turnoLast); // 1T
+                mergeSetValueCenter($NER, 'Q', 'R', 'Q', $inicioMerge1, $finMerge, 0, $turnoLast); // 2T
+                mergeSetValueCenter($NER, 'S', 'T', 'S', $inicioMerge1, $finMerge, 0, $turnoLast); // 3T
+                mergeSetValueCenter($NER, 'U', 'V', 'U', $inicioMerge1, $finMerge, 0, $otroLast); // OTRO
+                mergeSetValueCenter($NER, 'W', 'X', 'W', $inicioMerge1, $finMerge, 0, $totalLast); // TOTAL
+                mergeSetValueCenter($NER, 'Y', 'Z', 'Y', $inicioMerge1, $finMerge, 0, $nivelLast); // NIVEL NSA
+                mergeSetValueCenter($NER, 'AA', 'AD', 'AA', $inicioMerge1, $finMerge, 0, $fecha); // ÚLTIMA EVALUACIÓN
+                mergeSetValueCenter($NER, 'AE', 'AJ', 'AE', $inicioMerge1, $finMerge, 0, $responsableLast); // RESPONSABLE
+                mergeSetValueCenter($NER, 'AK', 'AP', 'AK', $inicioMerge1, $finMerge, 0, $observacionLast); // OBSERVACIÓN
+
+                ajustarTexto($NER, 'AE', $inicioMerge1);
+                ajustarTexto($NER, 'AK', $inicioMerge1);
+            }
+
+            //Bordeamos toda la tabla
+            $NER->getStyle('B12:' . 'AP' . $finMerge)->applyFromArray($borderStyle);
+
+            //Creamos el contenido siguiente
+            $numeroNotas = $finMerge + 3;
+            $NER->setCellValue('B' . $numeroNotas, 'NOTAS');
+            Negritas($NER, 'B', $numeroNotas);
+            $NER->getStyle('B' . $numeroNotas . ':' . 'AP' . $numeroNotas)->applyFromArray($borderStyleBottom);
+            $NER->setCellValue('B' . ($numeroNotas + 1), '1T , 2T, 3T son abreviaturas de primer, segundo y tercer turno respectivamente.');
+            $NER->setCellValue('B' . ($numeroNotas + 2), 'NSA = Nivel sonoro A,  es el nivel de presión acústica instantánea medido con la red de ponderación A de un sonómetro integrador');
+            $NER->setCellValue('B' . ($numeroNotas + 3), 'NÚMERO DE TRABAJADORES: Se refiere a la cantidad de trabajadores en esa área que están expuestos al ruido. No incluir visitantes ni proveedores');
+            $NER->setCellValue('B' . ($numeroNotas + 4), 'ÚLTIMA EVALUACIÓN: Indique la fecha en la cual se realiza este reconocimiento.');
+
+            $numero = $numeroNotas + 8;
+
+            #Insertamos las imagenes de la Hoja de NER
+            insertarImagen($NER, $spreadsheet, "B", $numero);
+            insertarImagen($NER, $spreadsheet, "B", 1);
+            $NER->setCellValue('B' . ($numero + 4), 'EVALUACIÓN - Nivel de exposición a ruido');
+            Negritas($NER, 'B', ($numero + 4));
+            $NER->setCellValue('B' . ($numero + 5), '=PORTADA!C16');
+            Negritas($NER, 'B', ($numero + 5));
+            $NER->setCellValue('B' . ($numero + 6), 'Registre primeramente los datos del evaluador que incluye los instrumentos empleados, posteriormente registre los resultados obtenidos');
+
+            #Encabezado de la segunda tabla
+            $numero = $numero + 7;
+
+            mergeSetValue($NER, 'B', 'K', 'B', $numero, $numero, 1, 'RESPONSABLE DE LA MEDICIÓN');
+            pintarCelda($NER, 'B', $numero + 1);
+            mergeSetValue($NER, 'L', 'AA', 'L', $numero, $numero, 1, 'José Roberto Torres Rodríguez');
+            mergeSetValue($NER, 'AB', 'AF', 'AB', $numero, $numero, 1, 'ACREDITACIÓN: ');
+            mergeSetValue($NER, 'AG', 'AP', 'AG', $numero, $numero, 1, ' XXXXXXXXXXXXX');
+            pintarCelda($NER, 'AB', $numero + 1);
+            mergeSetValue($NER, 'B', 'H', 'B', $numero, $numero, 2, 'FECHA DE EVALUACIÓN:');
+            pintarCelda($NER, 'B', $numero + 2);
+            mergeSetValue($NER, 'I', 'AA', 'I', $numero, $numero, 2, $fecha);
+            mergeSetValue($NER, 'AB', 'AJ', 'AB', $numero, $numero, 2, 'VIGENCIA DE LA ACREDITACIÓN:');
+            pintarCelda($NER, 'AB', $numero + 2);
+            mergeSetValue($NER, 'AK', 'AP', 'AK', $numero, $numero, 2, 'Continúa vigente');
+            $NER->getStyle('B' . ($numero + 1)  . ':' . 'AP' . ($numero + 2))->applyFromArray($borderStyle);
+
+            #Encabezado de la tabla de equipos
+            mergeSetValueCenter($NER, 'B', 'H', 'B', $numero, $numero, 4, 'INSTRUMENTO');
+            pintarCelda($NER, 'B', $numero + 4);
+            mergeSetValueCenter($NER, 'I', 'K', 'I', $numero, $numero, 4, 'MARCA');
+            pintarCelda($NER, 'I', $numero + 4);
+            mergeSetValueCenter($NER, 'L', 'R', 'L', $numero, $numero, 4, 'NÚMERO DE SERIE');
+            pintarCelda($NER, 'L', $numero + 4);
+            mergeSetValueCenter($NER, 'S', 'AC', 'S', $numero, $numero, 4, 'CERTIFICADO DE CALIBRACIÓN');
+            pintarCelda($NER, 'S', $numero + 4);
+            mergeSetValueCenter($NER, 'AD', 'AP', 'AD', $numero, $numero, 4, 'OBSERVACIONES');
+            pintarCelda($NER, 'AD', $numero + 4);
+
+
+            #Equipo utilizado
+            $celdaEquipo = $numero + 5;
+            foreach ($equipoUtilizado as $equipo) {
+
+                mergeSetValueCenter($NER, 'I', 'K', 'I', $celdaEquipo, $celdaEquipo, 0, $equipo->MARCA);
+                mergeSetValueCenter($NER, 'B', 'H', 'B', $celdaEquipo, $celdaEquipo, 0, $equipo->INSTRUMENTO);
+                mergeSetValueCenter($NER, 'L', 'R', 'L', $celdaEquipo, $celdaEquipo, 0, $equipo->SERIE);
+                mergeSetValueCenter($NER, 'S', 'AC', 'S', $celdaEquipo, $celdaEquipo, 0, $equipo->CERTIFICACION);
+                mergeSetValueCenter($NER, 'AD', 'AP', 'AD', $celdaEquipo, $celdaEquipo, 0, $equipo->CALIBRACION);
+
+                $celdaEquipo++;
+            }
+            $NER->getStyle('B' . ($numero + 4) . ':' . 'AP' . ($celdaEquipo - 1))->applyFromArray($borderStyle);
+
+            #Tabla de Identificacion de los puntos
+            $celdaIdentificacion  = $celdaEquipo + 1;
+
+            $NER->setCellValue('B' . $celdaIdentificacion, 'N');
+            pintarCelda($NER, 'B', $celdaIdentificacion);
+            centrarContenido($NER, 'B', $celdaIdentificacion);
+            mergeSetValueCenter($NER, 'C', 'K', 'C', $celdaIdentificacion, $celdaIdentificacion, 0, 'IDENTIFICACIÓN DEL PUNTO');
+            pintarCelda($NER, 'C', $celdaIdentificacion);
+            mergeSetValueCenter($NER, 'L', 'S', 'L', $celdaIdentificacion, $celdaIdentificacion, 0, 'MÉTODO DE EVALUACIÓN');
+            pintarCelda($NER, 'L', $celdaIdentificacion);
+            mergeSetValueCenter($NER, 'T', 'U', 'T', $celdaIdentificacion, $celdaIdentificacion, 0, 'NER');
+            pintarCelda($NER, 'T', $celdaIdentificacion);
+            mergeSetValueCenter($NER, 'V', 'W', 'V', $celdaIdentificacion, $celdaIdentificacion, 0, 'LMPE');
+            pintarCelda($NER, 'V', $celdaIdentificacion);
+            mergeSetValueCenter($NER, 'X', 'AC', 'X', $celdaIdentificacion, $celdaIdentificacion, 0, 'RESULTADO');
+            pintarCelda($NER, 'X', $celdaIdentificacion);
+            mergeSetValueCenter($NER, 'AD', 'AP', 'AD', $celdaIdentificacion, $celdaIdentificacion, 0, 'OBSERVACIONES');
+            pintarCelda($NER, 'AD', $celdaIdentificacion);
+
+            #Obtener resultados
+            $resultados = DB::select('SELECT reporteruidopuntoner.reporteruidopuntoner_punto as PUNTO,
+                                    reporteruidopuntoner.reporteruidopuntoner_identificacion UBICACION,
+                                    reporteruidopuntoner.reporteruidopuntoner_ner as NER,
+                                    reporteruidopuntoner.reporteruidopuntoner_lmpe as LMPE,
+                                    "Puntos de Medición" as METODO,
+                                    IF(reporteruidopuntoner.reporteruidopuntoner_ner <= reporteruidopuntoner.reporteruidopuntoner_lmpe, "Dentro de norma", "Fuera de norma") as RESULTADO
+                                FROM
+                                    reporteruidopuntoner
+                                    LEFT JOIN reportearea ON reporteruidopuntoner.reporteruidoarea_id = reportearea.id
+                                WHERE
+                                    reporteruidopuntoner.proyecto_id = ?
+                                ORDER BY
+                                    reporteruidopuntoner.reporteruidopuntoner_punto ASC', [$proyecto_id]);
+
+            #Creamos la tabla a partir de la consulta que muestra los resultados
+            $numeroTabla = $celdaIdentificacion + 1;
+            foreach ($resultados as $val) {
+
+                $NER->setCellValue('B' . $numeroTabla, $val->PUNTO);
+                centrarContenido($NER, 'B', $numeroTabla);
+                mergeSetValueCenter($NER, 'C', 'K', 'C', $numeroTabla, $numeroTabla, 0, $val->UBICACION);
+                mergeSetValueCenter($NER, 'L', 'S', 'L', $numeroTabla, $numeroTabla, 0, $val->METODO);
+                mergeSetValueCenter($NER, 'T', 'U', 'T', $numeroTabla, $numeroTabla, 0, $val->NER);
+                mergeSetValueCenter($NER, 'V', 'W', 'V', $numeroTabla, $numeroTabla, 0, $val->LMPE);
+                mergeSetValueCenter($NER, 'X', 'AC', 'X', $numeroTabla, $numeroTabla, 0, $val->RESULTADO);
+                mergeSetValueCenter($NER, 'AD', 'AP', 'AD', $numeroTabla, $numeroTabla, 0, '');
+
+                $numeroTabla++;
+            }
+
+            #Bordeamos toda la tabla
+            $NER->getStyle('B' . $celdaIdentificacion . ':' . 'AP' . ($numeroTabla - 1))->applyFromArray($borderStyle);
+
+            #Creamos la nota de la tabla
+            $NER->setCellValue('B' . ($numeroTabla + 1), 'NOTAS');
+            Negritas($NER, 'B', ($numeroTabla + 1));
+            $NER->getStyle('B' . ($numeroTabla + 1) . ':' . 'AP' . ($numeroTabla + 1))->applyFromArray($borderStyleBottom);
+            $NER->setCellValue('B' . ($numeroTabla + 2), 'Cuando las exposiciones a ruido igualen o excedan el NER de 80 dB(A), el reconocimiento y evaluación del NER se repetirá cada dos años o dentro de los ');
+            $NER->setCellValue('B' . ($numeroTabla + 3), 'noventa días posteriores a un cambio de producción, procesos, equipos, controles u otros cambios, que puedan ocasionar variaciones en los resultados del estudio anterior.');
+            $NER->setCellValue('B' . ($numeroTabla + 4), 'Nivel de exposición a ruido (NER): es el nivel sonoro A promedio referido a una exposición de 8 horas. ');
+
+
+            // =============================================================== CONFIGURACION DE LA PAGINA NPA ==============================================================
+
+            #Pintamos las primer tabla
+            pintarCelda($NPA, 'B', 14);
+            pintarCelda($NPA, 'I', 14);
+            pintarCelda($NPA, 'L', 14);
+            pintarCelda($NPA, 'S', 14);
+            pintarCelda($NPA, 'AD', 14);
+            pintarCelda($NPA, 'B', 11);
+            pintarCelda($NPA, 'AB', 11);
+            pintarCelda($NPA, 'B', 12);
+            pintarCelda($NPA, 'AB', 12);
+            insertarImagen($NPA, $spreadsheet, "C", 3);
+
+            $NPA->setCellValue('L11', 'José Roberto Torres Rodríguez');
+            $NPA->setCellValue('I12', $fecha);
+            $NPA->setCellValue('AG11', 'XXXXXXXX');
+
+            #Equipo utilizado
+            $celdaEquipoNpa = 15;
+            foreach ($equipoUtilizado as $equipo) {
+
+                mergeSetValueCenter($NPA, 'B', 'H', 'B', $celdaEquipoNpa, $celdaEquipoNpa, 0, $equipo->INSTRUMENTO);
+                mergeSetValueCenter($NPA, 'I', 'K', 'I', $celdaEquipoNpa, $celdaEquipoNpa, 0, $equipo->MARCA);
+                mergeSetValueCenter($NPA, 'L', 'R', 'L', $celdaEquipoNpa, $celdaEquipoNpa, 0, $equipo->SERIE);
+                mergeSetValueCenter($NPA, 'S', 'AC', 'S', $celdaEquipoNpa, $celdaEquipoNpa, 0, $equipo->CERTIFICACION);
+                mergeSetValueCenter($NPA, 'AD', 'AP', 'AD', $celdaEquipoNpa, $celdaEquipoNpa, 0, $equipo->CALIBRACION);
+
+                $celdaEquipoNpa++;
+            }
+            $NPA->getStyle('B14:' . 'AP' . ($celdaEquipoNpa - 1))->applyFromArray($borderStyle);
+
+
+            #Tabla de frecuencias 
+            $celdaFrecuencia = $celdaEquipoNpa + 1;
+
+            mergeSetValueCenter($NPA, 'B', 'B', 'B', $celdaFrecuencia, $celdaFrecuencia + 1, 0, 'N');
+            pintarCelda($NPA, 'B', $celdaFrecuencia);
+            mergeSetValueCenter($NPA, 'C', 'K', 'C', $celdaFrecuencia, $celdaFrecuencia + 1, 0, 'IDENTIFICACIÓN DEL PUNTO');
+            pintarCelda($NPA, 'C', $celdaFrecuencia);
+            mergeSetValueCenter($NPA, 'L', 'R', 'L', $celdaFrecuencia, $celdaFrecuencia + 1, 0, 'ÁREA');
+            pintarCelda($NPA, 'L', $celdaFrecuencia);
+            mergeSetValueCenter($NPA, 'S', 'AJ', 'S', $celdaFrecuencia, $celdaFrecuencia, 0, 'FRECUENCIAS (Hz)');
+            pintarCelda($NPA, 'S', $celdaFrecuencia);
+            mergeSetValueCenter($NPA, 'AK', 'AP', 'AK', $celdaFrecuencia, $celdaFrecuencia + 1, 0, 'REFERENCIA');
+            pintarCelda($NPA, 'AK', $celdaFrecuencia);
+
+            mergeSetValueCenter($NPA, 'S', 'T', 'S', $celdaFrecuencia + 1, $celdaFrecuencia + 1, 0, '31.5');
+            pintarCeldaCustom($NPA, 'S', $celdaFrecuencia + 1, '90EE90');
+            mergeSetValueCenter($NPA, 'U', 'V', 'U', $celdaFrecuencia + 1, $celdaFrecuencia + 1, 0, '63');
+            pintarCeldaCustom($NPA, 'U', $celdaFrecuencia + 1, '00FF00');
+            mergeSetValueCenter($NPA, 'W', 'X', 'W', $celdaFrecuencia + 1, $celdaFrecuencia + 1, 0, '125');
+            pintarCeldaCustom($NPA, 'W', $celdaFrecuencia + 1, '32CD32');
+            mergeSetValueCenter($NPA, 'Y', 'Z', 'Y', $celdaFrecuencia + 1, $celdaFrecuencia + 1, 0, '250');
+            pintarCeldaCustom($NPA, 'Y', $celdaFrecuencia + 1, '228B22');
+            mergeSetValueCenter($NPA, 'AA', 'AB', 'AA', $celdaFrecuencia + 1, $celdaFrecuencia + 1, 0, '500');
+            pintarCeldaCustom($NPA, 'AA', $celdaFrecuencia + 1, '8B4513');
+            mergeSetValueCenter($NPA, 'AC', 'AD', 'AC', $celdaFrecuencia + 1, $celdaFrecuencia + 1, 0, '1 K');
+            pintarCeldaCustom($NPA, 'AC', $celdaFrecuencia + 1, 'FFE5E5');
+            mergeSetValueCenter($NPA, 'AE', 'AF', 'AE', $celdaFrecuencia + 1, $celdaFrecuencia + 1, 0, '2 K');
+            pintarCeldaCustom($NPA, 'AE', $celdaFrecuencia + 1, 'FFCC99');
+            mergeSetValueCenter($NPA, 'AG', 'AH', 'AG', $celdaFrecuencia + 1, $celdaFrecuencia + 1, 0, '4 K');
+            pintarCeldaCustom($NPA, 'AG', $celdaFrecuencia + 1, 'FF9966');
+            mergeSetValueCenter($NPA, 'AI', 'AJ', 'AI', $celdaFrecuencia + 1, $celdaFrecuencia + 1, 0, '8 K');
+            pintarCeldaCustom($NPA, 'AI', $celdaFrecuencia + 1, 'FF6600');
+
+            #Obtenemos datos de la tabla de fecuencia
+            $frecuencias = DB::select('SELECT DISTINCT
+                                        reporteruidopuntoner.reporteruidopuntoner_punto as PUNTO,
+                                        reporteruidopuntoner.reporteruidopuntoner_identificacion AS UBICACION,
+                                        reportearea.reportearea_nombre AS AREA,
+                                        reporteruidopuntonerfrecuencias.reporteruidopuntonerfrecuencias_orden,
+                                        reporteruidopuntonerfrecuencias.reporteruidopuntonerfrecuencias_frecuencia,
+                                        IFNULL(reporteruidopuntonerfrecuencias.reporteruidopuntonerfrecuencias_nivel, "") AS FRECUENCIA
+                                    FROM
+                                        reporteruidopuntoner
+                                        LEFT JOIN reportearea ON reporteruidopuntoner.reporteruidoarea_id = reportearea.id 
+                                        RIGHT JOIN reporteruidopuntonerfrecuencias ON reporteruidopuntoner.id = reporteruidopuntonerfrecuencias.reporteruidopuntoner_id
+                                    WHERE
+                                        reporteruidopuntoner.proyecto_id = ?
+                                    ORDER BY
+                                        reporteruidopuntoner.reporteruidopuntoner_punto ASC,
+                                        reporteruidopuntonerfrecuencias.reporteruidopuntonerfrecuencias_orden ASC', [$proyecto_id]);
+
+            $celdaTabla = $celdaFrecuencia + 2;
+            $ubicacion = 'xxx';
+            $ordenFrecuecia = 1;
+            foreach ($frecuencias as $key => $val) {
+
+                if ($key == 0) {
+                    $ubicacion = $val->UBICACION;
+                }
+
+
+                if ($ubicacion == $val->UBICACION) {
+
+
+                    $NPA->setCellValue('B' . $celdaTabla, $val->PUNTO);
+                    centrarContenido($NPA, 'B', $celdaTabla);
+                    mergeSetValueCenter($NPA, 'C', 'K', 'C', $celdaTabla, $celdaTabla, 0, $val->UBICACION);
+                    mergeSetValueCenter($NPA, 'L', 'R', 'L', $celdaTabla, $celdaTabla, 0, $val->AREA);
+                    mergeSetValueCenter($NPA, 'AK', 'AP', 'AK', $celdaTabla, $celdaTabla, 0, '');
+
+
+                    switch ($ordenFrecuecia) {
+                        case 1:
+                            mergeSetValueCenter($NPA, 'S', 'T', 'S', $celdaTabla, $celdaTabla, 0, $val->FRECUENCIA);
+                            break;
+                        case 2:
+                            mergeSetValueCenter($NPA, 'U', 'V', 'U', $celdaTabla, $celdaTabla, 0, $val->FRECUENCIA);
+
+                            break;
+                        case 3:
+                            mergeSetValueCenter($NPA, 'W', 'X', 'W', $celdaTabla, $celdaTabla, 0, $val->FRECUENCIA);
+
+                            break;
+                        case 4:
+                            mergeSetValueCenter($NPA, 'Y', 'Z', 'Y', $celdaTabla, $celdaTabla, 0, $val->FRECUENCIA);
+
+                            break;
+                        case 5:
+                            mergeSetValueCenter($NPA, 'AA', 'AB', 'AA', $celdaTabla, $celdaTabla, 0, $val->FRECUENCIA);
+
+                            break;
+                        case 6:
+                            mergeSetValueCenter($NPA, 'AC', 'AD', 'AC', $celdaTabla, $celdaTabla, 0, $val->FRECUENCIA);
+
+                            break;
+                        case 7:
+                            mergeSetValueCenter($NPA, 'AE', 'AF', 'AE', $celdaTabla, $celdaTabla, 0, $val->FRECUENCIA);
+
+                            break;
+                        case 8:
+                            mergeSetValueCenter($NPA, 'AG', 'AH', 'AG', $celdaTabla, $celdaTabla, 0, $val->FRECUENCIA);
+
+                            break;
+                        case 9:
+                            mergeSetValueCenter($NPA, 'AI', 'AJ', 'AI', $celdaTabla, $celdaTabla, 0, $val->FRECUENCIA);
+                            break;
+                    }
+
+
+                    $ordenFrecuecia++; // Para acceder a cada una de las frecuencias
+                    $ubicacion = $val->UBICACION;
+                } else {
+                    //Incrementamos antes de insertar para hacer un salto de linea
+                    $celdaTabla++;
+
+                    $NPA->setCellValue('B' . $celdaTabla, $val->PUNTO);
+                    centrarContenido($NPA, 'B', $celdaTabla);
+                    mergeSetValueCenter($NPA, 'C', 'K', 'C', $celdaTabla, $celdaTabla, 0, $val->UBICACION);
+                    mergeSetValueCenter($NPA, 'L', 'R', 'L', $celdaTabla, $celdaTabla, 0, $val->AREA);
+                    mergeSetValueCenter($NPA, 'AK', 'AP', 'AK', $celdaTabla, $celdaTabla, 0, '');
+
+
+                    mergeSetValueCenter($NPA, 'S', 'T', 'S', $celdaTabla, $celdaTabla, 0, $val->FRECUENCIA);
+
+
+                    $ubicacion = $val->UBICACION;
+
+
+                    //Receteamos todas la variables para hacerlo de nuevo con una ubicacion diferente
+                    $ordenFrecuecia = 2;
+                }
+            }
+            //Bordeamos la tabla
+            $NPA->getStyle('B19:' . 'AP' . $celdaTabla)->applyFromArray($borderStyle);
+
+            #Creamos la nota de la tabla
+            $NPA->setCellValue('B' . ($celdaTabla + 1), 'NOTAS');
+            Negritas($NPA, 'B', ($celdaTabla + 1));
+            $NPA->getStyle('B' . ($celdaTabla + 1) . ':' . 'AP' . ($celdaTabla + 1))->applyFromArray($borderStyleBottom);
+            $NPA->setCellValue('B' . ($celdaTabla + 2), 'El reconocimiento y evaluación de los NPA se repetirá cada dos años o dentro de los noventa días posteriores a un cambio de producción');
+            $NPA->setCellValue('B' . ($celdaTabla + 3), 'procesos, equipos, controles u otros cambios, que puedan ocasionar variaciones en los resultados del estudio.');
+
+
+            // =============================================================== CONFIGURACION DE LA PAGINA EPP ==============================================================
+
+            #Pintamos y colocamos la imagen
+            pintarCelda($EPP, 'B', 12);
+            pintarCelda($EPP, 'C', 12);
+            pintarCelda($EPP, 'L', 12);
+            pintarCelda($EPP, 'T', 12);
+            pintarCelda($EPP, 'U', 12);
+            pintarCelda($EPP, 'V', 12);
+            pintarCelda($EPP, 'W', 12);
+            insertarImagen($EPP, $spreadsheet, "C", 2);
+
+            #Obtenemos la informacion de los equipos
+            $equipos = DB::select('SELECT reporteruidopuntoner.reporteruidopuntoner_punto as PUNTO,
+                                    reporteruidopuntoner.reporteruidopuntoner_identificacion as UBICACION,
+                                    reporteruidopuntoner.reporteruidobandaoctava_equipo as EQUIPO,
+                                    reporteruidopuntoner.reporteruidopuntoner_ner as NER,
+                                    reporteruidopuntoner.reporteruidopuntoner_RdB as RDB,
+                                    reporteruidopuntoner.reporteruidopuntoner_NRE as NRE
+                                FROM
+                                    reporteruidopuntoner
+                                WHERE
+                                    reporteruidopuntoner.proyecto_id = ?
+                                    AND (reporteruidopuntoner.reporteruidopuntoner_RdB IS NOT NULL OR reporteruidopuntoner.reporteruidopuntoner_RdB <> "")
+                                ORDER BY
+                                    reporteruidopuntoner.reporteruidopuntoner_punto ASC', [$proyecto_id]);
+
+            $numeroepp = 13;
+            foreach ($equipos as $val) {
+
+                mergeSetValueCenter($EPP, 'B', 'B', 'B', $numeroepp, $numeroepp, 0, $val->PUNTO);
+                mergeSetValueCenter($EPP, 'C', 'K', 'C', $numeroepp, $numeroepp, 0, $val->UBICACION);
+                mergeSetValueCenter($EPP, 'L', 'S', 'L', $numeroepp, $numeroepp, 0, $val->EQUIPO);
+                mergeSetValueCenter($EPP, 'T', 'T', 'T', $numeroepp, $numeroepp, 0, $val->NER);
+                mergeSetValueCenter($EPP, 'U', 'U', 'U', $numeroepp, $numeroepp, 0, $val->RDB);
+                mergeSetValueCenter($EPP, 'V', 'V', 'V', $numeroepp, $numeroepp, 0, $val->NRE);
+                mergeSetValueCenter($EPP, 'W', 'AM', 'W', $numeroepp, $numeroepp, 0, "");
+
+                $numeroepp++;
+            }
+
+            $EPP->getStyle('B13:' . 'AM' . ($numeroepp - 1))->applyFromArray($borderStyle);
+
+            #Notas de la tabla
+            $EPP->setCellValue('B' . ($numeroepp + 1), 'NOTAS');
+            Negritas($EPP, 'B', ($numeroepp + 1));
+            $EPP->getStyle('B' . ($numeroepp + 1) . ':' . 'AM' . ($numeroepp + 1))->applyFromArray($borderStyleBottom);
+            $EPP->setCellValue('B' . ($numeroepp + 2), 'NER = Nivel de exposición a ruido, el registrado en la seccion del NER');
+            $EPP->setCellValue('B' . ($numeroepp + 3), 'procesos, equipos, controles u otros cambios, que puedan ocasionar variaciones en los resultados del estudio.');
+            insertarImagen($EPP, $spreadsheet, "C", ($numeroepp + 5));
+            $EPP->setCellValue('B' . ($numeroepp + 8), 'EQUIPO DE PROTECCION PERSONAL - REGISTRO DE PROCEDIMIENTOS');
+            Negritas($EPP, 'B', ($numeroepp + 8));
+            $EPP->setCellValue('B' . ($numeroepp + 9), '=PORTADA!C16');
+            Negritas($EPP, 'B', ($numeroepp + 9));
+
+
+            #Creamos la tablas de las observaciones
+            mergeSetValueCenter($EPP, 'B', 'S', 'B', ($numeroepp + 10), ($numeroepp + 10), 0, "PROCEDIMIENTO");
+            pintarCelda($EPP, 'B', ($numeroepp + 10));
+            mergeSetValueCenter($EPP, 'T', 'V', 'T', ($numeroepp + 10), ($numeroepp + 10), 0, "CLAVE");
+            pintarCelda($EPP, 'T', ($numeroepp + 10));
+            mergeSetValueCenter($EPP, 'W', 'AB', 'W', ($numeroepp + 10), ($numeroepp + 10), 0, "FECHA DE REVISIÓN");
+            pintarCelda($EPP, 'W', ($numeroepp + 10));
+            mergeSetValueCenter($EPP, 'AC', 'AM', 'AC', ($numeroepp + 10), ($numeroepp + 10), 0, "OBSERVACIONES");
+            pintarCelda($EPP, 'AC', ($numeroepp + 10));
+
+            $val = 3;
+            $numeroTablaObservaciones = $numeroepp + 11;
+            for ($i = 0; $i < $val; $i++) {
+
+                mergeSetValueCenter($EPP, 'B', 'S', 'B', ($numeroTablaObservaciones + $i), ($numeroTablaObservaciones + $i), 0, "");
+                mergeSetValueCenter($EPP, 'T', 'V', 'T', ($numeroTablaObservaciones + $i), ($numeroTablaObservaciones + $i), 0, "");
+                mergeSetValueCenter($EPP, 'W', 'AB', 'W', ($numeroTablaObservaciones + $i), ($numeroTablaObservaciones + $i), 0, "");
+                mergeSetValueCenter($EPP, 'AC', 'AM', 'AC', ($numeroTablaObservaciones + $i), ($numeroTablaObservaciones + $i), 0, "");
+            }
+
+            $EPP->getStyle('B' . ($numeroepp + 10) . ':' . 'AM' . ($numeroTablaObservaciones + ($val - 1)))->applyFromArray($borderStyle);
+
+
+            // =============================================================== CONFIGURACION DE LA PAGINA CAPACITACION ==============================================================
+
+            #Pintamos y colocamos la imagen
+            pintarCelda($CAPACITACION, 'B', 14);
+            pintarCelda($CAPACITACION, 'C', 14);
+            pintarCelda($CAPACITACION, 'R', 14);
+            pintarCelda($CAPACITACION, 'T', 14);
+            pintarCelda($CAPACITACION, 'U', 14);
+            pintarCelda($CAPACITACION, 'V', 14);
+            pintarCelda($CAPACITACION, 'X', 14);
+            pintarCelda($CAPACITACION, 'Z', 14);
+            pintarCelda($CAPACITACION, 'AB', 14);
+            pintarCelda($CAPACITACION, 'AD', 14);
+            pintarCelda($CAPACITACION, 'AF', 14);
+            pintarCelda($CAPACITACION, 'AH', 14);
+            pintarCelda($CAPACITACION, 'AJ', 14);
+            pintarCelda($CAPACITACION, 'AL', 14);
+            pintarCelda($CAPACITACION, 'AN', 14);
+            insertarImagen($CAPACITACION, $spreadsheet, "C", 2);
+
+            // =============================================================== CONFIGURACION DE LA PAGINA VIGILANCIA ==============================================================
+            #Pintamos y colocamos la imagen
+            pintarCelda($VIGILANCIA, 'B', 14);
+            pintarCelda($VIGILANCIA, 'B', 37);
+            insertarImagen($VIGILANCIA, $spreadsheet, "C", 2);
+            pintarCelda($VIGILANCIA, 'B', 61);
+            pintarCelda($VIGILANCIA, 'B', 84);
+            insertarImagen($VIGILANCIA, $spreadsheet, "C", 49);
+            pintarCelda($VIGILANCIA, 'B', 108);
+            pintarCelda($VIGILANCIA, 'B', 131);
+            insertarImagen($VIGILANCIA, $spreadsheet, "C", 96);
+            pintarCelda($VIGILANCIA, 'B', 155);
+            pintarCelda($VIGILANCIA, 'B', 178);
+            insertarImagen($VIGILANCIA, $spreadsheet, "C", 143);
+            $VIGILANCIA->setCellValue('B6', '=PORTADA!C16');
+
+
+            // =============================================================== CONFIGURACION DE LA PAGINA MEDIDAD DE CONTROL ==============================================================
+            $CONTROL->setCellValue('B6', '=PORTADA!C16');
+            insertarImagen($CONTROL, $spreadsheet, "C", 2);
+
+
+            // =============================================================== CONFIGURACION DE LA PAGINA DE DOSIMETRIA ==============================================================
+            insertarImagen($DOSIMETRIA, $spreadsheet, "C", 2);
+            pintarCelda($DOSIMETRIA, 'B', 7);
+            $DOSIMETRIA->setCellValue('F7', strtoupper($proyecto->proyecto_clientenombrecomercial));
+            pintarCelda($DOSIMETRIA, 'Y', 7);
+            pintarCelda($DOSIMETRIA, 'AC', 7);
+            pintarCelda($DOSIMETRIA, 'B', 9);
+            $DOSIMETRIA->setCellValue('L9', "SECTOR XXX: " . strtoupper($proyecto->proyecto_clienteinstalacion));
+            $DOSIMETRIA->setCellValue('H11', $proyecto->proyecto_clientedireccionservicio);
+            $DOSIMETRIA->setCellValue('L10', "XXXXXXXXXXXXXXXXXX");
+            pintarCelda($DOSIMETRIA, 'B', 10);
+            pintarCelda($DOSIMETRIA, 'B', 11);
+            pintarCelda($DOSIMETRIA, 'R', 11);
+            pintarCelda($DOSIMETRIA, 'B', 11);
+
+            #TABLA DE INSTRUMENTOS
+            pintarCelda($DOSIMETRIA, 'B', 15);
+            pintarCelda($DOSIMETRIA, 'G', 15);
+            pintarCelda($DOSIMETRIA, 'L', 15);
+            pintarCelda($DOSIMETRIA, 'S', 15);
+            pintarCelda($DOSIMETRIA, 'Z', 15);
+            pintarCelda($DOSIMETRIA, 'Z', 16);
+            pintarCelda($DOSIMETRIA, 'AC', 16);
+
+            #Recuperamos las dosimetrias
+            $dosis = DB::select('SELECT reporteruidodosisner.reporteruidodosisner_punto AS PUNTO,
+                                reportecategoria.reportecategoria_nombre AS CATEGORIA,
+                                reporteruidodosisner.reporteruidodosisner_dosis AS DOSIS,
+                                reporteruidodosisner.reporteruidodosisner_ner AS NER,
+                                reporteruidodosisner.reporteruidodosisner_tmpe AS TMPE,
+                                reporteruidodosisner.reporteruidodosisner_nombre AS NOMBRE, 
+                                equipo.equipo_Descripcion AS INSTRUMENTO,
+                                equipo.equipo_Modelo AS MODELO,
+                                equipo.equipo_Marca AS MARCA,
+                                equipo.equipo_Serie AS SERIE,
+                                5 AS TIEMPO_MEDICION
+                            FROM
+                                reporteruidodosisner
+                                LEFT JOIN reportearea ON reporteruidodosisner.reporteruidoarea_id = reportearea.id
+                                LEFT JOIN reportecategoria ON reporteruidodosisner.reporteruidocategoria_id = reportecategoria.id
+                                LEFT JOIN equipo ON equipo.id = reporteruidodosisner.reporteruidodosisner_equipo
+                            WHERE
+                                reporteruidodosisner.proyecto_id = ?
+                            ORDER BY
+                                reporteruidodosisner.reporteruidodosisner_punto ASC', [$proyecto_id]);
+                                
+            $numeroTrabajadores = count($dosis);
+            $DOSIMETRIA->setCellValue('AD11', $numeroTrabajadores);
+
+
+            #Ingresamos las dosis
+            $numerodosis = 17;
+            foreach($dosis as $val){
+
+                mergeSetValueCenter($DOSIMETRIA, 'B', 'F', 'B', $numerodosis, $numerodosis, 0, $val->PUNTO);
+                mergeSetValueCenter($DOSIMETRIA, 'G', 'K', 'G', $numerodosis, $numerodosis, 0, $val->MARCA);
+                mergeSetValueCenter($DOSIMETRIA, 'L', 'R', 'L', $numerodosis, $numerodosis, 0, $val->MODELO);
+                mergeSetValueCenter($DOSIMETRIA, 'S', 'Y', 'S', $numerodosis, $numerodosis, 0, $val->SERIE);
+                mergeSetValueCenter($DOSIMETRIA, 'Z', 'AB', 'Z', $numerodosis, $numerodosis, 0, "XXX");
+                mergeSetValueCenter($DOSIMETRIA, 'AC', 'AF', 'AC', $numerodosis, $numerodosis, 0, "XXX");
+
+                $numerodosis++;
+            }
+            $DOSIMETRIA->getStyle('B17:' . 'AF' . ($numerodosis - 1))->applyFromArray($borderStyle);
+
+            mergeSetValueCenter($DOSIMETRIA, 'B', 'AF', 'B', $numerodosis + 4, $numerodosis+4, 0, "TRABAJADORES");
+            pintarCelda($DOSIMETRIA, 'B', ($numerodosis+4));
+
+            #Creamos la tabla de los trabajadores
+            mergeSetValueCenter($DOSIMETRIA, 'B', 'F', 'B', ($numerodosis + 6), ($numerodosis+7), 0, "NOMBRE");
+            pintarCelda($DOSIMETRIA, 'B', ($numerodosis + 6));            
+            mergeSetValueCenter($DOSIMETRIA, 'G', 'K', 'G', ($numerodosis + 6), ($numerodosis+7), 0, "PUESTO");
+            pintarCelda($DOSIMETRIA, 'G', ($numerodosis + 6));            
+            mergeSetValueCenter($DOSIMETRIA, 'L', 'P', 'L', ($numerodosis + 6), ($numerodosis+7), 0, "INSTRUMENTO");
+            pintarCelda($DOSIMETRIA, 'L', ($numerodosis + 6));            
+            mergeSetValueCenter($DOSIMETRIA, 'Q', 'T', 'Q', ($numerodosis + 6), ($numerodosis+6), 0, "HORA");
+            pintarCelda($DOSIMETRIA, 'Q', ($numerodosis + 6));            
+            mergeSetValueCenter($DOSIMETRIA, 'Q', 'R', 'Q', ($numerodosis + 7), ($numerodosis+7), 0, "INICIAL");
+            pintarCelda($DOSIMETRIA, 'Q', ($numerodosis + 7));            
+            mergeSetValueCenter($DOSIMETRIA, 'S', 'T', 'S', ($numerodosis + 7), ($numerodosis+7), 0, "FINAL");
+            pintarCelda($DOSIMETRIA, 'S', ($numerodosis + 7));            
+            mergeSetValueCenter($DOSIMETRIA, 'U', 'Y', 'U', ($numerodosis + 6), ($numerodosis+7), 0, "TIEMPO DE MEDICIÓN (h)");
+            ajustarTexto($DOSIMETRIA, 'U', $numerodosis + 6); 
+            pintarCelda($DOSIMETRIA, 'U', ($numerodosis + 6));            
+            mergeSetValueCenter($DOSIMETRIA, 'Z', 'Z', 'Z', ($numerodosis + 6), ($numerodosis+7), 0, "% DOSIS");
+            ajustarTexto($DOSIMETRIA, 'Z', $numerodosis + 6); 
+            pintarCelda($DOSIMETRIA, 'Z', ($numerodosis + 6));            
+            mergeSetValueCenter($DOSIMETRIA, 'AA', 'AC', 'AA', ($numerodosis + 6), ($numerodosis+7), 0, "NER dB(A)");
+            ajustarTexto($DOSIMETRIA, 'AA', $numerodosis + 6); 
+            pintarCelda($DOSIMETRIA, 'AA', ($numerodosis + 6));            
+            mergeSetValueCenter($DOSIMETRIA, 'AD', 'AF', 'AD', ($numerodosis + 6), ($numerodosis+7), 0, "TMPE (h)");
+            pintarCelda($DOSIMETRIA, 'AD', ($numerodosis + 6));
+            ajustarTexto($DOSIMETRIA, 'AD', $numerodosis + 6);
+
+
+            #Ingresamos las dosis
+            $numeroTrabajadores = $numerodosis + 8;
+            foreach ($dosis as $val) {
+
+                mergeSetValueCenter($DOSIMETRIA, 'B', 'F', 'B', $numeroTrabajadores, $numeroTrabajadores, 0, $val->NOMBRE);
+                mergeSetValueCenter($DOSIMETRIA, 'G', 'K', 'G', $numeroTrabajadores, $numeroTrabajadores, 0, $val->CATEGORIA);
+                ajustarTexto($DOSIMETRIA, 'G', $numeroTrabajadores); 
+                mergeSetValueCenter($DOSIMETRIA, 'L', 'P', 'L', $numeroTrabajadores, $numeroTrabajadores, 0, $val->INSTRUMENTO);
+                mergeSetValueCenter($DOSIMETRIA, 'Q', 'R', 'Q', $numeroTrabajadores, $numeroTrabajadores, 0, "XXX");
+                mergeSetValueCenter($DOSIMETRIA, 'S', 'T', 'S', $numeroTrabajadores, $numeroTrabajadores, 0, "XXX");
+                mergeSetValueCenter($DOSIMETRIA, 'U', 'Y', 'U', $numeroTrabajadores, $numeroTrabajadores, 0, $val->TIEMPO_MEDICION);
+                mergeSetValueCenter($DOSIMETRIA, 'Z', 'Z', 'Z', $numeroTrabajadores, $numeroTrabajadores, 0, $val->DOSIS);
+                mergeSetValueCenter($DOSIMETRIA, 'AA', 'AC', 'AA', $numeroTrabajadores, $numeroTrabajadores, 0, $val->NER);
+                mergeSetValueCenter($DOSIMETRIA, 'AD', 'AF', 'AD', $numeroTrabajadores, $numeroTrabajadores, 0, $val->TMPE);
+
+
+                $numeroTrabajadores++;
+            }
+            $DOSIMETRIA->getStyle('B'. ($numerodosis + 6).':' . 'AF' . ($numeroTrabajadores - 1))->applyFromArray($borderStyle);
+
+            #Observaciones
+            $numeroObservacion = $numeroTrabajadores + 2;
+
+            mergeSetValueCenter($DOSIMETRIA, 'B', 'AF', 'B', $numeroObservacion, $numeroObservacion, 0, "OBSERVACIONES");
+            pintarCelda($DOSIMETRIA, 'B', $numeroObservacion);
+
+            mergeSetValueCenter($DOSIMETRIA, 'B', 'AF', 'B', $numeroObservacion + 1, $numeroObservacion + 6, 0, "");
+
+
+            mergeSetValueCenter($DOSIMETRIA, 'B', 'AF', 'B', $numeroObservacion + 8, $numeroObservacion + 8, 0, "FORMULAS EMPLEADAS");
+            pintarCelda($DOSIMETRIA, 'B', $numeroObservacion + 8);
+
+            colocarFormulas1($DOSIMETRIA, $numeroObservacion);
+            colocarFormulas2($DOSIMETRIA, $numeroObservacion);
+
+
+
+            // =============================================================== DESCARGAMOS EL ARCHIVO Y LO MANDAMOS AL FRONT PARA DARLE NOMBRE Y QUE EL USUARIO PUEDA VER LA DESCARGA
+            $nombre_descarga = "PCA - PROGRAMA DE CONSERVACION DE LA AUDICION.xls";
+            $writer = IOFactory::createWriter($spreadsheet, 'Xls');
+            return response()->stream(function () use ($writer) {
+                $writer->save('php://output');
+            }, 200, [
+                'Content-Type' => 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
+                'Content-Disposition' => "attachment; filename=\"{$nombre_descarga}\"",
+            ]);
+        } catch (Exception $e) {
+
+            $dato["msj"] = 'Error ' . $e->getMessage();
+            return response()->json($dato);
+        }
+    }
+
+
+
     public function store(Request $request)
     {
         try {
@@ -6229,7 +7183,8 @@ class reporteruidoController extends Controller
 
                 $puntoner->update([
                     'reporteruidopuntoner_RdB' => $request->reporteruidobandaoctava_RdB,
-                    'reporteruidopuntoner_NRE' => $request->reporteruidobandaoctava_NRE
+                    'reporteruidopuntoner_NRE' => $request->reporteruidobandaoctava_NRE,
+                    'reporteruidobandaoctava_equipo' => $request->reporteruidobandaoctava_equipo
                 ]);
 
                 foreach ($request->reporteruidopuntonerfrecuencias_frecuencia as $key => $value) {

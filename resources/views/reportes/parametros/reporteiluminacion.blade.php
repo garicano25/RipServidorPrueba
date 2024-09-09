@@ -1906,25 +1906,25 @@
 						<div class="col-3">
 							<div class="form-group">
 								<label><b>x</b>&nbsp;Largo del área (m) *</label>
-								<input type="number" step="any" class="form-control" id="reportearea_largo" name="reportearea_largo" required>
+								<input type="number" class="form-control" id="reportearea_largo" name="reportearea_largo" required>
 							</div>
 						</div>
 						<div class="col-3">
 							<div class="form-group">
 								<label><b>y</b>&nbsp;Ancho del área (m) *</label>
-								<input type="number" step="any" class="form-control" id="reportearea_ancho" name="reportearea_ancho" required>
+								<input type="number" class="form-control" id="reportearea_ancho" name="reportearea_ancho" required>
 							</div>
 						</div>
 						<div class="col-3">
 							<div class="form-group">
 								<label><b>h</b>&nbsp;Alto del área (m) *</label>
-								<input type="number" step="any" class="form-control" id="reportearea_alto" name="reportearea_alto" required>
+								<input type="number" class="form-control" id="reportearea_alto" name="reportearea_alto" required>
 							</div>
 						</div>
 						<div class="col-3">
 							<div class="form-group">
 								<label>% de operacion en el área</label>
-								<input type="number" step="any" min="0" max="100" class="form-control" id="reporteiluminacionarea_porcientooperacion" name="reporteiluminacionarea_porcientooperacion" required>
+								<input type="number" min="0" max="100" class="form-control" id="reporteiluminacionarea_porcientooperacion" name="reporteiluminacionarea_porcientooperacion" required>
 							</div>
 						</div>
 						<div class="col-4">

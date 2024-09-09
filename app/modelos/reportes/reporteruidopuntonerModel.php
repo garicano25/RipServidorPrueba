@@ -18,7 +18,8 @@ class reporteruidopuntonerModel extends Model
 		'reporteruidopuntoner_ner',
 		'reporteruidopuntoner_lmpe',
 		'reporteruidopuntoner_RdB',
-		'reporteruidopuntoner_NRE'
+		'reporteruidopuntoner_NRE',
+		'reporteruidobandaoctava_equipo'
 	];
 
 	public function reporteruidoarea()
