@@ -672,10 +672,17 @@ use Illuminate\Support\Str;
 
     @if(request()->is('recsensorialcatalogos'))
     {{-- datatable --}}
+
+    <script src="/js/jasny-bootstrap.js"></script>
+
     <script src="/assets/plugins/datatables/jquery.dataTables.min.js"></script>
     <script src="/assets/plugins/datatables/dataTables.rowsGroup.js"></script>
     <script src="/js_sitio/recsensorial_catalogos.js?v=2.0"></script>
     <script src="/assets/plugins/dropify/dist/js/dropify.min.js"></script>
+    <script src="/assets/plugins/select-search/selectize.js" type="text/javascript"></script>
+
+
+
     @endif
 
     @if(request()->is('recsensorialquimicoscatalogos'))

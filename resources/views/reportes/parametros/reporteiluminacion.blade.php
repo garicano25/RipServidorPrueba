@@ -993,6 +993,13 @@
 					<button type="button" class="btn btn-default waves-effect botoninforme" data-toggle="tooltip" title="Nuevo punto de iluminación" id="boton_reporte_nuevoiluminacionpunto">
 						<span class="btn-label"><i class="fa fa-plus"></i></span>Punto de iluminación
 					</button>
+					
+					@if(auth()->user()->hasRoles(['Superusuario', 'Administrador', 'Coordinador']))
+					<button type="button" class="btn btn-default waves-effect botoninforme" data-toggle="tooltip" title="Borrar todos los registros" id="boton_borrar_registrosiluminacionpunto">
+						<span class="btn-label"><i class="fa fa-trash" aria-hidden="true"></i>
+						</span>Borrar todos los registros
+					</button>
+					@endif
 					<button type="button" class="btn btn-default waves-effect botoninforme" data-toggle="tooltip" title="Importar puntos de iluminación" id="boton_reporte_iluminacion_importar">
 						<span class="btn-label"><i class="fa fa-file-excel-o"></i></span>Importar
 					</button>

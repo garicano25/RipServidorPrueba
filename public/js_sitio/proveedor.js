@@ -3636,12 +3636,14 @@ function equipovalida_alcanceservicio(valor)
     {
         // Vaciar campos
         $("#equipo_TipoCalibracion").val('');
+        $("#equipo_certificadoCalibracion").val('');
         $("#equipo_FechaCalibracion").val('');
         $("#equipo_VigenciaCalibracion").val('');
         $("#campo_file_equipo").val('');
 
         // No requerir campos
         $("#equipo_TipoCalibracion").attr('required', false);
+        $("#equipo_certificadoCalibracion").attr('required', false);
         $("#equipo_FechaCalibracion").attr('required', false);
         $("#equipo_VigenciaCalibracion").attr('required', false);
         $("#campo_file_equipo").attr('required', false);
@@ -3649,6 +3651,7 @@ function equipovalida_alcanceservicio(valor)
 
         // Desactivar campos
         $("#equipo_TipoCalibracion").attr('readonly', false);
+        $("#equipo_certificadoCalibracion").attr('readonly', false);
         $("#equipo_FechaCalibracion").attr('readonly', false);
         $("#equipo_VigenciaCalibracion").attr('readonly', false);
         $("#campo_file_equipo").attr('readonly', false);
@@ -3657,12 +3660,14 @@ function equipovalida_alcanceservicio(valor)
     {
         // Desactivar campos
         $("#equipo_TipoCalibracion").attr('readonly', false);
+        $("#equipo_certificadoCalibracion").attr('readonly', false);
         $("#equipo_FechaCalibracion").attr('readonly', false);
         $("#equipo_VigenciaCalibracion").attr('readonly', false);
         $("#campo_file_equipo").attr('readonly', false);
 
         // No requerir campos
         $("#equipo_TipoCalibracion").attr('required', false);
+        $("#equipo_certificadoCalibracion").attr('required', false);
         $("#equipo_FechaCalibracion").attr('required', false);
         $("#equipo_VigenciaCalibracion").attr('required', false);
         $("#campo_file_equipo").attr('required', false);
@@ -3756,6 +3761,7 @@ $(document).ready(function()
             $("#equipo_PesoNeto").val(row.data().equipo_PesoNeto);
             $("#equipo_CostoAprox").val(row.data().equipo_CostoAprox);
             $("#equipo_TipoCalibracion").val(row.data().equipo_TipoCalibracion);
+            $("#equipo_certificadoCalibracion").val(row.data().equipo_certificadoCalibracion);
             $("#equipo_FechaCalibracion").val(row.data().equipo_FechaCalibracion);
             $("#equipo_VigenciaCalibracion").val(row.data().equipo_VigenciaCalibracion);
             $("#folio_factura").val(row.data().folio_factura);
@@ -3805,6 +3811,9 @@ $(document).ready(function()
                 $('#foto_equipo').dropify().data('dropify').resetPreview();
                 $('#foto_equipo').dropify().data('dropify').clearElement();
             }
+
+
+            
 
             if (row.data().equipo_EstadoActivo==1)
             {
@@ -4023,6 +4032,7 @@ $(document).ready(function()
                             $("#equipo_PesoNeto").val(row.data().equipo_PesoNeto);
                             $("#equipo_CostoAprox").val(row.data().equipo_CostoAprox);
                             $("#equipo_TipoCalibracion").val(row.data().equipo_TipoCalibracion);
+                            $("#equipo_certificadoCalibracion").val(row.data().equipo_certificadoCalibracion);
                             $("#equipo_FechaCalibracion").val(row.data().equipo_FechaCalibracion);
                             $("#equipo_VigenciaCalibracion").val(row.data().equipo_VigenciaCalibracion);
                             $("#campo_file_equipo").val(row.data().campo_file_equipo);

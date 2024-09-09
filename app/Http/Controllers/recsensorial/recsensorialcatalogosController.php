@@ -23,8 +23,11 @@ use App\modelos\catalogos\Cat_pruebanormaModel;
 use App\modelos\recsensorial\catCargosInformeModel;
 use App\modelos\recsensorial\catFormatosCampo;
 use App\modelos\recsensorial\catConclusionesModel;
+use App\modelos\recsensorial\catProteccion_auditivaModel;
 use App\modelos\recsensorial\cat_descripcionarea;
 use App\modelos\recsensorial\cat_sistemailuminacionModel;
+
+
 use App\modelos\catalogos\Cat_etiquetaModel;
 use App\modelos\catalogos\CatetiquetaopcionesModel;
 
@@ -46,10 +49,6 @@ class recsensorialcatalogosController extends Controller
         // $this->middleware('roles:Superusuario,Administrador,Proveedor,Reconocimiento,Proyecto,Compras,Usuario,Externo');
         $this->middleware('roles:Superusuario,Administrador,Coordinador,Operativo HI,Almacén,Compras');
     }
-
-
-
-
 
 
     /**
@@ -117,9 +116,6 @@ class recsensorialcatalogosController extends Controller
 
                 // Convertir la lista a JSON y enviarla a la vista
                 break;
-
-
-
             case 2:
                 // consulta catalogo
                 $lista = catregionModel::all();
@@ -437,6 +433,29 @@ class recsensorialcatalogosController extends Controller
                     }
                 }
                 break;
+
+            case 19:
+                    // consulta catalogo
+                $lista = catProteccion_auditivaModel::all();
+    
+                    // crear campos NOMBRE Y ESTADO
+                foreach ($lista as $key => $value) {
+                    $value['TIPO'] = $value->TIPO;
+                    $value['MODELO'] = $value->MODELO;
+                    $value['MARCA'] = $value->MARCA;
+                    $value['CUMPLIMIENTO'] = $value->CUMPLIMIENTO;
+                   
+                    $value['boton_editar'] = '<button type="button" class="btn btn-danger btn-circle" onclick="editar_proteccion();"><i class="fa fa-pencil"></i></button>';
+                    $value['boton_ver'] = '<button type="button" class="btn btn-info btn-circle" onclick="verFichaTecnica();"><i class="fa fa-eye"></i></button>';
+                    $value['boton_descargar'] = '<button type="button" class="btn btn-success btn-circle" onclick="descargarFichaTecnica();"><i class="fa fa-download"></i></button>';
+    
+                    if ($value->ACTIVO == 1) {
+                        $value['CheckboxEstado'] = '<div class="switch"><label><input type="checkbox" checked onclick="estado_registro(' . $num_catalogo . ', ' . $value->ID_PROTECCION . ', this);"><span class="lever switch-col-light-blue"></span></label></div>';
+                    } else {
+                        $value['CheckboxEstado'] = '<div class="switch"><label><input type="checkbox" onclick="estado_registro(' . $num_catalogo . ', ' . $value->ID_PROTECCION . ', this);"><span class="lever switch-col-light-blue"></span></label></div>';
+                    }
+                }
+                break;
         }
 
         // Respuesta
@@ -457,6 +476,22 @@ class recsensorialcatalogosController extends Controller
         } else {
             return Storage::download($documento->RUTA_PDF);
         }
+    }
+
+    public function verFichaTecnica($opcion, $ID)
+    {
+        $documento = catProteccion_auditivaModel::findOrFail($ID);
+
+        if ($opcion = 0) {
+            return Storage::response($documento->RUTA_PDF);
+        } else {
+            return Storage::download($documento->RUTA_PDF);
+        }
+    }
+    public function verProteccionFoto($ID)
+    {
+        $foto = catProteccion_auditivaModel::findOrFail($ID);
+        return Storage::response($foto->RUTA_IMG);
     }
 
 
@@ -761,9 +796,59 @@ class recsensorialcatalogosController extends Controller
                         $dato["msj"] = 'Información modificada correctamente';
                     }
                     break;
-            }
 
-            // Respuesta
+                case 19:
+                    if ($request['ID_PROTECCION'] == 0) {
+                        DB::statement('ALTER TABLE catProteccion_auditiva AUTO_INCREMENT=1');
+
+                        $request["ACTIVO"] = 1;
+                        $catalogo = catProteccion_auditivaModel::create($request->all());
+
+                        $dato["msj"] = 'Información guardada correctamente';
+                        if ($request->file('FICHA_PDF')) {
+
+                            $extension = $request->file('FICHA_PDF')->getClientOriginalExtension();
+
+                            $request['RUTA_PDF'] = $request->file('FICHA_PDF')->storeAs('catalogos/catProteccionAuditiva/' . $catalogo->ID_PROTECCION, 'fichaTecnica' . '.' . $extension);
+
+                            $catalogo->update($request->all());
+                        }
+                        if ($request->file('foto_proteccion')) {
+
+
+                            $extension = $request->file('foto_proteccion')->getClientOriginalExtension();
+
+                            $request['RUTA_IMG'] = $request->file('foto_proteccion')->storeAs('catalogos/catProteccionAuditiva/' . $catalogo->ID_PROTECCION, 'fotoProteccion' . '.' . $extension);
+
+                            $catalogo->update($request->all());
+                        }
+                        return response()->json($catalogo);
+                    } else {
+
+                        $catalogo = catProteccion_auditivaModel::findOrFail($request['ID_PROTECCION']);
+                        if ($request->file('FICHA_PDF')) {
+
+                            $extension = $request->file('FICHA_PDF')->getClientOriginalExtension();
+
+                            $request['RUTA_PDF'] = $request->file('FICHA_PDF')->storeAs('catalogos/catProteccionAuditiva/' . $catalogo->ID_PROTECCION, 'fichaTecnica' . '.' . $extension);
+                        }
+                        if ($request->file('foto_proteccion')) {
+
+                            if (Storage::exists($catalogo->foto_proteccion)) {
+                                Storage::delete($catalogo->foto_proteccion);
+                            }
+
+                            $extension = $request->file('foto_proteccion')->getClientOriginalExtension();
+                            $request['RUTA_IMG'] = $request->file('foto_proteccion')->storeAs('catalogos/catProteccionAuditiva/' . $catalogo->ID_PROTECCION, 'fotoProteccion' . '.' . $extension);
+                        }
+                        $catalogo->update($request->all());
+                        $dato["msj"] = 'Información modificada correctamente';
+                        return response()->json($catalogo);
+                    }
+                    break;
+
+
+            }
             return response()->json($dato);
         } catch (Exception $e) {
             $dato["msj"] = 'Error ' . $e->getMessage();
@@ -884,6 +969,10 @@ class recsensorialcatalogosController extends Controller
                     break;
                 case 18:
                     $tabla = cat_sistemailuminacionModel::findOrFail($registro);
+                    $tabla->update(['ACTIVO' => $estado]);
+                    break;
+                case 19:
+                    $tabla = catProteccion_auditivaModel::findOrFail($registro);
                     $tabla->update(['ACTIVO' => $estado]);
                     break;
             }

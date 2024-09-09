@@ -1054,7 +1054,19 @@ class reporteiluminacionController extends Controller
         }
     }
 
+    public function reporteiluminaciontablaregistroseliminar($proyecto_id)
+    {
+        try {
+            $punto = reporteiluminacionpuntosModel::where('proyecto_id', $proyecto_id)->delete();
 
+            // respuesta
+            $dato["msj"] = 'Registros eliminados correctamente';
+            return response()->json($dato);
+        } catch (Exception $e) {
+            $dato["msj"] = 'Error ' . $e->getMessage();
+            return response()->json($dato);
+        }
+    }
     /**
      * Display the specified resource.
      *
@@ -1252,7 +1264,7 @@ class reporteiluminacionController extends Controller
                                         reportearea.reportearea_alturalamparas,
                                         reportearea.reportearea_programamantenimiento,
                                         reportearea.reportearea_tipoiluminacion,
-                                        reportearea.reportearea_descripcionilimunacion,
+                                        reportearea.reportearea_descripcion,
 
 
 
@@ -1555,7 +1567,7 @@ class reporteiluminacionController extends Controller
                                         reporteiluminacionarea.reporteiluminacionarea_alturalamparas AS reportearea_alturalamparas,
                                         reporteiluminacionarea.reporteiluminacionarea_programamantenimiento AS reportearea_programamantenimiento,
                                         reporteiluminacionarea.reporteiluminacionarea_tipoiluminacion AS reportearea_tipoiluminacion,
-                                        reporteiluminacionarea.reporteiluminacionarea_descripcionilimunaciona AS reportearea_descripcionilimunacion,
+                                        reporteiluminacionarea.reporteiluminacionarea_descripcion AS reportearea_descripcion,
 
                                         IF(reporteiluminacionarea.reporteiluminacionarea_largo > 0, reporteiluminacionarea.reporteiluminacionarea_largo, 1) AS reportearea_largo,
                                         IF(reporteiluminacionarea.reporteiluminacionarea_ancho > 0, reporteiluminacionarea.reporteiluminacionarea_ancho, 1) AS reportearea_ancho,
@@ -6265,7 +6277,7 @@ class reporteiluminacionController extends Controller
                                         'reportearea_alturalamparas' => is_null($rowData['R']) ? null : $rowData['R'],
                                         'reportearea_programamantenimiento' => is_null($rowData['S']) ? null : $rowData['S'],
                                         'reportearea_tipoiluminacion' => is_null($rowData['T']) ? null : tipoIluminacion($rowData['T']),
-                                        'reportearea_descripcionilimunacion' => is_null($rowData['U']) ? null : $rowData['U'],
+                                        'reportearea_descripcion' => is_null($rowData['U']) ? null : $rowData['U'],
                                     ]);
 
                                     $puntosInsertados++;
@@ -6807,7 +6819,7 @@ class reporteiluminacionController extends Controller
                             'reportearea_alturalamparas' => $request->reportearea_alturalamparas,
                             'reportearea_programamantenimiento' => $request->reportearea_programamantenimiento,
                             'reportearea_tipoiluminacion' => $request->reportearea_tipoiluminacion,
-                            'reportearea_descripcionilimunacion' => $request->reportearea_descripcionilimunacion
+                            'reportearea_descripcion' => $request->reportearea_descripcion
 
 
                         ]);
@@ -6867,7 +6879,7 @@ class reporteiluminacionController extends Controller
                             'reporteiluminacionarea_alturalamparas' => $request->reportearea_alturalamparas,
                             'reporteiluminacionarea_programamantenimiento' => $request->reportearea_programamantenimiento,
                             'reporteiluminacionarea_tipoiluminacion' => $request->reportearea_tipoiluminacion,
-                            'reporteiluminacionarea_descripcionilimunacion' => $request->reportearea_descripcionilimunacion
+                            'reporteiluminacionarea_descripcion' => $request->reportearea_descripcion
                         ]);
 
 

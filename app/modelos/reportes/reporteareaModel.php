@@ -31,7 +31,7 @@ class reporteareaModel extends Model
 		, 'reportearea_alturalamparas'  //Iluminación
 		, 'reportearea_programamantenimiento'  //Iluminación
 		, 'reportearea_tipoiluminacion'  //Iluminación
-		, 'reportearea_descripcionilimunacion'  //Iluminación
+		, 'reportearea_descripcion'  //Iluminación
 
 
 		, 'reporteruidoarea_porcientooperacion' //Ruido

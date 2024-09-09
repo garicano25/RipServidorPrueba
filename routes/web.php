@@ -445,6 +445,9 @@ Route::get('recsensorialcatalogodesactiva/{catalogo}/{registro}/{estado}', ['as'
 
 Route::get('verFormatoCampo/{opcion}/{id}', ['as' => 'verFormatoCampo', 'uses' => 'recsensorial\recsensorialcatalogosController@verFormatoCampo']);
 
+Route::get('verFichaTecnica/{opcion}/{id}', ['as' => 'verFichaTecnica', 'uses' => 'recsensorial\recsensorialcatalogosController@verFichaTecnica']);
+
+Route::get('verProteccionFoto/{id}', ['as' => 'verProteccionFoto', 'uses' => 'recsensorial\recsensorialcatalogosController@verProteccionFoto']);
 
 
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -1052,6 +1055,8 @@ Route::get('reporteiluminacionareaeliminar/{area_id}', ['as' => 'reporteiluminac
 Route::get('reporteiluminaciontablapuntos/{proyecto_id}/{reporteiluminacion_id}/{areas_poe}', ['as' => 'reporteiluminacion.reporteiluminaciontablapuntos', 'uses' => 'reportes\reporteiluminacionController@reporteiluminaciontablapuntos']);
 
 Route::get('reporteiluminaciontablapuntoseliminar/{punto_id}', ['as' => 'reporteiluminacion.reporteiluminaciontablapuntoseliminar', 'uses' => 'reportes\reporteiluminacionController@reporteiluminaciontablapuntoseliminar']);
+
+Route::get('reporteiluminaciontablaregistroseliminar/{proyecto_id}', ['as' => 'reporteiluminacion.reporteiluminaciontablaregistroseliminar', 'uses' => 'reportes\reporteiluminacionController@reporteiluminaciontablaregistroseliminar']);
 
 Route::get('reporteiluminaciontablaresultados/{proyecto_id}/{reporteiluminacion_id}/{areas_poe}', ['as' => 'reporteiluminacion.reporteiluminaciontablaresultados', 'uses' => 'reportes\reporteiluminacionController@reporteiluminaciontablaresultados']);
 

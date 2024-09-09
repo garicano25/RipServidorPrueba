@@ -19,6 +19,7 @@ class EquipoModel extends Model
         'equipo_PesoNeto',
         'equipo_CostoAprox',
         'equipo_TipoCalibracion',
+        'equipo_certificadoCalibracion',
         'equipo_FechaCalibracion',
         'equipo_VigenciaCalibracion',
         'requiere_calibracion',

@@ -38,7 +38,7 @@ class reporteiluminacionareaModel extends Model
 		, 'reporteiluminacionarea_alturalamparas'
 		, 'reporteiluminacionarea_programamantenimiento'
 		, 'reporteiluminacionarea_tipoiluminacion'
-		, 'reporteiluminacionarea_descripcionilimunacion'
+		, 'reporteiluminacionarea_descripcion'
 
 	];
 }
