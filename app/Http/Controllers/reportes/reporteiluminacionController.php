@@ -78,6 +78,7 @@ class reporteiluminacionController extends Controller
     public function reporteiluminacionvista($proyecto_id)
     {
         $proyecto = proyectoModel::findOrFail($proyecto_id);
+       
 
         if (($proyecto->recsensorial->recsensorial_tipocliente + 0) == 1 && ($proyecto->recsensorial_id == NULL || $proyecto->catregion_id == NULL || $proyecto->catsubdireccion_id == NULL || $proyecto->catgerencia_id == NULL || $proyecto->catactivo_id == NULL || $proyecto->proyecto_clienteinstalacion == NULL || $proyecto->proyecto_fechaentrega == NULL)) {
             return '<div style="text-align: center;">
@@ -185,6 +186,7 @@ class reporteiluminacionController extends Controller
             $sistemas = cat_sistemailuminacionModel::where('ACTIVO', 1)->get();
 
 
+
             // Vista
             return view('reportes.parametros.reporteiluminacion', compact('proyecto', 'recsensorial', 'catregion', 'catsubdireccion', 'catgerencia', 'catactivo', 'categorias_poe', 'areas_poe', 'sistemas'));
         }
@@ -253,6 +255,8 @@ class reporteiluminacionController extends Controller
     public function reporteiluminaciondatosgenerales($proyecto_id, $agente_id, $agente_nombre)
     {
         try {
+            $excelExists = reporteiluminacionModel::where('proyecto_id', $proyecto_id)->value('reporteiluminacion_excel');
+            $dato['reporteiluminacion_excel'] = $excelExists;
             $proyecto = proyectoModel::with(['catregion', 'catsubdireccion', 'catgerencia', 'catactivo'])->findOrFail($proyecto_id);
             $recsensorial = recsensorialModel::with(['catregion', 'catsubdireccion', 'catgerencia', 'catactivo'])->findOrFail($proyecto->recsensorial_id);
 
@@ -1059,9 +1063,11 @@ class reporteiluminacionController extends Controller
         try {
             $punto = reporteiluminacionpuntosModel::where('proyecto_id', $proyecto_id)->delete();
 
-            // respuesta
-            $dato["msj"] = 'Registros eliminados correctamente';
-            return response()->json($dato);
+            $excelExists = 0;
+                        //RETORNAMOS UN MENSAJE DE CUANTOS INSERTO 
+                        $dato["msj"] = 'Registros eliminados correctamente';
+                        return response()->json($dato);   
+           
         } catch (Exception $e) {
             $dato["msj"] = 'Error ' . $e->getMessage();
             return response()->json($dato);
@@ -6160,8 +6166,18 @@ class reporteiluminacionController extends Controller
                             $puntosInsertados++;
                         }
 
+                        $excelExist = reporteiluminacionModel::where('proyecto_id', $request['proyecto_id'])
+                        ->first();
+
+                    if ($excelExist) {
+
+                        $excelExist->update([
+                            'reporteiluminacion_excel' => intval(1),
+                        ]);
                         //RETORNAMOS UN MENSAJE DE CUANTOS INSERTO 
                         return response()->json(['msj' => 'Total de puntos insertados : ' . $puntosInsertados . ' de ' . $totalPuntos, 'code' => 200]);
+                    }
+
                     } else {
 
                         return response()->json(["msj" => 'No se ha subido ningún archivo Excel', "code" => 500]);

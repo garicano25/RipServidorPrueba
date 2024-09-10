@@ -149,6 +149,12 @@ function datosgenerales()
 		cache: false,
 		success:function(dato)
 		{
+			console.log(parseInt(dato.reporteiluminacion_excel));
+			if(parseInt(dato.reporteiluminacion_excel)==1){
+				$('#boton_reporte_iluminacion_importar').css('display', 'none');
+			}else{
+				$('#boton_reporte_iluminacion_importar').css('display', 'block');
+			}
 			reporteiluminacion_id = 0;
 			if (parseInt(dato.reporteiluminacion_id) > 0)
 			{
@@ -3994,6 +4000,8 @@ $("#boton_reporte_nuevoiluminacionpunto").click(function()
 	// mostrar modal
 	$('#modal_reporte_iluminacionpunto').modal({backdrop:false});
 });
+
+$(document).ready(function() {
 $("#boton_borrar_registrosiluminacionpunto").click(function()
 {
 	swal({    
@@ -4036,6 +4044,12 @@ $("#boton_borrar_registrosiluminacionpunto").click(function()
 						cache: false,
 						success:function(dato)
 						{
+
+						//$('#boton_reporte_iluminacion_importar').show();
+						$('#boton_reporte_iluminacion_importar').css('display', 'block');	
+
+							//$('#boton_reporte_iluminacion_importar').show();
+
 							// Actualizar tablas
 							tabla_reporte_iluminacionpuntos(proyecto.id, reporteiluminacion_id);
 							tabla_reporte_iluminacionresultados(proyecto.id, reporteiluminacion_id);
@@ -4104,6 +4118,7 @@ $("#boton_borrar_registrosiluminacionpunto").click(function()
 		}
 	});
 	return false;
+});
 });
 
 
@@ -8672,7 +8687,9 @@ $(document).ready(function () {
                             success: function (dato) {
 
                                 // actualizar boton
-                                $('#botonCargarExcelPuntos').prop('disabled', false);
+                                // Ocultar el botón
+								$('#boton_reporte_iluminacion_importar').css('display', 'none');
+
                                 $('#divCargaPuntos').css('display', 'none');
                                 
                                 if (dato.code == 200) {
@@ -8721,13 +8738,13 @@ $(document).ready(function () {
                             },
                             beforeSend: function () {
 
-                                $('#botonCargarExcelPuntos').prop('disabled', true);
+                                //$('#botonCargarExcelPuntos').prop('disabled', true);
                                 $('#divCargaPuntos').css('display', 'block');
                             },
                             error: function(dato) {
                                 
                                 // actualiza boton
-                                $('#botonCargarExcelPuntos').prop('disabled', false);
+                                //$('#botonCargarExcelPuntos').prop('disabled', false);
                                 $('#divCargaPuntos').css('display', 'none');
 
                                 // mensaje
