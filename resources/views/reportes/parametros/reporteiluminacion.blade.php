@@ -1937,19 +1937,19 @@
 						<div class="col-4">
 							<div class="form-group">
 								<label><b>x</b>&nbsp;Largo del área (m) *</label>
-								<input type="number" class="form-control infoAdicionalArea" id="reportearea_largo" name="reportearea_largo" required>
+								<input type="text" class="form-control infoAdicionalArea" id="reportearea_largo" name="reportearea_largo" required>
 							</div>
 						</div>
 						<div class="col-4">
 							<div class="form-group">
 								<label><b>y</b>&nbsp;Ancho del área (m) *</label>
-								<input type="number" class="form-control infoAdicionalArea" id="reportearea_ancho" name="reportearea_ancho" required>
+								<input type="text" class="form-control infoAdicionalArea" id="reportearea_ancho" name="reportearea_ancho" required>
 							</div>
 						</div>
 						<div class="col-4">
 							<div class="form-group">
 								<label><b>h</b>&nbsp;Alto del área (m) *</label>
-								<input type="number" class="form-control infoAdicionalArea" id="reportearea_alto" name="reportearea_alto" required>
+								<input type="text" class="form-control infoAdicionalArea" id="reportearea_alto" name="reportearea_alto" required>
 							</div>
 						</div>
 						<div class="col-4">
