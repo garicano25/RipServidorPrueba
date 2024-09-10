@@ -800,8 +800,9 @@
 							<thead>
 								<tr>
 									<th width="60">No.</th>
-									<th>Parte del cuerpo</th>
-									<th>Equipo de protección personal<br>básico proporcionado</th>
+                                    <th style="max-width: 48%!important;">Región anatómica *</th>
+                                    <th style="max-width: 48%!important;">Clave y EPP *</th>
+									<!-- <th>Equipo de protección personal<br>básico proporcionado</th> -->
 									<th width="60">Editar</th>
 									<th width="60">Eliminar</th>
 								</tr>
@@ -2064,6 +2065,14 @@
 					<div class="row">
 						<div class="col-6">
 							<div class="row">
+								<div class="col-12">
+									<div class="form-group">
+									<label>Seleccione un equipo auditivo o rellene los siguientes datos manualmente</label>
+									<select class="custom-select form-control" id="select_proteccionAuditiva" onchange="mostrar_proteccionauditiva(this.value);">
+                                        <option value="">Seleccione</option>
+                                    </select>
+									</div>
+								</div>
 								<div class="col-12">
 									<div class="form-group">
 										<label>Tipo</label>

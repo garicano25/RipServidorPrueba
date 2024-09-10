@@ -1097,6 +1097,10 @@ Route::get('reporteiluminacionworddescargar/{proyecto_id}/{revision_id}/{ultima_
 
 Route::resource('reporteruido', 'reportes\reporteruidoController');
 
+Route::get('menuProteccionAuditiva/{proyecto_id}', ['as' => 'reporteruido.menuProteccionAuditiva', 'uses' => 'reportes\reporteruidoController@menuProteccionAuditiva']);
+
+Route::get('reporteruidoequipoauditivocampos/{ID_PROTECCION}', ['as' => 'reporteruido.reporteruidoequipoauditivocampos', 'uses' => 'reportes\reporteruidoController@reporteruidoequipoauditivocampos']);
+
 Route::get('reporteruidovista/{proyecto_id}', ['as' => 'reporteruido.reporteruidovista', 'uses' => 'reportes\reporteruidoController@reporteruidovista']);
 
 Route::get('generarPCA/{proyecto_id}', ['as' => 'reporteruido.generarPCA', 'uses' => 'reportes\reporteruidoController@generarPCA']);
