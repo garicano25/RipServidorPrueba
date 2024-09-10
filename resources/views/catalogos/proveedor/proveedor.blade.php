@@ -1240,6 +1240,12 @@
                                                         </div>
                                                         <div class="col-6 calibracion-requrida">
                                                             <div class="form-group">
+                                                                <label>Certificado de calibración</label>
+                                                                <input type="text" class="form-control" id="equipo_certificadoCalibracion" name="equipo_certificadoCalibracion">
+                                                            </div>
+                                                        </div>
+                                                        <div class="col-6 calibracion-requrida">
+                                                            <div class="form-group">
                                                                 <label>Fecha calibración</label>
                                                                 <div class="input-group">
                                                                     <input type="text" class="form-control mydatepicker" placeholder="aaaa-mm-dd" id="equipo_FechaCalibracion" name="equipo_FechaCalibracion">

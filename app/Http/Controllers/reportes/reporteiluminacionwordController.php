@@ -712,14 +712,10 @@ class reporteiluminacionwordController extends Controller
             //================================================================================
 
 
-            if (($recsensorial->recsensorial_tipocliente + 0) == 1) // 1 = Pemex, 0 = Cliente
-            {
-                $fuente = 'Arial';
-                $font_size = 10;
-            } else {
-                $fuente = 'Arial';
-                $font_size = 10;
-            }
+            
+            $fuente = 'Arial';
+            $font_size = 10;
+           
 
             $bgColor_encabezado = '#0C3F64'; //#1A5276
             $encabezado_celda = array('bgColor' => $bgColor_encabezado, 'valign' => 'center', 'cellMargin' => 100);
@@ -2323,14 +2319,10 @@ class reporteiluminacionwordController extends Controller
             //================================================================================
 
 
-            if (($recsensorial->recsensorial_tipocliente + 0) == 1) // 1 = Pemex, 0 = Cliente
-            {
-                $fuente = 'Arial';
-                $font_size = 8;
-            } else {
-                $fuente = 'Arial';
-                $font_size = 8;
-            }
+            
+            $fuente = 'Arial';
+            $font_size = 8;
+           
 
             $bgColor_encabezado = '#0C3F64'; //#1A5276
             $encabezado_celda2 = array('bgColor' => $bgColor_encabezado, 'valign' => 'center', 'cellMargin' => 100);
@@ -2913,9 +2905,9 @@ class reporteiluminacionwordController extends Controller
                 $table->addCell($ancho_col_12, $celda2)->addTextRun($centrado2)->addText($value->luxmed3, array('color' => $value->luxmed3_color, 'size' => 8, 'bold' => false, 'name' => $fuente));
 
                 if ($value->lux_resultado == "Fuera de norma") {
-                    $table->addCell($ancho_col_13, array('valign' => 'center', 'bgColor' => $value->lux_resultado_color))->addTextRun($centrado2)->addText($value->lux_resultado, array('color' => 'FFFFFF', 'size' => 8, 'bold' => true, 'name' => $fuente));
+                    $table->addCell($ancho_col_13, array('valign' => 'center', 'bgColor' => $value->lux_resultado_color))->addTextRun($centrado2)->addText($value->lux_resultado, array('color' => 'FFFFFF', 'size' => 8, 'bold' => true, 'name' => 'Arial'));
                 } else {
-                    $table->addCell($ancho_col_13, array('valign' => 'center', 'bgColor' => $value->lux_resultado_color))->addTextRun($centrado2)->addText($value->lux_resultado, array('color' => '000000', 'size' => 8, 'bold' => true, 'name' => $fuente));
+                    $table->addCell($ancho_col_13, array('valign' => 'center', 'bgColor' => $value->lux_resultado_color))->addTextRun($centrado2)->addText($value->lux_resultado, array('color' => '000000', 'size' => 8, 'bold' => true, 'name' => 'Arial'));
                 }
             }
 
@@ -3025,9 +3017,9 @@ class reporteiluminacionwordController extends Controller
                 $table->addCell($ancho_col_15, $celda2)->addTextRun($centrado2)->addText($value->frptmed3, array('color' => $value->frptmed3_color, 'size' => 8, 'bold' => false, 'name' => $fuente));
 
                 if ($value->fr_resultado == "Fuera de norma") {
-                    $table->addCell($ancho_col_16, array('valign' => 'center', 'bgColor' => $value->fr_resultado_color))->addTextRun($centrado2)->addText($value->fr_resultado, array('color' => 'FFFFFF', 'size' => 8, 'bold' => true, 'name' => $fuente));
+                    $table->addCell($ancho_col_16, array('valign' => 'center', 'bgColor' => $value->fr_resultado_color))->addTextRun($centrado2)->addText($value->fr_resultado, array('color' => 'FFFFFF', 'size' => 8, 'bold' => true, 'name' => 'Arial'));
                 } else {
-                    $table->addCell($ancho_col_16, array('valign' => 'center', 'bgColor' => $value->fr_resultado_color))->addTextRun($centrado2)->addText($value->fr_resultado, array('color' => '000000', 'size' => 8, 'bold' => true, 'name' => $fuente));
+                    $table->addCell($ancho_col_16, array('valign' => 'center', 'bgColor' => $value->fr_resultado_color))->addTextRun($centrado2)->addText($value->fr_resultado, array('color' => '000000', 'size' => 8, 'bold' => true, 'name' => 'Arial'));
                 }
             }
 
@@ -3039,14 +3031,10 @@ class reporteiluminacionwordController extends Controller
             //================================================================================
 
 
-            if (($recsensorial->recsensorial_tipocliente + 0) == 1) // 1 = Pemex, 0 = Cliente
-            {
-                $fuente = 'Arial';
-                $font_size = 6;
-            } else {
-                $fuente = 'Arial';
-                $font_size = 6;
-            }
+         
+            $fuente = 'Arial';
+            $font_size = 6;
+            
 
 
             $bgColor_encabezado = '#0C3F64'; //#1A5276

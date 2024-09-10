@@ -993,6 +993,14 @@
 					<button type="button" class="btn btn-default waves-effect botoninforme" data-toggle="tooltip" title="Nuevo punto de iluminación" id="boton_reporte_nuevoiluminacionpunto">
 						<span class="btn-label"><i class="fa fa-plus"></i></span>Punto de iluminación
 					</button>
+
+
+					@if(auth()->user()->hasRoles(['Superusuario', 'Administrador']))
+					<button type="button" class="btn btn-default waves-effect botoninforme" data-toggle="tooltip" title="Borrar todos los registros de la tabla de resultados" id="boton_borrar_registrosiluminacionpunto">
+						<span class="btn-label"><i class="fa fa-trash" aria-hidden="true"></i>
+						</span>Eliminar todos los puntos
+					</button>
+					@endif
 					<button type="button" class="btn btn-default waves-effect botoninforme" data-toggle="tooltip" title="Importar puntos de iluminación" id="boton_reporte_iluminacion_importar">
 						<span class="btn-label"><i class="fa fa-file-excel-o"></i></span>Importar
 					</button>
@@ -1880,22 +1888,45 @@
 								Datos Generales
 							</ol>
 						</div>
-						<div class="col-6">
+						<div class="col-3">
 							<div class="form-group">
 								<label>Instalación</label>
 								<input type="text" class="form-control" id="reportearea_instalacion" name="reportearea_instalacion" required>
 							</div>
 						</div>
-						<div class="col-4">
+						<div class="col-3">
 							<div class="form-group">
 								<label>Nombre del área</label>
 								<input type="text" class="form-control" id="reportearea_nombre" name="reportearea_nombre" required>
 							</div>
 						</div>
-						<div class="col-2">
+						<div class="col-3">
+							<div class="form-group">
+								<label>% de operacion en el área</label>
+								<input type="number" min="0" max="100" class="form-control" id="reporteiluminacionarea_porcientooperacion" name="reporteiluminacionarea_porcientooperacion" required>
+							</div>
+						</div>
+						<div class="col-3">
 							<div class="form-group">
 								<label>No. orden del área</label>
 								<input type="number" class="form-control" id="reportearea_orden" name="reportearea_orden" required>
+							</div>
+						</div>
+						<div class="col-12 p-2 text-center">
+							<label class="text-danger mr-4 d-block" style="font-size: 18px;" data-toggle="tooltip" title="" data-original-title="Marque la casilla de NO si el área no fue evaluada en el reconocimiento">¿ Área evaluada en el reconocimiento ?</label>
+							<div class="d-flex justify-content-center">
+								<div class="form-check mx-4">
+									<input class="form-check-input" type="radio" name="aplica_iluminacion" id="aplica_iluminacion_si" value="1" required="required" checked>
+									<label class="form-check-label" for="aplica_iluminacion_si">
+										Si
+									</label>
+								</div>
+								<div class="form-check mx-4">
+									<input class="form-check-input" type="radio" name="aplica_iluminacion" id="aplica_iluminacion_no" value="0" required="required">
+									<label class="form-check-label" for="aplica_iluminacion_no">
+										No
+									</label>
+								</div>
 							</div>
 						</div>
 						<div class="col-12">
@@ -1903,83 +1934,77 @@
 								Descripción de las instalaciones
 							</ol>
 						</div>
-						<div class="col-3">
+						<div class="col-4">
 							<div class="form-group">
 								<label><b>x</b>&nbsp;Largo del área (m) *</label>
-								<input type="number" step="any" class="form-control" id="reportearea_largo" name="reportearea_largo" required>
+								<input type="number" class="form-control infoAdicionalArea" id="reportearea_largo" name="reportearea_largo" required>
 							</div>
 						</div>
-						<div class="col-3">
+						<div class="col-4">
 							<div class="form-group">
 								<label><b>y</b>&nbsp;Ancho del área (m) *</label>
-								<input type="number" step="any" class="form-control" id="reportearea_ancho" name="reportearea_ancho" required>
+								<input type="number" class="form-control infoAdicionalArea" id="reportearea_ancho" name="reportearea_ancho" required>
 							</div>
 						</div>
-						<div class="col-3">
+						<div class="col-4">
 							<div class="form-group">
 								<label><b>h</b>&nbsp;Alto del área (m) *</label>
-								<input type="number" step="any" class="form-control" id="reportearea_alto" name="reportearea_alto" required>
-							</div>
-						</div>
-						<div class="col-3">
-							<div class="form-group">
-								<label>% de operacion en el área</label>
-								<input type="number" step="any" min="0" max="100" class="form-control" id="reporteiluminacionarea_porcientooperacion" name="reporteiluminacionarea_porcientooperacion" required>
+								<input type="number" class="form-control infoAdicionalArea" id="reportearea_alto" name="reportearea_alto" required>
 							</div>
 						</div>
 						<div class="col-4">
 							<div class="form-group">
 								<label>Puntos evaluados por IC *</label>
-								<input type="number" class="form-control" id="reportearea_puntos_ic" name="reportearea_puntos_ic" required>
+								<input type="number" class="form-control infoAdicionalArea" id="reportearea_puntos_ic" name="reportearea_puntos_ic" required>
 							</div>
 						</div>
 						<div class="col-4">
 							<div class="form-group">
 								<label>Puntos evaluados por PT *</label>
-								<input type="number" class="form-control" id="reportearea_puntos_pt" name="reportearea_puntos_pt" required>
+								<input type="number" class="form-control infoAdicionalArea" id="reportearea_puntos_pt" name="reportearea_puntos_pt" required>
 							</div>
 						</div>
 						<div class="col-4">
 							<div class="form-group">
 								<label>Criterio *</label>
-								<input type="text" class="form-control" id="reportearea_criterio" name="reportearea_criterio" required>
+								<input type="text" class="form-control infoAdicionalArea" id="reportearea_criterio" name="reportearea_criterio" required>
 							</div>
 						</div>
 						<div class="col-4">
 							<div class="form-group">
 								<label>Color de techo</label>
-								<input type="text" class="form-control" id="reportearea_colortecho" name="reportearea_colortecho">
+								<input type="text" class="form-control infoAdicionalArea" id="reportearea_colortecho" name="reportearea_colortecho">
 							</div>
 						</div>
 						<div class="col-4">
 							<div class="form-group">
 								<label>Color de paredes</label>
-								<input type="text" class="form-control" id="reportearea_paredes" name="reportearea_paredes">
+								<input type="text" class="form-control infoAdicionalArea" id="reportearea_paredes" name="reportearea_paredes">
 							</div>
 						</div>
 						<div class="col-4">
 							<div class="form-group">
 								<label>Color de piso</label>
-								<input type="text" class="form-control" id="reportearea_colorpiso" name="reportearea_colorpiso">
+								<input type="text" class="form-control infoAdicionalArea" id="reportearea_colorpiso" name="reportearea_colorpiso">
 							</div>
 						</div>
 
 						<div class="col-4">
 							<div class="form-group">
 								<label>Superficie techo</label>
-								<input type="text" class="form-control" id="reportearea_superficietecho" name="reportearea_superficietecho" required>
+								<input type="text" class="form-control infoAdicionalArea" id="reportearea_superficietecho" name="reportearea_superficietecho" required>
 							</div>
 						</div>
 						<div class="col-4">
 							<div class="form-group">
 								<label>Superficie paredes</label>
-								<input type="text" class="form-control" id="reportearea_superficieparedes" name="reportearea_superficieparedes" required>
+								<input type="text" class="form-control infoAdicionalArea" id="reportearea_superficieparedes" name="reportearea_superficieparedes" required>
 							</div>
 						</div>
 						<div class="col-4">
 							<div class="form-group">
 								<label>Superficie piso</label>
-								<input type="text" class="form-control" id="reportearea_superficiepiso" name="reportearea_superficiepiso" required>
+								<input type="text" class="form-control infoAdicionalArea" id="reportearea_superficiepiso" name="reportearea_superficiepiso" required>
 							</div>
 						</div>
 						{{-- --}}
@@ -1991,8 +2016,9 @@
 						<div class="col-4">
 							<div class="form-group">
 								<label>Tipo de lámparas *</label>
-								<select class="custom-select form-control" id="reportearea_sistemailuminacion" name="reportearea_sistemailuminacion" required>
+								<select class="custom-select form-control infoAdicionalArea" id="reportearea_sistemailuminacion" name="reportearea_sistemailuminacion" required>
 									<option value=""></option>
+									<option value="NA">No aplica</option>
 									@foreach($sistemas as $dato)
 									<option value="{{$dato->NOMBRE}}">{{ $dato->NOMBRE }}</option>
 									@endforeach
@@ -2002,34 +2028,35 @@
 						<div class="col-4">
 							<div class="form-group">
 								<label>Potencia de las lámparas *</label>
-								<input type="text" class="form-control" id="reportearea_potenciaslamparas" name="reportearea_potenciaslamparas" required>
+								<input type="text" class="form-control infoAdicionalArea" id="reportearea_potenciaslamparas" name="reportearea_potenciaslamparas" required>
 							</div>
 						</div>
 						<div class="col-4">
 							<div class="form-group">
 								<label>N° de lámparas *</label>
-								<input type="number	" class="form-control" id="reportearea_numlamparas" name="reportearea_numlamparas" required>
+								<input type="number	" class="form-control infoAdicionalArea" id="reportearea_numlamparas" name="reportearea_numlamparas" required>
 							</div>
 						</div>
 
 						<div class="col-4">
 							<div class="form-group">
 								<label>(h) Altura (m) *</label>
-								<input type="text" class="form-control" id="reportearea_alturalamparas" name="reportearea_alturalamparas" required>
+								<input type="text" class="form-control infoAdicionalArea" id="reportearea_alturalamparas" name="reportearea_alturalamparas" required>
 							</div>
 						</div>
 						<div class="col-4">
 							<div class="form-group">
 								<label>Programa de mantenimiento *</label>
-								<input type="text" class="form-control" id="reportearea_programamantenimiento" name="reportearea_programamantenimiento" required>
+								<input type="text" class="form-control infoAdicionalArea" id="reportearea_programamantenimiento" name="reportearea_programamantenimiento" required>
 							</div>
 						</div>
 
 						<div class="col-4">
 							<div class="form-group">
 								<label>Tipo de iluminación</label>
-								<select class="custom-select form-control" id="reportearea_tipoiluminacion" name="reportearea_tipoiluminacion" required>
+								<select class="custom-select form-control infoAdicionalArea" id="reportearea_tipoiluminacion" name="reportearea_tipoiluminacion" required>
 									<option value=""></option>
+									<option value="NA">No aplica</option>
 									<option value="Natural">Natural</option>
 									<option value="Artificial">Artificial</option>
 									<option value="Natural y artificial">Natural y artificial</option>
@@ -2040,7 +2067,7 @@
 						<div class="col-12">
 							<div class="form-group">
 								<label>Descripción de trabajo que requiere iluminación localizada *</label>
-								<input type="text" class="form-control" id="reportearea_descripcionilimunacion" name="reportearea_descripcionilimunacion" required>
+								<input type="text" class="form-control infoAdicionalArea" id="reportearea_descripcionilimunacion" name="reportearea_descripcionilimunacion" required>
 							</div>
 						</div>
 
@@ -2050,6 +2077,7 @@
 								<label>Influencia de luz natural</label>
 								<select class="custom-select form-control" id="reportearea_luznatural" name="reportearea_luznatural" required>
 									<option value=""></option>
+									<option value="NA">No aplica</option>
 									<option value="Si">Si</option>
 									<option value="No">No</option>
 								</select>
@@ -2060,6 +2088,7 @@
 								<label>Iluminación localizada</label>
 								<select class="custom-select form-control" id="reportearea_iluminacionlocalizada" name="reportearea_iluminacionlocalizada" required>
 									<option value=""></option>
+									<option value="NA">No aplica</option>
 									<option value="Si">Si</option>
 									<option value="No">No</option>
 								</select>
@@ -2602,4 +2631,4 @@
 </script>
 
 <script src="/js_sitio/html2canvas.js"></script>
-<script src="/js_sitio/reportes/reporteiluminacion.js?v=1.0"></script>
+<script src="/js_sitio/reportes/reporteiluminacion.js?v=3.0"></script>

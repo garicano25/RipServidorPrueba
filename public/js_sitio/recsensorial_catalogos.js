@@ -9,130 +9,125 @@ var datatable_formatos = null;
 var datatable_conclusiones = null;
 var datatable_descripcion = null;
 var datatable_sistema = null;
+var datatable_pa = null;
 var catalogo = 0;
 
+
 // Load CATALOGOS PROVEEDORES
-$(document).ready(function()
-{
-	mostrar_catalogo(10);
+$(document).ready(function () {
+    mostrar_catalogo(10);
 
     // Inicializar tooltip
     $('[data-toggle="tooltip"]').tooltip();
 });
 
 
-function mostrar_catalogo(num_catalogo)
-{
+function mostrar_catalogo(num_catalogo) {
     catalogo = parseInt(num_catalogo);
 
     // Desactivar ACTIVE menu catalogos
-    $.each( $('#tabla_lista_catalogos tr'), function( key, value )
-    {
+    $.each($('#tabla_lista_catalogos tr'), function (key, value) {
         $(this).removeClass('active');
-        $("#cat_"+(key+1)).removeClass("text-info");
+        $("#cat_" + (key + 1)).removeClass("text-info");
         $("#cat_" + (key + 1)).addClass("text-secondary");
 
-        
+
     });
-    
-   	switch (catalogo)
-   	{
+
+    switch (catalogo) {
         case 1:
             // nombre de los campos
             $("#nombre").attr('name', 'catcontrato_numero');
             $("#activo").attr('name', 'catcontrato_activo');
-            
+
             // activar menu
             $("#titulo_tabla").html('Catálogo [Contrato]');
             $("#modal_titulo").html("Catálogo [Contrato]");
             $("#tr_1").addClass("active");
-			$("#cat_1").addClass("text-info");
+            $("#cat_1").addClass("text-info");
 
             // Inicializar tabla
-            if(datatable_contratos != null)
-            {
+            if (datatable_contratos != null) {
                 datatable_contratos.destroy();
                 datatable_contratos = null;
             }
 
             // diseño tabla
-            $("#div_datatable").html('<table class="table table-hover stylish-table" id="tabla_lista_contratos" width="100%">'+
-                                        '<thead>'+
-                                            '<tr>'+
-                                                '<th>Contrato / Empresa</th>'+
-                                                '<th>Inicio / Fin</th>'+
-                                                '<th>Montos</th>'+
-                                                '<th style="width: 90px!important;">Editar</th>'+
-                                                '<th style="width: 90px!important;">Activo</th>'+
-                                            '</tr>'+
-                                        '</thead>'+
-                                        '<tbody></tbody>'+
-                                    '</table>');
+            $("#div_datatable").html('<table class="table table-hover stylish-table" id="tabla_lista_contratos" width="100%">' +
+                '<thead>' +
+                '<tr>' +
+                '<th>Contrato / Empresa</th>' +
+                '<th>Inicio / Fin</th>' +
+                '<th>Montos</th>' +
+                '<th style="width: 90px!important;">Editar</th>' +
+                '<th style="width: 90px!important;">Activo</th>' +
+                '</tr>' +
+                '</thead>' +
+                '<tbody></tbody>' +
+                '</table>');
 
             tabla_contratos(catalogo);
             break;
         case 2:
             // nombre de los campos
-        	$("#nombre").attr('name', 'catregion_nombre');
+            $("#nombre").attr('name', 'catregion_nombre');
             $("#activo").attr('name', 'catregion_activo');
 
             // activa menu
             $("#titulo_tabla").html('Catálogo [Región]');
             $("#modal_titulo").html("Catálogo [Región]");
             $("#tr_2").addClass("active");
-			$("#cat_2").addClass("text-info");
+            $("#cat_2").addClass("text-info");
 
             // Inicializar tabla
-            if(datatable_catalogo != null)
-            {
+            if (datatable_catalogo != null) {
                 datatable_catalogo.destroy();
                 datatable_catalogo = null;
             }
 
             // diseño tabla
-            $("#div_datatable").html('<table class="table table-hover stylish-table" id="tabla_lista_catalogo" width="100%">'+
-                                        '<thead>'+
-                                            '<tr>'+
-                                                '<th>Región</th>'+
-                                                '<th style="width: 90px!important;">Editar</th>'+
-                                                '<th style="width: 90px!important;">Activo</th>'+
-                                            '</tr>'+
-                                        '</thead>'+
-                                        '<tbody></tbody>'+
-                                    '</table>');
+            $("#div_datatable").html('<table class="table table-hover stylish-table" id="tabla_lista_catalogo" width="100%">' +
+                '<thead>' +
+                '<tr>' +
+                '<th>Región</th>' +
+                '<th style="width: 90px!important;">Editar</th>' +
+                '<th style="width: 90px!important;">Activo</th>' +
+                '</tr>' +
+                '</thead>' +
+                '<tbody></tbody>' +
+                '</table>');
 
             tabla_catalogo(catalogo);
             break;
         case 3:
             // campos
-        	$("#catalogo2campos_campo1").attr('name', 'catgerencia_siglas');
+            $("#catalogo2campos_campo1").attr('name', 'catgerencia_siglas');
             $("#catalogo2campos_campo2").attr('name', 'catgerencia_nombre');
 
             // activa menu
             $("#titulo_tabla").html('Catálogo [Gerencia]');
             $("#modal_catalogo2campos .modal-title").html("Catálogo [Gerencia]");
             $("#tr_3").addClass("active");
-			$("#cat_3").addClass("text-info");
+            $("#cat_3").addClass("text-info");
 
             // Inicializar tabla
-            if(datatable_catalogo2campos != null)
-            {
+            if (datatable_catalogo2campos != null) {
                 datatable_catalogo2campos.destroy();
                 datatable_catalogo2campos = null;
             }
 
             // diseño tabla
-            $("#div_datatable").html('<table class="table table-hover stylish-table" id="tabla_catalogo2campos" width="100%">'+
-                                        '<thead>'+
-                                            '<tr>'+
-                                                '<th width="130">Siglas</th>'+
-                                                '<th>Gerencia</th>'+
-                                                '<th width="90">Editar</th>'+
-                                                '<th width="90">Activo</th>'+
-                                            '</tr>'+
-                                        '</thead>'+
-                                        '<tbody></tbody>'+
-                                    '</table>');
+            $("#div_datatable").html('<table class="table table-hover stylish-table" id="tabla_catalogo2campos" width="100%">' +
+                '<thead>' +
+                '<tr>' +
+                '<th width="130">Siglas</th>' +
+                '<th>Gerencia</th>' +
+                '<th width="90">Editar</th>' +
+                '<th width="90">Activo</th>' +
+                '</tr>' +
+                '</thead>' +
+                '<tbody></tbody>' +
+                '</table>');
 
             tabla_catalogo2campos(catalogo);
             break;
@@ -148,56 +143,54 @@ function mostrar_catalogo(num_catalogo)
             $("#cat_4").addClass("text-info");
 
             // Inicializar tabla
-            if(datatable_catalogo2campos != null)
-            {
+            if (datatable_catalogo2campos != null) {
                 datatable_catalogo2campos.destroy();
                 datatable_catalogo2campos = null;
             }
 
             // diseño tabla
-            $("#div_datatable").html('<table class="table table-hover stylish-table" id="tabla_catalogo2campos" width="100%">'+
-                                        '<thead>'+
-                                            '<tr>'+
-                                                '<th width="130">Siglas</th>'+
-                                                '<th>Activo</th>'+
-                                                '<th width="90">Editar</th>'+
-                                                '<th width="90">Activo</th>'+
-                                            '</tr>'+
-                                        '</thead>'+
-                                        '<tbody></tbody>'+
-                                    '</table>');
+            $("#div_datatable").html('<table class="table table-hover stylish-table" id="tabla_catalogo2campos" width="100%">' +
+                '<thead>' +
+                '<tr>' +
+                '<th width="130">Siglas</th>' +
+                '<th>Activo</th>' +
+                '<th width="90">Editar</th>' +
+                '<th width="90">Activo</th>' +
+                '</tr>' +
+                '</thead>' +
+                '<tbody></tbody>' +
+                '</table>');
 
             tabla_catalogo2campos(catalogo);
             break;
         case 5:
             // campos
-			$("#nombre").attr('name', 'catdepartamento_nombre');
-			$("#activo").attr('name', 'catdepartamento_activo');
+            $("#nombre").attr('name', 'catdepartamento_nombre');
+            $("#activo").attr('name', 'catdepartamento_activo');
 
             // activa menu
-			$("#titulo_tabla").html('Catálogo [Departamento]');
+            $("#titulo_tabla").html('Catálogo [Departamento]');
             $("#modal_titulo").html("Catálogo [Departamento]");
-			$("#tr_5").addClass("active");
-			$("#cat_5").addClass("text-info");
+            $("#tr_5").addClass("active");
+            $("#cat_5").addClass("text-info");
 
             // Inicializar tabla
-            if(datatable_catalogo != null)
-            {
+            if (datatable_catalogo != null) {
                 datatable_catalogo.destroy();
                 datatable_catalogo = null;
             }
 
             // diseño tabla
-            $("#div_datatable").html('<table class="table table-hover stylish-table" id="tabla_lista_catalogo" width="100%">'+
-                                        '<thead>'+
-                                            '<tr>'+
-                                                '<th>Departamento</th>'+
-                                                '<th style="width: 90px!important;">Editar</th>'+
-                                                '<th style="width: 90px!important;">Activo</th>'+
-                                            '</tr>'+
-                                        '</thead>'+
-                                        '<tbody></tbody>'+
-                                    '</table>');
+            $("#div_datatable").html('<table class="table table-hover stylish-table" id="tabla_lista_catalogo" width="100%">' +
+                '<thead>' +
+                '<tr>' +
+                '<th>Departamento</th>' +
+                '<th style="width: 90px!important;">Editar</th>' +
+                '<th style="width: 90px!important;">Activo</th>' +
+                '</tr>' +
+                '</thead>' +
+                '<tbody></tbody>' +
+                '</table>');
 
             tabla_catalogo(catalogo);
             break;
@@ -213,25 +206,24 @@ function mostrar_catalogo(num_catalogo)
             $("#cat_6").addClass("text-info");
 
             // Inicializar tabla
-            if(datatable_epp != null)
-            {
+            if (datatable_epp != null) {
                 datatable_epp.destroy();
                 datatable_epp = null;
             }
 
             // diseño tabla
-            $("#div_datatable").html('<table class="table table-hover stylish-table" id="tabla_lista_catalogo_epp" width="100%">'+
-                                        '<thead>'+
-                                            '<tr>' +
-                                                '<th>Parte del cuerpo</th>' +
-                                                '<th>Clave y EPP</th>'+
-                                                '<th>Tipo de riesgo en funcion de la actividad</th>'+
-                                                '<th style="width: 90px!important;">Editar</th>'+
-                                                '<th style="width: 90px!important;">Activo</th>'+
-                                            '</tr>'+
-                                        '</thead>'+
-                                        '<tbody></tbody>'+
-                                    '</table>');
+            $("#div_datatable").html('<table class="table table-hover stylish-table" id="tabla_lista_catalogo_epp" width="100%">' +
+                '<thead>' +
+                '<tr>' +
+                '<th>Parte del cuerpo</th>' +
+                '<th>Clave y EPP</th>' +
+                '<th>Tipo de riesgo en funcion de la actividad</th>' +
+                '<th style="width: 90px!important;">Editar</th>' +
+                '<th style="width: 90px!important;">Activo</th>' +
+                '</tr>' +
+                '</thead>' +
+                '<tbody></tbody>' +
+                '</table>');
 
             tabla_catalogo_epp(catalogo);
             break;
@@ -247,32 +239,31 @@ function mostrar_catalogo(num_catalogo)
             $("#cat_7").addClass("text-info");
 
             // Inicializar tabla
-            if(datatable_catalogo != null)
-            {
+            if (datatable_catalogo != null) {
                 datatable_catalogo.destroy();
                 datatable_catalogo = null;
             }
 
             // diseño tabla
-            $("#div_datatable").html('<table class="table table-hover stylish-table" id="tabla_lista_catalogo" width="100%">'+
-                                        '<thead>'+
-                                            '<tr>'+
-                                                '<th>Características de los alimentos</th>'+
-                                                '<th style="width: 90px!important;">Editar</th>'+
-                                                '<th style="width: 90px!important;">Activo</th>'+
-                                            '</tr>'+
-                                        '</thead>'+
-                                        '<tbody></tbody>'+
-                                    '</table>');
+            $("#div_datatable").html('<table class="table table-hover stylish-table" id="tabla_lista_catalogo" width="100%">' +
+                '<thead>' +
+                '<tr>' +
+                '<th>Características de los alimentos</th>' +
+                '<th style="width: 90px!important;">Editar</th>' +
+                '<th style="width: 90px!important;">Activo</th>' +
+                '</tr>' +
+                '</thead>' +
+                '<tbody></tbody>' +
+                '</table>');
 
             tabla_catalogo(catalogo);
             break;
         case 8:
             // campos
             $("#tipo").attr('name', 'catparametroaguacaracteristica_tipo');
-            $("#tipo").html('<option value=""></option>'+
-                            '<option value="Microbiológico">Microbiológico</option>'+
-                            '<option value="Fisicoquímico">Fisicoquímico</option>');
+            $("#tipo").html('<option value=""></option>' +
+                '<option value="Microbiológico">Microbiológico</option>' +
+                '<option value="Fisicoquímico">Fisicoquímico</option>');
 
             $("#caracteristica").attr('name', 'catparametroaguacaracteristica_caracteristica');
 
@@ -283,25 +274,24 @@ function mostrar_catalogo(num_catalogo)
             $("#cat_8").addClass("text-info");
 
             // Inicializar tabla
-            if(datatable_caracteristicas != null)
-            {
+            if (datatable_caracteristicas != null) {
                 datatable_caracteristicas.destroy();
                 datatable_caracteristicas = null;
             }
 
             // diseño tabla
-            $("#div_datatable").html('<table class="table table-bordered table-hover" id="tabla_lista_caracteristica" width="100%">'+
-                                        '<thead>'+
-                                            '<tr>'+
-                                                '<th>Tipo</th>'+
-                                                '<th>Característica</th>'+
-                                                '<th style="width: 90px!important;">Editar</th>'+
-                                                '<th style="width: 90px!important;">Activo</th>'+
-                                            '</tr>'+
-                                        '</thead>'+
-                                        '<tbody></tbody>'+
-                                    '</table>');
-            
+            $("#div_datatable").html('<table class="table table-bordered table-hover" id="tabla_lista_caracteristica" width="100%">' +
+                '<thead>' +
+                '<tr>' +
+                '<th>Tipo</th>' +
+                '<th>Característica</th>' +
+                '<th style="width: 90px!important;">Editar</th>' +
+                '<th style="width: 90px!important;">Activo</th>' +
+                '</tr>' +
+                '</thead>' +
+                '<tbody></tbody>' +
+                '</table>');
+
             tabla_caracteristica(catalogo);
             break;
         case 9:
@@ -316,47 +306,45 @@ function mostrar_catalogo(num_catalogo)
             $("#cat_9").addClass("text-info");
 
             // Inicializar tabla
-            if(datatable_catalogo != null)
-            {
+            if (datatable_catalogo != null) {
                 datatable_catalogo.destroy();
                 datatable_catalogo = null;
             }
 
             // diseño tabla
-            $("#div_datatable").html('<table class="table table-hover stylish-table" id="tabla_lista_catalogo" width="100%">'+
-                                        '<thead>'+
-                                            '<tr>'+
-                                                '<th>Caracteristicas ventilación y calidad del aire</th>'+
-                                                '<th style="width: 90px!important;">Editar</th>'+
-                                                '<th style="width: 90px!important;">Activo</th>'+
-                                            '</tr>'+
-                                        '</thead>'+
-                                        '<tbody></tbody>'+
-                                    '</table>');
+            $("#div_datatable").html('<table class="table table-hover stylish-table" id="tabla_lista_catalogo" width="100%">' +
+                '<thead>' +
+                '<tr>' +
+                '<th>Caracteristicas ventilación y calidad del aire</th>' +
+                '<th style="width: 90px!important;">Editar</th>' +
+                '<th style="width: 90px!important;">Activo</th>' +
+                '</tr>' +
+                '</thead>' +
+                '<tbody></tbody>' +
+                '</table>');
 
             tabla_catalogo(catalogo);
             break;
         case 10:
             // Inicializar tabla
-            if(datatable_agentes != null)
-            {
+            if (datatable_agentes != null) {
                 datatable_agentes.destroy();
                 datatable_agentes = null;
             }
 
             // diseño tabla
-            $("#div_datatable").html('<table class="table table-hover stylish-table" id="tabla_lista_agentes" width="100%">'+
-                                        '<thead>'+
-                                            '<tr>'+
-                                                '<th>Tipo</th>'+
-                                                '<th>Agente / Factor de riesgo / Servicio</th>'+
-                                                '<th id="titulo_columna_tabla">Normas y/o procedimientos</th>'+
-                                                '<th style="width: 90px!important;">Editar</th>'+
-                                                '<th style="width: 90px!important;">Activo</th>'+
-                                            '</tr>'+
-                                        '</thead>'+
-                                        '<tbody></tbody>'+
-                                    '</table>');
+            $("#div_datatable").html('<table class="table table-hover stylish-table" id="tabla_lista_agentes" width="100%">' +
+                '<thead>' +
+                '<tr>' +
+                '<th>Tipo</th>' +
+                '<th>Agente / Factor de riesgo / Servicio</th>' +
+                '<th id="titulo_columna_tabla">Normas y/o procedimientos</th>' +
+                '<th style="width: 90px!important;">Editar</th>' +
+                '<th style="width: 90px!important;">Activo</th>' +
+                '</tr>' +
+                '</thead>' +
+                '<tbody></tbody>' +
+                '</table>');
 
             $("#titulo_tabla").html('Catálogo [Agente / Factor de riesgo / Servicio]');
             $("#modal_titulo").html("Catálogo [Agente / Factor de riesgo / Servicio]");
@@ -376,32 +364,31 @@ function mostrar_catalogo(num_catalogo)
             $("#cat_11").addClass("text-info");
 
             // Inicializar tabla
-            if(datatable_catalogo != null)
-            {
+            if (datatable_catalogo != null) {
                 datatable_catalogo.destroy();
                 datatable_catalogo = null;
             }
 
             // diseño tabla
-            $("#div_datatable").html('<table class="table table-hover stylish-table" id="tabla_lista_catalogo" width="100%">'+
-                                        '<thead>'+
-                                            '<tr>'+
-                                                '<th>Características de las superficies</th>'+
-                                                '<th style="width: 70px!important;">Editar</th>'+
-                                                '<th style="width: 70px!important;">Activo</th>'+
-                                            '</tr>'+
-                                        '</thead>'+
-                                        '<tbody></tbody>'+
-                                    '</table>');
+            $("#div_datatable").html('<table class="table table-hover stylish-table" id="tabla_lista_catalogo" width="100%">' +
+                '<thead>' +
+                '<tr>' +
+                '<th>Características de las superficies</th>' +
+                '<th style="width: 70px!important;">Editar</th>' +
+                '<th style="width: 70px!important;">Activo</th>' +
+                '</tr>' +
+                '</thead>' +
+                '<tbody></tbody>' +
+                '</table>');
 
             tabla_catalogo(catalogo);
             break;
         case 12:
             // campos
             $("#tipo").attr('name', 'catparametrohielocaracteristica_tipo');
-            $("#tipo").html('<option value=""></option>'+
-                            '<option value="Microbiológico">Microbiológico</option>'+
-                            '<option value="Fisicoquímico">Fisicoquímico</option>');
+            $("#tipo").html('<option value=""></option>' +
+                '<option value="Microbiológico">Microbiológico</option>' +
+                '<option value="Fisicoquímico">Fisicoquímico</option>');
 
             $("#caracteristica").attr('name', 'catparametrohielocaracteristica_caracteristica');
 
@@ -412,25 +399,24 @@ function mostrar_catalogo(num_catalogo)
             $("#cat_12").addClass("text-info");
 
             // Inicializar tabla
-            if(datatable_caracteristicas != null)
-            {
+            if (datatable_caracteristicas != null) {
                 datatable_caracteristicas.destroy();
                 datatable_caracteristicas = null;
             }
 
             // diseño tabla
-            $("#div_datatable").html('<table class="table table-bordered table-hover" id="tabla_lista_caracteristica" width="100%">'+
-                                        '<thead>'+
-                                            '<tr>'+
-                                                '<th>Tipo</th>'+
-                                                '<th>Característica</th>'+
-                                                '<th style="width: 70px!important;">Editar</th>'+
-                                                '<th style="width: 70px!important;">Activo</th>'+
-                                            '</tr>'+
-                                        '</thead>'+
-                                        '<tbody></tbody>'+
-                                    '</table>');
-            
+            $("#div_datatable").html('<table class="table table-bordered table-hover" id="tabla_lista_caracteristica" width="100%">' +
+                '<thead>' +
+                '<tr>' +
+                '<th>Tipo</th>' +
+                '<th>Característica</th>' +
+                '<th style="width: 70px!important;">Editar</th>' +
+                '<th style="width: 70px!important;">Activo</th>' +
+                '</tr>' +
+                '</thead>' +
+                '<tbody></tbody>' +
+                '</table>');
+
             tabla_caracteristica(catalogo);
             break;
         case 13:
@@ -445,24 +431,23 @@ function mostrar_catalogo(num_catalogo)
             $("#cat_13").addClass("text-info");
 
             // Inicializar tabla
-            if(datatable_catalogo2campos != null)
-            {
+            if (datatable_catalogo2campos != null) {
                 datatable_catalogo2campos.destroy();
                 datatable_catalogo2campos = null;
             }
 
             // diseño tabla
-            $("#div_datatable").html('<table class="table table-hover stylish-table" id="tabla_catalogo2campos" width="100%">'+
-                                        '<thead>'+
-                                            '<tr>'+
-                                                '<th width="130">Siglas</th>'+
-                                                '<th>Subdirección</th>'+
-                                                '<th width="90">Editar</th>'+
-                                                '<th width="90">Activo</th>'+
-                                            '</tr>'+
-                                        '</thead>'+
-                                        '<tbody></tbody>'+
-                                    '</table>');
+            $("#div_datatable").html('<table class="table table-hover stylish-table" id="tabla_catalogo2campos" width="100%">' +
+                '<thead>' +
+                '<tr>' +
+                '<th width="130">Siglas</th>' +
+                '<th>Subdirección</th>' +
+                '<th width="90">Editar</th>' +
+                '<th width="90">Activo</th>' +
+                '</tr>' +
+                '</thead>' +
+                '<tbody></tbody>' +
+                '</table>');
 
             tabla_catalogo2campos(catalogo);
             break;
@@ -470,57 +455,55 @@ function mostrar_catalogo(num_catalogo)
             // activa menu
             $("#titulo_tabla").html('Catálogo [Cargos para Informes]');
             $("#tr_14").addClass("active");
-			$("#cat_14").addClass("text-info");
+            $("#cat_14").addClass("text-info");
 
             // Inicializar tabla
-            if(datatable_cargos != null)
-            {
+            if (datatable_cargos != null) {
                 datatable_cargos.destroy();
                 datatable_cargos = null;
             }
 
             // diseño tabla
-            $("#div_datatable").html('<table class="table table-hover stylish-table" id="tabla_lista_cargos" width="100%">'+
-                                        '<thead>'+
-                                            '<tr>'+
-                                                '<th>#</th>'+
-                                                '<th>Cargo</th>'+
-                                                '<th style="width: 90px!important;">Editar</th>'+
-                                                '<th style="width: 90px!important;">Activo</th>'+
-                                            '</tr>'+
-                                        '</thead>'+
-                                        '<tbody></tbody>'+
-                                    '</table>');
+            $("#div_datatable").html('<table class="table table-hover stylish-table" id="tabla_lista_cargos" width="100%">' +
+                '<thead>' +
+                '<tr>' +
+                '<th>#</th>' +
+                '<th>Cargo</th>' +
+                '<th style="width: 90px!important;">Editar</th>' +
+                '<th style="width: 90px!important;">Activo</th>' +
+                '</tr>' +
+                '</thead>' +
+                '<tbody></tbody>' +
+                '</table>');
 
             tabla_cargo(catalogo);
-                  break;
-         case 15:
+            break;
+        case 15:
             // activa menu
             $("#titulo_tabla").html('Catálogo [Formatos de campo]');
             $("#tr_15").addClass("active");
-			$("#cat_15").addClass("text-info");
+            $("#cat_15").addClass("text-info");
 
             // Inicializar tabla
-            if(datatable_formatos != null)
-            {
+            if (datatable_formatos != null) {
                 datatable_formatos.destroy();
                 datatable_formatos = null;
             }
 
             // diseño tabla
-            $("#div_datatable").html('<table class="table table-hover stylish-table" id="tabla_lista_formatos" width="100%">'+
-                                        '<thead>'+
-                                            '<tr>'+
-                                                '<th>#</th>'+
-                                                '<th>Nombre</th>' +
-                                                '<th>Descripción</th>'+
-                                                '<th style="width: 90px!important;">Descargar</th>'+
-                                                '<th style="width: 90px!important;">Ver</th>' +
-                                                '<th style="width: 90px!important;">Editar</th>'+
-                                            '</tr>'+
-                                        '</thead>'+
-                                        '<tbody></tbody>'+
-                                    '</table>');
+            $("#div_datatable").html('<table class="table table-hover stylish-table" id="tabla_lista_formatos" width="100%">' +
+                '<thead>' +
+                '<tr>' +
+                '<th>#</th>' +
+                '<th>Nombre</th>' +
+                '<th>Descripción</th>' +
+                '<th style="width: 90px!important;">Descargar</th>' +
+                '<th style="width: 90px!important;">Ver</th>' +
+                '<th style="width: 90px!important;">Editar</th>' +
+                '</tr>' +
+                '</thead>' +
+                '<tbody></tbody>' +
+                '</table>');
 
             tabla_formatos(catalogo);
             break;
@@ -528,101 +511,128 @@ function mostrar_catalogo(num_catalogo)
             // activa menu
             $("#titulo_tabla").html('Catálogo [Conclusiones para Informes]');
             $("#tr_16").addClass("active");
-			$("#cat_16").addClass("text-info");
+            $("#cat_16").addClass("text-info");
 
             // Inicializar tabla
-            if(datatable_conclusiones != null)
-            {
+            if (datatable_conclusiones != null) {
                 datatable_conclusiones.destroy();
                 datatable_conclusiones = null;
             }
 
             // diseño tabla
-            $("#div_datatable").html('<table class="table table-hover stylish-table" id="tabla_lista_conclusiones" width="100%">'+
-                                        '<thead>'+
-                                            '<tr>'+
-                                                '<th>#</th>'+
-                                                '<th>Nombre</th>' +
-                                                '<th>Descripción</th>'+
-                                                '<th style="width: 90px!important;">Editar</th>'+
-                                                '<th style="width: 90px!important;">Activo</th>'+
-                                            '</tr>'+
-                                        '</thead>'+
-                                        '<tbody></tbody>'+
-                                    '</table>');
+            $("#div_datatable").html('<table class="table table-hover stylish-table" id="tabla_lista_conclusiones" width="100%">' +
+                '<thead>' +
+                '<tr>' +
+                '<th>#</th>' +
+                '<th>Nombre</th>' +
+                '<th>Descripción</th>' +
+                '<th style="width: 90px!important;">Editar</th>' +
+                '<th style="width: 90px!important;">Activo</th>' +
+                '</tr>' +
+                '</thead>' +
+                '<tbody></tbody>' +
+                '</table>');
 
             tabla_conclusiones(catalogo);
-        break;
-
+            break;
         case 17:
             // activa menu
             $("#titulo_tabla").html('Catálogo [Descripciones Área]');
             $("#tr_17").addClass("active");
-			$("#cat_17").addClass("text-info");
+            $("#cat_17").addClass("text-info");
 
             // Inicializar tabla
-            if(datatable_descripcion != null)
-            {
+            if (datatable_descripcion != null) {
                 datatable_descripcion.destroy();
                 datatable_descripcion = null;
             }
 
             // diseño tabla
-            $("#div_datatable").html('<table class="table table-hover stylish-table" id="tabla_lista_descripcion" width="100%">'+
-                                        '<thead>'+
-                                            '<tr>'+
-                                                '<th>#</th>'+
-                                                '<th>Descripción</th>'+
-                                                '<th style="width: 90px!important;">Editar</th>'+
-                                                '<th style="width: 90px!important;">Activo</th>'+
-                                            '</tr>'+
-                                        '</thead>'+
-                                        '<tbody></tbody>'+
-                                    '</table>');
+            $("#div_datatable").html('<table class="table table-hover stylish-table" id="tabla_lista_descripcion" width="100%">' +
+                '<thead>' +
+                '<tr>' +
+                '<th>#</th>' +
+                '<th>Descripción</th>' +
+                '<th style="width: 90px!important;">Editar</th>' +
+                '<th style="width: 90px!important;">Activo</th>' +
+                '</tr>' +
+                '</thead>' +
+                '<tbody></tbody>' +
+                '</table>');
 
             tabla_descripcion(catalogo);
-        break;
-
+            break;
         case 18:
             // activa menu
             $("#titulo_tabla").html('Catálogo [Sistema de iluminación]');
             $("#tr_18").addClass("active");
-			$("#cat_18").addClass("text-info");
+            $("#cat_18").addClass("text-info");
 
             // Inicializar tabla
-            if(datatable_sistema != null)
-            {
+            if (datatable_sistema != null) {
                 datatable_sistema.destroy();
                 datatable_sistema = null;
             }
 
             // diseño tabla
-            $("#div_datatable").html('<table class="table table-hover stylish-table" id="tabla_lista_sistema" width="100%">'+
-                                        '<thead>'+
-                                            '<tr>'+
-                                                '<th>#</th>'+
-                                                '<th>Nombre</th>'+
-                                                '<th>Descripción</th>'+
-                                                '<th style="width: 90px!important;">Editar</th>'+
-                                                '<th style="width: 90px!important;">Activo</th>'+
-                                            '</tr>'+
-                                        '</thead>'+
-                                        '<tbody></tbody>'+
-                                    '</table>');
+            $("#div_datatable").html('<table class="table table-hover stylish-table" id="tabla_lista_sistema" width="100%">' +
+                '<thead>' +
+                '<tr>' +
+                '<th>#</th>' +
+                '<th>Nombre</th>' +
+                '<th>Descripción</th>' +
+                '<th style="width: 90px!important;">Editar</th>' +
+                '<th style="width: 90px!important;">Activo</th>' +
+                '</tr>' +
+                '</thead>' +
+                '<tbody></tbody>' +
+                '</table>');
 
             tabla_sistema(catalogo);
-        break;
+            break;
+        case 19:
+
+            // activa menu
+            $("#titulo_tabla").html('Catálogo [Protección auditiva]');
+            $("#modal_titulo").html("Catálogo [Protección auditiva]");
+            $("#tr_19").addClass("active");
+            $("#cat_19").addClass("text-info");
+
+            // Inicializar tabla
+            if (datatable_pa != null) {
+                datatable_pa.destroy();
+                datatable_pa = null;
+            }
+
+
+            // diseño tabla
+            $("#div_datatable").html('<table class="table table-hover stylish-table" id="tabla_lista_catalogo_pa" width="100%">' +
+                '<thead>' +
+                '<tr>' +
+                '<th>Tipo</th>' +
+                '<th>Modelo</th>' +
+                '<th>Marca</th>' +
+                '<th>Cumplimiento normativo</th>' +
+                '<th style="width: 90px!important;">Descargar</th>' +
+                '<th style="width: 90px!important;">Ver</th>' +
+                '<th style="width: 90px!important;">Editar</th>' +
+                '<th style="width: 90px!important;">Activo</th>' +
+                '</tr>' +
+                '</thead>' +
+                '<tbody></tbody>' +
+                '</table>');
+
+            tabla_catalogo_pa(catalogo);
+            break;
     }
 }
 
 
-$("#boton_nuevo_registro").click(function()
-{
-    switch (catalogo)
-    {
+$("#boton_nuevo_registro").click(function () {
+    switch (catalogo) {
         case 1:
             // Borrar formulario
-            $('#form_contrato').each(function(){
+            $('#form_contrato').each(function () {
                 this.reset();
             });
 
@@ -631,11 +641,11 @@ $("#boton_nuevo_registro").click(function()
             $("#contrato_catalogo").val(catalogo);
 
             // abrir modal
-            $('#modal_contrato').modal({backdrop:false});
+            $('#modal_contrato').modal({ backdrop: false });
             break;
         case 3:
             // Borrar formulario
-            $('#form_catalogo2campos').each(function(){
+            $('#form_catalogo2campos').each(function () {
                 this.reset();
             });
 
@@ -644,11 +654,11 @@ $("#boton_nuevo_registro").click(function()
             $("#catalogo2campos_catalogo").val(catalogo);
 
             // abrir modal
-            $('#modal_catalogo2campos').modal({backdrop:false});
+            $('#modal_catalogo2campos').modal({ backdrop: false });
             break;
         case 4:
             // Borrar formulario
-            $('#form_catalogo2campos').each(function(){
+            $('#form_catalogo2campos').each(function () {
                 this.reset();
             });
 
@@ -657,11 +667,11 @@ $("#boton_nuevo_registro").click(function()
             $("#catalogo2campos_catalogo").val(catalogo);
 
             // abrir modal
-            $('#modal_catalogo2campos').modal({backdrop:false});
+            $('#modal_catalogo2campos').modal({ backdrop: false });
             break;
         case 6:
             // Borrar formulario
-            $('#form_catalogo_epp').each(function(){
+            $('#form_catalogo_epp').each(function () {
                 this.reset();
             });
 
@@ -670,11 +680,11 @@ $("#boton_nuevo_registro").click(function()
             $("#catalogo").val(catalogo);
 
             // abrir modal
-            $('#modal_catalogo_epp').modal({backdrop:false});
+            $('#modal_catalogo_epp').modal({ backdrop: false });
             break;
         case 8:
             // Borrar formulario
-            $('#form_caracteristica').each(function(){
+            $('#form_caracteristica').each(function () {
                 this.reset();
             });
 
@@ -683,11 +693,11 @@ $("#boton_nuevo_registro").click(function()
             $("#caracteristica_catalogo").val(catalogo);
 
             // abrir modal
-            $('#modal_caracteristica').modal({backdrop:false});
+            $('#modal_caracteristica').modal({ backdrop: false });
             break;
         case 10:
             // Borrar formulario
-            $('#form_agentes').each(function(){
+            $('#form_agentes').each(function () {
                 this.reset();
             });
 
@@ -697,19 +707,19 @@ $("#boton_nuevo_registro").click(function()
 
             // Tabla lista de normas y procedimeintos en el MODAL
             $("#tabla_lista_normas tbody").html('');
-            $("#tabla_lista_normas tbody").append('<tr>'+
-                                                    '<td><select class="custom-select form-control" name="tipo[]" required><option value=""></option><option value="Norma">Norma</option><option value="Procedimiento">Procedimiento</option><option value="Metodo"> Método</option></select></td> '+
-                                                    '<td><input type="text" class="form-control" name="numero[]" required></td>'+
-                                                    '<td><input type="text" class="form-control" name="descripcion[]" required></td>'+
-                                                    '<td><button type="button" class="btn btn-secondary btn-circle"><i class="fa fa-ban"></i></button></td>'+
-                                                    '</tr>');
+            $("#tabla_lista_normas tbody").append('<tr>' +
+                '<td><select class="custom-select form-control" name="tipo[]" required><option value=""></option><option value="Norma">Norma</option><option value="Procedimiento">Procedimiento</option><option value="Metodo"> Método</option></select></td> ' +
+                '<td><input type="text" class="form-control" name="numero[]" required></td>' +
+                '<td><input type="text" class="form-control" name="descripcion[]" required></td>' +
+                '<td><button type="button" class="btn btn-secondary btn-circle"><i class="fa fa-ban"></i></button></td>' +
+                '</tr>');
 
             // abrir modal
-            $('#modal_agentes').modal({backdrop:false});
+            $('#modal_agentes').modal({ backdrop: false });
             break;
         case 12:
             // Borrar formulario
-            $('#form_caracteristica').each(function(){
+            $('#form_caracteristica').each(function () {
                 this.reset();
             });
 
@@ -718,11 +728,11 @@ $("#boton_nuevo_registro").click(function()
             $("#caracteristica_catalogo").val(catalogo);
 
             // abrir modal
-            $('#modal_caracteristica').modal({backdrop:false});
+            $('#modal_caracteristica').modal({ backdrop: false });
             break;
         case 13:
             // Borrar formulario
-            $('#form_catalogo2campos').each(function(){
+            $('#form_catalogo2campos').each(function () {
                 this.reset();
             });
 
@@ -731,11 +741,11 @@ $("#boton_nuevo_registro").click(function()
             $("#catalogo2campos_catalogo").val(catalogo);
 
             // abrir modal
-            $('#modal_catalogo2campos').modal({backdrop:false});
+            $('#modal_catalogo2campos').modal({ backdrop: false });
             break;
-         case 14:
+        case 14:
             // Borrar formulario
-            $('#form_cargo').each(function(){
+            $('#form_cargo').each(function () {
                 this.reset();
             });
 
@@ -743,11 +753,11 @@ $("#boton_nuevo_registro").click(function()
             $("#ID_CARGO_INFORME").val(0);
 
             // abrir modal
-            $('#modal_cargo').modal({backdrop:false});
+            $('#modal_cargo').modal({ backdrop: false });
             break;
-         case 15:
+        case 15:
             // Borrar formulario
-            $('#form_formato').each(function(){
+            $('#form_formato').each(function () {
                 this.reset();
             });
 
@@ -755,7 +765,7 @@ $("#boton_nuevo_registro").click(function()
             $("#ID_FORMATO").val(0);
 
             // abrir modal
-            $('#modal_formatos').modal({backdrop:false});
+            $('#modal_formatos').modal({ backdrop: false });
             break;
         case 16:
             // Borrar formulario
@@ -769,34 +779,83 @@ $("#boton_nuevo_registro").click(function()
             // abrir modal
             $('#modal_conclusion').modal({ backdrop: false });
             break;
+        case 17:
+            // Borrar formulario
+            $('#form_descripcionarea').each(function () {
+                this.reset();
+            });
 
-            case 17:
-                // Borrar formulario
-                $('#form_descripcionarea').each(function () {
-                    this.reset();
+            // campos hidden
+            $("#ID_DESCRIPCION_AREA").val(0);
+
+            // abrir modal
+            $('#modal_descripcionarea').modal({ backdrop: false });
+            break;
+        case 18:
+            // Borrar formulario
+            $('#form_sistema').each(function () {
+                this.reset();
+            });
+
+            // campos hidden
+            $("#ID_SISTEMA_ILUMINACION").val(0);
+
+            // abrir modal
+            $('#modal_sistema').modal({ backdrop: false });
+            break;
+        case 19:
+            // Borrar formulario
+            $('#form_catalogo_pa').each(function () {
+                this.reset();
+            });
+
+            // campos hidden
+            $("#ID_PROTECCION").val(0);
+            $("#catalogo").val(catalogo);
+
+
+            // Mostrar Foto Mapa instalacion en el INPUT
+            if ($('#foto_proteccion').data('dropify')) {
+                $('#foto_proteccion').dropify().data('dropify').resetPreview();
+                $('#foto_proteccion').dropify().data('dropify').clearElement();
+                // $('#signatariofoto').dropify().data('dropify').destroy();
+                // $('#signatariofoto').dropify().data('dropify').init();
+            }
+            else {
+                // $('#signatariofoto').attr('data-height', 400);
+                // $('#signatariofoto').attr('data-default-file', imagenUrl);
+                $('#foto_proteccion').dropify({
+                    messages: {
+                        'default': 'Arrastre la imagen aquí o haga click',
+                        'replace': 'Arrastre la imagen o haga clic para reemplazar',
+                        'remove': 'Quitar',
+                        'error': 'Ooops, ha ocurrido un error.'
+                    },
+                    error: {
+                        'fileSize': 'Demasiado grande ({{ value }} max).',
+                        'minWidth': 'Ancho demasiado pequeño (min {{ value }}}px).',
+                        'maxWidth': 'Ancho demasiado grande (max {{ value }}}px).',
+                        'minHeight': 'Alto demasiado pequeño (min {{ value }}}px).',
+                        'maxHeight': 'Alto demasiado grande (max {{ value }}px max).',
+                        'imageFormat': 'Formato no permitido, sólo ({{ value }}).'
+                    }
                 });
-    
-                // campos hidden
-                $("#ID_DESCRIPCION_AREA").val(0);
-    
-                // abrir modal
-                $('#modal_descripcionarea').modal({ backdrop: false });
-                break;
-                case 18:
-                    // Borrar formulario
-                    $('#form_sistema').each(function () {
-                        this.reset();
-                    });
-        
-                    // campos hidden
-                    $("#ID_SISTEMA_ILUMINACION").val(0);
-        
-                    // abrir modal
-                    $('#modal_sistema').modal({ backdrop: false });
-                    break;
+            }
+
+            // requerir campo FOTO
+            $('#foto_proteccion').attr('required', false);
+
+
+            // abrir modal
+            $('#modal_catalogo_pa').modal({ backdrop: false });
+            break;
+
+
+
+
         default:
             // Borrar formulario
-            $('#form_catalogo').each(function(){
+            $('#form_catalogo').each(function () {
                 this.reset();
             });
 
@@ -805,33 +864,28 @@ $("#boton_nuevo_registro").click(function()
             $("#catalogo").val(catalogo);
 
             // abrir modal
-            $('#modal_catalogo').modal({backdrop:false});
+            $('#modal_catalogo').modal({ backdrop: false });
             break;
     }
 });
 
 
 //=======================================
-function tabla_cargo(num_catalogo)
-{
-    var ruta = "/recsensorialconsultacatalogo/"+num_catalogo;
+function tabla_cargo(num_catalogo) {
+    var ruta = "/recsensorialconsultacatalogo/" + num_catalogo;
 
-    try
-    {
-        if (datatable_cargos != null)
-        {
+    try {
+        if (datatable_cargos != null) {
             datatable_cargos.clear().draw();
             datatable_cargos.ajax.url(ruta).load();
         }
-        else
-        {
+        else {
             datatable_cargos = $('#tabla_lista_cargos').DataTable({
                 "ajax": {
                     "url": ruta,
                     "type": "get",
                     "cache": false,
-                    error: function (xhr, error, code)
-                    {
+                    error: function (xhr, error, code) {
                         // console.log(xhr); console.log(code);
                         tabla_cargo(num_catalogo);
                     },
@@ -839,7 +893,7 @@ function tabla_cargo(num_catalogo)
                 },
                 "columns": [
                     {
-                        "data": "ID_CARGO_INFORME" 
+                        "data": "ID_CARGO_INFORME"
                     },
                     {
                         "data": "CARGO"
@@ -860,7 +914,7 @@ function tabla_cargo(num_catalogo)
                     }
                 ],
                 "lengthMenu": [[20, 50, 100, -1], [20, 50, 100, "Todos"]],
-                "order": [[ 0, "asc" ]],        
+                "order": [[0, "asc"]],
                 "searching": false,
                 "paging": false,
                 "ordering": false,
@@ -885,34 +939,28 @@ function tabla_cargo(num_catalogo)
             });
         }
     }
-    catch (exception)
-    {
+    catch (exception) {
         // alert("error en el ajax");
         tabla_cargo(num_catalogo);
-    }    
+    }
 }
 
 
-function tabla_formatos(num_catalogo)
-{
-    var ruta = "/recsensorialconsultacatalogo/"+num_catalogo;
+function tabla_formatos(num_catalogo) {
+    var ruta = "/recsensorialconsultacatalogo/" + num_catalogo;
 
-    try
-    {
-        if (datatable_formatos != null)
-        {
+    try {
+        if (datatable_formatos != null) {
             datatable_formatos.clear().draw();
             datatable_formatos.ajax.url(ruta).load();
         }
-        else
-        {
+        else {
             datatable_formatos = $('#tabla_lista_formatos').DataTable({
                 "ajax": {
                     "url": ruta,
                     "type": "get",
                     "cache": false,
-                    error: function (xhr, error, code)
-                    {
+                    error: function (xhr, error, code) {
                         // console.log(xhr); console.log(code);
                         tabla_formatos(num_catalogo);
                     },
@@ -920,7 +968,7 @@ function tabla_formatos(num_catalogo)
                 },
                 "columns": [
                     {
-                        "data": "ID_FORMATO" 
+                        "data": "ID_FORMATO"
                     },
                     {
                         "data": "NOMBRE"
@@ -928,7 +976,7 @@ function tabla_formatos(num_catalogo)
                     {
                         "data": "DESCRIPCION"
                     },
-                      {
+                    {
                         "className": 'descargar',
                         "orderable": false,
                         "data": 'boton_descargar',
@@ -949,10 +997,10 @@ function tabla_formatos(num_catalogo)
                         "defaultContent": '-'
                         // "defaultContent": '<button type="button" class="btn btn-danger btn-circle"><i class="fa fa-pencil"></i></button>'
                     }
-                   
+
                 ],
                 "lengthMenu": [[20, 50, 100, -1], [20, 50, 100, "Todos"]],
-                "order": [[ 0, "asc" ]],        
+                "order": [[0, "asc"]],
                 "searching": false,
                 "paging": false,
                 "ordering": false,
@@ -977,33 +1025,27 @@ function tabla_formatos(num_catalogo)
             });
         }
     }
-    catch (exception)
-    {
+    catch (exception) {
         // alert("error en el ajax");
         tabla_formatos(num_catalogo);
-    }    
+    }
 }
 
-function tabla_conclusiones(num_catalogo)
-{
-    var ruta = "/recsensorialconsultacatalogo/"+num_catalogo;
+function tabla_conclusiones(num_catalogo) {
+    var ruta = "/recsensorialconsultacatalogo/" + num_catalogo;
 
-    try
-    {
-        if (datatable_conclusiones != null)
-        {
+    try {
+        if (datatable_conclusiones != null) {
             datatable_conclusiones.clear().draw();
             datatable_conclusiones.ajax.url(ruta).load();
         }
-        else
-        {
+        else {
             datatable_conclusiones = $('#tabla_lista_conclusiones').DataTable({
                 "ajax": {
                     "url": ruta,
                     "type": "get",
                     "cache": false,
-                    error: function (xhr, error, code)
-                    {
+                    error: function (xhr, error, code) {
                         // console.log(xhr); console.log(code);
                         tabla_conclusiones(num_catalogo);
                     },
@@ -1011,7 +1053,7 @@ function tabla_conclusiones(num_catalogo)
                 },
                 "columns": [
                     {
-                        "data": "ID_CATCONCLUSION" 
+                        "data": "ID_CATCONCLUSION"
                     },
                     {
                         "data": "NOMBRE"
@@ -1035,7 +1077,7 @@ function tabla_conclusiones(num_catalogo)
                     }
                 ],
                 "lengthMenu": [[20, 50, 100, -1], [20, 50, 100, "Todos"]],
-                "order": [[ 0, "asc" ]],        
+                "order": [[0, "asc"]],
                 "searching": false,
                 "paging": false,
                 "ordering": false,
@@ -1060,35 +1102,29 @@ function tabla_conclusiones(num_catalogo)
             });
         }
     }
-    catch (exception)
-    {
+    catch (exception) {
         // alert("error en el ajax");
         tabla_conclusiones(num_catalogo);
-    }    
+    }
 }
 
 
 
-function tabla_descripcion(num_catalogo)
-{
-    var ruta = "/recsensorialconsultacatalogo/"+num_catalogo;
+function tabla_descripcion(num_catalogo) {
+    var ruta = "/recsensorialconsultacatalogo/" + num_catalogo;
 
-    try
-    {
-        if (datatable_descripcion != null)
-        {
+    try {
+        if (datatable_descripcion != null) {
             datatable_descripcion.clear().draw();
             datatable_descripcion.ajax.url(ruta).load();
         }
-        else
-        {
+        else {
             datatable_descripcion = $('#tabla_lista_descripcion').DataTable({
                 "ajax": {
                     "url": ruta,
                     "type": "get",
                     "cache": false,
-                    error: function (xhr, error, code)
-                    {
+                    error: function (xhr, error, code) {
                         // console.log(xhr); console.log(code);
                         tabla_descripcion(num_catalogo);
                     },
@@ -1096,7 +1132,7 @@ function tabla_descripcion(num_catalogo)
                 },
                 "columns": [
                     {
-                        "data": "ID_DESCRIPCION_AREA" 
+                        "data": "ID_DESCRIPCION_AREA"
                     },
                     {
                         "data": "DESCRIPCION"
@@ -1117,7 +1153,7 @@ function tabla_descripcion(num_catalogo)
                     }
                 ],
                 "lengthMenu": [[20, 50, 100, -1], [20, 50, 100, "Todos"]],
-                "order": [[ 0, "asc" ]],        
+                "order": [[0, "asc"]],
                 "searching": false,
                 "paging": false,
                 "ordering": false,
@@ -1142,33 +1178,27 @@ function tabla_descripcion(num_catalogo)
             });
         }
     }
-    catch (exception)
-    {
+    catch (exception) {
         // alert("error en el ajax");
         tabla_descripcion(num_catalogo);
-    }    
+    }
 }
 
-function tabla_sistema(num_catalogo)
-{
-    var ruta = "/recsensorialconsultacatalogo/"+num_catalogo;
+function tabla_sistema(num_catalogo) {
+    var ruta = "/recsensorialconsultacatalogo/" + num_catalogo;
 
-    try
-    {
-        if (datatable_sistema != null)
-        {
+    try {
+        if (datatable_sistema != null) {
             datatable_sistema.clear().draw();
             datatable_sistema.ajax.url(ruta).load();
         }
-        else
-        {
+        else {
             datatable_sistema = $('#tabla_lista_sistema').DataTable({
                 "ajax": {
                     "url": ruta,
                     "type": "get",
                     "cache": false,
-                    error: function (xhr, error, code)
-                    {
+                    error: function (xhr, error, code) {
                         // console.log(xhr); console.log(code);
                         tabla_sistema(num_catalogo);
                     },
@@ -1176,7 +1206,7 @@ function tabla_sistema(num_catalogo)
                 },
                 "columns": [
                     {
-                        "data": "ID_SISTEMA_ILUMINACION" 
+                        "data": "ID_SISTEMA_ILUMINACION"
                     },
                     {
                         "data": "NOMBRE"
@@ -1200,7 +1230,7 @@ function tabla_sistema(num_catalogo)
                     }
                 ],
                 "lengthMenu": [[20, 50, 100, -1], [20, 50, 100, "Todos"]],
-                "order": [[ 0, "asc" ]],        
+                "order": [[0, "asc"]],
                 "searching": false,
                 "paging": false,
                 "ordering": false,
@@ -1225,33 +1255,27 @@ function tabla_sistema(num_catalogo)
             });
         }
     }
-    catch (exception)
-    {
+    catch (exception) {
         // alert("error en el ajax");
         tabla_sistema(num_catalogo);
-    }    
+    }
 }
 
-function tabla_catalogo(num_catalogo)
-{
-    var ruta = "/recsensorialconsultacatalogo/"+num_catalogo;
+function tabla_catalogo(num_catalogo) {
+    var ruta = "/recsensorialconsultacatalogo/" + num_catalogo;
 
-    try
-    {
-        if (datatable_catalogo != null)
-        {
+    try {
+        if (datatable_catalogo != null) {
             datatable_catalogo.clear().draw();
             datatable_catalogo.ajax.url(ruta).load();
         }
-        else
-        {
+        else {
             datatable_catalogo = $('#tabla_lista_catalogo').DataTable({
                 "ajax": {
                     "url": ruta,
                     "type": "get",
                     "cache": false,
-                    error: function (xhr, error, code)
-                    {
+                    error: function (xhr, error, code) {
                         // console.log(xhr); console.log(code);
                         tabla_catalogo(num_catalogo);
                     },
@@ -1280,7 +1304,7 @@ function tabla_catalogo(num_catalogo)
                     }
                 ],
                 "lengthMenu": [[20, 50, 100, -1], [20, 50, 100, "Todos"]],
-                "order": [[ 0, "asc" ]],        
+                "order": [[0, "asc"]],
                 "searching": false,
                 "paging": false,
                 "ordering": false,
@@ -1305,22 +1329,20 @@ function tabla_catalogo(num_catalogo)
             });
         }
     }
-    catch (exception)
-    {
+    catch (exception) {
         // alert("error en el ajax");
         tabla_catalogo(num_catalogo);
-    }    
+    }
 }
 
 
-function editar_registro()
-{
-    $('#tabla_lista_catalogo tbody').on('click', 'td.editar', function() {
+function editar_registro() {
+    $('#tabla_lista_catalogo tbody').on('click', 'td.editar', function () {
         // console.log();
         var tr = $(this).closest('tr');
         var row = datatable_catalogo.row(tr);
 
-        $('#form_catalogo').each(function(){
+        $('#form_catalogo').each(function () {
             this.reset();
         });
 
@@ -1330,19 +1352,18 @@ function editar_registro()
         $("#catalogo").val(catalogo);
 
         // abrir modal
-        $('#modal_catalogo').modal({backdrop:false});
+        $('#modal_catalogo').modal({ backdrop: false });
     });
 }
 
 
-function editar_registro_epp()
-{
-    $('#tabla_lista_catalogo_epp tbody').on('click', 'td.editar', function() {
+function editar_registro_epp() {
+    $('#tabla_lista_catalogo_epp tbody').on('click', 'td.editar', function () {
         // console.log();
         var tr = $(this).closest('tr');
         var row = datatable_epp.row(tr);
 
-        $('#form_catalogo_epp').each(function(){
+        $('#form_catalogo_epp').each(function () {
             this.reset();
         });
 
@@ -1355,17 +1376,16 @@ function editar_registro_epp()
         $("#catalogo").val(6);
 
         // abrir modal
-        $('#modal_catalogo_epp').modal({backdrop:false});
+        $('#modal_catalogo_epp').modal({ backdrop: false });
     });
 }
 
-function estado_registro(catalogo, registro, checkbox)
-{
+function estado_registro(catalogo, registro, checkbox) {
     var estado = 0;
     if (checkbox.checked) {
         estado = 1;// activo
     }
-    else{
+    else {
         estado = 0;// Inactivo
     }
 
@@ -1373,14 +1393,14 @@ function estado_registro(catalogo, registro, checkbox)
     $.ajax({
         type: "GET",
         dataType: "json",
-        url: "/recsensorialcatalogodesactiva/"+catalogo+"/"+registro+"/"+estado,
-        data:{},
+        url: "/recsensorialcatalogodesactiva/" + catalogo + "/" + registro + "/" + estado,
+        data: {},
         cache: false,
-        success:function(dato){
+        success: function (dato) {
             // mensaje
             swal({
                 title: "Correcto",
-                text: ""+dato.msj,
+                text: "" + dato.msj,
                 type: "success", // warning, error, success, info
                 buttons: {
                     visible: false, // true , false
@@ -1389,12 +1409,12 @@ function estado_registro(catalogo, registro, checkbox)
                 showConfirmButton: false
             });
         },
-        error: function(dato){
+        error: function (dato) {
             // checkbox estado anterior
-            if (checkbox.checked){
+            if (checkbox.checked) {
                 $(checkbox).prop('checked', false); // volver a Inactivar
             }
-            else{
+            else {
                 $(checkbox).prop('checked', true); // volver activar
             }
 
@@ -1415,12 +1435,10 @@ function estado_registro(catalogo, registro, checkbox)
 }
 
 
-$("#boton_guardar_conclusion").click(function()
-{
+$("#boton_guardar_conclusion").click(function () {
     // valida campos vacios
     var valida = this.form.checkValidity();
-    if (valida)
-    {
+    if (valida) {
         // enviar datos
         $('#form_conclusion').ajaxForm({
             dataType: 'json',
@@ -1428,8 +1446,7 @@ $("#boton_guardar_conclusion").click(function()
             url: '/recsensorialcatalogos',
             data: {},
             resetForm: false,
-            success: function(dato)
-            {
+            success: function (dato) {
                 // actualizar tabla
                 tabla_conclusiones(catalogo);
 
@@ -1451,16 +1468,16 @@ $("#boton_guardar_conclusion").click(function()
                 // cerrar modal
                 $('#modal_conclusion').modal('hide');
             },
-            beforeSend: function(){
+            beforeSend: function () {
                 $('#boton_guardar_conclusion').html('Guardando <i class="fa fa-spin fa-spinner"></i>');
             },
-            error: function(dato) {
+            error: function (dato) {
                 // actualiza boton
                 $('#boton_guardar_conclusion').html('Guardar <i class="fa fa-save"></i>');
                 // mensaje
                 swal({
                     title: "Error",
-                    text: "Error en la acción: "+dato,
+                    text: "Error en la acción: " + dato,
                     type: "error", // warning, error, success, info
                     buttons: {
                         visible: false, // true , false
@@ -1477,12 +1494,10 @@ $("#boton_guardar_conclusion").click(function()
 
 
 
-$("#boton_guardar_descripcionarea").click(function()
-{
+$("#boton_guardar_descripcionarea").click(function () {
     // valida campos vacios
     var valida = this.form.checkValidity();
-    if (valida)
-    {
+    if (valida) {
         // enviar datos
         $('#form_descripcionarea').ajaxForm({
             dataType: 'json',
@@ -1490,8 +1505,7 @@ $("#boton_guardar_descripcionarea").click(function()
             url: '/recsensorialcatalogos',
             data: {},
             resetForm: false,
-            success: function(dato)
-            {
+            success: function (dato) {
                 // actualizar tabla
                 tabla_descripcion(catalogo);
 
@@ -1513,16 +1527,16 @@ $("#boton_guardar_descripcionarea").click(function()
                 // cerrar modal
                 $('#modal_descripcionarea').modal('hide');
             },
-            beforeSend: function(){
+            beforeSend: function () {
                 $('#boton_guardar_descripcionarea').html('Guardando <i class="fa fa-spin fa-spinner"></i>');
             },
-            error: function(dato) {
+            error: function (dato) {
                 // actualiza boton
                 $('#boton_guardar_descripcionarea').html('Guardar <i class="fa fa-save"></i>');
                 // mensaje
                 swal({
                     title: "Error",
-                    text: "Error en la acción: "+dato,
+                    text: "Error en la acción: " + dato,
                     type: "error", // warning, error, success, info
                     buttons: {
                         visible: false, // true , false
@@ -1537,12 +1551,10 @@ $("#boton_guardar_descripcionarea").click(function()
     }
 });
 
-$("#boton_guardar_sistemailuminacion").click(function()
-{
+$("#boton_guardar_sistemailuminacion").click(function () {
     // valida campos vacios
     var valida = this.form.checkValidity();
-    if (valida)
-    {
+    if (valida) {
         // enviar datos
         $('#form_sistema').ajaxForm({
             dataType: 'json',
@@ -1550,8 +1562,7 @@ $("#boton_guardar_sistemailuminacion").click(function()
             url: '/recsensorialcatalogos',
             data: {},
             resetForm: false,
-            success: function(dato)
-            {
+            success: function (dato) {
                 // actualizar tabla
                 tabla_sistema(catalogo);
 
@@ -1573,16 +1584,16 @@ $("#boton_guardar_sistemailuminacion").click(function()
                 // cerrar modal
                 $('#modal_sistema').modal('hide');
             },
-            beforeSend: function(){
+            beforeSend: function () {
                 $('#boton_guardar_sistemailuminacion').html('Guardando <i class="fa fa-spin fa-spinner"></i>');
             },
-            error: function(dato) {
+            error: function (dato) {
                 // actualiza boton
                 $('#boton_guardar_sistemailuminacion').html('Guardar <i class="fa fa-save"></i>');
                 // mensaje
                 swal({
                     title: "Error",
-                    text: "Error en la acción: "+dato,
+                    text: "Error en la acción: " + dato,
                     type: "error", // warning, error, success, info
                     buttons: {
                         visible: false, // true , false
@@ -1598,12 +1609,10 @@ $("#boton_guardar_sistemailuminacion").click(function()
 });
 
 
-$("#boton_guardar_cargo").click(function()
-{
+$("#boton_guardar_cargo").click(function () {
     // valida campos vacios
     var valida = this.form.checkValidity();
-    if (valida)
-    {
+    if (valida) {
         // enviar datos
         $('#form_cargo').ajaxForm({
             dataType: 'json',
@@ -1611,8 +1620,7 @@ $("#boton_guardar_cargo").click(function()
             url: '/recsensorialcatalogos',
             data: {},
             resetForm: false,
-            success: function(dato)
-            {
+            success: function (dato) {
                 // actualizar tabla
                 tabla_cargo(catalogo);
 
@@ -1634,16 +1642,16 @@ $("#boton_guardar_cargo").click(function()
                 // cerrar modal
                 $('#modal_cargo').modal('hide');
             },
-            beforeSend: function(){
+            beforeSend: function () {
                 $('#boton_guardar_cargo').html('Guardando <i class="fa fa-spin fa-spinner"></i>');
             },
-            error: function(dato) {
+            error: function (dato) {
                 // actualiza boton
                 $('#boton_guardar_cargo').html('Guardar <i class="fa fa-save"></i>');
                 // mensaje
                 swal({
                     title: "Error",
-                    text: "Error en la acción: "+dato,
+                    text: "Error en la acción: " + dato,
                     type: "error", // warning, error, success, info
                     buttons: {
                         visible: false, // true , false
@@ -1658,14 +1666,13 @@ $("#boton_guardar_cargo").click(function()
     }
 });
 
-function editar_cargoInforme()
-{
-    $('#tabla_lista_cargos tbody').on('click', 'td.editar', function() {
+function editar_cargoInforme() {
+    $('#tabla_lista_cargos tbody').on('click', 'td.editar', function () {
         // console.log();
         var tr = $(this).closest('tr');
         var row = datatable_cargos.row(tr);
 
-        $('#form_cargo').each(function(){
+        $('#form_cargo').each(function () {
             this.reset();
         });
 
@@ -1675,18 +1682,17 @@ function editar_cargoInforme()
         $("#catalogo").val(14);
 
         // abrir modal
-        $('#modal_cargo').modal({backdrop:false});
+        $('#modal_cargo').modal({ backdrop: false });
     });
 }
 
-function editar_catConclusion()
-{
-    $('#tabla_lista_conclusiones tbody').on('click', 'td.editar', function() {
+function editar_catConclusion() {
+    $('#tabla_lista_conclusiones tbody').on('click', 'td.editar', function () {
         // console.log();
         var tr = $(this).closest('tr');
         var row = datatable_conclusiones.row(tr);
 
-        $('#form_conclusion').each(function(){
+        $('#form_conclusion').each(function () {
             this.reset();
         });
 
@@ -1698,19 +1704,18 @@ function editar_catConclusion()
         $("#catalogo").val(16);
 
         // abrir modal
-        $('#modal_conclusion').modal({backdrop:false});
+        $('#modal_conclusion').modal({ backdrop: false });
     });
 }
 
 
-function editar_catdescripcion()
-{
-    $('#tabla_lista_descripcion tbody').on('click', 'td.editar', function() {
+function editar_catdescripcion() {
+    $('#tabla_lista_descripcion tbody').on('click', 'td.editar', function () {
         // console.log();
         var tr = $(this).closest('tr');
         var row = datatable_descripcion.row(tr);
 
-        $('#form_descripcionarea').each(function(){
+        $('#form_descripcionarea').each(function () {
             this.reset();
         });
 
@@ -1721,18 +1726,17 @@ function editar_catdescripcion()
         $("#catalogo").val(17);
 
         // abrir modal
-        $('#modal_descripcionarea').modal({backdrop:false});
+        $('#modal_descripcionarea').modal({ backdrop: false });
     });
 }
 
-function editar_catsistema()
-{
-    $('#tabla_lista_sistema tbody').on('click', 'td.editar', function() {
+function editar_catsistema() {
+    $('#tabla_lista_sistema tbody').on('click', 'td.editar', function () {
         // console.log();
         var tr = $(this).closest('tr');
         var row = datatable_sistema.row(tr);
 
-        $('#form_sistema').each(function(){
+        $('#form_sistema').each(function () {
             this.reset();
         });
 
@@ -1744,16 +1748,14 @@ function editar_catsistema()
         $("#catalogo").val(18);
 
         // abrir modal
-        $('#modal_sistema').modal({backdrop:false});
+        $('#modal_sistema').modal({ backdrop: false });
     });
 }
 
-$("#boton_guardar_catalogo").click(function()
-{
+$("#boton_guardar_catalogo").click(function () {
     // valida campos vacios
     var valida = this.form.checkValidity();
-    if (valida)
-    {
+    if (valida) {
         // enviar datos
         $('#form_catalogo').ajaxForm({
             dataType: 'json',
@@ -1761,8 +1763,7 @@ $("#boton_guardar_catalogo").click(function()
             url: '/recsensorialcatalogos',
             data: {},
             resetForm: false,
-            success: function(dato)
-            {
+            success: function (dato) {
                 // actualizar tabla
                 tabla_catalogo(catalogo);
 
@@ -1784,16 +1785,16 @@ $("#boton_guardar_catalogo").click(function()
                 // cerrar modal
                 $('#modal_catalogo').modal('hide');
             },
-            beforeSend: function(){
+            beforeSend: function () {
                 $('#boton_guardar_catalogo').html('Guardando <i class="fa fa-spin fa-spinner"></i>');
             },
-            error: function(dato) {
+            error: function (dato) {
                 // actualiza boton
                 $('#boton_guardar_catalogo').html('Guardar <i class="fa fa-save"></i>');
                 // mensaje
                 swal({
                     title: "Error",
-                    text: "Error en la acción: "+dato,
+                    text: "Error en la acción: " + dato,
                     type: "error", // warning, error, success, info
                     buttons: {
                         visible: false, // true , false
@@ -1809,12 +1810,10 @@ $("#boton_guardar_catalogo").click(function()
 });
 
 
-$("#boton_guardar_catalogo_epp").click(function()
-{
+$("#boton_guardar_catalogo_epp").click(function () {
     // valida campos vacios
     var valida = this.form.checkValidity();
-    if (valida)
-    {
+    if (valida) {
         // enviar datos
         $('#form_catalogo_epp').ajaxForm({
             dataType: 'json',
@@ -1822,8 +1821,7 @@ $("#boton_guardar_catalogo_epp").click(function()
             url: '/recsensorialcatalogos',
             data: {},
             resetForm: false,
-            success: function(dato)
-            {
+            success: function (dato) {
                 // actualizar tabla
                 tabla_catalogo_epp(catalogo);
 
@@ -1845,16 +1843,16 @@ $("#boton_guardar_catalogo_epp").click(function()
                 // cerrar modal
                 $('#modal_catalogo_epp').modal('hide');
             },
-            beforeSend: function(){
+            beforeSend: function () {
                 $('#boton_guardar_catalogo_epp').html('Guardando <i class="fa fa-spin fa-spinner"></i>');
             },
-            error: function(dato) {
+            error: function (dato) {
                 // actualiza boton
                 $('#boton_guardar_catalogo_epp').html('Guardar <i class="fa fa-save"></i>');
                 // mensaje
                 swal({
                     title: "Error",
-                    text: "Error en la acción: "+dato,
+                    text: "Error en la acción: " + dato,
                     type: "error", // warning, error, success, info
                     buttons: {
                         visible: false, // true , false
@@ -1869,29 +1867,110 @@ $("#boton_guardar_catalogo_epp").click(function()
     }
 });
 
-//=======================================
+$(document).ready(function() {
+    $("#boton_guardar_catalogo_pa").click(function() {
+        var valida = this.form.checkValidity();
+        if (valida) {
+
+            // Deshabilitar el botón para evitar múltiples envíos
+            $(this).prop("disabled", true);
+            
+            var formData = new FormData($('#form_catalogo_pa')[0]);
+
+            // Preparar combinaciones de frecuencia y atenuación
+            var combinaciones = {};
+            var desviacion = {};
+
+            for (let i = 1; i <= 9; i++) {
+                var frecuenciaId = `#FRECUENCIA_${i}`;
+                var atenuacionId = `#ATENUACION_${i}`;
+                var desviacionId = `#DESVIACION_${i}`;
+                var frecuenciaValue = $(frecuenciaId).val();
+                var atenuacionValue = $(atenuacionId).val();
+                var desviacionValue = $(desviacionId).val();
+                desviacion[frecuenciaValue] = desviacionValue;
+                combinaciones[frecuenciaValue] = atenuacionValue;
+            }
+
+            var tabla_frecuencias = [combinaciones];
+            var tabla_desviacion = [desviacion];
+    
+            formData.append('ATENUACIONES_JSON', JSON.stringify(tabla_frecuencias));
+            formData.append('DESVIACIONES_JSON', JSON.stringify(tabla_desviacion));
+
+            // Enviar los datos mediante AJAX
+            $.ajax({
+                type: 'POST',
+                url: "/recsensorialcatalogos",
+                data: formData,
+                dataType: 'json',
+                processData: false,
+                contentType: false,
+                success: function(data) {
+                    // Actualizar la tabla
+                    tabla_catalogo_pa(catalogo);
+
+                    // Restaurar el botón a su estado original
+                    $('#boton_guardar_catalogo_pa').html('Guardar <i class="fa fa-save"></i>');
+                    $("#boton_guardar_catalogo_pa").prop("disabled", false);
+
+                    // Mostrar mensaje de éxito
+                    swal({
+                        title: "Correcto",
+                        text: "Información guardada correctamente",
+                        type: "success",
+                        buttons: {
+                            visible: false
+                        },
+                        timer: 1500,
+                        showConfirmButton: false
+                    });
+
+                    // Cerrar el modal después de guardar correctamente
+                    $('#modal_catalogo_pa').modal('hide');
+                },
+                beforeSend: function() {
+                    // Cambiar el texto del botón a "Guardando" mientras se envía la solicitud
+                    $('#boton_guardar_catalogo_pa').html('Guardando <i class="fa fa-spin fa-spinner"></i>');
+                },
+                error: function() {
+                    // Restaurar el botón y mostrar mensaje de error
+                    $('#boton_guardar_catalogo_pa').html('Guardar <i class="fa fa-save"></i>');
+                    $("#boton_guardar_catalogo_pa").prop("disabled", false);
+
+                    swal({
+                        title: "Error",
+                        text: "Error al guardar la información",
+                        type: "error",
+                        buttons: {
+                            visible: false
+                        },
+                        timer: 1500,
+                        showConfirmButton: false
+                    });
+                }
+            });
+        }
+    });
+});
 
 
-function tabla_catalogo2campos(num_catalogo)
-{
-    var ruta = "/recsensorialconsultacatalogo/"+num_catalogo;
 
-    try
-    {
-        if (datatable_catalogo2campos != null)
-        {
+function tabla_catalogo2campos(num_catalogo) {
+    var ruta = "/recsensorialconsultacatalogo/" + num_catalogo;
+
+    try {
+        if (datatable_catalogo2campos != null) {
             datatable_catalogo2campos.clear().draw();
             datatable_catalogo2campos.ajax.url(ruta).load();
         }
-        else
-        {
+        else {
             datatable_catalogo2campos = $('#tabla_catalogo2campos').DataTable({
                 "ajax": {
                     "url": ruta,
                     "type": "get",
                     "cache": false,
-                    error: function (xhr, error, code)
-                    {
+                    error: function (xhr, error, code) {
                         // console.log(xhr); console.log(code);
                         tabla_catalogo2campos(num_catalogo);
                     },
@@ -1926,7 +2005,7 @@ function tabla_catalogo2campos(num_catalogo)
                 ],
                 // "rowsGroup": [0], //agrupar filas
                 "lengthMenu": [[20, 50, 100, -1], [20, 50, 100, "Todos"]],
-                "order": [[ 0, "asc" ]],        
+                "order": [[0, "asc"]],
                 "searching": false,
                 "paging": false,
                 "ordering": false,
@@ -1951,22 +2030,19 @@ function tabla_catalogo2campos(num_catalogo)
             });
         }
     }
-    catch (exception)
-    {
+    catch (exception) {
         // alert("error en el ajax");
         tabla_catalogo2campos(num_catalogo);
-    }    
+    }
 }
 
 
-function editar_catalogo2campos()
-{
-    $('#tabla_catalogo2campos tbody').on('click', 'td.editar', function()
-    {
+function editar_catalogo2campos() {
+    $('#tabla_catalogo2campos tbody').on('click', 'td.editar', function () {
         var tr = $(this).closest('tr');
         var row = datatable_catalogo2campos.row(tr);
 
-        $('#form_catalogo2campos').each(function(){
+        $('#form_catalogo2campos').each(function () {
             this.reset();
         });
 
@@ -1977,17 +2053,15 @@ function editar_catalogo2campos()
         $("#catalogo2campos_catalogo").val(catalogo);
 
         // abrir modal
-        $('#modal_catalogo2campos').modal({backdrop:false});
+        $('#modal_catalogo2campos').modal({ backdrop: false });
     });
 }
 
 
-$("#boton_guardar_catalogo2campos").click(function()
-{
+$("#boton_guardar_catalogo2campos").click(function () {
     // valida campos vacios
     var valida = this.form.checkValidity();
-    if (valida)
-    {
+    if (valida) {
         // enviar datos
         $('#form_catalogo2campos').ajaxForm({
             dataType: 'json',
@@ -1995,15 +2069,14 @@ $("#boton_guardar_catalogo2campos").click(function()
             url: '/recsensorialcatalogos',
             data: {},
             resetForm: false,
-            success: function(dato)
-            {
+            success: function (dato) {
                 // actualizar tabla
                 tabla_catalogo2campos(catalogo);
 
                 // mensaje
                 swal({
                     title: "Correcto",
-                    text: ""+dato.msj,
+                    text: "" + dato.msj,
                     type: "success", // warning, error, success, info
                     buttons: {
                         visible: false, // true , false
@@ -2018,18 +2091,16 @@ $("#boton_guardar_catalogo2campos").click(function()
                 // cerrar modal
                 $('#modal_catalogo2campos').modal('hide');
             },
-            beforeSend: function()
-            {
+            beforeSend: function () {
                 $('#boton_guardar_catalogo2campos').html('Guardando <i class="fa fa-spin fa-spinner"></i>');
             },
-            error: function(dato)
-            {
+            error: function (dato) {
                 // actualiza boton
                 $('#boton_guardar_catalogo2campos').html('Guardar <i class="fa fa-save"></i>');
                 // mensaje
                 swal({
                     title: "Error",
-                    text: ""+dato,
+                    text: "" + dato,
                     type: "error", // warning, error, success, info
                     buttons: {
                         visible: false, // true , false
@@ -2048,26 +2119,21 @@ $("#boton_guardar_catalogo2campos").click(function()
 //=======================================
 
 
-function tabla_agentes(num_catalogo)
-{
-    var ruta = "/recsensorialconsultacatalogo/"+num_catalogo;
+function tabla_agentes(num_catalogo) {
+    var ruta = "/recsensorialconsultacatalogo/" + num_catalogo;
 
-    try
-    {
-        if (datatable_agentes != null)
-        {
+    try {
+        if (datatable_agentes != null) {
             datatable_agentes.clear().draw();
             datatable_agentes.ajax.url(ruta).load();
         }
-        else
-        {
+        else {
             datatable_agentes = $('#tabla_lista_agentes').DataTable({
                 "ajax": {
                     "url": ruta,
                     "type": "get",
                     "cache": false,
-                    error: function (xhr, error, code)
-                    {
+                    error: function (xhr, error, code) {
                         // console.log(xhr); console.log(code);
                         tabla_agentes(num_catalogo);
                     },
@@ -2103,7 +2169,7 @@ function tabla_agentes(num_catalogo)
                     }
                 ],
                 "lengthMenu": [[20, 50, 100, -1], [20, 50, 100, "Todos"]],
-                "order": [[ 0, "asc" ]],        
+                "order": [[0, "asc"]],
                 "searching": false,
                 "paging": false,
                 "ordering": false,
@@ -2128,44 +2194,42 @@ function tabla_agentes(num_catalogo)
             });
         }
     }
-    catch (exception)
-    {
+    catch (exception) {
         // alert("error en el ajax");
         tabla_agentes(num_catalogo);
-    }    
+    }
 }
 
 
-$("#boton_nueva_norma").click(function()
-{
-    $("#tabla_lista_normas tbody").append('<tr>'+
-                                                '<td><select class="custom-select form-control" name="tipo[]" required><option value=""></option><option value="Norma">Norma</option><option value="Procedimiento">Procedimiento</option><option value="Metodo"> Método</option></select></td>'+
-                                                '<td><input type="text" class="form-control" name="numero[]" required></td>'+
-                                                '<td><input type="text" class="form-control" name="descripcion[]" required></td>'+
-                                                '<td class="eliminar"><button type="button" class="btn btn-danger btn-circle"><i class="fa fa-trash"></i></button></td>'+
-                                            '</tr>');
+$("#boton_nueva_norma").click(function () {
+    $("#tabla_lista_normas tbody").append('<tr>' +
+        '<td><select class="custom-select form-control" name="tipo[]" required><option value=""></option><option value="Norma">Norma</option><option value="Procedimiento">Procedimiento</option><option value="Metodo"> Método</option></select></td>' +
+        '<td><input type="text" class="form-control" name="numero[]" required></td>' +
+        '<td><input type="text" class="form-control" name="descripcion[]" required></td>' +
+        '<td class="eliminar"><button type="button" class="btn btn-danger btn-circle"><i class="fa fa-trash"></i></button></td>' +
+        '</tr>');
 });
 
 
 // Eliminar fila
-$('#tabla_lista_normas tbody').on('click', '.eliminar', function() {
+$('#tabla_lista_normas tbody').on('click', '.eliminar', function () {
     // alert(tr.index()); //index fila
     var tr = $(this).closest('tr');
     $(this).closest("tr").remove();// eliminar fila TR vacia
 });
 
 
+
 // Selecciona AGENTE
-function editar_agente()
-{
-    $('#tabla_lista_agentes tbody').on('click', 'td.editar', function() {
+function editar_agente() {
+    $('#tabla_lista_agentes tbody').on('click', 'td.editar', function () {
         var tr = $(this).closest('tr');
         var row = datatable_agentes.row(tr);
         var numero = 0;
         var opciones = "";
 
         // Borrar formulario
-        $('#form_agentes').each(function(){
+        $('#form_agentes').each(function () {
             this.reset();
         });
 
@@ -2181,59 +2245,52 @@ function editar_agente()
         $("#tabla_lista_normas tbody").html('');
 
         // Seleccionar checkbox
-        $.each( row.data().pruebanorma, function( key, value ) 
-        {
+        $.each(row.data().pruebanorma, function (key, value) {
             // seleccionar tipo de norma
-            if (value.catpruebanorma_tipo == "Norma")
-            {
+            if (value.catpruebanorma_tipo == "Norma") {
                 opciones = '<option value=""></option><option value="Norma" selected>Norma</option><option value="Procedimiento">Procedimiento</option><option value="Metodo"> Método</option>';
             }
-            else if(value.catpruebanorma_tipo == "Procedimiento")
-            {
+            else if (value.catpruebanorma_tipo == "Procedimiento") {
                 opciones = '<option value=""></option><option value="Norma">Norma</option><option value="Procedimiento" selected>Procedimiento</option><option value="Metodo"> Método</option>';
             }
-            else{
+            else {
                 opciones = '<option value=""></option><option value="Norma">Norma</option><option value="Procedimiento" >Procedimiento</option><option value="Metodo" selected> Método</option>';
             }
 
             // pintar campos
-            if (numero == 0)
-            {
-                $("#tabla_lista_normas tbody").append('<tr>'+
-                                                            '<td><select class="custom-select form-control" name="tipo[]" required>'+opciones+'</select></td>'+
-                                                            '<td><input type="text" class="form-control" name="numero[]" value="'+value.catpruebanorma_numero+'" required></td>'+
-                                                            '<td><input type="text" class="form-control" name="descripcion[]" value="'+value.catpruebanorma_descripcion+'" required></td>'+
-                                                            '<td><button type="button" class="btn btn-secondary btn-circle"><i class="fa fa-ban"></i></button></td>'+
-                                                        '</tr>');
+            if (numero == 0) {
+                $("#tabla_lista_normas tbody").append('<tr>' +
+                    '<td><select class="custom-select form-control" name="tipo[]" required>' + opciones + '</select></td>' +
+                    '<td><input type="text" class="form-control" name="numero[]" value="' + value.catpruebanorma_numero + '" required></td>' +
+                    '<td><input type="text" class="form-control" name="descripcion[]" value="' + value.catpruebanorma_descripcion + '" required></td>' +
+                    '<td><button type="button" class="btn btn-secondary btn-circle"><i class="fa fa-ban"></i></button></td>' +
+                    '</tr>');
             }
-            else
-            {
-                $("#tabla_lista_normas tbody").append('<tr>'+
-                                                            '<td><select class="custom-select form-control" name="tipo[]" required>'+opciones+'</select></td>'+
-                                                            '<td><input type="text" class="form-control" name="numero[]" value="'+value.catpruebanorma_numero+'" required></td>'+
-                                                            '<td><input type="text" class="form-control" name="descripcion[]" value="'+value.catpruebanorma_descripcion+'" required></td>'+
-                                                            '<td class="eliminar"><button type="button" class="btn btn-danger btn-circle"><i class="fa fa-trash"></i></button></td>'+
-                                                        '</tr>');
+            else {
+                $("#tabla_lista_normas tbody").append('<tr>' +
+                    '<td><select class="custom-select form-control" name="tipo[]" required>' + opciones + '</select></td>' +
+                    '<td><input type="text" class="form-control" name="numero[]" value="' + value.catpruebanorma_numero + '" required></td>' +
+                    '<td><input type="text" class="form-control" name="descripcion[]" value="' + value.catpruebanorma_descripcion + '" required></td>' +
+                    '<td class="eliminar"><button type="button" class="btn btn-danger btn-circle"><i class="fa fa-trash"></i></button></td>' +
+                    '</tr>');
             }
 
             numero += 1;
         });
 
         // mostrar modal
-        $('#modal_agentes').modal({backdrop:false});
+        $('#modal_agentes').modal({ backdrop: false });
     });
 }
 
 
-$("#boton_guardar_agente").click(function()
-{
+$("#boton_guardar_agente").click(function () {
     // valida campos vacios
     var valida = this.form.checkValidity();
-    if (valida)
-    {
-        swal({   
+    if (valida) {
+        swal({
             title: "¡Confirme que desea guardar!",
-            text: "Agente: "+$("#catPrueba_Nombre").val(),
+            text: "Agente: " + $("#catPrueba_Nombre").val(),
             type: "warning",
             showCancelButton: true,
             confirmButtonColor: "#DD6B55",
@@ -2241,9 +2298,8 @@ $("#boton_guardar_agente").click(function()
             cancelButtonText: "Cancelar!",
             closeOnConfirm: false,
             closeOnCancel: false
-        }, function(isConfirm){
-            if (isConfirm)
-            {
+        }, function (isConfirm) {
+            if (isConfirm) {
                 // cerrar msj confirmacion
                 swal.close();
 
@@ -2254,15 +2310,14 @@ $("#boton_guardar_agente").click(function()
                     url: '/recsensorialcatalogos',
                     data: {},
                     resetForm: false,
-                    success: function(dato)
-                    {
+                    success: function (dato) {
                         // actualiza tabla
                         tabla_agentes(catalogo);
 
                         // mensaje
                         swal({
                             title: "Correcto",
-                            text: ""+dato.msj,
+                            text: "" + dato.msj,
                             type: "success", // warning, error, success, info
                             buttons: {
                                 visible: false, // true , false
@@ -2277,16 +2332,16 @@ $("#boton_guardar_agente").click(function()
                         // cerrar modal
                         $('#modal_agentes').modal('hide');
                     },
-                    beforeSend: function(){
+                    beforeSend: function () {
                         $('#boton_guardar_agente').html('Guardando <i class="fa fa-spin fa-spinner"></i>');
                     },
-                    error: function(dato) {
+                    error: function (dato) {
                         // actualiza boton
                         $('#boton_guardar_agente').html('Guardar <i class="fa fa-save"></i>');
                         // mensaje
                         swal({
                             title: "Error",
-                            text: ""+dato.msj,
+                            text: "" + dato.msj,
                             type: "error", // warning, error, success, info
                             buttons: {
                                 visible: false, // true , false
@@ -2299,8 +2354,7 @@ $("#boton_guardar_agente").click(function()
                 }).submit();
                 return false;
             }
-            else 
-            {
+            else {
                 // mensaje
                 swal({
                     title: "Cancelado",
@@ -2311,7 +2365,7 @@ $("#boton_guardar_agente").click(function()
                     },
                     timer: 1500,
                     showConfirmButton: false
-                });   
+                });
             }
         });
         return false;
@@ -2319,13 +2373,12 @@ $("#boton_guardar_agente").click(function()
 });
 
 
-function estado_agente(catalogo, registro, checkbox)
-{
+function estado_agente(catalogo, registro, checkbox) {
     var estado = 0;
     if (checkbox.checked) {
         estado = 1;// activo
     }
-    else{
+    else {
         estado = 0;// Inactivo
     }
 
@@ -2333,14 +2386,14 @@ function estado_agente(catalogo, registro, checkbox)
     $.ajax({
         type: "GET",
         dataType: "json",
-        url: "/recsensorialcatalogodesactiva/"+catalogo+"/"+registro+"/"+estado,
-        data:{},
+        url: "/recsensorialcatalogodesactiva/" + catalogo + "/" + registro + "/" + estado,
+        data: {},
         cache: false,
-        success:function(dato){
+        success: function (dato) {
             // mensaje
             swal({
                 title: "Correcto",
-                text: ""+dato.msj,
+                text: "" + dato.msj,
                 type: "success", // warning, error, success, info
                 buttons: {
                     visible: false, // true , false
@@ -2349,12 +2402,12 @@ function estado_agente(catalogo, registro, checkbox)
                 showConfirmButton: false
             });
         },
-        error: function(dato){
+        error: function (dato) {
             // checkbox estado anterior
-            if (checkbox.checked){
+            if (checkbox.checked) {
                 $(checkbox).prop('checked', false); // volver a Inactivar
             }
-            else{
+            else {
                 $(checkbox).prop('checked', true); // volver activar
             }
 
@@ -2373,30 +2426,23 @@ function estado_agente(catalogo, registro, checkbox)
         }
     });//Fin ajax
 }
-
-
 //=======================================
 
-function tabla_catalogo_epp(num_catalogo)
-{
-    var ruta = "/recsensorialconsultacatalogo/"+6;
+function tabla_catalogo_epp(num_catalogo) {
+    var ruta = "/recsensorialconsultacatalogo/" + 6;
 
-    try
-    {
-        if (datatable_epp != null)
-        {
+    try {
+        if (datatable_epp != null) {
             datatable_epp.clear().draw();
             datatable_epp.ajax.url(ruta).load();
         }
-        else
-        {
+        else {
             datatable_epp = $('#tabla_lista_catalogo_epp').DataTable({
                 "ajax": {
                     "url": ruta,
                     "type": "get",
                     "cache": false,
-                    error: function (xhr, error, code)
-                    {
+                    error: function (xhr, error, code) {
                         // console.log(xhr); console.log(code);
                         tabla_catalogo_epp(6);
                     },
@@ -2435,8 +2481,8 @@ function tabla_catalogo_epp(num_catalogo)
                     }
                 ],
                 "lengthMenu": [[20, 50, 100, -1], [20, 50, 100, "Todos"]],
-                "order": [[0, "asc"]],      
-                "rowsGroup": [0], 
+                "order": [[0, "asc"]],
+                "rowsGroup": [0],
                 "searching": false,
                 "paging": false,
                 "ordering": false,
@@ -2461,35 +2507,146 @@ function tabla_catalogo_epp(num_catalogo)
             });
         }
     }
-    catch (exception)
-    {
+    catch (exception) {
         // alert("error en el ajax");
         tabla_catalogo_epp(6);
-    }    
+    }
 }
 
+function tabla_catalogo_pa(num_catalogo) {
+    var ruta = "/recsensorialconsultacatalogo/" + num_catalogo;
 
+    try {
+        if (datatable_pa != null) {
+            datatable_pa.clear().draw();
+            datatable_pa.ajax.url(ruta).load();
+        }
+        else {
+            datatable_pa = $('#tabla_lista_catalogo_pa').DataTable({
+                "ajax": {
+                    "url": ruta,
+                    "type": "get",
+                    "cache": false,
+                    error: function (xhr, error, code) {
+                        // console.log(xhr); console.log(code);
+                        tabla_catalogo_pa(num_catalogo);
+                    },
+                    "data": {}
+                },
+                "columns": [
+                    {
+                        "data": "TIPO",
+                        "defaultContent": '-'
+                    },
+                    {
+                        "data": "MODELO",
+                        "defaultContent": '-'
+                    },
+                    {
+                        "data": "MARCA",
+                        "defaultContent": '-'
+                    },
+                    // {
+                    //     "data": "NRR_PA",
+                    //     "defaultContent": '-'
+                    // },
+                    // {
+                    //     "data": "SNR_PA",
+                    //     "defaultContent": '-'
+                    // },
+                    {
+                        "data": "CUMPLIMIENTO",
+                        "defaultContent": '-'
+                    },
+                    // {
+                    //     "data": "H_PA",
+                    //     "defaultContent": '-'
+                    // },
+                    // {
+                    //     "data": "M_PA",
+                    //     "defaultContent": '-'
+                    // },
+                    // {
+                    //     "data": "L_PA",
+                    //     "defaultContent": '-'
+                    // },
+                    {
+                        "className": 'descargar',
+                        "orderable": false,
+                        "data": 'boton_descargar',
+                        "defaultContent": '-'
+                        // "defaultContent": '<button type="button" class="btn btn-danger btn-circle"><i class="fa fa-lock"></i></button>'
+                    },
+                    {
+                        "className": 'ver',
+                        "orderable": false,
+                        "data": 'boton_ver',
+                        "defaultContent": '-'
+                        // "defaultContent": '<button type="button" class="btn btn-danger btn-circle"><i class="fa fa-lock"></i></button>'
+                    },
+                    {
+                        "className": 'editar',
+                        "orderable": false,
+                        "data": 'boton_editar',
+                        "defaultContent": '-'
+                        // "defaultContent": '<button type="button" class="btn btn-danger btn-circle"><i class="fa fa-pencil"></i></button>'
+                    },
+                    {
+                        // "className": 'Desactivar',
+                        "orderable": false,
+                        "data": 'CheckboxEstado',
+                        "defaultContent": '-'
+                        // "defaultContent": '<button type="button" class="btn btn-danger btn-circle"><i class="fa fa-lock"></i></button>'
+                    }
+                ],
+                "lengthMenu": [[20, 50, 100, -1], [20, 50, 100, "Todos"]],
+                "order": [[0, "asc"]],
+                "rowsGroup": [0],
+                "searching": false,
+                "paging": false,
+                "ordering": false,
+                "processing": true,
+                "language": {
+                    "lengthMenu": "Mostrar _MENU_ Registros",
+                    "zeroRecords": "No se encontraron registros",
+                    "info": "", //Página _PAGE_ de _PAGES_
+                    "infoEmpty": "No se encontraron registros",
+                    "infoFiltered": "(Filtrado de _MAX_ registros)",
+                    "emptyTable": "No hay datos disponibles en la tabla",
+                    "loadingRecords": "Cargando datos....",
+                    "processing": "Procesando <i class='fa fa-spin fa-spinner fa-3x'></i>",
+                    "search": "Buscar",
+                    "paginate": {
+                        "first": "Primera",
+                        "last": "Ultima",
+                        "next": "Siguiente",
+                        "previous": "Anterior"
+                    }
+                }
+            });
+        }
+    }
+    catch (exception) {
+        // alert("error en el ajax");
+        tabla_catalogo_pa(num_catalogo);
+    }
+}
 
-function tabla_contratos(num_catalogo)
-{
-    var ruta = "/recsensorialconsultacatalogo/"+num_catalogo;
+function tabla_contratos(num_catalogo) {
+    var ruta = "/recsensorialconsultacatalogo/" + num_catalogo;
 
-    try
-    {
-        if (datatable_contratos != null)
-        {
+    try {
+        if (datatable_contratos != null) {
             datatable_contratos.clear().draw();
             datatable_contratos.ajax.url(ruta).load();
         }
-        else
-        {
+        else {
             datatable_contratos = $('#tabla_lista_contratos').DataTable({
                 "ajax": {
                     "url": ruta,
                     "type": "get",
                     "cache": false,
-                    error: function (xhr, error, code)
-                    {
+                    error: function (xhr, error, code) {
                         // console.log(xhr); console.log(code);
                         tabla_contratos(num_catalogo);
                     },
@@ -2527,7 +2684,7 @@ function tabla_contratos(num_catalogo)
                     }
                 ],
                 "lengthMenu": [[20, 50, 100, -1], [20, 50, 100, "Todos"]],
-                "order": [[ 0, "asc" ]],        
+                "order": [[0, "asc"]],
                 "searching": false,
                 "paging": false,
                 "ordering": false,
@@ -2552,23 +2709,19 @@ function tabla_contratos(num_catalogo)
             });
         }
     }
-    catch (exception)
-    {
+    catch (exception) {
         // alert("error en el ajax");
         tabla_contratos(num_catalogo);
-    }    
+    }
 }
-
-
 // Selecciona CONTRATO
-function editar_contrato()
-{
-    $('#tabla_lista_contratos tbody').on('click', 'td.editar', function() {
+function editar_contrato() {
+    $('#tabla_lista_contratos tbody').on('click', 'td.editar', function () {
         var tr = $(this).closest('tr');
         var row = datatable_contratos.row(tr);
 
         // Borrar formulario
-        $('#form_contrato').each(function(){
+        $('#form_contrato').each(function () {
             this.reset();
         });
 
@@ -2585,18 +2738,16 @@ function editar_contrato()
         $("#catcontrato_montousd").val(row.data().catcontrato_montousd);
 
         // mostrar modal
-        $('#modal_contrato').modal({backdrop:false});
+        $('#modal_contrato').modal({ backdrop: false });
     });
 }
 
 
-$("#boton_guardar_contrato").click(function()
-{
+$("#boton_guardar_contrato").click(function () {
     // valida campos vacios
     var valida = this.form.checkValidity();
-    if (valida)
-    {
-        swal({   
+    if (valida) {
+        swal({
             title: "¡Confirme que desea guardar contrato!",
             text: "",
             type: "warning",
@@ -2606,12 +2757,11 @@ $("#boton_guardar_contrato").click(function()
             cancelButtonText: "Cancelar!",
             closeOnConfirm: false,
             closeOnCancel: false
-        }, function(isConfirm){
-            if (isConfirm)
-            {
+        }, function (isConfirm) {
+            if (isConfirm) {
                 // cerrar msj confirmacion
                 swal.close();
-                
+
                 // enviar datos
                 $('#form_contrato').ajaxForm({
                     dataType: 'json',
@@ -2619,15 +2769,14 @@ $("#boton_guardar_contrato").click(function()
                     url: '/recsensorialcatalogos',
                     data: {},
                     resetForm: false,
-                    success: function(dato)
-                    {
+                    success: function (dato) {
                         // actualiza tabla
                         tabla_contratos(catalogo);
 
                         // mensaje
                         swal({
                             title: "Correcto",
-                            text: ""+dato.msj,
+                            text: "" + dato.msj,
                             type: "success", // warning, error, success, info
                             buttons: {
                                 visible: false, // true , false
@@ -2642,16 +2791,16 @@ $("#boton_guardar_contrato").click(function()
                         // cerrar modal
                         $('#modal_contrato').modal('hide');
                     },
-                    beforeSend: function(){
+                    beforeSend: function () {
                         $('#boton_guardar_contrato').html('Guardando <i class="fa fa-spin fa-spinner"></i>');
                     },
-                    error: function(dato) {
+                    error: function (dato) {
                         // actualiza boton
                         $('#boton_guardar_contrato').html('Guardar <i class="fa fa-save"></i>');
                         // mensaje
                         swal({
                             title: "Error",
-                            text: ""+dato.msj,
+                            text: "" + dato.msj,
                             type: "error", // warning, error, success, info
                             buttons: {
                                 visible: false, // true , false
@@ -2664,8 +2813,7 @@ $("#boton_guardar_contrato").click(function()
                 }).submit();
                 return false;
             }
-            else 
-            {
+            else {
                 // mensaje
                 swal({
                     title: "Cancelado",
@@ -2676,7 +2824,7 @@ $("#boton_guardar_contrato").click(function()
                     },
                     timer: 1500,
                     showConfirmButton: false
-                });   
+                });
             }
         });
         return false;
@@ -2684,13 +2832,12 @@ $("#boton_guardar_contrato").click(function()
 });
 
 
-function estado_contrato(catalogo, registro, checkbox)
-{
+function estado_contrato(catalogo, registro, checkbox) {
     var estado = 0;
     if (checkbox.checked) {
         estado = 1;// activo
     }
-    else{
+    else {
         estado = 0;// Inactivo
     }
 
@@ -2698,14 +2845,14 @@ function estado_contrato(catalogo, registro, checkbox)
     $.ajax({
         type: "GET",
         dataType: "json",
-        url: "/recsensorialcatalogodesactiva/"+catalogo+"/"+registro+"/"+estado,
-        data:{},
+        url: "/recsensorialcatalogodesactiva/" + catalogo + "/" + registro + "/" + estado,
+        data: {},
         cache: false,
-        success:function(dato){
+        success: function (dato) {
             // mensaje
             swal({
                 title: "Correcto",
-                text: ""+dato.msj,
+                text: "" + dato.msj,
                 type: "success", // warning, error, success, info
                 buttons: {
                     visible: false, // true , false
@@ -2714,12 +2861,12 @@ function estado_contrato(catalogo, registro, checkbox)
                 showConfirmButton: false
             });
         },
-        error: function(dato){
+        error: function (dato) {
             // checkbox estado anterior
-            if (checkbox.checked){
+            if (checkbox.checked) {
                 $(checkbox).prop('checked', false); // volver a Inactivar
             }
-            else{
+            else {
                 $(checkbox).prop('checked', true); // volver activar
             }
 
@@ -2743,26 +2890,21 @@ function estado_contrato(catalogo, registro, checkbox)
 //=======================================
 
 
-function tabla_caracteristica(num_catalogo)
-{
-    var ruta = "/recsensorialconsultacatalogo/"+num_catalogo;
+function tabla_caracteristica(num_catalogo) {
+    var ruta = "/recsensorialconsultacatalogo/" + num_catalogo;
 
-    try
-    {
-        if (datatable_caracteristicas != null)
-        {
+    try {
+        if (datatable_caracteristicas != null) {
             datatable_caracteristicas.clear().draw();
             datatable_caracteristicas.ajax.url(ruta).load();
         }
-        else
-        {
+        else {
             datatable_caracteristicas = $('#tabla_lista_caracteristica').DataTable({
                 "ajax": {
                     "url": ruta,
                     "type": "get",
                     "cache": false,
-                    error: function (xhr, error, code)
-                    {
+                    error: function (xhr, error, code) {
                         // console.log(xhr); console.log(code);
                         tabla_caracteristica(num_catalogo);
                     },
@@ -2797,7 +2939,7 @@ function tabla_caracteristica(num_catalogo)
                 ],
                 "rowsGroup": [0], //agrupar filas
                 "lengthMenu": [[20, 50, 100, -1], [20, 50, 100, "Todos"]],
-                "order": [[ 0, "asc" ]],        
+                "order": [[0, "asc"]],
                 "searching": false,
                 "paging": false,
                 "ordering": false,
@@ -2822,22 +2964,20 @@ function tabla_caracteristica(num_catalogo)
             });
         }
     }
-    catch (exception)
-    {
+    catch (exception) {
         // alert("error en el ajax");
         tabla_caracteristica(num_catalogo);
-    }    
+    }
 }
 
 
-function editar_caracteristica()
-{
-    $('#tabla_lista_caracteristica tbody').on('click', 'td.editar', function() {
+function editar_caracteristica() {
+    $('#tabla_lista_caracteristica tbody').on('click', 'td.editar', function () {
         // console.log();
         var tr = $(this).closest('tr');
         var row = datatable_caracteristicas.row(tr);
 
-        $('#form_caracteristica').each(function(){
+        $('#form_caracteristica').each(function () {
             this.reset();
         });
 
@@ -2849,17 +2989,15 @@ function editar_caracteristica()
         $("#caracteristica_catalogo").val(catalogo);
 
         // abrir modal
-        $('#modal_caracteristica').modal({backdrop:false});
+        $('#modal_caracteristica').modal({ backdrop: false });
     });
 }
 
 
-$("#boton_guardar_caracteristica").click(function()
-{
+$("#boton_guardar_caracteristica").click(function () {
     // valida campos vacios
     var valida = this.form.checkValidity();
-    if (valida)
-    {
+    if (valida) {
         // enviar datos
         $('#form_caracteristica').ajaxForm({
             dataType: 'json',
@@ -2867,8 +3005,7 @@ $("#boton_guardar_caracteristica").click(function()
             url: '/recsensorialcatalogos',
             data: {},
             resetForm: false,
-            success: function(dato)
-            {
+            success: function (dato) {
                 // actualizar tabla
                 tabla_caracteristica(catalogo);
 
@@ -2890,16 +3027,16 @@ $("#boton_guardar_caracteristica").click(function()
                 // cerrar modal
                 $('#modal_caracteristica').modal('hide');
             },
-            beforeSend: function(){
+            beforeSend: function () {
                 $('#boton_guardar_caracteristica').html('Guardando <i class="fa fa-spin fa-spinner"></i>');
             },
-            error: function(dato) {
+            error: function (dato) {
                 // actualiza boton
                 $('#boton_guardar_caracteristica').html('Guardar <i class="fa fa-save"></i>');
                 // mensaje
                 swal({
                     title: "Error",
-                    text: "Error en la acción: "+dato,
+                    text: "Error en la acción: " + dato,
                     type: "error", // warning, error, success, info
                     buttons: {
                         visible: false, // true , false
@@ -2916,12 +3053,10 @@ $("#boton_guardar_caracteristica").click(function()
 
 
 
-$("#boton_guardar_formato").click(function()
-{
+$("#boton_guardar_formato").click(function () {
     // valida campos vacios
     var valida = this.form.checkValidity();
-    if (valida)
-    {
+    if (valida) {
         // enviar datos
         $('#form_formato').ajaxForm({
             dataType: 'json',
@@ -2929,8 +3064,7 @@ $("#boton_guardar_formato").click(function()
             url: '/recsensorialcatalogos',
             data: {},
             resetForm: false,
-            success: function(dato)
-            {
+            success: function (dato) {
                 // actualizar tabla
                 tabla_formatos(catalogo);
 
@@ -2938,8 +3072,8 @@ $("#boton_guardar_formato").click(function()
                 swal({
                     title: "Correcto",
                     text: "Información guardada correctamente",
-                    type: "success", 
-                    buttons: {visible: false},
+                    type: "success",
+                    buttons: { visible: false },
                     timer: 2000,
                     showConfirmButton: false
                 });
@@ -2950,16 +3084,16 @@ $("#boton_guardar_formato").click(function()
                 // cerrar modal
                 $('#modal_formatos').modal('hide');
             },
-            beforeSend: function(){
+            beforeSend: function () {
                 $('#boton_guardar_formato').html('Guardando <i class="fa fa-spin fa-spinner"></i>');
             },
-            error: function(dato) {
+            error: function (dato) {
                 // actualiza boton
                 $('#boton_guardar_formato').html('Guardar <i class="fa fa-save"></i>');
                 // mensaje
                 swal({
                     title: "Error",
-                    text: "Error en la acción: "+dato,
+                    text: "Error en la acción: " + dato,
                     type: "error", // warning, error, success, info
                     buttons: {
                         visible: false, // true , false
@@ -2975,11 +3109,13 @@ $("#boton_guardar_formato").click(function()
 });
 
 
-function verFormatoCampo(){
+
+
+function verFormatoCampo() {
     // mostrar PDF
     $('#tabla_lista_formatos').on('click', 'td.ver', function () {
 
-    
+
         var tr = $(this).closest('tr');
         var row = datatable_formatos.row(tr);
 
@@ -2988,57 +3124,244 @@ function verFormatoCampo(){
         // $('#visor_documento').attr('src', '/assets/images/cargando.gif');
 
         // abrir modal
-        $('#modal_visor').modal({backdrop:false});
+        $('#modal_visor').modal({ backdrop: false });
 
         // TITULO DEL VISOR
         $('#nombre_documento_visor').html(row.data().NOMBRE);
 
-        
+
 
         // Mostrar PDF
         // if (parseInt(row.data().perfil) == 1 && parseInt(proveedor_Bloqueado) == 0)
         // {
-            // $('#visor_documento').attr('src', '/assets/plugins/viewer-pdfjs/web/viewer.html?file=/verFormatoCampo/'+row.data().ID_FORMATO);
+        // $('#visor_documento').attr('src', '/assets/plugins/viewer-pdfjs/web/viewer.html?file=/verFormatoCampo/'+row.data().ID_FORMATO);
         // }
         // else
         // {
-            $('#visor_documento').attr('src', '/assets/plugins/viewer-pdfjs/web/viewer_read.html?file=/verFormatoCampo/0/'+row.data().ID_FORMATO);
+        $('#visor_documento').attr('src', '/assets/plugins/viewer-pdfjs/web/viewer_read.html?file=/verFormatoCampo/0/' + row.data().ID_FORMATO);
         // }
     });
 };
 
-function descargarFormatoCampo(){
+function descargarFormatoCampo() {
     // mostrar PDF
     $('#tabla_lista_formatos').on('click', 'td.descargar', function () {
 
-    
+
         var tr = $(this).closest('tr');
         var row = datatable_formatos.row(tr);
 
-    	window.open('/verFormatoCampo/1/'+row.data().ID_FORMATO);
+        window.open('/verFormatoCampo/1/' + row.data().ID_FORMATO);
 
-        
+
     });
 };
 
-function editarFormatoCampo(){
+function editarFormatoCampo() {
     // mostrar PDF
     $('#tabla_lista_formatos').on('click', 'td.editar', function () {
 
-        $('#form_formato').each(function(){
+        $('#form_formato').each(function () {
             this.reset();
         });
-    
+
         var tr = $(this).closest('tr');
         var row = datatable_formatos.row(tr);
 
         $('#FORMATO_DESCRIPCION').val(row.data().DESCRIPCION)
         $('#FORMATO_NOMBRE').val(row.data().NOMBRE)
-    	$('#ID_FORMATO').val(row.data().ID_FORMATO)
-        
-        $('#FORMATO_PDF').prop('required', false)
-        $('#modal_formatos').modal({backdrop:false});
+        $('#ID_FORMATO').val(row.data().ID_FORMATO)
 
+        $('#FORMATO_PDF').prop('required', false)
+        $('#modal_formatos').modal({ backdrop: false });
+
+
+    });
+};
+
+function verFichaTecnica() {
+    // mostrar PDF
+    $('#tabla_lista_catalogo_pa').on('click', 'td.ver', function () {
+
+
+        var tr = $(this).closest('tr');
+        var row = datatable_pa.row(tr);
+
+        // console.log(row);
+        // vaciar visor
+        // $('#visor_documento').attr('src', '/assets/images/cargando.gif');
+
+        // abrir modal
+        $('#modal_visor').modal({ backdrop: false });
+
+        // TITULO DEL VISOR
+        $('#nombre_documento_visor').html(row.data().TIPO);
+
+
+
+        // Mostrar PDF
+        // if (parseInt(row.data().perfil) == 1 && parseInt(proveedor_Bloqueado) == 0)
+        // {
+        // $('#visor_documento').attr('src', '/assets/plugins/viewer-pdfjs/web/viewer.html?file=/verFormatoCampo/'+row.data().ID_FORMATO);
+        // }
+        // else
+        // {
+        $('#visor_documento').attr('src', '/assets/plugins/viewer-pdfjs/web/viewer_read.html?file=/verFichaTecnica/0/' + row.data().ID_PROTECCION);
+        // }
+    });
+};
+
+function descargarFichaTecnica() {
+    // mostrar PDF
+    $('#tabla_lista_catalogo_pa').on('click', 'td.descargar', function () {
+
+
+        var tr = $(this).closest('tr');
+        var row = datatable_pa.row(tr);
+
+        window.open('/verFichaTecnica/1/' + row.data().ID_PROTECCION);
+
+
+    });
+};
+
+function editar_proteccion() {
+    // mostrar PDF
+    $('#tabla_lista_catalogo_pa').on('click', 'td.editar', function () {
+
+        $('#form_catalogo_pa').each(function () {
+            this.reset();
+        });
+
+
+
+        var tr = $(this).closest('tr');
+        var row = datatable_pa.row(tr);
+
+        //foto
+
+        //data
+        $("#ID_PROTECCION").val(row.data().ID_PROTECCION);
+        $('#TIPO').val(row.data().TIPO)
+        $('#MODELO').val(row.data().MODELO)
+        $('#MARCA').val(row.data().MARCA)
+        $('#CUMPLIMIENTO').val(row.data().CUMPLIMIENTO)
+        $('#NRR').val(row.data().NRR)
+        $('#SNR').val(row.data().SNR)
+        $('#H').val(row.data().H)
+        $('#M').val(row.data().M)
+        $('#L').val(row.data().L)
+
+        var atenuacionesJson = row.data().ATENUACIONES_JSON;
         
+        if (atenuacionesJson) {
+            // Decodifica el JSON en un objeto JavaScript
+            var atenuacionesArray = JSON.parse(atenuacionesJson);
+
+            // Asegúrate de que sea un array y tenga al menos un objeto
+            if (Array.isArray(atenuacionesArray) && atenuacionesArray.length > 0) {
+                var atenuaciones = atenuacionesArray[0]; // Accede al primer objeto
+            // Asigna los valores a los campos correspondientes
+            $('#ATENUACION_1').val(atenuaciones['125'] ?? '');
+            $('#ATENUACION_2').val(atenuaciones['250'] ?? '');
+            $('#ATENUACION_3').val(atenuaciones['500'] ?? '');
+            $('#ATENUACION_4').val(atenuaciones['1000'] ?? '');
+            $('#ATENUACION_5').val(atenuaciones['2000'] ?? '');
+            $('#ATENUACION_6').val(atenuaciones['3150'] ?? '');
+            $('#ATENUACION_7').val(atenuaciones['4000'] ?? '');
+            $('#ATENUACION_8').val(atenuaciones['6300'] ?? '');
+            $('#ATENUACION_9').val(atenuaciones['8000'] ?? '');
+        } else {
+            // Si no hay datos, deja los campos vacíos
+            $('#ATENUACION_1').val('');
+            $('#ATENUACION_2').val('');
+            $('#ATENUACION_3').val('');
+            $('#ATENUACION_4').val('');
+            $('#ATENUACION_5').val('');
+            $('#ATENUACION_6').val('');
+            $('#ATENUACION_7').val('');
+            $('#ATENUACION_8').val('');
+            $('#ATENUACION_9').val('');
+        }
+    }
+
+    var desviacionesJson = row.data().DESVIACIONES_JSON;
+        
+        if (desviacionesJson) {
+            // Decodifica el JSON en un objeto JavaScript
+            var desviacionesArray = JSON.parse(desviacionesJson);
+
+            // Asegúrate de que sea un array y tenga al menos un objeto
+            if (Array.isArray(desviacionesArray) && desviacionesArray.length > 0) {
+                var desviaciones = desviacionesArray[0]; // Accede al primer objeto
+            // Asigna los valores a los campos correspondientes
+            $('#DESVIACION_1').val(desviaciones['125'] ?? '');
+            $('#DESVIACION_2').val(desviaciones['250'] ?? '');
+            $('#DESVIACION_3').val(desviaciones['500'] ?? '');
+            $('#DESVIACION_4').val(desviaciones['1000'] ?? '');
+            $('#DESVIACION_5').val(desviaciones['2000'] ?? '');
+            $('#DESVIACION_6').val(desviaciones['3150'] ?? '');
+            $('#DESVIACION_7').val(desviaciones['4000'] ?? '');
+            $('#DESVIACION_8').val(desviaciones['6300'] ?? '');
+            $('#DESVIACION_9').val(desviaciones['8000'] ?? '');
+        } else {
+            // Si no hay datos, deja los campos vacíos
+            $('#ATENUACION_1').val('');
+            $('#DESVIACION_2').val('');
+            $('#DESVIACION_3').val('');
+            $('#DESVIACION_4').val('');
+            $('#DESVIACION_5').val('');
+            $('#DESVIACION_6').val('');
+            $('#DESVIACION_7').val('');
+            $('#DESVIACION_8').val('');
+            $('#DESVIACION_9').val('');
+        }
+    }
+
+
+        //FOTO PROTECCION
+        $('#foto_proteccion').attr('required', false);
+        if (row.data().RUTA_IMG) {
+
+            var archivo = row.data().RUTA_IMG;
+            var extension = archivo.substring(archivo.lastIndexOf("."));
+            // Obtener FOTO
+            var imagenUrl = '/verProteccionFoto/' + row.data().ID_PROTECCION + extension;
+
+            // Mostrar Foto en el INPUT
+            if ($('#foto_proteccion').data('dropify')) {
+                $('#foto_proteccion').dropify().data('dropify').destroy();
+                // $('.dropify-wrapper').css('height', 400);
+                $('#foto_proteccion').dropify().data('dropify').settings.defaultFile = imagenUrl;
+                $('#foto_proteccion').dropify().data('dropify').init();
+            }
+            else {
+                // $('#signatariofoto').attr('data-height', 400);
+                $('#foto_proteccion').attr('data-default-file', imagenUrl);
+                $('#foto_proteccion').dropify({
+                    messages: {
+                        'default': 'Arrastre la imagen aquí o haga click',
+                        'replace': 'Arrastre la imagen o haga clic para reemplazar',
+                        'remove': 'Quitar',
+                        'error': 'Ooops, ha ocurrido un error.'
+                    },
+                    error: {
+                        'fileSize': 'Demasiado grande ({{ value }} max).',
+                        'minWidth': 'Ancho demasiado pequeño (min {{ value }}}px).',
+                        'maxWidth': 'Ancho demasiado grande (max {{ value }}}px).',
+                        'minHeight': 'Alto demasiado pequeño (min {{ value }}}px).',
+                        'maxHeight': 'Alto demasiado grande (max {{ value }}px max).',
+                        'imageFormat': 'Formato no permitido, sólo ({{ value }}).'
+                    }
+                });
+            }
+        } else {
+            $('#foto_proteccion').dropify().data('dropify').resetPreview();
+            $('#foto_proteccion').dropify().data('dropify').clearElement();
+        }
+        $('#FICHA_PDF').prop('required', false)
+        $('#modal_catalogo_pa').modal({ backdrop: false });
+
+
     });
 };

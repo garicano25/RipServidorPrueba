@@ -48,5 +48,6 @@ class reporteiluminacionModel extends Model
 		, 'reporteiluminacion_canceladonombre'
 		, 'reporteiluminacion_canceladofecha'
 		, 'reporteiluminacion_canceladoobservacion'
+		, 'reporteiluminacion_excel'
 	];
 }

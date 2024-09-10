@@ -2066,6 +2066,19 @@ $('#tabla_reporte_area tbody').on('click', 'td.editar', function()
 	$('#reportevibracionarea_porcientooperacion').val(row.data().reportevibracionarea_porcientooperacion);
 	$('#reportearea_tipoexposicion').val(row.data().reportearea_tipoexposicion);
 
+	//Validamos el check de que si aplica o no aplica
+	if (row.data().aplica_vibracion == 1) {
+		$('#aplica_ruido_si').prop('checked', true);
+		$('#aplica_ruido_no').prop('checked', false);
+
+	} else {
+
+		$('#aplica_ruido_si').prop('checked', false);
+		$('#aplica_ruido_no').prop('checked', true);
+		
+	}
+
+
 
 	$('#reportearea_instalacion').attr('required', false);
 	$('#reportearea_instalacion').attr('disabled', true);
@@ -2113,43 +2126,51 @@ function validarCampos() {
 	//Validar categorias seleccionadas
 	const checkboxes = document.querySelectorAll('#tabla_areacategorias input[type="checkbox"]');
 	const algunoMarcado = Array.from(checkboxes).some(checkbox => checkbox.checked);
+	const aplica = document.getElementById('aplica_vibracion_no');
 
-	if (!algunoMarcado) {
-		swal({
-			title: "Por favor no se olvide de seleccionar al menos una categoria.",
-			text: "Realize esta acción para poder continuar",
-			type: "warning", // warning, error, success, info
-			buttons: {
-				visible: true, // true , false
-			},
-			showConfirmButton: true
-		})
-		return false; 
+	if (aplica.checked) {
+		
+			return true;
+	
+	} else { 
+
+		if (!algunoMarcado) {
+			swal({
+				title: "Por favor no se olvide de seleccionar al menos una categoria.",
+				text: "Realize esta acción para poder continuar",
+				type: "warning", // warning, error, success, info
+				buttons: {
+					visible: true, // true , false
+				},
+				showConfirmButton: true
+			})
+			return false;
+		}
+	
+	
+		const textInputs = document.querySelectorAll('#tabla_areamaquinaria input[name="reportevibracionmaquinaria_nombre[]"]');
+		const algunoLleno = Array.from(textInputs).some(input => input.value.trim() !== "");
+	
+		if (!algunoLleno) {
+			swal({
+				title: "Por favor no se olvide de agregar al menos una fuentes generadoras.",
+				text: "Realize estas acciones para poder continuar",
+				type: "warning", // warning, error, success, info
+				buttons: {
+					visible: true, // true , false
+				},
+				showConfirmButton: true
+			})
+			return false;
+		}
+		
+		return true;
+	
 	}
-
-
-	const textInputs = document.querySelectorAll('#tabla_areamaquinaria input[name="reportevibracionmaquinaria_nombre[]"]');
-	const algunoLleno = Array.from(textInputs).some(input => input.value.trim() !== "");
-
-	if (!algunoLleno) {
-		swal({
-			title: "Por favor no se olvide de agregar al menos una fuentes generadoras.",
-			text: "Realize estas acciones para poder continuar",
-			type: "warning", // warning, error, success, info
-			buttons: {
-				visible: true, // true , false
-			},
-			showConfirmButton: true
-		})
-		return false; 
-	}
-
-	return true;
 }
 
 $("#botonguardar_modal_area").click(function (e){
-	// borrar campo filtro del DATATABLE'S
-	// datatable_areacategoria.search($(this).val()).draw();
+	
 	datatable_areacategoria.search("").draw();
 
 	e.preventDefault()	

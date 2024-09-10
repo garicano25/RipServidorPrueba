@@ -445,6 +445,9 @@ Route::get('recsensorialcatalogodesactiva/{catalogo}/{registro}/{estado}', ['as'
 
 Route::get('verFormatoCampo/{opcion}/{id}', ['as' => 'verFormatoCampo', 'uses' => 'recsensorial\recsensorialcatalogosController@verFormatoCampo']);
 
+Route::get('verFichaTecnica/{opcion}/{id}', ['as' => 'verFichaTecnica', 'uses' => 'recsensorial\recsensorialcatalogosController@verFichaTecnica']);
+
+Route::get('verProteccionFoto/{id}', ['as' => 'verProteccionFoto', 'uses' => 'recsensorial\recsensorialcatalogosController@verProteccionFoto']);
 
 
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -1053,6 +1056,8 @@ Route::get('reporteiluminaciontablapuntos/{proyecto_id}/{reporteiluminacion_id}/
 
 Route::get('reporteiluminaciontablapuntoseliminar/{punto_id}', ['as' => 'reporteiluminacion.reporteiluminaciontablapuntoseliminar', 'uses' => 'reportes\reporteiluminacionController@reporteiluminaciontablapuntoseliminar']);
 
+Route::get('reporteiluminaciontablaregistroseliminar/{proyecto_id}', ['as' => 'reporteiluminacion.reporteiluminaciontablaregistroseliminar', 'uses' => 'reportes\reporteiluminacionController@reporteiluminaciontablaregistroseliminar']);
+
 Route::get('reporteiluminaciontablaresultados/{proyecto_id}/{reporteiluminacion_id}/{areas_poe}', ['as' => 'reporteiluminacion.reporteiluminaciontablaresultados', 'uses' => 'reportes\reporteiluminacionController@reporteiluminaciontablaresultados']);
 
 Route::get('reporteiluminaciontablamatrizexposicion/{proyecto_id}/{reporteiluminacion_id}/{areas_poe}', ['as' => 'reporteiluminacion.reporteiluminaciontablamatrizexposicion', 'uses' => 'reportes\reporteiluminacionController@reporteiluminaciontablamatrizexposicion']);
@@ -1094,9 +1099,13 @@ Route::resource('reporteruido', 'reportes\reporteruidoController');
 
 Route::get('reporteruidovista/{proyecto_id}', ['as' => 'reporteruido.reporteruidovista', 'uses' => 'reportes\reporteruidoController@reporteruidovista']);
 
+Route::get('generarPCA/{proyecto_id}', ['as' => 'reporteruido.generarPCA', 'uses' => 'reportes\reporteruidoController@generarPCA']);
+
 Route::get('reporteruidodatosgenerales/{proyecto_id}/{agente_id}/{agente_nombre}', ['as' => 'reporteruido.reporteruidodatosgenerales', 'uses' => 'reportes\reporteruidoController@reporteruidodatosgenerales']);
 
 Route::get('guardarCampolmpe/{proyecto_id}/{id}/{valor}', ['as' => 'reporteruido.guardarCampolmpe', 'uses' => 'reportes\reporteruidoController@guardarCampolmpe']);
+
+Route::get('consultarListaEquiposProteccion/{proyecto_id}/{valor}', ['as' => 'reporteruido.consultarListaEquiposProteccion', 'uses' => 'reportes\reporteruidoController@consultarListaEquiposProteccion']);
 
 
 Route::get('reporteruidotabladefiniciones/{proyecto_id}/{agente_nombre}/{reporteregistro_id}', ['as' => 'reporteruido.reporteruidotabladefiniciones', 'uses' => 'reportes\reporteruidoController@reporteruidotabladefiniciones']);
