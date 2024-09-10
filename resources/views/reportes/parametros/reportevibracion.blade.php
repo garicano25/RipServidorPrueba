@@ -2238,4 +2238,4 @@
 	var recsensorial = <?php echo json_encode($recsensorial); ?>;
 </script>
 <script src="/js_sitio/html2canvas.js"></script>
-<script src="/js_sitio/reportes/reportevibracion.js?v=3.0"></script>
+<script src="/js_sitio/reportes/reportevibracion.js?v=5.0"></script>
