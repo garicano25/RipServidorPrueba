@@ -1064,9 +1064,9 @@ class reporteiluminacionController extends Controller
             $punto = reporteiluminacionpuntosModel::where('proyecto_id', $proyecto_id)->delete();
 
             $excelExists = 0;
-                        //RETORNAMOS UN MENSAJE DE CUANTOS INSERTO 
-                        $dato["msj"] = 'Registros eliminados correctamente';
-                        return response()->json($dato);   
+                        
+            $dato["msj"] = 'Puntos eliminados correctamente';
+            return response()->json($dato);   
            
         } catch (Exception $e) {
             $dato["msj"] = 'Error ' . $e->getMessage();
@@ -1244,6 +1244,7 @@ class reporteiluminacionController extends Controller
                 $areas = DB::select('SELECT
                                         reportearea.proyecto_id,
                                         reportearea.id,
+                                        reportearea.aplica_iluminacion,
                                         reportearea.reportearea_instalacion,
                                         reportearea.reportearea_nombre,
                                         reportearea.reportearea_orden,
@@ -1252,28 +1253,25 @@ class reporteiluminacionController extends Controller
                                         IF( IFNULL( reportearea.reporteiluminacionarea_porcientooperacion, "" ) != "", CONCAT( reportearea.reporteiluminacionarea_porcientooperacion, " %" ), NULL ) AS reportearea_porcientooperacion_texto,
                                         reportearea.reportearea_puntos_ic,
                                         reportearea.reportearea_puntos_pt,
-                                        reportearea.reportearea_sistemailuminacion,
+                                        IFNULL(reportearea.reportearea_sistemailuminacion, "NA") AS reportearea_sistemailuminacion,
                                         reportearea.reportearea_luznatural,
                                         reportearea.reportearea_iluminacionlocalizada,
-                                        reportearea.reportearea_colorsuperficie,
-                                        reportearea.reportearea_tiposuperficie,
+                                        IFNULL(reportearea.reportearea_colorsuperficie, "NA") AS reportearea_colorsuperficie,
+                                        IFNULL(reportearea.reportearea_tiposuperficie, "NA") AS reportearea_tiposuperficie,
 
                                         reportearea.reportearea_criterio,
                                         reportearea.reportearea_colortecho,
                                         reportearea.reportearea_paredes,
-                                        reportearea.reportearea_colorpiso,
+                                        IFNULL(reportearea.reportearea_colorpiso, "NA") AS reportearea_colorpiso,
                                         reportearea.reportearea_superficietecho,
                                         reportearea.reportearea_superficieparedes,
-                                        reportearea.reportearea_superficiepiso,
+                                        IFNULL(reportearea.reportearea_superficiepiso, "NA") AS reportearea_superficiepiso
                                         reportearea.reportearea_potenciaslamparas,
                                         reportearea.reportearea_numlamparas,
                                         reportearea.reportearea_alturalamparas,
                                         reportearea.reportearea_programamantenimiento,
-                                        reportearea.reportearea_tipoiluminacion,
+                                        IFNULL(reportearea.reportearea_tipoiluminacion, "NA") AS reportearea_tipoiluminacion,
                                         reportearea.reportearea_descripcion,
-
-
-
 
                                         IF(reportearea.reportearea_largo > 0, reportearea.reportearea_largo, 1) AS reportearea_largo,
                                         IF(reportearea.reportearea_ancho > 0, reportearea.reportearea_ancho, 1) AS reportearea_ancho,
@@ -1385,7 +1383,7 @@ class reporteiluminacionController extends Controller
                     $value->boton_eliminar = '<button type="button" class="btn btn-default waves-effect btn-circle" data-toggle="tooltip" title="No disponible"><i class="fa fa-ban fa-1x"></i></button>';
 
 
-                    if ($value->reportearea_puntos_ic === NULL) {
+                    if ($value->aplica_iluminacion === NULL) {
                         $total_singuardar += 1;
                     }
 
@@ -6492,7 +6490,7 @@ class reporteiluminacionController extends Controller
                         $recurso->update([
                             'NORMA_ID' => 0,
                             'NIVEL1' => is_null($request->NIVEL1) ? null : $request->NIVEL1,
-                            'NIVEL2' => is_null($request->NIVEL2) ? null : $request->NIVEL2,
+                            'NIVEL2' => is_null($request->NIVEL2) ? null : $request->NIVEL2, 
                             'NIVEL3' => is_null($request->NIVEL3) ? null : $request->NIVEL3,
                             'NIVEL4' => is_null($request->NIVEL4) ? null : $request->NIVEL4,
                             'NIVEL5' => is_null($request->NIVEL5) ? null : $request->NIVEL5,
