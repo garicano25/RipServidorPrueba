@@ -776,6 +776,57 @@ class reporteruidoController extends Controller
         }
     }
 
+     /**
+     * Display a listing of the resource.
+     *
+     * @param  int  $proyecto_id
+     * @return \Illuminate\Http\Response
+     */
+
+    public function menuProteccionAuditiva($proyecto_id)
+    {
+        try {
+            $sql = DB::select('SELECT
+                                    ID_PROTECCION,
+                                    TIPO,
+                                    MODELO,
+                                    MARCA,
+                                    NRR,
+                                    SNR,
+                                    CUMPLIMIENTO,
+                                    H,
+                                    M,
+                                    L,
+                                    ATENUACIONES_JSON,
+                                    DESVIACIONES_JSON,
+                                    RUTA_PDF,
+                                    RUTA_IMG
+                                FROM
+                                    catProteccion_auditiva', [$proyecto_id]);
+
+            $opciones_menu = '<option value="">Seleccione</option>';
+            // $opciones_menu .= '<option value="0">POE PROYECTO</option>';  -> EL POE ESTARA APARTE EN EL SELECT SOLO ESTARAN LOS REPORTES DE LOS AGENTES
+
+            //DESCOMENTAR DESPUES DE SUBIR AL SERVIDOR
+            foreach ($sql as $key => $value){
+                $opciones_menu .= '<option value="'.$value->ID_PROTECCION.'">TIPO [' .
+                $value->TIPO . '], MODELO ' .
+                $value->MODELO . ', MARCA ' .
+                $value->MARCA . '</option>';
+            }
+
+            $dato['opciones_menu'] = $opciones_menu;
+            $dato["msj"] = 'Datos consultados correctamente';
+            return response()->json($dato);
+        } catch (Exception $e) {
+            $dato["msj"] = 'Error ' . $e->getMessage();
+            $dato['opciones_menu'] = '<option value="">Error al consultar los parametros</option>';
+            return response()->json($dato);
+        }
+    }
+
+    
+
 
     /**
      * Display the specified resource.
@@ -2177,6 +2228,48 @@ class reporteruidoController extends Controller
             $dato["msj"] = 'Error ' . $e->getMessage();
             return response()->json($dato);
         }
+    }
+
+/**
+     * Display the specified resource.
+     *
+     * @param  int $equipoauditivo_id
+     * @return \Illuminate\Http\Response
+     */
+    public function reporteruidoequipoauditivocampos($ID_PROTECCION)
+    {
+        try {
+            $equipo = DB::select('SELECT
+                                        ID_PROTECCION,
+                                        TIPO,
+                                        MODELO,
+                                        MARCA,
+                                        NRR,
+                                        ATENUACIONES_JSON
+                                    FROM
+                                        catProteccion_auditiva
+                                    WHERE
+                                        ID_PROTECCION=' . $ID_PROTECCION . '');
+            
+           
+                foreach ($equipo as $key => $value){
+                    $dato['TIPO'] = $value->TIPO;
+                    $dato['MARCA'] = $value->MARCA;
+                    $dato['MODELO'] = $value->MODELO;
+                    $dato['NRR'] = $value->NRR;
+                    $dato['ATENUACIONES_JSON'] = $value->ATENUACIONES_JSON;
+                }
+    
+                $dato["msj"] = 'Datos consultados correctamente';
+                return response()->json($dato);
+            } catch (Exception $e) {
+                $dato["msj"] = 'Error ' . $e->getMessage();
+                $dato['TIPO'] = '<option value="">Error al consultar los parametros</option>';
+                $dato['MARCA'] = '<option value="">Error al consultar los parametros</option>';
+                $dato['MODELO'] = '<option value="">Error al consultar los parametros</option>';
+                $dato['NRR'] = '<option value="">Error al consultar los parametros</option>';
+                return response()->json($dato);
+            }
     }
 
 
