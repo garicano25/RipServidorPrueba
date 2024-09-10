@@ -7040,7 +7040,7 @@ class reporteruidoController extends Controller
                     $equipoauditivo = reporteruidoequipoauditivoModel::create($request->all());
 
                     if ($request->reporteruidoequipoauditivoatenuacion_bandaNRR) {
-                        DB::statement('ALTER TABLE reporteruidoequipoauditivoatenuacion AUTO_INCREMENT = 1;');
+                        // DB::statement('ALTER TABLE reporteruidoequipoauditivoatenuacion AUTO_INCREMENT = 1;');
 
                         foreach ($request->reporteruidoequipoauditivoatenuacion_bandaNRR as $key => $value) {
                             $atenuacion = reporteruidoequipoauditivoatenuacionModel::create([
@@ -7052,7 +7052,7 @@ class reporteruidoController extends Controller
                     }
 
                     if ($request->equipoauditivo_categoria) {
-                        DB::statement('ALTER TABLE reporteruidoequipoauditivocategorias AUTO_INCREMENT = 1;');
+                        // DB::statement('ALTER TABLE reporteruidoequipoauditivocategorias AUTO_INCREMENT = 1;');
 
                         foreach ($request->equipoauditivo_categoria as $key => $value) {
                             $categoria = reporteruidoequipoauditivocategoriasModel::create([

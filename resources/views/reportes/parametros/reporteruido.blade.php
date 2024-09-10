@@ -1909,13 +1909,13 @@
 						<div class="col-4">
 							<div class="form-group">
 								<label>Lecturas del nivel instantáneo NS<sub>A</sub> en dB<sub>A</sub> (Mínimo)</label>
-								<input type="number" class="form-control" id="reporteruidoarea_LNI_1" name="reporteruidoarea_LNI_1" required>
+								<input type="text" class="form-control" id="reporteruidoarea_LNI_1" name="reporteruidoarea_LNI_1" required>
 							</div>
 						</div>
 						<div class="col-4">
 							<div class="form-group">
 								<label>Lecturas del nivel instantáneo NS<sub>A</sub> en dB<sub>A</sub> (Máximo)</label>
-								<input type="numer" class="form-control" id="reporteruidoarea_LNI_2" name="reporteruidoarea_LNI_2" required>
+								<input type="text" class="form-control" id="reporteruidoarea_LNI_2" name="reporteruidoarea_LNI_2" required>
 							</div>
 						</div>
 					</div>
