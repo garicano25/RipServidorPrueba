@@ -1878,6 +1878,7 @@
 								<!-- <input type="text" class="form-control" id="reporteruidoarea_tiporuido" name="reporteruidoarea_tiporuido" required> -->
 								<select class="custom-select form-control" id="reporteruidoarea_tiporuido" name="reporteruidoarea_tiporuido" required>
 									<option value=""></option>
+									<option value="NA">No aplica</option>
 									<option value="Inestable">Inestable</option>
 									<option value="Impulsivo">Impulsivo</option>
 									<option value="Estable">Estable</option>
@@ -1897,6 +1898,7 @@
 								<!-- <input type="text" class="form-control" id="reporteruidoarea_evaluacion" name="reporteruidoarea_evaluacion" required>-->
 								<select class="custom-select form-control" id="reporteruidoarea_evaluacion" name="reporteruidoarea_evaluacion" required>
 									<option value=""></option>
+									<option value="NA">No aplica</option>
 									<option value="GPS">GPS</option>
 									<option value="PAE">PAE</option>
 									<option value="PFT">PFT</option>
@@ -1906,13 +1908,13 @@
 						<div class="col-4">
 							<div class="form-group">
 								<label>Lecturas del nivel instantáneo NS<sub>A</sub> en dB<sub>A</sub> (Mínimo)</label>
-								<input type="text" class="form-control" id="reporteruidoarea_LNI_1" name="reporteruidoarea_LNI_1" required>
+								<input type="number" class="form-control" id="reporteruidoarea_LNI_1" name="reporteruidoarea_LNI_1" required>
 							</div>
 						</div>
 						<div class="col-4">
 							<div class="form-group">
 								<label>Lecturas del nivel instantáneo NS<sub>A</sub> en dB<sub>A</sub> (Máximo)</label>
-								<input type="text" class="form-control" id="reporteruidoarea_LNI_2" name="reporteruidoarea_LNI_2" required>
+								<input type="numer" class="form-control" id="reporteruidoarea_LNI_2" name="reporteruidoarea_LNI_2" required>
 							</div>
 						</div>
 					</div>
@@ -1951,6 +1953,26 @@
 							</table>
 						</div>
 					</div> --}}
+
+
+					<div class="col-12 p-2 text-center">
+						<label class="text-danger mr-4 d-block" style="font-size: 18px;" data-toggle="tooltip" title="" data-original-title="Marque la casilla de NO si el área no fue evaluada en el reconocimiento">¿ Área evaluada en el reconocimiento ?</label>
+						<div class="d-flex justify-content-center">
+							<div class="form-check mx-4">
+								<input class="form-check-input" type="radio" name="aplica_ruido" id="aplica_ruido_si" value="1" required="required" checked>
+								<label class="form-check-label" for="aplica_ruido_si">
+									Si
+								</label>
+							</div>
+							<div class="form-check mx-4">
+								<input class="form-check-input" type="radio" name="aplica_ruido" id="aplica_ruido_no" value="0" required="required">
+								<label class="form-check-label" for="aplica_ruido_no">
+									No
+								</label>
+							</div>
+						</div>
+					</div>
+
 					<div class="row">
 						<div class="col-6">
 							<ol class="breadcrumb text-light" style="padding: 6px; margin: 0px 0px 10px 0px; text-align: center;">Categorías en el área</ol>

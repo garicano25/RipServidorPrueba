@@ -809,6 +809,7 @@ class reportevibracionController extends Controller
             $areas = DB::select('SELECT
                                      reportearea.proyecto_id,
                                      reportearea.id,
+                                     reportearea.aplica_vibracion,
                                      reportearea.reportearea_instalacion,
                                      reportearea.reportearea_nombre,
                                      reportearea.reportearea_orden,
@@ -884,7 +885,7 @@ class reportevibracionController extends Controller
                 // $value->boton_eliminar = '<button type="button" class="btn btn-default waves-effect btn-circle" data-toggle="tooltip" title="No disponible"><i class="fa fa-ban fa-2x"></i></button>';
 
 
-                if ($value->reportearea_tipoexposicion === NULL) {
+                if ($value->aplica_vibracion === NULL) {
                     $total_singuardar += 1;
                 }
 

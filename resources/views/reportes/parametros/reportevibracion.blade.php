@@ -1559,10 +1559,30 @@
 								<label>Tipo de exposición</label>
 								<select class="custom-select form-control" id="reportearea_tipoexposicion" name="reportearea_tipoexposicion" required>
 									<option value=""></option>
+									<option value="NA">No aplica</option>
 									<option value="Cuerpo entero">Cuerpo entero</option>
 									<option value="Extremidades superiores">Extremidades superiores</option>
 									<option value="Cuerpo entero y extremidades superiores">Cuerpo entero y extremidades superiores</option>
 								</select>
+							</div>
+						</div>
+					</div>
+
+
+					<div class="col-12 p-2 text-center">
+						<label class="text-danger mr-4 d-block" style="font-size: 18px;" data-toggle="tooltip" title="" data-original-title="Marque la casilla de NO si el área no fue evaluada en el reconocimiento">¿ Área evaluada en el reconocimiento ?</label>
+						<div class="d-flex justify-content-center">
+							<div class="form-check mx-4">
+								<input class="form-check-input" type="radio" name="aplica_vibracion" id="aplica_vibracion_si" value="1" required="required" checked>
+								<label class="form-check-label" for="aplica_vibracion_si">
+									Si
+								</label>
+							</div>
+							<div class="form-check mx-4">
+								<input class="form-check-input" type="radio" name="aplica_vibracion" id="aplica_vibracion_no" value="0" required="required">
+								<label class="form-check-label" for="aplica_vibracion_no">
+									No
+								</label>
 							</div>
 						</div>
 					</div>

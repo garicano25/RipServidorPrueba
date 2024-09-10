@@ -32,6 +32,7 @@ class reporteareaModel extends Model
 		, 'reportearea_programamantenimiento'  //Iluminación
 		, 'reportearea_tipoiluminacion'  //Iluminación
 		, 'reportearea_descripcion'  //Iluminación
+		, 'aplica_iluminacion'  //Iluminación
 
 
 		, 'reporteruidoarea_porcientooperacion' //Ruido
@@ -48,26 +49,33 @@ class reporteareaModel extends Model
 		, 'reportearea_LNI_8' //Ruido
 		, 'reportearea_LNI_9' //Ruido
 		, 'reportearea_LNI_10' //Ruido
+		, 'aplica_ruido' //Ruido
 
 		, 'reportequimicosarea_porcientooperacion' //Quimicos
 		, 'reportearea_caracteristica' //Quimicos
 		, 'reportearea_maquinaria' //Quimicos
 		, 'reportearea_contaminante' //Quimicos
+		, 'aplica_quimicos' //Quimicos
 
 		, 'reporteairearea_porcientooperacion' //Aire
 		, 'reportearea_ventilacionsistema' //Aire
 		, 'reportearea_ventilacioncaracteristica' //Aire
 		, 'reportearea_ventilacioncantidad' //Aire
+		, 'aplica_aire' //Aire
 
 		, 'reporteaguaarea_porcientooperacion' //Agua
+		, 'aplica_agua' //Agua
 
 		, 'reportehieloarea_porcientooperacion' //Hielo
+		, 'aplica_hielo' //Hielo
 
 		, 'reportetemperaturaarea_porcientooperacion' //Temperatura
 		, 'reportearea_caracteristicaarea' //Temperatura
 		, 'reportearea_tipoventilacion' //Temperatura
+		, 'aplica_temperatura' //Temperatura
 
 		, 'reportevibracionarea_porcientooperacion' //Vibracion
 		, 'reportearea_tipoexposicion' //Vibracion
+		, 'aplica_vibracion' //Vibracion
 	];
 }

@@ -1113,6 +1113,7 @@ class reporteruidoController extends Controller
                 $areas = DB::select('SELECT
                                         reportearea.proyecto_id,
                                         reportearea.id,
+                                        reportearea.aplica_ruido,
                                         reportearea.reportearea_instalacion AS reporteruidoarea_instalacion,
                                         reportearea.reportearea_nombre AS reporteruidoarea_nombre,
                                         reportearea.reportearea_orden AS reporteruidoarea_numorden,
@@ -1122,6 +1123,8 @@ class reporteruidoController extends Controller
                                         reportearea.reportearea_proceso AS reporteruidoarea_proceso,
                                         reportearea.reportearea_tiporuido AS reporteruidoarea_tiporuido,
                                         reportearea.reportearea_evaluacion AS reporteruidoarea_evaluacion,
+                                        IF(reportearea.reportearea_LNI_1 = 0, "NA" ,reportearea.reportearea_LNI_1) AS reporteruidoarea_LNI_1_TEXTO,
+                                        IF(reportearea.reportearea_LNI_2 = 0, "NA",reportearea.reportearea_LNI_2 ) AS reporteruidoarea_LNI_2_TEXTO,
                                         reportearea.reportearea_LNI_1 AS reporteruidoarea_LNI_1,
                                         reportearea.reportearea_LNI_2 AS reporteruidoarea_LNI_2,
                                         reportearea.reportearea_LNI_3 AS reporteruidoarea_LNI_3,
@@ -1231,8 +1234,8 @@ class reporteruidoController extends Controller
                             $tabla_5_8_UNO .= '<tr>
                                                     <td>' . $value->reporteruidoarea_instalacion . '</td>
                                                     <td>' . $value->reporteruidoarea_nombre . '</td>
-                                                    <td>' . $value->reporteruidoarea_LNI_1 . '</td>
-                                                    <td>' . $value->reporteruidoarea_LNI_2 . '</td>
+                                                    <td>' . $value->reporteruidoarea_LNI_1_TEXTO . '</td>
+                                                    <td>' . $value->reporteruidoarea_LNI_2_TEXTO . '</td>
                                                     <td>' . $value->reporteruidoarea_tiporuido . '</td>
                                                     <td>' . $value->reporteruidoarea_evaluacion . '</td>
                                                 </tr>';
@@ -1294,7 +1297,7 @@ class reporteruidoController extends Controller
                     $value->boton_eliminar = '<button type="button" class="btn btn-default waves-effect btn-circle" data-toggle="tooltip" title="No disponible"><i class="fa fa-ban fa-1x"></i></button>';
 
 
-                    if ($value->reporteruidoarea_tiporuido === NULL) {
+                    if ($value->aplica_ruido === NULL) {
                         $total_singuardar += 1;
                     }
 
@@ -1400,8 +1403,10 @@ class reporteruidoController extends Controller
                                         reporteruidoarea.reporteruidoarea_porcientooperacion,
                                         reporteruidoarea.reporteruidoarea_tiporuido,
                                         reporteruidoarea.reporteruidoarea_evaluacion,
-                                        reporteruidoarea.reporteruidoarea_LNI_1,
-                                        reporteruidoarea.reporteruidoarea_LNI_2,
+                                        IF(reportearea.reportearea_LNI_1 = 0, "NA" ,reportearea.reportearea_LNI_1) AS reporteruidoarea_LNI_1_TEXTO,
+                                        IF(reportearea.reportearea_LNI_2 = 0, "NA",reportearea.reportearea_LNI_2 ) AS reporteruidoarea_LNI_2_TEXTO,
+                                        reportearea.reportearea_LNI_1 AS reporteruidoarea_LNI_1,
+                                        reportearea.reportearea_LNI_2 AS reporteruidoarea_LNI_2,
                                         reporteruidoarea.reporteruidoarea_LNI_3,
                                         reporteruidoarea.reporteruidoarea_LNI_4,
                                         reporteruidoarea.reporteruidoarea_LNI_5,
@@ -1493,8 +1498,8 @@ class reporteruidoController extends Controller
                             $tabla_5_8_UNO .= '<tr>
                                                     <td>' . $value->reporteruidoarea_instalacion . '</td>
                                                     <td>' . $value->reporteruidoarea_nombre . '</td>
-                                                    <td>' . $value->reporteruidoarea_LNI_1 . '</td>
-                                                    <td>' . $value->reporteruidoarea_LNI_2 . '</td>
+                                                    <td>' . $value->reporteruidoarea_LNI_1_TEXTO . '</td>
+                                                    <td>' . $value->reporteruidoarea_LNI_2_TEXTO . '</td>
                                                     <td>' . $value->reporteruidoarea_tiporuido . '</td>
                                                     <td>' . $value->reporteruidoarea_evaluacion . '</td>
                                                 </tr>';
@@ -1793,7 +1798,7 @@ class reporteruidoController extends Controller
                         $areamaquinaria_lista .= '<tr>
                                                         <td><input type="text" class="form-control" name="reporteruidoareamaquinaria_nombre[]" value="' . $value->reporteruidoareamaquinaria_nombre . '" required></td>
                                                         <td><input type="number" min="1" class="form-control" name="reporteruidoareamaquinaria_cantidad[]" value="' . $value->reporteruidoareamaquinaria_cantidad . '" required></td>
-                                                        <td><button type="button" class="btn btn-default waves-effect btn-circle" data-toggle="tooltip" title="No disponible"><i class="fa fa-ban fa-1x"></i></button></td>
+                                                        <td><button type="button" class="btn btn-danger waves-effect btn-circle eliminar"><i class="fa fa-trash fa-1x"></i></button></td>
                                                     </tr>';
                     }
                 }
@@ -1825,7 +1830,7 @@ class reporteruidoController extends Controller
                         $areamaquinaria_lista .= '<tr>
                                                         <td><input type="text" class="form-control" name="reporteruidoareamaquinaria_nombre[]" value="' . $value->reporteruidoareamaquinaria_nombre . '" required></td>
                                                         <td><input type="number" min="1" class="form-control" name="reporteruidoareamaquinaria_cantidad[]" value="' . $value->reporteruidoareamaquinaria_cantidad . '" required></td>
-                                                        <td><button type="button" class="btn btn-default waves-effect btn-circle" data-toggle="tooltip" title="No disponible"><i class="fa fa-ban fa-1x"></i></button></td>
+                                                        <td><button type="button" class="btn btn-danger waves-effect btn-circle eliminar"><i class="fa fa-trash fa-1x"></i></button></td>
                                                     </tr>';
                     }
                 }
