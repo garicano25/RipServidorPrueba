@@ -3419,6 +3419,7 @@ $("#boton_reporte_nuevoequipoauditivo").click(function()
 
 	// categorias
 	equipoauditivo_categorias(proyecto_id, reporteregistro_id, 0);
+	consulta_menuProteccionAuditiva(proyecto_id);
 
 	// Campos Hidden
 	$('#reporteequipoauditivo_id').val(0);
@@ -3428,6 +3429,8 @@ $("#boton_reporte_nuevoequipoauditivo").click(function()
 
 	// mostrar modal
 	$('#modal_reporte_equipoauditivo').modal({backdrop:false});
+
+
 });
 
 
@@ -3500,6 +3503,78 @@ $('#tabla_equipoauditivo_atenuaciones tbody').on('click', 'td>button.eliminar', 
     });
 });
 
+function consulta_menuProteccionAuditiva(proyecto_id)
+{
+	$.ajax({
+		type: "GET",
+		dataType: "json",
+		url: "/menuProteccionAuditiva/"+proyecto_id,
+		data:{},
+		cache: false,
+		success:function(dato)
+		{
+			// Pintar menu opciones
+			$('#select_proteccionAuditiva').html(dato.opciones_menu);
+		},
+		beforeSend: function()
+		{
+			// $('#lista_menu_parametros_reportes').html('<li class="nav-item" style="border-bottom: 1px #F0F0F0 solid;"><i class="fa fa-spin fa-spinner" style="font-size: 40px!important;"></i></li>');
+			$('#select_proteccionAuditiva').html('<option value=""><i class="fa fa-spin fa-spinner""></i></option>');
+		},
+		error: function(dato)
+		{
+
+			// $('#lista_menu_parametros_reportes').html('<li class="nav-item" style="border-bottom: 1px #F0F0F0 solid;">Error al cargar los parametros</li>');
+			$('#select_proteccionAuditiva').html('<option value="">Error al cargar la lista de equipos de proteccion auditiva, actualice la página</option>');
+			return false;
+		}
+	});//Fin ajax
+}
+
+function mostrar_proteccionauditiva(ID_PROTECCION)
+{
+// Enviar datos
+$.ajax({
+	type: "GET",
+	dataType: "json",
+	url: "/reporteruidoequipoauditivocampos/"+ID_PROTECCION,
+	data:{},
+	cache: false,
+	success:function(dato)
+	{
+		$('#tabla_equipoauditivo_atenuaciones > tbody').html('');
+		json= JSON.parse(dato.ATENUACIONES_JSON);
+		var atenuaciones = json[0]; 
+		$.each(atenuaciones, function (key, value) {
+			$('#tabla_equipoauditivo_atenuaciones > tbody').append(`<tr>
+				<td width="40%"><input type="number" value="${key}" class="form-control" name="reporteruidoequipoauditivoatenuacion_bandaNRR[]" required></td>
+				<td width="40%"><input type="number" value="${value}" class="form-control" name="reporteruidoequipoauditivoatenuacion_bandaatenuacion[]" required></td>
+				<td width="10%"><button type="button" class="btn btn-danger waves-effect btn-circle eliminar"><i class="fa fa-trash fa-2x"></i></button></td>
+			'</tr>`);
+			
+		});
+		//$('#tabla_equipoauditivo_atenuaciones tbody').html(dato.atenuaciones);
+		$('#reporteruidoequipoauditivo_tipo').val(dato.TIPO);
+		$('#reporteruidoequipoauditivo_marca').val(dato.MARCA);
+		$('#reporteruidoequipoauditivo_modelo').val(dato.MODELO);
+		$('#reporteruidoequipoauditivo_NRR').val(dato.NRR);
+		
+	},
+	beforeSend: function()
+	{
+		//$('#tabla_equipoauditivo_atenuaciones tbody').html('<tr><td colspan="3"><i class="fa fa-spin fa-spinner" style="font-size: 40px!important;"></i></td></tr>');
+	},
+	error: function(dato)
+	{
+		$('#reporteruidoequipoauditivo_tipo').val('ERROR');
+		$('#reporteruidoequipoauditivo_marca').val('ERROR');
+		$('#reporteruidoequipoauditivo_modelo').val('ERROR');
+		$('#reporteruidoequipoauditivo_NRR').val('ERROR');
+		
+	}
+
+});//Fin ajax
+}
 
 function equipoauditivo_atenuaciones(equipoauditivo_id)
 {
@@ -3538,6 +3613,7 @@ function equipoauditivo_categorias(proyecto_id, reporteregistro_id, equipoauditi
 		success:function(dato)
 		{
 			$('#reporteequipoauditivo_categoriaslista').html(dato.equipoauditivocategorias_lista);
+			
 		},
 		beforeSend: function()
 		{
