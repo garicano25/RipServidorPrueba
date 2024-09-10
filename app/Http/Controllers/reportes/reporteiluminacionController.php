@@ -1265,7 +1265,7 @@ class reporteiluminacionController extends Controller
                                         IFNULL(reportearea.reportearea_colorpiso, "NA") AS reportearea_colorpiso,
                                         reportearea.reportearea_superficietecho,
                                         reportearea.reportearea_superficieparedes,
-                                        IFNULL(reportearea.reportearea_superficiepiso, "NA") AS reportearea_superficiepiso
+                                        IFNULL(reportearea.reportearea_superficiepiso, "NA") AS reportearea_superficiepiso,
                                         reportearea.reportearea_potenciaslamparas,
                                         reportearea.reportearea_numlamparas,
                                         reportearea.reportearea_alturalamparas,
