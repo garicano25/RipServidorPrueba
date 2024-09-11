@@ -5557,16 +5557,6 @@ function tabla_reporte_matriz(proyecto_id, reporteregistro_id)
 						// className: '',
 						orderable: false,
 					},
-					// {
-					// 	data: "catsubdireccion_nombre",
-					// 	defaultContent: "-",
-					// 	orderable: false,
-					// },
-					// {
-					// 	data: "gerencia_activo",
-					// 	defaultContent: "-",
-					// 	orderable: false,
-					// },
 					{
 						data: "reportequimicosarea_instalacion",
 						defaultContent: "-",
@@ -5609,7 +5599,7 @@ function tabla_reporte_matriz(proyecto_id, reporteregistro_id)
 					}
 				],
 				lengthMenu: [[20, 50, 100, -1], [20, 50, 100, "Todos"]],
-				rowsGroup: [1, 2, 3, 4, 10, 0], //agrupar filas
+				rowsGroup: [1, 2, 3, 4, 0], //agrupar filas
 				order: [[ 0, "ASC" ]],
 				ordering: false,
 				processing: true,
