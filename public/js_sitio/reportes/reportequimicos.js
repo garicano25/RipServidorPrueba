@@ -4737,7 +4737,7 @@ $('#tabla_reporte_7 tbody').on('click', 'td.editar', function()
 
 						setTimeout(() => {
 							
-							$('#tabla_evaluacion_parametros tbody tr:last-child select[name="reportequimicosevaluacionparametro_metodo[]"]').val(dato.reportequimicosevaluacionparametro_metodo);
+							$('#tabla_evaluacion_parametros tbody tr:last-child select[name="reportequimicosevaluacionparametro_metodo[]"]').val(data.reportequimicosevaluacionparametro_metodo);
 							$('#tabla_evaluacion_parametros tbody tr:last-child select[name="reportequimicosevaluacionparametro_unidad[]"]').val(data.reportequimicosevaluacionparametro_unidad);
 
 
