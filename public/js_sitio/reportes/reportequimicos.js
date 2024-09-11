@@ -4722,7 +4722,6 @@ $('#tabla_reporte_7 tbody').on('click', 'td.editar', function()
 																	'</td>'+
 																'</tr>');
 				// Asignar un valor al segundo select
-			$('#tabla_evaluacion_parametros tbody tr:last-child select[name="reportequimicosevaluacionparametro_metodo[]"]').val(data.reportequimicosevaluacionparametro_unidad);
 			valorSeleccionado = $('#tabla_evaluacion_parametros tbody tr:last-child select[name="reportequimicosevaluacionparametro_parametro[]"]').val();
 			setTimeout(() => {
 				
@@ -4735,7 +4734,14 @@ $('#tabla_reporte_7 tbody').on('click', 'td.editar', function()
 					success: function (dato) {
 						
 						$('#tabla_evaluacion_parametros tbody tr:last-child select[name="reportequimicosevaluacionparametro_metodo[]"]').html(dato.opciones);
-						$('#tabla_evaluacion_parametros tbody tr:last-child select[name="reportequimicosevaluacionparametro_metodo[]"]').val(dato.reportequimicosevaluacionparametro_metodo);
+
+						setTimeout(() => {
+							
+							$('#tabla_evaluacion_parametros tbody tr:last-child select[name="reportequimicosevaluacionparametro_metodo[]"]').val(dato.reportequimicosevaluacionparametro_metodo);
+							$('#tabla_evaluacion_parametros tbody tr:last-child select[name="reportequimicosevaluacionparametro_metodo[]"]').val(data.reportequimicosevaluacionparametro_unidad);
+
+
+						}, 300);
 					},
 					error: function(dato){
 					
