@@ -730,6 +730,8 @@ Route::get('recsensorialquimicoscatalogostabla/{num_catalogo}', ['as' => 'recsen
 
 Route::get('tablasustanciasEntidad/{SUSTANCIA_QUIMICA_ID}', ['as' => 'recsensorialquimicoscatalogos.tablasustanciasEntidad', 'uses' => 'recsensorialquimicos\recsensorialquimicoscatalogosController@tablasustanciasEntidad']);
 
+Route::get('listaMetodosSustanciasQuimicas/{SUSTANCIA_QUIMICA_ID}', ['as' => 'recsensorialquimicoscatalogos.listaMetodosSustanciasQuimicas', 'uses' => 'recsensorialquimicos\recsensorialquimicoscatalogosController@listaMetodosSustanciasQuimicas']);
+
 Route::get('inforCartaEntidades/{ID_SUSTANCIA_QUIMICA}', ['as' => 'recsensorialquimicoscatalogos.inforCartaEntidades', 'uses' => 'recsensorialquimicos\recsensorialquimicoscatalogosController@inforCartaEntidades']);
 
 
@@ -1208,6 +1210,8 @@ Route::get('reportequimicosvista/{proyecto_id}', ['as' => 'reportequimicos.repor
 Route::get('reportequimicosdatosgenerales/{proyecto_id}/{agente_id}/{agente_nombre}', ['as' => 'reportequimicos.reportequimicosdatosgenerales', 'uses' => 'reportes\reportequimicosController@reportequimicosdatosgenerales']);
 
 Route::get('reportequimicostabla/{proyecto_id}/{reporteregistro_id}', ['as' => 'reportequimicos.reportequimicostabla', 'uses' => 'reportes\reportequimicosController@reportequimicostabla']);
+
+Route::get('obtenerMetodosSustancias/{sustancia}', ['as' => 'reportequimicos.obtenerMetodosSustancias', 'uses' => 'reportes\reportequimicosController@obtenerMetodosSustancias']);
 
 Route::get('reportequimicostabladefiniciones/{proyecto_id}/{agente_nombre}/{reporteregistro_id}', ['as' => 'reportequimicos.reportequimicostabladefiniciones', 'uses' => 'reportes\reportequimicosController@reportequimicostabladefiniciones']);
 

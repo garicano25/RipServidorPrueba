@@ -4425,13 +4425,15 @@ $("#boton_reporte_puntoevalucion").click(function()
 	// Tabla parametros
 	$('#tabla_evaluacion_parametros tbody').html('<tr>'+
 														'<td>'+
-															'<select class="custom-select form-control" name="reportequimicosevaluacionparametro_parametro[]" required>'+
+															'<select class="custom-select form-control sustanciaMetodoFind" name="reportequimicosevaluacionparametro_parametro[]" required>'+
 																'<option value=""></option>'+
 																quimicos_lista_opciones+
 															'</select>'+
 														'</td>'+
 														'<td>'+
-															'<textarea class="form-control" rows="2" name="reportequimicosevaluacionparametro_metodo[]" required></textarea>'+
+															'<select class="custom-select form-control" name="reportequimicosevaluacionparametro_metodo[]" required>'+
+																'<option value=""></option>'+
+															'</select>'+
 														'</td>'+
 														'<td>'+
 															'<select class="custom-select form-control"  name="reportequimicosevaluacionparametro_unidad[]" required><option value=""></option><option value="ppm">ppm</option><option value="mg/m³">mg/m³</option><option value="f/m³">f/m³</option><option value="f/cc">f/cc</option></select>'+
@@ -4513,13 +4515,15 @@ $("#boton_evaluacion_nuevoparametro").click(function() // Agregar fila TABLA
 
 	$('#tabla_evaluacion_parametros > tbody').append('<tr>'+
 															'<td>'+
-																'<select class="custom-select form-control" name="reportequimicosevaluacionparametro_parametro[]" required>'+
+																'<select class="custom-select form-control sustanciaMetodoFind" name="reportequimicosevaluacionparametro_parametro[]"   required>'+
 																	'<option value=""></option>'+
 																	quimicos_lista_opciones+
 																'</select>'+
 															'</td>'+
 															'<td>'+
-																'<textarea class="form-control" rows="2" name="reportequimicosevaluacionparametro_metodo[]" required></textarea>'+
+															'<select class="custom-select form-control" name="reportequimicosevaluacionparametro_metodo[]" required>'+
+																'<option value=""></option>'+
+															'</select>'+
 															'</td>'+
 															'<td>'+
 															'<select class="custom-select form-control"  name="reportequimicosevaluacionparametro_unidad[]" required><option value=""></option><option value="ppm">ppm</option><option value="mg/m³">mg/m³</option><option value="f/m³">f/m³</option><option value="f/cc">f/cc</option></select>'+
@@ -4688,19 +4692,21 @@ $('#tabla_reporte_7 tbody').on('click', 'td.editar', function()
 
 			$('#tabla_evaluacion_parametros > tbody').append('<tr>'+
 																	'<td>'+
-																		'<select class="custom-select form-control" name="reportequimicosevaluacionparametro_parametro[]" required>'+
+																		'<select class="custom-select form-control sustanciaMetodoFind" name="reportequimicosevaluacionparametro_parametro[]" required>'+
 																			'<option value=""></option>'+
 																			quimicos_lista_opciones+
 																		'</select>'+
 																	'</td>'+
 																	'<td>'+
-																		'<textarea class="form-control" rows="2" name="reportequimicosevaluacionparametro_metodo[]" required>'+data.reportequimicosevaluacionparametro_metodo+'</textarea>'+
+																	'<select class="custom-select form-control" name="reportequimicosevaluacionparametro_metodo[]"  required>'+
+																		'<option value=""></option>'+
+																	'</select>'+
 																	'</td>' +
 																	'<td>'+
 																		'<select class="custom-select form-control"  name="reportequimicosevaluacionparametro_unidad[]" required><option value=""></option><option value="ppm">ppm</option><option value="mg/m³">mg/m³</option><option value="f/m³">f/m³</option><option value="f/cc">f/cc</option></select>'+
 																	'</td>'+
 																	'<td>'+
-																		'<input type="text" class="form-control" name="reportequimicosevaluacionparametro_concentracion[]" value="'+data.concentracion_texto+'" required>'+
+																		'<input type="text" class="form-control" name="reportequimicosevaluacionparametro_concentracion[]" value="'+data.concentracion+'" required>'+
 																	'</td>'+
 																	'<td>'+
 																		'<input type="number" step="any" class="form-control" name="reportequimicosevaluacionparametro_valorlimite[]" value="'+data.valorlimite+'" required>'+
@@ -4715,7 +4721,29 @@ $('#tabla_reporte_7 tbody').on('click', 'td.editar', function()
 																		boton_eliminar+
 																	'</td>'+
 																'</tr>');
-
+				// Asignar un valor al segundo select
+			$('#tabla_evaluacion_parametros tbody tr:last-child select[name="reportequimicosevaluacionparametro_metodo[]"]').val(data.reportequimicosevaluacionparametro_unidad);
+			valorSeleccionado = $('#tabla_evaluacion_parametros tbody tr:last-child select[name="reportequimicosevaluacionparametro_parametro[]"]').val();
+			setTimeout(() => {
+				
+				$.ajax({
+					type: "GET",
+					dataType: "json",
+					url: "/obtenerMetodosSustancias/" + valorSeleccionado,
+					data:{},
+					cache: false,
+					success: function (dato) {
+						
+						$('#tabla_evaluacion_parametros tbody tr:last-child select[name="reportequimicosevaluacionparametro_metodo[]"]').html(dato.opciones);
+						$('#tabla_evaluacion_parametros tbody tr:last-child select[name="reportequimicosevaluacionparametro_metodo[]"]').val(dato.reportequimicosevaluacionparametro_metodo);
+					},
+					error: function(dato){
+					
+						return false;
+					}
+				});//
+				
+			}, 500);
 
 			contador += 1;
 		}
@@ -9419,3 +9447,30 @@ function obtenerdatos() {
         }
     });
 }
+
+
+
+$("#tabla_evaluacion_parametros tbody").on("change", ".sustanciaMetodoFind", function() {
+  
+    var valorSeleccionado = $(this).val();
+	var fila = $(this).closest("tr");
+	var selectMetodo = fila.find("select[name='reportequimicosevaluacionparametro_metodo[]']"); 
+	
+	 $.ajax({
+        type: "GET",
+        dataType: "json",
+        url: "/obtenerMetodosSustancias/" + valorSeleccionado,
+        data:{},
+        cache: false,
+		 success: function (dato) {
+			
+        	selectMetodo.html(dato.opciones);
+        },
+        error: function(dato){
+           
+            return false;
+        }
+    });//
+	
+
+});

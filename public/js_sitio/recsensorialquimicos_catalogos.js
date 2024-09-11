@@ -6,6 +6,7 @@ var tabla_catpeligro = null;
 var tabla_catgradoriesgo = null;
 var tabla_catsustanciaQuimicas = null;
 var tabla_catsustanciaQuimicasEntidad = null;
+var tabla_metodosSustanciasQuimicas = null;
 var tabla_catUnidadMedida = null;
 var tabla_catConnotacion = null;
 var tabla_catEntidades = null;
@@ -2493,6 +2494,7 @@ function selecciona_sustancia_quimico()
             
             //INICIAMOS LA TABLA DE LOS DATOS POR ENTIDADES
             tablaSustanciasQuimicasEntidades(SUSTANCIA_QUIMICA_ID)
+            tablaMetodosSustanciasQuimicas(SUSTANCIA_QUIMICA_ID)
             
         }
          var submitButtons = $('#form_catSustanciQuimica').find('input[type="submit"], button[type="submit"]').show();
@@ -2898,6 +2900,91 @@ $("#boton_guardar_catSustanciaQuimicaEntidad").click(function(){
 });
 
 
+$('#boton_nueva_metodo').on('click', function (e) {
+    e.preventDefault();
+
+    $('#form_metodosSustanciasQuimicas').each(function () {
+        this.reset();
+    });
+
+
+    // campos hidden
+    $('#METODO_SUSTANCIA_QUIMICA_ID').val(SUSTANCIA_QUIMICA_ID);
+    $('#ID_METODO').val(0);
+    $('#ELIMINAR_METODO').val(0);
+    $('#CATALOGO_METODO').val(13);
+
+
+    $('#titulo_modal_metodo').html('Método de evaluación para ' + $('#SUSTANCIA_QUIMICA').val());
+
+    // abrir modal
+    $('#modal_metodosSustanciasQuimicas').modal({backdrop:false});
+
+
+})
+
+
+$("#boton_guardar_metodo").click(function(){
+    // valida campos vacios
+    var valida = this.form.checkValidity();
+    if (valida) {
+
+        $('#form_metodosSustanciasQuimicas').ajaxForm({
+            dataType: 'json',
+            type: 'POST',
+            url: '/recsensorialquimicoscatalogos',
+            data: {},
+            resetForm: false,
+            success: function(dato){
+                // actualiza tabla
+                tabla_metodosSustanciasQuimicas.ajax.url("/listaMetodosSustanciasQuimicas/" + SUSTANCIA_QUIMICA_ID).load();
+
+                // mensaje
+                swal({
+                    title: "Correcto",
+                     text: ""+dato.msj,
+                    type: "success", // warning, error, success, info
+                    buttons: {
+                        visible: false, // true , false
+                    },
+                    timer: 1500,
+                    showConfirmButton: false
+                });
+
+                // actualiza boton
+                $('#boton_guardar_metodo').html('Guardar <i class="fa fa-save"></i>');
+
+                // cerrar modal
+                $('#modal_metodosSustanciasQuimicas').modal('hide');
+            },
+            beforeSend: function()
+            {
+                $('#boton_guardar_metodo').html('Guardando <i class="fa fa-spin fa-spinner"></i>');
+            },
+            error: function(dato) 
+            {
+                // actualiza boton
+                $('#boton_guardar_metodo').html('Guardar <i class="fa fa-save"></i>');
+                
+                // mensaje
+                swal({
+                    title: "Error",
+                    text: "Error en la acción: "+dato,
+                    type: "error", // warning, error, success, info
+                    buttons: {
+                        visible: false, // true , false
+                    },
+                    timer: 1500,
+                    showConfirmButton: false
+                });
+                return false;
+            }
+        }).submit();
+        return false;
+    }
+});
+
+
 
 function tablaSustanciasQuimicasEntidades(SUSTANCIA_QUIMICA_ID) {
     
@@ -2960,19 +3047,19 @@ function tablaSustanciasQuimicasEntidades(SUSTANCIA_QUIMICA_ID) {
             // "rowsGroup": [0, 3], //agrupar filas
             "lengthMenu": [[20, 50, 100, -1], [20, 50, 100, "Todos"]],
             "order": [[ 0, "DESC" ]],        
-            "searching": true,
-            "paging": true,
-            "ordering": true,
+            "searching": false,
+            "paging": false,
+            "ordering": false,
             "processing": true,
             "language": {
                 "lengthMenu": "Mostrar _MENU_ Registros",
-                "zeroRecords": "No se encontraron registros",
+                "zeroRecords": "",
                 "info": "", //Página _PAGE_ de _PAGES_
-                "infoEmpty": "No se encontraron registros",
+                "infoEmpty": "",
                 "infoFiltered": "(Filtrado de _MAX_ registros)",
                 "emptyTable": "No hay datos disponibles en la tabla",
                 "loadingRecords": "Cargando datos....",
-                "processing": "Procesando <i class='fa fa-spin fa-spinner fa-3x'></i>",
+                "processing": "Consultando entidades <i class='fa fa-spin fa-spinner fa-3x'></i>",
                 "search": "Buscar",
                 "paginate": {
                     "first": "Primera",
@@ -2986,7 +3073,85 @@ function tablaSustanciasQuimicasEntidades(SUSTANCIA_QUIMICA_ID) {
     catch (exception)
     {
         // alert('error al cargar la tabla');
-        tablaSustanciasQuimicasEntidades(num_catalogo);
+        tablaSustanciasQuimicasEntidades(SUSTANCIA_QUIMICA_ID);
+    }
+}
+
+
+function tablaMetodosSustanciasQuimicas(SUSTANCIA_QUIMICA_ID) {
+    
+    procesoMetodo = 1
+	// Inicializar tabla
+    if (tabla_metodosSustanciasQuimicas != null)
+    {
+        tabla_metodosSustanciasQuimicas.destroy();
+        tabla_metodosSustanciasQuimicas = null;
+    }
+
+    try
+    {
+        tabla_metodosSustanciasQuimicas = $('#tabla_metodosSustanciasQuimicas').DataTable({
+            "ajax": {
+                "url": "/listaMetodosSustanciasQuimicas/"+ SUSTANCIA_QUIMICA_ID,
+                "type": "get",
+                "cache": false,
+                "data": {},
+                error: function (xhr, error, code){
+
+                    tablaMetodosSustanciasQuimicas(SUSTANCIA_QUIMICA_ID);
+                },
+                complete: function () {
+                       procesoMetodo = 0
+
+                }
+            },
+            "columns": [
+                // {
+                //     "data": "id" 
+                // },
+                {
+                    "data": "DESCRIPCION",
+                    "defaultContent": ''
+                },
+                {
+                    "data": "boton_editar",
+                    "defaultContent": ''
+                },
+                {
+                    "data": "boton_eliminar",
+                    "defaultContent": ''
+                }
+            ],
+            // "rowsGroup": [0, 3], //agrupar filas
+            "lengthMenu": [[20, 50, 100, -1], [20, 50, 100, "Todos"]],
+            "order": [[ 0, "DESC" ]],        
+            "searching": false,
+            "paging": false,
+            "ordering": false,
+            "processing": true,
+            "language": {
+                "lengthMenu": "Mostrar _MENU_ Registros",
+                "zeroRecords": "",
+                "info": "", //Página _PAGE_ de _PAGES_
+                "infoEmpty": "",
+                "infoFiltered": "(Filtrado de _MAX_ registros)",
+                "emptyTable": "No hay datos disponibles en la tabla",
+                "loadingRecords": "Cargando datos....",
+                "processing": "Consultando metodos <i class='fa fa-spin fa-spinner fa-3x'></i>",
+                "search": "Buscar",
+                "paginate": {
+                    "first": "Primera",
+                    "last": "Ultima",
+                    "next": "Siguiente",
+                    "previous": "Anterior"
+                }
+            }
+        });
+    }
+    catch (exception)
+    {
+        // alert('error al cargar la tabla');
+        tablaMetodosSustanciasQuimicas(SUSTANCIA_QUIMICA_ID);
     }
 }
 
@@ -3487,6 +3652,115 @@ function eliminar_sustanciaQuimicaEntidad () {
 }
 
 
+function editar_metodo_sustancia() {
+    
+    $('#tabla_metodosSustanciasQuimicas tbody').on('click', 'td>button.EDITAR', function() {
+        // console.log();
+        var tr = $(this).closest('tr');
+        var row = tabla_metodosSustanciasQuimicas.row(tr);
+
+        $('#form_metodosSustanciasQuimicas').each(function () {
+            this.reset();
+        });
+
+
+        // campos hidden
+        $('#METODO_SUSTANCIA_QUIMICA_ID').val(row.data().SUSTANCIAS_QUIMICA_ID);
+        $('#ID_METODO').val(row.data().ID_METODO);
+        $('#ELIMINAR_METODO').val(0);
+        $('#CATALOGO_METODO').val(13);
+        
+
+        // campos visibles
+        $("#DESCRIPCION_METODO").val(row.data().DESCRIPCION);  
+
+
+        $('#titulo_modal_metodo').html('Editar método de evaluación para ' + $('#SUSTANCIA_QUIMICA').val());
+        $('#modal_metodosSustanciasQuimicas').modal({ backdrop: false });
+        
+    });
+}
+
+
+function eliminar_metodo_sustancia() {
+    
+    $('#tabla_metodosSustanciasQuimicas tbody').on('click', 'td>button.ELIMINAR', function() {
+        // console.log();
+        var tr = $(this).closest('tr');
+        var row = tabla_metodosSustanciasQuimicas.row(tr);
+
+        
+        swal({   
+            title: "¿Está seguro de eliminar este registro?",   
+            type: "warning",   
+            showCancelButton: true,   
+            confirmButtonColor: "#DD6B55",   
+            confirmButtonText: "Eliminar!",   
+            cancelButtonText: "Cancelar!",   
+            closeOnConfirm: false,   
+            closeOnCancel: false 
+            }, function (isConfirm) {
+                if (isConfirm) {
+                    // cerrar msj confirmacion
+                    swal.close();
+
+                    // campos hidden
+                    $('#METODO_SUSTANCIA_QUIMICA_ID').val(row.data().SUSTANCIAS_QUIMICA_ID);
+                    $('#ID_METODO').val(row.data().ID_METODO);
+                    $('#ELIMINAR_METODO').val(1);
+                    $('#CATALOGO_METODO').val(13);
+
+                    // campos visibles
+                    $("#DESCRIPCION_METODO").val(row.data().DESCRIPCION);  
+
+
+                    $('#form_metodosSustanciasQuimicas').ajaxForm({
+                        dataType: 'json',
+                        type: 'POST',
+                        url: '/recsensorialquimicoscatalogos',
+                        data: {},
+                        resetForm: false,
+                        success: function(dato){
+                            // actualiza tabla
+                            tabla_metodosSustanciasQuimicas.ajax.url("/listaMetodosSustanciasQuimicas/" + SUSTANCIA_QUIMICA_ID).load();
+
+                            // mensaje
+                            swal({
+                                title: "Correcto",
+                                text: ""+dato.msj,
+                                type: "success", // warning, error, success, info
+                                buttons: {
+                                    visible: false, // true , false
+                                },
+                                timer: 1500,
+                                showConfirmButton: false
+                            });
+
+                        
+                        },
+                        error: function(dato) {
+                            
+                            // mensaje
+                            swal({
+                                title: "Error",
+                                text: "Error en la acción: "+dato,
+                                type: "error", // warning, error, success, info
+                                buttons: {
+                                    visible: false, // true , false
+                                },
+                                timer: 1500,
+                                showConfirmButton: false
+                            });
+                            return false;
+                        }
+                    }).submit();
+                    return false;   
+            }
+        })       
+        
+    });
+}
+
 
 function ver_sustancia_quimico(){
     
@@ -3543,6 +3817,7 @@ function ver_sustancia_quimico(){
             
             //INICIAMOS LA TABLA DE LOS DATOS POR ENTIDADES
             tablaSustanciasQuimicasEntidades(SUSTANCIA_QUIMICA_ID)
+            tablaMetodosSustanciasQuimicas(SUSTANCIA_QUIMICA_ID)
             
         }
          var submitButtons = $('#form_catSustanciQuimica').find('input[type="submit"], button[type="submit"]').hide();

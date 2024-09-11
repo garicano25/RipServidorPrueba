@@ -810,7 +810,8 @@
 							</div>
 						</div>
 
-						<div class="col-12 tablaEntidades">
+
+						<div class="col-6 tablaEntidades">
 							<ol class="breadcrumb mb-2 p-2 mt-3">
 								<h2 style="color: #ffff; margin: 0;" class="mx-2"><i class="fa fa-file-text-o" aria-hidden="true"></i> Datos por entidad </h2>
 
@@ -828,7 +829,20 @@
 								@endif
 							</ol>
 						</div>
-						<div class="col-12 tablaEntidades">
+						<div class="col-6 tablaEntidades">
+							<ol class="breadcrumb mb-2 p-2 mt-3">
+								<h2 style="color: #ffff; margin: 0;" class="mx-2"><i class="fa fa-meetup" aria-hidden="true"></i> Métodos de evaluación </h2>
+
+								@if(auth()->user()->hasRoles(['Superusuario','Administrador', 'Reconocimiento', 'Coordinador']))
+
+								<button type="button" class="btn btn-secondary waves-effect waves-light " data-toggle="tooltip" title="Nueva método" id="boton_nueva_metodo" style="margin-left: 13px;">Método<i class="fa fa-plus"></i>
+								</button>
+
+								@endif
+							</ol>
+						</div>
+
+						<div class="col-6 tablaEntidades">
 							<div class="table-responsive">
 								<table class="table table-bordered table-hover stylish-table" width="100%" id="tabla_catSustanciasQuimicaEntidad">
 									<thead>
@@ -846,6 +860,23 @@
 								</table>
 							</div>
 						</div>
+
+						<div class="col-6 tablaEntidades">
+							<div class="table-responsive">
+								<table class="table table-bordered table-hover stylish-table" width="100%" id="tabla_metodosSustanciasQuimicas">
+									<thead>
+										<tr>
+											<th>Método</th>
+											<th>Editar</th>
+											<th>Eliminar</th>
+										</tr>
+									</thead>
+									<tbody>
+									</tbody>
+								</table>
+							</div>
+						</div>
+
 					</div>
 				</div>
 				<div class="modal-footer">
@@ -997,6 +1028,43 @@
 	</div>
 </div>
 
+<div id="modal_metodosSustanciasQuimicas" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" style="display: none;">
+	<div class="modal-dialog ">
+		<div class="modal-content">
+			<form method="post" enctype="multipart/form-data" name="form_metodosSustanciasQuimicas" id="form_metodosSustanciasQuimicas">
+				<div class="modal-header">
+					<button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+					<h4 class="modal-title" id="titulo_modal_metodo"></h4>
+				</div>
+				<div class="modal-body">
+					<div class="row">
+						{!! csrf_field() !!}
+						<div class="col-12">
+							<input type="hidden" class="form-control" id="METODO_SUSTANCIA_QUIMICA_ID" name="SUSTANCIAS_QUIMICA_ID" value="0">
+							<input type="hidden" class="form-control" id="ID_METODO" name="ID_METODO" value="0">
+							<input type="hidden" class="form-control" id="ELIMINAR_METODO" name="ELIMINAR" value="0">
+							<input type="hidden" class="form-control" id="CATALOGO_METODO" name="catalogo" value="0">
+						</div>
+						<div class="col-12">
+							<div class="form-group">
+								<label>Nombre del método de evaluación*</label>
+								<input type="text" class="form-control" id="DESCRIPCION_METODO" name="DESCRIPCION" required>
+							</div>
+						</div>
+					</div>
+				</div>
+				<div class="modal-footer">
+					<button type="button" class="btn btn-default waves-effect" data-dismiss="modal">Cerrar</button>
+					@if(auth()->user()->hasRoles(['Superusuario', 'Administrador','Coordinador']))
+					<button type="submit" class="btn btn-danger waves-effect waves-light" id="boton_guardar_metodo">
+						Guardar <i class="fa fa-save"></i>
+					</button>
+					@endif
+				</div>
+			</form>
+		</div>
+	</div>
+</div>
 
 
 

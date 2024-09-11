@@ -825,32 +825,43 @@ class reportequimicosController extends Controller
     }
 
 
-    /**
-     * Display the specified resource.
-     *
-     * @param  int $proyecto_id
-     * @param  int $reporteregistro_id
-     * @return \Illuminate\Http\Response
-     */
+
+    public function obtenerMetodosSustancias($sustancia) {
+        try {
+        
+            $metodos = DB::select('SELECT m.DESCRIPCION
+                                        FROM metodosSustanciasQuimicas m
+                                        LEFT JOIN catsustancias_quimicas sus ON sus.ID_SUSTANCIA_QUIMICA = m.SUSTANCIAS_QUIMICA_ID
+                                        WHERE sus.SUSTANCIA_QUIMICA = ?', [$sustancia]);
+
+             
+            $opciones = '<option value=""></option>';
+
+            foreach ($metodos as $key => $value) {
+
+                $opciones .= '<option value="' . $value->DESCRIPCION . '">' . $value->DESCRIPCION . '</option>';
+                
+            }
+
+            // respuesta
+            $dato['opciones'] = $opciones;
+            $dato["msj"] = 'Datos consultados correctamente';
+            return response()->json($dato);
+
+        } catch (Exception $e) {
+            $dato['data'] = 0;
+            $dato["msj"] = 'Error ' . $e->getMessage();
+            return response()->json($dato);
+        }
+    }
+
+
+
     public function reportequimicostabla($proyecto_id, $reporteregistro_id)
     {
         try {
-            // $reporte = reportequimicosModel::where('id', $reporteregistro_id)->get();
 
-            // $edicion = 1;
-            // if (count($reporte) > 0)
-            // {
-            //     if($reporte[0]->reportequimicos_concluido == 1 || $reporte[0]->reportequimicos_cancelado == 1)
-            //     {
-            //         $edicion = 0;
-            //     }
-            // }
-
-
-            //==========================================
-
-
-            $quimicos = DB::select('SELECT
+         $quimicos = DB::select('SELECT
                                         reportequimicosproyecto.id,
                                         reportequimicosproyecto.proyecto_id,
                                         reportequimicosproyecto.registro_id,
@@ -864,20 +875,7 @@ class reportequimicosController extends Controller
                                         reportequimicosproyecto.reportequimicosproyecto_parametro ASC');
 
 
-            // if (count($quimicos) == 0)
-            // {
-            //     $quimicos = DB::select('SELECT
-            //                                 reportequimicosproyecto.id,
-            //                                 reportequimicosproyecto.proyecto_id,
-            //                                 reportequimicosproyecto.registro_id,
-            //                                 reportequimicosproyecto.reportequimicosproyecto_parametro 
-            //                             FROM
-            //                                 reportequimicosproyecto 
-            //                             WHERE
-            //                                 reportequimicosproyecto.proyecto_id = '.$proyecto_id.' 
-            //                             ORDER BY
-            //                                 reportequimicosproyecto.reportequimicosproyecto_parametro ASC');
-            // }
+    
 
 
             $numero_registro = 0; // $quimicos_lista = array();
@@ -886,17 +884,6 @@ class reportequimicosController extends Controller
                 $value->numero_registro = $numero_registro;
 
 
-                // if ($edicion == 1)
-                // {
-                //     $value->boton_eliminar = '<button type="button" class="btn btn-danger waves-effect btn-circle eliminar"><i class="fa fa-trash fa-2x"></i></button>';
-                // }
-                // else
-                // {
-                //     $value->boton_eliminar = '<button type="button" class="btn btn-default waves-effect btn-circle" data-toggle="tooltip" title="No disponible"><i class="fa fa-ban fa-2x"></i></button>';
-                // }
-
-
-                // $quimicos_lista[] = $value->reportequimicosproyecto_parametro;
             }
 
             // respuesta
@@ -2312,6 +2299,7 @@ class reportequimicosController extends Controller
                                                     END
                                                 ) AS orden,
                                                 reportequimicosevaluacionparametro.reportequimicosevaluacionparametro_metodo,
+                                                reportequimicosevaluacionparametro.reportequimicosevaluacionparametro_unidad,
                                                 CONCAT(reportequimicosevaluacionparametro.reportequimicosevaluacionparametro_concentracion," ", reportequimicosevaluacionparametro.reportequimicosevaluacionparametro_unidad) AS concentracion_texto,
 
                                                 (REPLACE(REPLACE(REPLACE(reportequimicosevaluacionparametro.reportequimicosevaluacionparametro_concentracion, "<", ""), ">", ""), " ", "") + 0) AS concentracion,
@@ -2375,6 +2363,7 @@ class reportequimicosController extends Controller
                                                     END
                                                 ) AS orden,
                                                 reportequimicosevaluacionparametro.reportequimicosevaluacionparametro_metodo,
+                                                reportequimicosevaluacionparametro.reportequimicosevaluacionparametro_unidad,
                                                  CONCAT(reportequimicosevaluacionparametro.reportequimicosevaluacionparametro_concentracion," ", reportequimicosevaluacionparametro.reportequimicosevaluacionparametro_unidad) AS concentracion_texto,
                                                 (REPLACE(REPLACE(reportequimicosevaluacionparametro.reportequimicosevaluacionparametro_concentracion, "<", "reportequimicosevaluacionparametro_valorlimite - "), ">", "reportequimicosevaluacionparametro_valorlimite + ") + 0) AS concentracion,
                                                 CONCAT(reportequimicosevaluacionparametro.reportequimicosevaluacionparametro_valorlimite," ", reportequimicosevaluacionparametro.reportequimicosevaluacionparametro_unidad) AS valorlimiteTexto,
@@ -5209,7 +5198,7 @@ class reportequimicosController extends Controller
                 // Mensaje
                 $dato["msj"] = 'Datos guardados correctamente';
             }
-
+ 
 
             // INTRODUCCION
             if (($request->opcion + 0) == 1) {

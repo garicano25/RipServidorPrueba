@@ -21,6 +21,7 @@ use App\modelos\recsensorialquimicos\catEntidadesModel;
 use App\modelos\recsensorial\catConclusionesModel;
 use App\modelos\recsensorial\cat_descripcionarea;
 use App\modelos\recsensorialquimicos\gruposDeExposicionModel;
+use App\modelos\recsensorialquimicos\metodosSustanciasQuimicasModel;
 
 
 
@@ -30,6 +31,7 @@ use Illuminate\Support\Facades\Storage;
 
 
 use App\Services\PayUService\Exception;
+use Exception as GlobalException;
 
 class recsensorialquimicoscatalogosController extends Controller
 {
@@ -548,6 +550,37 @@ class recsensorialquimicoscatalogosController extends Controller
         }
     }
 
+
+    public function listaMetodosSustanciasQuimicas($SUSTANCIA_QUIMICA_ID){
+        try {
+
+            $catalogo = metodosSustanciasQuimicasModel::where('SUSTANCIAS_QUIMICA_ID', $SUSTANCIA_QUIMICA_ID)->get();
+
+            // crear campos NOMBRE Y ESTADO
+            foreach ($catalogo as $key => $value) {
+
+                if (auth()->user()->hasRoles(['Superusuario', 'Administrador', 'Coordinador'])) {
+                    $value->perfil = 1;
+                    $value['boton_editar'] = '<button type="button" class="btn btn-warning btn-circle EDITAR" onclick="editar_metodo_sustancia();"><i class="fa fa-pencil"></i></button>';
+                    $value['boton_eliminar'] = '<button type="button" class="btn btn-danger btn-circle ELIMINAR" onclick="eliminar_metodo_sustancia();"><i class="fa fa-trash"></i></button>';
+
+                } else {
+                    $value->perfil = 0;
+                    $value['boton_editar'] = '<button type="button" class="btn btn-secondary btn-circle" ><i class="fa fa-ban"></i></button>';
+                    $value['boton_eliminar'] = '<button type="button" class="btn btn-secondary btn-circle"><i class="fa fa-ban"></i></button>';
+
+                }
+            }
+
+            $dato['data']  = $catalogo;
+            return response()->json($dato);
+        } catch (Exception $e) {
+            
+            $dato["msj"] = 'Error ' . $e->getMessage();
+            $dato['data'] = 0;
+            return response()->json($dato);
+        }
+    }
 
 
     public function listaConnotaciones($ID_ENTIDAD)
@@ -1089,11 +1122,36 @@ class recsensorialquimicoscatalogosController extends Controller
                         $catalogo->update($request->all());
                     }
                     break;
+                case 13:
+                    if ($request['ELIMINAR'] == 0){
+
+                        if ($request['ID_METODO'] == 0) {
+    
+                            $catalogo = metodosSustanciasQuimicasModel::create($request->all());
+                        
+                        } else {
+    
+                            $catalogo = metodosSustanciasQuimicasModel::findOrFail($request['ID_METODO']);
+                            $catalogo->update($request->all());
+                        }
+
+                    }else{
+
+                        $catalogo = metodosSustanciasQuimicasModel::findOrFail($request['ID_METODO']);
+                        $catalogo->delete();
+
+                        $dato["code"] = 1;
+                        $dato["msj"] = 'Registro eliminado exitosamente';
+                        return response()->json($dato);
+
+
+                    }
+                    break;
             }
 
             // Respuesta
             $dato["code"] = 1;
-            $dato["msj"] = 'información guardada correctamente';
+            $dato["msj"] = 'Información guardada correctamente';
             return response()->json($dato);
         } catch (Exception $e) {
             return response()->json('Error al guardar informacion');
