@@ -834,14 +834,20 @@ class reportequimicosController extends Controller
                                         LEFT JOIN catsustancias_quimicas sus ON sus.ID_SUSTANCIA_QUIMICA = m.SUSTANCIAS_QUIMICA_ID
                                         WHERE sus.SUSTANCIA_QUIMICA = ?', [$sustancia]);
 
-             
-            $opciones = '<option value=""></option>';
+            if(count($metodos) > 0) {
 
-            foreach ($metodos as $key => $value) {
+                $opciones = '<option value=""></option>';
+    
+                foreach ($metodos as $key => $value) {
+    
+                    $opciones .= '<option value="' . $value->DESCRIPCION . '">' . $value->DESCRIPCION . '</option>';
+                    
+                }
+            }else{
+                $opciones = '<option value="" disabled>El parámetro seleccionado no tiene métodos asignados (Catálogo de sustancias químicas) </option>';
 
-                $opciones .= '<option value="' . $value->DESCRIPCION . '">' . $value->DESCRIPCION . '</option>';
-                
             }
+             
 
             // respuesta
             $dato['opciones'] = $opciones;
