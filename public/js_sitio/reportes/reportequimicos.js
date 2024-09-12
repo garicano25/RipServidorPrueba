@@ -2,7 +2,8 @@
 
 //=================================================
 // MENU INDICE
-
+// modulo EPP
+var opciones_catepp = "";
 
 $(".stickyside").stick_in_parent({
 	offset_top: 150 // Margin Top del menu
@@ -113,6 +114,7 @@ $(document).ready(function()
 
 	datosgenerales(); // Cargar datos
 	portadaInfo() // Info de la portada
+	consulta_categoria_epp(); //cargar partes del cuerpo epp
 
 	// Inicializar campos datepicker
     jQuery('.mydatepicker').datepicker({
@@ -3818,12 +3820,63 @@ $("#boton_reporte_nuevoepp").click(function()
 	$('#reporteepp_id').val(0);
 
 	// Titulo del modal
-	$('#modal_reporte_epp .modal-title').html('Nueva equipo de protección personal');
+	$('#modal_reporte_epp .modal-title').html('Nuevo equipo de protección personal');
 
+	//consulta_categoria_epp();
+
+	$("#tabla_lista_epp_quimicos tbody").html('');
+	$("#tabla_lista_epp_quimicos tbody").append(  '<tr>'+
+		'<td style="width:250px"><select class="custom-select form-control regionAnatomica" id="reportequimicosepp_partecuerpo" name="reportequimicosepp_partecuerpo" required>'+opciones_catepp+'</select></td>'+
+		'<td style="width:400px"><select class="custom-select form-control claveyEpp" id="reportequimicosepp_equipo" name="reportequimicosepp_equipo" required></select></td>' +
+	'</tr>');
 	// mostrar modal
 	$('#modal_reporte_epp').modal({backdrop:false});
 });
 
+$("#tabla_lista_epp_quimicos tbody").on("change", ".regionAnatomica", function() {
+  
+    var valorSeleccionado = $(this).val();
+	var fila = $(this).closest("tr");
+	var selectClaveEppp = fila.find("select[name='reportequimicosepp_equipo']"); // Encontrar el Select en la misma fila
+	
+	 $.ajax({
+        type: "GET",
+        dataType: "json",
+        url: "/recsensorialClaveEppruido/"+valorSeleccionado,
+        data:{},
+        cache: false,
+        success:function(dato){
+        	selectClaveEppp.html(dato.opciones);
+        },
+        error: function(dato){
+            // alert('Error: '+dato.msj);
+            return false;
+        }
+    });//
+	
+
+});
+
+function consulta_categoria_epp()
+{
+	// alert('mensaje');
+	$.ajax({
+		type: "GET",
+		dataType: "json",
+		url: "/recsensorialeppcatalogoruido",
+		data:{},
+		cache: false,
+		success:function(dato)
+		{
+			opciones_catepp = dato.opciones;
+		},
+		error: function(dato)
+		{
+			// alert('Error: '+dato.msj);
+			return false;
+		}
+	});//Fin ajax
+}
 
 $('#tabla_reporte_epp tbody').on('click', 'td.editar', function()
 {
@@ -3836,17 +3889,45 @@ $('#tabla_reporte_epp tbody').on('click', 'td.editar', function()
 
 	// Campos Hidden
 	$('#reporteepp_id').val(row.data().id);
-
-	// Llenar campos
-	$('#reportequimicosepp_partecuerpo').val(row.data().reportequimicosepp_partecuerpo);
-	$('#reportequimicosepp_equipo').val(row.data().reportequimicosepp_equipo);
-
 	// Titulo del modal
 	$('#modal_reporte_epp .modal-title').html('Equipo de protección personal');
 
+	consulta_categoria_epp()
+	
+	$("#tabla_lista_epp_ruido tbody").html('');
+	$("#tabla_lista_epp_ruido tbody").append(  '<tr>'+
+			'<td style="width:250px"><select class="custom-select form-control regionAnatomica" id="reportequimicosepp_partecuerpo" name="reportequimicosepp_partecuerpo" required>'+opciones_catepp+'</select></td>'+
+			'<td style="width:400px"><select class="custom-select form-control claveyEpp" id="reportequimicosepp_equipo" name="reportequimicosepp_equipo" required></select></td>' +
+		'</tr>');
+		
+	// Llenar campos
+	// Campos Hidden
+	$('#reporteepp_id').val(row.data().id);
+	
+	
+	$.ajax({
+        type: "GET",
+        dataType: "json",
+        url: "/recsensorialClaveEppruido/"+row.data().reportequimicosepp_partecuerpo,
+        data:{},
+        cache: false,
+        success:function(dato){
+			$('#reportequimicosepp_equipo').html(dato.opciones);
+			setTimeout(() => {
+				$('#reportequimicosepp_partecuerpo').val(row.data().reportequimicosepp_partecuerpo);
+				$('#reportequimicosepp_equipo').val(row.data().reportequimicosepp_equipo);
+
+			}, 500);
+        },
+        error: function(dato){
+            // alert('Error: '+dato.msj);
+            return false;
+        }
+    });//
 	// mostrar modal
 	$('#modal_reporte_epp').modal({backdrop:false});
 });
+
 
 
 $('#tabla_reporte_epp tbody').on('click', 'td>button.eliminar', function()
@@ -4425,13 +4506,15 @@ $("#boton_reporte_puntoevalucion").click(function()
 	// Tabla parametros
 	$('#tabla_evaluacion_parametros tbody').html('<tr>'+
 														'<td>'+
-															'<select class="custom-select form-control" name="reportequimicosevaluacionparametro_parametro[]" required>'+
+															'<select class="custom-select form-control sustanciaMetodoFind" name="reportequimicosevaluacionparametro_parametro[]" required>'+
 																'<option value=""></option>'+
 																quimicos_lista_opciones+
 															'</select>'+
 														'</td>'+
 														'<td>'+
-															'<textarea class="form-control" rows="2" name="reportequimicosevaluacionparametro_metodo[]" required></textarea>'+
+															'<select class="custom-select form-control" name="reportequimicosevaluacionparametro_metodo[]" required>'+
+																'<option value=""></option>'+
+															'</select>'+
 														'</td>'+
 														'<td>'+
 															'<select class="custom-select form-control"  name="reportequimicosevaluacionparametro_unidad[]" required><option value=""></option><option value="ppm">ppm</option><option value="mg/m³">mg/m³</option><option value="f/m³">f/m³</option><option value="f/cc">f/cc</option></select>'+
@@ -4513,13 +4596,15 @@ $("#boton_evaluacion_nuevoparametro").click(function() // Agregar fila TABLA
 
 	$('#tabla_evaluacion_parametros > tbody').append('<tr>'+
 															'<td>'+
-																'<select class="custom-select form-control" name="reportequimicosevaluacionparametro_parametro[]" required>'+
+																'<select class="custom-select form-control sustanciaMetodoFind" name="reportequimicosevaluacionparametro_parametro[]"   required>'+
 																	'<option value=""></option>'+
 																	quimicos_lista_opciones+
 																'</select>'+
 															'</td>'+
 															'<td>'+
-																'<textarea class="form-control" rows="2" name="reportequimicosevaluacionparametro_metodo[]" required></textarea>'+
+															'<select class="custom-select form-control" name="reportequimicosevaluacionparametro_metodo[]" required>'+
+																'<option value=""></option>'+
+															'</select>'+
 															'</td>'+
 															'<td>'+
 															'<select class="custom-select form-control"  name="reportequimicosevaluacionparametro_unidad[]" required><option value=""></option><option value="ppm">ppm</option><option value="mg/m³">mg/m³</option><option value="f/m³">f/m³</option><option value="f/cc">f/cc</option></select>'+
@@ -4688,19 +4773,21 @@ $('#tabla_reporte_7 tbody').on('click', 'td.editar', function()
 
 			$('#tabla_evaluacion_parametros > tbody').append('<tr>'+
 																	'<td>'+
-																		'<select class="custom-select form-control" name="reportequimicosevaluacionparametro_parametro[]" required>'+
+																		'<select class="custom-select form-control sustanciaMetodoFind" name="reportequimicosevaluacionparametro_parametro[]" required>'+
 																			'<option value=""></option>'+
 																			quimicos_lista_opciones+
 																		'</select>'+
 																	'</td>'+
 																	'<td>'+
-																		'<textarea class="form-control" rows="2" name="reportequimicosevaluacionparametro_metodo[]" required>'+data.reportequimicosevaluacionparametro_metodo+'</textarea>'+
+																	'<select class="custom-select form-control" name="reportequimicosevaluacionparametro_metodo[]"  required>'+
+																		'<option value=""></option>'+
+																	'</select>'+
 																	'</td>' +
 																	'<td>'+
 																		'<select class="custom-select form-control"  name="reportequimicosevaluacionparametro_unidad[]" required><option value=""></option><option value="ppm">ppm</option><option value="mg/m³">mg/m³</option><option value="f/m³">f/m³</option><option value="f/cc">f/cc</option></select>'+
 																	'</td>'+
 																	'<td>'+
-																		'<input type="text" class="form-control" name="reportequimicosevaluacionparametro_concentracion[]" value="'+data.concentracion_texto+'" required>'+
+																		'<input type="text" class="form-control" name="reportequimicosevaluacionparametro_concentracion[]" value="'+data.concentracion+'" required>'+
 																	'</td>'+
 																	'<td>'+
 																		'<input type="number" step="any" class="form-control" name="reportequimicosevaluacionparametro_valorlimite[]" value="'+data.valorlimite+'" required>'+
@@ -4715,7 +4802,35 @@ $('#tabla_reporte_7 tbody').on('click', 'td.editar', function()
 																		boton_eliminar+
 																	'</td>'+
 																'</tr>');
+				// Asignar un valor al segundo select
+			valorSeleccionado = $('#tabla_evaluacion_parametros tbody tr:last-child select[name="reportequimicosevaluacionparametro_parametro[]"]').val();
+			setTimeout(() => {
+				
+				$.ajax({
+					type: "GET",
+					dataType: "json",
+					url: "/obtenerMetodosSustancias/" + valorSeleccionado,
+					data:{},
+					cache: false,
+					success: function (dato) {
+						
+						$('#tabla_evaluacion_parametros tbody tr:last-child select[name="reportequimicosevaluacionparametro_metodo[]"]').html(dato.opciones);
 
+						setTimeout(() => {
+							
+							$('#tabla_evaluacion_parametros tbody tr:last-child select[name="reportequimicosevaluacionparametro_metodo[]"]').val(data.reportequimicosevaluacionparametro_metodo);
+							$('#tabla_evaluacion_parametros tbody tr:last-child select[name="reportequimicosevaluacionparametro_unidad[]"]').val(data.reportequimicosevaluacionparametro_unidad);
+
+
+						}, 500);
+					},
+					error: function(dato){
+					
+						return false;
+					}
+				});//
+				
+			}, 500);
 
 			contador += 1;
 		}
@@ -5523,16 +5638,6 @@ function tabla_reporte_matriz(proyecto_id, reporteregistro_id)
 						// className: '',
 						orderable: false,
 					},
-					// {
-					// 	data: "catsubdireccion_nombre",
-					// 	defaultContent: "-",
-					// 	orderable: false,
-					// },
-					// {
-					// 	data: "gerencia_activo",
-					// 	defaultContent: "-",
-					// 	orderable: false,
-					// },
 					{
 						data: "reportequimicosarea_instalacion",
 						defaultContent: "-",
@@ -5575,7 +5680,7 @@ function tabla_reporte_matriz(proyecto_id, reporteregistro_id)
 					}
 				],
 				lengthMenu: [[20, 50, 100, -1], [20, 50, 100, "Todos"]],
-				rowsGroup: [1, 2, 3, 4, 10, 0], //agrupar filas
+				rowsGroup: [1, 2, 3, 4, 0], //agrupar filas
 				order: [[ 0, "ASC" ]],
 				ordering: false,
 				processing: true,
@@ -9419,3 +9524,30 @@ function obtenerdatos() {
         }
     });
 }
+
+
+
+$("#tabla_evaluacion_parametros tbody").on("change", ".sustanciaMetodoFind", function() {
+  
+    var valorSeleccionado = $(this).val();
+	var fila = $(this).closest("tr");
+	var selectMetodo = fila.find("select[name='reportequimicosevaluacionparametro_metodo[]']"); 
+	
+	 $.ajax({
+        type: "GET",
+        dataType: "json",
+        url: "/obtenerMetodosSustancias/" + valorSeleccionado,
+        data:{},
+        cache: false,
+		 success: function (dato) {
+			
+        	selectMetodo.html(dato.opciones);
+        },
+        error: function(dato){
+           
+            return false;
+        }
+    });//
+	
+
+});

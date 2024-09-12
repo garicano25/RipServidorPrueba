@@ -1690,6 +1690,7 @@ class reporteaireController extends Controller
             $dato['tabla_reporte_7_4'] = NULL;
             $dato['tabla_reporte_7_5'] = NULL;
             $dato['tabla_reporte_7_6'] = NULL;
+            $dato['tabla_reporte_7_7'] = NULL;
 
 
             if (($areas_poe + 0) == 1) {
@@ -1703,12 +1704,8 @@ class reporteaireController extends Controller
                                                 reportearea.reportearea_orden AS reporteairearea_numorden,
                                                 reporteaireevaluacion.reporteaireevaluacion_ubicacion,
                                                 reporteaireevaluacion.reporteaireevaluacion_punto,
-                                                reporteaireevaluacion.reporteaireevaluacion_so2,
                                                 (
                                                     SELECT
-                                                        -- TABLA.proyecto_id,
-                                                        -- TABLA.registro_id,
-                                                        -- TABLA.reporteairearea_id,
                                                         COUNT(TABLA.reporteaireevaluacion_punto)
                                                     FROM
                                                         reporteaireevaluacion AS TABLA
@@ -1719,9 +1716,6 @@ class reporteaireController extends Controller
                                                 ) AS total_puntosarea,
                                                 (
                                                     SELECT
-                                                        -- TABLA.proyecto_id,
-                                                        -- TABLA.registro_id,
-                                                        -- TABLA.reporteairearea_id,
                                                         COUNT(TABLA.reporteaireevaluacion_punto)
                                                     FROM
                                                         reporteaireevaluacion AS TABLA
@@ -1733,9 +1727,7 @@ class reporteaireController extends Controller
                                                         AND TABLA.reporteaireevaluacion_so2 = reporteaireevaluacion.reporteaireevaluacion_so2
                                                 ) AS total_puntosubicacion,
                                                 reporteaireevaluacion.reporteaireevaluacion_ct,
-                                                -- REPLACE(REPLACE(reporteaireevaluacion.reporteaireevaluacion_ct, "<", "˂"), ">", "˃") AS reporteaireevaluacion_ct,
                                                 (
-                                                    -- IF((REPLACE(REPLACE(reporteaireevaluacion.reporteaireevaluacion_ct, ">" , ""), "<" ,"") + 0) <= 500, "Dentro de norma", "Fuera de norma")
                                                     IF(
                                                         CONVERT(REPLACE(REPLACE(REPLACE(reporteaireevaluacion.reporteaireevaluacion_ct, ">" , ""), "<" ,""), " ", ""), UNSIGNED INTEGER) > 0
                                                         , IF(
@@ -1747,9 +1739,7 @@ class reporteaireController extends Controller
                                                     )
                                                 ) AS ct_resultado,
                                                 reporteaireevaluacion.reporteaireevaluacion_ctma,
-                                                -- REPLACE(REPLACE(reporteaireevaluacion.reporteaireevaluacion_ctma, "<", "˂"), ">", "˃") AS reporteaireevaluacion_ctma,
                                                 (
-                                                    -- IF((REPLACE(REPLACE(REPLACE(reporteaireevaluacion.reporteaireevaluacion_ctma, ">" , ""), "<" ,""), " ", "") + 0) <= 500, "Dentro de norma", "Fuera de norma")
                                                     IF(
                                                         CONVERT(REPLACE(REPLACE(REPLACE(reporteaireevaluacion.reporteaireevaluacion_ctma, ">" , ""), "<" ,""), " ", ""), UNSIGNED INTEGER) > 0
                                                         , IF(
@@ -1761,9 +1751,7 @@ class reporteaireController extends Controller
                                                     )
                                                 ) AS ctma_resultado,
                                                 reporteaireevaluacion.reporteaireevaluacion_hongos,
-                                                -- REPLACE(REPLACE(reporteaireevaluacion.reporteaireevaluacion_hongos, "<", "˂"), ">", "˃") AS reporteaireevaluacion_hongos,
                                                 (
-                                                    -- IF((REPLACE(REPLACE(REPLACE(reporteaireevaluacion.reporteaireevaluacion_hongos, ">" , ""), "<" ,""), " ", "") + 0) <= 500, "Dentro de norma", "Fuera de norma")
                                                     IF(
                                                         CONVERT(REPLACE(REPLACE(REPLACE(reporteaireevaluacion.reporteaireevaluacion_hongos, ">" , ""), "<" ,""), " ", ""), UNSIGNED INTEGER) > 0
                                                         , IF(
@@ -1775,9 +1763,7 @@ class reporteaireController extends Controller
                                                     )
                                                 ) AS hongos_resultado,
                                                 reporteaireevaluacion.reporteaireevaluacion_levaduras,
-                                                -- REPLACE(REPLACE(reporteaireevaluacion.reporteaireevaluacion_levaduras, "<", "˂"), ">", "˃") AS reporteaireevaluacion_levaduras,
                                                 (
-                                                    -- IF((REPLACE(REPLACE(REPLACE(reporteaireevaluacion.reporteaireevaluacion_levaduras, ">" , ""), "<" ,""), " ", "") + 0) <= 500, "Dentro de norma", "Fuera de norma")
                                                     IF(
                                                         CONVERT(REPLACE(REPLACE(REPLACE(reporteaireevaluacion.reporteaireevaluacion_levaduras, ">" , ""), "<" ,""), " ", ""), UNSIGNED INTEGER) > 0
                                                         , IF(
@@ -1795,7 +1781,6 @@ class reporteaireController extends Controller
                                                 reporteaireevaluacion.reporteaireevaluacion_velocidad,
                                                 reporteaireevaluacion.reporteaireevaluacion_velocidadlimite,
                                                 (
-                                                    -- IF((reporteaireevaluacion.reporteaireevaluacion_velocidad + 0) >= 0.15 AND (reporteaireevaluacion.reporteaireevaluacion_velocidad + 0) <= 0.25, "Dentro de norma", "Fuera de norma")
                                                     IF((reporteaireevaluacion.reporteaireevaluacion_velocidad + 0) <= (reporteaireevaluacion.reporteaireevaluacion_velocidadlimite + 0), "Dentro de norma", "Fuera de norma")
                                                 ) AS velocidad_resultado,
                                                 reporteaireevaluacion.reporteaireevaluacion_humedad,
@@ -1803,9 +1788,7 @@ class reporteaireController extends Controller
                                                     IF((reporteaireevaluacion.reporteaireevaluacion_humedad + 0) >= 20 AND (reporteaireevaluacion.reporteaireevaluacion_humedad + 0) <= 60, "Dentro de norma", "Fuera de norma")
                                                 ) AS humedad_resultado,
                                                 reporteaireevaluacion.reporteaireevaluacion_co,
-                                                -- REPLACE(REPLACE(reporteaireevaluacion.reporteaireevaluacion_co, "<", "˂"), ">", "˃") AS reporteaireevaluacion_co,
                                                 (
-                                                    -- IF((REPLACE(REPLACE(REPLACE(reporteaireevaluacion.reporteaireevaluacion_co, ">" , ""), "<" ,""), " ", "") + 0) <= 25, "Dentro de norma", "Fuera de norma")
                                                     IF(
                                                         CONVERT(REPLACE(REPLACE(REPLACE(reporteaireevaluacion.reporteaireevaluacion_co, ">" , ""), "<" ,""), " ", ""), UNSIGNED INTEGER) >= 0
                                                         , IF(
@@ -1817,9 +1800,7 @@ class reporteaireController extends Controller
                                                     )
                                                 ) AS co_resultado,
                                                 reporteaireevaluacion.reporteaireevaluacion_co2,
-                                                -- REPLACE(REPLACE(reporteaireevaluacion.reporteaireevaluacion_co2, "<", "˂"), ">", "˃") AS reporteaireevaluacion_co2,
                                                 (
-                                                    -- IF((REPLACE(REPLACE(REPLACE(reporteaireevaluacion.reporteaireevaluacion_co2, ">" , ""), "<" ,""), " ", "") + 0) <= 5000, "Dentro de norma", "Fuera de norma")
                                                     IF(
                                                         CONVERT(REPLACE(REPLACE(REPLACE(reporteaireevaluacion.reporteaireevaluacion_co2, ">" , ""), "<" ,""), " ", ""), UNSIGNED INTEGER) >= 0
                                                         , IF(
@@ -1829,7 +1810,28 @@ class reporteaireController extends Controller
                                                         )
                                                         , "Fuera de norma"
                                                     )
-                                                ) AS co2_resultado 
+                                                ) AS co2_resultado,
+                                                reporteaireevaluacion.reporteaireevaluacion_so2,
+                                                (
+                                                IF(
+                                                    -- Verificar si el valor contiene solo letras o es N.D, N.A, N/A
+                                                    reporteaireevaluacion.reporteaireevaluacion_so2 REGEXP "^[A-Za-z]+$|^N[./]?D$|^N[./]?A$", 
+                                                    -- Si contiene solo letras o las abreviaturas, retornamos "Dentro de norma"
+                                                    "Dentro de norma",  
+                                                    -- Si contiene números, continuamos con la limpieza
+                                                    IF(
+                                                        CONVERT(REPLACE(REPLACE(REPLACE(reporteaireevaluacion.reporteaireevaluacion_so2, ">" , ""), "<" ,""), " ", ""), DECIMAL(10,2)) >= 0,
+                                                        -- Después de limpiar, verificamos si el valor es mayor o igual a 0.25
+                                                        IF(
+                                                            (REPLACE(REPLACE(REPLACE(reporteaireevaluacion.reporteaireevaluacion_so2, ">" , ""), "<" ,""), " ", "") + 0) > 0.25,
+                                                            "Fuera de norma",  -- Si es mayor a 0.25, está fuera de norma
+                                                            "Dentro de norma"  -- Si es menor, está dentro de norma
+                                                        ),
+                                                        "Fuera de norma"  -- Si no es un número válido o es negativo, es fuera de norma
+                                                    )
+                                                )
+                                            ) AS so2_resultado
+
                                             FROM
                                                 reporteaireevaluacion
                                                 LEFT JOIN reportearea ON reporteaireevaluacion.reporteairearea_id = reportearea.id
@@ -1974,7 +1976,27 @@ class reporteaireController extends Controller
                                                         )
                                                         , "Fuera de norma"
                                                     )
-                                                ) AS co2_resultado 
+                                                ) AS co2_resultado,
+                                                 reporteaireevaluacion.reporteaireevaluacion_so2,
+                                                (
+                                                IF(
+                                                    -- Verificar si el valor contiene solo letras o es N.D, N.A, N/A
+                                                    reporteaireevaluacion.reporteaireevaluacion_so2 REGEXP "^[A-Za-z]+$|^N[./]?D$|^N[./]?A$", 
+                                                    -- Si contiene solo letras o las abreviaturas, retornamos "Dentro de norma"
+                                                    "Dentro de norma",  
+                                                    -- Si contiene números, continuamos con la limpieza
+                                                    IF(
+                                                        CONVERT(REPLACE(REPLACE(REPLACE(reporteaireevaluacion.reporteaireevaluacion_so2, ">" , ""), "<" ,""), " ", ""), DECIMAL(10,2)) >= 0,
+                                                        -- Después de limpiar, verificamos si el valor es mayor o igual a 0.25
+                                                        IF(
+                                                            (REPLACE(REPLACE(REPLACE(reporteaireevaluacion.reporteaireevaluacion_so2, ">" , ""), "<" ,""), " ", "") + 0) > 0.25,
+                                                            "Fuera de norma",  -- Si es mayor a 0.25, está fuera de norma
+                                                            "Dentro de norma"  -- Si es menor, está dentro de norma
+                                                        ),
+                                                        "Fuera de norma"  -- Si no es un número válido o es negativo, es fuera de norma
+                                                    )
+                                                )
+                                            ) AS so2_resultado 
                                             FROM
                                                 reporteaireevaluacion
                                                 LEFT JOIN reporteairearea ON reporteaireevaluacion.reporteairearea_id = reporteairearea.id
@@ -2130,6 +2152,22 @@ class reporteaireController extends Controller
                                                     <td>' . $value->reporteaireevaluacion_co2 . '</td>
                                                     <td>' . $value->co2_resultado . '</td>
                                                 </tr>';
+
+
+                // TABLA RESULTADOS Dióxido  de Azufre (SO2)
+                //==========================================
+
+
+                $dato['tabla_reporte_7_7'] .= '<tr>
+                                                    <td>' . $value->reporteaireevaluacion_punto . '</td>
+                                                    <td>' . $value->reporteairearea_instalacion . '</td>
+                                                    <td>' . $value->reporteairearea_nombre . '</td>
+                                                    <td>' . $value->reporteaireevaluacion_ubicacion . '</td>
+                                                    <td>' . $value->total_puntosubicacion . '</td>
+                                                    <td>0.25</td>
+                                                    <td>' . $value->reporteaireevaluacion_so2 . '</td>
+                                                    <td>' . $value->so2_resultado . '</td>
+                                                </tr>';
             }
 
 
@@ -2147,6 +2185,7 @@ class reporteaireController extends Controller
             $dato['tabla_reporte_7_4'] = NULL;
             $dato['tabla_reporte_7_5'] = NULL;
             $dato['tabla_reporte_7_6'] = NULL;
+            $dato['tabla_reporte_7_7'] = NULL;
             $dato["msj"] = 'Error ' . $e->getMessage();
             return response()->json($dato);
         }
@@ -3137,7 +3176,27 @@ class reporteaireController extends Controller
                                                         )
                                                         , 0
                                                     )
-                                                ) AS co2_resultado 
+                                                ) AS co2_resultado,
+                                                reporteaireevaluacion.reporteaireevaluacion_so2,
+                                                (
+                                                    IF(
+                                                        -- Verificar si el valor contiene solo letras o es N.D, N.A, N/A
+                                                        reporteaireevaluacion.reporteaireevaluacion_so2 REGEXP "^[A-Za-z]+$|^N[./]?D$|^N[./]?A$", 
+                                                        -- Si contiene solo letras o las abreviaturas, retornamos "Dentro de norma"
+                                                        1,  
+                                                        -- Si contiene números, continuamos con la limpieza
+                                                        IF(
+                                                            CONVERT(REPLACE(REPLACE(REPLACE(reporteaireevaluacion.reporteaireevaluacion_so2, ">" , ""), "<" ,""), " ", ""), DECIMAL(10,2)) >= 0,
+                                                            -- Después de limpiar, verificamos si el valor es mayor o igual a 0.25
+                                                            IF(
+                                                                (REPLACE(REPLACE(REPLACE(reporteaireevaluacion.reporteaireevaluacion_so2, ">" , ""), "<" ,""), " ", "") + 0) > 0.25,
+                                                                0,  -- Si es mayor o igual a 0.25, está fuera de norma
+                                                                1  -- Si es menor, está dentro de norma
+                                                            ),
+                                                            0 -- Si no es un número válido o es negativo, es fuera de norma
+                                                        )
+                                                    )
+                                                ) AS so2_resultado  
                                             FROM
                                                 reporteaireevaluacion
                                                 LEFT JOIN reportearea ON reporteaireevaluacion.reporteairearea_id = reportearea.id
@@ -3255,7 +3314,27 @@ class reporteaireController extends Controller
                                                         )
                                                         , 0
                                                     )
-                                                ) AS co2_resultado 
+                                                ) AS co2_resultado,
+                                                reporteaireevaluacion.reporteaireevaluacion_so2,
+                                                (
+                                                    IF(
+                                                        -- Verificar si el valor contiene solo letras o es N.D, N.A, N/A
+                                                        reporteaireevaluacion.reporteaireevaluacion_so2 REGEXP "^[A-Za-z]+$|^N[./]?D$|^N[./]?A$", 
+                                                        -- Si contiene solo letras o las abreviaturas, retornamos "Dentro de norma"
+                                                        1,  
+                                                        -- Si contiene números, continuamos con la limpieza
+                                                        IF(
+                                                            CONVERT(REPLACE(REPLACE(REPLACE(reporteaireevaluacion.reporteaireevaluacion_so2, ">" , ""), "<" ,""), " ", ""), DECIMAL(10,2)) >= 0,
+                                                            -- Después de limpiar, verificamos si el valor es mayor o igual a 0.25
+                                                            IF(
+                                                                (REPLACE(REPLACE(REPLACE(reporteaireevaluacion.reporteaireevaluacion_so2, ">" , ""), "<" ,""), " ", "") + 0) > 0.25,
+                                                                0,  -- Si es mayor o igual a 0.25, está fuera de norma
+                                                                1  -- Si es menor, está dentro de norma
+                                                            ),
+                                                            0 -- Si no es un número válido o es negativo, es fuera de norma
+                                                        )
+                                                    )
+                                                ) AS so2_resultado 
                                             FROM
                                                 reporteaireevaluacion
                                                 LEFT JOIN reporteairearea ON reporteaireevaluacion.reporteairearea_id = reporteairearea.id
@@ -3281,6 +3360,8 @@ class reporteaireController extends Controller
             $monoxido_color = '';
             $dioxido = 0;
             $dioxido_color = '';
+            $azufre = 0;
+            $azufre_color = '';
             if (count($cumplimiento) > 0) {
                 foreach ($cumplimiento as $key => $value) {
                     $temperatura += ($value->temperatura_resultado + 0);
@@ -3288,6 +3369,7 @@ class reporteaireController extends Controller
                     $humedad += ($value->humedad_resultado + 0);
                     $monoxido += ($value->co_resultado + 0);
                     $dioxido += ($value->co2_resultado + 0);
+                    $azufre += ($value->so2_resultado + 0);
                     $bioaerosoles += (($value->ct_resultado + 0) + ($value->ctma_resultado + 0) + ($value->hongos_resultado + 0) + ($value->levaduras_resultado + 0));
                 }
 
@@ -3369,6 +3451,20 @@ class reporteaireController extends Controller
 
                 //--------------------
 
+                $azufre = round((round(($azufre / count($cumplimiento)), 3) * 100), 1);
+
+
+                if ($azufre >= 90) {
+                    $azufre_color = '#8ee66b';
+                } else if ($dioxido >= 50) {
+                    $azufre_color = '#ffb22b';
+                } else {
+                    $azufre_color = '#fc4b6c';
+                }
+                
+                
+                //--------------------
+
 
                 $bioaerosoles = round((round(($bioaerosoles / (4 * count($cumplimiento))), 3) * 100), 1);
 
@@ -3413,6 +3509,12 @@ class reporteaireController extends Controller
                                                         <h6 class="m-t-30" style="margin: 0px; font-size:0.8vw;">Dióxido de carbono (CO<sub>2</sub>) <span class="pull-right">' . $dioxido . '%</span></h6>
                                                         <div class="progress" style="margin-bottom: 8px;">
                                                             <div class="progress-bar" role="progressbar" style="width: ' . $dioxido . '%; height: 10px; background: #8ee66b;" aria-valuenow="25" aria-valuemin="0" aria-valuemax="100"></div>
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-12" style="display: inline-block; text-align: left;">
+                                                        <h6 class="m-t-30" style="margin: 0px; font-size:0.8vw;">Dióxido de azufre (SO<sub>2</sub>) <span class="pull-right">' . $azufre . '%</span></h6>
+                                                        <div class="progress" style="margin-bottom: 8px;">
+                                                            <div class="progress-bar" role="progressbar" style="width: ' . $azufre . '%; height: 10px; background: #8ee66b;" aria-valuenow="25" aria-valuemin="0" aria-valuemax="100"></div>
                                                         </div>
                                                     </div>
                                                     <div class="col-12" style="display: inline-block; text-align: left;">

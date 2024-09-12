@@ -826,7 +826,42 @@ class reporteruidoController extends Controller
     }
 
     
+    /**
+     * Display the specified resource.
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function reporteruidoeppcatalogo()
+    {
+        // try {
+        //     $opciones = '<option value=""></option>';
 
+        //     $sql = DB::select('SELECT
+        //                             catpartecuerpo.id,
+        //                             catpartecuerpo.catpartecuerpo_nombre,
+        //                             catpartecuerpo.catpartecuerpo_activo 
+        //                         FROM
+        //                             catpartecuerpo
+        //                         WHERE
+        //                             catpartecuerpo.catpartecuerpo_activo = 1
+        //                         ORDER BY
+        //                             catpartecuerpo.id ASC');
+
+        //     // colocar numero de registro
+        //     foreach ($sql as $key => $value) {
+        //         $opciones .= '<option value="' . $value->id . '">' . $value->catpartecuerpo_nombre . '</option>';
+        //     }
+
+        //     // respuesta
+        //     $dato['opciones'] = $opciones;
+        //     $dato["msj"] = 'Información consultada correctamente';
+        //     return response()->json($dato);
+        // } catch (Exception $e) {
+        //     $dato['opciones'] = 0;
+        //     $dato["msj"] = 'Error ' . $e->getMessage();
+        //     return response()->json($dato);
+        // }
+    }
 
     /**
      * Display the specified resource.

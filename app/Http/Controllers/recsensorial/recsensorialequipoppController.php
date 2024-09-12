@@ -138,6 +138,68 @@ class recsensorialequipoppController extends Controller
         }
     }
 
+    public function recsensorialeppcatalogoruido()
+    {
+        try {
+            $opciones = '<option value=""></option>';
+
+            $sql = DB::select('SELECT
+                                    catpartecuerpo.id,
+                                    catpartecuerpo.catpartecuerpo_nombre,
+                                    catpartecuerpo.catpartecuerpo_activo 
+                                FROM
+                                    catpartecuerpo
+                                WHERE
+                                    catpartecuerpo.catpartecuerpo_activo = 1
+                                ORDER BY
+                                    catpartecuerpo.id ASC');
+
+            // colocar numero de registro
+            foreach ($sql as $key => $value) {
+                $opciones .= '<option value="' . $value->catpartecuerpo_nombre . '">' . $value->catpartecuerpo_nombre . '</option>';
+            }
+
+            // respuesta
+            $dato['opciones'] = $opciones;
+            $dato["msj"] = 'Información consultada correctamente';
+            return response()->json($dato);
+        } catch (Exception $e) {
+            $dato['opciones'] = 0;
+            $dato["msj"] = 'Error ' . $e->getMessage();
+            return response()->json($dato);
+        }
+    }
+
+
+    public function recsensorialClaveEppruido($PARTECUERPO_ID)
+    {
+        try {
+            $opciones = '<option value=""></option>';
+
+            $sql = DB::select('SELECT
+                                    d.CLAVE_EPP
+									FROM
+                                    catpartescuerpo_descripcion d
+									LEFT JOIN catpartecuerpo c ON c.id = d.PARTECUERPO_ID
+                                WHERE
+                                    d.ACTIVO = 1
+                                    AND c.catpartecuerpo_nombre = ? ', [$PARTECUERPO_ID] );
+
+            // colocar numero de registro
+            foreach ($sql as $key => $value) {
+                $opciones .= '<option value="' . $value->CLAVE_EPP . '" >' . $value->CLAVE_EPP . '</option>';
+            }
+
+            // respuesta
+            $dato['opciones'] = $opciones;
+            $dato["msj"] = 'Información consultada correctamente';
+            return response()->json($dato);
+        } catch (Exception $e) {
+            $dato['opciones'] = 0;
+            $dato["msj"] = 'Error ' . $e->getMessage();
+            return response()->json($dato);
+        }
+    }
 
     public function recsensorialClaveEpp($PARTECUERPO_ID)
     {
@@ -169,7 +231,6 @@ class recsensorialequipoppController extends Controller
             return response()->json($dato);
         }
     }
-
 
     /**
      * Display the specified resource.
