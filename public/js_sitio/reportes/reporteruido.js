@@ -4100,18 +4100,21 @@ $('#tabla_reporte_epp tbody').on('click', 'td.editar', function()
 	$('#form_modal_epp').each(function(){
 		this.reset();
 	});
+	// Titulo del modal
+	$('#modal_reporte_epp .modal-title').html('Equipo de protección personal');
 
+	consulta_categoria_epp()
 	
 	$("#tabla_lista_epp_ruido tbody").html('');
 	$("#tabla_lista_epp_ruido tbody").append(  '<tr>'+
-			'<td style="width:250px"><select class="custom-select form-control regionAnatomica" id="reporteruidoepp_partecuerpo" name="reporteruidoepp_partecuerpo" required></select></td>'+
+			'<td style="width:250px"><select class="custom-select form-control regionAnatomica" id="reporteruidoepp_partecuerpo" name="reporteruidoepp_partecuerpo" required>'+opciones_catepp+'</select></td>'+
 			'<td style="width:400px"><select class="custom-select form-control claveyEpp" id="reporteruidoepp_equipo" name="reporteruidoepp_equipo" required></select></td>' +
 		'</tr>');
 		
 	// Llenar campos
 	// Campos Hidden
 	$('#reporteepp_id').val(row.data().id);
-	$('#reporteruidoepp_partecuerpo').val(row.data().reporteruidoepp_partecuerpo);
+	
 	
 	$.ajax({
         type: "GET",
@@ -4122,6 +4125,7 @@ $('#tabla_reporte_epp tbody').on('click', 'td.editar', function()
         success:function(dato){
 			$('#reporteruidoepp_equipo').html(dato.opciones);
 			setTimeout(() => {
+				$('#reporteruidoepp_partecuerpo').val(row.data().reporteruidoepp_partecuerpo);
 				$('#reporteruidoepp_equipo').val(row.data().reporteruidoepp_equipo);
 
 			}, 500);
@@ -4133,8 +4137,6 @@ $('#tabla_reporte_epp tbody').on('click', 'td.editar', function()
     });//
 	
 	
-	// Titulo del modal
-	$('#modal_reporte_epp .modal-title').html(row.data().reportearea_nombre);
 
 	// mostrar modal
 	$('#modal_reporte_epp').modal({backdrop:false});
