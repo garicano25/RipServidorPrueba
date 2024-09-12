@@ -4103,7 +4103,7 @@ $('#tabla_reporte_epp tbody').on('click', 'td.editar', function()
 
 	
 	$("#tabla_lista_epp_ruido tbody").html('');
-		$("#tabla_lista_epp_ruido tbody").append(  '<tr>'+
+	$("#tabla_lista_epp_ruido tbody").append(  '<tr>'+
 			'<td style="width:250px"><select class="custom-select form-control regionAnatomica" id="reporteruidoepp_partecuerpo" name="reporteruidoepp_partecuerpo" required></select></td>'+
 			'<td style="width:400px"><select class="custom-select form-control claveyEpp" id="reporteruidoepp_equipo" name="reporteruidoepp_equipo" required></select></td>' +
 		'</tr>');
