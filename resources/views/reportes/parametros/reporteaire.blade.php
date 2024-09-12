@@ -187,7 +187,8 @@
 				<a href="#7_4" class="list-group-item submenu">7.4.- Resultados de humedad relativa <i class="fa fa-times" id="menureporte_7_4"></i></a>
 				<a href="#7_5" class="list-group-item submenu">7.5.- Tabla de resultados del Monóxido de Carbono (CO) <i class="fa fa-times" id="menureporte_7_5"></i></a>
 				<a href="#7_6" class="list-group-item submenu">7.6.- Tabla de resultados del Dióxido de Carbono (CO<sub>2</sub>) <i class="fa fa-times" id="menureporte_7_6"></i></a>
-				<a href="#7_7" class="list-group-item submenu">7.7.- Matriz de exposición laboral <i class="fa fa-times" id="menureporte_7_7"></i></a>
+				<a href="#7_7" class="list-group-item submenu">7.7.- Tabla de resultados del Dióxido de azufre (SO<sub>2</sub>)<i class="fa fa-times" id="menureporte_7_7"></i></a>
+				<a href="#7_8" class="list-group-item submenu">7.8.- Matriz de exposición laboral <i class="fa fa-times" id="menureporte_7_8"></i></a>
 				<a href="#8" class="list-group-item">8.- Conclusiones <i class="fa fa-times" id="menureporte_8"></i></a>
 				<a href="#9" class="list-group-item">9.- Recomendaciones de control <i class="fa fa-times" id="menureporte_9"></i></a>
 				<a href="#10" class="list-group-item">10.- Responsables del informe <i class="fa fa-times" id="menureporte_10"></i></a>
@@ -1103,7 +1104,27 @@
 						</table>
 					</div>
 				</div>
-				<h4 class="card-title" id="7_7">7.7.- Matriz de exposición laboral</h4>
+				<h4 class="card-title" id="7_7">7.7.- Tabla de resultados del Dióxido de azufre (SO<sub>2</sub>)</h4>
+				<div class="row">
+					<div class="col-12">
+						<table class="table table-hover tabla_info_centrado tabla_evaluacion" width="100%" id="tabla_reporte_7_7">
+							<thead>
+								<tr>
+									<th width="70">No. de<br>Medición</th>
+									<th width="120">Instalación</th>
+									<th width="150">Área</th>
+									<th width="">Ubicación</th>
+									<th width="60">Total<br>puntos</th>
+									<th width="100">Límite permisible<br>en ppm</th>
+									<th width="100">Resultado<br>en ppm</th>
+									<th width="100">Cumplimiento<br>Normativo</th>
+								</tr>
+							</thead>
+							<tbody></tbody>
+						</table>
+					</div>
+				</div>
+				<h4 class="card-title" id="7_8">7.7.- Matriz de exposición laboral</h4>
 				<div class="row">
 					<div class="col-12">
 						<style type="text/css">
@@ -2061,7 +2082,7 @@
 
 						<div class="col-3">
 							<div class="form-group">
-								<label style="font-size: 14px;">Dióxido de zufre (SO₂) ppm</label>
+								<label style="font-size: 14px;">Dióxido de azufre (SO₂) ppm</label>
 								<input type="text" class="form-control" id="reporteaireevaluacion_so2" name="reporteaireevaluacion_so2" placeholder="0.25" required>
 							</div>
 						</div>

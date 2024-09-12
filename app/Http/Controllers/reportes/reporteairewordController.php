@@ -1812,7 +1812,27 @@ class reporteairewordController extends Controller
                                                 )
                                                 , "Fuera de norma"
                                             )
-                                        ) AS co2_resultado 
+                                        ) AS co2_resultado,
+                                        reporteaireevaluacion.reporteaireevaluacion_so2,
+                                                (
+                                                IF(
+                                                    -- Verificar si el valor contiene solo letras o es N.D, N.A, N/A
+                                                    reporteaireevaluacion.reporteaireevaluacion_so2 REGEXP "^[A-Za-z]+$|^N[./]?D$|^N[./]?A$", 
+                                                    -- Si contiene solo letras o las abreviaturas, retornamos "Dentro de norma"
+                                                    "Dentro de norma",  
+                                                    -- Si contiene números, continuamos con la limpieza
+                                                    IF(
+                                                        CONVERT(REPLACE(REPLACE(REPLACE(reporteaireevaluacion.reporteaireevaluacion_so2, ">" , ""), "<" ,""), " ", ""), DECIMAL(10,2)) >= 0,
+                                                        -- Después de limpiar, verificamos si el valor es mayor o igual a 0.25
+                                                        IF(
+                                                            (REPLACE(REPLACE(REPLACE(reporteaireevaluacion.reporteaireevaluacion_so2, ">" , ""), "<" ,""), " ", "") + 0) > 0.25,
+                                                            "Fuera de norma",  -- Si es mayor a 0.25, está fuera de norma
+                                                            "Dentro de norma"  -- Si es menor, está dentro de norma
+                                                        ),
+                                                        "Fuera de norma"  -- Si no es un número válido o es negativo, es fuera de norma
+                                                    )
+                                                )
+                                            ) AS so2_resultado 
                                     FROM
                                         reporteaireevaluacion
                                         LEFT JOIN reporteairearea ON reporteaireevaluacion.reporteairearea_id = reporteairearea.id
@@ -2424,6 +2444,104 @@ class reporteairewordController extends Controller
 
 
             $plantillaword->setComplexBlock('TABLA_7_6', $table);
+
+
+            // TABLA 7.7 Dióxido de Aarbono (SO2)
+            //================================================================================
+
+
+            // Crear tabla
+            $table = null;
+            $table = new Table(array('name' => $fuente, 'borderSize' => 1, 'borderColor' => '000000', 'cellMargin' => 40, 'unit' => TblWidth::TWIP));
+
+            // encabezado tabla
+            $ancho_col_1 = 1000;
+            $ancho_col_2 = 1500;
+            $ancho_col_3 = 2800;
+            $ancho_col_4 = 2400;
+            $ancho_col_5 = 1000;
+            $ancho_col_6 = 1600;
+            $ancho_col_7 = 1000;
+            $ancho_col_8 = 1700;
+
+            $table->addRow(200, array('tblHeader' => true));
+            $table->addCell($ancho_col_1, $encabezado_celda)->addTextRun($centrado)->addText('No.<w:br/>medición', $encabezado_texto);
+            $table->addCell($ancho_col_2, $encabezado_celda)->addTextRun($centrado)->addText('Instalación', $encabezado_texto);
+            $table->addCell($ancho_col_3, $encabezado_celda)->addTextRun($centrado)->addText('Área', $encabezado_texto);
+            $table->addCell($ancho_col_4, $encabezado_celda)->addTextRun($centrado)->addText('Ubicación', $encabezado_texto);
+            $table->addCell($ancho_col_5, $encabezado_celda)->addTextRun($centrado)->addText('Total, de<w:br/>puntos', $encabezado_texto);
+            $table->addCell($ancho_col_6, $encabezado_celda)->addTextRun($centrado)->addText('Límite permisible<w:br/>en ppm', $encabezado_texto);
+            $table->addCell($ancho_col_7, $encabezado_celda)->addTextRun($centrado)->addText('Resultado<w:br/>en ppm', $encabezado_texto);
+            $table->addCell($ancho_col_8, $encabezado_celda)->addTextRun($centrado)->addText('Cumplimiento<w:br/>normativo', $encabezado_texto);
+
+
+            $instalacion = 'XXXXX';
+            $area = 'XXXXX';
+            $ubicacion = 'XXXXX';
+            foreach ($sql as $key => $value) {
+                $table->addRow(); //fila
+                $table->addCell($ancho_col_1, $celda)->addTextRun($centrado)->addText($value->reporteaireevaluacion_punto, $texto);
+
+
+                if ($instalacion != $value->reporteairearea_instalacion) {
+                    $table->addCell($ancho_col_2, $combinar_fila)->addTextRun($centrado)->addText($value->reporteairearea_instalacion, $texto);
+                    $instalacion = $value->reporteairearea_instalacion;
+                } else {
+                    $table->addCell($ancho_col_2, $continua_fila);
+                }
+
+
+                if ($area != $value->reporteairearea_nombre) {
+                    $table->addCell($ancho_col_3, $combinar_fila)->addTextRun($centrado)->addText($value->reporteairearea_nombre, $texto);
+                    $area = $value->reporteairearea_nombre;
+
+                    $table->addCell($ancho_col_4, $combinar_fila)->addTextRun($centrado)->addText($value->reporteaireevaluacion_ubicacion, $texto);
+                    $ubicacion = $value->reporteaireevaluacion_ubicacion;
+
+                    $table->addCell($ancho_col_5, $combinar_fila)->addTextRun($centrado)->addText($value->total_puntosubicacion, $texto);
+                } else {
+                    $table->addCell($ancho_col_3, $continua_fila);
+
+                    if ($ubicacion != $value->reporteaireevaluacion_ubicacion) {
+                        $table->addCell($ancho_col_4,
+                            $combinar_fila
+                        )->addTextRun($centrado)->addText($value->reporteaireevaluacion_ubicacion, $texto);
+                        $ubicacion = $value->reporteaireevaluacion_ubicacion;
+
+                        $table->addCell($ancho_col_5,
+                            $combinar_fila
+                        )->addTextRun($centrado)->addText($value->total_puntosubicacion, $texto);
+                    } else {
+                        $table->addCell($ancho_col_4,
+                            $continua_fila
+                        );
+                        $table->addCell($ancho_col_5,
+                            $continua_fila
+                        );
+                    }
+                }
+
+
+                $table->addCell($ancho_col_6, $celda)->addTextRun($centrado)->addText('0.25', $texto);
+                $table->addCell($ancho_col_7, $celda)->addTextRun($centrado)->addText($value->reporteaireevaluacion_so2, $texto);
+
+
+                if ($value->co2_resultado == "Dentro de norma") //Verde
+                {
+                    $text_color = "#000000";
+                    $bgColor = "#00FF00";
+
+                    $table->addCell($ancho_col_8, array('bgColor' => $bgColor, 'valign' => 'center'))->addTextRun($centrado)->addText($value->so2_resultado, array('color' => $text_color, 'size' => $font_size, 'bold' => true, 'name' => "Arial"));
+                } else {
+                    $text_color = "#FFFFFF";
+                    $bgColor = "#FF0000";
+
+                    $table->addCell($ancho_col_8, array('bgColor' => $bgColor, 'valign' => 'center'))->addTextRun($centrado)->addText($value->so2_resultado, array('color' => $text_color, 'size' => $font_size, 'bold' => true, 'name' => "Arial"));
+                }
+            }
+
+
+            $plantillaword->setComplexBlock('TABLA_7_7', $table);
 
 
             // TABLA 7.7 Matriz de exposición laboral
@@ -3482,7 +3600,7 @@ class reporteairewordController extends Controller
             }
 
 
-            $plantillaword->setComplexBlock('TABLA_7_7', $table);
+            $plantillaword->setComplexBlock('TABLA_7_8', $table);
 
 
             // CONCLUSION

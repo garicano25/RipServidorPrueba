@@ -3059,6 +3059,7 @@ function tabla_reporte_puntos(proyecto_id, reporteregistro_id)
 						menureporte_estado("menureporte_7_4", parseInt(json.total));
 						menureporte_estado("menureporte_7_5", parseInt(json.total));
 						menureporte_estado("menureporte_7_6", parseInt(json.total));
+						menureporte_estado("menureporte_7_7", parseInt(json.total));
 
 						
 						// // Tablas
@@ -3068,6 +3069,7 @@ function tabla_reporte_puntos(proyecto_id, reporteregistro_id)
 						tabla_reporte_7_4(json.tabla_reporte_7_4);
 						tabla_reporte_7_5(json.tabla_reporte_7_5);
 						tabla_reporte_7_6(json.tabla_reporte_7_6);
+						tabla_reporte_7_7(json.tabla_reporte_7_7);
 
 
 						return json.data;
@@ -3923,6 +3925,64 @@ function tabla_reporte_7_6(tbody)
 }
 
 
+var datatable_reporte_7_7 = null;
+function tabla_reporte_7_7(tbody)
+{
+	if (datatable_reporte_7_7 != null)
+	{
+		datatable_reporte_7_7.destroy();
+	}
+
+	$('#tabla_reporte_7_7 tbody').html(tbody);
+
+
+	datatable_reporte_7_7 = $('#tabla_reporte_7_7').DataTable({
+		lengthMenu: [[20, 50, 100, -1], [20, 50, 100, "Todos"]],
+		rowsGroup: [1, 2, 3, 4, 0], //agrupar filas
+		order: [[ 0, "DESC" ]],
+		ordering: false,
+		searching: true,
+		processing: true,
+		paging: true,
+		language: {
+			lengthMenu: "Mostrar _MENU_ Registros",
+			zeroRecords: "No se encontraron registros",
+			info: "Página _PAGE_ de _PAGES_ (Total _TOTAL_ registros)",
+			infoEmpty: "No se encontraron registros",
+			infoFiltered: "(Filtrado de _MAX_ registros)",
+			emptyTable: "No hay datos disponibles en la tabla",
+			loadingRecords: "Cargando datos....",
+			processing: "Procesando <i class='fa fa-spin fa-spinner fa-3x'></i>",
+			search: "Buscar",
+			paginate: {
+				first: "Primera",
+				last: "Ultima",
+				next: "Siguiente",
+				previous: "Anterior"
+			}
+		},
+		rowCallback: function(row, data, index)
+		{
+			// // console.log(index+' - '+data.reporteiluminacionpuntos_nopunto);
+			// $(row).find('td:eq(7)').css('background', data.resultadoner_color);
+
+			if($(row).find('td:eq(7)').text() == "Dentro de norma")
+			{
+				$(row).find('td:eq(7)').css('background', "#00FF00");
+				$(row).find('td:eq(7)').css('color', '#000000');
+				$(row).find('td:eq(7)').css('font-weight', 'bold');
+			}
+			else
+			{
+				$(row).find('td:eq(7)').css('background', "#FF0000");
+				$(row).find('td:eq(7)').css('color', '#FFFFFF');
+				$(row).find('td:eq(7)').css('font-weight', 'bold');
+			}
+		},
+	});
+}
+
+
 //=================================================
 // TABLA 7.7 MATRIZ DE EXPOSICIÓN LABORAL
 
@@ -3991,7 +4051,7 @@ function tabla_reporte_matriz(proyecto_id, reporteregistro_id)
 						data: {},
 						dataSrc: function (json)
 						{
-							menureporte_estado("menureporte_7_7", parseInt(json.total));
+							menureporte_estado("menureporte_7_8", parseInt(json.total));
 
 							// alert("Done! "+json.msj);
 							return json.data;
@@ -4207,7 +4267,7 @@ function tabla_reporte_matriz(proyecto_id, reporteregistro_id)
 						data: {},
 						dataSrc: function (json)
 						{
-							menureporte_estado("menureporte_7_7", parseInt(json.total));
+							menureporte_estado("menureporte_7_8", parseInt(json.total));
 
 							// alert("Done! "+json.msj);
 							return json.data;
@@ -4411,7 +4471,7 @@ function tabla_reporte_matriz(proyecto_id, reporteregistro_id)
 				success:function(dato)
 				{
 					$('#tabla_reporte_matriz tbody').html(dato.matriz);
-					menureporte_estado("menureporte_7_7", parseInt(dato.total));
+					menureporte_estado("menureporte_7_8", parseInt(dato.total));
 
 
 					datatable_reporte_matriz = $('#tabla_reporte_matriz').DataTable({
