@@ -6207,7 +6207,6 @@ $("#boton_nueva_equipopp").click(function()
                                             '<td><input type="text" class="form-control" name="tipoRiesgo[]" value="" style="height: auto;" required></td>'+
                                             '<td><button type="button" class="btn btn-secondary btn-circle"><i class="fa fa-ban"></i></button></td>'+
                                         '</tr>');
-
     // mostrar modal
 	$('#modal_equipopp').modal({backdrop:false});
 });

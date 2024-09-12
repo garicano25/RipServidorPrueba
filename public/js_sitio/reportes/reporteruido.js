@@ -1,4 +1,5 @@
-
+// modulo EPP
+var opciones_catepp = "";
 //=================================================
 // MENU INDICE
 
@@ -110,9 +111,9 @@ $(document).ready(function()
 	$('#modal_cargando .modal-title').html('Cargando informe de '+agente_nombre); // Titulo modal
 	$('#modal_cargando').modal(); // Abrir modal
 	updateClock(); // Ejecutar tiempo de espera
-
 	datosgenerales(); // Cargar datos
-	portadaInfo()  // Portada info
+	portadaInfo();
+	consulta_categoria_epp();  // Portada info
 
 	// Inicializar campos datepicker
     jQuery('.mydatepicker').datepicker({
@@ -4030,17 +4031,66 @@ $("#boton_reporte_nuevoepp").click(function()
 	$('#form_modal_epp').each(function(){
 		this.reset();
 	});
-
 	// Campos Hidden
 	$('#reporteepp_id').val(0);
 
 	// Titulo del modal
 	$('#modal_reporte_epp .modal-title').html('Nueva equipo de protección personal');
 
-	// mostrar modal
+	//consulta_categoria_epp();
+
+	$("#tabla_lista_epp_ruido tbody").html('');
+	$("#tabla_lista_epp_ruido tbody").append(  '<tr>'+
+		'<td style="width:250px"><select class="custom-select form-control regionAnatomica" id="reporteruidoepp_partecuerpo" name="reporteruidoepp_partecuerpo" required>'+opciones_catepp+'</select></td>'+
+		'<td style="width:400px"><select class="custom-select form-control claveyEpp" id="reporteruidoepp_equipo" name="reporteruidoepp_equipo" required></select></td>' +
+	'</tr>');
 	$('#modal_reporte_epp').modal({backdrop:false});
 });
 
+$("#tabla_lista_epp_ruido tbody").on("change", ".regionAnatomica", function() {
+  
+    var valorSeleccionado = $(this).val();
+	var fila = $(this).closest("tr");
+	var selectClaveEppp = fila.find("select[name='reporteruidoepp_equipo']"); // Encontrar el Select en la misma fila
+	
+	 $.ajax({
+        type: "GET",
+        dataType: "json",
+        url: "/recsensorialClaveEppruido/"+valorSeleccionado,
+        data:{},
+        cache: false,
+        success:function(dato){
+        	selectClaveEppp.html(dato.opciones);
+        },
+        error: function(dato){
+            // alert('Error: '+dato.msj);
+            return false;
+        }
+    });//
+	
+
+});
+
+function consulta_categoria_epp()
+{
+	// alert('mensaje');
+	$.ajax({
+		type: "GET",
+		dataType: "json",
+		url: "/recsensorialeppcatalogoruido",
+		data:{},
+		cache: false,
+		success:function(dato)
+		{
+			opciones_catepp = dato.opciones;
+		},
+		error: function(dato)
+		{
+			// alert('Error: '+dato.msj);
+			return false;
+		}
+	});//Fin ajax
+}
 
 $('#tabla_reporte_epp tbody').on('click', 'td.editar', function()
 {
@@ -4051,13 +4101,38 @@ $('#tabla_reporte_epp tbody').on('click', 'td.editar', function()
 		this.reset();
 	});
 
+	
+	$("#tabla_lista_epp_ruido tbody").html('');
+		$("#tabla_lista_epp_ruido tbody").append(  '<tr>'+
+			'<td style="width:250px"><select class="custom-select form-control regionAnatomica" id="reporteruidoepp_partecuerpo" name="reporteruidoepp_partecuerpo" required></select></td>'+
+			'<td style="width:400px"><select class="custom-select form-control claveyEpp" id="reporteruidoepp_equipo" name="reporteruidoepp_equipo" required></select></td>' +
+		'</tr>');
+		
+	// Llenar campos
 	// Campos Hidden
 	$('#reporteepp_id').val(row.data().id);
-
-	// Llenar campos
 	$('#reporteruidoepp_partecuerpo').val(row.data().reporteruidoepp_partecuerpo);
-	$('#reporteruidoepp_equipo').val(row.data().reporteruidoepp_equipo);
+	
+	$.ajax({
+        type: "GET",
+        dataType: "json",
+        url: "/recsensorialClaveEppruido/"+row.data().reporteruidoepp_partecuerpo,
+        data:{},
+        cache: false,
+        success:function(dato){
+			$('#reporteruidoepp_equipo').html(dato.opciones);
+			setTimeout(() => {
+				$('#reporteruidoepp_equipo').val(row.data().reporteruidoepp_equipo);
 
+			}, 500);
+        },
+        error: function(dato){
+            // alert('Error: '+dato.msj);
+            return false;
+        }
+    });//
+	
+	
 	// Titulo del modal
 	$('#modal_reporte_epp .modal-title').html(row.data().reportearea_nombre);
 
@@ -4129,6 +4204,7 @@ $('#tabla_reporte_epp tbody').on('click', 'td>button.eliminar', function()
 						},
 						beforeSend: function()
 						{
+							
 							// $('#tabla_reporte_definiciones tbody').html('<tr><td colspan="5"><i class="fa fa-spin fa-spinner" style="font-size: 40px!important;"></i></td></tr>');
 						},
 						error: function(dato)
@@ -4221,6 +4297,7 @@ $("#botonguardar_modal_epp").click(function()
 						reporteregistro_id: reporteregistro_id,
 						catactivo_id: $("#reporte_catactivo_id").val(),
 						reporte_instalacion: $("#reporte_instalacion").val(),
+
 					},
 					resetForm: false,
 					success: function(dato)
@@ -4254,6 +4331,7 @@ $("#botonguardar_modal_epp").click(function()
 					},
 					beforeSend: function()
 					{
+						console.log($('#form_modal_epp').serializeArray());
 						$('#botonguardar_modal_epp').html('Guardando <i class="fa fa-spin fa-spinner"></i>');
 						$('#botonguardar_modal_epp').attr('disabled', true);
 					},

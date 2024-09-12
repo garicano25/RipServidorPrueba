@@ -409,6 +409,10 @@ Route::resource('recsensorialequipopp', 'recsensorial\recsensorialequipoppContro
 
 Route::get('recsensorialequipopptabla/{recsensorial_id}', ['as' => 'recsensorialequipopp.recsensorialequipopptabla', 'uses' => 'recsensorial\recsensorialequipoppController@recsensorialequipopptabla']);
 
+Route::get('recsensorialeppcatalogoruido', ['as' => 'recsensorialequipopp.recsensorialeppcatalogoruido', 'uses' => 'recsensorial\recsensorialequipoppController@recsensorialeppcatalogoruido']);
+
+Route::get('recsensorialClaveEppruido/{PARTECUERPO_ID}', ['as' => 'recsensorialequipopp.recsensorialClaveEppruido', 'uses' => 'recsensorial\recsensorialequipoppController@recsensorialClaveEppruido']);
+
 Route::get('recsensorialeppcatalogo', ['as' => 'recsensorialequipopp.recsensorialeppcatalogo', 'uses' => 'recsensorial\recsensorialequipoppController@recsensorialeppcatalogo']);
 
 Route::get('recsensorialeppcategorias/{recsensorial_id}/{seleccionado_id}', ['as' => 'recsensorialequipopp.recsensorialeppcategorias', 'uses' => 'recsensorial\recsensorialequipoppController@recsensorialeppcategorias']);
