@@ -1673,7 +1673,27 @@ class reporteairewordController extends Controller
                                                 )
                                                 , "Fuera de norma"
                                             )
-                                        ) AS co2_resultado 
+                                        ) AS co2_resultado,
+                                        reporteaireevaluacion.reporteaireevaluacion_so2,
+                                                (
+                                                IF(
+                                                    -- Verificar si el valor contiene solo letras o es N.D, N.A, N/A
+                                                    reporteaireevaluacion.reporteaireevaluacion_so2 REGEXP "^[A-Za-z]+$|^N[./]?D$|^N[./]?A$", 
+                                                    -- Si contiene solo letras o las abreviaturas, retornamos "Dentro de norma"
+                                                    "Dentro de norma",  
+                                                    -- Si contiene números, continuamos con la limpieza
+                                                    IF(
+                                                        CONVERT(REPLACE(REPLACE(REPLACE(reporteaireevaluacion.reporteaireevaluacion_so2, ">" , ""), "<" ,""), " ", ""), DECIMAL(10,2)) >= 0,
+                                                        -- Después de limpiar, verificamos si el valor es mayor o igual a 0.25
+                                                        IF(
+                                                            (REPLACE(REPLACE(REPLACE(reporteaireevaluacion.reporteaireevaluacion_so2, ">" , ""), "<" ,""), " ", "") + 0) > 0.25,
+                                                            "Fuera de norma",  -- Si es mayor a 0.25, está fuera de norma
+                                                            "Dentro de norma"  -- Si es menor, está dentro de norma
+                                                        ),
+                                                        "Fuera de norma"  -- Si no es un número válido o es negativo, es fuera de norma
+                                                    )
+                                                )
+                                            ) AS so2_resultado  
                                     FROM
                                         reporteaireevaluacion
                                         LEFT JOIN reportearea ON reporteaireevaluacion.reporteairearea_id = reportearea.id
