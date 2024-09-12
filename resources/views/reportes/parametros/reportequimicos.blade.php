@@ -2280,4 +2280,4 @@
 	var areas_poe = <?php echo json_encode($areas_poe); ?>;
 </script>
 <script src="/js_sitio/html2canvas.js"></script>
-<script src="/js_sitio/reportes/reportequimicos.js?v=7.0"></script>
+<script src="/js_sitio/reportes/reportequimicos.js?v=8.0"></script>
