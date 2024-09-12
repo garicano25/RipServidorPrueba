@@ -1841,18 +1841,19 @@
 							{!! csrf_field() !!}
 							<input type="hidden" class="form-control" id="reporteepp_id" name="reporteepp_id" value="0">
 						</div>
-						<div class="col-12">
-							<div class="form-group">
-								<label>Parte del cuerpo</label>
-								<input type="text" class="form-control" id="reportequimicosepp_partecuerpo" name="reportequimicosepp_partecuerpo" required>
-							</div>
-						</div>
-						<div class="col-12">
-							<div class="form-group">
-								<label>Equipo de protección personal básico proporcionado</label>
-								<input type="text" class="form-control" id="reportequimicosepp_equipo" name="reportequimicosepp_equipo" required>
-							</div>
-						</div>
+						<div class="table-responsive" style="max-height: 410px!important;">
+                                <table class="table table-hover stylish-table" width="100%" id="tabla_lista_epp_quimicos">
+                                    <thead>
+									<tr>
+                                            <th style="max-width: 48%!important;">Parte del cuerpo *</th>
+                                            <th style="max-width: 48%!important;">Equipo de protección personal básico proporcionado *</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+									
+                                    </tbody>
+                                </table>
+                            </div>
 					</div>
 				</div>
 				<div class="modal-footer">

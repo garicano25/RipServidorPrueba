@@ -2,7 +2,8 @@
 
 //=================================================
 // MENU INDICE
-
+// modulo EPP
+var opciones_catepp = "";
 
 $(".stickyside").stick_in_parent({
 	offset_top: 150 // Margin Top del menu
@@ -113,6 +114,7 @@ $(document).ready(function()
 
 	datosgenerales(); // Cargar datos
 	portadaInfo() // Info de la portada
+	consulta_categoria_epp(); //cargar partes del cuerpo epp
 
 	// Inicializar campos datepicker
     jQuery('.mydatepicker').datepicker({
@@ -3818,12 +3820,63 @@ $("#boton_reporte_nuevoepp").click(function()
 	$('#reporteepp_id').val(0);
 
 	// Titulo del modal
-	$('#modal_reporte_epp .modal-title').html('Nueva equipo de protección personal');
+	$('#modal_reporte_epp .modal-title').html('Nuevo equipo de protección personal');
 
+	//consulta_categoria_epp();
+
+	$("#tabla_lista_epp_quimicos tbody").html('');
+	$("#tabla_lista_epp_quimicos tbody").append(  '<tr>'+
+		'<td style="width:250px"><select class="custom-select form-control regionAnatomica" id="reportequimicosepp_partecuerpo" name="reportequimicosepp_partecuerpo" required>'+opciones_catepp+'</select></td>'+
+		'<td style="width:400px"><select class="custom-select form-control claveyEpp" id="reportequimicosepp_equipo" name="reportequimicosepp_equipo" required></select></td>' +
+	'</tr>');
 	// mostrar modal
 	$('#modal_reporte_epp').modal({backdrop:false});
 });
 
+$("#tabla_lista_epp_quimicos tbody").on("change", ".regionAnatomica", function() {
+  
+    var valorSeleccionado = $(this).val();
+	var fila = $(this).closest("tr");
+	var selectClaveEppp = fila.find("select[name='reportequimicosepp_equipo']"); // Encontrar el Select en la misma fila
+	
+	 $.ajax({
+        type: "GET",
+        dataType: "json",
+        url: "/recsensorialClaveEppruido/"+valorSeleccionado,
+        data:{},
+        cache: false,
+        success:function(dato){
+        	selectClaveEppp.html(dato.opciones);
+        },
+        error: function(dato){
+            // alert('Error: '+dato.msj);
+            return false;
+        }
+    });//
+	
+
+});
+
+function consulta_categoria_epp()
+{
+	// alert('mensaje');
+	$.ajax({
+		type: "GET",
+		dataType: "json",
+		url: "/recsensorialeppcatalogoruido",
+		data:{},
+		cache: false,
+		success:function(dato)
+		{
+			opciones_catepp = dato.opciones;
+		},
+		error: function(dato)
+		{
+			// alert('Error: '+dato.msj);
+			return false;
+		}
+	});//Fin ajax
+}
 
 $('#tabla_reporte_epp tbody').on('click', 'td.editar', function()
 {
@@ -3836,17 +3889,45 @@ $('#tabla_reporte_epp tbody').on('click', 'td.editar', function()
 
 	// Campos Hidden
 	$('#reporteepp_id').val(row.data().id);
-
-	// Llenar campos
-	$('#reportequimicosepp_partecuerpo').val(row.data().reportequimicosepp_partecuerpo);
-	$('#reportequimicosepp_equipo').val(row.data().reportequimicosepp_equipo);
-
 	// Titulo del modal
 	$('#modal_reporte_epp .modal-title').html('Equipo de protección personal');
 
+	consulta_categoria_epp()
+	
+	$("#tabla_lista_epp_ruido tbody").html('');
+	$("#tabla_lista_epp_ruido tbody").append(  '<tr>'+
+			'<td style="width:250px"><select class="custom-select form-control regionAnatomica" id="reportequimicosepp_partecuerpo" name="reportequimicosepp_partecuerpo" required>'+opciones_catepp+'</select></td>'+
+			'<td style="width:400px"><select class="custom-select form-control claveyEpp" id="reportequimicosepp_equipo" name="reportequimicosepp_equipo" required></select></td>' +
+		'</tr>');
+		
+	// Llenar campos
+	// Campos Hidden
+	$('#reporteepp_id').val(row.data().id);
+	
+	
+	$.ajax({
+        type: "GET",
+        dataType: "json",
+        url: "/recsensorialClaveEppruido/"+row.data().reportequimicosepp_partecuerpo,
+        data:{},
+        cache: false,
+        success:function(dato){
+			$('#reportequimicosepp_equipo').html(dato.opciones);
+			setTimeout(() => {
+				$('#reportequimicosepp_partecuerpo').val(row.data().reportequimicosepp_partecuerpo);
+				$('#reportequimicosepp_equipo').val(row.data().reportequimicosepp_equipo);
+
+			}, 500);
+        },
+        error: function(dato){
+            // alert('Error: '+dato.msj);
+            return false;
+        }
+    });//
 	// mostrar modal
 	$('#modal_reporte_epp').modal({backdrop:false});
 });
+
 
 
 $('#tabla_reporte_epp tbody').on('click', 'td>button.eliminar', function()

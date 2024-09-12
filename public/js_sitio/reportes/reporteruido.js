@@ -113,7 +113,7 @@ $(document).ready(function()
 	updateClock(); // Ejecutar tiempo de espera
 	datosgenerales(); // Cargar datos
 	portadaInfo();
-	consulta_categoria_epp();  // Portada info
+	consulta_categoria_epp();  // cargar partes del cuerpo epp
 
 	// Inicializar campos datepicker
     jQuery('.mydatepicker').datepicker({

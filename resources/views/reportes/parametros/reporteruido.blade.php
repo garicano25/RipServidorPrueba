@@ -2195,8 +2195,8 @@
                                 <table class="table table-hover stylish-table" width="100%" id="tabla_lista_epp_ruido">
                                     <thead>
 									<tr>
-                                            <th style="max-width: 48%!important;">Región anatómica *</th>
-                                            <th style="max-width: 48%!important;">Clave y EPP *</th>
+                                            <th style="max-width: 48%!important;">Parte del cuerpo *</th>
+                                            <th style="max-width: 48%!important;">Equipo de protección personal básico proporcionado *</th>
                                         </tr>
                                     </thead>
                                     <tbody>
