@@ -6551,7 +6551,7 @@ class reporteruidoController extends Controller
                                         'reporteruidocategoria_id' => isset($IdCategorias[$rowData['E']]) ?  $IdCategorias[$rowData['E']] : null,
                                         'reporteruidodosisner_lmpe' => $lmpe,
                                         'reporteruidodosisner_tmpe' => is_null($rowData['C']) ? 'NA' : calculartmpe($rowData['C']),
-
+                                        'reporteruidodosisner_nombre' => is_null($rowData['F']) ? 'NA' : $rowData['F'],
                                     ]);
 
 

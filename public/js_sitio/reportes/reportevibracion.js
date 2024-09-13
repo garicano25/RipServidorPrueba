@@ -6800,7 +6800,7 @@ $(document).ready(function () {
                             type: 'POST',
                             url: ''+ruta_storage_guardar,
                             data: {
-								opcion: 1000,
+								opcion: 1001,
 
 								proyecto_id: proyecto.id
 
@@ -6841,6 +6841,7 @@ $(document).ready(function () {
                                 
                                 } else {
 
+									console.log(dato.msj);
                                      swal({
                                         title: "Ocurrio un error al intentar insertar los datos.",
                                         text: ""+dato.msj,
@@ -6866,7 +6867,9 @@ $(document).ready(function () {
                                 // actualiza boton
                                 $('#botonCargarExcelResultados').prop('disabled', false);
                                 $('#divCargaResultados').css('display', 'none');
+								
 
+								console.log(dato.msj);
                                 // mensaje
                                 swal({
                                     title: "Error al cargar los puntos.",
