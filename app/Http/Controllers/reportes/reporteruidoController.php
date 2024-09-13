@@ -6510,16 +6510,24 @@ class reporteruidoController extends Controller
                                     ]);
 
 
+                                    #Verificamos si existe registro con ese ID en la tabla de reporteruidopuntonerfrecuencias para  no duplicar los datos
+                                    $total = reporteruidopuntonerfrecuenciasModel::where('reporteruidopuntoner_id', $punto->id)->count();
 
-                                    $frecuencias_bandasoctava = array('31.5', '63', '125', '250', '500', '1K', '2K', '4K', '8K');
-                                    foreach ($frecuencias_bandasoctava as $key => $value) {
-                                        $frecuencia = reporteruidopuntonerfrecuenciasModel::create([
-                                            'reporteruidopuntoner_id' => $punto->id,
-                                            'reporteruidopuntonerfrecuencias_orden' => ($key + 1),
-                                            'reporteruidopuntonerfrecuencias_frecuencia' => $value,
-                                            'reporteruidopuntonerfrecuencias_nivel' => NULL
-                                        ]);
+                                    if ($total == 0) {
+
+                                        $frecuencias_bandasoctava = array('31.5', '63', '125', '250', '500', '1K', '2K', '4K', '8K');
+                                        foreach ($frecuencias_bandasoctava as $key => $value) {
+                                            $frecuencia = reporteruidopuntonerfrecuenciasModel::create([
+                                                'reporteruidopuntoner_id' => $punto->id,
+                                                'reporteruidopuntonerfrecuencias_orden' => ($key + 1),
+                                                'reporteruidopuntonerfrecuencias_frecuencia' => $value,
+                                                'reporteruidopuntonerfrecuencias_nivel' => NULL
+                                            ]);
+                                        }
+
                                     }
+
+
 
                                     $puntosInsertados++;
                                 }
