@@ -5633,7 +5633,7 @@ class reporteruidoController extends Controller
                 } else {
 
                     //Agrupamos celdas y asignamos valores almacenamos
-                    $finMerge = $rowInicio - 1;
+                    $finMerge = $rowInicio;
 
                     mergeSetValueCenter($NER, 'B', 'G', 'B', $inicioMerge1, $finMerge, 0, $areaLast);
                     mergeSetValueCenter($NER, 'O', 'P', 'O', $inicioMerge1, $finMerge, 0, $turnoLast);
