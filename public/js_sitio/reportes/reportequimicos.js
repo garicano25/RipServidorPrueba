@@ -4734,7 +4734,7 @@ $('#tabla_reporte_7 tbody').on('click', 'td.editar', function()
 	// Llenar campos
 	$('#reportequimicosevaluacion_punto').val(row.data().reportequimicosevaluacion_punto);
 	$('#reportequimicosevaluacion_areaid').val(row.data().reportequimicosarea_id);
-	$('#reportequimicosevaluacion_nombre').val(row.data().reportequimicosevaluacion_nombre);
+	$('#reportequimicosevaluacion_nombre').val(row.data().reportequimicosevaluacion_nombre); 
 	$('#reportequimicosevaluacion_ficha').val(row.data().reportequimicosevaluacion_ficha);
 	$('#reportequimicosevaluacion_geo').val(row.data().reportequimicosevaluacion_geo);
 	$('#reportequimicosevaluacion_total').val(row.data().reportequimicosevaluacion_total);
@@ -9532,6 +9532,30 @@ $("#tabla_evaluacion_parametros tbody").on("change", ".sustanciaMetodoFind", fun
     var valorSeleccionado = $(this).val();
 	var fila = $(this).closest("tr");
 	var selectMetodo = fila.find("select[name='reportequimicosevaluacionparametro_metodo[]']"); 
+	
+	 $.ajax({
+        type: "GET",
+        dataType: "json",
+        url: "/obtenerMetodosSustancias/" + valorSeleccionado,
+        data:{},
+        cache: false,
+		 success: function (dato) {
+			
+        	selectMetodo.html(dato.opciones);
+        },
+        error: function(dato){
+           
+            return false;
+        }
+    });//
+	
+
+});
+
+$("#reportequimicosmetodomuestreo_parametro").on("change" , function() {
+  
+    var valorSeleccionado = $(this).val();
+	var selectMetodo = $("#reportequimicosmetodomuestreo_metodo"); 
 	
 	 $.ajax({
         type: "GET",

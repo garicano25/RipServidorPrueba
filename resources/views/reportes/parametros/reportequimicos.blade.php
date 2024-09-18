@@ -1842,18 +1842,18 @@
 							<input type="hidden" class="form-control" id="reporteepp_id" name="reporteepp_id" value="0">
 						</div>
 						<div class="table-responsive" style="max-height: 410px!important;">
-                                <table class="table table-hover stylish-table" width="100%" id="tabla_lista_epp_quimicos">
-                                    <thead>
+							<table class="table table-hover stylish-table" width="100%" id="tabla_lista_epp_quimicos">
+								<thead>
 									<tr>
-                                            <th style="max-width: 48%!important;">Parte del cuerpo *</th>
-                                            <th style="max-width: 48%!important;">Equipo de protección personal básico proporcionado *</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-									
-                                    </tbody>
-                                </table>
-                            </div>
+										<th style="max-width: 48%!important;">Parte del cuerpo *</th>
+										<th style="max-width: 48%!important;">Equipo de protección personal básico proporcionado *</th>
+									</tr>
+								</thead>
+								<tbody>
+
+								</tbody>
+							</table>
+						</div>
 					</div>
 				</div>
 				<div class="modal-footer">
@@ -2043,7 +2043,9 @@
 								<div class="col-12">
 									<div class="form-group">
 										<label>Procedimiento o método</label>
-										<textarea class="form-control" rows="2" id="reportequimicosmetodomuestreo_metodo" name="reportequimicosmetodomuestreo_metodo" required></textarea>
+										<select class="custom-select form-control" id="reportequimicosmetodomuestreo_metodo" name="reportequimicosmetodomuestreo_metodo" required>
+											<option value=""></option>
+										</select>
 									</div>
 								</div>
 								<div class="col-12">
@@ -2262,7 +2264,7 @@
 
 {{-- Amcharts --}}
 {{-- <link href="/assets/plugins/c3-master/c3.min.css" rel="stylesheet">
-<script src="/assets/plugins/amChart/amcharts/amcharts.js" type="text/javascript"></script>
+<script src="/assets/plugins/amChart/amcharts/amcharts.js" type="text/javascript"></script> 
 <script src="/assets/plugins/amChart/amcharts/serial.js" type="text/javascript"></script>
 <script src="/assets/plugins/amChart/amcharts/plugins/responsive/responsive.min.js" type="text/javascript"></script>
 <script src="/assets/plugins/amChart/amcharts/plugins/export/export.js" type="text/javascript"></script>

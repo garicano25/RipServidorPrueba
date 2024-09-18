@@ -5566,7 +5566,9 @@ class reporteruidoController extends Controller
             //=============================================================== CONFIGURACION DE LA PORTADA ===============================================================
             $PORTADA->setCellValue('C6', strtoupper($proyecto->proyecto_clientenombrecomercial));
             $PORTADA->setCellValue('C16', "SECTOR XXX: " . strtoupper($proyecto->proyecto_clienteinstalacion));
+            pintarCeldaCustom($PORTADA, 'C', 16, 'FF6600');
             $PORTADA->setCellValue('C20', "ESPECIFICAR NOMBRE DE LA REFINERIA");
+            pintarCeldaCustom($PORTADA, 'C', 20, 'FF6600');
             $PORTADA->setCellValue('C22', $proyecto->proyecto_clientedireccionservicio);
             #Insertamos la imagen en la portada
             insertarImagen($PORTADA, $spreadsheet, "D", 2);
@@ -5727,6 +5729,7 @@ class reporteruidoController extends Controller
             mergeSetValue($NER, 'L', 'AA', 'L', $numero, $numero, 1, 'José Roberto Torres Rodríguez');
             mergeSetValue($NER, 'AB', 'AF', 'AB', $numero, $numero, 1, 'ACREDITACIÓN: ');
             mergeSetValue($NER, 'AG', 'AP', 'AG', $numero, $numero, 1, ' XXXXXXXXXXXXX');
+            pintarCeldaCustom($NER, 'AG', $numero+1, 'FF6600');            
             pintarCelda($NER, 'AB', $numero + 1);
             mergeSetValue($NER, 'B', 'H', 'B', $numero, $numero, 2, 'FECHA DE EVALUACIÓN:');
             pintarCelda($NER, 'B', $numero + 2);
@@ -5842,6 +5845,8 @@ class reporteruidoController extends Controller
             $NPA->setCellValue('L11', 'José Roberto Torres Rodríguez');
             $NPA->setCellValue('I12', $fecha);
             $NPA->setCellValue('AG11', 'XXXXXXXX');
+            pintarCeldaCustom($NPA, 'AG', 11, 'FF6600');            
+
 
             #Equipo utilizado
             $celdaEquipoNpa = 15;
@@ -6004,6 +6009,9 @@ class reporteruidoController extends Controller
             // =============================================================== CONFIGURACION DE LA PAGINA EPP ==============================================================
 
             #Pintamos y colocamos la imagen
+            pintarCeldaCustom($EPP, 'L', 9, 'FF6600');
+            pintarCeldaCustom($EPP, 'I', 10, 'FF6600');            
+
             pintarCelda($EPP, 'B', 12);
             pintarCelda($EPP, 'C', 12);
             pintarCelda($EPP, 'L', 12);
@@ -6132,6 +6140,8 @@ class reporteruidoController extends Controller
             $DOSIMETRIA->setCellValue('L9', "SECTOR XXX: " . strtoupper($proyecto->proyecto_clienteinstalacion));
             $DOSIMETRIA->setCellValue('H11', $proyecto->proyecto_clientedireccionservicio);
             $DOSIMETRIA->setCellValue('L10', "XXXXXXXXXXXXXXXXXX");
+            pintarCeldaCustom($DOSIMETRIA, 'L', 10, 'FF6600');            
+
             pintarCelda($DOSIMETRIA, 'B', 10);
             pintarCelda($DOSIMETRIA, 'B', 11);
             pintarCelda($DOSIMETRIA, 'R', 11);
@@ -6181,7 +6191,9 @@ class reporteruidoController extends Controller
                 mergeSetValueCenter($DOSIMETRIA, 'L', 'R', 'L', $numerodosis, $numerodosis, 0, $val->MODELO);
                 mergeSetValueCenter($DOSIMETRIA, 'S', 'Y', 'S', $numerodosis, $numerodosis, 0, $val->SERIE);
                 mergeSetValueCenter($DOSIMETRIA, 'Z', 'AB', 'Z', $numerodosis, $numerodosis, 0, "XXX");
+                pintarCeldaCustom($DOSIMETRIA, 'Z', $numerodosis, 'FF6600');            
                 mergeSetValueCenter($DOSIMETRIA, 'AC', 'AF', 'AC', $numerodosis, $numerodosis, 0, "XXX");
+                pintarCeldaCustom($DOSIMETRIA, 'AC', $numerodosis, 'FF6600');            
 
                 $numerodosis++;
             }
@@ -6226,7 +6238,9 @@ class reporteruidoController extends Controller
                 ajustarTexto($DOSIMETRIA, 'G', $numeroTrabajadores); 
                 mergeSetValueCenter($DOSIMETRIA, 'L', 'P', 'L', $numeroTrabajadores, $numeroTrabajadores, 0, $val->INSTRUMENTO);
                 mergeSetValueCenter($DOSIMETRIA, 'Q', 'R', 'Q', $numeroTrabajadores, $numeroTrabajadores, 0, "XXX");
+                pintarCeldaCustom($DOSIMETRIA, 'Q', $numeroTrabajadores, 'FF6600');            
                 mergeSetValueCenter($DOSIMETRIA, 'S', 'T', 'S', $numeroTrabajadores, $numeroTrabajadores, 0, "XXX");
+                pintarCeldaCustom($DOSIMETRIA, 'S', $numeroTrabajadores, 'FF6600');            
                 mergeSetValueCenter($DOSIMETRIA, 'U', 'Y', 'U', $numeroTrabajadores, $numeroTrabajadores, 0, $val->TIEMPO_MEDICION);
                 mergeSetValueCenter($DOSIMETRIA, 'Z', 'Z', 'Z', $numeroTrabajadores, $numeroTrabajadores, 0, $val->DOSIS);
                 mergeSetValueCenter($DOSIMETRIA, 'AA', 'AC', 'AA', $numeroTrabajadores, $numeroTrabajadores, 0, $val->NER);
@@ -6520,7 +6534,7 @@ class reporteruidoController extends Controller
                                             $frecuencia = reporteruidopuntonerfrecuenciasModel::create([
                                                 'reporteruidopuntoner_id' => $punto->id,
                                                 'reporteruidopuntonerfrecuencias_orden' => ($key + 1),
-                                                'reporteruidopuntonerfrecuencias_frecuencia' => $value,
+                                                'reporteruidopuntonerfrecuencias_frecuencia' => $value, 
                                                 'reporteruidopuntonerfrecuencias_nivel' => NULL
                                             ]);
                                         }
