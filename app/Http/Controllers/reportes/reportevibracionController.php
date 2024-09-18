@@ -809,7 +809,7 @@ class reportevibracionController extends Controller
      * @param  int $proyecto_id
      * @return \Illuminate\Http\Response
      */
-    public function reportevibracionareas($proyecto_id)
+    public function reportevibracionareas($proyecto_id) 
     {
         try {
             $numero_registro = 0;
@@ -5350,7 +5350,7 @@ class reportevibracionController extends Controller
                 if (($request->reportevibracionevaluacion_tipoevaluacion + 0) == 1) {
                     $request['reportevibracionevaluacion_promedio'] = null;
                     $request['reportevibracionevaluacion_valormaximo'] = null;
-                    $request['reportevibracionevaluacion_fecha'] = null;
+                    // $request['reportevibracionevaluacion_fecha'] = null;
                 }
 
 
@@ -5358,7 +5358,7 @@ class reportevibracionController extends Controller
                     $request['reportevibracionevaluacion_tiempoexposicion'] = $request->reportevibracionevaluacion_promedio;
                     $request['reportevibracionevaluacion_promedio'] = null;
                     $request['reportevibracionevaluacion_valormaximo'] = null;
-                    $request['reportevibracionevaluacion_fecha'] = null;
+                    // $request['reportevibracionevaluacion_fecha'] = null;
                 }
 
 
@@ -5379,6 +5379,7 @@ class reportevibracionController extends Controller
                     // Mensaje
                     $dato["msj"] = 'Datos guardados correctamente';
                 } else {
+
                     $punto = reportevibracionevaluacionModel::findOrFail($request->reportevibracionevaluacion_id);
                     $punto->update($request->all());
 
