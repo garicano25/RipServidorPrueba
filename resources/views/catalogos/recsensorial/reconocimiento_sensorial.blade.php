@@ -363,7 +363,6 @@
                                                                                                                 {{$dato->catPrueba_Nombre}}
                                                                                                             </label>
                                                                                                             <input type="number" class="form-control cantidad" id="cantidad_{{$dato->id}}" style="width: 31%; height: 5px!important;" placeholder="Cantidad" min="0">
-
                                                                                                         </div>
                                                                                                     </div>
                                                                                                     @endforeach
@@ -3934,6 +3933,10 @@
 <!-- ============================================================== -->
 <!-- VISOR-MODAL -->
 <!-- ============================================================== -->
+
+<script>
+  var rolUsuario = @json(auth()->user()->roles->first()->rol_Nombre);
+</script>
 
 {{-- ========================================================================= --}}
 @endsection
