@@ -798,6 +798,10 @@ Route::get('proyectotabla', ['as' => 'proyecto.proyectotabla', 'uses' => 'proyec
 
 Route::get('proyectotablaInternos', ['as' => 'proyecto.proyectotablaInternos', 'uses' => 'proyecto\proyectoController@proyectotablaInternos']);
 
+Route::get('proyectoUsuarios/{PROYECTO_ID}', ['as' => 'proyecto.proyectoUsuarios', 'uses' => 'proyecto\proyectoController@proyectoUsuarios']);
+
+Route::get('actualizarEstadoUsuario/{ID}/{ACTIVO}', ['as' => 'proyecto.actualizarEstadoUsuario', 'uses' => 'proyecto\proyectoController@actualizarEstadoUsuario']);
+
 Route::get('proyectoEstructuta/{ID_PROYECTO}', ['as' => 'proyecto.proyectoEstructuta', 'uses' => 'proyecto\proyectoController@proyectoEstructuta']);
 
 Route::get('proyectoContactos', ['as' => 'proyecto.proyectoContactos', 'uses' => 'proyecto\proyectoController@proyectoContactos']);
