@@ -3747,7 +3747,7 @@ $("#boton_guardar_oc").click(function()
 					type: 'POST',
 					url: '/proyectoordencompra',
 					data: {
-						proyecto_id: $('#proyecto_id').val()
+						proyecto_id: proyecto_id
 					},
 					resetForm: false,
 					success: function(dato)
