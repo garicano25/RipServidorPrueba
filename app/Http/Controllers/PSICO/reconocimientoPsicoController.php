@@ -8,6 +8,7 @@ use Illuminate\Support\Facades\Storage;
 use Image;
 use Carbon\Carbon;
 use DateTime;
+
 use DB;
 use Artisan;
 use Exception;
@@ -228,172 +229,231 @@ class reconocimientoPsicoController extends Controller
                 if (($request->recsensorial_id + 0) == 0) //nuevo
                 {
 
-                    DB::statement('ALTER TABLE reconocimientopsico AUTO_INCREMENT=1');
+                        DB::statement('ALTER TABLE reconocimientopsico AUTO_INCREMENT=1');
 
-                    //Verificamos si el reconocimiento requiere contrato de no requerir autorizado lo ponemos como 0 para que deba ser autorizado
-                    if (intval($request->requiere_contrato) == 1) {
-                        $request['autorizado'] = 1;
+                        //Verificamos si el reconocimiento requiere contrato de no requerir autorizado lo ponemos como 0 para que deba ser autorizado
+                        if (intval($request->requiere_contrato) == 1) {
+                            $request['autorizado'] = 1;
+                            $request['recsensorial_bloqueado'] = 0;
+                        } else {
+                            $request['recsensorial_bloqueado'] = 1;
+                            $request['autorizado'] = 0;
+                            $request['contrato_id'] = 0;
+                        }
+
+                        $request['recsensorial_fisicosimprimirbloqueado'] = 0;
+                        $request['recsensorial_quimicosimprimirbloqueado'] = 0;
                         $request['recsensorial_bloqueado'] = 0;
-                    } else {
-                        $request['recsensorial_bloqueado'] = 1;
-                        $request['autorizado'] = 0;
-                        $request['contrato_id'] = 0;
-                    }
 
-                    $request['recsensorial_fisicosimprimirbloqueado'] = 0;
-                    $request['recsensorial_quimicosimprimirbloqueado'] = 0;
-                    $request['recsensorial_bloqueado'] = 0;
-
-                    $request['recsensorial_eliminado'] = 0;
-                    $reconocimientopsico = reconocimientopsicoModel::create($request->all());
-                    // $recsensorial->recsensorialpruebas()->sync($request->parametro); // SE COMENTO PORQUE YA SON DOS ARREGLOS DE PRUEBAS ENTONCES SI HIZO APARTE
+                        $request['recsensorial_eliminado'] = 0;
+                        $reconocimientopsico = reconocimientopsicoModel::create($request->all());
+                        // $recsensorial->recsensorialpruebas()->sync($request->parametro); // SE COMENTO PORQUE YA SON DOS ARREGLOS DE PRUEBAS ENTONCES SI HIZO APARTE
 
 
-                    //UNA VEZ GUARDADO TODO LO DE RECONOCIMIENTO PROCEDEMOS A VINCULAR EL  ID DEL RECONOCIMIENTO CON EL PROYECTO
-                    $proyecto = proyectoModel::where('proyecto_folio', $request["proyecto_folio"])->first();
-                    $proyecto->reconocimiento_psico_id = $reconocimientopsico->id;
-                    $proyecto->save();
+                        //UNA VEZ GUARDADO TODO LO DE RECONOCIMIENTO PROCEDEMOS A VINCULAR EL  ID DEL RECONOCIMIENTO CON EL PROYECTO
+                        $proyecto = proyectoModel::where('proyecto_folio', $request["proyecto_folio"])->first();
+                        $proyecto->reconocimiento_psico_id = $reconocimientopsico->id;
+                        $proyecto->save();
 
 
-                    // mensaje
-                    $dato["msj"] = 'Información guardada correctamente y vinculado con el proyecto: ' . $request["proyecto_folio"];
-                    $recsensorial_activo = 1;
+                        // mensaje
+                        $dato["msj"] = 'Información guardada correctamente y vinculado con el proyecto: ' . $request["proyecto_folio"];
+                        $recsensorial_activo = 1;
 
 
-                    // si envia archivo FOTO ubicacion
-                if ($request->file('inputfotomapa')) {
-                    $extension = $request->file('inputfotomapa')->getClientOriginalExtension();
-                    $request['fotoubicacion'] = $request->file('inputfotomapa')->storeAs('reconocimiento_psico/' . $reconocimientopsico->id . '/mapa', $reconocimientopsico->id . '.' . $extension);
-                    $reconocimientopsico->update($request->all());
-                }else{
-                    $recsensorial_extension = $request['hidden_fotomapa_extension'];
-                    $recsensorial_id = $request['hidden_fotomapa'];
-                    $rutaOriginal = 'recsensorial/' . $recsensorial_id . '/mapa/' . $recsensorial_id . $recsensorial_extension;
-
-                    if (Storage::exists($rutaOriginal)) {
-                        // Asegúrate de crear el directorio si no existe
-                        $nuevaRuta = 'reconocimiento_psico/' . $reconocimientopsico->id . '/mapa/' . $reconocimientopsico->id . '.' . pathinfo($rutaOriginal, PATHINFO_EXTENSION);
-    
-                        Storage::makeDirectory('reconocimiento_psico/' . $reconocimientopsico->id . '/mapa');
-    
-                        // Copiar la imagen a la nueva ubicación
-                        Storage::copy($rutaOriginal, $nuevaRuta);
-                        
-                        // Actualiza la base de datos con la nueva ruta
-                        $reconocimientopsico->fotoubicacion = $nuevaRuta;
+                        // si envia archivo FOTO ubicacion
+                    if ($request->file('inputfotomapa')) {
+                        $extension = $request->file('inputfotomapa')->getClientOriginalExtension();
+                        $request['fotoubicacion'] = $request->file('inputfotomapa')->storeAs('reconocimiento_psico/' . $reconocimientopsico->id . '/mapa', $reconocimientopsico->id . '.' . $extension);
                         $reconocimientopsico->update($request->all());
-                    } else {
-                        // Manejar caso en el que la imagen original no existe
-                        // Puedes lanzar una excepción o asignar un valor predeterminado
-                        throw new Exception("La imagen original no existe en la ruta: " . $rutaOriginal);
+                    }else{
+                        $recsensorial_extension = $request['hidden_fotomapa_extension'];
+                        $recsensorial_id = $request['hidden_fotomapa'];
+                        $rutaOriginal = 'recsensorial/' . $recsensorial_id . '/mapa/' . $recsensorial_id . $recsensorial_extension;
+
+                        if (Storage::exists($rutaOriginal)) {
+                            // Asegúrate de crear el directorio si no existe
+                            $nuevaRuta = 'reconocimiento_psico/' . $reconocimientopsico->id . '/mapa/' . $reconocimientopsico->id . '.' . pathinfo($rutaOriginal, PATHINFO_EXTENSION);
+        
+                            Storage::makeDirectory('reconocimiento_psico/' . $reconocimientopsico->id . '/mapa');
+        
+                            // Copiar la imagen a la nueva ubicación
+                            Storage::copy($rutaOriginal, $nuevaRuta);
+                            
+                            // Actualiza la base de datos con la nueva ruta
+                            $reconocimientopsico->fotoubicacion = $nuevaRuta;
+                            $reconocimientopsico->update($request->all());
+                        } else {
+                            // Manejar caso en el que la imagen original no existe
+                            // Puedes lanzar una excepción o asignar un valor predeterminado
+                            throw new Exception("La imagen original no existe en la ruta: " . $rutaOriginal);
+                        }
                     }
-                }
 
-                // si envia archivo FOTO plano
-                if ($request->file('inputfotoplano')) {
-                    $extension = $request->file('inputfotoplano')->getClientOriginalExtension();
-                    $request['fotoplano'] = $request->file('inputfotoplano')->storeAs('reconocimiento_psico/' . $reconocimientopsico->id . '/plano', $reconocimientopsico->id . '.' . $extension);
-                    $reconocimientopsico->update($request->all());
-                }else{
-                    $recsensorial_extension = $request['hidden_fotoplano_extension'];
-                    $recsensorial_id = $request['hidden_fotoplano'];
-                    $rutaOriginal = 'recsensorial/' . $recsensorial_id . '/plano/' . $recsensorial_id . $recsensorial_extension;
-
-                    if (Storage::exists($rutaOriginal)) {
-                        // Asegúrate de crear el directorio si no existe
-                        $nuevaRuta = 'reconocimiento_psico/' . $reconocimientopsico->id . '/plano/' . $reconocimientopsico->id . '.' . pathinfo($rutaOriginal, PATHINFO_EXTENSION);
-    
-                        Storage::makeDirectory('reconocimiento_psico/' . $reconocimientopsico->id . '/plano');
-    
-                        // Copiar la imagen a la nueva ubicación
-                        Storage::copy($rutaOriginal, $nuevaRuta);
-                        
-                        // Actualiza la base de datos con la nueva ruta
-                        $reconocimientopsico->fotoplano = $nuevaRuta;
+                    // si envia archivo FOTO plano
+                    if ($request->file('inputfotoplano')) {
+                        $extension = $request->file('inputfotoplano')->getClientOriginalExtension();
+                        $request['fotoplano'] = $request->file('inputfotoplano')->storeAs('reconocimiento_psico/' . $reconocimientopsico->id . '/plano', $reconocimientopsico->id . '.' . $extension);
                         $reconocimientopsico->update($request->all());
-                    } else {
-                        // Manejar caso en el que la imagen original no existe
-                        // Puedes lanzar una excepción o asignar un valor predeterminado
-                        throw new Exception("La imagen original no existe en la ruta: " . $rutaOriginal);
+                    }else{
+                        $recsensorial_extension = $request['hidden_fotoplano_extension'];
+                        $recsensorial_id = $request['hidden_fotoplano'];
+                        $rutaOriginal = 'recsensorial/' . $recsensorial_id . '/plano/' . $recsensorial_id . $recsensorial_extension;
+
+                        if (Storage::exists($rutaOriginal)) {
+                            // Asegúrate de crear el directorio si no existe
+                            $nuevaRuta = 'reconocimiento_psico/' . $reconocimientopsico->id . '/plano/' . $reconocimientopsico->id . '.' . pathinfo($rutaOriginal, PATHINFO_EXTENSION);
+        
+                            Storage::makeDirectory('reconocimiento_psico/' . $reconocimientopsico->id . '/plano');
+        
+                            // Copiar la imagen a la nueva ubicación
+                            Storage::copy($rutaOriginal, $nuevaRuta);
+                            
+                            // Actualiza la base de datos con la nueva ruta
+                            $reconocimientopsico->fotoplano = $nuevaRuta;
+                            $reconocimientopsico->update($request->all());
+                        } else {
+                            // Manejar caso en el que la imagen original no existe
+                            // Puedes lanzar una excepción o asignar un valor predeterminado
+                            throw new Exception("La imagen original no existe en la ruta: " . $rutaOriginal);
+                        }
                     }
-                }
 
-                // si envia archivo FOTO instalacion
-                if ($request->file('inputfotoinstalacion')) {
-                    $extension = $request->file('inputfotoinstalacion')->getClientOriginalExtension();
-                    $request['fotoinstalacion'] = $request->file('inputfotoinstalacion')->storeAs('reconocimiento_psico/' . $reconocimientopsico->id . '/instalacion', $reconocimientopsico->id . '.' . $extension);
-                    $reconocimientopsico->update($request->all());
-                }else{
-                    $recsensorial_extension = $request['hidden_fotoinstalacion_extension'];
-                    $recsensorial_id = $request['hidden_fotoinstalacion'];
-                    $rutaOriginal = 'recsensorial/' . $recsensorial_id . '/instalacion/' . $recsensorial_id . $recsensorial_extension;
-
-                    if (Storage::exists($rutaOriginal)) {
-                        // Asegúrate de crear el directorio si no existe
-                        $nuevaRuta = 'reconocimiento_psico/' . $reconocimientopsico->id . '/instalacion/' . $reconocimientopsico->id . '.' . pathinfo($rutaOriginal, PATHINFO_EXTENSION);
-    
-                        Storage::makeDirectory('reconocimiento_psico/' . $reconocimientopsico->id . '/instalacion');
-    
-                        // Copiar la imagen a la nueva ubicación
-                        Storage::copy($rutaOriginal, $nuevaRuta);
-                        
-                        // Actualiza la base de datos con la nueva ruta
-                        $reconocimientopsico->fotoinstalacion = $nuevaRuta;
+                    // si envia archivo FOTO instalacion
+                    if ($request->file('inputfotoinstalacion')) {
+                        $extension = $request->file('inputfotoinstalacion')->getClientOriginalExtension();
+                        $request['fotoinstalacion'] = $request->file('inputfotoinstalacion')->storeAs('reconocimiento_psico/' . $reconocimientopsico->id . '/instalacion', $reconocimientopsico->id . '.' . $extension);
                         $reconocimientopsico->update($request->all());
-                    } else {
-                        // Manejar caso en el que la imagen original no existe
-                        // Puedes lanzar una excepción o asignar un valor predeterminado
-                        throw new Exception("La imagen original no existe en la ruta: " . $rutaOriginal);
+                    }else{
+                        $recsensorial_extension = $request['hidden_fotoinstalacion_extension'];
+                        $recsensorial_id = $request['hidden_fotoinstalacion'];
+                        $rutaOriginal = 'recsensorial/' . $recsensorial_id . '/instalacion/' . $recsensorial_id . $recsensorial_extension;
+
+                        if (Storage::exists($rutaOriginal)) {
+                            // Asegúrate de crear el directorio si no existe
+                            $nuevaRuta = 'reconocimiento_psico/' . $reconocimientopsico->id . '/instalacion/' . $reconocimientopsico->id . '.' . pathinfo($rutaOriginal, PATHINFO_EXTENSION);
+        
+                            Storage::makeDirectory('reconocimiento_psico/' . $reconocimientopsico->id . '/instalacion');
+        
+                            // Copiar la imagen a la nueva ubicación
+                            Storage::copy($rutaOriginal, $nuevaRuta);
+                            
+                            // Actualiza la base de datos con la nueva ruta
+                            $reconocimientopsico->fotoinstalacion = $nuevaRuta;
+                            $reconocimientopsico->update($request->all());
+                        } else {
+                            // Manejar caso en el que la imagen original no existe
+                            // Puedes lanzar una excepción o asignar un valor predeterminado
+                            throw new Exception("La imagen original no existe en la ruta: " . $rutaOriginal);
+                        }
                     }
-                }
                 } else { //EDITAR 
 
                     // Obtener registro
-                    $recsensorial = recsensorialModel::findOrFail($request->recsensorial_id);
+                    $reconocimientopsico = reconocimientopsicoModel::findOrFail($request->recsensorial_id);
 
                     // consultar ID ultimo registro de la tabla
-                    $recsensorial_idmax = DB::select('SELECT
-                                                            MAX( recsensorial.id ) AS recsensorial_idmax
+                    $reconocimientopsico_idmax = DB::select('SELECT
+                                                            MAX( reconocimientopsico.id ) AS reconocimientopsico_idmax
                                                         FROM
-                                                            recsensorial
-                                                        WHERE
-                                                            recsensorial.recsensorial_eliminado = 0');
+                                                            reconocimientopsico');
 
                     // Validar que sea el ultimo ID, y permita editar folios
 
-                    $recsensorial->update($request->all());
+                    $reconocimientopsico->update($request->all());
                     // $recsensorial->recsensorialpruebas()->sync($request->parametro);
 
-                  
-
-                    //Activar que solo el ultimo registro agregado pueda ser editado
-                    if (($recsensorial_idmax[0]->recsensorial_idmax + 0) === ($request->recsensorial_id + 0)) //ultimo registro agregado
-                    {
-                        $recsensorial_activo = 1;
-                    }
-
                     ///VERIFICAMOS QUE EL FOLIO DEL PROYECTO QUE ENVIA SEA EL MISMO
-                    if ($recsensorial->proyecto_folio == $request['proyecto_folio']) {
+                    if ($reconocimientopsico->proyecto_folio == $request['proyecto_folio']) {
 
                         $proyecto = proyectoModel::where('proyecto_folio', $request["proyecto_folio"])->first();
-                        $proyecto->recsensorial_id = $recsensorial->id;
+                        $proyecto->reconocimiento_psico_id = $reconocimientopsico->id;
                         $proyecto->save();
                     } else {
 
 
-                        $proyecto = proyectoModel::where('proyecto_folio', $recsensorial->proyecto_folio)->first();
-                        $proyecto->recsensorial_id = null;
+                        $proyecto = proyectoModel::where('proyecto_folio', $reconocimientopsico->proyecto_folio)->first();
+                        $proyecto->reconocimiento_psico_id = null;
                         $proyecto->save();
 
 
                         $proyecto = proyectoModel::where('proyecto_folio', $request["proyecto_folio"])->first();
-                        $proyecto->recsensorial_id = $recsensorial->id;
+                        $proyecto->reconocimiento_psico_id = $reconocimientopsico->id;
                         $proyecto->save();
                     }
 
 
 
+                    // if ($request->file('inputfotomapa')) {
+                    //     $extension = $request->file('inputfotomapa')->getClientOriginalExtension();
+                    //     $request['fotoubicacion'] = $request->file('inputfotomapa')->storeAs('reconocimiento_psico/' . $reconocimientopsico->id . '/mapa', $reconocimientopsico->id . '.' . $extension);
+                    //     $reconocimientopsico->update($request->all());
+                    // }
 
+                    // // si envia archivo FOTO plano
+                    // if ($request->file('inputfotoplano')) {
+                    //     $extension = $request->file('inputfotoplano')->getClientOriginalExtension();
+                    //     $request['fotoplano'] = $request->file('inputfotoplano')->storeAs('reconocimiento_psico/' . $reconocimientopsico->id . '/plano', $reconocimientopsico->id . '.' . $extension);
+                    //     $reconocimientopsico->update($request->all());
+                    // }
+
+                    // // si envia archivo FOTO instalacion
+                    // if ($request->file('inputfotoinstalacion')) {
+                    //     $extension = $request->file('inputfotoinstalacion')->getClientOriginalExtension();
+                    //     $request['fotoinstalacion'] = $request->file('inputfotoinstalacion')->storeAs('reconocimiento_psico/' . $reconocimientopsico->id . '/instalacion', $reconocimientopsico->id . '.' . $extension);
+                    //     $reconocimientopsico->update($request->all());
+                    // }
+
+                    function eliminarArchivoAntiguo($id, $folder) {
+                        // Definir la ruta del directorio
+                        $directory = 'reconocimiento_psico/' . $id . '/' . $folder;
+                    
+                        // Buscar y eliminar cualquier archivo con el mismo nombre, pero con diferente extensión
+                        $files = Storage::files($directory);
+                        foreach ($files as $file) {
+                            // Verificar si el archivo coincide con el nombre, independientemente de la extensión
+                            if (pathinfo($file, PATHINFO_FILENAME) == $id) {
+                                Storage::delete($file);
+                            }
+                        }
+                    }
+
+                    if ($request->file('inputfotomapa')) {
+                        $extension = $request->file('inputfotomapa')->getClientOriginalExtension();
+                        $folder = 'mapa';
+                        $path = 'reconocimiento_psico/' . $reconocimientopsico->id . '/' . $folder . '/' . $reconocimientopsico->id . '.' . $extension;
+                    
+                        // Eliminar cualquier archivo antiguo, sin importar la extensión
+                        eliminarArchivoAntiguo($reconocimientopsico->id, $folder);
+                    
+                        // Guardar la nueva foto
+                        $request['fotoubicacion'] = $request->file('inputfotomapa')->storeAs('reconocimiento_psico/' . $reconocimientopsico->id . '/' . $folder, $reconocimientopsico->id . '.' . $extension);
+                        $reconocimientopsico->update($request->all());
+                    }
+                    
+                    // Para el archivo FOTO plano
+                    if ($request->file('inputfotoplano')) {
+                        $extension = $request->file('inputfotoplano')->getClientOriginalExtension();
+                        $folder = 'plano';
+                        $path = 'reconocimiento_psico/' . $reconocimientopsico->id . '/' . $folder . '/' . $reconocimientopsico->id . '.' . $extension;
+                    
+                        eliminarArchivoAntiguo($reconocimientopsico->id, $folder);
+                    
+                        $request['fotoplano'] = $request->file('inputfotoplano')->storeAs('reconocimiento_psico/' . $reconocimientopsico->id . '/' . $folder, $reconocimientopsico->id . '.' . $extension);
+                        $reconocimientopsico->update($request->all());
+                    }
+                    
+                    // Para el archivo FOTO instalación
+                    if ($request->file('inputfotoinstalacion')) {
+                        $extension = $request->file('inputfotoinstalacion')->getClientOriginalExtension();
+                        $folder = 'instalacion';
+                        $path = 'reconocimiento_psico/' . $reconocimientopsico->id . '/' . $folder . '/' . $reconocimientopsico->id . '.' . $extension;
+                    
+                        eliminarArchivoAntiguo($reconocimientopsico->id, $folder);
+                    
+                        $request['fotoinstalacion'] = $request->file('inputfotoinstalacion')->storeAs('reconocimiento_psico/' . $reconocimientopsico->id . '/' . $folder, $reconocimientopsico->id . '.' . $extension);
+                        $reconocimientopsico->update($request->all());
+                    }
 
 
                     // mensaje
@@ -465,9 +525,9 @@ class reconocimientoPsicoController extends Controller
         $reconocimientopsico = reconocimientopsicoModel::findOrFail($reconocimientopsico_id);
 
         if (($archivo_opcion + 0) == 0) {
-            return Storage::response($reconocimientopsico-fotoubicacion);
+            return Storage::response($reconocimientopsico->fotoubicacion);
         } else {
-            return Storage::download($reconocimientopsico-fotoubicacion);
+            return Storage::download($reconocimientopsico->fotoubicacion);
         }
     }
 
@@ -481,14 +541,14 @@ class reconocimientoPsicoController extends Controller
      */
     public function mostrarplanopsico($archivo_opcion, $reconocimientopsico_id)
     {
-        $reconocimientopsico = reconocmientopsicoModel::findOrFail($reconocimientopsico_id);
+        $reconocimientopsico = reconocimientopsicoModel::findOrFail($reconocimientopsico_id);
 
         if (($archivo_opcion + 0) == 0) {
 
             return Storage::response($reconocimientopsico->fotoplano);
         } else {
 
-            return Storage::download($reconocimientopsico-fotoplano);
+            return Storage::download($reconocimientopsico->fotoplano);
         }
     }
 
@@ -504,9 +564,9 @@ class reconocimientoPsicoController extends Controller
         $reconocimientopsico = reconocimientopsicoModel::findOrFail($reconocimientopsico_id);
 
         if (($archivo_opcion + 0) == 0) {
-            return Storage::response($reconocimientopsico-fotoinstalacion);
+            return Storage::response($reconocimientopsico->fotoinstalacion);
         } else {
-            return Storage::download($reconocimientopsico-fotoinstalacion);
+            return Storage::download($reconocimientopsico->fotoinstalacion);
         }
     }
 

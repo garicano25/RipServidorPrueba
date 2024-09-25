@@ -601,12 +601,59 @@ $('#tabla_reconocimiento_sensorial tbody').on('click', 'td.mostrar', function ()
 
 	}
 
+	if (row.data().fotoubicacion){
+		var archivo = row.data().fotoubicacion;
+		var extension = archivo.substring(archivo.lastIndexOf("."));
+		var imagenUrl = '/mostrarmapapsico/0/' + row.data().id + extension;
+		
+		rutaMapa = imagenUrl
+
+		// INPUT FOTO UBICACION
+		if ($('#inputfotomapa').data('dropify'))
+		{
+			$('#inputfotomapa').dropify().data('dropify').destroy();
+			// $('.dropify-wrapper').css('height', 400);
+			$('#inputfotomapa').dropify().data('dropify').settings.defaultFile = imagenUrl;
+			$('#inputfotomapa').dropify().data('dropify').init();
+		}
+		else
+		{
+			// $('#inputfotomapa').attr('data-height', 400);
+			$('#inputfotomapa').attr('data-default-file', imagenUrl);
+			$('#inputfotomapa').dropify({
+				messages: {
+					'default': 'Arrastre la imagen aquí o haga click',
+					'replace': 'Arrastre la imagen o haga clic para reemplazar',
+					'remove':  'Quitar',
+					'error':   'Ooops, ha ocurrido un error.'
+				},
+				error: {
+					'fileSize': 'Demasiado grande ({{ value }} max).',
+					'minWidth': 'Ancho demasiado pequeño (min {{ value }}}px).',
+					'maxWidth': 'Ancho demasiado grande (max {{ value }}}px).',
+					'minHeight': 'Alto demasiado pequeño (min {{ value }}}px).',
+					'maxHeight': 'Alto demasiado grande (max {{ value }}px max).',
+					'imageFormat': 'Formato no permitido, sólo ({{ value }}).'
+				}
+			});
+		}
+
+		// No requerir campo FOTO
+		$('#inputfotomapa').attr('required', false);
+
+		// Activar boton descarga
+		$("#boton_descargarmapaubicacion").css('display', 'block');
+	}
+	else
+	{
+		$("#boton_descargarmapaubicacion").css('display', 'none');
+	}
 
 	// OBTENER FOTO PLANO
-	if (row.data().recsensorial_fotoplano) {
-		var archivo = row.data().recsensorial_fotoplano;
+	if (row.data().fotoplano) {
+		var archivo = row.data().fotoplano;
 		var extension = archivo.substring(archivo.lastIndexOf("."));
-		var imagenUrl = '/mostrarplano/0/' + row.data().id + extension;
+		var imagenUrl = '/mostrarplanopsico/0/' + row.data().id + extension;
 
 		rutaMapa = imagenUrl
 
@@ -649,47 +696,36 @@ $('#tabla_reconocimiento_sensorial tbody').on('click', 'td.mostrar', function ()
 		$("#boton_descargarplanoinstalacion").css('display', 'none');
 	}
 
-
-	// Desactivar campos si no es ultimo registro
-	if (parseInt(row.data().recsensorial_activo) == 0) {
-		$("#recsensorial_alcancefisico").attr('disabled', true);
-		$("#recsensorial_alcancequimico").attr('disabled', true);
-	}
-	else {
-		$("#recsensorial_alcancefisico").attr('disabled', false);
-		$("#recsensorial_alcancequimico").attr('disabled', false);
-	}
-
-
 	// OBTENER FOTO INSTALACION
-	if (row.data().recsensorial_fotoinstalacion) {
-		var archivo = row.data().recsensorial_fotoinstalacion;
-		var extension = archivo.substring(archivo.lastIndexOf("."));
-		var imagenUrl = '/mostrarfotoinstalacion/0/' + row.data().id + extension;
-
-		// INPUT FOTO INSTALACION
-		$('#inputfotoinstalacion').dropify().data('dropify').destroy();
-		// $('.dropify-wrapper').css('height', 400);
-		$('#inputfotoinstalacion').dropify().data('dropify').settings.defaultFile = imagenUrl;
-		$('#inputfotoinstalacion').dropify().data('dropify').init();
-
-		// No requerir campo FOTO
-		$('#inputfotoinstalacion').attr('required', false);
-
-		// Activar boton descarga
-		$("#boton_descargarfotoinstalacion").css('display', 'block');
-
-	} else {
-
-		// Resetear campo FOTO INSTALACION
-		$('#inputfotoinstalacion').val('');
-		$('#inputfotoinstalacion').dropify().data('dropify').resetPreview();
-		$('#inputfotoinstalacion').dropify().data('dropify').clearElement();
-
-		// No requerir campo FOTO
-		$('#inputfotoinstalacion').attr('required', false);
-		$("#boton_descargarfotoinstalacion").css('display', 'none');
-	}
+	if (row.data().fotoinstalacion)
+		{
+			var archivo = row.data().fotoinstalacion;
+			var extension = archivo.substring(archivo.lastIndexOf("."));
+			var imagenUrl = '/mostrarfotoinstalacionpsico/0/'+row.data().id + extension;
+	
+			// INPUT FOTO INSTALACION
+			$('#inputfotoinstalacion').dropify().data('dropify').destroy();
+			// $('.dropify-wrapper').css('height', 400);
+			$('#inputfotoinstalacion').dropify().data('dropify').settings.defaultFile = imagenUrl;
+			$('#inputfotoinstalacion').dropify().data('dropify').init();
+	
+			// No requerir campo FOTO
+			$('#inputfotoinstalacion').attr('required', false);
+	
+			// Activar boton descarga
+			$("#boton_descargarfotoinstalacion").css('display', 'block');
+		
+		} else {
+	
+			// Resetear campo FOTO INSTALACION
+			$('#inputfotoinstalacion').val('');
+			$('#inputfotoinstalacion').dropify().data('dropify').resetPreview();
+			$('#inputfotoinstalacion').dropify().data('dropify').clearElement();
+	
+			// No requerir campo FOTO
+			$('#inputfotoinstalacion').attr('required', false);
+			$("#boton_descargarfotoinstalacion").css('display', 'none');
+		}
 
 
 	// Perfil
@@ -9973,136 +10009,136 @@ function obtenerEstructuraProyectos(FOLIO, NUEVO) {
 									<h2 class="mt-4" style="font-weight:bold"> <i class="fa fa-file-text"></i> ${response.info[0].TIPO_SERVICIO}</h2>
 									<h4 class="mb-2">${response.info[0].NOMBRE_CONTRATO}</h4>`).css('border-style', 'dotted')
 
-						//FOTOS OBTENIDAS DE RECSENSORIAL
-						if (response.info[0].FOTOUBICACION != null) {
-							var archivo = response.info[0].FOTOUBICACION;
-							var extension = archivo.substring(archivo.lastIndexOf("."));
-							var imagenUrl = '/mostrarmapa/0/' + response.info[0].ID + extension;
+						// //FOTOS OBTENIDAS DE RECSENSORIAL
+						// if (response.info[0].FOTOUBICACION != null) {
+						// 	var archivo = response.info[0].FOTOUBICACION;
+						// 	var extension = archivo.substring(archivo.lastIndexOf("."));
+						// 	var imagenUrl = '/mostrarmapapsico/0/' + response.info[0].ID + extension;
 				
-							rutaMapa = imagenUrl
-							$("#hidden_fotomapa").val(response.info[0].ID);
-							$("#hidden_fotomapa_extension").val(extension);
+						// 	rutaMapa = imagenUrl
+						// 	$("#hidden_fotomapa").val(response.info[0].ID);
+						// 	$("#hidden_fotomapa_extension").val(extension);
 				
-							// INPUT FOTO UBICACION
-							if ($('#inputfotomapa').data('dropify')) {
-								$('#inputfotomapa').dropify().data('dropify').destroy();
-								// $('.dropify-wrapper').css('height', 400);
-								$('#inputfotomapa').dropify().data('dropify').settings.defaultFile = imagenUrl;
-								$('#inputfotomapa').dropify().data('dropify').init();
-							}
-							else {
-								// $('#inputfotomapa').attr('data-height', 400);
-								$('#inputfotomapa').attr('data-default-file', imagenUrl);
-								$('#inputfotomapa').dropify({
-									messages: {
-										'default': 'Arrastre la imagen aquí o haga click',
-										'replace': 'Arrastre la imagen o haga clic para reemplazar',
-										'remove': 'Quitar',
-										'error': 'Ooops, ha ocurrido un error.'
-									},
-									error: {
-										'fileSize': 'Demasiado grande ({{ value }} max).',
-										'minWidth': 'Ancho demasiado pequeño (min {{ value }}}px).',
-										'maxWidth': 'Ancho demasiado grande (max {{ value }}}px).',
-										'minHeight': 'Alto demasiado pequeño (min {{ value }}}px).',
-										'maxHeight': 'Alto demasiado grande (max {{ value }}px max).',
-										'imageFormat': 'Formato no permitido, sólo ({{ value }}).'
-									}
-								});
-							}
+						// 	// INPUT FOTO UBICACION
+						// 	if ($('#inputfotomapa').data('dropify')) {
+						// 		$('#inputfotomapa').dropify().data('dropify').destroy();
+						// 		// $('.dropify-wrapper').css('height', 400);
+						// 		$('#inputfotomapa').dropify().data('dropify').settings.defaultFile = imagenUrl;
+						// 		$('#inputfotomapa').dropify().data('dropify').init();
+						// 	}
+						// 	else {
+						// 		// $('#inputfotomapa').attr('data-height', 400);
+						// 		$('#inputfotomapa').attr('data-default-file', imagenUrl);
+						// 		$('#inputfotomapa').dropify({
+						// 			messages: {
+						// 				'default': 'Arrastre la imagen aquí o haga click',
+						// 				'replace': 'Arrastre la imagen o haga clic para reemplazar',
+						// 				'remove': 'Quitar',
+						// 				'error': 'Ooops, ha ocurrido un error.'
+						// 			},
+						// 			error: {
+						// 				'fileSize': 'Demasiado grande ({{ value }} max).',
+						// 				'minWidth': 'Ancho demasiado pequeño (min {{ value }}}px).',
+						// 				'maxWidth': 'Ancho demasiado grande (max {{ value }}}px).',
+						// 				'minHeight': 'Alto demasiado pequeño (min {{ value }}}px).',
+						// 				'maxHeight': 'Alto demasiado grande (max {{ value }}px max).',
+						// 				'imageFormat': 'Formato no permitido, sólo ({{ value }}).'
+						// 			}
+						// 		});
+						// 	}
 				
-							// No requerir campo FOTO
-							$('#inputfotomapa').attr('required', false);
+						// 	// No requerir campo FOTO
+						// 	$('#inputfotomapa').attr('required', false);
 				
-							// Activar boton descarga
-							$("#boton_descargarmapaubicacion").css('display', 'block');
-						}
-						else {
-							$("#boton_descargarmapaubicacion").css('display', 'none');
-						}
+						// 	// Activar boton descarga
+						// 	$("#boton_descargarmapaubicacion").css('display', 'block');
+						// }
+						// else {
+						// 	$("#boton_descargarmapaubicacion").css('display', 'none');
+						// }
 		
-						if (response.info[0].FOTOPLANO != null) {
-							var archivo = response.info[0].FOTOPLANO;
-							var extension = archivo.substring(archivo.lastIndexOf("."));
-							var imagenUrl = '/mostrarplano/0/' + response.info[0].ID + extension;
+						// if (response.info[0].FOTOPLANO != null) {
+						// 	var archivo = response.info[0].FOTOPLANO;
+						// 	var extension = archivo.substring(archivo.lastIndexOf("."));
+						// 	var imagenUrl = '/mostrarplanopsico/0/' + response.info[0].ID + extension;
 					
-							rutaMapa = imagenUrl;
+						// 	rutaMapa = imagenUrl;
 					
-							$("#hidden_fotoplano").val(response.info[0].ID);
-							$("#hidden_fotoplano_extension").val(extension);
+						// 	$("#hidden_fotoplano").val(response.info[0].ID);
+						// 	$("#hidden_fotoplano_extension").val(extension);
 					
-							// INPUT FOTO PLANO
-							if ($('#inputfotoplano').data('dropify')) {
-								$('#inputfotoplano').dropify().data('dropify').destroy();
-								// $('.dropify-wrapper').css('height', 400);
-								$('#inputfotoplano').dropify().data('dropify').settings.defaultFile = imagenUrl;
-								$('#inputfotoplano').dropify().data('dropify').init();
-							}
-							else {
-								// $('#inputfotoplano').attr('data-height', 400);
-								$('#inputfotoplano').attr('data-default-file', imagenUrl);
-								$('#inputfotoplano').dropify({
-									messages: {
-										'default': 'Arrastre la imagen aquí o haga click',
-										'replace': 'Arrastre la imagen o haga clic para reemplazar',
-										'remove': 'Quitar',
-										'error': 'Ooops, ha ocurrido un error.'
-									},
-									error: {
-										'fileSize': 'Demasiado grande ({{ value }} max).',
-										'minWidth': 'Ancho demasiado pequeño (min {{ value }}}px).',
-										'maxWidth': 'Ancho demasiado grande (max {{ value }}}px).',
-										'minHeight': 'Alto demasiado pequeño (min {{ value }}}px).',
-										'maxHeight': 'Alto demasiado grande (max {{ value }}px max).',
-										'imageFormat': 'Formato no permitido, sólo ({{ value }}).'
-									}
-								});
-							}
+						// 	// INPUT FOTO PLANO
+						// 	if ($('#inputfotoplano').data('dropify')) {
+						// 		$('#inputfotoplano').dropify().data('dropify').destroy();
+						// 		// $('.dropify-wrapper').css('height', 400);
+						// 		$('#inputfotoplano').dropify().data('dropify').settings.defaultFile = imagenUrl;
+						// 		$('#inputfotoplano').dropify().data('dropify').init();
+						// 	}
+						// 	else {
+						// 		// $('#inputfotoplano').attr('data-height', 400);
+						// 		$('#inputfotoplano').attr('data-default-file', imagenUrl);
+						// 		$('#inputfotoplano').dropify({
+						// 			messages: {
+						// 				'default': 'Arrastre la imagen aquí o haga click',
+						// 				'replace': 'Arrastre la imagen o haga clic para reemplazar',
+						// 				'remove': 'Quitar',
+						// 				'error': 'Ooops, ha ocurrido un error.'
+						// 			},
+						// 			error: {
+						// 				'fileSize': 'Demasiado grande ({{ value }} max).',
+						// 				'minWidth': 'Ancho demasiado pequeño (min {{ value }}}px).',
+						// 				'maxWidth': 'Ancho demasiado grande (max {{ value }}}px).',
+						// 				'minHeight': 'Alto demasiado pequeño (min {{ value }}}px).',
+						// 				'maxHeight': 'Alto demasiado grande (max {{ value }}px max).',
+						// 				'imageFormat': 'Formato no permitido, sólo ({{ value }}).'
+						// 			}
+						// 		});
+						// 	}
 					
-							// No requerir campo FOTO
-							$('#inputfotoplano').attr('required', false);
+						// 	// No requerir campo FOTO
+						// 	$('#inputfotoplano').attr('required', false);
 					
-							// Activar boton descarga
-							$("#boton_descargarplanoinstalacion").css('display', 'block');
-						}
-						else {
-							$("#boton_descargarplanoinstalacion").css('display', 'none');
-						}
+						// 	// Activar boton descarga
+						// 	$("#boton_descargarplanoinstalacion").css('display', 'block');
+						// }
+						// else {
+						// 	$("#boton_descargarplanoinstalacion").css('display', 'none');
+						// }
 		
 					
 					
-						// OBTENER FOTO INSTALACION
-						if (response.info[0].FOTOINSTALACION) {
-							var archivo = response.info[0].FOTOINSTALACION;
-							var extension = archivo.substring(archivo.lastIndexOf("."));
-							var imagenUrl = '/mostrarfotoinstalacion/0/' + response.info[0].ID + extension;
+						// // OBTENER FOTO INSTALACION
+						// if (response.info[0].FOTOINSTALACION) {
+						// 	var archivo = response.info[0].FOTOINSTALACION;
+						// 	var extension = archivo.substring(archivo.lastIndexOf("."));
+						// 	var imagenUrl = '/mostrarfotoinstalacionpsico/0/' + response.info[0].ID + extension;
 					
 							
-							$("#hidden_fotoinstalacion").val(response.info[0].ID);
-							$("#hidden_fotoinstalacion_extension").val(extension);
-							// INPUT FOTO INSTALACION
-							$('#inputfotoinstalacion').dropify().data('dropify').destroy();
-							// $('.dropify-wrapper').css('height', 400);
-							$('#inputfotoinstalacion').dropify().data('dropify').settings.defaultFile = imagenUrl;
-							$('#inputfotoinstalacion').dropify().data('dropify').init();
+						// 	$("#hidden_fotoinstalacion").val(response.info[0].ID);
+						// 	$("#hidden_fotoinstalacion_extension").val(extension);
+						// 	// INPUT FOTO INSTALACION
+						// 	$('#inputfotoinstalacion').dropify().data('dropify').destroy();
+						// 	// $('.dropify-wrapper').css('height', 400);
+						// 	$('#inputfotoinstalacion').dropify().data('dropify').settings.defaultFile = imagenUrl;
+						// 	$('#inputfotoinstalacion').dropify().data('dropify').init();
 					
-							// No requerir campo FOTO
-							$('#inputfotoinstalacion').attr('required', false);
+						// 	// No requerir campo FOTO
+						// 	$('#inputfotoinstalacion').attr('required', false);
 					
-							// Activar boton descarga
-							$("#boton_descargarfotoinstalacion").css('display', 'block');
+						// 	// Activar boton descarga
+						// 	$("#boton_descargarfotoinstalacion").css('display', 'block');
 					
-						} else {
+						// } else {
 					
-							// Resetear campo FOTO INSTALACION
-							$('#inputfotoinstalacion').val('');
-							$('#inputfotoinstalacion').dropify().data('dropify').resetPreview();
-							$('#inputfotoinstalacion').dropify().data('dropify').clearElement();
+						// 	// Resetear campo FOTO INSTALACION
+						// 	$('#inputfotoinstalacion').val('');
+						// 	$('#inputfotoinstalacion').dropify().data('dropify').resetPreview();
+						// 	$('#inputfotoinstalacion').dropify().data('dropify').clearElement();
 					
-							// No requerir campo FOTO
-							$('#inputfotoinstalacion').attr('required', false);
-							$("#boton_descargarfotoinstalacion").css('display', 'none');
-						}
+						// 	// No requerir campo FOTO
+						// 	$('#inputfotoinstalacion').attr('required', false);
+						// 	$("#boton_descargarfotoinstalacion").css('display', 'none');
+						// }
 
 			}
 		},
