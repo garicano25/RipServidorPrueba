@@ -2659,7 +2659,7 @@
                                                 </div>
 
 
-                                                <button type="button" class="btn btn-info mx-4 mt-4" style="background: #FC4B6C!important;" data-toggle="tooltip" title="Guardar datos del Informe" id="boton_guardarDatosInforme">
+                                                <button type="submit" class="btn btn-info mx-4 mt-4" style="background: #FC4B6C!important;" data-toggle="tooltip" title="Guardar datos del Informe" id="boton_guardarDatosInforme">
                                                     Guardar <i class="fa fa-cloud-upload"></i>
                                                 </button>
                                             </div>
@@ -2695,7 +2695,7 @@
                                             <div id="divTablaInforme"></div>
 
                                             <div class="d-flex justify-content-center align-content-center">
-                                                <button type="button" class="btn btn-info mt-4" style="background: #FC4B6C!important; width: 30%;" data-toggle="tooltip" title="Guardar Puntos de muestreo y POE" id="boton_guardarTablaInformes">
+                                                <button type="submit" class="btn btn-info mt-4" style="background: #FC4B6C!important; width: 30%;" data-toggle="tooltip" title="Guardar Puntos de muestreo y POE" id="boton_guardarTablaInformes">
                                                     Guardar <i class="fa fa-cloud-upload"></i>
                                                 </button>
                                             </div>
@@ -2794,7 +2794,7 @@
                                                     Agregar <i class="fa fa-plus"></i>
                                                 </button>
 
-                                                <button type="button" class="btn btn-info mt-4 mx-4" style="background: #FC4B6C!important; width: 30%;" data-toggle="tooltip" title="Guardar Puntos de muestreo y POE" id="boton_guardarTablaClienteInformes">
+                                                <button type="submit" class="btn btn-info mt-4 mx-4" style="background: #FC4B6C!important; width: 30%;" data-toggle="tooltip" title="Guardar Puntos de muestreo y POE" id="boton_guardarTablaClienteInformes">
                                                     Guardar <i class="fa fa-cloud-upload"></i>
                                                 </button>
                                             </div>

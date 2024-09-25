@@ -307,6 +307,8 @@ Route::get('tablarecsensorial', ['as' => 'recsensorial.tablarecsensorial', 'uses
 
 Route::get('pruebasrecsensorial/{ID}', ['as' => 'recsensorial.pruebasrecsensorial', 'uses' => 'recsensorial\recsensorialController@pruebasrecsensorial']);
 
+Route::get('validacionAsignacionUser/{folio}', ['as' => 'recsensorial.validacionAsignacionUser', 'uses' => 'recsensorial\recsensorialController@validacionAsignacionUser']);
+
 Route::get('sustanciasrecsensorial/{ID}', ['as' => 'recsensorial.sustanciasrecsensorial', 'uses' => 'recsensorial\recsensorialController@sustanciasrecsensorial']);
 
 Route::get('informePortada/{id}', ['as' => 'informePortada', 'uses' => 'recsensorial\recsensorialController@informePortada']);
@@ -1007,9 +1009,11 @@ Route::get('reporteslistaparametros/{proyecto_id}', ['as' => 'reportes.reportesl
 
 Route::get('/servicioHI', ['as' => 'reportes.servicioHI', 'uses' => 'reportes\reportesController@servicioHI']);
 
+Route::get('/validacionAsignacionUserProyecto/{id}', ['as' => 'reportes.validacionAsignacionUserProyecto', 'uses' => 'reportes\reportesController@validacionAsignacionUserProyecto']);
+
 Route::get('/estatusProyecto/{PROYECTO_ID}', ['as' => 'reportes.estatusProyecto', 'uses' => 'reportes\reportesController@estatusProyecto']);
 
-Route::get('/finalizarPOE/{PROYECTO_ID}/{OPCION}/{NUEVO}', ['as' => 'reportes.finalizarPOE', 'uses' => 'reportes\reportesController@finalizarPOE']);
+Route::get('/finalizarPOE/{proyecto_id}/{OPCION}/{NUEVO}', ['as' => 'reportes.finalizarPOE', 'uses' => 'reportes\reportesController@finalizarPOE'])->middleware('asignacionUser:POE');
 
 Route::get('obtenerDatosInformesProyecto/{ID}', ['as' => 'reportes.obtenerDatosInformesProyecto', 'uses' => 'reportes\reportesController@obtenerDatosInformesProyecto']);
 

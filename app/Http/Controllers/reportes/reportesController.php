@@ -73,6 +73,9 @@ class reportesController extends Controller
         $this->middleware('auth');
         // $this->middleware('Superusuario,Administrador,Proveedor,Reconocimiento,Proyecto,Compras,Staff,Psicólogo,Ergónomo,CoordinadorPsicosocial,CoordinadorErgonómico,CoordinadorRN,CoordinadorRS,CoordinadorRM,CoordinadorHI,Reportes,Externo');
         $this->middleware('roles:Superusuario,Administrador,Coordinador,Operativo HI,Almacén,Compras,Psicólogo,Ergónomo');
+
+         $this->middleware('asignacionUser:POE')->only('store');
+
     }
 
 
@@ -186,6 +189,36 @@ class reportesController extends Controller
         }
     }
 
+
+    public function validacionAsignacionUserProyecto($id)
+    {
+        try {
+            if (auth()->user()->hasRoles(['Administrador'])) {
+
+                $next = 1;
+            }else{
+
+                $user = auth()->user()->id;
+
+                $permiso = DB::select("SELECT COUNT(u.ID_PROYECTO_USUARIO) AS PERMISO
+                                FROM proyectoUsuarios u
+                                WHERE u.SERVICIO_HI = 1 
+                                AND u.PROYECTO_ID = ?
+                                AND u.USUARIO_ID = ?", [$id, $user]);
+
+                $next = $permiso[0]->PERMISO;
+            }
+
+
+            $dato['permisos'] = $next;
+            $dato["msj"] = 'Datos consultados correctamente';
+            return response()->json($dato);
+        } catch (Exception $e) {
+            $dato["msj"] = 'Error ' . $e->getMessage();
+            $dato['opciones'] = "No encontradas";
+            return response()->json($dato);
+        }
+    }
 
 
     public function servicioHI()

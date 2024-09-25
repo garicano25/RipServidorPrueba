@@ -1169,7 +1169,7 @@
 
                                                 </div>
                                             </div>
-                                            @if(auth()->user()->hasRoles(['Superusuario', 'Administrador', 'Proyecto', 'CoordinadorHI']))
+                                            @if(auth()->user()->hasRoles(['Superusuario', 'Administrador', 'CoordinadorHI']))
                                             <!--STEP 2-->
                                             <div class="multisteps-form__panel" data-animation="scaleIn" id="steps_contenido_tab2">
                                                 <div class="multisteps-form__content">

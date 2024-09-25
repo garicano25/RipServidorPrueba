@@ -511,6 +511,7 @@
 
     // Load pagina
     $(document).ready(function() {
+        validarPermisosAsignados($('#proyecto_folio').val())
         funcion_tabla_parametroruidosonometria(recsensorial_id);
         funcion_tabla_parametroruidodosimetria(recsensorial_id);
         // consulta_select_areas(recsensorial_id, 0);
@@ -518,6 +519,37 @@
         $('[data-toggle="tooltip"]').tooltip();
     });
 
+    //Funcion para la validacion de permisos asignados en proyectos
+    function validarPermisosAsignados(proyecto_folio) {
+
+        $.ajax({
+            type: "GET",
+            dataType: "json",
+            url: "/validacionAsignacionUser/" + proyecto_folio,
+            data: {},
+            cache: false,
+            success: function(dato) {
+
+                if (dato.permisos == 1) {
+
+                    $('input[type="submit"], button[type="submit"]').fadeIn(0);
+
+                } else {
+
+                    $('input[type="submit"], button[type="submit"]').fadeOut(0);
+
+                }
+
+            },
+            beforeSend: function() {},
+            error: function(dato) {
+                // alert('Error: '+dato.msj);
+                alert('Los permisos no han sido cargado')
+
+                return false;
+            }
+        }); //Fin ajax
+    }
 
     function consulta_select_areas(recsensorial_id, seleccionado_id) {
         $.ajax({

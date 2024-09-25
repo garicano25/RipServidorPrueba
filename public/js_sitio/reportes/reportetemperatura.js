@@ -110,7 +110,7 @@ $(document).ready(function()
 	$('#modal_cargando').modal(); // Abrir modal
 	updateClock(); // Ejecutar tiempo de espera
 
-
+	validarPermisosAsignados(proyecto.id) //Validacion de permisos
 	datosgenerales(); // Cargar datos
 	portadaInfo() // Portada informacion
 

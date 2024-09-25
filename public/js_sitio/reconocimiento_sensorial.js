@@ -1455,6 +1455,8 @@ $('#tabla_reconocimiento_sensorial tbody').on('click', 'td.mostrar', function ()
 	var row = tabla_recsensorial.row(tr);
 	nuevoReconocimiento = 0;
 
+	validarPermisosAsignados(row.data().proyecto_folio)
+
 
 	// Quitar warning checkbox
 	$('#divListaAgentes').removeClass('checkbox_warning');
@@ -10365,7 +10367,9 @@ $('#boton_editarInforme').on('click', function (e) {
 
 
 
-$("#boton_guardarDatosInforme").click(function () {
+$("#boton_guardarDatosInforme").click(function (e) {
+
+	e.preventDefault(); // evita que se recargue la página
 
 	// Validamos los campos requeridos
 	var valida = this.form.checkValidity();
@@ -10670,8 +10674,9 @@ $(document).ready(function () {
 
 
 
-$("#boton_guardarTablaInformes").click(function () {
+$("#boton_guardarTablaInformes").click(function (e) {
 
+	e.preventDefault();
 	if ($('#divTablaInforme').find('input.error').length > 0) {
 
 		swal({
@@ -11320,7 +11325,9 @@ $(document).ready(function () {
 });
 
 
-$("#boton_guardarTablaClienteInformes").click(function () {
+$("#boton_guardarTablaClienteInformes").click(function (e) {
+
+	e.preventDefault();
 
 	// valida campos vacios
 	var valida = this.form.checkValidity();
@@ -12369,3 +12376,34 @@ $(document).ready(function () {
 	});
 
 })
+
+//Funcion para la validacion de permisos asignados en proyectos
+function validarPermisosAsignados(proyecto_folio) {
+
+	$.ajax({
+		type: "GET",
+		dataType: "json",
+		url: "/validacionAsignacionUser/" + proyecto_folio,
+		data: {},
+		cache: false,
+		success: function (dato) {
+			
+			if (dato.permisos == 1) { 
+
+				$('input[type="submit"], button[type="submit"]').fadeIn(0);
+
+			} else {
+				
+				$('input[type="submit"], button[type="submit"]').fadeOut(0);
+
+			}
+
+		}, beforeSend: function () {},
+		error: function (dato) {
+			// alert('Error: '+dato.msj);
+            alert('Los permisos no han sido cargado')
+
+			return false;
+		}
+	});//Fin ajax
+}

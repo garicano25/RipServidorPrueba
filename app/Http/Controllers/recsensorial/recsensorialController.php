@@ -71,6 +71,9 @@ class recsensorialController extends Controller
         $this->middleware('auth');
         // $this->middleware('Superusuario,Administrador,Proveedor,Reconocimiento,Proyecto,Compras,Staff,Psicólogo,Ergónomo,CoordinadorPsicosocial,CoordinadorErgonómico,CoordinadorRN,CoordinadorRS,CoordinadorRM,CoordinadorHI,ApoyoTecnico,Reportes,Externo');
         $this->middleware('roles:Superusuario,Administrador,Coordinador,Operativo HI,Almacén,Compras,Psicólogo,Ergónomo');
+
+        // $this->middleware('asignacionUser:RECSENSORIAL')->only('store');
+
     }
 
 
@@ -251,6 +254,42 @@ class recsensorialController extends Controller
             return response()->json($dato);
         }
     }
+
+
+    public function validacionAsignacionUser($folio){
+        try {
+
+            if (auth()->user()->hasRoles(['Administrador', 'Superusuario'])) {
+
+                $next = 1;
+
+            } else{
+
+                $user = auth()->user()->id; 
+
+                $permiso = DB::select("SELECT COUNT(u.ID_PROYECTO_USUARIO) AS PERMISO
+                                        FROM proyectoUsuarios u
+                                        LEFT JOIN proyecto p ON p.id = u.PROYECTO_ID
+                                        WHERE u.SERVICIO_HI = 1 
+                                        AND p.proyecto_folio = ?
+                                        AND u.USUARIO_ID = ?", [$folio, $user]);
+
+                $next = $permiso[0]->PERMISO;
+
+            }
+
+        
+            $dato['permisos'] = $next;
+            $dato["msj"] = 'Datos consultados correctamente';
+            return response()->json($dato);
+
+        } catch (Exception $e) {
+            $dato["msj"] = 'Error ' . $e->getMessage();
+            $dato['opciones'] = "No encontradas";
+            return response()->json($dato);
+        }
+    }
+
 
     public function pruebasrecsensorial($id)
     {
