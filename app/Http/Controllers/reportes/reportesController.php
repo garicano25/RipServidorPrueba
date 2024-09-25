@@ -193,7 +193,7 @@ class reportesController extends Controller
     public function validacionAsignacionUserProyecto($id)
     {
         try {
-            if (auth()->user()->hasRoles(['Administrador'])) {
+            if (auth()->user()->hasRoles(['Administrador','Superusuario'])) {
 
                 $next = 1;
             }else{

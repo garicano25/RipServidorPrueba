@@ -29,7 +29,7 @@ class ValidarAsignacionUser {
 
 
         //Epezamos con la validaciones de los permisos en este caso si el usuario que manda la Request es un Superusuario o Administrador le damos paso a realizar la acción en el store
-        if (auth()->user()->hasRoles(['Administrador'])){ 
+        if (auth()->user()->hasRoles(['Administrador', 'Superusuario'])){ 
 
 
             return $next($request);
