@@ -4,6 +4,7 @@ namespace App\Http\Middleware;
 
 use Closure;
 use DB;
+use App\modelos\reportes\reporterevisionesModel;
 
 class ValidarAsignacionUser {
 
@@ -52,6 +53,20 @@ class ValidarAsignacionUser {
                     //Obtenemos la validaciones de los permisos para su validacion
                     $PROYECTO_ID = isset($request['proyecto_id']) ? $request['proyecto_id'] : 0;
                     $permiso = $this->SQL($ID, $PROYECTO_ID);
+
+                    if ($permiso != 0) {
+                        return $next($request);
+                    }
+
+                    break;
+                case 'REVISION':
+
+                    //Obtenemos la validaciones de los permisos para su validacion
+                    $revision_id = $request->route('reporte_id');
+
+                    $revision  = reporterevisionesModel::findOrFail($revision_id);
+
+                    $permiso = $this->SQL($ID, $revision->proyecto_id);
 
                     if ($permiso != 0) {
                         return $next($request);
