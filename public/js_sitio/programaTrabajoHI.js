@@ -3538,7 +3538,7 @@ function mostrar_oc(proyecto_id, proveedor_id, cotizacion_id, ordencompra_id, or
 		// viewerpdf
 		setTimeout(function()
 		{
-			$('#visor_documento_oc').attr('src', '/assets/plugins/viewer-pdfjs/web/viewer_read.html?file=/proyectoordencompramostrar/'+proyecto_id+'/'+proveedor_id+'/'+cotizacion_id+'/'+ordencompra_id);
+			$('#visor_documento_oc').attr('src', '/assets/plugins/viewer-pdfjs/web/viewer.html?file=/proyectoordencompramostrar/'+proyecto_id+'/'+proveedor_id+'/'+cotizacion_id+'/'+ordencompra_id);
 		}, 500);
 	}
 }
