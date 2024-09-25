@@ -1713,6 +1713,49 @@ Route::get('ejecucionHI', ['as' => 'HI.ejecucion', 'uses' => 'HI\ejecucionContro
 
 Route::resource('informes', 'HI\informesrecoController');
 
+// ======================== MODULOS DEL RECONOCIMIENTO DE PSICOSOCIAL =========================================
+
+//RECONOCIMIENTO
+Route::resource('reconocimientoPsicosocial', 'PSICO\reconocimientoPsicoController');
+Route::get('/estructuraPsico/{FOLIO}', ['as' => 'reconocimientoPsico.estructuraproyectos', 'uses' => 'PSICO\reconocimientoPsicoController@estructuraproyectos']);
+Route::get('/folioproyectoPsico/{proyecto_folio}', ['as' => 'reconocimientoPsico.folioproyecto', 'uses' => 'PSICO\reconocimientoPsicoController@folioproyecto']);
+
+Route::get('mostrarplanopsico/{archivo_opcion}/{reconocimientopsico_id}', ['as' => 'mostrarplanopsico', 'uses' => 'PSICO\reconocimientoPsicoController@mostrarplanopsico']);
+Route::get('mostrarfotoinstalacionpsico/{archivo_opcion}/{reconocimientopsico_id}', ['as' => 'mostrarfotoinstalacionpsico', 'uses' => 'PSICO\reconocimientoPsicoController@mostrarfotoinstalacionpsico']);
+Route::get('mostrarmapapsico/{archivo_opcion}/{reconocimientopsico_id}', ['as' => 'mostrarmapapsico', 'uses' => 'PSICO\reconocimientoPsicoController@mostrarmapapsico']);
+Route::get('tablareconocimientopsico', ['as' => 'reconocimientoPsico.tablareconocimientopsico', 'uses' => 'PSICO\reconocimientoPsicoController@tablareconocimientopsico']);
+
+//PROGRAMA DE TRABAJO
+Route::resource('programaPsicosocial', 'PSICO\programaTrabajoPsicoController');
+//Route::get('tablaProgramaHI', ['as' => 'HI.programaTrabajo', 'uses' => 'HI\programaTrabajoController@tablaProgramaTrabajo']);
+
+
+
+//EJECUCION
+Route::resource('ejecucionPsicosocial', 'PSICO\ejecucionPsicoController');
+//Route::get('ejecucionHI', ['as' => 'HI.ejecucion', 'uses' => 'HI\ejecucionController@tablaEjecucion']);
+
+
+//INFORMES
+
+Route::resource('informesPsicosocial', 'PSICO\informesrecoPsicoController');
+
+
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+//////////////////////////////////////////////////PROGRAMA PSICOSOCIAL///////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+
+
+//Route::resource('seguimientoPsicosocial', 'PSICO\seguimientoPsicoController');
+//Route::resource('programaPsicosocial', 'PSICO\programaPsicoController');
+//Route::get('programatrabajoexcel/{proyecto_id}/{proyectoordentrabajo_id}', ['as' => 'programa.programatrabajoexcel', 'uses' => 'programa\programaController@programatrabajoexcel']);
+//Route::get('programatrabajoexcelcliente/{proyecto_id}/{proyectoordentrabajo_id}', ['as' => 'programa.programatrabajoexcelcliente', 'uses' => 'programa\programaController@programatrabajoexcelcliente']);
+
+//Route::get('listadoproyectos', ['as' => 'seguimiento.listadoproyectos', 'uses' => 'programa\seguimientoController@listadoproyectos']);
+//Route::get('detalletablaproyecto/{fase_id}/{proyecto_id}/{id}', ['as' => 'seguimiento.detalletablaproyecto', 'uses' => 'programa\seguimientoController@detalletablaproyecto']);
+//Route::get('detalleprograma/{proyecto_id}/{proyectoordentrabajo_id}/{proyectoordentrabajodatos_id}', ['as' => 'seguimiento.detalleprograma', 'uses' => 'programa\seguimientoController@detalleprograma']);
+//Route::get('detalleprogramagestion/{proyecto_id}/{proyectoordentrabajo_id}/{fase_id}', ['as' => 'seguimiento.detalleprogramagestion', 'uses' => 'programa\seguimientoController@detalleprogramagestion']);
 
 
 

@@ -127,7 +127,7 @@
                     @if(auth()->user()->hasRoles(['Superusuario', 'Administrador','Coordinador','Operativo HI']))
                     <ol class="breadcrumb m-b-10">
                         <h2 style="color: #ffff; margin: 0;"> <i class="fa fa-braille" aria-hidden="true"></i> Lista de Reconocimientos </h2>
-                        <button type="button" class="btn btn-secondary waves-effect waves-light boton_modulocliente" data-toggle="tooltip" title="Nuevo reconocimiento sensorial" style="margin-left:auto" id="boton_nuevo_recsensorial">
+                        <button type="button" class="btn btn-secondary waves-effect waves-light boton_modulocliente" data-toggle="tooltip" title="Nuevo reconocimiento sensorial" style="margin-left:auto" id="boton_nuevo_reconocimiento">
                             Reconocimiento <i class="fa fa-plus p-1"></i>
                         </button>
                     </ol>
@@ -284,139 +284,11 @@
                                                                         <h6 class="card-subtitle text-white m-b-0 op-5">&nbsp;</h6>
                                                                         <div class="row">
                                                                             {!! csrf_field() !!}
-                                                                            <div class="col-12">
-                                                                                <input type="hidden" class="form-control" id="recsensorial_id" name="recsensorial_id" value="0">
-                                                                                <input type="hidden" class="form-control" id="recsensorial_tipocliente" value="1">
-
+                                                                    
+                                                                            <div class="col-12 mt-3 mb-3">
+                                                                            <input type="hidden" class="form-control" id="recsensorial_id" name="recsensorial_id" value="0">
+                                                                            <input type="hidden" class="form-control" id="recsensorial_tipocliente" value="1">
                                                                             </div>
-                                                                            <div class="col-6">
-                                                                                <div class="form-group">
-                                                                                    <label> ¿Reconocimiento Sensorial? *</label>
-                                                                                    <select class="custom-select form-control" id="recsensorial_alcancefisico" name="recsensorial_alcancefisico" onchange="valida_alcance_recfisicos(this.value);" required>
-                                                                                        <option value=""></option>
-                                                                                        <option value="1">Rec. en sitio</option>
-                                                                                        <option value="2">Rec. de físicos (Puntos proporcionados por el cliente)</option>
-                                                                                        <option value="3">Ambos (Rec. Sitio / Físicos)</option>
-                                                                                        <option value="0">N/A</option>
-                                                                                    </select>
-                                                                                </div>
-                                                                            </div>
-                                                                            <div class="col-6">
-                                                                                <div class="form-group">
-                                                                                    <label> ¿Reconocimiento de químicos? *</label>
-                                                                                    <select class="custom-select form-control" id="recsensorial_alcancequimico" name="recsensorial_alcancequimico" onchange="valida_alcance_recquimicos(this.value);" required>
-                                                                                        <option selected disabled>Seleccione una opción</option>
-                                                                                        <option value="1">Rec. de químicos completo</option>
-                                                                                        <option value="2">Rec. de químicos (Puntos proporcionados por el cliente)</option>
-                                                                                        <option value="3">Rec. de químicos por un tercero</option>
-                                                                                        <option value="0">N/A</option>
-                                                                                    </select>
-                                                                                </div>
-                                                                            </div>
-                                                                            <div class="col-12 mb-3" id="divListaAgentes">
-                                                                                <p>
-                                                                                <div class="row">
-                                                                                    <div class="col-6">
-                                                                                        <button class="btn btn-info" id="mostrarListaAgentes" type="button" data-toggle="collapse" data-target=".multi-collapse" aria-expanded="false" aria-controls="multiCollapseExample1 multiCollapseExample2" disabled>Agente / factor de riesgo / servicio, a evaluar (Sensorial)*</button>
-                                                                                    </div>
-                                                                                    <div class="col-6">
-                                                                                        <button class="btn btn-info" id="mostrarSelectAgentes" type="button" data-toggle="collapse" data-target="#collapseExample" aria-expanded="false" aria-controls="collapseExample" disabled>Sustancias Químicas (Químicos)*</button>
-
-                                                                                    </div>
-
-                                                                                </div>
-                                                                                </p>
-                                                                                <div class="row">
-                                                                                    <div class="col-6" id="agentesSitios">
-                                                                                        <div class="collapse multi-collapse" id="multiCollapseExample1">
-                                                                                            <div class="card card-body">
-                                                                                                <div class="row">
-                                                                                                    <div class="col-12 justify-content-center">
-                                                                                                        <h4 style="float: left;" id="textSitio">Rec. en sitio</h4>
-                                                                                                    </div>
-                                                                                                    @foreach($catprueba as $dato)
-                                                                                                    <div class="col-12 mb-3 " id="agente_{{$dato->id}}_sitio">
-                                                                                                        <div class="form-check checkbox_agentes_div">
-                                                                                                            <input class="form-check-input checkbox_agentes agentes_sitio" type="radio" name="parametro_{{$dato->id}}[]" id="chekbox_parametro_{{$dato->id}}_sitio" value="{{$dato->id}}">
-                                                                                                            <label class="form-check-label" for="chekbox_parametro_{{$dato->id}}_sitio">
-                                                                                                                {{$dato->catPrueba_Nombre}}
-                                                                                                            </label>
-                                                                                                        </div>
-                                                                                                    </div>
-                                                                                                    @endforeach
-                                                                                                </div>
-                                                                                            </div>
-                                                                                        </div>
-                                                                                    </div>
-                                                                                    <div class="col-6" id="agentesFisico">
-                                                                                        <div class="collapse multi-collapse" id="multiCollapseExample2">
-                                                                                            <div class="card card-body">
-                                                                                                <div class="row">
-                                                                                                    <div class="col-12 justify-content-center">
-                                                                                                        <h4 style="float: left;" id="textFisico">Rec. de físicos</h4>
-                                                                                                    </div>
-                                                                                                    @foreach($catprueba as $dato)
-                                                                                                    <div class="col-12 " id="agente_{{$dato->id}}_fisico">
-                                                                                                        <div class="form-check checkbox_agentes_div">
-                                                                                                            <input class="form-check-input checkbox_agentes agentes_fisico" type="radio" name="parametro_{{$dato->id}}[]" id="chekbox_parametro_{{$dato->id}}_fisico" value="{{$dato->id}}">
-                                                                                                            <label class="form-check-label" for="chekbox_parametro_{{$dato->id}}_fisico">
-                                                                                                                {{$dato->catPrueba_Nombre}}
-                                                                                                            </label>
-                                                                                                            <input type="number" class="form-control cantidad" id="cantidad_{{$dato->id}}" style="width: 31%; height: 5px!important;" placeholder="Cantidad" min="0">
-
-                                                                                                        </div>
-                                                                                                    </div>
-                                                                                                    @endforeach
-                                                                                                </div>
-                                                                                            </div>
-                                                                                        </div>
-                                                                                    </div>
-                                                                                    <style>
-                                                                                        /* Estilos para el elemento select */
-                                                                                        .select2-selection__choice {
-                                                                                            color: #000;
-                                                                                        }
-
-                                                                                        .select2-container--default .select2-selection--multiple .select2-selection__choice {
-                                                                                            background-color: #bee24f;
-                                                                                        }
-
-                                                                                        .select2-container--default .select2-selection--multiple .select2-selection__choice__remove {
-                                                                                            background-color: #fff;
-                                                                                        }
-                                                                                    </style>
-                                                                                    <div class="col-12">
-                                                                                        <div class="collapse" id="collapseExample">
-                                                                                            <div class="card card-body">
-                                                                                                <div class="form-group">
-                                                                                                    <label>Sustancias Químicas *</label>
-                                                                                                    <select class="custom-select form-control" id="sustancias_quimicias" name="sustancias_quimicias" multiple="multiple" style="width: 100%">
-                                                                                                        <!-- <option value="">&nbsp;</option> -->
-                                                                                                        @foreach($catSustanciasQuimicas as $dato)
-                                                                                                        <option value="{{$dato->ID_SUSTANCIA_QUIMICA}}">{{$dato->SUSTANCIA_QUIMICA}}</option>
-                                                                                                        @endforeach
-                                                                                                    </select>
-                                                                                                </div>
-                                                                                                <div id="opciones_seleccionadas"></div>
-                                                                                            </div>
-                                                                                        </div>
-                                                                                    </div>
-                                                                                </div>
-                                                                            </div>
-
-                                                                            <div class="col-6">
-                                                                                <div class="form-group">
-                                                                                    <label> Folio rec. sensorial</label>
-                                                                                    <input type="text" class="form-control" id="recsensorial_foliofisico" readonly>
-                                                                                </div>
-                                                                            </div>
-                                                                            <div class="col-6">
-                                                                                <div class="form-group">
-                                                                                    <label> Folio rec. químico</label>
-                                                                                    <input type="text" class="form-control" id="recsensorial_folioquimico" readonly>
-                                                                                </div>
-                                                                            </div>
-                                                                            <div class="col-12 mt-3 mb-3"></div>
                                                                             <div class="col-12 text-center" id="infoCliente">
                                                                                 <!-- <style>
                                                                                     /* Estilos para el elemento select */
@@ -460,16 +332,17 @@
                                                                             <input type="hidden" name="contrato_id" id="contrato_id">
                                                                             <input type="hidden" name="descripcion_cliente" id="descripcion_cliente">
                                                                             <input type="hidden" name="descripcion_contrato" id="descripcion_contrato">
-
+                                                                            
 
 
                                                                             <!-- Guardamos la data de los clientes para poder usarla en JS -->
                                                                             <script type="text/javascript">
-                                                                                var lista_clientes = <?php echo $cliente; ?>;
+                                                                               
+                                                                            
                                                                             </script>
 
                                                                             <!-- Datos de Informe obtenido por el cliente -->
-                                                                            <div class="col-12 mt-5">
+                                                                            <!-- <div class="col-12 mt-5">
                                                                                 <div id="accordion">
                                                                                     <div class="card">
                                                                                         <div class="card-header" id="headingOne">
@@ -564,7 +437,7 @@
                                                                                         </div>
                                                                                     </div>
                                                                                 </div>
-                                                                            </div>
+                                                                            </div> -->
 
                                                                             <!-- Datos del cliente -->
                                                                             <div class="col-12 mt-3 clienteblock"></div>
@@ -572,7 +445,7 @@
                                                                             <div class="col-12 " style="display: none;">
                                                                                 <div class="form-group">
                                                                                     <label> Orden de trabajo / Licitacion </label>
-                                                                                    <input type="text" class="form-control" id="recsensorial_ordenTrabajoLicitacion" name="recsensorial_ordenTrabajoLicitacion" placeholder="Eje: RES-OT24-XXX ó N/A" readonly>
+                                                                                    <input type="text" class="form-control" id="ordenTrabajoLicitacion" name="ordenTrabajoLicitacion" placeholder="Eje: RES-OT24-XXX ó N/A" readonly>
                                                                                 </div>
                                                                             </div>
                                                                             <div class="col-12 text-center organizacional" id="titleOrganizacionLabel">
@@ -603,129 +476,84 @@
                                                                                 </div>
                                                                             </div>
 
-
-                                                                            <!--   <div class="col-12 clienteblock">
-                                                                                <div class="form-group">
-                                                                                    <label> Region *</label>
-                                                                                    <select class="custom-select form-control" id="catregion_id" name="catregion_id" required>
-                                                                                        <option value=""></option>
-                                                                                        @foreach($catregion as $dato)
-                                                                                        <option value="{{$dato->id}}">{{$dato->catregion_nombre}}</option>
-                                                                                        @endforeach
-                                                                                    </select>
-                                                                                </div>
-                                                                            </div>
-                                                                            <div class="col-12 clienteblock">
-                                                                                <div class="form-group ">
-                                                                                    <label> Subdireccion *</label>
-                                                                                    <select class="custom-select form-control" id="catsubdireccion_id" name="catsubdireccion_id" required>
-                                                                                        <option value=""></option>
-                                                                                        @foreach($catsubdireccion as $dato)
-                                                                                        <option value="{{$dato->id}}">{{$dato->catsubdireccion_siglas}} - {{$dato->catsubdireccion_nombre}}</option>
-                                                                                        @endforeach
-                                                                                    </select>
-                                                                                </div>
-                                                                            </div>
-                                                                            <div class="col-12 clienteblock">
-                                                                                <div class="form-group">
-                                                                                    <label> Gerencia *</label>
-                                                                                    <select class="custom-select form-control" id="catgerencia_id" name="catgerencia_id" required>
-                                                                                        <option value=""></option>
-                                                                                        @foreach($catgerencia as $dato)
-                                                                                        <option value="{{$dato->id}}">{{$dato->catgerencia_siglas}} - {{$dato->catgerencia_nombre}}</option>
-                                                                                        @endforeach
-                                                                                    </select>
-                                                                                </div>
-                                                                            </div>
-                                                                            <div class="col-12 clienteblock">
-                                                                                <div class="form-group">
-                                                                                    <label> Activo *</label>
-                                                                                    <select class="custom-select form-control" id="catactivo_id" name="catactivo_id" required>
-                                                                                        <option value=""></option>
-                                                                                        @foreach($catactivo as $dato)
-                                                                                        <option value="{{$dato->id}}">{{$dato->catactivo_siglas}} - {{$dato->catactivo_nombre}}</option>
-                                                                                        @endforeach
-                                                                                    </select>
-                                                                                </div>
-                                                                            </div> -->
                                                                             <div class="col-4 clienteblock">
                                                                                 <div class="form-group">
                                                                                     <label> Empresa *</label>
-                                                                                    <input type="text" class="form-control" id="recsensorial_empresa" name="recsensorial_empresa" required>
+                                                                                    <input type="text" class="form-control" id="empresa" name="empresa" required>
                                                                                 </div>
                                                                             </div>
                                                                             <div class="col-4 clienteblock">
                                                                                 <div class="form-group">
                                                                                     <label> R.F.C. *</label>
-                                                                                    <input type="text" class="form-control" id="recsensorial_rfc" name="recsensorial_rfc" required>
+                                                                                    <input type="text" class="form-control" id="rfc" name="rfc" required>
                                                                                 </div>
                                                                             </div>
                                                                             <div class="col-4 clienteblock">
                                                                                 <div class="form-group">
                                                                                     <label> Orden servicio </label>
-                                                                                    <input type="text" class="form-control" id="recsensorial_ordenservicio" name="recsensorial_ordenservicio" placeholder="Eje: CEN-004-2022 ó N/A">
+                                                                                    <input type="text" class="form-control" id="ordenservicio" name="ordenservicio" placeholder="Eje: CEN-004-2022 ó N/A">
                                                                                 </div>
                                                                             </div>
                                                                             <div class="col-6 clienteblock">
                                                                                 <div class="form-group">
                                                                                     <label> Repr. legal *</label>
-                                                                                    <input type="text" class="form-control" id="recsensorial_representantelegal" name="recsensorial_representantelegal" required>
+                                                                                    <input type="text" class="form-control" id="representantelegal" name="representantelegal" required>
                                                                                 </div>
                                                                             </div>
                                                                             <div class="col-6 clienteblock">
                                                                                 <div class="form-group">
                                                                                     <label> Repr. Seg. Industrial *</label>
-                                                                                    <input type="text" class="form-control" id="recsensorial_representanteseguridad" name="recsensorial_representanteseguridad" required>
+                                                                                    <input type="text" class="form-control" id="representanteseguridad" name="representanteseguridad" required>
                                                                                 </div>
                                                                             </div>
                                                                             <div class="col-12 clienteblock">
                                                                                 <div class="form-group">
                                                                                     <label> Instalación *</label>
-                                                                                    <input type="text" class="form-control" id="recsensorial_instalacion" name="recsensorial_instalacion" required>
+                                                                                    <input type="text" class="form-control" id="instalacion" name="instalacion" required>
                                                                                 </div>
                                                                             </div>
                                                                             <div class="col-12 clienteblock">
                                                                                 <div class="form-group">
                                                                                     <label> Dirección de la instalación *</label>
-                                                                                    <input type="text" class="form-control" id="recsensorial_direccion" name="recsensorial_direccion" required>
+                                                                                    <input type="text" class="form-control" id="direccion" name="direccion" required>
                                                                                 </div>
                                                                             </div>
                                                                             <div class="col-6 clienteblock">
                                                                                 <div class="form-group">
                                                                                     <label> Código postal *</label>
-                                                                                    <input type="number" class="form-control" id="recsensorial_codigopostal" name="recsensorial_codigopostal" required>
+                                                                                    <input type="number" class="form-control" id="codigopostal" name="codigopostal" required>
                                                                                 </div>
                                                                             </div>
                                                                             <div class="col-6 clienteblock">
                                                                                 <div class="form-group">
                                                                                     <label>Coordenadas *</label>
 
-                                                                                    <input type="text" class="form-control" id="recsensorial_coordenadas" name="recsensorial_coordenadas" required>
+                                                                                    <input type="text" class="form-control" id="coordenadas" name="coordenadas" required>
                                                                                 </div>
                                                                             </div>
                                                                             <div class="col-12 clienteblock">
                                                                                 <div class="form-group">
                                                                                     <label> Actividad principal *</label>
-                                                                                    <textarea class="form-control" rows="4" id="recsensorial_actividadprincipal" name="recsensorial_actividadprincipal" required></textarea>
+                                                                                    <textarea class="form-control" rows="4" id="actividadprincipal" name="actividadprincipal" required></textarea>
                                                                                 </div>
                                                                             </div>
                                                                             <div class="col-12 clienteblock">
                                                                                 <div class="form-group">
                                                                                     <label> Descripción del proceso en la instalación *</label>
-                                                                                    <textarea class="form-control" rows="4" id="recsensorial_descripcionproceso" name="recsensorial_descripcionproceso" required></textarea>
+                                                                                    <textarea class="form-control" rows="4" id="descripcionproceso" name="descripcionproceso" required></textarea>
                                                                                 </div>
                                                                             </div>
                                                                             <div class="col-12 clienteblock">
                                                                                 <div class="form-group">
                                                                                     <label> Observación sobre el horario del personal *</label>
-                                                                                    <textarea class="form-control" rows="3" id="recsensorial_obscategorias" name="recsensorial_obscategorias" required></textarea>
+                                                                                    <textarea class="form-control" rows="3" id="observaciones" name="observaciones" required></textarea>
                                                                                 </div>
                                                                             </div>
                                                                             <div class="col-md-6 col-sm-12 clienteblock">
                                                                                 <div class="form-group">
                                                                                     <label> Fecha inicio del reconocimiento *</label>
                                                                                     <div class="input-group">
-                                                                                        <input type="text" class="form-control mydatepicker" placeholder="aaaa-mm-dd" id="recsensorial_fechainicio" name="recsensorial_fechainicio" required>
+                                                                                        <input type="text" class="form-control mydatepicker" placeholder="aaaa-mm-dd" id="fechainicio" name="fechainicio" required>
                                                                                         <span class="input-group-addon"><i class="icon-calender"></i></span>
                                                                                     </div>
                                                                                 </div>
@@ -734,23 +562,12 @@
                                                                                 <div class="form-group">
                                                                                     <label> Fecha fin del reconocimiento *</label>
                                                                                     <div class="input-group">
-                                                                                        <input type="text" class="form-control mydatepicker" placeholder="aaaa-mm-dd" id="recsensorial_fechafin" name="recsensorial_fechafin" required>
+                                                                                        <input type="text" class="form-control mydatepicker" placeholder="aaaa-mm-dd" id="fechafin" name="fechafin" required>
                                                                                         <span class="input-group-addon"><i class="icon-calender"></i></span>
                                                                                     </div>
                                                                                 </div>
                                                                             </div>
-                                                                            <div class="col-12 " id="requiere_fisicos">
-                                                                                <div class="col-lg-12 col-sm-1" id="tituloPersonaElabora" style="display: none;">
-                                                                                    <h3><i class="fa fa-users"></i> Persona que elabora / proporciona los datos del reconocimiento sensorial *</h3>
-                                                                                </div>
-                                                                                <!-- <div class="form-group">
-                                                                                    <label> Persona que elabora / proporciona los datos del reconocimiento sensorial *</label>
-                                                                                    <input type="text" class="form-control" id="recsensorial_elabora1" name="recsensorial_elabora1" required>
-                                                                                </div> -->
-
-                                                                                <button type="button" class="btn btn-danger botonagregarElaborador mb-3" id="botonagregarElaborador">Agregar persona que elabora <i class="fa fa-user-circle"></i></button>
-
-                                                                            </div>
+                                                                            
 
 
                                                                         </div>
@@ -774,6 +591,8 @@
                                                                                                 }
                                                                                             </style>
                                                                                             <input type="file" accept="image/jpeg,image/x-png,image/gif" id="inputfotomapa" name="inputfotomapa" data-allowed-file-extensions="jpg png JPG PNG" data-height="300" data-default-file="" />
+                                                                                            <input type="hidden" id="hidden_fotomapa" name="hidden_fotomapa" value="">
+                                                                                            <input type="hidden" id="hidden_fotomapa_extension" name="hidden_fotomapa_extension" value="">
                                                                                         </div>
                                                                                     </div>
                                                                                 </div>
@@ -795,8 +614,8 @@
                                                                                                 }
                                                                                             </style>
                                                                                             <input type="file" accept="image/jpeg,image/x-png,image/gif" id="inputfotoplano" name="inputfotoplano" data-allowed-file-extensions="jpg png JPG PNG" data-height="300" data-default-file="" required />
-                                                                                          
-
+                                                                                            <input type="hidden" id="hidden_fotoplano" name="hidden_fotoplano" value="">
+                                                                                            <input type="hidden" id="hidden_fotoplano_extension" name="hidden_fotoplano_extension" value="">
                                                                                         </div>
                                                                                     </div>
                                                                                 </div>
@@ -818,6 +637,8 @@
                                                                                                 }
                                                                                             </style>
                                                                                             <input type="file" accept="image/jpeg,image/x-png,image/gif" id="inputfotoinstalacion" name="inputfotoinstalacion" data-allowed-file-extensions="jpg png JPG PNG" data-height="300" data-default-file="" required />
+                                                                                            <input type="hidden" id="hidden_fotoinstalacion" name="hidden_fotoinstalacion" value="">
+                                                                                            <input type="hidden" id="hidden_fotoinstalacion_extension" name="hidden_fotoinstalacion_extension" value="">
                                                                                         </div>
                                                                                     </div>
                                                                                 </div>
@@ -829,80 +650,6 @@
 
 
 
-                                                        </div>
-                                                        {{-- <div class="row" style="display: none;" id="seccion_quimicos"> --}}
-                                                        <div class="row" id="finalizarQuimico">
-                                                            <div class="col-8 seccion_quimicos">
-                                                                <div class="card">
-                                                                    <div class="card-body">
-                                                                        <h4 class="card-title">Datos para reconocimiento de químicos</h4>
-                                                                        <h6 class="card-subtitle text-white m-b-0 op-5">&nbsp;</h6>
-                                                                        <div class="row">
-                                                                            <div class="col-12">
-                                                                                <div class="form-group">
-                                                                                    <label> Persona que elabora / proporciona los datos del reconocimiento de químicos </label>
-                                                                                    <input type="text" class="form-control" id="recsensorial_elabora2" name="recsensorial_elabora2">
-                                                                                </div>
-                                                                            </div>
-                                                                            <div class="col-4">
-                                                                                <label class="text-danger">¿Rec. químico validado? </label>
-                                                                                <div class="switch">
-                                                                                    <label>
-                                                                                        No<input type="checkbox" id="recsensorial_quimicovalidado" name="recsensorial_quimicovalidado" onchange="quimicovalido(this);">
-                                                                                        <span class="lever switch-col-light-blue" id="checkbox_validaquimicos"></span>Si
-                                                                                    </label>
-                                                                                </div>
-                                                                            </div>
-                                                                            <div class="col-8">
-                                                                                <div class="form-group">
-                                                                                    <label> Persona que valida </label>
-                                                                                    <input type="text" class="form-control" id="recsensorial_quimicopersonavalida" name="recsensorial_quimicopersonavalida">
-                                                                                </div>
-                                                                            </div>
-                                                                            <div class="col-4">
-                                                                                <div class="form-group">
-                                                                                    <label> Fecha validación </label>
-                                                                                    <div class="input-group">
-                                                                                        <input type="text" class="form-control mydatepicker" placeholder="aaaa-mm-dd" id="recsensorial_quimicofechavalidacion" name="recsensorial_quimicofechavalidacion">
-                                                                                        <span class="input-group-addon"><i class="icon-calender"></i></span>
-                                                                                    </div>
-                                                                                </div>
-                                                                            </div>
-                                                                            <div class="col-8">
-                                                                                <div class="form-group">
-                                                                                    <label> Nuevo PDF validación </label>
-                                                                                    <div class="fileinput fileinput-new input-group" data-provides="fileinput">
-                                                                                        <div class="form-control" data-trigger="fileinput" id="campo_file_quimicos">
-                                                                                            <i class="fa fa-file fileinput-exists"></i>
-                                                                                            <span class="fileinput-filename"></span>
-                                                                                        </div>
-                                                                                        <span class="input-group-addon btn btn-secondary btn-file">
-                                                                                            <span class="fileinput-new">Seleccione</span>
-                                                                                            <span class="fileinput-exists">Cambiar</span>
-                                                                                            <input type="file" accept="application/pdf" name="pdfvalidaquimicos" id="pdfvalidaquimicos">
-                                                                                        </span>
-                                                                                        <a href="#" class="input-group-addon btn btn-secondary fileinput-exists" data-dismiss="fileinput">Quitar</a>
-                                                                                    </div>
-                                                                                </div>
-                                                                            </div>
-                                                                        </div>
-                                                                    </div>
-                                                                </div>
-                                                            </div>
-                                                            <div class="col-4 seccion_quimicos">
-                                                                <div class="card">
-                                                                    <div class="card-body">
-                                                                        <h4 class="card-title">PDF químico validación</h4>
-                                                                        <h6 class="card-subtitle text-white m-b-0 op-5">&nbsp;</h6>
-                                                                        <div class="row">
-                                                                            <div class="col-12" style="height: 286px; max-height: 286px; text-align: center;">
-                                                                                <iframe src="/assets/images/nada.jpg" id="visor_pdfquimicos" style="width: 100%; height: 280px;">No disponible</iframe>
-                                                                                <i class="fa fa-file-excel-o" id="visor_pdfquimicos_icono" style="font-size: 260px;"></i>
-                                                                            </div>
-                                                                        </div>
-                                                                    </div>
-                                                                </div>
-                                                            </div>
                                                         </div>
                                                         <!-- Botones de envio y desactivacion -->
                                                         <div class="row">
@@ -1131,9 +878,7 @@
                                                                             <label> Cargo del responsable Técnico del informe</label>
                                                                             <select class="custom-select form-control" id="recsensorial_repfisicos1cargo" name="recsensorial_repfisicos1cargo" required>
                                                                                 <option value=""></option>
-                                                                                @foreach($cargos as $dato)
-                                                                                <option value="{{$dato->CARGO}}">{{$dato->CARGO}}</option>
-                                                                                @endforeach
+                                                                               
                                                                             </select>
                                                                         </div>
                                                                     </div>
@@ -1162,9 +907,8 @@
                                                                             <label> Cargo del responsable del Contrato/Proyecto</label>
                                                                             <select class="custom-select form-control" id="recsensorial_repfisicos2cargo" name="recsensorial_repfisicos2cargo" required>
                                                                                 <option value=""></option>
-                                                                                @foreach($cargos as $dato)
-                                                                                <option value="{{$dato->CARGO}}">{{$dato->CARGO}}</option>
-                                                                                @endforeach
+                                                                               
+
                                                                             </select>
                                                                         </div>
                                                                     </div>
@@ -1201,9 +945,7 @@
                                                                             <label> Cargo del responsable Técnico del informe</label>
                                                                             <select class="custom-select form-control" id="recsensorial_repquimicos1cargo" name="recsensorial_repquimicos1cargo" required>
                                                                                 <option value=""></option>
-                                                                                @foreach($cargos as $dato)
-                                                                                <option value="{{$dato->CARGO}}">{{$dato->CARGO}}</option>
-                                                                                @endforeach
+                                                                                
                                                                             </select>
                                                                         </div>
                                                                     </div>
@@ -1231,9 +973,7 @@
                                                                             <label> Cargo del responsable del Contrato/Proyecto</label>
                                                                             <select class="custom-select form-control" id="recsensorial_repquimicos2cargo" name="recsensorial_repquimicos2cargo" required>
                                                                                 <option value=""></option>
-                                                                                @foreach($cargos as $dato)
-                                                                                <option value="{{$dato->CARGO}}">{{$dato->CARGO}}</option>
-                                                                                @endforeach
+                                                                               
                                                                             </select>
                                                                         </div>
                                                                     </div>
@@ -1380,43 +1120,7 @@
                                         <!-- Nav tabs -->
                                         <div class="vtabs" style="width: 100% !important">
                                             <ul class="nav nav-tabs tabs-vertical" role="tablist" style="border-right: none;">
-                                                @foreach($catprueba as $dato)
-
-                                                @if(auth()->user()->hasRoles(['Superusuario', 'Administrador', 'Coordinador','Operativo HI']))
-
-                                                <li class="nav-item" style="border-bottom: 1px #F0F0F0 solid;">
-                                                    <a class="nav-link link_menuparametro" data-toggle="tab" role="tab" href="#" id="menutab_parametro_{{$dato->id}}" onclick="mostrar_vista_parametro('{{$dato->catPrueba_Nombre}}', form_recsensorial.recsensorial_id.value, {{$dato->id}})">
-                                                        <span class="hidden-sm-up"><i class="ti-home"></i></span>
-                                                        <span class="hidden-xs-down">{{$dato->catPrueba_Nombre}}</span>
-                                                    </a>
-                                                </li>
-
-                                                @else
-                                                @if(auth()->user()->hasRoles(['Psicólogo']))
-
-                                                @if(trim($dato->catPrueba_Nombre) == "Riesgo psicosociales")
-                                                <li class="nav-item" style="border-bottom: 1px #F0F0F0 solid;">
-                                                    <a class="nav-link link_menuparametro" data-toggle="tab" role="tab" href="#" id="menutab_parametro_{{$dato->id}}" onclick="mostrar_vista_parametro('{{$dato->catPrueba_Nombre}}', form_recsensorial.recsensorial_id.value, {{$dato->id}})">
-                                                        <span class="hidden-sm-up"><i class="ti-home"></i></span>
-                                                        <span class="hidden-xs-down">{{$dato->catPrueba_Nombre}}</span>
-                                                    </a>
-                                                </li>
-
-                                                @endif
-                                                @else
-                                                @if(trim($dato->catPrueba_Nombre) == "Riesgos ergonómicos")
-                                                <li class="nav-item" style="border-bottom: 1px #F0F0F0 solid;">
-                                                    <a class="nav-link link_menuparametro" data-toggle="tab" role="tab" href="#" id="menutab_parametro_{{$dato->id}}"
-                                                        onclick="mostrar_vista_parametro('{{$dato->catPrueba_Nombre}}', form_recsensorial.recsensorial_id.value, {{$dato->id}} )">
-                                                        <span class="hidden-sm-up"><i class="ti-home"></i></span>
-                                                        <span class="hidden-xs-down">{{$dato->catPrueba_Nombre}}</span>
-                                                    </a>
-                                                </li>
-
-                                                @endif
-                                                @endif
-                                                @endif
-                                                @endforeach
+                                               
                                             </ul>
                                         </div>
                                         <!-- /Nav tabs -->
@@ -2408,9 +2112,8 @@
                                 <label> Departamento *</label>
                                 <select class="custom-select form-control" id="catdepartamento_id" name="catdepartamento_id" required>
                                     <option value=""></option>
-                                    @foreach($catdepartamento as $dato)
-                                    <option value="{{$dato->id}}">{{$dato->catdepartamento_nombre}}</option>
-                                    @endforeach
+                                   
+                                    
                                 </select>
                             </div>
                         </div>
@@ -2425,9 +2128,7 @@
                                 <label> Tipo puesto*</label>
                                 <select class="custom-select form-control" id="catmovilfijo_id" name="catmovilfijo_id" required>
                                     <option value=""></option>
-                                    @foreach($catmovilfijo as $dato)
-                                    <option value="{{$dato->id}}">{{$dato->catmovilfijo_nombre}}</option>
-                                    @endforeach
+                                  
                                 </select>
                             </div>
                         </div>
@@ -2533,9 +2234,7 @@
 
                                                         <select class="custom-select form-control mb-1" style="width: 100%;" id="ID_CATCONCLUSION" name="ID_CATCONCLUSION">
                                                             <option value="">&nbsp;</option>
-                                                            @foreach($catConclusiones as $dato)
-                                                            <option value="{{$dato->ID_CATCONCLUSION}}" data-descripcion="{{$dato->DESCRIPCION}}">{{$dato->NOMBRE}}</option>
-                                                            @endforeach
+                                                           
                                                         </select>
                                                         <textarea class="form-control" rows="8" id="CONCLUSION" name="CONCLUSION" readonly></textarea>
                                                     </div>
@@ -3119,9 +2818,7 @@
                                 <label> Descripción del área</label>
                                 <select class="custom-select form-control" id="DESCRIPCION_AREA" name="DESCRIPCION_AREA">
                                     <option value=""></option>
-                                    @foreach($descripciones as $dato)
-                                    <option value="{{$dato->ID_DESCRIPCION_AREA}}">{{ $dato->DESCRIPCION }}</option>
-                                    @endforeach
+                                    
                                 </select>
                             </div>
                         </div>
@@ -3198,9 +2895,7 @@
                                 <label> Nombre de la fuente generadora *</label>
                                 <input type="text" class="form-control" name="recsensorialmaquinaria_nombre" id="recsensorialmaquinaria_nombre" required>
                                 <select class="custom-select form-control" style="display: none;" id="recsensorialmaquinaria_quimica" name="recsensorialmaquinaria_quimica">
-                                    @foreach($hojasSeguridad as $dato)
-                                    <option value="{{$dato->id}}">{{$dato->catsustancia_nombre}}</option>
-                                    @endforeach
+                                   
                                 </select>
                             </div>
                         </div>
@@ -3234,7 +2929,7 @@
                     </div>
                     <!-- Guardamos los tipos en una variable -->
                     <script type="text/javascript">
-                        var lista_alcances = <?php echo $tipopruebas; ?>;
+                       
                     </script>
 
                     <div class="listaAreasAfectadas"></div>
@@ -3414,9 +3109,7 @@
                                 <label> Laboratorio *</label>
                                 <select class="custom-select form-control" id="proveedor_id" name="proveedor_id" onchange="anexo_proveedor(this.value)">
                                     <option value=""></option>
-                                    @foreach($proveedor as $dato)
-                                    <option value="{{$dato->id}}">{{ $dato->proveedor_RazonSocial }}</option>
-                                    @endforeach
+                                   
                                 </select>
                             </div>
                         </div>
@@ -3525,36 +3218,7 @@
 <!-- ============================================================== -->
 <!-- MODALES QUÍMICOS -->
 <!-- ============================================================== -->
-<style type="text/css" media="screen">
-    #div_tabla_catsustancia {
-        max-height: 300px;
-        overflow-y: scroll;
-        overflow-x: hidden;
-    }
 
-    #tabla_catsustancias th {
-        /*border: 1px #DDD solid;*/
-        border-bottom: 3px #999999 solid;
-    }
-
-    #tabla_catsustancias td {
-        text-align: center;
-        /*border: 1px #DDD solid;*/
-        /*padding: 6px 12px 6px 0px!important;*/
-        padding: 6px 0px;
-    }
-
-    #tabla_catsustancias td table td {
-        text-align: center;
-        border: 0px #DDD solid;
-        /*padding: 6px 12px 6px 0px!important;*/
-        padding: 3px 0px 3px 12px;
-    }
-
-    #tabla_catsustancias td table tr:hover td {
-        background: #D8D8D8;
-    }
-</style>
 <div id="modal_inventariosustancia" class="modal fade bs-example-modal-lg" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" style="display: none;">
     {{-- <div class="modal-dialog modal-lg" style="border: 0px #f00 solid; min-width: 90%!important;"> --}}
     <div class="modal-dialog modal-lg" style="min-width: 1200px!important;">
@@ -3574,7 +3238,7 @@
                         <div class="col-12">
                             <div class="form-group" style="padding: 0px; margin-bottom: 10px;">
                                 <label>Área *</label>
-                                <select class="custom-select form-control" id="sustancia_recsensorialarea_id" name="recsensorialarea_id" required onchange="consulta_select_categoriasxarea(this.value);">
+                                <select class="custom-select form-control" id="sustancia_recsensorialarea_id" name="recsensorialarea_id" required >
                                     <option value=""></option>
                                 </select>
                             </div>
@@ -3757,9 +3421,8 @@
                                         <label>Área *</label>
                                         <select class="custom-select form-control" id="recsensorialevidenciasquimicos_recsensorialarea_id" name="recsensorialarea_id" onchange="descripcion_fotoquimicos()" required>
                                             <option value=""></option>
-                                            {{-- @foreach($recsensorialareas as $dato)
-                                                <option value="{{$dato->id}}">{{$dato->recsensorialarea_nombre}}</option>
-                                            @endforeach --}}
+                                           
+                                            
                                         </select>
                                     </div>
                                 </div>
@@ -3818,11 +3481,7 @@
                                 <label>Agente / Factor de riesgo / Servicio *</label>
                                 <select class="custom-select form-control" id="agentescliente_agenteid" name="agentescliente_agenteid" onchange="valida_tipoanalisis(this.value);" required>
                                     <option value=""></option>
-                                    @foreach($catprueba as $agente)
-                                    @if($agente->id != 15)
-                                    <option class="selectagente" id="selectagente_{{$agente->id}}" value="{{$agente->id}}">{{$agente->catPrueba_Nombre}}</option>
-                                    @endif
-                                    @endforeach
+                                   
                                     <option class="selectagente" id="selectagente_15" value="15">Agente químico</option>
                                 </select>
                             </div>
