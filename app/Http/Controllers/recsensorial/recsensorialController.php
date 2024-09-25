@@ -271,6 +271,7 @@ class recsensorialController extends Controller
                                         FROM proyectoUsuarios u
                                         LEFT JOIN proyecto p ON p.id = u.PROYECTO_ID
                                         WHERE u.SERVICIO_HI = 1 
+                                        AND u.ACTIVO = 1
                                         AND p.proyecto_folio = ?
                                         AND u.USUARIO_ID = ?", [$folio, $user]);
 
