@@ -1725,6 +1725,9 @@ Route::get('mostrarfotoinstalacionpsico/{archivo_opcion}/{reconocimientopsico_id
 Route::get('mostrarmapapsico/{archivo_opcion}/{reconocimientopsico_id}', ['as' => 'mostrarmapapsico', 'uses' => 'PSICO\reconocimientoPsicoController@mostrarmapapsico']);
 Route::get('tablareconocimientopsico', ['as' => 'reconocimientoPsico.tablareconocimientopsico', 'uses' => 'PSICO\reconocimientoPsicoController@tablareconocimientopsico']);
 
+Route::get('recopsicocategoriatabla/{reconocimientopsico_id}', ['as' => 'recopsicocategoria.recopsicocategoriatabla', 'uses' => 'PSICO\recopsicocategoriaController@recopsicocategoriatabla']);
+Route::resource('recopsicocategoria', 'PSICO\recopsicocategoriaController');
+
 //PROGRAMA DE TRABAJO
 Route::resource('programaPsicosocial', 'PSICO\programaTrabajoPsicoController');
 //Route::get('tablaProgramaHI', ['as' => 'HI.programaTrabajo', 'uses' => 'HI\programaTrabajoController@tablaProgramaTrabajo']);

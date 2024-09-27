@@ -653,25 +653,8 @@
                                                         </div>
                                                         <!-- Botones de envio y desactivacion -->
                                                         <div class="row">
-                                                            <div class="col-4">
-                                                                @if(auth()->user()->hasRoles(['Superusuario', 'Administrador']))
-                                                                <div class="form-group" style="text-align: left;">
-                                                                    <button type="button" class="btn btn-success waves-effect waves-light" data-toggle="tooltip" title="Click para cambiar estado" id="boton_bloquear_reconocimiento" value="0" onclick="bloqueo_reconocimiento(this.value);">
-                                                                        <span class="btn-label"><i class="fa fa-unlock"></i></span> Reconocimento actualmente desbloqueado para edición
-                                                                    </button>
-                                                                </div>
-                                                                @endif
-                                                            </div>
-                                                            <div class="col-4">
-                                                                @if(auth()->user()->hasRoles(['Superusuario', 'Administrador','Coordinador']))
-                                                                <div class="form-group" style="text-align: right;">
-                                                                    <button type="button" class="btn btn-success" style="background-color: #5FB404!important;" id="boton_autorizar_recsensorial">
-                                                                        Autorizar reconocimiento <i class="fa fa-gavel" aria-hidden="true"></i>
-                                                                    </button>
-                                                                </div>
-                                                                @endif
-                                                            </div>
-                                                            <div class="col-4">
+                                                            
+                                                            <div class="col-12">
                                                                 @if(auth()->user()->hasRoles(['Superusuario', 'Administrador', 'Coordinador','Operativo HI']))
                                                                 <div class="form-group" style="text-align: right;">
                                                                     <button type="submit" class="btn btn-danger botonguardar_modulorecsensorial" id="boton_guardar_recsensorial">
@@ -2104,23 +2087,24 @@
                     {!! csrf_field() !!}
                     <div class="row">
                         <div class="col-12">
-                            <input type="hidden" class="form-control" id="categoria_id" name="categoria_id" value="0">
-                            <input type="hidden" class="form-control" id="categoria_recsensorial_id" name="recsensorial_id" value="0">
+                            <input type="hidden" class="form-control" id="ID_RECOPSICOCATEGORIA" name="ID_RECOPSICOCATEGORIA" value="0">
+                            <input type="hidden" class="form-control" id="RECPSICO_ID" name="RECPSICO_ID" value="0">
                         </div>
                         <div class="col-4">
                             <div class="form-group">
                                 <label> Departamento *</label>
                                 <select class="custom-select form-control" id="catdepartamento_id" name="catdepartamento_id" required>
                                     <option value=""></option>
-                                   
-                                    
+                                    @foreach($catdepartamento as $dato)
+                                    <option value="{{$dato->id}}">{{$dato->catdepartamento_nombre}}</option>
+                                    @endforeach
                                 </select>
                             </div>
                         </div>
                         <div class="col-8">
                             <div class="form-group">
                                 <label> Nombre categoría *</label>
-                                <input type="text" class="form-control" name="recsensorialcategoria_nombrecategoria" id="recsensorialcategoria_nombrecategoria" placeholder="ejem. Técnico de laboratorio electrónico" required>
+                                <input type="text" class="form-control" name="RECPSICO_NOMBRECATEGORIA" id="RECPSICO_NOMBRECATEGORIA" placeholder="ejem. Técnico de laboratorio electrónico" required>
                             </div>
                         </div>
                         <div class="col-12">
@@ -2128,7 +2112,9 @@
                                 <label> Tipo puesto*</label>
                                 <select class="custom-select form-control" id="catmovilfijo_id" name="catmovilfijo_id" required>
                                     <option value=""></option>
-                                  
+                                    @foreach($catmovilfijo as $dato)
+                                    <option value="{{$dato->id}}">{{$dato->catmovilfijo_nombre}}</option>
+                                    @endforeach
                                 </select>
                             </div>
                         </div>

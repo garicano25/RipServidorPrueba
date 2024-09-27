@@ -457,8 +457,7 @@ $("#boton_nuevo_reconocimiento").click(function () {
 	$('#catgerencia_id').attr('disabled', false);
 	$('#catactivo_id').attr('disabled', false);
 
-	$('#boton_autorizar_recsensorial').css('display', 'none');
-	// $('#contrato_id').val('').prop('required', true).prop('disabled', false).select2({ placeholder: "Seleccione un contrato - PO" });
+
 
 	//Ocultamos la seccion de validar quimicos ya que esa parte se rellena una vez esta finalizado el reconocimiento
 	$('#finalizarQuimico').fadeOut(0)
@@ -750,58 +749,6 @@ $('#tabla_reconocimiento_sensorial tbody').on('click', 'td.mostrar', function ()
 
 
 
-	// VERIFICA BLOQUEO DEL RECONOCIMIENTO
-	if (row.data().proyecto_id != null) {
-		$('#boton_bloquear_reconocimiento').css('display', 'block')
-
-		if (parseInt(row.data().recsensorial_bloqueado) == 0) //desbloqueado
-		{
-			recsensorial_bloqueado = 0;
-			$("#boton_bloquear_reconocimiento").val(0);
-			$("#boton_bloquear_reconocimiento").removeClass('btn-warning');
-			$("#boton_bloquear_reconocimiento").addClass('btn-success');
-			$("#boton_bloquear_reconocimiento").html('<span class="btn-label"><i class="fa fa-unlock"></i></span> Reconocimiento desbloqueado para edición');
-
-
-			// Activar botones
-			$(".botonguardar_modulorecsensorial").html('Guardar <i class="fa fa-save"></i>');
-			$(".botonguardar_modulorecsensorial").attr('disabled', false);
-			$(".botonnuevo_modulorecsensorial").attr('disabled', false);
-
-
-			// Botones puntos por el cliente
-			$("#boton_nuevo_agentescliente").attr('disabled', false);
-			$("#botonguardar_agentescliente").attr('disabled', false);
-
-
-			// BOton evidencia fotografica quimicos
-			$("#boton_nueva_fotoevidenciaquimicos").attr('disabled', false);
-		}
-		else {
-			recsensorial_bloqueado = 1;
-			$("#boton_bloquear_reconocimiento").val(1);
-			$("#boton_bloquear_reconocimiento").removeClass('btn-success');
-			$("#boton_bloquear_reconocimiento").addClass('btn-warning');
-			$("#boton_bloquear_reconocimiento").html('<span class="btn-label"><i class="fa fa-lock"></i></span> Reconocimiento bloqueado para edición');
-
-
-			// Desactivar botones
-			$(".botonguardar_modulorecsensorial").html('Guardar <i class="fa fa-ban"></i>');
-			$(".botonguardar_modulorecsensorial").attr('disabled', true);
-			$(".botonnuevo_modulorecsensorial").attr('disabled', true);
-
-
-			// Botones puntos por el cliente
-			$("#boton_nuevo_agentescliente").attr('disabled', true);
-			$("#botonguardar_agentescliente").attr('disabled', true);
-
-
-			// BOton evidencia fotografica quimicos
-			$("#boton_nueva_fotoevidenciaquimicos").attr('disabled', true);
-		}
-	} else {
-		$('#boton_bloquear_reconocimiento').css('display', 'none')
-	}
 
 	//=======================================
 
@@ -878,57 +825,7 @@ function bloqueo_reconocimiento(opcion) {
 						tabla_reconocimientosensorial();
 
 
-						// DISEÑO DEL BOTON [BLOQUEO DEL RECONOCIMIENTO]
-						if (parseInt(dato.recsensorial.recsensorial_bloqueado) == 0) {
-							recsensorial_bloqueado = 0;
-							$("#boton_bloquear_reconocimiento").val(0);
-							$("#boton_bloquear_reconocimiento").removeClass('btn-warning');
-							$("#boton_bloquear_reconocimiento").addClass('btn-success');
-							$("#boton_bloquear_reconocimiento").html('<span class="btn-label"><i class="fa fa-unlock"></i></span> Reconocimiento desbloqueado para edición');
-
-							// Activar botones
-							$(".botonguardar_modulorecsensorial").html('Guardar <i class="fa fa-save"></i>');
-							$(".botonguardar_modulorecsensorial").attr('disabled', false);
-							$(".botonnuevo_modulorecsensorial").attr('disabled', false);
-
-
-							// Botones descarga informes word
-							$("#boton_descargarfisicosdoc").html('Descargar word&nbsp;&nbsp;<i class="fa fa-file-word-o"></i>');
-							$("#boton_descargarfisicosdoc").attr('disabled', false);
-
-							$("#boton_descargarquimicosdoc").html('Descargar word&nbsp;&nbsp;<i class="fa fa-file-word-o"></i>');
-							$("#boton_descargarquimicosdoc").attr('disabled', false);
-							$("#boton_nueva_sustacia").attr('disabled', false);
-
-
-							// BOton evidencia fotografica quimicos
-							$("#boton_nueva_fotoevidenciaquimicos").attr('disabled', false);
-						}
-						else {
-							recsensorial_bloqueado = 1;
-							$("#boton_bloquear_reconocimiento").val(1);
-							$("#boton_bloquear_reconocimiento").removeClass('btn-success');
-							$("#boton_bloquear_reconocimiento").addClass('btn-warning');
-							$("#boton_bloquear_reconocimiento").html('<span class="btn-label"><i class="fa fa-lock"></i></span> Reconocimiento bloqueado para edición');
-
-							// Desactivar botones
-							$(".botonguardar_modulorecsensorial").html('Guardar <i class="fa fa-ban"></i>');
-							$(".botonguardar_modulorecsensorial").attr('disabled', true);
-							$(".botonnuevo_modulorecsensorial").attr('disabled', true);
-
-
-							// Botones descarga informes word
-							$("#boton_descargarfisicosdoc").html('Descargar word&nbsp;&nbsp;<i class="fa fa-ban"></i>');
-							$("#boton_descargarfisicosdoc").attr('disabled', true);
-
-							$("#boton_descargarquimicosdoc").html('Descargar word&nbsp;&nbsp;<i class="fa fa-ban"></i>');
-							$("#boton_descargarquimicosdoc").attr('disabled', true);
-							$("#boton_nueva_sustacia").attr('disabled', true);
-
-
-							// BOton evidencia fotografica quimicos
-							$("#boton_nueva_fotoevidenciaquimicos").attr('disabled', true);
-						}
+					
 
 
 						// mensaje
@@ -944,17 +841,11 @@ function bloqueo_reconocimiento(opcion) {
 						});
 					},
 					beforeSend: function () {
-						$("#boton_bloquear_reconocimiento").html('<span class="btn-label"><i class="fa fa-spin fa-spinner"></i></span> Cambiando estado del reconocimiento');
+					
 					},
 					error: function (dato) {
 						// VERIFICA BLOQUEO DEL RECONOCIMIENTO
-						if (valor == 0) //desbloqueado
-						{
-							$("#boton_bloquear_reconocimiento").html('<span class="btn-label"><i class="fa fa-unlock"></i></span> Reconocimiento desbloqueado para edición');
-						}
-						else {
-							$("#boton_bloquear_reconocimiento").html('<span class="btn-label"><i class="fa fa-lock"></i></span> Reconocimiento bloqueado para edición');
-						}
+						
 
 						// mensaje
 						swal({
@@ -1206,68 +1097,9 @@ $("#boton_guardar_recsensorial").click(function () {
 								menu_parametros_ocultar();
 
 		
-								//Bloquemaos los botones en caso de que no se requiera contrato ya que se tiene que autorizar antes de poder ocuparse
-								if (parseInt(dato.recsensorial.autorizado) == 0 && parseInt(dato.recsensorial.recsensorial_bloqueado) == 1) {
-									if (parseInt(dato.recsensorial.recsensorial_bloqueado) == 0) {
-										recsensorial_bloqueado = 0;
-										$("#boton_bloquear_reconocimiento").val(0);
-										$("#boton_bloquear_reconocimiento").removeClass('btn-warning');
-										$("#boton_bloquear_reconocimiento").addClass('btn-success');
-										$("#boton_bloquear_reconocimiento").html('<span class="btn-label"><i class="fa fa-unlock"></i></span> Reconocimiento desbloqueado para edición');
+								activa_stepforms();
 
-										// Activar botones
-										$(".botonguardar_modulorecsensorial").html('Guardar <i class="fa fa-save"></i>');
-										$(".botonguardar_modulorecsensorial").attr('disabled', false);
-										$(".botonnuevo_modulorecsensorial").attr('disabled', false);
-
-
-										// Botones descarga informes word
-										$("#boton_descargarfisicosdoc").html('Descargar word&nbsp;&nbsp;<i class="fa fa-file-word-o"></i>');
-										$("#boton_descargarfisicosdoc").attr('disabled', false);
-
-										$("#boton_descargarquimicosdoc").html('Descargar word&nbsp;&nbsp;<i class="fa fa-file-word-o"></i>');
-										$("#boton_descargarquimicosdoc").attr('disabled', false);
-										$("#boton_nueva_sustacia").attr('disabled', false);
-
-
-										// BOton evidencia fotografica quimicos
-										$("#boton_nueva_fotoevidenciaquimicos").attr('disabled', false);
-									}
-									else {
-										recsensorial_bloqueado = 1;
-										$("#boton_bloquear_reconocimiento").val(1);
-										$("#boton_bloquear_reconocimiento").removeClass('btn-success');
-										$("#boton_bloquear_reconocimiento").addClass('btn-warning');
-										$("#boton_bloquear_reconocimiento").html('<span class="btn-label"><i class="fa fa-lock"></i></span> Reconocimiento bloqueado para edición');
-
-										// Desactivar botones
-										$(".botonguardar_modulorecsensorial").html('Guardar <i class="fa fa-ban"></i>');
-										$(".botonguardar_modulorecsensorial").attr('disabled', true);
-										$(".botonnuevo_modulorecsensorial").attr('disabled', true);
-
-
-										// Botones descarga informes word
-										$("#boton_descargarfisicosdoc").html('Descargar word&nbsp;&nbsp;<i class="fa fa-ban"></i>');
-										$("#boton_descargarfisicosdoc").attr('disabled', true);
-
-										$("#boton_descargarquimicosdoc").html('Descargar word&nbsp;&nbsp;<i class="fa fa-ban"></i>');
-										$("#boton_descargarquimicosdoc").attr('disabled', true);
-										$("#boton_nueva_sustacia").attr('disabled', true);
-
-
-										// BOton evidencia fotografica quimicos
-										$("#boton_nueva_fotoevidenciaquimicos").attr('disabled', true);
-									}
-								}
-
-
-								if (parseInt(dato.recsensorial.autorizado) == 1) {
-									//Ejecutamos la funcion que nos obtiene la informacion del contrato
-									$('#boton_autorizar_recsensorial').css('display', 'none').prop('disabled', true);
-								} else {
-									$('#boton_autorizar_recsensorial').css('display', 'block').prop('disabled', false);
-
-								}
+							
 
 								// actualiza tabla general RECSENSORIAL
 								tabla_reconocimientosensorial();
@@ -1913,8 +1745,8 @@ $("#boton_nueva_categoria").click(function () {
 	});
 
 	// Campos Hidden
-	$("#categoria_id").val(0);
-	$("#categoria_recsensorial_id").val($("#recsensorial_id").val());
+	$("#ID_RECOPSICOCATEGORIA").val(0);
+	$("#RECPSICO_ID").val($("#recsensorial_id").val());
 
 	$(".listadodeturno").empty();
 
@@ -1925,7 +1757,7 @@ $("#boton_nueva_categoria").click(function () {
 
 function funcion_tabla_recsensorialcategorias(recsensorial_id) {
 	try {
-		var ruta = "/recsensorialcategoriatabla/" + recsensorial_id;
+		var ruta = "/recopsicocategoriatabla/" + recsensorial_id;
 
 		if (tabla_recsensorialcategorias != null) {
 			tabla_recsensorialcategorias.clear().draw();
@@ -1955,7 +1787,7 @@ function funcion_tabla_recsensorialcategorias(recsensorial_id) {
 						"defaultContent": "Sin dato"
 					},
 					{
-						"data": "recsensorialcategoria_nombrecategoria"
+						"data": "RECPSICO_NOMBRECATEGORIA"
 					},
 					{
 						"data": "catmovilfijo.catmovilfijo_nombre",
@@ -2064,13 +1896,13 @@ $("#boton_guardar_categoria").click(function (event) {
 
 		var formData = new FormData($('#form_categoria')[0]);
 		formData.append('JSON_TURNOS', JSON.stringify(turnosjs));
-		formData.append('sumaHorasJornada', sumaHorasJornada);
+		formData.append('SUMAHORASJORNADA', sumaHorasJornada);
 
 
 		// Enviar datos
 		$.ajax({
 			type: 'POST',
-			url: "/recsensorialcategoria",
+			url: "/recopsicocategoria",
 			data: formData,
 			dataType: 'json',
 			processData: false,
@@ -2078,11 +1910,11 @@ $("#boton_guardar_categoria").click(function (event) {
 			success: function (dato) {
 				// Manejar la respuesta del servidor
 				// Campos Hidden
-				$("#categoria_id").val(dato.categoria.id);
-				$("#categoria_recsensorial_id").val(dato.categoria.recsensorial_id);
+				$("#ID_RECOPSICOCATEGORIA").val(dato.categoriapsico.ID_RECOPSICOCATEGORIA);
+				$("#RECPSICO_ID").val(dato.categoriapsico.RECPSICO_ID);
 
 				// actualiza tabla
-				funcion_tabla_recsensorialcategorias(dato.categoria.recsensorial_id);
+				funcion_tabla_recsensorialcategorias(dato.categoriapsico.RECPSICO_ID);
 
 				// mensaje
 				swal({
@@ -2237,11 +2069,11 @@ $(document).ready(function () {
 		});
 
 		// llenar campos
-		$("#categoria_id").val(row.data().id);
-		$("#categoria_recsensorial_id").val(row.data().recsensorial_id);
+		$("#ID_RECOPSICOCATEGORIA").val(row.data().ID_RECOPSICOCATEGORIA);
+		$("#RECPSICO_ID").val(row.data().RECPSICO_ID);
 		$("#catdepartamento_id").val(row.data().catdepartamento_id);
 		$("#catmovilfijo_id").val(row.data().catmovilfijo_id);
-		$("#recsensorialcategoria_nombrecategoria").val(row.data().recsensorialcategoria_nombrecategoria);
+		$("#RECPSICO_NOMBRECATEGORIA").val(row.data().RECPSICO_NOMBRECATEGORIA);
 
 
 		// mostrar modal
@@ -2255,101 +2087,9 @@ $(document).ready(function () {
 });
 
 
-// eliminar CATEGORIA
-$(document).ready(function () {
-	$('#tabla_recsensorialcategorias tbody').on('click', 'td.eliminar', function () {
-		var tr = $(this).closest('tr');
-		var row = tabla_recsensorialcategorias.row(tr);
 
-		if (parseInt(row.data().accion_activa) > 0) {
-			swal({
-				title: "¿Eliminar categoría?",
-				text: "" + row.data().recsensorialcategoria_nombrecategoria,
-				type: "warning",
-				showCancelButton: true,
-				confirmButtonColor: "#DD6B55",
-				confirmButtonText: "Aceptar!",
-				cancelButtonText: "Cancelar!",
-				closeOnConfirm: false,
-				closeOnCancel: false
-			}, function (isConfirm) {
-				if (isConfirm) {
-					swal({
-						title: "¡Confirme nuevamente eliminar la categoría!",
-						text: "" + row.data().recsensorialcategoria_nombrecategoria,
-						type: "warning",
-						showCancelButton: true,
-						confirmButtonColor: "#DD6B55",
-						confirmButtonText: "Eliminar!",
-						cancelButtonText: "Cancelar!",
-						closeOnConfirm: false,
-						closeOnCancel: false
-					}, function (isConfirm) {
-						if (isConfirm) {
-							// cerrar msj confirmacion
-							swal.close();
 
-							// eliminar
-							$.ajax({
-								type: "GET",
-								dataType: "json",
-								url: "/recsensorialcategoriaeliminar/" + row.data().id,
-								data: {},
-								cache: false,
-								success: function (dato) {
-									// actualiza tabla
-									funcion_tabla_recsensorialcategorias(row.data().recsensorial_id);
 
-									// mensaje
-									swal({
-										title: "Correcto",
-										text: "" + dato.msj,
-										type: "success", // warning, error, success, info
-										buttons: {
-											visible: false, // true , false
-										},
-										timer: 1500,
-										showConfirmButton: false
-									});
-								},
-								error: function (dato) {
-									// alert('Error: '+dato.msj);
-									return false;
-								}
-							});//Fin ajax
-						}
-						else {
-							// mensaje
-							swal({
-								title: "Cancelado",
-								text: "Acción cancelada",
-								type: "error", // warning, error, success, info
-								buttons: {
-									visible: false, // true , false
-								},
-								timer: 500,
-								showConfirmButton: false
-							});
-						}
-					});
-				}
-				else {
-					// mensaje
-					swal({
-						title: "Cancelado",
-						text: "Acción cancelada",
-						type: "error", // warning, error, success, info
-						buttons: {
-							visible: false, // true , false
-						},
-						timer: 500,
-						showConfirmButton: false
-					});
-				}
-			});
-		}
-	});
-});
 
 
 //===============================================================
@@ -2576,25 +2316,25 @@ function consulta_parametros(recsensorial_id, area_id) {
 
 
 
-function consulta_categorias(recsensorial_id) {
-	$.ajax({
-		type: "GET",
-		dataType: "json",
-		url: "/recsensorialareacategorias/" + recsensorial_id,
-		data: {},
-		cache: false,
-		success: function (dato) {
-			select_areacategorias_opciones = '<option value=""></option>';
-			$.each(dato.categorias, function (key, value) {
-				select_areacategorias_opciones += '<option value="' + value.id + '">' + value.categoria_nombre + '</option>';
-			});
-		},
-		error: function (dato) {
-			select_areacategorias_opciones = '<option value="">No hay categorias que mostrar</option>';
-			return false;
-		}
-	});//Fin ajax
-}
+// function consulta_categorias(recsensorial_id) {
+// 	$.ajax({
+// 		type: "GET",
+// 		dataType: "json",
+// 		url: "/recsensorialareacategorias/" + recsensorial_id,
+// 		data: {},
+// 		cache: false,
+// 		success: function (dato) {
+// 			select_areacategorias_opciones = '<option value=""></option>';
+// 			$.each(dato.categorias, function (key, value) {
+// 				select_areacategorias_opciones += '<option value="' + value.id + '">' + value.categoria_nombre + '</option>';
+// 			});
+// 		},
+// 		error: function (dato) {
+// 			select_areacategorias_opciones = '<option value="">No hay categorias que mostrar</option>';
+// 			return false;
+// 		}
+// 	});//Fin ajax
+// }
 
 
 $("#boton_nueva_areacategoria").click(function () {
@@ -2613,88 +2353,6 @@ $("#boton_nueva_areacategoria").click(function () {
 	areacategorias_total += 1;
 });
 
-
-// Eliminar categoria del area
-$(document).ready(function () {
-	$('#tabla_areacategorias tbody').on('click', '.eliminar', function () {
-		// alert(tr.index()); //index fila
-		var tr = $(this).closest('tr');
-		var columna_0 = tr.find("td:eq(0)").html(); //obtener texto de la columna 0
-
-		swal({
-			title: "¿Eliminar categoría?",
-			text: "Quitar de la lista de categorías perteecientes a esta área",
-			type: "warning",
-			showCancelButton: true,
-			confirmButtonColor: "#DD6B55",
-			confirmButtonText: "Aceptar!",
-			cancelButtonText: "Cancelar",
-			closeOnConfirm: false,
-			closeOnCancel: false
-		}, function (isConfirm) {
-			if (isConfirm) {
-				swal({
-					title: "¡Confirme nuevamente eliminar categoría!",
-					text: "Quitar de la lista de categorías perteecientes a esta área",
-					type: "warning",
-					showCancelButton: true,
-					confirmButtonColor: "#DD6B55",
-					confirmButtonText: "¡Eliminar!",
-					cancelButtonText: "Cancelar",
-					closeOnConfirm: false,
-					closeOnCancel: false
-				}, function (isConfirm) {
-					if (isConfirm) {
-						// eliminar fila TR
-						tr.remove();
-
-						// actualiza contador categorías
-						areacategorias_total -= 1;
-
-						// mensaje
-						swal({
-							title: "Eliminado",
-							text: "",
-							type: "success", // warning, error, success, info
-							buttons: {
-								visible: false, // true , false
-							},
-							timer: 1000,
-							showConfirmButton: false
-						});
-					}
-					else {
-						// mensaje
-						swal({
-							title: "¡Cancelado!",
-							text: "Acción cancelada",
-							type: "error", // warning, error, success, info
-							buttons: {
-								visible: false, // true , false
-							},
-							timer: 500,
-							showConfirmButton: false
-						});
-					}
-				});
-			}
-			else {
-				// mensaje
-				swal({
-					title: "¡Cancelado!",
-					text: "Acción cancelada",
-					type: "error", // warning, error, success, info
-					buttons: {
-						visible: false, // true , false
-					},
-					timer: 500,
-					showConfirmButton: false
-				});
-			}
-		});
-
-	});
-});
 
 
 function consulta_areascategorias(area_id) {
@@ -2810,7 +2468,7 @@ $(document).ready(function () {
 		consulta_parametros($('#recsensorial_id').val(), row.data().id);
 
 		// Consultar categorías
-		consulta_areascategorias(row.data().id);
+		//consulta_areascategorias(row.data().id);
 
 
 		// Mostrar modal
@@ -2833,104 +2491,6 @@ $(document).ready(function () {
 });
 
 
-
-
-
-// eliminar AREA
-$(document).ready(function () {
-	$('#tabla_recsensorialareas tbody').on('click', 'td.eliminar', function () {
-		var tr = $(this).closest('tr');
-		var row = tabla_recsensorialareas.row(tr);
-
-		if (parseInt(row.data().accion_activa) > 0) {
-			swal({
-				title: "¿Eliminar área?",
-				text: "" + row.data().recsensorialarea_nombre,
-				type: "warning",
-				showCancelButton: true,
-				confirmButtonColor: "#DD6B55",
-				confirmButtonText: "Eliminar!",
-				cancelButtonText: "Cancelar!",
-				closeOnConfirm: false,
-				closeOnCancel: false
-			}, function (isConfirm) {
-				if (isConfirm) {
-					swal({
-						title: "¡Confirme nuevamente eliminar área!",
-						text: "" + row.data().recsensorialarea_nombre,
-						type: "warning",
-						showCancelButton: true,
-						confirmButtonColor: "#DD6B55",
-						confirmButtonText: "Eliminar!",
-						cancelButtonText: "Cancelar!",
-						closeOnConfirm: false,
-						closeOnCancel: false
-					}, function (isConfirm) {
-						if (isConfirm) {
-							// cerrar msj confirmacion
-							swal.close();
-
-							// eliminar
-							$.ajax({
-								type: "GET",
-								dataType: "json",
-								url: "/recsensorialareaeliminar/" + row.data().id,
-								data: {},
-								cache: false,
-								success: function (dato) {
-									// actualiza tabla
-									funcion_tabla_recsensorialareas(row.data().recsensorial_id);
-
-									// mensaje
-									swal({
-										title: "Correcto",
-										text: "" + dato.msj,
-										type: "success", // warning, error, success, info
-										buttons: {
-											visible: false, // true , false
-										},
-										timer: 1500,
-										showConfirmButton: false
-									});
-								},
-								error: function (dato) {
-									// alert('Error: '+dato.msj);
-									return false;
-								}
-							});//Fin ajax
-						}
-						else {
-							// mensaje
-							swal({
-								title: "Cancelado",
-								text: "Acción cancelada",
-								type: "error", // warning, error, success, info
-								buttons: {
-									visible: false, // true , false
-								},
-								timer: 500,
-								showConfirmButton: false
-							});
-						}
-					});
-				}
-				else {
-					// mensaje
-					swal({
-						title: "Cancelado",
-						text: "Acción cancelada",
-						type: "error", // warning, error, success, info
-						buttons: {
-							visible: false, // true , false
-						},
-						timer: 500,
-						showConfirmButton: false
-					});
-				}
-			});
-		}
-	});
-});
 
 
 function consulta_areas(nombre_campo, id_seleccionado, recsensorial_id, quimicas) {
@@ -7229,144 +6789,7 @@ document.getElementById('RECSENSORIAL_DATOSAREA').addEventListener('change', fun
 	document.getElementById('selectedArea').textContent = selectedOption;
 });
 
-//Autorizamos el Reconocimiento Sensorial
-$('#boton_autorizar_recsensorial').on('click', function (e) {
-	e.preventDefault()
 
-	swal({
-		title: "¿Está seguro de autorizar este reconocimiento sin contrato?",
-		text: "Al autorizar el reconocimiento, se podrán hacer ediciones y poder configurarlos.",
-		type: "warning",
-		showCancelButton: true,
-		confirmButtonColor: "#DD6B55",
-		confirmButtonText: "Autorizar!",
-		cancelButtonText: "Cancelar!",
-		closeOnConfirm: false,
-		closeOnCancel: false
-	}, function (isConfirm) {
-		if (isConfirm) {
-
-			swal.close();
-
-			// Autorizamos el Reconocimiento
-			id_reconocimiento = $('#recsensorial_id').val()
-			$.ajax({
-				type: "GET",
-				dataType: "json",
-				url: "/autorizarReconocimiento/" + id_reconocimiento,
-				data: {},
-				cache: false,
-				success: function (dato) {
-
-					swal({
-						title: "Correcto",
-						text: "" + dato.msj,
-						type: "success", // warning, error, success, info
-						buttons: {
-							visible: false, // true , false
-						},
-						timer: 1500,
-						showConfirmButton: false
-					});
-
-					$('#boton_autorizar_recsensorial').html('Reconocimiento autorizado <i class="fa fa-check-circle"></i>');
-					$('#boton_autorizar_recsensorial').attr('disabled', true);
-
-					// Actualiza tabla
-					tabla_reconocimientosensorial();
-
-
-					// DISEÑO DEL BOTON [BLOQUEO DEL RECONOCIMIENTO]
-					if (parseInt(dato.reconocimiento.recsensorial_bloqueado) == 0) {
-						recsensorial_bloqueado = 0;
-						$("#boton_bloquear_reconocimiento").val(0);
-						$("#boton_bloquear_reconocimiento").removeClass('btn-warning');
-						$("#boton_bloquear_reconocimiento").addClass('btn-success');
-						$("#boton_bloquear_reconocimiento").html('<span class="btn-label"><i class="fa fa-unlock"></i></span> Reconocimiento desbloqueado para edición');
-
-						// Activar botones
-						$(".botonguardar_modulorecsensorial").html('Guardar <i class="fa fa-save"></i>');
-						$(".botonguardar_modulorecsensorial").attr('disabled', false);
-						$(".botonnuevo_modulorecsensorial").attr('disabled', false);
-
-
-						// Botones descarga informes word
-						$("#boton_descargarfisicosdoc").html('Descargar word&nbsp;&nbsp;<i class="fa fa-file-word-o"></i>');
-						$("#boton_descargarfisicosdoc").attr('disabled', false);
-
-						$("#boton_descargarquimicosdoc").html('Descargar word&nbsp;&nbsp;<i class="fa fa-file-word-o"></i>');
-						$("#boton_descargarquimicosdoc").attr('disabled', false);
-						$("#boton_nueva_sustacia").attr('disabled', false);
-
-
-						// BOton evidencia fotografica quimicos
-						$("#boton_nueva_fotoevidenciaquimicos").attr('disabled', false);
-					}
-					else {
-						recsensorial_bloqueado = 1;
-						$("#boton_bloquear_reconocimiento").val(1);
-						$("#boton_bloquear_reconocimiento").removeClass('btn-success');
-						$("#boton_bloquear_reconocimiento").addClass('btn-warning');
-						$("#boton_bloquear_reconocimiento").html('<span class="btn-label"><i class="fa fa-lock"></i></span> Reconocimiento bloqueado para edición');
-
-						// Desactivar botones
-						$(".botonguardar_modulorecsensorial").html('Guardar <i class="fa fa-ban"></i>');
-						$(".botonguardar_modulorecsensorial").attr('disabled', true);
-						$(".botonnuevo_modulorecsensorial").attr('disabled', true);
-
-
-						// Botones descarga informes word
-						$("#boton_descargarfisicosdoc").html('Descargar word&nbsp;&nbsp;<i class="fa fa-ban"></i>');
-						$("#boton_descargarfisicosdoc").attr('disabled', true);
-
-						$("#boton_descargarquimicosdoc").html('Descargar word&nbsp;&nbsp;<i class="fa fa-ban"></i>');
-						$("#boton_descargarquimicosdoc").attr('disabled', true);
-						$("#boton_nueva_sustacia").attr('disabled', true);
-
-
-						// BOton evidencia fotografica quimicos
-						$("#boton_nueva_fotoevidenciaquimicos").attr('disabled', true);
-					}
-
-
-					//Actualizamos la variable a 1 (Autorizado)
-					rec_autorizado = 1
-
-				},
-				beforeSend: function () {
-					$('#boton_autorizar_recsensorial').html('Autorizando... <i class="fa fa-spin fa-spinner"></i>');
-					$('#boton_autorizar_recsensorial').attr('disabled', true);
-				},
-				error: function (dato) {
-
-					rec_autorizado = 0
-
-					swal({
-						title: "Error",
-						text: "" + dato.msj,
-						type: "error", // warning, error, success, info
-						buttons: {
-							visible: false, // true , false
-						},
-						timer: 3000,
-						showConfirmButton: false
-					});
-					return false;
-				}
-			});
-		} else {
-			swal({
-				title: "Cancelado",
-				text: "La autorización ha sido cancelada",
-				type: "error", // warning, error, success, info
-				buttons: { visible: false },
-				timer: 500,
-				showConfirmButton: false
-			});
-		}
-	});
-
-})
 
 function validatipoalcance(valor, camposelect, opcion_seleccionado) {
 	// Vaciar campos

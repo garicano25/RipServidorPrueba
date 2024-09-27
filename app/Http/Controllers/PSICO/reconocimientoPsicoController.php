@@ -18,6 +18,10 @@ use Illuminate\Support\Facades\Log;
 use App\modelos\proyecto\proyectoModel;
 use App\modelos\recsensorial\recsensorialModel;
 use App\modelos\reconocimientopsico\reconocimientopsicoModel;
+use App\modelos\recsensorial\catdepartamentoModel;
+use App\modelos\recsensorial\catmovilfijoModel;
+
+
 
 class reconocimientoPsicoController extends Controller
 {
@@ -37,7 +41,17 @@ class reconocimientoPsicoController extends Controller
      */
     public function index()
     { //vista RECONOCIMIENTO SENSORIAL
-        return view('catalogos.psico.reconocimiento_psicosocial');
+
+
+        $catdepartamento = catdepartamentoModel::where('catdepartamento_activo', 1)->orderBy('catdepartamento_nombre', 'ASC')->get();
+        $catmovilfijo = catmovilfijoModel::where('catmovilfijo_activo', 1)->get();
+
+
+        return view('catalogos.psico.reconocimiento_psicosocial', compact('catdepartamento','catmovilfijo'));
+
+
+
+      
     }
 
     
