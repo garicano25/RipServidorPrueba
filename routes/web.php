@@ -1728,6 +1728,8 @@ Route::get('tablareconocimientopsico', ['as' => 'reconocimientoPsico.tablarecono
 Route::get('recopsicocategoriatabla/{reconocimientopsico_id}', ['as' => 'recopsicocategoria.recopsicocategoriatabla', 'uses' => 'PSICO\recopsicocategoriaController@recopsicocategoriatabla']);
 Route::resource('recopsicocategoria', 'PSICO\recopsicocategoriaController');
 
+Route::resource('recopsiconormativa', 'PSICO\recopsiconormativaController');
+
 //PROGRAMA DE TRABAJO
 Route::resource('programaPsicosocial', 'PSICO\programaTrabajoPsicoController');
 //Route::get('tablaProgramaHI', ['as' => 'HI.programaTrabajo', 'uses' => 'HI\programaTrabajoController@tablaProgramaTrabajo']);

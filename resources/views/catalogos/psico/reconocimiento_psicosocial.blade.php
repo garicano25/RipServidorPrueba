@@ -204,10 +204,10 @@
                                                 <span>Áreas</span>
                                             </div>
                                             <div class="multisteps-form__progress-btn" id="steps_menu_tab4">
-                                                <i class="fa fa fa-industry"></i><br>
-                                                <span>F. generadoras</span>
+                                                <i class="fa fa-address-card"></i><br>
+                                                <span>Normativa</span>
                                             </div>
-                                            <div class="multisteps-form__progress-btn" id="steps_menu_tab5">
+                                            <!-- <div class="multisteps-form__progress-btn" id="steps_menu_tab5">
                                                 <i class="fa fa-handshake-o"></i><br>
                                                 <span>E. P. P.</span>
                                             </div>
@@ -218,7 +218,7 @@
                                             <div class="multisteps-form__progress-btn" id="steps_menu_tab7">
                                                 <i class="fa fa-file-text-o"></i><br>
                                                 <span>Anexos</span>
-                                            </div>
+                                            </div> -->
                                         </div>
                                     </div>
                                 </div>
@@ -751,7 +751,7 @@
                                                 </div>
                                             </div>
                                             <!--STEP 4-->
-                                            <div class="multisteps-form__panel" data-animation="scaleIn" id="steps_contenido_tab4">
+                                            <!-- <div class="multisteps-form__panel" data-animation="scaleIn" id="steps_contenido_tab4">
                                                 <div class="multisteps-form__content">
                                                     <div class="row">
                                                         <div class="col-12">
@@ -795,6 +795,129 @@
                                                             </div>
                                                         </div>
                                                     </div>
+                                                </div>
+                                            </div> -->
+
+                                            <div class="multisteps-form__panel" data-animation="scaleIn" id="steps_contenido_tab4">
+                                                <div class="multisteps-form__content">
+                                                    <form name="form_normativa" id="form_normativa" enctype="multipart/form-data" method="post">
+                                                        <div class="row">
+                                                            <div class="col-12">
+                                                                <div class="card">
+                                                                    <div class="card-body">
+                                                                        <label style="font-weight: bold;font-size: 20px;">Normativa (Criterio según número de trabajadores)</label>
+                                                                        <h6 class="card-subtitle text-white m-b-0 op-5">&nbsp;</h6>
+                                                                        <div class="row">
+                                                                            {!! csrf_field() !!}
+
+                                                                          <!-- Total de empleados -->
+                                                                        <div class="col-4 mt-3 mb-3">
+                                                                            <div class="form-group">
+                                                                                <label>Total de trabajadores *</label>
+                                                                                <input type="number" class="form-control" id="total_empleados" name="RECPSICO_TOTALTRABAJADORES" required>
+                                                                            </div>
+                                                                        </div>
+
+                                                                        <!-- Sección de opciones (checkboxes o radiobuttons) -->
+                                                                        <div class="col-4 mt-3 mb-3">
+                                                                            <label>Seleccione el o los criterios que desea aplicar:</label>
+                                                                            <div class="form-group">
+                                                                                <div class="custom-control custom-checkbox">
+                                                                                    <input type="checkbox" class="custom-control-input" id="option1" name="option1">
+                                                                                    <label class="custom-control-label" for="option1">GUIA DE REFERENCIA I</label>
+                                                                                </div>
+                                                                                <div class="custom-control custom-checkbox">
+                                                                                    <input type="checkbox" class="custom-control-input" id="option2" name="option2">
+                                                                                    <label class="custom-control-label" for="option2">GUIA DE REFERENCIA II</label>
+                                                                                </div>
+                                                                                <div class="custom-control custom-checkbox">
+                                                                                    <input type="checkbox" class="custom-control-input" id="option3" name="option3">
+                                                                                    <label class="custom-control-label" for="option3">GUIA DE REFERENCIA III</label>
+                                                                                </div>
+                                                                            </div>
+                                                                        </div>
+
+                                                                        <!-- Dropdown de "Aplicable a" -->
+                                                                        <div class="col-4 mt-3 mb-3">
+                                                                            <label>Aplicable a:</label>
+                                                                            <div class="form-group">
+                                                                                <select class="form-control" id="aplicable_a" name="RECPSICO_TIPOAPLICACION" required disabled>
+                                                                                    <option value="">Selecciona una opción</option>
+                                                                                </select>
+                                                                                <span id="error_aplicable_a" style="color: red; display: none;">Por favor selecciona una opción válida</span>
+                                                                            </div>
+                                                                        </div>
+
+                                                                        <!-- Resultado del cálculo -->
+                                                                        <div class="col-12">
+                                                                            <div class="form-group">
+                                                                                <div id="resultado-container" class="row mx-0 text-center">
+                                                                                    <h3 id="resultado" class="m-0"></h3>
+                                                                                </div>
+                                                                            </div>
+                                                                        </div>
+
+                                                                        <!-- Checkbox para habilitar campos opcionales -->
+                                                                        <div class="col-12 mt-3 mb-3">
+                                                                            <div class="custom-control custom-checkbox">
+                                                                                <input type="checkbox" class="custom-control-input" id="habilitar_opcional" name="habilitar_opcional">
+                                                                                <label class="custom-control-label" for="habilitar_opcional">Registrar porcentaje/cantidad de hombres y mujeres</label>
+                                                                            </div>
+                                                                        </div>
+
+                                                                        <!-- Campos opcionales de hombres y mujeres -->
+                                                                        <div class="col-12 mt-3 mb-3" id="campos_opcionales" style="display: none;">
+                                                                            <h5>Campos opcionales</h5>
+                                                                            <div class="row">
+                                                                                <!-- Select para el tipo de valor que se ingresa para hombres -->
+                                                                                <div class="col-4 mt-3 mb-3">
+                                                                                    <label>Tipo de valor:</label>
+                                                                                    <select class="form-control" id="tipo_valor_hombres" name="tipo_valor_hombres">
+                                                                                        <option value="">Selecciona un tipo de valor</option>
+                                                                                        <option value="cantidad">Cantidad</option>
+                                                                                        <option value="porcentaje">Porcentaje</option>
+                                                                                    </select>
+                                                                                </div>
+
+                                                                                <!-- Input numérico para hombres -->
+                                                                                <div class="col-4 mt-3 mb-3">
+                                                                                    <label>Hombres (cantidad/porcentaje):</label>
+                                                                                    <div class="input-group">
+                                                                                        <input type="number" class="form-control" id="valor_hombres" name="RECPSICO_TOTALHOMBRESTRABAJO" placeholder="Ingresa valor de hombres" >
+                                                                                        <div class="input-group-append">
+                                                                                            <span class="input-group-text" id="sufijo_hombres"> %</span>
+                                                                                        </div>
+                                                                                    </div>
+                                                                                </div>
+
+                                                                                <!-- Input numérico para mujeres -->
+                                                                                <div class="col-4 mt-3 mb-3">
+                                                                                    <label>Mujeres (cantidad/porcentaje):</label>
+                                                                                    <div class="input-group">
+                                                                                        <input type="number" class="form-control" id="valor_mujeres" name="RECPSICO_TOTALMUJERESTRABAJO" placeholder="Ingresa valor de mujeres" >
+                                                                                        <div class="input-group-append">
+                                                                                            <span class="input-group-text" id="sufijo_mujeres"> %</span>
+                                                                                        </div>
+                                                                                    </div>
+                                                                                </div>
+                                                                            </div>
+                                                                        </div>
+                                                                        </div>
+
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+
+                                                            <!-- Botón de envío -->
+                                                            <div class="col-12">
+                                                                <div class="form-group" style="text-align: right;">
+                                                                    <button type="submit" class="btn btn-danger botonguardar_modulorecsensorial" id="boton_guardar_normativa">
+                                                                        Guardar <i class="fa fa-save"></i>
+                                                                    </button>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </form>
                                                 </div>
                                             </div>
                                             <!--STEP 5-->
