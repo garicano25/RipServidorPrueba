@@ -251,6 +251,9 @@ $('.multisteps-form__progress-btn').click(function () {
 			break;
 		case "steps_menu_tab4":
 			funcion_tabla_recsensorialmaquinas($("#recsensorial_id").val());
+			$('#form_normativa').each(function () {
+				this.reset();
+			});
 			break;
 		case "steps_menu_tab5":
 			funcion_tabla_recsensorialequipopp($("#recsensorial_id").val());
@@ -539,6 +542,12 @@ $('#tabla_reconocimiento_sensorial tbody').on('click', 'td.mostrar', function ()
 		$("#estructura-container").css('display', 'flex');
 
 	}
+	$("#steps_menu_tab2").css('display', 'block');
+	$("#steps_menu_tab3").css('display', 'block');
+	$("#steps_menu_tab4").css('display', 'block');
+	$("#steps_menu_tab5").css('display', 'block');
+	$("#steps_menu_tab6").css('display', 'block');
+	$("#steps_menu_tab7").css('display', 'block');
 
 	// Menu principal
 	$("#tab_menu2").css('display', 'block');
@@ -9781,39 +9790,36 @@ function validarEmpleados() {
     const totalEmpleados = parseInt(document.getElementById('total_empleados').value);
     const selectAplicableA = document.getElementById('aplicable_a');
 
-    // Limpiar checkboxes
     document.getElementById('habilitar_opcional').checked = false;
     document.getElementById('option1').checked = false;
     document.getElementById('option2').checked = false;
     document.getElementById('option3').checked = false;
 
-    // Deshabilitar todos los checkboxes por defecto
     document.getElementById('option1').disabled = true;
     document.getElementById('option2').disabled = true;
     document.getElementById('option3').disabled = true;
 
     if (!isNaN(totalEmpleados)) {
         if (totalEmpleados < 16) {
-            // Habilitar solo la opción 1
             document.getElementById('option1').disabled = false;
             document.getElementById('option2').disabled = false;
             document.getElementById('option3').disabled = false;
 
-        } else if (totalEmpleados >= 16 && totalEmpleados < 50) {
-            // Habilitar solo la opción 2
+        } else if (totalEmpleados >= 16 && totalEmpleados <= 50) {
+            //document.getElementById('option1').disabled = false;
+
             document.getElementById('option2').disabled = false;
             document.getElementById('option3').disabled = false;
 
-        } else if (totalEmpleados >= 50) {
-            // Habilitar solo la opción 3
+        } else if (totalEmpleados > 50) {
+            //document.getElementById('option1').disabled = false;
+
             document.getElementById('option3').disabled = false;
         }
     }
 
-    // Limpiar opciones del select
     selectAplicableA.innerHTML = '<option value="">Selecciona una opción</option>';
 
-    // Validar si el total de empleados es un número
     if (!isNaN(totalEmpleados) && totalEmpleados > 0) {
         if (totalEmpleados < 50) {
             selectAplicableA.innerHTML += '<option value="opcion1">TODOS LOS TRABAJADORES</option>';
@@ -9923,6 +9929,9 @@ function validarValores() {
     // Verificar si se seleccionó "Cantidad"
     const tipoValorHombres = document.getElementById('tipo_valor_hombres').value;
 
+   
+
+
     // Limpiar advertencias
     clearWarnings();
 
@@ -9937,6 +9946,72 @@ function validarValores() {
             // Limpiar las clases de advertencia si la validación es correcta
             document.getElementById('valor_hombres').classList.remove('is-invalid');
             document.getElementById('valor_mujeres').classList.remove('is-invalid');
+			const opcionSeleccionada = document.getElementById('aplicable_a').value;
+			 // Mostrar resultado en el contenedor
+			 const porcentajeHombres = Math.round((valorHombres * 100)/totalEmpleados);
+			 const porcentajeMujeres = Math.round((valorMujeres * 100)/totalEmpleados);
+			 document.getElementById('porcentajes').innerText = `Hay ${porcentajeHombres}% de hombres y ${porcentajeMujeres}% de mujeres en el centro de trabajo`;
+			 
+			 if(opcionSeleccionada === "opcion2"){
+				let resultado = 0;
+			
+				if (!isNaN(totalEmpleados) && totalEmpleados !== "") {
+					
+						let a = 0.9604;
+						let b = 0.0025;
+						let c = totalEmpleados - 1;
+						let numerador = a * totalEmpleados;
+						let denominador = (b * c) + a;
+			
+						// Redondeo al entero más próximo
+						resultado = Math.round(numerador / denominador);
+						const seleccionHombres = Math.round(resultado * (porcentajeHombres / 100));
+						const seleccionMujeres = Math.round(resultado * (porcentajeMujeres / 100));
+						document.getElementById('seleccion').innerText = `Se seleccionaran de forma aleatoria ${seleccionHombres} hombres y ${seleccionMujeres} mujeres en el centro de trabajo para las entrevistas`;
+		
+
+				}		
+			 }
+        }
+    }
+
+	if (tipoValorHombres === "porcentaje") {
+        const suma = valorHombres + valorMujeres;
+        if (suma !== 100) {
+            // Mostrar advertencia si la suma no coincide
+            document.getElementById('valor_hombres').classList.add('is-invalid');
+            document.getElementById('valor_mujeres').classList.add('is-invalid');
+            showWarning("Los porcentajes no coinciden con la cantidad total de empleados.");
+        } else {
+            // Limpiar las clases de advertencia si la validación es correcta
+            document.getElementById('valor_hombres').classList.remove('is-invalid');
+            document.getElementById('valor_mujeres').classList.remove('is-invalid');
+			const opcionSeleccionada = document.getElementById('aplicable_a').value;
+
+			 // Mostrar resultado en el contenedor
+			 const porcentajeHombres = valorHombres;
+			 const porcentajeMujeres = valorMujeres;
+			 document.getElementById('porcentajes').innerText = `Hay ${porcentajeHombres}% de hombres y ${porcentajeMujeres}% de mujeres en el centro de trabajo`;
+
+			 if(opcionSeleccionada === "opcion2"){
+
+				if (!isNaN(totalEmpleados) && totalEmpleados !== "") {
+					
+					let a = 0.9604;
+					let b = 0.0025;
+					let c = totalEmpleados - 1;
+					let numerador = a * totalEmpleados;
+					let denominador = (b * c) + a;
+		
+					// Redondeo al entero más próximo
+					resultado = Math.round(numerador / denominador);
+					const seleccionHombres = Math.round(resultado * (porcentajeHombres / 100));
+					const seleccionMujeres = Math.round(resultado * (porcentajeMujeres / 100));
+					document.getElementById('seleccion').innerText = `Se seleccionaran de forma aleatoria ${seleccionHombres} hombres y ${seleccionMujeres} mujeres en el centro de trabajo para las entrevistas`;
+	
+
+				}
+			 }
         }
     }
 }
@@ -10042,7 +10117,9 @@ $("#boton_guardar_normativa").click(function (event) {
 				// Manejar la respuesta del servidor
 				// Campos Hidden
 				$("#ID_RECOPSICONORMATIVA").val(dato.normativapsico.ID_RECOPSICONORMATIVA);
-				$("#RECPSICO_ID").val(dato.normativapsico.RECPSICO_ID);
+
+				$("#RECPSICO_ID").val($("#recsensorial_id").val());
+				//$("#RECPSICO_ID").val(dato.normativapsico.RECPSICO_ID);
 
 				// // actualiza tabla
 				// funcion_tabla_recsensorialcategorias(dato.categoriapsico.RECPSICO_ID);

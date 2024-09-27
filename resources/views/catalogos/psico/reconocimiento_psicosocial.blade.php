@@ -823,15 +823,15 @@
                                                                             <label>Seleccione el o los criterios que desea aplicar:</label>
                                                                             <div class="form-group">
                                                                                 <div class="custom-control custom-checkbox">
-                                                                                    <input type="checkbox" class="custom-control-input" id="option1" name="option1">
+                                                                                    <input type="checkbox" class="custom-control-input" id="option1" name="option1" disabled>
                                                                                     <label class="custom-control-label" for="option1">GUIA DE REFERENCIA I</label>
                                                                                 </div>
                                                                                 <div class="custom-control custom-checkbox">
-                                                                                    <input type="checkbox" class="custom-control-input" id="option2" name="option2">
+                                                                                    <input type="checkbox" class="custom-control-input" id="option2" name="option2" disabled>
                                                                                     <label class="custom-control-label" for="option2">GUIA DE REFERENCIA II</label>
                                                                                 </div>
                                                                                 <div class="custom-control custom-checkbox">
-                                                                                    <input type="checkbox" class="custom-control-input" id="option3" name="option3">
+                                                                                    <input type="checkbox" class="custom-control-input" id="option3" name="option3" disabled>
                                                                                     <label class="custom-control-label" for="option3">GUIA DE REFERENCIA III</label>
                                                                                 </div>
                                                                             </div>
@@ -900,6 +900,21 @@
                                                                                         </div>
                                                                                     </div>
                                                                                 </div>
+
+                                                                                <div class="col-12">
+                                                                            <div class="form-group">
+                                                                                <div id="porcentajes-container" class="row mx-0 text-center">
+                                                                                    <h3 id="porcentajes" class="m-0"></h3>
+                                                                                </div>
+                                                                            </div>
+                                                                        </div>
+                                                                        <div class="col-12">
+                                                                            <div class="form-group">
+                                                                                <div id="seleccion-container" class="row mx-0 text-center">
+                                                                                    <h3 id="seleccion" class="m-0"></h3>
+                                                                                </div>
+                                                                            </div>
+                                                                        </div>
                                                                             </div>
                                                                         </div>
                                                                         </div>
