@@ -186,6 +186,8 @@ Route::get('tablaacreditacionalcances/{proveedor_id}/', ['as' => 'acreditacional
 
 Route::get('acreditacionalcancetipoagente/{agente_tipo}/{agente_seleccionado}', ['as' => 'acreditacionalcances.acreditacionalcancetipoagente', 'uses' => 'catalogos\acreditacionalcanceController@acreditacionalcancetipoagente']);
 
+Route::get('obtenerDeterminantesBeis/{beis}/{determinanteSeleccionado}', ['as' => 'acreditacionalcances.obtenerDeterminantesBeis', 'uses' => 'catalogos\acreditacionalcanceController@obtenerDeterminantesBeis']);
+
 Route::get('acreditacionalcanceagentenormas/{agente_id}', ['as' => 'acreditacionalcances.acreditacionalcanceagentenormas', 'uses' => 'catalogos\acreditacionalcanceController@acreditacionalcanceagentenormas']);
 
 Route::get('proveedoralcanceservicioslista/{proveedor_id}/{alcanceservicio_id}', ['as' => 'acreditacionalcances.proveedoralcanceservicioslista', 'uses' => 'catalogos\acreditacionalcanceController@proveedoralcanceservicioslista']);
@@ -736,6 +738,8 @@ Route::get('tablasustanciasEntidad/{SUSTANCIA_QUIMICA_ID}', ['as' => 'recsensori
 
 Route::get('listaMetodosSustanciasQuimicas/{SUSTANCIA_QUIMICA_ID}', ['as' => 'recsensorialquimicoscatalogos.listaMetodosSustanciasQuimicas', 'uses' => 'recsensorialquimicos\recsensorialquimicoscatalogosController@listaMetodosSustanciasQuimicas']);
 
+Route::get('listaBeiSustanciasQuimicas/{SUSTANCIA_QUIMICA_ID}', ['as' => 'recsensorialquimicoscatalogos.listaBeiSustanciasQuimicas', 'uses' => 'recsensorialquimicos\recsensorialquimicoscatalogosController@listaBeiSustanciasQuimicas']);
+
 Route::get('inforCartaEntidades/{ID_SUSTANCIA_QUIMICA}', ['as' => 'recsensorialquimicoscatalogos.inforCartaEntidades', 'uses' => 'recsensorialquimicos\recsensorialquimicoscatalogosController@inforCartaEntidades']);
 
 
@@ -745,6 +749,8 @@ Route::get('catSustanciaQuimicaEntidadEliminar/{ID_SUSTANCIA_QUIMICA_ENTIDAD}', 
 Route::get('listaConnotaciones/{ID_ENTIDAD}', ['as' => 'listaConnotaciones', 'uses' => 'recsensorialquimicos\recsensorialquimicoscatalogosController@listaConnotaciones']);
 
 Route::get('connotacionesSeleccionada/{ID_ENTIDAD}/{ID_SUSTANCIA_ENTIDAD}', ['as' => 'mostarConnotacionesSelccionadas', 'uses' => 'recsensorialquimicos\recsensorialquimicoscatalogosController@mostarConnotacionesSelccionadas']);
+
+Route::get('mostarNotacionesSelccionadas/{ID_ENTIDAD}/{ID_BEI}', ['as' => 'mostarNotacionesSelccionadas', 'uses' => 'recsensorialquimicos\recsensorialquimicoscatalogosController@mostarNotacionesSelccionadas']);
 
 
 Route::get('recsensorialsustanciasquimicoscatalogostabla/{num_catalogo}', ['as' => 'recsensorialquimicoscatalogos.recsensorialsustanciasquimicoscatalogostabla', 'uses' => 'recsensorialquimicos\recsensorialquimicoscatalogosController@recsensorialsustanciasquimicoscatalogostabla']);
