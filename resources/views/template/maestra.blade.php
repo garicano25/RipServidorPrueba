@@ -437,7 +437,7 @@ use Illuminate\Support\Str;
                         @if(auth()->user()->hasRoles(['Superusuario', 'Administrador', 'Coordinador','Psicólogo','Ergónomo']))
                         <li>
                             <a class="has-arrow " href="{{route('informes.index')}}" aria-expanded="false">
-                                <i class="fa fa-print"></i><span class="hide-menu">Informes </span>
+                                <i class="fa fa-print"></i><span class="hide-menu">Informes y entregables</span>
                             </a>
                         </li>
                         @endif
