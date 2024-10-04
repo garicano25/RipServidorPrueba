@@ -1732,7 +1732,7 @@ Route::resource('recopsiconormativa', 'PSICO\recopsiconormativaController');
 
 //PROGRAMA DE TRABAJO
 Route::resource('programaPsicosocial', 'PSICO\programaTrabajoPsicoController');
-//Route::get('tablaProgramaHI', ['as' => 'HI.programaTrabajo', 'uses' => 'HI\programaTrabajoController@tablaProgramaTrabajo']);
+Route::get('tablaProgramaPsico', ['as' => 'PSICO.programaTrabajoPsico', 'uses' => 'PSICO\programaTrabajoPsicoController@tablaProgramaTrabajoPsico']);
 
 
 

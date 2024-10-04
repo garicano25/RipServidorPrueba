@@ -4,6 +4,7 @@ namespace App\Http\Controllers\PSICO;
 
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use DB;
 
 class programaTrabajoPsicoController extends Controller
 {
@@ -18,52 +19,52 @@ class programaTrabajoPsicoController extends Controller
     }
 
 
-    // public function tablaProgramaTrabajo()
-    // {
+    public function tablaProgramaTrabajoPsico()
+    {
 
-    //     $tabla = DB::select('SELECT p.id ID_PROYECTO,
-    //                                 p.proyecto_folio FOLIO,
-    //                                 p.proyecto_fechainicio AS FECHA_INICIO,
-    //                                 p.proyecto_fechafin AS FECHA_FIN,
-    //                                 IFNULL(p.recsensorial_id, 0) TIENE_RECONOCIMIENTO,
-    //                                 IFNULL(r.recsensorial_foliofisico, "") FOLIO_FISICO,
-    //                                 IFNULL(r.recsensorial_folioquimico , "" ) FOLIO_QUIMICO,
-    //                                 r.recsensorial_alcancefisico,
-    //                                 r.recsensorial_alcancequimico,
-    //                                 p.proyecto_clienteinstalacion,
-    //                                 p.proyecto_clientedireccionservicio
-    //                         FROM proyecto p
-    //                         LEFT JOIN recsensorial r ON r.id = p.recsensorial_id 
-    //                         LEFT JOIN serviciosProyecto s ON s.PROYECTO_ID = p.id
-    //                         WHERE s.HI_EJECUCION = 1');
+        $tabla = DB::select('SELECT p.id ID_PROYECTO,
+                                    p.proyecto_folio FOLIO,
+                                    p.proyecto_fechainicio AS FECHA_INICIO,
+                                    p.proyecto_fechafin AS FECHA_FIN,
+                                    IFNULL(p.recsensorial_id, 0) TIENE_RECONOCIMIENTO,
+                                    IFNULL(r.recsensorial_foliofisico, "") FOLIO_FISICO,
+                                    IFNULL(r.recsensorial_folioquimico , "" ) FOLIO_QUIMICO,
+                                    r.recsensorial_alcancefisico,
+                                    r.recsensorial_alcancequimico,
+                                    p.proyecto_clienteinstalacion,
+                                    p.proyecto_clientedireccionservicio
+                            FROM proyecto p
+                            LEFT JOIN recsensorial r ON r.id = p.recsensorial_id 
+                            LEFT JOIN serviciosProyecto s ON s.PROYECTO_ID = p.id
+                            WHERE s.PSICO_EJECUCION = 1');
 
 
-    //     $count = 0;
-    //     foreach ($tabla as $key => $value) {
-    //         $count += 1;
+        $count = 0;
+        foreach ($tabla as $key => $value) {
+            $count += 1;
 
-    //         $value->COUNT = $count;
-    //         $value->instalacion_y_direccion = '<span style="color: #999999;">' . $value->proyecto_clienteinstalacion . '</span><br>' . $value->proyecto_clientedireccionservicio;
+            $value->COUNT = $count;
+            $value->instalacion_y_direccion = '<span style="color: #999999;">' . $value->proyecto_clienteinstalacion . '</span><br>' . $value->proyecto_clientedireccionservicio;
 
-    //         if ($value->TIENE_RECONOCIMIENTO  != 0) {
+            if ($value->TIENE_RECONOCIMIENTO  != 0) {
 
-    //             if ($value->FOLIO_FISICO != "" && $value->FOLIO_QUIMICO != "") {
-    //                 $value->RECONOCIMIENTO_VINCULADO = $value->FOLIO_FISICO . "<br>" . $value->FOLIO_QUIMICO;
-    //             } else if ($value->FOLIO_FISICO != "") {
-    //                 $value->RECONOCIMIENTO_VINCULADO = $value->FOLIO_FISICO;
-    //             } else {
-    //                 $value->RECONOCIMIENTO_VINCULADO = $value->FOLIO_QUIMICO;
-    //             }
+                if ($value->FOLIO_FISICO != "" && $value->FOLIO_QUIMICO != "") {
+                    $value->RECONOCIMIENTO_VINCULADO = $value->FOLIO_FISICO . "<br>" . $value->FOLIO_QUIMICO;
+                } else if ($value->FOLIO_FISICO != "") {
+                    $value->RECONOCIMIENTO_VINCULADO = $value->FOLIO_FISICO;
+                } else {
+                    $value->RECONOCIMIENTO_VINCULADO = $value->FOLIO_QUIMICO;
+                }
 
-    //             $value->boton_mostrar = '<button type="button" class="btn btn-info btn-circle mostrar" style="padding: 0px;"><i class="fa fa-eye fa-2x"></i></button>';
-    //         } else {
+                $value->boton_mostrar = '<button type="button" class="btn btn-info btn-circle mostrar" style="padding: 0px;"><i class="fa fa-eye fa-2x"></i></button>';
+            } else {
 
-    //             $value->RECONOCIMIENTO_VINCULADO = 'Sin vincular <br><i class="fa fa-ban text-danger"></i>';
-    //             $value->boton_mostrar = '<button type="button" class="btn btn-secondary btn-circle" style="padding: 0px; border: 1px #999999 solid!important;" disabled><i class="fa fa-eye-slash fa-2x"></i></button>';
-    //         }
-    //     }
+                $value->RECONOCIMIENTO_VINCULADO = 'Sin vincular <br><i class="fa fa-ban text-danger"></i>';
+                $value->boton_mostrar = '<button type="button" class="btn btn-secondary btn-circle" style="padding: 0px; border: 1px #999999 solid!important;" disabled><i class="fa fa-eye-slash fa-2x"></i></button>';
+            }
+        }
 
-    //     $listado['data']  = $tabla;
-    //     return response()->json($listado);
-    // }
+        $listado['data']  = $tabla;
+        return response()->json($listado);
+    }
 }

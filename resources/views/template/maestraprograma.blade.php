@@ -428,6 +428,26 @@
         <script src="/js_sitio/reconocimiento_sensorial.js"></script>
     @endif
 
+
+    @if(request()->is('reconocimientoPsicosocial'))
+    <!-- form_wizard_steps -->
+        <script src="/assets/plugins/form_wizard_steps_bootstrap/form_wizard_script2.js"></script>
+        <script src="/assets/plugins/form_wizard_steps_bootstrap/form_wizard_script3.js"></script>
+        {{-- datatable --}}
+        <script src="/assets/plugins/datatables/jquery.dataTables.min.js"></script>
+        <script src="/assets/plugins/datatables/dataTables.rowsGroup.js"></script>
+        <!-- jQuery file upload -->
+        <script src="/js/jasny-bootstrap.js"></script>
+        <script src="/assets/plugins/dropify/dist/js/dropify.min.js"></script>
+        <script src="/assets/plugins/sticky-kit-master/dist/sticky-kit.min.js"></script>
+        <script src="/assets/plugins/sparkline/jquery.sparkline.min.js"></script>
+        <script src="js/custom.min.js"></script>
+        {{-- Select search filter --}}
+        <script src="/assets/plugins/select-search/selectize.js" type="text/javascript"></script>
+        {{-- pagina --}}
+        <script src="/js_sitio/reconocimientoPsico.js"></script>
+    @endif
+
     @if(request()->is('recsensorialcatalogos'))
         {{-- datatable --}}
         <script src="/assets/plugins/datatables/jquery.dataTables.min.js"></script>

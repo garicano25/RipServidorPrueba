@@ -122,11 +122,37 @@
                                             @if(auth()->user()->hasRoles(['Superusuario', 'Administrador', 'Coordinador','Compras','Operativo HI']))
                                             <div class="multisteps-form__progress-btn" id="steps_menu_tab2">
                                                 <i class="fa fa-user"></i><br>
-                                                <span>Proveedores</span>
+                                                <span>Trabajadores</span>
                                             </div>
                                             @endif
 
-                                            
+                                            @if(auth()->user()->hasRoles(['Superusuario', 'Administrador', 'Coordinador','Operativo HI','Compras']))
+                                            <div class="multisteps-form__progress-btn" id="steps_menu_tab3">
+                                                <i class="fa fa-address-card-o"></i><br>
+                                                <span>Personal</span>
+                                            </div>
+                                            @endif
+
+                                            @if(auth()->user()->hasRoles(['Superusuario', 'Administrador', 'Coordinador','Operativo HI','Compras']))
+                                            <div class="multisteps-form__progress-btn" id="steps_menu_tab4">
+                                                <i class="fa fa-desktop"></i><br>
+                                                <span>Equipos</span>
+                                            </div>
+                                            @endif
+
+                                            @if(auth()->user()->hasRoles(['Superusuario', 'Administrador', 'Coordinador','Compras','Almacén','Operativo HI']))
+                                            <div class="multisteps-form__progress-btn" id="steps_menu_tab5">
+                                                <i class="fa fa-print"></i><br>
+                                                <span>Ordenes</span>
+                                            </div>
+                                            @endif
+
+                                            @if(auth()->user()->hasRoles(['Superusuario', 'Administrador', 'Coordinador','Almacén','Operativo HI','Compras']))
+                                            <div class="multisteps-form__progress-btn" id="steps_menu_tab6">
+                                                <i class="fa fa-list"></i><br>
+                                                <span>Lista de permisos</span>
+                                            </div>
+                                            @endif
                                         </div>
                                     </div>
                                 </div>
@@ -144,19 +170,19 @@
                                                                 {!! csrf_field() !!}
                                                                 <div class="card">
                                                                     <div class="card-body">
-                                                                        <h4 class="card-title">Asignar proveedores</h4>
+                                                                        <h4 class="card-title">Lista de trabajadores del centro de trabajo</h4>
                                                                         <hr>
                                                                         <table class="table table-hover stylish-table" width="100%" id="tabla_proyectoproveedores">
                                                                             <thead>
                                                                                 <tr>
                                                                                     <th style="width: 50px!important;">No</th>
                                                                                     <th style="width: 80px!important;">Seleccionado</th>
-                                                                                    <th style="width: 260px!important;">Proveedor</th>
-                                                                                    <th style="width: 260px!important;">Agente / Factor de riesgo / Servicio</th>
-                                                                                    <th style="width: 80px!important;">Total</th>
+                                                                                    <th style="width: 260px!important;">Modalidad</th>
+                                                                                    <th style="width: 260px!important;">Trabajador</th>
+                                                                                    <!-- <th style="width: 80px!important;">Total</th>
                                                                                     <!-- <th style="width: 130px!important;">Tipo instalación</th> -->
-                                                                                    <th style="width: 100px!important;">Total actual</th>
-                                                                                    <th>Observación</th>
+                                                                                    <!-- <th style="width: 100px!important;">Total actual</th>
+                                                                                    <th>Observación</th> -->
                                                                                 </tr>
                                                                             </thead>
                                                                             <tbody>

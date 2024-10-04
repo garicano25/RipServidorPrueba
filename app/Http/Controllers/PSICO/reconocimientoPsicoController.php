@@ -112,6 +112,7 @@ class reconocimientoPsicoController extends Controller
         }
     }
 
+  
     public function estructuraproyectos($FOLIO)
     {
         try {
@@ -128,45 +129,6 @@ class reconocimientoPsicoController extends Controller
                                 LEFT JOIN cat_etiquetas as ce ON ep.ETIQUETA_ID = ce.ID_ETIQUETA
                                 LEFT JOIN catetiquetas_opciones as co ON ep.OPCION_ID = co.ID_OPCIONES_ETIQUETAS
                                 WHERE p.proyecto_folio = ? ", [$FOLIO]);
-
-            // $infoProyecto = DB::select('SELECT p.proyecto_clienteinstalacion AS INSTALACION,
-            //                     p.proyecto_clientedireccionservicio AS DIRRECCION,
-            //                     p.proyecto_clientepersonacontacto AS REPRESENTANTE,
-            //                     p.proyecto_clienterfc AS RFC,
-            //                     p.proyecto_clienterazonsocial AS RAZON_SOCIAL,
-            //                     IFNULL(p.cliente_id, (SELECT CLIENTE_ID FROM contratos_clientes WHERE ID_CONTRATO = p.contrato_id)) AS CLIENTE_ID,
-            //                     IFNULL(p.contrato_id, 0) AS CONTRATO_ID,
-            //                     IF(p.requiereContrato = 0, "No aplica", 
-            //                         CASE p.tipoServicioCliente
-            //                             WHEN 1 THEN "Contrato"
-            //                             WHEN 2 THEN "O.S / O.C"
-            //                             ELSE "Cotización aceptada"
-            //                         END) AS TIPO_SERVICIO,
-            //                     IF(p.contrato_id IS NULL, 
-            //                         "El proyecto seleccionado no tiene un contrato.", 
-            //                         (SELECT CONCAT(IF(NUMERO_CONTRATO IS NULL, "", CONCAT("[ ", NUMERO_CONTRATO, " ] ")), DESCRIPCION_CONTRATO)
-            //                             FROM contratos_clientes 
-            //                             WHERE ID_CONTRATO = p.contrato_id)) AS NOMBRE_CONTRATO,
-            //                     -- Campos adicionales si HI_RECONOCIMIENTO es 1
-            //                             IF(sp.HI_RECONOCIMIENTO = 1, rec.id, NULL) AS ID,
-            //                             IF(sp.HI_RECONOCIMIENTO = 1, rec.recsensorial_representantelegal, NULL) AS REPRESENTANTE_LEGAL,
-            //                             IF(sp.HI_RECONOCIMIENTO = 1, rec.recsensorial_coordenadas, NULL) AS COORDENADAS,
-            //                             IF(sp.HI_RECONOCIMIENTO = 1, rec.recsensorial_ordenservicio, NULL) AS ORDENSERVICIO,
-            //                             IF(sp.HI_RECONOCIMIENTO = 1, rec.recsensorial_codigopostal, NULL) AS CODIGOPOSTAL,
-            //                             IF(sp.HI_RECONOCIMIENTO = 1, rec.recsensorial_actividadprincipal, NULL) AS ACTIVIDADPRINCIPAL,
-            //                             IF(sp.HI_RECONOCIMIENTO = 1, rec.recsensorial_descripcionproceso, NULL) AS DESCRIPCIONPROCESO,
-            //                             IF(sp.HI_RECONOCIMIENTO = 1, rec.recsensorial_obscategorias, NULL) AS OBSERVACION,
-            //                             IF(sp.HI_RECONOCIMIENTO = 1, rec.recsensorial_fechainicio, NULL) AS FECHAINICIO,
-            //                             IF(sp.HI_RECONOCIMIENTO = 1, rec.recsensorial_fechafin, NULL) AS FECHAFIN,
-            //                             IF(sp.HI_RECONOCIMIENTO = 1, rec.recsensorial_fotoplano, NULL) AS FOTOPLANO,
-            //                             IF(sp.HI_RECONOCIMIENTO = 1, rec.recsensorial_fotoubicacion, NULL) AS FOTOUBICACION,
-            //                             IF(sp.HI_RECONOCIMIENTO = 1, rec.recsensorial_fotoinstalacion, NULL) AS FOTOINSTALACION
-            //                     FROM proyecto p
-            //                     LEFT JOIN cliente c ON c.id = p.cliente_id
-            //                     LEFT JOIN contratos_clientes cc ON cc.ID_CONTRATO = p.CONTRATO_ID
-            //                     LEFT JOIN serviciosProyecto sp ON sp.PROYECTO_ID = p.id
-            //                     LEFT JOIN recsensorial rec ON rec.id = p.recsensorial_id -- Aquí se asume que recsensorial tiene un campo proyecto_id
-            //                     WHERE p.proyecto_folio = ?', [$FOLIO]);
 
 
             $infoProyecto = DB::select('SELECT p.proyecto_clienteinstalacion AS INSTALACION,
@@ -208,8 +170,11 @@ class reconocimientoPsicoController extends Controller
             LEFT JOIN recsensorial rec ON rec.id = p.recsensorial_id -- Aquí se asume que recsensorial tiene un campo proyecto_id
             WHERE p.proyecto_folio = ?', [$FOLIO]);
 
+            $higiene = DB::select("SELECT sp.HI_RECONOCIMIENTO 
+                                    FROM proyecto p LEFT JOIN serviciosProyecto sp ON sp.PROYECTO_ID = p.id 
+                                    WHERE p.proyecto_folio = ?", [$FOLIO]);
 
-
+            $dato['HIGIENE'] = $higiene;
             $dato['data'] = $estructura;
             $dato['info'] = $infoProyecto;
             $dato["msj"] = 'Informacion consultada correctamente';
@@ -509,11 +474,11 @@ class reconocimientoPsicoController extends Controller
         foreach ($recsensorial as $key => $value) {
             $numero_registro += 1;
             $value->numero_registro = $numero_registro;
+            $value->boton_mostrar = '<button type="button" class="btn btn-info btn-circle" style="padding: 0px;"><i class="fa fa-eye fa-2x"></i></button>';
 
         }
 
          // BOTON MOSTRAR [reconocimiento Bloqueado]
-             $value->boton_mostrar = '<button type="button" class="btn btn-info btn-circle" style="padding: 0px;"><i class="fa fa-eye fa-2x"></i></button>';
         
 
         // Respuesta en JSON
