@@ -2526,10 +2526,15 @@ class reporteruidowordController extends Controller
                 $table->addCell($ancho_col_6, $celda)->addTextRun($centrado)->addText($value->reporteruidopuntoner_lmpe, $texto);
                 $table->addCell($ancho_col_7, $celda)->addTextRun($centrado)->addText($value->reporteruidopuntoner_tmpe, $texto);
 
-                if ($value->reporteruidopuntoner_ner <= $value->reporteruidopuntoner_lmpe) {
-                    $table->addCell($ancho_col_8, array('valign' => 'center', 'bgColor' => '#00FF00'))->addTextRun($centrado)->addText('Dentro de norma', array('color' => '#000000', 'size' => 10, 'bold' => true, 'name' => $fuente));
+
+                if ($value->reporteruidopuntoner_ner > 90) {
+                    $table->addCell($ancho_col_8, array('valign' => 'center', 'bgColor' => '#FF0000'))->addTextRun($centrado)->addText('Fuera de norma', array('color' => '#FFFFFF', 'size' => 10, 'bold' => true, 'name' => 'Arial'));
+
+                } elseif ($value->reporteruidopuntoner_ner >= 85 && $value->reporteruidopuntoner_ner <= 90) {
+                    $table->addCell($ancho_col_8, array('valign' => 'center', 'bgColor' => '#FFFF00'))->addTextRun($centrado)->addText('Nivel de acción', array('color' => '#000000', 'size' => 10, 'bold' => true, 'name' => 'Arial'));
+
                 } else {
-                    $table->addCell($ancho_col_8, array('valign' => 'center', 'bgColor' => '#FF0000'))->addTextRun($centrado)->addText('Fuera de norma', array('color' => '#FFFFFF', 'size' => 10, 'bold' => true, 'name' => $fuente));
+                    $table->addCell($ancho_col_8, array('valign' => 'center', 'bgColor' => '#00FF00'))->addTextRun($centrado)->addText('Dentro de norma', array('color' => '#000000', 'size' => 10, 'bold' => true, 'name' => 'Arial'));
                 }
             }
 
@@ -2642,12 +2647,18 @@ class reporteruidowordController extends Controller
                 $table->addCell($ancho_col_7, $celda)->addTextRun($centrado)->addText($value->reporteruidodosisner_tmpe, $texto);
                 // $table->addCell($ancho_col_8, $celda)->addTextRun($centrado)->addText($value->reporteruidodosisner_dosis, $texto);
 
+                if ($value->reporteruidodosisner_ner > 90) {
+                    $table->addCell($ancho_col_8, array('valign' => 'center', 'bgColor' => '#FF0000'))->addTextRun($centrado)->addText('Fuera de norma', array('color' => '#FFFFFF', 'size' => 10, 'bold' => true, 'name' => 'Arial'));
 
-                if ($value->reporteruidodosisner_ner <= $value->reporteruidodosisner_lmpe) {
-                    $table->addCell($ancho_col_8, array('valign' => 'center', 'bgColor' => '#00FF00'))->addTextRun($centrado)->addText('Dentro de norma', array('color' => '#000000', 'size' => 10, 'bold' => true, 'name' => $fuente));
+                } elseif ($value->reporteruidodosisner_ner >= 85 && $value->reporteruidodosisner_ner <= 90) {
+
+                    $table->addCell($ancho_col_8, array('valign' => 'center', 'bgColor' => '#FFFF00'))->addTextRun($centrado)->addText('Nivel de acción', array('color' => '#000000', 'size' => 10, 'bold' => true, 'name' => 'Arial'));
+
                 } else {
-                    $table->addCell($ancho_col_8, array('valign' => 'center', 'bgColor' => '#FF0000'))->addTextRun($centrado)->addText('Fuera de norma', array('color' => '#FFFFFF', 'size' => 10, 'bold' => true, 'name' => $fuente));
+                    $table->addCell($ancho_col_8, array('valign' => 'center', 'bgColor' => '#00FF00'))->addTextRun($centrado)->addText('Dentro de norma', array('color' => '#000000', 'size' => 10, 'bold' => true, 'name' => 'Arial'));
                 }
+
+             
             }
 
 
@@ -3902,8 +3913,18 @@ class reporteruidowordController extends Controller
                                             reporteruidopuntoner.proyecto_id,
                                             reporteruidopuntoner.registro_id,
                                             COUNT(reporteruidopuntoner.reporteruidopuntoner_punto) AS totalsonometrias,
-                                            SUM(IF(reporteruidopuntoner.reporteruidopuntoner_ner <= reporteruidopuntoner.reporteruidopuntoner_lmpe, 1, 0)) AS dentronorma,
-                                            SUM(IF(reporteruidopuntoner.reporteruidopuntoner_ner > reporteruidopuntoner.reporteruidopuntoner_lmpe, 1, 0)) AS fueranorma
+                                         SUM(CASE
+                                                WHEN reporteruidopuntoner.reporteruidopuntoner_ner < 85 THEN 1
+                                                ELSE 0
+                                            END) AS dentronorma,
+                                        SUM(CASE
+                                                WHEN reporteruidopuntoner.reporteruidopuntoner_ner BETWEEN 85 AND 90 THEN 1
+                                                ELSE 0
+                                            END) AS niveldeaccion,
+                                        SUM(CASE
+                                                WHEN reporteruidopuntoner.reporteruidopuntoner_ner > 90 THEN 1
+                                                ELSE 0
+                                            END) AS fueranorma
                                         FROM
                                             reporteruidopuntoner
                                         WHERE
@@ -3918,10 +3939,12 @@ class reporteruidowordController extends Controller
             if (count($sonometrias) > 0) {
                 $dashboard_total_evaluacion = $sonometrias[0]->totalsonometrias . ' puntos<w:br/>Sonometría<w:br/><w:br/>';
                 $plantillaword->setValue('TOTAL_DENTRO', $sonometrias[0]->dentronorma);
+                $plantillaword->setValue('TOTAL_NIVEL', $sonometrias[0]->niveldeaccion);
                 $plantillaword->setValue('TOTAL_FUERA', $sonometrias[0]->fueranorma);
             } else {
                 $dashboard_total_evaluacion = '0 puntos<w:br/>Sonometría<w:br/><w:br/>';
                 $plantillaword->setValue('TOTAL_DENTRO', '0');
+                $plantillaword->setValue('TOTAL_NIVEL', '0');
                 $plantillaword->setValue('TOTAL_FUERA', '0');
             }
 

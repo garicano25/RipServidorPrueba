@@ -1225,10 +1225,10 @@
 						<table class="table" width="100%" id="tabla_dashboard">
 							<tbody>
 								<tr>
-									<th colspan="4" style="font-size: 18px!important;">Evaluación de ruido en <span class="div_instalacion_nombre">NOMBRE INSTALACION</span>.</th>
+									<th colspan="5" style="font-size: 18px!important;">Evaluación de ruido en <span class="div_instalacion_nombre">NOMBRE INSTALACION</span>.</th>
 								</tr>
 								<tr>
-									<th colspan="2">Áreas evaluadas en medición ambiental</th>
+									<th colspan="3">Áreas evaluadas en medición ambiental</th>
 									<th width="400">Categorías evaluadas en medición personal</th>
 									<td width="250" rowspan="2">
 										<div style="border: 0px #F00 solid;">
@@ -1240,7 +1240,7 @@
 									</td>
 								</tr>
 								<tr>
-									<td colspan="2" style="height: 200px; text-align: left;">
+									<td colspan="3" style="height: 200px; text-align: left;">
 										<span id="dashboard_areas">
 											{{-- * Motobomba y Servicio Auxiliares<br>
 												* Aguas Congénitas <br>
@@ -1257,7 +1257,7 @@
 									</td>
 								</tr>
 								<tr>
-									<th colspan="2">Puntos de evaluación (medición ambiental)</th>
+									<th colspan="3">Puntos de evaluación (medición ambiental)</th>
 									<th>Puntos de evaluación (medición personal)</th>
 									<td width="250" rowspan="2">
 										<span class="texto">Equipo de protección<br>personal auditiva:</span><br><br>
@@ -1278,6 +1278,11 @@
 										<span class="numero" id="dashboard_sonometria_total_dentronorma">0</span>
 									</td>
 									<td>
+										<i class="fa fa-warning icono" style="color: #f4d03f;"></i>
+										<span class="texto">Nivel de acción</span><br>
+										<span class="numero" id="dashboard_sonometria_total_niveldeaccion">0</span>
+									</td>
+									<td>
 										<i class="fa fa-warning icono" style="color: #fc4b6c;"></i>
 										<span class="texto">Fuera de norma</span><br>
 										<span class="numero" id="dashboard_sonometria_total_fueranorma">0</span>
@@ -1285,11 +1290,12 @@
 									<td>
 										<div id="grafica_resultados" style="height: 200px; width: 200px; border: 0px #000000 solid; margin: 0px auto;"></div>
 										<span style="color: #8ee66b;">■</span> Dentro de norma<br>
+										<span style="color: #f4d03f;">■</span> Nivel de acción <br>
 										<span style="color: #fc4b6c;">■</span> Fuera de norma
 									</td>
 								</tr>
 								<tr>
-									<th colspan="4">Análisis derivado del informe de resultados de ruido "Condiciones de seguridad e higiene en los centros de trabajo donde se genere ruido (NOM-011-STPS-2001)".</th>
+									<th colspan="5">Análisis derivado del informe de resultados de ruido "Condiciones de seguridad e higiene en los centros de trabajo donde se genere ruido (NOM-011-STPS-2001)".</th>
 								</tr>
 							</tbody>
 						</table>
@@ -2066,10 +2072,10 @@
 							<div class="row">
 								<div class="col-12">
 									<div class="form-group">
-									<label>Seleccione un equipo auditivo o rellene los siguientes datos manualmente</label>
-									<select class="custom-select form-control" id="select_proteccionAuditiva" onchange="mostrar_proteccionauditiva(this.value);">
-                                        <option value="">Seleccione</option>
-                                    </select>
+										<label>Seleccione un equipo auditivo o rellene los siguientes datos manualmente</label>
+										<select class="custom-select form-control" id="select_proteccionAuditiva" onchange="mostrar_proteccionauditiva(this.value);">
+											<option value="">Seleccione</option>
+										</select>
 									</div>
 								</div>
 								<div class="col-12">
@@ -2192,18 +2198,18 @@
 							<input type="hidden" class="form-control" id="reporteepp_id" name="reporteepp_id" value="0">
 						</div>
 						<div class="table-responsive" style="max-height: 410px!important;">
-                                <table class="table table-hover stylish-table" width="100%" id="tabla_lista_epp_ruido">
-                                    <thead>
+							<table class="table table-hover stylish-table" width="100%" id="tabla_lista_epp_ruido">
+								<thead>
 									<tr>
-                                            <th style="max-width: 48%!important;">Parte del cuerpo *</th>
-                                            <th style="max-width: 48%!important;">Equipo de protección personal básico proporcionado *</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-									
-                                    </tbody>
-                                </table>
-                            </div>
+										<th style="max-width: 48%!important;">Parte del cuerpo *</th>
+										<th style="max-width: 48%!important;">Equipo de protección personal básico proporcionado *</th>
+									</tr>
+								</thead>
+								<tbody>
+
+								</tbody>
+							</table>
+						</div>
 					</div>
 				</div>
 				<div class="modal-footer">
@@ -2941,4 +2947,4 @@
 	var areas_poe = <?php echo json_encode($areas_poe); ?>;
 </script>
 {{-- <script src="/js_sitio/html2canvas.js"></script> --}}
-<script src="/js_sitio/reportes/reporteruido.js?v=5.0"></script>
+<script src="/js_sitio/reportes/reporteruido.js?v=6.0"></script>

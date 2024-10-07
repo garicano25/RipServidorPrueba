@@ -14,6 +14,7 @@ var tabla_quimicosresumen_1 = null;
 var tabla_quimicosresumen_2 = null;
 var tabla_quimicosresumen_3 = null;
 var tabla_quimicosresumen_4 = null;
+var tabla_quimicosbei = null;
 var tabla_control_cambios = null;
 
 
@@ -1454,6 +1455,8 @@ $('#tabla_reconocimiento_sensorial tbody').on('click', 'td.mostrar', function ()
 	var tr = $(this).closest('tr');
 	var row = tabla_recsensorial.row(tr);
 	nuevoReconocimiento = 0;
+
+	validarPermisosAsignados(row.data().proyecto_folio)
 
 
 	// Quitar warning checkbox
@@ -8482,6 +8485,11 @@ $('.multisteps-form__progress-btn-3').click(function () {
 		case "steps3_menu_tab5": // Puntos de muestreo y POE
 			funcion_tabla_quimicosresumen_4($("#recsensorial_id").val(), 4);
 			break;
+		case "steps3_menu_tab6": // Obtencios de las sustancias para la evaluacion de POE
+			obtencionSustanciasEvaluacionBei($("#recsensorial_id").val(), 5); // Obtencios de sustancias
+			funcion_tabla_quimicosbeis($("#recsensorial_id").val(), 6); //Tabla de evaluacion de BEIs
+
+			break;
 		default:
 			break;
 	}
@@ -10365,7 +10373,9 @@ $('#boton_editarInforme').on('click', function (e) {
 
 
 
-$("#boton_guardarDatosInforme").click(function () {
+$("#boton_guardarDatosInforme").click(function (e) {
+
+	e.preventDefault(); // evita que se recargue la página
 
 	// Validamos los campos requeridos
 	var valida = this.form.checkValidity();
@@ -10670,8 +10680,9 @@ $(document).ready(function () {
 
 
 
-$("#boton_guardarTablaInformes").click(function () {
+$("#boton_guardarTablaInformes").click(function (e) {
 
+	e.preventDefault();
 	if ($('#divTablaInforme').find('input.error').length > 0) {
 
 		swal({
@@ -11320,7 +11331,9 @@ $(document).ready(function () {
 });
 
 
-$("#boton_guardarTablaClienteInformes").click(function () {
+$("#boton_guardarTablaClienteInformes").click(function (e) {
+
+	e.preventDefault();
 
 	// valida campos vacios
 	var valida = this.form.checkValidity();
@@ -12369,3 +12382,427 @@ $(document).ready(function () {
 	});
 
 })
+
+// Función para calcular la edad
+function calcularEdad(fechaNacimiento) {
+	var hoy = new Date();
+	var fechaNac = new Date(fechaNacimiento);
+	var edad = hoy.getFullYear() - fechaNac.getFullYear();
+	var mes = hoy.getMonth() - fechaNac.getMonth();
+	
+	// Ajuste si no ha pasado el cumpleaños en el año actual
+	if (mes < 0 || (mes === 0 && hoy.getDate() < fechaNac.getDate())) {
+		edad--;
+	}
+	return edad;
+}
+
+// Escuchar el evento 'change' en el campo de fecha de nacimiento
+$('#FECHA_NACIMIENTO_BEI').on('change', function() {
+	var fechaNacimiento = $(this).val();
+	if (fechaNacimiento) {
+		var edad = calcularEdad(fechaNacimiento);
+		$('#EDAD_BEI').val(edad);
+	}
+});
+
+
+function obtencionSustanciasEvaluacionBei(recsensorial, numero) {
+	//Obtenemos las sutancias quimicas que salieron a evaluar y las que son adicionales por el cliente
+	var ruta = "/recsensorialquimicosresumen/" + recsensorial + "/" + numero;
+	$.ajax({
+		type: "GET",
+		dataType: "json",
+		url: ruta,
+		data: {},
+		cache: false,
+		success: function (dato) {
+		
+			$('#SUSTANCIA_QUIMICA_ID_BEI').html(dato.data);
+			
+		},
+		beforeSend: function () {
+			$('#SUSTANCIA_QUIMICA_ID_BEI').html('<option value="" selected>Consultando sustancias...</option>');
+		},
+		error: function (dato) {
+			$('#SUSTANCIA_QUIMICA_ID_BEI').html('<option value="" disabled>Error al obtener las sustancias</option>');
+			return false;
+		}
+	});//Fin ajax
+
+
+	//Consultamos las areas del reconocimiento
+	$.ajax({
+		type: "GET",
+		dataType: "json",
+		url: "/obtenerGruposComponetes/" + $('#recsensorial_id').val(),
+		data: {},
+		cache: false,
+		success: function (dato) {
+
+			$('#AREA_ID_BEI').html(dato.opcionesaAreas);
+
+		},
+		beforeSend: function () {
+			$('#AREA_ID_BEI').html('<option value="" selected>Consultando areas...</option>');
+
+		},
+		error: function (dato) {
+			$('#AREA_ID_BEI').html('<option value="" disabled>Error al obtener las areas</option>');
+
+		}
+		
+	});
+}
+
+
+function consultarDeterminanteBei(value, optionSelected = 0) {
+
+	var ruta = "/obtenerDeterminantesBeis/" + value + "/" + optionSelected;
+	$.ajax({
+		type: "GET",
+		dataType: "json",
+		url: ruta,
+		data: {},
+		cache: false,
+		success: function (dato) {
+		
+			$('#DETERMINANTE_ID_BEI').html(dato.opciones);
+			
+		},
+		beforeSend: function () {
+			$('#DETERMINANTE_ID_BEI').html('<option value="" selected>Consultando determinantes...</option>');
+		},
+		error: function (dato) {
+			$('#DETERMINANTE_ID_BEI').html('<option value="" disabled>Error al obtener las sustancias</option>');
+			return false;
+		}
+	});//Fin ajax
+
+}
+
+// Obtenemos el tiempo de muestreo del determinante seleccionado
+$("#DETERMINANTE_ID_BEI").on("change", function () {
+
+	var valorSeleccionado = $(this).find("option:selected");
+	var infoAdicional = valorSeleccionado.data("tiempo");
+	$('#TIEMPO_MUESTREO_BEI').val(infoAdicional)
+
+});
+
+//Obtenemos la lista de las categorias por el area seleccionada
+$('#AREA_ID_BEI').on('change', function () {
+
+	$.ajax({
+		type: "GET",
+		dataType: "json",
+		url: "/obtenerCategorias/" + $('#recsensorial_id').val() + "/" + $(this).val(),
+		data: {},
+		cache: false,
+		success: function (dato) {
+		
+			$('#CATEGORIA_ID_BEI').html(dato.opcionesaCategorias);
+
+		},
+		beforeSend: function () {
+			$('#CATEGORIA_ID_BEI').html('<option selected>Consultando categorias...</option>');
+		},
+		error: function (dato) {
+			$('#CATEGORIA_ID_BEI').html('<option selected>Error al consultar categorias...</option>');
+		}
+	});
+})
+
+$("#boton_nuevo_bei").click(function () {
+
+	// Borrar formulario
+	$('#form_inventariobei').each(function () {
+		this.reset();
+	});
+
+	// Campos Hidden
+	$('#ID_RECSENSORIAL_BEI').val(0);
+
+	// mostrar modal
+	$('#modal_inventariobei').modal({ backdrop: false });
+});
+
+
+
+$("#boton_guardar_recsensorialbei").click(function () {
+
+	// valida campos vacios
+	var valida = this.form.checkValidity();
+	if (valida) {
+		// Valida envio de datos
+		swal({
+			title: "¡Confirme para agregar nuevo registro!",
+			text: "Es necesario confirmar para guardar la información",
+			type: "info",
+			showCancelButton: true,
+			confirmButtonColor: "#DD6B55",
+			confirmButtonText: "Guardar!",
+			cancelButtonText: "Cancelar!",
+			closeOnConfirm: false,
+			closeOnCancel: false
+		}, function (isConfirm) {
+			if (isConfirm) {
+				// cerrar msj confirmacion
+				swal.close();
+
+				// enviar datos
+				$('#form_inventariobei').ajaxForm({
+					dataType: 'json',
+					type: 'POST',
+					url: '/recsensorialquimicosinventario',
+					data: {
+						api: 3,
+						RECONOCIMIENTO_ID: $('#recsensorial_id').val(),
+					},
+					resetForm: false,
+					success: function (dato) {
+
+						tabla_quimicosbei.ajax.reload()
+						
+						// mensaje
+						swal({
+							title: "Correcto",
+							text: "Informacion guardada exitosamente",
+							type: "success", // warning, error, success, info
+							buttons: {
+								visible: false, // true , false
+							},
+							timer: 1500,
+							showConfirmButton: false
+						});
+
+
+
+
+						// actualiza boton
+						$('#boton_guardar_recsensorialbei').html('Guardar <i class="fa fa-save"></i>');
+						$('#boton_guardar_recsensorialbei').attr('disabled', false);
+
+						// cerrar modal
+						$('#modal_inventariobei').modal('hide');
+					},
+					beforeSend: function () {
+						$('#boton_guardar_recsensorialbei').html('Guardando <i class="fa fa-spin fa-spinner"></i>');
+						$('#boton_guardar_recsensorialbei').attr('disabled', true);
+					},
+					error: function (dato) {
+						// actualiza boton
+						$('#boton_guardar_recsensorialbei').html('Guardar <i class="fa fa-save"></i>');
+						$('#boton_guardar_recsensorialbei').attr('disabled', false);
+
+						// mensaje
+						swal({
+							title: "No se pudo guardar",
+							text: "Asegúrese de que todos los campos validos esten rellenados ",
+							type: "warning", // warning, error, success, info
+							buttons: {
+								visible: false, // true , false
+							},
+							timer: 1500,
+							showConfirmButton: false
+						});
+						return false;
+					}
+				}).submit();
+				return false;
+			}
+			else {
+				// mensaje
+				swal({
+					title: "Cancelado",
+					text: "",
+					type: "error", // warning, error, success, info
+					buttons: {
+						visible: false, // true , false
+					},
+					timer: 500,
+					showConfirmButton: false
+				});
+			}
+		});
+		return false;
+	}
+
+});
+
+
+function funcion_tabla_quimicosbeis(recsensorial_id, numero_tabla) {
+	try {
+		var ruta = "/recsensorialquimicosresumen/" + recsensorial_id + "/" + numero_tabla;
+
+		if (tabla_quimicosbei != null) {
+			tabla_quimicosbei.clear().draw();
+			tabla_quimicosbei.ajax.url(ruta).load();
+		}
+		else {
+			var numeroejecucion = 1;
+			tabla_quimicosbei = $('#tabla_quimicosresumen_bei').DataTable({
+				"ajax": {
+					"url": ruta,
+					"type": "get",
+					"cache": false,
+					error: function (xhr, error, code) {
+
+						console.log('error en funcion_tabla_quimicosbeis');
+						if (numeroejecucion <= 1) {
+							funcion_tabla_quimicosbeis(recsensorial_id, numero_tabla);
+							numeroejecucion += 1;
+						}
+					},
+					"data": {}
+				},
+				"columns": [
+					{
+						"data": "boton_editar"
+					},
+					{
+						"data": "SUSTANCIA_QUIMICA",
+						"defaultContent": "-"
+					},
+					{
+						"data": "AREA_CATEGORIA",
+						"defaultContent": "-"
+					},
+					{
+						"data": "NOMBRE_PERSONA",
+						"defaultContent": "-"
+					},
+					{
+						"data": "NACIMIENTO_EDAD",
+						"defaultContent": "-"
+					},
+					{
+						"data": "ANTIGUEDAD_LABORAL",
+						"defaultContent": "-"
+					},
+					{
+						"data": "DETERMINANTE",
+						"defaultContent": "-"
+					},
+					{
+						"data": "TIEMPO_MUESTREO",
+						"defaultContent": "-"
+					},
+					{
+						"data": "NUMERO_MUESTRA",
+						"defaultContent": "-"
+					}
+				],
+				"order": [[0, "asc"]],
+				// "rowsGroup": [0, 1], //agrupar filas
+				"lengthMenu": [[20, 50, 100, -1], [20, 50, 100, "Todos"]],
+				"ordering": false,
+				"processing": true,
+				"language": {
+					"lengthMenu": "Mostrar _MENU_ Registros",
+					"zeroRecords": "No se encontraron registros",
+					"info": "Página _PAGE_ de _PAGES_ (Total _TOTAL_ registros)",
+					"infoEmpty": "No se encontraron registros",
+					"infoFiltered": "(Filtrado de _MAX_ registros)",
+					"emptyTable": "No hay datos disponibles en la tabla",
+					"loadingRecords": "Cargando datos....",
+					"processing": "Procesando <i class='fa fa-spin fa-spinner fa-3x'></i>",
+					"search": "Buscar",
+					"paginate": {
+						"first": "Primera",
+						"last": "Ultima",
+						"next": "Siguiente",
+						"previous": "Anterior"
+					}
+				}
+			});
+		}
+	}
+	catch (exception) {
+		// alert("error en el ajax");
+		funcion_tabla_quimicosbeis(recsensorial_id, numero_tabla);
+	}
+}
+
+$('#tabla_quimicosresumen_bei tbody').on('click', 'td>button.editar', function () {
+
+
+	var tr = $(this).closest('tr');
+	var row = tabla_quimicosbei.row(tr);
+
+	// Borrar formulario
+	$('#form_inventariobei').each(function () {
+		this.reset();
+	});
+
+	// llenar campos
+	$("#ID_RECSENSORIAL_BEI").val(row.data().ID_RECSENSORIAL_BEI);
+	$("#SUSTANCIA_QUIMICA_ID_BEI").val(row.data().SUSTANCIA_QUIMICA_ID);
+	$("#NOMBRE_PESONA_BEI").val(row.data().NOMBRE_PERSONA);
+	$("#AREA_ID_BEI").val(row.data().AREA_ID);
+	$("#FECHA_NACIMIENTO_BEI").val(row.data().FECHA_NACIMIENTO);
+	$("#EDAD_BEI").val(row.data().EDAD);
+	$("#ANTIGUEDAD_LABORAL_BEI").val(row.data().ANTIGUEDAD_LABORAL);
+	$("#NUMERO_MUESTRA_BEI").val(row.data().NUMERO_MUESTRA);
+	$("#TIEMPO_MUESTREO_BEI").val(row.data().TIEMPO_MUESTREO);
+
+	consultarDeterminanteBei(row.data().SUSTANCIA_QUIMICA_ID, row.data().DETERMINANTE_ID)
+
+	$.ajax({
+		type: "GET",
+		dataType: "json",
+		url: "/obtenerCategorias/" + $('#recsensorial_id').val() + "/" + row.data().AREA_ID,
+		data: {},
+		cache: false,
+		success: function (dato) {
+		
+			$('#CATEGORIA_ID_BEI').html(dato.opcionesaCategorias);
+			$('#CATEGORIA_ID_BEI').val(row.data().CATEGORIA_ID);
+
+		},
+		beforeSend: function () {
+			$('#CATEGORIA_ID_BEI').html('<option selected>Consultando categorias...</option>');
+		},
+		error: function (dato) {
+			$('#CATEGORIA_ID_BEI').html('<option selected>Error al consultar categorias...</option>');
+		}
+	});
+
+	// mostrar modal
+	$('#modal_inventariobei').modal({ backdrop: false });
+
+
+
+});
+
+
+//Funcion para la validacion de permisos asignados en proyectos
+function validarPermisosAsignados(proyecto_folio) {
+
+	$.ajax({
+		type: "GET",
+		dataType: "json",
+		url: "/validacionAsignacionUser/" + proyecto_folio,
+		data: {},
+		cache: false,
+		success: function (dato) {
+			
+			if (dato.permisos == 1) { 
+
+				$('input[type="submit"], button[type="submit"]').fadeIn(0);
+
+			} else {
+				
+				$('input[type="submit"], button[type="submit"]').fadeOut(0);
+
+			}
+
+		}, beforeSend: function () {},
+		error: function (dato) {
+			// alert('Error: '+dato.msj);
+            alert('Los permisos no han sido cargado')
+
+			return false;
+		}
+	});//Fin ajax
+}

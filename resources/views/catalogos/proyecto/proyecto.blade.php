@@ -930,6 +930,53 @@
                                                             </div>
                                                         </div>
                                                     </div>
+                                                    <!-- Seccion de Asignacion de usuarios -->
+                                                    @if(auth()->user()->hasRoles(['Superusuario', 'Administrador']))
+                                                    <div class="row" id="seccion_asignacion_usuarios">
+                                                        <div class="col-12">
+                                                            <div class="card">
+                                                                <div class="card-body">
+                                                                    <div class="row">
+                                                                        <h4 class="card-title mx-3">Asignación de usuarios al proyecto</h4>
+                                                                    </div>
+                                                                    <hr>
+                                                                    <div class="row">
+                                                                        <div class="col-12">
+                                                                            <ol class="breadcrumb m-b-10" style="padding: 6px;">
+                                                                                <button type="button" class="btn btn-default waves-effect botonnuevo_moduloproyecto" style="float: left" data-toggle="tooltip" title="Asignar un nuevo usuario" id="boton_asignar_usuario">
+                                                                                    <span class="btn-label"><i class="fa fa-user-plus"></i></span> Asignar usuario
+                                                                                </button>
+
+                                                                            </ol>
+                                                                            <div class="table-responsive">
+                                                                                <style type="text/css">
+                                                                                    #tabla_ordenservicios td {
+                                                                                        padding-top: 2px !important;
+                                                                                        padding-bottom: 2px !important;
+                                                                                    }
+                                                                                </style>
+                                                                                <table class="table table-hover stylish-table" width="100%" id="tabla_usuarios_asignados">
+                                                                                    <thead>
+                                                                                        <tr>
+                                                                                            <th style="width: 80px!important;">No</th>
+                                                                                            <th style="width: 200px!important;">Nombre</th>
+                                                                                            <th style="width: 200px!important;">Fecha de asignación</th>
+                                                                                            <th style="width: 200px!important;">Servicios asignados</th>
+                                                                                            <th style="width: 200px!important;">Estado</th>
+                                                                                            <th style="width: 200px!important;">Acción</th>
+                                                                                            <th style="width: 200px!important;">Editar</th>
+                                                                                        </tr>
+                                                                                    </thead>
+                                                                                    <tbody></tbody>
+                                                                                </table>
+                                                                            </div>
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    @endif
                                                     <!-- Seccion de Ordenes de servicio -->
                                                     @if(auth()->user()->hasRoles(['Superusuario', 'Administrador']))
                                                     <div class="row" id="seccion_ordenes_servicio">
@@ -1122,7 +1169,7 @@
 
                                                 </div>
                                             </div>
-                                            @if(auth()->user()->hasRoles(['Superusuario', 'Administrador', 'Proyecto', 'CoordinadorHI']))
+                                            @if(auth()->user()->hasRoles(['Superusuario', 'Administrador', 'CoordinadorHI']))
                                             <!--STEP 2-->
                                             <div class="multisteps-form__panel" data-animation="scaleIn" id="steps_contenido_tab2">
                                                 <div class="multisteps-form__content">
@@ -1489,25 +1536,26 @@
                             <div class="card">
                                 <div class="card-body" style="padding: 6px 10px">
                                     <table class="table" style="border: 0px #000 solid; margin: 0px;">
-                                        <tbody>
-                                            <tr>
-                                                <td width="40" style="text-align: center; border: none;">
-                                                    <span class="btn btn-success btn-circle"><i class="fa fa-file-text-o"></i></span>
-                                                </td>
-                                                <td width="160" style="text-align: left; border: none; vertical-align: middle;">
-                                                    <h4 style="margin: 0px;"><a class="text-success div_proyecto_folio">FOLIO</a></h4>
-                                                    <small style="color: #AAAAAA; font-size: 12px;">Proyecto</small>
-                                                </td>
-                                                <td width="auto" style="text-align: right; border: none; vertical-align: middle;">
-                                                    <h4 style="margin: 0px;"><a class="text-success div_proyecto_instalacion">INSTALACIÓN</a></h4>
-                                                    <small style="color: #AAAAAA; font-size: 12px;">Instalación</small>
-                                                </td>
-                                                <td width="40" style="text-align: center; border: none;">
-                                                    <span class="btn btn-success btn-circle"><i class="fa fa-industry"></i></span>
-                                                </td>
-                                            </tr>
-                                        </tbody>
-                                    </table>
+                                        <table class="table" style="border: 0px #000 solid; margin: 0px;">
+                                            <tbody>
+                                                <tr>
+                                                    <td width="40" style="text-align: center; border: none;">
+                                                        <span class="btn btn-success btn-circle"><i class="fa fa-file-text-o"></i></span>
+                                                    </td>
+                                                    <td width="160" style="text-align: left; border: none; vertical-align: middle;">
+                                                        <h4 style="margin: 0px;"><a class="text-success div_proyecto_folio">FOLIO</a></h4>
+                                                        <small style="color: #AAAAAA; font-size: 12px;">Proyecto</small>
+                                                    </td>
+                                                    <td width="auto" style="text-align: right; border: none; vertical-align: middle;">
+                                                        <h4 style="margin: 0px;"><a class="text-success div_proyecto_instalacion">INSTALACIÓN</a></h4>
+                                                        <small style="color: #AAAAAA; font-size: 12px;">Instalación</small>
+                                                    </td>
+                                                    <td width="40" style="text-align: center; border: none;">
+                                                        <span class="btn btn-success btn-circle"><i class="fa fa-industry"></i></span>
+                                                    </td>
+                                                </tr>
+                                            </tbody>
+                                        </table>
                                 </div>
                             </div>
                         </div>
@@ -2012,7 +2060,7 @@
                             <label> Documento PDF </label>
                             {{-- <div id="visor_menu_bloqueado"></div>
                             <div id="visor_contenido_bloqueado"></div> --}}
-                            <iframe src="/assets/images/fondovisor.jpg" id="visor_ordenserviciopdf" style=""></iframe>
+                            <iframe src="/assets/images/fondovisor.jpg" id="visor_ordenserviciopdf"></iframe>
                         </div>
                     </div>
                 </div>
@@ -2167,6 +2215,89 @@
 </div>
 <!-- ============================================================== -->
 <!-- MODAL PRORROGA -->
+<!-- ============================================================== -->
+
+<!-- ============================================================== -->
+<!-- MODAL ASIGNACION DE USUARIOS -->
+<!-- ============================================================== -->
+
+<div id="modal_asignacion_usuario" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" style="display: none;">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <form enctype="multipart/form-data" method="post" name="form_asignacion_usuario" id="form_asignacion_usuario">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                    <h4 class="modal-title">Nuevo usuario asignado al proyecto</h4>
+                </div>
+                <div class="modal-body">
+                    <div class="row">
+                        <div class="col-12">
+                            {!! csrf_field() !!}
+                            <input type="hidden" class="form-control" id="PROYECTO_USUARIO_ID" name="PROYECTO_ID" >
+                            <input type="hidden" class="form-control" id="ID_PROYECTO_USUARIO" name="ID_PROYECTO_USUARIO"  value="0">
+                        </div>
+                        <div class="col-12">
+                            <h4 class="text-center text-danger">
+                                <i class="fa fa-info-circle"></i> Al asignar un usuario al proyecto este podra Ver, Eliminar, Editar y Crear información de los servicios asignados al Proyecto.
+                            </h4>
+                        </div>
+                        <div class="col-12 mt-4">
+                            <div class="form-group">
+                                <label><b>Usuario*</b></label>
+                                <select class="form-control" id="USUARIO_ID" name="USUARIO_ID" required>
+                                    <option value=""></option>
+                                    @foreach($usuarios as $dato)
+                                    <option value="{{$dato->id}}">{{$dato->NOMBRE}} - ({{$dato->CORREO}}) </option>
+                                    @endforeach
+                                </select>
+                                <span class="text-info"><i class="fa fa-info"></i> No es necesario agregar a los usuarios Administradores o Coordinadores, estos tienen acceso total a la Información.</span>
+                            </div>
+                        </div>
+                        <div class="col-12 mb-4">
+                            <h4 class="text-center">
+                                Asignación de servicios
+                            </h4>
+                        </div>
+                        <div class="col-6 mb-3 text-center">
+                            <label class="text-success">Servicios de Higiene Industrial *</label>
+                            <div class="switch">
+                                <label>
+                                    Denegado<input type="checkbox" id="SERVICIO_HI" name="SERVICIO_HI" value="1"><span class="lever switch-col-light-blue"></span>Asignado
+                                </label>
+                            </div>
+                        </div>
+                        <div class="col-6 mb-3 text-center">
+                            <label class="text-success">Servicios de FR. de Psicosocial *</label>
+                            <div class="switch">
+                                <label>
+                                    Denegado<input type="checkbox" id="SERVICIO_PSICO" name="SERVICIO_PSICO" value="1"><span class="lever switch-col-light-blue"></span>Asignado
+                                </label>
+                            </div>
+                        </div>
+                        <div class="col-12 mb-3 mt-3 text-center">
+                            <label class="text-success">Servicios de FR. de Ergonomía *</label>
+                            <div class="switch">
+                                <label>
+                                    Denegado<input type="checkbox" id="SERVICIO_ERGO" name="SERVICIO_ERGO" value="1"><span class="lever switch-col-light-blue"></span>Asignado
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default waves-effect" data-dismiss="modal">Cerrar</button>
+                    @if(auth()->user()->hasRoles(['Superusuario', 'Administrador']))
+                    <button type="submit" class="btn btn-danger waves-effect waves-light" id="boton_guardar_usuario">
+                        Asignar usuario <i class="fa fa-save"></i>
+                    </button>
+                    @endif
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+<!-- ============================================================== -->
+<!-- MODAL ASIGNACION DE USUARIOS -->
 <!-- ============================================================== -->
 
 

@@ -179,7 +179,7 @@ use Illuminate\Support\Str;
 
 
 
-                    @if (preg_match('/\btablero\b/', request()->path()) || preg_match('/\bcliente\b/', request()->path()) || preg_match('/\bproveedor\b/', request()->path()) || preg_match('/\bclientecatalogo\b/', request()->path()) || preg_match('/\bproveedorcatalogos\b/', request()->path()) || preg_match('/\bbanco-imagenes\b/', request()->path()) || preg_match('/\busuario\b/', request()->path()))
+                    @if (preg_match('/\btablero\b/', request()->path()) || preg_match('/\bcliente\b/', request()->path()) || preg_match('/\bproveedor\b/', request()->path()) || preg_match('/\bclientecatalogo\b/', request()->path()) || preg_match('/\bproveedorcatalogos\b/', request()->path()) || preg_match('/\bbanco-imagenes\b/', request()->path()) || preg_match('/\busuario\b/', request()->path()) || preg_match('/\bbiblioteca\b/', request()->path()))
                     <div class="navbar-nav" style="left: 35%; position: absolute;">
 
                         <h1 style="color:#ffff;font-weight: bold;">Recursos Administrativos</h1>
@@ -324,7 +324,7 @@ use Illuminate\Support\Str;
                         </li>
                         @endif
 
-                        @if (preg_match('/\btablero\b/', request()->path()) || preg_match('/\bcliente\b/', request()->path()) || preg_match('/\bproveedor\b/', request()->path()) || preg_match('/\bclientecatalogo\b/', request()->path()) || preg_match('/\bproveedorcatalogos\b/', request()->path()) || preg_match('/\bbanco-imagenes\b/', request()->path()) || preg_match('/\busuario\b/', request()->path()))
+                        @if (preg_match('/\btablero\b/', request()->path()) || preg_match('/\bcliente\b/', request()->path()) || preg_match('/\bproveedor\b/', request()->path()) || preg_match('/\bclientecatalogo\b/', request()->path()) || preg_match('/\bproveedorcatalogos\b/', request()->path()) || preg_match('/\bbanco-imagenes\b/', request()->path()) || preg_match('/\busuario\b/', request()->path()) || preg_match('/\bbiblioteca\b/', request()->path()))
 
                         @if(auth()->user()->hasRoles(['Superusuario', 'Administrador','Coordinador']))
                         <li> {{-- class="active" --}}
@@ -344,6 +344,13 @@ use Illuminate\Support\Str;
                         <li>
                             <a class="has-arrow " href="{{route('proveedor.index')}}" aria-expanded="false">
                                 <i class="mdi mdi-contacts"></i><span class="hide-menu">Proveedores</span>
+                            </a>
+                        </li>
+                        @endif
+                        @if(auth()->user()->hasRoles(['Superusuario', 'Administrador','Coordinador','Compras','Almacén','Operativo HI','Psicólogo','Ergónomo']))
+                        <li>
+                            <a class="has-arrow " href="{{route('biblioteca.index')}}" aria-expanded="false">
+                                <i class="fa fa-book"></i><span class="hide-menu">Centro de información</span>
                             </a>
                         </li>
                         @endif
@@ -437,7 +444,7 @@ use Illuminate\Support\Str;
                         @if(auth()->user()->hasRoles(['Superusuario', 'Administrador', 'Coordinador','Psicólogo','Ergónomo']))
                         <li>
                             <a class="has-arrow " href="{{route('informes.index')}}" aria-expanded="false">
-                                <i class="fa fa-print"></i><span class="hide-menu">Informes </span>
+                                <i class="fa fa-print"></i><span class="hide-menu">Informes y entregables</span>
                             </a>
                         </li>
                         @endif
@@ -630,6 +637,12 @@ use Illuminate\Support\Str;
     <script src="/assets/plugins/datatables/jquery.dataTables.min.js"></script>
     <script src="/assets/plugins/dropify/dist/js/dropify.min.js"></script>
     <script src="/js_sitio/catalagoPlantilla.js?v=2.0"></script>
+    @endif
+
+    @if(request()->is('biblioteca'))
+    <script src="/js_sitio/biblioteca.js"></script>
+    <script src="/js/jasny-bootstrap.js"></script>
+
     @endif
 
     @if(request()->is('recsensorial'))

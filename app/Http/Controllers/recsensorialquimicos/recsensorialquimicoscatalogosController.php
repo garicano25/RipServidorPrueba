@@ -22,6 +22,7 @@ use App\modelos\recsensorial\catConclusionesModel;
 use App\modelos\recsensorial\cat_descripcionarea;
 use App\modelos\recsensorialquimicos\gruposDeExposicionModel;
 use App\modelos\recsensorialquimicos\metodosSustanciasQuimicasModel;
+use App\modelos\recsensorialquimicos\sustanciasEntidadBeisModel;
 
 
 
@@ -583,6 +584,40 @@ class recsensorialquimicoscatalogosController extends Controller
     }
 
 
+    public function listaBeiSustanciasQuimicas($SUSTANCIA_QUIMICA_ID)
+    {
+        try {
+
+            $catalogo = DB::select('SELECT b.*, e.DESCRIPCION AS ENTIDAD_NOMBRE
+                                FROM sustanciasEntidadBeis b
+                                LEFT JOIN catEntidades e ON e.ID_ENTIDAD = b.ENTIDAD_ID
+                                WHERE b.SUSTANCIA_QUIMICA_ID = ?', [$SUSTANCIA_QUIMICA_ID]);
+
+            // crear campos NOMBRE Y ESTADO
+            foreach ($catalogo as $key => $value) {
+
+
+                if (auth()->user()->hasRoles(['Superusuario', 'Administrador', 'Coordinador'])) {
+                    $value->perfil = 1;
+                    $value->boton_editar = '<button type="button" class="btn btn-warning btn-circle EDITAR" onclick="seleccionar_beiQuimicaEntidad();"><i class="fa fa-pencil"></i></button>';
+                    $value->boton_eliminar = '<button type="button" class="btn btn-danger btn-circle ELIMINAR" onclick="eliminar_bei_sustancia();"><i class="fa fa-trash"></i></button>';
+                } else {
+                    $value->perfil = 0;
+                    $value->boton_editar = '<button type="button" class="btn btn-secondary btn-circle" ><i class="fa fa-ban"></i></button>';
+                    $value->boton_eliminar = '<button type="button" class="btn btn-secondary btn-circle"><i class="fa fa-ban"></i></button>';
+                }
+            }
+
+            $dato['data']  = $catalogo;
+            return response()->json($dato);
+        } catch (Exception $e) {
+
+            $dato["msj"] = 'Error ' . $e->getMessage();
+            $dato['data'] = 0;
+            return response()->json($dato);
+        }
+    }
+
     public function listaConnotaciones($ID_ENTIDAD)
     {
         try {
@@ -631,6 +666,45 @@ class recsensorialquimicoscatalogosController extends Controller
 
             // Usa el valor directamente ya que ya es un array
             $connotacionesSeleccionadas = $connotacioneSelect[0]->CONNOTACION;
+
+            // Prepara los datos para enviar
+            $dato['opciones'] = $opciones;
+            $dato['connotacionesSeleccionadas'] = $connotacionesSeleccionadas;
+            $dato["msj"] = 'Datos consultados correctamente';
+
+            return response()->json($dato);
+        } catch (Exception $e) {
+            // Manejo de errores
+            $dato["msj"] = 'Error ' . $e->getMessage();
+            $dato['opciones'] = [];
+            $dato['connotacionesSeleccionadas'] = [];
+            return response()->json($dato);
+        }
+    }
+
+
+
+    public function mostarNotacionesSelccionadas($ID_ENTIDAD, $ID_BEI)
+    {
+        try {
+            // Inicializa el array para opciones
+            $opciones = [];
+
+            // Obtiene las connotaciones y las connotaciones seleccionadas
+            $connotaciones = catConnotacionModel::where('ENTIDAD_ID', $ID_ENTIDAD)->get();
+            $connotacioneSelect = sustanciasEntidadBeisModel::where('ID_BEI', $ID_BEI)->get();
+
+            // Llena el array de opciones con los datos necesarios
+            foreach ($connotaciones as $value) {
+                $opciones[] = [
+                    'value' => $value->ID_CONNOTACION,
+                    'text' => $value->ABREVIATURA,
+                    'description' => $value->DESCRIPCION
+                ];
+            }
+
+            // Usa el valor directamente ya que ya es un array
+            $connotacionesSeleccionadas = $connotacioneSelect[0]->NOTACION;
 
             // Prepara los datos para enviar
             $dato['opciones'] = $opciones;
@@ -1145,6 +1219,36 @@ class recsensorialquimicoscatalogosController extends Controller
                         return response()->json($dato);
 
 
+                    }
+                    break;
+                case 14:
+                    if ($request['ELIMINAR_BEI'] == 0) {
+
+                        if ($request['ID_BEI'] == 0) {
+
+                            $request['NOTACION'] = isset($request['NOTACION']) ? $request['NOTACION'] : null;
+                            $catalogo = sustanciasEntidadBeisModel::create($request->all());
+
+                        } else {
+
+                            // Verificar y ajustar el valor de NOTACION
+                            if (!isset($request['NOTACION']) || empty($request['NOTACION']) || is_null($request['NOTACION']) || $request['NOTACION'] == '') {
+                                $request['NOTACION'] = null;
+                            } else {
+                                $request['NOTACION'] = $request['NOTACION'];
+                            }
+
+                            $catalogo = sustanciasEntidadBeisModel::findOrFail($request['ID_BEI']);
+                            $catalogo->update($request->all());
+                        }
+                    }else{
+                        
+                        $catalogo = sustanciasEntidadBeisModel::findOrFail($request['ID_BEI']);
+                        $catalogo->delete();
+
+                        $dato["code"] = 1;
+                        $dato["msj"] = 'Registro eliminado exitosamente';
+                        return response()->json($dato);
                     }
                     break;
             }

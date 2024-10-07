@@ -1762,6 +1762,11 @@
                                                 <i class="fa fa-list-ol"></i><br>
                                                 <span>Puntos de muestreo y POE</span>
                                             </div>
+                                            <div class="multisteps-form__progress-btn-3" id="steps3_menu_tab6">
+                                                <i class="fa fa-cubes"></i><br>
+                                                <span>Evaluación de BEI</span>
+                                            </div>
+
                                         </div>
                                     </div>
                                 </div>
@@ -1920,7 +1925,7 @@
 
                                             @endif
                                             <!--STEP 5-->
-                                            <div class="multisteps-form__panel-3" data-animation="scaleIn" id="steps3_contenido_tab6">
+                                            <div class="multisteps-form__panel-3" data-animation="scaleIn" id="steps3_contenido_tab5">
                                                 <div class="multisteps-form__content-3">
                                                     <div class="row">
                                                         <div class="col-12">
@@ -1950,6 +1955,46 @@
                                                                         </tr>
                                                                     </thead>
                                                                     <tbody></tbody>
+                                                                </table>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <!--STEP 6-->
+                                            <div class="multisteps-form__panel-3" data-animation="scaleIn" id="steps3_contenido_tab6">
+                                                <div class="multisteps-form__content-3">
+                                                    <div class="row">
+                                                        <div class="col-12">
+                                                            <ol class="breadcrumb m-b-10 text-light">
+                                                                @if(auth()->user()->hasRoles(['Superusuario', 'Administrador', 'Coordinador','Operativo HI']))
+
+                                                                <button type="button" class="btn btn-secondary waves-effect waves-light botonnuevo_modulorecsensorial" data-toggle="tooltip" title="Agregar nueva evaluacion de BEI" id="boton_nuevo_bei">
+                                                                    <span class="btn-label"><i class="fa fa-plus"></i></span>Nuevo BEI
+                                                                </button>
+
+                                                                @endif
+                                                            </ol>
+                                                            <div class="table-responsive">
+                                                                <table class="table table-bordered" width="100%" id="tabla_quimicosresumen_bei">
+                                                                    <thead>
+                                                                        <tr>
+                                                                            <th>Editar</th>
+                                                                            <th>Componente<br> (Sustancia química y/o producto)</th>
+                                                                            <th>Área [Categoria]</th>
+                                                                            <th style="width: 130px!important;">Nombre</th>
+                                                                            <th style="width: 180px!important;">Fecha de nacimiento (edad)</th>
+                                                                            <th style="width: 160px!important;">Antigüedad laboral</th>
+                                                                            <th style="width: 160px!important;">Determinante</th>
+                                                                            <th style="width: 130px!important;">Tiempo de muestreo</th>
+                                                                            <th style="width: 100px!important;">Numero de muestra</th>
+                                                                        </tr>
+                                                                    </thead>
+                                                                    <tbody>
+                                                                        <tr>
+                                                                            <td colspan="11">&nbsp;</td>
+                                                                        </tr>
+                                                                    </tbody>
                                                                 </table>
                                                             </div>
                                                         </div>
@@ -2659,7 +2704,7 @@
                                                 </div>
 
 
-                                                <button type="button" class="btn btn-info mx-4 mt-4" style="background: #FC4B6C!important;" data-toggle="tooltip" title="Guardar datos del Informe" id="boton_guardarDatosInforme">
+                                                <button type="submit" class="btn btn-info mx-4 mt-4" style="background: #FC4B6C!important;" data-toggle="tooltip" title="Guardar datos del Informe" id="boton_guardarDatosInforme">
                                                     Guardar <i class="fa fa-cloud-upload"></i>
                                                 </button>
                                             </div>
@@ -2695,7 +2740,7 @@
                                             <div id="divTablaInforme"></div>
 
                                             <div class="d-flex justify-content-center align-content-center">
-                                                <button type="button" class="btn btn-info mt-4" style="background: #FC4B6C!important; width: 30%;" data-toggle="tooltip" title="Guardar Puntos de muestreo y POE" id="boton_guardarTablaInformes">
+                                                <button type="submit" class="btn btn-info mt-4" style="background: #FC4B6C!important; width: 30%;" data-toggle="tooltip" title="Guardar Puntos de muestreo y POE" id="boton_guardarTablaInformes">
                                                     Guardar <i class="fa fa-cloud-upload"></i>
                                                 </button>
                                             </div>
@@ -2794,7 +2839,7 @@
                                                     Agregar <i class="fa fa-plus"></i>
                                                 </button>
 
-                                                <button type="button" class="btn btn-info mt-4 mx-4" style="background: #FC4B6C!important; width: 30%;" data-toggle="tooltip" title="Guardar Puntos de muestreo y POE" id="boton_guardarTablaClienteInformes">
+                                                <button type="submit" class="btn btn-info mt-4 mx-4" style="background: #FC4B6C!important; width: 30%;" data-toggle="tooltip" title="Guardar Puntos de muestreo y POE" id="boton_guardarTablaClienteInformes">
                                                     Guardar <i class="fa fa-cloud-upload"></i>
                                                 </button>
                                             </div>
@@ -3874,6 +3919,117 @@
 <!-- /MODAL AGENTE CLIENTE -->
 <!-- ============================================================== -->
 
+<!-- ============================================================== -->
+<!-- /MODALES BEI -->
+<!-- ============================================================== -->
+
+<div id="modal_inventariobei" class="modal fade bs-example-modal-lg" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" style="display: none;">
+    <div class="modal-dialog modal-lg" style="min-width: 1200px!important;">
+        <div class="modal-content">
+            <form enctype="multipart/form-data" method="post" name="form_inventariobei" id="form_inventariobei">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                    <h4 class="modal-title">Evaluación de BEI</h4>
+                </div>
+                <div class="modal-body">
+                    {!! csrf_field() !!}
+                    <div class="row">
+                        <div class="col-12">
+                            <input type="hidden" class="form-control" id="ID_RECSENSORIAL_BEI" name="ID_RECSENSORIAL_BEI" value="0">
+                        </div>
+                        <div class="col-12">
+                            <div class="form-group" style="padding: 0px; margin-bottom: 10px;">
+                                <label>Sustancia química *</label>
+                                <select class="custom-select form-control" id="SUSTANCIA_QUIMICA_ID_BEI" name="SUSTANCIA_QUIMICA_ID" onchange="consultarDeterminanteBei(this.value)" required>
+                                    <option value=""></option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="col-6">
+                            <div class="form-group">
+                                <label>Nombre *</label>
+                                <input type="text" class="form-control" id="NOMBRE_PESONA_BEI" name="NOMBRE_PERSONA" required>
+                            </div>
+                        </div>
+                        <div class="col-6">
+                            <div class="form-group">
+                                <label>Area *</label>
+                                <select class="custom-select form-control" id="AREA_ID_BEI" name="AREA_ID" required>
+                                    <option value=""></option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-5">
+                            <div class="form-group">
+                                <label>Categoria *</label>
+                                <select class="custom-select form-control" id="CATEGORIA_ID_BEI" name="CATEGORIA_ID" required>
+                                    <option value=""></option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="col-5">
+                            <div class="form-group">
+                                <label> Fecha de nacimiento *</label>
+                                <div class="input-group">
+                                    <input type="text" class="form-control mydatepicker" placeholder="aaaa-mm-dd" id="FECHA_NACIMIENTO_BEI" name="FECHA_NACIMIENTO" required="required">
+                                    <span class="input-group-addon"><i class="icon-calender"></i></span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="col-2">
+                            <div class="form-group">
+                                <label>Edad</label>
+                                <input type="number" class="form-control" id="EDAD_BEI" name="EDAD" readonly>
+                            </div>
+                        </div>
+                        <div class="col-6">
+                            <div class="form-group">
+                                <label>Antigüedad laboral </label>
+                                <input type="text" class="form-control" id="ANTIGUEDAD_LABORAL_BEI" name="ANTIGUEDAD_LABORAL" >
+                            </div>
+                        </div>
+                        <div class="col-6">
+                            <div class="form-group">
+                                <label>Determinante *</label>
+                                <select class="custom-select form-control" id="DETERMINANTE_ID_BEI" name="DETERMINANTE_ID" required>
+                                    <option value=""></option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="col-6">
+                            <div class="form-group">
+                                <label>Tiempo de muestreo *</label>
+                                <input type="text" class="form-control" id="TIEMPO_MUESTREO_BEI" name="TIEMPO_MUESTREO" required readonly>
+                            </div>
+                        </div>
+                        <div class="col-6">
+                            <div class="form-group">
+                                <label>Numero de muestra *</label>
+                                <input type="number" class="form-control" id="NUMERO_MUESTRA_BEI" name="NUMERO_MUESTRA" required>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default waves-effect" data-dismiss="modal">Cerrar</button>
+                    @if(auth()->user()->hasRoles(['Superusuario', 'Administrador', 'Coordinador','Operativo HI']))
+                    <button type="submit" class="btn btn-danger waves-effect waves-light botonguardar_modulorecsensorial" id="boton_guardar_recsensorialbei">
+                        Guardar <i class="fa fa-save"></i>
+                    </button>
+                    @endif
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<!-- ============================================================== -->
+<!-- /MODALES BEI -->
+<!-- ============================================================== -->
+
 
 <!-- ============================================================== -->
 <!-- VISOR-MODAL -->
@@ -3935,7 +4091,7 @@
 <!-- ============================================================== -->
 
 <script>
-  var rolUsuario = @json(auth()->user()->roles->first()->rol_Nombre);
+    var rolUsuario = @json(auth()->user()->roles->first()->rol_Nombre);
 </script>
 
 {{-- ========================================================================= --}}
