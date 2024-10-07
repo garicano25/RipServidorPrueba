@@ -1456,6 +1456,8 @@ $('#tabla_reconocimiento_sensorial tbody').on('click', 'td.mostrar', function ()
 	var row = tabla_recsensorial.row(tr);
 	nuevoReconocimiento = 0;
 
+	validarPermisosAsignados(row.data().proyecto_folio)
+
 
 	// Quitar warning checkbox
 	$('#divListaAgentes').removeClass('checkbox_warning');
@@ -10371,7 +10373,9 @@ $('#boton_editarInforme').on('click', function (e) {
 
 
 
-$("#boton_guardarDatosInforme").click(function () {
+$("#boton_guardarDatosInforme").click(function (e) {
+
+	e.preventDefault(); // evita que se recargue la página
 
 	// Validamos los campos requeridos
 	var valida = this.form.checkValidity();
@@ -10676,8 +10680,9 @@ $(document).ready(function () {
 
 
 
-$("#boton_guardarTablaInformes").click(function () {
+$("#boton_guardarTablaInformes").click(function (e) {
 
+	e.preventDefault();
 	if ($('#divTablaInforme').find('input.error').length > 0) {
 
 		swal({
@@ -11326,7 +11331,9 @@ $(document).ready(function () {
 });
 
 
-$("#boton_guardarTablaClienteInformes").click(function () {
+$("#boton_guardarTablaClienteInformes").click(function (e) {
+
+	e.preventDefault();
 
 	// valida campos vacios
 	var valida = this.form.checkValidity();

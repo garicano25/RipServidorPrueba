@@ -10,6 +10,7 @@ var proyecto_bloqueado = 0;
 
 // Data tables
 var datatable_proyectos = null;
+var datatable_usuarios = null;
 var datatable_proyectosInternos = null;
 var datatable_proyectoordenservicios = null;
 
@@ -21,7 +22,7 @@ var datatable_equipos_activo = 0;
 var datatable_equipos = null;
 
 // Lista de proveedores del sistema
-var proveedores_asignados = 0;
+var proveedores_asignados = 0; 
 var proveedores_lista = '';
 // var proveedor_alcances = '';
 var proyectoInterno = 0;
@@ -116,6 +117,8 @@ $('.nav-link').click(function()
 			$('#tab_2').css('display', 'block');
 			$('#tab_3').css('display', 'none');
 			$('#tab_4').css('display', 'none');
+			$('#USUARIO_ID').selectize(); 
+
 			break;
 		case "tab_menu3":
 			$('#tab_1').css('display', 'none');
@@ -165,6 +168,7 @@ $('.multisteps-form__progress-btn').click(function()
 				consulta_proveedores(proyecto_id, recsensorial_id, recsensorial_alcancefisico, recsensorial_alcancequimico);
 				datatable_proveedores = 1;
 			}
+
 			break;
 		case "steps_menu_tab3":
 			// consultar signatarios
@@ -1119,6 +1123,7 @@ $("#boton_nuevo_proyecto").click(function () {
 
 	$("#seccion_prorrogas").css('display', 'none');
 	$("#seccion_ordenes_servicio").css('display', 'none');
+	$("#seccion_asignacion_usuarios").css('display', 'none');
 
 
 	// mostrar TAB
@@ -1190,6 +1195,7 @@ $('#tabla_proyectos tbody').on('click', 'td.mostrar', function()
 	$("#seccion_recsensorialresumenfisico").css({'display': 'flex','flex-wrap' : 'wrap'});
 	$("#seccion_recsensorialresumenquimico").css('display', 'block');
 	$("#seccion_ordenes_servicio").css('display', 'block');
+	$("#seccion_asignacion_usuarios").css('display', 'block');
 	$("#datosReconocimientos").css({'display': 'flex','flex-wrap' : 'wrap'});
 
 	//SELECT CONTRATOS
@@ -1403,6 +1409,7 @@ $('#tabla_proyectos tbody').on('click', 'td.mostrar', function()
 
 	// Tabla prorrogas
 	tabla_prorrogas(row.data().id);
+	tabla_usuarios(row.data().id);
 	
 
 	  // SELECT RECONOCIMIENTO SENSORIAL
@@ -1550,6 +1557,7 @@ $('#tabla_proyectos_internos tbody').on('click', 'td.mostrar', function()
 	$("#seccion_recsensorialresumenquimico").css('display', 'block');
 	$("#seccion_ordenes_servicio").css('display', 'none');
 	$("#datosReconocimientos").css({'display': 'flex','flex-wrap' : 'wrap'});
+	$("#seccion_asignacion_usuarios").css('display' ,'block');
 
 	//SELECT CONTRATOS
 
@@ -1760,6 +1768,7 @@ $('#tabla_proyectos_internos tbody').on('click', 'td.mostrar', function()
 
 	// Tabla prorrogas
 	tabla_prorrogas(row.data().id);
+	tabla_usuarios(row.data().id);
 	
 
 	  // SELECT RECONOCIMIENTO SENSORIAL
@@ -2086,7 +2095,9 @@ $("#boton_guardar_proyecto").click(function()
 						dataType: 'json',
 						type: 'POST',
 						url: '/proyectos',
-						data: {},
+						data: {
+							api: 1
+						},
 						resetForm: false,
 						success: function(dato)
 						{
@@ -2112,6 +2123,7 @@ $("#boton_guardar_proyecto").click(function()
 								$("#seccion_recsensorialresumenfisico").css({'display': 'flex','flex-wrap' : 'wrap'});
 								$("#seccion_recsensorialresumenquimico").css('display', 'block');
 								$("#datosReconocimientos").css({ 'display': 'flex', 'flex-wrap': 'wrap' });
+								$("#seccion_asignacion_usuarios").css( 'display', 'block');
 								
 								// actualiza tabla
 								tabla_proyectoInternos()
@@ -2125,6 +2137,8 @@ $("#boton_guardar_proyecto").click(function()
 								$("#seccion_recsensorialresumenfisico").css({'display': 'flex','flex-wrap' : 'wrap'});
 								$("#seccion_recsensorialresumenquimico").css('display', 'block');
 								$("#datosReconocimientos").css({ 'display': 'flex', 'flex-wrap': 'wrap' });
+								$("#seccion_asignacion_usuarios").css( 'display', 'block');
+
 								
 								// actualiza tabla
 								tabla_proyecto();
@@ -6772,7 +6786,7 @@ $("#boton_guardar_oc").click(function()
 					type: 'POST',
 					url: '/proyectoordencompra',
 					data: {
-						proyecto_id: $('#proyecto_id').val()
+						proyecto_id: proyecto_id
 					},
 					resetForm: false,
 					success: function(dato)
@@ -10846,7 +10860,6 @@ function obtenerContactos(checkbox) {
 	}
 }
 
-
 $('#PROYECTO_CONTACTO_SELECT').on('change', function (e) { 
 
 	var selectedOption = $(this).find('option:selected');
@@ -10861,3 +10874,288 @@ $('#PROYECTO_CONTACTO_SELECT').on('change', function (e) {
 
 
 })
+
+
+function tabla_usuarios(proyecto_id)
+{
+	try 
+	{
+		var ruta = "/proyectoUsuarios/" + proyecto_id;
+
+		if (datatable_usuarios != null)
+		{
+			datatable_usuarios.clear().draw();
+			datatable_usuarios.ajax.url(ruta).load();
+		}
+		else
+		{
+			var numeroejecucion = 1;
+			datatable_usuarios = $('#tabla_usuarios_asignados').DataTable({
+				"ajax": {
+					"url": ruta,
+					"type": "get",
+					"cache": false,
+					error: function (xhr, error, code)
+					{
+						// console.log(xhr); console.log(code);
+						
+						console.log('error en datatable_usuarios');
+						if (numeroejecucion <= 1)
+						{
+							tabla_usuarios(proyecto_id);
+							numeroejecucion += 1;
+						}
+					},
+					"data": {}
+				},
+				"columns": [
+					{
+					    "data": "count",
+					    "defaultContent": "-"
+					},
+					{
+					    "data": "nombre",
+					    "defaultContent": "-"
+					},
+					{
+					    "data": "fecha",
+					    "defaultContent": "-"
+					},
+					{
+					    "data": "servicios",
+					    "defaultContent": "-"
+					},
+					{
+					    "data": "estado",
+					    "defaultContent": "-"
+					},
+
+					{
+					    "orderable": false,
+					    "data": 'CheckboxEstado',
+					    "defaultContent": '-'
+					},
+					{
+					    "data": "boton_editar",
+					    "defaultContent": "-"
+					},
+				],
+		        "lengthMenu": [[20, 50, 100, -1], [20, 50, 100, "Todos"]],
+		        // "rowsGroup": [0, 1], //agrupar filas
+				"order": [[ 0, "DESC" ]],
+				"ordering": true,
+				"processing": true,
+				"language": {
+					"lengthMenu": "Mostrar _MENU_ Registros",
+					"zeroRecords": "No se encontraron registros",
+					"info": "Página _PAGE_ de _PAGES_ (Total _MAX_ registros)",
+					"infoEmpty": "No se encontraron registros",
+					"infoFiltered": "(Filtrado de _MAX_ registros)",
+					"emptyTable": "No hay datos disponibles en la tabla",
+					"loadingRecords": "Cargando usuarios asignados....",
+					"processing": "Cargando usuarios asignados <i class='fa fa-spin fa-spinner fa-3x'></i>",
+					"search": "Buscar",
+					"paginate": {
+						"first": "Primera",
+						"last": "Ultima",
+						"next": "Siguiente",
+						"previous": "Anterior"
+					}
+				}
+		    });
+		}
+
+		// Tooltip en DataTable
+		datatable_usuarios.on('draw', function ()
+		{
+			$('[data-toggle="tooltip"]').tooltip();
+		});
+	}
+	catch (exception)
+	{
+        tabla_usuarios(proyecto_id);
+    }
+}
+
+$("#boton_asignar_usuario").click(function () {
+
+	// Borrar formulario
+	$('#form_asignacion_usuario').each(function(){
+		this.reset();
+	});
+
+    $("#PROYECTO_USUARIO_ID").val($("#proyecto_id").val());
+    $("#ID_PROYECTO_USUARIO").val(0);
+
+    // mostrar modal
+	$('#modal_asignacion_usuario').modal({backdrop:false});
+});
+
+$("#boton_guardar_usuario").click(function(){
+	// valida campos vacios
+	var valida = this.form.checkValidity();
+	if (valida) {
+		
+		swal({   
+            title: "¡Confirme que desea asignar este usuario al proyecto!",
+            text: "Realize esta ación para continuar",
+            type: "warning",
+            showCancelButton: true,
+            confirmButtonColor: "#DD6B55",
+            confirmButtonText: "Asignar!",
+            cancelButtonText: "Cancelar!",
+            closeOnConfirm: false,
+            closeOnCancel: false
+        }, function(isConfirm){
+            if (isConfirm)
+            {
+            	// cerrar msj confirmacion
+				swal.close();
+
+				// enviar datos
+				$('#form_asignacion_usuario').ajaxForm({
+					dataType: 'json',
+					type: 'POST',
+					url: '/proyectos',
+					data: {
+						api: 2
+					},
+					resetForm: false,
+					success: function(dato)
+					{
+						// actualiza tabla
+						// tabla_usuarios(dato.proyecto_id);
+						datatable_usuarios.ajax.reload()
+
+						// mensaje
+						swal({
+							title: "Asignación realizada",
+							text: ""+dato.msj,
+							type: "success", // warning, error, success, info
+							buttons: {
+								visible: false, // true , false
+							},
+							timer: 1500,
+							showConfirmButton: false
+						});
+
+						// actualiza boton
+						$('#boton_guardar_usuario').html('Asignar usuario <i class="fa fa-save"></i>');
+
+						// cerrar modal
+						$('#modal_asignacion_usuario').modal('hide');
+					},
+					beforeSend: function(){
+						$('#boton_guardar_usuario').html('Asingando <i class="fa fa-spin fa-spinner"></i>');
+					},
+					error: function(dato) {
+						// actualiza boton
+						$('#boton_guardar_usuario').html('Asignar usuario <i class="fa fa-save"></i>');
+					
+						// mensaje
+						swal({
+							title: "Error",
+							text: dato.responseJSON,
+							type: "error", // warning, error, success, info
+							buttons: {
+								visible: false, // true , false
+							},
+							timer: 1500,
+							showConfirmButton: false
+						});
+						return false;
+					}
+				}).submit();
+				return false;
+            }
+            else 
+            {
+				// mensaje
+				swal({
+					title: "Cancelado",
+					text: "Acción cancelada",
+					type: "error", // warning, error, success, info
+					buttons: {
+						visible: false, // true , false
+					},
+					timer: 1500,
+					showConfirmButton: false
+				});
+            }
+		});
+		return false;
+	}
+});
+
+
+function cambia_estado_usuario(ID, ACTIVO) {
+		$.ajax({
+		type: "GET",
+		dataType: "json",
+		url: "/actualizarEstadoUsuario/"+ ID +"/" + ACTIVO,
+		data:{},
+		cache: false,
+		success: function (dato) {
+			
+			datatable_usuarios.ajax.reload()
+			swal({
+				title: "Ación realizada con exito",
+				type: "success", // warning, error, success, info
+				buttons: {
+					visible: false, // true , false
+				},
+				timer: 1500,
+				showConfirmButton: false
+			});
+		
+		}, 
+		error: function(dato){
+			
+			alert('Error al modificar el estado del usuario')
+
+			return false;
+		}
+	});
+}
+
+
+
+$('#tabla_usuarios_asignados tbody').on('click', 'td>button.editar', function () {
+	var tr = $(this).closest('tr');
+	var row = datatable_usuarios.row(tr);
+
+	// Borrar formulario
+	$('#form_asignacion_usuario').each(function () {
+		this.reset();
+	});
+
+	// llenar campos
+    $("#PROYECTO_USUARIO_ID").val($("#proyecto_id").val());
+	$("#ID_PROYECTO_USUARIO").val(row.data().ID_PROYECTO_USUARIO);
+	
+    if (row.data().SERVICIO_HI == 1) {
+		$('#SERVICIO_HI').prop('checked', true);
+	} else {
+		$('#SERVICIO_HI').prop('checked', false);
+	}
+
+	  if (row.data().SERVICIO_PSICO == 1) {
+		$('#SERVICIO_PSICO').prop('checked', true);
+	} else {
+		$('#SERVICIO_PSICO').prop('checked', false);
+	}
+
+	if (row.data().SERVICIO_ERGO == 1) {
+		$('#SERVICIO_ERGO').prop('checked', true);
+	} else {
+		$('#SERVICIO_ERGO').prop('checked', false);
+	}
+	
+	var selectizeInstance = $('#USUARIO_ID')[0].selectize;  // Obtener la instancia de Selectize
+	selectizeInstance.setValue(row.data().USUARIO_ID);  // Asignar el valor deseado
+
+
+	// mostrar modal
+	$('#modal_asignacion_usuario').modal({ backdrop: false });
+});
+

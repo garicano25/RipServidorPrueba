@@ -356,6 +356,8 @@ $('#tabla_programa_trabajo tbody').on('click', 'td>button.mostrar', function()
 	var tr = $(this).closest('tr');
 	var row = datatable_programaTrabajo.row(tr);
 
+	validarPermisosAsignados(row.data().FOLIO)
+
 
     recsensorial_errorvalidacion = 0;
     Menureportes_contador = 0;
@@ -3538,7 +3540,7 @@ function mostrar_oc(proyecto_id, proveedor_id, cotizacion_id, ordencompra_id, or
 		// viewerpdf
 		setTimeout(function()
 		{
-			$('#visor_documento_oc').attr('src', '/assets/plugins/viewer-pdfjs/web/viewer_read.html?file=/proyectoordencompramostrar/'+proyecto_id+'/'+proveedor_id+'/'+cotizacion_id+'/'+ordencompra_id);
+			$('#visor_documento_oc').attr('src', '/assets/plugins/viewer-pdfjs/web/viewer.html?file=/proyectoordencompramostrar/'+proyecto_id+'/'+proveedor_id+'/'+cotizacion_id+'/'+ordencompra_id);
 		}, 500);
 	}
 }
@@ -7488,3 +7490,33 @@ function mostrar_reporte(agente_id)
 	});//Fin ajax
 }
 
+//Funcion para la validacion de permisos asignados en proyectos
+function validarPermisosAsignados(proyecto_folio) {
+
+	$.ajax({
+		type: "GET",
+		dataType: "json",
+		url: "/validacionAsignacionUser/" + proyecto_folio,
+		data: {},
+		cache: false,
+		success: function (dato) {
+			
+			if (dato.permisos == 1) { 
+
+				$('input[type="submit"], button[type="submit"]').fadeIn(0);
+
+			} else {
+				
+				$('input[type="submit"], button[type="submit"]').fadeOut(0);
+
+			}
+
+		}, beforeSend: function () {},
+		error: function (dato) {
+			// alert('Error: '+dato.msj);
+            alert('Los permisos no han sido cargado')
+
+			return false;
+		}
+	});//Fin ajax
+}

@@ -421,13 +421,13 @@ $("#botonguardar_modal_categoria").click(function()
 
 						// mensaje
 						swal({
-							title: "Error",
-							text: ""+dato.msj,
-							type: "error", // warning, error, success, info
+							title: "No se pudo realizar esta acción",
+							text: dato.responseJSON,
+							type: "warning", // warning, error, success, info
 							buttons: {
 								visible: false, // true , false
 							},
-							timer: 1500,
+							timer: 2000,
 							showConfirmButton: false
 						});
 						return false;
@@ -907,17 +907,16 @@ $("#botonguardar_modal_area").click(function()
 							$('#botonguardar_modal_area').attr('disabled', false);
 
 							// mensaje
-							swal({
-								title: "Error",
-								text: ""+dato.msj,
-								type: "error", // warning, error, success, info
-								buttons: {
-									visible: false, // true , false
-								},
-								timer: 1500,
-								showConfirmButton: false
-							});
-
+						swal({
+							title: "No se pudo realizar esta acción",
+							text: dato.responseJSON,
+							type: "warning", // warning, error, success, info
+							buttons: {
+								visible: false, // true , false
+							},
+							timer: 2000,
+							showConfirmButton: false
+						});
 							return false;
 						}
 					});//Fin ajax
@@ -1277,8 +1276,27 @@ $('#btnFinalizarPoe').on('click', function (e) {
 
 
 				},
-				error: function(dato) {
-					console.error('Error:', dato.msj);
+				error: function (dato) {
+					
+					if (opcion == 1) {
+
+						$('#btnFinalizarPoe').html('<span class="btn-label"><i class="fa fa-lock"></i></span> Bloquear POE').prop('disabled', false)
+						
+					} else {
+						$('#btnFinalizarPoe').html('<span class="btn-label"><i class="fa fa-unlock"></i></span> Activar POE').prop('disabled', false);
+						
+					}
+					
+				swal({
+					title: "No se pudo realizar esta acción",
+					text: dato.responseJSON,
+					type: "warning", // warning, error, success, info
+					buttons: {
+						visible: false, // true , false
+					},
+					timer: 2000,
+					showConfirmButton: false
+				});
 					return false;
 				}
 			});

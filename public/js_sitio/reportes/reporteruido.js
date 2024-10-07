@@ -111,6 +111,8 @@ $(document).ready(function()
 	$('#modal_cargando .modal-title').html('Cargando informe de '+agente_nombre); // Titulo modal
 	$('#modal_cargando').modal(); // Abrir modal
 	updateClock(); // Ejecutar tiempo de espera
+
+	validarPermisosAsignados(proyecto.id) //Validacion de permisos
 	datosgenerales(); // Cargar datos
 	portadaInfo();
 	consulta_categoria_epp();  // cargar partes del cuerpo epp
@@ -9761,14 +9763,14 @@ function reporte_concluido(reporte_id, perfil, checkbox)
 								tabla_reporte_revisiones(proyecto.id);
 
 								// mensaje
-								swal({
-									title: "Correcto",
-									text: ""+dato.msj,
-									type: "error", // warning, error, success, info
+									swal({
+									title: "No se pudo realizar esta acción",
+									text: dato.responseJSON,
+									type: "warning", // warning, error, success, info
 									buttons: {
 										visible: false, // true , false
 									},
-									timer: 1500,
+									timer: 2000,
 									showConfirmButton: false
 								});
 
@@ -11039,6 +11041,35 @@ $("#botonCargarPuntos").click(function() {
 	}
 }); 
 
+function validarPermisosAsignados(proyecto_id) {
+
+	$.ajax({
+		type: "GET",
+		dataType: "json",
+		url: "/validacionAsignacionUserProyecto/" + proyecto_id,
+		data: {},
+		cache: false,
+		success: function (dato) {
+			
+			if (dato.permisos == 1) { 
+
+				$('input[type="submit"], button[type="submit"]').fadeIn(0);
+
+			} else {
+				
+				$('input[type="submit"], button[type="submit"]').fadeOut(0);
+
+			}
+
+		}, beforeSend: function () {},
+		error: function (dato) {
+			// alert('Error: '+dato.msj);
+            alert('Los permisos no han sido cargado')
+
+			return false;
+		}
+	});//Fin ajax
+}
 
 
 

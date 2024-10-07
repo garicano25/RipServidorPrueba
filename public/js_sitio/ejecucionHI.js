@@ -265,6 +265,7 @@ $('#tabla_ejecucionHI tbody').on('click', 'td>button.mostrar', function()
 	var row = datatable_ejecuciones.row(tr);
 
 	consulta_menuparametros_evidencias(row.data().ID_PROYECTO);
+	validarPermisosAsignados(row.data().FOLIO)
 	
     proyecto_id = row.data().ID_PROYECTO
 
@@ -3820,3 +3821,36 @@ $("#boton_bloquear_bitacoramuestreo").click(function()
 		}
 	});//Fin ajax
 });
+
+
+//Funcion para la validacion de permisos asignados en proyectos
+function validarPermisosAsignados(proyecto_folio) {
+
+	$.ajax({
+		type: "GET",
+		dataType: "json",
+		url: "/validacionAsignacionUser/" + proyecto_folio,
+		data: {},
+		cache: false,
+		success: function (dato) {
+			
+			if (dato.permisos == 1) { 
+
+				$('input[type="submit"], button[type="submit"]').fadeIn(0);
+
+			} else {
+				
+				$('input[type="submit"], button[type="submit"]').fadeOut(0);
+
+			}
+
+		}, beforeSend: function () {},
+		error: function (dato) {
+			// alert('Error: '+dato.msj);
+            alert('Los permisos no han sido cargado')
+
+			return false;
+		}
+	});//Fin ajax
+}
+
