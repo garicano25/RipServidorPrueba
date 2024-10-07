@@ -2732,6 +2732,57 @@ function validatipoalcance(valor, camposelect, opcion_seleccionado)
                 }
             });//Fin ajax
             break;
+         case "BEI":
+            // Ocultar campo
+
+
+            $("#div_campo_factor").css('display', 'none');
+
+            $("#prueba_id").val('');
+            $("#prueba_id").attr('required', false);
+
+            // Mostrar campo
+            $("#div_campo_agente").css('display', 'block');
+            $("#acreditacionAlcance_agente").selectize();
+            $("#acreditacionAlcance_agente").val('');
+            $("#acreditacionAlcance_agente").prop('required', true);
+
+            // requerir Campo select agentetipo
+            $('#acreditacionAlcance_agentetipo').prop('required', true);
+            $('#acreditacionAlcance_agentetipo').prop('disabled', false);
+
+            // Actualiza campo NORMAS
+            $.ajax({
+                type: "GET",
+                dataType: "json",
+                url: "/acreditacionalcanceagentenormas/22",
+                data:{},
+                cache: false,
+                success: function (dato) {
+
+                    data = dato.normas
+                    normas = ''
+                    procedimientos = ''
+                    data.forEach(item => {
+                        if (item.tipo == 'Norma') {
+                            normas += item.catpruebanorma_numero + ', '
+                        } else if (item.tipo == 'Procedimiento') {
+                            procedimientos += item.catpruebanorma_numero + ', '   
+                        }
+
+                    });
+
+                    $('#acreditacionAlcance_Norma').val(normas);
+                    $('#acreditacionAlcance_Procedimiento').val(procedimientos);
+
+                    // $('#acreditacionAlcance_Norma').val(dato.normas);
+                },
+                error: function(dato){
+                    $('#acreditacionAlcance_Norma').val('');
+                    return false;
+                }
+            });//Fin ajax
+            break;
         default:
             // Ocultar campo
             $("#div_campo_agente").css('display', 'none');
@@ -2758,60 +2809,6 @@ function validatipoalcance(valor, camposelect, opcion_seleccionado)
                     return false;
                 }
             });//Fin ajax
-
-
-              // Actualiza campo NORMAS o Metodos
-            // $.ajax({
-            //     type: "GET",
-            //     dataType: "json",
-            //     url: "/acreditacionalcanceagentenormas/" + opcion_seleccionado,
-            //     data:{},
-            //     cache: false,
-            //     success:function(dato){
-            //     //        if (dato.esMetodo == 1) {
-            //     //     $('#acreditacionAlcance_Metodo').prop('disabled', false);
-            //     //     $('#acreditacionAlcance_Norma').prop('disabled', true);
-            //     //     $('#acreditacionAlcance_Norma').prop('required', false);
-            //     //     $('#acreditacionAlcance_Norma').val('')
-
-            //     //     $('#acreditacionAlcance_Metodo').val(dato.normas);
-                    
-            //     // } else {
-
-            //     //     $('#acreditacionAlcance_Norma').prop('disabled', false);
-            //     //     $('#acreditacionAlcance_Metodo').prop('disabled', true);
-            //     //     $('#acreditacionAlcance_Metodo').prop('required', false);
-            //     //     $('#acreditacionAlcance_Metodo').val('')
-
-            //     //     $('#acreditacionAlcance_Norma').val(dato.normas);
-            //         // }
-                    
-            //         data = dato.normas
-            //         normas = ''
-            //         procedimientos = ''
-            //         metodos = ''
-
-            //         data.forEach(item => {
-            //             if (item.tipo == 'Norma') {
-            //                 normas += item.catpruebanorma_numero + ', '
-            //             } else if (item.tipo == 'Procedimiento') {
-            //                 procedimientos += item.catpruebanorma_numero + ', '   
-            //             } else {
-            //                 metodos += item.catpruebanorma_numero + ', '
-            //             }
-
-            //         });
-
-            //         $('#acreditacionAlcance_Norma').val(normas);
-            //         $('#acreditacionAlcance_Procedimiento').val(procedimientos);
-            //         $('#acreditacionAlcance_Metodo').val(metodos);
-
-            //     },
-            //     error: function(dato){
-            //         $('#acreditacionAlcance_Norma').val('');
-            //         return false;
-            //     }
-            // });//Fin ajax
             break;
     }
 }
@@ -2969,6 +2966,33 @@ function alcanceagente(select_agente)
 }
 
 
+function consultarInfoBeis(value, opcion_seleccionado = 0) {
+    
+    alcance  = $('#acreditacionAlcance_tipo').val()
+    if (alcance == 'BEI') { 
+
+        $.ajax({
+            type: "GET",
+            dataType: "json",
+            url: "/obtenerDeterminantesBeis/" + value + "/" + opcion_seleccionado,
+            data: {},
+            cache: false,
+            success: function (dato) {
+
+                $("#acreditacionAlcance_agentetipo").prop('disabled', false);
+                $("#acreditacionAlcance_agentetipo").prop('required', true);
+                $("#acreditacionAlcance_agentetipo").html(dato.opciones);
+                
+            }, error: function () {
+                
+                $("#acreditacionAlcance_agentetipo").html('<option value="">Error al consultar</option>');
+                return false;
+        }
+        })
+    }
+    
+}
+
 function alcanceservicios_lista(nombre_camposelect, proveedor_id, alcanceservicio_id)
 {
     $.ajax({
@@ -3003,10 +3027,6 @@ $(document).ready(function()
             this.reset();
         })
         
-
-
-
-
         if (parseInt(row.data().accion_activa) > 0)
         {
             // Borrar formulario
@@ -3024,17 +3044,10 @@ $(document).ready(function()
 
             // Llenar campos form
             $("#acreditacionAlcance_tipo").val(row.data().acreditacionAlcance_tipo);
-            // $("#prueba_id").val(row.data().prueba_id);
             $("#acreditacionAlcance_agente").val(row.data().acreditacionAlcance_agente);
-
-
-            // $("#acreditacionAlcance_agentetipo").val(row.data().acreditacionAlcance_agentetipo);
-            // $("#acreditacionAlcance_Norma").val(row.data().acreditacionAlcance_Norma);
             $("#acreditacionAlcance_Descripcion").val(row.data().acreditacionAlcance_Descripcion);
             $("#acreditacionAlcance_Observacion").val(row.data().acreditacionAlcance_Observacion);
 
-
-            
             $("#acreditacionAlcance_Norma").val(row.data().acreditacionAlcance_Norma);
             $("#alcace_aprovacion_id").val(row.data().alcace_aprovacion_id);
             $("#acreditacionAlcance_Procedimiento").val(row.data().acreditacionAlcance_Procedimiento);
@@ -3083,8 +3096,25 @@ $(document).ready(function()
             }
             $("#acreditacionAlcance_agentetipo").val(row.data().acreditacionAlcance_agentetipo);
 
-            // Campo acreditaciones
+            //Asignamos valor al seletize de las Sustancias quimicias cuando el alcance de BEIs o Químico
+            if (row.data().acreditacionAlcance_tipo == 'BEI') {
 
+                // Obtén la instancia de Selectize
+                var selectizeInstance = $('#acreditacionAlcance_agente')[0].selectize;
+                selectizeInstance.setValue(row.data().acreditacionAlcance_agente);
+                consultarInfoBeis(row.data().acreditacionAlcance_agente, row.data().acreditacionAlcance_agentetipo)
+            
+
+            } else if (row.data().acreditacionAlcance_tipo == 'Químico') {
+
+                  // Obtén la instancia de Selectize
+                var selectizeInstance = $('#acreditacionAlcance_agente')[0].selectize;
+                selectizeInstance.setValue(row.data().acreditacionAlcance_agente);
+            }
+
+
+
+            // Campo acreditaciones
             if (parseInt(row.data().proveedor.cat_tipoproveedor_id) == 1)
             {
                 $("#alcanceacreditacion_id").html('<option value=""></option><option value="0">N/A</option>');
@@ -3109,7 +3139,7 @@ $(document).ready(function()
                 type: "info",   
                 showCancelButton: false,
                 showConfirmButton: false,   
-                timer: 4000,   
+                timer: 2000,   
             })
         }
     });
@@ -10009,7 +10039,7 @@ document.addEventListener('DOMContentLoaded', function() {
     const tipoDocumentoSelect = document.getElementById('DOCUMENTO_TIPO_VEHICULOS');
     const nombreDocumentoInput = document.getElementById('NOMBRE_DOCUMENTO_VEHICULOS');
     
-    tipoDocumentoSelect.addEventListener('change', function() {
+    tipoDocumentoSelect.addEventListener('change', function() { 
         const opcionSeleccionada = this.value;
         
  

@@ -21,7 +21,7 @@
 <!-- Bread crumb and right sidebar toggle -->
 <!-- ============================================================== -->
 <div class="row page-titles">
-    {{-- <div class="col-md-5 col-8 align-self-center">
+    {{-- <div class="col-md-5 col-8 align-self-center"> 
         <h3 class="text-themecolor">Proveedores</h3>
         <ol class="breadcrumb">
             <li class="breadcrumb-item"><a href="javascript:void(0)">Lista</a></li>
@@ -978,7 +978,7 @@
                                 <label> Agente químico *</label>
                                 <!-- <input type="text" class="form-control" id="acreditacionAlcance_agente" name="acreditacionAlcance_agente"> -->
 
-                                <select class="custom-select form-control" id="acreditacionAlcance_agente" name="acreditacionAlcance_agente">
+                                <select class="custom-select form-control" id="acreditacionAlcance_agente" name="acreditacionAlcance_agente" onchange="consultarInfoBeis(this.value)">
                                     <option value=""></option>
                                     @foreach($sustanciasQuimicas as $sustancia)
                                     <option value="{{$sustancia->SUSTANCIA_QUIMICA}}">{{$sustancia->SUSTANCIA_QUIMICA}}</option>

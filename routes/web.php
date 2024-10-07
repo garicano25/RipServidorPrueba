@@ -186,6 +186,8 @@ Route::get('tablaacreditacionalcances/{proveedor_id}/', ['as' => 'acreditacional
 
 Route::get('acreditacionalcancetipoagente/{agente_tipo}/{agente_seleccionado}', ['as' => 'acreditacionalcances.acreditacionalcancetipoagente', 'uses' => 'catalogos\acreditacionalcanceController@acreditacionalcancetipoagente']);
 
+Route::get('obtenerDeterminantesBeis/{beis}/{determinanteSeleccionado}', ['as' => 'acreditacionalcances.obtenerDeterminantesBeis', 'uses' => 'catalogos\acreditacionalcanceController@obtenerDeterminantesBeis']);
+
 Route::get('acreditacionalcanceagentenormas/{agente_id}', ['as' => 'acreditacionalcances.acreditacionalcanceagentenormas', 'uses' => 'catalogos\acreditacionalcanceController@acreditacionalcanceagentenormas']);
 
 Route::get('proveedoralcanceservicioslista/{proveedor_id}/{alcanceservicio_id}', ['as' => 'acreditacionalcances.proveedoralcanceservicioslista', 'uses' => 'catalogos\acreditacionalcanceController@proveedoralcanceservicioslista']);
@@ -738,6 +740,8 @@ Route::get('tablasustanciasEntidad/{SUSTANCIA_QUIMICA_ID}', ['as' => 'recsensori
 
 Route::get('listaMetodosSustanciasQuimicas/{SUSTANCIA_QUIMICA_ID}', ['as' => 'recsensorialquimicoscatalogos.listaMetodosSustanciasQuimicas', 'uses' => 'recsensorialquimicos\recsensorialquimicoscatalogosController@listaMetodosSustanciasQuimicas']);
 
+Route::get('listaBeiSustanciasQuimicas/{SUSTANCIA_QUIMICA_ID}', ['as' => 'recsensorialquimicoscatalogos.listaBeiSustanciasQuimicas', 'uses' => 'recsensorialquimicos\recsensorialquimicoscatalogosController@listaBeiSustanciasQuimicas']);
+
 Route::get('inforCartaEntidades/{ID_SUSTANCIA_QUIMICA}', ['as' => 'recsensorialquimicoscatalogos.inforCartaEntidades', 'uses' => 'recsensorialquimicos\recsensorialquimicoscatalogosController@inforCartaEntidades']);
 
 
@@ -747,6 +751,8 @@ Route::get('catSustanciaQuimicaEntidadEliminar/{ID_SUSTANCIA_QUIMICA_ENTIDAD}', 
 Route::get('listaConnotaciones/{ID_ENTIDAD}', ['as' => 'listaConnotaciones', 'uses' => 'recsensorialquimicos\recsensorialquimicoscatalogosController@listaConnotaciones']);
 
 Route::get('connotacionesSeleccionada/{ID_ENTIDAD}/{ID_SUSTANCIA_ENTIDAD}', ['as' => 'mostarConnotacionesSelccionadas', 'uses' => 'recsensorialquimicos\recsensorialquimicoscatalogosController@mostarConnotacionesSelccionadas']);
+
+Route::get('mostarNotacionesSelccionadas/{ID_ENTIDAD}/{ID_BEI}', ['as' => 'mostarNotacionesSelccionadas', 'uses' => 'recsensorialquimicos\recsensorialquimicoscatalogosController@mostarNotacionesSelccionadas']);
 
 
 Route::get('recsensorialsustanciasquimicoscatalogostabla/{num_catalogo}', ['as' => 'recsensorialquimicoscatalogos.recsensorialsustanciasquimicoscatalogostabla', 'uses' => 'recsensorialquimicos\recsensorialquimicoscatalogosController@recsensorialsustanciasquimicoscatalogostabla']);
@@ -1096,7 +1102,7 @@ Route::get('reporteiluminaciontablarevisiones/{proyecto_id}', ['as' => 'reportei
 
 // Route::post('reporteiluminacionnuevarevision', ['as'=>'reporteiluminacion.reporteiluminacionnuevarevision', 'uses'=>'reportes\reporteiluminacionController@reporteiluminacionnuevarevision']);
 
-Route::get('reporteiluminacionconcluirrevision/{revision_id}', ['as' => 'reporteiluminacion.reporteiluminacionconcluirrevision', 'uses' => 'reportes\reporteiluminacionController@reporteiluminacionconcluirrevision']);
+Route::get('reporteiluminacionconcluirrevision/{reporte_id}', ['as' => 'reporteiluminacion.reporteiluminacionconcluirrevision', 'uses' => 'reportes\reporteiluminacionController@reporteiluminacionconcluirrevision'])->middleware('asignacionUser:REVISION');
 
 Route::get('reporteiluminacioncancelarrevision/{revision_id}', ['as' => 'reporteiluminacion.reporteiluminacioncancelarrevision', 'uses' => 'reportes\reporteiluminacionController@reporteiluminacioncancelarrevision']);
 
@@ -1200,7 +1206,7 @@ Route::get('reporteruidoanexosacreditacionestabla/{proyecto_id}/{reporteregistro
 
 Route::get('reporteruidorevisionestabla/{proyecto_id}', ['as' => 'reporteruido.reporteruidorevisionestabla', 'uses' => 'reportes\reporteruidoController@reporteruidorevisionestabla']);
 
-Route::get('reporteruidorevisionconcluir/{reporte_id}', ['as' => 'reporteruido.reporteruidorevisionconcluir', 'uses' => 'reportes\reporteruidoController@reporteruidorevisionconcluir']);
+Route::get('reporteruidorevisionconcluir/{reporte_id}', ['as' => 'reporteruido.reporteruidorevisionconcluir', 'uses' => 'reportes\reporteruidoController@reporteruidorevisionconcluir'])->middleware('asignacionUser:REVISION');
 
 Route::get('reporteruidorevisioncancelar/{reporte_id}', ['as' => 'reporteruido.reporteruidorevisioncancelar', 'uses' => 'reportes\reporteruidoController@reporteruidorevisioncancelar']);
 
@@ -1287,7 +1293,7 @@ Route::get('reportequimicosgrupoeliminar/{proyecto_id}/{reporteregistro_id}/{par
 
 Route::get('reportequimicosrevisionestabla/{proyecto_id}', ['as' => 'reportequimicos.reportequimicosrevisionestabla', 'uses' => 'reportes\reportequimicosController@reportequimicosrevisionestabla']);
 
-Route::get('reportequimicosrevisionconcluir/{reporte_id}', ['as' => 'reportequimicos.reportequimicosrevisionconcluir', 'uses' => 'reportes\reportequimicosController@reportequimicosrevisionconcluir']);
+Route::get('reportequimicosrevisionconcluir/{reporte_id}', ['as' => 'reportequimicos.reportequimicosrevisionconcluir', 'uses' => 'reportes\reportequimicosController@reportequimicosrevisionconcluir'])->middleware('asignacionUser:REVISION');
 
 // Route::post('reportequimicosrevisionnueva', ['as'=>'reportequimicos.reportequimicosrevisionnueva', 'uses'=>'reportes\reportequimicosController@reportequimicosrevisionnueva']);
 
@@ -1352,7 +1358,7 @@ Route::get('reporteaguaanexosacreditacionestabla/{proyecto_id}/{reporteregistro_
 
 Route::get('reporteaguarevisionestabla/{proyecto_id}', ['as' => 'reporteagua.reporteaguarevisionestabla', 'uses' => 'reportes\reporteaguaController@reporteaguarevisionestabla']);
 
-Route::get('reporteaguarevisionconcluir/{reporte_id}', ['as' => 'reporteagua.reporteaguarevisionconcluir', 'uses' => 'reportes\reporteaguaController@reporteaguarevisionconcluir']);
+Route::get('reporteaguarevisionconcluir/{reporte_id}', ['as' => 'reporteagua.reporteaguarevisionconcluir', 'uses' => 'reportes\reporteaguaController@reporteaguarevisionconcluir'])->middleware('asignacionUser:REVISION');
 
 Route::get('reporteaguarevisioncancelar/{reporte_id}', ['as' => 'reporteagua.reporteaguarevisioncancelar', 'uses' => 'reportes\reporteaguaController@reporteaguarevisioncancelar']);
 
@@ -1419,7 +1425,7 @@ Route::get('reportehieloanexosacreditacionestabla/{proyecto_id}/{reporteregistro
 
 Route::get('reportehielorevisionestabla/{proyecto_id}', ['as' => 'reportehielo.reportehielorevisionestabla', 'uses' => 'reportes\reportehieloController@reportehielorevisionestabla']);
 
-Route::get('reportehielorevisionconcluir/{reporte_id}', ['as' => 'reportehielo.reportehielorevisionconcluir', 'uses' => 'reportes\reportehieloController@reportehielorevisionconcluir']);
+Route::get('reportehielorevisionconcluir/{reporte_id}', ['as' => 'reportehielo.reportehielorevisionconcluir', 'uses' => 'reportes\reportehieloController@reportehielorevisionconcluir'])->middleware('asignacionUser:REVISION');
 
 Route::get('reportehielorevisioncancelar/{reporte_id}', ['as' => 'reportehielo.reportehielorevisioncancelar', 'uses' => 'reportes\reportehieloController@reportehielorevisioncancelar']);
 
@@ -1490,7 +1496,7 @@ Route::get('reporteairenotaseliminar/{reportenotas_id}', ['as' => 'reporteaire.r
 
 Route::get('reporteairerevisionestabla/{proyecto_id}', ['as' => 'reporteaire.reporteairerevisionestabla', 'uses' => 'reportes\reporteaireController@reporteairerevisionestabla']);
 
-Route::get('reporteairerevisionconcluir/{reporte_id}', ['as' => 'reporteaire.reporteairerevisionconcluir', 'uses' => 'reportes\reporteaireController@reporteairerevisionconcluir']);
+Route::get('reporteairerevisionconcluir/{reporte_id}', ['as' => 'reporteaire.reporteairerevisionconcluir', 'uses' => 'reportes\reporteaireController@reporteairerevisionconcluir'])->middleware('asignacionUser:REVISION');
 
 Route::get('reporteairerevisioncancelar/{reporte_id}', ['as' => 'reporteaire.reporteairerevisioncancelar', 'uses' => 'reportes\reporteaireController@reporteairerevisioncancelar']);
 
@@ -1545,7 +1551,7 @@ Route::get('reportetemperaturaanexosacreditacionestabla/{proyecto_id}/{agente_no
 
 Route::get('reportetemperaturarevisionestabla/{proyecto_id}', ['as' => 'reportetemperatura.reportetemperaturarevisionestabla', 'uses' => 'reportes\reportetemperaturaController@reportetemperaturarevisionestabla']);
 
-Route::get('reportetemperaturarevisionconcluir/{reporte_id}', ['as' => 'reportetemperatura.reportetemperaturarevisionconcluir', 'uses' => 'reportes\reportetemperaturaController@reportetemperaturarevisionconcluir']);
+Route::get('reportetemperaturarevisionconcluir/{reporte_id}', ['as' => 'reportetemperatura.reportetemperaturarevisionconcluir', 'uses' => 'reportes\reportetemperaturaController@reportetemperaturarevisionconcluir'])->middleware('asignacionUser:REVISION');
 
 Route::get('reportetemperaturarevisioncancelar/{reporte_id}', ['as' => 'reportetemperatura.reportetemperaturarevisioncancelar', 'uses' => 'reportes\reportetemperaturaController@reportetemperaturarevisioncancelar']);
 
@@ -1599,7 +1605,7 @@ Route::get('reportevibracionanexosacreditacionestabla/{proyecto_id}/{agente_nomb
 
 Route::get('reportevibracionrevisionestabla/{proyecto_id}', ['as' => 'reportevibracion.reportevibracionrevisionestabla', 'uses' => 'reportes\reportevibracionController@reportevibracionrevisionestabla']);
 
-Route::get('reportevibracionrevisionconcluir/{reporte_id}', ['as' => 'reportevibracion.reportevibracionrevisionconcluir', 'uses' => 'reportes\reportevibracionController@reportevibracionrevisionconcluir']);
+Route::get('reportevibracionrevisionconcluir/{reporte_id}', ['as' => 'reportevibracion.reportevibracionrevisionconcluir', 'uses' => 'reportes\reportevibracionController@reportevibracionrevisionconcluir'])->middleware('asignacionUser:REVISION');
 
 Route::get('reportevibracionrevisioncancelar/{reporte_id}', ['as' => 'reportevibracion.reportevibracionrevisioncancelar', 'uses' => 'reportes\reportevibracionController@reportevibracionrevisioncancelar']);
 
@@ -1649,7 +1655,7 @@ Route::get('reporteserviciopersonalplanostabla/{proyecto_id}/{agente_nombre}', [
 
 Route::get('reporteserviciopersonalrevisionestabla/{proyecto_id}', ['as' => 'reporteserviciopersonal.reporteserviciopersonalrevisionestabla', 'uses' => 'reportes\reporteserviciopersonalController@reporteserviciopersonalrevisionestabla']);
 
-Route::get('reporteserviciopersonalrevisionconcluir/{reporte_id}', ['as' => 'reporteserviciopersonal.reporteserviciopersonalrevisionconcluir', 'uses' => 'reportes\reporteserviciopersonalController@reporteserviciopersonalrevisionconcluir']);
+Route::get('reporteserviciopersonalrevisionconcluir/{reporte_id}', ['as' => 'reporteserviciopersonal.reporteserviciopersonalrevisionconcluir', 'uses' => 'reportes\reporteserviciopersonalController@reporteserviciopersonalrevisionconcluir'])->middleware('asignacionUser:REVISION');
 
 Route::get('reporteserviciopersonalrevisioncancelar/{reporte_id}', ['as' => 'reporteserviciopersonal.reporteserviciopersonalrevisioncancelar', 'uses' => 'reportes\reporteserviciopersonalController@reporteserviciopersonalrevisioncancelar']);
 

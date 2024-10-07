@@ -7703,16 +7703,16 @@ function reporte_concluido(reporte_id, perfil, checkbox)
 							tabla_reporte_revisiones(proyecto.id);
 
 							// mensaje
-							swal({
-								title: "Correcto",
-								text: ""+dato.msj,
-								type: "error", // warning, error, success, info
-								buttons: {
-									visible: false, // true , false
-								},
-								timer: 1500,
-								showConfirmButton: false
-							});
+								swal({
+									title: "No se pudo realizar esta acción",
+									text: dato.responseJSON,
+									type: "warning", // warning, error, success, info
+									buttons: {
+										visible: false, // true , false
+									},
+									timer: 2000,
+									showConfirmButton: false
+								});
 
 							return false;
 						}

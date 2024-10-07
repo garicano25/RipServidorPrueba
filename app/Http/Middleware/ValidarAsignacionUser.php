@@ -4,6 +4,7 @@ namespace App\Http\Middleware;
 
 use Closure;
 use DB;
+use App\modelos\reportes\reporterevisionesModel;
 
 class ValidarAsignacionUser {
 
@@ -13,7 +14,8 @@ class ValidarAsignacionUser {
 
         $permiso = DB::select("SELECT COUNT(u.ID_PROYECTO_USUARIO) AS PERMISO
                             FROM proyectoUsuarios u
-                            WHERE u.SERVICIO_HI = 1 
+                            WHERE u.SERVICIO_HI = 1
+                            AND u.ACTIVO = 1 
                             AND u.PROYECTO_ID = ?
                             AND u.USUARIO_ID = ?", [$proyecto, $user]);
     
@@ -27,7 +29,7 @@ class ValidarAsignacionUser {
 
 
         //Epezamos con la validaciones de los permisos en este caso si el usuario que manda la Request es un Superusuario o Administrador le damos paso a realizar la acción en el store
-        if (auth()->user()->hasRoles(['Administrador'])){ 
+        if (auth()->user()->hasRoles(['Administrador', 'Superusuario'])){ 
 
 
             return $next($request);
@@ -51,6 +53,20 @@ class ValidarAsignacionUser {
                     //Obtenemos la validaciones de los permisos para su validacion
                     $PROYECTO_ID = isset($request['proyecto_id']) ? $request['proyecto_id'] : 0;
                     $permiso = $this->SQL($ID, $PROYECTO_ID);
+
+                    if ($permiso != 0) {
+                        return $next($request);
+                    }
+
+                    break;
+                case 'REVISION':
+
+                    //Obtenemos la validaciones de los permisos para su validacion
+                    $revision_id = $request->route('reporte_id');
+
+                    $revision  = reporterevisionesModel::findOrFail($revision_id);
+
+                    $permiso = $this->SQL($ID, $revision->proyecto_id);
 
                     if ($permiso != 0) {
                         return $next($request);

@@ -498,8 +498,10 @@ function consulta_evidencias(proyecto_id, agente_id, agente_nombre, menu, nombre
 		consulta_evidencia_fotos(proyecto_id, agente_id, agente_nombre);
 
 		
-		// Consultar planos
-		consulta_evidencia_planos(proyecto_id, agente_id, agente_nombre);
+		// Consultar planos excepto para los de BEI
+		if (evidencia_agente != 'BEI') {
+			consulta_evidencia_planos(proyecto_id, agente_id, agente_nombre);
+		}
 
 		
 		// Activa botones NUEVO / GUARDAR
@@ -552,6 +554,14 @@ function consulta_evidencias(proyecto_id, agente_id, agente_nombre, menu, nombre
 				$('#boton_nuevo_planosevidencia').attr('disabled', true);
 				$('#boton_guardar_evidencia_planos').css('display', 'none');
 			}
+		}
+
+		//Ocultamos los planos ya que no son necesarios para los BEI
+		if (evidencia_agente == 'BEI') {
+			$('#planos_ejecucion').css('display', 'none')
+		} else {
+			$('#planos_ejecucion').css('display', 'block')
+			
 		}
 		
 

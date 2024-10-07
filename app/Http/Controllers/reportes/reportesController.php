@@ -193,7 +193,7 @@ class reportesController extends Controller
     public function validacionAsignacionUserProyecto($id)
     {
         try {
-            if (auth()->user()->hasRoles(['Administrador'])) {
+            if (auth()->user()->hasRoles(['Administrador','Superusuario'])) {
 
                 $next = 1;
             }else{
@@ -203,6 +203,7 @@ class reportesController extends Controller
                 $permiso = DB::select("SELECT COUNT(u.ID_PROYECTO_USUARIO) AS PERMISO
                                 FROM proyectoUsuarios u
                                 WHERE u.SERVICIO_HI = 1 
+                                AND u.ACTIVO = 1
                                 AND u.PROYECTO_ID = ?
                                 AND u.USUARIO_ID = ?", [$id, $user]);
 
