@@ -243,6 +243,7 @@
 									<div class="col-6" id="divPuntoEbullicion">
 										<div class="form-group">
 											<label>Punto de ebullición </label>
+											<button type="button" class="btn btn-danger text-center mb-1" style="margin-left: 35%; width: 35px; height: 35px; border-radius: 9px;" data-toggle="tooltip" title="Click para cambiar la Tem. de ebullición a °C una vez insertada en °F" onclick="cambiarGrados('catsustancia_puntoEbullicion')"><i class="fa fa-thermometer-three-quarters" aria-hidden="true"></i></button>
 											<input type="number" class="form-control" id="catsustancia_puntoEbullicion" name="catsustancia_puntoEbullicion" disabled>
 										</div>
 									</div>
@@ -383,6 +384,16 @@
 						<div class="col-12 mt-2">
 							<ol class="breadcrumb mb-4">
 								<h2 style="color: #ffff; margin: 0;"><i class="fa fa-flask"></i> Componentes / Subproductos de la sustancia </h2>
+
+								<div class="col-4 d-flex">
+									<label class="text-light">¿Contiene ingredientes peligrosos? </label>
+									<div class="switch mx-3">
+										<label class="text-light">
+											Si<input type="checkbox" id="validarSustancias" name="validarSustancias">
+											<span style="background-color: #94B732;" class="lever switch-col-light-blue" id="checkbox_validaquimicos"></span>No
+										</label>
+									</div>
+								</div>
 							</ol>
 
 							<style>
@@ -1169,7 +1180,7 @@
 						<div class="col-12">
 							<div class="form-group">
 								<label>Recomendación </label>
-								<input type="text" class="form-control" id="RECOMENDACION_BEI" name="RECOMENDACION" >
+								<input type="text" class="form-control" id="RECOMENDACION_BEI" name="RECOMENDACION">
 							</div>
 						</div>
 						<div class="col-12">
