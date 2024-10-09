@@ -366,6 +366,7 @@ class reportesController extends Controller
                                                     WHEN catprueba_id = 15 THEN "Químicos"
                                                     WHEN catprueba_id = 16 THEN "Infraestructura para servicios al personal"
                                                     WHEN catprueba_id = 17 THEN "" -- "Mapa de riesgos"
+                                                    WHEN catprueba_id = 22 THEN "BEI" -- "Beis"
                                                     ELSE ""
                                                 END
                                             ) AS agente_nombre
