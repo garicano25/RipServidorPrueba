@@ -176,21 +176,39 @@
                                                                             <thead>
                                                                                 <tr>
                                                                                     <th style="width: 50px!important;">No</th>
-                                                                                    <th style="width: 80px!important;">Seleccionado</th>
+                                                                                    <th style="width: 100px!important;">Seleccionado</th>
                                                                                     <th style="width: 260px!important;">Modalidad</th>
-                                                                                    <th style="width: 260px!important;">Trabajador</th>
-                                                                                    <!-- <th style="width: 80px!important;">Total</th>
-                                                                                    <!-- <th style="width: 130px!important;">Tipo instalación</th> -->
-                                                                                    <!-- <th style="width: 100px!important;">Total actual</th>
-                                                                                    <th>Observación</th> -->
+                                                                                    <th style="width: 280px!important;">Trabajador</th>
+                                                                                    <th style="width: 280px!important;">Observación</th>
                                                                                 </tr>
                                                                             </thead>
                                                                             <tbody>
                                                                                 <tr>
-                                                                                    <td colspan="7">&nbsp;</td>
+                                                                                    <td>1</td>
+                                                                                    <td>
+                                                                                        <div class="switch" style="border: 0px #000 solid;">
+                                                                                            <label>
+                                                                                                <input type="checkbox" name="agente_activo[]" value="1" onchange="valida_requiere_agente_activo(this)" checked="">
+                                                                                                <span class="lever switch-col-light-blue" style="padding: 0px; margin: 0px;"></span>
+                                                                                            </label>
+                                                                                        </div>
+                                                                                    </td>
+                                                                                    <td>
+                                                                                        <select class="custom-select form-control" id="adicional_proveedor" name="proveedoradicional_id[]" required onchange="mostrar_proveedoralcances(this, 1);">
+                                                                                            <option value="1">Online</option>
+                                                                                            <option value="2">Presencial</option>
+                                                                                        </select>
+                                                                                    </td>
+                                                                                    <td>
+                                                                                        <input type="text" class="form-control" id="adicional_tipo" name="agenteadicional_tipo[]" value="Guillermo Diaz Olan">
+                                                                                    </td>
+                                                                                    <td>
+                                                                                        <input type="text" class="form-control" name="agenteadicional_obs[]" value="" required>
+                                                                                    </td>
                                                                                 </tr>
                                                                             </tbody>
                                                                         </table>
+
                                                                         @if(auth()->user()->hasRoles(['Superusuario', 'Administrador', 'Coordinador']))
                                                                         <hr>
                                                                         <div class="form-group">
@@ -216,7 +234,7 @@
                                                         <div class="col-12">
                                                             <div class="card">
                                                                 <div class="card-body">
-                                                                    <h4 class="card-title">Lista de signatarios asignados al proyecto</h4>
+                                                                    <h4 class="card-title">Lista de psicólogos asignados al proyecto</h4>
                                                                     <div class="row">
                                                                         <div class="col-12">
                                                                             <form method="post" enctype="multipart/form-data" name="form_proyectosignatarios" id="form_proyectosignatarios">
@@ -235,8 +253,7 @@
                                                                                                 <th width="160" style="padding: 10px 0px; border-bottom: 2px #EEEEEE solid;">Proveedor</th>
                                                                                                 <th width="110" style="padding: 10px 0px; border-bottom: 2px #EEEEEE solid;">Disponible</th>
                                                                                                 <th width="80" style="padding: 10px 0px; border-bottom: 2px #EEEEEE solid;">Asignado</th>
-                                                                                                <th width="220" style="padding: 10px 0px; border-bottom: 2px #EEEEEE solid;">Signatario</th>
-                                                                                                <th width="auto" style="padding: 10px 0px; border-bottom: 2px #EEEEEE solid;">Alcances</th>
+                                                                                                <th width="220" style="padding: 10px 0px; border-bottom: 2px #EEEEEE solid;">Psicólogo</th>
                                                                                                 <th width="300" style="padding: 10px 0px; border-bottom: 2px #EEEEEE solid;">Entidad / Acreditación / Vigencia</th>
                                                                                             </tr>
                                                                                         </thead>

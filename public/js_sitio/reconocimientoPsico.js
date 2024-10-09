@@ -2105,20 +2105,194 @@ $("#boton_nueva_area").click(function () {
 
 });
 
-$("#boton_carga_trabajadores").click(function () {
-	// Restablecer formulario
+//excel trabajadores
+///FUNCION BOTONES DE INSERCION POR MEDIO DE EXCEL
+function abrirTrabajadoresExcel() {
+
 	$('#form_cargaTrabajadores').each(function () {
 		this.reset();
 	});
+	
+		//$('#divCargarTrabajadores').css('display', 'none');
+		$('#alertaVerificacion').css('display', 'none');
+		$('#modal_cargarTrabajadores').modal({backdrop:false});
+		
+}
 
-	// // Campos Hidden
-	// $("#area_id").val(0);
-	// $("#area_recsensorial_id").val($("#recsensorial_id").val());
-	// Mostrar modal
-	$('#modal_cargarTrabajadores').modal({ backdrop: false });
 
+ $('#excelTrabajadores').change(function () {
+        
+	if ($(this).val()) {
+		
+		$('#alertaVerificacion').css('display', 'block');
 
+	} else {
+		$('#alertaVerificacion').css('display', 'none');
+		
+	}
+});
 
+$(document).ready(function() {
+	$("#boton_cargarTrabajadores").click(function() {
+		var guardar = 0;
+		//var muestra = $('#tipoArchivo').val();
+		$("#RECPSICO_ID_TRABAJADORES").val($("#recsensorial_id").val());
+		$("#RECPSICO_APLICACION").val($("#RECPSICO_TOTALAPLICACION").val());
+
+		// valida campos vacios
+		var valida = this.form.checkValidity();
+		if (valida){
+
+			var formData = new FormData($('#form_cargaTrabajadores')[0]);
+			formData.append('RECPSICOTRABAJADOR_MUESTRA', document.getElementById("RECPSICOTRABAJADOR_MUESTRA").checked ? 1 : 0);
+			var RECPSICOTRABAJADOR_MUESTRA = document.getElementById("RECPSICOTRABAJADOR_MUESTRA").checked ? 1 : 0;
+			formData.append('RECPSICO_APLICACION', parseInt(document.getElementById('RECPSICO_APLICACION').value));
+			var RECPSICO_APLICACION = document.getElementById('RECPSICO_APLICACION').value;
+			// var totalEmpleadosMuestra = parseInt(document.getElementById('RECPSICO_TOTALAPLICACION').value);
+			// if (isNaN(totalEmpleadosMuestra)) {
+			// 	totalEmpleadosMuestra = 1; 
+			// } 
+				// Tipo archivo
+				var archivo = $("#excelTrabajadores").val();
+				var extension = archivo.substring(archivo.lastIndexOf("."));
+
+				// valida tipo de archivo
+				if(extension == ".xlsx" || extension == ".XLSX"){
+					guardar = 1;
+				}
+				else{
+					// mensaje
+					swal({
+						title: "Tipo de archivo incorrecto "+extension,
+						text: "Solo se pueden cargar archivos tipo .xlsx",
+						type: "warning", // warning, error, success, info
+						buttons: {
+							visible: false, // true , false
+						},
+						timer: 3000,
+						showConfirmButton: false
+					});
+
+					guardar = 0;
+
+					return false;
+				}
+			
+			
+
+			// guardar
+			if (guardar == 1){
+			
+				swal({   
+					title: "¿Está  seguro de cargar este documento?",   
+					text: "Está acción  no se puede revertir",   
+					type: "warning",   
+					showCancelButton: true,   
+					confirmButtonColor: "#DD6B55",   
+					confirmButtonText: "Guardar!",   
+					cancelButtonText: "Cancelar!",   
+					closeOnConfirm: false,   
+					closeOnCancel: false 
+				}, function (isConfirm) {   
+					
+					if (isConfirm){
+						// cerrar msj confirmacion
+						swal.close();
+
+						// enviar datos
+						$('#form_cargaTrabajadores').ajaxForm({
+							dataType: 'json',
+							type: 'POST',
+							url: "/recopsiconormativa",
+							data: {
+								opcion: 1000,
+								'RECPSICOTRABAJADOR_MUESTRA': RECPSICOTRABAJADOR_MUESTRA,
+								'RECPSICO_APLICACION': RECPSICO_APLICACION,
+							},
+							contentType: false,
+							processData: false,
+							success: function (dato) {
+
+								// actualizar boton
+								
+								
+								if (dato.code == 200) {
+									
+									// cerrar modal
+									$('#modal_cargarTrabajadores').modal('hide');
+
+									// mensaje
+									swal({
+										title: "Los datos fueron importados exitosamente",
+										text: ""+dato.msj,
+										type: "success", 
+										buttons: {visible: true},
+										showConfirmButton: true,
+										showCancelButton: false
+									});
+
+									setTimeout(() => {
+								
+									}, 2000);
+
+								
+								} else {
+
+									swal({
+										title: "Ocurrio un error al intentar importar los datos.",
+										// text: ""+dato.msj,
+										type: "error", // warning, error, success, info
+										buttons: {visible: true},
+										showConfirmButton: true,
+										showCancelButton: false
+									});
+								}
+								$('#boton_cargarTrabajadores').html('Guardar <i class="fa fa-save"></i>');
+								
+							},
+							beforeSend: function () {
+								$('#boton_cargarTrabajadores').html('Guardando <i class="fa fa-spin fa-spinner"></i>');							
+							},
+							error: function(dato) {
+								$('#boton_cargarTrabajadores').html('Guardar <i class="fa fa-save"></i>');		
+
+								console.log(""+dato.msj);
+								// mensaje
+								swal({
+									title: "Error al cargar los datos.",
+									text: ""+dato.msj,
+									type: "error", // warning, error, success, info
+									buttons: {
+										visible: false, // true , false
+									},
+									timer: 1500,
+									showConfirmButton: false
+								});
+
+								return false;
+							}
+						}).submit();
+						return false;
+					}
+					else 
+					{
+						// mensaje
+						swal({
+							title: "Cancelado",
+							text: "Acción cancelada",
+							type: "error", // warning, error, success, info
+							buttons: {
+								visible: false, // true , false
+							},
+							timer: 1500,
+							showConfirmButton: false
+						});   
+					} 
+				});
+				return false;
+			}
+		}
+	});
 });
 $("#boton_carga_muestra").click(function () {
 	// Restablecer formulario
@@ -2792,137 +2966,6 @@ function obtenerEstructuraProyectos(FOLIO, NUEVO) {
 									<h2 class="mt-4" style="font-weight:bold"> <i class="fa fa-file-text"></i> ${response.info[0].TIPO_SERVICIO}</h2>
 									<h4 class="mb-2">${response.info[0].NOMBRE_CONTRATO}</h4>`).css('border-style', 'dotted')
 
-						// //FOTOS OBTENIDAS DE RECSENSORIAL
-						// if (response.info[0].FOTOUBICACION != null) {
-						// 	var archivo = response.info[0].FOTOUBICACION;
-						// 	var extension = archivo.substring(archivo.lastIndexOf("."));
-						// 	var imagenUrl = '/mostrarmapapsico/0/' + response.info[0].ID + extension;
-				
-						// 	rutaMapa = imagenUrl
-						// 	$("#hidden_fotomapa").val(response.info[0].ID);
-						// 	$("#hidden_fotomapa_extension").val(extension);
-				
-						// 	// INPUT FOTO UBICACION
-						// 	if ($('#inputfotomapa').data('dropify')) {
-						// 		$('#inputfotomapa').dropify().data('dropify').destroy();
-						// 		// $('.dropify-wrapper').css('height', 400);
-						// 		$('#inputfotomapa').dropify().data('dropify').settings.defaultFile = imagenUrl;
-						// 		$('#inputfotomapa').dropify().data('dropify').init();
-						// 	}
-						// 	else {
-						// 		// $('#inputfotomapa').attr('data-height', 400);
-						// 		$('#inputfotomapa').attr('data-default-file', imagenUrl);
-						// 		$('#inputfotomapa').dropify({
-						// 			messages: {
-						// 				'default': 'Arrastre la imagen aquí o haga click',
-						// 				'replace': 'Arrastre la imagen o haga clic para reemplazar',
-						// 				'remove': 'Quitar',
-						// 				'error': 'Ooops, ha ocurrido un error.'
-						// 			},
-						// 			error: {
-						// 				'fileSize': 'Demasiado grande ({{ value }} max).',
-						// 				'minWidth': 'Ancho demasiado pequeño (min {{ value }}}px).',
-						// 				'maxWidth': 'Ancho demasiado grande (max {{ value }}}px).',
-						// 				'minHeight': 'Alto demasiado pequeño (min {{ value }}}px).',
-						// 				'maxHeight': 'Alto demasiado grande (max {{ value }}px max).',
-						// 				'imageFormat': 'Formato no permitido, sólo ({{ value }}).'
-						// 			}
-						// 		});
-						// 	}
-				
-						// 	// No requerir campo FOTO
-						// 	$('#inputfotomapa').attr('required', false);
-				
-						// 	// Activar boton descarga
-						// 	$("#boton_descargarmapaubicacion").css('display', 'block');
-						// }
-						// else {
-						// 	$("#boton_descargarmapaubicacion").css('display', 'none');
-						// }
-		
-						// if (response.info[0].FOTOPLANO != null) {
-						// 	var archivo = response.info[0].FOTOPLANO;
-						// 	var extension = archivo.substring(archivo.lastIndexOf("."));
-						// 	var imagenUrl = '/mostrarplanopsico/0/' + response.info[0].ID + extension;
-					
-						// 	rutaMapa = imagenUrl;
-					
-						// 	$("#hidden_fotoplano").val(response.info[0].ID);
-						// 	$("#hidden_fotoplano_extension").val(extension);
-					
-						// 	// INPUT FOTO PLANO
-						// 	if ($('#inputfotoplano').data('dropify')) {
-						// 		$('#inputfotoplano').dropify().data('dropify').destroy();
-						// 		// $('.dropify-wrapper').css('height', 400);
-						// 		$('#inputfotoplano').dropify().data('dropify').settings.defaultFile = imagenUrl;
-						// 		$('#inputfotoplano').dropify().data('dropify').init();
-						// 	}
-						// 	else {
-						// 		// $('#inputfotoplano').attr('data-height', 400);
-						// 		$('#inputfotoplano').attr('data-default-file', imagenUrl);
-						// 		$('#inputfotoplano').dropify({
-						// 			messages: {
-						// 				'default': 'Arrastre la imagen aquí o haga click',
-						// 				'replace': 'Arrastre la imagen o haga clic para reemplazar',
-						// 				'remove': 'Quitar',
-						// 				'error': 'Ooops, ha ocurrido un error.'
-						// 			},
-						// 			error: {
-						// 				'fileSize': 'Demasiado grande ({{ value }} max).',
-						// 				'minWidth': 'Ancho demasiado pequeño (min {{ value }}}px).',
-						// 				'maxWidth': 'Ancho demasiado grande (max {{ value }}}px).',
-						// 				'minHeight': 'Alto demasiado pequeño (min {{ value }}}px).',
-						// 				'maxHeight': 'Alto demasiado grande (max {{ value }}px max).',
-						// 				'imageFormat': 'Formato no permitido, sólo ({{ value }}).'
-						// 			}
-						// 		});
-						// 	}
-					
-						// 	// No requerir campo FOTO
-						// 	$('#inputfotoplano').attr('required', false);
-					
-						// 	// Activar boton descarga
-						// 	$("#boton_descargarplanoinstalacion").css('display', 'block');
-						// }
-						// else {
-						// 	$("#boton_descargarplanoinstalacion").css('display', 'none');
-						// }
-		
-					
-					
-						// // OBTENER FOTO INSTALACION
-						// if (response.info[0].FOTOINSTALACION) {
-						// 	var archivo = response.info[0].FOTOINSTALACION;
-						// 	var extension = archivo.substring(archivo.lastIndexOf("."));
-						// 	var imagenUrl = '/mostrarfotoinstalacionpsico/0/' + response.info[0].ID + extension;
-					
-							
-						// 	$("#hidden_fotoinstalacion").val(response.info[0].ID);
-						// 	$("#hidden_fotoinstalacion_extension").val(extension);
-						// 	// INPUT FOTO INSTALACION
-						// 	$('#inputfotoinstalacion').dropify().data('dropify').destroy();
-						// 	// $('.dropify-wrapper').css('height', 400);
-						// 	$('#inputfotoinstalacion').dropify().data('dropify').settings.defaultFile = imagenUrl;
-						// 	$('#inputfotoinstalacion').dropify().data('dropify').init();
-					
-						// 	// No requerir campo FOTO
-						// 	$('#inputfotoinstalacion').attr('required', false);
-					
-						// 	// Activar boton descarga
-						// 	$("#boton_descargarfotoinstalacion").css('display', 'block');
-					
-						// } else {
-					
-						// 	// Resetear campo FOTO INSTALACION
-						// 	$('#inputfotoinstalacion').val('');
-						// 	$('#inputfotoinstalacion').dropify().data('dropify').resetPreview();
-						// 	$('#inputfotoinstalacion').dropify().data('dropify').clearElement();
-					
-						// 	// No requerir campo FOTO
-						// 	$('#inputfotoinstalacion').attr('required', false);
-						// 	$("#boton_descargarfotoinstalacion").css('display', 'none');
-						// }
-
 			}
 		},
 		error: function (jqXHR, textStatus, errorThrown) {
@@ -2949,19 +2992,25 @@ $(document).ready(function () {
 $(document).ready(function () {
 
 	document.getElementById('habilitar_opcional').checked = false;
+	document.getElementById('boton_carga_trabajadores').disabled = true;
 	document.getElementById('boton_carga_muestra').disabled = true;
-	document.getElementById('boton_obtener_muestra').disabled = true;
+
+	document.getElementById('RECPSICOTRABAJADOR_MUESTRA').checked = false;
+	document.getElementById('RECPSICOTRABAJADOR_MUESTRA').disabled = true;
 
     document.getElementById('optionA').checked = false;
 
     document.getElementById('option1').checked = false;
     document.getElementById('option2').checked = false;
     document.getElementById('option3').checked = false;
+    document.getElementById('option4').checked = false;
 
 	document.getElementById('optionA').disabled = true;
     document.getElementById('option1').disabled = true;
     document.getElementById('option2').disabled = true;
     document.getElementById('option3').disabled = true;
+    document.getElementById('option4').disabled = true;
+
     // Manejo del evento de entrada de empleados
     document.getElementById('total_empleados').addEventListener('input', validarEmpleados);
 
@@ -2973,6 +3022,7 @@ $(document).ready(function () {
 
         // Mostrar u ocultar campos opcionales según el estado del checkbox
         camposOpcionales.style.display = isChecked ? 'block' : 'none';
+		document.getElementById('boton_carga_trabajadores').disabled = true;
 
         // Habilitar/deshabilitar los selects e inputs numéricos
         document.getElementById('tipo_valor_hombres').disabled = !isChecked;
@@ -3000,19 +3050,27 @@ $(document).ready(function () {
 
 		document.getElementById('option2').disabled = !isChecked;
 		document.getElementById('option3').disabled = !isChecked;
+		document.getElementById('option4').disabled = !isChecked;
+
         
 		if (!isNaN(totalEmpleados)) {
 			if (totalEmpleados < 16) {
 				document.getElementById('option2').disabled = !isChecked;
 				document.getElementById('option3').disabled = !isChecked;
+				document.getElementById('option4').disabled = !isChecked;
+
 	
 			} else if (totalEmpleados >= 16 && totalEmpleados <= 50) {
 				document.getElementById('option2').disabled = !isChecked;
 				document.getElementById('option3').disabled = !isChecked;
+				document.getElementById('option4').disabled = !isChecked;
+
 	
 			} else if (totalEmpleados > 50) {
 				document.getElementById('option2').disabled = !isChecked;
 				document.getElementById('option3').disabled = !isChecked;
+				document.getElementById('option4').disabled = !isChecked;
+
 	
 			}
 		}
@@ -3106,6 +3164,7 @@ function validarValores() {
             document.getElementById('valor_hombres').classList.add('is-invalid');
             document.getElementById('valor_mujeres').classList.add('is-invalid');
             showWarning("Los valores no coinciden con la cantidad total de empleados.");
+			document.getElementById('boton_carga_trabajadores').disabled = true;
         } else {
             // Limpiar las clases de advertencia si la validación es correcta
             document.getElementById('valor_hombres').classList.remove('is-invalid');
@@ -3115,6 +3174,7 @@ function validarValores() {
 			 const porcentajeHombres = Math.round((valorHombres * 100)/totalEmpleados);
 			 const porcentajeMujeres = Math.round((valorMujeres * 100)/totalEmpleados);
 			 document.getElementById('porcentajes').innerText = `Hay ${porcentajeHombres}% de hombres y ${porcentajeMujeres}% de mujeres en el centro de trabajo`;
+			 
 
 			 
 			 if(opcionSeleccionada === "opcion2"){
@@ -3135,9 +3195,12 @@ function validarValores() {
 						const seleccionHombres = Math.round(resultado * (porcentajeHombres / 100));
 						const seleccionMujeres = Math.round(resultado * (porcentajeMujeres / 100));
 						document.getElementById('seleccion').innerText = `Se seleccionaran de forma aleatoria ${seleccionHombres} hombres y ${seleccionMujeres} mujeres en el centro de trabajo para las entrevistas`;
-		
+						document.getElementById('boton_carga_trabajadores').disabled = false;
 
 				}		
+			 }else{
+				document.getElementById('boton_carga_trabajadores').disabled = false;
+
 			 }
 			 const generosContainer = document.getElementById('generos_container');
 			 generosContainer.style.display = 'block';
@@ -3153,6 +3216,7 @@ function validarValores() {
             document.getElementById('valor_hombres').classList.add('is-invalid');
             document.getElementById('valor_mujeres').classList.add('is-invalid');
             showWarning("Los porcentajes no coinciden con la cantidad total de empleados.");
+			document.getElementById('boton_carga_trabajadores').disabled = true;
         } else {
             // Limpiar las clases de advertencia si la validación es correcta
             document.getElementById('valor_hombres').classList.remove('is-invalid');
@@ -3179,9 +3243,13 @@ function validarValores() {
 					const seleccionHombres = Math.round(resultado * (porcentajeHombres / 100));
 					const seleccionMujeres = Math.round(resultado * (porcentajeMujeres / 100));
 					document.getElementById('seleccion').innerText = `Se seleccionaran de forma aleatoria ${seleccionHombres} hombres y ${seleccionMujeres} mujeres en el centro de trabajo para las entrevistas`;
-	
+					document.getElementById('boton_carga_trabajadores').disabled = false;
+					
 
 				}
+			 }else{
+				document.getElementById('boton_carga_trabajadores').disabled = false;
+
 			 }
 
 			 const generosContainer = document.getElementById('generos_container');
@@ -3212,6 +3280,7 @@ function validarValoresMuestra() {
             document.getElementById('valor_hombres').classList.add('is-invalid');
             document.getElementById('valor_mujeres').classList.add('is-invalid');
             showWarning("Los valores no coinciden con la cantidad total de empleados.");
+			document.getElementById('boton_carga_trabajadores').disabled = true;
         } else {
             // Limpiar las clases de advertencia si la validación es correcta
             document.getElementById('valor_hombres').classList.remove('is-invalid');
@@ -3241,9 +3310,13 @@ function validarValoresMuestra() {
 						const seleccionHombres = Math.round(totalEmpleadosMuestra * (porcentajeHombres / 100));
 						const seleccionMujeres = Math.round(totalEmpleadosMuestra * (porcentajeMujeres / 100));
 						document.getElementById('seleccion').innerText = `Se seleccionaran de forma aleatoria ${seleccionHombres} hombres y ${seleccionMujeres} mujeres en el centro de trabajo para las entrevistas`;
-		
+						document.getElementById('boton_carga_trabajadores').disabled = false;
+
 
 				}		
+			 }else{
+				document.getElementById('boton_carga_trabajadores').disabled = false;
+
 			 }
 			 const generosContainer = document.getElementById('generos_container');
 			 generosContainer.style.display = 'block';
@@ -3259,6 +3332,7 @@ function validarValoresMuestra() {
             document.getElementById('valor_hombres').classList.add('is-invalid');
             document.getElementById('valor_mujeres').classList.add('is-invalid');
             showWarning("Los porcentajes no coinciden con la cantidad total de empleados.");
+			document.getElementById('boton_carga_trabajadores').disabled = true;
         } else {
             // Limpiar las clases de advertencia si la validación es correcta
             document.getElementById('valor_hombres').classList.remove('is-invalid');
@@ -3285,9 +3359,13 @@ function validarValoresMuestra() {
 					const seleccionHombres = Math.round(totalEmpleadosMuestra * (porcentajeHombres / 100));
 					const seleccionMujeres = Math.round(totalEmpleadosMuestra * (porcentajeMujeres / 100));
 					document.getElementById('seleccion').innerText = `Se seleccionaran de forma aleatoria ${seleccionHombres} hombres y ${seleccionMujeres} mujeres en el centro de trabajo para las entrevistas`;
-	
+					document.getElementById('boton_carga_trabajadores').disabled = false;
+					
 
 				}
+			 }else{
+				document.getElementById('boton_carga_trabajadores').disabled = false;
+
 			 }
 
 			 const generosContainer = document.getElementById('generos_container');
@@ -3327,7 +3405,8 @@ function validarEmpleados() {
     const totalEmpleados = parseInt(document.getElementById('total_empleados').value);
     const selectAplicableA = document.getElementById('aplicable_a');
 	document.getElementById('boton_carga_muestra').disabled = true;
-	document.getElementById('boton_obtener_muestra').disabled = true;
+	document.getElementById('RECPSICOTRABAJADOR_MUESTRA').disabled = true;
+	document.getElementById('boton_carga_trabajadores').disabled = true;
 
     document.getElementById('habilitar_opcional').checked = false;
 
@@ -3337,11 +3416,15 @@ function validarEmpleados() {
     document.getElementById('option1').checked = false;
     document.getElementById('option2').checked = false;
     document.getElementById('option3').checked = false;
+    document.getElementById('option4').checked = false;
+
 
 	document.getElementById('optionA').disabled = true;
     document.getElementById('option1').disabled = true;
     document.getElementById('option2').disabled = true;
     document.getElementById('option3').disabled = true;
+    document.getElementById('option4').disabled = true;
+
 
 	const camposOpcionales = document.getElementById('campos_opcionales');
     camposOpcionales.style.display = 'none';
@@ -3401,7 +3484,7 @@ function validarEmpleados() {
     }
 
     // Limpiar resultado
-    document.getElementById('resultado').innerText = '';
+    document.getElementById('resultado').innerText = ' ';
 }
 
 function calcularResultado() {
@@ -3413,6 +3496,8 @@ function calcularResultado() {
     if (!isNaN(totalEmpleados) && totalEmpleados !== "") {
         if (opcionSeleccionada === "opcion1") {
             resultado = totalEmpleados;
+			document.getElementById('boton_carga_trabajadores').disabled = false;
+
         } else if (opcionSeleccionada === "opcion2") {
             let a = 0.9604;
             let b = 0.0025;
@@ -3435,7 +3520,8 @@ function calcularResultado() {
     if (opcionSeleccionada === "opcion2") {
         document.getElementById('habilitar_opcional').checked = true;
 		document.getElementById('boton_carga_muestra').disabled = false;
-		document.getElementById('boton_obtener_muestra').disabled = false;
+		document.getElementById('RECPSICOTRABAJADOR_MUESTRA').disabled = false;
+		
 		const camposOpcionales = document.getElementById('campos_opcionales');
 		camposOpcionales.style.display = 'block';
 		const generosContainer = document.getElementById('generos_container');
@@ -3452,7 +3538,7 @@ function calcularResultado() {
     }else{
 		document.getElementById('habilitar_opcional').checked = false;
 		document.getElementById('boton_carga_muestra').disabled = true;
-		document.getElementById('boton_obtener_muestra').disabled = true;
+		document.getElementById('RECPSICOTRABAJADOR_MUESTRA').disabled = true;
 		const camposOpcionales = document.getElementById('campos_opcionales');
 		camposOpcionales.style.display = 'none';
 		const generosContainer = document.getElementById('generos_container');
@@ -3472,6 +3558,8 @@ $("#boton_guardar_normativa").click(function (event) {
 	event.preventDefault(); // Evita el comportamiento predeterminado del formulario
 	// valida campos vacios
 
+	$("#RECPSICO_ID_NORMATIVA").val($("#recsensorial_id").val());
+
 	var valida = this.form.checkValidity();
 	if (valida) {
 
@@ -3480,6 +3568,8 @@ $("#boton_guardar_normativa").click(function (event) {
 		formData.append('RECPSICO_GUIAI', document.getElementById("option1").checked ? 1 : 0);
 		formData.append('RECPSICO_GUIAII', document.getElementById("option2").checked ? 1 : 0);
 		formData.append('RECPSICO_GUIAIII', document.getElementById("option3").checked ? 1 : 0);
+		formData.append('RECPSICO_GUIAV', document.getElementById("option4").checked ? 1 : 0);
+
 		// formData.append('JSON_TURNOS', JSON.stringify(turnosjs));
 		//formData.append('SUMAHORASJORNADA', sumaHorasJornada);
 
@@ -3496,8 +3586,9 @@ $("#boton_guardar_normativa").click(function (event) {
 				// Manejar la respuesta del servidor
 				// Campos Hidden
 				$("#ID_RECOPSICONORMATIVA").val(dato.normativapsico.ID_RECOPSICONORMATIVA);
+				
 
-				$("#RECPSICO_ID").val($("#recsensorial_id").val());
+				
 				//$("#RECPSICO_ID").val(dato.normativapsico.RECPSICO_ID);
 
 				// // actualiza tabla
@@ -3517,11 +3608,6 @@ $("#boton_guardar_normativa").click(function (event) {
 
 				// actualiza boton
 				$('#boton_guardar_categoria').html('Guardar <i class="fa fa-save"></i>');
-
-				// cerrar modal
-				$('#modal_categoria').modal('hide');
-
-				$(".listadodeturno").empty();
 
 			},
 			beforeSend: function () {
@@ -3548,454 +3634,71 @@ $("#boton_guardar_normativa").click(function (event) {
 });
 
 
-// $(document).ready(function () {
-//     // Manejo del evento de entrada de empleados
-//     document.getElementById('total_empleados').addEventListener('input', validarEmpleados);
 
-//     document.getElementById('aplicable_a').addEventListener('change', calcularResultado);
+$(document).ready(function() {
+	var tabla = $('#tabla_trabajadores_cargados').DataTable({
+        "language": {
+            "url": "//cdn.datatables.net/plug-ins/1.10.25/i18n/Spanish.json"
+        },
+        "columns": [
+            { "data": "numero"},
+            { "data": "nombre"},
+            { "data": "muestra",
+            	"render": function(data, type, row) {
+                if (data == 0) {
+                    return '<i class="fa fa-times-circle fa-2x text-danger"></i>'; 
+                } else if (data == 1) {
+                    return '<i class="fa fa-check-circle fa-2x text-success"></i>'; 
+                } else {
+                    return data;
+				}
+			}
+		}
+        ],
+        "columnDefs": [
+            { "orderable": false, "targets": [0, 1, 2] }
+        ]
+    });
 
-//     document.getElementById('habilitar_opcional').addEventListener('change', function () {
-//         const isChecked = this.checked;
-//         const camposOpcionales = document.getElementById('campos_opcionales');
-
-//         // Mostrar u ocultar campos opcionales según el estado del checkbox
-//         camposOpcionales.style.display = isChecked ? 'block' : 'none';
-
-//         // Habilitar/deshabilitar los selects e inputs numéricos
-//         document.getElementById('tipo_valor_hombres').disabled = !isChecked;
-//         document.getElementById('valor_hombres').disabled = !isChecked;
-//         document.getElementById('valor_mujeres').disabled = !isChecked;
-
-//         // Limpiar valores y sufijos
-//         if (!isChecked) {
-//             document.getElementById('valor_hombres').value = '';
-//             document.getElementById('valor_mujeres').value = '';
-//             document.getElementById('sufijo_hombres').innerText = ' %';
-//             document.getElementById('sufijo_mujeres').innerText = ' %';
-// 			document.getElementById('porcentajes').innerText = '';
-//             clearWarnings(); // Limpiar advertencias si el checkbox está desmarcado
-//         }
-//     });
-
-// 	document.getElementById('optionA').addEventListener('change', function () {
-//         const isChecked = this.checked;
-//         const camposOpcionales = document.getElementById('campos_opcionales');
-
-// 		const totalEmpleados = parseInt(document.getElementById('total_empleados').value);
-      
-
-
-// 		document.getElementById('option2').disabled = !isChecked;
-// 		document.getElementById('option3').disabled = !isChecked;
+    function cargarTrabajadores() {
+       // var recpsico_id = $('#RECPSICO_ID_TRABAJADORES').val(); 
+        var recpsico_id = 3; 
         
-// 		if (!isNaN(totalEmpleados)) {
-// 			if (totalEmpleados < 16) {
-// 				document.getElementById('option2').disabled = !isChecked;
-// 				document.getElementById('option3').disabled = !isChecked;
-	
-// 			} else if (totalEmpleados >= 16 && totalEmpleados <= 50) {
-// 				document.getElementById('option2').disabled = !isChecked;
-// 				document.getElementById('option3').disabled = !isChecked;
-	
-// 			} else if (totalEmpleados > 50) {
-// 				document.getElementById('option2').disabled = !isChecked;
-// 				document.getElementById('option3').disabled = !isChecked;
-	
-// 			}
-// 		}
-//     });
+        $.ajax({
+            url: '/recopsicotrabajadorescargados/' + 3,
+            type: 'GET',
+            data: { recpsico_id: recpsico_id },
+            dataType: 'json',
+            success: function(data) {
 
-// 	document.getElementById('option2').addEventListener('change', function () {
-// 		if (this.checked) {
-// 			document.getElementById('option3').checked = false;
-// 		}
-// 	});
-	
-// 	document.getElementById('option3').addEventListener('change', function () {
-// 		if (this.checked) {
-// 			document.getElementById('option2').checked = false;
-// 		}
-// 	});
+				tabla.clear();
+                
+                $.each(data, function(index, trabajador) {
+                    tabla.row.add({
+                        "numero": index + 1,
+                        "nombre": trabajador.RECPSICOTRABAJADOR_NOMBRE,
+                        "muestra": trabajador.RECPSICOTRABAJADOR_MUESTRA
+                    });
+                });
+                
+                tabla.draw();
+            },
+            error: function(xhr, status, error) {
+                console.error("Error al cargar trabajadores:", error);
+                alert("Error al cargar la lista de trabajadores");
+            }
+        });
+    }
 
-// 	document.getElementById('option1').addEventListener('change', function () {
-// 		if (this.checked) {
-// 			this.disabled = true; // Una vez seleccionado, no se podrá desmarcar ni cambiar
-// 		}
-// 	});
-//     // Validar la suma de valores de hombres y mujeres
-//     document.getElementById('valor_hombres').addEventListener('input', validarValores);
-//     document.getElementById('valor_mujeres').addEventListener('input', validarValores);
+    // Llamar a la función cuando se cargue la página
+    cargarTrabajadores();
 
-//     // Cambiar sufijo según tipo de valor seleccionado para hombres
-//     document.getElementById('tipo_valor_hombres').addEventListener('change', function () {
-//         const tipoValor = this.value;
-//         const sufijo = document.getElementById('sufijo_hombres');
-//         sufijo.innerText = tipoValor === 'porcentaje' ? ' %' : ' hombres';
-//     });
-
-//     // Cambiar sufijo según tipo de valor seleccionado para mujeres
-//     document.getElementById('tipo_valor_hombres').addEventListener('change', function () {
-//         const tipoValor = this.value;
-//         const sufijo = document.getElementById('sufijo_mujeres');
-//         sufijo.innerText = tipoValor === 'porcentaje' ? ' %' : ' mujeres';
-//     });
-// });
-
-// function validarValores() {
-//     const totalEmpleados = parseInt(document.getElementById('total_empleados').value);
-//     const valorHombres = parseInt(document.getElementById('valor_hombres').value) || 0;
-//     const valorMujeres = parseInt(document.getElementById('valor_mujeres').value) || 0;
-
-//     // Verificar si se seleccionó "Cantidad"
-//     const tipoValorHombres = document.getElementById('tipo_valor_hombres').value;
-
-   
+    // // Si tienes un botón para recargar la lista, puedes vincularlo así:
+    // $('#boton_recargar').on('click', cargarTrabajadores);
+});
 
 
-//     // Limpiar advertencias
-//     clearWarnings();
 
-//     if (tipoValorHombres === "cantidad") {
-//         const suma = valorHombres + valorMujeres;
-//         if (suma !== totalEmpleados) {
-//             // Mostrar advertencia si la suma no coincide
-//             document.getElementById('valor_hombres').classList.add('is-invalid');
-//             document.getElementById('valor_mujeres').classList.add('is-invalid');
-//             showWarning("Los valores no coinciden con la cantidad total de empleados.");
-//         } else {
-//             // Limpiar las clases de advertencia si la validación es correcta
-//             document.getElementById('valor_hombres').classList.remove('is-invalid');
-//             document.getElementById('valor_mujeres').classList.remove('is-invalid');
-// 			const opcionSeleccionada = document.getElementById('aplicable_a').value;
-// 			 // Mostrar resultado en el contenedor
-// 			 const porcentajeHombres = Math.round((valorHombres * 100)/totalEmpleados);
-// 			 const porcentajeMujeres = Math.round((valorMujeres * 100)/totalEmpleados);
-// 			 document.getElementById('porcentajes').innerText = `Hay ${porcentajeHombres}% de hombres y ${porcentajeMujeres}% de mujeres en el centro de trabajo`;
-			 
-// 			 if(opcionSeleccionada === "opcion2"){
-// 				let resultado = 0;
-			
-// 				if (!isNaN(totalEmpleados) && totalEmpleados !== "") {
-					
-// 						let a = 0.9604;
-// 						let b = 0.0025;
-// 						let c = totalEmpleados - 1;
-// 						let numerador = a * totalEmpleados;
-// 						let denominador = (b * c) + a;
-			
-// 						// Redondeo al entero más próximo
-// 						resultado = Math.round(numerador / denominador);
-// 						const seleccionHombres = Math.round(resultado * (porcentajeHombres / 100));
-// 						const seleccionMujeres = Math.round(resultado * (porcentajeMujeres / 100));
-// 						document.getElementById('seleccion').innerText = `Se seleccionaran de forma aleatoria ${seleccionHombres} hombres y ${seleccionMujeres} mujeres en el centro de trabajo para las entrevistas`;
-		
-
-// 				}		
-// 			 }
-//         }
-//     }
-
-// 	if (tipoValorHombres === "porcentaje") {
-//         const suma = valorHombres + valorMujeres;
-//         if (suma !== 100) {
-//             // Mostrar advertencia si la suma no coincide
-//             document.getElementById('valor_hombres').classList.add('is-invalid');
-//             document.getElementById('valor_mujeres').classList.add('is-invalid');
-//             showWarning("Los porcentajes no coinciden con la cantidad total de empleados.");
-//         } else {
-//             // Limpiar las clases de advertencia si la validación es correcta
-//             document.getElementById('valor_hombres').classList.remove('is-invalid');
-//             document.getElementById('valor_mujeres').classList.remove('is-invalid');
-// 			const opcionSeleccionada = document.getElementById('aplicable_a').value;
-
-// 			 // Mostrar resultado en el contenedor
-// 			 const porcentajeHombres = valorHombres;
-// 			 const porcentajeMujeres = valorMujeres;
-// 			 document.getElementById('porcentajes').innerText = `Hay ${porcentajeHombres}% de hombres y ${porcentajeMujeres}% de mujeres en el centro de trabajo`;
-
-// 			 if(opcionSeleccionada === "opcion2"){
-
-// 				if (!isNaN(totalEmpleados) && totalEmpleados !== "") {
-					
-// 					let a = 0.9604;
-// 					let b = 0.0025;
-// 					let c = totalEmpleados - 1;
-// 					let numerador = a * totalEmpleados;
-// 					let denominador = (b * c) + a;
-		
-// 					// Redondeo al entero más próximo
-// 					resultado = Math.round(numerador / denominador);
-// 					const seleccionHombres = Math.round(resultado * (porcentajeHombres / 100));
-// 					const seleccionMujeres = Math.round(resultado * (porcentajeMujeres / 100));
-// 					document.getElementById('seleccion').innerText = `Se seleccionaran de forma aleatoria ${seleccionHombres} hombres y ${seleccionMujeres} mujeres en el centro de trabajo para las entrevistas`;
-	
-
-// 				}
-// 			 }
-//         }
-//     }
-// }
-
-// function clearWarnings() {
-//     document.getElementById('valor_hombres').classList.remove('is-invalid');
-//     document.getElementById('valor_mujeres').classList.remove('is-invalid');
-//     // Limpiar cualquier mensaje de advertencia
-//     const warningElement = document.getElementById('warning-message');
-//     if (warningElement) {
-//         warningElement.remove();
-//     }
-// }
-
-// function showWarning(message) {
-//     const warningMessage = document.createElement('div');
-//     warningMessage.id = 'warning-message';
-//     warningMessage.style.color = 'red';
-//     warningMessage.innerText = message;
-//     document.getElementById('campos_opcionales').appendChild(warningMessage);
-// }
-
-// function updateCheckboxValue(checkbox) {
-//     const value = checkbox.checked ? 1 : 0;
-//     console.log(`Checkbox ${checkbox.id} value: ${value}`);
-//     // Aquí puedes enviar el valor a tu backend o procesarlo como necesites
-// }
-
-// function validarEmpleados() {
-//     const totalEmpleados = parseInt(document.getElementById('total_empleados').value);
-//     const selectAplicableA = document.getElementById('aplicable_a');
-
-//     document.getElementById('habilitar_opcional').checked = false;
-
-//     document.getElementById('optionA').checked = false;
-
-//     document.getElementById('option1').checked = false;
-//     document.getElementById('option2').checked = false;
-//     document.getElementById('option3').checked = false;
-
-// 	document.getElementById('optionA').disabled = true;
-//     document.getElementById('option1').disabled = true;
-//     document.getElementById('option2').disabled = true;
-//     document.getElementById('option3').disabled = true;
-
-//     if (!isNaN(totalEmpleados)) {
-//         if (totalEmpleados < 16) {
-// 			document.getElementById('optionA').disabled = false;
-//             document.getElementById('option1').disabled = true;
-// 			document.getElementById('option1').checked = true;
-
-//         } else if (totalEmpleados >= 16 && totalEmpleados <= 50) {
-// 			document.getElementById('optionA').disabled = false;
-//             document.getElementById('option1').disabled = true;
-// 			document.getElementById('option1').checked = true;
-// 			//document.getElementById('option1').disabled = false;
-//             document.getElementById('option2').disabled = false;
-// 			document.getElementById('option2').checked = true;
-
-
-//         } else if (totalEmpleados > 50) {
-//             document.getElementById('option1').disabled = true;
-// 			document.getElementById('option1').checked = true;
-// 			//document.getElementById('option1').disabled = false; 
-//           	//document.getElementById('option2').disabled = false;
-// 			  document.getElementById('option3').checked = true;
-//             document.getElementById('option3').disabled = false;
-
-//         }
-//     }
-
-//     selectAplicableA.innerHTML = '<option value="">Selecciona una opción</option>';
-
-//     if (!isNaN(totalEmpleados) && totalEmpleados > 0) {
-//         if (totalEmpleados <= 50) {
-//             selectAplicableA.innerHTML += '<option value="opcion1">TODOS LOS TRABAJADORES</option>';
-//         } else {
-//             selectAplicableA.innerHTML += '<option value="opcion1">TODOS LOS TRABAJADORES</option>';
-//             selectAplicableA.innerHTML += '<option value="opcion2">MUESTRA DE TRABAJADORES</option>';
-//         }
-//         // Habilitar el select de opciones
-//         selectAplicableA.disabled = false;
-//     } else {
-//         // Deshabilitar el select si no hay un total válido
-//         selectAplicableA.disabled = true;
-//     }
-
-//     // Limpiar resultado
-//     document.getElementById('resultado').innerText = '';
-// }
-
-// function calcularResultado() {
-//     const totalEmpleados = document.getElementById('total_empleados').value;
-//     const opcionSeleccionada = document.getElementById('aplicable_a').value;
-
-//     let resultado = 0;
-
-//     if (!isNaN(totalEmpleados) && totalEmpleados !== "") {
-//         if (opcionSeleccionada === "opcion1") {
-//             resultado = totalEmpleados;
-//         } else if (opcionSeleccionada === "opcion2") {
-//             let a = 0.9604;
-//             let b = 0.0025;
-//             let c = totalEmpleados - 1;
-//             let numerador = a * totalEmpleados;
-//             let denominador = (b * c) + a;
-
-//             // Redondeo al entero más próximo
-//             resultado = Math.round(numerador / denominador);
-//         }
-//     }
-
-//     // Mostrar resultado en el contenedor
-//     document.getElementById('resultado').innerText = `Número de trabajadores a entrevistar: ${resultado} trabajadores`;
-
-//     // Si se selecciona "MUESTRA DE TRABAJADORES", activar el checkbox opcional
-//     if (opcionSeleccionada === "opcion2") {
-//         document.getElementById('habilitar_opcional').checked = true;
-// 		const camposOpcionales = document.getElementById('campos_opcionales');
-// 		camposOpcionales.style.display = 'block';
-// 		document.getElementById('valor_hombres').value = '';
-//             document.getElementById('valor_mujeres').value = '';
-//             document.getElementById('sufijo_hombres').innerText = ' %';
-//             document.getElementById('sufijo_mujeres').innerText = ' %';
-// 			document.getElementById('porcentajes').innerText = '';
-//     }else{
-// 		document.getElementById('habilitar_opcional').checked = false;
-// 		const camposOpcionales = document.getElementById('campos_opcionales');
-// 		camposOpcionales.style.display = 'none';
-// 		document.getElementById('valor_hombres').value = '';
-//             document.getElementById('valor_mujeres').value = '';
-//             document.getElementById('sufijo_hombres').innerText = ' %';
-//             document.getElementById('sufijo_mujeres').innerText = ' %';
-// 			document.getElementById('porcentajes').innerText = '';
-// 	}
-// }
-
-// $("#boton_guardar_normativa").click(function (event) {
-// 	event.preventDefault(); // Evita el comportamiento predeterminado del formulario
-// 	// valida campos vacios
-
-// 	var valida = this.form.checkValidity();
-// 	if (valida) {
-// 		// Recopilar datos de turnos en formato JSON
-// 		// var turnosjs = [];
-// 		// var errorEnTurnos = false; // Variable para controlar si hay error en los turnos
-// 		// var sumaHorasJornada = 0
-
-// 		// $(".generarturnos").each(function () {
-
-
-// 		// 	var horasJornada = parseInt($(this).find("input[name='recsensorialcategoria_horasjornada']").val()) || 0;
-// 		// 	var horasComida = parseInt($(this).find("input[name='recsensorialcategoria_horascomida']").val()) || 0;
-
-// 		// 	sumaHorasJornada += horasJornada;
-
-// 		// 	var horaEntrada = new Date("2000-01-01T" + $(this).find("input[name='recsensorialcategoria_horarioentrada']").val() + ":00");
-// 		// 	var horaSalida = new Date("2000-01-01T" + $(this).find("input[name='recsensorialcategoria_horariosalida']").val() + ":00");
-
-// 		// 	var horasTrabajadas = (horaSalida - horaEntrada) / 1000 / 60 / 60;
-
-// 		// 	if (horasJornada + horasComida !== horasTrabajadas) {
-// 		// 		errorEnTurnos = true;
-// 		// 	}
-
-// 		// 	var turno = {
-// 		// 		'recsensorialcategoria_horasjornada': horasJornada,
-// 		// 		'recsensorialcategoria_horarioentrada': $(this).find("input[name='recsensorialcategoria_horarioentrada']").val(),
-// 		// 		'recsensorialcategoria_horariosalida': $(this).find("input[name='recsensorialcategoria_horariosalida']").val(),
-// 		// 		'recsensorialcategoria_horascomida': horasComida,
-// 		// 		'descripcioncategoria': $(this).find("input[name='descripcioncategoria']").val(),
-
-// 		// 	};
-// 		// 	turnosjs.push(turno);
-// 		// });
-
-// 		// if (errorEnTurnos) {
-// 		// 	swal({
-// 		// 		title: "No disponible",
-// 		// 		text: "Su horario de entrada y salida no coincide con las horas asignadas.",
-// 		// 		type: "warning", // Puedes cambiar el tipo según tus preferencias
-// 		// 		buttons: {
-// 		// 			confirm: {
-// 		// 				text: "OK",
-// 		// 				value: true,
-// 		// 				visible: true,
-// 		// 				className: "btn btn-danger" // Puedes ajustar las clases según tu estilo
-// 		// 			}
-// 		// 		}
-// 		// 	});
-// 		// 	return; // Detiene la ejecución del guardado si hay un error en los turnos
-// 		// }
-
-// 		var formData = new FormData($('#form_normativa')[0]);
-// 		formData.append('RECPSICO_GENEROS', document.getElementById("habilitar_opcional").checked ? 1 : 0);
-// 		formData.append('RECPSICO_GUIAI', document.getElementById("option1").checked ? 1 : 0);
-// 		formData.append('RECPSICO_GUIAII', document.getElementById("option2").checked ? 1 : 0);
-// 		formData.append('RECPSICO_GUIAIII', document.getElementById("option3").checked ? 1 : 0);
-// 		// formData.append('JSON_TURNOS', JSON.stringify(turnosjs));
-// 		//formData.append('SUMAHORASJORNADA', sumaHorasJornada);
-
-
-// 		// Enviar datos
-// 		$.ajax({
-// 			type: 'POST',
-// 			url: "/recopsiconormativa",
-// 			data: formData,
-// 			dataType: 'json',
-// 			processData: false,
-// 			contentType: false,
-// 			success: function (dato) {
-// 				// Manejar la respuesta del servidor
-// 				// Campos Hidden
-// 				$("#ID_RECOPSICONORMATIVA").val(dato.normativapsico.ID_RECOPSICONORMATIVA);
-
-// 				$("#RECPSICO_ID").val($("#recsensorial_id").val());
-// 				//$("#RECPSICO_ID").val(dato.normativapsico.RECPSICO_ID);
-
-// 				// // actualiza tabla
-// 				// funcion_tabla_recsensorialcategorias(dato.categoriapsico.RECPSICO_ID);
-
-// 				// mensaje
-// 				swal({
-// 					title: "Correcto",
-// 					text: "" + dato.msj,
-// 					type: "success", // warning, error, success, info
-// 					buttons: {
-// 						visible: false, // true , false
-// 					},
-// 					timer: 1500,
-// 					showConfirmButton: false
-// 				});
-
-// 				// actualiza boton
-// 				$('#boton_guardar_categoria').html('Guardar <i class="fa fa-save"></i>');
-
-// 				// cerrar modal
-// 				$('#modal_categoria').modal('hide');
-
-// 				$(".listadodeturno").empty();
-
-// 			},
-// 			beforeSend: function () {
-// 				$('#boton_guardar_categoria').html('Guardando <i class="fa fa-spin fa-spinner"></i>');
-// 			},
-// 			error: function (error) {
-// 				// Manejar errores de la solicitud
-// 				// actualiza boton
-// 				$('#boton_guardar_categoria').html('Guardar <i class="fa fa-save"></i>');
-// 				// mensaje
-// 				swal({
-// 					title: "Error",
-// 					text: "Error en la acción: " + error.responseText, // Acceder al mensaje de error
-// 					type: "error", // warning, error, success, info
-// 					buttons: {
-// 						visible: false, // true , false
-// 					},
-// 					timer: 1500,
-// 					showConfirmButton: false
-// 				});
-// 			}
-// 		});
-// 	}
-// });
 
 
 

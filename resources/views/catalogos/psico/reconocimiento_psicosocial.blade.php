@@ -51,6 +51,35 @@
     .checkbox_warning {
         border: 2px #F00 solid;
     }
+
+    .green-breadcrumb {
+    /* background-color: #8bd249; 
+    color: white; 
+    padding: 5px 10px; 
+    border-radius: 5px;  */
+    padding: 0.75rem 1rem;
+    margin-bottom: 1rem;
+    list-style: none;
+    background-color: rgb(139, 210, 73);
+    border-radius: 10px;
+    display: flex;
+    justify-content: space-between;
+    }
+    .blue-breadcrumb {
+    /* background-color: #8bd249; 
+    color: white; 
+    padding: 5px 10px; 
+    border-radius: 5px;  */
+    padding: 0.75rem 1rem;
+    margin-bottom: 1rem;
+    list-style: none;
+    background-color: rgb(0, 152, 199);
+    border-radius: 10px;
+    display: flex;
+    justify-content: space-between;
+    }
+
+
 </style>
 
 
@@ -756,20 +785,23 @@
                                                             <div class="col-12">
                                                                 <div class="card">
                                                                     <div class="card-body" >
-                                                                        <label style="font-weight: bold;font-size: 20px;">Normativa (Criterio según número de trabajadores)</label>
-                                                                        <h6 class="card-subtitle text-white m-b-0 op-5">&nbsp;</h6>
+                                                                        <div class="col-12" style="text-align: center;">
+                                                                            <label style="font-weight: bold;font-size: 20px;">Normativa (Criterio según número de trabajadores)</label>
+                                                                            <h6 class="card-subtitle text-white m-b-0 op-5">&nbsp;</h6>
+                                                                        </div>
                                                                         <div class="row">
                                                                             {!! csrf_field() !!}
 
                                                                             <div class="col-3 mt-3 mb-3">
                                                                                 <div class="form-group">
                                                                                     <label>Total de trabajadores *</label>
+                                                                                    <input type="hidden" class="form-control" id="RECPSICO_ID_NORMATIVA" name="RECPSICO_ID" value="0">
                                                                                     <input type="number" class="form-control" id="total_empleados" name="RECPSICO_TOTALTRABAJADORES" required>
                                                                                 </div>
                                                                             </div>
 
                                                                             <div class="col-5 mt-3 mb-3">
-                                                                                <label>Seleccione el o los criterios que desea aplicar:</label>
+                                                                                <label>Seleccione los criterios para aplicar la NOM-035-STPS-2018:</label>
                                                                                 <div class="custom-control custom-checkbox">
                                                                                         <input type="checkbox" class="custom-control-input" id="optionA" name="optionA" >
                                                                                         <label class="custom-control-label" for="optionA">Seleccionar guias adicionales: </label>
@@ -777,15 +809,19 @@
                                                                                 <div class="form-group">
                                                                                     <div class="custom-control custom-checkbox">
                                                                                         <input type="checkbox" class="custom-control-input" id="option1" name="option1" >
-                                                                                        <label class="custom-control-label" for="option1">GUIA DE REFERENCIA I (ISFSATS)</label>
+                                                                                        <label class="custom-control-label" for="option1">GUIA DE REFERENCIA I (Acontecimientos Traumáticos Severos)</label>
                                                                                     </div>
                                                                                     <div class="custom-control custom-checkbox">
                                                                                         <input type="checkbox" class="custom-control-input" id="option2" name="option2" >
-                                                                                        <label class="custom-control-label" for="option2">GUIA DE REFERENCIA II (IAFRP)</label>
+                                                                                        <label class="custom-control-label" for="option2">GUIA DE REFERENCIA II (Factores de Riesgo Psicosocial)</label>
                                                                                     </div>
                                                                                     <div class="custom-control custom-checkbox">
                                                                                         <input type="checkbox" class="custom-control-input" id="option3" name="option3" >
-                                                                                        <label class="custom-control-label" for="option3">GUIA DE REFERENCIA III (EEO)</label>
+                                                                                        <label class="custom-control-label" for="option3">GUIA DE REFERENCIA III (Evaluación del Entorno Organizacional)</label>
+                                                                                    </div>
+                                                                                    <div class="custom-control custom-checkbox">
+                                                                                        <input type="checkbox" class="custom-control-input" id="option4" name="option4" >
+                                                                                        <label class="custom-control-label" for="option4">GUIA DE REFERENCIA V (Datos del trabajador)</label>
                                                                                     </div>
                                                                                 </div>
                                                                             </div>
@@ -878,14 +914,37 @@
                                                                             </div>
                                                                         </div>
 
-                                                                      
-                                                                           
-                                                                        <button type="button" class="btn btn-success me-2 waves-effect waves-light botonnuevo_modulorecsensorial" style="margin: 25px;" data-toggle="tooltip" title="Cargar trabajadores" id="boton_carga_trabajadores">
+                                                                        <div class="col-12" style="text-align: center;">
+                                                                            <label class="col-12" style="font-weight: bold;font-size: 20px;">Carga de trabajadores del centro de trabajo</label>
+                                                                            <!-- <h6 class="col-12 card-subtitle text-white m-b-0 op-5">&nbsp;</h6> -->
+                                                                            <button type="button" class="btn btn-success me-2 waves-effect waves-light botonnuevo_modulorecsensorial" style="margin: 25px;" data-toggle="tooltip" title="Cargar trabajadores" id="boton_carga_trabajadores" onclick="abrirTrabajadoresExcel()">
                                                                                 <span class="btn-label"><i class="fa fa-file-excel-o"></i></span>Cargar trabajadores
-                                                                        </button>
-                                                                        <button type="button" class="btn btn-primary waves-effect waves-light botonnuevo_modulorecsensorial" style="margin: 25px;" data-toggle="tooltip" title="Cargar trabajadores" id="boton_carga_muestra">
-                                                                                <span class="btn-label"><i class="fa fa-file-excel-o"></i></span>Cargar muestra de trabajadores
-                                                                        </button>
+                                                                            </button>
+                                                                            <button type="button" class="btn btn-primary waves-effect waves-light botonnuevo_modulorecsensorial" style="margin: 25px;" data-toggle="tooltip" title="Cargar trabajadores" id="boton_carga_muestra">
+                                                                                    <span class="btn-label"><i class="fa fa-file-excel-o"></i></span>Cargar muestra de trabajadores
+                                                                            </button>
+                                                                        </div>
+
+                                                                        <div class="col-12" style="text-align: center;">
+                                                                            <div>
+                                                                                <ol class="breadcrumb m-b-10 blue-breadcrumb">
+                                                                                    <h2 style="color: #ffff; margin: 0;"> <i class="fa fa-braille" aria-hidden="true"></i> Lista de trabajadores totales cargados</h2>
+                                                                                </ol>
+                                                                                <div class="table-responsive">
+                                                                                    <table class="table table-hover stylish-table" width="100%" id="tabla_trabajadores_cargados">
+                                                                                        <thead>
+                                                                                            <tr>
+                                                                                            <th class="sorting_disabled text-center" rowspan="1" colspan="1">No. Orden</th>
+                                                                                            <th class="sorting_disabled text-center" rowspan="1" colspan="1">Nombre completo del trabajador</th>
+                                                                                            <th class="sorting_disabled text-center" rowspan="1" colspan="1">Muestra</th>
+                                                                                            </tr>
+                                                                                        </thead>
+                                                                                        <tbody></tbody>
+                                                                                    </table>
+                                                                                </div>
+                                                                            </div>
+                                                                        </div>   
+                                                                         
                                                                     </div>
                                                                 </div>
                                                             </div>
@@ -2171,6 +2230,8 @@
 
 
             </div>
+
+
         </div>
     </div>
 </div>
@@ -2191,62 +2252,41 @@
                     {!! csrf_field() !!}
                     <div class="row">
                         <div class="col-12">
-                            <input type="hidden" class="form-control" id="ID_RECOPSICOCATEGORIA" name="ID_RECOPSICOCATEGORIA" value="0">
-                            <input type="hidden" class="form-control" id="RECPSICO_ID" name="RECPSICO_ID" value="0">
+                            <input type="hidden" class="form-control" id="RECPSICO_ID_TRABAJADORES" name="RECPSICO_ID" value="0">
+                            <input type="number" class="form-control" id="RECPSICO_APLICACION" name="RECPSICO_APLICACION" style="visibility: hidden;">
+                            <div class="col-12" id="cargarTrabajadores_excel">
                         </div>
-                        <div class="col-12" id="cargarTrabajadores_excel">
-                                                                            @if(auth()->user()->hasRoles(['Superusuario', 'Administrador', 'Coordinador', 'CoordinadorHI']))
-                                                                            
-                                                                                            <form method="post" enctype="multipart/form-data" name="form_reconocimientofisicos_pdf" id="form_reconocimientofisicos_pdf">
-                                                                                                <table width="100%" cellpadding="0" cellspacing="0">
-                                                                                                    <tbody>
-                                                                                                        <tr>
-                                                                                                            <td>
-                                                                                                                {!! csrf_field() !!}
-                                                                                                                <label style="font-size: 16px;">Cargar excel de trabajadores totales del centro de trabajo*</label>
-                                                                                                                <div class="fileinput fileinput-new input-group" data-provides="fileinput">
-                                                                                                                    <div class="form-control" data-trigger="fileinput">
-                                                                                                                        <i class="fa fa-file fileinput-exists"></i>
-                                                                                                                        <span class="fileinput-filename"></span>
-                                                                                                                    </div>
-                                                                                                                    <span class="input-group-addon btn btn-secondary btn-file">
-                                                                                                                        <span class="fileinput-new">Seleccione</span>
-                                                                                                                        <span class="fileinput-exists">Cambiar</span>
-                                                                                                                        <input type="file" accept="application/pdf" id="reconocimientofisicospdf" name="reconocimientofisicospdf" required>
-                                                                                                                    </span>
-                                                                                                                    <a href="#" class="input-group-addon btn btn-secondary fileinput-exists" data-dismiss="fileinput">Quitar</a>
-                                                                                                                </div>
-                                                                                                            </td>
-                                                                                                            <td width="110" style="text-align: right; vertical-align: bottom;">
-                                                                                                                {{-- <button type="submit" class="btn btn-danger botonguardar_modulorecsensorial" style="height: 38px;" id="boton_guardar_reconocimientofisicospdf"> --}}
-                                                                                                                <button type="submit" class="btn btn-danger" style="height: 38px;" id="boton_guardar_reconocimientofisicospdf">
-                                                                                                                    Guardar <i class="fa fa-cloud-upload"></i>
-                                                                                                                </button>
-                                                                                                            </td>
-                                                                                                            <td >
-                                                                                                               
-                                                                                                            </td>
+                                        <div class="form-group">
+                                            <label> Cargar excel de trabajadores totales del centro de trabajo *</label>
+                                            <div class="fileinput fileinput-new input-group" data-provides="fileinput">
+                                                <div class="form-control" data-trigger="fileinput" id="input_file_excel_documento_trabajadores">
+                                                    <i class="fa fa-file fileinput-exists"></i>
+                                                    <span class="fileinput-filename"></span>
+                                                </div>
+                                                <span class="input-group-addon btn btn-secondary btn-file">
+                                                    <span class="fileinput-new">Seleccione</span>
+                                                    <span class="fileinput-exists">Cambiar</span>
+                                                    <input type="file" accept=".xls,.xlsx" name="excelTrabajadores" id="excelTrabajadores" required>
+                                                </span>
+                                                <a href="#" class="input-group-addon btn btn-secondary fileinput-exists" data-dismiss="fileinput">Quitar</a>
+                                            </div>
+                                        </div>
+                                        <div class="row mx-2 mb-2" id="alertaVerificacion" style="display:none">
+                                            <p class="text-danger"><i class="fa fa-info-circle" aria-hidden="true"></i> Por favor, asegúrese de que el nombre de las Áreas y/o categorías a insertar corresponda con las que están cargadas en el Software. </p>
+                                        </div> 
                                                                         
-                                                                                                        </tr>
-                                                                                                    </tbody>
-                                                                                                </table>
-                                                                                            </form>
-                                                                    
-                                                                            @endif
-                                                                        </div>
-
-                                                                        
-
+                        </div>
                     </div>
                 </div>
                 <div class="modal-footer" style="display: flex; justify-content: space-between;">
-                <button type="submit" class="btn btn-primary" style="height: 38px;" id="boton_obtener_muestra">
-                                                                                                                    Obtener muestra <i class="fa fa-random"></i>
-                                                                                                                </button>
+                <div class="custom-control custom-checkbox">
+                    <input type="checkbox" class="custom-control-input" id="RECPSICOTRABAJADOR_MUESTRA" name="RECPSICOTRABAJADOR_MUESTRA">
+                    <label class="custom-control-label" for="RECPSICOTRABAJADOR_MUESTRA">Obtener muestra </label>
+                </div>    
                     <div>
                         <button type="button" class="btn btn-default waves-effect" data-dismiss="modal">Cerrar</button>
                         @if(auth()->user()->hasRoles(['Superusuario', 'Administrador', 'Coordinador','Psicólogo']))
-                        <button type="submit" class="btn btn-danger waves-effect waves-light botonguardar_modulorecsensorial" id="boton_guardar_categoria">
+                        <button type="submit" class="btn btn-danger waves-effect waves-light botonguardar_modulorecsensorial" id="boton_cargarTrabajadores">
                             Guardar <i class="fa fa-save"></i>
                         </button>
                         @endif
@@ -2322,7 +2362,7 @@
                     <div>
                         <button type="button" class="btn btn-default waves-effect" data-dismiss="modal">Cerrar</button>
                         @if(auth()->user()->hasRoles(['Superusuario', 'Administrador', 'Coordinador','Psicólogo']))
-                        <button type="submit" class="btn btn-danger waves-effect waves-light botonguardar_modulorecsensorial" id="boton_guardar_categoria">
+                        <button type="submit" class="btn btn-danger waves-effect waves-light botonguardar_modulorecsensorial" id="boton_cargarMuestra">
                             Guardar <i class="fa fa-save"></i>
                         </button>
                         @endif
@@ -3321,155 +3361,6 @@
 <!-- /MODALES RECONOCIMIENTO SENSORIAL -->
 <!-- ============================================================== -->
 
-
-<!-- ============================================================== -->
-<!-- MODALES QUÍMICOS -->
-<!-- ============================================================== -->
-
-<div id="modal_inventariosustancia" class="modal fade bs-example-modal-lg" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" style="display: none;">
-    {{-- <div class="modal-dialog modal-lg" style="border: 0px #f00 solid; min-width: 90%!important;"> --}}
-    <div class="modal-dialog modal-lg" style="min-width: 1200px!important;">
-        <div class="modal-content">
-            <form enctype="multipart/form-data" method="post" name="form_inventariosustancia" id="form_inventariosustancia">
-                <div class="modal-header">
-                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
-                    <h4 class="modal-title">Inventario de sustancias químicas por área</h4>
-                </div>
-                <div class="modal-body">
-                    {!! csrf_field() !!}
-                    <div class="row">
-                        <div class="col-12">
-                            <input type="hidden" class="form-control" id="sustanciaarea_id" name="sustanciaarea_id" value="0">
-                            <input type="hidden" class="form-control" id="sustancia_recsensorial_id" name="recsensorial_id" value="0">
-                        </div>
-                        <div class="col-12">
-                            <div class="form-group" style="padding: 0px; margin-bottom: 10px;">
-                                <label>Área *</label>
-                                <select class="custom-select form-control" id="sustancia_recsensorialarea_id" name="recsensorialarea_id" required >
-                                    <option value=""></option>
-                                </select>
-                            </div>
-                        </div>
-                        @if(auth()->user()->hasRoles(['Superusuario']))
-                        <div class="col-12 d-none">
-                            <ol class="breadcrumb m-b-10">
-                                <button type="button" class="btn btn-secondary waves-effect waves-light botonnuevo_modulorecsensorial" data-toggle="tooltip" title="Agregar sustancia a la lista" id="boton_nuevasustancia_inventario">
-                                    <span class="btn-label"><i class="fa fa-plus"></i></span> Sustancia
-                                </button>
-                            </ol>
-                        </div>
-                        @endif
-                    </div>
-                    <div class="row">
-                        <div class="col-12">
-                            <table class="table table-hover stylish-table" width="100%" id="tabla_catsustancias">
-                                <thead style="display: block; width: 100%!important;">
-                                    <tr>
-                                        <th style="width: 52px!important;">No.</th>
-                                        <th style="width: 680px!important;">Sustancia química y/o producto</th>
-                                        <th style="width: 180px!important;"></th>
-                                        <th style="width: 180px!important;"></th>
-                                        <th style="width: auto!important;">Eliminar</th>
-                                    </tr>
-                                </thead>
-                                <tbody style="display: block; width: 100%; height: 300px; max-height: 300px; overflow-y: auto; overflow-x: hidden;"></tbody>
-                            </table>
-                        </div>
-                    </div>
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-default waves-effect" data-dismiss="modal">Cerrar</button>
-                    @if(auth()->user()->hasRoles(['Superusuario', 'Administrador', 'Coordinador','Psicólogo']))
-                    <button type="submit" class="btn btn-danger waves-effect waves-light botonguardar_modulorecsensorial" id="boton_guardar_sustancia">
-                        Guardar <i class="fa fa-save"></i>
-                    </button>
-                    @endif
-                </div>
-            </form>
-        </div>
-    </div>
-</div>
-
-
-
-<div id="modal_grupos" class="modal fade bs-example-modal-lg" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" style="display: none;">
-
-    <div class="modal-dialog modal-lg" style="min-width: 1200px!important;">
-        <div class="modal-content">
-            <form enctype="multipart/form-data" method="post" name="form_grupos" id="form_grupos">
-                <div class="modal-header">
-                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
-                    <h4 class="modal-title">Grupos de exposición homogénea</h4>
-                </div>
-                <div class="modal-body">
-                    {!! csrf_field() !!}
-                    <div class="row">
-                        <div class="col-12">
-                            <input type="hidden" class="form-control" id="NUEVO_GRUPO" name="NUEVO" value="0">
-                            <input type="hidden" class="form-control" id="GRUPO_RECSENSORIAL_ID" name="RECSENSORIAL_ID" value="0">
-                            <input type="hidden" class="form-control" id="GRUPO_EDITAR" name="GRUPO_EDITAR" value="">
-                        </div>
-                        <div class="col-12 mb-3">
-                            <div class="row">
-                                <div class="col-12 p-2 d-flex justify-content-center">
-                                    <label class="labelGrupo"><b style="font-size: 19px;">Clasificación del grupo *</b></label>
-                                    <div class="form-check mx-4">
-                                        <input class="form-check-input" type="radio" name="TIPO_CLASIFICACION" id="TIPO_CLASIFICACION_ROMANOS" value="1" required>
-                                        <label class="form-check-label" for="TIPO_CLASIFICACION_ROMANOS">
-                                            Num. Romanos
-                                        </label>
-                                    </div>
-                                    <div class="form-check mx-4">
-                                        <input class="form-check-input" type="radio" name="TIPO_CLASIFICACION" id="TIPO_CLASIFICACION_LETRAS" value="2" required>
-                                        <label class="form-check-label" for="TIPO_CLASIFICACION_LETRAS">
-                                            Letras
-                                        </label>
-                                    </div>
-                                </div>
-
-                                <div class="col-12 text-center">
-                                    <input type="text" class="form-control text-center" id="CLASIFICACION_GRUPO" name="CLASIFICACION_GRUPO" readonly>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col-12">
-                            <ol class="breadcrumb m-b-10 text-center">
-                                <h4 class="text-center text-light">Grupos de exposición homogénea</h4>
-                            </ol>
-                        </div>
-                    </div>
-                    <div class="row">
-                        <div class="col-12">
-                            <table class="table table-hover stylish-table" width="100%" id="tabla_grupos">
-                                <thead style="display: block; width: 100%!important;">
-                                    <tr>
-                                        <th style="width: 720px!important;">Componente de la mezcla</th>
-                                        <th style="width: 200px!important;">Numero de trabajadores</th>
-                                        <th style="width: 200px!important;">No. trabajadores expuestos</th>
-                                    </tr>
-                                </thead>
-                                <tbody style="display: block; width: 100%; height: 300px; max-height: 300px; overflow-y: auto; overflow-x: hidden;"></tbody>
-                            </table>
-                        </div>
-                    </div>
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-default waves-effect" data-dismiss="modal">Cerrar</button>
-                    @if(auth()->user()->hasRoles(['Superusuario', 'Administrador', 'Coordinador','Psicólogo']))
-                    <button type="submit" class="btn btn-danger waves-effect waves-light botonguardar_modulorecsensorial" id="boton_guardar_grupos">
-                        Guardar <i class="fa fa-save"></i>
-                    </button>
-                    @endif
-                </div>
-            </form>
-        </div>
-    </div>
-</div>
-<!-- ============================================================== -->
-<!-- /MODALES QUÍMICOS -->
-<!-- ============================================================== -->
-
-
 <!-- ============================================================== -->
 <!-- MODAL-EVIDENCIA-FOTOS -->
 <!-- ============================================================== -->
@@ -3484,86 +3375,6 @@
         padding: 0px 0px 3px 0px !important;
     }
 </style>
-<div id="modal_evidencia_fotosquimicos" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" style="display: none;">
-    <div class="modal-dialog modal-lg" style="min-width: 900px!important;">
-        <form method="post" enctype="multipart/form-data" name="form_evidencia_fotosquimicos" id="form_evidencia_fotosquimicos">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
-                    <h4 class="modal-title">Fotos evidencia</h4>
-                </div>
-                <div class="modal-body">
-                    <div class="row">
-                        <div class="col-12">
-                            {!! csrf_field() !!}
-                        </div>
-                    </div>
-                    <div class="row">
-                        <div class="col-7">
-                            <div class="form-group">
-                                <label> Foto evidencia / Plano *</label>
-                                <style type="text/css" media="screen">
-                                    .dropify-wrapper {
-                                        height: 292px !important;
-                                        /*tamaño estatico del campo foto*/
-                                    }
-                                </style>
-                                <input type="file" class="dropify" accept="image/jpeg,image/x-png" id="inputevidenciafotoquimicos" name="inputevidenciafoto" data-allowed-file-extensions="jpg png JPG PNG" data-height="296" data-default-file="" onchange="redimencionar_fotoevidenciaquimicos();" required>
-                            </div>
-                        </div>
-                        <div class="col-5">
-                            <div class="row">
-                                <div class="col-12">
-                                    <div class="form-group">
-                                        <label>Tipo de evidencia *</label>
-                                        <select class="custom-select form-control" id="recsensorialevidenciasquimicos_tipo" name="recsensorialevidencias_tipo" onchange="descripcion_fotoquimicos()" required>
-                                            <option value=""></option>
-                                            <option value="1">Foto evidencia</option>
-                                            <option value="2">Plano</option>
-                                        </select>
-                                    </div>
-                                </div>
-                                <div class="col-12">
-                                    <div class="form-group">
-                                        <label>Área *</label>
-                                        <select class="custom-select form-control" id="recsensorialevidenciasquimicos_recsensorialarea_id" name="recsensorialarea_id" onchange="descripcion_fotoquimicos()" required>
-                                            <option value=""></option>
-                                           
-                                            
-                                        </select>
-                                    </div>
-                                </div>
-                                <div class="col-12">
-                                    <div class="form-group">
-                                        <label>Descripción de la (foto / plano) en el reporte</label>
-                                        <textarea class="form-control" rows="6" id="recsensorialevidenciasquimicos_descripcion" name="recsensorialevidencias_descripcion" required></textarea>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="row">
-                        <div class="col-12" style="display: none;" id="mensaje_cargando_fotos">
-                            <p class="text-info" style="text-align: center; margin: 0px; padding: 0px;"><i class="fa fa-spin fa-spinner"></i> Cargando fotos, espere un momento por favor...</p>
-                        </div>
-                    </div>
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-default waves-effect" data-dismiss="modal">Cerrar</button>
-                    @if(auth()->user()->hasRoles(['Superusuario', 'Administrador', 'Coordinador','Psicólogo']))
-                    <button type="submit" class="btn btn-danger" id="boton_guardar_evidencia_fotosquimicos">
-                        Guardar <i class="fa fa-save"></i>
-                    </button>
-                    @endif
-                </div>
-            </div>
-        </form>
-    </div>
-</div>
-<!-- ============================================================== -->
-<!-- MODAL-EVIDENCIA-FOTOS -->
-<!-- ============================================================== -->
-
 
 <!-- ============================================================== -->
 <!-- MODAL AGENTE CLIENTE -->

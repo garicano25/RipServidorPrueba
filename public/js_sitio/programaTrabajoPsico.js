@@ -399,7 +399,7 @@ function consulta_proveedores(proyecto_id, recsensorial_id, recsensorial_alcance
 	$.ajax({
 		type: "GET",
 		dataType: "json",
-		url: "/proyectoproveedoreslista/"+proyecto_id+"/"+recsensorial_id+"/"+recsensorial_alcancefisico+"/"+recsensorial_alcancequimico,
+		url: "/proyectoproveedoreslista/"+proyecto_id+"/"+recsensorial_id,
 		data:{},
 		cache: false,
 		success:function(dato)
@@ -515,25 +515,48 @@ $("#boton_proyectoproveedornuevapartida").click(function()
 {
 	proveedores_asignados += 1;
 
-    $("#tabla_proyectoproveedores tbody").append( '<tr>'+
-    													'<td>'+proveedores_asignados+'</td>'+
-    													'<td class="eliminar"><button type="button" class="btn btn-danger btn-circle"><i class="fa fa-trash"></i></button></td>'+
-		                                                '<td>'+
-		                                                	'<input type="checkbox" name="agenteadicional_activo[]" checked/>'+
-															'<select class="custom-select form-control" id="adicional_'+proveedores_asignados+'_proveedor" name="proveedoradicional_id[]" required onchange="mostrar_proveedoralcances(this, '+proveedores_asignados+');">'+
-																proveedores_lista+
-															'</select>'+
-										                '</td>'+
-		                                                '<td colspan="3">'+
-		                                                	'<select class="custom-select form-control" id="adicional_'+proveedores_asignados+'_alcance" name="agenteadicional_id[]" required onchange="llenarcampos_proveedoralcances(this, '+proveedores_asignados+');">'+
-																'<option value="">&nbsp;</option>'+
-															'</select>'+
-															'<input type="hidden" class="form-control" id="adicional_'+proveedores_asignados+'_tipo" name="agenteadicional_tipo[]" value="">'+
+    // $("#tabla_proyectoproveedores tbody").append( '<tr>'+
+    // 													'<td>'+proveedores_asignados+'</td>'+
+    // 													'<td class="eliminar"><button type="button" class="btn btn-danger btn-circle"><i class="fa fa-trash"></i></button></td>'+
+	// 	                                                '<td>'+
+	// 	                                                	'<input type="checkbox" name="agenteadicional_activo[]" checked/>'+
+	// 														'<select class="custom-select form-control" id="adicional_'+proveedores_asignados+'_proveedor" name="proveedoradicional_id[]" required onchange="mostrar_proveedoralcances(this, '+proveedores_asignados+');">'+
+	// 															proveedores_lista+
+	// 														'</select>'+
+	// 									                '</td>'+
+	// 	                                                '<td colspan="3">'+
+	// 	                                                	'<select class="custom-select form-control" id="adicional_'+proveedores_asignados+'_alcance" name="agenteadicional_id[]" required onchange="llenarcampos_proveedoralcances(this, '+proveedores_asignados+');">'+
+	// 															'<option value="">&nbsp;</option>'+
+	// 														'</select>'+
+	// 														'<input type="hidden" class="form-control" id="adicional_'+proveedores_asignados+'_tipo" name="agenteadicional_tipo[]" value="">'+
 		                                                
-		                                                '<td>'+
-		                                                	'<input type="text" class="form-control" name="agenteadicional_obs[]" value="" required>'+
-		                                                '</td>'+
-		                                            '</tr>');
+	// 	                                                '<td>'+
+	// 	                                                	'<input type="text" class="form-control" name="agenteadicional_obs[]" value="" required>'+
+	// 	                                                '</td>'+
+	// 	                                            '</tr>');
+
+
+	$("#tabla_proyectoproveedores tbody").append(
+		'<tr>' +
+			'<td>' + proveedores_asignados + '</td>' +
+			'<td class="eliminar"><button type="button" class="btn btn-danger btn-circle"><i class="fa fa-trash"></i></button></td>'+
+			'<td>' +
+				'<select class="custom-select form-control" id="adicional_' + proveedores_asignados + '_proveedor" name="proveedoradicional_id[]" required onchange="mostrar_proveedoralcances(this, ' + proveedores_asignados + ');">' +
+				'<option value="1">Online</option>'+
+				'<option value="2">Presencial</option>' +
+				'</select>' +
+			'</td>' +
+			'<td>' +
+				'<input type="text" class="form-control" id="adicional_tipo_' + proveedores_asignados + '" name="agenteadicional_tipo[]">' +
+			'</td>' +
+			'<td>' +
+				'<input type="text" class="form-control" name="agenteadicional_obs[]" value="" required>' +
+			'</td>' +
+		'</tr>'
+	);
+	
+
+													
 });
 
 
