@@ -1692,6 +1692,17 @@ Route::get('reportebeiareascategorias/{proyecto_id}/{reportebei_id}/{area_id}/{a
 
 Route::get('reporteiluminacionareascategoriasconsultar/{area_id}/{categoria_id}/{reporteiluminacion_id}/{areas_poe}', ['as' => 'reporteiluminacion.reporteiluminacionareascategoriasconsultar', 'uses' => 'reportes\reporteiluminacionController@reporteiluminacionareascategoriasconsultar']);
 
+Route::get('reportebeitablarecomendaciones/{proyecto_id}/{reportebei_id}/{agente_nombre}', ['as' => 'reportebei.reportebeitablarecomendaciones', 'uses' => 'reportes\reportebeiController@reportebeitablarecomendaciones']);
+
+Route::get('reportebeitablainformeresultados/{proyecto_id}/{reportebei_id}/{agente_nombre}', ['as' => 'reportebei.reportebeitablainformeresultados', 'uses' => 'reportes\reportebeiController@reportebeitablainformeresultados']);
+
+Route::get('reportebeitablaequipoutilizado/{proyecto_id}/{reportebei_id}/{agente_nombre}', ['as' => 'reportebei.reportebeitablaequipoutilizado', 'uses' => 'reportes\reportebeiController@reportebeitablaequipoutilizado']);
+
+
+Route::get('reportebeiepptabla/{proyecto_id}/{reportebei_id}', ['as' => 'reportebei.reportebeiepptabla', 'uses' => 'reportes\reportebeiController@reportebeiepptabla']);
+
+Route::get('reportebeieppeliminar/{epp_id}', ['as' => 'reportebei.reportebeieppeliminar', 'uses' => 'reportes\reportebeiController@reportebeieppeliminar']);
+
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 //////////////////////////////////////////////////EXTERNO////////////////////////////////////////////////////
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////

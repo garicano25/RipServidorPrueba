@@ -2856,7 +2856,19 @@ $('#tabla_reporte_area tbody').on('click', 'td.editar', function()
 	$('#reportearea_orden').val(row.data().reportearea_orden);
 	$('#reportebeiarea_porcientooperacion').val(row.data().reportebeiarea_porcientooperacion);
 	
+	//Validamos el check de que si aplica o no aplica
+	if (row.data().aplica_bei == 1) {
+		$('#aplica_bei_si').prop('checked', true);
+		$('#aplica_bei_no').prop('checked', false);
 
+	} else {
+
+		$('#aplica_bei_si').prop('checked', false);
+		$('#aplica_bei_no').prop('checked', true);
+		
+	}
+
+	//Validamos el area poe para ver si aplica o no aplica
 	if (areas_poe == 1)
 	{
 		$('#reportearea_instalacion').attr('required', false);
@@ -2868,8 +2880,7 @@ $('#tabla_reporte_area tbody').on('click', 'td.editar', function()
 		$('#reportearea_orden').attr('required', false);
 		$('#reportearea_orden').attr('disabled', true);
 
-		$('#reportebeiarea_porcientooperacion').attr('required', false);
-		$('#reportebeiarea_porcientooperacion').attr('disabled', true);
+		
 	}
 	else
 	{
@@ -2882,8 +2893,7 @@ $('#tabla_reporte_area tbody').on('click', 'td.editar', function()
 		$('#reportearea_orden').attr('disabled', false);
 		$('#reportearea_orden').attr('required', true);
 
-		$('#reportebeiarea_porcientooperacion').attr('disabled', false);
-		$('#reportebeiarea_porcientooperacion').attr('required', true);
+		
 	}
 
 
@@ -3331,6 +3341,136 @@ function tabla_reporte_6_1(tbody) {
 //============================================
 // EQUIPO DE PROTECCION PERSONAL (EPP)
 
+$(document).ready(function()
+{
+	setTimeout(function()
+	{
+		tabla_reporte_epp(proyecto.id, reportebei_id);
+	}, 7000);
+});
+
+
+var datatable_epp = null;
+function tabla_reporte_epp(proyecto_id, reportebei_id)
+{
+	try 
+	{
+		var ruta = "/reportebeiepptabla/"+proyecto_id+"/"+reportebei_id;
+
+		if (datatable_epp != null)
+		{
+			datatable_epp.clear().draw();
+			datatable_epp.ajax.url(ruta).load();
+		}
+		else
+		{
+			var numeroejecucion = 1;
+			datatable_epp = $('#tabla_reporte_epp').DataTable({
+				ajax: {
+					url: ruta,
+					type: "get",
+					cache: false,
+					dataType: "json",
+					data: {},
+					dataSrc: function (json)
+					{
+						menureporte_estado("menureporte_5_4", parseInt(json.total));
+
+						return json.data;
+					},
+					error: function (xhr, error, code)
+					{						
+						console.log('error en datatable_epp '+code);
+						if (numeroejecucion <= 1)
+						{
+							tabla_reporte_epp(proyecto_id, reportebei_id)
+							numeroejecucion += 1;
+						}
+					}
+				},
+				columns: [
+					// {
+					//     data: "id" 
+					// },
+					{
+						data: "numero_registro",
+						defaultContent: "-",
+						// className: '',
+						orderable: false,
+					},
+					{
+						data: "reportebeiepp_partecuerpo",
+						defaultContent: "-",
+						orderable: false,
+					},
+					{
+						data: "reportebeiepp_equipo",
+						defaultContent: "-",
+						orderable: false,
+					},
+					{
+						data: "boton_editar",
+						defaultContent: "-",
+						className: 'editar',
+						orderable: false,
+					},
+					{
+						data: "boton_eliminar",
+						defaultContent: "-",
+						orderable: false,
+					}
+				],
+				lengthMenu: [[20, 50, 100, -1], [20, 50, 100, "Todos"]],
+				// rowsGroup: [1, 2, 3], //agrupar filas
+				// order: [[ 0, "ASC" ]],
+				ordering: false,
+				processing: true,
+				searching: false,
+				paging: false,
+				language: {
+					lengthMenu: "Mostrar _MENU_ Registros",
+					zeroRecords: "No se encontraron registros",
+					info: "Página _PAGE_ de _PAGES_ (Total _TOTAL_ registros)",
+					infoEmpty: "No se encontraron registros",
+					infoFiltered: "(Filtrado de _MAX_ registros)",
+					emptyTable: "No hay datos disponibles en la tabla",
+					loadingRecords: "Cargando datos....",
+					processing: "Procesando <i class='fa fa-spin fa-spinner fa-3x'></i>",
+					search: "Buscar",
+					paginate: {
+						first: "Primera",
+						last: "Ultima",
+						next: "Siguiente",
+						previous: "Anterior"
+					}
+				},
+				rowCallback: function(row, data, index)
+				{
+					// console.log(index+' - '+data.reporteiluminacionpuntos_nopunto);
+
+					// if(data.reporteiluminacionpuntos_nopunto == 2)
+					// {
+					// 	$(row).find('td:eq(12)').css('background', 'red');
+					// 	$(row).find('td:eq(12)').css('color', 'white');
+					// }
+
+					// $(row).find('td:eq(15)').css('background', ''+data.fr_resultado_color);
+					// $(row).find('td:eq(15)').css('color', '#FFFFFF');
+				},
+			});
+		}
+
+		// Tooltip en DataTable
+		datatable_epp.on('draw', function ()
+		{
+			$('[data-toggle="tooltip"]').tooltip();
+		});
+	}
+	catch (exception)
+	{
+		tabla_reporte_epp(proyecto_id, reportebei_id);
+    }
+}
 
 $("#boton_reporte_nuevoepp").click(function () {
 	$('#form_modal_epp').each(function () {
@@ -3485,7 +3625,7 @@ $('#tabla_reporte_epp tbody').on('click', 'td>button.eliminar', function () {
 								cache: false,
 								success: function (dato) {
 									// Actualizar tabla
-									tabla_reporte_epp(proyecto.id, reporteregistro_id);
+									tabla_reporte_epp(proyecto.id, reportebei_id);
 
 									// mensaje
 									swal({
@@ -3577,26 +3717,25 @@ $("#botonguardar_modal_epp").click(function () {
 					$('#form_modal_epp').ajaxForm({
 						dataType: 'json',
 						type: 'POST',
-						url: '' + ruta_storage_guardar,
+						url: '/reportebei',
 						data: {
-							opcion: 12,
+							opcion: 15,
 							proyecto_id: proyecto.id,
 							agente_id: agente_id,
 							agente_nombre: agente_nombre,
-							reporteregistro_id: reporteregistro_id,
-							catactivo_id: $("#reporte_catactivo_id").val(),
+							reportebei_id: reportebei_id,
 							reporte_instalacion: $("#reporte_instalacion").val(),
 
 						},
 						resetForm: false,
 						success: function (dato) {
 							// Actualizar ID reporte						
-							reporteregistro_id = dato.reporteregistro_id;
+							reportebei_id = dato.reportebei_id;
 
-							tabla_reporte_epp(proyecto.id, reporteregistro_id);
+							tabla_reporte_epp(proyecto.id, reportebei_id);
 
 							// Actualizar tabla
-							// tabla_reporte_areas(proyecto.id, reporteregistro_id);
+							// tabla_reporte_areas(proyecto.id, reportebei_id);
 
 							// mensaje
 							swal({
@@ -3661,3 +3800,1477 @@ $("#botonguardar_modal_epp").click(function () {
 	}
 });
 
+//=================================================
+// CONCLUSION
+
+
+$("#botonguardar_reporte_conclusion").click(function()
+{
+	// valida campos vacios
+	var valida = this.form.checkValidity();
+	if (valida)
+	{
+		swal({
+			title: "¡Confirme que desea guardar!",
+			text: "Conclusión",
+			type: "warning",
+			showCancelButton: true,
+			confirmButtonColor: "#DD6B55",
+			confirmButtonText: "Guardar!",
+			cancelButtonText: "Cancelar!",
+			closeOnConfirm: false,
+			closeOnCancel: false
+		},
+		function(isConfirm)
+		{
+			if (isConfirm)
+			{
+				// cerrar msj confirmacion
+				swal.close();
+
+				// enviar datos
+				$('#form_reporte_conclusion').ajaxForm({
+					dataType: 'json',
+					type: 'POST',
+					url: '/reportebei',
+					data: {
+						opcion: 20,
+						proyecto_id: proyecto.id,
+						agente_id: agente_id,
+						agente_nombre: agente_nombre,
+						reportebei_id: reportebei_id,
+						reportebei_instalacion: $("#reportebei_instalacion").val(),
+					},
+					resetForm: false,
+					success: function(dato)
+					{
+						// Actualizar ID reporte						
+						reportebei_id = dato.reportebei_id;
+
+						menureporte_estado("menureporte_8", 1);
+
+						tabla_reporte_revisiones(proyecto.id);
+
+						// mensaje
+						swal({
+							title: "Correcto",
+							text: ""+dato.msj,
+							type: "success", // warning, error, success, info
+							buttons: {
+								visible: false, // true , false
+							},
+							timer: 1500,
+							showConfirmButton: false
+						});
+
+						// actualiza boton
+						$('#botonguardar_reporte_conclusion').html('Guardar conclusión <i class="fa fa-save"></i>');
+						$('#botonguardar_reporte_conclusion').attr('disabled', false);
+					},
+					beforeSend: function()
+					{
+						$('#botonguardar_reporte_conclusion').html('Guardando conclusión <i class="fa fa-spin fa-spinner"></i>');
+						$('#botonguardar_reporte_conclusion').attr('disabled', true);
+					},
+					error: function(dato)
+					{
+						// actualiza boton
+						$('#botonguardar_reporte_conclusion').html('Guardar conclusión <i class="fa fa-save"></i>');
+						$('#botonguardar_reporte_conclusion').attr('disabled', false);
+
+						// mensaje
+						swal({
+							title: "Error",
+							text: ""+dato.msj,
+							type: "error", // warning, error, success, info
+							buttons: {
+								visible: false, // true , false
+							},
+							timer: 1500,
+							showConfirmButton: false
+						});
+						return false;
+					}
+				}).submit();
+				return false;
+			}
+			else 
+			{
+				// mensaje
+				swal({
+					title: "Cancelado",
+					text: "Acción cancelada",
+					type: "error", // warning, error, success, info
+					buttons: {
+						visible: false, // true , false
+					},
+					timer: 500,
+					showConfirmButton: false
+				});
+			}
+		});
+		return false;
+	}
+});
+
+
+//=================================================
+// REPONSABLES
+
+$("#botonguardar_reporte_responsablesinforme").click(function()
+{
+	// valida campos vacios
+	var valida = this.form.checkValidity();
+	if (valida)
+	{
+		swal({
+			title: "¡Confirme que desea guardar!",
+			text: "Responsables del informe",
+			type: "warning",
+			showCancelButton: true,
+			confirmButtonColor: "#DD6B55",
+			confirmButtonText: "Guardar!",
+			cancelButtonText: "Cancelar!",
+			closeOnConfirm: false,
+			closeOnCancel: false
+		},
+		function(isConfirm)
+		{
+			if (isConfirm)
+			{
+				// cerrar msj confirmacion
+				swal.close();
+
+				// enviar datos
+				$('#form_reporte_responsablesinforme').ajaxForm({
+					dataType: 'json',
+					type: 'POST',
+					url: '/reportebei',
+					data: {
+						opcion: 40,
+						proyecto_id: proyecto.id,
+						agente_id: agente_id,
+						agente_nombre: agente_nombre,
+						reportebei_id: reportebei_id,
+						reportebei_instalacion: $("#reportebei_instalacion").val(),
+					},
+					resetForm: false,
+					success: function(dato)
+					{
+						// Actualizar ID reporte						
+						reportebei_id = dato.reportebei_id;
+
+						menureporte_estado("menureporte_10", 1);
+
+						tabla_reporte_revisiones(proyecto.id);
+
+						$('#boton_descargarresponsabledoc1').css('display', 'block');
+						$('#boton_descargarresponsabledoc2').css('display', 'block');
+
+						// Carpeta ubicacion documentos historial
+						$('#reportebei_carpetadocumentoshistorial').val('');
+
+						// mensaje
+						swal({
+							title: "Correcto",
+							text: ""+dato.msj,
+							type: "success", // warning, error, success, info
+							buttons: {
+								visible: false, // true , false
+							},
+							timer: 1500,
+							showConfirmButton: false
+						});
+
+						// actualiza boton
+						$('#botonguardar_reporte_responsablesinforme').html('Guardar responsables del informe <i class="fa fa-save"></i>');
+						$('#botonguardar_reporte_responsablesinforme').attr('disabled', false);
+					},
+					beforeSend: function()
+					{
+						$('#botonguardar_reporte_responsablesinforme').html('Guardando responsables del informe <i class="fa fa-spin fa-spinner"></i>');
+						$('#botonguardar_reporte_responsablesinforme').attr('disabled', true);
+					},
+					error: function(dato)
+					{
+						// actualiza boton
+						$('#botonguardar_reporte_responsablesinforme').html('Guardar responsables del informe <i class="fa fa-save"></i>');
+						$('#botonguardar_reporte_responsablesinforme').attr('disabled', false);
+
+						// mensaje
+						swal({
+							title: "Error",
+							text: ""+dato.msj,
+							type: "error", // warning, error, success, info
+							buttons: {
+								visible: false, // true , false
+							},
+							timer: 1500,
+							showConfirmButton: false
+						});
+						return false;
+					}
+				}).submit();
+				return false;
+			}
+			else 
+			{
+				// mensaje
+				swal({
+					title: "Cancelado",
+					text: "Acción cancelada",
+					type: "error", // warning, error, success, info
+					buttons: {
+						visible: false, // true , false
+					},
+					timer: 500,
+					showConfirmButton: false
+				});
+			}
+		});
+		return false;
+	}
+});
+
+
+$("#boton_descargarresponsabledoc1").click(function()
+{
+	window.open('/reportebeiresponsabledocumento/'+reportebei_id+'/'+1+'/'+1);
+});
+
+
+$("#boton_descargarresponsabledoc2").click(function()
+{
+	window.open('/reportebeiresponsabledocumento/'+reportebei_id+'/'+2+'/'+1);
+});
+
+
+//=================================================
+// RECOMENDACIONES
+
+
+$(document).ready(function()
+{
+	setTimeout(function()
+	{
+		tabla_reporte_recomendaciones(proyecto.id, reportebei_id, agente_nombre);
+	}, 6500);
+});
+
+
+var datatable_recomendaciones = null;
+function tabla_reporte_recomendaciones(proyecto_id, reportebei_id, agente_nombre)
+{
+	try 
+	{
+		var ruta = "/reportebeitablarecomendaciones/"+proyecto_id+"/"+reportebei_id+"/"+agente_nombre;
+
+		if (datatable_recomendaciones != null)
+		{
+			datatable_recomendaciones.clear().draw();
+			datatable_recomendaciones.ajax.url(ruta).load();
+		}
+		else
+		{
+			var numeroejecucion = 1;
+			datatable_recomendaciones = $('#tabla_reporte_recomendaciones').DataTable({
+				"ajax": {
+					"url": ruta,
+					"type": "get",
+					"cache": false,
+					dataType: "json",
+					data: {},
+					dataSrc: function (json)
+					{
+						if (parseInt(json.total) > 0)
+						{
+							menureporte_estado("menureporte_9", 1);
+						}
+
+						// alert("Done! "+json.msj);
+						return json.data;
+					},
+					error: function (xhr, error, code)
+					{
+						// console.log(xhr); console.log(code);
+						console.log('error en datatable_recomendaciones');
+						if (numeroejecucion <= 1)
+						{
+							tabla_reporte_recomendaciones(proyecto_id, reportebei_id, agente_nombre);
+							numeroejecucion += 1;
+						}
+					},
+					"data": {}
+				},
+				"columns": [
+					// {
+					//     "data": "id" 
+					// },
+					{
+						"data": "numero_registro",
+						"defaultContent": "-"
+					},
+					{
+						"data": "checkbox",
+						"defaultContent": "-"
+					},
+					{
+						"data": "descripcion",
+						"defaultContent": "-"
+					}
+				],
+				"lengthMenu": [[20, 50, 100, -1], [20, 50, 100, "Todos"]],
+				// "rowsGroup": [0, 1], //agrupar filas
+				"order": [[ 0, "ASC" ]],
+				"ordering": false,
+				"processing": true,
+				"searching": false,
+				"paging": false,
+				"language": {
+					"lengthMenu": "Mostrar _MENU_ Registros",
+					"zeroRecords": "No se encontraron registros",
+					"info": "Página _PAGE_ de _PAGES_ (Total _TOTAL_ registros)",
+					"infoEmpty": "No se encontraron registros",
+					"infoFiltered": "(Filtrado de _MAX_ registros)",
+					"emptyTable": "No hay datos disponibles en la tabla",
+					"loadingRecords": "Cargando datos....",
+					"processing": "Procesando <i class='fa fa-spin fa-spinner fa-3x'></i>",
+					"search": "Buscar",
+					"paginate": {
+						"first": "Primera",
+						"last": "Ultima",
+						"next": "Siguiente",
+						"previous": "Anterior"
+					}
+				}
+		    });
+		}
+
+		// Tooltip en DataTable
+		datatable_recomendaciones.on('draw', function ()
+		{
+			$('[data-toggle="tooltip"]').tooltip();
+		});
+	}
+	catch (exception)
+	{
+		tabla_reporte_recomendaciones(proyecto_id, reportebei_id, agente_nombre);
+    }
+}
+
+
+$("#boton_reporte_nuevarecomendacion").click(function()
+{
+    $("#tabla_reporte_recomendaciones tbody").append( '<tr>'+
+															'<td>0</td>'+
+															'<td style="text-align: center;">'+
+																'<input type="checkbox" class="recomendacionadicional_checkbox" name="recomendacionadicional_checkbox[]" value="0" checked/>'+
+																'<br><button type="button" class="btn btn-danger waves-effect btn-circle eliminar" data-toggle="tooltip" title="Eliminar recomendación"><i class="fa fa-trash fa-2x"></i></button>'+
+															'</td>'+
+															'<td>'+
+																'<div class="form-group">'+
+																	'<label>Tipo</label>'+
+																	'<select class="custom-select form-control" name="recomendacionadicional_tipo[]" required>'+
+																		'<option value=""></option>'+
+																		'<option value="Preventiva">Preventiva</option>'+
+																		'<option value="Correctiva">Correctiva</option>'+
+																	'</select>'+
+																'</div>'+
+																'<div class="form-group">'+
+																	'<label>Descripción</label>'+
+																	'<textarea  class="form-control" style="margin-bottom: 0px;" rows="5" name="recomendacionadicional_descripcion[]" required></textarea>'+
+																'</div>'+
+															'</td>'+
+														'</tr>');
+
+    var posicion = $("#tabla_reporte_recomendaciones > tbody > tr").eq((parseInt(document.getElementById("tabla_reporte_recomendaciones").rows.length) - 1) - 2).offset().top;
+    $('html, body').animate({
+        scrollTop: posicion
+    }, 1000);
+
+    $('[data-toggle="tooltip"]').tooltip();
+});
+
+
+function activa_recomendacion(checkbox)
+{
+	if (checkbox.checked)
+	{
+		$('#recomendacion_descripcion_'+checkbox.value).attr('readonly', false);
+		$('#recomendacion_descripcion_'+checkbox.value).attr('required', true);
+	}
+	else
+	{
+		$('#recomendacion_descripcion_'+checkbox.value).attr('required', false);
+		$('#recomendacion_descripcion_'+checkbox.value).attr('readonly', true);
+	}
+}
+
+
+$('#tabla_reporte_recomendaciones tbody').on('click', '.eliminar', function()
+{
+    // obtener fila tabla
+    var fila = $(this);
+    
+    // confirmar
+    swal({   
+        title: "¿Eliminar recomendación?",   
+        text: "de la lista de recomendaciones",   
+        type: "warning",   
+        showCancelButton: true,   
+        confirmButtonColor: "#DD6B55",   
+        confirmButtonText: "Eliminar!",   
+        cancelButtonText: "Cancelar!",   
+        closeOnConfirm: false,   
+        closeOnCancel: false 
+    }, function(isConfirm){   
+        if (isConfirm)
+        {
+        	// cerrar msj confirmacion
+			// swal.close();
+
+            var tr = fila.closest('tr');
+            fila.closest("tr").remove(); // eliminar fila TR
+
+            // mensaje
+            swal({
+                title: "Correcto",
+                 text: "Recomendación eliminada de la lista",
+                type: "success", // warning, error, success, info
+                buttons: {
+                    visible: false, // true , false
+                },
+                timer: 1500,
+                showConfirmButton: false
+            });
+        }
+        else 
+        {
+            // mensaje
+            swal({
+                title: "Cancelado",
+                text: "",
+                type: "error", // warning, error, success, info
+                buttons: {
+                    visible: false, // true , false
+                },
+                timer: 500,
+                showConfirmButton: false
+            });   
+        } 
+    });
+    return false;
+});
+
+
+$("#botonguardar_reporte_recomendaciones").click(function()
+{
+	// borrar campo filtro del DATATABLE
+	// datatable_recomendaciones.search("").draw();
+
+	// valida campos vacios
+	var seleccionados = 0;
+	$('.recomendacion_checkbox').each(function()
+	{
+		if (this.checked)
+		{
+			seleccionados += 1;
+		}
+	});
+
+	$('.recomendacionadicional_checkbox').each(function()
+	{
+		if (this.checked)
+		{
+			seleccionados += 1;
+		}
+	});
+
+
+	if (seleccionados > 0)
+	{
+		// valida campos vacios
+		var valida = this.form.checkValidity();
+		if (valida)
+		{
+			swal({
+				title: "¡Confirme que desea guardar!",
+				text: "Recomendaciones",
+				type: "warning",
+				showCancelButton: true,
+				confirmButtonColor: "#DD6B55",
+				confirmButtonText: "Guardar!",
+				cancelButtonText: "Cancelar!",
+				closeOnConfirm: false,
+				closeOnCancel: false
+			},
+			function(isConfirm)
+			{
+				if (isConfirm)
+				{
+					// cerrar msj confirmacion
+					swal.close();
+
+					// enviar datos
+					$('#form_reporte_recomendaciones').ajaxForm({
+						dataType: 'json',
+						type: 'POST',
+						url: '/reportebei',
+						data: {
+							opcion: 30,
+							proyecto_id: proyecto.id,
+							agente_id: agente_id,
+							agente_nombre: agente_nombre,
+							reportebei_id: reportebei_id,
+							reportebei_instalacion: $("#reportebei_instalacion").val(),
+						},
+						resetForm: false,
+						success: function(dato)
+						{
+							// Actualizar ID reporte						
+							reportebei_id = dato.reportebei_id;
+
+							menureporte_estado("menureporte_9", 1);
+
+							tabla_reporte_revisiones(proyecto.id);
+
+							// mensaje
+							swal({
+								title: "Correcto",
+								text: ""+dato.msj,
+								type: "success", // warning, error, success, info
+								buttons: {
+									visible: false, // true , false
+								},
+								timer: 1500,
+								showConfirmButton: false
+							});
+
+							// actualiza boton
+							$('#botonguardar_reporte_recomendaciones').html('Guardar recomendaciones <i class="fa fa-save"></i>');
+							$('#botonguardar_reporte_recomendaciones').attr('disabled', false);
+						},
+						beforeSend: function()
+						{
+							$('#botonguardar_reporte_recomendaciones').html('Guardando recomendaciones <i class="fa fa-spin fa-spinner"></i>');
+							$('#botonguardar_reporte_recomendaciones').attr('disabled', true);
+						},
+						error: function(dato)
+						{
+							// actualiza boton
+							$('#botonguardar_reporte_recomendaciones').html('Guardar recomendaciones <i class="fa fa-save"></i>');
+							$('#botonguardar_reporte_recomendaciones').attr('disabled', false);
+
+							// mensaje
+							swal({
+								title: "Error",
+								text: ""+dato.msj,
+								type: "error", // warning, error, success, info
+								buttons: {
+									visible: false, // true , false
+								},
+								timer: 1500,
+								showConfirmButton: false
+							});
+							return false;
+						}
+					}).submit();
+					return false;
+				}
+				else 
+				{
+					// mensaje
+					swal({
+						title: "Cancelado",
+						text: "Acción cancelada",
+						type: "error", // warning, error, success, info
+						buttons: {
+							visible: false, // true , false
+						},
+						timer: 500,
+						showConfirmButton: false
+					});
+				}
+			});
+			return false;
+		}
+	}
+	else
+	{
+		// mensaje
+		swal({
+			title: "Seleccione recomendaciones",
+			text: "Antes de guardar debe seleccionar uno o más recomendaciones",
+			type: "info", // warning, error, success, info
+			buttons: {
+				visible: false, // true , false
+			},
+			timer: 1500,
+			showConfirmButton: false
+		});
+		return false;
+	}
+});
+
+
+//=================================================
+// INFORME DE RESULTADOS LABORATORIO
+	
+
+$(document).ready(function()
+{
+	setTimeout(function()
+	{
+		tabla_reporte_informeresultados(proyecto.id, reportebei_id, agente_nombre);
+	}, 10500);
+});
+
+
+var datatable_informeresultados = null;
+function tabla_reporte_informeresultados(proyecto_id, reportebei_id, agente_nombre)
+{
+	try 
+	{
+		var ruta = "/reportebeitablainformeresultados/"+proyecto_id+"/"+reportebei_id+"/"+agente_nombre;
+
+		if (datatable_informeresultados != null)
+		{
+			datatable_informeresultados.clear().draw();
+			datatable_informeresultados.ajax.url(ruta).load();
+		}
+		else
+		{
+			var numeroejecucion = 1;
+			datatable_informeresultados = $('#tabla_reporte_informeresultados').DataTable({
+				ajax: {
+					url: ruta,
+					type: "get",
+					cache: false,
+					dataType: "json",
+					data: {},
+					dataSrc: function (json)
+					{
+						// Actualiza menu
+						menureporte_estado("menureporte_11_6", json.total);
+
+						// alert("Done! "+json.msj);
+						return json.data;
+					},
+					error: function (xhr, error, code)
+					{						
+						console.log('error en datatable_informeresultados '+code);
+						if (numeroejecucion <= 1)
+						{
+							tabla_reporte_informeresultados(proyecto_id, reportebei_id, agente_nombre);
+							numeroejecucion += 1;
+						}
+					}
+				},
+				columns: [
+					// {
+					//     data: "id" 
+					// },
+					{
+						data: "numero_registro",
+						defaultContent: "-"
+					},
+					{
+						data: "checkbox",
+						defaultContent: "-",
+						orderable: false,
+					},
+					{
+						data: "proyectoevidenciadocumento_nombre",
+						defaultContent: "-",
+						orderable: false,
+					},
+					{
+						data: "proyectoevidenciadocumento_extension",
+						defaultContent: "-",
+						orderable: false,
+					},
+					{
+						data: "created_at",
+						defaultContent: "-",
+						orderable: false,
+					},
+					{
+						data: "documento",
+						defaultContent: "-",
+						orderable: false,
+						className: 'documentopdf',
+					}
+				],
+				lengthMenu: [[20, 50, 100, -1], [20, 50, 100, "Todos"]],
+				// rowsGroup: [0, 1], //agrupar filas
+				order: [[ 0, "ASC" ]],
+				ordering: false,
+				processing: true,
+				searching: false,
+				paging: true,
+				language: {
+					lengthMenu: "Mostrar _MENU_ Registros",
+					zeroRecords: "No se encontraron registros",
+					info: "Página _PAGE_ de _PAGES_ (Total _TOTAL_ registros)",
+					infoEmpty: "No se encontraron registros",
+					infoFiltered: "(Filtrado de _MAX_ registros)",
+					emptyTable: "No hay datos disponibles en la tabla",
+					loadingRecords: "Cargando datos....",
+					processing: "Procesando <i class='fa fa-spin fa-spinner fa-3x'></i>",
+					search: "Buscar",
+					paginate: {
+						first: "Primera",
+						last: "Ultima",
+						next: "Siguiente",
+						previous: "Anterior"
+					}
+				}
+			});
+		}
+
+		// Tooltip en DataTable
+		datatable_informeresultados.on('draw', function ()
+		{
+			$('[data-toggle="tooltip"]').tooltip();
+		});
+	}
+	catch (exception)
+	{
+		tabla_reporte_informeresultados(proyecto_id, reportebei_id, agente_nombre);
+    }
+}
+
+
+$("#botonguardar_reporte_informeresultados").click(function()
+{
+	// valida campos vacios
+	var valida = this.form.checkValidity();
+	if (valida)
+	{
+		swal({
+			title: "¡Confirme que desea guardar!",
+			text: "Informe de resultados",
+			type: "warning",
+			showCancelButton: true,
+			confirmButtonColor: "#DD6B55",
+			confirmButtonText: "Guardar!",
+			cancelButtonText: "Cancelar!",
+			closeOnConfirm: false,
+			closeOnCancel: false
+		},
+		function(isConfirm)
+		{
+			if (isConfirm)
+			{
+				// cerrar msj confirmacion
+				swal.close();
+
+				// enviar datos
+				$('#form_reporte_informeresultados').ajaxForm({
+					dataType: 'json',
+					type: 'POST',
+					url: '/reportebei',
+					data: {
+						opcion: 55,
+						proyecto_id: proyecto.id,
+						agente_id: agente_id,
+						agente_nombre: agente_nombre,
+						reportebei_id: reportebei_id,
+						catactivo_id: $("#reportebei_catactivo_id").val(),
+						reportebei_instalacion: $("#reportebei_instalacion").val(),
+					},
+					resetForm: false,
+					success: function(dato)
+					{
+						// Actualizar ID reporte						
+						reportebei_id = dato.reportebei_id;
+
+						// Actualiza menu
+						menureporte_estado("menureporte_11_6", dato.total);
+
+						tabla_reporte_revisiones(proyecto.id);
+
+						// mensaje
+						swal({
+							title: "Correcto",
+							text: ""+dato.msj,
+							type: "success", // warning, error, success, info
+							buttons: {
+								visible: false, // true , false
+							},
+							timer: 1500,
+							showConfirmButton: false
+						});
+
+						// actualiza boton
+						$('#botonguardar_reporte_informeresultados').html('Guardar anexo informe de resultados <i class="fa fa-save"></i>');
+						$('#botonguardar_reporte_informeresultados').attr('disabled', false);
+					},
+					beforeSend: function()
+					{
+						$('#botonguardar_reporte_informeresultados').html('Guardando anexo informe de resultados <i class="fa fa-spin fa-spinner"></i>');
+						$('#botonguardar_reporte_informeresultados').attr('disabled', true);
+					},
+					error: function(dato)
+					{
+						// actualiza boton
+						$('#botonguardar_reporte_informeresultados').html('Guardar anexo informe de resultados <i class="fa fa-save"></i>');
+						$('#botonguardar_reporte_informeresultados').attr('disabled', false);
+
+						// mensaje
+						swal({
+							title: "Error",
+							text: ""+dato.msj,
+							type: "error", // warning, error, success, info
+							buttons: {
+								visible: false, // true , false
+							},
+							timer: 1500,
+							showConfirmButton: false
+						});
+						return false;
+					}
+				}).submit();
+				return false;
+			}
+			else 
+			{
+				// mensaje
+				swal({
+					title: "Cancelado",
+					text: "Acción cancelada",
+					type: "error", // warning, error, success, info
+					buttons: {
+						visible: false, // true , false
+					},
+					timer: 500,
+					showConfirmButton: false
+				});
+			}
+		});
+		return false;
+	}
+});
+
+
+$('#tabla_reporte_informeresultados tbody').on('click', 'td.documentopdf', function()
+{
+	var tr = $(this).closest('tr');
+	var row = datatable_informeresultados.row(tr);
+
+	if (row.data().proyectoevidenciadocumento_extension == ".pdf" || row.data().proyectoevidenciadocumento_extension == ".PDF")
+	{
+		$('#visor_documento').attr('src', '/assets/plugins/viewer-pdfjs/web/viewer_read.html?file=/proyectoevidenciadocumentodescargar/'+row.data().id+'/'+0); // 0 mostrar
+
+		// Titulo modal
+		$('#modal_visor .modal-title').html(row.data().proyectoevidenciadocumento_nombre);
+
+		// Abrir modal
+		$('#modal_visor').modal({backdrop:false});
+	}
+	else
+	{
+		window.open("/proyectoevidenciadocumentodescargar/"+row.data().id+"/"+1); //1 descargar
+	}
+});
+//=================================================
+// INFORME DE RESULTADOS LABORATORIO
+	
+
+$(document).ready(function()
+{
+	setTimeout(function()
+	{
+		tabla_reporte_informeresultados(proyecto.id, reportebei_id, agente_nombre);
+	}, 10500);
+});
+
+
+var datatable_informeresultados = null;
+function tabla_reporte_informeresultados(proyecto_id, reportebei_id, agente_nombre)
+{
+	try 
+	{
+		var ruta = "/reportebeitablainformeresultados/"+proyecto_id+"/"+reportebei_id+"/"+agente_nombre;
+
+		if (datatable_informeresultados != null)
+		{
+			datatable_informeresultados.clear().draw();
+			datatable_informeresultados.ajax.url(ruta).load();
+		}
+		else
+		{
+			var numeroejecucion = 1;
+			datatable_informeresultados = $('#tabla_reporte_informeresultados').DataTable({
+				ajax: {
+					url: ruta,
+					type: "get",
+					cache: false,
+					dataType: "json",
+					data: {},
+					dataSrc: function (json)
+					{
+						// Actualiza menu
+						menureporte_estado("menureporte_11_3", json.total);
+
+						// alert("Done! "+json.msj);
+						return json.data;
+					},
+					error: function (xhr, error, code)
+					{						
+						console.log('error en datatable_informeresultados '+code);
+						if (numeroejecucion <= 1)
+						{
+							tabla_reporte_informeresultados(proyecto_id, reportebei_id, agente_nombre);
+							numeroejecucion += 1;
+						}
+					}
+				},
+				columns: [
+					// {
+					//     data: "id" 
+					// },
+					{
+						data: "numero_registro",
+						defaultContent: "-"
+					},
+					{
+						data: "checkbox",
+						defaultContent: "-",
+						orderable: false,
+					},
+					{
+						data: "proyectoevidenciadocumento_nombre",
+						defaultContent: "-",
+						orderable: false,
+					},
+					{
+						data: "proyectoevidenciadocumento_extension",
+						defaultContent: "-",
+						orderable: false,
+					},
+					{
+						data: "created_at",
+						defaultContent: "-",
+						orderable: false,
+					},
+					{
+						data: "documento",
+						defaultContent: "-",
+						orderable: false,
+						className: 'documentopdf',
+					}
+				],
+				lengthMenu: [[20, 50, 100, -1], [20, 50, 100, "Todos"]],
+				// rowsGroup: [0, 1], //agrupar filas
+				order: [[ 0, "ASC" ]],
+				ordering: false,
+				processing: true,
+				searching: false,
+				paging: true,
+				language: {
+					lengthMenu: "Mostrar _MENU_ Registros",
+					zeroRecords: "No se encontraron registros",
+					info: "Página _PAGE_ de _PAGES_ (Total _TOTAL_ registros)",
+					infoEmpty: "No se encontraron registros",
+					infoFiltered: "(Filtrado de _MAX_ registros)",
+					emptyTable: "No hay datos disponibles en la tabla",
+					loadingRecords: "Cargando datos....",
+					processing: "Procesando <i class='fa fa-spin fa-spinner fa-3x'></i>",
+					search: "Buscar",
+					paginate: {
+						first: "Primera",
+						last: "Ultima",
+						next: "Siguiente",
+						previous: "Anterior"
+					}
+				}
+			});
+		}
+
+		// Tooltip en DataTable
+		datatable_informeresultados.on('draw', function ()
+		{
+			$('[data-toggle="tooltip"]').tooltip();
+		});
+	}
+	catch (exception)
+	{
+		tabla_reporte_informeresultados(proyecto_id, reportebei_id, agente_nombre);
+    }
+}
+
+
+$("#botonguardar_reporte_informeresultados").click(function()
+{
+	// valida campos vacios
+	var valida = this.form.checkValidity();
+	if (valida)
+	{
+		swal({
+			title: "¡Confirme que desea guardar!",
+			text: "Informe de resultados",
+			type: "warning",
+			showCancelButton: true,
+			confirmButtonColor: "#DD6B55",
+			confirmButtonText: "Guardar!",
+			cancelButtonText: "Cancelar!",
+			closeOnConfirm: false,
+			closeOnCancel: false
+		},
+		function(isConfirm)
+		{
+			if (isConfirm)
+			{
+				// cerrar msj confirmacion
+				swal.close();
+
+				// enviar datos
+				$('#form_reporte_informeresultados').ajaxForm({
+					dataType: 'json',
+					type: 'POST',
+					url: '/reportebei',
+					data: {
+						opcion: 55,
+						proyecto_id: proyecto.id,
+						agente_id: agente_id,
+						agente_nombre: agente_nombre,
+						reportebei_id: reportebei_id,
+						reportebei_instalacion: $("#reportebei_instalacion").val(),
+					},
+					resetForm: false,
+					success: function(dato)
+					{
+						// Actualizar ID reporte						
+						reportebei_id = dato.reportebei_id;
+
+						// Actualiza menu
+						menureporte_estado("menureporte_11_3", dato.total);
+
+						tabla_reporte_revisiones(proyecto.id);
+
+						// mensaje
+						swal({
+							title: "Correcto",
+							text: ""+dato.msj,
+							type: "success", // warning, error, success, info
+							buttons: {
+								visible: false, // true , false
+							},
+							timer: 1500,
+							showConfirmButton: false
+						});
+
+						// actualiza boton
+						$('#botonguardar_reporte_informeresultados').html('Guardar anexo informe de resultados <i class="fa fa-save"></i>');
+						$('#botonguardar_reporte_informeresultados').attr('disabled', false);
+					},
+					beforeSend: function()
+					{
+						$('#botonguardar_reporte_informeresultados').html('Guardando anexo informe de resultados <i class="fa fa-spin fa-spinner"></i>');
+						$('#botonguardar_reporte_informeresultados').attr('disabled', true);
+					},
+					error: function(dato)
+					{
+						// actualiza boton
+						$('#botonguardar_reporte_informeresultados').html('Guardar anexo informe de resultados <i class="fa fa-save"></i>');
+						$('#botonguardar_reporte_informeresultados').attr('disabled', false);
+
+						// mensaje
+						swal({
+							title: "Error",
+							text: ""+dato.msj,
+							type: "error", // warning, error, success, info
+							buttons: {
+								visible: false, // true , false
+							},
+							timer: 1500,
+							showConfirmButton: false
+						});
+						return false;
+					}
+				}).submit();
+				return false;
+			}
+			else 
+			{
+				// mensaje
+				swal({
+					title: "Cancelado",
+					text: "Acción cancelada",
+					type: "error", // warning, error, success, info
+					buttons: {
+						visible: false, // true , false
+					},
+					timer: 500,
+					showConfirmButton: false
+				});
+			}
+		});
+		return false;
+	}
+});
+
+
+$('#tabla_reporte_informeresultados tbody').on('click', 'td.documentopdf', function()
+{
+	var tr = $(this).closest('tr');
+	var row = datatable_informeresultados.row(tr);
+
+	if (row.data().proyectoevidenciadocumento_extension == ".pdf" || row.data().proyectoevidenciadocumento_extension == ".PDF")
+	{
+		$('#visor_documento').attr('src', '/assets/plugins/viewer-pdfjs/web/viewer_read.html?file=/proyectoevidenciadocumentodescargar/'+row.data().id+'/'+0); // 0 mostrar
+
+		// Titulo modal
+		$('#modal_visor .modal-title').html(row.data().proyectoevidenciadocumento_nombre);
+
+		// Abrir modal
+		$('#modal_visor').modal({backdrop:false});
+	}
+	else
+	{
+		window.open("/proyectoevidenciadocumentodescargar/"+row.data().id+"/"+1); //1 descargar
+	}
+});
+
+
+
+//=================================================
+// EQUIPO UTILIZADO
+
+
+$(document).ready(function()
+{
+	setTimeout(function()
+	{
+		tabla_reporte_equipoutilizado(proyecto.id, reportebei_id, agente_nombre);
+	},5500);
+});
+
+
+var datatable_equipoutilizado = null;
+function tabla_reporte_equipoutilizado(proyecto_id, reportebei_id, agente_nombre)
+{
+	try 
+	{
+		var ruta = "/reportebeitablaequipoutilizado/"+proyecto_id+"/"+reportebei_id+"/"+agente_nombre;
+
+		if (datatable_equipoutilizado != null)
+		{
+			datatable_equipoutilizado.clear().draw();
+			datatable_equipoutilizado.ajax.url(ruta).load();
+		}
+		else
+		{
+			var numeroejecucion = 1;
+			datatable_equipoutilizado = $('#tabla_reporte_equipoutilizado').DataTable({
+				ajax: {
+					url: ruta,
+					type: "get",
+					cache: false,
+					dataType: "json",
+					data: {},
+					dataSrc: function (json)
+					{
+						if (parseInt(json.total) > 0)
+						{
+							menureporte_estado("menureporte_11_2", 1);
+						}
+
+						// alert("Done! "+json.msj);
+						return json.data;
+					},
+					error: function (xhr, error, code)
+					{						
+						console.log('error en datatable_equipoutilizado '+code);
+						if (numeroejecucion <= 1)
+						{
+							tabla_reporte_equipoutilizado(proyecto_id, reportebei_id, agente_nombre);
+							numeroejecucion += 1;
+						}
+					}
+				},
+				columns: [
+					// {
+					//     data: "id" 
+					// },
+					{
+						data: "numero_registro",
+						defaultContent: "-"
+					},
+					{
+						data: "checkbox",
+						defaultContent: "-"
+					},
+					{
+						data: "equipo",
+						defaultContent: "-"
+					},
+					{
+						data: "marca_modelo_serie",
+						defaultContent: "-"
+					},
+					{
+						data: "vigencia",
+						defaultContent: "-"
+					},
+					// {
+					// 	className: 'certificadopdf',
+					// 	orderable: false,
+					// 	data: "certificado",
+					// 	defaultContent: "-"
+					// },
+					// {
+					// 	data: "checkbox_carta",
+					// 	defaultContent: "-",
+					// 	orderable: false,
+					// },
+					// {
+					// 	className: 'cartapdf',
+					// 	data: "carta",
+					// 	defaultContent: "-",
+					// 	orderable: false,
+					// },
+				],
+				lengthMenu: [[20, 50, 100, -1], [20, 50, 100, "Todos"]],
+				// rowsGroup: [0, 1], //agrupar filas
+				order: [[ 0, "ASC" ]],
+				ordering: false,
+				processing: true,
+				searching: true,
+				paging: false,
+				language: {
+					lengthMenu: "Mostrar _MENU_ Registros",
+					zeroRecords: "No se encontraron registros",
+					info: "Página _PAGE_ de _PAGES_ (Total _TOTAL_ registros)",
+					infoEmpty: "No se encontraron registros",
+					infoFiltered: "(Filtrado de _MAX_ registros)",
+					emptyTable: "No hay datos disponibles en la tabla",
+					loadingRecords: "Cargando datos....",
+					processing: "Procesando <i class='fa fa-spin fa-spinner fa-3x'></i>",
+					search: "Buscar",
+					paginate: {
+						first: "Primera",
+						last: "Ultima",
+						next: "Siguiente",
+						previous: "Anterior"
+					}
+				}
+			});
+		}
+
+		// Tooltip en DataTable
+		datatable_equipoutilizado.on('draw', function ()
+		{
+			$('[data-toggle="tooltip"]').tooltip();
+		});
+	}
+	catch (exception)
+	{
+		tabla_reporte_equipoutilizado(proyecto_id, reportebei_id, agente_nombre);
+    }
+}
+
+
+function activa_checkboxcarta(checkbox, equipo_id)
+{
+	if (checkbox.checked)
+	{
+		$('#equipoutilizado_checkboxcarta_'+equipo_id).attr('disabled', false);
+	}
+	else
+	{
+		$('#equipoutilizado_checkboxcarta_'+equipo_id).prop("checked", false);
+		$('#equipoutilizado_checkboxcarta_'+equipo_id).attr('disabled', true);
+	}
+}
+
+
+$('#tabla_reporte_equipoutilizado tbody').on('click', 'td.cartapdf', function()
+{
+	var tr = $(this).closest('tr');
+	var row = datatable_equipoutilizado.row(tr);
+
+	if (row.data().equipo_cartaPDF)
+	{
+		$('#visor_documento').attr('src', '/assets/plugins/viewer-pdfjs/web/viewer_read.html?file=/verequipodocumento/'+row.data().equipo_id+'/'+2);
+
+		// Titulo modal
+		$('#modal_visor .modal-title').html('Carta '+row.data().equipo_Descripcion+' ['+row.data().equipo_Serie+']');
+
+		// Abrir modal
+		$('#modal_visor').modal({backdrop:false});
+	}
+});
+
+
+
+$('#tabla_reporte_equipoutilizado tbody').on('click', 'td.certificadopdf', function()
+{
+	var tr = $(this).closest('tr');
+	var row = datatable_equipoutilizado.row(tr);
+
+	if (row.data().equipo_CertificadoPDF)
+	{
+		$('#visor_documento').attr('src', '/assets/plugins/viewer-pdfjs/web/viewer_read.html?file=/verequipodocumento/'+row.data().equipo_id+'/'+1);
+
+		// Titulo modal
+		$('#modal_visor .modal-title').html('Certificado de calibración '+row.data().equipo_Descripcion+' ['+row.data().equipo_Serie+']');
+
+		// Abrir modal
+		$('#modal_visor').modal({backdrop:false});
+	}
+});
+
+
+$("#botoncerrar_modalvisor_reportebei").click(function()
+{
+	// Titulo modal
+    $('#modal_visor .modal-title').html('Documento');
+
+	// Visor
+	$('#visor_documento').attr('src', '/assets/images/cargando.gif');
+});
+
+
+$("#botonguardar_reporte_equipoutilizado").click(function()
+{
+	// borrar campo filtro del DATATABLE
+	// datatable_equipoutilizado.search($(this).val()).draw();
+	datatable_equipoutilizado.search("").draw();
+
+
+	// valida campos vacios
+	var seleccionados = 0;
+	$('.reportebei_equipoutilizadocheckbox').each(function()
+	{
+		if (this.checked)
+		{
+			seleccionados += 1;
+		}
+	});
+
+
+	if (seleccionados > 0)
+	{
+		// valida campos vacios
+		var valida = this.form.checkValidity();
+		if (valida)
+		{
+			swal({
+				title: "¡Confirme que desea guardar!",
+				text: "Equipo (s) utilizado (s)",
+				type: "warning",
+				showCancelButton: true,
+				confirmButtonColor: "#DD6B55",
+				confirmButtonText: "Guardar!",
+				cancelButtonText: "Cancelar!",
+				closeOnConfirm: false,
+				closeOnCancel: false
+			},
+			function(isConfirm)
+			{
+				if (isConfirm)
+				{
+					// cerrar msj confirmacion
+					swal.close();
+
+					// enviar datos
+					$('#form_reporte_equipoutilizado').ajaxForm({
+						dataType: 'json',
+						type: 'POST',
+						url: '/reportebei',
+						data: {
+							opcion: 50,
+							proyecto_id: proyecto.id,
+							agente_id: agente_id,
+							agente_nombre: agente_nombre,
+							reportebei_id: reportebei_id,
+							reportebei_instalacion: $("#reportebei_instalacion").val(),
+						},
+						resetForm: false,
+						success: function(dato)
+						{
+							// Actualizar ID reporte							
+							reportebei_id = dato.reportebei_id;
+
+							menureporte_estado("menureporte_11_2", 1);
+
+
+							// mensaje
+							swal({
+								title: "Correcto",
+								text: ""+dato.msj,
+								type: "success", // warning, error, success, info
+								buttons: {
+									visible: false, // true , false
+								},
+								timer: 1500,
+								showConfirmButton: false
+							});
+
+							// actualiza boton
+							$('#botonguardar_reporte_equipoutilizado').html('Guardar equipo utilizado <i class="fa fa-save"></i>');
+							$('#botonguardar_reporte_equipoutilizado').attr('disabled', false);
+						},
+						beforeSend: function()
+						{
+							$('#botonguardar_reporte_equipoutilizado').html('Guardando equipo utilizado <i class="fa fa-spin fa-spinner"></i>');
+							$('#botonguardar_reporte_equipoutilizado').attr('disabled', true);
+						},
+						error: function(dato)
+						{
+							// actualiza boton
+							$('#botonguardar_reporte_equipoutilizado').html('Guardar equipo utilizado <i class="fa fa-save"></i>');
+							$('#botonguardar_reporte_equipoutilizado').attr('disabled', false);
+
+							// mensaje
+							swal({
+								title: "Error",
+								text: ""+dato.msj,
+								type: "error", // warning, error, success, info
+								buttons: {
+									visible: false, // true , false
+								},
+								timer: 1500,
+								showConfirmButton: false
+							});
+							return false;
+						}
+					}).submit();
+					return false;
+				}
+				else 
+				{
+					// mensaje
+					swal({
+						title: "Cancelado",
+						text: "Acción cancelada",
+						type: "error", // warning, error, success, info
+						buttons: {
+							visible: false, // true , false
+						},
+						timer: 500,
+						showConfirmButton: false
+					});
+				}
+			});
+			return false;
+		}
+	}
+	else
+	{
+		// mensaje
+		swal({
+			title: "Seleccione equipo (s)",
+			text: "Antes de guardar debe seleccionar uno o más equipos",
+			type: "info", // warning, error, success, info
+			buttons: {
+				visible: false, // true , false
+			},
+			timer: 1500,
+			showConfirmButton: false
+		});
+		return false;
+	}
+});

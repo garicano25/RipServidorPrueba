@@ -22,6 +22,10 @@ use App\modelos\reportes\reportebeiareaModel;
 use App\modelos\reportes\reportebeicategoriaModel;
 use App\modelos\reportes\reportebeiareacategoriaModel;
 use App\modelos\reportes\recursosPortadasInformesModel;
+use App\modelos\reportes\reporterecomendacionesModel;
+use App\modelos\reportes\reporteanexosModel;
+use App\modelos\reportes\reporteequiposutilizadosModel;
+use App\modelos\reportes\reportebeiepp;
 
 
 class reporteBeiController extends Controller{
@@ -1355,7 +1359,7 @@ class reporteBeiController extends Controller{
                         $numero_registro += 1;
                         $value->numero_registro = $numero_registro;
 
-                        if (($value->reporteiluminacionarea_porcientooperacion + 0) > 0) {
+                        if (($value->reportebeiarea_porcientooperacion + 0) > 0) {
                             $numero_registro2 += 1;
 
 
@@ -1369,7 +1373,7 @@ class reporteBeiController extends Controller{
                                                 <td>' . $numero_registro2 . '</td>
                                                 <td>' . $value->reportearea_instalacion . '</td>
                                                 <td>' . $value->reportearea_nombre . '</td>
-                                                <td>' . $value->reporteiluminacionarea_porcientooperacion . '%</td>
+                                                <td>' . $value->reportebeiarea_porcientooperacion . '%</td>
                                             </tr>';
 
 
@@ -1661,6 +1665,434 @@ class reporteBeiController extends Controller{
         }
     }
 
+
+    public function reportebeitablarecomendaciones($proyecto_id, $reportebei_id, $agente_nombre)
+    {
+        try {
+            $proyecto = proyectoModel::with(['catregion', 'catsubdireccion', 'catgerencia', 'catactivo'])->findOrFail($proyecto_id);
+            $recsensorial = recsensorialModel::findOrFail($proyecto->recsensorial_id);
+
+            $tabla = collect(DB::select('SELECT
+                                            TABLA.id,
+                                            TABLA.agente_id,
+                                            TABLA.agente_nombre,
+                                            TABLA.recomendaciones_tipo,
+                                            TABLA.recomendaciones_descripcion,
+                                            TABLA.checked
+                                        FROM
+                                            (
+                                                (
+                                                    SELECT
+                                                        CATALOGO.id,
+                                                        CATALOGO.agente_id,
+                                                        CATALOGO.agente_nombre,
+                                                        CATALOGO.recomendaciones_tipo,
+                                                        IF(CATALOGO.recomendaciones_descripcion != "", CATALOGO.recomendaciones_descripcion, CATALOGO.recomendacionescatalogo_descripcion) AS recomendaciones_descripcion,
+                                                        IF(CATALOGO.recomendaciones_descripcion != "", "checked", "") AS checked
+                                                    FROM
+                                                        (
+                                                            SELECT
+                                                                reporterecomendacionescatalogo.id,
+                                                                reporterecomendacionescatalogo.agente_id,
+                                                                reporterecomendacionescatalogo.agente_nombre,
+                                                                reporterecomendacionescatalogo.reporterecomendacionescatalogo_tipo AS recomendaciones_tipo,
+                                                                reporterecomendacionescatalogo.reporterecomendacionescatalogo_descripcion AS recomendacionescatalogo_descripcion,
+                                                                IFNULL((
+                                                                        SELECT
+                                                                            reporterecomendaciones.reporterecomendaciones_descripcion
+                                                                        FROM
+                                                                            reporterecomendaciones 
+                                                                        WHERE
+                                                                            reporterecomendaciones.proyecto_id = ' . $proyecto_id . '
+                                                                            AND reporterecomendaciones.registro_id = ' . $reportebei_id . '
+                                                                            AND reporterecomendaciones.reporterecomendacionescatalogo_id = reporterecomendacionescatalogo.id
+                                                                        LIMIT 1 
+                                                                ), NULL) AS recomendaciones_descripcion
+                                                            FROM
+                                                                reporterecomendacionescatalogo
+                                                            WHERE
+                                                                reporterecomendacionescatalogo.agente_nombre = "' . $agente_nombre . '"
+                                                                AND reporterecomendacionescatalogo.reporterecomendacionescatalogo_activo = 1
+                                                            ORDER BY
+                                                                reporterecomendacionescatalogo.reporterecomendacionescatalogo_tipo DESC
+                                                        ) AS CATALOGO
+                                                )
+                                                UNION ALL
+                                                (
+                                                    SELECT
+                                                        0 AS id,
+                                                        reporterecomendaciones.agente_id,
+                                                        reporterecomendaciones.agente_nombre,
+                                                        reporterecomendaciones.reporterecomendaciones_tipo AS recomendaciones_tipo,
+                                                        reporterecomendaciones.reporterecomendaciones_descripcion AS recomendaciones_descripcion,
+                                                        "checked" AS checked
+                                                    FROM
+                                                        reporterecomendaciones
+                                                    WHERE
+                                                        reporterecomendaciones.proyecto_id = ' . $proyecto_id . '
+                                                        AND reporterecomendaciones.agente_nombre = "' . $agente_nombre . '"
+                                                        AND reporterecomendaciones.registro_id = ' . $reportebei_id . '
+                                                        AND reporterecomendaciones.reporterecomendacionescatalogo_id = 0
+                                                    ORDER BY
+                                                        reporterecomendaciones.id ASC
+                                                )
+                                            ) AS TABLA'));
+
+            $numero_registro = 0;
+            $total = 0;
+            foreach ($tabla as $key => $value) {
+                $numero_registro += 1;
+                $value->numero_registro = $numero_registro;
+
+                if (($value->id + 0) > 0) {
+                    $required_readonly = 'readonly';
+                    if ($value->checked) {
+                        $required_readonly = 'required';
+                    }
+
+                    $value->checkbox = '<div class="switch">
+                                            <label>
+                                                <input type="checkbox" class="recomendacion_checkbox" name="recomendacion_checkbox[]" value="' . $value->id . '" ' . $value->checked . ' onclick="activa_recomendacion(this);">
+                                                <span class="lever switch-col-light-blue"></span>
+                                            </label>
+                                        </div>';
+
+                    $value->descripcion = '<input type="hidden" class="form-control" name="recomendacion_tipo_' . $value->id . '" value="' . $value->recomendaciones_tipo . '" required>
+                                            <label>' . $value->recomendaciones_tipo . '</label>
+                                            <textarea  class="form-control" rows="5" id="recomendacion_descripcion_' . $value->id . '" name="recomendacion_descripcion_' . $value->id . '" ' . $required_readonly . '>' . $this->datosproyectoreemplazartexto($proyecto, $recsensorial, $value->recomendaciones_descripcion) . '</textarea>';
+                } else {
+                    $value->checkbox = '<input type="checkbox" class="recomendacionadicional_checkbox" name="recomendacionadicional_checkbox[]" value="0" checked/>
+                                        <button type="button" class="btn btn-danger waves-effect btn-circle eliminar" data-toggle="tooltip" title="Eliminar recomendación"><i class="fa fa-trash fa-1x"></i></button>';
+
+                    $preventiva = "";
+                    $correctiva = "";
+                    if ($value->recomendaciones_tipo == "Preventiva") {
+                        $preventiva = "selected";
+                    } else {
+                        $correctiva = "selected";
+                    }
+
+                    $value->descripcion = '<div class="form-group">
+                                                <label>Tipo</label>
+                                                <select class="custom-select form-control" name="recomendacionadicional_tipo[]" required>
+                                                    <option value=""></option>
+                                                    <option value="Preventiva" ' . $preventiva . '>Preventiva</option>
+                                                    <option value="Correctiva" ' . $correctiva . '>Correctiva</option>
+                                                </select>
+                                            </div>
+                                            <div class="form-group">
+                                                <label>Descripción</label>
+                                                <textarea  class="form-control" rows="5" name="recomendacionadicional_descripcion[]" required>' . $this->datosproyectoreemplazartexto($proyecto, $recsensorial, $value->recomendaciones_descripcion) . '</textarea>
+                                            </div>';
+                }
+
+                if ($value->checked) {
+                    $total += 1;
+                }
+            }
+
+            // respuesta
+            $dato['data'] = $tabla;
+            $dato['total'] = $total;
+            $dato["msj"] = 'Datos consultados correctamente';
+            return response()->json($dato);
+        } catch (Exception $e) {
+            $dato['data'] = 0;
+            $dato['total'] = 0;
+            $dato["msj"] = 'Error ' . $e->getMessage();
+            return response()->json($dato);
+        }
+    }
+
+
+
+    public function reportebeitablainformeresultados($proyecto_id, $reportebei_id, $agente_nombre)
+    {
+        try {
+            $informes = collect(DB::select('SELECT
+                                                proyectoevidenciadocumento.proyecto_id,
+                                                proyectoevidenciadocumento.proveedor_id,
+                                                proyectoevidenciadocumento.agente_id,
+                                                proyectoevidenciadocumento.agente_nombre,
+                                                proyectoevidenciadocumento.id,
+                                                proyectoevidenciadocumento.proyectoevidenciadocumento_nombre,
+                                                proyectoevidenciadocumento.proyectoevidenciadocumento_extension, 
+                                                proyectoevidenciadocumento.proyectoevidenciadocumento_archivo,
+                                                proyectoevidenciadocumento.created_at,
+                                                IFNULL((
+                                                    SELECT  
+                                                        IF(IFNULL(reporteanexos.reporteanexos_rutaanexo, "") = "", "", "checked")
+                                                    FROM
+                                                        reporteanexos
+                                                    WHERE
+                                                        reporteanexos.proyecto_id = proyectoevidenciadocumento.proyecto_id
+                                                        AND reporteanexos.agente_nombre = proyectoevidenciadocumento.agente_nombre
+                                                        AND reporteanexos.registro_id = ' . $reportebei_id . '
+                                                        AND reporteanexos.reporteanexos_tipo = 1
+                                                        AND reporteanexos.reporteanexos_rutaanexo = proyectoevidenciadocumento.proyectoevidenciadocumento_archivo
+                                                ), "") AS checked 
+                                            FROM
+                                                proyectoevidenciadocumento
+                                            WHERE
+                                                proyectoevidenciadocumento.proyecto_id = ' . $proyecto_id . '
+                                                AND proyectoevidenciadocumento.agente_nombre = "' . $agente_nombre . '"'));
+
+            $total_activos = 0;
+            $numero_registro = 0;
+            foreach ($informes as $key => $value) {
+                $numero_registro += 1;
+                $value->numero_registro = $numero_registro;
+
+                // $value->checked = NULL;
+
+                $value->checkbox = '<div class="switch">
+                                        <label>
+                                            <input type="hidden" class="form-control" name="reportebei_anexonombre_' . $value->id . '" value="' . $value->proyectoevidenciadocumento_nombre . '">
+                                            <input type="hidden" class="form-control" name="reportebei_anexoarchivo_' . $value->id . '" value="' . $value->proyectoevidenciadocumento_archivo . '">
+                                            <input type="checkbox" class="reportebei_informeresultadocheckbox" name="reportebei_informeresultadocheckbox[]" value="' . $value->id . '" ' . $value->checked . '>
+                                            <span class="lever switch-col-light-blue"></span>
+                                        </label>
+                                    </div>';
+
+                if ($value->proyectoevidenciadocumento_extension == '.pdf' || $value->proyectoevidenciadocumento_extension == '.PDF') {
+                    $value->documento = '<button type="button" class="btn btn-info waves-effect btn-circle" data-toggle="tooltip" title="Mostrar PDF"><i class="fa fa-file-pdf-o fa-1x"></i></button>';
+                } else {
+                    $value->documento = '<button type="button" class="btn btn-success waves-effect btn-circle" data-toggle="tooltip" title="Descargar archivo"><i class="fa fa-download fa-1x"></i></button>';
+                }
+
+                // VERIFICAR SI HAY DOCUMENTOS SELECCIONADOS
+                if ($value->checked) {
+                    $total_activos += 1;
+                }
+            }
+
+            // respuesta
+            $dato['data'] = $informes;
+            $dato["total"] = $total_activos;
+            $dato["msj"] = 'Datos consultados correctamente';
+            return response()->json($dato);
+        } catch (Exception $e) {
+            $dato['data'] = 0;
+            $dato["total"] = 0;
+            $dato["msj"] = 'Error ' . $e->getMessage();
+            return response()->json($dato);
+        }
+    }
+
+
+
+    public function reportebeitablaequipoutilizado($proyecto_id, $reportebei_id, $agente_nombre)
+    {
+        try {
+            $proveedor = DB::select('SELECT
+                                            proyectoproveedores.proyecto_id,
+                                            proyectoproveedores.proveedor_id,
+                                            proyectoproveedores.proyectoproveedores_tipoadicional,
+                                            proyectoproveedores.catprueba_id AS agente_id,
+                                            proyectoproveedores.proyectoproveedores_agente
+                                        FROM
+                                            proyectoproveedores
+                                        WHERE
+                                            proyectoproveedores.proyecto_id = ' . $proyecto_id . ' 
+                                            AND proyectoproveedores.proyectoproveedores_tipoadicional < 2
+                                            AND proyectoproveedores.catprueba_id = 22 -- BEI ------------------------------
+                                        ORDER BY
+                                            proyectoproveedores.proyectoproveedores_tipoadicional ASC,
+                                            proyectoproveedores.catprueba_id ASC
+                                        LIMIT 1');
+
+
+            $where_condicion = '';
+            
+
+
+            $equipos = DB::select('SELECT DISTINCT
+                                        proyectoequiposactual.proyecto_id,
+                                        proyectoequiposactual.proveedor_id,
+                                        proveedor.proveedor_NombreComercial,
+                                        proyectoequiposactual.equipo_id,
+                                        equipo.equipo_Descripcion,
+                                        equipo.equipo_Marca,
+                                        equipo.equipo_Modelo,
+                                        equipo.equipo_Serie,
+                                        IFNULL(equipo.equipo_FechaCalibracion, "N/A") AS equipo_FechaCalibracion,
+                                        IFNULL(equipo.equipo_VigenciaCalibracion, "N/A") AS equipo_VigenciaCalibracion,
+                                        IFNULL(DATEDIFF(equipo.equipo_VigenciaCalibracion, CURDATE()) + 1, 0) AS vigencia_dias,
+                                        IF(equipo.equipo_VigenciaCalibracion, CONCAT(equipo.equipo_VigenciaCalibracion, " (", (DATEDIFF(equipo.equipo_VigenciaCalibracion, CURDATE()) + 1)," d)"), "N/A") AS vigencia_texto,
+                                        (
+                                            CASE
+                                                WHEN IFNULL(DATEDIFF(equipo.equipo_VigenciaCalibracion, CURDATE()) + 1, 0) = 0 THEN ""
+                                                WHEN IFNULL(DATEDIFF(equipo.equipo_VigenciaCalibracion, CURDATE()) + 1, 0) >= 90 THEN ""
+                                                WHEN IFNULL(DATEDIFF(equipo.equipo_VigenciaCalibracion, CURDATE()) + 1, 0) >= 30 THEN "text-warning"
+                                                ELSE "text-danger"
+                                            END
+                                        ) AS vigencia_color,
+                                        -- equipo.equipo_CertificadoPDF,
+                                        -- equipo.equipo_cartaPDF,
+                                        IFNULL((
+                                            SELECT
+                                                IF(IFNULL(reporteequiposutilizados.equipo_id, ""), "checked" , "")
+                                            FROM
+                                                reporteequiposutilizados
+                                            WHERE
+                                                reporteequiposutilizados.proyecto_id = proyectoequiposactual.proyecto_id
+                                                AND reporteequiposutilizados.registro_id = "' . $reportebei_id . '"
+                                                AND reporteequiposutilizados.agente_nombre = "' . $agente_nombre . '"
+                                                AND reporteequiposutilizados.equipo_id = proyectoequiposactual.equipo_id
+                                            LIMIT 1
+                                        ), NULL) AS checked,
+                                        IFNULL((
+                                            SELECT
+                                                reporteequiposutilizados.reporteequiposutilizados_cartacalibracion
+                                            FROM
+                                                reporteequiposutilizados
+                                            WHERE
+                                                reporteequiposutilizados.proyecto_id = proyectoequiposactual.proyecto_id
+                                                AND reporteequiposutilizados.registro_id = "' . $reportebei_id . '"
+                                                AND reporteequiposutilizados.agente_nombre = "' . $agente_nombre . '"
+                                                AND reporteequiposutilizados.equipo_id = proyectoequiposactual.equipo_id
+                                            LIMIT 1
+                                        ), NULL) AS cartacalibracion,
+                                        IFNULL((
+                                            SELECT
+                                                reporteequiposutilizados.id
+                                            FROM
+                                                reporteequiposutilizados
+                                            WHERE
+                                                reporteequiposutilizados.proyecto_id = proyectoequiposactual.proyecto_id
+                                                AND reporteequiposutilizados.registro_id = "' . $reportebei_id . '"
+                                                AND reporteequiposutilizados.agente_nombre = "' . $agente_nombre . '"
+                                                AND reporteequiposutilizados.equipo_id = proyectoequiposactual.equipo_id
+                                            LIMIT 1
+                                        ), NULL) AS id
+                                    FROM
+                                        proyectoequiposactual
+                                        LEFT JOIN proveedor ON proyectoequiposactual.proveedor_id = proveedor.id
+                                        LEFT JOIN equipo ON proyectoequiposactual.equipo_id = equipo.id
+                                    WHERE
+                                        proyectoequiposactual.proyecto_id = ' . $proyecto_id . ' 
+                                        ' . $where_condicion . ' 
+                                    ORDER BY
+                                        equipo.equipo_Descripcion,
+                                        equipo.equipo_Marca,
+                                        equipo.equipo_Modelo,
+                                        equipo.equipo_Serie');
+
+
+
+            $total_activos = 0;
+            $numero_registro = 0;
+            foreach ($equipos as $key => $value) {
+                $numero_registro += 1;
+                $value->numero_registro = $numero_registro;
+
+
+                $value->checkbox = '<div class="switch">
+                                        <label>
+                                            <input type="checkbox" class="reportebei_equipoutilizadocheckbox" name="reportebei_equipoutilizadocheckbox[]" value="' . $value->equipo_id . '" ' . $value->checked . ' onchange="activa_checkboxcarta(this, ' . $value->equipo_id . ');";>
+                                            <span class="lever switch-col-light-blue"></span>
+                                        </label>
+                                    </div>';
+
+
+                $value->equipo = '<span class="' . $value->vigencia_color . '">' . $value->equipo_Descripcion . '</span><br><small class="' . $value->vigencia_color . '">' . $value->proveedor_NombreComercial . '</small>';
+
+
+                $value->marca_modelo_serie = '<span class="' . $value->vigencia_color . '">' . $value->equipo_Marca . '<br>' . $value->equipo_Modelo . '<br>' . $value->equipo_Serie . '</span>';
+
+
+                $value->vigencia = '<span class="' . $value->vigencia_color . '">' . $value->vigencia_texto . '</span>';
+                //---------------------------
+
+
+                // VERIFICAR SI HAY EQUIPOS SELECCIONADOS
+                if ($value->checked) {
+                    $total_activos += 1;
+                }
+            }
+
+            // respuesta
+            $dato['data'] = $equipos;
+            $dato["total"] = $total_activos;
+            $dato["msj"] = 'Datos consultados correctamente';
+            return response()->json($dato);
+        } catch (Exception $e) {
+            $dato['data'] = 0;
+            $dato["total"] = 0;
+            $dato["msj"] = 'Error ' . $e->getMessage();
+            return response()->json($dato);
+        }
+    }
+
+
+    public function reportebeiepptabla($proyecto_id, $reportebei_id)
+    {
+        try {
+            
+
+
+            $revision = reporterevisionesModel::where('proyecto_id', $proyecto_id)
+                ->where('agente_id', 1)
+                ->orderBy('reporterevisiones_revision', 'DESC')
+                ->get();
+
+
+            $edicion = 1;
+            if (count($revision) > 0) {
+                if ($revision[0]->reporterevisiones_concluido == 1 || $revision[0]->reporterevisiones_cancelado == 1) {
+                    $edicion = 0;
+                }
+            }
+
+
+            $epp = reportebeiepp::where('proyecto_id', $proyecto_id)
+                ->where('registro_id', $reportebei_id)
+                ->get();
+
+            $numero_registro = 0;
+            foreach ($epp as $key => $value) {
+                $numero_registro += 1;
+                $value->numero_registro = $numero_registro;
+
+                $value->boton_editar = '<button type="button" class="btn btn-warning waves-effect btn-circle"><i class="fa fa-pencil fa-1x"></i></button>';
+
+                if ($edicion == 1) {
+                    $value->boton_eliminar = '<button type="button" class="btn btn-danger waves-effect btn-circle eliminar"><i class="fa fa-trash fa-1x"></i></button>';
+                } else {
+                    $value->boton_eliminar = '<button type="button" class="btn btn-default waves-effect btn-circle" data-toggle="tooltip" title="No disponible"><i class="fa fa-ban fa-1x"></i></button>';
+                }
+            }
+
+            // respuesta
+            $dato['data'] = $epp;
+            $dato["total"] = count($epp);
+            $dato["msj"] = 'Datos consultados correctamente';
+            return response()->json($dato);
+        } catch (Exception $e) {
+            $dato['data'] = 0;
+            $dato["total"] = 0;
+            $dato["msj"] = 'Error ' . $e->getMessage();
+            return response()->json($dato);
+        }
+    }
+
+
+    
+    public function reportebeieppeliminar($epp_id)
+    {
+        try {
+            $epp = reportebeiepp::where('id', $epp_id)->delete();
+
+            // respuesta
+            $dato["msj"] = 'E.P.P. eliminado correctamente';
+            return response()->json($dato);
+        } catch (Exception $e) {
+            $dato["msj"] = 'Error ' . $e->getMessage();
+            return response()->json($dato);
+        }
+    }
+
+
     public function store(Request $request)
     {
         try {
@@ -1821,7 +2253,7 @@ class reporteBeiController extends Controller{
                         }
 
                         $extension = $request->file('PORTADA')->getClientOriginalExtension();
-                        $imgGuardada = $request->file('PORTADA')->storeAs('reportes/proyecto/' . $request->proyecto_id . '/' . $request->agente_nombre . '/' . $request->reporteregistro_id . '/imagenPortada', 'PORTADA_IAMGEN.' . $extension);
+                        $imgGuardada = $request->file('PORTADA')->storeAs('reportes/proyecto/' . $request->proyecto_id . '/' . $request->agente_nombre . '/' . $request->reportebei_id . '/imagenPortada', 'PORTADA_IAMGEN.' . $extension);
 
                         $recusros->update(['RUTA_IMAGEN_PORTADA' => $imgGuardada]);
                     }
@@ -1853,7 +2285,7 @@ class reporteBeiController extends Controller{
 
                             $extension = $request->file('PORTADA')->getClientOriginalExtension();
                             $imgGuardada = $request->file('PORTADA')->storeAs(
-                                'reportes/proyecto/' . $request->proyecto_id . '/' . $request->agente_nombre . '/' . $request->reporteregistro_id . '/imagenPortada',
+                                'reportes/proyecto/' . $request->proyecto_id . '/' . $request->agente_nombre . '/' . $request->reportebei_id . '/imagenPortada',
                                 'PORTADA_IMAGEN.' . $extension
                             );
 
@@ -2161,19 +2593,95 @@ class reporteBeiController extends Controller{
                 }
             }
 
+            // EQUIPO PROTECCION PERSONAL
+            if (($request->opcion + 0) == 15) {
+                if (($request->reporteepp_id + 0) == 0) {
+                    DB::statement('ALTER TABLE reportebeiepp AUTO_INCREMENT = 1;');
 
+                    $request['registro_id'] = $reportebei->id;
+                    $categoria = reportebeiepp::create($request->all());
+
+                    // Mensaje
+                    $dato["msj"] = 'Datos guardados correctamente';
+                } else {
+                    $request['registro_id'] = $reportebei->id;
+                    $categoria = reportebeiepp::findOrFail($request->reporteepp_id);
+                    $categoria->update($request->all());
+
+                    // Mensaje
+                    $dato["msj"] = 'Datos modificados correctamente';
+                }
+            }
 
 
             // CONCLUSION
             if (($request->opcion + 0) == 20) {
                 $reportebei->update([
-                    'reportebei_conclusion' => $this->datosproyectolimpiartexto($proyecto, $recsensorial, $request->reportebei_conclusion)
+                    'reportebei_conclusion' => $request->reportebei_conclusion
                 ]);
 
                 // Mensaje
                 $dato["msj"] = 'Datos guardados correctamente';
             }
 
+
+            // RECOMENDACIONES
+            if (($request->opcion + 0) == 30) {
+                if ($request->recomendacion_checkbox) {
+                    $eliminar_recomendaciones = reporterecomendacionesModel::where('proyecto_id', $request->proyecto_id)
+                        ->where('catactivo_id', $request->catactivo_id)
+                        ->where('agente_nombre', $request->agente_nombre)
+                        ->where('registro_id', $reportebei->id)
+                        ->delete();
+
+                    DB::statement('ALTER TABLE reporterecomendaciones AUTO_INCREMENT = 1;');
+
+                    foreach ($request->recomendacion_checkbox as $key => $value) {
+                        $recomendacion = reporterecomendacionesModel::create([
+                            'agente_id' => $request->agente_id,
+                            'agente_nombre' => $request->agente_nombre,
+                            'proyecto_id' => $request->proyecto_id,
+                            'registro_id' => $reportebei->id,
+                            'catactivo_id' => $request->catactivo_id,
+                            'reporterecomendacionescatalogo_id' => $value,
+                            'reporterecomendaciones_tipo' => $request['recomendacion_tipo_' . $value],
+                            'reporterecomendaciones_descripcion' => $this->datosproyectolimpiartexto($proyecto, $recsensorial, $request['recomendacion_descripcion_' . $value])
+                        ]);
+                    }
+
+                    // Mensaje
+                    $dato["msj"] = 'Datos guardados correctamente';
+                }
+
+
+                if ($request->recomendacionadicional_checkbox) {
+                    if (!$request->recomendacion_checkbox) {
+                        $eliminar_recomendaciones = reporterecomendacionesModel::where('proyecto_id', $request->proyecto_id)
+                            ->where('catactivo_id', $request->catactivo_id)
+                            ->where('agente_nombre', $request->agente_nombre)
+                            ->where('registro_id', $reportebei->id)
+                            ->delete();
+                    }
+
+                    DB::statement('ALTER TABLE reporterecomendaciones AUTO_INCREMENT = 1;');
+
+                    foreach ($request->recomendacionadicional_checkbox as $key => $value) {
+                        $recomendacion = reporterecomendacionesModel::create([
+                            'agente_id' => $request->agente_id,
+                            'agente_nombre' => $request->agente_nombre,
+                            'proyecto_id' => $request->proyecto_id,
+                            'registro_id' => $reportebei->id,
+                            'catactivo_id' => $request->catactivo_id,
+                            'reporterecomendacionescatalogo_id' => 0,
+                            'reporterecomendaciones_tipo' => $request->recomendacionadicional_tipo[$key],
+                            'reporterecomendaciones_descripcion' => $this->datosproyectolimpiartexto($proyecto, $recsensorial, $request->recomendacionadicional_descripcion[$key])
+                        ]);
+                    }
+
+                    // Mensaje
+                    $dato["msj"] = 'Datos guardados correctamente';
+                }
+            }
 
 
             // RESPONSABLES DEL INFORME
@@ -2238,8 +2746,74 @@ class reporteBeiController extends Controller{
                 $dato["msj"] = 'Datos guardados correctamente';
             }
 
+            // EQUIPO UTILIZADO
+            if (($request->opcion + 0) == 50) {
+                // dd($request->all());
 
-    
+                if ($request->reportebei_equipoutilizadocheckbox) {
+                    $eliminar_equiposutilizados = reporteequiposutilizadosModel::where('proyecto_id', $request->proyecto_id)
+                        ->where('agente_nombre', $request->agente_nombre)
+                        ->where('registro_id', $reportebei->id)
+                        ->delete();
+
+
+                    foreach ($request->reportebei_equipoutilizadocheckbox as $key => $value) {
+                        if ($request['equipoutilizado_checkboxcarta_' . $value]) {
+                            $request->reporteequiposutilizados_cartacalibracion = 1;
+                        } else {
+                            $request->reporteequiposutilizados_cartacalibracion = null;
+                        }
+
+
+                        $equipoutilizado = reporteequiposutilizadosModel::create([
+                            'proyecto_id' => $request->proyecto_id,
+                            'agente_id' => $request->agente_id,
+                            'agente_nombre' => $request->agente_nombre,
+                            'registro_id' => $reportebei->id,
+                            'equipo_id' => $value,
+                            'reporteequiposutilizados_cartacalibracion' => $request->reporteequiposutilizados_cartacalibracion
+                        ]);
+                    }
+                }
+
+
+                // Mensaje
+                $dato["msj"] = 'Datos guardados correctamente';
+            }
+
+            // INFORMES RESULTADOS
+            if (($request->opcion + 0) == 55) {
+                $eliminar_informes = reporteanexosModel::where('proyecto_id', $request->proyecto_id)
+                    ->where('agente_nombre', $request->agente_nombre)
+                    ->where('registro_id', $reportebei->id)
+                    ->where('reporteanexos_tipo', 1) // INFORMES DE RESULTADOS
+                    ->delete();
+
+                if ($request->reportebei_informeresultadocheckbox) {
+                    DB::statement('ALTER TABLE reporteanexos AUTO_INCREMENT = 1;');
+
+                    $dato["total"] = 0;
+                    foreach ($request->reportebei_informeresultadocheckbox as $key => $value) {
+                        $anexo = reporteanexosModel::create([
+                            'proyecto_id' => $request->proyecto_id,
+                            'agente_id' => $request->agente_id,
+                            'agente_nombre' => $request->agente_nombre,
+                            'registro_id' => $reportebei->id,
+                            'reporteanexos_tipo' => 1  // INFORMES DE RESULTADOS
+                            ,
+                            'reporteanexos_anexonombre' => str_replace(['\\', '/', ':', '*', '"', '?', '<', '>', '|'], '-', $request['reportebei_anexonombre_' . $value]),
+                            'reporteanexos_rutaanexo' => $request['reportebei_anexoarchivo_' . $value]
+                        ]);
+
+                        $dato["total"] += 1;
+                    }
+                } else {
+                    $dato["total"] = 0;
+                }
+
+                // Mensaje
+                $dato["msj"] = 'Información guardada correctamente';
+            }
 
             // REVISION INFORME, CANCELACION
             if (($request->opcion + 0) == 70) {
