@@ -21,7 +21,7 @@ $('.stickyside a').click(function()
 
 // This is auto select left sidebar
 var lastId,
-topMenu = $(".stickyside");
+topMenu = $(".stickyside"); 
 topMenuHeight = topMenu.outerHeight();
 
 
@@ -71,7 +71,7 @@ var meses = ["VACIO", "ENERO", "FEBRERO", "MARZO", "ABRIL", "MAYO", "JUNIO", "JU
 var reportebei_id = 0;
 var agente_id = 22;
 var agente_nombre = "BEI";
-
+var opciones_catepp = "";
 
 // Activar Tooltip
 $('[data-toggle="tooltip"]').tooltip();
@@ -125,7 +125,7 @@ $(document).ready(function()
 	validarPermisosAsignados(proyecto.id) //Validacion de permisos
 	datosgenerales(); // Datos generales
 	portadaInfo(); // Portada
-	
+	consulta_categoria_epp() //Equipo de proteccion EPP
 
 	// Inicializar campos datepicker
     jQuery('.mydatepicker').datepicker({
@@ -2685,6 +2685,7 @@ $(document).ready(function()
 {
 	setTimeout(function()
 	{
+		console.log(reportebei_id)
 		tabla_reporte_areas(proyecto.id, reportebei_id);
 	}, 5000);
 });
@@ -2716,12 +2717,10 @@ function tabla_reporte_areas(proyecto_id, reportebei_id)
 					{
 						if (parseInt(json.data.length) != 0 && parseInt(json.total_singuardar) == 0)
 						{
-							menureporte_estado("menureporte_5_4", 1);
 							menureporte_estado("menureporte_5_5", 1);
 							menureporte_estado("menureporte_6_1", 1);
 							
 						} else {
-							menureporte_estado("menureporte_5_4", 0);
 							menureporte_estado("menureporte_5_5", 0);
 							menureporte_estado("menureporte_6_1", 0);
 						
@@ -2736,7 +2735,6 @@ function tabla_reporte_areas(proyecto_id, reportebei_id)
 
 
 						// Tablas
-						tabla_reporte_5_4(json.tabla_5_4);
 						tabla_reporte_5_5(json.tabla_5_5);
 						tabla_reporte_6_1(json.tabla_6_1);
 					
@@ -2798,7 +2796,7 @@ function tabla_reporte_areas(proyecto_id, reportebei_id)
 					}
 				],
 				"lengthMenu": [[20, 50, 100, -1], [20, 50, 100, "Todos"]],
-				"rowsGroup": [1, 0, 2, 5, 6, 7, 8], //agrupar filas
+				"rowsGroup": [1, 0, 2, 5, 6], //agrupar filas
 				"order": [[ 0, "DESC" ]],
 				"ordering": false,
 				"processing": true,
@@ -2836,6 +2834,7 @@ function tabla_reporte_areas(proyecto_id, reportebei_id)
     }
 }
 
+
 $('#tabla_reporte_area tbody').on('click', 'td.editar', function()
 {
 	var tr = $(this).closest('tr');
@@ -2869,8 +2868,8 @@ $('#tabla_reporte_area tbody').on('click', 'td.editar', function()
 		$('#reportearea_orden').attr('required', false);
 		$('#reportearea_orden').attr('disabled', true);
 
-		// $('#reportebeiarea_porcientooperacion').attr('required', false);
-		// $('#reportebeiarea_porcientooperacion').attr('disabled', true);
+		$('#reportebeiarea_porcientooperacion').attr('required', false);
+		$('#reportebeiarea_porcientooperacion').attr('disabled', true);
 	}
 	else
 	{
@@ -2883,8 +2882,8 @@ $('#tabla_reporte_area tbody').on('click', 'td.editar', function()
 		$('#reportearea_orden').attr('disabled', false);
 		$('#reportearea_orden').attr('required', true);
 
-		// $('#reportebeiarea_porcientooperacion').attr('disabled', false);
-		// $('#reportebeiarea_porcientooperacion').attr('required', true);
+		$('#reportebeiarea_porcientooperacion').attr('disabled', false);
+		$('#reportebeiarea_porcientooperacion').attr('required', true);
 	}
 
 
@@ -2897,7 +2896,7 @@ $('#tabla_reporte_area tbody').on('click', 'td.editar', function()
 		cache: false,
 		success:function(dato)
 		{
-			// $('#tabla_areacategorias tbody').html(dato.areacategorias);
+			
 			tabla_areacategorias(dato.areacategorias);
 		},
 		beforeSend: function()
@@ -3039,3 +3038,626 @@ $('#tabla_reporte_area tbody').on('click', 'td>button.eliminar', function()
 	});
 	return false;
 });
+
+function validarCampos() {
+	//Validar categorias seleccionadas
+	const checkboxes = document.querySelectorAll('#tabla_areacategorias input[type="checkbox"]');
+	const algunoMarcado = Array.from(checkboxes).some(checkbox => checkbox.checked);
+	const aplica = document.getElementById('aplica_bei_no');
+
+	if (aplica.checked) {
+
+		$('.infoAdicionalArea').prop('required', false);
+		return true;
+
+	} else {
+
+		$('.infoAdicionalArea').prop('required', true);
+		if (!algunoMarcado) {
+			swal({
+				title: "Por favor no se olvide de seleccionar al menos una categoria.",
+				text: "Realize esta acción para poder continuar",
+				type: "warning", // warning, error, success, info
+				buttons: {
+					visible: true, // true , false
+				},
+				showConfirmButton: true
+			})
+			return false;
+		}
+
+		return true;
+
+	}
+}
+
+$("#botonguardar_modal_area").click(function (e) {
+
+	datatable_areacategoria.search("").draw();
+	e.preventDefault();
+
+	if (validarCampos()) {
+
+		// valida campos vacios
+		var valida = this.form.checkValidity();
+		if (valida) {
+			swal({
+				title: "¡Confirme que desea guardar!",
+				text: "Área: " + $("#reportearea_nombre").val(),
+				type: "warning",
+				showCancelButton: true,
+				confirmButtonColor: "#DD6B55",
+				confirmButtonText: "Guardar!",
+				cancelButtonText: "Cancelar!",
+				closeOnConfirm: false,
+				closeOnCancel: false
+			},
+				function (isConfirm) {
+					if (isConfirm) {
+						// cerrar msj confirmacion
+						swal.close();
+
+						// enviar datos
+						$('#form_reporte_area').ajaxForm({
+							dataType: 'json',
+							type: 'POST',
+							url: '/reportebei',
+							data: {
+								opcion: 14,
+								proyecto_id: proyecto.id,
+								agente_id: agente_id,
+								agente_nombre: agente_nombre,
+								reportebei_id: reportebei_id,
+								areas_poe: 1,
+							},
+							resetForm: false,
+							success: function (dato) {
+								// Actualizar ID reporte						
+								reportebei_id = dato.reportebei_id;
+
+								tabla_reporte_revisiones(proyecto.id);
+
+								// Actualizar tabla
+								tabla_reporte_areas(proyecto.id, reportebei_id);
+						
+
+								// mensaje
+								swal({
+									title: "Correcto",
+									text: "" + dato.msj,
+									type: "success", // warning, error, success, info
+									buttons: {
+										visible: false, // true , false
+									},
+									timer: 1500,
+									showConfirmButton: false
+								});
+
+								// actualiza boton
+								$('#botonguardar_modal_area').html('Guardar <i class="fa fa-save"></i>');
+								$('#botonguardar_modal_area').attr('disabled', false);
+
+								// cerrar modal
+								$('#modal_reporte_area').modal('hide');
+							},
+							beforeSend: function () {
+								$('#botonguardar_modal_area').html('Guardando <i class="fa fa-spin fa-spinner"></i>');
+								$('#botonguardar_modal_area').attr('disabled', true);
+							},
+							error: function (dato) {
+								// actualiza boton
+								$('#botonguardar_modal_area').html('Guardar <i class="fa fa-save"></i>');
+								$('#botonguardar_modal_area').attr('disabled', false);
+
+								// mensaje
+								swal({
+									title: "Error",
+									text: "" + dato.msj,
+									type: "error", // warning, error, success, info
+									buttons: {
+										visible: false, // true , false
+									},
+									timer: 1500,
+									showConfirmButton: false
+								});
+								return false;
+							}
+						}).submit();
+						return false;
+					}
+					else {
+						// mensaje
+						swal({
+							title: "Cancelado",
+							text: "Acción cancelada",
+							type: "error", // warning, error, success, info
+							buttons: {
+								visible: false, // true , false
+							},
+							timer: 500,
+							showConfirmButton: false
+						});
+					}
+				});
+			return false;
+		} else {
+			swal({
+				title: "Por favor asegurece de rellenar todos los campos",
+				text: "",
+				type: "info", // warning, error, success, info
+				buttons: {
+					visible: false, // true , false
+				},
+				timer: 2500,
+				showConfirmButton: false
+			});
+
+		}
+
+	}
+});
+
+//================================================================
+// TABLA AREAS CATEGORIAS
+
+var datatable_areacategoria = null;
+function tabla_areacategorias(tbody) {
+	if (datatable_areacategoria != null) {
+		datatable_areacategoria.destroy();
+	}
+
+	$('#tabla_areacategorias tbody').html(tbody);
+
+	datatable_areacategoria = $('#tabla_areacategorias').DataTable({
+		"scrollY": "185px",
+		"scrollCollapse": true,
+		"lengthMenu": [[20, 50, 100, -1], [20, 50, 100, "Todos"]],
+		// "rowsGroup": [0], //agrupar filas
+		"order": [[0, "DESC"]],
+		"ordering": false,
+		"searching": true,
+		"processing": true,
+		"paging": false,
+		"language": {
+			"lengthMenu": "Mostrar _MENU_ Registros",
+			"zeroRecords": "No se encontraron registros",
+			"info": "Página _PAGE_ de _PAGES_ (Total _TOTAL_ registros)",
+			"infoEmpty": "No se encontraron registros",
+			"infoFiltered": "(Filtrado de _MAX_ registros)",
+			"emptyTable": "No hay datos disponibles en la tabla",
+			"loadingRecords": "Cargando datos....",
+			"processing": "Procesando <i class='fa fa-spin fa-spinner fa-3x'></i>",
+			"search": "Buscar",
+			"paginate": {
+				"first": "Primera",
+				"last": "Ultima",
+				"next": "Siguiente",
+				"previous": "Anterior"
+			}
+		}
+	});
+}
+
+
+function activa_areacategoria(checkbox, num_registro) {
+	if (checkbox.checked) {
+		$(".areacategoria_" + num_registro).attr('readonly', false);
+		$(".areacategoria_" + num_registro).attr('required', true);
+	}
+	else {
+		$(".areacategoria_" + num_registro).val('');
+		$(".areacategoria_" + num_registro).attr('required', false);
+		$(".areacategoria_" + num_registro).attr('readonly', true);
+	}
+}
+
+//================================================================
+// TABLA AREAS ADICIONALES DE INFORMACION
+
+
+var datatable_reporte_5_5 = null;
+function tabla_reporte_5_5(tbody) {
+	if (datatable_reporte_5_5 != null) {
+		datatable_reporte_5_5.destroy();
+	}
+
+	$('#tabla_reporte_5_5 tbody').html(tbody);
+
+	datatable_reporte_5_5 = $('#tabla_reporte_5_5').DataTable({
+		"lengthMenu": [[20, 50, 100, -1], [20, 50, 100, "Todos"]],
+		"rowsGroup": [1], //agrupar filas
+		"order": [[0, "DESC"]],
+		"ordering": false,
+		"searching": false,
+		"processing": true,
+		"paging": true,
+		"language": {
+			"lengthMenu": "Mostrar _MENU_ Registros",
+			"zeroRecords": "No se encontraron registros",
+			"info": "Página _PAGE_ de _PAGES_ (Total _TOTAL_ registros)",
+			"infoEmpty": "No se encontraron registros",
+			"infoFiltered": "(Filtrado de _MAX_ registros)",
+			"emptyTable": "No hay datos disponibles en la tabla",
+			"loadingRecords": "Cargando datos....",
+			"processing": "Procesando <i class='fa fa-spin fa-spinner fa-3x'></i>",
+			"search": "Buscar",
+			"paginate": {
+				"first": "Primera",
+				"last": "Ultima",
+				"next": "Siguiente",
+				"previous": "Anterior"
+			}
+		}
+	});
+}
+
+
+var datatable_reporte_6_1 = null;
+function tabla_reporte_6_1(tbody) {
+	if (datatable_reporte_6_1 != null) {
+		datatable_reporte_6_1.destroy();
+	}
+
+	$('#tabla_reporte_6_1 tbody').html(tbody);
+
+	datatable_reporte_6_1 = $('#tabla_reporte_6_1').DataTable({
+		"lengthMenu": [[20, 50, 100, -1], [20, 50, 100, "Todos"]],
+		"rowsGroup": [1, 3], //agrupar filas
+		"order": [[0, "DESC"]],
+		"ordering": false,
+		"searching": false,
+		"processing": true,
+		"paging": true,
+		"language": {
+			"lengthMenu": "Mostrar _MENU_ Registros",
+			"zeroRecords": "No se encontraron registros",
+			"info": "Página _PAGE_ de _PAGES_ (Total _TOTAL_ registros)",
+			"infoEmpty": "No se encontraron registros",
+			"infoFiltered": "(Filtrado de _MAX_ registros)",
+			"emptyTable": "No hay datos disponibles en la tabla",
+			"loadingRecords": "Cargando datos....",
+			"processing": "Procesando <i class='fa fa-spin fa-spinner fa-3x'></i>",
+			"search": "Buscar",
+			"paginate": {
+				"first": "Primera",
+				"last": "Ultima",
+				"next": "Siguiente",
+				"previous": "Anterior"
+			}
+		}
+	});
+}
+
+//============================================
+// EQUIPO DE PROTECCION PERSONAL (EPP)
+
+
+$("#boton_reporte_nuevoepp").click(function () {
+	$('#form_modal_epp').each(function () {
+		this.reset();
+	});
+	// Campos Hidden
+	$('#reporteepp_id').val(0);
+
+	// Titulo del modal
+	$('#modal_reporte_epp .modal-title').html('Nueva equipo de protección personal');
+
+
+	$("#tabla_lista_epp_bei tbody").html('');
+	$("#tabla_lista_epp_bei tbody").append('<tr>' +
+		'<td style="width:250px"><select class="custom-select form-control regionAnatomica" id="reportebeiepp_partecuerpo" name="reportebeiepp_partecuerpo" required>' + opciones_catepp + '</select></td>' +
+		'<td style="width:400px"><select class="custom-select form-control claveyEpp" id="reportebeiepp_equipo" name="reportebeiepp_equipo" required></select></td>' +
+		'</tr>');
+	$('#modal_reporte_epp').modal({ backdrop: false });
+});
+
+
+$("#tabla_lista_epp_bei tbody").on("change", ".regionAnatomica", function () {
+
+	var valorSeleccionado = $(this).val();
+	var fila = $(this).closest("tr");
+	var selectClaveEppp = fila.find("select[name='reportebeiepp_equipo']"); // Encontrar el Select en la misma fila
+
+	$.ajax({
+		type: "GET",
+		dataType: "json",
+		url: "/recsensorialClaveEppruido/" + valorSeleccionado,
+		data: {},
+		cache: false,
+		success: function (dato) {
+			selectClaveEppp.html(dato.opciones);
+		},
+		error: function (dato) {
+			// alert('Error: '+dato.msj);
+			return false;
+		}
+	});//
+
+
+});
+
+function consulta_categoria_epp() {
+	// alert('mensaje');
+	$.ajax({
+		type: "GET",
+		dataType: "json",
+		url: "/recsensorialeppcatalogoruido",
+		data: {},
+		cache: false,
+		success: function (dato) {
+			opciones_catepp = dato.opciones;
+		},
+		error: function (dato) {
+			// alert('Error: '+dato.msj);
+			return false;
+		}
+	});//Fin ajax
+}
+
+$('#tabla_reporte_epp tbody').on('click', 'td.editar', function () {
+	var tr = $(this).closest('tr');
+	var row = datatable_epp.row(tr);
+
+	$('#form_modal_epp').each(function () {
+		this.reset();
+	});
+	// Titulo del modal
+	$('#modal_reporte_epp .modal-title').html('Equipo de protección personal');
+
+	consulta_categoria_epp()
+
+	$("#tabla_lista_epp_bei tbody").html('');
+	$("#tabla_lista_epp_bei tbody").append('<tr>' +
+		'<td style="width:250px"><select class="custom-select form-control regionAnatomica" id="reportebeiepp_partecuerpo" name="reportebeiepp_partecuerpo" required>' + opciones_catepp + '</select></td>' +
+		'<td style="width:400px"><select class="custom-select form-control claveyEpp" id="reportebeiepp_equipo" name="reportebeiepp_equipo" required></select></td>' +
+		'</tr>');
+
+	// Llenar campos
+	// Campos Hidden
+	$('#reporteepp_id').val(row.data().id);
+
+
+	$.ajax({
+		type: "GET",
+		dataType: "json",
+		url: "/recsensorialClaveEppruido/" + row.data().reportebeiepp_partecuerpo,
+		data: {},
+		cache: false,
+		success: function (dato) {
+			$('#reportebeiepp_equipo').html(dato.opciones);
+			setTimeout(() => {
+				$('#reportebeiepp_partecuerpo').val(row.data().reportebeiepp_partecuerpo);
+				$('#reportebeiepp_equipo').val(row.data().reportebeiepp_equipo);
+
+			}, 500);
+		},
+		error: function (dato) {
+			// alert('Error: '+dato.msj);
+			return false;
+		}
+	});//
+
+
+
+	// mostrar modal
+	$('#modal_reporte_epp').modal({ backdrop: false });
+});
+
+
+$('#tabla_reporte_epp tbody').on('click', 'td>button.eliminar', function () {
+	var tr = $(this).closest('tr');
+	var row = datatable_epp.row(tr);
+
+	swal({
+		title: "¡Confirme que desea eliminar!",
+		text: "E.P.P.: " + row.data().reportebeiepp_partecuerpo,
+		type: "warning",
+		showCancelButton: true,
+		confirmButtonColor: "#DD6B55",
+		confirmButtonText: "Aceptar!",
+		cancelButtonText: "Cancelar!",
+		closeOnConfirm: false,
+		closeOnCancel: false
+	},
+		function (isConfirm) {
+			if (isConfirm) {
+				swal({
+					title: "¡Por seguridad confirme nuevamente que desea eliminar!",
+					text: "E.P.P.: " + row.data().reportebeiepp_partecuerpo,
+					type: "warning",
+					showCancelButton: true,
+					confirmButtonColor: "#DD6B55",
+					confirmButtonText: "Eliminar!",
+					cancelButtonText: "Cancelar!",
+					closeOnConfirm: false,
+					closeOnCancel: false
+				},
+					function (isConfirm) {
+						if (isConfirm) {
+							// cerrar msj confirmacion
+							swal.close();
+
+							$.ajax({
+								type: "GET",
+								dataType: "json",
+								url: "/reportebeieppeliminar/" + row.data().id,
+								data: {},
+								cache: false,
+								success: function (dato) {
+									// Actualizar tabla
+									tabla_reporte_epp(proyecto.id, reporteregistro_id);
+
+									// mensaje
+									swal({
+										title: "Correcto",
+										text: "" + dato.msj,
+										type: "success", // warning, error, success, info
+										buttons: {
+											visible: false, // true , false
+										},
+										timer: 1500,
+										showConfirmButton: false
+									});
+								},
+								beforeSend: function () {
+
+									// $('#tabla_reporte_definiciones tbody').html('<tr><td colspan="5"><i class="fa fa-spin fa-spinner" style="font-size: 40px!important;"></i></td></tr>');
+								},
+								error: function (dato) {
+									// mensaje
+									swal({
+										title: "Error",
+										text: "" + dato.msj,
+										type: "error", // warning, error, success, info
+										buttons: {
+											visible: false, // true , false
+										},
+										timer: 1500,
+										showConfirmButton: false
+									});
+
+									return false;
+								}
+							});//Fin ajax
+						}
+						else {
+							// mensaje
+							swal({
+								title: "Cancelado",
+								text: "Acción cancelada",
+								type: "error", // warning, error, success, info
+								buttons: {
+									visible: false, // true , false
+								},
+								timer: 500,
+								showConfirmButton: false
+							});
+						}
+					});
+			}
+			else {
+				// mensaje
+				swal({
+					title: "Cancelado",
+					text: "Acción cancelada",
+					type: "error", // warning, error, success, info
+					buttons: {
+						visible: false, // true , false
+					},
+					timer: 500,
+					showConfirmButton: false
+				});
+			}
+		});
+	return false;
+});
+
+
+$("#botonguardar_modal_epp").click(function () {
+	// valida campos vacios
+	var valida = this.form.checkValidity();
+	if (valida) {
+		swal({
+			title: "¡Confirme que desea guardar!",
+			text: "Equipo de protección personal",
+			type: "warning",
+			showCancelButton: true,
+			confirmButtonColor: "#DD6B55",
+			confirmButtonText: "Guardar!",
+			cancelButtonText: "Cancelar!",
+			closeOnConfirm: false,
+			closeOnCancel: false
+		},
+			function (isConfirm) {
+				if (isConfirm) {
+					// cerrar msj confirmacion
+					swal.close();
+
+					// enviar datos
+					$('#form_modal_epp').ajaxForm({
+						dataType: 'json',
+						type: 'POST',
+						url: '' + ruta_storage_guardar,
+						data: {
+							opcion: 12,
+							proyecto_id: proyecto.id,
+							agente_id: agente_id,
+							agente_nombre: agente_nombre,
+							reporteregistro_id: reporteregistro_id,
+							catactivo_id: $("#reporte_catactivo_id").val(),
+							reporte_instalacion: $("#reporte_instalacion").val(),
+
+						},
+						resetForm: false,
+						success: function (dato) {
+							// Actualizar ID reporte						
+							reporteregistro_id = dato.reporteregistro_id;
+
+							tabla_reporte_epp(proyecto.id, reporteregistro_id);
+
+							// Actualizar tabla
+							// tabla_reporte_areas(proyecto.id, reporteregistro_id);
+
+							// mensaje
+							swal({
+								title: "Correcto",
+								text: "" + dato.msj,
+								type: "success", // warning, error, success, info
+								buttons: {
+									visible: false, // true , false
+								},
+								timer: 1500,
+								showConfirmButton: false
+							});
+
+							// actualiza boton
+							$('#botonguardar_modal_epp').html('Guardar <i class="fa fa-save"></i>');
+							$('#botonguardar_modal_epp').attr('disabled', false);
+
+							// cerrar modal
+							$('#modal_reporte_epp').modal('hide');
+						},
+						beforeSend: function () {
+							console.log($('#form_modal_epp').serializeArray());
+							$('#botonguardar_modal_epp').html('Guardando <i class="fa fa-spin fa-spinner"></i>');
+							$('#botonguardar_modal_epp').attr('disabled', true);
+						},
+						error: function (dato) {
+							// actualiza boton
+							$('#botonguardar_modal_epp').html('Guardar <i class="fa fa-save"></i>');
+							$('#botonguardar_modal_epp').attr('disabled', false);
+
+							// mensaje
+							swal({
+								title: "Error",
+								text: "" + dato.msj,
+								type: "error", // warning, error, success, info
+								buttons: {
+									visible: false, // true , false
+								},
+								timer: 1500,
+								showConfirmButton: false
+							});
+							return false;
+						}
+					}).submit();
+					return false;
+				}
+				else {
+					// mensaje
+					swal({
+						title: "Cancelado",
+						text: "Acción cancelada",
+						type: "error", // warning, error, success, info
+						buttons: {
+							visible: false, // true , false
+						},
+						timer: 500,
+						showConfirmButton: false
+					});
+				}
+			});
+		return false;
+	}
+});
+

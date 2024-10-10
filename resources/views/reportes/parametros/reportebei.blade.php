@@ -434,7 +434,7 @@
                         </div>
                         <div class="col-12" style="text-align: right;">
                             <button type="submit" class="btn btn-danger waves-effect waves-light botoninforme" id="botonguardar_reporte_metodologia_4_2">Guardar método de evaluación
-                            <i class="fa fa-save"></i></button>
+                                <i class="fa fa-save"></i></button>
                         </div>
                     </div>
                 </form>
@@ -510,6 +510,7 @@
                                     <th width="130">Instalación</th>
                                     <th width="130">Área</th>
                                     <th width="">Categoría</th>
+                                    <th width="">Total</th>
                                     <th width="60">Editar</th>
                                     <th width="60">Eliminar</th>
                                 </tr>
@@ -558,6 +559,7 @@
                                     <th width="">Área</th>
                                     <th width="80">Categoría</th>
                                     <th width="200">Actividad</th>
+                                    <th width="200">Jornada</th>
                                 </tr>
                             </thead>
                             <tbody></tbody>
@@ -1067,7 +1069,7 @@
                         <div class="col-3">
                             <div class="form-group">
                                 <label>% de operacion en el área</label>
-                                <input type="number" min="0" max="100" class="form-control" id="reportebeiarea_porcientooperacion" name="reportebeiarea_porcientooperacion" required>
+                                <input type="number" min="0" max="100" class="form-control" id="reportebeiarea_porcientooperacion" name="reportebeiarea_porcientooperacion" value="100" required>
                             </div>
                         </div>
                         <div class="col-3">
@@ -1093,163 +1095,6 @@
                                 </div>
                             </div>
                         </div>
-                        <div class="col-12">
-                            <ol class="breadcrumb text-light" style="padding: 6px; margin: 0px 0px 10px 0px; text-align: center;">
-                                Descripción de las instalaciones
-                            </ol>
-                        </div>
-                        <div class="col-4">
-                            <div class="form-group">
-                                <label><b>x</b>&nbsp;Largo del área (m) *</label>
-                                <input type="text" class="form-control infoAdicionalArea" id="reportearea_largo" name="reportearea_largo" required>
-                            </div>
-                        </div>
-                        <div class="col-4">
-                            <div class="form-group">
-                                <label><b>y</b>&nbsp;Ancho del área (m) *</label>
-                                <input type="text" class="form-control infoAdicionalArea" id="reportearea_ancho" name="reportearea_ancho" required>
-                            </div>
-                        </div>
-                        <div class="col-4">
-                            <div class="form-group">
-                                <label><b>h</b>&nbsp;Alto del área (m) *</label>
-                                <input type="text" class="form-control infoAdicionalArea" id="reportearea_alto" name="reportearea_alto" required>
-                            </div>
-                        </div>
-                        <div class="col-4">
-                            <div class="form-group">
-                                <label>Puntos evaluados por IC *</label>
-                                <input type="number" class="form-control infoAdicionalArea" id="reportearea_puntos_ic" name="reportearea_puntos_ic" required>
-                            </div>
-                        </div>
-                        <div class="col-4">
-                            <div class="form-group">
-                                <label>Puntos evaluados por PT *</label>
-                                <input type="number" class="form-control infoAdicionalArea" id="reportearea_puntos_pt" name="reportearea_puntos_pt" required>
-                            </div>
-                        </div>
-                        <div class="col-4">
-                            <div class="form-group">
-                                <label>Criterio *</label>
-                                <input type="text" class="form-control infoAdicionalArea" id="reportearea_criterio" name="reportearea_criterio" required>
-                            </div>
-                        </div>
-                        <div class="col-4">
-                            <div class="form-group">
-                                <label>Color de techo</label>
-                                <input type="text" class="form-control infoAdicionalArea" id="reportearea_colortecho" name="reportearea_colortecho">
-                            </div>
-                        </div>
-                        <div class="col-4">
-                            <div class="form-group">
-                                <label>Color de paredes</label>
-                                <input type="text" class="form-control infoAdicionalArea" id="reportearea_paredes" name="reportearea_paredes">
-                            </div>
-                        </div>
-                        <div class="col-4">
-                            <div class="form-group">
-                                <label>Color de piso</label>
-                                <input type="text" class="form-control infoAdicionalArea" id="reportearea_colorpiso" name="reportearea_colorpiso">
-                            </div>
-                        </div>
-
-                        <div class="col-4">
-                            <div class="form-group">
-                                <label>Superficie techo</label>
-                                <input type="text" class="form-control infoAdicionalArea" id="reportearea_superficietecho" name="reportearea_superficietecho" required>
-                            </div>
-                        </div>
-                        <div class="col-4">
-                            <div class="form-group">
-                                <label>Superficie paredes</label>
-                                <input type="text" class="form-control infoAdicionalArea" id="reportearea_superficieparedes" name="reportearea_superficieparedes" required>
-                            </div>
-                        </div>
-                        <div class="col-4">
-                            <div class="form-group">
-                                <label>Superficie piso</label>
-                                <input type="text" class="form-control infoAdicionalArea" id="reportearea_superficiepiso" name="reportearea_superficiepiso" required>
-                            </div>
-                        </div>
-                        {{-- --}}
-                        <div class="col-12">
-                            <ol class="breadcrumb text-light" style="padding: 6px; margin: 0px 0px 10px 0px; text-align: center;">
-                                Descripción de las lámparas
-                            </ol>
-                        </div>
-
-                        <div class="col-4">
-                            <div class="form-group">
-                                <label>Potencia de las lámparas *</label>
-                                <input type="text" class="form-control infoAdicionalArea" id="reportearea_potenciaslamparas" name="reportearea_potenciaslamparas" required>
-                            </div>
-                        </div>
-                        <div class="col-4">
-                            <div class="form-group">
-                                <label>N° de lámparas *</label>
-                                <input type="number	" class="form-control infoAdicionalArea" id="reportearea_numlamparas" name="reportearea_numlamparas" required>
-                            </div>
-                        </div>
-
-                        <div class="col-4">
-                            <div class="form-group">
-                                <label>(h) Altura (m) *</label>
-                                <input type="text" class="form-control infoAdicionalArea" id="reportearea_alturalamparas" name="reportearea_alturalamparas" required>
-                            </div>
-                        </div>
-                        <div class="col-4">
-                            <div class="form-group">
-                                <label>Programa de mantenimiento *</label>
-                                <input type="text" class="form-control infoAdicionalArea" id="reportearea_programamantenimiento" name="reportearea_programamantenimiento" required>
-                            </div>
-                        </div>
-
-                        <div class="col-4">
-                            <div class="form-group">
-                                <label>Tipo de iluminación</label>
-                                <select class="custom-select form-control infoAdicionalArea" id="reportearea_tipobei" name="reportearea_tipobei" required>
-                                    <option value=""></option>
-                                    <option value="NA">No aplica</option>
-                                    <option value="Natural">Natural</option>
-                                    <option value="Artificial">Artificial</option>
-                                    <option value="Natural y artificial">Natural y artificial</option>
-                                </select>
-                            </div>
-                        </div>
-
-                        <div class="col-12">
-                            <div class="form-group">
-                                <label>Descripción de trabajo que requiere iluminación localizada *</label>
-                                <input type="text" class="form-control infoAdicionalArea" id="reportearea_descripcionilimunacion" name="reportearea_descripcionilimunacion" required>
-                            </div>
-                        </div>
-
-
-                        {{-- <div class="col-3">
-							<div class="form-group">
-								<label>Influencia de luz natural</label>
-								<select class="custom-select form-control" id="reportearea_luznatural" name="reportearea_luznatural" required>
-									<option value=""></option>
-									<option value="NA">No aplica</option>
-									<option value="Si">Si</option>
-									<option value="No">No</option>
-								</select>
-							</div>
-						</div>
-						<div class="col-3">
-							<div class="form-group">
-								<label>Iluminación localizada</label>
-								<select class="custom-select form-control" id="reportearea_beilocalizada" name="reportearea_beilocalizada" required>
-									<option value=""></option>
-									<option value="NA">No aplica</option>
-									<option value="Si">Si</option>
-									<option value="No">No</option>
-								</select>
-							</div>
-						</div> --}}
-
-
-
 
                     </div>
                     <div class="row">
@@ -1266,8 +1111,6 @@
                                             <th width="80">Total</th>
                                             <th width="80">GEH</th>
                                             <th width="180">Actividades</th>
-                                            <th width="80">Niveles Mínimos de Iluminación </th>
-                                            <th width="180">Tarea visual</th>
                                         </tr>
                                     </thead>
                                     <tbody></tbody>
@@ -1574,6 +1417,64 @@
 <!-- MODAL-REPORTE-ÁREA -->
 <!-- ============================================================== -->
 
+<!-- ============================================================== -->
+<!-- MODAL-REPORTE-EQUIPO DE PROTECCION PERSONAL -->
+<!-- ============================================================== -->
+<style type="text/css" media="screen">
+    #modal_reporte_epp>.modal-dialog {
+        min-width: 800px !important;
+    }
+
+    #modal_reporte_epp .modal-body .form-group {
+        margin: 0px 0px 12px 0px !important;
+        padding: 0px !important;
+    }
+
+    #modal_reporte_epp .modal-body .form-group label {
+        margin: 0px !important;
+        padding: 0px 0px 3px 0px !important;
+    }
+</style>
+<div id="modal_reporte_epp" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" style="display: none;">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <form method="post" enctype="multipart/form-data" name="form_modal_epp" id="form_modal_epp">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                    <h4 class="modal-title">Titulo</h4>
+                </div>
+                <div class="modal-body">
+                    <div class="row">
+                        <div class="col-12">
+                            {!! csrf_field() !!}
+                            <input type="hidden" class="form-control" id="reporteepp_id" name="reporteepp_id" value="0">
+                        </div>
+                        <div class="table-responsive" style="max-height: 410px!important;">
+                            <table class="table table-hover stylish-table" width="100%" id="tabla_lista_epp_bei">
+                                <thead>
+                                    <tr>
+                                        <th style="max-width: 48%!important;">Parte del cuerpo *</th>
+                                        <th style="max-width: 48%!important;">Equipo de protección personal básico proporcionado *</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default waves-effect" data-dismiss="modal">Cerrar</button>
+                    <button type="submit" class="btn btn-danger waves-effect waves-light botoninforme" id="botonguardar_modal_epp">Guardar <i class="fa fa-save"></i></button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+<!-- ============================================================== -->
+<!-- MODAL-REPORTE-EQUIPO DE PROTECCION PERSONAL -->
+<!-- ============================================================== -->
 
 <!-- ============================================================== -->
 <!-- MODAL-IMPORTAR-PUNTOS -->

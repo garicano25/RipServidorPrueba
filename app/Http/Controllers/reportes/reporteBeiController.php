@@ -15,7 +15,7 @@ use App\modelos\reportes\reportecategoriaModel;
 use App\modelos\reportes\reporteareaModel;
 use App\modelos\proyecto\proyectoModel;
 use App\modelos\recsensorial\recsensorialModel;
-use App\modelos\reportes\reportedefinicionesModel;
+use App\modelos\reportes\reportedefinicionesModel; 
 use App\modelos\reportes\reportebeicatalogoModel;
 use App\modelos\reportes\reportebeiModel;
 use App\modelos\reportes\reportebeiareaModel;
@@ -1160,12 +1160,9 @@ class reporteBeiController extends Controller{
             $area = 'XXX';
             $area2 = 'XXX';
             $selectareasoption = '';
-            $tabla_5_4 = NULL;
             $tabla_5_5 = NULL;
             $tabla_6_1 = NULL;
-            $tabla_6_2_1 = NULL;
             $dato['total_ic'] = 0;
-            $tabla_6_2_2 = NULL;
             $dato['total_pt'] = 0;
 
 
@@ -1177,12 +1174,9 @@ class reporteBeiController extends Controller{
                                         reportearea.reportearea_instalacion,
                                         reportearea.reportearea_nombre,
                                         reportearea.reportearea_orden,
-                                        -- reportearea.reportearea_porcientooperacion,
                                         reportearea.reportebeiarea_porcientooperacion,
                                         IF( IFNULL( reportearea.reportebeiarea_porcientooperacion, "" ) != "", CONCAT( reportearea.reportebeiarea_porcientooperacion, " %" ), NULL ) AS reportearea_porcientooperacion_texto,
-                                        
                                         reportearea.reportearea_descripcion,
-
                                         reporteareacategoria.reportecategoria_id,
                                         reportecategoria.reportecategoria_orden,
                                         reportecategoria.reportecategoria_nombre,
@@ -1200,7 +1194,7 @@ class reporteBeiController extends Controller{
                                         reportecategoria.reportecategoria_horas,
                                         reporteareacategoria.reporteareacategoria_total,
                                         reporteareacategoria.reporteareacategoria_geh,
-                                        reporteareacategoria.reporteareacategoria_actividades,
+                                        reporteareacategoria.reporteareacategoria_actividades
 
                                     FROM
                                         reportearea
@@ -1223,6 +1217,22 @@ class reporteBeiController extends Controller{
 
                         $numero_registro += 1;
                         $value->numero_registro = $numero_registro;
+
+                        if (($value->reportebeiarea_porcientooperacion + 0) > 0) {
+                            $numero_registro2 += 1;
+
+
+                            //TABLA 6.1.- Condiciones de operación durante la evaluación (representado en porcentaje)
+                            //==================================================
+
+                            $tabla_6_1 .= '<tr>
+                                                <td>' . $numero_registro2 . '</td>
+                                                <td>' . $value->reportearea_instalacion . '</td>
+                                                <td>' . $value->reportearea_nombre . '</td>
+                                                <td>' . $value->reportebeiarea_porcientooperacion . '%</td>
+                                            </tr>';
+
+                        }
 
                     } else {
                         $value->area_nombre = $area;
@@ -1247,8 +1257,20 @@ class reporteBeiController extends Controller{
 
 
                     if (($value->reportebeiarea_porcientooperacion + 0) > 0) {
-                        
 
+                        if ($value->checked) {
+                            //TABLA 5.5.- Actividades del personal expuesto
+                            //==================================================
+
+                            $tabla_5_5 .= '<tr>
+                                                <td>' . $numero_registro2 . '</td>
+                                                <td>' . $value->reportearea_instalacion . '</td>
+                                                <td>' . $value->reportearea_nombre . '</td>
+                                                <td>' . $value->reportecategoria_nombre . '</td>
+                                                <td class="justificado">' . $value->reporteareacategoria_actividades . '</td>
+                                                <td>' . $value->reportecategoria_horas . ' Hrs.</td>
+                                            </tr>';
+                        }
 
                         // SELECT OPCIONES DE AREAS POR INSTALACION
                         //==================================================
@@ -1310,7 +1332,6 @@ class reporteBeiController extends Controller{
                                         reportebeiareacategoria.reportebeiareacategoria_total AS reporteareacategoria_total,
                                         reportebeiareacategoria.reportebeiareacategoria_geo AS reporteareacategoria_geh,
                                         reportebeicategoria.reportebeicategoria_horas AS reportecategoria_horas
-
                                     FROM
                                         reportebeiarea
                                         INNER JOIN reportebeiareacategoria ON reportebeiarea.id = reportebeiareacategoria.reportebeiarea_id
@@ -1333,6 +1354,27 @@ class reporteBeiController extends Controller{
 
                         $numero_registro += 1;
                         $value->numero_registro = $numero_registro;
+
+                        if (($value->reporteiluminacionarea_porcientooperacion + 0) > 0) {
+                            $numero_registro2 += 1;
+
+
+                           
+
+
+                            //TABLA 6.1.- Condiciones de operación durante la evaluación (representado en porcentaje)
+                            //==================================================
+
+                            $tabla_6_1 .= '<tr>
+                                                <td>' . $numero_registro2 . '</td>
+                                                <td>' . $value->reportearea_instalacion . '</td>
+                                                <td>' . $value->reportearea_nombre . '</td>
+                                                <td>' . $value->reporteiluminacionarea_porcientooperacion . '%</td>
+                                            </tr>';
+
+
+                           
+                        }
 
 
                         
@@ -1362,7 +1404,17 @@ class reporteBeiController extends Controller{
 
                     if (($value->reportebeiarea_porcientooperacion + 0) > 0) {
 
-                       
+                        //TABLA 5.5.- Actividades del personal expuesto
+                        //==================================================
+
+                        $tabla_5_5 .= '<tr>
+                                            <td>' . $numero_registro . '</td>
+                                            <td>' . $value->reportearea_instalacion . '</td>
+                                            <td>' . $value->reportearea_nombre . '</td>
+                                            <td>' . $value->reportecategoria_nombre . '</td>
+                                            <td class="justificado">' . $value->reporteareacategoria_actividades . '</td>
+                                            <td>' . $value->reportecategoria_horas . ' Hrs.</td>
+                                        </tr>';
 
 
                         // SELECT OPCIONES DE AREAS POR INSTALACION
@@ -1398,11 +1450,8 @@ class reporteBeiController extends Controller{
 
             // respuesta
             $dato['data'] = $areas;
-            $dato["tabla_5_4"] = $tabla_5_4;
             $dato["tabla_5_5"] = $tabla_5_5;
             $dato["tabla_6_1"] = $tabla_6_1;
-            $dato["tabla_6_2_1"] = $tabla_6_2_1;
-            $dato["tabla_6_2_2"] = $tabla_6_2_2;
 
             $dato["total_singuardar"] = $total_singuardar;
             $dato["selectareasoption"] = $selectareasoption;
@@ -1410,11 +1459,8 @@ class reporteBeiController extends Controller{
             return response()->json($dato);
         } catch (Exception $e) {
             $dato['data'] = 0;
-            $dato["tabla_5_4"] = NULL;
             $dato["tabla_5_5"] = NULL;
             $dato["tabla_6_1"] = NULL;
-            $dato["tabla_6_2_1"] = NULL;
-            $dato["tabla_6_2_2"] = NULL;
 
             $dato["total_singuardar"] = $total_singuardar;
             $dato["selectareasoption"] = '';
@@ -1423,6 +1469,197 @@ class reporteBeiController extends Controller{
         }
     }
 
+
+
+    public function reportebeiareascategorias($proyecto_id, $reportebei_id, $area_id, $areas_poe)
+    {
+        try {
+            $numero_registro = 0;
+            $areacategorias_lista = '';
+
+
+            if (($areas_poe + 0) == 1) {
+                $areacategorias = DB::select('SELECT
+                                                reportecategoria.proyecto_id,
+                                                reporteareacategoria.reportearea_id,
+                                                reportecategoria.id,
+                                                reportecategoria.reportecategoria_orden,
+                                                reportecategoria.reportecategoria_nombre,
+                                                IFNULL((
+                                                    SELECT
+                                                        IF(reportebeiareacategoria.reportebeicategoria_id, "checked", "")
+                                                    FROM
+                                                        reportebeiareacategoria
+                                                    WHERE
+                                                        reportebeiareacategoria.reportebeiarea_id = reporteareacategoria.reportearea_id
+                                                        AND reportebeiareacategoria.reportebeicategoria_id = reportecategoria.id
+                                                        AND reportebeiareacategoria.reportebeiareacategoria_poe = ' . $reportebei_id . ' 
+                                                    LIMIT 1
+                                                ), "") AS checked,
+                                                reporteareacategoria.reporteareacategoria_total AS categoria_total,
+                                                reporteareacategoria.reporteareacategoria_geh AS categoria_geh,
+                                                reporteareacategoria.reporteareacategoria_actividades AS categoria_actividades
+                                                
+                                            FROM
+                                                reporteareacategoria
+                                                INNER JOIN reportecategoria ON reporteareacategoria.reportecategoria_id = reportecategoria.id 
+                                            WHERE
+                                                reportecategoria.proyecto_id = ' . $proyecto_id . ' 
+                                                AND reporteareacategoria.reportearea_id = ' . $area_id . ' 
+                                            ORDER BY
+                                                reportecategoria.reportecategoria_orden ASC,
+                                                reportecategoria.reportecategoria_nombre ASC');
+
+
+
+                $readonly_required = '';
+                foreach ($areacategorias as $key => $value) {
+                    $numero_registro += 1;
+
+
+                    if ($value->checked) {
+                        $readonly_required = 'required';
+                    } else {
+                        $readonly_required = 'readonly';
+                    }
+
+
+                    $areacategorias_lista .= '<tr>
+                                                <td width="60">
+                                                    <div class="switch" style="border: 0px #000 solid;">
+                                                        <label>
+                                                            <input type="checkbox" name="checkbox_reportecategoria_id[]" value="' . $value->id . '" ' . $value->checked . ' onchange="activa_areacategoria(this, ' . $numero_registro . ');"/>
+                                                            <span class="lever switch-col-light-blue" style="padding: 0px; margin: 0px;"></span>
+                                                        </label>
+                                                    </div>
+                                                </td>
+                                                <td width="180">
+                                                    ' . $value->reportecategoria_nombre . '
+                                                </td>
+                                                <td width="80">
+                                                    <input type="number" class="form-control" name="reporteareacategoria_total_' . $value->id . '" value="' . $value->categoria_total . '" readonly>
+                                                </td>
+                                                <td width="80">
+                                                    <input type="number" class="form-control" name="reporteareacategoria_geh_' . $value->id . '" value="' . $value->categoria_geh . '" readonly>
+                                                </td>
+                                                <td width="180">
+                                                    <textarea rows="2" class="form-control" name="reporteareacategoria_actividades_' . $value->id . '" readonly>' . $value->categoria_actividades . '</textarea>
+                                                </td>
+                                            </tr>';
+                }
+            } else {
+                $areacategorias = DB::select('SELECT
+                                                    reportebeicategoria.id,
+                                                    reportebeicategoria.proyecto_id,
+                                                    reportebeicategoria.recsensorialcategoria_id,
+                                                    reportebeicategoria.reportebeicategoria_nombre,
+                                                    reportebeicategoria.reportebeicategoria_total,
+                                                    IFNULL((
+                                                        SELECT
+                                                            IF(reportebeiareacategoria.reportebeicategoria_id, "checked", "") AS checked
+                                                        FROM
+                                                            reportebeiareacategoria
+                                                        WHERE
+                                                            reportebeiareacategoria.reportebeiarea_id = ' . $area_id . '
+                                                            AND reportebeiareacategoria.reportebeicategoria_id = reportebeicategoria.id
+                                                            AND reportebeiareacategoria.reportebeiareacategoria_poe = 0
+                                                        LIMIT 1
+                                                    ), "") AS checked,
+                                                    IFNULL((
+                                                        SELECT
+                                                            reportebeiareacategoria.reportebeiareacategoria_total
+                                                        FROM
+                                                            reportebeiareacategoria
+                                                        WHERE
+                                                            reportebeiareacategoria.reportebeiarea_id = ' . $area_id . '
+                                                            AND reportebeiareacategoria.reportebeicategoria_id = reportebeicategoria.id
+                                                            AND reportebeiareacategoria.reportebeiareacategoria_poe = 0
+                                                        LIMIT 1
+                                                    ), "") AS categoria_total,
+                                                    IFNULL((
+                                                        SELECT
+                                                            reportebeiareacategoria.reportebeiareacategoria_geo
+                                                        FROM
+                                                            reportebeiareacategoria
+                                                        WHERE
+                                                            reportebeiareacategoria.reportebeiarea_id = ' . $area_id . '
+                                                            AND reportebeiareacategoria.reportebeicategoria_id = reportebeicategoria.id
+                                                            AND reportebeiareacategoria.reportebeiareacategoria_poe = 0
+                                                        LIMIT 1
+                                                    ), "") AS categoria_geh,
+                                                    IFNULL((
+                                                        SELECT
+                                                            reportebeiareacategoria.reportebeiareacategoria_actividades
+                                                        FROM
+                                                            reportebeiareacategoria
+                                                        WHERE
+                                                            reportebeiareacategoria.reportebeiarea_id = ' . $area_id . '
+                                                            AND reportebeiareacategoria.reportebeicategoria_id = reportebeicategoria.id
+                                                            AND reportebeiareacategoria.reportebeiareacategoria_poe = 0
+                                                        LIMIT 1
+                                                    ), "") AS categoria_actividades
+                                                FROM
+                                                    reportebeicategoria
+                                                WHERE
+                                                    reportebeicategoria.proyecto_id = ' . $proyecto_id . '
+                                                    AND reportebeicategoria.registro_id = ' . $reportebei_id . '
+                                                ORDER BY
+                                                    reportebeicategoria.reportebeicategoria_nombre ASC');
+
+
+                $readonly_required = '';
+                foreach ($areacategorias as $key => $value) {
+                    $numero_registro += 1;
+
+
+                    if ($value->checked) {
+                        $readonly_required = 'required';
+                    } else {
+                        $readonly_required = 'readonly';
+                    }
+
+
+                    if (!$value->categoria_total) {
+                        $value->categoria_total = $value->reportebeicategoria_total;
+                    }
+
+
+                    $areacategorias_lista .= '<tr>
+                                                <td width="60">
+                                                    <div class="switch" style="border: 0px #000 solid;">
+                                                        <label>
+                                                            <input type="checkbox" name="checkbox_reportecategoria_id[]" value="' . $value->id . '" ' . $value->checked . ' onchange="activa_areacategoria(this, ' . $numero_registro . ');"/>
+                                                            <span class="lever switch-col-light-blue" style="padding: 0px; margin: 0px;"></span>
+                                                        </label>
+                                                    </div>
+                                                </td>
+                                                <td width="180">
+                                                    ' . $value->reportebeicategoria_nombre . '
+                                                </td>
+                                                <td width="80">
+                                                    <input type="number" class="form-control areacategoria_' . $numero_registro . '" name="reporteareacategoria_total_' . $value->id . '" value="' . $value->categoria_total . '" ' . $readonly_required . '>
+                                                </td>
+                                                <td width="80">
+                                                    <input type="number" class="form-control areacategoria_' . $numero_registro . '" name="reporteareacategoria_geh_' . $value->id . '" value="' . $value->categoria_geh . '" ' . $readonly_required . ' >
+                                                </td>
+                                                <td width="180">
+                                                    <textarea rows="2" class="form-control areacategoria_' . $numero_registro . '" name="reporteareacategoria_actividades_' . $value->id . '" ' . $readonly_required . '>' . $value->categoria_actividades . '</textarea>
+                                                </td>
+                                            </tr>';
+                }
+            }
+
+
+            // respuesta
+            $dato['areacategorias'] = $areacategorias_lista;
+            $dato["msj"] = 'Datos consultados correctamente';
+            return response()->json($dato);
+        } catch (Exception $e) {
+            $dato['areacategorias'] = '<tr><td colspan="6">Error al cargar las categorías</td></tr>';
+            $dato["msj"] = 'Error ' . $e->getMessage();
+            return response()->json($dato);
+        }
+    }
 
     public function store(Request $request)
     {

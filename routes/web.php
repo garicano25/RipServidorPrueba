@@ -190,7 +190,7 @@ Route::get('obtenerDeterminantesBeis/{beis}/{determinanteSeleccionado}', ['as' =
 
 Route::get('acreditacionalcanceagentenormas/{agente_id}', ['as' => 'acreditacionalcances.acreditacionalcanceagentenormas', 'uses' => 'catalogos\acreditacionalcanceController@acreditacionalcanceagentenormas']);
 
-Route::get('proveedoralcanceservicioslista/{proveedor_id}/{alcanceservicio_id}', ['as' => 'acreditacionalcances.proveedoralcanceservicioslista', 'uses' => 'catalogos\acreditacionalcanceController@proveedoralcanceservicioslista']);
+Route::get('proveedoralcanceservicioslista/{proveedor_id}/{alcanceservicio_id}', ['as' => 'acreditacionalcances.proveedoralcanceservicioslista', 'uses' => 'catalogos\acreditacionalcanceController@proveedoralcanceservicioslista']); 
 
 //==============================================
 
@@ -1688,7 +1688,7 @@ Route::get('reportebeicategoriaeliminar/{categoria_id}', ['as' => 'reportebei.re
 
 Route::get('reportebeiareas/{proyecto_id}/{reportebei_id}/{areas_poe}', ['as' => 'reportebei.reportebeiareas', 'uses' => 'reportes\reportebeiController@reportebeiareas']);
 
-Route::get('reporteiluminacionareascategorias/{proyecto_id}/{reporteiluminacion_id}/{area_id}/{areas_poe}', ['as' => 'reporteiluminacion.reporteiluminacionareascategorias', 'uses' => 'reportes\reporteiluminacionController@reporteiluminacionareascategorias']);
+Route::get('reportebeiareascategorias/{proyecto_id}/{reportebei_id}/{area_id}/{areas_poe}', ['as' => 'reportebei.reportebeiareascategorias', 'uses' => 'reportes\reportebeiController@reportebeiareascategorias']);
 
 Route::get('reporteiluminacionareascategoriasconsultar/{area_id}/{categoria_id}/{reporteiluminacion_id}/{areas_poe}', ['as' => 'reporteiluminacion.reporteiluminacionareascategoriasconsultar', 'uses' => 'reportes\reporteiluminacionController@reporteiluminacionareascategoriasconsultar']);
 
