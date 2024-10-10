@@ -6256,7 +6256,7 @@ function tabla_reporte_7_3(proyecto_id, reporteregistro_id)
 					// console.log(index+' - '+data.reporteiluminacionpuntos_nopunto);
 					$(row).find('td:eq(7)').css('background', data.resultadoner_color);
 
-					if(data.resultadoner == 1)
+					if(data.resultadoner == 1) 
 					{
 						$(row).find('td:eq(7)').css('color', '#000000');
 						$(row).find('td:eq(7)').css('font-weight', 'bold');
@@ -7586,6 +7586,7 @@ function reporte_dashboard(proyecto_id, reporteregistro_id)
 			$("#dashboard_equipos").html(dato.dashboard_equipos);
 			$("#dashboard_total_evaluacion").html(dato.dashboard_total_evaluacion);
 			$("#dashboard_sonometria_total_dentronorma").html(dato.dashboard_sonometria_total_dentronorma);
+			$("#dashboard_sonometria_total_niveldeaccion").html(dato.dashboard_sonometria_total_niveldeaccion);
 			$("#dashboard_sonometria_total_fueranorma").html(dato.dashboard_sonometria_total_fueranorma);
 			$("#dashboard_recomendaciones_total").html(dato.dashboard_recomendaciones_total);
 
@@ -7677,7 +7678,7 @@ function grafica_dashboard_resultados(serie_grafico)
 		"labelText": "[[value]]<br>([[percents]]%)",
 		"balloonText": "[[title]]<br><span style='font-size:14px'><b>[[value]]</b> ([[percents]]%)</span>",
 		"labelRadius": -30,
-		"colors": ["#00FF00", "#FF0000"], //color de la series
+		"colors": ["#00FF00","#FFFF00", "#FF0000"], //color de la series
 		"dataProvider": serie_grafico,
 		// "dataProvider": [
 		// 	{

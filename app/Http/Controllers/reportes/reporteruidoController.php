@@ -3173,15 +3173,21 @@ class reporteruidoController extends Controller
                 $numero_registro += 1;
                 $value->numero_registro = $numero_registro;
 
-                if ($value->reporteruidopuntoner_ner <= $value->reporteruidopuntoner_lmpe) {
-                    $value->resultadoner = 1;
-                    $value->resultadoner_texto = 'Dentro de norma';
-                    $value->resultadoner_color = '#00FF00';
-                } else {
+                // --> Ajustamos el semaforo
+                if ($value->reporteruidopuntoner_ner > 90) {
                     $value->resultadoner = 0;
                     $value->resultadoner_texto = 'Fuera de norma';
-                    $value->resultadoner_color = '#FF0000';
+                    $value->resultadoner_color = '#FF0000'; 
+                } elseif ($value->reporteruidopuntoner_ner >= 85 && $value->reporteruidopuntoner_ner <= 90) {
+                    $value->resultadoner = 1; 
+                    $value->resultadoner_texto = 'Nivel de acción';
+                    $value->resultadoner_color = '#FFFF00'; 
+                } else {
+                    $value->resultadoner = 1;
+                    $value->resultadoner_texto = 'Dentro de norma';
+                    $value->resultadoner_color = '#00FF00'; 
                 }
+
 
                 $value->boton_editar = '<button type="button" class="btn btn-warning waves-effect btn-circle"><i class="fa fa-pencil fa-1x"></i></button>';
 
@@ -3393,8 +3399,7 @@ class reporteruidoController extends Controller
      * @param  int $areas_poe
      * @return \Illuminate\Http\Response
      */
-    public function reporteruidodosisnertabla($proyecto_id, $reporteregistro_id, $areas_poe)
-    {
+    public function reporteruidodosisnertabla($proyecto_id, $reporteregistro_id, $areas_poe){ 
         try {
             // $reporte = reporteruidoModel::where('id', $reporteregistro_id)->get();
 
@@ -3493,16 +3498,22 @@ class reporteruidoController extends Controller
                 $numero_registro += 1;
                 $value->numero_registro = $numero_registro;
 
-                if ($value->reporteruidodosisner_ner <= $value->reporteruidodosisner_lmpe) {
-                    $value->resultadoner = 1;
-                    $value->resultadoner_texto = 'Dentro de norma';
-                    $value->resultadoner_color = '#00FF00';
-                } else {
+                
+                if ($value->reporteruidodosisner_ner > 90) {
                     $value->resultadoner = 0;
                     $value->resultadoner_texto = 'Fuera de norma';
-                    $value->resultadoner_color = '#FF0000';
+                    $value->resultadoner_color = '#FF0000'; 
+                } elseif ($value->reporteruidodosisner_ner >= 85 && $value->reporteruidodosisner_ner <= 90) {
+                    $value->resultadoner = 1; 
+                    $value->resultadoner_texto = 'Nivel de acción';
+                    $value->resultadoner_color = '#FFFF00'; 
+                } else {
+                    $value->resultadoner = 1;
+                    $value->resultadoner_texto = 'Dentro de norma';
+                    $value->resultadoner_color = '#00FF00'; 
                 }
 
+                
                 $value->boton_editar = '<button type="button" class="btn btn-warning waves-effect btn-circle"><i class="fa fa-pencil fa-1x"></i></button>';
 
                 if ($edicion == 1) {
@@ -4395,30 +4406,44 @@ class reporteruidoController extends Controller
             // SONOMETRIAS RESULTADOS
 
 
+            //Ajustamos el semaforo de resultados para ruido
             $sonometrias = DB::select('SELECT
-                                            reporteruidopuntoner.proyecto_id,
-                                            reporteruidopuntoner.registro_id,
-                                            COUNT(reporteruidopuntoner.reporteruidopuntoner_punto) AS totalsonometrias,
-                                            SUM(IF(reporteruidopuntoner.reporteruidopuntoner_ner <= reporteruidopuntoner.reporteruidopuntoner_lmpe, 1, 0)) AS dentronorma,
-                                            SUM(IF(reporteruidopuntoner.reporteruidopuntoner_ner > reporteruidopuntoner.reporteruidopuntoner_lmpe, 1, 0)) AS fueranorma
-                                        FROM
-                                            reporteruidopuntoner
-                                        WHERE
-                                            reporteruidopuntoner.proyecto_id = ' . $proyecto_id . ' 
-                                            AND reporteruidopuntoner.registro_id = ' . $reporteregistro_id . ' 
-                                        GROUP BY
-                                            reporteruidopuntoner.proyecto_id,
-                                            reporteruidopuntoner.registro_id');
+                                reporteruidopuntoner.proyecto_id,
+                                reporteruidopuntoner.registro_id,
+                                COUNT(reporteruidopuntoner.reporteruidopuntoner_punto) AS totalsonometrias,
+                                SUM(CASE
+                                        WHEN reporteruidopuntoner.reporteruidopuntoner_ner < 85 THEN 1
+                                        ELSE 0
+                                    END) AS dentronorma,
+                                SUM(CASE
+                                        WHEN reporteruidopuntoner.reporteruidopuntoner_ner BETWEEN 85 AND 90 THEN 1
+                                        ELSE 0
+                                    END) AS niveldeaccion,
+                                SUM(CASE
+                                        WHEN reporteruidopuntoner.reporteruidopuntoner_ner > 90 THEN 1
+                                        ELSE 0
+                                    END) AS fueranorma
+                            FROM
+                                reporteruidopuntoner
+                            WHERE
+                                reporteruidopuntoner.proyecto_id = ' . $proyecto_id . '
+                                AND reporteruidopuntoner.registro_id = ' . $reporteregistro_id . '
+                            GROUP BY
+                                reporteruidopuntoner.proyecto_id,
+                                reporteruidopuntoner.registro_id');
+
 
 
             $dashboard_total_evaluacion = '';
             if (count($sonometrias) > 0) {
                 $dashboard_total_evaluacion = $sonometrias[0]->totalsonometrias . ' puntos<br>Sonometría<br><br>';
                 $dato["dashboard_sonometria_total_dentronorma"] = $sonometrias[0]->dentronorma;
+                $dato["dashboard_sonometria_total_niveldeaccion"] = $sonometrias[0]->niveldeaccion;
                 $dato["dashboard_sonometria_total_fueranorma"] = $sonometrias[0]->fueranorma;
             } else {
                 $dashboard_total_evaluacion = '0 puntos<br>Sonometría<br><br>';
                 $dato["dashboard_sonometria_total_dentronorma"] = 0;
+                $dato["dashboard_sonometria_total_niveldeaccion"] = 0;
                 $dato["dashboard_sonometria_total_fueranorma"] = 0;
             }
 
@@ -4432,8 +4457,21 @@ class reporteruidoController extends Controller
                                             reporteruidodosisner.proyecto_id,
                                             reporteruidodosisner.registro_id,
                                             COUNT(reporteruidodosisner.reporteruidodosisner_punto) AS totaldosimetrias,
-                                            SUM(IF(reporteruidodosisner.reporteruidodosisner_ner <= reporteruidodosisner.reporteruidodosisner_lmpe, 1, 0)) AS dentronorma,
-                                            SUM(IF(reporteruidodosisner.reporteruidodosisner_ner > reporteruidodosisner.reporteruidodosisner_lmpe, 1, 0)) AS fueranorma
+                                            
+
+                                             SUM(CASE
+                                                WHEN reporteruidodosisner.reporteruidodosisner_ner < 85 THEN 1
+                                                        ELSE 0
+                                                    END) AS dentronorma,
+                                                SUM(CASE
+                                                        WHEN reporteruidodosisner.reporteruidodosisner_ner BETWEEN 85 AND 90 THEN 1
+                                                        ELSE 0
+                                                    END) AS niveldeaccion,
+                                                SUM(CASE
+                                                        WHEN reporteruidodosisner.reporteruidodosisner_ner > 90 THEN 1
+                                                        ELSE 0
+                                            END) AS fueranorma
+
                                         FROM
                                             reporteruidodosisner
                                         WHERE
@@ -4450,6 +4488,11 @@ class reporteruidoController extends Controller
                 $serie_grafico[] = array(
                     'titulo' => "Dentro de norma",
                     'total' => $dosimetria[0]->dentronorma
+                ); 
+                
+                $serie_grafico[] = array(
+                    'titulo' => "Nivel de acción",
+                    'total' => $dosimetria[0]->niveldeaccion
                 );
 
                 $serie_grafico[] = array(

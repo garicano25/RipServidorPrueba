@@ -928,116 +928,198 @@ $("#boton_guardar_sustancia").click(function(e){
     componentes = $('#sustancias_quimicias').val();
     var valida = this.form.checkValidity();
 
-    if (componentes.length != 0) // valida que haya agregado componentes a la mezcla
-    {
-        if (!validarErrores()) {
-            sustanciaPorcentajes = crearArregloPorcentajeSustancia($('#sustancia_id').val())
+    if ($('#validarSustancias').is(':checked')) {
+        // enviar datos
+        $('#form_catsustancia').ajaxForm({
+            dataType: 'json',
+            type: 'POST',
+            url: '/recsensorialquimicoscatalogos',
+            data: {},
+            resetForm: false,
+            success: function (dato) {
 
-            // enviar datos
-            $('#form_catsustancia').ajaxForm({
-                dataType: 'json',
-                type: 'POST',
-                url: '/recsensorialquimicoscatalogos',
-                data: { porcentajes: JSON.stringify(sustanciaPorcentajes) },
-                resetForm: false,
-                success: function (dato) {
-                
-                    if (dato.code == 1) {
-                    
-                        // actualiza tabla
-                        tabla_catsustancia.ajax.url("/recsensorialquimicoscatalogostabla/1").load();
+                if (dato.code == 1) {
 
-                        // mensaje
-                        swal({
-                            title: "Correcto",
-                            text: "" + dato.msj,
-                            type: "success", // warning, error, success, info
-                            buttons: {
-                                visible: false, // true , false
-                            },
-                            timer: 1500,
-                            showConfirmButton: false
-                        });
+                    // actualiza tabla
+                    tabla_catsustancia.ajax.url("/recsensorialquimicoscatalogostabla/1").load();
 
-                        // actualiza boton
-                        $('#boton_guardar_sustancia').html('Guardar <i class="fa fa-save"></i>');
-                    
-                        //Limpiamos nuestro select de las sustancias
-                        $('#sustancias_quimicias').val('');
-                        $('#sustancias_quimicias').trigger('change');
-                    
-
-                        // cerrar modal
-                        $('#modal_catsustancia').modal('hide');
-                
-                    } else {
-                    
-                        swal({
-                            title: "La sustancia no se pudo guardar",
-                            text: "" + dato.msj,
-                            type: "info", // warning, error, success, info
-                            buttons: {
-                                visible: false, // true , false
-                            },
-                            timer: 2500,
-                            showConfirmButton: false
-                        });
-                    
-                        $('#boton_guardar_sustancia').html('Guardar <i class="fa fa-save"></i>');
-                    
-
-                    }
-                },
-                beforeSend: function () {
-                    $('#boton_guardar_sustancia').html('Guardando <i class="fa fa-spin fa-spinner"></i>');
-                },
-                error: function (dato) {
-                    // actualiza boton
-                    $('#boton_guardar_sustancia').html('Guardar <i class="fa fa-save"></i>');
-                
                     // mensaje
                     swal({
-                        title: "Rellene todos los campos..",
-                        text: "Si el error persiste comuniquelo con el responsable.",
-                        type: "error", // warning, error, success, info
+                        title: "Correcto",
+                        text: "" + dato.msj,
+                        type: "success", // warning, error, success, info
                         buttons: {
                             visible: false, // true , false
                         },
                         timer: 1500,
                         showConfirmButton: false
                     });
-                    return false;
-                }
-            }).submit();
-            return false;
-                
-        } else {
-             swal({
-            title: "¡Faltan campos por rellenar!",
-            text: "Asegurece de rellenar todos los campos pintados de ROJO",
-            type: "warning", // warning, error, success, info
-            buttons: {
-                visible: false, // true , false
-            },
-            timer: 2000,
-            showConfirmButton: false
-        });
-        }
-    
-    } else {
-        // mensaje
-        swal({
-            title: "¡Falta componente!",
-            text: "Debe seleccionar como mínimo 1 componente de la sustancia",
-            type: "warning", // warning, error, success, info
-            buttons: {
-                visible: false, // true , false
-            },
-            timer: 2000,
-            showConfirmButton: false
-        });
 
-        // $("#boton_nuevo_componente").click();
+                    // actualiza boton
+                    $('#boton_guardar_sustancia').html('Guardar <i class="fa fa-save"></i>');
+
+                    //Limpiamos nuestro select de las sustancias
+                    $('#sustancias_quimicias').val('');
+                    $('#sustancias_quimicias').trigger('change');
+
+
+                    // cerrar modal
+                    $('#modal_catsustancia').modal('hide');
+
+                } else {
+
+                    swal({
+                        title: "La sustancia no se pudo guardar",
+                        text: "" + dato.msj,
+                        type: "info", // warning, error, success, info
+                        buttons: {
+                            visible: false, // true , false
+                        },
+                        timer: 2500,
+                        showConfirmButton: false
+                    });
+
+                    $('#boton_guardar_sustancia').html('Guardar <i class="fa fa-save"></i>');
+
+
+                }
+            },
+            beforeSend: function () {
+                $('#boton_guardar_sustancia').html('Guardando <i class="fa fa-spin fa-spinner"></i>');
+            },
+            error: function (dato) {
+                // actualiza boton
+                $('#boton_guardar_sustancia').html('Guardar <i class="fa fa-save"></i>');
+
+                // mensaje
+                swal({
+                    title: "Rellene todos los campos..",
+                    text: "Si el error persiste comuniquelo con el responsable.",
+                    type: "error", // warning, error, success, info
+                    buttons: {
+                        visible: false, // true , false
+                    },
+                    timer: 1500,
+                    showConfirmButton: false
+                });
+                return false;
+            }
+        }).submit();
+        return false;
+    } else {
+        
+        if (componentes.length != 0) 
+        {
+            if (!validarErrores()) {
+                sustanciaPorcentajes = crearArregloPorcentajeSustancia($('#sustancia_id').val())
+    
+                // enviar datos
+                $('#form_catsustancia').ajaxForm({
+                    dataType: 'json',
+                    type: 'POST',
+                    url: '/recsensorialquimicoscatalogos',
+                    data: { porcentajes: JSON.stringify(sustanciaPorcentajes) },
+                    resetForm: false,
+                    success: function (dato) {
+                    
+                        if (dato.code == 1) {
+                        
+                            // actualiza tabla
+                            tabla_catsustancia.ajax.url("/recsensorialquimicoscatalogostabla/1").load();
+    
+                            // mensaje
+                            swal({
+                                title: "Correcto",
+                                text: "" + dato.msj,
+                                type: "success", // warning, error, success, info
+                                buttons: {
+                                    visible: false, // true , false
+                                },
+                                timer: 1500,
+                                showConfirmButton: false
+                            });
+    
+                            // actualiza boton
+                            $('#boton_guardar_sustancia').html('Guardar <i class="fa fa-save"></i>');
+                        
+                            //Limpiamos nuestro select de las sustancias
+                            $('#sustancias_quimicias').val('');
+                            $('#sustancias_quimicias').trigger('change');
+                        
+    
+                            // cerrar modal
+                            $('#modal_catsustancia').modal('hide');
+                    
+                        } else {
+                        
+                            swal({
+                                title: "La sustancia no se pudo guardar",
+                                text: "" + dato.msj,
+                                type: "info", // warning, error, success, info
+                                buttons: {
+                                    visible: false, // true , false
+                                },
+                                timer: 2500,
+                                showConfirmButton: false
+                            });
+                        
+                            $('#boton_guardar_sustancia').html('Guardar <i class="fa fa-save"></i>');
+                        
+    
+                        }
+                    },
+                    beforeSend: function () {
+                        $('#boton_guardar_sustancia').html('Guardando <i class="fa fa-spin fa-spinner"></i>');
+                    },
+                    error: function (dato) {
+                        // actualiza boton
+                        $('#boton_guardar_sustancia').html('Guardar <i class="fa fa-save"></i>');
+                    
+                        // mensaje
+                        swal({
+                            title: "Rellene todos los campos..",
+                            text: "Si el error persiste comuniquelo con el responsable.",
+                            type: "error", // warning, error, success, info
+                            buttons: {
+                                visible: false, // true , false
+                            },
+                            timer: 1500,
+                            showConfirmButton: false
+                        });
+                        return false;
+                    }
+                }).submit();
+                return false;
+                    
+            } else {
+                    swal({
+                title: "¡Faltan campos por rellenar!",
+                text: "Asegurece de rellenar todos los campos pintados de ROJO",
+                type: "warning", // warning, error, success, info
+                buttons: {
+                    visible: false, // true , false
+                },
+                timer: 2000,
+                showConfirmButton: false
+            });
+            }
+        
+        } else {
+            // mensaje
+            swal({
+                title: "¡Falta componente!",
+                text: "Debe seleccionar como mínimo 1 componente de la sustancia",
+                type: "warning", // warning, error, success, info
+                buttons: {
+                    visible: false, // true , false
+                },
+                timer: 2000,
+                showConfirmButton: false
+            });
+    
+            // $("#boton_nuevo_componente").click();
+        }
+        
     }
     
 });
@@ -1374,7 +1456,9 @@ function mostarSustanciasQuimicas(ID) {
                     $(`#tipoSustancia_${valor.SUSTANCIA_QUIMICA_ID}`).val(valor.TIPO);
 
                     // EJECUTAMOS LA FUNCION QUE CAMBIA LAS OPCIONES DE NUESTRO SELECT DE FORMAS
-                    cambiarFormaSustancia(`formaSustancia_${valor.SUSTANCIA_QUIMICA_ID}`, valor.ESTADO_FISICO)
+                    cambiarFormaSustancia(`formaSustancia_${valor.SUSTANCIA_QUIMICA_ID}`, `valatilidadSustancia_${valor.id}`, valor.ESTADO_FISICO)
+
+                    console.log(valor.FORMA)
                     // ASIGNAMOS CALOR UNA VEZ CAMBIADA LAS OPCIONES
                     $(`#formaSustancia_${valor.SUSTANCIA_QUIMICA_ID}`).val(valor.FORMA);
 
@@ -4363,6 +4447,7 @@ $('#catestadofisicosustancia_id').on('change', function () {
 
 //FUNCION PARA EL TIPO FORMA DE UNA SUSTANCIA
 function cambiarFormaSustancia(id, idVolatilidad, opcion) {
+    console.log(id, opcion)
     html = ""
       //LIQUIDOS
     if (opcion == 1 ) {

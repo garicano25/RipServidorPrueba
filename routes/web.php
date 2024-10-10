@@ -1727,12 +1727,8 @@ Route::get('detalleprogramagestion/{proyecto_id}/{proyectoordentrabajo_id}/{fase
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////Route::get('/mostrar-plantilla', function () {
 
 // Catalogo de cliente
-Route::get('/banco-imagenes', function () {
-    return view('catalogos.plantilla.plantillas');
-})->name('banco-imagenes');
-Route::get('/clientecatalogo', function () {
-    return view('catalogos.cliente.catalogocliente');
-})->name('clientecatalogo');
+Route::get('/banco-imagenes', function () {return view('catalogos.plantilla.plantillas');})->name('banco-imagenes');
+Route::get('/clientecatalogo', function () {return view('catalogos.cliente.catalogocliente');})->name('clientecatalogo');
 
 
 
@@ -1743,20 +1739,19 @@ Route::resource('programa', 'HI\programaTrabajoController');
 Route::get('tablaProgramaHI', ['as' => 'HI.programaTrabajo', 'uses' => 'HI\programaTrabajoController@tablaProgramaTrabajo']);
 
 
-
 //EJECUCION
 Route::resource('ejecucion', 'HI\ejecucionController');
 Route::get('ejecucionHI', ['as' => 'HI.ejecucion', 'uses' => 'HI\ejecucionController@tablaEjecucion']);
 
 
-
 //INFORMES
-
 Route::resource('informes', 'HI\informesrecoController');
 
 
-
-
+//====================================> BIBLIOTECA (CENTRO DE INFORMACION) <=================================>
+Route::resource('biblioteca', 'biblioteca\bibliotecaController');
+Route::get('obtenerInfoBliblioteca', ['as' => 'biblioteca.listaBiblioteca', 'uses' => 'biblioteca\bibliotecaController@listaBiblioteca']);
+Route::get('bibliotecapdf/{documento_id}', ['as' => 'biblioteca.bibliotecapdf', 'uses' => 'biblioteca\bibliotecaController@bibliotecapdf']);
 
 
 
