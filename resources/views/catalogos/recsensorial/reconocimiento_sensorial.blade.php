@@ -3267,7 +3267,7 @@
                                     <option value="2">Litros (L)</option>
                                     <option value="3">Metros cúbicos </option>
                                     <option value="4">Gramos (g)</option>
-                                    <option value="5">Kilos (Kl)</option>
+                                    <option value="5">Kilogramos (Kg)</option>
                                     <option value="6">Toneladas (T)</option>
                                     <option value="7">Piezas (pz)</option>
                                 </select>
