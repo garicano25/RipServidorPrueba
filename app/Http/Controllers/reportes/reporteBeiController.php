@@ -26,6 +26,7 @@ use App\modelos\reportes\reporterecomendacionesModel;
 use App\modelos\reportes\reporteanexosModel;
 use App\modelos\reportes\reporteequiposutilizadosModel;
 use App\modelos\reportes\reportebeiepp;
+use App\modelos\reportes\puntosBeiInformeModel;
 
 
 class reporteBeiController extends Controller{
@@ -124,6 +125,10 @@ class reporteBeiController extends Controller{
             {
                 $areas_poe = 1; // TIENE POE GENERAL
             }
+
+
+            //=================== INSERTAMOS LOS PUNTOS EVALUADOS DE BEI ========================================== 
+            DB::select('CALL sp_insertar_actualizar_puntos_bei_g(?,?)', [$proyecto_id, $proyecto->recsensorial_id]);
 
 
             $recsensorial = recsensorialModel::findOrFail($proyecto->recsensorial_id);

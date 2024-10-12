@@ -3446,9 +3446,9 @@ function tabla_reporte_epp(proyecto_id, reportebei_id)
 				},
 				rowCallback: function(row, data, index)
 				{
-					// console.log(index+' - '+data.reporteiluminacionpuntos_nopunto);
+					// console.log(index+' - '+data.reportebeipuntos_nopunto);
 
-					// if(data.reporteiluminacionpuntos_nopunto == 2)
+					// if(data.reportebeipuntos_nopunto == 2)
 					// {
 					// 	$(row).find('td:eq(12)').css('background', 'red');
 					// 	$(row).find('td:eq(12)').css('color', 'white');
@@ -5273,4 +5273,29 @@ $("#botonguardar_reporte_equipoutilizado").click(function()
 		});
 		return false;
 	}
+});
+
+//================================================================
+// RESULTADOS
+
+$("#boton_reporte_nuevobeipunto").click(function()
+{
+	$('#form_reporte_beipunto').each(function(){
+		this.reset();
+	});
+
+	// Campos Hidden
+	$('#reportebeipunto_id').val(0);
+
+	// Llenar campo area select
+	$('#reportebeipuntos_area_id').html('<option value=""></option>'+selectareas)
+
+	// Llenar campo categoria select
+	$('#reportebeipuntos_categoria_id').html('<option value=""></option>');
+
+	// Titulo del modal
+	$('#modal_reporte_beipunto .modal-title').html('Nuevo punto de iluminación');
+
+	// mostrar modal
+	$('#modal_reporte_beipunto').modal({backdrop:false});
 });

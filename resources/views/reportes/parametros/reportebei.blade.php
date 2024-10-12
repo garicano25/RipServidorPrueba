@@ -1163,245 +1163,94 @@
                     <div class="row">
                         <div class="col-12">
                             {!! csrf_field() !!}
-                            <input type="hidden" class="form-control" id="reportebeipunto_id" name="reportebeipunto_id" value="0">
+                            <input type="hidden" class="form-control" id="ID_BEI_INFORME" name="ID_BEI_INFORME" value="0">
+                        </div>
+                        <div class="col-12 text-center">
+                            <h3 id="nombre_determinante">Determinante</h3>
                         </div>
                         <div class="col-2">
                             <div class="form-group">
                                 <label>No. Punto</label>
-                                <input type="number" class="form-control" id="reportebeipuntos_nopunto" name="reportebeipuntos_nopunto" required>
+                                <input type="number" class="form-control" id="NUM_PUNTO_BEI" name="NUM_PUNTO_BEI" required>
                             </div>
                         </div>
                         <div class="col-5">
                             <div class="form-group">
-                                <label>Área</label>
-                                <select class="custom-select form-control" id="reportebeipuntos_area_id" name="reportebeipuntos_area_id" onchange="mostrar_categoriasarea(this.value, 0);" required>
+                                <label>Área *</label>
+                                <select class="custom-select form-control" id="AREA_ID_BEI" name="AREA_ID" onchange="mostrar_categoriasarea(this.value, 0);" required>
                                     <option value=""></option>
                                 </select>
                             </div>
                         </div>
                         <div class="col-5">
                             <div class="form-group">
-                                <label>Categoría</label>
-                                <select class="custom-select form-control" id="reportebeipuntos_categoria_id" name="reportebeipuntos_categoria_id" required>
+                                <label>Categoría *</label>
+                                <select class="custom-select form-control" id="CATEGORIA_ID_BEI" name="CATEGORIA_ID" required>
                                     <option value=""></option>
                                 </select>
                             </div>
                         </div>
-                        <div class="col-2">
+                        <div class="col-4">
                             <div class="form-group">
-                                <label>No. de POE</label>
-                                <input type="number" class="form-control" id="reportebeipuntos_nopoe" name="reportebeipuntos_nopoe" required>
+                                <label>Nombre *</label>
+                                <input type="text" class="form-control" id="NOMBRE_BEI" name="NOMBRE_BEI" required>
                             </div>
                         </div>
                         <div class="col-4">
                             <div class="form-group">
-                                <label>Nombre</label>
-                                <input type="text" class="form-control" id="reportebeipuntos_nombre" name="reportebeipuntos_nombre" required>
-                            </div>
-                        </div>
-                        <div class="col-2">
-                            <div class="form-group">
-                                <label>Ficha</label>
-                                <input type="text" class="form-control" id="reportebeipuntos_ficha" name="reportebeipuntos_ficha" required>
+                                <label>Genero *</label>
+                                <select class="custom-select form-control" id="GENERO_BEI" name="GENERO_BEI" required>
+                                    <option value=""></option>
+                                    <option value="Masculino">Masculino</option>
+                                    <option value="Femenino">Femenino</option>
+                                </select>
                             </div>
                         </div>
                         <div class="col-4">
                             <div class="form-group">
-                                <label>Ubicación</label>
-                                <input type="text" class="form-control" id="reportebeipuntos_concepto" name="reportebeipuntos_concepto" required>
+                                <label>Ficha*</label>
+                                <input type="text" class="form-control" id="FICHA_BEI" name="FICHA_BEI" required>
+                            </div>
+                        </div>
+                        <div class="col-4">
+                            <div class="form-group">
+                                <label>Edad *</label>
+                                <input type="text" class="form-control" id="EDAD_BEI" name="EDAD_BEI" required readonly>
+                            </div>
+                        </div>
 
-                                <!-- <select class="custom-select form-control" id="reportebeipuntos_concepto" name="reportebeipuntos_concepto" required>
-									<option value=""></option>
-									<option value="Índice de Área (IC)">Índice de Área (IC)</option>
-									<option value="Puesto de Trabajo">Puesto de Trabajo</option>
-								</select> -->
+                        <div class="col-4">
+                            <div class="form-group">
+                                <label>Antigüedad Laboral *</label>
+                                <input type="text" class="form-control" id="ANTIGUEDAD_BEI" name="ANTIGUEDAD_BEI" required readonly>
                             </div>
-                        </div>
-                    </div>
-                    <div class="row">
-                        <div class="col-12">
-                            <ol class="breadcrumb text-light" style="padding: 6px; margin: 0px 0px 10px 0px; text-align: center;">
-                                Fecha y hora de medición
-                            </ol>
                         </div>
                         <div class="col-4">
                             <div class="form-group">
-                                <label>Fecha evaluación</label>
-                                <div class="input-group">
-                                    <input type="text" class="form-control mydatepicker" placeholder="aaaa-mm-dd" id="reportebeipuntos_fechaeval" name="reportebeipuntos_fechaeval" required>
-                                    <span class="input-group-addon"><i class="icon-calender"></i></span>
-                                </div>
+                                <label>Numero de muestra *</label>
+                                <input type="text" class="form-control" id="MUESTRA_BEI" name="MUESTRA_BEI" required>
                             </div>
-                        </div>
-                        <div class="col-2">
-                            <div class="form-group">
-                                <label style="color: #0d47a1;">Horario periodo 1</label>
-                                {{-- <input type="text" class="form-control" placeholder="hh:mm" id="reportebeipuntos_horario1" name="reportebeipuntos_horario1" required> --}}
-                                <input type="time" class="form-control" id="reportebeipuntos_horario1" name="reportebeipuntos_horario1" required>
-                            </div>
-                        </div>
-                        <div class="col-2">
-                            <div class="form-group">
-                                <label style="color: #78281F;">Horario periodo 2</label>
-                                {{-- <input type="text" class="form-control" placeholder="hh:mm" id="reportebeipuntos_horario2" name="reportebeipuntos_horario2" required> --}}
-                                <input type="time" class="form-control" id="reportebeipuntos_horario2" name="reportebeipuntos_horario2">
-                            </div>
-                        </div>
-                        <div class="col-2">
-                            <div class="form-group">
-                                <label style="color: #00695c;">Horario periodo 3</label>
-                                {{-- <input type="text" class="form-control" placeholder="hh:mm" id="reportebeipuntos_horario3" name="reportebeipuntos_horario3" required> --}}
-                                <input type="time" class="form-control" id="reportebeipuntos_horario3" name="reportebeipuntos_horario3">
-                            </div>
-                        </div>
-                        <div class="col-2">
-                            &nbsp;
-                        </div>
-                    </div>
-                    <div class="row">
-                        <div class="col-12">
-                            <ol class="breadcrumb text-light" style="padding: 6px; margin: 0px 0px 10px 0px; text-align: center;">
-                                Resultados de niveles de iluminación
-                            </ol>
                         </div>
                         <div class="col-4">
                             <div class="form-group">
-                                <label>Nivel de iluminación mínimo requerido (Lux)</label>
-                                <input type="number" step="any" class="form-control limite_lux" id="reportebeipuntos_lux" name="reportebeipuntos_lux" required onchange="calcula_resultado_bei('limite_lux', 'resultado_lux', 'N/A (NIMR)');">
+                                <label>Unidad de medida *</label>
+                                <select class="custom-select form-control" id="UNIDAD_MEDIDA_BEI" name="UNIDAD_MEDIDA_BEI" required>
+                                    <option value=""></option>
+                                    <option value="mg/L">mg/L</option>
+                                </select>
                             </div>
-                        </div>
-                        <div class="col-2">
-                            <div class="form-group">
-                                <div style="position: absolute; margin-top: 28px;">
-                                    <span style="font-size: 28px; line-height: 12px;">&#60;</span> {{-- < --}}
-                                </div>
-                                <div style="position: absolute; margin-top: 50px;">
-                                    <span style="font-size: 28px; line-height: 12px;">&#62;</span> {{-- > --}}
-                                </div>
-                                <div style="position: absolute; margin-top: 24px; margin-left: 20px;">
-                                    <input type="checkbox" class="filled-in chk-col-brown" id="reportebeipuntos_luxmed1menor" name="reportebeipuntos_luxmed1menor" />
-                                    <label for="reportebeipuntos_luxmed1menor"><b>&nbsp;</b></label>
-                                </div>
-                                <div style="position: absolute; margin-top: 46px; margin-left: 20px;">
-                                    <input type="checkbox" class="filled-in chk-col-brown" id="reportebeipuntos_luxmed1mayor" name="reportebeipuntos_luxmed1mayor" />
-                                    <label for="reportebeipuntos_luxmed1mayor"><b>&nbsp;</b></label>
-                                </div>
-
-                                <label style="color: #0d47a1;">Periodo 1 NI (Lux)</label>
-                                <div style="width: 100%; padding-left: 45px;">
-                                    <input type="number" step="any" class="form-control resultado_lux" id="reportebeipuntos_luxmed1" name="reportebeipuntos_luxmed1" required onchange="calcula_resultado_bei('limite_lux', 'resultado_lux', 'N/A (NIMR)');">
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col-2">
-                            <div class="form-group">
-                                <div style="position: absolute; margin-top: 28px;">
-                                    <span style="font-size: 28px; line-height: 12px;">&#60;</span> {{-- < --}}
-                                </div>
-                                <div style="position: absolute; margin-top: 50px;">
-                                    <span style="font-size: 28px; line-height: 12px;">&#62;</span> {{-- > --}}
-                                </div>
-                                <div style="position: absolute; margin-top: 24px; margin-left: 20px;">
-                                    <input type="checkbox" class="filled-in chk-col-brown" id="reportebeipuntos_luxmed2menor" name="reportebeipuntos_luxmed2menor" />
-                                    <label for="reportebeipuntos_luxmed2menor"><b>&nbsp;</b></label>
-                                </div>
-                                <div style="position: absolute; margin-top: 46px; margin-left: 20px;">
-                                    <input type="checkbox" class="filled-in chk-col-brown" id="reportebeipuntos_luxmed2mayor" name="reportebeipuntos_luxmed2mayor" />
-                                    <label for="reportebeipuntos_luxmed2mayor"><b>&nbsp;</b></label>
-                                </div>
-
-                                <label style="color: #78281F;">Periodo 2 NI (Lux)</label>
-                                <div style="width: 100%; padding-left: 45px;">
-                                    <input type="number" step="any" class="form-control resultado_lux" id="reportebeipuntos_luxmed2" name="reportebeipuntos_luxmed2" required onchange="calcula_resultado_bei('limite_lux', 'resultado_lux', 'N/A (NIMR)');">
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col-2">
-                            <div class="form-group">
-                                <div style="position: absolute; margin-top: 28px;">
-                                    <span style="font-size: 28px; line-height: 12px;">&#60;</span> {{-- < --}}
-                                </div>
-                                <div style="position: absolute; margin-top: 50px;">
-                                    <span style="font-size: 28px; line-height: 12px;">&#62;</span> {{-- > --}}
-                                </div>
-                                <div style="position: absolute; margin-top: 24px; margin-left: 20px;">
-                                    <input type="checkbox" class="filled-in chk-col-brown" id="reportebeipuntos_luxmed3menor" name="reportebeipuntos_luxmed3menor" />
-                                    <label for="reportebeipuntos_luxmed3menor"><b>&nbsp;</b></label>
-                                </div>
-                                <div style="position: absolute; margin-top: 46px; margin-left: 20px;">
-                                    <input type="checkbox" class="filled-in chk-col-brown" id="reportebeipuntos_luxmed3mayor" name="reportebeipuntos_luxmed3mayor" />
-                                    <label for="reportebeipuntos_luxmed3mayor"><b>&nbsp;</b></label>
-                                </div>
-
-                                <label style="color: #00695c;">Periodo 3 NI (Lux)</label>
-                                <div style="width: 100%; padding-left: 45px;">
-                                    <input type="number" step="any" class="form-control resultado_lux" id="reportebeipuntos_luxmed3" name="reportebeipuntos_luxmed3" required onchange="calcula_resultado_bei('limite_lux', 'resultado_lux', 'N/A (NIMR)');">
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col-2 align-middle" style="text-align: right; padding-top: 30px;" id="resultado_lux">
-                            {{-- <b class="text-success"><i class="fa fa-check"></i> Dentro de norma</b> --}}
-                        </div>
-                    </div>
-                    <div class="row">
-                        <div class="col-12">
-                            <ol class="breadcrumb text-light" style="padding: 6px; margin: 0px 0px 10px 0px; text-align: center;">
-                                Resultados del nivel de reflexión
-                            </ol>
                         </div>
                         <div class="col-4">
                             <div class="form-group">
-                                <label>Factor de reflexión en paredes (P)</label>
-                                <input type="number" step="any" class="form-control limite_frp" id="reportebeipuntos_frp" name="reportebeipuntos_frp" value="60" readonly>
+                                <label>Resultado *</label>
+                                <input type="text" class="form-control" id="RESULTADO_BEI" name="RESULTADO_BEI" required>
                             </div>
-                        </div>
-                        <div class="col-2">
-                            <div class="form-group">
-                                <label style="color: #0d47a1;">Periodo 1 FR (P) (%)</label>
-                                <input type="number" step="any" class="form-control resultado_frp" id="reportebeipuntos_frpmed1" name="reportebeipuntos_frpmed1" required onchange="calcula_resultado_reflexion('limite_frp', 'resultado_frp', 'N/A (FR-P)');">
-                            </div>
-                        </div>
-                        <div class="col-2">
-                            <div class="form-group">
-                                <label style="color: #78281F;">Periodo 2 FR (P) (%)</label>
-                                <input type="number" step="any" class="form-control resultado_frp" id="reportebeipuntos_frpmed2" name="reportebeipuntos_frpmed2" required onchange="calcula_resultado_reflexion('limite_frp', 'resultado_frp', 'N/A (FR-P)');">
-                            </div>
-                        </div>
-                        <div class="col-2">
-                            <div class="form-group">
-                                <label style="color: #00695c;">Periodo 3 FR (P) (%)</label>
-                                <input type="number" step="any" class="form-control resultado_frp" id="reportebeipuntos_frpmed3" name="reportebeipuntos_frpmed3" required onchange="calcula_resultado_reflexion('limite_frp', 'resultado_frp', 'N/A (FR-P)');">
-                            </div>
-                        </div>
-                        <div class="col-2 align-middle" style="text-align: right; padding-top: 30px;" id="resultado_frp">
-                            {{-- <b class="text-danger"><i class="fa fa-ban"></i> Fuera de norma</b> --}}
                         </div>
                         <div class="col-4">
                             <div class="form-group">
-                                <label>Factor de reflexión en plano trabajo (PT)</label>
-                                <input type="number" step="any" class="form-control limite_frpt" id="reportebeipuntos_frpt" name="reportebeipuntos_frpt" value="50" readonly>
+                                <label>Valor de referencia *</label>
+                                <input type="text" class="form-control" id="REFERENCIA_BEI" name="REFERENCIA_BEI" required>
                             </div>
-                        </div>
-                        <div class="col-2">
-                            <div class="form-group">
-                                <label style="color: #0d47a1;">Periodo 1 FR (PT) (%)</label>
-                                <input type="number" step="any" class="form-control resultado_frpt" id="reportebeipuntos_frptmed1" name="reportebeipuntos_frptmed1" required onchange="calcula_resultado_reflexion('limite_frpt', 'resultado_frpt', 'N/A (FR-PT)');">
-                            </div>
-                        </div>
-                        <div class="col-2">
-                            <div class="form-group">
-                                <label style="color: #78281F;">Periodo 2 FR (PT) (%)</label>
-                                <input type="number" step="any" class="form-control resultado_frpt" id="reportebeipuntos_frptmed2" name="reportebeipuntos_frptmed2" required onchange="calcula_resultado_reflexion('limite_frpt', 'resultado_frpt', 'N/A (FR-PT)');">
-                            </div>
-                        </div>
-                        <div class="col-2">
-                            <div class="form-group">
-                                <label style="color: #00695c;">Periodo 3 FR (PT) (%)</label>
-                                <input type="number" step="any" class="form-control resultado_frpt" id="reportebeipuntos_frptmed3" name="reportebeipuntos_frptmed3" required onchange="calcula_resultado_reflexion('limite_frpt', 'resultado_frpt', 'N/A (FR-PT)');">
-                            </div>
-                        </div>
-                        <div class="col-2 align-middle" style="text-align: right; padding-top: 30px;" id="resultado_frpt">
-                            {{-- <b class="text-danger"><i class="fa fa-ban"></i> Fuera de norma</b> --}}
                         </div>
                     </div>
                 </div>
