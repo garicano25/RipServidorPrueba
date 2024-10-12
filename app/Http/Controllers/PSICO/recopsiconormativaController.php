@@ -219,6 +219,15 @@ class recopsiconormativaController extends Controller
                                         recopsicotrabajadoresModel::where('ID_RECOPSICOTRABAJADOR', $trabajador->ID_RECOPSICOTRABAJADOR)
                                             ->update(['RECPSICOTRABAJADOR_MUESTRA' => 1]);
                                     }
+                                }else{
+                                    $trabajadoresAleatorios = DB::table('recopsicotrabajadores')
+                                    ->where('RECPSICO_ID', $RECPSICO_ID)
+                                    ->get();
+                    
+                                    foreach ($trabajadoresAleatorios as $trabajador) {
+                                        recopsicotrabajadoresModel::where('ID_RECOPSICOTRABAJADOR', $trabajador->ID_RECOPSICOTRABAJADOR)
+                                            ->update(['RECPSICOTRABAJADOR_MUESTRA' => 1]);
+                                    }
                                 }
 
                                 //$RECPSICO_MUESTRAINT = intval($RECPSICO_MUESTRA);

@@ -14,21 +14,19 @@ var datatable_programaTrabajoInternos = null;
 var datatable_proyectoordenservicios = null;
 
 // tablas principales
-var datatable_proveedores = 0;
-var datatable_signatarios_activo = 0;
-var datatable_signatarios = null;
+var datatable_trabajadores = 0;
+var datatable_psicologos_activo = 0;
+var datatable_psicologos = null;
 var datatable_equipos_activo = 0;
 var datatable_equipos = null;
+var datatable_vehiculos_activo = 0;
+var datatable_vehiculos = null;
 
 // Lista de proveedores del sistema
 var proveedores_asignados = 0;
 var proveedores_lista = '';
-// var proveedor_alcances = '';
-var proyectoInterno = 0;
 
-// Modulo evidencia
-var evidencia_agente_id = 0;
-var evidencia_agente = '';
+var proyectoInterno = 0;
 
 // Modulo reportes
 Menureportes_contador = 0;
@@ -51,7 +49,7 @@ $(document).ready(function()
 
 	setTimeout(function()
 	{
-		consulta_listaproveedores();
+		//consulta_listaproveedores();
 	}, 1000);
 
 	$('#tab_programa_trabajo').click();
@@ -110,12 +108,20 @@ $('.multisteps-form__progress-btn').click(function()
 				tabla_equipos(proyecto_id);
 				datatable_equipos_activo = 1;
 			}
-			break;
+		break;
 		case "steps_menu_tab5":
+			// consultar equipos
+			if (datatable_vehiculos_activo == 0)
+			{
+				tabla_vehiculos(proyecto_id);
+				datatable_vvehiculos_activo = 1;
+			}
+		break;
+		case "steps_menu_tab6":
 			//Seccion reportes
 			$("#reportetab_menu1").click();
 			break;
-			case "steps_menu_tab6":
+		case "steps_menu_tab7":
 			//Seccion reportes
 			$("#reportetab_menu3").click();
 			break;
@@ -166,9 +172,11 @@ function mostrar_stepformproyecto()
 
 function inicializar_datatables()
 {
-	datatable_proveedores = 0;
-	datatable_signatarios_activo = 0;
+	datatable_trabajadores = 0;
+	datatable_psicologos_activo = 0;
 	datatable_equipos_activo = 0;
+	datatable_vehiculos_activo = 0;
+
 }
 
 
@@ -370,8 +378,8 @@ $('#tabla_programa_trabajo tbody').on('click', 'td>button.mostrar', function()
 
     
    
-    // consulta_proveedores(row.data().ID_PROYECTO, row.data().TIENE_RECONOCIMIENTO, row.data().recsensorial_alcancefisico, row.data().recsensorial_alcancequimico);
-    // datatable_proveedores = 1;
+    consulta_trabajadores(row.data().TIENE_RECONOCIMIENTO);
+    datatable_trabajadores = 1;
     
 
 	
@@ -394,174 +402,166 @@ $('#tabla_programa_trabajo tbody').on('click', 'td>button.mostrar', function()
 //===============================================================
 
 
-function consulta_proveedores(proyecto_id, recsensorial_id, recsensorial_alcancefisico, recsensorial_alcancequimico)
+function consulta_trabajadores(RECPSICO_ID)
 {
 	$.ajax({
 		type: "GET",
 		dataType: "json",
-		url: "/proyectoproveedoreslista/"+proyecto_id+"/"+recsensorial_id,
+		url: "/proyectotrabajadoreslista/"+RECPSICO_ID,
 		data:{},
 		cache: false,
 		success:function(dato)
 		{
 			if (parseInt(dato.numero_registros) > 0)
 			{
-				$('#tabla_proyectoproveedores tbody').html(dato.filas);
-				proveedores_asignados = parseInt(dato.numero_registros);
-
-				// Verifica proyecto bloqueado
-				if (parseInt(proyecto_bloqueado) == 1)
-				{
-					$('#boton_guardar_proyectoproveedores').html('Guardar <i class="fa fa-ban"></i>')
-					$('#boton_guardar_proyectoproveedores').attr('disabled', true);
-				}
-				else
-				{
-					$('#boton_guardar_proyectoproveedores').html('Guardar <i class="fa fa-save"></i>')
-					$('#boton_guardar_proyectoproveedores').attr('disabled', false);
-				}
+				$('#tabla_proyectotrabajadores tbody').html(dato.filas);
+				trabajadores = parseInt(dato.numero_registros);
 			}
 			else
 			{
-				$('#boton_guardar_proyectoproveedores').html('Guardar <i class="fa fa-ban"></i>')
-				$('#boton_guardar_proyectoproveedores').attr('disabled', true);
+				$('#boton_guardar_proyectotrabajadores').html('Guardar <i class="fa fa-ban"></i>')
+				$('#boton_guardar_proyectotrabajadores').attr('disabled', true);
 
-				$('#tabla_proyectoproveedores tbody').html('<tr><td colspan="8" style="text-align: center;">No hay datos que mostrar</td></tr>');
-				proveedores_asignados = 0;
+				$('#tabla_proyectotrabajadores tbody').html('<tr><td colspan="8" style="text-align: center;">No hay datos que mostrar</td></tr>');
+				trabajadores = 0;
 			}
 		},
 		beforeSend: function(){
-			$('#tabla_proyectoproveedores tbody').html('<tr><td colspan="8" style="text-align: center;"><i class="fa fa-spin fa-spinner" style="font-size: 40px!important;"></i></td></tr>');
+			$('#tabla_proyectotrabajadores tbody').html('<tr><td colspan="8" style="text-align: center;"><i class="fa fa-spin fa-spinner" style="font-size: 40px!important;"></i></td></tr>');
 		},
 		error: function(dato){
-			$('#tabla_proyectoproveedores tbody').html('<tr><td colspan="8" style="text-align: center;">Error al consultar los datos</td></tr>');
-			$('#boton_guardar_proyectoproveedores').attr('disabled', true);
-			proveedores_asignados = 0;
+			$('#tabla_proyectotrabajadores tbody').html('<tr><td colspan="8" style="text-align: center;">Error al consultar los datos</td></tr>');
+			$('#boton_guardar_proyectotrabajadores').attr('disabled', true);
+			trabajadores = 0;
 			return false;
 		}
 	});//Fin ajax
 }
 
+$(document).ready(function() {
+    $('body').on('change', '.worker-checkbox', function() {
+        var index = $(this).data('index');
+        var observacionActiva = $('#RECPSICOTRABAJADOR_OBSERVACION' + index);
 
-function valida_requiere_agente_activo(agente_activo)
-{
-	if (agente_activo.checked)// Valida estado
-	{
-		// $('#select_proveedor_'+agente_activo.value).attr('readonly', false);
-		// $('#puntos_agente_'+agente_activo.value).attr('readonly', false);
+        console.log('Checkbox changed for index:', index);
 
-		$('#select_proveedor_'+agente_activo.value).attr('required', true);
-		$('#puntos_agente_'+agente_activo.value).attr('required', true);
-	}
-	else
-	{
-		$('#select_proveedor_'+agente_activo.value).val('');
-		$('#puntos_agente_'+agente_activo.value).val('');
+        if ($(this).is(':checked')) {
+            observacionActiva.prop('disabled', true);
+        } else {
+            observacionActiva.prop('disabled', false);
+        }
+    });
 
-		$('#select_proveedor_'+agente_activo.value).attr('required', false);
-		$('#puntos_agente_'+agente_activo.value).attr('required', false);
+	    //inicializacion
+    function initializeObservationFields() {
+        $('.worker-checkbox').each(function() {
+            var index = $(this).data('index');
+            var observacionActiva = $('#RECPSICOTRABAJADOR_OBSERVACION' + index);
 
-		// $('#select_proveedor_'+agente_activo.value).attr('readonly', true);
-		// $('#puntos_agente_'+agente_activo.value).attr('readonly', true);
-	}
-}
-
-
-function requiere_obs(agente_id, puntos_originales, puntos_actuales)
-{
-	var puntos_originales = parseInt(puntos_originales);
-	var puntos_actuales = parseInt(puntos_actuales);
-
-	if(puntos_originales != puntos_actuales)
-	{
-		$('#agente_obs_'+agente_id).attr('readonly', false);
-		$('#agente_obs_'+agente_id).attr('required', true);
-	}
-	else
-	{
-		$('#agente_obs_'+agente_id).val('');
-		$('#agente_obs_'+agente_id).attr('required', false);
-		$('#agente_obs_'+agente_id).attr('readonly', true);
-	}
-}
+            if ($(this).is(':checked')) {
+                observacionActiva.prop('disabled', true);
+            } else {
+                observacionActiva.prop('disabled', false);
+            }
+        });
+    }
 
 
-function consulta_listaproveedores()
-{
-	setTimeout(function()
-	{
-		$.ajax({
-			type: "GET",
-			dataType: "json",
-			url: "/proyectoproveedorestodos",
-			data:{},
-			cache: false,
-			success:function(dato)
-			{
-				proveedores_lista = dato.select_lista_proveedores;
-			},
-			error: function(dato)
-			{
-				consulta_listaproveedores();
-				proveedores = 0;
-				return false;
-			}
-		});//Fin ajax
-	}, 1000);
-}
+    initializeObservationFields();
 
-
-$("#boton_proyectoproveedornuevapartida").click(function()
-{
-	proveedores_asignados += 1;
-
-    // $("#tabla_proyectoproveedores tbody").append( '<tr>'+
-    // 													'<td>'+proveedores_asignados+'</td>'+
-    // 													'<td class="eliminar"><button type="button" class="btn btn-danger btn-circle"><i class="fa fa-trash"></i></button></td>'+
-	// 	                                                '<td>'+
-	// 	                                                	'<input type="checkbox" name="agenteadicional_activo[]" checked/>'+
-	// 														'<select class="custom-select form-control" id="adicional_'+proveedores_asignados+'_proveedor" name="proveedoradicional_id[]" required onchange="mostrar_proveedoralcances(this, '+proveedores_asignados+');">'+
-	// 															proveedores_lista+
-	// 														'</select>'+
-	// 									                '</td>'+
-	// 	                                                '<td colspan="3">'+
-	// 	                                                	'<select class="custom-select form-control" id="adicional_'+proveedores_asignados+'_alcance" name="agenteadicional_id[]" required onchange="llenarcampos_proveedoralcances(this, '+proveedores_asignados+');">'+
-	// 															'<option value="">&nbsp;</option>'+
-	// 														'</select>'+
-	// 														'<input type="hidden" class="form-control" id="adicional_'+proveedores_asignados+'_tipo" name="agenteadicional_tipo[]" value="">'+
-		                                                
-	// 	                                                '<td>'+
-	// 	                                                	'<input type="text" class="form-control" name="agenteadicional_obs[]" value="" required>'+
-	// 	                                                '</td>'+
-	// 	                                            '</tr>');
-
-
-	$("#tabla_proyectoproveedores tbody").append(
-		'<tr>' +
-			'<td>' + proveedores_asignados + '</td>' +
-			'<td class="eliminar"><button type="button" class="btn btn-danger btn-circle"><i class="fa fa-trash"></i></button></td>'+
-			'<td>' +
-				'<select class="custom-select form-control" id="adicional_' + proveedores_asignados + '_proveedor" name="proveedoradicional_id[]" required onchange="mostrar_proveedoralcances(this, ' + proveedores_asignados + ');">' +
-				'<option value="1">Online</option>'+
-				'<option value="2">Presencial</option>' +
-				'</select>' +
-			'</td>' +
-			'<td>' +
-				'<input type="text" class="form-control" id="adicional_tipo_' + proveedores_asignados + '" name="agenteadicional_tipo[]">' +
-			'</td>' +
-			'<td>' +
-				'<input type="text" class="form-control" name="agenteadicional_obs[]" value="" required>' +
-			'</td>' +
-		'</tr>'
-	);
-	
-
-													
 });
 
 
+$("#boton_proyectotrabajadornuevapartida").click(function() {
+    trabajadores += 1;
+
+    $("#tabla_proyectotrabajadores tbody").append(
+        '<tr>' +
+            '<td>' + trabajadores + '</td>' +
+            '<td class="eliminar"><button type="button" class="btn btn-danger btn-circle"><i class="fa fa-trash"></i></button></td>' +
+            '<td>' +
+                '<select class="custom-select form-control" id="adicional_' + trabajadores + '_trabajador" name="trabajadoradicional_id[]" required>' +
+                '<option value="">Seleccione una modalidad</option>' +
+                '<option value="Online">Online</option>' +
+                '<option value="Presencial">Presencial</option>' +
+                '</select>' +
+            '</td>' +
+            '<td>' +
+			'<select class="custom-select form-control" id="adicional_nombre_' + trabajadores + '" name="trabajadoradicional_nombre[]">'+
+			'<option value="" disabled selected>Seleccione un trabajador adicional</option>'+
+			'</select>'+
+		
+            '</td>' +
+            '<td>' +
+                '<input type="text" class="form-control" id="trabajadoradicional'+trabajadores+'_observacion[]" name="trabajadoradicional'+trabajadores+'_observacion[]" value="" disabled>' +
+            '</td>' +
+        '</tr>'
+    );
+	cargarTrabajadoresAdicionales('adicional_nombre_' + trabajadores);
+
+});
+
+function cargarTrabajadoresAdicionales(elementId) {
+    const selectElement = document.getElementById(elementId);
+    if (!selectElement) {
+        console.error('Error en consultar los datos');
+        return;
+    }
+
+    selectElement.innerHTML = '';
+
+    $.ajax({
+        type: "GET",
+        dataType: "json",
+        url: "/proyectotrabajadoresadicionales", 
+        data: {}, 
+        cache: false,
+        success: function(data) {
+            
+            data.forEach(trabajador => {
+                const option = document.createElement('option');
+                option.value = trabajador.ID_RECOPSICOTRABAJADOR; 
+                option.textContent = trabajador.RECPSICOTRABAJADOR_NOMBRE; 
+                selectElement.appendChild(option);
+            });
+
+            $(selectElement).selectize({
+                create: false,
+                sortField: 'text',
+                placeholder: 'Seleccione un trabajador adicional'
+            });
+        },
+        beforeSend: function() {
+            selectElement.innerHTML = '<option value="" disabled selected>Consultando trabajadores adicionales...</option>';
+        },
+        error: function(error) {
+            console.error('Error:', error.responseText);
+        }
+    });
+}
+
+
+
+
+
+    // $('#adicional_nombre_' + trabajadores).autocomplete({
+    //     source: function(request, response) {
+    //         $.ajax({
+    //             url: '/proyectotrabajadoresadicionales',
+    //             dataType: 'json',
+    //             data: {
+    //                 term: request.term 
+    //             },
+    //             success: function(data) {
+    //                 response(data); 
+    //             }
+    //         });
+    //     },
+    //     minLength: 1
+    // });
+
 // Eliminar fila partida
-$('#tabla_proyectoproveedores tbody').on('click', '.eliminar', function(){
+$('#tabla_proyectotrabajadores tbody').on('click', '.eliminar', function(){
 
     // obtener fila tabla
     var fila = $(this);
@@ -616,45 +616,8 @@ $('#tabla_proyectoproveedores tbody').on('click', '.eliminar', function(){
 });
 
 
-function mostrar_proveedoralcances(campo_select, campo_total)
+$("#boton_guardar_proyectotrabajadores").click(function()
 {
-	$.ajax({
-		type: "GET",
-		dataType: "json",
-		url: "/proyectoproveedoralcances/"+campo_select.value,
-		data:{},
-		cache: false,
-		success:function(dato)
-		{
-			$("#adicional_"+campo_total+"_alcance").html(dato.select_lista_proveedoralcances);
-		},
-		error: function(dato){
-			$("#adicional_"+campo_total+"_alcance").html('<option value="">&nbsp;</option>')
-			return false;
-		}
-	});//Fin ajax
-}
-
-
-function llenarcampos_proveedoralcances(campo_select, campo_total)
-{
-	if (parseInt(campo_select.value) > 0)
-	{
-		$("#adicional_"+campo_total+"_nombre").val($("#"+campo_select.id+" option:selected").text());
-		$("#adicional_"+campo_total+"_tipo").val(1);
-	}
-	else
-	{
-		$("#adicional_"+campo_total+"_nombre").val($("#"+campo_select.id+" option:selected").text());
-		$("#adicional_"+campo_total+"_tipo").val(2); //sin descripcion
-		$("#adicional_"+campo_total+"_analisis").val(''); //sin descripcion
-	}
-}
-
-
-$("#boton_guardar_proyectoproveedores").click(function()
-{
-	// valida campos vacios
 	var valida = this.form.checkValidity();
 	if (valida)
 	{
@@ -671,57 +634,52 @@ $("#boton_guardar_proyectoproveedores").click(function()
         }, function(isConfirm){
             if (isConfirm)
             {
-            	// cerrar msj confirmacion
 				swal.close();
 
-				// enviar datos
-				$('#form_proyectoproveedores').ajaxForm({
+				$('#form_proyectotrabajadores').ajaxForm({
 					dataType: 'json',
 					type: 'POST',
-					url: '/proyectoproveedores',
+					url: '/proyectotrabajadores',
 					data: {
 						proyecto_id: proyecto_id
 					},
 					resetForm: false,
 					success: function(dato){
 
-						// inicializar tabla
-						datatable_signatarios_activo = 0;
+						datatable_psicologos_activo = 0;
 						datatable_equipos_activo = 0;
+						datatable_vehiculos_activo = 0;
 
-						// mensaje
 						swal({
 							title: "Correcto",
 							text: ""+dato.msj,
-							type: "success", // warning, error, success, info
+							type: "success", 
 							buttons: {
-								visible: false, // true , false
+								visible: false, 
 							},
 							timer: 1500,
 							showConfirmButton: false
 						});
 
 						// actualiza boton
-						$('#boton_guardar_proyectoproveedores').html('Guardar <i class="fa fa-save"></i>');
+						$('#boton_guardar_proyectotrabajadores').html('Guardar <i class="fa fa-save"></i>');
 
 						$("#boton_nueva_ordenservicio").prop('disabled', true);
 						$("#boton_nueva_ordenservicioadicional").prop('disabled', true);
 
 					},
 					beforeSend: function(){
-						$('#boton_guardar_proyectoproveedores').html('Guardando <i class="fa fa-spin fa-spinner"></i>');
+						$('#boton_guardar_proyectotrabajadores').html('Guardando <i class="fa fa-spin fa-spinner"></i>');
 					},
 					error: function(dato) {
-						// actualiza boton
-						$('#boton_guardar_proyectoproveedores').html('Guardar <i class="fa fa-save"></i>');
+						$('#boton_guardar_proyectotrabajadores').html('Guardar <i class="fa fa-save"></i>');
 
-						// mensaje
 						swal({
 							title: "Error",
 							text: ""+dato.msj,
-							type: "error", // warning, error, success, info
+							type: "error", 
 							buttons: {
-								visible: false, // true , false
+								visible: false, 
 							},
 							timer: 1500,
 							showConfirmButton: false
@@ -733,13 +691,12 @@ $("#boton_guardar_proyectoproveedores").click(function()
             }
             else 
             {
-				// mensaje
 				swal({
 					title: "Cancelado",
 					text: "",
-					type: "error", // warning, error, success, info
+					type: "error", 
 					buttons: {
-						visible: false, // true , false
+						visible: false,
 					},
 					timer: 500,
 					showConfirmButton: false
@@ -754,101 +711,101 @@ $("#boton_guardar_proyectoproveedores").click(function()
 //===============================================================
 
 
-function tabla_signatarios(proyecto_id)
-{
-	try 
-	{
-		var ruta = "/proyectosignatariosinventario/"+proyecto_id;
+// function tabla_signatarios(proyecto_id)
+// {
+// 	try 
+// 	{
+// 		var ruta = "/proyectosignatariosinventario/"+proyecto_id;
 
-		if (datatable_signatarios != null)
-		{
-			datatable_signatarios.clear().draw();
-			datatable_signatarios.ajax.url(ruta).load();
-		}
-		else
-		{
-			datatable_signatarios = $('#tabla_proyectosignatarios').DataTable({
-		        "ajax": {
-		            "url": ruta,
-		            "type": "get",
-		            "cache": false,
-		            error: function (xhr, error, code)
-		            {
-		                // console.log(xhr); console.log(code);
-		                tabla_signatarios(proyecto_id);
-		            },
-		            "data": {}
-		        },
-		        "columns": [
-		            // {
-		            //     "data": "id" 
-		            // },
-		            {
-		                "data": "numero_registro",
-		                "defaultContent": "-"
-		            },
-		            {
-		                "data": "proveedor_NombreComercial",
-		                "defaultContent": "-"
-		            },
-		            {
-		                "data": "disponibilidad",
-		                "defaultContent": "-"
-		            },
-		            {
-		                "data": "checkbox",
-		                "defaultContent": "-",
-		                "orderable": false
-		            },
-		            {
-		                "data": "signatario_Nombre",
-		                "defaultContent": "-"
-		            },
-		            {
-		                "data": "signatario_alcances",
-		                "defaultContent": "-",
-		                "orderable": false
-		            },
-		            {
-		                "data": "signatario_acreditaciones",
-		                "defaultContent": "-"
-		            }
-		        ],
-		        "lengthMenu": [[20, 50, 100, -1], [20, 50, 100, "Todos"]],
-		        // "rowsGroup": [0, 1], //agrupar filas
-		        // "order": [[ 0, "DESC" ]],
-		        "ordering": false,
-		        "processing": true,
-		        "paging": false,
-		        "scrollY": 500,
-		        "scrollX": false,
-		        "scrollCollapse": false,
-		        responsive: true,
-		        "language": {
-		            "lengthMenu": "Mostrar _MENU_ Registros",
-		            "zeroRecords": "No se encontraron registros",
-		            "info": "Página _PAGE_ de _PAGES_ (Total _MAX_ registros)",
-		            "infoEmpty": "No se encontraron registros",
-		            "infoFiltered": "(Filtrado de _MAX_ registros)",
-		            "emptyTable": "No hay datos disponibles en la tabla",
-		            "loadingRecords": "Cargando datos....",
-		            "processing": "Procesando <i class='fa fa-spin fa-spinner fa-3x'></i>",
-		            "search": "Buscar",
-		            "paginate": {
-		                "first": "Primera",
-		                "last": "Ultima",
-		                "next": "Siguiente",
-		                "previous": "Anterior"
-		            }
-		        }
-		    });
-		}
-	}
-	catch (exception)
-	{
-        tabla_signatarios(proyecto_id);
-    }
-}
+// 		if (datatable_signatarios != null)
+// 		{
+// 			datatable_signatarios.clear().draw();
+// 			datatable_signatarios.ajax.url(ruta).load();
+// 		}
+// 		else
+// 		{
+// 			datatable_signatarios = $('#tabla_proyectosignatarios').DataTable({
+// 		        "ajax": {
+// 		            "url": ruta,
+// 		            "type": "get",
+// 		            "cache": false,
+// 		            error: function (xhr, error, code)
+// 		            {
+// 		                // console.log(xhr); console.log(code);
+// 		                tabla_signatarios(proyecto_id);
+// 		            },
+// 		            "data": {}
+// 		        },
+// 		        "columns": [
+// 		            // {
+// 		            //     "data": "id" 
+// 		            // },
+// 		            {
+// 		                "data": "numero_registro",
+// 		                "defaultContent": "-"
+// 		            },
+// 		            {
+// 		                "data": "proveedor_NombreComercial",
+// 		                "defaultContent": "-"
+// 		            },
+// 		            {
+// 		                "data": "disponibilidad",
+// 		                "defaultContent": "-"
+// 		            },
+// 		            {
+// 		                "data": "checkbox",
+// 		                "defaultContent": "-",
+// 		                "orderable": false
+// 		            },
+// 		            {
+// 		                "data": "signatario_Nombre",
+// 		                "defaultContent": "-"
+// 		            },
+// 		            {
+// 		                "data": "signatario_alcances",
+// 		                "defaultContent": "-",
+// 		                "orderable": false
+// 		            },
+// 		            {
+// 		                "data": "signatario_acreditaciones",
+// 		                "defaultContent": "-"
+// 		            }
+// 		        ],
+// 		        "lengthMenu": [[20, 50, 100, -1], [20, 50, 100, "Todos"]],
+// 		        // "rowsGroup": [0, 1], //agrupar filas
+// 		        // "order": [[ 0, "DESC" ]],
+// 		        "ordering": false,
+// 		        "processing": true,
+// 		        "paging": false,
+// 		        "scrollY": 500,
+// 		        "scrollX": false,
+// 		        "scrollCollapse": false,
+// 		        responsive: true,
+// 		        "language": {
+// 		            "lengthMenu": "Mostrar _MENU_ Registros",
+// 		            "zeroRecords": "No se encontraron registros",
+// 		            "info": "Página _PAGE_ de _PAGES_ (Total _MAX_ registros)",
+// 		            "infoEmpty": "No se encontraron registros",
+// 		            "infoFiltered": "(Filtrado de _MAX_ registros)",
+// 		            "emptyTable": "No hay datos disponibles en la tabla",
+// 		            "loadingRecords": "Cargando datos....",
+// 		            "processing": "Procesando <i class='fa fa-spin fa-spinner fa-3x'></i>",
+// 		            "search": "Buscar",
+// 		            "paginate": {
+// 		                "first": "Primera",
+// 		                "last": "Ultima",
+// 		                "next": "Siguiente",
+// 		                "previous": "Anterior"
+// 		            }
+// 		        }
+// 		    });
+// 		}
+// 	}
+// 	catch (exception)
+// 	{
+//         tabla_signatarios(proyecto_id);
+//     }
+// }
 
 
 $("#boton_guardar_proyectosignatarios").click(function()
@@ -970,75 +927,75 @@ $("#boton_guardar_proyectosignatarios").click(function()
 //===============================================================
 
 
-function consulta_observacionesproveedores(proyecto_id)
-{
-	$.ajax({
-		type: "GET",
-		dataType: "json",
-		url: "/proyectoobservacionesproveedores/"+proyecto_id,
-		data:{},
-		cache: false,
-		success:function(dato)
-		{
-			if (parseInt(dato.obs_signatarios.length) > 0)
-			{
-				// Contenido tablas
-				$('#tabla_proyectosignatariosobservaciones tbody').html(dato.obs_signatarios);
+// function consulta_observacionesproveedores(proyecto_id)
+// {
+// 	$.ajax({
+// 		type: "GET",
+// 		dataType: "json",
+// 		url: "/proyectoobservacionesproveedores/"+proyecto_id,
+// 		data:{},
+// 		cache: false,
+// 		success:function(dato)
+// 		{
+// 			if (parseInt(dato.obs_signatarios.length) > 0)
+// 			{
+// 				// Contenido tablas
+// 				$('#tabla_proyectosignatariosobservaciones tbody').html(dato.obs_signatarios);
 
-				// diseño boton
-				$('#boton_guardar_proyectosignatarios').attr('disabled', false);
-				$('#boton_guardar_proyectosignatarios').html('Guardar <i class="fa fa-save"></i>')
-			}
-			else
-			{
-				// Contenido tablas
-				$('#tabla_proyectosignatariosobservaciones tbody').html('<tr><td colspan="2" style="text-align: center;">No hay datos que mostrar</td></tr>');
+// 				// diseño boton
+// 				$('#boton_guardar_proyectosignatarios').attr('disabled', false);
+// 				$('#boton_guardar_proyectosignatarios').html('Guardar <i class="fa fa-save"></i>')
+// 			}
+// 			else
+// 			{
+// 				// Contenido tablas
+// 				$('#tabla_proyectosignatariosobservaciones tbody').html('<tr><td colspan="2" style="text-align: center;">No hay datos que mostrar</td></tr>');
 
-				// diseño boton
-				$('#boton_guardar_proyectosignatarios').html('Guardar <i class="fa fa-ban"></i>')
-				$('#boton_guardar_proyectosignatarios').attr('disabled', true);
+// 				// diseño boton
+// 				$('#boton_guardar_proyectosignatarios').html('Guardar <i class="fa fa-ban"></i>')
+// 				$('#boton_guardar_proyectosignatarios').attr('disabled', true);
 
-				// inicializar tabla
-				datatable_signatarios_activo = 0;
-			}
+// 				// inicializar tabla
+// 				datatable_signatarios_activo = 0;
+// 			}
 
-			if (parseInt(dato.obs_equipos.length) > 0)
-			{
-				// Contenido tablas
-				$('#tabla_proyectoequiposobservaciones tbody').html(dato.obs_equipos);
+// 			if (parseInt(dato.obs_equipos.length) > 0)
+// 			{
+// 				// Contenido tablas
+// 				$('#tabla_proyectoequiposobservaciones tbody').html(dato.obs_equipos);
 
-				// diseño boton
-				$('#boton_guardar_proyectoequipos').attr('disabled', false);
-				$('#boton_guardar_proyectoequipos').html('Guardar <i class="fa fa-save"></i>')
-			}
-			else
-			{
-				// Contenido tablas
-				$('#tabla_proyectoequiposobservaciones tbody').html('<tr><td colspan="2" style="text-align: center;">No hay datos que mostrar</td></tr>');
+// 				// diseño boton
+// 				$('#boton_guardar_proyectoequipos').attr('disabled', false);
+// 				$('#boton_guardar_proyectoequipos').html('Guardar <i class="fa fa-save"></i>')
+// 			}
+// 			else
+// 			{
+// 				// Contenido tablas
+// 				$('#tabla_proyectoequiposobservaciones tbody').html('<tr><td colspan="2" style="text-align: center;">No hay datos que mostrar</td></tr>');
 
-				// diseño boton
-				$('#boton_guardar_proyectoequipos').html('Guardar <i class="fa fa-ban"></i>')
-				$('#boton_guardar_proyectoequipos').attr('disabled', true);
+// 				// diseño boton
+// 				$('#boton_guardar_proyectoequipos').html('Guardar <i class="fa fa-ban"></i>')
+// 				$('#boton_guardar_proyectoequipos').attr('disabled', true);
 
-				// inicializar tabla
-				datatable_equipos_activo = 0;
-			}
-		},
-		// beforeSend: function(){
-		// 	$('#tabla_proyectosignatarios tbody').html('<tr><td colspan="6" style="text-align: center;"><i class="fa fa-spin fa-spinner" style="font-size: 40px!important;"></i></td></tr>');
-		// },
-		error: function(dato)
-		{
-			datatable_signatarios_activo = 0;
-			datatable_equipos_activo = 0;
-			$('#tabla_proyectosignatariosobservaciones tbody').html('<tr><td colspan="2" style="text-align: center;">No hay datos que mostrar</td></tr>');
-			$('#tabla_proyectoequiposobservaciones tbody').html('<tr><td colspan="2" style="text-align: center;">No hay datos que mostrar</td></tr>');
-			$('#boton_guardar_proyectosignatarios').attr('disabled', true);
-			$('#boton_guardar_proyectoequipos').attr('disabled', true);
-			return false;
-		}
-	});//Fin ajax
-}
+// 				// inicializar tabla
+// 				datatable_equipos_activo = 0;
+// 			}
+// 		},
+// 		// beforeSend: function(){
+// 		// 	$('#tabla_proyectosignatarios tbody').html('<tr><td colspan="6" style="text-align: center;"><i class="fa fa-spin fa-spinner" style="font-size: 40px!important;"></i></td></tr>');
+// 		// },
+// 		error: function(dato)
+// 		{
+// 			datatable_signatarios_activo = 0;
+// 			datatable_equipos_activo = 0;
+// 			$('#tabla_proyectosignatariosobservaciones tbody').html('<tr><td colspan="2" style="text-align: center;">No hay datos que mostrar</td></tr>');
+// 			$('#tabla_proyectoequiposobservaciones tbody').html('<tr><td colspan="2" style="text-align: center;">No hay datos que mostrar</td></tr>');
+// 			$('#boton_guardar_proyectosignatarios').attr('disabled', true);
+// 			$('#boton_guardar_proyectoequipos').attr('disabled', true);
+// 			return false;
+// 		}
+// 	});//Fin ajax
+// }
 
 
 //===============================================================

@@ -140,15 +140,22 @@
                                             </div>
                                             @endif
 
-                                            @if(auth()->user()->hasRoles(['Superusuario', 'Administrador', 'Coordinador','Compras','Almacén','Operativo HI']))
+                                            @if(auth()->user()->hasRoles(['Superusuario', 'Administrador', 'Coordinador','Operativo HI','Compras']))
                                             <div class="multisteps-form__progress-btn" id="steps_menu_tab5">
+                                                <i class="fa fa-car"></i><br>
+                                                <span>Vehículos</span>
+                                            </div>
+                                            @endif
+
+                                            @if(auth()->user()->hasRoles(['Superusuario', 'Administrador', 'Coordinador','Compras','Almacén','Operativo HI']))
+                                            <div class="multisteps-form__progress-btn" id="steps_menu_tab6">
                                                 <i class="fa fa-print"></i><br>
                                                 <span>Ordenes</span>
                                             </div>
                                             @endif
 
                                             @if(auth()->user()->hasRoles(['Superusuario', 'Administrador', 'Coordinador','Almacén','Operativo HI','Compras']))
-                                            <div class="multisteps-form__progress-btn" id="steps_menu_tab6">
+                                            <div class="multisteps-form__progress-btn" id="steps_menu_tab7">
                                                 <i class="fa fa-list"></i><br>
                                                 <span>Lista de permisos</span>
                                             </div>
@@ -166,13 +173,13 @@
                                                 <div class="multisteps-form__content">
                                                     <div class="row">
                                                         <div class="col-12">
-                                                            <form method="post" enctype="multipart/form-data" name="form_proyectoproveedores" id="form_proyectoproveedores">
+                                                            <form method="post" enctype="multipart/form-data" name="form_proyectotrabajadores" id="form_proyectotrabajadores">
                                                                 {!! csrf_field() !!}
                                                                 <div class="card">
                                                                     <div class="card-body">
                                                                         <h4 class="card-title">Lista de trabajadores del centro de trabajo</h4>
                                                                         <hr>
-                                                                        <table class="table table-hover stylish-table" width="100%" id="tabla_proyectoproveedores">
+                                                                        <table class="table table-hover stylish-table" width="100%" id="tabla_proyectotrabajadores">
                                                                             <thead>
                                                                                 <tr>
                                                                                     <th style="width: 50px!important;">No</th>
@@ -183,39 +190,16 @@
                                                                                 </tr>
                                                                             </thead>
                                                                             <tbody>
-                                                                                <tr>
-                                                                                    <td>1</td>
-                                                                                    <td>
-                                                                                        <div class="switch" style="border: 0px #000 solid;">
-                                                                                            <label>
-                                                                                                <input type="checkbox" name="agente_activo[]" value="1" onchange="valida_requiere_agente_activo(this)" checked="">
-                                                                                                <span class="lever switch-col-light-blue" style="padding: 0px; margin: 0px;"></span>
-                                                                                            </label>
-                                                                                        </div>
-                                                                                    </td>
-                                                                                    <td>
-                                                                                        <select class="custom-select form-control" id="adicional_proveedor" name="proveedoradicional_id[]" required onchange="mostrar_proveedoralcances(this, 1);">
-                                                                                            <option value="1">Online</option>
-                                                                                            <option value="2">Presencial</option>
-                                                                                        </select>
-                                                                                    </td>
-                                                                                    <td>
-                                                                                        <input type="text" class="form-control" id="adicional_tipo" name="agenteadicional_tipo[]" value="Guillermo Diaz Olan">
-                                                                                    </td>
-                                                                                    <td>
-                                                                                        <input type="text" class="form-control" name="agenteadicional_obs[]" value="" required>
-                                                                                    </td>
-                                                                                </tr>
                                                                             </tbody>
                                                                         </table>
 
                                                                         @if(auth()->user()->hasRoles(['Superusuario', 'Administrador', 'Coordinador']))
                                                                         <hr>
                                                                         <div class="form-group">
-                                                                            <button type="button" style="float: left;" class="btn btn-warning waves-effect waves-light botonnuevo_moduloproyecto" id="boton_proyectoproveedornuevapartida">
+                                                                            <button type="button" style="float: left;" class="btn btn-warning waves-effect waves-light botonnuevo_moduloproyecto" id="boton_proyectotrabajadornuevapartida">
                                                                                 <span class="btn-label"><i class="fa fa-plus"></i></span> Agregar adicional
                                                                             </button>
-                                                                            <button type="submit" style="float: right;" class="btn btn-danger waves-effect waves-light botonguardar_moduloproyecto" id="boton_guardar_proyectoproveedores">
+                                                                            <button type="submit" style="float: right;" class="btn btn-danger waves-effect waves-light botonguardar_moduloproyecto" id="boton_guardar_proyectotrabajadores">
                                                                                 Guardar <i class="fa fa-save"></i>
                                                                             </button>
                                                                         </div>
@@ -341,7 +325,7 @@
                                                                                         </thead>
                                                                                         <tbody>
                                                                                             <tr>
-                                                                                                <td colspan="9">&nbsp;</td>
+                                                                                                <td colspan="1">&nbsp;</td>
                                                                                             </tr>
                                                                                         </tbody>
                                                                                     </table>
@@ -388,9 +372,90 @@
                                                     </div>
                                                 </div>
                                             </div>
+                                            <div class="multisteps-form__panel" data-animation="scaleIn" id="steps_contenido_tab5">
+                                                <div class="multisteps-form__content">
+                                                    <div class="row">
+                                                        <div class="col-12">
+                                                            <div class="card">
+                                                                <div class="card-body">
+                                                                    <h4 class="card-title">Lista de vehículos asignados al proyecto</h4>
+                                                                    <div class="row">
+                                                                        <div class="col-12">
+                                                                            <form method="post" enctype="multipart/form-data" name="form_proyectovehiculos" id="form_proyectovehiculos">
+                                                                                <style type="text/css" media="screen">
+                                                                                    #tabla_proyectoequipos td {
+                                                                                        padding: 12px 20px 12px 2px;
+                                                                                        border-top: 1px #EEEEEE solid;
+                                                                                    }
+                                                                                </style>
+                                                                                <div style="border: 0px #999999 solid; margin-bottom: 20px;">
+                                                                                    {!! csrf_field() !!}
+                                                                                    <table class="display table-hover stylish-table" width="100%" id="tabla_proyectovehiculos">
+                                                                                        <thead>
+                                                                                            <tr>
+                                                                                                <th width="60" style="padding: 10px 0px; border-bottom: 2px #EEEEEE solid;">No</th>
+                                                                                                <th width="160" style="padding: 10px 0px; border-bottom: 2px #EEEEEE solid;">Proveedor</th>
+                                                                                                <th width="110" style="padding: 10px 0px; border-bottom: 2px #EEEEEE solid;">Disponible</th>
+                                                                                                <th width="80" style="padding: 10px 0px; border-bottom: 2px #EEEEEE solid;">Asignado</th>
+                                                                                                <th width="auto" style="padding: 10px 0px; border-bottom: 2px #EEEEEE solid;">Marca</th>
+                                                                                                <th width="180" style="padding: 10px 0px; border-bottom: 2px #EEEEEE solid;">Modelo</th>
+                                                                                                <th width="140" style="padding: 10px 0px; border-bottom: 2px #EEEEEE solid;">Serie</th>
+                                                                                                <th width="140" style="padding: 10px 0px; border-bottom: 2px #EEEEEE solid;">Linea</th>
+                                                                                                <th width="160" style="padding: 10px 0px; border-bottom: 2px #EEEEEE solid;">Placa</th>
+                                                                                            </tr>
+                                                                                        </thead>
+                                                                                        <tbody>
+                                                                                            <tr>
+                                                                                                <td colspan="9">&nbsp;</td>
+                                                                                            </tr>
+                                                                                        </tbody>
+                                                                                    </table>
+                                                                                </div>
+                                                                                @if(auth()->user()->hasRoles(['Superusuario', 'Administrador', 'Coordinador']))
+                                                                                <div class="form-group" style="text-align: right;">
+                                                                                    <button type="submit" class="btn btn-danger botonguardar_moduloproyecto" id="boton_guardar_proyectovehiculos">
+                                                                                        Guardar <i class="fa fa-save"></i>
+                                                                                    </button>
+                                                                                </div>
+                                                                                @endif
+                                                                            </form>
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                        <div class="col-12">
+                                                            <div class="card">
+                                                                <div class="card-body">
+                                                                    <h4 class="card-title">Observaciones</h4>
+                                                                    <hr>
+                                                                    <div class="row">
+                                                                        <div class="col-12">
+                                                                            <table class="table table-hover stylish-table" width="100%" id="tabla_proyectoequiposobservaciones">
+                                                                                <thead>
+                                                                                    <tr>
+                                                                                        <th width="320">Proveedor</th>
+                                                                                        <th>Observaciones</th>
+                                                                                    </tr>
+                                                                                </thead>
+                                                                                <tbody>
+                                                                                    <tr>
+                                                                                        <td>&nbsp;</td>
+                                                                                        <td>&nbsp;</td>
+                                                                                    </tr>
+                                                                                </tbody>
+                                                                            </table>
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
                                             @endif
                                             <!--STEP 5-->
-                                            <div class="multisteps-form__panel" data-animation="scaleIn" id="steps_contenido_tab5">
+                                            <div class="multisteps-form__panel" data-animation="scaleIn" id="steps_contenido_tab6">
                                                 <div class="multisteps-form__content">
                                                     <div class="row">
                                                         <div class="col-12">
@@ -474,7 +539,7 @@
                                                 </div>
                                             </div>
 
-                                            <div class="multisteps-form__panel" data-animation="scaleIn" id="steps_contenido_tab6">
+                                            <div class="multisteps-form__panel" data-animation="scaleIn" id="steps_contenido_tab7">
                                                 <div class="multisteps-form__content">
                                                     <div class="row">
                                                         <div class="col-12">
@@ -487,7 +552,7 @@
 
                                                                     <li class="nav-item">
                                                                         <a class="nav-link " data-toggle="tab" id="reportetab_menu3" role="tab" href="#reportetab_3">
-                                                                            <span class="hidden-xs-down">Lista de signatarios</span>
+                                                                            <span class="hidden-xs-down">Lista de psicólogos</span>
                                                                         </a>
                                                                     </li>
                                                                     @endif
@@ -495,6 +560,13 @@
                                                                     <li class="nav-item">
                                                                         <a class="nav-link " data-toggle="tab" id="reportetab_menu4" role="tab" href="#reportetab_4">
                                                                             <span class="hidden-xs-down">Lista de equipos</span>
+                                                                        </a>
+                                                                    </li>
+                                                                    @endif
+                                                                    @if(auth()->user()->hasRoles(['Superusuario', 'Administrador', 'Compras','Coordinador','Almacén','Operativo HI']))
+                                                                    <li class="nav-item">
+                                                                        <a class="nav-link " data-toggle="tab" id="reportetab_menu5" role="tab" href="#reportetab_5">
+                                                                            <span class="hidden-xs-down">Lista de vehículos</span>
                                                                         </a>
                                                                     </li>
                                                                     @endif
@@ -506,7 +578,7 @@
                                                                         @if(auth()->user()->hasRoles(['Superusuario', 'Administrador', 'Coordinador','Operativo HI','Compras']))
                                                                         <ol class="breadcrumb m-b-10">
                                                                             <button type="button" class="btn btn-secondary waves-effect waves-light botonnuevo_moduloproyecto" data-toggle="tooltip" title="Generar nueva" id="boton_nueva_ls">
-                                                                                <span class="btn-label"><i class="fa fa-plus"></i></span>Generar nueva lista de signatarios
+                                                                                <span class="btn-label"><i class="fa fa-plus"></i></span>Generar nueva lista de psicólogos
                                                                             </button>
                                                                         </ol>
                                                                         @endif
@@ -536,6 +608,30 @@
                                                                         @endif
                                                                         <div class="table-responsive">
                                                                             <table class="table table-hover stylish-table" width="100%" id="tabla_listaequipos">
+                                                                                <thead>
+                                                                                    <tr>
+                                                                                        <th style="width: 50px!important;">No.</th>
+                                                                                        <th>Revisión</th>
+                                                                                        <th style="width: 300px!important;">Autorizado por:</th>
+                                                                                        <th style="width: 300px!important;">Cancelado por:</th>
+                                                                                        <th style="width: 90px!important;">Estado</th>
+                                                                                        <th style="width: 70px!important;">Mostrar</th>
+                                                                                    </tr>
+                                                                                </thead>
+                                                                                <tbody></tbody>
+                                                                            </table>
+                                                                        </div>
+                                                                    </div>
+                                                                    <div class="tab-pane p-20" id="reportetab_5" role="tabpanel">
+                                                                        @if(auth()->user()->hasRoles(['Superusuario', 'Administrador', 'Coordinador','Operativo HI','Compras']))
+                                                                        <ol class="breadcrumb m-b-10">
+                                                                            <button type="button" class="btn btn-secondary waves-effect waves-light botonnuevo_moduloproyecto" data-toggle="tooltip" title="Generar nueva" id="boton_nueva_lv">
+                                                                                <span class="btn-label"><i class="fa fa-plus"></i></span>Generar nueva lista de vehículos
+                                                                            </button>
+                                                                        </ol>
+                                                                        @endif
+                                                                        <div class="table-responsive">
+                                                                            <table class="table table-hover stylish-table" width="100%" id="tabla_listavehiculos">
                                                                                 <thead>
                                                                                     <tr>
                                                                                         <th style="width: 50px!important;">No.</th>

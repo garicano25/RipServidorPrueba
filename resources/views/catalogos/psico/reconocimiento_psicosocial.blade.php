@@ -918,7 +918,7 @@
                                                                             <label class="col-12" style="font-weight: bold;font-size: 20px;">Carga de trabajadores del centro de trabajo</label>
                                                                             <!-- <h6 class="col-12 card-subtitle text-white m-b-0 op-5">&nbsp;</h6> -->
                                                                             <button type="button" class="btn btn-success me-2 waves-effect waves-light botonnuevo_modulorecsensorial" style="margin: 25px;" data-toggle="tooltip" title="Cargar trabajadores" id="boton_carga_trabajadores" onclick="abrirTrabajadoresExcel()">
-                                                                                <span class="btn-label"><i class="fa fa-file-excel-o"></i></span>Cargar trabajadores
+                                                                                <span class="btn-label"><i class="fa fa-file-excel-o"></i></span>Cargar trabajadores y/o muestrear
                                                                             </button>
                                                                             <button type="button" class="btn btn-primary waves-effect waves-light botonnuevo_modulorecsensorial" style="margin: 25px;" data-toggle="tooltip" title="Cargar trabajadores" id="boton_carga_muestra">
                                                                                     <span class="btn-label"><i class="fa fa-file-excel-o"></i></span>Cargar muestra de trabajadores

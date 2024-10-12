@@ -35,6 +35,8 @@ use Illuminate\Support\Str;
     <link href="/assets/plugins/sweetalert/sweetalert.css" rel="stylesheet" type="text/css">
     <!-- Date picker plugins css -->
     <link href="/assets/plugins/bootstrap-datepicker/bootstrap-datepicker.min.css" rel="stylesheet" type="text/css" />
+
+    
     <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
     <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
     <!--[if lt IE 9]>
@@ -100,6 +102,7 @@ use Illuminate\Support\Str;
     </link>
     <!-- Popup CSS -->
     <link href="/assets/plugins/Magnific-Popup-master/dist/magnific-popup.css" rel="stylesheet">
+
 
     {{-- Select2 search filter --}}
     <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
@@ -816,6 +819,8 @@ use Illuminate\Support\Str;
     @endif
 
 
+
+
     @if(request()->is('programa'))
     <!-- Form wizard -->
     <script src="/assets/plugins/form_wizard_steps_bootstrap/form_wizard_script.js"></script>
@@ -837,6 +842,7 @@ use Illuminate\Support\Str;
     @endif
 
     @if(request()->is('programaPsicosocial'))
+
     <!-- Form wizard -->
     <script src="/assets/plugins/form_wizard_steps_bootstrap/form_wizard_script2.js"></script>
     <script src="/assets/plugins/form_wizard_steps_bootstrap/form_wizard_script3.js"></script>
@@ -856,8 +862,33 @@ use Illuminate\Support\Str;
     <script src="/assets/plugins/select-search/selectize.js" type="text/javascript"></script>
     {{-- pagina --}}
     <script src="/js_sitio/programaTrabajoPsico.js?v=3.0"></script>
+    
     @endif
 
+
+    @if(request()->is('ejecucionPsicosocial'))
+    <!-- Form wizard -->
+    <script src="/assets/plugins/form_wizard_steps_bootstrap/form_wizard_script.js"></script>
+    <script src="/assets/plugins/moment/moment.js"></script>
+    <script src="/assets/plugins/bootstrap-material-datetimepicker/js/bootstrap-material-datetimepicker.js"></script>
+    <script src="/assets/plugins/bootstrap-datepicker/bootstrap-datepicker.min.js"></script>
+    {{-- datatable --}}
+    <script src="/assets/plugins/datatables/jquery.dataTables.min.js"></script>
+    <script src="/assets/plugins/datatables/dataTables.rowsGroup.js"></script>
+    <!-- jQuery file upload -->
+    <script src="/js/jasny-bootstrap.js"></script>
+    <script src="/assets/plugins/dropify/dist/js/dropify.min.js"></script>
+    {{-- pdfobject --}}
+    <script src="/assets/plugins/pdfobject/pdfobject.js"></script>
+    <!-- Magnific popup JavaScript -->
+    <script src="/assets/plugins/Magnific-Popup-master/dist/jquery.magnific-popup.min.js"></script>
+    <script src="/assets/plugins/Magnific-Popup-master/dist/jquery.magnific-popup-init.js"></script>
+    {{-- Select search filter --}}
+    <script src="/assets/plugins/select-search/selectize.js" type="text/javascript"></script>
+    {{-- pagina --}}
+    <script src="/js_sitio/ejecucionPsico.js?v=1.0"></script>
+
+    @endif
 
 
     @if(request()->is('proyectos'))

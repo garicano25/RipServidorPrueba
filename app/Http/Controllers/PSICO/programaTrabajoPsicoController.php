@@ -26,15 +26,11 @@ class programaTrabajoPsicoController extends Controller
                                     p.proyecto_folio FOLIO,
                                     p.proyecto_fechainicio AS FECHA_INICIO,
                                     p.proyecto_fechafin AS FECHA_FIN,
-                                    IFNULL(p.recsensorial_id, 0) TIENE_RECONOCIMIENTO,
-                                    IFNULL(r.recsensorial_foliofisico, "") FOLIO_FISICO,
-                                    IFNULL(r.recsensorial_folioquimico , "" ) FOLIO_QUIMICO,
-                                    r.recsensorial_alcancefisico,
-                                    r.recsensorial_alcancequimico,
+                                    IFNULL(p.reconocimiento_psico_id, 0) TIENE_RECONOCIMIENTO,
                                     p.proyecto_clienteinstalacion,
                                     p.proyecto_clientedireccionservicio
                             FROM proyecto p
-                            LEFT JOIN recsensorial r ON r.id = p.recsensorial_id 
+                            LEFT JOIN reconocimientopsico r ON r.id = p.reconocimiento_psico_id 
                             LEFT JOIN serviciosProyecto s ON s.PROYECTO_ID = p.id
                             WHERE s.PSICO_EJECUCION = 1');
 
@@ -47,15 +43,6 @@ class programaTrabajoPsicoController extends Controller
             $value->instalacion_y_direccion = '<span style="color: #999999;">' . $value->proyecto_clienteinstalacion . '</span><br>' . $value->proyecto_clientedireccionservicio;
 
             if ($value->TIENE_RECONOCIMIENTO  != 0) {
-
-                if ($value->FOLIO_FISICO != "" && $value->FOLIO_QUIMICO != "") {
-                    $value->RECONOCIMIENTO_VINCULADO = $value->FOLIO_FISICO . "<br>" . $value->FOLIO_QUIMICO;
-                } else if ($value->FOLIO_FISICO != "") {
-                    $value->RECONOCIMIENTO_VINCULADO = $value->FOLIO_FISICO;
-                } else {
-                    $value->RECONOCIMIENTO_VINCULADO = $value->FOLIO_QUIMICO;
-                }
-
                 $value->boton_mostrar = '<button type="button" class="btn btn-info btn-circle mostrar" style="padding: 0px;"><i class="fa fa-eye fa-2x"></i></button>';
             } else {
 

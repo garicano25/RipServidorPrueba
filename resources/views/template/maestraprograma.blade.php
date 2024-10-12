@@ -446,6 +446,13 @@
         <script src="/assets/plugins/select-search/selectize.js" type="text/javascript"></script>
         {{-- pagina --}}
         <script src="/js_sitio/reconocimientoPsico.js"></script>
+        <!-- Incluye jQuery -->
+        <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+        <!-- Incluye jQuery UI (para el autocompletado) -->
+        <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.min.js"></script>
+        <link rel="stylesheet" href="https://code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+
     @endif
 
     @if(request()->is('recsensorialcatalogos'))

@@ -1742,14 +1742,15 @@ Route::get('recopsicotrabajadorescargados/{reconocimientopsico_id}', ['as' => 'r
 //PROGRAMA DE TRABAJO
 Route::resource('programaPsicosocial', 'PSICO\programaTrabajoPsicoController');
 Route::get('tablaProgramaPsico', ['as' => 'PSICO.programaTrabajoPsico', 'uses' => 'PSICO\programaTrabajoPsicoController@tablaProgramaTrabajoPsico']);
-Route::get('proyectotrabajadoreslista/{proyecto_id}/{recsensorial_id}', ['as' => 'proyectotrabajadores.proyectotrabajadoreslista', 'uses' => 'proyecto\proyectoproveedoresController@proyectoproveedoreslista']);
-
-
+Route::get('proyectotrabajadoreslista/{RECPSICO_ID}', ['as' => 'proyectotrabajadores.proyectotrabajadoreslista', 'uses' => 'PSICO\proyectotrabajadoresController@proyectotrabajadoreslista']);
+Route::get('proyectotrabajadoresadicionales', ['as' => 'proyectotrabajadores.proyectotrabajadoresadicionales', 'uses' => 'PSICO\proyectotrabajadoresController@proyectotrabajadoresadicionales']);
+Route::get('trabajadoresProgramaPsico/{proyecto_id}/{RECPSICO_ID}', ['as' => 'programaTrabajoPsico.trabajadoresProgramaPsico', 'uses' => 'PSICO\programaTrabajoPsicoController@trabajadoresProgramaPsico']);
 
 //EJECUCION
 Route::resource('ejecucionPsicosocial', 'PSICO\ejecucionPsicoController');
-//Route::get('ejecucionHI', ['as' => 'HI.ejecucion', 'uses' => 'HI\ejecucionController@tablaEjecucion']);
-
+Route::get('ejecucionPsicoTabla', ['as' => 'PSICO.ejecucionPsico', 'uses' => 'PSICO\ejecucionPsicoController@tablaEjecucion']);
+Route::get('trabajadoresOnlineEjecucionPsico', ['as' => 'PSICO.trabajadoresOnline', 'uses' => 'PSICO\ejecucionPsicoController@tablaTrabajadoresOnline']);
+Route::get('trabajadoresPresencialEjecucionPsico', ['as' => 'PSICO.trabajadoresPresencial', 'uses' => 'PSICO\ejecucionPsicoController@tablaTrabajadoresPresencial']);
 
 //INFORMES
 

@@ -2133,6 +2133,61 @@ function abrirTrabajadoresExcel() {
 });
 
 $(document).ready(function() {
+
+	var tabla = $('#tabla_trabajadores_cargados').DataTable({
+        "language": {
+            "url": "//cdn.datatables.net/plug-ins/1.10.25/i18n/Spanish.json"
+        },
+        "columns": [
+            { "data": "numero"},
+            { "data": "nombre"},
+            { "data": "muestra",
+            	"render": function(data, type, row) {
+                if (data == 0) {
+                    return '<i class="fa fa-times-circle fa-2x text-danger"></i>'; 
+                } else if (data == 1) {
+                    return '<i class="fa fa-check-circle fa-2x text-success"></i>'; 
+                } else {
+                    return data;
+				}
+			}
+		}
+        ],
+        "columnDefs": [
+            { "orderable": false, "targets": [0, 1, 2] }
+        ]
+    });
+
+    function cargarTrabajadores() {
+       // var recpsico_id = $('#RECPSICO_ID_TRABAJADORES').val(); 
+        var recpsico_id = 3; 
+        
+        $.ajax({
+            url: '/recopsicotrabajadorescargados/' + 3,
+            type: 'GET',
+            data: { recpsico_id: recpsico_id },
+            dataType: 'json',
+            success: function(data) {
+
+				tabla.clear();
+                
+                $.each(data, function(index, trabajador) {
+                    tabla.row.add({
+                        "numero": index + 1,
+                        "nombre": trabajador.RECPSICOTRABAJADOR_NOMBRE,
+                        "muestra": trabajador.RECPSICOTRABAJADOR_MUESTRA
+                    });
+                });
+                
+                tabla.draw();
+            },
+            error: function(xhr, status, error) {
+                console.error("Error al cargar trabajadores:", error);
+                alert("Error al cargar la lista de trabajadores");
+            }
+        });
+    }
+
 	$("#boton_cargarTrabajadores").click(function() {
 		var guardar = 0;
 		//var muestra = $('#tipoArchivo').val();
@@ -2217,7 +2272,8 @@ $(document).ready(function() {
 								
 								
 								if (dato.code == 200) {
-									
+
+									cargarTrabajadores();
 									// cerrar modal
 									$('#modal_cargarTrabajadores').modal('hide');
 
@@ -2231,9 +2287,8 @@ $(document).ready(function() {
 										showCancelButton: false
 									});
 
-									setTimeout(() => {
-								
-									}, 2000);
+									
+									
 
 								
 								} else {
@@ -3447,7 +3502,7 @@ function validarEmpleados() {
             document.getElementById('option1').disabled = true;
 			document.getElementById('option1').checked = true;
 
-        } else if (totalEmpleados >= 16 && totalEmpleados <= 50) {
+        } else if (totalEmpleados >= 16 && totalEmpleados <= 19) {
 			document.getElementById('optionA').disabled = false;
             document.getElementById('option1').disabled = true;
 			document.getElementById('option1').checked = true;
@@ -3456,7 +3511,7 @@ function validarEmpleados() {
 			document.getElementById('option2').checked = true;
 
 
-        } else if (totalEmpleados > 50) {
+        } else if (totalEmpleados > 19) {
             document.getElementById('option1').disabled = true;
 			document.getElementById('option1').checked = true;
 			//document.getElementById('option1').disabled = false; 
@@ -3470,7 +3525,7 @@ function validarEmpleados() {
     selectAplicableA.innerHTML = '<option value="">Selecciona una opción</option>';
 
     if (!isNaN(totalEmpleados) && totalEmpleados > 0) {
-        if (totalEmpleados <= 50) {
+        if (totalEmpleados <= 19) {
             selectAplicableA.innerHTML += '<option value="opcion1">TODOS LOS TRABAJADORES</option>';
         } else {
             selectAplicableA.innerHTML += '<option value="opcion1">TODOS LOS TRABAJADORES</option>';
@@ -3583,47 +3638,37 @@ $("#boton_guardar_normativa").click(function (event) {
 			processData: false,
 			contentType: false,
 			success: function (dato) {
-				// Manejar la respuesta del servidor
-				// Campos Hidden
+
 				$("#ID_RECOPSICONORMATIVA").val(dato.normativapsico.ID_RECOPSICONORMATIVA);
 				
-
-				
 				//$("#RECPSICO_ID").val(dato.normativapsico.RECPSICO_ID);
-
-				// // actualiza tabla
-				// funcion_tabla_recsensorialcategorias(dato.categoriapsico.RECPSICO_ID);
 
 				// mensaje
 				swal({
 					title: "Correcto",
 					text: "" + dato.msj,
-					type: "success", // warning, error, success, info
+					type: "success", 
 					buttons: {
-						visible: false, // true , false
+						visible: false, 
 					},
 					timer: 1500,
 					showConfirmButton: false
 				});
 
-				// actualiza boton
-				$('#boton_guardar_categoria').html('Guardar <i class="fa fa-save"></i>');
+				$('#boton_guardar_normativa').html('Guardar <i class="fa fa-save"></i>');
 
 			},
 			beforeSend: function () {
-				$('#boton_guardar_categoria').html('Guardando <i class="fa fa-spin fa-spinner"></i>');
+				$('#boton_guardar_normativa').html('Guardando <i class="fa fa-spin fa-spinner"></i>');
 			},
 			error: function (error) {
-				// Manejar errores de la solicitud
-				// actualiza boton
-				$('#boton_guardar_categoria').html('Guardar <i class="fa fa-save"></i>');
-				// mensaje
+				$('#boton_guardar_normativa').html('Guardar <i class="fa fa-save"></i>');
 				swal({
 					title: "Error",
-					text: "Error en la acción: " + error.responseText, // Acceder al mensaje de error
-					type: "error", // warning, error, success, info
+					text: "Error en la acción: " + error.responseText, 
+					type: "error", 
 					buttons: {
-						visible: false, // true , false
+						visible: false, 
 					},
 					timer: 1500,
 					showConfirmButton: false
@@ -3635,67 +3680,7 @@ $("#boton_guardar_normativa").click(function (event) {
 
 
 
-$(document).ready(function() {
-	var tabla = $('#tabla_trabajadores_cargados').DataTable({
-        "language": {
-            "url": "//cdn.datatables.net/plug-ins/1.10.25/i18n/Spanish.json"
-        },
-        "columns": [
-            { "data": "numero"},
-            { "data": "nombre"},
-            { "data": "muestra",
-            	"render": function(data, type, row) {
-                if (data == 0) {
-                    return '<i class="fa fa-times-circle fa-2x text-danger"></i>'; 
-                } else if (data == 1) {
-                    return '<i class="fa fa-check-circle fa-2x text-success"></i>'; 
-                } else {
-                    return data;
-				}
-			}
-		}
-        ],
-        "columnDefs": [
-            { "orderable": false, "targets": [0, 1, 2] }
-        ]
-    });
 
-    function cargarTrabajadores() {
-       // var recpsico_id = $('#RECPSICO_ID_TRABAJADORES').val(); 
-        var recpsico_id = 3; 
-        
-        $.ajax({
-            url: '/recopsicotrabajadorescargados/' + 3,
-            type: 'GET',
-            data: { recpsico_id: recpsico_id },
-            dataType: 'json',
-            success: function(data) {
-
-				tabla.clear();
-                
-                $.each(data, function(index, trabajador) {
-                    tabla.row.add({
-                        "numero": index + 1,
-                        "nombre": trabajador.RECPSICOTRABAJADOR_NOMBRE,
-                        "muestra": trabajador.RECPSICOTRABAJADOR_MUESTRA
-                    });
-                });
-                
-                tabla.draw();
-            },
-            error: function(xhr, status, error) {
-                console.error("Error al cargar trabajadores:", error);
-                alert("Error al cargar la lista de trabajadores");
-            }
-        });
-    }
-
-    // Llamar a la función cuando se cargue la página
-    cargarTrabajadores();
-
-    // // Si tienes un botón para recargar la lista, puedes vincularlo así:
-    // $('#boton_recargar').on('click', cargarTrabajadores);
-});
 
 
 
