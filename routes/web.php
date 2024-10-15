@@ -1741,16 +1741,20 @@ Route::get('recopsicotrabajadorescargados/{reconocimientopsico_id}', ['as' => 'r
 
 //PROGRAMA DE TRABAJO
 Route::resource('programaPsicosocial', 'PSICO\programaTrabajoPsicoController');
+Route::resource('proyectotrabajadores', 'PSICO\proyectotrabajadoresController');
+
 Route::get('tablaProgramaPsico', ['as' => 'PSICO.programaTrabajoPsico', 'uses' => 'PSICO\programaTrabajoPsicoController@tablaProgramaTrabajoPsico']);
-Route::get('proyectotrabajadoreslista/{RECPSICO_ID}', ['as' => 'proyectotrabajadores.proyectotrabajadoreslista', 'uses' => 'PSICO\proyectotrabajadoresController@proyectotrabajadoreslista']);
+Route::get('proyectotrabajadoreslista/{RECPSICO_ID}/{proyecto_id}', ['as' => 'proyectotrabajadores.proyectotrabajadoreslista', 'uses' => 'PSICO\proyectotrabajadoresController@proyectotrabajadoreslista']);
 Route::get('proyectotrabajadoresadicionales', ['as' => 'proyectotrabajadores.proyectotrabajadoresadicionales', 'uses' => 'PSICO\proyectotrabajadoresController@proyectotrabajadoresadicionales']);
 Route::get('trabajadoresProgramaPsico/{proyecto_id}/{RECPSICO_ID}', ['as' => 'programaTrabajoPsico.trabajadoresProgramaPsico', 'uses' => 'PSICO\programaTrabajoPsicoController@trabajadoresProgramaPsico']);
 
 //EJECUCION
 Route::resource('ejecucionPsicosocial', 'PSICO\ejecucionPsicoController');
 Route::get('ejecucionPsicoTabla', ['as' => 'PSICO.ejecucionPsico', 'uses' => 'PSICO\ejecucionPsicoController@tablaEjecucion']);
-Route::get('trabajadoresOnlineEjecucionPsico', ['as' => 'PSICO.trabajadoresOnline', 'uses' => 'PSICO\ejecucionPsicoController@tablaTrabajadoresOnline']);
-Route::get('trabajadoresPresencialEjecucionPsico', ['as' => 'PSICO.trabajadoresPresencial', 'uses' => 'PSICO\ejecucionPsicoController@tablaTrabajadoresPresencial']);
+Route::get('trabajadoresOnlineEjecucionPsico/{proyecto_id}', ['as' => 'PSICO.trabajadoresOnline', 'uses' => 'PSICO\ejecucionPsicoController@tablaTrabajadoresOnline']);
+Route::get('trabajadoresPresencialEjecucionPsico/{proyecto_id}', ['as' => 'PSICO.trabajadoresPresencial', 'uses' => 'PSICO\ejecucionPsicoController@tablaTrabajadoresPresencial']);
+Route::get('ejecuciontrabajadoresnombres', ['as' => 'ejecucionpsico.trabajadoresNombres', 'uses' => 'PSICO\ejecucionPsicoController@trabajadoresNombres']);
+Route::put('actualizarFechasOnline', ['as' => 'PSICO.actualizarFechasOnline', 'uses' => 'PSICO\ejecucionPsicoController@actualizarFechasOnline']);
 
 //INFORMES
 

@@ -15,20 +15,25 @@ class CreateTablaRecopsicoproyectotrabajadores extends Migration
     {
         Schema::create('recopsicoproyectotrabajadores', function (Blueprint $table) {
             $table->increments('ID_RECOPSICOPROYECTOTRABAJADORES');
-            $table->integer('RECPSICOTRABAJADOR_ID')->nullable();
             $table->integer('RECPSICO_ID')->nullable();
+
+            $table->integer('RECPSICOTRABAJADOR_ID')->nullable();
+
+            $table->text('RECPSICOTRABAJADOR_MODALIDAD')->nullable();
+            $table->text('RECPSICOTRABAJADOR_OBSERVACION')->nullable();
+            $table->text('RECPSICOTRABAJADOR_SELECCIONADO')->nullable();
+
             $table->text('RECPSICOTRABAJADOR_ESTADOCORREO')->nullable();
             $table->text('RECPSICOTRABAJADOR_ESTADOCONTESTADO')->nullable();
             $table->text('RECPSICOTRABAJADOR_ESTADOCARGADO')->nullable();
-            $table->text('RECPSICOTRABAJADOR_')->nullable();
-            $table->text('RECPSICOTRABAJADOR_')->nullable();
-            $table->text('RECPSICOTRABAJADOR_')->nullable();
-            $table->text('RECPSICOTRABAJADOR_')->nullable();
-            $table->text('RECPSICOTRABAJADOR_')->nullable();
-            $table->text('RECPSICOTRABAJADOR_TIPOJORNADA')->nullable();
-            $table->text('RECPSICOTRABAJADOR_ROTACIONTURNOS')->nullable();
-            $table->text('RECPSICOTRABAJADOR_TIEMPOPUESTO')->nullable();
-            $table->text('RECPSICOTRABAJADOR_TIEMPOEXPERIENCIA')->nullable();
+
+            $table->text('RECPSICOTRABAJADOR_FECHAINICIO')->nullable();
+            $table->text('RECPSICOTRABAJADOR_FECHAFIN')->nullable();
+            $table->text('RECPSICOTRABAJADOR_FECHAAPLICACION')->nullable();
+
+            $table->text('RECPSICOTRABAJADOR_RUTAEVIDENCIA1')->nullable();
+            $table->text('RECPSICOTRABAJADOR_RUTAEVIDENCIA2')->nullable();
+
             $table->timestamps();
             });
     }

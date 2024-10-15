@@ -2255,7 +2255,7 @@
                             <input type="hidden" class="form-control" id="RECPSICO_ID_TRABAJADORES" name="RECPSICO_ID" value="0">
                             <input type="number" class="form-control" id="RECPSICO_APLICACION" name="RECPSICO_APLICACION" style="visibility: hidden;">
                             <div class="col-12" id="cargarTrabajadores_excel">
-                        </div>
+                            </div>
                                         <div class="form-group">
                                             <label> Cargar excel de trabajadores totales del centro de trabajo *</label>
                                             <div class="fileinput fileinput-new input-group" data-provides="fileinput">
@@ -2321,7 +2321,23 @@
                                                                                                         <tr>
                                                                                                             <td>
                                                                                                                 {!! csrf_field() !!}
-                                                                                                                <label style="font-size: 16px;">Cargar excel con la muestra de trabajadores del centro de trabajo*</label>
+                                                                                                                <label style="font-size: 16px;">Cargar excel con el total de trabajadores del centro de trabajo*</label>
+                                                                                                                <div class="fileinput fileinput-new input-group" data-provides="fileinput">
+                                                                                                                    <div class="form-control" data-trigger="fileinput">
+                                                                                                                        <i class="fa fa-file fileinput-exists"></i>
+                                                                                                                        <span class="fileinput-filename"></span>
+                                                                                                                    </div>
+                                                                                                                    <span class="input-group-addon btn btn-secondary btn-file">
+                                                                                                                        <span class="fileinput-new">Seleccione</span>
+                                                                                                                        <span class="fileinput-exists">Cambiar</span>
+                                                                                                                        <input type="file" accept="application/pdf" id="reconocimientofisicospdf" name="reconocimientofisicospdf" required>
+                                                                                                                    </span>
+                                                                                                                    <a href="#" class="input-group-addon btn btn-secondary fileinput-exists" data-dismiss="fileinput">Quitar</a>
+                                                                                                                </div>
+                                                                                                            </td>
+                                                                                                            <td>
+                                                                                                                {!! csrf_field() !!}
+                                                                                                                <label style="font-size: 16px;">Cargar excel con la muestra de trabajadores proporcionada por centro de trabajo*</label>
                                                                                                                 <div class="fileinput fileinput-new input-group" data-provides="fileinput">
                                                                                                                     <div class="form-control" data-trigger="fileinput">
                                                                                                                         <i class="fa fa-file fileinput-exists"></i>

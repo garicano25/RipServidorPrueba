@@ -134,7 +134,7 @@ use Illuminate\Support\Str;
 
     {{-- @if(request()->is('proyectos')) --}}
 
-    @if(request()->is('proyectos') || request()->is('ejecucion') || request()->is('informes') || request()->is('programa') || request()->is('programaPsicosocial'))
+    @if(request()->is('proyectos') || request()->is('ejecucion') || request()->is('informes') || request()->is('programa') || request()->is('programaPsicosocial') || request()->is('ejecucionPsicosocial'))
 
     <!-- form_wizard_stps -->
     <link href="/assets/plugins/form_wizard_steps_bootstrap/form_wizard_style.css" rel="stylesheet">

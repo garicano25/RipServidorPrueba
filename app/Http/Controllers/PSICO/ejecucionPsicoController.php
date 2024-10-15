@@ -6,6 +6,8 @@ use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use DB;
 
+use App\modelos\reconocimientopsico\recopsicotrabajadoresModel;
+
 class ejecucionPsicoController extends Controller
 {
     //
@@ -54,12 +56,17 @@ class ejecucionPsicoController extends Controller
         return response()->json($listado);
     }
 
-    public function tablaTrabajadoresOnline()
-    {
-
-        $tablaOnline = DB::select('SELECT r.RECPSICOTRABAJADOR_NOMBRE NOMBRE
-                            FROM recopsicotrabajadores r
-                            WHERE r.RECPSICOTRABAJADOR_MUESTRA = 1');
+         /**
+     * Display the specified resource.
+     *
+     * @param  int  $proyecto_id
+     * @return \Illuminate\Http\Response
+     */
+    public function tablaTrabajadoresOnline($proyecto_id)
+    {        
+        $tablaOnline = DB::select('SELECT p.TRABAJADOR_NOMBRE TRABAJADOR_NOMBRE, p.TRABAJADOR_ID TRABAJADOR_ID
+                            FROM proyectotrabajadores p
+                            WHERE p.TRABAJADOR_SELECCIONADO = 1 AND p.TRABAJADOR_MODALIDAD = "Online" AND p.proyecto_id = ' . $proyecto_id . '');
 
 
         $count = 0;
@@ -67,10 +74,12 @@ class ejecucionPsicoController extends Controller
             $count += 1;
 
             $value->COUNT = $count;
-            $value->ESTADOCORREO = 'Sin enviar';
+            $value->TRABAJADOR_ESTADOCORREO = 'Sin enviar';
             $value->FECHAINICIO = '2024-10-24';
             $value->FECHAFIN = '2024-10-24';
-            $value->ESTADOCUESTIONARIO = 'Sin iniciar';
+            $value->TRABAJADOR_ID = $value->TRABAJADOR_ID;
+            $value->TRABAJADOR_NOMBRE = $value->TRABAJADOR_NOMBRE;
+            $value->TRABAJADOR_ESTADOCONTESTADO = 'Sin iniciar';
             $value->boton_enviarCorreo = '<button type="button" class="btn btn-warning btn-circle enviarcorreo" style="padding: 0px;"><i class="fa fa-paper-plane "></i></button>';
         }
 
@@ -78,12 +87,17 @@ class ejecucionPsicoController extends Controller
         return response()->json($online);
     }
 
-    public function tablaTrabajadoresPresencial()
+         /**
+     * Display the specified resource.
+     *
+     * @param  int  $proyecto_id
+     * @return \Illuminate\Http\Response
+     */
+    public function tablaTrabajadoresPresencial($proyecto_id)
     {
-
-        $tablaPresencial = DB::select('SELECT r.RECPSICOTRABAJADOR_NOMBRE NOMBRE
-                            FROM recopsicotrabajadores r
-                            WHERE r.RECPSICOTRABAJADOR_MUESTRA = 0');
+        $tablaPresencial = DB::select('SELECT p.TRABAJADOR_NOMBRE NOMBRE
+                            FROM proyectotrabajadores p
+                            WHERE p.TRABAJADOR_SELECCIONADO = 1 AND p.TRABAJADOR_MODALIDAD = "Presencial" AND p.proyecto_id = ' . $proyecto_id . '');
 
 
         $count = 0;
@@ -91,11 +105,102 @@ class ejecucionPsicoController extends Controller
             $count += 1;
 
             $value->COUNT = $count;
+            $value->FECHAAPLICACION = '2024-10-24';
             $value->ESTADOCUESTIONARIO = 'Pendiente';
-            $value->boton_cargarPresencial = '<button type="button" class="btn btn-success btn-circle enviarcorreo" style="padding: 0px;"><i class="fa fa-file-excel-o"></i></button>';
         }
 
         $online['data']  = $tablaPresencial;
         return response()->json($online);
     }
+
+     /**
+     * Store a newly created resource in storage.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @return \Illuminate\Http\Response
+     */
+
+     public function trabajadoresNombres(Request $request)
+     {
+         $term = $request->input('term');
+     
+         $trabajadores = recopsicotrabajadoresModel::where('RECPSICOTRABAJADOR_NOMBRE', 'LIKE', '%' . $term . '%')
+             ->where('RECPSICO_ID', 3)
+             ->where('RECPSICOTRABAJADOR_MUESTRA', 1)
+             ->select('ID_RECOPSICOTRABAJADOR', 'RECPSICOTRABAJADOR_NOMBRE') 
+             ->get();
+        
+         return response()->json($trabajadores);
+     }
+
+          /**
+     * Display the specified resource.
+     *
+     * @return \Illuminate\Http\Response
+     * @param  \Illuminate\Http\Request  $request
+     */
+     
+    public function actualizarFechasOnline(Request $request)
+    {
+
+        try {
+        $datosJson = $request->input('datos');
+        $proyecto_id = $request->input('proyecto_id'); 
+
+        $datos = json_decode($datosJson, true); 
+
+        if (json_last_error() !== JSON_ERROR_NONE) {
+            return response()->json(['error' => 'Error al decodificar JSON: ' . json_last_error_msg()], 400);
+        }
+        $tablaOnline = DB::select('SELECT p.TRABAJADOR_NOMBRE NOMBRE, p.TRABAJADOR_ID TRABAJADOR_ID
+        FROM proyectotrabajadores p
+        WHERE p.TRABAJADOR_SELECCIONADO = 1 AND p.TRABAJADOR_MODALIDAD = "Online" AND p.proyecto_id = ' . $proyecto_id . '');
+        
+        $existingRecords = DB::table('seguimientotrabajadores')
+        ->where('proyecto_id', $proyecto_id)
+        ->exists();
+
+            // foreach ($tablaOnline as $key => $value) {
+
+            //     $tablaPresencial = DB::update('UPDATE seguimientotrabajadores 
+            //     SET TRABAJADOR_FECHAINICIO = ' . $request->fechaInicio . ', TRABAJADOR_FECHAFIN = ' . $request->fechaFin . '
+            //     WHERE proyecto_id = ' . $proyecto_id . '');
+
+            // }
+
+            if ($existingRecords) {
+               
+                    $tablaPresencial = DB::update('UPDATE seguimientotrabajadores 
+                    SET TRABAJADOR_FECHAINICIO = "' . $request->fechaInicio . '", TRABAJADOR_FECHAFIN = "' . $request->fechaFin . '"
+                    WHERE proyecto_id = ' . $proyecto_id . '');
+
+    
+                $response["msj"] = 'Datos actualizados correctamente';
+
+            } else {
+                
+                foreach ($datos as $dato) {
+                    $trabajadorId = $dato['trabajadorId'];
+    
+                    DB::table('seguimientotrabajadores')->insert([
+                        'TRABAJADOR_ID' => $dato['trabajadorId'],
+                        'proyecto_id' => $proyecto_id,
+                        'TRABAJADOR_FECHAINICIO' => $dato['fechaInicio'],
+                        'TRABAJADOR_FECHAFIN' => $dato['fechaFin'],
+                        'TRABAJADOR_ESTADOCORREO' => $dato['estadoCorreo'],
+                        'TRABAJADOR_ESTADOCONTESTADO' => $dato['estadoContestados']
+                    ]);
+                }
+    
+                $response["msj"] = 'Datos creados correctamente';
+            }
+    
+            return response()->json($response);
+        } catch (Exception $e) {
+            $response["msj"] = 'Error: ' . $e->getMessage();
+            return response()->json($response);
+        }
+
+    }
+
 }

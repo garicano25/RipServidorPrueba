@@ -378,7 +378,7 @@ $('#tabla_programa_trabajo tbody').on('click', 'td>button.mostrar', function()
 
     
    
-    consulta_trabajadores(row.data().TIENE_RECONOCIMIENTO);
+    consulta_trabajadores(row.data().TIENE_RECONOCIMIENTO, proyecto_id );
     datatable_trabajadores = 1;
     
 
@@ -400,14 +400,25 @@ $('#tabla_programa_trabajo tbody').on('click', 'td>button.mostrar', function()
 
 
 //===============================================================
+function initializeObservationFields() {
+	$('.worker-checkbox').each(function() {
+		var index = $(this).data('index');
+		var observacionActiva = $('#TRABAJADOR_OBSERVACION' + index);
 
+		if ($(this).is(':checked')) {
+			observacionActiva.prop('disabled', true);
+		} else {
+			observacionActiva.prop('disabled', false);
+		}
+	});
+}
 
-function consulta_trabajadores(RECPSICO_ID)
+function consulta_trabajadores(RECPSICO_ID, proyecto_id)
 {
 	$.ajax({
 		type: "GET",
 		dataType: "json",
-		url: "/proyectotrabajadoreslista/"+RECPSICO_ID,
+		url: "/proyectotrabajadoreslista/"+RECPSICO_ID+"/"+proyecto_id,
 		data:{},
 		cache: false,
 		success:function(dato)
@@ -416,11 +427,11 @@ function consulta_trabajadores(RECPSICO_ID)
 			{
 				$('#tabla_proyectotrabajadores tbody').html(dato.filas);
 				trabajadores = parseInt(dato.numero_registros);
+				initializeObservationFields();
 			}
 			else
 			{
 				$('#boton_guardar_proyectotrabajadores').html('Guardar <i class="fa fa-ban"></i>')
-				$('#boton_guardar_proyectotrabajadores').attr('disabled', true);
 
 				$('#tabla_proyectotrabajadores tbody').html('<tr><td colspan="8" style="text-align: center;">No hay datos que mostrar</td></tr>');
 				trabajadores = 0;
@@ -431,7 +442,6 @@ function consulta_trabajadores(RECPSICO_ID)
 		},
 		error: function(dato){
 			$('#tabla_proyectotrabajadores tbody').html('<tr><td colspan="8" style="text-align: center;">Error al consultar los datos</td></tr>');
-			$('#boton_guardar_proyectotrabajadores').attr('disabled', true);
 			trabajadores = 0;
 			return false;
 		}
@@ -441,7 +451,7 @@ function consulta_trabajadores(RECPSICO_ID)
 $(document).ready(function() {
     $('body').on('change', '.worker-checkbox', function() {
         var index = $(this).data('index');
-        var observacionActiva = $('#RECPSICOTRABAJADOR_OBSERVACION' + index);
+        var observacionActiva = $('#TRABAJADOR_OBSERVACION' + index);
 
         console.log('Checkbox changed for index:', index);
 
@@ -451,23 +461,6 @@ $(document).ready(function() {
             observacionActiva.prop('disabled', false);
         }
     });
-
-	    //inicializacion
-    function initializeObservationFields() {
-        $('.worker-checkbox').each(function() {
-            var index = $(this).data('index');
-            var observacionActiva = $('#RECPSICOTRABAJADOR_OBSERVACION' + index);
-
-            if ($(this).is(':checked')) {
-                observacionActiva.prop('disabled', true);
-            } else {
-                observacionActiva.prop('disabled', false);
-            }
-        });
-    }
-
-
-    initializeObservationFields();
 
 });
 
@@ -542,24 +535,6 @@ function cargarTrabajadoresAdicionales(elementId) {
 
 
 
-
-
-    // $('#adicional_nombre_' + trabajadores).autocomplete({
-    //     source: function(request, response) {
-    //         $.ajax({
-    //             url: '/proyectotrabajadoresadicionales',
-    //             dataType: 'json',
-    //             data: {
-    //                 term: request.term 
-    //             },
-    //             success: function(data) {
-    //                 response(data); 
-    //             }
-    //         });
-    //     },
-    //     minLength: 1
-    // });
-
 // Eliminar fila partida
 $('#tabla_proyectotrabajadores tbody').on('click', '.eliminar', function(){
 
@@ -623,7 +598,7 @@ $("#boton_guardar_proyectotrabajadores").click(function()
 	{
 		swal({   
             title: "¡Confirme que desea guardar!",
-            text: "Lista de proveedores a este proyecto",
+            text: "Guardar modalidades y selección de la lista de trabajadores",
             type: "warning",
             showCancelButton: true,
             confirmButtonColor: "#DD6B55",
