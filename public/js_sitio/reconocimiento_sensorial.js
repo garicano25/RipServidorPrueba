@@ -337,46 +337,47 @@ $('.link_menuprincipal').click(function () {
 	}
 });
 
-$('#recsensorialmaquinaria_quimica').on('change', function () {
 
+//FUENTE GENERADORA SIN COMPONENTES
+// $('#recsensorialmaquinaria_quimica').on('change', function () {
 
-	if ($(this).val()) {
+// 	if ($(this).val()) {
 
-		$.ajax({
-			type: "GET",
-			dataType: "json",
-			url: "/validarComponentesMaquinaria/" + $(this).val(),
-			data: {},
-			cache: false,
-			success: function (dato) {
+// 		$.ajax({
+// 			type: "GET",
+// 			dataType: "json",
+// 			url: "/validarComponentesMaquinaria/" + $(this).val(),
+// 			data: {},
+// 			cache: false,
+// 			success: function (dato) {
 
-				//Si no tiene componentes
-				if (dato.total == 0) {
+// 				//Si no tiene componentes
+// 				if (dato.total == 0) {
 
-					swal({
-						title: "Fuente generadora sin componentes...",
-						text: "Lo sentimos la fuente generadora seleccionada no puede ser evaluada, ya que no cuenta con componentes a evaluar, por favor elija otra o completa la información en el catálogo de químicos. ",
-						type: "warning", // warning, error, success, info
-						buttons: {
-							visible: false, // true , false
-						},
-						timer: 3500,
-						showConfirmButton: false
-					});
+// 					swal({
+// 						title: "Fuente generadora sin componentes...",
+// 						text: "Lo sentimos la fuente generadora seleccionada no puede ser evaluada, ya que no cuenta con componentes a evaluar, por favor elija otra o completa la información en el catálogo de químicos. ",
+// 						type: "warning", // warning, error, success, info
+// 						buttons: {
+// 							visible: false, // true , false
+// 						},
+// 						timer: 3500,
+// 						showConfirmButton: false
+// 					});
 
-					var select = $('#recsensorialmaquinaria_quimica')[0].selectize;
-					select.clear();
+// 					var select = $('#recsensorialmaquinaria_quimica')[0].selectize;
+// 					select.clear();
 
-				}
+// 				}
 
-			},
-			error: function (dato) {
-				return false;
-			}
-		});
-	}
+// 			},
+// 			error: function (dato) {
+// 				return false;
+// 			}
+// 		});
+// 	}
 
-})
+// })
 
 
 // validar navegacion menu tab 2 (step wizard)
