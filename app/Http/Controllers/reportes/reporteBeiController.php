@@ -27,6 +27,7 @@ use App\modelos\reportes\reporteanexosModel;
 use App\modelos\reportes\reporteequiposutilizadosModel;
 use App\modelos\reportes\reportebeiepp;
 use App\modelos\reportes\puntosBeiInformeModel;
+use App\modelos\recsensorial\catConclusionesModel;
 
 
 class reporteBeiController extends Controller{
@@ -132,9 +133,10 @@ class reporteBeiController extends Controller{
 
 
             $recsensorial = recsensorialModel::findOrFail($proyecto->recsensorial_id);
+            $catConclusiones = catConclusionesModel::where('ACTIVO', 1)->get();
 
             // Vista
-            return view('reportes.parametros.reportebei', compact('proyecto', 'recsensorial', 'categorias_poe', 'areas_poe'));
+            return view('reportes.parametros.reportebei', compact('proyecto', 'recsensorial', 'categorias_poe', 'areas_poe', 'catConclusiones'));
         }
     }
 

@@ -2579,7 +2579,7 @@
                                                             <option value="{{$dato->ID_CATCONCLUSION}}" data-descripcion="{{$dato->DESCRIPCION}}">{{$dato->NOMBRE}}</option>
                                                             @endforeach
                                                         </select>
-                                                        <textarea class="form-control" rows="8" id="CONCLUSION" name="CONCLUSION" readonly></textarea>
+                                                        <textarea class="form-control" rows="8" id="CONCLUSION" name="CONCLUSION" ></textarea>
                                                     </div>
                                                 </div>
                                                 <div class="col-12 mx-2">
@@ -3263,7 +3263,7 @@
                                 <label> Unidad de medida *</label>
                                 <select class="custom-select form-control" id="recsensorialmaquinaria_unidadMedida" name="recsensorialmaquinaria_unidadMedida" required>
                                     <option value="">&nbsp;</option>
-                                    <option value="1">Mililitros (mm)</option>
+                                    <option value="1">Mililitros (ml)</option>
                                     <option value="2">Litros (L)</option>
                                     <option value="3">Metros cúbicos </option>
                                     <option value="4">Gramos (g)</option>

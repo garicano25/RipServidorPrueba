@@ -3804,6 +3804,17 @@ $("#botonguardar_modal_epp").click(function () {
 // CONCLUSION
 
 
+$('#ID_CATCONCLUSION').on('change', function (e) {
+
+	var selectedOption = $(this).find('option:selected');
+	var descripcion = selectedOption.data('descripcion');
+
+	$('#reportebei_conclusion').val(descripcion);
+
+
+})
+
+
 $("#botonguardar_reporte_conclusion").click(function()
 {
 	// valida campos vacios
@@ -6557,7 +6568,7 @@ $('#tabla_reporte_revisiones tbody').on('click', 'td>button.botondescarga', func
 						success:function(dato)
 						{
 							console.log(dato);
-							
+
 							ventana = window.open('/reportebeiworddescargar/'+proyecto.id+"/"+row.data().id+"/"+ultimarevision_id);
 
 
@@ -6620,3 +6631,4 @@ $('#tabla_reporte_revisiones tbody').on('click', 'td>button.botondescarga', func
 		}
 	}, 500);
 });
+
