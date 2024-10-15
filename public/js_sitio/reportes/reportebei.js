@@ -6547,7 +6547,7 @@ $('#tabla_reporte_revisiones tbody').on('click', 'td>button.botondescarga', func
 							proyecto_id: proyecto.id,
 							agente_id: agente_id,
 							agente_nombre: agente_nombre,
-							reporteiluminacion_id: reporteiluminacion_id,
+							reportebei_id: reportebei_id,
 							areas_poe: areas_poe,
 							ultimarevision_id: ultimarevision_id,
 							crear_revision: 0,
@@ -6556,7 +6556,9 @@ $('#tabla_reporte_revisiones tbody').on('click', 'td>button.botondescarga', func
 						cache: false,
 						success:function(dato)
 						{
-							ventana = window.open('/reporteiluminacionworddescargar/'+proyecto.id+"/"+row.data().id+"/"+ultimarevision_id);
+							console.log(dato);
+							
+							ventana = window.open('/reportebeiworddescargar/'+proyecto.id+"/"+row.data().id+"/"+ultimarevision_id);
 
 
 							setTimeout(function()
@@ -6579,6 +6581,8 @@ $('#tabla_reporte_revisiones tbody').on('click', 'td>button.botondescarga', func
 						error: function(dato)
 						{
 							// mensaje
+							console.log(dato)
+
 							swal({
 								title: "Error",
 								text: "Al intentar crear informe, intentelo de nuevo.\n"+dato,
@@ -6597,7 +6601,7 @@ $('#tabla_reporte_revisiones tbody').on('click', 'td>button.botondescarga', func
 		}
 		else
 		{
-			ventana = window.open('/reporteiluminacionworddescargar/'+proyecto.id+"/"+row.data().id+"/"+ultimarevision_id);
+			ventana = window.open('/reportebeiworddescargar/'+proyecto.id+"/"+row.data().id+"/"+ultimarevision_id);
 
 
 			setTimeout(function()

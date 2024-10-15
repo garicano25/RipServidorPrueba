@@ -1707,7 +1707,7 @@ Route::get('reportebeitablapuntos/{proyecto_id}', ['as' => 'reportebei.reportebe
 
 Route::get('reportebeiconcluirrevision/{reporte_id}', ['as' => 'reportebei.reportebeiconcluirrevision', 'uses' => 'reportes\reportebeiController@reportebeiconcluirrevision'])->middleware('asignacionUser:REVISION');
 
-Route::get('reportebeiworddescargar/{proyecto_id}/{revision_id}/{ultima_revision}', ['as' => 'reportebei.reportebeiworddescargar', 'uses' => 'reportes\reporteBeiWordController@reportebeiword']);
+Route::get('reportebeiworddescargar/{proyecto_id}/{revision_id}/{ultima_revision}', ['as' => 'reportebei.reportebeiworddescargar', 'uses' => 'reportes\reporteBeiWordController@reportebeiworddescargar']);
 
 Route::post('reportebeiword', ['as' => 'reportebei.reportebeiword', 'uses' => 'reportes\reporteBeiWordController@reportebeiword']);
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
