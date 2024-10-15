@@ -1177,6 +1177,18 @@
 								<input type="text" class="form-control" id="BEI_DESCRIPCION" name="BEI_DESCRIPCION" required>
 							</div>
 						</div>
+						<div class="col-6">
+							<div class="form-group">
+								<label>Unidad de medida *</label>
+								<input type="text" class="form-control" id="UNIDAD_MEDIDA_BEI" name="UNIDAD_MEDIDA" required>
+							</div>
+						</div>
+						<div class="col-6">
+							<div class="form-group">
+								<label>BEI (Valor de referencia) *</label>
+								<input type="text" class="form-control" id="VALOR_REFERENCIA" name="VALOR_REFERENCIA" required>
+							</div>
+						</div>
 						<div class="col-12">
 							<div class="form-group">
 								<label>Recomendación </label>

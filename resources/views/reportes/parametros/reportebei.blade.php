@@ -592,7 +592,7 @@
 
                 <h4 class="card-title" id="7">7.- Resultados</h4>
                 <ol class="breadcrumb" style="padding: 6px; margin: 10px 0px;">
-                    <button type="button" class="btn btn-default waves-effect botoninforme" data-toggle="tooltip" title="Nuevo punto de evaluación" id="boton_reporte_nuevobeipunto">
+                    <button type="button" class="btn btn-default waves-effect botoninforme d-none" data-toggle="tooltip" title="Nuevo punto de evaluación" id="boton_reporte_nuevobeipunto">
                         <span class="btn-label"><i class="fa fa-plus"></i></span>Punto de evaluación
                     </button>
 
@@ -600,13 +600,17 @@
                 <table class="table-hover tabla_info_centrado" width="100%" id="tabla_reporte_beipuntos">
                     <thead>
                         <tr>
-                            <th width="60">Punto</th>
-                            <th width="150">Instalación</th>
-                            <th width="150">Área</th>
-                            <th width="">Categoría</th>
-                            <th width="80">Ubicación</th>
-                            <th width="60">Editar</th>
-                            <th width="60">Eliminar</th>
+                            <th>No.</th>
+                            <th>Nombre</th>
+                            <th>Área</th>
+                            <th>Categoria</th>
+                            <th>Ficha</th>
+                            <th>Edad</th>
+                            <th>Número de muestra</th>
+                            <th>Resultado</th>
+                            <th>Valor de referencia</th>
+                            <th>Cumplimiento normativo</th>
+                            <th>Editar</th>
                         </tr>
                     </thead>
                     <tbody></tbody>
@@ -1157,7 +1161,7 @@
             <form method="post" enctype="multipart/form-data" name="form_reporte_beipunto" id="form_reporte_beipunto">
                 <div class="modal-header">
                     <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
-                    <h4 class="modal-title">Área</h4>
+                    <h4 class="modal-title">Resultado BEI</h4>
                 </div>
                 <div class="modal-body">
                     <div class="row">
@@ -1177,7 +1181,7 @@
                         <div class="col-5">
                             <div class="form-group">
                                 <label>Área *</label>
-                                <select class="custom-select form-control" id="AREA_ID_BEI" name="AREA_ID" onchange="mostrar_categoriasarea(this.value, 0);" required>
+                                <select class="custom-select form-control" id="AREA_ID_BEI" name="AREA_ID" onchange="consultarAreasCategoriasRecsensorial(this.value, 0);" required>
                                     <option value=""></option>
                                 </select>
                             </div>
@@ -1234,10 +1238,8 @@
                         <div class="col-4">
                             <div class="form-group">
                                 <label>Unidad de medida *</label>
-                                <select class="custom-select form-control" id="UNIDAD_MEDIDA_BEI" name="UNIDAD_MEDIDA_BEI" required>
-                                    <option value=""></option>
-                                    <option value="mg/L">mg/L</option>
-                                </select>
+                                <input type="text" class="form-control" id="UNIDAD_MEDIDA_BEI" name="UNIDAD_MEDIDA_BEI" readonly>
+
                             </div>
                         </div>
                         <div class="col-4">
@@ -1249,7 +1251,7 @@
                         <div class="col-4">
                             <div class="form-group">
                                 <label>Valor de referencia *</label>
-                                <input type="text" class="form-control" id="REFERENCIA_BEI" name="REFERENCIA_BEI" required>
+                                <input type="text" class="form-control" id="REFERENCIA_BEI" name="REFERENCIA_BEI" readonly required>
                             </div>
                         </div>
                     </div>

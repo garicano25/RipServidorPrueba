@@ -1044,6 +1044,47 @@ class reporteBeiController extends Controller{
         }
     }
 
+    public function reportebeiconcluirrevision($revision_id)
+    {
+        try {
+            // $reportebei  = reportebeiModel::findOrFail($revision_id);
+            $revision  = reporterevisionesModel::findOrFail($revision_id);
+
+
+            $concluido = 0;
+            $concluidonombre = NULL;
+            $concluidofecha = NULL;
+
+
+            if ($revision->reporterevisiones_concluido == 0) {
+                $concluido = 1;
+                $concluidonombre = auth()->user()->empleado->empleado_nombre . " " . auth()->user()->empleado->empleado_apellidopaterno . " " . auth()->user()->empleado->empleado_apellidomaterno;
+                $concluidofecha = date('Y-m-d H:i:s');
+            }
+
+
+            $revision->update([
+                'reporterevisiones_concluido' => $concluido,
+                'reporterevisiones_concluidonombre' => $concluidonombre,
+                'reporterevisiones_concluidofecha' => $concluidofecha
+            ]);
+
+
+            $dato["estado"] = 0;
+            if ($concluido == 1 || $revision->reporterevisiones_cancelado == 1) {
+                $dato["estado"] = 1;
+            }
+
+
+            $dato["msj"] = 'Datos modificados correctamente';
+            return response()->json($dato);
+        } catch (Exception $e) {
+            $dato["estado"] = 0;
+            $dato["msj"] = 'Error ' . $e->getMessage();
+            return response()->json($dato);
+        }
+    }
+
 
     public function reportebeicategorias($proyecto_id, $reportebei_id, $areas_poe)
     {
@@ -2097,6 +2138,98 @@ class reporteBeiController extends Controller{
         }
     }
 
+    public function reportebeitablapuntos($proyecto_id) {
+        try {
+          
+
+
+            $revision = reporterevisionesModel::where('proyecto_id', $proyecto_id)
+                ->where('agente_id', 4)
+                ->orderBy('reporterevisiones_revision', 'DESC')
+                ->get();
+
+
+            $edicion = 1;
+            if (count($revision) > 0) {
+                if ($revision[0]->reporterevisiones_concluido == 1 || $revision[0]->reporterevisiones_cancelado == 1) {
+                    $edicion = 0;
+                }
+            }
+
+            
+            $puntos = DB::select('SELECT p.ID_BEI_INFORME,
+                                        CONCAT(p.EDAD_BEI," años") as EDAD_BEI_TEXTO,
+                                        p.NUM_PUNTO_BEI,
+                                        p.RECSENSORIAL_ID,
+                                        p.EDAD_BEI,
+                                        p.NOMBRE_BEI,
+                                        p.GENERO_BEI,
+                                        p.FICHA_BEI,
+                                        p.ANTIGUEDAD_BEI,
+                                        p.MUESTRA_BEI,
+                                        IFNULL(p.UNIDAD_MEDIDA_BEI, b.UNIDAD_MEDIDA) as UNIDAD_MEDIDA,
+                                        CONCAT(p.RESULTADO_BEI," ", IFNULL(p.UNIDAD_MEDIDA_BEI, b.UNIDAD_MEDIDA)) AS RESULTADO_BEI_TEXTO,
+                                        p.RESULTADO_BEI,
+                                        CONCAT(IFNULL(p.REFERENCIA_BEI, b.VALOR_REFERENCIA)," ", IFNULL(p.UNIDAD_MEDIDA_BEI, b.UNIDAD_MEDIDA)) AS REFERENCIA_BEI_TEXTO,
+                                        p.REFERENCIA_BEI,
+                                        a.recsensorialarea_nombre as AREA,
+                                        p.AREA_ID,
+                                        c.recsensorialcategoria_nombrecategoria as CATEGORIA,
+                                        p.CATEGORIA_ID,
+                                        b.DETERMINANTE,
+                                        (IF((p.RESULTADO_BEI = "" OR p.RESULTADO_BEI IS NULL),"Sin evaluar",
+                                            IF(
+                                                -- Verificar si el valor contiene solo letras o es N.D, N.A, N/A
+                                                p.RESULTADO_BEI REGEXP "^[A-Za-z]+$|^N[./]?D$|^N[./]?A$", 
+                                                -- Si contiene solo letras o las abreviaturas, retornamos "Dentro de norma"
+                                                "ND",  
+                                                -- Si contiene números, continuamos con la limpieza
+                                                IF(
+                                                    CONVERT(REPLACE(REPLACE(REPLACE(p.RESULTADO_BEI, ">" , ""), "<" ,""), " ", ""), DECIMAL(10,2)) >= 0,
+                                                    -- Después de limpiar, verificamos si el valor es mayor o igual a 0.25
+                                                    IF(
+                                                                    (REPLACE(REPLACE(REPLACE(p.RESULTADO_BEI, ">" , ""), "<" ,""), " ", "") + 0) > p.REFERENCIA_BEI,
+                                                                    "Fuera de norma",  -- Si es mayor, está fuera de norma
+                                                                    "Dentro de norma"  -- Si es menor, está dentro de norma
+                                                    ),
+                                                    "Fuera de norma"  -- Si no es un número válido o es negativo, es fuera de norma
+                                                )
+                                            )
+                                        )
+                                    )  as NORMATIVIDAD
+                                FROM puntosBeiInforme p
+                                LEFT JOIN sustanciasEntidadBeis b ON b.ID_BEI = p.BEI_ID
+                                LEFT JOIN recsensorialarea a ON a.id = p.AREA_ID
+                                LEFT JOIN recsensorialcategoria c ON c.id = p.CATEGORIA_ID
+                                WHERE p.PROYECTO_ID = ?', [$proyecto_id]);
+            
+
+
+            $numero_registro = 0;
+            foreach ($puntos as $key => $value) {
+                $numero_registro += 1;
+                $value->numero_registro = $numero_registro;
+
+                $value->boton_editar = '<button type="button" class="btn btn-warning waves-effect btn-circle"><i class="fa fa-pencil fa-1x"></i></button>';
+
+            }
+
+
+            // respuesta
+            $dato['data'] = $puntos;
+            $dato['total'] = $numero_registro;
+            $dato["msj"] = 'Datos consultados correctamente';
+            return response()->json($dato);
+        } catch (Exception $e) {
+            $dato['data'] = 0;
+            $dato['total'] = 0;
+            $dato["msj"] = 'Error ' . $e->getMessage();
+            return response()->json($dato);
+        }
+    }
+
+   
+
 
     public function store(Request $request)
     {
@@ -2856,6 +2989,18 @@ class reporteBeiController extends Controller{
                 $dato["msj"] = 'Datos modificados correctamente';
             }
 
+
+            // PUNTOS DE RESULTADOS                                                                                                                                                                              
+            if (($request->opcion + 0) == 80) {
+               
+                    
+                $categoria = puntosBeiInformeModel::findOrFail($request->ID_BEI_INFORME);
+                $categoria->update($request->all());
+
+                // Mensaje
+                $dato["msj"] = 'Datos guardados correctamente';
+            
+            }
 
             // respuesta
             $dato["reportebei_id"] = $reportebei->id;

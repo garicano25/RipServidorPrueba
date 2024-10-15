@@ -4943,7 +4943,8 @@ $(document).ready(function()
 {
 	setTimeout(function()
 	{
-		tabla_reporte_equipoutilizado(proyecto.id, reportebei_id, agente_nombre);
+
+		tabla_reporte_equipoutilizado(proyecto.id, 1, agente_nombre);
 	},5500);
 });
 
@@ -5285,17 +5286,1333 @@ $("#boton_reporte_nuevobeipunto").click(function()
 	});
 
 	// Campos Hidden
-	$('#reportebeipunto_id').val(0);
+	$('#ID_BEI_INFORME').val(0);
 
 	// Llenar campo area select
-	$('#reportebeipuntos_area_id').html('<option value=""></option>'+selectareas)
+	consultarAreasRecsensorial(recsensorial.id, 0)
 
 	// Llenar campo categoria select
-	$('#reportebeipuntos_categoria_id').html('<option value=""></option>');
+	$('#CATEGORIA_ID_BEI').html('<option value=""></option>');
 
 	// Titulo del modal
 	$('#modal_reporte_beipunto .modal-title').html('Nuevo punto de iluminación');
 
 	// mostrar modal
 	$('#modal_reporte_beipunto').modal({backdrop:false});
+});
+
+$(document).ready(function()
+{
+	setTimeout(function()
+	{
+		tabla_reporte_beipuntos(proyecto.id);
+	}, 6000);
+});
+
+var datatable_beipuntos = null;
+function tabla_reporte_beipuntos(proyecto_id, reportebei_id)
+{
+	try 
+	{
+		var ruta = "/reportebeitablapuntos/"+proyecto_id;
+
+		if (datatable_beipuntos != null)
+		{
+			datatable_beipuntos.clear().draw();
+			datatable_beipuntos.ajax.url(ruta).load();
+		}
+		else
+		{
+			var numeroejecucion = 1;
+			datatable_beipuntos = $('#tabla_reporte_beipuntos').DataTable({
+				ajax: {
+					url: ruta,
+					type: "get",
+					cache: false,
+					dataType: "json",
+					data: {},
+					dataSrc: function (json)
+					{
+						if (parseInt(json.total) > 0){
+							menureporte_estado("menureporte_7_1", 1);
+							
+						} else {
+							menureporte_estado("menureporte_7_1", 0);
+						}
+
+						// alert("Done! "+json.msj);
+						
+						return json.data;
+					},
+					error: function (xhr, error, code)
+					{						
+						console.log('error en datatable_beipuntos '+code);
+						if (numeroejecucion <= 1)
+						{
+							tabla_reporte_beipuntos(proyecto_id, reportebei_id);
+							numeroejecucion += 1;
+						}
+					}
+				},
+				columns: [
+					// {
+					//     data: "id" 
+					// },
+					{
+						data: "NUM_PUNTO_BEI",
+						defaultContent: "-",
+						orderable: false,
+					},
+					{
+						data: "NOMBRE_BEI",
+						defaultContent: "-",
+						orderable: false,
+					},
+					{
+						data: "AREA",
+						defaultContent: "-",
+						orderable: false,
+					},
+					{
+						data: "CATEGORIA",
+						defaultContent: "-",
+						orderable: false,
+					},
+					{
+						data: "FICHA_BEI",
+						defaultContent: "-",
+						orderable: false,
+					},
+					{
+						data: "EDAD_BEI_TEXTO",
+						defaultContent: "-",
+						orderable: false,
+					},
+					{
+						data: "MUESTRA_BEI",
+						defaultContent: "-",
+						orderable: false,
+					},
+					{
+						data: "RESULTADO_BEI_TEXTO",
+						defaultContent: "-",
+						orderable: false,
+					},
+					{
+						data: "REFERENCIA_BEI_TEXTO",
+						defaultContent: "-",
+						orderable: false,
+					},
+					{
+						data: "NORMATIVIDAD",
+						defaultContent: "-",
+						orderable: false,
+					},
+					{
+						className: 'editar',
+						data: "boton_editar",
+						defaultContent: "-",
+						orderable: false,
+					}
+				],
+				lengthMenu: [[20, 50, 100, -1], [20, 50, 100, "Todos"]],
+				rowsGroup: [1], //agrupar filas
+				order: [[ 0, "ASC" ]],
+				ordering: false,
+				processing: true,
+				searching: true,
+				paging: true,
+				language: {
+					lengthMenu: "Mostrar _MENU_ Registros",
+					zeroRecords: "No se encontraron registros",
+					info: "Página _PAGE_ de _PAGES_ (Total _TOTAL_ registros)",
+					infoEmpty: "No se encontraron registros",
+					infoFiltered: "(Filtrado de _MAX_ registros)",
+					emptyTable: "No hay datos disponibles en la tabla",
+					loadingRecords: "Cargando datos....",
+					processing: "Procesando <i class='fa fa-spin fa-spinner fa-3x'></i>",
+					search: "Buscar",
+					paginate: {
+						first: "Primera",
+						last: "Ultima",
+						next: "Siguiente",
+						previous: "Anterior"
+					}
+				},
+				rowCallback: function(row, data, index)
+				{
+				
+					if (data.NORMATIVIDAD == "Sin evaluar" || data.NORMATIVID == "ND") {
+						$(row).find('td:eq(9)').css('background', '#FFFFFF');	
+						$(row).find('td:eq(9)').css('color', '#000000');
+
+					} else if(data.NORMATIVIDAD == "Fuera de norma") {
+						$(row).find('td:eq(9)').css('background', '#FF0000');	
+						$(row).find('td:eq(9)').css('color', '#FFFFFF');
+					
+					} else {
+						
+						$(row).find('td:eq(9)').css('background', '#00ff6c');
+						$(row).find('td:eq(9)').css('color', '#000000');
+					}
+				},
+			});
+		}
+
+		// Tooltip en DataTable
+		datatable_beipuntos.on('draw', function ()
+		{
+			$('[data-toggle="tooltip"]').tooltip();
+		});
+	}
+	catch (exception)
+	{
+		tabla_reporte_beipuntos(proyecto_id, reportebei_id);
+    }
+}
+
+
+$('#tabla_reporte_beipuntos tbody').on('click', 'td.editar', function () {
+	var tr = $(this).closest('tr');
+	var row = datatable_beipuntos.row(tr);
+
+	$('#form_reporte_beipunto').each(function () {
+		this.reset();
+	});
+	// Titulo del modal
+	$('#nombre_determinante').html(row.data().DETERMINANTE);
+
+	// Campos Hidden
+	$('#ID_BEI_INFORME').val(row.data().ID_BEI_INFORME);
+	
+
+	consultarAreasRecsensorial(row.data().RECSENSORIAL_ID, row.data().AREA_ID)
+	consultarAreasCategoriasRecsensorial(row.data().AREA_ID, row.data().CATEGORIA_ID)
+
+	//Campos	
+	$('#NUM_PUNTO_BEI').val(row.data().NUM_PUNTO_BEI);
+	$('#CATEGORIA_ID_BEI').val(row.data().CATEGORIA_ID_BEI);
+	$('#NOMBRE_BEI').val(row.data().NOMBRE_BEI);
+	$('#GENERO_BEI').val(row.data().GENERO_BEI);
+	$('#FICHA_BEI').val(row.data().FICHA_BEI);
+	$('#EDAD_BEI').val(row.data().EDAD_BEI);
+	$('#ANTIGUEDAD_BEI').val(row.data().ANTIGUEDAD_BEI);
+	$('#MUESTRA_BEI').val(row.data().MUESTRA_BEI);
+	$('#UNIDAD_MEDIDA_BEI').val(row.data().UNIDAD_MEDIDA_BEI);
+	$('#RESULTADO_BEI').val(row.data().RESULTADO_BEI);
+	$('#REFERENCIA_BEI').val(row.data().REFERENCIA_BEI);
+
+
+	// mostrar modal
+	$('#modal_reporte_beipunto').modal({ backdrop: false });
+});
+
+
+function consultarAreasRecsensorial(recsensorial_id, area_id) {
+
+	$.ajax({
+		type: "GET",
+		dataType: "json",
+		url: "/recsensorialconsultaselectareas/" + recsensorial_id + "/" + area_id,
+		data: {},
+		cache: false,
+		success: function (dato) {
+			
+			$('#AREA_ID_BEI').html(dato.opciones);
+			
+		},
+		error: function (dato) {
+			// alert('Error: '+dato.msj);
+			return false;
+		}
+	})
+	
+}
+
+function consultarAreasCategoriasRecsensorial(area_id, categoria_id) {
+
+	$.ajax({
+		type: "GET",
+		dataType: "json",
+		url: "/recsensorialselectcategoriasxarea/" + area_id + "/" + categoria_id,
+		data: {},
+		cache: false,
+		success: function (dato) {
+			
+			$('#CATEGORIA_ID_BEI').html(dato.opciones);
+			
+		},
+		error: function (dato) {
+			// alert('Error: '+dato.msj);
+			return false;
+		}
+	})
+	
+}
+
+
+$("#botonguardar_modal_beipunto").click(function(){
+
+	// valida campos vacios
+	var valida = this.form.checkValidity();
+	if (valida)
+	{
+		swal({
+			title: "¿Esta seguro de guardar esta información?",
+			text: "Confirme para relaizar esta acción",
+			type: "warning",
+			showCancelButton: true,
+			confirmButtonColor: "#DD6B55",
+			confirmButtonText: "Guardar!",
+			cancelButtonText: "Cancelar!",
+			closeOnConfirm: false,
+			closeOnCancel: false
+		},
+		function(isConfirm)
+		{
+			if (isConfirm)
+			{
+				// cerrar msj confirmacion
+				swal.close();
+
+				// enviar datos
+				$('#form_reporte_beipunto').ajaxForm({
+					dataType: 'json',
+					type: 'POST',
+					url: '/reportebei',
+					data: {
+						opcion: 80,
+						proyecto_id: proyecto.id,
+						agente_id: agente_id,
+						agente_nombre: agente_nombre,
+						reportebei_id: reportebei_id,
+						reportebei_instalacion: $("#reportebei_instalacion").val(),
+					},
+					resetForm: false,
+					success: function(dato)
+					{
+						// Actualizar ID reporte							
+						tabla_reporte_beipuntos(proyecto.id, reportebei_id);
+
+
+						// mensaje
+						swal({
+							title: "Correcto",
+							text: ""+dato.msj,
+							type: "success", // warning, error, success, info
+							buttons: {
+								visible: false, // true , false
+							},
+							timer: 1500,
+							showConfirmButton: false
+						});
+
+						// actualiza boton
+						$('#botonguardar_modal_beipunto').html('Guardar <i class="fa fa-save"></i>');
+						$('#botonguardar_modal_beipunto').attr('disabled', false);
+
+						$('#modal_reporte_beipunto').modal('hide');
+
+					},
+					beforeSend: function()
+					{
+						$('#botonguardar_modal_beipunto').html('Guardando <i class="fa fa-spin fa-spinner"></i>');
+						$('#botonguardar_modal_beipunto').attr('disabled', true);
+					},
+					error: function(dato)
+					{
+						// actualiza boton
+						$('#botonguardar_modal_beipunto').html('Guardar <i class="fa fa-save"></i>');
+						$('#botonguardar_modal_beipunto').attr('disabled', false);
+
+						// mensaje
+						swal({
+							title: "Error",
+							text: ""+dato.msj,
+							type: "error", // warning, error, success, info
+							buttons: {
+								visible: false, // true , false
+							},
+							timer: 1500,
+							showConfirmButton: false
+						});
+						return false;
+					}
+				}).submit();
+				return false;
+			}
+			else 
+			{
+				// mensaje
+				swal({
+					title: "Cancelado",
+					text: "Acción cancelada",
+					type: "error", // warning, error, success, info
+					buttons: {
+						visible: false, // true , false
+					},
+					timer: 500,
+					showConfirmButton: false
+				});
+			}
+		});
+		return false;
+	}
+	
+
+});
+
+
+//=================================================
+// REVISIONES
+
+
+var ultimaversion_cancelada = 0;
+var ultimarevision_id = 0;
+
+
+$(document).ready(function()
+{
+	setTimeout(function()
+	{
+		tabla_reporte_revisiones(proyecto.id);
+	}, 8500);
+});
+
+
+var datatable_reporterevisiones = null;
+function tabla_reporte_revisiones(proyecto_id)
+{
+	try 
+	{
+		var ruta = "/reportebeitablarevisiones/"+proyecto_id;
+
+		if (datatable_reporterevisiones != null)
+		{
+			datatable_reporterevisiones.clear().draw();
+			datatable_reporterevisiones.ajax.url(ruta).load();
+		}
+		else
+		{
+			var numeroejecucion = 1;
+			datatable_reporterevisiones = $('#tabla_reporte_revisiones').DataTable({
+				ajax: {
+					url: ruta,
+					type: "get",
+					cache: false,
+					dataType: "json",
+					data: {},
+					dataSrc: function (json)
+					{
+						if (parseInt(json.total) > 0)
+						{
+							$("#boton_reporte_nuevarevision").attr('disabled', false);
+						}
+						else
+						{
+							$("#boton_reporte_nuevarevision").attr('disabled', true);
+						}
+
+
+						ultimarevision_id = parseInt(json.ultimarevision_id);
+						ultimaversion_cancelada = parseInt(json.ultimaversion_cancelada);
+						botoninforme_estado(json.ultimaversion_estado);
+
+
+						if (areas_poe == 1)
+						{
+							setTimeout(function()
+							{
+								$("#boton_reporte_nuevacategoria").attr('disabled', true);
+								$("#boton_reporte_nuevaarea").attr('disabled', true);
+							}, 5000);
+						}
+
+
+						return json.data;
+					},
+					error: function (xhr, error, code)
+					{						
+						console.log('error en datatable_reporterevisiones '+code);
+						if (numeroejecucion <= 1)
+						{
+							tabla_reporte_revisiones(proyecto_id)
+							numeroejecucion += 1;
+						}
+					}
+				},
+				columns: [
+					// {
+					//     data: "id" 
+					// },
+					{
+						data: "reporterevisiones_revision",
+						defaultContent: "-",
+						// className: '',
+						orderable: false,
+					},
+					{
+						data: "checkbox_concluido",
+						defaultContent: "-",
+						orderable: false,
+						// className: 'checkbox_concluido',
+					},
+					{
+						data: "nombre_concluido",
+						defaultContent: "-",
+						orderable: false,
+					},
+					{
+						data: "checkbox_cancelado",
+						defaultContent: "-",
+						orderable: false,
+						// className: 'checkbox_cancelado',
+					},
+					{
+						data: "nombre_cancelado",
+						defaultContent: "-",
+						orderable: false,
+					},
+					{
+						data: "estado_texto",
+						defaultContent: "-",
+						orderable: false,
+					},
+					{
+						data: "boton_descargar",
+						defaultContent: "-",
+						orderable: false,
+						// className: 'descargainforme',
+					}
+				],
+				lengthMenu: [[20, 50, 100, -1], [20, 50, 100, "Todos"]],
+				// rowsGroup: [1, 2, 3], //agrupar filas
+				// order: [[ 0, "ASC" ]],
+				ordering: false,
+				processing: true,
+				searching: false,
+				paging: false,
+				language: {
+					lengthMenu: "Mostrar _MENU_ Registros",
+					zeroRecords: "No se encontraron registros",
+					info: "Página _PAGE_ de _PAGES_ (Total _TOTAL_ registros)",
+					infoEmpty: "No se encontraron registros",
+					infoFiltered: "(Filtrado de _MAX_ registros)",
+					emptyTable: "No hay datos disponibles en la tabla",
+					loadingRecords: "Cargando datos....",
+					processing: "Procesando <i class='fa fa-spin fa-spinner fa-3x'></i>",
+					search: "Buscar",
+					paginate: {
+						first: "Primera",
+						last: "Ultima",
+						next: "Siguiente",
+						previous: "Anterior"
+					}
+				},
+				
+			});
+		}
+
+		// Tooltip en DataTable
+		datatable_reporterevisiones.on('draw', function ()
+		{
+			$('[data-toggle="tooltip"]').tooltip();
+		});
+	}
+	catch (exception)
+	{
+		tabla_reporte_revisiones(proyecto_id);
+    }
+}
+
+
+$("#boton_reporte_nuevarevision").click(function()
+{
+	if (ultimaversion_cancelada == 1)
+	{
+		if (parseInt(datatable_beipuntos.data().count()) > 0)
+		{
+			swal({
+				title: "¿Generar nueva revision?",
+				text: "Informe de BEI",
+				type: "info",
+				showCancelButton: true,
+				confirmButtonColor: "#DD6B55",
+				confirmButtonText: "Aceptar!",
+				cancelButtonText: "Cancelar!",
+				closeOnConfirm: false,
+				closeOnCancel: false
+			}, function(isConfirm){
+				if (isConfirm)
+				{
+					// cerrar msj confirmacion
+					swal.close();
+
+					$('#boton_reporte_nuevarevision').html('<span class="btn-label"><i class="fa fa-spin fa-spinner"></i></span>Copiando revisión, por favor espere...');
+					$('#boton_reporte_nuevarevision').attr('disabled', true);
+
+						
+					// Enviar datos
+					$.ajax({
+						type: "POST",
+						dataType: "json",
+						url: "/reportebeiword",
+						data:{
+							_token: document.querySelector('meta[name="csrf-token"]')['content'],
+							proyecto_id: proyecto.id,
+							agente_id: agente_id,
+							agente_nombre: agente_nombre,
+							reportebei_id: reportebei_id,
+							areas_poe: areas_poe,
+							ultimarevision_id: ultimarevision_id,
+							crear_revision: 1,
+							
+						},
+						cache: false,
+						success:function(dato)
+						{
+							botoninforme_estado(0); //Desbloquear
+
+
+							// ACTUALIZAR TABLAS
+							tabla_reporte_revisiones(proyecto.id);
+							tabla_reporte_definiciones(proyecto.id, agente_nombre, reportebei_id);
+							tabla_reporte_categorias(proyecto.id, reportebei_id);
+							tabla_reporte_areas(proyecto.id, reportebei_id);
+							tabla_reporte_beipuntos(proyecto.id, reportebei_id);
+							tabla_reporte_beiresultados(proyecto.id, reportebei_id);
+							
+
+
+							// desplazar a la ultima fila de la tabla
+							setTimeout(function()
+							{
+								$('html, body').animate({
+									scrollTop: $('#tabla_reporte_revisiones').offset().top //ultima fila
+								}, 1000);
+							}, 2000);
+
+
+							// mensaje
+							swal({
+								title: "Correcto",
+								text: ""+dato.msj,
+								type: "success", // warning, error, success, info
+								buttons: {
+									visible: false, // true , false
+								},
+								timer: 1500,
+								showConfirmButton: false
+							});
+
+
+							$('#boton_reporte_nuevarevision').html('<span class="btn-label"><i class="fa fa-plus"></i></span>Crear nueva revisión');
+							$('#boton_reporte_nuevarevision').attr('disabled', false);
+						},
+						// beforeSend: function()
+						// {
+						// 	$('#boton_reporte_nuevarevision').html('<span class="btn-label"><i class="fa fa-spin fa-spinner"></i></span>Copiando revisión, por favor espere...');
+						// 	$('#boton_reporte_nuevarevision').attr('disabled', true);
+						// },
+						error: function(dato)
+						{
+							// Boton
+							$('#boton_reporte_nuevarevision').html('<span class="btn-label"><i class="fa fa-plus"></i></span>Crear nueva revisión');
+							$('#boton_reporte_nuevarevision').attr('disabled', false);
+
+
+							tabla_reporte_revisiones(proyecto.id);
+
+
+							// mensaje
+							swal({
+								title: "Error",
+								text: "Al crear nueva revisión de este informe, intentelo de nuevo.",
+								type: "error", // warning, error, success, info
+								buttons: {
+									visible: false, // true , false
+								},
+								timer: 1500,
+								showConfirmButton: false
+							});
+							return false;
+						}
+					});//Fin ajax
+						
+					
+					
+				}
+				else 
+				{
+					// mensaje
+					swal({
+						title: "Cancelado",
+						text: "",
+						type: "error", // warning, error, success, info
+						buttons: {
+							visible: false, // true , false
+						},
+						timer: 500,
+						showConfirmButton: false
+					});
+				}
+			});
+		}
+		else
+		{
+			// mensaje
+			swal({
+				title: "No disponible",
+				text: "En este informe aún no se ha capturado puntos de iluminación.",
+				type: "info", // warning, error, success, info
+				buttons: {
+					visible: false, // true , false
+				},
+				timer: 3000,
+				showConfirmButton: false
+			});
+		}
+	}
+	else
+	{
+		// mensaje
+		swal({
+			title: "No disponible",
+			text: "Para generar una nueva revisión para este informe, debe cancelar la revisión mas reciente.",
+			type: "info", // warning, error, success, info
+			buttons: {
+				visible: false, // true , false
+			},
+			timer: 2000,
+			showConfirmButton: false
+		});
+	}
+});
+
+
+function botoninforme_estado(boton_estado)
+{
+	if (parseInt(boton_estado) > 0)
+	{
+		$(".botoninforme").attr('disabled', true);
+
+		$(".botoninforme>i").removeClass('fa-save');
+		$(".botoninforme>i").addClass('fa-ban');
+	}
+	else
+	{
+		$(".botoninforme").attr('disabled', false);
+
+		$(".botoninforme>i").removeClass('fa-ban');
+		$(".botoninforme>i").addClass('fa-save');
+	}
+}
+
+
+function reporte_concluido(revision_id, perfil, checkbox)
+{
+	if (parseInt(perfil) == 1)
+	{
+		if (checkbox.checked) // Activado
+		{
+			$(checkbox).prop('checked', false);
+
+
+			var pendientes = 0;
+			var pendientes_puntos = '';
+			$('#top-menu .fa-times').each(function()
+			{
+				pendientes += 1;
+
+				var texto = this.id;
+				texto = texto.replace("menureporte_", "");
+				texto = texto.replace("_", ".");
+				pendientes_puntos += '\nPunto: '+texto;
+			});
+
+
+			if (parseInt(pendientes) == 0)
+			{
+				// Confirmar
+				swal({
+					title: "¿Concluir informe?",
+					text: "Ultima revisión del informe de "+agente_nombre,
+					type: "warning",
+					showCancelButton: true,
+					confirmButtonColor: "#DD6B55",
+					confirmButtonText: "Aceptar!",
+					cancelButtonText: "Cancelar!",
+					closeOnConfirm: false,
+					closeOnCancel: false
+				},
+				function(isConfirm)
+				{
+					if (isConfirm)
+					{
+						// cerrar msj confirmacion
+						swal.close();
+
+						
+						// Enviar datos
+						$.ajax({
+							type: "GET",
+							dataType: "json",
+							url: "/reportebeiconcluirrevision/"+revision_id,
+							data:{},
+							cache: false,
+							success:function(dato)
+							{
+								// Actualizar tablas
+								tabla_reporte_revisiones(proyecto.id);
+								botoninforme_estado(dato.estado);
+
+								tabla_reporte_definiciones(proyecto.id, agente_nombre, reportebei_id);
+								tabla_reporte_categorias(proyecto.id, reportebei_id);
+								tabla_reporte_areas(proyecto.id, reportebei_id);
+								tabla_reporte_beipuntos(proyecto.id, reportebei_id);
+
+
+								// desplazar a la ultima fila de la tabla
+								setTimeout(function()
+								{
+									$('html, body').animate({
+										scrollTop: $('#tabla_reporte_revisiones').offset().top //ultima fila
+									}, 1000);
+								}, 2000);
+
+
+								// mensaje
+								swal({
+									title: "Correcto",
+									text: ""+dato.msj,
+									type: "success", // warning, error, success, info
+									buttons: {
+										visible: false, // true , false
+									},
+									timer: 1500,
+									showConfirmButton: false
+								});
+							},
+							error: function(dato)
+							{
+								tabla_reporte_revisiones(proyecto.id);
+
+								// mensaje
+								swal({
+									title: "No se pudo realizar esta acción",
+									text: dato.responseJSON,
+									type: "warning", // warning, error, success, info
+									buttons: {
+										visible: false, // true , false
+									},
+									timer: 2000,
+									showConfirmButton: false
+								});
+
+								return false;
+							}
+						});//Fin ajax
+					}
+					else 
+					{
+						// mensaje
+						swal({
+							title: "Cancelado",
+							text: "Acción cancelada",
+							type: "error", // warning, error, success, info
+							buttons: {
+								visible: false, // true , false
+							},
+							timer: 500,
+							showConfirmButton: false
+						});
+					}
+				});
+			}
+			else
+			{
+				// mensaje
+				swal({
+					title: "No disponible",
+					text: 'Esta revisión del informe aún no ha sido completada, se encontraron '+pendientes+' punto(s) pendiente(s) en todo el contenido por guardar.\n'+pendientes_puntos,
+					type: "info", // warning, error, success, info
+					buttons: {
+						visible: false, // true , false
+					},
+					timer: 6000,
+					showConfirmButton: false
+				});
+			}
+
+			return false;
+		}
+		else
+		{
+			$(checkbox).prop('checked', true);
+
+			// Confirmar
+			swal({
+				title: "¿Quitar concluido?",
+				text: "Ultima revisión del informe de "+agente_nombre,
+				type: "warning",
+				showCancelButton: true,
+				confirmButtonColor: "#DD6B55",
+				confirmButtonText: "Aceptar!",
+				cancelButtonText: "Cancelar!",
+				closeOnConfirm: false,
+				closeOnCancel: false
+			},
+			function(isConfirm)
+			{
+				if (isConfirm)
+				{
+					// cerrar msj confirmacion
+					swal.close();
+
+					
+					// Enviar datos
+					$.ajax({
+						type: "GET",
+						dataType: "json",
+						url: "/reportebeiconcluirrevision/"+revision_id,
+						data:{},
+						cache: false,
+						success:function(dato)
+						{
+							// desplazar a la ultima fila de la tabla
+							setTimeout(function()
+							{
+								$('html, body').animate({
+									scrollTop: $('#tabla_reporte_revisiones').offset().top //ultima fila
+								}, 1000);
+							}, 2000);
+
+
+							// Actualizar tablas
+							tabla_reporte_revisiones(proyecto.id);
+							botoninforme_estado(dato.estado);
+
+							tabla_reporte_definiciones(proyecto.id, agente_nombre, reportebei_id);
+							tabla_reporte_categorias(proyecto.id, reportebei_id);
+							tabla_reporte_areas(proyecto.id, reportebei_id);
+							tabla_reporte_beipuntos(proyecto.id, reportebei_id);
+
+
+							// mensaje
+							swal({
+								title: "Correcto",
+								text: ""+dato.msj,
+								type: "success", // warning, error, success, info
+								buttons: {
+									visible: false, // true , false
+								},
+								timer: 1500,
+								showConfirmButton: false
+							});
+						},
+						error: function(dato)
+						{
+							tabla_reporte_revisiones(proyecto.id);
+
+							// mensaje
+							swal({
+								title: "Correcto",
+								text: ""+dato.msj,
+								type: "error", // warning, error, success, info
+								buttons: {
+									visible: false, // true , false
+								},
+								timer: 1500,
+								showConfirmButton: false
+							});
+
+							return false;
+						}
+					});//Fin ajax
+				}
+				else 
+				{
+					// mensaje
+					swal({
+						title: "Cancelado",
+						text: "Acción cancelada",
+						type: "error", // warning, error, success, info
+						buttons: {
+							visible: false, // true , false
+						},
+						timer: 500,
+						showConfirmButton: false
+					});
+				}
+			});
+			return false;
+		}	
+	}
+}
+
+
+function reporte_cancelado(revision_id, perfil, checkbox)
+{
+	if (parseInt(perfil) == 1)
+	{
+		$('#form_modal_cancelacionobservacion').each(function(){
+			this.reset();
+		});
+
+
+		// Campos Hidden
+		$('#reporterevisiones_id').val(revision_id);
+
+
+		if (checkbox.checked) // Activado
+		{
+			$(checkbox).prop('checked', false);
+			// alert('Cancelado '+checkbox.checked);
+
+			// mostrar modal observacion
+			$('#modal_reporte_cancelacionobservacion').modal({backdrop:false, keyboard:false});
+		}
+		else
+		{
+			$(checkbox).prop('checked', true);
+			// alert('Descancelado '+checkbox.checked);
+
+
+			// Confirmar
+			swal({
+				title: "¿Quitar cancelación?",
+				text: "Ultima revisión del informe de "+agente_nombre,
+				type: "warning",
+				showCancelButton: true,
+				confirmButtonColor: "#DD6B55",
+				confirmButtonText: "Aceptar!",
+				cancelButtonText: "Cancelar!",
+				closeOnConfirm: false,
+				closeOnCancel: false
+			},
+			function(isConfirm)
+			{
+				if (isConfirm)
+				{
+					// cerrar msj confirmacion
+					swal.close();
+
+					
+					// enviar datos
+					$('#form_modal_cancelacionobservacion').ajaxForm({
+						dataType: 'json',
+						type: 'POST',
+						url: '/reportebei',
+						data: {
+							opcion: 70,
+							proyecto_id: proyecto.id,
+							agente_id: agente_id,
+							agente_nombre: agente_nombre,
+							reportebei_id: reportebei_id,
+							reportebei_instalacion: $("#reportebei_instalacion").val(),
+						},
+						resetForm: false,
+						success: function(dato)
+						{
+							// Actualizar ID reporte
+							reportebei_id = dato.reportebei_id;
+
+
+							// Actualizar tablas
+							botoninforme_estado(dato.estado);
+							tabla_reporte_revisiones(proyecto.id);
+
+							tabla_reporte_definiciones(proyecto.id, agente_nombre, reportebei_id);
+							tabla_reporte_categorias(proyecto.id, reportebei_id);
+							tabla_reporte_areas(proyecto.id, reportebei_id);
+							tabla_reporte_beipuntos(proyecto.id, reportebei_id);
+
+							
+							// desplazar a la ultima fila de la tabla
+							setTimeout(function()
+							{
+								$('html, body').animate({
+									scrollTop: $('#tabla_reporte_revisiones').offset().top //ultima fila
+								}, 1000);
+							}, 2000);
+
+
+							// mensaje
+							swal({
+								title: "Correcto",
+								text: ""+dato.msj,
+								type: "success", // warning, error, success, info
+								buttons: {
+									visible: false, // true , false
+								},
+								timer: 1500,
+								showConfirmButton: false
+							});
+
+							
+						},
+						
+						error: function(dato)
+						{
+						
+
+							// mensaje
+							swal({
+								title: "Error",
+								text: ""+dato.msj,
+								type: "error", // warning, error, success, info
+								buttons: {
+									visible: false, // true , false
+								},
+								timer: 1500,
+								showConfirmButton: false
+							});
+							return false;
+						}
+					}).submit();
+					return false;
+				}
+				else 
+				{
+					// mensaje
+					swal({
+						title: "Cancelado",
+						text: "Acción cancelada",
+						type: "error", // warning, error, success, info
+						buttons: {
+							visible: false, // true , false
+						},
+						timer: 500,
+						showConfirmButton: false
+					});
+				}
+			});
+			return false;
+		}
+	}
+}
+
+
+$("#botonguardar_modal_cancelacionobservacion").click(function()
+{
+	swal({
+		title: "¡Confirme que desea cancelar!",
+		text: "Ultima revisión del informe de "+agente_nombre,
+		type: "warning",
+		showCancelButton: true,
+		confirmButtonColor: "#DD6B55",
+		confirmButtonText: "Aceptar!",
+		cancelButtonText: "Cancelar!",
+		closeOnConfirm: false,
+		closeOnCancel: false
+	},
+	function(isConfirm)
+	{
+		if (isConfirm)
+		{
+			// cerrar msj confirmacion
+			swal.close();
+
+			// enviar datos
+			$('#form_modal_cancelacionobservacion').ajaxForm({
+				dataType: 'json',
+				type: 'POST',
+				url: '/reportebei',
+				data: {
+					opcion: 70,
+					proyecto_id: proyecto.id,
+					agente_id: agente_id,
+					agente_nombre: agente_nombre,
+					reportebei_id: reportebei_id,
+					
+					reportebei_instalacion: $("#reportebei_instalacion").val(),
+				},
+				resetForm: false,
+				success: function(dato)
+				{
+					// Actualizar ID reporte
+					reportebei_id = dato.reportebei_id;
+
+					// Actualizar tablas
+					botoninforme_estado(dato.estado);
+					tabla_reporte_revisiones(proyecto.id);
+
+					tabla_reporte_definiciones(proyecto.id, agente_nombre, reportebei_id);
+					tabla_reporte_categorias(proyecto.id, reportebei_id);
+					tabla_reporte_areas(proyecto.id, reportebei_id);
+					tabla_reporte_beipuntos(proyecto.id, reportebei_id);
+
+					
+					// desplazar a la ultima fila de la tabla
+					setTimeout(function()
+					{
+						$('html, body').animate({
+							scrollTop: $('#tabla_reporte_revisiones').offset().top //ultima fila
+						}, 1000);
+					}, 2000);
+
+
+					// mensaje
+					swal({
+						title: "Correcto",
+						text: ""+dato.msj,
+						type: "success", // warning, error, success, info
+						buttons: {
+							visible: false, // true , false
+						},
+						timer: 1500,
+						showConfirmButton: false
+					});
+
+					// actualiza boton
+					$('#botonguardar_modal_cancelacionobservacion').html('Guardar observación y cancelar revisión <i class="fa fa-save"></i>');
+					$('#botonguardar_modal_cancelacionobservacion').attr('disabled', false);
+
+					// cerrar modal
+					$('#modal_reporte_cancelacionobservacion').modal('hide');
+				},
+				beforeSend: function()
+				{
+					$('#botonguardar_modal_cancelacionobservacion').html('Guardando observación y cancelar revisión <i class="fa fa-spin fa-spinner"></i>');
+					$('#botonguardar_modal_cancelacionobservacion').attr('disabled', true);
+				},
+				error: function(dato)
+				{
+					// actualiza boton
+					$('#botonguardar_modal_cancelacionobservacion').html('Guardar observación y cancelar revisión <i class="fa fa-save"></i>');
+					$('#botonguardar_modal_cancelacionobservacion').attr('disabled', false);
+
+					// mensaje
+					swal({
+						title: "Error",
+						text: ""+dato.msj,
+						type: "error", // warning, error, success, info
+						buttons: {
+							visible: false, // true , false
+						},
+						timer: 1500,
+						showConfirmButton: false
+					});
+					return false;
+				}
+			}).submit();
+			return false;
+		}
+		else 
+		{
+			// mensaje
+			swal({
+				title: "Cancelado",
+				text: "Acción cancelada",
+				type: "error", // warning, error, success, info
+				buttons: {
+					visible: false, // true , false
+				},
+				timer: 500,
+				showConfirmButton: false
+			});
+		}
+	});
+	return false;
+});
+
+
+//=================================================
+// GENERAR WORD
+
+
+$('#tabla_reporte_revisiones tbody').on('click', 'td>button.botondescarga', function()
+{
+	var botondescarga = this;
+
+	var tr = $(this).closest('tr');
+	var row = datatable_reporterevisiones.row(tr);
+
+	// Boton descarga
+	$("#"+botondescarga.id).html('<i class="fa fa-spin fa-spinner fa-2x"></i>');
+
+	setTimeout(function()
+	{
+		if (parseInt(row.data().id) == parseInt(ultimarevision_id))
+		{
+				setTimeout(function()
+				{
+					// Enviar datos
+					$.ajax({
+						type: "POST",
+						dataType: "json",
+						url: "/reportebeiword",
+						data:{
+							_token: document.querySelector('meta[name="csrf-token"]')['content'],
+							proyecto_id: proyecto.id,
+							agente_id: agente_id,
+							agente_nombre: agente_nombre,
+							reporteiluminacion_id: reporteiluminacion_id,
+							areas_poe: areas_poe,
+							ultimarevision_id: ultimarevision_id,
+							crear_revision: 0,
+							
+						},
+						cache: false,
+						success:function(dato)
+						{
+							ventana = window.open('/reporteiluminacionworddescargar/'+proyecto.id+"/"+row.data().id+"/"+ultimarevision_id);
+
+
+							setTimeout(function()
+							{
+								tabla_reporte_revisiones(proyecto.id);
+							}, 6000);
+
+
+							setTimeout(function()
+							{
+								if (ventana.window)
+								{
+									ventana.window.close();
+								}
+							}, 15000);
+
+
+							
+						},
+						error: function(dato)
+						{
+							// mensaje
+							swal({
+								title: "Error",
+								text: "Al intentar crear informe, intentelo de nuevo.\n"+dato,
+								type: "error", // warning, error, success, info
+								buttons: {
+									visible: false, // true , false
+								},
+								timer: 1500,
+								showConfirmButton: false
+							});
+							return false;
+						}
+					});//Fin ajax
+				}, 1000);
+			
+		}
+		else
+		{
+			ventana = window.open('/reporteiluminacionworddescargar/'+proyecto.id+"/"+row.data().id+"/"+ultimarevision_id);
+
+
+			setTimeout(function()
+			{
+				tabla_reporte_revisiones(proyecto.id);
+			}, 6000);
+
+
+			setTimeout(function()
+			{
+				if (ventana.window)
+				{
+					ventana.window.close();
+				}
+			}, 15000);
+		}
+	}, 500);
 });

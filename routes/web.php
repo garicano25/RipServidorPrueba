@@ -1703,6 +1703,13 @@ Route::get('reportebeiepptabla/{proyecto_id}/{reportebei_id}', ['as' => 'reporte
 
 Route::get('reportebeieppeliminar/{epp_id}', ['as' => 'reportebei.reportebeieppeliminar', 'uses' => 'reportes\reportebeiController@reportebeieppeliminar']);
 
+Route::get('reportebeitablapuntos/{proyecto_id}', ['as' => 'reportebei.reportebeitablapuntos', 'uses' => 'reportes\reportebeiController@reportebeitablapuntos']);
+
+Route::get('reportebeiconcluirrevision/{reporte_id}', ['as' => 'reportebei.reportebeiconcluirrevision', 'uses' => 'reportes\reportebeiController@reportebeiconcluirrevision'])->middleware('asignacionUser:REVISION');
+
+Route::get('reportebeiworddescargar/{proyecto_id}/{revision_id}/{ultima_revision}', ['as' => 'reportebei.reportebeiworddescargar', 'uses' => 'reportes\reporteBeiWordController@reportebeiword']);
+
+Route::post('reportebeiword', ['as' => 'reportebei.reportebeiword', 'uses' => 'reportes\reporteBeiWordController@reportebeiword']);
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 //////////////////////////////////////////////////EXTERNO////////////////////////////////////////////////////
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////

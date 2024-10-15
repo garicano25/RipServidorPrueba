@@ -13,6 +13,7 @@ class puntosBeiInformeModel extends Model
         'PROYECTO_ID',
         'RECSENSORIAL_ID',
         'NUM_PUNTO_BEI',
+        'EVALUACION_BEI_ID',
         'BEI_ID',
         'AREA_ID',
         'CATEGORIA_ID',
