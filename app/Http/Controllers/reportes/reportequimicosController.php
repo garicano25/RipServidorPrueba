@@ -53,8 +53,7 @@ use App\modelos\reportes\reporteanexosModel;
 use App\modelos\reportes\catreportequimicospartidasModel;
 use App\modelos\clientes\clientepartidasModel;
 use App\modelos\reportes\reportequimicosgruposModel;
-
-
+use App\modelos\recsensorial\catConclusionesModel;
 use App\modelos\reportes\recursosPortadasInformesModel;
 
 
@@ -247,9 +246,10 @@ class reportequimicosController extends Controller
             $catsubdireccion = catsubdireccionModel::orderBy('catsubdireccion_nombre', 'ASC')->get();
             $catgerencia = catgerenciaModel::orderBy('catgerencia_nombre', 'ASC')->get();
             $catactivo = catactivoModel::orderBy('catactivo_nombre', 'ASC')->get();
+            $catConclusiones = catConclusionesModel::where('ACTIVO', 1)->get();
 
             // Vista
-            return view('reportes.parametros.reportequimicos', compact('proyecto', 'recsensorial', 'catregion', 'catsubdireccion', 'catgerencia', 'catactivo', 'categorias_poe', 'areas_poe'));
+            return view('reportes.parametros.reportequimicos', compact('proyecto', 'recsensorial', 'catregion', 'catsubdireccion', 'catgerencia', 'catactivo', 'categorias_poe', 'areas_poe', 'catConclusiones'));
         }
     }
 

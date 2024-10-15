@@ -35,7 +35,7 @@ $(document).ready(function() {
 
 
 function mostrar_catalogo(num_catalogo)
-{
+{ 
     // activar Menu
     $("#tr_0").removeClass("active");
 	$("#cat_0").removeClass("text-info");
@@ -4255,6 +4255,8 @@ function seleccionar_beiQuimicaEntidad() {
         $("#BEI_DESCRIPCION").val(row.data().BEI_DESCRIPCION);
         $("#DETERMINANTE_BEI").val(row.data().DETERMINANTE);
         $("#RECOMENDACION_BEI").val(row.data().RECOMENDACION);
+        $("#UNIDAD_MEDIDA_BEI").val(row.data().UNIDAD_MEDIDA);
+        $("#VALOR_REFERENCIA").val(row.data().VALOR_REFERENCIA);
 
 
        
