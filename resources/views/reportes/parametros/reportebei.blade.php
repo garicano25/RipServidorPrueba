@@ -1238,7 +1238,7 @@
                         <div class="col-4">
                             <div class="form-group">
                                 <label>Unidad de medida *</label>
-                                <input type="text" class="form-control" id="UNIDAD_MEDIDA_BEI" name="UNIDAD_MEDIDA_BEI" readonly>
+                                <input type="text" class="form-control" id="UNIDAD_MEDIDA_BEI" name="UNIDAD_MEDIDA_BEI" >
 
                             </div>
                         </div>
@@ -1251,7 +1251,7 @@
                         <div class="col-4">
                             <div class="form-group">
                                 <label>Valor de referencia *</label>
-                                <input type="text" class="form-control" id="REFERENCIA_BEI" name="REFERENCIA_BEI" readonly required>
+                                <input type="text" class="form-control" id="REFERENCIA_BEI" name="REFERENCIA_BEI"  required>
                             </div>
                         </div>
                     </div>
