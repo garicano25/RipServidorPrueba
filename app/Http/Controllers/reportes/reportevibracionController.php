@@ -45,7 +45,7 @@ use App\modelos\reportes\reporterecomendacionesModel;
 use App\modelos\reportes\reporteplanoscarpetasModel;
 use App\modelos\reportes\reporteequiposutilizadosModel;
 use App\modelos\reportes\reporteanexosModel;
-
+use App\modelos\recsensorial\catConclusionesModel;
 use App\modelos\reportes\recursosPortadasInformesModel;
 
 
@@ -177,10 +177,11 @@ class reportevibracionController extends Controller
             $catsubdireccion = catsubdireccionModel::orderBy('catsubdireccion_nombre', 'ASC')->get();
             $catgerencia = catgerenciaModel::orderBy('catgerencia_nombre', 'ASC')->get();
             $catactivo = catactivoModel::orderBy('catactivo_nombre', 'ASC')->get();
+            $catConclusiones = catConclusionesModel::where('ACTIVO', 1)->get();
 
 
             // Vista
-            return view('reportes.parametros.reportevibracion', compact('proyecto', 'recsensorial', 'catregion', 'catsubdireccion', 'catgerencia', 'catactivo', 'proveedor_id'));
+            return view('reportes.parametros.reportevibracion', compact('proyecto', 'recsensorial', 'catregion', 'catsubdireccion', 'catgerencia', 'catactivo', 'proveedor_id', 'catConclusiones'));
         }
     }
 

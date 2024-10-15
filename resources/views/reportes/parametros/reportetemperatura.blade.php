@@ -1075,6 +1075,12 @@
 					</div>
 				</div>
 				<h4 class="card-title" id="8">8.- Conclusiones</h4>
+				<select class="custom-select form-control mb-1" style="width: 100%;" id="ID_CATCONCLUSION">
+					<option value="">&nbsp;</option>
+					@foreach($catConclusiones as $dato)
+					<option value="{{$dato->ID_CATCONCLUSION}}" data-descripcion="{{$dato->DESCRIPCION}}">{{$dato->NOMBRE}}</option>
+					@endforeach
+				</select>
 				<div class="row">
 					<div class="col-12">
 						<form method="post" enctype="multipart/form-data" name="form_reporte_conclusion" id="form_reporte_conclusion">

@@ -65,6 +65,7 @@ use PhpOffice\PhpSpreadsheet\Style\Border;
 use PhpOffice\PhpSpreadsheet\Style\Color;
 use PhpOffice\PhpSpreadsheet\Style\Fill;
 use Illuminate\Support\Facades\Response;
+use App\modelos\recsensorial\catConclusionesModel;
 
 
 
@@ -201,10 +202,11 @@ class reporteruidoController extends Controller
             $catsubdireccion = catsubdireccionModel::orderBy('catsubdireccion_nombre', 'ASC')->get();
             $catgerencia = catgerenciaModel::orderBy('catgerencia_nombre', 'ASC')->get();
             $catactivo = catactivoModel::orderBy('catactivo_nombre', 'ASC')->get();
+            $catConclusiones = catConclusionesModel::where('ACTIVO', 1)->get();
 
 
             // Vista
-            return view('reportes.parametros.reporteruido', compact('proyecto', 'recsensorial', 'catregion', 'catsubdireccion', 'catgerencia', 'catactivo', 'categorias_poe', 'areas_poe'));
+            return view('reportes.parametros.reporteruido', compact('proyecto', 'recsensorial', 'catregion', 'catsubdireccion', 'catgerencia', 'catactivo', 'categorias_poe', 'areas_poe', 'catConclusiones'));
         }
     }
 

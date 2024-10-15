@@ -4955,7 +4955,7 @@ $(document).ready(function()
 	setTimeout(function()
 	{
 
-		tabla_reporte_equipoutilizado(proyecto.id, 1, agente_nombre);
+		tabla_reporte_equipoutilizado(proyecto.id, reportebei_id, agente_nombre);
 	},5500);
 });
 

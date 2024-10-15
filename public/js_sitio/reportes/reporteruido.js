@@ -7443,7 +7443,15 @@ function tabla_reporte_7_7(proyecto_id, reporteregistro_id)
 
 //=================================================
 // CONCLUSION
+$('#ID_CATCONCLUSION').on('change', function (e) {
 
+	var selectedOption = $(this).find('option:selected');
+	var descripcion = selectedOption.data('descripcion');
+
+	$('#reporte_conclusion').val(descripcion);
+
+
+})
 
 $("#botonguardar_reporte_conclusion").click(function()
 {
