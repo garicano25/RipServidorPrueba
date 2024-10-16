@@ -1,3 +1,11 @@
+console.log('Guía 1:', requiereGuia1);
+console.log('Guía 2:', requiereGuia2);
+console.log('Guía 3:', requiereGuia3);
+console.log('Id:', id);
+
+
+
+
 function guia1() {
     const pregunta1Si = document.getElementById("pregunta1_si").checked;
     const pregunta2Si = document.getElementById("pregunta2_si").checked;

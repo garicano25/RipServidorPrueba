@@ -12,10 +12,18 @@ class sendGuiaPsico extends Mailable
     use Queueable, SerializesModels;
 
     public $name;
+    public $guia1;
+    public $guia2;
+    public $guia3;
+    public $id;
 
-    public function __construct($name)
+    public function __construct($name, $guia1, $guia2, $guia3, $id)
     {
         $this->name = $name;
+        $this->guia1 = $guia1;
+        $this->guia2 = $guia2;
+        $this->guia3 = $guia3;
+        $this->id = $id;
     }
 
   

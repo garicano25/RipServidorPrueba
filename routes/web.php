@@ -29,23 +29,23 @@
 // });
 
 
-use App\Mail\sendGuiaPsico;
-use Illuminate\Support\Facades\Mail;
+// use App\Mail\sendGuiaPsico;
+// use Illuminate\Support\Facades\Mail;
 
-Route::get('/mail', function(){
+// Route::get('/mail', function(){
 
-    // return (new sendGuiaPsico("Edgar"))->render();
+//     // return (new sendGuiaPsico("Edgar"))->render();
 
-    // Este objeto acepta un modelo de eleocuent, o un arreglo de email
-    // $response = Mail::to('ecano@results-in-performance.com')->queue(new sendGuiaPsico('Edgar')); 
-    
-    $response = Mail::to('ecano@results-in-performance.com')->send(new sendGuiaPsico('Edgar'));
+//     // Este objeto acepta un modelo de eleocuent, o un arreglo de email
+//     // $response = Mail::to('ecano@results-in-performance.com')->queue(new sendGuiaPsico('Edgar')); 
 
-    dump($response);
-});
+//     $response = Mail::to('agutierrez@results-in-performance.com')->send(new sendGuiaPsico('Edgar'));
+
+//     dump($response);
+// });
 
 
-
+use Illuminate\Support\Facades\Crypt;
 //==============================================
 
 
@@ -1778,7 +1778,31 @@ Route::resource('informesPsicosocial', 'PSICO\informesrecoPsicoController');
 
 // GUIAS 
 
-Route::get('/Guía', function () { return view('catalogos.psico.guias.guias');})->name('Guía');
+// Route::get('/Guia/{id}/{guia1}/{guia2}/{guia3}', function () { return view('catalogos.psico.guias.guias');})->name('Guia');
+Route::get('/Guia/{guia1}/{guia2}/{guia3}/{id}', function ($guia1, $guia2, $guia3, $id) {
+    try {
+
+        // Desencriptamos las guías
+        $decryptedGuia1 = Crypt::decrypt($guia1);
+        $decryptedGuia2 = Crypt::decrypt($guia2);
+        $decryptedGuia3 = Crypt::decrypt($guia3);
+        $id = Crypt::decrypt($id);
+
+        // Enviamos los datos de las guias ya desencriptados para obtenerlas en nuestra vista
+        return view('catalogos.psico.guias.guias', [
+            'guia1' => $decryptedGuia1,
+            'guia2' => $decryptedGuia2,
+            'guia3' => $decryptedGuia3,
+            'id' => $id,
+        ]);
+    } catch (\Illuminate\Contracts\Encryption\DecryptException $e) {
+        //Cancelamos el acceso a la ruta
+        abort(403, "Acceso denegado.");
+    }
+})->name('Guia');
+
+
+Route::get('envioGuia/{tipo}/{idPersonal}/{idRecsensorial}', ['as' => 'PSICO.envioGuia', 'uses' => 'PSICO\ejecucionPsicoController@envioGuia']);
 
 
 //CATÁLOGOS

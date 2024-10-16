@@ -5,9 +5,10 @@ namespace App\Http\Controllers\PSICO;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use DB;
-
+use App\Mail\sendGuiaPsico;
+use Illuminate\Support\Facades\Mail;
 use App\modelos\reconocimientopsico\recopsicotrabajadoresModel;
-
+use Illuminate\Support\Facades\Crypt; // Importa el helper de encriptación
 class ejecucionPsicoController extends Controller
 {
     //
@@ -199,6 +200,54 @@ class ejecucionPsicoController extends Controller
         } catch (Exception $e) {
             $response["msj"] = 'Error: ' . $e->getMessage();
             return response()->json($response);
+        }
+
+    }
+
+
+    public function envioGuia($tipo, $idPersonal, $idRecsensorial){
+        try {
+            
+            //Validamos el tipo de envio
+            if ($tipo == 1) { //-> Envio masivo
+
+            } else { //-> Envio unico
+
+                //Obtenemos los datos del trabajador segun el id
+                $datos = DB::select('SELECT RECPSICOTRABAJADOR_NOMBRE, RECPSICOTRABAJADOR_CORREO
+                                    FROM recopsicotrabajadores
+                                    WHERE ID_RECOPSICOTRABAJADOR = ?', [$idPersonal]);
+
+                $nombre = $datos[0]->RECPSICOTRABAJADOR_NOMBRE;
+                $correo = $datos[0]->RECPSICOTRABAJADOR_CORREO;
+
+
+                //Obtenemos los datos del reconocimiento para las guias
+                $datos = DB::select('SELECT RECPSICO_GUIAI, RECPSICO_GUIAII, RECPSICO_GUIAIII
+                                    FROM recopsiconormativa
+                                    WHERE RECPSICO_ID = ?', [$idRecsensorial]);
+
+                $guia1 = $datos[0]->RECPSICO_GUIAI;
+                $guia2 = $datos[0]->RECPSICO_GUIAII;
+                $guia3 = $datos[0]->RECPSICO_GUIAIII;
+
+                // Encriptamos las guías
+                $encryptedGuia1 = Crypt::encrypt($guia1);
+                $encryptedGuia2 = Crypt::encrypt($guia2);
+                $encryptedGuia3 = Crypt::encrypt($guia3);
+                $encryptedId = Crypt::encrypt($idPersonal);
+
+                Mail::to($correo)->send(new sendGuiaPsico($nombre, $encryptedGuia1, $encryptedGuia2, $encryptedGuia3, $encryptedId));
+            }
+
+            //Retornamos respuesta
+            $response["msj"] = "Correo envio correctamente";
+            return response()->json($response, 200);
+        
+        }  catch (Exception $e) {
+
+            $response["msj"] = 'Error: ' . $e->getMessage();
+            return response()->json($response, 500);
         }
 
     }
