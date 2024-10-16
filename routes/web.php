@@ -29,6 +29,23 @@
 // });
 
 
+use App\Mail\sendGuiaPsico;
+use Illuminate\Support\Facades\Mail;
+
+Route::get('/mail', function(){
+
+    // return (new sendGuiaPsico("Edgar"))->render();
+
+    // Este objeto acepta un modelo de eleocuent, o un arreglo de email
+    // $response = Mail::to('ecano@results-in-performance.com')->queue(new sendGuiaPsico('Edgar')); 
+    
+    $response = Mail::to('ecano@results-in-performance.com')->send(new sendGuiaPsico('Edgar'));
+
+    dump($response);
+});
+
+
+
 //==============================================
 
 
