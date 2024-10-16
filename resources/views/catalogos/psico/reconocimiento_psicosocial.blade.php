@@ -796,6 +796,7 @@
                                                                                 <div class="form-group">
                                                                                     <label>Total de trabajadores *</label>
                                                                                     <input type="hidden" class="form-control" id="RECPSICO_ID_NORMATIVA" name="RECPSICO_ID" value="0">
+                                                                                    <input type="hidden" class="form-control" id="ID_RECOPSICONORMATIVA" name="ID_RECOPSICONORMATIVA" value="0">
                                                                                     <input type="number" class="form-control" id="total_empleados" name="RECPSICO_TOTALTRABAJADORES" required>
                                                                                 </div>
                                                                             </div>
@@ -915,6 +916,17 @@
                                                                         </div>
 
                                                                         <div class="col-12" style="text-align: center;">
+                                                                            <div class="form-group" style="text-align: center;">
+                                                                                <button type="submit" class="btn btn-danger w-50 botonguardar_modulorecsensorial" id="boton_guardar_normativa">
+                                                                                    Guardar datos de Normativa <i class="fa fa-save"></i>
+                                                                                </button>
+                                                                            </div>
+                                                                            <hr>
+                                                                        </div>
+                                                                        &ensp;
+                                                                       
+
+                                                                        <div class="col-12" style="text-align: center;">
                                                                             <label class="col-12" style="font-weight: bold;font-size: 20px;">Carga de trabajadores del centro de trabajo</label>
                                                                             <!-- <h6 class="col-12 card-subtitle text-white m-b-0 op-5">&nbsp;</h6> -->
                                                                             <button type="button" class="btn btn-success me-2 waves-effect waves-light botonnuevo_modulorecsensorial" style="margin: 25px;" data-toggle="tooltip" title="Cargar trabajadores" id="boton_carga_trabajadores" onclick="abrirTrabajadoresExcel()">
@@ -946,14 +958,6 @@
                                                                         </div>   
                                                                          
                                                                     </div>
-                                                                </div>
-                                                            </div>
-
-                                                            <div class="col-12">
-                                                                <div class="form-group" style="text-align: right;">
-                                                                    <button type="submit" class="btn btn-danger botonguardar_modulorecsensorial" id="boton_guardar_normativa">
-                                                                        Guardar <i class="fa fa-save"></i>
-                                                                    </button>
                                                                 </div>
                                                             </div>
                                                         </div>

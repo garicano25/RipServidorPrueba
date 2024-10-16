@@ -227,7 +227,7 @@ use Illuminate\Support\Str;
 
                     @endif
 
-                    @if (preg_match('/\bprogramaPsicosocial\b/', request()->path()) || preg_match('/\breconocimientoPsicosocial\b/', request()->path()) || preg_match('/\bejecucionPsicosocial\b/', request()->path()) || preg_match('/\binformesPsicosocial\b/', request()->path()))
+                    @if (preg_match('/\bprogramaPsicosocial\b/', request()->path()) || preg_match('/\breconocimientoPsicosocial\b/', request()->path()) || preg_match('/\bejecucionPsicosocial\b/', request()->path()) || preg_match('/\binformesPsicosocial\b/', request()->path()) || preg_match('/\brecpsicocatalogos\b/', request()->path()))
                     <div class="navbar-nav" style="left: 38%; position: absolute;">
 
                         <h1 style="color:#ffff;font-weight: bold;">Factor de Riesgo Psicosocial</h1>
@@ -504,7 +504,7 @@ use Illuminate\Support\Str;
 
                         @endif -->
 
-                        @if (preg_match('/\bprogramaPsicosocial\b/', request()->path()) || preg_match('/\breconocimientoPsicosocial\b/', request()->path()) || preg_match('/\bejecucionPsicosocial\b/', request()->path()) || preg_match('/\binformesPsicosocial\b/', request()->path()))
+                        @if (preg_match('/\bprogramaPsicosocial\b/', request()->path()) || preg_match('/\breconocimientoPsicosocial\b/', request()->path()) || preg_match('/\bejecucionPsicosocial\b/', request()->path()) || preg_match('/\binformesPsicosocial\b/', request()->path()) || preg_match('/\brecpsicocatalogos\b/', request()->path()))
 
 
 
@@ -540,6 +540,18 @@ use Illuminate\Support\Str;
                             <a class="has-arrow " href="{{route('informesPsicosocial.index')}}" aria-expanded="false">
                                 <i class="fa fa-print"></i><span class="hide-menu">Informes </span>
                             </a>
+                        </li>
+                        @endif
+                        @if(auth()->user()->hasRoles(['Superusuario', 'Administrador', 'Coordinador','Psicólogo']))
+                        <li>
+                            <a class="has-arrow " href="#" aria-expanded="false">
+                                <i class="mdi mdi-file-multiple"></i><span class="hide-menu">Catálogos</span>
+                            </a>
+                            <ul aria-expanded="false" class="collapse">
+                                @if(auth()->user()->hasRoles(['Superusuario', 'Administrador', 'Coordinador','Psicólogo']))
+                                <li><a href="{{route('recpsicocatalogos.index')}}">Banco de preguntas</a></li>
+                                @endif
+                            </ul>
                         </li>
                         @endif
                         @endif

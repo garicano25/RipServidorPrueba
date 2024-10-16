@@ -3250,11 +3250,9 @@ function validarValores() {
 						const seleccionHombres = Math.round(resultado * (porcentajeHombres / 100));
 						const seleccionMujeres = Math.round(resultado * (porcentajeMujeres / 100));
 						document.getElementById('seleccion').innerText = `Se seleccionaran de forma aleatoria ${seleccionHombres} hombres y ${seleccionMujeres} mujeres en el centro de trabajo para las entrevistas`;
-						document.getElementById('boton_carga_trabajadores').disabled = false;
 
 				}		
 			 }else{
-				document.getElementById('boton_carga_trabajadores').disabled = false;
 
 			 }
 			 const generosContainer = document.getElementById('generos_container');
@@ -3298,12 +3296,10 @@ function validarValores() {
 					const seleccionHombres = Math.round(resultado * (porcentajeHombres / 100));
 					const seleccionMujeres = Math.round(resultado * (porcentajeMujeres / 100));
 					document.getElementById('seleccion').innerText = `Se seleccionaran de forma aleatoria ${seleccionHombres} hombres y ${seleccionMujeres} mujeres en el centro de trabajo para las entrevistas`;
-					document.getElementById('boton_carga_trabajadores').disabled = false;
 					
 
 				}
 			 }else{
-				document.getElementById('boton_carga_trabajadores').disabled = false;
 
 			 }
 
@@ -3365,12 +3361,10 @@ function validarValoresMuestra() {
 						const seleccionHombres = Math.round(totalEmpleadosMuestra * (porcentajeHombres / 100));
 						const seleccionMujeres = Math.round(totalEmpleadosMuestra * (porcentajeMujeres / 100));
 						document.getElementById('seleccion').innerText = `Se seleccionaran de forma aleatoria ${seleccionHombres} hombres y ${seleccionMujeres} mujeres en el centro de trabajo para las entrevistas`;
-						document.getElementById('boton_carga_trabajadores').disabled = false;
 
 
 				}		
 			 }else{
-				document.getElementById('boton_carga_trabajadores').disabled = false;
 
 			 }
 			 const generosContainer = document.getElementById('generos_container');
@@ -3414,12 +3408,10 @@ function validarValoresMuestra() {
 					const seleccionHombres = Math.round(totalEmpleadosMuestra * (porcentajeHombres / 100));
 					const seleccionMujeres = Math.round(totalEmpleadosMuestra * (porcentajeMujeres / 100));
 					document.getElementById('seleccion').innerText = `Se seleccionaran de forma aleatoria ${seleccionHombres} hombres y ${seleccionMujeres} mujeres en el centro de trabajo para las entrevistas`;
-					document.getElementById('boton_carga_trabajadores').disabled = false;
 					
 
 				}
 			 }else{
-				document.getElementById('boton_carga_trabajadores').disabled = false;
 
 			 }
 
@@ -3516,8 +3508,8 @@ function validarEmpleados() {
 			document.getElementById('option1').checked = true;
 			//document.getElementById('option1').disabled = false; 
           	//document.getElementById('option2').disabled = false;
+			  document.getElementById('option3').disabled = false;
 			  document.getElementById('option3').checked = true;
-            document.getElementById('option3').disabled = false;
 
         }
     }
@@ -3551,7 +3543,6 @@ function calcularResultado() {
     if (!isNaN(totalEmpleados) && totalEmpleados !== "") {
         if (opcionSeleccionada === "opcion1") {
             resultado = totalEmpleados;
-			document.getElementById('boton_carga_trabajadores').disabled = false;
 
         } else if (opcionSeleccionada === "opcion2") {
             let a = 0.9604;
@@ -3656,6 +3647,8 @@ $("#boton_guardar_normativa").click(function (event) {
 				});
 
 				$('#boton_guardar_normativa').html('Guardar <i class="fa fa-save"></i>');
+				document.getElementById('boton_carga_trabajadores').disabled = false;
+
 
 			},
 			beforeSend: function () {

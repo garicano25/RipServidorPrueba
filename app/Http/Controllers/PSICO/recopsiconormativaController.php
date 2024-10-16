@@ -261,27 +261,34 @@ class recopsiconormativaController extends Controller
                 }
             }
 
+                $RECPSICO_ID = $request['RECPSICO_ID'];
+                $normativaExists = recopsiconormativaModel::where('RECPSICO_ID', $RECPSICO_ID)->exists();
 
-             if ($request['ID_RECOPSICONORMATIVA'] == 0) //nuevo
-             {
-                 // AUTO_INCREMENT
+
+                if ($normativaExists) {
+                    
+                    $normativapsico = recopsiconormativaModel::where('RECPSICO_ID', $RECPSICO_ID);
+                    $normativapsico->update([
+                        'RECPSICO_TOTALTRABAJADORES' => $request['RECPSICO_TOTALTRABAJADORES'],
+                        'RECPSICO_TIPOAPLICACION' => $request['RECPSICO_TIPOAPLICACION'],
+                        'RECPSICO_TOTALHOMBRESTRABAJO' => $request['RECPSICO_TOTALHOMBRESTRABAJO'],
+                        'RECPSICO_TOTALMUJERESTRABAJO' => $request['RECPSICO_TOTALMUJERESTRABAJO'],
+                        'RECPSICO_TOTALAPLICACION' => $request['RECPSICO_TOTALAPLICACION'],
+                        'RECPSICO_GENEROS' => $request['RECPSICO_GENEROS'],
+                        'RECPSICO_GUIAI' => $request['RECPSICO_GUIAI'],
+                        'RECPSICO_GUIAII' => $request['RECPSICO_GUIAII'],
+                        'RECPSICO_GUIAIII' => $request['RECPSICO_GUIAIII'],
+                        'RECPSICO_GUIAV' => $request['RECPSICO_GUIAV'],
+                        'updated_at' => now(),
+                    ]);
+                    $dato["msj"] = 'Información modificada correctamente';
+                }else{
                  DB::statement('ALTER TABLE recopsiconormativa AUTO_INCREMENT=1');
- 
-                 // guardar
+
                  $normativapsico = recopsiconormativaModel::create($request->all());
- 
-                 // mensaje
+
                  $dato["msj"] = 'Informacion guardada correctamente';
-             } else //editar
-             {
-                 // modificar
-                  $normativapsico = recopsiconormativaModel::findOrFail($request['ID_RECOPSICONORMATIVA']);
- 
-                 $normativapsico->update($request->all());
- 
-                 // mensaje
-                 $dato["msj"] = 'Informacion modificada correctamente';
-             }
+                }
  
 
              // respuesta

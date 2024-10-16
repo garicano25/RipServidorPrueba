@@ -1774,27 +1774,11 @@ Route::get('ejecuciontrabajadoresnombres', ['as' => 'ejecucionpsico.trabajadores
 Route::put('actualizarFechasOnline', ['as' => 'PSICO.actualizarFechasOnline', 'uses' => 'PSICO\ejecucionPsicoController@actualizarFechasOnline']);
 
 //INFORMES
-
 Route::resource('informesPsicosocial', 'PSICO\informesrecoPsicoController');
 
 
-//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-//////////////////////////////////////////////////PROGRAMA PSICOSOCIAL///////////////////////////////////////////////////////
-//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
-
-
-//Route::resource('seguimientoPsicosocial', 'PSICO\seguimientoPsicoController');
-//Route::resource('programaPsicosocial', 'PSICO\programaPsicoController');
-//Route::get('programatrabajoexcel/{proyecto_id}/{proyectoordentrabajo_id}', ['as' => 'programa.programatrabajoexcel', 'uses' => 'programa\programaController@programatrabajoexcel']);
-//Route::get('programatrabajoexcelcliente/{proyecto_id}/{proyectoordentrabajo_id}', ['as' => 'programa.programatrabajoexcelcliente', 'uses' => 'programa\programaController@programatrabajoexcelcliente']);
-
-//Route::get('listadoproyectos', ['as' => 'seguimiento.listadoproyectos', 'uses' => 'programa\seguimientoController@listadoproyectos']);
-//Route::get('detalletablaproyecto/{fase_id}/{proyecto_id}/{id}', ['as' => 'seguimiento.detalletablaproyecto', 'uses' => 'programa\seguimientoController@detalletablaproyecto']);
-//Route::get('detalleprograma/{proyecto_id}/{proyectoordentrabajo_id}/{proyectoordentrabajodatos_id}', ['as' => 'seguimiento.detalleprograma', 'uses' => 'programa\seguimientoController@detalleprograma']);
-//Route::get('detalleprogramagestion/{proyecto_id}/{proyectoordentrabajo_id}/{fase_id}', ['as' => 'seguimiento.detalleprogramagestion', 'uses' => 'programa\seguimientoController@detalleprogramagestion']);
-
-
+//CATÁLOGOS
+Route::resource('recpsicocatalogos', 'PSICO\recpsicocatalogosController');
 
 
 
