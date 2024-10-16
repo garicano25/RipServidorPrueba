@@ -903,6 +903,23 @@ use Illuminate\Support\Str;
     @endif
 
 
+
+    @if(request()->is('recpsicocatalogos'))
+    {{-- datatable --}}
+
+    <script src="/js/jasny-bootstrap.js"></script>
+
+    <script src="/assets/plugins/datatables/jquery.dataTables.min.js"></script>
+    <script src="/assets/plugins/datatables/dataTables.rowsGroup.js"></script>
+    <script src="/js_sitio/recpsico_catalogos.js?v=1.0"></script>
+    <script src="/assets/plugins/dropify/dist/js/dropify.min.js"></script>
+    <script src="/assets/plugins/select-search/selectize.js" type="text/javascript"></script>
+
+
+
+    @endif
+
+
     @if(request()->is('proyectos'))
 
     <!-- Form wizard -->
