@@ -764,11 +764,11 @@ class recsensorialquimicosreportewordController extends Controller
                                 CONCAT(recsensorialmaquinaria.recsensorialmaquinaria_cantidad, " PZ"),
                                 CONCAT(recsensorialmaquinaria.recsensorialmaquinaria_cantidad, " de ", recsensorialmaquinaria.recsensorialmaquinaria_contenido , " " , 
                                     CASE recsensorialmaquinaria.recsensorialmaquinaria_unidadMedida
-                                        WHEN 1 THEN "MM"
+                                        WHEN 1 THEN "ml"
                                         WHEN 2 THEN "L"
                                         WHEN 3 THEN "M³"
-                                        WHEN 4 THEN "G"
-                                        WHEN 5 THEN "Kl"
+                                        WHEN 4 THEN "gr"
+                                        WHEN 5 THEN "kg"
                                         WHEN 6 THEN "T"
                                         ELSE "ND"
                                     END
