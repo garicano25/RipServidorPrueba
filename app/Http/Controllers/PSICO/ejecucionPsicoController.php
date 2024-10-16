@@ -214,12 +214,18 @@ class ejecucionPsicoController extends Controller
             } else { //-> Envio unico
 
                 //Obtenemos los datos del trabajador segun el id
-                $datos = DB::select('SELECT RECPSICOTRABAJADOR_NOMBRE, RECPSICOTRABAJADOR_CORREO
-                                    FROM recopsicotrabajadores
-                                    WHERE ID_RECOPSICOTRABAJADOR = ?', [$idPersonal]);
+                $datos = DB::select('SELECT t.RECPSICOTRABAJADOR_NOMBRE,
+                                            t.RECPSICOTRABAJADOR_CORREO,
+                                            s.TRABAJADOR_FECHAINICIO,
+                                            s.TRABAJADOR_FECHAFIN,
+                                            IF(s.TRABAJADOR_FECHAINICIO = s.TRABAJADOR_FECHAFIN , 0 ,DATEDIFF(s.TRABAJADOR_FECHAINICIO, s.TRABAJADOR_FECHAFIN)) AS DIAS
+                                FROM recopsicotrabajadores t
+                                LEFT JOIN seguimientotrabajadores s ON s.TRABAJADOR_ID = t.ID_RECOPSICOTRABAJADOR
+                                WHERE t.ID_RECOPSICOTRABAJADOR = ?', [$idPersonal]);
 
                 $nombre = $datos[0]->RECPSICOTRABAJADOR_NOMBRE;
                 $correo = $datos[0]->RECPSICOTRABAJADOR_CORREO;
+                $dias = $datos[0]->DIAS;
 
 
                 //Obtenemos los datos del reconocimiento para las guias
@@ -237,11 +243,11 @@ class ejecucionPsicoController extends Controller
                 $encryptedGuia3 = Crypt::encrypt($guia3);
                 $encryptedId = Crypt::encrypt($idPersonal);
 
-                Mail::to($correo)->send(new sendGuiaPsico($nombre, $encryptedGuia1, $encryptedGuia2, $encryptedGuia3, $encryptedId));
+                Mail::to($correo)->send(new sendGuiaPsico($nombre, $encryptedGuia1, $encryptedGuia2, $encryptedGuia3, $encryptedId, $dias));
             }
 
             //Retornamos respuesta
-            $response["msj"] = "Correo envio correctamente";
+            $response["msj"] = "Correo enviado correctamente";
             return response()->json($response, 200);
         
         }  catch (Exception $e) {

@@ -16,14 +16,16 @@ class sendGuiaPsico extends Mailable
     public $guia2;
     public $guia3;
     public $id;
+    public $dias;
 
-    public function __construct($name, $guia1, $guia2, $guia3, $id)
+    public function __construct($name, $guia1, $guia2, $guia3, $id, $dias)
     {
         $this->name = $name;
         $this->guia1 = $guia1;
         $this->guia2 = $guia2;
         $this->guia3 = $guia3;
         $this->id = $id;
+        $this->dias = $dias;
     }
 
   
@@ -31,6 +33,6 @@ class sendGuiaPsico extends Mailable
     {
         // return $this->view('email.psico')->from("Quien lo manda")->subject("Factor de Riesgo Psicosocial - RES")->attachFromStorage("Pasar nombnre de un archivo o ruta para mandarlo");
 
-        return $this->view('email.psico')->subject("Factor de Riesgo Psicosocial - RES");
+        return $this->view('email.psico')->subject("Evaluación del Factor de Riesgo Psicosocial (NOM-035-STPS-2018)");
     }
 }
