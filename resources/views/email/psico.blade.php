@@ -8,10 +8,24 @@
 </head>
 
 <body>
-    <h1>Saludos, {{ $name }}</h1>
-    <p>Este este mensaje encontraras una liga para poder realizar el formulario de Psicosocial</p>
+    <h3>Estimado(a): {{ $name }}</h3>
+    <p>A continuación encontrará un enlace con los cuestionarios para evaluar los factores de riesgo psicosocial de su centro de trabajo, de acuerdo con lo establecido en la NOM-035-STPS-2018.</p>
 
-    <a href="http://127.0.0.1:8000/Guia/{{ $guia1 }}/{{ $guia2 }}/{{ $guia3 }}/{{ $id }}">Visítanos aquí</a>
+    @if ($dias == 0)
+
+        <p>La prueba es individual, confidencial y solo tiene el dia de  hoy para realizarla. </p>
+   
+    @else
+    
+        <p>La prueba es individual, confidencial y a partir de la fecha cuenta con {{ $dias }} días para realizarla. </p>
+    
+    @endif
+
+    <p>En caso de cualquier inquietud o información adicional que requiera, por favor no dude en contactarnos al XXXXXXXXXXXXXX (nombre del psicólogo asignado???)</p>
+    <p>Cordialmente,</p>
+    <p>Coordinación de evaluación del FRP</p>
+
+    <a href="http://127.0.0.1:8000/Guia/{{ $guia1 }}/{{ $guia2 }}/{{ $guia3 }}/{{ $id }}">Responder cuestionario aquí</a>
 
 </body>
 
