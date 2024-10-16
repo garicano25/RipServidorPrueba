@@ -74,3 +74,48 @@ function jefetrabajadores() {
         });
     }
 }
+
+
+
+
+
+function clientesyusuariosguia3() {
+    const siSeleccionadoguia3 = document.getElementById("preguntaadi1_3si").checked;
+
+    if (siSeleccionadoguia3) {
+        document.getElementById("seccion2_3").style.display = "block";
+    } else {
+        document.getElementById("seccion2_3").style.display = "none";
+
+        const inputsSeccionguia3 = document.querySelectorAll('#seccion2_3 input[type="radio"]');
+        inputsSeccionguia3.forEach(function(input) {
+            if (input.type === "radio" || input.type === "checkbox") {
+                input.checked = false;
+            } else {
+                input.value = "";
+            }
+        });
+    }
+}
+
+
+
+
+function jefetrabajadoresguia3() {
+    const sijefeguia3 = document.getElementById("preguntaadi2_3si").checked;
+
+    if (sijefeguia3) {
+        document.getElementById("seccion4_3").style.display = "block";
+    } else {
+        document.getElementById("seccion4_3").style.display = "none";
+
+        const seccion4guia3 = document.querySelectorAll('#seccion4_3 input[type="radio"]');
+        seccion4guia3.forEach(function(input) {
+            if (input.type === "radio" || input.type === "checkbox") {
+                input.checked = false;
+            } else {
+                input.value = "";
+            }
+        });
+    }
+}

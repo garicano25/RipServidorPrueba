@@ -178,7 +178,7 @@
                     </div>
                     <div id="pregunta5" style="display: flex; justify-content: space-between; align-items: center; width: 100%; margin-bottom: 10px;">
                         <p style="margin: 0; flex: 1;"><i class="fa fa-question-circle" aria-hidden="true" title=""></i>
-                            Secuestros?</p>
+                            Secuestro?</p>
                         <div style="display: flex; align-items: center; gap: 20px;">
                             <div>
                                 <label for="pregunta5_si" style="margin-right: 5px;">Sí</label>
@@ -464,7 +464,7 @@
                 <div id="seccion1_2" class="mt-3" style="display: block; padding: 10px;">
                     <div id="pregunta1_2" class="mt-4" style="display: flex; justify-content: space-between; align-items: center; width: 100%; margin-bottom: 10px;">
                         <p style="margin: 0; flex: 1;"><i class="fa fa-question-circle" aria-hidden="true" title=""></i>
-                            Mi trabajo me exige hacer mucho esfuerzo físico</p>
+                            Mi trabajo me exige hacer mucho esfuerzo &nbsp;&nbsp; físico</p>
                         <div style="display: flex; align-items: center; gap: 20px;">
                             <div>
                                 <label for="preguta1_siempre" style="margin-right: 5px;">Siempre</label>
@@ -490,7 +490,7 @@
                     </div>
                     <div id="pregunta2_2" class="mt-4" style="display: flex; justify-content: space-between; align-items: center; width: 100%; margin-bottom: 10px;">
                         <p style="margin: 0; flex: 1;"><i class="fa fa-question-circle" aria-hidden="true" title=""></i>
-                            Me preocupa sufrir un accidente en mi &nbsp;
+                            Me preocupa sufrir un accidente en mi 
                             trabajo </p>
                         <div style="display: flex; align-items: center; gap: 20px;">
                             <div>
@@ -517,7 +517,7 @@
                     </div>
                     <div id="pregunta3_2" class="mt-4" style="display: flex; justify-content: space-between; align-items: center; width: 100%; margin-bottom: 10px;">
                         <p style="margin: 0; flex: 1;"><i class="fa fa-question-circle" aria-hidden="true" title=""></i>
-                            Considero que las actividades que realizo &nbsp;&nbsp;
+                            Considero que las actividades que realizo 
                             son peligrosas
                         </p>
                         <div style="display: flex; align-items: center; gap: 20px;">
@@ -600,7 +600,7 @@
 
                     <div id="pregunta6_2" class="mt-4" style="display: flex; justify-content: space-between; align-items: center; width: 100%; margin-bottom: 10px;">
                         <p style="margin: 0; flex: 1;"><i class="fa fa-question-circle" aria-hidden="true" title=""></i>
-                            Considero que es necesario mantener un ritmo de trabajo acelerado
+                            Considero que es necesario mantener un <br> ritmo de trabajo acelerado
                         </p>
                         <div style="display: flex; align-items: center; gap: 20px;">
                             <div>
@@ -684,7 +684,7 @@
                     </div>
                     <div id="pregunta9_2" class="mt-4" style="display: flex; justify-content: space-between; align-items: center; width: 100%; margin-bottom: 10px;">
                         <p style="margin: 0; flex: 1;"><i class="fa fa-question-circle" aria-hidden="true" title=""></i>
-                            Mi trabajo exige que atienda varios asuntos &nbsp;&nbsp;
+                            Mi trabajo exige que atienda varios asuntos <br>
                             al mismo tiempo
                         </p>
                         <div style="display: flex; align-items: center; gap: 20px;">
@@ -742,7 +742,7 @@
                     </div>
                     <div id="pregunta11_2" class="mt-4" style="display: flex; justify-content: space-between; align-items: center; width: 100%; margin-bottom: 10px;">
                         <p style="margin: 0; flex: 1;"><i class="fa fa-question-circle" aria-hidden="true" title=""></i>
-                            Respondo ante mi jefe por los resultados de toda mi área de trabajo
+                            Respondo ante mi jefe por los resultados de  <br> toda mi área de trabajo
                         </p>
                         <div style="display: flex; align-items: center; gap: 20px;">
                             <div>
@@ -854,7 +854,7 @@
                     </div>
                     <div id="pregunta15_2" class="mt-4" style="display: flex; justify-content: space-between; align-items: center; width: 100%; margin-bottom: 10px;">
                         <p style="margin: 0; flex: 1;"><i class="fa fa-question-circle" aria-hidden="true" title=""></i>
-                            Mi trabajo me exige laborar en días de descanso, festivos o fines de semana
+                            Mi trabajo me exige laborar en días de <br> descanso, festivos o fines de semana
                         </p>
                         <div style="display: flex; align-items: center; gap: 20px;">
                             <div>
@@ -881,7 +881,7 @@
                     </div>
                     <div id="pregunta16_2" class="mt-4" style="display: flex; justify-content: space-between; align-items: center; width: 100%; margin-bottom: 10px;">
                         <p style="margin: 0; flex: 1;"><i class="fa fa-question-circle" aria-hidden="true" title=""></i>
-                            Considero que el tiempo en el trabajo es mucho y perjudica mis actividades familiares o personales
+                            Considero que el tiempo en el trabajo es <br> mucho y perjudica mis actividades familiares <br> o personales
                         </p>
                         <div style="display: flex; align-items: center; gap: 20px;">
                             <div>
@@ -908,7 +908,7 @@
                     </div>
                     <div id="pregunta17_2" class="mt-4" style="display: flex; justify-content: space-between; align-items: center; width: 100%; margin-bottom: 10px;">
                         <p style="margin: 0; flex: 1;"><i class="fa fa-question-circle" aria-hidden="true" title=""></i>
-                            Pienso en las actividades familiares o personales cuando estoy en mi trabajo
+                            Pienso en las actividades familiares o <br> personales cuando estoy en mi trabajo
                         </p>
                         <div style="display: flex; align-items: center; gap: 20px;">
                             <div>
@@ -969,7 +969,7 @@
 
                     <div id="pregunta19_2" class="mt-4" style="display: flex; justify-content: space-between; align-items: center; width: 100%; margin-bottom: 10px;">
                         <p style="margin: 0; flex: 1;"><i class="fa fa-question-circle" aria-hidden="true" title=""></i>
-                            En mi trabajo puedo aspirar a un mejor &nbsp;
+                            En mi trabajo puedo aspirar a un mejor <br>
                             puesto
                         </p>
                         <div style="display: flex; align-items: center; gap: 20px;">
@@ -1024,7 +1024,7 @@
                     </div>
                     <div id="pregunta21_2" class="mt-4" style="display: flex; justify-content: space-between; align-items: center; width: 100%; margin-bottom: 10px;">
                         <p style="margin: 0; flex: 1;"><i class="fa fa-question-circle" aria-hidden="true" title=""></i>
-                            Puedo decidir la velocidad a la que realizo &nbsp; mis actividades en mi trabajo
+                            Puedo decidir la velocidad a la que realizo mis actividades en mi trabajo
                         </p>
                         <div style="display: flex; align-items: center; gap: 20px;">
                             <div>
@@ -1051,7 +1051,7 @@
                     </div>
                     <div id="pregunta22_2" class="mt-4" style="display: flex; justify-content: space-between; align-items: center; width: 100%; margin-bottom: 10px;">
                         <p style="margin: 0; flex: 1;"><i class="fa fa-question-circle" aria-hidden="true" title=""></i>
-                            Puedo cambiar el orden de las actividades que realizo en mi trabajo
+                            Puedo cambiar el orden de las actividades <br> que realizo en mi trabajo
                         </p>
                         <div style="display: flex; align-items: center; gap: 20px;">
                             <div>
@@ -1111,7 +1111,7 @@
                     </div>
                     <div id="pregunta24_2" class="mt-4" style="display: flex; justify-content: space-between; align-items: center; width: 100%; margin-bottom: 10px;">
                         <p style="margin: 0; flex: 1;"><i class="fa fa-question-circle" aria-hidden="true" title=""></i>
-                            Me explican claramente los resultados que debo obtener en mi trabajo
+                            Me explican claramente los resultados que <br> debo obtener en mi trabajo
                         </p>
                         <div style="display: flex; align-items: center; gap: 20px;">
                             <div>
@@ -1193,7 +1193,7 @@
                     </div>
                     <div id="pregunta27_2" class="mt-4" style="display: flex; justify-content: space-between; align-items: center; width: 100%; margin-bottom: 10px;">
                         <p style="margin: 0; flex: 1;"><i class="fa fa-question-circle" aria-hidden="true" title=""></i>
-                            Recibo capacitación útil para hacer mi &nbsp;
+                            Recibo capacitación útil para hacer mi <br>
                             trabajo
                         </p>
                         <div style="display: flex; align-items: center; gap: 20px;">
@@ -1256,7 +1256,7 @@
 
                     <div id="pregunta29_2" class="mt-4" style="display: flex; justify-content: space-between; align-items: center; width: 100%; margin-bottom: 10px;">
                         <p style="margin: 0; flex: 1;"><i class="fa fa-question-circle" aria-hidden="true" title=""></i>
-                            Mi jefe ayuda a solucionar los problemas que se presentan en el trabajo
+                            Mi jefe ayuda a solucionar los problemas que <br> se presentan en el trabajo
                         </p>
                         <div style="display: flex; align-items: center; gap: 20px;">
                             <div>
@@ -1312,7 +1312,7 @@
                     </div>
                     <div id="pregunta31_2" class="mt-4" style="display: flex; justify-content: space-between; align-items: center; width: 100%; margin-bottom: 10px;">
                         <p style="margin: 0; flex: 1;"><i class="fa fa-question-circle" aria-hidden="true" title=""></i>
-                            Cuando tenemos que realizar trabajo de equipo los compañeros colaboran
+                            Cuando tenemos que realizar trabajo de <br> equipo los compañeros colaboran
                         </p>
                         <div style="display: flex; align-items: center; gap: 20px;">
                             <div>
@@ -1339,7 +1339,7 @@
                     </div>
                     <div id="pregunta32_2" class="mt-4" style="display: flex; justify-content: space-between; align-items: center; width: 100%; margin-bottom: 10px;">
                         <p style="margin: 0; flex: 1;"><i class="fa fa-question-circle" aria-hidden="true" title=""></i>
-                            Mis compañeros de trabajo me ayudan cuando tengo dificultades
+                            Mis compañeros de trabajo me ayudan <br> cuando tengo dificultades
                         </p>
                         <div style="display: flex; align-items: center; gap: 20px;">
                             <div>
@@ -1368,7 +1368,7 @@
 
                     <div id="pregunta33_2" class="mt-4" style="display: flex; justify-content: space-between; align-items: center; width: 100%; margin-bottom: 10px;">
                         <p style="margin: 0; flex: 1;"><i class="fa fa-question-circle" aria-hidden="true" title=""></i>
-                            En mi trabajo puedo expresarme libremente sin interrupciones
+                            En mi trabajo puedo expresarme libremente <br> sin interrupciones
                         </p>
                         <div style="display: flex; align-items: center; gap: 20px;">
                             <div>
@@ -1453,7 +1453,7 @@
 
                     <div id="pregunta36_2" class="mt-4" style="display: flex; justify-content: space-between; align-items: center; width: 100%; margin-bottom: 10px;">
                         <p style="margin: 0; flex: 1;"><i class="fa fa-question-circle" aria-hidden="true" title=""></i>
-                            Se ignora mi presencia o se me excluye de las reuniones de trabajo y en la toma de decisiones
+                            Se ignora mi presencia o se me excluye de <br> las reuniones de trabajo y en la toma de decisiones
                         </p>
                         <div style="display: flex; align-items: center; gap: 20px;">
                             <div>
@@ -1480,7 +1480,7 @@
                     </div>
                     <div id="pregunta37_2" class="mt-4" style="display: flex; justify-content: space-between; align-items: center; width: 100%; margin-bottom: 10px;">
                         <p style="margin: 0; flex: 1;"><i class="fa fa-question-circle" aria-hidden="true" title=""></i>
-                            Se manipulan las situaciones de trabajo para hacerme parecer un mal trabajador
+                            Se manipulan las situaciones de trabajo <br> para hacerme parecer un mal trabajador
                         </p>
                         <div style="display: flex; align-items: center; gap: 20px;">
                             <div>
@@ -1509,7 +1509,7 @@
 
                     <div id="pregunta38_2" class="mt-4" style="display: flex; justify-content: space-between; align-items: center; width: 100%; margin-bottom: 10px;">
                         <p style="margin: 0; flex: 1;"><i class="fa fa-question-circle" aria-hidden="true" title=""></i>
-                            Se ignoran mis éxitos laborales y se atribuyen a otros trabajadores
+                            Se ignoran mis éxitos laborales y se atribuyen <br> a otros trabajadores
                         </p>
                         <div style="display: flex; align-items: center; gap: 20px;">
                             <div>
@@ -1537,7 +1537,7 @@
 
                     <div id="pregunta39_2" class="mt-4" style="display: flex; justify-content: space-between; align-items: center; width: 100%; margin-bottom: 10px;">
                         <p style="margin: 0; flex: 1;"><i class="fa fa-question-circle" aria-hidden="true" title=""></i>
-                            Me bloquean o impiden las oportunidades que tengo para obtener ascenso o mejora en mi trabajo
+                            Me bloquean o impiden las oportunidades <br> que tengo para obtener ascenso o mejora <br>en mi trabajo
                         </p>
                         <div style="display: flex; align-items: center; gap: 20px;">
                             <div>
@@ -1564,7 +1564,7 @@
                     </div>
                     <div id="pregunta40_2" class="mt-4" style="display: flex; justify-content: space-between; align-items: center; width: 100%; margin-bottom: 10px;">
                         <p style="margin: 0; flex: 1;"><i class="fa fa-question-circle" aria-hidden="true" title=""></i>
-                            He presenciado actos de violencias en mi centro de trabajo
+                            He presenciado actos de violencias en mi <br> centro de trabajo
                         </p>
                         <div style="display: flex; align-items: center; gap: 20px;">
                             <div>
@@ -1707,7 +1707,7 @@
                 <div id="seccion3_2" class="mt-2" style="display: block; padding: 10px;">
                     <div id="preguntaadi2_2" class="mt-2" style="display: flex; align-items: center; margin-bottom: 10px;">
                         <p style="margin: 0; white-space: nowrap; margin-right: 10px;">
-                            Soy jefe de otros trabajadores
+                            Soy jefe de otros trabajadores:
                         </p>
                         <div style="display: flex; align-items: center; gap: 10px; margin-left: 10px;">
                             <div style="display: inline-block;">
@@ -1757,9 +1757,9 @@
                             </div>
                         </div>
                     </div>
-                    <div id="pregunta45_2" class="mt-3" style="display: flex; justify-content: space-between; align-items: center; width: 100%; margin-bottom: 10px;">
+                    <div id="pregunta45_2" class="mt-4" style="display: flex; justify-content: space-between; align-items: center; width: 100%; margin-bottom: 10px;">
                         <p style="margin: 0; flex: 1;"><i class="fa fa-question-circle" aria-hidden="true" title=""></i>
-                            Dificultan el logro de los resultados del &nbsp;
+                            Dificultan el logro de los resultados del <br>
                             trabajo
                         </p>
                         <div style="display: flex; align-items: center; gap: 20px;">
@@ -1785,9 +1785,9 @@
                             </div>
                         </div>
                     </div>
-                    <div id="pregunta46_2" class="mt-3" style="display: flex; justify-content: space-between; align-items: center; width: 100%; margin-bottom: 10px;">
+                    <div id="pregunta46_2" class="mt-4" style="display: flex; justify-content: space-between; align-items: center; width: 100%; margin-bottom: 10px;">
                         <p style="margin: 0; flex: 1;"><i class="fa fa-question-circle" aria-hidden="true" title=""></i>
-                            Ignoran las sugerencias para mejorar su trabajo
+                            Ignoran las sugerencias para mejorar <br> su trabajo
                         </p>
                         <div style="display: flex; align-items: center; gap: 20px;">
                             <div>
@@ -3645,7 +3645,285 @@
                             </div>
                         </div>
                     </div>
+
+                    
+                <div class="mt-5">
+                    <h6>Las preguntas siguientes están relacionadas con la atención a clientes y usuarios.
+                    </h6>
+                </div> 	
+    
+                <div id="preguntaadi1_3" class="mt-5" style="display: flex; align-items: center; margin-bottom: 10px;">
+                    <p style="margin: 0; white-space: nowrap; margin-right: 10px;">
+                        En mi trabajo debo brindar servicio a clientes o usuarios:
+                    </p>
+                    <div style="display: flex; align-items: center; gap: 10px; margin-left: 10px;">
+                        <div style="display: inline-block;">
+                            <label for="preguntaadi1_3si" style="line-height: 1; margin-right: 5px;">Sí</label>
+                            <input type="radio" id="preguntaadi1_3si" name="GUIAE3_1" value="1" style="vertical-align: middle;" required onchange="clientesyusuariosguia3()">
+                        </div>
+                        <div style="display: inline-block;">
+                            <label for="preguntaadi1_3no" style="line-height: 1; margin-right: 5px;">No</label>
+                            <input type="radio" id="preguntaadi1_3no" name="GUIAE3_1" value="0" style="vertical-align: middle;" onchange="clientesyusuariosguia3()">
+                        </div>
+                    </div>
+                </div> 
+                <div class="mt-3">
+                    <h6>Si su respuesta fue "SI", responda las preguntas siguientes. Si su respuesta fue "NO" pase a las preguntas de la sección siguiente.
+                    </h6>
+                </div> 
+            </div>
+
+            <div id="seccion2_3" class="mt-2" style="display: none; padding: 10px;">
+                <div id="pregunta65_3" class="mt-3" style="display: flex; justify-content: space-between; align-items: center; width: 100%; margin-bottom: 10px;">
+                    <p style="margin: 0; flex: 1;"><i class="fa fa-question-circle" aria-hidden="true" title=""></i>
+                        Atiendo clientes o usuarios muy enojados
+                    </p>
+                    <div style="display: flex; align-items: center; gap: 20px;">
+                        <div>
+                            <label for="preguta65_3siempre" style="margin-right: 5px;">Siempre</label>
+                            <input type="radio" id="preguta65_3siempre" name="GUIA3_65" value="">
+                        </div>
+                        <div>
+                            <label for="preguta65_3casi" style="margin-right: 5px;">Casí siempre</label>
+                            <input type="radio" id="preguta65_3casi" name="GUIA3_65" value="">
+                        </div>
+                        <div>
+                            <label for="preguta65_3algunas" style="margin-right: 5px;">Algunas veces</label>
+                            <input type="radio" id="preguta65_3algunas" name="GUIA3_65" value="">
+                        </div>
+                        <div>
+                            <label for="preguta65_3casinunca" style="margin-right: 5px;">Casi nunca</label>
+                            <input type="radio" id="preguta65_3casinunca" name="GUIA3_65" value="">
+                        </div>
+                        <div>
+                            <label for="preguta65_3nunca" style="margin-right: 5px;">Nunca</label>
+                            <input type="radio" id="preguta65_3nunca" name="GUIA3_65" value="">
+                        </div>
+                    </div>
                 </div>
+                <div id="pregunta66_3" class="mt-4" style="display: flex; justify-content: space-between; align-items: center; width: 100%; margin-bottom: 10px;">
+                    <p style="margin: 0; flex: 1;"><i class="fa fa-question-circle" aria-hidden="true" title=""></i>
+                        Mi trabajo me exige atender personas muy necesitadas de ayuda o enfermas
+                    </p>
+                    <div style="display: flex; align-items: center; gap: 20px;">
+                        <div>
+                            <label for="preguta66_3siempre" style="margin-right: 5px;">Siempre</label>
+                            <input type="radio" id="preguta66_3siempre" name="GUIA3_66" value="">
+                        </div>
+                        <div>
+                            <label for="preguta66_3casi" style="margin-right: 5px;">Casí siempre</label>
+                            <input type="radio" id="preguta66_3casi" name="GUIA3_66" value="">
+                        </div>
+                        <div>
+                            <label for="preguta66_3algunas" style="margin-right: 5px;">Algunas veces</label>
+                            <input type="radio" id="preguta66_3algunas" name="GUIA3_66" value="">
+                        </div>
+                        <div>
+                            <label for="preguta66_3casinunca" style="margin-right: 5px;">Casi nunca</label>
+                            <input type="radio" id="preguta66_3casinunca" name="GUIA3_66" value="">
+                        </div>
+                        <div>
+                            <label for="preguta66_3nunca" style="margin-right: 5px;">Nunca</label>
+                            <input type="radio" id="preguta66_3nunca" name="GUIA3_66" value="">
+                        </div>
+                    </div>
+                </div>
+                <div id="pregunta67_3" class="mt-5" style="display: flex; justify-content: space-between; align-items: center; width: 100%; margin-bottom: 10px;">
+                    <p style="margin: 0; flex: 1;"><i class="fa fa-question-circle" aria-hidden="true" title=""></i>
+                        Para hacer mi trabajo debo demostrar sentimientos distintos a los míos
+                    </p>
+                    <div style="display: flex; align-items: center; gap: 20px;">
+                        <div>
+                            <label for="preguta67_3siempre" style="margin-right: 5px;">Siempre</label>
+                            <input type="radio" id="preguta67_3siempre" name="GUIA3_67" value="">
+                        </div>
+                        <div>
+                            <label for="preguta67_3casi" style="margin-right: 5px;">Casí siempre</label>
+                            <input type="radio" id="preguta67_3casi" name="GUIA3_67" value="">
+                        </div>
+                        <div>
+                            <label for="preguta67_3algunas" style="margin-right: 5px;">Algunas veces</label>
+                            <input type="radio" id="preguta67_3algunas" name="GUIA3_67" value="">
+                        </div>
+                        <div>
+                            <label for="preguta67_3casinunca" style="margin-right: 5px;">Casi nunca</label>
+                            <input type="radio" id="preguta67_3casinunca" name="GUIA3_67" value="">
+                        </div>
+                        <div>
+                            <label for="preguta67_3nunca" style="margin-right: 5px;">Nunca</label>
+                            <input type="radio" id="preguta67_3nunca" name="GUIA3_67" value="">
+                        </div>
+                    </div>
+                </div>
+                <div id="pregunta68_3" class="mt-5" style="display: flex; justify-content: space-between; align-items: center; width: 100%; margin-bottom: 10px;">
+                    <p style="margin: 0; flex: 1;"><i class="fa fa-question-circle" aria-hidden="true" title=""></i>
+                        He presenciado actos de violencia en mi centro de trabajo
+                    </p>
+                    <div style="display: flex; align-items: center; gap: 20px;">
+                        <div>
+                            <label for="preguta68_3siempre" style="margin-right: 5px;">Siempre</label>
+                            <input type="radio" id="preguta68_3siempre" name="GUIA3_68" value="">
+                        </div>
+                        <div>
+                            <label for="preguta68_3casi" style="margin-right: 5px;">Casí siempre</label>
+                            <input type="radio" id="preguta68_3casi" name="GUIA3_68" value="">
+                        </div>
+                        <div>
+                            <label for="preguta68_3algunas" style="margin-right: 5px;">Algunas veces</label>
+                            <input type="radio" id="preguta68_3algunas" name="GUIA3_68" value="">
+                        </div>
+                        <div>
+                            <label for="preguta68_3casinunca" style="margin-right: 5px;">Casi nunca</label>
+                            <input type="radio" id="preguta68_3casinunca" name="GUIA3_68" value="">
+                        </div>
+                        <div>
+                            <label for="preguta68_3nunca" style="margin-right: 5px;">Nunca</label>
+                            <input type="radio" id="preguta68_3nunca" name="GUIA3_68" value="">
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div id="seccion3_3" class="mt-2" style="display: block; padding: 10px;">
+                <div id="preguntaadi2_3" class="mt-2" style="display: flex; align-items: center; margin-bottom: 10px;">
+                    <p style="margin: 0; white-space: nowrap; margin-right: 10px;">
+                        Soy jefe de otros trabajadores
+                    </p>
+                    <div style="display: flex; align-items: center; gap: 10px; margin-left: 10px;">
+                        <div style="display: inline-block;">
+                            <label for="preguntaadi2_3si" style="line-height: 1; margin-right: 5px;">Sí</label>
+                            <input type="radio" id="preguntaadi2_3si" name="GUIAE3_2" value="1" style="vertical-align: middle;" required onchange="jefetrabajadoresguia3()">
+                        </div>
+                        <div style="display: inline-block;">
+                            <label for="preguntaadi2_3no" style="line-height: 1; margin-right: 5px;">No</label>
+                            <input type="radio" id="preguntaadi2_3no" name="GUIAE3_2" value="0" style="vertical-align: middle;" onchange="jefetrabajadoresguia3()">
+                        </div>
+                    </div>
+                </div>
+                <div class="mt-3">
+                    <h6>Si su respuesta fue "SI", responda las preguntas siguientes. Si su respuesta fue "NO", ha concluido el cuestionario.
+                    </h6>
+                </div>
+            </div>
+
+
+            <div id="seccion4_3" class="mt-2" style="display: none; padding: 10px;">
+                <div class="mt-3">
+                    <h6>Las siguientes preguntas están relacionadas con las actitudes de los trabajadores que supervisa.
+                    </h6>
+                </div>
+                <div id="pregunta69_3" class="mt-4" style="display: flex; justify-content: space-between; align-items: center; width: 100%; margin-bottom: 10px;">
+                    <p style="margin: 0; flex: 1;"><i class="fa fa-question-circle" aria-hidden="true" title=""></i>
+                        Comunican tarde los asuntos del trabajo
+                    </p>
+                    <div style="display: flex; align-items: center; gap: 20px;">
+                        <div>
+                            <label for="preguta69_3siempre" style="margin-right: 5px;">Siempre</label>
+                            <input type="radio" id="preguta69_3siempre" name="GUIA3_69" value="">
+                        </div>
+                        <div>
+                            <label for="preguta69_3casi" style="margin-right: 5px;">Casí siempre</label>
+                            <input type="radio" id="preguta69_3casi" name="GUIA3_69" value="">
+                        </div>
+                        <div>
+                            <label for="preguta69_3algunas" style="margin-right: 5px;">Algunas veces</label>
+                            <input type="radio" id="preguta69_3algunas" name="GUIA3_69" value="">
+                        </div>
+                        <div>
+                            <label for="preguta69_3casinunca" style="margin-right: 5px;">Casi nunca</label>
+                            <input type="radio" id="preguta69_3casinunca" name="GUIA3_69" value="">
+                        </div>
+                        <div>
+                            <label for="preguta69_3nunca" style="margin-right: 5px;">Nunca</label>
+                            <input type="radio" id="preguta69_3nunca" name="GUIA3_69" value="">
+                        </div>
+                    </div>
+                </div>
+                <div id="pregunta70_3" class="mt-4" style="display: flex; justify-content: space-between; align-items: center; width: 100%; margin-bottom: 10px;">
+                    <p style="margin: 0; flex: 1;"><i class="fa fa-question-circle" aria-hidden="true" title=""></i>
+                        Dificultan el logro de los resultados del trabajo
+                    </p>
+                    <div style="display: flex; align-items: center; gap: 20px;">
+                        <div>
+                            <label for="preguta70_3siempre" style="margin-right: 5px;">Siempre</label>
+                            <input type="radio" id="preguta70_3siempre" name="GUIA3_70" value="">
+                        </div>
+                        <div>
+                            <label for="preguta70_3casi" style="margin-right: 5px;">Casí siempre</label>
+                            <input type="radio" id="preguta70_3casi" name="GUIA3_70" value="">
+                        </div>
+                        <div>
+                            <label for="preguta70_3algunas" style="margin-right: 5px;">Algunas veces</label>
+                            <input type="radio" id="preguta70_3algunas" name="GUIA3_70" value="">
+                        </div>
+                        <div>
+                            <label for="preguta70_3casinunca" style="margin-right: 5px;">Casi nunca</label>
+                            <input type="radio" id="preguta70_3casinunca" name="GUIA3_70" value="">
+                        </div>
+                        <div>
+                            <label for="preguta70_3nunca" style="margin-right: 5px;">Nunca</label>
+                            <input type="radio" id="preguta70_3nunca" name="GUIA3_70" value="">
+                        </div>
+                    </div>
+                </div>
+
+                <div id="pregunta71_3" class="mt-4" style="display: flex; justify-content: space-between; align-items: center; width: 100%; margin-bottom: 10px;">
+                    <p style="margin: 0; flex: 1;"><i class="fa fa-question-circle" aria-hidden="true" title=""></i>
+                        Cooperan poco cuando se necesita
+                    </p>
+                    <div style="display: flex; align-items: center; gap: 20px;">
+                        <div>
+                            <label for="preguta71_3siempre" style="margin-right: 5px;">Siempre</label>
+                            <input type="radio" id="preguta71_3siempre" name="GUIA3_71" value="">
+                        </div>
+                        <div>
+                            <label for="preguta71_3casi" style="margin-right: 5px;">Casí siempre</label>
+                            <input type="radio" id="preguta71_3casi" name="GUIA3_71" value="">
+                        </div>
+                        <div>
+                            <label for="preguta71_3algunas" style="margin-right: 5px;">Algunas veces</label>
+                            <input type="radio" id="preguta71_3algunas" name="GUIA3_71" value="">
+                        </div>
+                        <div>
+                            <label for="preguta71_3casinunca" style="margin-right: 5px;">Casi nunca</label>
+                            <input type="radio" id="preguta71_3casinunca" name="GUIA3_71" value="">
+                        </div>
+                        <div>
+                            <label for="preguta71_3nunca" style="margin-right: 5px;">Nunca</label>
+                            <input type="radio" id="preguta71_3nunca" name="GUIA3_71" value="">
+                        </div>
+                    </div>
+                </div>
+
+                <div id="pregunta72_3" class="mt-4" style="display: flex; justify-content: space-between; align-items: center; width: 100%; margin-bottom: 10px;">
+                    <p style="margin: 0; flex: 1;"><i class="fa fa-question-circle" aria-hidden="true" title=""></i>
+                        Ignoran las sugerencias para mejorar su trabajo
+                    </p>
+                    <div style="display: flex; align-items: center; gap: 20px;">
+                        <div>
+                            <label for="preguta72_3siempre" style="margin-right: 5px;">Siempre</label>
+                            <input type="radio" id="preguta72_3siempre" name="GUIA3_72" value="">
+                        </div>
+                        <div>
+                            <label for="preguta72_3casi" style="margin-right: 5px;">Casí siempre</label>
+                            <input type="radio" id="preguta72_3casi" name="GUIA3_72" value="">
+                        </div>
+                        <div>
+                            <label for="preguta72_3algunas" style="margin-right: 5px;">Algunas veces</label>
+                            <input type="radio" id="preguta72_3algunas" name="GUIA3_72" value="">
+                        </div>
+                        <div>
+                            <label for="preguta72_3casinunca" style="margin-right: 5px;">Casi nunca</label>
+                            <input type="radio" id="preguta72_3casinunca" name="GUIA3_72" value="">
+                        </div>
+                        <div>
+                            <label for="preguta72_3nunca" style="margin-right: 5px;">Nunca</label>
+                            <input type="radio" id="preguta72_3nunca" name="GUIA3_72" value="">
+                        </div>
+                    </div>
+                </div>               
+            </div>
+
 
 
 
@@ -3676,19 +3954,12 @@
     </script>
 
 
-
-    <!-- ============================================================== -->
-    <!-- End Wrapper -->
-    <!-- ============================================================== -->
-    <!-- ============================================================== -->
-    <!-- All Jquery -->
-    <!-- ============================================================== -->
     <script src="/assets/plugins/jquery/jquery.min.js"></script>
     <script src="/assets/plugins/bootstrap/js/popper.min.js"></script>
     <script src="/assets/plugins/bootstrap/js/bootstrap.js"></script>
     <script src="/assets/plugins/sweetalert/sweetalert.min.js"></script>
     <script src="/assets/plugins/sweetalert/jquery.sweet-alert.custom.js"></script>
-    </script>
+  
     <script src="/js_sitio/guias.js"></script>
 
 
