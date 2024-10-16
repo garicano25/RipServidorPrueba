@@ -1776,6 +1776,10 @@ Route::put('actualizarFechasOnline', ['as' => 'PSICO.actualizarFechasOnline', 'u
 //INFORMES
 Route::resource('informesPsicosocial', 'PSICO\informesrecoPsicoController');
 
+// GUIAS 
+
+Route::get('/Guía', function () { return view('catalogos.psico.guias.guias');})->name('Guía');
+
 
 //CATÁLOGOS
 Route::resource('recpsicocatalogos', 'PSICO\recpsicocatalogosController');
