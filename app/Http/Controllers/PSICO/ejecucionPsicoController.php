@@ -64,24 +64,54 @@ class ejecucionPsicoController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function tablaTrabajadoresOnline($proyecto_id)
-    {        
-        $tablaOnline = DB::select('SELECT p.TRABAJADOR_NOMBRE TRABAJADOR_NOMBRE, p.TRABAJADOR_ID TRABAJADOR_ID
+    {   
+        
+        //valida si ya hay datos guardados de seguimiento
+        $existingRecords = DB::table('seguimientotrabajadores')
+        ->where('proyecto_id', $proyecto_id)
+        ->exists();
+
+        if($existingRecords){
+            //TARE LOS DATOS DE LA TABLA DE SEGUIMIENTO RELACIONADO CON LA DE PROGRAMA DE TRABAJO
+            $tablaOnline = DB::select('SELECT p.TRABAJADOR_NOMBRE TRABAJADOR_NOMBRE, s.TRABAJADOR_ID TRABAJADOR_ID, s.TRABAJADOR_ESTADOCORREO ESTADOCORREO, 
+            s.TRABAJADOR_FECHAINICIO FECHAINICIO, s.TRABAJADOR_FECHAFIN FECHAFIN, s.TRABAJADOR_ESTADOCONTESTADO ESTADOCONTESTADO, r.RECPSICO_ID
+            FROM seguimientotrabajadores s LEFT JOIN proyectotrabajadores p ON s.TRABAJADOR_ID = p.TRABAJADOR_ID LEFT JOIN recopsicotrabajadores r ON p.TRABAJADOR_ID = r.ID_RECOPSICOTRABAJADOR
+            WHERE p.TRABAJADOR_SELECCIONADO = 1 AND p.TRABAJADOR_MODALIDAD = "Online" AND s.proyecto_id = ' . $proyecto_id . '');
+
+
+            $count = 0;
+            foreach ($tablaOnline as $key => $value) {
+            $count += 1;
+
+            $value->COUNT = $count;
+            $value->TRABAJADOR_ESTADOCORREO = $value->ESTADOCORREO;
+            $value->FECHAINICIO = $value->FECHAINICIO;
+            $value->FECHAFIN = $value->FECHAFIN;
+            $value->TRABAJADOR_ID = $value->TRABAJADOR_ID;
+            $value->TRABAJADOR_NOMBRE = $value->TRABAJADOR_NOMBRE;
+            $value->TRABAJADOR_ESTADOCONTESTADO = $value->ESTADOCONTESTADO;
+            $value->boton_enviarCorreo = '<button type="button" class="btn btn-warning btn-circle enviarcorreo" id="enviarCorreoTrabajador'.$count.'" name="enviarCorreoTrabajador" onclick="enviarCorreo('.$value->TRABAJADOR_ID.', '.$value->RECPSICO_ID.')" style="padding: 0px;"><i class="fa fa-paper-plane "></i></button>';
+            }
+        }else{
+            //OBTIENE LOS DATOS GUARDADOS DE PROGRAMA DE TRABAJO
+            $tablaOnline = DB::select('SELECT p.TRABAJADOR_NOMBRE TRABAJADOR_NOMBRE, p.TRABAJADOR_ID TRABAJADOR_ID
                             FROM proyectotrabajadores p
                             WHERE p.TRABAJADOR_SELECCIONADO = 1 AND p.TRABAJADOR_MODALIDAD = "Online" AND p.proyecto_id = ' . $proyecto_id . '');
 
 
-        $count = 0;
-        foreach ($tablaOnline as $key => $value) {
-            $count += 1;
+            $count = 0;
+            foreach ($tablaOnline as $key => $value) {
+                $count += 1;
 
-            $value->COUNT = $count;
-            $value->TRABAJADOR_ESTADOCORREO = 'Sin enviar';
-            $value->FECHAINICIO = '2024-10-24';
-            $value->FECHAFIN = '2024-10-24';
-            $value->TRABAJADOR_ID = $value->TRABAJADOR_ID;
-            $value->TRABAJADOR_NOMBRE = $value->TRABAJADOR_NOMBRE;
-            $value->TRABAJADOR_ESTADOCONTESTADO = 'Sin iniciar';
-            $value->boton_enviarCorreo = '<button type="button" class="btn btn-warning btn-circle enviarcorreo" style="padding: 0px;"><i class="fa fa-paper-plane "></i></button>';
+                $value->COUNT = $count;
+                $value->TRABAJADOR_ESTADOCORREO = 'Sin enviar';
+                $value->FECHAINICIO = '';
+                $value->FECHAFIN = '';
+                $value->TRABAJADOR_ID = $value->TRABAJADOR_ID;
+                $value->TRABAJADOR_NOMBRE = $value->TRABAJADOR_NOMBRE;
+                $value->TRABAJADOR_ESTADOCONTESTADO = 'Sin iniciar';
+                $value->boton_enviarCorreo = '<button type="button" class="btn btn-warning btn-circle enviarcorreo" id="enviarCorreoTrabajador'.$count.'" data-trabajador-id="'.$value->TRABAJADOR_ID.'" name="enviarCorreoTrabajador" style="padding: 0px;"><i class="fa fa-paper-plane "></i></button>';
+            }
         }
 
         $online['data']  = $tablaOnline;
