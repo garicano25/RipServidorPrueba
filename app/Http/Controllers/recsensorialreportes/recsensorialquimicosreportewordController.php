@@ -1890,7 +1890,7 @@ class recsensorialquimicosreportewordController extends Controller
                 if ($zip->open($zipFilePath, ZipArchive::CREATE | ZipArchive::OVERWRITE) === TRUE) {
                     // Añadir los archivos iniciales al ZIP
                     foreach ($archivosParaZip as $archivo) {
-                        if (file_exists($archivo)) {
+                        if (file_exists($archivo) && is_file($archivo)) {
                             $zip->addFile($archivo, basename($archivo));
                             Storage::delete($archivo);
                         }
@@ -1918,7 +1918,7 @@ class recsensorialquimicosreportewordController extends Controller
                                 foreach ($hojas as $key => $hoja) {
                                     $archivo = storage_path('app/' . $hoja->catsustancia_hojaseguridadpdf);
 
-                                    if (file_exists($archivo)) {
+                                    if (file_exists($archivo) && is_file($archivo)) {
 
                                         $nombrePersonalizado = 'Anexo ' . $val->recsensorialanexo_orden . ' HDS - ' . $hoja->catsustancia_nombre . '.pdf';
                                         $zip->addFile($archivo, $nombrePersonalizado);
@@ -1936,7 +1936,7 @@ class recsensorialquimicosreportewordController extends Controller
                                 foreach ($adicionales as $key => $doc) {
                                     $archivo = storage_path('app/' . $doc->RUTA);
 
-                                    if (file_exists($archivo)) {
+                                    if (file_exists($archivo) && is_file($archivo)) {
 
                                         $nombrePersonalizado = 'Anexo ' . $doc->recsensorialanexo_orden . ' - ' . $doc->NOMBRE_ANEXO . '.pdf';
                                         $zip->addFile($archivo, $nombrePersonalizado);
