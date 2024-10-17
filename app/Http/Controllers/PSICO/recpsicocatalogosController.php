@@ -56,6 +56,9 @@ class recpsicocatalogosController extends Controller
             break;
             case 2:
                 $lista = DB::select('SELECT
+                                        ID_GUIAPREGUNTA,
+                                        TIPOGUIA,
+                                        PREGUNTA_ID,
                                         PREGUNTA_NOMBRE,
                                         PREGUNTA_EXPLICACION
                                     FROM
@@ -73,6 +76,9 @@ class recpsicocatalogosController extends Controller
             break;
             case 3:
                 $lista = DB::select('SELECT
+                                        ID_GUIAPREGUNTA,
+                                        TIPOGUIA,
+                                        PREGUNTA_ID,
                                         PREGUNTA_NOMBRE,
                                         PREGUNTA_EXPLICACION
                                     FROM
@@ -114,7 +120,25 @@ class recpsicocatalogosController extends Controller
                         $catalogo->update($request->all());
                         $dato["msj"] = 'Información modificada correctamente';
                     }
-                    break;
+                break;
+                case 2:
+                    if ($request['ID_GUIAPREGUNTA'] == 0) {
+
+                    } else {
+                        $catalogo = catalogosguiaspsicoModel::findOrFail($request['ID_GUIAPREGUNTA']);
+                        $catalogo->update($request->all());
+                        $dato["msj"] = 'Información modificada correctamente';
+                    }
+                break;
+                case 3:
+                    if ($request['ID_GUIAPREGUNTA'] == 0) {
+
+                    } else {
+                        $catalogo = catalogosguiaspsicoModel::findOrFail($request['ID_GUIAPREGUNTA']);
+                        $catalogo->update($request->all());
+                        $dato["msj"] = 'Información modificada correctamente';
+                    }
+                break;
             }
             return response()->json($dato);
         } catch (Exception $e) {
