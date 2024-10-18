@@ -30,7 +30,8 @@ function mostrarGuias(requiereGuia1, requiereGuia2, requiereGuia3) {
 
 
 function guia1() {
-    const pregunta1Si = document.getElementById("pregunta1_si").checked;
+    const pregunta1Si = document.getElementById("pregunta1_si");
+    const pregunta1No = document.getElementById("pregunta1_no");
     const pregunta2Si = document.getElementById("pregunta2_si").checked;
     const pregunta3Si = document.getElementById("pregunta3_si").checked;
     const pregunta4Si = document.getElementById("pregunta4_si").checked;
@@ -38,7 +39,18 @@ function guia1() {
     const pregunta6Si = document.getElementById("pregunta6_si").checked;
     const pregunta7Si = document.getElementById("pregunta7_si").checked;
 
-    if (pregunta1Si || pregunta2Si || pregunta3Si || pregunta4Si || pregunta5Si || pregunta6Si || pregunta7Si) {
+    const algunaSi = pregunta2Si || pregunta3Si || pregunta4Si || pregunta5Si || pregunta6Si || pregunta7Si;
+
+    if (algunaSi) {
+        pregunta1Si.checked = true;
+        pregunta1No.checked = false;
+    } 
+    else {
+        pregunta1No.checked = true;
+        pregunta1Si.checked = false;
+    }
+
+    if (algunaSi) {
         document.getElementById("seccion2").style.display = "block";
         document.getElementById("seccion3").style.display = "block";
         document.getElementById("seccion4").style.display = "block";
@@ -53,6 +65,7 @@ function guia1() {
         });
     }
 }
+
 
 
 
