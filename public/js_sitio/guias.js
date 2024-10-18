@@ -4,6 +4,29 @@ console.log('Guía 3:', requiereGuia3);
 console.log('Id:', id);
 
 
+function mostrarGuias(requiereGuia1, requiereGuia2, requiereGuia3) {
+    const guia1 = document.getElementById('guia1');
+    if (requiereGuia1 === 1) {
+        guia1.style.display = 'block';
+    } else {
+        guia1.style.display = 'none';
+    }
+
+    // Guía 2
+    const guia2 = document.getElementById('guia2');
+    if (requiereGuia2 === 1) {
+        guia2.style.display = 'block';
+    } else {
+        guia2.style.display = 'none';
+    }
+
+    const guia3 = document.getElementById('guia3');
+    if (requiereGuia3 === 1) {
+        guia3.style.display = 'block';
+    } else {
+        guia3.style.display = 'none';
+    }
+}
 
 
 function guia1() {

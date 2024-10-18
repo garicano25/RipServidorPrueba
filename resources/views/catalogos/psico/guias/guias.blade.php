@@ -113,7 +113,7 @@
             <form enctype="multipart/form-data" method="post" name="guia_1" id="guia_1">
                 {!! csrf_field() !!}
 
-                <div id="seccion1" style="padding: 10px; border-bottom: 1px solid #ccc;">
+                <div id="seccion1" style="padding: 10px; ">
                     <div id="titulo1">
                         <h5 style="text-align: left; width: 70%;"><b>I.- Acontecimiento traumático severo</b></h5>
                     </div>
@@ -222,7 +222,7 @@
                     </div>
                 </div>
 
-                <div id="seccion2" class="mt-3" style="display: none; padding: 10px; border-bottom: 1px solid #ccc;">
+                <div id="seccion2" class="mt-3" style="display: none; padding: 10px;">
                     <div id="titulo2">
                         <h5 style="text-align: left; width: 70%;"><b>II.- Recuerdos persistentes sobre el acontecimiento (durante el último mes):</b></h5>
                     </div>
@@ -257,7 +257,7 @@
                         </div>
                     </div>
                 </div>
-                <div id="seccion3" class="mt-3" style="display: none; padding: 10px; border-bottom: 1px solid #ccc;">
+                <div id="seccion3" class="mt-3" style="display: none; padding: 10px;">
                     <div id="titulo3">
                         <h5 style="text-align: left; width: 70%;"><b>III.- Esfuerzo por evitar circunstancias parecidas o asociadas al acontecimiento (durante el último mes):</b></h5>
                     </div>
@@ -447,7 +447,7 @@
                         </div>
                     </div>
                 </div>
-                <button type="submit" class="btn btn-danger botonguardar_modulorecsensorial" id="">
+                <button type="submit" class="btn btn-danger" id="guardar_guia1">
                     Guardar <i class="fa fa-save"></i>
                 </button>
             </form>
@@ -1813,6 +1813,9 @@
                         </div>
                     </div>
                 </div>
+                <button type="submit" class="btn btn-danger" id="guardar_guia2">
+                    Guardar <i class="fa fa-save"></i>
+                </button>
             </form>
         </div>
 
@@ -3920,6 +3923,9 @@
                     </div>
                 </div>               
             </div>
+            <button type="submit" class="btn btn-danger" id="guardar_guia3">
+                Guardar <i class="fa fa-save"></i>
+            </button>
             </form>
         </div>
 
@@ -3934,6 +3940,10 @@
         var requiereGuia2 = <?php echo json_encode($guia2); ?>;
         var requiereGuia3 = <?php echo json_encode($guia3); ?>;
         var id = <?php echo json_encode($id); ?>;
+
+        document.addEventListener('DOMContentLoaded', function() {
+        mostrarGuias(requiereGuia1, requiereGuia2, requiereGuia3);
+    });
     </script>
 
 
