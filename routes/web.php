@@ -1802,7 +1802,10 @@ Route::get('/Guia/{guia1}/{guia2}/{guia3}/{id}', function ($guia1, $guia2, $guia
 })->name('Guia');
 
 
+Route::post('/obtenerExplicaciones', 'PSICO\guiasController@obtenerExplicaciones');
+
 Route::get('envioGuia/{tipo}/{idPersonal}/{idRecsensorial}', ['as' => 'PSICO.envioGuia', 'uses' => 'PSICO\ejecucionPsicoController@envioGuia']);
+
 
 
 //CATÁLOGOS

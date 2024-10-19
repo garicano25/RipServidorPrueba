@@ -108,7 +108,7 @@
 
         <div id="guia1" class="card" style="display: block">
             <h6 style="text-align: center">Guía de referencia I</h6>
-            <h3 class="card-title"><b>CUESTIONARIO PARA IDENTIFICAR A LOS TRABAJADORES QUE FUERON SUJETOS A ACONTECIMIENTOS TRAUMÁTICOS SEVEROS</b></h3>
+            <h3 class="card-title"><b>GUÍA PARA IDENTIFICAR A LOS TRABAJADORES QUE FUERON SUJETOS A ACONTECIMIENTOS TRAUMÁTICOS SEVEROS</b></h3>
 
             <form enctype="multipart/form-data" method="post" name="guia_1" id="guia_1">
                 {!! csrf_field() !!}
@@ -118,7 +118,7 @@
                         <h5 style="text-align: left; width: 70%;"><b>I.- Acontecimiento traumático severo</b></h5>
                     </div>
                     <div id="pregunta1" class="mt-4" style="display: flex; justify-content: space-between; align-items: center; width: 100%; margin-bottom: 10px;">
-                        <p style="margin: 0; flex: 1;"><i class="fa fa-question-circle" id="Exp1_1" aria-hidden="true" data-toggle="tooltip" title=""></i>
+                        <p style="margin: 0; flex: 1;"><i class="fa fa-info-circle" id="Exp1_1" aria-hidden="true" data-toggle="tooltip" title=""></i>
                             ¿Ha presenciado o sufrido alguna vez, durante o con motivo del trabajo un acontecimiento como los siguientes</p>
                         <div style="display: none; align-items: center; gap: 20px;">
                             <div>
@@ -133,7 +133,7 @@
                         </div>
                     </div>
                     <div id="pregunta2" style="display: flex; justify-content: space-between; align-items: center; width: 100%; margin-bottom: 10px;">
-                        <p style="margin: 0; flex: 1;"><i class="fa fa-question-circle" id="Exp1_2" aria-hidden="true" data-toggle="tooltip" title=""></i>
+                        <p style="margin: 0; flex: 1;"><i class="fa fa-info-circle" id="Exp1_2" aria-hidden="true" data-toggle="tooltip" title=""></i>
                             Accidente que tenga como consecuencia la muerte, la pérdida de un miembro o una lesión grave?</p>
                         <div style="display: flex; align-items: center; gap: 20px;">
                             <div>
@@ -147,7 +147,7 @@
                         </div>
                     </div>
                     <div id="pregunta3" style="display: flex; justify-content: space-between; align-items: center; width: 100%; margin-bottom: 10px;">
-                        <p style="margin: 0; flex: 1;"><i class="fa fa-question-circle" id="Exp1_3" aria-hidden="true" data-toggle="tooltip" title=""></i>
+                        <p style="margin: 0; flex: 1;"><i class="fa fa-info-circle" id="Exp1_3" aria-hidden="true" data-toggle="tooltip" title=""></i>
                             Asaltos?</p>
                         <div style="display: flex; align-items: center; gap: 20px;">
                             <div>
@@ -162,7 +162,7 @@
                         </div>
                     </div>
                     <div id="pregunta4" style="display: flex; justify-content: space-between; align-items: center; width: 100%; margin-bottom: 10px;">
-                        <p style="margin: 0; flex: 1;"><i class="fa fa-question-circle" id="Exp1_4" aria-hidden="true" data-toggle="tooltip" title=""></i>
+                        <p style="margin: 0; flex: 1;"><i class="fa fa-info-circle" id="Exp1_4" aria-hidden="true" data-toggle="tooltip" title=""></i>
                             Actos violentos que derivaron en lesiones graves?</p>
                         <div style="display: flex; align-items: center; gap: 20px;">
                             <div>
@@ -177,7 +177,7 @@
                         </div>
                     </div>
                     <div id="pregunta5" style="display: flex; justify-content: space-between; align-items: center; width: 100%; margin-bottom: 10px;">
-                        <p style="margin: 0; flex: 1;"><i class="fa fa-question-circle" id="Exp1_5" aria-hidden="true" data-toggle="tooltip" title=""></i>
+                        <p style="margin: 0; flex: 1;"><i class="fa fa-info-circle" id="Exp1_5" aria-hidden="true" data-toggle="tooltip" title=""></i>
                             Secuestro?</p>
                         <div style="display: flex; align-items: center; gap: 20px;">
                             <div>
@@ -192,7 +192,7 @@
                         </div>
                     </div>
                     <div id="pregunta6" style="display: flex; justify-content: space-between; align-items: center; width: 100%; margin-bottom: 10px;">
-                        <p style="margin: 0; flex: 1;"><i class="fa fa-question-circle" id="Exp1_6" aria-hidden="true" data-toggle="tooltip" title=""></i>
+                        <p style="margin: 0; flex: 1;"><i class="fa fa-info-circle" id="Exp1_6" aria-hidden="true" data-toggle="tooltip" title=""></i>
                             Amenazas?</p>
                         <div style="display: flex; align-items: center; gap: 20px;">
                             <div>
@@ -207,7 +207,7 @@
                         </div>
                     </div>
                     <div id="pregunta7" style="display: flex; justify-content: space-between; align-items: center; width: 100%; margin-bottom: 10px;">
-                        <p style="margin: 0; flex: 1;"><i class="fa fa-question-circle" id="Exp1_7" aria-hidden="true" data-toggle="tooltip" title=""></i>
+                        <p style="margin: 0; flex: 1;"><i class="fa fa-info-circle" id="Exp1_7" aria-hidden="true" data-toggle="tooltip" title=""></i>
                             O cualquier otro que ponga en riesgo su vida o salud, y/o la de otras personas?</p>
                         <div style="display: flex; align-items: center; gap: 20px;">
                             <div>
@@ -227,7 +227,7 @@
                         <h5 style="text-align: left; width: 70%;"><b>II.- Recuerdos persistentes sobre el acontecimiento (durante el último mes):</b></h5>
                     </div>
                     <div id="pregunta8" class="mt-4" style="display: flex; justify-content: space-between; align-items: center; width: 100%; margin-bottom: 10px;">
-                        <p style="margin: 0; flex: 1;"><i class="fa fa-question-circle" id="Exp1_8" aria-hidden="true" data-toggle="tooltip" title=""></i>
+                        <p style="margin: 0; flex: 1;"><i class="fa fa-info-circle" id="Exp1_8" aria-hidden="true" data-toggle="tooltip" title=""></i>
                             ¿Ha tenido recuerdos recurrentes sobre el acontecimiento que le provocan malestares?</p>
                         <div style="display: flex; align-items: center; gap: 20px;">
                             <div>
@@ -242,7 +242,7 @@
                         </div>
                     </div>
                     <div id="pregunta9" style="display: flex; justify-content: space-between; align-items: center; width: 100%; margin-bottom: 10px;">
-                        <p style="margin: 0; flex: 1;"><i class="fa fa-question-circle" id="Exp1_9" aria-hidden="true" data-toggle="tooltip" title=""></i>
+                        <p style="margin: 0; flex: 1;"><i class="fa fa-info-circle" id="Exp1_9" aria-hidden="true" data-toggle="tooltip" title=""></i>
                             ¿Ha tenido sueños de carácter recurrente sobre el acontecimiento, que le producen malestar?</p>
                         <div style="display: flex; align-items: center; gap: 20px;">
                             <div>
@@ -262,7 +262,7 @@
                         <h5 style="text-align: left; width: 70%;"><b>III.- Esfuerzo por evitar circunstancias parecidas o asociadas al acontecimiento (durante el último mes):</b></h5>
                     </div>
                     <div id="pregunta10" class="mt-4" style="display: flex; justify-content: space-between; align-items: center; width: 100%; margin-bottom: 10px;">
-                        <p style="margin: 0; flex: 1;"><i class="fa fa-question-circle" id="Exp1_10" aria-hidden="true" data-toggle="tooltip" title=""></i>
+                        <p style="margin: 0; flex: 1;"><i class="fa fa-info-circle" id="Exp1_10" aria-hidden="true" data-toggle="tooltip" title=""></i>
                             ¿Se ha esforzado por evitar todo tipo de sentimientos, conversaciones o situaciones que le puedan recordar el acontecimiento?</p>
                         <div style="display: flex; align-items: center; gap: 20px;">
                             <div>
@@ -277,7 +277,7 @@
                         </div>
                     </div>
                     <div id="pregunta11" style="display: flex; justify-content: space-between; align-items: center; width: 100%; margin-bottom: 10px;">
-                        <p style="margin: 0; flex: 1;"><i class="fa fa-question-circle" id="Exp1_11" aria-hidden="true" data-toggle="tooltip" title=""></i>
+                        <p style="margin: 0; flex: 1;"><i class="fa fa-info-circle" id="Exp1_11" aria-hidden="true" data-toggle="tooltip" title=""></i>
                             ¿Se ha esforzado por evitar todo tipo de actividades, lugares o personas que motivan recuerdos del acontecimiento?</p>
                         <div style="display: flex; align-items: center; gap: 20px;">
                             <div>
@@ -292,7 +292,7 @@
                         </div>
                     </div>
                     <div id="pregunta12" style="display: flex; justify-content: space-between; align-items: center; width: 100%; margin-bottom: 10px;">
-                        <p style="margin: 0; flex: 1;"><i class="fa fa-question-circle" id="Exp1_12" aria-hidden="true" data-toggle="tooltip" title=""></i>
+                        <p style="margin: 0; flex: 1;"><i class="fa fa-info-circle" id="Exp1_12" aria-hidden="true" data-toggle="tooltip" title=""></i>
                             ¿Ha tenido dificultad para recordar alguna parte importante del evento?</p>
                         <div style="display: flex; align-items: center; gap: 20px;">
                             <div>
@@ -307,7 +307,7 @@
                         </div>
                     </div>
                     <div id="pregunta13" style="display: flex; justify-content: space-between; align-items: center; width: 100%; margin-bottom: 10px;">
-                        <p style="margin: 0; flex: 1;"><i class="fa fa-question-circle" id="Exp1_13" aria-hidden="true" data-toggle="tooltip" title=""></i>
+                        <p style="margin: 0; flex: 1;"><i class="fa fa-info-circle" id="Exp1_13" aria-hidden="true" data-toggle="tooltip" title=""></i>
                             ¿Ha disminuido su interés en sus actividades cotidianas?</p>
                         <div style="display: flex; align-items: center; gap: 20px;">
                             <div>
@@ -322,7 +322,7 @@
                         </div>
                     </div>
                     <div id="pregunta14" style="display: flex; justify-content: space-between; align-items: center; width: 100%; margin-bottom: 10px;">
-                        <p style="margin: 0; flex: 1;"><i class="fa fa-question-circle" id="Exp1_14" aria-hidden="true" data-toggle="tooltip" title=""></i>
+                        <p style="margin: 0; flex: 1;"><i class="fa fa-info-circle" id="Exp1_14" aria-hidden="true" data-toggle="tooltip" title=""></i>
                             ¿Se ha sentido usted alejado o distante de los demás?</p>
                         <div style="display: flex; align-items: center; gap: 20px;">
                             <div>
@@ -337,7 +337,7 @@
                         </div>
                     </div>
                     <div id="pregunta15" style="display: flex; justify-content: space-between; align-items: center; width: 100%; margin-bottom: 10px;">
-                        <p style="margin: 0; flex: 1;"><i class="fa fa-question-circle" id="Exp1_15" aria-hidden="true" data-toggle="tooltip" title=""></i>
+                        <p style="margin: 0; flex: 1;"><i class="fa fa-info-circle" id="Exp1_15" aria-hidden="true" data-toggle="tooltip" title=""></i>
                             ¿Ha notado que tiene dificultad para expresar sus sentimientos?</p>
                         <div style="display: flex; align-items: center; gap: 20px;">
                             <div>
@@ -352,7 +352,7 @@
                         </div>
                     </div>
                     <div id="pregunta16" style="display: flex; justify-content: space-between; align-items: center; width: 100%; margin-bottom: 10px;">
-                        <p style="margin: 0; flex: 1;"><i class="fa fa-question-circle" id="Exp1_16" aria-hidden="true" data-toggle="tooltip" title=""></i>
+                        <p style="margin: 0; flex: 1;"><i class="fa fa-info-circle" id="Exp1_16" aria-hidden="true" data-toggle="tooltip" title=""></i>
                             ¿Ha tenido la impresión de que su vida se va a acortar, que va a morir antes que otras personas o que tiene un futuro limitado?</p>
                         <div style="display: flex; align-items: center; gap: 20px;">
                             <div>
@@ -372,7 +372,7 @@
                         <h5 style="text-align: left; width: 70%;"><b>IV.- Afectación (durante el último mes):</b></h5>
                     </div>
                     <div id="pregunta17" class="mt-4" style="display: flex; justify-content: space-between; align-items: center; width: 100%; margin-bottom: 10px;">
-                        <p style="margin: 0; flex: 1;"><i class="fa fa-question-circle" id="Exp1_17" aria-hidden="true" data-toggle="tooltip" title=""></i>
+                        <p style="margin: 0; flex: 1;"><i class="fa fa-info-circle" id="Exp1_17" aria-hidden="true" data-toggle="tooltip" title=""></i>
                             ¿Ha tenido usted dificultades para dormir?</p>
                         <div style="display: flex; align-items: center; gap: 20px;">
                             <div>
@@ -387,7 +387,7 @@
                         </div>
                     </div>
                     <div id="pregunta18" style="display: flex; justify-content: space-between; align-items: center; width: 100%; margin-bottom: 10px;">
-                        <p style="margin: 0; flex: 1;"><i class="fa fa-question-circle" id="Exp1_18" aria-hidden="true" data-toggle="tooltip" title=""></i>
+                        <p style="margin: 0; flex: 1;"><i class="fa fa-info-circle" id="Exp1_18" aria-hidden="true" data-toggle="tooltip" title=""></i>
                             ¿Ha estado particularmente irritable o le han dado arranques de coraje?</p>
                         <div style="display: flex; align-items: center; gap: 20px;">
                             <div>
@@ -402,7 +402,7 @@
                         </div>
                     </div>
                     <div id="pregunta19" style="display: flex; justify-content: space-between; align-items: center; width: 100%; margin-bottom: 10px;">
-                        <p style="margin: 0; flex: 1;"><i class="fa fa-question-circle" id="Exp1_19" aria-hidden="true" data-toggle="tooltip" title=""></i>
+                        <p style="margin: 0; flex: 1;"><i class="fa fa-info-circle" id="Exp1_19" aria-hidden="true" data-toggle="tooltip" title=""></i>
                             ¿Ha tenido dificultad para concentrarse?</p>
                         <div style="display: flex; align-items: center; gap: 20px;">
                             <div>
@@ -417,7 +417,7 @@
                         </div>
                     </div>
                     <div id="pregunta20" style="display: flex; justify-content: space-between; align-items: center; width: 100%; margin-bottom: 10px;">
-                        <p style="margin: 0; flex: 1;"><i class="fa fa-question-circle" id="Exp1_20" aria-hidden="true" data-toggle="tooltip" title=""></i>
+                        <p style="margin: 0; flex: 1;"><i class="fa fa-info-circle" id="Exp1_20" aria-hidden="true" data-toggle="tooltip" title=""></i>
                             ¿Ha estado nervioso o constantemente en alerta?</p>
                         <div style="display: flex; align-items: center; gap: 20px;">
                             <div>
@@ -432,7 +432,7 @@
                         </div>
                     </div>
                     <div id="pregunta21" style="display: flex; justify-content: space-between; align-items: center; width: 100%; margin-bottom: 10px;">
-                        <p style="margin: 0; flex: 1;"><i class="fa fa-question-circle" id="Exp1_21" aria-hidden="true" data-toggle="tooltip" title=""></i>
+                        <p style="margin: 0; flex: 1;"><i class="fa fa-info-circle" id="Exp1_21" aria-hidden="true" data-toggle="tooltip" title=""></i>
                             ¿Se ha sobresaltado fácilmente por cualquier cosa?</p>
                         <div style="display: flex; align-items: center; gap: 20px;">
                             <div>
@@ -457,13 +457,13 @@
 
         <div id="guia2" class="card mt-4" style="display: block">
             <h6 style="text-align: center">Guía de referencia II</h6>
-            <h3 class="card-title"><b>CUESTIONARIO PARA IDENTIFICAR LOS FACTORES DE RIESGO PSICOSOCIAL EN LOS CENTROS DE TRABAJO</b></h3>
+            <h3 class="card-title"><b>GUÍA PARA IDENTIFICAR LOS FACTORES DE RIESGO PSICOSOCIAL EN LOS CENTROS DE TRABAJO</b></h3>
             <form enctype="multipart/form-data" method="post" name="guia_2" id="guia_2">
                 {!! csrf_field() !!}
 
                 <div id="seccion1_2" class="mt-3" style="display: block; padding: 10px;">
                     <div id="pregunta1_2" class="mt-4" style="display: flex; justify-content: space-between; align-items: center; width: 100%; margin-bottom: 10px;">
-                        <p style="margin: 0; flex: 1;"><i class="fa fa-question-circle" id="Exp2_1" aria-hidden="true" data-toggle="tooltip" title=""></i>
+                        <p style="margin: 0; flex: 1;"><i class="fa fa-info-circle" id="Exp2_1" aria-hidden="true" data-toggle="tooltip" title=""></i>
                             Mi trabajo me exige hacer mucho esfuerzo &nbsp;&nbsp; físico</p>
                         <div style="display: flex; align-items: center; gap: 20px;">
                             <div>
@@ -489,7 +489,7 @@
                         </div>
                     </div>
                     <div id="pregunta2_2" class="mt-4" style="display: flex; justify-content: space-between; align-items: center; width: 100%; margin-bottom: 10px;">
-                        <p style="margin: 0; flex: 1;"><i class="fa fa-question-circle" id="Exp2_2" aria-hidden="true" data-toggle="tooltip" title=""></i>
+                        <p style="margin: 0; flex: 1;"><i class="fa fa-info-circle" id="Exp2_2" aria-hidden="true" data-toggle="tooltip" title=""></i>
                             Me preocupa sufrir un accidente en mi 
                             trabajo </p>
                         <div style="display: flex; align-items: center; gap: 20px;">
@@ -516,7 +516,7 @@
                         </div>
                     </div>
                     <div id="pregunta3_2" class="mt-4" style="display: flex; justify-content: space-between; align-items: center; width: 100%; margin-bottom: 10px;">
-                        <p style="margin: 0; flex: 1;"><i class="fa fa-question-circle" id="Exp2_3" aria-hidden="true" data-toggle="tooltip" title=""></i>
+                        <p style="margin: 0; flex: 1;"><i class="fa fa-info-circle" id="Exp2_3" aria-hidden="true" data-toggle="tooltip" title=""></i>
                             Considero que las actividades que realizo 
                             son peligrosas
                         </p>
@@ -544,7 +544,7 @@
                         </div>
                     </div>
                     <div id="pregunta4_2" class="mt-4" style="display: flex; justify-content: space-between; align-items: center; width: 100%; margin-bottom: 10px;">
-                        <p style="margin: 0; flex: 1;"><i class="fa fa-question-circle" id="Exp2_4" aria-hidden="true" data-toggle="tooltip" title=""></i>
+                        <p style="margin: 0; flex: 1;"><i class="fa fa-info-circle" id="Exp2_4" aria-hidden="true" data-toggle="tooltip" title=""></i>
                             Por la cantidad de trabajo que tengo debo quedarme tiempo adicional a mi turno
                         </p>
                         <div style="display: flex; align-items: center; gap: 20px;">
@@ -571,7 +571,7 @@
                         </div>
                     </div>
                     <div id="pregunta5_2" class="mt-4" style="display: flex; justify-content: space-between; align-items: center; width: 100%; margin-bottom: 10px;">
-                        <p style="margin: 0; flex: 1;"><i class="fa fa-question-circle" id="Exp2_5" aria-hidden="true" data-toggle="tooltip" title=""></i>
+                        <p style="margin: 0; flex: 1;"><i class="fa fa-info-circle" id="Exp2_5" aria-hidden="true" data-toggle="tooltip" title=""></i>
                             Por la cantidad de trabajo que tengo debo trabajar sin parar
                         </p>
                         <div style="display: flex; align-items: center; gap: 20px;">
@@ -599,7 +599,7 @@
                     </div>
 
                     <div id="pregunta6_2" class="mt-4" style="display: flex; justify-content: space-between; align-items: center; width: 100%; margin-bottom: 10px;">
-                        <p style="margin: 0; flex: 1;"><i class="fa fa-question-circle" id="Exp2_6" aria-hidden="true" data-toggle="tooltip" title=""></i>
+                        <p style="margin: 0; flex: 1;"><i class="fa fa-info-circle" id="Exp2_6" aria-hidden="true" data-toggle="tooltip" title=""></i>
                             Considero que es necesario mantener un <br> ritmo de trabajo acelerado
                         </p>
                         <div style="display: flex; align-items: center; gap: 20px;">
@@ -628,7 +628,7 @@
 
 
                     <div id="pregunta7_2" class="mt-4" style="display: flex; justify-content: space-between; align-items: center; width: 100%; margin-bottom: 10px;">
-                        <p style="margin: 0; flex: 1;"><i class="fa fa-question-circle" id="Exp2_7" aria-hidden="true" data-toggle="tooltip" title=""></i>
+                        <p style="margin: 0; flex: 1;"><i class="fa fa-info-circle" id="Exp2_7" aria-hidden="true" data-toggle="tooltip" title=""></i>
                             Mi trabajo exige que esté muy concentrado
                         </p>
                         <div style="display: flex; align-items: center; gap: 20px;">
@@ -656,7 +656,7 @@
                     </div>
 
                     <div id="pregunta8_2" class="mt-4" style="display: flex; justify-content: space-between; align-items: center; width: 100%; margin-bottom: 10px;">
-                        <p style="margin: 0; flex: 1;"><i class="fa fa-question-circle" id="Exp2_8" aria-hidden="true" data-toggle="tooltip" title=""></i>
+                        <p style="margin: 0; flex: 1;"><i class="fa fa-info-circle" id="Exp2_8" aria-hidden="true" data-toggle="tooltip" title=""></i>
                             Mi trabajo requiere que memorice mucha información
                         </p>
                         <div style="display: flex; align-items: center; gap: 20px;">
@@ -683,7 +683,7 @@
                         </div>
                     </div>
                     <div id="pregunta9_2" class="mt-4" style="display: flex; justify-content: space-between; align-items: center; width: 100%; margin-bottom: 10px;">
-                        <p style="margin: 0; flex: 1;"><i class="fa fa-question-circle" id="Exp2_9" aria-hidden="true" data-toggle="tooltip" title=""></i>
+                        <p style="margin: 0; flex: 1;"><i class="fa fa-info-circle" id="Exp2_9" aria-hidden="true" data-toggle="tooltip" title=""></i>
                             Mi trabajo exige que atienda varios asuntos <br>
                             al mismo tiempo
                         </p>
@@ -714,7 +714,7 @@
                         <h6>Las preguntas siguientes están relacionadas con las actividades que realiza en su trabajo y las responsabilidades que tiene.</h6>
                     </div>
                     <div id="pregunta10_2" class="mt-5" style="display: flex; justify-content: space-between; align-items: center; width: 100%; margin-bottom: 10px;">
-                        <p style="margin: 0; flex: 1;"><i class="fa fa-question-circle" id="Exp2_10" aria-hidden="true" data-toggle="tooltip" title=""></i>
+                        <p style="margin: 0; flex: 1;"><i class="fa fa-info-circle" id="Exp2_10" aria-hidden="true" data-toggle="tooltip" title=""></i>
                             En mi trabajo soy responsable de cosas de mucho valor
                         </p>
                         <div style="display: flex; align-items: center; gap: 20px;">
@@ -741,7 +741,7 @@
                         </div>
                     </div>
                     <div id="pregunta11_2" class="mt-4" style="display: flex; justify-content: space-between; align-items: center; width: 100%; margin-bottom: 10px;">
-                        <p style="margin: 0; flex: 1;"><i class="fa fa-question-circle" id="Exp2_11" aria-hidden="true" data-toggle="tooltip" title=""></i>
+                        <p style="margin: 0; flex: 1;"><i class="fa fa-info-circle" id="Exp2_11" aria-hidden="true" data-toggle="tooltip" title=""></i>
                             Respondo ante mi jefe por los resultados de  <br> toda mi área de trabajo
                         </p>
                         <div style="display: flex; align-items: center; gap: 20px;">
@@ -768,7 +768,7 @@
                         </div>
                     </div>
                     <div id="pregunta12_2" class="mt-4" style="display: flex; justify-content: space-between; align-items: center; width: 100%; margin-bottom: 10px;">
-                        <p style="margin: 0; flex: 1;"><i class="fa fa-question-circle" id="Exp2_12" aria-hidden="true" data-toggle="tooltip" title=""></i>
+                        <p style="margin: 0; flex: 1;"><i class="fa fa-info-circle" id="Exp2_12" aria-hidden="true" data-toggle="tooltip" title=""></i>
                             En mi trabajo me dan órdenes contradictorias
                         </p>
                         <div style="display: flex; align-items: center; gap: 20px;">
@@ -795,7 +795,7 @@
                         </div>
                     </div>
                     <div id="pregunta13_2" class="mt-4" style="display: flex; justify-content: space-between; align-items: center; width: 100%; margin-bottom: 10px;">
-                        <p style="margin: 0; flex: 1;"><i class="fa fa-question-circle" id="Exp2_13" aria-hidden="true" data-toggle="tooltip" title=""></i>
+                        <p style="margin: 0; flex: 1;"><i class="fa fa-info-circle" id="Exp2_13" aria-hidden="true" data-toggle="tooltip" title=""></i>
                             Considero que en mi trabajo me piden hacer cosas innecesarias
                         </p>
                         <div style="display: flex; align-items: center; gap: 20px;">
@@ -826,7 +826,7 @@
                         <h6>Las preguntas siguientes están relacionadas con el tiempo destinado a su trabajo y sus responsabilidades familiares.</h6>
                     </div>
                     <div id="pregunta14_2" class="mt-5" style="display: flex; justify-content: space-between; align-items: center; width: 100%; margin-bottom: 10px;">
-                        <p style="margin: 0; flex: 1;"><i class="fa fa-question-circle" id="Exp2_14" aria-hidden="true" data-toggle="tooltip" title=""></i>
+                        <p style="margin: 0; flex: 1;"><i class="fa fa-info-circle" id="Exp2_14" aria-hidden="true" data-toggle="tooltip" title=""></i>
                             Trabajo horas extras más de tres veces a la semana
                         </p>
                         <div style="display: flex; align-items: center; gap: 20px;">
@@ -853,7 +853,7 @@
                         </div>
                     </div>
                     <div id="pregunta15_2" class="mt-4" style="display: flex; justify-content: space-between; align-items: center; width: 100%; margin-bottom: 10px;">
-                        <p style="margin: 0; flex: 1;"><i class="fa fa-question-circle" id="Exp2_15" aria-hidden="true" data-toggle="tooltip" title=""></i>
+                        <p style="margin: 0; flex: 1;"><i class="fa fa-info-circle" id="Exp2_15" aria-hidden="true" data-toggle="tooltip" title=""></i>
                             Mi trabajo me exige laborar en días de <br> descanso, festivos o fines de semana
                         </p>
                         <div style="display: flex; align-items: center; gap: 20px;">
@@ -880,7 +880,7 @@
                         </div>
                     </div>
                     <div id="pregunta16_2" class="mt-4" style="display: flex; justify-content: space-between; align-items: center; width: 100%; margin-bottom: 10px;">
-                        <p style="margin: 0; flex: 1;"><i class="fa fa-question-circle" id="Exp2_16" aria-hidden="true" data-toggle="tooltip" title=""></i>
+                        <p style="margin: 0; flex: 1;"><i class="fa fa-info-circle" id="Exp2_16" aria-hidden="true" data-toggle="tooltip" title=""></i>
                             Considero que el tiempo en el trabajo es <br> mucho y perjudica mis actividades familiares <br> o personales
                         </p>
                         <div style="display: flex; align-items: center; gap: 20px;">
@@ -907,7 +907,7 @@
                         </div>
                     </div>
                     <div id="pregunta17_2" class="mt-4" style="display: flex; justify-content: space-between; align-items: center; width: 100%; margin-bottom: 10px;">
-                        <p style="margin: 0; flex: 1;"><i class="fa fa-question-circle" id="Exp2_17" aria-hidden="true" data-toggle="tooltip" title=""></i>
+                        <p style="margin: 0; flex: 1;"><i class="fa fa-info-circle" id="Exp2_17" aria-hidden="true" data-toggle="tooltip" title=""></i>
                             Pienso en las actividades familiares o <br> personales cuando estoy en mi trabajo
                         </p>
                         <div style="display: flex; align-items: center; gap: 20px;">
@@ -940,7 +940,7 @@
                     </div>
 
                     <div id="pregunta18_2" class="mt-5" style="display: flex; justify-content: space-between; align-items: center; width: 100%; margin-bottom: 10px;">
-                        <p style="margin: 0; flex: 1;"><i class="fa fa-question-circle" id="Exp2_18" aria-hidden="true" data-toggle="tooltip" title=""></i>
+                        <p style="margin: 0; flex: 1;"><i class="fa fa-info-circle" id="Exp2_18" aria-hidden="true" data-toggle="tooltip" title=""></i>
                             Mi trabajo permite que desarrolle nuevas habilidades
                         </p>
                         <div style="display: flex; align-items: center; gap: 20px;">
@@ -968,7 +968,7 @@
                     </div>
 
                     <div id="pregunta19_2" class="mt-4" style="display: flex; justify-content: space-between; align-items: center; width: 100%; margin-bottom: 10px;">
-                        <p style="margin: 0; flex: 1;"><i class="fa fa-question-circle" id="Exp2_19" aria-hidden="true" data-toggle="tooltip" title=""></i>
+                        <p style="margin: 0; flex: 1;"><i class="fa fa-info-circle" id="Exp2_19" aria-hidden="true" data-toggle="tooltip" title=""></i>
                             En mi trabajo puedo aspirar a un mejor <br>
                             puesto
                         </p>
@@ -996,7 +996,7 @@
                         </div>
                     </div>
                     <div id="pregunta20_2" class="mt-4" style="display: flex; justify-content: space-between; align-items: center; width: 100%; margin-bottom: 10px;">
-                        <p style="margin: 0; flex: 1;"><i class="fa fa-question-circle" id="Exp2_20" aria-hidden="true" data-toggle="tooltip" title=""></i>
+                        <p style="margin: 0; flex: 1;"><i class="fa fa-info-circle" id="Exp2_20" aria-hidden="true" data-toggle="tooltip" title=""></i>
                             Durante mi jornada de trabajo puedo tomar pausas cuando las necesito
                         </p>
                         <div style="display: flex; align-items: center; gap: 20px;">
@@ -1023,7 +1023,7 @@
                         </div>
                     </div>
                     <div id="pregunta21_2" class="mt-4" style="display: flex; justify-content: space-between; align-items: center; width: 100%; margin-bottom: 10px;">
-                        <p style="margin: 0; flex: 1;"><i class="fa fa-question-circle" id="Exp2_21" aria-hidden="true" data-toggle="tooltip" title=""></i>
+                        <p style="margin: 0; flex: 1;"><i class="fa fa-info-circle" id="Exp2_21" aria-hidden="true" data-toggle="tooltip" title=""></i>
                             Puedo decidir la velocidad a la que realizo mis actividades en mi trabajo
                         </p>
                         <div style="display: flex; align-items: center; gap: 20px;">
@@ -1050,7 +1050,7 @@
                         </div>
                     </div>
                     <div id="pregunta22_2" class="mt-4" style="display: flex; justify-content: space-between; align-items: center; width: 100%; margin-bottom: 10px;">
-                        <p style="margin: 0; flex: 1;"><i class="fa fa-question-circle" id="Exp2_22" aria-hidden="true" data-toggle="tooltip" title=""></i>
+                        <p style="margin: 0; flex: 1;"><i class="fa fa-info-circle" id="Exp2_22" aria-hidden="true" data-toggle="tooltip" title=""></i>
                             Puedo cambiar el orden de las actividades <br> que realizo en mi trabajo
                         </p>
                         <div style="display: flex; align-items: center; gap: 20px;">
@@ -1083,7 +1083,7 @@
 
 
                     <div id="pregunta23_2" class="mt-5" style="display: flex; justify-content: space-between; align-items: center; width: 100%; margin-bottom: 10px;">
-                        <p style="margin: 0; flex: 1;"><i class="fa fa-question-circle" id="Exp2_23" aria-hidden="true" data-toggle="tooltip" title=""></i>
+                        <p style="margin: 0; flex: 1;"><i class="fa fa-info-circle" id="Exp2_23" aria-hidden="true" data-toggle="tooltip" title=""></i>
                             Me informan con claridad cuáles son mis funciones
                         </p>
                         <div style="display: flex; align-items: center; gap: 20px;">
@@ -1110,7 +1110,7 @@
                         </div>
                     </div>
                     <div id="pregunta24_2" class="mt-4" style="display: flex; justify-content: space-between; align-items: center; width: 100%; margin-bottom: 10px;">
-                        <p style="margin: 0; flex: 1;"><i class="fa fa-question-circle" id="Exp2_24" aria-hidden="true" data-toggle="tooltip" title=""></i>
+                        <p style="margin: 0; flex: 1;"><i class="fa fa-info-circle" id="Exp2_24" aria-hidden="true" data-toggle="tooltip" title=""></i>
                             Me explican claramente los resultados que <br> debo obtener en mi trabajo
                         </p>
                         <div style="display: flex; align-items: center; gap: 20px;">
@@ -1138,7 +1138,7 @@
                     </div>
 
                     <div id="pregunta25_2" class="mt-4" style="display: flex; justify-content: space-between; align-items: center; width: 100%; margin-bottom: 10px;">
-                        <p style="margin: 0; flex: 1;"><i class="fa fa-question-circle" id="Exp2_25" aria-hidden="true" data-toggle="tooltip" title=""></i>
+                        <p style="margin: 0; flex: 1;"><i class="fa fa-info-circle" id="Exp2_25" aria-hidden="true" data-toggle="tooltip" title=""></i>
                             Me informan con quién puedo resolver problemas o asuntos de trabajo
                         </p>
                         <div style="display: flex; align-items: center; gap: 20px;">
@@ -1165,7 +1165,7 @@
                         </div>
                     </div>
                     <div id="pregunta26_2" class="mt-4" style="display: flex; justify-content: space-between; align-items: center; width: 100%; margin-bottom: 10px;">
-                        <p style="margin: 0; flex: 1;"><i class="fa fa-question-circle" id="Exp2_26" aria-hidden="true" data-toggle="tooltip" title=""></i>
+                        <p style="margin: 0; flex: 1;"><i class="fa fa-info-circle" id="Exp2_26" aria-hidden="true" data-toggle="tooltip" title=""></i>
                             Me permiten asistir a capacitaciones relacionadas con mi trabajo
                         </p>
                         <div style="display: flex; align-items: center; gap: 20px;">
@@ -1192,7 +1192,7 @@
                         </div>
                     </div>
                     <div id="pregunta27_2" class="mt-4" style="display: flex; justify-content: space-between; align-items: center; width: 100%; margin-bottom: 10px;">
-                        <p style="margin: 0; flex: 1;"><i class="fa fa-question-circle" id="Exp2_27" aria-hidden="true" data-toggle="tooltip" title=""></i>
+                        <p style="margin: 0; flex: 1;"><i class="fa fa-info-circle" id="Exp2_27" aria-hidden="true" data-toggle="tooltip" title=""></i>
                             Recibo capacitación útil para hacer mi <br>
                             trabajo
                         </p>
@@ -1227,7 +1227,7 @@
                     </div>
 
                     <div id="pregunta28_2" class="mt-5" style="display: flex; justify-content: space-between; align-items: center; width: 100%; margin-bottom: 10px;">
-                        <p style="margin: 0; flex: 1;"><i class="fa fa-question-circle" id="Exp2_28" aria-hidden="true" data-toggle="tooltip" title=""></i>
+                        <p style="margin: 0; flex: 1;"><i class="fa fa-info-circle" id="Exp2_28" aria-hidden="true" data-toggle="tooltip" title=""></i>
                             Mi jefe tiene en cuenta mis puntos de vista y opiniones
                         </p>
                         <div style="display: flex; align-items: center; gap: 20px;">
@@ -1255,7 +1255,7 @@
                     </div>
 
                     <div id="pregunta29_2" class="mt-4" style="display: flex; justify-content: space-between; align-items: center; width: 100%; margin-bottom: 10px;">
-                        <p style="margin: 0; flex: 1;"><i class="fa fa-question-circle" id="Exp2_29" aria-hidden="true" data-toggle="tooltip" title=""></i>
+                        <p style="margin: 0; flex: 1;"><i class="fa fa-info-circle" id="Exp2_29" aria-hidden="true" data-toggle="tooltip" title=""></i>
                             Mi jefe ayuda a solucionar los problemas que <br> se presentan en el trabajo
                         </p>
                         <div style="display: flex; align-items: center; gap: 20px;">
@@ -1284,7 +1284,7 @@
 
 
                     <div id="pregunta30_2" class="mt-4" style="display: flex; justify-content: space-between; align-items: center; width: 100%; margin-bottom: 10px;">
-                        <p style="margin: 0; flex: 1;"><i class="fa fa-question-circle" id="Exp2_30" aria-hidden="true" data-toggle="tooltip" title=""></i>
+                        <p style="margin: 0; flex: 1;"><i class="fa fa-info-circle" id="Exp2_30" aria-hidden="true" data-toggle="tooltip" title=""></i>
                             Puedo confiar en mis compañeros de trabajo
                         </p>
                         <div style="display: flex; align-items: center; gap: 20px;">
@@ -1311,7 +1311,7 @@
                         </div>
                     </div>
                     <div id="pregunta31_2" class="mt-4" style="display: flex; justify-content: space-between; align-items: center; width: 100%; margin-bottom: 10px;">
-                        <p style="margin: 0; flex: 1;"><i class="fa fa-question-circle" id="Exp2_31" aria-hidden="true" data-toggle="tooltip" title=""></i>
+                        <p style="margin: 0; flex: 1;"><i class="fa fa-info-circle" id="Exp2_31" aria-hidden="true" data-toggle="tooltip" title=""></i>
                             Cuando tenemos que realizar trabajo de <br> equipo los compañeros colaboran
                         </p>
                         <div style="display: flex; align-items: center; gap: 20px;">
@@ -1338,7 +1338,7 @@
                         </div>
                     </div>
                     <div id="pregunta32_2" class="mt-4" style="display: flex; justify-content: space-between; align-items: center; width: 100%; margin-bottom: 10px;">
-                        <p style="margin: 0; flex: 1;"><i class="fa fa-question-circle" id="Exp2_32" aria-hidden="true" data-toggle="tooltip" title=""></i>
+                        <p style="margin: 0; flex: 1;"><i class="fa fa-info-circle" id="Exp2_32" aria-hidden="true" data-toggle="tooltip" title=""></i>
                             Mis compañeros de trabajo me ayudan <br> cuando tengo dificultades
                         </p>
                         <div style="display: flex; align-items: center; gap: 20px;">
@@ -1367,7 +1367,7 @@
 
 
                     <div id="pregunta33_2" class="mt-4" style="display: flex; justify-content: space-between; align-items: center; width: 100%; margin-bottom: 10px;">
-                        <p style="margin: 0; flex: 1;"><i class="fa fa-question-circle" id="Exp2_33" aria-hidden="true" data-toggle="tooltip" title=""></i>
+                        <p style="margin: 0; flex: 1;"><i class="fa fa-info-circle" id="Exp2_33" aria-hidden="true" data-toggle="tooltip" title=""></i>
                             En mi trabajo puedo expresarme libremente <br> sin interrupciones
                         </p>
                         <div style="display: flex; align-items: center; gap: 20px;">
@@ -1395,7 +1395,7 @@
                     </div>
 
                     <div id="pregunta34_2" class="mt-4" style="display: flex; justify-content: space-between; align-items: center; width: 100%; margin-bottom: 10px;">
-                        <p style="margin: 0; flex: 1;"><i class="fa fa-question-circle" id="Exp2_34" aria-hidden="true" data-toggle="tooltip" title=""></i>
+                        <p style="margin: 0; flex: 1;"><i class="fa fa-info-circle" id="Exp2_34" aria-hidden="true" data-toggle="tooltip" title=""></i>
                             Recibo críticas constantes a mi persona y/o trabajo
                         </p>
                         <div style="display: flex; align-items: center; gap: 20px;">
@@ -1424,7 +1424,7 @@
 
 
                     <div id="pregunta35_2" class="mt-4" style="display: flex; justify-content: space-between; align-items: center; width: 100%; margin-bottom: 10px;">
-                        <p style="margin: 0; flex: 1;"><i class="fa fa-question-circle" id="Exp2_35" aria-hidden="true" data-toggle="tooltip" title=""></i>
+                        <p style="margin: 0; flex: 1;"><i class="fa fa-info-circle" id="Exp2_35" aria-hidden="true" data-toggle="tooltip" title=""></i>
                             Recibo burlas, calumnias, difamaciones, humillaciones o ridiculizaciones
                         </p>
                         <div style="display: flex; align-items: center; gap: 20px;">
@@ -1452,7 +1452,7 @@
                     </div>
 
                     <div id="pregunta36_2" class="mt-4" style="display: flex; justify-content: space-between; align-items: center; width: 100%; margin-bottom: 10px;">
-                        <p style="margin: 0; flex: 1;"><i class="fa fa-question-circle" id="Exp2_36" aria-hidden="true" data-toggle="tooltip" title=""></i>
+                        <p style="margin: 0; flex: 1;"><i class="fa fa-info-circle" id="Exp2_36" aria-hidden="true" data-toggle="tooltip" title=""></i>
                             Se ignora mi presencia o se me excluye de <br> las reuniones de trabajo y en la toma de decisiones
                         </p>
                         <div style="display: flex; align-items: center; gap: 20px;">
@@ -1479,7 +1479,7 @@
                         </div>
                     </div>
                     <div id="pregunta37_2" class="mt-4" style="display: flex; justify-content: space-between; align-items: center; width: 100%; margin-bottom: 10px;">
-                        <p style="margin: 0; flex: 1;"><i class="fa fa-question-circle" id="Exp2_37" aria-hidden="true" data-toggle="tooltip" title=""></i>
+                        <p style="margin: 0; flex: 1;"><i class="fa fa-info-circle" id="Exp2_37" aria-hidden="true" data-toggle="tooltip" title=""></i>
                             Se manipulan las situaciones de trabajo <br> para hacerme parecer un mal trabajador
                         </p>
                         <div style="display: flex; align-items: center; gap: 20px;">
@@ -1508,7 +1508,7 @@
 
 
                     <div id="pregunta38_2" class="mt-4" style="display: flex; justify-content: space-between; align-items: center; width: 100%; margin-bottom: 10px;">
-                        <p style="margin: 0; flex: 1;"><i class="fa fa-question-circle" id="Exp2_38" aria-hidden="true" data-toggle="tooltip" title=""></i>
+                        <p style="margin: 0; flex: 1;"><i class="fa fa-info-circle" id="Exp2_38" aria-hidden="true" data-toggle="tooltip" title=""></i>
                             Se ignoran mis éxitos laborales y se atribuyen <br> a otros trabajadores
                         </p>
                         <div style="display: flex; align-items: center; gap: 20px;">
@@ -1536,7 +1536,7 @@
                     </div>
 
                     <div id="pregunta39_2" class="mt-4" style="display: flex; justify-content: space-between; align-items: center; width: 100%; margin-bottom: 10px;">
-                        <p style="margin: 0; flex: 1;"><i class="fa fa-question-circle" id="Exp2_39" aria-hidden="true" data-toggle="tooltip" title=""></i>
+                        <p style="margin: 0; flex: 1;"><i class="fa fa-info-circle" id="Exp2_39" aria-hidden="true" data-toggle="tooltip" title=""></i>
                             Me bloquean o impiden las oportunidades <br> que tengo para obtener ascenso o mejora <br>en mi trabajo
                         </p>
                         <div style="display: flex; align-items: center; gap: 20px;">
@@ -1563,7 +1563,7 @@
                         </div>
                     </div>
                     <div id="pregunta40_2" class="mt-4" style="display: flex; justify-content: space-between; align-items: center; width: 100%; margin-bottom: 10px;">
-                        <p style="margin: 0; flex: 1;"><i class="fa fa-question-circle" id="Exp2_40" aria-hidden="true" data-toggle="tooltip" title=""></i>
+                        <p style="margin: 0; flex: 1;"><i class="fa fa-info-circle" id="Exp2_40" aria-hidden="true" data-toggle="tooltip" title=""></i>
                             He presenciado actos de violencias en mi <br> centro de trabajo
                         </p>
                         <div style="display: flex; align-items: center; gap: 20px;">
@@ -1623,7 +1623,7 @@
                 <div id="seccion2_2" class="mt-2" style="display: none; padding: 10px;">
 
                     <div id="pregunta41_2" class="mt-3" style="display: flex; justify-content: space-between; align-items: center; width: 100%; margin-bottom: 10px;">
-                        <p style="margin: 0; flex: 1;"><i class="fa fa-question-circle" id="Exp2_41" aria-hidden="true" data-toggle="tooltip" title=""></i>
+                        <p style="margin: 0; flex: 1;"><i class="fa fa-info-circle" id="Exp2_41" aria-hidden="true" data-toggle="tooltip" title=""></i>
                             Atiendo clientes o usuarios muy enojados
                         </p>
                         <div style="display: flex; align-items: center; gap: 20px;">
@@ -1650,7 +1650,7 @@
                         </div>
                     </div>
                     <div id="pregunta42_2" class="mt-4" style="display: flex; justify-content: space-between; align-items: center; width: 100%; margin-bottom: 10px;">
-                        <p style="margin: 0; flex: 1;"><i class="fa fa-question-circle" id="Exp2_42" aria-hidden="true" data-toggle="tooltip" title=""></i>
+                        <p style="margin: 0; flex: 1;"><i class="fa fa-info-circle" id="Exp2_42" aria-hidden="true" data-toggle="tooltip" title=""></i>
                             Mi trabajo me exige atender personas muy necesitadas de ayuda o enfermas
                         </p>
                         <div style="display: flex; align-items: center; gap: 20px;">
@@ -1677,7 +1677,7 @@
                         </div>
                     </div>
                     <div id="pregunta43_2" class="mt-4" style="display: flex; justify-content: space-between; align-items: center; width: 100%; margin-bottom: 10px;">
-                        <p style="margin: 0; flex: 1;"><i class="fa fa-question-circle" id="Exp2_43" aria-hidden="true" data-toggle="tooltip" title=""></i>
+                        <p style="margin: 0; flex: 1;"><i class="fa fa-info-circle" id="Exp2_43" aria-hidden="true" data-toggle="tooltip" title=""></i>
                             Para hacer mi trabajo debo demostrar sentimientos distintos a los míos
                         </p>
                         <div style="display: flex; align-items: center; gap: 20px;">
@@ -1731,7 +1731,7 @@
                         </h6>
                     </div>
                     <div id="pregunta44_2" class="mt-4" style="display: flex; justify-content: space-between; align-items: center; width: 100%; margin-bottom: 10px;">
-                        <p style="margin: 0; flex: 1;"><i class="fa fa-question-circle" id="Exp2_44" aria-hidden="true" data-toggle="tooltip" title=""></i>
+                        <p style="margin: 0; flex: 1;"><i class="fa fa-info-circle" id="Exp2_44" aria-hidden="true" data-toggle="tooltip" title=""></i>
                             Comunican tarde los asuntos de trabajo
                         </p>
                         <div style="display: flex; align-items: center; gap: 20px;">
@@ -1758,7 +1758,7 @@
                         </div>
                     </div>
                     <div id="pregunta45_2" class="mt-4" style="display: flex; justify-content: space-between; align-items: center; width: 100%; margin-bottom: 10px;">
-                        <p style="margin: 0; flex: 1;"><i class="fa fa-question-circle" id="Exp2_45" aria-hidden="true" data-toggle="tooltip" title=""></i>
+                        <p style="margin: 0; flex: 1;"><i class="fa fa-info-circle" id="Exp2_45" aria-hidden="true" data-toggle="tooltip" title=""></i>
                             Dificultan el logro de los resultados del <br>
                             trabajo
                         </p>
@@ -1786,7 +1786,7 @@
                         </div>
                     </div>
                     <div id="pregunta46_2" class="mt-4" style="display: flex; justify-content: space-between; align-items: center; width: 100%; margin-bottom: 10px;">
-                        <p style="margin: 0; flex: 1;"><i class="fa fa-question-circle" id="Exp2_46" aria-hidden="true" data-toggle="tooltip" title=""></i>
+                        <p style="margin: 0; flex: 1;"><i class="fa fa-info-circle" id="Exp2_46" aria-hidden="true" data-toggle="tooltip" title=""></i>
                             Ignoran las sugerencias para mejorar <br> su trabajo
                         </p>
                         <div style="display: flex; align-items: center; gap: 20px;">
@@ -1828,7 +1828,7 @@
 
         <div id="guia3" class="card mt-4" style="display: block">
             <h6 style="text-align: center">Guía de referencia III</h6>
-            <h3 class="card-title"><b>CUESTIONARIO PARA IDENTIFICAR LOS FACTORES DE RIESGO PSICOSOCIAL Y EVALUAR EL ENTORNO ORGANIZACIONAL EN LOS CENTROS DE TRABAJO</b></h3>
+            <h3 class="card-title"><b>GUÍA PARA IDENTIFICAR LOS FACTORES DE RIESGO PSICOSOCIAL Y EVALUAR EL ENTORNO ORGANIZACIONAL EN LOS CENTROS DE TRABAJO</b></h3>
             <form enctype="multipart/form-data" method="post" name="guia_3" id="guia_3">
                 {!! csrf_field() !!}
 
@@ -1839,7 +1839,7 @@
 
                 <div id="seccion1_3" class="mt-2" style="display: block; padding: 10px;">
                     <div id="pregunta1_3" class="mt-4" style="display: flex; justify-content: space-between; align-items: center; width: 100%; margin-bottom: 10px;">
-                        <p style="margin: 0; flex: 1;"><i class="fa fa-question-circle" id="Exp3_1" aria-hidden="true" data-toggle="tooltip" title=""></i>
+                        <p style="margin: 0; flex: 1;"><i class="fa fa-info-circle" id="Exp3_1" aria-hidden="true" data-toggle="tooltip" title=""></i>
                             El espacio donde trabajo me permite realizar <br> mis actividades de manera segura e higiénica
                         </p>
                         <div style="display: flex; align-items: center; gap: 20px;">
@@ -1866,7 +1866,7 @@
                         </div>
                     </div>
                     <div id="pregunta2_3" class="mt-4" style="display: flex; justify-content: space-between; align-items: center; width: 100%; margin-bottom: 10px;">
-                        <p style="margin: 0; flex: 1;"><i class="fa fa-question-circle" id="Exp3_2" aria-hidden="true" data-toggle="tooltip" title=""></i>
+                        <p style="margin: 0; flex: 1;"><i class="fa fa-info-circle" id="Exp3_2" aria-hidden="true" data-toggle="tooltip" title=""></i>
                             Mi trabajo me exige hacer muchos esfuerzo <br> físico
                         </p>
                         <div style="display: flex; align-items: center; gap: 20px;">
@@ -1893,8 +1893,8 @@
                         </div>
                     </div>
                     <div id="pregunta3_3" class="mt-4" style="display: flex; justify-content: space-between; align-items: center; width: 100%; margin-bottom: 10px;">
-                        <p style="margin: 0; flex: 1;"><i class="fa fa-question-circle" id="Exp3_3" aria-hidden="true" data-toggle="tooltip" title=""></i>
-                            Me preocupa sufrir un accidente en mi trabajo
+                        <p style="margin: 0; flex: 1;"><i class="fa fa-info-circle" id="Exp3_3" aria-hidden="true" data-toggle="tooltip" title=""></i>
+                            Me preocupa sufrir un accidente en mi <br> trabajo
                         </p>
                         <div style="display: flex; align-items: center; gap: 20px;">
                             <div>
@@ -1920,7 +1920,7 @@
                         </div>
                     </div>
                     <div id="pregunta4_3" class="mt-4" style="display: flex; justify-content: space-between; align-items: center; width: 100%; margin-bottom: 10px;">
-                        <p style="margin: 0; flex: 1;"><i class="fa fa-question-circle" id="Exp3_4" aria-hidden="true" data-toggle="tooltip" title=""></i>
+                        <p style="margin: 0; flex: 1;"><i class="fa fa-info-circle" id="Exp3_4" aria-hidden="true" data-toggle="tooltip" title=""></i>
                             Considero que en mi trabajo se aplican las normas de seguridad y salud en el trabajo
                         </p>
                         <div style="display: flex; align-items: center; gap: 20px;">
@@ -1948,8 +1948,8 @@
                     </div>
 
                     <div id="pregunta5_3" class="mt-4" style="display: flex; justify-content: space-between; align-items: center; width: 100%; margin-bottom: 10px;">
-                        <p style="margin: 0; flex: 1;"><i class="fa fa-question-circle" id="Exp3_5" aria-hidden="true" data-toggle="tooltip" title=""></i>
-                            Considero que las actividades que realizo son peligrosas
+                        <p style="margin: 0; flex: 1;"><i class="fa fa-info-circle" id="Exp3_5" aria-hidden="true" data-toggle="tooltip" title=""></i>
+                            Considero que las actividades que realizo <br> son peligrosas
                         </p>
                         <div style="display: flex; align-items: center; gap: 20px;">
                             <div>
@@ -1979,7 +1979,7 @@
                         </h6>
                     </div>
                     <div id="pregunta6_3" class="mt-5" style="display: flex; justify-content: space-between; align-items: center; width: 100%; margin-bottom: 10px;">
-                        <p style="margin: 0; flex: 1;"><i class="fa fa-question-circle" id="Exp3_6" aria-hidden="true" data-toggle="tooltip" title=""></i>
+                        <p style="margin: 0; flex: 1;"><i class="fa fa-info-circle" id="Exp3_6" aria-hidden="true" data-toggle="tooltip" title=""></i>
                             Por la cantidad de trabajo que tengo debo quedarme tiempo adicional a mi turno
                         </p>
                         <div style="display: flex; align-items: center; gap: 20px;">
@@ -2006,7 +2006,7 @@
                         </div>
                     </div>
                     <div id="pregunta7_3" class="mt-4" style="display: flex; justify-content: space-between; align-items: center; width: 100%; margin-bottom: 10px;">
-                        <p style="margin: 0; flex: 1;"><i class="fa fa-question-circle" id="Exp3_7" aria-hidden="true" data-toggle="tooltip" title=""></i>
+                        <p style="margin: 0; flex: 1;"><i class="fa fa-info-circle" id="Exp3_7" aria-hidden="true" data-toggle="tooltip" title=""></i>
                             Por la cantidad de trabajo que tengo debo trabajar sin parar
                         </p>
                         <div style="display: flex; align-items: center; gap: 20px;">
@@ -2033,7 +2033,7 @@
                         </div>
                     </div>
                     <div id="pregunta8_3" class="mt-4" style="display: flex; justify-content: space-between; align-items: center; width: 100%; margin-bottom: 10px;">
-                        <p style="margin: 0; flex: 1;"><i class="fa fa-question-circle" id="Exp3_8" aria-hidden="true" data-toggle="tooltip" title=""></i>
+                        <p style="margin: 0; flex: 1;"><i class="fa fa-info-circle" id="Exp3_8" aria-hidden="true" data-toggle="tooltip" title=""></i>
                             Considero que es necesario mantener un <br> ritmo de trabajo acelerado
                         </p>
                         <div style="display: flex; align-items: center; gap: 20px;">
@@ -2064,7 +2064,7 @@
                         </h6>
                     </div>
                     <div id="pregunta9_3" class="mt-5" style="display: flex; justify-content: space-between; align-items: center; width: 100%; margin-bottom: 10px;">
-                        <p style="margin: 0; flex: 1;"><i class="fa fa-question-circle" id="Exp3_9" aria-hidden="true" data-toggle="tooltip" title=""></i>
+                        <p style="margin: 0; flex: 1;"><i class="fa fa-info-circle" id="Exp3_9" aria-hidden="true" data-toggle="tooltip" title=""></i>
                             Mi trabajo exige que esté muy concentrado
                         </p>
                         <div style="display: flex; align-items: center; gap: 20px;">
@@ -2091,7 +2091,7 @@
                         </div>
                     </div>
                     <div id="pregunta10_3" class="mt-4" style="display: flex; justify-content: space-between; align-items: center; width: 100%; margin-bottom: 10px;">
-                        <p style="margin: 0; flex: 1;"><i class="fa fa-question-circle" id="Exp3_10" aria-hidden="true" data-toggle="tooltip" title=""></i>
+                        <p style="margin: 0; flex: 1;"><i class="fa fa-info-circle" id="Exp3_10" aria-hidden="true" data-toggle="tooltip" title=""></i>
                             Mi trabajo requiere que memorice mucha información
                         </p>
                         <div style="display: flex; align-items: center; gap: 20px;">
@@ -2118,7 +2118,7 @@
                         </div>
                     </div>
                     <div id="pregunta11_3" class="mt-4" style="display: flex; justify-content: space-between; align-items: center; width: 100%; margin-bottom: 10px;">
-                        <p style="margin: 0; flex: 1;"><i class="fa fa-question-circle" id="Exp3_11" aria-hidden="true" data-toggle="tooltip" title=""></i>
+                        <p style="margin: 0; flex: 1;"><i class="fa fa-info-circle" id="Exp3_11" aria-hidden="true" data-toggle="tooltip" title=""></i>
                             En mi trabajo tengo que tomar decisiones difíciles muy rápido
                         </p>
                         <div style="display: flex; align-items: center; gap: 20px;">
@@ -2145,7 +2145,7 @@
                         </div>
                     </div>
                     <div id="pregunta12_3" class="mt-4" style="display: flex; justify-content: space-between; align-items: center; width: 100%; margin-bottom: 10px;">
-                        <p style="margin: 0; flex: 1;"><i class="fa fa-question-circle" id="Exp3_12" aria-hidden="true" data-toggle="tooltip" title=""></i>
+                        <p style="margin: 0; flex: 1;"><i class="fa fa-info-circle" id="Exp3_12" aria-hidden="true" data-toggle="tooltip" title=""></i>
                             Mi trabajo exige que atienda varios asuntos
                             <br> al mismo tiempo
                         </p>
@@ -2177,7 +2177,7 @@
                         </h6>
                     </div>
                     <div id="pregunta13_3" class="mt-5" style="display: flex; justify-content: space-between; align-items: center; width: 100%; margin-bottom: 10px;">
-                        <p style="margin: 0; flex: 1;"><i class="fa fa-question-circle" id="Exp3_13" aria-hidden="true" data-toggle="tooltip" title=""></i>
+                        <p style="margin: 0; flex: 1;"><i class="fa fa-info-circle" id="Exp3_13" aria-hidden="true" data-toggle="tooltip" title=""></i>
                             En mi trabajo soy responsable de cosas de mucho valor
                         </p>
                         <div style="display: flex; align-items: center; gap: 20px;">
@@ -2204,7 +2204,7 @@
                         </div>
                     </div>
                     <div id="pregunta14_3" class="mt-4" style="display: flex; justify-content: space-between; align-items: center; width: 100%; margin-bottom: 10px;">
-                        <p style="margin: 0; flex: 1;"><i class="fa fa-question-circle" id="Exp3_14" aria-hidden="true" data-toggle="tooltip" title=""></i>
+                        <p style="margin: 0; flex: 1;"><i class="fa fa-info-circle" id="Exp3_14" aria-hidden="true" data-toggle="tooltip" title=""></i>
                             Respondo ante mi jefe por los resultados de <br> toda mi área de trabajo
                         </p>
                         <div style="display: flex; align-items: center; gap: 20px;">
@@ -2231,7 +2231,7 @@
                         </div>
                     </div>
                     <div id="pregunta15_3" class="mt-4" style="display: flex; justify-content: space-between; align-items: center; width: 100%; margin-bottom: 10px;">
-                        <p style="margin: 0; flex: 1;"><i class="fa fa-question-circle" id="Exp3_15" aria-hidden="true" data-toggle="tooltip" title=""></i>
+                        <p style="margin: 0; flex: 1;"><i class="fa fa-info-circle" id="Exp3_15" aria-hidden="true" data-toggle="tooltip" title=""></i>
                             En el trabajo me dan órdenes contradictorias
                         </p>
                         <div style="display: flex; align-items: center; gap: 20px;">
@@ -2258,7 +2258,7 @@
                         </div>
                     </div>
                     <div id="pregunta16_3" class="mt-4" style="display: flex; justify-content: space-between; align-items: center; width: 100%; margin-bottom: 10px;">
-                        <p style="margin: 0; flex: 1;"><i class="fa fa-question-circle" id="Exp3_16" aria-hidden="true" data-toggle="tooltip" title=""></i>
+                        <p style="margin: 0; flex: 1;"><i class="fa fa-info-circle" id="Exp3_16" aria-hidden="true" data-toggle="tooltip" title=""></i>
                             Considero que en mi trabajo me piden hacer cosas innecesarias
                         </p>
                         <div style="display: flex; align-items: center; gap: 20px;">
@@ -2289,7 +2289,7 @@
                         </h6>
                     </div>
                     <div id="pregunta17_3" class="mt-5" style="display: flex; justify-content: space-between; align-items: center; width: 100%; margin-bottom: 10px;">
-                        <p style="margin: 0; flex: 1;"><i class="fa fa-question-circle" id="Exp3_17" aria-hidden="true" data-toggle="tooltip" title=""></i>
+                        <p style="margin: 0; flex: 1;"><i class="fa fa-info-circle" id="Exp3_17" aria-hidden="true" data-toggle="tooltip" title=""></i>
                             Trabajo horas extras más de tres veces a la semana
                         </p>
                         <div style="display: flex; align-items: center; gap: 20px;">
@@ -2316,7 +2316,7 @@
                         </div>
                     </div>
                     <div id="pregunta18_3" class="mt-4" style="display: flex; justify-content: space-between; align-items: center; width: 100%; margin-bottom: 10px;">
-                        <p style="margin: 0; flex: 1;"><i class="fa fa-question-circle" id="Exp3_18" aria-hidden="true" data-toggle="tooltip" title=""></i>
+                        <p style="margin: 0; flex: 1;"><i class="fa fa-info-circle" id="Exp3_18" aria-hidden="true" data-toggle="tooltip" title=""></i>
                             Mi trabajo me exige laborar en días de <br> descanso, festivos o fines de semana
                         </p>
                         <div style="display: flex; align-items: center; gap: 20px;">
@@ -2343,7 +2343,7 @@
                         </div>
                     </div>
                     <div id="pregunta19_3" class="mt-4" style="display: flex; justify-content: space-between; align-items: center; width: 100%; margin-bottom: 10px;">
-                        <p style="margin: 0; flex: 1;"><i class="fa fa-question-circle" id="Exp3_19" aria-hidden="true" data-toggle="tooltip" title=""></i>
+                        <p style="margin: 0; flex: 1;"><i class="fa fa-info-circle" id="Exp3_19" aria-hidden="true" data-toggle="tooltip" title=""></i>
                             Considero que el tiempo en el trabajo es <br> mucho y perjudica mis actividades familiares <br> o personales
                         </p>
                         <div style="display: flex; align-items: center; gap: 20px;">
@@ -2371,7 +2371,7 @@
                     </div>
 
                     <div id="pregunta20_3" class="mt-4" style="display: flex; justify-content: space-between; align-items: center; width: 100%; margin-bottom: 10px;">
-                        <p style="margin: 0; flex: 1;"><i class="fa fa-question-circle" id="Exp3_20" aria-hidden="true" data-toggle="tooltip" title=""></i>
+                        <p style="margin: 0; flex: 1;"><i class="fa fa-info-circle" id="Exp3_20" aria-hidden="true" data-toggle="tooltip" title=""></i>
                             Debo atender asuntos de trabajo cunado <br> estoy en casa
                         </p>
                         <div style="display: flex; align-items: center; gap: 20px;">
@@ -2399,7 +2399,7 @@
                     </div>
 
                     <div id="pregunta21_3" class="mt-4" style="display: flex; justify-content: space-between; align-items: center; width: 100%; margin-bottom: 10px;">
-                        <p style="margin: 0; flex: 1;"><i class="fa fa-question-circle" id="Exp3_21" aria-hidden="true" data-toggle="tooltip" title=""></i>
+                        <p style="margin: 0; flex: 1;"><i class="fa fa-info-circle" id="Exp3_21" aria-hidden="true" data-toggle="tooltip" title=""></i>
                             Pienso en las actividades familiares o <br> personales cuando estoy en mi trabajo
                         </p>
                         <div style="display: flex; align-items: center; gap: 20px;">
@@ -2426,7 +2426,7 @@
                         </div>
                     </div>
                     <div id="pregunta22_3" class="mt-4" style="display: flex; justify-content: space-between; align-items: center; width: 100%; margin-bottom: 10px;">
-                        <p style="margin: 0; flex: 1;"><i class="fa fa-question-circle" id="Exp3_22" aria-hidden="true" data-toggle="tooltip" title=""></i>
+                        <p style="margin: 0; flex: 1;"><i class="fa fa-info-circle" id="Exp3_22" aria-hidden="true" data-toggle="tooltip" title=""></i>
                             Pienso que mis responsabilidades familiares afectan mi trabajo
                         </p>
                         <div style="display: flex; align-items: center; gap: 20px;">
@@ -2457,7 +2457,7 @@
                         </h6>
                     </div>
                     <div id="pregunta23_3" class="mt-5" style="display: flex; justify-content: space-between; align-items: center; width: 100%; margin-bottom: 10px;">
-                        <p style="margin: 0; flex: 1;"><i class="fa fa-question-circle" id="Exp3_23" aria-hidden="true" data-toggle="tooltip" title=""></i>
+                        <p style="margin: 0; flex: 1;"><i class="fa fa-info-circle" id="Exp3_23" aria-hidden="true" data-toggle="tooltip" title=""></i>
                             Mi trabajo permite que desarrolle nuevas habilidades
                         </p>
                         <div style="display: flex; align-items: center; gap: 20px;">
@@ -2484,7 +2484,7 @@
                         </div>
                     </div>
                     <div id="pregunta24_3" class="mt-4" style="display: flex; justify-content: space-between; align-items: center; width: 100%; margin-bottom: 10px;">
-                        <p style="margin: 0; flex: 1;"><i class="fa fa-question-circle" id="Exp3_24" aria-hidden="true" data-toggle="tooltip" title=""></i>
+                        <p style="margin: 0; flex: 1;"><i class="fa fa-info-circle" id="Exp3_24" aria-hidden="true" data-toggle="tooltip" title=""></i>
                             En mi trabajo puedo aspirar a un mejor <br>
                             puesto
                         </p>
@@ -2512,7 +2512,7 @@
                         </div>
                     </div>
                     <div id="pregunta25_3" class="mt-4" style="display: flex; justify-content: space-between; align-items: center; width: 100%; margin-bottom: 10px;">
-                        <p style="margin: 0; flex: 1;"><i class="fa fa-question-circle" id="Exp3_25" aria-hidden="true" data-toggle="tooltip" title=""></i>
+                        <p style="margin: 0; flex: 1;"><i class="fa fa-info-circle" id="Exp3_25" aria-hidden="true" data-toggle="tooltip" title=""></i>
                             Durante mi jornada de trabajo puedo tomar pausas cuando las necesito
                         </p>
                         <div style="display: flex; align-items: center; gap: 20px;">
@@ -2539,7 +2539,7 @@
                         </div>
                     </div>
                     <div id="pregunta26_3" class="mt-4" style="display: flex; justify-content: space-between; align-items: center; width: 100%; margin-bottom: 10px;">
-                        <p style="margin: 0; flex: 1;"><i class="fa fa-question-circle" id="Exp3_26" aria-hidden="true" data-toggle="tooltip" title=""></i>
+                        <p style="margin: 0; flex: 1;"><i class="fa fa-info-circle" id="Exp3_26" aria-hidden="true" data-toggle="tooltip" title=""></i>
                             Puedo decidir cuánto trabajo realizo durante <br> la jornada laboral
                         </p>
                         <div style="display: flex; align-items: center; gap: 20px;">
@@ -2566,7 +2566,7 @@
                         </div>
                     </div>
                     <div id="pregunta27_3" class="mt-4" style="display: flex; justify-content: space-between; align-items: center; width: 100%; margin-bottom: 10px;">
-                        <p style="margin: 0; flex: 1;"><i class="fa fa-question-circle" id="Exp3_27" aria-hidden="true" data-toggle="tooltip" title=""></i>
+                        <p style="margin: 0; flex: 1;"><i class="fa fa-info-circle" id="Exp3_27" aria-hidden="true" data-toggle="tooltip" title=""></i>
                             Puedo decidir la velocidad a la que realizo <br> mis actividades en mi trabajo
                         </p>
                         <div style="display: flex; align-items: center; gap: 20px;">
@@ -2593,7 +2593,7 @@
                         </div>
                     </div>
                     <div id="pregunta28_3" class="mt-4" style="display: flex; justify-content: space-between; align-items: center; width: 100%; margin-bottom: 10px;">
-                        <p style="margin: 0; flex: 1;"><i class="fa fa-question-circle" id="Exp3_28" aria-hidden="true" data-toggle="tooltip" title=""></i>
+                        <p style="margin: 0; flex: 1;"><i class="fa fa-info-circle" id="Exp3_28" aria-hidden="true" data-toggle="tooltip" title=""></i>
                             Puedo cambiar el orden de las actividades <br> que realizo en mi trabajo
                         </p>
                         <div style="display: flex; align-items: center; gap: 20px;">
@@ -2625,7 +2625,7 @@
                         </h6>
                     </div>
                     <div id="pregunta29_3" class="mt-5" style="display: flex; justify-content: space-between; align-items: center; width: 100%; margin-bottom: 10px;">
-                        <p style="margin: 0; flex: 1;"><i class="fa fa-question-circle" id="Exp3_29" aria-hidden="true" data-toggle="tooltip" title=""></i>
+                        <p style="margin: 0; flex: 1;"><i class="fa fa-info-circle" id="Exp3_29" aria-hidden="true" data-toggle="tooltip" title=""></i>
                             Los cambios que se presentan en mi trabajo dificultan mi labor
                         </p>
                         <div style="display: flex; align-items: center; gap: 20px;">
@@ -2652,7 +2652,7 @@
                         </div>
                     </div>
                     <div id="pregunta30_3" class="mt-4" style="display: flex; justify-content: space-between; align-items: center; width: 100%; margin-bottom: 10px;">
-                        <p style="margin: 0; flex: 1;"><i class="fa fa-question-circle" id="Exp3_30" aria-hidden="true" data-toggle="tooltip" title=""></i>
+                        <p style="margin: 0; flex: 1;"><i class="fa fa-info-circle" id="Exp3_30" aria-hidden="true" data-toggle="tooltip" title=""></i>
                             Cuando se presentan cambios en mi <br> trabajo se tienen en cuenta mis ideas o aportaciones
                         </p>
                         <div style="display: flex; align-items: center; gap: 20px;">
@@ -2684,7 +2684,7 @@
                     </div>
 
                     <div id="pregunta31_3" class="mt-5" style="display: flex; justify-content: space-between; align-items: center; width: 100%; margin-bottom: 10px;">
-                        <p style="margin: 0; flex: 1;"><i class="fa fa-question-circle" id="Exp3_31" aria-hidden="true" data-toggle="tooltip" title=""></i>
+                        <p style="margin: 0; flex: 1;"><i class="fa fa-info-circle" id="Exp3_31" aria-hidden="true" data-toggle="tooltip" title=""></i>
                             Me informan con claridad cuáles son mis funciones
                         </p>
                         <div style="display: flex; align-items: center; gap: 20px;">
@@ -2712,7 +2712,7 @@
                     </div>
 
                     <div id="pregunta32_3" class="mt-4" style="display: flex; justify-content: space-between; align-items: center; width: 100%; margin-bottom: 10px;">
-                        <p style="margin: 0; flex: 1;"><i class="fa fa-question-circle" id="Exp3_32" aria-hidden="true" data-toggle="tooltip" title=""></i>
+                        <p style="margin: 0; flex: 1;"><i class="fa fa-info-circle" id="Exp3_32" aria-hidden="true" data-toggle="tooltip" title=""></i>
                             Me explican claramente los resultados que <br> debo obtener en mi trabajo
                         </p>
                         <div style="display: flex; align-items: center; gap: 20px;">
@@ -2739,7 +2739,7 @@
                         </div>
                     </div>
                     <div id="pregunta33_3" class="mt-4" style="display: flex; justify-content: space-between; align-items: center; width: 100%; margin-bottom: 10px;">
-                        <p style="margin: 0; flex: 1;"><i class="fa fa-question-circle" id="Exp3_33" aria-hidden="true" data-toggle="tooltip" title=""></i>
+                        <p style="margin: 0; flex: 1;"><i class="fa fa-info-circle" id="Exp3_33" aria-hidden="true" data-toggle="tooltip" title=""></i>
                             Me explican claramente los objetivos de mi trabajo
                         </p>
                         <div style="display: flex; align-items: center; gap: 20px;">
@@ -2766,7 +2766,7 @@
                         </div>
                     </div>
                     <div id="pregunta34_3" class="mt-4" style="display: flex; justify-content: space-between; align-items: center; width: 100%; margin-bottom: 10px;">
-                        <p style="margin: 0; flex: 1;"><i class="fa fa-question-circle" id="Exp3_34" aria-hidden="true" data-toggle="tooltip" title=""></i>
+                        <p style="margin: 0; flex: 1;"><i class="fa fa-info-circle" id="Exp3_34" aria-hidden="true" data-toggle="tooltip" title=""></i>
                             Me informan con quién puedo resolver problemas o asuntos de trabajo
                         </p>
                         <div style="display: flex; align-items: center; gap: 20px;">
@@ -2793,7 +2793,7 @@
                         </div>
                     </div>
                     <div id="pregunta35_3" class="mt-4" style="display: flex; justify-content: space-between; align-items: center; width: 100%; margin-bottom: 10px;">
-                        <p style="margin: 0; flex: 1;"><i class="fa fa-question-circle" id="Exp3_35" aria-hidden="true" data-toggle="tooltip" title=""></i>
+                        <p style="margin: 0; flex: 1;"><i class="fa fa-info-circle" id="Exp3_35" aria-hidden="true" data-toggle="tooltip" title=""></i>
                             Me permiten asistir a capacitaciones relacionadas con mi trabajo
 
                         </p>
@@ -2821,7 +2821,7 @@
                         </div>
                     </div>
                     <div id="pregunta36_3" class="mt-4" style="display: flex; justify-content: space-between; align-items: center; width: 100%; margin-bottom: 10px;">
-                        <p style="margin: 0; flex: 1;"><i class="fa fa-question-circle" id="Exp3_36" aria-hidden="true" data-toggle="tooltip" title=""></i>
+                        <p style="margin: 0; flex: 1;"><i class="fa fa-info-circle" id="Exp3_36" aria-hidden="true" data-toggle="tooltip" title=""></i>
 
                             Recibo capacitación útil para hacer mi <br>
                             trabajo
@@ -2855,7 +2855,7 @@
                         </h6>
                     </div>
                     <div id="pregunta37_3" class="mt-5" style="display: flex; justify-content: space-between; align-items: center; width: 100%; margin-bottom: 10px;">
-                        <p style="margin: 0; flex: 1;"><i class="fa fa-question-circle" id="Exp3_37" aria-hidden="true" data-toggle="tooltip" title=""></i>
+                        <p style="margin: 0; flex: 1;"><i class="fa fa-info-circle" id="Exp3_37" aria-hidden="true" data-toggle="tooltip" title=""></i>
                             Mi jefe me ayuda organizar mejor el trabajo
                         </p>
                         <div style="display: flex; align-items: center; gap: 20px;">
@@ -2883,7 +2883,7 @@
                     </div>
 
                     <div id="pregunta38_3" class="mt-4" style="display: flex; justify-content: space-between; align-items: center; width: 100%; margin-bottom: 10px;">
-                        <p style="margin: 0; flex: 1;"><i class="fa fa-question-circle" id="Exp3_38" aria-hidden="true" data-toggle="tooltip" title=""></i>
+                        <p style="margin: 0; flex: 1;"><i class="fa fa-info-circle" id="Exp3_38" aria-hidden="true" data-toggle="tooltip" title=""></i>
                             Mi jefe tiene en cuenta mis puntos de vista y opiniones
                         </p>
                         <div style="display: flex; align-items: center; gap: 20px;">
@@ -2911,7 +2911,7 @@
                     </div>
 
                     <div id="pregunta39_3" class="mt-4" style="display: flex; justify-content: space-between; align-items: center; width: 100%; margin-bottom: 10px;">
-                        <p style="margin: 0; flex: 1;"><i class="fa fa-question-circle" id="Exp3_39" aria-hidden="true" data-toggle="tooltip" title=""></i>
+                        <p style="margin: 0; flex: 1;"><i class="fa fa-info-circle" id="Exp3_39" aria-hidden="true" data-toggle="tooltip" title=""></i>
                             Mi jefe me comunica a tiempo la información relacionada con el trabajo
                         </p>
                         <div style="display: flex; align-items: center; gap: 20px;">
@@ -2938,7 +2938,7 @@
                         </div>
                     </div>
                     <div id="pregunta40_3" class="mt-4" style="display: flex; justify-content: space-between; align-items: center; width: 100%; margin-bottom: 10px;">
-                        <p style="margin: 0; flex: 1;"><i class="fa fa-question-circle" id="Exp3_40" aria-hidden="true" data-toggle="tooltip" title=""></i>
+                        <p style="margin: 0; flex: 1;"><i class="fa fa-info-circle" id="Exp3_40" aria-hidden="true" data-toggle="tooltip" title=""></i>
                             La orientación que me da mi jefe me ayuda a realizar mejor mi trabajo
                         </p>
                         <div style="display: flex; align-items: center; gap: 20px;">
@@ -2965,7 +2965,7 @@
                         </div>
                     </div>
                     <div id="pregunta41_3" class="mt-4" style="display: flex; justify-content: space-between; align-items: center; width: 100%; margin-bottom: 10px;">
-                        <p style="margin: 0; flex: 1;"><i class="fa fa-question-circle" id="Exp3_41" aria-hidden="true" data-toggle="tooltip" title=""></i>
+                        <p style="margin: 0; flex: 1;"><i class="fa fa-info-circle" id="Exp3_41" aria-hidden="true" data-toggle="tooltip" title=""></i>
                             Mi jefe ayuda a solucionar los problemas <br> que se presentan en el trabajo
                         </p>
                         <div style="display: flex; align-items: center; gap: 20px;">
@@ -2998,7 +2998,7 @@
                     </div>
 
                     <div id="pregunta42_3" class="mt-5" style="display: flex; justify-content: space-between; align-items: center; width: 100%; margin-bottom: 10px;">
-                        <p style="margin: 0; flex: 1;"><i class="fa fa-question-circle" id="Exp3_42" aria-hidden="true" data-toggle="tooltip" title=""></i>
+                        <p style="margin: 0; flex: 1;"><i class="fa fa-info-circle" id="Exp3_42" aria-hidden="true" data-toggle="tooltip" title=""></i>
                             Puedo confiar en mis compañeros de <br> trabajo
                         </p>
                         <div style="display: flex; align-items: center; gap: 20px;">
@@ -3027,7 +3027,7 @@
 
 
                     <div id="pregunta43_3" class="mt-4" style="display: flex; justify-content: space-between; align-items: center; width: 100%; margin-bottom: 10px;">
-                        <p style="margin: 0; flex: 1;"><i class="fa fa-question-circle" id="Exp3_43" aria-hidden="true" data-toggle="tooltip" title=""></i>
+                        <p style="margin: 0; flex: 1;"><i class="fa fa-info-circle" id="Exp3_43" aria-hidden="true" data-toggle="tooltip" title=""></i>
                             Entre compañeros solucionamos los <br> problemas de trabajo de forma respetuosa
                         </p>
                         <div style="display: flex; align-items: center; gap: 20px;">
@@ -3054,7 +3054,7 @@
                         </div>
                     </div>
                     <div id="pregunta44_3" class="mt-4" style="display: flex; justify-content: space-between; align-items: center; width: 100%; margin-bottom: 10px;">
-                        <p style="margin: 0; flex: 1;"><i class="fa fa-question-circle" id="Exp3_44" aria-hidden="true" data-toggle="tooltip" title=""></i>
+                        <p style="margin: 0; flex: 1;"><i class="fa fa-info-circle" id="Exp3_44" aria-hidden="true" data-toggle="tooltip" title=""></i>
                             En mi trabajo me hacen sentir parte del<br>
                             grupo
                         </p>
@@ -3083,7 +3083,7 @@
                     </div>
 
                     <div id="pregunta45_3" class="mt-4" style="display: flex; justify-content: space-between; align-items: center; width: 100%; margin-bottom: 10px;">
-                        <p style="margin: 0; flex: 1;"><i class="fa fa-question-circle" id="Exp3_45" aria-hidden="true" data-toggle="tooltip" title=""></i>
+                        <p style="margin: 0; flex: 1;"><i class="fa fa-info-circle" id="Exp3_45" aria-hidden="true" data-toggle="tooltip" title=""></i>
                             Cuando tenemos que realizar trabajo de <br> equipo los compañeros colaboran
                         </p>
                         <div style="display: flex; align-items: center; gap: 20px;">
@@ -3112,7 +3112,7 @@
 
 
                     <div id="pregunta46_3" class="mt-4" style="display: flex; justify-content: space-between; align-items: center; width: 100%; margin-bottom: 10px;">
-                        <p style="margin: 0; flex: 1;"><i class="fa fa-question-circle" id="Exp3_46" aria-hidden="true" data-toggle="tooltip" title=""></i>
+                        <p style="margin: 0; flex: 1;"><i class="fa fa-info-circle" id="Exp3_46" aria-hidden="true" data-toggle="tooltip" title=""></i>
                             Mis compañeros de trabajo me ayudan <br> cuando tengo dificultades
                         </p>
                         <div style="display: flex; align-items: center; gap: 20px;">
@@ -3145,7 +3145,7 @@
                         </h6>
                     </div>
                     <div id="pregunta47_3" class="mt-5" style="display: flex; justify-content: space-between; align-items: center; width: 100%; margin-bottom: 10px;">
-                        <p style="margin: 0; flex: 1;"><i class="fa fa-question-circle" id="Exp3_47" aria-hidden="true" data-toggle="tooltip" title=""></i>
+                        <p style="margin: 0; flex: 1;"><i class="fa fa-info-circle" id="Exp3_47" aria-hidden="true" data-toggle="tooltip" title=""></i>
                             Me informan sobre lo que hago bien en mi trabajo
                         </p>
                         <div style="display: flex; align-items: center; gap: 20px;">
@@ -3172,7 +3172,7 @@
                         </div>
                     </div>
                     <div id="pregunta48_3" class="mt-4" style="display: flex; justify-content: space-between; align-items: center; width: 100%; margin-bottom: 10px;">
-                        <p style="margin: 0; flex: 1;"><i class="fa fa-question-circle" id="Exp3_48" aria-hidden="true" data-toggle="tooltip" title=""></i>
+                        <p style="margin: 0; flex: 1;"><i class="fa fa-info-circle" id="Exp3_48" aria-hidden="true" data-toggle="tooltip" title=""></i>
                             La forma como evalúan mi trabajo en mi <br>centro de trabajo me ayuda a mejorar mi desempeño
                         </p>
                         <div style="display: flex; align-items: center; gap: 20px;">
@@ -3200,7 +3200,7 @@
                     </div>
 
                     <div id="pregunta49_3" class="mt-4" style="display: flex; justify-content: space-between; align-items: center; width: 100%; margin-bottom: 10px;">
-                        <p style="margin: 0; flex: 1;"><i class="fa fa-question-circle" id="Exp3_49" aria-hidden="true" data-toggle="tooltip" title=""></i>
+                        <p style="margin: 0; flex: 1;"><i class="fa fa-info-circle" id="Exp3_49" aria-hidden="true" data-toggle="tooltip" title=""></i>
                             En mi centro de trabajo me pagan a tiempo <br> mi salario
                         </p>
                         <div style="display: flex; align-items: center; gap: 20px;">
@@ -3228,7 +3228,7 @@
                     </div>
 
                     <div id="pregunta50_3" class="mt-4" style="display: flex; justify-content: space-between; align-items: center; width: 100%; margin-bottom: 10px;">
-                        <p style="margin: 0; flex: 1;"><i class="fa fa-question-circle" id="Exp3_50" aria-hidden="true" data-toggle="tooltip" title=""></i>
+                        <p style="margin: 0; flex: 1;"><i class="fa fa-info-circle" id="Exp3_50" aria-hidden="true" data-toggle="tooltip" title=""></i>
                             El pago que recibo es el que merezco por el trabajo que realizo
                         </p>
                         <div style="display: flex; align-items: center; gap: 20px;">
@@ -3256,7 +3256,7 @@
                     </div>
 
                     <div id="pregunta51_3" class="mt-4" style="display: flex; justify-content: space-between; align-items: center; width: 100%; margin-bottom: 10px;">
-                        <p style="margin: 0; flex: 1;"><i class="fa fa-question-circle" id="Exp3_51" aria-hidden="true" data-toggle="tooltip" title=""></i>
+                        <p style="margin: 0; flex: 1;"><i class="fa fa-info-circle" id="Exp3_51" aria-hidden="true" data-toggle="tooltip" title=""></i>
                             Si obtengo los resultados esperados en mi trabajo me recompensan o reconocen
                         </p>
                         <div style="display: flex; align-items: center; gap: 20px;">
@@ -3284,7 +3284,7 @@
                     </div>
 
                     <div id="pregunta52_3" class="mt-4" style="display: flex; justify-content: space-between; align-items: center; width: 100%; margin-bottom: 10px;">
-                        <p style="margin: 0; flex: 1;"><i class="fa fa-question-circle" id="Exp3_52" aria-hidden="true" data-toggle="tooltip" title=""></i>
+                        <p style="margin: 0; flex: 1;"><i class="fa fa-info-circle" id="Exp3_52" aria-hidden="true" data-toggle="tooltip" title=""></i>
                             Las personas que hacen bien el trabajo <br> pueden crecer laboralmente
                         </p>
                         <div style="display: flex; align-items: center; gap: 20px;">
@@ -3312,7 +3312,7 @@
                     </div>
 
                     <div id="pregunta53_3" class="mt-4" style="display: flex; justify-content: space-between; align-items: center; width: 100%; margin-bottom: 10px;">
-                        <p style="margin: 0; flex: 1;"><i class="fa fa-question-circle" id="Exp3_53" aria-hidden="true" data-toggle="tooltip" title=""></i>
+                        <p style="margin: 0; flex: 1;"><i class="fa fa-info-circle" id="Exp3_53" aria-hidden="true" data-toggle="tooltip" title=""></i>
                             Considero que mi trabajo es estable
                         </p>
                         <div style="display: flex; align-items: center; gap: 20px;">
@@ -3340,7 +3340,7 @@
                     </div>
 
                     <div id="pregunta54_3" class="mt-4" style="display: flex; justify-content: space-between; align-items: center; width: 100%; margin-bottom: 10px;">
-                        <p style="margin: 0; flex: 1;"><i class="fa fa-question-circle" id="Exp3_54" aria-hidden="true" data-toggle="tooltip" title=""></i>
+                        <p style="margin: 0; flex: 1;"><i class="fa fa-info-circle" id="Exp3_54" aria-hidden="true" data-toggle="tooltip" title=""></i>
                             En mi trabajo existe continua rotación de personal
                         </p>
                         <div style="display: flex; align-items: center; gap: 20px;">
@@ -3368,7 +3368,7 @@
                     </div>
 
                     <div id="pregunta55_3" class="mt-4" style="display: flex; justify-content: space-between; align-items: center; width: 100%; margin-bottom: 10px;">
-                        <p style="margin: 0; flex: 1;"><i class="fa fa-question-circle" id="Exp3_55" aria-hidden="true" data-toggle="tooltip" title=""></i>
+                        <p style="margin: 0; flex: 1;"><i class="fa fa-info-circle" id="Exp3_55" aria-hidden="true" data-toggle="tooltip" title=""></i>
                             Siento orgullo de laborar en este centro de trabajo
                         </p>
                         <div style="display: flex; align-items: center; gap: 20px;">
@@ -3396,7 +3396,7 @@
                     </div>
 
                     <div id="pregunta56_3" class="mt-4" style="display: flex; justify-content: space-between; align-items: center; width: 100%; margin-bottom: 10px;">
-                        <p style="margin: 0; flex: 1;"><i class="fa fa-question-circle" id="Exp3_56" aria-hidden="true" data-toggle="tooltip" title=""></i>
+                        <p style="margin: 0; flex: 1;"><i class="fa fa-info-circle" id="Exp3_56" aria-hidden="true" data-toggle="tooltip" title=""></i>
                             Me siento comprometido con mi trabajo
                         </p>
                         <div style="display: flex; align-items: center; gap: 20px;">
@@ -3430,7 +3430,7 @@
                     </div>
 
                     <div id="pregunta57_3" class="mt-5" style="display: flex; justify-content: space-between; align-items: center; width: 100%; margin-bottom: 10px;">
-                        <p style="margin: 0; flex: 1;"><i class="fa fa-question-circle" id="Exp3_57" aria-hidden="true" data-toggle="tooltip" title=""></i>
+                        <p style="margin: 0; flex: 1;"><i class="fa fa-info-circle" id="Exp3_57" aria-hidden="true" data-toggle="tooltip" title=""></i>
                             En mi trabajo puedo expresarme libremente sin interrupciones
                         </p>
                         <div style="display: flex; align-items: center; gap: 20px;">
@@ -3457,7 +3457,7 @@
                         </div>
                     </div>
                     <div id="pregunta58_3" class="mt-4" style="display: flex; justify-content: space-between; align-items: center; width: 100%; margin-bottom: 10px;">
-                        <p style="margin: 0; flex: 1;"><i class="fa fa-question-circle" id="Exp3_58" aria-hidden="true" data-toggle="tooltip" title=""></i>
+                        <p style="margin: 0; flex: 1;"><i class="fa fa-info-circle" id="Exp3_58" aria-hidden="true" data-toggle="tooltip" title=""></i>
                             Recibo críticas constantes a mi persona y/o trabajo
                         </p>
                         <div style="display: flex; align-items: center; gap: 20px;">
@@ -3484,7 +3484,7 @@
                         </div>
                     </div>
                     <div id="pregunta59_3" class="mt-4" style="display: flex; justify-content: space-between; align-items: center; width: 100%; margin-bottom: 10px;">
-                        <p style="margin: 0; flex: 1;"><i class="fa fa-question-circle" id="Exp3_59" aria-hidden="true" data-toggle="tooltip" title=""></i>
+                        <p style="margin: 0; flex: 1;"><i class="fa fa-info-circle" id="Exp3_59" aria-hidden="true" data-toggle="tooltip" title=""></i>
                             Recibo burlas, calumnias, difamaciones, humillaciones o ridiculizaciones
                         </p>
                         <div style="display: flex; align-items: center; gap: 20px;">
@@ -3511,7 +3511,7 @@
                         </div>
                     </div>
                     <div id="pregunta60_3" class="mt-4" style="display: flex; justify-content: space-between; align-items: center; width: 100%; margin-bottom: 10px;">
-                        <p style="margin: 0; flex: 1;"><i class="fa fa-question-circle" id="Exp3_60" aria-hidden="true" data-toggle="tooltip" title=""></i>
+                        <p style="margin: 0; flex: 1;"><i class="fa fa-info-circle" id="Exp3_60" aria-hidden="true" data-toggle="tooltip" title=""></i>
                             Se ignora mi presencia o se me excluye de <br> las reuniones de trabajo y en la toma de decisiones
                         </p>
                         <div style="display: flex; align-items: center; gap: 20px;">
@@ -3538,7 +3538,7 @@
                         </div>
                     </div>
                     <div id="pregunta61_3" class="mt-4" style="display: flex; justify-content: space-between; align-items: center; width: 100%; margin-bottom: 10px;">
-                        <p style="margin: 0; flex: 1;"><i class="fa fa-question-circle" id="Exp3_61" aria-hidden="true" data-toggle="tooltip" title=""></i>
+                        <p style="margin: 0; flex: 1;"><i class="fa fa-info-circle" id="Exp3_61" aria-hidden="true" data-toggle="tooltip" title=""></i>
                             Se manipulan las situaciones de trabajo para hacerme parecer un mal trabajador
                         </p>
                         <div style="display: flex; align-items: center; gap: 20px;">
@@ -3565,7 +3565,7 @@
                         </div>
                     </div>
                     <div id="pregunta62_3" class="mt-4" style="display: flex; justify-content: space-between; align-items: center; width: 100%; margin-bottom: 10px;">
-                        <p style="margin: 0; flex: 1;"><i class="fa fa-question-circle" id="Exp3_62" aria-hidden="true" data-toggle="tooltip" title=""></i>
+                        <p style="margin: 0; flex: 1;"><i class="fa fa-info-circle" id="Exp3_62" aria-hidden="true" data-toggle="tooltip" title=""></i>
                             Se ignoran mis éxitos laborales y se atribuyen <br> a otros trabajadores
                         </p>
                         <div style="display: flex; align-items: center; gap: 20px;">
@@ -3592,7 +3592,7 @@
                         </div>
                     </div>
                     <div id="pregunta63_3" class="mt-4" style="display: flex; justify-content: space-between; align-items: center; width: 100%; margin-bottom: 10px;">
-                        <p style="margin: 0; flex: 1;"><i class="fa fa-question-circle" id="Exp3_63" aria-hidden="true" data-toggle="tooltip" title=""></i>
+                        <p style="margin: 0; flex: 1;"><i class="fa fa-info-circle" id="Exp3_63" aria-hidden="true" data-toggle="tooltip" title=""></i>
                             Me bloquean o impiden las oportunidades <br> que tengo para obtener ascenso o mejora en <br> mi trabajo
                         </p>
                         <div style="display: flex; align-items: center; gap: 20px;">
@@ -3619,7 +3619,7 @@
                         </div>
                     </div>
                     <div id="pregunta64_3" class="mt-4" style="display: flex; justify-content: space-between; align-items: center; width: 100%; margin-bottom: 10px;">
-                        <p style="margin: 0; flex: 1;"><i class="fa fa-question-circle" id="Exp3_64" aria-hidden="true" data-toggle="tooltip" title=""></i>
+                        <p style="margin: 0; flex: 1;"><i class="fa fa-info-circle" id="Exp3_64" aria-hidden="true" data-toggle="tooltip" title=""></i>
                             He presenciado actos de violencia en mi <br> centro de trabajo
                         </p>
                         <div style="display: flex; align-items: center; gap: 20px;">
@@ -3675,7 +3675,7 @@
 
             <div id="seccion2_3" class="mt-2" style="display: none; padding: 10px;">
                 <div id="pregunta65_3" class="mt-3" style="display: flex; justify-content: space-between; align-items: center; width: 100%; margin-bottom: 10px;">
-                    <p style="margin: 0; flex: 1;"><i class="fa fa-question-circle" id="Exp3_65" aria-hidden="true" data-toggle="tooltip" title=""></i>
+                    <p style="margin: 0; flex: 1;"><i class="fa fa-info-circle" id="Exp3_65" aria-hidden="true" data-toggle="tooltip" title=""></i>
                         Atiendo clientes o usuarios muy enojados
                     </p>
                     <div style="display: flex; align-items: center; gap: 20px;">
@@ -3702,7 +3702,7 @@
                     </div>
                 </div>
                 <div id="pregunta66_3" class="mt-4" style="display: flex; justify-content: space-between; align-items: center; width: 100%; margin-bottom: 10px;">
-                    <p style="margin: 0; flex: 1;"><i class="fa fa-question-circle" id="Exp3_66" aria-hidden="true" data-toggle="tooltip" title=""></i>
+                    <p style="margin: 0; flex: 1;"><i class="fa fa-info-circle" id="Exp3_66" aria-hidden="true" data-toggle="tooltip" title=""></i>
                         Mi trabajo me exige atender personas muy necesitadas de ayuda o enfermas
                     </p>
                     <div style="display: flex; align-items: center; gap: 20px;">
@@ -3729,7 +3729,7 @@
                     </div>
                 </div>
                 <div id="pregunta67_3" class="mt-4" style="display: flex; justify-content: space-between; align-items: center; width: 100%; margin-bottom: 10px;">
-                    <p style="margin: 0; flex: 1;"><i class="fa fa-question-circle" id="Exp3_67" aria-hidden="true" data-toggle="tooltip" title=""></i>
+                    <p style="margin: 0; flex: 1;"><i class="fa fa-info-circle" id="Exp3_67" aria-hidden="true" data-toggle="tooltip" title=""></i>
                         Para hacer mi trabajo debo demostrar sentimientos distintos a los míos
                     </p>
                     <div style="display: flex; align-items: center; gap: 20px;">
@@ -3756,7 +3756,7 @@
                     </div>
                 </div>
                 <div id="pregunta68_3" class="mt-4" style="display: flex; justify-content: space-between; align-items: center; width: 100%; margin-bottom: 10px;">
-                    <p style="margin: 0; flex: 1;"><i class="fa fa-question-circle" id="Exp3_68" aria-hidden="true" data-toggle="tooltip" title=""></i>
+                    <p style="margin: 0; flex: 1;"><i class="fa fa-info-circle" id="Exp3_68" aria-hidden="true" data-toggle="tooltip" title=""></i>
                         Mi trabajo me exige atender situaciones de violencia
                     </p>
                     <div style="display: flex; align-items: center; gap: 20px;">
@@ -3813,8 +3813,8 @@
                     </h6>
                 </div>
                 <div id="pregunta69_3" class="mt-4" style="display: flex; justify-content: space-between; align-items: center; width: 100%; margin-bottom: 10px;">
-                    <p style="margin: 0; flex: 1;"><i class="fa fa-question-circle" id="Exp3_69" aria-hidden="true" data-toggle="tooltip" title=""></i>
-                        Comunican tarde los asuntos del trabajo
+                    <p style="margin: 0; flex: 1;"><i class="fa fa-info-circle" id="Exp3_69" aria-hidden="true" data-toggle="tooltip" title=""></i>
+                        Comunican tarde los asuntos de trabajo
                     </p>
                     <div style="display: flex; align-items: center; gap: 20px;">
                         <div>
@@ -3840,7 +3840,7 @@
                     </div>
                 </div>
                 <div id="pregunta70_3" class="mt-4" style="display: flex; justify-content: space-between; align-items: center; width: 100%; margin-bottom: 10px;">
-                    <p style="margin: 0; flex: 1;"><i class="fa fa-question-circle" id="Exp3_70" aria-hidden="true" data-toggle="tooltip" title=""></i>
+                    <p style="margin: 0; flex: 1;"><i class="fa fa-info-circle" id="Exp3_70" aria-hidden="true" data-toggle="tooltip" title=""></i>
                         Dificultan el logro de los resultados del <br> trabajo
                     </p>
                     <div style="display: flex; align-items: center; gap: 20px;">
@@ -3868,7 +3868,7 @@
                 </div>
 
                 <div id="pregunta71_3" class="mt-4" style="display: flex; justify-content: space-between; align-items: center; width: 100%; margin-bottom: 10px;">
-                    <p style="margin: 0; flex: 1;"><i class="fa fa-question-circle" id="Exp3_71" aria-hidden="true" data-toggle="tooltip" title=""></i>
+                    <p style="margin: 0; flex: 1;"><i class="fa fa-info-circle" id="Exp3_71" aria-hidden="true" data-toggle="tooltip" title=""></i>
                         Cooperan poco cuando se necesita
                     </p>
                     <div style="display: flex; align-items: center; gap: 20px;">
@@ -3896,7 +3896,7 @@
                 </div>
 
                 <div id="pregunta72_3" class="mt-4" style="display: flex; justify-content: space-between; align-items: center; width: 100%; margin-bottom: 10px;">
-                    <p style="margin: 0; flex: 1;"><i class="fa fa-question-circle" id="Exp3_72" aria-hidden="true" data-toggle="tooltip" title=""></i>
+                    <p style="margin: 0; flex: 1;"><i class="fa fa-info-circle" id="Exp3_72" aria-hidden="true" data-toggle="tooltip" title=""></i>
                         Ignoran las sugerencias para mejorar <br> su trabajo
                     </p>
                     <div style="display: flex; align-items: center; gap: 20px;">
@@ -3943,6 +3943,8 @@
 
         document.addEventListener('DOMContentLoaded', function() {
         mostrarGuias(requiereGuia1, requiereGuia2, requiereGuia3);
+        cargarExplicaciones();
+
     });
     </script>
 

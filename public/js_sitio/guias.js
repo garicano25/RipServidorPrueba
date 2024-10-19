@@ -155,3 +155,40 @@ function jefetrabajadoresguia3() {
         });
     }
 }
+
+
+
+function cargarExplicaciones() {
+
+    const iconElements = document.querySelectorAll('i[id]');
+    const ids = Array.from(iconElements).map(iconElement => iconElement.getAttribute('id')); 
+
+    const csrfToken = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
+
+    $.ajax({
+        type: "POST",
+        dataType: "json",
+        url: "/obtenerExplicaciones",
+        data: { 
+            ids: ids,
+            _token: csrfToken  
+        },
+        cache: false,
+        success: function(data) {
+            if (data.explicaciones) {
+                iconElements.forEach(function(iconElement) {
+                    const iconId = iconElement.getAttribute('id'); 
+
+                    const explicacion = data.explicaciones[iconId];
+                    if (explicacion) {
+                        iconElement.setAttribute('title', explicacion);
+                        $(iconElement).tooltip();
+                    }
+                });
+            }
+        },
+        error: function(xhr, status, error) {
+            console.error('Error al obtener las explicaciones:', error);
+        }
+    });
+}
