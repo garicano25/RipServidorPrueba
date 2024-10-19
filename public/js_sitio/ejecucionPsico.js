@@ -1,4 +1,3 @@
-
 //variables globales
 var proyecto_id = 0;
 var RECPSICO_ID = 0;
@@ -18,8 +17,6 @@ $(document).ready(function()
 	$('#tab_tabla_ejecucion').click();
 
 });
-
-
 
 //======================================NAV==================================//
 // navegar menu Tab principal
@@ -148,6 +145,8 @@ $("#botonactualizar_fechas_online").click(function()
 							showConfirmButton: false
 						});
 						
+					
+						tabla_trabajadores_online();
 						// actualiza boton
 						$('#botonactualizar_fechas_online').html('Guardar <i class="fa fa-save"></i>');
 					},
@@ -583,8 +582,8 @@ function tabla_trabajadores_online()
 	{
 		if (datatable_trabajadores_online != null) {
 			datatable_trabajadores_online.destroy();
-			// datatable_trabajadores_online.clear().draw();
-			// datatable_trabajadores_online.ajax.url(ruta).load();
+			//datatable_trabajadores_online.clear().destroy();
+			//datatable_trabajadores_online.ajax.url(ruta).load();
 		}
         datatable_trabajadores_online = $('#tabla_trabajadores_online').DataTable({
 			"ajax": {
@@ -843,7 +842,6 @@ function cargarTrabajadoresNombres(elementId) {
         }
     });
 }
-
 	
 function enviarCorreo(trabajadorId, idRecsensorial) {
 	//envio único
@@ -856,17 +854,59 @@ function enviarCorreo(trabajadorId, idRecsensorial) {
         method: 'GET', 
         success: function(response) {
             if (response.msj) {
-                alert(response.msj);
+				swal({
+					title: "¡Envío exitoso!",
+					text: ""+response.msj,
+					type: "success", // warning, error, success, info
+					buttons: {
+						visible: false, // true , false
+					},
+					timer: 1500,
+					showConfirmButton: false
+				});
+				tabla_trabajadores_online();
             } else {
-                alert('Error al enviar el correo.');
+                swal({
+					title: "Error",
+					text: ""+response.msj,
+					type: "error", // warning, error, success, info
+					buttons: {
+						visible: false, // true , false
+					},
+					timer: 1500,
+					showConfirmButton: false
+				});
             }
+
         },
+		beforeSend: function(){
+			swal({
+				title: "Espere un momento...",
+				text: "Enviando correo",
+				type: "info", // warning, error, success, info
+				buttons: {
+					visible: false, // true , false
+				},
+				showConfirmButton: false
+			});
+		},
         error: function(xhr, status, error) {
             console.error('Error en la solicitud AJAX:', error);
-            alert('Hubo un error al enviar el correo.');
+			swal({
+				title: "Error",
+				text: ""+response.msj,
+				type: "error", // warning, error, success, info
+				buttons: {
+					visible: false, // true , false
+				},
+				timer: 1500,
+				showConfirmButton: false
+			});
         }
     });
 }
+
+
 
 
 

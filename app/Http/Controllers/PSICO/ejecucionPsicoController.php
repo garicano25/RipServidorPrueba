@@ -57,7 +57,7 @@ class ejecucionPsicoController extends Controller
         return response()->json($listado);
     }
 
-         /**
+        /**
      * Display the specified resource.
      *
      * @param  int  $proyecto_id
@@ -94,8 +94,8 @@ class ejecucionPsicoController extends Controller
             }
         }else{
             //OBTIENE LOS DATOS GUARDADOS DE PROGRAMA DE TRABAJO
-            $tablaOnline = DB::select('SELECT p.TRABAJADOR_NOMBRE TRABAJADOR_NOMBRE, p.TRABAJADOR_ID TRABAJADOR_ID
-                            FROM proyectotrabajadores p
+            $tablaOnline = DB::select('SELECT p.TRABAJADOR_NOMBRE TRABAJADOR_NOMBRE, p.TRABAJADOR_ID TRABAJADOR_ID, r.RECPSICO_ID RECPSICO_ID
+                            FROM proyectotrabajadores p LEFT JOIN recopsicotrabajadores r ON p.TRABAJADOR_ID = r.ID_RECOPSICOTRABAJADOR
                             WHERE p.TRABAJADOR_SELECCIONADO = 1 AND p.TRABAJADOR_MODALIDAD = "Online" AND p.proyecto_id = ' . $proyecto_id . '');
 
 
@@ -110,7 +110,9 @@ class ejecucionPsicoController extends Controller
                 $value->TRABAJADOR_ID = $value->TRABAJADOR_ID;
                 $value->TRABAJADOR_NOMBRE = $value->TRABAJADOR_NOMBRE;
                 $value->TRABAJADOR_ESTADOCONTESTADO = 'Sin iniciar';
-                $value->boton_enviarCorreo = '<button type="button" class="btn btn-warning btn-circle enviarcorreo" id="enviarCorreoTrabajador'.$count.'" data-trabajador-id="'.$value->TRABAJADOR_ID.'" name="enviarCorreoTrabajador" style="padding: 0px;"><i class="fa fa-paper-plane "></i></button>';
+                $value->boton_enviarCorreo = '<button type="button" class="btn btn-warning btn-circle enviarcorreo" id="enviarCorreoTrabajador'.$count.'" name="enviarCorreoTrabajador" onclick="enviarCorreo('.$value->TRABAJADOR_ID.', '.$value->RECPSICO_ID.')" style="padding: 0px;"><i class="fa fa-paper-plane "></i></button>';
+                
+
             }
         }
 
@@ -118,6 +120,8 @@ class ejecucionPsicoController extends Controller
         return response()->json($online);
     }
 
+     
+   
          /**
      * Display the specified resource.
      *
@@ -274,6 +278,11 @@ class ejecucionPsicoController extends Controller
                 $encryptedId = Crypt::encrypt($idPersonal);
 
                 Mail::to($correo)->send(new sendGuiaPsico($nombre, $encryptedGuia1, $encryptedGuia2, $encryptedGuia3, $encryptedId, $dias));
+            
+                //cambiar el estado de envio de correo en el registro deltrabajador
+                DB::table('seguimientotrabajadores')
+                ->where('TRABAJADOR_ID', $idPersonal)
+                ->update(['TRABAJADOR_ESTADOCORREO' => 'Enviado']);  
             }
 
             //Retornamos respuesta
