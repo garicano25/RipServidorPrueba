@@ -137,6 +137,19 @@
 
                         <div class="row">
                             <div class="col-12">
+                            <ol class="breadcrumb m-b-10 p-t-10">
+                                    <h2 style="color: #ffffff">
+                                        <i class="fa fa-braille" aria-hidden="true"></i> Trabajadores modalidad online
+                                    </h2>
+                                    <div style="display: flex; justify-content: flex-end;">
+                                        <button type="submit" class="btn btn-light botonguardar_modalidad_online" id="botonguardar_modalidad_online" style="margin-right: 10px;">
+                                            Guardar cambios  <i class="fa fa-save"></i>
+                                        </button>
+                                        <button type="submit" class="btn btn-warning botonenviar_todos_correos" id="botonenviar_todos_correos" style="margin-right: 10px;">
+                                                Enviar todos los correos  <i class="fa fa-paper-plane"></i>
+                                        </button>
+                                    </div>
+                                </ol>
                                 <div class="card">
                                     <div class="card-body m-t-10" style="padding: 10px;">
                                         <h3 style="color: #9C9C9C; text-align: center;">
@@ -177,20 +190,6 @@
                         </div>
                             <!--form panels-->
                             <div class="col-12" style="text-align: center;">
-                                <ol class="breadcrumb m-b-10 p-t-10">
-                                    <h2 style="color: #ffffff">
-                                        <i class="fa fa-braille" aria-hidden="true"></i> Trabajadores modalidad online
-                                    </h2>
-                                    <div style="display: flex; justify-content: flex-end;">
-                                        <button type="submit" class="btn btn-light botonguardar_modalidad_online" id="botonguardar_modalidad_online" style="margin-right: 10px;">
-                                            Guardar cambios  <i class="fa fa-save"></i>
-                                        </button>
-                                        <button type="submit" class="btn btn-warning botonenviar_todos_correos" id="botonenviar_todos_correos" style="margin-right: 10px;">
-                                                Enviar todos los correos  <i class="fa fa-paper-plane"></i>
-                                        </button>
-                                    </div>
-                                </ol>
-
                                 <div class="table-responsive">
                                     <table class="table table-hover stylish-table" width="100%" id="tabla_trabajadores_online">
                                         <thead>
@@ -202,7 +201,8 @@
                                                 <th class="sorting_disabled text-center" rowspan="1" colspan="1">Estado del correo</th>
                                                 <th class="sorting_disabled text-center" rowspan="1" colspan="1">Estado de cuestionario</th>
                                                 <th class="sorting_disabled text-center" rowspan="1" colspan="1">Enviar link del cuestionario</th>
-                                                
+                                                <th style="display: none;">TRABAJADOR_ID</th>
+
                                             </tr>
                                         </thead>
                                         <tbody></tbody>
@@ -213,6 +213,17 @@
                         <hr>
                         <div class="col-12" style="text-align: center;">
                         <hr>
+                        <ol class="breadcrumb m-b-10 green-breadcrumb">
+                                    <h2 style="color: #ffff; margin: 0;"> <i class="fa fa-braille" aria-hidden="true"></i> Trabajadores modalidad presencial</h2>
+                                    <div style="display: flex; justify-content: flex-end;">
+                                        <button type="submit" class="btn btn-light botonguardar_modalidad_presencial" id="botonguardar_modalidad_presencial" style="margin-right: 10px;">
+                                            Guardar cambios  <i class="fa fa-save"></i>
+                                        </button>
+                                        <button type="submit" class="btn btn-light botocargar_respuestas_trabajadores" id="botocargar_respuestas_trabajadores" style="margin-right: 10px;">
+                                            Cargar respuestas de todos los trabajadores  <i class="fa fa-file-excel-o"></i>
+                                        </button>
+                                    </div>
+                                </ol>
                             <div class="row">
                                         <div class="col-12">
                                             <div class="card">
@@ -242,17 +253,7 @@
                                         </div>
                                     </div>
                                 <div>
-                                <ol class="breadcrumb m-b-10 green-breadcrumb">
-                                    <h2 style="color: #ffff; margin: 0;"> <i class="fa fa-braille" aria-hidden="true"></i> Trabajadores modalidad presencial</h2>
-                                    <div style="display: flex; justify-content: flex-end;">
-                                        <button type="submit" class="btn btn-light botonguardar_modalidad_presencial" id="botonguardar_modalidad_presencial" style="margin-right: 10px;">
-                                            Guardar cambios  <i class="fa fa-save"></i>
-                                        </button>
-                                        <button type="submit" class="btn btn-light botocargar_respuestas_trabajadores" id="botocargar_respuestas_trabajadores" style="margin-right: 10px;">
-                                            Cargar respuestas de todos los trabajadores  <i class="fa fa-file-excel-o"></i>
-                                        </button>
-                                    </div>
-                                </ol>
+                               
                                 <div class="table-responsive">
                                     <table class="table table-hover stylish-table" width="100%" id="tabla_trabajadores_presencial">
                                         <thead>
