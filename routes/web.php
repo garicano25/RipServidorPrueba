@@ -911,6 +911,17 @@ Route::get('proyectoequiposconsultarhistorial/{proyecto_id}/{proyectoequipos_rev
 
 
 //==============================================
+Route::resource('proyectovehiculos', 'proyecto\proyectoVehiculoController');
+
+Route::get('proyectovehiculosinventario/{proyecto_id}', ['as' => 'proyectovehiculo.proyectoVehiculoController', 'uses' => 'proyecto\proyectoVehiculoController@proyectovehiculosinventario']);
+
+Route::get('proyectovehiculoslistas/{proyecto_id}', ['as' => 'proyectovehiculo.proyectovehiculoslistas', 'uses' => 'proyecto\proyectoVehiculoController@proyectovehiculoslistas']);
+
+Route::get('proyectovehiculosgenerarlistaestado/{proyecto_id}', ['as' => 'proyectovehiculo.proyectovehiculosgenerarlistaestado', 'uses' => 'proyecto\proyectoVehiculoController@proyectovehiculosgenerarlistaestado']);
+
+Route::get('proyectovehiculosconsultaractual/{proyecto_id}', ['as' => 'proyectovehiculo.proyectovehiculosconsultaractual', 'uses' => 'proyecto\proyectoVehiculoController@proyectovehiculosconsultaractual']);
+
+//==============================================
 
 
 Route::resource('proyectoordentrabajo', 'proyecto\proyectoordentrabajoController');
