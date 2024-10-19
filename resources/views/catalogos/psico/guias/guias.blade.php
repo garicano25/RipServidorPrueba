@@ -95,6 +95,23 @@
         i {
             color: #99abb4;
         }
+
+        .radio-group {
+        display: none;
+    }
+
+    .radio-label {
+        background-color: #99abb4;
+        color: white;
+        padding: 5px 10px;
+        border-radius: 5px;
+        cursor: pointer;
+        transition: background-color 0.3s ease;
+    }
+
+    .radio-label.selected {
+        background-color: #28a745; 
+    }
     </style>
 
     <div id="titulo" class="mt-4">
@@ -462,84 +479,89 @@
                 {!! csrf_field() !!}
 
                 <div id="seccion1_2" class="mt-3" style="display: block; padding: 10px;">
+
                     <div id="pregunta1_2" class="mt-4" style="display: flex; justify-content: space-between; align-items: center; width: 100%; margin-bottom: 10px;">
-                        <p style="margin: 0; flex: 1;"><i class="fa fa-info-circle" id="Exp2_1" aria-hidden="true" data-toggle="tooltip" title=""></i>
-                            Mi trabajo me exige hacer mucho esfuerzo &nbsp;&nbsp; físico</p>
+                        <p style="margin: 0; flex: 1;">
+                            <i class="fa fa-info-circle" id="Exp2_1" aria-hidden="true" data-toggle="tooltip" title=""></i>
+                            Mi trabajo me exige hacer mucho esfuerzo <br> físico
+                        </p>
                         <div style="display: flex; align-items: center; gap: 20px;">
                             <div>
-                                <label for="preguta1_siempre" style="margin-right: 5px;">Siempre</label>
-                                <input type="radio" id="preguta1_siempre" name="GUIA2_1" value="4">
+                                <label for="preguta1_siempre" class="radio-label" style="margin-right: 5px;">Siempre</label>
+                                <input type="radio" class="radio-group" id="preguta1_siempre" name="GUIA2_1" value="4" style="display: none;">
                             </div>
                             <div>
-                                <label for="preguta1_casi" style="margin-right: 5px;">Casí siempre</label>
-                                <input type="radio" id="preguta1_casi" name="GUIA2_1" value="3">
+                                <label for="preguta1_casi" class="radio-label" style="margin-right: 5px;">Casi siempre</label>
+                                <input type="radio" class="radio-group" id="preguta1_casi" name="GUIA2_1" value="3" style="display: none;">
                             </div>
                             <div>
-                                <label for="preguta1_algunas" style="margin-right: 5px;">Algunas veces</label>
-                                <input type="radio" id="preguta1_algunas" name="GUIA2_1" value="2">
+                                <label for="preguta1_algunas" class="radio-label" style="margin-right: 5px;">Algunas veces</label>
+                                <input type="radio" class="radio-group" id="preguta1_algunas" name="GUIA2_1" value="2" style="display: none;">
                             </div>
                             <div>
-                                <label for="preguta1_casinunca" style="margin-right: 5px;">Casi nunca</label>
-                                <input type="radio" id="preguta1_casinunca" name="GUIA2_1" value="1">
+                                <label for="preguta1_casinunca" class="radio-label" style="margin-right: 5px;">Casi nunca</label>
+                                <input type="radio" class="radio-group" id="preguta1_casinunca" name="GUIA2_1" value="1" style="display: none;">
                             </div>
                             <div>
-                                <label for="preguta1_nunca" style="margin-right: 5px;">Nunca</label>
-                                <input type="radio" id="preguta1_nunca" name="GUIA2_1" value="0">
+                                <label for="preguta1_nunca" class="radio-label" style="margin-right: 5px;">Nunca</label>
+                                <input type="radio" class="radio-group" id="preguta1_nunca" name="GUIA2_1" value="0" style="display: none;">
                             </div>
                         </div>
                     </div>
+
+
                     <div id="pregunta2_2" class="mt-4" style="display: flex; justify-content: space-between; align-items: center; width: 100%; margin-bottom: 10px;">
                         <p style="margin: 0; flex: 1;"><i class="fa fa-info-circle" id="Exp2_2" aria-hidden="true" data-toggle="tooltip" title=""></i>
                             Me preocupa sufrir un accidente en mi 
                             trabajo </p>
                         <div style="display: flex; align-items: center; gap: 20px;">
                             <div>
-                                <label for="preguta2_siempre" style="margin-right: 5px;">Siempre</label>
-                                <input type="radio" id="preguta2_siempre" name="GUIA2_2" value="4">
+                                <label for="preguta2_siempre" class="radio-label" style="margin-right: 5px;">Siempre</label>
+                                <input type="radio" class="radio-group" id="preguta2_siempre" name="GUIA2_2" value="4">
                             </div>
                             <div>
-                                <label for="preguta2_casi" style="margin-right: 5px;">Casí siempre</label>
-                                <input type="radio" id="preguta2_casi" name="GUIA2_2" value="3">
+                                <label for="preguta2_casi" class="radio-label" style="margin-right: 5px;">Casí siempre</label>
+                                <input type="radio" class="radio-group" id="preguta2_casi" name="GUIA2_2" value="3">
                             </div>
                             <div>
-                                <label for="preguta2_algunas" style="margin-right: 5px;">Algunas veces</label>
-                                <input type="radio" id="preguta2_algunas" name="GUIA2_2" value="2">
+                                <label for="preguta2_algunas" class="radio-label" style="margin-right: 5px;">Algunas veces</label>
+                                <input type="radio"  class="radio-group" id="preguta2_algunas" name="GUIA2_2" value="2">
                             </div>
                             <div>
-                                <label for="preguta2_casinunca" style="margin-right: 5px;">Casi nunca</label>
-                                <input type="radio" id="preguta2_casinunca" name="GUIA2_2" value="1">
+                                <label for="preguta2_casinunca" class="radio-label" style="margin-right: 5px;">Casi nunca</label>
+                                <input type="radio" class="radio-group" id="preguta2_casinunca" name="GUIA2_2" value="1">
                             </div>
                             <div>
-                                <label for="preguta2_nunca" style="margin-right: 5px;">Nunca</label>
-                                <input type="radio" id="preguta2_nunca" name="GUIA2_2" value="0">
+                                <label for="preguta2_nunca" class="radio-label" style="margin-right: 5px;">Nunca</label>
+                                <input type="radio" class="radio-group" id="preguta2_nunca" name="GUIA2_2" value="0">
                             </div>
                         </div>
                     </div>
                     <div id="pregunta3_2" class="mt-4" style="display: flex; justify-content: space-between; align-items: center; width: 100%; margin-bottom: 10px;">
                         <p style="margin: 0; flex: 1;"><i class="fa fa-info-circle" id="Exp2_3" aria-hidden="true" data-toggle="tooltip" title=""></i>
-                            Considero que las actividades que realizo 
+                            Considero que las actividades que <br> realizo 
                             son peligrosas
                         </p>
                         <div style="display: flex; align-items: center; gap: 20px;">
                             <div>
-                                <label for="preguta3_siempre" style="margin-right: 5px;">Siempre</label>
-                                <input type="radio" id="preguta3_siempre" name="GUIA2_3" value="4">
+                                <label for="preguta3_siempre" class="radio-label" style="margin-right: 5px;">Siempre</label>
+                                <input type="radio"class="radio-group" id="preguta3_siempre" name="GUIA2_3" value="4">
                             </div>
                             <div>
-                                <label for="preguta3_casi" style="margin-right: 5px;">Casí siempre</label>
-                                <input type="radio" id="preguta3_casi" name="GUIA2_3" value="3">
+                                <label for="preguta3_casi"  class="radio-label"  style="margin-right: 5px;">Casí siempre</label>
+                                <input type="radio" class="radio-group"  id="preguta3_casi" name="GUIA2_3" value="3">
                             </div>
                             <div>
-                                <label for="preguta3_algunas" style="margin-right: 5px;">Algunas veces</label>
-                                <input type="radio" id="preguta3_algunas" name="GUIA2_3" value="2">
+                                <label for="preguta3_algunas" class="radio-label" style="margin-right: 5px;">Algunas veces</label>
+                                <input type="radio" class="radio-group" id="preguta3_algunas" name="GUIA2_3" value="2">
                             </div>
                             <div>
-                                <label for="preguta3_casinunca" style="margin-right: 5px;">Casi nunca</label>
-                                <input type="radio" id="preguta3_casinunca" name="GUIA2_3" value="1">
+                                <label for="preguta3_casinunca" class="radio-label" style="margin-right: 5px;">Casi nunca</label>
+                                <input type="radio" class="radio-group" id="preguta3_casinunca" name="GUIA2_3" value="1">
                             </div>
                             <div>
-                                <label for="preguta3_nunca" style="margin-right: 5px;">Nunca</label>
-                                <input type="radio" id="preguta3_nunca" name="GUIA2_3" value="0">
+                                <label for="preguta3_nunca"class="radio-label"  style="margin-right: 5px;">Nunca</label>
+                                <input type="radio" class="radio-group" id="preguta3_nunca" name="GUIA2_3" value="0">
                             </div>
                         </div>
                     </div>
@@ -549,24 +571,24 @@
                         </p>
                         <div style="display: flex; align-items: center; gap: 20px;">
                             <div>
-                                <label for="preguta4_siempre" style="margin-right: 5px;">Siempre</label>
-                                <input type="radio" id="preguta4_siempre" name="GUIA2_4" value="4">
+                                <label for="preguta4_siempre" class="radio-label" style="margin-right: 5px;">Siempre</label>
+                                <input type="radio" class="radio-group" id="preguta4_siempre" name="GUIA2_4" value="4">
                             </div>
                             <div>
-                                <label for="preguta4_casi" style="margin-right: 5px;">Casí siempre</label>
-                                <input type="radio" id="preguta4_casi" name="GUIA2_4" value="3">
+                                <label for="preguta4_casi" class="radio-label" style="margin-right: 5px;">Casí siempre</label>
+                                <input type="radio" class="radio-group" id="preguta4_casi" name="GUIA2_4" value="3">
                             </div>
                             <div>
-                                <label for="preguta4_algunas" style="margin-right: 5px;">Algunas veces</label>
-                                <input type="radio" id="preguta4_algunas" name="GUIA2_4" value="2">
+                                <label for="preguta4_algunas" class="radio-label" style="margin-right: 5px;">Algunas veces</label>
+                                <input type="radio" class="radio-group"  id="preguta4_algunas" name="GUIA2_4" value="2">
                             </div>
                             <div>
-                                <label for="preguta4_casinunca" style="margin-right: 5px;">Casi nunca</label>
-                                <input type="radio" id="preguta4_casinunca" name="GUIA2_4" value="1">
+                                <label for="preguta4_casinunca" class="radio-label" style="margin-right: 5px;">Casi nunca</label>
+                                <input type="radio" class="radio-group" id="preguta4_casinunca" name="GUIA2_4" value="1">
                             </div>
                             <div>
-                                <label for="preguta4_nunca" style="margin-right: 5px;">Nunca</label>
-                                <input type="radio" id="preguta4_nunca" name="GUIA2_4" value="0">
+                                <label for="preguta4_nunca" class="radio-label"  style="margin-right: 5px;">Nunca</label>
+                                <input type="radio" class="radio-group" id="preguta4_nunca" name="GUIA2_4" value="0">
                             </div>
                         </div>
                     </div>
@@ -576,24 +598,24 @@
                         </p>
                         <div style="display: flex; align-items: center; gap: 20px;">
                             <div>
-                                <label for="preguta5_siempre" style="margin-right: 5px;">Siempre</label>
-                                <input type="radio" id="preguta5_siempre" name="GUIA2_5" value="4">
+                                <label for="preguta5_siempre" class="radio-label" style="margin-right: 5px;">Siempre</label>
+                                <input type="radio" class="radio-group" id="preguta5_siempre" name="GUIA2_5" value="4">
                             </div>
                             <div>
-                                <label for="preguta5_casi" style="margin-right: 5px;">Casí siempre</label>
-                                <input type="radio" id="preguta5_casi" name="GUIA2_5" value="3">
+                                <label for="preguta5_casi" class="radio-label" style="margin-right: 5px;">Casí siempre</label>
+                                <input type="radio" class="radio-group" id="preguta5_casi" name="GUIA2_5" value="3">
                             </div>
                             <div>
-                                <label for="preguta5_algunas" style="margin-right: 5px;">Algunas veces</label>
-                                <input type="radio" id="preguta5_algunas" name="GUIA2_5" value="2">
+                                <label for="preguta5_algunas" class="radio-label" style="margin-right: 5px;">Algunas veces</label>
+                                <input type="radio" class="radio-group" id="preguta5_algunas" name="GUIA2_5" value="2">
                             </div>
                             <div>
-                                <label for="preguta5_casinunca" style="margin-right: 5px;">Casi nunca</label>
-                                <input type="radio" id="preguta5_casinunca" name="GUIA2_5" value="1">
+                                <label for="preguta5_casinunca" class="radio-label" style="margin-right: 5px;">Casi nunca</label>
+                                <input type="radio" class="radio-group" id="preguta5_casinunca" name="GUIA2_5" value="1">
                             </div>
                             <div>
-                                <label for="preguta5_nunca" style="margin-right: 5px;">Nunca</label>
-                                <input type="radio" id="preguta5_nunca" name="GUIA2_5" value="0">
+                                <label for="preguta5_nunca"  class="radio-label" style="margin-right: 5px;">Nunca</label>
+                                <input type="radio" class="radio-group" id="preguta5_nunca" name="GUIA2_5" value="0">
                             </div>
                         </div>
                     </div>
@@ -604,24 +626,24 @@
                         </p>
                         <div style="display: flex; align-items: center; gap: 20px;">
                             <div>
-                                <label for="preguta6_siempre" style="margin-right: 5px;">Siempre</label>
-                                <input type="radio" id="preguta6_siempre" name="GUIA2_6" value="4">
+                                <label for="preguta6_siempre" class="radio-label" style="margin-right: 5px;">Siempre</label>
+                                <input type="radio" class="radio-group"  id="preguta6_siempre" name="GUIA2_6" value="4">
                             </div>
                             <div>
-                                <label for="preguta6_casi" style="margin-right: 5px;">Casí siempre</label>
-                                <input type="radio" id="preguta6_casi" name="GUIA2_6" value="3">
+                                <label for="preguta6_casi" class="radio-label" style="margin-right: 5px;">Casí siempre</label>
+                                <input type="radio" class="radio-group"  id="preguta6_casi" name="GUIA2_6" value="3">
                             </div>
                             <div>
-                                <label for="preguta6_algunas" style="margin-right: 5px;">Algunas veces</label>
-                                <input type="radio" id="preguta6_algunas" name="GUIA2_6" value="2">
+                                <label for="preguta6_algunas" class="radio-label" style="margin-right: 5px;">Algunas veces</label>
+                                <input type="radio" class="radio-group"  id="preguta6_algunas" name="GUIA2_6" value="2">
                             </div>
                             <div>
-                                <label for="preguta6_casinunca" style="margin-right: 5px;">Casi nunca</label>
-                                <input type="radio" id="preguta6_casinunca" name="GUIA2_6" value="1">
+                                <label for="preguta6_casinunca" class="radio-label" style="margin-right: 5px;">Casi nunca</label>
+                                <input type="radio" class="radio-group"  id="preguta6_casinunca" name="GUIA2_6" value="1">
                             </div>
                             <div>
-                                <label for="preguta6_nunca" style="margin-right: 5px;">Nunca</label>
-                                <input type="radio" id="preguta6_nunca" name="GUIA2_6" value="0">
+                                <label for="preguta6_nunca" class="radio-label" style="margin-right: 5px;">Nunca</label>
+                                <input type="radio" class="radio-group"  id="preguta6_nunca" name="GUIA2_6" value="0">
                             </div>
                         </div>
                     </div>
@@ -633,24 +655,24 @@
                         </p>
                         <div style="display: flex; align-items: center; gap: 20px;">
                             <div>
-                                <label for="preguta7_siempre" style="margin-right: 5px;">Siempre</label>
-                                <input type="radio" id="preguta7_siempre" name="GUIA2_7" value="4">
+                                <label for="preguta7_siempre" class="radio-label" style="margin-right: 5px;">Siempre</label>
+                                <input type="radio" class="radio-group"  id="preguta7_siempre" name="GUIA2_7" value="4">
                             </div>
                             <div>
-                                <label for="preguta7_casi" style="margin-right: 5px;">Casí siempre</label>
-                                <input type="radio" id="preguta7_casi" name="GUIA2_7" value="3">
+                                <label for="preguta7_casi" class="radio-label" style="margin-right: 5px;">Casí siempre</label>
+                                <input type="radio" class="radio-group"  id="preguta7_casi" name="GUIA2_7" value="3">
                             </div>
                             <div>
-                                <label for="preguta7_algunas" style="margin-right: 5px;">Algunas veces</label>
-                                <input type="radio" id="preguta7_algunas" name="GUIA2_7" value="2">
+                                <label for="preguta7_algunas" class="radio-label" style="margin-right: 5px;">Algunas veces</label>
+                                <input type="radio" class="radio-group"  id="preguta7_algunas" name="GUIA2_7" value="2">
                             </div>
                             <div>
-                                <label for="preguta7_casinunca" style="margin-right: 5px;">Casi nunca</label>
-                                <input type="radio" id="preguta7_casinunca" name="GUIA2_7" value="1">
+                                <label for="preguta7_casinunca" class="radio-label" style="margin-right: 5px;">Casi nunca</label>
+                                <input type="radio" class="radio-group"  id="preguta7_casinunca" name="GUIA2_7" value="1">
                             </div>
                             <div>
-                                <label for="preguta7_nunca" style="margin-right: 5px;">Nunca</label>
-                                <input type="radio" id="preguta7_nunca" name="GUIA2_7" value="0">
+                                <label for="preguta7_nunca" class="radio-label" style="margin-right: 5px;">Nunca</label>
+                                <input type="radio" class="radio-group"  id="preguta7_nunca" name="GUIA2_7" value="0">
                             </div>
                         </div>
                     </div>
@@ -661,24 +683,24 @@
                         </p>
                         <div style="display: flex; align-items: center; gap: 20px;">
                             <div>
-                                <label for="preguta8_siempre" style="margin-right: 5px;">Siempre</label>
-                                <input type="radio" id="preguta8_siempre" name="GUIA2_8" value="4">
+                                <label for="preguta8_siempre"  class="radio-label" style="margin-right: 5px;">Siempre</label>
+                                <input type="radio" class="radio-group"  id="preguta8_siempre" name="GUIA2_8" value="4">
                             </div>
                             <div>
-                                <label for="preguta8_casi" style="margin-right: 5px;">Casí siempre</label>
-                                <input type="radio" id="preguta8_casi" name="GUIA2_8" value="3">
+                                <label for="preguta8_casi" class="radio-label" style="margin-right: 5px;">Casí siempre</label>
+                                <input type="radio" class="radio-group"  id="preguta8_casi" name="GUIA2_8" value="3">
                             </div>
                             <div>
-                                <label for="preguta8_algunas" style="margin-right: 5px;">Algunas veces</label>
-                                <input type="radio" id="preguta8_algunas" name="GUIA2_8" value="2">
+                                <label for="preguta8_algunas" class="radio-label" class="radio-label" style="margin-right: 5px;">Algunas veces</label>
+                                <input type="radio" class="radio-group"  id="preguta8_algunas" name="GUIA2_8" value="2">
                             </div>
                             <div>
-                                <label for="preguta8_casinunca" style="margin-right: 5px;">Casi nunca</label>
-                                <input type="radio" id="preguta8_casinunca" name="GUIA2_8" value="1">
+                                <label for="preguta8_casinunca" class="radio-label"  style="margin-right: 5px;">Casi nunca</label>
+                                <input type="radio" class="radio-group"  id="preguta8_casinunca" name="GUIA2_8" value="1">
                             </div>
                             <div>
-                                <label for="preguta8_nunca" style="margin-right: 5px;">Nunca</label>
-                                <input type="radio" id="preguta8_nunca" name="GUIA2_8" value="0">
+                                <label for="preguta8_nunca" class="radio-label" style="margin-right: 5px;">Nunca</label>
+                                <input type="radio" class="radio-group"  id="preguta8_nunca" name="GUIA2_8" value="0">
                             </div>
                         </div>
                     </div>
@@ -689,24 +711,24 @@
                         </p>
                         <div style="display: flex; align-items: center; gap: 20px;">
                             <div>
-                                <label for="preguta9_siempre" style="margin-right: 5px;">Siempre</label>
-                                <input type="radio" id="preguta9_siempre" name="GUIA2_9" value="4">
+                                <label for="preguta9_siempre" class="radio-label" style="margin-right: 5px;">Siempre</label>
+                                <input type="radio" class="radio-group"  id="preguta9_siempre" name="GUIA2_9" value="4">
                             </div>
                             <div>
-                                <label for="preguta9_casi" style="margin-right: 5px;">Casí siempre</label>
-                                <input type="radio" id="preguta9_casi" name="GUIA2_9" value="3">
+                                <label for="preguta9_casi" class="radio-label" style="margin-right: 5px;">Casí siempre</label>
+                                <input type="radio" class="radio-group"  id="preguta9_casi" name="GUIA2_9" value="3">
                             </div>
                             <div>
-                                <label for="preguta9_algunas" style="margin-right: 5px;">Algunas veces</label>
-                                <input type="radio" id="preguta9_algunas" name="GUIA2_9" value="2">
+                                <label for="preguta9_algunas" class="radio-label" style="margin-right: 5px;">Algunas veces</label>
+                                <input type="radio" class="radio-group"  id="preguta9_algunas" name="GUIA2_9" value="2">
                             </div>
                             <div>
-                                <label for="preguta9_casinunca" style="margin-right: 5px;">Casi nunca</label>
-                                <input type="radio" id="preguta9_casinunca" name="GUIA2_9" value="1">
+                                <label for="preguta9_casinunca" class="radio-label" style="margin-right: 5px;">Casi nunca</label>
+                                <input type="radio" class="radio-group"  id="preguta9_casinunca" name="GUIA2_9" value="1">
                             </div>
                             <div>
-                                <label for="preguta9_nunca" style="margin-right: 5px;">Nunca</label>
-                                <input type="radio" id="preguta9_nunca" name="GUIA2_9" value="0">
+                                <label for="preguta9_nunca" class="radio-label" style="margin-right: 5px;">Nunca</label>
+                                <input type="radio" class="radio-group"  id="preguta9_nunca" name="GUIA2_9" value="0">
                             </div>
                         </div>
                     </div>
@@ -719,51 +741,51 @@
                         </p>
                         <div style="display: flex; align-items: center; gap: 20px;">
                             <div>
-                                <label for="preguta10_siempre" style="margin-right: 5px;">Siempre</label>
-                                <input type="radio" id="preguta10_siempre" name="GUIA2_10" value="4">
+                                <label for="preguta10_siempre" class="radio-label" style="margin-right: 5px;">Siempre</label>
+                                <input type="radio" class="radio-group"  id="preguta10_siempre" name="GUIA2_10" value="4">
                             </div>
                             <div>
-                                <label for="preguta10_casi" style="margin-right: 5px;">Casí siempre</label>
-                                <input type="radio" id="preguta10_casi" name="GUIA2_10" value="3">
+                                <label for="preguta10_casi" class="radio-label" style="margin-right: 5px;">Casí siempre</label>
+                                <input type="radio" class="radio-group"  id="preguta10_casi" name="GUIA2_10" value="3">
                             </div>
                             <div>
-                                <label for="preguta10_algunas" style="margin-right: 5px;">Algunas veces</label>
-                                <input type="radio" id="preguta10_algunas" name="GUIA2_10" value="2">
+                                <label for="preguta10_algunas" class="radio-label" style="margin-right: 5px;">Algunas veces</label>
+                                <input type="radio" class="radio-group"  id="preguta10_algunas" name="GUIA2_10" value="2">
                             </div>
                             <div>
-                                <label for="preguta10_casinunca" style="margin-right: 5px;">Casi nunca</label>
-                                <input type="radio" id="preguta10_casinunca" name="GUIA2_10" value="1">
+                                <label for="preguta10_casinunca" class="radio-label" style="margin-right: 5px;">Casi nunca</label>
+                                <input type="radio" class="radio-group"  id="preguta10_casinunca" name="GUIA2_10" value="1">
                             </div>
                             <div>
-                                <label for="preguta10_nunca" style="margin-right: 5px;">Nunca</label>
-                                <input type="radio" id="preguta10_nunca" name="GUIA2_10" value="0">
+                                <label for="preguta10_nunca" class="radio-label"  style="margin-right: 5px;">Nunca</label>
+                                <input type="radio" class="radio-group"  id="preguta10_nunca" name="GUIA2_10" value="0">
                             </div>
                         </div>
                     </div>
                     <div id="pregunta11_2" class="mt-4" style="display: flex; justify-content: space-between; align-items: center; width: 100%; margin-bottom: 10px;">
                         <p style="margin: 0; flex: 1;"><i class="fa fa-info-circle" id="Exp2_11" aria-hidden="true" data-toggle="tooltip" title=""></i>
-                            Respondo ante mi jefe por los resultados de  <br> toda mi área de trabajo
+                            Respondo ante mi jefe por los resultados <br>de toda mi área de trabajo
                         </p>
                         <div style="display: flex; align-items: center; gap: 20px;">
                             <div>
-                                <label for="preguta11_siempre" style="margin-right: 5px;">Siempre</label>
-                                <input type="radio" id="preguta11_siempre" name="GUIA2_11" value="4">
+                                <label for="preguta11_siempre" class="radio-label"  style="margin-right: 5px;">Siempre</label>
+                                <input type="radio" class="radio-group"  id="preguta11_siempre" name="GUIA2_11" value="4">
                             </div>
                             <div>
-                                <label for="preguta11_casi" style="margin-right: 5px;">Casí siempre</label>
-                                <input type="radio" id="preguta11_casi" name="GUIA2_11" value="3">
+                                <label for="preguta11_casi"  class="radio-label" style="margin-right: 5px;">Casí siempre</label>
+                                <input type="radio" class="radio-group"  id="preguta11_casi" name="GUIA2_11" value="3">
                             </div>
                             <div>
-                                <label for="preguta11_algunas" style="margin-right: 5px;">Algunas veces</label>
-                                <input type="radio" id="preguta11_algunas" name="GUIA2_11" value="2">
+                                <label for="preguta11_algunas"  class="radio-label" style="margin-right: 5px;">Algunas veces</label>
+                                <input type="radio"  class="radio-group"  id="preguta11_algunas" name="GUIA2_11" value="2">
                             </div>
                             <div>
-                                <label for="preguta11_casinunca" style="margin-right: 5px;">Casi nunca</label>
-                                <input type="radio" id="preguta11_casinunca" name="GUIA2_11" value="1">
+                                <label for="preguta11_casinunca" class="radio-label" style="margin-right: 5px;">Casi nunca</label>
+                                <input type="radio" class="radio-group"   id="preguta11_casinunca" name="GUIA2_11" value="1">
                             </div>
                             <div>
-                                <label for="preguta11_nunca" style="margin-right: 5px;">Nunca</label>
-                                <input type="radio" id="preguta11_nunca" name="GUIA2_11" value="0">
+                                <label for="preguta11_nunca" class="radio-label"style="margin-right: 5px;">Nunca</label>
+                                <input type="radio" class="radio-group"  id="preguta11_nunca" name="GUIA2_11" value="0">
                             </div>
                         </div>
                     </div>
@@ -773,51 +795,51 @@
                         </p>
                         <div style="display: flex; align-items: center; gap: 20px;">
                             <div>
-                                <label for="preguta12_siempre" style="margin-right: 5px;">Siempre</label>
-                                <input type="radio" id="preguta12_siempre" name="GUIA2_12" value="4">
+                                <label for="preguta12_siempre" class="radio-label"  style="margin-right: 5px;">Siempre</label>
+                                <input type="radio"  class="radio-group"  id="preguta12_siempre" name="GUIA2_12" value="4">
                             </div>
                             <div>
-                                <label for="preguta12_casi" style="margin-right: 5px;">Casí siempre</label>
-                                <input type="radio" id="preguta12_casi" name="GUIA2_12" value="3">
+                                <label for="preguta12_casi" class="radio-label"  style="margin-right: 5px;">Casí siempre</label>
+                                <input type="radio" class="radio-group"  id="preguta12_casi" name="GUIA2_12" value="3">
                             </div>
                             <div>
-                                <label for="preguta12_algunas" style="margin-right: 5px;">Algunas veces</label>
-                                <input type="radio" id="preguta12_algunas" name="GUIA2_12" value="2">
+                                <label for="preguta12_algunas"  class="radio-label" style="margin-right: 5px;">Algunas veces</label>
+                                <input type="radio"class="radio-group"   id="preguta12_algunas" name="GUIA2_12" value="2">
                             </div>
                             <div>
-                                <label for="preguta12_casinunca" style="margin-right: 5px;">Casi nunca</label>
-                                <input type="radio" id="preguta12_casinunca" name="GUIA2_12" value="1">
+                                <label for="preguta12_casinunca" class="radio-label" style="margin-right: 5px;">Casi nunca</label>
+                                <input type="radio"  class="radio-group"  id="preguta12_casinunca" name="GUIA2_12" value="1">
                             </div>
                             <div>
-                                <label for="preguta12_nunca" style="margin-right: 5px;">Nunca</label>
-                                <input type="radio" id="preguta12_nunca" name="GUIA2_12" value="0">
+                                <label for="preguta12_nunca" class="radio-label" style="margin-right: 5px;">Nunca</label>
+                                <input type="radio" class="radio-group"  id="preguta12_nunca" name="GUIA2_12" value="0">
                             </div>
                         </div>
                     </div>
                     <div id="pregunta13_2" class="mt-4" style="display: flex; justify-content: space-between; align-items: center; width: 100%; margin-bottom: 10px;">
                         <p style="margin: 0; flex: 1;"><i class="fa fa-info-circle" id="Exp2_13" aria-hidden="true" data-toggle="tooltip" title=""></i>
-                            Considero que en mi trabajo me piden hacer cosas innecesarias
+                            Considero que en mi trabajo me piden <br> hacer cosas innecesarias
                         </p>
                         <div style="display: flex; align-items: center; gap: 20px;">
                             <div>
-                                <label for="preguta13_siempre" style="margin-right: 5px;">Siempre</label>
-                                <input type="radio" id="preguta13_siempre" name="GUIA2_13" value="4">
+                                <label for="preguta13_siempre" class="radio-label" style="margin-right: 5px;">Siempre</label>
+                                <input type="radio" class="radio-group"  id="preguta13_siempre" name="GUIA2_13" value="4">
                             </div>
                             <div>
-                                <label for="preguta13_casi" style="margin-right: 5px;">Casí siempre</label>
-                                <input type="radio" id="preguta13_casi" name="GUIA2_13" value="3">
+                                <label for="preguta13_casi" class="radio-label" style="margin-right: 5px;">Casí siempre</label>
+                                <input type="radio" class="radio-group"  id="preguta13_casi" name="GUIA2_13" value="3">
                             </div>
                             <div>
-                                <label for="preguta13_algunas" style="margin-right: 5px;">Algunas veces</label>
-                                <input type="radio" id="preguta13_algunas" name="GUIA2_13" value="2">
+                                <label for="preguta13_algunas" class="radio-label" style="margin-right: 5px;">Algunas veces</label>
+                                <input type="radio" class="radio-group"  id="preguta13_algunas" name="GUIA2_13" value="2">
                             </div>
                             <div>
-                                <label for="preguta13_casinunca" style="margin-right: 5px;">Casi nunca</label>
-                                <input type="radio" id="preguta13_casinunca" name="GUIA2_13" value="1">
+                                <label for="preguta13_casinunca" class="radio-label" style="margin-right: 5px;">Casi nunca</label>
+                                <input type="radio" class="radio-group"  id="preguta13_casinunca" name="GUIA2_13" value="1">
                             </div>
                             <div>
-                                <label for="preguta13_nunca" style="margin-right: 5px;">Nunca</label>
-                                <input type="radio" id="preguta13_nunca" name="GUIA2_13" value="0">
+                                <label for="preguta13_nunca" class="radio-label" style="margin-right: 5px;">Nunca</label>
+                                <input type="radio" class="radio-group"  id="preguta13_nunca" name="GUIA2_13" value="0">
                             </div>
                         </div>
                     </div>
@@ -827,28 +849,28 @@
                     </div>
                     <div id="pregunta14_2" class="mt-5" style="display: flex; justify-content: space-between; align-items: center; width: 100%; margin-bottom: 10px;">
                         <p style="margin: 0; flex: 1;"><i class="fa fa-info-circle" id="Exp2_14" aria-hidden="true" data-toggle="tooltip" title=""></i>
-                            Trabajo horas extras más de tres veces a la semana
+                            Trabajo horas extras más de tres veces <br> a la semana
                         </p>
                         <div style="display: flex; align-items: center; gap: 20px;">
                             <div>
-                                <label for="preguta14_siempre" style="margin-right: 5px;">Siempre</label>
-                                <input type="radio" id="preguta14_siempre" name="GUIA2_14" value="4">
+                                <label for="preguta14_siempre" class="radio-label" style="margin-right: 5px;">Siempre</label>
+                                <input type="radio"  class="radio-group" id="preguta14_siempre" name="GUIA2_14" value="4">
                             </div>
                             <div>
-                                <label for="preguta14_casi" style="margin-right: 5px;">Casí siempre</label>
-                                <input type="radio" id="preguta14_casi" name="GUIA2_14" value="3">
+                                <label for="preguta14_casi" class="radio-label" style="margin-right: 5px;">Casí siempre</label>
+                                <input type="radio" class="radio-group"  id="preguta14_casi" name="GUIA2_14" value="3">
                             </div>
                             <div>
-                                <label for="preguta14_algunas" style="margin-right: 5px;">Algunas veces</label>
-                                <input type="radio" id="preguta14_algunas" name="GUIA2_14" value="2">
+                                <label for="preguta14_algunas" class="radio-label" style="margin-right: 5px;">Algunas veces</label>
+                                <input type="radio" class="radio-group"  id="preguta14_algunas" name="GUIA2_14" value="2">
                             </div>
                             <div>
-                                <label for="preguta14_casinunca" style="margin-right: 5px;">Casi nunca</label>
-                                <input type="radio" id="preguta14_casinunca" name="GUIA2_14" value="1">
+                                <label for="preguta14_casinunca" class="radio-label" style="margin-right: 5px;">Casi nunca</label>
+                                <input type="radio" class="radio-group"  id="preguta14_casinunca" name="GUIA2_14" value="1">
                             </div>
                             <div>
-                                <label for="preguta14_nunca" style="margin-right: 5px;">Nunca</label>
-                                <input type="radio" id="preguta14_nunca" name="GUIA2_14" value="0">
+                                <label for="preguta14_nunca" class="radio-label" style="margin-right: 5px;">Nunca</label>
+                                <input type="radio" class="radio-group" id="preguta14_nunca" name="GUIA2_14" value="0">
                             </div>
                         </div>
                     </div>
@@ -858,51 +880,52 @@
                         </p>
                         <div style="display: flex; align-items: center; gap: 20px;">
                             <div>
-                                <label for="preguta15_siempre" style="margin-right: 5px;">Siempre</label>
-                                <input type="radio" id="preguta15_siempre" name="GUIA2_15" value="4">
+                                <label for="preguta15_siempre" class="radio-label" style="margin-right: 5px;">Siempre</label>
+                                <input type="radio" class="radio-group"  id="preguta15_siempre" name="GUIA2_15" value="4">
                             </div>
                             <div>
-                                <label for="preguta15_casi" style="margin-right: 5px;">Casí siempre</label>
-                                <input type="radio" id="preguta15_casi" name="GUIA2_15" value="3">
+                                <label for="preguta15_casi" class="radio-label" style="margin-right: 5px;">Casí siempre</label>
+                                <input type="radio" class="radio-group"  id="preguta15_casi" name="GUIA2_15" value="3">
                             </div>
                             <div>
-                                <label for="preguta15_algunas" style="margin-right: 5px;">Algunas veces</label>
-                                <input type="radio" id="preguta15_algunas" name="GUIA2_15" value="2">
+                                <label for="preguta15_algunas" class="radio-label"  style="margin-right: 5px;">Algunas veces</label>
+                                <input type="radio" class="radio-group"  id="preguta15_algunas" name="GUIA2_15" value="2">
                             </div>
                             <div>
-                                <label for="preguta15_casinunca" style="margin-right: 5px;">Casi nunca</label>
-                                <input type="radio" id="preguta15_casinunca" name="GUIA2_15" value="1">
+                                <label for="preguta15_casinunca" class="radio-label" style="margin-right: 5px;">Casi nunca</label>
+                                <input type="radio"class="radio-group"  id="preguta15_casinunca" name="GUIA2_15" value="1">
                             </div>
                             <div>
-                                <label for="preguta15_nunca" style="margin-right: 5px;">Nunca</label>
-                                <input type="radio" id="preguta15_nunca" name="GUIA2_15" value="0">
+                                <label for="preguta15_nunca" class="radio-label" style="margin-right: 5px;">Nunca</label>
+                                <input type="radio" class="radio-group"  id="preguta15_nunca" name="GUIA2_15" value="0">
                             </div>
                         </div>
                     </div>
                     <div id="pregunta16_2" class="mt-4" style="display: flex; justify-content: space-between; align-items: center; width: 100%; margin-bottom: 10px;">
                         <p style="margin: 0; flex: 1;"><i class="fa fa-info-circle" id="Exp2_16" aria-hidden="true" data-toggle="tooltip" title=""></i>
-                            Considero que el tiempo en el trabajo es <br> mucho y perjudica mis actividades familiares <br> o personales
+                            Considero que el tiempo en el trabajo <br> 
+                            es mucho y perjudica mis actividades familiares o personales
                         </p>
                         <div style="display: flex; align-items: center; gap: 20px;">
                             <div>
-                                <label for="preguta16_siempre" style="margin-right: 5px;">Siempre</label>
-                                <input type="radio" id="preguta16_siempre" name="GUIA2_16" value="4">
+                                <label for="preguta16_siempre" class="radio-label" style="margin-right: 5px;">Siempre</label>
+                                <input type="radio" class="radio-group"  id="preguta16_siempre" name="GUIA2_16" value="4">
                             </div>
                             <div>
-                                <label for="preguta16_casi" style="margin-right: 5px;">Casí siempre</label>
-                                <input type="radio" id="preguta16_casi" name="GUIA2_16" value="3">
+                                <label for="preguta16_casi" class="radio-label" style="margin-right: 5px;">Casí siempre</label>
+                                <input type="radio" class="radio-group"  id="preguta16_casi" name="GUIA2_16" value="3">
                             </div>
                             <div>
-                                <label for="preguta16_algunas" style="margin-right: 5px;">Algunas veces</label>
-                                <input type="radio" id="preguta16_algunas" name="GUIA2_16" value="2">
+                                <label for="preguta16_algunas" class="radio-label" style="margin-right: 5px;">Algunas veces</label>
+                                <input type="radio" class="radio-group"  id="preguta16_algunas" name="GUIA2_16" value="2">
                             </div>
                             <div>
-                                <label for="preguta16_casinunca" style="margin-right: 5px;">Casi nunca</label>
-                                <input type="radio" id="preguta16_casinunca" name="GUIA2_16" value="1">
+                                <label for="preguta16_casinunca" class="radio-label" style="margin-right: 5px;">Casi nunca</label>
+                                <input type="radio" class="radio-group"  id="preguta16_casinunca" name="GUIA2_16" value="1">
                             </div>
                             <div>
-                                <label for="preguta16_nunca" style="margin-right: 5px;">Nunca</label>
-                                <input type="radio" id="preguta16_nunca" name="GUIA2_16" value="0">
+                                <label for="preguta16_nunca"  class="radio-label" style="margin-right: 5px;">Nunca</label>
+                                <input type="radio" class="radio-group"  id="preguta16_nunca" name="GUIA2_16" value="0">
                             </div>
                         </div>
                     </div>
@@ -912,24 +935,24 @@
                         </p>
                         <div style="display: flex; align-items: center; gap: 20px;">
                             <div>
-                                <label for="preguta17_siempre" style="margin-right: 5px;">Siempre</label>
-                                <input type="radio" id="preguta17_siempre" name="GUIA2_17" value="4">
+                                <label for="preguta17_siempre" class="radio-label" style="margin-right: 5px;">Siempre</label>
+                                <input type="radio" class="radio-group"  id="preguta17_siempre" name="GUIA2_17" value="4">
                             </div>
                             <div>
-                                <label for="preguta17_casi" style="margin-right: 5px;">Casí siempre</label>
-                                <input type="radio" id="preguta17_casi" name="GUIA2_17" value="3">
+                                <label for="preguta17_casi" class="radio-label" style="margin-right: 5px;">Casí siempre</label>
+                                <input type="radio" class="radio-group"  id="preguta17_casi" name="GUIA2_17" value="3">
                             </div>
                             <div>
-                                <label for="preguta17_algunas" style="margin-right: 5px;">Algunas veces</label>
-                                <input type="radio" id="preguta17_algunas" name="GUIA2_17" value="2">
+                                <label for="preguta17_algunas"  class="radio-label" style="margin-right: 5px;">Algunas veces</label>
+                                <input type="radio" class="radio-group"  id="preguta17_algunas" name="GUIA2_17" value="2">
                             </div>
                             <div>
-                                <label for="preguta17_casinunca" style="margin-right: 5px;">Casi nunca</label>
-                                <input type="radio" id="preguta17_casinunca" name="GUIA2_17" value="1">
+                                <label for="preguta17_casinunca" class="radio-label" style="margin-right: 5px;">Casi nunca</label>
+                                <input type="radio" class="radio-group"  id="preguta17_casinunca" name="GUIA2_17" value="1">
                             </div>
                             <div>
-                                <label for="preguta17_nunca" style="margin-right: 5px;">Nunca</label>
-                                <input type="radio" id="preguta17_nunca" name="GUIA2_17" value="0">
+                                <label for="preguta17_nunca" class="radio-label" style="margin-right: 5px;">Nunca</label>
+                                <input type="radio" class="radio-group"  id="preguta17_nunca" name="GUIA2_17" value="0">
                             </div>
                         </div>
                     </div>
@@ -945,24 +968,24 @@
                         </p>
                         <div style="display: flex; align-items: center; gap: 20px;">
                             <div>
-                                <label for="preguta18_siempre" style="margin-right: 5px;">Siempre</label>
-                                <input type="radio" id="preguta18_siempre" name="GUIA2_18" value="0">
+                                <label for="preguta18_siempre" class="radio-label" style="margin-right: 5px;">Siempre</label>
+                                <input type="radio" class="radio-group"  id="preguta18_siempre" name="GUIA2_18" value="0">
                             </div>
                             <div>
-                                <label for="preguta18_casi" style="margin-right: 5px;">Casí siempre</label>
-                                <input type="radio" id="preguta18_casi" name="GUIA2_18" value="1">
+                                <label for="preguta18_casi" class="radio-label" style="margin-right: 5px;">Casí siempre</label>
+                                <input type="radio" class="radio-group" id="preguta18_casi" name="GUIA2_18" value="1">
                             </div>
                             <div>
-                                <label for="preguta18_algunas" style="margin-right: 5px;">Algunas veces</label>
-                                <input type="radio" id="preguta18_algunas" name="GUIA2_18" value="2">
+                                <label for="preguta18_algunas" class="radio-label" style="margin-right: 5px;">Algunas veces</label>
+                                <input type="radio" class="radio-group"  id="preguta18_algunas" name="GUIA2_18" value="2">
                             </div>
                             <div>
-                                <label for="preguta18_casinunca" style="margin-right: 5px;">Casi nunca</label>
-                                <input type="radio" id="preguta18_casinunca" name="GUIA2_18" value="3">
+                                <label for="preguta18_casinunca"  class="radio-label" style="margin-right: 5px;">Casi nunca</label>
+                                <input type="radio" class="radio-group"  id="preguta18_casinunca" name="GUIA2_18" value="3">
                             </div>
                             <div>
-                                <label for="preguta18_nunca" style="margin-right: 5px;">Nunca</label>
-                                <input type="radio" id="preguta18_nunca" name="GUIA2_18" value="4">
+                                <label for="preguta18_nunca" class="radio-label" style="margin-right: 5px;">Nunca</label>
+                                <input type="radio" class="radio-group"  id="preguta18_nunca" name="GUIA2_18" value="4">
                             </div>
                         </div>
                     </div>
@@ -974,51 +997,51 @@
                         </p>
                         <div style="display: flex; align-items: center; gap: 20px;">
                             <div>
-                                <label for="preguta19_siempre" style="margin-right: 5px;">Siempre</label>
-                                <input type="radio" id="preguta19_siempre" name="GUIA2_19" value="0">
+                                <label for="preguta19_siempre" class="radio-label"  style="margin-right: 5px;">Siempre</label>
+                                <input type="radio" class="radio-group" id="preguta19_siempre" name="GUIA2_19" value="0">
                             </div>
                             <div>
-                                <label for="preguta19_casi" style="margin-right: 5px;">Casí siempre</label>
-                                <input type="radio" id="preguta19_casi" name="GUIA2_19" value="1">
+                                <label for="preguta19_casi" class="radio-label" style="margin-right: 5px;">Casí siempre</label>
+                                <input type="radio" class="radio-group"  id="preguta19_casi" name="GUIA2_19" value="1">
                             </div>
                             <div>
-                                <label for="preguta19_algunas" style="margin-right: 5px;">Algunas veces</label>
-                                <input type="radio" id="preguta19_algunas" name="GUIA2_19" value="2">
+                                <label for="preguta19_algunas"  class="radio-label" style="margin-right: 5px;">Algunas veces</label>
+                                <input type="radio" class="radio-group"  id="preguta19_algunas" name="GUIA2_19" value="2">
                             </div>
                             <div>
-                                <label for="preguta19_casinunca" style="margin-right: 5px;">Casi nunca</label>
-                                <input type="radio" id="preguta19_casinunca" name="GUIA2_19" value="3">
+                                <label for="preguta19_casinunca" class="radio-label" style="margin-right: 5px;">Casi nunca</label>
+                                <input type="radio" class="radio-group"  id="preguta19_casinunca" name="GUIA2_19" value="3">
                             </div>
                             <div>
-                                <label for="preguta19_nunca" style="margin-right: 5px;">Nunca</label>
-                                <input type="radio" id="preguta19_nunca" name="GUIA2_19" value="4">
+                                <label for="preguta19_nunca" class="radio-label" style="margin-right: 5px;">Nunca</label>
+                                <input type="radio" class="radio-group"  id="preguta19_nunca" name="GUIA2_19" value="4">
                             </div>
                         </div>
                     </div>
                     <div id="pregunta20_2" class="mt-4" style="display: flex; justify-content: space-between; align-items: center; width: 100%; margin-bottom: 10px;">
                         <p style="margin: 0; flex: 1;"><i class="fa fa-info-circle" id="Exp2_20" aria-hidden="true" data-toggle="tooltip" title=""></i>
-                            Durante mi jornada de trabajo puedo tomar pausas cuando las necesito
+                            Durante mi jornada de trabajo puedo <br> tomar pausas cuando las necesito
                         </p>
                         <div style="display: flex; align-items: center; gap: 20px;">
                             <div>
-                                <label for="preguta20_siempre" style="margin-right: 5px;">Siempre</label>
-                                <input type="radio" id="preguta20_siempre" name="GUIA2_20" value="0">
+                                <label for="preguta20_siempre" class="radio-label" style="margin-right: 5px;">Siempre</label>
+                                <input type="radio" class="radio-group"  id="preguta20_siempre" name="GUIA2_20" value="0">
                             </div>
                             <div>
-                                <label for="preguta20_casi" style="margin-right: 5px;">Casí siempre</label>
-                                <input type="radio" id="preguta20_casi" name="GUIA2_20" value="1">
+                                <label for="preguta20_casi" class="radio-label" style="margin-right: 5px;">Casí siempre</label>
+                                <input type="radio" class="radio-group"  id="preguta20_casi" name="GUIA2_20" value="1">
                             </div>
                             <div>
-                                <label for="preguta20_algunas" style="margin-right: 5px;">Algunas veces</label>
-                                <input type="radio" id="preguta20_algunas" name="GUIA2_20" value="2">
+                                <label for="preguta20_algunas" class="radio-label"  style="margin-right: 5px;">Algunas veces</label>
+                                <input type="radio" class="radio-group"  id="preguta20_algunas" name="GUIA2_20" value="2">
                             </div>
                             <div>
-                                <label for="preguta20_casinunca" style="margin-right: 5px;">Casi nunca</label>
-                                <input type="radio" id="preguta20_casinunca" name="GUIA2_20" value="3">
+                                <label for="preguta20_casinunca" class="radio-label" style="margin-right: 5px;">Casi nunca</label>
+                                <input type="radio" class="radio-group"  id="preguta20_casinunca" name="GUIA2_20" value="3">
                             </div>
                             <div>
-                                <label for="preguta20_nunca" style="margin-right: 5px;">Nunca</label>
-                                <input type="radio" id="preguta20_nunca" name="GUIA2_20" value="4">
+                                <label for="preguta20_nunca" class="radio-label" style="margin-right: 5px;">Nunca</label>
+                                <input type="radio" class="radio-group"  id="preguta20_nunca" name="GUIA2_20" value="4">
                             </div>
                         </div>
                     </div>
@@ -1028,24 +1051,24 @@
                         </p>
                         <div style="display: flex; align-items: center; gap: 20px;">
                             <div>
-                                <label for="preguta21_siempre" style="margin-right: 5px;">Siempre</label>
-                                <input type="radio" id="preguta21_siempre" name="GUIA2_21" value="0">
+                                <label for="preguta21_siempre" class="radio-label" style="margin-right: 5px;">Siempre</label>
+                                <input type="radio"  class="radio-group"  id="preguta21_siempre" name="GUIA2_21" value="0">
                             </div>
                             <div>
-                                <label for="preguta21_casi" style="margin-right: 5px;">Casí siempre</label>
-                                <input type="radio" id="preguta21_casi" name="GUIA2_21" value="1">
+                                <label for="preguta21_casi" class="radio-label" style="margin-right: 5px;">Casí siempre</label>
+                                <input type="radio" class="radio-group"  id="preguta21_casi" name="GUIA2_21" value="1">
                             </div>
                             <div>
-                                <label for="preguta21_algunas" style="margin-right: 5px;">Algunas veces</label>
-                                <input type="radio" id="preguta21_algunas" name="GUIA2_21" value="2">
+                                <label for="preguta21_algunas" class="radio-label" style="margin-right: 5px;">Algunas veces</label>
+                                <input type="radio" class="radio-group"  id="preguta21_algunas" name="GUIA2_21" value="2">
                             </div>
                             <div>
-                                <label for="preguta21_casinunca" style="margin-right: 5px;">Casi nunca</label>
-                                <input type="radio" id="preguta21_casinunca" name="GUIA2_21" value="3">
+                                <label for="preguta21_casinunca" class="radio-label" style="margin-right: 5px;">Casi nunca</label>
+                                <input type="radio" class="radio-group"  id="preguta21_casinunca" name="GUIA2_21" value="3">
                             </div>
                             <div>
-                                <label for="preguta21_nunca" style="margin-right: 5px;">Nunca</label>
-                                <input type="radio" id="preguta21_nunca" name="GUIA2_21" value="4">
+                                <label for="preguta21_nunca" class="radio-label" style="margin-right: 5px;">Nunca</label>
+                                <input type="radio" class="radio-group"  id="preguta21_nunca" name="GUIA2_21" value="4">
                             </div>
                         </div>
                     </div>
@@ -1055,24 +1078,24 @@
                         </p>
                         <div style="display: flex; align-items: center; gap: 20px;">
                             <div>
-                                <label for="preguta22_siempre" style="margin-right: 5px;">Siempre</label>
-                                <input type="radio" id="preguta22_siempre" name="GUIA2_22" value="0">
+                                <label for="preguta22_siempre" class="radio-label" style="margin-right: 5px;">Siempre</label>
+                                <input type="radio" class="radio-group"  id="preguta22_siempre" name="GUIA2_22" value="0">
                             </div>
                             <div>
-                                <label for="preguta22_casi" style="margin-right: 5px;">Casí siempre</label>
-                                <input type="radio" id="preguta22_casi" name="GUIA2_22" value="1">
+                                <label for="preguta22_casi" class="radio-label" style="margin-right: 5px;">Casí siempre</label>
+                                <input type="radio" class="radio-group"  id="preguta22_casi" name="GUIA2_22" value="1">
                             </div>
                             <div>
-                                <label for="preguta22_algunas" style="margin-right: 5px;">Algunas veces</label>
-                                <input type="radio" id="preguta22_algunas" name="GUIA2_22" value="2">
+                                <label for="preguta22_algunas" class="radio-label" style="margin-right: 5px;">Algunas veces</label>
+                                <input type="radio" class="radio-group"  id="preguta22_algunas" name="GUIA2_22" value="2">
                             </div>
                             <div>
-                                <label for="preguta22_casinunca" style="margin-right: 5px;">Casi nunca</label>
-                                <input type="radio" id="preguta22_casinunca" name="GUIA2_22" value="3">
+                                <label for="preguta22_casinunca" class="radio-label" style="margin-right: 5px;">Casi nunca</label>
+                                <input type="radio" class="radio-group"  id="preguta22_casinunca" name="GUIA2_22" value="3">
                             </div>
                             <div>
-                                <label for="preguta22_nunca" style="margin-right: 5px;">Nunca</label>
-                                <input type="radio" id="preguta22_nunca" name="GUIA2_22" value="4">
+                                <label for="preguta22_nunca" class="radio-label" style="margin-right: 5px;">Nunca</label>
+                                <input type="radio" class="radio-group"  id="preguta22_nunca" name="GUIA2_22" value="4">
                             </div>
                         </div>
                     </div>
@@ -1088,51 +1111,51 @@
                         </p>
                         <div style="display: flex; align-items: center; gap: 20px;">
                             <div>
-                                <label for="preguta23_siempre" style="margin-right: 5px;">Siempre</label>
-                                <input type="radio" id="preguta23_siempre" name="GUIA2_23" value="0">
+                                <label for="preguta23_siempre" class="radio-label" style="margin-right: 5px;">Siempre</label>
+                                <input type="radio" class="radio-group"  id="preguta23_siempre" name="GUIA2_23" value="0">
                             </div>
                             <div>
-                                <label for="preguta23_casi" style="margin-right: 5px;">Casí siempre</label>
-                                <input type="radio" id="preguta23_casi" name="GUIA2_23" value="1">
+                                <label for="preguta23_casi"  class="radio-label" style="margin-right: 5px;">Casí siempre</label>
+                                <input type="radio" class="radio-group"  id="preguta23_casi" name="GUIA2_23" value="1">
                             </div>
                             <div>
-                                <label for="preguta23_algunas" style="margin-right: 5px;">Algunas veces</label>
-                                <input type="radio" id="preguta23_algunas" name="GUIA2_23" value="2">
+                                <label for="preguta23_algunas" class="radio-label" style="margin-right: 5px;">Algunas veces</label>
+                                <input type="radio" class="radio-group"  id="preguta23_algunas" name="GUIA2_23" value="2">
                             </div>
                             <div>
-                                <label for="preguta23_casinunca" style="margin-right: 5px;">Casi nunca</label>
-                                <input type="radio" id="preguta23_casinunca" name="GUIA2_23" value="3">
+                                <label for="preguta23_casinunca" class="radio-label" style="margin-right: 5px;">Casi nunca</label>
+                                <input type="radio"  class="radio-group" id="preguta23_casinunca" name="GUIA2_23" value="3">
                             </div>
                             <div>
-                                <label for="preguta23_nunca" style="margin-right: 5px;">Nunca</label>
-                                <input type="radio" id="preguta23_nunca" name="GUIA2_23" value="4">
+                                <label for="preguta23_nunca" class="radio-label" style="margin-right: 5px;">Nunca</label>
+                                <input type="radio" class="radio-group"  id="preguta23_nunca" name="GUIA2_23" value="4">
                             </div>
                         </div>
                     </div>
                     <div id="pregunta24_2" class="mt-4" style="display: flex; justify-content: space-between; align-items: center; width: 100%; margin-bottom: 10px;">
                         <p style="margin: 0; flex: 1;"><i class="fa fa-info-circle" id="Exp2_24" aria-hidden="true" data-toggle="tooltip" title=""></i>
-                            Me explican claramente los resultados que <br> debo obtener en mi trabajo
+                            Me explican claramente los resultados <br> que debo obtener en mi trabajo
                         </p>
                         <div style="display: flex; align-items: center; gap: 20px;">
                             <div>
-                                <label for="preguta24_siempre" style="margin-right: 5px;">Siempre</label>
-                                <input type="radio" id="preguta24_siempre" name="GUIA2_24" value="0">
+                                <label for="preguta24_siempre" class="radio-label" style="margin-right: 5px;">Siempre</label>
+                                <input type="radio"  class="radio-group"  id="preguta24_siempre" name="GUIA2_24" value="0">
                             </div>
                             <div>
-                                <label for="preguta24_casi" style="margin-right: 5px;">Casí siempre</label>
-                                <input type="radio" id="preguta24_casi" name="GUIA2_24" value="1">
+                                <label for="preguta24_casi" class="radio-label" style="margin-right: 5px;">Casí siempre</label>
+                                <input type="radio" class="radio-group"  id="preguta24_casi" name="GUIA2_24" value="1">
                             </div>
                             <div>
-                                <label for="preguta24_algunas" style="margin-right: 5px;">Algunas veces</label>
-                                <input type="radio" id="preguta24_algunas" name="GUIA2_24" value="2">
+                                <label for="preguta24_algunas" class="radio-label" class="radio-label"z  style="margin-right: 5px;">Algunas veces</label>
+                                <input type="radio" class="radio-group"  id="preguta24_algunas" name="GUIA2_24" value="2">
                             </div>
                             <div>
-                                <label for="preguta24_casinunca" style="margin-right: 5px;">Casi nunca</label>
-                                <input type="radio" id="preguta24_casinunca" name="GUIA2_24" value="3">
+                                <label for="preguta24_casinunca" class="radio-label" style="margin-right: 5px;">Casi nunca</label>
+                                <input type="radio" class="radio-group"  id="preguta24_casinunca" name="GUIA2_24" value="3">
                             </div>
                             <div>
-                                <label for="preguta24_nunca" style="margin-right: 5px;">Nunca</label>
-                                <input type="radio" id="preguta24_nunca" name="GUIA2_24" value="4">
+                                <label for="preguta24_nunca" class="radio-label" style="margin-right: 5px;">Nunca</label>
+                                <input type="radio" class="radio-group"  id="preguta24_nunca" name="GUIA2_24" value="4">
                             </div>
                         </div>
                     </div>
@@ -1143,24 +1166,24 @@
                         </p>
                         <div style="display: flex; align-items: center; gap: 20px;">
                             <div>
-                                <label for="preguta25_siempre" style="margin-right: 5px;">Siempre</label>
-                                <input type="radio" id="preguta25_siempre" name="GUIA2_25" value="0">
+                                <label for="preguta25_siempre" class="radio-label" style="margin-right: 5px;">Siempre</label>
+                                <input type="radio" class="radio-group"  id="preguta25_siempre" name="GUIA2_25" value="0">
                             </div>
                             <div>
-                                <label for="preguta25_casi" style="margin-right: 5px;">Casí siempre</label>
-                                <input type="radio" id="preguta25_casi" name="GUIA2_25" value="1">
+                                <label for="preguta25_casi" class="radio-label" style="margin-right: 5px;">Casí siempre</label>
+                                <input type="radio" class="radio-group" id="preguta25_casi" name="GUIA2_25" value="1">
                             </div>
                             <div>
-                                <label for="preguta25_algunas" style="margin-right: 5px;">Algunas veces</label>
-                                <input type="radio" id="preguta25_algunas" name="GUIA2_25" value="2">
+                                <label for="preguta25_algunas" class="radio-label" style="margin-right: 5px;">Algunas veces</label>
+                                <input type="radio" class="radio-group" id="preguta25_algunas" name="GUIA2_25" value="2">
                             </div>
                             <div>
-                                <label for="preguta25_casinunca" style="margin-right: 5px;">Casi nunca</label>
-                                <input type="radio" id="preguta25_casinunca" name="GUIA2_25" value="3">
+                                <label for="preguta25_casinunca" class="radio-label" style="margin-right: 5px;">Casi nunca</label>
+                                <input type="radio" class="radio-group"  id="preguta25_casinunca" name="GUIA2_25" value="3">
                             </div>
                             <div>
-                                <label for="preguta25_nunca" style="margin-right: 5px;">Nunca</label>
-                                <input type="radio" id="preguta25_nunca" name="GUIA2_25" value="4">
+                                <label for="preguta25_nunca" class="radio-label" style="margin-right: 5px;">Nunca</label>
+                                <input type="radio" class="radio-group"  id="preguta25_nunca" name="GUIA2_25" value="4">
                             </div>
                         </div>
                     </div>
@@ -1170,24 +1193,24 @@
                         </p>
                         <div style="display: flex; align-items: center; gap: 20px;">
                             <div>
-                                <label for="preguta26_siempre" style="margin-right: 5px;">Siempre</label>
-                                <input type="radio" id="preguta26_siempre" name="GUIA2_26" value="0">
+                                <label for="preguta26_siempre" class="radio-label" style="margin-right: 5px;">Siempre</label>
+                                <input type="radio" class="radio-group"  id="preguta26_siempre" name="GUIA2_26" value="0">
                             </div>
                             <div>
-                                <label for="preguta26_casi" style="margin-right: 5px;">Casí siempre</label>
-                                <input type="radio" id="preguta26_casi" name="GUIA2_26" value="1">
+                                <label for="preguta26_casi" class="radio-label" style="margin-right: 5px;">Casí siempre</label>
+                                <input type="radio" class="radio-group"  id="preguta26_casi" name="GUIA2_26" value="1">
                             </div>
                             <div>
-                                <label for="preguta26_algunas" style="margin-right: 5px;">Algunas veces</label>
-                                <input type="radio" id="preguta26_algunas" name="GUIA2_26" value="2">
+                                <label for="preguta26_algunas" class="radio-label" style="margin-right: 5px;">Algunas veces</label>
+                                <input type="radio" class="radio-group"  id="preguta26_algunas" name="GUIA2_26" value="2">
                             </div>
                             <div>
-                                <label for="preguta26_casinunca" style="margin-right: 5px;">Casi nunca</label>
-                                <input type="radio" id="preguta26_casinunca" name="GUIA2_26" value="3">
+                                <label for="preguta26_casinunca" class="radio-label" style="margin-right: 5px;">Casi nunca</label>
+                                <input type="radio" class="radio-group" id="preguta26_casinunca" name="GUIA2_26" value="3">
                             </div>
                             <div>
-                                <label for="preguta26_nunca" style="margin-right: 5px;">Nunca</label>
-                                <input type="radio" id="preguta26_nunca" name="GUIA2_26" value="4">
+                                <label for="preguta26_nunca" class="radio-label" style="margin-right: 5px;">Nunca</label>
+                                <input type="radio" class="radio-group" id="preguta26_nunca" name="GUIA2_26" value="4">
                             </div>
                         </div>
                     </div>
@@ -1198,24 +1221,24 @@
                         </p>
                         <div style="display: flex; align-items: center; gap: 20px;">
                             <div>
-                                <label for="preguta27_siempre" style="margin-right: 5px;">Siempre</label>
-                                <input type="radio" id="preguta27_siempre" name="GUIA2_27" value="0">
+                                <label for="preguta27_siempre" class="radio-label" style="margin-right: 5px;">Siempre</label>
+                                <input type="radio" class="radio-group"  id="preguta27_siempre" name="GUIA2_27" value="0">
                             </div>
                             <div>
-                                <label for="preguta27_casi" style="margin-right: 5px;">Casí siempre</label>
-                                <input type="radio" id="preguta27_casi" name="GUIA2_27" value="1">
+                                <label for="preguta27_casi" class="radio-label" style="margin-right: 5px;">Casí siempre</label>
+                                <input type="radio" class="radio-group"  id="preguta27_casi" name="GUIA2_27" value="1">
                             </div>
                             <div>
-                                <label for="preguta27_algunas" style="margin-right: 5px;">Algunas veces</label>
-                                <input type="radio" id="preguta27_algunas" name="GUIA2_27" value="2">
+                                <label for="preguta27_algunas" class="radio-label" style="margin-right: 5px;">Algunas veces</label>
+                                <input type="radio" class="radio-group"  id="preguta27_algunas" name="GUIA2_27" value="2">
                             </div>
                             <div>
-                                <label for="preguta27_casinunca" style="margin-right: 5px;">Casi nunca</label>
-                                <input type="radio" id="preguta27_casinunca" name="GUIA2_27" value="3">
+                                <label for="preguta27_casinunca" class="radio-label" style="margin-right: 5px;">Casi nunca</label>
+                                <input type="radio" class="radio-group"  id="preguta27_casinunca" name="GUIA2_27" value="3">
                             </div>
                             <div>
-                                <label for="preguta27_nunca" style="margin-right: 5px;">Nunca</label>
-                                <input type="radio" id="preguta27_nunca" name="GUIA2_27" value="4">
+                                <label for="preguta27_nunca" class="radio-label" style="margin-right: 5px;">Nunca</label>
+                                <input type="radio" class="radio-group"  id="preguta27_nunca" name="GUIA2_27" value="4">
                             </div>
                         </div>
                     </div>
@@ -1228,56 +1251,56 @@
 
                     <div id="pregunta28_2" class="mt-5" style="display: flex; justify-content: space-between; align-items: center; width: 100%; margin-bottom: 10px;">
                         <p style="margin: 0; flex: 1;"><i class="fa fa-info-circle" id="Exp2_28" aria-hidden="true" data-toggle="tooltip" title=""></i>
-                            Mi jefe tiene en cuenta mis puntos de vista y opiniones
+                            Mi jefe tiene en cuenta mis puntos de vista <br> y opiniones
                         </p>
                         <div style="display: flex; align-items: center; gap: 20px;">
                             <div>
-                                <label for="preguta28_siempre" style="margin-right: 5px;">Siempre</label>
-                                <input type="radio" id="preguta28_siempre" name="GUIA2_28" value="0">
+                                <label for="preguta28_siempre" class="radio-label" style="margin-right: 5px;">Siempre</label>
+                                <input type="radio" class="radio-group"  id="preguta28_siempre" name="GUIA2_28" value="0">
                             </div>
                             <div>
-                                <label for="preguta28_casi" style="margin-right: 5px;">Casí siempre</label>
-                                <input type="radio" id="preguta28_casi" name="GUIA2_28" value="1">
+                                <label for="preguta28_casi" class="radio-label" style="margin-right: 5px;">Casí siempre</label>
+                                <input type="radio" class="radio-group"  id="preguta28_casi" name="GUIA2_28" value="1">
                             </div>
                             <div>
-                                <label for="preguta28_algunas" style="margin-right: 5px;">Algunas veces</label>
-                                <input type="radio" id="preguta28_algunas" name="GUIA2_28" value="2">
+                                <label for="preguta28_algunas" class="radio-label" style="margin-right: 5px;">Algunas veces</label>
+                                <input type="radio" class="radio-group"  id="preguta28_algunas" name="GUIA2_28" value="2">
                             </div>
                             <div>
-                                <label for="preguta28_casinunca" style="margin-right: 5px;">Casi nunca</label>
-                                <input type="radio" id="preguta28_casinunca" name="GUIA2_28" value="3">
+                                <label for="preguta28_casinunca" class="radio-label" style="margin-right: 5px;">Casi nunca</label>
+                                <input type="radio" class="radio-group"  id="preguta28_casinunca" name="GUIA2_28" value="3">
                             </div>
                             <div>
-                                <label for="preguta28_nunca" style="margin-right: 5px;">Nunca</label>
-                                <input type="radio" id="preguta28_nunca" name="GUIA2_28" value="4">
+                                <label for="preguta28_nunca" class="radio-label" style="margin-right: 5px;">Nunca</label>
+                                <input type="radio" class="radio-group"  id="preguta28_nunca" name="GUIA2_28" value="4">
                             </div>
                         </div>
                     </div>
 
                     <div id="pregunta29_2" class="mt-4" style="display: flex; justify-content: space-between; align-items: center; width: 100%; margin-bottom: 10px;">
                         <p style="margin: 0; flex: 1;"><i class="fa fa-info-circle" id="Exp2_29" aria-hidden="true" data-toggle="tooltip" title=""></i>
-                            Mi jefe ayuda a solucionar los problemas que <br> se presentan en el trabajo
+                            Mi jefe ayuda a solucionar los problemas <br> que se presentan en el trabajo
                         </p>
                         <div style="display: flex; align-items: center; gap: 20px;">
                             <div>
-                                <label for="preguta29_siempre" style="margin-right: 5px;">Siempre</label>
-                                <input type="radio" id="preguta29_siempre" name="GUIA2_29" value="0">
+                                <label for="preguta29_siempre" class="radio-label" style="margin-right: 5px;">Siempre</label>
+                                <input type="radio" class="radio-group"  id="preguta29_siempre" name="GUIA2_29" value="0">
                             </div>
                             <div>
-                                <label for="preguta29_casi" style="margin-right: 5px;">Casí siempre</label>
-                                <input type="radio" id="preguta29_casi" name="GUIA2_29" value="1">
+                                <label for="preguta29_casi" class="radio-label" style="margin-right: 5px;">Casí siempre</label>
+                                <input type="radio" class="radio-group"  id="preguta29_casi" name="GUIA2_29" value="1">
                             </div>
                             <div>
-                                <label for="preguta29_algunas" style="margin-right: 5px;">Algunas veces</label>
-                                <input type="radio" id="preguta29_algunas" name="GUIA2_29" value="2">
+                                <label for="preguta29_algunas" class="radio-label" style="margin-right: 5px;">Algunas veces</label>
+                                <input type="radio" class="radio-group"  id="preguta29_algunas" name="GUIA2_29" value="2">
                             </div>
                             <div>
-                                <label for="preguta29_casinunca" style="margin-right: 5px;">Casi nunca</label>
-                                <input type="radio" id="preguta29_casinunca" name="GUIA2_29" value="3">
+                                <label for="preguta29_casinunca" class="radio-label" style="margin-right: 5px;">Casi nunca</label>
+                                <input type="radio" class="radio-group"  id="preguta29_casinunca" name="GUIA2_29" value="3">
                             </div>
                             <div>
-                                <label for="preguta29_nunca" style="margin-right: 5px;">Nunca</label>
-                                <input type="radio" id="preguta29_nunca" name="GUIA2_29" value="4">
+                                <label for="preguta29_nunca" class="radio-label" style="margin-right: 5px;">Nunca</label>
+                                <input type="radio"class="radio-group"  id="preguta29_nunca" name="GUIA2_29" value="4">
                             </div>
                         </div>
                     </div>
@@ -1285,28 +1308,28 @@
 
                     <div id="pregunta30_2" class="mt-4" style="display: flex; justify-content: space-between; align-items: center; width: 100%; margin-bottom: 10px;">
                         <p style="margin: 0; flex: 1;"><i class="fa fa-info-circle" id="Exp2_30" aria-hidden="true" data-toggle="tooltip" title=""></i>
-                            Puedo confiar en mis compañeros de trabajo
+                            Puedo confiar en mis compañeros de <br>trabajo
                         </p>
                         <div style="display: flex; align-items: center; gap: 20px;">
                             <div>
-                                <label for="preguta30_siempre" style="margin-right: 5px;">Siempre</label>
-                                <input type="radio" id="preguta30_siempre" name="GUIA2_30" value="0">
+                                <label for="preguta30_siempre" class="radio-label" style="margin-right: 5px;">Siempre</label>
+                                <input type="radio" class="radio-group"  id="preguta30_siempre" name="GUIA2_30" value="0">
                             </div>
                             <div>
-                                <label for="preguta30_casi" style="margin-right: 5px;">Casí siempre</label>
-                                <input type="radio" id="preguta30_casi" name="GUIA2_30" value="1">
+                                <label for="preguta30_casi" class="radio-label" style="margin-right: 5px;">Casí siempre</label>
+                                <input type="radio" class="radio-group"  id="preguta30_casi" name="GUIA2_30" value="1">
                             </div>
                             <div>
-                                <label for="preguta30_algunas" style="margin-right: 5px;">Algunas veces</label>
-                                <input type="radio" id="preguta30_algunas" name="GUIA2_30" value="2">
+                                <label for="preguta30_algunas" class="radio-label" style="margin-right: 5px;">Algunas veces</label>
+                                <input type="radio" class="radio-group" id="preguta30_algunas" name="GUIA2_30" value="2">
                             </div>
                             <div>
-                                <label for="preguta30_casinunca" style="margin-right: 5px;">Casi nunca</label>
-                                <input type="radio" id="preguta30_casinunca" name="GUIA2_30" value="3">
+                                <label for="preguta30_casinunca"  class="radio-label" style="margin-right: 5px;">Casi nunca</label>
+                                <input type="radio" class="radio-group" id="preguta30_casinunca" name="GUIA2_30" value="3">
                             </div>
                             <div>
-                                <label for="preguta30_nunca" style="margin-right: 5px;">Nunca</label>
-                                <input type="radio" id="preguta30_nunca" name="GUIA2_30" value="4">
+                                <label for="preguta30_nunca" class="radio-label" style="margin-right: 5px;">Nunca</label>
+                                <input type="radio" class="radio-group"  id="preguta30_nunca" name="GUIA2_30" value="4">
                             </div>
                         </div>
                     </div>
@@ -1316,24 +1339,24 @@
                         </p>
                         <div style="display: flex; align-items: center; gap: 20px;">
                             <div>
-                                <label for="preguta31_siempre" style="margin-right: 5px;">Siempre</label>
-                                <input type="radio" id="preguta31_siempre" name="GUIA2_31" value="0">
+                                <label for="preguta31_siempre" class="radio-label" style="margin-right: 5px;">Siempre</label>
+                                <input type="radio" class="radio-group"  id="preguta31_siempre" name="GUIA2_31" value="0">
                             </div>
                             <div>
-                                <label for="preguta31_casi" style="margin-right: 5px;">Casí siempre</label>
-                                <input type="radio" id="preguta31_casi" name="GUIA2_31" value="1">
+                                <label for="preguta31_casi" class="radio-label" style="margin-right: 5px;">Casí siempre</label>
+                                <input type="radio" class="radio-group"  id="preguta31_casi" name="GUIA2_31" value="1">
                             </div>
                             <div>
-                                <label for="preguta31_algunas" style="margin-right: 5px;">Algunas veces</label>
-                                <input type="radio" id="preguta31_algunas" name="GUIA2_31" value="2">
+                                <label for="preguta31_algunas" class="radio-label" style="margin-right: 5px;">Algunas veces</label>
+                                <input type="radio" class="radio-group"  id="preguta31_algunas" name="GUIA2_31" value="2">
                             </div>
                             <div>
-                                <label for="preguta31_casinunca" style="margin-right: 5px;">Casi nunca</label>
-                                <input type="radio" id="preguta31_casinunca" name="GUIA2_31" value="3">
+                                <label for="preguta31_casinunca" class="radio-label" style="margin-right: 5px;">Casi nunca</label>
+                                <input type="radio" class="radio-group"  id="preguta31_casinunca" name="GUIA2_31" value="3">
                             </div>
                             <div>
-                                <label for="preguta31_nunca" style="margin-right: 5px;">Nunca</label>
-                                <input type="radio" id="preguta31_nunca" name="GUIA2_31" value="4">
+                                <label for="preguta31_nunca" class="radio-label" style="margin-right: 5px;">Nunca</label>
+                                <input type="radio" class="radio-group" id="preguta31_nunca" name="GUIA2_31" value="4">
                             </div>
                         </div>
                     </div>
@@ -1343,24 +1366,24 @@
                         </p>
                         <div style="display: flex; align-items: center; gap: 20px;">
                             <div>
-                                <label for="preguta32_siempre" style="margin-right: 5px;">Siempre</label>
-                                <input type="radio" id="preguta32_siempre" name="GUIA2_32" value="0">
+                                <label for="preguta32_siempre" class="radio-label" style="margin-right: 5px;">Siempre</label>
+                                <input type="radio" class="radio-group"  id="preguta32_siempre" name="GUIA2_32" value="0">
                             </div>
                             <div>
-                                <label for="preguta32_casi" style="margin-right: 5px;">Casí siempre</label>
-                                <input type="radio" id="preguta32_casi" name="GUIA2_32" value="1">
+                                <label for="preguta32_casi" class="radio-label" style="margin-right: 5px;">Casí siempre</label>
+                                <input type="radio" class="radio-group"  id="preguta32_casi" name="GUIA2_32" value="1">
                             </div>
                             <div>
-                                <label for="preguta32_algunas" style="margin-right: 5px;">Algunas veces</label>
-                                <input type="radio" id="preguta32_algunas" name="GUIA2_32" value="2">
+                                <label for="preguta32_algunas" class="radio-label" style="margin-right: 5px;">Algunas veces</label>
+                                <input type="radio" class="radio-group"  id="preguta32_algunas" name="GUIA2_32" value="2">
                             </div>
                             <div>
-                                <label for="preguta32_casinunca" style="margin-right: 5px;">Casi nunca</label>
-                                <input type="radio" id="preguta32_casinunca" name="GUIA2_32" value="3">
+                                <label for="preguta32_casinunca" class="radio-label" style="margin-right: 5px;">Casi nunca</label>
+                                <input type="radio" class="radio-group"  id="preguta32_casinunca" name="GUIA2_32" value="3">
                             </div>
                             <div>
-                                <label for="preguta32_nunca" style="margin-right: 5px;">Nunca</label>
-                                <input type="radio" id="preguta32_nunca" name="GUIA2_32" value="4">
+                                <label for="preguta32_nunca" class="radio-label" style="margin-right: 5px;">Nunca</label>
+                                <input type="radio" class="radio-group" id="preguta32_nunca" name="GUIA2_32" value="4">
                             </div>
                         </div>
                     </div>
@@ -1368,56 +1391,56 @@
 
                     <div id="pregunta33_2" class="mt-4" style="display: flex; justify-content: space-between; align-items: center; width: 100%; margin-bottom: 10px;">
                         <p style="margin: 0; flex: 1;"><i class="fa fa-info-circle" id="Exp2_33" aria-hidden="true" data-toggle="tooltip" title=""></i>
-                            En mi trabajo puedo expresarme libremente <br> sin interrupciones
+                            En mi trabajo puedo expresarme <br>  libremente sin interrupciones
                         </p>
                         <div style="display: flex; align-items: center; gap: 20px;">
                             <div>
-                                <label for="preguta33_siempre" style="margin-right: 5px;">Siempre</label>
-                                <input type="radio" id="preguta33_siempre" name="GUIA2_33" value="0">
+                                <label for="preguta33_siempre" class="radio-label" style="margin-right: 5px;">Siempre</label>
+                                <input type="radio" class="radio-group"  id="preguta33_siempre" name="GUIA2_33" value="0">
                             </div>
                             <div>
-                                <label for="preguta33_casi" style="margin-right: 5px;">Casí siempre</label>
-                                <input type="radio" id="preguta33_casi" name="GUIA2_33" value="1">
+                                <label for="preguta33_casi" class="radio-label" style="margin-right: 5px;">Casí siempre</label>
+                                <input type="radio" class="radio-group" id="preguta33_casi" name="GUIA2_33" value="1">
                             </div>
                             <div>
-                                <label for="preguta33_algunas" style="margin-right: 5px;">Algunas veces</label>
-                                <input type="radio" id="preguta33_algunas" name="GUIA2_33" value="2">
+                                <label for="preguta33_algunas" class="radio-label" style="margin-right: 5px;">Algunas veces</label>
+                                <input type="radio" class="radio-group" id="preguta33_algunas" name="GUIA2_33" value="2">
                             </div>
                             <div>
-                                <label for="preguta33_casinunca" style="margin-right: 5px;">Casi nunca</label>
-                                <input type="radio" id="preguta33_casinunca" name="GUIA2_33" value="3">
+                                <label for="preguta33_casinunca" class="radio-label" style="margin-right: 5px;">Casi nunca</label>
+                                <input type="radio" class="radio-group" id="preguta33_casinunca" name="GUIA2_33" value="3">
                             </div>
                             <div>
-                                <label for="preguta33_nunca" style="margin-right: 5px;">Nunca</label>
-                                <input type="radio" id="preguta33_nunca" name="GUIA2_33" value="4">
+                                <label for="preguta33_nunca" class="radio-label" style="margin-right: 5px;">Nunca</label>
+                                <input type="radio" class="radio-group" id="preguta33_nunca" name="GUIA2_33" value="4">
                             </div>
                         </div>
                     </div>
 
                     <div id="pregunta34_2" class="mt-4" style="display: flex; justify-content: space-between; align-items: center; width: 100%; margin-bottom: 10px;">
                         <p style="margin: 0; flex: 1;"><i class="fa fa-info-circle" id="Exp2_34" aria-hidden="true" data-toggle="tooltip" title=""></i>
-                            Recibo críticas constantes a mi persona y/o trabajo
+                            Recibo críticas constantes a mi <br> persona y/o trabajo
                         </p>
                         <div style="display: flex; align-items: center; gap: 20px;">
                             <div>
-                                <label for="preguta34_siempre" style="margin-right: 5px;">Siempre</label>
-                                <input type="radio" id="preguta34_siempre" name="GUIA2_34" value="4">
+                                <label for="preguta34_siempre" class="radio-label" style="margin-right: 5px;">Siempre</label>
+                                <input type="radio" class="radio-group"  id="preguta34_siempre" name="GUIA2_34" value="4">
                             </div>
                             <div>
-                                <label for="preguta34_casi" style="margin-right: 5px;">Casí siempre</label>
-                                <input type="radio" id="preguta34_casi" name="GUIA2_34" value="3">
+                                <label for="preguta34_casi" class="radio-label" style="margin-right: 5px;">Casí siempre</label>
+                                <input type="radio" class="radio-group"  id="preguta34_casi" name="GUIA2_34" value="3">
                             </div>
                             <div>
-                                <label for="preguta34_algunas" style="margin-right: 5px;">Algunas veces</label>
-                                <input type="radio" id="preguta34_algunas" name="GUIA2_34" value="2">
+                                <label for="preguta34_algunas" class="radio-label" style="margin-right: 5px;">Algunas veces</label>
+                                <input type="radio" class="radio-group"  id="preguta34_algunas" name="GUIA2_34" value="2">
                             </div>
                             <div>
-                                <label for="preguta34_casinunca" style="margin-right: 5px;">Casi nunca</label>
-                                <input type="radio" id="preguta34_casinunca" name="GUIA2_34" value="1">
+                                <label for="preguta34_casinunca" class="radio-label" style="margin-right: 5px;">Casi nunca</label>
+                                <input type="radio" class="radio-group"  id="preguta34_casinunca" name="GUIA2_34" value="1">
                             </div>
                             <div>
-                                <label for="preguta34_nunca" style="margin-right: 5px;">Nunca</label>
-                                <input type="radio" id="preguta34_nunca" name="GUIA2_34" value="0">
+                                <label for="preguta34_nunca" class="radio-label" style="margin-right: 5px;">Nunca</label>
+                                <input type="radio" class="radio-group"  id="preguta34_nunca" name="GUIA2_34" value="0">
                             </div>
                         </div>
                     </div>
@@ -1429,52 +1452,52 @@
                         </p>
                         <div style="display: flex; align-items: center; gap: 20px;">
                             <div>
-                                <label for="preguta35_siempre" style="margin-right: 5px;">Siempre</label>
-                                <input type="radio" id="preguta35_siempre" name="GUIA2_35" value="4">
+                                <label for="preguta35_siempre" class="radio-label" style="margin-right: 5px;">Siempre</label>
+                                <input type="radio" class="radio-group"  id="preguta35_siempre" name="GUIA2_35" value="4">
                             </div>
                             <div>
-                                <label for="preguta35_casi" style="margin-right: 5px;">Casí siempre</label>
-                                <input type="radio" id="preguta35_casi" name="GUIA2_35" value="3">
+                                <label for="preguta35_casi" class="radio-label" style="margin-right: 5px;">Casí siempre</label>
+                                <input type="radio" class="radio-group"  id="preguta35_casi" name="GUIA2_35" value="3">
                             </div>
                             <div>
-                                <label for="preguta35_algunas" style="margin-right: 5px;">Algunas veces</label>
-                                <input type="radio" id="preguta35_algunas" name="GUIA2_35" value="2">
+                                <label for="preguta35_algunas" class="radio-label" style="margin-right: 5px;">Algunas veces</label>
+                                <input type="radio" class="radio-group"  id="preguta35_algunas" name="GUIA2_35" value="2">
                             </div>
                             <div>
-                                <label for="preguta35_casinunca" style="margin-right: 5px;">Casi nunca</label>
-                                <input type="radio" id="preguta35_casinunca" name="GUIA2_35" value="1">
+                                <label for="preguta35_casinunca" class="radio-label" style="margin-right: 5px;">Casi nunca</label>
+                                <input type="radio" class="radio-group" id="preguta35_casinunca" name="GUIA2_35" value="1">
                             </div>
                             <div>
-                                <label for="preguta35_nunca" style="margin-right: 5px;">Nunca</label>
-                                <input type="radio" id="preguta35_nunca" name="GUIA2_35" value="0">
+                                <label for="preguta35_nunca" class="radio-label" style="margin-right: 5px;">Nunca</label>
+                                <input type="radio" class="radio-group" id="preguta35_nunca" name="GUIA2_35" value="0">
                             </div>
                         </div>
                     </div>
 
                     <div id="pregunta36_2" class="mt-4" style="display: flex; justify-content: space-between; align-items: center; width: 100%; margin-bottom: 10px;">
                         <p style="margin: 0; flex: 1;"><i class="fa fa-info-circle" id="Exp2_36" aria-hidden="true" data-toggle="tooltip" title=""></i>
-                            Se ignora mi presencia o se me excluye de <br> las reuniones de trabajo y en la toma de decisiones
+                            Se ignora mi presencia o se me excluye <br> de las reuniones de trabajo y en la toma <br>de decisiones
                         </p>
                         <div style="display: flex; align-items: center; gap: 20px;">
                             <div>
-                                <label for="preguta36_siempre" style="margin-right: 5px;">Siempre</label>
-                                <input type="radio" id="preguta36_siempre" name="GUIA2_36" value="4">
+                                <label for="preguta36_siempre" class="radio-label" style="margin-right: 5px;">Siempre</label>
+                                <input type="radio" class="radio-group" id="preguta36_siempre" name="GUIA2_36" value="4">
                             </div>
                             <div>
-                                <label for="preguta36_casi" style="margin-right: 5px;">Casí siempre</label>
-                                <input type="radio" id="preguta36_casi" name="GUIA2_36" value="3">
+                                <label for="preguta36_casi" class="radio-label" style="margin-right: 5px;">Casí siempre</label>
+                                <input type="radio" class="radio-group" id="preguta36_casi" name="GUIA2_36" value="3">
                             </div>
                             <div>
-                                <label for="preguta36_algunas" style="margin-right: 5px;">Algunas veces</label>
-                                <input type="radio" id="preguta36_algunas" name="GUIA2_36" value="2">
+                                <label for="preguta36_algunas" class="radio-label" style="margin-right: 5px;">Algunas veces</label>
+                                <input type="radio" class="radio-group" id="preguta36_algunas" name="GUIA2_36" value="2">
                             </div>
                             <div>
-                                <label for="preguta36_casinunca" style="margin-right: 5px;">Casi nunca</label>
-                                <input type="radio" id="preguta36_casinunca" name="GUIA2_36" value="1">
+                                <label for="preguta36_casinunca" class="radio-label" style="margin-right: 5px;">Casi nunca</label>
+                                <input type="radio" class="radio-group" id="preguta36_casinunca" name="GUIA2_36" value="1">
                             </div>
                             <div>
-                                <label for="preguta36_nunca" style="margin-right: 5px;">Nunca</label>
-                                <input type="radio" id="preguta36_nunca" name="GUIA2_36" value="0">
+                                <label for="preguta36_nunca" class="radio-label" style="margin-right: 5px;">Nunca</label>
+                                <input type="radio" class="radio-group" id="preguta36_nunca" name="GUIA2_36" value="0">
                             </div>
                         </div>
                     </div>
@@ -1484,24 +1507,24 @@
                         </p>
                         <div style="display: flex; align-items: center; gap: 20px;">
                             <div>
-                                <label for="preguta37_siempre" style="margin-right: 5px;">Siempre</label>
-                                <input type="radio" id="preguta37_siempre" name="GUIA2_37" value="4">
+                                <label for="preguta37_siempre" class="radio-label" style="margin-right: 5px;">Siempre</label>
+                                <input type="radio" class="radio-group" id="preguta37_siempre" name="GUIA2_37" value="4">
                             </div>
                             <div>
-                                <label for="preguta37_casi" style="margin-right: 5px;">Casí siempre</label>
-                                <input type="radio" id="preguta37_casi" name="GUIA2_37" value="3">
+                                <label for="preguta37_casi" class="radio-label" style="margin-right: 5px;">Casí siempre</label>
+                                <input type="radio" class="radio-group" id="preguta37_casi" name="GUIA2_37" value="3">
                             </div>
                             <div>
-                                <label for="preguta37_algunas" style="margin-right: 5px;">Algunas veces</label>
-                                <input type="radio" id="preguta37_algunas" name="GUIA2_37" value="2">
+                                <label for="preguta37_algunas" class="radio-label" style="margin-right: 5px;">Algunas veces</label>
+                                <input type="radio" class="radio-group" id="preguta37_algunas" name="GUIA2_37" value="2">
                             </div>
                             <div>
-                                <label for="preguta37_casinunca" style="margin-right: 5px;">Casi nunca</label>
-                                <input type="radio" id="preguta37_casinunca" name="GUIA2_37" value="1">
+                                <label for="preguta37_casinunca" class="radio-label" style="margin-right: 5px;">Casi nunca</label>
+                                <input type="radio" class="radio-group" id="preguta37_casinunca" name="GUIA2_37" value="1">
                             </div>
                             <div>
-                                <label for="preguta37_nunca" style="margin-right: 5px;">Nunca</label>
-                                <input type="radio" id="preguta37_nunca" name="GUIA2_37" value="0">
+                                <label for="preguta37_nunca" class="radio-label" style="margin-right: 5px;">Nunca</label>
+                                <input type="radio" class="radio-group" id="preguta37_nunca" name="GUIA2_37" value="0">
                             </div>
                         </div>
                     </div>
@@ -1509,28 +1532,28 @@
 
                     <div id="pregunta38_2" class="mt-4" style="display: flex; justify-content: space-between; align-items: center; width: 100%; margin-bottom: 10px;">
                         <p style="margin: 0; flex: 1;"><i class="fa fa-info-circle" id="Exp2_38" aria-hidden="true" data-toggle="tooltip" title=""></i>
-                            Se ignoran mis éxitos laborales y se atribuyen <br> a otros trabajadores
+                            Se ignoran mis éxitos laborales y se <br> atribuyen a otros trabajadores
                         </p>
                         <div style="display: flex; align-items: center; gap: 20px;">
                             <div>
-                                <label for="preguta38_siempre" style="margin-right: 5px;">Siempre</label>
-                                <input type="radio" id="preguta38_siempre" name="GUIA2_38" value="4">
+                                <label for="preguta38_siempre" class="radio-label" style="margin-right: 5px;">Siempre</label>
+                                <input type="radio" class="radio-group" id="preguta38_siempre" name="GUIA2_38" value="4">
                             </div>
                             <div>
-                                <label for="preguta38_casi" style="margin-right: 5px;">Casí siempre</label>
-                                <input type="radio" id="preguta38_casi" name="GUIA2_38" value="3">
+                                <label for="preguta38_casi" class="radio-label" style="margin-right: 5px;">Casí siempre</label>
+                                <input type="radio" class="radio-group" id="preguta38_casi" name="GUIA2_38" value="3">
                             </div>
                             <div>
-                                <label for="preguta38_algunas" style="margin-right: 5px;">Algunas veces</label>
-                                <input type="radio" id="preguta38_algunas" name="GUIA2_38" value="2">
+                                <label for="preguta38_algunas" class="radio-label" style="margin-right: 5px;">Algunas veces</label>
+                                <input type="radio" class="radio-group" id="preguta38_algunas" name="GUIA2_38" value="2">
                             </div>
                             <div>
-                                <label for="preguta38_casinunca" style="margin-right: 5px;">Casi nunca</label>
-                                <input type="radio" id="preguta38_casinunca" name="GUIA2_38" value="1">
+                                <label for="preguta38_casinunca" class="radio-label" style="margin-right: 5px;">Casi nunca</label>
+                                <input type="radio" class="radio-group" id="preguta38_casinunca" name="GUIA2_38" value="1">
                             </div>
                             <div>
-                                <label for="preguta38_nunca" style="margin-right: 5px;">Nunca</label>
-                                <input type="radio" id="preguta38_nunca" name="GUIA2_38" value="0">
+                                <label for="preguta38_nunca" class="radio-label" style="margin-right: 5px;">Nunca</label>
+                                <input type="radio" class="radio-group" id="preguta38_nunca" name="GUIA2_38" value="0">
                             </div>
                         </div>
                     </div>
@@ -1541,24 +1564,24 @@
                         </p>
                         <div style="display: flex; align-items: center; gap: 20px;">
                             <div>
-                                <label for="preguta39_siempre" style="margin-right: 5px;">Siempre</label>
-                                <input type="radio" id="preguta39_siempre" name="GUIA2_39" value="4">
+                                <label for="preguta39_siempre" class="radio-label" style="margin-right: 5px;">Siempre</label>
+                                <input type="radio" class="radio-group" id="preguta39_siempre" name="GUIA2_39" value="4">
                             </div>
                             <div>
-                                <label for="preguta39_casi" style="margin-right: 5px;">Casí siempre</label>
-                                <input type="radio" id="preguta39_casi" name="GUIA2_39" value="3">
+                                <label for="preguta39_casi" class="radio-label" style="margin-right: 5px;">Casí siempre</label>
+                                <input type="radio" class="radio-group" id="preguta39_casi" name="GUIA2_39" value="3">
                             </div>
                             <div>
-                                <label for="preguta39_algunas" style="margin-right: 5px;">Algunas veces</label>
-                                <input type="radio" id="preguta39_algunas" name="GUIA2_39" value="2">
+                                <label for="preguta39_algunas" class="radio-label" style="margin-right: 5px;">Algunas veces</label>
+                                <input type="radio" class="radio-group" id="preguta39_algunas" name="GUIA2_39" value="2">
                             </div>
                             <div>
-                                <label for="preguta39_casinunca" style="margin-right: 5px;">Casi nunca</label>
-                                <input type="radio" id="preguta39_casinunca" name="GUIA2_39" value="1">
+                                <label for="preguta39_casinunca" class="radio-label" style="margin-right: 5px;">Casi nunca</label>
+                                <input type="radio"class="radio-group" id="preguta39_casinunca" name="GUIA2_39" value="1">
                             </div>
                             <div>
-                                <label for="preguta39_nunca" style="margin-right: 5px;">Nunca</label>
-                                <input type="radio" id="preguta39_nunca" name="GUIA2_39" value="0">
+                                <label for="preguta39_nunca" class="radio-label" style="margin-right: 5px;">Nunca</label>
+                                <input type="radio" class="radio-group" id="preguta39_nunca" name="GUIA2_39" value="0">
                             </div>
                         </div>
                     </div>
@@ -1568,24 +1591,24 @@
                         </p>
                         <div style="display: flex; align-items: center; gap: 20px;">
                             <div>
-                                <label for="preguta40_siempre" style="margin-right: 5px;">Siempre</label>
-                                <input type="radio" id="preguta40_siempre" name="GUIA2_40" value="4">
+                                <label for="preguta40_siempre" class="radio-label" style="margin-right: 5px;">Siempre</label>
+                                <input type="radio" class="radio-group" id="preguta40_siempre" name="GUIA2_40" value="4">
                             </div>
                             <div>
-                                <label for="preguta40_casi" style="margin-right: 5px;">Casí siempre</label>
-                                <input type="radio" id="preguta40_casi" name="GUIA2_40" value="3">
+                                <label for="preguta40_casi" class="radio-label" style="margin-right: 5px;">Casí siempre</label>
+                                <input type="radio" class="radio-group" id="preguta40_casi" name="GUIA2_40" value="3">
                             </div>
                             <div>
-                                <label for="preguta40_algunas" style="margin-right: 5px;">Algunas veces</label>
-                                <input type="radio" id="preguta40_algunas" name="GUIA2_40" value="2">
+                                <label for="preguta40_algunas" class="radio-label" style="margin-right: 5px;">Algunas veces</label>
+                                <input type="radio" class="radio-group" id="preguta40_algunas" name="GUIA2_40" value="2">
                             </div>
                             <div>
-                                <label for="preguta40_casinunca" style="margin-right: 5px;">Casi nunca</label>
-                                <input type="radio" id="preguta40_casinunca" name="GUIA2_40" value="1">
+                                <label for="preguta40_casinunca" class="radio-label" style="margin-right: 5px;">Casi nunca</label>
+                                <input type="radio" class="radio-group" id="preguta40_casinunca" name="GUIA2_40" value="1">
                             </div>
                             <div>
-                                <label for="preguta40_nunca" style="margin-right: 5px;">Nunca</label>
-                                <input type="radio" id="preguta40_nunca" name="GUIA2_40" value="0">
+                                <label for="preguta40_nunca" class="radio-label" style="margin-right: 5px;">Nunca</label>
+                                <input type="radio" class="radio-group" id="preguta40_nunca" name="GUIA2_40" value="0">
                             </div>
                         </div>
                     </div>
@@ -1628,24 +1651,24 @@
                         </p>
                         <div style="display: flex; align-items: center; gap: 20px;">
                             <div>
-                                <label for="preguta41_siempre" style="margin-right: 5px;">Siempre</label>
-                                <input type="radio" id="preguta41_siempre" name="GUIA2_41" value="4">
+                                <label for="preguta41_siempre" class="radio-label" style="margin-right: 5px;">Siempre</label>
+                                <input type="radio" class="radio-group" id="preguta41_siempre" name="GUIA2_41" value="4">
                             </div>
                             <div>
-                                <label for="preguta41_casi" style="margin-right: 5px;">Casí siempre</label>
-                                <input type="radio" id="preguta41_casi" name="GUIA2_41" value="3">
+                                <label for="preguta41_casi" class="radio-label" style="margin-right: 5px;">Casí siempre</label>
+                                <input type="radio" class="radio-group" id="preguta41_casi" name="GUIA2_41" value="3">
                             </div>
                             <div>
-                                <label for="preguta41_algunas" style="margin-right: 5px;">Algunas veces</label>
-                                <input type="radio" id="preguta41_algunas" name="GUIA2_41" value="2">
+                                <label for="preguta41_algunas" class="radio-label" style="margin-right: 5px;">Algunas veces</label>
+                                <input type="radio" class="radio-group" id="preguta41_algunas" name="GUIA2_41" value="2">
                             </div>
                             <div>
-                                <label for="preguta41_casinunca" style="margin-right: 5px;">Casi nunca</label>
-                                <input type="radio" id="preguta41_casinunca" name="GUIA2_41" value="1">
+                                <label for="preguta41_casinunca" class="radio-label" style="margin-right: 5px;">Casi nunca</label>
+                                <input type="radio" class="radio-group" id="preguta41_casinunca" name="GUIA2_41" value="1">
                             </div>
                             <div>
-                                <label for="preguta41_nunca" style="margin-right: 5px;">Nunca</label>
-                                <input type="radio" id="preguta41_nunca" name="GUIA2_41" value="0">
+                                <label for="preguta41_nunca" class="radio-label" style="margin-right: 5px;">Nunca</label>
+                                <input type="radio" class="radio-group" id="preguta41_nunca" name="GUIA2_41" value="0">
                             </div>
                         </div>
                     </div>
@@ -1655,24 +1678,24 @@
                         </p>
                         <div style="display: flex; align-items: center; gap: 20px;">
                             <div>
-                                <label for="preguta42_siempre" style="margin-right: 5px;">Siempre</label>
-                                <input type="radio" id="preguta42_siempre" name="GUIA2_42" value="4">
+                                <label for="preguta42_siempre" class="radio-label" style="margin-right: 5px;">Siempre</label>
+                                <input type="radio" class="radio-group" id="preguta42_siempre" name="GUIA2_42" value="4">
                             </div>
                             <div>
-                                <label for="preguta42_casi" style="margin-right: 5px;">Casí siempre</label>
-                                <input type="radio" id="preguta42_casi" name="GUIA2_42" value="3">
+                                <label for="preguta42_casi" class="radio-label" style="margin-right: 5px;">Casí siempre</label>
+                                <input type="radio" class="radio-group" id="preguta42_casi" name="GUIA2_42" value="3">
                             </div>
                             <div>
-                                <label for="preguta42_algunas" style="margin-right: 5px;">Algunas veces</label>
-                                <input type="radio" id="preguta42_algunas" name="GUIA2_42" value="2">
+                                <label for="preguta42_algunas" class="radio-label" style="margin-right: 5px;">Algunas veces</label>
+                                <input type="radio" class="radio-group" id="preguta42_algunas" name="GUIA2_42" value="2">
                             </div>
                             <div>
-                                <label for="preguta42_casinunca" style="margin-right: 5px;">Casi nunca</label>
-                                <input type="radio" id="preguta42_casinunca" name="GUIA2_42" value="1">
+                                <label for="preguta42_casinunca" class="radio-label" style="margin-right: 5px;">Casi nunca</label>
+                                <input type="radio" class="radio-group" id="preguta42_casinunca" name="GUIA2_42" value="1">
                             </div>
                             <div>
-                                <label for="preguta42_nunca" style="margin-right: 5px;">Nunca</label>
-                                <input type="radio" id="preguta42_nunca" name="GUIA2_42" value="0">
+                                <label for="preguta42_nunca" class="radio-label" style="margin-right: 5px;">Nunca</label>
+                                <input type="radio" class="radio-group" id="preguta42_nunca" name="GUIA2_42" value="0">
                             </div>
                         </div>
                     </div>
@@ -1682,24 +1705,24 @@
                         </p>
                         <div style="display: flex; align-items: center; gap: 20px;">
                             <div>
-                                <label for="preguta43_siempre" style="margin-right: 5px;">Siempre</label>
-                                <input type="radio" id="preguta43_siempre" name="GUIA2_43" value="4">
+                                <label for="preguta43_siempre" class="radio-label" style="margin-right: 5px;">Siempre</label>
+                                <input type="radio" class="radio-group" id="preguta43_siempre" name="GUIA2_43" value="4">
                             </div>
                             <div>
-                                <label for="preguta43_casi" style="margin-right: 5px;">Casí siempre</label>
-                                <input type="radio" id="preguta43_casi" name="GUIA2_43" value="3">
+                                <label for="preguta43_casi" class="radio-label" style="margin-right: 5px;">Casí siempre</label>
+                                <input type="radio" class="radio-group" id="preguta43_casi" name="GUIA2_43" value="3">
                             </div>
                             <div>
-                                <label for="preguta43_algunas" style="margin-right: 5px;">Algunas veces</label>
-                                <input type="radio" id="preguta43_algunas" name="GUIA2_43" value="2">
+                                <label for="preguta43_algunas" class="radio-label" style="margin-right: 5px;">Algunas veces</label>
+                                <input type="radio" class="radio-group" id="preguta43_algunas" name="GUIA2_43" value="2">
                             </div>
                             <div>
-                                <label for="preguta43_casinunca" style="margin-right: 5px;">Casi nunca</label>
-                                <input type="radio" id="preguta43_casinunca" name="GUIA2_43" value="1">
+                                <label for="preguta43_casinunca" class="radio-label" style="margin-right: 5px;">Casi nunca</label>
+                                <input type="radio" class="radio-group" id="preguta43_casinunca" name="GUIA2_43" value="1">
                             </div>
                             <div>
-                                <label for="preguta43_nunca" style="margin-right: 5px;">Nunca</label>
-                                <input type="radio" id="preguta43_nunca" name="GUIA2_43" value="0">
+                                <label for="preguta43_nunca" class="radio-label" style="margin-right: 5px;">Nunca</label>
+                                <input type="radio" class="radio-group" id="preguta43_nunca" name="GUIA2_43" value="0">
                             </div>
                         </div>
                     </div>
@@ -1736,24 +1759,24 @@
                         </p>
                         <div style="display: flex; align-items: center; gap: 20px;">
                             <div>
-                                <label for="preguta44_siempre" style="margin-right: 5px;">Siempre</label>
-                                <input type="radio" id="preguta44_siempre" name="GUIA2_44" value="4">
+                                <label for="preguta44_siempre" class="radio-label" style="margin-right: 5px;">Siempre</label>
+                                <input type="radio" class="radio-group" id="preguta44_siempre" name="GUIA2_44" value="4">
                             </div>
                             <div>
-                                <label for="preguta44_casi" style="margin-right: 5px;">Casí siempre</label>
-                                <input type="radio" id="preguta44_casi" name="GUIA2_44" value="3">
+                                <label for="preguta44_casi" class="radio-label" style="margin-right: 5px;">Casí siempre</label>
+                                <input type="radio" class="radio-group" id="preguta44_casi" name="GUIA2_44" value="3">
                             </div>
                             <div>
-                                <label for="preguta44_algunas" style="margin-right: 5px;">Algunas veces</label>
-                                <input type="radio" id="preguta44_algunas" name="GUIA2_44" value="2">
+                                <label for="preguta44_algunas" class="radio-label" style="margin-right: 5px;">Algunas veces</label>
+                                <input type="radio" class="radio-group" id="preguta44_algunas" name="GUIA2_44" value="2">
                             </div>
                             <div>
-                                <label for="preguta44_casinunca" style="margin-right: 5px;">Casi nunca</label>
-                                <input type="radio" id="preguta44_casinunca" name="GUIA2_44" value="1">
+                                <label for="preguta44_casinunca" class="radio-label" style="margin-right: 5px;">Casi nunca</label>
+                                <input type="radio"class="radio-group" id="preguta44_casinunca" name="GUIA2_44" value="1">
                             </div>
                             <div>
-                                <label for="preguta44_nunca" style="margin-right: 5px;">Nunca</label>
-                                <input type="radio" id="preguta44_nunca" name="GUIA2_44" value="0">
+                                <label for="preguta44_nunca" class="radio-label" style="margin-right: 5px;">Nunca</label>
+                                <input type="radio" class="radio-group" id="preguta44_nunca" name="GUIA2_44" value="0">
                             </div>
                         </div>
                     </div>
@@ -1764,24 +1787,24 @@
                         </p>
                         <div style="display: flex; align-items: center; gap: 20px;">
                             <div>
-                                <label for="preguta45_siempre" style="margin-right: 5px;">Siempre</label>
-                                <input type="radio" id="preguta45_siempre" name="GUIA2_45" value="4">
+                                <label for="preguta45_siempre" class="radio-label" style="margin-right: 5px;">Siempre</label>
+                                <input type="radio" class="radio-group" id="preguta45_siempre" name="GUIA2_45" value="4">
                             </div>
                             <div>
-                                <label for="preguta45_casi" style="margin-right: 5px;">Casí siempre</label>
-                                <input type="radio" id="preguta45_casi" name="GUIA2_45" value="3">
+                                <label for="preguta45_casi" class="radio-label" style="margin-right: 5px;">Casí siempre</label>
+                                <input type="radio" class="radio-group" id="preguta45_casi" name="GUIA2_45" value="3">
                             </div>
                             <div>
-                                <label for="preguta45_algunas" style="margin-right: 5px;">Algunas veces</label>
-                                <input type="radio" id="preguta45_algunas" name="GUIA2_45" value="2">
+                                <label for="preguta45_algunas" class="radio-label" style="margin-right: 5px;">Algunas veces</label>
+                                <input type="radio" class="radio-group" id="preguta45_algunas" name="GUIA2_45" value="2">
                             </div>
                             <div>
-                                <label for="preguta45_casinunca" style="margin-right: 5px;">Casi nunca</label>
-                                <input type="radio" id="preguta45_casinunca" name="GUIA2_45" value="1">
+                                <label for="preguta45_casinunca" class="radio-label" style="margin-right: 5px;">Casi nunca</label>
+                                <input type="radio" class="radio-group" id="preguta45_casinunca" name="GUIA2_45" value="1">
                             </div>
                             <div>
-                                <label for="preguta45_nunca" style="margin-right: 5px;">Nunca</label>
-                                <input type="radio" id="preguta45_nunca" name="GUIA2_45" value="0">
+                                <label for="preguta45_nunca" class="radio-label" style="margin-right: 5px;">Nunca</label>
+                                <input type="radio" class="radio-group" id="preguta45_nunca" name="GUIA2_45" value="0">
                             </div>
                         </div>
                     </div>
@@ -1791,24 +1814,24 @@
                         </p>
                         <div style="display: flex; align-items: center; gap: 20px;">
                             <div>
-                                <label for="preguta46_siempre" style="margin-right: 5px;">Siempre</label>
-                                <input type="radio" id="preguta46_siempre" name="GUIA2_46" value="4">
+                                <label for="preguta46_siempre" class="radio-label" style="margin-right: 5px;">Siempre</label>
+                                <input type="radio" class="radio-group" id="preguta46_siempre" name="GUIA2_46" value="4">
                             </div>
                             <div>
-                                <label for="preguta46_casi" style="margin-right: 5px;">Casí siempre</label>
-                                <input type="radio" id="preguta46_casi" name="GUIA2_46" value="3">
+                                <label for="preguta46_casi" class="radio-label" style="margin-right: 5px;">Casí siempre</label>
+                                <input type="radio" class="radio-group" id="preguta46_casi" name="GUIA2_46" value="3">
                             </div>
                             <div>
-                                <label for="preguta46_algunas" style="margin-right: 5px;">Algunas veces</label>
-                                <input type="radio" id="preguta46_algunas" name="GUIA2_46" value="2">
+                                <label for="preguta46_algunas" class="radio-label" style="margin-right: 5px;">Algunas veces</label>
+                                <input type="radio" class="radio-group" id="preguta46_algunas" name="GUIA2_46" value="2">
                             </div>
                             <div>
-                                <label for="preguta46_casinunca" style="margin-right: 5px;">Casi nunca</label>
-                                <input type="radio" id="preguta46_casinunca" name="GUIA2_46" value="1">
+                                <label for="preguta46_casinunca" class="radio-label" style="margin-right: 5px;">Casi nunca</label>
+                                <input type="radio" class="radio-group" id="preguta46_casinunca" name="GUIA2_46" value="1">
                             </div>
                             <div>
-                                <label for="preguta46_nunca" style="margin-right: 5px;">Nunca</label>
-                                <input type="radio" id="preguta46_nunca" name="GUIA2_46" value="0">
+                                <label for="preguta46_nunca" class="radio-label" style="margin-right: 5px;">Nunca</label>
+                                <input type="radio" class="radio-group" id="preguta46_nunca" name="GUIA2_46" value="0">
                             </div>
                         </div>
                     </div>
@@ -1818,11 +1841,6 @@
                 </button>
             </form>
         </div>
-
-
-
-
-
 
 
 
@@ -3942,8 +3960,10 @@
         var id = <?php echo json_encode($id); ?>;
 
         document.addEventListener('DOMContentLoaded', function() {
-        mostrarGuias(requiereGuia1, requiereGuia2, requiereGuia3);
+        // mostrarGuias(requiereGuia1, requiereGuia2, requiereGuia3); 
         cargarExplicaciones();
+        botonradio('radio-group');
+
 
     });
     </script>

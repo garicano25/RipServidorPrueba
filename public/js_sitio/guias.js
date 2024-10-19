@@ -29,6 +29,25 @@ function mostrarGuias(requiereGuia1, requiereGuia2, requiereGuia3) {
 }
 
 
+function botonradio(radioClass) {
+    const radios = document.querySelectorAll(`.${radioClass}`);
+
+    radios.forEach((radio) => {
+        radio.addEventListener('change', function() {
+            const radiosWithSameName = document.querySelectorAll(`input[name="${this.name}"]`);
+            
+            radiosWithSameName.forEach(radio => {
+                const label = document.querySelector(`label[for="${radio.id}"]`);
+                label.classList.remove('selected');
+            });
+            
+            const selectedLabel = document.querySelector(`label[for="${this.id}"]`);
+            selectedLabel.classList.add('selected');
+        });
+    });
+}
+
+
 function guia1() {
     const pregunta1Si = document.getElementById("pregunta1_si");
     const pregunta1No = document.getElementById("pregunta1_no");

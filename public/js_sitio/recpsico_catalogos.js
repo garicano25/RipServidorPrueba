@@ -40,7 +40,7 @@ $("#boton_guardar_guia").click(function () {
                 $('#boton_guardar_guia').html('Guardar <i class="fa fa-save"></i>');
 
                 // cerrar modal
-                $('#boton_guardar_guia').modal('hide');
+                $('#modal_guia').modal('hide');
             },
             beforeSend: function () {
                 $('#boton_guardar_guia').html('Guardando <i class="fa fa-spin fa-spinner"></i>');
