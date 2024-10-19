@@ -4,10 +4,34 @@ console.log('Guía 3:', requiereGuia3);
 console.log('Id:', id);
 
 
+function mostrarGuias(requiereGuia1, requiereGuia2, requiereGuia3) {
+    const guia1 = document.getElementById('guia1');
+    if (requiereGuia1 === 1) {
+        guia1.style.display = 'block';
+    } else {
+        guia1.style.display = 'none';
+    }
+
+    // Guía 2
+    const guia2 = document.getElementById('guia2');
+    if (requiereGuia2 === 1) {
+        guia2.style.display = 'block';
+    } else {
+        guia2.style.display = 'none';
+    }
+
+    const guia3 = document.getElementById('guia3');
+    if (requiereGuia3 === 1) {
+        guia3.style.display = 'block';
+    } else {
+        guia3.style.display = 'none';
+    }
+}
 
 
 function guia1() {
-    const pregunta1Si = document.getElementById("pregunta1_si").checked;
+    const pregunta1Si = document.getElementById("pregunta1_si");
+    const pregunta1No = document.getElementById("pregunta1_no");
     const pregunta2Si = document.getElementById("pregunta2_si").checked;
     const pregunta3Si = document.getElementById("pregunta3_si").checked;
     const pregunta4Si = document.getElementById("pregunta4_si").checked;
@@ -15,7 +39,18 @@ function guia1() {
     const pregunta6Si = document.getElementById("pregunta6_si").checked;
     const pregunta7Si = document.getElementById("pregunta7_si").checked;
 
-    if (pregunta1Si || pregunta2Si || pregunta3Si || pregunta4Si || pregunta5Si || pregunta6Si || pregunta7Si) {
+    const algunaSi = pregunta2Si || pregunta3Si || pregunta4Si || pregunta5Si || pregunta6Si || pregunta7Si;
+
+    if (algunaSi) {
+        pregunta1Si.checked = true;
+        pregunta1No.checked = false;
+    } 
+    else {
+        pregunta1No.checked = true;
+        pregunta1Si.checked = false;
+    }
+
+    if (algunaSi) {
         document.getElementById("seccion2").style.display = "block";
         document.getElementById("seccion3").style.display = "block";
         document.getElementById("seccion4").style.display = "block";
@@ -30,6 +65,7 @@ function guia1() {
         });
     }
 }
+
 
 
 
@@ -118,4 +154,41 @@ function jefetrabajadoresguia3() {
             }
         });
     }
+}
+
+
+
+function cargarExplicaciones() {
+
+    const iconElements = document.querySelectorAll('i[id]');
+    const ids = Array.from(iconElements).map(iconElement => iconElement.getAttribute('id')); 
+
+    const csrfToken = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
+
+    $.ajax({
+        type: "POST",
+        dataType: "json",
+        url: "/obtenerExplicaciones",
+        data: { 
+            ids: ids,
+            _token: csrfToken  
+        },
+        cache: false,
+        success: function(data) {
+            if (data.explicaciones) {
+                iconElements.forEach(function(iconElement) {
+                    const iconId = iconElement.getAttribute('id'); 
+
+                    const explicacion = data.explicaciones[iconId];
+                    if (explicacion) {
+                        iconElement.setAttribute('title', explicacion);
+                        $(iconElement).tooltip();
+                    }
+                });
+            }
+        },
+        error: function(xhr, status, error) {
+            console.error('Error al obtener las explicaciones:', error);
+        }
+    });
 }
