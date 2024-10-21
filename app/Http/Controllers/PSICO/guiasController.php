@@ -28,4 +28,24 @@ public function obtenerExplicaciones(Request $request) {
 }
 
 
+public function consultarDatosTrabajador(Request $request) {
+    $idTrabajador = $request->input('id_trabajador');
+
+    $trabajador = DB::select("
+        SELECT RECPSICOTRABAJADOR_NOMBRE, RECPSICOTRABAJADOR_GENERO, RECPSICOTRABAJADOR_CORREO
+        FROM recopsicotrabajadores
+        WHERE ID_RECOPSICOTRABAJADOR = :idTrabajador
+    ", ['idTrabajador' => $idTrabajador]);
+
+    if (!empty($trabajador)) {
+        return response()->json($trabajador[0]); 
+    }
+
+    return response()->json(['error' => 'No se encontraron datos para este trabajador'], 404);
+}
+
+
+
+
+
 }

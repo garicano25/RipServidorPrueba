@@ -5,6 +5,7 @@ console.log('Id:', id);
 
 
 function mostrarGuias(requiereGuia1, requiereGuia2, requiereGuia3) {
+
     const guia1 = document.getElementById('guia1');
     if (requiereGuia1 === 1) {
         guia1.style.display = 'block';
@@ -12,7 +13,7 @@ function mostrarGuias(requiereGuia1, requiereGuia2, requiereGuia3) {
         guia1.style.display = 'none';
     }
 
-    // Guía 2
+
     const guia2 = document.getElementById('guia2');
     if (requiereGuia2 === 1) {
         guia2.style.display = 'block';
@@ -211,3 +212,55 @@ function cargarExplicaciones() {
         }
     });
 }
+
+
+function scrolldatos() {
+    const datos = document.getElementById('col-datos');
+    const offsetTop = datos.offsetTop; 
+
+    window.addEventListener('scroll', function() {
+        const scrollTop = window.scrollY; 
+        if (scrollTop > offsetTop - 100) {
+            datos.classList.remove('mt-5');
+        } else {
+            datos.classList.add('mt-5');
+        }
+    });
+}
+
+
+
+function consultarDatos() {
+    if (typeof id === 'undefined') {
+        console.error("ID del trabajador no está definido");
+        return;
+    }
+
+    var csrfToken = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
+
+    $.ajax({
+        type: "POST",
+        url: "/consultarDatosTrabajador", 
+        dataType: "json",
+        data: {
+            id_trabajador: id, 
+            _token: csrfToken  
+        },
+        success: function (data) {
+            if (data) {
+                $('#nombre-trabajador').text(data.RECPSICOTRABAJADOR_NOMBRE || 'No disponible');
+                $('#genero-trabajador').text(data.RECPSICOTRABAJADOR_GENERO || 'No disponible');
+                $('#correo-trabajador').text(data.RECPSICOTRABAJADOR_CORREO || 'No disponible');
+
+            } else {
+                alert('No se encontraron datos para este trabajador.');
+            }
+        },
+        error: function (xhr, status, error) {
+            console.error('Error al obtener los datos:', error);
+        }
+    });
+}
+
+
+
