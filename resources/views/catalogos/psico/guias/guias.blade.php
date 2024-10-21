@@ -4018,7 +4018,7 @@
             <h4><i class="fa fa-user"></i> Datos Generales</h4>
             <div class="info-section">
                 <p><strong><i class="fa fa-id-card"></i> Nombre del trabajador:</strong><span id="nombre-trabajador"></span></p>
-                <p><strong><i class="fa fa-venus-mars"></i> Género:</strong><span id="genero-trabajador"></span></p>
+                <p><strong><i class="fa fa-venus-mars"></i> Sexo:</strong><span id="genero-trabajador"></span></p>
                 <p><strong><i class="fa fa-envelope"></i> Correo:</strong><span id="correo-trabajador"></span></p>
             </div>
     
