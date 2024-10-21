@@ -302,17 +302,17 @@ class proyectoVehiculoController extends Controller
                                         proyectovehiculosactual.vehiculo_id,
                                         vehiculo.vehiculo_marca,
                                         vehiculo.vehiculo_modelo,
-                                        vehiculo.vehiculo_serie,
-                                        vehiculo.vehiculo_linea
+                                        vehiculo.vehiculo_placa,
+                                        vehiculo.vehiculo_serie
                                     FROM
                                         proyectovehiculosactual
                                         LEFT JOIN proveedor ON proyectovehiculosactual.proveedor_id = proveedor.id
                                         LEFT JOIN vehiculo ON proyectovehiculosactual.vehiculo_id = vehiculo.id
                                     WHERE
-                                        proyectovehiculosactual.proyecto_id = ' . $proyecto_id . '
+                                        proyectovehiculosactual.proyecto_id = ?
                                     ORDER BY
                                         proveedor.proveedor_NombreComercial ASC,
-                                        vehiculo.vehiculo_Descripcion ASC');
+                                        vehiculo.vehiculo_Descripcion ASC', [$proyecto_id]);
 
 
             //===========================================
