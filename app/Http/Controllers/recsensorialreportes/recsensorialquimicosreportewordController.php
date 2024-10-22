@@ -634,7 +634,7 @@ class recsensorialquimicosreportewordController extends Controller
             if ($area != $value->recsensorialarea_nombre) {
                 $table->addRow(); //fila
                 $table->addCell(null, $combinar_fila)->addTextRun($centrado)->addText($value->recsensorialarea_nombre, $texto);
-                $table->addCell(null, $celda)->addTextRun($centrado)->addText($value->catsustancia_nombre, $texto);
+                $table->addCell(null, $celda)->addTextRun($centrado)->addText(sanitizeText($value->catsustancia_nombre), $texto);
                 $table->addCell(null, $celda)->addTextRun($centrado)->addText($value->recsensorialquimicosinventario_cantidad . " " . $value->catunidadmedidasustacia_abreviacion, $texto);
                 $table->addCell(null, $celda)->addTextRun($centrado)->addText($value->catestadofisicosustancia_estado, $texto);
                 // $table->addCell(null, $celda)->addTextRun($centrado)->addText($value->catviaingresoorganismo_viaingreso, $texto);
@@ -644,7 +644,7 @@ class recsensorialquimicosreportewordController extends Controller
             } else {
                 $table->addRow(); //fila
                 $table->addCell(null, $continua_fila);
-                $table->addCell(null, $celda)->addTextRun($centrado)->addText($value->catsustancia_nombre, $texto);
+                $table->addCell(null, $celda)->addTextRun($centrado)->addText(sanitizeText($value->catsustancia_nombre), $texto);
                 $table->addCell(null, $celda)->addTextRun($centrado)->addText($value->recsensorialquimicosinventario_cantidad . " " . $value->catunidadmedidasustacia_abreviacion, $texto);
                 $table->addCell(null, $celda)->addTextRun($centrado)->addText($value->catestadofisicosustancia_estado, $texto);
                 // $table->addCell(null, $celda)->addTextRun($centrado)->addText($value->catviaingresoorganismo_viaingreso, $texto);
@@ -787,8 +787,8 @@ class recsensorialquimicosreportewordController extends Controller
         foreach ($sql as $key => $value) {
             if ($sustancia != $value->catsustancia_nombre) {
                 $table->addRow(); //fila
-                $table->addCell(2700, $combinar_fila)->addTextRun($centrado)->addText('[' . $productos[$value->catsustancia_nombre] . '] ' . $value->catsustancia_nombre, $texto);
-                $table->addCell(2700, $celda)->addTextRun($centrado)->addText($value->SUSTANCIA_QUIMICA, $texto);
+                $table->addCell(2700, $combinar_fila)->addTextRun($centrado)->addText('[' . $productos[$value->catsustancia_nombre] . '] ' . sanitizeText($value->catsustancia_nombre), $texto);
+                $table->addCell(2700, $celda)->addTextRun($centrado)->addText(sanitizeText($value->SUSTANCIA_QUIMICA), $texto);
                 $table->addCell(2700, $celda)->addTextRun($centrado)->addText($value->VIA_INGRESO, $texto);
                 $table->addCell(2700, $celda)->addTextRun($centrado)->addText($value->CLASIFICACION_RIESGO, $texto);
                 $table->addCell(1350, $celda)->addTextRun($centrado)->addText($value->PPT, $texto);
@@ -798,7 +798,7 @@ class recsensorialquimicosreportewordController extends Controller
             } else {
                 $table->addRow(); //fila
                 $table->addCell(2700, $continua_fila);
-                $table->addCell(2700, $celda)->addTextRun($centrado)->addText($value->SUSTANCIA_QUIMICA, $texto);
+                $table->addCell(2700, $celda)->addTextRun($centrado)->addText(sanitizeText($value->SUSTANCIA_QUIMICA), $texto);
                 $table->addCell(2700, $celda)->addTextRun($centrado)->addText($value->VIA_INGRESO, $texto);
                 $table->addCell(2700, $celda)->addTextRun($centrado)->addText($value->CLASIFICACION_RIESGO, $texto);
                 $table->addCell(1350, $celda)->addTextRun($centrado)->addText($value->PPT, $texto);
@@ -881,16 +881,16 @@ class recsensorialquimicosreportewordController extends Controller
             if ($area != $value->recsensorialarea_nombre) {
                 $table->addRow(); //fila
                 $table->addCell(null, $combinar_fila)->addTextRun($centrado)->addText($value->recsensorialarea_nombre, $texto);
-                $table->addCell(null, $celda)->addTextRun($centrado)->addText($value->agente, $texto);
-                $table->addCell(null, $celda)->addTextRun($centrado)->addText($value->recsensorialmaquinaria_nombre, $texto);
+                $table->addCell(null, $celda)->addTextRun($centrado)->addText(sanitizeText($value->agente), $texto);
+                $table->addCell(null, $celda)->addTextRun($centrado)->addText(sanitizeText($value->recsensorialmaquinaria_nombre), $texto);
                 $table->addCell(null, $celda)->addTextRun($centrado)->addText($value->recsensorialmaquinaria_cantidad, $texto);
 
                 $area = $value->recsensorialarea_nombre;
             } else {
                 $table->addRow(); //fila
                 $table->addCell(null, $continua_fila);
-                $table->addCell(null, $celda)->addTextRun($centrado)->addText($value->agente, $texto);
-                $table->addCell(null, $celda)->addTextRun($centrado)->addText($value->recsensorialmaquinaria_nombre, $texto);
+                $table->addCell(null, $celda)->addTextRun($centrado)->addText(sanitizeText($value->agente), $texto);
+                $table->addCell(null, $celda)->addTextRun($centrado)->addText(sanitizeText($value->recsensorialmaquinaria_nombre), $texto);
                 $table->addCell(null, $celda)->addTextRun($centrado)->addText($value->recsensorialmaquinaria_cantidad, $texto);
             }
         }
@@ -990,8 +990,8 @@ class recsensorialquimicosreportewordController extends Controller
                 if ($area != $value->AREA) {
                     $table->addRow(); // fila para el nuevo área
                     $table->addCell(null, $combinar_fila)->addTextRun($centrado)->addText($value->AREA, $texto);
-                    $table->addCell(null, $combinar_fila)->addTextRun($centrado)->addText('[' . $productos[$value->PRODUCTO] . '] ' . $value->PRODUCTO, $texto);
-                    $table->addCell(null, $celda)->addTextRun($centrado)->addText($value->COMPONENTE, $texto);
+                    $table->addCell(null, $combinar_fila)->addTextRun($centrado)->addText('[' . $productos[$value->PRODUCTO] . '] ' . sanitizeText($value->PRODUCTO), $texto);
+                    $table->addCell(null, $celda)->addTextRun($centrado)->addText(sanitizeText($value->COMPONENTE), $texto);
                     $table->addCell(null, $celda)->addTextRun($centrado)->addText($value->PONDERACION_CANTIDAD, $texto);
                     $table->addCell(null, $celda)->addTextRun($centrado)->addText($value->PONDERACION_CLASIFICACION, $texto);
                     $table->addCell(null, $celda)->addTextRun($centrado)->addText($value->PONDERACION_VOLATILIDAD, $texto);
@@ -1002,8 +1002,8 @@ class recsensorialquimicosreportewordController extends Controller
                 } else if ($sustancia != $value->PRODUCTO) {
                     $table->addRow(); // fila para el nuevo producto dentro del área actual
                     $table->addCell(null, $continua_fila);
-                    $table->addCell(null, $combinar_fila)->addTextRun($centrado)->addText('[' . $productos[$value->PRODUCTO] . '] ' . $value->PRODUCTO, $texto);
-                    $table->addCell(null, $celda)->addTextRun($centrado)->addText($value->COMPONENTE, $texto);
+                    $table->addCell(null, $combinar_fila)->addTextRun($centrado)->addText('[' . $productos[$value->PRODUCTO] . '] ' . sanitizeText($value->PRODUCTO), $texto);
+                    $table->addCell(null, $celda)->addTextRun($centrado)->addText(sanitizeText($value->COMPONENTE), $texto);
                     $table->addCell(null, $celda)->addTextRun($centrado)->addText($value->PONDERACION_CANTIDAD, $texto);
                     $table->addCell(null, $celda)->addTextRun($centrado)->addText($value->PONDERACION_CLASIFICACION, $texto);
                     $table->addCell(null, $celda)->addTextRun($centrado)->addText($value->PONDERACION_VOLATILIDAD, $texto);
@@ -1014,7 +1014,7 @@ class recsensorialquimicosreportewordController extends Controller
                     $table->addRow(); // fila para el nuevo componente dentro del producto actual
                     $table->addCell(null, $continua_fila);
                     $table->addCell(null, $continua_fila);
-                    $table->addCell(null, $celda)->addTextRun($centrado)->addText($value->COMPONENTE, $texto);
+                    $table->addCell(null, $celda)->addTextRun($centrado)->addText(sanitizeText($value->COMPONENTE), $texto);
                     $table->addCell(null, $celda)->addTextRun($centrado)->addText($value->PONDERACION_CANTIDAD, $texto);
                     $table->addCell(null, $celda)->addTextRun($centrado)->addText($value->PONDERACION_CLASIFICACION, $texto);
                     $table->addCell(null, $celda)->addTextRun($centrado)->addText($value->PONDERACION_VOLATILIDAD, $texto);
@@ -1090,7 +1090,7 @@ class recsensorialquimicosreportewordController extends Controller
                     $table->addCell(2300, $combinar_fila)->addTextRun($centrado)->addText($value->CLASIFICACION, $texto);
 
                     if ($sustancia != $value->SUSTANCIA_PRODUCTO) {
-                        $table->addCell(2300, $combinar_fila)->addTextRun($centrado)->addText($value->SUSTANCIA_PRODUCTO, $textonegrita);
+                        $table->addCell(2300, $combinar_fila)->addTextRun($centrado)->addText(sanitizeText($value->SUSTANCIA_PRODUCTO), $textonegrita);
 
                         if ($area != $value->AREA) {
                             $table->addCell(2300, $combinar_fila)->addTextRun($centrado)->addText($value->AREA, $texto);
@@ -1149,7 +1149,7 @@ class recsensorialquimicosreportewordController extends Controller
                     $table->addCell(2300, $continua_fila);
 
                     if ($sustancia != $value->SUSTANCIA_PRODUCTO) {
-                        $table->addCell(2300, $combinar_fila)->addTextRun($centrado)->addText($value->SUSTANCIA_PRODUCTO, $textonegrita);
+                        $table->addCell(2300, $combinar_fila)->addTextRun($centrado)->addText(sanitizeText($value->SUSTANCIA_PRODUCTO), $textonegrita);
 
                         if ($area != $value->AREA) {
                             $table->addCell(2300, $combinar_fila)->addTextRun($centrado)->addText($value->AREA, $texto);
@@ -1252,7 +1252,7 @@ class recsensorialquimicosreportewordController extends Controller
                     $table->addCell(2300, $combinar_fila)->addTextRun($centrado)->addText($value->CLASIFICACION, $texto);
 
                     if ($sustancia != $value->SUSTANCIA_PRODUCTO) {
-                        $table->addCell(2300, $combinar_fila)->addTextRun($centrado)->addText($value->SUSTANCIA_PRODUCTO, $textonegrita);
+                        $table->addCell(2300, $combinar_fila)->addTextRun($centrado)->addText(sanitizeText($value->SUSTANCIA_PRODUCTO), $textonegrita);
 
                         if ($area != $value->AREA) {
                             $table->addCell(2300, $combinar_fila)->addTextRun($centrado)->addText($value->AREA, $texto);
@@ -1307,7 +1307,7 @@ class recsensorialquimicosreportewordController extends Controller
                     $table->addCell(2300, $continua_fila);
 
                     if ($sustancia != $value->SUSTANCIA_PRODUCTO) {
-                        $table->addCell(2300, $combinar_fila)->addTextRun($centrado)->addText($value->SUSTANCIA_PRODUCTO, $textonegrita);
+                        $table->addCell(2300, $combinar_fila)->addTextRun($centrado)->addText(sanitizeText($value->SUSTANCIA_PRODUCTO), $textonegrita);
 
                         if ($area != $value->AREA) {
                             $table->addCell(2300, $combinar_fila)->addTextRun($centrado)->addText($value->AREA, $texto);
@@ -1521,7 +1521,7 @@ class recsensorialquimicosreportewordController extends Controller
                 if ($grupo != $value->CLASIFICACION) {
                     $table->addRow(); // fila para el nuevo área
                     $table->addCell(null, $combinar_fila)->addTextRun($centrado)->addText($value->CLASIFICACION, $texto);
-                    $table->addCell(null, $combinar_fila)->addTextRun($centrado)->addText($value->PRODUCTO_COMPONENTE, $texto);
+                    $table->addCell(null, $combinar_fila)->addTextRun($centrado)->addText(sanitizeText($value->PRODUCTO_COMPONENTE), $texto);
                     $table->addCell(null, $celda)->addTextRun($centrado)->addText($value->CATEGORIA, $texto);
                     $table->addCell(null, $celda)->addTextRun($centrado)->addText($value->MUESTREO_PPT, $texto);
                     $table->addCell(null, $celda)->addTextRun($centrado)->addText($value->MUESTREO_CT, $texto);
@@ -1533,7 +1533,7 @@ class recsensorialquimicosreportewordController extends Controller
                 } else if ($sustancia != $value->PRODUCTO_COMPONENTE) {
                     $table->addRow(); // fila para el nuevo producto dentro del área actual
                     $table->addCell(null, $continua_fila);
-                    $table->addCell(null, $combinar_fila)->addTextRun($centrado)->addText($value->PRODUCTO_COMPONENTE, $texto);
+                    $table->addCell(null, $combinar_fila)->addTextRun($centrado)->addText(sanitizeText($value->PRODUCTO_COMPONENTE), $texto);
                     $table->addCell(null, $celda)->addTextRun($centrado)->addText($value->CATEGORIA, $texto);
                     $table->addCell(null, $celda)->addTextRun($centrado)->addText($value->MUESTREO_PPT, $texto);
                     $table->addCell(null, $celda)->addTextRun($centrado)->addText($value->MUESTREO_CT, $texto);
@@ -1625,7 +1625,7 @@ class recsensorialquimicosreportewordController extends Controller
             // registros tabla
             foreach ($sql as $key => $value) {
                 $table->addRow(); //fila
-                $table->addCell(3450, $celda)->addTextRun($centrado)->addText($value->PRODUCTO_COMPONENTE, $texto);
+                $table->addCell(3450, $celda)->addTextRun($centrado)->addText(sanitizeText($value->PRODUCTO_COMPONENTE), $texto);
                 $table->addCell(1400, $celda)->addTextRun($centrado)->addText($value->SUMA_MUESTREO_PPT, $texto);
                 $table->addCell(1400, $celda)->addTextRun($centrado)->addText($value->SUMA_MUESTREO_CT, $texto);
                 $table->addCell(1200, $celda)->addTextRun($centrado)->addText($value->TOTAL_MUESTREO, $textonegrita);
@@ -1693,7 +1693,7 @@ class recsensorialquimicosreportewordController extends Controller
                     $table->addCell(2300, $combinar_fila)->addTextRun($centrado)->addText($value->CATEGORIA, $textonegrita);
 
                     if ($sustancia != $value->SUSTANCIA) {
-                        $table->addCell(2300, $combinar_fila)->addTextRun($centrado)->addText($value->SUSTANCIA, $texto);
+                        $table->addCell(2300, $combinar_fila)->addTextRun($centrado)->addText(sanitizeText($value->SUSTANCIA), $texto);
                         $table->addCell(null, $celda)->addTextRun($centrado)->addText($value->PPT, $texto);
                         $table->addCell(null, $celda)->addTextRun($centrado)->addText($value->CT, $texto);
                         $table->addCell(null, $celda)->addTextRun($centrado)->addText($value->PUNTOS, $texto);
@@ -1735,7 +1735,7 @@ class recsensorialquimicosreportewordController extends Controller
                     $table->addCell(2300, $combinar_fila)->addTextRun($centrado)->addText($value->CATEGORIA, $textonegrita);
 
                     if ($sustancia != $value->SUSTANCIA) {
-                        $table->addCell(2300, $combinar_fila)->addTextRun($centrado)->addText($value->SUSTANCIA, $texto);
+                        $table->addCell(2300, $combinar_fila)->addTextRun($centrado)->addText(sanitizeText($value->SUSTANCIA), $texto);
                         $table->addCell(null, $celda)->addTextRun($centrado)->addText($value->PPT, $texto);
                         $table->addCell(null, $celda)->addTextRun($centrado)->addText($value->CT, $texto);
                         $table->addCell(null, $celda)->addTextRun($centrado)->addText($value->PUNTOS, $texto);
@@ -1753,7 +1753,7 @@ class recsensorialquimicosreportewordController extends Controller
                     $table->addCell(2300, $continua_fila);
 
                     if ($sustancia != $value->SUSTANCIA) {
-                        $table->addCell(2300, $combinar_fila)->addTextRun($centrado)->addText($value->SUSTANCIA, $texto);
+                        $table->addCell(2300, $combinar_fila)->addTextRun($centrado)->addText(sanitizeText($value->SUSTANCIA), $texto);
                         $table->addCell(null, $celda)->addTextRun($centrado)->addText($value->PPT, $texto);
                         $table->addCell(null, $celda)->addTextRun($centrado)->addText($value->CT, $texto);
                         $table->addCell(null, $celda)->addTextRun($centrado)->addText($value->PUNTOS, $texto);
