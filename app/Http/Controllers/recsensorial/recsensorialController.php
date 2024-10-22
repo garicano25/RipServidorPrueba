@@ -64,7 +64,7 @@ use App\modelos\proyecto\proyectoModel;
 date_default_timezone_set('America/Mexico_City');
 
 
-class recsensorialController extends Controller
+class recsensorialController extends Controller 
 {
     public function __construct()
     {

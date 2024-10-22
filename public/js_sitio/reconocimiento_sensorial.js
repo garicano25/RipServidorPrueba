@@ -343,7 +343,7 @@ $('.link_menuprincipal').click(function () {
 
 // 	if ($(this).val()) {
 
-// 		$.ajax({
+// 		$.ajax({ 
 // 			type: "GET",
 // 			dataType: "json",
 // 			url: "/validarComponentesMaquinaria/" + $(this).val(),
