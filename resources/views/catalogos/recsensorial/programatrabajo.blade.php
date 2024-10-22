@@ -140,6 +140,13 @@
                                             </div>
                                             @endif
 
+                                            @if(auth()->user()->hasRoles(['Superusuario', 'Administrador', 'Coordinador','Operativo HI','Compras']))
+                                            <div class="multisteps-form__progress-btn" id="steps_menu_tab7">
+                                                <i class="fa fa-car"></i><br>
+                                                <span>Vehículos</span>
+                                            </div>
+                                            @endif
+
                                             @if(auth()->user()->hasRoles(['Superusuario', 'Administrador', 'Coordinador','Compras','Almacén','Operativo HI']))
                                             <div class="multisteps-form__progress-btn" id="steps_menu_tab5">
                                                 <i class="fa fa-print"></i><br>
@@ -371,6 +378,87 @@
                                                     </div>
                                                 </div>
                                             </div>
+                                            <!--STEP 7-->
+                                            <div class="multisteps-form__panel" data-animation="scaleIn" id="steps_contenido_tab7">
+                                                <div class="multisteps-form__content">
+                                                    <div class="row">
+                                                        <div class="col-12">
+                                                            <div class="card">
+                                                                <div class="card-body">
+                                                                    <h4 class="card-title">Lista de vehículos asignados al proyecto</h4>
+                                                                    <div class="row">
+                                                                        <div class="col-12">
+                                                                            <form method="post" enctype="multipart/form-data" name="form_proyectovehiculos" id="form_proyectovehiculos">
+                                                                                <style type="text/css" media="screen">
+                                                                                    #tabla_proyectovehiculos td {
+                                                                                        padding: 12px 20px 12px 2px;
+                                                                                        border-top: 1px #EEEEEE solid;
+                                                                                    }
+                                                                                </style>
+                                                                                <div style="border: 0px #999999 solid; margin-bottom: 20px;">
+                                                                                    {!! csrf_field() !!}
+                                                                                    <table class="display table-hover stylish-table" width="100%" id="tabla_proyectovehiculos">
+                                                                                        <thead>
+                                                                                            <tr>
+                                                                                                <th width="60" style="padding: 10px 0px; border-bottom: 2px #EEEEEE solid;">No</th>
+                                                                                                <th width="160" style="padding: 10px 0px; border-bottom: 2px #EEEEEE solid;">Proveedor</th>
+                                                                                                <th width="110" style="padding: 10px 0px; border-bottom: 2px #EEEEEE solid;">Disponible</th>
+                                                                                                <th width="80" style="padding: 10px 0px; border-bottom: 2px #EEEEEE solid;">Asignado</th>
+                                                                                                <th width="auto" style="padding: 10px 0px; border-bottom: 2px #EEEEEE solid;">Marca</th>
+                                                                                                <th width="180" style="padding: 10px 0px; border-bottom: 2px #EEEEEE solid;">Placa</th>
+                                                                                                <th width="140" style="padding: 10px 0px; border-bottom: 2px #EEEEEE solid;">Modelo</th>
+                                                                                                <th width="140" style="padding: 10px 0px; border-bottom: 2px #EEEEEE solid;">Serie</th>
+                                                                                            </tr>
+                                                                                        </thead>
+                                                                                        <tbody>
+                                                                                            <tr>
+                                                                                                <td colspan="9">&nbsp;</td>
+                                                                                            </tr>
+                                                                                        </tbody>
+                                                                                    </table>
+                                                                                </div>
+                                                                                @if(auth()->user()->hasRoles(['Superusuario', 'Administrador', 'Coordinador']))
+                                                                                <div class="form-group" style="text-align: right;">
+                                                                                    <button type="submit" class="btn btn-danger botonguardar_moduloproyecto" id="boton_guardar_proyectovehiculos">
+                                                                                        Guardar <i class="fa fa-save"></i>
+                                                                                    </button>
+                                                                                </div>
+                                                                                @endif
+                                                                            </form>
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                        <div class="col-12">
+                                                            <div class="card">
+                                                                <div class="card-body">
+                                                                    <h4 class="card-title">Observaciones</h4>
+                                                                    <hr>
+                                                                    <div class="row">
+                                                                        <div class="col-12">
+                                                                            <table class="table table-hover stylish-table" width="100%" id="tabla_proyectoequiposobservaciones">
+                                                                                <thead>
+                                                                                    <tr>
+                                                                                        <th width="320">Proveedor</th>
+                                                                                        <th>Observaciones</th>
+                                                                                    </tr>
+                                                                                </thead>
+                                                                                <tbody>
+                                                                                    <tr>
+                                                                                        <td>&nbsp;</td>
+                                                                                        <td>&nbsp;</td>
+                                                                                    </tr>
+                                                                                </tbody>
+                                                                            </table>
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
                                             @endif
                                             <!--STEP 5-->
                                             <div class="multisteps-form__panel" data-animation="scaleIn" id="steps_contenido_tab5">
@@ -469,15 +557,22 @@
                                                                     @if(auth()->user()->hasRoles(['Superusuario', 'Administrador','Coordinador','Compras','Almacén','Operativo HI']))
 
                                                                     <li class="nav-item">
-                                                                        <a class="nav-link " data-toggle="tab" id="reportetab_menu3" role="tab" href="#reportetab_3">
+                                                                        <a class="nav-link link_menureportes" data-toggle="tab" id="reportetab_menu3" role="tab" href="#reportetab_3">
                                                                             <span class="hidden-xs-down">Lista de signatarios</span>
                                                                         </a>
                                                                     </li>
                                                                     @endif
                                                                     @if(auth()->user()->hasRoles(['Superusuario', 'Administrador', 'Compras','Coordinador','Almacén','Operativo HI']))
                                                                     <li class="nav-item">
-                                                                        <a class="nav-link " data-toggle="tab" id="reportetab_menu4" role="tab" href="#reportetab_4">
+                                                                        <a class="nav-link link_menureportes" data-toggle="tab" id="reportetab_menu4" role="tab" href="#reportetab_4">
                                                                             <span class="hidden-xs-down">Lista de equipos</span>
+                                                                        </a>
+                                                                    </li>
+                                                                    @endif
+                                                                    @if(auth()->user()->hasRoles(['Superusuario', 'Administrador', 'Compras','Coordinador','Almacén','Operativo HI']))
+                                                                    <li class="nav-item">
+                                                                        <a class="nav-link link_menureportes" data-toggle="tab" id="reportetab_menu5" role="tab" href="#reportetab_5">
+                                                                            <span class="hidden-xs-down">Lista de vehículos</span>
                                                                         </a>
                                                                     </li>
                                                                     @endif
@@ -533,20 +628,36 @@
                                                                             </table>
                                                                         </div>
                                                                     </div>
+                                                                    <div class="tab-pane p-20" id="reportetab_5" role="tabpanel">
+                                                                        @if(auth()->user()->hasRoles(['Superusuario', 'Administrador', 'Coordinador','Operativo HI','Compras']))
+                                                                        <ol class="breadcrumb m-b-10">
+                                                                            <button type="button" class="btn btn-secondary waves-effect waves-light botonnuevo_moduloproyecto" data-toggle="tooltip" title="Generar nueva" id="boton_nueva_lv">
+                                                                                <span class="btn-label"><i class="fa fa-plus"></i></span>Generar nueva lista de vehículos
+                                                                            </button>
+                                                                        </ol>
+                                                                        @endif
+                                                                        <div class="table-responsive">
+                                                                            <table class="table table-hover stylish-table" width="100%" id="tabla_listavehiculos">
+                                                                                <thead>
+                                                                                    <tr>
+                                                                                        <th style="width: 50px!important;">No.</th>
+                                                                                        <th>Revisión</th>
+                                                                                        <th style="width: 300px!important;">Autorizado por:</th>
+                                                                                        <th style="width: 300px!important;">Cancelado por:</th>
+                                                                                        <th style="width: 90px!important;">Estado</th>
+                                                                                        <th style="width: 70px!important;">Mostrar</th>
+                                                                                    </tr>
+                                                                                </thead>
+                                                                                <tbody></tbody>
+                                                                            </table>
+                                                                        </div>
+                                                                    </div>
                                                                 </div>
                                                             </div>
                                                         </div>
                                                     </div>
                                                 </div>
                                             </div>
-
-
-
-
-
-
-
-
                                         </div>
                                     </div>
                                 </div>
@@ -1323,6 +1434,128 @@
 </div>
 <!-- ============================================================== -->
 <!-- VISOR-MODAL-EQUIPOS -->
+<!-- ============================================================== -->
+
+
+
+<!-- ============================================================== -->
+<!-- VISOR-MODAL-VEHICULOS -->
+<!-- ============================================================== -->
+<style type="text/css" media="screen">
+    #visor_documento_lv {
+        width: 100%;
+        height: 600px;
+        border: 2px #DDDDDD solid;
+        pointer-events: painted;
+    }
+
+    #modal_vehiculoslista .modal-body .form-group {
+        margin: 0px 0px 12px 0px !important;
+        padding: 0px !important;
+    }
+
+    #modal_vehiculoslista .modal-body .form-group label {
+        margin: 0px !important;
+        padding: 0px 0px 3px 0px !important;
+    }
+</style>
+<div id="modal_vehiculoslista" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" style="display: none;">
+    <div class="modal-dialog modal-lg" style="min-width: 1200px!important;">
+        <form method="post" enctype="multipart/form-data" name="form_vehiculoslista" id="form_vehiculoslista">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                    <h4 class="modal-title" id="nombre_documento_visor_lv"></h4>
+                </div>
+                <div class="modal-body"> {{-- style="background: #555555;" --}}
+                    <div class="row">
+                        <div class="col-6">
+                            <iframe src="/assets/images/cargando.gif" name="visor_documento_lv" id="visor_documento_lv"></iframe>
+                        </div>
+                        <div class="col-6">
+                            <div class="row">
+                                <div class="col-12">
+                                    <div class="form-group">
+                                        {!! csrf_field() !!}
+                                        <input type="hidden" class="form-control" id="vehiculoslista_id" name="vehiculoslista_id" value="0">
+                                    </div>
+                                </div>
+                                <div class="col-4">
+                                    @if(auth()->user()->hasRoles(['Superusuario', 'Administrador', 'Proyecto']))
+                                    <div class="form-group">
+                                        <label class="demo-switch-title">¿Firmar de autorizado?</label>
+                                        <div class="switch">
+                                            <label>No<input type="checkbox" id="checkbox_autorizale" name="checkbox_autorizale" onclick="activa_campoautorizacion_lv(this);"><span class="lever switch-col-light-blue"></span>Si</label>
+                                        </div>
+                                    </div>
+                                    @else
+                                    <div class="form-group">
+                                        <label class="demo-switch-title">No disponible</label>
+                                        <div class="switch">
+                                            <label><input type="checkbox" disabled><span class="lever switch-col-secondary"></span></label>
+                                        </div>
+                                    </div>
+                                    @endif
+                                </div>
+                                <div class="col-8">
+                                    <div class="form-group">
+                                        <label>Nombre y fecha de quién autoriza (Firma digital)</label>
+                                        <input type="text" class="form-control" id="proyectovehiculo_autorizadonombre" name="proyectovehiculo_autorizadonombre" readonly>
+                                    </div>
+                                </div>
+                                <div class="col-4">
+                                    @if(auth()->user()->hasRoles(['Superusuario', 'Administrador', 'Proyecto']))
+                                    <div class="form-group">
+                                        <label class="demo-switch-title">¿Lista cancelada?</label>
+                                        <div class="switch">
+                                            <label>No<input type="checkbox" id="checkbox_cancelalv" name="checkbox_cancelalv" onclick="activa_campocancelacion_lv(this);"><span class="lever switch-col-red"></span>Si</label>
+                                        </div>
+                                    </div>
+                                    @else
+                                    <div class="form-group">
+                                        <label class="demo-switch-title">No disponible</label>
+                                        <div class="switch">
+                                            <label><input type="checkbox" disabled><span class="lever switch-col-secondary"></span></label>
+                                        </div>
+                                    </div>
+                                    @endif
+                                </div>
+                                <div class="col-8">
+                                    <div class="form-group">
+                                        <label>Nombre y fecha de quién cancela</label>
+                                        <input type="text" class="form-control" id="proyectovehiculo_canceladonombre" name="proyectovehiculo_canceladonombre" readonly>
+                                    </div>
+                                </div>
+                                <div class="col-12">
+                                    <div class="form-group">
+                                        <label> Observación (cancelación) *</label>
+                                        <textarea class="form-control" rows="8" id="proyectovehiculo_canceladoobservacion" name="proyectovehiculo_canceladoobservacion" required></textarea>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer" style="text-align: right!important;">
+                    <button type="button" class="btn btn-default waves-effect" data-dismiss="modal" id="boton_cerrar_vehiculoslista">
+                        Cerrar
+                    </button>
+                    @if(auth()->user()->hasRoles(['Superusuario', 'Administrador', 'Proyecto']))
+                    &nbsp;
+                    <button type="submit" class="btn btn-danger waves-effect botonguardar_moduloproyecto" id="boton_guardar_vehiculoslista">
+                        Guardar <i class="fa fa-save"></i>
+                    </button>
+                    <button type="button" class="btn btn-default waves-effect botonguardar_moduloproyecto" data-toggle="tooltip" title="Debe autorizar para activar opción de guardar" id="boton_guardar_vehiculoslista_2">
+                        Crear y guardar <i class="fa fa-ban"></i>
+                    </button>
+                    @endif
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+<!-- ============================================================== -->
+<!-- VISOR-MODAL-VEHICULOS -->
 <!-- ============================================================== -->
 
 
