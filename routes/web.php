@@ -342,6 +342,8 @@ Route::get('obtenerDatosInformes/{ID}', ['as' => 'recsensorial.obtenerDatosInfor
 
 Route::get('obtenerTablaInforme/{ID}', ['as' => 'recsensorial.obtenerTablaInforme', 'uses' => 'recsensorial\recsensorialController@obtenerTablaInforme']);
 
+Route::get('consultarRecomendaciones/{ID}', ['as' => 'recsensorial.consultarRecomendaciones', 'uses' => 'recsensorial\recsensorialController@consultarRecomendaciones']);
+
 Route::get('obtenerGruposComponetes/{ID}', ['as' => 'recsensorial.obtenerGruposComponetes', 'uses' => 'recsensorial\recsensorialController@obtenerGruposComponetes']);
 
 

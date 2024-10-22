@@ -23,6 +23,7 @@ use App\modelos\recsensorial\cat_descripcionarea;
 use App\modelos\recsensorialquimicos\gruposDeExposicionModel;
 use App\modelos\recsensorialquimicos\metodosSustanciasQuimicasModel;
 use App\modelos\recsensorialquimicos\sustanciasEntidadBeisModel;
+use App\modelos\recsensorialquimicos\catRecomendacionesModel;
 
 
 
@@ -482,6 +483,33 @@ class recsensorialquimicoscatalogosController extends Controller
                         }
                     }
                     break;
+                case 13: // CATALOGO DE RECOMENDACIONES
+                    $catalogo = catRecomendacionesModel::orderBy('ID_RECOMENDACION', 'ASC')->get();
+
+                    // crear campos DESCRIPCION Y ESTADO
+                    foreach ($catalogo as $key => $value) {
+
+
+                        $value['boton_editar'] = '<button type="button" class="btn btn-danger btn-circle" onclick="seleccionarRecomendacion();"><i class="fa fa-pencil"></i></button>';
+
+                        // Checkbox estado
+                        if ($value->ACTIVO == 1) {
+                            $value['CheckboxEstado'] = '<div class="switch"><label><input type="checkbox" checked onclick="cambia_estado_registro(' . $num_catalogo . ', ' . $value->ID_RECOMENDACION . ', this);"><span class="lever switch-col-light-blue"></span></label></div>';
+                        } else {
+                            $value['CheckboxEstado'] = '<div class="switch"><label><input type="checkbox" onclick="cambia_estado_registro(' . $num_catalogo . ', ' . $value->ID_RECOMENDACION . ', this);"><span class="lever switch-col-light-blue"></span></label></div>';
+                        }
+
+
+                        if (auth()->user()->hasRoles(['Superusuario', 'Administrador', 'Coordinador'])) {
+                            $value->perfil = 1;
+                        } else {
+                            $value->perfil = 0;
+
+                            $value['boton_editar'] = '<button type="button" class="btn btn-info btn-circle" onclick="seleccionarRecomendacion();"><i class="fa fa-eye"></i></button>';
+                            $value['CheckboxEstado'] = '<div class="switch"><label><input type="checkbox" disabled><span class="lever switch-col-light-blue"></span></label></div>';
+                        }
+                    }
+                    break;
             }
 
             // Respuesta
@@ -864,6 +892,10 @@ class recsensorialquimicoscatalogosController extends Controller
                     $estado = cat_descripcionarea::findOrFail($registro_id);
                     $estado->update(['ACTIVO' => $estado_checkbox]);
                     break;
+                case 13:
+                    $estado = catRecomendacionesModel::findOrFail($registro_id);
+                    $estado->update(['ACTIVO' => $estado_checkbox]);
+                    break;
             }
 
             // Respuesta
@@ -1200,6 +1232,18 @@ class recsensorialquimicoscatalogosController extends Controller
                     }
                     break;
                 case 13:
+                    if ($request['ID_RECOMENDACION'] == 0) {
+                        $sql = DB::select('ALTER TABLE catRecomendaciones AUTO_INCREMENT=1');
+                        $catalogo = catRecomendacionesModel::create($request->all());
+
+                    } else {
+
+                        $catalogo = catRecomendacionesModel::findOrFail($request['ID_RECOMENDACION']);
+                        $catalogo->update($request->all());
+                    }
+                    break;
+     
+               case 133:
                     if ($request['ELIMINAR'] == 0){
 
                         if ($request['ID_METODO'] == 0) {

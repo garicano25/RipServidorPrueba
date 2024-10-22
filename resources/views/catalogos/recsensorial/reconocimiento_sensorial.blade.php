@@ -2513,6 +2513,9 @@
                                     <a class="nav-link active" data-toggle="tab" href="#tab1_info" id="tab1_informe_info" role="tab">Datos generales</a>
                                 </li>
                                 <li class="nav-item">
+                                    <a class="nav-link" data-toggle="tab" style="display: none;" href="#tab5_recomendaciones" id="tab5_informe_recomendaciones" role="tab">Recomendaciones</a>
+                                </li>
+                                <li class="nav-item">
                                     <a class="nav-link" data-toggle="tab" href="#tab2_tabla" role="tab" id="tab2_informe_tabla">Puntos de muestreo y POE</a>
                                 </li>
                                 <li class="nav-item">
@@ -2579,10 +2582,19 @@
                                                             <option value="{{$dato->ID_CATCONCLUSION}}" data-descripcion="{{$dato->DESCRIPCION}}">{{$dato->NOMBRE}}</option>
                                                             @endforeach
                                                         </select>
-                                                        <textarea class="form-control" rows="8" id="CONCLUSION" name="CONCLUSION" ></textarea>
+                                                        <textarea class="form-control" rows="8" id="CONCLUSION" name="CONCLUSION"></textarea>
                                                     </div>
                                                 </div>
                                                 <div class="col-12 mx-2">
+                                                    <label style="color: #000000;">¿Agregar recomendaciones al informes ? </label>
+                                                    <div class="switch">
+                                                        <label>
+                                                            No<input type="checkbox" id="AGREGAR_RECOMENDACION" name="AGREGAR_RECOMENDACION" value="1">
+                                                            <span class="lever switch-col-light-blue" id="checkbox_RECOMENDACION"></span>Si
+                                                        </label>
+                                                    </div>
+                                                </div>
+                                                <div class="col-12 mx-2 mt-3">
                                                     <label class="text-danger">¿El cliente desea muestrear sustancias químicas adicionales ? </label>
                                                     <div class="switch">
                                                         <label>
@@ -2704,8 +2716,39 @@
                                                 </div>
 
 
-                                                <button type="submit" class="btn btn-info mx-4 mt-4" style="background: #FC4B6C!important;" data-toggle="tooltip" title="Guardar datos del Informe" id="boton_guardarDatosInforme">
+                                                <button type="submit" class="btn btn-info mx-4 mt-4 w-25" style="background: #FC4B6C!important;" data-toggle="tooltip" title="Guardar datos del Informe" id="boton_guardarDatosInforme">
                                                     Guardar <i class="fa fa-cloud-upload"></i>
+                                                </button>
+                                            </div>
+                                        </form>
+                                    </div>
+                                </div>
+
+                                <!-- tab 5 -->
+                                <div class="tab-pane" id="tab5_recomendaciones" role="tabpanel">
+                                    <div class="card-body">
+                                        <form enctype="multipart/form-data" method="post" name="form_recomendaciones" id="form_recomendaciones">
+                                            {!! csrf_field() !!}
+                                            <div class="row">
+
+                                                @foreach($recomendaciones as $dato)
+                                                <div class="col-12 mb-3 " id="RECOMENDACION_{{$dato->ID_RECOMENDACION}}">
+
+                                                    <div class="switch">
+                                                        <label>
+                                                            <input type="checkbox" class="recomendaciones-check" id="CHECK_RECOMENDACION_{{$dato->ID_RECOMENDACION}}" name="RECOMENDACIONES[]" value="{{$dato->ID_RECOMENDACION}}">
+                                                            <span class="lever switch-col-light-blue"></span> {{ $dato->DESCRIPCION }}
+                                                        </label>
+                                                    </div>
+
+
+                                                </div>
+
+
+                                                @endforeach
+
+                                                <button type="submit" class="btn btn-info mx-4 mt-4" style="background: #FC4B6C!important;" data-toggle="tooltip" title="Agregar recomendaciones al informe" id="boton_guardarRecomendaciones">
+                                                    Guardar recomendaciones <i class="fa fa-cloud-upload"></i>
                                                 </button>
                                             </div>
                                         </form>
@@ -3973,7 +4016,7 @@
                             <div class="form-group">
                                 <label> Fecha de nacimiento *</label>
                                 <div class="input-group">
-                                    <input type="text" class="form-control mydatepicker" placeholder="aaaa-mm-dd" id="FECHA_NACIMIENTO_BEI" name="FECHA_NACIMIENTO" required="required">
+                                    <input type="text" class="form-control mydatepicker" placeholder="aaaa-mm-dd" id="FECHA_NACIMIENTO_BEI" name="FECHA_NACIMIENTO" >
                                     <span class="input-group-addon"><i class="icon-calender"></i></span>
                                 </div>
                             </div>
@@ -3982,13 +4025,13 @@
                         <div class="col-2">
                             <div class="form-group">
                                 <label>Edad</label>
-                                <input type="number" class="form-control" id="EDAD_BEI" name="EDAD" readonly>
+                                <input type="number" class="form-control" id="EDAD_BEI" name="EDAD">
                             </div>
                         </div>
                         <div class="col-6">
                             <div class="form-group">
                                 <label>Antigüedad laboral </label>
-                                <input type="text" class="form-control" id="ANTIGUEDAD_LABORAL_BEI" name="ANTIGUEDAD_LABORAL" >
+                                <input type="text" class="form-control" id="ANTIGUEDAD_LABORAL_BEI" name="ANTIGUEDAD_LABORAL">
                             </div>
                         </div>
                         <div class="col-6">

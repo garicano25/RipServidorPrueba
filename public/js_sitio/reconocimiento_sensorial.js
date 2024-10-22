@@ -343,7 +343,7 @@ $('.link_menuprincipal').click(function () {
 
 // 	if ($(this).val()) {
 
-// 		$.ajax({
+// 		$.ajax({ 
 // 			type: "GET",
 // 			dataType: "json",
 // 			url: "/validarComponentesMaquinaria/" + $(this).val(),
@@ -10240,6 +10240,7 @@ $('#boton_editarInforme').on('click', function (e) {
 				// $('#CONCLUSION').val(`Agregar la conclusion.`);
 
 				$('#PETICION_CLIENTE').prop('checked', false);
+				$('#AGREGAR_RECOMENDACION').prop('checked', false);
 				$('#REQUIERE_CONCLUSION').prop('checked', false);
 
 				$('#boton_descargarquimicosdoc').css('display', 'none')
@@ -10306,6 +10307,13 @@ $('#boton_editarInforme').on('click', function (e) {
 					$('#PETICION_CLIENTE').prop('checked', true).trigger('change');
 				} else {
 					$('#PETICION_CLIENTE').prop('checked', false).trigger('change');
+
+				}
+				
+				if (dato.data[0].AGREGAR_RECOMENDACION == 1) {
+					$('#AGREGAR_RECOMENDACION').prop('checked', true).trigger('change');
+				} else {
+					$('#AGREGAR_RECOMENDACION').prop('checked', false).trigger('change');
 
 				}
 
@@ -11441,6 +11449,16 @@ $('#PETICION_CLIENTE').on('change', function (e) {
 		$('#tab3_informe_tabla_cliente').css('display', 'block');
 	} else {
 		$('#tab3_informe_tabla_cliente').css('display', 'none');
+
+	}
+})
+
+
+$('#AGREGAR_RECOMENDACION').on('change', function (e) {
+	if ($(this).is(':checked')) {
+		$('#tab5_informe_recomendaciones').css('display', 'block');
+	} else {
+		$('#tab5_informe_recomendaciones').css('display', 'none');
 
 	}
 })
@@ -12807,3 +12825,168 @@ function validarPermisosAsignados(proyecto_folio) {
 		}
 	});//Fin ajax
 }
+
+//================== RECOMENDACIONES =============================
+
+$("#boton_guardarRecomendaciones").click(function (e) {
+
+	e.preventDefault(); // evita que se recargue la página
+
+	// Validamos los campos requeridos
+	var valida = this.form.checkValidity();
+	if (valida) {
+		// Valida envio de datos
+		swal({
+			title: "¡Confirme guardar la información !",
+			text: "Una vez guardada la información los datos seran utilizados para el informe",
+			type: "info",
+			showCancelButton: true,
+			confirmButtonColor: "#DD6B55",
+			confirmButtonText: "Guardar!",
+			cancelButtonText: "Cancelar!",
+			closeOnConfirm: false,
+			closeOnCancel: false
+		}, function (isConfirm) {
+			if (isConfirm) {
+				// cerrar msj confirmacion
+				swal.close();
+
+				// enviar datos
+				$('#form_recomendaciones').ajaxForm({
+					dataType: 'json',
+					type: 'POST',
+					url: '/recsensorial',
+					data: {
+						opcion: 10,
+						RECSENSORIAL_ID: $('#recsensorial_id').val(),
+					},
+					resetForm: false,
+					success: function (dato) {
+
+
+						// mensaje
+						swal({
+							title: "Correcto",
+							text: "Informacion guardada exitosamente",
+							type: "success", // warning, error, success, info
+							buttons: {
+								visible: false, // true , false
+							},
+							timer: 1500,
+							showConfirmButton: false
+						});
+
+
+						$('#boton_descargarquimicosdoc').css('display', 'block')
+
+						// actualiza boton
+						$('#boton_guardarRecomendaciones').html('Guardar <i class="fa fa-save"></i>');
+						$('#boton_guardarRecomendaciones').attr('disabled', false);
+
+						// cerrar modal
+						// $('#modal_datosInforme').modal('hide');
+					},
+					beforeSend: function () {
+						$('#boton_guardarRecomendaciones').html('Guardando <i class="fa fa-spin fa-spinner"></i>');
+						$('#boton_guardarRecomendaciones').attr('disabled', true);
+					},
+					error: function (dato) {
+						// actualiza boton
+						$('#boton_guardarRecomendaciones').html('Guardar <i class="fa fa-save"></i>');
+						$('#boton_guardarRecomendaciones').attr('disabled', false);
+
+						// mensaje
+						swal({
+							title: "Error",
+							text: "" + dato.msj,
+							type: "error", // warning, error, success, info
+							buttons: {
+								visible: false, // true , false
+							},
+							timer: 1500,
+							showConfirmButton: false
+						});
+						return false;
+					}
+				}).submit();
+				return false;
+			}
+			else {
+				// mensaje
+				swal({
+					title: "Cancelado",
+					text: "",
+					type: "error", // warning, error, success, info
+					buttons: {
+						visible: false, // true , false
+					},
+					timer: 500,
+					showConfirmButton: false
+				});
+			}
+		});
+		return false;
+	} else {
+		swal({
+			title: "Faltan datos por rellenear",
+			text: "Asegurece de tener todos los datos rellenados, para poder continuar",
+			type: "warning", // warning, error, success, info
+			buttons: {
+				visible: false, // true , false
+			},
+			timer: 1500,
+			showConfirmButton: false
+		});
+
+	}
+
+});
+
+
+$('#tab5_informe_recomendaciones').click(function (e) {
+
+	$('.recomendaciones-check').prop('checked', false);
+	
+	$.ajax({
+		type: "GET",
+		dataType: "json",
+		url: "/consultarRecomendaciones/" + $('#recsensorial_id').val(),
+		data: {},
+		cache: false,
+		success: function (dato) {
+
+			//Marcamos todas la recomendaciones seleccionadas
+			$.each(dato.data, function (index, valor) { 
+
+				$(`#CHECK_RECOMENDACION_${valor.RECOMENDACION_ID}`).prop('checked', true)
+			})
+
+			$('#boton_guardarRecomendaciones').prop('disabled', false);
+			$('#tab5_informe_recomendaciones').html('Recomendaciones');
+
+		},
+		beforeSend: function () {
+
+			$('#tab5_informe_recomendaciones').html('Recomendaciones <i class="fa fa-spin fa-spinner"></i>');
+			$('#boton_guardarRecomendaciones').prop('disabled', true);
+
+		},
+		error: function (dato) {
+
+
+			swal({
+				title: "Error",
+				text: "" + dato.msj,
+				type: "error", // warning, error, success, info
+				buttons: {
+					visible: false, // true , false
+				},
+				timer: 3000,
+				showConfirmButton: false
+			});
+			return false;
+		}
+	});
+
+
+})
