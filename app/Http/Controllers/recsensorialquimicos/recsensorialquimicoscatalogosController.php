@@ -23,6 +23,7 @@ use App\modelos\recsensorial\cat_descripcionarea;
 use App\modelos\recsensorialquimicos\gruposDeExposicionModel;
 use App\modelos\recsensorialquimicos\metodosSustanciasQuimicasModel;
 use App\modelos\recsensorialquimicos\sustanciasEntidadBeisModel;
+use App\modelos\recsensorialquimicos\catRecomendacionesModel;
 
 
 
@@ -482,6 +483,33 @@ class recsensorialquimicoscatalogosController extends Controller
                         }
                     }
                     break;
+                case 13: // CATALOGO DE RECOMENDACIONES
+                    $catalogo = catRecomendacionesModel::orderBy('ID_RECOMENDACION', 'ASC')->get();
+
+                    // crear campos DESCRIPCION Y ESTADO
+                    foreach ($catalogo as $key => $value) {
+
+
+                        $value['boton_editar'] = '<button type="button" class="btn btn-danger btn-circle" onclick="seleccionarRecomendacion();"><i class="fa fa-pencil"></i></button>';
+
+                        // Checkbox estado
+                        if ($value->ACTIVO == 1) {
+                            $value['CheckboxEstado'] = '<div class="switch"><label><input type="checkbox" checked onclick="cambia_estado_registro(' . $num_catalogo . ', ' . $value->ID_RECOMENDACION . ', this);"><span class="lever switch-col-light-blue"></span></label></div>';
+                        } else {
+                            $value['CheckboxEstado'] = '<div class="switch"><label><input type="checkbox" onclick="cambia_estado_registro(' . $num_catalogo . ', ' . $value->ID_RECOMENDACION . ', this);"><span class="lever switch-col-light-blue"></span></label></div>';
+                        }
+
+
+                        if (auth()->user()->hasRoles(['Superusuario', 'Administrador', 'Coordinador'])) {
+                            $value->perfil = 1;
+                        } else {
+                            $value->perfil = 0;
+
+                            $value['boton_editar'] = '<button type="button" class="btn btn-info btn-circle" onclick="seleccionarRecomendacion();"><i class="fa fa-eye"></i></button>';
+                            $value['CheckboxEstado'] = '<div class="switch"><label><input type="checkbox" disabled><span class="lever switch-col-light-blue"></span></label></div>';
+                        }
+                    }
+                    break;
             }
 
             // Respuesta
@@ -864,6 +892,10 @@ class recsensorialquimicoscatalogosController extends Controller
                     $estado = cat_descripcionarea::findOrFail($registro_id);
                     $estado->update(['ACTIVO' => $estado_checkbox]);
                     break;
+                case 13:
+                    $estado = catRecomendacionesModel::findOrFail($registro_id);
+                    $estado->update(['ACTIVO' => $estado_checkbox]);
+                    break;
             }
 
             // Respuesta
@@ -942,20 +974,23 @@ class recsensorialquimicoscatalogosController extends Controller
                             $catalogo = catsustanciaModel::create($request->all());
 
                             // guardar componentes
-                            $porcentajes = json_decode($request->porcentajes, true);
-                            foreach ($porcentajes as $key => $value) {
+                            if(isset($request->porcentajes) || !is_null($request->porcentajes)){
 
-                                $sustancia = catHojaSeguridadSustanciaQuimicaModel::create([
-                                    'HOJA_SEGURIDAD_ID' => $catalogo->id,
-                                    'SUSTANCIA_QUIMICA_ID' => $value['SUSTANCIA_QUIMICA_ID'],
-                                    'TIPO' => $value['TIPO'],
-                                    'OPERADOR' => $value['OPERADOR'],
-                                    'PORCENTAJE' => $value['PORCENTAJE'],
-                                    'TEM_EBULLICION' => $value['TEM_EBULLICION'],
-                                    'VOLATILIDAD' => $value['VOLATILIDAD'],
-                                    'ESTADO_FISICO' => $value['ESTADO_FISICO'],
-                                    'FORMA' => $value['FORMA']
-                                ]);
+                                $porcentajes = json_decode($request->porcentajes, true);
+                                foreach ($porcentajes as $key => $value) {
+    
+                                    $sustancia = catHojaSeguridadSustanciaQuimicaModel::create([
+                                        'HOJA_SEGURIDAD_ID' => $catalogo->id,
+                                        'SUSTANCIA_QUIMICA_ID' => $value['SUSTANCIA_QUIMICA_ID'],
+                                        'TIPO' => $value['TIPO'],
+                                        'OPERADOR' => $value['OPERADOR'],
+                                        'PORCENTAJE' => $value['PORCENTAJE'],
+                                        'TEM_EBULLICION' => $value['TEM_EBULLICION'],
+                                        'VOLATILIDAD' => $value['VOLATILIDAD'],
+                                        'ESTADO_FISICO' => $value['ESTADO_FISICO'],
+                                        'FORMA' => $value['FORMA']
+                                    ]);
+                                }
                             }
                         } else {
 
@@ -967,62 +1002,62 @@ class recsensorialquimicoscatalogosController extends Controller
 
                         $catalogo = catsustanciaModel::findOrFail($request['sustancia_id']);
                         $catalogo->update($request->all());
-                        $porcentajes = json_decode($request->porcentajes, true);
 
-                        $arregloClaveValor = [];
-                        foreach ($porcentajes as $key => $value) {
-
-                            $sustanciaaa = catHojaSeguridadSustanciaQuimicaModel::where('HOJA_SEGURIDAD_ID', $catalogo->id)
-                                ->where('SUSTANCIA_QUIMICA_ID', $value['SUSTANCIA_QUIMICA_ID'])->first();;
+                        if (isset($request->porcentajes) || !is_null($request->porcentajes)) {
 
 
-                            if ($sustanciaaa) {
-                                $clave = $catalogo->id . '-' . $value['SUSTANCIA_QUIMICA_ID'];
-                                $arregloClaveValor[$clave] = $sustanciaaa->ID_HOJA_SUSTANCIA;
+                            $porcentajes = json_decode($request->porcentajes, true);
+    
+                            $arregloClaveValor = [];
+                            foreach ($porcentajes as $key => $value) {
+    
+                                $sustanciaaa = catHojaSeguridadSustanciaQuimicaModel::where('HOJA_SEGURIDAD_ID', $catalogo->id)
+                                    ->where('SUSTANCIA_QUIMICA_ID', $value['SUSTANCIA_QUIMICA_ID'])->first();;
+    
+    
+                                if ($sustanciaaa) {
+                                    $clave = $catalogo->id . '-' . $value['SUSTANCIA_QUIMICA_ID'];
+                                    $arregloClaveValor[$clave] = $sustanciaaa->ID_HOJA_SUSTANCIA;
+                                }
+                            }
+    
+    
+                            // AUTO_INCREMENT
+                            DB::statement('ALTER TABLE catHojasSeguridad_SustanciasQuimicas AUTO_INCREMENT=1');
+                            $componenteseliminar = catHojaSeguridadSustanciaQuimicaModel::where('HOJA_SEGURIDAD_ID', $request['sustancia_id'])->delete(); //eliminar componentes anteriores
+    
+                            // guardar componentes
+                            foreach ($porcentajes as $key => $value) {
+    
+                                $sustancia = catHojaSeguridadSustanciaQuimicaModel::create([
+                                    'HOJA_SEGURIDAD_ID' => $catalogo->id,
+                                    'SUSTANCIA_QUIMICA_ID' => $value['SUSTANCIA_QUIMICA_ID'],
+                                    'TIPO' => $value['TIPO'],
+                                    'OPERADOR' => $value['OPERADOR'],
+                                    'PORCENTAJE' => $value['PORCENTAJE'],
+                                    'TEM_EBULLICION' => $value['TEM_EBULLICION'],
+                                    'VOLATILIDAD' => $value['VOLATILIDAD'],
+                                    'ESTADO_FISICO' => $value['ESTADO_FISICO'],
+                                    'FORMA' => $value['FORMA']
+    
+                                ]);
+    
+    
+    
+                                //Actualizamos en la tabla de grupos de exposicion
+                                $claveBuscada = $catalogo->id . '-' . $value['SUSTANCIA_QUIMICA_ID'];
+    
+                                if (isset($arregloClaveValor[$claveBuscada])) {
+    
+                                    $IDViejo = $arregloClaveValor[$claveBuscada];
+                                    $IDNuevo = $sustancia->ID_HOJA_SUSTANCIA;
+    
+                                    gruposDeExposicionModel::where('RELACION_HOJA_SUS_ID', $IDViejo)
+                                        ->update(['RELACION_HOJA_SUS_ID' => $IDNuevo]);
+                                }
                             }
                         }
-
-                        // $dato["msj"] = $arregloClaveValor;
-                        // return response()->json($dato);
-
-
-
-
-
-                        // AUTO_INCREMENT
-                        DB::statement('ALTER TABLE catHojasSeguridad_SustanciasQuimicas AUTO_INCREMENT=1');
-                        $componenteseliminar = catHojaSeguridadSustanciaQuimicaModel::where('HOJA_SEGURIDAD_ID', $request['sustancia_id'])->delete(); //eliminar componentes anteriores
-
-                        // guardar componentes
-                        foreach ($porcentajes as $key => $value) {
-
-                            $sustancia = catHojaSeguridadSustanciaQuimicaModel::create([
-                                'HOJA_SEGURIDAD_ID' => $catalogo->id,
-                                'SUSTANCIA_QUIMICA_ID' => $value['SUSTANCIA_QUIMICA_ID'],
-                                'TIPO' => $value['TIPO'],
-                                'OPERADOR' => $value['OPERADOR'],
-                                'PORCENTAJE' => $value['PORCENTAJE'],
-                                'TEM_EBULLICION' => $value['TEM_EBULLICION'],
-                                'VOLATILIDAD' => $value['VOLATILIDAD'],
-                                'ESTADO_FISICO' => $value['ESTADO_FISICO'],
-                                'FORMA' => $value['FORMA']
-
-                            ]);
-
-
-
-                            //Actualizamos en la tabla de grupos de exposicion
-                            $claveBuscada = $catalogo->id . '-' . $value['SUSTANCIA_QUIMICA_ID'];
-
-                            if (isset($arregloClaveValor[$claveBuscada])) {
-
-                                $IDViejo = $arregloClaveValor[$claveBuscada];
-                                $IDNuevo = $sustancia->ID_HOJA_SUSTANCIA;
-
-                                gruposDeExposicionModel::where('RELACION_HOJA_SUS_ID', $IDViejo)
-                                    ->update(['RELACION_HOJA_SUS_ID' => $IDNuevo]);
-                            }
-                        }
+                        
                     }
 
                     // si envia archivo PDF
@@ -1197,6 +1232,18 @@ class recsensorialquimicoscatalogosController extends Controller
                     }
                     break;
                 case 13:
+                    if ($request['ID_RECOMENDACION'] == 0) {
+                        $sql = DB::select('ALTER TABLE catRecomendaciones AUTO_INCREMENT=1');
+                        $catalogo = catRecomendacionesModel::create($request->all());
+
+                    } else {
+
+                        $catalogo = catRecomendacionesModel::findOrFail($request['ID_RECOMENDACION']);
+                        $catalogo->update($request->all());
+                    }
+                    break;
+     
+               case 133:
                     if ($request['ELIMINAR'] == 0){
 
                         if ($request['ID_METODO'] == 0) {

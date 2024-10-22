@@ -5372,6 +5372,15 @@ function tabla_reporte_matrizexposicion(proyecto_id, reporteiluminacion_id)
 //=================================================
 // CONCLUSION
 
+$('#ID_CATCONCLUSION').on('change', function (e) {
+
+	var selectedOption = $(this).find('option:selected');
+	var descripcion = selectedOption.data('descripcion');
+
+	$('#reporteiluminacion_conclusion').val(descripcion);
+
+
+})
 
 $("#botonguardar_reporte_conclusion").click(function()
 {

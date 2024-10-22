@@ -77,5 +77,8 @@ class reporteareaModel extends Model
 		, 'reportevibracionarea_porcientooperacion' //Vibracion
 		, 'reportearea_tipoexposicion' //Vibracion
 		, 'aplica_vibracion' //Vibracion
+
+		,'aplica_bei' //BEI
+		,'reportebeiarea_porcientooperacion' //BEI
 	];
 }

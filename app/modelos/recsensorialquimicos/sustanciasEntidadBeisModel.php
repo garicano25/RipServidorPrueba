@@ -15,7 +15,9 @@ class sustanciasEntidadBeisModel extends Model
         'TIEMPO_MUESTREO',
         'BEI_DESCRIPCION',
         'NOTACION',
-        'RECOMENDACION'
+        'RECOMENDACION',
+        'UNIDAD_MEDIDA',
+        'VALOR_REFERENCIA'
     ];
 
 

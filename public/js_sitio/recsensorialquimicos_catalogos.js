@@ -35,7 +35,7 @@ $(document).ready(function() {
 
 
 function mostrar_catalogo(num_catalogo)
-{
+{ 
     // activar Menu
     $("#tr_0").removeClass("active");
 	$("#cat_0").removeClass("text-info");
@@ -77,16 +77,17 @@ function mostrar_catalogo(num_catalogo)
     $("#cat_10").addClass("text-secondary");
     $("#tr_10").removeClass("active");
 
-
     $("#cat_11").removeClass("text-info");
     $("#cat_11").addClass("text-secondary");
     $("#tr_11").removeClass("active");
 
-
-
     $("#cat_12").removeClass("text-info");
     $("#cat_12").addClass("text-secondary");
     $("#tr_12").removeClass("active");
+
+    $("#cat_13").removeClass("text-info");
+    $("#cat_13").addClass("text-secondary");
+    $("#tr_13").removeClass("active");
 
     $("#div_tabla_catalogo").html('');
 
@@ -487,6 +488,38 @@ function mostrar_catalogo(num_catalogo)
     
                 // mostrar tabla catalogo
                 function_tabla_catDescripcionarea(num_catalogo);
+                break;
+              
+            case 13:
+                // activar menu
+                $("#titulo_tabla").html('Catálogo [Recomendaciones para informes]');
+
+                $("#tr_13").addClass("active");
+                $("#cat_13").addClass("text-info");
+    
+                // tabla encabezado
+                $("#div_tabla_catalogo").html('<h2 class="add-ct-btn" style="border: 0px #f00 solid; margin-top: -24px;">'+
+                                                    '<button type="button" class="btn btn-circle btn-lg btn-secondary waves-effect" data-toggle="tooltip" title="Nuevo recomendación" onclick="boton_nuevo_catRecomendacion();">'+
+                                                        '<i class="fa fa-plus"></i>'+
+                                                    '</button>'+
+                                                '</h2>'+
+                                                '<div class="table-responsive m-t-20">'+
+                                                    '<table class="table table-hover stylish-table" width="100%" id="tabla_catRecomendacion">'+
+                                                        '<thead>'+
+                                                            '<tr>'+
+                                                                '<th>#</th>'+
+                                                                '<th>Descripción</th>'+
+                                                                '<th style="width: 80px !important;">Editar</th>'+
+                                                                '<th style="width: 80px !important;">Activo</th>'+
+                                                            '</tr>'+
+                                                        '</thead>'+
+                                                        '<tbody>'+
+                                                        '</tbody>'+
+                                                    '</table>'+
+                                                '</div>');
+    
+                // mostrar tabla catalogo
+                function_tabla_catRecomendacion(num_catalogo);
                 break;
 
 
@@ -928,116 +961,198 @@ $("#boton_guardar_sustancia").click(function(e){
     componentes = $('#sustancias_quimicias').val();
     var valida = this.form.checkValidity();
 
-    if (componentes.length != 0) // valida que haya agregado componentes a la mezcla
-    {
-        if (!validarErrores()) {
-            sustanciaPorcentajes = crearArregloPorcentajeSustancia($('#sustancia_id').val())
+    if ($('#validarSustancias').is(':checked')) {
+        // enviar datos
+        $('#form_catsustancia').ajaxForm({
+            dataType: 'json',
+            type: 'POST',
+            url: '/recsensorialquimicoscatalogos',
+            data: {},
+            resetForm: false,
+            success: function (dato) {
 
-            // enviar datos
-            $('#form_catsustancia').ajaxForm({
-                dataType: 'json',
-                type: 'POST',
-                url: '/recsensorialquimicoscatalogos',
-                data: { porcentajes: JSON.stringify(sustanciaPorcentajes) },
-                resetForm: false,
-                success: function (dato) {
-                
-                    if (dato.code == 1) {
-                    
-                        // actualiza tabla
-                        tabla_catsustancia.ajax.url("/recsensorialquimicoscatalogostabla/1").load();
+                if (dato.code == 1) {
 
-                        // mensaje
-                        swal({
-                            title: "Correcto",
-                            text: "" + dato.msj,
-                            type: "success", // warning, error, success, info
-                            buttons: {
-                                visible: false, // true , false
-                            },
-                            timer: 1500,
-                            showConfirmButton: false
-                        });
+                    // actualiza tabla
+                    tabla_catsustancia.ajax.url("/recsensorialquimicoscatalogostabla/1").load();
 
-                        // actualiza boton
-                        $('#boton_guardar_sustancia').html('Guardar <i class="fa fa-save"></i>');
-                    
-                        //Limpiamos nuestro select de las sustancias
-                        $('#sustancias_quimicias').val('');
-                        $('#sustancias_quimicias').trigger('change');
-                    
-
-                        // cerrar modal
-                        $('#modal_catsustancia').modal('hide');
-                
-                    } else {
-                    
-                        swal({
-                            title: "La sustancia no se pudo guardar",
-                            text: "" + dato.msj,
-                            type: "info", // warning, error, success, info
-                            buttons: {
-                                visible: false, // true , false
-                            },
-                            timer: 2500,
-                            showConfirmButton: false
-                        });
-                    
-                        $('#boton_guardar_sustancia').html('Guardar <i class="fa fa-save"></i>');
-                    
-
-                    }
-                },
-                beforeSend: function () {
-                    $('#boton_guardar_sustancia').html('Guardando <i class="fa fa-spin fa-spinner"></i>');
-                },
-                error: function (dato) {
-                    // actualiza boton
-                    $('#boton_guardar_sustancia').html('Guardar <i class="fa fa-save"></i>');
-                
                     // mensaje
                     swal({
-                        title: "Rellene todos los campos..",
-                        text: "Si el error persiste comuniquelo con el responsable.",
-                        type: "error", // warning, error, success, info
+                        title: "Correcto",
+                        text: "" + dato.msj,
+                        type: "success", // warning, error, success, info
                         buttons: {
                             visible: false, // true , false
                         },
                         timer: 1500,
                         showConfirmButton: false
                     });
-                    return false;
-                }
-            }).submit();
-            return false;
-                
-        } else {
-             swal({
-            title: "¡Faltan campos por rellenar!",
-            text: "Asegurece de rellenar todos los campos pintados de ROJO",
-            type: "warning", // warning, error, success, info
-            buttons: {
-                visible: false, // true , false
-            },
-            timer: 2000,
-            showConfirmButton: false
-        });
-        }
-    
-    } else {
-        // mensaje
-        swal({
-            title: "¡Falta componente!",
-            text: "Debe seleccionar como mínimo 1 componente de la sustancia",
-            type: "warning", // warning, error, success, info
-            buttons: {
-                visible: false, // true , false
-            },
-            timer: 2000,
-            showConfirmButton: false
-        });
 
-        // $("#boton_nuevo_componente").click();
+                    // actualiza boton
+                    $('#boton_guardar_sustancia').html('Guardar <i class="fa fa-save"></i>');
+
+                    //Limpiamos nuestro select de las sustancias
+                    $('#sustancias_quimicias').val('');
+                    $('#sustancias_quimicias').trigger('change');
+
+
+                    // cerrar modal
+                    $('#modal_catsustancia').modal('hide');
+
+                } else {
+
+                    swal({
+                        title: "La sustancia no se pudo guardar",
+                        text: "" + dato.msj,
+                        type: "info", // warning, error, success, info
+                        buttons: {
+                            visible: false, // true , false
+                        },
+                        timer: 2500,
+                        showConfirmButton: false
+                    });
+
+                    $('#boton_guardar_sustancia').html('Guardar <i class="fa fa-save"></i>');
+
+
+                }
+            },
+            beforeSend: function () {
+                $('#boton_guardar_sustancia').html('Guardando <i class="fa fa-spin fa-spinner"></i>');
+            },
+            error: function (dato) {
+                // actualiza boton
+                $('#boton_guardar_sustancia').html('Guardar <i class="fa fa-save"></i>');
+
+                // mensaje
+                swal({
+                    title: "Rellene todos los campos..",
+                    text: "Si el error persiste comuniquelo con el responsable.",
+                    type: "error", // warning, error, success, info
+                    buttons: {
+                        visible: false, // true , false
+                    },
+                    timer: 1500,
+                    showConfirmButton: false
+                });
+                return false;
+            }
+        }).submit();
+        return false;
+    } else {
+        
+        if (componentes.length != 0) 
+        {
+            if (!validarErrores()) {
+                sustanciaPorcentajes = crearArregloPorcentajeSustancia($('#sustancia_id').val())
+    
+                // enviar datos
+                $('#form_catsustancia').ajaxForm({
+                    dataType: 'json',
+                    type: 'POST',
+                    url: '/recsensorialquimicoscatalogos',
+                    data: { porcentajes: JSON.stringify(sustanciaPorcentajes) },
+                    resetForm: false,
+                    success: function (dato) {
+                    
+                        if (dato.code == 1) {
+                        
+                            // actualiza tabla
+                            tabla_catsustancia.ajax.url("/recsensorialquimicoscatalogostabla/1").load();
+    
+                            // mensaje
+                            swal({
+                                title: "Correcto",
+                                text: "" + dato.msj,
+                                type: "success", // warning, error, success, info
+                                buttons: {
+                                    visible: false, // true , false
+                                },
+                                timer: 1500,
+                                showConfirmButton: false
+                            });
+    
+                            // actualiza boton
+                            $('#boton_guardar_sustancia').html('Guardar <i class="fa fa-save"></i>');
+                        
+                            //Limpiamos nuestro select de las sustancias
+                            $('#sustancias_quimicias').val('');
+                            $('#sustancias_quimicias').trigger('change');
+                        
+    
+                            // cerrar modal
+                            $('#modal_catsustancia').modal('hide');
+                    
+                        } else {
+                        
+                            swal({
+                                title: "La sustancia no se pudo guardar",
+                                text: "" + dato.msj,
+                                type: "info", // warning, error, success, info
+                                buttons: {
+                                    visible: false, // true , false
+                                },
+                                timer: 2500,
+                                showConfirmButton: false
+                            });
+                        
+                            $('#boton_guardar_sustancia').html('Guardar <i class="fa fa-save"></i>');
+                        
+    
+                        }
+                    },
+                    beforeSend: function () {
+                        $('#boton_guardar_sustancia').html('Guardando <i class="fa fa-spin fa-spinner"></i>');
+                    },
+                    error: function (dato) {
+                        // actualiza boton
+                        $('#boton_guardar_sustancia').html('Guardar <i class="fa fa-save"></i>');
+                    
+                        // mensaje
+                        swal({
+                            title: "Rellene todos los campos..",
+                            text: "Si el error persiste comuniquelo con el responsable.",
+                            type: "error", // warning, error, success, info
+                            buttons: {
+                                visible: false, // true , false
+                            },
+                            timer: 1500,
+                            showConfirmButton: false
+                        });
+                        return false;
+                    }
+                }).submit();
+                return false;
+                    
+            } else {
+                    swal({
+                title: "¡Faltan campos por rellenar!",
+                text: "Asegurece de rellenar todos los campos pintados de ROJO",
+                type: "warning", // warning, error, success, info
+                buttons: {
+                    visible: false, // true , false
+                },
+                timer: 2000,
+                showConfirmButton: false
+            });
+            }
+        
+        } else {
+            // mensaje
+            swal({
+                title: "¡Falta componente!",
+                text: "Debe seleccionar como mínimo 1 componente de la sustancia",
+                type: "warning", // warning, error, success, info
+                buttons: {
+                    visible: false, // true , false
+                },
+                timer: 2000,
+                showConfirmButton: false
+            });
+    
+            // $("#boton_nuevo_componente").click();
+        }
+        
     }
     
 });
@@ -1374,7 +1489,9 @@ function mostarSustanciasQuimicas(ID) {
                     $(`#tipoSustancia_${valor.SUSTANCIA_QUIMICA_ID}`).val(valor.TIPO);
 
                     // EJECUTAMOS LA FUNCION QUE CAMBIA LAS OPCIONES DE NUESTRO SELECT DE FORMAS
-                    cambiarFormaSustancia(`formaSustancia_${valor.SUSTANCIA_QUIMICA_ID}`, valor.ESTADO_FISICO)
+                    cambiarFormaSustancia(`formaSustancia_${valor.SUSTANCIA_QUIMICA_ID}`, `valatilidadSustancia_${valor.id}`, valor.ESTADO_FISICO)
+
+                    console.log(valor.FORMA)
                     // ASIGNAMOS CALOR UNA VEZ CAMBIADA LAS OPCIONES
                     $(`#formaSustancia_${valor.SUSTANCIA_QUIMICA_ID}`).val(valor.FORMA);
 
@@ -4171,6 +4288,8 @@ function seleccionar_beiQuimicaEntidad() {
         $("#BEI_DESCRIPCION").val(row.data().BEI_DESCRIPCION);
         $("#DETERMINANTE_BEI").val(row.data().DETERMINANTE);
         $("#RECOMENDACION_BEI").val(row.data().RECOMENDACION);
+        $("#UNIDAD_MEDIDA_BEI").val(row.data().UNIDAD_MEDIDA);
+        $("#VALOR_REFERENCIA").val(row.data().VALOR_REFERENCIA); 
 
 
        
@@ -4363,6 +4482,7 @@ $('#catestadofisicosustancia_id').on('change', function () {
 
 //FUNCION PARA EL TIPO FORMA DE UNA SUSTANCIA
 function cambiarFormaSustancia(id, idVolatilidad, opcion) {
+    console.log(id, opcion)
     html = ""
       //LIQUIDOS
     if (opcion == 1 ) {
@@ -5640,4 +5760,189 @@ function function_tabla_catDescripcionarea(num_catalogo)
         // alert('error al cargar la tabla');
         function_tabla_catDescripcionarea(num_catalogo);
     }
+}
+
+
+//=========================== CATALAGO DE RECOMENDACIONES =========================
+var tabla_catRecomendacion = null;
+function function_tabla_catRecomendacion(num_catalogo)
+{
+    var ruta = "/recsensorialquimicoscatalogostabla/"+num_catalogo;
+
+    try
+    {
+        // Inicializar tabla
+        if (tabla_catRecomendacion != null)
+        {
+            tabla_catRecomendacion.destroy();
+            tabla_catRecomendacion = null;
+        }
+
+        tabla_catRecomendacion = $('#tabla_catRecomendacion').DataTable({
+            "ajax": {
+                "url": ruta,
+                "type": "get",
+                "cache": false,
+                error: function (xhr, error, code)
+                {
+                    // console.log(xhr); console.log(code);
+                    function_tabla_catRecomendacion(num_catalogo);
+                },
+                "data": {}
+            },
+            "columns": [
+                // {
+                //     "data": "id" 
+                // },
+                {
+                    "data": "ID_RECOMENDACION",
+                    "defaultContent": ''
+                },
+                {
+                    "data": "DESCRIPCION",
+                    "defaultContent": 'Sin dato'
+                },
+                {
+                    "className": 'Editar',
+                    "orderable": false,
+                    "data": 'boton_editar',
+                    "defaultContent": '<i class="fa fa-exclamation-circle fa-3x"></i>'
+                },
+                {
+                    // "className": 'Estado',
+                    // "orderable": false,
+                    "data": 'CheckboxEstado',
+                    "defaultContent": '<i class="fa fa-exclamation-circle fa-3x"></i>'
+                }
+            ],
+            // "rowsGroup": [0, 3], //agrupar filas
+            "lengthMenu": [[10, 30, 50, -1], [10, 30, 50, "Todos"]],
+            "order": [[ 0, "DESC" ]],        
+            "searching": false,
+            "paging": false,
+            "ordering": true,
+            "processing": true,
+            "language": {
+                "lengthMenu": "Mostrar _MENU_ Registros",
+                "zeroRecords": "No se encontraron registros",
+                "info": "", //Página _PAGE_ de _PAGES_
+                "infoEmpty": "No se encontraron registros",
+                "infoFiltered": "(Filtrado de _MAX_ registros)",
+                "emptyTable": "No hay datos disponibles en la tabla",
+                "loadingRecords": "Cargando datos....",
+                "processing": "Procesando <i class='fa fa-spin fa-spinner fa-3x'></i>",
+                "search": "Buscar",
+                "paginate": {
+                    "first": "Primera",
+                    "last": "Ultima",
+                    "next": "Siguiente",
+                    "previous": "Anterior"
+                }
+            }
+        });
+    }
+    catch (exception)
+    {
+        // alert('error al cargar la tabla');
+        function_tabla_catRecomendacion(num_catalogo);
+    }
+}
+
+function boton_nuevo_catRecomendacion (){
+    // Borrar formulario
+    $('#form_recomendacion').each(function(){
+        this.reset();
+    });
+
+    // campos hidden
+    $('#ID_RECOMENDACION').val(0);
+    $('#ACTIVO_RECOMENDACION').val(1);
+
+
+    // abrir modal
+    $('#modal_recomendacion').modal({backdrop:false});
+}
+
+$("#boton_guardar_recomendacion").click(function()
+{
+    // valida campos vacios
+    var valida = this.form.checkValidity();
+    if (valida)
+    {
+        // enviar datos
+        $('#form_recomendacion').ajaxForm({
+            dataType: 'json',
+            type: 'POST',
+            url: '/recsensorialquimicoscatalogos',
+            data: {},
+            resetForm: false,
+            success: function(dato)
+            {
+                // actualiza tabla
+                tabla_catRecomendacion.ajax.url("/recsensorialquimicoscatalogostabla/13").load();
+
+                // mensaje
+                swal({
+                    title: "Correcto",
+                     text: ""+dato.msj,
+                    type: "success", // warning, error, success, info
+                    buttons: {
+                        visible: false, // true , false
+                    },
+                    timer: 1500,
+                    showConfirmButton: false
+                });
+
+                // actualiza boton
+                $('#boton_guardar_recomendacion').html('Guardar <i class="fa fa-save"></i>');
+
+                // cerrar modal
+                $('#modal_recomendacion').modal('hide');
+            },
+            beforeSend: function()
+            {
+                $('#boton_guardar_recomendacion').html('Guardando <i class="fa fa-spin fa-spinner"></i>');
+            },
+            error: function(dato) 
+            {
+                // actualiza boton
+                $('#boton_guardar_recomendacion').html('Guardar <i class="fa fa-save"></i>');
+                
+                // mensaje
+                swal({
+                    title: "Error",
+                    text: "Error en la acción: "+dato,
+                    type: "error", // warning, error, success, info
+                    buttons: {
+                        visible: false, // true , false
+                    },
+                    timer: 1500,
+                    showConfirmButton: false
+                });
+                return false;
+            }
+        }).submit();
+        return false;
+    }
+});
+
+function seleccionarRecomendacion()
+{
+    $('#tabla_catRecomendacion tbody').on('click', 'td.Editar', function() {
+        // console.log();
+        var tr = $(this).closest('tr');
+        var row = tabla_catRecomendacion.row(tr);
+
+        // campos hidden
+        $('#ID_RECOMENDACION').val(row.data().ID_RECOMENDACION);
+        $('#ACTIVO_RECOMENDACION').val(row.data().ACTIVO);
+
+        $('#DESCRIPCION_RECOMENDACION').val(row.data().DESCRIPCION);
+
+        
+        $('#CATALOGO_RECOMENDACION').val(12);
+
+        // abrir modal
+        $('#modal_recomendacion').modal({backdrop:false});
+    });
 }

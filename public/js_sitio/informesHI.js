@@ -210,6 +210,9 @@ var proyecto_id =  $('#informes_reco').val();
 				case 17:
 					$('#estructura_reporte').html('<p style="text-align: center; font-size: 24px;">Reporte no disponible</p>');
 					break;
+				case 22:
+					$('#estructura_reporte').load('/reportebeivista/'+proyecto_id);
+					break;
 				default:
 					$('#estructura_reporte').html('<p style="text-align: center; font-size: 24px;">Seleccione un tipo de reporte</p>');
 					break;

@@ -152,6 +152,14 @@
 										</a>
 									</td>
 								</tr>
+								<tr id="tr_13">
+									<td>Recomendaciones para informes</td>
+									<td>
+										<a href="#" onclick="mostrar_catalogo(13);">
+											<i class="fa fa-chevron-circle-right fa-3x text-secondary" id="cat_12"></i>
+										</a>
+									</td>
+								</tr>
 							</tbody>
 						</table>
 					</div>
@@ -243,6 +251,7 @@
 									<div class="col-6" id="divPuntoEbullicion">
 										<div class="form-group">
 											<label>Punto de ebullición </label>
+											<button type="button" class="btn btn-danger text-center mb-1" style="margin-left: 35%; width: 35px; height: 35px; border-radius: 9px;" data-toggle="tooltip" title="Click para cambiar la Tem. de ebullición a °C una vez insertada en °F" onclick="cambiarGrados('catsustancia_puntoEbullicion')"><i class="fa fa-thermometer-three-quarters" aria-hidden="true"></i></button>
 											<input type="number" class="form-control" id="catsustancia_puntoEbullicion" name="catsustancia_puntoEbullicion" disabled>
 										</div>
 									</div>
@@ -383,6 +392,16 @@
 						<div class="col-12 mt-2">
 							<ol class="breadcrumb mb-4">
 								<h2 style="color: #ffff; margin: 0;"><i class="fa fa-flask"></i> Componentes / Subproductos de la sustancia </h2>
+
+								<div class="col-4 d-flex">
+									<label class="text-light">¿Contiene ingredientes peligrosos? </label>
+									<div class="switch mx-3">
+										<label class="text-light">
+											Si<input type="checkbox" id="validarSustancias" name="validarSustancias">
+											<span style="background-color: #94B732;" class="lever switch-col-light-blue" id="checkbox_validaquimicos"></span>No
+										</label>
+									</div>
+								</div>
 							</ol>
 
 							<style>
@@ -1166,10 +1185,22 @@
 								<input type="text" class="form-control" id="BEI_DESCRIPCION" name="BEI_DESCRIPCION" required>
 							</div>
 						</div>
+						<div class="col-6">
+							<div class="form-group">
+								<label>Unidad de medida *</label>
+								<input type="text" class="form-control" id="UNIDAD_MEDIDA_BEI" name="UNIDAD_MEDIDA" required>
+							</div>
+						</div>
+						<div class="col-6">
+							<div class="form-group">
+								<label>BEI (Valor de referencia) *</label>
+								<input type="text" class="form-control" id="VALOR_REFERENCIA" name="VALOR_REFERENCIA" required>
+							</div>
+						</div>
 						<div class="col-12">
 							<div class="form-group">
 								<label>Recomendación </label>
-								<input type="text" class="form-control" id="RECOMENDACION_BEI" name="RECOMENDACION" >
+								<input type="text" class="form-control" id="RECOMENDACION_BEI" name="RECOMENDACION">
 							</div>
 						</div>
 						<div class="col-12">
@@ -1493,6 +1524,46 @@
 				<div class="modal-footer">
 					<button type="button" class="btn btn-default waves-effect" data-dismiss="modal">Cerrar</button>
 					<button type="submit" class="btn btn-danger waves-effect waves-light" id="boton_guardar_descripcionarea">
+						Guardar <i class="fa fa-save"></i>
+					</button>
+				</div>
+			</form>
+		</div>
+	</div>
+</div>
+
+
+
+<div id="modal_recomendacion" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" style="display: none;">
+	<div class="modal-dialog" style="min-width: 70%;">
+		<div class="modal-content">
+			<form method="post" enctype="multipart/form-data" name="form_recomendacion" id="form_recomendacion">
+				<div class="modal-header">
+					<button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+					<h4 class="modal-title" id="modal_titulo">Recomendaciones para informes</h4>
+				</div>
+				<div class="modal-body">
+					<div class="row">
+						{!! csrf_field() !!}
+						<div class="col-12">
+							<input type="hidden" class="form-control" id="ID_RECOMENDACION" name="ID_RECOMENDACION" value="0">
+						</div>
+						<div class="col-12">
+							<div class="form-group">
+								<label> Descripción * </label>
+								<textarea class="form-control" rows="5" id="DESCRIPCION_RECOMENDACION" name="DESCRIPCION" required></textarea>
+							</div>
+						</div>
+						<div class="col-12">
+							<input type="hidden" class="form-control" id="CATALOGO_RECOMENDACION" name="catalogo" value="13">
+							<input type="hidden" class="form-control" id="ACTIVO_RECOMENDACION" name="ACTIVO" value="0">
+
+						</div>
+					</div>
+				</div>
+				<div class="modal-footer">
+					<button type="button" class="btn btn-default waves-effect" data-dismiss="modal">Cerrar</button>
+					<button type="submit" class="btn btn-danger waves-effect waves-light" id="boton_guardar_recomendacion">
 						Guardar <i class="fa fa-save"></i>
 					</button>
 				</div>

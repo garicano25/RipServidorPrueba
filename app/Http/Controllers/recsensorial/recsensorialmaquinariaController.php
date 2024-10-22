@@ -87,7 +87,7 @@ class recsensorialmaquinariaController extends Controller
 
                     switch ($value->recsensorialmaquinaria_unidadMedida) {
                         case 1:
-                            $value->recsensorialmaquinaria_cantidad_formateada =  $value->recsensorialmaquinaria_cantidad . ' de ' . $value->recsensorialmaquinaria_contenido . ' MM';
+                            $value->recsensorialmaquinaria_cantidad_formateada =  $value->recsensorialmaquinaria_cantidad . ' de ' . $value->recsensorialmaquinaria_contenido . ' mg';
                             break;
                         case 2:
                             $value->recsensorialmaquinaria_cantidad_formateada =  $value->recsensorialmaquinaria_cantidad . ' de ' . $value->recsensorialmaquinaria_contenido . ' L';
@@ -96,10 +96,10 @@ class recsensorialmaquinariaController extends Controller
                             $value->recsensorialmaquinaria_cantidad_formateada =  $value->recsensorialmaquinaria_cantidad . ' de ' . $value->recsensorialmaquinaria_contenido . ' M³';
                             break;
                         case 4:
-                            $value->recsensorialmaquinaria_cantidad_formateada =  $value->recsensorialmaquinaria_cantidad . ' de ' . $value->recsensorialmaquinaria_contenido . ' G';
+                            $value->recsensorialmaquinaria_cantidad_formateada =  $value->recsensorialmaquinaria_cantidad . ' de ' . $value->recsensorialmaquinaria_contenido . ' gr';
                             break;
                         case 5:
-                            $value->recsensorialmaquinaria_cantidad_formateada =  $value->recsensorialmaquinaria_cantidad . ' de ' . $value->recsensorialmaquinaria_contenido . ' Kl';
+                            $value->recsensorialmaquinaria_cantidad_formateada =  $value->recsensorialmaquinaria_cantidad . ' de ' . $value->recsensorialmaquinaria_contenido . ' Kg';
                             break;
                         case 6:
                             $value->recsensorialmaquinaria_cantidad_formateada =  $value->recsensorialmaquinaria_cantidad . ' de ' . $value->recsensorialmaquinaria_contenido . ' T';
