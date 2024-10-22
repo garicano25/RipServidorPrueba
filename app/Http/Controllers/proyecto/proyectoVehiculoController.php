@@ -59,7 +59,8 @@ class proyectoVehiculoController extends Controller
                                     vehiculo.vehiculo_marca,
                                     vehiculo.vehiculo_modelo,
                                     vehiculo.vehiculo_serie,
-                                    vehiculo.vehiculo_placa
+                                    vehiculo.vehiculo_placa,
+                                    vehiculo_disponible
                                 ORDER BY
                                     proveedor.proveedor_NombreComercial ASC,
                                     vehiculo_disponible DESC', [$proyecto_id]);
