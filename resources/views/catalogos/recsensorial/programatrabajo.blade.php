@@ -557,21 +557,21 @@
                                                                     @if(auth()->user()->hasRoles(['Superusuario', 'Administrador','Coordinador','Compras','Almacén','Operativo HI']))
 
                                                                     <li class="nav-item">
-                                                                        <a class="nav-link " data-toggle="tab" id="reportetab_menu3" role="tab" href="#reportetab_3">
+                                                                        <a class="nav-link link_menureportes" data-toggle="tab" id="reportetab_menu3" role="tab" href="#reportetab_3">
                                                                             <span class="hidden-xs-down">Lista de signatarios</span>
                                                                         </a>
                                                                     </li>
                                                                     @endif
                                                                     @if(auth()->user()->hasRoles(['Superusuario', 'Administrador', 'Compras','Coordinador','Almacén','Operativo HI']))
                                                                     <li class="nav-item">
-                                                                        <a class="nav-link " data-toggle="tab" id="reportetab_menu4" role="tab" href="#reportetab_4">
+                                                                        <a class="nav-link link_menureportes" data-toggle="tab" id="reportetab_menu4" role="tab" href="#reportetab_4">
                                                                             <span class="hidden-xs-down">Lista de equipos</span>
                                                                         </a>
                                                                     </li>
                                                                     @endif
                                                                     @if(auth()->user()->hasRoles(['Superusuario', 'Administrador', 'Compras','Coordinador','Almacén','Operativo HI']))
                                                                     <li class="nav-item">
-                                                                        <a class="nav-link " data-toggle="tab" id="reportetab_menu5" role="tab" href="#reportetab_5">
+                                                                        <a class="nav-link link_menureportes" data-toggle="tab" id="reportetab_menu5" role="tab" href="#reportetab_5">
                                                                             <span class="hidden-xs-down">Lista de vehículos</span>
                                                                         </a>
                                                                     </li>
@@ -1470,7 +1470,7 @@
                 <div class="modal-body"> {{-- style="background: #555555;" --}}
                     <div class="row">
                         <div class="col-6">
-                            <iframe src="/assets/images/cargando.gif" name="visor_documento_lv" id="visor_documento_lv" ></iframe>
+                            <iframe src="/assets/images/cargando.gif" name="visor_documento_lv" id="visor_documento_lv"></iframe>
                         </div>
                         <div class="col-6">
                             <div class="row">

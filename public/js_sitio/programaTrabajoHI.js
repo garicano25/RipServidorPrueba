@@ -1265,7 +1265,9 @@ $("#boton_guardar_proyectoequipos").click(function()
 var datatable_equiposlista = null;
 var datatable_signatarioslista = null;
 
-// navegar menu Tab principal
+
+
+	// navegar menu Tab principal
 $('.link_menureportes').click(function()
 {
 	switch (this.id)
@@ -1276,11 +1278,22 @@ $('.link_menureportes').click(function()
 		case "reportetab_menu2":
 				tabla_oc(proyecto_id);
 				break;
+		case "reportetab_menu3":
+				tabla_ls(proyecto_id);
+				break;
+		case "reportetab_menu4":
+				tabla_le(proyecto_id);
+			break;
+		case "reportetab_menu5":
+				tabla_lv(proyecto_id);
+				break;
 		default:
 				// return true;
 				break;
 	}
 });
+
+
 
 
 
@@ -2432,7 +2445,7 @@ function tabla_lv(proyecto_id)
 {
 	try 
 	{
-		var ruta = "/proyectovehiculoslistas/"+proyecto_id;
+		var ruta = "/proyectovehiculoslistas/"+ proyecto_id;
 
 		if (datatable_vehiculoslista != null)
 		{
@@ -2789,7 +2802,7 @@ $("#boton_guardar_vehiculoslista").click(function()
 				type: 'POST',
 				url: '/proyectovehiculos',
 				data: {
-					proyecto_id: $('#proyecto_id').val(),
+					proyecto_id: proyecto_id,
 					opcion: 1,
 				},
 				resetForm: false,

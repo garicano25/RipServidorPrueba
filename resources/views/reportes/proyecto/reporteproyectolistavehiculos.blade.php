@@ -274,6 +274,7 @@
             <tbody>
                 <tr>
                     <td rowspan="2" width="20%"><img src="{{ Request::root().'/assets/images/logo_results.jpg' }}" height="46" width="130" alt=""></td>
+                    <!-- <td rowspan="2" width="20%"><h5>Logo</h5></td> -->
                     <td rowspan="2" width="60%">
                         <h1>Lista de vehiculos</h1>
 
@@ -334,14 +335,14 @@
     <table cellpadding="0" cellspacing="0" width="100%" id="tabla_listaservicios">
         <thead>
             <tr>
-                <th colspan="8">vehiculos asignados</th>
+                <th colspan="6">vehiculos asignados</th>
             </tr>
             <tr>
                 <th style="width: 5%!important;">No.</th>
                 <th>Proveedor</th>
                 <th>Marca</th>
-                <th>Placa</th>
                 <th>Modelo</th>
+                <th>Placa</th>
                 <th>Serie</th>
             </tr>
         </thead>
@@ -353,8 +354,8 @@
                 <td>{{ $fila }}</td>
                 <td>{{ $vehiculo->proveedor_NombreComercial }}</td>
                 <td>{{ $vehiculo->vehiculo_marca }}</td>
-                <td>{{ $vehiculo->vehiculo_placa }}</td>
                 <td>{{ $vehiculo->vehiculo_modelo }}</td>
+                <td>{{ $vehiculo->vehiculo_placa }}</td>
                 <td>{{ $vehiculo->vehiculo_serie }}</td>
             </tr>
             @endforeach

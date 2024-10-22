@@ -9,6 +9,7 @@ use DB;
 use App\modelos\proyecto\proyectovehiculosactualModel;
 use App\modelos\proyecto\proyectovehiculosModel;
 use App\modelos\proyecto\proyectoModel;
+use App\modelos\proyecto\proyectovehiculoshistorialModel;
 
 
 class proyectoVehiculoController extends Controller
@@ -311,8 +312,7 @@ class proyectoVehiculoController extends Controller
                                     WHERE
                                         proyectovehiculosactual.proyecto_id = ?
                                     ORDER BY
-                                        proveedor.proveedor_NombreComercial ASC,
-                                        vehiculo.vehiculo_Descripcion ASC', [$proyecto_id]);
+                                        proveedor.proveedor_NombreComercial ASC', [$proyecto_id]);
 
 
             //===========================================
@@ -320,6 +320,99 @@ class proyectoVehiculoController extends Controller
 
 
             return \PDF::loadView('reportes.proyecto.reporteproyectolistavehiculos', compact('proyecto', 'vehiculoslista', 'vehiculos'))->stream($ot_folio . ' Lista de vehiculos' . $no_revision_texto . '.pdf');
+            // return response()->json($dato);
+        } catch (Exception $e) {
+            $dato["msj"] = 'Error ' . $e->getMessage();
+            // $dato['opciones'] = $opciones_select;
+            return response()->json($dato);
+        }
+    }
+
+
+    public function proyectovehiculosconsultarhistorial($proyecto_id, $proyectovehiculos_revision)
+    {
+        try {
+            // Proyecto
+            $proyecto = proyectoModel::findOrFail($proyecto_id);
+
+            // Obtener folio
+            $proyecto_folio = explode("-", $proyecto->proyecto_folio);
+            $ot_folio = 'RIP-OTVH-' . $proyecto_folio[1] . '-' . $proyecto_folio[2];
+            $proyecto->folio_ot = $ot_folio;
+
+            // Lista de vehiculos historial
+            $datoslista = DB::select('SELECT
+                                            proyectovehiculos.id,
+                                            proyectovehiculos.proyecto_id,
+                                            proyectovehiculos.proyectovehiculo_revision,
+                                            proyectovehiculos.proyectovehiculo_autorizado,
+                                            proyectovehiculos.proyectovehiculo_autorizadonombre,
+                                            proyectovehiculos.proyectovehiculo_autorizadofecha,
+                                            proyectovehiculos.proyectovehiculo_cancelado,
+                                            proyectovehiculos.proyectovehiculo_canceladonombre,
+                                            proyectovehiculos.proyectovehiculo_canceladofecha,
+                                            proyectovehiculos.proyectovehiculo_canceladoobservacion,
+                                            proyectovehiculos.created_at,
+                                            proyectovehiculos.updated_at 
+                                        FROM
+                                            proyectovehiculos 
+                                        WHERE
+                                            proyectovehiculos.proyecto_id = ' . $proyecto_id . ' 
+                                            AND proyectovehiculos.proyectovehiculo_revision = ' . $proyectovehiculos_revision . '
+                                        LIMIT 1');
+
+            // Datos de la lista nueva de vehiculos
+            $vehiculoslista = array(
+                'proyecto_id' => $proyecto_id,
+                'proyectovehiculo_revision' => $datoslista[0]->proyectovehiculo_revision,
+                'proyectovehiculo_autorizado' => $datoslista[0]->proyectovehiculo_autorizado,
+                'proyectovehiculo_autorizadonombre' => $datoslista[0]->proyectovehiculo_autorizadonombre,
+                'proyectovehiculo_autorizadofecha' => $datoslista[0]->proyectovehiculo_autorizadofecha,
+                'proyectovehiculo_cancelado' => $datoslista[0]->proyectovehiculo_cancelado,
+                'proyectovehiculo_canceladonombre' => $datoslista[0]->proyectovehiculo_canceladonombre,
+                'proyectovehiculo_canceladofecha' => $datoslista[0]->proyectovehiculo_canceladofecha,
+                'proyectovehiculo_canceladoobservacion' => $datoslista[0]->proyectovehiculo_canceladoobservacion,
+                'created_at' => $datoslista[0]->created_at,
+                'updated_at' => $datoslista[0]->updated_at
+            );
+
+            // Numero de revision
+            $documento_nombre = '';
+            if (($proyectovehiculos_revision + 0) > 0) {
+                $documento_nombre = 'Lista de vehiculos rev-' . $proyectovehiculos_revision;
+            } else {
+                $documento_nombre = 'Lista de vehiculos';
+            }
+
+            // Consulta vehiculos historial
+            DB::statement("SET lc_time_names = 'es_MX';");
+            $vehiculos = DB::select('SELECT
+                                        proyectovehiculoshistorial.proyecto_id,
+                                        proyectovehiculoshistorial.proyectovehiculo_revision,
+                                        proyectovehiculoshistorial.proveedor_id,
+                                        proyectovehiculoshistorial.vehiculo_id,
+                                        proveedor.proveedor_RazonSocial,
+                                        proveedor.proveedor_NombreComercial,
+                                        vehiculo.vehiculo_marca,
+                                        vehiculo.vehiculo_modelo,
+                                        vehiculo.vehiculo_placa,
+                                        vehiculo.vehiculo_serie
+                                    FROM
+                                        proyectovehiculoshistorial
+                                        LEFT JOIN proveedor ON proyectovehiculoshistorial.proveedor_id = proveedor.id
+                                        LEFT JOIN vehiculo ON proyectovehiculoshistorial.vehiculo_id = vehiculo.id
+                                    WHERE
+                                        proyectovehiculoshistorial.proyecto_id = ' . $proyecto_id . '
+                                        AND proyectovehiculoshistorial.proyectovehiculo_revision = ' . $proyectovehiculos_revision . '
+                                    ORDER BY
+                                        proveedor.proveedor_NombreComercial ASC');
+
+
+            //===========================================
+
+
+            return \PDF::loadView('reportes.proyecto.reporteproyectolistavehiculos', compact('proyecto', 'vehiculoslista', 'vehiculos'))->stream($ot_folio . ' ' . $documento_nombre . '.pdf');
+
             // return response()->json($dato);
         } catch (Exception $e) {
             $dato["msj"] = 'Error ' . $e->getMessage();
@@ -439,7 +532,7 @@ class proyectoVehiculoController extends Controller
                                         FROM
                                             proyecto
                                         WHERE
-                                            proyecto.id = ' . $request->proyecto_id);
+                                            proyecto.id = ?'  , [intval($request->proyecto_id)]);
 
 
                 if (($request->vehiculoslista_id) == 0) // NUEVA LISTA
@@ -455,10 +548,10 @@ class proyectoVehiculoController extends Controller
                                                         FROM
                                                             proyectovehiculos
                                                         WHERE
-                                                            proyectovehiculos.proyecto_id = ' . $request->proyecto_id . '
+                                                            proyectovehiculos.proyecto_id = ?
                                                         ORDER BY
                                                             proyectovehiculos.proyectovehiculo_revision DESC
-                                                        LIMIT 1');
+                                                        LIMIT 1', [$request->proyecto_id]);
 
                     if (count($vehiculoslistastotal) > 0) {
                         $no_revision = ($vehiculoslistastotal[0]->proyectovehiculo_revision + 1);
@@ -490,7 +583,7 @@ class proyectoVehiculoController extends Controller
                     DB::statement('ALTER TABLE proyectovehiculos AUTO_INCREMENT = 1;');
 
                     // Crear lista
-                    $proyectovehiculolista = proyectovehiculoModel::create([
+                    $proyectovehiculolista = proyectovehiculosModel::create([
                         'proyecto_id' => $request->proyecto_id,
                         'proyectovehiculo_revision' => $no_revision,
                         'proyectovehiculo_autorizado' => $autorizado,
@@ -510,14 +603,14 @@ class proyectoVehiculoController extends Controller
                                                 FROM
                                                     proyectovehiculosactual
                                                 WHERE
-                                                    proyectovehiculosactual.proyecto_id = ' . $request->proyecto_id);
+                                                    proyectovehiculosactual.proyecto_id = ?' , [$request->proyecto_id]);
 
                     // AUTO_INCREMENT
                     DB::statement('ALTER TABLE proyectovehiculoshistorial AUTO_INCREMENT = 1;');
 
                     // Guardar lista de vehiculos actual en historial
                     foreach ($vehiculosactual as $key => $value) {
-                        $vehiculoshistorial = proyectovehiculohistorialModel::create([
+                        $vehiculoshistorial = proyectovehiculoshistorialModel::create([
                             'proyecto_id' => $value->proyecto_id,
                             'proveedor_id' => $value->proveedor_id,
                             'proyectovehiculo_revision' => $no_revision,
@@ -530,7 +623,7 @@ class proyectoVehiculoController extends Controller
                 } else // EDITAR LISTA
                 {
                     // Obtener lista de vehiculos
-                    $proyectovehiculolista = proyectovehiculoModel::findOrFail($request->vehiculoslista_id);
+                    $proyectovehiculolista = proyectovehiculosModel::findOrFail($request->vehiculoslista_id);
 
                     // Valida si viene AUTORIZADO
                     $autorizado = 0;

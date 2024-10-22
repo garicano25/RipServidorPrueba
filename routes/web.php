@@ -923,6 +923,8 @@ Route::get('proyectovehiculosgenerarlistaestado/{proyecto_id}', ['as' => 'proyec
 
 Route::get('proyectovehiculosconsultaractual/{proyecto_id}', ['as' => 'proyectovehiculo.proyectovehiculosconsultaractual', 'uses' => 'proyecto\proyectoVehiculoController@proyectovehiculosconsultaractual']);
 
+
+Route::get('proyectovehiculosconsultarhistorial/{proyecto_id}/{proyectovehiculos_revision}', ['as' => 'proyectoequipos.proyectovehiculosconsultarhistorial', 'uses' => 'proyecto\proyectoVehiculoController@proyectovehiculosconsultarhistorial']);
 //==============================================
 
 
