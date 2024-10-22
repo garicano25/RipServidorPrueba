@@ -105,6 +105,71 @@ class recsensorialquimicosreportewordController extends Controller
         return $textoNormal;
     }
 
+    public function recomendacionesNuevas($texto)
+    {
+        
+        $parrafos = explode('\n\n', $texto);
+        $texto_nuevo = '';
+
+
+        foreach ($parrafos as $key => $parrafo) {
+            if (($key + 0) < (count($parrafos) - 1)) {
+                $text = explode("\n", $parrafo);
+
+                foreach ($text as $key2 => $parrafo2) {
+                    if (($key2 + 0) < (count($text) - 1)) {
+                        // $formato = '<w:rPr>
+                        //                 <!-- <w:u w:val="single"/>  -->
+                        //                 <!-- <w:u w:val="none"/>  -->
+                        //                 <!-- <w:b w:val="false"/>  -->
+                        //                 <!-- <w:i w:val="false"/>  -->
+                        //                 <!-- <w:caps w:val="false"/>  -->
+                        //                 <!-- <w:sz w:val="60"/>  -->
+                        //                 <!-- <w:color w:val="ff0000"/> -->
+                        //                 <w:t xml:space="preserve">'.htmlspecialchars($parrafo2).'</w:t>
+                        //             </w:rPr>';
+
+                        // SALTO DE PAGINA (<w:br/></w:t></w:r><w:r ><w:br w:type="page"/></w:r><w:r><w:t><w:br/>)
+
+                        $texto_nuevo .= '<w:p>
+                                            <w:pPr>
+                                                <w:jc w:val="both"/>
+                                                <w:spacing w:before="0" w:after="0" w:line="240" w:lineRule="exactly" w:beforeAutospacing="0" w:afterAutospacing="0"/>
+                                            </w:pPr>
+                                            <w:t>' . htmlspecialchars($parrafo2) . '</w:t>
+                                        </w:p>';
+                    } else {
+                        $texto_nuevo .= '<w:p>
+                                            <w:pPr>
+                                                <w:jc w:val="both"/>
+                                                <w:spacing w:before="0" w:after="0" w:line="240" w:lineRule="exactly" w:beforeAutospacing="0" w:afterAutospacing="0"/>
+                                            </w:pPr>
+                                            <w:t>' . htmlspecialchars($parrafo2) . '</w:t>
+                                        </w:p><w:br/>';
+                    }
+                }
+            } else {
+                $text = explode("\n", $parrafo);
+
+                foreach ($text as $key2 => $parrafo2) {
+                    if (($key2 + 0) < (count($text) - 1)) {
+                        $texto_nuevo .= '<w:p>
+                                            <w:pPr>
+                                                <w:jc w:val="both"/>
+                                                <w:spacing w:before="0" w:after="0" w:line="240" w:lineRule="exactly" w:beforeAutospacing="0" w:afterAutospacing="0"/>
+                                            </w:pPr>
+                                            <w:t>' . htmlspecialchars($parrafo2) . '</w:t>
+                                        </w:p>';
+                    } else {
+                        $texto_nuevo .= '<w:t>' . htmlspecialchars($parrafo2) . '</w:t>';
+                    }
+                }
+            }
+        }
+
+
+        return $texto_nuevo;
+    }
 
 
 
@@ -1752,6 +1817,37 @@ class recsensorialquimicosreportewordController extends Controller
         $PHPWord->save(storage_path('app\reportes\recsensorial\recsensorialquimicos_reporteword.docx'));
 
         */
+
+
+
+
+        //CONCLUSIONES
+        if ($recursos[0]->AGREGAR_RECOMENDACION == 1) {
+
+
+            $sql = DB::select('SELECT c.DESCRIPCION
+                                FROM recsensorialRecomendaciones r
+                                LEFT JOIN catRecomendaciones c ON c.ID_RECOMENDACION = r.RECOMENDACION_ID
+                                WHERE r.RECSENSORIAL_ID = ?', [$recsensorial_id]);
+
+            $recomendacion = '';
+            foreach ($sql as $key => $value) {
+                if (($key + 0) < (count($sql) - 1)) {
+                    $recomendacion .= $value->DESCRIPCION . '\n\n';
+                } else {
+                    $recomendacion .= $value->DESCRIPCION ;
+                }
+            }
+
+            $plantillaword->setValue('lista_recomendaciones', $this->recomendacionesNuevas($recomendacion));
+
+        } else {
+
+            $plantillaword->setValue('lista_recomendaciones', "Sin recomendaciones");
+          
+        }
+
+
 
         //CONCLUSIONES
         if ($recursos[0]->REQUIERE_CONCLUSION == 1) {

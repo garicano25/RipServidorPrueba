@@ -53,6 +53,8 @@ use App\modelos\recsensorial\recsensorialTablaClienteProporcionadoModel;
 use App\modelos\recsensorial\cat_descripcionarea;
 use App\modelos\recsensorialquimicos\catsustanciaModel;
 use App\modelos\recsensorialquimicos\gruposDeExposicionModel;
+use App\modelos\recsensorialquimicos\catRecomendacionesModel;
+use App\modelos\recsensorial\recsensorialRecomendacionesModel;
 
 
 use App\modelos\proyecto\proyectoModel;
@@ -112,6 +114,7 @@ class recsensorialController extends Controller
         $hojasSeguridad = catsustanciaModel::where('catsustancia_activo', 1)->get();
 
         $descripciones = cat_descripcionarea::where('ACTIVO', 1)->get();
+        $recomendaciones = catRecomendacionesModel::where('ACTIVO', 1)->get();
 
 
 
@@ -123,7 +126,7 @@ class recsensorialController extends Controller
 
 
         //vista RECONOCIMIENTO SENSORIAL
-        return view('catalogos.recsensorial.reconocimiento_sensorial', compact('cliente', 'catregion', 'catsubdireccion', 'catgerencia', 'catactivo', 'catprueba', 'catdepartamento', 'catmovilfijo', 'catpartecuerpo', 'catcategoriapeligrosalud', 'catgradoriesgosalud', 'catunidadmedidasustacia', 'catvolatilidad', 'catestadofisicosustancia', 'catviaingresoorganismo', 'proveedor', 'catSustanciasQuimicas', 'tipopruebas', 'cargos', 'catConclusiones', 'descripciones', 'hojasSeguridad'));
+        return view('catalogos.recsensorial.reconocimiento_sensorial', compact('cliente', 'catregion', 'catsubdireccion', 'catgerencia', 'catactivo', 'catprueba', 'catdepartamento', 'catmovilfijo', 'catpartecuerpo', 'catcategoriapeligrosalud', 'catgradoriesgosalud', 'catunidadmedidasustacia', 'catvolatilidad', 'catestadofisicosustancia', 'catviaingresoorganismo', 'proveedor', 'catSustanciasQuimicas', 'tipopruebas', 'cargos', 'catConclusiones', 'descripciones', 'hojasSeguridad', 'recomendaciones'));
     }
 
 
@@ -913,6 +916,7 @@ class recsensorialController extends Controller
                                         NIVEL4,
                                         NIVEL5,
                                         PETICION_CLIENTE,
+                                        AGREGAR_RECOMENDACION,
                                         REQUIERE_CONCLUSION,
                                         ID_CATCONCLUSION
                                 FROM recsensorial_recursos_informes
@@ -1025,6 +1029,24 @@ class recsensorialController extends Controller
             $dato["data"] = $datos;
             $dato["nuevo"] = 1;
             return response()->json($dato);
+        } catch (Exception $e) {
+
+            $dato["msj"] = 'Error ' . $e->getMessage();
+            return response()->json($dato, 500);
+        }
+    }
+
+
+    // OBTEMOS LAS RECOMENDACIONES SELECCIONADAS PARA EL INFORME
+    public function consultarRecomendaciones($ID)
+    {
+        try {
+
+            $datos = DB::select('SELECT RECOMENDACION_ID FROM recsensorialRecomendaciones WHERE RECSENSORIAL_ID', [$ID]);
+
+            $dato["data"] = $datos;
+            return response()->json($dato);
+
         } catch (Exception $e) {
 
             $dato["msj"] = 'Error ' . $e->getMessage();
@@ -2068,6 +2090,7 @@ class recsensorialController extends Controller
 
 
                     $request['PETICION_CLIENTE'] = isset($request['PETICION_CLIENTE']) ? $request['PETICION_CLIENTE'] : 0;
+                    $request['AGREGAR_RECOMENDACION'] = isset($request['AGREGAR_RECOMENDACION']) ? $request['AGREGAR_RECOMENDACION'] : 0;
                     $request['REQUIERE_CONCLUSION'] = isset($request['REQUIERE_CONCLUSION']) ? $request['REQUIERE_CONCLUSION'] : 0;
 
                     //VERIFICAMOS LAS OPCIONES DE LA PORTADA
@@ -2259,7 +2282,22 @@ class recsensorialController extends Controller
                 }
             }
 
+            if (($request->opcion + 0) == 10) // GUARDAR RECOMENDACIONES PARA EL INFORME
+            {
+                $eliminar_columnas = recsensorialRecomendacionesModel::where('RECSENSORIAL_ID', $request["RECSENSORIAL_ID"])->delete();
 
+                if ($request->RECOMENDACIONES) {
+                    foreach ($request->RECOMENDACIONES as $key => $value) {
+
+                        $guardar_columnas = recsensorialRecomendacionesModel::create([
+                            'RECSENSORIAL_ID' => $request['RECSENSORIAL_ID'],
+                            'RECOMENDACION_ID' => $value,
+                        ]);
+                    }
+                }
+                $dato["msj"] = 'Recomendaciones guardadas con exito';
+
+            }
             return response()->json($dato);
         } catch (Exception $e) {
             $dato["msj"] = 'Error ' . $e->getMessage();
