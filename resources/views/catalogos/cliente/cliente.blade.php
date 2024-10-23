@@ -28,24 +28,7 @@
 <!-- ============================================================== -->
 <!-- Bread crumb and right sidebar toggle -->
 <!-- ============================================================== -->
-<div class="row page-titles">
-    {{-- <div class="col-md-5 col-8 align-self-center">
-        <h3 class="text-themecolor">Clientes</h3>
-        <ol class="breadcrumb">
-            <li class="breadcrumb-item"><a href="javascript:void(0)">Lista</a></li>
-            <li class="breadcrumb-item active">Clientes</li>
-        </ol>
-    </div> --}}
-    <div class="col-12 align-self-center">
-        <div class="d-flex justify-content-end">
-            <div class="">
-                {{-- <button class="right-side-toggle waves-effect waves-light btn-success btn btn-circle btn-sm pull-right m-l-10">
-                    <i class="ti-settings text-white"></i>
-                </button> --}}
-            </div>
-        </div>
-    </div>
-</div>
+
 <!-- ============================================================== -->
 <!-- End Bread crumb and right sidebar toggle -->
 <!-- ============================================================== -->
@@ -542,7 +525,7 @@
                 </ol>
             </div>
         </div>
-        <div style="min-width: 700px; width: 100% margin: 0px auto;">
+        <div style="min-width: 700px; width: 100% ;margin: 0px auto;">
             <!--multisteps-form-->
             <div class="multisteps-form">
                 <div class="row">
@@ -557,16 +540,16 @@
                                 <i class="fa fa-file-text-o"></i><br>
                                 <span>Convenios</span>
                             </div>
+                            <div class="multisteps-form__progress-btn" id="steps_menu_tab3">
+                                <i class="fa fa-calendar"></i><br>
+                                <span>Cronograma de trabajo</span>
+                            </div>
                             @endif
 
                         </div>
                     </div>
                 </div>
 
-
-                <!-- <ol class="breadcrumb m-b-10" style="font-size: 25px; background-color: #26c6da; color:#fff">
-                                    <i class="fa fa-handshake-o" aria-hidden="true"></i> Contratos
-                                </ol> -->
                 <div class="row mt-3 infoContratos" id="infoContratos">
                     <div class="col-12" style="display: none;" id="documentos_contrato">
                         <div class="multisteps-form__form">
@@ -858,6 +841,95 @@
                                                     </div>
                                                 </div>
                                             </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!--STEP 3 CRONOGRAMA DE TRABAJO-->
+                            <div class="multisteps-form__panel" data-animation="scaleIn" id="steps_contenido_tab3">
+                                <div class="multisteps-form__content">
+                                    <div class="row">
+                                        <div class="col-12">
+                                            @if(auth()->user()->hasRoles(['Superusuario', 'Administrador']))
+                                            <!-- Cronograma de trabajo -->
+                                            <ol class="breadcrumb">
+                                                <h2 style="color: #ffff; margin: 0;"><i class="fa fa-calendar" aria-hidden="true"></i> Cronograma de trabajo </h2>
+
+                                                <button type="button" class="btn btn-secondary waves-effect waves-light boton_modulocliente contrato" style="margin-left: auto;" id="boton_nueva_actividad">
+                                                    Actividad <i class="fa fa-calendar-plus-o p-1"></i>
+                                                </button>
+                                            </ol>
+                                            <br>
+                                            <div class="row">
+                                                <div class="col-4">
+                                                    <div class="card" style="max-height: 500px; overflow-y: auto;">
+                                                        <div class="card-body">
+                                                            <h2 class="text-center">Actividades</h2>
+
+                                                            <div class="activity-list">
+                                                                <!-- Aquí puedes agregar varias cards -->
+                                                                <div class="card">
+                                                                    <div class="card-body">
+                                                                        Actividad 1
+                                                                    </div>
+                                                                </div>
+                                                                <div class="card">
+                                                                    <div class="card-body">
+                                                                        Actividad 2
+                                                                    </div>
+                                                                </div>
+                                                                <div class="card">
+                                                                    <div class="card-body">
+                                                                        Actividad 3
+                                                                    </div>
+                                                                </div>
+                                                                <div class="card">
+                                                                    <div class="card-body">
+                                                                        Actividad 1
+                                                                    </div>
+                                                                </div>
+                                                                <div class="card">
+                                                                    <div class="card-body">
+                                                                        Actividad 2
+                                                                    </div>
+                                                                </div>
+                                                                <div class="card">
+                                                                    <div class="card-body">
+                                                                        Actividad 3
+                                                                    </div>
+                                                                </div>
+                                                                <div class="card">
+                                                                    <div class="card-body">
+                                                                        Actividad 1
+                                                                    </div>
+                                                                </div>
+                                                                <div class="card">
+                                                                    <div class="card-body">
+                                                                        Actividad 2
+                                                                    </div>
+                                                                </div>
+                                                                <div class="card">
+                                                                    <div class="card-body">
+                                                                        Actividad 3
+                                                                    </div>
+                                                                </div>
+                                                                <!-- Agrega más actividades aquí -->
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                               
+                                                <div class="col-8">
+                                                    <div class="card">
+                                                        <div class="card-body">
+                                                            <div id='calendar'></div>
+
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            @endif
                                         </div>
                                     </div>
                                 </div>

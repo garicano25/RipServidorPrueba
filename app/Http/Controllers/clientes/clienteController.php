@@ -32,7 +32,7 @@ use DB;
 use Illuminate\Support\Facades\Storage;
 use Image;
 // use Artisan;
-
+ 
 
 // plugins PDF
 use Barryvdh\DomPDF\Facade as PDF;

@@ -3357,7 +3357,7 @@ function tabla_documento_cierre(contrato_id)
     {
         var tr = $(this).closest('tr');
         var row = TablaDocumentosCierre.row( tr );
-
+ 
         // abrir modal
         // $('#modal_visor').modal({backdrop:false, keyboard:false});
         $('#modal_visor').modal({backdrop:false});
@@ -4572,4 +4572,17 @@ $(document).ready(function() {
     actualizarOpcionesEtiqueta();
 });
 
+
+//================================================================ CRONOGRAMA DE ACTIVIDADES =============================================================
+
+ document.addEventListener('DOMContentLoaded', function() {
+    var calendarEl = document.getElementById('calendar');
+    var calendar = new FullCalendar.Calendar(calendarEl, {
+        initialView: 'dayGridMonth'
+    });
+     calendar.render();
+     
+     
+ });
+    
 

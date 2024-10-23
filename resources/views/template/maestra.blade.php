@@ -608,6 +608,9 @@ use Illuminate\Support\Str;
     <script src="/assets/plugins/datatables/dataTables.rowsGroup.js"></script>
     <!-- Form wizard -->
     <script src="/assets/plugins/form_wizard_steps_bootstrap/form_wizard_script.js"></script>
+    <!-- Calerdario -->
+    <script src="https://cdn.jsdelivr.net/npm/fullcalendar@6.1.15/index.global.min.js"></script>
+
     {{-- JS pagina --}}
     <script src="/js_sitio/cliente.js?v=2.0"></script>
     @endif
