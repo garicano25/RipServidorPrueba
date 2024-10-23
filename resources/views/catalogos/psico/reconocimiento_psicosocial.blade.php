@@ -1042,7 +1042,6 @@
                                                                                                                 </div>
                                                                                                             </td>
                                                                                                             <td width="110" style="text-align: right; vertical-align: bottom;">
-                                                                                                                {{-- <button type="submit" class="btn btn-danger botonguardar_modulorecsensorial" style="height: 38px;" id="boton_guardar_reconocimientofisicospdf"> --}}
                                                                                                                 <button type="submit" class="btn btn-danger" style="height: 38px;" id="boton_guardar_reconocimientofisicospdf">
                                                                                                                     Guardar <i class="fa fa-cloud-upload"></i>
                                                                                                                 </button>
@@ -1155,32 +1154,72 @@
                     {!! csrf_field() !!}
                     <div class="row">
                         <div class="col-12">
-                            <input type="hidden" class="form-control" id="RECPSICO_ID_TRABAJADORES" name="RECPSICO_ID" value="0">
-                            <input type="number" class="form-control" id="RECPSICO_APLICACION" name="RECPSICO_APLICACION" style="visibility: hidden;">
-                            <div class="col-12" id="cargarTrabajadores_excel">
-                            </div>
+                            <input type="hidden" class="form-control" id="RECPSICO_ID_GUIAV" name="RECPSICO_ID" value="0">
+                            <input type="hidden" class="form-control" id="ID_GUIAV" name="ID_GUIAV" value="0">
                                 <div class="form-group">
                                     <label>Seleccionar las preguntas que desea aplicar de la Guia de referencia V *</label>
+                                    <div class="custom-control custom-checkbox" style="display: block;">
+                                        <input type="checkbox" class="custom-control-input" id="pregunta1" name="pregunta1" checked disabled>
+                                        <label class="custom-control-label" for="pregunta1">Sexo</label>
+                                    </div> 
+                                    <div class="custom-control custom-checkbox" style="display: block;">
+                                        <input type="checkbox" class="custom-control-input" id="pregunta2" name="pregunta2" checked>
+                                        <label class="custom-control-label" for="pregunta2">Edad en años</label>
+                                    </div> 
+                                    <div class="custom-control custom-checkbox" style="display: block;">
+                                        <input type="checkbox" class="custom-control-input" id="pregunta3" name="pregunta3" checked>
+                                        <label class="custom-control-label" for="pregunta3">Estado civil</label>
+                                    </div> 
+                                    <div class="custom-control custom-checkbox" style="display: block;">
+                                        <input type="checkbox" class="custom-control-input" id="pregunta4" name="pregunta4" checked>
+                                        <label class="custom-control-label" for="pregunta4">Nivel de estudios</label>
+                                    </div> 
+                                    <div class="custom-control custom-checkbox" style="display: block;">
+                                        <input type="checkbox" class="custom-control-input" id="pregunta5" name="pregunta5" checked disabled>
+                                        <label class="custom-control-label" for="pregunta5">Ocupacion/profesión/puesto</label>
+                                    </div> 
+                                    <div class="custom-control custom-checkbox" style="display: block;">
+                                        <input type="checkbox" class="custom-control-input" id="pregunta6" name="pregunta6" checked disabled>
+                                        <label class="custom-control-label" for="pregunta6">Departamento/Sección/Área</label>
+                                    </div> 
+                                    <div class="custom-control custom-checkbox" style="display: block;"> 
+                                        <input type="checkbox" class="custom-control-input" id="pregunta7" name="pregunta7" checked>
+                                        <label class="custom-control-label" for="pregunta7">Tipo de puesto</label>
+                                    </div>
+                                    <div class="custom-control custom-checkbox" style="display: block;">
+                                        <input type="checkbox" class="custom-control-input" id="pregunta8" name="pregunta8" checked>
+                                        <label class="custom-control-label" for="pregunta8">Tipo de contratación</label>
+                                    </div> 
+                                    <div class="custom-control custom-checkbox" style="display: block;">
+                                        <input type="checkbox" class="custom-control-input" id="pregunta9" name="pregunta9" checked>
+                                        <label class="custom-control-label" for="pregunta9">Tipo de personal</label>
+                                    </div> 
+                                    <div class="custom-control custom-checkbox" style="display: block;">
+                                        <input type="checkbox" class="custom-control-input" id="pregunta10" name="pregunta10" checked>
+                                        <label class="custom-control-label" for="pregunta10">Tipo de jornada de trabajo</label>
+                                    </div> 
+                                    <div class="custom-control custom-checkbox" style="display: block;">
+                                        <input type="checkbox" class="custom-control-input" id="pregunta11" name="pregunta11" checked>
+                                        <label class="custom-control-label" for="pregunta11">Realiza rotación de turnos</label>
+                                    </div> 
+                                    <div class="custom-control custom-checkbox" style="display: block;">
+                                        <input type="checkbox" class="custom-control-input" id="pregunta12" name="pregunta12" checked>
+                                        <label class="custom-control-label" for="pregunta12">Tiempo en el puesto actual</label>
+                                    </div> 
+                                    <div class="custom-control custom-checkbox" style="display: block;">
+                                        <input type="checkbox" class="custom-control-input" id="pregunta13" name="pregunta13" checked>
+                                        <label class="custom-control-label" for="pregunta13">Tiempo de experiencia laboral</label>
+                                    </div> 
                                 </div>
-                                <div class="custom-control custom-checkbox">
-                                    <input type="checkbox" class="custom-control-input" id="" name="">
-                                    <label class="custom-control-label" for="RECPSICOTRABAJADOR_MUESTRA">Pregunta1 </label>
-                                </div> 
-                                <div class="custom-control custom-checkbox">
-                                    <input type="checkbox" class="custom-control-input" id="" name="">
-                                    <label class="custom-control-label" for="RECPSICOTRABAJADOR_MUESTRA">Pregunta1 </label>
-                                </div> 
                         </div>
                     </div>
                 </div>
                 <div class="modal-footer" style="display: flex; justify-content: space-between;">   
                     <div>
                         <button type="button" class="btn btn-default waves-effect" data-dismiss="modal">Cerrar</button>
-                        @if(auth()->user()->hasRoles(['Superusuario', 'Administrador', 'Coordinador','Psicólogo']))
-                        <button type="submit" class="btn btn-danger waves-effect waves-light botonguardar_modulorecsensorial" id="boton_cargarTrabajadores">
+                        <button type="submit" class="btn btn-danger waves-effect waves-light" id="boton_editarGuiaV">
                             Guardar <i class="fa fa-save"></i>
                         </button>
-                        @endif
                     </div>
                 </div>
 

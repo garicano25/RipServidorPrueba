@@ -1804,9 +1804,10 @@ Route::get('/Guia/{guia1}/{guia2}/{guia3}/{id}', function ($guia1, $guia2, $guia
 
 Route::post('/obtenerExplicaciones', 'PSICO\guiasController@obtenerExplicaciones');
 Route::post('/consultarDatosTrabajador', 'PSICO\guiasController@consultarDatosTrabajador');
-
-
+Route::post('/guardarFotoRecpsico', 'PSICO\guiasController@guardarFotoRecpsico');
 Route::get('envioGuia/{tipo}/{idPersonal}/{idRecsensorial}', ['as' => 'PSICO.envioGuia', 'uses' => 'PSICO\ejecucionPsicoController@envioGuia']);
+
+Route::resource('guardarGuiasPsico', 'PSICO\guiasController');
 
 
 

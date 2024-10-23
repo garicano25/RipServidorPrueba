@@ -10,6 +10,7 @@ var categoriasEvaluadas = '';
 var areacategorias_total = 0;
 var recsensorial_perfil = 0;
 var recsensorial = 0;
+var normativa_id = 0;
 
 //--------------------------------------------------CARGA PRINCIPAL---------------------------------------------------------//
 $(document).ready(function () {
@@ -527,7 +528,7 @@ $(document).ready(function () {
 
 	document.getElementById('habilitar_opcional').checked = false;
 	document.getElementById('boton_carga_trabajadores').disabled = true;
-	document.getElementById('boton_carga_muestra').disabled = true;k
+	document.getElementById('boton_carga_muestra').disabled = true;
 
 	document.getElementById('RECPSICOTRABAJADOR_MUESTRA').checked = false;
 	document.getElementById('RECPSICOTRABAJADOR_MUESTRA').disabled = true;
@@ -1182,8 +1183,7 @@ $("#boton_carga_muestra").click(function () {
 });
 
 $("#boton_guardar_normativa").click(function (event) {
-	event.preventDefault(); // Evita el comportamiento predeterminado del formulario
-	// valida campos vacios
+	event.preventDefault(); 
 
 	$("#RECPSICO_ID_NORMATIVA").val($("#recsensorial_id").val());
 
@@ -1237,6 +1237,87 @@ $("#boton_guardar_normativa").click(function (event) {
 			},
 			error: function (error) {
 				$('#boton_guardar_normativa').html('Guardar <i class="fa fa-save"></i>');
+				swal({
+					title: "Error",
+					text: "Error en la acción: " + error.responseText, 
+					type: "error", 
+					buttons: {
+						visible: false, 
+					},
+					timer: 1500,
+					showConfirmButton: false
+				});
+			}
+		});
+	}
+});
+
+$("#boton_editarGuiaV").click(function (event) {
+	event.preventDefault(); 
+
+	$("#RECPSICO_ID_GUIAV").val($("#recsensorial_id").val());
+
+	var valida = this.form.checkValidity();
+	if (valida) {
+
+		var formData = new FormData($('#form_editarGuiaV')[0]);
+
+		formData.append('opcion', 5);
+		formData.append('RECPSICO_PREGUNTA1', document.getElementById("pregunta1").checked ? 1 : 0);
+		formData.append('RECPSICO_PREGUNTA2', document.getElementById("pregunta2").checked ? 1 : 0);
+		formData.append('RECPSICO_PREGUNTA3', document.getElementById("pregunta3").checked ? 1 : 0);
+		formData.append('RECPSICO_PREGUNTA4', document.getElementById("pregunta4").checked ? 1 : 0);
+		formData.append('RECPSICO_PREGUNTA5', document.getElementById("pregunta5").checked ? 1 : 0);
+		formData.append('RECPSICO_PREGUNTA6', document.getElementById("pregunta6").checked ? 1 : 0);
+		formData.append('RECPSICO_PREGUNTA7', document.getElementById("pregunta7").checked ? 1 : 0);
+		formData.append('RECPSICO_PREGUNTA8', document.getElementById("pregunta8").checked ? 1 : 0);
+		formData.append('RECPSICO_PREGUNTA9', document.getElementById("pregunta9").checked ? 1 : 0);
+		formData.append('RECPSICO_PREGUNTA10', document.getElementById("pregunta10").checked ? 1 : 0);
+		formData.append('RECPSICO_PREGUNTA11', document.getElementById("pregunta11").checked ? 1 : 0);
+		formData.append('RECPSICO_PREGUNTA12', document.getElementById("pregunta12").checked ? 1 : 0);
+		formData.append('RECPSICO_PREGUNTA13', document.getElementById("pregunta13").checked ? 1 : 0);
+
+
+		// Enviar datos
+		$.ajax({
+			type: 'POST',
+			url: "/recopsiconormativa",
+			data: formData,
+			dataType: 'json',
+			processData: false,
+			contentType: false,
+			success: function (dato) {
+				if (dato.code == 200) {
+					// cerrar modal
+					$('#modal_editarGuiaV').modal('hide');
+			
+					// mensaje de éxito
+					swal({
+						title: "Los datos fueron guardados exitosamente",
+						text: ""+dato.msj,
+						type: "success", 
+						buttons: {visible: true},
+						showConfirmButton: true,
+						showCancelButton: false
+					});
+				} else {
+					// mensaje de error
+					swal({
+						title: "Ocurrió un error al intentar guardar los datos.",
+						text: ""+dato.msj,
+						type: "error", 
+						buttons: {visible: true},
+						showConfirmButton: true,
+						showCancelButton: false
+					});
+				}
+				$('#boton_editarGuiaV').html('Guardar <i class="fa fa-save"></i>');
+			},
+			beforeSend: function () {
+				$('#boton_editarGuiaV').html('Guardando <i class="fa fa-spin fa-spinner"></i>');
+			},
+			error: function (error) {
+				$('#boton_editarGuiaV').html('Guardar <i class="fa fa-save"></i>');
 				swal({
 					title: "Error",
 					text: "Error en la acción: " + error.responseText, 

@@ -169,6 +169,43 @@
             margin: 20px 0;
         }
 
+        /* OPACIDAD DEL MODAL */
+        .modal-content {
+        border-radius: 10px;
+        box-shadow: 0 5px 15px rgba(16, 16, 16, 0.958);
+        }
+
+        .modal-backdrop.show {
+            opacity: 1;
+        }
+
+        .modal-backdrop {
+            background-color: rgba(16, 16, 16, 0.963); 
+            /* background-color: rgba(0, 0, 0, 1);  */
+        }
+
+        /* MODAL FOTO */
+
+        .contenedor-formulario {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        min-height: 100vh;
+        }
+
+        .camera-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+        }
+
+        #camera-wrapper {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 100%;
+        }
 
     </style>
 
@@ -201,7 +238,7 @@
                                 <div style="display: none; align-items: center; gap: 20px;">
                                     <div>
                                         <label for="pregunta1_si" style="margin-right: 5px;">Sí</label>
-                                        <input type="radio" id="pregunta1_si" name="GUIA1_1" value="1" required onchange="guia1()">
+                                        <input type="radio" id="pregunta1_si" name="GUIA1_1" value="1"   onchange="guia1()">
                                     </div>
 
                                     <div>
@@ -216,7 +253,7 @@
                                 <div style="display: flex; align-items: center; gap: 20px;">
                                     <div>
                                         <label for="pregunta2_si" style="margin-right: 5px;">Sí</label>
-                                        <input type="radio" id="pregunta2_si" name="GUIA1_2" value="1" required onchange="guia1()">
+                                        <input type="radio" id="pregunta2_si" name="GUIA1_2" value="1" onchange="guia1()">
                                     </div>
                                     <div>
                                         <label for="pregunta2_no" style="margin-right: 5px;">No</label>
@@ -230,7 +267,7 @@
                                 <div style="display: flex; align-items: center; gap: 20px;">
                                     <div>
                                         <label for="pregunta3_si" style="margin-right: 5px;">Sí</label>
-                                        <input type="radio" id="pregunta3_si" name="GUIA1_3" value="1" required onchange="guia1()">
+                                        <input type="radio" id="pregunta3_si" name="GUIA1_3" value="1" onchange="guia1()">
                                     </div>
 
                                     <div>
@@ -245,7 +282,7 @@
                                 <div style="display: flex; align-items: center; gap: 20px;">
                                     <div>
                                         <label for="pregunta4_si" style="margin-right: 5px;">Sí</label>
-                                        <input type="radio" id="pregunta4_si" name="GUIA1_4" value="1" required onchange="guia1()">
+                                        <input type="radio" id="pregunta4_si" name="GUIA1_4" value="1" onchange="guia1()">
                                     </div>
 
                                     <div>
@@ -260,7 +297,7 @@
                                 <div style="display: flex; align-items: center; gap: 20px;">
                                     <div>
                                         <label for="pregunta5_si" style="margin-right: 5px;">Sí</label>
-                                        <input type="radio" id="pregunta5_si" name="GUIA1_5" value="1" required onchange="guia1()">
+                                        <input type="radio" id="pregunta5_si" name="GUIA1_5" value="1" onchange="guia1()">
                                     </div>
 
                                     <div>
@@ -275,7 +312,7 @@
                                 <div style="display: flex; align-items: center; gap: 20px;">
                                     <div>
                                         <label for="pregunta6_si" style="margin-right: 5px;">Sí</label>
-                                        <input type="radio" id="pregunta6_si" name="GUIA1_6" value="1" required onchange="guia1()">
+                                        <input type="radio" id="pregunta6_si" name="GUIA1_6" value="1" onchange="guia1()">
                                     </div>
 
                                     <div>
@@ -290,7 +327,7 @@
                                 <div style="display: flex; align-items: center; gap: 20px;">
                                     <div>
                                         <label for="pregunta7_si" style="margin-right: 5px;">Sí</label>
-                                        <input type="radio" id="pregunta7_si" name="GUIA1_7" value="1" required onchange="guia1()">
+                                        <input type="radio" id="pregunta7_si" name="GUIA1_7" value="1" onchange="guia1()">
                                     </div>
                                     <div>
                                         <label for="pregunta7_no" style="margin-right: 5px;">No</label>
@@ -525,9 +562,7 @@
                                 </div>
                             </div>
                         </div>
-                        <button type="submit" class="btn btn-danger" id="guardar_guia1">
-                            Guardar <i class="fa fa-save"></i>
-                        </button>
+                   
                     </form>
 
                 </div>
@@ -1686,7 +1721,7 @@
                                 <div style="display: flex; align-items: center; gap: 10px; margin-left: 10px;">
                                     <div style="display: inline-block;">
                                         <label for="preguntaadi1_si" style="line-height: 1; margin-right: 5px;">Sí</label>
-                                        <input type="radio" id="preguntaadi1_si" name="GUIAE2_1" value="1" style="vertical-align: middle;" required onchange="clientesyusuarios()">
+                                        <input type="radio" id="preguntaadi1_si" name="GUIAE2_1" value="1" style="vertical-align: middle;"   onchange="clientesyusuarios()">
                                     </div>
                                     <div style="display: inline-block;">
                                         <label for="preguntaadi1_no" style="line-height: 1; margin-right: 5px;">No</label>
@@ -1796,7 +1831,7 @@
                                 <div style="display: flex; align-items: center; gap: 10px; margin-left: 10px;">
                                     <div style="display: inline-block;">
                                         <label for="preguntaadi2_si" style="line-height: 1; margin-right: 5px;">Sí</label>
-                                        <input type="radio" id="preguntaadi2_si" name="GUIAE2_2" value="1" style="vertical-align: middle;" required onchange="jefetrabajadores()">
+                                        <input type="radio" id="preguntaadi2_si" name="GUIAE2_2" value="1" style="vertical-align: middle;"   onchange="jefetrabajadores()">
                                     </div>
                                     <div style="display: inline-block;">
                                         <label for="preguntaadi2_no" style="line-height: 1; margin-right: 5px;">No</label>
@@ -3738,7 +3773,7 @@
                             <div style="display: flex; align-items: center; gap: 10px; margin-left: 10px;">
                                 <div style="display: inline-block;">
                                     <label for="preguntaadi1_3si" style="line-height: 1; margin-right: 5px;">Sí</label>
-                                    <input type="radio" id="preguntaadi1_3si" name="GUIAE3_1" value="1" style="vertical-align: middle;" required onchange="clientesyusuariosguia3()">
+                                    <input type="radio" id="preguntaadi1_3si" name="GUIAE3_1" value="1" style="vertical-align: middle;"   onchange="clientesyusuariosguia3()">
                                 </div>
                                 <div style="display: inline-block;">
                                     <label for="preguntaadi1_3no" style="line-height: 1; margin-right: 5px;">No</label>
@@ -3871,7 +3906,7 @@
                             <div style="display: flex; align-items: center; gap: 10px; margin-left: 10px;">
                                 <div style="display: inline-block;">
                                     <label for="preguntaadi2_3si" style="line-height: 1; margin-right: 5px;">Sí</label>
-                                    <input type="radio" id="preguntaadi2_3si" name="GUIAE3_2" value="1" style="vertical-align: middle;" required onchange="jefetrabajadoresguia3()">
+                                    <input type="radio" id="preguntaadi2_3si" name="GUIAE3_2" value="1" style="vertical-align: middle;"   onchange="jefetrabajadoresguia3()">
                                 </div>
                                 <div style="display: inline-block;">
                                     <label for="preguntaadi2_3no" style="line-height: 1; margin-right: 5px;">No</label>
@@ -4038,6 +4073,76 @@
 
 </div>
 
+<!-- Modal para el aviso de privacidad -->
+<div id="avisoPrivacidadModal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="avisoModalLabel" aria-hidden="true" data-backdrop="static" data-keyboard="false">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+        <div class="modal-header d-flex justify-content-between align-items-center">
+            <h5 class="modal-title" id="avisoPrivacidadModalLabel">Aviso de Privacidad y Permisos de Cámara</h5>
+            <img src="/assets/images/Logo_Color_results_original.png" alt="Imagen de Privacidad" style="width: 220px;">
+        </div>
+
+            <div class="modal-body">
+                <p>
+                    Para continuar usando esta aplicación, debe aceptar nuestro aviso de privacidad y otorgar los permisos de cámara.
+                </p>
+                <h6>Aviso de Privacidad</h6>
+                <p>
+                Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.
+                </p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-primary" id="aceptarPermisos">Acepto y continuo</button>
+            </div>
+        </div>
+    </div>
+</div>
+<div id="avisoPermisosModal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="avisoPermisosModalLabel" aria-hidden="true" data-backdrop="static" data-keyboard="false">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="avisoPermisosModalLabel">Permiso requerido</h5>
+            </div>
+            <div class="modal-body">
+                <h6>Permiso de cámara requerido</h6>
+                <p>
+                Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.
+                </p>
+            </div>
+        </div>
+    </div>
+</div>
+<div id="fotoModal" class="modal fade" tabindex="-1" role="dialog" data-backdrop="static" data-keyboard="false">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-body">
+        <form id="form-foto" enctype="multipart/form-data">
+          <!-- CSRF Token -->
+          <input type="hidden" name="_token" value="{{ csrf_token() }}">
+          
+          <div id="video-container"></div>
+          <input type="file" id="imagen" name="foto" style="display:none;">
+        </form>
+
+        <!-- Spinner de carga -->
+        <div id="loadingSpinner" class="text-center" style="display: none;">
+          <div class="spinner-border" role="status">
+            <span class="sr-only">Cargando...</span>
+          </div>
+          <p>Guardando la foto, por favor espera...</p>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-primary" id="tomar-foto">Tomar foto y continuar</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+
+
+
 
     <script type="text/javascript">
         var requiereGuia1 = <?php echo json_encode($guia1); ?>;
@@ -4068,5 +4173,6 @@
 
 
 </body>
+
 
 </html>

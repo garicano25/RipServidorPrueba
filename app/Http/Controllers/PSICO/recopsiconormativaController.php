@@ -8,6 +8,8 @@ use App\modelos\reconocimientopsico\reconocimientopsicoModel;
 use App\modelos\reconocimientopsico\recopsiconormativaModel;
 use App\modelos\reconocimientopsico\recopsicotrabajadoresModel;
 use App\modelos\reconocimientopsico\recopsicoguia5Model;
+use App\modelos\reconocimientopsico\guiavnormativapsicoModel;
+
 //use DB;
 //Re//cursos para abrir el Excel
 use PhpOffice\PhpSpreadsheet\IOFactory;
@@ -75,7 +77,7 @@ class recopsiconormativaController extends Controller
          try {
             
              //IMPORTACION DE DATOS POR MEDIO DE EXEL
-             if ($request->opcion == 1000) {
+            if ($request->opcion == 1000) {
 
                 //VARIABLES GLOBALES
                 $RECPSICO_ID = $request['RECPSICO_ID'];
@@ -259,6 +261,42 @@ class recopsiconormativaController extends Controller
 
                     return response()->json(['msj' => 'Se produjo un error al intentar cargar los trabajadores, inténtelo de nuevo o comuníquelo con el responsable ' . ' ---- ' . $e->getMessage(), 'code' => 500]);
                 }
+            }
+            //SELECCIONAR LAS PREGUNTAS QUE DESEA APLICAR DE LA GUIA V
+            if ($request->opcion == 5){
+                $RECPSICO_ID = $request['RECPSICO_ID'];
+
+                $guiavNormativa = guiavnormativapsicoModel::where('RECPSICO_ID', $RECPSICO_ID)->exists();
+
+                if ($guiavNormativa) {
+                    guiavnormativapsicoModel::where('RECPSICO_ID', $RECPSICO_ID)->delete();
+                }
+                try {
+                    // Procesar las preguntas, asignando 1 si está marcada y 0 si no está presente en el request
+                    $guiavNormativaSend = guiavnormativapsicoModel::create([
+                        'RECPSICO_ID' => $RECPSICO_ID,
+                        'RECPSICO_PREGUNTA1' => $request->has('pregunta1') ? 1 : 0,
+                        'RECPSICO_PREGUNTA2' => $request->has('pregunta2') ? 1 : 0,
+                        'RECPSICO_PREGUNTA3' => $request->has('pregunta3') ? 1 : 0,
+                        'RECPSICO_PREGUNTA4' => $request->has('pregunta4') ? 1 : 0,
+                        'RECPSICO_PREGUNTA5' => $request->has('pregunta5') ? 1 : 0,
+                        'RECPSICO_PREGUNTA6' => $request->has('pregunta6') ? 1 : 0,
+                        'RECPSICO_PREGUNTA7' => $request->has('pregunta7') ? 1 : 0,
+                        'RECPSICO_PREGUNTA8' => $request->has('pregunta8') ? 1 : 0,
+                        'RECPSICO_PREGUNTA9' => $request->has('pregunta9') ? 1 : 0,
+                        'RECPSICO_PREGUNTA10' => $request->has('pregunta10') ? 1 : 0,
+                        'RECPSICO_PREGUNTA11' => $request->has('pregunta11') ? 1 : 0,
+                        'RECPSICO_PREGUNTA12' => $request->has('pregunta12') ? 1 : 0,
+                        'RECPSICO_PREGUNTA13' => $request->has('pregunta13') ? 1 : 0,
+                    ]);
+            
+                    $dato["msj"] = 'Información guardada correctamente';
+                    return response()->json($dato);
+                } catch (Exception $e) {
+                    $dato["msj"] = 'Error: ' . $e->getMessage();
+                    return response()->json($dato);
+                }
+                
             }
 
                 $RECPSICO_ID = $request['RECPSICO_ID'];
