@@ -4,6 +4,7 @@ console.log('Guía 3:', requiereGuia3);
 console.log('Id:', id);
 
 //CARG INICIAL
+
 document.addEventListener("DOMContentLoaded", function () {
     // Mostrar el modal de aviso de privacidad al cargar la página
     $('#avisoPrivacidadModal').modal('show');
@@ -17,6 +18,7 @@ document.addEventListener("DOMContentLoaded", function () {
         });
     });
 });
+
 //BOTONES
 $("#guardar_guia2").click(function () {
 
@@ -161,6 +163,149 @@ $("#guardar_guia2").click(function () {
 });
 
 //FUNCIONES
+function submitGuia1y2() {
+    // Asignar valores del trabajador y respuestas
+    $("#GUIAI_TRABAJADOR_ID").val($("#TRABAJADOR_ID").val());
+    $("#GUIAI_ID_RECOPSICORESPUESTAS").val($("#ID_RECOPSICORESPUESTAS").val());
+    $("#GUIAII_TRABAJADOR_ID").val($("#TRABAJADOR_ID").val());
+    $("#GUIAII_ID_RECOPSICORESPUESTAS").val($("#ID_RECOPSICORESPUESTAS").val());
+
+    // Obtener los datos de la guia 1
+    var form1Data = new FormData(document.getElementById('guia_1'));
+    form1Data.append('option', 1); // Enviar opción 1 para la guía 1
+
+    $.ajax({
+        url: '/guardarGuiasPsico',
+        type: 'POST',
+        data: form1Data,
+        processData: false,
+        contentType: false,
+        success: function(response) {
+            console.log('Guia 1 enviada:', response);
+        },
+        error: function(jqXHR, textStatus, errorThrown) {
+            console.error('Error en Guia 1:', textStatus, errorThrown);
+        }
+    });
+
+    // Obtener los datos de la guia 2
+    var form2Data = new FormData(document.getElementById('form2'));
+    form2Data.append('option', 2); // Enviar opción 2 para la guía 2
+
+    $.ajax({
+        url: '/guardarGuiasPsico',
+        type: 'POST',
+        data: form2Data,
+        processData: false,
+        contentType: false,
+        success: function(response) {
+            console.log('Guia 2 enviada:', response);
+        },
+        error: function(jqXHR, textStatus, errorThrown) {
+            console.error('Error en Guia 2:', textStatus, errorThrown);
+        }
+    });
+}
+
+function submitGuia1y3() {
+    // Asignar valores del trabajador y respuestas
+    $("#GUIAI_TRABAJADOR_ID").val($("#TRABAJADOR_ID").val());
+    $("#GUIAI_ID_RECOPSICORESPUESTAS").val($("#ID_RECOPSICORESPUESTAS").val());
+    $("#GUIAIII_TRABAJADOR_ID").val($("#TRABAJADOR_ID").val());
+    $("#GUIAIII_ID_RECOPSICORESPUESTAS").val($("#ID_RECOPSICORESPUESTAS").val());
+
+    // Obtener los datos de la guia 1
+    var form1Data = new FormData(document.getElementById('guia_1'));
+    form1Data.append('option', 1); // Enviar opción 1 para la guía 1
+    
+    // swal({
+    //     title: "¡Confirme que desea guardar!",
+    //     text: "Guardar para mas tarde",
+    //     type: "warning",
+    //     showCancelButton: true,
+    //     confirmButtonColor: "#DD6B55",
+    //     confirmButtonText: "Aceptar!",
+    //     cancelButtonText: "Cancelar!",
+    //     closeOnConfirm: false,
+    //     closeOnCancel: false
+    // }, function (isConfirm) {
+    //     if (isConfirm) {
+            
+    //         swal.close();
+    //         $.ajax({
+    //             url: '/guardarGuiasPsico',
+    //             type: 'POST',
+    //             data: form1Data,
+    //             processData: false,
+    //             contentType: false,
+    //             success: function(response) {
+    //                 console.log('Guia 1 enviada:', response);
+    //                 $('#guardar_guia3').html('Guardar <i class="fa fa-save"></i>');
+    //             },
+    //             beforeSend: function () {
+    //                 $('#guardar_guia3').html('Guardando <i class="fa fa-spin fa-spinner"></i>');
+    //             },
+    //             error: function(jqXHR, textStatus, errorThrown) {
+    //                 console.error('Error en Guia 1:', textStatus, errorThrown);
+    //                 $('#guardar_guia3').html('Guardar <i class="fa fa-save"></i>');
+    //             }
+    //         });
+
+    //         // Obtener los datos de la guia 2
+    //         var form2Data = new FormData(document.getElementById('guia_3'));
+    //         form2Data.append('option', 3);
+
+    //         $.ajax({
+    //             url: '/guardarGuiasPsico',
+    //             type: 'POST',
+    //             data: form2Data,
+    //             processData: false,
+    //             contentType: false,
+    //             success: function(response) {
+    //                 console.log('Guia 3 enviada:', response);
+    //                 $('#guardar_guia3').html('Guardar <i class="fa fa-save"></i>');
+    //             },
+    //             beforeSend: function () {
+    //                 $('#guardar_guia3').html('Guardando <i class="fa fa-spin fa-spinner"></i>');
+    //             },
+    //             error: function(jqXHR, textStatus, errorThrown) {
+    //                 console.error('Error en Guia 3:', textStatus, errorThrown);
+    //                 $('#guardar_guia3').html('Guardar <i class="fa fa-save"></i>');
+    //             }
+    //         });
+    //     }
+    //     else {
+    //         // mensaje
+    //         swal({
+    //             title: "Cancelado",
+    //             text: "Acción cancelada",
+    //             type: "error", // warning, error, success, info
+    //             buttons: {
+    //                 visible: false, // true , false
+    //             },
+    //             timer: 500,
+    //             showConfirmButton: false
+    //         });
+    //     }
+    // });
+
+    Swal.fire({
+      title: "Do you want to save the changes?",
+      showDenyButton: true,
+      showCancelButton: true,
+      confirmButtonText: "Save",
+      denyButtonText: `Don't save`
+    }).then((result) => {
+      /* Read more about isConfirmed, isDenied below */
+      if (result.isConfirmed) {
+        Swal.fire("Saved!", "", "success");
+      } else if (result.isDenied) {
+        Swal.fire("Changes are not saved", "", "info");
+      }
+    });
+}
+
+
 function ejecucionCamara(){
     navigator.mediaDevices.getUserMedia({ video: true })
             .then(function (stream) {

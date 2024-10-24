@@ -20,8 +20,14 @@ class CreateTablaRecopsicoTrabajadoresRespuestas extends Migration
             $table->integer('RECPSICO_TRABAJADOR')->nullable();
             
             $table->text('RECPSICO_GUIAI_RESPUESTAS')->nullable();
+            $table->text('RECPSICO_GUIAI_IDS')->nullable();
+
             $table->text('RECPSICO_GUIAII_RESPUESTAS')->nullable();
+            $table->text('RECPSICO_GUIAII_IDS')->nullable();
+            
             $table->text('RECPSICO_GUIAIII_RESPUESTAS')->nullable();
+            $table->text('RECPSICO_GUIAIII_IDS')->nullable();
+
             $table->integer('RECPSICO_GUIAV_ID')->nullable();
             $table->timestamps();
         });

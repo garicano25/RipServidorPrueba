@@ -20,7 +20,8 @@
     <!-- You can change the theme colors from here -->
     <link href="/css/colors/color_RIP.css" id="theme" rel="stylesheet">
     <!--alerts CSS -->
-    <link href="/assets/plugins/sweetalert/sweetalert.css" rel="stylesheet" type="text/css">
+    <!-- <link href="/assets/plugins/sweetalert/sweetalert.css" rel="stylesheet" type="text/css"> -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11.14.4/dist/sweetalert2.min.css">
     <!-- Date picker plugins css -->
     <link href="/assets/plugins/bootstrap-datepicker/bootstrap-datepicker.min.css" rel="stylesheet" type="text/css">
     
@@ -220,7 +221,10 @@
 <div class="row">
     <div class="col-9 mt-5">
         <div class="card-container">
-
+            <div class="col-12">
+                <input type="hidden" class="form-control" id="ID_RECOPSICORESPUESTAS" name="ID_RECOPSICORESPUESTAS" value="0">
+                <input type="hidden" class="form-control" id="TRABAJADOR_ID" name="TRABAJADOR_ID" value="0">
+            </div>
                 <div id="guia1" class="card" style="display: block">
                     <h6 style="text-align: center">Guía de referencia I</h6>
                     <h3 class="card-title"><b>GUÍA PARA IDENTIFICAR A LOS TRABAJADORES QUE FUERON SUJETOS A ACONTECIMIENTOS TRAUMÁTICOS SEVEROS</b></h3>
@@ -231,6 +235,10 @@
                         <div id="seccion1" style="padding: 10px; ">
                             <div id="titulo1">
                                 <h5 style="text-align: left; width: 70%;"><b>I.- Acontecimiento traumático severo</b></h5>
+                            </div>
+                            <div class="col-12">
+                                <input type="hidden" class="form-control" id="GUIAI_ID_RECOPSICORESPUESTAS" name="ID_RECOPSICORESPUESTAS" value="0">
+                                <input type="hidden" class="form-control" id="GUIAI_TRABAJADOR_ID" name="TRABAJADOR_ID" value="0">
                             </div>
                             <div id="pregunta1" class="mt-4" style="display: flex; justify-content: space-between; align-items: center; width: 100%; margin-bottom: 10px;">
                                 <p style="margin: 0; flex: 1;"><i class="fa fa-info-circle" id="Exp1_1" aria-hidden="true" data-toggle="tooltip" title=""></i>
@@ -574,6 +582,10 @@
                     <form enctype="multipart/form-data" method="post" name="guia_2" id="guia_2">
                         {!! csrf_field() !!}
 
+                        <div class="col-12">
+                                <input type="hidden" class="form-control" id="GUIAII_ID_RECOPSICORESPUESTAS" name="ID_RECOPSICORESPUESTAS" value="0">
+                                <input type="hidden" class="form-control" id="GUIAII_TRABAJADOR_ID" name="TRABAJADOR_ID" value="0">
+                        </div>
                         <div id="seccion1_2" class="mt-3" style="display: block; padding: 10px;">
 
                             <div id="pregunta1_2" class="mt-4" style="display: flex; justify-content: space-between; align-items: center; width: 100%; margin-bottom: 10px;">
@@ -1714,18 +1726,18 @@
                                 </h6>
                             </div>
 
-                            <div id="preguntaadi1_2" class="mt-5" style="display: flex; align-items: center; margin-bottom: 10px;">
+                            <div id="pregunta47_2" class="mt-5" style="display: flex; align-items: center; margin-bottom: 10px;">
                                 <p style="margin: 0; white-space: nowrap; margin-right: 10px;"><i class="fa fa-info-circle" id="Exp2_1ADI" aria-hidden="true" data-toggle="tooltip" title=""></i>
                                     En mi trabajo debo brindar servicio a clientes o usuarios:
                                 </p>
                                 <div style="display: flex; align-items: center; gap: 10px; margin-left: 10px;">
                                     <div style="display: inline-block;">
                                         <label for="preguntaadi1_si" style="line-height: 1; margin-right: 5px;">Sí</label>
-                                        <input type="radio" id="preguntaadi1_si" name="GUIAE2_1" value="1" style="vertical-align: middle;"   onchange="clientesyusuarios()">
+                                        <input type="radio" id="preguntaadi1_si" name="GUIA2_47" value="1" style="vertical-align: middle;"   onchange="clientesyusuarios()">
                                     </div>
                                     <div style="display: inline-block;">
                                         <label for="preguntaadi1_no" style="line-height: 1; margin-right: 5px;">No</label>
-                                        <input type="radio" id="preguntaadi1_no" name="GUIAE2_1" value="0" style="vertical-align: middle;" onchange="clientesyusuarios()">
+                                        <input type="radio" id="preguntaadi1_no" name="GUIA2_47" value="0" style="vertical-align: middle;" onchange="clientesyusuarios()">
                                     </div>
                                 </div>
                             </div>
@@ -1824,18 +1836,18 @@
                             </div>
                         </div>
                         <div id="seccion3_2" class="mt-2" style="display: block; padding: 10px;">
-                            <div id="preguntaadi2_2" class="mt-2" style="display: flex; align-items: center; margin-bottom: 10px;">
+                            <div id="pregunta48_2" class="mt-2" style="display: flex; align-items: center; margin-bottom: 10px;">
                                 <p style="margin: 0; white-space: nowrap; margin-right: 10px;"><i class="fa fa-info-circle" id="Exp2_2ADI" aria-hidden="true" data-toggle="tooltip" title=""></i>
                                     Soy jefe de otros trabajadores:
                                 </p>
                                 <div style="display: flex; align-items: center; gap: 10px; margin-left: 10px;">
                                     <div style="display: inline-block;">
                                         <label for="preguntaadi2_si" style="line-height: 1; margin-right: 5px;">Sí</label>
-                                        <input type="radio" id="preguntaadi2_si" name="GUIAE2_2" value="1" style="vertical-align: middle;"   onchange="jefetrabajadores()">
+                                        <input type="radio" id="preguntaadi2_si" name="GUIA2_48" value="1" style="vertical-align: middle;"   onchange="jefetrabajadores()">
                                     </div>
                                     <div style="display: inline-block;">
                                         <label for="preguntaadi2_no" style="line-height: 1; margin-right: 5px;">No</label>
-                                        <input type="radio" id="preguntaadi2_no" name="GUIAE2_2" value="0" style="vertical-align: middle;" onchange="jefetrabajadores()">
+                                        <input type="radio" id="preguntaadi2_no" name="GUIA2_48" value="0" style="vertical-align: middle;" onchange="jefetrabajadores()">
                                     </div>
                                 </div>
                             </div>
@@ -1932,7 +1944,7 @@
                                 </div>
                             </div>
                         </div>
-                        <button type="submit" class="btn btn-danger" id="guardar_guia2">
+                        <button type="button" class="btn btn-danger" id="guardar_guia2" onclick="submitGuia1y2()">
                             Guardar <i class="fa fa-save"></i>
                         </button>
                     </form>
@@ -1946,6 +1958,10 @@
                     <form enctype="multipart/form-data" method="post" name="guia_3" id="guia_3">
                         {!! csrf_field() !!}
 
+                        <div class="col-12">
+                                <input type="hidden" class="form-control" id="GUIAIII_ID_RECOPSICORESPUESTAS" name="ID_RECOPSICORESPUESTAS" value="0">
+                                <input type="hidden" class="form-control" id="GUIAIII_TRABAJADOR_ID" name="TRABAJADOR_ID" value="0">
+                        </div>
                         <div class="mt-3">
                             <h6>Para responder las siguientes preguntas considere las condiciones ambientales de su centro de trabajo.
                             </h6>
@@ -3766,18 +3782,18 @@
                             </h6>
                         </div> 	
             
-                        <div id="preguntaadi1_3" class="mt-5" style="display: flex; align-items: center; margin-bottom: 10px;">
+                        <div id="pregunta73_3" class="mt-5" style="display: flex; align-items: center; margin-bottom: 10px;">
                             <p style="margin: 0; white-space: nowrap; margin-right: 10px;"><i class="fa fa-info-circle" id="Exp3_1ADI" aria-hidden="true" data-toggle="tooltip" title=""></i>
                                 En mi trabajo debo brindar servicio a clientes o usuarios:
                             </p>
                             <div style="display: flex; align-items: center; gap: 10px; margin-left: 10px;">
                                 <div style="display: inline-block;">
                                     <label for="preguntaadi1_3si" style="line-height: 1; margin-right: 5px;">Sí</label>
-                                    <input type="radio" id="preguntaadi1_3si" name="GUIAE3_1" value="1" style="vertical-align: middle;"   onchange="clientesyusuariosguia3()">
+                                    <input type="radio" id="preguntaadi1_3si" name="GUIA3_73" value="1" style="vertical-align: middle;"   onchange="clientesyusuariosguia3()">
                                 </div>
                                 <div style="display: inline-block;">
                                     <label for="preguntaadi1_3no" style="line-height: 1; margin-right: 5px;">No</label>
-                                    <input type="radio" id="preguntaadi1_3no" name="GUIAE3_1" value="0" style="vertical-align: middle;" onchange="clientesyusuariosguia3()">
+                                    <input type="radio" id="preguntaadi1_3no" name="GUIA3_73" value="0" style="vertical-align: middle;" onchange="clientesyusuariosguia3()">
                                 </div>
                             </div>
                         </div> 
@@ -3899,18 +3915,18 @@
                     </div>
 
                     <div id="seccion3_3" class="mt-2" style="display: block; padding: 10px;">
-                        <div id="preguntaadi2_3" class="mt-2" style="display: flex; align-items: center; margin-bottom: 10px;">
+                        <div id="pregunta74_3" class="mt-2" style="display: flex; align-items: center; margin-bottom: 10px;">
                             <p style="margin: 0; white-space: nowrap; margin-right: 10px;"><i class="fa fa-info-circle" id="Exp3_2ADI" aria-hidden="true" data-toggle="tooltip" title=""></i>
                                 Soy jefe de otros trabajadores:
                             </p>
                             <div style="display: flex; align-items: center; gap: 10px; margin-left: 10px;">
                                 <div style="display: inline-block;">
                                     <label for="preguntaadi2_3si" style="line-height: 1; margin-right: 5px;">Sí</label>
-                                    <input type="radio" id="preguntaadi2_3si" name="GUIAE3_2" value="1" style="vertical-align: middle;"   onchange="jefetrabajadoresguia3()">
+                                    <input type="radio" id="preguntaadi2_3si" name="GUIA3_74" value="1" style="vertical-align: middle;"   onchange="jefetrabajadoresguia3()">
                                 </div>
                                 <div style="display: inline-block;">
                                     <label for="preguntaadi2_3no" style="line-height: 1; margin-right: 5px;">No</label>
-                                    <input type="radio" id="preguntaadi2_3no" name="GUIAE3_2" value="0" style="vertical-align: middle;" onchange="jefetrabajadoresguia3()">
+                                    <input type="radio" id="preguntaadi2_3no" name="GUIA3_74" value="0" style="vertical-align: middle;" onchange="jefetrabajadoresguia3()">
                                 </div>
                             </div>
                         </div>
@@ -4037,7 +4053,7 @@
                             </div>
                         </div>               
                     </div>
-                    <button type="submit" class="btn btn-danger" id="guardar_guia3">
+                    <button type="button" class="btn btn-danger" id="guardar_guia3" onclick="submitGuia1y3()">
                         Guardar <i class="fa fa-save"></i>
                     </button>
                     </form>
@@ -4151,7 +4167,8 @@
         var id = <?php echo json_encode($id); ?>;
 
         document.addEventListener('DOMContentLoaded', function() {
-            
+        $("#TRABAJADOR_ID").val(id);
+        
         mostrarGuias(requiereGuia1, requiereGuia2, requiereGuia3);
         cargarExplicaciones();
         botonradio('radio-group');
@@ -4165,9 +4182,10 @@
     <script src="/assets/plugins/jquery/jquery.min.js"></script>
     <script src="/assets/plugins/bootstrap/js/popper.min.js"></script>
     <script src="/assets/plugins/bootstrap/js/bootstrap.js"></script>
-    <script src="/assets/plugins/sweetalert/sweetalert.min.js"></script>
-    <script src="/assets/plugins/sweetalert/jquery.sweet-alert.custom.js"></script>
-  
+    <!-- <script src="/assets/plugins/sweetalert/sweetalert.min.js"></script>
+    <script src="/assets/plugins/sweetalert/jquery.sweet-alert.custom.js"></script> -->
+    <!-- <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script> -->
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11.14.4/dist/sweetalert2.all.min.js"></script>
     <script src="/js_sitio/guias.js"></script>
 
 

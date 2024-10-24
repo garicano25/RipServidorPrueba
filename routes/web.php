@@ -1811,6 +1811,7 @@ Route::resource('guardarGuiasPsico', 'PSICO\guiasController');
 
 
 
+
 //CATÁLOGOS
 Route::resource('recpsicocatalogos', 'PSICO\recpsicocatalogosController');
 Route::get('recpsicocatalogosguia/{num_catalogo}', ['as' => 'PSICO.recpsicocatalogos', 'uses' => 'PSICO\recpsicocatalogosController@tablaCatalogoGuia']);
