@@ -50,6 +50,8 @@ use App\modelos\reportes\reporteanexosModel;
 use App\modelos\reportes\reportenotasModel;
 use App\modelos\recsensorial\catConclusionesModel;
 use App\modelos\reportes\recursosPortadasInformesModel;
+use App\modelos\reportes\reportecaiModel;
+
 
 
 //Configuracion Zona horaria
@@ -952,6 +954,41 @@ class reporteaireController extends Controller
             return Storage::download($reporte->reporteaire_ubicacionfoto);
         }
     }
+
+
+
+ public function obtenerCAI($ID)
+{
+    try {
+        $info = DB::select('SELECT ID_CAI_INFORMES , JSON_CARACTERISTICA 
+                            FROM cai_informes
+                            WHERE proyecto_id = ?', [$ID]);
+
+        if (!empty($info)) {
+            // Decodificamos el JSON_CARACTERISTICA
+            $jsonCaracteristicas = json_decode($info[0]->JSON_CARACTERISTICA);
+
+            return response()->json([
+                'status' => 'success',
+                'caracteristicas' => $jsonCaracteristicas,
+                'ID_CAI_INFORMES' => $info[0]->ID_CAI_INFORMES  // Devolver el ID para usarlo en la edición
+            ]);
+        } else {
+            return response()->json([
+                'status' => 'error',
+                'message' => 'No se encontraron características para este proyecto'
+            ]);
+        }
+
+    } catch (\Exception $e) {
+        return response()->json([
+            'status' => 'error',
+            'message' => 'Ocurrió un error al obtener las características: ' . $e->getMessage()
+        ]);
+    }
+}
+
+
 
 
     /**
@@ -3526,7 +3563,8 @@ class reporteaireController extends Controller
                                                         <div class="progress" style="margin-bottom: 8px;">
                                                             <div class="progress-bar" role="progressbar" style="width: ' . $bioaerosoles . '%; height: 10px; background: #8ee66b;" aria-valuenow="25" aria-valuemin="0" aria-valuemax="100"></div>
                                                         </div>
-                                                    </div>';
+                                                    </div>
+                                                    ';
 
 
                 $dato["dashboard_puntos"] = (count($cumplimiento) + 0);
@@ -6247,6 +6285,44 @@ class reporteaireController extends Controller
 
                 $dato["msj"] = 'Datos modificados correctamente';
             }
+
+            if (($request->opcion + 0) == 21) {
+                
+                $jsonCaracteristicas = $request->input('caracteristicas_aire'); 
+                $ID_CAI_INFORMES = $request->input('ID_CAI_INFORMES', 0);  // Si estás usando este valor para otra lógica
+            
+                if ($ID_CAI_INFORMES == 0) { 
+                    // Crear un nuevo registro si no existe
+                    DB::statement('ALTER TABLE cai_informes AUTO_INCREMENT = 1;');
+                
+                    $cai = reportecaiModel::create([
+                        'proyecto_id' => $request->proyecto_id,
+                        'JSON_CARACTERISTICA' => $jsonCaracteristicas, 
+                    ]);
+                
+                    $dato["msj"] = 'Datos guardados correctamente';
+                } else { 
+                    // Buscar por ID_CAI_INFORMES para la edición
+                    $cai = reportecaiModel::find($ID_CAI_INFORMES);
+                
+                    if ($cai) {
+                        // Actualizar el registro existente
+                        $cai->update([
+                            'proyecto_id' => $request->proyecto_id,
+                            'JSON_CARACTERISTICA' => $jsonCaracteristicas, 
+                        ]);
+                
+                        $dato["msj"] = 'Datos modificados correctamente';
+                    } else {
+                        // Si no se encuentra el registro
+                        $dato["msj"] = 'No se encontró el registro para actualizar';
+                    }
+                }
+                return response()->json($dato);
+            }
+            
+            
+            
 
 
             // respuesta

@@ -155,6 +155,29 @@
 		text-align: center;
 		vertical-align: middle !important;
 	}
+
+
+	
+	.evluaraire {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        flex-direction: column;
+        height: 23vh; 
+        text-align: center; 
+    }
+
+    .checkbox-container {
+        display: flex;
+        justify-content: center;
+        flex-wrap: wrap; 
+    }
+
+    .checkbox-container div {
+        margin: 10px 20px; 
+    }
+
+
 </style>
 
 
@@ -162,7 +185,8 @@
 	<div class="col-xlg-2 col-lg-3 col-md-5">
 		<div class="stickyside">
 			<div class="list-group" id="top-menu">
-				<a href="#0" class="list-group-item active">Portada <i class="fa fa-times" id="menureporte_0"></i></a>
+				<a href="#0_1" class="list-group-item active">Característica del aire<i  id="menureporte_0_1"></i></a>
+				<a href="#0" class="list-group-item ">Portada <i class="fa fa-times" id="menureporte_0"></i></a>
 				<a href="#1" class="list-group-item">1.- Introducción <i class="fa fa-times" id="menureporte_1"></i></a>
 				<a href="#2" class="list-group-item">2.- Definiciones <i class="fa fa-times" id="menureporte_2"></i></a>
 				<a href="#3" class="list-group-item">3.- Objetivos</a>
@@ -205,9 +229,69 @@
 			</div>
 		</div>
 	</div>
-	<div class="col-xlg-10 col-lg-9 col-md-7">
+	
+	<div class="col-xlg-10 col-lg-9 col-md-7" >
 		<div class="card">
-			<div class="card-body">
+	
+			<div class="evluaraire">
+				<h3 class="card-title" style="padding: 0px!important;" id="0_1">Seleccione las características a evaluar de aire</h3>
+				<form method="post" enctype="multipart/form-data" name="form_reporte_evaluaraire" id="form_reporte_evaluaraire">
+					<div class="col-12">
+						{!! csrf_field() !!}
+					</div>
+					<input type="hidden" id="ID_CAI_INFORMES" name="ID_CAI_INFORMES" value="0">
+
+					<div class="checkbox-container" style="display: flex; justify-content: center; flex-wrap: wrap;">
+						<div style="margin-right: 20px;">
+							<input type="checkbox" id="bioaerosoles" name="bioaerosoles">
+							<label for="bioaerosoles">Bioaerosoles</label>
+						</div>
+						<div style="margin-right: 20px;">
+							<input type="checkbox" id="co" name="co">
+							<label for="co">CO</label>
+						</div>
+						<div style="margin-right: 20px;">
+							<input type="checkbox" id="co2" name="co2">
+							<label for="co2">CO₂</label>
+						</div>
+						<div style="margin-right: 20px;">
+							<input type="checkbox" id="temperatura" name="temperatura">
+							<label for="temperatura">Temperatura del aire</label>
+						</div>
+						<div style="margin-right: 20px;">
+							<input type="checkbox" id="velocidad" name="velocidad">
+							<label for="velocidad">Velocidad del aire</label>
+						</div>
+						<div style="margin-right: 20px;">
+							<input type="checkbox" id="caudal" name="caudal">
+							<label for="caudal">Caudal de aire</label>
+						</div>
+						<div>
+							<input type="checkbox" id="humedad" name="humedad">
+							<label for="humedad">Humedad relativa</label>
+						</div>
+						<div>
+							<input type="checkbox" id="SO2" name="SO2">
+							<label for="SO2">SO2</label>
+						</div>
+						<div>
+							<input type="checkbox" id="Formaldehídos" name="Formaldehídos">
+							<label for="Formaldehídos">Formaldehídos</label>
+						</div>
+					</div>
+			
+					<div class="col-12" style="text-align: center; margin-top: 20px;">
+						<button type="submit" class="btn btn-danger waves-effect waves-light " id="botonguardar_reporte_evaluaraire">
+							Guardar características de aire <i class="fa fa-save"></i>
+						</button>
+					</div>
+				</form>
+			</div>
+			
+			
+
+			
+			<div class="card-body" style="display: block">
 				<h4 class="card-title" style="padding: 0px!important;" id="0">Portadas</h4>
 				<form method="post" enctype="multipart/form-data" name="form_reporte_portada" id="form_reporte_portada">
 					<div class="row">
@@ -623,7 +707,7 @@
 									</tr>
 								</thead>
 								<tbody>
-									<tr>
+									<tr id="TEM_AIRE_1" >
 										<td>Temperatura del aire</td>
 										<td>22-24.5°C</td>
 										<td rowspan="3" style="text-align: justify!important;">NOM-001-STPS-2008, Edificios, locales, instalaciones y áreas en los centros de trabajo - Condiciones de seguridad.</td>
