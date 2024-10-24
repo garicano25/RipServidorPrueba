@@ -856,14 +856,18 @@
                                             <ol class="breadcrumb">
                                                 <h2 style="color: #ffff; margin: 0;"><i class="fa fa-calendar" aria-hidden="true"></i> Cronograma de trabajo </h2>
 
-                                                <button type="button" class="btn btn-secondary waves-effect waves-light boton_modulocliente contrato" style="margin-left: auto;" id="boton_nueva_actividad">
+                                                <button type="button" class="btn btn-secondary waves-effect waves-light boton_modulocliente contrato" style="margin-left: 20px;" id="boton_nueva_actividad">
                                                     Nueva Actividad <i class="fa fa-calendar-plus-o p-1"></i>
+                                                </button>
+
+                                                <button type="button" class="btn btn-secondary waves-effect waves-light boton_modulocliente contrato" style="margin-left: auto;background: #94B732;color: #fff;border: 1px solid #fff;" id="boton_autorizar_cronograma_modal">
+                                                    Validar o Autorizar cronograma <i class="fa fa fa-gavel p-1"></i>
                                                 </button>
                                             </ol>
                                             <br>
                                             <div class="row">
                                                 <div class="col-4">
-                                                    <div class="card" style="max-height: 600px; overflow-y: auto;">
+                                                    <div class="card" style="max-height: 625px; overflow-y: auto;">
                                                         <div class="card-body">
                                                             <h2 class="text-center">Actividades</h2>
                                                             <style>
@@ -875,7 +879,6 @@
                                                                     transform: scale(1.03);
                                                                     box-shadow: 0px 4px 20px rgba(0, 0, 0, 0.2);
                                                                 }
-
                                                             </style>
 
                                                             <div id="activity-list">
@@ -887,7 +890,7 @@
                                                 </div>
 
                                                 <div class="col-8">
-                                                    <div class="card" style="height: 100%;">
+                                                    <div class="card" style="height: 96%;">
                                                         <div class="card-body">
                                                             <div id='calendar'>
 
@@ -916,6 +919,88 @@
 <!-- ============================================================== -->
 <!-- End PAge Content -->
 <!-- ============================================================== -->
+
+
+<!-- Modal autorizacion del cronograma -->
+<div id="modal_autorizacion" class="modal fade bs-example-modal-lg" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" style="display: none;">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <form enctype="multipart/form-data" method="post" name="form_actividad" id="form_actividad">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                    <h4 class="modal-title">Validación y autorización del cronograma de trabajo</h4>
+                </div>
+                <div class="modal-body">
+                    <div class="row">
+                        <div class="col-12">
+                            {!! csrf_field() !!}
+                            <input type="hidden" class="form-control" id="ID_AUTORIZACION" name="ID_AUTORIZACION" value="0">
+                        </div>
+
+                        <div class="col-6" id="div-validacion">
+                            <div class="col-12">
+                                <div class="form-group">
+                                    <label>Fecha de validación *</label>
+                                    <div class="input-group">
+                                        <input type="text" class="form-control mydatepicker" placeholder="aaaa-mm-dd" id="FECHA_VALIDACION_CRONOGRAMA" name="FECHA_VALIDACION_CRONOGRAMA" readonly>
+                                        <span class="input-group-addon"><i class="icon-calender"></i></span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-12">
+                                <div class="form-group">
+                                    <label>Cargo de quien valida</label>
+                                    <input type="text" class="form-control" name="CARGO_VALIDACION_CRONOGRAMA" id="CARGO_VALIDACION_CRONOGRAMA" readonly>
+                                </div>
+                            </div>
+                            <div class="col-12">
+                                <div class="form-group">
+                                    <label>Nombre de quien valida</label>
+                                    <input type="text" class="form-control" name="NOMBRE_VALIDACION_CRONOGRAMA" id="NOMBRE_VALIDACION_CRONOGRAMA" readonly>
+                                </div>
+                            </div>
+
+                        </div>
+                        <div class="col-6" id="div-autorizacion">
+                            <div class="col-12">
+                                <div class="form-group">
+                                    <label>Fecha de autorización *</label>
+                                    <div class="input-group">
+                                        <input type="text" class="form-control mydatepicker" placeholder="aaaa-mm-dd" id="FECHA_AUTORIZACION_CRONOGRAMA" name="FECHA_AUTORIZACION_CRONOGRAMA" readonly>
+                                        <span class="input-group-addon"><i class="icon-calender"></i></span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-12">
+                                <div class="form-group">
+                                    <label>Cargo de quien autoriza</label>
+                                    <input type="text" class="form-control" name="CARGO_AUTORIZACION_CRONOGRAMA" id="CARGO_AUTORIZACION_CRONOGRAMA" readonly>
+                                </div>
+                            </div>
+                            <div class="col-12">
+                                <div class="form-group">
+                                    <label>Nombre de quien autoriza</label>
+                                    <input type="text" class="form-control" name="NOMBRE_AUTORIZACION_CRONOGRAMA" id="NOMBRE_AUTORIZACION_CRONOGRAMA" readonly>
+                                </div>
+                            </div>
+
+                        </div>
+
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default waves-effect" data-dismiss="modal">Cerrar</button>
+                    @if(auth()->user()->hasRoles(['Superusuario', 'Administrador']))
+                    <button type="submit" class="btn btn-danger waves-effect waves-light boton_modulocliente" id="boton_autorizar_cronograma"> Guardar <i class="fa fa-save"></i></button>
+                    @endif
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+<!-- /.Modal autorizacion del cronograma -->
+
+
 
 <!-- Modal actividades del cronograma -->
 <div id="modal_actividades" class="modal fade bs-example-modal-lg" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" style="display: none;">
@@ -975,6 +1060,15 @@
                             <div class="form-group">
                                 <label>Puntos</label>
                                 <input type="number" class="form-control" name="PUNTOS_ACTIVIDAD" id="PUNTOS_ACTIVIDAD">
+                            </div>
+                        </div>
+                        <div class="col-12">
+                            <div class="form-group" style="position: relative;">
+                                <label>Color etiqueta</label>
+                                <input type="color" class="form-control" name="COLOR_ACTIVIDAD" id="COLOR_ACTIVIDAD" value="#1E88E6" style="border-radius: 20px; padding: 5px; width: 100px; height: 40px; position: absolute; top: 100%; left: 0; display: none;">
+                            </div>
+                            <div id="etiqueta-div" style="border-radius: 20px; padding: 10px; cursor: pointer; text-align:center">
+                                <h5 style="color: #ffffff;"><i class="fa fa-star" aria-hidden="true"></i> Etiqueta de actividad </h5>
                             </div>
                         </div>
 
@@ -1570,5 +1664,15 @@
 <!-- ============================================================== -->
 <!-- VISOR-MODAL -->
 <!-- ============================================================== -->
+@php
+    $rolUsuario = auth()->user()->roles->first() ? auth()->user()->roles->first()->rol_Nombre : null;
+    $empleado = auth()->user()->empleado;
+    $nombreCompleto = $empleado ? $empleado->empleado_nombre . ' ' . $empleado->empleado_apellidopaterno . ' ' . $empleado->empleado_apellidomaterno : '';
+@endphp
+
+<script>
+    var rolUsuario = @json($rolUsuario);
+    var Usuario = @json($nombreCompleto);
+</script>
 
 @endsection

@@ -7,7 +7,7 @@ var TablaDocumentosCierre = null;
 var datatable_partidas = null;
 var datatable_partidas_convenios = null;
 var datatable_anexo = null;
-
+var eventos = null;
 
 // Variables globales
 var cliente_id = 0;
@@ -2778,7 +2778,8 @@ $('#tabla_clientecontratos tbody').on('click', 'td>button.informacion', function
             scrollTop: $('#encabezado_contrato').offset().top
         }, 'slow');
 
-   
+    //Cargamos el cronograma de una vez, para formar nuestros eventos
+   mostrarActividadesCronograma()
 
 });
 
@@ -3713,53 +3714,8 @@ $('.multisteps-form__progress-btn').click(async function()
 
             break;
         case "steps_menu_tab3":
-            mostrarActividadesCronograma()
-            const eventos = [
-                {
-                    title: 'Actividad 1',   // Asignar título
-                    start: '2024-10-23T09:00:00',  // Fecha de inicio
-                    end: '2024-10-25T09:00:00'     // Fecha de fin
-                }
-            ];
 
-           
-
-            var calendarEl = document.getElementById('calendar');
-            var calendar = new FullCalendar.Calendar(calendarEl, {
-                
-                height: 'auto',
-                headerToolbar: {
-                    right: 'prev,next today',
-                    center: 'title',
-                    left: 'dayGridMonth,timeGridWeek,timeGridDay'
-                },
-                locale: 'es',
-                buttonText: {
-                    month: 'Mes',
-                    week: 'Semana',
-                    day: 'Día'
-                },
-                initialView: 'dayGridMonth',
-                events: eventos,
-                dateClick: function (info) {
-                    
-                    var fechaSeleccionada = info.date;
-                    
-
-                    $('#form_actividad').each(function () {
-                        this.reset();
-                    });
-
-                    // Rellenamos los datos almacenados
-                    $('#ID_ACTIVIDAD').val(0)
-                    $('#FECHA_INICIO_ACTIVIDAD').val(fechaSeleccionada.toISOString().split('T')[0])
-                    
-                    // Abrir modal
-                    $('#modal_actividades').modal({ backdrop: false });
-                }
-                
-            });
-            calendar.render();
+            
 
             break;
         
@@ -4634,6 +4590,8 @@ $("#boton_nueva_actividad").click(function () {
     });
 
     $('#ID_ACTIVIDAD').val(0)
+    $('#COLOR_ACTIVIDAD').val('#1E88E6')
+    $('#etiqueta-div').css('background-color', '#1E88E6');
 
     // Abrir modal
     $('#modal_actividades').modal({ backdrop: false });
@@ -4748,8 +4706,55 @@ function mostrarActividadesCronograma() {
         data: {},
         cache: false,
         success: function (dato) {
+             var fechaActual = new Date().toISOString().split('T')[0]; 
 
+            //=================== VALIDAMOS LA VALIDACION Y AUTORIZACION DEL CRONOGRAMA ================================================
+            if (Array.isArray(dato.autorizado) && dato.autorizado.length > 0) {
+                
+                info = dato.autorizado[0]
+            
+                $('#FECHA_VALIDACION_CRONOGRAMA').val(info.FECHA_VALIDACION_CRONOGRAMA);
+                $('#CARGO_VALIDACION_CRONOGRAMA').val(info.CARGO_VALIDACION_CRONOGRAMA);
+                $('#NOMBRE_VALIDACION_CRONOGRAMA').val(info.NOMBRE_VALIDACION_CRONOGRAMA);
+
+                if (info.NOMBRE_AUTORIZACION_CRONOGRAMA == null || info.NOMBRE_AUTORIZACION_CRONOGRAMA == '') {
+                    $('#FECHA_AUTORIZACION_CRONOGRAMA').val(fechaActual);
+                    $('#CARGO_AUTORIZACION_CRONOGRAMA').val(rolUsuario);
+                    $('#NOMBRE_AUTORIZACION_CRONOGRAMA').val(Usuario);
+
+
+                } else {
+
+                    $('#FECHA_AUTORIZACION_CRONOGRAMA').val(info.FECHA_AUTORIZACION_CRONOGRAMA);
+                    $('#CARGO_AUTORIZACION_CRONOGRAMA').val(info.CARGO_AUTORIZACION_CRONOGRAMA);
+                    $('#NOMBRE_AUTORIZACION_CRONOGRAMA').val(info.NOMBRE_AUTORIZACION_CRONOGRAMA);
+                }
+                
+                $('#boton_autorizar_cronograma').html('Autorizar <i class="fa fa-save"></i>');
+                $('#boton_autorizar_cronograma_modal').html('Autorizar cronograma <i class="fa fa fa-gavel p-1"></i>');
+
+            } else {
+                $('#boton_autorizar_cronograma').html('Validar <i class="fa fa-save"></i>');
+                $('#boton_autorizar_cronograma_modal').html('Validar cronograma <i class="fa fa fa-gavel p-1"></i>');
+
+                $('#FECHA_VALIDACION_CRONOGRAMA').val(fechaActual);
+                $('#CARGO_VALIDACION_CRONOGRAMA').val(rolUsuario);
+                $('#NOMBRE_VALIDACION_CRONOGRAMA').val(Usuario);
+            }
+
+
+            //=================== CREAMOS Y CARGAMAOS TODA LA ESTRUCTURA DEL CRONOGRAMA ================================================
             $('#activity-list').html('')
+            dato = dato.data;
+
+            eventos = dato.map(actividad => ({
+                title: actividad.DESCRIPCION_ACTIVIDAD, 
+                start: `${actividad.FECHA_INICIO_ACTIVIDAD}T00:00:00`,  
+                end: `${actividad.FECHA_FIN_ACTIVIDAD}T17:00:00`, 
+                backgroundColor: actividad.COLOR_ACTIVIDAD,  
+                borderColor: '#FFFFFF',
+                extendedProps: {ID_ACTIVIDAD: actividad.ID_ACTIVIDAD} //Pasamos atributos adicionales
+            }));
 
             $.each(dato, function (index, actividad) {
 
@@ -4763,8 +4768,9 @@ function mostrarActividadesCronograma() {
                         <input type="hidden" class="form-control" id="DESCRIPCION_ACTIVIDAD_${actividad.ID_ACTIVIDAD}"  value="${actividad.DESCRIPCION_ACTIVIDAD}">
                         <input type="hidden" class="form-control" id="AGENTE_ID_ACTIVIDAD_${actividad.ID_ACTIVIDAD}"  value="${actividad.AGENTE_ACTIVIDAD_ID}">
                         <input type="hidden" class="form-control" id="PUNTOS_ACTIVIDAD_${actividad.ID_ACTIVIDAD}"  value="${actividad.PUNTOS_ACTIVIDAD}">
+                        <input type="hidden" class="form-control" id="COLOR_ACTIVIDAD_${actividad.ID_ACTIVIDAD}"  value="${actividad.COLOR_ACTIVIDAD}">
 
-                        <h5><i class="fa fa-star" aria-hidden="true"></i> ${actividad.DESCRIPCION_ACTIVIDAD}</h5>
+                        <h5 style="color: ${actividad.COLOR_ACTIVIDAD}"><i class="fa fa-star" aria-hidden="true"></i> ${actividad.DESCRIPCION_ACTIVIDAD}</h5>
                         <p> <i class="fa fa-calendar-check-o" aria-hidden="true"></i> Del: ${ actividad.FECHA_INICIO_ACTIVIDAD} al: ${actividad.FECHA_FIN_ACTIVIDAD}</p>
                         <div class="col-12" style="justify-content: end; display: flex;">
                             <button type="button" class="btn btn-warning btn-circle boton_editar" data-toggle="tooltip" data-placement="top" title="Editar actividad" onclick="editarActividad(${actividad.ID_ACTIVIDAD})"><i class="fa fa-pencil"></i></button>
@@ -4778,10 +4784,18 @@ function mostrarActividadesCronograma() {
 
             $('#activity-list').html(html)
 
+            //Cargamos el calendarion una vez tenemos todos los eventos
+            inicializarCalendario(eventos)
+            $('#boton_autorizar_cronograma_modal').prop('disabled', false)
+            $('#boton_nueva_actividad').prop('disabled', false)
+
 
         }, beforeSend: function (dato) {
 
             $('#activity-list').html('<div class="col-12 text-center justify-content-center" ><i class="fa fa-spin fa-spinner fa-5x"></i></div>')
+            $('#calendar').html('<div class="col-12 text-center justify-content-center"><h2>Calendario de actividades</h2><i class="fa fa-spin fa-spinner fa-5x"></i></div>')
+            $('#boton_autorizar_cronograma_modal').prop('disabled', true)
+            $('#boton_nueva_actividad').prop('disabled', true)
 
         },
         error: function (dato) {
@@ -4791,6 +4805,61 @@ function mostrarActividadesCronograma() {
     });//Fin ajax
 }
 
+
+function inicializarCalendario(eventos) {
+    
+    $('#calendar').html('')
+    var calendarEl = document.getElementById('calendar');
+    var calendar = new FullCalendar.Calendar(calendarEl, {
+        
+        height: 'auto',
+        headerToolbar: {
+            right: 'prev,next today',
+            center: 'title',
+            left: 'dayGridMonth,timeGridWeek,timeGridDay'
+        },
+        locale: 'es',
+        buttonText: {
+            month: 'Mes',
+            week: 'Semana',
+            day: 'Día'
+        },
+        displayEventTime: false,
+        initialView: 'dayGridMonth',
+        events: eventos,
+        dateClick: function (info) { //Evento cuando le damos click a una fecha en especifico
+            $(info.dayEl).css('cursor', 'pointer');
+            var fechaSeleccionada = info.date;
+
+            $('#form_actividad').each(function () {
+                this.reset();
+            });
+            // Rellenamos los datos almacenados
+            $('#ID_ACTIVIDAD').val(0)
+            $('#FECHA_INICIO_ACTIVIDAD').val(fechaSeleccionada.toISOString().split('T')[0])
+            $('#COLOR_ACTIVIDAD').val('#1E88E6')
+            $('#etiqueta-div').css('background-color', '#1E88E6');
+            // Abrir modal
+            $('#modal_actividades').modal({ backdrop: false });
+        },
+        eventClick: function(info) { //Evento para cuando le damos click a las fechas en el calendario
+            var evento = info.event;
+            editarActividad(evento.extendedProps.ID_ACTIVIDAD)
+        },
+        eventDidMount: function(info) { 
+            $(info.el).css('cursor', 'pointer');
+        }
+        
+    });
+    calendar.render();
+
+
+    $('.fc-dayGridMonth-button').css('background', '#0B3F64')
+    $('.fc-timeGridWeek-button').css('background', '#0B3F64')
+    $('.fc-timeGridDay-button').css('background', '#0B3F64')
+    $('.fc-prev-button').css('background', '#0B3F64')
+    $('.fc-next-button').css('background', '#0B3F64')
+}
 
 function eliminarActividad(ID) {
     swal({
@@ -4837,7 +4906,7 @@ function eliminarActividad(ID) {
                 }
             })
         }
-
+        return false;
     });//Fin ajax
 }
 
@@ -4856,8 +4925,53 @@ function editarActividad(ID) {
     $('#AGENTE_ACTIVIDAD_ID').val($(`#AGENTE_ID_ACTIVIDAD_${ID}`).val())
     $('#PUNTOS_ACTIVIDAD').val($(`#PUNTOS_ACTIVIDAD_${ID}`).val())
 
+    color = $(`#COLOR_ACTIVIDAD_${ID}`).val()
+    $('#COLOR_ACTIVIDAD').val(color)
+    $('#etiqueta-div').css('background-color', color);
+   
 
 
     // Abrir modal
     $('#modal_actividades').modal({ backdrop: false });
 }
+
+document.getElementById('etiqueta-div').addEventListener('click', function() {
+    var colorInput = document.getElementById('COLOR_ACTIVIDAD');
+
+    if (colorInput.style.display === 'none') {
+        colorInput.style.display = 'block';
+    } else {
+        colorInput.style.display = 'none';
+    }
+});
+
+
+document.getElementById('COLOR_ACTIVIDAD').addEventListener('input', function() {
+    var nuevoColor = this.value; 
+    document.getElementById('etiqueta-div').style.backgroundColor = nuevoColor;
+});
+
+
+document.addEventListener('click', function(event) {
+    var colorInput = document.getElementById('COLOR_ACTIVIDAD');
+    var etiquetaDiv = document.getElementById('etiqueta-div');
+
+    if (!colorInput.contains(event.target) && !etiquetaDiv.contains(event.target)) {
+        colorInput.style.display = 'none';
+    }
+});
+
+
+$("#boton_autorizar_cronograma_modal").click(function () {
+     // Borrar formulario
+    $('#form_autorizar').each(function () {
+        this.reset();
+    });
+
+    $('#ID_AUTORIZACION').val(0)
+    
+
+    // Abrir modal
+    $('#modal_autorizacion').modal({ backdrop: false });
+
+});

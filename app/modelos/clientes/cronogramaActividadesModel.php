@@ -16,6 +16,7 @@ class cronogramaActividadesModel extends Model
         'FECHA_INICIO_ACTIVIDAD',
         'FECHA_FIN_ACTIVIDAD',
         'AGENTE_ACTIVIDAD_ID',
-        'PUNTOS_ACTIVIDAD'
+        'PUNTOS_ACTIVIDAD',
+        'COLOR_ACTIVIDAD'
     ];
 }

@@ -13,17 +13,14 @@ use App\modelos\catalogos\Cat_pruebaModel;
 use App\modelos\clientes\contratoDocumentoCierre;
 use App\modelos\clientes\contratoAnexosModel;
 use App\modelos\clientes\cronogramaActividadesModel;
+use App\modelos\clientes\autorizacionCronogramaModel;
 use App\modelos\catalogos\TablaPantillaClientesModel;
 use App\modelos\recsensorial\catregionModel;
 use App\modelos\recsensorial\catsubdireccionModel;
 use App\modelos\recsensorial\catgerenciaModel;
 use App\modelos\recsensorial\catactivoModel;
-
-
 use App\modelos\catalogos\Cat_etiquetaModel;
 use App\modelos\catalogos\CatetiquetaopcionesModel; 
-
-
 use App\modelos\clientes\estructuraclientesModel;
 
 use DB;
@@ -85,14 +82,17 @@ class clienteController extends Controller
         if ($ID_PROYECTO == 0){
 
             $actividades = cronogramaActividadesModel::where('CONTRATO_ID', $ID_CONTRATO)->orderBy('FECHA_INICIO_ACTIVIDAD', 'ASC')->get();
+            $autorizado = autorizacionCronogramaModel::where('CONTRATO_ID', $ID_CONTRATO)->get();
 
         }else{
 
             $actividades = cronogramaActividadesModel::where('PROYECTO_ID', $ID_PROYECTO)->orderBy('FECHA_INICIO_ACTIVIDAD', 'ASC')->get();
+            $autorizado = autorizacionCronogramaModel::where('PROYECTO_ID', $ID_PROYECTO)->get();
 
         }
-
-        return response()->json($actividades);
+        $dato['data']  = $actividades;
+        $dato['autorizado']  = $autorizado;
+        return response()->json($dato);
 
     }
 
