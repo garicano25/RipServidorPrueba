@@ -3712,6 +3712,57 @@ $('.multisteps-form__progress-btn').click(async function()
             await tabla_conveniosPartidas(contrato_id, convenio_id);
 
             break;
+        case "steps_menu_tab3":
+            mostrarActividadesCronograma()
+            const eventos = [
+                {
+                    title: 'Actividad 1',   // Asignar título
+                    start: '2024-10-23T09:00:00',  // Fecha de inicio
+                    end: '2024-10-25T09:00:00'     // Fecha de fin
+                }
+            ];
+
+           
+
+            var calendarEl = document.getElementById('calendar');
+            var calendar = new FullCalendar.Calendar(calendarEl, {
+                
+                height: 'auto',
+                headerToolbar: {
+                    right: 'prev,next today',
+                    center: 'title',
+                    left: 'dayGridMonth,timeGridWeek,timeGridDay'
+                },
+                locale: 'es',
+                buttonText: {
+                    month: 'Mes',
+                    week: 'Semana',
+                    day: 'Día'
+                },
+                initialView: 'dayGridMonth',
+                events: eventos,
+                dateClick: function (info) {
+                    
+                    var fechaSeleccionada = info.date;
+                    
+
+                    $('#form_actividad').each(function () {
+                        this.reset();
+                    });
+
+                    // Rellenamos los datos almacenados
+                    $('#ID_ACTIVIDAD').val(0)
+                    $('#FECHA_INICIO_ACTIVIDAD').val(fechaSeleccionada.toISOString().split('T')[0])
+                    
+                    // Abrir modal
+                    $('#modal_actividades').modal({ backdrop: false });
+                }
+                
+            });
+            calendar.render();
+
+            break;
+        
         default:
             // alert(this.id);
             break;
@@ -4573,16 +4624,240 @@ $(document).ready(function() {
 });
 
 
-//================================================================ CRONOGRAMA DE ACTIVIDADES =============================================================
+//======================================= CRONOGRAMA DE ACTIVIDADES ==============================================
 
- document.addEventListener('DOMContentLoaded', function() {
-    var calendarEl = document.getElementById('calendar');
-    var calendar = new FullCalendar.Calendar(calendarEl, {
-        initialView: 'dayGridMonth'
+$("#boton_nueva_actividad").click(function () {
+
+    // Borrar formulario
+    $('#form_actividad').each(function () {
+        this.reset();
     });
-     calendar.render();
-     
-     
- });
-    
 
+    $('#ID_ACTIVIDAD').val(0)
+
+    // Abrir modal
+    $('#modal_actividades').modal({ backdrop: false });
+
+});
+
+
+$("#boton_guardar_actividad").click(function () {
+    // valida campos vacios
+    var valida = this.form.checkValidity();
+    if (valida) {
+        // Valida envio de datos
+        swal({
+            title: "¿Está seguro de agregar esta actividad al cronograma de trabajo?",
+            type: "info",
+            showCancelButton: true,
+            confirmButtonColor: "#DD6B55",
+            confirmButtonText: "Guardar!",
+            cancelButtonText: "Cancelar!",
+            closeOnConfirm: false,
+            closeOnCancel: false
+        }, function (isConfirm) {
+            if (isConfirm) {
+                // cerrar msj confirmacion
+                swal.close();
+
+                // enviar datos
+                $('#form_actividad').ajaxForm({
+                    dataType: 'json',
+                    type: 'POST',
+                    url: '/cliente',
+                    data: {
+                        opcion: 12, //CRONOGRAMA DE TRABAJO
+                        CONTRATO_ID: contrato_id,
+                        PROYECTO_ID: 0
+                    },
+                    resetForm: false,
+                    success: function (dato) {
+                        
+                        // Mostramos las actividades del cornograma
+                        mostrarActividadesCronograma()
+
+                        // mensaje
+                        swal({
+                            title: "Actividad guardada correctamente",
+                            text: "Anexo agregado",
+                            type: "success", // warning, error, success, info
+                            buttons: {
+                                visible: false, // true , false
+                            },
+                            timer: 1500,
+                            showConfirmButton: false
+                        });
+
+                        // actualiza boton
+                        $('#boton_guardar_actividad').html('Guardar <i class="fa fa-save"></i>');
+                        $('#boton_guardar_actividad').attr('disabled', false);
+
+                        // cerrar modal
+                        $('#modal_actividades').modal('hide');
+                    },
+                    beforeSend: function () {
+                        $('#boton_guardar_actividad').html('Guardando <i class="fa fa-spin fa-spinner"></i>');
+                        $('#boton_guardar_actividad').attr('disabled', true);
+                    },
+                    error: function (dato) {
+                        // actualiza boton
+                        $('#boton_guardar_actividad').html('Guardar <i class="fa fa-save"></i>');
+                        $('#boton_guardar_actividad').attr('disabled', false);
+
+                        // mensaje
+                        swal({
+                            title: "Error",
+                            text: "" + dato.msj,
+                            type: "error", // warning, error, success, info
+                            buttons: {
+                                visible: false, // true , false
+                            },
+                            timer: 1500,
+                            showConfirmButton: false
+                        });
+                        return false;
+                    }
+                }).submit();
+                return false;
+            }
+            else {
+                // mensaje
+                swal({
+                    title: "Cancelado",
+                    text: "",
+                    type: "error", // warning, error, success, info
+                    buttons: {
+                        visible: false, // true , false
+                    },
+                    timer: 500,
+                    showConfirmButton: false
+                });
+            }
+        });
+        return false;
+    }
+});
+
+function mostrarActividadesCronograma() {
+    
+    var html = "";
+    $.ajax({
+        type: "GET",
+        dataType: "json",
+        url: "/obtenerActividadesCronograma/" + contrato_id + "/" + 0,
+        data: {},
+        cache: false,
+        success: function (dato) {
+
+            $('#activity-list').html('')
+
+            $.each(dato, function (index, actividad) {
+
+                html += `
+                <div class="card actividades-card">
+                    <div class="card-body">
+
+                        <input type="hidden" class="form-control" id="ID_ACTIVIDAD_${actividad.ID_ACTIVIDAD}"  value="${actividad.ID_ACTIVIDAD}">
+                        <input type="hidden" class="form-control" id="FECHA_INICIO_ACTIVIDAD_${actividad.ID_ACTIVIDAD}"  value="${actividad.FECHA_INICIO_ACTIVIDAD}">
+                        <input type="hidden" class="form-control" id="FECHA_FIN_ACTIVIDAD_${actividad.ID_ACTIVIDAD}"  value="${actividad.FECHA_FIN_ACTIVIDAD}">
+                        <input type="hidden" class="form-control" id="DESCRIPCION_ACTIVIDAD_${actividad.ID_ACTIVIDAD}"  value="${actividad.DESCRIPCION_ACTIVIDAD}">
+                        <input type="hidden" class="form-control" id="AGENTE_ID_ACTIVIDAD_${actividad.ID_ACTIVIDAD}"  value="${actividad.AGENTE_ACTIVIDAD_ID}">
+                        <input type="hidden" class="form-control" id="PUNTOS_ACTIVIDAD_${actividad.ID_ACTIVIDAD}"  value="${actividad.PUNTOS_ACTIVIDAD}">
+
+                        <h5><i class="fa fa-star" aria-hidden="true"></i> ${actividad.DESCRIPCION_ACTIVIDAD}</h5>
+                        <p> <i class="fa fa-calendar-check-o" aria-hidden="true"></i> Del: ${ actividad.FECHA_INICIO_ACTIVIDAD} al: ${actividad.FECHA_FIN_ACTIVIDAD}</p>
+                        <div class="col-12" style="justify-content: end; display: flex;">
+                            <button type="button" class="btn btn-warning btn-circle boton_editar" data-toggle="tooltip" data-placement="top" title="Editar actividad" onclick="editarActividad(${actividad.ID_ACTIVIDAD})"><i class="fa fa-pencil"></i></button>
+
+                            <button type="button" class="btn btn-danger btn-circle boton_eliminar mx-2" data-toggle="tooltip" data-placement="top" title="Eliminar actividad" onclick="eliminarActividad(${actividad.ID_ACTIVIDAD})" ><i class="fa fa-trash"></i></button>
+                        </div>
+                    </div>
+                </div>
+                `
+            });
+
+            $('#activity-list').html(html)
+
+
+        }, beforeSend: function (dato) {
+
+            $('#activity-list').html('<div class="col-12 text-center justify-content-center" ><i class="fa fa-spin fa-spinner fa-5x"></i></div>')
+
+        },
+        error: function (dato) {
+            // alert('Error: '+dato.msj);
+            return false;
+        }
+    });//Fin ajax
+}
+
+
+function eliminarActividad(ID) {
+    swal({
+        title: "¿Está seguro de eliminar esta actividad?",
+        text: "Se eliminara del cronograma de trabajo",
+        type: "info",
+        showCancelButton: true,
+        confirmButtonColor: "#DD6B55",
+        confirmButtonText: "Eliminar!",
+        cancelButtonText: "Cancelar!",
+        closeOnConfirm: false,
+        closeOnCancel: false
+    }, function (isConfirm) {
+        if (isConfirm) {
+            // cerrar msj confirmacion
+            swal.close();
+            $.ajax({
+                type: "GET",
+                dataType: "json",
+                url: "/eliminarActividadCronograma/" + ID,
+                data: {},
+                cache: false,
+                success: function (dato) {
+
+                    // Refrescanos las actividades
+                    mostrarActividadesCronograma();
+
+                    // mensaje
+                    swal({
+                        title: "Actividad eliminada correctamente",
+                        text: "La lista de actividades sera recargada",
+                        type: "success", // warning, error, success, info
+                        buttons: {
+                            visible: false, // true , false
+                        },
+                        timer: 1500,
+                        showConfirmButton: false
+                    });
+
+                },
+                error: function (dato) {
+                    // alert('Error: '+dato.msj);
+                    return false;
+                }
+            })
+        }
+
+    });//Fin ajax
+}
+
+
+function editarActividad(ID) {
+    // Borrar formulario
+    $('#form_actividad').each(function () {
+        this.reset();
+    });
+
+    // Rellenamos los datos almacenados
+    $('#ID_ACTIVIDAD').val($(`#ID_ACTIVIDAD_${ID}`).val())
+    $('#FECHA_INICIO_ACTIVIDAD').val($(`#FECHA_INICIO_ACTIVIDAD_${ID}`).val())
+    $('#FECHA_FIN_ACTIVIDAD').val($(`#FECHA_FIN_ACTIVIDAD_${ID}`).val())
+    $('#DESCRIPCION_ACTIVIDAD').val($(`#DESCRIPCION_ACTIVIDAD_${ID}`).val())
+    $('#AGENTE_ACTIVIDAD_ID').val($(`#AGENTE_ID_ACTIVIDAD_${ID}`).val())
+    $('#PUNTOS_ACTIVIDAD').val($(`#PUNTOS_ACTIVIDAD_${ID}`).val())
+
+
+
+    // Abrir modal
+    $('#modal_actividades').modal({ backdrop: false });
+}

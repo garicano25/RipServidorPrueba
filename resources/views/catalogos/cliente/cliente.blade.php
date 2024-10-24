@@ -857,74 +857,41 @@
                                                 <h2 style="color: #ffff; margin: 0;"><i class="fa fa-calendar" aria-hidden="true"></i> Cronograma de trabajo </h2>
 
                                                 <button type="button" class="btn btn-secondary waves-effect waves-light boton_modulocliente contrato" style="margin-left: auto;" id="boton_nueva_actividad">
-                                                    Actividad <i class="fa fa-calendar-plus-o p-1"></i>
+                                                    Nueva Actividad <i class="fa fa-calendar-plus-o p-1"></i>
                                                 </button>
                                             </ol>
                                             <br>
                                             <div class="row">
                                                 <div class="col-4">
-                                                    <div class="card" style="max-height: 500px; overflow-y: auto;">
+                                                    <div class="card" style="max-height: 600px; overflow-y: auto;">
                                                         <div class="card-body">
                                                             <h2 class="text-center">Actividades</h2>
+                                                            <style>
+                                                                .actividades-card {
+                                                                    transition: transform 0.3s ease, box-shadow 0.3s ease;
+                                                                }
 
-                                                            <div class="activity-list">
-                                                                <!-- Aquí puedes agregar varias cards -->
-                                                                <div class="card">
-                                                                    <div class="card-body">
-                                                                        Actividad 1
-                                                                    </div>
-                                                                </div>
-                                                                <div class="card">
-                                                                    <div class="card-body">
-                                                                        Actividad 2
-                                                                    </div>
-                                                                </div>
-                                                                <div class="card">
-                                                                    <div class="card-body">
-                                                                        Actividad 3
-                                                                    </div>
-                                                                </div>
-                                                                <div class="card">
-                                                                    <div class="card-body">
-                                                                        Actividad 1
-                                                                    </div>
-                                                                </div>
-                                                                <div class="card">
-                                                                    <div class="card-body">
-                                                                        Actividad 2
-                                                                    </div>
-                                                                </div>
-                                                                <div class="card">
-                                                                    <div class="card-body">
-                                                                        Actividad 3
-                                                                    </div>
-                                                                </div>
-                                                                <div class="card">
-                                                                    <div class="card-body">
-                                                                        Actividad 1
-                                                                    </div>
-                                                                </div>
-                                                                <div class="card">
-                                                                    <div class="card-body">
-                                                                        Actividad 2
-                                                                    </div>
-                                                                </div>
-                                                                <div class="card">
-                                                                    <div class="card-body">
-                                                                        Actividad 3
-                                                                    </div>
-                                                                </div>
-                                                                <!-- Agrega más actividades aquí -->
+                                                                .actividades-card:hover {
+                                                                    transform: scale(1.03);
+                                                                    box-shadow: 0px 4px 20px rgba(0, 0, 0, 0.2);
+                                                                }
+
+                                                            </style>
+
+                                                            <div id="activity-list">
+
                                                             </div>
+
                                                         </div>
                                                     </div>
                                                 </div>
-                                               
-                                                <div class="col-8">
-                                                    <div class="card">
-                                                        <div class="card-body">
-                                                            <div id='calendar'></div>
 
+                                                <div class="col-8">
+                                                    <div class="card" style="height: 100%;">
+                                                        <div class="card-body">
+                                                            <div id='calendar'>
+
+                                                            </div>
                                                         </div>
                                                     </div>
                                                 </div>
@@ -949,6 +916,83 @@
 <!-- ============================================================== -->
 <!-- End PAge Content -->
 <!-- ============================================================== -->
+
+<!-- Modal actividades del cronograma -->
+<div id="modal_actividades" class="modal fade bs-example-modal-lg" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" style="display: none;">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <form enctype="multipart/form-data" method="post" name="form_actividad" id="form_actividad">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                    <h4 class="modal-title">Crear nueva actividad</h4>
+                </div>
+                <div class="modal-body">
+                    <div class="row">
+                        <div class="col-12">
+                            {!! csrf_field() !!}
+                            <input type="hidden" class="form-control" id="ID_ACTIVIDAD" name="ID_ACTIVIDAD" value="0">
+                        </div>
+
+
+                        <div class="col-6">
+                            <div class="form-group">
+                                <label>Fecha Inicio *</label>
+                                <div class="input-group">
+                                    <input type="text" class="form-control mydatepicker" placeholder="aaaa-mm-dd" id="FECHA_INICIO_ACTIVIDAD" name="FECHA_INICIO_ACTIVIDAD" required>
+                                    <span class="input-group-addon"><i class="icon-calender"></i></span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="col-6">
+                            <div class="form-group">
+                                <label>Fecha Fin *</label>
+                                <div class="input-group">
+                                    <input type="text" class="form-control mydatepicker" placeholder="aaaa-mm-dd" id="FECHA_FIN_ACTIVIDAD" name="FECHA_FIN_ACTIVIDAD" required>
+                                    <span class="input-group-addon"><i class="icon-calender"></i></span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="col-12">
+                            <div class="form-group">
+                                <label>Descripción de la actividad *</label>
+                                <textarea class="form-control" style="text-align: center;" rows="4" name="DESCRIPCION_ACTIVIDAD" id="DESCRIPCION_ACTIVIDAD" required></textarea>
+                            </div>
+                        </div>
+
+                        <div class="col-6">
+                            <label>Agente</label>
+                            <select class="form-control" name="AGENTE_ACTIVIDAD_ID" id="AGENTE_ACTIVIDAD_ID">
+                                <option value=""></option>
+                                @foreach($catpruebas as $dato)
+                                <option value="{{$dato->id}}">[{{$dato->catPrueba_Tipo}}] {{$dato->catPrueba_Nombre}}</option>
+                                @endforeach
+                            </select>
+                        </div>
+
+                        <div class="col-6">
+                            <div class="form-group">
+                                <label>Puntos</label>
+                                <input type="number" class="form-control" name="PUNTOS_ACTIVIDAD" id="PUNTOS_ACTIVIDAD">
+                            </div>
+                        </div>
+
+
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default waves-effect" data-dismiss="modal">Cerrar</button>
+                    @if(auth()->user()->hasRoles(['Superusuario', 'Administrador']))
+                    <button type="submit" class="btn btn-danger waves-effect waves-light boton_modulocliente" id="boton_guardar_actividad">Guardar <i class="fa fa-save"></i></button>
+                    @endif
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+<!-- /.Modal actividades del cronograma -->
+
 
 <!-- Modal convenios -->
 <div id="modal_convenio" class="modal fade bs-example-modal-lg" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" style="display: none;">

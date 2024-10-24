@@ -81,6 +81,10 @@ Route::get('usuarioeliminar/{usuario_id}/{usuario_tipo}/{empleado_id}', ['as' =>
 
 Route::get('/opciones/{etiquetaId}', ['as' => 'cliente.obteneretiquetas', 'uses' => 'clientes\clienteController@obteneretiquetas']);
 
+Route::get('obtenerActividadesCronograma/{ID_CONTRATO}/{ID_PROYECTO}', ['as' => 'cliente.obtenerActividadesCronograma', 'uses' => 'clientes\clienteController@obtenerActividadesCronograma']);
+
+Route::get('eliminarActividadCronograma/{id}', ['as' => 'eliminarActividadCronograma', 'uses' => 'clientes\clienteController@eliminarActividadCronograma']);
+
 Route::get('/estructura-cliente/{clienteId}', ['as' => 'cliente.obtenerEstructuraCliente', 'uses' => 'clientes\clienteController@obtenerEstructuraCliente']);
 
 
