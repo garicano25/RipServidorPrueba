@@ -893,9 +893,7 @@ class clienteController extends Controller
      */
     public function store(Request $request)
     {
-        // return response()->json([$request->all()], 500);
-        // print_r($request->all());
-        // exit();
+        
         try {
             // dd($request->all());
 
@@ -1237,6 +1235,28 @@ class clienteController extends Controller
 
                 return response()->json($dato);
             }
+
+            if (($request->opcion + 0) == 13) // AUTORIZACION Y VALIDACION DEL CRONOGRAMA DE ACTIVIDAD
+            {
+                if (($request->ID_AUTORIZACION + 0) == 0) {
+
+
+                    autorizacionCronogramaModel::create($request->all());
+
+                    $dato['msj'] = 'Informacion guardada correctamente';
+                    
+                } else {
+
+                    $partida = autorizacionCronogramaModel::findOrFail($request->ID_AUTORIZACION);
+
+                    $partida->update($request->all());
+
+                    $dato['msj'] = 'Informacion actualizada correctamente';
+                }
+
+                return response()->json($dato);
+            }
+
         } catch (Exception $e) {
 
             return response()->json('Error al guardar CLIENTE');

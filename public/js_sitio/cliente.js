@@ -4713,30 +4713,57 @@ function mostrarActividadesCronograma() {
                 
                 info = dato.autorizado[0]
             
+                $('#ID_AUTORIZACION').val(info.ID_AUTORIZACION);
                 $('#FECHA_VALIDACION_CRONOGRAMA').val(info.FECHA_VALIDACION_CRONOGRAMA);
                 $('#CARGO_VALIDACION_CRONOGRAMA').val(info.CARGO_VALIDACION_CRONOGRAMA);
                 $('#NOMBRE_VALIDACION_CRONOGRAMA').val(info.NOMBRE_VALIDACION_CRONOGRAMA);
 
+                //Mostramos la informacion
+                $('#divAutorizacion').removeClass('d-none').addClass('d-block');
+                $('#infoValidacion').removeClass('d-none').addClass('d-block');
+                $('#fechaValidacion').text(info.FECHA_VALIDACION_CRONOGRAMA);
+                $('#cargoValido').text(info.CARGO_VALIDACION_CRONOGRAMA);
+                $('#nombreValido').text(info.NOMBRE_VALIDACION_CRONOGRAMA);
+
+
                 if (info.NOMBRE_AUTORIZACION_CRONOGRAMA == null || info.NOMBRE_AUTORIZACION_CRONOGRAMA == '') {
+
+                    $('#infoAutorizacion').removeClass('d-block').addClass('d-none');
                     $('#FECHA_AUTORIZACION_CRONOGRAMA').val(fechaActual);
                     $('#CARGO_AUTORIZACION_CRONOGRAMA').val(rolUsuario);
                     $('#NOMBRE_AUTORIZACION_CRONOGRAMA').val(Usuario);
+                    $('.btn_cronograma').css('display', 'block');
 
 
                 } else {
+                    
+                    $('#infoAutorizacion').removeClass('d-none').addClass('d-block');
+                    $('#fechaAutorizo').text(info.FECHA_AUTORIZACION_CRONOGRAMA);
+                    $('#cargoAutorizo').text(info.CARGO_AUTORIZACION_CRONOGRAMA);
+                    $('#nombreAutorizo').text(info.NOMBRE_AUTORIZACION_CRONOGRAMA);
 
                     $('#FECHA_AUTORIZACION_CRONOGRAMA').val(info.FECHA_AUTORIZACION_CRONOGRAMA);
                     $('#CARGO_AUTORIZACION_CRONOGRAMA').val(info.CARGO_AUTORIZACION_CRONOGRAMA);
                     $('#NOMBRE_AUTORIZACION_CRONOGRAMA').val(info.NOMBRE_AUTORIZACION_CRONOGRAMA);
+                    $('.btn_cronograma').css('display', 'none');
+
                 }
                 
                 $('#boton_autorizar_cronograma').html('Autorizar <i class="fa fa-save"></i>');
                 $('#boton_autorizar_cronograma_modal').html('Autorizar cronograma <i class="fa fa fa-gavel p-1"></i>');
 
             } else {
+
+                $('#form_autorizado').each(function () {
+                    this.reset();
+                });
+
+                $('#divAutorizacion').removeClass('d-block').addClass('d-none');
                 $('#boton_autorizar_cronograma').html('Validar <i class="fa fa-save"></i>');
                 $('#boton_autorizar_cronograma_modal').html('Validar cronograma <i class="fa fa fa-gavel p-1"></i>');
-
+                $('.btn_cronograma').css('display', 'block');
+                
+                $('#ID_AUTORIZACION').val(0);
                 $('#FECHA_VALIDACION_CRONOGRAMA').val(fechaActual);
                 $('#CARGO_VALIDACION_CRONOGRAMA').val(rolUsuario);
                 $('#NOMBRE_VALIDACION_CRONOGRAMA').val(Usuario);
@@ -4744,10 +4771,12 @@ function mostrarActividadesCronograma() {
 
 
             //=================== CREAMOS Y CARGAMAOS TODA LA ESTRUCTURA DEL CRONOGRAMA ================================================
-            $('#activity-list').html('')
-            dato = dato.data;
 
-            eventos = dato.map(actividad => ({
+            $('#activity-list').html('')
+            datoInfo = dato.data;
+
+            //Generamos los eventos del cronograma
+            eventos = datoInfo.map(actividad => ({
                 title: actividad.DESCRIPCION_ACTIVIDAD, 
                 start: `${actividad.FECHA_INICIO_ACTIVIDAD}T00:00:00`,  
                 end: `${actividad.FECHA_FIN_ACTIVIDAD}T17:00:00`, 
@@ -4756,8 +4785,33 @@ function mostrarActividadesCronograma() {
                 extendedProps: {ID_ACTIVIDAD: actividad.ID_ACTIVIDAD} //Pasamos atributos adicionales
             }));
 
-            $.each(dato, function (index, actividad) {
 
+            //Creamos la estructura de las actividades y el cronograma
+            $.each(datoInfo, function (index, actividad) {
+
+                //Validamos el los botones de edicion  eliminacion de las actividaes
+                if (Array.isArray(dato.autorizado) && dato.autorizado.length > 0) { 
+
+                    
+                    if (info.NOMBRE_AUTORIZACION_CRONOGRAMA == null ) {
+                        
+                        btn_editar = `<button type="button" class="btn btn-warning btn-circle boton_editar" data-toggle="tooltip" data-placement="top" title="Editar actividad" onclick="editarActividad(${actividad.ID_ACTIVIDAD})"><i class="fa fa-pencil"></i></button>`
+                        btn_eliminar = `<button type="button" class="btn btn-danger btn-circle boton_eliminar mx-2" data-toggle="tooltip" data-placement="top" title="Eliminar actividad" onclick="eliminarActividad(${actividad.ID_ACTIVIDAD})" ><i class="fa fa-trash"></i></button>`
+
+                    } else {
+
+                        btn_editar = ''   
+                        btn_eliminar = ''
+    
+                    }
+
+                } else {
+
+                    btn_editar = `<button type="button" class="btn btn-warning btn-circle boton_editar" data-toggle="tooltip" data-placement="top" title="Editar actividad" onclick="editarActividad(${actividad.ID_ACTIVIDAD})"><i class="fa fa-pencil"></i></button>`
+                    btn_eliminar = `<button type="button" class="btn btn-danger btn-circle boton_eliminar mx-2" data-toggle="tooltip" data-placement="top" title="Eliminar actividad" onclick="eliminarActividad(${actividad.ID_ACTIVIDAD})" ><i class="fa fa-trash"></i></button>`
+                }
+
+                //Creamos el contenido de las actividades y el calendario
                 html += `
                 <div class="card actividades-card">
                     <div class="card-body">
@@ -4773,9 +4827,8 @@ function mostrarActividadesCronograma() {
                         <h5 style="color: ${actividad.COLOR_ACTIVIDAD}"><i class="fa fa-star" aria-hidden="true"></i> ${actividad.DESCRIPCION_ACTIVIDAD}</h5>
                         <p> <i class="fa fa-calendar-check-o" aria-hidden="true"></i> Del: ${ actividad.FECHA_INICIO_ACTIVIDAD} al: ${actividad.FECHA_FIN_ACTIVIDAD}</p>
                         <div class="col-12" style="justify-content: end; display: flex;">
-                            <button type="button" class="btn btn-warning btn-circle boton_editar" data-toggle="tooltip" data-placement="top" title="Editar actividad" onclick="editarActividad(${actividad.ID_ACTIVIDAD})"><i class="fa fa-pencil"></i></button>
-
-                            <button type="button" class="btn btn-danger btn-circle boton_eliminar mx-2" data-toggle="tooltip" data-placement="top" title="Eliminar actividad" onclick="eliminarActividad(${actividad.ID_ACTIVIDAD})" ><i class="fa fa-trash"></i></button>
+                            ${btn_editar}
+                            ${btn_eliminar}
                         </div>
                     </div>
                 </div>
@@ -4883,9 +4936,10 @@ function eliminarActividad(ID) {
                 data: {},
                 cache: false,
                 success: function (dato) {
-
-                    // Refrescanos las actividades
+                        
+                    // Refrescanos las actividades 
                     mostrarActividadesCronograma();
+                      
 
                     // mensaje
                     swal({
@@ -4963,15 +5017,106 @@ document.addEventListener('click', function(event) {
 
 
 $("#boton_autorizar_cronograma_modal").click(function () {
-     // Borrar formulario
-    $('#form_autorizar').each(function () {
-        this.reset();
-    });
-
-    $('#ID_AUTORIZACION').val(0)
     
-
     // Abrir modal
     $('#modal_autorizacion').modal({ backdrop: false });
 
+});
+
+
+$("#boton_autorizar_cronograma").click(function () {
+    // valida campos vacios
+    var valida = this.form.checkValidity();
+    if (valida) {
+        // Valida envio de datos
+        swal({
+            title: "¿Está seguro de realizar esta acción?",
+            type: "info",
+            showCancelButton: true,
+            confirmButtonColor: "#DD6B55",
+            confirmButtonText: "Guardar!",
+            cancelButtonText: "Cancelar!",
+            closeOnConfirm: false,
+            closeOnCancel: false
+        }, function (isConfirm) {
+            if (isConfirm) {
+                // cerrar msj confirmacion
+                swal.close();
+
+                // enviar datos
+                $('#form_autorizado').ajaxForm({
+                    dataType: 'json',
+                    type: 'POST',
+                    url: '/cliente',
+                    data: {
+                        opcion: 13, //Autoziar o Validar cronograma
+                        CONTRATO_ID: contrato_id,
+                        PROYECTO_ID: 0
+                    },
+                    resetForm: false,
+                    success: function (dato) {
+                        
+                        // Refrescanos las actividades cuando el cronograma sea autorizado
+                        mostrarActividadesCronograma();
+
+                        // mensaje
+                        swal({
+                            title: "Información guardada correctamente",
+                            text: "Cronograma correctamente guardado",
+                            type: "success", // warning, error, success, info
+                            buttons: {
+                                visible: false, // true , false
+                            },
+                            timer: 1500,
+                            showConfirmButton: false
+                        });
+
+                        // actualiza boton
+                        $('#boton_autorizar_cronograma').html('Guardar <i class="fa fa-save"></i>');
+                        $('#boton_autorizar_cronograma').attr('disabled', false);
+
+                        // cerrar modal
+                        $('#modal_autorizacion').modal('hide');
+                    },
+                    beforeSend: function () {
+                        $('#boton_autorizar_cronograma').html('Guardando <i class="fa fa-spin fa-spinner"></i>');
+                        $('#boton_autorizar_cronograma').attr('disabled', true);
+                    },
+                    error: function (dato) {
+                        // actualiza boton
+                        $('#boton_autorizar_cronograma').html('Guardar <i class="fa fa-save"></i>');
+                        $('#boton_autorizar_cronograma').attr('disabled', false);
+
+                        // mensaje
+                        swal({
+                            title: "Error",
+                            text: "" + dato.msj,
+                            type: "error", // warning, error, success, info
+                            buttons: {
+                                visible: false, // true , false
+                            },
+                            timer: 1500,
+                            showConfirmButton: false
+                        });
+                        return false;
+                    }
+                }).submit();
+                return false;
+            }
+            else {
+                // mensaje
+                swal({
+                    title: "Cancelado",
+                    text: "",
+                    type: "error", // warning, error, success, info
+                    buttons: {
+                        visible: false, // true , false
+                    },
+                    timer: 500,
+                    showConfirmButton: false
+                });
+            }
+        });
+        return false;
+    }
 });

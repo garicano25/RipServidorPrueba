@@ -864,7 +864,42 @@
                                                     Validar o Autorizar cronograma <i class="fa fa fa-gavel p-1"></i>
                                                 </button>
                                             </ol>
-                                            <br>
+                                            <div class="row mt-3 mb-1">
+                                                <div class="col-12 d-none" id="divAutorizacion">
+                                                    <div class="card">
+                                                        <div class="car-body">
+                                                            <div class="row p-2">
+                                                                <div class="col-12 d-none" id="infoValidacion">
+                                                                    <div class="row mx-2">
+                                                                        <div class="col-4">
+                                                                            <span style="color:#0B3F64">Fecha de validación : </span><span id="fechaValidacion"></span>
+                                                                        </div>
+                                                                        <div class="col-4">
+                                                                            <span style="color:#0B3F64">Cargo de quien valido : </span><span id="cargoValido"></span>
+                                                                        </div>
+                                                                        <div class="col-4">
+                                                                            <span style="color:#0B3F64">Nombre de quien valido : </span><span id="nombreValido"></span>
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                                <div class="col-12 d-none" id="infoAutorizacion">
+                                                                    <div class="row mx-2">
+                                                                        <div class="col-4">
+                                                                            <span style="color: #94B732;">Fecha de autorización : </span><span id="fechaAutorizo"></span>
+                                                                        </div>
+                                                                        <div class="col-4">
+                                                                            <span style="color: #94B732;">Cargo de quien autorizo : </span><span id="cargoAutorizo"></span>
+                                                                        </div>
+                                                                        <div class="col-4">
+                                                                            <span style="color: #94B732;">Nombre de quien autorizo : </span><span id="nombreAutorizo"></span>
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
                                             <div class="row">
                                                 <div class="col-4">
                                                     <div class="card" style="max-height: 625px; overflow-y: auto;">
@@ -925,7 +960,7 @@
 <div id="modal_autorizacion" class="modal fade bs-example-modal-lg" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" style="display: none;">
     <div class="modal-dialog modal-lg">
         <div class="modal-content">
-            <form enctype="multipart/form-data" method="post" name="form_actividad" id="form_actividad">
+            <form enctype="multipart/form-data" method="post" name="form_autorizado" id="form_autorizado">
                 <div class="modal-header">
                     <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
                     <h4 class="modal-title">Validación y autorización del cronograma de trabajo</h4>
@@ -991,7 +1026,7 @@
                 <div class="modal-footer">
                     <button type="button" class="btn btn-default waves-effect" data-dismiss="modal">Cerrar</button>
                     @if(auth()->user()->hasRoles(['Superusuario', 'Administrador']))
-                    <button type="submit" class="btn btn-danger waves-effect waves-light boton_modulocliente" id="boton_autorizar_cronograma"> Guardar <i class="fa fa-save"></i></button>
+                    <button type="submit" class="btn btn-danger waves-effect waves-light boton_modulocliente btn_cronograma" id="boton_autorizar_cronograma"> Guardar <i class="fa fa-save"></i></button>
                     @endif
                 </div>
             </form>
@@ -1078,7 +1113,7 @@
                 <div class="modal-footer">
                     <button type="button" class="btn btn-default waves-effect" data-dismiss="modal">Cerrar</button>
                     @if(auth()->user()->hasRoles(['Superusuario', 'Administrador']))
-                    <button type="submit" class="btn btn-danger waves-effect waves-light boton_modulocliente" id="boton_guardar_actividad">Guardar <i class="fa fa-save"></i></button>
+                    <button type="submit" class="btn btn-danger waves-effect waves-light boton_modulocliente btn_cronograma" id="boton_guardar_actividad">Guardar <i class="fa fa-save"></i></button>
                     @endif
                 </div>
             </form>
@@ -1665,9 +1700,9 @@
 <!-- VISOR-MODAL -->
 <!-- ============================================================== -->
 @php
-    $rolUsuario = auth()->user()->roles->first() ? auth()->user()->roles->first()->rol_Nombre : null;
-    $empleado = auth()->user()->empleado;
-    $nombreCompleto = $empleado ? $empleado->empleado_nombre . ' ' . $empleado->empleado_apellidopaterno . ' ' . $empleado->empleado_apellidomaterno : '';
+$rolUsuario = auth()->user()->roles->first() ? auth()->user()->roles->first()->rol_Nombre : null;
+$empleado = auth()->user()->empleado;
+$nombreCompleto = $empleado ? $empleado->empleado_nombre . ' ' . $empleado->empleado_apellidopaterno . ' ' . $empleado->empleado_apellidomaterno : '';
 @endphp
 
 <script>
