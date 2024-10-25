@@ -114,7 +114,8 @@ use Illuminate\Support\Str;
     {{-- @if(request()->is('proyectos')) --}}
 
     @if(request()->is('proyectos') || request()->is('ejecucion') || request()->is('informes') || request()->is('programa'))
-
+    <!-- FullCalendar CSS -->
+    <link href='https://cdn.jsdelivr.net/npm/fullcalendar@6.1.4/main.min.css' rel='stylesheet' />
     <!-- form_wizard_stps -->
     <link href="/assets/plugins/form_wizard_steps_bootstrap/form_wizard_style.css" rel="stylesheet">
     </link>
@@ -778,6 +779,9 @@ use Illuminate\Support\Str;
     <script src="/assets/plugins/Magnific-Popup-master/dist/jquery.magnific-popup-init.js"></script>
     {{-- Select search filter --}}
     <script src="/assets/plugins/select-search/selectize.js" type="text/javascript"></script>
+    <!-- FullCalendar JS -->
+    <script src='https://cdn.jsdelivr.net/npm/fullcalendar@6.1.15/index.global.min.js'></script>
+    <script src="https://cdn.jsdelivr.net/npm/@fullcalendar/multimonth@6.1.15/index.global.min.js"></script>
     {{-- pagina --}}
     <script src="/js_sitio/proyecto.js?v=2.0"></script>
     @endif
