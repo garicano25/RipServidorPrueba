@@ -482,21 +482,20 @@ function obtenerCaracteristica() {
                 $('#SO2').prop('checked', caracteristicas.SO2 === 1);
                 $('#Formaldehídos').prop('checked', caracteristicas.Formaldehídos === 1);
 
-
                 if (response.ID_CAI_INFORMES) {
                     $('#ID_CAI_INFORMES').val(response.ID_CAI_INFORMES);  
                 } else {
                     $('#ID_CAI_INFORMES').val('');  
                 }
-            } else {
-                alert(response.message);
             }
+            // Si el status es error, no se realiza ninguna acción ni se muestra mensaje
         },
         error: function() {
-            alert('Ocurrió un error al obtener las características del proyecto.');
+            // No se muestra ningún mensaje en caso de error
         }
     });
 }
+
 
 
 
@@ -557,6 +556,19 @@ $("#botonguardar_reporte_evaluaraire").click(function(event) {
                             showConfirmButton: false
                         });
 
+
+						if ($('#bioaerosoles').is(':checked')) {
+                            $('#BIOAEROSOLES_AIRE_1').css('display', 'inline-block');
+                            $('#BIOAEROSOLES_AIRE_3').css('display', 'inline-block');
+                        } else {
+                            menureporte_estado('menureporte_7_1', 1);
+                            $('#BIOAEROSOLES_AIRE_1').css('display', 'none');
+                            $('#BIOAEROSOLES_AIRE_3').css('display', 'none');
+                        }
+
+
+						
+
                         $('#botonguardar_reporte_evaluaraire').html('Guardar características de aire <i class="fa fa-save"></i>');
                         $('#botonguardar_reporte_evaluaraire').attr('disabled', false);
                     },
@@ -602,21 +614,132 @@ $("#botonguardar_reporte_evaluaraire").click(function(event) {
 
 
 
-// function activarMenusSiempreActivos() {
-//     menureporte_estado('menureporte_7_1', 1);
-//     menureporte_estado('menureporte_7_2', 1);
-//     menureporte_estado('menureporte_7_3', 1);
-//     menureporte_estado('menureporte_7_4', 1);
-//     menureporte_estado('menureporte_7_5', 1);
-//     menureporte_estado('menureporte_7_6', 1);
-//     menureporte_estado('menureporte_7_7', 1);
-// }
-
-
-// activarMenusSiempreActivos();
 
 
 
+$('#bioaerosoles').change(function() {
+    if ($(this).is(':checked')) {
+        $('#BIOAEROSOLES_AIRE_1').css('display', 'table-row');
+        $('#BIOAEROSOLES_AIRE_3').css('display', 'inline-block');
+        $('#reporteaireevaluacion_ct, #reporteaireevaluacion_ctma, #reporteaireevaluacion_hongos, #reporteaireevaluacion_levaduras').prop('readonly', false).prop('required', true);
+
+    } else {
+        menureporte_estado('menureporte_7_1', 1);
+        $('#BIOAEROSOLES_AIRE_1').css('display', 'none');
+        $('#BIOAEROSOLES_AIRE_3').css('display', 'none');
+        
+        $('#reporteaireevaluacion_ct, #reporteaireevaluacion_ctma, #reporteaireevaluacion_hongos, #reporteaireevaluacion_levaduras').prop('readonly', true).prop('required', false);
+    }
+});
+
+$('#co').change(function() {
+    if ($(this).is(':checked')) {
+        $('#CO_AIRE_1').css('display', 'table-row');
+        $('#CO_AIRE_2').css('display', 'table-row');
+        $('#CO_AIRE_3').css('display', 'inline-block');
+        $('#reporteaireevaluacion_co').prop('readonly', false).prop('required', true);
+
+    } else {
+        menureporte_estado('menureporte_7_5', 1);
+        $('#CO_AIRE_1').css('display', 'none');
+        $('#CO_AIRE_2').css('display', 'none');
+        $('#CO_AIRE_3').css('display', 'none');
+        
+        $('#reporteaireevaluacion_co').prop('readonly', true).prop('required', false);
+    }
+});
+
+
+$('#co2').change(function() {
+    if ($(this).is(':checked')) {
+        $('#CO2_AIRE_1').css('display', 'table-row');
+        $('#CO2_AIRE_2').css('display', 'table-row');
+        $('#CO2_AIRE_3').css('display', 'inline-block');
+        $('#reporteaireevaluacion_co2').prop('readonly', false).prop('required', true);
+
+    } else {
+        menureporte_estado('menureporte_7_6', 1);
+        $('#CO2_AIRE_1').css('display', 'none');
+        $('#CO2_AIRE_2').css('display', 'none');
+        $('#CO2_AIRE_3').css('display', 'none');
+        
+        $('#reporteaireevaluacion_co2').prop('readonly', true).prop('required', false);
+    }
+});
+
+
+$('#temperatura').change(function() {
+    if ($(this).is(':checked')) {
+        $('#TEM_AIRE_1').css('display', 'table-row');
+        $('#TEM_AIRE_2').css('display', 'table-row');
+        $('#TEM_AIRE_3').css('display', 'inline-block');
+        $('#reporteaireevaluacion_temperatura').prop('readonly', false).prop('required', true);
+
+    } else {
+        menureporte_estado('menureporte_7_2', 1);
+        $('#TEM_AIRE_1').css('display', 'none');
+        $('#TEM_AIRE_2').css('display', 'none');
+        $('#TEM_AIRE_3').css('display', 'none');
+        
+        $('#reporteaireevaluacion_temperatura').prop('readonly', true).prop('required', false);
+    }
+});
+
+
+$('#velocidad').change(function() {
+    if ($(this).is(':checked')) {
+        $('#VELOCIDAD_AIRE_1').css('display', 'table-row');
+        $('#VELOCIDAD_AIRE_2').css('display', 'table-row');
+        $('#VELOCIDAD_AIRE_3').css('display', 'inline-block');
+		$('#reporteaireevaluacion_velocidad').prop('readonly', false).prop('required', true);
+        $('#reporteaireevaluacion_velocidadlimite').prop('disabled', false).prop('required', true);
+
+
+
+    } else {
+        menureporte_estado('menureporte_7_3', 1);
+        $('#VELOCIDAD_AIRE_1').css('display', 'none');
+        $('#VELOCIDAD_AIRE_2').css('display', 'none');
+        $('#VELOCIDAD_AIRE_3').css('display', 'none');
+		$('#reporteaireevaluacion_velocidad').prop('readonly', true).prop('required', false);
+		$('#reporteaireevaluacion_velocidadlimite').prop('disabled', true).prop('required', false);
+
+	}
+});
+
+
+
+$('#humedad').change(function() {
+    if ($(this).is(':checked')) {
+        $('#HUMEDAD_AIRE_1').css('display', 'table-row');
+        $('#HUMEDAD_AIRE_2').css('display', 'table-row');
+        $('#HUMEDAD_AIRE_3').css('display', 'inline-block');
+        $('#reporteaireevaluacion_humedad').prop('readonly', false).prop('required', true);
+
+    } else {
+        menureporte_estado('menureporte_7_4', 1);
+        $('#HUMEDAD_AIRE_1').css('display', 'none');
+        $('#HUMEDAD_AIRE_2').css('display', 'none');
+        $('#HUMEDAD_AIRE_3').css('display', 'none');
+        $('#reporteaireevaluacion_humedad').prop('readonly', true).prop('required', false);
+    }
+});
+
+$('#SO2').change(function() {
+    if ($(this).is(':checked')) {
+        $('#SO2_AIRE_1').css('display', 'table-row');
+        $('#SO2_AIRE_2').css('display', 'table-row');
+        $('#SO2_AIRE_3').css('display', 'inline-block');
+        $('#reporteaireevaluacion_so2').prop('readonly', false).prop('required', true);
+
+    } else {
+        menureporte_estado('menureporte_7_7', 1);
+        $('#SO2_AIRE_1').css('display', 'none');
+        $('#SO2_AIRE_2').css('display', 'none');
+        $('#SO2_AIRE_3').css('display', 'none');
+        $('#reporteaireevaluacion_so2').prop('readonly', true).prop('required', false);
+    }
+});
 
 //=================================================
 // PORTADA
@@ -3184,21 +3307,9 @@ $(document).ready(function() {
     setTimeout(function() {
         tabla_reporte_puntos(proyecto.id, reporteregistro_id);
 
-        setTimeout(function() {
-            forzarMenusActivos(); 
-        }, 1000); 
     }, 6000); 
 });
 
-function forzarMenusActivos() {
-    menureporte_estado('menureporte_7_1', 1);
-    menureporte_estado('menureporte_7_2', 1);
-    menureporte_estado('menureporte_7_3', 1);
-    menureporte_estado('menureporte_7_4', 1);
-    menureporte_estado('menureporte_7_5', 1);
-    menureporte_estado('menureporte_7_6', 1);
-    menureporte_estado('menureporte_7_7', 1);
-}
 
 
 

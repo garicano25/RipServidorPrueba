@@ -957,7 +957,7 @@ class reporteaireController extends Controller
 
 
 
- public function obtenerCAI($ID)
+    public function obtenerCAI($ID)
 {
     try {
         $info = DB::select('SELECT ID_CAI_INFORMES , JSON_CARACTERISTICA 
@@ -965,28 +965,23 @@ class reporteaireController extends Controller
                             WHERE proyecto_id = ?', [$ID]);
 
         if (!empty($info)) {
-            // Decodificamos el JSON_CARACTERISTICA
             $jsonCaracteristicas = json_decode($info[0]->JSON_CARACTERISTICA);
 
             return response()->json([
                 'status' => 'success',
                 'caracteristicas' => $jsonCaracteristicas,
-                'ID_CAI_INFORMES' => $info[0]->ID_CAI_INFORMES  // Devolver el ID para usarlo en la edición
+                'ID_CAI_INFORMES' => $info[0]->ID_CAI_INFORMES  
             ]);
         } else {
-            return response()->json([
-                'status' => 'error',
-                'message' => 'No se encontraron características para este proyecto'
-            ]);
+            return response()->json(['status' => 'error', 'message' => 'No se encontraron datos.']);
         }
 
     } catch (\Exception $e) {
-        return response()->json([
-            'status' => 'error',
-            'message' => 'Ocurrió un error al obtener las características: ' . $e->getMessage()
-        ]);
+        return response()->json(['status' => 'error', 'message' => 'Error: ' . $e->getMessage()]);
     }
 }
+
+    
 
 
 
@@ -3522,43 +3517,43 @@ class reporteaireController extends Controller
                 //--------------------
 
 
-                $dato["dashboard_parametros"] .= '<div class="col-12" style="display: inline-block; text-align: left;">
+                $dato["dashboard_parametros"] .= '<div class="col-12" style="display: none; text-align: left;" id="TEM_AIRE_3">
                                                         <h6 class="m-t-30" style="margin: 0px; font-size:0.8vw;">Temperatura del aire <span class="pull-right">' . $temperatura . '%</span></h6>
                                                         <div class="progress" style="margin-bottom: 8px;">
                                                             <div class="progress-bar" role="progressbar" style="width: ' . $temperatura . '%; height: 10px; background: #8ee66b;" aria-valuenow="25" aria-valuemin="0" aria-valuemax="100"></div>
                                                         </div>
                                                     </div>
-                                                    <div class="col-12" style="display: inline-block; text-align: left;">
+                                                    <div class="col-12" style="display: none; text-align: left;"  id="VELOCIDAD_AIRE_3">
                                                         <h6 class="m-t-30" style="margin: 0px; font-size:0.8vw;">Velocidad del aire <span class="pull-right">' . $velocidad . '%</span></h6>
                                                         <div class="progress" style="margin-bottom: 8px;">
                                                             <div class="progress-bar" role="progressbar" style="width: ' . $velocidad . '%; height: 10px; background: #8ee66b;" aria-valuenow="25" aria-valuemin="0" aria-valuemax="100"></div>
                                                         </div>
                                                     </div>
-                                                    <div class="col-12" style="display: inline-block; text-align: left;">
+                                                    <div class="col-12" style="display: none; text-align: left;" id="HUMEDAD_AIRE_3">
                                                         <h6 class="m-t-30" style="margin: 0px; font-size:0.8vw;">Humedad relativa <span class="pull-right">' . $humedad . '%</span></h6>
                                                         <div class="progress" style="margin-bottom: 8px;">
                                                             <div class="progress-bar" role="progressbar" style="width: ' . $humedad . '%; height: 10px; background: #8ee66b;" aria-valuenow="25" aria-valuemin="0" aria-valuemax="100"></div>
                                                         </div>
                                                     </div>
-                                                    <div class="col-12" style="display: inline-block; text-align: left;">
+                                                    <div class="col-12" style="display: none; text-align: left;" id="CO_AIRE_3">
                                                         <h6 class="m-t-30" style="margin: 0px; font-size:0.8vw;">Monóxido de carbono (CO) <span class="pull-right">' . $monoxido . '%</span></h6>
                                                         <div class="progress" style="margin-bottom: 8px;">
                                                             <div class="progress-bar" role="progressbar" style="width: ' . $monoxido . '%; height: 10px; background: #8ee66b;" aria-valuenow="25" aria-valuemin="0" aria-valuemax="100"></div>
                                                         </div>
                                                     </div>
-                                                    <div class="col-12" style="display: inline-block; text-align: left;">
+                                                    <div class="col-12" style="display: none; text-align: left;" id="CO2_AIRE_3">
                                                         <h6 class="m-t-30" style="margin: 0px; font-size:0.8vw;">Dióxido de carbono (CO<sub>2</sub>) <span class="pull-right">' . $dioxido . '%</span></h6>
                                                         <div class="progress" style="margin-bottom: 8px;">
                                                             <div class="progress-bar" role="progressbar" style="width: ' . $dioxido . '%; height: 10px; background: #8ee66b;" aria-valuenow="25" aria-valuemin="0" aria-valuemax="100"></div>
                                                         </div>
                                                     </div>
-                                                    <div class="col-12" style="display: inline-block; text-align: left;">
+                                                    <div class="col-12" style="display: none; text-align: left;" id="SO2_AIRE_3">
                                                         <h6 class="m-t-30" style="margin: 0px; font-size:0.8vw;">Dióxido de azufre (SO<sub>2</sub>) <span class="pull-right">' . $azufre . '%</span></h6>
                                                         <div class="progress" style="margin-bottom: 8px;">
                                                             <div class="progress-bar" role="progressbar" style="width: ' . $azufre . '%; height: 10px; background: #8ee66b;" aria-valuenow="25" aria-valuemin="0" aria-valuemax="100"></div>
                                                         </div>
                                                     </div>
-                                                    <div class="col-12" style="display: inline-block; text-align: left;">
+                                                    <div class="col-12" style="display: none; text-align: left;" id="BIOAEROSOLES_AIRE_3">
                                                         <h6 class="m-t-30" style="margin: 0px; font-size:0.8vw;">Bioaerosoles (CT, CTMA, Hongos, Levaduras) <span class="pull-right">' . $bioaerosoles . '%</span></h6>
                                                         <div class="progress" style="margin-bottom: 8px;">
                                                             <div class="progress-bar" role="progressbar" style="width: ' . $bioaerosoles . '%; height: 10px; background: #8ee66b;" aria-valuenow="25" aria-valuemin="0" aria-valuemax="100"></div>
