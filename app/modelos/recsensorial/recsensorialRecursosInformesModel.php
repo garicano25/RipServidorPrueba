@@ -26,6 +26,7 @@ class recsensorialRecursosInformesModel extends Model
         'NIVEL4',
         'NIVEL5',
         'PETICION_CLIENTE',
+        'AGREGAR_RECOMENDACION',
         'REQUIERE_CONCLUSION',
         'ID_CATCONCLUSION'
 

@@ -342,6 +342,8 @@ Route::get('obtenerDatosInformes/{ID}', ['as' => 'recsensorial.obtenerDatosInfor
 
 Route::get('obtenerTablaInforme/{ID}', ['as' => 'recsensorial.obtenerTablaInforme', 'uses' => 'recsensorial\recsensorialController@obtenerTablaInforme']);
 
+Route::get('consultarRecomendaciones/{ID}', ['as' => 'recsensorial.consultarRecomendaciones', 'uses' => 'recsensorial\recsensorialController@consultarRecomendaciones']);
+
 Route::get('obtenerGruposComponetes/{ID}', ['as' => 'recsensorial.obtenerGruposComponetes', 'uses' => 'recsensorial\recsensorialController@obtenerGruposComponetes']);
 
 
@@ -910,6 +912,19 @@ Route::get('proyectoequiposconsultaractual/{proyecto_id}', ['as' => 'proyectoequ
 Route::get('proyectoequiposconsultarhistorial/{proyecto_id}/{proyectoequipos_revision}', ['as' => 'proyectoequipos.proyectoequiposconsultarhistorial', 'uses' => 'proyecto\proyectoequipoController@proyectoequiposconsultarhistorial']);
 
 
+//==============================================
+Route::resource('proyectovehiculos', 'proyecto\proyectoVehiculoController');
+
+Route::get('proyectovehiculosinventario/{proyecto_id}', ['as' => 'proyectovehiculo.proyectoVehiculoController', 'uses' => 'proyecto\proyectoVehiculoController@proyectovehiculosinventario']);
+
+Route::get('proyectovehiculoslistas/{proyecto_id}', ['as' => 'proyectovehiculo.proyectovehiculoslistas', 'uses' => 'proyecto\proyectoVehiculoController@proyectovehiculoslistas']);
+
+Route::get('proyectovehiculosgenerarlistaestado/{proyecto_id}', ['as' => 'proyectovehiculo.proyectovehiculosgenerarlistaestado', 'uses' => 'proyecto\proyectoVehiculoController@proyectovehiculosgenerarlistaestado']);
+
+Route::get('proyectovehiculosconsultaractual/{proyecto_id}', ['as' => 'proyectovehiculo.proyectovehiculosconsultaractual', 'uses' => 'proyecto\proyectoVehiculoController@proyectovehiculosconsultaractual']);
+
+
+Route::get('proyectovehiculosconsultarhistorial/{proyecto_id}/{proyectovehiculos_revision}', ['as' => 'proyectoequipos.proyectovehiculosconsultarhistorial', 'uses' => 'proyecto\proyectoVehiculoController@proyectovehiculosconsultarhistorial']);
 //==============================================
 
 

@@ -667,7 +667,7 @@ use Illuminate\Support\Str;
     <script src="/assets/plugins/Magnific-Popup-master/dist/jquery.magnific-popup.min.js"></script>
     <script src="/assets/plugins/Magnific-Popup-master/dist/jquery.magnific-popup-init.js"></script>
     {{-- pagina --}}
-    <script src="/js_sitio/reconocimiento_sensorial.js?v=10.0"></script>
+    <script src="/js_sitio/reconocimiento_sensorial.js?v=12.0"></script>
     @endif
 
 
@@ -750,7 +750,7 @@ use Illuminate\Support\Str;
     {{-- Select search filter --}}
     <script src="/assets/plugins/select-search/selectize.js" type="text/javascript"></script>
     {{-- pagina --}}
-    <script src="/js_sitio/programaTrabajoHI.js?v=3.0"></script>
+    <script src="/js_sitio/programaTrabajoHI.js?v=5.0"></script>
 
     @endif
 
