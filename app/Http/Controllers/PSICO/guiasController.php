@@ -17,6 +17,21 @@ use App\modelos\reconocimientopsico\respuestastrabajadorespsicoModel;
 
 class guiasController extends Controller
 {
+    public function consultarRespuestasGuardadas(Request $request) {
+        $idTrabajador = $request->input('id_trabajador');
+
+        $trabajador = DB::select("
+            SELECT RECPSICO_GUIAI_RESPUESTAS, RECPSICO_GUIAII_RESPUESTAS, RECPSICO_GUIAIII_RESPUESTAS
+            FROM recopsicoTrabajadoresRespuestas
+            WHERE RECPSICO_TRABAJADOR = :idTrabajador
+        ", ['idTrabajador' => $idTrabajador]);
+
+        if (!empty($trabajador)) {
+            return response()->json($trabajador[0]); 
+        }
+
+        return response()->json(['error' => 'No se encontraron respuestas guardadas de este trabajador'], 404);
+    }
 
     public function obtenerExplicaciones(Request $request) {
         $ids = $request->input('ids');  
@@ -144,6 +159,8 @@ class guiasController extends Controller
 
                     if ($existe) {
                         // Si el registro ya existe, realizar un UPDATE selectivo
+                        
+
                         DB::table('recopsicoTrabajadoresRespuestas')
                             ->where('RECPSICO_TRABAJADOR', $request->input('TRABAJADOR_ID'))
                             ->update([
@@ -153,14 +170,29 @@ class guiasController extends Controller
         
                         return response()->json(['mensaje' => 'Registro actualizado exitosamente']);
                     } else {
-                        // Si el registro no existe, realizar un INSERT INTO
-                        DB::table('recopsicoTrabajadoresRespuestas')->insert([
-                            'RECPSICO_TRABAJADOR' => $request->input('TRABAJADOR_ID'),
-                            'RECPSICO_GUIAI_RESPUESTAS' => $jsonDatos,
-                            'created_at' => now(),
-                            'updated_at' => now(),
-                        ]);
+                        $registro = DB::table('recopsicotrabajadores')
+                            ->where('ID_RECOPSICOTRABAJADOR', $request->input('TRABAJADOR_ID'))
+                            ->first(['RECPSICO_ID']);
 
+                            if ($registro) {
+                                DB::table('recopsicoTrabajadoresRespuestas')->insert([
+                                    'RECPSICO_ID' => $registro->RECPSICO_ID,
+                                    'RECPSICO_TRABAJADOR' => $request->input('TRABAJADOR_ID'),
+                                    'RECPSICO_GUIAI_RESPUESTAS' => $jsonDatos,
+                                    'created_at' => now(),
+                                    'updated_at' => now(),
+                                ]);
+        
+                            } else {
+                                DB::table('recopsicoTrabajadoresRespuestas')->insert([
+                                    'RECPSICO_TRABAJADOR' => $request->input('TRABAJADOR_ID'),
+                                    'RECPSICO_GUIAI_RESPUESTAS' => $jsonDatos,
+                                    'created_at' => now(),
+                                    'updated_at' => now(),
+                                ]);
+                            }
+                        // Si el registro no existe, realizar un INSERT INTO
+                        
                         //actualizar el esatdo de contestado del formulario
                         DB::table('seguimientotrabajadores')
                         ->where('TRABAJADOR_ID', $request->input('TRABAJADOR_ID'))
@@ -267,4 +299,5 @@ class guiasController extends Controller
         }
     }
 
+    
 }

@@ -163,6 +163,10 @@ $("#guardar_guia2").click(function () {
 });
 
 //FUNCIONES
+function instruccionesEntendidas(){
+    $('#instruccionesModal').modal('hide');
+}
+
 function submitGuia1y2() {
     // Asignar valores del trabajador y respuestas
     $("#GUIAI_TRABAJADOR_ID").val($("#TRABAJADOR_ID").val());
@@ -217,90 +221,107 @@ function submitGuia1y3() {
     // Obtener los datos de la guia 1
     var form1Data = new FormData(document.getElementById('guia_1'));
     form1Data.append('option', 1); // Enviar opción 1 para la guía 1
-    
-    // swal({
-    //     title: "¡Confirme que desea guardar!",
-    //     text: "Guardar para mas tarde",
-    //     type: "warning",
-    //     showCancelButton: true,
-    //     confirmButtonColor: "#DD6B55",
-    //     confirmButtonText: "Aceptar!",
-    //     cancelButtonText: "Cancelar!",
-    //     closeOnConfirm: false,
-    //     closeOnCancel: false
-    // }, function (isConfirm) {
-    //     if (isConfirm) {
-            
-    //         swal.close();
-    //         $.ajax({
-    //             url: '/guardarGuiasPsico',
-    //             type: 'POST',
-    //             data: form1Data,
-    //             processData: false,
-    //             contentType: false,
-    //             success: function(response) {
-    //                 console.log('Guia 1 enviada:', response);
-    //                 $('#guardar_guia3').html('Guardar <i class="fa fa-save"></i>');
-    //             },
-    //             beforeSend: function () {
-    //                 $('#guardar_guia3').html('Guardando <i class="fa fa-spin fa-spinner"></i>');
-    //             },
-    //             error: function(jqXHR, textStatus, errorThrown) {
-    //                 console.error('Error en Guia 1:', textStatus, errorThrown);
-    //                 $('#guardar_guia3').html('Guardar <i class="fa fa-save"></i>');
-    //             }
-    //         });
-
-    //         // Obtener los datos de la guia 2
-    //         var form2Data = new FormData(document.getElementById('guia_3'));
-    //         form2Data.append('option', 3);
-
-    //         $.ajax({
-    //             url: '/guardarGuiasPsico',
-    //             type: 'POST',
-    //             data: form2Data,
-    //             processData: false,
-    //             contentType: false,
-    //             success: function(response) {
-    //                 console.log('Guia 3 enviada:', response);
-    //                 $('#guardar_guia3').html('Guardar <i class="fa fa-save"></i>');
-    //             },
-    //             beforeSend: function () {
-    //                 $('#guardar_guia3').html('Guardando <i class="fa fa-spin fa-spinner"></i>');
-    //             },
-    //             error: function(jqXHR, textStatus, errorThrown) {
-    //                 console.error('Error en Guia 3:', textStatus, errorThrown);
-    //                 $('#guardar_guia3').html('Guardar <i class="fa fa-save"></i>');
-    //             }
-    //         });
-    //     }
-    //     else {
-    //         // mensaje
-    //         swal({
-    //             title: "Cancelado",
-    //             text: "Acción cancelada",
-    //             type: "error", // warning, error, success, info
-    //             buttons: {
-    //                 visible: false, // true , false
-    //             },
-    //             timer: 500,
-    //             showConfirmButton: false
-    //         });
-    //     }
-    // });
 
     Swal.fire({
-      title: "Do you want to save the changes?",
+      title: "¿Desea guardar sus respuestas?",
+      icon: "question",
+      width: "600px",
       showDenyButton: true,
       showCancelButton: true,
-      confirmButtonText: "Save",
-      denyButtonText: `Don't save`
+      denyButtonColor: "#5F9EA0",
+      confirmButtonColor: "green",
+      confirmButtonText: "Guardar y finalizar",
+      denyButtonText: `Guardar y continuar más tarde`
     }).then((result) => {
       /* Read more about isConfirmed, isDenied below */
       if (result.isConfirmed) {
-        Swal.fire("Saved!", "", "success");
+
+        swal.close();
+        $.ajax({
+            url: '/guardarGuiasPsico',
+            type: 'POST',
+            data: form1Data,
+            processData: false,
+            contentType: false,
+            success: function(response) {
+                console.log('Guia 1 enviada:', response);
+            },
+            beforeSend: function () {
+                $('#guardar_guia3').html('Guardando <i class="fa fa-spin fa-spinner"></i>');
+            },
+            error: function(jqXHR, textStatus, errorThrown) {
+                console.error('Error en Guia 1:', textStatus, errorThrown);
+                $('#guardar_guia3').html('Guardar <i class="fa fa-save"></i>');
+            }
+        });
+
+        // Obtener los datos de la guia 2
+        var form2Data = new FormData(document.getElementById('guia_3'));
+        form2Data.append('option', 3);
+
+        $.ajax({
+            url: '/guardarGuiasPsico',
+            type: 'POST',
+            data: form2Data,
+            processData: false,
+            contentType: false,
+            success: function(response) {
+                console.log('Guia 3 enviada:', response);
+                Swal.fire("Guardado y envíado correctamente!", "Usted ha finalizado exitosamente. Ya puede cerrar esta ventana, gracias!", "success");
+                $('#guardar_guia3').html('Guardar <i class="fa fa-save"></i>');
+            },
+            beforeSend: function () {
+                $('#guardar_guia3').html('Guardando <i class="fa fa-spin fa-spinner"></i>');
+            },
+            error: function(jqXHR, textStatus, errorThrown) {
+                console.error('Error en Guia 3:', textStatus, errorThrown);
+                $('#guardar_guia3').html('Guardar <i class="fa fa-save"></i>');
+            }
+        });
+
       } else if (result.isDenied) {
-        Swal.fire("Changes are not saved", "", "info");
+        swal.close();
+        $.ajax({
+            url: '/guardarGuiasPsico',
+            type: 'POST',
+            data: form1Data,
+            processData: false,
+            contentType: false,
+            success: function(response) {
+                console.log('Guia 1 enviada:', response);
+            },
+            beforeSend: function () {
+                $('#guardar_guia3').html('Guardando <i class="fa fa-spin fa-spinner"></i>');
+            },
+            error: function(jqXHR, textStatus, errorThrown) {
+                console.error('Error en Guia 1:', textStatus, errorThrown);
+                $('#guardar_guia3').html('Guardar <i class="fa fa-save"></i>');
+            }
+        });
+
+        // Obtener los datos de la guia 2
+        var form2Data = new FormData(document.getElementById('guia_3'));
+        form2Data.append('option', 3);
+
+        $.ajax({
+            url: '/guardarGuiasPsico',
+            type: 'POST',
+            data: form2Data,
+            processData: false,
+            contentType: false,
+            success: function(response) {
+                console.log('Guia 3 enviada:', response);
+                Swal.fire("Guardado para más tarde", "Puede continuar cuando lo desee durante el plazo indicado en su correo electrónico. Recuerde finalizar antes de su fecha límite", "success");
+                $('#guardar_guia3').html('Guardar <i class="fa fa-save"></i>');
+            },
+            beforeSend: function () {
+                $('#guardar_guia3').html('Guardando <i class="fa fa-spin fa-spinner"></i>');
+            },
+            error: function(jqXHR, textStatus, errorThrown) {
+                console.error('Error en Guia 3:', textStatus, errorThrown);
+                $('#guardar_guia3').html('Guardar <i class="fa fa-save"></i>');
+            }
+        });
       }
     });
 }
@@ -372,7 +393,8 @@ function ejecucionCamara(){
                 
                         // Mostrar el spinner de carga dentro del modal
                         $('#loadingSpinner').show();
-                
+                        $('#tomar-foto').hide();
+                        $('#instruccionesFoto').hide();
                         $.ajax({
                             url: '/guardarFotoRecpsico',
                             type: 'POST',
@@ -388,6 +410,7 @@ function ejecucionCamara(){
                 
                                 if (response.mensaje) {
                                     $('#fotoModal').modal('hide');
+                                    $('#instruccionesModal').modal('show');
                                     console.log("Foto guardada correctamente", response);
                                 } else {
                                     swal({
@@ -671,5 +694,101 @@ function consultarDatos() {
     });
 }
 
+function consultarRespuestasGuardadas() {
+    if (typeof id === 'undefined') {
+        console.error("ID del trabajador no está definido");
+        return;
+    }
+
+    var csrfToken = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
+
+    $.ajax({
+        type: "POST",
+        url: "/consultarRespuestasGuardadas", 
+        dataType: "json",
+        data: {
+            id_trabajador: id, 
+            _token: csrfToken  
+        },
+        success: function (data) {
+            if (data) {
+                    // $('#nombre-trabajador').text(data.RECPSICOTRABAJADOR_NOMBRE || 'No disponible');
+                    // $('#genero-trabajador').text(data.RECPSICOTRABAJADOR_GENERO || 'No disponible');
+                    // $('#correo-trabajador').text(data.RECPSICOTRABAJADOR_CORREO || 'No disponible');
+                    console.log('GUIA I RESPUESTAS' + data.RECPSICO_GUIAI_RESPUESTAS + 'GUIA II:' + data.RECPSICO_GUIAII_RESPUESTAS + 'GUIA III:' + data.RECPSICO_GUIAIII_RESPUESTAS);
+                    const respuestasGuiaI = data.RECPSICO_GUIAI_RESPUESTAS
+                    const respuestasGuiaIArray = JSON.parse(respuestasGuiaI);
+                    if (Array.isArray(respuestasGuiaIArray)) {
+                        respuestasGuiaIArray.forEach((respuesta, index) => {
+                            if (respuesta !== null) {
+                                const preguntaDiv = document.getElementById(`pregunta${index + 1}_1`);
+                                if (preguntaDiv) {
+                
+                                    const radioInput = preguntaDiv.querySelector(`input[type="radio"][value="${respuesta}"]`);
+                                    if (radioInput) {
+                                        radioInput.checked = true; // Marcar el input
+                                    }
+                                }
+                            }
+                        });
+                        guia1();
+                    } else {
+                        console.error('La variable respuestasGuiaI no es un arreglo.');
+                    }
+                    //RESPUESTAS GUIA II
+                    const respuestasGuiaII = data.RECPSICO_GUIAII_RESPUESTAS
+                    const respuestasGuiaIIArray = JSON.parse(respuestasGuiaII);
+                    if (Array.isArray(respuestasGuiaIIArray)) {
+                        respuestasGuiaIIArray.forEach((respuesta, index) => {
+                            if (respuesta !== null) {
+                                const preguntaDiv2 = document.getElementById(`pregunta${index + 1}_2`);
+                                if (preguntaDiv2) {
+                                    const radioInput2 = preguntaDiv2.querySelector(`input[type="radio"][value="${respuesta}"]`);
+                                    if (radioInput2) {
+                                        radioInput2.checked = true; // Marcar el input
+                                    }
+                                }
+                            }
+                        });
+                        clientesyusuarios();
+                        jefetrabajadores();
+
+                    } else {
+                        console.error('La variable respuestasGuiaII no es un arreglo.');
+                    }
+                    //RESPUESTAS GUIA III
+                    const respuestasGuiaIII = data.RECPSICO_GUIAIII_RESPUESTAS
+                    const respuestasGuiaIIIArray = JSON.parse(respuestasGuiaIII);
+                    if (Array.isArray(respuestasGuiaIIIArray)) {
+                        respuestasGuiaIIIArray.forEach((respuesta, index) => {
+                            if (respuesta !== null) {
+                                const preguntaDiv3 = document.getElementById(`pregunta${index + 1}_3`);
+                                if (preguntaDiv3) {
+                                    const radioInput3 = preguntaDiv3.querySelector(`input[type="radio"][value="${respuesta}"]`);
+                                    if (radioInput3) {
+                                        radioInput3.checked = true;
+                                        const label3 = preguntaDiv3.querySelector(`label[for="${radioInput3.id}"]`);
+                                        if (label3) {
+                                            label3.classList.add('selected'); 
+                                        }
+                                    }
+                                }
+                            }
+                        });
+                        clientesyusuariosguia3();
+                        jefetrabajadoresguia3();
+
+                    } else {
+                        console.error('La variable respuestasGuiaIII no es un arreglo.');
+                    }
+            } else {
+                alert('No se encontraron respuestas para este trabajador.');
+            }
+        },
+        error: function (xhr, status, error) {
+            console.error('Error al obtener los datos:', error);
+        }
+    });
+}
 
 

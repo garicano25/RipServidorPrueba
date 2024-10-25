@@ -1801,7 +1801,7 @@ Route::get('/Guia/{guia1}/{guia2}/{guia3}/{id}', function ($guia1, $guia2, $guia
     }
 })->name('Guia');
 
-
+Route::post('/consultarRespuestasGuardadas', 'PSICO\guiasController@consultarRespuestasGuardadas');
 Route::post('/obtenerExplicaciones', 'PSICO\guiasController@obtenerExplicaciones');
 Route::post('/consultarDatosTrabajador', 'PSICO\guiasController@consultarDatosTrabajador');
 Route::post('/guardarFotoRecpsico', 'PSICO\guiasController@guardarFotoRecpsico');

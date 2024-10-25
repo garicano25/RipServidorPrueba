@@ -240,24 +240,24 @@
                                 <input type="hidden" class="form-control" id="GUIAI_ID_RECOPSICORESPUESTAS" name="ID_RECOPSICORESPUESTAS" value="0">
                                 <input type="hidden" class="form-control" id="GUIAI_TRABAJADOR_ID" name="TRABAJADOR_ID" value="0">
                             </div>
-                            <div id="pregunta1" class="mt-4" style="display: flex; justify-content: space-between; align-items: center; width: 100%; margin-bottom: 10px;">
-                                <p style="margin: 0; flex: 1;"><i class="fa fa-info-circle" id="Exp1_1" aria-hidden="true" data-toggle="tooltip" title=""></i>
-                                    ¿Ha presenciado o sufrido alguna vez, durante o con motivo del trabajo un acontecimiento como los siguientes</p>
+                            <div id="pregunta1_1" class="mt-4" style="display: flex; justify-content: space-between; align-items: center; width: 100%; margin-bottom: 10px;">
+                                <p style="margin: 0; flex: 1; font-style: italic; margin-bottom: 10px;"><i class="fa fa-info-circle" id="Exp1_1" aria-hidden="true" data-toggle="tooltip" title=""></i>
+                                    1.  ¿Ha presenciado o sufrido alguna vez, durante o con motivo del trabajo un acontecimiento como los siguientes?:</p>
                                 <div style="display: none; align-items: center; gap: 20px;">
                                     <div>
                                         <label for="pregunta1_si" style="margin-right: 5px;">Sí</label>
                                         <input type="radio" id="pregunta1_si" name="GUIA1_1" value="1"   onchange="guia1()">
                                     </div>
-
                                     <div>
                                         <label for="pregunta1_no" style="margin-right: 5px;">No</label>
                                         <input type="radio" id="pregunta1_no" name="GUIA1_1" value="0" onchange="guia1()">
                                     </div>
                                 </div>
+
                             </div>
-                            <div id="pregunta2" style="display: flex; justify-content: space-between; align-items: center; width: 100%; margin-bottom: 10px;">
+                            <div id="pregunta2_1" style="display: flex; justify-content: space-between; align-items: center; width: 100%; margin-bottom: 10px;">
                                 <p style="margin: 0; flex: 1;"><i class="fa fa-info-circle" id="Exp1_2" aria-hidden="true" data-toggle="tooltip" title=""></i>
-                                    Accidente que tenga como consecuencia la muerte, la pérdida de un miembro o una lesión grave?</p>
+                                    2.  ¿Accidente que tenga como consecuencia la muerte, la pérdida de un miembro o una lesión grave?</p>
                                 <div style="display: flex; align-items: center; gap: 20px;">
                                     <div>
                                         <label for="pregunta2_si" style="margin-right: 5px;">Sí</label>
@@ -269,9 +269,9 @@
                                     </div>
                                 </div>
                             </div>
-                            <div id="pregunta3" style="display: flex; justify-content: space-between; align-items: center; width: 100%; margin-bottom: 10px;">
+                            <div id="pregunta3_1" style="display: flex; justify-content: space-between; align-items: center; width: 100%; margin-bottom: 10px;">
                                 <p style="margin: 0; flex: 1;"><i class="fa fa-info-circle" id="Exp1_3" aria-hidden="true" data-toggle="tooltip" title=""></i>
-                                    Asaltos?</p>
+                                  3.  ¿Asaltos?</p>
                                 <div style="display: flex; align-items: center; gap: 20px;">
                                     <div>
                                         <label for="pregunta3_si" style="margin-right: 5px;">Sí</label>
@@ -284,9 +284,9 @@
                                     </div>
                                 </div>
                             </div>
-                            <div id="pregunta4" style="display: flex; justify-content: space-between; align-items: center; width: 100%; margin-bottom: 10px;">
+                            <div id="pregunta4_1" style="display: flex; justify-content: space-between; align-items: center; width: 100%; margin-bottom: 10px;">
                                 <p style="margin: 0; flex: 1;"><i class="fa fa-info-circle" id="Exp1_4" aria-hidden="true" data-toggle="tooltip" title=""></i>
-                                    Actos violentos que derivaron en lesiones graves?</p>
+                                  4.  ¿Actos violentos que derivaron en lesiones graves?</p>
                                 <div style="display: flex; align-items: center; gap: 20px;">
                                     <div>
                                         <label for="pregunta4_si" style="margin-right: 5px;">Sí</label>
@@ -299,9 +299,9 @@
                                     </div>
                                 </div>
                             </div>
-                            <div id="pregunta5" style="display: flex; justify-content: space-between; align-items: center; width: 100%; margin-bottom: 10px;">
+                            <div id="pregunta5_1" style="display: flex; justify-content: space-between; align-items: center; width: 100%; margin-bottom: 10px;">
                                 <p style="margin: 0; flex: 1;"><i class="fa fa-info-circle" id="Exp1_5" aria-hidden="true" data-toggle="tooltip" title=""></i>
-                                    Secuestro?</p>
+                                  5.  ¿Secuestro?</p>
                                 <div style="display: flex; align-items: center; gap: 20px;">
                                     <div>
                                         <label for="pregunta5_si" style="margin-right: 5px;">Sí</label>
@@ -314,9 +314,9 @@
                                     </div>
                                 </div>
                             </div>
-                            <div id="pregunta6" style="display: flex; justify-content: space-between; align-items: center; width: 100%; margin-bottom: 10px;">
+                            <div id="pregunta6_1" style="display: flex; justify-content: space-between; align-items: center; width: 100%; margin-bottom: 10px;">
                                 <p style="margin: 0; flex: 1;"><i class="fa fa-info-circle" id="Exp1_6" aria-hidden="true" data-toggle="tooltip" title=""></i>
-                                    Amenazas?</p>
+                                    6.  ¿Amenazas?</p>
                                 <div style="display: flex; align-items: center; gap: 20px;">
                                     <div>
                                         <label for="pregunta6_si" style="margin-right: 5px;">Sí</label>
@@ -329,9 +329,9 @@
                                     </div>
                                 </div>
                             </div>
-                            <div id="pregunta7" style="display: flex; justify-content: space-between; align-items: center; width: 100%; margin-bottom: 10px;">
+                            <div id="pregunta7_1" style="display: flex; justify-content: space-between; align-items: center; width: 100%; margin-bottom: 10px;">
                                 <p style="margin: 0; flex: 1;"><i class="fa fa-info-circle" id="Exp1_7" aria-hidden="true" data-toggle="tooltip" title=""></i>
-                                    O cualquier otro que ponga en riesgo su vida o salud, y/o la de otras personas?</p>
+                                  7.  ¿Cualquier otro que ponga en riesgo su vida o salud, y/o la de otras personas?</p>
                                 <div style="display: flex; align-items: center; gap: 20px;">
                                     <div>
                                         <label for="pregunta7_si" style="margin-right: 5px;">Sí</label>
@@ -349,9 +349,9 @@
                             <div id="titulo2">
                                 <h5 style="text-align: left; width: 70%;"><b>II.- Recuerdos persistentes sobre el acontecimiento (durante el último mes):</b></h5>
                             </div>
-                            <div id="pregunta8" class="mt-4" style="display: flex; justify-content: space-between; align-items: center; width: 100%; margin-bottom: 10px;">
+                            <div id="pregunta8_1" class="mt-4" style="display: flex; justify-content: space-between; align-items: center; width: 100%; margin-bottom: 10px;">
                                 <p style="margin: 0; flex: 1;"><i class="fa fa-info-circle" id="Exp1_8" aria-hidden="true" data-toggle="tooltip" title=""></i>
-                                    ¿Ha tenido recuerdos recurrentes sobre el acontecimiento que le provocan malestares?</p>
+                                  8.  ¿Ha tenido recuerdos recurrentes sobre el acontecimiento que le provocan malestares?</p>
                                 <div style="display: flex; align-items: center; gap: 20px;">
                                     <div>
                                         <label for="preguta8_si" style="margin-right: 5px;">Sí</label>
@@ -364,9 +364,9 @@
                                     </div>
                                 </div>
                             </div>
-                            <div id="pregunta9" style="display: flex; justify-content: space-between; align-items: center; width: 100%; margin-bottom: 10px;">
+                            <div id="pregunta9_1" style="display: flex; justify-content: space-between; align-items: center; width: 100%; margin-bottom: 10px;">
                                 <p style="margin: 0; flex: 1;"><i class="fa fa-info-circle" id="Exp1_9" aria-hidden="true" data-toggle="tooltip" title=""></i>
-                                    ¿Ha tenido sueños de carácter recurrente sobre el acontecimiento, que le producen malestar?</p>
+                                  9.  ¿Ha tenido sueños de carácter recurrente sobre el acontecimiento, que le producen malestar?</p>
                                 <div style="display: flex; align-items: center; gap: 20px;">
                                     <div>
                                         <label for="pregunta9_si" style="margin-right: 5px;">Sí</label>
@@ -384,9 +384,9 @@
                             <div id="titulo3">
                                 <h5 style="text-align: left; width: 70%;"><b>III.- Esfuerzo por evitar circunstancias parecidas o asociadas al acontecimiento (durante el último mes):</b></h5>
                             </div>
-                            <div id="pregunta10" class="mt-4" style="display: flex; justify-content: space-between; align-items: center; width: 100%; margin-bottom: 10px;">
+                            <div id="pregunta10_1" class="mt-4" style="display: flex; justify-content: space-between; align-items: center; width: 100%; margin-bottom: 10px;">
                                 <p style="margin: 0; flex: 1;"><i class="fa fa-info-circle" id="Exp1_10" aria-hidden="true" data-toggle="tooltip" title=""></i>
-                                    ¿Se ha esforzado por evitar todo tipo de sentimientos, conversaciones o situaciones que le puedan recordar el acontecimiento?</p>
+                                  10.  ¿Se ha esforzado por evitar todo tipo de sentimientos, conversaciones o situaciones que le puedan recordar el acontecimiento?</p>
                                 <div style="display: flex; align-items: center; gap: 20px;">
                                     <div>
                                         <label for="preguta10_si" style="margin-right: 5px;">Sí</label>
@@ -399,9 +399,9 @@
                                     </div>
                                 </div>
                             </div>
-                            <div id="pregunta11" style="display: flex; justify-content: space-between; align-items: center; width: 100%; margin-bottom: 10px;">
+                            <div id="pregunta11_1" style="display: flex; justify-content: space-between; align-items: center; width: 100%; margin-bottom: 10px;">
                                 <p style="margin: 0; flex: 1;"><i class="fa fa-info-circle" id="Exp1_11" aria-hidden="true" data-toggle="tooltip" title=""></i>
-                                    ¿Se ha esforzado por evitar todo tipo de actividades, lugares o personas que motivan recuerdos del acontecimiento?</p>
+                                  11.  ¿Se ha esforzado por evitar todo tipo de actividades, lugares o personas que motivan recuerdos del acontecimiento?</p>
                                 <div style="display: flex; align-items: center; gap: 20px;">
                                     <div>
                                         <label for="pregunta11_si" style="margin-right: 5px;">Sí</label>
@@ -414,9 +414,9 @@
                                     </div>
                                 </div>
                             </div>
-                            <div id="pregunta12" style="display: flex; justify-content: space-between; align-items: center; width: 100%; margin-bottom: 10px;">
+                            <div id="pregunta12_1" style="display: flex; justify-content: space-between; align-items: center; width: 100%; margin-bottom: 10px;">
                                 <p style="margin: 0; flex: 1;"><i class="fa fa-info-circle" id="Exp1_12" aria-hidden="true" data-toggle="tooltip" title=""></i>
-                                    ¿Ha tenido dificultad para recordar alguna parte importante del evento?</p>
+                                  12.  ¿Ha tenido dificultad para recordar alguna parte importante del evento?</p>
                                 <div style="display: flex; align-items: center; gap: 20px;">
                                     <div>
                                         <label for="pregunta12_si" style="margin-right: 5px;">Sí</label>
@@ -429,9 +429,9 @@
                                     </div>
                                 </div>
                             </div>
-                            <div id="pregunta13" style="display: flex; justify-content: space-between; align-items: center; width: 100%; margin-bottom: 10px;">
+                            <div id="pregunta13_1" style="display: flex; justify-content: space-between; align-items: center; width: 100%; margin-bottom: 10px;">
                                 <p style="margin: 0; flex: 1;"><i class="fa fa-info-circle" id="Exp1_13" aria-hidden="true" data-toggle="tooltip" title=""></i>
-                                    ¿Ha disminuido su interés en sus actividades cotidianas?</p>
+                                  13.  ¿Ha disminuido su interés en sus actividades cotidianas?</p>
                                 <div style="display: flex; align-items: center; gap: 20px;">
                                     <div>
                                         <label for="pregunta13_si" style="margin-right: 5px;">Sí</label>
@@ -444,9 +444,9 @@
                                     </div>
                                 </div>
                             </div>
-                            <div id="pregunta14" style="display: flex; justify-content: space-between; align-items: center; width: 100%; margin-bottom: 10px;">
+                            <div id="pregunta14_1" style="display: flex; justify-content: space-between; align-items: center; width: 100%; margin-bottom: 10px;">
                                 <p style="margin: 0; flex: 1;"><i class="fa fa-info-circle" id="Exp1_14" aria-hidden="true" data-toggle="tooltip" title=""></i>
-                                    ¿Se ha sentido usted alejado o distante de los demás?</p>
+                                   14.  ¿Se ha sentido usted alejado o distante de los demás?</p>
                                 <div style="display: flex; align-items: center; gap: 20px;">
                                     <div>
                                         <label for="pregunta14_si" style="margin-right: 5px;">Sí</label>
@@ -459,9 +459,9 @@
                                     </div>
                                 </div>
                             </div>
-                            <div id="pregunta15" style="display: flex; justify-content: space-between; align-items: center; width: 100%; margin-bottom: 10px;">
+                            <div id="pregunta15_1" style="display: flex; justify-content: space-between; align-items: center; width: 100%; margin-bottom: 10px;">
                                 <p style="margin: 0; flex: 1;"><i class="fa fa-info-circle" id="Exp1_15" aria-hidden="true" data-toggle="tooltip" title=""></i>
-                                    ¿Ha notado que tiene dificultad para expresar sus sentimientos?</p>
+                                  15.  ¿Ha notado que tiene dificultad para expresar sus sentimientos?</p>
                                 <div style="display: flex; align-items: center; gap: 20px;">
                                     <div>
                                         <label for="pregunta15_si" style="margin-right: 5px;">Sí</label>
@@ -474,9 +474,9 @@
                                     </div>
                                 </div>
                             </div>
-                            <div id="pregunta16" style="display: flex; justify-content: space-between; align-items: center; width: 100%; margin-bottom: 10px;">
+                            <div id="pregunta16_1" style="display: flex; justify-content: space-between; align-items: center; width: 100%; margin-bottom: 10px;">
                                 <p style="margin: 0; flex: 1;"><i class="fa fa-info-circle" id="Exp1_16" aria-hidden="true" data-toggle="tooltip" title=""></i>
-                                    ¿Ha tenido la impresión de que su vida se va a acortar, que va a morir antes que otras personas o que tiene un futuro limitado?</p>
+                                  16.  ¿Ha tenido la impresión de que su vida se va a acortar, que va a morir antes que otras personas o que tiene un futuro limitado?</p>
                                 <div style="display: flex; align-items: center; gap: 20px;">
                                     <div>
                                         <label for="pregunta16_si" style="margin-right: 5px;">Sí</label>
@@ -494,9 +494,9 @@
                             <div id="titulo4">
                                 <h5 style="text-align: left; width: 70%;"><b>IV.- Afectación (durante el último mes):</b></h5>
                             </div>
-                            <div id="pregunta17" class="mt-4" style="display: flex; justify-content: space-between; align-items: center; width: 100%; margin-bottom: 10px;">
+                            <div id="pregunta17_1" class="mt-4" style="display: flex; justify-content: space-between; align-items: center; width: 100%; margin-bottom: 10px;">
                                 <p style="margin: 0; flex: 1;"><i class="fa fa-info-circle" id="Exp1_17" aria-hidden="true" data-toggle="tooltip" title=""></i>
-                                    ¿Ha tenido usted dificultades para dormir?</p>
+                                  17.  ¿Ha tenido usted dificultades para dormir?</p>
                                 <div style="display: flex; align-items: center; gap: 20px;">
                                     <div>
                                         <label for="preguta17_si" style="margin-right: 5px;">Sí</label>
@@ -509,9 +509,9 @@
                                     </div>
                                 </div>
                             </div>
-                            <div id="pregunta18" style="display: flex; justify-content: space-between; align-items: center; width: 100%; margin-bottom: 10px;">
+                            <div id="pregunta18_1" style="display: flex; justify-content: space-between; align-items: center; width: 100%; margin-bottom: 10px;">
                                 <p style="margin: 0; flex: 1;"><i class="fa fa-info-circle" id="Exp1_18" aria-hidden="true" data-toggle="tooltip" title=""></i>
-                                    ¿Ha estado particularmente irritable o le han dado arranques de coraje?</p>
+                                  18.  ¿Ha estado particularmente irritable o le han dado arranques de coraje?</p>
                                 <div style="display: flex; align-items: center; gap: 20px;">
                                     <div>
                                         <label for="pregunta18_si" style="margin-right: 5px;">Sí</label>
@@ -524,9 +524,9 @@
                                     </div>
                                 </div>
                             </div>
-                            <div id="pregunta19" style="display: flex; justify-content: space-between; align-items: center; width: 100%; margin-bottom: 10px;">
+                            <div id="pregunta19_1" style="display: flex; justify-content: space-between; align-items: center; width: 100%; margin-bottom: 10px;">
                                 <p style="margin: 0; flex: 1;"><i class="fa fa-info-circle" id="Exp1_19" aria-hidden="true" data-toggle="tooltip" title=""></i>
-                                    ¿Ha tenido dificultad para concentrarse?</p>
+                                  19.  ¿Ha tenido dificultad para concentrarse?</p>
                                 <div style="display: flex; align-items: center; gap: 20px;">
                                     <div>
                                         <label for="pregunta19_si" style="margin-right: 5px;">Sí</label>
@@ -539,9 +539,9 @@
                                     </div>
                                 </div>
                             </div>
-                            <div id="pregunta20" style="display: flex; justify-content: space-between; align-items: center; width: 100%; margin-bottom: 10px;">
+                            <div id="pregunta20_1" style="display: flex; justify-content: space-between; align-items: center; width: 100%; margin-bottom: 10px;">
                                 <p style="margin: 0; flex: 1;"><i class="fa fa-info-circle" id="Exp1_20" aria-hidden="true" data-toggle="tooltip" title=""></i>
-                                    ¿Ha estado nervioso o constantemente en alerta?</p>
+                                   20.  ¿Ha estado nervioso o constantemente en alerta?</p>
                                 <div style="display: flex; align-items: center; gap: 20px;">
                                     <div>
                                         <label for="pregunta20_si" style="margin-right: 5px;">Sí</label>
@@ -554,9 +554,9 @@
                                     </div>
                                 </div>
                             </div>
-                            <div id="pregunta21" style="display: flex; justify-content: space-between; align-items: center; width: 100%; margin-bottom: 10px;">
+                            <div id="pregunta21_1" style="display: flex; justify-content: space-between; align-items: center; width: 100%; margin-bottom: 10px;">
                                 <p style="margin: 0; flex: 1;"><i class="fa fa-info-circle" id="Exp1_21" aria-hidden="true" data-toggle="tooltip" title=""></i>
-                                    ¿Se ha sobresaltado fácilmente por cualquier cosa?</p>
+                                  21.  ¿Se ha sobresaltado fácilmente por cualquier cosa?</p>
                                 <div style="display: flex; align-items: center; gap: 20px;">
                                     <div>
                                         <label for="pregunta21_si" style="margin-right: 5px;">Sí</label>
@@ -1963,14 +1963,13 @@
                                 <input type="hidden" class="form-control" id="GUIAIII_TRABAJADOR_ID" name="TRABAJADOR_ID" value="0">
                         </div>
                         <div class="mt-3">
-                            <h6>Para responder las siguientes preguntas considere las condiciones ambientales de su centro de trabajo.
-                            </h6>
+                            <p style="margin: 0; flex: 1; font-style: italic;"><i class="fa fa-info-circle" aria-hidden="true" data-toggle="tooltip" title=""></i>
+                            Para responder las siguientes preguntas considere las condiciones ambientales de su centro de trabajo.</p>
                         </div>
-
-                        <div id="seccion1_3" class="mt-2" style="display: block; padding: 10px;">
+                        <div id="seccion1_3" style="display: block;">
                             <div id="pregunta1_3" class="mt-4" style="display: flex; justify-content: space-between; align-items: center; width: 100%; margin-bottom: 10px;">
                                 <p style="margin: 0; flex: 1;"><i class="fa fa-info-circle" id="Exp3_1" aria-hidden="true" data-toggle="tooltip" title=""></i>
-                                    El espacio donde trabajo me permite <br> realizar mis actividades de manera segura <br> e higiénica
+                                    1.  El espacio donde trabajo me permite <br> realizar mis actividades de manera segura <br> e higiénica
                                 </p>
                                 <div style="display: flex; align-items: center; gap: 20px;">
                                     <div>
@@ -1997,7 +1996,7 @@
                             </div>
                             <div id="pregunta2_3" class="mt-4" style="display: flex; justify-content: space-between; align-items: center; width: 100%; margin-bottom: 10px;">
                                 <p style="margin: 0; flex: 1;"><i class="fa fa-info-circle" id="Exp3_2" aria-hidden="true" data-toggle="tooltip" title=""></i>
-                                    Mi trabajo me exige hacer muchos <br> esfuerzo físico
+                                   2.  Mi trabajo me exige hacer muchos <br> esfuerzo físico
                                 </p>
                                 <div style="display: flex; align-items: center; gap: 20px;">
                                     <div>
@@ -2024,7 +2023,7 @@
                             </div>
                             <div id="pregunta3_3" class="mt-4" style="display: flex; justify-content: space-between; align-items: center; width: 100%; margin-bottom: 10px;">
                                 <p style="margin: 0; flex: 1;"><i class="fa fa-info-circle" id="Exp3_3" aria-hidden="true" data-toggle="tooltip" title=""></i>
-                                    Me preocupa sufrir un accidente en mi <br> trabajo
+                                  3.  Me preocupa sufrir un accidente en mi <br> trabajo
                                 </p>
                                 <div style="display: flex; align-items: center; gap: 20px;">
                                     <div>
@@ -2051,7 +2050,7 @@
                             </div>
                             <div id="pregunta4_3" class="mt-4" style="display: flex; justify-content: space-between; align-items: center; width: 100%; margin-bottom: 10px;">
                                 <p style="margin: 0; flex: 1;"><i class="fa fa-info-circle" id="Exp3_4" aria-hidden="true" data-toggle="tooltip" title=""></i>
-                                    Considero que en mi trabajo se aplican las normas de seguridad y salud en el trabajo
+                                   4.  Considero que en mi trabajo se aplican las normas de seguridad y salud en el trabajo
                                 </p>
                                 <div style="display: flex; align-items: center; gap: 20px;">
                                     <div>
@@ -2105,12 +2104,13 @@
                                 </div>
                             </div>
                             <div class="mt-5">
-                                <h6>Para responder a las preguntas siguientes piense en la cantidad y ritmo de trabajo que tiene.
-                                </h6>
+                            <hr>
+                                <p style="margin: 0; flex: 1; font-style: italic;"><i class="fa fa-info-circle" aria-hidden="true" data-toggle="tooltip" title=""></i>
+                               5.  Para responder a las preguntas siguientes piense en la cantidad y ritmo de trabajo que tiene.</p>
                             </div>
                             <div id="pregunta6_3" class="mt-5" style="display: flex; justify-content: space-between; align-items: center; width: 100%; margin-bottom: 10px;">
                                 <p style="margin: 0; flex: 1;"><i class="fa fa-info-circle" id="Exp3_6" aria-hidden="true" data-toggle="tooltip" title=""></i>
-                                    Por la cantidad de trabajo que tengo debo quedarme tiempo adicional a mi turno
+                                  6.  Por la cantidad de trabajo que tengo debo quedarme tiempo adicional a mi turno
                                 </p>
                                 <div style="display: flex; align-items: center; gap: 20px;">
                                     <div>
@@ -2137,7 +2137,7 @@
                             </div>
                             <div id="pregunta7_3" class="mt-4" style="display: flex; justify-content: space-between; align-items: center; width: 100%; margin-bottom: 10px;">
                                 <p style="margin: 0; flex: 1;"><i class="fa fa-info-circle" id="Exp3_7" aria-hidden="true" data-toggle="tooltip" title=""></i>
-                                    Por la cantidad de trabajo que tengo debo trabajar sin parar
+                                   7.  Por la cantidad de trabajo que tengo debo trabajar sin parar
                                 </p>
                                 <div style="display: flex; align-items: center; gap: 20px;">
                                     <div>
@@ -2164,7 +2164,7 @@
                             </div>
                             <div id="pregunta8_3" class="mt-4" style="display: flex; justify-content: space-between; align-items: center; width: 100%; margin-bottom: 10px;">
                                 <p style="margin: 0; flex: 1;"><i class="fa fa-info-circle" id="Exp3_8" aria-hidden="true" data-toggle="tooltip" title=""></i>
-                                    Considero que es necesario mantener un <br> ritmo de trabajo acelerado
+                                 8.  Considero que es necesario mantener un <br> ritmo de trabajo acelerado
                                 </p>
                                 <div style="display: flex; align-items: center; gap: 20px;">
                                     <div>
@@ -2195,7 +2195,7 @@
                             </div>
                             <div id="pregunta9_3" class="mt-5" style="display: flex; justify-content: space-between; align-items: center; width: 100%; margin-bottom: 10px;">
                                 <p style="margin: 0; flex: 1;"><i class="fa fa-info-circle" id="Exp3_9" aria-hidden="true" data-toggle="tooltip" title=""></i>
-                                    Mi trabajo exige que esté muy concentrado
+                                  9.  Mi trabajo exige que esté muy concentrado
                                 </p>
                                 <div style="display: flex; align-items: center; gap: 20px;">
                                     <div>
@@ -2222,7 +2222,7 @@
                             </div>
                             <div id="pregunta10_3" class="mt-4" style="display: flex; justify-content: space-between; align-items: center; width: 100%; margin-bottom: 10px;">
                                 <p style="margin: 0; flex: 1;"><i class="fa fa-info-circle" id="Exp3_10" aria-hidden="true" data-toggle="tooltip" title=""></i>
-                                    Mi trabajo requiere que memorice mucha información
+                                  10.  Mi trabajo requiere que memorice mucha información
                                 </p>
                                 <div style="display: flex; align-items: center; gap: 20px;">
                                     <div>
@@ -2249,7 +2249,7 @@
                             </div>
                             <div id="pregunta11_3" class="mt-4" style="display: flex; justify-content: space-between; align-items: center; width: 100%; margin-bottom: 10px;">
                                 <p style="margin: 0; flex: 1;"><i class="fa fa-info-circle" id="Exp3_11" aria-hidden="true" data-toggle="tooltip" title=""></i>
-                                    En mi trabajo tengo que tomar decisiones difíciles muy rápido
+                                  11.  En mi trabajo tengo que tomar decisiones difíciles muy rápido
                                 </p>
                                 <div style="display: flex; align-items: center; gap: 20px;">
                                     <div>
@@ -2276,7 +2276,7 @@
                             </div>
                             <div id="pregunta12_3" class="mt-4" style="display: flex; justify-content: space-between; align-items: center; width: 100%; margin-bottom: 10px;">
                                 <p style="margin: 0; flex: 1;"><i class="fa fa-info-circle" id="Exp3_12" aria-hidden="true" data-toggle="tooltip" title=""></i>
-                                    Mi trabajo exige que atienda varios <br> asuntos
+                                   12. Mi trabajo exige que atienda varios <br> asuntos
                                     al mismo tiempo
                                 </p>
                                 <div style="display: flex; align-items: center; gap: 20px;">
@@ -3777,7 +3777,7 @@
                             </div>
 
                             
-                        <div class="mt-5">
+                        <div class="mt-3">
                             <h6>Las preguntas siguientes están relacionadas con la atención a clientes y usuarios.
                             </h6>
                         </div> 	
@@ -4060,6 +4060,9 @@
                 </div>
 
 
+               
+
+
         </div>
     </div>
 
@@ -4108,7 +4111,7 @@
                 </p>
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-primary" id="aceptarPermisos">Acepto y continuo</button>
+                <button type="button" class="btn btn-info" id="aceptarPermisos">Acepto y continuo</button>
             </div>
         </div>
     </div>
@@ -4135,10 +4138,13 @@
         <form id="form-foto" enctype="multipart/form-data">
           <!-- CSRF Token -->
           <input type="hidden" name="_token" value="{{ csrf_token() }}">
-          
+          <div id="instruccionesFoto" class="text-center">
+            <p>Para continuar, mire fijamente a la cámara por unos segundos y cuando este listo presione el botón para capturar y guardar su foto</p>
+            </div>
           <div id="video-container"></div>
           <input type="file" id="imagen" name="foto" style="display:none;">
         </form>
+
 
         <!-- Spinner de carga -->
         <div id="loadingSpinner" class="text-center" style="display: none;">
@@ -4149,16 +4155,47 @@
         </div>
       </div>
       <div class="modal-footer">
-        <button type="button" class="btn btn-primary" id="tomar-foto">Tomar foto y continuar</button>
+        <button type="button" class="btn btn-info" id="tomar-foto">Tomar foto y continuar</button>
       </div>
     </div>
   </div>
 </div>
+<div id="instruccionesModal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="instruccionesModalLabel" aria-hidden="true" data-backdrop="static" data-keyboard="false">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+        <div class="modal-header d-flex justify-content-between align-items-center">
+            <h5 class="modal-title" id="instruccionesModalLabel">Instrucciones</h5>
+            <img src="/assets/images/Logo_Color_results_original.png" alt="Imagen de Privacidad" style="width: 220px;">
+        </div>
 
+        <div class="modal-body">
+            <p style="font-size: 1rem; color: #333;">
+                <i class="fa fa-info-circle" style="color: #007bff;"></i>
+                Por favor, lea detenidamente cada uno de los siguientes incisos y responda conforme a su experiencia.
+            </p>
+            
+            <h6 style="margin-top: 20px; font-weight: bold; color: #dc3545;">
+                <i class="fa fa-exclamation-triangle" aria-hidden="true" style="color: #dc3545;"></i> Aviso Importante
+            </h6>
+            
+            <p style="font-size: 0.9rem; color: #555; font-style: italic;">
+                Recuerde que esto no es un examen, por lo que no existen respuestas correctas o incorrectas. 
+                <br>
+            </p>
+            <p style="font-size: 0.9rem; color: #555;">
+                Esta herramienta evalúa factores de riesgo psicosocial en los centros de trabajo, con base en la NOM-035-STPS-2018 establecida en los Estados Unidos Mexicanos.
+            </p>
+        </div>
 
+        <div class="modal-footer">
+            <button type="button" class="btn btn-info" id="instruccionesEntendidas" onclick="instruccionesEntendidas()" >
+                <i class="fa fa-check" aria-hidden="true"></i> Entendido
+            </button>
+        </div>
 
-
-
+        </div>
+    </div>
+</div>
 
     <script type="text/javascript">
         var requiereGuia1 = <?php echo json_encode($guia1); ?>;
@@ -4174,6 +4211,7 @@
         botonradio('radio-group');
         scrolldatos();
         consultarDatos();
+        consultarRespuestasGuardadas();
 
     });
     </script>
