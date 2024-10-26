@@ -106,6 +106,7 @@
             text-align: center;
             display: inline-block;
             width: 100%;
+            color: #154b75;
         }
 
         .card {
@@ -113,7 +114,7 @@
         }
 
         i {
-            color: #99abb4;
+            color: #154b75;
         }
 
         .radio-group {
@@ -159,7 +160,7 @@
 
         .info-section i {
             margin-right: 10px;
-            color: #007bff; 
+            color: ##0099c7; 
         }
 
 
@@ -228,11 +229,11 @@
                 <div id="guia1" class="card" style="display: block">
                     <h6 style="text-align: center">Guía de referencia I</h6>
                     <h3 class="card-title"><b>GUÍA PARA IDENTIFICAR A LOS TRABAJADORES QUE FUERON SUJETOS A ACONTECIMIENTOS TRAUMÁTICOS SEVEROS</b></h3>
-
+                    <hr>
                     <form enctype="multipart/form-data" method="post" name="guia_1" id="guia_1">
                         {!! csrf_field() !!}
 
-                        <div id="seccion1" style="padding: 10px; ">
+                        <div id="seccion1" style="padding: 10px;">
                             <div id="titulo1">
                                 <h5 style="text-align: left; width: 70%;"><b>I.- Acontecimiento traumático severo</b></h5>
                             </div>
@@ -575,10 +576,10 @@
 
                 </div>
 
-
                 <div id="guia2" class="card mt-4" style="display: block">
                     <h6 style="text-align: center">Guía de referencia II</h6>
                     <h3 class="card-title"><b>GUÍA PARA IDENTIFICAR LOS FACTORES DE RIESGO PSICOSOCIAL EN LOS CENTROS DE TRABAJO</b></h3>
+                    <hr>
                     <form enctype="multipart/form-data" method="post" name="guia_2" id="guia_2">
                         {!! csrf_field() !!}
 
@@ -628,7 +629,7 @@
                                         <input type="radio" class="radio-group" id="preguta2_siempre" name="GUIA2_2" value="4">
                                     </div>
                                     <div>
-                                        <label for="preguta2_casi" class="radio-label" style="margin-right: 5px;">Casí siempre</label>
+                                        <label for="preguta2_casi" class="radio-label" style="margin-right: 5px;">Casi siempre</label>
                                         <input type="radio" class="radio-group" id="preguta2_casi" name="GUIA2_2" value="3">
                                     </div>
                                     <div>
@@ -656,7 +657,7 @@
                                         <input type="radio"class="radio-group" id="preguta3_siempre" name="GUIA2_3" value="4">
                                     </div>
                                     <div>
-                                        <label for="preguta3_casi"  class="radio-label"  style="margin-right: 5px;">Casí siempre</label>
+                                        <label for="preguta3_casi"  class="radio-label"  style="margin-right: 5px;">Casi siempre</label>
                                         <input type="radio" class="radio-group"  id="preguta3_casi" name="GUIA2_3" value="3">
                                     </div>
                                     <div>
@@ -683,7 +684,7 @@
                                         <input type="radio" class="radio-group" id="preguta4_siempre" name="GUIA2_4" value="4">
                                     </div>
                                     <div>
-                                        <label for="preguta4_casi" class="radio-label" style="margin-right: 5px;">Casí siempre</label>
+                                        <label for="preguta4_casi" class="radio-label" style="margin-right: 5px;">Casi siempre</label>
                                         <input type="radio" class="radio-group" id="preguta4_casi" name="GUIA2_4" value="3">
                                     </div>
                                     <div>
@@ -710,7 +711,7 @@
                                         <input type="radio" class="radio-group" id="preguta5_siempre" name="GUIA2_5" value="4">
                                     </div>
                                     <div>
-                                        <label for="preguta5_casi" class="radio-label" style="margin-right: 5px;">Casí siempre</label>
+                                        <label for="preguta5_casi" class="radio-label" style="margin-right: 5px;">Casi siempre</label>
                                         <input type="radio" class="radio-group" id="preguta5_casi" name="GUIA2_5" value="3">
                                     </div>
                                     <div>
@@ -738,7 +739,7 @@
                                         <input type="radio" class="radio-group"  id="preguta6_siempre" name="GUIA2_6" value="4">
                                     </div>
                                     <div>
-                                        <label for="preguta6_casi" class="radio-label" style="margin-right: 5px;">Casí siempre</label>
+                                        <label for="preguta6_casi" class="radio-label" style="margin-right: 5px;">Casi siempre</label>
                                         <input type="radio" class="radio-group"  id="preguta6_casi" name="GUIA2_6" value="3">
                                     </div>
                                     <div>
@@ -767,7 +768,7 @@
                                         <input type="radio" class="radio-group"  id="preguta7_siempre" name="GUIA2_7" value="4">
                                     </div>
                                     <div>
-                                        <label for="preguta7_casi" class="radio-label" style="margin-right: 5px;">Casí siempre</label>
+                                        <label for="preguta7_casi" class="radio-label" style="margin-right: 5px;">Casi siempre</label>
                                         <input type="radio" class="radio-group"  id="preguta7_casi" name="GUIA2_7" value="3">
                                     </div>
                                     <div>
@@ -795,7 +796,7 @@
                                         <input type="radio" class="radio-group"  id="preguta8_siempre" name="GUIA2_8" value="4">
                                     </div>
                                     <div>
-                                        <label for="preguta8_casi" class="radio-label" style="margin-right: 5px;">Casí siempre</label>
+                                        <label for="preguta8_casi" class="radio-label" style="margin-right: 5px;">Casi siempre</label>
                                         <input type="radio" class="radio-group"  id="preguta8_casi" name="GUIA2_8" value="3">
                                     </div>
                                     <div>
@@ -823,7 +824,7 @@
                                         <input type="radio" class="radio-group"  id="preguta9_siempre" name="GUIA2_9" value="4">
                                     </div>
                                     <div>
-                                        <label for="preguta9_casi" class="radio-label" style="margin-right: 5px;">Casí siempre</label>
+                                        <label for="preguta9_casi" class="radio-label" style="margin-right: 5px;">Casi siempre</label>
                                         <input type="radio" class="radio-group"  id="preguta9_casi" name="GUIA2_9" value="3">
                                     </div>
                                     <div>
@@ -853,7 +854,7 @@
                                         <input type="radio" class="radio-group"  id="preguta10_siempre" name="GUIA2_10" value="4">
                                     </div>
                                     <div>
-                                        <label for="preguta10_casi" class="radio-label" style="margin-right: 5px;">Casí siempre</label>
+                                        <label for="preguta10_casi" class="radio-label" style="margin-right: 5px;">Casi siempre</label>
                                         <input type="radio" class="radio-group"  id="preguta10_casi" name="GUIA2_10" value="3">
                                     </div>
                                     <div>
@@ -880,7 +881,7 @@
                                         <input type="radio" class="radio-group"  id="preguta11_siempre" name="GUIA2_11" value="4">
                                     </div>
                                     <div>
-                                        <label for="preguta11_casi"  class="radio-label" style="margin-right: 5px;">Casí siempre</label>
+                                        <label for="preguta11_casi"  class="radio-label" style="margin-right: 5px;">Casi siempre</label>
                                         <input type="radio" class="radio-group"  id="preguta11_casi" name="GUIA2_11" value="3">
                                     </div>
                                     <div>
@@ -907,7 +908,7 @@
                                         <input type="radio"  class="radio-group"  id="preguta12_siempre" name="GUIA2_12" value="4">
                                     </div>
                                     <div>
-                                        <label for="preguta12_casi" class="radio-label"  style="margin-right: 5px;">Casí siempre</label>
+                                        <label for="preguta12_casi" class="radio-label"  style="margin-right: 5px;">Casi siempre</label>
                                         <input type="radio" class="radio-group"  id="preguta12_casi" name="GUIA2_12" value="3">
                                     </div>
                                     <div>
@@ -934,7 +935,7 @@
                                         <input type="radio" class="radio-group"  id="preguta13_siempre" name="GUIA2_13" value="4">
                                     </div>
                                     <div>
-                                        <label for="preguta13_casi" class="radio-label" style="margin-right: 5px;">Casí siempre</label>
+                                        <label for="preguta13_casi" class="radio-label" style="margin-right: 5px;">Casi siempre</label>
                                         <input type="radio" class="radio-group"  id="preguta13_casi" name="GUIA2_13" value="3">
                                     </div>
                                     <div>
@@ -965,7 +966,7 @@
                                         <input type="radio"  class="radio-group" id="preguta14_siempre" name="GUIA2_14" value="4">
                                     </div>
                                     <div>
-                                        <label for="preguta14_casi" class="radio-label" style="margin-right: 5px;">Casí siempre</label>
+                                        <label for="preguta14_casi" class="radio-label" style="margin-right: 5px;">Casi siempre</label>
                                         <input type="radio" class="radio-group"  id="preguta14_casi" name="GUIA2_14" value="3">
                                     </div>
                                     <div>
@@ -992,7 +993,7 @@
                                         <input type="radio" class="radio-group"  id="preguta15_siempre" name="GUIA2_15" value="4">
                                     </div>
                                     <div>
-                                        <label for="preguta15_casi" class="radio-label" style="margin-right: 5px;">Casí siempre</label>
+                                        <label for="preguta15_casi" class="radio-label" style="margin-right: 5px;">Casi siempre</label>
                                         <input type="radio" class="radio-group"  id="preguta15_casi" name="GUIA2_15" value="3">
                                     </div>
                                     <div>
@@ -1020,7 +1021,7 @@
                                         <input type="radio" class="radio-group"  id="preguta16_siempre" name="GUIA2_16" value="4">
                                     </div>
                                     <div>
-                                        <label for="preguta16_casi" class="radio-label" style="margin-right: 5px;">Casí siempre</label>
+                                        <label for="preguta16_casi" class="radio-label" style="margin-right: 5px;">Casi siempre</label>
                                         <input type="radio" class="radio-group"  id="preguta16_casi" name="GUIA2_16" value="3">
                                     </div>
                                     <div>
@@ -1047,7 +1048,7 @@
                                         <input type="radio" class="radio-group"  id="preguta17_siempre" name="GUIA2_17" value="4">
                                     </div>
                                     <div>
-                                        <label for="preguta17_casi" class="radio-label" style="margin-right: 5px;">Casí siempre</label>
+                                        <label for="preguta17_casi" class="radio-label" style="margin-right: 5px;">Casi siempre</label>
                                         <input type="radio" class="radio-group"  id="preguta17_casi" name="GUIA2_17" value="3">
                                     </div>
                                     <div>
@@ -1080,7 +1081,7 @@
                                         <input type="radio" class="radio-group"  id="preguta18_siempre" name="GUIA2_18" value="0">
                                     </div>
                                     <div>
-                                        <label for="preguta18_casi" class="radio-label" style="margin-right: 5px;">Casí siempre</label>
+                                        <label for="preguta18_casi" class="radio-label" style="margin-right: 5px;">Casi siempre</label>
                                         <input type="radio" class="radio-group" id="preguta18_casi" name="GUIA2_18" value="1">
                                     </div>
                                     <div>
@@ -1109,7 +1110,7 @@
                                         <input type="radio" class="radio-group" id="preguta19_siempre" name="GUIA2_19" value="0">
                                     </div>
                                     <div>
-                                        <label for="preguta19_casi" class="radio-label" style="margin-right: 5px;">Casí siempre</label>
+                                        <label for="preguta19_casi" class="radio-label" style="margin-right: 5px;">Casi siempre</label>
                                         <input type="radio" class="radio-group"  id="preguta19_casi" name="GUIA2_19" value="1">
                                     </div>
                                     <div>
@@ -1136,7 +1137,7 @@
                                         <input type="radio" class="radio-group"  id="preguta20_siempre" name="GUIA2_20" value="0">
                                     </div>
                                     <div>
-                                        <label for="preguta20_casi" class="radio-label" style="margin-right: 5px;">Casí siempre</label>
+                                        <label for="preguta20_casi" class="radio-label" style="margin-right: 5px;">Casi siempre</label>
                                         <input type="radio" class="radio-group"  id="preguta20_casi" name="GUIA2_20" value="1">
                                     </div>
                                     <div>
@@ -1163,7 +1164,7 @@
                                         <input type="radio"  class="radio-group"  id="preguta21_siempre" name="GUIA2_21" value="0">
                                     </div>
                                     <div>
-                                        <label for="preguta21_casi" class="radio-label" style="margin-right: 5px;">Casí siempre</label>
+                                        <label for="preguta21_casi" class="radio-label" style="margin-right: 5px;">Casi siempre</label>
                                         <input type="radio" class="radio-group"  id="preguta21_casi" name="GUIA2_21" value="1">
                                     </div>
                                     <div>
@@ -1190,7 +1191,7 @@
                                         <input type="radio" class="radio-group"  id="preguta22_siempre" name="GUIA2_22" value="0">
                                     </div>
                                     <div>
-                                        <label for="preguta22_casi" class="radio-label" style="margin-right: 5px;">Casí siempre</label>
+                                        <label for="preguta22_casi" class="radio-label" style="margin-right: 5px;">Casi siempre</label>
                                         <input type="radio" class="radio-group"  id="preguta22_casi" name="GUIA2_22" value="1">
                                     </div>
                                     <div>
@@ -1223,7 +1224,7 @@
                                         <input type="radio" class="radio-group"  id="preguta23_siempre" name="GUIA2_23" value="0">
                                     </div>
                                     <div>
-                                        <label for="preguta23_casi"  class="radio-label" style="margin-right: 5px;">Casí siempre</label>
+                                        <label for="preguta23_casi"  class="radio-label" style="margin-right: 5px;">Casi siempre</label>
                                         <input type="radio" class="radio-group"  id="preguta23_casi" name="GUIA2_23" value="1">
                                     </div>
                                     <div>
@@ -1250,7 +1251,7 @@
                                         <input type="radio"  class="radio-group"  id="preguta24_siempre" name="GUIA2_24" value="0">
                                     </div>
                                     <div>
-                                        <label for="preguta24_casi" class="radio-label" style="margin-right: 5px;">Casí siempre</label>
+                                        <label for="preguta24_casi" class="radio-label" style="margin-right: 5px;">Casi siempre</label>
                                         <input type="radio" class="radio-group"  id="preguta24_casi" name="GUIA2_24" value="1">
                                     </div>
                                     <div>
@@ -1278,7 +1279,7 @@
                                         <input type="radio" class="radio-group"  id="preguta25_siempre" name="GUIA2_25" value="0">
                                     </div>
                                     <div>
-                                        <label for="preguta25_casi" class="radio-label" style="margin-right: 5px;">Casí siempre</label>
+                                        <label for="preguta25_casi" class="radio-label" style="margin-right: 5px;">Casi siempre</label>
                                         <input type="radio" class="radio-group" id="preguta25_casi" name="GUIA2_25" value="1">
                                     </div>
                                     <div>
@@ -1305,7 +1306,7 @@
                                         <input type="radio" class="radio-group"  id="preguta26_siempre" name="GUIA2_26" value="0">
                                     </div>
                                     <div>
-                                        <label for="preguta26_casi" class="radio-label" style="margin-right: 5px;">Casí siempre</label>
+                                        <label for="preguta26_casi" class="radio-label" style="margin-right: 5px;">Casi siempre</label>
                                         <input type="radio" class="radio-group"  id="preguta26_casi" name="GUIA2_26" value="1">
                                     </div>
                                     <div>
@@ -1333,7 +1334,7 @@
                                         <input type="radio" class="radio-group"  id="preguta27_siempre" name="GUIA2_27" value="0">
                                     </div>
                                     <div>
-                                        <label for="preguta27_casi" class="radio-label" style="margin-right: 5px;">Casí siempre</label>
+                                        <label for="preguta27_casi" class="radio-label" style="margin-right: 5px;">Casi siempre</label>
                                         <input type="radio" class="radio-group"  id="preguta27_casi" name="GUIA2_27" value="1">
                                     </div>
                                     <div>
@@ -1367,7 +1368,7 @@
                                         <input type="radio" class="radio-group"  id="preguta28_siempre" name="GUIA2_28" value="0">
                                     </div>
                                     <div>
-                                        <label for="preguta28_casi" class="radio-label" style="margin-right: 5px;">Casí siempre</label>
+                                        <label for="preguta28_casi" class="radio-label" style="margin-right: 5px;">Casi siempre</label>
                                         <input type="radio" class="radio-group"  id="preguta28_casi" name="GUIA2_28" value="1">
                                     </div>
                                     <div>
@@ -1395,7 +1396,7 @@
                                         <input type="radio" class="radio-group"  id="preguta29_siempre" name="GUIA2_29" value="0">
                                     </div>
                                     <div>
-                                        <label for="preguta29_casi" class="radio-label" style="margin-right: 5px;">Casí siempre</label>
+                                        <label for="preguta29_casi" class="radio-label" style="margin-right: 5px;">Casi siempre</label>
                                         <input type="radio" class="radio-group"  id="preguta29_casi" name="GUIA2_29" value="1">
                                     </div>
                                     <div>
@@ -1424,7 +1425,7 @@
                                         <input type="radio" class="radio-group"  id="preguta30_siempre" name="GUIA2_30" value="0">
                                     </div>
                                     <div>
-                                        <label for="preguta30_casi" class="radio-label" style="margin-right: 5px;">Casí siempre</label>
+                                        <label for="preguta30_casi" class="radio-label" style="margin-right: 5px;">Casi siempre</label>
                                         <input type="radio" class="radio-group"  id="preguta30_casi" name="GUIA2_30" value="1">
                                     </div>
                                     <div>
@@ -1451,7 +1452,7 @@
                                         <input type="radio" class="radio-group"  id="preguta31_siempre" name="GUIA2_31" value="0">
                                     </div>
                                     <div>
-                                        <label for="preguta31_casi" class="radio-label" style="margin-right: 5px;">Casí siempre</label>
+                                        <label for="preguta31_casi" class="radio-label" style="margin-right: 5px;">Casi siempre</label>
                                         <input type="radio" class="radio-group"  id="preguta31_casi" name="GUIA2_31" value="1">
                                     </div>
                                     <div>
@@ -1478,7 +1479,7 @@
                                         <input type="radio" class="radio-group"  id="preguta32_siempre" name="GUIA2_32" value="0">
                                     </div>
                                     <div>
-                                        <label for="preguta32_casi" class="radio-label" style="margin-right: 5px;">Casí siempre</label>
+                                        <label for="preguta32_casi" class="radio-label" style="margin-right: 5px;">Casi siempre</label>
                                         <input type="radio" class="radio-group"  id="preguta32_casi" name="GUIA2_32" value="1">
                                     </div>
                                     <div>
@@ -1507,7 +1508,7 @@
                                         <input type="radio" class="radio-group"  id="preguta33_siempre" name="GUIA2_33" value="0">
                                     </div>
                                     <div>
-                                        <label for="preguta33_casi" class="radio-label" style="margin-right: 5px;">Casí siempre</label>
+                                        <label for="preguta33_casi" class="radio-label" style="margin-right: 5px;">Casi siempre</label>
                                         <input type="radio" class="radio-group" id="preguta33_casi" name="GUIA2_33" value="1">
                                     </div>
                                     <div>
@@ -1535,7 +1536,7 @@
                                         <input type="radio" class="radio-group"  id="preguta34_siempre" name="GUIA2_34" value="4">
                                     </div>
                                     <div>
-                                        <label for="preguta34_casi" class="radio-label" style="margin-right: 5px;">Casí siempre</label>
+                                        <label for="preguta34_casi" class="radio-label" style="margin-right: 5px;">Casi siempre</label>
                                         <input type="radio" class="radio-group"  id="preguta34_casi" name="GUIA2_34" value="3">
                                     </div>
                                     <div>
@@ -1564,7 +1565,7 @@
                                         <input type="radio" class="radio-group"  id="preguta35_siempre" name="GUIA2_35" value="4">
                                     </div>
                                     <div>
-                                        <label for="preguta35_casi" class="radio-label" style="margin-right: 5px;">Casí siempre</label>
+                                        <label for="preguta35_casi" class="radio-label" style="margin-right: 5px;">Casi siempre</label>
                                         <input type="radio" class="radio-group"  id="preguta35_casi" name="GUIA2_35" value="3">
                                     </div>
                                     <div>
@@ -1592,7 +1593,7 @@
                                         <input type="radio" class="radio-group" id="preguta36_siempre" name="GUIA2_36" value="4">
                                     </div>
                                     <div>
-                                        <label for="preguta36_casi" class="radio-label" style="margin-right: 5px;">Casí siempre</label>
+                                        <label for="preguta36_casi" class="radio-label" style="margin-right: 5px;">Casi siempre</label>
                                         <input type="radio" class="radio-group" id="preguta36_casi" name="GUIA2_36" value="3">
                                     </div>
                                     <div>
@@ -1619,7 +1620,7 @@
                                         <input type="radio" class="radio-group" id="preguta37_siempre" name="GUIA2_37" value="4">
                                     </div>
                                     <div>
-                                        <label for="preguta37_casi" class="radio-label" style="margin-right: 5px;">Casí siempre</label>
+                                        <label for="preguta37_casi" class="radio-label" style="margin-right: 5px;">Casi siempre</label>
                                         <input type="radio" class="radio-group" id="preguta37_casi" name="GUIA2_37" value="3">
                                     </div>
                                     <div>
@@ -1648,7 +1649,7 @@
                                         <input type="radio" class="radio-group" id="preguta38_siempre" name="GUIA2_38" value="4">
                                     </div>
                                     <div>
-                                        <label for="preguta38_casi" class="radio-label" style="margin-right: 5px;">Casí siempre</label>
+                                        <label for="preguta38_casi" class="radio-label" style="margin-right: 5px;">Casi siempre</label>
                                         <input type="radio" class="radio-group" id="preguta38_casi" name="GUIA2_38" value="3">
                                     </div>
                                     <div>
@@ -1676,7 +1677,7 @@
                                         <input type="radio" class="radio-group" id="preguta39_siempre" name="GUIA2_39" value="4">
                                     </div>
                                     <div>
-                                        <label for="preguta39_casi" class="radio-label" style="margin-right: 5px;">Casí siempre</label>
+                                        <label for="preguta39_casi" class="radio-label" style="margin-right: 5px;">Casi siempre</label>
                                         <input type="radio" class="radio-group" id="preguta39_casi" name="GUIA2_39" value="3">
                                     </div>
                                     <div>
@@ -1703,7 +1704,7 @@
                                         <input type="radio" class="radio-group" id="preguta40_siempre" name="GUIA2_40" value="4">
                                     </div>
                                     <div>
-                                        <label for="preguta40_casi" class="radio-label" style="margin-right: 5px;">Casí siempre</label>
+                                        <label for="preguta40_casi" class="radio-label" style="margin-right: 5px;">Casi siempre</label>
                                         <input type="radio" class="radio-group" id="preguta40_casi" name="GUIA2_40" value="3">
                                     </div>
                                     <div>
@@ -1763,7 +1764,7 @@
                                         <input type="radio" class="radio-group" id="preguta41_siempre" name="GUIA2_41" value="4">
                                     </div>
                                     <div>
-                                        <label for="preguta41_casi" class="radio-label" style="margin-right: 5px;">Casí siempre</label>
+                                        <label for="preguta41_casi" class="radio-label" style="margin-right: 5px;">Casi siempre</label>
                                         <input type="radio" class="radio-group" id="preguta41_casi" name="GUIA2_41" value="3">
                                     </div>
                                     <div>
@@ -1790,7 +1791,7 @@
                                         <input type="radio" class="radio-group" id="preguta42_siempre" name="GUIA2_42" value="4">
                                     </div>
                                     <div>
-                                        <label for="preguta42_casi" class="radio-label" style="margin-right: 5px;">Casí siempre</label>
+                                        <label for="preguta42_casi" class="radio-label" style="margin-right: 5px;">Casi siempre</label>
                                         <input type="radio" class="radio-group" id="preguta42_casi" name="GUIA2_42" value="3">
                                     </div>
                                     <div>
@@ -1817,7 +1818,7 @@
                                         <input type="radio" class="radio-group" id="preguta43_siempre" name="GUIA2_43" value="4">
                                     </div>
                                     <div>
-                                        <label for="preguta43_casi" class="radio-label" style="margin-right: 5px;">Casí siempre</label>
+                                        <label for="preguta43_casi" class="radio-label" style="margin-right: 5px;">Casi siempre</label>
                                         <input type="radio" class="radio-group" id="preguta43_casi" name="GUIA2_43" value="3">
                                     </div>
                                     <div>
@@ -1871,7 +1872,7 @@
                                         <input type="radio" class="radio-group" id="preguta44_siempre" name="GUIA2_44" value="4">
                                     </div>
                                     <div>
-                                        <label for="preguta44_casi" class="radio-label" style="margin-right: 5px;">Casí siempre</label>
+                                        <label for="preguta44_casi" class="radio-label" style="margin-right: 5px;">Casi siempre</label>
                                         <input type="radio" class="radio-group" id="preguta44_casi" name="GUIA2_44" value="3">
                                     </div>
                                     <div>
@@ -1899,7 +1900,7 @@
                                         <input type="radio" class="radio-group" id="preguta45_siempre" name="GUIA2_45" value="4">
                                     </div>
                                     <div>
-                                        <label for="preguta45_casi" class="radio-label" style="margin-right: 5px;">Casí siempre</label>
+                                        <label for="preguta45_casi" class="radio-label" style="margin-right: 5px;">Casi siempre</label>
                                         <input type="radio" class="radio-group" id="preguta45_casi" name="GUIA2_45" value="3">
                                     </div>
                                     <div>
@@ -1926,7 +1927,7 @@
                                         <input type="radio" class="radio-group" id="preguta46_siempre" name="GUIA2_46" value="4">
                                     </div>
                                     <div>
-                                        <label for="preguta46_casi" class="radio-label" style="margin-right: 5px;">Casí siempre</label>
+                                        <label for="preguta46_casi" class="radio-label" style="margin-right: 5px;">Casi siempre</label>
                                         <input type="radio" class="radio-group" id="preguta46_casi" name="GUIA2_46" value="3">
                                     </div>
                                     <div>
@@ -1950,11 +1951,10 @@
                     </form>
                 </div>
 
-
-
                 <div id="guia3" class="card mt-4" style="display: block">
                     <h6 style="text-align: center">Guía de referencia III</h6>
                     <h3 class="card-title"><b>GUÍA PARA IDENTIFICAR LOS FACTORES DE RIESGO PSICOSOCIAL Y EVALUAR EL ENTORNO ORGANIZACIONAL EN LOS CENTROS DE TRABAJO</b></h3>
+                    <hr>
                     <form enctype="multipart/form-data" method="post" name="guia_3" id="guia_3">
                         {!! csrf_field() !!}
 
@@ -1977,7 +1977,7 @@
                                         <input type="radio" class="radio-group" id="preguta1_3siempre" name="GUIA3_1" value="0">
                                     </div>
                                     <div>
-                                        <label for="preguta1_3casi" class="radio-label" style="margin-right: 5px;">Casí siempre</label>
+                                        <label for="preguta1_3casi" class="radio-label" style="margin-right: 5px;">Casi siempre</label>
                                         <input type="radio" class="radio-group" id="preguta1_3casi" name="GUIA3_1" value="1">
                                     </div>
                                     <div>
@@ -2004,7 +2004,7 @@
                                         <input type="radio" class="radio-group" id="preguta2_3siempre" name="GUIA3_2" value="4">
                                     </div>
                                     <div>
-                                        <label for="preguta2_3casi" class="radio-label" style="margin-right: 5px;">Casí siempre</label>
+                                        <label for="preguta2_3casi" class="radio-label" style="margin-right: 5px;">Casi siempre</label>
                                         <input type="radio" class="radio-group" id="preguta2_3casi" name="GUIA3_2" value="3">
                                     </div>
                                     <div>
@@ -2031,7 +2031,7 @@
                                         <input type="radio" class="radio-group" id="preguta3_3siempre" name="GUIA3_3" value="4">
                                     </div>
                                     <div>
-                                        <label for="preguta3_3casi" class="radio-label" style="margin-right: 5px;">Casí siempre</label>
+                                        <label for="preguta3_3casi" class="radio-label" style="margin-right: 5px;">Casi siempre</label>
                                         <input type="radio" class="radio-group" id="preguta3_3casi" name="GUIA3_3" value="3">
                                     </div>
                                     <div>
@@ -2058,7 +2058,7 @@
                                         <input type="radio" class="radio-group" id="preguta4_3siempre" name="GUIA3_4" value="0">
                                     </div>
                                     <div>
-                                        <label for="preguta4_3casi" class="radio-label" style="margin-right: 5px;">Casí siempre</label>
+                                        <label for="preguta4_3casi" class="radio-label" style="margin-right: 5px;">Casi siempre</label>
                                         <input type="radio" class="radio-group" id="preguta4_3casi" name="GUIA3_4" value="1">
                                     </div>
                                     <div>
@@ -2078,7 +2078,7 @@
 
                             <div id="pregunta5_3" class="mt-4" style="display: flex; justify-content: space-between; align-items: center; width: 100%; margin-bottom: 10px;">
                                 <p style="margin: 0; flex: 1;"><i class="fa fa-info-circle" id="Exp3_5" aria-hidden="true" data-toggle="tooltip" title=""></i>
-                                    Considero que las actividades que realizo <br> son peligrosas
+                                    5.  Considero que las actividades que realizo <br> son peligrosas
                                 </p>
                                 <div style="display: flex; align-items: center; gap: 20px;">
                                     <div>
@@ -2086,7 +2086,7 @@
                                         <input type="radio" class="radio-group" id="preguta5_3siempre" name="GUIA3_5" value="4">
                                     </div>
                                     <div>
-                                        <label for="preguta5_3casi" class="radio-label" style="margin-right: 5px;">Casí siempre</label>
+                                        <label for="preguta5_3casi" class="radio-label" style="margin-right: 5px;">Casi siempre</label>
                                         <input type="radio" class="radio-group" id="preguta5_3casi" name="GUIA3_5" value="3">
                                     </div>
                                     <div>
@@ -2106,7 +2106,7 @@
                             <div class="mt-5">
                             <hr>
                                 <p style="margin: 0; flex: 1; font-style: italic;"><i class="fa fa-info-circle" aria-hidden="true" data-toggle="tooltip" title=""></i>
-                               5.  Para responder a las preguntas siguientes piense en la cantidad y ritmo de trabajo que tiene.</p>
+                                Para responder a las preguntas siguientes piense en la cantidad y ritmo de trabajo que tiene.</p>
                             </div>
                             <div id="pregunta6_3" class="mt-5" style="display: flex; justify-content: space-between; align-items: center; width: 100%; margin-bottom: 10px;">
                                 <p style="margin: 0; flex: 1;"><i class="fa fa-info-circle" id="Exp3_6" aria-hidden="true" data-toggle="tooltip" title=""></i>
@@ -2118,7 +2118,7 @@
                                         <input type="radio"class="radio-group"  id="preguta6_3siempre" name="GUIA3_6" value="4">
                                     </div>
                                     <div>
-                                        <label for="preguta6_3casi" class="radio-label" style="margin-right: 5px;">Casí siempre</label>
+                                        <label for="preguta6_3casi" class="radio-label" style="margin-right: 5px;">Casi siempre</label>
                                         <input type="radio" class="radio-group" id="preguta6_3casi" name="GUIA3_6" value="3">
                                     </div>
                                     <div>
@@ -2145,7 +2145,7 @@
                                         <input type="radio" class="radio-group" id="preguta7_3siempre" name="GUIA3_7" value="4">
                                     </div>
                                     <div>
-                                        <label for="preguta7_3casi" class="radio-label" style="margin-right: 5px;">Casí siempre</label>
+                                        <label for="preguta7_3casi" class="radio-label" style="margin-right: 5px;">Casi siempre</label>
                                         <input type="radio" class="radio-group" id="preguta7_3casi" name="GUIA3_7" value="3">
                                     </div>
                                     <div>
@@ -2172,7 +2172,7 @@
                                         <input type="radio" class="radio-group" id="preguta8_3siempre" name="GUIA3_8" value="4">
                                     </div>
                                     <div>
-                                        <label for="preguta8_3casi" class="radio-label" style="margin-right: 5px;">Casí siempre</label>
+                                        <label for="preguta8_3casi" class="radio-label" style="margin-right: 5px;">Casi siempre</label>
                                         <input type="radio" class="radio-group" id="preguta8_3casi" name="GUIA3_8" value="3">
                                     </div>
                                     <div>
@@ -2190,8 +2190,9 @@
                                 </div>
                             </div>
                             <div class="mt-5">
-                                <h6>Las preguntas siguientes están relacionadas con el esfuerzo mental que le exige su trabajo.
-                                </h6>
+                                <hr>
+                                <p style="margin: 0; flex: 1; font-style: italic;"><i class="fa fa-info-circle" aria-hidden="true" data-toggle="tooltip" title=""></i>
+                                Las preguntas siguientes están relacionadas con el esfuerzo mental que le exige su trabajo.</p>
                             </div>
                             <div id="pregunta9_3" class="mt-5" style="display: flex; justify-content: space-between; align-items: center; width: 100%; margin-bottom: 10px;">
                                 <p style="margin: 0; flex: 1;"><i class="fa fa-info-circle" id="Exp3_9" aria-hidden="true" data-toggle="tooltip" title=""></i>
@@ -2203,7 +2204,7 @@
                                         <input type="radio" class="radio-group" id="preguta9_3siempre" name="GUIA3_9" value="4">
                                     </div>
                                     <div>
-                                        <label for="preguta9_3casi" class="radio-label" style="margin-right: 5px;">Casí siempre</label>
+                                        <label for="preguta9_3casi" class="radio-label" style="margin-right: 5px;">Casi siempre</label>
                                         <input type="radio" class="radio-group" id="preguta9_3casi" name="GUIA3_9" value="3">
                                     </div>
                                     <div>
@@ -2230,7 +2231,7 @@
                                         <input type="radio" class="radio-group" id="preguta10_3siempre" name="GUIA3_10" value="4">
                                     </div>
                                     <div>
-                                        <label for="preguta10_3casi" class="radio-label" style="margin-right: 5px;">Casí siempre</label>
+                                        <label for="preguta10_3casi" class="radio-label" style="margin-right: 5px;">Casi siempre</label>
                                         <input type="radio" class="radio-group" id="preguta10_3casi" name="GUIA3_10" value="3">
                                     </div>
                                     <div>
@@ -2257,7 +2258,7 @@
                                         <input type="radio" class="radio-group" id="preguta11_3siempre" name="GUIA3_11" value="4">
                                     </div>
                                     <div>
-                                        <label for="preguta11_3casi" class="radio-label" style="margin-right: 5px;">Casí siempre</label>
+                                        <label for="preguta11_3casi" class="radio-label" style="margin-right: 5px;">Casi siempre</label>
                                         <input type="radio" class="radio-group" id="preguta11_3casi" name="GUIA3_11" value="3">
                                     </div>
                                     <div>
@@ -2285,7 +2286,7 @@
                                         <input type="radio" class="radio-group" id="preguta12_3siempre" name="GUIA3_12" value="4">
                                     </div>
                                     <div>
-                                        <label for="preguta12_3casi" class="radio-label" style="margin-right: 5px;">Casí siempre</label>
+                                        <label for="preguta12_3casi" class="radio-label" style="margin-right: 5px;">Casi siempre</label>
                                         <input type="radio" class="radio-group" id="preguta12_3casi" name="GUIA3_12" value="3">
                                     </div>
                                     <div>
@@ -2303,12 +2304,13 @@
                                 </div>
                             </div>
                             <div class="mt-5">
-                                <h6>Las preguntas siguientes están relacionadas con las actividades que realiza en su trabajo y las responsabilidades que tiene.
-                                </h6>
+                                <hr>
+                                <p style="margin: 0; flex: 1; font-style: italic;"><i class="fa fa-info-circle" aria-hidden="true" data-toggle="tooltip" title=""></i>
+                                Las preguntas siguientes están relacionadas con las actividades que realiza en su trabajo y las responsabilidades que tiene.</p>
                             </div>
                             <div id="pregunta13_3" class="mt-5" style="display: flex; justify-content: space-between; align-items: center; width: 100%; margin-bottom: 10px;">
                                 <p style="margin: 0; flex: 1;"><i class="fa fa-info-circle" id="Exp3_13" aria-hidden="true" data-toggle="tooltip" title=""></i>
-                                    En mi trabajo soy responsable de cosas de mucho valor
+                                  13.  En mi trabajo soy responsable de cosas de mucho valor
                                 </p>
                                 <div style="display: flex; align-items: center; gap: 20px;">
                                     <div>
@@ -2316,7 +2318,7 @@
                                         <input type="radio" class="radio-group" id="preguta13_3siempre" name="GUIA3_13" value="4">
                                     </div>
                                     <div>
-                                        <label for="preguta13_3casi" class="radio-label" style="margin-right: 5px;">Casí siempre</label>
+                                        <label for="preguta13_3casi" class="radio-label" style="margin-right: 5px;">Casi siempre</label>
                                         <input type="radio" class="radio-group" id="preguta13_3casi" name="GUIA3_13" value="3">
                                     </div>
                                     <div>
@@ -2335,7 +2337,7 @@
                             </div>
                             <div id="pregunta14_3" class="mt-4" style="display: flex; justify-content: space-between; align-items: center; width: 100%; margin-bottom: 10px;">
                                 <p style="margin: 0; flex: 1;"><i class="fa fa-info-circle" id="Exp3_14" aria-hidden="true" data-toggle="tooltip" title=""></i>
-                                    Respondo ante mi jefe por los resultados <br> de toda mi área de trabajo
+                                  14.  Respondo ante mi jefe por los resultados <br> de toda mi área de trabajo
                                 </p>
                                 <div style="display: flex; align-items: center; gap: 20px;">
                                     <div>
@@ -2343,7 +2345,7 @@
                                         <input type="radio" class="radio-group" id="preguta14_3siempre" name="GUIA3_14" value="4">
                                     </div>
                                     <div>
-                                        <label for="preguta14_3casi" class="radio-label" style="margin-right: 5px;">Casí siempre</label>
+                                        <label for="preguta14_3casi" class="radio-label" style="margin-right: 5px;">Casi siempre</label>
                                         <input type="radio" class="radio-group" id="preguta14_3casi" name="GUIA3_14" value="3">
                                     </div>
                                     <div>
@@ -2362,7 +2364,7 @@
                             </div>
                             <div id="pregunta15_3" class="mt-4" style="display: flex; justify-content: space-between; align-items: center; width: 100%; margin-bottom: 10px;">
                                 <p style="margin: 0; flex: 1;"><i class="fa fa-info-circle" id="Exp3_15" aria-hidden="true" data-toggle="tooltip" title=""></i>
-                                    En el trabajo me dan órdenes <br>contradictorias
+                                  15.  En el trabajo me dan órdenes <br>contradictorias
                                 </p>
                                 <div style="display: flex; align-items: center; gap: 20px;">
                                     <div>
@@ -2370,7 +2372,7 @@
                                         <input type="radio" class="radio-group" id="preguta15_3siempre" name="GUIA3_15" value="4">
                                     </div>
                                     <div>
-                                        <label for="preguta15_3casi" class="radio-label" style="margin-right: 5px;">Casí siempre</label>
+                                        <label for="preguta15_3casi" class="radio-label" style="margin-right: 5px;">Casi siempre</label>
                                         <input type="radio" class="radio-group" id="preguta15_3casi" name="GUIA3_15" value="3">
                                     </div>
                                     <div>
@@ -2389,7 +2391,7 @@
                             </div>
                             <div id="pregunta16_3" class="mt-4" style="display: flex; justify-content: space-between; align-items: center; width: 100%; margin-bottom: 10px;">
                                 <p style="margin: 0; flex: 1;"><i class="fa fa-info-circle" id="Exp3_16" aria-hidden="true" data-toggle="tooltip" title=""></i>
-                                    Considero que en mi trabajo me piden<br> hacer cosas innecesarias
+                                  16.  Considero que en mi trabajo me piden<br> hacer cosas innecesarias
                                 </p>
                                 <div style="display: flex; align-items: center; gap: 20px;">
                                     <div>
@@ -2397,7 +2399,7 @@
                                         <input type="radio" class="radio-group" id="preguta16_3siempre" name="GUIA3_16" value="4">
                                     </div>
                                     <div>
-                                        <label for="preguta16_3casi" class="radio-label" style="margin-right: 5px;">Casí siempre</label>
+                                        <label for="preguta16_3casi" class="radio-label" style="margin-right: 5px;">Casi siempre</label>
                                         <input type="radio" class="radio-group" id="preguta16_3casi" name="GUIA3_16" value="3">
                                     </div>
                                     <div>
@@ -2420,7 +2422,7 @@
                             </div>
                             <div id="pregunta17_3" class="mt-5" style="display: flex; justify-content: space-between; align-items: center; width: 100%; margin-bottom: 10px;">
                                 <p style="margin: 0; flex: 1;"><i class="fa fa-info-circle" id="Exp3_17" aria-hidden="true" data-toggle="tooltip" title=""></i>
-                                    Trabajo horas extras más de tres veces a<br> la semana
+                                   17.  Trabajo horas extras más de tres veces a<br> la semana
                                 </p>
                                 <div style="display: flex; align-items: center; gap: 20px;">
                                     <div>
@@ -2428,7 +2430,7 @@
                                         <input type="radio" class="radio-group" id="preguta17_3siempre" name="GUIA3_17" value="4">
                                     </div>
                                     <div>
-                                        <label for="preguta17_3casi" class="radio-label" style="margin-right: 5px;">Casí siempre</label>
+                                        <label for="preguta17_3casi" class="radio-label" style="margin-right: 5px;">Casi siempre</label>
                                         <input type="radio" class="radio-group" id="preguta17_3casi" name="GUIA3_17" value="3">
                                     </div>
                                     <div>
@@ -2447,7 +2449,7 @@
                             </div>
                             <div id="pregunta18_3" class="mt-4" style="display: flex; justify-content: space-between; align-items: center; width: 100%; margin-bottom: 10px;">
                                 <p style="margin: 0; flex: 1;"><i class="fa fa-info-circle" id="Exp3_18" aria-hidden="true" data-toggle="tooltip" title=""></i>
-                                    Mi trabajo me exige laborar en días de <br> descanso, festivos o fines de semana
+                                  18.  Mi trabajo me exige laborar en días de <br> descanso, festivos o fines de semana
                                 </p>
                                 <div style="display: flex; align-items: center; gap: 20px;">
                                     <div>
@@ -2455,7 +2457,7 @@
                                         <input type="radio" class="radio-group" id="preguta18_3siempre" name="GUIA3_18" value="4">
                                     </div>
                                     <div>
-                                        <label for="preguta18_3casi" class="radio-label" style="margin-right: 5px;">Casí siempre</label>
+                                        <label for="preguta18_3casi" class="radio-label" style="margin-right: 5px;">Casi siempre</label>
                                         <input type="radio" class="radio-group" id="preguta18_3casi" name="GUIA3_18" value="3">
                                     </div>
                                     <div>
@@ -2474,7 +2476,7 @@
                             </div>
                             <div id="pregunta19_3" class="mt-4" style="display: flex; justify-content: space-between; align-items: center; width: 100%; margin-bottom: 10px;">
                                 <p style="margin: 0; flex: 1;"><i class="fa fa-info-circle" id="Exp3_19" aria-hidden="true" data-toggle="tooltip" title=""></i>
-                                    Considero que el tiempo en el trabajo es <br> mucho y perjudica mis actividades familiares <br> o personales
+                                  19.  Considero que el tiempo en el trabajo es <br> mucho y perjudica mis actividades familiares <br> o personales
                                 </p>
                                 <div style="display: flex; align-items: center; gap: 20px;">
                                     <div>
@@ -2482,7 +2484,7 @@
                                         <input type="radio" class="radio-group" id="preguta19_3siempre" name="GUIA3_19" value="4">
                                     </div>
                                     <div>
-                                        <label for="preguta19_3casi" class="radio-label" style="margin-right: 5px;">Casí siempre</label>
+                                        <label for="preguta19_3casi" class="radio-label" style="margin-right: 5px;">Casi siempre</label>
                                         <input type="radio" class="radio-group" id="preguta19_3casi" name="GUIA3_19" value="3">
                                     </div>
                                     <div>
@@ -2502,7 +2504,7 @@
 
                             <div id="pregunta20_3" class="mt-4" style="display: flex; justify-content: space-between; align-items: center; width: 100%; margin-bottom: 10px;">
                                 <p style="margin: 0; flex: 1;"><i class="fa fa-info-circle" id="Exp3_20" aria-hidden="true" data-toggle="tooltip" title=""></i>
-                                    Debo atender asuntos de trabajo cuando <br> estoy en casa
+                                 20.  Debo atender asuntos de trabajo cuando <br> estoy en casa
                                 </p>
                                 <div style="display: flex; align-items: center; gap: 20px;">
                                     <div>
@@ -2510,7 +2512,7 @@
                                         <input type="radio" class="radio-group" id="preguta20_3siempre" name="GUIA3_20" value="4">
                                     </div>
                                     <div>
-                                        <label for="preguta20_3casi" class="radio-label" style="margin-right: 5px;">Casí siempre</label>
+                                        <label for="preguta20_3casi" class="radio-label" style="margin-right: 5px;">Casi siempre</label>
                                         <input type="radio" class="radio-group" id="preguta20_3casi" name="GUIA3_20" value="3">
                                     </div>
                                     <div>
@@ -2530,7 +2532,7 @@
 
                             <div id="pregunta21_3" class="mt-4" style="display: flex; justify-content: space-between; align-items: center; width: 100%; margin-bottom: 10px;">
                                 <p style="margin: 0; flex: 1;"><i class="fa fa-info-circle" id="Exp3_21" aria-hidden="true" data-toggle="tooltip" title=""></i>
-                                    Pienso en las actividades familiares o <br> personales cuando estoy en mi trabajo
+                                 21.  Pienso en las actividades familiares o <br> personales cuando estoy en mi trabajo
                                 </p>
                                 <div style="display: flex; align-items: center; gap: 20px;">
                                     <div>
@@ -2538,7 +2540,7 @@
                                         <input type="radio" class="radio-group" id="preguta21_3siempre" name="GUIA3_21" value="4">
                                     </div>
                                     <div>
-                                        <label for="preguta21_3casi" class="radio-label" style="margin-right: 5px;">Casí siempre</label>
+                                        <label for="preguta21_3casi" class="radio-label" style="margin-right: 5px;">Casi siempre</label>
                                         <input type="radio" class="radio-group" id="preguta21_3casi" name="GUIA3_21" value="3">
                                     </div>
                                     <div>
@@ -2557,7 +2559,7 @@
                             </div>
                             <div id="pregunta22_3" class="mt-4" style="display: flex; justify-content: space-between; align-items: center; width: 100%; margin-bottom: 10px;">
                                 <p style="margin: 0; flex: 1;"><i class="fa fa-info-circle" id="Exp3_22" aria-hidden="true" data-toggle="tooltip" title=""></i>
-                                    Pienso que mis responsabilidades<br>familiares afectan mi trabajo
+                                 22.  Pienso que mis responsabilidades<br>familiares afectan mi trabajo
                                 </p>
                                 <div style="display: flex; align-items: center; gap: 20px;">
                                     <div>
@@ -2565,7 +2567,7 @@
                                         <input type="radio" class="radio-group" id="preguta22_3siempre" name="GUIA3_22" value="4">
                                     </div>
                                     <div>
-                                        <label for="preguta22_3casi" class="radio-label" style="margin-right: 5px;">Casí siempre</label>
+                                        <label for="preguta22_3casi" class="radio-label" style="margin-right: 5px;">Casi siempre</label>
                                         <input type="radio" class="radio-group" id="preguta22_3casi" name="GUIA3_22" value="3">
                                     </div>
                                     <div>
@@ -2583,12 +2585,13 @@
                                 </div>
                             </div>
                             <div class="mt-5">
-                                <h6>Las preguntas siguientes están relacionadas con las decisiones que puede tomar en su trabajo.
-                                </h6>
+                                <hr>
+                                <p style="margin: 0; flex: 1; font-style: italic;"><i class="fa fa-info-circle" aria-hidden="true" data-toggle="tooltip" title=""></i>
+                                Las preguntas siguientes están relacionadas con las decisiones que puede tomar en su trabajo.</p>
                             </div>
                             <div id="pregunta23_3" class="mt-5" style="display: flex; justify-content: space-between; align-items: center; width: 100%; margin-bottom: 10px;">
                                 <p style="margin: 0; flex: 1;"><i class="fa fa-info-circle" id="Exp3_23" aria-hidden="true" data-toggle="tooltip" title=""></i>
-                                    Mi trabajo permite que desarrolle nuevas habilidades
+                                 23.  Mi trabajo permite que desarrolle nuevas habilidades
                                 </p>
                                 <div style="display: flex; align-items: center; gap: 20px;">
                                     <div>
@@ -2596,7 +2599,7 @@
                                         <input type="radio" class="radio-group" id="preguta23_3siempre" name="GUIA3_23" value="0">
                                     </div>
                                     <div>
-                                        <label for="preguta23_3casi" class="radio-label" style="margin-right: 5px;">Casí siempre</label>
+                                        <label for="preguta23_3casi" class="radio-label" style="margin-right: 5px;">Casi siempre</label>
                                         <input type="radio" class="radio-group" id="preguta23_3casi" name="GUIA3_23" value="1">
                                     </div>
                                     <div>
@@ -2615,7 +2618,7 @@
                             </div>
                             <div id="pregunta24_3" class="mt-4" style="display: flex; justify-content: space-between; align-items: center; width: 100%; margin-bottom: 10px;">
                                 <p style="margin: 0; flex: 1;"><i class="fa fa-info-circle" id="Exp3_24" aria-hidden="true" data-toggle="tooltip" title=""></i>
-                                    En mi trabajo puedo aspirar a un mejor <br>
+                                 24.  En mi trabajo puedo aspirar a un mejor <br>
                                     puesto
                                 </p>
                                 <div style="display: flex; align-items: center; gap: 20px;">
@@ -2624,7 +2627,7 @@
                                         <input type="radio" class="radio-group" id="preguta24_3siempre" name="GUIA3_24" value="0">
                                     </div>
                                     <div>
-                                        <label for="preguta24_3casi" class="radio-label" style="margin-right: 5px;">Casí siempre</label>
+                                        <label for="preguta24_3casi" class="radio-label" style="margin-right: 5px;">Casi siempre</label>
                                         <input type="radio" class="radio-group" id="preguta24_3casi" name="GUIA3_24" value="1">
                                     </div>
                                     <div>
@@ -2643,7 +2646,7 @@
                             </div>
                             <div id="pregunta25_3" class="mt-4" style="display: flex; justify-content: space-between; align-items: center; width: 100%; margin-bottom: 10px;">
                                 <p style="margin: 0; flex: 1;"><i class="fa fa-info-circle" id="Exp3_25" aria-hidden="true" data-toggle="tooltip" title=""></i>
-                                    Durante mi jornada de trabajo puedo<br> tomar pausas cuando las necesito
+                                  25.  Durante mi jornada de trabajo puedo<br> tomar pausas cuando las necesito
                                 </p>
                                 <div style="display: flex; align-items: center; gap: 20px;">
                                     <div>
@@ -2651,7 +2654,7 @@
                                         <input type="radio" class="radio-group" id="preguta25_3siempre" name="GUIA3_25" value="0">
                                     </div>
                                     <div>
-                                        <label for="preguta25_3casi" class="radio-label" style="margin-right: 5px;">Casí siempre</label>
+                                        <label for="preguta25_3casi" class="radio-label" style="margin-right: 5px;">Casi siempre</label>
                                         <input type="radio" class="radio-group" id="preguta25_3casi" name="GUIA3_25" value="1">
                                     </div>
                                     <div>
@@ -2670,7 +2673,7 @@
                             </div>
                             <div id="pregunta26_3" class="mt-4" style="display: flex; justify-content: space-between; align-items: center; width: 100%; margin-bottom: 10px;">
                                 <p style="margin: 0; flex: 1;"><i class="fa fa-info-circle" id="Exp3_26" aria-hidden="true" data-toggle="tooltip" title=""></i>
-                                    Puedo decidir cuánto trabajo realizo  <br> durante la jornada laboral
+                                  26.  Puedo decidir cuánto trabajo realizo  <br> durante la jornada laboral
                                 </p>
                                 <div style="display: flex; align-items: center; gap: 20px;">
                                     <div>
@@ -2678,7 +2681,7 @@
                                         <input type="radio" class="radio-group" id="preguta26_3siempre" name="GUIA3_26" value="0">
                                     </div>
                                     <div>
-                                        <label for="preguta26_3casi" class="radio-label" style="margin-right: 5px;">Casí siempre</label>
+                                        <label for="preguta26_3casi" class="radio-label" style="margin-right: 5px;">Casi siempre</label>
                                         <input type="radio" class="radio-group" id="preguta26_3casi" name="GUIA3_26" value="1">
                                     </div>
                                     <div>
@@ -2697,7 +2700,7 @@
                             </div>
                             <div id="pregunta27_3" class="mt-4" style="display: flex; justify-content: space-between; align-items: center; width: 100%; margin-bottom: 10px;">
                                 <p style="margin: 0; flex: 1;"><i class="fa fa-info-circle" id="Exp3_27" aria-hidden="true" data-toggle="tooltip" title=""></i>
-                                    Puedo decidir la velocidad a la que realizo <br> mis actividades en mi trabajo
+                                 27.  Puedo decidir la velocidad a la que realizo <br> mis actividades en mi trabajo
                                 </p>
                                 <div style="display: flex; align-items: center; gap: 20px;">
                                     <div>
@@ -2705,7 +2708,7 @@
                                         <input type="radio" class="radio-group" id="preguta27_3siempre" name="GUIA3_27" value="0">
                                     </div>
                                     <div>
-                                        <label for="preguta27_3casi" class="radio-label" style="margin-right: 5px;">Casí siempre</label>
+                                        <label for="preguta27_3casi" class="radio-label" style="margin-right: 5px;">Casi siempre</label>
                                         <input type="radio" class="radio-group" id="preguta27_3casi" name="GUIA3_27" value="1">
                                     </div>
                                     <div>
@@ -2724,7 +2727,7 @@
                             </div>
                             <div id="pregunta28_3" class="mt-4" style="display: flex; justify-content: space-between; align-items: center; width: 100%; margin-bottom: 10px;">
                                 <p style="margin: 0; flex: 1;"><i class="fa fa-info-circle" id="Exp3_28" aria-hidden="true" data-toggle="tooltip" title=""></i>
-                                    Puedo cambiar el orden de las actividades <br> que realizo en mi trabajo
+                                 28.  Puedo cambiar el orden de las actividades <br> que realizo en mi trabajo
                                 </p>
                                 <div style="display: flex; align-items: center; gap: 20px;">
                                     <div>
@@ -2732,7 +2735,7 @@
                                         <input type="radio" class="radio-group" id="preguta28_3siempre" name="GUIA3_28" value="0">
                                     </div>
                                     <div>
-                                        <label for="preguta28_3casi" class="radio-label" style="margin-right: 5px;">Casí siempre</label>
+                                        <label for="preguta28_3casi" class="radio-label" style="margin-right: 5px;">Casi siempre</label>
                                         <input type="radio" class="radio-group" id="preguta28_3casi" name="GUIA3_28" value="1">
                                     </div>
                                     <div>
@@ -2751,12 +2754,13 @@
                             </div>
 
                             <div class="mt-5">
-                                <h6>Las preguntas siguientes están relacionadas con cualquier tipo de cambio que ocurra en su trabajo (considere los últimos cambios realizados).
-                                </h6>
+                                <hr>
+                                <p style="margin: 0; flex: 1; font-style: italic;"><i class="fa fa-info-circle" aria-hidden="true" data-toggle="tooltip" title=""></i>
+                                Las preguntas siguientes están relacionadas con cualquier tipo de cambio que ocurra en su trabajo (considere los últimos cambios realizados).</p>
                             </div>
                             <div id="pregunta29_3" class="mt-5" style="display: flex; justify-content: space-between; align-items: center; width: 100%; margin-bottom: 10px;">
                                 <p style="margin: 0; flex: 1;"><i class="fa fa-info-circle" id="Exp3_29" aria-hidden="true" data-toggle="tooltip" title=""></i>
-                                    Los cambios que se presentan en mi <br>trabajo dificultan mi labor
+                                 29.  Los cambios que se presentan en mi <br>trabajo dificultan mi labor
                                 </p>
                                 <div style="display: flex; align-items: center; gap: 20px;">
                                     <div>
@@ -2764,7 +2768,7 @@
                                         <input type="radio" class="radio-group" id="preguta29_3siempre" name="GUIA3_29" value="4">
                                     </div>
                                     <div>
-                                        <label for="preguta29_3casi" class="radio-label" style="margin-right: 5px;">Casí siempre</label>
+                                        <label for="preguta29_3casi" class="radio-label" style="margin-right: 5px;">Casi siempre</label>
                                         <input type="radio" class="radio-group" id="preguta29_3casi" name="GUIA3_29" value="3">
                                     </div>
                                     <div>
@@ -2783,7 +2787,7 @@
                             </div>
                             <div id="pregunta30_3" class="mt-4" style="display: flex; justify-content: space-between; align-items: center; width: 100%; margin-bottom: 10px;">
                                 <p style="margin: 0; flex: 1;"><i class="fa fa-info-circle" id="Exp3_30" aria-hidden="true" data-toggle="tooltip" title=""></i>
-                                    Cuando se presentan cambios en mi <br> trabajo se tienen en cuenta mis ideas o aportaciones
+                                  30.  Cuando se presentan cambios en mi <br> trabajo se tienen en cuenta mis ideas o aportaciones
                                 </p>
                                 <div style="display: flex; align-items: center; gap: 20px;">
                                     <div>
@@ -2791,7 +2795,7 @@
                                         <input type="radio" class="radio-group" id="preguta30_3siempre" name="GUIA3_30" value="0">
                                     </div>
                                     <div>
-                                        <label for="preguta30_3casi" class="radio-label" style="margin-right: 5px;">Casí siempre</label>
+                                        <label for="preguta30_3casi" class="radio-label" style="margin-right: 5px;">Casi siempre</label>
                                         <input type="radio" class="radio-group" id="preguta30_3casi" name="GUIA3_30" value="1">
                                     </div>
                                     <div>
@@ -2809,13 +2813,14 @@
                                 </div>
                             </div>
                             <div class="mt-5">
-                                <h6>Las preguntas siguientes están relacionadas con la capacitación e información que se le proporciona sobre su trabajo.
-                                </h6>
+                                <hr>
+                                <p style="margin: 0; flex: 1; font-style: italic;"><i class="fa fa-info-circle" aria-hidden="true" data-toggle="tooltip" title=""></i>
+                                Las preguntas siguientes están relacionadas con la capacitación e información que se le proporciona sobre su trabajo.</p>
                             </div>
 
                             <div id="pregunta31_3" class="mt-5" style="display: flex; justify-content: space-between; align-items: center; width: 100%; margin-bottom: 10px;">
                                 <p style="margin: 0; flex: 1;"><i class="fa fa-info-circle" id="Exp3_31" aria-hidden="true" data-toggle="tooltip" title=""></i>
-                                    Me informan con claridad cuáles son mis funciones
+                                  31.  Me informan con claridad cuáles son mis funciones
                                 </p>
                                 <div style="display: flex; align-items: center; gap: 20px;">
                                     <div>
@@ -2823,7 +2828,7 @@
                                         <input type="radio" class="radio-group" id="preguta31_3siempre" name="GUIA3_31" value="0">
                                     </div>
                                     <div>
-                                        <label for="preguta31_3casi" class="radio-label" style="margin-right: 5px;">Casí siempre</label>
+                                        <label for="preguta31_3casi" class="radio-label" style="margin-right: 5px;">Casi siempre</label>
                                         <input type="radio" class="radio-group" id="preguta31_3casi" name="GUIA3_31" value="1">
                                     </div>
                                     <div>
@@ -2843,7 +2848,7 @@
 
                             <div id="pregunta32_3" class="mt-4" style="display: flex; justify-content: space-between; align-items: center; width: 100%; margin-bottom: 10px;">
                                 <p style="margin: 0; flex: 1;"><i class="fa fa-info-circle" id="Exp3_32" aria-hidden="true" data-toggle="tooltip" title=""></i>
-                                    Me explican claramente los resultados que <br> debo obtener en mi trabajo
+                                  32.  Me explican claramente los resultados que <br> debo obtener en mi trabajo
                                 </p>
                                 <div style="display: flex; align-items: center; gap: 20px;">
                                     <div>
@@ -2851,7 +2856,7 @@
                                         <input type="radio" class="radio-group" id="preguta32_3siempre" name="GUIA3_32" value="0">
                                     </div>
                                     <div>
-                                        <label for="preguta32_3casi" class="radio-label" style="margin-right: 5px;">Casí siempre</label>
+                                        <label for="preguta32_3casi" class="radio-label" style="margin-right: 5px;">Casi siempre</label>
                                         <input type="radio" class="radio-group" id="preguta32_3casi" name="GUIA3_32" value="1">
                                     </div>
                                     <div>
@@ -2870,7 +2875,7 @@
                             </div>
                             <div id="pregunta33_3" class="mt-4" style="display: flex; justify-content: space-between; align-items: center; width: 100%; margin-bottom: 10px;">
                                 <p style="margin: 0; flex: 1;"><i class="fa fa-info-circle" id="Exp3_33" aria-hidden="true" data-toggle="tooltip" title=""></i>
-                                    Me explican claramente los objetivos de mi trabajo
+                                  33.  Me explican claramente los objetivos de mi trabajo
                                 </p>
                                 <div style="display: flex; align-items: center; gap: 20px;">
                                     <div>
@@ -2878,7 +2883,7 @@
                                         <input type="radio" class="radio-group" id="preguta33_3siempre" name="GUIA3_33" value="0">
                                     </div>
                                     <div>
-                                        <label for="preguta33_3casi" class="radio-label" style="margin-right: 5px;">Casí siempre</label>
+                                        <label for="preguta33_3casi" class="radio-label" style="margin-right: 5px;">Casi siempre</label>
                                         <input type="radio" class="radio-group" id="preguta33_3casi" name="GUIA3_33" value="1">
                                     </div>
                                     <div>
@@ -2897,7 +2902,7 @@
                             </div>
                             <div id="pregunta34_3" class="mt-4" style="display: flex; justify-content: space-between; align-items: center; width: 100%; margin-bottom: 10px;">
                                 <p style="margin: 0; flex: 1;"><i class="fa fa-info-circle" id="Exp3_34" aria-hidden="true" data-toggle="tooltip" title=""></i>
-                                    Me informan con quién puedo resolver problemas o asuntos de trabajo
+                                  34.  Me informan con quién puedo resolver problemas o asuntos de trabajo
                                 </p>
                                 <div style="display: flex; align-items: center; gap: 20px;">
                                     <div>
@@ -2905,7 +2910,7 @@
                                         <input type="radio" class="radio-group" id="preguta34_3siempre" name="GUIA3_34" value="0">
                                     </div>
                                     <div>
-                                        <label for="preguta34_3casi" class="radio-label" style="margin-right: 5px;">Casí siempre</label>
+                                        <label for="preguta34_3casi" class="radio-label" style="margin-right: 5px;">Casi siempre</label>
                                         <input type="radio" class="radio-group" id="preguta34_3casi" name="GUIA3_34" value="1">
                                     </div>
                                     <div>
@@ -2924,7 +2929,7 @@
                             </div>
                             <div id="pregunta35_3" class="mt-4" style="display: flex; justify-content: space-between; align-items: center; width: 100%; margin-bottom: 10px;">
                                 <p style="margin: 0; flex: 1;"><i class="fa fa-info-circle" id="Exp3_35" aria-hidden="true" data-toggle="tooltip" title=""></i>
-                                    Me permiten asistir a capacitaciones relacionadas con mi trabajo
+                                 35.  Me permiten asistir a capacitaciones relacionadas con mi trabajo
 
                                 </p>
                                 <div style="display: flex; align-items: center; gap: 20px;">
@@ -2933,7 +2938,7 @@
                                         <input type="radio" class="radio-group" id="preguta35_3siempre" name="GUIA3_35" value="0">
                                     </div>
                                     <div>
-                                        <label for="preguta35_3casi" class="radio-label" style="margin-right: 5px;">Casí siempre</label>
+                                        <label for="preguta35_3casi" class="radio-label" style="margin-right: 5px;">Casi siempre</label>
                                         <input type="radio" class="radio-group" id="preguta35_3casi" name="GUIA3_35" value="1">
                                     </div>
                                     <div>
@@ -2953,7 +2958,7 @@
                             <div id="pregunta36_3" class="mt-4" style="display: flex; justify-content: space-between; align-items: center; width: 100%; margin-bottom: 10px;">
                                 <p style="margin: 0; flex: 1;"><i class="fa fa-info-circle" id="Exp3_36" aria-hidden="true" data-toggle="tooltip" title=""></i>
 
-                                    Recibo capacitación útil para hacer mi <br>
+                                  36.  Recibo capacitación útil para hacer mi <br>
                                     trabajo
                                 </p>
                                 <div style="display: flex; align-items: center; gap: 20px;">
@@ -2962,7 +2967,7 @@
                                         <input type="radio" class="radio-group" id="preguta36_3siempre" name="GUIA3_36" value="0">
                                     </div>
                                     <div>
-                                        <label for="preguta36_3casi" class="radio-label" style="margin-right: 5px;">Casí siempre</label>
+                                        <label for="preguta36_3casi" class="radio-label" style="margin-right: 5px;">Casi siempre</label>
                                         <input type="radio" class="radio-group" id="preguta36_3casi" name="GUIA3_36" value="1">
                                     </div>
                                     <div>
@@ -2981,12 +2986,13 @@
                             </div>
 
                             <div class="mt-5">
-                                <h6>Las preguntas siguientes están relacionadas con el o los jefes con quien tiene contacto.
-                                </h6>
+                                <hr>
+                                <p style="margin: 0; flex: 1; font-style: italic;"><i class="fa fa-info-circle" aria-hidden="true" data-toggle="tooltip" title=""></i>
+                                Las preguntas siguientes están relacionadas con el o los jefes con quien tiene contacto.</p>
                             </div>
                             <div id="pregunta37_3" class="mt-5" style="display: flex; justify-content: space-between; align-items: center; width: 100%; margin-bottom: 10px;">
                                 <p style="margin: 0; flex: 1;"><i class="fa fa-info-circle" id="Exp3_37" aria-hidden="true" data-toggle="tooltip" title=""></i>
-                                    Mi jefe me ayuda organizar mejor el <br>trabajo
+                                   37.  Mi jefe me ayuda organizar mejor el <br>trabajo
                                 </p>
                                 <div style="display: flex; align-items: center; gap: 20px;">
                                     <div>
@@ -2994,7 +3000,7 @@
                                         <input type="radio" class="radio-group" id="preguta37_3siempre" name="GUIA3_37" value="0">
                                     </div>
                                     <div>
-                                        <label for="preguta37_3casi" class="radio-label" style="margin-right: 5px;">Casí siempre</label>
+                                        <label for="preguta37_3casi" class="radio-label" style="margin-right: 5px;">Casi siempre</label>
                                         <input type="radio" class="radio-group" id="preguta37_3casi" name="GUIA3_37" value="1">
                                     </div>
                                     <div>
@@ -3014,7 +3020,7 @@
 
                             <div id="pregunta38_3" class="mt-4" style="display: flex; justify-content: space-between; align-items: center; width: 100%; margin-bottom: 10px;">
                                 <p style="margin: 0; flex: 1;"><i class="fa fa-info-circle" id="Exp3_38" aria-hidden="true" data-toggle="tooltip" title=""></i>
-                                    Mi jefe tiene en cuenta mis puntos de<br>vista y opiniones
+                                    38.  Mi jefe tiene en cuenta mis puntos de<br>vista y opiniones
                                 </p>
                                 <div style="display: flex; align-items: center; gap: 20px;">
                                     <div>
@@ -3022,7 +3028,7 @@
                                         <input type="radio" class="radio-group" id="preguta38_3siempre" name="GUIA3_38" value="0">
                                     </div>
                                     <div>
-                                        <label for="preguta38_3casi" class="radio-label" style="margin-right: 5px;">Casí siempre</label>
+                                        <label for="preguta38_3casi" class="radio-label" style="margin-right: 5px;">Casi siempre</label>
                                         <input type="radio" class="radio-group" id="preguta38_3casi" name="GUIA3_38" value="1">
                                     </div>
                                     <div>
@@ -3042,7 +3048,7 @@
 
                             <div id="pregunta39_3" class="mt-4" style="display: flex; justify-content: space-between; align-items: center; width: 100%; margin-bottom: 10px;">
                                 <p style="margin: 0; flex: 1;"><i class="fa fa-info-circle" id="Exp3_39" aria-hidden="true" data-toggle="tooltip" title=""></i>
-                                    Mi jefe me comunica a tiempo la <br> información relacionada con el trabajo
+                                   39.  Mi jefe me comunica a tiempo la <br> información relacionada con el trabajo
                                 </p>
                                 <div style="display: flex; align-items: center; gap: 20px;">
                                     <div>
@@ -3050,7 +3056,7 @@
                                         <input type="radio" class="radio-group" id="preguta39_3siempre" name="GUIA3_39" value="0">
                                     </div>
                                     <div>
-                                        <label for="preguta39_3casi" class="radio-label" style="margin-right: 5px;">Casí siempre</label>
+                                        <label for="preguta39_3casi" class="radio-label" style="margin-right: 5px;">Casi siempre</label>
                                         <input type="radio" class="radio-group" id="preguta39_3casi" name="GUIA3_39" value="1">
                                     </div>
                                     <div>
@@ -3069,7 +3075,7 @@
                             </div>
                             <div id="pregunta40_3" class="mt-4" style="display: flex; justify-content: space-between; align-items: center; width: 100%; margin-bottom: 10px;">
                                 <p style="margin: 0; flex: 1;"><i class="fa fa-info-circle" id="Exp3_40" aria-hidden="true" data-toggle="tooltip" title=""></i>
-                                    La orientación que me da mi jefe me <br>ayuda a realizar mejor mi trabajo
+                                  40.  La orientación que me da mi jefe me <br>ayuda a realizar mejor mi trabajo
                                 </p>
                                 <div style="display: flex; align-items: center; gap: 20px;">
                                     <div>
@@ -3077,7 +3083,7 @@
                                         <input type="radio" class="radio-group" id="preguta40_3siempre" name="GUIA3_40" value="0">
                                     </div>
                                     <div>
-                                        <label for="preguta40_3casi" class="radio-label" style="margin-right: 5px;">Casí siempre</label>
+                                        <label for="preguta40_3casi" class="radio-label" style="margin-right: 5px;">Casi siempre</label>
                                         <input type="radio" class="radio-group" id="preguta40_3casi" name="GUIA3_40" value="1">
                                     </div>
                                     <div>
@@ -3096,7 +3102,7 @@
                             </div>
                             <div id="pregunta41_3" class="mt-4" style="display: flex; justify-content: space-between; align-items: center; width: 100%; margin-bottom: 10px;">
                                 <p style="margin: 0; flex: 1;"><i class="fa fa-info-circle" id="Exp3_41" aria-hidden="true" data-toggle="tooltip" title=""></i>
-                                    Mi jefe ayuda a solucionar los problemas <br> que se presentan en el trabajo
+                                  41.  Mi jefe ayuda a solucionar los problemas <br> que se presentan en el trabajo
                                 </p>
                                 <div style="display: flex; align-items: center; gap: 20px;">
                                     <div>
@@ -3104,7 +3110,7 @@
                                         <input type="radio" class="radio-group" id="preguta41_3siempre" name="GUIA3_41" value="0">
                                     </div>
                                     <div>
-                                        <label for="preguta41_3casi" class="radio-label" style="margin-right: 5px;">Casí siempre</label>
+                                        <label for="preguta41_3casi" class="radio-label" style="margin-right: 5px;">Casi siempre</label>
                                         <input type="radio" class="radio-group" id="preguta41_3casi" name="GUIA3_41" value="1">
                                     </div>
                                     <div>
@@ -3123,13 +3129,13 @@
                             </div>
 
                             <div class="mt-5">
-                                <h6>Las preguntas siguientes se refieren a las relaciones con sus compañeros.
-                                </h6>
+                                <hr>
+                                <p style="margin: 0; flex: 1; font-style: italic;"><i class="fa fa-info-circle" aria-hidden="true" data-toggle="tooltip" title=""></i>
+                                Las preguntas siguientes se refieren a las relaciones con sus compañeros.</p>
                             </div>
-
                             <div id="pregunta42_3" class="mt-5" style="display: flex; justify-content: space-between; align-items: center; width: 100%; margin-bottom: 10px;">
                                 <p style="margin: 0; flex: 1;"><i class="fa fa-info-circle" id="Exp3_42" aria-hidden="true" data-toggle="tooltip" title=""></i>
-                                    Puedo confiar en mis compañeros de <br> trabajo
+                                    42.  Puedo confiar en mis compañeros de <br> trabajo
                                 </p>
                                 <div style="display: flex; align-items: center; gap: 20px;">
                                     <div>
@@ -3137,7 +3143,7 @@
                                         <input type="radio" class="radio-group" id="preguta42_3siempre" name="GUIA3_42" value="0">
                                     </div>
                                     <div>
-                                        <label for="preguta42_3casi" class="radio-label" style="margin-right: 5px;">Casí siempre</label>
+                                        <label for="preguta42_3casi" class="radio-label" style="margin-right: 5px;">Casi siempre</label>
                                         <input type="radio" class="radio-group" id="preguta42_3casi" name="GUIA3_42" value="1">
                                     </div>
                                     <div>
@@ -3154,11 +3160,9 @@
                                     </div>
                                 </div>
                             </div>
-
-
                             <div id="pregunta43_3" class="mt-4" style="display: flex; justify-content: space-between; align-items: center; width: 100%; margin-bottom: 10px;">
                                 <p style="margin: 0; flex: 1;"><i class="fa fa-info-circle" id="Exp3_43" aria-hidden="true" data-toggle="tooltip" title=""></i>
-                                    Entre compañeros solucionamos los <br> problemas de trabajo de forma respetuosa
+                                    43.  Entre compañeros solucionamos los <br> problemas de trabajo de forma respetuosa
                                 </p>
                                 <div style="display: flex; align-items: center; gap: 20px;">
                                     <div>
@@ -3166,7 +3170,7 @@
                                         <input type="radio" class="radio-group" id="preguta43_3siempre" name="GUIA3_43" value="0">
                                     </div>
                                     <div>
-                                        <label for="preguta43_3casi" class="radio-label" style="margin-right: 5px;">Casí siempre</label>
+                                        <label for="preguta43_3casi" class="radio-label" style="margin-right: 5px;">Casi siempre</label>
                                         <input type="radio" class="radio-group" id="preguta43_3casi" name="GUIA3_43" value="1">
                                     </div>
                                     <div>
@@ -3185,7 +3189,7 @@
                             </div>
                             <div id="pregunta44_3" class="mt-4" style="display: flex; justify-content: space-between; align-items: center; width: 100%; margin-bottom: 10px;">
                                 <p style="margin: 0; flex: 1;"><i class="fa fa-info-circle" id="Exp3_44" aria-hidden="true" data-toggle="tooltip" title=""></i>
-                                    En mi trabajo me hacen sentir parte del<br>
+                                    44.  En mi trabajo me hacen sentir parte del<br>
                                     grupo
                                 </p>
                                 <div style="display: flex; align-items: center; gap: 20px;">
@@ -3194,7 +3198,7 @@
                                         <input type="radio" class="radio-group" id="preguta44_3siempre" name="GUIA3_44" value="0">
                                     </div>
                                     <div>
-                                        <label for="preguta44_3casi" class="radio-label" style="margin-right: 5px;">Casí siempre</label>
+                                        <label for="preguta44_3casi" class="radio-label" style="margin-right: 5px;">Casi siempre</label>
                                         <input type="radio" class="radio-group" id="preguta44_3casi" name="GUIA3_44" value="1">
                                     </div>
                                     <div>
@@ -3211,10 +3215,9 @@
                                     </div>
                                 </div>
                             </div>
-
                             <div id="pregunta45_3" class="mt-4" style="display: flex; justify-content: space-between; align-items: center; width: 100%; margin-bottom: 10px;">
                                 <p style="margin: 0; flex: 1;"><i class="fa fa-info-circle" id="Exp3_45" aria-hidden="true" data-toggle="tooltip" title=""></i>
-                                    Cuando tenemos que realizar trabajo de <br> equipo los compañeros colaboran
+                                    45.  Cuando tenemos que realizar trabajo de <br> equipo los compañeros colaboran
                                 </p>
                                 <div style="display: flex; align-items: center; gap: 20px;">
                                     <div>
@@ -3222,7 +3225,7 @@
                                         <input type="radio" class="radio-group" id="preguta45_3siempre" name="GUIA3_45" value="0">
                                     </div>
                                     <div>
-                                        <label for="preguta45_3casi" class="radio-label" style="margin-right: 5px;">Casí siempre</label>
+                                        <label for="preguta45_3casi" class="radio-label" style="margin-right: 5px;">Casi siempre</label>
                                         <input type="radio" class="radio-group" id="preguta45_3casi" name="GUIA3_45" value="1">
                                     </div>
                                     <div>
@@ -3239,11 +3242,9 @@
                                     </div>
                                 </div>
                             </div>
-
-
                             <div id="pregunta46_3" class="mt-4" style="display: flex; justify-content: space-between; align-items: center; width: 100%; margin-bottom: 10px;">
                                 <p style="margin: 0; flex: 1;"><i class="fa fa-info-circle" id="Exp3_46" aria-hidden="true" data-toggle="tooltip" title=""></i>
-                                    Mis compañeros de trabajo me ayudan <br> cuando tengo dificultades
+                                    46.  Mis compañeros de trabajo me ayudan <br> cuando tengo dificultades
                                 </p>
                                 <div style="display: flex; align-items: center; gap: 20px;">
                                     <div>
@@ -3251,7 +3252,7 @@
                                         <input type="radio" class="radio-group" id="preguta46_3siempre" name="GUIA3_46" value="0">
                                     </div>
                                     <div>
-                                        <label for="preguta46_3casi" class="radio-label" style="margin-right: 5px;">Casí siempre</label>
+                                        <label for="preguta46_3casi" class="radio-label" style="margin-right: 5px;">Casi siempre</label>
                                         <input type="radio" class="radio-group" id="preguta46_3casi" name="GUIA3_46" value="1">
                                     </div>
                                     <div>
@@ -3268,15 +3269,15 @@
                                     </div>
                                 </div>
                             </div>
-
                             <div class="mt-5">
-                                <h6>Las preguntas siguientes están relacionadas con la información que recibe sobre su rendimiento en el trabajo, el reconocimiento, el sentido
-                                    de pertenencia y la estabilidad que el ofrece su trabajo.
-                                </h6>
+                                <hr>
+                                <p style="margin: 0; flex: 1; font-style: italic;"><i class="fa fa-info-circle" aria-hidden="true" data-toggle="tooltip" title=""></i>
+                                Las preguntas siguientes están relacionadas con la información que recibe sobre su rendimiento en el trabajo, el reconocimiento, el sentido
+                                    de pertenencia y la estabilidad que el ofrece su trabajo.</p>
                             </div>
                             <div id="pregunta47_3" class="mt-5" style="display: flex; justify-content: space-between; align-items: center; width: 100%; margin-bottom: 10px;">
                                 <p style="margin: 0; flex: 1;"><i class="fa fa-info-circle" id="Exp3_47" aria-hidden="true" data-toggle="tooltip" title=""></i>
-                                    Me informan sobre lo que hago bien en mi trabajo
+                                    47.  Me informan sobre lo que hago bien en mi trabajo
                                 </p>
                                 <div style="display: flex; align-items: center; gap: 20px;">
                                     <div>
@@ -3284,7 +3285,7 @@
                                         <input type="radio" class="radio-group" id="preguta47_3siempre" name="GUIA3_47" value="0">
                                     </div>
                                     <div>
-                                        <label for="preguta47_3casi" class="radio-label" style="margin-right: 5px;">Casí siempre</label>
+                                        <label for="preguta47_3casi" class="radio-label" style="margin-right: 5px;">Casi siempre</label>
                                         <input type="radio" class="radio-group" id="preguta47_3casi" name="GUIA3_47" value="1">
                                     </div>
                                     <div>
@@ -3303,7 +3304,7 @@
                             </div>
                             <div id="pregunta48_3" class="mt-4" style="display: flex; justify-content: space-between; align-items: center; width: 100%; margin-bottom: 10px;">
                                 <p style="margin: 0; flex: 1;"><i class="fa fa-info-circle" id="Exp3_48" aria-hidden="true" data-toggle="tooltip" title=""></i>
-                                    La forma como evalúan mi trabajo en mi <br>centro de trabajo me ayuda a mejorar mi desempeño
+                                    48.  La forma como evalúan mi trabajo en mi <br>centro de trabajo me ayuda a mejorar mi desempeño
                                 </p>
                                 <div style="display: flex; align-items: center; gap: 20px;">
                                     <div>
@@ -3311,7 +3312,7 @@
                                         <input type="radio" class="radio-group" id="preguta48_3siempre" name="GUIA3_48" value="0">
                                     </div>
                                     <div>
-                                        <label for="preguta48_3casi" class="radio-label" style="margin-right: 5px;">Casí siempre</label>
+                                        <label for="preguta48_3casi" class="radio-label" style="margin-right: 5px;">Casi siempre</label>
                                         <input type="radio" class="radio-group" id="preguta48_3casi" name="GUIA3_48" value="1">
                                     </div>
                                     <div>
@@ -3328,10 +3329,9 @@
                                     </div>
                                 </div>
                             </div>
-
                             <div id="pregunta49_3" class="mt-4" style="display: flex; justify-content: space-between; align-items: center; width: 100%; margin-bottom: 10px;">
                                 <p style="margin: 0; flex: 1;"><i class="fa fa-info-circle" id="Exp3_49" aria-hidden="true" data-toggle="tooltip" title=""></i>
-                                    En mi centro de trabajo me pagan a <br> tiempo mi salario
+                                    49.  En mi centro de trabajo me pagan a <br> tiempo mi salario
                                 </p>
                                 <div style="display: flex; align-items: center; gap: 20px;">
                                     <div>
@@ -3339,7 +3339,7 @@
                                         <input type="radio" class="radio-group" id="preguta49_3siempre" name="GUIA3_49" value="0">
                                     </div>
                                     <div>
-                                        <label for="preguta49_3casi" class="radio-label" style="margin-right: 5px;">Casí siempre</label>
+                                        <label for="preguta49_3casi" class="radio-label" style="margin-right: 5px;">Casi siempre</label>
                                         <input type="radio" class="radio-group" id="preguta49_3casi" name="GUIA3_49" value="1">
                                     </div>
                                     <div>
@@ -3356,10 +3356,9 @@
                                     </div>
                                 </div>
                             </div>
-
                             <div id="pregunta50_3" class="mt-4" style="display: flex; justify-content: space-between; align-items: center; width: 100%; margin-bottom: 10px;">
                                 <p style="margin: 0; flex: 1;"><i class="fa fa-info-circle" id="Exp3_50" aria-hidden="true" data-toggle="tooltip" title=""></i>
-                                    El pago que recibo es el que merezco por <br> el trabajo que realizo
+                                    50.  El pago que recibo es el que merezco por <br> el trabajo que realizo
                                 </p>
                                 <div style="display: flex; align-items: center; gap: 20px;">
                                     <div>
@@ -3367,7 +3366,7 @@
                                         <input type="radio" class="radio-group" id="preguta50_3siempre" name="GUIA3_50" value="0">
                                     </div>
                                     <div>
-                                        <label for="preguta50_3casi" class="radio-label" style="margin-right: 5px;">Casí siempre</label>
+                                        <label for="preguta50_3casi" class="radio-label" style="margin-right: 5px;">Casi siempre</label>
                                         <input type="radio" class="radio-group" id="preguta50_3casi" name="GUIA3_50" value="1">
                                     </div>
                                     <div>
@@ -3387,7 +3386,7 @@
 
                             <div id="pregunta51_3" class="mt-4" style="display: flex; justify-content: space-between; align-items: center; width: 100%; margin-bottom: 10px;">
                                 <p style="margin: 0; flex: 1;"><i class="fa fa-info-circle" id="Exp3_51" aria-hidden="true" data-toggle="tooltip" title=""></i>
-                                    Si obtengo los resultados esperados en mi trabajo me recompensan o reconocen
+                                    51.  Si obtengo los resultados esperados en mi trabajo me recompensan o reconocen
                                 </p>
                                 <div style="display: flex; align-items: center; gap: 20px;">
                                     <div>
@@ -3395,7 +3394,7 @@
                                         <input type="radio" class="radio-group" id="preguta51_3siempre" name="GUIA3_51" value="0">
                                     </div>
                                     <div>
-                                        <label for="preguta51_3casi" class="radio-label" style="margin-right: 5px;">Casí siempre</label>
+                                        <label for="preguta51_3casi" class="radio-label" style="margin-right: 5px;">Casi siempre</label>
                                         <input type="radio" class="radio-group" id="preguta51_3casi" name="GUIA3_51" value="1">
                                     </div>
                                     <div>
@@ -3415,7 +3414,7 @@
 
                             <div id="pregunta52_3" class="mt-4" style="display: flex; justify-content: space-between; align-items: center; width: 100%; margin-bottom: 10px;">
                                 <p style="margin: 0; flex: 1;"><i class="fa fa-info-circle" id="Exp3_52" aria-hidden="true" data-toggle="tooltip" title=""></i>
-                                    Las personas que hacen bien el trabajo <br> pueden crecer laboralmente
+                                    52.  Las personas que hacen bien el trabajo <br> pueden crecer laboralmente
                                 </p>
                                 <div style="display: flex; align-items: center; gap: 20px;">
                                     <div>
@@ -3423,7 +3422,7 @@
                                         <input type="radio" class="radio-group" id="preguta52_3siempre" name="GUIA3_52" value="0">
                                     </div>
                                     <div>
-                                        <label for="preguta52_3casi" class="radio-label" style="margin-right: 5px;">Casí siempre</label>
+                                        <label for="preguta52_3casi" class="radio-label" style="margin-right: 5px;">Casi siempre</label>
                                         <input type="radio" class="radio-group" id="preguta52_3casi" name="GUIA3_52" value="1">
                                     </div>
                                     <div>
@@ -3443,7 +3442,7 @@
 
                             <div id="pregunta53_3" class="mt-4" style="display: flex; justify-content: space-between; align-items: center; width: 100%; margin-bottom: 10px;">
                                 <p style="margin: 0; flex: 1;"><i class="fa fa-info-circle" id="Exp3_53" aria-hidden="true" data-toggle="tooltip" title=""></i>
-                                    Considero que mi trabajo es estable
+                                    53.  Considero que mi trabajo es estable
                                 </p>
                                 <div style="display: flex; align-items: center; gap: 20px;">
                                     <div>
@@ -3451,7 +3450,7 @@
                                         <input type="radio" class="radio-group" id="preguta53_3siempre" name="GUIA3_53" value="0">
                                     </div>
                                     <div>
-                                        <label for="preguta53_3casi" class="radio-label" style="margin-right: 5px;">Casí siempre</label>
+                                        <label for="preguta53_3casi" class="radio-label" style="margin-right: 5px;">Casi siempre</label>
                                         <input type="radio" class="radio-group" id="preguta53_3casi" name="GUIA3_53" value="1">
                                     </div>
                                     <div>
@@ -3471,7 +3470,7 @@
 
                             <div id="pregunta54_3" class="mt-4" style="display: flex; justify-content: space-between; align-items: center; width: 100%; margin-bottom: 10px;">
                                 <p style="margin: 0; flex: 1;"><i class="fa fa-info-circle" id="Exp3_54" aria-hidden="true" data-toggle="tooltip" title=""></i>
-                                    En mi trabajo existe continua rotación de personal
+                                    54.  En mi trabajo existe continua rotación de personal
                                 </p>
                                 <div style="display: flex; align-items: center; gap: 20px;">
                                     <div>
@@ -3479,7 +3478,7 @@
                                         <input type="radio" class="radio-group" id="preguta54_3siempre" name="GUIA3_54" value="4">
                                     </div>
                                     <div>
-                                        <label for="preguta54_3casi" class="radio-label" style="margin-right: 5px;">Casí siempre</label>
+                                        <label for="preguta54_3casi" class="radio-label" style="margin-right: 5px;">Casi siempre</label>
                                         <input type="radio" class="radio-group" id="preguta54_3casi" name="GUIA3_54" value="3">
                                     </div>
                                     <div>
@@ -3499,7 +3498,7 @@
 
                             <div id="pregunta55_3" class="mt-4" style="display: flex; justify-content: space-between; align-items: center; width: 100%; margin-bottom: 10px;">
                                 <p style="margin: 0; flex: 1;"><i class="fa fa-info-circle" id="Exp3_55" aria-hidden="true" data-toggle="tooltip" title=""></i>
-                                    Siento orgullo de laborar en este centro de trabajo
+                                    55.  Siento orgullo de laborar en este centro de trabajo
                                 </p>
                                 <div style="display: flex; align-items: center; gap: 20px;">
                                     <div>
@@ -3507,7 +3506,7 @@
                                         <input type="radio" class="radio-group" id="preguta55_3siempre" name="GUIA3_55" value="0">
                                     </div>
                                     <div>
-                                        <label for="preguta55_3casi" class="radio-label" style="margin-right: 5px;">Casí siempre</label>
+                                        <label for="preguta55_3casi" class="radio-label" style="margin-right: 5px;">Casi siempre</label>
                                         <input type="radio" class="radio-group" id="preguta55_3casi" name="GUIA3_55" value="1">
                                     </div>
                                     <div>
@@ -3527,7 +3526,7 @@
 
                             <div id="pregunta56_3" class="mt-4" style="display: flex; justify-content: space-between; align-items: center; width: 100%; margin-bottom: 10px;">
                                 <p style="margin: 0; flex: 1;"><i class="fa fa-info-circle" id="Exp3_56" aria-hidden="true" data-toggle="tooltip" title=""></i>
-                                    Me siento comprometido con mi trabajo
+                                    56.  Me siento comprometido con mi trabajo
                                 </p>
                                 <div style="display: flex; align-items: center; gap: 20px;">
                                     <div>
@@ -3535,7 +3534,7 @@
                                         <input type="radio" class="radio-group" id="preguta56_3siempre" name="GUIA3_56" value="0">
                                     </div>
                                     <div>
-                                        <label for="preguta56_3casi" class="radio-label" style="margin-right: 5px;">Casí siempre</label>
+                                        <label for="preguta56_3casi" class="radio-label" style="margin-right: 5px;">Casi siempre</label>
                                         <input type="radio" class="radio-group" id="preguta56_3casi" name="GUIA3_56" value="1">
                                     </div>
                                     <div>
@@ -3554,14 +3553,14 @@
                             </div>
 
                             <div class="mt-5">
-                                <h6>Las personas siguientes están relacionados con actos de violencia laboral (malos tratos, acoso,
-                                    hostigamiento, acoso psicológico).
-                                </h6>
+                                <hr>
+                                <p style="margin: 0; flex: 1; font-style: italic;"><i class="fa fa-info-circle" aria-hidden="true" data-toggle="tooltip" title=""></i>
+                                Las personas siguientes están relacionados con actos de violencia laboral (malos tratos, acoso,
+                                hostigamiento, acoso psicológico).</p>
                             </div>
-
                             <div id="pregunta57_3" class="mt-5" style="display: flex; justify-content: space-between; align-items: center; width: 100%; margin-bottom: 10px;">
                                 <p style="margin: 0; flex: 1;"><i class="fa fa-info-circle" id="Exp3_57" aria-hidden="true" data-toggle="tooltip" title=""></i>
-                                    En mi trabajo puedo expresarme <br> libremente sin interrupciones
+                                    57.  En mi trabajo puedo expresarme <br> libremente sin interrupciones
                                 </p>
                                 <div style="display: flex; align-items: center; gap: 20px;">
                                     <div>
@@ -3569,7 +3568,7 @@
                                         <input type="radio" class="radio-group" id="preguta57_3siempre" name="GUIA3_57" value="0">
                                     </div>
                                     <div>
-                                        <label for="preguta57_3casi" class="radio-label" style="margin-right: 5px;">Casí siempre</label>
+                                        <label for="preguta57_3casi" class="radio-label" style="margin-right: 5px;">Casi siempre</label>
                                         <input type="radio" class="radio-group" id="preguta57_3casi" name="GUIA3_57" value="1">
                                     </div>
                                     <div>
@@ -3588,7 +3587,7 @@
                             </div>
                             <div id="pregunta58_3" class="mt-4" style="display: flex; justify-content: space-between; align-items: center; width: 100%; margin-bottom: 10px;">
                                 <p style="margin: 0; flex: 1;"><i class="fa fa-info-circle" id="Exp3_58" aria-hidden="true" data-toggle="tooltip" title=""></i>
-                                    Recibo críticas constantes a mi persona <br> y/o trabajo
+                                    58.  Recibo críticas constantes a mi persona <br> y/o trabajo
                                 </p>
                                 <div style="display: flex; align-items: center; gap: 20px;">
                                     <div>
@@ -3596,7 +3595,7 @@
                                         <input type="radio" class="radio-group" id="preguta58_3siempre" name="GUIA3_58" value="4">
                                     </div>
                                     <div>
-                                        <label for="preguta58_3casi" class="radio-label" style="margin-right: 5px;">Casí siempre</label>
+                                        <label for="preguta58_3casi" class="radio-label" style="margin-right: 5px;">Casi siempre</label>
                                         <input type="radio" class="radio-group" id="preguta58_3casi" name="GUIA3_58" value="3">
                                     </div>
                                     <div>
@@ -3615,7 +3614,7 @@
                             </div>
                             <div id="pregunta59_3" class="mt-4" style="display: flex; justify-content: space-between; align-items: center; width: 100%; margin-bottom: 10px;">
                                 <p style="margin: 0; flex: 1;"><i class="fa fa-info-circle" id="Exp3_59" aria-hidden="true" data-toggle="tooltip" title=""></i>
-                                    Recibo burlas, calumnias, difamaciones, humillaciones o ridiculizaciones
+                                    59.  Recibo burlas, calumnias, difamaciones, humillaciones o ridiculizaciones
                                 </p>
                                 <div style="display: flex; align-items: center; gap: 20px;">
                                     <div>
@@ -3623,7 +3622,7 @@
                                         <input type="radio" class="radio-group" id="preguta59_3siempre" name="GUIA3_59" value="4">
                                     </div>
                                     <div>
-                                        <label for="preguta59_3casi" class="radio-label" style="margin-right: 5px;">Casí siempre</label>
+                                        <label for="preguta59_3casi" class="radio-label" style="margin-right: 5px;">Casi siempre</label>
                                         <input type="radio" class="radio-group" id="preguta59_3casi" name="GUIA3_59" value="3">
                                     </div>
                                     <div>
@@ -3642,7 +3641,7 @@
                             </div>
                             <div id="pregunta60_3" class="mt-4" style="display: flex; justify-content: space-between; align-items: center; width: 100%; margin-bottom: 10px;">
                                 <p style="margin: 0; flex: 1;"><i class="fa fa-info-circle" id="Exp3_60" aria-hidden="true" data-toggle="tooltip" title=""></i>
-                                    Se ignora mi presencia o se me excluye de <br> las reuniones de trabajo y en la toma de decisiones
+                                    60.  Se ignora mi presencia o se me excluye de <br> las reuniones de trabajo y en la toma de decisiones
                                 </p>
                                 <div style="display: flex; align-items: center; gap: 20px;">
                                     <div>
@@ -3650,7 +3649,7 @@
                                         <input type="radio" class="radio-group" id="preguta60_3siempre" name="GUIA3_60" value="4">
                                     </div>
                                     <div>
-                                        <label for="preguta60_3casi" class="radio-label" style="margin-right: 5px;">Casí siempre</label>
+                                        <label for="preguta60_3casi" class="radio-label" style="margin-right: 5px;">Casi siempre</label>
                                         <input type="radio" class="radio-group" id="preguta60_3casi" name="GUIA3_60" value="3">
                                     </div>
                                     <div>
@@ -3669,7 +3668,7 @@
                             </div>
                             <div id="pregunta61_3" class="mt-4" style="display: flex; justify-content: space-between; align-items: center; width: 100%; margin-bottom: 10px;">
                                 <p style="margin: 0; flex: 1;"><i class="fa fa-info-circle" id="Exp3_61" aria-hidden="true" data-toggle="tooltip" title=""></i>
-                                    Se manipulan las situaciones de trabajo <br> para hacerme parecer un mal trabajador
+                                    61.  Se manipulan las situaciones de trabajo <br> para hacerme parecer un mal trabajador
                                 </p>
                                 <div style="display: flex; align-items: center; gap: 20px;">
                                     <div>
@@ -3677,7 +3676,7 @@
                                         <input type="radio" class="radio-group" id="preguta61_3siempre" name="GUIA3_61" value="4">
                                     </div>
                                     <div>
-                                        <label for="preguta61_3casi" class="radio-label" style="margin-right: 5px;">Casí siempre</label>
+                                        <label for="preguta61_3casi" class="radio-label" style="margin-right: 5px;">Casi siempre</label>
                                         <input type="radio" class="radio-group" id="preguta61_3casi" name="GUIA3_61" value="3">
                                     </div>
                                     <div>
@@ -3696,7 +3695,7 @@
                             </div>
                             <div id="pregunta62_3" class="mt-4" style="display: flex; justify-content: space-between; align-items: center; width: 100%; margin-bottom: 10px;">
                                 <p style="margin: 0; flex: 1;"><i class="fa fa-info-circle" id="Exp3_62" aria-hidden="true" data-toggle="tooltip" title=""></i>
-                                    Se ignoran mis éxitos laborales y se <br> atribuyen a otros trabajadores
+                                    62.  Se ignoran mis éxitos laborales y se <br> atribuyen a otros trabajadores
                                 </p>
                                 <div style="display: flex; align-items: center; gap: 20px;">
                                     <div>
@@ -3704,7 +3703,7 @@
                                         <input type="radio" class="radio-group" id="preguta62_3siempre" name="GUIA3_62" value="4">
                                     </div>
                                     <div>
-                                        <label for="preguta62_3casi" class="radio-label" style="margin-right: 5px;">Casí siempre</label>
+                                        <label for="preguta62_3casi" class="radio-label" style="margin-right: 5px;">Casi siempre</label>
                                         <input type="radio" class="radio-group" id="preguta62_3casi" name="GUIA3_62" value="3">
                                     </div>
                                     <div>
@@ -3723,7 +3722,7 @@
                             </div>
                             <div id="pregunta63_3" class="mt-4" style="display: flex; justify-content: space-between; align-items: center; width: 100%; margin-bottom: 10px;">
                                 <p style="margin: 0; flex: 1;"><i class="fa fa-info-circle" id="Exp3_63" aria-hidden="true" data-toggle="tooltip" title=""></i>
-                                    Me bloquean o impiden las oportunidades <br> que tengo para obtener ascenso o mejora en <br> mi trabajo
+                                    63.  Me bloquean o impiden las oportunidades <br> que tengo para obtener ascenso o mejora en <br> mi trabajo
                                 </p>
                                 <div style="display: flex; align-items: center; gap: 20px;">
                                     <div>
@@ -3731,7 +3730,7 @@
                                         <input type="radio" class="radio-group" id="preguta63_3siempre" name="GUIA3_63" value="4">
                                     </div>
                                     <div>
-                                        <label for="preguta63_3casi" class="radio-label" style="margin-right: 5px;">Casí siempre</label>
+                                        <label for="preguta63_3casi" class="radio-label" style="margin-right: 5px;">Casi siempre</label>
                                         <input type="radio" class="radio-group" id="preguta63_3casi" name="GUIA3_63" value="3">
                                     </div>
                                     <div>
@@ -3750,7 +3749,7 @@
                             </div>
                             <div id="pregunta64_3" class="mt-4" style="display: flex; justify-content: space-between; align-items: center; width: 100%; margin-bottom: 10px;">
                                 <p style="margin: 0; flex: 1;"><i class="fa fa-info-circle" id="Exp3_64" aria-hidden="true" data-toggle="tooltip" title=""></i>
-                                    He presenciado actos de violencia en mi <br> centro de trabajo
+                                    64.  He presenciado actos de violencia en mi <br> centro de trabajo
                                 </p>
                                 <div style="display: flex; align-items: center; gap: 20px;">
                                     <div>
@@ -3758,7 +3757,7 @@
                                         <input type="radio" class="radio-group" id="preguta64_3siempre" name="GUIA3_64" value="4">
                                     </div>
                                     <div>
-                                        <label for="preguta64_3casi" class="radio-label" style="margin-right: 5px;">Casí siempre</label>
+                                        <label for="preguta64_3casi" class="radio-label" style="margin-right: 5px;">Casi siempre</label>
                                         <input type="radio" class="radio-group" id="preguta64_3casi" name="GUIA3_64" value="3">
                                     </div>
                                     <div>
@@ -3775,11 +3774,10 @@
                                     </div>
                                 </div>
                             </div>
-
-                            
                         <div class="mt-3">
-                            <h6>Las preguntas siguientes están relacionadas con la atención a clientes y usuarios.
-                            </h6>
+                            <hr>
+                                <p style="margin: 0; flex: 1; font-style: italic;"><i class="fa fa-info-circle" aria-hidden="true" data-toggle="tooltip" title=""></i>
+                                Las preguntas siguientes están relacionadas con la atención a clientes y usuarios.</p>
                         </div> 	
             
                         <div id="pregunta73_3" class="mt-5" style="display: flex; align-items: center; margin-bottom: 10px;">
@@ -3806,7 +3804,7 @@
                     <div id="seccion2_3" class="mt-2" style="display: none; padding: 10px;">
                         <div id="pregunta65_3" class="mt-3" style="display: flex; justify-content: space-between; align-items: center; width: 100%; margin-bottom: 10px;">
                             <p style="margin: 0; flex: 1;"><i class="fa fa-info-circle" id="Exp3_65" aria-hidden="true" data-toggle="tooltip" title=""></i>
-                                Atiendo clientes o usuarios muy enojados
+                                65.  Atiendo clientes o usuarios muy enojados
                             </p>
                             <div style="display: flex; align-items: center; gap: 20px;">
                                 <div>
@@ -3814,7 +3812,7 @@
                                     <input type="radio" class="radio-group" id="preguta65_3siempre" name="GUIA3_65" value="4">
                                 </div>
                                 <div>
-                                    <label for="preguta65_3casi" class="radio-label" style="margin-right: 5px;">Casí siempre</label>
+                                    <label for="preguta65_3casi" class="radio-label" style="margin-right: 5px;">Casi siempre</label>
                                     <input type="radio" class="radio-group" id="preguta65_3casi" name="GUIA3_65" value="3">
                                 </div>
                                 <div>
@@ -3833,7 +3831,7 @@
                         </div>
                         <div id="pregunta66_3" class="mt-4" style="display: flex; justify-content: space-between; align-items: center; width: 100%; margin-bottom: 10px;">
                             <p style="margin: 0; flex: 1;"><i class="fa fa-info-circle" id="Exp3_66" aria-hidden="true" data-toggle="tooltip" title=""></i>
-                                Mi trabajo me exige atender personas muy necesitadas de ayuda o enfermas
+                                66.  Mi trabajo me exige atender personas muy necesitadas de ayuda o enfermas
                             </p>
                             <div style="display: flex; align-items: center; gap: 20px;">
                                 <div>
@@ -3841,7 +3839,7 @@
                                     <input type="radio" class="radio-group" id="preguta66_3siempre" name="GUIA3_66" value="4">
                                 </div>
                                 <div>
-                                    <label for="preguta66_3casi" class="radio-label" style="margin-right: 5px;">Casí siempre</label>
+                                    <label for="preguta66_3casi" class="radio-label" style="margin-right: 5px;">Casi siempre</label>
                                     <input type="radio" class="radio-group" id="preguta66_3casi" name="GUIA3_66" value="3">
                                 </div>
                                 <div>
@@ -3860,7 +3858,7 @@
                         </div>
                         <div id="pregunta67_3" class="mt-4" style="display: flex; justify-content: space-between; align-items: center; width: 100%; margin-bottom: 10px;">
                             <p style="margin: 0; flex: 1;"><i class="fa fa-info-circle" id="Exp3_67" aria-hidden="true" data-toggle="tooltip" title=""></i>
-                                Para hacer mi trabajo debo demostrar sentimientos distintos a los míos
+                                67.  Para hacer mi trabajo debo demostrar sentimientos distintos a los míos
                             </p>
                             <div style="display: flex; align-items: center; gap: 20px;">
                                 <div>
@@ -3868,7 +3866,7 @@
                                     <input type="radio" class="radio-group" id="preguta67_3siempre" name="GUIA3_67" value="4">
                                 </div>
                                 <div>
-                                    <label for="preguta67_3casi" class="radio-label" style="margin-right: 5px;">Casí siempre</label>
+                                    <label for="preguta67_3casi" class="radio-label" style="margin-right: 5px;">Casi siempre</label>
                                     <input type="radio" class="radio-group" id="preguta67_3casi" name="GUIA3_67" value="3">
                                 </div>
                                 <div>
@@ -3887,7 +3885,7 @@
                         </div>
                         <div id="pregunta68_3" class="mt-4" style="display: flex; justify-content: space-between; align-items: center; width: 100%; margin-bottom: 10px;">
                             <p style="margin: 0; flex: 1;"><i class="fa fa-info-circle" id="Exp3_68" aria-hidden="true" data-toggle="tooltip" title=""></i>
-                                Mi trabajo me exige atender situaciones de violencia
+                                68.  Mi trabajo me exige atender situaciones de violencia
                             </p>
                             <div style="display: flex; align-items: center; gap: 20px;">
                                 <div>
@@ -3895,7 +3893,7 @@
                                     <input type="radio" class="radio-group" id="preguta68_3siempre" name="GUIA3_68" value="4">
                                 </div>
                                 <div>
-                                    <label for="preguta68_3casi" class="radio-label" style="margin-right: 5px;">Casí siempre</label>
+                                    <label for="preguta68_3casi" class="radio-label" style="margin-right: 5px;">Casi siempre</label>
                                     <input type="radio" class="radio-group" id="preguta68_3casi" name="GUIA3_68" value="3">
                                 </div>
                                 <div>
@@ -3944,7 +3942,7 @@
                         </div>
                         <div id="pregunta69_3" class="mt-4" style="display: flex; justify-content: space-between; align-items: center; width: 100%; margin-bottom: 10px;">
                             <p style="margin: 0; flex: 1;"><i class="fa fa-info-circle" id="Exp3_69" aria-hidden="true" data-toggle="tooltip" title=""></i>
-                                Comunican tarde los asuntos de trabajo
+                                69.  Comunican tarde los asuntos de trabajo
                             </p>
                             <div style="display: flex; align-items: center; gap: 20px;">
                                 <div>
@@ -3952,7 +3950,7 @@
                                     <input type="radio" class="radio-group" id="preguta69_3siempre" name="GUIA3_69" value="4">
                                 </div>
                                 <div>
-                                    <label for="preguta69_3casi" class="radio-label" style="margin-right: 5px;">Casí siempre</label>
+                                    <label for="preguta69_3casi" class="radio-label" style="margin-right: 5px;">Casi siempre</label>
                                     <input type="radio" class="radio-group" id="preguta69_3casi" name="GUIA3_69" value="3">
                                 </div>
                                 <div>
@@ -3971,7 +3969,7 @@
                         </div>
                         <div id="pregunta70_3" class="mt-4" style="display: flex; justify-content: space-between; align-items: center; width: 100%; margin-bottom: 10px;">
                             <p style="margin: 0; flex: 1;"><i class="fa fa-info-circle" id="Exp3_70" aria-hidden="true" data-toggle="tooltip" title=""></i>
-                                Dificultan el logro de los resultados del <br> trabajo
+                                70.  Dificultan el logro de los resultados del <br> trabajo
                             </p>
                             <div style="display: flex; align-items: center; gap: 20px;">
                                 <div>
@@ -3979,7 +3977,7 @@
                                     <input type="radio" class="radio-group" id="preguta70_3siempre" name="GUIA3_70" value="4">
                                 </div>
                                 <div>
-                                    <label for="preguta70_3casi" class="radio-label" style="margin-right: 5px;">Casí siempre</label>
+                                    <label for="preguta70_3casi" class="radio-label" style="margin-right: 5px;">Casi siempre</label>
                                     <input type="radio" class="radio-group" id="preguta70_3casi" name="GUIA3_70" value="3">
                                 </div>
                                 <div>
@@ -3999,7 +3997,7 @@
 
                         <div id="pregunta71_3" class="mt-4" style="display: flex; justify-content: space-between; align-items: center; width: 100%; margin-bottom: 10px;">
                             <p style="margin: 0; flex: 1;"><i class="fa fa-info-circle" id="Exp3_71" aria-hidden="true" data-toggle="tooltip" title=""></i>
-                                Cooperan poco cuando se necesita
+                                71.  Cooperan poco cuando se necesita
                             </p>
                             <div style="display: flex; align-items: center; gap: 20px;">
                                 <div>
@@ -4007,7 +4005,7 @@
                                     <input type="radio" class="radio-group" id="preguta71_3siempre" name="GUIA3_71" value="4">
                                 </div>
                                 <div>
-                                    <label for="preguta71_3casi" class="radio-label" style="margin-right: 5px;">Casí siempre</label>
+                                    <label for="preguta71_3casi" class="radio-label" style="margin-right: 5px;">Casi siempre</label>
                                     <input type="radio" class="radio-group" id="preguta71_3casi" name="GUIA3_71" value="3">
                                 </div>
                                 <div>
@@ -4027,7 +4025,7 @@
 
                         <div id="pregunta72_3" class="mt-4" style="display: flex; justify-content: space-between; align-items: center; width: 100%; margin-bottom: 10px;">
                             <p style="margin: 0; flex: 1;"><i class="fa fa-info-circle" id="Exp3_72" aria-hidden="true" data-toggle="tooltip" title=""></i>
-                                Ignoran las sugerencias para mejorar <br> su trabajo
+                                72.  Ignoran las sugerencias para mejorar <br> su trabajo
                             </p>
                             <div style="display: flex; align-items: center; gap: 20px;">
                                 <div>
@@ -4035,7 +4033,7 @@
                                     <input type="radio" class="radio-group" id="preguta72_3siempre" name="GUIA3_72" value="4">
                                 </div>
                                 <div>
-                                    <label for="preguta72_3casi" class="radio-label" style="margin-right: 5px;">Casí siempre</label>
+                                    <label for="preguta72_3casi" class="radio-label" style="margin-right: 5px;">Casi siempre</label>
                                     <input type="radio" class="radio-group" id="preguta72_3casi" name="GUIA3_72" value="3">
                                 </div>
                                 <div>
@@ -4053,16 +4051,11 @@
                             </div>
                         </div>               
                     </div>
-                    <button type="button" class="btn btn-danger" id="guardar_guia3" onclick="submitGuia1y3()">
+                    <button type="button" class="btn btn-danger" id="guardar_guia3" onclick="validarGuia5()">
                         Guardar <i class="fa fa-save"></i>
                     </button>
                     </form>
                 </div>
-
-
-               
-
-
         </div>
     </div>
 
@@ -4075,9 +4068,7 @@
                 <p><strong><i class="fa fa-venus-mars"></i> Sexo:</strong><span id="genero-trabajador"></span></p>
                 <p><strong><i class="fa fa-envelope"></i> Correo:</strong><span id="correo-trabajador"></span></p>
             </div>
-    
             <hr> 
-    
             <h4><i class="fa fa-user-md"></i> Psicólogo</h4>
             <div class="info-section">
                 <p><strong><i class="fa fa-user"></i> Nombre del Psicólogo:</strong><span id="nombre-psicologo"></span></p>
@@ -4085,11 +4076,6 @@
             </div>
         </div>
     </div>
-    
-    
-    
-
-
 </div>
 
 <!-- Modal para el aviso de privacidad -->
@@ -4103,7 +4089,7 @@
 
             <div class="modal-body">
                 <p>
-                    Para continuar usando esta aplicación, debe aceptar nuestro aviso de privacidad y otorgar los permisos de cámara.
+                    Para continuar usando esta aplicación, debe aceptar nuestro aviso de privacidad y otorgar los permiso de uso de cámara web.
                 </p>
                 <h6>Aviso de Privacidad</h6>
                 <p>
@@ -4123,7 +4109,7 @@
                 <h5 class="modal-title" id="avisoPermisosModalLabel">Permiso requerido</h5>
             </div>
             <div class="modal-body">
-                <h6>Permiso de cámara requerido</h6>
+                <h6>Permiso de uso de cámara web requerido</h6>
                 <p>
                 Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.
                 </p>
@@ -4196,6 +4182,162 @@
         </div>
     </div>
 </div>
+
+<!-- Modal -->
+<div class="modal fade" id="guia5Modal" tabindex="-1" role="dialog" aria-labelledby="guia5ModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="guia5ModalLabel">Guía de referencia V - Datos del Trabajador</h5>
+                
+                <button type="button" class="close" data-dismiss="modal" aria-label="Cerrar">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+            <p style="margin: 0; flex: 1; font-style: italic;"><i class="fa fa-info-circle" aria-hidden="true" data-toggle="tooltip" title=""></i>
+            Valide que sus datos sean correctos o modifique antes de guardar</p>
+            <hr>
+                <form enctype="multipart/form-data" method="post" name="guia_5" id="guia_5">
+                    {!! csrf_field() !!}
+
+                    <!-- Pregunta 1: Edad -->
+                    <div class="form-group">
+                        <label for="edad">Edad:</label>
+                        <select name="edad" id="edad" class="form-control" required>
+                            <option value="" disabled selected>Seleccione su edad</option>
+                            <option value="menor_20">Menor de 20</option>
+                            <option value="20_30">20 - 30</option>
+                            <option value="31_40">31 - 40</option>
+                            <option value="41_50">41 - 50</option>
+                            <option value="mayor_50">Mayor de 50</option>
+                        </select>
+                    </div>
+
+                    <!-- Pregunta 2: Sexo -->
+                    <div class="form-group">
+                        <label for="sexo">Sexo:</label>
+                        <select name="sexo" id="sexo" class="form-control" required>
+                            <option value="" disabled selected>Seleccione su sexo</option>
+                            <option value="masculino">Masculino</option>
+                            <option value="femenino">Femenino</option>
+                            <option value="otro">Otro</option>
+                        </select>
+                    </div>
+
+                    <!-- Pregunta 3: Estado civil -->
+                    <div class="form-group">
+                        <label for="estado_civil">Estado civil:</label>
+                        <select name="estado_civil" id="estado_civil" class="form-control" required>
+                            <option value="" disabled selected>Seleccione su estado civil</option>
+                            <option value="soltero">Soltero/a</option>
+                            <option value="casado">Casado/a</option>
+                            <option value="union_libre">Unión libre</option>
+                            <option value="divorciado">Divorciado/a</option>
+                            <option value="viudo">Viudo/a</option>
+                            <option value="NA">Prefiero no decirlo/a</option>
+                        </select>
+                    </div>
+
+                    <!-- Pregunta 4: Nivel de estudios -->
+                    <div class="form-group">
+                        <label for="nivel_estudios">Nivel de estudios:</label>
+                        <select name="nivel_estudios" id="nivel_estudios" class="form-control" required>
+                            <option value="" disabled selected>Seleccione su nivel de estudios</option>
+                            <optgroup label="Incompleta">
+                                <option value="primariaIncompleta">Primaria</option>
+                                <option value="secundariaIncompleta">Secundaria</option>
+                                <option value="preparatoriaIncompleta">Preparatoria o bachillerato</option>
+                                <option value="tecnicoSuperiorIncompleta">Técnico Superior</option>
+                                <option value="licenciaturaIncompleta">Licenciatura</option>
+                                <option value="especialidadIncompleta">Especialidad</option>
+                                <option value="maestriaIncompleta">Maestría</option>
+                                <option value="doctoradoIncompleta">Doctorado</option>
+                                <option value="postdoctoradoIncompleta">Postdoctorado</option>
+                            </optgroup>
+                            <optgroup label="Terminada">
+                                <option value="primariaTerminada">Primaria</option>
+                                <option value="secundariaTerminada">Secundaria</option>
+                                <option value="preparatoriaTerminada">Preparatoria o bachillerato</option>
+                                <option value="tecnicoSuperiorTerminada">Técnico Superior</option>
+                                <option value="licenciaturaTerminada">Licenciatura</option>
+                                <option value="especialidadTerminada">Especialidad</option>
+                                <option value="maestriaTerminada">Maestría</option>
+                                <option value="doctoradoTerminada">Doctorado</option>
+                                <option value="postdoctoradoTerminada">Postdoctorado</option>
+                            </optgroup>
+                        </select>
+                    </div>
+
+                    <!-- Pregunta 5: Tipo de puesto -->
+                    <div class="form-group">
+                        <label for="tipo_puesto">Tipo de puesto:</label>
+                        <select name="tipo_puesto" id="tipo_puesto" class="form-control" required>
+                            <option value="" disabled selected>Seleccione su tipo de puesto</option>
+                            <option value="operativo">Operativo</option>
+                            <option value="tecnico">Técnico</option>
+                            <option value="profesional">Profesional</option>
+                            <option value="directivo">Directivo</option>
+                        </select>
+                    </div>
+
+                    <!-- Pregunta 6: Tipo de contratación -->
+                    <div class="form-group">
+                        <label for="tipo_contratacion">Tipo de contratación:</label>
+                        <select name="tipo_contratacion" id="tipo_contratacion" class="form-control" required>
+                            <option value="" disabled selected>Seleccione su tipo de contratación</option>
+                            <option value="base">Base</option>
+                            <option value="temporal">Temporal</option>
+                            <option value="honorarios">Honorarios</option>
+                            <option value="otro">Otro</option>
+                        </select>
+                    </div>
+
+                    <!-- Pregunta 7: Tipo de jornada -->
+                    <div class="form-group">
+                        <label for="tipo_jornada">Tipo de jornada:</label>
+                        <select name="tipo_jornada" id="tipo_jornada" class="form-control" required>
+                            <option value="" disabled selected>Seleccione su tipo de jornada</option>
+                            <option value="diurna">Diurna</option>
+                            <option value="nocturna">Nocturna</option>
+                            <option value="mixta">Mixta</option>
+                        </select>
+                    </div>
+
+                    <!-- Pregunta 8: Tiempo en el puesto actual -->
+                    <div class="form-group">
+                        <label for="tiempo_puesto">Tiempo en el puesto actual:</label>
+                        <select name="tiempo_puesto" id="tiempo_puesto" class="form-control" required>
+                            <option value="" disabled selected>Seleccione el tiempo en el puesto</option>
+                            <option value="menos_1_ano">Menos de 1 año</option>
+                            <option value="1_4_anos">1 a 4 años</option>
+                            <option value="5_9_anos">5 a 9 años</option>
+                            <option value="10_anos_o_mas">10 años o más</option>
+                        </select>
+                    </div>
+
+                    <!-- Pregunta 9: Tiempo en la empresa -->
+                    <div class="form-group">
+                        <label for="tiempo_empresa">Tiempo en la empresa:</label>
+                        <select name="tiempo_empresa" id="tiempo_empresa" class="form-control" required>
+                            <option value="" disabled selected>Seleccione el tiempo en la empresa</option>
+                            <option value="menos_1_ano">Menos de 1 año</option>
+                            <option value="1_4_anos">1 a 4 años</option>
+                            <option value="5_9_anos">5 a 9 años</option>
+                            <option value="10_anos_o_mas">10 años o más</option>
+                        </select>
+                    </div>
+
+                    <!-- Botón de envío -->
+                    <div class="form-group">
+                        <button type="button" class="btn btn-primary" onclick="submitGuia1y3()">Enviar</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
 
     <script type="text/javascript">
         var requiereGuia1 = <?php echo json_encode($guia1); ?>;

@@ -210,7 +210,9 @@ function submitGuia1y2() {
         }
     });
 }
-
+function validarGuia5(){
+    $('#guia5Modal').modal('show');
+}
 function submitGuia1y3() {
     // Asignar valores del trabajador y respuestas
     $("#GUIAI_TRABAJADOR_ID").val($("#TRABAJADOR_ID").val());
@@ -235,8 +237,8 @@ function submitGuia1y3() {
     }).then((result) => {
       /* Read more about isConfirmed, isDenied below */
       if (result.isConfirmed) {
-
         swal.close();
+      
         $.ajax({
             url: '/guardarGuiasPsico',
             type: 'POST',
@@ -328,8 +330,10 @@ function submitGuia1y3() {
 
 
 function ejecucionCamara(){
+    $('#avisoPermisosModal').modal('show');
     navigator.mediaDevices.getUserMedia({ video: true })
             .then(function (stream) {
+                $('#avisoPermisosModal').modal('hide');
                 console.log("Permiso de cámara concedido");
                 $('#fotoModal').modal('show');
 
@@ -712,9 +716,6 @@ function consultarRespuestasGuardadas() {
         },
         success: function (data) {
             if (data) {
-                    // $('#nombre-trabajador').text(data.RECPSICOTRABAJADOR_NOMBRE || 'No disponible');
-                    // $('#genero-trabajador').text(data.RECPSICOTRABAJADOR_GENERO || 'No disponible');
-                    // $('#correo-trabajador').text(data.RECPSICOTRABAJADOR_CORREO || 'No disponible');
                     console.log('GUIA I RESPUESTAS' + data.RECPSICO_GUIAI_RESPUESTAS + 'GUIA II:' + data.RECPSICO_GUIAII_RESPUESTAS + 'GUIA III:' + data.RECPSICO_GUIAIII_RESPUESTAS);
                     const respuestasGuiaI = data.RECPSICO_GUIAI_RESPUESTAS
                     const respuestasGuiaIArray = JSON.parse(respuestasGuiaI);

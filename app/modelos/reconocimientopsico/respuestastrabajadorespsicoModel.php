@@ -12,11 +12,8 @@ class respuestastrabajadorespsicoModel extends Model
         'RECPSICO_ID',
         'RECPSICO_TRABAJADOR',
         'RECPSICO_GUIAI_RESPUESTAS',
-        'RECPSICO_GUIAI_IDS',
         'RECPSICO_GUIAII_RESPUESTAS',
-        'RECPSICO_GUIAII_IDS',
         'RECPSICO_GUIAIII_RESPUESTAS',
-        'RECPSICO_GUIAIII_IDS',
         'RECPSICO_GUIAV_ID',
     ];
 }
