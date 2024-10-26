@@ -66,14 +66,6 @@
             transition: transform 0.3s ease;
         }
 
-        /* .datos  {
-            border: 1px solid #ccc;
-            padding: 20px;
-            border-radius: 8px;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-            height: 666px; 
-        } */
-
 
         #datos {
             display: flex;
@@ -86,7 +78,7 @@
             box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
             width: 100%;
             position: sticky;
-            top: 100px;
+            top: 4px;
         }
 
         #datos {
@@ -97,9 +89,8 @@
             height: auto; 
             width: 100%;
             position: sticky;
-            top: 100px;
+            top: 4px;
         }
-
 
         .card-title {
             font-size: 18px;
@@ -4059,9 +4050,13 @@
         </div>
     </div>
 
-
     <div id="col-datos" class="col-3 mt-5">
         <div id="datos" class="datos">
+            <div class="info-section text-center">
+                <i class="fa fa-info-circle fa-2x mb-1"></i> 
+                <p style="font-style: italic;"><strong>Puede presionar sobre el icono de algunas preguntas para obtener una explicación detallada</strong></p>
+            </div>
+            <hr>
             <h4><i class="fa fa-user"></i> Datos Generales</h4>
             <div class="info-section">
                 <p><strong><i class="fa fa-id-card"></i> Nombre del trabajador:</strong><span id="nombre-trabajador"></span></p>
@@ -4072,10 +4067,19 @@
             <h4><i class="fa fa-user-md"></i> Psicólogo</h4>
             <div class="info-section">
                 <p><strong><i class="fa fa-user"></i> Nombre del Psicólogo:</strong><span id="nombre-psicologo"></span></p>
-                <p><strong><i class="fa fa-building"></i> Empresa:</strong><span id="empresa-psicologo">Results In Performance</span></p>
+                <p><strong><i class="fa fa-phone"></i> Número de teléfono:</strong><span id="telefono-psicologo"></span></p>
+                <p><strong><i class="fa fa-clock-o"></i> Horario de atención:</strong><span id="horario-psicologo"></span></p>
+            </div>
+            <hr> 
+            <h4><i class="fa fa-user-md"></i> Empresa</h4>
+            <div class="info-section">
+                <p><strong><i class="fa fa-building"></i> Nombre de la empresa:</strong><span id="nombre-empresa"></span></p>
+                <p><strong><i class="fa fa-phone"></i> Número de teléfono:</strong><span id="telefono-empresa"></span></p>
+                <p><strong><i class="fa fa-clock-o"></i> Horario de atención:</strong><span id="horario-empresa"></span></p>
             </div>
         </div>
     </div>
+    
 </div>
 
 <!-- Modal para el aviso de privacidad -->
@@ -4183,7 +4187,7 @@
     </div>
 </div>
 
-<!-- Modal -->
+<!-- Modal guia 5 -->
 <div class="modal fade" id="guia5Modal" tabindex="-1" role="dialog" aria-labelledby="guia5ModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-lg" role="document">
         <div class="modal-content">
@@ -4244,28 +4248,34 @@
                         <label for="nivel_estudios">Nivel de estudios:</label>
                         <select name="nivel_estudios" id="nivel_estudios" class="form-control" required>
                             <option value="" disabled selected>Seleccione su nivel de estudios</option>
-                            <optgroup label="Incompleta">
-                                <option value="primariaIncompleta">Primaria</option>
-                                <option value="secundariaIncompleta">Secundaria</option>
-                                <option value="preparatoriaIncompleta">Preparatoria o bachillerato</option>
-                                <option value="tecnicoSuperiorIncompleta">Técnico Superior</option>
-                                <option value="licenciaturaIncompleta">Licenciatura</option>
-                                <option value="especialidadIncompleta">Especialidad</option>
-                                <option value="maestriaIncompleta">Maestría</option>
-                                <option value="doctoradoIncompleta">Doctorado</option>
-                                <option value="postdoctoradoIncompleta">Postdoctorado</option>
-                            </optgroup>
-                            <optgroup label="Terminada">
-                                <option value="primariaTerminada">Primaria</option>
-                                <option value="secundariaTerminada">Secundaria</option>
-                                <option value="preparatoriaTerminada">Preparatoria o bachillerato</option>
-                                <option value="tecnicoSuperiorTerminada">Técnico Superior</option>
-                                <option value="licenciaturaTerminada">Licenciatura</option>
-                                <option value="especialidadTerminada">Especialidad</option>
-                                <option value="maestriaTerminada">Maestría</option>
-                                <option value="doctoradoTerminada">Doctorado</option>
-                                <option value="postdoctoradoTerminada">Postdoctorado</option>
-                            </optgroup>
+
+                            <option value="primariaIncompleta">Primaria Incompleta</option>
+                            <option value="primariaTerminada">Primaria Terminada</option>
+                            
+                            <option value="secundariaIncompleta">Secundaria Incompleta</option>
+                            <option value="secundariaTerminada">Secundaria Terminada</option>
+                            
+                            <option value="preparatoriaIncompleta">Preparatoria o bachillerato Incompleta</option>
+                            <option value="preparatoriaTerminada">Preparatoria o bachillerato Terminada</option>
+                            
+                            <option value="tecnicoSuperiorIncompleta">Técnico Superior Incompleta</option>
+                            <option value="tecnicoSuperiorTerminada">Técnico Superior Terminada</option>
+                            
+                            <option value="licenciaturaIncompleta">Licenciatura Incompleta</option>
+                            <option value="licenciaturaTerminada">Licenciatura Terminada</option>
+                            
+                            <option value="especialidadIncompleta">Especialidad Incompleta</option>
+                            <option value="especialidadTerminada">Especialidad Terminada</option>
+                            
+                            <option value="maestriaIncompleta">Maestría Incompleta</option>
+                            <option value="maestriaTerminada">Maestría Terminada</option>
+                            
+                            <option value="doctoradoIncompleta">Doctorado Incompleta</option>
+                            <option value="doctoradoTerminada">Doctorado Terminada</option>
+                            
+                            <option value="postdoctoradoIncompleta">Postdoctorado Incompleta</option>
+                            <option value="postdoctoradoTerminada">Postdoctorado Terminada</option>
+
                         </select>
                     </div>
 

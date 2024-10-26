@@ -210,9 +210,11 @@ function submitGuia1y2() {
         }
     });
 }
+
 function validarGuia5(){
     $('#guia5Modal').modal('show');
 }
+
 function submitGuia1y3() {
     // Asignar valores del trabajador y respuestas
     $("#GUIAI_TRABAJADOR_ID").val($("#TRABAJADOR_ID").val());
@@ -227,13 +229,15 @@ function submitGuia1y3() {
     Swal.fire({
       title: "¿Desea guardar sus respuestas?",
       icon: "question",
-      width: "600px",
+      width: "700px",
       showDenyButton: true,
       showCancelButton: true,
       denyButtonColor: "#5F9EA0",
       confirmButtonColor: "green",
+      cancelButtonColor: "red",
       confirmButtonText: "Guardar y finalizar",
-      denyButtonText: `Guardar y continuar más tarde`
+      denyButtonText: `Guardar y continuar más tarde`,
+      cancelButtonText: "Cancelar",
     }).then((result) => {
       /* Read more about isConfirmed, isDenied below */
       if (result.isConfirmed) {
@@ -327,7 +331,6 @@ function submitGuia1y3() {
       }
     });
 }
-
 
 function ejecucionCamara(){
     $('#avisoPermisosModal').modal('show');
