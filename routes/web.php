@@ -29,6 +29,23 @@
 // });
 
 
+// use App\Mail\sendGuiaPsico;
+// use Illuminate\Support\Facades\Mail;
+
+// Route::get('/mail', function(){
+
+//     // return (new sendGuiaPsico("Edgar"))->render();
+
+//     // Este objeto acepta un modelo de eleocuent, o un arreglo de email
+//     // $response = Mail::to('ecano@results-in-performance.com')->queue(new sendGuiaPsico('Edgar')); 
+
+//     $response = Mail::to('agutierrez@results-in-performance.com')->send(new sendGuiaPsico('Edgar'));
+
+//     dump($response);
+// });
+
+
+use Illuminate\Support\Facades\Crypt;
 //==============================================
 
 
@@ -1481,6 +1498,9 @@ Route::get('reporteaireareas/{proyecto_id}/{reporteregistro_id}/{areas_poe}', ['
 
 Route::get('reporteaireareaeliminar/{area_id}', ['as' => 'reporteaire.reporteaireareaeliminar', 'uses' => 'reportes\reporteaireController@reporteaireareaeliminar']);
 
+Route::get('obtenerCAI/{ID}', ['as' => 'reporteaire.obtenerCAI', 'uses' => 'reportes\reporteaireController@obtenerCAI']);
+
+
 Route::get('reporteaireareacategorias/{proyecto_id}/{reporteregistro_id}/{area_id}/{areas_poe}', ['as' => 'reporteaire.reporteaireareacategorias', 'uses' => 'reportes\reporteaireController@reporteaireareacategorias']);
 
 Route::get('reporteaireevaluaciontabla/{proyecto_id}/{reporteregistro_id}/{areas_poe}', ['as' => 'reporteaire.reporteaireevaluaciontabla', 'uses' => 'reportes\reporteaireController@reporteaireevaluaciontabla']);
@@ -1688,43 +1708,43 @@ Route::resource('reportebei', 'reportes\reporteBeiController');
 
 Route::get('reportebeivista/{proyecto_id}', ['as' => 'reportebei.reportebeivista', 'uses' => 'reportes\reporteBeiController@reportebeivista']);
 
-Route::get('reportebeitabladefiniciones/{proyecto_id}/{agente_nombre}/{reportebei_id}', ['as' => 'reportebei.reportebeitabladefiniciones', 'uses' => 'reportes\reportebeiController@reportebeitabladefiniciones']);
+Route::get('reportebeitabladefiniciones/{proyecto_id}/{agente_nombre}/{reportebei_id}', ['as' => 'reportebei.reportebeitabladefiniciones', 'uses' => 'reportes\reporteBeiController@reportebeitabladefiniciones']);
 
-Route::get('reportebeidefinicioneliminar/{definicion_id}', ['as' => 'reportebeiController.reportebeidefinicioneliminar', 'uses' => 'reportes\reportebeiController@reportebeidefinicioneliminar']);
+Route::get('reportebeidefinicioneliminar/{definicion_id}', ['as' => 'reporteBeiController.reportebeidefinicioneliminar', 'uses' => 'reportes\reporteBeiController@reportebeidefinicioneliminar']);
 
-Route::get('reportebeidatosgenerales/{proyecto_id}/{agente_id}/{agente_nombre}', ['as' => 'reportebei.reportebeidatosgenerales', 'uses' => 'reportes\reportebeiController@reportebeidatosgenerales']);
+Route::get('reportebeidatosgenerales/{proyecto_id}/{agente_id}/{agente_nombre}', ['as' => 'reportebei.reportebeidatosgenerales', 'uses' => 'reportes\reporteBeiController@reportebeidatosgenerales']);
 
-Route::get('reportebeimapaubicacion/{reportebei_id}/{archivo_opcion}', ['as' => 'reportebei.reportebeimapaubicacion', 'uses' => 'reportes\reportebeiController@reportebeimapaubicacion']);
+Route::get('reportebeimapaubicacion/{reportebei_id}/{archivo_opcion}', ['as' => 'reportebei.reportebeimapaubicacion', 'uses' => 'reportes\reporteBeiController@reportebeimapaubicacion']);
 
-Route::get('reportebeiresponsabledocumento/{reportebei_id}/{responsabledoc_tipo}/{responsabledoc_opcion}', ['as' => 'reportebei.reportebeiresponsabledocumento', 'uses' => 'reportes\reportebeiController@reportebeiresponsabledocumento']);
+Route::get('reportebeiresponsabledocumento/{reportebei_id}/{responsabledoc_tipo}/{responsabledoc_opcion}', ['as' => 'reportebei.reportebeiresponsabledocumento', 'uses' => 'reportes\reporteBeiController@reportebeiresponsabledocumento']);
 
-Route::get('reportebeitablarevisiones/{proyecto_id}', ['as' => 'reportebei.reportebeitablarevisiones', 'uses' => 'reportes\reportebeiController@reportebeitablarevisiones']);
+Route::get('reportebeitablarevisiones/{proyecto_id}', ['as' => 'reportebei.reportebeitablarevisiones', 'uses' => 'reportes\reporteBeiController@reportebeitablarevisiones']);
 
-Route::get('reportebeicategorias/{proyecto_id}/{reportebei_id}/{areas_poe}', ['as' => 'reportebei.reportebeicategorias', 'uses' => 'reportes\reportebeiController@reportebeicategorias']);
+Route::get('reportebeicategorias/{proyecto_id}/{reportebei_id}/{areas_poe}', ['as' => 'reportebei.reportebeicategorias', 'uses' => 'reportes\reporteBeiController@reportebeicategorias']);
 
-Route::get('reportebeicategoriaeliminar/{categoria_id}', ['as' => 'reportebei.reportebeicategoriaseliminar', 'uses' => 'reportes\reportebeiController@reportebeicategoriaeliminar']);
+Route::get('reportebeicategoriaeliminar/{categoria_id}', ['as' => 'reportebei.reportebeicategoriaseliminar', 'uses' => 'reportes\reporteBeiController@reportebeicategoriaeliminar']);
 
 
-Route::get('reportebeiareas/{proyecto_id}/{reportebei_id}/{areas_poe}', ['as' => 'reportebei.reportebeiareas', 'uses' => 'reportes\reportebeiController@reportebeiareas']);
+Route::get('reportebeiareas/{proyecto_id}/{reportebei_id}/{areas_poe}', ['as' => 'reportebei.reportebeiareas', 'uses' => 'reportes\reporteBeiController@reportebeiareas']);
 
-Route::get('reportebeiareascategorias/{proyecto_id}/{reportebei_id}/{area_id}/{areas_poe}', ['as' => 'reportebei.reportebeiareascategorias', 'uses' => 'reportes\reportebeiController@reportebeiareascategorias']);
+Route::get('reportebeiareascategorias/{proyecto_id}/{reportebei_id}/{area_id}/{areas_poe}', ['as' => 'reportebei.reportebeiareascategorias', 'uses' => 'reportes\reporteBeiController@reportebeiareascategorias']);
 
 Route::get('reporteiluminacionareascategoriasconsultar/{area_id}/{categoria_id}/{reporteiluminacion_id}/{areas_poe}', ['as' => 'reporteiluminacion.reporteiluminacionareascategoriasconsultar', 'uses' => 'reportes\reporteiluminacionController@reporteiluminacionareascategoriasconsultar']);
 
-Route::get('reportebeitablarecomendaciones/{proyecto_id}/{reportebei_id}/{agente_nombre}', ['as' => 'reportebei.reportebeitablarecomendaciones', 'uses' => 'reportes\reportebeiController@reportebeitablarecomendaciones']);
+Route::get('reportebeitablarecomendaciones/{proyecto_id}/{reportebei_id}/{agente_nombre}', ['as' => 'reportebei.reportebeitablarecomendaciones', 'uses' => 'reportes\reporteBeiController@reportebeitablarecomendaciones']);
 
-Route::get('reportebeitablainformeresultados/{proyecto_id}/{reportebei_id}/{agente_nombre}', ['as' => 'reportebei.reportebeitablainformeresultados', 'uses' => 'reportes\reportebeiController@reportebeitablainformeresultados']);
+Route::get('reportebeitablainformeresultados/{proyecto_id}/{reportebei_id}/{agente_nombre}', ['as' => 'reportebei.reportebeitablainformeresultados', 'uses' => 'reportes\reporteBeiController@reportebeitablainformeresultados']);
 
-Route::get('reportebeitablaequipoutilizado/{proyecto_id}/{reportebei_id}/{agente_nombre}', ['as' => 'reportebei.reportebeitablaequipoutilizado', 'uses' => 'reportes\reportebeiController@reportebeitablaequipoutilizado']);
+Route::get('reportebeitablaequipoutilizado/{proyecto_id}/{reportebei_id}/{agente_nombre}', ['as' => 'reportebei.reportebeitablaequipoutilizado', 'uses' => 'reportes\reporteBeiController@reportebeitablaequipoutilizado']);
 
 
-Route::get('reportebeiepptabla/{proyecto_id}/{reportebei_id}', ['as' => 'reportebei.reportebeiepptabla', 'uses' => 'reportes\reportebeiController@reportebeiepptabla']);
+Route::get('reportebeiepptabla/{proyecto_id}/{reportebei_id}', ['as' => 'reportebei.reportebeiepptabla', 'uses' => 'reportes\reporteBeiController@reportebeiepptabla']);
 
-Route::get('reportebeieppeliminar/{epp_id}', ['as' => 'reportebei.reportebeieppeliminar', 'uses' => 'reportes\reportebeiController@reportebeieppeliminar']);
+Route::get('reportebeieppeliminar/{epp_id}', ['as' => 'reportebei.reportebeieppeliminar', 'uses' => 'reportes\reporteBeiController@reportebeieppeliminar']);
 
-Route::get('reportebeitablapuntos/{proyecto_id}', ['as' => 'reportebei.reportebeitablapuntos', 'uses' => 'reportes\reportebeiController@reportebeitablapuntos']);
+Route::get('reportebeitablapuntos/{proyecto_id}', ['as' => 'reportebei.reportebeitablapuntos', 'uses' => 'reportes\reporteBeiController@reportebeitablapuntos']);
 
-Route::get('reportebeiconcluirrevision/{reporte_id}', ['as' => 'reportebei.reportebeiconcluirrevision', 'uses' => 'reportes\reportebeiController@reportebeiconcluirrevision'])->middleware('asignacionUser:REVISION');
+Route::get('reportebeiconcluirrevision/{reporte_id}', ['as' => 'reportebei.reportebeiconcluirrevision', 'uses' => 'reportes\reporteBeiController@reportebeiconcluirrevision'])->middleware('asignacionUser:REVISION');
 
 Route::get('reportebeiworddescargar/{proyecto_id}/{revision_id}/{ultima_revision}', ['as' => 'reportebei.reportebeiworddescargar', 'uses' => 'reportes\reporteBeiWordController@reportebeiworddescargar']);
 
@@ -1784,12 +1804,94 @@ Route::get('ejecucionHI', ['as' => 'HI.ejecucion', 'uses' => 'HI\ejecucionContro
 //INFORMES
 Route::resource('informes', 'HI\informesrecoController');
 
+// ======================== MODULOS DEL RECONOCIMIENTO DE PSICOSOCIAL =========================================
+
+//RECONOCIMIENTO
+Route::resource('reconocimientoPsicosocial', 'PSICO\reconocimientoPsicoController');
+Route::get('/estructuraPsico/{FOLIO}', ['as' => 'reconocimientoPsico.estructuraproyectos', 'uses' => 'PSICO\reconocimientoPsicoController@estructuraproyectos']);
+Route::get('/folioproyectoPsico/{proyecto_folio}', ['as' => 'reconocimientoPsico.folioproyecto', 'uses' => 'PSICO\reconocimientoPsicoController@folioproyecto']);
+
+Route::get('mostrarplanopsico/{archivo_opcion}/{reconocimientopsico_id}', ['as' => 'mostrarplanopsico', 'uses' => 'PSICO\reconocimientoPsicoController@mostrarplanopsico']);
+Route::get('mostrarfotoinstalacionpsico/{archivo_opcion}/{reconocimientopsico_id}', ['as' => 'mostrarfotoinstalacionpsico', 'uses' => 'PSICO\reconocimientoPsicoController@mostrarfotoinstalacionpsico']);
+Route::get('mostrarmapapsico/{archivo_opcion}/{reconocimientopsico_id}', ['as' => 'mostrarmapapsico', 'uses' => 'PSICO\reconocimientoPsicoController@mostrarmapapsico']);
+Route::get('tablareconocimientopsico', ['as' => 'reconocimientoPsico.tablareconocimientopsico', 'uses' => 'PSICO\reconocimientoPsicoController@tablareconocimientopsico']);
+
+//categoria
+Route::get('recopsicocategoriatabla/{reconocimientopsico_id}', ['as' => 'recopsicocategoria.recopsicocategoriatabla', 'uses' => 'PSICO\recopsicocategoriaController@recopsicocategoriatabla']);
+Route::resource('recopsicocategoria', 'PSICO\recopsicocategoriaController');
+//area
+Route::resource('recopsicoarea', 'recsensorial\recsensorialareaController');
+Route::get('recopsicoareatabla/{reconocimientopsico_id}', ['as' => 'recsensorialarea.recsensorialareatabla', 'uses' => 'recsensorial\recsensorialareaController@recsensorialareatabla']);
+//areacategorias
+Route::get('recopsicoareacategorias/{reconocimientopsico_id}', ['as' => 'recsensorialarea.recsensorialareacategorias', 'uses' => 'recsensorial\recsensorialareaController@recsensorialareacategorias']);
+Route::get('recopsicoareacategoriaselegidas/{area_id}', ['as' => 'recsensorialarea.recsensorialareacategoriaselegidas', 'uses' => 'recsensorial\recsensorialareaController@recsensorialareacategoriaselegidas']);
+
+Route::resource('recopsiconormativa', 'PSICO\recopsiconormativaController');
+Route::get('recopsicotrabajadorescargados/{reconocimientopsico_id}', ['as' => 'recopsicotrabajadores.recopsicotrabajadoresCargadosTabla', 'uses' => 'PSICO\recopsiconormativaController@recopsicotrabajadoresCargadosTabla']);
+
+
+//PROGRAMA DE TRABAJO
+Route::resource('programaPsicosocial', 'PSICO\programaTrabajoPsicoController');
+Route::resource('proyectotrabajadores', 'PSICO\proyectotrabajadoresController');
+
+Route::get('tablaProgramaPsico', ['as' => 'PSICO.programaTrabajoPsico', 'uses' => 'PSICO\programaTrabajoPsicoController@tablaProgramaTrabajoPsico']);
+Route::get('proyectotrabajadoreslista/{RECPSICO_ID}/{proyecto_id}', ['as' => 'proyectotrabajadores.proyectotrabajadoreslista', 'uses' => 'PSICO\proyectotrabajadoresController@proyectotrabajadoreslista']);
+Route::get('proyectotrabajadoresadicionales', ['as' => 'proyectotrabajadores.proyectotrabajadoresadicionales', 'uses' => 'PSICO\proyectotrabajadoresController@proyectotrabajadoresadicionales']);
+Route::get('trabajadoresProgramaPsico/{proyecto_id}/{RECPSICO_ID}', ['as' => 'programaTrabajoPsico.trabajadoresProgramaPsico', 'uses' => 'PSICO\programaTrabajoPsicoController@trabajadoresProgramaPsico']);
+
+//EJECUCION
+Route::resource('ejecucionPsicosocial', 'PSICO\ejecucionPsicoController');
+Route::get('ejecucionPsicoTabla', ['as' => 'PSICO.ejecucionPsico', 'uses' => 'PSICO\ejecucionPsicoController@tablaEjecucion']);
+Route::get('trabajadoresOnlineEjecucionPsico/{proyecto_id}', ['as' => 'PSICO.trabajadoresOnline', 'uses' => 'PSICO\ejecucionPsicoController@tablaTrabajadoresOnline']);
+Route::get('trabajadoresPresencialEjecucionPsico/{proyecto_id}', ['as' => 'PSICO.trabajadoresPresencial', 'uses' => 'PSICO\ejecucionPsicoController@tablaTrabajadoresPresencial']);
+Route::get('ejecuciontrabajadoresnombres', ['as' => 'ejecucionpsico.trabajadoresNombres', 'uses' => 'PSICO\ejecucionPsicoController@trabajadoresNombres']);
+Route::put('actualizarFechasOnline', ['as' => 'PSICO.actualizarFechasOnline', 'uses' => 'PSICO\ejecucionPsicoController@actualizarFechasOnline']);
+
+//INFORMES
+Route::resource('informesPsicosocial', 'PSICO\informesrecoPsicoController');
+
+// GUIAS 
+
+// Route::get('/Guia/{id}/{guia1}/{guia2}/{guia3}', function () { return view('catalogos.psico.guias.guias');})->name('Guia');
+Route::get('/Guia/{guia1}/{guia2}/{guia3}/{id}', function ($guia1, $guia2, $guia3, $id) {
+    try {
+
+        // Desencriptamos las guías
+        $decryptedGuia1 = Crypt::decrypt($guia1);
+        $decryptedGuia2 = Crypt::decrypt($guia2);
+        $decryptedGuia3 = Crypt::decrypt($guia3);
+        $id = Crypt::decrypt($id);
+
+        // Enviamos los datos de las guias ya desencriptados para obtenerlas en nuestra vista
+        return view('catalogos.psico.guias.guias', [
+            'guia1' => $decryptedGuia1,
+            'guia2' => $decryptedGuia2,
+            'guia3' => $decryptedGuia3,
+            'id' => $id,
+        ]);
+    } catch (\Illuminate\Contracts\Encryption\DecryptException $e) {
+        //Cancelamos el acceso a la ruta
+        abort(403, "Acceso denegado.");
+    }
+})->name('Guia');
+
+Route::post('/consultarRespuestasGuardadas', 'PSICO\guiasController@consultarRespuestasGuardadas');
+Route::post('/obtenerExplicaciones', 'PSICO\guiasController@obtenerExplicaciones');
+Route::post('/consultarDatosTrabajador', 'PSICO\guiasController@consultarDatosTrabajador');
+Route::post('/guardarFotoRecpsico', 'PSICO\guiasController@guardarFotoRecpsico');
+Route::get('envioGuia/{tipo}/{idPersonal}/{idRecsensorial}', ['as' => 'PSICO.envioGuia', 'uses' => 'PSICO\ejecucionPsicoController@envioGuia']);
+
+Route::resource('guardarGuiasPsico', 'PSICO\guiasController');
 
 //====================================> BIBLIOTECA (CENTRO DE INFORMACION) <=================================>
 Route::resource('biblioteca', 'biblioteca\bibliotecaController');
 Route::get('obtenerInfoBliblioteca/{clasificacion}/{titulo}', ['as' => 'biblioteca.listaBiblioteca', 'uses' => 'biblioteca\bibliotecaController@listaBiblioteca']);
 Route::get('listaBibliotecaText/{clasificacion}/{titulo}', ['as' => 'biblioteca.listaBiblioteca', 'uses' => 'biblioteca\bibliotecaController@listaBibliotecaText']);
 Route::get('bibliotecapdf/{documento_id}', ['as' => 'biblioteca.bibliotecapdf', 'uses' => 'biblioteca\bibliotecaController@bibliotecapdf']);
+
+//CATÁLOGOS
+Route::resource('recpsicocatalogos', 'PSICO\recpsicocatalogosController');
+Route::get('recpsicocatalogosguia/{num_catalogo}', ['as' => 'PSICO.recpsicocatalogos', 'uses' => 'PSICO\recpsicocatalogosController@tablaCatalogoGuia']);
 
 
 

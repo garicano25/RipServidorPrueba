@@ -173,7 +173,6 @@ class proyectoproveedoresController extends Controller
                     $checked = '';
                     $puntos = 0;
 
-                    // select proveedores
                     $opciones = DB::select('SELECT
                                                 acreditacionalcance.proveedor_id
                                                 ,proveedor.proveedor_NombreComercial

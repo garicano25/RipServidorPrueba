@@ -53,7 +53,8 @@ class proyectoModel extends Model
         'proyectoInterno',
         'requiereContrato',
         'cliente_id',
-        'tipoServicioCliente'
+        'tipoServicioCliente',
+        'reconocimiento_psico_id'
     ];
 
     //=============== RELACION A TABLAS ===================
