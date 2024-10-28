@@ -725,16 +725,20 @@
 									<tr id="CO_AIRE_1" style="display: none">
 										<td>Concentración de monóxido de carbono (CO)</td>
 										<td>25 ppm</td>
-										<td rowspan="3" style="text-align: justify!important;">NOM-010-STPS-2014, Agentes químicos contaminantes del ambiente laboral - Reconocimiento, evaluación y control.</td>
+										<td rowspan="1" style="text-align: justify!important;">NOM-010-STPS-2014, Agentes químicos contaminantes del ambiente laboral - Reconocimiento, evaluación y control.</td>
 									</tr>
 									<tr id="CO2_AIRE_1" style="display: none">
 										<td>Concentración de dióxido de carbono (CO₂)</td>
 										<td>5000 ppm</td>
+										<td rowspan="1" style="text-align: justify!important;">NOM-010-STPS-2014, Agentes químicos contaminantes del ambiente laboral - Reconocimiento, evaluación y control.</td>
+
 										{{-- <td style="text-align: justify!important;">NOM-010-STPS-2014, Agentes químicos contaminantes del ambiente laboral - Reconocimiento, evaluación y control.</td> --}}
 									</tr>
 									<tr id="SO2_AIRE_1" style="display: none">
 										<td>Concentración de dióxido de azufre (SO₂)</td>
 										<td>0.25 ppm</td>
+										<td rowspan="1" style="text-align: justify!important;">NOM-010-STPS-2014, Agentes químicos contaminantes del ambiente laboral - Reconocimiento, evaluación y control.</td>
+
 										{{-- <td style="text-align: justify!important;">NOM-010-STPS-2014, Agentes químicos contaminantes del ambiente laboral - Reconocimiento, evaluación y control.</td> --}}
 									</tr>
 									<tr>
