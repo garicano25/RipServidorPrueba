@@ -23,19 +23,26 @@ class bibliotecaController extends Controller
 
     public function listaBiblioteca($clasificacion, $titulo){
 
-
-        if ($clasificacion == 0 && $titulo != 0) {
-            $info = centroInformacionModel::where('TITULO', 'LIKE', '%' . $titulo . '%')->OrderBy('created_at', 'ASC')->get();
-
-        } else if ($clasificacion != 0 ){
-            $info = centroInformacionModel::where('CLASIFICACION', $clasificacion)->OrderBy('created_at', 'ASC')->get();
-        }else{
-            $info = centroInformacionModel::OrderBy('created_at', 'ASC')->get();
-           
-        }
-        
+        if ($clasificacion == 0 && $titulo == 0) {
+            $info = centroInformacionModel::orderBy('created_at', 'ASC')->get();
+        } else if ($clasificacion != 0 && $titulo == 0) {
+            $info = centroInformacionModel::where('CLASIFICACION', $clasificacion)
+                ->orderBy('created_at', 'ASC')
+                ->get();
+        } 
         return response()->json($info);
 
+    }
+
+
+    public function listaBibliotecaText($clasificacion, $titulo)
+    {
+
+        $info = centroInformacionModel::where('TITULO', 'LIKE', '%' . $titulo . '%')
+            ->orWhere('DESCRIPCION', 'LIKE', '%' . $titulo . '%')
+            ->orderBy('created_at', 'ASC')
+            ->get();
+        return response()->json($info);
     }
 
     public function bibliotecapdf($documento_id)

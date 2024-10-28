@@ -268,6 +268,35 @@ $('#filtrar').on('click', function () {
     titulo = $('#TITULO_SELECT').val();
 
 
-    consultarInformacion(0, titulo)
+      $('#listaInformacion').html('')
+    
+    $.ajax({
+        type: "GET",
+        dataType: "json",
+        url: "/listaBibliotecaText/" + 0 + "/" + titulo ,
+        data:{},
+        cache: false,
+        success: function (dato) {
+            
+            if (dato.length != 0) {
+
+                mostraBilioteca(dato);
+                
+            } else {
+
+                $('#listaInformacion').html('<h2 class="mx-2" >No existe documentos con esta clasificación<h2>')
+                
+            }
+            
+            $('#divLoader').css('display', 'none');  
+            
+        },beforeSend: function () {
+            $('#divLoader').css({ 'display': 'flex', 'justify-content': 'center' });  
+
+        },
+        error: function(dato){
+            return false;
+        }
+    });
 
  })

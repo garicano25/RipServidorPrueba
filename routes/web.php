@@ -1788,6 +1788,7 @@ Route::resource('informes', 'HI\informesrecoController');
 //====================================> BIBLIOTECA (CENTRO DE INFORMACION) <=================================>
 Route::resource('biblioteca', 'biblioteca\bibliotecaController');
 Route::get('obtenerInfoBliblioteca/{clasificacion}/{titulo}', ['as' => 'biblioteca.listaBiblioteca', 'uses' => 'biblioteca\bibliotecaController@listaBiblioteca']);
+Route::get('listaBibliotecaText/{clasificacion}/{titulo}', ['as' => 'biblioteca.listaBiblioteca', 'uses' => 'biblioteca\bibliotecaController@listaBibliotecaText']);
 Route::get('bibliotecapdf/{documento_id}', ['as' => 'biblioteca.bibliotecapdf', 'uses' => 'biblioteca\bibliotecaController@bibliotecapdf']);
 
 
