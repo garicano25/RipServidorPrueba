@@ -56,7 +56,7 @@ class recopsiconormativaController extends Controller
     {
         $RECPSICO_ID = $request->input('RECPSICO_ID');
         
-        $trabajadores = recopsicotrabajadoresModel::where('RECPSICO_ID', 3)
+        $trabajadores = recopsicotrabajadoresModel::where('RECPSICO_ID', $RECPSICO_ID)
             ->select('ID_RECOPSICOTRABAJADOR', 'RECPSICOTRABAJADOR_NOMBRE', 'RECPSICOTRABAJADOR_MUESTRA')
             ->get();
 
