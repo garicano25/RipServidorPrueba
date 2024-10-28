@@ -98,6 +98,10 @@ Route::get('usuarioeliminar/{usuario_id}/{usuario_tipo}/{empleado_id}', ['as' =>
 
 Route::get('/opciones/{etiquetaId}', ['as' => 'cliente.obteneretiquetas', 'uses' => 'clientes\clienteController@obteneretiquetas']);
 
+Route::get('obtenerActividadesCronograma/{ID_CONTRATO}/{ID_PROYECTO}', ['as' => 'cliente.obtenerActividadesCronograma', 'uses' => 'clientes\clienteController@obtenerActividadesCronograma']);
+
+Route::get('eliminarActividadCronograma/{id}', ['as' => 'eliminarActividadCronograma', 'uses' => 'clientes\clienteController@eliminarActividadCronograma']);
+
 Route::get('/estructura-cliente/{clienteId}', ['as' => 'cliente.obtenerEstructuraCliente', 'uses' => 'clientes\clienteController@obtenerEstructuraCliente']);
 
 
@@ -1881,7 +1885,8 @@ Route::resource('guardarGuiasPsico', 'PSICO\guiasController');
 
 //====================================> BIBLIOTECA (CENTRO DE INFORMACION) <=================================>
 Route::resource('biblioteca', 'biblioteca\bibliotecaController');
-Route::get('obtenerInfoBliblioteca', ['as' => 'biblioteca.listaBiblioteca', 'uses' => 'biblioteca\bibliotecaController@listaBiblioteca']);
+Route::get('obtenerInfoBliblioteca/{clasificacion}/{titulo}', ['as' => 'biblioteca.listaBiblioteca', 'uses' => 'biblioteca\bibliotecaController@listaBiblioteca']);
+Route::get('listaBibliotecaText/{clasificacion}/{titulo}', ['as' => 'biblioteca.listaBiblioteca', 'uses' => 'biblioteca\bibliotecaController@listaBibliotecaText']);
 Route::get('bibliotecapdf/{documento_id}', ['as' => 'biblioteca.bibliotecapdf', 'uses' => 'biblioteca\bibliotecaController@bibliotecapdf']);
 
 //CATÁLOGOS

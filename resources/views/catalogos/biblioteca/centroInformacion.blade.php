@@ -13,11 +13,11 @@
 
     .book {
         position: relative;
-        width: 280px;
-        height: 300px;
+        width: 310px;
+        height: 320px;
         border-radius: 5px 0 0 5px;
         box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
-        transform: rotateY(-20deg);
+        transform: rotateY(-25deg);
         transform-style: preserve-3d;
         transition: transform 0.6s ease;
     }
@@ -105,17 +105,35 @@
 <!-- Esqueleto de la vista -->
 <div class="row mt-4">
     <div class="col-12">
-        <ol class="breadcrumb m-b-10">
-            @if(auth()->user()->hasRoles(['Superusuario', 'Administrador','Coordinador']))
-
+        <ol class="breadcrumb mb-3">
             <h2 style="color: #ffff; margin: 0;"><i class="fa fa-book" aria-hidden="true"></i> Centro de información</h2>
+
+
+
+
+            <select class="form-control mx-3" style="width: 265px;" id="CLASIFICACION_SELECT" >
+                <option value="" selected disabled>Seleccione una clasificacion</option>
+                <option value="0"></option>
+                <option value="1">Psicología</option>
+                <option value="2">Ergonomía</option>
+                <option value="3">Higiene Industrial</option>
+                <option value="4">Normas Mexicanas</option>
+                <option value="5">Normas Internacionales</option>
+                <option value="6">Otros</option>
+            </select>
+            <input type="text" class="form-control" style="width: 400px;" id="TITULO_SELECT" placeholder="Buscar por...">
+            <button type="button" class="btn btn-secondary waves-effect waves-light"  id="filtrar" data-toggle="tooltip" data-placement="top" title="Filtrar por nombre y clasificacion">
+                <i class="fa fa-filter p-1"></i>
+            </button>
+
+
+            @if(auth()->user()->hasRoles(['Superusuario', 'Administrador','Coordinador']))
 
             <button type="button" class="btn btn-secondary waves-effect waves-light" style="margin-left: auto;" id="boton_nueva_doc">
                 Información <i class="fa fa-plus p-1"></i>
             </button>
-            @else
-            <h2 style="color: #ffff; margin: 0;"><i class="fa fa-book" aria-hidden="true"></i> Centro de información</h2>
             @endif
+
         </ol>
     </div>
 
@@ -149,6 +167,21 @@
                     <div class="row">
                         <div class="col-12">
                             {!! csrf_field() !!}
+
+
+                            <div class="form-group">
+                                <label>Clasificación *</label>
+                                <select class="form-control" name="CLASIFICACION" id="CLASIFICACION" required>
+                                    <option value=""></option>
+                                    <option value="1">Psicología</option>
+                                    <option value="2">Ergonomía</option>
+                                    <option value="3">Higiene Industrial</option>
+                                    <option value="4">Normas Mexicanas</option>
+                                    <option value="5">Normas Internacionales</option>
+                                    <option value="6">Otros</option>
+                                </select>
+                            </div>
+
                             <div class="form-group">
                                 <label>Titulo *</label>
                                 <input type="text" class="form-control" style="text-align: center;" name="TITULO" id="TITULO" required>

@@ -36,7 +36,7 @@ use Illuminate\Support\Str;
     <!-- Date picker plugins css -->
     <link href="/assets/plugins/bootstrap-datepicker/bootstrap-datepicker.min.css" rel="stylesheet" type="text/css" />
 
-    
+
     <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
     <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
     <!--[if lt IE 9]>
@@ -54,6 +54,8 @@ use Illuminate\Support\Str;
 
     @if(request()->is('cliente'))
     <!-- file upload -->
+    <!-- FullCalendar CSS -->
+    <link href='https://cdn.jsdelivr.net/npm/fullcalendar@6.1.4/main.min.css' rel='stylesheet' />
     <link rel="stylesheet" href="/assets/plugins/dropify/dist/css/dropify.min.css">
     <link href="/assets/plugins/form_wizard_steps_bootstrap/form_wizard_style.css" rel="stylesheet">
     </link>
@@ -135,7 +137,8 @@ use Illuminate\Support\Str;
     {{-- @if(request()->is('proyectos')) --}}
 
     @if(request()->is('proyectos') || request()->is('ejecucion') || request()->is('informes') || request()->is('programa') || request()->is('programaPsicosocial') || request()->is('ejecucionPsicosocial'))
-
+    <!-- FullCalendar CSS -->
+    <link href='https://cdn.jsdelivr.net/npm/fullcalendar@6.1.4/main.min.css' rel='stylesheet' />
     <!-- form_wizard_stps -->
     <link href="/assets/plugins/form_wizard_steps_bootstrap/form_wizard_style.css" rel="stylesheet">
     </link>
@@ -234,7 +237,7 @@ use Illuminate\Support\Str;
                     </div>
 
                     @endif
-                    
+
 
 
 
@@ -504,7 +507,7 @@ use Illuminate\Support\Str;
 
 
                         @endif
-<!-- 
+                        <!-- 
                         @if (preg_match('/\bpsicosocial\b/', request()->path()))
 
 
@@ -571,7 +574,7 @@ use Illuminate\Support\Str;
                         </li>
                         @endif
 
-                       
+
 
 
 
@@ -694,6 +697,10 @@ use Illuminate\Support\Str;
     <script src="/assets/plugins/datatables/dataTables.rowsGroup.js"></script>
     <!-- Form wizard -->
     <script src="/assets/plugins/form_wizard_steps_bootstrap/form_wizard_script.js"></script>
+    <!-- FullCalendar JS -->
+    <script src='https://cdn.jsdelivr.net/npm/fullcalendar@6.1.15/index.global.min.js'></script>
+    <script src="https://cdn.jsdelivr.net/npm/@fullcalendar/multimonth@6.1.15/index.global.min.js"></script>
+
     {{-- JS pagina --}}
     <script src="/js_sitio/cliente.js?v=2.0"></script>
     @endif
@@ -887,7 +894,7 @@ use Illuminate\Support\Str;
     <script src="/assets/plugins/select-search/selectize.js" type="text/javascript"></script>
     {{-- pagina --}}
     <script src="/js_sitio/programaTrabajoPsico.js?v=3.0"></script>
-    
+
     @endif
 
 
@@ -950,6 +957,9 @@ use Illuminate\Support\Str;
     <script src="/assets/plugins/Magnific-Popup-master/dist/jquery.magnific-popup-init.js"></script>
     {{-- Select search filter --}}
     <script src="/assets/plugins/select-search/selectize.js" type="text/javascript"></script>
+    <!-- FullCalendar JS -->
+    <script src='https://cdn.jsdelivr.net/npm/fullcalendar@6.1.15/index.global.min.js'></script>
+    <script src="https://cdn.jsdelivr.net/npm/@fullcalendar/multimonth@6.1.15/index.global.min.js"></script>
     {{-- pagina --}}
     <script src="/js_sitio/proyecto.js?v=2.0"></script>
     @endif

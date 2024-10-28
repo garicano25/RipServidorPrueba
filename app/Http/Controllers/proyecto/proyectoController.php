@@ -28,6 +28,7 @@ use App\modelos\recsensorial\catregionModel;
 use App\modelos\recsensorial\catsubdireccionModel;
 use App\modelos\recsensorial\catgerenciaModel;
 use App\modelos\recsensorial\catactivoModel;
+use App\modelos\catalogos\Cat_pruebaModel;
 
 
 //Configuracion Zona horaria
@@ -61,8 +62,10 @@ class proyectoController extends Controller
         $catsubdireccion = catsubdireccionModel::where('catsubdireccion_activo', 1)->orderBy('catsubdireccion_nombre', 'ASC')->get();
         $catgerencia = catgerenciaModel::where('catgerencia_activo', 1)->orderBy('catgerencia_nombre', 'ASC')->get();
         $catactivo = catactivoModel::where('catactivo_activo', 1)->orderBy('catactivo_nombre', 'ASC')->get();
+        // CATALOGO PRUEBAS
+        $catpruebas = Cat_pruebaModel::where('catPrueba_Activo', 1)->OrderBy('catPrueba_Nombre', 'ASC')->get();
 
-        return view('catalogos.proyecto.proyecto', compact('catregion', 'catsubdireccion', 'catgerencia', 'catactivo', 'usuarios'));
+        return view('catalogos.proyecto.proyecto', compact('catregion', 'catsubdireccion', 'catgerencia', 'catactivo', 'usuarios', 'catpruebas'));
     }
 
 
