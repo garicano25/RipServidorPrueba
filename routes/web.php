@@ -1687,43 +1687,43 @@ Route::resource('reportebei', 'reportes\reporteBeiController');
 
 Route::get('reportebeivista/{proyecto_id}', ['as' => 'reportebei.reportebeivista', 'uses' => 'reportes\reporteBeiController@reportebeivista']);
 
-Route::get('reportebeitabladefiniciones/{proyecto_id}/{agente_nombre}/{reportebei_id}', ['as' => 'reportebei.reportebeitabladefiniciones', 'uses' => 'reportes\reportebeiController@reportebeitabladefiniciones']);
+Route::get('reportebeitabladefiniciones/{proyecto_id}/{agente_nombre}/{reportebei_id}', ['as' => 'reportebei.reportebeitabladefiniciones', 'uses' => 'reportes\reporteBeiController@reportebeitabladefiniciones']);
 
-Route::get('reportebeidefinicioneliminar/{definicion_id}', ['as' => 'reportebeiController.reportebeidefinicioneliminar', 'uses' => 'reportes\reportebeiController@reportebeidefinicioneliminar']);
+Route::get('reportebeidefinicioneliminar/{definicion_id}', ['as' => 'reporteBeiController.reportebeidefinicioneliminar', 'uses' => 'reportes\reporteBeiController@reportebeidefinicioneliminar']);
 
-Route::get('reportebeidatosgenerales/{proyecto_id}/{agente_id}/{agente_nombre}', ['as' => 'reportebei.reportebeidatosgenerales', 'uses' => 'reportes\reportebeiController@reportebeidatosgenerales']);
+Route::get('reportebeidatosgenerales/{proyecto_id}/{agente_id}/{agente_nombre}', ['as' => 'reportebei.reportebeidatosgenerales', 'uses' => 'reportes\reporteBeiController@reportebeidatosgenerales']);
 
-Route::get('reportebeimapaubicacion/{reportebei_id}/{archivo_opcion}', ['as' => 'reportebei.reportebeimapaubicacion', 'uses' => 'reportes\reportebeiController@reportebeimapaubicacion']);
+Route::get('reportebeimapaubicacion/{reportebei_id}/{archivo_opcion}', ['as' => 'reportebei.reportebeimapaubicacion', 'uses' => 'reportes\reporteBeiController@reportebeimapaubicacion']);
 
-Route::get('reportebeiresponsabledocumento/{reportebei_id}/{responsabledoc_tipo}/{responsabledoc_opcion}', ['as' => 'reportebei.reportebeiresponsabledocumento', 'uses' => 'reportes\reportebeiController@reportebeiresponsabledocumento']);
+Route::get('reportebeiresponsabledocumento/{reportebei_id}/{responsabledoc_tipo}/{responsabledoc_opcion}', ['as' => 'reportebei.reportebeiresponsabledocumento', 'uses' => 'reportes\reporteBeiController@reportebeiresponsabledocumento']);
 
-Route::get('reportebeitablarevisiones/{proyecto_id}', ['as' => 'reportebei.reportebeitablarevisiones', 'uses' => 'reportes\reportebeiController@reportebeitablarevisiones']);
+Route::get('reportebeitablarevisiones/{proyecto_id}', ['as' => 'reportebei.reportebeitablarevisiones', 'uses' => 'reportes\reporteBeiController@reportebeitablarevisiones']);
 
-Route::get('reportebeicategorias/{proyecto_id}/{reportebei_id}/{areas_poe}', ['as' => 'reportebei.reportebeicategorias', 'uses' => 'reportes\reportebeiController@reportebeicategorias']);
+Route::get('reportebeicategorias/{proyecto_id}/{reportebei_id}/{areas_poe}', ['as' => 'reportebei.reportebeicategorias', 'uses' => 'reportes\reporteBeiController@reportebeicategorias']);
 
-Route::get('reportebeicategoriaeliminar/{categoria_id}', ['as' => 'reportebei.reportebeicategoriaseliminar', 'uses' => 'reportes\reportebeiController@reportebeicategoriaeliminar']);
+Route::get('reportebeicategoriaeliminar/{categoria_id}', ['as' => 'reportebei.reportebeicategoriaseliminar', 'uses' => 'reportes\reporteBeiController@reportebeicategoriaeliminar']);
 
 
-Route::get('reportebeiareas/{proyecto_id}/{reportebei_id}/{areas_poe}', ['as' => 'reportebei.reportebeiareas', 'uses' => 'reportes\reportebeiController@reportebeiareas']);
+Route::get('reportebeiareas/{proyecto_id}/{reportebei_id}/{areas_poe}', ['as' => 'reportebei.reportebeiareas', 'uses' => 'reportes\reporteBeiController@reportebeiareas']);
 
-Route::get('reportebeiareascategorias/{proyecto_id}/{reportebei_id}/{area_id}/{areas_poe}', ['as' => 'reportebei.reportebeiareascategorias', 'uses' => 'reportes\reportebeiController@reportebeiareascategorias']);
+Route::get('reportebeiareascategorias/{proyecto_id}/{reportebei_id}/{area_id}/{areas_poe}', ['as' => 'reportebei.reportebeiareascategorias', 'uses' => 'reportes\reporteBeiController@reportebeiareascategorias']);
 
 Route::get('reporteiluminacionareascategoriasconsultar/{area_id}/{categoria_id}/{reporteiluminacion_id}/{areas_poe}', ['as' => 'reporteiluminacion.reporteiluminacionareascategoriasconsultar', 'uses' => 'reportes\reporteiluminacionController@reporteiluminacionareascategoriasconsultar']);
 
-Route::get('reportebeitablarecomendaciones/{proyecto_id}/{reportebei_id}/{agente_nombre}', ['as' => 'reportebei.reportebeitablarecomendaciones', 'uses' => 'reportes\reportebeiController@reportebeitablarecomendaciones']);
+Route::get('reportebeitablarecomendaciones/{proyecto_id}/{reportebei_id}/{agente_nombre}', ['as' => 'reportebei.reportebeitablarecomendaciones', 'uses' => 'reportes\reporteBeiController@reportebeitablarecomendaciones']);
 
-Route::get('reportebeitablainformeresultados/{proyecto_id}/{reportebei_id}/{agente_nombre}', ['as' => 'reportebei.reportebeitablainformeresultados', 'uses' => 'reportes\reportebeiController@reportebeitablainformeresultados']);
+Route::get('reportebeitablainformeresultados/{proyecto_id}/{reportebei_id}/{agente_nombre}', ['as' => 'reportebei.reportebeitablainformeresultados', 'uses' => 'reportes\reporteBeiController@reportebeitablainformeresultados']);
 
-Route::get('reportebeitablaequipoutilizado/{proyecto_id}/{reportebei_id}/{agente_nombre}', ['as' => 'reportebei.reportebeitablaequipoutilizado', 'uses' => 'reportes\reportebeiController@reportebeitablaequipoutilizado']);
+Route::get('reportebeitablaequipoutilizado/{proyecto_id}/{reportebei_id}/{agente_nombre}', ['as' => 'reportebei.reportebeitablaequipoutilizado', 'uses' => 'reportes\reporteBeiController@reportebeitablaequipoutilizado']);
 
 
-Route::get('reportebeiepptabla/{proyecto_id}/{reportebei_id}', ['as' => 'reportebei.reportebeiepptabla', 'uses' => 'reportes\reportebeiController@reportebeiepptabla']);
+Route::get('reportebeiepptabla/{proyecto_id}/{reportebei_id}', ['as' => 'reportebei.reportebeiepptabla', 'uses' => 'reportes\reporteBeiController@reportebeiepptabla']);
 
-Route::get('reportebeieppeliminar/{epp_id}', ['as' => 'reportebei.reportebeieppeliminar', 'uses' => 'reportes\reportebeiController@reportebeieppeliminar']);
+Route::get('reportebeieppeliminar/{epp_id}', ['as' => 'reportebei.reportebeieppeliminar', 'uses' => 'reportes\reporteBeiController@reportebeieppeliminar']);
 
-Route::get('reportebeitablapuntos/{proyecto_id}', ['as' => 'reportebei.reportebeitablapuntos', 'uses' => 'reportes\reportebeiController@reportebeitablapuntos']);
+Route::get('reportebeitablapuntos/{proyecto_id}', ['as' => 'reportebei.reportebeitablapuntos', 'uses' => 'reportes\reporteBeiController@reportebeitablapuntos']);
 
-Route::get('reportebeiconcluirrevision/{reporte_id}', ['as' => 'reportebei.reportebeiconcluirrevision', 'uses' => 'reportes\reportebeiController@reportebeiconcluirrevision'])->middleware('asignacionUser:REVISION');
+Route::get('reportebeiconcluirrevision/{reporte_id}', ['as' => 'reportebei.reportebeiconcluirrevision', 'uses' => 'reportes\reporteBeiController@reportebeiconcluirrevision'])->middleware('asignacionUser:REVISION');
 
 Route::get('reportebeiworddescargar/{proyecto_id}/{revision_id}/{ultima_revision}', ['as' => 'reportebei.reportebeiworddescargar', 'uses' => 'reportes\reporteBeiWordController@reportebeiworddescargar']);
 
