@@ -112,7 +112,8 @@ $(document).ready(function()
 	$('#modal_cargando').modal(); // Abrir modal
 	updateClock(); // Ejecutar tiempo de espera
 
-
+	obtenerCaracteristica(proyecto.id)
+	validarPermisosAsignados(proyecto.id) //Validacion de permisos
 	datosgenerales(); // Cargar datos
 	portadaInfo() // Info portada
 
@@ -456,6 +457,533 @@ function instalacion_nombre(reporte_instalacion)
 {
 	$('.div_instalacion_nombre').html(reporte_instalacion);
 }
+
+
+
+//=================================================
+//  CARACTERISTICA A EVALUAR DE AIRE 
+
+
+// function obtenerCaracteristica() {
+//     $.ajax({
+//         url: "/obtenerCAI/" + proyecto.id,
+//         type: 'GET',
+//         success: function(response) {
+//             if (response.status === 'success') {
+//                 var caracteristicas = response.caracteristicas;
+
+//                 $('#bioaerosoles').prop('checked', caracteristicas.bioaerosoles === 1);
+//                 $('#co').prop('checked', caracteristicas.co === 1);
+//                 $('#co2').prop('checked', caracteristicas.co2 === 1);
+//                 $('#temperatura').prop('checked', caracteristicas.temperatura === 1);
+//                 $('#velocidad').prop('checked', caracteristicas.velocidad === 1);
+//                 $('#caudal').prop('checked', caracteristicas.caudal === 1);
+//                 $('#humedad').prop('checked', caracteristicas.humedad === 1);
+//                 $('#SO2').prop('checked', caracteristicas.SO2 === 1);
+//                 $('#Formaldehídos').prop('checked', caracteristicas.Formaldehídos === 1);
+
+//                 if (response.ID_CAI_INFORMES) {
+//                     $('#ID_CAI_INFORMES').val(response.ID_CAI_INFORMES);  
+//                 } else {
+//                     $('#ID_CAI_INFORMES').val('');  
+//                 }
+//             }
+//             // Si el status es error, no se realiza ninguna acción ni se muestra mensaje
+//         },
+//         error: function() {
+//             // No se muestra ningún mensaje en caso de error
+//         }
+//     });
+// }
+
+
+
+
+
+
+$("#botonguardar_reporte_evaluaraire").click(function(event) {
+    event.preventDefault(); 
+
+    var valida = this.form.checkValidity(); 
+    if (valida) {
+        swal({
+            title: "¡Confirme guardar las características de aire!",
+            text: "",
+            type: "warning",
+            showCancelButton: true,
+            confirmButtonColor: "#DD6B55",
+            confirmButtonText: "Guardar!",
+            cancelButtonText: "Cancelar!",
+            closeOnConfirm: false,
+            closeOnCancel: false
+        }, function(isConfirm) {
+            if (isConfirm) {
+                swal.close(); 
+
+                var jsonchecks = {
+                    bioaerosoles: $('#bioaerosoles').is(':checked') ? 1 : 0,
+                    co: $('#co').is(':checked') ? 1 : 0,
+                    co2: $('#co2').is(':checked') ? 1 : 0,
+                    temperatura: $('#temperatura').is(':checked') ? 1 : 0,
+                    velocidad: $('#velocidad').is(':checked') ? 1 : 0,
+                    caudal: $('#caudal').is(':checked') ? 1 : 0,
+                    humedad: $('#humedad').is(':checked') ? 1 : 0 ,
+                    SO2: $('#SO2').is(':checked') ? 1 : 0 ,
+                    Formaldehídos: $('#Formaldehídos').is(':checked') ? 1 : 0
+
+
+                };
+
+                $('#form_reporte_evaluaraire').ajaxForm({
+                    dataType: 'json',
+                    type: 'POST',
+                    url: ''+ruta_storage_guardar, 
+                    data: {
+                        opcion: 21,
+                        proyecto_id: proyecto.id, 
+						ID_CAI_INFORMES: $('#ID_CAI_INFORMES').val(), 
+                        caracteristicas_aire: JSON.stringify(jsonchecks) 
+                    },
+                    resetForm: false,
+                    success: function(dato) {
+                        swal({
+                            title: "Correcto",
+                            text: ""+dato.msj,
+                            type: "success", 
+                            buttons: {
+                                visible: false, 
+                            },
+                            timer: 1500,
+                            showConfirmButton: false
+                        });
+
+
+						if ($('#bioaerosoles').is(':checked')) {
+                            $('#BIOAEROSOLES_AIRE_1').css('display', 'inline-block');
+                            $('#BIOAEROSOLES_AIRE_3').css('display', 'inline-block');
+                        } else {
+                            menureporte_estado('menureporte_7_1', 1);
+                            $('#BIOAEROSOLES_AIRE_1').css('display', 'none');
+                            $('#BIOAEROSOLES_AIRE_3').css('display', 'none');
+                        }
+
+
+						
+
+                        $('#botonguardar_reporte_evaluaraire').html('Guardar características de aire <i class="fa fa-save"></i>');
+                        $('#botonguardar_reporte_evaluaraire').attr('disabled', false);
+                    },
+                    beforeSend: function() {
+                        $('#botonguardar_reporte_evaluaraire').html('Guardar características de aire <i class="fa fa-spin fa-spinner"></i>');
+                        $('#botonguardar_reporte_evaluaraire').attr('disabled', true);
+                    },
+                    error: function(dato) {
+                        swal({
+                            title: "Error",
+                            text: ""+dato.msj,
+                            type: "error", 
+                            buttons: {
+                                visible: false, 
+                            },
+                            timer: 1500,
+                            showConfirmButton: false
+                        });
+
+                        $('#botonguardar_reporte_evaluaraire').html('Guardar características de aire <i class="fa fa-save"></i>');
+                        $('#botonguardar_reporte_evaluaraire').attr('disabled', false);
+                        return false;
+                    }
+                }).submit(); 
+                return false;
+            } else {
+                swal({
+                    title: "Cancelado",
+                    text: "Acción cancelada",
+                    type: "error", 
+                    buttons: {
+                        visible: false, 
+                    },
+                    timer: 500,
+                    showConfirmButton: false
+                });
+            }
+        });
+        return false;
+    }
+});
+
+
+
+
+
+
+
+// $('#bioaerosoles').change(function() {
+//     if ($(this).is(':checked')) {
+//         $('#BIOAEROSOLES_AIRE_1').css('display', 'table-row');
+//         $('#BIOAEROSOLES_AIRE_3').css('display', 'inline-block');
+//         $('#reporteaireevaluacion_ct, #reporteaireevaluacion_ctma, #reporteaireevaluacion_hongos, #reporteaireevaluacion_levaduras').prop('readonly', false).prop('required', true);
+
+//     } else {
+//         menureporte_estado('menureporte_7_1', 1);
+//         $('#BIOAEROSOLES_AIRE_1').css('display', 'none');
+//         $('#BIOAEROSOLES_AIRE_3').css('display', 'none');
+        
+//         $('#reporteaireevaluacion_ct, #reporteaireevaluacion_ctma, #reporteaireevaluacion_hongos, #reporteaireevaluacion_levaduras').prop('readonly', true).prop('required', false);
+//     }
+// });
+
+// $('#co').change(function() {
+//     if ($(this).is(':checked')) {
+//         $('#CO_AIRE_1').css('display', 'table-row');
+//         $('#CO_AIRE_2').css('display', 'table-row');
+//         $('#CO_AIRE_3').css('display', 'inline-block');
+//         $('#reporteaireevaluacion_co').prop('readonly', false).prop('required', true);
+
+//     } else {
+//         menureporte_estado('menureporte_7_5', 1);
+//         $('#CO_AIRE_1').css('display', 'none');
+//         $('#CO_AIRE_2').css('display', 'none');
+//         $('#CO_AIRE_3').css('display', 'none');
+        
+//         $('#reporteaireevaluacion_co').prop('readonly', true).prop('required', false);
+//     }
+// });
+
+
+// $('#co2').change(function() {
+//     if ($(this).is(':checked')) {
+//         $('#CO2_AIRE_1').css('display', 'table-row');
+//         $('#CO2_AIRE_2').css('display', 'table-row');
+//         $('#CO2_AIRE_3').css('display', 'inline-block');
+//         $('#reporteaireevaluacion_co2').prop('readonly', false).prop('required', true);
+
+//     } else {
+//         menureporte_estado('menureporte_7_6', 1);
+//         $('#CO2_AIRE_1').css('display', 'none');
+//         $('#CO2_AIRE_2').css('display', 'none');
+//         $('#CO2_AIRE_3').css('display', 'none');
+        
+//         $('#reporteaireevaluacion_co2').prop('readonly', true).prop('required', false);
+//     }
+// });
+
+
+// $('#temperatura').change(function() {
+//     if ($(this).is(':checked')) {
+//         $('#TEM_AIRE_1').css('display', 'table-row');
+//         $('#TEM_AIRE_2').css('display', 'table-row');
+//         $('#TEM_AIRE_3').css('display', 'inline-block');
+//         $('#reporteaireevaluacion_temperatura').prop('readonly', false).prop('required', true);
+
+//     } else {
+//         menureporte_estado('menureporte_7_2', 1);
+//         $('#TEM_AIRE_1').css('display', 'none');
+//         $('#TEM_AIRE_2').css('display', 'none');
+//         $('#TEM_AIRE_3').css('display', 'none');
+        
+//         $('#reporteaireevaluacion_temperatura').prop('readonly', true).prop('required', false);
+//     }
+// });
+
+
+// $('#velocidad').change(function() {
+//     if ($(this).is(':checked')) {
+//         $('#VELOCIDAD_AIRE_1').css('display', 'table-row');
+//         $('#VELOCIDAD_AIRE_2').css('display', 'table-row');
+//         $('#VELOCIDAD_AIRE_3').css('display', 'inline-block');
+// 		$('#reporteaireevaluacion_velocidad').prop('readonly', false).prop('required', true);
+//         $('#reporteaireevaluacion_velocidadlimite').prop('disabled', false).prop('required', true);
+
+
+
+//     } else {
+//         menureporte_estado('menureporte_7_3', 1);
+//         $('#VELOCIDAD_AIRE_1').css('display', 'none');
+//         $('#VELOCIDAD_AIRE_2').css('display', 'none');
+//         $('#VELOCIDAD_AIRE_3').css('display', 'none');
+// 		$('#reporteaireevaluacion_velocidad').prop('readonly', true).prop('required', false);
+// 		$('#reporteaireevaluacion_velocidadlimite').prop('disabled', true).prop('required', false);
+
+// 	}
+// });
+
+
+
+// $('#humedad').change(function() {
+//     if ($(this).is(':checked')) {
+//         $('#HUMEDAD_AIRE_1').css('display', 'table-row');
+//         $('#HUMEDAD_AIRE_2').css('display', 'table-row');
+//         $('#HUMEDAD_AIRE_3').css('display', 'inline-block');
+//         $('#reporteaireevaluacion_humedad').prop('readonly', false).prop('required', true);
+
+//     } else {
+//         menureporte_estado('menureporte_7_4', 1);
+//         $('#HUMEDAD_AIRE_1').css('display', 'none');
+//         $('#HUMEDAD_AIRE_2').css('display', 'none');
+//         $('#HUMEDAD_AIRE_3').css('display', 'none');
+//         $('#reporteaireevaluacion_humedad').prop('readonly', true).prop('required', false);
+//     }
+// });
+
+// $('#SO2').change(function() {
+//     if ($(this).is(':checked')) {
+//         $('#SO2_AIRE_1').css('display', 'table-row');
+//         $('#SO2_AIRE_2').css('display', 'table-row');
+//         $('#SO2_AIRE_3').css('display', 'inline-block');
+//         $('#reporteaireevaluacion_so2').prop('readonly', false).prop('required', true);
+
+//     } else {
+//         menureporte_estado('menureporte_7_7', 1);
+//         $('#SO2_AIRE_1').css('display', 'none');
+//         $('#SO2_AIRE_2').css('display', 'none');
+//         $('#SO2_AIRE_3').css('display', 'none');
+//         $('#reporteaireevaluacion_so2').prop('readonly', true).prop('required', false);
+//     }
+// });
+
+
+
+
+function aplicarConfiguracionCheckbox(idCheckbox, elementos, idInputs, menureporte, estado, isDisabled = false) {
+    // Configurar el checkbox según el estado
+    $(idCheckbox).prop('checked', estado === 1);
+
+    // Mostrar u ocultar elementos y ajustar los inputs
+    if (estado === 1) {
+        elementos.forEach(function(elemento) {
+            $(elemento.id).css('display', elemento.display);
+        });
+
+        // Aplicar disabled o readonly según corresponda
+        if (isDisabled) {
+            $(idInputs).prop('disabled', false).prop('required', true);
+        } else {
+            $(idInputs).prop('readonly', false).prop('required', true);
+        }
+
+        menureporte_estado(menureporte, 0);  // Activado
+    } else {
+        elementos.forEach(function(elemento) {
+            $(elemento.id).css('display', 'none');
+        });
+
+        // Aplicar disabled o readonly según corresponda
+        if (isDisabled) {
+            $(idInputs).prop('disabled', true).prop('required', false);
+        } else {
+            $(idInputs).prop('readonly', true).prop('required', false);
+        }
+
+        menureporte_estado(menureporte, 1);  // Desactivado (ahora siempre se asegura)
+    }
+}
+
+function inicializarCheckboxes() {
+    // Configuración inicial cuando es "nuevo"
+    aplicarConfiguracionCheckbox(
+        '#bioaerosoles',
+        [
+            {id: '#BIOAEROSOLES_AIRE_1', display: 'table-row'},
+            {id: '#BIOAEROSOLES_AIRE_3', display: 'inline-block'}
+        ],
+        '#reporteaireevaluacion_ct, #reporteaireevaluacion_ctma, #reporteaireevaluacion_hongos, #reporteaireevaluacion_levaduras',
+        'menureporte_7_1',
+        $('#bioaerosoles').is(':checked') ? 1 : 0
+    );
+
+    aplicarConfiguracionCheckbox(
+        '#velocidad',
+        [
+            {id: '#VELOCIDAD_AIRE_1', display: 'table-row'},
+            {id: '#VELOCIDAD_AIRE_2', display: 'table-row'},
+            {id: '#VELOCIDAD_AIRE_3', display: 'inline-block'}
+        ],
+        '#reporteaireevaluacion_velocidad, #reporteaireevaluacion_velocidadlimite',
+        'menureporte_7_3',
+        $('#velocidad').is(':checked') ? 1 : 0,
+        true // Aplicar disabled para #reporteaireevaluacion_velocidadlimite
+    );
+
+    aplicarConfiguracionCheckbox(
+        '#co',
+        [
+            {id: '#CO_AIRE_1', display: 'table-row'},
+            {id: '#CO_AIRE_2', display: 'table-row'},
+            {id: '#CO_AIRE_3', display: 'inline-block'}
+        ],
+        '#reporteaireevaluacion_co',
+        'menureporte_7_5',
+        $('#co').is(':checked') ? 1 : 0
+    );
+
+    aplicarConfiguracionCheckbox(
+        '#co2',
+        [
+            {id: '#CO2_AIRE_1', display: 'table-row'},
+            {id: '#CO2_AIRE_2', display: 'table-row'},
+            {id: '#CO2_AIRE_3', display: 'inline-block'}
+        ],
+        '#reporteaireevaluacion_co2',
+        'menureporte_7_6',
+        $('#co2').is(':checked') ? 1 : 0
+    );
+
+    aplicarConfiguracionCheckbox(
+        '#temperatura',
+        [
+            {id: '#TEM_AIRE_1', display: 'table-row'},
+            {id: '#TEM_AIRE_2', display: 'table-row'},
+            {id: '#TEM_AIRE_3', display: 'inline-block'}
+        ],
+        '#reporteaireevaluacion_temperatura',
+        'menureporte_7_2',
+        $('#temperatura').is(':checked') ? 1 : 0
+    );
+
+    aplicarConfiguracionCheckbox(
+        '#humedad',
+        [
+            {id: '#HUMEDAD_AIRE_1', display: 'table-row'},
+            {id: '#HUMEDAD_AIRE_2', display: 'table-row'},
+            {id: '#HUMEDAD_AIRE_3', display: 'inline-block'}
+        ],
+        '#reporteaireevaluacion_humedad',
+        'menureporte_7_4',
+        $('#humedad').is(':checked') ? 1 : 0
+    );
+
+    aplicarConfiguracionCheckbox(
+        '#SO2',
+        [
+            {id: '#SO2_AIRE_1', display: 'table-row'},
+            {id: '#SO2_AIRE_2', display: 'table-row'},
+            {id: '#SO2_AIRE_3', display: 'inline-block'}
+        ],
+        '#reporteaireevaluacion_so2',
+        'menureporte_7_7',
+        $('#SO2').is(':checked') ? 1 : 0
+    );
+
+    // Simplemente obtenemos los valores de caudal y Formaldehídos
+    $('#caudal').prop('checked', $('#caudal').is(':checked'));
+    $('#Formaldehídos').prop('checked', $('#Formaldehídos').is(':checked'));
+}
+
+function obtenerCaracteristica() {
+    $.ajax({
+        url: "/obtenerCAI/" + proyecto.id,
+        type: 'GET',
+        success: function(response) {
+            if (response.status === 'success') {
+                var caracteristicas = response.caracteristicas;
+
+                // Aplicar configuración basada en los datos obtenidos
+                aplicarConfiguracionCheckbox(
+                    '#bioaerosoles',
+                    [
+                        {id: '#BIOAEROSOLES_AIRE_1', display: 'table-row'},
+                        {id: '#BIOAEROSOLES_AIRE_3', display: 'inline-block'}
+                    ],
+                    '#reporteaireevaluacion_ct, #reporteaireevaluacion_ctma, #reporteaireevaluacion_hongos, #reporteaireevaluacion_levaduras',
+                    'menureporte_7_1',
+                    caracteristicas.bioaerosoles
+                );
+
+                aplicarConfiguracionCheckbox(
+                    '#velocidad',
+                    [
+                        {id: '#VELOCIDAD_AIRE_1', display: 'table-row'},
+                        {id: '#VELOCIDAD_AIRE_2', display: 'table-row'},
+                        {id: '#VELOCIDAD_AIRE_3', display: 'inline-block'}
+                    ],
+                    '#reporteaireevaluacion_velocidad, #reporteaireevaluacion_velocidadlimite',
+                    'menureporte_7_3',
+                    caracteristicas.velocidad,
+                    true // Aplicar disabled para #reporteaireevaluacion_velocidadlimite
+                );
+
+                aplicarConfiguracionCheckbox(
+                    '#co',
+                    [
+                        {id: '#CO_AIRE_1', display: 'table-row'},
+                        {id: '#CO_AIRE_2', display: 'table-row'},
+                        {id: '#CO_AIRE_3', display: 'inline-block'}
+                    ],
+                    '#reporteaireevaluacion_co',
+                    'menureporte_7_5',
+                    caracteristicas.co
+                );
+
+                aplicarConfiguracionCheckbox(
+                    '#co2',
+                    [
+                        {id: '#CO2_AIRE_1', display: 'table-row'},
+                        {id: '#CO2_AIRE_2', display: 'table-row'},
+                        {id: '#CO2_AIRE_3', display: 'inline-block'}
+                    ],
+                    '#reporteaireevaluacion_co2',
+                    'menureporte_7_6',
+                    caracteristicas.co2
+                );
+
+                aplicarConfiguracionCheckbox(
+                    '#temperatura',
+                    [
+                        {id: '#TEM_AIRE_1', display: 'table-row'},
+                        {id: '#TEM_AIRE_2', display: 'table-row'},
+                        {id: '#TEM_AIRE_3', display: 'inline-block'}
+                    ],
+                    '#reporteaireevaluacion_temperatura',
+                    'menureporte_7_2',
+                    caracteristicas.temperatura
+                );
+
+                aplicarConfiguracionCheckbox(
+                    '#humedad',
+                    [
+                        {id: '#HUMEDAD_AIRE_1', display: 'table-row'},
+                        {id: '#HUMEDAD_AIRE_2', display: 'table-row'},
+                        {id: '#HUMEDAD_AIRE_3', display: 'inline-block'}
+                    ],
+                    '#reporteaireevaluacion_humedad',
+                    'menureporte_7_4',
+                    caracteristicas.humedad
+                );
+
+                aplicarConfiguracionCheckbox(
+                    '#SO2',
+                    [
+                        {id: '#SO2_AIRE_1', display: 'table-row'},
+                        {id: '#SO2_AIRE_2', display: 'table-row'},
+                        {id: '#SO2_AIRE_3', display: 'inline-block'}
+                    ],
+                    '#reporteaireevaluacion_so2',
+                    'menureporte_7_7',
+                    caracteristicas.SO2
+                );
+
+                // Obtenemos solo el valor de caudal y Formaldehídos
+                $('#caudal').prop('checked', caracteristicas.caudal === 1);
+                $('#Formaldehídos').prop('checked', caracteristicas.Formaldehídos === 1);
+
+                if (response.ID_CAI_INFORMES) {
+                    $('#ID_CAI_INFORMES').val(response.ID_CAI_INFORMES);  
+                } else {
+                    $('#ID_CAI_INFORMES').val('');  
+                }
+            }
+        },
+        error: function() {
+            // No se muestra ningún mensaje en caso de error
+        }
+    });
+}
+
+$(document).ready(function() {
+    inicializarCheckboxes(); // Para inicializar en caso de "nuevo"
+});
+
 
 
 //=================================================
@@ -3020,162 +3548,282 @@ function tabla_reporte_6_1(tbody)
 var selectcategorias = '';
 
 
-$(document).ready(function()
-{
-	setTimeout(function()
-	{
-		tabla_reporte_puntos(proyecto.id, reporteregistro_id);
-	}, 6000);
+$(document).ready(function() {
+    setTimeout(function() {
+        tabla_reporte_puntos(proyecto.id, reporteregistro_id);
+
+    }, 6000); 
 });
 
 
-var datatable_reporte_puntos = null;
-function tabla_reporte_puntos(proyecto_id, reporteregistro_id)
-{
-	try 
-	{
-		var ruta = "/reporteaireevaluaciontabla/"+proyecto_id+"/"+reporteregistro_id+"/"+areas_poe;
-
-		if (datatable_reporte_puntos != null)
-		{
-			datatable_reporte_puntos.clear().draw();
-			datatable_reporte_puntos.ajax.url(ruta).load();
-		}
-		else
-		{
-			var numeroejecucion = 1;
-			datatable_reporte_puntos = $('#tabla_reporte_puntos').DataTable({
-				ajax: {
-					url: ruta,
-					type: "get",
-					cache: false,
-					dataType: "json",
-					data: {},
-					dataSrc: function (json)
-					{
-						menureporte_estado("menureporte_7_1", parseInt(json.total));
-						menureporte_estado("menureporte_7_2", parseInt(json.total));
-						menureporte_estado("menureporte_7_3", parseInt(json.total));
-						menureporte_estado("menureporte_7_4", parseInt(json.total));
-						menureporte_estado("menureporte_7_5", parseInt(json.total));
-						menureporte_estado("menureporte_7_6", parseInt(json.total));
-						menureporte_estado("menureporte_7_7", parseInt(json.total));
-
-						
-						// // Tablas
-						tabla_reporte_7_1(json.tabla_reporte_7_1);
-						tabla_reporte_7_2(json.tabla_reporte_7_2);
-						tabla_reporte_7_3(json.tabla_reporte_7_3);
-						tabla_reporte_7_4(json.tabla_reporte_7_4);
-						tabla_reporte_7_5(json.tabla_reporte_7_5);
-						tabla_reporte_7_6(json.tabla_reporte_7_6);
-						tabla_reporte_7_7(json.tabla_reporte_7_7);
 
 
-						return json.data;
-					},
-					error: function (xhr, error, code)
-					{						
-						console.log('error en datatable_reporte_puntos '+code);
-						if (numeroejecucion <= 1)
-						{
-							tabla_reporte_puntos(proyecto_id, reporteregistro_id)
-							numeroejecucion += 1;
-						}
-					}
-				},
-				columns: [
-					// {
-					//     data: "id" 
-					// },
-					{
-						data: "reporteaireevaluacion_punto",
-						defaultContent: "-",
-						orderable: false,
-					},
-					{
-						data: "reporteairearea_instalacion",
-						defaultContent: "-",
-						orderable: false,
-					},
-					{
-						data: "reporteairearea_nombre",
-						defaultContent: "-",
-						orderable: false,
-					},
-					{
-						data: "reporteaireevaluacion_ubicacion",
-						defaultContent: "-",
-						orderable: false,
-					},
-					{
-						data: "boton_editar",
-						defaultContent: "-",
-						className: 'editar',
-						orderable: false,
-					},
-					{
-						data: "boton_eliminar",
-						defaultContent: "-",
-						orderable: false,
-					}
-				],
-				lengthMenu: [[20, 50, 100, -1], [20, 50, 100, "Todos"]],
-				rowsGroup: [1, 2, 0], //agrupar filas
-				// order: [[ 0, "ASC" ]],
-				ordering: false,
-				processing: true,
-				searching: false,
-				paging: true,
-				language: {
-					lengthMenu: "Mostrar _MENU_ Registros",
-					zeroRecords: "No se encontraron registros",
-					info: "Página _PAGE_ de _PAGES_ (Total _TOTAL_ registros)",
-					infoEmpty: "No se encontraron registros",
-					infoFiltered: "(Filtrado de _MAX_ registros)",
-					emptyTable: "No hay datos disponibles en la tabla",
-					loadingRecords: "Cargando datos....",
-					processing: "Procesando <i class='fa fa-spin fa-spinner fa-3x'></i>",
-					search: "Buscar",
-					paginate: {
-						first: "Primera",
-						last: "Ultima",
-						next: "Siguiente",
-						previous: "Anterior"
-					}
-				},
-				rowCallback: function(row, data, index)
-				{
-					// // console.log(index+' - '+data.reporteiluminacionpuntos_nopunto);
-					// $(row).find('td:eq(7)').css('background', data.resultadoner_color);
 
-					if(data.reportehieloevaluacionparametros_resultado == "Dentro de norma")
-					{
-						$(row).find('td:eq(13)').css('background', "#00FF00");
-						$(row).find('td:eq(13)').css('color', '#000000');
-						$(row).find('td:eq(13)').css('font-weight', 'bold');
-					}
-					else
-					{
-						$(row).find('td:eq(13)').css('background', "#FF0000");
-						$(row).find('td:eq(13)').css('color', '#FFFFFF');
-						$(row).find('td:eq(13)').css('font-weight', 'bold');
-					}
-				},
-			});
-		}
 
-		// Tooltip en DataTable
-		datatable_reporte_puntos.on('draw', function ()
-		{
-			$('[data-toggle="tooltip"]').tooltip();
-		});
-	}
-	catch (exception)
-	{
-		tabla_reporte_puntos(proyecto_id, reporteregistro_id);
+const idsMenureporte = ["menureporte_7_1", "menureporte_7_2", "menureporte_7_3", "menureporte_7_4", "menureporte_7_5", "menureporte_7_6", "menureporte_7_7"];
+
+const estadosMenureporte = idsMenureporte.reduce((acc, id) => ({ ...acc, [id]: 0 }), {});
+
+function actualizarMenureporteEstado(id, nuevoEstado) {
+    if (estadosMenureporte[id] !== 1 || nuevoEstado !== 0) {
+        menureporte_estado(id, nuevoEstado);
+        estadosMenureporte[id] = nuevoEstado; 
     }
 }
+
+var datatable_reporte_puntos = null;
+
+function tabla_reporte_puntos(proyecto_id, reporteregistro_id) {
+    try {
+        var ruta = "/reporteaireevaluaciontabla/" + proyecto_id + "/" + reporteregistro_id + "/" + areas_poe;
+
+        if (datatable_reporte_puntos != null) {
+            datatable_reporte_puntos.clear().draw();
+            datatable_reporte_puntos.ajax.url(ruta).load();
+        } else {
+            var numeroejecucion = 1;
+            datatable_reporte_puntos = $('#tabla_reporte_puntos').DataTable({
+                ajax: {
+                    url: ruta,
+                    type: "get",
+                    cache: false,
+                    dataType: "json",
+                    data: {},
+                    dataSrc: function (json) {
+                        idsMenureporte.forEach((id, index) => {
+                            const tablaReporte = json[`tabla_reporte_${index + 1}`];
+                            actualizarMenureporteEstado(id, tablaReporte ? 1 : 0);
+                        });
+
+                        // Llama a las funciones para cada tabla según los datos de json
+                        tabla_reporte_7_1(json.tabla_reporte_7_1);
+                        tabla_reporte_7_2(json.tabla_reporte_7_2);
+                        tabla_reporte_7_3(json.tabla_reporte_7_3);
+                        tabla_reporte_7_4(json.tabla_reporte_7_4);
+                        tabla_reporte_7_5(json.tabla_reporte_7_5);
+                        tabla_reporte_7_6(json.tabla_reporte_7_6);
+                        tabla_reporte_7_7(json.tabla_reporte_7_7);
+
+                        return json.data;
+                    },
+                    error: function (xhr, error, code) {
+                        console.log('error en datatable_reporte_puntos ' + code);
+                        if (numeroejecucion <= 1) {
+                            tabla_reporte_puntos(proyecto_id, reporteregistro_id);
+                            numeroejecucion += 1;
+                        }
+                    }
+                },
+                columns: [
+                    { data: "reporteaireevaluacion_punto", defaultContent: "-", orderable: false },
+                    { data: "reporteairearea_instalacion", defaultContent: "-", orderable: false },
+                    { data: "reporteairearea_nombre", defaultContent: "-", orderable: false },
+                    { data: "reporteaireevaluacion_ubicacion", defaultContent: "-", orderable: false },
+                    { data: "boton_editar", defaultContent: "-", className: 'editar', orderable: false },
+                    { data: "boton_eliminar", defaultContent: "-", orderable: false }
+                ],
+                lengthMenu: [[20, 50, 100, -1], [20, 50, 100, "Todos"]],
+                rowsGroup: [1, 2, 0],
+                ordering: false,
+                processing: true,
+                searching: false,
+                paging: true,
+                language: {
+                    lengthMenu: "Mostrar _MENU_ Registros",
+                    zeroRecords: "No se encontraron registros",
+                    info: "Página _PAGE_ de _PAGES_ (Total _TOTAL_ registros)",
+                    infoEmpty: "No se encontraron registros",
+                    infoFiltered: "(Filtrado de _MAX_ registros)",
+                    emptyTable: "No hay datos disponibles en la tabla",
+                    loadingRecords: "Cargando datos....",
+                    processing: "Procesando <i class='fa fa-spin fa-spinner fa-3x'></i>",
+                    search: "Buscar",
+                    paginate: {
+                        first: "Primera",
+                        last: "Ultima",
+                        next: "Siguiente",
+                        previous: "Anterior"
+                    }
+                },
+                rowCallback: function(row, data, index) {
+                    var cell = $(row).find('td:eq(13)');
+                    if (data.reportehieloevaluacionparametros_resultado === "Dentro de norma") {
+                        cell.css({
+                            'background': "#00FF00",
+                            'color': "#000000",
+                            'font-weight': 'bold'
+                        });
+                    } else {
+                        cell.css({
+                            'background': "#FF0000",
+                            'color': "#FFFFFF",
+                            'font-weight': 'bold'
+                        });
+                    }
+                }
+            });
+        }
+
+        // Tooltip en DataTable
+        datatable_reporte_puntos.on('draw', function () {
+            $('[data-toggle="tooltip"]').tooltip();
+        });
+    } catch (exception) {
+        tabla_reporte_puntos(proyecto_id, reporteregistro_id);
+    }
+}
+
+
+
+
+
+// var datatable_reporte_puntos = null;
+// function tabla_reporte_puntos(proyecto_id, reporteregistro_id)
+// {
+// 	try 
+// 	{
+// 		var ruta = "/reporteaireevaluaciontabla/"+proyecto_id+"/"+reporteregistro_id+"/"+areas_poe;
+
+// 		if (datatable_reporte_puntos != null)
+// 		{
+// 			datatable_reporte_puntos.clear().draw();
+// 			datatable_reporte_puntos.ajax.url(ruta).load();
+// 		}
+// 		else
+// 		{
+// 			var numeroejecucion = 1;
+// 			datatable_reporte_puntos = $('#tabla_reporte_puntos').DataTable({
+// 				ajax: {
+// 					url: ruta,
+// 					type: "get",
+// 					cache: false,
+// 					dataType: "json",
+// 					data: {},
+// 					dataSrc: function (json)
+// 					{
+// 						menureporte_estado("menureporte_7_1", parseInt(json.total));
+// 						menureporte_estado("menureporte_7_2", parseInt(json.total));
+// 						menureporte_estado("menureporte_7_3", parseInt(json.total));
+// 						menureporte_estado("menureporte_7_4", parseInt(json.total));
+// 						menureporte_estado("menureporte_7_5", parseInt(json.total));
+// 						menureporte_estado("menureporte_7_6", parseInt(json.total));
+// 						menureporte_estado("menureporte_7_7", parseInt(json.total));
+
+						
+// 						// // Tablas
+// 						tabla_reporte_7_1(json.tabla_reporte_7_1);
+// 						tabla_reporte_7_2(json.tabla_reporte_7_2);
+// 						tabla_reporte_7_3(json.tabla_reporte_7_3);
+// 						tabla_reporte_7_4(json.tabla_reporte_7_4);
+// 						tabla_reporte_7_5(json.tabla_reporte_7_5);
+// 						tabla_reporte_7_6(json.tabla_reporte_7_6);
+// 						tabla_reporte_7_7(json.tabla_reporte_7_7);
+
+
+// 						return json.data;
+// 					},
+// 					error: function (xhr, error, code)
+// 					{						
+// 						console.log('error en datatable_reporte_puntos '+code);
+// 						if (numeroejecucion <= 1)
+// 						{
+// 							tabla_reporte_puntos(proyecto_id, reporteregistro_id)
+// 							numeroejecucion += 1;
+// 						}
+// 					}
+// 				},
+// 				columns: [
+// 					// {
+// 					//     data: "id" 
+// 					// },
+// 					{
+// 						data: "reporteaireevaluacion_punto",
+// 						defaultContent: "-",
+// 						orderable: false,
+// 					},
+// 					{
+// 						data: "reporteairearea_instalacion",
+// 						defaultContent: "-",
+// 						orderable: false,
+// 					},
+// 					{
+// 						data: "reporteairearea_nombre",
+// 						defaultContent: "-",
+// 						orderable: false,
+// 					},
+// 					{
+// 						data: "reporteaireevaluacion_ubicacion",
+// 						defaultContent: "-",
+// 						orderable: false,
+// 					},
+// 					{
+// 						data: "boton_editar",
+// 						defaultContent: "-",
+// 						className: 'editar',
+// 						orderable: false,
+// 					},
+// 					{
+// 						data: "boton_eliminar",
+// 						defaultContent: "-",
+// 						orderable: false,
+// 					}
+// 				],
+// 				lengthMenu: [[20, 50, 100, -1], [20, 50, 100, "Todos"]],
+// 				rowsGroup: [1, 2, 0], //agrupar filas
+// 				// order: [[ 0, "ASC" ]],
+// 				ordering: false,
+// 				processing: true,
+// 				searching: false,
+// 				paging: true,
+// 				language: {
+// 					lengthMenu: "Mostrar _MENU_ Registros",
+// 					zeroRecords: "No se encontraron registros",
+// 					info: "Página _PAGE_ de _PAGES_ (Total _TOTAL_ registros)",
+// 					infoEmpty: "No se encontraron registros",
+// 					infoFiltered: "(Filtrado de _MAX_ registros)",
+// 					emptyTable: "No hay datos disponibles en la tabla",
+// 					loadingRecords: "Cargando datos....",
+// 					processing: "Procesando <i class='fa fa-spin fa-spinner fa-3x'></i>",
+// 					search: "Buscar",
+// 					paginate: {
+// 						first: "Primera",
+// 						last: "Ultima",
+// 						next: "Siguiente",
+// 						previous: "Anterior"
+// 					}
+// 				},
+// 				rowCallback: function(row, data, index)
+// 				{
+// 					// // console.log(index+' - '+data.reporteiluminacionpuntos_nopunto);
+// 					// $(row).find('td:eq(7)').css('background', data.resultadoner_color);
+
+// 					if(data.reportehieloevaluacionparametros_resultado == "Dentro de norma")
+// 					{
+// 						$(row).find('td:eq(13)').css('background', "#00FF00");
+// 						$(row).find('td:eq(13)').css('color', '#000000');
+// 						$(row).find('td:eq(13)').css('font-weight', 'bold');
+// 					}
+// 					else
+// 					{
+// 						$(row).find('td:eq(13)').css('background', "#FF0000");
+// 						$(row).find('td:eq(13)').css('color', '#FFFFFF');
+// 						$(row).find('td:eq(13)').css('font-weight', 'bold');
+// 					}
+// 				},
+// 			});
+// 		}
+
+// 		// Tooltip en DataTable
+// 		datatable_reporte_puntos.on('draw', function ()
+// 		{
+// 			$('[data-toggle="tooltip"]').tooltip();
+// 		});
+// 	}
+// 	catch (exception)
+// 	{
+// 		tabla_reporte_puntos(proyecto_id, reporteregistro_id);
+//     }
+// }
 
 
 $("#boton_reporte_nuevopuntomedicion").click(function()
@@ -4740,6 +5388,14 @@ function tabla_reporte_matriz(proyecto_id, reporteregistro_id)
 //=================================================
 // CONCLUSION
 
+$('#ID_CATCONCLUSION').on('change', function (e) {
+
+	var selectedOption = $(this).find('option:selected');
+	var descripcion = selectedOption.data('descripcion');
+
+	$('#reporte_conclusion').val(descripcion);
+
+})
 
 $("#botonguardar_reporte_conclusion").click(function()
 {
@@ -7435,6 +8091,8 @@ $(document).on('submit', function()
 	{
 		// alert('Guardaste algo');
 		tabla_reporte_revisiones(proyecto.id);
+		
+
 	}, 7500);
 });
 
@@ -7703,16 +8361,16 @@ function reporte_concluido(reporte_id, perfil, checkbox)
 							tabla_reporte_revisiones(proyecto.id);
 
 							// mensaje
-							swal({
-								title: "Correcto",
-								text: ""+dato.msj,
-								type: "error", // warning, error, success, info
-								buttons: {
-									visible: false, // true , false
-								},
-								timer: 1500,
-								showConfirmButton: false
-							});
+								swal({
+									title: "No se pudo realizar esta acción",
+									text: dato.responseJSON,
+									type: "warning", // warning, error, success, info
+									buttons: {
+										visible: false, // true , false
+									},
+									timer: 2000,
+									showConfirmButton: false
+								});
 
 							return false;
 						}
@@ -8509,4 +9167,35 @@ function obtenerdatos() {
             swal('Error', 'No se pudieron obtener los datos del informe', 'error');
         }
     });
+}
+
+
+function validarPermisosAsignados(proyecto_id) {
+
+	$.ajax({
+		type: "GET",
+		dataType: "json",
+		url: "/validacionAsignacionUserProyecto/" + proyecto_id,
+		data: {},
+		cache: false,
+		success: function (dato) {
+			
+			if (dato.permisos == 1) { 
+
+				$('input[type="submit"], button[type="submit"]').fadeIn(0);
+
+			} else {
+				
+				$('input[type="submit"], button[type="submit"]').fadeOut(0);
+
+			}
+
+		}, beforeSend: function () {},
+		error: function (dato) {
+			// alert('Error: '+dato.msj);
+            alert('Los permisos no han sido cargado')
+
+			return false;
+		}
+	});//Fin ajax
 }

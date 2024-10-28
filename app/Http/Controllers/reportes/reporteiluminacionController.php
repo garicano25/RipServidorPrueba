@@ -45,8 +45,7 @@ use App\modelos\reportes\reporterecomendacionesModel;
 use App\modelos\reportes\reporteequiposutilizadosModel;
 use App\modelos\reportes\reporteanexosModel;
 use App\modelos\recsensorial\cat_sistemailuminacionModel;
-
-
+use App\modelos\recsensorial\catConclusionesModel;
 use App\modelos\reportes\recursosPortadasInformesModel;
 
 
@@ -65,6 +64,9 @@ class reporteiluminacionController extends Controller
         $this->middleware('auth');
         // $this->middleware('Superusuario,Administrador,Proveedor,Reconocimiento,Proyecto,Compras,Staff,Psicólogo,Ergónomo,CoordinadorPsicosocial,CoordinadorErgonómico,CoordinadorRN,CoordinadorRS,CoordinadorRM,CoordinadorHI,Externo');
         // $this->middleware('roles:Superusuario,Administrador,Proyecto');
+
+        $this->middleware('asignacionUser:INFORMES')->only('store');
+
     }
 
 
@@ -184,11 +186,12 @@ class reporteiluminacionController extends Controller
             $catactivo = catactivoModel::orderBy('catactivo_nombre', 'ASC')->get();
 
             $sistemas = cat_sistemailuminacionModel::where('ACTIVO', 1)->get();
+            $catConclusiones = catConclusionesModel::where('ACTIVO', 1)->get();
 
 
 
             // Vista
-            return view('reportes.parametros.reporteiluminacion', compact('proyecto', 'recsensorial', 'catregion', 'catsubdireccion', 'catgerencia', 'catactivo', 'categorias_poe', 'areas_poe', 'sistemas'));
+            return view('reportes.parametros.reporteiluminacion', compact('proyecto', 'recsensorial', 'catregion', 'catsubdireccion', 'catgerencia', 'catactivo', 'categorias_poe', 'areas_poe', 'sistemas', 'catConclusiones'));
         }
     }
 

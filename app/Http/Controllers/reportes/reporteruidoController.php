@@ -65,6 +65,7 @@ use PhpOffice\PhpSpreadsheet\Style\Border;
 use PhpOffice\PhpSpreadsheet\Style\Color;
 use PhpOffice\PhpSpreadsheet\Style\Fill;
 use Illuminate\Support\Facades\Response;
+use App\modelos\recsensorial\catConclusionesModel;
 
 
 
@@ -79,6 +80,9 @@ class reporteruidoController extends Controller
         $this->middleware('auth');
         // $this->middleware('Superusuario,Administrador,Proveedor,Reconocimiento,Proyecto,Compras,Staff,Psicólogo,Ergónomo,CoordinadorPsicosocial,CoordinadorErgonómico,CoordinadorRN,CoordinadorRS,CoordinadorRM,CoordinadorHI,Externo');
         // $this->middleware('roles:Superusuario,Administrador,Proyecto');
+
+        $this->middleware('asignacionUser:INFORMES')->only('store');
+
     }
 
 
@@ -198,10 +202,11 @@ class reporteruidoController extends Controller
             $catsubdireccion = catsubdireccionModel::orderBy('catsubdireccion_nombre', 'ASC')->get();
             $catgerencia = catgerenciaModel::orderBy('catgerencia_nombre', 'ASC')->get();
             $catactivo = catactivoModel::orderBy('catactivo_nombre', 'ASC')->get();
+            $catConclusiones = catConclusionesModel::where('ACTIVO', 1)->get();
 
 
             // Vista
-            return view('reportes.parametros.reporteruido', compact('proyecto', 'recsensorial', 'catregion', 'catsubdireccion', 'catgerencia', 'catactivo', 'categorias_poe', 'areas_poe'));
+            return view('reportes.parametros.reporteruido', compact('proyecto', 'recsensorial', 'catregion', 'catsubdireccion', 'catgerencia', 'catactivo', 'categorias_poe', 'areas_poe', 'catConclusiones'));
         }
     }
 
@@ -3170,15 +3175,21 @@ class reporteruidoController extends Controller
                 $numero_registro += 1;
                 $value->numero_registro = $numero_registro;
 
-                if ($value->reporteruidopuntoner_ner <= $value->reporteruidopuntoner_lmpe) {
-                    $value->resultadoner = 1;
-                    $value->resultadoner_texto = 'Dentro de norma';
-                    $value->resultadoner_color = '#00FF00';
-                } else {
+                // --> Ajustamos el semaforo
+                if ($value->reporteruidopuntoner_ner > 90) {
                     $value->resultadoner = 0;
                     $value->resultadoner_texto = 'Fuera de norma';
-                    $value->resultadoner_color = '#FF0000';
+                    $value->resultadoner_color = '#FF0000'; 
+                } elseif ($value->reporteruidopuntoner_ner >= 85 && $value->reporteruidopuntoner_ner <= 90) {
+                    $value->resultadoner = 1; 
+                    $value->resultadoner_texto = 'Nivel de acción';
+                    $value->resultadoner_color = '#FFFF00'; 
+                } else {
+                    $value->resultadoner = 1;
+                    $value->resultadoner_texto = 'Dentro de norma';
+                    $value->resultadoner_color = '#00FF00'; 
                 }
+
 
                 $value->boton_editar = '<button type="button" class="btn btn-warning waves-effect btn-circle"><i class="fa fa-pencil fa-1x"></i></button>';
 
@@ -3390,8 +3401,7 @@ class reporteruidoController extends Controller
      * @param  int $areas_poe
      * @return \Illuminate\Http\Response
      */
-    public function reporteruidodosisnertabla($proyecto_id, $reporteregistro_id, $areas_poe)
-    {
+    public function reporteruidodosisnertabla($proyecto_id, $reporteregistro_id, $areas_poe){ 
         try {
             // $reporte = reporteruidoModel::where('id', $reporteregistro_id)->get();
 
@@ -3490,16 +3500,22 @@ class reporteruidoController extends Controller
                 $numero_registro += 1;
                 $value->numero_registro = $numero_registro;
 
-                if ($value->reporteruidodosisner_ner <= $value->reporteruidodosisner_lmpe) {
-                    $value->resultadoner = 1;
-                    $value->resultadoner_texto = 'Dentro de norma';
-                    $value->resultadoner_color = '#00FF00';
-                } else {
+                
+                if ($value->reporteruidodosisner_ner > 90) {
                     $value->resultadoner = 0;
                     $value->resultadoner_texto = 'Fuera de norma';
-                    $value->resultadoner_color = '#FF0000';
+                    $value->resultadoner_color = '#FF0000'; 
+                } elseif ($value->reporteruidodosisner_ner >= 85 && $value->reporteruidodosisner_ner <= 90) {
+                    $value->resultadoner = 1; 
+                    $value->resultadoner_texto = 'Nivel de acción';
+                    $value->resultadoner_color = '#FFFF00'; 
+                } else {
+                    $value->resultadoner = 1;
+                    $value->resultadoner_texto = 'Dentro de norma';
+                    $value->resultadoner_color = '#00FF00'; 
                 }
 
+                
                 $value->boton_editar = '<button type="button" class="btn btn-warning waves-effect btn-circle"><i class="fa fa-pencil fa-1x"></i></button>';
 
                 if ($edicion == 1) {
@@ -4392,30 +4408,44 @@ class reporteruidoController extends Controller
             // SONOMETRIAS RESULTADOS
 
 
+            //Ajustamos el semaforo de resultados para ruido
             $sonometrias = DB::select('SELECT
-                                            reporteruidopuntoner.proyecto_id,
-                                            reporteruidopuntoner.registro_id,
-                                            COUNT(reporteruidopuntoner.reporteruidopuntoner_punto) AS totalsonometrias,
-                                            SUM(IF(reporteruidopuntoner.reporteruidopuntoner_ner <= reporteruidopuntoner.reporteruidopuntoner_lmpe, 1, 0)) AS dentronorma,
-                                            SUM(IF(reporteruidopuntoner.reporteruidopuntoner_ner > reporteruidopuntoner.reporteruidopuntoner_lmpe, 1, 0)) AS fueranorma
-                                        FROM
-                                            reporteruidopuntoner
-                                        WHERE
-                                            reporteruidopuntoner.proyecto_id = ' . $proyecto_id . ' 
-                                            AND reporteruidopuntoner.registro_id = ' . $reporteregistro_id . ' 
-                                        GROUP BY
-                                            reporteruidopuntoner.proyecto_id,
-                                            reporteruidopuntoner.registro_id');
+                                reporteruidopuntoner.proyecto_id,
+                                reporteruidopuntoner.registro_id,
+                                COUNT(reporteruidopuntoner.reporteruidopuntoner_punto) AS totalsonometrias,
+                                SUM(CASE
+                                        WHEN reporteruidopuntoner.reporteruidopuntoner_ner < 85 THEN 1
+                                        ELSE 0
+                                    END) AS dentronorma,
+                                SUM(CASE
+                                        WHEN reporteruidopuntoner.reporteruidopuntoner_ner BETWEEN 85 AND 90 THEN 1
+                                        ELSE 0
+                                    END) AS niveldeaccion,
+                                SUM(CASE
+                                        WHEN reporteruidopuntoner.reporteruidopuntoner_ner > 90 THEN 1
+                                        ELSE 0
+                                    END) AS fueranorma
+                            FROM
+                                reporteruidopuntoner
+                            WHERE
+                                reporteruidopuntoner.proyecto_id = ' . $proyecto_id . '
+                                AND reporteruidopuntoner.registro_id = ' . $reporteregistro_id . '
+                            GROUP BY
+                                reporteruidopuntoner.proyecto_id,
+                                reporteruidopuntoner.registro_id');
+
 
 
             $dashboard_total_evaluacion = '';
             if (count($sonometrias) > 0) {
                 $dashboard_total_evaluacion = $sonometrias[0]->totalsonometrias . ' puntos<br>Sonometría<br><br>';
                 $dato["dashboard_sonometria_total_dentronorma"] = $sonometrias[0]->dentronorma;
+                $dato["dashboard_sonometria_total_niveldeaccion"] = $sonometrias[0]->niveldeaccion;
                 $dato["dashboard_sonometria_total_fueranorma"] = $sonometrias[0]->fueranorma;
             } else {
                 $dashboard_total_evaluacion = '0 puntos<br>Sonometría<br><br>';
                 $dato["dashboard_sonometria_total_dentronorma"] = 0;
+                $dato["dashboard_sonometria_total_niveldeaccion"] = 0;
                 $dato["dashboard_sonometria_total_fueranorma"] = 0;
             }
 
@@ -4429,8 +4459,21 @@ class reporteruidoController extends Controller
                                             reporteruidodosisner.proyecto_id,
                                             reporteruidodosisner.registro_id,
                                             COUNT(reporteruidodosisner.reporteruidodosisner_punto) AS totaldosimetrias,
-                                            SUM(IF(reporteruidodosisner.reporteruidodosisner_ner <= reporteruidodosisner.reporteruidodosisner_lmpe, 1, 0)) AS dentronorma,
-                                            SUM(IF(reporteruidodosisner.reporteruidodosisner_ner > reporteruidodosisner.reporteruidodosisner_lmpe, 1, 0)) AS fueranorma
+                                            
+
+                                             SUM(CASE
+                                                WHEN reporteruidodosisner.reporteruidodosisner_ner < 85 THEN 1
+                                                        ELSE 0
+                                                    END) AS dentronorma,
+                                                SUM(CASE
+                                                        WHEN reporteruidodosisner.reporteruidodosisner_ner BETWEEN 85 AND 90 THEN 1
+                                                        ELSE 0
+                                                    END) AS niveldeaccion,
+                                                SUM(CASE
+                                                        WHEN reporteruidodosisner.reporteruidodosisner_ner > 90 THEN 1
+                                                        ELSE 0
+                                            END) AS fueranorma
+
                                         FROM
                                             reporteruidodosisner
                                         WHERE
@@ -4447,6 +4490,11 @@ class reporteruidoController extends Controller
                 $serie_grafico[] = array(
                     'titulo' => "Dentro de norma",
                     'total' => $dosimetria[0]->dentronorma
+                ); 
+                
+                $serie_grafico[] = array(
+                    'titulo' => "Nivel de acción",
+                    'total' => $dosimetria[0]->niveldeaccion
                 );
 
                 $serie_grafico[] = array(
@@ -5566,7 +5614,9 @@ class reporteruidoController extends Controller
             //=============================================================== CONFIGURACION DE LA PORTADA ===============================================================
             $PORTADA->setCellValue('C6', strtoupper($proyecto->proyecto_clientenombrecomercial));
             $PORTADA->setCellValue('C16', "SECTOR XXX: " . strtoupper($proyecto->proyecto_clienteinstalacion));
+            pintarCeldaCustom($PORTADA, 'C', 16, 'FF6600');
             $PORTADA->setCellValue('C20', "ESPECIFICAR NOMBRE DE LA REFINERIA");
+            pintarCeldaCustom($PORTADA, 'C', 20, 'FF6600');
             $PORTADA->setCellValue('C22', $proyecto->proyecto_clientedireccionservicio);
             #Insertamos la imagen en la portada
             insertarImagen($PORTADA, $spreadsheet, "D", 2);
@@ -5727,6 +5777,7 @@ class reporteruidoController extends Controller
             mergeSetValue($NER, 'L', 'AA', 'L', $numero, $numero, 1, 'José Roberto Torres Rodríguez');
             mergeSetValue($NER, 'AB', 'AF', 'AB', $numero, $numero, 1, 'ACREDITACIÓN: ');
             mergeSetValue($NER, 'AG', 'AP', 'AG', $numero, $numero, 1, ' XXXXXXXXXXXXX');
+            pintarCeldaCustom($NER, 'AG', $numero+1, 'FF6600');            
             pintarCelda($NER, 'AB', $numero + 1);
             mergeSetValue($NER, 'B', 'H', 'B', $numero, $numero, 2, 'FECHA DE EVALUACIÓN:');
             pintarCelda($NER, 'B', $numero + 2);
@@ -5842,6 +5893,8 @@ class reporteruidoController extends Controller
             $NPA->setCellValue('L11', 'José Roberto Torres Rodríguez');
             $NPA->setCellValue('I12', $fecha);
             $NPA->setCellValue('AG11', 'XXXXXXXX');
+            pintarCeldaCustom($NPA, 'AG', 11, 'FF6600');            
+
 
             #Equipo utilizado
             $celdaEquipoNpa = 15;
@@ -6004,6 +6057,9 @@ class reporteruidoController extends Controller
             // =============================================================== CONFIGURACION DE LA PAGINA EPP ==============================================================
 
             #Pintamos y colocamos la imagen
+            pintarCeldaCustom($EPP, 'L', 9, 'FF6600');
+            pintarCeldaCustom($EPP, 'I', 10, 'FF6600');            
+
             pintarCelda($EPP, 'B', 12);
             pintarCelda($EPP, 'C', 12);
             pintarCelda($EPP, 'L', 12);
@@ -6132,6 +6188,8 @@ class reporteruidoController extends Controller
             $DOSIMETRIA->setCellValue('L9', "SECTOR XXX: " . strtoupper($proyecto->proyecto_clienteinstalacion));
             $DOSIMETRIA->setCellValue('H11', $proyecto->proyecto_clientedireccionservicio);
             $DOSIMETRIA->setCellValue('L10', "XXXXXXXXXXXXXXXXXX");
+            pintarCeldaCustom($DOSIMETRIA, 'L', 10, 'FF6600');            
+
             pintarCelda($DOSIMETRIA, 'B', 10);
             pintarCelda($DOSIMETRIA, 'B', 11);
             pintarCelda($DOSIMETRIA, 'R', 11);
@@ -6181,7 +6239,9 @@ class reporteruidoController extends Controller
                 mergeSetValueCenter($DOSIMETRIA, 'L', 'R', 'L', $numerodosis, $numerodosis, 0, $val->MODELO);
                 mergeSetValueCenter($DOSIMETRIA, 'S', 'Y', 'S', $numerodosis, $numerodosis, 0, $val->SERIE);
                 mergeSetValueCenter($DOSIMETRIA, 'Z', 'AB', 'Z', $numerodosis, $numerodosis, 0, "XXX");
+                pintarCeldaCustom($DOSIMETRIA, 'Z', $numerodosis, 'FF6600');            
                 mergeSetValueCenter($DOSIMETRIA, 'AC', 'AF', 'AC', $numerodosis, $numerodosis, 0, "XXX");
+                pintarCeldaCustom($DOSIMETRIA, 'AC', $numerodosis, 'FF6600');            
 
                 $numerodosis++;
             }
@@ -6226,7 +6286,9 @@ class reporteruidoController extends Controller
                 ajustarTexto($DOSIMETRIA, 'G', $numeroTrabajadores); 
                 mergeSetValueCenter($DOSIMETRIA, 'L', 'P', 'L', $numeroTrabajadores, $numeroTrabajadores, 0, $val->INSTRUMENTO);
                 mergeSetValueCenter($DOSIMETRIA, 'Q', 'R', 'Q', $numeroTrabajadores, $numeroTrabajadores, 0, "XXX");
+                pintarCeldaCustom($DOSIMETRIA, 'Q', $numeroTrabajadores, 'FF6600');            
                 mergeSetValueCenter($DOSIMETRIA, 'S', 'T', 'S', $numeroTrabajadores, $numeroTrabajadores, 0, "XXX");
+                pintarCeldaCustom($DOSIMETRIA, 'S', $numeroTrabajadores, 'FF6600');            
                 mergeSetValueCenter($DOSIMETRIA, 'U', 'Y', 'U', $numeroTrabajadores, $numeroTrabajadores, 0, $val->TIEMPO_MEDICION);
                 mergeSetValueCenter($DOSIMETRIA, 'Z', 'Z', 'Z', $numeroTrabajadores, $numeroTrabajadores, 0, $val->DOSIS);
                 mergeSetValueCenter($DOSIMETRIA, 'AA', 'AC', 'AA', $numeroTrabajadores, $numeroTrabajadores, 0, $val->NER);
@@ -6520,7 +6582,7 @@ class reporteruidoController extends Controller
                                             $frecuencia = reporteruidopuntonerfrecuenciasModel::create([
                                                 'reporteruidopuntoner_id' => $punto->id,
                                                 'reporteruidopuntonerfrecuencias_orden' => ($key + 1),
-                                                'reporteruidopuntonerfrecuencias_frecuencia' => $value,
+                                                'reporteruidopuntonerfrecuencias_frecuencia' => $value, 
                                                 'reporteruidopuntonerfrecuencias_nivel' => NULL
                                             ]);
                                         }
@@ -6551,7 +6613,7 @@ class reporteruidoController extends Controller
                                         'reporteruidocategoria_id' => isset($IdCategorias[$rowData['E']]) ?  $IdCategorias[$rowData['E']] : null,
                                         'reporteruidodosisner_lmpe' => $lmpe,
                                         'reporteruidodosisner_tmpe' => is_null($rowData['C']) ? 'NA' : calculartmpe($rowData['C']),
-
+                                        'reporteruidodosisner_nombre' => is_null($rowData['F']) ? 'NA' : $rowData['F'],
                                     ]);
 
 

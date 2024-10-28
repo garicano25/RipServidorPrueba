@@ -43,7 +43,7 @@ use App\modelos\reportes\reporterecomendacionesModel;
 use App\modelos\reportes\reporteplanoscarpetasModel;
 use App\modelos\reportes\reporteequiposutilizadosModel;
 use App\modelos\reportes\reporteanexosModel;
-
+use App\modelos\recsensorial\catConclusionesModel;
 use App\modelos\reportes\recursosPortadasInformesModel;
 
 //Configuracion Zona horaria
@@ -57,6 +57,9 @@ class reportetemperaturaController extends Controller
         $this->middleware('auth');
         // $this->middleware('Superusuario,Administrador,Proveedor,Reconocimiento,Proyecto,Compras,Staff,Psicólogo,Ergónomo,CoordinadorPsicosocial,CoordinadorErgonómico,CoordinadorRN,CoordinadorRS,CoordinadorRM,CoordinadorHI,Externo');
         // $this->middleware('roles:Superusuario,Administrador,Proyecto');
+
+        $this->middleware('asignacionUser:INFORMES')->only('store');
+
     }
 
 
@@ -149,10 +152,11 @@ class reportetemperaturaController extends Controller
             $catsubdireccion = catsubdireccionModel::orderBy('catsubdireccion_nombre', 'ASC')->get();
             $catgerencia = catgerenciaModel::orderBy('catgerencia_nombre', 'ASC')->get();
             $catactivo = catactivoModel::orderBy('catactivo_nombre', 'ASC')->get();
+            $catConclusiones = catConclusionesModel::where('ACTIVO', 1)->get();
 
 
             // Vista
-            return view('reportes.parametros.reportetemperatura', compact('proyecto', 'recsensorial', 'catregion', 'catsubdireccion', 'catgerencia', 'catactivo', 'proveedor_id'));
+            return view('reportes.parametros.reportetemperatura', compact('proyecto', 'recsensorial', 'catregion', 'catsubdireccion', 'catgerencia', 'catactivo', 'proveedor_id', 'catConclusiones'));
         }
     }
 

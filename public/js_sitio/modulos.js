@@ -101,6 +101,14 @@ $(document).ready(function () {
     return false;
 });
 
+    
+     $('a').mouseenter(function() {
+        $(this).addClass('ld ld-bounceAlt'); 
+        $(this).css('animation-duration:3.0s;'); 
+    }).mouseleave(function() {
+        $(this).css('animation-duration:0s;'); 
+        $(this).removeClass('ld ld-bounceAlt'); 
+    });
 
     
 });

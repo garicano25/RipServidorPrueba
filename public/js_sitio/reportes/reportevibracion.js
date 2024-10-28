@@ -115,7 +115,7 @@ $(document).ready(function()
 	$('#modal_cargando').modal(); // Abrir modal
 	updateClock(); // Ejecutar tiempo de espera
 
-
+	validarPermisosAsignados(proyecto.id) //Validacion de permisos
 	datosgenerales(); // Cargar datos
 	portadaInfo() // Portada Info
 	obtenerdatos()
@@ -3635,6 +3635,14 @@ function tabla_reporte_matriz(proyecto_id)
 
 //=================================================
 // CONCLUSION
+$('#ID_CATCONCLUSION').on('change', function (e) {
+
+	var selectedOption = $(this).find('option:selected');
+	var descripcion = selectedOption.data('descripcion');
+
+	$('#reporte_conclusion').val(descripcion);
+
+})
 
 
 $("#botonguardar_reporte_conclusion").click(function()
@@ -5919,13 +5927,13 @@ function reporte_concluido(reporte_id, perfil, checkbox)
 
 							// mensaje
 							swal({
-								title: "Correcto",
-								text: ""+dato.msj,
-								type: "error", // warning, error, success, info
+								title: "No se pudo realizar esta acción",
+								text: dato.responseJSON,
+								type: "warning", // warning, error, success, info
 								buttons: {
 									visible: false, // true , false
 								},
-								timer: 1500,
+								timer: 2000,
 								showConfirmButton: false
 							});
 
@@ -6800,7 +6808,7 @@ $(document).ready(function () {
                             type: 'POST',
                             url: ''+ruta_storage_guardar,
                             data: {
-								opcion: 1000,
+								opcion: 1001,
 
 								proyecto_id: proyecto.id
 
@@ -6841,6 +6849,7 @@ $(document).ready(function () {
                                 
                                 } else {
 
+									console.log(dato.msj);
                                      swal({
                                         title: "Ocurrio un error al intentar insertar los datos.",
                                         text: ""+dato.msj,
@@ -6866,7 +6875,9 @@ $(document).ready(function () {
                                 // actualiza boton
                                 $('#botonCargarExcelResultados').prop('disabled', false);
                                 $('#divCargaResultados').css('display', 'none');
+								
 
+								console.log(dato.msj);
                                 // mensaje
                                 swal({
                                     title: "Error al cargar los puntos.",
@@ -6920,3 +6931,32 @@ $(document).ready(function () {
 
 });
 
+function validarPermisosAsignados(proyecto_id) {
+
+	$.ajax({
+		type: "GET",
+		dataType: "json",
+		url: "/validacionAsignacionUserProyecto/" + proyecto_id,
+		data: {},
+		cache: false,
+		success: function (dato) {
+			
+			if (dato.permisos == 1) { 
+
+				$('input[type="submit"], button[type="submit"]').fadeIn(0);
+
+			} else {
+				
+				$('input[type="submit"], button[type="submit"]').fadeOut(0);
+
+			}
+
+		}, beforeSend: function () {},
+		error: function (dato) {
+			// alert('Error: '+dato.msj);
+            alert('Los permisos no han sido cargado')
+
+			return false;
+		}
+	});//Fin ajax
+}

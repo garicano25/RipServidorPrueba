@@ -171,7 +171,7 @@
                                                         <li class="nav-item">
                                                             <a class="nav-link" data-toggle="tab" id="tabmenu_evidencia_2" href="#tab_evidencia_2" role="tab">Fotos</a>
                                                         </li>
-                                                        <li class="nav-item">
+                                                        <li class="nav-item" id="planos_ejecucion">
                                                             <a class="nav-link" data-toggle="tab" id="tabmenu_evidencia_3" href="#tab_evidencia_3" role="tab">Planos</a>
                                                         </li>
                                                     </ul>

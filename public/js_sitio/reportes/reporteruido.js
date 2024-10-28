@@ -111,6 +111,8 @@ $(document).ready(function()
 	$('#modal_cargando .modal-title').html('Cargando informe de '+agente_nombre); // Titulo modal
 	$('#modal_cargando').modal(); // Abrir modal
 	updateClock(); // Ejecutar tiempo de espera
+
+	validarPermisosAsignados(proyecto.id) //Validacion de permisos
 	datosgenerales(); // Cargar datos
 	portadaInfo();
 	consulta_categoria_epp();  // cargar partes del cuerpo epp
@@ -6254,7 +6256,7 @@ function tabla_reporte_7_3(proyecto_id, reporteregistro_id)
 					// console.log(index+' - '+data.reporteiluminacionpuntos_nopunto);
 					$(row).find('td:eq(7)').css('background', data.resultadoner_color);
 
-					if(data.resultadoner == 1)
+					if(data.resultadoner == 1) 
 					{
 						$(row).find('td:eq(7)').css('color', '#000000');
 						$(row).find('td:eq(7)').css('font-weight', 'bold');
@@ -7441,7 +7443,15 @@ function tabla_reporte_7_7(proyecto_id, reporteregistro_id)
 
 //=================================================
 // CONCLUSION
+$('#ID_CATCONCLUSION').on('change', function (e) {
 
+	var selectedOption = $(this).find('option:selected');
+	var descripcion = selectedOption.data('descripcion');
+
+	$('#reporte_conclusion').val(descripcion);
+
+
+})
 
 $("#botonguardar_reporte_conclusion").click(function()
 {
@@ -7584,6 +7594,7 @@ function reporte_dashboard(proyecto_id, reporteregistro_id)
 			$("#dashboard_equipos").html(dato.dashboard_equipos);
 			$("#dashboard_total_evaluacion").html(dato.dashboard_total_evaluacion);
 			$("#dashboard_sonometria_total_dentronorma").html(dato.dashboard_sonometria_total_dentronorma);
+			$("#dashboard_sonometria_total_niveldeaccion").html(dato.dashboard_sonometria_total_niveldeaccion);
 			$("#dashboard_sonometria_total_fueranorma").html(dato.dashboard_sonometria_total_fueranorma);
 			$("#dashboard_recomendaciones_total").html(dato.dashboard_recomendaciones_total);
 
@@ -7675,7 +7686,7 @@ function grafica_dashboard_resultados(serie_grafico)
 		"labelText": "[[value]]<br>([[percents]]%)",
 		"balloonText": "[[title]]<br><span style='font-size:14px'><b>[[value]]</b> ([[percents]]%)</span>",
 		"labelRadius": -30,
-		"colors": ["#00FF00", "#FF0000"], //color de la series
+		"colors": ["#00FF00","#FFFF00", "#FF0000"], //color de la series
 		"dataProvider": serie_grafico,
 		// "dataProvider": [
 		// 	{
@@ -9761,14 +9772,14 @@ function reporte_concluido(reporte_id, perfil, checkbox)
 								tabla_reporte_revisiones(proyecto.id);
 
 								// mensaje
-								swal({
-									title: "Correcto",
-									text: ""+dato.msj,
-									type: "error", // warning, error, success, info
+									swal({
+									title: "No se pudo realizar esta acción",
+									text: dato.responseJSON,
+									type: "warning", // warning, error, success, info
 									buttons: {
 										visible: false, // true , false
 									},
-									timer: 1500,
+									timer: 2000,
 									showConfirmButton: false
 								});
 
@@ -11039,6 +11050,35 @@ $("#botonCargarPuntos").click(function() {
 	}
 }); 
 
+function validarPermisosAsignados(proyecto_id) {
+
+	$.ajax({
+		type: "GET",
+		dataType: "json",
+		url: "/validacionAsignacionUserProyecto/" + proyecto_id,
+		data: {},
+		cache: false,
+		success: function (dato) {
+			
+			if (dato.permisos == 1) { 
+
+				$('input[type="submit"], button[type="submit"]').fadeIn(0);
+
+			} else {
+				
+				$('input[type="submit"], button[type="submit"]').fadeOut(0);
+
+			}
+
+		}, beforeSend: function () {},
+		error: function (dato) {
+			// alert('Error: '+dato.msj);
+            alert('Los permisos no han sido cargado')
+
+			return false;
+		}
+	});//Fin ajax
+}
 
 
 

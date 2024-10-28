@@ -16,6 +16,7 @@ use App\modelos\recsensorialquimicos\catviaingresoorganismoModel;
 use App\modelos\recsensorialquimicos\catvolatilidadModel;
 use App\modelos\recsensorialquimicos\catsustanciaModel;
 use App\modelos\recsensorialquimicos\gruposDeExposicionModel;
+use App\modelos\recsensorialquimicos\evaluacionBeisModel;
 use DB;
 
 class recsensorialquimicosinventarioController extends Controller
@@ -848,6 +849,28 @@ class recsensorialquimicosinventarioController extends Controller
                         $value->TOTAL_MUESTREOS = '<b style="color:#000000;">' . $value->TOTAL_MUESTREOS . '</b>';
                     }
                     break;
+                case 5: //OBTENCIOS DE SUSTANCIAS QUIMICAS PARA LA EVALUACION DE BEIs
+
+                    $tablaSQL = DB::select('CALL sp_obtener_sustancia_evaluar_bei_b(?)', [$recsensorial_id]);
+
+
+                    $tabla = '<option value=""></option>';
+                    foreach ($tablaSQL as $value) {
+                        $tabla .= '<option value="' . $value->ID_SUSTANCIA_QUIMICA . '">' . $value->SUSTANCIA_PRODUCTO . '</option>';
+                    }
+                    break;
+                case 6: //TABLA DE EVALUACION DE BEIS
+
+                    $tabla = DB::select('CALL sp_obtener_tabla_evaluacion_bei(?)', [$recsensorial_id]);
+
+
+                    $numero_registro = 0;
+                    foreach ($tabla as $key => $value) {
+
+                        $value->numero_registro = $numero_registro += 1;
+                        $value->boton_editar = '<button type="button" class="btn btn-warning btn-circle editar" id="editargeh_' . $value->ID_RECSENSORIAL_BEI . '"><i class="fa fa-pencil"></i></button>';
+                    }
+                    break;
                 default:
                     // Sin información;
                     break;
@@ -909,7 +932,8 @@ class recsensorialquimicosinventarioController extends Controller
                 // mensaje
                 $dato["msj"] = 'Información modificada correctamente';
                 $dato['recsensorial_id'] = $request['recsensorial_id'];
-            } else { //GUARDAMOS LOS GRUPOS DE EXPOSICION HOMOGENEA
+
+            } else  if ($request['api'] == 2){ //GUARDAMOS LOS GRUPOS DE EXPOSICION HOMOGENEA
 
                 // Verfificamos que el tipo de clasificacion llegue si no lo obtenemos de la base de datos
                 if (isset($request['TIPO_CLASIFICACION'])) {
@@ -959,7 +983,25 @@ class recsensorialquimicosinventarioController extends Controller
                     $dato["msj"] = 'Grupo editado correctamente';
                     $dato['recsensorial_id'] = $request['RECSENSORIAL_ID'];
                 }
+            
+            } else if($request['api'] == 3){ //Guardamos la evaluacion de los BEIS
+                
+                if ($request['ID_RECSENSORIAL_BEI'] == 0) {
+
+                    $bei = evaluacionBeisModel::create($request->all());
+                    $dato["msj"] = 'Guardado correctamente';
+                    $dato["info"] = $bei;
+
+                } else {
+                    $bei = evaluacionBeisModel::findOrFail($request['ID_RECSENSORIAL_BEI']);
+                    $bei->update($request->all());
+
+                    $dato["msj"] = 'Editado correctamente';
+                    $dato["info"] = $bei;
+                }
+
             }
+
             // respuesta
             return response()->json($dato);
         } catch (Exception $e) {

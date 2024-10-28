@@ -152,6 +152,14 @@
 										</a>
 									</td>
 								</tr>
+								<tr id="tr_13">
+									<td>Recomendaciones para informes</td>
+									<td>
+										<a href="#" onclick="mostrar_catalogo(13);">
+											<i class="fa fa-chevron-circle-right fa-3x text-secondary" id="cat_12"></i>
+										</a>
+									</td>
+								</tr>
 							</tbody>
 						</table>
 					</div>
@@ -243,6 +251,7 @@
 									<div class="col-6" id="divPuntoEbullicion">
 										<div class="form-group">
 											<label>Punto de ebullición </label>
+											<button type="button" class="btn btn-danger text-center mb-1" style="margin-left: 35%; width: 35px; height: 35px; border-radius: 9px;" data-toggle="tooltip" title="Click para cambiar la Tem. de ebullición a °C una vez insertada en °F" onclick="cambiarGrados('catsustancia_puntoEbullicion')"><i class="fa fa-thermometer-three-quarters" aria-hidden="true"></i></button>
 											<input type="number" class="form-control" id="catsustancia_puntoEbullicion" name="catsustancia_puntoEbullicion" disabled>
 										</div>
 									</div>
@@ -383,6 +392,16 @@
 						<div class="col-12 mt-2">
 							<ol class="breadcrumb mb-4">
 								<h2 style="color: #ffff; margin: 0;"><i class="fa fa-flask"></i> Componentes / Subproductos de la sustancia </h2>
+
+								<div class="col-4 d-flex">
+									<label class="text-light">¿Contiene ingredientes peligrosos? </label>
+									<div class="switch mx-3">
+										<label class="text-light">
+											Si<input type="checkbox" id="validarSustancias" name="validarSustancias">
+											<span style="background-color: #94B732;" class="lever switch-col-light-blue" id="checkbox_validaquimicos"></span>No
+										</label>
+									</div>
+								</div>
 							</ol>
 
 							<style>
@@ -811,72 +830,123 @@
 						</div>
 
 
-						<div class="col-6 tablaEntidades">
-							<ol class="breadcrumb mb-2 p-2 mt-3">
-								<h2 style="color: #ffff; margin: 0;" class="mx-2"><i class="fa fa-file-text-o" aria-hidden="true"></i> Datos por entidad </h2>
+						<div class="row w-100 mx-2">
+							<div class="col-12">
+								<div class="card">
+									<ul class="nav nav-tabs customtab" id="myTab" role="tablist">
+										<li class="nav-item">
+											<a class="nav-link active" id="entidades-tab" data-toggle="tab" href="#entidades" role="tab" aria-controls="entidades" aria-selected="true">VLE</a>
+										</li>
+										<li class="nav-item">
+											<a class="nav-link" id="metodos-tab" data-toggle="tab" href="#metodos" role="tab" aria-controls="metodos" aria-selected="false">Métodos </a>
+										</li>
+										<li class="nav-item">
+											<a class="nav-link" id="beis-tab" data-toggle="tab" href="#beis" role="tab" aria-controls="beis" aria-selected="false">BEIs</a>
+										</li>
+									</ul>
+									<div class="tab-content" id="myTabContent">
+										<div class="tab-pane show active" id="entidades" role="tabpanel" aria-labelledby="entidades-tab">
+											<div class="col-12 tablaEntidades">
 
-								@if(auth()->user()->hasRoles(['Superusuario','Administrador', 'Reconocimiento', 'Coordinador']))
+												<ol class="breadcrumb mb-2 p-2 mt-3">
+													<h2 style="color: #ffff; margin: 0;" class="mx-2"><i class="fa fa-file-text-o" aria-hidden="true"></i> Datos por entidad </h2>
 
-								<button type="button" class="btn btn-secondary waves-effect waves-light " data-toggle="tooltip" title="Nueva entidad" id="boton_nueva_sustanciaEntidad" style="margin-left: 13px;"> Entidad <i class="fa fa-plus"></i>
-								</button>
+													@if(auth()->user()->hasRoles(['Superusuario','Administrador', 'Reconocimiento', 'Coordinador']))
 
-								<button type="button" class="btn btn-secondary waves-effect waves-light mr-2" data-toggle="tooltip" title="Ver información" id="boton_verInfo" style="margin-left: auto;"> Ver información <i class="fa fa-eye"></i>
-								</button>
+													<button type="button" class="btn btn-secondary waves-effect waves-light " data-toggle="tooltip" title="Nueva entidad" id="boton_nueva_sustanciaEntidad" style="margin-left: 13px;"> Entidad <i class="fa fa-plus"></i>
+													</button>
 
-								@else
-								<button type="button" class="btn btn-secondary waves-effect waves-light mr-2" data-toggle="tooltip" title="Ver información" id="boton_verInfo" style="margin-left: auto;"> Ver información <i class="fa fa-eye"></i>
-								</button>
-								@endif
-							</ol>
-						</div>
-						<div class="col-6 tablaEntidades">
-							<ol class="breadcrumb mb-2 p-2 mt-3">
-								<h2 style="color: #ffff; margin: 0;" class="mx-2"><i class="fa fa-meetup" aria-hidden="true"></i> Métodos de evaluación </h2>
+													<button type="button" class="btn btn-secondary waves-effect waves-light mr-2" data-toggle="tooltip" title="Ver información" id="boton_verInfo" style="margin-left: auto;"> Ver información <i class="fa fa-eye"></i>
+													</button>
 
-								@if(auth()->user()->hasRoles(['Superusuario','Administrador', 'Reconocimiento', 'Coordinador']))
+													@else
+													<button type="button" class="btn btn-secondary waves-effect waves-light mr-2" data-toggle="tooltip" title="Ver información" id="boton_verInfo" style="margin-left: auto;"> Ver información <i class="fa fa-eye"></i>
+													</button>
+													@endif
+												</ol>
+											</div>
+											<div class="col-12 tablaEntidades">
+												<div class="table-responsive">
+													<table class="table table-bordered table-hover stylish-table" width="100%" id="tabla_catSustanciasQuimicaEntidad">
+														<thead>
+															<tr>
+																<th>Entidad</th>
+																<th>Normativa</th>
+																<th>Connotación</th>
+																<th>PPT</th>
+																<th>CT</th>
+																<th>Acciones</th>
+															</tr>
+														</thead>
+														<tbody>
+														</tbody>
+													</table>
+												</div>
+											</div>
+										</div>
+										<div class="tab-pane" id="metodos" role="tabpanel" aria-labelledby="metodos-tab">
+											<div class="col-12 tablaEntidades">
+												<ol class="breadcrumb mb-2 p-2 mt-3">
+													<h2 style="color: #ffff; margin: 0;" class="mx-2"><i class="fa fa-meetup" aria-hidden="true"></i> Métodos de evaluación </h2>
 
-								<button type="button" class="btn btn-secondary waves-effect waves-light " data-toggle="tooltip" title="Nueva método" id="boton_nueva_metodo" style="margin-left: 13px;">Método<i class="fa fa-plus"></i>
-								</button>
+													@if(auth()->user()->hasRoles(['Superusuario','Administrador', 'Reconocimiento', 'Coordinador']))
 
-								@endif
-							</ol>
-						</div>
+													<button type="button" class="btn btn-secondary waves-effect waves-light " data-toggle="tooltip" title="Nueva método" id="boton_nueva_metodo" style="margin-left: 13px;">Método<i class="fa fa-plus"></i>
+													</button>
 
-						<div class="col-6 tablaEntidades">
-							<div class="table-responsive">
-								<table class="table table-bordered table-hover stylish-table" width="100%" id="tabla_catSustanciasQuimicaEntidad">
-									<thead>
-										<tr>
-											<th>Entidad</th>
-											<th>Normativa</th>
-											<th>Connotación</th>
-											<th>PPT</th>
-											<th>CT</th>
-											<th>Acciones</th>
-										</tr>
-									</thead>
-									<tbody>
-									</tbody>
-								</table>
+													@endif
+												</ol>
+											</div>
+											<div class="col-12 tablaEntidades">
+												<div class="table-responsive">
+													<table class="table table-bordered table-hover stylish-table" width="100%" id="tabla_metodosSustanciasQuimicas">
+														<thead>
+															<tr>
+																<th>Método</th>
+																<th>Editar</th>
+																<th>Eliminar</th>
+															</tr>
+														</thead>
+														<tbody>
+														</tbody>
+													</table>
+												</div>
+											</div>
+										</div>
+										<div class="tab-pane" id="beis" role="tabpanel" aria-labelledby="beis-tab">
+											<div class="col-12 tablaEntidades">
+												<ol class="breadcrumb mb-2 p-2 mt-3 d-flex justify-content-between align-items-center">
+													<h2 style="color: #fff; margin: 0;" class="mx-2"><i class="fa fa-list-ol" aria-hidden="true"></i> Lista de BEIs </h2>
+
+													@if(auth()->user()->hasRoles(['Superusuario','Administrador', 'Reconocimiento', 'Coordinador']))
+													<button type="button" class="btn btn-secondary waves-effect waves-light" data-toggle="tooltip" title="Nuevo BEI" id="boton_nueva_bei" style="margin-left: 75%;"> BEI <i class="fa fa-plus"></i></button>
+													@endif
+												</ol>
+											</div>
+											<div class="col-12 tablaEntidades">
+												<div class="table-responsive">
+													<table class="table table-bordered table-hover stylish-table" width="100%" id="tabla_beiSustanciasQuimicas">
+														<thead>
+															<tr>
+																<th>Entidad</th>
+																<th>Determinante</th>
+																<th>Tiempo de muestreo</th>
+																<th>BEI</th>
+																<th>Editar</th>
+																<th>Eliminar</th>
+															</tr>
+														</thead>
+														<tbody>
+														</tbody>
+													</table>
+												</div>
+											</div>
+										</div>
+									</div>
+
+								</div>
 							</div>
 						</div>
-
-						<div class="col-6 tablaEntidades">
-							<div class="table-responsive">
-								<table class="table table-bordered table-hover stylish-table" width="100%" id="tabla_metodosSustanciasQuimicas">
-									<thead>
-										<tr>
-											<th>Método</th>
-											<th>Editar</th>
-											<th>Eliminar</th>
-										</tr>
-									</thead>
-									<tbody>
-									</tbody>
-								</table>
-							</div>
-						</div>
-
 					</div>
 				</div>
 				<div class="modal-footer">
@@ -995,8 +1065,9 @@
 								</div>
 							</div>
 						</div>
-						<div class="col-12 p-2 d-flex justify-content-start mt-2">
-							<h4>¿La sustancia quimica tiene IBEs?</h4>
+						<!-- La lista de BEIS se cambio a una tabla independiente -->
+						<!-- <div class="col-12 p-2 d-flex justify-content-start mt-2">
+							<h4>¿La sustancia química tiene IBEs?</h4>
 							<div class="form-check mx-4">
 								<input class="form-check-input" type="radio" name="TIENE_BEIS" id="SUSTANCIA_BEIS_SI" value="1">
 								<label class="form-check-label" for="SUSTANCIA_BEIS_SI">
@@ -1014,7 +1085,7 @@
 								<button type="button" class="btn btn-danger" id="botonagregarBeis">Agregar IBEs <i class="fa fa-plus-circle"></i></button>
 							</div>
 						</div>
-						<div class="agregarBeis"></div>
+						<div class="agregarBeis"></div> -->
 					</div>
 				</div>
 				<div class="modal-footer">
@@ -1060,6 +1131,130 @@
 						Guardar <i class="fa fa-save"></i>
 					</button>
 					@endif
+				</div>
+			</form>
+		</div>
+	</div>
+</div>
+
+
+<div id="modal_beiSustancias" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" style="display: none;">
+	<div class="modal-dialog modal-lg" style="min-width: 70%!important;">
+		<div class="modal-content">
+			<form method="post" enctype="multipart/form-data" name="form_beiSustancias" id="form_beiSustancias">
+				<div class="modal-header">
+					<button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+					<h4 class="modal-title" id="titulo_modal_bei_sustancia"></h4>
+				</div>
+				<div class="modal-body">
+					<div class="row">
+						{!! csrf_field() !!}
+						<div class="col-12">
+							<input type="hidden" class="form-control" id="ID_BEI" name="ID_BEI" value="0">
+							<input type="hidden" class="form-control" id="SUSTANCIA_QUIMICA_ID_BEI" name="SUSTANCIA_QUIMICA_ID" value="0">
+							<input type="hidden" class="form-control" id="ELIMINAR_BEI" name="ELIMINAR_BEI" value="0">
+							<input type="hidden" class="form-control" name="catalogo" value="14">
+						</div>
+
+						<div class="col-6">
+							<div class="form-group">
+								<label>Entidad*</label>
+								<select class="custom-select form-control" id="ENTIDAD_ID_BEI" name="ENTIDAD_ID" required>
+									<option value=""></option>
+									@foreach($catEntidades as $dato)
+									<option value="{{$dato->ID_ENTIDAD}}" data-descripcion="{{$dato->DESCRIPCION}}"> {{$dato->ENTIDAD}} </option>
+									@endforeach
+								</select>
+							</div>
+						</div>
+						<div class="col-6">
+							<div class="form-group">
+								<label>Determinante *</label>
+								<input type="text" class="form-control" id="DETERMINANTE_BEI" name="DETERMINANTE" required>
+							</div>
+						</div>
+						<div class="col-6">
+							<div class="form-group">
+								<label>Tiempo de muestreo *</label>
+								<input type="text" class="form-control" id="TIEMPO_MUESTREO" name="TIEMPO_MUESTREO" required>
+							</div>
+						</div>
+						<div class="col-6">
+							<div class="form-group">
+								<label>Descripción BEI *</label>
+								<input type="text" class="form-control" id="BEI_DESCRIPCION" name="BEI_DESCRIPCION" required>
+							</div>
+						</div>
+						<div class="col-6">
+							<div class="form-group">
+								<label>Unidad de medida *</label>
+								<input type="text" class="form-control" id="UNIDAD_MEDIDA_BEI" name="UNIDAD_MEDIDA" required>
+							</div>
+						</div>
+						<div class="col-6">
+							<div class="form-group">
+								<label>BEI (Valor de referencia) *</label>
+								<input type="text" class="form-control" id="VALOR_REFERENCIA" name="VALOR_REFERENCIA" required>
+							</div>
+						</div>
+						<div class="col-12">
+							<div class="form-group">
+								<label>Recomendación </label>
+								<input type="text" class="form-control" id="RECOMENDACION_BEI" name="RECOMENDACION">
+							</div>
+						</div>
+						<div class="col-12">
+							<div class="form-group" style="width: 660px;">
+								<style>
+									.selectize-control.selectize-select .selectize-input.items .item {
+										background-color: #bee24f;
+										/* Color de fondo para las opciones seleccionadas */
+										color: #fff;
+										/* Color del texto */
+										border-radius: 5px;
+										/* Bordes redondeados */
+										padding: 5px 10px;
+										/* Espaciado interno */
+										margin: 2px;
+										/* Margen entre las opciones */
+									}
+
+									.selectize-control.selectize-select .selectize-dropdown .option {
+										padding: 10px;
+										/* Espaciado interno */
+										cursor: pointer;
+										/* Cambia el cursor al pasar por encima */
+									}
+
+									.selectize-control.selectize-select .selectize-dropdown .option:hover {
+										background-color: #f0f0f0;
+										/* Color de fondo al pasar el cursor */
+										color: #333;
+										/* Color del texto al pasar el cursor */
+									}
+								</style>
+								<label>Notación *</label>
+								<select class="custom-select form-control" id="NOTACION_BEI" name="NOTACION[]" multiple="multiple">
+									<option value=""></option>
+
+								</select>
+							</div>
+							<div class="form-group" style="width: 660px;" id="opciones_seleccionadas">
+
+							</div>
+						</div>
+
+						<div class="col-12" id="opciones_seleccionadas_bei">
+
+						</div>
+
+					</div>
+				</div>
+				<div class="modal-footer">
+					<button type="button" class="btn btn-default waves-effect" data-dismiss="modal">Cerrar</button>
+					<button type="submit" class="btn btn-danger waves-effect waves-light" id="boton_guardar_beiSustancias">
+						Guardar <i class="fa fa-save"></i>
+					</button>
 				</div>
 			</form>
 		</div>
@@ -1329,6 +1524,46 @@
 				<div class="modal-footer">
 					<button type="button" class="btn btn-default waves-effect" data-dismiss="modal">Cerrar</button>
 					<button type="submit" class="btn btn-danger waves-effect waves-light" id="boton_guardar_descripcionarea">
+						Guardar <i class="fa fa-save"></i>
+					</button>
+				</div>
+			</form>
+		</div>
+	</div>
+</div>
+
+
+
+<div id="modal_recomendacion" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" style="display: none;">
+	<div class="modal-dialog" style="min-width: 70%;">
+		<div class="modal-content">
+			<form method="post" enctype="multipart/form-data" name="form_recomendacion" id="form_recomendacion">
+				<div class="modal-header">
+					<button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+					<h4 class="modal-title" id="modal_titulo">Recomendaciones para informes</h4>
+				</div>
+				<div class="modal-body">
+					<div class="row">
+						{!! csrf_field() !!}
+						<div class="col-12">
+							<input type="hidden" class="form-control" id="ID_RECOMENDACION" name="ID_RECOMENDACION" value="0">
+						</div>
+						<div class="col-12">
+							<div class="form-group">
+								<label> Descripción * </label>
+								<textarea class="form-control" rows="5" id="DESCRIPCION_RECOMENDACION" name="DESCRIPCION" required></textarea>
+							</div>
+						</div>
+						<div class="col-12">
+							<input type="hidden" class="form-control" id="CATALOGO_RECOMENDACION" name="catalogo" value="13">
+							<input type="hidden" class="form-control" id="ACTIVO_RECOMENDACION" name="ACTIVO" value="0">
+
+						</div>
+					</div>
+				</div>
+				<div class="modal-footer">
+					<button type="button" class="btn btn-default waves-effect" data-dismiss="modal">Cerrar</button>
+					<button type="submit" class="btn btn-danger waves-effect waves-light" id="boton_guardar_recomendacion">
 						Guardar <i class="fa fa-save"></i>
 					</button>
 				</div>

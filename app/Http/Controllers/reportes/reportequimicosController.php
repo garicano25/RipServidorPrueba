@@ -53,8 +53,7 @@ use App\modelos\reportes\reporteanexosModel;
 use App\modelos\reportes\catreportequimicospartidasModel;
 use App\modelos\clientes\clientepartidasModel;
 use App\modelos\reportes\reportequimicosgruposModel;
-
-
+use App\modelos\recsensorial\catConclusionesModel;
 use App\modelos\reportes\recursosPortadasInformesModel;
 
 
@@ -69,6 +68,8 @@ class reportequimicosController extends Controller
         $this->middleware('auth');
         // $this->middleware('Superusuario,Administrador,Proveedor,Reconocimiento,Proyecto,Compras,Staff,Psicólogo,Ergónomo,CoordinadorPsicosocial,CoordinadorErgonómico,CoordinadorRN,CoordinadorRS,CoordinadorRM,CoordinadorHI,Externo');
         // $this->middleware('roles:Superusuario,Administrador,Proyecto');
+        $this->middleware('asignacionUser:INFORMES')->only('store');
+
     }
 
 
@@ -245,9 +246,10 @@ class reportequimicosController extends Controller
             $catsubdireccion = catsubdireccionModel::orderBy('catsubdireccion_nombre', 'ASC')->get();
             $catgerencia = catgerenciaModel::orderBy('catgerencia_nombre', 'ASC')->get();
             $catactivo = catactivoModel::orderBy('catactivo_nombre', 'ASC')->get();
+            $catConclusiones = catConclusionesModel::where('ACTIVO', 1)->get();
 
             // Vista
-            return view('reportes.parametros.reportequimicos', compact('proyecto', 'recsensorial', 'catregion', 'catsubdireccion', 'catgerencia', 'catactivo', 'categorias_poe', 'areas_poe'));
+            return view('reportes.parametros.reportequimicos', compact('proyecto', 'recsensorial', 'catregion', 'catsubdireccion', 'catgerencia', 'catactivo', 'categorias_poe', 'areas_poe', 'catConclusiones'));
         }
     }
 
@@ -2307,10 +2309,7 @@ class reportequimicosController extends Controller
                                                 reportequimicosevaluacionparametro.reportequimicosevaluacionparametro_metodo,
                                                 reportequimicosevaluacionparametro.reportequimicosevaluacionparametro_unidad,
                                                 CONCAT(reportequimicosevaluacionparametro.reportequimicosevaluacionparametro_concentracion," ", reportequimicosevaluacionparametro.reportequimicosevaluacionparametro_unidad) AS concentracion_texto,
-
-                                                (REPLACE(REPLACE(REPLACE(reportequimicosevaluacionparametro.reportequimicosevaluacionparametro_concentracion, "<", ""), ">", ""), " ", "") + 0) AS concentracion,
-                                                
-                                                (REPLACE(REPLACE(reportequimicosevaluacionparametro.reportequimicosevaluacionparametro_concentracion, "<", "reportequimicosevaluacionparametro_valorlimite - "), ">", "reportequimicosevaluacionparametro_valorlimite + ") + 0) AS concentracion,
+                                                reportequimicosevaluacionparametro.reportequimicosevaluacionparametro_concentracion as concentracion,
                                                 
                                                 CONCAT(reportequimicosevaluacionparametro.reportequimicosevaluacionparametro_valorlimite," ", reportequimicosevaluacionparametro.reportequimicosevaluacionparametro_unidad) AS valorlimiteTexto,
 
@@ -2371,7 +2370,8 @@ class reportequimicosController extends Controller
                                                 reportequimicosevaluacionparametro.reportequimicosevaluacionparametro_metodo,
                                                 reportequimicosevaluacionparametro.reportequimicosevaluacionparametro_unidad,
                                                  CONCAT(reportequimicosevaluacionparametro.reportequimicosevaluacionparametro_concentracion," ", reportequimicosevaluacionparametro.reportequimicosevaluacionparametro_unidad) AS concentracion_texto,
-                                                (REPLACE(REPLACE(reportequimicosevaluacionparametro.reportequimicosevaluacionparametro_concentracion, "<", "reportequimicosevaluacionparametro_valorlimite - "), ">", "reportequimicosevaluacionparametro_valorlimite + ") + 0) AS concentracion,
+                                                reportequimicosevaluacionparametro.reportequimicosevaluacionparametro_concentracion as concentracion,
+                                            
                                                 CONCAT(reportequimicosevaluacionparametro.reportequimicosevaluacionparametro_valorlimite," ", reportequimicosevaluacionparametro.reportequimicosevaluacionparametro_unidad) AS valorlimiteTexto,
 
                                                 reportequimicosevaluacionparametro.reportequimicosevaluacionparametro_valorlimite AS valorlimite,

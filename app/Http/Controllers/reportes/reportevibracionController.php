@@ -45,7 +45,7 @@ use App\modelos\reportes\reporterecomendacionesModel;
 use App\modelos\reportes\reporteplanoscarpetasModel;
 use App\modelos\reportes\reporteequiposutilizadosModel;
 use App\modelos\reportes\reporteanexosModel;
-
+use App\modelos\recsensorial\catConclusionesModel;
 use App\modelos\reportes\recursosPortadasInformesModel;
 
 
@@ -53,7 +53,27 @@ use App\modelos\reportes\recursosPortadasInformesModel;
 use PhpOffice\PhpSpreadsheet\IOFactory;
 use PhpOffice\PhpSpreadsheet\Spreadsheet;
 
+//variables del excel
+$area = null;
+$puntoEvaluacion = null;
+$ubicacion = null;
+$tipoEvaluacion = null;
 
+$puntoMedicion = null;
+$categoria = null;
+$tecnico = null;
+
+$nombre = null;
+$ficha = null;
+
+$criterioNormativo = null;
+$tiempoExposicion = null;
+$mediciones = null;
+
+$limitesNOM = null;
+$tiempoExposicionNOM = null;
+$numeroMediciones = null;
+$fechaMedicion = null;
 //Configuracion Zona horaria
 date_default_timezone_set('America/Mexico_City');
 
@@ -65,6 +85,8 @@ class reportevibracionController extends Controller
         $this->middleware('auth');
         // $this->middleware('Superusuario,Administrador,Proveedor,Reconocimiento,Proyecto,Compras,Staff,Psicólogo,Ergónomo,CoordinadorPsicosocial,CoordinadorErgonómico,CoordinadorRN,CoordinadorRS,CoordinadorRM,CoordinadorHI,Externo');
         // $this->middleware('roles:Superusuario,Administrador,Proyecto');
+        $this->middleware('asignacionUser:INFORMES')->only('store');
+
     }
 
 
@@ -155,10 +177,11 @@ class reportevibracionController extends Controller
             $catsubdireccion = catsubdireccionModel::orderBy('catsubdireccion_nombre', 'ASC')->get();
             $catgerencia = catgerenciaModel::orderBy('catgerencia_nombre', 'ASC')->get();
             $catactivo = catactivoModel::orderBy('catactivo_nombre', 'ASC')->get();
+            $catConclusiones = catConclusionesModel::where('ACTIVO', 1)->get();
 
 
             // Vista
-            return view('reportes.parametros.reportevibracion', compact('proyecto', 'recsensorial', 'catregion', 'catsubdireccion', 'catgerencia', 'catactivo', 'proveedor_id'));
+            return view('reportes.parametros.reportevibracion', compact('proyecto', 'recsensorial', 'catregion', 'catsubdireccion', 'catgerencia', 'catactivo', 'proveedor_id', 'catConclusiones'));
         }
     }
 
@@ -789,7 +812,7 @@ class reportevibracionController extends Controller
      * @param  int $proyecto_id
      * @return \Illuminate\Http\Response
      */
-    public function reportevibracionareas($proyecto_id)
+    public function reportevibracionareas($proyecto_id) 
     {
         try {
             $numero_registro = 0;
@@ -4365,7 +4388,7 @@ class reportevibracionController extends Controller
                             }
                         }
 
-                        // return response()->json(['msj' => $datosGenerales, "code" => 500]);
+                         return response()->json(['msj' => $datosGenerales, "code" => 500]);
 
 
                         //Puntos totales
@@ -4637,6 +4660,341 @@ class reportevibracionController extends Controller
                     return response()->json(['msj' => 'Se produjo un error al intentar cargar los resultados, inténtelo de nuevo o comuníquelo con el responsable ' . ' ---- ' . $e->getMessage(), 'code' => 500]);
                 }
             }
+
+            if ($request->opcion == 1001) {
+
+
+
+                $proyecto_id = $request['proyecto_id'];
+
+                function validarFecha($date, $formatosValidos = ['Y-m-d', 'd-m-Y', 'Y/m/d', 'd/m/Y'], $formatoFinal = 'Y-m-d')
+                        {
+                            foreach ($formatosValidos as $formato) {
+                                $d = DateTime::createFromFormat($formato, $date);
+                                if ($d && $d->format($formato) === $date) {
+                                    return $d->format($formatoFinal);
+                                }
+                            }
+                            return null;
+                        }
+
+
+                        function tipoevaluacion($uso)
+                        {
+                            $usoModificado = trim(mb_strtoupper($uso, 'UTF-8'));
+
+                            $usoModificado = preg_replace('/\s+/', ' ', $usoModificado);
+
+                            // Comprobar y retornar el valor correspondiente
+                            if ($usoModificado == 'NOM-024' || $usoModificado == 'NOM-024-STPS-2001'  || $usoModificado == 'LÍMITES POR NOM-024-STPS-2001' || $usoModificado == 'LIMITES POR NOM-024-STPS-2001') {
+                                return 1;
+                            } elseif ($usoModificado == 'LÍMITES POR INTERPOLACIÓN' || $usoModificado == 'INTERPOLACIÓN' ||  $usoModificado == 'LIMITES POR INTERPOLACION' || $usoModificado == 'INTERPOLACION') {
+                                return 2;
+                            } elseif ($usoModificado === 'MÉTODO ISO'  || $usoModificado == 'ISO' || $usoModificado == 'METODO ISO') {
+                                return 3;
+                            } else {
+                                return 0;
+                            }
+                        }
+
+
+
+                        function tiempoexposicion($uso)
+                        {
+                            $usoModificado = trim(mb_strtoupper($uso, 'UTF-8'));
+
+                            $usoModificado = preg_replace('/\s+/', ' ', $usoModificado);
+
+                            // Comprobar y retornar el valor correspondiente
+                            if ($usoModificado == '1 MINUTOS' || $usoModificado == '1 MIN' || $usoModificado == '1 MINUTO') {
+                                return "1 min";
+                            } elseif ($usoModificado == '16 MINUTOS' || $usoModificado == '16 MIN' || $usoModificado == '16 MINUTO') {
+                                return "16 min";
+                            } elseif ($usoModificado === '25 MINUTOS'  || $usoModificado == '25 MIN' || $usoModificado == '25 MINUTO') {
+                                return "25 min";
+                            } elseif ($usoModificado === '1 HORA'  || $usoModificado == '1 H' || $usoModificado == '1 HORAS') {
+                                return "1 h";
+                            } elseif ($usoModificado === '2.5 HORA'  || $usoModificado == '2.5 H' || $usoModificado == '2.5 HORAS') {
+                                return "2.5 h";
+                            } elseif ($usoModificado === '4 HORA'  || $usoModificado == '4 H' || $usoModificado == '4 HORAS') {
+                                return "4 h";
+                            } elseif ($usoModificado === '8 HORA'  || $usoModificado == '8 H' || $usoModificado == '8 HORAS') {
+                                return "8 h";
+                            } elseif ($usoModificado === '16 HORA'  || $usoModificado == '16 H' || $usoModificado == '16 HORAS') {
+                                return "16 h";
+                            } elseif ($usoModificado === '24 HORA'  || $usoModificado == '24 H' || $usoModificado == '24 HORAS') {
+                                return "24 h";
+                            } else {
+                                return 0;
+                            }
+                        }
+
+
+                        function medicioneje($uso)
+                        {
+                            $usoModificado = trim(mb_strtoupper($uso, 'UTF-8'));
+
+                            $usoModificado = preg_replace('/\s+/', ' ', $usoModificado);
+
+                            // Comprobar y retornar el valor correspondiente
+                            if ($usoModificado == '1') {
+                                return 1;
+                            } elseif ($usoModificado == '3') {
+                                return 3;
+                            } else {
+                                return 0;
+                            }
+                        }
+
+
+                        function obtenerLimites($tiempo_exposicion)
+                        {
+                            switch ($tiempo_exposicion) {
+                                case '1 min':
+                                    return [
+                                        'az' => ['5.60', '5.00', '4.50', '4.00', '3.55', '3.15', '2.80', '2.80', '2.80', '2.80', '3.55', '4.50', '5.60', '7.10', '9.00', '11.2', '14.00', '18.0', '22.4', '28.0'],
+                                        'axy' => ['2.0', '2.0', '2.0', '2.0', '2.5', '3.15', '4.0', '5.0', '6.3', '8.0', '10.0', '12.5', '16.0', '20.0', '25.0', '31.5', '40.0', '50.0', '63.0', '80.0']
+                                    ];
+                                case '16 min':
+                                    return [
+                                        'az' => ['4.25', '3.75', '3.35', '3.00', '2.65', '2.35', '2.12', '2.12', '2.12', '2.12', '2.65', '3.35', '4.25', '5.30', '6.70', '8.50', '10.6', '13.2', '17.0', '21.2'],
+                                        'axy' => ['1.50', '1.50', '1.50', '1.50', '1.9', '2.36', '3.0', '3.75', '4.75', '6.0', '7.5', '9.5', '11.8', '15.0', '19.0', '23.6', '30.0', '37.5', '45.7', '60.0']
+                                    ];
+                                case '25 min':
+                                    return [
+                                        'az' => ['3.55', '3.15', '2.80', '2.50', '2.24', '2.00', '1.80', '1.80', '1.80', '1.80', '2.24', '2.80', '3.55', '4.50', '5.60', '7.10', '9.00', '11.2', '14.0', '18.0'],
+                                        'axy' => ['1.25', '1.25', '1.25', '1.25', '1.6', '2.0', '2.5', '3.15', '4.0', '5.0', '6.3', '8.0', '10.0', '12.5', '15.0', '20.0', '25.0', '3.5', '40.0', '50.0']
+                                    ];
+                                case '1 h':
+                                    return [
+                                        'az' => ['2.36', '2.12', '1.90', '1.70', '1.50', '1.32', '1.18', '1.18', '1.18', '1.18', '1.50', '1.90', '2.36', '3.00', '3.75', '4.75', '6.00', '7.50', '9.50', '11.8'],
+                                        'axy' => ['0.85', '0.85', '0.85', '0.85', '1.06', '1.32', '1.70', '2.12', '2.65', '3.35', '4.25', '5.30', '6.70', '8.5', '10.6', '13.2', '17.0', '21.2', '26.5', '33.5']
+                                    ];
+                                case '2.5 h':
+                                    return [
+                                        'az' => ['1.40', '1.26', '1.12', '1.00', '0.90', '0.80', '0.71', '0.71', '0.71', '0.71', '0.90', '1.12', '1.40', '1.80', '2.24', '2.80', '3.55', '4.50', '5.60', '7.10'],
+                                        'axy' => ['0.50', '0.50', '0.50', '0.50', '0.63', '0.8', '1.0', '1.25', '1.6', '2.0', '2.5', '3.15', '4.0', '5.0', '6.3', '8.0', '10.0', '12.5', '16.0', '20.0']
+                                    ];
+                                case '4 h':
+                                    return [
+                                        'az' => ['1.06', '0.95', '0.85', '0.75', '0.67', '0.60', '0.53', '0.53', '0.53', '0.53', '0.67', '0.85', '1.06', '1.32', '1.70', '2.12', '2.65', '3.35', '4.25', '5.30'],
+                                        'axy' => ['0.355', '0.355', '0.355', '0.355', '0.450', '0.560', '0.710', '0.900', '1.12', '1.40', '1.80', '2.24', '2.80', '3.55', '4.50', '5.60', '7.10', '9.00', '11.2', '14.0']
+                                    ];
+                                case '8 h':
+                                    return [
+                                        'az' => ['0.63', '0.56', '0.50', '0.45', '0.40', '0.355', '0.315', '0.315', '0.315', '0.315', '0.40', '0.50', '0.63', '0.80', '1.00', '1.25', '1.60', '2.0', '2.5', '3.15'],
+                                        'axy' => ['0.224', '0.224', '0.224', '0.224', '0.280', '0.355', '0.450', '0.560', '0.710', '0.900', '1.12', '1.40', '1.80', '2.24', '2.80', '3.55', '4.50', '5.60', '7.10', '9.00']
+                                    ];
+                                case '16 h':
+                                    return [
+                                        'az' => ['0.383', '0.338', '0.302', '0.270', '0.239', '0.212', '0.192', '0.192', '0.192', '0.192', '0.239', '0.302', '0.383', '0.477', '0.605', '0.765', '0.955', '1.19', '1.53', '1.91'],
+                                        'axy' => ['0.135', '0.135', '0.135', '0.135', '0.171', '0.212', '0.270', '0.338', '0.428', '0.54', '0.675', '0.855', '1.06', '1.35', '1.71', '2.12', '2.70', '3.38', '4.28', '5.4']
+                                    ];
+                                case '24 h':
+                                    return [
+                                        'az' => ['0.280', '0.250', '0.224', '0.200', '0.180', '0.160', '0.140', '0.140', '0.140', '0.140', '0.180', '0.224', '0.280', '0.355', '0.450', '0.560', '0.710', '0.900', '1.120', '1.400'],
+                                        'axy' => ['0.100', '0.100', '0.100', '0.100', '0.125', '0.160', '0.20', '0.250', '0.315', '0.40', '0.50', '0.63', '0.80', '1.00', '1.25', '1.60', '2.00', '2.50', '3.15', '4.00']
+                                    ];
+                                default:
+                                    return [
+                                        'az' => [],
+                                        'axy' => []
+                                    ];
+                            }
+                        }
+
+
+                // Empezamos a guardar los puntos de iluminacion
+                try {
+
+                    // Verificar si hay un archivo en la solicitud
+                    if ($request->hasFile('excelResultado')) {
+
+                        // Obtenemos el Excel de los personales
+                        $excel = $request->file('excelResultado');
+
+                        // Cargamos el archivo usando la libreria de PhpSpreadsheet
+                        $spreadsheet = IOFactory::load($excel->getPathname());
+
+                        // Obtener la cantidad de hojas
+                        $totalHojas = $spreadsheet->getSheetCount();
+
+                        for ($hojaIndex = 0; $hojaIndex < $totalHojas; $hojaIndex++) {
+                        //     // Selecciona la hoja actual
+                        $sheet = $spreadsheet->getSheet($hojaIndex);
+                        //obtener hoja activa
+                        //$sheet = $spreadsheet->getActiveSheet();
+                        $data = $sheet->toArray(null, true, true, true);
+
+                        // Eliminar las 3 primeras filas ya que no contienen datos importantes
+                        //$data = array_slice($data, 4);
+
+                        //Obtenemos todos los datos del Excel y los almacenamos datos sin imagenes
+                        $datosGenerales = [];
+                        foreach ($data as $row) {
+                            // Verificar si la fila no está completamente vacía
+                            if (!empty(array_filter($row))) {
+                                // Almacenar la fila limpia en el array
+                                $datosGenerales[] = $row;
+                            }
+                        }
+
+                         
+
+                        //Puntos totales
+                        $totalPuntos = 20;
+                        $puntosInsertados = 0;
+
+                        //================================= Funciones de limpieaza de datos =================================
+
+                        //BUCAMOS Y ARMAMOS EL ARRAY PARA OBTENER LAS CATEGORIAS CON SU ID
+                        $IdCategorias = [];
+                        $caategorias = reportecategoriaModel::where('proyecto_id', $proyecto_id)->get();
+                        foreach ($caategorias as $cat) {
+                            $clave = $cat->reportecategoria_nombre;
+                            $IdCategorias[$clave] = $cat->id;
+                        }
+
+                        //BUCAMOS Y ARMAMOS EL ARRAY PARA OBTENER LAS AREAS CON SU ID
+                        $IdAreas = [];
+                        $areas = reporteareaModel::where('proyecto_id', $proyecto_id)->get();
+                        foreach ($areas as $area) {
+                            $clave = $area->reportearea_nombre;
+                            $IdAreas[$clave] = $area->id;
+                        }
+
+
+
+                        $frecuencias = [
+                            '1.00',
+                            '1.25',
+                            '1.60',
+                            '2.00',
+                            '2.50',
+                            '3.15',
+                            '4.00',
+                            '5.00',
+                            '6.30',
+                            '8.00',
+                            '10.00',
+                            '12.50',
+                            '16.00',
+                            '20.00',
+                            '25.00',
+                            '31.50',
+                            '40.00',
+                            '50.00',
+                            '63.00',
+                            '80.00'
+                        ];
+
+                        $columnasX1 = 'B';
+                        $columnasX2 = 'E';
+                        $columnasX3 = 'H';
+                        $columnasY1 = 'C';
+                        $columnasY2 = 'F';
+                        $columnasY3 = 'I';
+                        $columnasZ1 = 'D';
+                        $columnasZ2 = 'G';
+                        $columnasZ3 = 'J';  
+
+                        // Reiniciamos el AUTO_INCREMENT de la tabla principal
+                        // DB::statement('ALTER TABLE reportevibracionevaluacion AUTO_INCREMENT = 1;');    
+                        // Limpiamos, validamos e insertamos todos los datos del Excel
+                            foreach ($datosGenerales as $index => $rowData) {
+                                switch ($index) {
+                                    case 0: // Primera fila: contiene datos del área
+                                        $area = isset($rowData['B']) ? $rowData['B'] : null;
+                                        $puntoEvaluacion = isset($rowData['G']) ? $rowData['G'] : null;
+                                        break;
+                            
+                                    case 1: // Segunda fila: contiene datos del punto de medición
+                                        $puntoMedicion = isset($rowData['C']) ? $rowData['C'] : null;
+                                        $categoria = isset($rowData['F']) ? $rowData['F'] : null;
+                                        break;
+                            
+                                    case 2: // Tercera fila: contiene nombre y ficha
+                                        $nombre = isset($rowData['C']) ? $rowData['C'] : null;
+                                        $ficha = isset($rowData['I']) ? $rowData['I'] : null;
+                                        break;
+                            
+                                    case 4: // Quinta fila: contiene límites y fecha
+                                        $tipoEvaluacion = isset($rowData['A']) ? $rowData['A'] : null;
+                                        $tiempoExposicion = isset($rowData['E']) ? $rowData['E'] : null;
+                                        $numeroMediciones = isset($rowData['G']) ? $rowData['G'] : null;
+                                        $fechaMedicion = isset($rowData['I']) ? validarFecha($rowData['I']) : null;
+                                        break;
+                                }
+                               
+
+                            
+                        }
+
+                        $punto = reportevibracionevaluacionModel::create([
+                            'proyecto_id' => $request['proyecto_id'],
+                            'reportearea_id' => isset($IdAreas[$area]) ? $IdAreas[$area] : null,
+                            'reportevibracionevaluacion_puntoevaluacion' => $puntoEvaluacion,
+                            'reportevibracionevaluacion_punto' => $puntoMedicion,
+                            'reportecategoria_id' => isset($IdCategorias[$categoria]) ? $IdCategorias[$categoria] : null,
+                            'reportevibracionevaluacion_nombre' => $nombre,
+                            'reportevibracionevaluacion_ficha' => $ficha,
+                            'reportevibracionevaluacion_tipoevaluacion' => tipoevaluacion($tipoEvaluacion),
+                            'reportevibracionevaluacion_tiempoexposicion' => tiempoexposicion($tiempoExposicion),
+                            'reportevibracionevaluacion_numeromediciones' => medicioneje($numeroMediciones),
+                            'reportevibracionevaluacion_fecha' => validarFecha($fechaMedicion),
+                        ]);
+                      // Obtener límites basados en el tiempo de exposición
+                        $tiempoExposicion1 = tiempoexposicion($tiempoExposicion);
+                        $limites = obtenerLimites($tiempoExposicion1);
+                        $limiteAz = $limites['az'];
+                        $limiteAxy = $limites['axy'];
+                        
+                        
+                       
+                        foreach ($frecuencias as $key => $frecuencia) {
+                            // Asignar valores generales de la frecuencia
+                            $reportData = [
+                                'reportevibracionevaluacion_id' => $punto->id,
+                                'reportevibracionevaluaciondatos_frecuencia' => $frecuencia,
+                                'reportevibracionevaluaciondatos_azlimite' => isset($limiteAz[$key]) ? $limiteAz[$key] : null,
+                                'reportevibracionevaluaciondatos_axylimite' => isset($limiteAxy[$key]) ? $limiteAxy[$key] : null,
+                            ];
+                        
+                            // Procesar solo el índice correcto de $datosGenerales
+                            $rowData = $datosGenerales[$key + 6] ?? null; // Ajusta $key + 6 si es el índice correspondiente
+                        
+                            if ($rowData) {
+                                $reportData['reportevibracionevaluaciondatos_az1'] = isset($rowData[$columnasZ1]) ? $rowData[$columnasZ1] : null;
+                                $reportData['reportevibracionevaluaciondatos_az2'] = isset($rowData[$columnasZ2]) ? $rowData[$columnasZ2] : null;
+                                $reportData['reportevibracionevaluaciondatos_az3'] = isset($rowData[$columnasZ3]) ? $rowData[$columnasZ3] : null;
+                                $reportData['reportevibracionevaluaciondatos_ax1'] = isset($rowData[$columnasX1]) ? $rowData[$columnasX1] : null;
+                                $reportData['reportevibracionevaluaciondatos_ax2'] = isset($rowData[$columnasX2]) ? $rowData[$columnasX2] : null;
+                                $reportData['reportevibracionevaluaciondatos_ax3'] = isset($rowData[$columnasX3]) ? $rowData[$columnasX3] : null;
+                                $reportData['reportevibracionevaluaciondatos_ay1'] = isset($rowData[$columnasY1]) ? $rowData[$columnasY1] : null;
+                                $reportData['reportevibracionevaluaciondatos_ay2'] = isset($rowData[$columnasY2]) ? $rowData[$columnasY2] : null;
+                                $reportData['reportevibracionevaluaciondatos_ay3'] = isset($rowData[$columnasY3]) ? $rowData[$columnasY3] : null;
+                        
+                                // Crear el registro en la base de datos
+                                reportevibracionevaluaciondatosModel::create($reportData);
+                                $puntosInsertados++;
+                            }
+                        }
+                        // return response()->json(['msj' => 'Total de puntos insertados : ' . $puntosInsertados . ' de ' . $totalPuntos, 'code' => 200]);
+                       
+                        }
+                        return response()->json(['msj' => 'Se cargaron ' . $totalHojas . ' puntos y se insertaron ' . $puntosInsertados . '/' . $totalPuntos. ' registros por punto', 'code' => 200]);
+
+                             
+                    } else {
+
+                        return response()->json(["msj" => 'No se ha subido ningún archivo Excel', "code" => 500]);
+                    }
+                } catch (Exception $e) {
+
+                    return response()->json(['msj' => 'Se produjo un error al intentar cargar los resultados, inténtelo de nuevo o comuníquelo con el responsable ' . ' ---- ' . $e->getMessage(), 'code' => 500]);
+                }
+            }
+            
 
 
 
@@ -4995,7 +5353,7 @@ class reportevibracionController extends Controller
                 if (($request->reportevibracionevaluacion_tipoevaluacion + 0) == 1) {
                     $request['reportevibracionevaluacion_promedio'] = null;
                     $request['reportevibracionevaluacion_valormaximo'] = null;
-                    $request['reportevibracionevaluacion_fecha'] = null;
+                    // $request['reportevibracionevaluacion_fecha'] = null;
                 }
 
 
@@ -5003,7 +5361,7 @@ class reportevibracionController extends Controller
                     $request['reportevibracionevaluacion_tiempoexposicion'] = $request->reportevibracionevaluacion_promedio;
                     $request['reportevibracionevaluacion_promedio'] = null;
                     $request['reportevibracionevaluacion_valormaximo'] = null;
-                    $request['reportevibracionevaluacion_fecha'] = null;
+                    // $request['reportevibracionevaluacion_fecha'] = null;
                 }
 
 
@@ -5024,6 +5382,7 @@ class reportevibracionController extends Controller
                     // Mensaje
                     $dato["msj"] = 'Datos guardados correctamente';
                 } else {
+
                     $punto = reportevibracionevaluacionModel::findOrFail($request->reportevibracionevaluacion_id);
                     $punto->update($request->all());
 

@@ -59,11 +59,9 @@ class acreditacionalcanceController extends Controller
             $tabla = AcreditacionalcanceModel::with(['proveedor', 'acreditacion', 'prueba', 'prueba.pruebanorma'])
                 ->where('proveedor_id', $proveedor_id)
                 ->where('acreditacionAlcance_Eliminado', 0)
-                // ->orderBy('acreditacion_id', 'DESC')
-                // ->orderBy('acreditacionAlcance_tipo', 'ASC')
-                // ->orderBy('acreditacionAlcance_agente', 'ASC')
                 ->orderBy('id', 'ASC')
                 ->get();
+
 
             // Formatear filas
             $numero_registro = 0;
@@ -79,7 +77,7 @@ class acreditacionalcanceController extends Controller
                 }
 
                 // Tipo Agente
-                if ($value->acreditacionAlcance_agentetipo) {
+                if ($value->acreditacionAlcance_agentetipo && $value->prueba_id != 22) {
                     $value->agente = $value->acreditacionAlcance_agente . " (" . $value->acreditacionAlcance_agentetipo . ")";
                 } else {
                     $value->agente = $value->acreditacionAlcance_agente;
@@ -208,6 +206,53 @@ class acreditacionalcanceController extends Controller
         }
     }
 
+    public function obtenerDeterminantesBeis($beis, $determinanteSeleccionado){
+        try {
+
+            if (is_numeric($beis)) {
+
+                $determinantes = DB::select('SELECT beis.DETERMINANTE, beis.ID_BEI, beis.TIEMPO_MUESTREO
+                                        FROM sustanciasEntidadBeis beis
+                                        LEFT JOIN catsustancias_quimicas sus ON beis.SUSTANCIA_QUIMICA_ID = sus.ID_SUSTANCIA_QUIMICA
+                                        WHERE sus.ID_SUSTANCIA_QUIMICA = ?', [$beis]);
+
+            } else {
+
+                $determinantes = DB::select('SELECT beis.DETERMINANTE, beis.ID_BEI, beis.TIEMPO_MUESTREO
+                                        FROM sustanciasEntidadBeis beis
+                                        LEFT JOIN catsustancias_quimicas sus ON beis.SUSTANCIA_QUIMICA_ID = sus.ID_SUSTANCIA_QUIMICA
+                                        WHERE sus.SUSTANCIA_QUIMICA = ?', [$beis]);
+                
+            }
+            
+
+            if(count($determinantes) == 0){
+                $opciones_select = '<option value="" disabled>Sustancia quimica sin BEIs</option>';
+
+            } else {
+                
+                $opciones_select = '<option value="">&nbsp;</option>';
+                
+                foreach ($determinantes as $key => $value) {
+                    if ($value->ID_BEI == $determinanteSeleccionado) {
+                        $opciones_select .= '<option value="' . $value->ID_BEI . '" data-tiempo="'. $value->TIEMPO_MUESTREO.'" selected>' . $value->DETERMINANTE . '</option>';
+                    } else {
+                        $opciones_select .= '<option value="' . $value->ID_BEI . '" data-tiempo="' . $value->TIEMPO_MUESTREO . '">' . $value->DETERMINANTE . '</option>';
+                    }
+                }
+            }
+
+            // // respuesta
+            $dato['opciones'] = $opciones_select;
+            $dato["msj"] = 'Datos consultados correctamente';
+            return response()->json($dato);
+        } catch (Exception $e) {
+            $dato["msj"] = 'Error ' . $e->getMessage();
+            $dato['opciones'] = $opciones_select;
+            return response()->json($dato);
+        }
+    }
+
 
 
 
@@ -240,25 +285,6 @@ class acreditacionalcanceController extends Controller
                                     cat_pruebanorma.cat_prueba_id = ' . $agente_id . '
                                 ORDER BY
                                     cat_pruebanorma.catpruebanorma_tipo ASC');
-
-            // $no = 0;
-            // $ListadeMetodos = 0;
-            // $listanormas = 'N/A';
-            // foreach ($normas as $key => $value) {
-            //     if ($value->catpruebanorma_numero != 'N/A') {
-            //         if ($no == 0) {
-            //             $listanormas = '';
-            //             $listanormas .= $value->catpruebanorma_numero;
-            //         } else {
-            //             $listanormas .= ', ' . $value->catpruebanorma_numero;
-            //         }
-            //         $no += 1;
-            //     }
-
-            //     if ($value->esMetodo == 'SonMetodos') {
-            //         $ListadeMetodos = 1;
-            //     }
-            // }
 
             // // respuesta
             $dato['normas'] = $normas;
@@ -297,6 +323,10 @@ class acreditacionalcanceController extends Controller
                 // Valida si es fisico o quimico
                 if ($request['acreditacionAlcance_tipo'] === "Químico") {
                     $request['prueba_id'] = 15;
+                
+                } elseif ($request['acreditacionAlcance_tipo'] === "BEI"){
+                    $request['prueba_id'] = 22;
+
                 } else {
 
                     $id_prueba = intval($request['prueba_id']);
@@ -328,6 +358,7 @@ class acreditacionalcanceController extends Controller
                 DB::statement('ALTER TABLE acreditacionalcance AUTO_INCREMENT=1');
                 $proveedor = AcreditacionalcanceModel::create($request->all());
                 return response()->json($proveedor);
+
             } else {
                 $proveedor = AcreditacionalcanceModel::findOrFail($request['alcance_id']);
 
@@ -335,6 +366,10 @@ class acreditacionalcanceController extends Controller
 
                 if ($request['acreditacionAlcance_tipo'] === "Químico") {
                     $request['prueba_id'] = 15;
+                
+                } elseif ($request['acreditacionAlcance_tipo'] === "BEI"){
+                    $request['prueba_id'] = 22;
+
                 } else {
 
                     $id_prueba = intval($request['prueba_id']);
