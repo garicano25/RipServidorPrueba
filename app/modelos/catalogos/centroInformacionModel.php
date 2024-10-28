@@ -10,6 +10,7 @@ class centroInformacionModel extends Model
     protected $primaryKey = 'ID_CENTRO_INFORMACION';
     protected $table = 'centroInformacion';
     protected $fillable = [
+        'CLASIFICACION',
         'TITULO',
         'DESCRIPCION',
         'RUTA_DOCUMENTO',

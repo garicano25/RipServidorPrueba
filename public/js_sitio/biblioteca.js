@@ -1,10 +1,9 @@
 $(document).ready(function(){
     
-    consultarInformacion()
+    consultarInformacion(0, 0)
 
     // Inicializar tooltip
-    $('[data-toggle="tooltip"]').tooltip();
-    
+   
 
     $('#boton_nueva_doc').on('click', function (e) {
         e.preventDefault();
@@ -20,7 +19,7 @@ $(document).ready(function(){
 
         // Abrir modal
         $('#modal_informacion').modal({ backdrop: false });
-
+ 
     })
 
     $("#boton_guardar_informacion").click(function (e) {
@@ -56,7 +55,7 @@ $(document).ready(function(){
                         resetForm: false,
                         success: function(data) {
                             
-                            consultarInformacion()
+                            consultarInformacion(0, 0)
 
                             // mensaje
                             swal({
@@ -143,16 +142,28 @@ function seleccionarInformacion(checkbox) {
     }
 }
 
-function consultarInformacion() {
+function consultarInformacion(valor, titulo) {
+
+    $('#listaInformacion').html('')
+    
     $.ajax({
         type: "GET",
         dataType: "json",
-        url: "/obtenerInfoBliblioteca",
+        url: "/obtenerInfoBliblioteca/" + valor + "/" + titulo ,
         data:{},
         cache: false,
-        success:function(dato){
+        success: function (dato) {
             
-            mostraBilioteca(dato);
+            if (dato.length != 0) {
+
+                mostraBilioteca(dato);
+                
+            } else {
+
+                $('#listaInformacion').html('<h2 class="mx-2" >No existe documentos con esta clasificación<h2>')
+                
+            }
+            
             $('#divLoader').css('display', 'none');  
             
         },beforeSend: function () {
@@ -184,21 +195,17 @@ function mostraBilioteca(data) {
         const buttonColor = color === 'rgb(152, 193, 29)' ? 'rgb(0, 152, 199)' : 'rgb(152, 193, 29)'; 
 
         if (element.RUTA_LINK) {
-            button = `<button href="#" class="view-button" style="background-color: ${buttonColor}; color: white;" onclick="verLibroLink('${element.RUTA_LINK}', '${element.TITULO}')"> Ver </button>`;
+            button = `<button href="#" class="view-button" style="background-color: ${buttonColor}; color: white;" onclick="verLibroLink('${element.RUTA_LINK}', '${element.TITULO}')"> Consultar </button>`;
         } else {
-            button = `<button class="view-button" style="background-color: ${buttonColor}; color: white;" onclick="verLibroPdf('${element.ID_CENTRO_INFORMACION}', '${element.TITULO}')" > Ver </button>`;
+            button = `<button class="view-button" style="background-color: ${buttonColor}; color: white;" onclick="verLibroPdf('${element.ID_CENTRO_INFORMACION}', '${element.TITULO}')" > Consultar </button>`;
         }
 
         
-        html += `<div class="col-3 mb-5">
-                    <div class="book-container">
+        html += `<div class="col-3 mb-5" data-toggle="tooltip" data-placement="top" title="${des}">
+                    <div class="book-container mb-3">
                         <div class="book">
                             <div class="cover" style="background-color: ${color};">
-                                <h1 class="book-title" style="color: ${titleColor};">${element.TITULO}</h1>
-                                <p class="book-description">
-                                    ${des}
-                                </p>
-                                ${button}
+                                <h1 class="book-title" style="color: ${titleColor};">${acortarTexto(element.TITULO)}</h1>
                             </div>
                             <div class="pages">
                                 <div class="page"></div>
@@ -210,11 +217,14 @@ function mostraBilioteca(data) {
                             <div class="side"></div>
                         </div>
                     </div>
+                    ${button}
                 </div>`;
     });
 
 
     $('#listaInformacion').html(html)
+
+     $('[data-toggle="tooltip"]').tooltip()
 }
 
 function verLibroLink(ruta, titulo) {
@@ -223,6 +233,15 @@ function verLibroLink(ruta, titulo) {
     const opciones = "width=800,height=600"; 
     window.open(url, nombreVentana, opciones);
 }
+
+
+
+function acortarTexto (data) {
+    if (data.length > 115) {
+        return data.substr(0, 115) + '...'; 
+    }
+    return data;
+} 
 
 
 function verLibroPdf(id, titulo) {
@@ -234,3 +253,21 @@ function verLibroPdf(id, titulo) {
     $('#nombre_documento_visor').html(titulo);
             
 }
+
+$('#CLASIFICACION_SELECT').on('change', function () {
+
+    valor = $(this).val();
+    consultarInformacion(valor, 0)
+
+})
+ 
+
+$('#filtrar').on('click', function () {
+
+    clasificacion = $('#CLASIFICACION_SELECT').val();
+    titulo = $('#TITULO_SELECT').val();
+
+
+    consultarInformacion(0, titulo)
+
+ })
