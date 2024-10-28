@@ -52,9 +52,8 @@ class recopsiconormativaController extends Controller
      * @return \Illuminate\Http\Response
      */
   
-    public function recopsicotrabajadoresCargadosTabla(Request $request)
+    public function recopsicotrabajadoresCargadosTabla($RECPSICO_ID)
     {
-        $RECPSICO_ID = $request->input('RECPSICO_ID');
         
         $trabajadores = recopsicotrabajadoresModel::where('RECPSICO_ID', $RECPSICO_ID)
             ->select('ID_RECOPSICOTRABAJADOR', 'RECPSICOTRABAJADOR_NOMBRE', 'RECPSICOTRABAJADOR_MUESTRA')
