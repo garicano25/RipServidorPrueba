@@ -177,6 +177,7 @@ $(document).ready(function() {
 			var RECPSICOTRABAJADOR_MUESTRA = document.getElementById("RECPSICOTRABAJADOR_MUESTRA").checked ? 1 : 0;
 			formData.append('RECPSICO_APLICACION', parseInt(document.getElementById('RECPSICO_APLICACION').value));
 			var RECPSICO_APLICACION = document.getElementById('RECPSICO_APLICACION').value;
+			
 			// var totalEmpleadosMuestra = parseInt(document.getElementById('RECPSICO_TOTALAPLICACION').value);
 			// if (isNaN(totalEmpleadosMuestra)) {
 			// 	totalEmpleadosMuestra = 1; 
@@ -1252,7 +1253,7 @@ $("#boton_guardar_normativa").click(function (event) {
 	}
 });
 
-$("#boton_editarGuiaV").click(function (event) {
+$("#boton_guadarGuiaV").click(function (event) {
 	event.preventDefault(); 
 
 	$("#RECPSICO_ID_GUIAV").val($("#recsensorial_id").val());
@@ -1287,7 +1288,6 @@ $("#boton_editarGuiaV").click(function (event) {
 			processData: false,
 			contentType: false,
 			success: function (dato) {
-				if (dato.code == 200) {
 					// cerrar modal
 					$('#modal_editarGuiaV').modal('hide');
 			
@@ -1300,17 +1300,6 @@ $("#boton_editarGuiaV").click(function (event) {
 						showConfirmButton: true,
 						showCancelButton: false
 					});
-				} else {
-					// mensaje de error
-					swal({
-						title: "Ocurrió un error al intentar guardar los datos.",
-						text: ""+dato.msj,
-						type: "error", 
-						buttons: {visible: true},
-						showConfirmButton: true,
-						showCancelButton: false
-					});
-				}
 				$('#boton_editarGuiaV').html('Guardar <i class="fa fa-save"></i>');
 			},
 			beforeSend: function () {
@@ -2486,7 +2475,8 @@ function validarValores() {
 						const seleccionHombres = Math.round(resultado * (porcentajeHombres / 100));
 						const seleccionMujeres = Math.round(resultado * (porcentajeMujeres / 100));
 						document.getElementById('seleccion').innerText = `Se seleccionaran de forma aleatoria ${seleccionHombres} hombres y ${seleccionMujeres} mujeres en el centro de trabajo para las entrevistas`;
-
+						document.getElementById('RECPSICO_TOTALMUJERESSELECCION').value = seleccionMujeres;
+						document.getElementById('RECPSICO_TOTALHOMBRESSELECCION').value = seleccionHombres;
 				}		
 			 }else{
 
@@ -2532,7 +2522,8 @@ function validarValores() {
 					const seleccionHombres = Math.round(resultado * (porcentajeHombres / 100));
 					const seleccionMujeres = Math.round(resultado * (porcentajeMujeres / 100));
 					document.getElementById('seleccion').innerText = `Se seleccionaran de forma aleatoria ${seleccionHombres} hombres y ${seleccionMujeres} mujeres en el centro de trabajo para las entrevistas`;
-					
+					document.getElementById('RECPSICO_TOTALMUJERESSELECCION').value = seleccionMujeres;
+						document.getElementById('RECPSICO_TOTALHOMBRESSELECCION').value = seleccionHombres;
 
 				}
 			 }else{
@@ -2597,7 +2588,8 @@ function validarValoresMuestra() {
 						const seleccionHombres = Math.round(totalEmpleadosMuestra * (porcentajeHombres / 100));
 						const seleccionMujeres = Math.round(totalEmpleadosMuestra * (porcentajeMujeres / 100));
 						document.getElementById('seleccion').innerText = `Se seleccionaran de forma aleatoria ${seleccionHombres} hombres y ${seleccionMujeres} mujeres en el centro de trabajo para las entrevistas`;
-
+						document.getElementById('RECPSICO_TOTALMUJERESSELECCION').value = seleccionMujeres;
+						document.getElementById('RECPSICO_TOTALHOMBRESSELECCION').value = seleccionHombres;
 
 				}		
 			 }else{
@@ -2644,7 +2636,8 @@ function validarValoresMuestra() {
 					const seleccionHombres = Math.round(totalEmpleadosMuestra * (porcentajeHombres / 100));
 					const seleccionMujeres = Math.round(totalEmpleadosMuestra * (porcentajeMujeres / 100));
 					document.getElementById('seleccion').innerText = `Se seleccionaran de forma aleatoria ${seleccionHombres} hombres y ${seleccionMujeres} mujeres en el centro de trabajo para las entrevistas`;
-					
+					document.getElementById('RECPSICO_TOTALMUJERESSELECCION').value = seleccionMujeres;
+						document.getElementById('RECPSICO_TOTALHOMBRESSELECCION').value = seleccionHombres;
 
 				}
 			 }else{

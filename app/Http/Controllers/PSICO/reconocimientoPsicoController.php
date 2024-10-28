@@ -447,7 +447,11 @@ class reconocimientoPsicoController extends Controller
                 $dato['recsensorial_activo'] = $recsensorial_activo;
                 $dato['recsensorial'] = $reconocimientopsico;
             }
-
+            if (($request->opcion + 0) == 5) // PREGUNTAS DE GUIA 5
+            {
+                $dato['code'] = 200;
+                $dato["msj"] = 'Información modificada correctamente';
+            }
 
             return response()->json($dato);
         } catch (Exception $e) {

@@ -211,13 +211,35 @@ class recopsiconormativaController extends Controller
                                 
                                
                                 if($RECPSICOTRABAJADOR_MUESTRA==1){
+
+                                    $numMuestraHombres = DB::table('recopsiconormativa')
+                                        ->where('RECPSICO_ID', $RECPSICO_ID)
+                                        ->value('RECPSICO_TOTALHOMBRESSELECCION');
+                                
                                     $trabajadoresAleatorios = DB::table('recopsicotrabajadores')
-                                    ->where('RECPSICO_ID', $RECPSICO_ID)
-                                    ->inRandomOrder() 
-                                    ->limit($RECPSICO_APLICACION) 
-                                    ->get();
+                                        ->where('RECPSICO_ID', $RECPSICO_ID)
+                                        ->where('RECPSICOTRABAJADOR_GENERO', 'Masculino') 
+                                        ->inRandomOrder() 
+                                        ->limit($numMuestraHombres) 
+                                        ->get();
                     
                                     foreach ($trabajadoresAleatorios as $trabajador) {
+                                        recopsicotrabajadoresModel::where('ID_RECOPSICOTRABAJADOR', $trabajador->ID_RECOPSICOTRABAJADOR)
+                                            ->update(['RECPSICOTRABAJADOR_MUESTRA' => 1]);
+                                    }
+
+                                    $numMuestraMujeres = DB::table('recopsiconormativa')
+                                        ->where('RECPSICO_ID', $RECPSICO_ID)
+                                        ->value('RECPSICO_TOTALMUJERESSELECCION');
+                                
+                                    $trabajadoresAleatorios2 = DB::table('recopsicotrabajadores')
+                                        ->where('RECPSICO_ID', $RECPSICO_ID)
+                                        ->where('RECPSICOTRABAJADOR_GENERO', 'Femenino') 
+                                        ->inRandomOrder() 
+                                        ->limit($numMuestraMujeres) 
+                                        ->get();
+                    
+                                    foreach ($trabajadoresAleatorios2 as $trabajador) {
                                         recopsicotrabajadoresModel::where('ID_RECOPSICOTRABAJADOR', $trabajador->ID_RECOPSICOTRABAJADOR)
                                             ->update(['RECPSICOTRABAJADOR_MUESTRA' => 1]);
                                     }
@@ -317,6 +339,8 @@ class recopsiconormativaController extends Controller
                         'RECPSICO_GUIAII' => $request['RECPSICO_GUIAII'],
                         'RECPSICO_GUIAIII' => $request['RECPSICO_GUIAIII'],
                         'RECPSICO_GUIAV' => $request['RECPSICO_GUIAV'],
+                        'RECPSICO_TOTALHOMBRESSELECCION' => $request['RECPSICO_TOTALHOMBRESSELECCION'],
+                        'RECPSICO_TOTALMUJERESSELECCION' => $request['RECPSICO_TOTALMUJERESSELECCION'],
                         'updated_at' => now(),
                     ]);
                     $dato["msj"] = 'Información modificada correctamente';

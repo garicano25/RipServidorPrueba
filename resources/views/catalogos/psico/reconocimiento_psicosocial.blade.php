@@ -749,6 +749,8 @@
                                                                                     <input type="hidden" class="form-control" id="RECPSICO_ID_NORMATIVA" name="RECPSICO_ID" value="0">
                                                                                     <input type="hidden" class="form-control" id="ID_RECOPSICONORMATIVA" name="ID_RECOPSICONORMATIVA" value="0">
                                                                                     <input type="number" class="form-control" id="total_empleados" name="RECPSICO_TOTALTRABAJADORES" required>
+                                                                                    <input type="hidden" class="form-control" name="RECPSICO_TOTALHOMBRESSELECCION" id="RECPSICO_TOTALHOMBRESSELECCION" value="0">
+                                                                                    <input type="hidden" class="form-control" name="RECPSICO_TOTALMUJERESSELECCION" id="RECPSICO_TOTALMUJERESSELECCION" value="0">
                                                                                 </div>
                                                                             </div>
 
@@ -862,6 +864,7 @@
                                                                                         </h2>
                                                                                         <h3 class="mb-2" id="porcentajes" >
                                                                                         <h3 class="mb-2" id="seleccion" >
+                                                                                        
                                                                                     </div>
                                                                                 </div>
                                                                             </div>
@@ -1217,7 +1220,7 @@
                 <div class="modal-footer" style="display: flex; justify-content: space-between;">   
                     <div>
                         <button type="button" class="btn btn-default waves-effect" data-dismiss="modal">Cerrar</button>
-                        <button type="submit" class="btn btn-danger waves-effect waves-light" id="boton_editarGuiaV">
+                        <button type="submit" class="btn btn-danger waves-effect waves-light" id="boton_guadarGuiaV">
                             Guardar <i class="fa fa-save"></i>
                         </button>
                     </div>
