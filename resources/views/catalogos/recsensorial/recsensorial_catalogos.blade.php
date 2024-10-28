@@ -62,7 +62,7 @@
                                                 <i class="fa fa-chevron-circle-right fa-3x text-secondary"
                                                     id="cat_10"></i>
                                             </a>
-                                        </td>
+                                        </td> 
                                     </tr>
                                     <!-- <tr id="tr_1">
                          <td>Contrato</td>
@@ -112,7 +112,7 @@
                           </a>
                          </td>
                         </tr> -->
-                                    <tr id="tr_9">
+                                    <tr id="tr_9" style="display: none">
                                         <td>Caracteristicas ventilación y calidad del aire</td>
                                         <td>
                                             <a href="#" onclick="mostrar_catalogo(9);">

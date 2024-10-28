@@ -1477,6 +1477,9 @@ Route::get('reporteaireareas/{proyecto_id}/{reporteregistro_id}/{areas_poe}', ['
 
 Route::get('reporteaireareaeliminar/{area_id}', ['as' => 'reporteaire.reporteaireareaeliminar', 'uses' => 'reportes\reporteaireController@reporteaireareaeliminar']);
 
+Route::get('obtenerCAI/{ID}', ['as' => 'reporteaire.obtenerCAI', 'uses' => 'reportes\reporteaireController@obtenerCAI']);
+
+
 Route::get('reporteaireareacategorias/{proyecto_id}/{reporteregistro_id}/{area_id}/{areas_poe}', ['as' => 'reporteaire.reporteaireareacategorias', 'uses' => 'reportes\reporteaireController@reporteaireareacategorias']);
 
 Route::get('reporteaireevaluaciontabla/{proyecto_id}/{reporteregistro_id}/{areas_poe}', ['as' => 'reporteaire.reporteaireevaluaciontabla', 'uses' => 'reportes\reporteaireController@reporteaireevaluaciontabla']);
