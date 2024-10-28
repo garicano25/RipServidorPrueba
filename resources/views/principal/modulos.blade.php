@@ -114,7 +114,7 @@
                     </div>
                     <div class="col-8">
                         <div class="d-flex justify-content-end mr-5 mb-4">
-                            <a class="cta disabled " href="#" id="btnPsico">
+                            <a class="cta disabled " href="{{route('programaPsicosocial.index')}}" id="btnPsico">
                                 <div class="row circle-one">
                                     <div class="col-12 circle-two">
                                         <img src="/assets/images/modulos/psicosocial.png" class="logos" alt="Modulos de Factor Piscosocial">
