@@ -138,7 +138,7 @@ $(document).ready(function() {
         $.ajax({
             url: '/recopsicotrabajadorescargados/' + recpsico_id,
             type: 'GET',
-            data: { recpsico_id: recpsico_id },
+            data: {},
             dataType: 'json',
             success: function(data) {
 
