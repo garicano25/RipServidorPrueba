@@ -91,7 +91,6 @@
                                     <th width="600">Intalación / Dirrección</th>
                                     <th>Fecha inicio</th>
                                     <th>Fecha fin</th>
-                                    <th>Reconocimiento vinculado</th>
                                     <th width="60">Mostrar</th>
                                 </tr>
                             </thead>
@@ -145,7 +144,7 @@
                                         <button type="submit" class="btn btn-light botonguardar_modalidad_online" id="botonguardar_modalidad_online" style="margin-right: 10px;">
                                             Guardar cambios  <i class="fa fa-save"></i>
                                         </button>
-                                        <button type="submit" class="btn btn-warning botonenviar_todos_correos" id="botonenviar_todos_correos" style="margin-right: 10px;">
+                                        <button type="submit" class="btn btn-warning botonenviar_todos_correos d-none" id="botonenviar_todos_correos" style="margin-right: 10px;">
                                                 Enviar todos los correos  <i class="fa fa-paper-plane"></i>
                                         </button>
                                     </div>

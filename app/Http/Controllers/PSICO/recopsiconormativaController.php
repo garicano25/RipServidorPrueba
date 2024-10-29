@@ -52,11 +52,10 @@ class recopsiconormativaController extends Controller
      * @return \Illuminate\Http\Response
      */
   
-    public function recopsicotrabajadoresCargadosTabla(Request $request)
+    public function recopsicotrabajadoresCargadosTabla($RECPSICO_ID)
     {
-        $RECPSICO_ID = $request->input('RECPSICO_ID');
         
-        $trabajadores = recopsicotrabajadoresModel::where('RECPSICO_ID', 3)
+        $trabajadores = recopsicotrabajadoresModel::where('RECPSICO_ID', $RECPSICO_ID)
             ->select('ID_RECOPSICOTRABAJADOR', 'RECPSICOTRABAJADOR_NOMBRE', 'RECPSICOTRABAJADOR_MUESTRA')
             ->get();
 
@@ -176,7 +175,7 @@ class recopsiconormativaController extends Controller
                                         'RECPSICOTRABAJADOR_AREA' => null,
                                         'RECPSICOTRABAJADOR_CATEGORIA' => null,
                                         'RECPSICOTRABAJADOR_FICHA' => is_null($rowData['F']) ? null : $rowData['F'],
-                                        'RECPSICOTRABAJADOR_CORREO' => is_null($rowData['G']) ? null : $rowData['G'],
+                                        'RECPSICOTRABAJADOR_CORREO' => is_null($rowData['G']) ? null : str_replace(' ', '', $rowData['G']),
                                         'RECPSICOTRABAJADOR_SELECCIONADO' => null,
                                         'RECPSICOTRABAJADOR_OBSERVACION' => null,
                                         'RECPSICOTRABAJADOR_MODALIDAD' => null

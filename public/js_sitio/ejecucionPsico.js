@@ -530,10 +530,6 @@ function tabla_ejecucion()
 					    "defaultContent": "-"
 					},
 					{
-					    "data": "RECONOCIMIENTO_VINCULADO",
-					    "defaultContent": "-"
-					},
-					{
 					    "orderable": false,
 					    "data": 'boton_mostrar',
 					    "defaultContent": '-'

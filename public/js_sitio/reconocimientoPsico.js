@@ -133,13 +133,12 @@ $(document).ready(function() {
     });
 
     function cargarTrabajadores() {
-       // var recpsico_id = $('#RECPSICO_ID_TRABAJADORES').val(); 
-        var recpsico_id = 3; 
-        
+       var recpsico_id = $('#RECPSICO_ID_TRABAJADORES').val(); 
+					
         $.ajax({
-            url: '/recopsicotrabajadorescargados/' + 3,
+            url: '/recopsicotrabajadorescargados/' + recpsico_id,
             type: 'GET',
-            data: { recpsico_id: recpsico_id },
+            data: {},
             dataType: 'json',
             success: function(data) {
 
@@ -262,10 +261,6 @@ $(document).ready(function() {
 										showCancelButton: false
 									});
 
-									
-									
-
-								
 								} else {
 
 									swal({
@@ -367,10 +362,6 @@ $(document).ready(function () {
 		$('#RECSENSORIAL_DATOSAREA').val(row.data().RECSENSORIAL_DATOSAREA);
 
 		actualizarTextoAreaSeleccionada();
-
-
-		// Consultar parámetros
-		consulta_parametros($('#recsensorial_id').val(), row.data().id);
 
 		// Consultar categorías
 		//consulta_areascategorias(row.data().id);
