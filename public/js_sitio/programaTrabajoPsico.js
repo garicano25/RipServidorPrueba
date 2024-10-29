@@ -238,10 +238,6 @@ function tablaprogramaTrabajoPsico()
 					    "defaultContent": "-"
 					},
 					{
-					    "data": "RECONOCIMIENTO_VINCULADO",
-					    "defaultContent": "-"
-					},
-					{
 					    "orderable": false,
 					    "data": 'boton_mostrar',
 					    "defaultContent": '-'

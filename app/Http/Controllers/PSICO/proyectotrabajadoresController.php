@@ -79,7 +79,7 @@ class proyectotrabajadoresController extends Controller
                 $trabajadoresLista = DB::select('SELECT
                                                     ID_RECOPSICOTRABAJADOR AS TRABAJADOR_ID,
                                                     RECPSICOTRABAJADOR_NOMBRE AS TRABAJADOR_NOMBRE,
-                                                    RECPSICOTRABAJADOR_SELECCIONADO AS TRABAJADOR_SELECCIONADO,
+                                                    RECPSICOTRABAJADOR_MUESTRA AS TRABAJADOR_SELECCIONADO,
                                                     RECPSICOTRABAJADOR_OBSERVACION AS TRABAJADOR_OBSERVACION,
                                                     RECPSICOTRABAJADOR_MODALIDAD AS TRABAJADOR_MODALIDAD
                                                 FROM
