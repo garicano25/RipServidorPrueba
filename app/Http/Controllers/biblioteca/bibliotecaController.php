@@ -21,11 +21,28 @@ class bibliotecaController extends Controller
         return view('catalogos.biblioteca.centroInformacion');
     }
 
-    public function listaBiblioteca(){
+    public function listaBiblioteca($clasificacion, $titulo){
 
-        $info = centroInformacionModel::OrderBy('created_at', 'ASC')->get();
+        if ($clasificacion == 0 && $titulo == 0) {
+            $info = centroInformacionModel::orderBy('created_at', 'ASC')->get();
+        } else if ($clasificacion != 0 && $titulo == 0) {
+            $info = centroInformacionModel::where('CLASIFICACION', $clasificacion)
+                ->orderBy('created_at', 'ASC')
+                ->get();
+        } 
         return response()->json($info);
 
+    }
+
+
+    public function listaBibliotecaText($clasificacion, $titulo)
+    {
+
+        $info = centroInformacionModel::where('TITULO', 'LIKE', '%' . $titulo . '%')
+            ->orWhere('DESCRIPCION', 'LIKE', '%' . $titulo . '%')
+            ->orderBy('created_at', 'ASC')
+            ->get();
+        return response()->json($info);
     }
 
     public function bibliotecapdf($documento_id)
@@ -40,7 +57,7 @@ class bibliotecaController extends Controller
            
             // AUTO_INCREMENT
             DB::statement('ALTER TABLE centroInformacion AUTO_INCREMENT=1;');
-            $documento = centroInformacionModel::create($request->all());
+            $documento = centroInformacionModel::create($request->all()); 
 
             if ($request->file('DOCUMENTO')) {
 

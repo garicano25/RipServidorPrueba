@@ -12,17 +12,15 @@ use App\modelos\clientes\clientecontratoModel;
 use App\modelos\catalogos\Cat_pruebaModel;
 use App\modelos\clientes\contratoDocumentoCierre;
 use App\modelos\clientes\contratoAnexosModel;
+use App\modelos\clientes\cronogramaActividadesModel;
+use App\modelos\clientes\autorizacionCronogramaModel;
 use App\modelos\catalogos\TablaPantillaClientesModel;
 use App\modelos\recsensorial\catregionModel;
 use App\modelos\recsensorial\catsubdireccionModel;
 use App\modelos\recsensorial\catgerenciaModel;
 use App\modelos\recsensorial\catactivoModel;
-
-
 use App\modelos\catalogos\Cat_etiquetaModel;
-use App\modelos\catalogos\CatetiquetaopcionesModel;
-
-
+use App\modelos\catalogos\CatetiquetaopcionesModel; 
 use App\modelos\clientes\estructuraclientesModel;
 
 use DB;
@@ -32,7 +30,7 @@ use DB;
 use Illuminate\Support\Facades\Storage;
 use Image;
 // use Artisan;
-
+ 
 
 // plugins PDF
 use Barryvdh\DomPDF\Facade as PDF;
@@ -77,6 +75,25 @@ class clienteController extends Controller
     {
         $opciones = CatetiquetaopcionesModel::where('ETIQUETA_ID', $etiquetaId)->where('ACTIVO', 1)->orderBy('ID_OPCIONES_ETIQUETAS', 'ASC')->get();
         return response()->json($opciones);
+    }
+    
+    public function obtenerActividadesCronograma($ID_CONTRATO, $ID_PROYECTO)
+    {
+        if ($ID_PROYECTO == 0){
+
+            $actividades = cronogramaActividadesModel::where('CONTRATO_ID', $ID_CONTRATO)->orderBy('FECHA_INICIO_ACTIVIDAD', 'ASC')->get();
+            $autorizado = autorizacionCronogramaModel::where('CONTRATO_ID', $ID_CONTRATO)->get();
+
+        }else{
+
+            $actividades = cronogramaActividadesModel::where('PROYECTO_ID', $ID_PROYECTO)->orderBy('FECHA_INICIO_ACTIVIDAD', 'ASC')->get();
+            $autorizado = autorizacionCronogramaModel::where('PROYECTO_ID', $ID_PROYECTO)->get();
+
+        }
+        $dato['data']  = $actividades;
+        $dato['autorizado']  = $autorizado;
+        return response()->json($dato);
+
     }
 
 
@@ -852,6 +869,21 @@ class clienteController extends Controller
     }
 
 
+    public function eliminarActividadCronograma($ID)
+    {
+        try {
+            cronogramaActividadesModel::where('ID_ACTIVIDAD', $ID)->delete();
+
+            // respuesta
+            $dato["msj"] = 'Actividad eliminada correctamente';
+            return response()->json($dato);
+            
+        } catch (Exception $e) {
+            $dato["msj"] = 'Error ' . $e->getMessage();
+            return response()->json($dato);
+        }
+    }
+
 
     /**
      * Store a newly created resource in storage.
@@ -861,9 +893,7 @@ class clienteController extends Controller
      */
     public function store(Request $request)
     {
-        // return response()->json([$request->all()], 500);
-        // print_r($request->all());
-        // exit();
+        
         try {
             // dd($request->all());
 
@@ -909,9 +939,6 @@ class clienteController extends Controller
                 return response()->json($cliente);
             }
 
-
-
-
             if (($request->opcion + 0) == 2) // NUEVO Y EDITAR DOCUMENTOS
             {
                 if ($request['documento_id'] == 0) //nuevo
@@ -951,14 +978,12 @@ class clienteController extends Controller
                 return response()->json($cliente);
             }
 
-
             if (($request->opcion + 0) == 3) // ELIMINAR DOCUMENTOS
             {
                 $documento = clientedocumentoModel::findOrFail($request['documento_id']);
                 $documento->update($request->all());
                 return response()->json($documento);
             }
-
 
             if (($request->opcion + 0) == 4) // PLANTILLA CLIENTE
             {
@@ -1016,7 +1041,6 @@ class clienteController extends Controller
                 return response()->json($contrado);
             }
 
-
             if (($request->opcion + 0) == 5) // PARTIDA INFORMES
             {
 
@@ -1064,7 +1088,6 @@ class clienteController extends Controller
                 return response()->json($dato);
             }
 
-
             if (($request->opcion + 0) == 6) // CONVENIO DE AMPLIACION
             {
                 if (($request->convenio_id + 0) == 0) {
@@ -1108,7 +1131,6 @@ class clienteController extends Controller
                 return response()->json($dato);
             }
 
-
             if (($request->opcion + 0) == 8) // GUARDAR O ACTUALIZAR DOCUMENTO DE CIERRE
             {
                 if ($request['documento_cierre_id'] == 0) //nuevo
@@ -1147,8 +1169,6 @@ class clienteController extends Controller
 
                 return response()->json($cliente);
             }
-
-
 
             if (($request->opcion + 0) == 9) // ACTUALIZAR DOCUMENTOS DE CIERRE
             {
@@ -1193,7 +1213,52 @@ class clienteController extends Controller
                     return response()->json($anexos);
                 }
             }
+
+            
+            if (($request->opcion + 0) == 12) // CRONOGRAMA DE ACTIVIDADES
+            {
+                if (($request->ID_ACTIVIDAD + 0) == 0) {
+
+
+                    cronogramaActividadesModel::create($request->all());
+
+                    $dato['msj'] = 'Actividad guardada correctamente';
+
+                } else {
+
+                    $partida = cronogramaActividadesModel::findOrFail($request->ID_ACTIVIDAD);
+
+                    $partida->update($request->all());
+
+                    $dato['msj'] = 'Actividad actualizada correctamente';
+                }
+
+                return response()->json($dato);
+            }
+
+            if (($request->opcion + 0) == 13) // AUTORIZACION Y VALIDACION DEL CRONOGRAMA DE ACTIVIDAD
+            {
+                if (($request->ID_AUTORIZACION + 0) == 0) {
+
+
+                    autorizacionCronogramaModel::create($request->all());
+
+                    $dato['msj'] = 'Informacion guardada correctamente';
+                    
+                } else {
+
+                    $partida = autorizacionCronogramaModel::findOrFail($request->ID_AUTORIZACION);
+
+                    $partida->update($request->all());
+
+                    $dato['msj'] = 'Informacion actualizada correctamente';
+                }
+
+                return response()->json($dato);
+            }
+
         } catch (Exception $e) {
+
             return response()->json('Error al guardar CLIENTE');
         }
     }

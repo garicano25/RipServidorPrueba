@@ -794,6 +794,8 @@
                                                                                                 }
                                                                                             </style>
                                                                                             <input type="file" accept="image/jpeg,image/x-png,image/gif" id="inputfotoplano" name="inputfotoplano" data-allowed-file-extensions="jpg png JPG PNG" data-height="300" data-default-file="" required />
+                                                                                          
+
                                                                                         </div>
                                                                                     </div>
                                                                                 </div>

@@ -249,7 +249,12 @@ class reporteBeiWordController extends Controller
             //================================================================================
 
             $plantillaword = new TemplateProcessor(storage_path('app/plantillas_reportes/proyecto_infomes/Plantilla_informe_beis.docx')); //Ruta carpeta storage
-            
+
+            //================================= Limpiamos el texto =================================================
+            function sanitizeText($text)
+            {
+                return htmlspecialchars($text, ENT_QUOTES, 'UTF-8');
+            }
 
 
             ################ PORTADA EXTERNA ####################
@@ -1036,17 +1041,17 @@ class reporteBeiWordController extends Controller
 
                 if ($determinante != $value->DETERMINANTE) {
                     $table->addRow(); //fila
-                    $table->addCell(null, $combinar_fila)->addTextRun($centrado)->addText($value->DETERMINANTE,$texto);
-                    $table->addCell(null, $celda)->addTextRun($centrado)->addText($value->NOMBRE_BEI,$texto);
+                    $table->addCell(null, $combinar_fila)->addTextRun($centrado)->addText(sanitizeText($value->DETERMINANTE),$texto);
+                    $table->addCell(null, $celda)->addTextRun($centrado)->addText(sanitizeText($value->NOMBRE_BEI),$texto);
                     $table->addCell(null, $celda)->addTextRun($centrado)->addText($value->GENERO_BEI,$texto);
                     $table->addCell(null, $celda)->addTextRun($centrado)->addText($value->AREA,$texto);
                     $table->addCell(null, $celda)->addTextRun($centrado)->addText($value->CATEGORIA,$texto);
                     $table->addCell(null, $celda)->addTextRun($centrado)->addText($value->FICHA_BEI,$texto);
                     $table->addCell(null, $celda)->addTextRun($centrado)->addText($value->EDAD_BEI_TEXTO,$texto);
                     $table->addCell(null, $celda)->addTextRun($centrado)->addText($value->ANTIGUEDAD_BEI,$texto);
-                    $table->addCell(null, $celda)->addTextRun($centrado)->addText($value->MUESTRA_BEI,$texto);
-                    $table->addCell(null, $celda)->addTextRun($centrado)->addText($value->RESULTADO_BEI_TEXTO,$texto);
-                    $table->addCell(null, $celda)->addTextRun($centrado)->addText($value->REFERENCIA_BEI_TEXTO,$texto);
+                    $table->addCell(null, $celda)->addTextRun($centrado)->addText(sanitizeText($value->MUESTRA_BEI),$texto);
+                    $table->addCell(null, $celda)->addTextRun($centrado)->addText(sanitizeText($value->RESULTADO_BEI_TEXTO),$texto);
+                    $table->addCell(null, $celda)->addTextRun($centrado)->addText(sanitizeText($value->REFERENCIA_BEI_TEXTO),$texto);
                     $table->addCell(null, array('bgColor' => $value->COLOR, 'valign' => 'center'))->addTextRun($centrado)->addText($value->NORMATIVIDAD, $texto);
 
 
@@ -1056,16 +1061,16 @@ class reporteBeiWordController extends Controller
 
                     $table->addRow(); //fila
                     $table->addCell(null, $continua_fila);
-                    $table->addCell(null, $celda)->addTextRun($centrado)->addText($value->NOMBRE_BEI,$texto);
+                    $table->addCell(null, $celda)->addTextRun($centrado)->addText(sanitizeText($value->NOMBRE_BEI),$texto);
                     $table->addCell(null, $celda)->addTextRun($centrado)->addText($value->GENERO_BEI,$texto);
                     $table->addCell(null, $celda)->addTextRun($centrado)->addText($value->AREA,$texto);
                     $table->addCell(null, $celda)->addTextRun($centrado)->addText($value->CATEGORIA,$texto);
                     $table->addCell(null, $celda)->addTextRun($centrado)->addText($value->FICHA_BEI,$texto);
                     $table->addCell(null, $celda)->addTextRun($centrado)->addText($value->EDAD_BEI_TEXTO,$texto);
                     $table->addCell(null, $celda)->addTextRun($centrado)->addText($value->ANTIGUEDAD_BEI,$texto);
-                    $table->addCell(null, $celda)->addTextRun($centrado)->addText($value->MUESTRA_BEI,$texto);
-                    $table->addCell(null, $celda)->addTextRun($centrado)->addText($value->RESULTADO_BEI_TEXTO,$texto);
-                    $table->addCell(null, $celda)->addTextRun($centrado)->addText($value->REFERENCIA_BEI_TEXTO,$texto);
+                    $table->addCell(null, $celda)->addTextRun($centrado)->addText(sanitizeText($value->MUESTRA_BEI),$texto);
+                    $table->addCell(null, $celda)->addTextRun($centrado)->addText(sanitizeText($value->RESULTADO_BEI_TEXTO),$texto);
+                    $table->addCell(null, $celda)->addTextRun($centrado)->addText(sanitizeText($value->REFERENCIA_BEI_TEXTO),$texto);
                     $table->addCell(null, array('bgColor' => $value->COLOR, 'valign' => 'center'))->addTextRun($centrado)->addText($value->NORMATIVIDAD, $texto);
                 }
             }

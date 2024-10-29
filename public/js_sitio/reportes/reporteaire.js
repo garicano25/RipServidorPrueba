@@ -745,42 +745,38 @@ $("#botonguardar_reporte_evaluaraire").click(function(event) {
 
 
 
-function aplicarConfiguracionCheckbox(idCheckbox, elementos, idInputs, menureporte, estado, isDisabled = false) {
-    // Configurar el checkbox según el estado
+function aplicarConfiguracionCheckbox(idCheckbox, elementos, idReadonlyInputs, idDisabledInput, menureporte, estado) {
     $(idCheckbox).prop('checked', estado === 1);
 
-    // Mostrar u ocultar elementos y ajustar los inputs
-    if (estado === 1) {
-        elementos.forEach(function(elemento) {
-            $(elemento.id).css('display', elemento.display);
-        });
+    function actualizarEstadoCheckbox(estadoActivo) {
+        if (estadoActivo) {
+            elementos.forEach(function(elemento) {
+                $(elemento.id).css('display', elemento.display);
+            });
+            $(idReadonlyInputs).prop('readonly', false).prop('required', true);
+            $(idDisabledInput).prop('disabled', false).prop('required', true);
 
-        // Aplicar disabled o readonly según corresponda
-        if (isDisabled) {
-            $(idInputs).prop('disabled', false).prop('required', true);
+            // menureporte_estado(menureporte, 0); // Activado
         } else {
-            $(idInputs).prop('readonly', false).prop('required', true);
+            elementos.forEach(function(elemento) {
+                $(elemento.id).css('display', 'none');
+            });
+            $(idReadonlyInputs).prop('readonly', true).prop('required', false);
+            $(idDisabledInput).prop('disabled', true).prop('required', false);
+
+            menureporte_estado(menureporte, 1); // Desactivado
         }
-
-        menureporte_estado(menureporte, 0);  // Activado
-    } else {
-        elementos.forEach(function(elemento) {
-            $(elemento.id).css('display', 'none');
-        });
-
-        // Aplicar disabled o readonly según corresponda
-        if (isDisabled) {
-            $(idInputs).prop('disabled', true).prop('required', false);
-        } else {
-            $(idInputs).prop('readonly', true).prop('required', false);
-        }
-
-        menureporte_estado(menureporte, 1);  // Desactivado (ahora siempre se asegura)
     }
+
+    actualizarEstadoCheckbox(estado === 1);
+
+    $(idCheckbox).change(function() {
+        const isChecked = $(this).is(':checked');
+        actualizarEstadoCheckbox(isChecked ? 1 : 0);
+    });
 }
 
 function inicializarCheckboxes() {
-    // Configuración inicial cuando es "nuevo"
     aplicarConfiguracionCheckbox(
         '#bioaerosoles',
         [
@@ -788,6 +784,7 @@ function inicializarCheckboxes() {
             {id: '#BIOAEROSOLES_AIRE_3', display: 'inline-block'}
         ],
         '#reporteaireevaluacion_ct, #reporteaireevaluacion_ctma, #reporteaireevaluacion_hongos, #reporteaireevaluacion_levaduras',
+        '', 
         'menureporte_7_1',
         $('#bioaerosoles').is(':checked') ? 1 : 0
     );
@@ -799,10 +796,10 @@ function inicializarCheckboxes() {
             {id: '#VELOCIDAD_AIRE_2', display: 'table-row'},
             {id: '#VELOCIDAD_AIRE_3', display: 'inline-block'}
         ],
-        '#reporteaireevaluacion_velocidad, #reporteaireevaluacion_velocidadlimite',
+        '#reporteaireevaluacion_velocidad', 
+        '#reporteaireevaluacion_velocidadlimite', 
         'menureporte_7_3',
-        $('#velocidad').is(':checked') ? 1 : 0,
-        true // Aplicar disabled para #reporteaireevaluacion_velocidadlimite
+        $('#velocidad').is(':checked') ? 1 : 0
     );
 
     aplicarConfiguracionCheckbox(
@@ -813,6 +810,7 @@ function inicializarCheckboxes() {
             {id: '#CO_AIRE_3', display: 'inline-block'}
         ],
         '#reporteaireevaluacion_co',
+        '', 
         'menureporte_7_5',
         $('#co').is(':checked') ? 1 : 0
     );
@@ -825,6 +823,7 @@ function inicializarCheckboxes() {
             {id: '#CO2_AIRE_3', display: 'inline-block'}
         ],
         '#reporteaireevaluacion_co2',
+        '', 
         'menureporte_7_6',
         $('#co2').is(':checked') ? 1 : 0
     );
@@ -837,6 +836,7 @@ function inicializarCheckboxes() {
             {id: '#TEM_AIRE_3', display: 'inline-block'}
         ],
         '#reporteaireevaluacion_temperatura',
+        '', 
         'menureporte_7_2',
         $('#temperatura').is(':checked') ? 1 : 0
     );
@@ -849,6 +849,7 @@ function inicializarCheckboxes() {
             {id: '#HUMEDAD_AIRE_3', display: 'inline-block'}
         ],
         '#reporteaireevaluacion_humedad',
+        '', 
         'menureporte_7_4',
         $('#humedad').is(':checked') ? 1 : 0
     );
@@ -861,6 +862,7 @@ function inicializarCheckboxes() {
             {id: '#SO2_AIRE_3', display: 'inline-block'}
         ],
         '#reporteaireevaluacion_so2',
+        '', 
         'menureporte_7_7',
         $('#SO2').is(':checked') ? 1 : 0
     );
@@ -878,7 +880,6 @@ function obtenerCaracteristica() {
             if (response.status === 'success') {
                 var caracteristicas = response.caracteristicas;
 
-                // Aplicar configuración basada en los datos obtenidos
                 aplicarConfiguracionCheckbox(
                     '#bioaerosoles',
                     [
@@ -886,8 +887,9 @@ function obtenerCaracteristica() {
                         {id: '#BIOAEROSOLES_AIRE_3', display: 'inline-block'}
                     ],
                     '#reporteaireevaluacion_ct, #reporteaireevaluacion_ctma, #reporteaireevaluacion_hongos, #reporteaireevaluacion_levaduras',
+                    '', 
                     'menureporte_7_1',
-                    caracteristicas.bioaerosoles
+                    caracteristicas.bioaerosoles || 0
                 );
 
                 aplicarConfiguracionCheckbox(
@@ -897,10 +899,10 @@ function obtenerCaracteristica() {
                         {id: '#VELOCIDAD_AIRE_2', display: 'table-row'},
                         {id: '#VELOCIDAD_AIRE_3', display: 'inline-block'}
                     ],
-                    '#reporteaireevaluacion_velocidad, #reporteaireevaluacion_velocidadlimite',
+                    '#reporteaireevaluacion_velocidad',
+                    '#reporteaireevaluacion_velocidadlimite',
                     'menureporte_7_3',
-                    caracteristicas.velocidad,
-                    true // Aplicar disabled para #reporteaireevaluacion_velocidadlimite
+                    caracteristicas.velocidad || 0
                 );
 
                 aplicarConfiguracionCheckbox(
@@ -911,8 +913,9 @@ function obtenerCaracteristica() {
                         {id: '#CO_AIRE_3', display: 'inline-block'}
                     ],
                     '#reporteaireevaluacion_co',
+                    '', 
                     'menureporte_7_5',
-                    caracteristicas.co
+                    caracteristicas.co || 0
                 );
 
                 aplicarConfiguracionCheckbox(
@@ -923,8 +926,9 @@ function obtenerCaracteristica() {
                         {id: '#CO2_AIRE_3', display: 'inline-block'}
                     ],
                     '#reporteaireevaluacion_co2',
+                    '', 
                     'menureporte_7_6',
-                    caracteristicas.co2
+                    caracteristicas.co2 || 0
                 );
 
                 aplicarConfiguracionCheckbox(
@@ -935,8 +939,9 @@ function obtenerCaracteristica() {
                         {id: '#TEM_AIRE_3', display: 'inline-block'}
                     ],
                     '#reporteaireevaluacion_temperatura',
+                    '', 
                     'menureporte_7_2',
-                    caracteristicas.temperatura
+                    caracteristicas.temperatura || 0
                 );
 
                 aplicarConfiguracionCheckbox(
@@ -947,8 +952,9 @@ function obtenerCaracteristica() {
                         {id: '#HUMEDAD_AIRE_3', display: 'inline-block'}
                     ],
                     '#reporteaireevaluacion_humedad',
+                    '', 
                     'menureporte_7_4',
-                    caracteristicas.humedad
+                    caracteristicas.humedad || 0
                 );
 
                 aplicarConfiguracionCheckbox(
@@ -959,11 +965,11 @@ function obtenerCaracteristica() {
                         {id: '#SO2_AIRE_3', display: 'inline-block'}
                     ],
                     '#reporteaireevaluacion_so2',
+                    '', 
                     'menureporte_7_7',
-                    caracteristicas.SO2
+                    caracteristicas.SO2 || 0
                 );
 
-                // Obtenemos solo el valor de caudal y Formaldehídos
                 $('#caudal').prop('checked', caracteristicas.caudal === 1);
                 $('#Formaldehídos').prop('checked', caracteristicas.Formaldehídos === 1);
 
@@ -975,13 +981,12 @@ function obtenerCaracteristica() {
             }
         },
         error: function() {
-            // No se muestra ningún mensaje en caso de error
         }
     });
 }
 
 $(document).ready(function() {
-    inicializarCheckboxes(); // Para inicializar en caso de "nuevo"
+    inicializarCheckboxes(); 
 });
 
 
