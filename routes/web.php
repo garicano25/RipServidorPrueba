@@ -29,6 +29,23 @@
 // });
 
 
+// use App\Mail\sendGuiaPsico;
+// use Illuminate\Support\Facades\Mail;
+
+// Route::get('/mail', function(){
+
+//     // return (new sendGuiaPsico("Edgar"))->render();
+
+//     // Este objeto acepta un modelo de eleocuent, o un arreglo de email
+//     // $response = Mail::to('ecano@results-in-performance.com')->queue(new sendGuiaPsico('Edgar')); 
+
+//     $response = Mail::to('agutierrez@results-in-performance.com')->send(new sendGuiaPsico('Edgar'));
+
+//     dump($response);
+// });
+
+
+use Illuminate\Support\Facades\Crypt;
 //==============================================
 
 
@@ -80,6 +97,10 @@ Route::get('usuarioeliminar/{usuario_id}/{usuario_tipo}/{empleado_id}', ['as' =>
 // En tu archivo de rutas (web.php)
 
 Route::get('/opciones/{etiquetaId}', ['as' => 'cliente.obteneretiquetas', 'uses' => 'clientes\clienteController@obteneretiquetas']);
+
+Route::get('obtenerActividadesCronograma/{ID_CONTRATO}/{ID_PROYECTO}', ['as' => 'cliente.obtenerActividadesCronograma', 'uses' => 'clientes\clienteController@obtenerActividadesCronograma']);
+
+Route::get('eliminarActividadCronograma/{id}', ['as' => 'eliminarActividadCronograma', 'uses' => 'clientes\clienteController@eliminarActividadCronograma']);
 
 Route::get('/estructura-cliente/{clienteId}', ['as' => 'cliente.obtenerEstructuraCliente', 'uses' => 'clientes\clienteController@obtenerEstructuraCliente']);
 
@@ -1783,11 +1804,94 @@ Route::get('ejecucionHI', ['as' => 'HI.ejecucion', 'uses' => 'HI\ejecucionContro
 //INFORMES
 Route::resource('informes', 'HI\informesrecoController');
 
+// ======================== MODULOS DEL RECONOCIMIENTO DE PSICOSOCIAL =========================================
+
+//RECONOCIMIENTO
+Route::resource('reconocimientoPsicosocial', 'PSICO\reconocimientoPsicoController');
+Route::get('/estructuraPsico/{FOLIO}', ['as' => 'reconocimientoPsico.estructuraproyectos', 'uses' => 'PSICO\reconocimientoPsicoController@estructuraproyectos']);
+Route::get('/folioproyectoPsico/{proyecto_folio}', ['as' => 'reconocimientoPsico.folioproyecto', 'uses' => 'PSICO\reconocimientoPsicoController@folioproyecto']);
+
+Route::get('mostrarplanopsico/{archivo_opcion}/{reconocimientopsico_id}', ['as' => 'mostrarplanopsico', 'uses' => 'PSICO\reconocimientoPsicoController@mostrarplanopsico']);
+Route::get('mostrarfotoinstalacionpsico/{archivo_opcion}/{reconocimientopsico_id}', ['as' => 'mostrarfotoinstalacionpsico', 'uses' => 'PSICO\reconocimientoPsicoController@mostrarfotoinstalacionpsico']);
+Route::get('mostrarmapapsico/{archivo_opcion}/{reconocimientopsico_id}', ['as' => 'mostrarmapapsico', 'uses' => 'PSICO\reconocimientoPsicoController@mostrarmapapsico']);
+Route::get('tablareconocimientopsico', ['as' => 'reconocimientoPsico.tablareconocimientopsico', 'uses' => 'PSICO\reconocimientoPsicoController@tablareconocimientopsico']);
+
+//categoria
+Route::get('recopsicocategoriatabla/{reconocimientopsico_id}', ['as' => 'recopsicocategoria.recopsicocategoriatabla', 'uses' => 'PSICO\recopsicocategoriaController@recopsicocategoriatabla']);
+Route::resource('recopsicocategoria', 'PSICO\recopsicocategoriaController');
+//area
+Route::resource('recopsicoarea', 'recsensorial\recsensorialareaController');
+Route::get('recopsicoareatabla/{reconocimientopsico_id}', ['as' => 'recsensorialarea.recsensorialareatabla', 'uses' => 'recsensorial\recsensorialareaController@recsensorialareatabla']);
+//areacategorias
+Route::get('recopsicoareacategorias/{reconocimientopsico_id}', ['as' => 'recsensorialarea.recsensorialareacategorias', 'uses' => 'recsensorial\recsensorialareaController@recsensorialareacategorias']);
+Route::get('recopsicoareacategoriaselegidas/{area_id}', ['as' => 'recsensorialarea.recsensorialareacategoriaselegidas', 'uses' => 'recsensorial\recsensorialareaController@recsensorialareacategoriaselegidas']);
+
+Route::resource('recopsiconormativa', 'PSICO\recopsiconormativaController');
+Route::get('recopsicotrabajadorescargados/{reconocimientopsico_id}', ['as' => 'recopsicotrabajadores.recopsicotrabajadoresCargadosTabla', 'uses' => 'PSICO\recopsiconormativaController@recopsicotrabajadoresCargadosTabla']);
+
+
+//PROGRAMA DE TRABAJO
+Route::resource('programaPsicosocial', 'PSICO\programaTrabajoPsicoController');
+Route::resource('proyectotrabajadores', 'PSICO\proyectotrabajadoresController');
+
+Route::get('tablaProgramaPsico', ['as' => 'PSICO.programaTrabajoPsico', 'uses' => 'PSICO\programaTrabajoPsicoController@tablaProgramaTrabajoPsico']);
+Route::get('proyectotrabajadoreslista/{RECPSICO_ID}/{proyecto_id}', ['as' => 'proyectotrabajadores.proyectotrabajadoreslista', 'uses' => 'PSICO\proyectotrabajadoresController@proyectotrabajadoreslista']);
+Route::get('proyectotrabajadoresadicionales', ['as' => 'proyectotrabajadores.proyectotrabajadoresadicionales', 'uses' => 'PSICO\proyectotrabajadoresController@proyectotrabajadoresadicionales']);
+Route::get('trabajadoresProgramaPsico/{proyecto_id}/{RECPSICO_ID}', ['as' => 'programaTrabajoPsico.trabajadoresProgramaPsico', 'uses' => 'PSICO\programaTrabajoPsicoController@trabajadoresProgramaPsico']);
+
+//EJECUCION
+Route::resource('ejecucionPsicosocial', 'PSICO\ejecucionPsicoController');
+Route::get('ejecucionPsicoTabla', ['as' => 'PSICO.ejecucionPsico', 'uses' => 'PSICO\ejecucionPsicoController@tablaEjecucion']);
+Route::get('trabajadoresOnlineEjecucionPsico/{proyecto_id}', ['as' => 'PSICO.trabajadoresOnline', 'uses' => 'PSICO\ejecucionPsicoController@tablaTrabajadoresOnline']);
+Route::get('trabajadoresPresencialEjecucionPsico/{proyecto_id}', ['as' => 'PSICO.trabajadoresPresencial', 'uses' => 'PSICO\ejecucionPsicoController@tablaTrabajadoresPresencial']);
+Route::get('ejecuciontrabajadoresnombres', ['as' => 'ejecucionpsico.trabajadoresNombres', 'uses' => 'PSICO\ejecucionPsicoController@trabajadoresNombres']);
+Route::put('actualizarFechasOnline', ['as' => 'PSICO.actualizarFechasOnline', 'uses' => 'PSICO\ejecucionPsicoController@actualizarFechasOnline']);
+
+//INFORMES
+Route::resource('informesPsicosocial', 'PSICO\informesrecoPsicoController');
+
+// GUIAS 
+
+// Route::get('/Guia/{id}/{guia1}/{guia2}/{guia3}', function () { return view('catalogos.psico.guias.guias');})->name('Guia');
+Route::get('/Guia/{guia1}/{guia2}/{guia3}/{id}', function ($guia1, $guia2, $guia3, $id) {
+    try {
+
+        // Desencriptamos las guías
+        $decryptedGuia1 = Crypt::decrypt($guia1);
+        $decryptedGuia2 = Crypt::decrypt($guia2);
+        $decryptedGuia3 = Crypt::decrypt($guia3);
+        $id = Crypt::decrypt($id);
+
+        // Enviamos los datos de las guias ya desencriptados para obtenerlas en nuestra vista
+        return view('catalogos.psico.guias.guias', [
+            'guia1' => $decryptedGuia1,
+            'guia2' => $decryptedGuia2,
+            'guia3' => $decryptedGuia3,
+            'id' => $id,
+        ]);
+    } catch (\Illuminate\Contracts\Encryption\DecryptException $e) {
+        //Cancelamos el acceso a la ruta
+        abort(403, "Acceso denegado.");
+    }
+})->name('Guia');
+
+Route::post('/consultarRespuestasGuardadas', 'PSICO\guiasController@consultarRespuestasGuardadas');
+Route::post('/obtenerExplicaciones', 'PSICO\guiasController@obtenerExplicaciones');
+Route::post('/consultarDatosTrabajador', 'PSICO\guiasController@consultarDatosTrabajador');
+Route::post('/guardarFotoRecpsico', 'PSICO\guiasController@guardarFotoRecpsico');
+Route::get('envioGuia/{tipo}/{idPersonal}/{idRecsensorial}', ['as' => 'PSICO.envioGuia', 'uses' => 'PSICO\ejecucionPsicoController@envioGuia']);
+
+Route::resource('guardarGuiasPsico', 'PSICO\guiasController');
 
 //====================================> BIBLIOTECA (CENTRO DE INFORMACION) <=================================>
 Route::resource('biblioteca', 'biblioteca\bibliotecaController');
-Route::get('obtenerInfoBliblioteca', ['as' => 'biblioteca.listaBiblioteca', 'uses' => 'biblioteca\bibliotecaController@listaBiblioteca']);
+Route::get('obtenerInfoBliblioteca/{clasificacion}/{titulo}', ['as' => 'biblioteca.listaBiblioteca', 'uses' => 'biblioteca\bibliotecaController@listaBiblioteca']);
+Route::get('listaBibliotecaText/{clasificacion}/{titulo}', ['as' => 'biblioteca.listaBiblioteca', 'uses' => 'biblioteca\bibliotecaController@listaBibliotecaText']);
 Route::get('bibliotecapdf/{documento_id}', ['as' => 'biblioteca.bibliotecapdf', 'uses' => 'biblioteca\bibliotecaController@bibliotecapdf']);
+
+//CATÁLOGOS
+Route::resource('recpsicocatalogos', 'PSICO\recpsicocatalogosController');
+Route::get('recpsicocatalogosguia/{num_catalogo}', ['as' => 'PSICO.recpsicocatalogos', 'uses' => 'PSICO\recpsicocatalogosController@tablaCatalogoGuia']);
 
 
 

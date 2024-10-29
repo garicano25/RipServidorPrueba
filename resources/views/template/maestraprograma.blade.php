@@ -428,6 +428,33 @@
         <script src="/js_sitio/reconocimiento_sensorial.js"></script>
     @endif
 
+
+    @if(request()->is('reconocimientoPsicosocial'))
+    <!-- form_wizard_steps -->
+        <script src="/assets/plugins/form_wizard_steps_bootstrap/form_wizard_script2.js"></script>
+        <script src="/assets/plugins/form_wizard_steps_bootstrap/form_wizard_script3.js"></script>
+        {{-- datatable --}}
+        <script src="/assets/plugins/datatables/jquery.dataTables.min.js"></script>
+        <script src="/assets/plugins/datatables/dataTables.rowsGroup.js"></script>
+        <!-- jQuery file upload -->
+        <script src="/js/jasny-bootstrap.js"></script>
+        <script src="/assets/plugins/dropify/dist/js/dropify.min.js"></script>
+        <script src="/assets/plugins/sticky-kit-master/dist/sticky-kit.min.js"></script>
+        <script src="/assets/plugins/sparkline/jquery.sparkline.min.js"></script>
+        <script src="js/custom.min.js"></script>
+        {{-- Select search filter --}}
+        <script src="/assets/plugins/select-search/selectize.js" type="text/javascript"></script>
+        {{-- pagina --}}
+        <script src="/js_sitio/reconocimientoPsico.js"></script>
+        <!-- Incluye jQuery -->
+        <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+        <!-- Incluye jQuery UI (para el autocompletado) -->
+        <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.min.js"></script>
+        <link rel="stylesheet" href="https://code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+
+    @endif
+
     @if(request()->is('recsensorialcatalogos'))
         {{-- datatable --}}
         <script src="/assets/plugins/datatables/jquery.dataTables.min.js"></script>
