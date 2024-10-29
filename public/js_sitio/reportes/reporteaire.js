@@ -746,27 +746,21 @@ $("#botonguardar_reporte_evaluaraire").click(function(event) {
 
 
 function aplicarConfiguracionCheckbox(idCheckbox, elementos, idReadonlyInputs, idDisabledInput, menureporte, estado) {
-    // Configurar el checkbox según el estado inicial
     $(idCheckbox).prop('checked', estado === 1);
 
-    // Función para manejar el estado de los elementos y inputs
     function actualizarEstadoCheckbox(estadoActivo) {
         if (estadoActivo) {
-            // Mostrar elementos
             elementos.forEach(function(elemento) {
                 $(elemento.id).css('display', elemento.display);
             });
-            // Habilitar inputs readonly y el input específico con disabled
             $(idReadonlyInputs).prop('readonly', false).prop('required', true);
             $(idDisabledInput).prop('disabled', false).prop('required', true);
 
-            menureporte_estado(menureporte, 0); // Activado
+            // menureporte_estado(menureporte, 0); // Activado
         } else {
-            // Ocultar elementos
             elementos.forEach(function(elemento) {
                 $(elemento.id).css('display', 'none');
             });
-            // Deshabilitar inputs readonly y el input específico con disabled
             $(idReadonlyInputs).prop('readonly', true).prop('required', false);
             $(idDisabledInput).prop('disabled', true).prop('required', false);
 
@@ -774,10 +768,8 @@ function aplicarConfiguracionCheckbox(idCheckbox, elementos, idReadonlyInputs, i
         }
     }
 
-    // Aplicar la configuración inicial
     actualizarEstadoCheckbox(estado === 1);
 
-    // Manejar el cambio en tiempo real cuando se marca o desmarca el checkbox
     $(idCheckbox).change(function() {
         const isChecked = $(this).is(':checked');
         actualizarEstadoCheckbox(isChecked ? 1 : 0);
@@ -792,7 +784,7 @@ function inicializarCheckboxes() {
             {id: '#BIOAEROSOLES_AIRE_3', display: 'inline-block'}
         ],
         '#reporteaireevaluacion_ct, #reporteaireevaluacion_ctma, #reporteaireevaluacion_hongos, #reporteaireevaluacion_levaduras',
-        '', // Sin inputs disabled
+        '', 
         'menureporte_7_1',
         $('#bioaerosoles').is(':checked') ? 1 : 0
     );
@@ -804,8 +796,8 @@ function inicializarCheckboxes() {
             {id: '#VELOCIDAD_AIRE_2', display: 'table-row'},
             {id: '#VELOCIDAD_AIRE_3', display: 'inline-block'}
         ],
-        '#reporteaireevaluacion_velocidad', // Inputs readonly
-        '#reporteaireevaluacion_velocidadlimite', // Input specific for disabled
+        '#reporteaireevaluacion_velocidad', 
+        '#reporteaireevaluacion_velocidadlimite', 
         'menureporte_7_3',
         $('#velocidad').is(':checked') ? 1 : 0
     );
@@ -818,7 +810,7 @@ function inicializarCheckboxes() {
             {id: '#CO_AIRE_3', display: 'inline-block'}
         ],
         '#reporteaireevaluacion_co',
-        '', // Sin inputs disabled
+        '', 
         'menureporte_7_5',
         $('#co').is(':checked') ? 1 : 0
     );
@@ -831,7 +823,7 @@ function inicializarCheckboxes() {
             {id: '#CO2_AIRE_3', display: 'inline-block'}
         ],
         '#reporteaireevaluacion_co2',
-        '', // Sin inputs disabled
+        '', 
         'menureporte_7_6',
         $('#co2').is(':checked') ? 1 : 0
     );
@@ -844,7 +836,7 @@ function inicializarCheckboxes() {
             {id: '#TEM_AIRE_3', display: 'inline-block'}
         ],
         '#reporteaireevaluacion_temperatura',
-        '', // Sin inputs disabled
+        '', 
         'menureporte_7_2',
         $('#temperatura').is(':checked') ? 1 : 0
     );
@@ -857,7 +849,7 @@ function inicializarCheckboxes() {
             {id: '#HUMEDAD_AIRE_3', display: 'inline-block'}
         ],
         '#reporteaireevaluacion_humedad',
-        '', // Sin inputs disabled
+        '', 
         'menureporte_7_4',
         $('#humedad').is(':checked') ? 1 : 0
     );
@@ -870,7 +862,7 @@ function inicializarCheckboxes() {
             {id: '#SO2_AIRE_3', display: 'inline-block'}
         ],
         '#reporteaireevaluacion_so2',
-        '', // Sin inputs disabled
+        '', 
         'menureporte_7_7',
         $('#SO2').is(':checked') ? 1 : 0
     );
@@ -888,7 +880,6 @@ function obtenerCaracteristica() {
             if (response.status === 'success') {
                 var caracteristicas = response.caracteristicas;
 
-                // Aplicar configuración basada en los datos obtenidos
                 aplicarConfiguracionCheckbox(
                     '#bioaerosoles',
                     [
@@ -896,7 +887,7 @@ function obtenerCaracteristica() {
                         {id: '#BIOAEROSOLES_AIRE_3', display: 'inline-block'}
                     ],
                     '#reporteaireevaluacion_ct, #reporteaireevaluacion_ctma, #reporteaireevaluacion_hongos, #reporteaireevaluacion_levaduras',
-                    '', // Sin inputs disabled
+                    '', 
                     'menureporte_7_1',
                     caracteristicas.bioaerosoles || 0
                 );
@@ -922,7 +913,7 @@ function obtenerCaracteristica() {
                         {id: '#CO_AIRE_3', display: 'inline-block'}
                     ],
                     '#reporteaireevaluacion_co',
-                    '', // Sin inputs disabled
+                    '', 
                     'menureporte_7_5',
                     caracteristicas.co || 0
                 );
@@ -935,7 +926,7 @@ function obtenerCaracteristica() {
                         {id: '#CO2_AIRE_3', display: 'inline-block'}
                     ],
                     '#reporteaireevaluacion_co2',
-                    '', // Sin inputs disabled
+                    '', 
                     'menureporte_7_6',
                     caracteristicas.co2 || 0
                 );
@@ -948,7 +939,7 @@ function obtenerCaracteristica() {
                         {id: '#TEM_AIRE_3', display: 'inline-block'}
                     ],
                     '#reporteaireevaluacion_temperatura',
-                    '', // Sin inputs disabled
+                    '', 
                     'menureporte_7_2',
                     caracteristicas.temperatura || 0
                 );
@@ -961,7 +952,7 @@ function obtenerCaracteristica() {
                         {id: '#HUMEDAD_AIRE_3', display: 'inline-block'}
                     ],
                     '#reporteaireevaluacion_humedad',
-                    '', // Sin inputs disabled
+                    '', 
                     'menureporte_7_4',
                     caracteristicas.humedad || 0
                 );
@@ -974,12 +965,11 @@ function obtenerCaracteristica() {
                         {id: '#SO2_AIRE_3', display: 'inline-block'}
                     ],
                     '#reporteaireevaluacion_so2',
-                    '', // Sin inputs disabled
+                    '', 
                     'menureporte_7_7',
                     caracteristicas.SO2 || 0
                 );
 
-                // Actualizar solo el valor de caudal y Formaldehídos
                 $('#caudal').prop('checked', caracteristicas.caudal === 1);
                 $('#Formaldehídos').prop('checked', caracteristicas.Formaldehídos === 1);
 
@@ -991,13 +981,12 @@ function obtenerCaracteristica() {
             }
         },
         error: function() {
-            // No se muestra ningún mensaje en caso de error
         }
     });
 }
 
 $(document).ready(function() {
-    inicializarCheckboxes(); // Para inicializar en caso de "nuevo"
+    inicializarCheckboxes(); 
 });
 
 
