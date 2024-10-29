@@ -365,7 +365,6 @@ $('#tabla_programa_trabajo tbody').on('click', 'td>button.mostrar', function()
 
     //DIV NOMBRE DEL PROYECTO
     $('.div_programa_proyecto').html(row.data().FOLIO);
-    $('.div_programa_reconocimiento').html(row.data().RECONOCIMIENTO_VINCULADO);
 
     proyecto_id = row.data().ID_PROYECTO
 
