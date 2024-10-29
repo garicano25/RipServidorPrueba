@@ -38,21 +38,13 @@ class proyectotrabajadoresController extends Controller
             $numero_registros = 0;
             $filas = '';
 
-                // $trabajadoresLista = DB::select('SELECT
-                //                                     ID_RECOPSICOTRABAJADOR,
-                //                                     RECPSICOTRABAJADOR_NOMBRE,
-                //                                     RECPSICOTRABAJADOR_MUESTRA,
-                //                                     RECPSICOTRABAJADOR_SELECCIONADO,
-                //                                     RECPSICOTRABAJADOR_OBSERVACION,
-                //                                     RECPSICOTRABAJADOR_MODALIDAD
-                //                                 FROM
-                //                                     recopsicotrabajadores
-                //                                 WHERE
-                //                                     RECPSICO_ID = ' . $RECPSICO_ID . ' AND
-                //                                     RECPSICOTRABAJADOR_MUESTRA = 1
-                //                                 ');
+                //si ya hay datos guardados en programa de trabajo
+                $exists = DB::table('proyectotrabajadores')
+                ->where('proyecto_id', $proyecto_id)
+                ->exists();
 
 
+            if ($exists) {
                 $trabajadoresLista = DB::select('SELECT 
                                                 TRABAJADOR_ID,
                                                 TRABAJADOR_NOMBRE,
@@ -82,7 +74,21 @@ class proyectotrabajadoresController extends Controller
                                                     FROM proyectotrabajadores 
                                                     WHERE proyecto_id = ' . $proyecto_id . '
                                                 )');
-
+            } else {
+                
+                $trabajadoresLista = DB::select('SELECT
+                                                    ID_RECOPSICOTRABAJADOR AS TRABAJADOR_ID,
+                                                    RECPSICOTRABAJADOR_NOMBRE AS TRABAJADOR_NOMBRE,
+                                                    RECPSICOTRABAJADOR_SELECCIONADO AS TRABAJADOR_SELECCIONADO,
+                                                    RECPSICOTRABAJADOR_OBSERVACION AS TRABAJADOR_OBSERVACION,
+                                                    RECPSICOTRABAJADOR_MODALIDAD AS TRABAJADOR_MODALIDAD
+                                                FROM
+                                                    recopsicotrabajadores
+                                                WHERE
+                                                    RECPSICO_ID = ' . $RECPSICO_ID . ' AND
+                                                    RECPSICOTRABAJADOR_MUESTRA = 1
+                                                ');
+            }
 
                 foreach ($trabajadoresLista as $key => $value) {
                     $lista = '';
