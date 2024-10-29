@@ -13,19 +13,19 @@
 
     @if ($dias == 0)
 
-        <p>La prueba es individual, confidencial y solo tiene el dia de  hoy para realizarla. </p>
-   
+    <p>La prueba es individual, confidencial y solo tiene el dia de hoy para realizarla. </p>
+
     @else
-    
-        <p>La prueba es individual, confidencial y a partir de la fecha cuenta con {{ $dias }} días para realizarla. </p>
-    
+
+    <p>La prueba es individual, confidencial y a partir de la fecha cuenta con {{ $dias }} días para realizarla. </p>
+
     @endif
 
     <p>En caso de cualquier inquietud o información adicional que requiera, por favor no dude en contactarnos al XXXXXXXXXXXXXX (nombre del psicólogo asignado???)</p>
     <p>Cordialmente,</p>
     <p>Coordinación de evaluación del FRP</p>
 
-    <a href="http://desarrolloti.results-in-performance.com/Guia/{{ $guia1 }}/{{ $guia2 }}/{{ $guia3 }}/{{ $id }}">Responder cuestionario aquí</a>
+    <a href="https://sehilab-prueba.results-in-performance.com/Guia/{{ $guia1 }}/{{ $guia2 }}/{{ $guia3 }}/{{ $id }}">Responder cuestionario aquí</a>
 
 </body>
 
