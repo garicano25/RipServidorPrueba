@@ -91,7 +91,6 @@
                                     <th width="600">Intalación / Dirrección</th>
                                     <th>Fecha inicio</th>
                                     <th>Fecha fin</th>
-                                    <th>Reconocimiento vinculado</th>
                                     <th width="60">Mostrar</th>
                                 </tr>
                             </thead>

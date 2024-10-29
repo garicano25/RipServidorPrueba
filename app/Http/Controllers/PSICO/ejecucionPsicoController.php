@@ -220,8 +220,8 @@ class ejecucionPsicoController extends Controller
                     DB::table('seguimientotrabajadores')->insert([
                         'TRABAJADOR_ID' => $dato['trabajadorId'],
                         'proyecto_id' => $proyecto_id,
-                        'TRABAJADOR_FECHAINICIO' => $dato['fechaInicio'],
-                        'TRABAJADOR_FECHAFIN' => $dato['fechaFin'],
+                        'TRABAJADOR_FECHAINICIO' => $request->fechaInicio,
+                        'TRABAJADOR_FECHAFIN' => $request->fechaFin,
                         'TRABAJADOR_ESTADOCORREO' => $dato['estadoCorreo'],
                         'TRABAJADOR_ESTADOCONTESTADO' => $dato['estadoContestados']
                     ]);
