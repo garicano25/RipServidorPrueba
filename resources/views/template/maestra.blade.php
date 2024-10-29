@@ -702,7 +702,7 @@ use Illuminate\Support\Str;
     <script src="https://cdn.jsdelivr.net/npm/@fullcalendar/multimonth@6.1.15/index.global.min.js"></script>
 
     {{-- JS pagina --}}
-    <script src="/js_sitio/cliente.js?v=2.0"></script>
+    <script src="/js_sitio/cliente.js?v=7.0"></script>
     @endif
 
     @if(request()->is('proveedor'))
@@ -961,7 +961,7 @@ use Illuminate\Support\Str;
     <script src='https://cdn.jsdelivr.net/npm/fullcalendar@6.1.15/index.global.min.js'></script>
     <script src="https://cdn.jsdelivr.net/npm/@fullcalendar/multimonth@6.1.15/index.global.min.js"></script>
     {{-- pagina --}}
-    <script src="/js_sitio/proyecto.js?v=2.0"></script>
+    <script src="/js_sitio/proyecto.js?v=6.0"></script>
     @endif
 
 

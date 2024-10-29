@@ -84,12 +84,33 @@ class ejecucionPsicoController extends Controller
             $count += 1;
 
             $value->COUNT = $count;
-            $value->TRABAJADOR_ESTADOCORREO = $value->ESTADOCORREO;
+
+            if($value->ESTADOCORREO == 'Sin enviar'){
+                $value->TRABAJADOR_ESTADOCORREO = '<span class="badge badge-pill badge-danger" style="font-size: 12px">'. $value->ESTADOCORREO .'</span>';
+            }else{
+                $value->TRABAJADOR_ESTADOCORREO = '<span class="badge badge-pill badge-success" style="font-size: 12px">'. $value->ESTADOCORREO .'</span>';
+                    
+            }
+            
             $value->FECHAINICIO = $value->FECHAINICIO;
             $value->FECHAFIN = $value->FECHAFIN;
             $value->TRABAJADOR_ID = $value->TRABAJADOR_ID;
             $value->TRABAJADOR_NOMBRE = $value->TRABAJADOR_NOMBRE;
-            $value->TRABAJADOR_ESTADOCONTESTADO = $value->ESTADOCONTESTADO;
+
+
+            if ($value->ESTADOCONTESTADO == 'Sin iniciar') {
+                $value->TRABAJADOR_ESTADOCONTESTADO = '<span class="badge badge-pill badge-danger" style="font-size: 12px">' . $value->ESTADOCONTESTADO . '</span>';
+            
+            } else if ($value->ESTADOCONTESTADO == 'En proceso'){
+
+                $value->TRABAJADOR_ESTADOCONTESTADO = '<span class="badge badge-pill badge-warning" style="font-size: 12px">' . $value->ESTADOCONTESTADO . '</span>';
+            
+            }else{
+                $value->TRABAJADOR_ESTADOCONTESTADO = '<span class="badge badge-pill badge-success" style="font-size: 12px">' . $value->ESTADOCONTESTADO . '</span>';
+            }
+            
+
+
             $value->boton_enviarCorreo = '<button type="button" class="btn btn-warning btn-circle enviarcorreo" id="enviarCorreoTrabajador'.$count.'" name="enviarCorreoTrabajador" onclick="enviarCorreo('.$value->TRABAJADOR_ID.', '.$value->RECPSICO_ID.')" style="padding: 0px;"><i class="fa fa-paper-plane "></i></button>';
             }
         }else{
@@ -104,7 +125,7 @@ class ejecucionPsicoController extends Controller
                 $count += 1;
 
                 $value->COUNT = $count;
-                $value->TRABAJADOR_ESTADOCORREO = 'Sin enviar';
+                $value->TRABAJADOR_ESTADOCORREO = '<span class="badge badge-pill badge-danger">Sin enviar</span>';
                 $value->FECHAINICIO = '';
                 $value->FECHAFIN = '';
                 $value->TRABAJADOR_ID = $value->TRABAJADOR_ID;
@@ -131,8 +152,10 @@ class ejecucionPsicoController extends Controller
     public function tablaTrabajadoresPresencial($proyecto_id)
     {
         $tablaPresencial = DB::select('SELECT p.TRABAJADOR_NOMBRE NOMBRE
-                            FROM proyectotrabajadores p
-                            WHERE p.TRABAJADOR_SELECCIONADO = 1 AND p.TRABAJADOR_MODALIDAD = "Presencial" AND p.proyecto_id = ' . $proyecto_id . '');
+                                        FROM proyectotrabajadores p
+                                        WHERE p.TRABAJADOR_SELECCIONADO = 1 
+                                        AND p.TRABAJADOR_MODALIDAD = "Presencial" 
+                                        AND p.proyecto_id = ' . $proyecto_id . '');
 
 
         $count = 0;
@@ -140,8 +163,8 @@ class ejecucionPsicoController extends Controller
             $count += 1;
 
             $value->COUNT = $count;
-            $value->FECHAAPLICACION = '2024-10-24';
-            $value->ESTADOCUESTIONARIO = 'Pendiente';
+            $value->FECHAAPLICACION = '';
+            $value->ESTADOCUESTIONARIO = 'En proceso';
         }
 
         $online['data']  = $tablaPresencial;
@@ -252,7 +275,7 @@ class ejecucionPsicoController extends Controller
                                             t.RECPSICOTRABAJADOR_CORREO,
                                             s.TRABAJADOR_FECHAINICIO,
                                             s.TRABAJADOR_FECHAFIN,
-                                            IF(s.TRABAJADOR_FECHAINICIO = s.TRABAJADOR_FECHAFIN , 0 ,DATEDIFF(s.TRABAJADOR_FECHAINICIO, s.TRABAJADOR_FECHAFIN)) AS DIAS
+                                            IF(s.TRABAJADOR_FECHAINICIO = s.TRABAJADOR_FECHAFIN , 0 ,DATEDIFF(s.TRABAJADOR_FECHAFIN, s.TRABAJADOR_FECHAINICIO)) AS DIAS
                                 FROM recopsicotrabajadores t
                                 LEFT JOIN seguimientotrabajadores s ON s.TRABAJADOR_ID = t.ID_RECOPSICOTRABAJADOR
                                 WHERE t.ID_RECOPSICOTRABAJADOR = ?', [$idPersonal]);

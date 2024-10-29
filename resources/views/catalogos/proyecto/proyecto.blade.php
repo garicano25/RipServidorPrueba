@@ -2013,20 +2013,15 @@
                         <div class="col-6">
                             <div class="form-group">
                                 <label>Fecha Inicio *</label>
-                                <div class="input-group">
-                                    <input type="text" class="form-control mydatepicker" placeholder="aaaa-mm-dd" id="FECHA_INICIO_ACTIVIDAD" name="FECHA_INICIO_ACTIVIDAD" required>
-                                    <span class="input-group-addon"><i class="icon-calender"></i></span>
-                                </div>
+                                <input type="datetime-local" class="form-control" id="FECHA_INICIO_ACTIVIDAD" name="FECHA_INICIO_ACTIVIDAD" required>
                             </div>
                         </div>
 
                         <div class="col-6">
                             <div class="form-group">
                                 <label>Fecha Fin *</label>
-                                <div class="input-group">
-                                    <input type="text" class="form-control mydatepicker" placeholder="aaaa-mm-dd" id="FECHA_FIN_ACTIVIDAD" name="FECHA_FIN_ACTIVIDAD" required>
-                                    <span class="input-group-addon"><i class="icon-calender"></i></span>
-                                </div>
+                                <input type="datetime-local" class="form-control" id="FECHA_FIN_ACTIVIDAD" name="FECHA_FIN_ACTIVIDAD" required>
+
                             </div>
                         </div>
 

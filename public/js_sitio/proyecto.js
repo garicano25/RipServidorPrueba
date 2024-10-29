@@ -11352,8 +11352,8 @@ function mostrarActividadesCronograma() {
             //Generamos los eventos del cronograma
             eventos = datoInfo.map(actividad => ({
                 title: actividad.DESCRIPCION_ACTIVIDAD, 
-                start: `${actividad.FECHA_INICIO_ACTIVIDAD}T00:00:00`,  
-                end: `${actividad.FECHA_FIN_ACTIVIDAD}T17:00:00`, 
+                start: `${actividad.FECHA_INICIO_ACTIVIDAD}`,  
+                end: `${actividad.FECHA_FIN_ACTIVIDAD}`, 
                 backgroundColor: actividad.COLOR_ACTIVIDAD,  
                 borderColor: '#FFFFFF',
                 extendedProps: {ID_ACTIVIDAD: actividad.ID_ACTIVIDAD} //Pasamos atributos adicionales
@@ -11451,7 +11451,7 @@ function inicializarCalendario(eventos) {
             week: 'Semana',
             day: 'Día'
         },
-        displayEventTime: false,
+        displayEventTime: true,
         initialView: 'dayGridMonth',
         events: eventos,
         dateClick: function (info) { //Evento cuando le damos click a una fecha en especifico

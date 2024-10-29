@@ -175,7 +175,7 @@ class recopsiconormativaController extends Controller
                                         'RECPSICOTRABAJADOR_AREA' => null,
                                         'RECPSICOTRABAJADOR_CATEGORIA' => null,
                                         'RECPSICOTRABAJADOR_FICHA' => is_null($rowData['F']) ? null : $rowData['F'],
-                                        'RECPSICOTRABAJADOR_CORREO' => is_null($rowData['G']) ? null : $rowData['G'],
+                                        'RECPSICOTRABAJADOR_CORREO' => is_null($rowData['G']) ? null : str_replace(' ', '', $rowData['G']),
                                         'RECPSICOTRABAJADOR_SELECCIONADO' => null,
                                         'RECPSICOTRABAJADOR_OBSERVACION' => null,
                                         'RECPSICOTRABAJADOR_MODALIDAD' => null
