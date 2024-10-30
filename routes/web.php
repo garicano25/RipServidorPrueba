@@ -1749,6 +1749,21 @@ Route::get('reportebeiconcluirrevision/{reporte_id}', ['as' => 'reportebei.repor
 Route::get('reportebeiworddescargar/{proyecto_id}/{revision_id}/{ultima_revision}', ['as' => 'reportebei.reportebeiworddescargar', 'uses' => 'reportes\reporteBeiWordController@reportebeiworddescargar']);
 
 Route::post('reportebeiword', ['as' => 'reportebei.reportebeiword', 'uses' => 'reportes\reporteBeiWordController@reportebeiword']);
+
+
+//==============================================
+
+
+Route::resource('reportealimentos', 'reportes\reportealimentosController');
+
+Route::get('reportealimentosvista/{proyecto_id}', ['as' => 'reportealimentos.reportealimentosvista', 'uses' => 'reportes\reportealimentosController@reportealimentosvista']);
+
+Route::get('reportealimentosdatosgenerales/{proyecto_id}/{agente_id}/{agente_nombre}', ['as' => 'reportealimentos.reportealimentosdatosgenerales', 'uses' => 'reportes\reportealimentosController@reportealimentosdatosgenerales']);
+
+
+
+
+
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 //////////////////////////////////////////////////EXTERNO////////////////////////////////////////////////////
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////

@@ -190,7 +190,7 @@ var proyecto_id =  $('#informes_reco').val();
 					$('#estructura_reporte').load('/reportehielovista/'+proyecto_id);
 					break;
 				case 11:
-					$('#estructura_reporte').html('<p style="text-align: center; font-size: 24px;">Reporte no disponible</p>');
+					$('#estructura_reporte').load('/reportealimentosvista/'+proyecto_id);
 					break;
 				case 12:
 					$('#estructura_reporte').html('<p style="text-align: center; font-size: 24px;">Reporte no disponible</p>');
