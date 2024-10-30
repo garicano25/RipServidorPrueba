@@ -2463,7 +2463,7 @@
                             </div>
                             <div id="pregunta2_3" class="mt-4" style="display: flex; justify-content: space-between; align-items: center; width: 100%; margin-bottom: 10px;">
                                 <p style="margin: 0; flex: 1;"><i class="fa fa-info-circle" id="Exp3_2"   data-toggle="tooltip" title=""></i>
-                                    2. Mi trabajo me exige hacer muchos <br> esfuerzo físico
+                                    2. Mi trabajo me exige hacer mucho <br> esfuerzo físico
                                 </p>
                                 <div style="display: flex; align-items: center; gap: 20px;">
                                     <div>
@@ -3740,7 +3740,7 @@
                                 <hr>
                                 <p style="margin: 0; flex: 1; font-style: italic;"><i class="fa fa-info-circle"   data-toggle="tooltip" title=""></i>
                                     Las preguntas siguientes están relacionadas con la información que recibe sobre su rendimiento en el trabajo, el reconocimiento, el sentido
-                                    de pertenencia y la estabilidad que el ofrece su trabajo.</p>
+                                    de pertenencia y la estabilidad que le ofrece su trabajo.</p>
                             </div>
                             <div id="pregunta47_3" class="mt-5" style="display: flex; justify-content: space-between; align-items: center; width: 100%; margin-bottom: 10px;">
                                 <p style="margin: 0; flex: 1;"><i class="fa fa-info-circle" id="Exp3_47"   data-toggle="tooltip" title=""></i>
@@ -4022,7 +4022,7 @@
                             <div class="mt-5">
                                 <hr>
                                 <p style="margin: 0; flex: 1; font-style: italic;"><i class="fa fa-info-circle"   data-toggle="tooltip" title=""></i>
-                                    Las personas siguientes están relacionados con actos de violencia laboral (malos tratos, acoso,
+                                    Las preguntas siguientes están relacionados con actos de violencia laboral (malos tratos, acoso,
                                     hostigamiento, acoso psicológico).</p>
                             </div>
                             <div id="pregunta57_3" class="mt-5" style="display: flex; justify-content: space-between; align-items: center; width: 100%; margin-bottom: 10px;">
