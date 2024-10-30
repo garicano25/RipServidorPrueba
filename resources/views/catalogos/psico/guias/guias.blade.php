@@ -4508,28 +4508,28 @@
             </div>
         </div>
 
-        <div id="col-datos" class="col-3 mt-3">
+        <div id="col-datos" class="col-3">
             <div id="datos" class="datos">
                 <div class="info-section text-center">
                     <i class="fa fa-info-circle fa-2x mb-1"></i>
                     <p style="font-style: italic;"><strong>Presione el icono para obtener una explicación detallada</strong></p>
                 </div>
               
-                <h4><i class="fa fa-user"></i>Datos Generales</h4>
+                <h5><i class="fa fa-user"></i>Datos Generales</h5>
                 <div class="info-section">
                     <p><strong><i class="fa fa-id-card"></i> Nombre del trabajador:</strong><span id="nombre-trabajador"></span></p>
                     <p><strong><i class="fa fa-venus-mars"></i> Sexo:</strong><span id="genero-trabajador"></span></p>
                     <p><strong><i class="fa fa-envelope"></i> Correo:</strong><span id="correo-trabajador"></span></p>
                 </div>
              
-                <h4><i class="fa fa-user-md"></i> Psicólogo</h4>
+                <h5><i class="fa fa-user-md"></i> Psicólogo</h5>
                 <div class="info-section">
                     <p><strong><i class="fa fa-user"></i> Nombre del Psicólogo:</strong><span id="nombre-psicologo"></span></p>
                     <p><strong><i class="fa fa-phone"></i> Número de teléfono:</strong><span id="telefono-psicologo"></span></p>
                     <p><strong><i class="fa fa-clock-o"></i> Horario de atención:</strong><span id="horario-psicologo"></span></p>
                 </div>
               
-                <h4><i class="fa fa-user-md"></i> Empresa</h4>
+                <h5><i class="fa fa-user-md"></i> Empresa</h5>
                 <div class="info-section">
                     <p><strong><i class="fa fa-building"></i> Nombre de la empresa:</strong><span id="nombre-empresa">Results In Performance</span></p>
                     <p><strong><i class="fa fa-phone"></i> Número de teléfono:</strong><span id="telefono-empresa"> +52 993 14 72 682</span></p>
