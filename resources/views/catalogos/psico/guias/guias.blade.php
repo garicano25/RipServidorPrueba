@@ -383,18 +383,18 @@
 
 
         h5{
-            font-size: 20px;
-            margin-bottom: 20px;
+            font-size: 15px;
+            margin-bottom: 10px;
             color: #333;
         }
 
         .info-section p {
-            font-size: 14px;
+            font-size: 10px;
             margin: 10px 0;
         }
 
         .info-section strong {
-            font-size: 15px;
+            font-size: 10px;
             display: flex;
             align-items: center;
         }
@@ -402,7 +402,7 @@
         .info-section span {
             display: block;
             margin-top: 5px;
-            font-size: 14px;
+            font-size: 10px;
         }
 
         .info-section i {
