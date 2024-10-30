@@ -12,7 +12,7 @@ use App\modelos\reconocimientopsico\recopsicotrabajadoresModel;
 use App\modelos\reconocimientopsico\recopsicoguia5Model;
 use App\modelos\reconocimientopsico\seguimientotrabajadoresModel;
 use App\modelos\reconocimientopsico\respuestastrabajadorespsicoModel;
-
+use App\modelos\reconocimientopsico\recopsicoproyectotrabajadoresModel;
 
 //use DB;
 //Re//cursos para abrir el Excel
@@ -93,7 +93,10 @@ class recopsiconormativaController extends Controller
                 if ($excelTrabajadoresExists) {
                     recopsicotrabajadoresModel::where('RECPSICO_ID', $RECPSICO_ID)->delete();
                     recopsicoguia5Model::where('RECPSICO_ID', $RECPSICO_ID)->delete();
-                    recopsicoguia5Model::where('RECPSICO_ID', $RECPSICO_ID)->delete();
+                    respuestastrabajadorespsicoModel::where('RECPSICO_ID', $RECPSICO_ID)->delete();
+                    //seguimientotrabajadoresModel::where('RECPSICO_ID', $RECPSICO_ID)->delete(); esat es con proyecto id
+                    recopsicoproyectotrabajadoresModel::where('RECPSICO_ID', $RECPSICO_ID)->delete();
+                    //proyectotrabajadoresModel::where('RECPSICO_ID', $RECPSICO_ID)->delete(); es copn proyecto id
                 }
         
                 try {
