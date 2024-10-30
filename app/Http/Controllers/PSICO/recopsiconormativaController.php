@@ -6,9 +6,13 @@ use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\modelos\reconocimientopsico\reconocimientopsicoModel;
 use App\modelos\reconocimientopsico\recopsiconormativaModel;
+use App\modelos\reconocimientopsico\guiavnormativapsicoModel;
+
 use App\modelos\reconocimientopsico\recopsicotrabajadoresModel;
 use App\modelos\reconocimientopsico\recopsicoguia5Model;
-use App\modelos\reconocimientopsico\guiavnormativapsicoModel;
+use App\modelos\reconocimientopsico\seguimientotrabajadoresModel;
+use App\modelos\reconocimientopsico\respuestastrabajadorespsicoModel;
+
 
 //use DB;
 //Re//cursos para abrir el Excel
@@ -89,6 +93,7 @@ class recopsiconormativaController extends Controller
                 if ($excelTrabajadoresExists) {
                     recopsicotrabajadoresModel::where('RECPSICO_ID', $RECPSICO_ID)->delete();
                     recopsicoguia5Model::where('RECPSICO_ID', $RECPSICO_ID)->delete();
+                    recopsicoguia5Model::where('RECPSICO_ID', $RECPSICO_ID)->delete();
                 }
         
                 try {
@@ -163,8 +168,6 @@ class recopsiconormativaController extends Controller
                                
                                 //Limpiamos, Validamos y Insertamos todos los datos del Excel
                                 foreach ($datosGenerales as $rowData) {
-
-                                    
 
                                     $TRABAJADOR = recopsicotrabajadoresModel::create([
                                         'RECPSICO_ID' => $RECPSICO_ID,

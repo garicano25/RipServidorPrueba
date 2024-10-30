@@ -242,50 +242,91 @@ function submitGuia1y3() {
       /* Read more about isConfirmed, isDenied below */
       if (result.isConfirmed) {
         swal.close();
-      
-        $.ajax({
-            url: '/guardarGuiasPsico',
-            type: 'POST',
-            data: form1Data,
-            processData: false,
-            contentType: false,
-            success: function(response) {
-                console.log('Guia 1 enviada:', response);
-            },
-            beforeSend: function () {
-                $('#guardar_guia3').html('Guardando <i class="fa fa-spin fa-spinner"></i>');
-            },
-            error: function(jqXHR, textStatus, errorThrown) {
-                console.error('Error en Guia 1:', textStatus, errorThrown);
-                $('#guardar_guia3').html('Guardar <i class="fa fa-save"></i>');
-            }
+        
+        // Validar y enviar guia_1
+        var form1 = document.getElementById('guia_1');
+        const gruposPreguntas = form1.querySelectorAll('input[name^="GUIA1_"]');
+        var todasContestado = true;
+        var preguntaSinContestar = null;
+
+        gruposPreguntas.forEach(pregunta => {
+            const radios = form1.querySelectorAll(`input[name="${pregunta.name}"]`);
+            const isChecked = Array.from(radios).some(radio => radio.checked);
+
+            if (!isChecked) {
+                radios[0].setAttribute('required', 'required');
+                todasContestado = false; // Indicar que no todas están contestadas
+                preguntaSinContestar = radios[0]; // Guardar la primera pregunta sin contestar
+            } else {
+                radios.forEach(radio => {
+                    radio.removeAttribute('required'); // Quitar 'required' si hay respuesta
+                });
+            } 
         });
-
-        // Obtener los datos de la guia 2
-        var form2Data = new FormData(document.getElementById('guia_3'));
-        form2Data.append('option', 3);
-
-        $.ajax({
-            url: '/guardarGuiasPsico',
-            type: 'POST',
-            data: form2Data,
-            processData: false,
-            contentType: false,
-            success: function(response) {
-                console.log('Guia 3 enviada:', response);
-                Swal.fire("Guardado y envíado correctamente!", "Usted ha finalizado exitosamente. Ya puede cerrar esta ventana, gracias!", "success");
-                $('#guardar_guia3').html('Guardar <i class="fa fa-save"></i>');
-            },
-            beforeSend: function () {
-                $('#guardar_guia3').html('Guardando <i class="fa fa-spin fa-spinner"></i>');
-            },
-            error: function(jqXHR, textStatus, errorThrown) {
-                console.error('Error en Guia 3:', textStatus, errorThrown);
-                $('#guardar_guia3').html('Guardar <i class="fa fa-save"></i>');
-            }
-        });
-
-      } else if (result.isDenied) {
+        var form1Data = new FormData(form1);
+        var valida1 = form1.checkValidity();
+        
+        if (todasContestado && valida1) {
+            $('#guia5Modal').modal('show');
+            $.ajax({
+                url: '/guardarGuiasPsico',
+                type: 'POST',
+                data: form1Data,
+                processData: false,
+                contentType: false,
+                beforeSend: function () {
+                    $('#guardar_guia3').html('Guardando <i class="fa fa-spin fa-spinner"></i>');
+                },
+                success: function(response) {
+                    console.log('Guia 1 enviada:', response);
+                    
+                    // Después de enviar guia_1, validar y enviar guia_3
+                    var form2 = document.getElementById('guia_3');
+                    var form2Data = new FormData(form2);
+                    var valida2 = form2.checkValidity();
+                    
+                    if (valida2) {
+                        $.ajax({
+                            url: '/guardarGuiasPsico',
+                            type: 'POST',
+                            data: form2Data,
+                            processData: false,
+                            contentType: false,
+                            beforeSend: function () {
+                                $('#guardar_guia3').html('Guardando <i class="fa fa-spin fa-spinner"></i>');
+                            },
+                            success: function(response) {
+                                console.log('Guia 3 enviada:', response);
+                                Swal.fire("Guardado y enviado correctamente!", "Usted ha finalizado exitosamente. Ya puede cerrar esta ventana, gracias!", "success");
+                                $('#guardar_guia3').html('Guardar <i class="fa fa-save"></i>');
+                            },
+                            error: function(jqXHR, textStatus, errorThrown) {
+                                console.error('Error en Guia 3:', textStatus, errorThrown);
+                                $('#guardar_guia3').html('Guardar <i class="fa fa-save"></i>');
+                            }
+                        });
+                    } else {
+                        swal("Advertencia", "Por favor, completa todas las preguntas de la Guia 3 antes de enviar.", "warning");
+                    }
+                },
+                error: function(jqXHR, textStatus, errorThrown) {
+                    console.error('Error en Guia 1:', textStatus, errorThrown);
+                    $('#guardar_guia3').html('Guardar <i class="fa fa-save"></i>');
+                }
+            });
+        }else{
+            Swal.fire({
+                title: "Advertencia",
+                text: "Por favor, completa todas las preguntas de la Guia 1 antes de enviar.",
+                icon: "warning",
+                confirmButtonText: "Aceptar"
+            });
+    
+            // Enfocar la pregunta sin contestar
+            preguntaSinContestar.scrollIntoView({ behavior: "smooth", block: "center" });
+            preguntaSinContestar.focus();
+        } 
+    }else if (result.isDenied) {
         swal.close();
         $.ajax({
             url: '/guardarGuiasPsico',
@@ -330,16 +371,17 @@ function submitGuia1y3() {
         });
       }
     });
+    
 }
 
 function ejecucionCamara(){
     $('#avisoPermisosModal').modal('show');
     navigator.mediaDevices.getUserMedia({ video: true })
             .then(function (stream) {
-                $('#avisoPermisosModal').modal('hide');
                 console.log("Permiso de cámara concedido");
+                $('#avisoPermisosModal').modal('hide');
                 $('#fotoModal').modal('show');
-
+                
                 const tomarFotoBtn = document.getElementById("tomar-foto");
                 const imagenInput = document.getElementById("imagen");
 
@@ -354,31 +396,6 @@ function ejecucionCamara(){
                 const videoContainer = document.getElementById("video-container");
                 videoContainer.innerHTML = ''; // Limpia cualquier contenido previo
                 videoContainer.appendChild(video);
-
-                // Escucha el evento click del botón para capturar la imagen
-                // tomarFotoBtn.addEventListener("click", function() {
-                //     const canvas = document.createElement("canvas");
-                //     const context = canvas.getContext("2d");
-
-                //     // Configura el canvas con el mismo tamaño que el video
-                //     canvas.width = video.videoWidth;
-                //     canvas.height = video.videoHeight;
-
-                //     // Captura la imagen del video y la dibuja en el canvas
-                //     context.drawImage(video, 0, 0, canvas.width, canvas.height);
-
-                //     // Convierte el canvas a un archivo de imagen
-                //     canvas.toBlob(function(blob) {
-                //         const imagenFile = new File([blob], "foto.png", {
-                //             type: "image/png"
-                //         });
-                //         imagenInput.files = [imagenFile];
-                //         // Limpia el video y el canvas
-                //         stream.getVideoTracks()[0].stop();
-                //         video.remove();
-                //         canvas.remove();
-                //     }, "image/png");
-                // });
 
                 tomarFotoBtn.addEventListener("click", function() {
                     const canvas = document.createElement("canvas");
@@ -399,9 +416,9 @@ function ejecucionCamara(){
                         let csrfToken = $('input[name="_token"]').val();
                 
                         // Mostrar el spinner de carga dentro del modal
-                        $('#loadingSpinner').show();
+                        document.getElementById("loadingSpinner").style.display = "block";
+                        $('#divFoto').hide();
                         $('#tomar-foto').hide();
-                        $('#instruccionesFoto').hide();
                         $.ajax({
                             url: '/guardarFotoRecpsico',
                             type: 'POST',
@@ -413,7 +430,7 @@ function ejecucionCamara(){
                             },
                             success: function(response) {
                                 // Ocultar el spinner de carga
-                                $('#loadingSpinner').hide();
+                                // $('#loadingSpinner').hide();
                 
                                 if (response.mensaje) {
                                     $('#fotoModal').modal('hide');
@@ -432,7 +449,7 @@ function ejecucionCamara(){
                             },
                             error: function(xhr, status, error) {
                                 // Ocultar el spinner de carga
-                                $('#loadingSpinner').hide();
+                               // $('#loadingSpinner').hide();
                 
                                 Swal.fire({
                                     title: "Ocurrió un error",
@@ -661,9 +678,9 @@ function scrolldatos() {
     window.addEventListener('scroll', function() {
         const scrollTop = window.scrollY; 
         if (scrollTop > offsetTop - 100) {
-            datos.classList.remove('mt-5');
+            datos.classList.remove('mt-3');
         } else {
-            datos.classList.add('mt-5');
+            datos.classList.add('mt-3');
         }
     });
 }
@@ -793,5 +810,4 @@ function consultarRespuestasGuardadas() {
         }
     });
 }
-
 

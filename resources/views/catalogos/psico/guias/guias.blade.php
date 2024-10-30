@@ -64,7 +64,7 @@
         .header-container {
             width: 100%;
             padding: 1.5rem 2rem;
-            background: var(--azul-cielo);
+            background: var(--azul-oscuro);
             position: relative;
         }
 
@@ -113,7 +113,7 @@
         }
 
         /* Efectos y Decoraciones */
-        .main-title::after {
+        /* .main-title::after {
             content: '';
             display: block;
             width: 100px;
@@ -121,7 +121,7 @@
             background: var(--azul-oscuro);
             margin: 0.5rem auto 0;
             border-radius: 2px;
-        }
+        } */
 
         
         .row {
@@ -281,7 +281,7 @@
             box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
             background: white;
             position: sticky;
-            top: 4px;
+            top: 1px;
         }
 
         /* Ícono principal grande verde */
@@ -428,7 +428,7 @@
         }
 
         .modal-backdrop.show {
-            opacity: 0.85;
+            opacity: 1;
         }
 
         .modal-backdrop {
@@ -530,6 +530,24 @@
         .spinner-border {
             color: var(--azul-cielo);
         } */
+
+        .spinner-border {
+            display: inline-block;
+            width: 2rem;
+            height: 2rem;
+            vertical-align: text-bottom;
+            border: 0.25em solid currentColor;
+            color: var(--azul-cielo);
+            border-right-color: transparent;
+            border-radius: 50%;
+            animation: spinner-border 0.75s linear infinite;
+        }
+
+        @keyframes spinner-border {
+            100% {
+                transform: rotate(360deg);
+            }
+        }
 
         /* Íconos y Alertas */
         .fa-exclamation-triangle {
@@ -658,7 +676,7 @@
     <header class="header-container">
         <div class="header-content">
             <div class="logo-wrapper">
-                <img src="/assets/images/Logo_Color_results_original.png" alt="Results In Performance Logo">
+                <img src="/assets/images/logo-light.png" alt="Results In Performance Logo">
             </div>
             <div class="title-wrapper">
                 <h1 class="main-title">Results In Performance</h1>
@@ -4500,7 +4518,7 @@
                                 </div>
                             </div>
                         </div>
-                        <button type="button" class="btn btn-danger" id="guardar_guia3" onclick="validarGuia5()">
+                        <button type="button" class="btn btn-danger" id="guardar_guia3" onclick="submitGuia1y3()">
                             Guardar <i class="fa fa-save"></i>
                         </button>
                     </form>
@@ -4508,7 +4526,7 @@
             </div>
         </div>
 
-        <div id="col-datos" class="col-3">
+        <div id="col-datos" class="col-3 mt-3">
             <div id="datos" class="datos">
                 <div class="info-section text-center">
                     <i class="fa fa-info-circle fa-2x mb-1"></i>
@@ -4546,7 +4564,7 @@
             <div class="modal-content">
                 <div class="modal-header d-flex justify-content-between align-items-center">
                     <h5 class="modal-title" id="avisoPrivacidadModalLabel">Aviso de Privacidad y Permisos de Cámara</h5>
-                    <img src="/assets/images/Logo_Color_results_original.png" alt="Imagen de Privacidad" style="width: 220px;">
+                    <img src="/assets/images/logo-light.png" alt="Imagen de Privacidad" style="width: 150px;">
                 </div>
 
                 <div class="modal-body">
@@ -4569,6 +4587,7 @@
             <div class="modal-content">
                 <div class="modal-header">
                     <h5 class="modal-title" id="avisoPermisosModalLabel">Permiso requerido</h5>
+                    <img src="/assets/images/logo-light.png" alt="Imagen de Privacidad" style="width: 150px;">
                 </div>
                 <div class="modal-body">
                     <h6>Permiso de uso de cámara web requerido</h6>
@@ -4579,26 +4598,26 @@
             </div>
         </div>
     </div>
-    <div id="fotoModal" class="modal fade" tabindex="-1" role="dialog" data-backdrop="static" data-keyboard="false">
+    <div id="fotoModal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="fotoModalLabel" aria-hidden="true" data-backdrop="static" data-keyboard="false">
         <div class="modal-dialog">
             <div class="modal-content">
                 <div class="modal-body">
-                    <form id="form-foto" enctype="multipart/form-data">
-                        <!-- CSRF Token -->
-                        <input type="hidden" name="_token" value="{{ csrf_token() }}">
-                        <div id="instruccionesFoto" class="text-center">
-                            <p>Para continuar, mire fijamente a la cámara por unos segundos y cuando este listo presione el botón para capturar y guardar su foto</p>
-                        </div>
-                        <div id="video-container"></div>
-                        <input type="file" id="imagen" name="foto" style="display:none;">
-                    </form>
-
+                    <div id="divFoto">
+                        <form id="form-foto" enctype="multipart/form-data">
+                            <input type="hidden" name="_token" value="{{ csrf_token() }}">
+                            <div id="instruccionesFoto" class="text-center">
+                                <p>Para continuar, mire fijamente a la cámara por unos segundos y cuando este listo presione el botón para capturar y guardar su foto</p>
+                            </div>
+                            <div id="video-container"></div>
+                            <input type="file" id="imagen" name="foto" style="display:none;">
+                        </form>
+                    </div>
 
                     <!-- Spinner de carga -->
                     <div id="loadingSpinner" class="text-center" style="display: none;">
-                        <div class="spinner-border" role="status">
-                            <span class="sr-only">Cargando...</span>
-                        </div>
+                    <div class="spinner-border mb-3" role="status">
+                        <span class="sr-only">Loading...</span>
+                    </div>
                         <p>Guardando la foto, por favor espera...</p>
                     </div>
 
@@ -4614,7 +4633,7 @@
             <div class="modal-content">
                 <div class="modal-header d-flex justify-content-between align-items-center">
                     <h5 class="modal-title" id="instruccionesModalLabel">Instrucciones</h5>
-                    <img src="/assets/images/Logo_Color_results_original.png" alt="Imagen de Privacidad" style="width: 220px;">
+                    <img src="/assets/images/logo-light.png" alt="Imagen de Privacidad" style="width: 150px;">
                 </div>
 
                 <div class="modal-body">
@@ -4684,7 +4703,6 @@
                                 <option value="" disabled selected>Seleccione su sexo</option>
                                 <option value="masculino">Masculino</option>
                                 <option value="femenino">Femenino</option>
-                                <option value="otro">Otro</option>
                             </select>
                         </div>
 
@@ -4698,7 +4716,7 @@
                                 <option value="union_libre">Unión libre</option>
                                 <option value="divorciado">Divorciado/a</option>
                                 <option value="viudo">Viudo/a</option>
-                                <option value="NA">Prefiero no decirlo/a</option>
+                                <option value="NA">Prefiero no decirlo</option>
                             </select>
                         </div>
 
@@ -4798,8 +4816,8 @@
                         </div>
 
                         <!-- Botón de envío -->
-                        <div class="form-group">
-                            <button type="button" class="btn btn-primary" onclick="submitGuia1y3()">Enviar</button>
+                        <div class="form-group text-center">
+                            <button type="button" class="btn btn-success" onclick="submitGuia1y3()">Enviar</button>
                         </div>
                     </form>
                 </div>
