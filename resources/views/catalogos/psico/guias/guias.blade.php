@@ -382,9 +382,9 @@
         }
 
 
-        h4 {
+        h5{
             font-size: 20px;
-            margin-bottom: 20px;
+            margin-bottom: 10px;
             color: #333;
         }
 
