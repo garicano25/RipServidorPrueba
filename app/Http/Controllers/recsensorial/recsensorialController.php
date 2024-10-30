@@ -12,6 +12,10 @@ use DB;
 use Artisan;
 use Exception;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Auth;
+use ZipArchive;
+use App\Http\Controllers\recsensorialreportes\recsensorialquimicosreportewordController;
+
 
 // Modelos
 use App\modelos\recsensorial\recsensorialModel;
@@ -1309,14 +1313,15 @@ class recsensorialController extends Controller
                 // Botones
                 if (auth()->user()->hasRoles(['Superusuario', 'Administrador', 'Coordinador'])  && $value->AUTORIZADO == 0) {
 
-                    $value->boton_autorizar = '<button type="button" class="btn btn-success btn-circle AUTORIZAR"><i class="fa fa-gavel"></i></button>';
+                    $value->boton_descargar = '<button type="button" class="btn btn-success waves-effect btn-circle AUTORIZAR" id="botondescarga_revision"><i class="fa fa-download fa-1x"></i></button>';
+                    
+                    
                 } else {
 
-                    $value->boton_autorizar = '<button type="button" class="btn btn-secondary btn-circle"><i class="fa fa-ban"></i></button>';
+                    $value->boton_descargar = '<button type="button" class="btn btn-default waves-effect btn-circle" data-toggle="tooltip" title="" data-original-title="Solo Coordinadores y Administradores"><i class="fa fa-ban fa-1x"></i></button>
+';
                 }
 
-
-                $value->AUTORIZADO_POR =  $value->AUTORIZADO_ID == 'SIN AUTORIZAR' ? '<span class="badge badge-pill badge-danger p-2" style="font-size: 11px;">SIN AUTORIZAR</span>' : $value->AUTORIZADO_ID;
             }
 
             // respuesta
@@ -2189,46 +2194,82 @@ class recsensorialController extends Controller
                 }
             }
 
-            if (($request->opcion + 0) == 8) // REALIZAR Y AUTORIZAR LOS INFORMES PARA EL CONTROL DE CAMBIOS
-            {
-                if ($request['ID_CONTROL_CAMBIO'] == 0) //ACCION DE REALIZAR
-                {
+            // if (($request->opcion + 0) == 8) // REALIZAR Y AUTORIZAR LOS INFORMES PARA EL CONTROL DE CAMBIOS
+            // {
+            //     if ($request['ID_CONTROL_CAMBIO'] == 0) //ACCION DE REALIZAR
+            //     {
 
 
-                    //VALIDAMOS QUE NO EXISTA UNA SOLICITUD DE CAMBIO SIN VALIDAR
-                    $solicitudes = DB::select('SELECT COUNT(*) SOLICITUDES_ABIERTAS
-                                                FROM controlCambios
-                                                WHERE RECONOCIMIENTO_ID = ? 
-                                                AND AUTORIZADO_ID IS NULL', [$request['RECONOCIMIENTO_ID']]);
+            //         //VALIDAMOS QUE NO EXISTA UNA SOLICITUD DE CAMBIO SIN VALIDAR
+            //         $solicitudes = DB::select('SELECT COUNT(*) SOLICITUDES_ABIERTAS
+            //                                     FROM controlCambios
+            //                                     WHERE RECONOCIMIENTO_ID = ? 
+            //                                     AND AUTORIZADO_ID IS NULL', [$request['RECONOCIMIENTO_ID']]);
 
 
-                    if ($solicitudes[0]->SOLICITUDES_ABIERTAS == 0) {
+            //         if ($solicitudes[0]->SOLICITUDES_ABIERTAS == 0) {
 
-                        // AUTO_INCREMENT
-                        DB::statement('ALTER TABLE controlCambios AUTO_INCREMENT=1;');
-                        $request['AUTORIZADO'] = 0;
-                        $request['DESCRIPCION_REALIZADO'] = '[' . $request['TIPO_CAMBIO'] . '] ' . $request['DESCRIPCION_CAMBIO'];
+            //             // AUTO_INCREMENT
+            //             DB::statement('ALTER TABLE controlCambios AUTO_INCREMENT=1;');
+            //             $request['AUTORIZADO'] = 0;
+            //             $request['DESCRIPCION_REALIZADO'] = '[' . $request['TIPO_CAMBIO'] . '] ' . $request['DESCRIPCION_CAMBIO'];
 
-                        $documento = controlCambiosModel::create($request->all());
+            //             $documento = controlCambiosModel::create($request->all());
 
-                        $dato["MSJ"] = 'BIEN';
-                        $dato["DOC"] = $documento;
+            //             $dato["MSJ"] = 'BIEN';
+            //             $dato["DOC"] = $documento;
 
-                        return response()->json($dato);
-                    } else {
+            //             return response()->json($dato);
+            //         } else {
 
-                        $dato["MSJ"] = 'SOLICITUD ABIERTA';
-                        return response()->json($dato);
-                    }
-                } else //ACCION DE AUTORIZAR
-                {
-                    $documento = controlCambiosModel::findOrFail($request['ID_CONTROL_CAMBIO']);
-                    $request['AUTORIZADO'] = 1;
-                    $documento->update($request->all());
-                    return response()->json($documento);
-                }
+            //             $dato["MSJ"] = 'SOLICITUD ABIERTA';
+            //             return response()->json($dato);
+            //         }
+            //     } else //ACCION DE AUTORIZAR
+            //     {
+            //         $documento = controlCambiosModel::findOrFail($request['ID_CONTROL_CAMBIO']);
+            //         $request['AUTORIZADO'] = 1;
+            //         $documento->update($request->all());
+            //         return response()->json($documento);
+            //     }
+            // }
+
+           
+
+            if (($request->opcion + 0) == 8) { 
+                $ultimoRegistro = controlCambiosModel::where('RECONOCIMIENTO_ID', $request['RECONOCIMIENTO_ID'])
+                                                     ->orderByDesc('NUMERO_VERSIONES')
+                                                     ->first();
+            
+                $numeroVersiones = $ultimoRegistro ? $ultimoRegistro->NUMERO_VERSIONES + 1 : 0;
+            
+                $data = [
+                    'NUMERO_VERSIONES' => $numeroVersiones,
+                    'DESCRIPCION_REALIZADO' => $ultimoRegistro ? '' : 'Documento inicial',
+                    'AUTORIZADO' => 0,
+                    'REALIZADO_ID' => Auth::user()->id,
+                    'RECONOCIMIENTO_ID' => $request['RECONOCIMIENTO_ID']
+                ];
+            
+                $zipController = new recsensorialquimicosreportewordController();
+                $rutaZip = $zipController->recsensorialquimicosreporte1word($request['RECONOCIMIENTO_ID'], 2, $numeroVersiones);
+                
+                $data['RUTA_ZIP'] = $rutaZip;
+            
+                $documento = controlCambiosModel::create($data);
+            
+                // Responder con éxito
+                $dato["MSJ"] = 'BIEN';
+                $dato["DOC"] = $documento;
+            
+                return response()->json($dato);
             }
+            
+            
 
+
+            
+            
             if (($request->opcion + 0) == 9) // GUARDAR O ACTUALIZAR INFORMACION PARA EL LA TABLA DEL INFORME DE LOS PUNTOS SOLICITADOS POR EL CLIENTE
             {
                 if ($request['NUEVO'] == 1) //nuevo

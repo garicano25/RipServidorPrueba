@@ -2524,7 +2524,7 @@
                                     <a class="nav-link" data-toggle="tab" style="display: none;" href="#tab3_tabla_cliente" role="tab" id="tab3_informe_tabla_cliente">Puntos de muestreo adicionales solicitados por el cliente</a>
                                 </li>
                                 <li class="nav-item">
-                                    <a class="nav-link" data-toggle="tab" href="#tab4_cambios" role="tab" id="tab4_control_cambios" style="display: none">Control de cambios</a>
+                                    <a class="nav-link" data-toggle="tab" href="#tab4_cambios" role="tab" id="tab4_control_cambios" style="display: block">Control de versiones</a>
                                 </li>
                             </ul>
 
@@ -2897,8 +2897,8 @@
                                 <div class="tab-pane" id="tab4_cambios" role="tabpanel">
                                     <div class="card-body">
                                         @if(auth()->user()->hasRoles(['Superusuario','Reconocimiento', 'ApoyoTecnico']))
-
-                                        <form enctype="multipart/form-data" method="post" name="form_controlCambios" id="form_controlCambios">
+                                        
+                                        <!--  <form enctype="multipart/form-data" method="post" name="form_controlCambios" id="form_controlCambios">
 
                                             {!! csrf_field() !!}
                                             <div class="row">
@@ -2941,7 +2941,15 @@
 
                                                 </div>
                                             </div>
-                                        </form>
+                                        </form>  -->
+                                        @endif
+
+                                        @if(auth()->user()->hasRoles(['Superusuario', 'Administrador', 'Coordinador']))
+                                        <ol class="breadcrumb" style="padding: 6px; margin: 10px 0px;">
+                                            <button type="button" class="btn btn-default waves-effect" data-toggle="tooltip" title="Nueva revisión" id="boton_descargarquimicosdoc_final" onclick="reporte(form_recsensorial.recsensorial_id.value, 2, this, 2);">
+                                                <span class="btn-label"><i class="fa fa-plus"></i></span>Crear nueva revisión
+                                            </button>
+                                        </ol>
                                         @endif
 
                                         <div class="table-responsive" style="max-height: 410px!important;">
@@ -2952,9 +2960,7 @@
                                                         <th>Realizado por</th>
                                                         <th>Cambio(s)</th>
                                                         <th>Fecha</th>
-                                                        <th>Autorizado por</th>
-                                                        <th>Fecha</th>
-                                                        <th>Autorizar</th>
+                                                        <th>Descargar</th>
                                                     </tr>
                                                 </thead>
                                                 <tbody>
@@ -2962,8 +2968,8 @@
                                                 </tbody>
                                             </table>
                                         </div>
-                                        <!-- DESCOMENTAR CUANDO SE HAGA LO DE CONTROL DE CAMBIOS -->
-                                        <!--  @if(auth()->user()->hasRoles(['Superusuario', 'Administrador', 'Coordinador']))
+                                        <!-- DESCOMENTAR CUANDO SE HAGA LO DE CONTROL DE CAMBIOS 
+                                          @if(auth()->user()->hasRoles(['Superusuario', 'Administrador', 'Coordinador']))
                                         <button type="button" class="btn btn-info mt-1" style="background: #1E88E6!important; float: right; display: none;" data-toggle="tooltip" title="Descargar informe sensorial de químicos .doc" id="boton_descargarquimicosdoc" onclick="reporte(form_recsensorial.recsensorial_id.value, 2, this);">
                                             Descargar &nbsp;&nbsp;<i class="fa fa-file-word-o fa-1x"></i>
                                         </button>
@@ -2983,15 +2989,15 @@
                     Descargar pdf&nbsp;&nbsp;<i class="fa fa-file-pdf-o fa-1x"></i>
                 </button> -->
 
-                @if(auth()->user()->hasRoles(['Superusuario', 'Administrador', 'Coordinador']))
+                <!-- @if(auth()->user()->hasRoles(['Superusuario', 'Administrador', 'Coordinador']))
                 <button type="button" class="btn btn-info mt-1" style="background: #1E88E6!important; float: left; display: block;" data-toggle="tooltip" title="Descargar informe sensorial de químicos .doc" id="boton_descargarquimicosdoc" onclick="reporte(form_recsensorial.recsensorial_id.value, 2, this, 1);">
                     Descargar previa &nbsp;&nbsp;<i class="fa fa-eye fa-1x"></i>
                 </button>
 
-                <button type="button" class="btn btn-info mt-1" style="background: #94B732!important; float: left; display: block;" data-toggle="tooltip" title="Descargar informe sensorial de químicos y anexos .zip" id="boton_descargarquimicosdoc_final" onclick="reporte(form_recsensorial.recsensorial_id.value, 2, this, 2);">
+                 <button type="button" class="btn btn-info mt-1" style="background: #94B732!important; float: left; display: block;" data-toggle="tooltip" title="Descargar informe sensorial de químicos y anexos .zip" id="boton_descargarquimicosdoc_final" onclick="reporte(form_recsensorial.recsensorial_id.value, 2, this, 2);">
                     Descargar final &nbsp;&nbsp;<i class="fa fa-file-archive-o fa-1x"></i>
                 </button>
-                @endif
+                @endif  -->
 
                 <button type="button" class="btn btn-default waves-effect mx-3" style="float: left;" data-dismiss="modal">Cerrar</button>
             </div>

@@ -3002,131 +3002,281 @@ $("#boton_descargarquimicospdf").click(function () {
 
 
 //Version actualizada de la descarga del Informe de reconocimientos
+
+
+// function reporte(recsensorial_id, recsensorial_tipo, boton, tipo) {
+
+// 	tipodoc = parseInt(tipo)
+
+// 	if ($('#boton_descargarquimicosdoc').hasClass('desbloqueado')) {
+
+// 		var tipo = 'físicos';
+// 		var nombreInstalacion = $('#recsensorial_instalacion').val();
+
+// 		if (parseInt(recsensorial_tipo) === 2) {
+// 			tipo = 'químicos';
+// 		}
+
+// 		swal({
+// 			title: "¡Confirme imprimir!",
+// 			text: "Reconocimiento de " + tipo + "\n\nSolo se puede descargar una vez, la siguiente debe ser con autorización del administrador",
+// 			type: "info",
+// 			showCancelButton: true,
+// 			confirmButtonColor: "#DD6B55",
+// 			confirmButtonText: "Descargar!",
+// 			cancelButtonText: "Cancelar!",
+// 			closeOnConfirm: false,
+// 			closeOnCancel: false
+// 		},
+// 			function (isConfirm) {
+// 				if (isConfirm) {
+// 					// Mostrar mensaje de carga
+// 					swal({
+// 						title: "Generando documento",
+// 						text: 'Espere un momento, el documento se esta documento se esta generando...',
+// 						type: "info",
+// 						showConfirmButton: false,
+// 						allowOutsideClick: false
+// 					});
+
+// 					var url = "";
+// 					if (parseInt(recsensorial_tipo) === 1) {
+// 						if (parseInt($("#recsensorial_tipocliente").val()) === 0) { // 0 = Cliente, 1 = Pemex
+// 							url = "/recsensorialreporte1wordcliente/" + recsensorial_id + "/" + tipodoc;
+// 						} else {
+// 							url = "/recsensorialreporte1word/" + recsensorial_id + "/" + tipodoc;
+// 						}
+// 					} else {
+// 						if (parseInt($("#recsensorial_tipocliente").val()) === 0) { // 0 = Cliente, 1 = Pemex
+// 							url = "/recsensorialquimicosreporte1wordcliente/" + recsensorial_id + "/" + tipodoc;
+// 						} else {
+// 							url = "/recsensorialquimicosreporte1word/" + recsensorial_id + "/" + tipodoc;
+// 						}
+// 					}
+
+
+// 					if (tipodoc == 1) {
+// 						ext = '.docx'
+// 					} else {
+// 						ext = '.zip'
+// 					}
+
+// 					$.ajax({
+// 						url: url,
+// 						method: 'GET',
+// 						xhrFields: {
+// 							responseType: 'blob'
+// 						},
+// 						success: function (data) {
+// 							var a = document.createElement('a');
+// 							var url = window.URL.createObjectURL(data);
+// 							a.href = url;
+// 							a.download = `Informe - Reconocimiento de Químicos - ${nombreInstalacion}${ext}`;
+// 							document.body.append(a);
+// 							a.click();
+// 							a.remove();
+// 							window.URL.revokeObjectURL(url);
+
+// 							// Cerrar mensaje de carga
+// 							swal.close();
+
+// 							if (parseInt(recsensorial_tipo) !== 1 && parseInt($("#recsensorial_tipocliente").val()) === 1) {
+// 								//Recargamos la tabla de reconocimiento para que se ajusten los cambios de que el reconocimiento ha sido finalizado
+// 								tabla_recsensorial.ajax.url('/tablarecsensorial').load();
+// 								//Mostramos la seccion para poder validar el reconocimiento
+// 								$('#finalizarQuimico').fadeIn(0);
+// 							}
+// 						},
+// 						error: function () {
+// 							swal({
+// 								title: "Hubo un problema al generar el documento.",
+// 								text: "Intentelo de nuevo, o comuniquelo con el responsable",
+// 								type: "error",
+// 								showConfirmButton: true
+// 							});
+// 						}
+// 					});
+// 				} else {
+// 					// mensaje de cancelación
+// 					swal({
+// 						title: "Cancelado",
+// 						text: "Acción cancelada",
+// 						type: "error",
+// 						buttons: {
+// 							visible: false,
+// 						},
+// 						timer: 500,
+// 						showConfirmButton: false
+// 					});
+// 				}
+// 			});
+// 		return false;
+
+// 	} 
+	
+// 	else {
+
+// 		swal({
+// 			title: "Informe no disponible",
+// 			text: "Es necesario guardar los datos de la portada y confirmar puntos de muestreo y POE ",
+// 			type: "warning", // warning, error, success, info
+// 			buttons: {
+// 				visible: false, // true , false
+// 			},
+// 			timer: 2500,
+// 			showConfirmButton: false
+// 		});
+
+// 	}
+
+
+// }
+
+
+
+
+
+
+
 function reporte(recsensorial_id, recsensorial_tipo, boton, tipo) {
+    let tipodoc = parseInt(tipo);
+    let tipoDescarga = 'físicos';
+    let nombreInstalacion = $('#recsensorial_instalacion').val();
 
-	tipodoc = parseInt(tipo)
+    if (parseInt(recsensorial_tipo) === 2) {
+        tipoDescarga = 'químicos';
+    }
 
-	if ($('#boton_descargarquimicosdoc').hasClass('desbloqueado')) {
+    swal({
+        title: "¿Generar nueva revisión?",
+        text: "Nueva revisión",
+        type: "info",
+        showCancelButton: true,
+        confirmButtonColor: "#DD6B55",
+        confirmButtonText: "Descargar!",
+        cancelButtonText: "Cancelar!",
+        closeOnConfirm: false,
+        closeOnCancel: false
+    },
+    function (isConfirm) {
+        if (isConfirm) {
+            $('#boton_descargarquimicosdoc_final').html('<span class="btn-label"><i class="fa fa-spin fa-spinner"></i></span>Copiando revisión, por favor espere...');
+            $('#boton_descargarquimicosdoc_final').attr('disabled', true);
 
-		var tipo = 'físicos';
-		var nombreInstalacion = $('#recsensorial_instalacion').val();
+            swal({
+                title: "Generando revisión",
+                text: 'Espere un momento, creando revisión...',
+                type: "info",
+                showConfirmButton: false,
+                allowOutsideClick: false
+            });
 
-		if (parseInt(recsensorial_tipo) === 2) {
-			tipo = 'químicos';
-		}
-
-		swal({
-			title: "¡Confirme imprimir!",
-			text: "Reconocimiento de " + tipo + "\n\nSolo se puede descargar una vez, la siguiente debe ser con autorización del administrador",
-			type: "info",
-			showCancelButton: true,
-			confirmButtonColor: "#DD6B55",
-			confirmButtonText: "Descargar!",
-			cancelButtonText: "Cancelar!",
-			closeOnConfirm: false,
-			closeOnCancel: false
-		},
-			function (isConfirm) {
-				if (isConfirm) {
-					// Mostrar mensaje de carga
-					swal({
-						title: "Generando documento",
-						text: 'Espere un momento, el documento se esta documento se esta generando...',
-						type: "info",
-						showConfirmButton: false,
-						allowOutsideClick: false
-					});
-
-					var url = "";
-					if (parseInt(recsensorial_tipo) === 1) {
-						if (parseInt($("#recsensorial_tipocliente").val()) === 0) { // 0 = Cliente, 1 = Pemex
-							url = "/recsensorialreporte1wordcliente/" + recsensorial_id + "/" + tipodoc;
-						} else {
-							url = "/recsensorialreporte1word/" + recsensorial_id + "/" + tipodoc;
-						}
-					} else {
-						if (parseInt($("#recsensorial_tipocliente").val()) === 0) { // 0 = Cliente, 1 = Pemex
-							url = "/recsensorialquimicosreporte1wordcliente/" + recsensorial_id + "/" + tipodoc;
-						} else {
-							url = "/recsensorialquimicosreporte1word/" + recsensorial_id + "/" + tipodoc;
-						}
-					}
-
-
-					if (tipodoc == 1) {
-						ext = '.docx'
-					} else {
-						ext = '.zip'
-					}
-
-					$.ajax({
-						url: url,
-						method: 'GET',
-						xhrFields: {
-							responseType: 'blob'
-						},
-						success: function (data) {
-							var a = document.createElement('a');
-							var url = window.URL.createObjectURL(data);
-							a.href = url;
-							a.download = `Informe - Reconocimiento de Químicos - ${nombreInstalacion}${ext}`;
-							document.body.append(a);
-							a.click();
-							a.remove();
-							window.URL.revokeObjectURL(url);
-
-							// Cerrar mensaje de carga
-							swal.close();
-
-							if (parseInt(recsensorial_tipo) !== 1 && parseInt($("#recsensorial_tipocliente").val()) === 1) {
-								//Recargamos la tabla de reconocimiento para que se ajusten los cambios de que el reconocimiento ha sido finalizado
-								tabla_recsensorial.ajax.url('/tablarecsensorial').load();
-								//Mostramos la seccion para poder validar el reconocimiento
-								$('#finalizarQuimico').fadeIn(0);
-							}
-						},
-						error: function () {
-							swal({
-								title: "Hubo un problema al generar el documento.",
-								text: "Intentelo de nuevo, o comuniquelo con el responsable",
-								type: "error",
-								showConfirmButton: true
-							});
-						}
-					});
-				} else {
-					// mensaje de cancelación
-					swal({
-						title: "Cancelado",
-						text: "Acción cancelada",
-						type: "error",
-						buttons: {
-							visible: false,
-						},
-						timer: 500,
-						showConfirmButton: false
-					});
-				}
-			});
-		return false;
-
-	} else {
-
-		swal({
-			title: "Informe no disponible",
-			text: "Es necesario guardar los datos de la portada y confirmar puntos de muestreo y POE ",
-			type: "warning", // warning, error, success, info
-			buttons: {
-				visible: false, // true , false
-			},
-			timer: 2500,
-			showConfirmButton: false
-		});
-
-	}
-
-
+            if (tipodoc === 1) {
+                descargarDocumento(recsensorial_id, recsensorial_tipo, tipodoc, nombreInstalacion);
+            
+            } else {
+                $.ajax({
+                    url: '/recsensorial',
+                    type: 'POST',
+                    data: {
+                        opcion: 8,
+                        RECONOCIMIENTO_ID: recsensorial_id,
+                        _token: $('meta[name="csrf-token"]').attr('content')
+                    },
+                    success: function(response) {
+                        if (response.MSJ === 'BIEN') {
+                            descargarDocumento(recsensorial_id, recsensorial_tipo, tipodoc, nombreInstalacion);
+                            finalizarProceso();
+                            tabla_ControlCambios(); // Llamada para actualizar la tabla después de crear el registro
+                            swal.close();
+                        } else if (response.MSJ === 'SOLICITUD ABIERTA') {
+                            swal("Ya existe una solicitud abierta", "", "warning");
+                            finalizarProceso();
+                        }
+                    },
+                    error: function(error) {
+                        swal("Error", "No se pudo crear el registro. Intente nuevamente.", "error");
+                        finalizarProceso();
+                    }
+                });
+            }
+        } else {
+            swal({
+                title: "Cancelado",
+                text: "Acción cancelada",
+                type: "error",
+                buttons: {
+                    visible: false,
+                },
+                timer: 500,
+                showConfirmButton: false
+            });
+        }
+    });
 }
+
+function finalizarProceso() {
+    $('#boton_descargarquimicosdoc_final').html('Crear nueva revisión');
+    $('#boton_descargarquimicosdoc_final').attr('disabled', false);
+}
+
+
+
+function descargarDocumento(recsensorial_id, recsensorial_tipo, tipodoc, nombreInstalacion) {
+				let numeroVersiones = 0;
+
+				let url = "";
+				if (parseInt(recsensorial_tipo) === 1) {
+					url = parseInt($("#recsensorial_tipocliente").val()) === 0 ?
+						`/recsensorialreporte1wordcliente/${recsensorial_id}/${tipodoc}/${numeroVersiones}` :
+						`/recsensorialreporte1word/${recsensorial_id}/${tipodoc}/${numeroVersiones}`;
+				} else {
+					url = parseInt($("#recsensorial_tipocliente").val()) === 0 ?
+						`/recsensorialquimicosreporte1wordcliente/${recsensorial_id}/${tipodoc}/${numeroVersiones}` :
+						`/recsensorialquimicosreporte1word/${recsensorial_id}/${tipodoc}/${numeroVersiones}`;
+				}
+
+				let ext = tipodoc === 1 ? '.docx' : '.zip';
+
+				$.ajax({
+					url: url,
+					method: 'GET',
+					xhrFields: {
+						responseType: 'blob'
+					},
+					success: function (data) {
+						let a = document.createElement('a');
+						let downloadUrl = window.URL.createObjectURL(data);
+						a.href = downloadUrl;
+						a.download = `Informe - Reconocimiento de Químicos - ${nombreInstalacion}${ext}`;
+						document.body.append(a);
+						a.click();
+						a.remove();
+						window.URL.revokeObjectURL(downloadUrl);
+
+						if (parseInt(recsensorial_tipo) !== 1 && parseInt($("#recsensorial_tipocliente").val()) === 1) {
+							tabla_recsensorial.ajax.url('/tablarecsensorial').load();
+							$('#finalizarQuimico').fadeIn(0);
+						}
+						swal.close(); 
+					},
+					error: function () {
+						swal({
+							title: "Hubo un problema al generar el documento.",
+							text: "Intentelo de nuevo, o comuniquelo con el responsable",
+							type: "error",
+							showConfirmButton: true
+						});
+					}
+				});
+}
+
+
+
+
+
+
+
 
 function validarHojaSeguridad(check) {
 
@@ -10246,8 +10396,8 @@ $('#boton_editarInforme').on('click', function (e) {
 				$('#boton_descargarquimicosdoc').css('display', 'none')
 				$('#boton_descargarquimicosdoc').removeClass('desbloqueado').addClass('bloqueado')
 
-				$('#boton_descargarquimicosdoc_final').css('display', 'none')
-				$('#boton_descargarquimicosdoc_final').removeClass('desbloqueado').addClass('bloqueado')
+				// $('#boton_descargarquimicosdoc_final').css('display', 'none')
+				// $('#boton_descargarquimicosdoc_final').removeClass('desbloqueado').addClass('bloqueado')
 
 
 			} else { //DOCUMENTO YA EDITADO
@@ -10255,8 +10405,8 @@ $('#boton_editarInforme').on('click', function (e) {
 				$('#boton_descargarquimicosdoc').removeClass('bloqueado').addClass('desbloqueado')
 				$('#boton_descargarquimicosdoc').css('display', 'block')
 
-				$('#boton_descargarquimicosdoc_final').removeClass('bloqueado').addClass('desbloqueado')
-				$('#boton_descargarquimicosdoc_final').css('display', 'block')
+				// $('#boton_descargarquimicosdoc_final').removeClass('bloqueado').addClass('desbloqueado')
+				// $('#boton_descargarquimicosdoc_final').css('display', 'block')
 
 				// obtener extencion archivo
 				var archivo = dato.data[0].IMAGEN_PORTADA;
@@ -11641,16 +11791,8 @@ function tabla_ControlCambios() {
 						"defaultContent": "-"
 					},
 					{
-						"data": "AUTORIZADO_POR",
-						"defaultContent": "-"
-					},
-					{
-						"data": "FECHA_AUTORIZADO",
-						"defaultContent": "-"
-					},
-					{
 						"orderable": false,
-						"data": 'boton_autorizar',
+						"data": 'boton_descargar',
 						"defaultContent": '-'
 					}
 				],

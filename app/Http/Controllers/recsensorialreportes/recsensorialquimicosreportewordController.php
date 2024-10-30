@@ -26,6 +26,7 @@ use App\modelos\clientes\clienteModel;
 use App\modelos\clientes\clientepartidasModel;
 use App\modelos\clientes\clientecontratoModel;
 use App\modelos\recsensorial\recsensorialRecursosInformesModel;
+use App\modelos\recsensorial\controlCambiosModel;
 
 
 
@@ -181,7 +182,7 @@ class recsensorialquimicosreportewordController extends Controller
      * @param  int  $recsensorial_id
      * @return \Illuminate\Http\Response
      */
-    public function recsensorialquimicosreporte1word($recsensorial_id, $tipo)
+    public function recsensorialquimicosreporte1word($recsensorial_id, $tipo, $numeroVersiones)
     {
         $No = 1;
 
@@ -1980,48 +1981,125 @@ class recsensorialquimicosreportewordController extends Controller
                 }
 
                 // Crear el archivo ZIP
-                $zipFilePath = storage_path('app/reportes/recsensorial/Informe_y_Anexos.zip');
+            //     $zipFilePath = storage_path('app/reportes/recsensorial/Informe_y_Anexos.zip');
+            //     $zip = new ZipArchive;
+
+            //     if ($zip->open($zipFilePath, ZipArchive::CREATE | ZipArchive::OVERWRITE) === TRUE) {
+            //         // Añadir los archivos iniciales al ZIP
+            //         foreach ($archivosParaZip as $archivo) {
+            //             if (file_exists($archivo) && is_file($archivo)) {
+            //                 $zip->addFile($archivo, basename($archivo));
+            //                 Storage::delete($archivo);
+            //             }
+            //         }
+
+            //         // Verificar si hay hojas de seguridad y añadirlas al ZIP
+            //         if (count($anexos) != 0) {
+
+            //             foreach ($anexos as $key => $val) {
+
+            //                 if ($val->hojas_seguridad == 1) {
+
+            //                     $hojas = DB::select('SELECT hoja.catsustancia_nombre,
+            //                                  hoja.catsustancia_hojaseguridadpdf
+            //                           FROM recsensorialquimicosinventario inventario
+            //                           LEFT JOIN catHojasSeguridad_SustanciasQuimicas relacion ON relacion.HOJA_SEGURIDAD_ID = inventario.catsustancia_id
+            //                           LEFT JOIN catsustancia hoja ON hoja.id = relacion.HOJA_SEGURIDAD_ID
+            //                           LEFT JOIN catsustancias_quimicas sus ON sus.ID_SUSTANCIA_QUIMICA = relacion.SUSTANCIA_QUIMICA_ID
+            //                           LEFT JOIN catestadofisicosustancia estado ON estado.id = relacion.ESTADO_FISICO
+            //                           LEFT JOIN catvolatilidad volatilidad ON volatilidad.id = relacion.VOLATILIDAD
+            //                           WHERE inventario.recsensorial_id = ?
+            //                           GROUP BY hoja.catsustancia_nombre, hoja.catsustancia_hojaseguridadpdf
+            //                           ORDER BY hoja.catsustancia_nombre', [$recsensorial_id]);
+
+            //                     foreach ($hojas as $key => $hoja) {
+            //                         $archivo = storage_path('app/' . $hoja->catsustancia_hojaseguridadpdf);
+
+            //                         if (file_exists($archivo) && is_file($archivo)) {
+
+            //                             $nombrePersonalizado = 'Anexo ' . $val->recsensorialanexo_orden . ' HDS - ' . $hoja->catsustancia_nombre . '.pdf';
+            //                             $zip->addFile($archivo, $nombrePersonalizado);
+            //                         }
+            //                     }
+            //                 } else {
+
+            //                     $adicionales = DB::select('SELECT contrato.NOMBRE_ANEXO, IFNULL(anexo.ruta_anexo, acre.acreditacion_SoportePDF) AS RUTA, anexo.recsensorialanexo_orden 
+            //                                                 FROM recsensorialanexo anexo
+            //                                                 LEFT JOIN contratros_anexos contrato ON contrato.ID_CONTRATO_ANEXO = anexo.contrato_anexo_id
+            //                                                 LEFT JOIN acreditacion acre ON acre.id = anexo.acreditacion_id
+            //                                                 WHERE anexo.recsensorial_id = ? AND anexo.recsensorialanexo_tipo = 2 AND anexo.hojas_seguridad = 0
+            //                                                 ORDER BY anexo.recsensorialanexo_orden', [$recsensorial_id]);
+
+            //                     foreach ($adicionales as $key => $doc) {
+            //                         $archivo = storage_path('app/' . $doc->RUTA);
+
+            //                         if (file_exists($archivo) && is_file($archivo)) {
+
+            //                             $nombrePersonalizado = 'Anexo ' . $doc->recsensorialanexo_orden . ' - ' . $doc->NOMBRE_ANEXO . '.pdf';
+            //                             $zip->addFile($archivo, $nombrePersonalizado);
+            //                         }
+            //                     }
+            //                 }
+            //             }
+            //         }
+
+            //         // Cerrar el ZIP
+            //         $zip->close();
+            //     } else {
+
+            //         throw new Exception("No se pudo crear el archivo ZIP.");
+            //     }
+
+            //     // Retornar el archivo ZIP para su descarga
+            //     return response()->download($zipFilePath)->deleteFileAfterSend(true);
+            
+
+
+            // Crear el archivo ZIP
+            $zipFolderBasePath = "ZIP_RECO/{$recsensorial_id}/{$numeroVersiones}";
+                Storage::makeDirectory($zipFolderBasePath);
+
+                $zipFileName = "Informe_y_Anexos.zip";
+
+                $zipFilePath = storage_path("app/{$zipFolderBasePath}/{$zipFileName}");
+
                 $zip = new ZipArchive;
 
                 if ($zip->open($zipFilePath, ZipArchive::CREATE | ZipArchive::OVERWRITE) === TRUE) {
-                    // Añadir los archivos iniciales al ZIP
                     foreach ($archivosParaZip as $archivo) {
                         if (file_exists($archivo) && is_file($archivo)) {
                             $zip->addFile($archivo, basename($archivo));
-                            Storage::delete($archivo);
+                            Storage::delete($archivo); 
                         }
                     }
 
                     // Verificar si hay hojas de seguridad y añadirlas al ZIP
                     if (count($anexos) != 0) {
-
                         foreach ($anexos as $key => $val) {
-
                             if ($val->hojas_seguridad == 1) {
-
+                                // Consulta para obtener hojas de seguridad
                                 $hojas = DB::select('SELECT hoja.catsustancia_nombre,
-                                             hoja.catsustancia_hojaseguridadpdf
-                                      FROM recsensorialquimicosinventario inventario
-                                      LEFT JOIN catHojasSeguridad_SustanciasQuimicas relacion ON relacion.HOJA_SEGURIDAD_ID = inventario.catsustancia_id
-                                      LEFT JOIN catsustancia hoja ON hoja.id = relacion.HOJA_SEGURIDAD_ID
-                                      LEFT JOIN catsustancias_quimicas sus ON sus.ID_SUSTANCIA_QUIMICA = relacion.SUSTANCIA_QUIMICA_ID
-                                      LEFT JOIN catestadofisicosustancia estado ON estado.id = relacion.ESTADO_FISICO
-                                      LEFT JOIN catvolatilidad volatilidad ON volatilidad.id = relacion.VOLATILIDAD
-                                      WHERE inventario.recsensorial_id = ?
-                                      GROUP BY hoja.catsustancia_nombre, hoja.catsustancia_hojaseguridadpdf
-                                      ORDER BY hoja.catsustancia_nombre', [$recsensorial_id]);
+                                                            hoja.catsustancia_hojaseguridadpdf
+                                                    FROM recsensorialquimicosinventario inventario
+                                                    LEFT JOIN catHojasSeguridad_SustanciasQuimicas relacion ON relacion.HOJA_SEGURIDAD_ID = inventario.catsustancia_id
+                                                    LEFT JOIN catsustancia hoja ON hoja.id = relacion.HOJA_SEGURIDAD_ID
+                                                    LEFT JOIN catsustancias_quimicas sus ON sus.ID_SUSTANCIA_QUIMICA = relacion.SUSTANCIA_QUIMICA_ID
+                                                    LEFT JOIN catestadofisicosustancia estado ON estado.id = relacion.ESTADO_FISICO
+                                                    LEFT JOIN catvolatilidad volatilidad ON volatilidad.id = relacion.VOLATILIDAD
+                                                    WHERE inventario.recsensorial_id = ?
+                                                    GROUP BY hoja.catsustancia_nombre, hoja.catsustancia_hojaseguridadpdf
+                                                    ORDER BY hoja.catsustancia_nombre', [$recsensorial_id]);
 
                                 foreach ($hojas as $key => $hoja) {
                                     $archivo = storage_path('app/' . $hoja->catsustancia_hojaseguridadpdf);
 
                                     if (file_exists($archivo) && is_file($archivo)) {
-
                                         $nombrePersonalizado = 'Anexo ' . $val->recsensorialanexo_orden . ' HDS - ' . $hoja->catsustancia_nombre . '.pdf';
                                         $zip->addFile($archivo, $nombrePersonalizado);
                                     }
                                 }
                             } else {
-
+                                // Consulta para añadir otros anexos al ZIP
                                 $adicionales = DB::select('SELECT contrato.NOMBRE_ANEXO, IFNULL(anexo.ruta_anexo, acre.acreditacion_SoportePDF) AS RUTA, anexo.recsensorialanexo_orden 
                                                             FROM recsensorialanexo anexo
                                                             LEFT JOIN contratros_anexos contrato ON contrato.ID_CONTRATO_ANEXO = anexo.contrato_anexo_id
@@ -2033,7 +2111,6 @@ class recsensorialquimicosreportewordController extends Controller
                                     $archivo = storage_path('app/' . $doc->RUTA);
 
                                     if (file_exists($archivo) && is_file($archivo)) {
-
                                         $nombrePersonalizado = 'Anexo ' . $doc->recsensorialanexo_orden . ' - ' . $doc->NOMBRE_ANEXO . '.pdf';
                                         $zip->addFile($archivo, $nombrePersonalizado);
                                     }
@@ -2042,16 +2119,28 @@ class recsensorialquimicosreportewordController extends Controller
                         }
                     }
 
-                    // Cerrar el ZIP
+                    // Cerrar el ZIP después de añadir todos los archivos
                     $zip->close();
                 } else {
-
                     throw new Exception("No se pudo crear el archivo ZIP.");
                 }
 
-                // Retornar el archivo ZIP para su descarga
-                return response()->download($zipFilePath)->deleteFileAfterSend(true);
-            }
+                $rutaZip = "{$zipFolderBasePath}/{$zipFileName}";
+
+
+
+                return $rutaZip; 
+
+
+                // Descargar el archivo ZIP después de crearlo y guardarlo en storage
+                // return response()->download($zipFilePath)->deleteFileAfterSend(false);
+            
+        }
+
+
+
+            
+            
         } catch (Exception $e) {
             $dato["msj"] = 'Error al crear reporte: ' . $e->getMessage();
             return response()->json($dato);
