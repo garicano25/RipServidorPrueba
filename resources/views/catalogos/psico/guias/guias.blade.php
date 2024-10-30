@@ -292,7 +292,7 @@
         }
 
         /* Íconos de encabezado h4 en verde */
-        #datos h4 .fa {
+        #datos h5 .fa {
             color: #4CAF50;
             font-size: 1.2rem;
             margin-right: 8px;
@@ -309,7 +309,7 @@
 
 
 
-        #datos h4 {
+        #datos h5 {
             color: #2c3e50;
             font-size: 1.1rem;
             font-weight: 600;
@@ -384,7 +384,7 @@
 
         h5{
             font-size: 20px;
-            margin-bottom: 10px;
+            margin-bottom: 20px;
             color: #333;
         }
 
