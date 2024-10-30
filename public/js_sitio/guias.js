@@ -391,7 +391,7 @@ function ejecucionCamara(){
                 
                     canvas.toBlob(function(blob) {
                         const imagenFile = new File([blob], "foto.png", { type: "image/png" });
-                        const trabajadorID = 7188;
+                        const trabajadorID = $("#TRABAJADOR_ID").val();
                         let formData = new FormData();
                         formData.append('foto', imagenFile);
                         formData.append('trabajadorId', trabajadorID);  // Enviar ID del trabajador
@@ -420,11 +420,10 @@ function ejecucionCamara(){
                                     $('#instruccionesModal').modal('show');
                                     console.log("Foto guardada correctamente", response);
                                 } else {
-                                    swal({
+                                    Swal.fire({
                                         title: "Ocurrió un error",
                                         text: "Ha ocurrido un error al intentar capturar la foto, recargue e intente de nuevo",
-                                        type: "error", 
-                                        buttons: {visible: true},
+                                        icon: "error",
                                         showConfirmButton: true,
                                         showCancelButton: false
                                     });
@@ -435,14 +434,14 @@ function ejecucionCamara(){
                                 // Ocultar el spinner de carga
                                 $('#loadingSpinner').hide();
                 
-                                swal({
+                                Swal.fire({
                                     title: "Ocurrió un error",
                                     text: "Ha ocurrido un error al intentar capturar la foto, intente de nuevo más tarde",
-                                    type: "error", 
-                                    buttons: {visible: true},
+                                    icon: "error",
                                     showConfirmButton: true,
                                     showCancelButton: false
                                 });
+                                
                                 console.error("Error al enviar la solicitud:", error);
                             }
                         });

@@ -73,10 +73,18 @@ class ejecucionPsicoController extends Controller
 
         if($existingRecords){
             //TARE LOS DATOS DE LA TABLA DE SEGUIMIENTO RELACIONADO CON LA DE PROGRAMA DE TRABAJO
-            $tablaOnline = DB::select('SELECT p.TRABAJADOR_NOMBRE TRABAJADOR_NOMBRE, s.TRABAJADOR_ID TRABAJADOR_ID, s.TRABAJADOR_ESTADOCORREO ESTADOCORREO, 
-            s.TRABAJADOR_FECHAINICIO FECHAINICIO, s.TRABAJADOR_FECHAFIN FECHAFIN, s.TRABAJADOR_ESTADOCONTESTADO ESTADOCONTESTADO, r.RECPSICO_ID
-            FROM seguimientotrabajadores s LEFT JOIN proyectotrabajadores p ON s.TRABAJADOR_ID = p.TRABAJADOR_ID LEFT JOIN recopsicotrabajadores r ON p.TRABAJADOR_ID = r.ID_RECOPSICOTRABAJADOR
-            WHERE p.TRABAJADOR_SELECCIONADO = 1 AND p.TRABAJADOR_MODALIDAD = "Online" AND s.proyecto_id = ' . $proyecto_id . '');
+            $tablaOnline = DB::select('SELECT p.TRABAJADOR_NOMBRE TRABAJADOR_NOMBRE,
+                                            s.TRABAJADOR_ID TRABAJADOR_ID, 
+                                            s.TRABAJADOR_ESTADOCORREO ESTADOCORREO, 
+                                            s.TRABAJADOR_FECHAINICIO FECHAINICIO,
+                                            s.TRABAJADOR_FECHAFIN FECHAFIN,
+                                            s.TRABAJADOR_ESTADOCONTESTADO ESTADOCONTESTADO,
+                                            r.RECPSICO_ID,
+                                            r.RECPSICOTRABAJADOR_CORREO TRABAJADOR_CORREO
+                                        FROM seguimientotrabajadores s 
+                                        LEFT JOIN proyectotrabajadores p ON s.TRABAJADOR_ID = p.TRABAJADOR_ID 
+                                        LEFT JOIN recopsicotrabajadores r ON p.TRABAJADOR_ID = r.ID_RECOPSICOTRABAJADOR
+                                        WHERE p.TRABAJADOR_SELECCIONADO = 1 AND p.TRABAJADOR_MODALIDAD = "Online" AND s.proyecto_id = ' . $proyecto_id . '');
 
 
             $count = 0;
@@ -115,9 +123,15 @@ class ejecucionPsicoController extends Controller
             }
         }else{
             //OBTIENE LOS DATOS GUARDADOS DE PROGRAMA DE TRABAJO
-            $tablaOnline = DB::select('SELECT p.TRABAJADOR_NOMBRE TRABAJADOR_NOMBRE, p.TRABAJADOR_ID TRABAJADOR_ID, r.RECPSICO_ID RECPSICO_ID
-                            FROM proyectotrabajadores p LEFT JOIN recopsicotrabajadores r ON p.TRABAJADOR_ID = r.ID_RECOPSICOTRABAJADOR
-                            WHERE p.TRABAJADOR_SELECCIONADO = 1 AND p.TRABAJADOR_MODALIDAD = "Online" AND p.proyecto_id = ' . $proyecto_id . '');
+            $tablaOnline = DB::select('SELECT p.TRABAJADOR_NOMBRE TRABAJADOR_NOMBRE,
+                                            p.TRABAJADOR_ID TRABAJADOR_ID,
+                                            r.RECPSICO_ID RECPSICO_ID,
+                                            r.RECPSICOTRABAJADOR_CORREO TRABAJADOR_CORREO
+                            FROM proyectotrabajadores p 
+                            LEFT JOIN recopsicotrabajadores r ON p.TRABAJADOR_ID = r.ID_RECOPSICOTRABAJADOR
+                            WHERE p.TRABAJADOR_SELECCIONADO = 1 
+                            AND p.TRABAJADOR_MODALIDAD = "Online" 
+                            AND p.proyecto_id = ' . $proyecto_id . '');
 
 
             $count = 0;

@@ -631,6 +631,18 @@ function tabla_trabajadores_online()
                         }
                         return data;
                     }
+				},
+				{
+                    "data": "TRABAJADOR_CORREO",
+					"defaultContent": "-",
+					"render": function(data, type, row) {
+                        if (type === 'display') {
+                            return '<div class="input-group">' +
+                                		'<input type="text" class="form-control " name="CORREO_TRABAJADOR[]" value="' + data + '">' +
+                                	'</div>';
+                        }
+                        return data;
+                    }
                 },
                 {
                     "data": "TRABAJADOR_ESTADOCORREO",

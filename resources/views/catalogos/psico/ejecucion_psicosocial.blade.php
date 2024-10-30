@@ -140,7 +140,7 @@
                                             <i class="fa fa-braille" aria-hidden="true"></i> Trabajadores modalidad online
                                         </h2>
                                         <div style="display: flex; justify-content: flex-end;">
-                                            <button type="submit" class="btn btn-light botonguardar_modalidad_online" id="botonguardar_modalidad_online" style="margin-right: 10px;">
+                                            <button type="submit" class="btn btn-light botonguardar_modalidad_online" id="botonguardar_modalidad_online" style="float: left;">
                                                 Guardar cambios <i class="fa fa-save"></i>
                                             </button>
                                             <button type="submit" class="btn btn-warning botonenviar_todos_correos d-none" id="botonenviar_todos_correos" style="margin-right: 10px;">
@@ -196,6 +196,7 @@
                                                 <th class="sorting_disabled text-center" rowspan="1" colspan="1">Nombre completo del trabajador</th>
                                                 <th class="sorting_disabled text-center" rowspan="1" colspan="1">Fecha de inicio</th>
                                                 <th class="sorting_disabled text-center" rowspan="1" colspan="1">Fecha de fin</th>
+                                                <th class="sorting_disabled text-center" rowspan="1" colspan="1">Correo</th>
                                                 <th class="sorting_disabled text-center" rowspan="1" colspan="1">Estado del correo</th>
                                                 <th class="sorting_disabled text-center" rowspan="1" colspan="1">Estado de cuestionario</th>
                                                 <th class="sorting_disabled text-center" rowspan="1" colspan="1">Enviar link del cuestionario</th>
