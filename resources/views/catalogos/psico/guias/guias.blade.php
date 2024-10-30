@@ -292,7 +292,7 @@
         }
 
         /* Íconos de encabezado h4 en verde */
-        #datos h4 .fa {
+        #datos h5 .fa {
             color: #4CAF50;
             font-size: 1.2rem;
             margin-right: 8px;
@@ -309,9 +309,9 @@
 
 
 
-        #datos h4 {
+        #datos h5 {
             color: #2c3e50;
-            font-size: 1.1rem;
+            font-size: 1rem;
             font-weight: 600;
             margin: 0.5rem 0;
             display: flex;
@@ -337,7 +337,7 @@
 
         #datos .info-section span {
             margin-left: 4px;
-            font-size: 0.9rem;
+            font-size: 0.8rem;
             color: #37474F;
         }
 
@@ -382,27 +382,27 @@
         }
 
 
-        h4 {
-            font-size: 20px;
-            margin-bottom: 20px;
+        h5{
+            font-size: 15px;
+            margin-bottom: 10px;
             color: #333;
         }
 
         .info-section p {
-            font-size: 14px;
+            font-size: 15px;
             margin: 10px 0;
         }
 
         .info-section strong {
-            font-size: 15px;
+            font-size: 13px;
             display: flex;
             align-items: center;
         }
 
         .info-section span {
             display: block;
-            margin-top: 5px;
-            font-size: 14px;
+            margin-top: 3px;
+            font-size: 8px;
         }
 
         .info-section i {
@@ -4508,32 +4508,32 @@
             </div>
         </div>
 
-        <div id="col-datos" class="col-3 mt-3">
+        <div id="col-datos" class="col-3">
             <div id="datos" class="datos">
                 <div class="info-section text-center">
                     <i class="fa fa-info-circle fa-2x mb-1"></i>
-                    <p style="font-style: italic;"><strong>Puede presionar sobre el icono de algunas preguntas para obtener una explicación detallada</strong></p>
+                    <p style="font-style: italic;"><strong>Presione el icono para obtener una explicación detallada</strong></p>
                 </div>
-                <hr>
-                <h4><i class="fa fa-user"></i>Datos Generales</h4>
+              
+                <h5><i class="fa fa-user"></i>Datos Generales</h5>
                 <div class="info-section">
                     <p><strong><i class="fa fa-id-card"></i> Nombre del trabajador:</strong><span id="nombre-trabajador"></span></p>
                     <p><strong><i class="fa fa-venus-mars"></i> Sexo:</strong><span id="genero-trabajador"></span></p>
                     <p><strong><i class="fa fa-envelope"></i> Correo:</strong><span id="correo-trabajador"></span></p>
                 </div>
-                <hr>
-                <h4><i class="fa fa-user-md"></i> Psicólogo</h4>
+             
+                <h5><i class="fa fa-user-md"></i> Psicólogo</h5>
                 <div class="info-section">
                     <p><strong><i class="fa fa-user"></i> Nombre del Psicólogo:</strong><span id="nombre-psicologo"></span></p>
                     <p><strong><i class="fa fa-phone"></i> Número de teléfono:</strong><span id="telefono-psicologo"></span></p>
                     <p><strong><i class="fa fa-clock-o"></i> Horario de atención:</strong><span id="horario-psicologo"></span></p>
                 </div>
-                <hr>
-                <h4><i class="fa fa-user-md"></i> Empresa</h4>
+              
+                <h5><i class="fa fa-user-md"></i> Empresa</h5>
                 <div class="info-section">
-                    <p><strong><i class="fa fa-building"></i> Nombre de la empresa:</strong><span id="nombre-empresa"></span></p>
-                    <p><strong><i class="fa fa-phone"></i> Número de teléfono:</strong><span id="telefono-empresa"></span></p>
-                    <p><strong><i class="fa fa-clock-o"></i> Horario de atención:</strong><span id="horario-empresa"></span></p>
+                    <p><strong><i class="fa fa-building"></i> Nombre de la empresa:</strong><span id="nombre-empresa">Results In Performance</span></p>
+                    <p><strong><i class="fa fa-phone"></i> Número de teléfono:</strong><span id="telefono-empresa"> +52 993 14 72 682</span></p>
+                    <p><strong><i class="fa fa-clock-o"></i> Horario de atención:</strong><span id="horario-empresa">Lunes-Sábado de 8:00 - 18:00 hrs</span></p>
                 </div>
             </div>
         </div>
