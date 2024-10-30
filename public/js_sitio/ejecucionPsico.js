@@ -635,24 +635,10 @@ function tabla_trabajadores_online()
                 {
                     "data": "TRABAJADOR_ESTADOCORREO",
                     "defaultContent": "-",
-					"render": function(data, type, row) {
-                        if (type === 'display') {
-							return '<div data-trabajador-estadocorreo="' + data + '">' + data + '</div>';
-							
-                        }
-                        return data;
-                    }
                 },
                 {
                     "data": "TRABAJADOR_ESTADOCONTESTADO",
-                    "defaultContent": "-",
-					"render": function(data, type, row) {
-                        if (type === 'display') {
-							return '<div data-trabajador-estadocontestado="' + data + '">' + data + '</div>';
-							
-						}
-                        return data;
-                    }
+                    "defaultContent": "-"
                 },
                 {
                     "orderable": false,
