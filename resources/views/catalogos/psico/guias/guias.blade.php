@@ -311,7 +311,7 @@
 
         #datos h5 {
             color: #2c3e50;
-            font-size: 1.1rem;
+            font-size: 1rem;
             font-weight: 600;
             margin: 0.5rem 0;
             display: flex;
@@ -337,7 +337,7 @@
 
         #datos .info-section span {
             margin-left: 4px;
-            font-size: 0.9rem;
+            font-size: 0.8rem;
             color: #37474F;
         }
 
@@ -389,20 +389,20 @@
         }
 
         .info-section p {
-            font-size: 10px;
+            font-size: 15px;
             margin: 10px 0;
         }
 
         .info-section strong {
-            font-size: 10px;
+            font-size: 13px;
             display: flex;
             align-items: center;
         }
 
         .info-section span {
             display: block;
-            margin-top: 5px;
-            font-size: 10px;
+            margin-top: 3px;
+            font-size: 8px;
         }
 
         .info-section i {
