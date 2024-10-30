@@ -50,8 +50,6 @@ $("#guardar_guia2").click(function () {
                         let datosFormulario2 = $('#guia_2').serializeArray();
                         let datosFormulario3 = $('#guia_3').serializeArray();
                         
-
-
                         let csrfToken = $('input[name="_token"]').val();
 
                         let jsonData = {};
