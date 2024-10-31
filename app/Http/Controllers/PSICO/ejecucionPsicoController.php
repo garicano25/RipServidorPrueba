@@ -144,7 +144,7 @@ class ejecucionPsicoController extends Controller
                 $value->FECHAFIN = '';
                 $value->TRABAJADOR_ID = $value->TRABAJADOR_ID;
                 $value->TRABAJADOR_NOMBRE = $value->TRABAJADOR_NOMBRE;
-                $value->TRABAJADOR_ESTADOCONTESTADO = 'Sin iniciar';
+                $value->TRABAJADOR_ESTADOCONTESTADO = '<span class="badge badge-pill badge-danger">Sin iniciar</span>';
                 $value->boton_enviarCorreo = '<button type="button" class="btn btn-warning btn-circle enviarcorreo" id="enviarCorreoTrabajador'.$count.'" name="enviarCorreoTrabajador" onclick="enviarCorreo('.$value->TRABAJADOR_ID.', '.$value->RECPSICO_ID.')" style="padding: 0px;"><i class="fa fa-paper-plane "></i></button>';
                 
 
