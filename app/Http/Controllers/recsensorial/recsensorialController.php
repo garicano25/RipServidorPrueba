@@ -1287,6 +1287,27 @@ class recsensorialController extends Controller
     }
 
 
+
+    //  VERIFICAR QUE ESTE BLOQUEADO 
+
+        public function verificarBloqueado($id)
+        {
+            $registro = DB::select("
+                SELECT BLOQUEADO
+                FROM controlCambios
+                WHERE RECONOCIMIENTO_ID = ? 
+                ORDER BY NUMERO_VERSIONES DESC
+                LIMIT 1
+            ", [$id]);
+        
+            if ($registro) {
+                return response()->json(['BLOQUEADO' => $registro[0]->BLOQUEADO]);
+            } else {
+                return response()->json(['BLOQUEADO' => 0]);
+            }
+        }
+
+
     //TABLA DE CONTROL DE CAMBIOS
     public function TablaControlCambios($recsensorial_id)
     {

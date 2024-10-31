@@ -543,6 +543,10 @@ $("#boton_nuevo_recsensorial").click(function () {
 
 	nuevoReconocimiento = 1;
 
+
+	desbloquearBotones();
+
+
 	$('#inputfotomapa').attr('required', false);
 
 	$('#titleOrganizacionLabel').fadeIn();
@@ -1460,6 +1464,10 @@ $('#tabla_reconocimiento_sensorial tbody').on('click', 'td.mostrar', function ()
 	validarPermisosAsignados(row.data().proyecto_folio)
 
 
+	verificarYBloquear(row.data().id)
+
+
+	
 	// Quitar warning checkbox
 	$('#divListaAgentes').removeClass('checkbox_warning');
 
@@ -1499,6 +1507,7 @@ $('#tabla_reconocimiento_sensorial tbody').on('click', 'td.mostrar', function ()
 
 	// ocultar todos los agentes EVALUACION FISICOS
 	menu_parametros_ocultar();
+
 
 
 
@@ -3173,7 +3182,6 @@ function reporte(recsensorial_id, recsensorial_tipo, boton, tipo) {
 
             if (tipodoc === 1) {
                 descargarDocumento(recsensorial_id, recsensorial_tipo, tipodoc, nombreInstalacion);
-            
             } else {
                 $.ajax({
                     url: '/recsensorial',
@@ -3181,13 +3189,15 @@ function reporte(recsensorial_id, recsensorial_tipo, boton, tipo) {
                     data: {
                         opcion: 8,
                         RECONOCIMIENTO_ID: recsensorial_id,
+						
                         _token: $('meta[name="csrf-token"]').attr('content')
                     },
                     success: function(response) {
                         if (response.MSJ === 'BIEN') {
                             descargarDocumento(recsensorial_id, recsensorial_tipo, tipodoc, nombreInstalacion);
                             finalizarProceso();
-                            tabla_ControlCambios(); // Llamada para actualizar la tabla después de crear el registro
+                            tabla_ControlCambios(); 
+                            bloquearBotones(); 
                             swal.close();
                         } else if (response.MSJ === 'SOLICITUD ABIERTA') {
                             swal("Ya existe una solicitud abierta", "", "warning");
@@ -3218,6 +3228,105 @@ function reporte(recsensorial_id, recsensorial_tipo, boton, tipo) {
 function finalizarProceso() {
     $('#boton_descargarquimicosdoc_final').html('Crear nueva revisión');
     $('#boton_descargarquimicosdoc_final').attr('disabled', false);
+}
+
+
+
+let bloqueadoGlobal = 0;
+
+function verificarYBloquear(ID) {
+    $.ajax({
+        type: "get",
+        dataType: "json",
+        url: "/verificarBloqueado/" + ID,
+        data: {},
+        cache: false,
+        success: function(response) {
+            bloqueadoGlobal = response.BLOQUEADO;
+
+            if (bloqueadoGlobal === 1) {
+                bloquearBotones();
+            } else {
+                desbloquearBotones(); 
+            }
+        },
+        error: function() {
+            console.error("Error al verificar el estado de BLOQUEADO");
+        }
+    });
+}
+
+
+function bloquearBotones() {
+    const botones = [
+        "boton_guardar_recsensorial",
+        "boton_nueva_categoria",
+        "boton_guardar_categoria",
+        "boton_nueva_area",
+        "boton_guardar_area",
+        "boton_nueva_maquina",
+        "boton_guardar_maquina",
+        "boton_nueva_equipopp",
+        "boton_guardar_responsables",
+        "boton_nuevo_anexo",
+        "boton_nueva_fotoevidenciaquimicos",
+        "boton_guardar_evidencia_fotosquimicos",
+        "boton_nueva_sustacia",
+        "boton_guardar_sustancia",
+        "boton_nuevo_grupo",
+        "boton_guardar_grupos",
+        "boton_nuevo_bei",
+        "boton_guardar_recsensorialbei",
+        "boton_guardar_reconocimientofisicospdf",
+        "boton_guardar_reconocimientoquimicospdf",
+        "boton_guardarDatosInforme",
+        "boton_guardarRecomendaciones",
+        "boton_guardarTablaInformes",
+        "boton_guardarTablaClienteInformes"
+    ];
+
+    botones.forEach(id => {
+        const boton = document.getElementById(id);
+        if (boton) {
+            boton.disabled = true;
+        }
+    });
+}
+
+function desbloquearBotones() {
+    const botones = [
+        "boton_guardar_recsensorial",
+        "boton_nueva_categoria",
+        "boton_guardar_categoria",
+        "boton_nueva_area",
+        "boton_guardar_area",
+        "boton_nueva_maquina",
+        "boton_guardar_maquina",
+        "boton_nueva_equipopp",
+        "boton_guardar_responsables",
+        "boton_nuevo_anexo",
+        "boton_nueva_fotoevidenciaquimicos",
+        "boton_guardar_evidencia_fotosquimicos",
+        "boton_nueva_sustacia",
+        "boton_guardar_sustancia",
+        "boton_nuevo_grupo",
+        "boton_guardar_grupos",
+        "boton_nuevo_bei",
+        "boton_guardar_recsensorialbei",
+        "boton_guardar_reconocimientofisicospdf",
+        "boton_guardar_reconocimientoquimicospdf",
+        "boton_guardarDatosInforme",
+        "boton_guardarRecomendaciones",
+        "boton_guardarTablaInformes",
+        "boton_guardarTablaClienteInformes"
+    ];
+
+    botones.forEach(id => {
+        const boton = document.getElementById(id);
+        if (boton) {
+            boton.disabled = false;
+        }
+    });
 }
 
 
@@ -11744,6 +11853,14 @@ $("#boton_guardar_control_cambio").click(function () {
 });
 
 
+
+
+
+
+
+
+
+
 function tabla_ControlCambios() {
 	try {
 		var ruta = "/TablaControlCambios/" + $('#recsensorial_id').val();
@@ -11788,6 +11905,14 @@ function tabla_ControlCambios() {
 					},
 					{
 						"data": "FECHA_REALIZADO",
+						"defaultContent": "-"
+					},
+					{
+						"data": "CANCELADO",
+						"defaultContent": "-"
+					},
+					{
+						"data": "CANCELADO_POR",
 						"defaultContent": "-"
 					},
 					{

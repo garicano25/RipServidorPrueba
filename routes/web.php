@@ -338,6 +338,13 @@ Route::get('informePortada/{id}', ['as' => 'informePortada', 'uses' => 'recsenso
 
 Route::get('TablaControlCambios/{id}', ['as' => 'TablaControlCambios', 'uses' => 'recsensorial\recsensorialController@TablaControlCambios']);
 
+Route::get('verificarBloqueado/{ID}', ['as' => 'verificarBloqueado', 'uses' => 'recsensorial\recsensorialController@verificarBloqueado']);
+
+
+
+
+
+
 Route::get('mostrarmapa/{archivo_opcion}/{recsensorial_id}', ['as' => 'mostrarmapa', 'uses' => 'recsensorial\recsensorialController@mostrarmapa']);
 
 Route::get('mostrarplano/{archivo_opcion}/{recsensorial_id}', ['as' => 'mostrarplano', 'uses' => 'recsensorial\recsensorialController@mostrarplano']);

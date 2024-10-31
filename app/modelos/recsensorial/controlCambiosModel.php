@@ -16,6 +16,10 @@ class controlCambiosModel extends Model
         'DESCRIPCION_AUTORIZADO',
         'RUTA_ZIP',
         'NUMERO_VERSIONES',
+        'CANCELADO',
+        'CANCELADO_POR',
+        'BLOQUEADO',
+        'CANCELADO_COMENTARIO',
         'AUTORIZADO',
     ];
 }

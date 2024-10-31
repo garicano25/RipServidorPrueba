@@ -2960,6 +2960,8 @@
                                                         <th>Realizado por</th>
                                                         <th>Cambio(s)</th>
                                                         <th>Fecha</th>
+                                                        <th>Cancelado</th>
+                                                        <th>Cancelado por:</th>
                                                         <th>Descargar</th>
                                                     </tr>
                                                 </thead>
