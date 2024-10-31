@@ -178,7 +178,6 @@ class proyectotrabajadoresController extends Controller
      
              $selectedWorkers = $request->input('TRABAJADOR_SELECCIONADO', []);
      
-             // Obtener todos los IDs de trabajadores
              $allWorkerIds = $request->TRABAJADOR_ID;
              $contadorComentario = 0;
      
