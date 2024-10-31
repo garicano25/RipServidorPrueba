@@ -7,7 +7,6 @@ use App\Http\Controllers\Controller;
 use App\modelos\reconocimientopsico\reconocimientopsicoModel;
 use App\modelos\reconocimientopsico\recopsiconormativaModel;
 use App\modelos\reconocimientopsico\guiavnormativapsicoModel;
-use App\modelos\reconocimientopsico\proyectoModel;
 
 use App\modelos\reconocimientopsico\recopsicotrabajadoresModel;
 use App\modelos\reconocimientopsico\recopsicoguia5Model;
@@ -90,15 +89,14 @@ class recopsiconormativaController extends Controller
                
 
                 $excelTrabajadoresExists = recopsicotrabajadoresModel::where('RECPSICO_ID', $RECPSICO_ID)->exists();
-                $proyectoId = proyectoModel::where('reconocimiento_psico_id', $RECPSICO_ID)->value('id');
 
                 if ($excelTrabajadoresExists) {
                     recopsicotrabajadoresModel::where('RECPSICO_ID', $RECPSICO_ID)->delete();
                     recopsicoguia5Model::where('RECPSICO_ID', $RECPSICO_ID)->delete();
                     respuestastrabajadorespsicoModel::where('RECPSICO_ID', $RECPSICO_ID)->delete();
-                    seguimientotrabajadoresModel::where('proyecto_id', $proyectoId)->delete();
+                    //seguimientotrabajadoresModel::where('RECPSICO_ID', $RECPSICO_ID)->delete(); esat es con proyecto id
                     recopsicoproyectotrabajadoresModel::where('RECPSICO_ID', $RECPSICO_ID)->delete();
-                    proyectotrabajadoresModel::where('proyecto_id', $proyectoId)->delete(); 
+                    //proyectotrabajadoresModel::where('RECPSICO_ID', $RECPSICO_ID)->delete(); es copn proyecto id
                 }
         
                 try {
