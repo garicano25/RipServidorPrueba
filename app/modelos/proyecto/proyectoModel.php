@@ -10,6 +10,7 @@ class proyectoModel extends Model
     protected $fillable = [
         'contrato_id'
          , 'recsensorial_id'
+         , 'reconocimiento_psico_id' 
         , 'proyecto_folio'
         , 'proyecto_ordenservicio'
         , 'proyecto_cotizacion'

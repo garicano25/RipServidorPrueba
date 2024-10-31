@@ -133,6 +133,7 @@ class guiasController extends Controller
     {
         try {
             $option = $request->input('option'); // Obtener la opción enviada
+            $tipoGuardado = $request->input('tipoGuardado');
 
             if ($option == 1) { // GUIA 1
                 //$RESPUESTAS_TRABAJADOR_EXISTS = respuestastrabajadorespsicoModel::where('TRABAJADOR_ID', $request["TRABAJADOR_ID"])->exists();
@@ -159,16 +160,15 @@ class guiasController extends Controller
 
                     if ($existe) {
                         // Si el registro ya existe, realizar un UPDATE selectivo
-                        
-
                         DB::table('recopsicoTrabajadoresRespuestas')
                             ->where('RECPSICO_TRABAJADOR', $request->input('TRABAJADOR_ID'))
                             ->update([
-                                'RECPSICO_GUIAI_RESPUESTAS' => $jsonDatos, // Solo actualizar los datos recibidos
+                                'RECPSICO_GUIAI_RESPUESTAS' => $jsonDatos, 
                                 'updated_at' => now(),
                             ]);
-        
-                        return response()->json(['mensaje' => 'Registro actualizado exitosamente']);
+    
+                        return response()->json(['mensaje' => 'Registro actualizadob y finalizado exitosamente']);
+                        
                     } else {
                         $registro = DB::table('recopsicotrabajadores')
                             ->where('ID_RECOPSICOTRABAJADOR', $request->input('TRABAJADOR_ID'))
@@ -191,17 +191,28 @@ class guiasController extends Controller
                                     'updated_at' => now(),
                                 ]);
                             }
-                        // Si el registro no existe, realizar un INSERT INTO
-                        
                         //actualizar el esatdo de contestado del formulario
-                        DB::table('seguimientotrabajadores')
-                        ->where('TRABAJADOR_ID', $request->input('TRABAJADOR_ID'))
-                        ->update([
-                            'TRABAJADOR_ESTADOCONTESTADO' => 'En proceso',
-                            'updated_at' => now(),
-                        ]);
-        
-                        return response()->json(['mensaje' => 'Registro creado exitosamente']);
+                        if($tipoGuardado == 1){
+                            DB::table('seguimientotrabajadores')
+                            ->where('TRABAJADOR_ID', $request->input('TRABAJADOR_ID'))
+                            ->update([
+                                'TRABAJADOR_ESTADOCONTESTADO' => 'Finalizado',
+                                'updated_at' => now(),
+                            ]);
+            
+                            return response()->json(['mensaje' => 'Registro creado exitosamente']);
+                        }else{
+                            DB::table('seguimientotrabajadores')
+                            ->where('TRABAJADOR_ID', $request->input('TRABAJADOR_ID'))
+                            ->update([
+                                'TRABAJADOR_ESTADOCONTESTADO' => 'En proceso',
+                                'updated_at' => now(),
+                            ]);
+            
+                            return response()->json(['mensaje' => 'Registro creado exitosamente']);
+                        }
+                        
+                        
                     }
 
             } elseif ($option == 2) { // GUIA 2

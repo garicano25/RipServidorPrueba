@@ -1,7 +1,4 @@
-console.log('Guía 1:', requiereGuia1);
-console.log('Guía 2:', requiereGuia2);
-console.log('Guía 3:', requiereGuia3);
-console.log('Id:', id);
+
 
 //CARG INICIAL
 
@@ -183,7 +180,7 @@ function submitGuia1y2() {
         processData: false,
         contentType: false,
         success: function(response) {
-            console.log('Guia 1 enviada:', response);
+            
         },
         error: function(jqXHR, textStatus, errorThrown) {
             console.error('Error en Guia 1:', textStatus, errorThrown);
@@ -201,7 +198,7 @@ function submitGuia1y2() {
         processData: false,
         contentType: false,
         success: function(response) {
-            console.log('Guia 2 enviada:', response);
+           
         },
         error: function(jqXHR, textStatus, errorThrown) {
             console.error('Error en Guia 2:', textStatus, errorThrown);
@@ -213,16 +210,51 @@ function validarGuia5(){
     $('#guia5Modal').modal('show');
 }
 
-function submitGuia1y3() {
-    // Asignar valores del trabajador y respuestas
+function validarPregunta(){
+    const divPreguntas = $('.divPreguntas');
+    for(let pregunta of divPreguntas){
+        
+        const idPregunta = pregunta.id;
+        const divActual = $('#'+idPregunta);
+        const opciones = pregunta.querySelectorAll('input[type="radio"]');
+
+        var contestado = false;
+        for(let opcion of opciones){
+            if(opcion.checked){
+                contestado = true;
+                break;
+            }
+            
+        }
+        if(!contestado){
+            divActual.css('border', '1px solid red');
+           opciones.forEach(opcion => {
+            opcion.addEventListener('change', ()=>{
+                divActual.css('border', 'none');
+            })
+           });
+           
+            return [false,pregunta]
+        }else{
+            divActual.css('border', 'none');
+        }
+    }
+    return true
+}
+
+
+$('#guardar_guia3').on('click',function(e){  
+    e.preventDefault();
+    document.getElementById("guardar_guia3").blur();
+  
     $("#GUIAI_TRABAJADOR_ID").val($("#TRABAJADOR_ID").val());
     $("#GUIAI_ID_RECOPSICORESPUESTAS").val($("#ID_RECOPSICORESPUESTAS").val());
     $("#GUIAIII_TRABAJADOR_ID").val($("#TRABAJADOR_ID").val());
     $("#GUIAIII_ID_RECOPSICORESPUESTAS").val($("#ID_RECOPSICORESPUESTAS").val());
 
-    // Obtener los datos de la guia 1
+    
     var form1Data = new FormData(document.getElementById('guia_1'));
-    form1Data.append('option', 1); // Enviar opción 1 para la guía 1
+    form1Data.append('option', 1); 
 
     Swal.fire({
       title: "¿Desea guardar sus respuestas?",
@@ -237,34 +269,21 @@ function submitGuia1y3() {
       denyButtonText: `Guardar y continuar más tarde`,
       cancelButtonText: "Cancelar",
     }).then((result) => {
-      /* Read more about isConfirmed, isDenied below */
+      
       if (result.isConfirmed) {
         swal.close();
+
+
         
         // Validar y enviar guia_1
         var form1 = document.getElementById('guia_1');
-        const gruposPreguntas = form1.querySelectorAll('input[name^="GUIA1_"]');
-        var todasContestado = true;
-        var preguntaSinContestar = null;
-
-        gruposPreguntas.forEach(pregunta => {
-            const radios = form1.querySelectorAll(`input[name="${pregunta.name}"]`);
-            const isChecked = Array.from(radios).some(radio => radio.checked);
-
-            if (!isChecked) {
-                radios[0].setAttribute('required', 'required');
-                todasContestado = false; // Indicar que no todas están contestadas
-                preguntaSinContestar = radios[0]; // Guardar la primera pregunta sin contestar
-            } else {
-                radios.forEach(radio => {
-                    radio.removeAttribute('required'); // Quitar 'required' si hay respuesta
-                });
-            } 
-        });
         var form1Data = new FormData(form1);
+        form1Data.append('tipoGuardado', 1); 
         var valida1 = form1.checkValidity();
         
-        if (todasContestado && valida1) {
+        const [validado,div] = validarPregunta();
+        if (validado) {
+
             $('#guia5Modal').modal('show');
             $.ajax({
                 url: '/guardarGuiasPsico',
@@ -276,7 +295,7 @@ function submitGuia1y3() {
                     $('#guardar_guia3').html('Guardando <i class="fa fa-spin fa-spinner"></i>');
                 },
                 success: function(response) {
-                    console.log('Guia 1 enviada:', response);
+                   
                     
                     // Después de enviar guia_1, validar y enviar guia_3
                     var form2 = document.getElementById('guia_3');
@@ -294,7 +313,7 @@ function submitGuia1y3() {
                                 $('#guardar_guia3').html('Guardando <i class="fa fa-spin fa-spinner"></i>');
                             },
                             success: function(response) {
-                                console.log('Guia 3 enviada:', response);
+                                
                                 Swal.fire("Guardado y enviado correctamente!", "Usted ha finalizado exitosamente. Ya puede cerrar esta ventana, gracias!", "success");
                                 $('#guardar_guia3').html('Guardar <i class="fa fa-save"></i>');
                             },
@@ -319,13 +338,13 @@ function submitGuia1y3() {
                 icon: "warning",
                 confirmButtonText: "Aceptar"
             });
-    
-            // Enfocar la pregunta sin contestar
-            preguntaSinContestar.scrollIntoView({ behavior: "smooth", block: "center" });
-            preguntaSinContestar.focus();
+            
+            div.scrollIntoView({behavior: "smooth", block: "center" });
+            
         } 
     }else if (result.isDenied) {
         swal.close();
+        
         $.ajax({
             url: '/guardarGuiasPsico',
             type: 'POST',
@@ -333,7 +352,7 @@ function submitGuia1y3() {
             processData: false,
             contentType: false,
             success: function(response) {
-                console.log('Guia 1 enviada:', response);
+               
             },
             beforeSend: function () {
                 $('#guardar_guia3').html('Guardando <i class="fa fa-spin fa-spinner"></i>');
@@ -344,7 +363,6 @@ function submitGuia1y3() {
             }
         });
 
-        // Obtener los datos de la guia 2
         var form2Data = new FormData(document.getElementById('guia_3'));
         form2Data.append('option', 3);
 
@@ -355,7 +373,7 @@ function submitGuia1y3() {
             processData: false,
             contentType: false,
             success: function(response) {
-                console.log('Guia 3 enviada:', response);
+                
                 Swal.fire("Guardado para más tarde", "Puede continuar cuando lo desee durante el plazo indicado en su correo electrónico. Recuerde finalizar antes de su fecha límite", "success");
                 $('#guardar_guia3').html('Guardar <i class="fa fa-save"></i>');
             },
@@ -370,13 +388,13 @@ function submitGuia1y3() {
       }
     });
     
-}
+}) 
 
 function ejecucionCamara(){
     $('#avisoPermisosModal').modal('show');
     navigator.mediaDevices.getUserMedia({ video: true })
             .then(function (stream) {
-                console.log("Permiso de cámara concedido");
+              
                 $('#avisoPermisosModal').modal('hide');
                 $('#fotoModal').modal('show');
                 
@@ -433,7 +451,7 @@ function ejecucionCamara(){
                                 if (response.mensaje) {
                                     $('#fotoModal').modal('hide');
                                     $('#instruccionesModal').modal('show');
-                                    console.log("Foto guardada correctamente", response);
+                                  
                                 } else {
                                     Swal.fire({
                                         title: "Ocurrió un error",
@@ -474,7 +492,7 @@ function ejecucionCamara(){
                 })
             .catch(function (err) {
                 $('#avisoPermisosModal').modal('show');
-                console.log("Error al intentar acceder a la cámara: ", err);
+               
             });
 } 
 
@@ -491,15 +509,19 @@ function mostrarGuias(requiereGuia1, requiereGuia2, requiereGuia3) {
     const guia2 = document.getElementById('guia2');
     if (requiereGuia2 === 1) {
         guia2.style.display = 'block';
+        $('.guia2').addClass('divPreguntas');
     } else {
         guia2.style.display = 'none';
+        $('.guia2').removeClass('divPreguntas');
     }
 
     const guia3 = document.getElementById('guia3');
     if (requiereGuia3 === 1) {
         guia3.style.display = 'block';
+        $('.guia3').addClass('divPreguntas');
     } else {
         guia3.style.display = 'none';
+        $('.guia3').removeClass('divPreguntas');
     }
 }
 
@@ -546,11 +568,13 @@ function guia1() {
         document.getElementById("seccion2").style.display = "block";
         document.getElementById("seccion3").style.display = "block";
         document.getElementById("seccion4").style.display = "block";
+        $('.ocultas').addClass('divPreguntas');
+
     } else {
         document.getElementById("seccion2").style.display = "none";
         document.getElementById("seccion3").style.display = "none";
         document.getElementById("seccion4").style.display = "none";
-
+        $('.ocultas').removeClass('divPreguntas');
         const radiosSecciones = document.querySelectorAll('#seccion2 input[type="radio"], #seccion3 input[type="radio"], #seccion4 input[type="radio"]');
         radiosSecciones.forEach(function(radio) {
             radio.checked = false;
@@ -563,9 +587,10 @@ function clientesyusuarios() {
 
     if (siSeleccionado) {
         document.getElementById("seccion2_2").style.display = "block";
+        $('.ocultas2_1').addClass('divPreguntas');
     } else {
         document.getElementById("seccion2_2").style.display = "none";
-
+        $('.ocultas2_1').removeClass('divPreguntas');
         const inputsSeccion = document.querySelectorAll('#seccion2_2 input[type="radio"]');
         inputsSeccion.forEach(function(input) {
             if (input.type === "radio" || input.type === "checkbox") {
@@ -582,9 +607,10 @@ function jefetrabajadores() {
 
     if (sijefe) {
         document.getElementById("seccion4_2").style.display = "block";
+        $('.ocultas2_2').addClass('divPreguntas');
     } else {
         document.getElementById("seccion4_2").style.display = "none";
-
+        $('.ocultas2_2').removeClass('divPreguntas');
         const seccion4guia2 = document.querySelectorAll('#seccion4_2 input[type="radio"]');
         seccion4guia2.forEach(function(input) {
             if (input.type === "radio" || input.type === "checkbox") {
@@ -601,9 +627,10 @@ function clientesyusuariosguia3() {
 
     if (siSeleccionadoguia3) {
         document.getElementById("seccion2_3").style.display = "block";
+        $('.ocultas3_1').addClass('divPreguntas');
     } else {
         document.getElementById("seccion2_3").style.display = "none";
-
+        $('.ocultas3_1').removeClass('divPreguntas');
         const inputsSeccionguia3 = document.querySelectorAll('#seccion2_3 input[type="radio"]');
         inputsSeccionguia3.forEach(function(input) {
             if (input.type === "radio" || input.type === "checkbox") {
@@ -620,8 +647,11 @@ function jefetrabajadoresguia3() {
 
     if (sijefeguia3) {
         document.getElementById("seccion4_3").style.display = "block";
+        $('.ocultas3_2').addClass('divPreguntas');
+
     } else {
         document.getElementById("seccion4_3").style.display = "none";
+        $('.ocultas3_2').removeClass('divPreguntas');
 
         const seccion4guia3 = document.querySelectorAll('#seccion4_3 input[type="radio"]');
         seccion4guia3.forEach(function(input) {
@@ -733,7 +763,6 @@ function consultarRespuestasGuardadas() {
         },
         success: function (data) {
             if (data) {
-                    console.log('GUIA I RESPUESTAS' + data.RECPSICO_GUIAI_RESPUESTAS + 'GUIA II:' + data.RECPSICO_GUIAII_RESPUESTAS + 'GUIA III:' + data.RECPSICO_GUIAIII_RESPUESTAS);
                     const respuestasGuiaI = data.RECPSICO_GUIAI_RESPUESTAS
                     const respuestasGuiaIArray = JSON.parse(respuestasGuiaI);
                     if (Array.isArray(respuestasGuiaIArray)) {
@@ -809,3 +838,55 @@ function consultarRespuestasGuardadas() {
     });
 }
 
+// function validarFormulario(form) {
+//     var formulario = form;
+  
+//     // Agrega la clase "validar" a todos los elementos input, textarea y select con el atributo required, incluyendo radios
+//     formulario.find('input[required]:not([disabled]), textarea[required]:not([disabled]), select[required]:not([disabled])').addClass('validar').removeClass('error');
+  
+//     // Busca todos los campos dentro del formulario con la clase "validar"
+//     var campos = formulario.find('.validar');
+//     var formularioValido = true;
+  
+//     campos.each(function () {
+//         var tipoCampo = $(this).attr('type');
+//         var valorCampo = $(this).val();
+  
+//         // Verifica si el campo es un radio o checkbox y si hay uno seleccionado en el grupo
+//         if (tipoCampo === 'radio') {
+//             var nombreGrupo = $(this).attr('name');
+//             if ($('input[name="' + nombreGrupo + '"]:checked').length === 0) {
+//                 $('input[name="' + nombreGrupo + '"]').addClass('error'); // Añade clase error a los radios
+//                 formularioValido = false;
+//             } else {
+//                 $('input[name="' + nombreGrupo + '"]').removeClass('error');
+//             }
+//         } 
+//         // Valida otros tipos de campos (text, email, etc.)
+//         else if (valorCampo === '' || valorCampo === null) {
+//             $(this).addClass('error');
+//             formularioValido = false;
+//         } else {
+//             $(this).removeClass('error');
+//         }
+//     });
+  
+//     return formularioValido;
+//   }
+  
+//   // Evento para eliminar la clase "error" cuando el campo cambia o recibe entrada
+//   $(document).on('input change', 'input[required], textarea[required], select[required]', function() {
+//     var tipoCampo = $(this).attr('type');
+  
+//     // Si es radio o checkbox, solo remueve el error cuando uno del grupo es seleccionado
+//     if (tipoCampo === 'radio' || tipoCampo === 'checkbox') {
+//         var nombreGrupo = $(this).attr('name');
+//         if ($('input[name="' + nombreGrupo + '"]:checked').length > 0) {
+//             $('input[name="' + nombreGrupo + '"]').removeClass('error');
+//         }
+//     } else {
+//         if ($(this).val() !== '' && $(this).val() !== null) {
+//             $(this).removeClass('error');
+//         }
+//     }
+//   });
