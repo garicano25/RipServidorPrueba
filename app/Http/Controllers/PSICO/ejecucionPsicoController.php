@@ -66,25 +66,109 @@ class ejecucionPsicoController extends Controller
     public function tablaTrabajadoresOnline($proyecto_id)
     {   
         
-        //valida si ya hay datos guardados de seguimiento
-        $existingRecords = DB::table('seguimientotrabajadores')
+        // //valida si ya hay datos guardados de seguimiento
+        // $existingRecords = DB::table('seguimientotrabajadores')
+        // ->where('proyecto_id', $proyecto_id)
+        // ->exists();
+
+        // if($existingRecords){
+        //     //TARE LOS DATOS DE LA TABLA DE SEGUIMIENTO RELACIONADO CON LA DE PROGRAMA DE TRABAJO
+        //     $tablaOnline = DB::select('SELECT p.TRABAJADOR_NOMBRE TRABAJADOR_NOMBRE,
+        //                                     s.TRABAJADOR_ID TRABAJADOR_ID, 
+        //                                     s.TRABAJADOR_ESTADOCORREO ESTADOCORREO, 
+        //                                     s.TRABAJADOR_FECHAINICIO FECHAINICIO,
+        //                                     s.TRABAJADOR_FECHAFIN FECHAFIN,
+        //                                     s.TRABAJADOR_ESTADOCONTESTADO ESTADOCONTESTADO,
+        //                                     r.RECPSICO_ID,
+        //                                     r.RECPSICOTRABAJADOR_CORREO TRABAJADOR_CORREO
+        //                                 FROM seguimientotrabajadores s 
+        //                                 LEFT JOIN proyectotrabajadores p ON s.TRABAJADOR_ID = p.TRABAJADOR_ID 
+        //                                 LEFT JOIN recopsicotrabajadores r ON p.TRABAJADOR_ID = r.ID_RECOPSICOTRABAJADOR
+        //                                 WHERE p.TRABAJADOR_SELECCIONADO = 1 AND p.TRABAJADOR_MODALIDAD = "Online" AND s.proyecto_id = ' . $proyecto_id . '');
+
+
+        //     $count = 0;
+        //     foreach ($tablaOnline as $key => $value) {
+        //     $count += 1;
+
+        //     $value->COUNT = $count;
+
+        //     if($value->ESTADOCORREO == 'Sin enviar'){
+        //         $value->TRABAJADOR_ESTADOCORREO = '<span class="badge badge-pill badge-danger" style="font-size: 12px">'. $value->ESTADOCORREO .'</span>';
+        //     }else{
+        //         $value->TRABAJADOR_ESTADOCORREO = '<span class="badge badge-pill badge-success" style="font-size: 12px">'. $value->ESTADOCORREO .'</span>';
+                    
+        //     }
+            
+        //     $value->FECHAINICIO = $value->FECHAINICIO;
+        //     $value->FECHAFIN = $value->FECHAFIN;
+        //     $value->TRABAJADOR_ID = $value->TRABAJADOR_ID;
+        //     $value->TRABAJADOR_NOMBRE = $value->TRABAJADOR_NOMBRE;
+
+
+        //     if ($value->ESTADOCONTESTADO == 'Sin iniciar') {
+        //         $value->TRABAJADOR_ESTADOCONTESTADO = '<span class="badge badge-pill badge-danger" style="font-size: 12px">' . $value->ESTADOCONTESTADO . '</span>';
+            
+        //     } else if ($value->ESTADOCONTESTADO == 'En proceso'){
+
+        //         $value->TRABAJADOR_ESTADOCONTESTADO = '<span class="badge badge-pill badge-warning" style="font-size: 12px">' . $value->ESTADOCONTESTADO . '</span>';
+            
+        //     }else{
+        //         $value->TRABAJADOR_ESTADOCONTESTADO = '<span class="badge badge-pill badge-success" style="font-size: 12px">' . $value->ESTADOCONTESTADO . '</span>';
+        //     }
+            
+
+
+        //     $value->boton_enviarCorreo = '<button type="button" class="btn btn-warning btn-circle enviarcorreo" id="enviarCorreoTrabajador'.$count.'" name="enviarCorreoTrabajador" onclick="enviarCorreo('.$value->TRABAJADOR_ID.', '.$value->RECPSICO_ID.')" style="padding: 0px;"><i class="fa fa-paper-plane "></i></button>';
+        //     }
+        // }else{
+        //     //OBTIENE LOS DATOS GUARDADOS DE PROGRAMA DE TRABAJO
+        //     $tablaOnline = DB::select('SELECT p.TRABAJADOR_NOMBRE TRABAJADOR_NOMBRE,
+        //                                     p.TRABAJADOR_ID TRABAJADOR_ID,
+        //                                     r.RECPSICO_ID RECPSICO_ID,
+        //                                     r.RECPSICOTRABAJADOR_CORREO TRABAJADOR_CORREO
+        //                     FROM proyectotrabajadores p 
+        //                     LEFT JOIN recopsicotrabajadores r ON p.TRABAJADOR_ID = r.ID_RECOPSICOTRABAJADOR
+        //                     WHERE p.TRABAJADOR_SELECCIONADO = 1 
+        //                     AND p.TRABAJADOR_MODALIDAD = "Online" 
+        //                     AND p.proyecto_id = ' . $proyecto_id . '');
+
+
+        //     $count = 0;
+        //     foreach ($tablaOnline as $key => $value) {
+        //         $count += 1;
+
+        //         $value->COUNT = $count;
+        //         $value->TRABAJADOR_ESTADOCORREO = '<span class="badge badge-pill badge-danger">Sin enviar</span>';
+        //         $value->FECHAINICIO = '';
+        //         $value->FECHAFIN = '';
+        //         $value->TRABAJADOR_ID = $value->TRABAJADOR_ID;
+        //         $value->TRABAJADOR_NOMBRE = $value->TRABAJADOR_NOMBRE;
+        //         $value->TRABAJADOR_ESTADOCONTESTADO = '<span class="badge badge-pill badge-danger">Sin iniciar</span>';
+        //         $value->boton_enviarCorreo = '<button type="button" class="btn btn-warning btn-circle enviarcorreo" id="enviarCorreoTrabajador'.$count.'" name="enviarCorreoTrabajador" onclick="enviarCorreo('.$value->TRABAJADOR_ID.', '.$value->RECPSICO_ID.')" style="padding: 0px;"><i class="fa fa-paper-plane "></i></button>';
+                
+
+        //     }
+        // }
+
+
+        $existingRecords = DB::table('proyectotrabajadores')
         ->where('proyecto_id', $proyecto_id)
         ->exists();
 
         if($existingRecords){
             //TARE LOS DATOS DE LA TABLA DE SEGUIMIENTO RELACIONADO CON LA DE PROGRAMA DE TRABAJO
-            $tablaOnline = DB::select('SELECT p.TRABAJADOR_NOMBRE TRABAJADOR_NOMBRE,
-                                            s.TRABAJADOR_ID TRABAJADOR_ID, 
-                                            s.TRABAJADOR_ESTADOCORREO ESTADOCORREO, 
-                                            s.TRABAJADOR_FECHAINICIO FECHAINICIO,
-                                            s.TRABAJADOR_FECHAFIN FECHAFIN,
-                                            s.TRABAJADOR_ESTADOCONTESTADO ESTADOCONTESTADO,
+            $tablaOnline = DB::select('SELECT p.TRABAJADOR_NOMBRE ,
+                                            p.TRABAJADOR_ID , 
+                                            p.TRABAJADOR_ESTADOCORREO , 
+                                            p.TRABAJADOR_FECHAINICIO ,
+                                            p.TRABAJADOR_FECHAFIN ,
+                                            p.TRABAJADOR_ESTADOCONTESTADO ,
                                             r.RECPSICO_ID,
-                                            r.RECPSICOTRABAJADOR_CORREO TRABAJADOR_CORREO
-                                        FROM seguimientotrabajadores s 
-                                        LEFT JOIN proyectotrabajadores p ON s.TRABAJADOR_ID = p.TRABAJADOR_ID 
+                                            r.RECPSICOTRABAJADOR_CORREO 
+                                        FROM proyectotrabajadores p
                                         LEFT JOIN recopsicotrabajadores r ON p.TRABAJADOR_ID = r.ID_RECOPSICOTRABAJADOR
-                                        WHERE p.TRABAJADOR_SELECCIONADO = 1 AND p.TRABAJADOR_MODALIDAD = "Online" AND s.proyecto_id = ' . $proyecto_id . '');
+                                        WHERE p.TRABAJADOR_SELECCIONADO = 1 AND p.TRABAJADOR_MODALIDAD = "Online" AND p.proyecto_id = ' . $proyecto_id . '');
 
 
             $count = 0;
@@ -95,6 +179,9 @@ class ejecucionPsicoController extends Controller
 
             if($value->ESTADOCORREO == 'Sin enviar'){
                 $value->TRABAJADOR_ESTADOCORREO = '<span class="badge badge-pill badge-danger" style="font-size: 12px">'. $value->ESTADOCORREO .'</span>';
+            }
+            else if($value->ESTADOCORREO == null){
+                $value->TRABAJADOR_ESTADOCORREO = '<span class="badge badge-pill badge-danger" style="font-size: 12px">Sin enviar</span>';
             }else{
                 $value->TRABAJADOR_ESTADOCORREO = '<span class="badge badge-pill badge-success" style="font-size: 12px">'. $value->ESTADOCORREO .'</span>';
                     
@@ -112,7 +199,10 @@ class ejecucionPsicoController extends Controller
             } else if ($value->ESTADOCONTESTADO == 'En proceso'){
 
                 $value->TRABAJADOR_ESTADOCONTESTADO = '<span class="badge badge-pill badge-warning" style="font-size: 12px">' . $value->ESTADOCONTESTADO . '</span>';
-            
+            }
+            else if($value->ESTADOCONTESTADO == null) {
+                    $value->TRABAJADOR_ESTADOCONTESTADO = '<span class="badge badge-pill badge-danger" style="font-size: 12px">Sin iniciar</span>';
+                
             }else{
                 $value->TRABAJADOR_ESTADOCONTESTADO = '<span class="badge badge-pill badge-success" style="font-size: 12px">' . $value->ESTADOCONTESTADO . '</span>';
             }
@@ -121,35 +211,9 @@ class ejecucionPsicoController extends Controller
 
             $value->boton_enviarCorreo = '<button type="button" class="btn btn-warning btn-circle enviarcorreo" id="enviarCorreoTrabajador'.$count.'" name="enviarCorreoTrabajador" onclick="enviarCorreo('.$value->TRABAJADOR_ID.', '.$value->RECPSICO_ID.')" style="padding: 0px;"><i class="fa fa-paper-plane "></i></button>';
             }
-        }else{
-            //OBTIENE LOS DATOS GUARDADOS DE PROGRAMA DE TRABAJO
-            $tablaOnline = DB::select('SELECT p.TRABAJADOR_NOMBRE TRABAJADOR_NOMBRE,
-                                            p.TRABAJADOR_ID TRABAJADOR_ID,
-                                            r.RECPSICO_ID RECPSICO_ID,
-                                            r.RECPSICOTRABAJADOR_CORREO TRABAJADOR_CORREO
-                            FROM proyectotrabajadores p 
-                            LEFT JOIN recopsicotrabajadores r ON p.TRABAJADOR_ID = r.ID_RECOPSICOTRABAJADOR
-                            WHERE p.TRABAJADOR_SELECCIONADO = 1 
-                            AND p.TRABAJADOR_MODALIDAD = "Online" 
-                            AND p.proyecto_id = ' . $proyecto_id . '');
-
-
-            $count = 0;
-            foreach ($tablaOnline as $key => $value) {
-                $count += 1;
-
-                $value->COUNT = $count;
-                $value->TRABAJADOR_ESTADOCORREO = '<span class="badge badge-pill badge-danger">Sin enviar</span>';
-                $value->FECHAINICIO = '';
-                $value->FECHAFIN = '';
-                $value->TRABAJADOR_ID = $value->TRABAJADOR_ID;
-                $value->TRABAJADOR_NOMBRE = $value->TRABAJADOR_NOMBRE;
-                $value->TRABAJADOR_ESTADOCONTESTADO = '<span class="badge badge-pill badge-danger">Sin iniciar</span>';
-                $value->boton_enviarCorreo = '<button type="button" class="btn btn-warning btn-circle enviarcorreo" id="enviarCorreoTrabajador'.$count.'" name="enviarCorreoTrabajador" onclick="enviarCorreo('.$value->TRABAJADOR_ID.', '.$value->RECPSICO_ID.')" style="padding: 0px;"><i class="fa fa-paper-plane "></i></button>';
-                
-
-            }
         }
+
+
 
         $online['data']  = $tablaOnline;
         return response()->json($online);
