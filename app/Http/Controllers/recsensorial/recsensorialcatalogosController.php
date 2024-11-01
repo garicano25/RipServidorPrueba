@@ -488,6 +488,7 @@ class recsensorialcatalogosController extends Controller
             return Storage::download($documento->RUTA_PDF);
         }
     }
+    
     public function verProteccionFoto($ID)
     {
         $foto = catProteccion_auditivaModel::findOrFail($ID);

@@ -1287,6 +1287,22 @@ class recsensorialController extends Controller
     }
 
 
+// DESCARGAR ZIP
+
+
+
+public function verZIP($opcion, $ID)
+{
+    $documento = controlCambiosModel::findOrFail($ID);
+
+    if ($opcion == 0) {
+        return Storage::response($documento->RUTA_ZIP);
+    } else {
+        return Storage::download($documento->RUTA_ZIP);
+    }
+}
+
+
 
     //  VERIFICAR QUE ESTE BLOQUEADO 
 
@@ -1313,7 +1329,8 @@ class recsensorialController extends Controller
     {
         try {
             // Cambios
-            $cambios = DB::select("SELECT CONCAT(er.empleado_nombre,' ',er.empleado_apellidopaterno,' ', er.empleado_apellidomaterno) AS REALIZADO_POR,
+            $cambios = DB::select("SELECT c.ID_CONTROL_CAMBIO, 
+                                        CONCAT(er.empleado_nombre,' ',er.empleado_apellidopaterno,' ', er.empleado_apellidomaterno) AS REALIZADO_POR,
                                         DESCRIPCION_REALIZADO AS CAMBIOS,
                                         c.created_at FECHA_REALIZADO,
                                         IFNULL(CONCAT(ea.empleado_nombre,' ',ea.empleado_apellidopaterno,' ', ea.empleado_apellidomaterno), 'SIN AUTORIZAR') AS AUTORIZADO_ID,
@@ -1325,27 +1342,14 @@ class recsensorialController extends Controller
                         LEFT JOIN empleado er ON er.id = ur.empleado_id
                         LEFT JOIN empleado ea ON ea.id = ua.empleado_id
                         WHERE c.RECONOCIMIENTO_ID = ?", [$recsensorial_id]);
-
+    
             $COUNT = 0;
-            foreach ($cambios  as $key => $value) {
-
+            foreach ($cambios as $key => $value) {
                 $value->COUNT = $COUNT++;
-
-                // Botones
-                if (auth()->user()->hasRoles(['Superusuario', 'Administrador', 'Coordinador'])  && $value->AUTORIZADO == 0) {
-
-                    $value->boton_descargar = '<button type="button" class="btn btn-success waves-effect btn-circle AUTORIZAR" id="botondescarga_revision"><i class="fa fa-download fa-1x"></i></button>';
-                    
-                    
-                } else {
-
-                    $value->boton_descargar = '<button type="button" class="btn btn-default waves-effect btn-circle" data-toggle="tooltip" title="" data-original-title="Solo Coordinadores y Administradores"><i class="fa fa-ban fa-1x"></i></button>
-';
-                }
-
+                $value->boton_descargar = '<button type="button" class="btn btn-success btn-circle descargar"><i class="fa fa-download"></i></button>';
             }
-
-            // respuesta
+    
+            // Respuesta
             $dato['data'] = $cambios;
             $dato["msj"] = 'Informacion consultada correctamente';
             return response()->json($dato);
@@ -1355,6 +1359,8 @@ class recsensorialController extends Controller
             return response()->json($dato);
         }
     }
+    
+    
 
     public function estructuraproyectos($FOLIO)
     {

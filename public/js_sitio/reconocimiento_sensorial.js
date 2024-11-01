@@ -3080,7 +3080,6 @@ $("#boton_descargarquimicospdf").click(function () {
 // 							var a = document.createElement('a');
 // 							var url = window.URL.createObjectURL(data);
 // 							a.href = url;
-// 							a.download = `Informe - Reconocimiento de Químicos - ${nombreInstalacion}${ext}`;
 // 							document.body.append(a);
 // 							a.click();
 // 							a.remove();
@@ -3247,7 +3246,7 @@ function verificarYBloquear(ID) {
             if (bloqueadoGlobal === 1) {
                 bloquearBotones();
             } else {
-                desbloquearBotones(); 
+                desbloquearBotones();
             }
         },
         error: function() {
@@ -3255,7 +3254,6 @@ function verificarYBloquear(ID) {
         }
     });
 }
-
 
 function bloquearBotones() {
     const botones = [
@@ -3328,6 +3326,7 @@ function desbloquearBotones() {
         }
     });
 }
+
 
 
 
@@ -7405,78 +7404,308 @@ $('#tabla_recsensorialanexos2 tbody').on('click', 'td>button.elimina_anexo', fun
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 
-function mostrar_vista_parametro(parametro_nombre, recsensorial_id, parametro_id) {
-	// alert('Rec. Sensorial: '+recsensorial_id+' - parametro: '+parametro_nombre+' Id '+parametro_id);
-	var opcion = parseInt(parametro_id);
-	$("#titulo_parametro").html(parametro_nombre);
+// function mostrar_vista_parametro(parametro_nombre, recsensorial_id, parametro_id) {
+// 	// alert('Rec. Sensorial: '+recsensorial_id+' - parametro: '+parametro_nombre+' Id '+parametro_id);
+// 	var opcion = parseInt(parametro_id);
+// 	$("#titulo_parametro").html(parametro_nombre);
 
-	$.ajax({
-		success: function () {
-			switch (opcion) {
-				case 1:
-					$('#forms_parametro').load('/parametroruidovista/' + recsensorial_id);
-					break;
-				case 2:
-					$('#forms_parametro').load('/parametrovibracionvista/' + recsensorial_id);
-					break;
-				case 3:
-					$('#forms_parametro').load('/parametrotemperaturavista/' + recsensorial_id);
-					break;
-				case 4:
-					$('#forms_parametro').load('/parametroiluminacionvista/' + recsensorial_id);
-					break;
-				case 5:
-					$('#forms_parametro').load('/parametroradiacionionizantevista/' + recsensorial_id);
-					break;
-				case 6:
-					$('#forms_parametro').load('/parametroradiacionnoionizantevista/' + recsensorial_id);
-					break;
-				case 7:
-					$('#forms_parametro').load('/parametroprecionesambientalesvista/' + recsensorial_id);
-					break;
-				case 8:
-					$('#forms_parametro').load('/parametrocalidadairevista/' + recsensorial_id);
-					break;
-				case 9:
-					$('#forms_parametro').load('/parametroaguavista/' + recsensorial_id);
-					break;
-				case 10:
-					$('#forms_parametro').load('/parametrohielovista/' + recsensorial_id);
-					break;
-				case 11:
-					$('#forms_parametro').load('/parametroalimentovista/' + recsensorial_id);
-					break;
-				case 12:
-					$('#forms_parametro').load('/parametrosuperficievista/' + recsensorial_id);
-					break;
-				case 13:
-					$('#forms_parametro').load('/parametroergonomiavista/' + recsensorial_id);
-					break;
-				case 14:
-					$('#forms_parametro').load('/parametropsicosocialvista/' + recsensorial_id);
-					break;
-				case 15:
-					// Quimicos, Esta opcion no se muestra en el menú
-					break;
-				case 16:
-					$('#forms_parametro').load('/parametroserviciopersonalvista/' + recsensorial_id);
-					break;
-				case 17:
-					$('#forms_parametro').load('/parametromapariesgovista/' + recsensorial_id);
-					break;
-				default:
-					break;
-			}
-		},
-		beforeSend: function () {
-			$('#forms_parametro').html('<div style="text-align: center;"><i class="fa fa-spin fa-spinner fa-5x"></div>');
-		},
-		error: function () {
-			$('#forms_parametro').html('<div style="text-align: center;">Error al cargar agente</div>');
-			return false;
-		}
-	});//Fin ajax
+// 	$.ajax({
+// 		success: function () {
+// 			switch (opcion) {
+// 				case 1:
+// 					$('#forms_parametro').load('/parametroruidovista/' + recsensorial_id);
+// 					break;
+// 				case 2:
+// 					$('#forms_parametro').load('/parametrovibracionvista/' + recsensorial_id);
+// 					break;
+// 				case 3:
+// 					$('#forms_parametro').load('/parametrotemperaturavista/' + recsensorial_id);
+// 					break;
+// 				case 4:
+// 					$('#forms_parametro').load('/parametroiluminacionvista/' + recsensorial_id);
+// 					break;
+// 				case 5:
+// 					$('#forms_parametro').load('/parametroradiacionionizantevista/' + recsensorial_id);
+// 					break;
+// 				case 6:
+// 					$('#forms_parametro').load('/parametroradiacionnoionizantevista/' + recsensorial_id);
+// 					break;
+// 				case 7:
+// 					$('#forms_parametro').load('/parametroprecionesambientalesvista/' + recsensorial_id);
+// 					break;
+// 				case 8:
+// 					$('#forms_parametro').load('/parametrocalidadairevista/' + recsensorial_id);
+// 					break;
+// 				case 9:
+// 					$('#forms_parametro').load('/parametroaguavista/' + recsensorial_id);
+// 					break;
+// 				case 10:
+// 					$('#forms_parametro').load('/parametrohielovista/' + recsensorial_id);
+// 					break;
+// 				case 11:
+// 					$('#forms_parametro').load('/parametroalimentovista/' + recsensorial_id);
+// 					break;
+// 				case 12:
+// 					$('#forms_parametro').load('/parametrosuperficievista/' + recsensorial_id);
+// 					break;
+// 				case 13:
+// 					$('#forms_parametro').load('/parametroergonomiavista/' + recsensorial_id);
+// 					break;
+// 				case 14:
+// 					$('#forms_parametro').load('/parametropsicosocialvista/' + recsensorial_id);
+// 					break;
+// 				case 15:
+// 					// Quimicos, Esta opcion no se muestra en el menú
+// 					break;
+// 				case 16:
+// 					$('#forms_parametro').load('/parametroserviciopersonalvista/' + recsensorial_id);
+// 					break;
+// 				case 17:
+// 					$('#forms_parametro').load('/parametromapariesgovista/' + recsensorial_id);
+// 					break;
+// 				default:
+// 					break;
+// 			}
+// 		},
+// 		beforeSend: function () {
+// 			$('#forms_parametro').html('<div style="text-align: center;"><i class="fa fa-spin fa-spinner fa-5x"></div>');
+// 		},
+// 		error: function () {
+// 			$('#forms_parametro').html('<div style="text-align: center;">Error al cargar agente</div>');
+// 			return false;
+// 		}
+// 	});//Fin ajax
+// }
+
+
+function mostrar_vista_parametro(parametro_nombre, recsensorial_id, parametro_id) {
+    $("#titulo_parametro").html(parametro_nombre);
+
+    var opcion = parseInt(parametro_id);
+    
+    $.ajax({
+        success: function () {
+            switch (opcion) {
+                case 1:
+                    $('#forms_parametro').load('/parametroruidovista/' + recsensorial_id, function() {
+						if (bloqueadoGlobal === 1) {
+                            bloquearBotonesVistaCargada();
+                            activarBloqueoDataTables();
+                        }
+
+                    });
+                    break;
+                case 2:
+                    $('#forms_parametro').load('/parametrovibracionvista/' + recsensorial_id, function() {
+                        if (bloqueadoGlobal === 1) {
+                            bloquearBotonesVistaCargada();
+                            activarBloqueoDataTables();
+                        }
+
+                    });
+                    break;
+                case 3:
+                    $('#forms_parametro').load('/parametrotemperaturavista/' + recsensorial_id, function() {
+						if (bloqueadoGlobal === 1) {
+                            bloquearBotonesVistaCargada();
+                            activarBloqueoDataTables();
+                        }
+
+                    });
+                    break;
+                case 4:
+                    $('#forms_parametro').load('/parametroiluminacionvista/' + recsensorial_id, function() {
+                        if (bloqueadoGlobal === 1) {
+                            bloquearBotonesVistaCargada();
+                            activarBloqueoDataTables();
+                        }
+
+                    });
+                    break;
+                case 5:
+                    $('#forms_parametro').load('/parametroradiacionionizantevista/' + recsensorial_id, function() {
+                        if (bloqueadoGlobal === 1) {
+                            bloquearBotonesVistaCargada();
+                            activarBloqueoDataTables();
+                        }
+
+                    });
+                    break;
+                case 6:
+                    $('#forms_parametro').load('/parametroradiacionnoionizantevista/' + recsensorial_id, function() {
+                        if (bloqueadoGlobal === 1) {
+                            bloquearBotonesVistaCargada();
+                            activarBloqueoDataTables();
+                        }
+
+                    });
+                    break;
+                case 7:
+                    $('#forms_parametro').load('/parametroprecionesambientalesvista/' + recsensorial_id, function() {
+						if (bloqueadoGlobal === 1) {
+                            bloquearBotonesVistaCargada();
+                            activarBloqueoDataTables();
+                        }
+
+                    });
+                    break;
+                case 8:
+                    $('#forms_parametro').load('/parametrocalidadairevista/' + recsensorial_id, function() {
+                        if (bloqueadoGlobal === 1) {
+                            bloquearBotonesVistaCargada();
+                            activarBloqueoDataTables();
+                        }
+
+                    });
+                    break;
+                case 9:
+                    $('#forms_parametro').load('/parametroaguavista/' + recsensorial_id, function() {
+                        if (bloqueadoGlobal === 1) {
+                            bloquearBotonesVistaCargada();
+                            activarBloqueoDataTables();
+                        }
+
+                    });
+                    break;
+                case 10:
+                    $('#forms_parametro').load('/parametrohielovista/' + recsensorial_id, function() {
+						if (bloqueadoGlobal === 1) {
+                            bloquearBotonesVistaCargada();
+                            activarBloqueoDataTables();
+                        }
+
+                    });
+                    break;
+                case 11:
+                    $('#forms_parametro').load('/parametroalimentovista/' + recsensorial_id, function() {
+                        if (bloqueadoGlobal === 1) {
+                            bloquearBotonesVistaCargada();
+                            activarBloqueoDataTables();
+                        }
+
+                    });
+                    break;
+                case 12:
+                    $('#forms_parametro').load('/parametrosuperficievista/' + recsensorial_id, function() {
+						if (bloqueadoGlobal === 1) {
+                            bloquearBotonesVistaCargada();
+                            activarBloqueoDataTables();
+                        }
+
+                    });
+                    break;
+                case 13:
+                    $('#forms_parametro').load('/parametroergonomiavista/' + recsensorial_id, function() {
+						if (bloqueadoGlobal === 1) {
+                            bloquearBotonesVistaCargada();
+                            activarBloqueoDataTables();
+                        }
+
+                    });
+                    break;
+                case 14:
+                    $('#forms_parametro').load('/parametropsicosocialvista/' + recsensorial_id, function() {
+						if (bloqueadoGlobal === 1) {
+                            bloquearBotonesVistaCargada();
+                            activarBloqueoDataTables();
+                        }
+
+                    });
+                    break;
+                case 16:
+                    $('#forms_parametro').load('/parametroserviciopersonalvista/' + recsensorial_id, function() {
+						if (bloqueadoGlobal === 1) {
+                            bloquearBotonesVistaCargada();
+                            activarBloqueoDataTables();
+                        }
+                    });
+                    break;
+                case 17:
+                    $('#forms_parametro').load('/parametromapariesgovista/' + recsensorial_id, function() {
+						if (bloqueadoGlobal === 1) {
+                            bloquearBotonesVistaCargada();
+                            activarBloqueoDataTables();
+                        }
+
+                    });
+                    break;
+                default:
+                    break;
+            }
+        },
+        beforeSend: function () {
+            $('#forms_parametro').html('<div style="text-align: center;"><i class="fa fa-spin fa-spinner fa-5x"></div>');
+        },
+        error: function () {
+            $('#forms_parametro').html('<div style="text-align: center;">Error al cargar agente</div>');
+            return false;
+        }
+    });
 }
+
+function bloquearBotonesVistaCargada() {
+    console.log("Ejecutando bloqueo inicial de botones en la vista");
+    
+    $('#forms_parametro')
+        .find('button:not([data-dismiss="modal"]), input[type="button"]:not([data-dismiss="modal"]), input[type="submit"]:not([data-dismiss="modal"])')
+        .each(function() {
+            $(this).prop('disabled', true);
+        });
+}
+
+// Función para deshabilitar botones y cambiar clases después de cargar todas las tablas DataTable
+function bloquearBotonesPostCargaDataTable() {
+    console.log("Ejecutando bloqueo de botones específicos en DataTables");
+
+    $('.btn-danger').each(function() {
+        $(this).prop('disabled', true);
+        console.log("Deshabilitado botón con clase 'btn-danger'", this);
+    });
+
+    $('.eliminar').each(function() {
+        $(this).removeClass('eliminar').addClass('bloqueado-eliminar');
+        console.log("Cambiada clase 'eliminar' a 'bloqueado-eliminar'", this);
+    });
+}
+
+// Función para activar el bloqueo en todas las DataTables cuando se cargan por completo
+function activarBloqueoDataTables() {
+    console.log("Activando bloqueo en DataTables");
+    
+    $('table').each(function() {
+        if ($.fn.DataTable.isDataTable(this)) {
+            $(this).DataTable().on('initComplete', function() {
+                console.log("DataTable completamente cargada:", this);
+                if (bloqueadoGlobal === 1) {
+                    bloquearBotonesPostCargaDataTable();
+                }
+            });
+        }
+    });
+}
+
+
+
+
+function descargarZIP() {
+    // mostrar PDF
+    $('#tabla_control_cambios').on('click', 'td.descargar', function () {
+
+
+        var tr = $(this).closest('tr');
+        var row = tabla_control_cambios.row(tr);
+
+        window.open('/verZIP/1/' + row.data().ID_CONTROL_CAMBIO);
+
+
+    });
+};
+
+
+
+
+
+
 
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -11916,10 +12145,12 @@ function tabla_ControlCambios() {
 						"defaultContent": "-"
 					},
 					{
-						"orderable": false,
-						"data": 'boton_descargar',
-						"defaultContent": '-'
-					}
+                        "className": 'descargar',
+                        "orderable": false,
+                        "data": 'boton_descargar',
+                        "defaultContent": '-'
+                        // "defaultContent": '<button type="button" class="btn btn-danger btn-circle"><i class="fa fa-lock"></i></button>'
+                    }
 				],
 				"lengthMenu": [[20, 50, 100, -1], [20, 50, 100, "Todos"]],
 				// "rowsGroup": [0, 1], //agrupar filas
@@ -12061,6 +12292,7 @@ $(document).ready(function () {
 $('#tab4_control_cambios').click(function (e) {
 
 	tabla_ControlCambios()
+    descargarZIP();
 
 })
 

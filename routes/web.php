@@ -341,6 +341,10 @@ Route::get('TablaControlCambios/{id}', ['as' => 'TablaControlCambios', 'uses' =>
 Route::get('verificarBloqueado/{ID}', ['as' => 'verificarBloqueado', 'uses' => 'recsensorial\recsensorialController@verificarBloqueado']);
 
 
+Route::get('verZIP/{opcion}/{id}', ['as' => 'verZIP', 'uses' => 'recsensorial\recsensorialController@verZIP']);
+
+
+
 
 
 
