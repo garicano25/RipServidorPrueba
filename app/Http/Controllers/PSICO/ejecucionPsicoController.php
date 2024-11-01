@@ -259,6 +259,8 @@ class ejecucionPsicoController extends Controller
                         'proyecto_id' => $proyecto_id,
                         'TRABAJADOR_FECHAINICIO' => $request->fechaInicio,
                         'TRABAJADOR_FECHAFIN' => $request->fechaFin,
+                        'TRABAJADOR_ESTADOCORREO' => 'Sin enviar',
+                        'TRABAJADOR_ESTADOCONTESTADO' => 'Sin iniciar',
                     ]);
                 }
     
