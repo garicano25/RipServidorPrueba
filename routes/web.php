@@ -1760,6 +1760,18 @@ Route::get('reportealimentosvista/{proyecto_id}', ['as' => 'reportealimentos.rep
 
 Route::get('reportealimentosdatosgenerales/{proyecto_id}/{agente_id}/{agente_nombre}', ['as' => 'reportealimentos.reportealimentosdatosgenerales', 'uses' => 'reportes\reportealimentosController@reportealimentosdatosgenerales']);
 
+Route::get('reportealimentosmapaubicacion/{reportealimentos_id}/{archivo_opcion}', ['as' => 'reportealimentos.reportealimentosmapaubicacion', 'uses' => 'reportes\reportealimentosController@reportealimentosmapaubicacion']);
+
+Route::get('reportealimentosresponsabledocumento/{reportealimentos_id}/{responsabledoc_tipo}/{responsabledoc_opcion}', ['as' => 'reportealimentos.reportealimentosresponsabledocumento', 'uses' => 'reportes\reportealimentosController@reportealimentosresponsabledocumento']);
+
+Route::get('reportealimentostabladefiniciones/{proyecto_id}/{agente_nombre}/{reportealimentos_id}', ['as' => 'reportealimentos.reportealimentostabladefiniciones', 'uses' => 'reportes\reportealimentosController@reportealimentostabladefiniciones']);
+
+Route::get('reportealimentosdefinicioneliminar/{id}', ['as' => 'reportealimentos.reportealimentosdefinicioneliminar', 'uses' => 'reportes\reportealimentosController@reportealimentosdefinicioneliminar']);
+
+Route::get('reportealimentostablarevisiones/{id}', ['as' => 'reportealimentos.reportealimentostablarevisiones', 'uses' => 'reportes\reportealimentosController@reportealimentostablarevisiones']);
+
+Route::get('reportealimentostablarecomendaciones/{proyecto_id}/{reportealimentos_id}/{agente_nombre}', ['as' => 'reportealimentos.reportealimentostablarecomendaciones', 'uses' => 'reportes\reportealimentosController@reportealimentostablarecomendaciones']);
+
 
 
 

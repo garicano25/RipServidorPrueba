@@ -161,7 +161,7 @@
                 <a href="#5_2" class="list-group-item submenu">5.2.- Método de evaluación <i class="fa fa-times" id="menureporte_5_2"></i></a>
                 <a href="#6" class="list-group-item">6.- Reconocimiento</a>
                 <a href="#6_1" class="list-group-item submenu">6.1.- Ubicación de la instalación <i class="fa fa-times" id="menureporte_6_1"></i></a>
-                <a href="#7" class="list-group-item">7.- Descripción del proceso en la instalación</a>
+                <a href="#7" class="list-group-item">7.- Descripción del proceso en la instalación <i class="fa fa-times" id="menureporte_7"></i></a>
                 <a href="#8" class="list-group-item">8.- Resultados <i class="fa fa-times" id="menureporte_8"></i></a>
 
                 <!-- Adicionales -->
@@ -180,8 +180,8 @@
                 <!-- Adicionales -->
 
                 <a href="#10" class="list-group-item">10.- Conclusiones <i class="fa fa-times" id="menureporte_10"></i></a>
-                <a href="#11" class="list-group-item">11.- Recomendaciones de control</a>
-                <a href="#12" class="list-group-item">12.- Responsables del informe</a>
+                <a href="#11" class="list-group-item">11.- Recomendaciones de control <i class="fa fa-times" id="menureporte_11"></i></a>
+                <a href="#12" class="list-group-item">12.- Responsables del informe <i class="fa fa-times" id="menureporte_12"></i></a>
                 <a href="#13" class="list-group-item">13.- Anexos</a>
                 <a href="#13_1" class="list-group-item submenu">13.1.- Anexo 1: Resultados de laboratorio <i class="fa fa-times" id="menureporte_13_1"></i></a>
                 <a href="#13_2" class="list-group-item submenu">13.2.- Anexo 2: Información de los contaminantes evaluados <i class="fa fa-times" id="menureporte_13_2"></i></a>
@@ -482,7 +482,7 @@
                         <div class="col-12">
                             <div class="form-group">
                                 {!! csrf_field() !!}
-                                <textarea class="form-control" style="margin-bottom: 0px;" rows="12" id="reportealimentos_5_1" name="reportealimentos_5_1" required></textarea>
+                                <textarea class="form-control" style="margin-bottom: 0px;" rows="12" id="reportealimentos_metodologia_5_1" name="reportealimentos_metodologia_5_1" required></textarea>
                             </div>
                         </div>
                         <div class="col-12" style="text-align: right;">
@@ -498,7 +498,7 @@
                             {!! csrf_field() !!}
                             <div class="form-group">
                                 <label>Método de evaluación</label>
-                                <textarea class="form-control" style="margin-bottom: 0px;" rows="20" id="reportealimentos_5_2" name="reportealimentos_5_2" required></textarea>
+                                <textarea class="form-control" style="margin-bottom: 0px;" rows="20" id="reportealimentos_metodologia_5_2" name="reportealimentos_metodologia_5_2" required></textarea>
                             </div>
                         </div>
                         <div class="col-12" style="text-align: right;">
