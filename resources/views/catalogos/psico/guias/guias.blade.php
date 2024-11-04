@@ -690,6 +690,7 @@
             top: 2px;
             left: 2px;
         }
+      
         
     </style>
 
@@ -4700,142 +4701,183 @@
                     <hr>
                     <form enctype="multipart/form-data" method="post" name="guia_5" id="guia_5">
                         {!! csrf_field() !!}
-
-                        <!-- Pregunta 1: Edad -->
+                        <div class="col-12">
+                                <input type="hidden" class="form-control" id="GUIAV_ID" name="GUIAV_ID" value="0">
+                                <input type="hidden" class="form-control" id="GUIAV_TRABAJADOR_ID" name="TRABAJADOR_ID" value="0">
+                        </div>
+                        <!-- Pregunta 1: Sexo -->
                         <div class="form-group">
-                            <label for="edad">Edad:</label>
-                            <select name="edad" id="edad" class="form-control" required>
-                                <option value="" disabled selected>Seleccione su edad</option>
-                                <option value="menor_20">Menor de 20</option>
-                                <option value="20_30">20 - 30</option>
-                                <option value="31_40">31 - 40</option>
-                                <option value="41_50">41 - 50</option>
-                                <option value="mayor_50">Mayor de 50</option>
+                            <label for="RECPSICOTRABAJADOR_GENERO">Sexo:</label>
+                            <select name="RECPSICOTRABAJADOR_GENERO" id="pregunta1_5" class="form-control" required>
+                                <option value="Masculino">Masculino</option>
+                                <option value="Femenino">Femenino</option>
                             </select>
                         </div>
 
-                        <!-- Pregunta 2: Sexo -->
+                        <!-- Pregunta 2: Edad -->
                         <div class="form-group">
-                            <label for="sexo">Sexo:</label>
-                            <select name="sexo" id="sexo" class="form-control" required>
-                                <option value="" disabled selected>Seleccione su sexo</option>
-                                <option value="masculino">Masculino</option>
-                                <option value="femenino">Femenino</option>
+                            <label for="RECPSICOTRABAJADOR_EDAD">Edad en años:</label>
+                            <select name="RECPSICOTRABAJADOR_EDAD" id="pregunta2_5" class="form-control" required>
+                                <option value="" disabled selected>Seleccione su edad</option>
+                                <option value="15">15 - 19</option>
+                                <option value="20">20 - 24</option>
+                                <option value="25">25 - 29</option>
+                                <option value="30">31 - 34</option>
+                                <option value="35">35 - 39</option>
+                                <option value="40">40 - 44</option>
+                                <option value="45">45 - 49</option>
+                                <option value="50">50 - 54</option>
+                                <option value="55">55 - 59</option>
+                                <option value="60">60 - 64</option>
+                                <option value="65">65 - 69</option>
+                                <option value="70">70 o más</option>
                             </select>
                         </div>
 
                         <!-- Pregunta 3: Estado civil -->
                         <div class="form-group">
-                            <label for="estado_civil">Estado civil:</label>
-                            <select name="estado_civil" id="estado_civil" class="form-control" required>
+                            <label for="RECPSICOTRABAJADOR_ESTADOCIVIL">Estado civil:</label>
+                            <select name="RECPSICOTRABAJADOR_ESTADOCIVIL" id="pregunta3_5" class="form-control" required>
                                 <option value="" disabled selected>Seleccione su estado civil</option>
-                                <option value="soltero">Soltero/a</option>
-                                <option value="casado">Casado/a</option>
-                                <option value="union_libre">Unión libre</option>
-                                <option value="divorciado">Divorciado/a</option>
-                                <option value="viudo">Viudo/a</option>
-                                <option value="NA">Prefiero no decirlo</option>
+                                <option value="Casado">Casado</option>
+                                <option value="Soltero">Soltero</option>
+                                <option value="Union Libre">Unión libre</option>
+                                <option value="Divorciado">Divorciado</option>
+                                <option value="Viudo">Viudo</option>
+                                <option value="Prefiero no decirlo">Prefiero no decirlo</option>
                             </select>
                         </div>
 
                         <!-- Pregunta 4: Nivel de estudios -->
                         <div class="form-group">
-                            <label for="nivel_estudios">Nivel de estudios:</label>
-                            <select name="nivel_estudios" id="nivel_estudios" class="form-control" required>
+                            <label for="RECPSICOTRABAJADOR_ESTUDIOS">Nivel de estudios:</label>
+                            <select name="RECPSICOTRABAJADOR_ESTUDIOS" id="pregunta4_5" class="form-control" required>
                                 <option value="" disabled selected>Seleccione su nivel de estudios</option>
 
-                                <option value="primariaIncompleta">Primaria Incompleta</option>
-                                <option value="primariaTerminada">Primaria Terminada</option>
+                                <option value="Sin formación">Sin formación</option>
 
-                                <option value="secundariaIncompleta">Secundaria Incompleta</option>
-                                <option value="secundariaTerminada">Secundaria Terminada</option>
+                                <option value="Primaria Incompleta">Primaria Incompleta</option>
+                                <option value="Primaria Terminada">Primaria Terminada</option>
 
-                                <option value="preparatoriaIncompleta">Preparatoria o bachillerato Incompleta</option>
-                                <option value="preparatoriaTerminada">Preparatoria o bachillerato Terminada</option>
+                                <option value="Secundaria Incompleta">Secundaria Incompleta</option>
+                                <option value="Secundaria Terminada">Secundaria Terminada</option>
 
-                                <option value="tecnicoSuperiorIncompleta">Técnico Superior Incompleta</option>
-                                <option value="tecnicoSuperiorTerminada">Técnico Superior Terminada</option>
+                                <option value="Preparatoria o bachillerato Incompleta">Preparatoria o bachillerato Incompleta</option>
+                                <option value="Preparatoria o bachillerato Terminada">Preparatoria o bachillerato Terminada</option>
 
-                                <option value="licenciaturaIncompleta">Licenciatura Incompleta</option>
-                                <option value="licenciaturaTerminada">Licenciatura Terminada</option>
+                                <option value="Técnico Superior Incompleta">Técnico Superior Incompleta</option>
+                                <option value="Técnico Superior Terminada">Técnico Superior Terminada</option>
 
-                                <option value="especialidadIncompleta">Especialidad Incompleta</option>
-                                <option value="especialidadTerminada">Especialidad Terminada</option>
+                                <option value="Licenciatura Incompleta">Licenciatura Incompleta</option>
+                                <option value="Licenciatura Terminada">Licenciatura Terminada</option>
 
-                                <option value="maestriaIncompleta">Maestría Incompleta</option>
-                                <option value="maestriaTerminada">Maestría Terminada</option>
+                                <option value="Especialidad Incompleta">Especialidad Incompleta</option>
+                                <option value="Especialidad Terminada">Especialidad Terminada</option>
 
-                                <option value="doctoradoIncompleta">Doctorado Incompleta</option>
-                                <option value="doctoradoTerminada">Doctorado Terminada</option>
+                                <option value="Maestría Incompleta">Maestría Incompleta</option>
+                                <option value="Maestría Terminada">Maestría Terminada</option>
 
-                                <option value="postdoctoradoIncompleta">Postdoctorado Incompleta</option>
-                                <option value="postdoctoradoTerminada">Postdoctorado Terminada</option>
+                                <option value="Doctorado Incompleta">Doctorado Incompleta</option>
+                                <option value="Doctorado Terminada">Doctorado Terminada</option>
+
+                                <option value="Postdoctorado Incompleta">Postdoctorado Incompleta</option>
+                                <option value="Postdoctorado Terminada">Postdoctorado Terminada</option>
 
                             </select>
                         </div>
 
                         <!-- Pregunta 5: Tipo de puesto -->
                         <div class="form-group">
-                            <label for="tipo_puesto">Tipo de puesto:</label>
-                            <select name="tipo_puesto" id="tipo_puesto" class="form-control" required>
+                            <label for="RECPSICOTRABAJADOR_TIPOPUESTO">Tipo de puesto:</label>
+                            <select name="RECPSICOTRABAJADOR_TIPOPUESTO" id="pregunta5_5" class="form-control" required>
                                 <option value="" disabled selected>Seleccione su tipo de puesto</option>
-                                <option value="operativo">Operativo</option>
-                                <option value="tecnico">Técnico</option>
-                                <option value="profesional">Profesional</option>
-                                <option value="directivo">Directivo</option>
+                                <option value="Operativo">Operativo</option>
+                                <option value="Técnico">Técnico</option>
+                                <option value="Profesional">Profesional</option>
+                                <option value="Directivo">Directivo</option>
                             </select>
                         </div>
 
                         <!-- Pregunta 6: Tipo de contratación -->
                         <div class="form-group">
-                            <label for="tipo_contratacion">Tipo de contratación:</label>
-                            <select name="tipo_contratacion" id="tipo_contratacion" class="form-control" required>
+                            <label for="RECPSICOTRABAJADOR_TIPOCONTRATACION">Tipo de contratación:</label>
+                            <select name="RECPSICOTRABAJADOR_TIPOCONTRATACION" id="pregunta6_5" class="form-control" required>
                                 <option value="" disabled selected>Seleccione su tipo de contratación</option>
-                                <option value="base">Base</option>
-                                <option value="temporal">Temporal</option>
-                                <option value="honorarios">Honorarios</option>
-                                <option value="otro">Otro</option>
+                                <option value="Por obra o proyecto">Por obra o proyecto</option>
+                                <option value="Tiempo indeterminado">Tiempo indeterminado</option>
+                                <option value="Por tiempo determinado (temporal)">Por tiempo determinado (temporal)</option>
+                                <option value="Honorarios">Honorarios</option>
                             </select>
                         </div>
 
-                        <!-- Pregunta 7: Tipo de jornada -->
+                         <!-- Pregunta 7: Tipo personal -->
+                         <div class="form-group">
+                            <label for="RECPSICOTRABAJADOR_TIPOPERSONAL">Tipo de personal:</label>
+                            <select name="RECPSICOTRABAJADOR_TIPOPERSONAL" id="pregunta7_5" class="form-control" required>
+                                <option value="" disabled selected>Seleccione su tipo de personal</option>
+                                <option value="Sindicalizado">Sindicalizado</option>
+                                <option value="Confianza">Confianza</option>
+                                <option value="Ninguno">Ninguno</option>
+                            </select>
+                        </div>
+
+
+                        <!-- Pregunta 8: Tipo de jornada -->
                         <div class="form-group">
-                            <label for="tipo_jornada">Tipo de jornada:</label>
-                            <select name="tipo_jornada" id="tipo_jornada" class="form-control" required>
+                            <label for="RECPSICOTRABAJADOR_TIPOJORNADA">Tipo de jornada de trabajo:</label>
+                            <select name="RECPSICOTRABAJADOR_TIPOJORNADA" id="pregunta8_5" class="form-control" required>
                                 <option value="" disabled selected>Seleccione su tipo de jornada</option>
-                                <option value="diurna">Diurna</option>
-                                <option value="nocturna">Nocturna</option>
-                                <option value="mixta">Mixta</option>
+                                <option value="Fijo nocturno (entre las 20:00 y 6:00 hrs)">Fijo nocturno (entre las 20:00 y 6:00 hrs)</option>
+                                <option value="Fijo diurno (entre las 6:00 y 20:00 hrs)">Fijo diurno (entre las 6:00 y 20:00 hrs)</option>
+                                <option value="Fijo mixto (combinación de nocturno y diurno)">Fijo mixto (combinación de nocturno y diurno)</option>
+                            </select>
+                        </div>
+                        
+                        <!-- Pregunta 9: Rotación de turnos -->
+                        <div class="form-group">
+                            <label for="RECPSICOTRABAJADOR_ROTACIONTURNOS">Realiza rotación de turnos:</label>
+                            <select name="RECPSICOTRABAJADOR_ROTACIONTURNOS" id="pregunta9_5" class="form-control" required>
+                                <option value="" disabled selected>Seleccione una opción</option>
+                                <option value="Si">Sí</option>
+                                <option value="No">No</option>
                             </select>
                         </div>
 
-                        <!-- Pregunta 8: Tiempo en el puesto actual -->
-                        <div class="form-group">
-                            <label for="tiempo_puesto">Tiempo en el puesto actual:</label>
-                            <select name="tiempo_puesto" id="tiempo_puesto" class="form-control" required>
-                                <option value="" disabled selected>Seleccione el tiempo en el puesto</option>
-                                <option value="menos_1_ano">Menos de 1 año</option>
-                                <option value="1_4_anos">1 a 4 años</option>
-                                <option value="5_9_anos">5 a 9 años</option>
-                                <option value="10_anos_o_mas">10 años o más</option>
+                         <!-- Pregunta 10: Tiempo en el puesto actual -->
+                         <div class="form-group">
+                            <label for="RECPSICOTRABAJADOR_TIEMPOPUESTO">Tiempo en el puesto actual:</label>
+                            <select name="RECPSICOTRABAJADOR_TIEMPOPUESTO" id="pregunta10_5" class="form-control" required>
+                                <option value="" disabled selected>Seleccione el tiempo en el puesto actual</option>
+                                <option value="Menos de 6 meses">Menos de 6 meses</option>
+                                <option value="Entre 6 meses y 1 año">Entre 6 meses y 1 año</option>
+                                <option value="Entre 1 a 4 años">Entre 1 a 4 años</option>
+                                <option value="Entre 5 a 9 años">Entre 5 a 9 años</option>
+                                <option value="Entre 10 a 14 años">Entre 10 a 14 años</option>
+                                <option value="Entre 15 a 19 años">Entre 15 a 19 años</option>
+                                <option value="Entre 20 a 24 años">Entre 20 a 24 años</option>
+                                <option value="25 años o más">25 años o más</option>
                             </select>
                         </div>
 
-                        <!-- Pregunta 9: Tiempo en la empresa -->
-                        <div class="form-group">
-                            <label for="tiempo_empresa">Tiempo en la empresa:</label>
-                            <select name="tiempo_empresa" id="tiempo_empresa" class="form-control" required>
-                                <option value="" disabled selected>Seleccione el tiempo en la empresa</option>
-                                <option value="menos_1_ano">Menos de 1 año</option>
-                                <option value="1_4_anos">1 a 4 años</option>
-                                <option value="5_9_anos">5 a 9 años</option>
-                                <option value="10_anos_o_mas">10 años o más</option>
+                          <!-- Pregunta 11: Tiempo experiancia laboral -->
+                          <div class="form-group">
+                            <label for="RECPSICOTRABAJADOR_TIEMPOEXPERIENCIA">Tiempo experiencia laboral:</label>
+                            <select name="RECPSICOTRABAJADOR_TIEMPOEXPERIENCIA" id="pregunta11_5" class="form-control" required>
+                                <option value="" disabled selected>Seleccione el tiempo de experiencia laboral</option>
+                                <option value="Menos de 6 meses">Menos de 6 meses</option>
+                                <option value="Entre 6 meses y 1 año">Entre 6 meses y 1 año</option>
+                                <option value="Entre 1 a 4 años">Entre 1 a 4 años</option>
+                                <option value="Entre 5 a 9 años">Entre 5 a 9 años</option>
+                                <option value="Entre 10 a 14 años">Entre 10 a 14 años</option>
+                                <option value="Entre 15 a 19 años">Entre 15 a 19 años</option>
+                                <option value="Entre 20 a 24 años">Entre 20 a 24 años</option>
+                                <option value="25 años o más">25 años o más</option>
                             </select>
                         </div>
 
                         <!-- Botón de envío -->
                         <div class="form-group text-center">
-                            <button type="button" class="btn btn-success" onclick="submitGuia1y3()">Enviar</button>
+                            <button type="button" class="btn btn-success" id="guardar_guia5" onclick="guardarGuiaV()">Enviar</button>
                         </div>
                     </form>
                 </div>
@@ -4848,6 +4890,7 @@
         var requiereGuia1 = <?php echo json_encode($guia1); ?>;
         var requiereGuia2 = <?php echo json_encode($guia2); ?>;
         var requiereGuia3 = <?php echo json_encode($guia3); ?>;
+        var requiereGuia5 = <?php echo json_encode($guia5); ?>;
         var id = <?php echo json_encode($id); ?>;
 
         document.addEventListener('DOMContentLoaded', function() {
@@ -4859,7 +4902,7 @@
             scrolldatos();
             consultarDatos();
             consultarRespuestasGuardadas();
-
+            // consultarRespuestasGuia5(requiereGuia5, id);
         });
     </script>
 

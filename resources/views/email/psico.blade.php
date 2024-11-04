@@ -25,7 +25,7 @@
     <p>Cordialmente,</p>
     <p>Coordinación de evaluación del FRP</p>
 
-    <a href="http://127.0.0.1:8000/Guia/{{ $guia1 }}/{{ $guia2 }}/{{ $guia3 }}/{{ $id }}">Responder cuestionario aquí</a>
+    <a href="http://127.0.0.1:8000/Guia/{{ $guia1 }}/{{ $guia2 }}/{{ $guia3 }}/{{ $guia5 }}/{{ $id }}">Responder cuestionario aquí</a>
 
 </body>
 

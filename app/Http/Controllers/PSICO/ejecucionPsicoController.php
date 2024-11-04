@@ -241,21 +241,23 @@ class ejecucionPsicoController extends Controller
 
 
                 //Obtenemos los datos del reconocimiento para las guias
-                $datos = DB::select('SELECT RECPSICO_GUIAI, RECPSICO_GUIAII, RECPSICO_GUIAIII
+                $datos = DB::select('SELECT RECPSICO_GUIAI, RECPSICO_GUIAII, RECPSICO_GUIAIII, RECPSICO_GUIAV
                                     FROM recopsiconormativa
                                     WHERE RECPSICO_ID = ?', [$idRecsensorial]);
 
                 $guia1 = $datos[0]->RECPSICO_GUIAI;
                 $guia2 = $datos[0]->RECPSICO_GUIAII;
                 $guia3 = $datos[0]->RECPSICO_GUIAIII;
-
+                $guia5 = $datos[0]->RECPSICO_GUIAV;
                 // Encriptamos las guías
                 $encryptedGuia1 = Crypt::encrypt($guia1);
                 $encryptedGuia2 = Crypt::encrypt($guia2);
                 $encryptedGuia3 = Crypt::encrypt($guia3);
+                $encryptedGuia5 = Crypt::encrypt($guia5);
+
                 $encryptedId = Crypt::encrypt($idPersonal);
 
-                Mail::to($correo)->send(new sendGuiaPsico($nombre, $encryptedGuia1, $encryptedGuia2, $encryptedGuia3, $encryptedId, $dias));
+                Mail::to($correo)->send(new sendGuiaPsico($nombre, $encryptedGuia1, $encryptedGuia2, $encryptedGuia3, $encryptedGuia5, $encryptedId, $dias));
             
                 //cambiar el estado de envio de correo en el registro deltrabajador
                 DB::table('proyectotrabajadores')

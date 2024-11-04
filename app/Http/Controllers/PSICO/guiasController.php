@@ -33,6 +33,27 @@ class guiasController extends Controller
         return response()->json(['error' => 'No se encontraron respuestas guardadas de este trabajador'], 404);
     }
 
+    public function consultarRespuestasGuiaV(Request $request) {
+        $idTrabajador = $request->input('id_trabajador');
+
+        $trabajador = DB::select("
+            SELECT RECPSICOTRABAJADOR_GENERO, RECPSICOTRABAJADOR_EDAD, 
+            RECPSICOTRABAJADOR_ESTADOCIVIL, RECPSICOTRABAJADOR_ESTUDIOS, 
+            RECPSICOTRABAJADOR_TIPOPUESTO, RECPSICOTRABAJADOR_TIPOCONTRATACION, 
+            RECPSICOTRABAJADOR_TIPOCONTRATACION, RECPSICOTRABAJADOR_TIPOPERSONAL, 
+            RECPSICOTRABAJADOR_ROTACIONTURNOS, RECPSICOTRABAJADOR_TIEMPOPUESTO, 
+            RECPSICOTRABAJADOR_TIEMPOEXPERIENCIA
+            FROM recopsicoguia_5
+            WHERE RECPSICOTRABAJADOR_ID =:idTrabajador
+        ", ['idTrabajador' => $idTrabajador]);
+
+        if (!empty($trabajador)) {
+            return response()->json($trabajador[0]); 
+        }
+
+        return response()->json(['error' => 'No se encontraron respuestas guardadas de este trabajador'], 404);
+    }
+
     public function obtenerExplicaciones(Request $request) {
         $ids = $request->input('ids');  
 
@@ -132,23 +153,23 @@ class guiasController extends Controller
     public function store(Request $request)
     {
         try {
-            $option = $request->input('option'); // Obtener la opción enviada
-    $tipoGuardado = $request->input('tipoGuardado');
+            $option = $request->input('option'); // Obtener la guia enviada
+            $tipoGuardado = $request->input('tipoGuardado'); //1=En proceso 2=Finaliazado
 
-    if ($option == 1) { // GUIA 1
-        // Crear un array con 21 posiciones inicializadas en null para las respuestas
-            $datosRegistro = array_fill(0, 21, null);
-                for ($i = 1; $i <= 21; $i++) {
-                    $campoNombre = "GUIA1_$i"; 
-                    if ($request->has($campoNombre)) {
-                        $datosRegistro[$i - 1] = $request->input($campoNombre);
-                    }
+            if ($option == 1) { // GUIA 1
+       
+                $datosRegistro = array_fill(0, 21, null);
+                    for ($i = 1; $i <= 21; $i++) {
+                        $campoNombre = "GUIA1_$i"; 
+                        if ($request->has($campoNombre)) {
+                            $datosRegistro[$i - 1] = $request->input($campoNombre);
+                        }
                 }
 
-                // Codificar a JSON el array de respuestas
+            
                 $jsonDatos = json_encode($datosRegistro);
 
-                // Verificar si el registro ya existe
+                    
                 $existe = DB::table('recopsicoTrabajadoresRespuestas')
                     ->where('RECPSICO_TRABAJADOR', $request->input('TRABAJADOR_ID'))
                     ->exists();
@@ -162,31 +183,8 @@ class guiasController extends Controller
                             'updated_at' => now(),
                         ]);
 
-                    return response()->json(['mensaje' => 'Registro actualizado y finalizado exitosamente']);
-                } else {
-                    // Obtener el RECPSICO_ID si existe
-                    $registro = DB::table('recopsicotrabajadores')
-                        ->where('ID_RECOPSICOTRABAJADOR', $request->input('TRABAJADOR_ID'))
-                        ->first(['RECPSICO_ID']);
-
-                    // Preparar los datos para la inserción
-                    $dataInsert = [
-                        'RECPSICO_TRABAJADOR' => $request->input('TRABAJADOR_ID'),
-                        'RECPSICO_GUIAI_RESPUESTAS' => $jsonDatos,
-                        'created_at' => now(),
-                        'updated_at' => now(),
-                    ];
-
-                    if ($registro) {
-                        $dataInsert['RECPSICO_ID'] = $registro->RECPSICO_ID;
-                    }
-
-                    // Insertar el nuevo registro en la tabla
-                    DB::table('recopsicoTrabajadoresRespuestas')->insert($dataInsert);
-
-                    // Actualizar el estado de contestación del formulario
                     $estadoContestacion = $tipoGuardado == 1 ? 'Finalizado' : 'En proceso';
-
+                
                     DB::table('proyectotrabajadores')
                         ->where('TRABAJADOR_ID', $request->input('TRABAJADOR_ID'))
                         ->update([
@@ -194,7 +192,35 @@ class guiasController extends Controller
                             'updated_at' => now(),
                         ]);
 
-                    return response()->json(['mensaje' => 'Registro creado exitosamente']);
+                return response()->json(['mensaje' => 'Registro actualizado y finalizado exitosamente']);
+                } else {
+
+                    $registro = DB::table('recopsicotrabajadores')
+                        ->where('ID_RECOPSICOTRABAJADOR', $request->input('TRABAJADOR_ID'))
+                        ->first(['RECPSICO_ID']);
+
+                    if ($registro) {
+                        $dataInsert = [
+                            'RECPSICO_TRABAJADOR' => $request->input('TRABAJADOR_ID'),
+                            'RECPSICO_GUIAI_RESPUESTAS' => $jsonDatos,
+                            'RECPSICO_ID' => $registro->RECPSICO_ID,
+                            'created_at' => now(),
+                            'updated_at' => now(),
+                        ];
+
+                        DB::table('recopsicoTrabajadoresRespuestas')->insert($dataInsert);
+
+                        $estadoContestacion = $tipoGuardado == 1 ? 'Finalizado' : 'En proceso';
+                    
+                        DB::table('proyectotrabajadores')
+                            ->where('TRABAJADOR_ID', $request->input('TRABAJADOR_ID'))
+                            ->update([
+                                'TRABAJADOR_ESTADOCONTESTADO' => $estadoContestacion,
+                                'updated_at' => now(),
+                            ]);
+            
+                        return response()->json(['mensaje' => 'Registro creado exitosamente']);
+                    }
                 }
 
             } else if ($option == 2) { // GUIA 2
@@ -251,34 +277,60 @@ class guiasController extends Controller
                 
                 $jsonDatos3 = json_encode($datosRegistro3);
 
-                //validacion 
-                // if ($datosRegistro[0] === null || $datosRegistro[1] === null) {
-                //     return response()->json(['error' => 'Los campos GUIA1_1 y GUIA1_2 son obligatorios.'], 422);
-                // }
-
                 $existe3 = DB::table('recopsicoTrabajadoresRespuestas')
                     ->where('RECPSICO_TRABAJADOR', $request->input('TRABAJADOR_ID'))
                     ->exists();
 
                 if ($existe3) {
-                    // Si el registro ya existe, realizar un UPDATE selectivo
                     DB::table('recopsicoTrabajadoresRespuestas')
                         ->where('RECPSICO_TRABAJADOR', $request->input('TRABAJADOR_ID'))
                         ->update([
-                            'RECPSICO_GUIAIII_RESPUESTAS' => $jsonDatos3, // Solo actualizar los datos recibidos
+                            'RECPSICO_GUIAIII_RESPUESTAS' => $jsonDatos3,
                             'updated_at' => now(),
                         ]);
     
                     return response()->json(['mensaje' => 'Registro actualizado exitosamente']);
                 } else {
-                    // Si el registro no existe, realizar un INSERT INTO
                     DB::table('recopsicoTrabajadoresRespuestas')->insert([
                         'RECPSICO_TRABAJADOR' => $request->input('TRABAJADOR_ID'),
                         'RECPSICO_GUIAIII_RESPUESTAS' => $jsonDatos3,
                         'created_at' => now(),
                         'updated_at' => now(),
                     ]);
+                    return response()->json(['mensaje' => 'Registro creado exitosamente']);
+                }
+            } else if ($option == 5) { // GUIA 5
+
+                $existe5 = DB::table('recopsicoguia_5')
+                    ->where('RECPSICOTRABAJADOR_ID', $request->input('TRABAJADOR_ID'))
+                    ->exists();
+
+                if ($existe5) {
+                    DB::table('recopsicoguia_5')
+                        ->where('RECPSICOTRABAJADOR_ID', $request->input('TRABAJADOR_ID'))
+                        ->update([
+                            'RECPSICOTRABAJADOR_GENERO' => $request->input('RECPSICOTRABAJADOR_GENERO'),
+                            'RECPSICOTRABAJADOR_EDAD' => $request->input('RECPSICOTRABAJADOR_EDAD'),
+                            'RECPSICOTRABAJADOR_ESTADOCIVIL' => $request->input('RECPSICOTRABAJADOR_ESTADOCIVIL'),
+                            'RECPSICOTRABAJADOR_ESTUDIOS' => $request->input('RECPSICOTRABAJADOR_ESTUDIOS'),
+                            'RECPSICOTRABAJADOR_TIPOPUESTO' => $request->input('RECPSICOTRABAJADOR_TIPOPUESTO'),
+                            'RECPSICOTRABAJADOR_TIPOCONTRATACION' => $request->input('RECPSICOTRABAJADOR_TIPOCONTRATACION'),
+                            'RECPSICOTRABAJADOR_TIPOPERSONAL' => $request->input('RECPSICOTRABAJADOR_TIPOPERSONAL'),
+                            'RECPSICOTRABAJADOR_TIPOJORNADA' => $request->input('RECPSICOTRABAJADOR_TIPOJORNADA'),
+                            'RECPSICOTRABAJADOR_ROTACIONTURNOS' => $request->input('RECPSICOTRABAJADOR_ROTACIONTURNOS'),
+                            'RECPSICOTRABAJADOR_TIEMPOPUESTO' => $request->input('RECPSICOTRABAJADOR_TIEMPOPUESTO'),
+                            'RECPSICOTRABAJADOR_TIEMPOEXPERIENCIA' => $request->input('RECPSICOTRABAJADOR_TIEMPOEXPERIENCIA'),
+                            'updated_at' => now(),
+                        ]);
     
+                    return response()->json(['mensaje' => 'Registro actualizado exitosamente']);
+                } else {
+                    DB::table('recopsicoTrabajadoresRespuestas')->insert([
+                        'RECPSICO_TRABAJADOR' => $request->input('TRABAJADOR_ID'),
+                        'RECPSICO_GUIAIII_RESPUESTAS' => $jsonDatos3,
+                        'created_at' => now(),
+                        'updated_at' => now(),
+                    ]);
                     return response()->json(['mensaje' => 'Registro creado exitosamente']);
                 }
             }
