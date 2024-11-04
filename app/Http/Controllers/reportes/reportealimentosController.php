@@ -22,6 +22,7 @@ use App\modelos\reportes\reporteequiposutilizadosModel;
 use App\modelos\recsensorial\catConclusionesModel;
 use App\modelos\reportes\reportealimentoscatalogoModel;
 use App\modelos\reportes\reportealimentosModel;
+use App\modelos\reportes\reporteplanoscarpetasModel;
 
 use App\modelos\reportes\reporteAlimentosPuntosSuperficiesInertesModel;
 use App\modelos\reportes\reporteAlimentosPuntosSuperficiesVivasModel;
@@ -1108,6 +1109,322 @@ class reportealimentosController extends Controller
         } catch (Exception $e) {
             $dato['data'] = 0;
             $dato['total'] = 0;
+            $dato["msj"] = 'Error ' . $e->getMessage();
+            return response()->json($dato);
+        }
+    }
+
+
+
+
+    public function reportePuntosAlimentosTablas($proyecto_id, $tabla)
+    {
+        try {
+
+            $revision = reporterevisionesModel::where('proyecto_id', $proyecto_id)
+                ->where('agente_id', 11)
+                ->orderBy('reporterevisiones_revision', 'DESC')
+                ->get();
+
+
+            $edicion = 1;
+            if (count($revision) > 0) {
+                if ($revision[0]->reporterevisiones_concluido == 1 || $revision[0]->reporterevisiones_cancelado == 1) {
+                    $edicion = 0;
+                }
+            }
+
+            //========================================== Creacion de tablas =================================
+            switch ($tabla) {
+                #Tabla de los resultados del punto 8.1
+                case 1:
+                    $data = DB::select('CALL sp_obtener_puntos_alimentos_8_1_b(?)', [$proyecto_id]);
+
+                    $registros = count($data);
+                    foreach ($data  as $key => $value) {
+                    
+                        $value->boton_editar = '<button type="button" class="btn btn-warning btn-circle boton_editar" onclick=("editarPuntoAlimento8_1('. $value->ID.')") ><i class="fa fa-pencil"></i></button>';
+                        $value->boton_eliminar = '<button type="button" class="btn btn-danger btn-circle boton_eliminar" onclick=("eliminarPuntoAlimento8_1(' . $value->ID . ')")><i class="fa fa-trash"></i></button>';
+
+                    }
+
+                    break;
+                #Tabla de los resultados del punto 8.1.1
+                case 2:
+                    $data = DB::select('CALL sp_obtener_puntos_alimentos_8_1_1_b(?)', [$proyecto_id]);
+                    $registros = count($data);
+
+                    break;
+                #Tabla de los resultados del punto 8.2
+                case 3:
+                    $data = DB::select('CALL sp_obtener_puntos_alimentos_8_2_b(?)', [$proyecto_id]);
+
+                    $registros = count($data);
+                    foreach ($data  as $key => $value) {
+
+                        $value->boton_editar = '<button type="button" class="btn btn-warning btn-circle boton_editar" onclick=("editarPuntoAlimento8_2(' . $value->ID . ')") ><i class="fa fa-pencil"></i></button>';
+                        $value->boton_eliminar = '<button type="button" class="btn btn-danger btn-circle boton_eliminar" onclick=("eliminarPuntoAlimento8_2(' . $value->ID . ')")><i class="fa fa-trash"></i></button>';
+                    }
+
+                    break;
+                #Tabla de los resultados del punto 8.3
+                case 4:
+                    $data = DB::select('CALL sp_obtener_puntos_alimentos_8_3_b(?)', [$proyecto_id]);
+
+                    $registros = count($data);
+                    foreach ($data  as $key => $value) {
+
+                        $value->boton_editar = '<button type="button" class="btn btn-warning btn-circle boton_editar" onclick=("editarPuntoAlimento8_3(' . $value->ID . ')") ><i class="fa fa-pencil"></i></button>';
+                        $value->boton_eliminar = '<button type="button" class="btn btn-danger btn-circle boton_eliminar" onclick=("eliminarPuntoAlimento8_3(' . $value->ID . ')")><i class="fa fa-trash"></i></button>';
+                    }
+
+                    break;
+                default:
+                    $data = ''; 
+
+            }
+
+
+            // respuesta
+            $dato['data'] = $data;
+            $dato['total'] = $registros;
+            $dato["msj"] = 'Datos consultados correctamente';
+            return response()->json($dato);
+        } catch (Exception $e) {
+            $dato['data'] = 0;
+            $dato["msj"] = 'Error ' . $e->getMessage();
+            return response()->json($dato);
+        }
+    }
+
+
+    public function reportealimentostablaplanos($proyecto_id, $reportealimentos_id, $agente_nombre)
+    {
+        try {
+            $planos = collect(DB::select('SELECT
+                                                proyectoevidenciaplano.proyecto_id,
+                                                proyectoevidenciaplano.agente_id,
+                                                proyectoevidenciaplano.agente_nombre,
+                                                proyectoevidenciaplano.proyectoevidenciaplano_carpeta,
+                                                COUNT(proyectoevidenciaplano.id) AS total_planos,
+                                                IFNULL((
+                                                    SELECT
+                                                        IF(IFNULL(reporteplanoscarpetas.reporteplanoscarpetas_nombre, "") = "", "", "checked")
+                                                    FROM
+                                                        reporteplanoscarpetas
+                                                    WHERE
+                                                        reporteplanoscarpetas.proyecto_id = proyectoevidenciaplano.proyecto_id
+                                                        AND reporteplanoscarpetas.agente_nombre = proyectoevidenciaplano.agente_nombre
+                                                        AND reporteplanoscarpetas.registro_id = ' . $reportealimentos_id . '
+                                                        AND reporteplanoscarpetas.reporteplanoscarpetas_nombre = proyectoevidenciaplano.proyectoevidenciaplano_carpeta
+                                                ), "") AS checked
+                                            FROM
+                                                proyectoevidenciaplano
+                                            WHERE
+                                                proyectoevidenciaplano.proyecto_id = ' . $proyecto_id . '
+                                                AND proyectoevidenciaplano.agente_nombre = "' . $agente_nombre . '"
+                                                AND proyectoevidenciaplano.proyectoevidenciaplano_carpeta != ""
+                                            GROUP BY
+                                                proyectoevidenciaplano.proyecto_id,
+                                                proyectoevidenciaplano.agente_id,
+                                                proyectoevidenciaplano.agente_nombre,
+                                                proyectoevidenciaplano.proyectoevidenciaplano_carpeta
+                                            ORDER BY
+                                                proyectoevidenciaplano.proyectoevidenciaplano_carpeta ASC'));
+
+            $total_activos = 0;
+            $numero_registro = 0;
+            foreach ($planos as $key => $value) {
+                $numero_registro += 1;
+                $value->numero_registro = $numero_registro;
+
+                $value->checkbox = '<div class="switch">
+                                        <label>
+                                            <input type="checkbox" class="reportealimentos_checkboxplanocarpeta" name="reportealimentos_checkboxplanocarpeta[]" value="' . $value->proyectoevidenciaplano_carpeta . '" ' . $value->checked . '>
+                                            <span class="lever switch-col-light-blue"></span>
+                                        </label>
+                                    </div>';
+
+                // VERIFICAR SI HAY CARPETAS SELECCIONADAS
+                if ($value->checked) {
+                    $total_activos += 1;
+                }
+            }
+
+            // respuesta
+            $dato['data'] = $planos;
+            $dato["total"] = $total_activos;
+            $dato["msj"] = 'Datos consultados correctamente';
+            return response()->json($dato);
+        } catch (Exception $e) {
+            $dato['data'] = 0;
+            $dato["total"] = 0;
+            $dato["msj"] = 'Error ' . $e->getMessage();
+            return response()->json($dato);
+        }
+    }
+
+
+    public function reportealimentostablaanexos($proyecto_id, $reportealimentos_id, $agente_nombre)
+    {
+        try {
+            $acreditaciones = collect(DB::select('SELECT
+                                                        proyectoproveedores.proyecto_id,
+                                                        proyectoproveedores.proveedor_id,
+                                                        proyectoproveedores.catprueba_id,
+                                                        proyectoproveedores.proyectoproveedores_agente,
+                                                        acreditacion.id,
+                                                        acreditacion.acreditacion_Entidad,
+                                                        acreditacion.acreditacion_Numero,
+                                                        cat_tipoacreditacion.catTipoAcreditacion_Nombre,
+                                                        cat_area.catArea_Nombre,
+                                                        acreditacion.acreditacion_Expedicion,
+                                                        acreditacion.acreditacion_Vigencia,
+                                                        IFNULL(DATEDIFF(acreditacion.acreditacion_Vigencia, CURDATE()) + 1, 0) AS vigencia_dias,
+                                                        IF(acreditacion.acreditacion_Vigencia, CONCAT(acreditacion.acreditacion_Vigencia, " (", (DATEDIFF(acreditacion.acreditacion_Vigencia, CURDATE()) + 1)," d)"), "N/A") AS vigencia_texto,
+                                                        (
+                                                            CASE
+                                                                WHEN IFNULL(DATEDIFF(acreditacion.acreditacion_Vigencia, CURDATE()) + 1, 0) = 0 THEN ""
+                                                                WHEN IFNULL(DATEDIFF(acreditacion.acreditacion_Vigencia, CURDATE()) + 1, 0) >= 90 THEN ""
+                                                                WHEN IFNULL(DATEDIFF(acreditacion.acreditacion_Vigencia, CURDATE()) + 1, 0) >= 30 THEN "text-warning"
+                                                                ELSE "text-danger"
+                                                            END
+                                                        ) AS vigencia_color,
+                                                        acreditacion.acreditacion_SoportePDF,
+                                                        IFNULL((
+                                                            SELECT  
+                                                                IF(IFNULL(reporteanexos.reporteanexos_rutaanexo, "") = "", "", "checked")
+                                                            FROM
+                                                                reporteanexos
+                                                            WHERE
+                                                                reporteanexos.proyecto_id = proyectoproveedores.proyecto_id
+                                                                AND reporteanexos.agente_nombre = proyectoproveedores.proyectoproveedores_agente
+                                                                AND reporteanexos.registro_id = ' . $reportealimentos_id . '
+                                                                AND reporteanexos.reporteanexos_tipo = 2
+                                                                AND reporteanexos.reporteanexos_rutaanexo = acreditacion.acreditacion_SoportePDF
+                                                            LIMIT 1
+                                                        ), "") AS checked 
+                                                    FROM
+                                                        proyectoproveedores
+                                                        INNER JOIN acreditacion ON proyectoproveedores.proveedor_id = acreditacion.proveedor_id
+                                                        LEFT JOIN cat_tipoacreditacion ON acreditacion.acreditacion_Tipo = cat_tipoacreditacion.id
+                                                        LEFT JOIN cat_area ON acreditacion.cat_area_id = cat_area.id 
+                                                    WHERE
+                                                        proyectoproveedores.proyecto_id = ' . $proyecto_id . ' 
+                                                        AND proyectoproveedores.proyectoproveedores_agente = "' . $agente_nombre . '" 
+                                                        AND acreditacion.acreditacion_Eliminado = 0
+                                                        AND IFNULL(acreditacion.acreditacion_SoportePDF, "") != ""'));
+
+            $total_activos = 0;
+            $numero_registro = 0;
+            foreach ($acreditaciones as $key => $value) {
+                $numero_registro += 1;
+                $value->numero_registro = $numero_registro;
+
+                $value->checkbox = '<div class="switch">
+                                        <label>
+                                            <input type="hidden" class="form-control" name="reportealimentos_anexonombre_' . $value->id . '" value="' . $value->acreditacion_Entidad . ' ' . $value->acreditacion_Numero . '">
+                                            <input type="hidden" class="form-control" name="reportealimentos_anexoarchivo_' . $value->id . '" value="' . $value->acreditacion_SoportePDF . '">
+                                            <input type="checkbox" class="reportealimentos_anexocheckbox" name="reportealimentos_anexocheckbox[]" value="' . $value->id . '" ' . $value->checked . '>
+                                            <span class="lever switch-col-light-blue"></span>
+                                        </label>
+                                    </div>';
+
+                $value->tipo = '<span class="' . $value->vigencia_color . '">' . $value->catTipoAcreditacion_Nombre . '</span>';
+                $value->entidad = '<span class="' . $value->vigencia_color . '">' . $value->acreditacion_Entidad . '</span>';
+                $value->numero = '<span class="' . $value->vigencia_color . '">' . $value->acreditacion_Numero . '</span>';
+                $value->area = '<span class="' . $value->vigencia_color . '">' . $value->catArea_Nombre . '</span>';
+                $value->vigencia = '<span class="' . $value->vigencia_color . '">' . $value->vigencia_texto . '</span>';
+                $value->certificado = '<button type="button" class="btn btn-info waves-effect btn-circle" data-toggle="tooltip" title="Mostrar certificado"><i class="fa fa-file-pdf-o fa-1x"></i></button>';
+
+                // VERIFICAR SI HAY ACREDITACIONES SELECCIONADOS
+                if ($value->checked) {
+                    $total_activos += 1;
+                }
+            }
+
+            // respuesta
+            $dato['data'] = $acreditaciones;
+            $dato["total"] = $total_activos;
+            $dato["msj"] = 'Datos consultados correctamente';
+            return response()->json($dato);
+        } catch (Exception $e) {
+            $dato['data'] = 0;
+            $dato["total"] = 0;
+            $dato["msj"] = 'Error ' . $e->getMessage();
+            return response()->json($dato);
+        }
+    }
+
+
+    public function reportealimentostablainformeresultados($proyecto_id, $reportealimentos_id, $agente_nombre)
+    {
+        try {
+            $informes = collect(DB::select('SELECT
+                                                proyectoevidenciadocumento.proyecto_id,
+                                                proyectoevidenciadocumento.proveedor_id,
+                                                proyectoevidenciadocumento.agente_id,
+                                                proyectoevidenciadocumento.agente_nombre,
+                                                proyectoevidenciadocumento.id,
+                                                proyectoevidenciadocumento.proyectoevidenciadocumento_nombre,
+                                                proyectoevidenciadocumento.proyectoevidenciadocumento_extension, 
+                                                proyectoevidenciadocumento.proyectoevidenciadocumento_archivo,
+                                                proyectoevidenciadocumento.created_at,
+                                                IFNULL((
+                                                    SELECT  
+                                                        IF(IFNULL(reporteanexos.reporteanexos_rutaanexo, "") = "", "", "checked")
+                                                    FROM
+                                                        reporteanexos
+                                                    WHERE
+                                                        reporteanexos.proyecto_id = proyectoevidenciadocumento.proyecto_id
+                                                        AND reporteanexos.agente_nombre = proyectoevidenciadocumento.agente_nombre
+                                                        AND reporteanexos.registro_id = ' . $reportealimentos_id . '
+                                                        AND reporteanexos.reporteanexos_tipo = 1
+                                                        AND reporteanexos.reporteanexos_rutaanexo = proyectoevidenciadocumento.proyectoevidenciadocumento_archivo
+                                                ), "") AS checked 
+                                            FROM
+                                                proyectoevidenciadocumento
+                                            WHERE
+                                                proyectoevidenciadocumento.proyecto_id = ' . $proyecto_id . '
+                                                AND proyectoevidenciadocumento.agente_nombre = "' . $agente_nombre . '"'));
+
+            $total_activos = 0;
+            $numero_registro = 0;
+            foreach ($informes as $key => $value) {
+                $numero_registro += 1;
+                $value->numero_registro = $numero_registro;
+
+                // $value->checked = NULL;
+
+                $value->checkbox = '<div class="switch">
+                                        <label>
+                                            <input type="hidden" class="form-control" name="reportealimentos_anexonombre_' . $value->id . '" value="' . $value->proyectoevidenciadocumento_nombre . '">
+                                            <input type="hidden" class="form-control" name="reportealimentos_anexoarchivo_' . $value->id . '" value="' . $value->proyectoevidenciadocumento_archivo . '">
+                                            <input type="checkbox" class="reportealimentos_informeresultadocheckbox" name="reportealimentos_informeresultadocheckbox[]" value="' . $value->id . '" ' . $value->checked . '>
+                                            <span class="lever switch-col-light-blue"></span>
+                                        </label>
+                                    </div>';
+
+                if ($value->proyectoevidenciadocumento_extension == '.pdf' || $value->proyectoevidenciadocumento_extension == '.PDF') {
+                    $value->documento = '<button type="button" class="btn btn-info waves-effect btn-circle" data-toggle="tooltip" title="Mostrar PDF"><i class="fa fa-file-pdf-o fa-1x"></i></button>';
+                } else {
+                    $value->documento = '<button type="button" class="btn btn-success waves-effect btn-circle" data-toggle="tooltip" title="Descargar archivo"><i class="fa fa-download fa-1x"></i></button>';
+                }
+
+                // VERIFICAR SI HAY DOCUMENTOS SELECCIONADOS
+                if ($value->checked) {
+                    $total_activos += 1;
+                }
+            }
+
+            // respuesta
+            $dato['data'] = $informes;
+            $dato["total"] = $total_activos;
+            $dato["msj"] = 'Datos consultados correctamente';
+            return response()->json($dato);
+        } catch (Exception $e) {
+            $dato['data'] = 0;
+            $dato["total"] = 0;
             $dato["msj"] = 'Error ' . $e->getMessage();
             return response()->json($dato);
         }

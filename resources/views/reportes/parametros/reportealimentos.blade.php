@@ -162,7 +162,7 @@
                 <a href="#6" class="list-group-item">6.- Reconocimiento</a>
                 <a href="#6_1" class="list-group-item submenu">6.1.- Ubicación de la instalación <i class="fa fa-times" id="menureporte_6_1"></i></a>
                 <a href="#7" class="list-group-item">7.- Descripción del proceso en la instalación <i class="fa fa-times" id="menureporte_7"></i></a>
-                <a href="#8" class="list-group-item">8.- Resultados <i class="fa fa-times" id="menureporte_8"></i></a>
+                <a href="#8" class="list-group-item">8.- Resultados </a>
 
                 <!-- Adicionales -->
                 <a href="#8_1" class="list-group-item submenu">8.1.- Resultados, calidad e inocuidad de alimentos <i class="fa fa-times" id="menureporte_8_1"></i></a>
@@ -171,7 +171,7 @@
                 <!-- Adicionales -->
 
 
-                <a href="#9" class="list-group-item">9.- Análisis de los resultados <i class="fa fa-times" id="menureporte_9"></i></a>
+                <a href="#9" class="list-group-item">9.- Análisis de los resultados </a>
 
                 <!-- Adicionales -->
                 <a href="#9_1" class="list-group-item submenu">9.1.- Calidad e inocuidad de alimentos <i class="fa fa-times" id="menureporte_9_1"></i></a>
@@ -183,8 +183,8 @@
                 <a href="#11" class="list-group-item">11.- Recomendaciones de control <i class="fa fa-times" id="menureporte_11"></i></a>
                 <a href="#12" class="list-group-item">12.- Responsables del informe <i class="fa fa-times" id="menureporte_12"></i></a>
                 <a href="#13" class="list-group-item">13.- Anexos</a>
-                <a href="#13_1" class="list-group-item submenu">13.1.- Anexo 1: Resultados de laboratorio <i class="fa fa-times" id="menureporte_13_1"></i></a>
-                <a href="#13_2" class="list-group-item submenu">13.2.- Anexo 2: Información de los contaminantes evaluados <i class="fa fa-times" id="menureporte_13_2"></i></a>
+                <a href="#13_1" class="list-group-item submenu">13.1.- Anexo 1: Resultados de laboratorio <i style="color: #64bd44;" class="fa fa-check" id="menureporte_13_1"></i></a>
+                <a href="#13_2" class="list-group-item submenu">13.2.- Anexo 2: Información de los contaminantes evaluados <i style="color:#64bd44" class="fa fa-check" id="menureporte_13_2"></i></a>
                 <a href="#13_3" class="list-group-item submenu">13.3.- Anexo 3: Memoria fotográfica <i class="fa fa-times" id="menureporte_13_3"></i></a>
                 <a href="#13_4" class="list-group-item submenu">13.4.- Anexo 4: Copia de acreditación del laboratorio de ensayo ante la ema <i class="fa fa-times" id="menureporte_13_4"></i></a>
                 <a href="#13_5" class="list-group-item submenu">13.5.- Anexo 5: Planos de ubicación de los puntos de muestreo <i class="fa fa-times" id="menureporte_13_5"></i></a>
@@ -566,7 +566,7 @@
                         <span class="btn-label"><i class="fa fa-plus"></i></span>Resultado
                     </button>
                 </ol>
-                <table class="table-hover tabla_info_centrado" width="100%" id="tabla_resultado_8_1">
+                <table class="table-hover tabla_info_centrado mb-1" width="100%" id="tabla_resultado_8_1">
                     <thead>
                         <tr>
                             <th width="60">Punto</th>
@@ -585,19 +585,19 @@
                     </thead>
                     <tbody></tbody>
                 </table>
-
-                <table class="table-hover tabla_info_centrado mt-4" width="100%" id="tabla_resultado_8_1_2">
+                <br>
+                <table class="table-hover tabla_info_centrado mt-1" width="100%" id="tabla_resultado_8_1_1">
                     <thead>
                         <tr>
                             <th width="60">Punto</th>
                             <th width="150">Área</th>
-                            <th width="">Fecha de medición</th>
-                            <th width="80">Parametro</th>
+                            <th width="80">Fecha de medición</th>
+                            <th width="100">Parametro</th>
                             <th width="80">Unidades</th>
-                            <th width="60">Método de análisis</th>
-                            <th width="60">Ubicación</th>
+                            <th width="120">Método de análisis</th>
+                            <th width="150">Ubicación</th>
                             <th width="60">No. de trabajadores expuestos</th>
-                            <th width="60">Concentración obtenida</th>
+                            <th width="100">Concentración obtenida</th>
                         </tr>
                     </thead>
                     <tbody></tbody>
@@ -617,7 +617,7 @@
                             <th width="60">Punto</th>
                             <th width="150">Area</th>
                             <th width="">Fecha de medición</th>
-                            <th width="80">Unidades</th>
+                            <th width="80">Parametro</th>
                             <th width="80">Método de análisis</th>
                             <th width="80">Ubicación</th>
                             <th width="80">No. de trabajadores expuestos</th>
@@ -644,7 +644,7 @@
                             <th width="60">Punto</th>
                             <th width="150">Area</th>
                             <th width="">Fecha de medición</th>
-                            <th width="80">Unidades</th>
+                            <th width="80">Parametro</th>
                             <th width="80">Método de análisis</th>
                             <th width="80">Ubicación</th>
                             <th width="80">No. de trabajadores expuestos</th>
@@ -672,9 +672,9 @@
                             <th width="60">Punto</th>
                             <th width="150">Párametro</th>
                             <th width="150">Ubicación</th>
-                            <th width="">Concentración obtenida</th>
-                            <th width="">Concentración permisible</th>
-                            <th width="80">Cumplimiento normativo</th>
+                            <th width="90">Concentración obtenida</th>
+                            <th width="90">Concentración permisible</th>
+                            <th width="150">Cumplimiento normativo</th>
                         </tr>
                     </thead>
                     <tbody></tbody>
@@ -688,7 +688,7 @@
                             <th width="60">Punto</th>
                             <th width="150">Parámetro</th>
                             <th width="150">Ubicación</th>
-                            <th width="">Concentración obtenida</th>
+                            <th width="90">Concentración obtenida</th>
                         </tr>
                     </thead>
                     <tbody></tbody>
@@ -708,11 +708,9 @@
                             <th width="60">Punto de medición</th>
                             <th width="150">Parámetro</th>
                             <th width="150">Ubicación</th>
-                            <th width="">Concentración obtenida</th>
-                            <th width="">Concentración permisible</th>
-                            <th width="80">Cumplimiento normativo</th>
-                            <th width="60">Editar</th>
-                            <th width="60">Eliminar</th>
+                            <th width="80">Concentración obtenida</th>
+                            <th width="80">Concentración permisible</th>
+                            <th width="130">Cumplimiento normativo</th>
                         </tr>
                     </thead>
                     <tbody></tbody>
@@ -731,11 +729,9 @@
                             <th width="60">Punto de medición</th>
                             <th width="150">Parámetro</th>
                             <th width="150">Ubicación</th>
-                            <th width="">Concentración obtenida</th>
-                            <th width="">Concentración permisible</th>
-                            <th width="80">Cumplimiento normativo</th>
-                            <th width="60">Editar</th>
-                            <th width="60">Eliminar</th>
+                            <th width="80">Concentración obtenida</th>
+                            <th width="80">Concentración permisible</th>
+                            <th width="130">Cumplimiento normativo</th>
                         </tr>
                     </thead>
                     <tbody></tbody>
@@ -863,6 +859,9 @@
 
                 <h4 class="card-title" id="13">13.- Anexos</h4>
                 <h4 class="card-title" id="13_1">13.1.- Anexo 1: Resultados de laboratorio</h4>
+                <p class="justificado"><b style="color: #333333; font-weight: bold;">Nota del software:</b> Los resultados de laboratorio seran agregados de manera manual.</p>
+
+                <h4 class="card-title mt-4" id="13_2">13.2.- Anexo 2: Información de los contaminantes evaluados</h4>
                 <form method="post" enctype="multipart/form-data" name="form_reporte_informeresultados" id="form_reporte_informeresultados">
                     <div class="row">
                         <div class="col-12">
@@ -886,35 +885,6 @@
                         </div>
                         <div class="col-12" style="text-align: right;">
                             <div class="form-group">
-                                <button type="submit" class="btn btn-danger waves-effect waves-light botoninforme" id="botonguardar_reporte_informeresultados">Guardar anexo Resultados de laboratorio <i class="fa fa-save"></i></button>
-                            </div>
-                        </div>
-                    </div>
-                </form>
-                <h4 class="card-title" id="13_2">13.2.- Anexo 2: Información de los contaminantes evaluados</h4>
-                <form method="post" enctype="multipart/form-data" name="form_reporte_informeContaminantes" id="form_reporte_informeContaminantes">
-                    <div class="row">
-                        <div class="col-12">
-                            {!! csrf_field() !!}
-                        </div>
-                        <div class="col-12">
-                            <p class="justificado"><b style="color: #333333; font-weight: bold;">Nota del software:</b> Los arhivos seleccionados se adjuntarán en la impresión del reporte en formato PDF.</p>
-                            <table class="table-hover tabla_info_centrado" width="100%" id="tabla_reporte_informacionContaminantes">
-                                <thead>
-                                    <tr>
-                                        <th width="60">No.</th>
-                                        <th width="70">Seleccionado</th>
-                                        <th>Documento</th>
-                                        <th width="60">Tipo</th>
-                                        <th width="160">Fecha</th>
-                                        <th width="60">Mostrar</th>
-                                    </tr>
-                                </thead>
-                                <tbody></tbody>
-                            </table><br><br>
-                        </div>
-                        <div class="col-12" style="text-align: right;">
-                            <div class="form-group">
                                 <button type="submit" class="btn btn-danger waves-effect waves-light botoninforme" id="botonguardar_reporte_informeresultados">Guardar anexo Información de los contaminantes evaluados <i class="fa fa-save"></i></button>
                             </div>
                         </div>
@@ -923,18 +893,42 @@
                 <h4 class="card-title" id="13_3">13.3.- Anexo 3: Memoria fotográfica</h4>
                 <div class="row">
                     <div class="col-12" style="padding-top: 10px;">
-                        <p class="justificado"><b style="color: #333333; font-weight: bold;">Nota del software:</b> Se encontraron <span id="memoriafotografica_total">0</span> fotos de los puntos de iluminación que se agregaran al informe.</p>
+                        <p class="justificado"><b style="color: #333333; font-weight: bold;">Nota del software:</b> Se encontraron <span id="memoriafotografica_total">0</span> fotos de los puntos de alimentos que se agregaran al informe.</p>
                     </div>
                 </div>
 
-                <h4 class="card-title" id="13_4">13.4.- Anexo 4: : Copia de acreditación del laboratorio de ensayo ante la ema.</h4>
-                <div class="row">
-                    <div class="col-12" style="padding-top: 10px;">
-                        <b style="color: #333333; font-weight: bold;">Nota aclaratoria</b><br>
-                        <p class="justificado">El muestreo se realizó por un signatario acreditado en la NOM-025-STPS-2008, condiciones de Alimentos en los centros de trabajo, el cual aparece dentro de la acreditación del laboratorio ante la entidad mexicana de acreditación (ema).</p>
+                <h4 class="card-title mt-2" id="13_4">13.4.- Anexo 4: : Copia de acreditación del laboratorio de ensayo ante la ema.</h4>
+                <form method="post" enctype="multipart/form-data" name="form_reporte_anexos" id="form_reporte_anexos">
+                    <div class="row">
+                        <div class="col-12">
+                            {!! csrf_field() !!}
+                        </div>
+                        <div class="col-12">
+                            <p class="justificado"><b style="color: #333333; font-weight: bold;">Nota del software:</b> Los arhivos seleccionados se adjuntarán en la impresión del reporte en formato PDF.</p>
+                            <table class="table-hover tabla_info_centrado" width="100%" id="tabla_reporte_anexos">
+                                <thead>
+                                    <tr>
+                                        <th width="60">No.</th>
+                                        <th width="60">Seleccionado</th>
+                                        <th width="100">Tipo</th>
+                                        <th>Entidad</th>
+                                        <th width="200">Numero</th>
+                                        <th>Área</th>
+                                        <th width="160">Vigencia</th>
+                                        <th width="60">Certificado</th>
+                                    </tr>
+                                </thead>
+                                <tbody></tbody>
+                            </table><br><br>
+                        </div>
+                        <div class="col-12" style="text-align: right;">
+                            <div class="form-group">
+                                <button type="submit" class="btn btn-danger waves-effect waves-light botoninforme" id="botonguardar_reporte_anexos">Guardar anexos 4 <i class="fa fa-save"></i></button>
+                            </div>
+                        </div>
                     </div>
-                </div>
-                <h4 class="card-title" id="13_5">11.5.- Anexo 5: Planos de ubicación de los puntos de muestreo.</h4>
+                </form>
+                <h4 class="card-title" id="13_5">13.5.- Anexo 5: Planos de ubicación de los puntos de muestreo.</h4>
                 <form method="post" enctype="multipart/form-data" name="form_reporte_planos" id="form_reporte_planos">
                     <div class="row">
                         <div class="col-12">

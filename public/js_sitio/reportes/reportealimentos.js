@@ -2795,9 +2795,15 @@ $("#botonguardar_punto_8_1").click(function () {
 							reportealimentos_id = dato.reportealimentos_id;
 
 							menureporte_estado("menureporte_8_1", 1);
+
+							//Refrescamos la tablas de resultados
+							tabla_reporte_informeresultados8_1(proyecto.id)
+							tabla_reporte_informeresultados8_1_1(proyecto.id)
+
+
 							tabla_reporte_revisiones(proyecto.id);
 
-					
+
 							// mensaje
 							swal({
 								title: "Correcto",
@@ -2861,6 +2867,300 @@ $("#botonguardar_punto_8_1").click(function () {
 	}
 });
 
+
+$(document).ready(function()
+{
+	setTimeout(function()
+	{
+		tabla_reporte_informeresultados8_1(proyecto.id);
+	}, 7000);
+});
+
+
+var datatable_informeresultados8_1 = null;
+function tabla_reporte_informeresultados8_1(proyecto_id)
+{
+	try 
+	{
+		var ruta = "/reportePuntosAlimentosTablas/"+ proyecto_id + "/" + 1;
+
+		if (datatable_informeresultados8_1 != null)
+		{
+			datatable_informeresultados8_1.clear().draw();
+			datatable_informeresultados8_1.ajax.url(ruta).load();
+		}
+		else
+		{
+			var numeroejecucion = 1;
+			datatable_informeresultados8_1 = $('#tabla_resultado_8_1').DataTable({
+				ajax: {
+					url: ruta,
+					type: "get",
+					cache: false,
+					dataType: "json",
+					data: {},
+					dataSrc: function (json)
+					{
+						dataAlmacenada8_1 = json.data;
+						tabla_reporte_9_1(dataAlmacenada8_1) //Ejecutamos la funcion de la tabla 9.1 ya que los resultados son los mismos
+
+						menureporte_estado("menureporte_8_1", json.total);
+						menureporte_estado("menureporte_9_1", json.total);
+
+						return json.data;
+
+					},
+					error: function (xhr, error, code)
+					{						
+						console.log('error en datatable_informeresultados '+code);
+						if (numeroejecucion <= 1)
+						{
+							tabla_reporte_informeresultados8_1(proyecto.id);
+							numeroejecucion += 1;
+						}
+					}
+				},
+				columns: [
+					{
+						data: "PUNTO",
+						defaultContent: "-"
+					},
+					{
+						data: "AREA",
+						defaultContent: "-",
+						orderable: false,
+					},
+					{
+						data: "FECHA_MEDICION",
+						defaultContent: "-",
+						orderable: false,
+					},
+					{
+						data: "PARAMETRO",
+						defaultContent: "-",
+						orderable: false,
+					},
+					{
+						data: "METODO",
+						defaultContent: "-",
+						orderable: false,
+					},{
+						data: "UBICACION",
+						defaultContent: "-",
+						orderable: false,
+					},{
+						data: "TRABAJADORES",
+						defaultContent: "-",
+						orderable: false,
+					},{
+						data: "CONCENTRACION",
+						defaultContent: "-",
+						orderable: false,
+					},{
+						data: "CONCENTRACION_PERMISIBLE",
+						defaultContent: "-",
+						orderable: false,
+					},{
+						data: "CUMPLIMIENTO_NORMATIVO",
+						defaultContent: "-",
+						orderable: false,
+					},
+					{
+						data: "boton_editar",
+						defaultContent: "-",
+						orderable: false,
+					},{
+						data: "boton_eliminar",
+						defaultContent: "-",
+						orderable: false,
+					}
+				],
+				lengthMenu: [[20, 50, 100, -1], [20, 50, 100, "Todos"]],
+				rowsGroup: [10, 11,0,1, 2,5,6], //agrupar filas
+				order: [[ 0, "ASC" ]],
+				ordering: false,
+				processing: true,
+				searching: false,
+				paging: true,
+				language: {
+					lengthMenu: "Mostrar _MENU_ Registros",
+					zeroRecords: "No se encontraron registros",
+					info: "Página _PAGE_ de _PAGES_ (Total _TOTAL_ registros)",
+					infoEmpty: "No se encontraron registros",
+					infoFiltered: "(Filtrado de _MAX_ registros)",
+					emptyTable: "No hay datos disponibles en la tabla",
+					loadingRecords: "Cargando datos....",
+					processing: "Procesando <i class='fa fa-spin fa-spinner fa-3x'></i>",
+					search: "Buscar",
+					paginate: {
+						first: "Primera",
+						last: "Ultima",
+						next: "Siguiente",
+						previous: "Anterior"
+					}
+				},
+				rowCallback: function(row, data, index)
+				{
+
+					if (data.CUMPLIMIENTO_NORMATIVO == 'Fuera de norma') {
+						$(row).find('td:eq(9)').css('background', '#FF0000');
+						$(row).find('td:eq(9)').css('color', 'white');
+					} else {
+						$(row).find('td:eq(9)').css('background', '#00FF00');
+						$(row).find('td:eq(9)').css('color', '#000000');
+					}
+				},
+			});
+		}
+
+		// Tooltip en DataTable
+		datatable_informeresultados8_1.on('draw', function ()
+		{
+			$('[data-toggle="tooltip"]').tooltip();
+		});
+	}
+	catch (exception)
+	{
+		tabla_reporte_informeresultados8_1(proyecto.id);
+    }
+}
+
+
+
+$(document).ready(function()
+{
+	setTimeout(function()
+	{
+		tabla_reporte_informeresultados8_1_1(proyecto.id);
+	}, 7500);
+});
+
+
+var datatable_informeresultados8_1_1 = null;
+function tabla_reporte_informeresultados8_1_1(proyecto_id)
+{
+	try 
+	{
+		var ruta = "/reportePuntosAlimentosTablas/"+ proyecto_id + "/" + 2;
+
+		if (datatable_informeresultados8_1_1 != null)
+		{
+			datatable_informeresultados8_1_1.clear().draw();
+			datatable_informeresultados8_1_1.ajax.url(ruta).load();
+		}
+		else
+		{
+			var numeroejecucion = 1;
+			datatable_informeresultados8_1_1 = $('#tabla_resultado_8_1_1').DataTable({
+				ajax: {
+					url: ruta,
+					type: "get",
+					cache: false,
+					dataType: "json",
+					data: {},
+					dataSrc: function (json)
+					{
+						
+						dataAlmacenada8_1_1 = json.data;
+						tabla_reporte_9_1_1(dataAlmacenada8_1_1) //Ejecutamos la funcion de la tabla 9.1.1 ya que los resultados son los mismos
+
+						// Actualiza menu
+						menureporte_estado("menureporte_8_1", json.total);
+
+						return json.data;
+
+					},
+					error: function (xhr, error, code)
+					{						
+						console.log('error en datatable_informeresultados_8_1_1 '+code);
+						if (numeroejecucion <= 1)
+						{
+							tabla_reporte_informeresultados8_1_1(proyecto.id);
+							numeroejecucion += 1;
+						}
+					}
+				},
+				columns: [
+					{
+						data: "PUNTO",
+						defaultContent: "-"
+					},
+					{
+						data: "AREA",
+						defaultContent: "-",
+						orderable: false,
+					},
+					{
+						data: "FECHA_MEDICION",
+						defaultContent: "-",
+						orderable: false,
+					},
+					{
+						data: "PARAMETRO",
+						defaultContent: "-",
+						orderable: false,
+					},{
+						data: "UNIDADES",
+						defaultContent: "-",
+						orderable: false,
+					},
+					{
+						data: "METODO",
+						defaultContent: "-",
+						orderable: false,
+					},{
+						data: "UBICACION",
+						defaultContent: "-",
+						orderable: false,
+					},{
+						data: "TRABAJADORES",
+						defaultContent: "-",
+						orderable: false,
+					},{
+						data: "CONCENTRACION",
+						defaultContent: "-",
+						orderable: false,
+					}
+				],
+				lengthMenu: [[20, 50, 100, -1], [20, 50, 100, "Todos"]],
+				rowsGroup: [0,1,2,6,7], //agrupar filas
+				order: [[ 0, "ASC" ]],
+				ordering: false,
+				processing: true,
+				searching: false,
+				paging: true,
+				language: {
+					lengthMenu: "Mostrar _MENU_ Registros",
+					zeroRecords: "No se encontraron registros",
+					info: "Página _PAGE_ de _PAGES_ (Total _TOTAL_ registros)",
+					infoEmpty: "No se encontraron registros",
+					infoFiltered: "(Filtrado de _MAX_ registros)",
+					emptyTable: "No hay datos disponibles en la tabla",
+					loadingRecords: "Cargando datos....",
+					processing: "Procesando <i class='fa fa-spin fa-spinner fa-3x'></i>",
+					search: "Buscar",
+					paginate: {
+						first: "Primera",
+						last: "Ultima",
+						next: "Siguiente",
+						previous: "Anterior"
+					}
+				},
+				
+			});
+		}
+
+		// Tooltip en DataTable
+		datatable_informeresultados8_1_1.on('draw', function ()
+		{
+			$('[data-toggle="tooltip"]').tooltip();
+		});
+	}
+	catch (exception)
+	{
+		tabla_reporte_informeresultados8_1_1(proyecto.id);
+    }
+}
 
 
 // ============== Punto 8.2 ==============
@@ -2938,7 +3238,12 @@ $("#botonguardar_punto_8_2").click(function () {
 							reportealimentos_id = dato.reportealimentos_id;
 
 							menureporte_estado("menureporte_8_2", 1);
+
+							//Refrecamos la tablas de resultados
+							tabla_reporte_informeresultados8_2(proyecto.id);
+
 							tabla_reporte_revisiones(proyecto.id);
+
 
 
 							// mensaje
@@ -3003,6 +3308,165 @@ $("#botonguardar_punto_8_2").click(function () {
 		return false;
 	}
 });
+
+
+
+$(document).ready(function()
+{
+	setTimeout(function()
+	{
+		tabla_reporte_informeresultados8_2(proyecto.id);
+	}, 8000);
+});
+
+
+var datatable_informeresultados8_2 = null;
+function tabla_reporte_informeresultados8_2(proyecto_id)
+{
+	try 
+	{
+		var ruta = "/reportePuntosAlimentosTablas/"+ proyecto_id + "/" + 3;
+
+		if (datatable_informeresultados8_2 != null)
+		{
+			datatable_informeresultados8_2.clear().draw();
+			datatable_informeresultados8_2.ajax.url(ruta).load();
+		}
+		else
+		{
+			var numeroejecucion = 1;
+			datatable_informeresultados8_2 = $('#tabla_resultado_8_2').DataTable({
+				ajax: {
+					url: ruta,
+					type: "get",
+					cache: false,
+					dataType: "json",
+					data: {},
+					dataSrc: function (json)
+					{
+						dataAlmacenada8_2 = json.data;
+						tabla_reporte_9_2(dataAlmacenada8_2) //Ejecutamos la funcion de la tabla 9.2 ya que los resultados son los mismos
+
+						menureporte_estado("menureporte_8_2", json.total);
+						menureporte_estado("menureporte_9_2", json.total);
+
+						return json.data;
+
+					},
+					error: function (xhr, error, code)
+					{						
+						console.log('error en datatable_informeresultados '+code);
+						if (numeroejecucion <= 1)
+						{
+							tabla_reporte_informeresultados8_2(proyecto.id);
+							numeroejecucion += 1;
+						}
+					}
+				},
+				columns: [
+					{
+						data: "PUNTO",
+						defaultContent: "-"
+					},
+					{
+						data: "AREA",
+						defaultContent: "-",
+						orderable: false,
+					},
+					{
+						data: "FECHA_MEDICION",
+						defaultContent: "-",
+						orderable: false,
+					},
+					{
+						data: "PARAMETRO",
+						defaultContent: "-",
+						orderable: false,
+					},
+					{
+						data: "METODO",
+						defaultContent: "-",
+						orderable: false,
+					},{
+						data: "UBICACION",
+						defaultContent: "-",
+						orderable: false,
+					},{
+						data: "TRABAJADORES",
+						defaultContent: "-",
+						orderable: false,
+					},{
+						data: "CONCENTRACION",
+						defaultContent: "-",
+						orderable: false,
+					},{
+						data: "CONCENTRACION_PERMISIBLE",
+						defaultContent: "-",
+						orderable: false,
+					},{
+						data: "CUMPLIMIENTO_NORMATIVO",
+						defaultContent: "-",
+						orderable: false,
+					},
+					{
+						data: "boton_editar",
+						defaultContent: "-",
+						orderable: false,
+					},{
+						data: "boton_eliminar",
+						defaultContent: "-",
+						orderable: false,
+					}
+				],
+				lengthMenu: [[20, 50, 100, -1], [20, 50, 100, "Todos"]],
+				rowsGroup: [10, 11,0,1, 2,5,6], //agrupar filas
+				order: [[ 0, "ASC" ]],
+				ordering: false,
+				processing: true,
+				searching: false,
+				paging: true,
+				language: {
+					lengthMenu: "Mostrar _MENU_ Registros",
+					zeroRecords: "No se encontraron registros",
+					info: "Página _PAGE_ de _PAGES_ (Total _TOTAL_ registros)",
+					infoEmpty: "No se encontraron registros",
+					infoFiltered: "(Filtrado de _MAX_ registros)",
+					emptyTable: "No hay datos disponibles en la tabla",
+					loadingRecords: "Cargando datos....",
+					processing: "Procesando <i class='fa fa-spin fa-spinner fa-3x'></i>",
+					search: "Buscar",
+					paginate: {
+						first: "Primera",
+						last: "Ultima",
+						next: "Siguiente",
+						previous: "Anterior"
+					}
+				},
+				rowCallback: function(row, data, index)
+				{
+
+					if (data.CUMPLIMIENTO_NORMATIVO == 'Fuera de norma') {
+						$(row).find('td:eq(9)').css('background', '#FF0000');
+						$(row).find('td:eq(9)').css('color', 'white');
+					} else {
+						$(row).find('td:eq(9)').css('background', '#00FF00');
+						$(row).find('td:eq(9)').css('color', '#000000');
+					}
+				},
+			});
+		}
+
+		// Tooltip en DataTable
+		datatable_informeresultados8_2.on('draw', function ()
+		{
+			$('[data-toggle="tooltip"]').tooltip();
+		});
+	}
+	catch (exception)
+	{
+		tabla_reporte_informeresultados8_2(proyecto.id);
+    }
+}
 
 
 //  ============== Punto 8.3 ==============
@@ -3080,6 +3544,11 @@ $("#botonguardar_punto_8_3").click(function () {
 							reportealimentos_id = dato.reportealimentos_id;
 
 							menureporte_estado("menureporte_8_3", 1);
+					
+							// Refrescamos la tablas 
+							tabla_reporte_informeresultados8_3(proyecto.id);
+
+							
 							tabla_reporte_revisiones(proyecto.id);
 
 
@@ -3143,6 +3612,1133 @@ $("#botonguardar_punto_8_3").click(function () {
 				}
 			});
 		return false;
+	}
+});
+
+
+$(document).ready(function()
+{
+	setTimeout(function()
+	{
+		tabla_reporte_informeresultados8_3(proyecto.id);
+	}, 8500);
+});
+
+
+var datatable_informeresultados8_3 = null;
+function tabla_reporte_informeresultados8_3(proyecto_id)
+{
+	try 
+	{
+		var ruta = "/reportePuntosAlimentosTablas/"+ proyecto_id + "/" + 4;
+
+		if (datatable_informeresultados8_3 != null)
+		{
+			datatable_informeresultados8_3.clear().draw();
+			datatable_informeresultados8_3.ajax.url(ruta).load();
+		}
+		else
+		{
+			var numeroejecucion = 1;
+			datatable_informeresultados8_3 = $('#tabla_resultado_8_3').DataTable({
+				ajax: {
+					url: ruta,
+					type: "get",
+					cache: false,
+					dataType: "json",
+					data: {},
+					dataSrc: function (json)
+					{
+						dataAlmacenada8_3 = json.data;
+						tabla_reporte_9_3(dataAlmacenada8_3) //Ejecutamos la funcion de la tabla 9.3 ya que los resultados son los mismos
+						
+						menureporte_estado("menureporte_8_3", json.total);
+						menureporte_estado("menureporte_9_3", json.total);
+
+						return json.data;
+
+					},
+					error: function (xhr, error, code)
+					{						
+						console.log('error en datatable_informeresultados '+code);
+						if (numeroejecucion <= 1)
+						{
+							tabla_reporte_informeresultados8_3(proyecto.id);
+							numeroejecucion += 1;
+						}
+					}
+				},
+				columns: [
+					{
+						data: "PUNTO",
+						defaultContent: "-"
+					},
+					{
+						data: "AREA",
+						defaultContent: "-",
+						orderable: false,
+					},
+					{
+						data: "FECHA_MEDICION",
+						defaultContent: "-",
+						orderable: false,
+					},
+					{
+						data: "PARAMETRO",
+						defaultContent: "-",
+						orderable: false,
+					},
+					{
+						data: "METODO",
+						defaultContent: "-",
+						orderable: false,
+					},{
+						data: "UBICACION",
+						defaultContent: "-",
+						orderable: false,
+					},{
+						data: "TRABAJADORES",
+						defaultContent: "-",
+						orderable: false,
+					},{
+						data: "CONCENTRACION",
+						defaultContent: "-",
+						orderable: false,
+					},{
+						data: "CONCENTRACION_PERMISIBLE",
+						defaultContent: "-",
+						orderable: false,
+					},{
+						data: "CUMPLIMIENTO_NORMATIVO",
+						defaultContent: "-",
+						orderable: false,
+					},
+					{
+						data: "boton_editar",
+						defaultContent: "-",
+						orderable: false,
+					},{
+						data: "boton_eliminar",
+						defaultContent: "-",
+						orderable: false,
+					}
+				],
+				lengthMenu: [[20, 50, 100, -1], [20, 50, 100, "Todos"]],
+				rowsGroup: [10, 11,0,1, 2,5,6], //agrupar filas
+				order: [[ 0, "ASC" ]],
+				ordering: false,
+				processing: true,
+				searching: false,
+				paging: true,
+				language: {
+					lengthMenu: "Mostrar _MENU_ Registros",
+					zeroRecords: "No se encontraron registros",
+					info: "Página _PAGE_ de _PAGES_ (Total _TOTAL_ registros)",
+					infoEmpty: "No se encontraron registros",
+					infoFiltered: "(Filtrado de _MAX_ registros)",
+					emptyTable: "No hay datos disponibles en la tabla",
+					loadingRecords: "Cargando datos....",
+					processing: "Procesando <i class='fa fa-spin fa-spinner fa-3x'></i>",
+					search: "Buscar",
+					paginate: {
+						first: "Primera",
+						last: "Ultima",
+						next: "Siguiente",
+						previous: "Anterior"
+					}
+				},
+				rowCallback: function(row, data, index)
+				{
+
+					if (data.CUMPLIMIENTO_NORMATIVO == 'Fuera de norma') {
+						$(row).find('td:eq(9)').css('background', '#FF0000');
+						$(row).find('td:eq(9)').css('color', 'white');
+					} else {
+						$(row).find('td:eq(9)').css('background', '#00FF00');
+						$(row).find('td:eq(9)').css('color', '#000000');
+					}
+				},
+			});
+		}
+
+		// Tooltip en DataTable
+		datatable_informeresultados8_3.on('draw', function ()
+		{
+			$('[data-toggle="tooltip"]').tooltip();
+		});
+	}
+	catch (exception)
+	{
+		tabla_reporte_informeresultados8_3(proyecto.id);
+    }
+}
+
+
+//=================================================
+// TABLAS REPORTE PUNTO 9
+
+// Reporte Punto 9.1
+var datatable_reporte_9_1 = null;
+function tabla_reporte_9_1(data) {
+
+    if (datatable_reporte_9_1 != null) {
+        datatable_reporte_9_1.destroy();
+    }
+
+    // Creamos la tabla con los datos proporcionados
+    datatable_reporte_9_1 = $('#tabla_resultado_9_1').DataTable({
+        data: data, 
+        columns: [
+            { data: "PUNTO", defaultContent: "-" },
+            { data: "PARAMETRO", defaultContent: "-", orderable: false },
+            { data: "UBICACION", defaultContent: "-", orderable: false },
+            { data: "CONCENTRACION", defaultContent: "-", orderable: false },
+            { data: "CONCENTRACION_PERMISIBLE", defaultContent: "-", orderable: false },
+            { data: "CUMPLIMIENTO_NORMATIVO", defaultContent: "-", orderable: false }
+        ],
+        lengthMenu: [[20, 50, 100, -1], [20, 50, 100, "Todos"]],
+        rowsGroup: [0, 2], // Agrupar filas
+        order: [[0, "ASC"]],
+        ordering: false,
+        processing: true,
+        searching: false,
+        paging: true,
+        language: {
+            lengthMenu: "Mostrar _MENU_ Registros",
+            zeroRecords: "No se encontraron registros",
+            info: "Página _PAGE_ de _PAGES_ (Total _TOTAL_ registros)",
+            infoEmpty: "No se encontraron registros",
+            infoFiltered: "(Filtrado de _MAX_ registros)",
+            emptyTable: "No hay datos disponibles en la tabla",
+            loadingRecords: "Cargando datos....",
+            processing: "Procesando <i class='fa fa-spin fa-spinner fa-3x'></i>",
+            search: "Buscar",
+            paginate: {
+                first: "Primera",
+                last: "Ultima",
+                next: "Siguiente",
+                previous: "Anterior"
+            }
+        }
+    });
+}
+
+
+
+// Reporte Punto 9.1.1
+var datatable_reporte_9_1_1 = null;
+function tabla_reporte_9_1_1(data) {
+
+    if (datatable_reporte_9_1_1 != null) {
+        datatable_reporte_9_1_1.destroy();
+	}
+	
+	datatable_reporte_9_1_1 = $('#tabla_resultado_9_1_1').DataTable({
+		data: data, 
+		columns: [
+			{ data: "PUNTO", defaultContent: "-" },
+			{ data: "PARAMETRO", defaultContent: "-", orderable: false },
+			{ data: "UBICACION", defaultContent: "-", orderable: false },
+			{ data: "CONCENTRACION", defaultContent: "-", orderable: false },
+			
+		],
+		lengthMenu: [[20, 50, 100, -1], [20, 50, 100, "Todos"]],
+		rowsGroup: [0,2], //agrupar filas
+		order: [[0, "ASC"]],
+		ordering: false,
+		processing: true,
+		searching: false,
+		paging: true,
+		language: {
+			lengthMenu: "Mostrar _MENU_ Registros",
+			zeroRecords: "No se encontraron registros",
+			info: "Página _PAGE_ de _PAGES_ (Total _TOTAL_ registros)",
+			infoEmpty: "No se encontraron registros",
+			infoFiltered: "(Filtrado de _MAX_ registros)",
+			emptyTable: "No hay datos disponibles en la tabla",
+			loadingRecords: "Cargando datos....",
+			processing: "Procesando <i class='fa fa-spin fa-spinner fa-3x'></i>",
+			search: "Buscar",
+			paginate: {
+				first: "Primera",
+				last: "Ultima",
+				next: "Siguiente",
+				previous: "Anterior"
+			}
+		}
+	});
+   
+}
+
+
+// Reporte Punto 9.2
+var datatable_reporte_9_2 = null;
+function tabla_reporte_9_2(data) {
+
+	if (datatable_reporte_9_2 != null) {
+		datatable_reporte_9_2.destroy();
+    }
+	datatable_reporte_9_2 = $('#tabla_resultado_9_2').DataTable({
+		data: data, 
+		columns: [
+			{ data: "PUNTO", defaultContent: "-" },
+			{ data: "PARAMETRO", defaultContent: "-", orderable: false },
+			{ data: "UBICACION", defaultContent: "-", orderable: false },
+			{ data: "CONCENTRACION", defaultContent: "-", orderable: false },
+			{ data: "CONCENTRACION_PERMISIBLE", defaultContent: "-", orderable: false },
+			{ data: "CUMPLIMIENTO_NORMATIVO", defaultContent: "-", orderable: false },
+			
+		],
+		lengthMenu: [[20, 50, 100, -1], [20, 50, 100, "Todos"]],
+		rowsGroup: [0,2], //agrupar filas
+		order: [[0, "ASC"]],
+		ordering: false,
+		processing: true,
+		searching: false,
+		paging: true,
+		language: {
+			lengthMenu: "Mostrar _MENU_ Registros",
+			zeroRecords: "No se encontraron registros",
+			info: "Página _PAGE_ de _PAGES_ (Total _TOTAL_ registros)",
+			infoEmpty: "No se encontraron registros",
+			infoFiltered: "(Filtrado de _MAX_ registros)",
+			emptyTable: "No hay datos disponibles en la tabla",
+			loadingRecords: "Cargando datos....",
+			processing: "Procesando <i class='fa fa-spin fa-spinner fa-3x'></i>",
+			search: "Buscar",
+			paginate: {
+				first: "Primera",
+				last: "Ultima",
+				next: "Siguiente",
+				previous: "Anterior"
+			}
+		}
+	});
+
+}
+
+
+
+// Reporte Punto 9.3
+var datatable_reporte_9_3 = null;
+function tabla_reporte_9_3(data) {
+
+	if (datatable_reporte_9_3 != null) {
+		datatable_reporte_9_3.destroy();
+	}
+
+	 datatable_reporte_9_3 = $('#tabla_resultado_9_3').DataTable({
+		data: data, 
+		columns: [
+			{ data: "PUNTO", defaultContent: "-" },
+			{ data: "PARAMETRO", defaultContent: "-", orderable: false },
+			{ data: "UBICACION", defaultContent: "-", orderable: false },
+			{ data: "CONCENTRACION", defaultContent: "-", orderable: false },
+			{ data: "CONCENTRACION_PERMISIBLE", defaultContent: "-", orderable: false },
+			{ data: "CUMPLIMIENTO_NORMATIVO", defaultContent: "-", orderable: false },
+			
+		],
+		lengthMenu: [[20, 50, 100, -1], [20, 50, 100, "Todos"]],
+		rowsGroup: [0,2], //agrupar filas
+		order: [[0, "ASC"]],
+		ordering: false,
+		processing: true,
+		searching: false,
+		paging: true,
+		language: {
+			lengthMenu: "Mostrar _MENU_ Registros",
+			zeroRecords: "No se encontraron registros",
+			info: "Página _PAGE_ de _PAGES_ (Total _TOTAL_ registros)",
+			infoEmpty: "No se encontraron registros",
+			infoFiltered: "(Filtrado de _MAX_ registros)",
+			emptyTable: "No hay datos disponibles en la tabla",
+			loadingRecords: "Cargando datos....",
+			processing: "Procesando <i class='fa fa-spin fa-spinner fa-3x'></i>",
+			search: "Buscar",
+			paginate: {
+				first: "Primera",
+				last: "Ultima",
+				next: "Siguiente",
+				previous: "Anterior"
+			}
+		}
+	});
+   
+}
+
+
+
+//=====================================================
+// ANEXOS
+
+//=================================================
+// PLANOS
+
+
+$(document).ready(function()
+{
+	setTimeout(function()
+	{
+		tabla_reporte_planos(proyecto.id, reportealimentos_id, agente_nombre);
+	}, 5000);
+});
+
+
+var datatable_planos = null;
+function tabla_reporte_planos(proyecto_id, reportealimentos_id, agente_nombre)
+{
+	try 
+	{
+		var ruta = "/reportealimentostablaplanos/"+proyecto_id+"/"+reportealimentos_id+"/"+agente_nombre;
+
+		if (datatable_planos != null)
+		{
+			datatable_planos.clear().draw();
+			datatable_planos.ajax.url(ruta).load();
+		}
+		else
+		{
+			var numeroejecucion = 1;
+			datatable_planos = $('#tabla_reporte_planos').DataTable({
+				ajax: {
+					url: ruta,
+					type: "get",
+					cache: false,
+					dataType: "json",
+					data: {},
+					dataSrc: function (json)
+					{
+						// Actualiza menu
+						menureporte_estado("menureporte_13_5", json.total);
+
+						// alert("Done! "+json.msj);
+						return json.data;
+					},
+					error: function (xhr, error, code)
+					{						
+						console.log('error en datatable_planos '+code);
+						if (numeroejecucion <= 1)
+						{
+							tabla_reporte_planos(proyecto_id, reportealimentos_id, agente_nombre);
+							numeroejecucion += 1;
+						}
+					}
+				},
+				columns: [
+					// {
+					//     data: "id" 
+					// },
+					// {
+					// 	data: "numero_registro",
+					// 	defaultContent: "-"
+					// },
+					{
+						data: "checkbox",
+						defaultContent: "-",
+						orderable: false,
+					},
+					{
+						data: "proyectoevidenciaplano_carpeta",
+						defaultContent: "-",
+						orderable: false,
+					}
+					,
+					{
+						data: "total_planos",
+						defaultContent: "-",
+						orderable: false,
+					}
+				],
+				lengthMenu: [[20, 50, 100, -1], [20, 50, 100, "Todos"]],
+				// rowsGroup: [0, 1], //agrupar filas
+				order: [[ 0, "ASC" ]],
+				ordering: false,
+				processing: true,
+				searching: false,
+				paging: false,
+				language: {
+					lengthMenu: "Mostrar _MENU_ Registros",
+					zeroRecords: "No se encontraron registros",
+					info: "Página _PAGE_ de _PAGES_ (Total _TOTAL_ registros)",
+					infoEmpty: "No se encontraron registros",
+					infoFiltered: "(Filtrado de _MAX_ registros)",
+					emptyTable: "No hay datos disponibles en la tabla",
+					loadingRecords: "Cargando datos....",
+					processing: "Procesando <i class='fa fa-spin fa-spinner fa-3x'></i>",
+					search: "Buscar",
+					paginate: {
+						first: "Primera",
+						last: "Ultima",
+						next: "Siguiente",
+						previous: "Anterior"
+					}
+				}
+			});
+		}
+
+		// Tooltip en DataTable
+		datatable_planos.on('draw', function ()
+		{
+			$('[data-toggle="tooltip"]').tooltip();
+		});
+	}
+	catch (exception)
+	{
+		tabla_reporte_planos(proyecto_id, reportealimentos_id, agente_nombre);
+    }
+}
+
+
+$("#botonguardar_reporte_planos").click(function()
+{
+	// valida campos vacios
+	var valida = this.form.checkValidity();
+	if (valida)
+	{
+		swal({
+			title: "¡Confirme que desea guardar!",
+			text: "Carpeta planos seleccionados",
+			type: "warning",
+			showCancelButton: true,
+			confirmButtonColor: "#DD6B55",
+			confirmButtonText: "Guardar!",
+			cancelButtonText: "Cancelar!",
+			closeOnConfirm: false,
+			closeOnCancel: false
+		},
+		function(isConfirm)
+		{
+			if (isConfirm)
+			{
+				// cerrar msj confirmacion
+				swal.close();
+
+				// enviar datos
+				$('#form_reporte_planos').ajaxForm({
+					dataType: 'json',
+					type: 'POST',
+					url: '/reportealimentos',
+					data: {
+						opcion: 45,
+						proyecto_id: proyecto.id,
+						agente_id: agente_id,
+						agente_nombre: agente_nombre,
+						reportealimentos_id: reportealimentos_id,
+						catactivo_id: $("#reportealimentos_catactivo_id").val(),
+						reportealimentos_instalacion: $("#reportealimentos_instalacion").val(),
+					},
+					resetForm: false,
+					success: function(dato)
+					{
+						// Actualizar ID reporte						
+						reportealimentos_id = dato.reportealimentos_id;
+
+						// Actualiza menu
+						menureporte_estado("menureporte_13_5", dato.total);
+
+						tabla_reporte_revisiones(proyecto.id);
+
+						// mensaje
+						swal({
+							title: "Correcto",
+							text: ""+dato.msj,
+							type: "success", // warning, error, success, info
+							buttons: {
+								visible: false, // true , false
+							},
+							timer: 1500,
+							showConfirmButton: false
+						});
+
+						// actualiza boton
+						$('#botonguardar_reporte_planos').html('Guardar carpeta planos seleccionados <i class="fa fa-save"></i>');
+						$('#botonguardar_reporte_planos').attr('disabled', false);
+					},
+					beforeSend: function()
+					{
+						$('#botonguardar_reporte_planos').html('Guardando carpeta planos seleccionados <i class="fa fa-spin fa-spinner"></i>');
+						$('#botonguardar_reporte_planos').attr('disabled', true);
+					},
+					error: function(dato)
+					{
+						// actualiza boton
+						$('#botonguardar_reporte_planos').html('Guardar carpeta planos seleccionados <i class="fa fa-save"></i>');
+						$('#botonguardar_reporte_planos').attr('disabled', false);
+
+						// mensaje
+						swal({
+							title: "Error",
+							text: ""+dato.msj,
+							type: "error", // warning, error, success, info
+							buttons: {
+								visible: false, // true , false
+							},
+							timer: 1500,
+							showConfirmButton: false
+						});
+						return false;
+					}
+				}).submit();
+				return false;
+			}
+			else 
+			{
+				// mensaje
+				swal({
+					title: "Cancelado",
+					text: "Acción cancelada",
+					type: "error", // warning, error, success, info
+					buttons: {
+						visible: false, // true , false
+					},
+					timer: 500,
+					showConfirmButton: false
+				});
+			}
+		});
+		return false;
+	}
+});
+
+
+//=================================================
+// ANEXOS PDF
+
+
+$(document).ready(function()
+{
+	setTimeout(function()
+	{
+		tabla_reporte_anexos(proyecto.id, reportealimentos_id, agente_nombre);
+	}, 6500);
+});
+
+
+var datatable_anexos = null;
+function tabla_reporte_anexos(proyecto_id, reportealimentos_id, agente_nombre)
+{
+	try 
+	{
+		var ruta = "/reportealimentostablaanexos/"+proyecto_id+"/"+reportealimentos_id+"/"+agente_nombre;
+
+		if (datatable_anexos != null)
+		{
+			datatable_anexos.clear().draw();
+			datatable_anexos.ajax.url(ruta).load();
+		}
+		else
+		{
+			var numeroejecucion = 1;
+			datatable_anexos = $('#tabla_reporte_anexos').DataTable({
+				ajax: {
+					url: ruta,
+					type: "get",
+					cache: false,
+					dataType: "json",
+					data: {},
+					dataSrc: function (json)
+					{
+						if (parseInt(json.total) > 0)
+						{
+							menureporte_estado("menureporte_13_4", 1);
+						}
+
+						// alert("Done! "+json.msj);
+						return json.data;
+					},
+					error: function (xhr, error, code)
+					{						
+						console.log('error en datatable_anexos '+code);
+						if (numeroejecucion <= 1)
+						{
+							tabla_reporte_anexos(proyecto_id);
+							numeroejecucion += 1;
+						}
+					}
+				},
+				columns: [
+					// {
+					//     data: "id" 
+					// },
+					{
+						data: "numero_registro",
+						defaultContent: "-",
+						// className: '',
+						orderable: true,
+					},
+					{
+						data: "checkbox",
+						defaultContent: "-",
+						orderable: false,
+					},
+					{
+						data: "tipo",
+						defaultContent: "-",
+						orderable: true,
+					},
+					{
+						data: "entidad",
+						defaultContent: "-",
+						orderable: true,
+					},
+					{
+						data: "numero",
+						defaultContent: "-",
+						orderable: true,
+					},
+					{
+						data: "area",
+						defaultContent: "-",
+						orderable: true,
+					},
+					{
+						data: "vigencia",
+						defaultContent: "-",
+						orderable: true,
+					},
+					{
+						data: "certificado",
+						defaultContent: "-",
+						orderable: false,
+						className: 'certificadopdf',
+					}
+				],
+				lengthMenu: [[20, 50, 100, -1], [20, 50, 100, "Todos"]],
+				// rowsGroup: [1, 2, 3], //agrupar filas
+				// order: [[ 0, "ASC" ]],
+				ordering: true,
+				processing: true,
+				searching: true,
+				paging: true,
+				language: {
+					lengthMenu: "Mostrar _MENU_ Registros",
+					zeroRecords: "No se encontraron registros",
+					info: "Página _PAGE_ de _PAGES_ (Total _TOTAL_ registros)",
+					infoEmpty: "No se encontraron registros",
+					infoFiltered: "(Filtrado de _MAX_ registros)",
+					emptyTable: "No hay datos disponibles en la tabla",
+					loadingRecords: "Cargando datos....",
+					processing: "Procesando <i class='fa fa-spin fa-spinner fa-3x'></i>",
+					search: "Buscar",
+					paginate: {
+						first: "Primera",
+						last: "Ultima",
+						next: "Siguiente",
+						previous: "Anterior"
+					}
+				},
+		
+			});
+		}
+
+		// Tooltip en DataTable
+		datatable_anexos.on('draw', function ()
+		{
+			$('[data-toggle="tooltip"]').tooltip();
+		});
+	}
+	catch (exception)
+	{
+		tabla_reporte_anexos(proyecto_id, reportealimentos_id, agente_nombre);
+    }
+}
+
+
+$('#tabla_reporte_anexos tbody').on('click', 'td.certificadopdf', function()
+{
+	var tr = $(this).closest('tr');
+	var row = datatable_anexos.row(tr);
+
+	if (row.data().acreditacion_SoportePDF)
+	{
+		$('#visor_documento').attr('src', '/assets/plugins/viewer-pdfjs/web/viewer_read.html?file=/veracreditaciondocumento/'+row.data().id + '/' + 0);
+
+		// Titulo modal
+		$('#modal_visor .modal-title').html(row.data().catTipoAcreditacion_Nombre+' '+row.data().acreditacion_Entidad+' ['+row.data().acreditacion_Numero+']');
+
+		// Abrir modal
+		$('#modal_visor').modal({backdrop:false});
+	}
+});
+
+
+$("#botonguardar_reporte_anexos").click(function()
+{
+	// borrar campo filtro del DATATABLE
+	// datatable_anexos.search($(this).val()).draw();
+	datatable_anexos.search("").draw();
+
+
+	// valida campos vacios
+	var valida = this.form.checkValidity();
+	if (valida)
+	{
+		swal({
+			title: "¡Confirme que desea guardar!",
+			text: "Anexos",
+			type: "warning",
+			showCancelButton: true,
+			confirmButtonColor: "#DD6B55",
+			confirmButtonText: "Guardar!",
+			cancelButtonText: "Cancelar!",
+			closeOnConfirm: false,
+			closeOnCancel: false
+		},
+		function(isConfirm)
+		{
+			if (isConfirm)
+			{
+				// cerrar msj confirmacion
+				swal.close();
+
+				// enviar datos
+				$('#form_reporte_anexos').ajaxForm({
+					dataType: 'json',
+					type: 'POST',
+					url: '/reportealimentos',
+					data: {
+						opcion: 60,
+						proyecto_id: proyecto.id,
+						agente_id: agente_id,
+						agente_nombre: agente_nombre,
+						reportealimentos_id: reportealimentos_id,
+						catactivo_id: $("#reportealimentos_catactivo_id").val(),
+						reportealimentos_instalacion: $("#reportealimentos_instalacion").val(),
+					},
+					resetForm: false,
+					success: function(dato)
+					{
+						// Actualizar ID reporte
+						reportealimentos_id = dato.reportealimentos_id;
+
+						// Actualiza menu
+						menureporte_estado("menureporte_13_4", dato.total);
+
+						tabla_reporte_revisiones(proyecto.id);
+
+						// mensaje
+						swal({
+							title: "Correcto",
+							text: ""+dato.msj,
+							type: "success", // warning, error, success, info
+							buttons: {
+								visible: false, // true , false
+							},
+							timer: 1500,
+							showConfirmButton: false
+						});
+
+						// actualiza boton
+						$('#botonguardar_reporte_anexos').html('Guardar anexos 7 (STPS) y 8 (EMA) <i class="fa fa-save"></i>');
+						$('#botonguardar_reporte_anexos').attr('disabled', false);
+					},
+					beforeSend: function()
+					{
+						$('#botonguardar_reporte_anexos').html('Guardando anexos 7 (STPS) y 8 (EMA) <i class="fa fa-spin fa-spinner"></i>');
+						$('#botonguardar_reporte_anexos').attr('disabled', true);
+					},
+					error: function(dato)
+					{
+						// actualiza boton
+						$('#botonguardar_reporte_anexos').html('Guardar anexos 7 (STPS) y 8 (EMA) <i class="fa fa-save"></i>');
+						$('#botonguardar_reporte_anexos').attr('disabled', false);
+
+						// mensaje
+						swal({
+							title: "Error",
+							text: ""+dato.msj,
+							type: "error", // warning, error, success, info
+							buttons: {
+								visible: false, // true , false
+							},
+							timer: 1500,
+							showConfirmButton: false
+						});
+						return false;
+					}
+				}).submit();
+				return false;
+			}
+			else 
+			{
+				// mensaje
+				swal({
+					title: "Cancelado",
+					text: "Acción cancelada",
+					type: "error", // warning, error, success, info
+					buttons: {
+						visible: false, // true , false
+					},
+					timer: 500,
+					showConfirmButton: false
+				});
+			}
+		});
+		return false;
+	}
+});
+
+
+
+
+//=================================================
+// INFORMACION DE LOS CONTAMINANTES EVALUADOS
+	
+
+$(document).ready(function()
+{
+	setTimeout(function()
+	{
+		tabla_reporte_informeresultados(proyecto.id, reportealimentos_id, agente_nombre);
+	}, 10500);
+});
+
+
+var datatable_informeresultados = null;
+function tabla_reporte_informeresultados(proyecto_id, reportealimentos_id, agente_nombre)
+{
+	try 
+	{
+		var ruta = "/reportealimentostablainformeresultados/"+proyecto_id+"/"+reportealimentos_id+"/"+agente_nombre;
+
+		if (datatable_informeresultados != null)
+		{
+			datatable_informeresultados.clear().draw();
+			datatable_informeresultados.ajax.url(ruta).load();
+		}
+		else
+		{
+			var numeroejecucion = 1;
+			datatable_informeresultados = $('#tabla_reporte_informeresultados').DataTable({
+				ajax: {
+					url: ruta,
+					type: "get",
+					cache: false,
+					dataType: "json",
+					data: {},
+					dataSrc: function (json)
+					{
+						// Actualiza menu
+						menureporte_estado("menureporte_11_6", json.total);
+
+						// alert("Done! "+json.msj);
+						return json.data;
+					},
+					error: function (xhr, error, code)
+					{						
+						console.log('error en datatable_informeresultados '+code);
+						if (numeroejecucion <= 1)
+						{
+							tabla_reporte_informeresultados(proyecto_id, reportealimentos_id, agente_nombre);
+							numeroejecucion += 1;
+						}
+					}
+				},
+				columns: [
+					// {
+					//     data: "id" 
+					// },
+					{
+						data: "numero_registro",
+						defaultContent: "-"
+					},
+					{
+						data: "checkbox",
+						defaultContent: "-",
+						orderable: false,
+					},
+					{
+						data: "proyectoevidenciadocumento_nombre",
+						defaultContent: "-",
+						orderable: false,
+					},
+					{
+						data: "proyectoevidenciadocumento_extension",
+						defaultContent: "-",
+						orderable: false,
+					},
+					{
+						data: "created_at",
+						defaultContent: "-",
+						orderable: false,
+					},
+					{
+						data: "documento",
+						defaultContent: "-",
+						orderable: false,
+						className: 'documentopdf',
+					}
+				],
+				lengthMenu: [[20, 50, 100, -1], [20, 50, 100, "Todos"]],
+				// rowsGroup: [0, 1], //agrupar filas
+				order: [[ 0, "ASC" ]],
+				ordering: false,
+				processing: true,
+				searching: false,
+				paging: true,
+				language: {
+					lengthMenu: "Mostrar _MENU_ Registros",
+					zeroRecords: "No se encontraron registros",
+					info: "Página _PAGE_ de _PAGES_ (Total _TOTAL_ registros)",
+					infoEmpty: "No se encontraron registros",
+					infoFiltered: "(Filtrado de _MAX_ registros)",
+					emptyTable: "No hay datos disponibles en la tabla",
+					loadingRecords: "Cargando datos....",
+					processing: "Procesando <i class='fa fa-spin fa-spinner fa-3x'></i>",
+					search: "Buscar",
+					paginate: {
+						first: "Primera",
+						last: "Ultima",
+						next: "Siguiente",
+						previous: "Anterior"
+					}
+				}
+			});
+		}
+
+		// Tooltip en DataTable
+		datatable_informeresultados.on('draw', function ()
+		{
+			$('[data-toggle="tooltip"]').tooltip();
+		});
+	}
+	catch (exception)
+	{
+		tabla_reporte_informeresultados(proyecto_id, reportealimentos_id, agente_nombre);
+    }
+}
+
+
+$("#botonguardar_reporte_informeresultados").click(function()
+{
+	// valida campos vacios
+	var valida = this.form.checkValidity();
+	if (valida)
+	{
+		swal({
+			title: "¡Confirme que desea guardar!",
+			text: "Informe de resultados",
+			type: "warning",
+			showCancelButton: true,
+			confirmButtonColor: "#DD6B55",
+			confirmButtonText: "Guardar!",
+			cancelButtonText: "Cancelar!",
+			closeOnConfirm: false,
+			closeOnCancel: false
+		},
+		function(isConfirm)
+		{
+			if (isConfirm)
+			{
+				// cerrar msj confirmacion
+				swal.close();
+
+				// enviar datos
+				$('#form_reporte_informeresultados').ajaxForm({
+					dataType: 'json',
+					type: 'POST',
+					url: '/reportealimentos',
+					data: {
+						opcion: 55,
+						proyecto_id: proyecto.id,
+						agente_id: agente_id,
+						agente_nombre: agente_nombre,
+						reportealimentos_id: reportealimentos_id,
+						catactivo_id: $("#reportealimentos_catactivo_id").val(),
+						reportealimentos_instalacion: $("#reportealimentos_instalacion").val(),
+					},
+					resetForm: false,
+					success: function(dato)
+					{
+						// Actualizar ID reporte						
+						reportealimentos_id = dato.reportealimentos_id;
+
+						// Actualiza menu
+						menureporte_estado("menureporte_11_6", dato.total);
+
+						tabla_reporte_revisiones(proyecto.id);
+
+						// mensaje
+						swal({
+							title: "Correcto",
+							text: ""+dato.msj,
+							type: "success", // warning, error, success, info
+							buttons: {
+								visible: false, // true , false
+							},
+							timer: 1500,
+							showConfirmButton: false
+						});
+
+						// actualiza boton
+						$('#botonguardar_reporte_informeresultados').html('Guardar anexo informe de resultados <i class="fa fa-save"></i>');
+						$('#botonguardar_reporte_informeresultados').attr('disabled', false);
+					},
+					beforeSend: function()
+					{
+						$('#botonguardar_reporte_informeresultados').html('Guardando anexo informe de resultados <i class="fa fa-spin fa-spinner"></i>');
+						$('#botonguardar_reporte_informeresultados').attr('disabled', true);
+					},
+					error: function(dato)
+					{
+						// actualiza boton
+						$('#botonguardar_reporte_informeresultados').html('Guardar anexo informe de resultados <i class="fa fa-save"></i>');
+						$('#botonguardar_reporte_informeresultados').attr('disabled', false);
+
+						// mensaje
+						swal({
+							title: "Error",
+							text: ""+dato.msj,
+							type: "error", // warning, error, success, info
+							buttons: {
+								visible: false, // true , false
+							},
+							timer: 1500,
+							showConfirmButton: false
+						});
+						return false;
+					}
+				}).submit();
+				return false;
+			}
+			else 
+			{
+				// mensaje
+				swal({
+					title: "Cancelado",
+					text: "Acción cancelada",
+					type: "error", // warning, error, success, info
+					buttons: {
+						visible: false, // true , false
+					},
+					timer: 500,
+					showConfirmButton: false
+				});
+			}
+		});
+		return false;
+	}
+});
+
+
+$('#tabla_reporte_informeresultados tbody').on('click', 'td.documentopdf', function()
+{
+	var tr = $(this).closest('tr');
+	var row = datatable_informeresultados.row(tr);
+
+	if (row.data().proyectoevidenciadocumento_extension == ".pdf" || row.data().proyectoevidenciadocumento_extension == ".PDF")
+	{
+		$('#visor_documento').attr('src', '/assets/plugins/viewer-pdfjs/web/viewer_read.html?file=/proyectoevidenciadocumentodescargar/'+row.data().id+'/'+0); // 0 mostrar
+
+		// Titulo modal
+		$('#modal_visor .modal-title').html(row.data().proyectoevidenciadocumento_nombre);
+
+		// Abrir modal
+		$('#modal_visor').modal({backdrop:false});
+	}
+	else
+	{
+		window.open("/proyectoevidenciadocumentodescargar/"+row.data().id+"/"+1); //1 descargar
 	}
 });
 
@@ -3280,18 +4876,6 @@ function tabla_reporte_revisiones(proyecto_id) {
 						previous: "Anterior"
 					}
 				},
-				rowCallback: function (row, data, index) {
-					// console.log(index+' - '+data.reportealimentospuntos_nopunto);
-
-					// if(data.reportealimentospuntos_nopunto == 2)
-					// {
-					// 	$(row).find('td:eq(12)').css('background', 'red');
-					// 	$(row).find('td:eq(12)').css('color', 'white');
-					// }
-
-					// $(row).find('td:eq(15)').css('background', ''+data.fr_resultado_color);
-					// $(row).find('td:eq(15)').css('color', '#FFFFFF');
-				},
 			});
 		}
 
@@ -3306,12 +4890,14 @@ function tabla_reporte_revisiones(proyecto_id) {
 }
 
 
-$("#boton_reporte_nuevarevision").click(function () {
-	if (ultimaversion_cancelada == 1) {
-		if (parseInt(datatable_alimentospuntos.data().count()) > 0) {
+$("#boton_reporte_nuevarevision").click(function()
+{
+	if (ultimaversion_cancelada == 1)
+	{
+		
 			swal({
 				title: "¿Generar nueva revision?",
-				text: "Informe de Iluminación",
+				text: "Informe de Alimentos",
 				type: "info",
 				showCancelButton: true,
 				confirmButtonColor: "#DD6B55",
@@ -3319,131 +4905,99 @@ $("#boton_reporte_nuevarevision").click(function () {
 				cancelButtonText: "Cancelar!",
 				closeOnConfirm: false,
 				closeOnCancel: false
-			}, function (isConfirm) {
-				if (isConfirm) {
+			}, function(isConfirm){
+				if (isConfirm)
+				{
 					// cerrar msj confirmacion
 					swal.close();
 
 					$('#boton_reporte_nuevarevision').html('<span class="btn-label"><i class="fa fa-spin fa-spinner"></i></span>Copiando revisión, por favor espere...');
 					$('#boton_reporte_nuevarevision').attr('disabled', true);
 
-					setTimeout(function () {
-						var grafica_alimentos_imgbase64 = '';
-						graficapastel_alimentos.export.capture({}, function () {
-							this.toPNG({ quality: 1, multiplier: 6 }, function (img_base64) {
-								// var image = new Image();
-								// image.src = data;
-								// document.getElementById("captura").appendChild(image);
-								// console.log('grafica pastel alimentos');
+						
+					// Enviar datos
+					$.ajax({
+						type: "POST",
+						dataType: "json",
+						url: "/reportealimentosword",
+						data:{
+							_token: document.querySelector('meta[name="csrf-token"]')['content'],
+							proyecto_id: proyecto.id,
+							agente_id: agente_id,
+							agente_nombre: agente_nombre,
+							reportealimentos_id: reportealimentos_id,
+							areas_poe: areas_poe,
+							ultimarevision_id: ultimarevision_id,
+							crear_revision: 1,
+							
+						},
+						cache: false,
+						success:function(dato)
+						{
+							botoninforme_estado(0); //Desbloquear
 
-								grafica_alimentos_imgbase64 = img_base64;
+
+							// ACTUALIZAR TABLAS
+							tabla_reporte_revisiones(proyecto.id);
+							tabla_reporte_definiciones(proyecto.id, agente_nombre, reportealimentos_id);
+							
+
+
+							// desplazar a la ultima fila de la tabla
+							setTimeout(function()
+							{
+								$('html, body').animate({
+									scrollTop: $('#tabla_reporte_revisiones').offset().top //ultima fila
+								}, 1000);
+							}, 2000);
+
+
+							// mensaje
+							swal({
+								title: "Correcto",
+								text: ""+dato.msj,
+								type: "success", // warning, error, success, info
+								buttons: {
+									visible: false, // true , false
+								},
+								timer: 1500,
+								showConfirmButton: false
 							});
-						});
 
 
-						var grafica_reflexion_imgbase64 = '';
-						graficapastel_reflexion.export.capture({}, function () {
-							this.toPNG({ quality: 1, multiplier: 6 }, function (img_base64) {
-								// var image = new Image();
-								// image.src = img_base64;
-								// document.getElementById("captura").appendChild(image);
-								// console.log('grafica pastel reflexion');
+							$('#boton_reporte_nuevarevision').html('<span class="btn-label"><i class="fa fa-plus"></i></span>Crear nueva revisión');
+							$('#boton_reporte_nuevarevision').attr('disabled', false);
+						},
+						error: function(dato)
+						{
+							// Boton
+							$('#boton_reporte_nuevarevision').html('<span class="btn-label"><i class="fa fa-plus"></i></span>Crear nueva revisión');
+							$('#boton_reporte_nuevarevision').attr('disabled', false);
 
-								grafica_reflexion_imgbase64 = img_base64;
+
+							tabla_reporte_revisiones(proyecto.id);
+
+
+							// mensaje
+							swal({
+								title: "Error",
+								text: "Al crear nueva revisión de este informe, intentelo de nuevo.",
+								type: "error", // warning, error, success, info
+								buttons: {
+									visible: false, // true , false
+								},
+								timer: 1500,
+								showConfirmButton: false
 							});
-						});
-
-
-						html2canvas(document.querySelector("#areas_cumplimiento"), { scale: 6 }).then(canvas => {
-							// document.getElementById("captura").appendChild(canvas)
-							var imgData = canvas.toDataURL('image/jpeg');
-
-							setTimeout(function () {
-								// Enviar datos
-								$.ajax({
-									type: "POST",
-									dataType: "json",
-									url: "/reportealimentosword",
-									data: {
-										_token: document.querySelector('meta[name="csrf-token"]')['content'],
-										proyecto_id: proyecto.id,
-										agente_id: agente_id,
-										agente_nombre: agente_nombre,
-										reportealimentos_id: reportealimentos_id,
-										areas_poe: areas_poe,
-										ultimarevision_id: ultimarevision_id,
-										crear_revision: 1,
-										grafica1: imgData,
-										grafica_alimentos: grafica_alimentos_imgbase64,
-										grafica_reflexion: grafica_reflexion_imgbase64,
-									},
-									cache: false,
-									success: function (dato) {
-										botoninforme_estado(0); //Desbloquear
-
-
-										// ACTUALIZAR TABLAS
-										tabla_reporte_revisiones(proyecto.id);
-										tabla_reporte_definiciones(proyecto.id, agente_nombre, reportealimentos_id);
-
-
-										// desplazar a la ultima fila de la tabla
-										setTimeout(function () {
-											$('html, body').animate({
-												scrollTop: $('#tabla_reporte_revisiones').offset().top //ultima fila
-											}, 1000);
-										}, 2000);
-
-
-										// mensaje
-										swal({
-											title: "Correcto",
-											text: "" + dato.msj,
-											type: "success", // warning, error, success, info
-											buttons: {
-												visible: false, // true , false
-											},
-											timer: 1500,
-											showConfirmButton: false
-										});
-
-
-										$('#boton_reporte_nuevarevision').html('<span class="btn-label"><i class="fa fa-plus"></i></span>Crear nueva revisión');
-										$('#boton_reporte_nuevarevision').attr('disabled', false);
-									},
-									// beforeSend: function()
-									// {
-									// 	$('#boton_reporte_nuevarevision').html('<span class="btn-label"><i class="fa fa-spin fa-spinner"></i></span>Copiando revisión, por favor espere...');
-									// 	$('#boton_reporte_nuevarevision').attr('disabled', true);
-									// },
-									error: function (dato) {
-										// Boton
-										$('#boton_reporte_nuevarevision').html('<span class="btn-label"><i class="fa fa-plus"></i></span>Crear nueva revisión');
-										$('#boton_reporte_nuevarevision').attr('disabled', false);
-
-
-										tabla_reporte_revisiones(proyecto.id);
-
-
-										// mensaje
-										swal({
-											title: "Error",
-											text: "Al crear nueva revisión de este informe, intentelo de nuevo.",
-											type: "error", // warning, error, success, info
-											buttons: {
-												visible: false, // true , false
-											},
-											timer: 1500,
-											showConfirmButton: false
-										});
-										return false;
-									}
-								});//Fin ajax
-							}, 1000);
-						});
-					}, 500);
+							return false;
+						}
+					});//Fin ajax
+						
+					
+					
 				}
-				else {
+				else 
+				{
 					// mensaje
 					swal({
 						title: "Cancelado",
@@ -3457,22 +5011,10 @@ $("#boton_reporte_nuevarevision").click(function () {
 					});
 				}
 			});
-		}
-		else {
-			// mensaje
-			swal({
-				title: "No disponible",
-				text: "En este informe aún no se ha capturado puntos de iluminación.",
-				type: "info", // warning, error, success, info
-				buttons: {
-					visible: false, // true , false
-				},
-				timer: 3000,
-				showConfirmButton: false
-			});
-		}
+		
 	}
-	else {
+	else
+	{
 		// mensaje
 		swal({
 			title: "No disponible",
@@ -3485,5 +5027,606 @@ $("#boton_reporte_nuevarevision").click(function () {
 			showConfirmButton: false
 		});
 	}
+});
+
+
+function reporte_concluido(revision_id, perfil, checkbox)
+{
+	if (parseInt(perfil) == 1)
+	{
+		if (checkbox.checked) // Activado
+		{
+			$(checkbox).prop('checked', false);
+
+
+			var pendientes = 0;
+			var pendientes_puntos = '';
+			$('#top-menu .fa-times').each(function()
+			{
+				pendientes += 1;
+
+				var texto = this.id;
+				texto = texto.replace("menureporte_", "");
+				texto = texto.replace("_", ".");
+				pendientes_puntos += '\nPunto: '+texto;
+			});
+
+
+			if (parseInt(pendientes) == 0)
+			{
+				// Confirmar
+				swal({
+					title: "¿Concluir informe?",
+					text: "Ultima revisión del informe de "+agente_nombre,
+					type: "warning",
+					showCancelButton: true,
+					confirmButtonColor: "#DD6B55",
+					confirmButtonText: "Aceptar!",
+					cancelButtonText: "Cancelar!",
+					closeOnConfirm: false,
+					closeOnCancel: false
+				},
+				function(isConfirm)
+				{
+					if (isConfirm)
+					{
+						// cerrar msj confirmacion
+						swal.close();
+
+						
+						// Enviar datos
+						$.ajax({
+							type: "GET",
+							dataType: "json",
+							url: "/reportealimentosconcluirrevision/"+revision_id,
+							data:{},
+							cache: false,
+							success:function(dato)
+							{
+								// Actualizar tablas
+								tabla_reporte_revisiones(proyecto.id);
+								botoninforme_estado(dato.estado);
+
+								tabla_reporte_definiciones(proyecto.id, agente_nombre, reportealimentos_id);
+
+
+								// desplazar a la ultima fila de la tabla
+								setTimeout(function()
+								{
+									$('html, body').animate({
+										scrollTop: $('#tabla_reporte_revisiones').offset().top //ultima fila
+									}, 1000);
+								}, 2000);
+
+
+								// mensaje
+								swal({
+									title: "Correcto",
+									text: ""+dato.msj,
+									type: "success", // warning, error, success, info
+									buttons: {
+										visible: false, // true , false
+									},
+									timer: 1500,
+									showConfirmButton: false
+								});
+							},
+							error: function(dato)
+							{
+								tabla_reporte_revisiones(proyecto.id);
+
+								// mensaje
+								swal({
+									title: "No se pudo realizar esta acción",
+									text: dato.responseJSON,
+									type: "warning", // warning, error, success, info
+									buttons: {
+										visible: false, // true , false
+									},
+									timer: 2000,
+									showConfirmButton: false
+								});
+
+								return false;
+							}
+						});//Fin ajax
+					}
+					else 
+					{
+						// mensaje
+						swal({
+							title: "Cancelado",
+							text: "Acción cancelada",
+							type: "error", // warning, error, success, info
+							buttons: {
+								visible: false, // true , false
+							},
+							timer: 500,
+							showConfirmButton: false
+						});
+					}
+				});
+			}
+			else
+			{
+				// mensaje
+				swal({
+					title: "No disponible",
+					text: 'Esta revisión del informe aún no ha sido completada, se encontraron '+pendientes+' punto(s) pendiente(s) en todo el contenido por guardar.\n'+pendientes_puntos,
+					type: "info", // warning, error, success, info
+					buttons: {
+						visible: false, // true , false
+					},
+					timer: 6000,
+					showConfirmButton: false
+				});
+			}
+
+			return false;
+		}
+		else
+		{
+			$(checkbox).prop('checked', true);
+
+			// Confirmar
+			swal({
+				title: "¿Quitar concluido?",
+				text: "Ultima revisión del informe de "+agente_nombre,
+				type: "warning",
+				showCancelButton: true,
+				confirmButtonColor: "#DD6B55",
+				confirmButtonText: "Aceptar!",
+				cancelButtonText: "Cancelar!",
+				closeOnConfirm: false,
+				closeOnCancel: false
+			},
+			function(isConfirm)
+			{
+				if (isConfirm)
+				{
+					// cerrar msj confirmacion
+					swal.close();
+
+					
+					// Enviar datos
+					$.ajax({
+						type: "GET",
+						dataType: "json",
+						url: "/reportealimentosconcluirrevision/"+revision_id,
+						data:{},
+						cache: false,
+						success:function(dato)
+						{
+							// desplazar a la ultima fila de la tabla
+							setTimeout(function()
+							{
+								$('html, body').animate({
+									scrollTop: $('#tabla_reporte_revisiones').offset().top //ultima fila
+								}, 1000);
+							}, 2000);
+
+
+							// Actualizar tablas
+							tabla_reporte_revisiones(proyecto.id);
+							botoninforme_estado(dato.estado);
+
+							tabla_reporte_definiciones(proyecto.id, agente_nombre, reportealimentos_id);
+
+
+							// mensaje
+							swal({
+								title: "Correcto",
+								text: ""+dato.msj,
+								type: "success", // warning, error, success, info
+								buttons: {
+									visible: false, // true , false
+								},
+								timer: 1500,
+								showConfirmButton: false
+							});
+						},
+						error: function(dato)
+						{
+							tabla_reporte_revisiones(proyecto.id);
+
+							// mensaje
+							swal({
+								title: "Correcto",
+								text: ""+dato.msj,
+								type: "error", // warning, error, success, info
+								buttons: {
+									visible: false, // true , false
+								},
+								timer: 1500,
+								showConfirmButton: false
+							});
+
+							return false;
+						}
+					});//Fin ajax
+				}
+				else 
+				{
+					// mensaje
+					swal({
+						title: "Cancelado",
+						text: "Acción cancelada",
+						type: "error", // warning, error, success, info
+						buttons: {
+							visible: false, // true , false
+						},
+						timer: 500,
+						showConfirmButton: false
+					});
+				}
+			});
+			return false;
+		}	
+	}
+}
+
+
+function reporte_cancelado(revision_id, perfil, checkbox)
+{
+	if (parseInt(perfil) == 1)
+	{
+		$('#form_modal_cancelacionobservacion').each(function(){
+			this.reset();
+		});
+
+
+		// Campos Hidden
+		$('#reporterevisiones_id').val(revision_id);
+
+
+		if (checkbox.checked) // Activado
+		{
+			$(checkbox).prop('checked', false);
+			// alert('Cancelado '+checkbox.checked);
+
+			// mostrar modal observacion
+			$('#modal_reporte_cancelacionobservacion').modal({backdrop:false, keyboard:false});
+		}
+		else
+		{
+			$(checkbox).prop('checked', true);
+			// alert('Descancelado '+checkbox.checked);
+
+
+			// Confirmar
+			swal({
+				title: "¿Quitar cancelación?",
+				text: "Ultima revisión del informe de "+agente_nombre,
+				type: "warning",
+				showCancelButton: true,
+				confirmButtonColor: "#DD6B55",
+				confirmButtonText: "Aceptar!",
+				cancelButtonText: "Cancelar!",
+				closeOnConfirm: false,
+				closeOnCancel: false
+			},
+			function(isConfirm)
+			{
+				if (isConfirm)
+				{
+					// cerrar msj confirmacion
+					swal.close();
+
+					
+					// enviar datos
+					$('#form_modal_cancelacionobservacion').ajaxForm({
+						dataType: 'json',
+						type: 'POST',
+						url: '/reportealimentos',
+						data: {
+							opcion: 70,
+							proyecto_id: proyecto.id,
+							agente_id: agente_id,
+							agente_nombre: agente_nombre,
+							reportealimentos_id: reportealimentos_id,
+							reportealimentos_instalacion: $("#reportealimentos_instalacion").val(),
+						},
+						resetForm: false,
+						success: function(dato)
+						{
+							// Actualizar ID reporte
+							reportealimentos_id = dato.reportealimentos_id;
+
+
+							// Actualizar tablas
+							botoninforme_estado(dato.estado);
+							tabla_reporte_revisiones(proyecto.id);
+
+							tabla_reporte_definiciones(proyecto.id, agente_nombre, reportealimentos_id);
+
+							
+							// desplazar a la ultima fila de la tabla
+							setTimeout(function()
+							{
+								$('html, body').animate({
+									scrollTop: $('#tabla_reporte_revisiones').offset().top //ultima fila
+								}, 1000);
+							}, 2000);
+
+
+							// mensaje
+							swal({
+								title: "Correcto",
+								text: ""+dato.msj,
+								type: "success", // warning, error, success, info
+								buttons: {
+									visible: false, // true , false
+								},
+								timer: 1500,
+								showConfirmButton: false
+							});
+
+							
+						},
+						
+						error: function(dato)
+						{
+						
+
+							// mensaje
+							swal({
+								title: "Error",
+								text: ""+dato.msj,
+								type: "error", // warning, error, success, info
+								buttons: {
+									visible: false, // true , false
+								},
+								timer: 1500,
+								showConfirmButton: false
+							});
+							return false;
+						}
+					}).submit();
+					return false;
+				}
+				else 
+				{
+					// mensaje
+					swal({
+						title: "Cancelado",
+						text: "Acción cancelada",
+						type: "error", // warning, error, success, info
+						buttons: {
+							visible: false, // true , false
+						},
+						timer: 500,
+						showConfirmButton: false
+					});
+				}
+			});
+			return false;
+		}
+	}
+}
+
+
+$("#botonguardar_modal_cancelacionobservacion").click(function()
+{
+	swal({
+		title: "¡Confirme que desea cancelar!",
+		text: "Ultima revisión del informe de "+agente_nombre,
+		type: "warning",
+		showCancelButton: true,
+		confirmButtonColor: "#DD6B55",
+		confirmButtonText: "Aceptar!",
+		cancelButtonText: "Cancelar!",
+		closeOnConfirm: false,
+		closeOnCancel: false
+	},
+	function(isConfirm)
+	{
+		if (isConfirm)
+		{
+			// cerrar msj confirmacion
+			swal.close();
+
+			// enviar datos
+			$('#form_modal_cancelacionobservacion').ajaxForm({
+				dataType: 'json',
+				type: 'POST',
+				url: '/reportealimentos',
+				data: {
+					opcion: 70,
+					proyecto_id: proyecto.id,
+					agente_id: agente_id,
+					agente_nombre: agente_nombre,
+					reportealimentos_id: reportealimentos_id,
+					
+					reportealimentos_instalacion: $("#reportealimentos_instalacion").val(),
+				},
+				resetForm: false,
+				success: function(dato)
+				{
+					// Actualizar ID reporte
+					reportealimentos_id = dato.reportealimentos_id;
+
+					// Actualizar tablas
+					botoninforme_estado(dato.estado);
+					tabla_reporte_revisiones(proyecto.id);
+
+					tabla_reporte_definiciones(proyecto.id, agente_nombre, reportealimentos_id);
+
+					
+					// desplazar a la ultima fila de la tabla
+					setTimeout(function()
+					{
+						$('html, body').animate({
+							scrollTop: $('#tabla_reporte_revisiones').offset().top //ultima fila
+						}, 1000);
+					}, 2000);
+
+
+					// mensaje
+					swal({
+						title: "Correcto",
+						text: ""+dato.msj,
+						type: "success", // warning, error, success, info
+						buttons: {
+							visible: false, // true , false
+						},
+						timer: 1500,
+						showConfirmButton: false
+					});
+
+					// actualiza boton
+					$('#botonguardar_modal_cancelacionobservacion').html('Guardar observación y cancelar revisión <i class="fa fa-save"></i>');
+					$('#botonguardar_modal_cancelacionobservacion').attr('disabled', false);
+
+					// cerrar modal
+					$('#modal_reporte_cancelacionobservacion').modal('hide');
+				},
+				beforeSend: function()
+				{
+					$('#botonguardar_modal_cancelacionobservacion').html('Guardando observación y cancelar revisión <i class="fa fa-spin fa-spinner"></i>');
+					$('#botonguardar_modal_cancelacionobservacion').attr('disabled', true);
+				},
+				error: function(dato)
+				{
+					// actualiza boton
+					$('#botonguardar_modal_cancelacionobservacion').html('Guardar observación y cancelar revisión <i class="fa fa-save"></i>');
+					$('#botonguardar_modal_cancelacionobservacion').attr('disabled', false);
+
+					// mensaje
+					swal({
+						title: "Error",
+						text: ""+dato.msj,
+						type: "error", // warning, error, success, info
+						buttons: {
+							visible: false, // true , false
+						},
+						timer: 1500,
+						showConfirmButton: false
+					});
+					return false;
+				}
+			}).submit();
+			return false;
+		}
+		else 
+		{
+			// mensaje
+			swal({
+				title: "Cancelado",
+				text: "Acción cancelada",
+				type: "error", // warning, error, success, info
+				buttons: {
+					visible: false, // true , false
+				},
+				timer: 500,
+				showConfirmButton: false
+			});
+		}
+	});
+	return false;
+});
+
+
+//=================================================
+// GENERAR WORD
+
+
+$('#tabla_reporte_revisiones tbody').on('click', 'td>button.botondescarga', function()
+{
+	var botondescarga = this;
+
+	var tr = $(this).closest('tr');
+	var row = datatable_reporterevisiones.row(tr);
+
+	// Boton descarga
+	$("#"+botondescarga.id).html('<i class="fa fa-spin fa-spinner fa-2x"></i>');
+
+	setTimeout(function()
+	{
+		if (parseInt(row.data().id) == parseInt(ultimarevision_id))
+		{
+				setTimeout(function()
+				{
+					// Enviar datos
+					$.ajax({
+						type: "POST",
+						dataType: "json",
+						url: "/reportealimentosword",
+						data:{
+							_token: document.querySelector('meta[name="csrf-token"]')['content'],
+							proyecto_id: proyecto.id,
+							agente_id: agente_id,
+							agente_nombre: agente_nombre,
+							reportealimentos_id: reportealimentos_id,
+							areas_poe: areas_poe,
+							ultimarevision_id: ultimarevision_id,
+							crear_revision: 0,
+							
+						},
+						cache: false,
+						success:function(dato)
+						{
+							console.log(dato);
+
+							ventana = window.open('/reportealimentosworddescargar/'+proyecto.id+"/"+row.data().id+"/"+ultimarevision_id);
+
+
+							setTimeout(function()
+							{
+								tabla_reporte_revisiones(proyecto.id);
+							}, 6000);
+
+
+							setTimeout(function()
+							{
+								if (ventana.window)
+								{
+									ventana.window.close();
+								}
+							}, 15000);
+
+
+							
+						},
+						error: function(dato)
+						{
+							// mensaje
+							console.log(dato)
+
+							swal({
+								title: "Error",
+								text: "Al intentar crear informe, intentelo de nuevo.\n"+dato,
+								type: "error", // warning, error, success, info
+								buttons: {
+									visible: false, // true , false
+								},
+								timer: 1500,
+								showConfirmButton: false
+							});
+							return false;
+						}
+					});//Fin ajax
+				}, 1000);
+			
+		}
+		else
+		{
+			ventana = window.open('/reportealimentosworddescargar/'+proyecto.id+"/"+row.data().id+"/"+ultimarevision_id);
+
+
+			setTimeout(function()
+			{
+				tabla_reporte_revisiones(proyecto.id);
+			}, 6000);
+
+
+			setTimeout(function()
+			{
+				if (ventana.window)
+				{
+					ventana.window.close();
+				}
+			}, 15000);
+		}
+	}, 500);
 });
 

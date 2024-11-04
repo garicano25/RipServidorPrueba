@@ -1772,6 +1772,14 @@ Route::get('reportealimentostablarevisiones/{id}', ['as' => 'reportealimentos.re
 
 Route::get('reportealimentostablarecomendaciones/{proyecto_id}/{reportealimentos_id}/{agente_nombre}', ['as' => 'reportealimentos.reportealimentostablarecomendaciones', 'uses' => 'reportes\reportealimentosController@reportealimentostablarecomendaciones']);
 
+Route::get('reportePuntosAlimentosTablas/{proyecto_id}/{tabla}', ['as' => 'reportealimentos.reportePuntosAlimentosTablas', 'uses' => 'reportes\reportealimentosController@reportePuntosAlimentosTablas']);
+
+Route::get('reportealimentostablaplanos/{proyecto_id}/{reportealimentos_id}/{agente_nombre}', ['as' => 'reportealimentos.reportealimentostablaplanos', 'uses' => 'reportes\reportealimentosController@reportealimentostablaplanos']);
+
+Route::get('reportealimentostablaanexos/{proyecto_id}/{reportealimentos_id}/{agente_nombre}', ['as' => 'reportealimentos.reportealimentostablaanexos', 'uses' => 'reportes\reportealimentosController@reportealimentostablaanexos']);
+
+Route::get('reportealimentostablainformeresultados/{proyecto_id}/{reportealimentos_id}/{agente_nombre}', ['as' => 'reportealimentos.reportealimentostablainformeresultados', 'uses' => 'reportes\reportealimentosController@reportealimentostablainformeresultados']);
+
 
 
 
