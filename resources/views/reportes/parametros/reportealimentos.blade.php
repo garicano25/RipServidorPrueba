@@ -560,6 +560,7 @@
 
                 <h4 class="card-title" id="8">8.- Resultados</h4>
                 <h4 class="card-title" id="8_1">8.1.- Resultados de calidad e inocuidad de alimentos</h4>
+                <span>A continuación, se presentan de manera detallada los resultados obtenidos en la evaluación de la calidad e inocuidad de alimentos respecto a los parámetros microbiólogicos y organolépticos por punto de muestreo:</span>
                 <ol class="breadcrumb" style="padding: 6px; margin: 10px 0px;">
                     <button type="button" class="btn btn-default waves-effect botoninforme" data-toggle="tooltip" title="Resultados, calidad e inocuidad de alimentos" id="boton_reporte_nuevoalimentospunto8_1">
                         <span class="btn-label"><i class="fa fa-plus"></i></span>Resultado
@@ -585,10 +586,29 @@
                     <tbody></tbody>
                 </table>
 
-                <h4 class="card-title" id="8_2">8.2.- Resultados, evalución de superficies vivas</h4>
-                <ol class="breadcrumb" style="padding: 6px; margin: 10px 0px;">
-                    <button type="button" class="btn btn-default waves-effect botoninforme" data-toggle="tooltip" title="Resultados, evalución de superficies vivas" id="boton_reporte_nuevoalimentospunto8_2>
-                        <span class=" btn-label"><i class="fa fa-plus"></i></span> Resultado
+                <table class="table-hover tabla_info_centrado mt-4" width="100%" id="tabla_resultado_8_1_2">
+                    <thead>
+                        <tr>
+                            <th width="60">Punto</th>
+                            <th width="150">Área</th>
+                            <th width="">Fecha de medición</th>
+                            <th width="80">Parametro</th>
+                            <th width="80">Unidades</th>
+                            <th width="60">Método de análisis</th>
+                            <th width="60">Ubicación</th>
+                            <th width="60">No. de trabajadores expuestos</th>
+                            <th width="60">Concentración obtenida</th>
+                        </tr>
+                    </thead>
+                    <tbody></tbody>
+                </table>
+                <span><b>Nota aclaratoria:</b> No existe una norma espécifica para la comparación de las concentraciones obtenidas de los parámetros físicos y organolépticos de alimentos, por lo tanto, no se puede determinar un cumplimiento normativo.</span>
+
+                <h4 class="card-title mt-5" id="8_2">8.2.- Resultados, evalución de superficies vivas</h4>
+                <span>A continuación, se presentan de manera detallada los resultados obtenidos en la evaluación de superficies vivas respecto a los parámetros microbiológicos por punto de muestreo:</span>
+                <ol class="breadcrumb mt-1" style="padding: 6px; margin: 10px 0px;">
+                    <button type="button" class="btn btn-default waves-effect botoninforme" data-toggle="tooltip" title="Resultados, evalución de superficies vivas" id="boton_reporte_nuevoalimentospunto8_2">
+                        <span class="btn-label"><i class="fa fa-plus"></i></span> Resultado
                     </button>
                 </ol>
                 <table class="table-hover tabla_info_centrado" width="100%" id="tabla_resultado_8_2">
@@ -611,8 +631,9 @@
                     <tbody></tbody>
                 </table>
 
-                <h4 class="card-title" id="8_3">8.3.- Resultados, evalución de superficies inertes</h4>
-                <ol class="breadcrumb" style="padding: 6px; margin: 10px 0px;">
+                <h4 class="card-title mt-5" id="8_3">8.3.- Resultados, evalución de superficies inertes</h4>
+                <span>A continuación, se presentan de manera detallada a los resultados obtenidos en la evaluación de la calidad de superficies inertes respecto a los parámetros microbiológicos por punto de muestreo:</span>
+                <ol class="breadcrumb mt-1" style="padding: 6px; margin: 10px 0px;">
                     <button type="button" class="btn btn-default waves-effect botoninforme" data-toggle="tooltip" title="Resultados, evalución de superficies inertes" id="boton_reporte_nuevoalimentospunto8_3">
                         <span class="btn-label"><i class="fa fa-plus"></i></span> Resultado
                     </button>
@@ -637,14 +658,15 @@
                     <tbody></tbody>
                 </table>
 
-                <h4 class="card-title" id="9">9.- Análisis de los resultados</h4>
+                <h4 class="card-title mt-5" id="9">9.- Análisis de los resultados</h4>
                 <h4 class="card-title" id="9_1">9.1.- Calidad e inocuidad de alimentos</h4>
-                <ol class="breadcrumb" style="padding: 6px; margin: 10px 0px;">
+                <span>Durante la evaluación se obtuvieron los siguientes resultados de los parámetros microbiológicos:</span>
+                <!-- <ol class="breadcrumb mt-2" style="padding: 6px; margin: 10px 0px;">
                     <button type="button" class="btn btn-default waves-effect botoninforme" data-toggle="tooltip" title="Calidad e inocuidad de alimentos" id="boton_reporte_nuevoalimentospunto9_1">
                         <span class="btn-label"><i class="fa fa-plus"></i></span> Resultado
                     </button>
-                </ol>
-                <table class="table-hover tabla_info_centrado" width="100%" id="tabla_resultado_9_1">
+                </ol> -->
+                <table class="table-hover tabla_info_centrado mb-5" width="100%" id="tabla_resultado_9_1">
                     <thead>
                         <tr>
                             <th width="60">Punto</th>
@@ -653,15 +675,13 @@
                             <th width="">Concentración obtenida</th>
                             <th width="">Concentración permisible</th>
                             <th width="80">Cumplimiento normativo</th>
-                            <th width="60">Editar</th>
-                            <th width="60">Eliminar</th>
                         </tr>
                     </thead>
                     <tbody></tbody>
                 </table>
 
 
-                <span class="mt-3">Durante la evaluación se obtuvieron los siguientes resultados de los parámetros físicos y arganolépticos:</span>
+                <span>Durante la evaluación se obtuvieron los siguientes resultados de los parámetros físicos y arganolépticos:</span>
                 <table class="table-hover tabla_info_centrado" width="100%" id="tabla_resultado_9_1_1">
                     <thead>
                         <tr>
@@ -673,13 +693,15 @@
                     </thead>
                     <tbody></tbody>
                 </table>
+                <span><b>Nota aclaratoria:</b> No existe una norma espécifica para la comparación de las concentraciones obtenidas de los parámetros físicos y organolépticos de alimentos, por lo tanto, no se puede determinar un cumplimiento normativo.</span>
 
-                <h4 class="card-title" id="9_2">9.2.- Superficies vivas</h4>
-                <ol class="breadcrumb" style="padding: 6px; margin: 10px 0px;">
-                    <button type="button" class="btn btn-default waves-effect botoninforme" data-toggle="tooltip" title="Calidad e inocuidad de alimentos" id="boton_reporte_nuevoalimentospunto9_2">
+                <h4 class="card-title mt-5" id="9_2">9.2.- Superficies vivas</h4>
+                <span>Durante la evalución se obtuviueron los siguientes resultados de los parámetros microbiológicos:</span>
+                <!-- <ol class="breadcrumb mt-2" style="padding: 6px; margin: 10px 0px;">
+                    <button type="button" class="btn btn-default waves-effect botoninforme" data-toggle="tooltip" title="Superficies vivas" id="boton_reporte_nuevoalimentospunto9_2">
                         <span class="btn-label"><i class="fa fa-plus"></i></span> Resultado
                     </button>
-                </ol>
+                </ol> -->
                 <table class="table-hover tabla_info_centrado" width="100%" id="tabla_resultado_9_2">
                     <thead>
                         <tr>
@@ -696,12 +718,13 @@
                     <tbody></tbody>
                 </table>
 
-                <h4 class="card-title" id="9_3">9.3.- Superficies inertes</h4>
-                <ol class="breadcrumb" style="padding: 6px; margin: 10px 0px;">
-                    <button type="button" class="btn btn-default waves-effect botoninforme" data-toggle="tooltip" title="Calidad e inocuidad de alimentos" id="boton_reporte_nuevoalimentospunto9_3">
-                        <span class="btn-label"><i class="fa fa-plus"></i></span>Punto de iluminación
+                <h4 class="card-title mt-5" id="9_3">9.3.- Superficies inertes</h4>
+                <span>Durante la evaluación se obtuvieron los siguientes resultados de los parámetros microbiológicos:</span>
+                <!-- <ol class="breadcrumb mt-2" style="padding: 6px; margin: 10px 0px;">
+                    <button type="button" class="btn btn-default waves-effect botoninforme" data-toggle="tooltip" title="Superficies inertes" id="boton_reporte_nuevoalimentospunto9_3">
+                        <span class="btn-label"><i class="fa fa-plus"></i></span>Resultado
                     </button>
-                </ol>
+                </ol> -->
                 <table class="table-hover tabla_info_centrado" width="100%" id="tabla_resultado_9_3">
                     <thead>
                         <tr>
@@ -718,7 +741,7 @@
                     <tbody></tbody>
                 </table>
 
-                <h4 class="card-title" id="10">10.- Conclusiones</h4>
+                <h4 class="card-title mt-4" id="10">10.- Conclusiones</h4>
                 <select class="custom-select form-control mb-1" style="width: 100%;" id="ID_CATCONCLUSION">
                     <option value="">&nbsp;</option>
                     @foreach($catConclusiones as $dato)
@@ -1099,6 +1122,751 @@
 <!-- MODAL-REPORTE-DEFINICION -->
 <!-- ============================================================== -->
 
+<!-- ============================================================== -->
+<!-- MODAL-PUNTO-8.1 -->
+<!-- ============================================================== -->
+<style type="text/css" media="screen">
+    #modal_reporte_punto_8_1>.modal-dialog {
+        min-width: 90% !important;
+    }
+
+    #modal_reporte_punto_8_1 .modal-body .form-group {
+        margin: 0px 0px 12px 0px !important;
+        padding: 0px !important;
+    }
+
+    #modal_reporte_punto_8_1 .modal-body .form-group label {
+        margin: 0px !important;
+        padding: 0px 0px 3px 0px !important;
+    }
+</style>
+<div id="modal_reporte_punto_8_1" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" style="display: none;">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <form method="post" enctype="multipart/form-data" name="form_reporte_punto_8_1" id="form_reporte_punto_8_1">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                    <h4 class="modal-title">Resultado de calidad e inocuidad de alimentos</h4>
+                </div>
+                <div class="modal-body">
+                    <div class="row">
+                        <div class="col-12">
+                            {!! csrf_field() !!}
+                            <input type="hidden" class="form-control" id="ID_PUNTO_ALIMENTOS" name="ID_PUNTO_ALIMENTOS" value="0">
+                        </div>
+
+                        <div class="col-2">
+                            <div class="form-group">
+                                <label>Punto de medición</label>
+                                <input type="number" class="form-control" id="PUNTO_MEDICION_ALIMENTOS" name="PUNTO_MEDICION_ALIMENTOS" required>
+                            </div>
+                        </div>
+                        <div class="col-5">
+                            <div class="form-group">
+                                <label>Área</label>
+                                <input type="text" class="form-control" id="AREA_ALIMENTOS" name="AREA_ALIMENTOS" required>
+                            </div>
+                        </div>
+                        <div class="col-5">
+                            <div class="form-group">
+                                <label>Ubicación</label>
+                                <input type="text" class="form-control" id="UBICACION_ALIMENTOS" name="UBICACION_ALIMENTOS" required>
+                            </div>
+                        </div>
+                        <hr>
+                        <!-- Datos para los resultados de Coliformes Totales -->
+                        <div class="col-12  mt-2">
+                            <div class="row">
+                                <div class="col-2 p-2 mt-4 text-center">
+                                    <label class="text-info d-block" style="font-size: 18px;" data-toggle="tooltip" title="">Coliformes Totales</label>
+                                    <div class="d-flex justify-content-center">
+                                        <div class="form-check mx-4">
+                                            <input class="form-check-input" type="radio" name="COLIFORME_TOTALES_ALIMENTOS" id="COLIFORME_TOTALES_ALIMENTOS_SI" value="1" required="required" checked>
+                                            <label class="form-check-label" for="COLIFORME_TOTALES_ALIMENTOS_SI">
+                                                Si
+                                            </label>
+                                        </div>
+                                        <div class="form-check mx-4">
+                                            <input class="form-check-input" type="radio" name="COLIFORME_TOTALES_ALIMENTOS" id="COLIFORME_TOTALES_ALIMENTOS_NO" value="0" required="required">
+                                            <label class="form-check-label" for="COLIFORME_TOTALES_ALIMENTOS_NO">
+                                                No
+                                            </label>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-10">
+                                    <div class="row">
+                                        <div class="col-4">
+                                            <div class="form-group">
+                                                <label>Fecha de medición *</label>
+                                                <div class="input-group">
+                                                    <input type="text" class="form-control mydatepicker totales" placeholder="aaaa-mm-dd" id="FECHA_MEDICION_ALIMENTOS_TOTALES" name="FECHA_MEDICION_ALIMENTOS_TOTALES" required>
+                                                    <span class="input-group-addon"><i class="icon-calender"></i></span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-4">
+                                            <div class="form-group">
+                                                <label>Unidades *</label>
+                                                <select class="custom-select form-control totales" id="UNIDAD_ALIMENTOS_TOTALES" name="UNIDAD_ALIMENTOS_TOTALES" required>
+                                                    <option value=""></option>
+                                                    <option value="NA">NA</option>
+                                                    <option value="UFC/g">UFC/g</option>
+                                                    <option value="NMP/g">NMP/g</option>
+                                                    <option value="Pt/Co">Pt/Co</option>
+                                                </select>
+                                            </div>
+                                        </div>
+                                        <div class="col-4">
+                                            <div class="form-group">
+                                                <label>Método de análisis </label>
+                                                <input type="text" class="form-control totales" id="METODO_ALIMENTOS_TOTALES" name="METODO_ALIMENTOS_TOTALES" required>
+                                            </div>
+                                        </div>
+                                        <div class="col-4">
+                                            <div class="form-group">
+                                                <label>No. de trabajadores expuestos</label>
+                                                <input type="number" class="form-control totales" id="TRABAJADORES_ALIMENTOS_TOTALES" name="TRABAJADORES_ALIMENTOS_TOTALES" required>
+                                            </div>
+                                        </div>
+                                        <div class="col-4">
+                                            <div class="form-group">
+                                                <label>Concentración obtenida </label>
+                                                <input type="text" class="form-control totales" id="CONCENTRACION_ALIMENTOS_TOTALES" name="CONCENTRACION_ALIMENTOS_TOTALES" required>
+                                            </div>
+                                        </div>
+                                        <div class="col-4">
+                                            <div class="form-group">
+                                                <label>Concentración permisible </label>
+                                                <input type="text" class="form-control totales" id="CONCENTRACION_PERMISIBLE_TOTALES" name="CONCENTRACION_PERMISIBLE_TOTALES" required>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Datos para los resultados de Coliformes Fecales -->
+                        <div class="col-12  mt-4 mb-4">
+                            <div class="row">
+                                <div class="col-2 p-2 mt-4 text-center">
+                                    <label class="text-info d-block" style="font-size: 18px;" data-toggle="tooltip" title="">Coliformes Fecales</label>
+                                    <div class="d-flex justify-content-center">
+                                        <div class="form-check mx-4">
+                                            <input class="form-check-input" type="radio" name="COLIFORME_FECALES_ALIMENTOS" id="COLIFORME_FECALES_ALIMENTOS_SI" value="1" required="required" checked>
+                                            <label class="form-check-label" for="COLIFORME_FECALES_ALIMENTOS_SI">
+                                                Si
+                                            </label>
+                                        </div>
+                                        <div class="form-check mx-4">
+                                            <input class="form-check-input" type="radio" name="COLIFORME_FECALES_ALIMENTOS" id="COLIFORME_FECALES_ALIMENTOS_NO" value="0" required="required">
+                                            <label class="form-check-label" for="COLIFORME_FECALES_ALIMENTOS_NO">
+                                                No
+                                            </label>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-10">
+                                    <div class="row">
+                                        <div class="col-4">
+                                            <div class="form-group">
+                                                <label>Fecha de medición *</label>
+                                                <div class="input-group">
+                                                    <input type="text" class="form-control mydatepicker fecales" placeholder="aaaa-mm-dd" id="FECHA_MEDICION_ALIMENTOS_FECALES" name="FECHA_MEDICION_ALIMENTOS_FECALES" required>
+                                                    <span class="input-group-addon"><i class="icon-calender"></i></span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-4">
+                                            <div class="form-group">
+                                                <label>Unidades *</label>
+                                                <select class="custom-select form-control fecales" id="UNIDAD_ALIMENTOS_FECALES" name="UNIDAD_ALIMENTOS_FECALES" required>
+                                                    <option value=""></option>
+                                                    <option value="NA">NA</option>
+                                                    <option value="UFC/g">UFC/g</option>
+                                                    <option value="NMP/g">NMP/g</option>
+                                                    <option value="Pt/Co">Pt/Co</option>
+                                                </select>
+                                            </div>
+                                        </div>
+                                        <div class="col-4">
+                                            <div class="form-group">
+                                                <label>Método de análisis </label>
+                                                <input type="text" class="form-control fecales" id="METODO_ALIMENTOS_FECALES" name="METODO_ALIMENTOS_FECALES" required>
+                                            </div>
+                                        </div>
+                                        <div class="col-4">
+                                            <div class="form-group">
+                                                <label>No. de trabajadores expuestos</label>
+                                                <input type="number" class="form-control fecales" id="TRABAJADORES_ALIMENTOS_FECALES" name="TRABAJADORES_ALIMENTOS_FECALES" required>
+                                            </div>
+                                        </div>
+                                        <div class="col-4">
+                                            <div class="form-group">
+                                                <label>Concentración obtenida </label>
+                                                <input type="text" class="form-control fecales" id="CONCENTRACION_ALIMENTOS_FECALES" name="CONCENTRACION_ALIMENTOS_FECALES" required>
+                                            </div>
+                                        </div>
+                                        <div class="col-4">
+                                            <div class="form-group">
+                                                <label>Concentración permisible </label>
+                                                <input type="text" class="form-control fecales" id="CONCENTRACION_PERMISIBLE_FECALES" name="CONCENTRACION_PERMISIBLE_FECALES" required>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- Resultado de color -->
+                        <div class="col-3">
+                            <div class="form-group">
+                                <label>Párametro </label>
+                                <input type="text" class="form-control " id="PARAMETRO_COLOR" name="PARAMETRO_COLOR" value="Color" readonly>
+                            </div>
+                        </div>
+                        <div class="col-3">
+                            <div class="form-group">
+                                <label>Unidades *</label>
+                                <select class="custom-select form-control " id="UNIDAD_COLOR" name="UNIDAD_COLOR" required>
+                                    <option value=""></option>
+                                    <option value="NA">NA</option>
+                                    <option value="UFC/g">UFC/g</option>
+                                    <option value="NMP/g">NMP/g</option>
+                                    <option value="Pt/Co">Pt/Co</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="col-3">
+                            <div class="form-group">
+                                <label>Método de análisis </label>
+                                <input type="text" class="form-control " id="METODO_COLOR" name="METODO_COLOR" required>
+                            </div>
+                        </div>
+                        <div class="col-3">
+                            <div class="form-group">
+                                <label>Concentración obtenida</label>
+                                <input type="text" class="form-control " id="CONCENTRACION_COLOR" name="CONCENTRACION_COLOR" required>
+                            </div>
+                        </div>
+
+                        <!-- Resultado de Olor -->
+                        <div class="col-3">
+                            <div class="form-group">
+                                <label>Párametro </label>
+                                <input type="text" class="form-control " id="PARAMETRO_OLOR" name="PARAMETRO_OLOR" value="Olor" readonly>
+                            </div>
+                        </div>
+                        <div class="col-3">
+                            <div class="form-group">
+                                <label>Unidades *</label>
+                                <select class="custom-select form-control " id="UNIDAD_OLOR" name="UNIDAD_OLOR" required>
+                                    <option value=""></option>
+                                    <option value="NA">NA</option>
+                                    <option value="UFC/g">UFC/g</option>
+                                    <option value="NMP/g">NMP/g</option>
+                                    <option value="Pt/Co">Pt/Co</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="col-3">
+                            <div class="form-group">
+                                <label>Método de análisis </label>
+                                <input type="text" class="form-control " id="METODO_OLOR" name="METODO_OLOR" required>
+                            </div>
+                        </div>
+                        <div class="col-3">
+                            <div class="form-group">
+                                <label>Concentración obtenida</label>
+                                <input type="text" class="form-control " id="CONCENTRACION_OLOR" name="CONCENTRACION_OLOR" required>
+                            </div>
+                        </div>
+
+                        <!-- Resultado de Sabor -->
+                        <div class="col-3">
+                            <div class="form-group">
+                                <label>Párametro </label>
+                                <input type="text" class="form-control " id="PARAMETRO_SABOR" name="PARAMETRO_SABOR" value="Sabor" readonly>
+                            </div>
+                        </div>
+                        <div class="col-3">
+                            <div class="form-group">
+                                <label>Unidades *</label>
+                                <select class="custom-select form-control " id="UNIDAD_SABOR" name="UNIDAD_SABOR" required>
+                                    <option value=""></option>
+                                    <option value="NA">NA</option>
+                                    <option value="UFC/g">UFC/g</option>
+                                    <option value="NMP/g">NMP/g</option>
+                                    <option value="Pt/Co">Pt/Co</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="col-3">
+                            <div class="form-group">
+                                <label>Método de análisis </label>
+                                <input type="text" class="form-control " id="METODO_SABOR" name="METODO_SABOR" required>
+                            </div>
+                        </div>
+                        <div class="col-3">
+                            <div class="form-group">
+                                <label>Concentración obtenida</label>
+                                <input type="text" class="form-control " id="CONCENTRACION_SABOR" name="CONCENTRACION_SABOR" required>
+                            </div>
+                        </div>
+
+
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-default waves-effect" data-dismiss="modal">Cerrar</button>
+                            <button type="submit" class="btn btn-danger waves-effect waves-light botoninforme" id="botonguardar_punto_8_1">Guardar <i class="fa fa-save"></i></button>
+                        </div>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<!-- ============================================================== -->
+<!-- MODAL-PUNTO-8.1 -->
+<!-- ============================================================== -->
+
+
+<!-- ============================================================== -->
+<!-- MODAL-PUNTO-8.2 -->
+<!-- ============================================================== -->
+<style type="text/css" media="screen">
+    #modal_reporte_punto_8_2>.modal-dialog {
+        min-width: 90% !important;
+    }
+
+    #modal_reporte_punto_8_2 .modal-body .form-group {
+        margin: 0px 0px 12px 0px !important;
+        padding: 0px !important;
+    }
+
+    #modal_reporte_punto_8_2 .modal-body .form-group label {
+        margin: 0px !important;
+        padding: 0px 0px 3px 0px !important;
+    }
+</style>
+<div id="modal_reporte_punto_8_2" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" style="display: none;">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <form method="post" enctype="multipart/form-data" name="form_reporte_punto_8_2" id="form_reporte_punto_8_2">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                    <h4 class="modal-title">Resultado de evaluación de superficies vivas</h4>
+                </div>
+                <div class="modal-body">
+                    <div class="row">
+                        <div class="col-12">
+                            {!! csrf_field() !!}
+                            <input type="hidden" class="form-control" id="ID_PUNTO_VIVAS" name="ID_PUNTO_VIVAS" value="0">
+                        </div>
+
+                        <div class="col-2">
+                            <div class="form-group">
+                                <label>Punto de medición</label>
+                                <input type="number" class="form-control" id="PUNTO_MEDICION_VIVAS" name="PUNTO_MEDICION_VIVAS" required>
+                            </div>
+                        </div>
+                        <div class="col-5">
+                            <div class="form-group">
+                                <label>Área</label>
+                                <input type="text" class="form-control" id="AREA_VIVAS" name="AREA_VIVAS" required>
+                            </div>
+                        </div>
+                        <div class="col-5">
+                            <div class="form-group">
+                                <label>Ubicación</label>
+                                <input type="text" class="form-control" id="UBICACION_VIVAS" name="UBICACION_VIVAS" required>
+                            </div>
+                        </div>
+                        <hr>
+                        <!-- Datos para los resultados de Coliformes Totales -->
+                        <div class="col-12  mt-2">
+                            <div class="row">
+                                <div class="col-2 p-2 mt-4 text-center">
+                                    <label class="text-info d-block" style="font-size: 18px;" data-toggle="tooltip" title="">Coliformes Totales</label>
+                                    <div class="d-flex justify-content-center">
+                                        <div class="form-check mx-4">
+                                            <input class="form-check-input" type="radio" name="COLIFORME_TOTALES_VIVAS" id="COLIFORME_TOTALES_VIVAS_SI" value="1" required="required" checked>
+                                            <label class="form-check-label" for="COLIFORME_TOTALES_VIVAS_SI">
+                                                Si
+                                            </label>
+                                        </div>
+                                        <div class="form-check mx-4">
+                                            <input class="form-check-input" type="radio" name="COLIFORME_TOTALES_VIVAS" id="COLIFORME_TOTALES_VIVAS_NO" value="0" required="required">
+                                            <label class="form-check-label" for="COLIFORME_TOTALES_VIVAS_NO">
+                                                No
+                                            </label>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-10">
+                                    <div class="row">
+                                        <div class="col-4">
+                                            <div class="form-group">
+                                                <label>Fecha de medición *</label>
+                                                <div class="input-group">
+                                                    <input type="text" class="form-control mydatepicker vivas_totales" placeholder="aaaa-mm-dd" id="FECHA_MEDICION_VIVAS_TOTALES" name="FECHA_MEDICION_VIVAS_TOTALES" required>
+                                                    <span class="input-group-addon"><i class="icon-calender"></i></span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-4">
+                                            <div class="form-group">
+                                                <label>Unidades *</label>
+                                                <select class="custom-select form-control vivas_totales" id="UNIDAD_VIVAS_TOTALES" name="UNIDAD_VIVAS_TOTALES" required>
+                                                    <option value=""></option>
+                                                    <option value="NA">NA</option>
+                                                    <option value="UFC/g">UFC/g</option>
+                                                    <option value="NMP/g">NMP/g</option>
+                                                    <option value="Pt/Co">Pt/Co</option>
+                                                    <option value="UFC/sup.manos">UFC/sup.manos</option>
+                                                    <option value="NMP/sup.manos">NMP/sup.manos</option>
+                                                </select>
+                                            </div>
+                                        </div>
+                                        <div class="col-4">
+                                            <div class="form-group">
+                                                <label>Método de análisis </label>
+                                                <input type="text" class="form-control vivas_totales" id="METODO_VIVAS_TOTALES" name="METODO_VIVAS_TOTALES" required>
+                                            </div>
+                                        </div>
+                                        <div class="col-4">
+                                            <div class="form-group">
+                                                <label>No. de trabajadores expuestos</label>
+                                                <input type="number" class="form-control vivas_totales" id="TRABAJADORES_VIVAS_TOTALES" name="TRABAJADORES_VIVAS_TOTALES" required>
+                                            </div>
+                                        </div>
+                                        <div class="col-4">
+                                            <div class="form-group">
+                                                <label>Concentración obtenida </label>
+                                                <input type="text" class="form-control vivas_totales" id="CONCENTRACION_VIVAS_TOTALES" name="CONCENTRACION_VIVAS_TOTALES" required>
+                                            </div>
+                                        </div>
+                                        <div class="col-4">
+                                            <div class="form-group">
+                                                <label>Concentración permisible </label>
+                                                <input type="text" class="form-control vivas_totales" id="CONCENTRACION_PERMISIBLE_TOTALES" name="CONCENTRACION_PERMISIBLE_TOTALES" required>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Datos para los resultados de Coliformes Fecales -->
+                        <div class="col-12  mt-5">
+                            <div class="row">
+                                <div class="col-2 p-2 mt-4 text-center">
+                                    <label class="text-info d-block" style="font-size: 18px;" data-toggle="tooltip" title="">Coliformes Fecales</label>
+                                    <div class="d-flex justify-content-center">
+                                        <div class="form-check mx-4">
+                                            <input class="form-check-input" type="radio" name="COLIFORME_FECALES_VIVAS" id="COLIFORME_FECALES_VIVAS_SI" value="1" required="required" checked>
+                                            <label class="form-check-label" for="COLIFORME_FECALES_VIVAS_SI">
+                                                Si
+                                            </label>
+                                        </div>
+                                        <div class="form-check mx-4">
+                                            <input class="form-check-input" type="radio" name="COLIFORME_FECALES_VIVAS" id="COLIFORME_FECALES_VIVAS_NO" value="0" required="required">
+                                            <label class="form-check-label" for="COLIFORME_FECALES_VIVAS_NO">
+                                                No
+                                            </label>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-10">
+                                    <div class="row">
+                                        <div class="col-4">
+                                            <div class="form-group">
+                                                <label>Fecha de medición *</label>
+                                                <div class="input-group">
+                                                    <input type="text" class="form-control mydatepicker vivas_fecales" placeholder="aaaa-mm-dd" id="FECHA_MEDICION_VIVAS_FECALES" name="FECHA_MEDICION_VIVAS_FECALES" required>
+                                                    <span class="input-group-addon"><i class="icon-calender"></i></span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-4">
+                                            <div class="form-group">
+                                                <label>Unidades *</label>
+                                                <select class="custom-select form-control vivas_fecales" id="UNIDAD_VIVAS_FECALES" name="UNIDAD_VIVAS_FECALES" required>
+                                                    <option value=""></option>
+                                                    <option value="NA">NA</option>
+                                                    <option value="UFC/g">UFC/g</option>
+                                                    <option value="NMP/g">NMP/g</option>
+                                                    <option value="Pt/Co">Pt/Co</option>
+                                                    <option value="UFC/sup.manos">UFC/sup.manos</option>
+                                                    <option value="NMP/sup.manos">NMP/sup.manos</option>
+                                                </select>
+                                            </div>
+                                        </div>
+                                        <div class="col-4">
+                                            <div class="form-group">
+                                                <label>Método de análisis </label>
+                                                <input type="text" class="form-control vivas_fecales" id="METODO_VIVAS_FECALES" name="METODO_VIVAS_FECALES" required>
+                                            </div>
+                                        </div>
+                                        <div class="col-4">
+                                            <div class="form-group">
+                                                <label>No. de trabajadores expuestos</label>
+                                                <input type="number" class="form-control vivas_fecales" id="TRABAJADORES_VIVAS_FECALES" name="TRABAJADORES_VIVAS_FECALES" required>
+                                            </div>
+                                        </div>
+                                        <div class="col-4">
+                                            <div class="form-group">
+                                                <label>Concentración obtenida </label>
+                                                <input type="text" class="form-control vivas_fecales" id="CONCENTRACION_VIVAS_FECALES" name="CONCENTRACION_VIVAS_FECALES" required>
+                                            </div>
+                                        </div>
+                                        <div class="col-4">
+                                            <div class="form-group">
+                                                <label>Concentración permisible </label>
+                                                <input type="text" class="form-control vivas_fecales" id="CONCENTRACION_PERMISIBLE_FECALES" name="CONCENTRACION_PERMISIBLE_FECALES" required>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-default waves-effect" data-dismiss="modal">Cerrar</button>
+                            <button type="submit" class="btn btn-danger waves-effect waves-light botoninforme" id="botonguardar_punto_8_2">Guardar <i class="fa fa-save"></i></button>
+                        </div>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<!-- ============================================================== -->
+<!-- MODAL-PUNTO-8.2 -->
+<!-- ============================================================== -->
+
+
+<!-- ============================================================== -->
+<!-- MODAL-PUNTO-8.3 -->
+<!-- ============================================================== -->
+<style type="text/css" media="screen">
+    #modal_reporte_punto_8_3>.modal-dialog {
+        min-width: 90% !important;
+    }
+
+    #modal_reporte_punto_8_3 .modal-body .form-group {
+        margin: 0px 0px 12px 0px !important;
+        padding: 0px !important;
+    }
+
+    #modal_reporte_punto_8_3 .modal-body .form-group label {
+        margin: 0px !important;
+        padding: 0px 0px 3px 0px !important;
+    }
+</style>
+<div id="modal_reporte_punto_8_3" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" style="display: none;">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <form method="post" enctype="multipart/form-data" name="form_reporte_punto_8_3" id="form_reporte_punto_8_3">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                    <h4 class="modal-title">Resultado de evaluación de superficies inertes</h4>
+                </div>
+                <div class="modal-body">
+                    <div class="row">
+                        <div class="col-12">
+                            {!! csrf_field() !!}
+                            <input type="hidden" class="form-control" id="ID_PUNTO_INERTES" name="ID_PUNTO_INERTES" value="0">
+                        </div>
+
+                        <div class="col-2">
+                            <div class="form-group">
+                                <label>Punto de medición</label>
+                                <input type="number" class="form-control" id="PUNTO_MEDICION_INERTES" name="PUNTO_MEDICION_INERTES" required>
+                            </div>
+                        </div>
+                        <div class="col-5">
+                            <div class="form-group">
+                                <label>Área</label>
+                                <input type="text" class="form-control" id="AREA_INERTES" name="AREA_INERTES" required>
+                            </div>
+                        </div>
+                        <div class="col-5">
+                            <div class="form-group">
+                                <label>Ubicación</label>
+                                <input type="text" class="form-control" id="UBICACION_INERTES" name="UBICACION_INERTES" required>
+                            </div>
+                        </div>
+                        <hr>
+                        <!-- Datos para los resultados de Coliformes Totales -->
+                        <div class="col-12  mt-2">
+                            <div class="row">
+                                <div class="col-2 p-2 mt-4 text-center">
+                                    <label class="text-info d-block" style="font-size: 18px;" data-toggle="tooltip" title="">Coliformes Totales</label>
+                                    <div class="d-flex justify-content-center">
+                                        <div class="form-check mx-4">
+                                            <input class="form-check-input" type="radio" name="COLIFORME_TOTALES_INERTES" id="COLIFORME_TOTALES_INERTES_SI" value="1" required="required" checked>
+                                            <label class="form-check-label" for="COLIFORME_TOTALES_INERTES_SI">
+                                                Si
+                                            </label>
+                                        </div>
+                                        <div class="form-check mx-4">
+                                            <input class="form-check-input" type="radio" name="COLIFORME_TOTALES_INERTES" id="COLIFORME_TOTALES_INERTES_NO" value="0" required="required">
+                                            <label class="form-check-label" for="COLIFORME_TOTALES_INERTES_NO">
+                                                No
+                                            </label>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-10">
+                                    <div class="row">
+                                        <div class="col-4">
+                                            <div class="form-group">
+                                                <label>Fecha de medición *</label>
+                                                <div class="input-group">
+                                                    <input type="text" class="form-control mydatepicker inertes_totales" placeholder="aaaa-mm-dd" id="FECHA_MEDICION_INERTES_TOTALES" name="FECHA_MEDICION_INERTES_TOTALES" required>
+                                                    <span class="input-group-addon"><i class="icon-calender"></i></span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-4">
+                                            <div class="form-group">
+                                                <label>Unidades *</label>
+                                                <select class="custom-select form-control inertes_totales" id="UNIDAD_INERTES_TOTALES" name="UNIDAD_INERTES_TOTALES" required>
+                                                    <option value=""></option>
+                                                    <option value="NA">NA</option>
+                                                    <option value="UFC/g">UFC/g</option>
+                                                    <option value="NMP/g">NMP/g</option>
+                                                    <option value="Pt/Co">Pt/Co</option>
+                                                    <option value="UFC/sup.manos">UFC/sup.manos</option>
+                                                    <option value="NMP/sup.manos">NMP/sup.manos</option>
+                                                    <option value="UFC/100 cm2">UFC/100 cm2</option>
+                                                    <option value="NMP/100 cm2">NMP/100 cm2</option>
+                                                </select>
+                                            </div>
+                                        </div>
+                                        <div class="col-4">
+                                            <div class="form-group">
+                                                <label>Método de análisis </label>
+                                                <input type="text" class="form-control inertes_totales" id="METODO_INERTES_TOTALES" name="METODO_INERTES_TOTALES" required>
+                                            </div>
+                                        </div>
+                                        <div class="col-4">
+                                            <div class="form-group">
+                                                <label>No. de trabajadores expuestos</label>
+                                                <input type="number" class="form-control inertes_totales" id="TRABAJADORES_INERTES_TOTALES" name="TRABAJADORES_INERTES_TOTALES" required>
+                                            </div>
+                                        </div>
+                                        <div class="col-4">
+                                            <div class="form-group">
+                                                <label>Concentración obtenida </label>
+                                                <input type="text" class="form-control inertes_totales" id="CONCENTRACION_INERTES_TOTALES" name="CONCENTRACION_INERTES_TOTALES" required>
+                                            </div>
+                                        </div>
+                                        <div class="col-4">
+                                            <div class="form-group">
+                                                <label>Concentración permisible </label>
+                                                <input type="text" class="form-control inertes_totales" id="CONCENTRACION_INERTES_TOTALES_PERMISIBLE" name="CONCENTRACION_PERMISIBLE_TOTALES" required>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Datos para los resultados de Coliformes Fecales -->
+                        <div class="col-12  mt-5">
+                            <div class="row">
+                                <div class="col-2 p-2 mt-4 text-center">
+                                    <label class="text-info d-block" style="font-size: 18px;" data-toggle="tooltip" title="">Coliformes Fecales</label>
+                                    <div class="d-flex justify-content-center">
+                                        <div class="form-check mx-4">
+                                            <input class="form-check-input" type="radio" name="COLIFORME_FECALES_INERTES" id="COLIFORME_FECALES_INERTES_SI" value="1" required="required" checked>
+                                            <label class="form-check-label" for="COLIFORME_FECALES_INERTES_SI">
+                                                Si
+                                            </label>
+                                        </div>
+                                        <div class="form-check mx-4">
+                                            <input class="form-check-input" type="radio" name="COLIFORME_FECALES_INERTES" id="COLIFORME_FECALES_INERTES_NO" value="0" required="required">
+                                            <label class="form-check-label" for="COLIFORME_FECALES_INERTES_NO">
+                                                No
+                                            </label>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-10">
+                                    <div class="row">
+                                        <div class="col-4">
+                                            <div class="form-group">
+                                                <label>Fecha de medición *</label>
+                                                <div class="input-group">
+                                                    <input type="text" class="form-control mydatepicker inertes_fecales" placeholder="aaaa-mm-dd" id="FECHA_MEDICION_INERTES_FECALES" name="FECHA_MEDICION_INERTES_FECALES" required>
+                                                    <span class="input-group-addon"><i class="icon-calender"></i></span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-4">
+                                            <div class="form-group">
+                                                <label>Unidades *</label>
+                                                <select class="custom-select form-control inertes_fecales" id="UNIDAD_INERTES_FECALES" name="UNIDAD_INERTES_FECALES" required>
+                                                    <option value=""></option>
+                                                    <option value="NA">NA</option>
+                                                    <option value="UFC/g">UFC/g</option>
+                                                    <option value="NMP/g">NMP/g</option>
+                                                    <option value="Pt/Co">Pt/Co</option>
+                                                    <option value="UFC/sup.manos">UFC/sup.manos</option>
+                                                    <option value="NMP/sup.manos">NMP/sup.manos</option>
+                                                    <option value="UFC/100 cm2">UFC/100 cm2</option>
+                                                    <option value="NMP/100 cm2">NMP/100 cm2</option>
+                                                </select>
+                                            </div>
+                                        </div>
+                                        <div class="col-4">
+                                            <div class="form-group">
+                                                <label>Método de análisis </label>
+                                                <input type="text" class="form-control inertes_fecales" id="METODO_INERTES_FECALES" name="METODO_INERTES_FECALES" required>
+                                            </div>
+                                        </div>
+                                        <div class="col-4">
+                                            <div class="form-group">
+                                                <label>No. de trabajadores expuestos</label>
+                                                <input type="number" class="form-control inertes_fecales" id="TRABAJADORES_INERTES_FECALES" name="TRABAJADORES_INERTES_FECALES" required>
+                                            </div>
+                                        </div>
+                                        <div class="col-4">
+                                            <div class="form-group">
+                                                <label>Concentración obtenida </label>
+                                                <input type="text" class="form-control inertes_fecales" id="CONCENTRACION_INERTES_FECALES" name="CONCENTRACION_INERTES_FECALES" required>
+                                            </div>
+                                        </div>
+                                        <div class="col-4">
+                                            <div class="form-group">
+                                                <label>Concentración permisible </label>
+                                                <input type="text" class="form-control inertes_fecales" id="CONCENTRACION_INERTES_FECALES_PERMISIBLE" name="CONCENTRACION_PERMISIBLE_FECALES" required>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-default waves-effect" data-dismiss="modal">Cerrar</button>
+                            <button type="submit" class="btn btn-danger waves-effect waves-light botoninforme" id="botonguardar_punto_8_3">Guardar <i class="fa fa-save"></i></button>
+                        </div>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<!-- ============================================================== -->
+<!-- MODAL-PUNTO-8.3 -->
+<!-- ============================================================== -->
+
+
+
+
 
 <!-- ============================================================== -->
 <!-- MODAL-REPORTE-CATEGORIA -->
@@ -1443,295 +2211,9 @@
         </div>
     </div>
 </div>
-<!-- ============================================================== -->
-<!-- MODAL-REPORTE-ÁREA -->
-<!-- ============================================================== -->
 
 
 
-<!-- ============================================================== -->
-<!-- MODAL-REPORTE-ÁREA -->
-<!-- ============================================================== -->
-<style type="text/css" media="screen">
-    #modal_reporte_alimentospunto>.modal-dialog {
-        min-width: 90% !important;
-    }
-
-    #modal_reporte_alimentospunto .modal-body .form-group {
-        margin: 0px 0px 12px 0px !important;
-        padding: 0px !important;
-    }
-
-    #modal_reporte_alimentospunto .modal-body .form-group label {
-        margin: 0px !important;
-        padding: 0px 0px 3px 0px !important;
-    }
-</style>
-<div id="modal_reporte_alimentospunto" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" style="display: none;">
-    <div class="modal-dialog modal-lg">
-        <div class="modal-content">
-            <form method="post" enctype="multipart/form-data" name="form_reporte_alimentospunto" id="form_reporte_alimentospunto">
-                <div class="modal-header">
-                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
-                    <h4 class="modal-title">Área</h4>
-                </div>
-                <div class="modal-body">
-                    <div class="row">
-                        <div class="col-12">
-                            {!! csrf_field() !!}
-                            <input type="hidden" class="form-control" id="reportealimentospunto_id" name="reportealimentospunto_id" value="0">
-                        </div>
-                        <div class="col-2">
-                            <div class="form-group">
-                                <label>No. Punto</label>
-                                <input type="number" class="form-control" id="reportealimentospuntos_nopunto" name="reportealimentospuntos_nopunto" required>
-                            </div>
-                        </div>
-                        <div class="col-5">
-                            <div class="form-group">
-                                <label>Área</label>
-                                <select class="custom-select form-control" id="reportealimentospuntos_area_id" name="reportealimentospuntos_area_id" onchange="mostrar_categoriasarea(this.value, 0);" required>
-                                    <option value=""></option>
-                                </select>
-                            </div>
-                        </div>
-                        <div class="col-5">
-                            <div class="form-group">
-                                <label>Categoría</label>
-                                <select class="custom-select form-control" id="reportealimentospuntos_categoria_id" name="reportealimentospuntos_categoria_id" required>
-                                    <option value=""></option>
-                                </select>
-                            </div>
-                        </div>
-                        <div class="col-2">
-                            <div class="form-group">
-                                <label>No. de POE</label>
-                                <input type="number" class="form-control" id="reportealimentospuntos_nopoe" name="reportealimentospuntos_nopoe" required>
-                            </div>
-                        </div>
-                        <div class="col-4">
-                            <div class="form-group">
-                                <label>Nombre</label>
-                                <input type="text" class="form-control" id="reportealimentospuntos_nombre" name="reportealimentospuntos_nombre" required>
-                            </div>
-                        </div>
-                        <div class="col-2">
-                            <div class="form-group">
-                                <label>Ficha</label>
-                                <input type="text" class="form-control" id="reportealimentospuntos_ficha" name="reportealimentospuntos_ficha" required>
-                            </div>
-                        </div>
-                        <div class="col-4">
-                            <div class="form-group">
-                                <label>Ubicación</label>
-                                <input type="text" class="form-control" id="reportealimentospuntos_concepto" name="reportealimentospuntos_concepto" required>
-
-                                <!-- <select class="custom-select form-control" id="reportealimentospuntos_concepto" name="reportealimentospuntos_concepto" required>
-									<option value=""></option>
-									<option value="Índice de Área (IC)">Índice de Área (IC)</option>
-									<option value="Puesto de Trabajo">Puesto de Trabajo</option>
-								</select> -->
-                            </div>
-                        </div>
-                    </div>
-                    <div class="row">
-                        <div class="col-12">
-                            <ol class="breadcrumb text-light" style="padding: 6px; margin: 0px 0px 10px 0px; text-align: center;">
-                                Fecha y hora de medición
-                            </ol>
-                        </div>
-                        <div class="col-4">
-                            <div class="form-group">
-                                <label>Fecha evaluación</label>
-                                <div class="input-group">
-                                    <input type="text" class="form-control mydatepicker" placeholder="aaaa-mm-dd" id="reportealimentospuntos_fechaeval" name="reportealimentospuntos_fechaeval" required>
-                                    <span class="input-group-addon"><i class="icon-calender"></i></span>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col-2">
-                            <div class="form-group">
-                                <label style="color: #0d47a1;">Horario periodo 1</label>
-                                {{-- <input type="text" class="form-control" placeholder="hh:mm" id="reportealimentospuntos_horario1" name="reportealimentospuntos_horario1" required> --}}
-                                <input type="time" class="form-control" id="reportealimentospuntos_horario1" name="reportealimentospuntos_horario1" required>
-                            </div>
-                        </div>
-                        <div class="col-2">
-                            <div class="form-group">
-                                <label style="color: #78281F;">Horario periodo 2</label>
-                                {{-- <input type="text" class="form-control" placeholder="hh:mm" id="reportealimentospuntos_horario2" name="reportealimentospuntos_horario2" required> --}}
-                                <input type="time" class="form-control" id="reportealimentospuntos_horario2" name="reportealimentospuntos_horario2">
-                            </div>
-                        </div>
-                        <div class="col-2">
-                            <div class="form-group">
-                                <label style="color: #00695c;">Horario periodo 3</label>
-                                {{-- <input type="text" class="form-control" placeholder="hh:mm" id="reportealimentospuntos_horario3" name="reportealimentospuntos_horario3" required> --}}
-                                <input type="time" class="form-control" id="reportealimentospuntos_horario3" name="reportealimentospuntos_horario3">
-                            </div>
-                        </div>
-                        <div class="col-2">
-                            &nbsp;
-                        </div>
-                    </div>
-                    <div class="row">
-                        <div class="col-12">
-                            <ol class="breadcrumb text-light" style="padding: 6px; margin: 0px 0px 10px 0px; text-align: center;">
-                                Resultados de niveles de iluminación
-                            </ol>
-                        </div>
-                        <div class="col-4">
-                            <div class="form-group">
-                                <label>Nivel de iluminación mínimo requerido (Lux)</label>
-                                <input type="number" step="any" class="form-control limite_lux" id="reportealimentospuntos_lux" name="reportealimentospuntos_lux" required onchange="calcula_resultado_alimentos('limite_lux', 'resultado_lux', 'N/A (NIMR)');">
-                            </div>
-                        </div>
-                        <div class="col-2">
-                            <div class="form-group">
-                                <div style="position: absolute; margin-top: 28px;">
-                                    <span style="font-size: 28px; line-height: 12px;">&#60;</span> {{-- < --}}
-                                </div>
-                                <div style="position: absolute; margin-top: 50px;">
-                                    <span style="font-size: 28px; line-height: 12px;">&#62;</span> {{-- > --}}
-                                </div>
-                                <div style="position: absolute; margin-top: 24px; margin-left: 20px;">
-                                    <input type="checkbox" class="filled-in chk-col-brown" id="reportealimentospuntos_luxmed1menor" name="reportealimentospuntos_luxmed1menor" />
-                                    <label for="reportealimentospuntos_luxmed1menor"><b>&nbsp;</b></label>
-                                </div>
-                                <div style="position: absolute; margin-top: 46px; margin-left: 20px;">
-                                    <input type="checkbox" class="filled-in chk-col-brown" id="reportealimentospuntos_luxmed1mayor" name="reportealimentospuntos_luxmed1mayor" />
-                                    <label for="reportealimentospuntos_luxmed1mayor"><b>&nbsp;</b></label>
-                                </div>
-
-                                <label style="color: #0d47a1;">Periodo 1 NI (Lux)</label>
-                                <div style="width: 100%; padding-left: 45px;">
-                                    <input type="number" step="any" class="form-control resultado_lux" id="reportealimentospuntos_luxmed1" name="reportealimentospuntos_luxmed1" required onchange="calcula_resultado_alimentos('limite_lux', 'resultado_lux', 'N/A (NIMR)');">
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col-2">
-                            <div class="form-group">
-                                <div style="position: absolute; margin-top: 28px;">
-                                    <span style="font-size: 28px; line-height: 12px;">&#60;</span> {{-- < --}}
-                                </div>
-                                <div style="position: absolute; margin-top: 50px;">
-                                    <span style="font-size: 28px; line-height: 12px;">&#62;</span> {{-- > --}}
-                                </div>
-                                <div style="position: absolute; margin-top: 24px; margin-left: 20px;">
-                                    <input type="checkbox" class="filled-in chk-col-brown" id="reportealimentospuntos_luxmed2menor" name="reportealimentospuntos_luxmed2menor" />
-                                    <label for="reportealimentospuntos_luxmed2menor"><b>&nbsp;</b></label>
-                                </div>
-                                <div style="position: absolute; margin-top: 46px; margin-left: 20px;">
-                                    <input type="checkbox" class="filled-in chk-col-brown" id="reportealimentospuntos_luxmed2mayor" name="reportealimentospuntos_luxmed2mayor" />
-                                    <label for="reportealimentospuntos_luxmed2mayor"><b>&nbsp;</b></label>
-                                </div>
-
-                                <label style="color: #78281F;">Periodo 2 NI (Lux)</label>
-                                <div style="width: 100%; padding-left: 45px;">
-                                    <input type="number" step="any" class="form-control resultado_lux" id="reportealimentospuntos_luxmed2" name="reportealimentospuntos_luxmed2" required onchange="calcula_resultado_alimentos('limite_lux', 'resultado_lux', 'N/A (NIMR)');">
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col-2">
-                            <div class="form-group">
-                                <div style="position: absolute; margin-top: 28px;">
-                                    <span style="font-size: 28px; line-height: 12px;">&#60;</span> {{-- < --}}
-                                </div>
-                                <div style="position: absolute; margin-top: 50px;">
-                                    <span style="font-size: 28px; line-height: 12px;">&#62;</span> {{-- > --}}
-                                </div>
-                                <div style="position: absolute; margin-top: 24px; margin-left: 20px;">
-                                    <input type="checkbox" class="filled-in chk-col-brown" id="reportealimentospuntos_luxmed3menor" name="reportealimentospuntos_luxmed3menor" />
-                                    <label for="reportealimentospuntos_luxmed3menor"><b>&nbsp;</b></label>
-                                </div>
-                                <div style="position: absolute; margin-top: 46px; margin-left: 20px;">
-                                    <input type="checkbox" class="filled-in chk-col-brown" id="reportealimentospuntos_luxmed3mayor" name="reportealimentospuntos_luxmed3mayor" />
-                                    <label for="reportealimentospuntos_luxmed3mayor"><b>&nbsp;</b></label>
-                                </div>
-
-                                <label style="color: #00695c;">Periodo 3 NI (Lux)</label>
-                                <div style="width: 100%; padding-left: 45px;">
-                                    <input type="number" step="any" class="form-control resultado_lux" id="reportealimentospuntos_luxmed3" name="reportealimentospuntos_luxmed3" required onchange="calcula_resultado_alimentos('limite_lux', 'resultado_lux', 'N/A (NIMR)');">
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col-2 align-middle" style="text-align: right; padding-top: 30px;" id="resultado_lux">
-                            {{-- <b class="text-success"><i class="fa fa-check"></i> Dentro de norma</b> --}}
-                        </div>
-                    </div>
-                    <div class="row">
-                        <div class="col-12">
-                            <ol class="breadcrumb text-light" style="padding: 6px; margin: 0px 0px 10px 0px; text-align: center;">
-                                Resultados del nivel de reflexión
-                            </ol>
-                        </div>
-                        <div class="col-4">
-                            <div class="form-group">
-                                <label>Factor de reflexión en paredes (P)</label>
-                                <input type="number" step="any" class="form-control limite_frp" id="reportealimentospuntos_frp" name="reportealimentospuntos_frp" value="60" readonly>
-                            </div>
-                        </div>
-                        <div class="col-2">
-                            <div class="form-group">
-                                <label style="color: #0d47a1;">Periodo 1 FR (P) (%)</label>
-                                <input type="number" step="any" class="form-control resultado_frp" id="reportealimentospuntos_frpmed1" name="reportealimentospuntos_frpmed1" required onchange="calcula_resultado_reflexion('limite_frp', 'resultado_frp', 'N/A (FR-P)');">
-                            </div>
-                        </div>
-                        <div class="col-2">
-                            <div class="form-group">
-                                <label style="color: #78281F;">Periodo 2 FR (P) (%)</label>
-                                <input type="number" step="any" class="form-control resultado_frp" id="reportealimentospuntos_frpmed2" name="reportealimentospuntos_frpmed2" required onchange="calcula_resultado_reflexion('limite_frp', 'resultado_frp', 'N/A (FR-P)');">
-                            </div>
-                        </div>
-                        <div class="col-2">
-                            <div class="form-group">
-                                <label style="color: #00695c;">Periodo 3 FR (P) (%)</label>
-                                <input type="number" step="any" class="form-control resultado_frp" id="reportealimentospuntos_frpmed3" name="reportealimentospuntos_frpmed3" required onchange="calcula_resultado_reflexion('limite_frp', 'resultado_frp', 'N/A (FR-P)');">
-                            </div>
-                        </div>
-                        <div class="col-2 align-middle" style="text-align: right; padding-top: 30px;" id="resultado_frp">
-                            {{-- <b class="text-danger"><i class="fa fa-ban"></i> Fuera de norma</b> --}}
-                        </div>
-                        <div class="col-4">
-                            <div class="form-group">
-                                <label>Factor de reflexión en plano trabajo (PT)</label>
-                                <input type="number" step="any" class="form-control limite_frpt" id="reportealimentospuntos_frpt" name="reportealimentospuntos_frpt" value="50" readonly>
-                            </div>
-                        </div>
-                        <div class="col-2">
-                            <div class="form-group">
-                                <label style="color: #0d47a1;">Periodo 1 FR (PT) (%)</label>
-                                <input type="number" step="any" class="form-control resultado_frpt" id="reportealimentospuntos_frptmed1" name="reportealimentospuntos_frptmed1" required onchange="calcula_resultado_reflexion('limite_frpt', 'resultado_frpt', 'N/A (FR-PT)');">
-                            </div>
-                        </div>
-                        <div class="col-2">
-                            <div class="form-group">
-                                <label style="color: #78281F;">Periodo 2 FR (PT) (%)</label>
-                                <input type="number" step="any" class="form-control resultado_frpt" id="reportealimentospuntos_frptmed2" name="reportealimentospuntos_frptmed2" required onchange="calcula_resultado_reflexion('limite_frpt', 'resultado_frpt', 'N/A (FR-PT)');">
-                            </div>
-                        </div>
-                        <div class="col-2">
-                            <div class="form-group">
-                                <label style="color: #00695c;">Periodo 3 FR (PT) (%)</label>
-                                <input type="number" step="any" class="form-control resultado_frpt" id="reportealimentospuntos_frptmed3" name="reportealimentospuntos_frptmed3" required onchange="calcula_resultado_reflexion('limite_frpt', 'resultado_frpt', 'N/A (FR-PT)');">
-                            </div>
-                        </div>
-                        <div class="col-2 align-middle" style="text-align: right; padding-top: 30px;" id="resultado_frpt">
-                            {{-- <b class="text-danger"><i class="fa fa-ban"></i> Fuera de norma</b> --}}
-                        </div>
-                    </div>
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-default waves-effect" data-dismiss="modal">Cerrar</button>
-                    <button type="submit" class="btn btn-danger waves-effect waves-light botoninforme" id="botonguardar_modal_alimentospunto">Guardar <i class="fa fa-save"></i></button>
-                </div>
-            </form>
-        </div>
-    </div>
-</div>
-<!-- ============================================================== -->
-<!-- MODAL-REPORTE-ÁREA -->
-<!-- ============================================================== -->
 
 
 <!-- ============================================================== -->

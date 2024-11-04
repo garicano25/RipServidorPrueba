@@ -23,6 +23,10 @@ use App\modelos\recsensorial\catConclusionesModel;
 use App\modelos\reportes\reportealimentoscatalogoModel;
 use App\modelos\reportes\reportealimentosModel;
 
+use App\modelos\reportes\reporteAlimentosPuntosSuperficiesInertesModel;
+use App\modelos\reportes\reporteAlimentosPuntosSuperficiesVivasModel;
+use App\modelos\reportes\reporteAlimentosPuntosAlimentosModel;
+
 
 class reportealimentosController extends Controller
 {
@@ -492,7 +496,7 @@ class reportealimentosController extends Controller
 
             $dato['reportealimentos_metodologia_5_2'] = $this->datosproyectoreemplazartexto($proyecto, $recsensorial, $metodologia_5_2);
 
-         
+
             // UBICACION
             //===================================================
 
@@ -644,7 +648,6 @@ class reportealimentosController extends Controller
             // respuesta
             $dato["msj"] = 'Datos consultados correctamente';
             return response()->json($dato);
-
         } catch (Exception $e) {
 
             $dato['datoscompletos'] = 0;
@@ -715,7 +718,7 @@ class reportealimentosController extends Controller
     public function reportealimentostabladefiniciones($proyecto_id, $agente_nombre, $reportealimentos_id)
     {
         try {
-          
+
             $revision = reporterevisionesModel::where('proyecto_id', $proyecto_id)
                 ->where('agente_id', 11)
                 ->orderBy('reporterevisiones_revision', 'DESC')
@@ -1109,7 +1112,7 @@ class reportealimentosController extends Controller
             return response()->json($dato);
         }
     }
-    
+
 
     public function store(Request $request)
     {
@@ -1476,301 +1479,51 @@ class reportealimentosController extends Controller
                 $dato["msj"] = 'Datos guardados correctamente';
             }
 
-
-            // CATEGORIAS
+            //RESULTADOS DEL PUNTO 8.1
             if (($request->opcion + 0) == 13) {
-                // dd($request->all());
+                
+                if ($request->ID_PUNTO_ALIMENTOS == 0) {
+                    
+                    $datos = reporteAlimentosPuntosAlimentosModel::create($request->all());
+                    $dato["msj"] = 'Información guardada correctamente';
 
-
-                if (($request->categorias_poe + 0) == 1) {
-                    $categoria = reportecategoriaModel::findOrFail($request->reportecategoria_id);
-                    $categoria->update($request->all());
-
-                    // Mensaje
-                    $dato["msj"] = 'Datos modificados correctamente';
                 } else {
-                    if (($request->reportecategoria_id + 0) == 0) {
-                        DB::statement('ALTER TABLE reportealimentoscategoria AUTO_INCREMENT = 1;');
+                    $dato = reporteAlimentosPuntosAlimentosModel::findOrFail($request->ID_PUNTO_ALIMENTOS);
+                    $dato->update($request->all());
+                    $dato["msj"] = 'Información editada correctamente';
 
-
-                        // $request['registro_id'] = $reportealimentos->id;
-                        // $request['recsensorialcategoria_id'] = 0;
-                        // $categoria = reportealimentoscategoriaModel::create($request->all());
-
-                        $categoria = reportealimentoscategoriaModel::create([
-                            'proyecto_id' => $request->proyecto_id,
-                            'registro_id' => $reportealimentos->id,
-                            'recsensorialcategoria_id' => 0,
-                            'reportealimentoscategoria_nombre' => $request->reportecategoria_nombre,
-                            'reportealimentoscategoria_total' => $request->reportecategoria_total,
-                            'reportealimentoscategoria_horas' => $request->reportecategoria_horas
-                        ]);
-
-
-                        // Mensaje
-                        $dato["msj"] = 'Datos guardados correctamente';
-                    } else {
-                        $categoria = reportealimentoscategoriaModel::findOrFail($request->reportecategoria_id);
-                        // $categoria->update($request->all());
-
-                        $categoria->update([
-                            'registro_id' => $reportealimentos->id,
-                            'reportealimentoscategoria_nombre' => $request->reportecategoria_nombre,
-                            'reportealimentoscategoria_total' => $request->reportecategoria_total,
-                            'reportealimentoscategoria_horas' => $request->reportecategoria_horas
-                        ]);
-
-
-                        // Mensaje
-                        $dato["msj"] = 'Datos modificados correctamente';
-                    }
                 }
             }
 
-
-            // AREAS
+            //RESULTADOS DEL PUNTO 8.2
             if (($request->opcion + 0) == 14) {
-                // dd($request->all());
 
+                if ($request->ID_PUNTO_VIVAS == 0) {
 
-                if (($request->areas_poe + 0) == 1) {
-                    $area = reporteareaModel::findOrFail($request->reportearea_id);
-                    $area->update($request->all());
-
-
-                    $eliminar_categorias = reportealimentosareacategoriaModel::where('reportealimentosarea_id', $request->reportearea_id)
-                        ->where('reportealimentosareacategoria_poe', $reportealimentos->id)
-                        ->delete();
-
-
-                    if ($request->checkbox_reportecategoria_id) {
-                        DB::statement('ALTER TABLE reportealimentosareacategoria AUTO_INCREMENT = 1;');
-
-
-                        foreach ($request->checkbox_reportecategoria_id as $key => $value) {
-                            $areacategoria = reportealimentosareacategoriaModel::create([
-                                'reportealimentosarea_id' => $area->id,
-                                'reportealimentoscategoria_id' => $value,
-                                'reportealimentosareacategoria_poe' => $reportealimentos->id,
-                                'reportealimentosareacategoria_total' => $request['reporteareacategoria_total_' . $value],
-                                'reportealimentosareacategoria_geo' => $request['reporteareacategoria_geh_' . $value],
-                                'reportealimentosareacategoria_actividades' => $request['reporteareacategoria_actividades_' . $value],
-                                'reportealimentosareacategoria_tareavisual' => $request['reporteareacategoria_tareavisual_' . $value],
-                                'niveles_minimo' => $request['niveles_minimo_' . $value]
-
-                            ]);
-                        }
-                    }
-
-
-                    // Mensaje
-                    $dato["msj"] = 'Datos modificados correctamente';
+                    $datos = reporteAlimentosPuntosSuperficiesVivasModel::create($request->all());
+                    $dato["msj"] = 'Información guardada correctamente';
                 } else {
-                    if (($request->reportearea_id + 0) == 0) {
-                        DB::statement('ALTER TABLE reportealimentosarea AUTO_INCREMENT = 1;');
-
-                        // $request['registro_id'] = $reportealimentos->id;
-                        // $request['recsensorialarea_id'] = 0;
-                        // $area = reportealimentosareaModel::create($request->all());
-
-                        $area = reportealimentosareaModel::create([
-                            'proyecto_id' => $request->proyecto_id,
-                            'registro_id' => $reportealimentos->id,
-                            'recsensorialarea_id' => 0,
-                            'reportealimentosarea_numorden' => $request->reportearea_orden,
-                            'reportealimentosarea_nombre' => $request->reportearea_nombre,
-                            'reportealimentosarea_instalacion' => $request->reportearea_instalacion,
-                            'reportealimentosarea_puntos_ic' => $request->reportearea_puntos_ic,
-                            'reportealimentosarea_puntos_pt' => $request->reportearea_puntos_pt,
-                            'reportealimentosarea_sistemaalimentos' => $request->reportearea_sistemaalimentos,
-                            'reportealimentosarea_luznatural' => $request->reportearea_luznatural,
-                            'reportealimentosarea_alimentoslocalizada' => $request->reportearea_alimentoslocalizada,
-                            'reportealimentosarea_porcientooperacion' => $request->reportealimentosarea_porcientooperacion,
-                            'reportealimentosarea_colorsuperficie' => $request->reportearea_colorsuperficie,
-                            'reportealimentosarea_tiposuperficie' => $request->reportearea_tiposuperficie,
-                            'reportealimentosarea_largo' => $request->reportearea_largo,
-                            'reportealimentosarea_ancho' => $request->reportearea_ancho,
-                            'reportealimentosarea_alto' => $request->reportearea_alto,
-                            'reportearea_criterio ' => $request->reportearea_criterio,
-                            'reportearea_colortecho' => $request->reportearea_colortecho,
-                            'reportearea_paredes' => $request->reportearea_paredes,
-                            'reportearea_colorpiso' => $request->reportearea_colorpiso,
-                            'reportearea_superficietecho' => $request->reportearea_superficietecho,
-                            'reportearea_superficieparedes' => $request->reportearea_superficieparedes,
-                            'reportearea_superficiepiso' => $request->reportearea_superficiepiso,
-                            'reportearea_potenciaslamparas' => $request->reportearea_potenciaslamparas,
-                            'reportearea_numlamparas' => $request->reportearea_numlamparas,
-                            'reportearea_alturalamparas' => $request->reportearea_alturalamparas,
-                            'reportearea_programamantenimiento' => $request->reportearea_programamantenimiento,
-                            'reportearea_tipoalimentos' => $request->reportearea_tipoalimentos,
-                            'reportearea_descripcion' => $request->reportearea_descripcion
-
-
-                        ]);
-
-
-                        if ($request->checkbox_reportecategoria_id) {
-                            DB::statement('ALTER TABLE reportealimentosareacategoria AUTO_INCREMENT = 1;');
-
-
-                            foreach ($request->checkbox_reportecategoria_id as $key => $value) {
-                                $areacategoria = reportealimentosareacategoriaModel::create([
-                                    'reportealimentosarea_id' => $area->id,
-                                    'reportealimentoscategoria_id' => $value,
-                                    'reportealimentosareacategoria_poe' => 0,
-                                    'reportealimentosareacategoria_total' => $request['reporteareacategoria_total_' . $value],
-                                    'reportealimentosareacategoria_geo' => $request['reporteareacategoria_geh_' . $value],
-                                    'reportealimentosareacategoria_actividades' => $request['reporteareacategoria_actividades_' . $value],
-                                    'reportealimentosareacategoria_tareavisual' => $request['reporteareacategoria_tareavisual_' . $value],
-                                    'niveles_minimo' => $request['niveles_minimo_' . $value]
-
-
-                                ]);
-                            }
-                        }
-
-                        // Mensaje
-                        $dato["msj"] = 'Datos guardados correctamente';
-                    } else {
-                        // $request['registro_id'] = $reportealimentos->id;
-                        $area = reportealimentosareaModel::findOrFail($request->reportearea_id);
-                        // $area->update($request->all());
-                        $area->update([
-                            'registro_id' => $reportealimentos->id,
-                            'reportealimentosarea_numorden' => $request->reportearea_orden,
-                            'reportealimentosarea_nombre' => $request->reportearea_nombre,
-                            'reportealimentosarea_instalacion' => $request->reportearea_instalacion,
-                            'reportealimentosarea_puntos_ic' => $request->reportearea_puntos_ic,
-                            'reportealimentosarea_puntos_pt' => $request->reportearea_puntos_pt,
-                            'reportealimentosarea_sistemaalimentos' => $request->reportearea_sistemaalimentos,
-                            'reportealimentosarea_luznatural' => $request->reportearea_luznatural,
-                            'reportealimentosarea_alimentoslocalizada' => $request->reportearea_alimentoslocalizada,
-                            'reportealimentosarea_porcientooperacion' => $request->reportealimentosarea_porcientooperacion,
-                            'reportealimentosarea_colorsuperficie' => $request->reportearea_colorsuperficie,
-                            'reportealimentosarea_tiposuperficie' => $request->reportearea_tiposuperficie,
-                            'reportealimentosarea_largo' => $request->reportearea_largo,
-                            'reportealimentosarea_ancho' => $request->reportearea_ancho,
-                            'reportealimentosarea_alto' => $request->reportearea_alto,
-                            'reportealimentosarea_criterio ' => $request->reportearea_criterio,
-                            'reportealimentosarea_colortecho' => $request->reportearea_colortecho,
-                            'reportealimentosarea_paredes' => $request->reportearea_paredes,
-                            'reportealimentosarea_colorpiso' => $request->reportearea_colorpiso,
-                            'reportealimentosarea_superficietecho' => $request->reportearea_superficietecho,
-                            'reportealimentosarea_superficieparedes' => $request->reportearea_superficieparedes,
-                            'reportealimentosarea_superficiepiso' => $request->reportearea_superficiepiso,
-                            'reportealimentosarea_potenciaslamparas' => $request->reportearea_potenciaslamparas,
-                            'reportealimentosarea_numlamparas' => $request->reportearea_numlamparas,
-                            'reportealimentosarea_alturalamparas' => $request->reportearea_alturalamparas,
-                            'reportealimentosarea_programamantenimiento' => $request->reportearea_programamantenimiento,
-                            'reportealimentosarea_tipoalimentos' => $request->reportearea_tipoalimentos,
-                            'reportealimentosarea_descripcion' => $request->reportearea_descripcion
-                        ]);
-
-
-                        $eliminar_categorias = reportealimentosareacategoriaModel::where('reportealimentosarea_id', $request->reportearea_id)
-                            ->where('reportealimentosareacategoria_poe', 0)
-                            ->delete();
-
-
-                        if ($request->checkbox_reportecategoria_id) {
-                            DB::statement('ALTER TABLE reportealimentosareacategoria AUTO_INCREMENT = 1;');
-
-
-                            foreach ($request->checkbox_reportecategoria_id as $key => $value) {
-                                $areacategoria = reportealimentosareacategoriaModel::create([
-                                    'reportealimentosarea_id' => $area->id,
-                                    'reportealimentoscategoria_id' => $value,
-                                    'reportealimentosareacategoria_poe' => 0,
-                                    'reportealimentosareacategoria_total' => $request['reporteareacategoria_total_' . $value],
-                                    'reportealimentosareacategoria_geo' => $request['reporteareacategoria_geh_' . $value],
-                                    'reportealimentosareacategoria_actividades' => $request['reporteareacategoria_actividades_' . $value],
-                                    'reportealimentosareacategoria_tareavisual' => $request['reporteareacategoria_tareavisual_' . $value],
-                                    'niveles_minimo' => $request['niveles_minimo_' . $value]
-
-                                ]);
-                            }
-                        }
-
-                        // Mensaje
-                        $dato["msj"] = 'Datos modificados correctamente';
-                    }
+                    $dato = reporteAlimentosPuntosSuperficiesVivasModel::findOrFail($request->ID_PUNTO_VIVAS);
+                    $dato->update($request->all());
+                    $dato["msj"] = 'Información editada correctamente';
                 }
             }
 
 
-            // CRITERIO SELECCION
+            //RESULTADOS DEL PUNTO 8.3
             if (($request->opcion + 0) == 15) {
-                $reportealimentos->update([
-                    'reportealimentos_criterioseleccion' => $this->datosproyectolimpiartexto($proyecto, $recsensorial, $request->reportealimentos_criterioseleccion)
-                ]);
 
-                // Mensaje
-                $dato["msj"] = 'Datos guardados correctamente';
-            }
+                if ($request->ID_PUNTO_INERTES == 0) {
 
-
-            // PUNTOS DE alimentos
-            if (($request->opcion + 0) == 16) {
-                if ($request->reportealimentospuntos_luxmed1menor != NULL) {
-                    $request['reportealimentospuntos_luxmed1menor'] = 1;
+                    $datos = reporteAlimentosPuntosSuperficiesInertesModel::create($request->all());
+                    $dato["msj"] = 'Información guardada correctamente';
                 } else {
-                    $request['reportealimentospuntos_luxmed1menor'] = 0;
-                }
-
-
-                if ($request->reportealimentospuntos_luxmed2menor != NULL) {
-                    $request['reportealimentospuntos_luxmed2menor'] = 1;
-                } else {
-                    $request['reportealimentospuntos_luxmed2menor'] = 0;
-                }
-
-
-                if ($request->reportealimentospuntos_luxmed3menor != NULL) {
-                    $request['reportealimentospuntos_luxmed3menor'] = 1;
-                } else {
-                    $request['reportealimentospuntos_luxmed3menor'] = 0;
-                }
-
-
-
-                if ($request->reportealimentospuntos_luxmed1mayor != NULL) {
-                    $request['reportealimentospuntos_luxmed1mayor'] = 1;
-                } else {
-                    $request['reportealimentospuntos_luxmed1mayor'] = 0;
-                }
-
-
-                if ($request->reportealimentospuntos_luxmed2mayor != NULL) {
-                    $request['reportealimentospuntos_luxmed2mayor'] = 1;
-                } else {
-                    $request['reportealimentospuntos_luxmed2mayor'] = 0;
-                }
-
-
-                if ($request->reportealimentospuntos_luxmed3mayor != NULL) {
-                    $request['reportealimentospuntos_luxmed3mayor'] = 1;
-                } else {
-                    $request['reportealimentospuntos_luxmed3mayor'] = 0;
-                }
-
-
-                $request['registro_id'] = $reportealimentos->id;
-                if (($request->reportealimentospunto_id + 0) == 0) {
-                    DB::statement('ALTER TABLE reportealimentospuntos AUTO_INCREMENT = 1;');
-
-                    $punto = reportealimentospuntosModel::create($request->all());
-
-                    // Mensaje
-                    $dato["msj"] = 'Datos guardados correctamente';
-                } else {
-                    $punto = reportealimentospuntosModel::findOrFail($request->reportealimentospunto_id);
-                    $punto->update($request->all());
-
-                    // Mensaje
-                    $dato["msj"] = 'Datos modificados correctamente';
+                    $dato = reporteAlimentosPuntosSuperficiesInertesModel::findOrFail($request->ID_PUNTO_INERTES);
+                    $dato->update($request->all());
+                    $dato["msj"] = 'Información editada correctamente';
                 }
             }
-
+            
 
             // CONCLUSION
             if (($request->opcion + 0) == 20) {
@@ -2091,6 +1844,4 @@ class reportealimentosController extends Controller
             return response()->json($dato);
         }
     }
-
-    
 }
