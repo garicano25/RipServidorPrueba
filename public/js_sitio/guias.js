@@ -1,80 +1,6 @@
-
 //CARG INICIAL
-
 document.addEventListener("DOMContentLoaded", function () {
     $('#contenidoCuestionarios').hide();     
-});
-
-function validacionFechalimiteStatus(fechalimite, estadoCuestionario){
-    console.log('el status de este cuestionario es '+ estadoCuestionario);
-    const today = new Date().toISOString().split('T')[0];
-    const fechaLimiteDate = new Date(fechalimite);
-    const todayDate = new Date(today);
-
-    if (fechaLimiteDate>=todayDate && estadoCuestionario!='Finalizado'){//o no lo ha terminado o aun tiene tiempo
-        
-        $('#avisoPrivacidadModal').modal('show');
-        mostrarGuias(requiereGuia1, requiereGuia2, requiereGuia3);
-        $('#contenidoCuestionarios').show();
-
-        document.getElementById("aceptarPermisos").addEventListener("click", function () {
-            $('#avisoPrivacidadModal').modal('hide');
-            $('#avisoPrivacidadModal').on('hidden.bs.modal', function () {
-                if (estadoCuestionario!='En proceso' || estadoCuestionario!='Finalizado' ){
-                    $('#instruccionesModal').modal('show');
-                }else{
-                    ejecucionCamara();
-                }
-            });
-        });
-
-    }else if(estadoCuestionario=='Finalizado'){//si no, y ya lo termino
-
-        const sectionFinalizado = document.getElementById('sectionFinalizado');
-        sectionFinalizado.classList.remove('d-none');
-
-    }else if(fechaLimiteDate<todayDate){ //o si no, y ya se le paso la fecha y no lo termino
-
-        const sectionExpirado = document.getElementById('sectionExpirado');
-        sectionExpirado.classList.remove('d-none');
-    }
-}
-
-$(document).ready(function () {
-    $("#guardar_guia5").click(function (event) {
-        event.preventDefault(); 
-
-        var valida = this.form.checkValidity(); 
-        $("#GUIAV_TRABAJADOR_ID").val($("#TRABAJADOR_ID").val()); 
-
-        var formDataGuia5 = new FormData(document.getElementById('guia_5'));
-        formDataGuia5.append('option', 5);
-        formDataGuia5.append('tipoGuardado', 5);
-
-        if (valida) {
-            $.ajax({
-                url: '/guardarGuiasPsico',
-                type: 'POST',
-                data: formDataGuia5,
-                processData: false,
-                contentType: false,
-                beforeSend: function () {
-                    $('#guardar_guia5').html('Guardando <i class="fa fa-spin fa-spinner"></i>');
-                },
-                success: function (response) {
-                    $('#guardar_guia5').html('Guardado <i class="fa fa-check"></i>');
-                    $('#guia5Modal').modal('hide');
-                    $('#guia5Modal').on('hidden.bs.modal', function () {
-                        ejecucionFinalCamara()();
-                    });
-                },
-                error: function (jqXHR, textStatus, errorThrown) {
-                    console.error('Error en Guia 5:', textStatus, errorThrown);
-                    $('#guardar_guia5').html('Error al guardar <i class="fa fa-exclamation-triangle"></i>');
-                }
-            });
-        }
-    });
 });
 
 //BOTONES
@@ -217,6 +143,7 @@ $("#guardar_guia2").click(function () {
         return false;
     }
 });
+
 $('#guardar_guia3').on('click', function (e) {
     e.preventDefault();
     document.getElementById("guardar_guia3").blur();
@@ -307,7 +234,80 @@ $('#guardar_guia3').on('click', function (e) {
     });
 
 });
+
+$(document).ready(function () {
+    $("#guardar_guia5").click(function (event) {
+        event.preventDefault(); 
+
+        var valida = this.form.checkValidity(); 
+        $("#GUIAV_TRABAJADOR_ID").val($("#TRABAJADOR_ID").val()); 
+
+        var formDataGuia5 = new FormData(document.getElementById('guia_5'));
+        formDataGuia5.append('option', 5);
+        formDataGuia5.append('tipoGuardado', 5);
+
+        if (valida) {
+            $.ajax({
+                url: '/guardarGuiasPsico',
+                type: 'POST',
+                data: formDataGuia5,
+                processData: false,
+                contentType: false,
+                beforeSend: function () {
+                    $('#guardar_guia5').html('Guardando <i class="fa fa-spin fa-spinner"></i>');
+                },
+                success: function (response) {
+                    $('#guardar_guia5').html('Guardado <i class="fa fa-check"></i>');
+                    $('#guia5Modal').modal('hide');
+                    $('#guia5Modal').on('hidden.bs.modal', function () {
+                        ejecucionFinalCamara();
+                    });
+                },
+                error: function (jqXHR, textStatus, errorThrown) {
+                    console.error('Error en Guia 5:', textStatus, errorThrown);
+                    $('#guardar_guia5').html('Error al guardar <i class="fa fa-exclamation-triangle"></i>');
+                }
+            });
+        }
+    });
+});
+
 //FUNCIONES
+function validacionFechalimiteStatus(fechalimite, estadoCuestionario){
+    console.log('el status de este cuestionario es '+ estadoCuestionario);
+    const today = new Date().toISOString().split('T')[0];
+    const fechaLimiteDate = new Date(fechalimite);
+    const todayDate = new Date(today);
+
+    if (fechaLimiteDate>=todayDate && estadoCuestionario!='Finalizado'){//o no lo ha terminado o aun tiene tiempo
+        
+        $('#avisoPrivacidadModal').modal('show');
+        mostrarGuias(requiereGuia1, requiereGuia2, requiereGuia3);
+        $('#contenidoCuestionarios').show();
+
+        document.getElementById("aceptarPermisos").addEventListener("click", function () {
+            $('#avisoPrivacidadModal').modal('hide');
+            $('#avisoPrivacidadModal').on('hidden.bs.modal', function () {
+                if (estadoCuestionario!='En proceso' || estadoCuestionario!='Finalizado' ){
+                    $('#instruccionesModal').modal('show');
+                }else{
+                    ejecucionCamara();
+                }
+            });
+        });
+
+    }else if(estadoCuestionario=='Finalizado'){//si no, y ya lo termino
+
+        const sectionFinalizado = document.getElementById('sectionFinalizado');
+        sectionFinalizado.classList.remove('d-none');
+
+    }else if(fechaLimiteDate<todayDate){ //o si no, y ya se le paso la fecha y no lo termino
+
+        const sectionExpirado = document.getElementById('sectionExpirado');
+        sectionExpirado.classList.remove('d-none');
+    }
+}
+
 function instruccionesEntendidas() {
     $('#instruccionesModal').modal('hide');
 }
@@ -377,7 +377,7 @@ function validarPregunta() {
 
         }
         if (!contestado) {
-            divActual.css('border', '1px solid red');
+            divActual.css('border', '2px solid red');
             opciones.forEach(opcion => {
                 opcion.addEventListener('change', () => {
                     divActual.css('border', 'none');
@@ -712,27 +712,33 @@ function botonradio(radioClass) {
 }
 
 function guia1() {
-    const pregunta1Si = document.getElementById("pregunta1_si");
-    const pregunta1No = document.getElementById("pregunta1_no");
-    const pregunta2Si = document.getElementById("pregunta2_si").checked;
-    const pregunta3Si = document.getElementById("pregunta3_si").checked;
-    const pregunta4Si = document.getElementById("pregunta4_si").checked;
-    const pregunta5Si = document.getElementById("pregunta5_si").checked;
-    const pregunta6Si = document.getElementById("pregunta6_si").checked;
-    const pregunta7Si = document.getElementById("pregunta7_si").checked;
+    const pregunta1Si = document.getElementById("pregunta1_si").checked;
+    const pregunta1No = document.getElementById("pregunta1_no").checked;
 
-    const algunaSi = pregunta2Si || pregunta3Si || pregunta4Si || pregunta5Si || pregunta6Si || pregunta7Si;
+    const pregunta2Si = document.getElementById("pregunta2_si");
+    const pregunta3Si = document.getElementById("pregunta3_si");
+    const pregunta4Si = document.getElementById("pregunta4_si");
+    const pregunta5Si = document.getElementById("pregunta5_si");
+    const pregunta6Si = document.getElementById("pregunta6_si");
+    const pregunta7Si = document.getElementById("pregunta7_si");
 
-    if (algunaSi) {
-        pregunta1Si.checked = true;
-        pregunta1No.checked = false;
+    const pregunta2No = document.getElementById("pregunta2_no");
+    const pregunta3No = document.getElementById("pregunta3_no");
+    const pregunta4No = document.getElementById("pregunta4_no");
+    const pregunta5No = document.getElementById("pregunta5_no");
+    const pregunta6No = document.getElementById("pregunta6_no");
+    const pregunta7No = document.getElementById("pregunta7_no");
+
+    if(pregunta1No) {
+        pregunta2No.checked = true;
+        pregunta3No.checked = true;
+        pregunta4No.checked = true;
+        pregunta5No.checked = true;
+        pregunta6No.checked = true;
+        pregunta7No.checked = true;
     }
-    else {
-        pregunta1No.checked = true;
-        pregunta1Si.checked = false;
-    }
 
-    if (algunaSi) {
+    if (pregunta1Si) {
         document.getElementById("seccion2").style.display = "block";
         document.getElementById("seccion3").style.display = "block";
         document.getElementById("seccion4").style.display = "block";
@@ -857,6 +863,8 @@ function cargarExplicaciones() {
                     if (explicacion) {
                         iconElement.setAttribute('title', explicacion);
                         $(iconElement).tooltip();
+                    } else {
+                        iconElement.style.display = 'none';
                     }
                 });
             }
@@ -904,6 +912,7 @@ function consultarDatos() {
                 $('#genero-trabajador').text(data.RECPSICOTRABAJADOR_GENERO || 'No disponible');
                 $('#correo-trabajador').text(data.RECPSICOTRABAJADOR_CORREO || 'No disponible');
                 estadoCuestionario = data.TRABAJADOR_ESTADOCONTESTADO;
+                fechalimite = data.TRABAJADOR_FECHAFIN;
                 validacionFechalimiteStatus(fechalimite, estadoCuestionario);
 
             } else {
@@ -1179,4 +1188,5 @@ function consultarRespuestasGuia5(requiereGuia5, id) {
             }
         });
     }
+    //
 }
