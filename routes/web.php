@@ -1853,7 +1853,7 @@ Route::resource('informesPsicosocial', 'PSICO\informesrecoPsicoController');
 // GUIAS 
 
 // Route::get('/Guia/{id}/{guia1}/{guia2}/{guia3}', function () { return view('catalogos.psico.guias.guias');})->name('Guia');
-Route::get('/Guia/{guia1}/{guia2}/{guia3}/{guia5}/{id}', function ($guia1, $guia2, $guia3, $guia5, $id) {
+Route::get('/Guia/{guia1}/{guia2}/{guia3}/{guia5}/{status}/{fechalimite}/{id}', function ($guia1, $guia2, $guia3, $guia5, $status, $fechalimite, $id) {
     try {
 
         // Desencriptamos las guías
@@ -1861,6 +1861,10 @@ Route::get('/Guia/{guia1}/{guia2}/{guia3}/{guia5}/{id}', function ($guia1, $guia
         $decryptedGuia2 = Crypt::decrypt($guia2);
         $decryptedGuia3 = Crypt::decrypt($guia3);
         $decryptedGuia5 = Crypt::decrypt($guia5);
+
+        $decryptedstatus = Crypt::decrypt($status);
+        $decryptedfechalimite = Crypt::decrypt($fechalimite);
+
         $id = Crypt::decrypt($id);
 
         // Enviamos los datos de las guias ya desencriptados para obtenerlas en nuestra vista
@@ -1869,6 +1873,8 @@ Route::get('/Guia/{guia1}/{guia2}/{guia3}/{guia5}/{id}', function ($guia1, $guia
             'guia2' => $decryptedGuia2,
             'guia3' => $decryptedGuia3,
             'guia5' => $decryptedGuia5,
+            'status' => $decryptedstatus,
+            'fechalimite' => $decryptedfechalimite,
             'id' => $id,
         ]);
     } catch (\Illuminate\Contracts\Encryption\DecryptException $e) {

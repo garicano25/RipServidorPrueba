@@ -228,15 +228,17 @@ class ejecucionPsicoController extends Controller
                 //Obtenemos los datos del trabajador segun el id
                 $datos = DB::select('SELECT t.RECPSICOTRABAJADOR_NOMBRE,
                                             t.RECPSICOTRABAJADOR_CORREO,
-                                            s.TRABAJADOR_FECHAINICIO,
                                             s.TRABAJADOR_FECHAFIN,
-                                            IF(s.TRABAJADOR_FECHAINICIO = s.TRABAJADOR_FECHAFIN , 0 ,DATEDIFF(s.TRABAJADOR_FECHAFIN, s.TRABAJADOR_FECHAINICIO)) AS DIAS
+                                            s.TRABAJADOR_ESTADOCONTESTADO,
+                                            DATEDIFF(s.TRABAJADOR_FECHAFIN, DATE_FORMAT(NOW(),"%Y-%m-%d")) AS DIAS
                                 FROM recopsicotrabajadores t
-                                LEFT JOIN seguimientotrabajadores s ON s.TRABAJADOR_ID = t.ID_RECOPSICOTRABAJADOR
+                                LEFT JOIN proyectotrabajadores s ON s.TRABAJADOR_ID = t.ID_RECOPSICOTRABAJADOR
                                 WHERE t.ID_RECOPSICOTRABAJADOR = ?', [$idPersonal]);
 
                 $nombre = $datos[0]->RECPSICOTRABAJADOR_NOMBRE;
                 $correo = $datos[0]->RECPSICOTRABAJADOR_CORREO;
+                $fechalimite = $datos[0]->TRABAJADOR_FECHAFIN;
+                $status = $datos[0]->TRABAJADOR_ESTADOCONTESTADO;
                 $dias = $datos[0]->DIAS;
 
 
@@ -254,10 +256,13 @@ class ejecucionPsicoController extends Controller
                 $encryptedGuia2 = Crypt::encrypt($guia2);
                 $encryptedGuia3 = Crypt::encrypt($guia3);
                 $encryptedGuia5 = Crypt::encrypt($guia5);
+                
+                $encryptedfechalimite = Crypt::encrypt($fechalimite);
+                $encryptedstatus = Crypt::encrypt($status);
 
                 $encryptedId = Crypt::encrypt($idPersonal);
 
-                Mail::to($correo)->send(new sendGuiaPsico($nombre, $encryptedGuia1, $encryptedGuia2, $encryptedGuia3, $encryptedGuia5, $encryptedId, $dias));
+                Mail::to($correo)->send(new sendGuiaPsico($nombre, $encryptedGuia1, $encryptedGuia2, $encryptedGuia3, $encryptedGuia5, $encryptedstatus, $encryptedfechalimite, $encryptedId, $dias));
             
                 //cambiar el estado de envio de correo en el registro deltrabajador
                 DB::table('proyectotrabajadores')

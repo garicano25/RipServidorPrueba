@@ -2,16 +2,78 @@
 //CARG INICIAL
 
 document.addEventListener("DOMContentLoaded", function () {
-    // Mostrar el modal de aviso de privacidad al cargar la página
-    $('#avisoPrivacidadModal').modal('show');
+    $('#contenidoCuestionarios').hide();     
+});
 
-    document.getElementById("aceptarPermisos").addEventListener("click", function () {
-        $('#avisoPrivacidadModal').modal('hide');
+function validacionFechalimiteStatus(fechalimite, estadoCuestionario){
+    console.log('el status de este cuestionario es '+ estadoCuestionario);
+    const today = new Date().toISOString().split('T')[0];
+    const fechaLimiteDate = new Date(fechalimite);
+    const todayDate = new Date(today);
 
-        // Mostrar el modal de la cámara cuando el de privacidad se haya cerrado
-        $('#avisoPrivacidadModal').on('hidden.bs.modal', function () {
-            ejecucionCamara();
+    if (fechaLimiteDate>=todayDate && estadoCuestionario!='Finalizado'){//o no lo ha terminado o aun tiene tiempo
+        
+        $('#avisoPrivacidadModal').modal('show');
+        mostrarGuias(requiereGuia1, requiereGuia2, requiereGuia3);
+        $('#contenidoCuestionarios').show();
+
+        document.getElementById("aceptarPermisos").addEventListener("click", function () {
+            $('#avisoPrivacidadModal').modal('hide');
+            $('#avisoPrivacidadModal').on('hidden.bs.modal', function () {
+                if (estadoCuestionario!='En proceso' || estadoCuestionario!='Finalizado' ){
+                    $('#instruccionesModal').modal('show');
+                }else{
+                    ejecucionCamara();
+                }
+            });
         });
+
+    }else if(estadoCuestionario=='Finalizado'){//si no, y ya lo termino
+
+        const sectionFinalizado = document.getElementById('sectionFinalizado');
+        sectionFinalizado.classList.remove('d-none');
+
+    }else if(fechaLimiteDate<todayDate){ //o si no, y ya se le paso la fecha y no lo termino
+
+        const sectionExpirado = document.getElementById('sectionExpirado');
+        sectionExpirado.classList.remove('d-none');
+    }
+}
+
+$(document).ready(function () {
+    $("#guardar_guia5").click(function (event) {
+        event.preventDefault(); 
+
+        var valida = this.form.checkValidity(); 
+        $("#GUIAV_TRABAJADOR_ID").val($("#TRABAJADOR_ID").val()); 
+
+        var formDataGuia5 = new FormData(document.getElementById('guia_5'));
+        formDataGuia5.append('option', 5);
+        formDataGuia5.append('tipoGuardado', 5);
+
+        if (valida) {
+            $.ajax({
+                url: '/guardarGuiasPsico',
+                type: 'POST',
+                data: formDataGuia5,
+                processData: false,
+                contentType: false,
+                beforeSend: function () {
+                    $('#guardar_guia5').html('Guardando <i class="fa fa-spin fa-spinner"></i>');
+                },
+                success: function (response) {
+                    $('#guardar_guia5').html('Guardado <i class="fa fa-check"></i>');
+                    $('#guia5Modal').modal('hide');
+                    $('#guia5Modal').on('hidden.bs.modal', function () {
+                        ejecucionFinalCamara()();
+                    });
+                },
+                error: function (jqXHR, textStatus, errorThrown) {
+                    console.error('Error en Guia 5:', textStatus, errorThrown);
+                    $('#guardar_guia5').html('Error al guardar <i class="fa fa-exclamation-triangle"></i>');
+                }
+            });
+        }
     });
 });
 
@@ -155,93 +217,6 @@ $("#guardar_guia2").click(function () {
         return false;
     }
 });
-
-//FUNCIONES
-function instruccionesEntendidas() {
-    $('#instruccionesModal').modal('hide');
-}
-
-function submitGuia1y2() {
-    // Asignar valores del trabajador y respuestas
-    $("#GUIAI_TRABAJADOR_ID").val($("#TRABAJADOR_ID").val());
-    $("#GUIAI_ID_RECOPSICORESPUESTAS").val($("#ID_RECOPSICORESPUESTAS").val());
-    $("#GUIAII_TRABAJADOR_ID").val($("#TRABAJADOR_ID").val());
-    $("#GUIAII_ID_RECOPSICORESPUESTAS").val($("#ID_RECOPSICORESPUESTAS").val());
-
-    // Obtener los datos de la guia 1
-    var form1Data = new FormData(document.getElementById('guia_1'));
-    form1Data.append('option', 1); // Enviar opción 1 para la guía 1
-
-    $.ajax({
-        url: '/guardarGuiasPsico',
-        type: 'POST',
-        data: form1Data,
-        processData: false,
-        contentType: false,
-        success: function (response) {
-
-        },
-        error: function (jqXHR, textStatus, errorThrown) {
-            console.error('Error en Guia 1:', textStatus, errorThrown);
-        }
-    });
-
-    // Obtener los datos de la guia 2
-    var form2Data = new FormData(document.getElementById('form2'));
-    form2Data.append('option', 2); // Enviar opción 2 para la guía 2
-
-    $.ajax({
-        url: '/guardarGuiasPsico',
-        type: 'POST',
-        data: form2Data,
-        processData: false,
-        contentType: false,
-        success: function (response) {
-
-        },
-        error: function (jqXHR, textStatus, errorThrown) {
-            console.error('Error en Guia 2:', textStatus, errorThrown);
-        }
-    });
-}
-
-function validarGuia5() {
-    $('#guia5Modal').modal('show');
-}
-
-function validarPregunta() {
-    const divPreguntas = $('.divPreguntas');
-    for (let pregunta of divPreguntas) {
-
-        const idPregunta = pregunta.id;
-        const divActual = $('#' + idPregunta);
-        const opciones = pregunta.querySelectorAll('input[type="radio"]');
-
-        var contestado = false;
-        for (let opcion of opciones) {
-            if (opcion.checked) {
-                contestado = true;
-                break;
-            }
-
-        }
-        if (!contestado) {
-            divActual.css('border', '1px solid red');
-            opciones.forEach(opcion => {
-                opcion.addEventListener('change', () => {
-                    divActual.css('border', 'none');
-                })
-            });
-
-            return [false, pregunta]
-        } else {
-            divActual.css('border', 'none');
-        }
-    }
-    return [true, '']
-}
-
-
 $('#guardar_guia3').on('click', function (e) {
     e.preventDefault();
     document.getElementById("guardar_guia3").blur();
@@ -331,33 +306,96 @@ $('#guardar_guia3').on('click', function (e) {
         }
     });
 
-})
+});
+//FUNCIONES
+function instruccionesEntendidas() {
+    $('#instruccionesModal').modal('hide');
+}
 
-function guardarGuiaV(){
-    var formDataGuia5 = new FormData(document.getElementById('guia_5'));
-    formDataGuia5.append('option', 5);
+function submitGuia1y2() {
+    // Asignar valores del trabajador y respuestas
+    $("#GUIAI_TRABAJADOR_ID").val($("#TRABAJADOR_ID").val());
+    $("#GUIAI_ID_RECOPSICORESPUESTAS").val($("#ID_RECOPSICORESPUESTAS").val());
+    $("#GUIAII_TRABAJADOR_ID").val($("#TRABAJADOR_ID").val());
+    $("#GUIAII_ID_RECOPSICORESPUESTAS").val($("#ID_RECOPSICORESPUESTAS").val());
+
+    // Obtener los datos de la guia 1
+    var form1Data = new FormData(document.getElementById('guia_1'));
+    form1Data.append('option', 1); // Enviar opción 1 para la guía 1
+
     $.ajax({
         url: '/guardarGuiasPsico',
         type: 'POST',
-        data: formDataGuia5,
+        data: form1Data,
         processData: false,
         contentType: false,
-        beforeSend: function () {
-            $('#guardar_guia5').html('Guardando <i class="fa fa-spin fa-spinner"></i>');
-        },
         success: function (response) {
 
         },
         error: function (jqXHR, textStatus, errorThrown) {
             console.error('Error en Guia 1:', textStatus, errorThrown);
-            $('#guardar_guia5').html('Guardar <i class="fa fa-save"></i>');
         }
     });
+
+    // Obtener los datos de la guia 2
+    var form2Data = new FormData(document.getElementById('form2'));
+    form2Data.append('option', 2); // Enviar opción 2 para la guía 2
+
+    $.ajax({
+        url: '/guardarGuiasPsico',
+        type: 'POST',
+        data: form2Data,
+        processData: false,
+        contentType: false,
+        success: function (response) {
+
+        },
+        error: function (jqXHR, textStatus, errorThrown) {
+            console.error('Error en Guia 2:', textStatus, errorThrown);
+        }
+    });
+}
+
+function validarGuia5() {
+    $('#guia5Modal').modal('show');
+}
+
+function validarPregunta() {
+    const divPreguntas = $('.divPreguntas');
+    for (let pregunta of divPreguntas) {
+
+        const idPregunta = pregunta.id;
+        const divActual = $('#' + idPregunta);
+        const opciones = pregunta.querySelectorAll('input[type="radio"]');
+
+        var contestado = false;
+        for (let opcion of opciones) {
+            if (opcion.checked) {
+                contestado = true;
+                break;
+            }
+
+        }
+        if (!contestado) {
+            divActual.css('border', '1px solid red');
+            opciones.forEach(opcion => {
+                opcion.addEventListener('change', () => {
+                    divActual.css('border', 'none');
+                })
+            });
+
+            return [false, pregunta]
+        } else {
+            divActual.css('border', 'none');
+        }
+    }
+    return [true, '']
 }
 
 function guardarGuia1y3(){
     var form1Data = new FormData(document.getElementById('guia_1'));
     form1Data.append('option', 1);
+    form1Data.append('tipoGuardado', 1);
     $.ajax({
         url: '/guardarGuiasPsico',
         type: 'POST',
@@ -365,7 +403,7 @@ function guardarGuia1y3(){
         processData: false,
         contentType: false,
         beforeSend: function () {
-            $('#guardar_guia3').html('Guardando <i class="fa fa-spin fa-spinner"></i>');
+
         },
         success: function (response) {
 
@@ -382,16 +420,30 @@ function guardarGuia1y3(){
                     processData: false,
                     contentType: false,
                     beforeSend: function () {
-                        $('#guardar_guia3').html('Guardando <i class="fa fa-spin fa-spinner"></i>');
+                       
                     },
                     success: function (response) {
+                        $('#fotoFinalModal').modal('hide');
+                        Swal.fire({
+                            title: "Guardado y enviado correctamente!",
+                            text: "Usted ha finalizado exitosamente. Ya puede cerrar esta ventana, gracias!",
+                            icon: "success",
+                            confirmButtonText: 'Aceptar',
+                        }).then((result) => {
+                            // Este código se ejecuta cuando el usuario hace clic en "Aceptar"
+                            if (result.isConfirmed) {
+                                const sectionCuestionario = document.getElementById('contenidoCuestionarios');
+                                sectionCuestionario.classList.add('d-none'); // Oculta la sección de cuestionarios
+                    
+                                const sectionFinalizado = document.getElementById('sectionFinalizado');
+                                sectionFinalizado.classList.remove('d-none'); // Muestra la sección finalizada
+                            }
+                        });
 
-                        Swal.fire("Guardado y enviado correctamente!", "Usted ha finalizado exitosamente. Ya puede cerrar esta ventana, gracias!", "success");
-                        $('#guardar_guia3').html('Guardar <i class="fa fa-save"></i>');
                     },
                     error: function (jqXHR, textStatus, errorThrown) {
                         console.error('Error en Guia 3:', textStatus, errorThrown);
-                        $('#guardar_guia3').html('Guardar <i class="fa fa-save"></i>');
+                        
                     }
                 });
             } else {
@@ -400,7 +452,6 @@ function guardarGuia1y3(){
         },
         error: function (jqXHR, textStatus, errorThrown) {
             console.error('Error en Guia 1:', textStatus, errorThrown);
-            $('#guardar_guia3').html('Guardar <i class="fa fa-save"></i>');
         }
     });
 }
@@ -442,7 +493,8 @@ function ejecucionCamara() {
                     const trabajadorID = $("#TRABAJADOR_ID").val();
                     let formData = new FormData();
                     formData.append('foto', imagenFile);
-                    formData.append('trabajadorId', trabajadorID);  // Enviar ID del trabajador
+                    formData.append('trabajadorId', trabajadorID);
+                    formData.append('tipo', 1);  // foto inicial
 
                     let csrfToken = $('input[name="_token"]').val();
 
@@ -512,103 +564,104 @@ function ejecucionCamara() {
 }
 
 function ejecucionFinalCamara() {
-    // navigator.mediaDevices.getUserMedia({ video: true })
-    //     .then(function (stream) {
-    //         $('#fotoModal').modal('show');
-    //         const tomarFotoBtn = document.getElementById("tomar-foto");
-    //         const imagenInput = document.getElementById("imagen");
-    //         const video = document.createElement("video");
 
-    //         video.setAttribute("autoplay", true);
-    //         video.style.width = "100%";
-    //         video.style.transform = "scaleX(-1)";
-    //         video.srcObject = stream;
+    navigator.mediaDevices.getUserMedia({ video: true })
+        .then(function (stream) {
+            $('#fotoFinalModal').modal('show');
+            const tomarFotoBtn = document.getElementById("tomar-foto-final");
+            const imagenInput = document.getElementById("imagenFinal");
+            const video = document.createElement("video");
 
-    //         const videoContainer = document.getElementById("video-container");
-    //         videoContainer.innerHTML = '';
-    //         videoContainer.appendChild(video);
+            video.setAttribute("autoplay", true);
+            video.style.width = "100%";
+            video.style.transform = "scaleX(-1)";
+            video.srcObject = stream;
 
-    //         tomarFotoBtn.addEventListener("click", function () {
-    //             const canvas = document.createElement("canvas");
-    //             const context = canvas.getContext("2d");
+            const videoContainer = document.getElementById("videofinal-container");
+            videoContainer.innerHTML = '';
+            videoContainer.appendChild(video);
 
-    //             canvas.width = video.videoWidth;
-    //             canvas.height = video.videoHeight;
+            tomarFotoBtn.addEventListener("click", function () {
+                const canvas = document.createElement("canvas");
+                const context = canvas.getContext("2d");
 
-    //             context.drawImage(video, 0, 0, canvas.width, canvas.height);
+                canvas.width = video.videoWidth;
+                canvas.height = video.videoHeight;
 
-    //             canvas.toBlob(function (blob) {
-    //                 const imagenFile = new File([blob], "foto.png", { type: "image/png" });
-    //                 const trabajadorID = $("#TRABAJADOR_ID").val();
-    //                 let formData = new FormData();
-    //                 formData.append('foto', imagenFile);
-    //                 formData.append('trabajadorId', trabajadorID);  // Enviar ID del trabajador
+                context.drawImage(video, 0, 0, canvas.width, canvas.height);
 
-    //                 let csrfToken = $('input[name="_token"]').val();
+                canvas.toBlob(function (blob) {
+                    const imagenFile = new File([blob], "foto.png", { type: "image/png" });
+                    const trabajadorID = $("#TRABAJADOR_ID").val();
+                    let formData = new FormData();
+                    formData.append('foto', imagenFile);
+                    formData.append('trabajadorId', trabajadorID);
+                    formData.append('tipo', 2);  // foto final
 
-    //                 // Mostrar el spinner de carga dentro del modal
-    //                 document.getElementById("loadingSpinner").style.display = "block";
-    //                 $('#divFoto').hide();
-    //                 $('#tomar-foto').hide();
-    //                 $.ajax({
-    //                     url: '/guardarFotoRecpsico',
-    //                     type: 'POST',
-    //                     data: formData,
-    //                     contentType: false,
-    //                     processData: false,
-    //                     headers: {
-    //                         'X-CSRF-TOKEN': csrfToken
-    //                     },
-    //                     success: function (response) {
-    //                         // Ocultar el spinner de carga
-    //                         // $('#loadingSpinner').hide();
+                    let csrfToken = $('input[name="_token"]').val();
 
-    //                         if (response.mensaje) {
-    //                             $('#fotoModal').modal('hide');
-    //                             $('#instruccionesModal').modal('show');
+                    // Mostrar el spinner de carga dentro del modal
+                    document.getElementById("loadingSpinnerFinal").style.display = "block";
+                    $('#divFotoFinal').hide();
+                    $('#tomar-foto-final').hide();
+                    $.ajax({
+                        url: '/guardarFotoRecpsico',
+                        type: 'POST',
+                        data: formData,
+                        contentType: false,
+                        processData: false,
+                        headers: {
+                            'X-CSRF-TOKEN': csrfToken
+                        },
+                        success: function (response) {
 
-    //                         } else {
-    //                             Swal.fire({
-    //                                 title: "Ocurrió un error",
-    //                                 text: "Ha ocurrido un error al intentar capturar la foto, recargue e intente de nuevo",
-    //                                 icon: "error",
-    //                                 showConfirmButton: true,
-    //                                 showCancelButton: false
-    //                             });
-    //                             console.error("Error al guardar la foto:", response);
-    //                         }
-    //                     },
-    //                     error: function (xhr, status, error) {
-    //                         // Ocultar el spinner de carga
-    //                         // $('#loadingSpinner').hide();
+                            if (response.mensaje) {
+                                if(requiereGuia2==1){
+                                    //guardarGuia1y2();
+                                }else if(requiereGuia3==1){
+                                    guardarGuia1y3();
+                                }
+                                
+                            } else {
+                                Swal.fire({
+                                    title: "Ocurrió un error",
+                                    text: "Ha ocurrido un error al intentar capturar la foto, recargue e intente de nuevo",
+                                    icon: "error",
+                                    showConfirmButton: true,
+                                    showCancelButton: false
+                                });
+                                console.error("Error al guardar la foto:", response);
+                            }
+                        },
+                        error: function (xhr, status, error) {
 
-    //                         Swal.fire({
-    //                             title: "Ocurrió un error",
-    //                             text: "Ha ocurrido un error al intentar capturar la foto, intente de nuevo más tarde",
-    //                             icon: "error",
-    //                             showConfirmButton: true,
-    //                             showCancelButton: false
-    //                         });
+                            Swal.fire({
+                                title: "Ocurrió un error",
+                                text: "Ha ocurrido un error al intentar capturar la foto, intente de nuevo más tarde",
+                                icon: "error",
+                                showConfirmButton: true,
+                                showCancelButton: false
+                            });
 
-    //                         console.error("Error al enviar la solicitud:", error);
-    //                     }
-    //                 });
+                            console.error("Error al enviar la solicitud:", error);
+                        }
+                    });
 
-    //                 // Limpiar video y canvas
-    //                 stream.getVideoTracks()[0].stop();
-    //                 video.remove();
-    //                 canvas.remove();
-    //             }, "image/png");
-    //         });
-
-
+                    // Limpiar video y canvas
+                    stream.getVideoTracks()[0].stop();
+                    video.remove();
+                    canvas.remove();
+                }, "image/png");
+            });
 
 
-    //     })
-    //     .catch(function (err) {
-    //         $('#avisoPermisosModal').modal('show');
 
-    //     });
+
+        })
+        .catch(function (err) {
+            $('#avisoPermisosModal').modal('show');
+
+        });
 }
 
 function mostrarGuias(requiereGuia1, requiereGuia2, requiereGuia3) {
@@ -846,9 +899,12 @@ function consultarDatos() {
         },
         success: function (data) {
             if (data) {
+                document.getElementById('loading').style.display = 'none';
                 $('#nombre-trabajador').text(data.RECPSICOTRABAJADOR_NOMBRE || 'No disponible');
                 $('#genero-trabajador').text(data.RECPSICOTRABAJADOR_GENERO || 'No disponible');
                 $('#correo-trabajador').text(data.RECPSICOTRABAJADOR_CORREO || 'No disponible');
+                estadoCuestionario = data.TRABAJADOR_ESTADOCONTESTADO;
+                validacionFechalimiteStatus(fechalimite, estadoCuestionario);
 
             } else {
                 alert('No se encontraron datos para este trabajador.');
@@ -994,7 +1050,7 @@ function consultarRespuestasGuia5(requiereGuia5, id) {
                     
                     // Género
                     if (RECPSICOTRABAJADOR_GENERO != null) {
-                        setSelectValue("pregunta1_5", RECPSICOTRABAJADOR_GENERO, ["Masculino", "Femenino"]);
+                        setSelectValue("RECPSICOTRABAJADOR_GENERO", RECPSICOTRABAJADOR_GENERO, ["Masculino", "Femenino"]);
                     }
                     
                     // Edad
@@ -1026,53 +1082,91 @@ function consultarRespuestasGuia5(requiereGuia5, id) {
                             edadOption = "70";
                         }
                         if (edadOption) {
-                            setSelectValue("pregunta2_5", edadOption, ["15", "20", "25", "30", "35", "40", "45", "50", "55", "60", "65", "70"]);
+                            setSelectValue("RECPSICOTRABAJADOR_EDAD", edadOption, ["15", "20", "25", "30", "35", "40", "45", "50", "55", "60", "65", "70"]);
                         }
                     }
                     
                     // Estado Civil
                     if (RECPSICOTRABAJADOR_ESTADOCIVIL != null) {
-                        setSelectValue("pregunta3_5", RECPSICOTRABAJADOR_ESTADOCIVIL, ["Casado", "Soltero", "Union Libre", "Divorciado", "Viudo", "NA"]);
+                        setSelectValue("RECPSICOTRABAJADOR_ESTADOCIVIL", RECPSICOTRABAJADOR_ESTADOCIVIL, ["Casado", "Soltero", "Union Libre", "Divorciado", "Viudo", "Prefiero no decirlo"]);
                     }
                     
                     // Estudios
                     if (RECPSICOTRABAJADOR_ESTUDIOS != null) {
-                        setSelectValue("pregunta4_5", RECPSICOTRABAJADOR_ESTUDIOS, ["Primaria", "Secundaria", "Preparatoria", "Licenciatura", "Posgrado"]);
+                        setSelectValue("RECPSICOTRABAJADOR_ESTUDIOS", RECPSICOTRABAJADOR_ESTUDIOS, [
+                            "Sin formación",
+                            "Primaria Incompleta",
+                            "Primaria Terminada",
+                            "Secundaria Incompleta",
+                            "Secundaria Terminada",
+                            "Preparatoria o bachillerato Incompleta",
+                            "Preparatoria o bachillerato Terminada",
+                            "Técnico Superior Incompleta",
+                            "Técnico Superior Terminada",
+                            "Licenciatura Incompleta",
+                            "Licenciatura Terminada",
+                            "Especialidad Incompleta",
+                            "Especialidad Terminada",
+                            "Maestría Incompleta",
+                            "Maestría Terminada",
+                            "Doctorado Incompleta",
+                            "Doctorado Terminada",
+                            "Postdoctorado Incompleta",
+                            "Postdoctorado Terminada"
+                        ]);                        
                     }
                     
                     // Tipo de puesto
                     if (RECPSICOTRABAJADOR_TIPOPUESTO != null) {
-                        setSelectValue("pregunta5_5", RECPSICOTRABAJADOR_TIPOPUESTO, ["Operativo", "Administrativo", "Gerencial"]);
+                        setSelectValue("RECPSICOTRABAJADOR_TIPOPUESTO", RECPSICOTRABAJADOR_TIPOPUESTO, ["Operativo", "Técnico", "Profesional", "Directivo"]);
                     }
                     
                     // Tipo de contratación
                     if (RECPSICOTRABAJADOR_TIPOCONTRATACION != null) {
-                        setSelectValue("pregunta6_5", RECPSICOTRABAJADOR_TIPOCONTRATACION, ["Temporal", "Permanente"]);
+                        setSelectValue("RECPSICOTRABAJADOR_TIPOCONTRATACION", RECPSICOTRABAJADOR_TIPOCONTRATACION, ["Por obra o proyecto", "Tiempo indeterminado", "Por tiempo determinado (temporal)", "Honorarios"]);
                     }
                     
                     // Tipo de personal
                     if (RECPSICOTRABAJADOR_TIPOPERSONAL != null) {
-                        setSelectValue("pregunta7_5", RECPSICOTRABAJADOR_TIPOPERSONAL, ["Interno", "Externo"]);
+                        setSelectValue("RECPSICOTRABAJADOR_TIPOPERSONAL", RECPSICOTRABAJADOR_TIPOPERSONAL, ["Sindicalizado", "Confianza", "Ninguno"]);
                     }
                     
                     // Tipo de jornada
                     if (RECPSICOTRABAJADOR_TIPOJORNADA != null) {
-                        setSelectValue("pregunta8_5", RECPSICOTRABAJADOR_TIPOJORNADA, ["Matutina", "Vespertina", "Nocturna", "Mixta"]);
+                        setSelectValue("RECPSICOTRABAJADOR_TIPOJORNADA", RECPSICOTRABAJADOR_TIPOJORNADA, ["Fijo nocturno (entre las 20:00 y 6:00 hrs)", "Fijo diurno (entre las 6:00 y 20:00 hrs)", "Fijo mixto (combinación de nocturno y diurno)"]);
                     }
                     
                     // Rotación de turnos
                     if (RECPSICOTRABAJADOR_ROTACIONTURNOS != null) {
-                        setSelectValue("pregunta9_5", RECPSICOTRABAJADOR_ROTACIONTURNOS, ["Si", "No"]);
+                        setSelectValue("RECPSICOTRABAJADOR_ROTACIONTURNOS", RECPSICOTRABAJADOR_ROTACIONTURNOS, ["Si", "No"]);
                     }
                     
                     // Tiempo en el puesto
                     if (RECPSICOTRABAJADOR_TIEMPOPUESTO != null) {
-                        setSelectValue("pregunta10_5", RECPSICOTRABAJADOR_TIEMPOPUESTO, ["6", "12", "24", "36", "48"]);
+                        setSelectValue("RECPSICOTRABAJADOR_TIEMPOPUESTO", RECPSICOTRABAJADOR_TIEMPOPUESTO, [
+                            "Menos de 6 meses",
+                            "Entre 6 meses y 1 año",
+                            "Entre 1 a 4 años",
+                            "Entre 5 a 9 años",
+                            "Entre 10 a 14 años",
+                            "Entre 15 a 19 años",
+                            "Entre 20 a 24 años",
+                            "25 años o más"
+                        ]);
                     }
                     
                     // Tiempo de experiencia laboral
                     if (RECPSICOTRABAJADOR_TIEMPOEXPERIENCIA != null) {
-                        setSelectValue("pregunta11_5", RECPSICOTRABAJADOR_TIEMPOEXPERIENCIA, ["6", "1", "4", "9", "14", "19", "24", "25"]);
+                        setSelectValue("RECPSICOTRABAJADOR_TIEMPOEXPERIENCIA", RECPSICOTRABAJADOR_TIEMPOEXPERIENCIA, [
+                            "Menos de 6 meses",
+                            "Entre 6 meses y 1 año",
+                            "Entre 1 a 4 años",
+                            "Entre 5 a 9 años",
+                            "Entre 10 a 14 años",
+                            "Entre 15 a 19 años",
+                            "Entre 20 a 24 años",
+                            "25 años o más"
+                        ]);
                     }
                     
                     

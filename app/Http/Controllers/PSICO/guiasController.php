@@ -64,13 +64,12 @@ class guiasController extends Controller
         return response()->json(['explicaciones' => $explicaciones]);
     }
 
-
     public function consultarDatosTrabajador(Request $request) {
         $idTrabajador = $request->input('id_trabajador');
 
         $trabajador = DB::select("
-            SELECT RECPSICOTRABAJADOR_NOMBRE, RECPSICOTRABAJADOR_GENERO, RECPSICOTRABAJADOR_CORREO
-            FROM recopsicotrabajadores
+            SELECT r.RECPSICOTRABAJADOR_NOMBRE RECPSICOTRABAJADOR_NOMBRE, r.RECPSICOTRABAJADOR_GENERO RECPSICOTRABAJADOR_GENERO, r.RECPSICOTRABAJADOR_CORREO RECPSICOTRABAJADOR_CORREO, p.TRABAJADOR_ESTADOCONTESTADO TRABAJADOR_ESTADOCONTESTADO
+            FROM recopsicotrabajadores r LEFT JOIN proyectotrabajadores p ON r.ID_RECOPSICOTRABAJADOR = p.TRABAJADOR_ID
             WHERE ID_RECOPSICOTRABAJADOR = :idTrabajador
         ", ['idTrabajador' => $idTrabajador]);
 
@@ -84,6 +83,7 @@ class guiasController extends Controller
     public function guardarFotoRecpsico(Request $request)
     {
         $idTrabajador = $request->input('trabajadorId');
+        $tipoFoto = $request->input('tipo');
 
         // Buscar el reconocimiento psicológico del trabajador
         $recpsico = DB::selectOne("
@@ -100,7 +100,13 @@ class guiasController extends Controller
                 $extension = $foto->getClientOriginalExtension();
                 $nombreArchivo = time() . '.' . $extension;
 
-                $ruta = $foto->storeAs('evidencias_psico/' . $recpsicoId . '/ONLINE', $idTrabajador . '_preguia.' . $extension);
+                if ($tipoFoto == 1) {
+                    $ruta = $foto->storeAs('evidencias_psico/' . $recpsicoId . '/ONLINE', $idTrabajador . '_preguia.' . $extension);
+                    $campoFoto = 'RECPSICO_FOTOPREGUIA';
+                } else {
+                    $ruta = $foto->storeAs('evidencias_psico/' . $recpsicoId . '/ONLINE', $idTrabajador . '_postguia.' . $extension);
+                    $campoFoto = 'RECPSICO_FOTOPOSTGUIA';
+                }
 
                 // Verificar si ya existe un registro para el trabajador en la tabla recopsicoFotosTrabajadores
                 $fotoTrabajador = DB::table('recopsicoFotosTrabajadores')
@@ -113,7 +119,7 @@ class guiasController extends Controller
                         ->where('RECPSICO_TRABAJADOR', $idTrabajador)
                         ->update([
                             'RECPSICO_ID' => $recpsicoId,
-                            'RECPSICO_FOTOPREGUIA' => $ruta,
+                            $campoFoto => $ruta,
                             'updated_at' => now()
                         ]);
 
@@ -325,9 +331,19 @@ class guiasController extends Controller
     
                     return response()->json(['mensaje' => 'Registro actualizado exitosamente']);
                 } else {
-                    DB::table('recopsicoTrabajadoresRespuestas')->insert([
+                    DB::table('recopsicoguia_5')->insert([
                         'RECPSICO_TRABAJADOR' => $request->input('TRABAJADOR_ID'),
-                        'RECPSICO_GUIAIII_RESPUESTAS' => $jsonDatos3,
+                        'RECPSICOTRABAJADOR_GENERO' => $request->input('RECPSICOTRABAJADOR_GENERO'),
+                        'RECPSICOTRABAJADOR_EDAD' => $request->input('RECPSICOTRABAJADOR_EDAD'),
+                        'RECPSICOTRABAJADOR_ESTADOCIVIL' => $request->input('RECPSICOTRABAJADOR_ESTADOCIVIL'),
+                        'RECPSICOTRABAJADOR_ESTUDIOS' => $request->input('RECPSICOTRABAJADOR_ESTUDIOS'),
+                        'RECPSICOTRABAJADOR_TIPOPUESTO' => $request->input('RECPSICOTRABAJADOR_TIPOPUESTO'),
+                        'RECPSICOTRABAJADOR_TIPOCONTRATACION' => $request->input('RECPSICOTRABAJADOR_TIPOCONTRATACION'),
+                        'RECPSICOTRABAJADOR_TIPOPERSONAL' => $request->input('RECPSICOTRABAJADOR_TIPOPERSONAL'),
+                        'RECPSICOTRABAJADOR_TIPOJORNADA' => $request->input('RECPSICOTRABAJADOR_TIPOJORNADA'),
+                        'RECPSICOTRABAJADOR_ROTACIONTURNOS' => $request->input('RECPSICOTRABAJADOR_ROTACIONTURNOS'),
+                        'RECPSICOTRABAJADOR_TIEMPOPUESTO' => $request->input('RECPSICOTRABAJADOR_TIEMPOPUESTO'),
+                        'RECPSICOTRABAJADOR_TIEMPOEXPERIENCIA' => $request->input('RECPSICOTRABAJADOR_TIEMPOEXPERIENCIA'),
                         'created_at' => now(),
                         'updated_at' => now(),
                     ]);

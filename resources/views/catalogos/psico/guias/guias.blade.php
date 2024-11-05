@@ -690,6 +690,19 @@
             top: 2px;
             left: 2px;
         }
+
+        #loading {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(255, 255, 255, 0.8);
+            display: flex;
+            justify-content: center; /* Centra horizontalmente */
+            align-items: center; /* Centra verticalmente */
+            z-index: 1000; /* Asegúrate de que esté por encima de otros elementos */
+        }
       
         
     </style>
@@ -706,8 +719,75 @@
         </div>
     </header>
 
+    <div id="loading">
+        <div class="text-center">
+            <div class="spinner-border text-primary mb-3" role="status">
+                <span class="sr-only">Cargando...</span>
+            </div>
+        </div>
+    </div>
 
-    <div class="row">
+    <section id="sectionFinalizado" class="container mt-5 d-none">
+        <div class="row justify-content-center">
+            <div class="col-12 col-md-8">
+                <div class="card text-center">
+                    <div class="card-header" style="background-color: #009bcf; color: #fff;">
+                        <h5 class="card-title">
+                            <i class="fa fa-exclamation-triangle" style="color: #ffcc00;"></i>
+                            FACTORES DE RIESGO PSICOSOCIALES NOM-035-STPS-2018
+                        </h5>
+                    </div>
+                    <div class="card-body">
+                        <h6 class="card-subtitle mb-2 text-muted">Estado: FINALIZADO</h6>
+                        <p class="lead">
+                            <i class="fa fa-check-circle" style="color: #28a745;"></i>
+                            Sus respuestas han sido guardas y enviadas exitosamente.
+                        </p>
+                        <p class="font-weight-bold">Usted ya ha finalizado este cuestionario.</p>
+                        <p class="small text-muted">
+                            <i class="fa fa-phone" style="color: #007bff;"></i>
+                            Cualquier duda o aclaración comuníquese al Tel. 999 357 8332.
+                        </p>
+                    </div>
+                    <div class="card-footer text-muted">
+                        <small>Results In Performance</small>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="sectionExpirado" class="container mt-5 d-none">
+        <div class="row justify-content-center">
+            <div class="col-12 col-md-8">
+                <div class="card text-center">
+                    <div class="card-header" style="background-color: #009bcf; color: #fff;">
+                        <h5 class="card-title">
+                            <i class="fa fa-exclamation-triangle" style="color: #ffcc00;"></i>
+                            FACTORES DE RIESGO PSICOSOCIALES NOM-035-STPS-2018
+                        </h5>
+                    </div>
+                    <div class="card-body">
+                        <h6 class="card-subtitle mb-2 text-muted">Fecha limite superada</h6>
+                        <p class="lead">
+                            <i class="fa fa-exclamation" style="color: #8B0000;"></i>
+                            Ya ha pasado la fecha límite en la que podia contestar este cuestionario.
+                        </p>
+                        <p class="font-weight-bold">Comuniquese con el responsable correspondiente en su centro de trabajo y solicite una extensión de su fecha límite.</p>
+                        <p class="small text-muted">
+                            <i class="fa fa-phone" style="color: #007bff;"></i>
+                            Cualquier duda o aclaración comuníquese al Tel. 999 357 8332.
+                        </p>
+                    </div>
+                    <div class="card-footer text-muted">
+                        <small>Results In Performance</small>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <div class="row" id="contenidoCuestionarios">
         <div class="col-9 mt-3">
             <div class="card-container">
                 <div class="col-12">
@@ -4647,6 +4727,34 @@
             </div>
         </div>
     </div>
+    <div id="fotoFinalModal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="fotoFinalModalLabel"   data-backdrop="static" data-keyboard="false">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-body">
+                    <div id="divFotoFinal" class="text-center">
+                        <form id="form-foto-final" enctype="multipart/form-data">
+                            <input type="hidden" name="_token" value="{{ csrf_token() }}">
+                            <div id="instruccionesFotoFinal" class="text-center">
+                                <p>Antes de finalizar, necesitamos validar su identidad, cuando este listo presione el botón para capturar y guardar su foto</p>
+                            </div>
+                            <button type="button" class="btn btn-warning" id="tomar-foto-final">Tomar foto y finalizar</button>
+                            <div id="videofinal-container"></div>
+                            <input type="file" id="imagenFinal" name="fotofinal" style="display:none;">
+                        </form>
+                    </div>
+
+                    <!-- Spinner de carga -->
+                    <div id="loadingSpinnerFinal" class="text-center" style="display: none;">
+                        <div class="spinner-border mb-3" role="status">
+                            <span class="sr-only">Loading...</span>
+                        </div>
+                            <p>Guardando sus respuestas...</p>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </div>
     <div id="instruccionesModal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="instruccionesModalLabel"   data-backdrop="static" data-keyboard="false">
         <div class="modal-dialog modal-lg">
             <div class="modal-content">
@@ -4701,23 +4809,24 @@
                     <hr>
                     <form enctype="multipart/form-data" method="post" name="guia_5" id="guia_5">
                         {!! csrf_field() !!}
+
                         <div class="col-12">
-                                <input type="hidden" class="form-control" id="GUIAV_ID" name="GUIAV_ID" value="0">
                                 <input type="hidden" class="form-control" id="GUIAV_TRABAJADOR_ID" name="TRABAJADOR_ID" value="0">
                         </div>
                         <!-- Pregunta 1: Sexo -->
                         <div class="form-group">
-                            <label for="RECPSICOTRABAJADOR_GENERO">Sexo:</label>
-                            <select name="RECPSICOTRABAJADOR_GENERO" id="pregunta1_5" class="form-control" required>
-                                <option value="Masculino">Masculino</option>
-                                <option value="Femenino">Femenino</option>
-                            </select>
+                            <label>Sexo:</label>
+                                <select id="RECPSICOTRABAJADOR_GENERO" name="RECPSICOTRABAJADOR_GENERO" class="form-control" required>
+                                    <option value="" disabled selected>Seleccione su sexo</option>
+                                    <option value="Masculino">Masculino</option>
+                                    <option value="Femenino">Femenino</option>
+                                </select>
                         </div>
-
+                      
                         <!-- Pregunta 2: Edad -->
                         <div class="form-group">
                             <label for="RECPSICOTRABAJADOR_EDAD">Edad en años:</label>
-                            <select name="RECPSICOTRABAJADOR_EDAD" id="pregunta2_5" class="form-control" required>
+                            <select name="RECPSICOTRABAJADOR_EDAD" id="RECPSICOTRABAJADOR_EDAD" class="form-control" required>
                                 <option value="" disabled selected>Seleccione su edad</option>
                                 <option value="15">15 - 19</option>
                                 <option value="20">20 - 24</option>
@@ -4737,7 +4846,7 @@
                         <!-- Pregunta 3: Estado civil -->
                         <div class="form-group">
                             <label for="RECPSICOTRABAJADOR_ESTADOCIVIL">Estado civil:</label>
-                            <select name="RECPSICOTRABAJADOR_ESTADOCIVIL" id="pregunta3_5" class="form-control" required>
+                            <select name="RECPSICOTRABAJADOR_ESTADOCIVIL" id="RECPSICOTRABAJADOR_ESTADOCIVIL" class="form-control" required>
                                 <option value="" disabled selected>Seleccione su estado civil</option>
                                 <option value="Casado">Casado</option>
                                 <option value="Soltero">Soltero</option>
@@ -4751,7 +4860,7 @@
                         <!-- Pregunta 4: Nivel de estudios -->
                         <div class="form-group">
                             <label for="RECPSICOTRABAJADOR_ESTUDIOS">Nivel de estudios:</label>
-                            <select name="RECPSICOTRABAJADOR_ESTUDIOS" id="pregunta4_5" class="form-control" required>
+                            <select name="RECPSICOTRABAJADOR_ESTUDIOS" id="RECPSICOTRABAJADOR_ESTUDIOS" class="form-control" required>
                                 <option value="" disabled selected>Seleccione su nivel de estudios</option>
 
                                 <option value="Sin formación">Sin formación</option>
@@ -4789,7 +4898,7 @@
                         <!-- Pregunta 5: Tipo de puesto -->
                         <div class="form-group">
                             <label for="RECPSICOTRABAJADOR_TIPOPUESTO">Tipo de puesto:</label>
-                            <select name="RECPSICOTRABAJADOR_TIPOPUESTO" id="pregunta5_5" class="form-control" required>
+                            <select name="RECPSICOTRABAJADOR_TIPOPUESTO" id="RECPSICOTRABAJADOR_TIPOPUESTO" class="form-control" required>
                                 <option value="" disabled selected>Seleccione su tipo de puesto</option>
                                 <option value="Operativo">Operativo</option>
                                 <option value="Técnico">Técnico</option>
@@ -4801,7 +4910,7 @@
                         <!-- Pregunta 6: Tipo de contratación -->
                         <div class="form-group">
                             <label for="RECPSICOTRABAJADOR_TIPOCONTRATACION">Tipo de contratación:</label>
-                            <select name="RECPSICOTRABAJADOR_TIPOCONTRATACION" id="pregunta6_5" class="form-control" required>
+                            <select name="RECPSICOTRABAJADOR_TIPOCONTRATACION" id="RECPSICOTRABAJADOR_TIPOCONTRATACION" class="form-control" required>
                                 <option value="" disabled selected>Seleccione su tipo de contratación</option>
                                 <option value="Por obra o proyecto">Por obra o proyecto</option>
                                 <option value="Tiempo indeterminado">Tiempo indeterminado</option>
@@ -4813,7 +4922,7 @@
                          <!-- Pregunta 7: Tipo personal -->
                          <div class="form-group">
                             <label for="RECPSICOTRABAJADOR_TIPOPERSONAL">Tipo de personal:</label>
-                            <select name="RECPSICOTRABAJADOR_TIPOPERSONAL" id="pregunta7_5" class="form-control" required>
+                            <select name="RECPSICOTRABAJADOR_TIPOPERSONAL" id="RECPSICOTRABAJADOR_TIPOPERSONAL" class="form-control" required>
                                 <option value="" disabled selected>Seleccione su tipo de personal</option>
                                 <option value="Sindicalizado">Sindicalizado</option>
                                 <option value="Confianza">Confianza</option>
@@ -4825,7 +4934,7 @@
                         <!-- Pregunta 8: Tipo de jornada -->
                         <div class="form-group">
                             <label for="RECPSICOTRABAJADOR_TIPOJORNADA">Tipo de jornada de trabajo:</label>
-                            <select name="RECPSICOTRABAJADOR_TIPOJORNADA" id="pregunta8_5" class="form-control" required>
+                            <select name="RECPSICOTRABAJADOR_TIPOJORNADA" id="RECPSICOTRABAJADOR_TIPOJORNADA" class="form-control" required>
                                 <option value="" disabled selected>Seleccione su tipo de jornada</option>
                                 <option value="Fijo nocturno (entre las 20:00 y 6:00 hrs)">Fijo nocturno (entre las 20:00 y 6:00 hrs)</option>
                                 <option value="Fijo diurno (entre las 6:00 y 20:00 hrs)">Fijo diurno (entre las 6:00 y 20:00 hrs)</option>
@@ -4836,7 +4945,7 @@
                         <!-- Pregunta 9: Rotación de turnos -->
                         <div class="form-group">
                             <label for="RECPSICOTRABAJADOR_ROTACIONTURNOS">Realiza rotación de turnos:</label>
-                            <select name="RECPSICOTRABAJADOR_ROTACIONTURNOS" id="pregunta9_5" class="form-control" required>
+                            <select name="RECPSICOTRABAJADOR_ROTACIONTURNOS" id="RECPSICOTRABAJADOR_ROTACIONTURNOS" class="form-control" required>
                                 <option value="" disabled selected>Seleccione una opción</option>
                                 <option value="Si">Sí</option>
                                 <option value="No">No</option>
@@ -4846,7 +4955,7 @@
                          <!-- Pregunta 10: Tiempo en el puesto actual -->
                          <div class="form-group">
                             <label for="RECPSICOTRABAJADOR_TIEMPOPUESTO">Tiempo en el puesto actual:</label>
-                            <select name="RECPSICOTRABAJADOR_TIEMPOPUESTO" id="pregunta10_5" class="form-control" required>
+                            <select name="RECPSICOTRABAJADOR_TIEMPOPUESTO" id="RECPSICOTRABAJADOR_TIEMPOPUESTO" class="form-control" required>
                                 <option value="" disabled selected>Seleccione el tiempo en el puesto actual</option>
                                 <option value="Menos de 6 meses">Menos de 6 meses</option>
                                 <option value="Entre 6 meses y 1 año">Entre 6 meses y 1 año</option>
@@ -4862,7 +4971,7 @@
                           <!-- Pregunta 11: Tiempo experiancia laboral -->
                           <div class="form-group">
                             <label for="RECPSICOTRABAJADOR_TIEMPOEXPERIENCIA">Tiempo experiencia laboral:</label>
-                            <select name="RECPSICOTRABAJADOR_TIEMPOEXPERIENCIA" id="pregunta11_5" class="form-control" required>
+                            <select name="RECPSICOTRABAJADOR_TIEMPOEXPERIENCIA" id="RECPSICOTRABAJADOR_TIEMPOEXPERIENCIA" class="form-control" required>
                                 <option value="" disabled selected>Seleccione el tiempo de experiencia laboral</option>
                                 <option value="Menos de 6 meses">Menos de 6 meses</option>
                                 <option value="Entre 6 meses y 1 año">Entre 6 meses y 1 año</option>
@@ -4877,7 +4986,7 @@
 
                         <!-- Botón de envío -->
                         <div class="form-group text-center">
-                            <button type="button" class="btn btn-success" id="guardar_guia5" onclick="guardarGuiaV()">Enviar</button>
+                            <button type="submit" class="btn btn-success" id="guardar_guia5">Enviar</button>
                         </div>
                     </form>
                 </div>
@@ -4891,18 +5000,20 @@
         var requiereGuia2 = <?php echo json_encode($guia2); ?>;
         var requiereGuia3 = <?php echo json_encode($guia3); ?>;
         var requiereGuia5 = <?php echo json_encode($guia5); ?>;
+
+        var estadoCuestionario = '';
+        var fechalimite = <?php echo json_encode($fechalimite); ?>;
+
         var id = <?php echo json_encode($id); ?>;
 
         document.addEventListener('DOMContentLoaded', function() {
             $("#TRABAJADOR_ID").val(id);
-// 
-            mostrarGuias(requiereGuia1, requiereGuia2, requiereGuia3);
+            consultarDatos();
             cargarExplicaciones();
             botonradio('radio-group');
             scrolldatos();
-            consultarDatos();
             consultarRespuestasGuardadas();
-            // consultarRespuestasGuia5(requiereGuia5, id);
+            consultarRespuestasGuia5(requiereGuia5, id);
         });
     </script>
 
