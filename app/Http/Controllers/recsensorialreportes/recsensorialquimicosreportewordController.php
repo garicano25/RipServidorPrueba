@@ -182,7 +182,7 @@ class recsensorialquimicosreportewordController extends Controller
      * @param  int  $recsensorial_id
      * @return \Illuminate\Http\Response
      */
-    public function recsensorialquimicosreporte1word($recsensorial_id, $tipo, $numeroVersiones)
+    public function recsensorialquimicosreporte1word($recsensorial_id, $tipo, $numeroVersiones, $numerodescarga)
     {
         $No = 1;
 
@@ -2131,11 +2131,20 @@ class recsensorialquimicosreportewordController extends Controller
 
 
 
-                return $rutaZip; 
 
+                if ($numerodescarga == 1) {
+                    return response()->download($zipFilePath)->deleteFileAfterSend(false);
+                } else {
+                    return $rutaZip;
+                }
+
+                
+
+
+               //return $rutaZip; 
 
                 // Descargar el archivo ZIP después de crearlo y guardarlo en storage
-                // return response()->download($zipFilePath)->deleteFileAfterSend(false);
+                //return response()->download($zipFilePath)->deleteFileAfterSend(false);
             
         }
 

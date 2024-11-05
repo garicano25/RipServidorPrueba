@@ -826,7 +826,7 @@ Route::get('recsensorialreporte1wordcliente/{recsensorial_id}', ['as' => 'recsen
 
 // Route::get('recsensorialquimicosreporte1word/{recsensorial_id}/{tipo}', ['as' => 'recsensorialreporte1.recsensorialquimicosreporte1word', 'uses' => 'recsensorialreportes\recsensorialquimicosreportewordController@recsensorialquimicosreporte1word']);
 
-Route::get('recsensorialquimicosreporte1word/{recsensorial_id}/{tipo}/{numeroVersiones}', ['as' => 'recsensorialreporte1.recsensorialquimicosreporte1word', 'uses' => 'recsensorialreportes\recsensorialquimicosreportewordController@recsensorialquimicosreporte1word']);
+Route::get('recsensorialquimicosreporte1word/{recsensorial_id}/{tipo}/{numeroVersiones}/{numerodescarga}', ['as' => 'recsensorialreporte1.recsensorialquimicosreporte1word', 'uses' => 'recsensorialreportes\recsensorialquimicosreportewordController@recsensorialquimicosreporte1word']);
 
 Route::get('recsensorialquimicosreporte1wordcliente/{recsensorial_id}', ['as' => 'recsensorialreporte1.recsensorialquimicosreporte1wordcliente', 'uses' => 'recsensorialreportes\recsensorialquimicosreportewordController@recsensorialquimicosreporte1wordcliente']);
 
@@ -836,7 +836,7 @@ Route::get('ejemploCargarDocx', ['as' => 'recsensorialreporte1.ejemploCargarDocx
 
 
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-//////////////////////////////////////////////////PROYECTOS////////////////////////////////////////////////////
+//////////////////////////////////////////////////PROYECTOS///////////////////////////////////////////////////////////////////
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 Route::resource('proyectos', 'proyecto\proyectoController');

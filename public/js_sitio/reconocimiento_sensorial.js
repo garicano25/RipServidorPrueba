@@ -3146,7 +3146,122 @@ $("#boton_descargarquimicospdf").click(function () {
 
 
 
-function reporte(recsensorial_id, recsensorial_tipo, boton, tipo) {
+// function reporte(recsensorial_id, recsensorial_tipo, boton, tipo) {
+//     verificarRevision().then(response => {
+//         if (nuevaRevision === 0) {
+//             swal({
+//                 title: "No disponible",
+//                 text: response.mensaje,
+//                 type: "warning",
+//                 showConfirmButton: true,
+//                 confirmButtonText: "Entendido"
+//             });
+//             return; 
+//         }
+
+//         let tipodoc = parseInt(tipo);
+//         let tipoDescarga = 'físicos';
+//         let nombreInstalacion = $('#recsensorial_instalacion').val();
+
+//         if (parseInt(recsensorial_tipo) === 2) {
+//             tipoDescarga = 'químicos';
+//         }
+
+//         swal({
+//             title: "¿Generar nueva revisión?",
+//             text: "Nueva revisión",
+//             type: "info",
+//             showCancelButton: true,
+//             confirmButtonColor: "#DD6B55",
+//             confirmButtonText: "Generar!",
+//             cancelButtonText: "Cancelar!",
+//             closeOnConfirm: false,
+//             closeOnCancel: false
+//         },
+//         function (isConfirm) {
+//             if (isConfirm) {
+//                 $('#boton_descargarquimicosdoc_final').html('<span class="btn-label"><i class="fa fa-spin fa-spinner"></i></span>Copiando revisión, por favor espere...');
+//                 $('#boton_descargarquimicosdoc_final').attr('disabled', true);
+
+//                 swal({
+//                     title: "Generando revisión",
+//                     text: 'Espere un momento, creando revisión...',
+//                     type: "info",
+//                     showConfirmButton: false,
+//                     allowOutsideClick: false
+//                 });
+
+//                 if (tipodoc === 1) {
+//                     descargarDocumento(recsensorial_id, recsensorial_tipo, tipodoc, nombreInstalacion);
+//                 } else {
+//                     $.ajax({
+//                         url: '/recsensorial',
+//                         type: 'POST',
+//                         data: {
+//                             opcion: 8,
+//                             RECONOCIMIENTO_ID: recsensorial_id,
+// 							nombreInstalacion: nombreInstalacion, 
+//                             _token: $('meta[name="csrf-token"]').attr('content')
+//                         },
+//                         success: function(response) {
+//                             if (response.MSJ === 'BIEN') {
+//                                 nuevaRevision = 0;
+//                              descargarDocumento(recsensorial_id, recsensorial_tipo, tipodoc, nombreInstalacion);
+//                                 finalizarProceso();
+//                                 tabla_ControlCambios(); 
+//                                 bloquearBotones(); 
+//                                 swal.close();
+//                             } else if (response.MSJ === 'SOLICITUD ABIERTA') {
+//                                 swal("Ya existe una solicitud abierta", "", "warning");
+//                                 finalizarProceso();
+//                             }
+//                         },
+//                         error: function(error) {
+//                             swal("Error", "No se pudo crear el registro. Intente nuevamente.", "error");
+//                             finalizarProceso();
+//                         }
+//                     });
+//                 }
+//             } else {
+//                 swal({
+//                     title: "Cancelado",
+//                     text: "Acción cancelada",
+//                     type: "error",
+//                     buttons: {
+//                         visible: false,
+//                     },
+//                     timer: 500,
+//                     showConfirmButton: false
+//                 });
+//             }
+//         });
+//     }).catch(error => {
+//         swal("Error", error, "error");
+//     });
+// }
+
+
+
+
+
+function reporte(recsensorial_id, recsensorial_tipo, boton, tipo,version) {
+    let tipodoc = parseInt(tipo);
+    let nombreInstalacion = $('#recsensorial_instalacion').val();
+
+    if (tipodoc === 3) {
+        // Configuración para descarga directa (numerodescarga = 1)
+        swal({
+            title: "Generando informe",
+            text: 'Espere un momento, creando el informe...',
+            type: "info",
+            showConfirmButton: false,
+            allowOutsideClick: false
+        });
+
+        descargarDocumento(recsensorial_id, recsensorial_tipo, 2, nombreInstalacion, 1,version); // numerodescarga = 1 para descarga directa
+        return;
+    }
+
     verificarRevision().then(response => {
         if (nuevaRevision === 0) {
             swal({
@@ -3156,13 +3271,10 @@ function reporte(recsensorial_id, recsensorial_tipo, boton, tipo) {
                 showConfirmButton: true,
                 confirmButtonText: "Entendido"
             });
-            return; 
+            return;
         }
 
-        let tipodoc = parseInt(tipo);
         let tipoDescarga = 'físicos';
-        let nombreInstalacion = $('#recsensorial_instalacion').val();
-
         if (parseInt(recsensorial_tipo) === 2) {
             tipoDescarga = 'químicos';
         }
@@ -3173,7 +3285,7 @@ function reporte(recsensorial_id, recsensorial_tipo, boton, tipo) {
             type: "info",
             showCancelButton: true,
             confirmButtonColor: "#DD6B55",
-            confirmButtonText: "Descargar!",
+            confirmButtonText: "Generar!",
             cancelButtonText: "Cancelar!",
             closeOnConfirm: false,
             closeOnCancel: false
@@ -3192,24 +3304,23 @@ function reporte(recsensorial_id, recsensorial_tipo, boton, tipo) {
                 });
 
                 if (tipodoc === 1) {
-                    descargarDocumento(recsensorial_id, recsensorial_tipo, tipodoc, nombreInstalacion);
-                } else {
+                    descargarDocumento(recsensorial_id, recsensorial_tipo, tipodoc, nombreInstalacion, 1); // numerodescarga = 1
+                } else if (tipodoc === 2) {
                     $.ajax({
                         url: '/recsensorial',
                         type: 'POST',
                         data: {
                             opcion: 8,
                             RECONOCIMIENTO_ID: recsensorial_id,
-							nombreInstalacion: nombreInstalacion, 
+                            nombreInstalacion: nombreInstalacion,
                             _token: $('meta[name="csrf-token"]').attr('content')
                         },
                         success: function(response) {
                             if (response.MSJ === 'BIEN') {
                                 nuevaRevision = 0;
-                                descargarDocumento(recsensorial_id, recsensorial_tipo, tipodoc, nombreInstalacion);
                                 finalizarProceso();
-                                tabla_ControlCambios(); 
-                                bloquearBotones(); 
+                                tabla_ControlCambios();
+                                bloquearBotones();
                                 swal.close();
                             } else if (response.MSJ === 'SOLICITUD ABIERTA') {
                                 swal("Ya existe una solicitud abierta", "", "warning");
@@ -3241,13 +3352,10 @@ function reporte(recsensorial_id, recsensorial_tipo, boton, tipo) {
 }
 
 
-
 function finalizarProceso() {
     $('#boton_descargarquimicosdoc_final').html('Crear nueva revisión');
     $('#boton_descargarquimicosdoc_final').attr('disabled', false);
 }
-
-
 
 
 let nuevaRevision = 1; 
@@ -3270,8 +3378,6 @@ function verificarRevision() {
         });
     });
 }
-
-
 
 
 let bloqueadoGlobal = 0;
@@ -3371,10 +3477,6 @@ function desbloquearBotones() {
 }
 
 
-
-
-
-
 function cancelarrevision(idControlCambio, checkbox) {
     const isChecked = checkbox.checked;
     const confirmText = isChecked 
@@ -3438,54 +3540,55 @@ function cancelarrevision(idControlCambio, checkbox) {
 
 
 
-function descargarDocumento(recsensorial_id, recsensorial_tipo, tipodoc, nombreInstalacion) {
-				let numeroVersiones = 0;
+function descargarDocumento(recsensorial_id, recsensorial_tipo, tipodoc, nombreInstalacion, numerodescarga,version) {
+    let numeroVersiones = 0;
 
-				let url = "";
-				if (parseInt(recsensorial_tipo) === 1) {
-					url = parseInt($("#recsensorial_tipocliente").val()) === 0 ?
-						`/recsensorialreporte1wordcliente/${recsensorial_id}/${tipodoc}/${numeroVersiones}` :
-						`/recsensorialreporte1word/${recsensorial_id}/${tipodoc}/${numeroVersiones}`;
-				} else {
-					url = parseInt($("#recsensorial_tipocliente").val()) === 0 ?
-						`/recsensorialquimicosreporte1wordcliente/${recsensorial_id}/${tipodoc}/${numeroVersiones}` :
-						`/recsensorialquimicosreporte1word/${recsensorial_id}/${tipodoc}/${numeroVersiones}`;
-				}
+    let url = "";
+    if (parseInt(recsensorial_tipo) === 1) {
+        url = parseInt($("#recsensorial_tipocliente").val()) === 0 ?
+            `/recsensorialreporte1wordcliente/${recsensorial_id}/${tipodoc}/${numeroVersiones}/${numerodescarga}` :
+            `/recsensorialreporte1word/${recsensorial_id}/${tipodoc}/${numeroVersiones}/${numerodescarga}`;
+    } else {
+        url = parseInt($("#recsensorial_tipocliente").val()) === 0 ?
+            `/recsensorialquimicosreporte1wordcliente/${recsensorial_id}/${tipodoc}/${numeroVersiones}/${numerodescarga}` :
+            `/recsensorialquimicosreporte1word/${recsensorial_id}/${tipodoc}/${numeroVersiones}/${numerodescarga}`;
+    }
 
-				let ext = tipodoc === 1 ? '.docx' : '.zip';
+    let ext = tipodoc === 1 ? '.docx' : '.zip';
 
-				$.ajax({
-					url: url,
-					method: 'GET',
-					xhrFields: {
-						responseType: 'blob'
-					},
-					success: function (data) {
-						let a = document.createElement('a');
-						let downloadUrl = window.URL.createObjectURL(data);
-						a.href = downloadUrl;
-						a.download = `Informe - Reconocimiento de Químicos - ${nombreInstalacion}${ext}`;
-						document.body.append(a);
-						a.click();
-						a.remove();
-						window.URL.revokeObjectURL(downloadUrl);
+    $.ajax({
+        url: url,
+        method: 'GET',
+        xhrFields: {
+            responseType: 'blob'
+        },
+        success: function (data) {
+            let a = document.createElement('a');
+            let downloadUrl = window.URL.createObjectURL(data);
+            a.href = downloadUrl;
+            a.download = `Informe - Reconocimiento de Químicos - ${nombreInstalacion}_V${version}${ext}`;
+            document.body.append(a);
+            a.click();
+            a.remove();
+            window.URL.revokeObjectURL(downloadUrl);
 
-						if (parseInt(recsensorial_tipo) !== 1 && parseInt($("#recsensorial_tipocliente").val()) === 1) {
-							tabla_recsensorial.ajax.url('/tablarecsensorial').load();
-							$('#finalizarQuimico').fadeIn(0);
-						}
-						swal.close(); 
-					},
-					error: function () {
-						swal({
-							title: "Hubo un problema al generar el documento.",
-							text: "Intentelo de nuevo, o comuniquelo con el responsable",
-							type: "error",
-							showConfirmButton: true
-						});
-					}
-				});
+            if (parseInt(recsensorial_tipo) !== 1 && parseInt($("#recsensorial_tipocliente").val()) === 1) {
+                tabla_recsensorial.ajax.url('/tablarecsensorial').load();
+                $('#finalizarQuimico').fadeIn(0);
+            }
+            swal.close(); 
+        },
+        error: function () {
+            swal({
+                title: "Hubo un problema al generar el documento.",
+                text: "Intentelo de nuevo, o comuniquelo con el responsable",
+                type: "error",
+                showConfirmButton: true
+            });
+        }
+    });
 }
+
 
 
 
@@ -7795,19 +7898,31 @@ function activarBloqueoDataTables() {
 
 
 
-function descargarZIP() {
-    // mostrar PDF
-    $('#tabla_control_cambios').on('click', 'td.descargar', function () {
+// function descargarZIP() {
+//     $('#tabla_control_cambios').on('click', 'td.descargar', function () {
 
 
-        var tr = $(this).closest('tr');
-        var row = tabla_control_cambios.row(tr);
+//         var tr = $(this).closest('tr');
+//         var row = tabla_control_cambios.row(tr);
 
-        window.open('/verZIP/1/' + row.data().ID_CONTROL_CAMBIO);
+//         window.open('/verZIP/1/' + row.data().ID_CONTROL_CAMBIO);
 
 
-    });
-};
+//     });
+// };
+
+
+
+$('#tabla_control_cambios tbody').on('click', 'td>button.descargar', function () {
+	var button = $(this).find('button');
+
+	if (!button.attr('onclick')) {
+		var tr = $(this).closest('tr');
+		var row = tabla_control_cambios.row(tr);
+
+		window.open('/verZIP/1/' + row.data().ID_CONTROL_CAMBIO);
+	}
+});
 
 
 
@@ -12399,7 +12514,7 @@ $(document).ready(function () {
 $('#tab4_control_cambios').click(function (e) {
 
 	tabla_ControlCambios()
-    descargarZIP();
+    // descargarZIP();
 	verificarRevision();
 })
 
