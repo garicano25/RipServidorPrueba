@@ -3147,87 +3147,130 @@ $("#boton_descargarquimicospdf").click(function () {
 
 
 function reporte(recsensorial_id, recsensorial_tipo, boton, tipo) {
-    let tipodoc = parseInt(tipo);
-    let tipoDescarga = 'físicos';
-    let nombreInstalacion = $('#recsensorial_instalacion').val();
-
-    if (parseInt(recsensorial_tipo) === 2) {
-        tipoDescarga = 'químicos';
-    }
-
-    swal({
-        title: "¿Generar nueva revisión?",
-        text: "Nueva revisión",
-        type: "info",
-        showCancelButton: true,
-        confirmButtonColor: "#DD6B55",
-        confirmButtonText: "Descargar!",
-        cancelButtonText: "Cancelar!",
-        closeOnConfirm: false,
-        closeOnCancel: false
-    },
-    function (isConfirm) {
-        if (isConfirm) {
-            $('#boton_descargarquimicosdoc_final').html('<span class="btn-label"><i class="fa fa-spin fa-spinner"></i></span>Copiando revisión, por favor espere...');
-            $('#boton_descargarquimicosdoc_final').attr('disabled', true);
-
+    verificarRevision().then(response => {
+        if (nuevaRevision === 0) {
             swal({
-                title: "Generando revisión",
-                text: 'Espere un momento, creando revisión...',
-                type: "info",
-                showConfirmButton: false,
-                allowOutsideClick: false
+                title: "No disponible",
+                text: response.mensaje,
+                type: "warning",
+                showConfirmButton: true,
+                confirmButtonText: "Entendido"
             });
+            return; 
+        }
 
-            if (tipodoc === 1) {
-                descargarDocumento(recsensorial_id, recsensorial_tipo, tipodoc, nombreInstalacion);
-            } else {
-                $.ajax({
-                    url: '/recsensorial',
-                    type: 'POST',
-                    data: {
-                        opcion: 8,
-                        RECONOCIMIENTO_ID: recsensorial_id,
-						
-                        _token: $('meta[name="csrf-token"]').attr('content')
-                    },
-                    success: function(response) {
-                        if (response.MSJ === 'BIEN') {
-                            descargarDocumento(recsensorial_id, recsensorial_tipo, tipodoc, nombreInstalacion);
-                            finalizarProceso();
-                            tabla_ControlCambios(); 
-                            bloquearBotones(); 
-                            swal.close();
-                        } else if (response.MSJ === 'SOLICITUD ABIERTA') {
-                            swal("Ya existe una solicitud abierta", "", "warning");
+        let tipodoc = parseInt(tipo);
+        let tipoDescarga = 'físicos';
+        let nombreInstalacion = $('#recsensorial_instalacion').val();
+
+        if (parseInt(recsensorial_tipo) === 2) {
+            tipoDescarga = 'químicos';
+        }
+
+        swal({
+            title: "¿Generar nueva revisión?",
+            text: "Nueva revisión",
+            type: "info",
+            showCancelButton: true,
+            confirmButtonColor: "#DD6B55",
+            confirmButtonText: "Descargar!",
+            cancelButtonText: "Cancelar!",
+            closeOnConfirm: false,
+            closeOnCancel: false
+        },
+        function (isConfirm) {
+            if (isConfirm) {
+                $('#boton_descargarquimicosdoc_final').html('<span class="btn-label"><i class="fa fa-spin fa-spinner"></i></span>Copiando revisión, por favor espere...');
+                $('#boton_descargarquimicosdoc_final').attr('disabled', true);
+
+                swal({
+                    title: "Generando revisión",
+                    text: 'Espere un momento, creando revisión...',
+                    type: "info",
+                    showConfirmButton: false,
+                    allowOutsideClick: false
+                });
+
+                if (tipodoc === 1) {
+                    descargarDocumento(recsensorial_id, recsensorial_tipo, tipodoc, nombreInstalacion);
+                } else {
+                    $.ajax({
+                        url: '/recsensorial',
+                        type: 'POST',
+                        data: {
+                            opcion: 8,
+                            RECONOCIMIENTO_ID: recsensorial_id,
+							nombreInstalacion: nombreInstalacion, 
+                            _token: $('meta[name="csrf-token"]').attr('content')
+                        },
+                        success: function(response) {
+                            if (response.MSJ === 'BIEN') {
+                                nuevaRevision = 0;
+                                descargarDocumento(recsensorial_id, recsensorial_tipo, tipodoc, nombreInstalacion);
+                                finalizarProceso();
+                                tabla_ControlCambios(); 
+                                bloquearBotones(); 
+                                swal.close();
+                            } else if (response.MSJ === 'SOLICITUD ABIERTA') {
+                                swal("Ya existe una solicitud abierta", "", "warning");
+                                finalizarProceso();
+                            }
+                        },
+                        error: function(error) {
+                            swal("Error", "No se pudo crear el registro. Intente nuevamente.", "error");
                             finalizarProceso();
                         }
+                    });
+                }
+            } else {
+                swal({
+                    title: "Cancelado",
+                    text: "Acción cancelada",
+                    type: "error",
+                    buttons: {
+                        visible: false,
                     },
-                    error: function(error) {
-                        swal("Error", "No se pudo crear el registro. Intente nuevamente.", "error");
-                        finalizarProceso();
-                    }
+                    timer: 500,
+                    showConfirmButton: false
                 });
             }
-        } else {
-            swal({
-                title: "Cancelado",
-                text: "Acción cancelada",
-                type: "error",
-                buttons: {
-                    visible: false,
-                },
-                timer: 500,
-                showConfirmButton: false
-            });
-        }
+        });
+    }).catch(error => {
+        swal("Error", error, "error");
     });
 }
+
+
 
 function finalizarProceso() {
     $('#boton_descargarquimicosdoc_final').html('Crear nueva revisión');
     $('#boton_descargarquimicosdoc_final').attr('disabled', false);
 }
+
+
+
+
+let nuevaRevision = 1; 
+
+function verificarRevision() {
+    return new Promise((resolve, reject) => {
+        $.ajax({
+            type: "get",
+            dataType: "json",
+            url: "/verificarRevision/" + $('#recsensorial_id').val(),
+            data: {},
+            cache: false,
+            success: function(response) {
+                nuevaRevision = response.permitido ? 1 : 0;
+                resolve(response); 
+            },
+            error: function() {
+                reject("No se pudo verificar la revisión. Intente nuevamente.");
+            }
+        });
+    });
+}
+
 
 
 
@@ -3326,6 +3369,71 @@ function desbloquearBotones() {
         }
     });
 }
+
+
+
+
+
+
+function cancelarrevision(idControlCambio, checkbox) {
+    const isChecked = checkbox.checked;
+    const confirmText = isChecked 
+        ? "¡Confirme que desea cancelar!" 
+        : "¿Quitar cancelación?";
+    const alertText = "Última revisión";
+    const cancelado = isChecked ? 1 : 0;
+    const bloqueado = isChecked ? 0 : 1;
+
+    swal({
+        title: confirmText,
+        text: alertText,
+        type: "warning",
+        showCancelButton: true,
+        confirmButtonColor: "#DD6B55",
+        confirmButtonText: "Aceptar!",
+        cancelButtonText: "Cancelar!",
+        closeOnConfirm: false,
+        closeOnCancel: false
+    }, function(isConfirm) {
+        if (isConfirm) {
+            $.ajax({
+                url: '/actualizarEstadoCancelado',
+                type: 'POST',
+                data: {
+                    id: idControlCambio,
+                    cancelado: cancelado,
+                    bloqueado: bloqueado,
+                    _token: $('meta[name="csrf-token"]').attr('content')
+                },
+                success: function(response) {
+                    if (response.success) {
+                        swal("Éxito", response.message, "success");
+
+                        bloqueadoGlobal = bloqueado;
+                        if (bloqueado === 0) {
+                            desbloquearBotones();
+                        } else {
+                            bloquearBotones();
+                        }
+
+                        tabla_ControlCambios();
+                    } else {
+                        swal("Error", response.message, "error");
+                        checkbox.checked = !isChecked; 
+                    }
+                },
+                error: function() {
+                    swal("Error", "No se pudo actualizar el estado. Intente nuevamente.", "error");
+                    checkbox.checked = !isChecked; 
+                }
+            });
+        } else {
+            checkbox.checked = !isChecked; 
+            swal.close(); 
+        }
+    });
+}
+
 
 
 
@@ -12128,17 +12236,16 @@ function tabla_ControlCambios() {
 						"data": "REALIZADO_POR",
 						"defaultContent": "-"
 					},
-					{
-						"data": "CAMBIOS",
-						"defaultContent": "-"
-					},
+					
 					{
 						"data": "FECHA_REALIZADO",
 						"defaultContent": "-"
 					},
 					{
-						"data": "CANCELADO",
-						"defaultContent": "-"
+						data: "checkbox_cancelado",
+						defaultContent: "-",
+						orderable: false,
+						// className: 'checkbox_cancelado',
 					},
 					{
 						"data": "CANCELADO_POR",
@@ -12293,7 +12400,7 @@ $('#tab4_control_cambios').click(function (e) {
 
 	tabla_ControlCambios()
     descargarZIP();
-
+	verificarRevision();
 })
 
 

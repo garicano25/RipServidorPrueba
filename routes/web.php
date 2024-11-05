@@ -340,6 +340,9 @@ Route::get('TablaControlCambios/{id}', ['as' => 'TablaControlCambios', 'uses' =>
 
 Route::get('verificarBloqueado/{ID}', ['as' => 'verificarBloqueado', 'uses' => 'recsensorial\recsensorialController@verificarBloqueado']);
 
+Route::get('verificarRevision/{ID}', ['as' => 'verificarRevision', 'uses' => 'recsensorial\recsensorialController@verificarRevision']);
+
+Route::post('actualizarEstadoCancelado', ['as' => 'actualizarEstadoCancelado', 'uses' => 'recsensorial\recsensorialController@actualizarEstadoCancelado']);
 
 Route::get('verZIP/{opcion}/{id}', ['as' => 'verZIP', 'uses' => 'recsensorial\recsensorialController@verZIP']);
 
@@ -821,6 +824,7 @@ Route::get('recsensorialreporte1word/{recsensorial_id}', ['as' => 'recsensorialr
 
 Route::get('recsensorialreporte1wordcliente/{recsensorial_id}', ['as' => 'recsensorialreporte1.recsensorialreporte1wordcliente', 'uses' => 'recsensorialreportes\recsensorialreportewordController@recsensorialreporte1wordcliente']);
 
+// Route::get('recsensorialquimicosreporte1word/{recsensorial_id}/{tipo}', ['as' => 'recsensorialreporte1.recsensorialquimicosreporte1word', 'uses' => 'recsensorialreportes\recsensorialquimicosreportewordController@recsensorialquimicosreporte1word']);
 
 Route::get('recsensorialquimicosreporte1word/{recsensorial_id}/{tipo}/{numeroVersiones}', ['as' => 'recsensorialreporte1.recsensorialquimicosreporte1word', 'uses' => 'recsensorialreportes\recsensorialquimicosreportewordController@recsensorialquimicosreporte1word']);
 

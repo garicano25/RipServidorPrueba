@@ -1294,13 +1294,56 @@ class recsensorialController extends Controller
 public function verZIP($opcion, $ID)
 {
     $documento = controlCambiosModel::findOrFail($ID);
+    $filePath = storage_path('app/' . $documento->RUTA_ZIP); // Ruta completa del archivo en el sistema de almacenamiento
+
+    if (!file_exists($filePath)) {
+        abort(404, 'Archivo no encontrado.');
+    }
 
     if ($opcion == 0) {
-        return Storage::response($documento->RUTA_ZIP);
+        return response()->file($filePath);
     } else {
-        return Storage::download($documento->RUTA_ZIP);
+        $fileName = basename($documento->RUTA_ZIP);
+
+        return response()->download($filePath, $fileName, [
+            'Content-Disposition' => "attachment; filename*=UTF-8''" . rawurlencode($fileName)
+        ]);
     }
 }
+
+
+
+
+
+    public function verificarRevision($id)
+    {
+        $registro = DB::select("
+            SELECT CANCELADO
+            FROM controlCambios
+            WHERE RECONOCIMIENTO_ID = ? 
+            ORDER BY NUMERO_VERSIONES DESC
+            LIMIT 1
+        ", [$id]);
+    
+        if ($registro) {
+            $permitido = $registro[0]->CANCELADO == 1;
+            return response()->json([
+                'permitido' => $permitido,
+                'mensaje' => $permitido 
+                    ? 'Se puede generar una nueva revisión.' 
+                    : 'No disponible: Para generar una nueva revisión, debe cancelar la revisión más reciente.'
+            ]);
+        } else {
+            return response()->json([
+                'permitido' => true,
+                'mensaje' => 'No hay revisiones previas. Puede crear una nueva revisión.'
+            ]);
+        }
+    }
+    
+    
+
+
 
 
 
@@ -1315,7 +1358,7 @@ public function verZIP($opcion, $ID)
                 ORDER BY NUMERO_VERSIONES DESC
                 LIMIT 1
             ", [$id]);
-        
+
             if ($registro) {
                 return response()->json(['BLOQUEADO' => $registro[0]->BLOQUEADO]);
             } else {
@@ -1324,42 +1367,100 @@ public function verZIP($opcion, $ID)
         }
 
 
+
+        public function actualizarEstadoCancelado(Request $request)
+        {
+            try {
+                $id = $request->input('id');
+                $cancelado = $request->input('cancelado');
+                $bloqueado = $request->input('bloqueado');
+                $userId = Auth::user()->id;
+
+                DB::table('controlCambios')
+                    ->where('ID_CONTROL_CAMBIO', $id)
+                    ->update([
+                        'CANCELADO' => $cancelado,
+                        'BLOQUEADO' => $bloqueado,
+                        'CANCELADO_POR' => $userId,
+                        'updated_at' => now()
+                    ]);
+
+                return response()->json([
+                    'success' => true,
+                    'message' => 'Estado actualizado correctamente.'
+                ]);
+            } catch (Exception $e) {
+                return response()->json([
+                    'success' => false,
+                    'message' => 'Error: ' . $e->getMessage()
+                ]);
+            }
+        }
+
+
+
+
+
+
+
     //TABLA DE CONTROL DE CAMBIOS
     public function TablaControlCambios($recsensorial_id)
-    {
-        try {
-            // Cambios
-            $cambios = DB::select("SELECT c.ID_CONTROL_CAMBIO, 
-                                        CONCAT(er.empleado_nombre,' ',er.empleado_apellidopaterno,' ', er.empleado_apellidomaterno) AS REALIZADO_POR,
-                                        DESCRIPCION_REALIZADO AS CAMBIOS,
-                                        c.created_at FECHA_REALIZADO,
-                                        IFNULL(CONCAT(ea.empleado_nombre,' ',ea.empleado_apellidopaterno,' ', ea.empleado_apellidomaterno), 'SIN AUTORIZAR') AS AUTORIZADO_ID,
-                                        IF(c.AUTORIZADO = 0,'--', c.updated_at) FECHA_AUTORIZADO,
-                                        c.AUTORIZADO
-                        FROM controlCambios c
-                        LEFT JOIN usuario ur ON ur.id = c.REALIZADO_ID
-                        LEFT JOIN usuario ua ON ua.id = c.AUTORIZADO_ID
-                        LEFT JOIN empleado er ON er.id = ur.empleado_id
-                        LEFT JOIN empleado ea ON ea.id = ua.empleado_id
-                        WHERE c.RECONOCIMIENTO_ID = ?", [$recsensorial_id]);
-    
-            $COUNT = 0;
-            foreach ($cambios as $key => $value) {
-                $value->COUNT = $COUNT++;
-                $value->boton_descargar = '<button type="button" class="btn btn-success btn-circle descargar"><i class="fa fa-download"></i></button>';
+{
+    try {
+        // Cambios
+        $cambios = DB::select("SELECT c.ID_CONTROL_CAMBIO, 
+                                    CONCAT(er.empleado_nombre, ' ', er.empleado_apellidopaterno, ' ', er.empleado_apellidomaterno) AS REALIZADO_POR,
+                                    IF(c.CANCELADO = 1, CONCAT(CONCAT(er.empleado_nombre, ' ', er.empleado_apellidopaterno, ' ', er.empleado_apellidomaterno), '<br>', DATE_FORMAT(c.updated_at, '%Y-%m-%d %H:%i:%s')), NULL) AS CANCELADO_POR,
+                                     DESCRIPCION_REALIZADO AS CAMBIOS,
+                                    c.created_at AS FECHA_REALIZADO,
+                                    IFNULL(CONCAT(ea.empleado_nombre, ' ', ea.empleado_apellidopaterno, ' ', ea.empleado_apellidomaterno), 'SIN AUTORIZAR') AS AUTORIZADO_ID,
+                                    IF(c.AUTORIZADO = 0, '--', DATE_FORMAT(c.updated_at, '%Y-%m-%d %H:%i:%s')) AS FECHA_AUTORIZADO,
+                                    c.AUTORIZADO,
+                                    c.CANCELADO
+                    FROM controlCambios c
+                    LEFT JOIN usuario ur ON ur.id = c.REALIZADO_ID
+                    LEFT JOIN usuario ua ON ua.id = c.AUTORIZADO_ID
+                    LEFT JOIN empleado er ON er.id = ur.empleado_id
+                    LEFT JOIN empleado ea ON ea.id = ua.empleado_id
+                    WHERE c.RECONOCIMIENTO_ID = ?", [$recsensorial_id]);
+
+        $COUNT = 0;
+        foreach ($cambios as $key => $value) {
+            $value->COUNT = $COUNT++;
+
+            // Botón de descarga
+            $value->boton_descargar = '<button type="button" class="btn btn-success btn-circle descargar"><i class="fa fa-download"></i></button>';
+
+            // Estado del checkbox
+            $checked = $value->CANCELADO == 1 ? 'checked' : '';
+            if (auth()->user()->hasRoles(['Superusuario', 'Administrador'])) {
+                $value->checkbox_cancelado = '<div class="switch" data-toggle="tooltip" title="Solo Administradores y Coordinadores">
+                                                <label>
+                                                    <input type="checkbox" class="checkbox_cancelado" ' . $checked . ' onchange="cancelarrevision(' . $value->ID_CONTROL_CAMBIO . ', this)">
+                                                    <span class="lever switch-col-red"></span>
+                                                </label>
+                                             </div>';
+            } else {
+                $value->checkbox_cancelado = '<div class="switch" data-toggle="tooltip" title="Solo Administradores y Coordinadores">
+                                                <label>
+                                                    <input type="checkbox" class="checkbox_cancelado" disabled>
+                                                    <span class="lever switch-col-red"></span>
+                                                </label>
+                                              </div>';
             }
-    
-            // Respuesta
-            $dato['data'] = $cambios;
-            $dato["msj"] = 'Informacion consultada correctamente';
-            return response()->json($dato);
-        } catch (Exception $e) {
-            $dato["msj"] = 'Error ' . $e->getMessage();
-            $dato['data'] = 0;
-            return response()->json($dato);
         }
+
+        // Respuesta
+        $dato['data'] = $cambios;
+        $dato["msj"] = 'Información consultada correctamente';
+        return response()->json($dato);
+    } catch (Exception $e) {
+        $dato["msj"] = 'Error ' . $e->getMessage();
+        $dato['data'] = 0;
+        return response()->json($dato);
     }
-    
+}
+
     
 
     public function estructuraproyectos($FOLIO)
@@ -2263,12 +2364,45 @@ public function verZIP($opcion, $ID)
 
            
 
+            // if (($request->opcion + 0) == 8) { 
+            //     $ultimoRegistro = controlCambiosModel::where('RECONOCIMIENTO_ID', $request['RECONOCIMIENTO_ID'])
+            //                                          ->orderByDesc('NUMERO_VERSIONES')
+            //                                          ->first();
+            
+            //     $numeroVersiones = $ultimoRegistro ? $ultimoRegistro->NUMERO_VERSIONES + 1 : 0;
+            
+            //     $data = [
+            //         'NUMERO_VERSIONES' => $numeroVersiones,
+            //         'DESCRIPCION_REALIZADO' => $ultimoRegistro ? '' : 'Documento inicial',
+            //         'AUTORIZADO' => 0,
+            //         'REALIZADO_ID' => Auth::user()->id,
+            //         'RECONOCIMIENTO_ID' => $request['RECONOCIMIENTO_ID']
+            //     ];
+            
+            //     $zipController = new recsensorialquimicosreportewordController();
+            //     $rutaZip = $zipController->recsensorialquimicosreporte1word($request['RECONOCIMIENTO_ID'], 2, $numeroVersiones);
+                
+            //     $data['RUTA_ZIP'] = $rutaZip;
+            
+            //     $documento = controlCambiosModel::create($data);
+            
+            //     // Responder con éxito
+            //     $dato["MSJ"] = 'BIEN';
+            //     $dato["DOC"] = $documento;
+            
+            //     return response()->json($dato);
+            // }
+            
+            
             if (($request->opcion + 0) == 8) { 
                 $ultimoRegistro = controlCambiosModel::where('RECONOCIMIENTO_ID', $request['RECONOCIMIENTO_ID'])
                                                      ->orderByDesc('NUMERO_VERSIONES')
                                                      ->first();
             
                 $numeroVersiones = $ultimoRegistro ? $ultimoRegistro->NUMERO_VERSIONES + 1 : 0;
+            
+                // Almacenar nombreInstalacion en la sesión
+                session(['nombreInstalacion' => $request->input('nombreInstalacion', 'NombrePorDefecto')]);
             
                 $data = [
                     'NUMERO_VERSIONES' => $numeroVersiones,
@@ -2292,9 +2426,7 @@ public function verZIP($opcion, $ID)
                 return response()->json($dato);
             }
             
-            
-
-
+          
             
             
             if (($request->opcion + 0) == 9) // GUARDAR O ACTUALIZAR INFORMACION PARA EL LA TABLA DEL INFORME DE LOS PUNTOS SOLICITADOS POR EL CLIENTE

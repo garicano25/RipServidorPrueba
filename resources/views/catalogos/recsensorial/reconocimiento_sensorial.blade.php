@@ -2944,13 +2944,19 @@
                                         </form>  -->
                                         @endif
 
-                                        @if(auth()->user()->hasRoles(['Superusuario', 'Administrador', 'Coordinador']))
+                                        <!--   @if(auth()->user()->hasRoles(['Superusuario', 'Administrador', 'Coordinador']))
                                         <ol class="breadcrumb" style="padding: 6px; margin: 10px 0px;">
                                             <button type="button" class="btn btn-default waves-effect" data-toggle="tooltip" title="Nueva revisión" id="boton_descargarquimicosdoc_final" onclick="reporte(form_recsensorial.recsensorial_id.value, 2, this, 2);">
                                                 <span class="btn-label"><i class="fa fa-plus"></i></span>Crear nueva revisión
                                             </button>
                                         </ol>
-                                        @endif
+                                        @endif -->
+
+                                        <ol class="breadcrumb" style="padding: 6px; margin: 10px 0px;">
+                                            <button type="button" class="btn btn-default waves-effect" data-toggle="tooltip" title="Nueva revisión" id="boton_descargarquimicosdoc_final" onclick="reporte(form_recsensorial.recsensorial_id.value, 2, this, 2);">
+                                                <span class="btn-label"><i class="fa fa-plus"></i></span>Crear nueva revisión
+                                            </button>
+                                        </ol>
 
                                         <div class="table-responsive" style="max-height: 410px!important;">
                                             <table class="table table-hover stylish-table mt-1" width="100%" id="tabla_control_cambios">
@@ -2958,7 +2964,6 @@
                                                     <tr>
                                                         <th>Versión</th>
                                                         <th>Realizado por</th>
-                                                        <th>Cambio(s)</th>
                                                         <th>Fecha</th>
                                                         <th>Cancelado</th>
                                                         <th>Cancelado por:</th>

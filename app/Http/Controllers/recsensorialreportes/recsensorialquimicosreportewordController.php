@@ -2056,22 +2056,24 @@ class recsensorialquimicosreportewordController extends Controller
 
 
             // Crear el archivo ZIP
-            $zipFolderBasePath = "ZIP_RECO/{$recsensorial_id}/{$numeroVersiones}";
-                Storage::makeDirectory($zipFolderBasePath);
+            $nombreInstalacion = session('nombreInstalacion', 'NombrePorDefecto');
 
-                $zipFileName = "Informe_y_Anexos.zip";
+                        $zipFolderBasePath = "ZIP_RECO/{$recsensorial_id}/{$numeroVersiones}";
+                        Storage::makeDirectory($zipFolderBasePath);
 
-                $zipFilePath = storage_path("app/{$zipFolderBasePath}/{$zipFileName}");
+                        $zipFileName = "Informe - Reconocimiento de Químicos - {$nombreInstalacion}_V{$numeroVersiones}.zip";
+                        $zipFilePath = storage_path("app/{$zipFolderBasePath}/{$zipFileName}");
 
-                $zip = new ZipArchive;
+                        $zip = new ZipArchive;
 
-                if ($zip->open($zipFilePath, ZipArchive::CREATE | ZipArchive::OVERWRITE) === TRUE) {
-                    foreach ($archivosParaZip as $archivo) {
-                        if (file_exists($archivo) && is_file($archivo)) {
-                            $zip->addFile($archivo, basename($archivo));
-                            Storage::delete($archivo); 
-                        }
-                    }
+                        if ($zip->open($zipFilePath, ZipArchive::CREATE | ZipArchive::OVERWRITE) === TRUE) {
+                            foreach ($archivosParaZip as $archivo) {
+                                if (file_exists($archivo) && is_file($archivo)) {
+                                    $zip->addFile($archivo, basename($archivo));
+                                    Storage::delete($archivo); 
+                                }
+                            }
+
 
                     // Verificar si hay hojas de seguridad y añadirlas al ZIP
                     if (count($anexos) != 0) {
