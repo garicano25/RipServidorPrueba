@@ -106,8 +106,7 @@ $("#botonactualizar_fechas_online").click(function()
 					let trabajadorNombre = row.TRABAJADOR_NOMBRE; 
 					let fechaInicio = row.FECHAINICIO;
 					let fechaFin = row.FECHAFIN;
-					let estadoCorreo = row.TRABAJADOR_ESTADOCORREO;
-					let estadoContestados = row.TRABAJADOR_ESTADOCONTESTADO;
+					
 					let trabajadorId = row.TRABAJADOR_ID;
 
 					datosEnviar.push({
@@ -115,8 +114,7 @@ $("#botonactualizar_fechas_online").click(function()
 						trabajadorId: trabajadorId,
 						fechaInicio: fechaInicio,
 						fechaFin: fechaFin,
-						estadoCorreo: estadoCorreo,
-						estadoContestados: estadoContestados
+						
 					});
 				});
 

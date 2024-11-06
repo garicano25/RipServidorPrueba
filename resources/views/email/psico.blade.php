@@ -25,7 +25,7 @@
     <p>Cordialmente,</p>
     <p>Coordinación de evaluación del FRP</p>
 
-    <a href="https://sehilab-prueba.results-in-performance.com/Guia/{{ $guia1 }}/{{ $guia2 }}/{{ $guia3 }}/{{ $id }}">Responder cuestionario aquí</a>
+    <a href="https://sehilab-prueba.results-in-performance.com/Guia/{{ $guia1 }}/{{ $guia2 }}/{{ $guia3 }}/{{ $guia5 }}/{{ $status }}/{{ $fechalimite }}/{{ $id }}">Responder cuestionario aquí</a>
 
 </body>
 
