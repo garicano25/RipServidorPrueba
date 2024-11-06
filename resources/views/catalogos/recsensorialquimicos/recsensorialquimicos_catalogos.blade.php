@@ -251,8 +251,8 @@
 									<div class="col-6" id="divPuntoEbullicion">
 										<div class="form-group">
 											<label>Punto de ebullición </label>
-											<button type="button" class="btn btn-danger text-center mb-1" style="margin-left: 35%; width: 35px; height: 35px; border-radius: 9px;" data-toggle="tooltip" title="Click para cambiar la Tem. de ebullición a °C una vez insertada en °F" onclick="cambiarGrados('catsustancia_puntoEbullicion')"><i class="fa fa-thermometer-three-quarters" aria-hidden="true"></i></button>
-											<input type="number" class="form-control" id="catsustancia_puntoEbullicion" name="catsustancia_puntoEbullicion" disabled>
+											<button type="button" class="btn btn-danger text-center mb-1" style="margin-left: 25%; width: 35px; height: 35px; border-radius: 9px;" data-toggle="tooltip" title="Click para cambiar la Tem. de ebullición a °C una vez insertada en °F" onclick="cambiarGrados('catsustancia_puntoEbullicion')"><i class="fa fa-thermometer-three-quarters" aria-hidden="true"></i></button>
+											<input type="text" class="form-control" id="catsustancia_puntoEbullicion" name="catsustancia_puntoEbullicion" disabled>
 										</div>
 									</div>
 
@@ -302,7 +302,7 @@
 									<div class="col-6">
 										<div class="form-group">
 											<label>Temperatura de Operación (°C)</label>
-											<button type="button" class="btn btn-danger text-center mb-1" style="margin-left: 35%; width: 35px; height: 35px; border-radius: 9px;" data-toggle="tooltip" title="Click para cambiar la Tem. de operación a °C una vez insertada en °F" onclick="cambiarGrados('catTemOperacion')"><i class="fa fa-thermometer-three-quarters" aria-hidden="true"></i></button>
+											<button type="button" class="btn btn-danger text-center mb-1" style="margin-left: 25%; width: 35px; height: 35px; border-radius: 9px;" data-toggle="tooltip" title="Click para cambiar la Tem. de operación a °C una vez insertada en °F" onclick="cambiarGrados('catTemOperacion')"><i class="fa fa-thermometer-three-quarters" aria-hidden="true"></i></button>
 											<input type="number" class="form-control" id="catTemOperacion" name="catTemOperacion">
 										</div>
 									</div>
