@@ -65,26 +65,23 @@ class ejecucionPsicoController extends Controller
      */
     public function tablaTrabajadoresOnline($proyecto_id)
     {   
-        
-        //valida si ya hay datos guardados de seguimiento
-        $existingRecords = DB::table('seguimientotrabajadores')
+        $existingRecords = DB::table('proyectotrabajadores')
         ->where('proyecto_id', $proyecto_id)
         ->exists();
 
         if($existingRecords){
             //TARE LOS DATOS DE LA TABLA DE SEGUIMIENTO RELACIONADO CON LA DE PROGRAMA DE TRABAJO
             $tablaOnline = DB::select('SELECT p.TRABAJADOR_NOMBRE TRABAJADOR_NOMBRE,
-                                            s.TRABAJADOR_ID TRABAJADOR_ID, 
-                                            s.TRABAJADOR_ESTADOCORREO ESTADOCORREO, 
-                                            s.TRABAJADOR_FECHAINICIO FECHAINICIO,
-                                            s.TRABAJADOR_FECHAFIN FECHAFIN,
-                                            s.TRABAJADOR_ESTADOCONTESTADO ESTADOCONTESTADO,
+                                            p.TRABAJADOR_ID TRABAJADOR_ID, 
+                                            p.TRABAJADOR_ESTADOCORREO ESTADOCORREO, 
+                                            p.TRABAJADOR_FECHAINICIO FECHAINICIO,
+                                            p.TRABAJADOR_FECHAFIN FECHAFIN,
+                                            p.TRABAJADOR_ESTADOCONTESTADO ESTADOCONTESTADO,
                                             r.RECPSICO_ID,
                                             r.RECPSICOTRABAJADOR_CORREO TRABAJADOR_CORREO
-                                        FROM seguimientotrabajadores s 
-                                        LEFT JOIN proyectotrabajadores p ON s.TRABAJADOR_ID = p.TRABAJADOR_ID 
+                                        FROM proyectotrabajadores p
                                         LEFT JOIN recopsicotrabajadores r ON p.TRABAJADOR_ID = r.ID_RECOPSICOTRABAJADOR
-                                        WHERE p.TRABAJADOR_SELECCIONADO = 1 AND p.TRABAJADOR_MODALIDAD = "Online" AND s.proyecto_id = ' . $proyecto_id . '');
+                                        WHERE p.TRABAJADOR_SELECCIONADO = 1 AND p.TRABAJADOR_MODALIDAD = "Online" AND p.proyecto_id = ' . $proyecto_id . '');
 
 
             $count = 0;
@@ -95,13 +92,16 @@ class ejecucionPsicoController extends Controller
 
             if($value->ESTADOCORREO == 'Sin enviar'){
                 $value->TRABAJADOR_ESTADOCORREO = '<span class="badge badge-pill badge-danger" style="font-size: 12px">'. $value->ESTADOCORREO .'</span>';
+            }
+            else if($value->ESTADOCORREO == null){
+                $value->TRABAJADOR_ESTADOCORREO = '<span class="badge badge-pill badge-danger" style="font-size: 12px">Sin enviar</span>';
             }else{
                 $value->TRABAJADOR_ESTADOCORREO = '<span class="badge badge-pill badge-success" style="font-size: 12px">'. $value->ESTADOCORREO .'</span>';
                     
             }
             
-            $value->FECHAINICIO = $value->FECHAINICIO;
-            $value->FECHAFIN = $value->FECHAFIN;
+            $value->FECHAINICIO = $value->FECHAINICIO ?? '';
+            $value->FECHAFIN = $value->FECHAFIN ?? '';
             $value->TRABAJADOR_ID = $value->TRABAJADOR_ID;
             $value->TRABAJADOR_NOMBRE = $value->TRABAJADOR_NOMBRE;
 
@@ -112,7 +112,10 @@ class ejecucionPsicoController extends Controller
             } else if ($value->ESTADOCONTESTADO == 'En proceso'){
 
                 $value->TRABAJADOR_ESTADOCONTESTADO = '<span class="badge badge-pill badge-warning" style="font-size: 12px">' . $value->ESTADOCONTESTADO . '</span>';
-            
+            }
+            else if($value->ESTADOCONTESTADO == null) {
+                    $value->TRABAJADOR_ESTADOCONTESTADO = '<span class="badge badge-pill badge-danger" style="font-size: 12px">Sin iniciar</span>';
+                
             }else{
                 $value->TRABAJADOR_ESTADOCONTESTADO = '<span class="badge badge-pill badge-success" style="font-size: 12px">' . $value->ESTADOCONTESTADO . '</span>';
             }
@@ -121,35 +124,9 @@ class ejecucionPsicoController extends Controller
 
             $value->boton_enviarCorreo = '<button type="button" class="btn btn-warning btn-circle enviarcorreo" id="enviarCorreoTrabajador'.$count.'" name="enviarCorreoTrabajador" onclick="enviarCorreo('.$value->TRABAJADOR_ID.', '.$value->RECPSICO_ID.')" style="padding: 0px;"><i class="fa fa-paper-plane "></i></button>';
             }
-        }else{
-            //OBTIENE LOS DATOS GUARDADOS DE PROGRAMA DE TRABAJO
-            $tablaOnline = DB::select('SELECT p.TRABAJADOR_NOMBRE TRABAJADOR_NOMBRE,
-                                            p.TRABAJADOR_ID TRABAJADOR_ID,
-                                            r.RECPSICO_ID RECPSICO_ID,
-                                            r.RECPSICOTRABAJADOR_CORREO TRABAJADOR_CORREO
-                            FROM proyectotrabajadores p 
-                            LEFT JOIN recopsicotrabajadores r ON p.TRABAJADOR_ID = r.ID_RECOPSICOTRABAJADOR
-                            WHERE p.TRABAJADOR_SELECCIONADO = 1 
-                            AND p.TRABAJADOR_MODALIDAD = "Online" 
-                            AND p.proyecto_id = ' . $proyecto_id . '');
-
-
-            $count = 0;
-            foreach ($tablaOnline as $key => $value) {
-                $count += 1;
-
-                $value->COUNT = $count;
-                $value->TRABAJADOR_ESTADOCORREO = '<span class="badge badge-pill badge-danger">Sin enviar</span>';
-                $value->FECHAINICIO = '';
-                $value->FECHAFIN = '';
-                $value->TRABAJADOR_ID = $value->TRABAJADOR_ID;
-                $value->TRABAJADOR_NOMBRE = $value->TRABAJADOR_NOMBRE;
-                $value->TRABAJADOR_ESTADOCONTESTADO = 'Sin iniciar';
-                $value->boton_enviarCorreo = '<button type="button" class="btn btn-warning btn-circle enviarcorreo" id="enviarCorreoTrabajador'.$count.'" name="enviarCorreoTrabajador" onclick="enviarCorreo('.$value->TRABAJADOR_ID.', '.$value->RECPSICO_ID.')" style="padding: 0px;"><i class="fa fa-paper-plane "></i></button>';
-                
-
-            }
         }
+
+
 
         $online['data']  = $tablaOnline;
         return response()->json($online);
@@ -224,49 +201,13 @@ class ejecucionPsicoController extends Controller
         if (json_last_error() !== JSON_ERROR_NONE) {
             return response()->json(['error' => 'Error al decodificar JSON: ' . json_last_error_msg()], 400);
         }
-        $tablaOnline = DB::select('SELECT p.TRABAJADOR_NOMBRE NOMBRE, p.TRABAJADOR_ID TRABAJADOR_ID
-        FROM proyectotrabajadores p
-        WHERE p.TRABAJADOR_SELECCIONADO = 1 AND p.TRABAJADOR_MODALIDAD = "Online" AND p.proyecto_id = ' . $proyecto_id . '');
-        
-        $existingRecords = DB::table('seguimientotrabajadores')
-        ->where('proyecto_id', $proyecto_id)
-        ->exists();
-
-            // foreach ($tablaOnline as $key => $value) {
-
-            //     $tablaPresencial = DB::update('UPDATE seguimientotrabajadores 
-            //     SET TRABAJADOR_FECHAINICIO = ' . $request->fechaInicio . ', TRABAJADOR_FECHAFIN = ' . $request->fechaFin . '
-            //     WHERE proyecto_id = ' . $proyecto_id . '');
-
-            // }
-
-            if ($existingRecords) {
-               
-                    $tablaPresencial = DB::update('UPDATE seguimientotrabajadores 
-                    SET TRABAJADOR_FECHAINICIO = "' . $request->fechaInicio . '", TRABAJADOR_FECHAFIN = "' . $request->fechaFin . '"
-                    WHERE proyecto_id = ' . $proyecto_id . '');
-
     
-                $response["msj"] = 'Datos actualizados correctamente';
+            $actualizarTablaOnline = DB::update('UPDATE proyectotrabajadores 
+            SET TRABAJADOR_FECHAINICIO = ?, TRABAJADOR_FECHAFIN = ?
+            WHERE proyecto_id = ? AND TRABAJADOR_MODALIDAD = ?', 
+            [$request->fechaInicio, $request->fechaFin, $proyecto_id, 'Online']);
 
-            } else {
-                
-                foreach ($datos as $dato) {
-                    $trabajadorId = $dato['trabajadorId'];
-    
-                    DB::table('seguimientotrabajadores')->insert([
-                        'TRABAJADOR_ID' => $dato['trabajadorId'],
-                        'proyecto_id' => $proyecto_id,
-                        'TRABAJADOR_FECHAINICIO' => $request->fechaInicio,
-                        'TRABAJADOR_FECHAFIN' => $request->fechaFin,
-                        'TRABAJADOR_ESTADOCORREO' => $dato['estadoCorreo'],
-                        'TRABAJADOR_ESTADOCONTESTADO' => $dato['estadoContestados']
-                    ]);
-                }
-    
-                $response["msj"] = 'Datos creados correctamente';
-            }
-    
+            $response["msj"] = 'Datos actualizados correctamente';
             return response()->json($response);
         } catch (Exception $e) {
             $response["msj"] = 'Error: ' . $e->getMessage();
@@ -287,37 +228,44 @@ class ejecucionPsicoController extends Controller
                 //Obtenemos los datos del trabajador segun el id
                 $datos = DB::select('SELECT t.RECPSICOTRABAJADOR_NOMBRE,
                                             t.RECPSICOTRABAJADOR_CORREO,
-                                            s.TRABAJADOR_FECHAINICIO,
                                             s.TRABAJADOR_FECHAFIN,
-                                            IF(s.TRABAJADOR_FECHAINICIO = s.TRABAJADOR_FECHAFIN , 0 ,DATEDIFF(s.TRABAJADOR_FECHAFIN, s.TRABAJADOR_FECHAINICIO)) AS DIAS
+                                            s.TRABAJADOR_ESTADOCONTESTADO,
+                                            DATEDIFF(s.TRABAJADOR_FECHAFIN, DATE_FORMAT(NOW(),"%Y-%m-%d")) AS DIAS
                                 FROM recopsicotrabajadores t
-                                LEFT JOIN seguimientotrabajadores s ON s.TRABAJADOR_ID = t.ID_RECOPSICOTRABAJADOR
+                                LEFT JOIN proyectotrabajadores s ON s.TRABAJADOR_ID = t.ID_RECOPSICOTRABAJADOR
                                 WHERE t.ID_RECOPSICOTRABAJADOR = ?', [$idPersonal]);
 
                 $nombre = $datos[0]->RECPSICOTRABAJADOR_NOMBRE;
                 $correo = $datos[0]->RECPSICOTRABAJADOR_CORREO;
+                $fechalimite = $datos[0]->TRABAJADOR_FECHAFIN;
+                $status = $datos[0]->TRABAJADOR_ESTADOCONTESTADO;
                 $dias = $datos[0]->DIAS;
 
 
                 //Obtenemos los datos del reconocimiento para las guias
-                $datos = DB::select('SELECT RECPSICO_GUIAI, RECPSICO_GUIAII, RECPSICO_GUIAIII
+                $datos = DB::select('SELECT RECPSICO_GUIAI, RECPSICO_GUIAII, RECPSICO_GUIAIII, RECPSICO_GUIAV
                                     FROM recopsiconormativa
                                     WHERE RECPSICO_ID = ?', [$idRecsensorial]);
 
                 $guia1 = $datos[0]->RECPSICO_GUIAI;
                 $guia2 = $datos[0]->RECPSICO_GUIAII;
                 $guia3 = $datos[0]->RECPSICO_GUIAIII;
-
+                $guia5 = $datos[0]->RECPSICO_GUIAV;
                 // Encriptamos las guías
                 $encryptedGuia1 = Crypt::encrypt($guia1);
                 $encryptedGuia2 = Crypt::encrypt($guia2);
                 $encryptedGuia3 = Crypt::encrypt($guia3);
+                $encryptedGuia5 = Crypt::encrypt($guia5);
+                
+                $encryptedfechalimite = Crypt::encrypt($fechalimite);
+                $encryptedstatus = Crypt::encrypt($status);
+
                 $encryptedId = Crypt::encrypt($idPersonal);
 
-                Mail::to($correo)->send(new sendGuiaPsico($nombre, $encryptedGuia1, $encryptedGuia2, $encryptedGuia3, $encryptedId, $dias));
+                Mail::to($correo)->send(new sendGuiaPsico($nombre, $encryptedGuia1, $encryptedGuia2, $encryptedGuia3, $encryptedGuia5, $encryptedstatus, $encryptedfechalimite, $encryptedId, $dias));
             
                 //cambiar el estado de envio de correo en el registro deltrabajador
-                DB::table('seguimientotrabajadores')
+                DB::table('proyectotrabajadores')
                 ->where('TRABAJADOR_ID', $idPersonal)
                 ->update(['TRABAJADOR_ESTADOCORREO' => 'Enviado']);  
             }
