@@ -818,7 +818,7 @@ use Illuminate\Support\Str;
 
     @if(request()->is('recsensorialquimicoscatalogos'))
     <script src="/assets/plugins/datatables/jquery.dataTables.min.js"></script>
-    <script src="/js_sitio/recsensorialquimicos_catalogos.js?v=5.0"></script>
+    <script src="/js_sitio/recsensorialquimicos_catalogos.js?v=7.0"></script>
     <script src="/assets/plugins/datatables/dataTables.rowsGroup.js"></script>
     {{-- Select search filter --}}
     <script src="/assets/plugins/select-search/selectize.js" type="text/javascript"></script>
@@ -983,7 +983,7 @@ use Illuminate\Support\Str;
     {{-- Select search filter --}}
     <script src="/assets/plugins/select-search/selectize.js" type="text/javascript"></script>
     {{-- pagina --}}
-    <script src="/js_sitio/informesHI.js?v=2.0"></script>
+    <script src="/js_sitio/informesHI.js?v=5.0"></script>
     @endif
 
     @if(request()->is('usuario'))
