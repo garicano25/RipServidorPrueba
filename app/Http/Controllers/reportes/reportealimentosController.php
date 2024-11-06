@@ -860,7 +860,7 @@ class reportealimentosController extends Controller
                                             reporterevisiones
                                         WHERE
                                             reporterevisiones.proyecto_id = ' . $proyecto_id . ' 
-                                            AND reporterevisiones.agente_id = 4
+                                            AND reporterevisiones.agente_id = 11
                                         ORDER BY
                                             reporterevisiones.reporterevisiones_revision DESC');
 
@@ -1143,8 +1143,16 @@ class reportealimentosController extends Controller
                     $registros = count($data);
                     foreach ($data  as $key => $value) {
                     
-                        $value->boton_editar = '<button type="button" class="btn btn-warning btn-circle boton_editar" onclick=("editarPuntoAlimento8_1('. $value->ID.')") ><i class="fa fa-pencil"></i></button>';
-                        $value->boton_eliminar = '<button type="button" class="btn btn-danger btn-circle boton_eliminar" onclick=("eliminarPuntoAlimento8_1(' . $value->ID . ')")><i class="fa fa-trash"></i></button>';
+                        
+                        if ($edicion == 1) {
+                            $value->boton_editar = '<button type="button" class="btn btn-warning btn-circle boton_editar boton_' . $value->ID . '" ) ><i class="fa fa-pencil"></i></button>';
+                            $value->boton_eliminar = '<button type="button" class="btn btn-danger btn-circle boton_eliminar" onclick=(eliminarPuntoAlimento8_1(' . $value->ID . '))><i class="fa fa-trash"></i></button>';
+
+                        } else {
+                            $value->boton_editar = '<button type="button" class="btn btn-default btn-circle boton_' . $value->ID . '"  data-toggle="tooltip" title="No disponible"><i class="fa fa-ban fa-1x"></i></button>';
+                            $value->boton_eliminar = '<button type="button" class="btn btn-default btn-circle boton_' . $value->ID . '" data-toggle="tooltip" title="No disponible"><i class="fa fa-ban fa-1x"></i></button>';
+
+                        }
 
                     }
 
@@ -1162,8 +1170,14 @@ class reportealimentosController extends Controller
                     $registros = count($data);
                     foreach ($data  as $key => $value) {
 
-                        $value->boton_editar = '<button type="button" class="btn btn-warning btn-circle boton_editar" onclick=("editarPuntoAlimento8_2(' . $value->ID . ')") ><i class="fa fa-pencil"></i></button>';
-                        $value->boton_eliminar = '<button type="button" class="btn btn-danger btn-circle boton_eliminar" onclick=("eliminarPuntoAlimento8_2(' . $value->ID . ')")><i class="fa fa-trash"></i></button>';
+                        if ($edicion == 1) {
+                            $value->boton_editar = '<button type="button" class="btn btn-warning btn-circle boton_editar boton_' . $value->ID . '" ) ><i class="fa fa-pencil"></i></button>';
+                            $value->boton_eliminar = '<button type="button" class="btn btn-danger btn-circle boton_eliminar" onclick=(eliminarPuntoAlimento8_2(' . $value->ID . '))><i class="fa fa-trash"></i></button>';
+
+                        } else {
+                            $value->boton_editar = '<button type="button" class="btn btn-default btn-circle boton_' . $value->ID . '" data-toggle="tooltip" title="No disponible"><i class="fa fa-ban fa-1x"></i></button>';
+                            $value->boton_eliminar = '<button type="button" class="btn btn-default btn-circle boton_' . $value->ID . '" data-toggle="tooltip" title="No disponible"><i class="fa fa-ban fa-1x"></i></button>';
+                        }
                     }
 
                     break;
@@ -1174,8 +1188,15 @@ class reportealimentosController extends Controller
                     $registros = count($data);
                     foreach ($data  as $key => $value) {
 
-                        $value->boton_editar = '<button type="button" class="btn btn-warning btn-circle boton_editar" onclick=("editarPuntoAlimento8_3(' . $value->ID . ')") ><i class="fa fa-pencil"></i></button>';
-                        $value->boton_eliminar = '<button type="button" class="btn btn-danger btn-circle boton_eliminar" onclick=("eliminarPuntoAlimento8_3(' . $value->ID . ')")><i class="fa fa-trash"></i></button>';
+                       
+
+                        if ($edicion == 1) {
+                            $value->boton_editar = '<button type="button" class="btn btn-warning btn-circle boton_editar boton_' . $value->ID . '" ) ><i class="fa fa-pencil"></i></button>';
+                            $value->boton_eliminar = '<button type="button" class="btn btn-danger btn-circle boton_eliminar" onclick=(eliminarPuntoAlimento8_3(' . $value->ID . '))><i class="fa fa-trash"></i></button>';
+                        } else {
+                            $value->boton_editar = '<button type="button" class="btn btn-default btn-circle boton_' . $value->ID . '"  data-toggle="tooltip" title="No disponible"><i class="fa fa-ban fa-1x"></i></button>';
+                            $value->boton_eliminar = '<button type="button" class="btn btn-default btn-circle boton_' . $value->ID . '" data-toggle="tooltip" title="No disponible"><i class="fa fa-ban fa-1x"></i></button>';
+                        }
                     }
 
                     break;
@@ -1425,6 +1446,80 @@ class reportealimentosController extends Controller
         } catch (Exception $e) {
             $dato['data'] = 0;
             $dato["total"] = 0;
+            $dato["msj"] = 'Error ' . $e->getMessage();
+            return response()->json($dato);
+        }
+    }
+
+
+
+    public function reportealimentosconcluirrevision($revision_id)
+    {
+        try {
+            // $reportebei  = reportebeiModel::findOrFail($revision_id);
+            $revision  = reporterevisionesModel::findOrFail($revision_id);
+
+
+            $concluido = 0;
+            $concluidonombre = NULL;
+            $concluidofecha = NULL;
+
+
+            if ($revision->reporterevisiones_concluido == 0) {
+                $concluido = 1;
+                $concluidonombre = auth()->user()->empleado->empleado_nombre . " " . auth()->user()->empleado->empleado_apellidopaterno . " " . auth()->user()->empleado->empleado_apellidomaterno;
+                $concluidofecha = date('Y-m-d H:i:s');
+            }
+
+
+            $revision->update([
+                'reporterevisiones_concluido' => $concluido,
+                'reporterevisiones_concluidonombre' => $concluidonombre,
+                'reporterevisiones_concluidofecha' => $concluidofecha
+            ]);
+
+
+            $dato["estado"] = 0;
+            if ($concluido == 1 || $revision->reporterevisiones_cancelado == 1) {
+                $dato["estado"] = 1;
+            }
+
+
+            $dato["msj"] = 'Datos modificados correctamente';
+            return response()->json($dato);
+        } catch (Exception $e) {
+            $dato["estado"] = 0;
+            $dato["msj"] = 'Error ' . $e->getMessage();
+            return response()->json($dato);
+        }
+    }
+
+
+
+    public function reporteAlimentosEliminarPuntos($tabla, $id)
+    {
+        try {
+                
+            switch (intval($tabla)) {
+                case 1:
+                    $punto = reporteAlimentosPuntosAlimentosModel::where('ID_PUNTO_ALIMENTOS', $id)->delete();
+                    break;
+                case 2:
+                    $punto = reporteAlimentosPuntosSuperficiesVivasModel::where('ID_PUNTO_VIVAS', $id)->delete();
+                    break; 
+                case 3:
+                    $punto = reporteAlimentosPuntosSuperficiesInertesModel::where('ID_PUNTO_INERTES', $id)->delete();
+                    break;
+                default:
+                 
+                    break;
+            }
+
+            // respuesta
+            $dato["msj"] = 'Registro eliminada correctamente';
+            return response()->json($dato);
+
+        } catch (Exception $e) {
             $dato["msj"] = 'Error ' . $e->getMessage();
             return response()->json($dato);
         }

@@ -3162,6 +3162,164 @@ function tabla_reporte_informeresultados8_1_1(proyecto_id)
     }
 }
 
+function eliminarPuntoAlimento8_1(id) {
+
+	swal({
+		title: "¡Confirme que desea eliminar este resultado!",
+		text: "Esta acción es irreversible",
+		type: "warning",
+		showCancelButton: true,
+		confirmButtonColor: "#DD6B55",
+		confirmButtonText: "Eliminar!",
+		cancelButtonText: "Cancelar!",
+		closeOnConfirm: false,
+		closeOnCancel: false
+	},
+		function (isConfirm) {
+			if (isConfirm) {
+				// cerrar msj confirmacion
+				swal.close();
+
+				$.ajax({
+					type: "GET",
+					dataType: "json",
+					url: "/reporteAlimentosEliminarPuntos/1/" + id,
+					data:{},
+					cache: false,
+					success: function (dato) {
+						
+						// Actualizamos las tabla
+						tabla_reporte_informeresultados8_1(proyecto.id);
+						tabla_reporte_informeresultados8_1_1(proyecto.id);
+
+						// mensaje
+						swal({
+							title: "Registro eliminado con exito",
+							text: "Acción realizada",
+							type: "success", // warning, error, success, info
+							buttons: {
+								visible: false, // true , false
+							},
+							timer: 1500,
+							showConfirmButton: false
+						});
+
+						
+					}, error: function(dato) {
+						// mensaje
+						console.log(dato)
+
+						swal({
+							title: "Error",
+							text: "Al intentar eliminar el registro, intentelo de nuevo.\n"+dato,
+							type: "error", // warning, error, success, info
+							buttons: {
+								visible: false, // true , false
+							},
+							timer: 1500,
+							showConfirmButton: false
+						});
+						return false;
+					}
+				});//Fin ajax
+				return false;
+			}else {
+				// mensaje
+				swal({
+					title: "Cancelado",
+					text: "Acción cancelada",
+					type: "error", // warning, error, success, info
+					buttons: {
+						visible: false, // true , false
+					},
+					timer: 500,
+					showConfirmButton: false
+				});
+			}
+		});
+	return false;
+	
+}
+
+$('#tabla_resultado_8_1 tbody').on('click', 'td>button.boton_editar', function () {
+
+	var tr = $(this).closest('tr');
+	var row = datatable_informeresultados8_1.row(tr);
+
+	$('#form_reporte_punto_8_1').each(function () {
+		this.reset();
+	});
+
+
+	// Campos Hidden
+	$('#ID_PUNTO_ALIMENTOS').val(row.data().ID_PUNTO_ALIMENTOS);
+
+
+	//Campos generalas
+	$('#PUNTO_MEDICION_ALIMENTOS').val(row.data().PUNTO_MEDICION_ALIMENTOS);
+	$('#AREA_ALIMENTOS').val(row.data().AREA_ALIMENTOS);
+	$('#UBICACION_ALIMENTOS').val(row.data().UBICACION_ALIMENTOS);
+
+	//Validamos los campos de Coliformes
+	if (row.data().COLIFORME_TOTALES_ALIMENTOS == 1) {
+		$('#COLIFORME_TOTALES_ALIMENTOS_SI').prop('checked', true)
+		$('.totales').prop('disabled', false).prop('required', true).val('');
+
+
+		$('#FECHA_MEDICION_ALIMENTOS_TOTALES').val(row.data().FECHA_MEDICION_ALIMENTOS_TOTALES);
+		$('#UNIDAD_ALIMENTOS_TOTALES').val(row.data().UNIDAD_ALIMENTOS_TOTALES);
+		$('#METODO_ALIMENTOS_TOTALES').val(row.data().METODO_ALIMENTOS_TOTALES);
+		$('#TRABAJADORES_ALIMENTOS_TOTALES').val(row.data().TRABAJADORES_ALIMENTOS_TOTALES);
+		$('#CONCENTRACION_ALIMENTOS_TOTALES').val(row.data().CONCENTRACION_ALIMENTOS_TOTALES);
+		$('#CONCENTRACION_PERMISIBLE_TOTALES').val(row.data().CONCENTRACION_PERMISIBLE_TOTALES);
+
+	} else {
+		$('#COLIFORME_TOTALES_ALIMENTOS_NO').prop('checked', false)
+		$('.totales').prop('disabled', true).prop('required', false).val('');
+
+	}
+	
+	
+	
+	if (row.data().COLIFORME_FECALES_ALIMENTOS == 1) {
+		$('#COLIFORME_FECALES_ALIMENTOS_SI').prop('checked', true)
+		$('.fecales').prop('disabled', false).prop('required', true).val('');
+
+		$('#FECHA_MEDICION_ALIMENTOS_FECALES').val(row.data().FECHA_MEDICION_ALIMENTOS_FECALES);
+		$('#UNIDAD_ALIMENTOS_FECALES').val(row.data().UNIDAD_ALIMENTOS_FECALES);
+		$('#METODO_ALIMENTOS_FECALES').val(row.data().METODO_ALIMENTOS_FECALES);
+		$('#TRABAJADORES_ALIMENTOS_FECALES').val(row.data().TRABAJADORES_ALIMENTOS_FECALES);
+		$('#CONCENTRACION_ALIMENTOS_FECALES').val(row.data().CONCENTRACION_ALIMENTOS_FECALES);
+		$('#CONCENTRACION_PERMISIBLE_FECALES').val(row.data().CONCENTRACION_PERMISIBLE_FECALES);
+
+	} else {
+		$('#COLIFORME_FECALES_ALIMENTOS_NO').prop('checked', false)
+		$('.fecales').prop('disabled', true).prop('required', false).val('');
+
+	}
+
+	//COLOR
+	$('#UNIDAD_COLOR').val(row.data().UNIDAD_COLOR);
+	$('#METODO_COLOR').val(row.data().METODO_COLOR);
+	$('#CONCENTRACION_COLOR').val(row.data().CONCENTRACION_COLOR);
+	
+	//OLOR
+	$('#UNIDAD_OLOR').val(row.data().UNIDAD_OLOR);
+	$('#METODO_OLOR').val(row.data().METODO_OLOR);
+	$('#CONCENTRACION_OLOR').val(row.data().CONCENTRACION_OLOR);
+	
+	//SABOR
+	$('#UNIDAD_SABOR').val(row.data().UNIDAD_SABOR);
+	$('#METODO_SABOR').val(row.data().METODO_SABOR);
+	$('#CONCENTRACION_SABOR').val(row.data().CONCENTRACION_SABOR);
+	
+
+	// mostrar modal
+	$('#modal_reporte_punto_8_1').modal({ backdrop: false });
+});
+
+
+
 
 // ============== Punto 8.2 ==============
 $('input[name="COLIFORME_TOTALES_VIVAS"]').change(function () {
@@ -3469,6 +3627,152 @@ function tabla_reporte_informeresultados8_2(proyecto_id)
 }
 
 
+
+function eliminarPuntoAlimento8_2(id) {
+
+	swal({
+		title: "¡Confirme que desea eliminar este resultado!",
+		text: "Esta acción es irreversible",
+		type: "warning",
+		showCancelButton: true,
+		confirmButtonColor: "#DD6B55",
+		confirmButtonText: "Eliminar!",
+		cancelButtonText: "Cancelar!",
+		closeOnConfirm: false,
+		closeOnCancel: false
+	},
+		function (isConfirm) {
+			if (isConfirm) {
+				// cerrar msj confirmacion
+				swal.close();
+
+				$.ajax({
+					type: "GET",
+					dataType: "json",
+					url: "/reporteAlimentosEliminarPuntos/2/" + id,
+					data:{},
+					cache: false,
+					success: function (dato) {
+						
+						// Actualizamos las tabla
+						tabla_reporte_informeresultados8_2(proyecto.id);
+
+						// mensaje
+						swal({
+							title: "Registro eliminado con exito",
+							text: "Acción realizada",
+							type: "success", // warning, error, success, info
+							buttons: {
+								visible: false, // true , false
+							},
+							timer: 1500,
+							showConfirmButton: false
+						});
+
+						
+					}, error: function(dato) {
+						// mensaje
+						console.log(dato)
+
+						swal({
+							title: "Error",
+							text: "Al intentar eliminar el registro, intentelo de nuevo.\n"+dato,
+							type: "error", // warning, error, success, info
+							buttons: {
+								visible: false, // true , false
+							},
+							timer: 1500,
+							showConfirmButton: false
+						});
+						return false;
+					}
+				});//Fin ajax
+				return false;
+			}else {
+				// mensaje
+				swal({
+					title: "Cancelado",
+					text: "Acción cancelada",
+					type: "error", // warning, error, success, info
+					buttons: {
+						visible: false, // true , false
+					},
+					timer: 500,
+					showConfirmButton: false
+				});
+			}
+		});
+	return false;
+	
+}
+
+
+$('#tabla_resultado_8_2 tbody').on('click', 'td>button.boton_editar', function () {
+
+	var tr = $(this).closest('tr');
+	var row = datatable_informeresultados8_2.row(tr);
+
+	$('#form_reporte_punto_8_2').each(function () {
+		this.reset();
+	});
+
+
+	// Campos Hidden
+	$('#ID_PUNTO_VIVAS').val(row.data().ID_PUNTO_VIVAS);
+
+
+	//Campos generalas
+	$('#PUNTO_MEDICION_VIVAS').val(row.data().PUNTO_MEDICION_VIVAS);
+	$('#AREA_VIVAS').val(row.data().AREA_VIVAS);
+	$('#UBICACION_VIVAS').val(row.data().UBICACION_VIVAS);
+
+	//Validamos los campos de Coliformes
+	if (row.data().COLIFORME_TOTALES_VIVAS == 1) {
+		$('#COLIFORME_TOTALES_VIVAS_SI').prop('checked', true)
+		$('.vivas_totales').prop('disabled', false).prop('required', true).val('');
+
+
+		$('#FECHA_MEDICION_VIVAS_TOTALES').val(row.data().FECHA_MEDICION_VIVAS_TOTALES);
+		$('#UNIDAD_VIVAS_TOTALES').val(row.data().UNIDAD_VIVAS_TOTALES);
+		$('#METODO_VIVAS_TOTALES').val(row.data().METODO_VIVAS_TOTALES);
+		$('#TRABAJADORES_VIVAS_TOTALES').val(row.data().TRABAJADORES_VIVAS_TOTALES);
+		$('#CONCENTRACION_VIVAS_TOTALES').val(row.data().CONCENTRACION_VIVAS_TOTALES);
+		$('#CONCENTRACION_PERMISIBLE_TOTALES').val(row.data().CONCENTRACION_PERMISIBLE_TOTALES);
+
+	} else {
+		$('#COLIFORME_TOTALES_VIVAS_NO').prop('checked', false)
+		$('.vivas_totales').prop('disabled', true).prop('required', false).val('');
+
+	}
+	
+	
+	
+	if (row.data().COLIFORME_FECALES_VIVAS == 1) {
+		$('#COLIFORME_FECALES_VIVAS_SI').prop('checked', true)
+		$('.vivas_fecales').prop('disabled', false).prop('required', true).val('');
+
+		$('#FECHA_MEDICION_VIVAS_FECALES').val(row.data().FECHA_MEDICION_VIVAS_FECALES);
+		$('#UNIDAD_VIVAS_FECALES').val(row.data().UNIDAD_VIVAS_FECALES);
+		$('#METODO_VIVAS_FECALES').val(row.data().METODO_VIVAS_FECALES);
+		$('#TRABAJADORES_VIVAS_FECALES').val(row.data().TRABAJADORES_VIVAS_FECALES);
+		$('#CONCENTRACION_VIVAS_FECALES').val(row.data().CONCENTRACION_VIVAS_FECALES);
+		$('#CONCENTRACION_PERMISIBLE_FECALES').val(row.data().CONCENTRACION_PERMISIBLE_FECALES);
+
+	} else {
+		$('#COLIFORME_FECALES_VIVAS_NO').prop('checked', false)
+		$('.vivas_fecales').prop('disabled', true).prop('required', false).val('');
+
+	}
+
+	
+	
+
+	// mostrar modal
+	$('#modal_reporte_punto_8_2').modal({ backdrop: false });
+});
+
+
+
 //  ============== Punto 8.3 ==============
 $('input[name="COLIFORME_TOTALES_INERTES"]').change(function () {
 	if ($('#COLIFORME_TOTALES_INERTES_SI').is(':checked')) {
@@ -3772,6 +4076,151 @@ function tabla_reporte_informeresultados8_3(proyecto_id)
 		tabla_reporte_informeresultados8_3(proyecto.id);
     }
 }
+
+
+function eliminarPuntoAlimento8_3(id) {
+
+	swal({
+		title: "¡Confirme que desea eliminar este resultado!",
+		text: "Esta acción es irreversible",
+		type: "warning",
+		showCancelButton: true,
+		confirmButtonColor: "#DD6B55",
+		confirmButtonText: "Eliminar!",
+		cancelButtonText: "Cancelar!",
+		closeOnConfirm: false,
+		closeOnCancel: false
+	},
+		function (isConfirm) {
+			if (isConfirm) {
+				// cerrar msj confirmacion
+				swal.close();
+
+				$.ajax({
+					type: "GET",
+					dataType: "json",
+					url: "/reporteAlimentosEliminarPuntos/3/" + id,
+					data:{},
+					cache: false,
+					success: function (dato) {
+						
+						// Actualizamos las tabla
+						tabla_reporte_informeresultados8_3(proyecto.id);
+
+						// mensaje
+						swal({
+							title: "Registro eliminado con exito",
+							text: "Acción realizada",
+							type: "success", // warning, error, success, info
+							buttons: {
+								visible: false, // true , false
+							},
+							timer: 1500,
+							showConfirmButton: false
+						});
+
+						
+					}, error: function(dato) {
+						// mensaje
+						console.log(dato)
+
+						swal({
+							title: "Error",
+							text: "Al intentar eliminar el registro, intentelo de nuevo.\n"+dato,
+							type: "error", // warning, error, success, info
+							buttons: {
+								visible: false, // true , false
+							},
+							timer: 1500,
+							showConfirmButton: false
+						});
+						return false;
+					}
+				});//Fin ajax
+				return false;
+			}else {
+				// mensaje
+				swal({
+					title: "Cancelado",
+					text: "Acción cancelada",
+					type: "error", // warning, error, success, info
+					buttons: {
+						visible: false, // true , false
+					},
+					timer: 500,
+					showConfirmButton: false
+				});
+			}
+		});
+	return false;
+	
+}
+
+
+$('#tabla_resultado_8_3 tbody').on('click', 'td>button.boton_editar', function () {
+
+	var tr = $(this).closest('tr');
+	var row = datatable_informeresultados8_3.row(tr);
+
+	$('#form_reporte_punto_8_3').each(function () {
+		this.reset();
+	});
+
+
+	// Campos Hidden
+	$('#ID_PUNTO_INERTES').val(row.data().ID_PUNTO_INERTES);
+
+
+	//Campos generalas
+	$('#PUNTO_MEDICION_INERTES').val(row.data().PUNTO_MEDICION_INERTES);
+	$('#AREA_INERTES').val(row.data().AREA_INERTES);
+	$('#UBICACION_INERTES').val(row.data().UBICACION_INERTES);
+
+	//Validamos los campos de Coliformes
+	if (row.data().COLIFORME_TOTALES_INERTES == 1) {
+		$('#COLIFORME_TOTALES_INERTES_SI').prop('checked', true)
+		$('.inertes_totales').prop('disabled', false).prop('required', true).val('');
+
+
+		$('#FECHA_MEDICION_INERTES_TOTALES').val(row.data().FECHA_MEDICION_INERTES_TOTALES);
+		$('#UNIDAD_INERTES_TOTALES').val(row.data().UNIDAD_INERTES_TOTALES);
+		$('#METODO_INERTES_TOTALES').val(row.data().METODO_INERTES_TOTALES);
+		$('#TRABAJADORES_INERTES_TOTALES').val(row.data().TRABAJADORES_INERTES_TOTALES);
+		$('#CONCENTRACION_INERTES_TOTALES').val(row.data().CONCENTRACION_INERTES_TOTALES);
+		$('#CONCENTRACION_PERMISIBLE_TOTALES').val(row.data().CONCENTRACION_PERMISIBLE_TOTALES);
+
+	} else {
+		$('#COLIFORME_TOTALES_INERTES_NO').prop('checked', false)
+		$('.inertes_totales').prop('disabled', true).prop('required', false).val('');
+
+	}
+	
+	
+	
+	if (row.data().COLIFORME_FECALES_INERTES == 1) {
+		$('#COLIFORME_FECALES_INERTES_SI').prop('checked', true)
+		$('.inertes_fecales').prop('disabled', false).prop('required', true).val('');
+
+		$('#FECHA_MEDICION_INERTES_FECALES').val(row.data().FECHA_MEDICION_INERTES_FECALES);
+		$('#UNIDAD_INERTES_FECALES').val(row.data().UNIDAD_INERTES_FECALES);
+		$('#METODO_INERTES_FECALES').val(row.data().METODO_INERTES_FECALES);
+		$('#TRABAJADORES_INERTES_FECALES').val(row.data().TRABAJADORES_INERTES_FECALES);
+		$('#CONCENTRACION_INERTES_FECALES').val(row.data().CONCENTRACION_INERTES_FECALES);
+		$('#CONCENTRACION_PERMISIBLE_FECALES').val(row.data().CONCENTRACION_PERMISIBLE_FECALES);
+
+	} else {
+		$('#COLIFORME_FECALES_INERTES_NO').prop('checked', false)
+		$('.inertes_fecales').prop('disabled', true).prop('required', false).val('');
+
+	}
+
+	
+	
+
+	// mostrar modal
+	$('#modal_reporte_punto_8_3').modal({ backdrop: false });
+});
+
 
 
 //=================================================
@@ -4941,6 +5390,10 @@ $("#boton_reporte_nuevarevision").click(function()
 							tabla_reporte_revisiones(proyecto.id);
 							tabla_reporte_definiciones(proyecto.id, agente_nombre, reportealimentos_id);
 							
+							tabla_reporte_informeresultados8_1(proyecto.id);
+							tabla_reporte_informeresultados8_2(proyecto.id);
+							tabla_reporte_informeresultados8_3(proyecto.id);
+							
 
 
 							// desplazar a la ultima fila de la tabla
@@ -5089,6 +5542,9 @@ function reporte_concluido(revision_id, perfil, checkbox)
 
 								tabla_reporte_definiciones(proyecto.id, agente_nombre, reportealimentos_id);
 
+								tabla_reporte_informeresultados8_1(proyecto.id);
+								tabla_reporte_informeresultados8_2(proyecto.id);
+								tabla_reporte_informeresultados8_3(proyecto.id);
 
 								// desplazar a la ultima fila de la tabla
 								setTimeout(function()
@@ -5211,6 +5667,10 @@ function reporte_concluido(revision_id, perfil, checkbox)
 							botoninforme_estado(dato.estado);
 
 							tabla_reporte_definiciones(proyecto.id, agente_nombre, reportealimentos_id);
+
+							tabla_reporte_informeresultados8_1(proyecto.id);
+							tabla_reporte_informeresultados8_2(proyecto.id);
+							tabla_reporte_informeresultados8_3(proyecto.id);
 
 
 							// mensaje
@@ -5338,7 +5798,10 @@ function reporte_cancelado(revision_id, perfil, checkbox)
 							tabla_reporte_revisiones(proyecto.id);
 
 							tabla_reporte_definiciones(proyecto.id, agente_nombre, reportealimentos_id);
-
+							
+							tabla_reporte_informeresultados8_1(proyecto.id);
+							tabla_reporte_informeresultados8_2(proyecto.id);
+							tabla_reporte_informeresultados8_3(proyecto.id);
 							
 							// desplazar a la ultima fila de la tabla
 							setTimeout(function()
@@ -5451,6 +5914,9 @@ $("#botonguardar_modal_cancelacionobservacion").click(function()
 
 					tabla_reporte_definiciones(proyecto.id, agente_nombre, reportealimentos_id);
 
+					tabla_reporte_informeresultados8_1(proyecto.id);
+					tabla_reporte_informeresultados8_2(proyecto.id);
+					tabla_reporte_informeresultados8_3(proyecto.id);
 					
 					// desplazar a la ultima fila de la tabla
 					setTimeout(function()

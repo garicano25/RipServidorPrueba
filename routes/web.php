@@ -1780,8 +1780,13 @@ Route::get('reportealimentostablaanexos/{proyecto_id}/{reportealimentos_id}/{age
 
 Route::get('reportealimentostablainformeresultados/{proyecto_id}/{reportealimentos_id}/{agente_nombre}', ['as' => 'reportealimentos.reportealimentostablainformeresultados', 'uses' => 'reportes\reportealimentosController@reportealimentostablainformeresultados']);
 
+Route::get('reporteAlimentosEliminarPuntos/{tabla}/{id}', ['as' => 'reportealimentos.reporteAlimentosEliminarPuntos', 'uses' => 'reportes\reportealimentosController@reporteAlimentosEliminarPuntos']);
 
+Route::get('reportealimentosconcluirrevision/{reporte_id}', ['as' => 'reportealimentos.reportealimentosconcluirrevision', 'uses' => 'reportes\reportealimentosController@reportealimentosconcluirrevision'])->middleware('asignacionUser:REVISION');
 
+Route::get('reportealimentosworddescargar/{proyecto_id}/{revision_id}/{ultima_revision}', ['as' => 'reportealimentos.reportealimentosworddescargar', 'uses' => 'reportes\reportealimentosWordController@reportealimentosworddescargar']);
+
+Route::post('reportealimentosword', ['as' => 'reportealimentos.reportealimentosword', 'uses' => 'reportes\reportealimentosWordController@reportealimentosword']);
 
 
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
