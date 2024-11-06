@@ -818,7 +818,7 @@ use Illuminate\Support\Str;
 
     @if(request()->is('recsensorialquimicoscatalogos'))
     <script src="/assets/plugins/datatables/jquery.dataTables.min.js"></script>
-    <script src="/js_sitio/recsensorialquimicos_catalogos.js?v=7.0"></script>
+    <script src="/js_sitio/recsensorialquimicos_catalogos.js?v=8.0"></script>
     <script src="/assets/plugins/datatables/dataTables.rowsGroup.js"></script>
     {{-- Select search filter --}}
     <script src="/assets/plugins/select-search/selectize.js" type="text/javascript"></script>
