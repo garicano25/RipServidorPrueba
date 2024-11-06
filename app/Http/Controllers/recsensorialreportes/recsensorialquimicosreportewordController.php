@@ -108,7 +108,7 @@ class recsensorialquimicosreportewordController extends Controller
 
     public function recomendacionesNuevas($texto)
     {
-        
+
         $parrafos = explode('\n\n', $texto);
         $texto_nuevo = '';
 
@@ -826,18 +826,17 @@ class recsensorialquimicosreportewordController extends Controller
                             IFNULL(recsensorialarea.recsensorialarea_nombre, "Sin dato") AS recsensorialarea_nombre,
                             recsensorialmaquinaria.id,
                             recsensorialmaquinaria.recsensorialmaquinaria_descripcionfuente AS recsensorialmaquinaria_nombre,
-                            IF(recsensorialmaquinaria.recsensorialmaquinaria_unidadMedida = 7,
-                                CONCAT(recsensorialmaquinaria.recsensorialmaquinaria_cantidad, " PZ"),
-                                CONCAT(recsensorialmaquinaria.recsensorialmaquinaria_cantidad, " de ", recsensorialmaquinaria.recsensorialmaquinaria_contenido , " " , 
-                                    CASE recsensorialmaquinaria.recsensorialmaquinaria_unidadMedida
-                                        WHEN 1 THEN "ml"
-                                        WHEN 2 THEN "L"
-                                        WHEN 3 THEN "M³"
-                                        WHEN 4 THEN "gr"
-                                        WHEN 5 THEN "kg"
-                                        WHEN 6 THEN "T"
-                                        ELSE "ND"
-                                    END
+                            IF(recsensorialmaquinaria.recsensorialmaquinaria_unidadMedida = 7, CONCAT(recsensorialmaquinaria.recsensorialmaquinaria_cantidad, " PZ"),
+                                CONCAT((IFNULL(recsensorialmaquinaria.recsensorialmaquinaria_cantidad,0) * IFNULL(recsensorialmaquinaria.recsensorialmaquinaria_contenido ,0)), " " , 
+                                        CASE recsensorialmaquinaria.recsensorialmaquinaria_unidadMedida
+                                                WHEN 1 THEN "ml"
+                                                WHEN 2 THEN "L"
+                                                WHEN 3 THEN "M³"
+                                                WHEN 4 THEN "gr"
+                                                WHEN 5 THEN "kg"
+                                                WHEN 6 THEN "T"
+                                                ELSE "ND"
+                                        END
                                 )
                             ) AS recsensorialmaquinaria_cantidad,
                             recsensorialmaquinaria.recsensorialmaquinaria_afecta 
@@ -862,22 +861,6 @@ class recsensorialquimicosreportewordController extends Controller
         // registros tabla
         $area = 'xxx';
         foreach ($sql as $key => $value) {
-
-            // $agentes = DB::select('SELECT
-            //                             IFNULL(CONCAT("● ", REPLACE(GROUP_CONCAT(TABLA.catsustancia_nombre), ",", "<w:br />● ")), "Sin dato") AS agentes_quimicos
-            //                         FROM
-            //                             (
-            //                                 SELECT  
-            //                                     catsustancia.catsustancia_nombre
-            //                                 FROM
-            //                                     recsensorialquimicosinventario
-            //                                     LEFT JOIN catsustancia ON recsensorialquimicosinventario.catsustancia_id = catsustancia.id 
-            //                                 WHERE
-            //                                     recsensorialquimicosinventario.recsensorialarea_id = ?
-            //                                 GROUP BY
-            //                                     catsustancia.catsustancia_nombre
-            //                             ) AS TABLA', [$value->recsensorialarea_id]);
-
 
             if ($area != $value->recsensorialarea_nombre) {
                 $table->addRow(); //fila
@@ -1836,16 +1819,14 @@ class recsensorialquimicosreportewordController extends Controller
                 if (($key + 0) < (count($sql) - 1)) {
                     $recomendacion .= $value->DESCRIPCION . '\n\n';
                 } else {
-                    $recomendacion .= $value->DESCRIPCION ;
+                    $recomendacion .= $value->DESCRIPCION;
                 }
             }
 
             $plantillaword->setValue('lista_recomendaciones', $this->recomendacionesNuevas($recomendacion));
-
         } else {
 
             $plantillaword->setValue('lista_recomendaciones', "Sin recomendaciones");
-          
         }
 
 
@@ -1981,98 +1962,98 @@ class recsensorialquimicosreportewordController extends Controller
                 }
 
                 // Crear el archivo ZIP
-            //     $zipFilePath = storage_path('app/reportes/recsensorial/Informe_y_Anexos.zip');
-            //     $zip = new ZipArchive;
+                //     $zipFilePath = storage_path('app/reportes/recsensorial/Informe_y_Anexos.zip');
+                //     $zip = new ZipArchive;
 
-            //     if ($zip->open($zipFilePath, ZipArchive::CREATE | ZipArchive::OVERWRITE) === TRUE) {
-            //         // Añadir los archivos iniciales al ZIP
-            //         foreach ($archivosParaZip as $archivo) {
-            //             if (file_exists($archivo) && is_file($archivo)) {
-            //                 $zip->addFile($archivo, basename($archivo));
-            //                 Storage::delete($archivo);
-            //             }
-            //         }
+                //     if ($zip->open($zipFilePath, ZipArchive::CREATE | ZipArchive::OVERWRITE) === TRUE) {
+                //         // Añadir los archivos iniciales al ZIP
+                //         foreach ($archivosParaZip as $archivo) {
+                //             if (file_exists($archivo) && is_file($archivo)) {
+                //                 $zip->addFile($archivo, basename($archivo));
+                //                 Storage::delete($archivo);
+                //             }
+                //         }
 
-            //         // Verificar si hay hojas de seguridad y añadirlas al ZIP
-            //         if (count($anexos) != 0) {
+                //         // Verificar si hay hojas de seguridad y añadirlas al ZIP
+                //         if (count($anexos) != 0) {
 
-            //             foreach ($anexos as $key => $val) {
+                //             foreach ($anexos as $key => $val) {
 
-            //                 if ($val->hojas_seguridad == 1) {
+                //                 if ($val->hojas_seguridad == 1) {
 
-            //                     $hojas = DB::select('SELECT hoja.catsustancia_nombre,
-            //                                  hoja.catsustancia_hojaseguridadpdf
-            //                           FROM recsensorialquimicosinventario inventario
-            //                           LEFT JOIN catHojasSeguridad_SustanciasQuimicas relacion ON relacion.HOJA_SEGURIDAD_ID = inventario.catsustancia_id
-            //                           LEFT JOIN catsustancia hoja ON hoja.id = relacion.HOJA_SEGURIDAD_ID
-            //                           LEFT JOIN catsustancias_quimicas sus ON sus.ID_SUSTANCIA_QUIMICA = relacion.SUSTANCIA_QUIMICA_ID
-            //                           LEFT JOIN catestadofisicosustancia estado ON estado.id = relacion.ESTADO_FISICO
-            //                           LEFT JOIN catvolatilidad volatilidad ON volatilidad.id = relacion.VOLATILIDAD
-            //                           WHERE inventario.recsensorial_id = ?
-            //                           GROUP BY hoja.catsustancia_nombre, hoja.catsustancia_hojaseguridadpdf
-            //                           ORDER BY hoja.catsustancia_nombre', [$recsensorial_id]);
+                //                     $hojas = DB::select('SELECT hoja.catsustancia_nombre,
+                //                                  hoja.catsustancia_hojaseguridadpdf
+                //                           FROM recsensorialquimicosinventario inventario
+                //                           LEFT JOIN catHojasSeguridad_SustanciasQuimicas relacion ON relacion.HOJA_SEGURIDAD_ID = inventario.catsustancia_id
+                //                           LEFT JOIN catsustancia hoja ON hoja.id = relacion.HOJA_SEGURIDAD_ID
+                //                           LEFT JOIN catsustancias_quimicas sus ON sus.ID_SUSTANCIA_QUIMICA = relacion.SUSTANCIA_QUIMICA_ID
+                //                           LEFT JOIN catestadofisicosustancia estado ON estado.id = relacion.ESTADO_FISICO
+                //                           LEFT JOIN catvolatilidad volatilidad ON volatilidad.id = relacion.VOLATILIDAD
+                //                           WHERE inventario.recsensorial_id = ?
+                //                           GROUP BY hoja.catsustancia_nombre, hoja.catsustancia_hojaseguridadpdf
+                //                           ORDER BY hoja.catsustancia_nombre', [$recsensorial_id]);
 
-            //                     foreach ($hojas as $key => $hoja) {
-            //                         $archivo = storage_path('app/' . $hoja->catsustancia_hojaseguridadpdf);
+                //                     foreach ($hojas as $key => $hoja) {
+                //                         $archivo = storage_path('app/' . $hoja->catsustancia_hojaseguridadpdf);
 
-            //                         if (file_exists($archivo) && is_file($archivo)) {
+                //                         if (file_exists($archivo) && is_file($archivo)) {
 
-            //                             $nombrePersonalizado = 'Anexo ' . $val->recsensorialanexo_orden . ' HDS - ' . $hoja->catsustancia_nombre . '.pdf';
-            //                             $zip->addFile($archivo, $nombrePersonalizado);
-            //                         }
-            //                     }
-            //                 } else {
+                //                             $nombrePersonalizado = 'Anexo ' . $val->recsensorialanexo_orden . ' HDS - ' . $hoja->catsustancia_nombre . '.pdf';
+                //                             $zip->addFile($archivo, $nombrePersonalizado);
+                //                         }
+                //                     }
+                //                 } else {
 
-            //                     $adicionales = DB::select('SELECT contrato.NOMBRE_ANEXO, IFNULL(anexo.ruta_anexo, acre.acreditacion_SoportePDF) AS RUTA, anexo.recsensorialanexo_orden 
-            //                                                 FROM recsensorialanexo anexo
-            //                                                 LEFT JOIN contratros_anexos contrato ON contrato.ID_CONTRATO_ANEXO = anexo.contrato_anexo_id
-            //                                                 LEFT JOIN acreditacion acre ON acre.id = anexo.acreditacion_id
-            //                                                 WHERE anexo.recsensorial_id = ? AND anexo.recsensorialanexo_tipo = 2 AND anexo.hojas_seguridad = 0
-            //                                                 ORDER BY anexo.recsensorialanexo_orden', [$recsensorial_id]);
+                //                     $adicionales = DB::select('SELECT contrato.NOMBRE_ANEXO, IFNULL(anexo.ruta_anexo, acre.acreditacion_SoportePDF) AS RUTA, anexo.recsensorialanexo_orden 
+                //                                                 FROM recsensorialanexo anexo
+                //                                                 LEFT JOIN contratros_anexos contrato ON contrato.ID_CONTRATO_ANEXO = anexo.contrato_anexo_id
+                //                                                 LEFT JOIN acreditacion acre ON acre.id = anexo.acreditacion_id
+                //                                                 WHERE anexo.recsensorial_id = ? AND anexo.recsensorialanexo_tipo = 2 AND anexo.hojas_seguridad = 0
+                //                                                 ORDER BY anexo.recsensorialanexo_orden', [$recsensorial_id]);
 
-            //                     foreach ($adicionales as $key => $doc) {
-            //                         $archivo = storage_path('app/' . $doc->RUTA);
+                //                     foreach ($adicionales as $key => $doc) {
+                //                         $archivo = storage_path('app/' . $doc->RUTA);
 
-            //                         if (file_exists($archivo) && is_file($archivo)) {
+                //                         if (file_exists($archivo) && is_file($archivo)) {
 
-            //                             $nombrePersonalizado = 'Anexo ' . $doc->recsensorialanexo_orden . ' - ' . $doc->NOMBRE_ANEXO . '.pdf';
-            //                             $zip->addFile($archivo, $nombrePersonalizado);
-            //                         }
-            //                     }
-            //                 }
-            //             }
-            //         }
+                //                             $nombrePersonalizado = 'Anexo ' . $doc->recsensorialanexo_orden . ' - ' . $doc->NOMBRE_ANEXO . '.pdf';
+                //                             $zip->addFile($archivo, $nombrePersonalizado);
+                //                         }
+                //                     }
+                //                 }
+                //             }
+                //         }
 
-            //         // Cerrar el ZIP
-            //         $zip->close();
-            //     } else {
+                //         // Cerrar el ZIP
+                //         $zip->close();
+                //     } else {
 
-            //         throw new Exception("No se pudo crear el archivo ZIP.");
-            //     }
+                //         throw new Exception("No se pudo crear el archivo ZIP.");
+                //     }
 
-            //     // Retornar el archivo ZIP para su descarga
-            //     return response()->download($zipFilePath)->deleteFileAfterSend(true);
-            
+                //     // Retornar el archivo ZIP para su descarga
+                //     return response()->download($zipFilePath)->deleteFileAfterSend(true);
 
 
-            // Crear el archivo ZIP
-            $nombreInstalacion = session('nombreInstalacion', 'NombrePorDefecto');
 
-                        $zipFolderBasePath = "ZIP_RECO/{$recsensorial_id}/{$numeroVersiones}";
-                        Storage::makeDirectory($zipFolderBasePath);
+                // Crear el archivo ZIP
+                $nombreInstalacion = session('nombreInstalacion', 'NombrePorDefecto');
 
-                        $zipFileName = "Informe - Reconocimiento de Químicos - {$nombreInstalacion}_V{$numeroVersiones}.zip";
-                        $zipFilePath = storage_path("app/{$zipFolderBasePath}/{$zipFileName}");
+                $zipFolderBasePath = "ZIP_RECO/{$recsensorial_id}/{$numeroVersiones}";
+                Storage::makeDirectory($zipFolderBasePath);
 
-                        $zip = new ZipArchive;
+                $zipFileName = "Informe - Reconocimiento de Químicos - {$nombreInstalacion}_V{$numeroVersiones}.zip";
+                $zipFilePath = storage_path("app/{$zipFolderBasePath}/{$zipFileName}");
 
-                        if ($zip->open($zipFilePath, ZipArchive::CREATE | ZipArchive::OVERWRITE) === TRUE) {
-                            foreach ($archivosParaZip as $archivo) {
-                                if (file_exists($archivo) && is_file($archivo)) {
-                                    $zip->addFile($archivo, basename($archivo));
-                                    Storage::delete($archivo); 
-                                }
-                            }
+                $zip = new ZipArchive;
+
+                if ($zip->open($zipFilePath, ZipArchive::CREATE | ZipArchive::OVERWRITE) === TRUE) {
+                    foreach ($archivosParaZip as $archivo) {
+                        if (file_exists($archivo) && is_file($archivo)) {
+                            $zip->addFile($archivo, basename($archivo));
+                            Storage::delete($archivo);
+                        }
+                    }
 
 
                     // Verificar si hay hojas de seguridad y añadirlas al ZIP
@@ -2138,20 +2119,15 @@ class recsensorialquimicosreportewordController extends Controller
                     return $rutaZip;
                 }
 
-                
 
 
-               //return $rutaZip; 
+
+                //return $rutaZip; 
 
                 // Descargar el archivo ZIP después de crearlo y guardarlo en storage
                 //return response()->download($zipFilePath)->deleteFileAfterSend(false);
-            
-        }
 
-
-
-            
-            
+            }
         } catch (Exception $e) {
             $dato["msj"] = 'Error al crear reporte: ' . $e->getMessage();
             return response()->json($dato);
