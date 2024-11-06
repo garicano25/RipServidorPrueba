@@ -106,8 +106,7 @@ $("#botonactualizar_fechas_online").click(function()
 					let trabajadorNombre = row.TRABAJADOR_NOMBRE; 
 					let fechaInicio = row.FECHAINICIO;
 					let fechaFin = row.FECHAFIN;
-					let estadoCorreo = row.TRABAJADOR_ESTADOCORREO;
-					let estadoContestados = row.TRABAJADOR_ESTADOCONTESTADO;
+					
 					let trabajadorId = row.TRABAJADOR_ID;
 
 					datosEnviar.push({
@@ -115,8 +114,7 @@ $("#botonactualizar_fechas_online").click(function()
 						trabajadorId: trabajadorId,
 						fechaInicio: fechaInicio,
 						fechaFin: fechaFin,
-						estadoCorreo: estadoCorreo,
-						estadoContestados: estadoContestados
+						
 					});
 				});
 
@@ -530,10 +528,6 @@ function tabla_ejecucion()
 					    "defaultContent": "-"
 					},
 					{
-					    "data": "RECONOCIMIENTO_VINCULADO",
-					    "defaultContent": "-"
-					},
-					{
 					    "orderable": false,
 					    "data": 'boton_mostrar',
 					    "defaultContent": '-'
@@ -635,28 +629,26 @@ function tabla_trabajadores_online()
                         }
                         return data;
                     }
-                },
-                {
-                    "data": "TRABAJADOR_ESTADOCORREO",
-                    "defaultContent": "-",
+				},
+				{
+                    "data": "TRABAJADOR_CORREO",
+					"defaultContent": "-",
 					"render": function(data, type, row) {
                         if (type === 'display') {
-							return '<div data-trabajador-estadocorreo="' + data + '">' + data + '</div>';
-							
+                            return '<div class="input-group">' +
+                                		'<input type="text" class="form-control " name="CORREO_TRABAJADOR[]" value="' + data + '">' +
+                                	'</div>';
                         }
                         return data;
                     }
                 },
                 {
-                    "data": "TRABAJADOR_ESTADOCONTESTADO",
+                    "data": "TRABAJADOR_ESTADOCORREO",
                     "defaultContent": "-",
-					"render": function(data, type, row) {
-                        if (type === 'display') {
-							return '<div data-trabajador-estadocontestado="' + data + '">' + data + '</div>';
-							
-						}
-                        return data;
-                    }
+                },
+                {
+                    "data": "TRABAJADOR_ESTADOCONTESTADO",
+                    "defaultContent": "-"
                 },
                 {
                     "orderable": false,

@@ -359,7 +359,7 @@ class reportesController extends Controller
                                                     WHEN catprueba_id = 8 THEN "Ventilación y calidad del aire"
                                                     WHEN catprueba_id = 9 THEN "Agua"
                                                     WHEN catprueba_id = 10 THEN "Hielo"
-                                                    WHEN catprueba_id = 11 THEN "" -- "Alimentos"
+                                                    WHEN catprueba_id = 11 THEN "Alimentos" -- "Alimentos"
                                                     WHEN catprueba_id = 12 THEN "" -- "Superficies"
                                                     WHEN catprueba_id = 13 THEN "" -- "Riesgos ergonómicos"
                                                     WHEN catprueba_id = 14 THEN "" -- "Factores psicosociales"

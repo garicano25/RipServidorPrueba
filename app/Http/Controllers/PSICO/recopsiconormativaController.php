@@ -6,9 +6,15 @@ use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\modelos\reconocimientopsico\reconocimientopsicoModel;
 use App\modelos\reconocimientopsico\recopsiconormativaModel;
+use App\modelos\reconocimientopsico\guiavnormativapsicoModel;
 use App\modelos\reconocimientopsico\recopsicotrabajadoresModel;
 use App\modelos\reconocimientopsico\recopsicoguia5Model;
-use App\modelos\reconocimientopsico\guiavnormativapsicoModel;
+use App\modelos\reconocimientopsico\proyectotrabajadoresModel;
+use App\modelos\reconocimientopsico\seguimientotrabajadoresModel;
+use App\modelos\reconocimientopsico\respuestastrabajadorespsicoModel;
+use App\modelos\reconocimientopsico\recopsicoproyectotrabajadoresModel;
+
+use App\modelos\proyecto\proyectoModel;
 
 //use DB;
 //Re//cursos para abrir el Excel
@@ -83,12 +89,16 @@ class recopsiconormativaController extends Controller
                 $RECPSICOTRABAJADOR_MUESTRA = $request->input('RECPSICOTRABAJADOR_MUESTRA');
                 $RECPSICO_APLICACION = $request->input('RECPSICO_APLICACION');
                
-
                 $excelTrabajadoresExists = recopsicotrabajadoresModel::where('RECPSICO_ID', $RECPSICO_ID)->exists();
+                $proyectoExists = proyectoModel::where('reconocimiento_psico_id', $RECPSICO_ID)->value('id');
 
                 if ($excelTrabajadoresExists) {
                     recopsicotrabajadoresModel::where('RECPSICO_ID', $RECPSICO_ID)->delete();
                     recopsicoguia5Model::where('RECPSICO_ID', $RECPSICO_ID)->delete();
+                    respuestastrabajadorespsicoModel::where('RECPSICO_ID', $RECPSICO_ID)->delete();
+                    seguimientotrabajadoresModel::where('proyecto_id', $proyectoExists)->delete(); 
+                    recopsicoproyectotrabajadoresModel::where('RECPSICO_ID', $RECPSICO_ID)->delete();
+                    proyectotrabajadoresModel::where('proyecto_id', $proyectoExists)->delete();
                 }
         
                 try {
@@ -164,8 +174,6 @@ class recopsiconormativaController extends Controller
                                 //Limpiamos, Validamos y Insertamos todos los datos del Excel
                                 foreach ($datosGenerales as $rowData) {
 
-                                    
-
                                     $TRABAJADOR = recopsicotrabajadoresModel::create([
                                         'RECPSICO_ID' => $RECPSICO_ID,
                                         'RECPSICOTRABAJADOR_MUESTRA' => 0,
@@ -175,7 +183,7 @@ class recopsiconormativaController extends Controller
                                         'RECPSICOTRABAJADOR_AREA' => null,
                                         'RECPSICOTRABAJADOR_CATEGORIA' => null,
                                         'RECPSICOTRABAJADOR_FICHA' => is_null($rowData['F']) ? null : $rowData['F'],
-                                        'RECPSICOTRABAJADOR_CORREO' => is_null($rowData['G']) ? null : $rowData['G'],
+                                        'RECPSICOTRABAJADOR_CORREO' => is_null($rowData['G']) ? null : str_replace(' ', '', $rowData['G']),
                                         'RECPSICOTRABAJADOR_SELECCIONADO' => null,
                                         'RECPSICOTRABAJADOR_OBSERVACION' => null,
                                         'RECPSICOTRABAJADOR_MODALIDAD' => null

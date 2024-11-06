@@ -4060,7 +4060,7 @@
                         <div class="col-6">
                             <div class="form-group">
                                 <label>Numero de muestra *</label>
-                                <input type="number" class="form-control" id="NUMERO_MUESTRA_BEI" name="NUMERO_MUESTRA" required>
+                                <input type="text" class="form-control" id="NUMERO_MUESTRA_BEI" name="NUMERO_MUESTRA" required>
                             </div>
                         </div>
                     </div>

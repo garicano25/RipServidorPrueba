@@ -118,23 +118,24 @@
                             @if(!auth()->user()->hasRoles(['Superusuario', 'Administrador','Coordinador','Compras','Almacén','Operativo HI','Psicólogo','Ergónomo']))
                             <a class="unauthorized" href="#">
 
-                            @else
-                                @if(auth()->user()->hasRoles(['Compras','Almacén','Operativo HI']))
+                                @else
+                                @if(auth()->user()->hasRoles(['Compras','Almacén','Operativo HI', 'Coordinador', 'Ergónomo']))
                                 <a class="unauthorized" href="#">
 
-                                @elseif(auth()->user()->hasRoles(['Psicólogo','Superusuario', 'Administrador']))
-                                <a class="cta" href="{{route('programaPsicosocial.index')}}">
+                                    @elseif(auth()->user()->hasRoles(['Psicólogo','Superusuario', 'Administrador']))
+                                    <a class="cta" href="{{route('programaPsicosocial.index')}}">
 
-                                @endif
-                            @endif
-                                <div class="row circle-one">
-                                    <div class="col-12 circle-two">
-                                        <img src="/assets/images/modulos/psicosocial.png" class="logos" alt="Modulos de Factor Piscosocial">
-                                    </div>
-                                    <span class="titulos" style="justify-content: center; margin-top:20px">Factor Psicosocial</span>
+                                        @endif
+                                        @endif
 
-                                </div>
-                            </a>
+                                        <div class="row circle-one">
+                                            <div class="col-12 circle-two">
+                                                <img src="/assets/images/modulos/psicosocial.png" class="logos" alt="Modulos de Factor Piscosocial">
+                                            </div>
+                                            <span class="titulos" style="justify-content: center; margin-top:20px">Factor Psicosocial</span>
+
+                                        </div>
+                                    </a>
                         </div>
                     </div>
                 </div>

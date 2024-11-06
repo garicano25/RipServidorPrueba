@@ -1765,6 +1765,46 @@ Route::get('reportebeiconcluirrevision/{reporte_id}', ['as' => 'reportebei.repor
 Route::get('reportebeiworddescargar/{proyecto_id}/{revision_id}/{ultima_revision}', ['as' => 'reportebei.reportebeiworddescargar', 'uses' => 'reportes\reporteBeiWordController@reportebeiworddescargar']);
 
 Route::post('reportebeiword', ['as' => 'reportebei.reportebeiword', 'uses' => 'reportes\reporteBeiWordController@reportebeiword']);
+
+
+//==============================================
+
+
+Route::resource('reportealimentos', 'reportes\reportealimentosController');
+
+Route::get('reportealimentosvista/{proyecto_id}', ['as' => 'reportealimentos.reportealimentosvista', 'uses' => 'reportes\reportealimentosController@reportealimentosvista']);
+
+Route::get('reportealimentosdatosgenerales/{proyecto_id}/{agente_id}/{agente_nombre}', ['as' => 'reportealimentos.reportealimentosdatosgenerales', 'uses' => 'reportes\reportealimentosController@reportealimentosdatosgenerales']);
+
+Route::get('reportealimentosmapaubicacion/{reportealimentos_id}/{archivo_opcion}', ['as' => 'reportealimentos.reportealimentosmapaubicacion', 'uses' => 'reportes\reportealimentosController@reportealimentosmapaubicacion']);
+
+Route::get('reportealimentosresponsabledocumento/{reportealimentos_id}/{responsabledoc_tipo}/{responsabledoc_opcion}', ['as' => 'reportealimentos.reportealimentosresponsabledocumento', 'uses' => 'reportes\reportealimentosController@reportealimentosresponsabledocumento']);
+
+Route::get('reportealimentostabladefiniciones/{proyecto_id}/{agente_nombre}/{reportealimentos_id}', ['as' => 'reportealimentos.reportealimentostabladefiniciones', 'uses' => 'reportes\reportealimentosController@reportealimentostabladefiniciones']);
+
+Route::get('reportealimentosdefinicioneliminar/{id}', ['as' => 'reportealimentos.reportealimentosdefinicioneliminar', 'uses' => 'reportes\reportealimentosController@reportealimentosdefinicioneliminar']);
+
+Route::get('reportealimentostablarevisiones/{id}', ['as' => 'reportealimentos.reportealimentostablarevisiones', 'uses' => 'reportes\reportealimentosController@reportealimentostablarevisiones']);
+
+Route::get('reportealimentostablarecomendaciones/{proyecto_id}/{reportealimentos_id}/{agente_nombre}', ['as' => 'reportealimentos.reportealimentostablarecomendaciones', 'uses' => 'reportes\reportealimentosController@reportealimentostablarecomendaciones']);
+
+Route::get('reportePuntosAlimentosTablas/{proyecto_id}/{tabla}', ['as' => 'reportealimentos.reportePuntosAlimentosTablas', 'uses' => 'reportes\reportealimentosController@reportePuntosAlimentosTablas']);
+
+Route::get('reportealimentostablaplanos/{proyecto_id}/{reportealimentos_id}/{agente_nombre}', ['as' => 'reportealimentos.reportealimentostablaplanos', 'uses' => 'reportes\reportealimentosController@reportealimentostablaplanos']);
+
+Route::get('reportealimentostablaanexos/{proyecto_id}/{reportealimentos_id}/{agente_nombre}', ['as' => 'reportealimentos.reportealimentostablaanexos', 'uses' => 'reportes\reportealimentosController@reportealimentostablaanexos']);
+
+Route::get('reportealimentostablainformeresultados/{proyecto_id}/{reportealimentos_id}/{agente_nombre}', ['as' => 'reportealimentos.reportealimentostablainformeresultados', 'uses' => 'reportes\reportealimentosController@reportealimentostablainformeresultados']);
+
+Route::get('reporteAlimentosEliminarPuntos/{tabla}/{id}', ['as' => 'reportealimentos.reporteAlimentosEliminarPuntos', 'uses' => 'reportes\reportealimentosController@reporteAlimentosEliminarPuntos']);
+
+Route::get('reportealimentosconcluirrevision/{reporte_id}', ['as' => 'reportealimentos.reportealimentosconcluirrevision', 'uses' => 'reportes\reportealimentosController@reportealimentosconcluirrevision'])->middleware('asignacionUser:REVISION');
+
+Route::get('reportealimentosworddescargar/{proyecto_id}/{revision_id}/{ultima_revision}', ['as' => 'reportealimentos.reportealimentosworddescargar', 'uses' => 'reportes\reportealimentosWordController@reportealimentosworddescargar']);
+
+Route::post('reportealimentosword', ['as' => 'reportealimentos.reportealimentosword', 'uses' => 'reportes\reportealimentosWordController@reportealimentosword']);
+
+
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 //////////////////////////////////////////////////EXTERNO////////////////////////////////////////////////////
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -1869,13 +1909,18 @@ Route::resource('informesPsicosocial', 'PSICO\informesrecoPsicoController');
 // GUIAS 
 
 // Route::get('/Guia/{id}/{guia1}/{guia2}/{guia3}', function () { return view('catalogos.psico.guias.guias');})->name('Guia');
-Route::get('/Guia/{guia1}/{guia2}/{guia3}/{id}', function ($guia1, $guia2, $guia3, $id) {
+Route::get('/Guia/{guia1}/{guia2}/{guia3}/{guia5}/{status}/{fechalimite}/{id}', function ($guia1, $guia2, $guia3, $guia5, $status, $fechalimite, $id) {
     try {
 
         // Desencriptamos las guías
         $decryptedGuia1 = Crypt::decrypt($guia1);
         $decryptedGuia2 = Crypt::decrypt($guia2);
         $decryptedGuia3 = Crypt::decrypt($guia3);
+        $decryptedGuia5 = Crypt::decrypt($guia5);
+
+        $decryptedstatus = Crypt::decrypt($status);
+        $decryptedfechalimite = Crypt::decrypt($fechalimite);
+
         $id = Crypt::decrypt($id);
 
         // Enviamos los datos de las guias ya desencriptados para obtenerlas en nuestra vista
@@ -1883,6 +1928,9 @@ Route::get('/Guia/{guia1}/{guia2}/{guia3}/{id}', function ($guia1, $guia2, $guia
             'guia1' => $decryptedGuia1,
             'guia2' => $decryptedGuia2,
             'guia3' => $decryptedGuia3,
+            'guia5' => $decryptedGuia5,
+            'status' => $decryptedstatus,
+            'fechalimite' => $decryptedfechalimite,
             'id' => $id,
         ]);
     } catch (\Illuminate\Contracts\Encryption\DecryptException $e) {
@@ -1892,6 +1940,7 @@ Route::get('/Guia/{guia1}/{guia2}/{guia3}/{id}', function ($guia1, $guia2, $guia
 })->name('Guia');
 
 Route::post('/consultarRespuestasGuardadas', 'PSICO\guiasController@consultarRespuestasGuardadas');
+Route::post('/consultarRespuestasGuiaV', 'PSICO\guiasController@consultarRespuestasGuiaV');
 Route::post('/obtenerExplicaciones', 'PSICO\guiasController@obtenerExplicaciones');
 Route::post('/consultarDatosTrabajador', 'PSICO\guiasController@consultarDatosTrabajador');
 Route::post('/guardarFotoRecpsico', 'PSICO\guiasController@guardarFotoRecpsico');

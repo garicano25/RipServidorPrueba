@@ -3,7 +3,7 @@
 namespace App\Http\Controllers\reportes;
 
 use Illuminate\Http\Request;
-use App\Http\Controllers\Controller;;
+use App\Http\Controllers\Controller;
 
 // Plugins
 use PhpOffice\PhpWord\PhpWord;
@@ -27,38 +27,37 @@ use App\modelos\proyecto\proyectoModel;
 use App\modelos\recsensorial\recsensorialModel;
 use App\modelos\clientes\clienteModel;
 
-// Catalogos
-use App\modelos\recsensorial\catregionModel;
-use App\modelos\recsensorial\catsubdireccionModel;
-use App\modelos\recsensorial\catgerenciaModel;
-use App\modelos\recsensorial\catactivoModel;
 
 //Revisiones
 use App\modelos\reportes\reporterevisionesModel;
 use App\modelos\reportes\reporterevisionesarchivoModel;
 
-// Tablas datos del reconocimiento
-use App\modelos\recsensorial\recsensorialcategoriaModel;
-use App\modelos\recsensorial\recsensorialareaModel;
 
 // Tablas estrucura del reporte
-use App\modelos\reportes\reportebeicatalogoModel;
-use App\modelos\reportes\reportebeiModel;
-
 use App\modelos\reportes\reportedefinicionesModel;
-use App\modelos\reportes\reportebeipuntosModel;
 use App\modelos\reportes\reporterecomendacionesModel;
-use App\modelos\reportes\reporteequiposutilizadosModel;
-use App\modelos\reportes\reportebeicategoriaModel;
-use App\modelos\reportes\reportebeiareaModel;
-use App\modelos\reportes\reportebeiareacategoriaModel;
 use App\modelos\reportes\reporteanexosModel;
+
+use App\modelos\reportes\reportealimentoscatalogoModel;
+use App\modelos\reportes\reportealimentosModel;
+use App\modelos\reportes\reportecategoriaModel;
+use App\modelos\reportes\reporteareaModel;
+use App\modelos\recsensorial\catConclusionesModel;
+use App\modelos\reportes\reporteplanoscarpetasModel;
+use App\modelos\reportes\reporteAlimentosPuntosSuperficiesInertesModel;
+use App\modelos\reportes\reporteAlimentosPuntosSuperficiesVivasModel;
+use App\modelos\reportes\reporteAlimentosPuntosAlimentosModel;
+
+
 use App\modelos\clientes\clientepartidasModel;
 use App\modelos\clientes\clientecontratoModel;
 use App\modelos\reportes\recursosPortadasInformesModel;
-class reporteBeiWordController extends Controller
-{
 
+
+
+class reportealimentosWordController extends Controller
+{
+    
 
     public function datosproyectoreemplazartexto($proyecto, $recsensorial, $texto)
     {
@@ -85,7 +84,10 @@ class reporteBeiWordController extends Controller
         $texto = str_replace("INSTALACION_CODIGOPOSTAL", "C.P. " . $recsensorial->recsensorial_codigopostal, $texto);
         $texto = str_replace("INSTALACION_COORDENADAS", $recsensorial->recsensorial_coordenadas, $texto);
         $texto = str_replace("REPORTE_FECHA_LARGA", $reportefecha[2] . " de " . $meses[($reportefecha[1] + 0)] . " del año " . $reportefecha[0], $texto);
-      
+        // $texto = str_replace("\n\n", "<w:br/><w:br/>", $texto);
+        // $texto = str_replace("\n", "<w:br/>", $texto);
+
+        // return $texto;
 
 
         $parrafos = explode('\n\n', $texto);
@@ -98,6 +100,18 @@ class reporteBeiWordController extends Controller
 
                 foreach ($text as $key2 => $parrafo2) {
                     if (($key2 + 0) < (count($text) - 1)) {
+                        // $formato = '<w:rPr>
+                        //                 <!-- <w:u w:val="single"/>  -->
+                        //                 <!-- <w:u w:val="none"/>  -->
+                        //                 <!-- <w:b w:val="false"/>  -->
+                        //                 <!-- <w:i w:val="false"/>  -->
+                        //                 <!-- <w:caps w:val="false"/>  -->
+                        //                 <!-- <w:sz w:val="60"/>  -->
+                        //                 <!-- <w:color w:val="ff0000"/> -->
+                        //                 <w:t xml:space="preserve">'.htmlspecialchars($parrafo2).'</w:t>
+                        //             </w:rPr>';
+
+                        // SALTO DE PAGINA (<w:br/></w:t></w:r><w:r ><w:br w:type="page"/></w:r><w:r><w:t><w:br/>)
 
                         $texto_nuevo .= '<w:p>
                                             <w:pPr>
@@ -173,30 +187,15 @@ class reporteBeiWordController extends Controller
     }
 
 
-    public function reportebeiword(Request $request){
+  
+    public function reportealimentosword(Request $request)
+    {
         try {
-
-
-            // ====================================================
-            //Estilos de las tablas
-            $encabezado_celda = array('bgColor' => '1A5276', 'valign' => 'center'); //'bgColor' => '1A5276'
-            $encabezado_texto = array('color' => 'FFFFFF', 'size' => 11, 'bold' => false, 'name' => 'Arial');
-            $combinar_fila_encabezado = array('vMerge' => 'restart', 'valign' => 'center', 'bgColor' => '1A5276');
-            $combinar_fila = array('vMerge' => 'restart', 'valign' => 'center');
-            $varias_columnas = array('gridSpan' => 2, 'valign' => 'center');
-            $continua_fila = array('vMerge' => 'continue', 'valign' => 'center');
-            $celda = array('valign' => 'center');
-            $centrado = array('align' => 'center', 'spaceBefore' => 0, 'spaceAfter' => 0, 'lineHeight' => 1.15);
-            $izquierda = array('align' => 'left', 'spaceBefore' => 0, 'spaceAfter' => 0, 'lineHeight' => 1.15);
-            $justificado = array('align' => 'both', 'spaceBefore' => 0, 'spaceAfter' => 0, 'lineHeight' => 1.15);
-            $texto = array('color' => '000000', 'size' => 11, 'bold' => false, 'name' => 'Arial');
-            $texto10 = array('color' => '000000', 'size' => 10, 'bold' => false, 'name' => 'Arial');
-            $textonegrita = array('color' => '000000', 'size' => 11, 'bold' => true, 'name' => 'Arial');
-            $textototal = array('color' => 'FFFFFF', 'size' => 11, 'bold' => false, 'name' => 'Arial');
+         
 
 
             $proyecto_id = $request->proyecto_id;
-            $reportebei_id = $request->reportebei_id;
+            $reportealimentos_id = $request->reportealimentos_id;
             $areas_poe = $request->areas_poe;
 
 
@@ -205,8 +204,8 @@ class reporteBeiWordController extends Controller
             setlocale(LC_ALL, "es_MX");
 
             ################ DATOS GENERALES ######################
-            $agente_id = 22;
-            $agente_nombre = "BEI";
+            $agente_id = 11;
+            $agente_nombre = "Alimentos";
             $proyecto = proyectoModel::with(['catregion', 'catsubdireccion', 'catgerencia', 'catactivo'])->findOrFail($proyecto_id);
             $recsensorial = recsensorialModel::with(['cliente', 'catregion', 'catsubdireccion', 'catgerencia', 'catactivo'])->findOrFail($proyecto->recsensorial_id);
             $cliente = clienteModel::findOrFail($recsensorial->cliente_id);
@@ -214,14 +213,14 @@ class reporteBeiWordController extends Controller
 
             ############# INFORMACION DE LAS PORTADAS #########
             $recursos = recursosPortadasInformesModel::where('PROYECTO_ID', $proyecto_id)->where('AGENTE_ID', $agente_id)->get();
-            $agente = reportebeiModel::where('proyecto_id', $proyecto_id)->get();
+            $agente = reportealimentosModel::where('proyecto_id', $proyecto_id)->get();
             if ($proyecto->requiereContrato == 1) {
 
                 $contratoId = $proyecto->contrato_id;
 
                 $clienteInfo = DB::table('contratos_clientes as cc')
-                ->leftJoin('cliente as c', 'c.id', '=', 'cc.CLIENTE_ID')
-                ->where('cc.ID_CONTRATO', $contratoId)
+                    ->leftJoin('cliente as c', 'c.id', '=', 'cc.CLIENTE_ID')
+                    ->where('cc.ID_CONTRATO', $contratoId)
                     ->select(
                         'cc.NUMERO_CONTRATO',
                         'cc.DESCRIPCION_CONTRATO',
@@ -238,8 +237,8 @@ class reporteBeiWordController extends Controller
 
             ########### VALIDACION DEL RECONOCIMIENTO #################
 
-            if ($reportebei_id > 0) {
-                $reportebei  = reportebeiModel::findOrFail($reportebei_id);
+            if ($reportealimentos_id > 0) {
+                $reportealimentos  = reportealimentosModel::findOrFail($reportealimentos_id);
                 $revision = reporterevisionesModel::findOrFail($request->ultimarevision_id);
             } else {
                 return '<h3>Aun no se ha guardado nada para este informe de ' . $agente_nombre . ', primero debe guardar los datos para poder descargarlo.</h3>';
@@ -248,8 +247,7 @@ class reporteBeiWordController extends Controller
 
             // LEER PLANTILLA WORD
             //================================================================================
-
-            $plantillaword = new TemplateProcessor(storage_path('app/plantillas_reportes/proyecto_infomes/Plantilla_informe_beis.docx')); //Ruta carpeta storage
+            $plantillaword = new TemplateProcessor(storage_path('app/plantillas_reportes/proyecto_infomes/Plantilla_informe_alimentos.docx')); //Ruta carpeta 
 
             //================================= Limpiamos el texto =================================================
             function sanitizeText($text)
@@ -257,11 +255,10 @@ class reporteBeiWordController extends Controller
                 return htmlspecialchars($text, ENT_QUOTES, 'UTF-8');
             }
 
-
             ################ PORTADA EXTERNA ####################
             $titulo_partida = clientepartidasModel::where('CONTRATO_ID', $recsensorial->contrato_id)
                 ->where('clientepartidas_tipo', 2) // Informe de resultados
-                ->where('catprueba_id', 22) // bei
+                ->where('catprueba_id', 11) // Alimentos
                 ->orderBy('updated_at', 'DESC')
                 ->get();
 
@@ -274,7 +271,7 @@ class reporteBeiWordController extends Controller
             } else {
 
                 $plantillaword->setValue('PARTIDA', "");
-                $plantillaword->setValue('proyecto_portada', 'El proyecto no esta vinculado a ningun contrato.');
+                $plantillaword->setValue('proyecto_portada', 'No existe una partida para este informe en el contrato.');
             }
 
             $plantillaword->setValue('folio_portada', $proyecto->proyecto_folio);
@@ -291,7 +288,7 @@ class reporteBeiWordController extends Controller
             $plantillaword->setValue('instalación_portada', $OPCION_PORTADA1 . $OPCION_PORTADA2 . $OPCION_PORTADA3 . $OPCION_PORTADA4 . $OPCION_PORTADA5 . $OPCION_PORTADA6);
 
 
-            $fecha = $agente[0]->reportebei_mes . ' del ' . $agente[0]->reportebei_fecha;
+            $fecha = $agente[0]->reportealimentos_mes . ' del ' . $agente[0]->reportealimentos_fecha;
             $plantillaword->setValue('lugar_fecha_portada', $recsensorial->recsensorial_direccion . ' ' . $fecha);
             $plantillaword->setValue('PORTADA_FECHA', $fecha);
 
@@ -320,10 +317,7 @@ class reporteBeiWordController extends Controller
             $NIVEL_PORTADA4 = is_null($recursos[0]->OPCION_PORTADA4) ? "" : $recursos[0]->OPCION_PORTADA4 . "<w:br />";
             $NIVEL_PORTADA5 = is_null($recursos[0]->OPCION_PORTADA5) ? "" : $recursos[0]->OPCION_PORTADA5 . "<w:br />";
             $NIVEL_PORTADA6 = is_null($recursos[0]->OPCION_PORTADA6) ? "" : $recursos[0]->OPCION_PORTADA6 . "<w:br />";
-            $plantillaword->setValue(
-                'ESTRUCTURA',
-                $NIVEL_PORTADA1 . $NIVEL_PORTADA2 . $NIVEL_PORTADA3 . $NIVEL_PORTADA4 . $NIVEL_PORTADA5 . $NIVEL_PORTADA6
-            );
+            $plantillaword->setValue('ESTRUCTURA',$NIVEL_PORTADA1 . $NIVEL_PORTADA2 . $NIVEL_PORTADA3 . $NIVEL_PORTADA4 . $NIVEL_PORTADA5 . $NIVEL_PORTADA6);
 
             if (
                 $proyecto->requiereContrato == 1
@@ -353,12 +347,8 @@ class reporteBeiWordController extends Controller
             $NIVEL4 = is_null($recursos[0]->NIVEL4) ? "" : $recursos[0]->NIVEL4 . "<w:br />";
             $NIVEL5 = is_null($recursos[0]->NIVEL5) ? "" : $recursos[0]->NIVEL5;
 
-            $plantillaword->setValue(
-                'ENCABEZADO',
-                $NIVEL1 . $NIVEL2 . $NIVEL3 . $NIVEL4 . $NIVEL5
-            );
+            $plantillaword->setValue('ENCABEZADO',$NIVEL1 . $NIVEL2 . $NIVEL3 . $NIVEL4 . $NIVEL5);
             $plantillaword->setValue('INSTALACION_NOMBRE', $NIVEL1 . $NIVEL2 . $NIVEL3 . $NIVEL4 . $NIVEL5);
-
             $plantillaword->setValue('INSTALACION_NOMBRE_TEXTO', $proyecto->proyecto_clienteinstalacion);
 
 
@@ -406,15 +396,13 @@ class reporteBeiWordController extends Controller
                 $plantillaword->setValue('LOGO_IZQUIERDO_PORTADA', 'SIN CONTRATO');
             }
 
+            //--------------------------------------------------------------------------------------------------------------------------
 
-
-            //-----------------------------------------
             ##### REVISIONES ###################
             $cancelado_texto = '';
             if ($revision->reporterevisiones_cancelado == 1) {
                 $cancelado_texto = '<w:br/>INFORME REVISIÓN ' . $revision->reporterevisiones_revision . ' CANCELADA';
             }
-
 
             if (($revision->reporterevisiones_revision + 0) > 0) {
                 $plantillaword->setValue('INFORME_REVISION', $proyecto->proyecto_folio . ' - Informe de ' . $agente_nombre . ' Rev-' . $revision->reporterevisiones_revision);
@@ -423,9 +411,10 @@ class reporteBeiWordController extends Controller
             }
 
 
+
             ##### INTRODUCCION ###################
 
-            $introduccionTexto = $agente[0]->reportebei_introduccion;
+            $introduccionTexto = $agente[0]->reportealimentos_introduccion;
             $introduccionTextoModificado = $this->introduccion($proyecto, $introduccionTexto);
 
             // Asigna el texto modificado a la plantilla
@@ -438,7 +427,6 @@ class reporteBeiWordController extends Controller
             }
 
 
-
             // DEFINICIONES
             //================================================================================
 
@@ -448,19 +436,13 @@ class reporteBeiWordController extends Controller
 
 
             $where_definiciones = '';
-            if (($recsensorial->recsensorial_tipocliente + 0) == 1) // 1 = pemex, 0 = cliente
+            if (($recsensorial->recsensorial_tipocliente + 0) == 1) 
             {
                 $where_definiciones = 'AND reportedefiniciones.catactivo_id = ' . $proyecto->catactivo_id;
             }
 
 
             $sql = collect(DB::select('SELECT
-                                            -- TABLA.id,
-                                            -- TABLA.agente_id,
-                                            -- TABLA.agente_nombre,
-                                            -- TABLA.catactivo_id,
-                                            -- TABLA.concepto,
-                                            -- CONCAT(": ", TABLA.descripcion) AS descripcion,
                                             TABLA.fuente
                                         FROM
                                             (
@@ -532,7 +514,6 @@ class reporteBeiWordController extends Controller
 
 
             $plantillaword->setValue('DEFINICIONES_FUENTES', $definicionesfuentes);
-
 
             $sql = collect(DB::select('SELECT
                                             TABLA.id,
@@ -611,7 +592,6 @@ class reporteBeiWordController extends Controller
                                             </w:p><w:br/>';
                         } else {
 
-
                             $definiciones .= '<w:p>
                                                 <w:pPr>
                                                     <w:jc w:val="both"/>
@@ -635,35 +615,42 @@ class reporteBeiWordController extends Controller
                 }
             }
 
-
             $plantillaword->setValue('DEFINICIONES', $definiciones);
+
 
             // OBJETIVO GENERAL
             //================================================================================
 
-            $plantillaword->setValue('OBJETIVO_GENERAL', $this->datosproyectoreemplazartexto($proyecto, $recsensorial, $reportebei->reportebei_objetivogeneral));
+
+            $plantillaword->setValue('OBJETIVO_GENERAL', $this->datosproyectoreemplazartexto($proyecto, $recsensorial, $reportealimentos->reportealimentos_objetivogeneral));
 
 
             // OBJETIVOS ESPECIFICOS
             //================================================================================
 
-            $plantillaword->setValue('OBJETIVOS_ESPECIFICOS', $this->datosproyectoreemplazartexto($proyecto, $recsensorial, $reportebei->reportebei_objetivoespecifico));
+
+            $plantillaword->setValue('OBJETIVOS_ESPECIFICOS', $this->datosproyectoreemplazartexto($proyecto, $recsensorial, $reportealimentos->reportealimentos_objetivoespecifico));
+
 
             // METODOLOGIA
             //================================================================================
 
-            $plantillaword->setValue('METODOLOGIA_4_1', $this->datosproyectoreemplazartexto($proyecto, $recsensorial, $reportebei->reportebei_metodologia_4_1));
-            $plantillaword->setValue('METODOLOGIA_4_2', $this->datosproyectoreemplazartexto($proyecto, $recsensorial, $reportebei->reportebei_metodologia_4_2));
+
+            $plantillaword->setValue('METODOLOGIA_4_1', $this->datosproyectoreemplazartexto($proyecto, $recsensorial, $reportealimentos->reportealimentos_metodologia_4_1));
+            $plantillaword->setValue('METODOLOGIA_4_2', $this->datosproyectoreemplazartexto($proyecto, $recsensorial, $reportealimentos->reportealimentos_metodologia_4_2));
+            $plantillaword->setValue('METODOLOGIA_5_1', $this->datosproyectoreemplazartexto($proyecto, $recsensorial, $reportealimentos->reportealimentos_metodologia_5_1));
+            $plantillaword->setValue('METODOLOGIA_5_2', $this->datosproyectoreemplazartexto($proyecto, $recsensorial, $reportealimentos->reportealimentos_metodologia_5_2));
 
 
             // UBICACION
             //================================================================================
 
-            $plantillaword->setValue('UBICACION_TEXTO', $this->datosproyectoreemplazartexto($proyecto, $recsensorial, $reportebei->reportebei_ubicacioninstalacion));
+            $plantillaword->setValue('UBICACION_TEXTO', $this->datosproyectoreemplazartexto($proyecto, $recsensorial, $reportealimentos->reportealimentos_ubicacioninstalacion));
 
-            if ($reportebei->reportebei_ubicacionfoto) {
-                if (file_exists(storage_path('app/' . $reportebei->reportebei_ubicacionfoto))) {
-                    $plantillaword->setImageValue('UBICACION_FOTO', array('path' => storage_path('app/' . $reportebei->reportebei_ubicacionfoto), 'width' => 580, 'height' => 400, 'ratio' => true, 'borderColor' => '000000'));
+            // Imagen FOTO
+            if ($reportealimentos->reportealimentos_ubicacionfoto) {
+                if (file_exists(storage_path('app/' . $reportealimentos->reportealimentos_ubicacionfoto))) {
+                    $plantillaword->setImageValue('UBICACION_FOTO', array('path' => storage_path('app/' . $reportealimentos->reportealimentos_ubicacionfoto), 'width' => 580, 'height' => 400, 'ratio' => true, 'borderColor' => '000000'));
                 } else {
                     $plantillaword->setValue('UBICACION_FOTO', 'FALTA CARGAR IMAGEN DESDE EL SISTEMA.');
                 }
@@ -671,280 +658,36 @@ class reporteBeiWordController extends Controller
                 $plantillaword->setValue('UBICACION_FOTO', 'FALTA CARGAR IMAGEN DESDE EL SISTEMA.');
             }
 
+
             // PROCESO INSTALACION
             //================================================================================
-            $plantillaword->setValue('PROCESO_INSTALACION', $this->datosproyectoreemplazartexto($proyecto, $recsensorial, $reportebei->reportebei_procesoinstalacion));
 
-
-
-            // TABLA 5.3 Población ocupacionalmente expuesta
-            //================================================================================
-            // Crear tabla
-            $table = null;
-            $No = 1;
-            $total = 0;
-            $table = new Table(array('name' => 'Arial', 'width' => 9500, 'borderSize' => 10, 'borderColor' => '000000', 'cellMargin' => 0, 'spaceAfter' => 0, 'unit' => TblWidth::TWIP));
-
-            $sql = DB::select('SELECT
-                                        reportearea.proyecto_id,
-                                        reportearea.id,
-                                        reportearea.aplica_bei,
-                                        reportearea.reportearea_instalacion,
-                                        reportearea.reportearea_nombre,
-                                        reportearea.reportearea_orden,
-                                        reportearea.reportebeiarea_porcientooperacion,
-                                        reportearea.reportearea_proceso,
-                                        IF( IFNULL( reportearea.reportebeiarea_porcientooperacion, "" ) != "", CONCAT( reportearea.reportebeiarea_porcientooperacion, " %" ), NULL ) AS reportearea_porcientooperacion_texto,
-                                        reportearea.reportearea_descripcion,
-                                        reporteareacategoria.reportecategoria_id,
-                                        reportecategoria.reportecategoria_orden,
-                                        reportecategoria.reportecategoria_nombre,
-                                        IFNULL((
-                                            SELECT
-                                                IF(reportebeiareacategoria.reportebeicategoria_id, "checked", "") AS checked
-                                            FROM
-                                                reportebeiareacategoria
-                                            WHERE
-                                                reportebeiareacategoria.reportebeiarea_id = reportearea.id
-                                                AND reportebeiareacategoria.reportebeicategoria_id = reporteareacategoria.reportecategoria_id
-                                                AND reportebeiareacategoria.reportebeiareacategoria_poe = ?
-                                            LIMIT 1
-                                        ), "") AS checked,
-                                        reportecategoria.reportecategoria_horas,
-                                        reporteareacategoria.reporteareacategoria_total,
-                                        reporteareacategoria.reporteareacategoria_geh,
-                                        reporteareacategoria.reporteareacategoria_actividades
-
-                                    FROM
-                                        reportearea
-                                        LEFT JOIN reporteareacategoria ON reportearea.id = reporteareacategoria.reportearea_id
-                                        LEFT JOIN reportecategoria ON reporteareacategoria.reportecategoria_id = reportecategoria.id 
-                                    WHERE
-                                        reportearea.proyecto_id = ?
-                                    ORDER BY
-                                        reportearea.reportearea_orden ASC,
-                                        reportearea.reportearea_nombre ASC,
-                                        reportecategoria.reportecategoria_orden ASC,
-                                        reportecategoria.reportecategoria_nombre ASC', [$reportebei_id, $proyecto_id]);
-
-
-            // encabezado tabla
-            $table->addRow(200, array('tblHeader' => true));
-            $table->addCell(1000, $encabezado_celda)->addTextRun($centrado)->addText('Área', $encabezado_texto);
-            $table->addCell(1000, $encabezado_celda)->addTextRun($centrado)->addText('Categoría', $encabezado_texto);
-            $table->addCell(500, $encabezado_celda)->addTextRun($centrado)->addText('Cantidad de personal', $encabezado_texto);
-            $table->addCell(2500, $encabezado_celda)->addTextRun($centrado)->addText('Descripción de la actividad principal de la instalación', $encabezado_texto);
-
-            // registros tabla
-            $area = 'xxx';
+            $plantillaword->setValue('PROCESO_INSTALACION', $this->datosproyectoreemplazartexto($proyecto, $recsensorial, $reportealimentos->reportealimentos_procesoinstalacion));
             
-            foreach ($sql as $key => $value) {
-
-                if ($area != $value->reportearea_nombre) {
-
-                    $table->addRow(); //fila
-                    $table->addCell(null, $combinar_fila)->addTextRun($centrado)->addText($value->reportearea_nombre, $texto);
-                    $table->addCell(null, $celda)->addTextRun($centrado)->addText($value->reportecategoria_nombre, $texto);
-                    $table->addCell(null, $celda)->addTextRun($centrado)->addText($value->reporteareacategoria_total, $texto);
-                    $table->addCell(null, $combinar_fila)->addTextRun($centrado)->addText($value->reportearea_proceso, $texto);
-
-                    $area = $value->reportearea_nombre;
-                } else {
-                    $table->addRow(); //fila
-                    $table->addCell(null, $continua_fila);
-                    $table->addCell(null, $celda)->addTextRun($centrado)->addText($value->reportecategoria_nombre, $texto);
-                    $table->addCell(null, $celda)->addTextRun($centrado)->addText($value->reporteareacategoria_total, $texto);
-                    $table->addCell(null, $continua_fila);
 
 
-                }
-            }
-
-            $plantillaword->setComplexBlock('TABLA_5_3', $table);
-
-
-            // TABLA 5.4 Equipo de Protección Personal (EPP)
+            // TIPOGRAFIAS PARA LAS TABLAS
             //================================================================================
+            $fuente = 'Arial';
+            $font_size = 10;
 
-            $sql = DB::select('SELECT
-                                    reportebeiepp.id,
-                                    reportebeiepp.proyecto_id,
-                                    reportebeiepp.registro_id,
-                                    reportebeiepp.reportebeiepp_partecuerpo,
-                                    reportebeiepp.reportebeiepp_equipo 
-                                FROM
-                                    reportebeiepp
-                                WHERE
-                                    reportebeiepp.proyecto_id = ?
-                                    AND reportebeiepp.registro_id = ? 
-                                ORDER BY
-                                    reportebeiepp.id ASC', [$proyecto_id, $reportebei_id]);
-
-            // Crear tabla
-            $table = null;
-            $table = new Table(array('name' => 'Arial','width' => 9500, 'borderSize' => 1, 'borderColor' => '000000', 'cellMargin' => 40, 'unit' => TblWidth::TWIP));
-
-            // encabezado tabla
-            $ancho_col_1 = 4000;
-            $ancho_col_2 = 5500;
-            $table->addRow(200, array('tblHeader' => true));
-            $table->addCell($ancho_col_1, $encabezado_celda)->addTextRun($centrado)->addText('Región anatómica', $encabezado_texto);
-            $table->addCell($ancho_col_2, $encabezado_celda)->addTextRun($centrado)->addText('EPP', $encabezado_texto);
-
-            foreach ($sql as $key => $value) {
-                $table->addRow(); //fila
-                $table->addCell($ancho_col_1, $celda)->addTextRun($centrado)->addText($value->reportebeiepp_partecuerpo,
-                    $texto
-                );
-                $table->addCell($ancho_col_2, $celda)->addTextRun($centrado)->addText($value->reportebeiepp_equipo, $texto);
-            }
-
-
-            $plantillaword->setComplexBlock('TABLA_5_4', $table);
-
-
-            // TABLA 5.5 Actividades del personal expuesto
-            //================================================================================
-            // Crear tabla
-            $table = null;
-            $No = 1;
-            $total = 0;
-            $table = new Table(array('name' => 'Arial', 'width' => 9500, 'borderSize' => 10, 'borderColor' => '000000', 'cellMargin' => 0, 'spaceAfter' => 0, 'unit' => TblWidth::TWIP));
-
-            $sql = DB::select('SELECT
-                                        reportearea.proyecto_id,
-                                        reportearea.id,
-                                        reportearea.aplica_bei,
-                                        reportearea.reportearea_instalacion,
-                                        reportearea.reportearea_nombre,
-                                        reportearea.reportearea_orden,
-                                        reportearea.reportebeiarea_porcientooperacion,
-                                        IF( IFNULL( reportearea.reportebeiarea_porcientooperacion, "" ) != "", CONCAT( reportearea.reportebeiarea_porcientooperacion, " %" ), NULL ) AS reportearea_porcientooperacion_texto,
-                                        reportearea.reportearea_descripcion,
-                                        reporteareacategoria.reportecategoria_id,
-                                        reportecategoria.reportecategoria_orden,
-                                        reportecategoria.reportecategoria_nombre,
-                                        IFNULL((
-                                            SELECT
-                                                IF(reportebeiareacategoria.reportebeicategoria_id, "checked", "") AS checked
-                                            FROM
-                                                reportebeiareacategoria
-                                            WHERE
-                                                reportebeiareacategoria.reportebeiarea_id = reportearea.id
-                                                AND reportebeiareacategoria.reportebeicategoria_id = reporteareacategoria.reportecategoria_id
-                                                AND reportebeiareacategoria.reportebeiareacategoria_poe = ?
-                                            LIMIT 1
-                                        ), "") AS checked,
-                                        reportecategoria.reportecategoria_horas,
-                                        reporteareacategoria.reporteareacategoria_total,
-                                        reporteareacategoria.reporteareacategoria_geh,
-                                        reporteareacategoria.reporteareacategoria_actividades
-
-                                    FROM
-                                        reportearea
-                                        LEFT JOIN reporteareacategoria ON reportearea.id = reporteareacategoria.reportearea_id
-                                        LEFT JOIN reportecategoria ON reporteareacategoria.reportecategoria_id = reportecategoria.id 
-                                    WHERE
-                                        reportearea.proyecto_id = ?
-                                    ORDER BY
-                                        reportearea.reportearea_orden ASC,
-                                        reportearea.reportearea_nombre ASC,
-                                        reportecategoria.reportecategoria_orden ASC,
-                                        reportecategoria.reportecategoria_nombre ASC', [$reportebei_id, $proyecto_id]);
-
-
-            // encabezado tabla
-            $table->addRow(200, array('tblHeader' => true));
-            $table->addCell(2500, $encabezado_celda)->addTextRun($centrado)->addText('Área', $encabezado_texto);
-            $table->addCell(3500, $encabezado_celda)->addTextRun($centrado)->addText('Categoría', $encabezado_texto);
-            $table->addCell(3000, $encabezado_celda)->addTextRun($centrado)->addText('Descripción de las actividades', $encabezado_texto);
-
-            // registros tabla
-            $area = 'xxx';
-
-            foreach ($sql as $key => $value) {
-
-                if ($area != $value->reportearea_nombre) {
-                    $table->addRow(); //fila
-                    $table->addCell(null, $combinar_fila)->addTextRun($centrado)->addText($value->reportearea_nombre, $texto);
-                    $table->addCell(null, $celda)->addTextRun($centrado)->addText($value->reportecategoria_nombre, $texto);
-                    $table->addCell(null, $celda)->addTextRun($centrado)->addText($value->reporteareacategoria_actividades, $texto);
-
-                    $area = $value->reportearea_nombre;
-                } else {
-                    $table->addRow(); //fila
-                    $table->addCell(null, $continua_fila);
-                    $table->addCell(null, $celda)->addTextRun($centrado)->addText($value->reportecategoria_nombre, $texto);
-                    $table->addCell(null, $celda)->addTextRun($centrado)->addText($value->reporteareacategoria_actividades, $texto);
-                }
-            }
-
-            $plantillaword->setComplexBlock('TABLA_5_5', $table);
-
-
-            // TABLA  6.1 Condiciones de operación durante la evaluación (representado en porcentaje)
-            //================================================================================
-            // Crear tabla
-            $table = null;
-            $No = 1;
-            $total = 0;
-            $table = new Table(array('name' => 'Arial', 'width' => 9500, 'borderSize' => 10, 'borderColor' => '000000', 'cellMargin' => 0, 'spaceAfter' => 0, 'unit' => TblWidth::TWIP));
-
-            $sql = DB::select('SELECT
-                                reportearea.proyecto_id,
-                                reportearea.id,
-                                reportearea.aplica_bei,
-                                reportearea.reportearea_instalacion,
-                                reportearea.reportearea_nombre,
-                                reportearea.reportearea_orden,
-                                reportearea.reportebeiarea_porcientooperacion,
-                                IF( IFNULL( reportearea.reportebeiarea_porcientooperacion, "" ) != "", CONCAT( reportearea.reportebeiarea_porcientooperacion, " %" ), NULL ) AS reportearea_porcientooperacion_texto,
-                                reportearea.reportearea_descripcion
-                            FROM
-                                reportearea
-
-                            WHERE
-                                reportearea.proyecto_id = ?
-                            ORDER BY
-                                reportearea.reportearea_orden ASC,
-                                reportearea.reportearea_nombre ASC', [ $proyecto_id]);
-
-
-            // encabezado tabla
-            $table->addRow(200, array('tblHeader' => true));
-            $table->addCell(2500, $encabezado_celda)->addTextRun($centrado)->addText('Instalación', $encabezado_texto);
-            $table->addCell(5000, $encabezado_celda)->addTextRun($centrado)->addText('Área de trabajo', $encabezado_texto);
-            $table->addCell(2000, $encabezado_celda)->addTextRun($centrado)->addText('Porcentaje de operación', $encabezado_texto);
-
-            // registros tabla
-            $area = 'xxx';
-
-            foreach ($sql as $key => $value) {
-
-                if ($area != $value->reportearea_instalacion) {
-                    $table->addRow(); //fila
-                    $table->addCell(null, $combinar_fila)->addTextRun($centrado)->addText($value->reportearea_instalacion, $texto);
-                    $table->addCell(null, $celda)->addTextRun($centrado)->addText($value->reportearea_nombre, $texto);
-                    $table->addCell(null, $celda)->addTextRun($centrado)->addText($value->reportearea_porcientooperacion_texto,
-                        $texto
-                    );
-
-                    $area = $value->reportearea_instalacion;
-                } else {
-                    $table->addRow(); //fila
-                    $table->addCell(null, $continua_fila);
-                    $table->addCell(null, $celda)->addTextRun($centrado)->addText($value->reportearea_nombre, $texto);
-                    $table->addCell(null, $celda)->addTextRun($centrado)->addText($value->reportearea_porcientooperacion_texto,
-                        $texto
-                    );
-                }
-            }
-
-            $plantillaword->setComplexBlock('TABLA_6_1', $table);
+            $bgColor_encabezado = '#0C3F64'; //#1A5276
+            $encabezado_celda = array('bgColor' => $bgColor_encabezado, 'valign' => 'center', 'cellMargin' => 100);
+            $encabezado_texto = array('color' => 'FFFFFF', 'size' => $font_size, 'bold' => false, 'name' => $fuente);
+            $combinar_fila_encabezado = array('vMerge' => 'restart', 'valign' => 'center', 'bgColor' => $bgColor_encabezado);
+            $combinar_fila = array('vMerge' => 'restart', 'valign' => 'center');
+            $continua_fila = array('vMerge' => 'continue', 'valign' => 'center');
+            $celda = array('valign' => 'center');
+            $centrado = array('align' => 'center', 'spaceBefore' => 0, 'spaceAfter' => 0, 'lineHeight' => 1.15);
+            $izquierda = array('align' => 'left', 'spaceBefore' => 0, 'spaceAfter' => 0, 'lineHeight' => 1.15);
+            $justificado = array('align' => 'both', 'spaceBefore' => 0, 'spaceAfter' => 0, 'lineHeight' => 1.15);
+            $texto = array('color' => '000000', 'size' => $font_size, 'bold' => false, 'name' => $fuente);
+            $textonegrita = array('color' => '000000', 'size' => $font_size, 'bold' => true, 'name' => $fuente);
+            $textototal = array('color' => 'FFFFFF', 'size' => $font_size, 'bold' => false, 'name' => $fuente);
 
 
 
-            // TABLA  7. Resultados
+            // TABLA  8.1.- Resultados de calidad e inocuidad de alimentos
             //================================================================================
             // Crear tabla
             $table = null;
@@ -952,140 +695,534 @@ class reporteBeiWordController extends Controller
             $total = 0;
             $table = new Table(array('name' => 'Arial', 'width' => 13500, 'borderSize' => 10, 'borderColor' => '000000', 'cellMargin' => 0, 'spaceAfter' => 0, 'unit' => TblWidth::TWIP));
 
-            $sql = DB::select('SELECT p.ID_BEI_INFORME,
-                                        CONCAT(p.EDAD_BEI," años") as EDAD_BEI_TEXTO,
-                                        p.NUM_PUNTO_BEI,
-                                        p.RECSENSORIAL_ID,
-                                        p.EDAD_BEI,
-                                        p.NOMBRE_BEI,
-                                        p.GENERO_BEI,
-                                        p.FICHA_BEI,
-                                        p.ANTIGUEDAD_BEI,
-                                        p.MUESTRA_BEI,
-                                        IFNULL(p.UNIDAD_MEDIDA_BEI, b.UNIDAD_MEDIDA) as UNIDAD_MEDIDA,
-                                        CONCAT(p.RESULTADO_BEI," ", IFNULL(p.UNIDAD_MEDIDA_BEI, b.UNIDAD_MEDIDA)) AS RESULTADO_BEI_TEXTO,
-                                        p.RESULTADO_BEI,
-                                        CONCAT(IFNULL(p.REFERENCIA_BEI, b.VALOR_REFERENCIA)," ", IFNULL(p.UNIDAD_MEDIDA_BEI, b.UNIDAD_MEDIDA)) AS REFERENCIA_BEI_TEXTO,
-                                        p.REFERENCIA_BEI,
-                                        a.recsensorialarea_nombre as AREA,
-                                        p.AREA_ID,
-                                        c.recsensorialcategoria_nombrecategoria as CATEGORIA,
-                                        p.CATEGORIA_ID,
-                                        b.DETERMINANTE,
-                                        (IF((p.RESULTADO_BEI = "" OR p.RESULTADO_BEI IS NULL),"Sin evaluar",
-                                            IF(
-                                                -- Verificar si el valor contiene solo letras o es N.D, N.A, N/A
-                                                p.RESULTADO_BEI REGEXP "^[A-Za-z]+$|^N[./]?D$|^N[./]?A$", 
-                                                -- Si contiene solo letras o las abreviaturas, retornamos "Dentro de norma"
-                                                "ND",  
-                                                -- Si contiene números, continuamos con la limpieza
-                                                IF(
-                                                    CONVERT(REPLACE(REPLACE(REPLACE(p.RESULTADO_BEI, ">" , ""), "<" ,""), " ", ""), DECIMAL(10,2)) >= 0,
-                                                    -- Después de limpiar, verificamos si el valor es mayor o igual a 0.25
-                                                    IF(
-                                                                    (REPLACE(REPLACE(REPLACE(p.RESULTADO_BEI, ">" , ""), "<" ,""), " ", "") + 0) > p.REFERENCIA_BEI,
-                                                                    "Fuera de norma",  -- Si es mayor, está fuera de norma
-                                                                    "Dentro de norma"  -- Si es menor, está dentro de norma
-                                                    ),
-                                                    "Fuera de norma"  -- Si no es un número válido o es negativo, es fuera de norma
-                                                )
-                                            )
-                                        )
-                                    )  as NORMATIVIDAD,
-                                     (IF((p.RESULTADO_BEI = "" OR p.RESULTADO_BEI IS NULL),"Sin evaluar",
-                                            IF(
-                                                -- Verificar si el valor contiene solo letras o es N.D, N.A, N/A
-                                                p.RESULTADO_BEI REGEXP "^[A-Za-z]+$|^N[./]?D$|^N[./]?A$", 
-                                                -- Si contiene solo letras o las abreviaturas, retornamos "Dentro de norma"
-                                                "#FFFFFF",  
-                                                -- Si contiene números, continuamos con la limpieza
-                                                IF(
-                                                    CONVERT(REPLACE(REPLACE(REPLACE(p.RESULTADO_BEI, ">" , ""), "<" ,""), " ", ""), DECIMAL(10,2)) >= 0,
-                                                    -- Después de limpiar, verificamos si el valor es mayor o igual a 0.25
-                                                    IF(
-                                                                    (REPLACE(REPLACE(REPLACE(p.RESULTADO_BEI, ">" , ""), "<" ,""), " ", "") + 0) > p.REFERENCIA_BEI,
-                                                                    "#FF0000",  -- Si es mayor, está fuera de norma
-                                                                    "#00ff6c"  -- Si es menor, está dentro de norma
-                                                    ),
-                                                    "#FF0000"  -- Si no es un número válido o es negativo, es fuera de norma
-                                                )
-                                            )
-                                        )
-                                    )  as COLOR
-                                FROM puntosBeiInforme p
-                                LEFT JOIN sustanciasEntidadBeis b ON b.ID_BEI = p.BEI_ID
-                                LEFT JOIN recsensorialarea a ON a.id = p.AREA_ID
-                                LEFT JOIN recsensorialcategoria c ON c.id = p.CATEGORIA_ID
-                                WHERE p.PROYECTO_ID = ?
-                                ORDER BY b.DETERMINANTE', [$proyecto_id]);
+            $sql8_1 = DB::select('CALL sp_obtener_puntos_alimentos_8_1_b(?)', [$proyecto_id]);
 
 
             // encabezado tabla
             $table->addRow(200, array('tblHeader' => true));
-            $table->addCell(2000, $encabezado_celda)->addTextRun($centrado)->addText('Determinante', $encabezado_texto);
-            $table->addCell(2500, $encabezado_celda)->addTextRun($centrado)->addText('Nombre', $encabezado_texto);
-            $table->addCell(2500, $encabezado_celda)->addTextRun($centrado)->addText('Género', $encabezado_texto);
-            $table->addCell(2500, $encabezado_celda)->addTextRun($centrado)->addText('Área', $encabezado_texto);
-            $table->addCell(2500, $encabezado_celda)->addTextRun($centrado)->addText('Categoria', $encabezado_texto);
-            $table->addCell(2500, $encabezado_celda)->addTextRun($centrado)->addText('Ficha', $encabezado_texto);
-            $table->addCell(2500, $encabezado_celda)->addTextRun($centrado)->addText('Edad', $encabezado_texto);
-            $table->addCell(2500, $encabezado_celda)->addTextRun($centrado)->addText('Antigüedad Laboral', $encabezado_texto);
-            $table->addCell(2500, $encabezado_celda)->addTextRun($centrado)->addText('Número de muestra', $encabezado_texto);
-            $table->addCell(2500, $encabezado_celda)->addTextRun($centrado)->addText('Resultado', $encabezado_texto);
-            $table->addCell(2500, $encabezado_celda)->addTextRun($centrado)->addText('Valor de referencia', $encabezado_texto);
+            $table->addCell(1500, $encabezado_celda)->addTextRun($centrado)->addText('Punto', $encabezado_texto);
+            $table->addCell(3000, $encabezado_celda)->addTextRun($centrado)->addText('Área', $encabezado_texto);
+            $table->addCell(2500, $encabezado_celda)->addTextRun($centrado)->addText('Fecha de medición', $encabezado_texto);
+            $table->addCell(2500, $encabezado_celda)->addTextRun($centrado)->addText('Parametro', $encabezado_texto);
+            $table->addCell(3500, $encabezado_celda)->addTextRun($centrado)->addText('Método de análisis', $encabezado_texto);
+            $table->addCell(2500, $encabezado_celda)->addTextRun($centrado)->addText('Ubicación', $encabezado_texto);
+            $table->addCell(2000, $encabezado_celda)->addTextRun($centrado)->addText('No. de trabajadores expuestos', $encabezado_texto);
+            $table->addCell(2000, $encabezado_celda)->addTextRun($centrado)->addText('Concentración obtenida', $encabezado_texto);
+            $table->addCell(2000, $encabezado_celda)->addTextRun($centrado)->addText('Concentración permisible', $encabezado_texto);
             $table->addCell(2500, $encabezado_celda)->addTextRun($centrado)->addText('Cumplimiento normativo', $encabezado_texto);
+    
 
             // registros tabla
-            $determinante = 'xxx';
+            $punto = 'xxx';
 
-            foreach ($sql as $key => $value) {
+            foreach ($sql8_1 as $key => $value) {
 
-                if ($determinante != $value->DETERMINANTE) {
+                if ($punto != $value->PUNTO) {
                     $table->addRow(); //fila
-                    $table->addCell(null, $combinar_fila)->addTextRun($centrado)->addText(sanitizeText($value->DETERMINANTE),$texto10);
-                    $table->addCell(null, $celda)->addTextRun($centrado)->addText(sanitizeText($value->NOMBRE_BEI),$texto10);
-                    $table->addCell(null, $celda)->addTextRun($centrado)->addText($value->GENERO_BEI,$texto10);
-                    $table->addCell(null, $celda)->addTextRun($centrado)->addText($value->AREA,$texto10);
-                    $table->addCell(null, $celda)->addTextRun($centrado)->addText($value->CATEGORIA,$texto10);
-                    $table->addCell(null, $celda)->addTextRun($centrado)->addText($value->FICHA_BEI,$texto10);
-                    $table->addCell(null, $celda)->addTextRun($centrado)->addText($value->EDAD_BEI_TEXTO,$texto10);
-                    $table->addCell(null, $celda)->addTextRun($centrado)->addText($value->ANTIGUEDAD_BEI,$texto10);
-                    $table->addCell(null, $celda)->addTextRun($centrado)->addText(sanitizeText($value->MUESTRA_BEI),$texto10);
-                    $table->addCell(null, $celda)->addTextRun($centrado)->addText(sanitizeText($value->RESULTADO_BEI_TEXTO),$texto10);
-                    $table->addCell(null, $celda)->addTextRun($centrado)->addText(sanitizeText($value->REFERENCIA_BEI_TEXTO),$texto10);
-                    $table->addCell(null, array('bgColor' => $value->COLOR, 'valign' => 'center'))->addTextRun($centrado)->addText($value->NORMATIVIDAD, $texto10);
+                    $table->addCell(null, $combinar_fila)->addTextRun($centrado)->addText(sanitizeText($value->PUNTO), $texto);
+                    $table->addCell(null, $combinar_fila)->addTextRun($centrado)->addText(sanitizeText($value->AREA), $texto);
+                    $table->addCell(null, $combinar_fila)->addTextRun($centrado)->addText(sanitizeText($value->FECHA_MEDICION), $texto);
+                    $table->addCell(null, $celda)->addTextRun($centrado)->addText(sanitizeText($value->PARAMETRO), $texto);
+                    $table->addCell(null, $celda)->addTextRun($centrado)->addText(sanitizeText($value->METODO), $texto);
+                    $table->addCell(null, $combinar_fila)->addTextRun($centrado)->addText(sanitizeText($value->UBICACION), $texto);
+                    $table->addCell(null, $combinar_fila)->addTextRun($centrado)->addText(sanitizeText($value->TRABAJADORES), $texto);
+                    $table->addCell(null, $celda)->addTextRun($centrado)->addText(sanitizeText($value->CONCENTRACION), $texto);
+                    $table->addCell(null, $celda)->addTextRun($centrado)->addText(sanitizeText($value->CONCENTRACION_PERMISIBLE), $texto);
 
+                    if($value->CUMPLIMIENTO_NORMATIVO == "Dentro de norma"){
+                        $table->addCell(null, array('bgColor' => '#00FF00', 'valign' => 'center'))->addTextRun($centrado)->addText($value->CUMPLIMIENTO_NORMATIVO, $texto);
+                    }else{
+                        $table->addCell(null, array('bgColor' => "#FF0000", 'valign' => 'center'))->addTextRun($centrado)->addText($value->CUMPLIMIENTO_NORMATIVO, $textototal);
+                    }
 
-                    $determinante = $value->DETERMINANTE;
+                    $punto = $value->PUNTO;
 
                 } else {
 
                     $table->addRow(); //fila
                     $table->addCell(null, $continua_fila);
-                    $table->addCell(null, $celda)->addTextRun($centrado)->addText(sanitizeText($value->NOMBRE_BEI),$texto10);
-                    $table->addCell(null, $celda)->addTextRun($centrado)->addText($value->GENERO_BEI,$texto10);
-                    $table->addCell(null, $celda)->addTextRun($centrado)->addText($value->AREA,$texto10);
-                    $table->addCell(null, $celda)->addTextRun($centrado)->addText($value->CATEGORIA,$texto10);
-                    $table->addCell(null, $celda)->addTextRun($centrado)->addText($value->FICHA_BEI,$texto10);
-                    $table->addCell(null, $celda)->addTextRun($centrado)->addText($value->EDAD_BEI_TEXTO,$texto10);
-                    $table->addCell(null, $celda)->addTextRun($centrado)->addText($value->ANTIGUEDAD_BEI,$texto10);
-                    $table->addCell(null, $celda)->addTextRun($centrado)->addText(sanitizeText($value->MUESTRA_BEI),$texto10);
-                    $table->addCell(null, $celda)->addTextRun($centrado)->addText(sanitizeText($value->RESULTADO_BEI_TEXTO),$texto10);
-                    $table->addCell(null, $celda)->addTextRun($centrado)->addText(sanitizeText($value->REFERENCIA_BEI_TEXTO),$texto10);
-                    $table->addCell(null, array('bgColor' => $value->COLOR, 'valign' => 'center'))->addTextRun($centrado)->addText($value->NORMATIVIDAD, $texto10);
+                    $table->addCell(null, $continua_fila);
+                    $table->addCell(null, $continua_fila);
+                    $table->addCell(null, $celda)->addTextRun($centrado)->addText(sanitizeText($value->PARAMETRO), $texto);
+                    $table->addCell(null, $celda)->addTextRun($centrado)->addText(sanitizeText($value->METODO), $texto);
+                    $table->addCell(null, $continua_fila);
+                    $table->addCell(null, $continua_fila);
+                    $table->addCell(null, $celda)->addTextRun($centrado)->addText(sanitizeText($value->CONCENTRACION), $texto);
+                    $table->addCell(null, $celda)->addTextRun($centrado)->addText(sanitizeText($value->CONCENTRACION_PERMISIBLE), $texto);
+
+                    if ($value->CUMPLIMIENTO_NORMATIVO == "Dentro de norma") {
+                        $table->addCell(null, array('bgColor' => '#00FF00', 'valign' => 'center'))->addTextRun($centrado)->addText($value->CUMPLIMIENTO_NORMATIVO, $texto);
+                    } else {
+                        $table->addCell(null, array('bgColor' => "#FF0000", 'valign' => 'center'))->addTextRun($centrado)->addText($value->CUMPLIMIENTO_NORMATIVO, $textototal);
+                    }
+
                 }
             }
 
-            $plantillaword->setComplexBlock('TABLA_7', $table);
+            $plantillaword->setComplexBlock('TABLA_8_1', $table);
+
+
+            // TABLA  8.1.1.- Resultados de calidad e inocuidad de alimentos
+            //================================================================================
+            // Crear tabla
+            $table = null;
+            $No = 1;
+            $total = 0;
+            $table = new Table(array('name' => 'Arial', 'width' => 13500, 'borderSize' => 10, 'borderColor' => '000000', 'cellMargin' => 0, 'spaceAfter' => 0, 'unit' => TblWidth::TWIP));
+
+            $sql8_1_1 = DB::select('CALL sp_obtener_puntos_alimentos_8_1_1_b(?)', [$proyecto_id]);
+
+
+            // encabezado tabla
+            $table->addRow(200, array('tblHeader' => true));
+            $table->addCell(1500, $encabezado_celda)->addTextRun($centrado)->addText('Punto', $encabezado_texto);
+            $table->addCell(3000, $encabezado_celda)->addTextRun($centrado)->addText('Área', $encabezado_texto);
+            $table->addCell(2500, $encabezado_celda)->addTextRun($centrado)->addText('Fecha de medición', $encabezado_texto);
+            $table->addCell(2500, $encabezado_celda)->addTextRun($centrado)->addText('Parametro', $encabezado_texto);
+            $table->addCell(2500, $encabezado_celda)->addTextRun($centrado)->addText('Unidades', $encabezado_texto);
+            $table->addCell(3500, $encabezado_celda)->addTextRun($centrado)->addText('Método de análisis', $encabezado_texto);
+            $table->addCell(2500, $encabezado_celda)->addTextRun($centrado)->addText('Ubicación', $encabezado_texto);
+            $table->addCell(2000, $encabezado_celda)->addTextRun($centrado)->addText('No. de trabajadores expuestos', $encabezado_texto);
+            $table->addCell(2000, $encabezado_celda)->addTextRun($centrado)->addText('Concentración obtenida', $encabezado_texto);
+          
+
+
+            // registros tabla
+            $punto = 'xxx';
+
+            foreach ($sql8_1_1 as $key => $value) {
+
+                if ($punto != $value->PUNTO
+                ) {
+                    $table->addRow(); //fila
+                    $table->addCell(null, $combinar_fila)->addTextRun($centrado)->addText(sanitizeText($value->PUNTO), $texto);
+                    $table->addCell(null, $combinar_fila)->addTextRun($centrado)->addText(sanitizeText($value->AREA), $texto);
+                    $table->addCell(null, $combinar_fila)->addTextRun($centrado)->addText(sanitizeText($value->FECHA_MEDICION), $texto);
+                    $table->addCell(null, $celda)->addTextRun($centrado)->addText(sanitizeText($value->PARAMETRO), $texto);
+                    $table->addCell(null, $celda)->addTextRun($centrado)->addText(sanitizeText($value->UNIDADES), $texto);
+                    $table->addCell(null, $celda)->addTextRun($centrado)->addText(sanitizeText($value->METODO), $texto);
+                    $table->addCell(null, $combinar_fila)->addTextRun($centrado)->addText(sanitizeText($value->UBICACION), $texto);
+                    $table->addCell(null, $combinar_fila)->addTextRun($centrado)->addText(sanitizeText($value->TRABAJADORES), $texto);
+                    $table->addCell(null, $celda)->addTextRun($centrado)->addText(sanitizeText($value->CONCENTRACION), $texto);
+
+
+                    $punto = $value->PUNTO;
+                } else {
+
+                    $table->addRow(); //fila
+                    $table->addCell(null, $continua_fila);
+                    $table->addCell(null, $continua_fila);
+                    $table->addCell(null, $continua_fila);
+                    $table->addCell(null, $celda)->addTextRun($centrado)->addText(sanitizeText($value->PARAMETRO), $texto);
+                    $table->addCell(null, $celda)->addTextRun($centrado)->addText(sanitizeText($value->UNIDADES), $texto);
+                    $table->addCell(null, $celda)->addTextRun($centrado)->addText(sanitizeText($value->METODO), $texto);
+                    $table->addCell(null, $continua_fila);
+                    $table->addCell(null, $continua_fila);
+                    $table->addCell(null, $celda)->addTextRun($centrado)->addText(sanitizeText($value->CONCENTRACION), $texto);
+
+                   
+                }
+            }
+
+            $plantillaword->setComplexBlock('TABLA_8_1_1', $table);
+
+
+            // TABLA  8.2.- Resultados, evalución de superficies vivas
+            //================================================================================
+            // Crear tabla
+            $table = null;
+            $No = 1;
+            $total = 0;
+            $table = new Table(array('name' => 'Arial', 'width' => 13500, 'borderSize' => 10, 'borderColor' => '000000', 'cellMargin' => 0, 'spaceAfter' => 0, 'unit' => TblWidth::TWIP));
+
+            $sql8_2 = DB::select('CALL sp_obtener_puntos_alimentos_8_2_b(?)', [$proyecto_id]);
+
+
+            // encabezado tabla
+            $table->addRow(200, array('tblHeader' => true));
+            $table->addCell(1500, $encabezado_celda)->addTextRun($centrado)->addText('Punto', $encabezado_texto);
+            $table->addCell(3000, $encabezado_celda)->addTextRun($centrado)->addText('Área', $encabezado_texto);
+            $table->addCell(2500, $encabezado_celda)->addTextRun($centrado)->addText('Fecha de medición', $encabezado_texto);
+            $table->addCell(2500, $encabezado_celda)->addTextRun($centrado)->addText('Parametro', $encabezado_texto);
+            $table->addCell(1500, $encabezado_celda)->addTextRun($centrado)->addText('Unidades', $encabezado_texto);
+            $table->addCell(3500, $encabezado_celda)->addTextRun($centrado)->addText('Método de análisis', $encabezado_texto);
+            $table->addCell(2500, $encabezado_celda)->addTextRun($centrado)->addText('Ubicación', $encabezado_texto);
+            $table->addCell(1500, $encabezado_celda)->addTextRun($centrado)->addText('No. de trabajadores expuestos', $encabezado_texto);
+            $table->addCell(1500, $encabezado_celda)->addTextRun($centrado)->addText('Concentración obtenida', $encabezado_texto);
+            $table->addCell(1500, $encabezado_celda)->addTextRun($centrado)->addText('Concentración permisible', $encabezado_texto);
+            $table->addCell(2500, $encabezado_celda)->addTextRun($centrado)->addText('Cumplimiento normativo', $encabezado_texto);
+
+
+            // registros tabla
+            $punto = 'xxx';
+
+            foreach ($sql8_2 as $key => $value) {
+
+                if ($punto != $value->PUNTO
+                ) {
+                    $table->addRow(); //fila
+                    $table->addCell(null, $combinar_fila)->addTextRun($centrado)->addText(sanitizeText($value->PUNTO), $texto);
+                    $table->addCell(null, $combinar_fila)->addTextRun($centrado)->addText(sanitizeText($value->AREA), $texto);
+                    $table->addCell(null, $combinar_fila)->addTextRun($centrado)->addText(sanitizeText($value->FECHA_MEDICION), $texto);
+                    $table->addCell(null, $celda)->addTextRun($centrado)->addText(sanitizeText($value->PARAMETRO), $texto);
+                    $table->addCell(null, $celda)->addTextRun($centrado)->addText(sanitizeText($value->UNIDADES), $texto);
+                    $table->addCell(null, $celda)->addTextRun($centrado)->addText(sanitizeText($value->METODO), $texto);
+                    $table->addCell(null, $combinar_fila)->addTextRun($centrado)->addText(sanitizeText($value->UBICACION), $texto);
+                    $table->addCell(null, $combinar_fila)->addTextRun($centrado)->addText(sanitizeText($value->TRABAJADORES), $texto);
+                    $table->addCell(null, $celda)->addTextRun($centrado)->addText(sanitizeText($value->CONCENTRACION), $texto);
+                    $table->addCell(null, $celda)->addTextRun($centrado)->addText(sanitizeText($value->CONCENTRACION_PERMISIBLE), $texto);
+
+                    if ($value->CUMPLIMIENTO_NORMATIVO == "Dentro de norma") {
+                        $table->addCell(null, array('bgColor' => '#00FF00', 'valign' => 'center'))->addTextRun($centrado)->addText($value->CUMPLIMIENTO_NORMATIVO, $texto);
+                    } else {
+                        $table->addCell(null, array('bgColor' => "#FF0000", 'valign' => 'center'))->addTextRun($centrado)->addText($value->CUMPLIMIENTO_NORMATIVO, $textototal);
+                    }
+
+                    $punto = $value->PUNTO;
+                } else {
+
+                    $table->addRow(); //fila
+                    $table->addCell(null, $continua_fila);
+                    $table->addCell(null, $continua_fila);
+                    $table->addCell(null, $continua_fila);
+                    $table->addCell(null, $celda)->addTextRun($centrado)->addText(sanitizeText($value->PARAMETRO), $texto);
+                    $table->addCell(null, $celda)->addTextRun($centrado)->addText(sanitizeText($value->UNIDADES), $texto);
+                    $table->addCell(null, $celda)->addTextRun($centrado)->addText(sanitizeText($value->METODO), $texto);
+                    $table->addCell(null, $continua_fila);
+                    $table->addCell(null, $continua_fila);
+                    $table->addCell(null, $celda)->addTextRun($centrado)->addText(sanitizeText($value->CONCENTRACION), $texto);
+                    $table->addCell(null, $celda)->addTextRun($centrado)->addText(sanitizeText($value->CONCENTRACION_PERMISIBLE), $texto);
+
+                    if ($value->CUMPLIMIENTO_NORMATIVO == "Dentro de norma") {
+                        $table->addCell(null, array('bgColor' => '#00FF00', 'valign' => 'center'))->addTextRun($centrado)->addText($value->CUMPLIMIENTO_NORMATIVO, $texto);
+                    } else {
+                        $table->addCell(null, array('bgColor' => "#FF0000", 'valign' => 'center'))->addTextRun($centrado)->addText($value->CUMPLIMIENTO_NORMATIVO, $textototal);
+                    }
+                }
+            }
+
+            $plantillaword->setComplexBlock('TABLA_8_2', $table);
+
+
+
+            // TABLA  8.3.- Resultados, evalución de superficies inertes
+            //================================================================================
+            // Crear tabla
+            $table = null;
+            $No = 1;
+            $total = 0;
+            $table = new Table(array('name' => 'Arial', 'width' => 13500, 'borderSize' => 10, 'borderColor' => '000000', 'cellMargin' => 0, 'spaceAfter' => 0, 'unit' => TblWidth::TWIP));
+
+            $sql8_3 = DB::select('CALL sp_obtener_puntos_alimentos_8_3_b(?)', [$proyecto_id]);
+
+
+            // encabezado tabla
+            $table->addRow(200, array('tblHeader' => true));
+            $table->addCell(1500, $encabezado_celda)->addTextRun($centrado)->addText('Punto', $encabezado_texto);
+            $table->addCell(3000, $encabezado_celda)->addTextRun($centrado)->addText('Área', $encabezado_texto);
+            $table->addCell(2500, $encabezado_celda)->addTextRun($centrado)->addText('Fecha de medición', $encabezado_texto);
+            $table->addCell(2500, $encabezado_celda)->addTextRun($centrado)->addText('Parametro', $encabezado_texto);
+            $table->addCell(2000, $encabezado_celda)->addTextRun($centrado)->addText('Unidades', $encabezado_texto);
+            $table->addCell(3500, $encabezado_celda)->addTextRun($centrado)->addText('Método de análisis', $encabezado_texto);
+            $table->addCell(2500, $encabezado_celda)->addTextRun($centrado)->addText('Ubicación', $encabezado_texto);
+            $table->addCell(1500, $encabezado_celda)->addTextRun($centrado)->addText('No. de trabajadores expuestos', $encabezado_texto);
+            $table->addCell(1500, $encabezado_celda)->addTextRun($centrado)->addText('Concentración obtenida', $encabezado_texto);
+            $table->addCell(1500, $encabezado_celda)->addTextRun($centrado)->addText('Concentración permisible', $encabezado_texto);
+            $table->addCell(2500, $encabezado_celda)->addTextRun($centrado)->addText('Cumplimiento normativo', $encabezado_texto);
+
+
+            // registros tabla
+            $punto = 'xxx';
+
+            foreach ($sql8_3 as $key => $value) {
+
+                if (
+                    $punto != $value->PUNTO
+                ) {
+                    $table->addRow(); //fila
+                    $table->addCell(null, $combinar_fila)->addTextRun($centrado)->addText(sanitizeText($value->PUNTO), $texto);
+                    $table->addCell(null, $combinar_fila)->addTextRun($centrado)->addText(sanitizeText($value->AREA), $texto);
+                    $table->addCell(null, $combinar_fila)->addTextRun($centrado)->addText(sanitizeText($value->FECHA_MEDICION), $texto);
+                    $table->addCell(null, $celda)->addTextRun($centrado)->addText(sanitizeText($value->PARAMETRO), $texto);
+                    $table->addCell(null, $celda)->addTextRun($centrado)->addText(sanitizeText($value->UNIDADES), $texto);
+                    $table->addCell(null, $celda)->addTextRun($centrado)->addText(sanitizeText($value->METODO), $texto);
+                    $table->addCell(null, $combinar_fila)->addTextRun($centrado)->addText(sanitizeText($value->UBICACION), $texto);
+                    $table->addCell(null, $combinar_fila)->addTextRun($centrado)->addText(sanitizeText($value->TRABAJADORES), $texto);
+                    $table->addCell(null, $celda)->addTextRun($centrado)->addText(sanitizeText($value->CONCENTRACION), $texto);
+                    $table->addCell(null, $celda)->addTextRun($centrado)->addText(sanitizeText($value->CONCENTRACION_PERMISIBLE), $texto);
+
+                    if ($value->CUMPLIMIENTO_NORMATIVO == "Dentro de norma") {
+                        $table->addCell(null, array('bgColor' => '#00FF00', 'valign' => 'center'))->addTextRun($centrado)->addText($value->CUMPLIMIENTO_NORMATIVO, $texto);
+                    } else {
+                        $table->addCell(null, array('bgColor' => "#FF0000", 'valign' => 'center'))->addTextRun($centrado)->addText($value->CUMPLIMIENTO_NORMATIVO, $textototal);
+                    }
+
+                    $punto = $value->PUNTO;
+                } else {
+
+                    $table->addRow(); //fila
+                    $table->addCell(null, $continua_fila);
+                    $table->addCell(null, $continua_fila);
+                    $table->addCell(null, $continua_fila);
+                    $table->addCell(null, $celda)->addTextRun($centrado)->addText(sanitizeText($value->PARAMETRO), $texto);
+                    $table->addCell(null, $celda)->addTextRun($centrado)->addText(sanitizeText($value->UNIDADES), $texto);
+                    $table->addCell(null, $celda)->addTextRun($centrado)->addText(sanitizeText($value->METODO), $texto);
+                    $table->addCell(null, $continua_fila);
+                    $table->addCell(null, $continua_fila);
+                    $table->addCell(null, $celda)->addTextRun($centrado)->addText(sanitizeText($value->CONCENTRACION), $texto);
+                    $table->addCell(null, $celda)->addTextRun($centrado)->addText(sanitizeText($value->CONCENTRACION_PERMISIBLE), $texto);
+
+                    if ($value->CUMPLIMIENTO_NORMATIVO == "Dentro de norma") {
+                        $table->addCell(null, array('bgColor' => '#00FF00', 'valign' => 'center'))->addTextRun($centrado)->addText($value->CUMPLIMIENTO_NORMATIVO, $texto);
+                    } else {
+                        $table->addCell(null, array('bgColor' => "#FF0000", 'valign' => 'center'))->addTextRun($centrado)->addText($value->CUMPLIMIENTO_NORMATIVO, $textototal);
+                    }
+                }
+            }
+
+            $plantillaword->setComplexBlock('TABLA_8_3', $table);
+
+
+            // 9.1.- Calidad e inocuidad de alimentos
+            //================================================================================
+            // Crear tabla
+            $table = null;
+            $No = 1;
+            $total = 0;
+            $table = new Table(array('name' => 'Arial', 'width' => 13500, 'borderSize' => 10, 'borderColor' => '000000', 'cellMargin' => 0, 'spaceAfter' => 0, 'unit' => TblWidth::TWIP));
+
+            // encabezado tabla
+            $table->addRow(200, array('tblHeader' => true));
+            $table->addCell(2500, $encabezado_celda)->addTextRun($centrado)->addText('Punto', $encabezado_texto);
+            $table->addCell(2500, $encabezado_celda)->addTextRun($centrado)->addText('Parametro', $encabezado_texto);
+            $table->addCell(2500, $encabezado_celda)->addTextRun($centrado)->addText('Ubicación', $encabezado_texto);
+            $table->addCell(2500, $encabezado_celda)->addTextRun($centrado)->addText('Concentración obtenida', $encabezado_texto);
+            $table->addCell(2500, $encabezado_celda)->addTextRun($centrado)->addText('Concentración permisible', $encabezado_texto);
+            $table->addCell(2500, $encabezado_celda)->addTextRun($centrado)->addText('Cumplimiento normativo', $encabezado_texto);
+
+
+            // registros tabla
+            $punto = 'xxx';
+
+            foreach ($sql8_1 as $key => $value) {
+
+                if ($punto != $value->PUNTO
+                ) {
+                    $table->addRow(); //fila
+                    $table->addCell(null, $combinar_fila)->addTextRun($centrado)->addText(sanitizeText($value->PUNTO), $texto);
+                    $table->addCell(null, $celda)->addTextRun($centrado)->addText(sanitizeText($value->PARAMETRO), $texto);
+                    $table->addCell(null, $combinar_fila)->addTextRun($centrado)->addText(sanitizeText($value->UBICACION), $texto);
+                    $table->addCell(null, $celda)->addTextRun($centrado)->addText(sanitizeText($value->CONCENTRACION), $texto);
+                    $table->addCell(null, $celda)->addTextRun($centrado)->addText(sanitizeText($value->CONCENTRACION_PERMISIBLE), $texto);
+
+                    if ($value->CUMPLIMIENTO_NORMATIVO == "Dentro de norma") {
+                        $table->addCell(null, array('bgColor' => '#00FF00', 'valign' => 'center'))->addTextRun($centrado)->addText($value->CUMPLIMIENTO_NORMATIVO, $texto);
+                    } else {
+                        $table->addCell(null, array('bgColor' => "#FF0000", 'valign' => 'center'))->addTextRun($centrado)->addText($value->CUMPLIMIENTO_NORMATIVO, $textototal);
+                    }
+
+                    $punto = $value->PUNTO;
+                } else {
+
+                    $table->addRow(); //fila
+                    $table->addCell(null, $continua_fila);
+                    $table->addCell(null, $celda)->addTextRun($centrado)->addText(sanitizeText($value->PARAMETRO), $texto);
+                    $table->addCell(null, $continua_fila);
+                    $table->addCell(null, $celda)->addTextRun($centrado)->addText(sanitizeText($value->CONCENTRACION), $texto);
+                    $table->addCell(null, $celda)->addTextRun($centrado)->addText(sanitizeText($value->CONCENTRACION_PERMISIBLE), $texto);
+
+                    if ($value->CUMPLIMIENTO_NORMATIVO == "Dentro de norma") {
+                        $table->addCell(null, array('bgColor' => '#00FF00', 'valign' => 'center'))->addTextRun($centrado)->addText($value->CUMPLIMIENTO_NORMATIVO, $texto);
+                    } else {
+                        $table->addCell(null, array('bgColor' => "#FF0000", 'valign' => 'center'))->addTextRun($centrado)->addText($value->CUMPLIMIENTO_NORMATIVO, $textototal);
+                    }
+                }
+            }
+
+            $plantillaword->setComplexBlock('TABLA_9_1', $table);
+
+
+
+            // TABLA  8.1.1.- Resultados de calidad e inocuidad de alimentos
+            //================================================================================
+            // Crear tabla
+            $table = null;
+            $No = 1;
+            $total = 0;
+            $table = new Table(array('name' => 'Arial', 'width' => 13500, 'borderSize' => 10, 'borderColor' => '000000', 'cellMargin' => 0, 'spaceAfter' => 0, 'unit' => TblWidth::TWIP));
+
+
+            // encabezado tabla
+            $table->addRow(200, array('tblHeader' => true));
+            $table->addCell(3500, $encabezado_celda)->addTextRun($centrado)->addText('Punto', $encabezado_texto);
+            $table->addCell(3500, $encabezado_celda)->addTextRun($centrado)->addText('Parametro', $encabezado_texto);
+            $table->addCell(3500, $encabezado_celda)->addTextRun($centrado)->addText('Ubicación', $encabezado_texto);
+            $table->addCell(3500, $encabezado_celda)->addTextRun($centrado)->addText('Concentración obtenida', $encabezado_texto);
+
+
+
+            // registros tabla
+            $punto = 'xxx';
+
+            foreach ($sql8_1_1 as $key => $value) {
+
+                if (
+                    $punto != $value->PUNTO
+                ) {
+                    $table->addRow(); //fila
+                    $table->addCell(null, $combinar_fila)->addTextRun($centrado)->addText(sanitizeText($value->PUNTO), $texto);
+                    $table->addCell(null, $celda)->addTextRun($centrado)->addText(sanitizeText($value->PARAMETRO), $texto);
+                    $table->addCell(null, $combinar_fila)->addTextRun($centrado)->addText(sanitizeText($value->UBICACION), $texto);
+                    $table->addCell(null, $celda)->addTextRun($centrado)->addText(sanitizeText($value->CONCENTRACION), $texto);
+
+
+                    $punto = $value->PUNTO;
+                } else {
+
+                    $table->addRow(); //fila
+                    $table->addCell(null, $continua_fila);
+                    $table->addCell(null, $celda)->addTextRun($centrado)->addText(sanitizeText($value->PARAMETRO), $texto);
+                    $table->addCell(null, $continua_fila);
+                    $table->addCell(null, $celda)->addTextRun($centrado)->addText(sanitizeText($value->CONCENTRACION), $texto);
+                }
+            }
+
+            $plantillaword->setComplexBlock('TABLA_9_1_1', $table);
+
+
+
+            // TABLA  9.2.- Superficies vivas
+            //================================================================================
+            // Crear tabla
+            $table = null;
+            $No = 1;
+            $total = 0;
+            $table = new Table(array('name' => 'Arial', 'width' => 13500, 'borderSize' => 10, 'borderColor' => '000000', 'cellMargin' => 0, 'spaceAfter' => 0, 'unit' => TblWidth::TWIP));
+
+
+            // encabezado tabla
+            $table->addRow(200, array('tblHeader' => true));
+            $table->addCell(2500, $encabezado_celda)->addTextRun($centrado)->addText('Punto', $encabezado_texto);
+            $table->addCell(2500, $encabezado_celda)->addTextRun($centrado)->addText('Parametro', $encabezado_texto);
+            $table->addCell(2500, $encabezado_celda)->addTextRun($centrado)->addText('Ubicación', $encabezado_texto);
+            $table->addCell(2500, $encabezado_celda)->addTextRun($centrado)->addText('Concentración obtenida', $encabezado_texto);
+            $table->addCell(2500, $encabezado_celda)->addTextRun($centrado)->addText('Concentración permisible', $encabezado_texto);
+            $table->addCell(2500, $encabezado_celda)->addTextRun($centrado)->addText('Cumplimiento normativo', $encabezado_texto);
+
+
+            // registros tabla
+            $punto = 'xxx';
+
+            foreach ($sql8_2 as $key => $value) {
+
+                if (
+                    $punto != $value->PUNTO
+                ) {
+                    $table->addRow(); //fila
+                    $table->addCell(null, $combinar_fila)->addTextRun($centrado)->addText(sanitizeText($value->PUNTO), $texto);
+                    $table->addCell(null, $celda)->addTextRun($centrado)->addText(sanitizeText($value->PARAMETRO), $texto);
+                    $table->addCell(null, $combinar_fila)->addTextRun($centrado)->addText(sanitizeText($value->UBICACION), $texto);
+                    $table->addCell(null, $celda)->addTextRun($centrado)->addText(sanitizeText($value->CONCENTRACION), $texto);
+                    $table->addCell(null, $celda)->addTextRun($centrado)->addText(sanitizeText($value->CONCENTRACION_PERMISIBLE), $texto);
+
+                    if ($value->CUMPLIMIENTO_NORMATIVO == "Dentro de norma") {
+                        $table->addCell(null, array('bgColor' => '#00FF00', 'valign' => 'center', 'color' => '000000'))->addTextRun($centrado)->addText($value->CUMPLIMIENTO_NORMATIVO, $texto);
+                    } else {
+                        $table->addCell(null, array('bgColor' => "#FF0000", 'valign' => 'center', 'color' => 'FFFFFF'))->addTextRun($centrado)->addText($value->CUMPLIMIENTO_NORMATIVO, $textototal);
+                    }
+
+                    $punto = $value->PUNTO;
+                } else {
+
+                    $table->addRow(); //fila
+                    $table->addCell(null, $continua_fila);
+                    $table->addCell(null, $celda)->addTextRun($centrado)->addText(sanitizeText($value->PARAMETRO), $texto);
+                    $table->addCell(null, $continua_fila);
+                    $table->addCell(null, $celda)->addTextRun($centrado)->addText(sanitizeText($value->CONCENTRACION), $texto);
+                    $table->addCell(null, $celda)->addTextRun($centrado)->addText(sanitizeText($value->CONCENTRACION_PERMISIBLE), $texto);
+
+                    if ($value->CUMPLIMIENTO_NORMATIVO == "Dentro de norma") {
+                        $table->addCell(null, array('bgColor' => '#00FF00', 'valign' => 'center'))->addTextRun($centrado)->addText($value->CUMPLIMIENTO_NORMATIVO, $texto);
+                    } else {
+                        $table->addCell(null, array('bgColor' => "#FF0000", 'valign' => 'center'))->addTextRun($centrado)->addText($value->CUMPLIMIENTO_NORMATIVO, $textototal);
+                    }
+                }
+            }
+
+            $plantillaword->setComplexBlock('TABLA_9_2', $table);
+
+
+
+            // TABLA  9.3.- Superficies inertes
+            //================================================================================
+            // Crear tabla
+            $table = null;
+            $No = 1;
+            $total = 0;
+            $table = new Table(array('name' => 'Arial', 'width' => 13500, 'borderSize' => 10, 'borderColor' => '000000', 'cellMargin' => 0, 'spaceAfter' => 0, 'unit' => TblWidth::TWIP));
+
+
+            // encabezado tabla
+            $table->addRow(200, array('tblHeader' => true));
+            $table->addCell(2500, $encabezado_celda)->addTextRun($centrado)->addText('Punto', $encabezado_texto);
+            $table->addCell(2500, $encabezado_celda)->addTextRun($centrado)->addText('Parametro', $encabezado_texto);
+            $table->addCell(2500, $encabezado_celda)->addTextRun($centrado)->addText('Ubicación', $encabezado_texto);
+            $table->addCell(2500, $encabezado_celda)->addTextRun($centrado)->addText('Concentración obtenida', $encabezado_texto);
+            $table->addCell(2500, $encabezado_celda)->addTextRun($centrado)->addText('Concentración permisible', $encabezado_texto);
+            $table->addCell(2500, $encabezado_celda)->addTextRun($centrado)->addText('Cumplimiento normativo', $encabezado_texto);
+
+
+            // registros tabla
+            $punto = 'xxx';
+
+            foreach ($sql8_3 as $key => $value) {
+
+                if (
+                    $punto != $value->PUNTO
+                ) {
+                    $table->addRow(); //fila
+                    $table->addCell(null, $combinar_fila)->addTextRun($centrado)->addText(sanitizeText($value->PUNTO), $texto);
+                    $table->addCell(null, $celda)->addTextRun($centrado)->addText(sanitizeText($value->PARAMETRO), $texto);
+                    $table->addCell(null, $combinar_fila)->addTextRun($centrado)->addText(sanitizeText($value->UBICACION), $texto);
+                    $table->addCell(null, $celda)->addTextRun($centrado)->addText(sanitizeText($value->CONCENTRACION), $texto);
+                    $table->addCell(null, $celda)->addTextRun($centrado)->addText(sanitizeText($value->CONCENTRACION_PERMISIBLE), $texto);
+
+                    if ($value->CUMPLIMIENTO_NORMATIVO == "Dentro de norma") {
+                        $table->addCell(null, array('bgColor' => '#00FF00', 'valign' => 'center'))->addTextRun($centrado)->addText($value->CUMPLIMIENTO_NORMATIVO, $texto);
+                    } else {
+                        $table->addCell(null, array('bgColor' => "#FF0000", 'valign' => 'center'))->addTextRun($centrado)->addText($value->CUMPLIMIENTO_NORMATIVO, $textototal);
+                    }
+
+                    $punto = $value->PUNTO;
+                } else {
+
+                    $table->addRow(); //fila
+                    $table->addCell(null, $continua_fila);
+                    $table->addCell(null, $celda)->addTextRun($centrado)->addText(sanitizeText($value->PARAMETRO), $texto);
+                    $table->addCell(null, $continua_fila);
+                    $table->addCell(null, $celda)->addTextRun($centrado)->addText(sanitizeText($value->CONCENTRACION), $texto);
+                    $table->addCell(null, $celda)->addTextRun($centrado)->addText(sanitizeText($value->CONCENTRACION_PERMISIBLE), $texto);
+
+                    if ($value->CUMPLIMIENTO_NORMATIVO == "Dentro de norma") {
+                        $table->addCell(null, array('bgColor' => '#00FF00', 'valign' => 'center'))->addTextRun($centrado)->addText($value->CUMPLIMIENTO_NORMATIVO, $texto);
+                    } else {
+                        $table->addCell(null, array('bgColor' => "#FF0000", 'valign' => 'center'))->addTextRun($centrado)->addText($value->CUMPLIMIENTO_NORMATIVO, $textototal);
+                    }
+                }
+            }
+
+            $plantillaword->setComplexBlock('TABLA_9_3', $table);
+
 
 
             // CONCLUSION
             //================================================================================
-            $plantillaword->setValue('CONCLUSION', $this->datosproyectoreemplazartexto($proyecto, $recsensorial, $reportebei->reportebei_conclusion));
+            $plantillaword->setValue('CONCLUSION', $this->datosproyectoreemplazartexto($proyecto, $recsensorial, $reportealimentos->reportealimentos_conclusion));
 
 
             // RECOMENDACIONES
             //================================================================================
+
 
             $sql = collect(DB::select('SELECT
                                             TABLA.id,
@@ -1119,7 +1256,7 @@ class reporteBeiWordController extends Controller
                                                                             reporterecomendaciones 
                                                                         WHERE
                                                                             reporterecomendaciones.proyecto_id = ' . $proyecto_id . ' 
-                                                                            AND reporterecomendaciones.registro_id = ' . $reportebei_id . ' 
+                                                                            AND reporterecomendaciones.registro_id = ' . $reportealimentos_id . ' 
                                                                             AND reporterecomendaciones.reporterecomendacionescatalogo_id = reporterecomendacionescatalogo.id
                                                                         LIMIT 1 
                                                                 ), NULL) AS recomendaciones_descripcion
@@ -1146,7 +1283,7 @@ class reporteBeiWordController extends Controller
                                                     WHERE
                                                         reporterecomendaciones.proyecto_id = ' . $proyecto_id . '
                                                         AND reporterecomendaciones.agente_nombre = "' . $agente_nombre . '" 
-                                                        AND reporterecomendaciones.registro_id = ' . $reportebei_id . ' 
+                                                        AND reporterecomendaciones.registro_id = ' . $reportealimentos_id . ' 
                                                         AND reporterecomendaciones.reporterecomendacionescatalogo_id = 0
                                                     ORDER BY
                                                         reporterecomendaciones.id ASC
@@ -1171,14 +1308,14 @@ class reporteBeiWordController extends Controller
             $plantillaword->setValue('RECOMENDACIONES', $this->datosproyectoreemplazartexto($proyecto, $recsensorial, $recomendacion));
 
 
-
             // RESPONSABLES
             //================================================================================
 
+
             // RESPONSABLE 1, FOTO DOCUMENTO
-            if ($reportebei->reportebei_responsable1documento) {
-                if (file_exists(storage_path('app/' . $reportebei->reportebei_responsable1documento))) {
-                    $plantillaword->setImageValue('REPONSABLE1_DOCUMENTO', array('path' => storage_path('app/' . $reportebei->reportebei_responsable1documento), 'height' => 300, 'width' => 580, 'ratio' => true, 'borderColor' => '000000'));
+            if ($reportealimentos->reportealimentos_responsable1documento) {
+                if (file_exists(storage_path('app/' . $reportealimentos->reportealimentos_responsable1documento))) {
+                    $plantillaword->setImageValue('REPONSABLE1_DOCUMENTO', array('path' => storage_path('app/' . $reportealimentos->reportealimentos_responsable1documento), 'height' => 300, 'width' => 580, 'ratio' => true, 'borderColor' => '000000'));
                 } else {
                     $plantillaword->setValue('REPONSABLE1_DOCUMENTO', 'FALTA CARGAR IMAGEN DESDE EL SISTEMA.');
                 }
@@ -1187,13 +1324,13 @@ class reporteBeiWordController extends Controller
             }
 
 
-            $plantillaword->setValue('REPONSABLE1', $reportebei->reportebei_responsable1 . "<w:br/>" . $reportebei->reportebei_responsable1cargo);
+            $plantillaword->setValue('REPONSABLE1', $reportealimentos->reportealimentos_responsable1 . "<w:br/>" . $reportealimentos->reportealimentos_responsable1cargo);
 
 
             // RESPONSABLE 2, FOTO DOCUMENTO
-            if ($reportebei->reportebei_responsable2documento) {
-                if (file_exists(storage_path('app/' . $reportebei->reportebei_responsable2documento))) {
-                    $plantillaword->setImageValue('REPONSABLE2_DOCUMENTO', array('path' => storage_path('app/' . $reportebei->reportebei_responsable2documento), 'height' => 300, 'width' => 580, 'ratio' => true, 'borderColor' => '000000'));
+            if ($reportealimentos->reportealimentos_responsable2documento) {
+                if (file_exists(storage_path('app/' . $reportealimentos->reportealimentos_responsable2documento))) {
+                    $plantillaword->setImageValue('REPONSABLE2_DOCUMENTO', array('path' => storage_path('app/' . $reportealimentos->reportealimentos_responsable2documento), 'height' => 300, 'width' => 580, 'ratio' => true, 'borderColor' => '000000'));
                 } else {
                     $plantillaword->setValue('REPONSABLE2_DOCUMENTO', 'FALTA CARGAR IMAGEN DESDE EL SISTEMA.');
                 }
@@ -1202,18 +1339,16 @@ class reporteBeiWordController extends Controller
             }
 
 
-            $plantillaword->setValue('REPONSABLE2', $reportebei->reportebei_responsable2 . "<w:br/>" . $reportebei->reportebei_responsable2cargo);
+            $plantillaword->setValue('REPONSABLE2', $reportealimentos->reportealimentos_responsable2 . "<w:br/>" . $reportealimentos->reportealimentos_responsable2cargo);
 
 
-
-
-            // TABLA ANEXO 1, Memoria fotográfica 
+            // TABLA ANEXO 4, Memoria fotográfica  - CREAR VARIABLES
             //================================================================================
 
 
             // Crear tabla
             $table = null;
-            $table = new Table(array('name' => 'Arial', 'borderSize' => 1, 'borderColor' => '000000', 'cellMargin' => 40, 'unit' => TblWidth::TWIP));
+            $table = new Table(array('name' => $fuente, 'borderSize' => 1, 'borderColor' => '000000', 'cellMargin' => 40, 'unit' => TblWidth::TWIP));
 
             $fotos = DB::select('SELECT
                                     proyectoevidenciafoto.id,
@@ -1239,15 +1374,13 @@ class reporteBeiWordController extends Controller
 
             // Crear tabla
             $table = null;
-            $table = new Table(array('name' => 'Arial', 'borderSize' => 1, 'borderColor' => '000000', 'cellMargin' => 40, 'unit' => TblWidth::TWIP));
+            $table = new Table(array('name' => $fuente, 'borderSize' => 1, 'borderColor' => '000000', 'cellMargin' => 40, 'unit' => TblWidth::TWIP));
 
 
             $table->addRow(400, array('tblHeader' => true));
-            $table->addCell(($ancho_col_1 + $ancho_col_2),
-                array('gridSpan' => 2, 'valign' => 'center', 'borderTopColor' => 'ffffff', 'borderTopSize' => 1, 'borderRightColor' => 'ffffff', 'borderRightSize' => 1, 'borderBottomColor' => '000000', 'borderBottomSize' => 1, 'borderLeftColor' => 'ffffff', 'borderLeftSize' => 1,)
-            )->addTextRun($centrado)->addText('Memoria fotográfica', array('color' => '000000', 'size' => 12, 'bold' => true, 'name' => 'Arial'));
+            $table->addCell(($ancho_col_1 + $ancho_col_2), array('gridSpan' => 2, 'valign' => 'center', 'borderTopColor' => 'ffffff', 'borderTopSize' => 1, 'borderRightColor' => 'ffffff', 'borderRightSize' => 1, 'borderBottomColor' => '000000', 'borderBottomSize' => 1, 'borderLeftColor' => 'ffffff', 'borderLeftSize' => 1,))->addTextRun($centrado)->addText('Memoria fotográfica', array('color' => '000000', 'size' => 12, 'bold' => true, 'name' => $fuente));
             $table->addRow(400, array('tblHeader' => true));
-            $table->addCell(($ancho_col_1 + $ancho_col_2), array('gridSpan' => 2, 'valign' => 'center', 'bgColor' => '0C3F64'))->addTextRun($centrado)->addText('Evaluación de IBE', $encabezado_texto);
+            $table->addCell(($ancho_col_1 + $ancho_col_2), array('gridSpan' => 2, 'valign' => 'center', 'bgColor' => '0C3F64'))->addTextRun($centrado)->addText('Evaluación de iluminación', $encabezado_texto);
 
 
             for ($i = 0; $i < count($fotos); $i += 4) {
@@ -1306,105 +1439,62 @@ class reporteBeiWordController extends Controller
 
 
 
-
-            // TABLA ANEXO 2, EQUIPO UTILIZADO PARA LA MEDICION
+            // ANEXO 5, Planos de ubicación de luminarias y puntos de evaluación por área - CREAR VARIABLES
             //================================================================================
 
 
-            // Crear tabla
-            $table = null;
-            $table = new Table(array('name' => 'Arial', 'borderSize' => 1, 'borderColor' => '000000', 'cellMargin' => 40, 'unit' => TblWidth::TWIP));
+            $planoscarpetas = DB::select('SELECT
+                                                reporteplanoscarpetas.id,
+                                                reporteplanoscarpetas.proyecto_id,
+                                                reporteplanoscarpetas.agente_id,
+                                                reporteplanoscarpetas.agente_nombre,
+                                                reporteplanoscarpetas.reporteplanoscarpetas_nombre 
+                                            FROM
+                                                reporteplanoscarpetas
+                                            WHERE
+                                                reporteplanoscarpetas.proyecto_id = ' . $proyecto_id . '
+                                                AND reporteplanoscarpetas.agente_nombre = "' . $agente_nombre . '" 
+                                                AND reporteplanoscarpetas.registro_id = ' . $reportealimentos_id);
 
 
-            $sql = DB::select('SELECT
-                                    reporteequiposutilizados.proyecto_id,
-                                    reporteequiposutilizados.registro_id,
-                                    reporteequiposutilizados.id,
-                                    reporteequiposutilizados.agente_id,
-                                    reporteequiposutilizados.agente_nombre,
-                                    reporteequiposutilizados.equipo_id,
-                                    reporteequiposutilizados.reporteequiposutilizados_cartacalibracion,
-                                    REPLACE(REPLACE(REPLACE(equipo.equipo_Descripcion, "<", "˂"), ">", "˃"), "&", "Ꞩ") AS equipo_Descripcion,
-                                    equipo.equipo_Marca,
-                                    equipo.equipo_Modelo,
-                                    equipo.equipo_Serie,
-                                    IFNULL(equipo.equipo_FechaCalibracion, "N/A") AS equipo_FechaCalibracion,
-                                    IFNULL(equipo.equipo_VigenciaCalibracion, "N/A") AS equipo_VigenciaCalibracion,
-                                    IFNULL(DATEDIFF(equipo.equipo_VigenciaCalibracion, CURDATE()) + 1, 0) AS vigencia_dias,
-                                    IF(equipo.equipo_VigenciaCalibracion, CONCAT(equipo.equipo_VigenciaCalibracion, " (", (DATEDIFF(equipo.equipo_VigenciaCalibracion, CURDATE()) + 1)," d)"), "N/A") AS vigencia_texto,
-                                    (
-                                        CASE
-                                            WHEN IFNULL(DATEDIFF(equipo.equipo_VigenciaCalibracion, CURDATE()) + 1, 0) = 0 THEN ""
-                                            WHEN IFNULL(DATEDIFF(equipo.equipo_VigenciaCalibracion, CURDATE()) + 1, 0) >= 90 THEN ""
-                                            WHEN IFNULL(DATEDIFF(equipo.equipo_VigenciaCalibracion, CURDATE()) + 1, 0) >= 30 THEN "text-warning"
-                                            ELSE "text-danger"
-                                        END
-                                    ) AS vigencia_color
-                                    -- equipo.equipo_CertificadoPDF 
-                                FROM
-                                    reporteequiposutilizados
-                                    LEFT JOIN equipo ON reporteequiposutilizados.equipo_id = equipo.id
-                                WHERE
-                                    reporteequiposutilizados.proyecto_id = ' . $proyecto_id . ' 
-                                    AND reporteequiposutilizados.registro_id = ' . $reportebei_id . ' 
-                                    AND reporteequiposutilizados.agente_nombre = "' . $agente_nombre . '"
-                                ORDER BY
-                                    equipo.equipo_Descripcion ASC,
-                                    equipo.equipo_Marca ASC,
-                                    equipo.equipo_Modelo ASC,
-                                    equipo.equipo_Serie ASC');
+            $planoscarpetasvariales = '';
+            $planocontador = 0;
+            $plano_archivo = array();
+            if (count($planoscarpetas) > 0) {
+                foreach ($planoscarpetas as $key => $carpeta) {
+                    $planos = DB::select('SELECT
+                                                proyectoevidenciaplano.proyecto_id,
+                                                proyectoevidenciaplano.agente_id,
+                                                proyectoevidenciaplano.agente_nombre,
+                                                proyectoevidenciaplano.proyectoevidenciaplano_carpeta,
+                                                proyectoevidenciaplano.proyectoevidenciaplano_archivo 
+                                            FROM
+                                                proyectoevidenciaplano 
+                                            WHERE
+                                                proyectoevidenciaplano.proyecto_id = ' . $carpeta->proyecto_id . ' 
+                                                AND proyectoevidenciaplano.agente_nombre = "' . $carpeta->agente_nombre . '" 
+                                                AND proyectoevidenciaplano.proyectoevidenciaplano_carpeta = "' . $carpeta->reporteplanoscarpetas_nombre . '" 
+                                            ORDER BY
+                                                proyectoevidenciaplano.proyectoevidenciaplano_carpeta ASC');
 
+                    foreach ($planos as $key => $plano) {
+                        $planoscarpetasvariales .= '${PLANO_' . $planocontador . '_FOTO}';
 
-            // encabezado tabla
-            $table->addRow(200, array('tblHeader' => true));
-            $ancho_col_1 = 1800;
-            $ancho_col_2 = 1800;
-            $ancho_col_3 = 1800;
-            $ancho_col_4 = 1800;
-            $ancho_col_5 = 1800;
-            $table->addCell($ancho_col_1, $encabezado_celda)->addTextRun($centrado)->addText('Equipo', $encabezado_texto);
-            $table->addCell($ancho_col_2, $encabezado_celda)->addTextRun($centrado)->addText('Marca', $encabezado_texto);
-            $table->addCell($ancho_col_3, $encabezado_celda)->addTextRun($centrado)->addText('Modelo', $encabezado_texto);
-            $table->addCell($ancho_col_4, $encabezado_celda)->addTextRun($centrado)->addText('No. de serie', $encabezado_texto);
-            $table->addCell($ancho_col_5, $encabezado_celda)->addTextRun($centrado)->addText('Vigencia de<w:br/>calibración', $encabezado_texto);
+                        $plano_archivo[] = $plano->proyectoevidenciaplano_archivo;
 
-
-            $numero_fila = 0;
-            $total_cartas = 0;
-            foreach ($sql as $key => $value) {
-                $table->addRow(); //fila
-
-                if ($value->reporteequiposutilizados_cartacalibracion) {
-                    $table->addCell($ancho_col_1, $celda)->addTextRun($centrado)->addText(htmlspecialchars('* ' . $value->equipo_Descripcion), $texto);
-                    $total_cartas += 1;
-                } else {
-                    $table->addCell($ancho_col_1, $celda)->addTextRun($centrado)->addText(htmlspecialchars($value->equipo_Descripcion), $texto);
+                        $planocontador += 1;
+                    }
                 }
-
-                $table->addCell($ancho_col_2, $celda)->addTextRun($centrado)->addText(htmlspecialchars($value->equipo_Marca), $texto);
-                $table->addCell($ancho_col_3, $celda)->addTextRun($centrado)->addText(htmlspecialchars($value->equipo_Modelo), $texto);
-                $table->addCell($ancho_col_4, $celda)->addTextRun($centrado)->addText(htmlspecialchars($value->equipo_Serie), $texto);
-                $table->addCell($ancho_col_5, $celda)->addTextRun($centrado)->addText(htmlspecialchars($value->equipo_VigenciaCalibracion), $texto);
-            }
-
-
-            $plantillaword->setComplexBlock('EQUIPO_UTILIZADO', $table);
-
-
-            if ($total_cartas > 0) {
-                $plantillaword->setValue('EQUIPO_UTILIZADO_NOTA', '<w:br/>
-                                                                    <w:rPr>
-                                                                        <w:b w:val="true"/>
-                                                                        <w:t xml:space="preserve">Nota *: </w:t>
-                                                                    </w:rPr>
-                                                                    <w:rPr>
-                                                                        <w:b w:val="false"/>
-                                                                        <w:t xml:space="preserve">La calibración tiene una extensión en el tiempo de vigencia avalada mediante una carta emitida por el laboratorio acreditado misma que se encuentra disponible para consulta en el anexo 5.</w:t>
-                                                                    </w:rPr>');
             } else {
-                $plantillaword->setValue('EQUIPO_UTILIZADO_NOTA', '');
+                $plano_archivo = array();
+                $planoscarpetasvariales = 'NO HAY PLANOS QUE MOSTRAR.';
             }
 
+
+            $plantillaword->setValue('PLANOS', $planoscarpetasvariales);
+
+
+           
 
             /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
             // CREAR WORD TEMPORAL
@@ -1412,11 +1502,12 @@ class reporteBeiWordController extends Controller
 
             // GUARDAR
             Storage::makeDirectory('reportes/informes'); //crear directorio
-            $plantillaword->saveAs(storage_path('app/reportes/informes/Informe_BEI_' . $proyecto->proyecto_folio . '_TEMPORAL.docx')); //GUARDAR Y CREAR archivo word TEMPORAL
+            $plantillaword->saveAs(storage_path('app/reportes/informes/Informe_alimentos_' . $proyecto->proyecto_folio . '_TEMPORAL.docx')); //GUARDAR Y CREAR archivo word TEMPORAL
 
+            // sleep(1);
 
             // ABRIR NUEVA PLANTILLA
-            $plantillaword = new TemplateProcessor(storage_path('app/reportes/informes/Informe_BEI_' . $proyecto->proyecto_folio . '_TEMPORAL.docx')); //Abrir plantilla TEMPORAL
+            $plantillaword = new TemplateProcessor(storage_path('app/reportes/informes/Informe_alimentos_' . $proyecto->proyecto_folio . '_TEMPORAL.docx')); //Abrir plantilla TEMPORAL
 
 
             /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -1434,6 +1525,7 @@ class reporteBeiWordController extends Controller
                         $plantillaword->setValue('PUNTO_' . $i . '_FOTO', 'NO SE ENCONTRÓ LA FOTO');
                     }
 
+                    // $plantillaword->setValue('PUNTO_' . $i . '_DESCRIPCION', "Punto " . $fotos[$i]->proyectoevidenciafoto_nopunto . " " . $fotos[$i]->proyectoevidenciafoto_descripcion);
                     $plantillaword->setValue('PUNTO_' . $i . '_DESCRIPCION', $fotos[$i]->proyectoevidenciafoto_descripcion);
                 }
 
@@ -1445,6 +1537,7 @@ class reporteBeiWordController extends Controller
                         $plantillaword->setValue('PUNTO_' . ($i + 1) . '_FOTO', 'NO SE ENCONTRÓ LA FOTO');
                     }
 
+                    // $plantillaword->setValue('PUNTO_' . ($i + 1) . '_DESCRIPCION', "Punto " . $fotos[($i + 1)]->proyectoevidenciafoto_nopunto . " " . $fotos[($i + 1)]->proyectoevidenciafoto_descripcion);
                     $plantillaword->setValue('PUNTO_' . ($i + 1) . '_DESCRIPCION', $fotos[($i + 1)]->proyectoevidenciafoto_descripcion);
                 }
 
@@ -1456,6 +1549,7 @@ class reporteBeiWordController extends Controller
                         $plantillaword->setValue('PUNTO_' . ($i + 2) . '_FOTO', 'NO SE ENCONTRÓ LA FOTO');
                     }
 
+                    // $plantillaword->setValue('PUNTO_' . ($i + 2) . '_DESCRIPCION', "Punto " . $fotos[($i + 2)]->proyectoevidenciafoto_nopunto . " " . $fotos[($i + 2)]->proyectoevidenciafoto_descripcion);
                     $plantillaword->setValue('PUNTO_' . ($i + 2) . '_DESCRIPCION', $fotos[($i + 2)]->proyectoevidenciafoto_descripcion);
                 }
 
@@ -1467,7 +1561,21 @@ class reporteBeiWordController extends Controller
                         $plantillaword->setValue('PUNTO_' . ($i + 3) . '_FOTO', 'NO SE ENCONTRÓ LA FOTO');
                     }
 
+                    // $plantillaword->setValue('PUNTO_' . ($i + 3) . '_DESCRIPCION', "Punto " . $fotos[($i + 3)]->proyectoevidenciafoto_nopunto . " " . $fotos[($i + 3)]->proyectoevidenciafoto_descripcion);
                     $plantillaword->setValue('PUNTO_' . ($i + 3) . '_DESCRIPCION', $fotos[($i + 3)]->proyectoevidenciafoto_descripcion);
+                }
+            }
+
+
+            // ANEXO 2, Planos de ubicación de luminarias y puntos de evaluación por área - AGREGAR FOTOS
+            //================================================================================
+
+
+            for ($i = 0; $i < count($plano_archivo); $i++) {
+                if (Storage::exists($plano_archivo[$i])) {
+                    $plantillaword->setImageValue('PLANO_' . $i . '_FOTO', array('path' => storage_path('app/' . $plano_archivo[$i]), 'height' => 690, 'width' => 588, 'ratio' => false, 'borderColor' => '000000'));
+                } else {
+                    $plantillaword->setValue('PLANO_' . $i . '_FOTO', 'NO SE ENCONTRÓ LA FOTO<w:br/>');
                 }
             }
 
@@ -1482,28 +1590,13 @@ class reporteBeiWordController extends Controller
                                         (
                                             (
                                                 SELECT
-                                                    CONCAT("Certificado de calibración - ", equipo.equipo_Descripcion, " (", equipo.equipo_Serie, ")") AS nombre,
-                                                    equipos_documentos.RUTA_DOCUMENTO AS archivo
-                                                FROM
-                                                    reporteequiposutilizados
-                                                INNER JOIN equipo ON reporteequiposutilizados.equipo_id = equipo.id
-                                                INNER JOIN equipos_documentos ON equipos_documentos.EQUIPO_ID = equipo.id
-                                                WHERE
-                                                    reporteequiposutilizados.proyecto_id = ' . $proyecto_id . '
-                                                    AND reporteequiposutilizados.registro_id = ' . $reportebei_id . '
-                                                    AND reporteequiposutilizados.agente_nombre = "' . $agente_nombre . '"
-                                                    AND equipos_documentos.DOCUMENTO_TIPO = 4
-                                            )
-                                            UNION ALL
-                                            (
-                                                SELECT
                                                     reporteanexos.reporteanexos_anexonombre AS nombre,
                                                     reporteanexos.reporteanexos_rutaanexo AS archivo 
                                                 FROM
                                                     reporteanexos
                                                 WHERE
                                                     reporteanexos.proyecto_id = ' . $proyecto_id . '
-                                                    AND reporteanexos.registro_id = ' . $reportebei_id . '
+                                                    AND reporteanexos.registro_id = ' . $reportealimentos_id . '
                                                     AND reporteanexos.agente_nombre = "' . $agente_nombre . '"
                                             )
                                         ) AS ANEXO');
@@ -1515,17 +1608,21 @@ class reporteBeiWordController extends Controller
 
 
             // GUARDAR
-            $informe_nombre = 'Informe de BEI - ' . $proyecto->proyecto_folio . ' (' . $proyecto->proyecto_clienteinstalacion . ').docx';
+            $informe_nombre = 'Informe de Alimentos - ' . $proyecto->proyecto_folio . ' (' . $proyecto->proyecto_clienteinstalacion . ').docx';
             $plantillaword->saveAs(storage_path('app/reportes/informes/' . $informe_nombre)); //crear archivo word
 
 
             // ELIMINAR TEMPORAL
-            if (Storage::exists('reportes/informes/Informe_BEI_' . $proyecto->proyecto_folio . '_TEMPORAL.docx')) {
-                Storage::delete('reportes/informes/Informe_BEI_' . $proyecto->proyecto_folio . '_TEMPORAL.docx');
+            if (Storage::exists('reportes/informes/Informe_alimentos_' . $proyecto->proyecto_folio . '_TEMPORAL.docx')) {
+                Storage::delete('reportes/informes/Informe_alimentos_' . $proyecto->proyecto_folio . '_TEMPORAL.docx');
             }
 
 
-           
+            
+
+
+            //--------------------------------------------------------------------------------
+
 
             if (($request->crear_revision + 0) == 0) // Crear informe y guardar en carpeta temporal para descarga
             {
@@ -1535,7 +1632,7 @@ class reporteBeiWordController extends Controller
                 // Define Dir Folder
                 $zip_ruta = storage_path('app/reportes/informes');
                 // Zip File Name
-                $zip_nombre = 'Informe de BEI - ' . $proyecto->proyecto_folio . ' (' . $proyecto->proyecto_clienteinstalacion . ') + Anexos.zip';
+                $zip_nombre = 'Informe de Alimentos - ' . $proyecto->proyecto_folio . ' (' . $proyecto->proyecto_clienteinstalacion . ') + Anexos.zip';
                 // Create ZipArchive Obj
                 $zip = new ZipArchive;
 
@@ -1551,8 +1648,13 @@ class reporteBeiWordController extends Controller
                         }
                     }
 
+
+                    // Close ZipArchive     
                     $zip->close();
                 }
+
+
+                //----------------------------------
 
 
                 // ELIMINAR INFORME word (PORQUE YA ESTÁ EN EL ZIP)
@@ -1560,8 +1662,8 @@ class reporteBeiWordController extends Controller
                     Storage::delete('reportes/informes/' . $informe_nombre);
                 }
 
-                $dato["msj"] = 'Informe creado correctamente';
 
+                $dato["msj"] = 'Informe creado correctamente';
             } else // Crear informes historial y guardar en base de datos
             {
                 //================================================================================
@@ -1569,11 +1671,11 @@ class reporteBeiWordController extends Controller
 
 
                 // Define Dir Folder
-                $zip_ruta_servidor = 'reportes/proyecto/' . $proyecto_id . '/' . $agente_nombre . '/' . $reportebei_id . '/revisiones/' . $request->ultimarevision_id;
+                $zip_ruta_servidor = 'reportes/proyecto/' . $proyecto_id . '/' . $agente_nombre . '/' . $reportealimentos_id . '/revisiones/' . $request->ultimarevision_id;
                 Storage::makeDirectory($zip_ruta_servidor); //crear directorio
-                $zip_ruta_completa = storage_path('app/reportes/proyecto/' . $proyecto_id . '/' . $agente_nombre . '/' . $reportebei_id . '/revisiones/' . $request->ultimarevision_id);
+                $zip_ruta_completa = storage_path('app/reportes/proyecto/' . $proyecto_id . '/' . $agente_nombre . '/' . $reportealimentos_id . '/revisiones/' . $request->ultimarevision_id);
                 // Zip File Name
-                $zip_nombre = 'Informe de BEI - ' . $proyecto->proyecto_folio . ' (' . $proyecto->proyecto_clienteinstalacion . ') + Anexos.zip';
+                $zip_nombre = 'Informe de Alimentos - ' . $proyecto->proyecto_folio . ' (' . $proyecto->proyecto_clienteinstalacion . ') + Anexos.zip';
                 // Create ZipArchive Obj
                 $zip = new ZipArchive;
 
@@ -1592,6 +1694,9 @@ class reporteBeiWordController extends Controller
 
                     $zip->close(); // Close ZipArchive
                 }
+
+
+                //----------------------------------
 
 
                 // ELIMINAR INFORME word (PORQUE YA ESTÁ EN EL ZIP)
@@ -1632,14 +1737,14 @@ class reporteBeiWordController extends Controller
                                                 reporterevisiones
                                             WHERE
                                                 reporterevisiones.proyecto_id = ' . $proyecto_id . ' 
-                                                AND reporterevisiones.agente_id = 22 -- BEI 
+                                                AND reporterevisiones.agente_id = 11 -- Alimentos 
                                             ORDER BY
                                                 reporterevisiones.reporterevisiones_revision DESC');
 
 
-
                 // CREAR NUEVA REVISION
                 // -------------------------------------------------
+
 
                 DB::statement('ALTER TABLE reporterevisiones AUTO_INCREMENT = 1;');
                 $revision = reporterevisionesModel::create([
@@ -1662,9 +1767,9 @@ class reporteBeiWordController extends Controller
 
 
             //--------------------------------------------------------------------------------
+
+
             return response()->json($dato);
-
-
         } catch (Exception $e) {
             // respuesta
             $dato["msj"] = 'Error ' . $e->getMessage();
@@ -1673,58 +1778,51 @@ class reporteBeiWordController extends Controller
     }
 
 
-    public function reportebeiworddescargar($proyecto_id, $revision_id, $ultima_revision){
+   
+    public function reportealimentosworddescargar($proyecto_id, $revision_id, $ultima_revision)
+    {
+        $agente_nombre = 'Alimentos';
 
-        try {
 
-            $agente_nombre = 'BEI';
-    
-    
-            if (($revision_id + 0) == ($ultima_revision + 0)) //Descargar y eliminar .ZIP de la carpeta temporal
-            {
-                $proyecto = proyectoModel::findOrFail($proyecto_id);
-    
-                $zip_nombre = 'Informe de BEI - ' . $proyecto->proyecto_folio . ' (' . $proyecto->proyecto_clienteinstalacion . ') + Anexos.zip';
-    
-    
-                if (Storage::exists('reportes/informes/' . $zip_nombre)) {
-                    return response()->download(storage_path('app/reportes/informes/' . $zip_nombre), $zip_nombre, array('Content-Type' => 'application/octet-stream'))->deleteFileAfterSend(true);
+        if (($revision_id + 0) == ($ultima_revision + 0)) //Descargar y eliminar .ZIP de la carpeta temporal
+        {
+            $proyecto = proyectoModel::findOrFail($proyecto_id);
+
+            $zip_nombre = 'Informe de Alimentos - ' . $proyecto->proyecto_folio . ' (' . $proyecto->proyecto_clienteinstalacion . ') + Anexos.zip';
+
+
+            if (Storage::exists('reportes/informes/' . $zip_nombre)) {
+                return response()->download(storage_path('app/reportes/informes/' . $zip_nombre), $zip_nombre, array('Content-Type' => 'application/octet-stream'))->deleteFileAfterSend(true);
+            } else {
+                return '<h3>No se encontró el informe de ' . $agente_nombre . ', intentelo de nuevo</h3>';
+            }
+        } else {
+            $archivo_historial = DB::select('SELECT
+                                                reporterevisiones.proyecto_id,
+                                                reporterevisiones.agente_id,
+                                                reporterevisiones.agente_nombre,
+                                                reporterevisiones.id,
+                                                reporterevisiones.reporterevisiones_revision,
+                                                reporterevisiones.reporterevisiones_concluido,
+                                                reporterevisiones.reporterevisiones_cancelado,
+                                                reporterevisionesarchivo.reporterevisionesarchivo_tipo,
+                                                reporterevisionesarchivo.reporterevisionesarchivo_archivo 
+                                            FROM
+                                                reporterevisiones
+                                                LEFT JOIN reporterevisionesarchivo ON reporterevisiones.id = reporterevisionesarchivo.reporterevisiones_id
+                                            WHERE
+                                                reporterevisiones.id = ' . $revision_id);
+
+
+            if (count($archivo_historial) > 0) {
+                if (Storage::exists($archivo_historial[0]->reporterevisionesarchivo_archivo)) {
+                    return response()->download(storage_path('app/' . $archivo_historial[0]->reporterevisionesarchivo_archivo), "", array('Content-Type' => 'application/octet-stream'))->deleteFileAfterSend(false);
                 } else {
-                    return '<h3>No se encontró el informe de ' . $agente_nombre . ', intentelo de nuevo</h3>';
+                    return '<h3>No se encontró el archivo historial del informe de ' . $agente_nombre . ' 1</h3>';
                 }
             } else {
-    
-                $archivo_historial = DB::select('SELECT
-                                                    reporterevisiones.proyecto_id,
-                                                    reporterevisiones.agente_id,
-                                                    reporterevisiones.agente_nombre,
-                                                    reporterevisiones.id,
-                                                    reporterevisiones.reporterevisiones_revision,
-                                                    reporterevisiones.reporterevisiones_concluido,
-                                                    reporterevisiones.reporterevisiones_cancelado,
-                                                    reporterevisionesarchivo.reporterevisionesarchivo_tipo,
-                                                    reporterevisionesarchivo.reporterevisionesarchivo_archivo 
-                                                FROM
-                                                    reporterevisiones
-                                                    LEFT JOIN reporterevisionesarchivo ON reporterevisiones.id = reporterevisionesarchivo.reporterevisiones_id
-                                                WHERE
-                                                    reporterevisiones.id = ' . $revision_id);
-    
-    
-                if (count($archivo_historial) > 0) {
-                    if (Storage::exists($archivo_historial[0]->reporterevisionesarchivo_archivo)) {
-                        return response()->download(storage_path('app/' . $archivo_historial[0]->reporterevisionesarchivo_archivo), "", array('Content-Type' => 'application/octet-stream'))->deleteFileAfterSend(false);
-                    } else {
-                        return '<h3>No se encontró el archivo historial del informe de ' . $agente_nombre . ' 1</h3>';
-                    }
-                } else {
-                    return '<h3>No se encontró el archivo historial del informe de ' . $agente_nombre . ' 2</h3>';
-                }
+                return '<h3>No se encontró el archivo historial del informe de ' . $agente_nombre . ' 2</h3>';
             }
-        } catch (Exception $e) {
-            // respuesta
-            $dato["msj"] = 'Error ' . $e->getMessage();
-            return response()->json($dato);
         }
     }
 }
