@@ -1441,7 +1441,7 @@ function mostarSustanciasQuimicas(ID) {
                         </select>
                     </td>
                     <td>
-                        <input type="number" class="form-control porcentajeSustancias text-center" style="width: 100%;" id="porcentajeSustancia_${valor.SUSTANCIA_QUIMICA_ID}" name="PORCENTAJE" style="width: 100%;" placeholder="% Componente" min="0" value="${valor.PORCENTAJE}">
+                        <input type="text" class="form-control porcentajeSustancias text-center" style="width: 100%;" id="porcentajeSustancia_${valor.SUSTANCIA_QUIMICA_ID}" name="PORCENTAJE" style="width: 100%;" placeholder="% Componente" min="0" value="${valor.PORCENTAJE}">
                     </td>
                     <td>
                         <select class="custom-select form-control" id="estadoSustancia_${valor.SUSTANCIA_QUIMICA_ID}" name="ESTADO_FISICO" style="width: 100%;" required onchange="cambiarFormaSustancia('formaSustancia_${valor.SUSTANCIA_QUIMICA_ID}','valatilidadSustancia_${valor.SUSTANCIA_QUIMICA_ID}' ,this.value)">
@@ -3917,7 +3917,7 @@ function mostrarPorcentajeSustancia(sus) {
                             </select>
                         </td>
                         <td>
-                            <input type="number" class="form-control porcentajeSustancias text-center error" id="porcentajeSustancia_${option.id}" name="PORCENTAJE" style="width: 100%;" placeholder="% Componente" min="0" >
+                            <input type="text" class="form-control porcentajeSustancias text-center error" id="porcentajeSustancia_${option.id}" name="PORCENTAJE" style="width: 100%;" placeholder="% Componente" min="0" >
                         </td>
                         <td>
                             <select class="custom-select form-control error" id="estadoSustancia_${option.id}" name="ESTADO_FISICO" style="width: 100%;"  onchange="cambiarFormaSustancia('formaSustancia_${option.id}','valatilidadSustancia_${option.id}', this.value)" required>
