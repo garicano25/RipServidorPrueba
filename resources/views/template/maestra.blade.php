@@ -983,7 +983,7 @@ use Illuminate\Support\Str;
     {{-- Select search filter --}}
     <script src="/assets/plugins/select-search/selectize.js" type="text/javascript"></script>
     {{-- pagina --}}
-    <script src="/js_sitio/informesHI.js?v=2.0"></script>
+    <script src="/js_sitio/informesHI.js?v=5.0"></script>
     @endif
 
     @if(request()->is('usuario'))
