@@ -748,7 +748,7 @@
                     <div class="card-header" style="background-color: #009bcf; color: #fff;">
                         <h5 class="card-title">
                             <i class="fa fa-exclamation-triangle" style="color: #ffcc00;"></i>
-                            FACTORES DE RIESGO PSICOSOCIALES NOM-035-STPS-2018
+                            FACTORES DE RIESGO PSICOSOCIAL NOM-035-STPS-2018
                         </h5>
                     </div>
                     <div class="card-body">
@@ -778,7 +778,7 @@
                     <div class="card-header" style="background-color: #009bcf; color: #fff;">
                         <h5 class="card-title">
                             <i class="fa fa-exclamation-triangle" style="color: #ffcc00;"></i>
-                            FACTORES DE RIESGO PSICOSOCIALES NOM-035-STPS-2018
+                            FACTORES DE RIESGO PSICOSOCIAL NOM-035-STPS-2018
                         </h5>
                     </div>
                     <div class="card-body">
