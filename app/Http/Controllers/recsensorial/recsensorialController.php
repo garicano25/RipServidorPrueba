@@ -1380,9 +1380,10 @@ class recsensorialController extends Controller
                     ->update([
                         'CANCELADO' => $cancelado,
                         'BLOQUEADO' => $bloqueado,
-                        'CANCELADO_POR' => $userId,
+                        'CANCELADO_POR' => $userId,  // Se actualiza siempre
                         'updated_at' => now()
                     ]);
+
 
                 return response()->json([
                     'success' => true,
@@ -1412,22 +1413,24 @@ class recsensorialController extends Controller
                 ->max('NUMERO_VERSIONES');
     
             // Cambios
-            $cambios = DB::select("SELECT c.ID_CONTROL_CAMBIO, 
-                                        CONCAT(er.empleado_nombre, ' ', er.empleado_apellidopaterno, ' ', er.empleado_apellidomaterno) AS REALIZADO_POR,
-                                        IF(c.CANCELADO = 1, CONCAT(CONCAT(er.empleado_nombre, ' ', er.empleado_apellidopaterno, ' ', er.empleado_apellidomaterno), '<br>', DATE_FORMAT(c.updated_at, '%Y-%m-%d %H:%i:%s')), NULL) AS CANCELADO_POR,
-                                        DESCRIPCION_REALIZADO AS CAMBIOS,
-                                        c.created_at AS FECHA_REALIZADO,
-                                        IFNULL(CONCAT(ea.empleado_nombre, ' ', ea.empleado_apellidopaterno, ' ', ea.empleado_apellidomaterno), 'SIN AUTORIZAR') AS AUTORIZADO_ID,
-                                        IF(c.AUTORIZADO = 0, '--', DATE_FORMAT(c.updated_at, '%Y-%m-%d %H:%i:%s')) AS FECHA_AUTORIZADO,
-                                        c.AUTORIZADO,
-                                        c.CANCELADO,
-                                        c.NUMERO_VERSIONES
-                        FROM controlCambios c
-                        LEFT JOIN usuario ur ON ur.id = c.REALIZADO_ID
-                        LEFT JOIN usuario ua ON ua.id = c.AUTORIZADO_ID
-                        LEFT JOIN empleado er ON er.id = ur.empleado_id
-                        LEFT JOIN empleado ea ON ea.id = ua.empleado_id
-                        WHERE c.RECONOCIMIENTO_ID = ?", [$recsensorial_id]);
+            $cambios = DB::select("  SELECT c.ID_CONTROL_CAMBIO,
+                                            CONCAT(er.empleado_nombre, ' ', er.empleado_apellidopaterno, ' ', er.empleado_apellidomaterno) AS REALIZADO_POR,
+                                            IF(c.CANCELADO = 1, CONCAT(ec.empleado_nombre, ' ', ec.empleado_apellidopaterno, ' ', ec.empleado_apellidomaterno, '<br>', DATE_FORMAT(c.updated_at, '%Y-%m-%d %H:%i:%s')), NULL) AS CANCELADO_POR,
+                                            DESCRIPCION_REALIZADO AS CAMBIOS,
+                                            c.created_at AS FECHA_REALIZADO,
+                                            IFNULL(CONCAT(ea.empleado_nombre, ' ', ea.empleado_apellidopaterno, ' ', ea.empleado_apellidomaterno), 'SIN AUTORIZAR') AS AUTORIZADO_ID,
+                                            IF(c.AUTORIZADO = 0, '--', DATE_FORMAT(c.updated_at, '%Y-%m-%d %H:%i:%s')) AS FECHA_AUTORIZADO,
+                                            c.AUTORIZADO,
+                                            c.CANCELADO,
+                                            c.NUMERO_VERSIONES
+                                        FROM controlCambios c
+                                        LEFT JOIN usuario ur ON ur.id = c.REALIZADO_ID
+                                        LEFT JOIN usuario ua ON ua.id = c.AUTORIZADO_ID
+                                        LEFT JOIN usuario uc ON uc.id = c.CANCELADO_POR  
+                                        LEFT JOIN empleado er ON er.id = ur.empleado_id
+                                        LEFT JOIN empleado ea ON ea.id = ua.empleado_id
+                                        LEFT JOIN empleado ec ON ec.id = uc.empleado_id  
+                                        WHERE c.RECONOCIMIENTO_ID = ?", [$recsensorial_id]);
     
             $COUNT = 0;
             foreach ($cambios as $key => $value) {
