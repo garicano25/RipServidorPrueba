@@ -191,7 +191,6 @@ class ejecucionPsicoController extends Controller
      
     public function actualizarFechasOnline(Request $request)
     {
-
         try {
         $datosJson = $request->input('datos');
         $proyecto_id = $request->input('proyecto_id'); 
