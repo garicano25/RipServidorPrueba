@@ -14,9 +14,9 @@ use App\modelos\proyecto\proyectovehiculoshistorialModel;
 
 class proyectoVehiculoController extends Controller
 {
-    public function __construct() {
+    public function __construct()
+    {
         $this->middleware('auth');
-       
     }
 
     public function proyectovehiculosinventario($proyecto_id)
@@ -68,7 +68,92 @@ class proyectoVehiculoController extends Controller
 
             $numero_registro = 0;
             $listavehiculos = '';
-            foreach ($vehiculos as $key => $value) { 
+            foreach ($vehiculos as $key => $value) {
+                // dibujar filas
+                $numero_registro += 1;
+                $value->numero_registro = $numero_registro;
+                $value->proveedor_NombreComercial;
+                $value->vehiculo_disponible;
+
+                if ($value->vehiculo_disponible === "Si") {
+                    $value->checkbox = '<div class="switch" style="border: 0px #000 solid;">
+                                            <label>
+                                                <input type="checkbox" class="checkbox_proyectovehiculos" name="vehiculo[]" value="' . $value->proveedor_id . '-' . $value->id . '" ' . $value->checked . '>
+                                                <span class="lever switch-col-light-blue" style="paddin: 0px; margin: 0px;"></span>
+                                            </label>
+                                        </div>';
+                } else {
+                    $value->checkbox = '<i class="fa fa-ban"></i>';
+                }
+
+                $value->vehiculo_marca = '<span >' . $value->vehiculo_marca . '</span>';
+                $value->vehiculo_placa = '<span >' . $value->vehiculo_placa . '</span>';
+                $value->vehiculo_modelo = '<span >' . $value->vehiculo_modelo . '</span>';
+                $value->vehiculo_serie = '<span >' . $value->vehiculo_serie . '</span>';
+            }
+
+
+            // Respuesta
+            $dato["data"] = $vehiculos;
+            $dato["msj"] = 'Datos consultados correctamente';
+            return response()->json($dato);
+        } catch (Exception $e) {
+            // Respuesta
+            $dato["msj"] = 'Error ' . $e->getMessage();
+            $dato["data"] = 0;
+            return response()->json($dato);
+        }
+    }
+
+
+    public function proyectovehiculosinventarioPsico($proyecto_id)
+    {
+        try {
+            $where_adicional = '';
+            if (auth()->user()->hasRoles(['Externo'])) {
+                $where_adicional = 'AND proyectoproveedores.proveedor_id = ' . auth()->user()->empleado_id;
+            }
+
+            $vehiculos = DB::select('SELECT
+                                        proveedor.id AS proveedor_id,
+                                        proveedor.proveedor_NombreComercial,
+                                        vehiculo.id,
+                                        vehiculo.vehiculo_marca,
+                                        vehiculo.vehiculo_modelo,
+                                        vehiculo.vehiculo_placa,
+                                        vehiculo.vehiculo_serie,
+                                        IFNULL((
+                                        SELECT
+                                                IF(proyectovehiculosactual.vehiculo_id, "checked", "" ) 
+                                        FROM
+                                                proyectovehiculosactual 
+                                        WHERE
+                                                proyectovehiculosactual.proyecto_id = ?
+                                                AND proyectovehiculosactual.vehiculo_id = vehiculo.id 
+                                                LIMIT 1 ), "" ) AS checked,
+                                        IF(vehiculo.vehiculo_EstadoActivo = 1, "Si", "No") AS vehiculo_disponible 
+                                     FROM
+                                        proveedor
+                                        INNER JOIN vehiculo ON proveedor.id = vehiculo.proveedor_id 
+                                    WHERE
+                                        proveedor.id = 1
+                                    GROUP BY
+                                        proveedor.id,
+                                        proveedor.proveedor_NombreComercial,
+                                        vehiculo.id,
+                                        vehiculo.vehiculo_marca,
+                                        vehiculo.vehiculo_modelo,
+                                        vehiculo.vehiculo_serie,
+                                        vehiculo.vehiculo_placa,
+                                        vehiculo_disponible
+                                    ORDER BY
+                                        proveedor.proveedor_NombreComercial ASC,
+                                        vehiculo_disponible DESC', [$proyecto_id]);
+
+
+            $numero_registro = 0;
+            $listavehiculos = '';
+            foreach ($vehiculos as $key => $value) {
                 // dibujar filas
                 $numero_registro += 1;
                 $value->numero_registro = $numero_registro;
@@ -533,7 +618,7 @@ class proyectoVehiculoController extends Controller
                                         FROM
                                             proyecto
                                         WHERE
-                                            proyecto.id = ?'  , [intval($request->proyecto_id)]);
+                                            proyecto.id = ?', [intval($request->proyecto_id)]);
 
 
                 if (($request->vehiculoslista_id) == 0) // NUEVA LISTA
@@ -604,7 +689,7 @@ class proyectoVehiculoController extends Controller
                                                 FROM
                                                     proyectovehiculosactual
                                                 WHERE
-                                                    proyectovehiculosactual.proyecto_id = ?' , [$request->proyecto_id]);
+                                                    proyectovehiculosactual.proyecto_id = ?', [$request->proyecto_id]);
 
                     // AUTO_INCREMENT
                     DB::statement('ALTER TABLE proyectovehiculoshistorial AUTO_INCREMENT = 1;');
@@ -697,6 +782,4 @@ class proyectoVehiculoController extends Controller
             return response()->json($dato);
         }
     }
-
-
 }

@@ -33,20 +33,6 @@ class proyectosignatarioController extends Controller
     }
 
 
-
-
-
-
-
-
-
-
-    /**
-     * Display the specified resource.
-     *
-     * @param  int  $proyecto_id
-     * @return \Illuminate\Http\Response
-     */
     public function proyectosignatariosinventario($proyecto_id)
     {
         try
@@ -222,6 +208,168 @@ class proyectosignatarioController extends Controller
     }
 
 
+
+    public function proyectosignatariosinventarioPsico($proyecto_id)
+    {
+        try {
+            $where_adicional = '';
+            if (auth()->user()->hasRoles(['Externo'])) {
+                $where_adicional = 'AND proyectoproveedores.proveedor_id = ' . auth()->user()->empleado_id;
+            }
+
+            $signatarios = DB::select('SELECT
+                                        TABLAPROVEEDORES.proyecto_id,
+                                        TABLAPROVEEDORES.proveedor_id,
+                                        TABLAPROVEEDORES.proveedor_NombreComercial,-- signatario.*,
+                                        signatario.id,
+                                        signatario.signatario_EstadoActivo,
+                                    IF
+                                        ( signatario.signatario_EstadoActivo = 1, "Si", "No" ) AS disponibilidad,
+                                        signatario.signatario_Nombre,
+                                        IFNULL((
+                                            SELECT
+                                            IF
+                                                ( proyectosignatariosactual.signatario_id, "checked", "" ) 
+                                            FROM
+                                                proyectosignatariosactual 
+                                            WHERE
+                                                proyectosignatariosactual.proyecto_id = TABLAPROVEEDORES.proyecto_id 
+                                                AND proyectosignatariosactual.signatario_id = signatario.id 
+                                                LIMIT 1 
+                                                ),
+                                            "" 
+                                        ) AS checked 
+                                    FROM
+                                        (
+                                        SELECT
+                                            ? as proyecto_id,
+                                            proyectoproveedores.id as proveedor_id,
+                                            proyectoproveedores.proveedor_NombreComercial 
+                                        FROM
+                                            proveedor proyectoproveedores
+                                        WHERE
+                                            proyectoproveedores.id = 1
+                                        GROUP BY
+                                            proyecto_id,
+                                            proveedor_id,
+                                            proyectoproveedores.proveedor_NombreComercial 
+                                        ORDER BY
+                                            proyectoproveedores.proveedor_NombreComercial ASC 
+                                        ) AS TABLAPROVEEDORES
+                                        LEFT JOIN signatario ON TABLAPROVEEDORES.proveedor_id = signatario.proveedor_id 
+                                        WHERE-- signatario.signatario_EstadoActivo = 1 AND
+                                        signatario.signatario_Eliminado = 0 
+                                    GROUP BY
+                                        TABLAPROVEEDORES.proyecto_id,
+                                        TABLAPROVEEDORES.proveedor_id,
+                                        TABLAPROVEEDORES.proveedor_NombreComercial,
+                                        signatario.id,
+                                        signatario.signatario_EstadoActivo,
+                                        signatario.signatario_Nombre 
+                                    ORDER BY
+                                        TABLAPROVEEDORES.proveedor_NombreComercial ASC,
+                                        signatario.signatario_EstadoActivo DESC,
+                                        signatario.signatario_Nombre ASC', [$proyecto_id]);
+
+            $numero_registro = 0;
+            $listasignatarios = '';
+            foreach ($signatarios as $key => $value) {
+                // consulta acreditaciones por signatario
+                $listaalcances = '';
+                $alcances = DB::select('SELECT
+                                            acreditacionalcance.acreditacionAlcance_agente
+                                            -- GROUP_CONCAT(acreditacionalcance.acreditacionAlcance_agente) AS acreditacionAlcance_agente
+                                        FROM
+                                            signatarioacreditacion
+                                            LEFT JOIN acreditacionalcance ON signatarioacreditacion.signatarioAcreditacion_Alcance = acreditacionalcance.id
+                                        WHERE
+                                            signatarioacreditacion.signatario_id = ' . $value->id . '
+                                            AND signatarioacreditacion.cat_signatariodisponibilidad_id = 1
+                                            AND signatarioacreditacion.signatarioAcreditacion_Eliminado = 0
+                                            AND acreditacionalcance.acreditacionAlcance_Eliminado = 0
+                                        GROUP BY
+                                            acreditacionalcance.acreditacionAlcance_agente
+                                        ORDER BY
+                                            acreditacionalcance.acreditacionAlcance_agente ASC');
+
+                foreach ($alcances as $key1 => $value1) {
+                    if (($key1 + 0) == 0) {
+                        $listaalcances .= '• ' . $value1->acreditacionAlcance_agente;
+                    } else {
+                        $listaalcances .= ' • ' . $value1->acreditacionAlcance_agente;
+                    }
+                }
+
+
+                // consulta acreditaciones por signatario
+                $listaacreditaciones = '';
+                $acreditaciones = DB::select('SELECT
+                                                    TABLA1.acreditacion
+                                                FROM
+                                                    (
+                                                        SELECT
+                                                            signatarioacreditacion.signatarioAcreditacion_Eliminado,
+                                                            signatarioacreditacion.cat_signatariodisponibilidad_id,
+                                                            acreditacionalcance.acreditacionAlcance_Eliminado,
+                                                            acreditacion.acreditacion_Eliminado,
+                                                            IFNULL(( 
+                                                                CASE
+                                                                    WHEN (DATEDIFF(acreditacion.acreditacion_Vigencia, CURDATE()) > 90) THEN CONCAT(acreditacion.acreditacion_Entidad, " / ", acreditacion.acreditacion_Numero, " / ", DATE_FORMAT(acreditacion.acreditacion_Vigencia, "%d-%m-%Y"))
+                                                                    WHEN (DATEDIFF(acreditacion.acreditacion_Vigencia, CURDATE()) > 30) THEN CONCAT("<b style=color:#ffae00;>", acreditacion.acreditacion_Entidad, " / ", acreditacion.acreditacion_Numero, " / ", DATE_FORMAT(acreditacion.acreditacion_Vigencia, "%d-%m-%Y"), " (", DATEDIFF(acreditacion.acreditacion_Vigencia, CURDATE()), " d)", "</b>")
+                                                                    ELSE CONCAT("<b style=color:#F00;>", acreditacion.acreditacion_Entidad, " / ", acreditacion.acreditacion_Numero, " / ", DATE_FORMAT(acreditacion.acreditacion_Vigencia, "%d-%m-%Y"), " (", DATEDIFF(acreditacion.acreditacion_Vigencia, CURDATE()), " d)", "</b>")
+                                                                END
+                                                            ), "Acreditacion: N/A") AS acreditacion
+                                                        FROM
+                                                            signatarioacreditacion
+                                                            INNER JOIN acreditacionalcance ON signatarioacreditacion.signatarioAcreditacion_Alcance = acreditacionalcance.id
+                                                            LEFT JOIN acreditacion ON acreditacionalcance.acreditacion_id = acreditacion.id
+                                                        WHERE
+                                                            signatarioacreditacion.signatario_id = ' . $value->id . '
+                                                    ) AS TABLA1
+                                                WHERE
+                                                    TABLA1.signatarioAcreditacion_Eliminado = 0
+                                                    AND TABLA1.cat_signatariodisponibilidad_id = 1
+                                                    AND IF(TABLA1.acreditacion = "Acreditacion: N/A", TABLA1.acreditacionAlcance_Eliminado = 0, TABLA1.acreditacionAlcance_Eliminado = 0 AND TABLA1.acreditacion_Eliminado = 0)
+                                                GROUP BY
+                                                    TABLA1.acreditacion');
+
+                foreach ($acreditaciones as $key2 => $value2) {
+                    $listaacreditaciones .= '<li>' . $value2->acreditacion . '</li>';
+                }
+
+                // dibujar filas
+                $numero_registro += 1;
+                $value->numero_registro = $numero_registro;
+                $value->proveedor_NombreComercial;
+                $value->disponibilidad;
+
+                if (($value->signatario_EstadoActivo + 0) == 1) {
+                    $value->checkbox = '<div class="switch" style="border: 0px #000 solid;">
+                                            <label>
+                                                <input type="checkbox" class="checkbox_proyectosignatarios" name="signatario[]" value="' . $value->proveedor_id . '-' . $value->id . '" ' . $value->checked . '>
+                                                <span class="lever switch-col-light-blue" style="paddin: 0px; margin: 0px;"></span>
+                                            </label>
+                                        </div>';
+                } else {
+                    $value->checkbox = '<i class="fa fa-ban"></i>';
+                }
+
+                $value->signatario_Nombre = $value->signatario_Nombre;
+                $value->signatario_alcances = '<div style="text-align: justify;">' . $listaalcances . '</div>';
+                $value->signatario_acreditaciones = $listaacreditaciones;
+            }
+
+            // Respuesta
+            $dato["data"] = $signatarios;
+            $dato["msj"] = 'Datos consultados correctamente';
+            return response()->json($dato);
+        } catch (Exception $e) {
+            // Respuesta
+            $dato["msj"] = 'Error ' . $e->getMessage();
+            $dato["data"] = 0;
+            return response()->json($dato);
+        }
+    }
 
 
 
