@@ -237,7 +237,8 @@
                                                                                                 <th width="160" style="padding: 10px 0px; border-bottom: 2px #EEEEEE solid;">Proveedor</th>
                                                                                                 <th width="110" style="padding: 10px 0px; border-bottom: 2px #EEEEEE solid;">Disponible</th>
                                                                                                 <th width="80" style="padding: 10px 0px; border-bottom: 2px #EEEEEE solid;">Asignado</th>
-                                                                                                <th width="220" style="padding: 10px 0px; border-bottom: 2px #EEEEEE solid;">Psicólogo</th>
+                                                                                                <th width="220" style="padding: 10px 0px; border-bottom: 2px #EEEEEE solid;">Signatario</th>
+                                                                                                <th width="auto" style="padding: 10px 0px; border-bottom: 2px #EEEEEE solid;">Alcances</th>
                                                                                                 <th width="300" style="padding: 10px 0px; border-bottom: 2px #EEEEEE solid;">Entidad / Acreditación / Vigencia</th>
                                                                                             </tr>
                                                                                         </thead>
@@ -383,7 +384,7 @@
                                                                         <div class="col-12">
                                                                             <form method="post" enctype="multipart/form-data" name="form_proyectovehiculos" id="form_proyectovehiculos">
                                                                                 <style type="text/css" media="screen">
-                                                                                    #tabla_proyectoequipos td {
+                                                                                    #tabla_proyectovehiculos td {
                                                                                         padding: 12px 20px 12px 2px;
                                                                                         border-top: 1px #EEEEEE solid;
                                                                                     }
@@ -398,10 +399,9 @@
                                                                                                 <th width="110" style="padding: 10px 0px; border-bottom: 2px #EEEEEE solid;">Disponible</th>
                                                                                                 <th width="80" style="padding: 10px 0px; border-bottom: 2px #EEEEEE solid;">Asignado</th>
                                                                                                 <th width="auto" style="padding: 10px 0px; border-bottom: 2px #EEEEEE solid;">Marca</th>
-                                                                                                <th width="180" style="padding: 10px 0px; border-bottom: 2px #EEEEEE solid;">Modelo</th>
+                                                                                                <th width="180" style="padding: 10px 0px; border-bottom: 2px #EEEEEE solid;">Placa</th>
+                                                                                                <th width="140" style="padding: 10px 0px; border-bottom: 2px #EEEEEE solid;">Modelo</th>
                                                                                                 <th width="140" style="padding: 10px 0px; border-bottom: 2px #EEEEEE solid;">Serie</th>
-                                                                                                <th width="140" style="padding: 10px 0px; border-bottom: 2px #EEEEEE solid;">Linea</th>
-                                                                                                <th width="160" style="padding: 10px 0px; border-bottom: 2px #EEEEEE solid;">Placa</th>
                                                                                             </tr>
                                                                                         </thead>
                                                                                         <tbody>

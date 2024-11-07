@@ -738,33 +738,33 @@ class recsensorialquimicosreportewordController extends Controller
         $total = 0;
         $table = new Table(array('name' => 'Arial', 'width' => 13500, 'borderSize' => 10, 'borderColor' => '000000', 'cellMargin' => 0, 'spaceAfter' => 0, 'unit' => TblWidth::TWIP));
 
-        $sql = DB::select("SELECT hoja.catsustancia_nombre,
+        $sql = DB::select("SELECT  hoja.catsustancia_nombre,
                                         sus.SUSTANCIA_QUIMICA,
                                         ingreso.catviaingresoorganismo_viaingreso AS VIA_INGRESO,
                                         sus.CLASIFICACION_RIESGO,
                                         IFNULL(entidad.VLE_PPT, 'ND') AS PPT,
                                         IFNULL(entidad.VLE_CT_P, 'ND') AS CT,
                                         relacion.PORCENTAJE
-                                FROM recsensorialquimicosinventario inventario
-                                LEFT JOIN catHojasSeguridad_SustanciasQuimicas relacion ON relacion.HOJA_SEGURIDAD_ID = inventario.catsustancia_id
-                                LEFT JOIN catsustancia hoja ON hoja.id = relacion.HOJA_SEGURIDAD_ID
-                                LEFT JOIN catsustancias_quimicas sus ON sus.ID_SUSTANCIA_QUIMICA = relacion.SUSTANCIA_QUIMICA_ID
-                                LEFT JOIN sustanciaQuimicaEntidad entidad ON entidad.SUSTANCIA_QUIMICA_ID = sus.ID_SUSTANCIA_QUIMICA
-                                LEFT JOIN catEntidades catEntidad ON catEntidad.ID_ENTIDAD = entidad.ENTIDAD_ID
-                                LEFT JOIN catviaingresoorganismo ingreso ON ingreso.id = sus.VIA_INGRESO
-                                WHERE inventario.recsensorial_id = ?
-                                    AND entidad.ENTIDAD_ID = 1 
+                            FROM recsensorialquimicosinventario inventario
+                            LEFT JOIN catHojasSeguridad_SustanciasQuimicas relacion ON relacion.HOJA_SEGURIDAD_ID = inventario.catsustancia_id
+                            LEFT JOIN catsustancia hoja ON hoja.id = relacion.HOJA_SEGURIDAD_ID
+                            LEFT JOIN catsustancias_quimicas sus ON sus.ID_SUSTANCIA_QUIMICA = relacion.SUSTANCIA_QUIMICA_ID
+                            LEFT JOIN sustanciaQuimicaEntidad entidad ON entidad.SUSTANCIA_QUIMICA_ID = sus.ID_SUSTANCIA_QUIMICA
+                            LEFT JOIN catEntidades catEntidad ON catEntidad.ID_ENTIDAD = entidad.ENTIDAD_ID
+                            LEFT JOIN catviaingresoorganismo ingreso ON ingreso.id = sus.VIA_INGRESO
+                            WHERE inventario.recsensorial_id = ?
+                                    AND (entidad.ENTIDAD_ID = 1 OR entidad.ENTIDAD_ID = 2) 
                                     AND  (relacion.PORCENTAJE > 1.00 OR (JSON_CONTAINS(entidad.CONNOTACION, '\"1\"') OR JSON_CONTAINS(entidad.CONNOTACION, '\"2\"')))
-                                GROUP BY relacion.HOJA_SEGURIDAD_ID,
-                                        relacion.SUSTANCIA_QUIMICA_ID,
-                                        hoja.catsustancia_nombre, 
-                                        sus.SUSTANCIA_QUIMICA,
-                                        ingreso.catviaingresoorganismo_viaingreso,
-                                        sus.CLASIFICACION_RIESGO,
-                                        PPT,
-                                        CT,
-                                        relacion.PORCENTAJE
-                                ORDER BY  hoja.id ASC ", [$recsensorial_id]);
+                            GROUP BY relacion.HOJA_SEGURIDAD_ID,
+                                            relacion.SUSTANCIA_QUIMICA_ID,
+                                            hoja.catsustancia_nombre, 
+                                            sus.SUSTANCIA_QUIMICA,
+                                            ingreso.catviaingresoorganismo_viaingreso,
+                                            sus.CLASIFICACION_RIESGO,
+                                            PPT,
+                                            CT,
+                                            relacion.PORCENTAJE
+                            ORDER BY hoja.id ASC", [$recsensorial_id]);
         //OBTENEMOS TODAS AQUELLOS COMPONENTES LOS CUALES SEAN MAYOR AL 1% PERO SIEMPRE Y CUANDO NO TENGAN CONNOTACION CANCERIGENA
 
 
