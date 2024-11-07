@@ -375,7 +375,14 @@ class recsensorialquimicosreportewordController extends Controller
         }
 
         //PARTE DEL FOLIO PORTADA
-        $plantillaword->setValue('folio_portada', $recsensorial[0]->recsensorial_folioquimico);
+        
+        if(intval($numeroVersiones) != 0){
+            $folio = $recsensorial[0]->recsensorial_folioquimico;
+        }else{
+            $folio = $recsensorial[0]->recsensorial_folioquimico . ' - Rev '.$numeroVersiones;
+        }
+
+        $plantillaword->setValue('folio_portada', $folio);
 
         //PARTE DE REALIZADO PARA PORTADA
         $plantillaword->setValue('razon_social_portada', $recsensorial[0]->recsensorial_empresa);

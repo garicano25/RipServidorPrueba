@@ -1437,12 +1437,25 @@ class recsensorialController extends Controller
                 $value->COUNT = $COUNT++;
     
                 // Botón de descarga
+
                 if ($value->NUMERO_VERSIONES == $ultimaVersion) {
 
                     $value->boton_descargar = '<button type="button" class="btn btn-success btn-circle" onclick="reporte(form_recsensorial.recsensorial_id.value, 2, this, 3, '.$value->NUMERO_VERSIONES.');"><i class="fa fa-download"></i></button>';
                 } else {
-                    $value->boton_descargar = '<button type="button" class="btn btn-success btn-circle descargar"><i class="fa fa-download"></i></button>';
+
+                    if (auth()->user()->hasRoles(['Superusuario', 'Administrador'])) {
+
+                        $value->boton_descargar = '<button type="button" class="btn btn-success btn-circle descargar"><i class="fa fa-download"></i></button>';
+                        
+                    }else{
+
+                        $value->boton_descargar = '<button type="button" class="btn btn-secondary btn-circle" disabled data-toggle="tooltip" title="Solo Administradores y Coordinadores"><i class="fa fa-ban"></i></button>';
+                    }
                 }
+
+
+
+
     
                 // Estado del checkbox
                 $checked = $value->CANCELADO == 1 ? 'checked' : '';
