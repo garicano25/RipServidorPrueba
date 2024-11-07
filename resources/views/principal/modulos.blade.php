@@ -191,7 +191,7 @@
                             <div class="col-12 circle-two">
                                 <img src="/assets/images/modulos/ergonomia.png" class="logos" alt="Modulos de Factor Ergonomico">
                             </div>
-                            <span class="titulos" style="justify-content: center; margin-top:20px">Factor Ergonomicó</span>
+                            <span class="titulos" style="justify-content: center; margin-top:20px">Factor Ergonómico</span>
                         </div>
                     </a>
                 </div>

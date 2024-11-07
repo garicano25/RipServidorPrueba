@@ -1886,27 +1886,42 @@ Route::resource('recopsiconormativa', 'PSICO\recopsiconormativaController');
 Route::get('recopsicotrabajadorescargados/{reconocimientopsico_id}', ['as' => 'recopsicotrabajadores.recopsicotrabajadoresCargadosTabla', 'uses' => 'PSICO\recopsiconormativaController@recopsicotrabajadoresCargadosTabla']);
 
 
-//PROGRAMA DE TRABAJO
+//==============PROGRAMA DE TRABAJO
 Route::resource('programaPsicosocial', 'PSICO\programaTrabajoPsicoController');
+
 Route::resource('proyectotrabajadores', 'PSICO\proyectotrabajadoresController');
 
 Route::get('tablaProgramaPsico', ['as' => 'PSICO.programaTrabajoPsico', 'uses' => 'PSICO\programaTrabajoPsicoController@tablaProgramaTrabajoPsico']);
+
 Route::get('proyectotrabajadoreslista/{RECPSICO_ID}/{proyecto_id}', ['as' => 'proyectotrabajadores.proyectotrabajadoreslista', 'uses' => 'PSICO\proyectotrabajadoresController@proyectotrabajadoreslista']);
+
 Route::get('proyectotrabajadoresadicionales', ['as' => 'proyectotrabajadores.proyectotrabajadoresadicionales', 'uses' => 'PSICO\proyectotrabajadoresController@proyectotrabajadoresadicionales']);
+
 Route::get('trabajadoresProgramaPsico/{proyecto_id}/{RECPSICO_ID}', ['as' => 'programaTrabajoPsico.trabajadoresProgramaPsico', 'uses' => 'PSICO\programaTrabajoPsicoController@trabajadoresProgramaPsico']);
 
-//EJECUCION
+Route::get('proyectosignatariosinventarioPsico/{proyecto_id}', ['as' => 'proyectosignatarios.proyectosignatariosinventarioPsico', 'uses' => 'proyecto\proyectosignatarioController@proyectosignatariosinventarioPsico']);
+
+Route::get('proyectoequiposinventarioPsico/{proyecto_id}', ['as' => 'proyectoequipos.proyectoequiposinventarioPsico', 'uses' => 'proyecto\proyectoequipoController@proyectoequiposinventarioPsico']);
+
+Route::get('proyectovehiculosinventarioPsico/{proyecto_id}', ['as' => 'proyectovehiculo.proyectovehiculosinventarioPsico', 'uses' => 'proyecto\proyectoVehiculoController@proyectovehiculosinventarioPsico']);
+
+//================EJECUCION
 Route::resource('ejecucionPsicosocial', 'PSICO\ejecucionPsicoController');
+
 Route::get('ejecucionPsicoTabla', ['as' => 'PSICO.ejecucionPsico', 'uses' => 'PSICO\ejecucionPsicoController@tablaEjecucion']);
+
 Route::get('trabajadoresOnlineEjecucionPsico/{proyecto_id}', ['as' => 'PSICO.trabajadoresOnline', 'uses' => 'PSICO\ejecucionPsicoController@tablaTrabajadoresOnline']);
+
 Route::get('trabajadoresPresencialEjecucionPsico/{proyecto_id}', ['as' => 'PSICO.trabajadoresPresencial', 'uses' => 'PSICO\ejecucionPsicoController@tablaTrabajadoresPresencial']);
+
 Route::get('ejecuciontrabajadoresnombres', ['as' => 'ejecucionpsico.trabajadoresNombres', 'uses' => 'PSICO\ejecucionPsicoController@trabajadoresNombres']);
+
 Route::put('actualizarFechasOnline', ['as' => 'PSICO.actualizarFechasOnline', 'uses' => 'PSICO\ejecucionPsicoController@actualizarFechasOnline']);
 
-//INFORMES
+//================INFORMES
 Route::resource('informesPsicosocial', 'PSICO\informesrecoPsicoController');
 
-// GUIAS 
+// =================GUIAS 
 
 // Route::get('/Guia/{id}/{guia1}/{guia2}/{guia3}', function () { return view('catalogos.psico.guias.guias');})->name('Guia');
 Route::get('/Guia/{guia1}/{guia2}/{guia3}/{guia5}/{status}/{fechalimite}/{id}', function ($guia1, $guia2, $guia3, $guia5, $status, $fechalimite, $id) {

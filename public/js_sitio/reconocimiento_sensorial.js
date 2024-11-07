@@ -3497,7 +3497,10 @@ function cancelarrevision(idControlCambio, checkbox) {
         closeOnConfirm: false,
         closeOnCancel: false
     }, function(isConfirm) {
-        if (isConfirm) {
+		if (isConfirm) {
+			
+			swal.close();
+
             $.ajax({
                 url: '/actualizarEstadoCancelado',
                 type: 'POST',
@@ -3523,7 +3526,10 @@ function cancelarrevision(idControlCambio, checkbox) {
                         swal("Error", response.message, "error");
                         checkbox.checked = !isChecked; 
                     }
-                },
+				}, beforeSend: function (dato) {
+					swal("Espere un momento...", '', "info");
+
+				},
                 error: function() {
                     swal("Error", "No se pudo actualizar el estado. Intente nuevamente.", "error");
                     checkbox.checked = !isChecked; 

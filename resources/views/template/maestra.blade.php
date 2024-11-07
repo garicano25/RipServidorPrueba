@@ -760,7 +760,7 @@ use Illuminate\Support\Str;
     <script src="/assets/plugins/Magnific-Popup-master/dist/jquery.magnific-popup.min.js"></script>
     <script src="/assets/plugins/Magnific-Popup-master/dist/jquery.magnific-popup-init.js"></script>
     {{-- pagina --}}
-    <script src="/js_sitio/reconocimiento_sensorial.js?v=12.0"></script>
+    <script src="/js_sitio/reconocimiento_sensorial.js?v=15.0"></script>
     @endif
 
     @if(request()->is('reconocimientoPsicosocial'))
@@ -785,7 +785,7 @@ use Illuminate\Support\Str;
     <script src="/assets/plugins/Magnific-Popup-master/dist/jquery.magnific-popup.min.js"></script>
     <script src="/assets/plugins/Magnific-Popup-master/dist/jquery.magnific-popup-init.js"></script>
     {{-- pagina --}}
-    <script src="/js_sitio/reconocimientoPsico.js?v=1.0"></script>
+    <script src="/js_sitio/reconocimientoPsico.js?v=3.0"></script>
     @endif
 
 
@@ -818,7 +818,7 @@ use Illuminate\Support\Str;
 
     @if(request()->is('recsensorialquimicoscatalogos'))
     <script src="/assets/plugins/datatables/jquery.dataTables.min.js"></script>
-    <script src="/js_sitio/recsensorialquimicos_catalogos.js?v=5.0"></script>
+    <script src="/js_sitio/recsensorialquimicos_catalogos.js?v=8.0"></script>
     <script src="/assets/plugins/datatables/dataTables.rowsGroup.js"></script>
     {{-- Select search filter --}}
     <script src="/assets/plugins/select-search/selectize.js" type="text/javascript"></script>
@@ -893,7 +893,7 @@ use Illuminate\Support\Str;
     {{-- Select search filter --}}
     <script src="/assets/plugins/select-search/selectize.js" type="text/javascript"></script>
     {{-- pagina --}}
-    <script src="/js_sitio/programaTrabajoPsico.js?v=3.0"></script>
+    <script src="/js_sitio/programaTrabajoPsico.js?v=5.0"></script>
 
     @endif
 
@@ -918,7 +918,7 @@ use Illuminate\Support\Str;
     {{-- Select search filter --}}
     <script src="/assets/plugins/select-search/selectize.js" type="text/javascript"></script>
     {{-- pagina --}}
-    <script src="/js_sitio/ejecucionPsico.js?v=1.0"></script>
+    <script src="/js_sitio/ejecucionPsico.js?v=3.0"></script>
 
     @endif
 
@@ -983,7 +983,7 @@ use Illuminate\Support\Str;
     {{-- Select search filter --}}
     <script src="/assets/plugins/select-search/selectize.js" type="text/javascript"></script>
     {{-- pagina --}}
-    <script src="/js_sitio/informesHI.js?v=2.0"></script>
+    <script src="/js_sitio/informesHI.js?v=5.0"></script>
     @endif
 
     @if(request()->is('usuario'))

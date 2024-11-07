@@ -1441,7 +1441,7 @@ function mostarSustanciasQuimicas(ID) {
                         </select>
                     </td>
                     <td>
-                        <input type="number" class="form-control porcentajeSustancias text-center" style="width: 100%;" id="porcentajeSustancia_${valor.SUSTANCIA_QUIMICA_ID}" name="PORCENTAJE" style="width: 100%;" placeholder="% Componente" min="0" value="${valor.PORCENTAJE}">
+                        <input type="text" class="form-control porcentajeSustancias text-center" style="width: 100%;" id="porcentajeSustancia_${valor.SUSTANCIA_QUIMICA_ID}" name="PORCENTAJE" style="width: 100%;" placeholder="% Componente" min="0" value="${valor.PORCENTAJE}">
                     </td>
                     <td>
                         <select class="custom-select form-control" id="estadoSustancia_${valor.SUSTANCIA_QUIMICA_ID}" name="ESTADO_FISICO" style="width: 100%;" required onchange="cambiarFormaSustancia('formaSustancia_${valor.SUSTANCIA_QUIMICA_ID}','valatilidadSustancia_${valor.SUSTANCIA_QUIMICA_ID}' ,this.value)">
@@ -1462,7 +1462,7 @@ function mostarSustanciasQuimicas(ID) {
                                 <i class="fa fa-thermometer-three-quarters" aria-hidden="true"></i>
                             </button>
 
-                        <input type="number" onchange="cambiarVolatilidadSustanciaTem('estadoSustancia_${valor.SUSTANCIA_QUIMICA_ID}','valatilidadSustancia_${valor.SUSTANCIA_QUIMICA_ID}' ,this.value)" class="form-control text-center" id="temSustancia_${valor.SUSTANCIA_QUIMICA_ID}" name="TEM_EBULLICION" style="width: 100%;" placeholder="Tem. de ebullición (°C)" min="0"  value="${valor.TEM_EBULLICION}">
+                        <input type="text" onchange="cambiarVolatilidadSustanciaTem('estadoSustancia_${valor.SUSTANCIA_QUIMICA_ID}','valatilidadSustancia_${valor.SUSTANCIA_QUIMICA_ID}' ,this.value)" class="form-control text-center" id="temSustancia_${valor.SUSTANCIA_QUIMICA_ID}" name="TEM_EBULLICION" style="width: 100%;" placeholder="Tem. de ebullición (°C)" min="0"  value="${valor.TEM_EBULLICION}">
                     </td>
                     <td>
                         <select class="custom-select form-control" id="valatilidadSustancia_${valor.SUSTANCIA_QUIMICA_ID}" name="VOLATILIDAD" style="width: 100%;" required>
@@ -3917,7 +3917,7 @@ function mostrarPorcentajeSustancia(sus) {
                             </select>
                         </td>
                         <td>
-                            <input type="number" class="form-control porcentajeSustancias text-center error" id="porcentajeSustancia_${option.id}" name="PORCENTAJE" style="width: 100%;" placeholder="% Componente" min="0" >
+                            <input type="text" class="form-control porcentajeSustancias text-center error" id="porcentajeSustancia_${option.id}" name="PORCENTAJE" style="width: 100%;" placeholder="% Componente" min="0" >
                         </td>
                         <td>
                             <select class="custom-select form-control error" id="estadoSustancia_${option.id}" name="ESTADO_FISICO" style="width: 100%;"  onchange="cambiarFormaSustancia('formaSustancia_${option.id}','valatilidadSustancia_${option.id}', this.value)" required>
@@ -3938,7 +3938,7 @@ function mostrarPorcentajeSustancia(sus) {
                                 <i class="fa fa-thermometer-three-quarters" aria-hidden="true"></i>
                             </button>
 
-                            <input type="number" onchange="cambiarVolatilidadSustanciaTem('estadoSustancia_${option.id}','valatilidadSustancia_${option.id}', this.value)" class="form-control text-center error" id="temSustancia_${option.id}" name="TEM_EBULLICION" style="flex: 1;" placeholder="Tem. de ebullición" min="0" >
+                            <input type="text" onchange="cambiarVolatilidadSustanciaTem('estadoSustancia_${option.id}','valatilidadSustancia_${option.id}', this.value)" class="form-control text-center error" id="temSustancia_${option.id}" name="TEM_EBULLICION" style="flex: 1;" placeholder="Tem. de ebullición" min="0" >
                         </td>
                         <td>
                             <select class="custom-select form-control error" id="valatilidadSustancia_${option.id}" name="VOLATILIDAD" style="width: 100%;" required>
