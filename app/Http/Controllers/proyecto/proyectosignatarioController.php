@@ -248,7 +248,7 @@ class proyectosignatarioController extends Controller
                                         FROM
                                             proveedor proyectoproveedores
                                         WHERE
-                                            proyectoproveedores.id = 1
+                                            proyectoproveedores.id = 2
                                         GROUP BY
                                             proyecto_id,
                                             proveedor_id,
