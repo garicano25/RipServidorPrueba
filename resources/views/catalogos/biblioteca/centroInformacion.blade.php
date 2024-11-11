@@ -111,7 +111,7 @@
 
 
 
-            <select class="form-control mx-3" style="width: 265px;" id="CLASIFICACION_SELECT" >
+            <select class="form-control mx-3" style="width: 265px;" id="CLASIFICACION_SELECT">
                 <option value="" selected disabled>Seleccione una clasificacion</option>
                 <option value="0"></option>
                 <option value="1">Psicología</option>
@@ -122,7 +122,7 @@
                 <option value="6">Otros</option>
             </select>
             <input type="text" class="form-control" style="width: 400px;" id="TITULO_SELECT" placeholder="Buscar por...">
-            <button type="button" class="btn btn-secondary waves-effect waves-light"  id="filtrar" data-toggle="tooltip" data-placement="top" title="Filtrar por nombre y clasificacion">
+            <button type="button" class="btn btn-secondary waves-effect waves-light" id="filtrar" data-toggle="tooltip" data-placement="top" title="Filtrar por nombre y clasificacion">
                 <i class="fa fa-filter p-1"></i>
             </button>
 
@@ -157,17 +157,18 @@
 <div id="modal_informacion" class="modal fade bs-example-modal-lg" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" style="display: none;">
     <div class="modal-dialog modal-lg">
         <div class="modal-content">
-            <form enctype="multipart/form-data" name="form_subir_informacion" id="form_subir_informacion">
+            <form enctype="multipart/form-data" name="form_subir_informacion" id="form_subir_informacion" class="d-block">
                 <div class="modal-header">
                     <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
                     <h4 class="modal-title">Nueva informacion </h4>
                 </div>
-                <div class="modal-body">
+                <div class="modal-body" id="formulario">
 
                     <div class="row">
                         <div class="col-12">
                             {!! csrf_field() !!}
 
+                            <input type="hidden" class="form-control" name="ID_CENTRO_INFORMACION" id="ID_CENTRO_INFORMACION" value="0">
 
                             <div class="form-group">
                                 <label>Clasificación *</label>
@@ -196,7 +197,7 @@
                                 <div class="switch mx-4">
                                     <label>
                                         Documento
-                                        <input type="checkbox" onchange="seleccionarInformacion(this)">
+                                        <input type="checkbox" onchange="seleccionarInformacion(this)" id="check">
                                         <span class="lever switch-col-light-blue"></span>
                                         Link
                                     </label>
@@ -232,6 +233,18 @@
                         </div>
                     </div>
                 </div>
+
+                <div class="row mt-3 d-none" id="divCargaEquipos">
+
+                    <div class="col-12 text-center">
+                        <h2>Cargando información espere un momento...</h2>
+                    </div>
+                    <div class="col-12 text-center">
+                        <i class='fa fa-spin fa-spinner fa-5x'></i>
+                    </div>
+
+                </div>
+
                 <div class="modal-footer">
                     <button type="button" class="btn btn-default waves-effect" data-dismiss="modal">Cerrar</button>
                     @if(auth()->user()->hasRoles(['Superusuario', 'Administrador','Coordinador']))
@@ -303,5 +316,14 @@
 <!-- ============================================================== -->
 <!-- VISOR-MODAL -->
 <!-- ============================================================== -->
+
+
+
+@php
+$rolUsuario = auth()->user()->roles->first() ? auth()->user()->roles->first()->rol_Nombre : null;
+@endphp
+<script>
+    var rolUsuario = @json($rolUsuario);
+</script>
 
 @endsection

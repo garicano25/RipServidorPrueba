@@ -1967,7 +1967,12 @@ Route::resource('guardarGuiasPsico', 'PSICO\guiasController');
 Route::resource('biblioteca', 'biblioteca\bibliotecaController');
 Route::get('obtenerInfoBliblioteca/{clasificacion}/{titulo}', ['as' => 'biblioteca.listaBiblioteca', 'uses' => 'biblioteca\bibliotecaController@listaBiblioteca']);
 Route::get('listaBibliotecaText/{clasificacion}/{titulo}', ['as' => 'biblioteca.listaBiblioteca', 'uses' => 'biblioteca\bibliotecaController@listaBibliotecaText']);
+
 Route::get('bibliotecapdf/{documento_id}', ['as' => 'biblioteca.bibliotecapdf', 'uses' => 'biblioteca\bibliotecaController@bibliotecapdf']);
+
+Route::get('consultaLibro/{id}', ['as' => 'biblioteca.consultaLibro', 'uses' => 'biblioteca\bibliotecaController@consultaLibro']);
+
+Route::get('eliminarLibro/{id}', ['as' => 'biblioteca.eliminarLibro', 'uses' => 'biblioteca\bibliotecaController@eliminarLibro']);
 
 //CATÁLOGOS
 Route::resource('recpsicocatalogos', 'PSICO\recpsicocatalogosController');
