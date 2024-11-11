@@ -711,9 +711,9 @@
                                                                                             <h3 class="mb-2" id="titleServicios">Tipos de servicios</h3>
                                                                                         </div>
                                                                                         <!-- Servicio de Higione Industria -->
-                                                                                        <div class="col-4 mb-3">
+                                                                                        <div class="col-3 mb-3">
                                                                                             <div class="col-12 d-flex align-items-center">
-                                                                                                <label class="me-2 servicios">Servicio de Higiene Industrial </label>
+                                                                                                <label class="me-2 servicios">Higiene Industrial </label>
                                                                                                 <div class="switch mx-4 rol_lista" data-toggle="tooltip" title="Módulo de Higiene Industrial">
                                                                                                     <label>
                                                                                                         No<input type="checkbox" id="proyectoServicioHi" name="HI" value="1" onchange="mostrarOpcionesServicios(this, 1)">
@@ -765,9 +765,9 @@
                                                                                         </div>
 
                                                                                         <!-- Servicio ergonomico -->
-                                                                                        <div class="col-4 mb-3">
+                                                                                        <div class="col-3 mb-3">
                                                                                             <div class="col-12 d-flex align-items-center">
-                                                                                                <label class="me-2 servicios">Servicio de FR. Ergonómico</label>
+                                                                                                <label class="me-2 servicios">FR. Ergonómico</label>
                                                                                                 <div class="switch mx-4 rol_lista" data-toggle="tooltip" title="Módulo de FR. Ergonómico.">
                                                                                                     <label>
                                                                                                         No<input type="checkbox" id="proyectoServicioErgo" name="ERGO" value="1" onchange="mostrarOpcionesServicios(this, 2)">
@@ -821,9 +821,9 @@
 
 
                                                                                         <!-- Servicio Psico -->
-                                                                                        <div class="col-4 mb-3">
+                                                                                        <div class="col-3 mb-3">
                                                                                             <div class="col-12 d-flex align-items-center">
-                                                                                                <label class="me-2 servicios">Servicio de FR. Psicosocial </label>
+                                                                                                <label class="me-2 servicios">FR. Psicosocial </label>
                                                                                                 <div class="switch mx-4 rol_lista" data-toggle="tooltip" title="Módulo de FR. Psicosocial.">
                                                                                                     <label>
                                                                                                         No<input type="checkbox" id="proyectoServicioPsico" value="1" name="PSICO" onchange="mostrarOpcionesServicios(this, 3)">
@@ -873,6 +873,62 @@
                                                                                                 </div>
                                                                                             </div>
                                                                                         </div>
+
+
+                                                                                        <!-- Servicio Seguridad Industrial -->
+                                                                                        <div class="col-3 mb-3">
+                                                                                            <div class="col-12 d-flex align-items-center">
+                                                                                                <label class="me-2 servicios">Seguridad Industrial </label>
+                                                                                                <div class="switch mx-4 rol_lista" data-toggle="tooltip" title="Módulo de Seguridad Industrial.">
+                                                                                                    <label>
+                                                                                                        No<input type="checkbox" id="proyectoServicioSeguridad" value="1" name="SEGURIDAD" onchange="mostrarOpcionesServicios(this, 4)">
+                                                                                                        <span class=" lever switch-col-light-blue"></span>Si
+                                                                                                    </label>
+                                                                                                </div>
+                                                                                            </div>
+                                                                                            <!-- Opciones del Servicio -->
+                                                                                            <div id="opciones_seguridad" class="mt-1" style="display: none;">
+                                                                                                <div class="col-12 mx-3 d-flex align-items-center">
+                                                                                                    <li class="me-2">Programa de trabajo </li>
+                                                                                                    <div class="switch mx-4 ">
+                                                                                                        <label>
+                                                                                                            No<input type="checkbox" id="seguridadPrograma" value="1" name="SEGURIDAD_PROGRAMA">
+                                                                                                            <span class=" lever switch-col-light-blue"></span>Si
+                                                                                                        </label>
+                                                                                                    </div>
+                                                                                                </div>
+                                                                                                <div class="col-12 mx-3 d-flex align-items-center">
+                                                                                                    <li class="me-2">Reconocimiento </li>
+                                                                                                    <div class="switch mx-4 ">
+                                                                                                        <label>
+                                                                                                            No<input type="checkbox" id="seguridadReconocimiento" value="1" name="SEGURIDAD_RECONOCIMIENTO">
+                                                                                                            <span class=" lever switch-col-light-blue"></span>Si
+                                                                                                        </label>
+                                                                                                    </div>
+                                                                                                </div>
+
+                                                                                                <div class="col-12 mx-3 d-flex align-items-center">
+                                                                                                    <li class="me-2">Ejecución (on-site) </li>
+                                                                                                    <div class="switch mx-4 ">
+                                                                                                        <label>
+                                                                                                            No<input type="checkbox" id="seguridadEjecucion" value="1" name="SEGURIDAD_EJECUCION">
+                                                                                                            <span class=" lever switch-col-light-blue"></span>Si
+                                                                                                        </label>
+                                                                                                    </div>
+                                                                                                </div>
+
+                                                                                                <div class="col-12 mx-3 d-flex align-items-center">
+                                                                                                    <li class="me-2">Informes </li>
+                                                                                                    <div class="switch mx-4">
+                                                                                                        <label>
+                                                                                                            No<input type="checkbox" id="seguridadInformes" value="1" name="SEGURIDAD_INFORME">
+                                                                                                            <span class=" lever switch-col-light-blue"></span>Si
+                                                                                                        </label>
+                                                                                                    </div>
+                                                                                                </div>
+                                                                                            </div>
+                                                                                        </div>
+
                                                                                     </div>
                                                                                     <div class="col-3">
                                                                                         <div class="form-group">
