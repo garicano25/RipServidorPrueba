@@ -3245,7 +3245,7 @@ $("#boton_descargarquimicospdf").click(function () {
 
 
 function reporte(recsensorial_id, recsensorial_tipo, boton, tipo,version) {
-    let tipodoc = parseInt(tipo);
+    let tipodoc = parseInt(tipo); 
     let nombreInstalacion = $('#recsensorial_instalacion').val();
 
     if (tipodoc === 3) {
@@ -3552,12 +3552,12 @@ function descargarDocumento(recsensorial_id, recsensorial_tipo, tipodoc, nombreI
     let url = "";
     if (parseInt(recsensorial_tipo) === 1) {
         url = parseInt($("#recsensorial_tipocliente").val()) === 0 ?
-            `/recsensorialreporte1wordcliente/${recsensorial_id}/${tipodoc}/${numeroVersiones}/${numerodescarga}` :
-            `/recsensorialreporte1word/${recsensorial_id}/${tipodoc}/${numeroVersiones}/${numerodescarga}`;
+			`/recsensorialreporte1wordcliente/${recsensorial_id}/${tipodoc}/${version}/${numerodescarga}` :
+			`/recsensorialreporte1word/${recsensorial_id}/${tipodoc}/${version}/${numerodescarga}`;
     } else {
         url = parseInt($("#recsensorial_tipocliente").val()) === 0 ?
-            `/recsensorialquimicosreporte1wordcliente/${recsensorial_id}/${tipodoc}/${numeroVersiones}/${numerodescarga}` :
-            `/recsensorialquimicosreporte1word/${recsensorial_id}/${tipodoc}/${numeroVersiones}/${numerodescarga}`;
+			`/recsensorialquimicosreporte1wordcliente/${recsensorial_id}/${tipodoc}/${version}/${numerodescarga}` :
+			`/recsensorialquimicosreporte1word/${recsensorial_id}/${tipodoc}/${version}/${numerodescarga}`;
     }
 
     let ext = tipodoc === 1 ? '.docx' : '.zip';
