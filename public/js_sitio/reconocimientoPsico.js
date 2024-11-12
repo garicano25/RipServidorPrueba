@@ -107,62 +107,9 @@ $(document).ready(function () {
 	});
 });
 $(document).ready(function() {
-
-	var tabla = $('#tabla_trabajadores_cargados').DataTable({
-        "language": {
-            "url": "//cdn.datatables.net/plug-ins/1.10.25/i18n/Spanish.json"
-        },
-        "columns": [
-            { "data": "numero"},
-            { "data": "nombre"},
-            { "data": "muestra",
-            	"render": function(data, type, row) {
-                if (data == 0) {
-                    return '<i class="fa fa-times-circle fa-2x text-danger"></i>'; 
-                } else if (data == 1) {
-                    return '<i class="fa fa-check-circle fa-2x text-success"></i>'; 
-                } else {
-                    return data;
-				}
-			}
-		}
-        ],
-        "columnDefs": [
-            { "orderable": false, "targets": [0, 1, 2] }
-        ]
-    });
-
-    function cargarTrabajadores() {
-       var recpsico_id = $('#RECPSICO_ID_TRABAJADORES').val(); 
-					
-        $.ajax({
-            url: '/recopsicotrabajadorescargados/' + recpsico_id,
-            type: 'GET',
-            data: {},
-            dataType: 'json',
-            success: function(data) {
-
-				tabla.clear();
-                
-                $.each(data, function(index, trabajador) {
-                    tabla.row.add({
-                        "numero": index + 1,
-                        "nombre": trabajador.RECPSICOTRABAJADOR_NOMBRE,
-                        "muestra": trabajador.RECPSICOTRABAJADOR_MUESTRA
-                    });
-                });
-                
-                tabla.draw();
-            },
-            error: function(xhr, status, error) {
-                console.error("Error al cargar trabajadores:", error);
-                alert("Error al cargar la lista de trabajadores");
-            }
-        });
-    }
-
 	$("#boton_cargarTrabajadores").click(function() {
 		var guardar = 0;
+		var recpsico_id = $("#recsensorial_id").val();
 		//var muestra = $('#tipoArchivo').val();
 		$("#RECPSICO_ID_TRABAJADORES").val($("#recsensorial_id").val());
 		$("#RECPSICO_APLICACION").val($("#RECPSICO_TOTALAPLICACION").val());
@@ -247,7 +194,7 @@ $(document).ready(function() {
 								
 								if (dato.code == 200) {
 
-									cargarTrabajadores();
+									cargarTrabajadores(recpsico_id);
 									// cerrar modal
 									$('#modal_cargarTrabajadores').modal('hide');
 
@@ -520,7 +467,6 @@ $(document).ready(function () {
 
 	document.getElementById('habilitar_opcional').checked = false;
 	document.getElementById('boton_carga_trabajadores').disabled = true;
-	document.getElementById('boton_carga_muestra').disabled = true;
 
 	document.getElementById('RECPSICOTRABAJADOR_MUESTRA').checked = false;
 	document.getElementById('RECPSICOTRABAJADOR_MUESTRA').disabled = true;
@@ -710,6 +656,8 @@ $('.multisteps-form__progress-btn').click(function () {
 			$('#form_normativa').each(function () {
 				this.reset();
 			});
+			cargarTrabajadores($("#recsensorial_id").val());
+			datosNormativa($("#recsensorial_id").val());
 		break;
 		default:
 		break;
@@ -1562,25 +1510,6 @@ $('#tabla_reconocimiento_sensorial tbody').on('click', 'td.mostrar', function ()
 
 	// Colocar nombre del reconocimieto
 	$(".div_reconocimiento_instalacion").html(row.data().recsensorial_instalacion);
-	if (parseInt(row.data().recsensorial_alcancefisico) > 0 && parseInt(row.data().recsensorial_alcancequimico) > 0) {
-		$(".div_reconocimiento_folios").html(row.data().recsensorial_foliofisico + ' <span style="color: #999999;">y</span> ' + row.data().recsensorial_folioquimico);
-		$(".div_reconocimiento_alcance").html('Reconocimiento de Físicos y Químicos');
-	}
-	else if (parseInt(row.data().recsensorial_alcancefisico) > 0) {
-		$(".div_reconocimiento_folios").html(row.data().recsensorial_foliofisico);
-		$(".div_reconocimiento_alcance").html('Reconocimiento de Físicos');
-	}
-	else {
-		$(".div_reconocimiento_folios").html(row.data().recsensorial_folioquimico);
-		$(".div_reconocimiento_alcance").html('Reconocimiento de Químicos');
-	}
-
-
-
-
-
-	//=======================================
-
 
 	// seleccionar TAB
 	$("#steps_menu_tab1").click();
@@ -1593,6 +1522,105 @@ $("#modalvisor_boton_cerrar").click(function () {
 });
 
 //-----------------------------------------------------FUNCIONES------------------------------------------------------------//
+function datosNormativa(recpsico_id){
+	// Borrar formulario
+	$('#form_normativa').each(function () {
+		this.reset();
+	});
+
+	// Campos hidden
+	$("#RECPSICO_ID_NORMATIVA").val(recpsico_id);
+
+	$.ajax({
+		url: '/datosnormativa/' + recpsico_id,
+		method: 'GET',
+		beforeSend: function () {
+		},
+		success: function (response) {
+
+				//hidden
+				$('#ID_RECOPSICONORMATIVA').val(response.info[0].RAZON_SOCIAL)
+				$('#total_empleados').val(response.info[0].RFC)
+				$('#RECPSICO_TOTALHOMBRESSELECCION').val(response.info[0].REPRESENTANTE)
+				$('#RECPSICO_TOTALMUJERESSELECCION').val(response.info[0].DIRRECCION)
+
+				$('#cliente_id').val(response.info[0].CLIENTE_ID)
+				$('#contrato_id').val(contrato)
+				$('#requiere_contrato').val(requiereContrato)
+				$('#descripcion_contrato').val(response.info[0].NOMBRE_CONTRATO)
+				$('#descripcion_cliente').val(response.info[0].RAZON_SOCIAL)
+
+
+				//INFORMACION CONSULTADA DE RECSENSORIAL
+				$('#ordenservicio').val(response.info[0].ORDENSERVICIO)
+				$('#representantelegal').val(response.info[0].REPRESENTANTE_LEGAL)
+				$('#codigopostal').val(response.info[0].CODIGOPOSTAL)
+				$('#coordenadas').val(response.info[0].COORDENADAS)
+				$('#actividadprincipal').val(response.info[0].ACTIVIDADPRINCIPAL)
+				$('#descripcionproceso').val(response.info[0].DESCRIPCIONPROCESO)
+				$('#observaciones').val(response.info[0].OBSERVACION)
+				$('#fechainicio').val(response.info[0].FECHAINICIO)
+				$('#fechafin').val(response.info[0].FECHAFIN)
+		
+		},
+		error: function (jqXHR, textStatus, errorThrown) {
+			console.error('Error al consultar los datos:', textStatus, errorThrown);
+		}
+	});
+
+}
+
+function cargarTrabajadores(recpsico_id) {		
+	var tabla = $('#tabla_trabajadores_cargados').DataTable({
+        "language": {
+            "url": "//cdn.datatables.net/plug-ins/1.10.25/i18n/Spanish.json"
+        },
+        "columns": [
+            { "data": "numero"},
+            { "data": "nombre"},
+            { "data": "muestra",
+            	"render": function(data, type, row) {
+                if (data == 0) {
+                    return '<i class="fa fa-times-circle fa-2x text-danger"></i>'; 
+                } else if (data == 1) {
+                    return '<i class="fa fa-check-circle fa-2x text-success"></i>'; 
+                } else {
+                    return data;
+				}
+			}
+		}
+        ],
+        "columnDefs": [
+            { "orderable": false, "targets": [0, 1, 2] }
+        ]
+    });
+
+	 $.ajax({
+		 url: '/recopsicotrabajadorescargados/' + recpsico_id,
+		 type: 'GET',
+		 data: {},
+		 dataType: 'json',
+		 success: function(data) {
+
+			 tabla.clear();
+			 
+			 $.each(data, function(index, trabajador) {
+				 tabla.row.add({
+					 "numero": index + 1,
+					 "nombre": trabajador.RECPSICOTRABAJADOR_NOMBRE,
+					 "muestra": trabajador.RECPSICOTRABAJADOR_MUESTRA
+				 });
+			 });
+			 
+			 tabla.draw();
+		 },
+		 error: function(xhr, status, error) {
+			 console.error("Error al cargar trabajadores:", error);
+			 alert("Error al cargar la lista de trabajadores");
+		 }
+	 });
+}
+
 function activa_stepforms() {
 	$("#steps_menu_tab2").css('display', 'block');
 	$("#steps_menu_tab3").css('display', 'block');

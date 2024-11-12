@@ -1883,6 +1883,7 @@ Route::get('recopsicoareacategorias/{reconocimientopsico_id}', ['as' => 'recsens
 Route::get('recopsicoareacategoriaselegidas/{area_id}', ['as' => 'recsensorialarea.recsensorialareacategoriaselegidas', 'uses' => 'recsensorial\recsensorialareaController@recsensorialareacategoriaselegidas']);
 
 Route::resource('recopsiconormativa', 'PSICO\recopsiconormativaController');
+Route::get('/datosnormativa/{reconocimientopsico_id}', ['as' => 'recopsiconormativa.recopsiconormativadatos', 'uses' => 'PSICO\recopsiconormativaController@recopsiconormativadatos']);
 Route::get('recopsicotrabajadorescargados/{reconocimientopsico_id}', ['as' => 'recopsicotrabajadores.recopsicotrabajadoresCargadosTabla', 'uses' => 'PSICO\recopsiconormativaController@recopsicotrabajadoresCargadosTabla']);
 
 

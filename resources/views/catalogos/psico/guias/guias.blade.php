@@ -4305,7 +4305,7 @@
                             </div>
                             <div id="pregunta63_3"  class="mt-4 guia3"  style="display: flex; justify-content: space-between; align-items: center; width: 100%; margin-bottom: 10px;">
                                 <p style="margin: 0; flex: 1;"><i class="fa fa-info-circle" id="Exp3_63"   data-toggle="tooltip" title=""></i>
-                                    63. Me bloquean o impiden las oportunidades que tengo para obtener ascenso o mejora en <br> mi trabajo
+                                    63. Me bloquean o impiden las oportunidades que tengo para obtener ascenso o mejora en mi trabajo
                                 </p>
                                 <div style="display: flex; align-items: center; gap: 20px;">
                                     <div>

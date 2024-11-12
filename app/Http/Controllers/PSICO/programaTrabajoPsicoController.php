@@ -27,6 +27,7 @@ class programaTrabajoPsicoController extends Controller
                                     p.proyecto_fechainicio AS FECHA_INICIO,
                                     p.proyecto_fechafin AS FECHA_FIN,
                                     IFNULL(p.reconocimiento_psico_id, 0) TIENE_RECONOCIMIENTO,
+                                    IFNULL(s.HI, 0) PROYECTO_COMBINADO,
                                     p.proyecto_clienteinstalacion,
                                     p.proyecto_clientedireccionservicio
                             FROM proyecto p
