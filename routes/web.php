@@ -102,6 +102,9 @@ Route::get('obtenerActividadesCronograma/{ID_CONTRATO}/{ID_PROYECTO}', ['as' => 
 
 Route::get('eliminarActividadCronograma/{id}', ['as' => 'eliminarActividadCronograma', 'uses' => 'clientes\clienteController@eliminarActividadCronograma']);
 
+Route::get('generarConcentradoActividades/{id_contrato}/{id_proyecto}', ['as' => 'generarConcentradoActividades', 'uses' => 'clientes\clienteController@generarConcentradoActividades']);
+
+
 Route::get('/estructura-cliente/{clienteId}', ['as' => 'cliente.obtenerEstructuraCliente', 'uses' => 'clientes\clienteController@obtenerEstructuraCliente']);
 
 

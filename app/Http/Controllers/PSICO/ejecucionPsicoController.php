@@ -262,7 +262,24 @@ class ejecucionPsicoController extends Controller
 
                 $encryptedId = Crypt::encrypt($idPersonal);
 
-                Mail::to($correo)->send(new sendGuiaPsico($nombre, $encryptedGuia1, $encryptedGuia2, $encryptedGuia3, $encryptedGuia5, $encryptedstatus, $encryptedfechalimite, $encryptedId, $dias));
+
+
+                // Obtenemos la informacion de uno de los Psicologos asignado
+                $proyecto = DB::select('SELECT id
+                                FROM proyecto 
+                                WHERE reconocimiento_psico_id = ?', [$idRecsensorial]);
+
+
+                $psicoInfo = DB::select('SELECT IFNULL(s.signatario_Nombre, "NA") as info
+                                FROM proyectosignatariosactual p
+                                LEFT JOIN signatario s ON s.id = p.signatario_id
+                                WHERE p.proyecto_id = ?
+                                LIMIT 1', [$proyecto[0]->id]);
+                $psico = $psicoInfo[0]->info;
+
+
+
+                Mail::to($correo)->send(new sendGuiaPsico($nombre, $encryptedGuia1, $encryptedGuia2, $encryptedGuia3, $encryptedGuia5, $encryptedstatus, $encryptedfechalimite, $encryptedId, $dias, $psico));
             
                 //cambiar el estado de envio de correo en el registro deltrabajador
                 DB::table('proyectotrabajadores')

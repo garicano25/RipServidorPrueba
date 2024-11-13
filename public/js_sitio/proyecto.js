@@ -10963,3 +10963,81 @@ $("#boton_autorizar_cronograma").click(function () {
 		return false;
 	}
 });
+
+
+//DESCARGAR CONCENTRADO DE ACTIVIDADDES
+$('#boton_descargar_cronograma').on('click', function (e) {
+	e.preventDefault();
+
+	swal({
+		title: "¡Confirme para Generar Concentrado de Actividades!",
+		text: "Lista de tareas a realizar.",
+		type: "info",
+		showCancelButton: true,
+		confirmButtonColor: "#DD6B55",
+		confirmButtonText: "Descargar!",
+		cancelButtonText: "Cancelar!",
+		closeOnConfirm: false,
+		closeOnCancel: false
+	},
+		function (isConfirm) {
+			if (isConfirm) {
+				// Mostrar mensaje de carga
+
+				$('#boton_descargar_cronograma').prop('disabled', true);
+				swal({
+					title: "Generando reporte...",
+					text: 'Espere un momento, el documento se esta generando...',
+					type: "info",
+					showConfirmButton: false,
+					allowOutsideClick: false
+				});
+
+				url = 'generarConcentradoActividades/' + 0 + '/' + proyecto_id;
+
+				$.ajax({
+					url: url,
+					method: 'GET',
+					xhrFields: {
+						responseType: 'blob'
+					},
+					success: function (data) {
+						var a = document.createElement('a');
+						var url = window.URL.createObjectURL(data);
+						a.href = url;
+						a.download = `Concentrado de actividades.xlsx`;
+						document.body.append(a);
+						a.click();
+						a.remove();
+						window.URL.revokeObjectURL(url);
+
+						// Cerrar mensaje de carga
+						swal.close();
+
+						$('#boton_descargar_cronograma').prop('disabled', false);
+					},
+					error: function () {
+						swal({
+							title: "Hubo un problema al generar el documento.",
+							text: "Intentelo de nuevo, o comuniquelo con el responsable",
+							type: "error",
+							showConfirmButton: true
+						});
+					}
+				});
+			} else {
+				// mensaje de cancelación
+				swal({
+					title: "Cancelado",
+					text: "Acción cancelada",
+					type: "error",
+					buttons: {
+						visible: false,
+					},
+					timer: 500,
+					showConfirmButton: false
+				});
+			}
+		});
+	return false;
+})
