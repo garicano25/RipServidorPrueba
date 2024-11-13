@@ -288,13 +288,12 @@ function validacionFechalimiteStatus(fechalimite, estadoCuestionario){
         document.getElementById("aceptarPermisos").addEventListener("click", function () {
             $('#avisoPrivacidadModal').modal('hide');
             $('#avisoPrivacidadModal').on('hidden.bs.modal', function () {
-                if (estadoCuestionario !== 'En proceso' || estadoCuestionario !== 'Finalizado') {
-                    ejecucionCamara();
-                    console.log('entro aqui en cam');
-                } else {
+                if (estadoCuestionario === 'En proceso' || estadoCuestionario === 'Finalizado') {
                     $('#instruccionesModal').modal('show');
                     console.log('entro aca en instruciones');
-
+                } else {
+                    ejecucionCamara();
+                    console.log('entro aqui en cam');
                 }
             });
         });
