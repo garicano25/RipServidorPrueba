@@ -26,12 +26,8 @@ $('.nav-link').click(function()
 	{
 		case "tab_tabla_ejecucion":
             $('#tab_info_ejecucion').css('display', 'none');
-            
             break;
-        
-		case "tab_menu2":
-			
-            
+		case "tab_menu2":   
 			break;
 		default:
 			// return true;
@@ -656,6 +652,11 @@ function tabla_trabajadores_online()
                     "defaultContent": '-'
                 },
 				{
+                    "orderable": false,
+                    "data": 'boton_guardarCambios',
+                    "defaultContent": '-'
+                },
+				{
 					"data": "TRABAJADOR_ID", 
 					"visible": false,
 					"defaultContent": "-",
@@ -898,6 +899,67 @@ function enviarCorreo(trabajadorId, idRecsensorial) {
     });
 }
 
+function guardarCambios(trabajadorId, idRecsensorial) {
+	//envio único
+    
+    let url = `/guardarCambiosTrabajador/${trabajadorId}/${idRecsensorial}`;
+
+    $.ajax({
+        url: url, 
+        method: 'GET', 
+        success: function(response) {
+            if (response.msj) {
+				swal({
+					title: "¡Envío exitoso!",
+					text: ""+response.msj,
+					type: "success", // warning, error, success, info
+					buttons: {
+						visible: false, // true , false
+					},
+					timer: 1500,
+					showConfirmButton: false
+				});
+				tabla_trabajadores_online();
+            } else {
+                swal({
+					title: "Error",
+					text: ""+response.msj,
+					type: "error", // warning, error, success, info
+					buttons: {
+						visible: false, // true , false
+					},
+					timer: 1500,
+					showConfirmButton: false
+				});
+            }
+
+        },
+		beforeSend: function(){
+			swal({
+				title: "Espere un momento...",
+				text: "Enviando correo",
+				type: "info", // warning, error, success, info
+				buttons: {
+					visible: false, // true , false
+				},
+				showConfirmButton: false
+			});
+		},
+        error: function(xhr, status, error) {
+            console.error('Error en la solicitud AJAX:', error);
+			swal({
+				title: "Error",
+				text: ""+response.msj,
+				type: "error", // warning, error, success, info
+				buttons: {
+					visible: false, // true , false
+				},
+				timer: 1500,
+				showConfirmButton: false
+			});
+        }
+    });
+}
 
 
 

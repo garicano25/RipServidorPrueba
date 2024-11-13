@@ -96,7 +96,7 @@ class ejecucionPsicoController extends Controller
             else if($value->ESTADOCORREO == null){
                 $value->TRABAJADOR_ESTADOCORREO = '<span class="badge badge-pill badge-danger" style="font-size: 12px">Sin enviar</span>';
             }else{
-                $value->TRABAJADOR_ESTADOCORREO = '<span class="badge badge-pill badge-success" style="font-size: 12px">'. $value->ESTADOCORREO .'</span>';
+                $value->TRABAJADOR_ESTADOCORREO = '<span class="badge badge-pill badge-verde" style="font-size: 12px">'. $value->ESTADOCORREO .'</span>';
                     
             }
             
@@ -117,13 +117,14 @@ class ejecucionPsicoController extends Controller
                     $value->TRABAJADOR_ESTADOCONTESTADO = '<span class="badge badge-pill badge-danger" style="font-size: 12px">Sin iniciar</span>';
                 
             }else{
-                $value->TRABAJADOR_ESTADOCONTESTADO = '<span class="badge badge-pill badge-success" style="font-size: 12px">' . $value->ESTADOCONTESTADO . '</span>';
+                $value->TRABAJADOR_ESTADOCONTESTADO = '<span class="badge badge-pill badge-verde" style="font-size: 12px">' . $value->ESTADOCONTESTADO . '</span>';
             }
-            
 
 
             $value->boton_enviarCorreo = '<button type="button" class="btn btn-warning btn-circle enviarcorreo" id="enviarCorreoTrabajador'.$count.'" name="enviarCorreoTrabajador" onclick="enviarCorreo('.$value->TRABAJADOR_ID.', '.$value->RECPSICO_ID.')" style="padding: 0px;"><i class="fa fa-paper-plane "></i></button>';
-            }
+            $value->boton_guardarCambios = '<button type="button" class="btn btn-danger btn-circle guardarCambios" id="guardarCambiosTrabajador'.$count.'" name="guardarCambiosTrabajador" onclick="guardarCambios('.$value->TRABAJADOR_ID.', '.$value->RECPSICO_ID.')" style="padding: 0px;"><i class="fa fa-save"></i></button>';
+            
+        }
         }
 
 

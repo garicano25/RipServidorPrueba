@@ -48,6 +48,11 @@
         margin: 0px !important;
         font-size: 16px !important;
     }
+
+    .badge-verde {
+        background-color: green;
+        color: white; 
+    }
 </style>
 
 
@@ -200,8 +205,8 @@
                                                 <th class="sorting_disabled text-center" rowspan="1" colspan="1">Estado del correo</th>
                                                 <th class="sorting_disabled text-center" rowspan="1" colspan="1">Estado de cuestionario</th>
                                                 <th class="sorting_disabled text-center" rowspan="1" colspan="1">Enviar link del cuestionario</th>
+                                                <th class="sorting_disabled text-center" rowspan="1" colspan="1">Guardar cambios</th>
                                                 <th style="display: none;">TRABAJADOR_ID</th>
-
                                             </tr>
                                         </thead>
                                         <tbody></tbody>
