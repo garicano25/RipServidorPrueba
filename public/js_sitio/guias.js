@@ -290,8 +290,11 @@ function validacionFechalimiteStatus(fechalimite, estadoCuestionario){
             $('#avisoPrivacidadModal').on('hidden.bs.modal', function () {
                 if (estadoCuestionario !== 'En proceso' || estadoCuestionario !== 'Finalizado') {
                     ejecucionCamara();
+                    console.log('entro aqui en cam');
                 } else {
                     $('#instruccionesModal').modal('show');
+                    console.log('entro aca en instruciones');
+
                 }
             });
         });
