@@ -792,7 +792,7 @@
                     <div class="card-body">
                         
                         <p class="lead mt-3 mb-3">
-                            <i class="fa fa-check-circle" style="color: #28a745;"></i>
+                            <i class="fa fa-exclamation-circle" style="color: #b81414;"></i>
                             Ya ha pasado la fecha límite en la que podia contestar este cuestionario.
                         </p>
                         <h6 class="card-subtitle mt-5 mb-5" style="font-size: 2.5rem; font-weight: bold; color: #b81414;">
