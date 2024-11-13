@@ -1921,7 +1921,9 @@ Route::get('trabajadoresPresencialEjecucionPsico/{proyecto_id}', ['as' => 'PSICO
 Route::get('ejecuciontrabajadoresnombres', ['as' => 'ejecucionpsico.trabajadoresNombres', 'uses' => 'PSICO\ejecucionPsicoController@trabajadoresNombres']);
 
 Route::put('actualizarFechasOnline', ['as' => 'PSICO.actualizarFechasOnline', 'uses' => 'PSICO\ejecucionPsicoController@actualizarFechasOnline']);
+
 Route::put('guardarCambiosTrabajador', ['as' => 'PSICO.guardarCambiosTrabajador', 'uses' => 'PSICO\ejecucionPsicoController@guardarCambiosTrabajador']);
+
 
 
 

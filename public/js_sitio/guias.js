@@ -289,9 +289,9 @@ function validacionFechalimiteStatus(fechalimite, estadoCuestionario){
             $('#avisoPrivacidadModal').modal('hide');
             $('#avisoPrivacidadModal').on('hidden.bs.modal', function () {
                 if (estadoCuestionario!='En proceso' || estadoCuestionario!='Finalizado' ){
-                    $('#instruccionesModal').modal('show');
-                }else{
                     ejecucionCamara();
+                }else{
+                    $('#instruccionesModal').modal('show');
                 }
             });
         });
@@ -743,6 +743,12 @@ function guia1() {
         document.getElementById("seccion3").style.display = "block";
         document.getElementById("seccion4").style.display = "block";
         $('.ocultas').addClass('divPreguntas');
+        pregunta2No.checked = true;
+        pregunta3No.checked = true;
+        pregunta4No.checked = true;
+        pregunta5No.checked = true;
+        pregunta6No.checked = true;
+        pregunta7No.checked = true;
 
     } else {
         document.getElementById("seccion2").style.display = "none";
