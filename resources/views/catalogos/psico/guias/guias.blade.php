@@ -841,8 +841,9 @@
                                 </div>
 
                             </div>
-                            <div id="pregunta2_1" class="divPreguntas">
-                                <p style="margin: 0; flex: 1;"><i class="fa fa-info-circle" id="Exp1_2" data-toggle="tooltip" title=""></i>
+                            <div id="pregunta2_1" class="divPreguntas" style="margin-bottom: 5px !important;">
+                            <p style="margin: 0 0 0 15px !important; flex: 1;">
+                                    <i class="fa fa-info-circle" id="Exp1_2" data-toggle="tooltip" title=""></i>
                                     accidente que tenga como consecuencia la muerte, la pérdida de un miembro o una lesión grave?</p>
                                 <div class="d-none" >
                                     <div>
@@ -855,8 +856,8 @@
                                     </div>
                                 </div>
                             </div>
-                            <div id="pregunta3_1">
-                                <p style="margin: 0; flex: 1;"><i class="fa fa-info-circle" id="Exp1_3" data-toggle="tooltip" title=""></i>
+                            <div id="pregunta3_1" class="divPreguntas" style="margin-bottom: 5px !important;">
+                            <p style="margin: 0 0 0 15px !important; flex: 1;"><i class="fa fa-info-circle" id="Exp1_3" data-toggle="tooltip" title=""></i>
                                     asaltos?</p>
                                 <div class="d-none" >
                                     <div>
@@ -870,8 +871,8 @@
                                     </div>
                                 </div>
                             </div>
-                            <div id="pregunta4_1" class="divPreguntas" >
-                                <p style="margin: 0; flex: 1;"><i class="fa fa-info-circle" id="Exp1_4" data-toggle="tooltip" title=""></i>
+                            <div id="pregunta4_1" class="divPreguntas" style="margin-bottom: 5px !important;">
+                            <p style="margin: 0 0 0 15px !important; flex: 1;"><i class="fa fa-info-circle" id="Exp1_4" data-toggle="tooltip" title=""></i>
                                     actos violentos que derivaron en lesiones graves?</p>
                                 <div class="d-none" >
                                     <div>
@@ -885,8 +886,8 @@
                                     </div>
                                 </div>
                             </div>
-                            <div id="pregunta5_1" class="divPreguntas" >
-                                <p style="margin: 0; flex: 1;"><i class="fa fa-info-circle" id="Exp1_5" data-toggle="tooltip" title=""></i>
+                            <div id="pregunta5_1" class="divPreguntas" style="margin-bottom: 5px !important;">
+                            <p style="margin: 0 0 0 15px !important; flex: 1;"><i class="fa fa-info-circle" id="Exp1_5" data-toggle="tooltip" title=""></i>
                                     secuestro?</p>
                                 <div class="d-none" >
                                     <div>
@@ -900,8 +901,8 @@
                                     </div>
                                 </div>
                             </div>
-                            <div id="pregunta6_1" class="divPreguntas" >
-                                <p style="margin: 0; flex: 1;"><i class="fa fa-info-circle" id="Exp1_6" data-toggle="tooltip" title=""></i>
+                            <div id="pregunta6_1" class="divPreguntas" style="margin-bottom: 5px !important;">
+                            <p style="margin: 0 0 0 15px !important; flex: 1;"><i class="fa fa-info-circle" id="Exp1_6" data-toggle="tooltip" title=""></i>
                                     amenazas?</p>
                                 <div class="d-none" >
                                     <div>
@@ -915,8 +916,8 @@
                                     </div>
                                 </div>
                             </div>
-                            <div id="pregunta7_1" class="divPreguntas">
-                                <p style="margin: 0; flex: 1;"><i class="fa fa-info-circle" id="Exp1_7" data-toggle="tooltip" title=""></i>
+                            <div id="pregunta7_1" class="divPreguntas" style="margin-bottom: 5px !important;">
+                            <p style="margin: 0 0 0 15px !important; flex: 1;"><i class="fa fa-info-circle" id="Exp1_7" data-toggle="tooltip" title=""></i>
                                     cualquier otro que ponga en riesgo su vida o salud, y/o la de otras personas?</p>
                                 <div class="d-none">
                                     <div>
@@ -937,7 +938,7 @@
                             </div>
                             <div id="pregunta8_1" class="mt-4 ocultas" style="display: flex; justify-content: space-between; align-items: center; width: 100%; margin-bottom: 10px;">
                                 <p style="margin: 0; flex: 1;"><i class="fa fa-info-circle" id="Exp1_8" data-toggle="tooltip" title=""></i>
-                                    8. ¿Ha tenido recuerdos recurrentes sobre el acontecimiento que le provocan malestares?</p>
+                                    2. ¿Ha tenido recuerdos recurrentes sobre el acontecimiento que le provocan malestares?</p>
                                 <div style="display: flex; align-items: center; gap: 20px;">
                                     <div>
                                         <label for="preguta8_si" style="margin-right: 1px;">Sí</label>
@@ -952,7 +953,7 @@
                             </div>
                             <div id="pregunta9_1" class="ocultas" style="display: flex; justify-content: space-between; align-items: center; width: 100%; margin-bottom: 10px;">
                                 <p style="margin: 0; flex: 1;"><i class="fa fa-info-circle" id="Exp1_9" data-toggle="tooltip" title=""></i>
-                                    9. ¿Ha tenido sueños de carácter recurrente sobre el acontecimiento, que le producen malestar?</p>
+                                    3. ¿Ha tenido sueños de carácter recurrente sobre el acontecimiento, que le producen malestar?</p>
                                 <div style="display: flex; align-items: center; gap: 20px;">
                                     <div>
                                         <label for="pregunta9_si" style="margin-right: 1px;">Sí</label>
@@ -972,7 +973,7 @@
                             </div>
                             <div id="pregunta10_1" class="mt-4 ocultas" style="display: flex; justify-content: space-between; align-items: center; width: 100%; margin-bottom: 10px;">
                                 <p style="margin: 0; flex: 1;"><i class="fa fa-info-circle" id="Exp1_10" data-toggle="tooltip" title=""></i>
-                                    10. ¿Se ha esforzado por evitar todo tipo de sentimientos, conversaciones o situaciones que le puedan recordar el acontecimiento?</p>
+                                    4. ¿Se ha esforzado por evitar todo tipo de sentimientos, conversaciones o situaciones que le puedan recordar el acontecimiento?</p>
                                 <div style="display: flex; align-items: center; gap: 20px;">
                                     <div>
                                         <label for="preguta10_si" style="margin-right: 1px;">Sí</label>
@@ -987,7 +988,7 @@
                             </div>
                             <div id="pregunta11_1" class="ocultas" style="display: flex; justify-content: space-between; align-items: center; width: 100%; margin-bottom: 10px;">
                                 <p style="margin: 0; flex: 1;"><i class="fa fa-info-circle" id="Exp1_11" data-toggle="tooltip" title=""></i>
-                                    11. ¿Se ha esforzado por evitar todo tipo de actividades, lugares o personas que motivan recuerdos del acontecimiento?</p>
+                                    5. ¿Se ha esforzado por evitar todo tipo de actividades, lugares o personas que motivan recuerdos del acontecimiento?</p>
                                 <div style="display: flex; align-items: center; gap: 20px;">
                                     <div>
                                         <label for="pregunta11_si" style="margin-right: 1px;">Sí</label>
@@ -1002,7 +1003,7 @@
                             </div>
                             <div id="pregunta12_1" class="ocultas" style="display: flex; justify-content: space-between; align-items: center; width: 100%; margin-bottom: 10px;">
                                 <p style="margin: 0; flex: 1;"><i class="fa fa-info-circle" id="Exp1_12" data-toggle="tooltip" title=""></i>
-                                    12. ¿Ha tenido dificultad para recordar alguna parte importante del evento?</p>
+                                    6. ¿Ha tenido dificultad para recordar alguna parte importante del evento?</p>
                                 <div style="display: flex; align-items: center; gap: 20px;">
                                     <div>
                                         <label for="pregunta12_si" style="margin-right: 1px;">Sí</label>
@@ -1017,7 +1018,7 @@
                             </div>
                             <div id="pregunta13_1" class="ocultas" style="display: flex; justify-content: space-between; align-items: center; width: 100%; margin-bottom: 10px;">
                                 <p style="margin: 0; flex: 1;"><i class="fa fa-info-circle" id="Exp1_13" data-toggle="tooltip" title=""></i>
-                                    13. ¿Ha disminuido su interés en sus actividades cotidianas?</p>
+                                    7. ¿Ha disminuido su interés en sus actividades cotidianas?</p>
                                 <div style="display: flex; align-items: center; gap: 20px;">
                                     <div>
                                         <label for="pregunta13_si" style="margin-right: 1px;">Sí</label>
@@ -1032,7 +1033,7 @@
                             </div>
                             <div id="pregunta14_1" class="ocultas" style="display: flex; justify-content: space-between; align-items: center; width: 100%; margin-bottom: 10px;">
                                 <p style="margin: 0; flex: 1;"><i class="fa fa-info-circle" id="Exp1_14" data-toggle="tooltip" title=""></i>
-                                    14. ¿Se ha sentido usted alejado o distante de los demás?</p>
+                                    8. ¿Se ha sentido usted alejado o distante de los demás?</p>
                                 <div style="display: flex; align-items: center; gap: 20px;">
                                     <div>
                                         <label for="pregunta14_si" style="margin-right: 1px;">Sí</label>
@@ -1047,7 +1048,7 @@
                             </div>
                             <div id="pregunta15_1" class="ocultas" style="display: flex; justify-content: space-between; align-items: center; width: 100%; margin-bottom: 10px;">
                                 <p style="margin: 0; flex: 1;"><i class="fa fa-info-circle" id="Exp1_15" data-toggle="tooltip" title=""></i>
-                                    15. ¿Ha notado que tiene dificultad para expresar sus sentimientos?</p>
+                                    9. ¿Ha notado que tiene dificultad para expresar sus sentimientos?</p>
                                 <div style="display: flex; align-items: center; gap: 20px;">
                                     <div>
                                         <label for="pregunta15_si" style="margin-right: 1px;">Sí</label>
@@ -1062,7 +1063,7 @@
                             </div>
                             <div id="pregunta16_1" class="ocultas" style="display: flex; justify-content: space-between; align-items: center; width: 100%; margin-bottom: 10px;">
                                 <p style="margin: 0; flex: 1;"><i class="fa fa-info-circle" id="Exp1_16" data-toggle="tooltip" title=""></i>
-                                    16. ¿Ha tenido la impresión de que su vida se va a acortar, que va a morir antes que otras personas o que tiene un futuro limitado?</p>
+                                    10. ¿Ha tenido la impresión de que su vida se va a acortar, que va a morir antes que otras personas o que tiene un futuro limitado?</p>
                                 <div style="display: flex; align-items: center; gap: 20px;">
                                     <div>
                                         <label for="pregunta16_si" style="margin-right: 1px;">Sí</label>
@@ -1082,7 +1083,7 @@
                             </div>
                             <div id="pregunta17_1" class="mt-4 ocultas" class="mt-4 divPreguntas" style="display: flex; justify-content: space-between; align-items: center; width: 100%; margin-bottom: 10px;">
                                 <p style="margin: 0; flex: 1;"><i class="fa fa-info-circle" id="Exp1_17" data-toggle="tooltip" title=""></i>
-                                    17. ¿Ha tenido usted dificultades para dormir?</p>
+                                    11. ¿Ha tenido usted dificultades para dormir?</p>
                                 <div style="display: flex; align-items: center; gap: 20px;">
                                     <div>
                                         <label for="preguta17_si" style="margin-right: 1px;">Sí</label>
@@ -1097,7 +1098,7 @@
                             </div>
                             <div id="pregunta18_1" class="ocultas" style="display: flex; justify-content: space-between; align-items: center; width: 100%; margin-bottom: 10px;">
                                 <p style="margin: 0; flex: 1;"><i class="fa fa-info-circle" id="Exp1_18" data-toggle="tooltip" title=""></i>
-                                    18. ¿Ha estado particularmente irritable o le han dado arranques de coraje?</p>
+                                    12. ¿Ha estado particularmente irritable o le han dado arranques de coraje?</p>
                                 <div style="display: flex; align-items: center; gap: 20px;">
                                     <div>
                                         <label for="pregunta18_si" style="margin-right: 1px;">Sí</label>
@@ -1112,7 +1113,7 @@
                             </div>
                             <div id="pregunta19_1" class="ocultas" style="display: flex; justify-content: space-between; align-items: center; width: 100%; margin-bottom: 10px;">
                                 <p style="margin: 0; flex: 1;"><i class="fa fa-info-circle" id="Exp1_19" data-toggle="tooltip" title=""></i>
-                                    19. ¿Ha tenido dificultad para concentrarse?</p>
+                                    13. ¿Ha tenido dificultad para concentrarse?</p>
                                 <div style="display: flex; align-items: center; gap: 20px;">
                                     <div>
                                         <label for="pregunta19_si" style="margin-right: 1px;">Sí</label>
@@ -1127,7 +1128,7 @@
                             </div>
                             <div id="pregunta20_1" class="ocultas" style="display: flex; justify-content: space-between; align-items: center; width: 100%; margin-bottom: 10px;">
                                 <p style="margin: 0; flex: 1;"><i class="fa fa-info-circle" id="Exp1_20" data-toggle="tooltip" title=""></i>
-                                    20. ¿Ha estado nervioso o constantemente en alerta?</p>
+                                    14. ¿Ha estado nervioso o constantemente en alerta?</p>
                                 <div style="display: flex; align-items: center; gap: 20px;">
                                     <div>
                                         <label for="pregunta20_si" style="margin-right: 1px;">Sí</label>
@@ -1142,7 +1143,7 @@
                             </div>
                             <div id="pregunta21_1" class="ocultas" style="display: flex; justify-content: space-between; align-items: center; width: 100%; margin-bottom: 10px;">
                                 <p style="margin: 0; flex: 1;"><i class="fa fa-info-circle" id="Exp1_21" data-toggle="tooltip" title=""></i>
-                                    21. ¿Se ha sobresaltado fácilmente por cualquier cosa?</p>
+                                    15. ¿Se ha sobresaltado fácilmente por cualquier cosa?</p>
                                 <div style="display: flex; align-items: center; gap: 20px;">
                                     <div>
                                         <label for="pregunta21_si" style="margin-right: 1px;">Sí</label>
