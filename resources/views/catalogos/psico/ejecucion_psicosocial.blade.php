@@ -192,6 +192,7 @@
                                 </div>
                             </div>
                             <!--form panels-->
+                            <div id="csrf-token" style="display: none;">{{ csrf_token() }}</div>
                             <div class="col-12" style="text-align: center;">
                                 <div class="table-responsive">
                                     <table class="table table-bordered table-hover stylish-table" width="100%" id="tabla_trabajadores_online">

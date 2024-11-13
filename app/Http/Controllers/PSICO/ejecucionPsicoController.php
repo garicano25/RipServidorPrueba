@@ -122,7 +122,7 @@ class ejecucionPsicoController extends Controller
 
 
             $value->boton_enviarCorreo = '<button type="button" class="btn btn-warning btn-circle enviarcorreo" id="enviarCorreoTrabajador'.$count.'" name="enviarCorreoTrabajador" onclick="enviarCorreo('.$value->TRABAJADOR_ID.', '.$value->RECPSICO_ID.')" style="padding: 0px;"><i class="fa fa-paper-plane "></i></button>';
-            $value->boton_guardarCambios = '<button type="button" class="btn btn-danger btn-circle guardarCambios" id="guardarCambiosTrabajador'.$count.'" name="guardarCambiosTrabajador" onclick="guardarCambios('.$value->TRABAJADOR_ID.', '.$value->RECPSICO_ID.')" style="padding: 0px;"><i class="fa fa-save"></i></button>';
+            $value->boton_guardarCambios = '<button type="button" class="btn btn-danger btn-circle guardarCambios" id="guardarCambiosTrabajador'.$value->TRABAJADOR_ID.'" name="guardarCambiosTrabajador" onclick="guardarCambios('.$value->TRABAJADOR_ID.', '.$value->RECPSICO_ID.')" style="padding: 0px;"><i class="fa fa-save"></i></button>';
             
         }
         }
@@ -215,6 +215,45 @@ class ejecucionPsicoController extends Controller
         }
 
     }
+
+             /**
+     * Display the specified resource.
+     *
+     * @return \Illuminate\Http\Response
+     * @param  \Illuminate\Http\Request  $request
+     */
+     
+     public function guardarCambiosTrabajador(Request $request)
+     {
+         try {
+         $datosJson = $request->input('datos');
+ 
+         $datos = json_decode($datosJson, true); 
+ 
+         if (json_last_error() !== JSON_ERROR_NONE) {
+             return response()->json(['error' => 'Error al decodificar JSON: ' . json_last_error_msg()], 400);
+         }
+     
+             $actualizarFechasOnlineTrabajador = DB::update('UPDATE proyectotrabajadores 
+             SET TRABAJADOR_FECHAINICIO = ?, TRABAJADOR_FECHAFIN = ?
+             WHERE TRABAJADOR_ID = ?', 
+             [$datos['fechaInicio'], $datos['fechaFin'], $datos['trabajadorId']]
+            );
+
+             $actualizarCorreoOnlineTrabajador = DB::update('UPDATE recopsicotrabajadores
+             SET RECPSICOTRABAJADOR_CORREO = ?
+             WHERE ID_RECOPSICOTRABAJADOR = ?', 
+             [$datos['trabajadorCorreo'], $datos['trabajadorId']]
+            );
+ 
+            $response = ["msj" => 'Datos guardados correctamente'];
+             return response()->json($response);
+         } catch (Exception $e) {
+            $response = ["msj" => 'Error: ' . $e->getMessage()];
+            return response()->json($response);
+         }
+ 
+     }
 
 
     public function envioGuia($tipo, $idPersonal, $idRecsensorial){
