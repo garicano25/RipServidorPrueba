@@ -288,7 +288,7 @@ function validacionFechalimiteStatus(fechalimite, estadoCuestionario){
         document.getElementById("aceptarPermisos").addEventListener("click", function () {
             $('#avisoPrivacidadModal').modal('hide');
             $('#avisoPrivacidadModal').on('hidden.bs.modal', function () {
-                if (estadoCuestionario === 'En proceso' || estadoCuestionario === 'Finalizado') {
+                if (estadoCuestionario === 'En proceso') {
                     $('#instruccionesModal').modal('show');
                     console.log('entro aca en instruciones');
                 } else {
