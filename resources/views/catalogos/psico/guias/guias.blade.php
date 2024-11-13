@@ -826,7 +826,7 @@
                                 <input type="hidden" class="form-control" id="GUIAI_ID_RECOPSICORESPUESTAS" name="ID_RECOPSICORESPUESTAS" value="0">
                                 <input type="hidden" class="form-control" id="GUIAI_TRABAJADOR_ID" name="TRABAJADOR_ID" value="0">
                             </div>
-                            <div id="pregunta1_1" class="mt-4 divPreguntas" style="display: flex; justify-content: space-between; align-items: center; width: 100%; margin-bottom: 10px;">
+                            <div id="pregunta1_1" class="mt-4 divPreguntas" style="display: flex; justify-content: space-between; align-items: center; width: 100%;">
                                 <p style="margin: 0; flex: 1; font-style: italic; margin-bottom: 10px;"><i class="fa fa-info-circle" id="Exp1_1" data-toggle="tooltip" title=""></i>
                                     1. ¿Ha presenciado o sufrido alguna vez, durante o con motivo del trabajo un acontecimiento como los siguientes:</p>
                                 <div style="display: flex; align-items: center; gap: 20px;">
@@ -841,10 +841,10 @@
                                 </div>
 
                             </div>
-                            <div id="pregunta2_1" class="divPreguntas" style="display: flex; justify-content: space-between; align-items: center; width: 100%;">
+                            <div id="pregunta2_1" class="divPreguntas">
                                 <p style="margin: 0; flex: 1;"><i class="fa fa-info-circle" id="Exp1_2" data-toggle="tooltip" title=""></i>
                                     accidente que tenga como consecuencia la muerte, la pérdida de un miembro o una lesión grave?</p>
-                                <div class="d-none" style="display: flex; align-items: center; gap: 20px;">
+                                <div class="d-none" >
                                     <div>
                                         <label for="pregunta2_si" style="margin-right: 1px;">Sí</label>
                                         <input type="radio" id="pregunta2_si" name="GUIA1_2" value="1" onchange="guia1()">
@@ -855,10 +855,10 @@
                                     </div>
                                 </div>
                             </div>
-                            <div id="pregunta3_1" style="display: flex; justify-content: space-between; align-items: center; width: 100%;">
+                            <div id="pregunta3_1">
                                 <p style="margin: 0; flex: 1;"><i class="fa fa-info-circle" id="Exp1_3" data-toggle="tooltip" title=""></i>
                                     asaltos?</p>
-                                <div class="d-none" style="display: flex; align-items: center; gap: 20px;">
+                                <div class="d-none" >
                                     <div>
                                         <label for="pregunta3_si" style="margin-right: 1px;">Sí</label>
                                         <input type="radio" id="pregunta3_si" name="GUIA1_3" value="1" onchange="guia1()">
@@ -870,10 +870,10 @@
                                     </div>
                                 </div>
                             </div>
-                            <div id="pregunta4_1" class="divPreguntas" style="display: flex; justify-content: space-between; align-items: center; width: 100%;">
+                            <div id="pregunta4_1" class="divPreguntas" >
                                 <p style="margin: 0; flex: 1;"><i class="fa fa-info-circle" id="Exp1_4" data-toggle="tooltip" title=""></i>
                                     actos violentos que derivaron en lesiones graves?</p>
-                                <div class="d-none" style="display: flex; align-items: center; gap: 20px;">
+                                <div class="d-none" >
                                     <div>
                                         <label for="pregunta4_si" style="margin-right: 1px;">Sí</label>
                                         <input type="radio" id="pregunta4_si" name="GUIA1_4" value="1" onchange="guia1()">
@@ -885,10 +885,10 @@
                                     </div>
                                 </div>
                             </div>
-                            <div id="pregunta5_1" class="divPreguntas" style="display: flex; justify-content: space-between; align-items: center; width: 100%;">
+                            <div id="pregunta5_1" class="divPreguntas" >
                                 <p style="margin: 0; flex: 1;"><i class="fa fa-info-circle" id="Exp1_5" data-toggle="tooltip" title=""></i>
                                     secuestro?</p>
-                                <div class="d-none" style="display: flex; align-items: center; gap: 20px;">
+                                <div class="d-none" >
                                     <div>
                                         <label for="pregunta5_si" style="margin-right: 1px;">Sí</label>
                                         <input type="radio" id="pregunta5_si" name="GUIA1_5" value="1" onchange="guia1()">
@@ -900,10 +900,10 @@
                                     </div>
                                 </div>
                             </div>
-                            <div id="pregunta6_1" class="divPreguntas" style="display: flex; justify-content: space-between; align-items: center; width: 100%;">
+                            <div id="pregunta6_1" class="divPreguntas" >
                                 <p style="margin: 0; flex: 1;"><i class="fa fa-info-circle" id="Exp1_6" data-toggle="tooltip" title=""></i>
                                     amenazas?</p>
-                                <div class="d-none" style="display: flex; align-items: center; gap: 20px;">
+                                <div class="d-none" >
                                     <div>
                                         <label for="pregunta6_si" style="margin-right: 1px;">Sí</label>
                                         <input type="radio" id="pregunta6_si" name="GUIA1_6" value="1" onchange="guia1()">
@@ -915,10 +915,10 @@
                                     </div>
                                 </div>
                             </div>
-                            <div id="pregunta7_1" class="divPreguntas" style="display: flex; justify-content: space-between; align-items: center; width: 100%;">
+                            <div id="pregunta7_1" class="divPreguntas">
                                 <p style="margin: 0; flex: 1;"><i class="fa fa-info-circle" id="Exp1_7" data-toggle="tooltip" title=""></i>
                                     cualquier otro que ponga en riesgo su vida o salud, y/o la de otras personas?</p>
-                                <div class="d-none" style="display: flex; align-items: center; gap: 20px;">
+                                <div class="d-none">
                                     <div>
                                         <label for="pregunta7_si" style="margin-right: 1px;">Sí</label>
                                         <input type="radio" id="pregunta7_si" name="GUIA1_7" value="1" onchange="guia1()">
