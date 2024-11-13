@@ -860,6 +860,10 @@
                                                     Nueva Actividad <i class="fa fa-calendar-plus-o p-1"></i>
                                                 </button>
 
+                                                <button type="button" class="btn btn-secondary waves-effect waves-light boton_modulocliente contrato" style="margin-left: 20px;" id="boton_descargar_cronograma">
+                                                    Excel <i class="fa fa-file-excel-o" aria-hidden="true"></i>
+                                                </button>
+
                                                 <button type="button" class="btn btn-secondary waves-effect waves-light boton_modulocliente contrato" style="margin-left: auto;background: #94B732;color: #fff;border: 1px solid #fff;" id="boton_autorizar_cronograma_modal">
                                                     Validar o Autorizar cronograma <i class="fa fa fa-gavel p-1"></i>
                                                 </button>

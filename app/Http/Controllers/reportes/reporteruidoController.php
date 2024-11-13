@@ -6325,6 +6325,7 @@ class reporteruidoController extends Controller
                 'Content-Type' => 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
                 'Content-Disposition' => "attachment; filename=\"{$nombre_descarga}\"",
             ]);
+            
         } catch (Exception $e) {
 
             $dato["msj"] = 'Error ' . $e->getMessage();
