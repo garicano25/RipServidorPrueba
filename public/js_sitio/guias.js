@@ -184,7 +184,7 @@ $('#guardar_guia3').on('click', function (e) {
             } else {
                 Swal.fire({
                     title: "Advertencia",
-                    text: "Por favor, completa todas las preguntas de la Guia 1 antes de enviar.",
+                    text: "Por favor, completa todas las preguntas antes de enviar.",
                     icon: "warning",
                     confirmButtonText: "Aceptar"
                 });

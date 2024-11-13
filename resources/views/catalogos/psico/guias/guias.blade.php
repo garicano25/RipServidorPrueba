@@ -820,7 +820,7 @@
 
                         <div id="seccion1" style="padding: 10px;">
                             <div id="titulo1">
-                                <h5 style="text-align: left; width: 70%;" class="titulo-seccion"><b>I.- Acontecimiento traumático severo</b></h5>
+                                <h5 style="text-align: left; width: 70%;" class="titulo-seccion"><b>I.- Acontecimiento traumático severo (DURANTE EL ÚLTIMO MES)</b></h5>
                             </div>
                             <div class="col-12">
                                 <input type="hidden" class="form-control" id="GUIAI_ID_RECOPSICORESPUESTAS" name="ID_RECOPSICORESPUESTAS" value="0">
@@ -4649,7 +4649,7 @@
         <div id="col-datos" class="col-3 mt-3">
             <div id="datos" class="datos">
                 <div class="info-section text-center">
-                    <i class="fa fa-info-circle fa-2x mb-1"></i>
+                    <i class="fa fa-info-circle fa-2x mb-1" style="color: #003d6b !important;"></i>
                     <p style="font-style: italic;"><strong>Presione el icono para obtener una explicación detallada</strong></p>
                 </div>
 
