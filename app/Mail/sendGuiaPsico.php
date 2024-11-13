@@ -20,8 +20,9 @@ class sendGuiaPsico extends Mailable
     public $fechalimite;
     public $id;
     public $dias;
+    public $psico;
 
-    public function __construct($name, $guia1, $guia2, $guia3, $guia5, $status, $fechalimite, $id, $dias)
+    public function __construct($name, $guia1, $guia2, $guia3, $guia5, $status, $fechalimite, $id, $dias,$psico)
     {
         $this->name = $name;
         $this->guia1 = $guia1;
@@ -32,6 +33,7 @@ class sendGuiaPsico extends Mailable
         $this->fechalimite = $fechalimite;
         $this->id = $id;
         $this->dias = $dias;
+        $this->psico = $psico;
     }
 
   

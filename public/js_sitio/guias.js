@@ -908,11 +908,20 @@ function consultarDatos() {
         success: function (data) {
             if (data) {
                 document.getElementById('loading').style.display = 'none';
-                $('#nombre-trabajador').text(data.RECPSICOTRABAJADOR_NOMBRE || 'No disponible');
-                $('#genero-trabajador').text(data.RECPSICOTRABAJADOR_GENERO || 'No disponible');
-                $('#correo-trabajador').text(data.RECPSICOTRABAJADOR_CORREO || 'No disponible');
-                estadoCuestionario = data.TRABAJADOR_ESTADOCONTESTADO;
-                fechalimite = data.TRABAJADOR_FECHAFIN;
+                $('#nombre-trabajador').text(data['trabajador'].RECPSICOTRABAJADOR_NOMBRE || 'No disponible');
+                $('#genero-trabajador').text(data['trabajador'].RECPSICOTRABAJADOR_GENERO || 'No disponible');
+                $('#correo-trabajador').text(data['trabajador'].RECPSICOTRABAJADOR_CORREO || 'No disponible');
+                estadoCuestionario = data['trabajador'].TRABAJADOR_ESTADOCONTESTADO;
+                fechalimite = data['trabajador'].TRABAJADOR_FECHAFIN;
+
+                $('#nombre-psicologo').text(data['psico'].nombre || 'No disponible');
+                $('#telefono-psicologo').text(data['psico'].telefono || 'No disponible');
+                $('#correo-psicologo').text(data['psico'].correo || 'No disponible');
+
+
+
+
+
                 validacionFechalimiteStatus(fechalimite, estadoCuestionario);
 
             } else {
