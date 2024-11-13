@@ -746,28 +746,33 @@
 
     <section id="sectionFinalizado" class="container mt-5 d-none">
         <div class="row justify-content-center">
-            <div class="col-12 col-md-8">
-                <div class="card text-center">
-                    <div class="card-header" style="background-color: #009bcf; color: #fff;">
-                        <h5 class="card-title">
-                            <i class="fa fa-exclamation-triangle" style="color: #ffcc00;"></i>
+            <div class="col-12">
+                <div class="card text-center" style="border-radius: 12px; box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); margin: 10px;">
+                    <div class="card-header" style="background-color: #88bd23; color: #fff; font-weight: bold; border-radius: 12px 12px 0 0;">
+                        <h6 class="card-title m-0" style="font-size: 1.5rem; font-weight: bold; color: #ffffff;">
+                            <i class="fa fa-exclamation-triangle" style="color: #ffffff;"></i>
                             FACTORES DE RIESGO PSICOSOCIAL NOM-035-STPS-2018
-                        </h5>
+                        </h6>
                     </div>
                     <div class="card-body">
-                        <h6 class="card-subtitle mb-2 text-muted">FINALIZADO</h6>
-                        <p class="lead">
+                        
+                        <p class="lead mt-3 mb-3">
                             <i class="fa fa-check-circle" style="color: #28a745;"></i>
-                            Sus respuestas han sido guardas y enviadas exitosamente.
+                            Sus respuestas han sido guardadas y enviadas exitosamente.
                         </p>
-                        <p class="font-weight-bold">Usted ya ha finalizado este cuestionario.</p>
-                        <p class="small text-muted">
+                        <h6 class="card-subtitle mt-5 mb-5" style="font-size: 2.5rem; font-weight: bold; color: #88bd23;">
+                            FINALIZADO
+                        </h6>
+                        <p class="font-weight-bold mt-3 mb-3">Usted ya ha finalizado este cuestionario.</p>
+                        <p class="small text-muted" style="font-size: 1rem;">
                             <i class="fa fa-phone" style="color: #007bff;"></i>
                             Cualquier duda o aclaración comuníquese al Tel. 999 357 8332.
                         </p>
                     </div>
-                    <div class="card-footer text-muted">
-                        <small>Results In Performance</small>
+                    <div class="card-footer text-muted" style="background-color: #009bcf; color: #fff; font-weight: bold; border-radius: 0 0 12px 12px;">
+                        <h6 class="card-title m-0" style="font-size: 1rem; font-weight: bold; color: #ffffff;">
+                            Results In Performance
+                        </h6>
                     </div>
                 </div>
             </div>
@@ -776,28 +781,33 @@
 
     <section id="sectionExpirado" class="container mt-5 d-none">
         <div class="row justify-content-center">
-            <div class="col-12 col-md-8">
-                <div class="card text-center">
-                    <div class="card-header" style="background-color: #009bcf; color: #fff;">
-                        <h5 class="card-title">
-                            <i class="fa fa-exclamation-triangle" style="color: #ffcc00;"></i>
+        <div class="col-12">
+                <div class="card text-center" style="border-radius: 12px; box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); margin: 10px;">
+                    <div class="card-header" style="background-color: #b81414; color: #fff; font-weight: bold; border-radius: 12px 12px 0 0;">
+                        <h6 class="card-title m-0" style="font-size: 1.5rem; font-weight: bold; color: #ffffff;">
+                            <i class="fa fa-exclamation-triangle" style="color: #ffffff;"></i>
                             FACTORES DE RIESGO PSICOSOCIAL NOM-035-STPS-2018
-                        </h5>
+                        </h6>
                     </div>
                     <div class="card-body">
-                        <h6 class="card-subtitle mb-2 text-muted">Fecha limite superada</h6>
-                        <p class="lead">
-                            <i class="fa fa-exclamation" style="color: #8B0000;"></i>
+                        
+                        <p class="lead mt-3 mb-3">
+                            <i class="fa fa-check-circle" style="color: #28a745;"></i>
                             Ya ha pasado la fecha límite en la que podia contestar este cuestionario.
                         </p>
-                        <p class="font-weight-bold">Comuniquese con el responsable correspondiente en su centro de trabajo y solicite una extensión de su fecha límite.</p>
-                        <p class="small text-muted">
+                        <h6 class="card-subtitle mt-5 mb-5" style="font-size: 2.5rem; font-weight: bold; color: #b81414;">
+                            CUESTIONARIO VENCIDO
+                        </h6>
+                        <p class="font-weight-bold mt-3 mb-3">Comuniquese con el responsable correspondiente en su centro de trabajo y solicite una extensión de su fecha límite.</p>
+                        <p class="small text-muted" style="font-size: 1rem;">
                             <i class="fa fa-phone" style="color: #007bff;"></i>
                             Cualquier duda o aclaración comuníquese al Tel. 999 357 8332.
                         </p>
                     </div>
-                    <div class="card-footer text-muted">
-                        <small>Results In Performance</small>
+                    <div class="card-footer text-muted" style="background-color: #009bcf; color: #fff; font-weight: bold; border-radius: 0 0 12px 12px;">
+                        <h6 class="card-title m-0" style="font-size: 1rem; font-weight: bold; color: #ffffff;">
+                            Results In Performance
+                        </h6>
                     </div>
                 </div>
             </div>
