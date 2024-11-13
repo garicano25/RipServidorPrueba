@@ -841,8 +841,8 @@
                                 </div>
 
                             </div>
-                            <div id="pregunta2_1" class="divPreguntas" style="margin-bottom: 5px !important;">
-                            <p style="margin: 0 0 0 15px !important; flex: 1;">
+                            <div id="pregunta2_1" class="divPreguntas" style="margin-bottom: 0px !important;">
+                            <p style="margin: 0 0 0 25px !important; flex: 1;">
                                     <i class="fa fa-info-circle" id="Exp1_2" data-toggle="tooltip" title=""></i>
                                     accidente que tenga como consecuencia la muerte, la pérdida de un miembro o una lesión grave?</p>
                                 <div class="d-none" >
@@ -856,8 +856,8 @@
                                     </div>
                                 </div>
                             </div>
-                            <div id="pregunta3_1" class="divPreguntas" style="margin-bottom: 5px !important;">
-                            <p style="margin: 0 0 0 15px !important; flex: 1;"><i class="fa fa-info-circle" id="Exp1_3" data-toggle="tooltip" title=""></i>
+                            <div id="pregunta3_1" class="divPreguntas" style="margin-bottom: 0px !important;">
+                            <p style="margin: 0 0 0 25px !important; flex: 1;"><i class="fa fa-info-circle" id="Exp1_3" data-toggle="tooltip" title=""></i>
                                     asaltos?</p>
                                 <div class="d-none" >
                                     <div>
@@ -871,8 +871,8 @@
                                     </div>
                                 </div>
                             </div>
-                            <div id="pregunta4_1" class="divPreguntas" style="margin-bottom: 5px !important;">
-                            <p style="margin: 0 0 0 15px !important; flex: 1;"><i class="fa fa-info-circle" id="Exp1_4" data-toggle="tooltip" title=""></i>
+                            <div id="pregunta4_1" class="divPreguntas" style="margin-bottom: 0px !important;">
+                            <p style="margin: 0 0 0 25px !important; flex: 1;"><i class="fa fa-info-circle" id="Exp1_4" data-toggle="tooltip" title=""></i>
                                     actos violentos que derivaron en lesiones graves?</p>
                                 <div class="d-none" >
                                     <div>
@@ -886,8 +886,8 @@
                                     </div>
                                 </div>
                             </div>
-                            <div id="pregunta5_1" class="divPreguntas" style="margin-bottom: 5px !important;">
-                            <p style="margin: 0 0 0 15px !important; flex: 1;"><i class="fa fa-info-circle" id="Exp1_5" data-toggle="tooltip" title=""></i>
+                            <div id="pregunta5_1" class="divPreguntas" style="margin-bottom: 0px !important;">
+                            <p style="margin: 0 0 0 25px !important; flex: 1;"><i class="fa fa-info-circle" id="Exp1_5" data-toggle="tooltip" title=""></i>
                                     secuestro?</p>
                                 <div class="d-none" >
                                     <div>
@@ -901,8 +901,8 @@
                                     </div>
                                 </div>
                             </div>
-                            <div id="pregunta6_1" class="divPreguntas" style="margin-bottom: 5px !important;">
-                            <p style="margin: 0 0 0 15px !important; flex: 1;"><i class="fa fa-info-circle" id="Exp1_6" data-toggle="tooltip" title=""></i>
+                            <div id="pregunta6_1" class="divPreguntas" style="margin-bottom: 0px !important;">
+                            <p style="margin: 0 0 0 25px !important; flex: 1;"><i class="fa fa-info-circle" id="Exp1_6" data-toggle="tooltip" title=""></i>
                                     amenazas?</p>
                                 <div class="d-none" >
                                     <div>
@@ -916,8 +916,8 @@
                                     </div>
                                 </div>
                             </div>
-                            <div id="pregunta7_1" class="divPreguntas" style="margin-bottom: 5px !important;">
-                            <p style="margin: 0 0 0 15px !important; flex: 1;"><i class="fa fa-info-circle" id="Exp1_7" data-toggle="tooltip" title=""></i>
+                            <div id="pregunta7_1" class="divPreguntas" style="margin-bottom: 0px !important;">
+                            <p style="margin: 0 0 0 25px !important; flex: 1;"><i class="fa fa-info-circle" id="Exp1_7" data-toggle="tooltip" title=""></i>
                                     cualquier otro que ponga en riesgo su vida o salud, y/o la de otras personas?</p>
                                 <div class="d-none">
                                     <div>
