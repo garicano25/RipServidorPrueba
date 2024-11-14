@@ -967,6 +967,9 @@ $("#boton_nuevo_proyecto").click(function () {
 	$(`#titleOrganizacion`).css('display', 'none')
 
 
+	$(`#boton_cambiar_proyecto`).removeClass('d-block').addClass('d-none');
+
+
 	$('#proyecto_personaelabora').css('display', 'block').prop('disabled', false);
 	$('#proyecto_contacto').css('display', 'block').prop('disabled', false);
 	$('#PROYECTO_CONTACTO_SELECT').css('display', 'none').prop('disabled', true);
@@ -1096,6 +1099,7 @@ $('#tabla_proyectos tbody').on('click', 'td.mostrar', function () {
 	var tr = $(this).closest('tr');
 	var row = datatable_proyectos.row(tr);
 
+	$(`#boton_cambiar_proyecto`).removeClass('d-block').addClass('d-none');
 	$('#proyecto_personaelabora').css('display', 'block').prop('disabled', false);
 	$('#proyecto_contacto').css('display', 'block').prop('disabled', false);
 	$('#PROYECTO_CONTACTO_SELECT').css('display', 'none').prop('disabled', true);
@@ -1445,7 +1449,7 @@ $('#tabla_proyectos_internos tbody').on('click', 'td.mostrar', function () {
 
 	//Marcamos el proyecto interno
 	$('#proyectoInternoCheck').prop('checked', true).prop('disabled', true);
-
+	$(`#boton_cambiar_proyecto`).removeClass('d-none').addClass('d-block');
 	$('#proyecto_personaelabora').css('display', 'block').prop('disabled', false);
 	$('#proyecto_contacto').css('display', 'block').prop('disabled', false);
 	$('#PROYECTO_CONTACTO_SELECT').css('display', 'none').prop('disabled', true);
@@ -11041,3 +11045,111 @@ $('#boton_descargar_cronograma').on('click', function (e) {
 		});
 	return false;
 })
+
+
+// Convertir proyecto interno a proyecto
+$("#boton_cambiar_proyecto").click(function () {
+	
+
+	swal({
+		title: "¡Confirme que desea realizar esta acción!",
+		text: "Si desea continuar se creara un Proyecto, con la información del proyecto interno actual",
+		type: "warning",
+		showCancelButton: true,
+		confirmButtonColor: "#DD6B55",
+		confirmButtonText: "Confirmar!",
+		cancelButtonText: "Cancelar!",
+		closeOnConfirm: false,
+		closeOnCancel: false
+	}, function (isConfirm) {
+		if (isConfirm) {
+			// cerrar msj confirmacion
+			swal.close();
+
+			// enviar datos
+			$('#form_proyecto').ajaxForm({
+				dataType: 'json',
+				type: 'POST',
+				url: '/proyectos',
+				data: {
+					api: 3
+				},
+				setForm: false,
+				success: function (dato) {
+
+					
+					//Recargamos el numero de contratos
+					proyectosTotales()
+					tabla_proyecto();
+					
+
+					// mensaje
+					swal({
+						title: "Proyecto clonado con exito",
+						text: "El proyecto fue creado con exito puede consultarlo en la Lista de Proyectos",
+						type: "success", // warning, error, success, info
+						buttons: {
+							visible: true, // true , false
+						},
+						showConfirmButton: true
+					});
+
+					// actualiza boton
+					$('#boton_cambiar_proyecto').html('Convertir a Proyecto <i class="fa fa-clone" aria-hidden="true"></i>');
+
+					$("#boton_cambiar_proyecto").prop('disabled', false);
+
+				},
+				beforeSend: function () {
+					$('#boton_cambiar_proyecto').html('Clonando a Proyecto <i class="fa fa-spin fa-spinner"></i>');
+					$("#boton_cambiar_proyecto").prop('disabled', true);
+
+
+					swal({
+						title: "Espere un momento...",
+						text: "Estamos creando un nuevo proyecto...",
+						type: "info", // warning, error, success, info
+						buttons: {
+							visible: false, // true , false
+						},
+						showConfirmButton: false
+					});
+
+				},
+				error: function (dato) {
+					// actualiza boton
+					$('#boton_cambiar_proyecto').html('Convertir a Proyecto <i class="fa fa-clone" aria-hidden="true"></i>');
+
+					// mensaje
+					swal({
+						title: "Error",
+						text: "" + dato.msj,
+						type: "error", // warning, error, success, info
+						buttons: {
+							visible: false, // true , false
+						},
+						timer: 1500,
+						showConfirmButton: false
+					});
+					return false;
+				}
+			}).submit();
+			return false;
+		}
+		else {
+			// mensaje
+			swal({
+				title: "Cancelado",
+				text: "",
+				type: "error", // warning, error, success, info
+				buttons: {
+					visible: false, // true , false
+				},
+				timer: 500,
+				showConfirmButton: false
+			});
+		}
+	});
+	return false;
+	
+});

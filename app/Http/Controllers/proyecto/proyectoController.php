@@ -1397,22 +1397,12 @@ class proyectoController extends Controller
     }
 
 
+   
 
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
     public function store(Request $request)
     {
         try {
-            // dd($request->all());
-
-            // formatear fecha
-            // $request['proyecto_fechainicio'] = Carbon::createFromFormat('d-m-Y', $request['proyecto_fechainicio'])->format('Y-m-d');
-            // $request['proyecto_fechafin'] = Carbon::createFromFormat('d-m-Y', $request['proyecto_fechafin'])->format('Y-m-d');
-            // $request['proyecto_fechaelaboracion'] = Carbon::createFromFormat('d-m-Y', $request['proyecto_fechaelaboracion'])->format('Y-m-d');
+         
             if ($request->api == 1) {
 
                 if (($request->proyecto_id + 0) == 0) //NUEVO PROYECTO
@@ -1534,6 +1524,8 @@ class proyectoController extends Controller
 
 
                     $proyecto = proyectoModel::with(['recsensorial', 'recsensorial.cliente', 'recsensorial.catregion', 'recsensorial.catgerencia', 'recsensorial.catactivo'])->findOrFail($proyectoo->id);
+
+
                 } else //PROYECTO EDITADO
                 {
                     // Consulta proyecto
@@ -1660,7 +1652,9 @@ class proyectoController extends Controller
                     // mensaje
                     $dato["msj"] = 'Informacion modificada correctamente';
                 }
-            } else {
+            
+            // ===================== Asignacion de usuarios =========================
+            } elseif ($request->api == 2){
 
                 $total = DB::select('SELECT COUNT(ID_PROYECTO_USUARIO) AS ASIGNADO
                                     FROM proyectoUsuarios
@@ -1687,6 +1681,105 @@ class proyectoController extends Controller
 
                 //Realizamos la asignacion de usuarios
                 return response()->json($proyecto);
+            
+
+            // ================== Clonacion de proyectos =================================
+            }elseif($request->api == 3){
+
+                // acccion
+                $request['proyecto_puntosrealesactivo'] = 1;
+                $request['proyecto_bitacoraactivo'] = 1;
+                $request['proyecto_concluido'] = 0;
+                $request['proyecto_eliminado'] = 0;
+                $request['solicitudOS'] = 0;
+                $request['proyectoInterno'] = 0;
+                $request['recsensorial_id'] = null;
+                $request['reconocimiento_psico_id'] = null;
+                $request['proyecto_folio'] = null;
+
+                DB::statement('ALTER TABLE proyecto AUTO_INCREMENT=1');
+                $proyectoo = proyectoModel::create($request->all());
+
+
+                $ano = (date('y')) + 0;
+                $proyecto_folio = "";
+
+                //Buscamos los proyectos Internos
+                $folio = DB::select('SELECT
+                                (COUNT(proyecto.proyecto_folio)+42) AS nuevo_folio_proyecto
+                            FROM
+                                proyecto
+                            WHERE
+                                proyecto.proyectoInterno = 0
+                                AND DATE_FORMAT(proyecto.created_at, "%Y") = DATE_FORMAT(CURDATE(), "%Y")');
+
+
+                switch ($folio[0]->nuevo_folio_proyecto + 1) {
+                    case ($folio[0]->nuevo_folio_proyecto < 10):
+                        $proyecto_folio = "RES-PJ-" . $ano . "-00" . $folio[0]->nuevo_folio_proyecto;
+                        break;
+                    case ($folio[0]->nuevo_folio_proyecto < 100):
+                        $proyecto_folio = "RES-PJ-" . $ano . "-0" . $folio[0]->nuevo_folio_proyecto;
+                        break;
+                    default:
+                        $proyecto_folio = "RES-PJ-" . $ano . "-" . $folio[0]->nuevo_folio_proyecto;
+                        break;
+                }
+
+                $proyectoo->update([
+                    'proyecto_folio' => $proyecto_folio
+                ]);
+
+                //GUARDAMOS LOS TIPOS DEL
+                if ($request['HI']) {
+
+                    serviciosProyectoModel::create([
+                        'PROYECTO_ID' => $proyectoo->id,
+                        'HI' => isset($request['HI']) ? $request['HI'] : 0,
+                        'HI_PROGRAMA' => isset($request['HI_PROGRAMA']) ? $request['HI_PROGRAMA'] : 0,
+                        'HI_RECONOCIMIENTO' => isset($request['HI_RECONOCIMIENTO']) ? $request['HI_RECONOCIMIENTO'] : 0,
+                        'HI_EJECUCION' => isset($request['HI_EJECUCION']) ? $request['HI_EJECUCION'] : 0,
+                        'HI_INFORME' => isset($request['HI_INFORME']) ? $request['HI_INFORME'] : 0,
+                        'ERGO' => isset($request['ERGO']) ? $request['ERGO'] : 0,
+                        'ERGO_PROGRAMA' => isset($request['ERGO_PROGRAMA']) ? $request['ERGO_PROGRAMA'] : 0,
+                        'ERGO_RECONOCIMIENTO' => isset($request['ERGO_RECONOCIMIENTO']) ? $request['ERGO_RECONOCIMIENTO'] : 0,
+                        'ERGO_EJECUCION' => isset($request['ERGO_EJECUCION']) ? $request['ERGO_EJECUCION'] : 0,
+                        'ERGO_INFORME' => isset($request['ERGO_INFORME']) ? $request['ERGO_INFORME'] : 0,
+                        'PSICO' => isset($request['PSICO']) ? $request['PSICO'] : 0,
+                        'PSICO_PROGRAMA' => isset($request['PSICO_PROGRAMA']) ? $request['PSICO_PROGRAMA'] : 0,
+                        'PSICO_RECONOCIMIENTO' => isset($request['PSICO_RECONOCIMIENTO']) ? $request['PSICO_RECONOCIMIENTO'] : 0,
+                        'PSICO_EJECUCION' => isset($request['PSICO_EJECUCION']) ? $request['PSICO_EJECUCION'] : 0,
+                        'PSICO_INFORME' => isset($request['PSICO_INFORME']) ? $request['PSICO_INFORME'] : 0,
+                        'SEGURIDAD' => isset($request['SEGURIDAD']) ? $request['PSICO'] : 0,
+                        'SEGURIDAD_PROGRAMA' => isset($request['SEGURIDAD_PROGRAMA']) ? $request['SEGURIDAD_PROGRAMA'] : 0,
+                        'SEGURIDAD_RECONOCIMIENTO' => isset($request['SEGURIDAD_RECONOCIMIENTO']) ? $request['SEGURIDAD_RECONOCIMIENTO'] : 0,
+                        'SEGURIDAD_EJECUCION' => isset($request['SEGURIDAD_EJECUCION']) ? $request['SEGURIDAD_EJECUCION'] : 0,
+                        'SEGURIDAD_INFORME' => isset($request['SEGURIDAD_INFORME']) ? $request['SEGURIDAD_INFORME'] : 0
+                    ]);
+                }
+
+
+                //GUARDAMOS LA ESTRUCTURA DEL PROYECTO
+                if ($request['TIENE_ESTRUCTURA'] == 1) {
+                    foreach ($request->ETIQUETA_ID as $key => $value) {
+
+                        estructuraProyectosModel::create([
+                            'PROYECTO_ID' => $proyectoo->id,
+                            'ETIQUETA_ID' => $value,
+                            'OPCION_ID' => $request->OPCION_ID[$key],
+                            'NIVEL' => $request->NIVEL[$key]
+
+                        ]);
+                    }
+                }
+
+
+                // DB::select('CALL clonacionProyectoInterno(?)', [$proyectoo->id]);
+
+                $dato["msj"] = 'Proyecto clonado';
+                return response()->json($dato);
+
+
             }
 
             // respuesta
