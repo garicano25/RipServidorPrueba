@@ -865,7 +865,7 @@ class recsensorialquimicosreportewordController extends Controller
         $table->addCell(5000, $encabezado_celda)->addTextRun($centrado)->addText('Áreas', $encabezado_texto);
         $table->addCell(5000, $encabezado_celda)->addTextRun($centrado)->addText('Agentes químicos identificados', $encabezado_texto);
         $table->addCell(6000, $encabezado_celda)->addTextRun($centrado)->addText('Fuente generadora', $encabezado_texto);
-        $table->addCell(1500, $encabezado_celda)->addTextRun($centrado)->addText('Cantidad', $encabezado_texto);
+        $table->addCell(1500, $encabezado_celda)->addTextRun($centrado)->addText('Cantidad manejada por jornada de trabajo', $encabezado_texto);
 
         // registros tabla
         $area = 'xxx';
