@@ -882,7 +882,7 @@ Route::get('proyectobloqueo/{proyecto_id}/{proyecto_estado}', ['as' => 'proyecto
 
 Route::get('proyectoSolicitarOS/{proyecto_id}/{valor}', ['as' => 'proyectos.proyectoSolicitarOS', 'uses' => 'proyecto\proyectoController@proyectoSolicitarOS']);
 
-
+Route::get('clonarProyectoInterno/{proyecto_id}', ['as' => 'proyectos.clonarProyectoInterno', 'uses' => 'proyecto\proyectoController@clonarProyectoInterno']);
 
 //==============================================
 

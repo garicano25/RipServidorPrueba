@@ -283,7 +283,7 @@
                                                                                 font-size: 17px;
                                                                             }
                                                                         </style>
-                                                                        <div class="col-10 d-flex align-items-center">
+                                                                        <div class="col-5 d-flex align-items-center">
                                                                             <label class="text-danger me-2">¿El proyecto es Interno? </label>
                                                                             <div class="switch mx-4 rol_lista" data-toggle="tooltip" title="Al aceptar esta opción el proyecto tendrá un folio de Proyectos Internos. Ejem: RES-PI-XX-XXX">
                                                                                 <label>
@@ -291,6 +291,9 @@
                                                                                     <span class=" lever switch-col-light-blue"></span>Si
                                                                                 </label>
                                                                             </div>
+                                                                        </div>
+                                                                        <div class="col-5 justify-content-end d-flex">
+                                                                            <button type="submit" class="btn btn-danger d-none" id="boton_cambiar_proyecto">Convertir a Proyecto <i class="fa fa-clone" aria-hidden="true"></i></button>
                                                                         </div>
                                                                     </div>
 
