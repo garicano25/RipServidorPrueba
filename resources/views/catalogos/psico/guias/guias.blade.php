@@ -4703,7 +4703,7 @@
                         Todos los datos personales y respuestas a los cuestionarios serán tratados de
                         forma confidencial y anónima, conforme a la Ley y la NOM-035.
                     </p>
-                    <h6>Aviso de Privacidad</h6>
+                    <h3>Aviso de Privacidad</h3>
                     <p>
                     Con fundamento en la Ley Federal de Protección de Datos Personales en Posesión de
                     los Particulares, y en cumplimiento con la Norma Oficial Mexicana NOM-035-STPS-
@@ -4712,7 +4712,7 @@
                     128, Colonia Nueva Villahermosa, C. P. 86070, Villahermosa, Tabasco pone a su
                     disposición el presente Aviso de Privacidad.
                     </p>
-                    <h1>1. Datos que se recabarán</h1>
+                    <h6>1. Datos que se recabarán</h6>
                     <p>
                     Recabaremos información personal, laboral y psicosocial, la cual puede incluir:
                     - Datos de identificación: nombre, cargo, área de trabajo, etc.
@@ -4720,7 +4720,7 @@
                     - Datos psicosociales: respuestas a cuestionarios, encuestas y evaluaciones que
                     miden los factores de riesgo psicosocial y el clima organizacional, entre otros.
                     </p>
-                    <h1>2. Finalidad del tratamiento de los datos personales</h1>
+                    <h6>2. Finalidad del tratamiento de los datos personales</h6>
                     <p>
                     Sus datos personales serán tratados para cumplir con las disposiciones de la
                     NOM-035-STPS-2018, lo cual incluye:
@@ -4728,20 +4728,20 @@
                     - Implementar medidas preventivas y correctivas para mejorar el ambiente laboral.
                     - Desarrollar políticas y programas de bienestar y salud en el trabajo.
                     </p>
-                    <h1>3. Uso y protección de la información</h1>
+                    <h6>3. Uso y protección de la información</h6>
                     <p>
                     Sus datos serán utilizados únicamente para los fines establecidos en este aviso
                     y serán tratados con absoluta confidencialidad. Contamos con medidas de
                     seguridad para proteger sus datos personales contra el acceso no autorizado,
                     daño, pérdida o alteración.
                     </p>
-                    <h1>4. Transferencia de datos personales</h1>
+                    <h6>4. Transferencia de datos personales</h6>
                     <p>
                     Sus datos personales no serán compartidos con terceros sin su consentimiento,
                     salvo en los casos establecidos por la Ley o que resulten necesarios para
                     cumplir con la NOM-035-STPS-2018 y otras disposiciones aplicables.
                     </p>
-                    <h1>5. Derechos ARCO</h1>
+                    <h6>5. Derechos ARCO</h6>
                     <p>
                     Usted tiene derecho a acceder, rectificar, cancelar u oponerse al tratamiento de
                     sus datos personales (derechos ARCO). Para ejercer estos derechos o para
@@ -4751,7 +4751,7 @@
                     brindados por RESULTS, una vez concluido ese periodo deberá de realizar la
                     solicitud presencialmente para exponer los motivos del ejercicio de su derecho.
                     </p>
-                    <h1>6. Cambios en el aviso de privacidad</h1>
+                    <h6>6. Cambios en el aviso de privacidad</h6>
                     <p>
                     Este Aviso de Privacidad podrá ser modificado para cumplir con cambios en la
                     normativa aplicable o actualizaciones en las políticas internas de Results In Performance. Las modificaciones estarán disponibles <a href="https://results-in-performance.com/images/2024/Aviso_privacidad.pdf">aquí.</a>
@@ -4775,10 +4775,10 @@
                     <h6>Permiso de uso de cámara web requerido</h6>
                     <p>
                     Autorizo a Results In Performance para hacer uso de la cámara web de mi dispositivo durante la evaluación de los Factores de Riesgo Psicosocial. Esta autorización se concede bajo las siguientes condiciones:
-- El uso de la cámara web estará destinado únicamente a la evaluación de Factores de Riesgo Psicosocial, permitiendo la correcta identificación del usuario, la validación de la participación activa y la supervisión del proceso evaluativo en línea.
-- Results se compromete a proteger la confidencialidad de las imágenes y datos personales capturados durante la evaluación, en conformidad con la normativa de protección de datos aplicable y la política de privacidad de la empresa.
-- Las imágenes y cualquier dato capturado durante la evaluación serán utilizados exclusivamente para fines de verificación y registro de la evaluación de Factores de Riesgo Psicosocial, y no serán compartidos ni utilizados para otros propósitos sin autorización previa del usuario.
-- Esta autorización será válida únicamente durante el tiempo que dure la evaluación de los Factores de Riesgo Psicosocial.
+<br> - El uso de la cámara web estará destinado únicamente a la evaluación de Factores de Riesgo Psicosocial, permitiendo la correcta identificación del usuario, la validación de la participación activa y la supervisión del proceso evaluativo en línea.
+<br> - Results se compromete a proteger la confidencialidad de las imágenes y datos personales capturados durante la evaluación, en conformidad con la normativa de protección de datos aplicable y la política de privacidad de la empresa.
+<br> - Las imágenes y cualquier dato capturado durante la evaluación serán utilizados exclusivamente para fines de verificación y registro de la evaluación de Factores de Riesgo Psicosocial, y no serán compartidos ni utilizados para otros propósitos sin autorización previa del usuario.
+<br> - Esta autorización será válida únicamente durante el tiempo que dure la evaluación de los Factores de Riesgo Psicosocial.
 
                     </p>
                     <p>
@@ -4855,33 +4855,28 @@
 
                 <div class="modal-body">
 
-                    <h6 style="margin-top: 20px; font-weight: bold; color: #dc3545;">
-                        <i class="fa fa-exclamation-triangle" style="color: #dc3545;"></i> Confidencialidad
+                    <h6 style="margin-top: 20px; font-weight: bold; color: #000000;">
+                        <i class="fa fa-lock" style="color: #000000;"></i> Confidencialidad
                     </h6>
                     <p style="font-size: 1rem; color: #333;">
                         Todos los datos personales y respuestas a los cuestionarios serán tratados de
                         forma confidencial y anónima, conforme a la Ley y la NOM-035.
                     </p>
 
-                    <h6 style="margin-top: 20px; font-weight: bold; color: #dc3545;">
-                        <i class="fa fa-exclamation-triangle" style="color: #dc3545;"></i> Realización del Cuestionario de Factores de Riesgo Psicosocial
+                    <h6 style="margin-top: 20px; font-weight: bold;">
+                        Realización del Cuestionario de Factores de Riesgo Psicosocial
                     </h6>
 
                     <p style="font-size: 0.9rem; color: #555; font-style: italic;">
                     Completar el cuestionario te tomará aproximadamente 15-
                     30 minutos.
                     </p>
-                    <p style="font-size: 0.9rem; color: #555; font-style: italic;">
-                    Evaluar los factores de riesgo psicosocial, como el
-                    ambiente organizacional, la carga de trabajo, el liderazgo y el entorno
-                    organizacional.
-                    </p>
-                    <p style="font-size: 0.9rem; color: #555; font-style: italic;">
+                    <p style="font-size: 0.9rem; color: #555;">
                     Lee cada pregunta cuidadosamente y responde con sinceridad;
                      <strong>
                      no hay respuestas correctas o incorrectas
                             <br>
-                        </strong>. Este cuestionario es una herramienta
+                        </strong>Este cuestionario es una herramienta
                     para mejorar tu entorno laboral.
                     </p>
                     <p style="font-size: 0.9rem; color: #555;">
