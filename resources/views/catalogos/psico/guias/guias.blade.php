@@ -4774,7 +4774,16 @@
                 <div class="modal-body">
                     <h6>Permiso de uso de cámara web requerido</h6>
                     <p>
-                        Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.
+                    Autorizo a Results In Performance para hacer uso de la cámara web de mi dispositivo durante la evaluación de los Factores de Riesgo Psicosocial. Esta autorización se concede bajo las siguientes condiciones:
+- El uso de la cámara web estará destinado únicamente a la evaluación de Factores de Riesgo Psicosocial, permitiendo la correcta identificación del usuario, la validación de la participación activa y la supervisión del proceso evaluativo en línea.
+- Results se compromete a proteger la confidencialidad de las imágenes y datos personales capturados durante la evaluación, en conformidad con la normativa de protección de datos aplicable y la política de privacidad de la empresa.
+- Las imágenes y cualquier dato capturado durante la evaluación serán utilizados exclusivamente para fines de verificación y registro de la evaluación de Factores de Riesgo Psicosocial, y no serán compartidos ni utilizados para otros propósitos sin autorización previa del usuario.
+- Esta autorización será válida únicamente durante el tiempo que dure la evaluación de los Factores de Riesgo Psicosocial.
+
+                    </p>
+                    <p>
+                    Cualquier duda puede consultar nuestro aviso de privacidad <a href="https://results-in-performance.com/images/2024/Aviso_privacidad.pdf">aquí</a> o ponerse en contacto a través del correo contacto@results-in-performance.com
+
                     </p>
                 </div>
             </div>
