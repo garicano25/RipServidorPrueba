@@ -4693,7 +4693,7 @@
         <div class="modal-dialog modal-lg">
             <div class="modal-content">
                 <div class="modal-header d-flex justify-content-between align-items-center">
-                    <h5 class="modal-title" id="avisoPrivacidadModalLabel">Aviso de Privacidad</h5>
+                    <h5 class="modal-title" id="avisoPrivacidadModalLabel">AVISO DE PRIVACIDAD</h5>
                     <img src="/assets/images/logo-light.png" alt="Imagen de Privacidad" style="width: 150px;">
                 </div>
 
@@ -4767,7 +4767,7 @@
         <div class="modal-dialog modal-lg">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title" id="avisoPermisosModalLabel">Permiso requerido</h5>
+                    <h5 class="modal-title" id="avisoPermisosModalLabel">PERMISO DE USO DE CÁMARA WEB</h5>
                     <img src="/assets/images/logo-light.png" alt="Imagen de Privacidad" style="width: 150px;">
                 </div>
                 <div class="modal-body">
