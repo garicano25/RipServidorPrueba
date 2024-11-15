@@ -4693,7 +4693,7 @@
         <div class="modal-dialog modal-lg">
             <div class="modal-content">
                 <div class="modal-header d-flex justify-content-between align-items-center">
-                    <h5 class="modal-title" id="avisoPrivacidadModalLabel">Aviso de Privacidad y Permisos de Cámara</h5>
+                    <h5 class="modal-title" id="avisoPrivacidadModalLabel">Aviso de Privacidad</h5>
                     <img src="/assets/images/logo-light.png" alt="Imagen de Privacidad" style="width: 150px;">
                 </div>
 
@@ -4703,7 +4703,6 @@
                         Todos los datos personales y respuestas a los cuestionarios serán tratados de
                         forma confidencial y anónima, conforme a la Ley y la NOM-035.
                     </p>
-                    <h3>Aviso de Privacidad</h3>
                     <p>
                     Con fundamento en la Ley Federal de Protección de Datos Personales en Posesión de
                     los Particulares, y en cumplimiento con la Norma Oficial Mexicana NOM-035-STPS-
@@ -4754,7 +4753,7 @@
                     <h6>6. Cambios en el aviso de privacidad</h6>
                     <p>
                     Este Aviso de Privacidad podrá ser modificado para cumplir con cambios en la
-                    normativa aplicable o actualizaciones en las políticas internas de Results In Performance. Las modificaciones estarán disponibles <a href="https://results-in-performance.com/images/2024/Aviso_privacidad.pdf">aquí.</a>
+                    normativa aplicable o actualizaciones en las políticas internas de Results In Performance. Las modificaciones estarán disponibles <a href="https://results-in-performance.com/images/2024/Aviso_privacidad.pdf" target="_blank">aquí.</a>
                     </p>
 
                 </div>
