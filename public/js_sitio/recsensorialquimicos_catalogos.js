@@ -4533,7 +4533,7 @@ function cambiarVolatilidadSustanciaTem(opcion, id,  valor) {
         if (inputValue > 150) {
             $('#' + id).val(1).removeClass('error')
             
-        } else if (inputValue > 50 && inputValue <= 150) {
+        } else if (inputValue >= 50 && inputValue <= 150) {
             $('#' + id).val(2).removeClass('error')
     
         } else if (inputValue < 50) {
