@@ -106,6 +106,9 @@ $('.nav-link').click(function () {
 			$('#tab_3').css('display', 'none');
 			$('#tab_menu4').css('display', 'none');
 			$('#tab_4').css('display', 'none');
+
+			$("button").css("display", "block");
+
 			break;
 		case "tab_menu2":
 			$('#tab_1').css('display', 'none');
@@ -1447,9 +1450,19 @@ $('#tabla_proyectos_internos tbody').on('click', 'td.mostrar', function () {
 	var tr = $(this).closest('tr');
 	var row = datatable_proyectosInternos.row(tr);
 
+	console.log(row.data().proyecto_clonado)
+	//Mostramos o ocultamos los botones dependiendo si el proyecto ya fue clonado o no 
+	if (row.data().proyecto_clonado == 1) {
+		$("button").css("display", "none");
+		$(`#boton_cambiar_proyecto`).removeClass('d-block').addClass('d-none')
+	} else {
+		$("button").css("display", "block");
+		$(`#boton_cambiar_proyecto`).removeClass('d-none').addClass('d-block');
+
+
+	}
 	//Marcamos el proyecto interno
 	$('#proyectoInternoCheck').prop('checked', true).prop('disabled', true);
-	$(`#boton_cambiar_proyecto`).removeClass('d-none').addClass('d-block');
 	$('#proyecto_personaelabora').css('display', 'block').prop('disabled', false);
 	$('#proyecto_contacto').css('display', 'block').prop('disabled', false);
 	$('#PROYECTO_CONTACTO_SELECT').css('display', 'none').prop('disabled', true);
@@ -1782,6 +1795,10 @@ $('#tabla_proyectos_internos tbody').on('click', 'td.mostrar', function () {
 
 	// Limpiar seccion modulo Reporte
 	$('#estructura_reporte').html('<p style="text-align: center; font-size: 24px;">Seleccione un tipo de reporte</p>');
+
+
+
+
 });
 
 
@@ -11082,7 +11099,16 @@ $("#boton_cambiar_proyecto").click(function () {
 					proyectosTotales()
 					tabla_proyecto();
 					
+					// actualiza boton
+					$('#boton_cambiar_proyecto').html('Convertir a Proyecto <i class="fa fa-clone" aria-hidden="true"></i>');
 
+					$("#boton_cambiar_proyecto").prop('disabled', false);
+
+
+					$("button").css("display", "none");
+					$(`#boton_cambiar_proyecto`).removeClass('d-block').addClass('d-none')
+
+					
 					// mensaje
 					swal({
 						title: "Proyecto clonado con exito",
@@ -11094,10 +11120,7 @@ $("#boton_cambiar_proyecto").click(function () {
 						showConfirmButton: true
 					});
 
-					// actualiza boton
-					$('#boton_cambiar_proyecto').html('Convertir a Proyecto <i class="fa fa-clone" aria-hidden="true"></i>');
-
-					$("#boton_cambiar_proyecto").prop('disabled', false);
+					
 
 				},
 				beforeSend: function () {

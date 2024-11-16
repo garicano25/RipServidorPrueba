@@ -1697,6 +1697,14 @@ class proyectoController extends Controller
                 $request['reconocimiento_psico_id'] = null;
                 $request['proyecto_folio'] = null;
 
+                //Al proyecto interno le actualizacimos el campo de proyecto_clonado para que se deshabilite
+                $proyecto_clonado = proyectoModel::findOrFail($request->proyecto_id);
+                $proyecto_clonado->update(['proyecto_clonado' => 1]);
+
+
+
+
+
                 DB::statement('ALTER TABLE proyecto AUTO_INCREMENT=1');
                 $proyectoo = proyectoModel::create($request->all());
 

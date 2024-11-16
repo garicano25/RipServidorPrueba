@@ -55,7 +55,8 @@ class proyectoModel extends Model
         'requiereContrato',
         'cliente_id',
         'tipoServicioCliente',
-        'reconocimiento_psico_id'
+        'reconocimiento_psico_id',
+        'proyecto_clonado'
     ];
 
     //=============== RELACION A TABLAS ===================
