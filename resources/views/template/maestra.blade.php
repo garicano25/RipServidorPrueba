@@ -702,7 +702,7 @@ use Illuminate\Support\Str;
     <script src="https://cdn.jsdelivr.net/npm/@fullcalendar/multimonth@6.1.15/index.global.min.js"></script>
 
     {{-- JS pagina --}}
-    <script src="/js_sitio/cliente.js?v=7.0"></script>
+    <script src="/js_sitio/cliente.js?v=9.0"></script>
     @endif
 
     @if(request()->is('proveedor'))
@@ -760,7 +760,7 @@ use Illuminate\Support\Str;
     <script src="/assets/plugins/Magnific-Popup-master/dist/jquery.magnific-popup.min.js"></script>
     <script src="/assets/plugins/Magnific-Popup-master/dist/jquery.magnific-popup-init.js"></script>
     {{-- pagina --}}
-    <script src="/js_sitio/reconocimiento_sensorial.js?v=15.0"></script>
+    <script src="/js_sitio/reconocimiento_sensorial.js?v=17.0"></script>
     @endif
 
     @if(request()->is('reconocimientoPsicosocial'))
@@ -818,7 +818,7 @@ use Illuminate\Support\Str;
 
     @if(request()->is('recsensorialquimicoscatalogos'))
     <script src="/assets/plugins/datatables/jquery.dataTables.min.js"></script>
-    <script src="/js_sitio/recsensorialquimicos_catalogos.js?v=8.0"></script>
+    <script src="/js_sitio/recsensorialquimicos_catalogos.js?v=10.0"></script>
     <script src="/assets/plugins/datatables/dataTables.rowsGroup.js"></script>
     {{-- Select search filter --}}
     <script src="/assets/plugins/select-search/selectize.js" type="text/javascript"></script>
@@ -961,7 +961,7 @@ use Illuminate\Support\Str;
     <script src='https://cdn.jsdelivr.net/npm/fullcalendar@6.1.15/index.global.min.js'></script>
     <script src="https://cdn.jsdelivr.net/npm/@fullcalendar/multimonth@6.1.15/index.global.min.js"></script>
     {{-- pagina --}}
-    <script src="/js_sitio/proyecto.js?v=6.0"></script>
+    <script src="/js_sitio/proyecto.js?v=8.0"></script>
     @endif
 
 
