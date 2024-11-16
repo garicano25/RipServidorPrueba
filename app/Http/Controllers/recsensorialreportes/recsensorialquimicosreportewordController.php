@@ -375,7 +375,16 @@ class recsensorialquimicosreportewordController extends Controller
         }
 
         //PARTE DEL FOLIO PORTADA
-        $plantillaword->setValue('folio_portada', $recsensorial[0]->recsensorial_folioquimico);
+        if ($numeroVersiones == 0 ) {
+
+            $folio = $recsensorial[0]->recsensorial_folioquimico;
+        } else {
+            $folio = $recsensorial[0]->recsensorial_folioquimico. " - Rev ".$numeroVersiones;
+          
+        }
+        
+
+        $plantillaword->setValue('folio_portada', $folio);
 
         //PARTE DE REALIZADO PARA PORTADA
         $plantillaword->setValue('razon_social_portada', $recsensorial[0]->recsensorial_empresa);
@@ -856,7 +865,7 @@ class recsensorialquimicosreportewordController extends Controller
         $table->addCell(5000, $encabezado_celda)->addTextRun($centrado)->addText('Áreas', $encabezado_texto);
         $table->addCell(5000, $encabezado_celda)->addTextRun($centrado)->addText('Agentes químicos identificados', $encabezado_texto);
         $table->addCell(6000, $encabezado_celda)->addTextRun($centrado)->addText('Fuente generadora', $encabezado_texto);
-        $table->addCell(1500, $encabezado_celda)->addTextRun($centrado)->addText('Cantidad', $encabezado_texto);
+        $table->addCell(1500, $encabezado_celda)->addTextRun($centrado)->addText('Cantidad manejada por jornada de trabajo', $encabezado_texto);
 
         // registros tabla
         $area = 'xxx';

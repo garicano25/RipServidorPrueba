@@ -884,9 +884,6 @@
                                                                             <button type="button" class="btn btn-success me-2 waves-effect waves-light botonnuevo_modulorecsensorial" style="margin: 25px;" data-toggle="tooltip" title="Cargar trabajadores" id="boton_carga_trabajadores" onclick="abrirTrabajadoresExcel()">
                                                                                 <span class="btn-label"><i class="fa fa-file-excel-o"></i></span>Cargar trabajadores y/o muestrear
                                                                             </button>
-                                                                            <button type="button" class="btn btn-primary waves-effect waves-light botonnuevo_modulorecsensorial" style="margin: 25px;" data-toggle="tooltip" title="Cargar trabajadores" id="boton_carga_muestra">
-                                                                                    <span class="btn-label"><i class="fa fa-file-excel-o"></i></span>Cargar muestra de trabajadores
-                                                                            </button>
                                                                         </div>
 
                                                                         <div class="col-12" style="text-align: center;">

@@ -184,7 +184,7 @@ $('#guardar_guia3').on('click', function (e) {
             } else {
                 Swal.fire({
                     title: "Advertencia",
-                    text: "Por favor, completa todas las preguntas de la Guia 1 antes de enviar.",
+                    text: "Por favor, completa todas las preguntas antes de enviar.",
                     icon: "warning",
                     confirmButtonText: "Aceptar"
                 });
@@ -288,10 +288,12 @@ function validacionFechalimiteStatus(fechalimite, estadoCuestionario){
         document.getElementById("aceptarPermisos").addEventListener("click", function () {
             $('#avisoPrivacidadModal').modal('hide');
             $('#avisoPrivacidadModal').on('hidden.bs.modal', function () {
-                if (estadoCuestionario!='En proceso' || estadoCuestionario!='Finalizado' ){
+                if (estadoCuestionario === 'En proceso') {
                     $('#instruccionesModal').modal('show');
-                }else{
+                    console.log('entro aca en instruciones');
+                } else {
                     ejecucionCamara();
+                    console.log('entro aqui en cam');
                 }
             });
         });
@@ -743,6 +745,12 @@ function guia1() {
         document.getElementById("seccion3").style.display = "block";
         document.getElementById("seccion4").style.display = "block";
         $('.ocultas').addClass('divPreguntas');
+        pregunta2No.checked = true;
+        pregunta3No.checked = true;
+        pregunta4No.checked = true;
+        pregunta5No.checked = true;
+        pregunta6No.checked = true;
+        pregunta7No.checked = true;
 
     } else {
         document.getElementById("seccion2").style.display = "none";
@@ -908,11 +916,20 @@ function consultarDatos() {
         success: function (data) {
             if (data) {
                 document.getElementById('loading').style.display = 'none';
-                $('#nombre-trabajador').text(data.RECPSICOTRABAJADOR_NOMBRE || 'No disponible');
-                $('#genero-trabajador').text(data.RECPSICOTRABAJADOR_GENERO || 'No disponible');
-                $('#correo-trabajador').text(data.RECPSICOTRABAJADOR_CORREO || 'No disponible');
-                estadoCuestionario = data.TRABAJADOR_ESTADOCONTESTADO;
-                fechalimite = data.TRABAJADOR_FECHAFIN;
+                $('#nombre-trabajador').text(data['trabajador'].RECPSICOTRABAJADOR_NOMBRE || 'No disponible');
+                $('#genero-trabajador').text(data['trabajador'].RECPSICOTRABAJADOR_GENERO || 'No disponible');
+                $('#correo-trabajador').text(data['trabajador'].RECPSICOTRABAJADOR_CORREO || 'No disponible');
+                estadoCuestionario = data['trabajador'].TRABAJADOR_ESTADOCONTESTADO;
+                fechalimite = data['trabajador'].TRABAJADOR_FECHAFIN;
+
+                $('#nombre-psicologo').text(data['psico'].nombre || 'No disponible');
+                $('#telefono-psicologo').text(data['psico'].telefono || 'No disponible');
+                $('#correo-psicologo').text(data['psico'].correo || 'No disponible');
+
+
+
+
+
                 validacionFechalimiteStatus(fechalimite, estadoCuestionario);
 
             } else {

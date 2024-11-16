@@ -20,17 +20,25 @@ use App\modelos\recsensorial\catsubdireccionModel;
 use App\modelos\recsensorial\catgerenciaModel;
 use App\modelos\recsensorial\catactivoModel;
 use App\modelos\catalogos\Cat_etiquetaModel;
-use App\modelos\catalogos\CatetiquetaopcionesModel; 
+use App\modelos\catalogos\CatetiquetaopcionesModel;
 use App\modelos\clientes\estructuraclientesModel;
-
+use App\modelos\proyecto\proyectoModel;
+use App\modelos\recsensorial\recsensorialModel;
 use DB;
 
 
 
 use Illuminate\Support\Facades\Storage;
 use Image;
+use PhpOffice\PhpSpreadsheet\Spreadsheet;
+use PhpOffice\PhpSpreadsheet\Writer\Xlsx;
+use PhpOffice\PhpSpreadsheet\IOFactory;
+use PhpOffice\PhpSpreadsheet\Style\Alignment;
+use PhpOffice\PhpSpreadsheet\Style\Border;
+use PhpOffice\PhpSpreadsheet\Style\Color;
+use PhpOffice\PhpSpreadsheet\Style\Fill;
+
 // use Artisan;
- 
 
 // plugins PDF
 use Barryvdh\DomPDF\Facade as PDF;
@@ -76,25 +84,8 @@ class clienteController extends Controller
         $opciones = CatetiquetaopcionesModel::where('ETIQUETA_ID', $etiquetaId)->where('ACTIVO', 1)->orderBy('ID_OPCIONES_ETIQUETAS', 'ASC')->get();
         return response()->json($opciones);
     }
-    
-    public function obtenerActividadesCronograma($ID_CONTRATO, $ID_PROYECTO)
-    {
-        if ($ID_PROYECTO == 0){
 
-            $actividades = cronogramaActividadesModel::where('CONTRATO_ID', $ID_CONTRATO)->orderBy('FECHA_INICIO_ACTIVIDAD', 'ASC')->get();
-            $autorizado = autorizacionCronogramaModel::where('CONTRATO_ID', $ID_CONTRATO)->get();
 
-        }else{
-
-            $actividades = cronogramaActividadesModel::where('PROYECTO_ID', $ID_PROYECTO)->orderBy('FECHA_INICIO_ACTIVIDAD', 'ASC')->get();
-            $autorizado = autorizacionCronogramaModel::where('PROYECTO_ID', $ID_PROYECTO)->get();
-
-        }
-        $dato['data']  = $actividades;
-        $dato['autorizado']  = $autorizado;
-        return response()->json($dato);
-
-    }
 
 
     public function obtenerEstructuraCliente($clienteId)
@@ -877,12 +868,489 @@ class clienteController extends Controller
             // respuesta
             $dato["msj"] = 'Actividad eliminada correctamente';
             return response()->json($dato);
-            
         } catch (Exception $e) {
             $dato["msj"] = 'Error ' . $e->getMessage();
             return response()->json($dato);
         }
     }
+
+    public function obtenerActividadesCronograma($ID_CONTRATO, $ID_PROYECTO)
+    {
+        if ($ID_PROYECTO == 0) {
+
+            $actividades = cronogramaActividadesModel::where('CONTRATO_ID', $ID_CONTRATO)->orderBy('FECHA_INICIO_ACTIVIDAD', 'ASC')->get();
+            $autorizado = autorizacionCronogramaModel::where('CONTRATO_ID', $ID_CONTRATO)->get();
+        } else {
+
+            $actividades = cronogramaActividadesModel::where('PROYECTO_ID', $ID_PROYECTO)->orderBy('FECHA_INICIO_ACTIVIDAD', 'ASC')->get();
+            $autorizado = autorizacionCronogramaModel::where('PROYECTO_ID', $ID_PROYECTO)->get();
+        }
+        $dato['data']  = $actividades;
+        $dato['autorizado']  = $autorizado;
+        return response()->json($dato);
+    }
+
+
+    public function generarConcentradoActividades($ID_CONTRATO, $ID_PROYECTO)
+    {
+        if ($ID_PROYECTO == 0) {
+
+            $actividades = cronogramaActividadesModel::where('CONTRATO_ID', $ID_CONTRATO)->orderBy('FECHA_INICIO_ACTIVIDAD', 'ASC')->get();
+            $autorizado = autorizacionCronogramaModel::where('CONTRATO_ID', $ID_CONTRATO)->first();
+            $contrato = clientecontratoModel::where('ID_CONTRATO', $ID_CONTRATO)->first();
+            $cliente = clienteModel::where('id', $contrato->CLIENTE_ID)->first();
+
+
+            // Crear un nuevo archivo de Excel
+            $spreadsheet = new Spreadsheet();
+            $sheet = $spreadsheet->getActiveSheet();
+
+
+
+            function pintarCelda($sheet, $celda, $numero)
+            {
+
+                $style = $sheet->getStyle($celda . $numero);
+                $style->getFill()
+                    ->setFillType(Fill::FILL_SOLID)
+                    ->getStartColor()
+                    ->setRGB('D3D3D3');
+            }
+
+            function pintarCeldaCustom($sheet, $celda, $numero, $color)
+            {
+
+                $style = $sheet->getStyle($celda . $numero);
+                $style->getFill()
+                    ->setFillType(Fill::FILL_SOLID)
+                    ->getStartColor()
+                    ->setRGB($color);
+            }
+
+            function Negritas($sheet, $celda, $numero)
+            {
+                $style = $sheet->getStyle($celda . $numero);
+                $style->getFont()->setBold(true);
+            }
+
+            function ajustarTexto($sheet, $celda, $numero)
+            {
+                $sheet->getStyle($celda . $numero)->getAlignment()->setWrapText(true);
+            }
+
+            function mergeSetValue($sheet, $inicioMerge, $finMerge, $celdaValor, $numero1, $numero2, $valor)
+            {
+                $sheet->mergeCells($inicioMerge . $numero1  . ':' . $finMerge . $numero2);
+                $sheet->setCellValue($celdaValor . $numero1, $valor);
+            }
+            function centrarContenido($sheet, $celda, $numero)
+            {
+                $style = $sheet->getStyle($celda . $numero);
+                $style->getAlignment()->setHorizontal(Alignment::HORIZONTAL_CENTER);
+
+                $style2 = $sheet->getStyle($celda . $numero);
+                $style2->getAlignment()->setVertical(Alignment::VERTICAL_CENTER);
+            }
+
+            mergeSetValue($sheet, 'A', 'E', 'A', 1, 1, 'Cronograma de trabajo');
+            Negritas($sheet, 'A', 1);
+            centrarContenido($sheet, 'A', 1);
+            // Informacion del cliente
+            $sheet->setCellValue('A3', 'Cliente:');
+            pintarCelda($sheet, 'A', 3);
+            $sheet->setCellValue('B3', $cliente->cliente_RazonSocialContrato);
+
+            $sheet->setCellValue('A4', 'No. Contrato:');
+            pintarCelda($sheet, 'A', 4);
+            $sheet->setCellValue('B4', $contrato->NUMERO_CONTRATO);
+
+            $sheet->setCellValue('A5', 'Fecha Inicio:');
+            pintarCelda($sheet, 'A', 5);
+            $sheet->setCellValue('B5', $contrato->FECHA_INICIO);
+            $sheet->setCellValue('C5', 'Fecha Fin:');
+            pintarCelda($sheet, 'C', 5);
+            $sheet->setCellValue('D5', $contrato->FECHA_FIN);
+
+            // Infomacion de validacion del cronojgrama
+            $sheet->setCellValue('A6', 'Validado por:');
+            pintarCelda($sheet, 'A', 6);
+            $validado = $autorizado && !is_null($autorizado->NOMBRE_VALIDACION_CRONOGRAMA)
+                ? $autorizado->NOMBRE_VALIDACION_CRONOGRAMA
+                : 'Sin validar';
+
+            $sheet->setCellValue('B6', $validado);
+
+            $sheet->setCellValue('A7', 'Autorizado por por:');
+            pintarCelda($sheet, 'A', 7);
+            $autorizadoo = $autorizado && !is_null($autorizado->NOMBRE_AUTORIZACION_CRONOGRAMA)
+                ? $autorizado->NOMBRE_AUTORIZACION_CRONOGRAMA
+                : 'Sin autorizar';
+            $sheet->setCellValue('B7', $autorizadoo);
+
+
+            // Esqueleto de las actividades
+            $sheet->setCellValue('A10', 'Actividad');
+            pintarCelda($sheet, 'A', 10);
+
+            $sheet->setCellValue('B10', 'Período actividad');
+            pintarCelda($sheet, 'B', 10);
+
+            $sheet->setCellValue('C10', 'Agente');
+            pintarCelda($sheet, 'C', 10);
+
+            $sheet->setCellValue('D10', 'Puntos');
+            pintarCelda($sheet, 'D', 10);
+
+
+            //Pintamos todo el rango de fechas
+            $fechas = DB::select('CALL obtener_rango_fechas(?,?)',[0, $ID_CONTRATO]);
+            $letra_fecha = 'E';
+            foreach ($fechas as $val) {
+
+                $sheet->setCellValue($letra_fecha . 10, $val->fecha);
+                $sheet->getColumnDimension($letra_fecha)->setAutoSize(true);
+                centrarContenido($sheet, $letra_fecha, 10);
+                pintarCelda($sheet, $letra_fecha, 10);
+
+
+
+
+                $letra_fecha++;
+            }
+           
+
+
+            // Mostramos las actividades
+            #Obtener resultadosa
+            $resultados = DB::select('SELECT a.DESCRIPCION_ACTIVIDAD,
+                                            DATE_FORMAT(a.FECHA_INICIO_ACTIVIDAD, "%Y-%m-%d %H:%i") AS FECHA_INICIO_ACTIVIDAD,
+                                            DATE_FORMAT(a.FECHA_FIN_ACTIVIDAD, "%Y-%m-%d %H:%i") AS FECHA_FIN_ACTIVIDAD,
+                                            DATEDIFF(a.FECHA_FIN_ACTIVIDAD, a.FECHA_INICIO_ACTIVIDAD) AS TOTAL_DIAS,
+                                            CONCAT("Del ",DATE_FORMAT(a.FECHA_INICIO_ACTIVIDAD, "%Y-%m-%d"), " al " ,DATE_FORMAT(a.FECHA_FIN_ACTIVIDAD, "%Y-%m-%d")) PERIODO_ACTIVIDAD,
+                                            
+                                            DATEDIFF( a.FECHA_INICIO_ACTIVIDAD, (SELECT 
+                                                MIN(a.FECHA_INICIO_ACTIVIDAD) 
+                                                FROM
+                                                        cronogramaActividades AS a
+                                                WHERE a.CONTRATO_ID = ?)) AS DIFERENCIA_INICIO,
+                                            
+                                            REPLACE(a.COLOR_ACTIVIDAD, "#", "") AS COLOR_CELDA,
+                                            IFNULL(c.catPrueba_Nombre,"") AS AGENTE_ACTIVIDAD_ID,
+                                            IFNULL(a.PUNTOS_ACTIVIDAD, "") AS PUNTOS_ACTIVIDAD
+                                FROM
+                                    cronogramaActividades as a
+                                LEFT JOIN cat_prueba as c ON c.id = a.AGENTE_ACTIVIDAD_ID
+                                    
+                                WHERE
+                                    a.CONTRATO_ID = ?
+                                ORDER BY
+                                    a.FECHA_INICIO_ACTIVIDAD ASC', [$ID_CONTRATO, $ID_CONTRATO]);
+
+            #Creamos la tabla a partir de la consulta que muestra los resultados
+            $numeroTabla = 11;
+            
+            foreach ($resultados as $val) {
+
+                //Mostamos las actividades, Agentes y puntos por cada una de las actividades
+                $sheet->setCellValue('A' . $numeroTabla, $val->DESCRIPCION_ACTIVIDAD);
+                $sheet->getColumnDimension('A')->setAutoSize(true);
+
+                $sheet->setCellValue('B' . $numeroTabla, $val->PERIODO_ACTIVIDAD);
+                $sheet->getColumnDimension('B')->setAutoSize(true);
+
+
+                $sheet->setCellValue('C' . $numeroTabla, $val->AGENTE_ACTIVIDAD_ID);
+                $sheet->getColumnDimension('C')->setAutoSize(true);
+
+                $sheet->setCellValue('D' . $numeroTabla, $val->PUNTOS_ACTIVIDAD);
+                centrarContenido($sheet, 'D', $numeroTabla);
+
+
+                $letra_actividad = 'E';
+                //Obtenemos la celda de inicio de la actividad dependiendo la diferencia de dias entre la fecha de inicio mas baja y la fecha de inicio de la actividad
+                for ($i = 0; $i <= $val->DIFERENCIA_INICIO; $i++) {
+                    $letra_actividad_sumada = $letra_actividad++;
+                }
+
+                //Pintamos las celdas dependiendo el total de dias
+                for ($i=0; $i <= $val->TOTAL_DIAS; $i++) {
+
+                    pintarCeldaCustom($sheet, $letra_actividad_sumada, $numeroTabla, $val->COLOR_CELDA);
+                    $letra_actividad_sumada++;
+                
+                }
+                
+
+                $numeroTabla++;
+            }
+
+            #Bordeamos toda la tabla
+            $borderStyle = [
+                'borders' => [
+                    'allBorders' => [
+                        'borderStyle' => Border::BORDER_THIN,
+
+                    ],
+                ]
+            ];
+
+            //Aplicamos el Borde a toda la tabla, y le restamos una letra a nuestra variable de letra_fecha usando ascci
+            $sheet->getStyle('A' . 10 . ':' . $letra_fecha . ($numeroTabla - 1))->applyFromArray($borderStyle);
+
+
+
+            // Crear un escritor de tipo Xlsx
+            $writer = new Xlsx($spreadsheet);
+
+
+
+            // ========================= DESCARGAMOS EL ARCHIVO Y LO MANDAMOS AL FRONT PARA DARLE NOMBRE Y QUE EL USUARIO PUEDA VER LA DESCARGA
+            $nombre_descarga = "Concentrado de actividades.xlsx";
+            $writer = IOFactory::createWriter($spreadsheet, 'Xlsx');
+            return response()->stream(
+                function () use ($writer) {
+                    $writer->save('php://output');
+                },
+                200,
+                [
+                    'Content-Type' => 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
+                    'Content-Disposition' => "attachment; filename=\"{$nombre_descarga}\"",
+                ]
+            );
+
+
+        } else {
+
+            $actividades = cronogramaActividadesModel::where('PROYECTO_ID', $ID_PROYECTO)->orderBy('FECHA_INICIO_ACTIVIDAD', 'ASC')->get();
+            $autorizado = autorizacionCronogramaModel::where('PROYECTO_ID', $ID_PROYECTO)->first();
+            $proyecto = proyectoModel::where('id', $ID_PROYECTO)->first();
+
+            // Crear un nuevo archivo de Excel
+            $spreadsheet = new Spreadsheet();
+            $sheet = $spreadsheet->getActiveSheet();
+
+
+
+            function pintarCelda($sheet, $celda, $numero)
+            {
+
+                $style = $sheet->getStyle($celda . $numero);
+                $style->getFill()
+                    ->setFillType(Fill::FILL_SOLID)
+                    ->getStartColor()
+                    ->setRGB('D3D3D3');
+            }
+
+            function pintarCeldaCustom($sheet, $celda, $numero, $color)
+            {
+
+                $style = $sheet->getStyle($celda . $numero);
+                $style->getFill()
+                    ->setFillType(Fill::FILL_SOLID)
+                    ->getStartColor()
+                    ->setRGB($color);
+            }
+
+            function Negritas($sheet, $celda, $numero)
+            {
+                $style = $sheet->getStyle($celda . $numero);
+                $style->getFont()->setBold(true);
+            }
+
+            function ajustarTexto($sheet, $celda, $numero)
+            {
+                $sheet->getStyle($celda . $numero)->getAlignment()->setWrapText(true);
+            }
+
+            function mergeSetValue($sheet, $inicioMerge, $finMerge, $celdaValor, $numero1, $numero2, $valor)
+            {
+                $sheet->mergeCells($inicioMerge . $numero1  . ':' . $finMerge . $numero2);
+                $sheet->setCellValue($celdaValor . $numero1, $valor);
+            }
+            function centrarContenido($sheet, $celda, $numero)
+            {
+                $style = $sheet->getStyle($celda . $numero);
+                $style->getAlignment()->setHorizontal(Alignment::HORIZONTAL_CENTER);
+
+                $style2 = $sheet->getStyle($celda . $numero);
+                $style2->getAlignment()->setVertical(Alignment::VERTICAL_CENTER);
+            }
+
+            mergeSetValue($sheet, 'A', 'E', 'A', 1, 1, 'Cronograma de trabajo');
+            Negritas($sheet, 'A', 1);
+            centrarContenido($sheet, 'A', 1);
+            // Informacion del cliente
+            $sheet->setCellValue('A3', 'Cliente:');
+            pintarCelda($sheet, 'A', 3);
+            $sheet->setCellValue('B3', $proyecto->proyecto_clienterazonsocial);
+
+            $sheet->setCellValue('A4', 'Folio proyecto:');
+            pintarCelda($sheet, 'A', 4);
+            $sheet->setCellValue('B4', $proyecto->proyecto_folio);
+
+            $sheet->setCellValue('A5', 'Instalación:');
+            pintarCelda($sheet, 'A', 5);
+            $sheet->setCellValue('B5', $proyecto->proyecto_clienteinstalacion);
+
+
+            // Infomacion de validacion del cronojgrama
+            $sheet->setCellValue('A6', 'Validado por:');
+            pintarCelda($sheet, 'A', 6);
+            $validado = $autorizado && !is_null($autorizado->NOMBRE_VALIDACION_CRONOGRAMA)
+                ? $autorizado->NOMBRE_VALIDACION_CRONOGRAMA
+                : 'Sin validar';
+
+            $sheet->setCellValue('B6', $validado);
+
+            $sheet->setCellValue('A7', 'Autorizado por por:');
+            pintarCelda($sheet, 'A', 7);
+            $autorizadoo = $autorizado && !is_null($autorizado->NOMBRE_AUTORIZACION_CRONOGRAMA)
+                ? $autorizado->NOMBRE_AUTORIZACION_CRONOGRAMA
+                : 'Sin autorizar';
+            $sheet->setCellValue('B7', $autorizadoo);
+
+
+            // Esqueleto de las actividades
+            $sheet->setCellValue('A10', 'Actividad');
+            pintarCelda($sheet, 'A', 10);
+
+            $sheet->setCellValue('B10', 'Período actividad');
+            pintarCelda($sheet, 'B', 10);
+
+            $sheet->setCellValue('C10', 'Agente');
+            pintarCelda($sheet, 'C', 10);
+
+            $sheet->setCellValue('D10', 'Puntos');
+            pintarCelda($sheet, 'D', 10);
+
+
+            //Pintamos todo el rango de fechas
+            $fechas = DB::select('CALL obtener_rango_fechas(?,?)', [$ID_PROYECTO, 0]);
+            $letra_fecha = 'E';
+            foreach ($fechas as $val) {
+
+                $sheet->setCellValue($letra_fecha . 10, $val->fecha);
+                $sheet->getColumnDimension($letra_fecha)->setAutoSize(true);
+                centrarContenido($sheet, $letra_fecha, 10);
+                pintarCelda($sheet, $letra_fecha, 10);
+
+
+
+
+                $letra_fecha++;
+            }
+
+
+
+            // Mostramos las actividades
+            #Obtener resultadosa
+            $resultados = DB::select('SELECT a.DESCRIPCION_ACTIVIDAD,
+                                            DATE_FORMAT(a.FECHA_INICIO_ACTIVIDAD, "%Y-%m-%d %H:%i") AS FECHA_INICIO_ACTIVIDAD,
+                                            DATE_FORMAT(a.FECHA_FIN_ACTIVIDAD, "%Y-%m-%d %H:%i") AS FECHA_FIN_ACTIVIDAD,
+                                            DATEDIFF(a.FECHA_FIN_ACTIVIDAD, a.FECHA_INICIO_ACTIVIDAD) AS TOTAL_DIAS,
+                                            CONCAT("Del ",DATE_FORMAT(a.FECHA_INICIO_ACTIVIDAD, "%Y-%m-%d"), " al " ,DATE_FORMAT(a.FECHA_FIN_ACTIVIDAD, "%Y-%m-%d")) PERIODO_ACTIVIDAD,
+                                            
+                                            DATEDIFF( a.FECHA_INICIO_ACTIVIDAD, (SELECT 
+                                                MIN(a.FECHA_INICIO_ACTIVIDAD) 
+                                                FROM
+                                                        cronogramaActividades AS a
+                                                WHERE a.PROYECTO_ID = ?)) AS DIFERENCIA_INICIO,
+                                            
+                                            REPLACE(a.COLOR_ACTIVIDAD, "#", "") AS COLOR_CELDA,
+                                            IFNULL(c.catPrueba_Nombre,"") AS AGENTE_ACTIVIDAD_ID,
+                                            IFNULL(a.PUNTOS_ACTIVIDAD, "") AS PUNTOS_ACTIVIDAD
+                                FROM
+                                    cronogramaActividades as a
+                                LEFT JOIN cat_prueba as c ON c.id = a.AGENTE_ACTIVIDAD_ID
+                                    
+                                WHERE
+                                    a.PROYECTO_ID = ?
+                                ORDER BY
+                                    a.FECHA_INICIO_ACTIVIDAD ASC', [$ID_PROYECTO, $ID_PROYECTO]);
+
+            #Creamos la tabla a partir de la consulta que muestra los resultados
+            $numeroTabla = 11;
+
+            foreach ($resultados as $val) {
+
+                //Mostamos las actividades, Agentes y puntos por cada una de las actividades
+                $sheet->setCellValue('A' . $numeroTabla, $val->DESCRIPCION_ACTIVIDAD);
+                $sheet->getColumnDimension('A')->setAutoSize(true);
+
+                $sheet->setCellValue('B' . $numeroTabla, $val->PERIODO_ACTIVIDAD);
+                $sheet->getColumnDimension('B')->setAutoSize(true);
+
+
+                $sheet->setCellValue('C' . $numeroTabla, $val->AGENTE_ACTIVIDAD_ID);
+                $sheet->getColumnDimension('C')->setAutoSize(true);
+
+                $sheet->setCellValue('D' . $numeroTabla, $val->PUNTOS_ACTIVIDAD);
+                centrarContenido($sheet, 'D', $numeroTabla);
+
+
+                $letra_actividad = 'E';
+                //Obtenemos la celda de inicio de la actividad dependiendo la diferencia de dias entre la fecha de inicio mas baja y la fecha de inicio de la actividad
+                for ($i = 0; $i <= $val->DIFERENCIA_INICIO; $i++) {
+                    $letra_actividad_sumada = $letra_actividad++;
+                }
+
+
+               
+
+                //Pintamos las celdas dependiendo el total de dias
+                for ($i = 0; $i <= $val->TOTAL_DIAS; $i++) {
+
+                    pintarCeldaCustom($sheet, $letra_actividad_sumada, $numeroTabla, $val->COLOR_CELDA);
+                    $letra_actividad_sumada++;
+                }
+
+
+                $numeroTabla++;
+            }
+
+            #Bordeamos toda la tabla
+            $borderStyle = [
+                'borders' => [
+                    'allBorders' => [
+                        'borderStyle' => Border::BORDER_THIN,
+
+                    ],
+                ]
+            ];
+
+            //Aplicamos el Borde a toda la tabla, y le restamos una letra a nuestra variable de letra_fecha usando ascci
+            $sheet->getStyle('A' . 10 . ':' . $letra_fecha . ($numeroTabla - 1))->applyFromArray($borderStyle);
+
+
+
+            // Crear un escritor de tipo Xlsx
+            $writer = new Xlsx($spreadsheet);
+
+
+
+            // ========================= DESCARGAMOS EL ARCHIVO Y LO MANDAMOS AL FRONT PARA DARLE NOMBRE Y QUE EL USUARIO PUEDA VER LA DESCARGA
+            $nombre_descarga = "Concentrado de actividades.xlsx";
+            $writer = IOFactory::createWriter($spreadsheet, 'Xlsx');
+            return response()->stream(
+                function () use ($writer) {
+                    $writer->save('php://output');
+                },
+                200,
+                [
+                    'Content-Type' => 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
+                    'Content-Disposition' => "attachment; filename=\"{$nombre_descarga}\"",
+                ]
+            );
+        }
+    }
+
+
+
+
+
+
+
+
 
 
     /**
@@ -893,7 +1361,7 @@ class clienteController extends Controller
      */
     public function store(Request $request)
     {
-        
+
         try {
             // dd($request->all());
 
@@ -1214,7 +1682,7 @@ class clienteController extends Controller
                 }
             }
 
-            
+
             if (($request->opcion + 0) == 12) // CRONOGRAMA DE ACTIVIDADES
             {
                 if (($request->ID_ACTIVIDAD + 0) == 0) {
@@ -1223,7 +1691,6 @@ class clienteController extends Controller
                     cronogramaActividadesModel::create($request->all());
 
                     $dato['msj'] = 'Actividad guardada correctamente';
-
                 } else {
 
                     $partida = cronogramaActividadesModel::findOrFail($request->ID_ACTIVIDAD);
@@ -1244,7 +1711,6 @@ class clienteController extends Controller
                     autorizacionCronogramaModel::create($request->all());
 
                     $dato['msj'] = 'Informacion guardada correctamente';
-                    
                 } else {
 
                     $partida = autorizacionCronogramaModel::findOrFail($request->ID_AUTORIZACION);
@@ -1256,7 +1722,6 @@ class clienteController extends Controller
 
                 return response()->json($dato);
             }
-
         } catch (Exception $e) {
 
             return response()->json('Error al guardar CLIENTE');

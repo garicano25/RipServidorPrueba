@@ -196,7 +196,7 @@ class proyectoController extends Controller
                 // }
 
                 //MOSTRAMOS LOS SERVICIOS QUE TIENE EL PROYECTOS
-                if ((is_null($value->HI) && is_null($value->ERGO) && is_null($value->PSICO)) || ($value->HI == 0 && $value->ERGO == 0 && $value->PSICO == 0)) {
+                if ((is_null($value->HI) && is_null($value->ERGO) && is_null($value->PSICO) && is_null($value->SEGURIDAD)) || ($value->HI == 0 && $value->ERGO == 0 && $value->PSICO == 0 && $value->SEGURIDAD == 0)) {
 
                     $value->servicios = '<span class="badge badge-pill badge-danger p-2" style="font-size:12px">Sin servicios</span>';
                 } else {
@@ -207,7 +207,9 @@ class proyectoController extends Controller
 
                     $psico = $value->PSICO == 1 ? '<li>Psicosocial</li>' : '';
 
-                    $value->servicios = $hi . $ergo . $psico;
+                    $seguridad = $value->SEGURIDAD == 1 ? '<li>Seguridad Industrial</li>' : '';
+
+                    $value->servicios = $hi . $ergo . $psico . $seguridad;
                 }
 
 
@@ -368,7 +370,10 @@ class proyectoController extends Controller
                 // }
 
                 //MOSTRAMOS LOS SERVICIOS QUE TIENE EL PROYECTOS
-                if ((!is_null($value->HI) && !is_null($value->ERGO) && !is_null($value->PSICO)) || ($value->HI == 0 && $value->ERGO == 0 && $value->PSICO == 0)) {
+                if ((is_null($value->HI) && is_null($value->ERGO) && is_null($value->PSICO) && is_null($value->SEGURIDAD)) || ($value->HI == 0 && $value->ERGO == 0 && $value->PSICO == 0 && $value->SEGURIDAD == 0)) {
+
+                    $value->servicios = '<span class="badge badge-pill badge-danger p-2" style="font-size:12px">Sin servicios</span>';
+                } else {
 
                     $hi = $value->HI == 1 ? '<li>Higiene Industrial</li>' : '';
 
@@ -376,10 +381,9 @@ class proyectoController extends Controller
 
                     $psico = $value->PSICO == 1 ? '<li>Psicosocial</li>' : '';
 
-                    $value->servicios = $hi . $ergo . $psico;
-                } else {
+                    $seguridad = $value->SEGURIDAD == 1 ? '<li>Seguridad Industrial</li>' : '';
 
-                    $value->servicios = '<span class="badge badge-pill badge-danger p-2" style="font-size:12px">Sin servicios</span>';
+                    $value->servicios = $hi . $ergo . $psico . $seguridad;
                 }
 
 
@@ -439,30 +443,30 @@ class proyectoController extends Controller
 
 
             // crear campos NOMBRE Y ESTADO
-            $count = 1;     
+            $count = 1;
             foreach ($usuarios as $key => $value) {
 
-                
+
                 $value->count = $count;
-                
+
                 $hi = $value->SERVICIO_HI == 1 ? '<li>Higiene Industrial </li>' : '';
                 $pscio = $value->SERVICIO_PSICO == 1 ? '<li> FR. Psicosocial </li>' : '';
                 $ergo = $value->SERVICIO_ERGO == 1 ? '<li> FR. Ergonimico </li>' : '';
+                
 
                 $value->servicios = $hi . $pscio . $ergo;
 
                 // Checkbox estado
                 if ($value->ACTIVO == 1) {
-                    $value->CheckboxEstado = '<div class="switch"><label><input type="checkbox" checked onclick="cambia_estado_usuario(' . $value->ID_PROYECTO_USUARIO . ','. $value->ACTIVO .');"><span class="lever switch-col-light-blue"></span></label></div>';
+                    $value->CheckboxEstado = '<div class="switch"><label><input type="checkbox" checked onclick="cambia_estado_usuario(' . $value->ID_PROYECTO_USUARIO . ',' . $value->ACTIVO . ');"><span class="lever switch-col-light-blue"></span></label></div>';
                     $value->boton_editar = '<button type="button" class="btn btn-warning btn-circle editar" id="editarUsuario_' . $value->ID_PROYECTO_USUARIO . '"><i class="fa fa-pencil"></i></button>';
-                    
+
                     $value->estado = '<div class="text-success"><i class="fa fa-eercast fw" aria-hidden="true"></i> Usuario activo</div>';
                 } else {
-                    $value->CheckboxEstado = '<div class="switch"><label><input type="checkbox" onclick="cambia_estado_usuario(' . $value->ID_PROYECTO_USUARIO . ', '. $value->ACTIVO.');"><span class="lever switch-col-light-blue"></span></label></div>';
+                    $value->CheckboxEstado = '<div class="switch"><label><input type="checkbox" onclick="cambia_estado_usuario(' . $value->ID_PROYECTO_USUARIO . ', ' . $value->ACTIVO . ');"><span class="lever switch-col-light-blue"></span></label></div>';
                     $value->boton_editar = '<button type="button" class="btn btn-secondary btn-circle" id="editarUsuario_' . $value->ID_PROYECTO_USUARIO . '"><i class="fa fa-ban"></i></button>';
 
                     $value->estado = '<div class="text-danger"><i class="fa fa-eercast fw" aria-hidden="true"></i> Usuario bloqueado</div>';
-
                 }
 
                 $count++;
@@ -1393,46 +1397,36 @@ class proyectoController extends Controller
     }
 
 
+   
 
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
     public function store(Request $request)
     {
         try {
-            // dd($request->all());
-
-            // formatear fecha
-            // $request['proyecto_fechainicio'] = Carbon::createFromFormat('d-m-Y', $request['proyecto_fechainicio'])->format('Y-m-d');
-            // $request['proyecto_fechafin'] = Carbon::createFromFormat('d-m-Y', $request['proyecto_fechafin'])->format('Y-m-d');
-            // $request['proyecto_fechaelaboracion'] = Carbon::createFromFormat('d-m-Y', $request['proyecto_fechaelaboracion'])->format('Y-m-d');
-            if($request->api == 1){
+         
+            if ($request->api == 1) {
 
                 if (($request->proyecto_id + 0) == 0) //NUEVO PROYECTO
                 {
-    
+
                     // acccion
                     $request['proyecto_puntosrealesactivo'] = 1;
                     $request['proyecto_bitacoraactivo'] = 1;
                     $request['proyecto_concluido'] = 0;
                     $request['proyecto_eliminado'] = 0;
                     $request['solicitudOS'] = 0;
-    
+
                     DB::statement('ALTER TABLE proyecto AUTO_INCREMENT=1');
                     $proyectoo = proyectoModel::create($request->all());
-    
-    
+
+
                     // Folios siguientes
                     $ano = (date('y')) + 0;
                     $proyecto_folio = "";
-    
-    
+
+
                     // folio proyecto
                     if (intval($request->proyectoInterno) == 0) { //ASIGNAMOS UN FOLIO NORMAL
-    
+
                         //Buscamos los proyectos Internos
                         $folio = DB::select('SELECT
                                             (COUNT(proyecto.proyecto_folio)+42) AS nuevo_folio_proyecto
@@ -1441,8 +1435,8 @@ class proyectoController extends Controller
                                         WHERE
                                             proyecto.proyectoInterno = 0
                                             AND DATE_FORMAT(proyecto.created_at, "%Y") = DATE_FORMAT(CURDATE(), "%Y")');
-    
-    
+
+
                         switch ($folio[0]->nuevo_folio_proyecto) {
                             case ($folio[0]->nuevo_folio_proyecto < 10):
                                 $proyecto_folio = "RES-PJ-" . $ano . "-00" . $folio[0]->nuevo_folio_proyecto;
@@ -1455,8 +1449,8 @@ class proyectoController extends Controller
                                 break;
                         }
                     } else { // ASIGNAMOS UN FOLIO INTERNO 
-    
-    
+
+
                         $folio = DB::select('SELECT
                                             (COUNT(proyecto.proyecto_folio)+42) AS nuevo_folio_proyecto
                                         FROM
@@ -1464,7 +1458,7 @@ class proyectoController extends Controller
                                         WHERE
                                             proyecto.proyectoInterno = 1
                                             AND DATE_FORMAT(proyecto.created_at, "%Y") = DATE_FORMAT(CURDATE(), "%Y")');
-    
+
                         switch ($folio[0]->nuevo_folio_proyecto) {
                             case ($folio[0]->nuevo_folio_proyecto < 10):
                                 $proyecto_folio = "RES-PI-" . $ano . "-00" . $folio[0]->nuevo_folio_proyecto;
@@ -1477,16 +1471,16 @@ class proyectoController extends Controller
                                 break;
                         }
                     }
-    
+
                     // actualizar folio
                     $proyectoo->update([
                         'proyecto_folio' => $proyecto_folio
                     ]);
-    
-    
+
+
                     //GUARDAMOS LOS TIPOS DEL
                     if ($request['HI']) {
-    
+
                         serviciosProyectoModel::create([
                             'PROYECTO_ID' => $proyectoo->id,
                             'HI' => isset($request['HI']) ? $request['HI'] : 0,
@@ -1503,48 +1497,55 @@ class proyectoController extends Controller
                             'PSICO_PROGRAMA' => isset($request['PSICO_PROGRAMA']) ? $request['PSICO_PROGRAMA'] : 0,
                             'PSICO_RECONOCIMIENTO' => isset($request['PSICO_RECONOCIMIENTO']) ? $request['PSICO_RECONOCIMIENTO'] : 0,
                             'PSICO_EJECUCION' => isset($request['PSICO_EJECUCION']) ? $request['PSICO_EJECUCION'] : 0,
-                            'PSICO_INFORME' => isset($request['PSICO_INFORME']) ? $request['PSICO_INFORME'] : 0
+                            'PSICO_INFORME' => isset($request['PSICO_INFORME']) ? $request['PSICO_INFORME'] : 0,
+                            'SEGURIDAD' => isset($request['SEGURIDAD']) ? $request['PSICO'] : 0,
+                            'SEGURIDAD_PROGRAMA' => isset($request['SEGURIDAD_PROGRAMA']) ? $request['SEGURIDAD_PROGRAMA'] : 0,
+                            'SEGURIDAD_RECONOCIMIENTO' => isset($request['SEGURIDAD_RECONOCIMIENTO']) ? $request['SEGURIDAD_RECONOCIMIENTO'] : 0,
+                            'SEGURIDAD_EJECUCION' => isset($request['SEGURIDAD_EJECUCION']) ? $request['SEGURIDAD_EJECUCION'] : 0,
+                            'SEGURIDAD_INFORME' => isset($request['SEGURIDAD_INFORME']) ? $request['SEGURIDAD_INFORME'] : 0
                         ]);
                     }
-    
-    
+
+
                     //GUARDAMOS LA ESTRUCTURA DEL PROYECTO
                     if ($request['TIENE_ESTRUCTURA'] == 1) {
                         foreach ($request->ETIQUETA_ID as $key => $value) {
-    
+
                             estructuraProyectosModel::create([
                                 'PROYECTO_ID' => $proyectoo->id,
                                 'ETIQUETA_ID' => $value,
                                 'OPCION_ID' => $request->OPCION_ID[$key],
                                 'NIVEL' => $request->NIVEL[$key]
-    
+
                             ]);
                         }
                     }
-    
-    
-    
+
+
+
                     $proyecto = proyectoModel::with(['recsensorial', 'recsensorial.cliente', 'recsensorial.catregion', 'recsensorial.catgerencia', 'recsensorial.catactivo'])->findOrFail($proyectoo->id);
+
+
                 } else //PROYECTO EDITADO
                 {
                     // Consulta proyecto
                     $proyecto = proyectoModel::findOrFail($request->proyecto_id);
-    
+
                     // Actualizar y consultar datos del proyecto
                     $proyecto->update($request->all());
-    
+
                     //VALIDAMOS SI EL PROYECTO TIENE UN RECONOCIMIENTO VINCULADO EN ESE CASO VALIDAMOS LOS DATOS DEL PROYECTO Y LOS EDITAMOS PARA EL RECONOCIMIENTO
                     if (!is_null($proyecto->recsensorial_id)) {
-    
+
                         // Reconocimiento seleccionado
                         $recsensorial = recsensorialModel::findOrFail($proyecto->recsensorial_id);
                         $contrato = clientecontratoModel::findOrFail($proyecto->contrato_id);
                         $descripcion_contrato = is_null($contrato->NUMERO_CONTRATO) ? $contrato->DESCRIPCION_CONTRATO : '[ ' . $contrato->NUMERO_CONTRATO . ' ]' . $contrato->DESCRIPCION_CONTRATO;
-    
-    
+
+
                         // Modificar dependiendo si la informacion cargada en el reconocimiento es para el cliente seleccionado o no
                         if ($recsensorial->informe_del_cliente == 1) {
-    
+
                             $recsensorial->update([
                                 'cliente_id' => $contrato->CLIENTE_ID,
                                 'contrato_id' => $proyecto->contrato_id,
@@ -1555,10 +1556,10 @@ class proyectoController extends Controller
                                 'recsensorial_instalacion' => $proyecto->proyecto_clienteinstalacion,
                                 'recsensorial_direccion' => $proyecto->proyecto_clientedireccionservicio,
                                 'recsensorial_representanteseguridad' => $proyecto->proyecto_clientepersonadirigido
-    
+
                             ]);
                         } else {
-    
+
                             $recsensorial->update([
                                 'cliente_id' => $contrato->CLIENTE_ID,
                                 'contrato_id' => $proyecto->contrato_id,
@@ -1567,15 +1568,15 @@ class proyectoController extends Controller
                             ]);
                         }
                     }
-    
-    
+
+
                     // if ($proyecto->recsensorial_id) // VALIDAR SI HAY RECONOCIMIENTO Y SI ES EL MISMO (YA EL RECONOCIMIENTO NO SE VINCULA EN PROYECTO SI NO EN RECONOCIMINETO)
                     // {
                     //     if ($proyecto->recsensorial_id == $request->recsensorial_id) // MISMO RECONOCIMIENTO
                     //     {
                     //         // Reconocimiento seleccionado
                     //         $recsensorial = recsensorialModel::findOrFail($proyecto->recsensorial_id);
-    
+
                     //         // Modificar
                     //         $recsensorial->update([
                     //             'recsensorial_fisicosimprimirbloqueado' => 0, 'recsensorial_quimicosimprimirbloqueado' => 0, 'recsensorial_bloqueado' => 0, 'proyecto_id' => $proyecto->proyecto_folio
@@ -1584,27 +1585,27 @@ class proyectoController extends Controller
                     //     {
                     //         // Reconocimiento anterior
                     //         $recsensorial = recsensorialModel::findOrFail($proyecto->recsensorial_id);
-    
+
                     //         // Modificar
                     //         $recsensorial->update([
                     //             'recsensorial_fisicosimprimirbloqueado' => 0, 'recsensorial_quimicosimprimirbloqueado' => 0, 'recsensorial_bloqueado' => 0, 'proyecto_id' => null,
                     //         ]);
-    
+
                     //         // Reconocimiento actual
                     //         $recsensorial = recsensorialModel::findOrFail($request->recsensorial_id);
-    
+
                     //         // Modificar
                     //         $recsensorial->update([
                     //             'recsensorial_fisicosimprimirbloqueado' => 0, 'recsensorial_quimicosimprimirbloqueado' => 0, 'recsensorial_bloqueado' => 0, 'proyecto_id' => $proyecto->proyecto_folio
                     //         ]);
                     //     }
                     // }
-    
-    
+
+
                     //Actualizamos los servicios del proyecto
                     $eliminar_columnas = serviciosProyectoModel::where('PROYECTO_ID', $request->proyecto_id)->delete();
                     if ($request['HI']) {
-    
+
                         serviciosProyectoModel::create([
                             'PROYECTO_ID' => $proyecto->id,
                             'HI' => isset($request['HI']) ? $request['HI'] : 0,
@@ -1621,61 +1622,172 @@ class proyectoController extends Controller
                             'PSICO_PROGRAMA' => isset($request['PSICO_PROGRAMA']) ? $request['PSICO_PROGRAMA'] : 0,
                             'PSICO_RECONOCIMIENTO' => isset($request['PSICO_RECONOCIMIENTO']) ? $request['PSICO_RECONOCIMIENTO'] : 0,
                             'PSICO_EJECUCION' => isset($request['PSICO_EJECUCION']) ? $request['PSICO_EJECUCION'] : 0,
-                            'PSICO_INFORME' => isset($request['PSICO_INFORME']) ? $request['PSICO_INFORME'] : 0
+                            'PSICO_INFORME' => isset($request['PSICO_INFORME']) ? $request['PSICO_INFORME'] : 0,
+                            'SEGURIDAD' => isset($request['SEGURIDAD']) ? $request['SEGURIDAD'] : 0,
+                            'SEGURIDAD_PROGRAMA' => isset($request['SEGURIDAD_PROGRAMA']) ? $request['SEGURIDAD_PROGRAMA'] : 0,
+                            'SEGURIDAD_RECONOCIMIENTO' => isset($request['SEGURIDAD_RECONOCIMIENTO']) ? $request['SEGURIDAD_RECONOCIMIENTO'] : 0,
+                            'SEGURIDAD_EJECUCION' => isset($request['SEGURIDAD_EJECUCION']) ? $request['SEGURIDAD_EJECUCION'] : 0,
+                            'SEGURIDAD_INFORME' => isset($request['SEGURIDAD_INFORME']) ? $request['SEGURIDAD_INFORME'] : 0
                         ]);
                     }
-    
-    
+
+
                     //Actualizamos la estructura del proyecto
                     $eliminar_columnass = estructuraProyectosModel::where('PROYECTO_ID', $request->proyecto_id)->delete();
                     if ($request['TIENE_ESTRUCTURA'] == 1) {
                         foreach ($request->ETIQUETA_ID as $key => $value) {
-    
+
                             estructuraProyectosModel::create([
                                 'PROYECTO_ID' => $proyecto->id,
                                 'ETIQUETA_ID' => $value,
                                 'OPCION_ID' => $request->OPCION_ID[$key],
                                 'NIVEL' => $request->NIVEL[$key]
-    
+
                             ]);
                         }
                     }
-    
-    
+
+
                     $proyecto = proyectoModel::with(['recsensorial', 'recsensorial.cliente', 'recsensorial.catregion', 'recsensorial.catgerencia', 'recsensorial.catactivo'])->findOrFail($request->proyecto_id);
                     // mensaje
                     $dato["msj"] = 'Informacion modificada correctamente';
                 }
             
-            }else{
+            // ===================== Asignacion de usuarios =========================
+            } elseif ($request->api == 2){
 
                 $total = DB::select('SELECT COUNT(ID_PROYECTO_USUARIO) AS ASIGNADO
                                     FROM proyectoUsuarios
                                     WHERE USUARIO_ID = ?
-                                    AND PROYECTO_ID = ?',[$request->USUARIO_ID , $request->PROYECTO_ID]);
+                                    AND PROYECTO_ID = ?', [$request->USUARIO_ID, $request->PROYECTO_ID]);
 
-                if($request->ID_PROYECTO_USUARIO == 0){
+                if ($request->ID_PROYECTO_USUARIO == 0) {
 
-                    if($total[0]->ASIGNADO == 0){
+                    if ($total[0]->ASIGNADO == 0) {
 
                         $proyecto = ProyectoUsuariosModel::create($request->all());
-                    }else{
+                    } else {
 
                         return response()->json('El usuario ya esta asignado al proyecto', 500);
-
                     }
-                
-                }else{
+                } else {
 
                     $proyecto = ProyectoUsuariosModel::findOrFail($request->ID_PROYECTO_USUARIO);
-                    $request['SERVICIO_HI'] = isset($request['SERVICIO_HI']) ? $request['SERVICIO_HI'] : 0; 
-                    $request['SERVICIO_PSICO'] = isset($request['SERVICIO_PSICO']) ? $request['SERVICIO_PSICO'] : 0; 
-                    $request['SERVICIO_ERGO'] = isset($request['SERVICIO_ERGO']) ? $request['SERVICIO_ERGO'] : 0; 
+                    $request['SERVICIO_HI'] = isset($request['SERVICIO_HI']) ? $request['SERVICIO_HI'] : 0;
+                    $request['SERVICIO_PSICO'] = isset($request['SERVICIO_PSICO']) ? $request['SERVICIO_PSICO'] : 0;
+                    $request['SERVICIO_ERGO'] = isset($request['SERVICIO_ERGO']) ? $request['SERVICIO_ERGO'] : 0;
                     $proyecto->update($request->all());
                 }
 
                 //Realizamos la asignacion de usuarios
                 return response()->json($proyecto);
+            
+
+            // ================== Clonacion de proyectos =================================
+            }elseif($request->api == 3){
+
+                // acccion
+                $request['proyecto_puntosrealesactivo'] = 1;
+                $request['proyecto_bitacoraactivo'] = 1;
+                $request['proyecto_concluido'] = 0;
+                $request['proyecto_eliminado'] = 0;
+                $request['solicitudOS'] = 0;
+                $request['proyectoInterno'] = 0;
+                $request['recsensorial_id'] = null;
+                $request['reconocimiento_psico_id'] = null;
+                $request['proyecto_folio'] = null;
+
+                //Al proyecto interno le actualizacimos el campo de proyecto_clonado para que se deshabilite
+                $proyecto_clonado = proyectoModel::findOrFail($request->proyecto_id);
+                $proyecto_clonado->update(['proyecto_clonado' => 1]);
+
+
+
+
+
+                DB::statement('ALTER TABLE proyecto AUTO_INCREMENT=1');
+                $proyectoo = proyectoModel::create($request->all());
+
+
+                $ano = (date('y')) + 0;
+                $proyecto_folio = "";
+
+                //Buscamos los proyectos 
+                $folio = DB::select('SELECT
+                                (COUNT(proyecto.proyecto_folio)+42) AS nuevo_folio_proyecto
+                            FROM
+                                proyecto
+                            WHERE
+                                proyecto.proyectoInterno = 0
+                                AND DATE_FORMAT(proyecto.created_at, "%Y") = DATE_FORMAT(CURDATE(), "%Y")');
+
+
+                switch (($folio[0]->nuevo_folio_proyecto + 2)) {
+                    case ($folio[0]->nuevo_folio_proyecto < 10):
+                        $proyecto_folio = "RES-PJ-" . $ano . "-00" . $folio[0]->nuevo_folio_proyecto;
+                        break;
+                    case ($folio[0]->nuevo_folio_proyecto < 100):
+                        $proyecto_folio = "RES-PJ-" . $ano . "-0" . $folio[0]->nuevo_folio_proyecto;
+                        break;
+                    default:
+                        $proyecto_folio = "RES-PJ-" . $ano . "-" . $folio[0]->nuevo_folio_proyecto;
+                        break;
+                }
+
+                $proyectoo->update([
+                    'proyecto_folio' => $proyecto_folio
+                ]);
+
+                //GUARDAMOS LOS TIPOS DEL
+                if ($request['HI']) {
+
+                    serviciosProyectoModel::create([
+                        'PROYECTO_ID' => $proyectoo->id,
+                        'HI' => isset($request['HI']) ? $request['HI'] : 0,
+                        'HI_PROGRAMA' => isset($request['HI_PROGRAMA']) ? $request['HI_PROGRAMA'] : 0,
+                        'HI_RECONOCIMIENTO' => isset($request['HI_RECONOCIMIENTO']) ? $request['HI_RECONOCIMIENTO'] : 0,
+                        'HI_EJECUCION' => isset($request['HI_EJECUCION']) ? $request['HI_EJECUCION'] : 0,
+                        'HI_INFORME' => isset($request['HI_INFORME']) ? $request['HI_INFORME'] : 0,
+                        'ERGO' => isset($request['ERGO']) ? $request['ERGO'] : 0,
+                        'ERGO_PROGRAMA' => isset($request['ERGO_PROGRAMA']) ? $request['ERGO_PROGRAMA'] : 0,
+                        'ERGO_RECONOCIMIENTO' => isset($request['ERGO_RECONOCIMIENTO']) ? $request['ERGO_RECONOCIMIENTO'] : 0,
+                        'ERGO_EJECUCION' => isset($request['ERGO_EJECUCION']) ? $request['ERGO_EJECUCION'] : 0,
+                        'ERGO_INFORME' => isset($request['ERGO_INFORME']) ? $request['ERGO_INFORME'] : 0,
+                        'PSICO' => isset($request['PSICO']) ? $request['PSICO'] : 0,
+                        'PSICO_PROGRAMA' => isset($request['PSICO_PROGRAMA']) ? $request['PSICO_PROGRAMA'] : 0,
+                        'PSICO_RECONOCIMIENTO' => isset($request['PSICO_RECONOCIMIENTO']) ? $request['PSICO_RECONOCIMIENTO'] : 0,
+                        'PSICO_EJECUCION' => isset($request['PSICO_EJECUCION']) ? $request['PSICO_EJECUCION'] : 0,
+                        'PSICO_INFORME' => isset($request['PSICO_INFORME']) ? $request['PSICO_INFORME'] : 0,
+                        'SEGURIDAD' => isset($request['SEGURIDAD']) ? $request['PSICO'] : 0,
+                        'SEGURIDAD_PROGRAMA' => isset($request['SEGURIDAD_PROGRAMA']) ? $request['SEGURIDAD_PROGRAMA'] : 0,
+                        'SEGURIDAD_RECONOCIMIENTO' => isset($request['SEGURIDAD_RECONOCIMIENTO']) ? $request['SEGURIDAD_RECONOCIMIENTO'] : 0,
+                        'SEGURIDAD_EJECUCION' => isset($request['SEGURIDAD_EJECUCION']) ? $request['SEGURIDAD_EJECUCION'] : 0,
+                        'SEGURIDAD_INFORME' => isset($request['SEGURIDAD_INFORME']) ? $request['SEGURIDAD_INFORME'] : 0
+                    ]);
+                }
+
+
+                //GUARDAMOS LA ESTRUCTURA DEL PROYECTO
+                if ($request['TIENE_ESTRUCTURA'] == 1) {
+                    foreach ($request->ETIQUETA_ID as $key => $value) {
+
+                        estructuraProyectosModel::create([
+                            'PROYECTO_ID' => $proyectoo->id,
+                            'ETIQUETA_ID' => $value,
+                            'OPCION_ID' => $request->OPCION_ID[$key],
+                            'NIVEL' => $request->NIVEL[$key]
+
+                        ]);
+                    }
+                }
+
+
+                // DB::select('CALL clonacionProyectoInterno(?)', [$proyectoo->id]);
+
+                $dato["msj"] = 'Proyecto clonado';
+                return response()->json($dato);
+
+
             }
 
             // respuesta
@@ -1729,7 +1841,7 @@ class proyectoController extends Controller
     {
         try {
             // Proyecto
-            $proyecto = proyectoModel::findOrFail($proyecto_id); 
+            $proyecto = proyectoModel::findOrFail($proyecto_id);
 
             // Guardar cambios
             $proyecto->solicitudOS = intval($valor);

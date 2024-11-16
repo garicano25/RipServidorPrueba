@@ -96,7 +96,7 @@ class ejecucionPsicoController extends Controller
             else if($value->ESTADOCORREO == null){
                 $value->TRABAJADOR_ESTADOCORREO = '<span class="badge badge-pill badge-danger" style="font-size: 12px">Sin enviar</span>';
             }else{
-                $value->TRABAJADOR_ESTADOCORREO = '<span class="badge badge-pill badge-success" style="font-size: 12px">'. $value->ESTADOCORREO .'</span>';
+                $value->TRABAJADOR_ESTADOCORREO = '<span class="badge badge-pill badge-verde" style="font-size: 12px">'. $value->ESTADOCORREO .'</span>';
                     
             }
             
@@ -117,13 +117,14 @@ class ejecucionPsicoController extends Controller
                     $value->TRABAJADOR_ESTADOCONTESTADO = '<span class="badge badge-pill badge-danger" style="font-size: 12px">Sin iniciar</span>';
                 
             }else{
-                $value->TRABAJADOR_ESTADOCONTESTADO = '<span class="badge badge-pill badge-success" style="font-size: 12px">' . $value->ESTADOCONTESTADO . '</span>';
+                $value->TRABAJADOR_ESTADOCONTESTADO = '<span class="badge badge-pill badge-verde" style="font-size: 12px">' . $value->ESTADOCONTESTADO . '</span>';
             }
-            
 
 
             $value->boton_enviarCorreo = '<button type="button" class="btn btn-warning btn-circle enviarcorreo" id="enviarCorreoTrabajador'.$count.'" name="enviarCorreoTrabajador" onclick="enviarCorreo('.$value->TRABAJADOR_ID.', '.$value->RECPSICO_ID.')" style="padding: 0px;"><i class="fa fa-paper-plane "></i></button>';
-            }
+            $value->boton_guardarCambios = '<button type="button" class="btn btn-danger btn-circle guardarCambios" id="guardarCambiosTrabajador'.$value->TRABAJADOR_ID.'" name="guardarCambiosTrabajador" onclick="guardarCambios('.$value->TRABAJADOR_ID.', '.$value->RECPSICO_ID.')" style="padding: 0px;"><i class="fa fa-save"></i></button>';
+            
+        }
         }
 
 
@@ -215,6 +216,45 @@ class ejecucionPsicoController extends Controller
 
     }
 
+             /**
+     * Display the specified resource.
+     *
+     * @return \Illuminate\Http\Response
+     * @param  \Illuminate\Http\Request  $request
+     */
+     
+     public function guardarCambiosTrabajador(Request $request)
+     {
+         try {
+         $datosJson = $request->input('datos');
+ 
+         $datos = json_decode($datosJson, true); 
+ 
+         if (json_last_error() !== JSON_ERROR_NONE) {
+             return response()->json(['error' => 'Error al decodificar JSON: ' . json_last_error_msg()], 400);
+         }
+     
+             $actualizarFechasOnlineTrabajador = DB::update('UPDATE proyectotrabajadores 
+             SET TRABAJADOR_FECHAINICIO = ?, TRABAJADOR_FECHAFIN = ?
+             WHERE TRABAJADOR_ID = ?', 
+             [$datos['fechaInicio'], $datos['fechaFin'], $datos['trabajadorId']]
+            );
+
+             $actualizarCorreoOnlineTrabajador = DB::update('UPDATE recopsicotrabajadores
+             SET RECPSICOTRABAJADOR_CORREO = ?
+             WHERE ID_RECOPSICOTRABAJADOR = ?', 
+             [$datos['trabajadorCorreo'], $datos['trabajadorId']]
+            );
+ 
+            $response = ["msj" => 'Datos guardados correctamente'];
+             return response()->json($response);
+         } catch (Exception $e) {
+            $response = ["msj" => 'Error: ' . $e->getMessage()];
+            return response()->json($response);
+         }
+ 
+     }
+
 
     public function envioGuia($tipo, $idPersonal, $idRecsensorial){
         try {
@@ -261,7 +301,24 @@ class ejecucionPsicoController extends Controller
 
                 $encryptedId = Crypt::encrypt($idPersonal);
 
-                Mail::to($correo)->send(new sendGuiaPsico($nombre, $encryptedGuia1, $encryptedGuia2, $encryptedGuia3, $encryptedGuia5, $encryptedstatus, $encryptedfechalimite, $encryptedId, $dias));
+
+
+                // Obtenemos la informacion de uno de los Psicologos asignado
+                $proyecto = DB::select('SELECT id
+                                FROM proyecto 
+                                WHERE reconocimiento_psico_id = ?', [$idRecsensorial]);
+
+
+                $psicoInfo = DB::select('SELECT IFNULL(s.signatario_Nombre, "NA") as info
+                                FROM proyectosignatariosactual p
+                                LEFT JOIN signatario s ON s.id = p.signatario_id
+                                WHERE p.proyecto_id = ?
+                                LIMIT 1', [$proyecto[0]->id]);
+                $psico = $psicoInfo[0]->info;
+
+
+
+                Mail::to($correo)->send(new sendGuiaPsico($nombre, $encryptedGuia1, $encryptedGuia2, $encryptedGuia3, $encryptedGuia5, $encryptedstatus, $encryptedfechalimite, $encryptedId, $dias, $psico));
             
                 //cambiar el estado de envio de correo en el registro deltrabajador
                 DB::table('proyectotrabajadores')

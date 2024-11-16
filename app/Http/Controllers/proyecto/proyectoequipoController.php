@@ -208,7 +208,7 @@ class proyectoequipoController extends Controller
                                                 proveedor 
                                                 INNER JOIN equipo ON proveedor.id = equipo.proveedor_id 
                                             WHERE
-                                                proveedor.id = 1
+                                                proveedor.id = 2
                                             GROUP BY
                                                 proveedor.id,
                                                 proveedor.proveedor_NombreComercial,

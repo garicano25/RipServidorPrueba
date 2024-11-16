@@ -48,6 +48,11 @@
         margin: 0px !important;
         font-size: 16px !important;
     }
+
+    .badge-verde {
+        background-color: green;
+        color: white; 
+    }
 </style>
 
 
@@ -187,6 +192,7 @@
                                 </div>
                             </div>
                             <!--form panels-->
+                            <div id="csrf-token" style="display: none;">{{ csrf_token() }}</div>
                             <div class="col-12" style="text-align: center;">
                                 <div class="table-responsive">
                                     <table class="table table-bordered table-hover stylish-table" width="100%" id="tabla_trabajadores_online">
@@ -200,8 +206,8 @@
                                                 <th class="sorting_disabled text-center" rowspan="1" colspan="1">Estado del correo</th>
                                                 <th class="sorting_disabled text-center" rowspan="1" colspan="1">Estado de cuestionario</th>
                                                 <th class="sorting_disabled text-center" rowspan="1" colspan="1">Enviar link del cuestionario</th>
+                                                <th class="sorting_disabled text-center" rowspan="1" colspan="1">Guardar cambios</th>
                                                 <th style="display: none;">TRABAJADOR_ID</th>
-
                                             </tr>
                                         </thead>
                                         <tbody></tbody>

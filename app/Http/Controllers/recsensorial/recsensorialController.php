@@ -70,7 +70,7 @@ use App\modelos\proyecto\proyectoModel;
 date_default_timezone_set('America/Mexico_City');
 
 
-class recsensorialController extends Controller 
+class recsensorialController extends Controller
 {
     public function __construct()
     {
@@ -263,16 +263,16 @@ class recsensorialController extends Controller
     }
 
 
-    public function validacionAsignacionUser($folio){
+    public function validacionAsignacionUser($folio)
+    {
         try {
 
             if (auth()->user()->hasRoles(['Administrador', 'Superusuario'])) {
 
                 $next = 1;
+            } else {
 
-            } else{
-
-                $user = auth()->user()->id; 
+                $user = auth()->user()->id;
 
                 $permiso = DB::select("SELECT COUNT(u.ID_PROYECTO_USUARIO) AS PERMISO
                                         FROM proyectoUsuarios u
@@ -283,14 +283,12 @@ class recsensorialController extends Controller
                                         AND u.USUARIO_ID = ?", [$folio, $user]);
 
                 $next = $permiso[0]->PERMISO;
-
             }
 
-        
+
             $dato['permisos'] = $next;
             $dato["msj"] = 'Datos consultados correctamente';
             return response()->json($dato);
-
         } catch (Exception $e) {
             $dato["msj"] = 'Error ' . $e->getMessage();
             $dato['opciones'] = "No encontradas";
@@ -1050,7 +1048,6 @@ class recsensorialController extends Controller
 
             $dato["data"] = $datos;
             return response()->json($dato);
-
         } catch (Exception $e) {
 
             $dato["msj"] = 'Error ' . $e->getMessage();
@@ -1288,12 +1285,12 @@ class recsensorialController extends Controller
 
 
 
-// DESCARGAR ZIP
+    // DESCARGAR ZIP
 
     public function verZIP($opcion, $ID)
     {
         $documento = controlCambiosModel::findOrFail($ID);
-        $filePath = storage_path('app/' . $documento->RUTA_ZIP); 
+        $filePath = storage_path('app/' . $documento->RUTA_ZIP);
 
         if (!file_exists($filePath)) {
             abort(404, 'Archivo no encontrado.');
@@ -1323,13 +1320,13 @@ class recsensorialController extends Controller
             ORDER BY NUMERO_VERSIONES DESC
             LIMIT 1
         ", [$id]);
-    
+
         if ($registro) {
             $permitido = $registro[0]->CANCELADO == 1;
             return response()->json([
                 'permitido' => $permitido,
-                'mensaje' => $permitido 
-                    ? 'Se puede generar una nueva revisión.' 
+                'mensaje' => $permitido
+                    ? 'Se puede generar una nueva revisión.'
                     : 'No disponible: Para generar una nueva revisión, debe cancelar la revisión más reciente.'
             ]);
         } else {
@@ -1339,8 +1336,8 @@ class recsensorialController extends Controller
             ]);
         }
     }
-    
-    
+
+
 
 
 
@@ -1348,9 +1345,9 @@ class recsensorialController extends Controller
 
     //  VERIFICAR QUE ESTE BLOQUEADO 
 
-        public function verificarBloqueado($id)
-        {
-            $registro = DB::select("
+    public function verificarBloqueado($id)
+    {
+        $registro = DB::select("
                 SELECT BLOQUEADO
                 FROM controlCambios
                 WHERE RECONOCIMIENTO_ID = ? 
@@ -1358,43 +1355,50 @@ class recsensorialController extends Controller
                 LIMIT 1
             ", [$id]);
 
-            if ($registro) {
-                return response()->json(['BLOQUEADO' => $registro[0]->BLOQUEADO]);
-            } else {
-                return response()->json(['BLOQUEADO' => 0]);
-            }
+        if ($registro) {
+            return response()->json(['BLOQUEADO' => $registro[0]->BLOQUEADO]);
+        } else {
+            return response()->json(['BLOQUEADO' => 0]);
         }
+    }
 
 
 
-        public function actualizarEstadoCancelado(Request $request)
-        {
-            try {
-                $id = $request->input('id');
-                $cancelado = $request->input('cancelado');
-                $bloqueado = $request->input('bloqueado');
+    public function actualizarEstadoCancelado(Request $request)
+    {
+        try {
+            $id = $request->input('id');
+            $cancelado = $request->input('cancelado');
+            $bloqueado = $request->input('bloqueado');
+
+            if ($cancelado == 1){
                 $userId = Auth::user()->id;
 
-                DB::table('controlCambios')
-                    ->where('ID_CONTROL_CAMBIO', $id)
-                    ->update([
-                        'CANCELADO' => $cancelado,
-                        'BLOQUEADO' => $bloqueado,
-                        'CANCELADO_POR' => $userId,
-                        'updated_at' => now()
-                    ]);
+            }else{
+                $userId = null;
 
-                return response()->json([
-                    'success' => true,
-                    'message' => 'Estado actualizado correctamente.'
-                ]);
-            } catch (Exception $e) {
-                return response()->json([
-                    'success' => false,
-                    'message' => 'Error: ' . $e->getMessage()
-                ]);
             }
+
+            DB::table('controlCambios')
+                ->where('ID_CONTROL_CAMBIO', $id)
+                ->update([
+                    'CANCELADO' => $cancelado,
+                    'BLOQUEADO' => $bloqueado,
+                    'CANCELADO_POR' => $userId,
+                    'updated_at' => now()
+                ]);
+
+            return response()->json([
+                'success' => true,
+                'message' => 'Estado actualizado correctamente.'
+            ]);
+        } catch (Exception $e) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Error: ' . $e->getMessage()
+            ]);
         }
+    }
 
 
 
@@ -1410,41 +1414,40 @@ class recsensorialController extends Controller
             $ultimaVersion = DB::table('controlCambios')
                 ->where('RECONOCIMIENTO_ID', $recsensorial_id)
                 ->max('NUMERO_VERSIONES');
-    
+
             // Cambios
             $cambios = DB::select("SELECT c.ID_CONTROL_CAMBIO, 
-                                        CONCAT(er.empleado_nombre, ' ', er.empleado_apellidopaterno, ' ', er.empleado_apellidomaterno) AS REALIZADO_POR,
-                                        IF(c.CANCELADO = 1, CONCAT(CONCAT(er.empleado_nombre, ' ', er.empleado_apellidopaterno, ' ', er.empleado_apellidomaterno), '<br>', DATE_FORMAT(c.updated_at, '%Y-%m-%d %H:%i:%s')), NULL) AS CANCELADO_POR,
-                                        DESCRIPCION_REALIZADO AS CAMBIOS,
-                                        c.created_at AS FECHA_REALIZADO,
-                                        IFNULL(CONCAT(ea.empleado_nombre, ' ', ea.empleado_apellidopaterno, ' ', ea.empleado_apellidomaterno), 'SIN AUTORIZAR') AS AUTORIZADO_ID,
-                                        IF(c.AUTORIZADO = 0, '--', DATE_FORMAT(c.updated_at, '%Y-%m-%d %H:%i:%s')) AS FECHA_AUTORIZADO,
-                                        c.AUTORIZADO,
-                                        c.CANCELADO,
-                                        c.NUMERO_VERSIONES
-                        FROM controlCambios c
-                        LEFT JOIN usuario ur ON ur.id = c.REALIZADO_ID
-                        LEFT JOIN usuario ua ON ua.id = c.AUTORIZADO_ID
-                        LEFT JOIN empleado er ON er.id = ur.empleado_id
-                        LEFT JOIN empleado ea ON ea.id = ua.empleado_id
-                        WHERE c.RECONOCIMIENTO_ID = ?", [$recsensorial_id]);
-    
+                                    CONCAT(er.empleado_nombre, ' ', er.empleado_apellidopaterno, ' ', er.empleado_apellidomaterno) AS REALIZADO_POR,
+                                    c.created_at AS FECHA_REALIZADO,
+                                    IFNULL(CONCAT(ea.empleado_nombre, ' ', ea.empleado_apellidopaterno, ' ', ea.empleado_apellidomaterno), '--') AS CANCELADO_POR,
+                                    IF(c.AUTORIZADO = 0, '--', DATE_FORMAT(c.updated_at, '%Y-%m-%d %H:%i:%s')) AS FECHA_AUTORIZADO,
+                                    c.AUTORIZADO,
+                                    c.CANCELADO,
+                                    c.NUMERO_VERSIONES,
+                                    c.CANCELADO_COMENTARIO
+                    FROM controlCambios c
+                    LEFT JOIN usuario ur ON ur.id = c.REALIZADO_ID
+                    LEFT JOIN usuario ua ON ua.id = c.CANCELADO_POR
+                    LEFT JOIN empleado er ON er.id = ur.empleado_id
+                    LEFT JOIN empleado ea ON ea.id = ua.empleado_id
+                    WHERE c.RECONOCIMIENTO_ID = ?", [$recsensorial_id]);
+
             $COUNT = 0;
             foreach ($cambios as $key => $value) {
                 $value->COUNT = $COUNT++;
-    
+
                 // Botón de descarga
                 if ($value->NUMERO_VERSIONES == $ultimaVersion) {
 
-                    $value->boton_descargar = '<button type="button" class="btn btn-success btn-circle" onclick="reporte(form_recsensorial.recsensorial_id.value, 2, this, 3, '.$value->NUMERO_VERSIONES.');"><i class="fa fa-download"></i></button>';
+                    $value->boton_descargar = '<button type="button" class="btn btn-success btn-circle" onclick="reporte(form_recsensorial.recsensorial_id.value, 2, this, 3, ' . $value->NUMERO_VERSIONES . ');"><i class="fa fa-download"></i></button>';
                 } else {
                     $value->boton_descargar = '<button type="button" class="btn btn-success btn-circle descargar"><i class="fa fa-download"></i></button>';
                 }
-    
+
                 // Estado del checkbox
                 $checked = $value->CANCELADO == 1 ? 'checked' : '';
                 $disabled = ($value->NUMERO_VERSIONES == $ultimaVersion) ? '' : 'disabled';
-    
+
                 if (auth()->user()->hasRoles(['Superusuario', 'Administrador'])) {
                     $value->checkbox_cancelado = '<div class="switch" data-toggle="tooltip" title="Solo Administradores y Coordinadores">
                                                     <label>
@@ -1461,7 +1464,7 @@ class recsensorialController extends Controller
                                                   </div>';
                 }
             }
-    
+
             // Respuesta
             $dato['data'] = $cambios;
             $dato["msj"] = 'Información consultada correctamente';
@@ -1472,10 +1475,10 @@ class recsensorialController extends Controller
             return response()->json($dato);
         }
     }
-    
-    
 
-    
+
+
+
 
     public function estructuraproyectos($FOLIO)
     {
@@ -2336,43 +2339,44 @@ class recsensorialController extends Controller
                 }
             }
 
-                   
-            
-            if (($request->opcion + 0) == 8) { 
+
+
+            if (($request->opcion + 0) == 8) {
                 $ultimoRegistro = controlCambiosModel::where('RECONOCIMIENTO_ID', $request['RECONOCIMIENTO_ID'])
-                                                     ->orderByDesc('NUMERO_VERSIONES')
-                                                     ->first();
-            
+                    ->orderByDesc('NUMERO_VERSIONES')
+                    ->first();
+
                 $numeroVersiones = $ultimoRegistro ? $ultimoRegistro->NUMERO_VERSIONES + 1 : 0;
-            
+
                 // Almacenar nombreInstalacion en la sesión
                 session(['nombreInstalacion' => $request->input('nombreInstalacion', 'NombrePorDefecto')]);
-            
+
                 $data = [
                     'NUMERO_VERSIONES' => $numeroVersiones,
                     'DESCRIPCION_REALIZADO' => $ultimoRegistro ? '' : 'Documento inicial',
                     'AUTORIZADO' => 0,
                     'REALIZADO_ID' => Auth::user()->id,
-                    'RECONOCIMIENTO_ID' => $request['RECONOCIMIENTO_ID']
+                    'RECONOCIMIENTO_ID' => $request['RECONOCIMIENTO_ID'],
+                    'CANCELADO_COMENTARIO' => $request['cambios_realizados']
                 ];
-            
+
                 $zipController = new recsensorialquimicosreportewordController();
-                $rutaZip = $zipController->recsensorialquimicosreporte1word($request['RECONOCIMIENTO_ID'], 2, $numeroVersiones,0);
-                
+                $rutaZip = $zipController->recsensorialquimicosreporte1word($request['RECONOCIMIENTO_ID'], 2, $numeroVersiones, 0);
+
                 $data['RUTA_ZIP'] = $rutaZip;
-            
+
                 $documento = controlCambiosModel::create($data);
-            
+
                 // Responder con éxito
                 $dato["MSJ"] = 'BIEN';
                 $dato["DOC"] = $documento;
-            
+
                 return response()->json($dato);
             }
-            
-          
-            
-            
+
+
+
+
             if (($request->opcion + 0) == 9) // GUARDAR O ACTUALIZAR INFORMACION PARA EL LA TABLA DEL INFORME DE LOS PUNTOS SOLICITADOS POR EL CLIENTE
             {
                 if ($request['NUEVO'] == 1) //nuevo
@@ -2440,7 +2444,6 @@ class recsensorialController extends Controller
                     }
                 }
                 $dato["msj"] = 'Recomendaciones guardadas con exito';
-
             }
             return response()->json($dato);
         } catch (Exception $e) {

@@ -68,6 +68,23 @@ class recopsiconormativaController extends Controller
         return response()->json($trabajadores);
     }
 
+        /**
+     * Store a newly created resource in storage.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @return \Illuminate\Http\Response
+     */
+  
+     public function recopsiconormativadatos($RECPSICO_ID)
+     {
+         
+         $normativa = recopsiconormativaModel::where('RECPSICO_ID', $RECPSICO_ID)
+             ->select('ID_RECOPSICONORMATIVA', 'RECPSICO_GUIAI', 'RECPSICO_GUIAII', 'RECPSICO_GUIAIII', 'RECPSICO_TOTALTRABAJADORES', 'RECPSICO_TIPOAPLICACION', 'RECPSICO_TOTALAPLICACION', 'RECPSICO_GENEROS', 'RECPSICO_PORCENTAJEHOMBRESTRABAJO', 'RECPSICO_PORCENTAJEMUJERESTRABAJO', 'RECPSICO_TOTALHOMBRESTRABAJO', 'RECPSICO_TOTALMUJERESTRABAJO', 'RECPSICO_TOTALHOMBRESSELECCION', 'RECPSICO_TOTALMUJERESSELECCION')
+             ->get();
+ 
+         return response()->json($normativa);
+     }
+
     
      /**
      * Store a newly created resource in storage.

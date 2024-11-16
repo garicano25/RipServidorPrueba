@@ -102,6 +102,9 @@ Route::get('obtenerActividadesCronograma/{ID_CONTRATO}/{ID_PROYECTO}', ['as' => 
 
 Route::get('eliminarActividadCronograma/{id}', ['as' => 'eliminarActividadCronograma', 'uses' => 'clientes\clienteController@eliminarActividadCronograma']);
 
+Route::get('generarConcentradoActividades/{id_contrato}/{id_proyecto}', ['as' => 'generarConcentradoActividades', 'uses' => 'clientes\clienteController@generarConcentradoActividades']);
+
+
 Route::get('/estructura-cliente/{clienteId}', ['as' => 'cliente.obtenerEstructuraCliente', 'uses' => 'clientes\clienteController@obtenerEstructuraCliente']);
 
 
@@ -879,7 +882,7 @@ Route::get('proyectobloqueo/{proyecto_id}/{proyecto_estado}', ['as' => 'proyecto
 
 Route::get('proyectoSolicitarOS/{proyecto_id}/{valor}', ['as' => 'proyectos.proyectoSolicitarOS', 'uses' => 'proyecto\proyectoController@proyectoSolicitarOS']);
 
-
+Route::get('clonarProyectoInterno/{proyecto_id}', ['as' => 'proyectos.clonarProyectoInterno', 'uses' => 'proyecto\proyectoController@clonarProyectoInterno']);
 
 //==============================================
 
@@ -1883,6 +1886,7 @@ Route::get('recopsicoareacategorias/{reconocimientopsico_id}', ['as' => 'recsens
 Route::get('recopsicoareacategoriaselegidas/{area_id}', ['as' => 'recsensorialarea.recsensorialareacategoriaselegidas', 'uses' => 'recsensorial\recsensorialareaController@recsensorialareacategoriaselegidas']);
 
 Route::resource('recopsiconormativa', 'PSICO\recopsiconormativaController');
+Route::get('/datosnormativa/{reconocimientopsico_id}', ['as' => 'recopsiconormativa.recopsiconormativadatos', 'uses' => 'PSICO\recopsiconormativaController@recopsiconormativadatos']);
 Route::get('recopsicotrabajadorescargados/{reconocimientopsico_id}', ['as' => 'recopsicotrabajadores.recopsicotrabajadoresCargadosTabla', 'uses' => 'PSICO\recopsiconormativaController@recopsicotrabajadoresCargadosTabla']);
 
 
@@ -1917,6 +1921,11 @@ Route::get('trabajadoresPresencialEjecucionPsico/{proyecto_id}', ['as' => 'PSICO
 Route::get('ejecuciontrabajadoresnombres', ['as' => 'ejecucionpsico.trabajadoresNombres', 'uses' => 'PSICO\ejecucionPsicoController@trabajadoresNombres']);
 
 Route::put('actualizarFechasOnline', ['as' => 'PSICO.actualizarFechasOnline', 'uses' => 'PSICO\ejecucionPsicoController@actualizarFechasOnline']);
+
+Route::put('guardarCambiosTrabajador', ['as' => 'PSICO.guardarCambiosTrabajador', 'uses' => 'PSICO\ejecucionPsicoController@guardarCambiosTrabajador']);
+
+
+
 
 //================INFORMES
 Route::resource('informesPsicosocial', 'PSICO\informesrecoPsicoController');
@@ -1967,7 +1976,12 @@ Route::resource('guardarGuiasPsico', 'PSICO\guiasController');
 Route::resource('biblioteca', 'biblioteca\bibliotecaController');
 Route::get('obtenerInfoBliblioteca/{clasificacion}/{titulo}', ['as' => 'biblioteca.listaBiblioteca', 'uses' => 'biblioteca\bibliotecaController@listaBiblioteca']);
 Route::get('listaBibliotecaText/{clasificacion}/{titulo}', ['as' => 'biblioteca.listaBiblioteca', 'uses' => 'biblioteca\bibliotecaController@listaBibliotecaText']);
+
 Route::get('bibliotecapdf/{documento_id}', ['as' => 'biblioteca.bibliotecapdf', 'uses' => 'biblioteca\bibliotecaController@bibliotecapdf']);
+
+Route::get('consultaLibro/{id}', ['as' => 'biblioteca.consultaLibro', 'uses' => 'biblioteca\bibliotecaController@consultaLibro']);
+
+Route::get('eliminarLibro/{id}', ['as' => 'biblioteca.eliminarLibro', 'uses' => 'biblioteca\bibliotecaController@eliminarLibro']);
 
 //CATÁLOGOS
 Route::resource('recpsicocatalogos', 'PSICO\recpsicocatalogosController');

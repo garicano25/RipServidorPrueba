@@ -21,7 +21,7 @@
 
     @endif
 
-    <p>En caso de cualquier inquietud o información adicional que requiera, por favor no dude en contactarnos al XXXXXXXXXXXXXX (nombre del psicólogo asignado???)</p>
+    <p>En caso de cualquier inquietud o información adicional que requiera, por favor no dude en contactarnos al 999 357 8332 ({{ $psico }})</p>
     <p>Cordialmente,</p>
     <p>Coordinación de evaluación del FRP</p>
 

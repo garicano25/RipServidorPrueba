@@ -7,6 +7,7 @@ var recsensorial_alcancefisico = 0;
 var recsensorial_alcancequimico = 0;
 var recsensorial_errorvalidacion = 0;
 var proyecto_bloqueado = 0;
+var proyecto_combinado = 0;
 
 // Data tables
 var datatable_programaTrabajo = null;
@@ -336,6 +337,10 @@ $('#tabla_programa_trabajo tbody').on('click', 'td>button.mostrar', function () 
 
 	recsensorial_errorvalidacion = 0;
 	Menureportes_contador = 0;
+
+	//1 si tiene higiene y 0 si solo es psico
+	proyecto_combinado = row.data().PROYECTO_COMBINADO;
+
 
 	//DIV NOMBRE DEL PROYECTO
 	$('.div_programa_proyecto').html(row.data().FOLIO);

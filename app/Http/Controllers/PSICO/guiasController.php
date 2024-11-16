@@ -68,13 +68,31 @@ class guiasController extends Controller
         $idTrabajador = $request->input('id_trabajador');
 
         $trabajador = DB::select("
-            SELECT r.RECPSICOTRABAJADOR_NOMBRE RECPSICOTRABAJADOR_NOMBRE, r.RECPSICOTRABAJADOR_GENERO RECPSICOTRABAJADOR_GENERO, r.RECPSICOTRABAJADOR_CORREO RECPSICOTRABAJADOR_CORREO, p.TRABAJADOR_ESTADOCONTESTADO TRABAJADOR_ESTADOCONTESTADO, p.TRABAJADOR_FECHAFIN TRABAJADOR_FECHAFIN
+            SELECT r.RECPSICOTRABAJADOR_NOMBRE RECPSICOTRABAJADOR_NOMBRE, r.RECPSICOTRABAJADOR_GENERO RECPSICOTRABAJADOR_GENERO, r.RECPSICOTRABAJADOR_CORREO RECPSICOTRABAJADOR_CORREO, p.TRABAJADOR_ESTADOCONTESTADO TRABAJADOR_ESTADOCONTESTADO, p.TRABAJADOR_FECHAFIN TRABAJADOR_FECHAFIN, r.RECPSICO_ID
             FROM recopsicotrabajadores r LEFT JOIN proyectotrabajadores p ON r.ID_RECOPSICOTRABAJADOR = p.TRABAJADOR_ID
             WHERE ID_RECOPSICOTRABAJADOR = :idTrabajador
         ", ['idTrabajador' => $idTrabajador]);
 
+
+    // Obtenemos la informacion de un psicolo asigano
+        $proyecto = DB::select('SELECT id
+                                FROM proyecto 
+                                WHERE reconocimiento_psico_id = ?', [$trabajador[0]->RECPSICO_ID]);
+
+        $psicoInfo = DB::select('SELECT IFNULL(s.signatario_Nombre, "NA") as nombre,
+                                        IFNULL(s.signatario_Telefono, "NA") as telefono,
+                                        IFNULL(s.signatario_Correo, "NA") as correo
+                                FROM proyectosignatariosactual p
+                                LEFT JOIN signatario s ON s.id = p.signatario_id
+                                WHERE p.proyecto_id = ?
+                                LIMIT 1', [$proyecto[0]->id]);
+     
+
         if (!empty($trabajador)) {
-            return response()->json($trabajador[0]); 
+            $dato['trabajador'] = $trabajador[0];
+            $dato['psico'] = $psicoInfo[0];
+
+            return response()->json($dato); 
         }
 
         return response()->json(['error' => 'No se encontraron datos para este trabajador'], 404);

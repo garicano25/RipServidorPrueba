@@ -136,7 +136,7 @@ class proyectoVehiculoController extends Controller
                                         proveedor
                                         INNER JOIN vehiculo ON proveedor.id = vehiculo.proveedor_id 
                                     WHERE
-                                        proveedor.id = 1
+                                        proveedor.id = 2
                                     GROUP BY
                                         proveedor.id,
                                         proveedor.proveedor_NombreComercial,
