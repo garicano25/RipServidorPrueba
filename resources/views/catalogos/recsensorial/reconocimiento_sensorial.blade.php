@@ -794,7 +794,7 @@
                                                                                                 }
                                                                                             </style>
                                                                                             <input type="file" accept="image/jpeg,image/x-png,image/gif" id="inputfotoplano" name="inputfotoplano" data-allowed-file-extensions="jpg png JPG PNG" data-height="300" data-default-file="" required />
-                                                                                          
+
 
                                                                                         </div>
                                                                                     </div>
@@ -2897,7 +2897,7 @@
                                 <div class="tab-pane" id="tab4_cambios" role="tabpanel">
                                     <div class="card-body">
                                         @if(auth()->user()->hasRoles(['Superusuario','Reconocimiento', 'ApoyoTecnico']))
-                                        
+
                                         <!--  <form enctype="multipart/form-data" method="post" name="form_controlCambios" id="form_controlCambios">
 
                                             {!! csrf_field() !!}
@@ -2944,14 +2944,14 @@
                                         </form>  -->
                                         @endif
 
-                                      
+
 
                                         <ol class="breadcrumb" style="padding: 6px; margin: 10px 0px;">
-                                            <button type="button" class="btn btn-default waves-effect" data-toggle="tooltip" title="Nueva revisión" id="boton_descargarquimicosdoc_final" onclick="reporte(form_recsensorial.recsensorial_id.value, 2, this, 2);">
+                                            <button type="button" class="btn btn-default waves-effect" data-toggle="tooltip" title="Nueva revisión" id="boton_descargarquimicosdoc_final">
                                                 <span class="btn-label"><i class="fa fa-plus"></i></span>Crear nueva revisión
                                             </button>
                                         </ol>
-                                        
+
                                         <div class="table-responsive" style="max-height: 410px!important;">
                                             <table class="table table-hover stylish-table mt-1" width="100%" id="tabla_control_cambios">
                                                 <thead>
@@ -2959,6 +2959,7 @@
                                                         <th>Versión</th>
                                                         <th>Realizado por</th>
                                                         <th>Fecha</th>
+                                                        <th style="width: 425px!important;">Cambios realizados</th>
                                                         <th>Cancelado</th>
                                                         <th>Cancelado por:</th>
                                                         <th>Descargar</th>
@@ -4025,7 +4026,7 @@
                             <div class="form-group">
                                 <label> Fecha de nacimiento *</label>
                                 <div class="input-group">
-                                    <input type="text" class="form-control mydatepicker" placeholder="aaaa-mm-dd" id="FECHA_NACIMIENTO_BEI" name="FECHA_NACIMIENTO" >
+                                    <input type="text" class="form-control mydatepicker" placeholder="aaaa-mm-dd" id="FECHA_NACIMIENTO_BEI" name="FECHA_NACIMIENTO">
                                     <span class="input-group-addon"><i class="icon-calender"></i></span>
                                 </div>
                             </div>
@@ -4080,6 +4081,43 @@
 
 <!-- ============================================================== -->
 <!-- /MODALES BEI -->
+<!-- ============================================================== -->
+
+
+
+<!-- ============================================================== -->
+<!-- MODAL CONTROL DE CAMBIOS -->
+<!-- ============================================================== -->
+<div id="modal_revision" class="modal fade bs-example-modal-lg" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" style="display: none;">
+    <div class="modal-dialog modal-lg" style="min-width: 60%;">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                <h4 class="modal-title">Control de cambios</h4>
+            </div>
+            <div class="modal-body">
+                <div class="row">
+                    <div class="col-12">
+                        <div class="form-group">
+                            <label> Especifique el motivo de esta revisión (Cambios realizados)</label>
+                            <textarea class="form-control" rows="4" id="cambios_realizados" name="cambios_realizados"></textarea>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default waves-effect" data-dismiss="modal">Cerrar</button>
+                @if(auth()->user()->hasRoles(['Superusuario', 'Administrador', 'Coordinador']))
+                <button type="button" class="btn btn-info waves-effect waves-light" id="creacion_revision_model" onclick="reporte(form_recsensorial.recsensorial_id.value, 2, this, 2);">
+                    Realizar revisión <i class="fa fa-check"></i>
+                </button>
+                @endif
+            </div>
+        </div>
+    </div>
+</div>
+<!-- ============================================================== -->
+<!-- /MODAL CONTROL DE CAMBIOS -->
 <!-- ============================================================== -->
 
 
