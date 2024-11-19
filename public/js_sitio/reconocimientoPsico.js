@@ -11,6 +11,7 @@ var areacategorias_total = 0;
 var recsensorial_perfil = 0;
 var recsensorial = 0;
 var normativa_id = 0;
+var tabla = null;
 
 //--------------------------------------------------CARGA PRINCIPAL---------------------------------------------------------//
 $(document).ready(function () {
@@ -107,6 +108,30 @@ $(document).ready(function () {
 	});
 });
 $(document).ready(function() {
+	tabla = $('#tabla_trabajadores_cargados').DataTable({
+        "language": {
+            "url": "//cdn.datatables.net/plug-ins/1.10.25/i18n/Spanish.json"
+        },
+        "columns": [
+            { "data": "numero"},
+            { "data": "nombre"},
+            { "data": "muestra",
+            	"render": function(data, type, row) {
+                if (data == 0) {
+                    return '<i class="fa fa-times-circle fa-2x text-danger"></i>'; 
+                } else if (data == 1) {
+                    return '<i class="fa fa-check-circle fa-2x text-success"></i>'; 
+                } else {
+                    return data;
+				}
+			}
+		}
+        ],
+        "columnDefs": [
+            { "orderable": false, "targets": [0, 1, 2] }
+        ]
+    });
+ 
 	$("#boton_cargarTrabajadores").click(function() {
 		var guardar = 0;
 		var recpsico_id = $("#recsensorial_id").val();
@@ -194,7 +219,7 @@ $(document).ready(function() {
 								
 								if (dato.code == 200) {
 
-									cargarTrabajadores(recpsico_id);
+									cargarTrabajadores(recpsico_id, tabla);
 									// cerrar modal
 									$('#modal_cargarTrabajadores').modal('hide');
 
@@ -636,7 +661,6 @@ $('.link_menuprincipal').click(function () {
 			$("#tab_1").css('display', 'none');
 
 			$("#steps_menu_tab1").click();
-
 		break;
 		default:
 			break;
@@ -656,8 +680,15 @@ $('.multisteps-form__progress-btn').click(function () {
 			$('#form_normativa').each(function () {
 				this.reset();
 			});
-			cargarTrabajadores($("#recsensorial_id").val());
+			cargarTrabajadores($("#recsensorial_id").val(), tabla);
 			datosNormativa($("#recsensorial_id").val());
+		break;
+		case "steps_menu_tab5":
+			// $('#form_normativa').each(function () {
+			// 	this.reset();
+			// });
+			// cargarTrabajadores($("#recsensorial_id").val());
+			// datosNormativa($("#recsensorial_id").val());
 		break;
 		default:
 		break;
@@ -699,13 +730,12 @@ $("#boton_nuevo_reconocimiento").click(function () {
 	$("#tab_menu5").css('display', 'none');
 	$("#tab_menu6").css('display', 'none');
 
+
 	// ocultar secciones
 	$("#steps_menu_tab2").css('display', 'none');
 	$("#steps_menu_tab3").css('display', 'none');
 	$("#steps_menu_tab4").css('display', 'none');
 	$("#steps_menu_tab5").css('display', 'none');
-	$("#steps_menu_tab6").css('display', 'none');
-	$("#steps_menu_tab7").css('display', 'none');
 
 	// LIMPIAR TITULO DEL RECONOCIMIENTO
 	$(".div_reconocimiento_folios").html('FOLIO');
@@ -1314,16 +1344,12 @@ $('#tabla_reconocimiento_sensorial tbody').on('click', 'td.mostrar', function ()
 	$("#steps_menu_tab3").css('display', 'block');
 	$("#steps_menu_tab4").css('display', 'block');
 	$("#steps_menu_tab5").css('display', 'block');
-	$("#steps_menu_tab6").css('display', 'block');
-	$("#steps_menu_tab7").css('display', 'block');
 
 	// Menu principal
 	$("#tab_menu2").css('display', 'block');
 	$("#tab_menu3").css('display', 'none');
 	$("#tab_menu4").css('display', 'none');
 	$("#tab_menu5").css('display', 'none');
-	$("#tab_menu6").css('display', 'none');
-	$("#tab_menu9").css('display', 'none');
 
 	// Borrar formulario
 	$('#form_recsensorial').each(function () {
@@ -1570,31 +1596,8 @@ function datosNormativa(recpsico_id){
 
 }
 
-function cargarTrabajadores(recpsico_id) {		
-	var tabla = $('#tabla_trabajadores_cargados').DataTable({
-        "language": {
-            "url": "//cdn.datatables.net/plug-ins/1.10.25/i18n/Spanish.json"
-        },
-        "columns": [
-            { "data": "numero"},
-            { "data": "nombre"},
-            { "data": "muestra",
-            	"render": function(data, type, row) {
-                if (data == 0) {
-                    return '<i class="fa fa-times-circle fa-2x text-danger"></i>'; 
-                } else if (data == 1) {
-                    return '<i class="fa fa-check-circle fa-2x text-success"></i>'; 
-                } else {
-                    return data;
-				}
-			}
-		}
-        ],
-        "columnDefs": [
-            { "orderable": false, "targets": [0, 1, 2] }
-        ]
-    });
-
+function cargarTrabajadores(recpsico_id, tabla) {		
+	
 	 $.ajax({
 		 url: '/recopsicotrabajadorescargados/' + recpsico_id,
 		 type: 'GET',
@@ -1625,12 +1628,15 @@ function activa_stepforms() {
 	$("#steps_menu_tab2").css('display', 'block');
 	$("#steps_menu_tab3").css('display', 'block');
 	$("#steps_menu_tab4").css('display', 'block');
+	$("#steps_menu_tab5").css('display', 'block');
 }
 
 function desactiva_stepforms() {
 	$("#steps_menu_tab2").css('display', 'none');
 	$("#steps_menu_tab3").css('display', 'none');
 	$("#steps_menu_tab4").css('display', 'none');
+	$("#steps_menu_tab5").css('display', 'none');
+
 }
 
 function menu_parametros_ocultar() {
