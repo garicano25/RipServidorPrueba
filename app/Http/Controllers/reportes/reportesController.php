@@ -189,6 +189,116 @@ class reportesController extends Controller
         }
     }
 
+      /**
+     * Display the specified resource.
+     *
+     * @param  int  $proyecto_id
+     * @return \Illuminate\Http\Response
+     */
+    public function reportepoevistapsico($proyecto_id)
+    {
+        $proyecto = proyectoModel::findOrFail($proyecto_id);
+
+        if (($proyecto->recsensorial->recsensorial_tipocliente + 0) == 1 && ($proyecto->recsensorial_id == NULL || $proyecto->proyecto_clienteinstalacion == NULL || $proyecto->proyecto_fechaentrega == NULL)) {
+            return '<div style="text-align: center;">
+                        <p style="font-size: 24px;">Datos incompletos</p>
+                        <b style="font-size: 18px;">Para ingresar al diseño de la tabla POE primero debe completar todos los campos vacíos de la sección de datos generales del proyecto.</b>
+                    </div>';
+        } else {
+
+            // COPIAR CATEGORIAS DEL RECONOCIMIENTO SENSORIAL
+            //===================================================
+            $total_categorias = DB::select('SELECT
+                                                COUNT(reportecategoria.id) AS TOTAL
+                                            FROM
+                                                reportecategoria
+                                            WHERE
+                                                reportecategoria.proyecto_id = ' . $proyecto_id);
+
+
+            //INSERTAMOS LA CATEGORIAS POR PRIMERA VEZ
+            if (($total_categorias[0]->TOTAL + 0) == 0) {
+
+                $recsensorial_categorias = recsensorialcategoriaModel::where('recsensorial_id', $proyecto->recsensorial_id)
+                    ->orderBy('recsensorialcategoria_nombrecategoria', 'ASC')
+                    ->get();
+
+
+                DB::statement('ALTER TABLE reportecategoria AUTO_INCREMENT = 1;');
+
+                $num_orden = 1;
+                foreach ($recsensorial_categorias as $key => $value) {
+                    $categoria = reportecategoriaModel::create([
+                        'proyecto_id' => $proyecto_id,
+                        'recsensorialcategoria_id' => $value->id,
+                        'reportecategoria_nombre' => $value->recsensorialcategoria_nombrecategoria,
+                        'reportecategoria_orden' => $num_orden,
+                        'reportecategoria_horas' => $value->sumaHorasJornada
+                    ]);
+
+                    $num_orden++;
+                }
+            } else { // VALIDAMOS AQUELLAS CATEGORIAS QUE NO ESTAN AGREGADAS Y LAS AGREGAMOS
+
+                $inserciones = DB::select('CALL sp_insertar_categoriasFaltantes_g(?,?)', [$proyecto->recsensorial_id, $proyecto_id]);
+            }
+
+
+            // COPIAR AREAS DEL RECONOCIMIENTO SENSORIAL
+            //==================================================
+            $total_areas = DB::select('SELECT
+                                            COUNT(reportearea.id) AS TOTAL
+                                        FROM
+                                            reportearea
+                                        WHERE
+                                            reportearea.proyecto_id = ' . $proyecto_id);
+
+            if (($total_areas[0]->TOTAL + 0) == 0) {
+                $recsensorial_areas = recsensorialareaModel::where('recsensorial_id', $proyecto->recsensorial_id)
+                    ->orderBy('recsensorialarea_nombre', 'ASC')
+                    ->get();
+
+
+                DB::statement('ALTER TABLE reportearea AUTO_INCREMENT = 1;');
+
+                $num_orden = 1;
+                foreach ($recsensorial_areas as $key => $value) {
+                    $area = reporteareaModel::create([
+                        'proyecto_id' => $proyecto_id,
+                        'recsensorialarea_id' => $value->id,
+                        'reportearea_nombre' => $value->recsensorialarea_nombre,
+                        'reportearea_instalacion' => $proyecto->proyecto_clienteinstalacion,
+                        'reportearea_orden' => $num_orden,
+                        'reportearea_proceso' => $value->RECSENSORIALAREA_PROCESO
+                    ]);
+
+                    $num_orden++;
+                }
+            } else {
+
+                $inserciones = DB::select('CALL sp_insertar_areasFaltantes_g(?,?, ?)', [$proyecto->recsensorial_id, $proyecto_id, $proyecto->proyecto_clienteinstalacion]);
+            }
+
+
+            //===================================================
+
+
+            // $recsensorial = recsensorialModel::with(['catcontrato', 'catregion', 'catgerencia', 'catactivo'])->findOrFail($proyecto->recsensorial_id);
+            $recsensorial = recsensorialModel::with(['cliente', 'catregion', 'catgerencia', 'catactivo'])->findOrFail($proyecto->recsensorial_id);
+
+            // Catalogos
+            $catregion = catregionModel::get();
+            $catsubdireccion = catsubdireccionModel::orderBy('catsubdireccion_nombre', 'ASC')->get();
+            $catgerencia = catgerenciaModel::orderBy('catgerencia_nombre', 'ASC')->get();
+            $catactivo = catactivoModel::orderBy('catactivo_nombre', 'ASC')->get();
+            $estatus = estatusReportesInformeModel::where('PROYECTO_ID', $proyecto_id)->get();
+
+
+            // Vista
+            return view('reportes.parametros.reportepoe', compact('proyecto', 'recsensorial', 'catregion', 'catsubdireccion', 'catgerencia', 'catactivo', 'estatus'));
+        }
+    }
+
 
     public function validacionAsignacionUserProyecto($id)
     {
@@ -253,6 +363,44 @@ class reportesController extends Controller
                         $reconocimientoFisico . ', ' .
                         $instalacion . '</option>';
                 }
+            }
+
+            $dato['opciones'] = $opciones_select;
+            $dato['proyecto_id'] = $proyectoID;
+            $dato["msj"] = 'Datos consultados correctamente';
+            return response()->json($dato);
+        } catch (Exception $e) {
+            $dato["msj"] = 'Error ' . $e->getMessage();
+            $dato['opciones'] = $opciones_select;
+            return response()->json($dato, 500);
+        }
+    }
+
+    public function servicioPsico()
+    {
+        try {
+            $opciones_select = '<option value="">&nbsp;</option>';
+
+            $proyectos = DB::select("
+            SELECT p.proyecto_folio as ProyectoFolio,
+                p.id AS ProyectoID,
+                p.proyecto_clienteinstalacion as ProyectoClienteInstalacion
+            FROM serviciosProyecto sp 
+            LEFT JOIN proyecto p ON sp.PROYECTO_ID = p.id
+            LEFT JOIN reconocimientopsico r ON r.id  = p.reconocimiento_psico_id
+            WHERE sp.PSICO_INFORME = 1
+            ");
+
+            $proyectoID = null;
+            foreach ($proyectos as $proyecto) {
+               
+                    $proyectoID = $proyecto->ProyectoID;
+                    $instalacion = $proyecto->ProyectoClienteInstalacion ? 'Instalación: ' . $proyecto->ProyectoClienteInstalacion : '[No tiene instalación]';
+
+                    $opciones_select .= '<option value="' . $proyectoID . '">Folio proyecto [' .
+                        $proyecto->ProyectoFolio . '], Reconocimiento ' .
+                        $instalacion . '</option>';
+                
             }
 
             $dato['opciones'] = $opciones_select;
@@ -394,6 +542,57 @@ class reportesController extends Controller
             //DESCOMENTAR DESPUES DE SUBIR AL SERVIDOR
             foreach ($sql as $key => $value){
                 $opciones_menu .= '<option value="'.$value->agente_id.'">'.$value->agente_nombre.'</option>';
+            }
+
+
+            // QUITAR DESPUES DE SUBIR AL SERVIDOR
+            // $opciones_menu .= '<option value="1">Ruido</option>';
+            // $opciones_menu .= '<option value="2">Vibración</option>';
+            // $opciones_menu .= '<option value="3">Temperatura</option>';
+            // $opciones_menu .= '<option value="4">Iluminación</option>';
+            // $opciones_menu .= '<option value="8">Ventilación y calidad del aire</option>';
+            // $opciones_menu .= '<option value="9">Agua</option>';
+            // $opciones_menu .= '<option value="10">Hielo</option>';
+            // $opciones_menu .= '<option value="15">Químicos</option>';
+            // $opciones_menu .= '<option value="16">Infraestructura para servicios al personal</option>';
+
+
+            $dato['opciones_menu'] = $opciones_menu;
+            $dato["msj"] = 'Datos consultados correctamente';
+            return response()->json($dato);
+        } catch (Exception $e) {
+            $dato["msj"] = 'Error ' . $e->getMessage();
+            $dato['opciones_menu'] = '<option value="">Error al consultar los parametros</option>';
+            return response()->json($dato);
+        }
+    }
+
+    
+
+    /**
+     * Display a listing of the resource.
+     *
+     * @param  int  $proyecto_id
+     * @return \Illuminate\Http\Response
+     */
+    public function reporteslistaparametrosPsico($proyecto_id)
+    {
+        try {
+            $sql = DB::select('SELECT 
+                                p.id as proyecto_id,
+                                1 AS paquete_id,
+                                "NOM-035" AS paquete_nombre
+                                FROM reconocimientopsico r
+                                LEFT JOIN recopsiconormativa n ON r.id = n.RECPSICO_ID
+                                LEFT JOIN proyecto p ON p.reconocimiento_psico_id = r.id
+                                WHERE p.id = ? AND n.RECPSICO_GUIAI = 1', [$proyecto_id]);
+
+            $opciones_menu = '<option value="">Seleccione</option>';
+            // $opciones_menu .= '<option value="0">POE PROYECTO</option>';  -> EL POE ESTARA APARTE EN EL SELECT SOLO ESTARAN LOS REPORTES DE LOS AGENTES
+
+            //DESCOMENTAR DESPUES DE SUBIR AL SERVIDOR
+            foreach ($sql as $key => $value){
+                $opciones_menu .= '<option value="'.$value->paquete_id.'">'.$value->paquete_nombre.'</option>';
             }
 
 

@@ -21,17 +21,11 @@
 
         </div>
 
-
-        @if(auth()->user()->hasRoles(['Superusuario', 'Administrador', 'Coordinador']))
         <h4 class="text-white card-title" style="float: left; margin: 0px; padding: 0px;">Reporte de&nbsp;&nbsp;</h4>
         <select class="custom-select" style="float: left; width: 340px; height: 24px; margin: 0px; padding: 2px 4px; font-weight: 550; background: #FFF;" id="select_tiporeportes" onchange="mostrar_reporte(this.value);" disabled>
           <option value="">Seleccione</option>
         </select>
-        @endif
-
-
-
-
+      
         <button class="btn btn-light" style="margin-left: 50%;" type="button" id="btnPoeProyecto" data-toggle="tooltip" title="Población Ocupacionalmente Expuesta" disabled> <i class="fa fa-users" aria-hidden="true"></i> POE Proyecto</button>
         <button class="btn btn-light" style="margin-left: 1%;" type="button" data-toggle="tooltip" title="Matriz de Exposición Laboral (No disponible)" disabled> <i class="fa fa-table" aria-hidden="true"></i> MEL Proyecto</button>
       </div>

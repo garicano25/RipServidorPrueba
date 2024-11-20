@@ -1068,7 +1068,11 @@ Route::resource('reportes', 'reportes\reportesController');
 
 Route::get('reporteslistaparametros/{proyecto_id}', ['as' => 'reportes.reporteslistaparametros', 'uses' => 'reportes\reportesController@reporteslistaparametros']);
 
+Route::get('reporteslistaparametrosPsico/{proyecto_id}', ['as' => 'reportes.reporteslistaparametrosPsico', 'uses' => 'reportes\reportesController@reporteslistaparametrosPsico']);
+
 Route::get('/servicioHI', ['as' => 'reportes.servicioHI', 'uses' => 'reportes\reportesController@servicioHI']);
+
+Route::get('/servicioPsico', ['as' => 'reportes.servicioPsico', 'uses' => 'reportes\reportesController@servicioPsico']);
 
 Route::get('/validacionAsignacionUserProyecto/{id}', ['as' => 'reportes.validacionAsignacionUserProyecto', 'uses' => 'reportes\reportesController@validacionAsignacionUserProyecto']);
 
@@ -1083,6 +1087,8 @@ Route::get('logoPortada/{ID}', ['as' => 'reportes.logoPortada', 'uses' => 'repor
 Route::get('portadaInfo/{proyecto}/{agente}', ['as' => 'reportes.portadaInfo', 'uses' => 'reportes\reportesController@portadaInfo']);
 
 Route::get('reportepoevista/{proyecto_id}', ['as' => 'reportes.reportepoevista', 'uses' => 'reportes\reportesController@reportepoevista']);
+
+Route::get('reportepoevistapsico/{proyecto_id}', ['as' => 'reportes.reportepoevistapsico', 'uses' => 'reportes\reportesController@reportepoevistapsico']);
 
 Route::get('reportecategoriatabla/{proyecto_id}', ['as' => 'reportes.reportecategoriatabla', 'uses' => 'reportes\reportesController@reportecategoriatabla']);
 
@@ -1101,8 +1107,11 @@ Route::get('descargarPortadaInformes/{proyecto_id}/{tipo}', ['as' => 'reportes.d
 
 
 //==============================================
+Route::get('reportenom035vista/{proyecto_id}', ['as' => 'reportenom035.reportenom035vista', 'uses' => 'reportes\reportenom035Controller@reporteruidovista']);
 
 
+
+//==============================================
 Route::resource('reporteiluminacion', 'reportes\reporteiluminacionController');
 
 Route::get('reporteiluminacionvista/{proyecto_id}', ['as' => 'reporteiluminacion.reporteiluminacionvista', 'uses' => 'reportes\reporteiluminacionController@reporteiluminacionvista']);

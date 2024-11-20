@@ -896,15 +896,16 @@
                                                                                 </div>
                                                                             </div>
                                                                         </div>   
-                                                                         
-                                                                    </div>
+                                                                    </div> 
                                                                 </div>
                                                             </div>
                                                         </div>
-                                                    </form>
+                                                    </div>
+                                                </form>
                                                 </div>
                                             </div>
-                                             <!--STEP 5-->
+                                           
+                                            <!--STEP 5-->
                                             <div class="multisteps-form__panel" data-animation="scaleIn" id="steps_contenido_tab5">
                                                 <div class="multisteps-form__content">
                                                     <form enctype="multipart/form-data" method="post" name="form_responsables" id="form_responsables">
@@ -912,7 +913,7 @@
                                                             <div class="col-12">
                                                                 {!! csrf_field() !!}
                                                             </div>
-                                                            <div class="col-lg-6 col-md-12 col-sm-12">
+                                                            <div class="col-lg-12 col-md-12 col-sm-12">
                                                                 <ol class="breadcrumb m-b-10 text-light">
                                                                     Responsables del informe de reconocimiento sensorial
                                                                 </ol>

@@ -136,7 +136,7 @@ use Illuminate\Support\Str;
 
     {{-- @if(request()->is('proyectos')) --}}
 
-    @if(request()->is('proyectos') || request()->is('ejecucion') || request()->is('informes') || request()->is('programa') || request()->is('programaPsicosocial') || request()->is('ejecucionPsicosocial'))
+    @if(request()->is('proyectos') || request()->is('ejecucion') || request()->is('informes') || request()->is('programa') || request()->is('programaPsicosocial') || request()->is('ejecucionPsicosocial') || request()->is('informesPsicosocial'))
     <!-- FullCalendar CSS -->
     <link href='https://cdn.jsdelivr.net/npm/fullcalendar@6.1.4/main.min.css' rel='stylesheet' />
     <!-- form_wizard_stps -->
@@ -920,6 +920,27 @@ use Illuminate\Support\Str;
     {{-- pagina --}}
     <script src="/js_sitio/ejecucionPsico.js?v=3.0"></script>
 
+    @endif
+
+    @if(request()->is('informesPsicosocial'))
+
+    <!-- Form wizard -->
+    <script src="/assets/plugins/form_wizard_steps_bootstrap/form_wizard_script.js"></script>
+    {{-- datatable --}}
+    <script src="/assets/plugins/datatables/jquery.dataTables.min.js"></script>
+    <script src="/assets/plugins/datatables/dataTables.rowsGroup.js"></script>
+    <!-- jQuery file upload -->
+    <script src="/js/jasny-bootstrap.js"></script>
+    <script src="/assets/plugins/dropify/dist/js/dropify.min.js"></script>
+    {{-- pdfobject --}}
+    <script src="/assets/plugins/pdfobject/pdfobject.js"></script>
+    <!-- Magnific popup JavaScript -->
+    <script src="/assets/plugins/Magnific-Popup-master/dist/jquery.magnific-popup.min.js"></script>
+    <script src="/assets/plugins/Magnific-Popup-master/dist/jquery.magnific-popup-init.js"></script>
+    {{-- Select search filter --}}
+    <script src="/assets/plugins/select-search/selectize.js" type="text/javascript"></script>
+    {{-- pagina --}}
+    <script src="/js_sitio/informesPsico.js?v=1.0"></script>
     @endif
 
 
