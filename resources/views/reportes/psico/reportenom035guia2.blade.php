@@ -171,31 +171,26 @@
 				<a href="#3_1" class="list-group-item submenu">3.1.- Objetivo general <i class="fa fa-times" id="menureporte_3_1"></i></a>
 				<a href="#3_2" class="list-group-item submenu">3.2.- Objetivos específicos <i class="fa fa-times" id="menureporte_3_2"></i></a>
 				<a href="#4" class="list-group-item">4.- Metodología</a>
-				<a href="#4_1" class="list-group-item submenu">4.1.- Reconocimiento de los agentes y factores <i class="fa fa-times" id="menureporte_4_1"></i></a>
-				<a href="#4_2" class="list-group-item submenu">4.2.- Evaluación de los agentes y factores <i class="fa fa-times" id="menureporte_4_2"></i></a>
+				<a href="#4_1" class="list-group-item submenu">4.1.- Instrumentos para la evaluación <i class="fa fa-times" id="menureporte_4_1"></i></a>
 				<a href="#5" class="list-group-item">5.- Reconocimiento</a>
 				<a href="#5_1" class="list-group-item submenu">5.1.- Ubicación de la instalación <i class="fa fa-times" id="menureporte_5_1"></i></a>
 				<a href="#5_2" class="list-group-item submenu">5.2.- Descripción del proceso en la instalación <i class="fa fa-times" id="menureporte_5_2"></i></a>
-				<a href="#5_3" class="list-group-item submenu">5.3.- Descripción de los procesos que generen ruido <i class="fa fa-times" id="menureporte_5_3"></i></a>
-				<a href="#5_4" class="list-group-item submenu">5.4.- Población ocupacionalmente expuesta <i class="fa fa-times" id="menureporte_5_4"></i></a>
-				<a href="#5_5" class="list-group-item submenu">5.5.- Actividades del personal expuesto <i class="fa fa-times" id="menureporte_5_5"></i></a>
-				<a href="#5_6" class="list-group-item submenu">5.6.- Equipo de Protección Personal Auditiva (EPPA) <i class="fa fa-times" id="menureporte_5_6"></i></a>
-				<a href="#5_7" class="list-group-item submenu">5.7.- Equipo de protección personal básico y específico suministrado por la empresa al personal <i class="fa fa-times" id="menureporte_5_7"></i></a>
-				<a href="#5_8" class="list-group-item submenu">5.8.- NS <sub>A</sub> instantáneo para identificar las áreas y fuentes emisoras <i class="fa fa-times" id="menureporte_5_8"></i></a>
-				<a href="#6" class="list-group-item">6.- Evaluación</a>
-				<a href="#6_1" class="list-group-item submenu">6.1.- Condiciones de operación durante la evaluación (representado en porcentaje) <i class="fa fa-times" id="menureporte_6_1"></i></a>
-				<a href="#6_2" class="list-group-item submenu">6.2.- Determinación de las áreas y puntos de evaluación <i class="fa fa-times" id="menureporte_6_2"></i></a>
-				<a href="#6_3" class="list-group-item submenu">6.3.- Selección del método o métodos empleados para la evaluación de la exposición a ruido <i class="fa fa-times" id="menureporte_6_3"></i></a>
-				<a href="#7" class="list-group-item">7.- Resultados</a>
-				<a href="#7_1" class="list-group-item submenu">7.1.- Tabla de resultados del Nivel Sonoro Continuo Equivalente “A” (NSCE<sub>A, T</sub>) por punto de medición <i class="fa fa-times" id="menureporte_7_1"></i></a>
-				<a href="#7_2" class="list-group-item submenu">7.2.- Tabla de resultados de la determinación del NER <i class="fa fa-times" id="menureporte_7_2"></i></a>
-				<a href="#7_3" class="list-group-item submenu">7.3.- Determinación del NER, porcentaje de dosis de la evaluación personal (del o los trabajadores) <i class="fa fa-times" id="menureporte_7_3"></i></a>
-				{{--
-				<a href="#7_4" class="list-group-item submenu">7.4.- Determinación del factor de reducción (R) del equipo de protección personal auditivo <i class="fa fa-times" id="menureporte_7_4"></i></a>
-				<a href="#7_5" class="list-group-item submenu">7.5.- Resultados del Nivel de Ruido Efectivo (NRE) por modelo con mediciones de ruido en dB (A) <i class="fa fa-times" id="menureporte_7_5"></i></a>
-				--}}
-				<a href="#7_6" class="list-group-item submenu">7.4.- Resultados del Nivel de Ruido Efectivo (NRE) con modelo por bandas de octava <i class="fa fa-times" id="menureporte_7_6"></i></a>
-				<a href="#7_7" class="list-group-item submenu">7.5.- Matriz de exposición laboral <i class="fa fa-times" id="menureporte_7_7"></i></a>
+				<a href="#5_3" class="list-group-item submenu">5.3.- Descripción de las actividades del personal expuesto <i class="fa fa-times" id="menureporte_5_3"></i></a>
+				<a href="#6" class="list-group-item">6.- Estrategias de medición</a>
+				<a href="#7" class="list-group-item">7.- Evaluación</a>
+				<a href="#7_1" class="list-group-item submenu">7.1.- Descripción del método realizado para la evaluación de los Factores de Riesgo Psicosocial <i class="fa fa-times" id="menureporte_6_1"></i></a>
+				<a href="#7_2" class="list-group-item submenu">7.2.- Información general del puesto de trabajo <i class="fa fa-times" id="menureporte_6_2"></i></a>
+				<a href="#8" class="list-group-item">8.- Valores de referencia</a>
+				<a href="#9" class="list-group-item">9.- Resultados</a>
+				<a href="#9_1" class="list-group-item submenu">9.1.- Registro de los resultados. Número de puntos evaluados<i class="fa fa-times" id="menureporte_7_1"></i></a>
+				<a href="#9_2" class="list-group-item submenu">9.2.- Código de representación gráfica y color, NOM-035-STPS-2018 <i class="fa fa-times" id="menureporte_7_2"></i></a>
+				<a href="#9_3" class="list-group-item submenu">9.3.- Resultados obtenidos en la Guía de Referencia I, Identificar a los trabajadores que fueron sujetos a acontecimientos traumáticos severos <i class="fa fa-times" id="menureporte_7_3"></i></a>
+				<a href="#9_4" class="list-group-item submenu">9.4.- Resultados obtenidos en la guía de referencia III, Identificación y análisis de los Factores de Riesgo Psicosocial y Evaluación del entorno organizacional en los centros de trabajo por categoría y dominio conforme a la NOM-035-STPS-2018 <i class="fa fa-times" id="menureporte_7_4"></i></a>
+				<a href="#9_5" class="list-group-item submenu">9.5.- Resultados del Nivel de Ruido Efectivo (NRE) por modelo con mediciones de ruido en dB (A) <i class="fa fa-times" id="menureporte_7_5"></i></a>
+				<a href="#9_6" class="list-group-item submenu">9.6.- Resultados del Nivel de Ruido Efectivo (NRE) con modelo por bandas de octava <i class="fa fa-times" id="menureporte_7_6"></i></a>
+				<a href="#9_7" class="list-group-item submenu">9.7.- Matriz de exposición laboral <i class="fa fa-times" id="menureporte_7_7"></i></a>
+				<a href="#9_8" class="list-group-item submenu">9.8.- Matriz de exposición laboral <i class="fa fa-times" id="menureporte_7_7"></i></a>
+				<a href="#9_9" class="list-group-item submenu">9.9.- Matriz de exposición laboral <i class="fa fa-times" id="menureporte_7_7"></i></a>
 				<a href="#8" class="list-group-item">8.- Conclusiones <i class="fa fa-times" id="menureporte_8"></i></a>
 				<a href="#9" class="list-group-item">9.- Recomendaciones de control <i class="fa fa-times" id="menureporte_9"></i></a>
 				<a href="#10" class="list-group-item">10.- Responsables del informe <i class="fa fa-times" id="menureporte_10"></i></a>
@@ -1638,7 +1633,7 @@
 <!-- MODAL-CARGANDO -->
 <!-- ============================================================== -->
 <div id="modal_cargando" class="modal fade bs-example-modal-sm" tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel" aria-hidden="true" style="display: none;">
-	<div class="modal-dialog modal-sm" style="max-width: 300px!important; margin-top: 250px;">
+	<div class="modal-dialog modal-sm" style="max-width: 400px!important; margin-top: 250px;">
 		<div class="modal-content">
 			<div class="modal-header">
 				<h4 class="modal-title" id="mySmallModalLabel">Cargando</h4>
@@ -2953,4 +2948,4 @@
 	var areas_poe = <?php echo json_encode($areas_poe); ?>;
 </script>
 {{-- <script src="/js_sitio/html2canvas.js"></script> --}}
-<script src="/js_sitio/reportes/reporteruido.js?v=6.0"></script>
+<script src="/js_sitio/reportes/reportenom035.js?v=1.0"></script>
