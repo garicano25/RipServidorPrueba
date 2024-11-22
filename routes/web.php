@@ -1107,7 +1107,9 @@ Route::get('descargarPortadaInformes/{proyecto_id}/{tipo}', ['as' => 'reportes.d
 
 
 //==============================================
-Route::get('reportenom035vista/{proyecto_id}', ['as' => 'reportenom035.reportenom035vista', 'uses' => 'reportes\reportenom035Controller@reporteruidovista']);
+Route::get('reportenom035vista2/{proyecto_id}', ['as' => 'reportenom035.reportenom035vista2', 'uses' => 'reportes\reportenom0352Controller@reportenom035vista2']);
+
+Route::get('reportenom035vista3/{proyecto_id}', ['as' => 'reportenom035.reportenom035vista3', 'uses' => 'reportes\reportenom0353Controller@reportenom035vista3']);
 
 
 

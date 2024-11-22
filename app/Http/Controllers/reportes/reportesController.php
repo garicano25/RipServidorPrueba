@@ -580,7 +580,11 @@ class reportesController extends Controller
         try {
             $sql = DB::select('SELECT 
                                 p.id as proyecto_id,
-                                1 AS paquete_id,
+                                 CASE 
+                                    WHEN n.RECPSICO_GUIAII = 1 THEN 1
+                                    WHEN n.RECPSICO_GUIAIII = 1 THEN 2
+                                    ELSE NULL 
+                                END AS paquete_id,
                                 "NOM-035" AS paquete_nombre
                                 FROM reconocimientopsico r
                                 LEFT JOIN recopsiconormativa n ON r.id = n.RECPSICO_ID

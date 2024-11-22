@@ -159,7 +159,10 @@ var proyecto_id =  $('#informes_reco').val();
 					$('#estructura_reporte').load('/reportepoevistapsico/'+proyecto_id);
 					break;
 				case 1:
-				    $('#estructura_reporte').load('/reportenom035vista/'+proyecto_id);
+				    $('#estructura_reporte').load('/reportenom035vista2/'+proyecto_id);
+					break;
+				case 2:
+				    $('#estructura_reporte').load('/reportenom035vista3/'+proyecto_id);
 					break;
 				default:
 					$('#estructura_reporte').html('<p style="text-align: center; font-size: 24px;">Seleccione un tipo de reporte</p>');

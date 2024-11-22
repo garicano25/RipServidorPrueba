@@ -552,7 +552,7 @@
 					</div>
 				</form>
 				<h4 class="card-title" id="4">4.- Metodología</h4>
-				<h4 class="card-title" id="4_1">4.1.- Reconocimiento de los agentes y factores</h4>
+				<h4 class="card-title" id="4_1">4.1.- Instrumentos de medición</h4>
 				<form method="post" enctype="multipart/form-data" name="form_reporte_metodologia_4_1" id="form_reporte_metodologia_4_1">
 					<div class="row">
 						<div class="col-12">
@@ -563,64 +563,6 @@
 						</div>
 						<div class="col-12" style="text-align: right;">
 							<button type="submit" class="btn btn-danger waves-effect waves-light botoninforme" id="botonguardar_reporte_metodologia_4_1">Guardar metodología punto 4.1 <i class="fa fa-save"></i></button>
-						</div>
-					</div>
-				</form>
-				<h4 class="card-title" id="4_2">4.2.- Evaluación de los agentes y factores</h4>
-				<form method="post" enctype="multipart/form-data" name="form_reporte_metodologia_4_2" id="form_reporte_metodologia_4_2">
-					<div class="row">
-						<div class="col-12">
-							<div class="form-group">
-								{!! csrf_field() !!}
-								<textarea class="form-control" style="margin-bottom: 0px;" rows="12" id="reporte_metodologia_4_2" name="reporte_metodologia_4_2" required></textarea>
-							</div>
-						</div>
-						<div class="col-12">
-							<div class="informacion_estatica">
-								<div class="imagen_formula">Tabla 1<br>Límites Máximos Permisibles de Exposición (LMPE)</div><br>
-								<table class="table tabla_info_centrado" width="100%">
-									<thead>
-										<tr>
-											<th width="40%">NER</th>
-											<th width="50%">TMPE</th>
-										</tr>
-									</thead>
-									<tbody>
-										<tr>
-											<td>90 dB(A)</td>
-											<td>8 HORAS</td>
-										</tr>
-										<tr>
-											<td>93 dB(A)</td>
-											<td>4 HORAS</td>
-										</tr>
-										<tr>
-											<td>96 dB(A)</td>
-											<td>2 HORAS</td>
-										</tr>
-										<tr>
-											<td>99 dB(A)</td>
-											<td>1 HORA</td>
-										</tr>
-										<tr>
-											<td>102 dB(A)</td>
-											<td>30 MINUTOS</td>
-										</tr>
-										<tr>
-											<td>105 dB(A)</td>
-											<td>15 MINUTOS</td>
-										</tr>
-									</tbody>
-									<tfoot>
-										<tr>
-											<td colspan="2">Tabla obtenida de la NOM-011-STPS-2001</td>
-										</tr>
-									</tfoot>
-								</table>
-							</div>
-						</div>
-						<div class="col-12" style="text-align: right;">
-							<button type="submit" class="btn btn-danger waves-effect waves-light botoninforme" id="botonguardar_reporte_metodologia_4_2">Guardar metodología punto 4.2 <i class="fa fa-save"></i></button>
 						</div>
 					</div>
 				</form>
@@ -670,23 +612,7 @@
 						</div>
 					</div>
 				</form>
-				<h4 class="card-title" id="5_3">5.3.- Descripción de los procesos que generen ruido</h4>
-				<div class="row">
-					<div class="col-12">
-						<p class="justificado">A continuación, se describe el proceso de trabajo que genera ruido en cada una de las áreas evaluadas:</p><br>
-						<table class="table tabla_info_centrado table-hover" width="100%" id="tabla_reporte_5_3">
-							<thead>
-								<tr>
-									<th width="150">Instalación</th>
-									<th width="200">Áreas de trabajo</th>
-									<th width="">Proceso</th>
-								</tr>
-							</thead>
-							<tbody></tbody>
-						</table>
-					</div>
-				</div>
-				<h4 class="card-title" id="5_4">5.4.- Población ocupacionalmente expuesta</h4>
+				<h4 class="card-title" id="5_3">5.3.- Descripción de las actividades del personal expuesto</h4>
 				<div class="row">
 					<div class="col-12">
 						<p class="justificado">En este apartado se muestra la actividad principal desarrollada en la instalación, involucrando al personal/categoría adscrito en cada área que integran a la <b class="div_instalacion_nombre" style="color: #000000;">NOMBRE INSTALACION</b>:</p><br>
@@ -727,10 +653,9 @@
 						</table>
 					</div>
 				</div>
-				<h4 class="card-title" id="5_5">5.5.- Actividades del personal expuesto</h4>
 				<div class="row">
 					<div class="col-12">
-						<p class="justificado">A continuación, se describen las actividades realizadas en cada área con exposición a ruido, según la categoría encontrada en dicho sitio.</p><br>
+						<p class="justificado">A continuación, se describen las actividades realizadas en cada área del personal expuesto, según la categoría encontrada en dicho sitio.</p><br>
 						<div class="informacion_estatica">
 							<table class="table table-hover tabla_info_centrado" width="100%" id="tabla_reporte_5_5">
 								<thead>
@@ -745,433 +670,36 @@
 							</table>
 						</div>
 					</div>
-				</div>
-				<h4 class="card-title" id="5_6">5.6.- Equipo de Protección Personal Auditiva (EPPA)</h4>
+				</div>	
+				<h4 class="card-title" id="6">6.- Estrategias de medición</h4>
 				<div class="row">
 					<div class="col-12">
-						<p class="justificado">En la siguiente tabla se describe el Equipo de Protección Personal Auditiva (EPPA) utilizado en cada una de las categorías pertenecientes a la <b class="div_instalacion_nombre" style="color: #000000;">NOMBRE INSTALACION</b>:</p><br>
-						<div class="informacion_estatica">
-							<table class="table table-hover tabla_info_centrado" width="100%" id="tabla_reporte_5_6">
-								<thead>
-									<tr>
-										<th width="">Categoría</th>
-										<th width="20%">Tipo</th>
-										<th width="15%">Marca</th>
-										<th width="15%">Modelo</th>
-										<th width="8%">NRR</th>
-									</tr>
-								</thead>
-								<tbody></tbody>
-							</table>
-						</div>
-						<ol class="breadcrumb" style="padding: 6px; margin: 10px 0px;">
-							<button type="button" class="btn btn-default waves-effect botoninforme" data-toggle="tooltip" title="Nuevo equipo auditivo" id="boton_reporte_nuevoequipoauditivo">
-								<span class="btn-label"><i class="fa fa-plus"></i></span>Equipo auditivo
-							</button>
-						</ol>
-						<div id="div_tablas_equiposautivos"></div>
-						{{-- <table class="table table-hover tabla_info_centrado" width="100%" id="tabla_reporte_5_6_equipoauditivo">
-							</table> --}}
+						<p class="justificado">De acuerdo con lo establecido en la metodología, se evaluó con la Guía de referencia I, Cuestionario para identificar a los trabajadores que fueron sujetos a Acontecimientos traumáticos severos y la Guía de referencia III, Identificación y análisis de los Factores de Riesgo Psicosocial y Evaluación del entorno organizacional en los centros de trabajo. Como lo dicta la NOM-035-STPS-2018.</p><br>
 					</div>
 				</div>
-				<h4 class="card-title" id="5_7">5.7.- Equipo de protección personal básico y específico suministrado por la empresa al personal</h4>
-				<div class="row">
-					<div class="col-12">
-						<p class="justificado">Equipo de protección general utilizado por los trabajadores de la instalación:</p><br>
-						<ol class="breadcrumb" style="padding: 6px; margin: 10px 0px;">
-							<button type="button" class="btn btn-default waves-effect botoninforme" data-toggle="tooltip" title="Nueva equipo de protección" id="boton_reporte_nuevoepp">
-								<span class="btn-label"><i class="fa fa-plus"></i></span>Equipo de protección
-							</button>
-						</ol>
-						<table class="table table-hover tabla_info_centrado" width="100%" id="tabla_reporte_epp">
-							<thead>
-								<tr>
-									<th width="60">No.</th>
-									<th>Parte del cuerpo</th>
-									<th>Equipo de protección personal<br>básico proporcionado</th>
-									<th width="60">Editar</th>
-									<th width="60">Eliminar</th>
-								</tr>
-							</thead>
-							<tbody></tbody>
-						</table>
-					</div>
-				</div>
-				<h4 class="card-title" id="5_8">5.8.- NS <sub>A</sub> instantáneo para identificar las áreas y fuentes emisoras</h4>
-				<div class="row">
-					<div class="col-12">
-						<p class="justificado">Se realizó un recorrido con un sonómetro o equipo de medición de ruido para conocer los valores instantáneos (NSA) emitidos por las fuentes generadores en todas las áreas donde los trabajadores realicen actividades, con el fin de establecer las zonas consideradas a evaluar, así como la característica del tipo de ruido generado.</p><br>
-						<table class="table table-hover tabla_info_centrado" width="100%" id="tabla_reporte_5_8_UNO">
-							<thead>
-								<tr>
-									<th width="130" rowspan="2">Instalación</th>
-									<th width="" rowspan="2">Área</th>
-									<th colspan="2">Lecturas del nivel instantáneo NS<sub>A</sub> en dB<sub>A</sub></th>
-									<th width="120" rowspan="2">Tipo de<br>ruido</th>
-									<th width="120" rowspan="2">Evaluación</th>
-								</tr>
-								<tr>
-									<th width="150">Mínimo</th>
-									<th width="150">Máximo</th>
-									{{-- <th>3</th>
-										<th>4</th>
-										<th>5</th>
-										<th>6</th>
-										<th>7</th>
-										<th>8</th>
-										<th>9</th>
-										<th>10</th> --}}
-								</tr>
-							</thead>
-							<tbody></tbody>
-						</table>
-						<br>
-						<p class="justificado">Además, durante el reconocimiento se identificaron las siguientes fuentes generadoras de ruido:</p><br>
-						<table class="table table-hover tabla_info_centrado" width="100%" id="tabla_reporte_5_8_DOS">
-							<thead>
-								<tr>
-									<th width="130">Instalación</th>
-									<th width="300">Áreas de trabajo</th>
-									<th>Máquina del área</th>
-									<th width="90">Cantidad</th>
-								</tr>
-							</thead>
-							<tbody></tbody>
-						</table>
-					</div>
-				</div>
-				<h4 class="card-title" id="6">6.- Evaluación</h4>
-				<h4 class="card-title" id="6_1">6.1.- Condiciones de operación durante la evaluación (representado en porcentaje)</h4>
-				<div class="row">
-					<div class="col-12">
-						<p class="justificado">Las condiciones de operación que se encontraron en las diversas áreas de la instalación <b class="div_instalacion_nombre" style="color: #000000;">NOMBRE INSTALACION</b>, se presentan por porcentaje en la siguiente tabla:</p><br>
-						<table class="table table-hover tabla_info_centrado" width="100%" id="tabla_reporte_6_1">
-							<thead>
-								<tr>
-									<th width="60">No.</th>
-									<th width="150">Instalación</th>
-									<th width="">Áreas de trabajo</th>
-									<th width="200">Porcentaje de operación</th>
-								</tr>
-							</thead>
-							<tbody></tbody>
-						</table>
-					</div>
-				</div>
-				<h4 class="card-title" id="6_2">6.2.- Determinación de las áreas y puntos de evaluación</h4>
-				<div class="row">
-					<div class="col-12">
-						<p class="justificado">Para la evaluación de ruido al que se expone el personal dentro de las áreas operativas, se ubicaron los puntos de medición en las zonas donde el nivel instantáneo NSA sea igual o mayor a los 80 dB, de acuerdo con lo establecido en la metodología descrita en la NOM-011-STPS-2001.<br><br>No se realizaron evaluaciones donde el nivel instantáneo descrito en el reconocimiento fue menor a los 80 dB, debido a que se consideran las áreas de acuerdo al Nivel instantáneo establecido en la NOM-011-STPS-2001.</p><br>
-						<ol class="breadcrumb" style="padding: 6px; margin: 10px 0px;">
-							<button type="button" class="btn btn-default waves-effect botoninforme" data-toggle="tooltip" title="Nueva área y puntos de evaluación" id="boton_reporte_areaevaluacion">
-								<span class="btn-label"><i class="fa fa-plus"></i></span>Área y puntos de evaluación
-							</button>
-						</ol>
-						<table class="table table-hover tabla_info_centrado" width="100%" id="tabla_reporte_6_2">
-							<thead>
-								<tr>
-									<th width="130">Instalación</th>
-									<th width="220">Área</th>
-									<th width="100">No. de<br>medición</th>
-									<th>Ubicación</th>
-									<th width="100">No. de<br>evaluaciones<br>por área</th>
-									<th width="60">Editar</th>
-									<th width="60">Eliminar</th>
-								</tr>
-							</thead>
-							<tbody></tbody>
-							<tfoot>
-								<tr>
-									<th colspan="4">Total de puntos evaluados</th>
-									<td><b id="areaevaluacion_totalpuntos">0</b></td>
-									<td colspan="2"></td>
-								</tr>
-							</tfoot>
-						</table>
-					</div>
-				</div>
-				<h4 class="card-title" id="6_3">6.3.- Selección del método o métodos empleados para la evaluación de la exposición a ruido</h4>
-				<form method="post" enctype="multipart/form-data" name="form_reporte_metodoevaluacion" id="form_reporte_metodoevaluacion">
+				<h4 class="card-title" id="7">7.- Evaluación</h4>
+				<h4 class="card-title" id="7_1">7.1.- Descripción del método realizado para la evaluación de los Factores de Riesgo Psicosocial</h4>
+				<form method="post" enctype="multipart/form-data" name="form_reporte_descripcionmetodo" id="form_reporte_descripcionmetodo">
 					<div class="row">
 						<div class="col-12">
 							{!! csrf_field() !!}
 							<div class="form-group">
-								<textarea class="form-control" style="margin-bottom: 0px;" rows="8" id="reporte_metodoevaluacion" name="reporte_metodoevaluacion" required></textarea>
+								<label>Descripción del método realizado para la evaluación de los Factores de Riesgo Psicosocial</label>
+								<textarea class="form-control" style="margin-bottom: 0px;" rows="20" id="reporte_descripcionmetodo" name="reporte_descripcionmetodo" required></textarea>
 							</div>
 						</div>
 						<div class="col-12" style="text-align: right;">
 							<div class="form-group">
-								<button type="submit" class="btn btn-danger waves-effect waves-light botoninforme" id="botonguardar_reporte_metodoevaluacion">Guardar método de evaluación <i class="fa fa-save"></i></button>
+								<button type="submit" class="btn btn-danger waves-effect waves-light botoninforme" id="botonguardar_reporte_descripcionmetodo">Guardar proceso instalación <i class="fa fa-save"></i></button>
 							</div>
 						</div>
 					</div>
 				</form>
-				<h4 class="card-title" id="7">7.- Resultados</h4>
-				<h4 class="card-title" id="7_1">7.1.- Tabla de resultados del Nivel Sonoro Continuo Equivalente “A” (NSCE<sub>A, T</sub>) por punto de medición</h4>
+				<h4 class="card-title" id="7_2">7.2.- Información general del puesto de trabajo</h4>
 				<div class="row">
 					<div class="col-12">
-						<ol class="breadcrumb" style="padding: 6px; margin: 10px 0px;">
-							<button type="button" class="btn btn-default waves-effect botoninforme" data-toggle="tooltip" title="Nuevo punto de medición de nivel sonoro continuo" id="boton_reporte_nuevonivelsonoro">
-								<span class="btn-label"><i class="fa fa-plus"></i></span>Punto de medición de nivel sonoro continuo
-							</button>
-							<button type="button" class="btn btn-default waves-effect botoninforme" data-toggle="tooltip" title="Importar puntos de medición de nivel sonoro continuo" id="boton_importar_puntos_71" onclick="abrirModalPuntos(1)">
-								<span class="btn-label"><i class="fa fa-file-excel-o" aria-hidden="true"></i></span> Importar
-							</button>
-						</ol>
-						<table class="table table-hover tabla_info_centrado" width="100%" id="tabla_reporte_7_1">
-							<thead>
-								<tr>
-									<th width="100">No. Medición</th>
-									<th>Ubicación</th>
-									<th width="100">Periodo 1</th>
-									<th width="100">Periodo 2</th>
-									<th width="100">NSCE<sub>A, Ti</sub><br>Promedio</th>
-								</tr>
-							</thead>
-							<tbody>
-								<tr>
-									<td colspan="5">No hay datos que mostrar</td>
-								</tr>
-							</tbody>
-						</table>
-					</div>
-				</div>
-				<h4 class="card-title" id="7_2">7.2.- Tabla de resultados de la determinación del NER</h4>
-				<div class="row">
-					<div class="col-12">
-						<ol class="breadcrumb" style="padding: 6px; margin: 10px 0px;">
-							<button type="button" class="btn btn-default waves-effect botoninforme LMPE" data-toggle="tooltip" title="Nuevo punto de determinación del NER " id="boton_reporte_nuevopuntoner">
-								<span class="btn-label"><i class="fa fa-plus"></i></span>Punto de determinación del NER
-							</button>
-							<button type="button" class="btn btn-default waves-effect botoninforme LMPE" data-toggle="tooltip" title="Importar puntos de determinación del NER" id="boton_importar_puntos_72" onclick="abrirModalPuntos(2)">
-								<span class="btn-label"><i class="fa fa-file-excel-o" aria-hidden="true"></i></span> Importar
-							</button>
-							<input type="number" class="form-control w-25 text-center" min="1" placeholder="Agrege el LMPE dB(A)" id="reporteruido_lmpe" name="reporteruido_lmpe">
-						</ol>
-						<style type="text/css">
-							#tabla_reporte_7_2 th {
-								background: #F9F9F9;
-								border: 1px #E5E5E5 solid;
-								padding: 1px !important;
-								font-size: 0.7vw !important;
-								text-align: center;
-								vertical-align: middle;
-							}
-
-							#tabla_reporte_7_2 td {
-								padding: 1px !important;
-								font-size: 0.7vw !important;
-								text-align: center;
-							}
-
-							#tabla_reporte_7_2 tr:hover td {
-								color: #000000;
-							}
-						</style>
-						<table class="table table-hover tabla_info_centrado" width="100%" id="tabla_reporte_7_2">
-							<thead>
-								<tr>
-									<th width="70">No.<br>Medición</th>
-									<th width="">Área</th>
-									<th width="130">Ubicación</th>
-									<th width="130">Identificación</th>
-									<th width="60">NER<br>dB(A)</th>
-									<th width="60">LMPE<br>dB(A)</th>
-									<th width="90">TMPE<br>Horas</th>
-									<th width="110">Cumplimiento<br>normativo</th>
-									<th width="60">Editar</th>
-									<th width="60">Eliminar</th>
-								</tr>
-							</thead>
-							<tbody></tbody>
-						</table>
-					</div>
-				</div>
-				<h4 class="card-title" id="7_3">7.3.- Determinación del NER, porcentaje de dosis de la evaluación personal (del o los trabajadores)</h4>
-				<div class="row">
-					<div class="col-12">
-						<ol class="breadcrumb" style="padding: 6px; margin: 10px 0px;">
-							<button type="button" class="btn btn-default waves-effect botoninforme LMPE" data-toggle="tooltip" title="Nueva dosis de determinación del NER al personal" id="boton_reporte_nuevadosisner">
-								<span class="btn-label"><i class="fa fa-plus"></i></span>Dosis de determinación del NER al personal
-							</button>
-							<button type="button" class="btn btn-default waves-effect botoninforme LMPE" data-toggle="tooltip" title="Importar dosis de determinación del NER al personal" id="boton_importar_puntos_73" onclick="abrirModalPuntos(3)">
-								<span class="btn-label"><i class="fa fa-file-excel-o" aria-hidden="true"></i></span> Importar
-							</button>
-						</ol>
-						<style type="text/css">
-							#tabla_reporte_7_3 th {
-								background: #F9F9F9;
-								border: 1px #E5E5E5 solid;
-								padding: 1px !important;
-								font-size: 0.7vw !important;
-								text-align: center;
-								vertical-align: middle;
-							}
-
-							#tabla_reporte_7_3 td {
-								padding: 1px !important;
-								font-size: 0.7vw !important;
-								text-align: center;
-							}
-
-							#tabla_reporte_7_3 tr:hover td {
-								color: #000000;
-							}
-						</style>
-						<table class="table table-hover tabla_info_centrado" width="100%" id="tabla_reporte_7_3">
-							<thead>
-								<tr>
-									<th width="60">No.<br>Medición</th>
-									<th width="150">Área</th>
-									<th width="">Categoría</th>
-									<th width="60">% Dosis</th>
-									<th width="60">NER<br>dB(A)</th>
-									<th width="60">LMPE<br>dB(A)</th>
-									<th width="90">TMPE<br>Horas</th>
-									<th width="110">Cumplimiento<br>normativo</th>
-									<th width="60">Editar</th>
-									<th width="60">Eliminar</th>
-								</tr>
-							</thead>
-							<tbody></tbody>
-						</table>
-					</div>
-				</div>
-				{{--
-				<h4 class="card-title" id="7_4">7.4.- Determinación del factor de reducción (R) del equipo de protección personal auditivo</h4>
-					<p class="justificado">Cuando se use un equipo de protección personal auditiva, el factor de reducción R se calcula con la siguiente ecuación:</p><br>
-					<div class="imagen_formula">
-						<img src="/assets/images/reportes/reporteruido_figura_7.4.jpg" height="60">
-					</div><br>
-					<p class="justificado">Donde:<br>NRR: Es el factor de nivel de reducción a ruido establecido por el fabricante.</p><br>
-					<div id="equiposauditivos_datos"></div>
-				<h4 class="card-title" id="7_5">7.5.- Resultados del Nivel de Ruido Efectivo (NRE) por modelo con mediciones de ruido en dB (A)</h4>
-					<div class="row">
-						<div class="col-12">
-							<p class="justificado">A continuación, se describe la determinación del Factores de Reducción del Equipo de Protección Personal Auditivo para cada punto y el Nivel de Ruido Efectivo (NRE):</p><br>
-							<table class="table table-hover tabla_info_centrado" width="100%" id="tabla_reporte_7_5">
-								<thead>
-									<tr>
-										<th width="70">No.<br>medición</th>
-										<th>Área</th>
-										<th>Puesto</th>
-										<th width="70">NER<br>dB(A)</th>
-										<th width="70">NRE<br>dB(A)</th>
-									</tr>
-								</thead>
-								<tbody></tbody>
-							</table>
-						</div>
-					</div> 
-				--}}
-				<h4 class="card-title" id="7_6">7.4.- Resultados del Nivel de Ruido Efectivo (NRE) con modelo por bandas de octava</h4>
-				<div class="row">
-					<div class="col-12">
-						<p class="justificado">A continuación, se describe la determinación del Factores de Reducción del Equipo de Protección Personal Auditivo para cada punto y el Nivel de Ruido Efectivo (NRE):</p>
-						<table class="table table-hover tabla_info_centrado" width="100%" id="tabla_reporte_7_6">
-							<thead>
-								<tr>
-									<th width="60">No.<br>medición</th>
-									<th width="130">Área</th>
-									<th width="">Ubicación</th>
-									<th width="">Identificación</th>
-									<th width="80">Frecuencia<br>en Hz</th>
-									<th width="80">Nivel de<br>Presión<br>Acústica<br>Promedio (dB)</th>
-									<th width="60">NER<br>dB(A)</th>
-									<th width="60">R<br>dB (A)</th>
-									<th width="60">NRE<br>dB (A)</th>
-									<th width="60">Editar</th>
-								</tr>
-							</thead>
-							<tbody></tbody>
-						</table>
-					</div>
-				</div>
-				<h4 class="card-title" id="7_7">7.5.- Matriz de exposición laboral</h4>
-				<div class="row">
-					<div class="col-12">
-						<style type="text/css">
-							#tabla_reporte_7_7 th {
-								background: #F9F9F9;
-								border: 1px #E5E5E5 solid;
-								padding: 1px !important;
-								font-size: 0.6vw !important;
-								text-align: center;
-								vertical-align: middle;
-							}
-
-							#tabla_reporte_7_7 td {
-								padding: 1px !important;
-								font-size: 0.6vw !important;
-								text-align: center;
-							}
-
-							#tabla_reporte_7_7 tr:hover td {
-								color: #000000;
-							}
-
-							.rotartexto {
-								-webkit-transform: rotate(-90deg);
-								-moz-transform: rotate(-90deg);
-								-o-transform: rotate(-90deg);
-								transform: rotate(-90deg);
-								filter: progid:DXImageTransform.Microsoft.BasicImage(rotation=3);
-
-								display: -moz-inline-stack;
-								display: inline-block;
-								zoom: 1;
-								*display: inline;
-							}
-						</style>
-						<table class="table table-hover tabla_info_centrado" width="100%" id="tabla_reporte_7_7">
-							{{-- <thead>
-									<tr>
-										<th width="60">No.<br>medición</th>
-										<th>Área</th>
-										<th>Ubicación</th>
-										<th>Identificación</th>
-										<th width="80">Frecuencia<br>en Hz</th>
-										<th width="80">Nivel de<br>Presión<br>Acústica<br>Promedio (dB)</th>
-										<th width="60">NER<br>dB(A)</th>
-										<th width="60">R<br>dB (A)</th>
-										<th width="60">NRE<br>dB (A)</th>
-										<th width="60">Editar</th>
-									</tr>
-								</thead>
-								<tbody></tbody> --}}
-						</table>
-					</div>
-				</div>
-				<h4 class="card-title" id="8">8.- Conclusiones</h4>
-				<select class="custom-select form-control mb-1" style="width: 100%;" id="ID_CATCONCLUSION">
-					<option value="">&nbsp;</option>
-					@foreach($catConclusiones as $dato)
-					<option value="{{$dato->ID_CATCONCLUSION}}" data-descripcion="{{$dato->DESCRIPCION}}">{{$dato->NOMBRE}}</option>
-					@endforeach
-				</select>
-				<div class="row">
-					<div class="col-12">
-						<form method="post" enctype="multipart/form-data" name="form_reporte_conclusion" id="form_reporte_conclusion">
-							<div class="row">
-								<div class="col-12">
-									{!! csrf_field() !!}
-									<div class="form-group">
-										<textarea class="form-control" style="margin-bottom: 0px;" rows="20" id="reporte_conclusion" name="reporte_conclusion" required></textarea>
-									</div>
-								</div>
-								<div class="col-12" style="text-align: right;">
-									<div class="form-group">
-										<button type="submit" class="btn btn-danger waves-effect waves-light botoninforme" id="botonguardar_reporte_conclusion">Guardar conclusión <i class="fa fa-save"></i></button>
-									</div>
-								</div>
-							</div>
-						</form>
-					</div>
-				</div>
-				<div class="row">
-					<div class="col-12">
-						<p class="justificado">A continuación, se plasman los resultados en la siguiente figura:</p><br>
-						<style type="text/css">
+							<p class="justificado">A continuación, se plasman los resultados en la siguiente figura:</p><br>
+							<style type="text/css">
 							#tabla_dashboard th {
 								border: 1px #E9E9E9 solid;
 								background: #0C3F64;
@@ -1218,120 +746,189 @@
 						<table class="table" width="100%" id="tabla_dashboard">
 							<tbody>
 								<tr>
-									<th colspan="5" style="font-size: 18px!important;">Evaluación de ruido en <span class="div_instalacion_nombre">NOMBRE INSTALACION</span>.</th>
+									<th colspan="5" style="font-size: 18px!important;">Información general del puesto de trabajo</th>
 								</tr>
 								<tr>
-									<th colspan="3">Áreas evaluadas en medición ambiental</th>
-									<th width="400">Categorías evaluadas en medición personal</th>
-									<td width="250" rowspan="2">
-										<div style="border: 0px #F00 solid;">
-											<span style="position: absolute; margin-top: 60px; margin-left: 55px; font-size: 18px; font-weight: bold;" id="dashboard_total_evaluacion">
-												{{-- 20 puntos<br>Sonometría<br><br>3 puntos<br>Dosimetría --}}
-											</span>
-											<img src="/assets/images/reportes/dashboard_ruido1.jpg" height="200">
-										</div>
-									</td>
+									<th colspan="3">Trabajadores evaluados por género</th>
+									<th width="400">Trabajadores evaluados por rango de edades</th>
+									<th width="250">Trabajadores evaluados por escolaridad</th>
 								</tr>
 								<tr>
-									<td colspan="3" style="height: 200px; text-align: left;">
-										<span id="dashboard_areas">
-											{{-- * Motobomba y Servicio Auxiliares<br>
-												* Aguas Congénitas <br>
-												* Turbocompresoras<br> --}}
-										</span>
+								<td colspan="3" style="height: 200px; text-align: left;">
+								<div id="grafica_genero" style="height: 200px; width: 200px; border: 0px #000000 solid; margin: 0px auto;"></div>
+										<span style="color: #8ee66b;">■</span> Dentro de norma<br>
+										<span style="color: #f4d03f;">■</span> Nivel de acción <br>
+										<span style="color: #fc4b6c;">■</span> Fuera de norma
 									</td>
-									<td style="text-align: left;">
-										{{-- <i class="fa fa-users text-info" style="font-size: 60px!important;"></i><br><br> --}}
-										<span id="dashboard_categorias">
-											{{-- * Bombero “A” Medidor en Batería de Separación<br>
-												* Ayudante Especialista Diversos Oficios<br>
-												* Operario Especialista Eléctrico<br> --}}
-										</span>
-									</td>
-								</tr>
-								<tr>
-									<th colspan="3">Puntos de evaluación (medición ambiental)</th>
-									<th>Puntos de evaluación (medición personal)</th>
-									<td width="250" rowspan="2">
-										<span class="texto">Equipo de protección<br>personal auditiva:</span><br><br>
-										<span id="dashboard_equipos">
-											* Bombero “A” Medidor en Batería de Separación<br>
-											* Ayudante Especialista Diversos Oficios<br>
-											* Operario Especialista Eléctrico<br>
-										</span><br><br>
-										<i class="fa fa-pencil-square-o text-info" style="font-size: 60px!important;"></i><br>
-										<span class="texto">Recomendaciones<br>emitidas:</span><br>
-										<span class="numero" id="dashboard_recomendaciones_total">0</span>
-									</td>
-								</tr>
-								<tr>
-									<td style="height: 280px;">
-										<i class="fa fa-warning icono" style="color: #8ee66b;"></i>
-										<span class="texto">Dentro de norma</span><br>
-										<span class="numero" id="dashboard_sonometria_total_dentronorma">0</span>
-									</td>
+								
+							
 									<td>
-										<i class="fa fa-warning icono" style="color: #f4d03f;"></i>
-										<span class="texto">Nivel de acción</span><br>
-										<span class="numero" id="dashboard_sonometria_total_niveldeaccion">0</span>
+										<div id="grafica_edad" style="height: 200px; width: 200px; border: 0px #000000 solid; margin: 0px auto;"></div>
+										<span style="color: #8ee66b;">■</span> Dentro de norma<br>
+										<span style="color: #f4d03f;">■</span> Nivel de acción <br>
+										<span style="color: #fc4b6c;">■</span> Fuera de norma
 									</td>
+						
 									<td>
-										<i class="fa fa-warning icono" style="color: #fc4b6c;"></i>
-										<span class="texto">Fuera de norma</span><br>
-										<span class="numero" id="dashboard_sonometria_total_fueranorma">0</span>
-									</td>
-									<td>
-										<div id="grafica_resultados" style="height: 200px; width: 200px; border: 0px #000000 solid; margin: 0px auto;"></div>
+										<div id="grafica_escolaridad" style="height: 200px; width: 200px; border: 0px #000000 solid; margin: 0px auto;"></div>
 										<span style="color: #8ee66b;">■</span> Dentro de norma<br>
 										<span style="color: #f4d03f;">■</span> Nivel de acción <br>
 										<span style="color: #fc4b6c;">■</span> Fuera de norma
 									</td>
 								</tr>
 								<tr>
+									<th colspan="3">Trabajadores evaluados por género</th>
+									<th width="400">Trabajadores evaluados por rango de edades</th>
+									<th width="250">Trabajadores evaluados por escolaridad</th>
+								</tr>
+								<tr>
+									<td>
+										<div id="grafica_estadocivil" style="height: 200px; border: 0px #000000 solid; margin: 0px auto;"></div>
+										<span style="color: #8ee66b;">■</span> Dentro de norma<br>
+										<span style="color: #f4d03f;">■</span> Nivel de acción <br>
+										<span style="color: #fc4b6c;">■</span> Fuera de norma
+									</td>
+									
+									<td>
+										<div id="grafica_regimen" style="height: 200px; border: 0px #000000 solid; margin: 0px auto;"></div>
+										<span style="color: #8ee66b;">■</span> Dentro de norma<br>
+										<span style="color: #f4d03f;">■</span> Nivel de acción <br>
+										<span style="color: #fc4b6c;">■</span> Fuera de norma
+									</td>
+									
+									<td>
+										<div id="grafica_areas" style="height: 200px; border: 0px #000000 solid; margin: 0px auto;"></div>
+										<span style="color: #8ee66b;">■</span> Dentro de norma<br>
+										<span style="color: #f4d03f;">■</span> Nivel de acción <br>
+										<span style="color: #fc4b6c;">■</span> Fuera de norma
+									</td>
+									</tr>
+								
+								<tr>
 									<th colspan="5">Análisis derivado del informe de resultados de ruido "Condiciones de seguridad e higiene en los centros de trabajo donde se genere ruido (NOM-011-STPS-2001)".</th>
 								</tr>
 							</tbody>
 						</table>
-						{{-- <div id="captura" style="height: 800px; width: 100%; border: 1px #000 solid;">graficas</div><br> --}}
-						{{-- <button type="button" class="btn btn-success waves-effect waves-light" id="botonguardar_generargraficas">Guardar gráficas <i class="fa fa-chart"></i></button> --}}
 					</div>
 				</div>
-				<h4 class="card-title" id="9">9.- Recomendaciones de control</h4>
-				<form method="post" enctype="multipart/form-data" name="form_reporte_recomendaciones" id="form_reporte_recomendaciones">
-					<div class="row">
-						<div class="col-12">
-							{!! csrf_field() !!}
-						</div>
-						<div class="col-12">
-							<ol class="breadcrumb" style="padding: 6px; margin: 10px 0px;">
-								<button type="button" class="btn btn-default waves-effect botoninforme" data-toggle="tooltip" title="Agregar nueva recomendación" id="boton_reporte_nuevarecomendacion">
-									<span class="btn-label"><i class="fa fa-plus"></i></span>Nueva recomendación
-								</button>
-							</ol>
-							<style type="text/css">
-								#tabla_reporte_9 td.alinear_izquierda {
-									text-align: left;
-								}
-							</style>
-							<table class="table table-hover tabla_info_centrado" width="100%" id="tabla_reporte_9">
-								<thead>
-									<tr>
-										<th width="60">No.</th>
-										<th width="70">Activo</th>
-										<th>Descripción</th>
-									</tr>
-								</thead>
-								<tbody></tbody>
-							</table>
-						</div>
-						<div class="col-12" style="text-align: right;">
-							<div class="form-group">
-								<button type="submit" class="btn btn-danger waves-effect waves-light botoninforme" id="botonguardar_reporte_recomendaciones">Guardar recomendaciones <i class="fa fa-save"></i></button>
-							</div>
-						</div>
+				<h4 class="card-title" id="8">8.- Valores de referencia</h4>
+				<div class="row">
+					<div class="col-12">
+						<p class="justificado">A partir del resultado de la calificación de cada cuestionario se determina y analiza el nivel de riesgo, así como las acciones que se deben adoptar para el control de los factores de riesgo psicosocial</p><br>
 					</div>
-				</form>
+				</div>
+				<h4 class="card-title" id="9">9.- Resultados</h4>
+				<h4 class="card-title" id="9_1">9.1.- Registro de los resultados. Número de puntos evaluados</h4>
+				<div class="row">
+					<div class="col-12">
+						<p class="justificado">En este apartado se muestra el registro de resultados</p><br>
+						<table class="table table-hover tabla_info_centrado" width="100%" id="tabla_reporte_categoria">
+							<thead>
+								<tr>
+									<th>GUIA DE REFERENCIA</th>
+									<th>NOMBRE</th>
+									<th>No. Preguntas</th>
+								</tr>
+							</thead>
+							<tbody></tbody>
+						</table><br>
+					</div>
+				</div>
+				<h4 class="card-title" id="9_2">9.2.- Código de representación gráfica y color, NOM-035-STPS-2018</h4>
+				<div class="row">
+					<div class="col-12">
+						<p class="justificado">En este apartado se muestran: categorias, niveles de riesgo y recomendaciones, según el código de representación gráfica de riesgo </p><br>
+						<table class="table table-hover tabla_info_centrado" width="100%" id="tabla_reporte_categoria">
+							<thead>
+								<tr>
+									<th>Categoría</th>
+									<th>Nivel de riesggo</th>
+									<th>Recomendación</th>
+								</tr>
+							</thead>
+							<tbody>
+								<tr>
+									<td>Acontecimientos traumáticos severos</td>
+									<td>icono</td>
+									<td>
+										<input type="text" name="traumatic_event" placeholder="Escribir recomendación">
+									</td>
+								</tr>
+								<tr>
+									<td>Ambiente de trabajo</td>
+									<td>icono</td>
+									<td>
+										<input type="text" name="traumatic_event" placeholder="Escribir recomendación">
+									</td>
+								</tr>
+								<tr>
+									<td>Factores propios de la actividad</td>
+									<td>icono</td>
+									<td>
+										<input type="text" name="traumatic_event" placeholder="Escribir recomendación">
+									</td>
+								</tr>
+								<tr>
+									<td>Organización del tiempo de trabajo</td>
+									<td>icono</td>
+									<td>
+										<input type="text" name="traumatic_event" placeholder="Escribir recomendación">
+									</td>
+								</tr>
+								<tr>
+									<td>Liderazgo y relaciones en el trabajo</td>
+									<td>icono</td>
+									<td>
+										<input type="text" name="traumatic_event" placeholder="Escribir recomendación">
+									</td>
+								</tr>
+								<tr>
+									<td>Entorno organizacional</td>
+									<td>icono</td>
+									<td>
+										<input type="text" name="traumatic_event" placeholder="Escribir recomendación">
+									</td>
+								</tr>
+								
+							</tbody>
+						</table><br>
+					</div>
+				</div>
+				<h4 class="card-title" id="9_3">9.3.- Resultados obtenidos en la Guía de Referencia I, Identificar a los trabajadores que fueron sujetos a acontecimientos traumáticos severos.</h4>
+				<h4 class="card-title" id="9_4">9.4.- Resultados obtenidos en la guía de referencia III, Identificación y análisis de los Factores de Riesgo Psicosocial y Evaluación del entorno organizacional en los centros de trabajo por categoría y dominio conforme a la NOM-035-STPS-2018.</h4>
+				<h4 class="card-title" id="9_5">9.5.- Resultados obtenidos, categoría evento traumatico severo.</h4>
+				<h4 class="card-title" id="9_6">9.6.- Resultados obtenidos, categoría ambiente de trabajo.</h4>
+				<h4 class="card-title" id="9_7">9.7.- Resultados obtenidos, categoría factores propios de la actividad.</h4>
+				<h4 class="card-title" id="9_8">9.8.- Resultados obtenidos, categoría organización del tiempo de trabajo.</h4>
+				<h4 class="card-title" id="9_9">9.9.- Resultados obtenidos, categoría liderazgo y relaciones en el trabajo.</h4>
+				<h4 class="card-title" id="9_10">9.10.- Resultados obtenidos, categoría entorno organizacional.</h4>
+				<h4 class="card-title" id="9_11">9.11.- Resultados obtenidos, consolidado general del centro de trabajo.</h4>
 				<h4 class="card-title" id="10">10.- Responsables del informe</h4>
+				<select class="custom-select form-control mb-1" style="width: 100%;" id="ID_CATCONCLUSION">
+					<option value="">&nbsp;</option>
+					@foreach($catConclusiones as $dato)
+					<option value="{{$dato->ID_CATCONCLUSION}}" data-descripcion="{{$dato->DESCRIPCION}}">{{$dato->NOMBRE}}</option>
+					@endforeach
+				</select>
+				<div class="row">
+					<div class="col-12">
+						<form method="post" enctype="multipart/form-data" name="form_reporte_conclusion" id="form_reporte_conclusion">
+							<div class="row">
+								<div class="col-12">
+									{!! csrf_field() !!}
+									<div class="form-group">
+										<textarea class="form-control" style="margin-bottom: 0px;" rows="20" id="reporte_conclusion" name="reporte_conclusion" required></textarea>
+									</div>
+								</div>
+								<div class="col-12" style="text-align: right;">
+									<div class="form-group">
+										<button type="submit" class="btn btn-danger waves-effect waves-light botoninforme" id="botonguardar_reporte_conclusion">Guardar conclusión <i class="fa fa-save"></i></button>
+									</div>
+								</div>
+							</div>
+						</form>
+					</div>
+				</div>
 				<form method="post" enctype="multipart/form-data" name="form_reporte_responsablesinforme" id="form_reporte_responsablesinforme">
 					<div class="row">
 						<div class="col-12">
@@ -1402,184 +999,7 @@
 						<p class="justificado"><b style="color: #333333; font-weight: bold;">Nota del software:</b> Se encontraron <span id="memoriafotografica_total">0</span> fotos de los puntos evaluados que se agregaran al informe de ruido.</p>
 					</div>
 				</div>
-				<h4 class="card-title" id="11_2">11.2.- Anexo 2: Planos de fuentes generadoras y puntos evaluados</h4>
-				<form method="post" enctype="multipart/form-data" name="form_reporte_planos" id="form_reporte_planos">
-					<div class="row">
-						<div class="col-12">
-							{!! csrf_field() !!}
-						</div>
-						<div class="col-12">
-							<p class="justificado"><b style="color: #333333; font-weight: bold;">Nota del software:</b> Solo los planos de las carpetas elegidas aparecerán en el informe de ruido.</p><br>
-							<table class="table table-hover tabla_info_centrado" width="100%" id="tabla_reporte_planos">
-								<thead>
-									<tr>
-										<th width="60">Seleccionado</th>
-										<th>Carpeta</th>
-										<th width="120">Total planos</th>
-									</tr>
-								</thead>
-								<tbody></tbody>
-							</table>
-						</div>
-						<div class="col-12" style="text-align: right;">
-							<div class="form-group">
-								<button type="submit" class="btn btn-danger waves-effect waves-light botoninforme" id="botonguardar_reporte_planos">Guardar carpeta planos <i class="fa fa-save"></i></button>
-							</div>
-						</div>
-					</div>
-				</form>
-				<h4 class="card-title" id="11_3">11.3.- Anexo 3: Memoria de cálculo y gráficas del NS<sub>A</sub> o bien, del NSCE<sub>A, T</sub> y NER según método utilizado</h4>
-				<div class="row">
-					<div class="col-12" style="padding-top: 10px;">
-						<p class="justificado"><b style="color: #333333; font-weight: bold;">Nota del software:</b> El Anexo "Anexo 3", debe elegirlo en la tabla del punto 12.1 El cual se adjuntará en la impresión del informe en formato PDF.</p>
-					</div>
-				</div>
-				<div class="row">
-					<div class="col-12" style="padding-top: 10px;">
-						<b style="color: #333333; font-weight: bold;">Nota aclaratoria</b><br>
-						<p class="justificado">La memoria de cálculo y gráficas del NS<sub>A</sub> o bien, del NSCE<sub>A, T</sub> y NER de acuerdo al método empleado en el presente estudio, se encuentra disponible para consulta dentro del informe de resultados (Anexo 7) emitido por el laboratorio aprobado ya que dicho informe no puede ser alterado o modificado en su contenido.</p>
-					</div>
-				</div>
-				<h4 class="card-title" id="11_4">11.4.- Anexo 4: Memoria de cálculo y gráfica del Nivel de Presión Acústica NPA en bandas de octava</h4>
-				<div class="row">
-					<div class="col-12" style="padding-top: 10px;">
-						<p class="justificado"><b style="color: #333333; font-weight: bold;">Nota del software:</b> El Anexo "Anexo 4", debe elegirlo en la tabla del punto 12.1 El cual se adjuntará en la impresión del informe en formato PDF.</p>
-					</div>
-				</div>
-				<div class="row">
-					<div class="col-12" style="padding-top: 10px;">
-						<b style="color: #333333; font-weight: bold;">Nota aclaratoria</b><br>
-						<p class="justificado">La memoria de cálculo y gráfica del Nivel de Presión Acústica NPA en bandas de octava, se encuentra disponible para consulta dentro del informe de resultados (Anexo 7) emitido por el laboratorio aprobado ya que dicho informe no puede ser alterado o modificado en su contenido.</p>
-					</div>
-				</div>
-				<h4 class="card-title" id="11_5">11.5.- Anexo 5: Equipo utilizado en la medición</h4>
-				<form method="post" enctype="multipart/form-data" name="form_reporte_equipoutilizado" id="form_reporte_equipoutilizado">
-					<div class="row">
-						<div class="col-12">
-							{!! csrf_field() !!}
-						</div>
-						<div class="col-12">
-							<table class="table table-hover tabla_info_centrado" width="100%" id="tabla_reporte_equipoutilizado">
-								<thead>
-									<tr>
-										<th width="60">No.</th>
-										<th width="60">Seleccionado</th>
-										<th>Equipo</th>
-										<th width="200">Marca / Modelo / Serie</th>
-										<th width="160">Vigencia</th>
-									</tr>
-								</thead>
-								<tbody></tbody>
-							</table>
-						</div>
-						<div class="col-12">
-							<div class="informacion_estatica">
-								<br><b>Nota *:</b> La calibración tiene una extensión en el tiempo de vigencia avalada mediante una carta emitida por el laboratorio acreditado misma que se encuentra disponible para consulta en el anexo 5.<br>
-							</div>
-						</div>
-						<div class="col-12" style="text-align: right;">
-							<div class="form-group">
-								<button type="submit" class="btn btn-danger waves-effect waves-light botoninforme" id="botonguardar_reporte_equipoutilizado">Guardar equipo utilizado <i class="fa fa-save"></i></button>
-							</div>
-						</div>
-					</div>
-				</form>
-				<h4 class="card-title" id="11_6">11.6.- Anexo 6: Copia de certificados o avisos de calibración del equipo</h4>
-				<div class="row">
-					<div class="col-12" style="padding-top: 10px;">
-						<p class="justificado"><b style="color: #333333; font-weight: bold;">Nota del software:</b> El certificado del equipo utilizado seleccionado en el punto 11.6 “Anexo 6: Equipo utilizado en la medición” se adjuntará en la impresión del reporte en formato PDF.</p>
-					</div>
-				</div>
-				<h4 class="card-title" id="11_7">11.7.- Anexo 7: Informe de resultados</h4>
-				<div class="row">
-					<div class="col-12" style="padding-top: 10px;">
-						<p class="justificado"><b style="color: #333333; font-weight: bold;">Nota del software:</b> El Anexo "Anexo 7", debe elegirlo en la tabla del punto 12.1 El cual se adjuntará en la impresión del informe en formato PDF.</p>
-					</div>
-				</div>
-				<h4 class="card-title" id="11_8">11.8.- Anexo 8: Copia de aprobación del laboratorio de ensayo ante la STPS</h4>
-				<div class="row">
-					<div class="col-12" style="padding-top: 10px;">
-						<p class="justificado"><b style="color: #333333; font-weight: bold;">Nota del software:</b> El Anexo "Anexo 8", debe elegirlo en la tabla del punto 12.2 El cual se adjuntará en la impresión del informe en formato PDF.</p>
-					</div>
-				</div>
-				<div class="row">
-					<div class="col-12" style="padding-top: 10px;">
-						<b style="color: #333333; font-weight: bold;">Nota aclaratoria</b><br>
-						<p class="justificado">El muestreo se realizó por un signatario aprobado para llevar a cabo la evaluación de conformidad con la NOM-011-STPS-2001, condiciones de seguridad e higiene en los centros de trabajo donde se genere ruido, mismo que aparece dentro del registro de aprobación ante la Secretaría del Trabajo y Previsión Social (STPS).</p>
-					</div>
-				</div>
-				<h4 class="card-title" id="11_9">11.9.- Anexo 9: Copia del registro ante la entidad mexicana de acreditación (ema)</h4>
-				<div class="row">
-					<div class="col-12" style="padding-top: 10px;">
-						<p class="justificado"><b style="color: #333333; font-weight: bold;">Nota del software:</b> El Anexo "Anexo 9", debe elegirlo en la tabla del punto 12.2 El cual se adjuntará en la impresión del informe en formato PDF.</p>
-					</div>
-				</div>
-				<div class="row">
-					<div class="col-12" style="padding-top: 10px;">
-						<b style="color: #333333; font-weight: bold;">Nota aclaratoria</b><br>
-						<p class="justificado">El muestreo se realizó por un signatario acreditado en la NOM-011-STPS-2001, condiciones de seguridad e higiene en los centros de trabajo donde se genere ruido, el cual aparece dentro de la acreditación del laboratorio ante la entidad mexicana de acreditación (ema).</p>
-					</div>
-				</div>
-				<h4 class="card-title" id="12_1">12.1.- Seleccionar Anexos 3 (Memo. cal.) y 4 (Memo. cal.) y 7 (Info. resultados)</h4>
-				<form method="post" enctype="multipart/form-data" name="form_reporte_anexosresultados" id="form_reporte_anexosresultados">
-					<div class="row">
-						<div class="col-12">
-							{!! csrf_field() !!}
-						</div>
-						<div class="col-12">
-							<p class="justificado"><b style="color: #333333; font-weight: bold;">Nota del software:</b> Los arhivos seleccionados se adjuntarán en la impresión del reporte en formato PDF.</p><br>
-							<table class="table table-hover tabla_info_centrado" width="100%" id="tabla_reporte_anexosresultados">
-								<thead>
-									<tr>
-										<th width="60">No.</th>
-										<th width="70">Seleccionado</th>
-										<th>Documento</th>
-										<th width="60">Tipo</th>
-										<th width="160">Fecha</th>
-										<th width="60">Mostrar</th>
-									</tr>
-								</thead>
-								<tbody></tbody>
-							</table>
-						</div>
-						<div class="col-12" style="text-align: right;">
-							<div class="form-group">
-								<button type="submit" class="btn btn-danger waves-effect waves-light botoninforme" id="botonguardar_reporte_anexosresultados">Guardar anexos resultados <i class="fa fa-save"></i></button>
-							</div>
-						</div>
-					</div>
-				</form>
-				<h4 class="card-title" id="12_2">12.2.- Seleccionar Anexos 8 (STPS) y 9 (EMA)</h4>
-				<form method="post" enctype="multipart/form-data" name="form_reporte_acreditacionaprobacion" id="form_reporte_acreditacionaprobacion">
-					<div class="row">
-						<div class="col-12">
-							{!! csrf_field() !!}
-						</div>
-						<div class="col-12">
-							<p class="justificado"><b style="color: #333333; font-weight: bold;">Nota del software:</b> Los arhivos seleccionados se adjuntarán en la impresión del reporte en formato PDF.</p><br>
-							<table class="table table-hover tabla_info_centrado" width="100%" id="tabla_reporte_acreditacionaprobacion">
-								<thead>
-									<tr>
-										<th width="60">No.</th>
-										<th width="60">Seleccionado</th>
-										<th width="100">Tipo</th>
-										<th>Entidad</th>
-										<th width="200">Numero</th>
-										<th>Área</th>
-										<th width="160">Vigencia</th>
-										<th width="60">Certificado</th>
-									</tr>
-								</thead>
-								<tbody></tbody>
-							</table>
-						</div>
-						<div class="col-12" style="text-align: right;">
-							<div class="form-group">
-								<button type="submit" class="btn btn-danger waves-effect waves-light botoninforme" id="botonguardar_reporte_acreditacionaprobacion">Guardar anexos 7 (STPS) y 8 (EMA) <i class="fa fa-save"></i></button>
-							</div>
-						</div>
-					</div>
-				</form>
+				
 				<h4 class="card-title" id="13">Generar informe .docx + Anexos .Zip</h4>
 				<div class="row">
 					<div class="col-12">
@@ -2940,4 +2360,4 @@
 	var areas_poe = <?php echo json_encode($areas_poe); ?>;
 </script>
 {{-- <script src="/js_sitio/html2canvas.js"></script> --}}
-<script src="/js_sitio/reportes/reportenom035.js?v=1.0"></script>
+<script src="/js_sitio/reportes/reportenom0353.js?v=1.0"></script>
