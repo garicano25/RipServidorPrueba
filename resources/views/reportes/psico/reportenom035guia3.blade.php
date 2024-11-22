@@ -481,7 +481,7 @@
 						<div class="col-12">
 							<div class="form-group">
 								{!! csrf_field() !!}
-								<textarea class="form-control" style="margin-bottom: 0px;" rows="20" id="reporte_introduccion" name="reporte_introduccion" required></textarea>
+								<textarea class="form-control" style="margin-bottom: 0px;" rows="20" id="" name="" required></textarea>
 							</div>
 						</div>
 						<div class="col-12" style="text-align: right;">
@@ -529,7 +529,7 @@
 						<div class="col-12">
 							<div class="form-group">
 								{!! csrf_field() !!}
-								<textarea class="form-control" style="margin-bottom: 0px;" rows="8" id="reporte_objetivogeneral" name="reporte_objetivogeneral" required></textarea>
+								<textarea class="form-control" style="margin-bottom: 0px;" rows="8" id="" name="" required></textarea>
 							</div>
 						</div>
 						<div class="col-12" style="text-align: right;">
@@ -543,7 +543,7 @@
 						<div class="col-12">
 							<div class="form-group">
 								{!! csrf_field() !!}
-								<textarea class="form-control" style="margin-bottom: 0px;" rows="12" id="reporte_objetivoespecifico" name="reporte_objetivoespecifico" required></textarea>
+								<textarea class="form-control" style="margin-bottom: 0px;" rows="12" id="" name="" required></textarea>
 							</div>
 						</div>
 						<div class="col-12" style="text-align: right;">
@@ -558,7 +558,7 @@
 						<div class="col-12">
 							<div class="form-group">
 								{!! csrf_field() !!}
-								<textarea class="form-control" style="margin-bottom: 0px;" rows="8" id="reporte_metodologia_4_1" name="reporte_metodologia_4_1" required></textarea>
+								<textarea class="form-control" style="margin-bottom: 0px;" rows="8" id="" name="" required></textarea>
 							</div>
 						</div>
 						<div class="col-12" style="text-align: right;">
