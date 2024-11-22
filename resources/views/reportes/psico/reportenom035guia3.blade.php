@@ -972,31 +972,6 @@
 					</div>
 				</form>
 				<h4 class="card-title" id="12">12.- Responsables del informe</h4>
-				<select class="custom-select form-control mb-1" style="width: 100%;" id="ID_CATCONCLUSION">
-					<option value="">&nbsp;</option>
-					@foreach($catConclusiones as $dato)
-					<option value="{{$dato->ID_CATCONCLUSION}}" data-descripcion="{{$dato->DESCRIPCION}}">{{$dato->NOMBRE}}</option>
-					@endforeach
-				</select>
-				<div class="row">
-					<div class="col-12">
-						<form method="post" enctype="multipart/form-data" name="form_reporte_conclusion" id="form_reporte_conclusion">
-							<div class="row">
-								<div class="col-12">
-									{!! csrf_field() !!}
-									<div class="form-group">
-										<textarea class="form-control" style="margin-bottom: 0px;" rows="20" id="reporte_conclusion" name="reporte_conclusion" required></textarea>
-									</div>
-								</div>
-								<div class="col-12" style="text-align: right;">
-									<div class="form-group">
-										<button type="submit" class="btn btn-danger waves-effect waves-light botoninforme" id="botonguardar_reporte_conclusion">Guardar conclusión <i class="fa fa-save"></i></button>
-									</div>
-								</div>
-							</div>
-						</form>
-					</div>
-				</div>
 				<form method="post" enctype="multipart/form-data" name="form_reporte_responsablesinforme" id="form_reporte_responsablesinforme">
 					<div class="row">
 						<div class="col-12">
