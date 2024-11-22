@@ -756,51 +756,46 @@
 								<tr>
 								<td colspan="3" style="height: 200px; text-align: left;">
 								<div id="grafica_genero" style="height: 200px; width: 200px; border: 0px #000000 solid; margin: 0px auto;"></div>
-										<span style="color: #8ee66b;">■</span> Dentro de norma<br>
-										<span style="color: #f4d03f;">■</span> Nivel de acción <br>
-										<span style="color: #fc4b6c;">■</span> Fuera de norma
+								<span style="color: #8ee66b;">■</span> Bajo<br>
+										<span style="color: #f4d03f;">■</span> Medio<br>
+										<span style="color: #fc4b6c;">■</span> Alto
 									</td>
 								
 							
 									<td>
 										<div id="grafica_edad" style="height: 200px; width: 200px; border: 0px #000000 solid; margin: 0px auto;"></div>
-										<span style="color: #8ee66b;">■</span> Dentro de norma<br>
-										<span style="color: #f4d03f;">■</span> Nivel de acción <br>
-										<span style="color: #fc4b6c;">■</span> Fuera de norma
+										<span style="color: #8ee66b;">■</span> Bajo<br>
+										<span style="color: #f4d03f;">■</span> Medio<br>
+										<span style="color: #fc4b6c;">■</span> Alto
 									</td>
 						
 									<td>
 										<div id="grafica_escolaridad" style="height: 200px; width: 200px; border: 0px #000000 solid; margin: 0px auto;"></div>
-										<span style="color: #8ee66b;">■</span> Dentro de norma<br>
-										<span style="color: #f4d03f;">■</span> Nivel de acción <br>
-										<span style="color: #fc4b6c;">■</span> Fuera de norma
+										<span style="color: #8ee66b;">■</span> Bajo<br>
+										<span style="color: #f4d03f;">■</span> Medio<br>
+										<span style="color: #fc4b6c;">■</span> Alto
 									</td>
 								</tr>
 								<tr>
-									<th colspan="3">Trabajadores evaluados por género</th>
-									<th width="400">Trabajadores evaluados por rango de edades</th>
-									<th width="250">Trabajadores evaluados por escolaridad</th>
-								</tr>
-								<tr>
-									<td>
-										<div id="grafica_estadocivil" style="height: 200px; border: 0px #000000 solid; margin: 0px auto;"></div>
-										<span style="color: #8ee66b;">■</span> Dentro de norma<br>
-										<span style="color: #f4d03f;">■</span> Nivel de acción <br>
-										<span style="color: #fc4b6c;">■</span> Fuera de norma
+								<td colspan="3" style="height: 200px; text-align: left;">
+								<div id="grafica_estadocivil" style="height: 200px; width: 200px; border: 0px #000000 solid; margin: 0px auto;"></div>
+								<span style="color: #8ee66b;">■</span> Bajo<br>
+										<span style="color: #f4d03f;">■</span> Medio<br>
+										<span style="color: #fc4b6c;">■</span> Alto
 									</td>
 									
 									<td>
 										<div id="grafica_regimen" style="height: 200px; border: 0px #000000 solid; margin: 0px auto;"></div>
-										<span style="color: #8ee66b;">■</span> Dentro de norma<br>
-										<span style="color: #f4d03f;">■</span> Nivel de acción <br>
-										<span style="color: #fc4b6c;">■</span> Fuera de norma
+										<span style="color: #8ee66b;">■</span> Bajo<br>
+										<span style="color: #f4d03f;">■</span> Medio<br>
+										<span style="color: #fc4b6c;">■</span> Alto
 									</td>
 									
 									<td>
 										<div id="grafica_areas" style="height: 200px; border: 0px #000000 solid; margin: 0px auto;"></div>
-										<span style="color: #8ee66b;">■</span> Dentro de norma<br>
-										<span style="color: #f4d03f;">■</span> Nivel de acción <br>
-										<span style="color: #fc4b6c;">■</span> Fuera de norma
+										<span style="color: #8ee66b;">■</span> Bajo<br>
+										<span style="color: #f4d03f;">■</span> Medio<br>
+										<span style="color: #fc4b6c;">■</span> Alto
 									</td>
 									</tr>
 								
@@ -903,7 +898,80 @@
 				<h4 class="card-title" id="9_9">9.9.- Resultados obtenidos, categoría liderazgo y relaciones en el trabajo.</h4>
 				<h4 class="card-title" id="9_10">9.10.- Resultados obtenidos, categoría entorno organizacional.</h4>
 				<h4 class="card-title" id="9_11">9.11.- Resultados obtenidos, consolidado general del centro de trabajo.</h4>
-				<h4 class="card-title" id="10">10.- Responsables del informe</h4>
+				<h4 class="card-title" id="10">10.- Conclusiones</h4>
+				<h4 class="card-title" id="10_1">10.1.- Conclusiones de conformidad a la NOM-035-STPS-2018.</h4>
+				<form method="post" enctype="multipart/form-data" name="form_reporte_procesoinstalacion" id="form_reporte_procesoinstalacion">
+					<div class="row">
+						<div class="col-12">
+							{!! csrf_field() !!}
+							<div class="form-group">
+								<label>Categoría acontecimientos traumáticos severos.</label>
+								<textarea class="form-control" style="margin-bottom: 0px;" rows="5" id="reporte_procesoinstalacion" name="reporte_procesoinstalacion" required></textarea>
+							</div>
+							<div class="form-group">
+								<label>Categoría ambiente de trabajo.</label>
+								<textarea class="form-control" style="margin-bottom: 0px;" rows="5" id="reporte_procesoinstalacion" name="reporte_procesoinstalacion" required></textarea>
+							</div>
+							<div class="form-group">
+								<label>Categoría factores propios de la actividad.</label>
+								<textarea class="form-control" style="margin-bottom: 0px;" rows="5" id="reporte_procesoinstalacion" name="reporte_procesoinstalacion" required></textarea>
+							</div>
+							<div class="form-group">
+								<label>Categoría organización del tiempo de trabajo.</label>
+								<textarea class="form-control" style="margin-bottom: 0px;" rows="5" id="reporte_procesoinstalacion" name="reporte_procesoinstalacion" required></textarea>
+							</div>
+							<div class="form-group">
+								<label>Categoría liderazgo y relaciones en el trabajo.</label>
+								<textarea class="form-control" style="margin-bottom: 0px;" rows="5" id="reporte_procesoinstalacion" name="reporte_procesoinstalacion" required></textarea>
+							</div>
+							<div class="form-group">
+								<label>Categoría entorno organizacional.</label>
+								<textarea class="form-control" style="margin-bottom: 0px;" rows="5" id="reporte_procesoinstalacion" name="reporte_procesoinstalacion" required></textarea>
+							</div>
+						</div>
+						<div class="col-12" style="text-align: right;">
+							<div class="form-group">
+								<button type="submit" class="btn btn-danger waves-effect waves-light botoninforme" id="botonguardar_reporte_procesoinstalacion">Guardar proceso instalación <i class="fa fa-save"></i></button>
+							</div>
+						</div>
+					</div>
+				</form>
+				<h4 class="card-title" id="11">11.- Recomendaciones de control</h4>
+				<form method="post" enctype="multipart/form-data" name="form_reporte_recomendaciones" id="form_reporte_recomendaciones">
+					<div class="row">
+						<div class="col-12">
+							{!! csrf_field() !!}
+						</div>
+						<div class="col-12">
+							<ol class="breadcrumb" style="padding: 6px; margin: 10px 0px;">
+								<button type="button" class="btn btn-default waves-effect botoninforme" data-toggle="tooltip" title="Agregar nueva recomendación" id="boton_reporte_nuevarecomendacion">
+									<span class="btn-label"><i class="fa fa-plus"></i></span>Nueva recomendación
+								</button>
+							</ol>
+							<style type="text/css">
+								#tabla_reporte_9 td.alinear_izquierda {
+									text-align: left;
+								}
+							</style>
+							<table class="table table-hover tabla_info_centrado" width="100%" id="tabla_reporte_9">
+								<thead>
+									<tr>
+										<th width="60">No.</th>
+										<th width="70">Activo</th>
+										<th>Descripción</th>
+									</tr>
+								</thead>
+								<tbody></tbody>
+							</table>
+						</div>
+						<div class="col-12" style="text-align: right;">
+							<div class="form-group">
+								<button type="submit" class="btn btn-danger waves-effect waves-light botoninforme" id="botonguardar_reporte_recomendaciones">Guardar recomendaciones <i class="fa fa-save"></i></button>
+							</div>
+						</div>
+					</div>
+				</form>
+				<h4 class="card-title" id="12">12.- Responsables del informe</h4>
 				<select class="custom-select form-control mb-1" style="width: 100%;" id="ID_CATCONCLUSION">
 					<option value="">&nbsp;</option>
 					@foreach($catConclusiones as $dato)
@@ -996,7 +1064,7 @@
 				<h4 class="card-title" id="11_1">11.1.- Anexo 1: Memoria fotográfica</h4>
 				<div class="row">
 					<div class="col-12" style="padding-top: 10px;">
-						<p class="justificado"><b style="color: #333333; font-weight: bold;">Nota del software:</b> Se encontraron <span id="memoriafotografica_total">0</span> fotos de los puntos evaluados que se agregaran al informe de ruido.</p>
+						<p class="justificado"><b style="color: #333333; font-weight: bold;">Nota del software:</b> Se encontraron <span id="memoriafotografica_total">0</span> fotos de los trabajadores evaluados.</p>
 					</div>
 				</div>
 				

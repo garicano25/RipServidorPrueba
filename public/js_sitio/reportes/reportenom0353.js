@@ -9,11 +9,10 @@ $(".stickyside").stick_in_parent({
 });
 
 
-$('.stickyside a').click(function()
-{
+$('.stickyside a').click(function () {
 	// $('.list-group-item').removeClass('active');
 	// $(this).addClass('active');
-	
+
 	$('html, body').animate({
 		scrollTop: $($(this).attr('href')).offset().top - 150 // Margin TOP del DIV al que hace referencia el menu
 	}, 1200);
@@ -23,7 +22,7 @@ $('.stickyside a').click(function()
 
 // This is auto select left sidebar
 var lastId,
-topMenu = $(".stickyside");
+	topMenu = $(".stickyside");
 topMenuHeight = topMenu.outerHeight();
 
 
@@ -32,8 +31,7 @@ menuItems = topMenu.find("a");
 
 
 // Anchors corresponding to menu items
-scrollItems = menuItems.map(function()
-{
+scrollItems = menuItems.map(function () {
 	var item = $($(this).attr("href"));
 	if (item.length) {
 		return item;
@@ -42,24 +40,22 @@ scrollItems = menuItems.map(function()
 
 
 // Menu al mover el scroll
-$(window).scroll(function()
-{
+$(window).scroll(function () {
 	// Get container scroll position
 	var fromTop = $(this).scrollTop() + topMenuHeight - 100;
 	// var fromTop = $(this).scrollTop() + topMenuHeight;
 
 	// Get id of current scroll item
-	var cur = scrollItems.map(function() {
+	var cur = scrollItems.map(function () {
 		if ($(this).offset().top < fromTop)
-		return this;
+			return this;
 	});
 
 	// Get the id of the current element
 	cur = cur[cur.length - 1];
 	var id = cur && cur.length ? cur[0].id : "";
 
-	if (lastId !== id)
-	{
+	if (lastId !== id) {
 		lastId = id;
 		// Set/remove active class
 		menuItems.removeClass("active").filter("[href='#" + id + "']").addClass("active");
@@ -85,30 +81,25 @@ $('[data-toggle="tooltip"]').tooltip();
 
 
 var tiempoespera = 10; // Segundos
-function updateClock()
-{
-	if (parseInt(tiempoespera) > 0)
-	{
+function updateClock() {
+	if (parseInt(tiempoespera) > 0) {
 		$('#segundos_espera').html((tiempoespera - 1));
 
 		tiempoespera = (parseInt(tiempoespera) - 1);
 
-		setTimeout(function()
-		{
+		setTimeout(function () {
 			updateClock();
 		}, 1000);
 	}
-	else
-	{
+	else {
 		$('#modal_cargando').modal('hide');
 	}
 }
 
 
-$(document).ready(function()
-{
+$(document).ready(function () {
 	// Modal cargando
-	$('#modal_cargando .modal-title').html('Cargando informe de '+agente_nombre); // Titulo modal
+	$('#modal_cargando .modal-title').html('Cargando informe de ' + agente_nombre); // Titulo modal
 	$('#modal_cargando').modal(); // Abrir modal
 	updateClock(); // Ejecutar tiempo de espera
 
@@ -118,26 +109,25 @@ $(document).ready(function()
 	consulta_categoria_epp();  // cargar partes del cuerpo epp
 
 	// Inicializar campos datepicker
-    jQuery('.mydatepicker').datepicker({
-        format: 'yyyy-mm-dd', //'dd-mm-yyyy'
-        weekStart: 1, //dia que inicia la semana, 1 = Lunes
-        // startDate: new Date('11/17/2020'), // deshabilitar dias anteriores con fecha
-        // startDate: '-3d', // deshabilitar dias anteriores del dia actual
-        // endDate: '+3d', //deshabilitar dias despues del dia actual
-        calendarWeeks: true,
-        autoclose: true,
-        todayHighlight: true, //Dia de hoy marcado en el calendario
-        toggleActive: true,
-        // setDate: new Date('11/17/2020'), // "2020/11/25", //Fecha marcada en el caledario
-        forceParse: false, //mantiene la fecha del input si no se selecciona otra
-        showOnFocus: true
-    });
+	jQuery('.mydatepicker').datepicker({
+		format: 'yyyy-mm-dd', //'dd-mm-yyyy'
+		weekStart: 1, //dia que inicia la semana, 1 = Lunes
+		// startDate: new Date('11/17/2020'), // deshabilitar dias anteriores con fecha
+		// startDate: '-3d', // deshabilitar dias anteriores del dia actual
+		// endDate: '+3d', //deshabilitar dias despues del dia actual
+		calendarWeeks: true,
+		autoclose: true,
+		todayHighlight: true, //Dia de hoy marcado en el calendario
+		toggleActive: true,
+		// setDate: new Date('11/17/2020'), // "2020/11/25", //Fecha marcada en el caledario
+		forceParse: false, //mantiene la fecha del input si no se selecciona otra
+		showOnFocus: true
+	});
 
-    // Si selecciona un campo tipo datepicker
-    $('.mydatepicker').on('click', function()
-    {
-        $(this).datepicker('setDate', $(this).val());// Mostrar fecha del input y marcar en el calendario
-    });
+	// Si selecciona un campo tipo datepicker
+	$('.mydatepicker').on('click', function () {
+		$(this).datepicker('setDate', $(this).val());// Mostrar fecha del input y marcar en el calendario
+	});
 });
 
 
@@ -146,29 +136,24 @@ $(document).ready(function()
 
 
 var datosgenerales_ejecusiones = 0;
-function datosgenerales()
-{
+function datosgenerales() {
 	$.ajax({
 		type: "GET",
 		dataType: "json",
-		url: "/reporteruidodatosgenerales/"+proyecto.id+"/"+agente_id+"/"+agente_nombre,
-		data:{},
+		url: "/reporteruidodatosgenerales/" + proyecto.id + "/" + agente_id + "/" + agente_nombre,
+		data: {},
 		cache: false,
-		success:function(dato)
-		{
+		success: function (dato) {
 			reporteregistro_id = 0;
-			if (parseInt(dato.reporteregistro_id) > 0)
-			{
+			if (parseInt(dato.reporteregistro_id) > 0) {
 				reporteregistro_id = parseInt(dato.reporteregistro_id);
 				// $('#reporteregistro_id').html(reporteregistro_id);
 			}
 
-			if (parseInt(dato.reporte_concluido) == 1 || parseInt(dato.reporte_cancelado) == 1)
-			{
+			if (parseInt(dato.reporte_concluido) == 1 || parseInt(dato.reporte_cancelado) == 1) {
 				botoninforme_estado(1);
 			}
-			else
-			{
+			else {
 				botoninforme_estado(0);
 			}
 
@@ -184,8 +169,7 @@ function datosgenerales()
 				$('#reporte_catregion_activo').prop('checked', dato.reporte_portada.reporte_catregion_activo);
 				$('#reporte_catregion_id').val(dato.reporte_portada.catregion_id);
 			}
-			else
-			{
+			else {
 				$('#reporte_catsubdireccion_id').val('');
 				$('#reporte_catgerencia_id').val('');
 				$('#reporte_catactivo_id').val('');
@@ -196,7 +180,7 @@ function datosgenerales()
 				$('#reporte_catactivo_activo').prop('checked', 0);
 				$('#reporte_catregion_activo').prop('checked', 0);
 			}
-			
+
 			$('#reporte_instalacion').val(dato.reporte_portada.reporte_instalacion);
 			$('#reporte_fecha').val(dato.reporte_portada.reporte_fecha);
 
@@ -213,21 +197,19 @@ function datosgenerales()
 			$('#reporte_metodologia_4_2').html(dato.reporte_metodologia_4_2);
 
 			$('#reporte_ubicacioninstalacion').html(dato.reporte_ubicacioninstalacion.ubicacion);
-			if (dato.reporte_ubicacioninstalacion.ubicacionfoto)
-			{
+			if (dato.reporte_ubicacioninstalacion.ubicacionfoto) {
 				var archivo = dato.reporte_ubicacioninstalacion.ubicacionfoto;
 				var extension = archivo.substring(archivo.lastIndexOf("."));
-				var imagenUrl = '/reporteruidomapaubicacion/'+reporteregistro_id+'/'+0;
+				var imagenUrl = '/reporteruidomapaubicacion/' + reporteregistro_id + '/' + 0;
 				$('#reporteubicacionfoto').dropify().data('dropify').destroy();
-				$('#reporteubicacionfoto').dropify().data('dropify').settings.defaultFile = imagenUrl+extension;
+				$('#reporteubicacionfoto').dropify().data('dropify').settings.defaultFile = imagenUrl + extension;
 				$('#reporteubicacionfoto').dropify().data('dropify').init();
 				$('#reporteubicacionfoto').attr('required', false);
-				
+
 				// Boton descargar mapa ubicacion
 				$('#boton_descargarmapaubicacion').css('display', 'block');
 			}
-			else
-			{
+			else {
 				$('#reporteubicacionfoto').val('');
 				$('#reporteubicacionfoto').attr('required', true);
 				$('#reporteubicacionfoto').dropify().data('dropify').resetPreview();
@@ -242,8 +224,7 @@ function datosgenerales()
 			$('#reporte_metodoevaluacion').html(dato.reporte_metodoevaluacion);
 			$('#reporte_conclusion').html(dato.reporte_conclusion);
 
-			if (dato.reporte_responsablesinforme.responsable1)
-			{
+			if (dato.reporte_responsablesinforme.responsable1) {
 				// Responsable 1
 				$('#reporte_responsable1').val(dato.reporte_responsablesinforme.responsable1);
 				$('#reporte_responsable1cargo').val(dato.reporte_responsablesinforme.responsable1cargo);
@@ -251,12 +232,12 @@ function datosgenerales()
 				$('#reporteresponsable1documento').val('');
 				var archivo = dato.reporte_responsablesinforme.responsable1documento;
 				var extension = archivo.substring(archivo.lastIndexOf("."));
-				var imagenUrl = '/reporteruidoresponsabledocumento/'+dato.reporte_responsablesinforme.registro_id+'/'+1+'/'+0;
+				var imagenUrl = '/reporteruidoresponsabledocumento/' + dato.reporte_responsablesinforme.registro_id + '/' + 1 + '/' + 0;
 				$('#reporteresponsable1documento').dropify().data('dropify').destroy();
-				$('#reporteresponsable1documento').dropify().data('dropify').settings.defaultFile = imagenUrl+extension;
+				$('#reporteresponsable1documento').dropify().data('dropify').settings.defaultFile = imagenUrl + extension;
 				$('#reporteresponsable1documento').dropify().data('dropify').init();
 				$('#reporteresponsable1documento').attr('required', false);
-				
+
 				// Responsable 2
 				$('#reporte_responsable2').val(dato.reporte_responsablesinforme.responsable2);
 				$('#reporte_responsable2cargo').val(dato.reporte_responsablesinforme.responsable2cargo);
@@ -264,25 +245,23 @@ function datosgenerales()
 				$('#reporteresponsable2documento').val('');
 				var archivo = dato.reporte_responsablesinforme.responsable2documento;
 				var extension = archivo.substring(archivo.lastIndexOf("."));
-				var imagenUrl = '/reporteruidoresponsabledocumento/'+dato.reporte_responsablesinforme.registro_id+'/'+2+'/'+0;
+				var imagenUrl = '/reporteruidoresponsabledocumento/' + dato.reporte_responsablesinforme.registro_id + '/' + 2 + '/' + 0;
 				$('#reporteresponsable2documento').dropify().data('dropify').destroy();
-				$('#reporteresponsable2documento').dropify().data('dropify').settings.defaultFile = imagenUrl+extension;
+				$('#reporteresponsable2documento').dropify().data('dropify').settings.defaultFile = imagenUrl + extension;
 				$('#reporteresponsable2documento').dropify().data('dropify').init();
 				$('#reporteresponsable2documento').attr('required', false);
 
 				// Botones de descarga
 				$('#boton_descargarresponsabledoc1').css('display', 'none');
 				$('#boton_descargarresponsabledoc2').css('display', 'none');
-				$('#responsablesinforme_carpetadocumentoshistorial').val('reportes/proyecto/'+dato.reporte_responsablesinforme.proyecto_id+'/'+agente_nombre+'/'+dato.reporte_responsablesinforme.registro_id+'/responsables informe');
-				if (parseInt(dato.reporte_responsablesinforme.proyecto_id) == parseInt(proyecto.id))
-				{
+				$('#responsablesinforme_carpetadocumentoshistorial').val('reportes/proyecto/' + dato.reporte_responsablesinforme.proyecto_id + '/' + agente_nombre + '/' + dato.reporte_responsablesinforme.registro_id + '/responsables informe');
+				if (parseInt(dato.reporte_responsablesinforme.proyecto_id) == parseInt(proyecto.id)) {
 					$('#boton_descargarresponsabledoc1').css('display', 'block');
 					$('#boton_descargarresponsabledoc2').css('display', 'block');
 					$('#responsablesinforme_carpetadocumentoshistorial').val('');
 				}
 			}
-			else
-			{
+			else {
 				$('#reporte_responsable1').val('');
 				$('#reporte_responsable1cargo').val('');
 				$('#reporte_responsable1_documentobase64').val('');
@@ -291,7 +270,7 @@ function datosgenerales()
 				$('#reporteresponsable1documento').dropify().data('dropify').resetPreview();
 				$('#reporteresponsable1documento').dropify().data('dropify').clearElement();
 				$('#boton_descargarresponsabledoc1').css('display', 'none');
-				
+
 				$('#reporte_responsable2').val('');
 				$('#reporte_responsable2cargo').val('');
 				$('#reporte_responsable2_documentobase64').val('');
@@ -335,20 +314,16 @@ function datosgenerales()
 			// }
 
 
-			if (areas_poe == 1)
-			{
-				setTimeout(function()
-				{
+			if (areas_poe == 1) {
+				setTimeout(function () {
 					$("#boton_reporte_nuevacategoria").attr('disabled', true);
 					$("#boton_reporte_nuevaarea").attr('disabled', true);
 				}, 5000);
 			}
 
 
-			if (areas_poe == 1)
-			{
-				setTimeout(function()
-				{
+			if (areas_poe == 1) {
+				setTimeout(function () {
 					$("#boton_reporte_nuevacategoria").attr('disabled', true);
 					$("#boton_reporte_nuevaarea").attr('disabled', true);
 				}, 10000);
@@ -358,16 +333,14 @@ function datosgenerales()
 		// {
 		// 	// $('#tabla_reporte_definiciones tbody').html('<tr><td colspan="5"><i class="fa fa-spin fa-spinner" style="font-size: 40px!important;"></i></td></tr>');
 		// },
-		error: function(dato)
-		{
-			if (datosgenerales_ejecusiones == 0)
-			{
+		error: function (dato) {
+			if (datosgenerales_ejecusiones == 0) {
 				datosgenerales();
 				datosgenerales_ejecusiones += 1;
 			}
 
 			reporte_id = 0;
-			
+
 			$('#reporte_instalacion').val('Error al cargar los datos');
 			$('#reporte_fecha').val('Error al cargar los datos');
 			$('#reporte_mes').val('Error al cargar los datos');
@@ -405,97 +378,93 @@ function portadaInfo() {
 			console.log('Error al cargar los datos');
 		}
 	})
-	
+
 }
 
 
-function menureporte_estado(menu_nombre, menu_estado)
-{
-	if (parseInt(menu_estado) > 0)
-	{
-		$('#'+menu_nombre).css('color', '#64bd44'); // Verde
+function menureporte_estado(menu_nombre, menu_estado) {
+	if (parseInt(menu_estado) > 0) {
+		$('#' + menu_nombre).css('color', '#64bd44'); // Verde
 
-		$('#'+menu_nombre).removeClass('fa fa-times');
-		$('#'+menu_nombre).addClass('fa fa-check');
+		$('#' + menu_nombre).removeClass('fa fa-times');
+		$('#' + menu_nombre).addClass('fa fa-check');
 	}
-	else
-	{
-		$('#'+menu_nombre).css('color', '#fc4b6c'); // Rojo
+	else {
+		$('#' + menu_nombre).css('color', '#fc4b6c'); // Rojo
 
-		$('#'+menu_nombre).removeClass('fa fa-check');
-		$('#'+menu_nombre).addClass('fa fa-times');
+		$('#' + menu_nombre).removeClass('fa fa-check');
+		$('#' + menu_nombre).addClass('fa fa-times');
 	}
 }
 
 
-function instalacion_nombre(reporte_instalacion)
-{
+function instalacion_nombre(reporte_instalacion) {
 	$('.div_instalacion_nombre').html(reporte_instalacion);
 }
 
 
 function redimencionar_foto(campo_file, campo_filehidden, boton_guardar) {
-    // Bloquear botón guardar
-    $('#' + boton_guardar).attr('disabled', true);
-    $('#' + campo_filehidden).val('');
+	// Bloquear botón guardar
+	$('#' + boton_guardar).attr('disabled', true);
+	$('#' + campo_filehidden).val('');
 
-    var filesToUpload = document.getElementById(campo_file).files;
-    var file = filesToUpload[0];
+	var filesToUpload = document.getElementById(campo_file).files;
+	var file = filesToUpload[0];
 
-    // Crear un lector de archivos
-    var reader = new FileReader();
+	// Crear un lector de archivos
+	var reader = new FileReader();
 
-    // Cargar archivos en el lector de archivos
-    reader.readAsDataURL(file);
+	// Cargar archivos en el lector de archivos
+	reader.readAsDataURL(file);
 
-    // Configurar la imagen una vez que se carga en el lector de archivos
-    reader.onload = function(e) {
-        var img = new Image();
-        img.onload = function() {
-            var canvas = document.createElement("canvas");
+	// Configurar la imagen una vez que se carga en el lector de archivos
+	reader.onload = function (e) {
+		var img = new Image();
+		img.onload = function () {
+			var canvas = document.createElement("canvas");
 
-            // Dimensiones reales
-            var width = img.width;
-            var height = img.height;
+			// Dimensiones reales
+			var width = img.width;
+			var height = img.height;
 
-            // Dimensiones Nuevas
-            var MAX_WIDTH = (width > 8000) ? 4000 : 1200;
-            var MAX_HEIGHT = (width > 8000) ? 3000 : 900;
+			// Dimensiones Nuevas
+			var MAX_WIDTH = (width > 8000) ? 4000 : 1200;
+			var MAX_HEIGHT = (width > 8000) ? 3000 : 900;
 
-            // Dimensionar con respecto a la relación de aspecto
-            if (width > height) {
-                if (width > MAX_WIDTH) {
-                    height *= MAX_WIDTH / width;
-                    width = MAX_WIDTH;
-                }
-            } else {
-                if (height > MAX_HEIGHT) {
-                    width *= MAX_HEIGHT / height;
-                    height = MAX_HEIGHT;
-                }
-            }
+			// Dimensionar con respecto a la relación de aspecto
+			if (width > height) {
+				if (width > MAX_WIDTH) {
+					height *= MAX_WIDTH / width;
+					width = MAX_WIDTH;
+				}
+			} else {
+				if (height > MAX_HEIGHT) {
+					width *= MAX_HEIGHT / height;
+					height = MAX_HEIGHT;
+				}
+			}
 
-            canvas.width = width;
-            canvas.height = height;
-            var ctx = canvas.getContext("2d");
+			canvas.width = width;
+			canvas.height = height;
+			var ctx = canvas.getContext("2d");
 
-            // Establecer un fondo blanco
-            ctx.fillStyle = "white";
-            ctx.fillRect(0, 0, canvas.width, canvas.height);
+			// Establecer un fondo blanco
+			ctx.fillStyle = "white";
+			ctx.fillRect(0, 0, canvas.width, canvas.height);
 
-            // Dibujar la imagen redimensionada sobre el fondo blanco
-            ctx.drawImage(img, 0, 0, width, height);
+			// Dibujar la imagen redimensionada sobre el fondo blanco
+			ctx.drawImage(img, 0, 0, width, height);
 
-            // Resultado
-            var dataurl = canvas.toDataURL("image/jpeg");
-            $('#' + campo_filehidden).val(dataurl);
+			// Resultado
+			var dataurl = canvas.toDataURL("image/jpeg");
+			$('#' + campo_filehidden).val(dataurl);
 
-            // Desbloquear botón guardar
-            $('#' + boton_guardar).attr('disabled', false);
-        };
+			// Desbloquear botón guardar
+			$('#' + boton_guardar).attr('disabled', false);
+		};
 
-        img.src = e.target.result;
-    };
+		img.src = e.target.result;
+	};
 }
 
 
@@ -504,11 +473,9 @@ function redimencionar_foto(campo_file, campo_filehidden, boton_guardar) {
 // PORTADA
 
 
-$("#botonguardar_reporte_portada").click(function()
-{
+$("#botonguardar_reporte_portada").click(function () {
 	var valida = this.form.checkValidity();
-	if (valida)
-	{
+	if (valida) {
 		swal({
 			title: "¡Confirme guardar la portada!",
 			text: "",
@@ -520,94 +487,88 @@ $("#botonguardar_reporte_portada").click(function()
 			closeOnConfirm: false,
 			closeOnCancel: false
 		},
-		function(isConfirm)
-		{
-			if (isConfirm)
-			{
-				// cerrar msj confirmacion
-				swal.close();
+			function (isConfirm) {
+				if (isConfirm) {
+					// cerrar msj confirmacion
+					swal.close();
 
-				// enviar datos
-				$('#form_reporte_portada').ajaxForm({
-					dataType: 'json',
-					type: 'POST',
-					url: ''+ruta_storage_guardar,
-					data: {
-						opcion: 0,
-						proyecto_id: proyecto.id,
-						agente_id: agente_id,
-						agente_nombre: agente_nombre,
-						reporteregistro_id: reporteregistro_id,
-						catactivo_id: $("#reporte_catactivo_id").val()
-					},
-					resetForm: false,
-					success: function(dato)
-					{
-						// Actualizar ID reporte
-						reporteregistro_id = dato.reporteregistro_id;
+					// enviar datos
+					$('#form_reporte_portada').ajaxForm({
+						dataType: 'json',
+						type: 'POST',
+						url: '' + ruta_storage_guardar,
+						data: {
+							opcion: 0,
+							proyecto_id: proyecto.id,
+							agente_id: agente_id,
+							agente_nombre: agente_nombre,
+							reporteregistro_id: reporteregistro_id,
+							catactivo_id: $("#reporte_catactivo_id").val()
+						},
+						resetForm: false,
+						success: function (dato) {
+							// Actualizar ID reporte
+							reporteregistro_id = dato.reporteregistro_id;
 
-						menureporte_estado("menureporte_0", 1);
+							menureporte_estado("menureporte_0", 1);
 
-						// tabla_reporte_revisiones(proyecto.id);
+							// tabla_reporte_revisiones(proyecto.id);
 
-						// mensaje
-						swal({
-							title: "Correcto",
-							text: ""+dato.msj,
-							type: "success", // warning, error, success, info
-							buttons: {
-								visible: false, // true , false
-							},
-							timer: 1500,
-							showConfirmButton: false
-						});
+							// mensaje
+							swal({
+								title: "Correcto",
+								text: "" + dato.msj,
+								type: "success", // warning, error, success, info
+								buttons: {
+									visible: false, // true , false
+								},
+								timer: 1500,
+								showConfirmButton: false
+							});
 
-						// actualiza boton
-						$('#botonguardar_reporte_portada').html('Guardar portada <i class="fa fa-save"></i>');
-						$('#botonguardar_reporte_portada').attr('disabled', false);
-					},
-					beforeSend: function()
-					{
-						$('#botonguardar_reporte_portada').html('Guardando portada <i class="fa fa-spin fa-spinner"></i>');
-						$('#botonguardar_reporte_portada').attr('disabled', true);
-					},
-					error: function(dato)
-					{
-						// actualiza boton
-						$('#botonguardar_reporte_portada').html('Guardar portada <i class="fa fa-save"></i>');
-						$('#botonguardar_reporte_portada').attr('disabled', false);
+							// actualiza boton
+							$('#botonguardar_reporte_portada').html('Guardar portada <i class="fa fa-save"></i>');
+							$('#botonguardar_reporte_portada').attr('disabled', false);
+						},
+						beforeSend: function () {
+							$('#botonguardar_reporte_portada').html('Guardando portada <i class="fa fa-spin fa-spinner"></i>');
+							$('#botonguardar_reporte_portada').attr('disabled', true);
+						},
+						error: function (dato) {
+							// actualiza boton
+							$('#botonguardar_reporte_portada').html('Guardar portada <i class="fa fa-save"></i>');
+							$('#botonguardar_reporte_portada').attr('disabled', false);
 
-						// mensaje
-						swal({
-							title: "Error",
-							text: ""+dato.msj,
-							type: "error", // warning, error, success, info
-							buttons: {
-								visible: false, // true , false
-							},
-							timer: 1500,
-							showConfirmButton: false
-						});
-						return false;
-					}
-				}).submit();
-				return false;
-			}
-			else 
-			{
-				// mensaje
-				swal({
-					title: "Cancelado",
-					text: "Acción cancelada",
-					type: "error", // warning, error, success, info
-					buttons: {
-						visible: false, // true , false
-					},
-					timer: 500,
-					showConfirmButton: false
-				});
-			}
-		});
+							// mensaje
+							swal({
+								title: "Error",
+								text: "" + dato.msj,
+								type: "error", // warning, error, success, info
+								buttons: {
+									visible: false, // true , false
+								},
+								timer: 1500,
+								showConfirmButton: false
+							});
+							return false;
+						}
+					}).submit();
+					return false;
+				}
+				else {
+					// mensaje
+					swal({
+						title: "Cancelado",
+						text: "Acción cancelada",
+						type: "error", // warning, error, success, info
+						buttons: {
+							visible: false, // true , false
+						},
+						timer: 500,
+						showConfirmButton: false
+					});
+				}
+			});
 		return false;
 	}
 });
@@ -617,12 +578,10 @@ $("#botonguardar_reporte_portada").click(function()
 // INTRODUCCION
 
 
-$("#botonguardar_reporte_introduccion").click(function()
-{
+$("#botonguardar_reporte_introduccion").click(function () {
 	// valida campos vacios
 	var valida = this.form.checkValidity();
-	if (valida)
-	{
+	if (valida) {
 		swal({
 			title: "¡Confirme que desea guardar!",
 			text: "Introducción",
@@ -634,95 +593,89 @@ $("#botonguardar_reporte_introduccion").click(function()
 			closeOnConfirm: false,
 			closeOnCancel: false
 		},
-		function(isConfirm)
-		{
-			if (isConfirm)
-			{
-				// cerrar msj confirmacion
-				swal.close();
+			function (isConfirm) {
+				if (isConfirm) {
+					// cerrar msj confirmacion
+					swal.close();
 
-				// enviar datos
-				$('#form_reporte_introduccion').ajaxForm({
-					dataType: 'json',
-					type: 'POST',
-					url: ''+ruta_storage_guardar,
-					data: {
-						opcion: 1,
-						proyecto_id: proyecto.id,
-						agente_id: agente_id,
-						agente_nombre: agente_nombre,
-						reporteregistro_id: reporteregistro_id,
-						catactivo_id: $("#reporte_catactivo_id").val(),
-						reporte_instalacion: $("#reporte_instalacion").val()
-					},
-					resetForm: false,
-					success: function(dato)
-					{
-						// Actualizar ID reporte						
-						reporteregistro_id = dato.reporteregistro_id;
+					// enviar datos
+					$('#form_reporte_introduccion').ajaxForm({
+						dataType: 'json',
+						type: 'POST',
+						url: '' + ruta_storage_guardar,
+						data: {
+							opcion: 1,
+							proyecto_id: proyecto.id,
+							agente_id: agente_id,
+							agente_nombre: agente_nombre,
+							reporteregistro_id: reporteregistro_id,
+							catactivo_id: $("#reporte_catactivo_id").val(),
+							reporte_instalacion: $("#reporte_instalacion").val()
+						},
+						resetForm: false,
+						success: function (dato) {
+							// Actualizar ID reporte						
+							reporteregistro_id = dato.reporteregistro_id;
 
-						menureporte_estado("menureporte_1", 1);
+							menureporte_estado("menureporte_1", 1);
 
-						// tabla_reporte_revisiones(proyecto.id);
+							// tabla_reporte_revisiones(proyecto.id);
 
-						// mensaje
-						swal({
-							title: "Correcto",
-							text: ""+dato.msj,
-							type: "success", // warning, error, success, info
-							buttons: {
-								visible: false, // true , false
-							},
-							timer: 1500,
-							showConfirmButton: false
-						});
+							// mensaje
+							swal({
+								title: "Correcto",
+								text: "" + dato.msj,
+								type: "success", // warning, error, success, info
+								buttons: {
+									visible: false, // true , false
+								},
+								timer: 1500,
+								showConfirmButton: false
+							});
 
-						// actualiza boton
-						$('#botonguardar_reporte_introduccion').html('Guardar introducción <i class="fa fa-save"></i>');
-						$('#botonguardar_reporte_introduccion').attr('disabled', false);
-					},
-					beforeSend: function()
-					{
-						$('#botonguardar_reporte_introduccion').html('Guardando introducción <i class="fa fa-spin fa-spinner"></i>');
-						$('#botonguardar_reporte_introduccion').attr('disabled', true);
-					},
-					error: function(dato)
-					{
-						// actualiza boton
-						$('#botonguardar_reporte_introduccion').html('Guardar introducción <i class="fa fa-save"></i>');
-						$('#botonguardar_reporte_introduccion').attr('disabled', false);
+							// actualiza boton
+							$('#botonguardar_reporte_introduccion').html('Guardar introducción <i class="fa fa-save"></i>');
+							$('#botonguardar_reporte_introduccion').attr('disabled', false);
+						},
+						beforeSend: function () {
+							$('#botonguardar_reporte_introduccion').html('Guardando introducción <i class="fa fa-spin fa-spinner"></i>');
+							$('#botonguardar_reporte_introduccion').attr('disabled', true);
+						},
+						error: function (dato) {
+							// actualiza boton
+							$('#botonguardar_reporte_introduccion').html('Guardar introducción <i class="fa fa-save"></i>');
+							$('#botonguardar_reporte_introduccion').attr('disabled', false);
 
-						// mensaje
-						swal({
-							title: "Error",
-							text: ""+dato.msj,
-							type: "error", // warning, error, success, info
-							buttons: {
-								visible: false, // true , false
-							},
-							timer: 1500,
-							showConfirmButton: false
-						});
-						return false;
-					}
-				}).submit();
-				return false;
-			}
-			else 
-			{
-				// mensaje
-				swal({
-					title: "Cancelado",
-					text: "Acción cancelada",
-					type: "error", // warning, error, success, info
-					buttons: {
-						visible: false, // true , false
-					},
-					timer: 500,
-					showConfirmButton: false
-				});
-			}
-		});
+							// mensaje
+							swal({
+								title: "Error",
+								text: "" + dato.msj,
+								type: "error", // warning, error, success, info
+								buttons: {
+									visible: false, // true , false
+								},
+								timer: 1500,
+								showConfirmButton: false
+							});
+							return false;
+						}
+					}).submit();
+					return false;
+				}
+				else {
+					// mensaje
+					swal({
+						title: "Cancelado",
+						text: "Acción cancelada",
+						type: "error", // warning, error, success, info
+						buttons: {
+							visible: false, // true , false
+						},
+						timer: 500,
+						showConfirmButton: false
+					});
+				}
+			});
 		return false;
 	}
 });
@@ -732,50 +685,42 @@ $("#botonguardar_reporte_introduccion").click(function()
 // DEFINICIONES
 
 
-$(document).ready(function()
-{	
+$(document).ready(function () {
 	obtenerdatos()
 
-	setTimeout(function()
-	{
+	setTimeout(function () {
 		tabla_reporte_definiciones(proyecto.id, agente_nombre, reporteregistro_id);
 	}, 2000);
 });
 
 
 var datatable_reportedefiniciones = null;
-function tabla_reporte_definiciones(proyecto_id, agente_nombre, reporteregistro_id)
-{
-	try 
-	{
-		var ruta = "/reporteruidotabladefiniciones/"+proyecto_id+"/"+agente_nombre+"/"+reporteregistro_id;
+function tabla_reporte_definiciones(proyecto_id, agente_nombre, reporteregistro_id) {
+	try {
+		var ruta = "/reporteruidotabladefiniciones/" + proyecto_id + "/" + agente_nombre + "/" + reporteregistro_id;
 
-		if (datatable_reportedefiniciones != null)
-		{
+		if (datatable_reportedefiniciones != null) {
 			datatable_reportedefiniciones.clear().draw();
 			datatable_reportedefiniciones.ajax.url(ruta).load();
 		}
-		else
-		{
+		else {
 			var numeroejecucion = 1;
 			datatable_reportedefiniciones = $('#tabla_reporte_definiciones').DataTable({
 				"ajax": {
-						"url": ruta,
-						"type": "get",
-						"cache": false,
-						error: function (xhr, error, code)
-						{
-							// console.log(xhr); console.log(code);
-							console.log('error en datatable_reportedefiniciones');
-							if (numeroejecucion <= 1)
-							{
-								tabla_reporte_definiciones(proyecto_id, agente_nombre, reporteregistro_id);
-								numeroejecucion += 1;
-							}
-						},
-						"data": {}
+					"url": ruta,
+					"type": "get",
+					"cache": false,
+					error: function (xhr, error, code) {
+						// console.log(xhr); console.log(code);
+						console.log('error en datatable_reportedefiniciones');
+						if (numeroejecucion <= 1) {
+							tabla_reporte_definiciones(proyecto_id, agente_nombre, reporteregistro_id);
+							numeroejecucion += 1;
+						}
 					},
-					"columns": [
+					"data": {}
+				},
+				"columns": [
 					// {
 					//     "data": "id" 
 					// },
@@ -803,7 +748,7 @@ function tabla_reporte_definiciones(proyecto_id, agente_nombre, reporteregistro_
 				],
 				"lengthMenu": [[20, 50, 100, -1], [20, 50, 100, "Todos"]],
 				// "rowsGroup": [0, 1], //agrupar filas
-				"order": [[ 0, "DESC" ]],
+				"order": [[0, "DESC"]],
 				"ordering": false,
 				"processing": true,
 				"paging": false,
@@ -824,25 +769,22 @@ function tabla_reporte_definiciones(proyecto_id, agente_nombre, reporteregistro_
 						"previous": "Anterior"
 					}
 				}
-		    });
+			});
 		}
 
 		// Tooltip en DataTable
-		datatable_reportedefiniciones.on('draw', function ()
-		{
+		datatable_reportedefiniciones.on('draw', function () {
 			$('[data-toggle="tooltip"]').tooltip();
 		});
 	}
-	catch (exception)
-	{
+	catch (exception) {
 		tabla_reporte_definiciones(proyecto_id, agente_nombre, reporteregistro_id);
-    }
+	}
 }
 
 
-$("#boton_reporte_nuevadefinicion").click(function()
-{
-	$('#form_modal_definicion').each(function(){
+$("#boton_reporte_nuevadefinicion").click(function () {
+	$('#form_modal_definicion').each(function () {
 		this.reset();
 	});
 
@@ -853,18 +795,16 @@ $("#boton_reporte_nuevadefinicion").click(function()
 	$('#modal_reporte_definicion .modal-title').html('Nueva definición');
 
 	// mostrar modal
-	$('#modal_reporte_definicion').modal({backdrop:false});
+	$('#modal_reporte_definicion').modal({ backdrop: false });
 });
 
 
-$('#tabla_reporte_definiciones tbody').on('click', 'td.editar', function()
-{
+$('#tabla_reporte_definiciones tbody').on('click', 'td.editar', function () {
 	var tr = $(this).closest('tr');
 	var row = datatable_reportedefiniciones.row(tr);
 
-	if (parseInt(row.data().catactivo_id) >= 0)
-	{
-		$('#form_modal_definicion').each(function(){
+	if (parseInt(row.data().catactivo_id) >= 0) {
+		$('#form_modal_definicion').each(function () {
 			this.reset();
 		});
 
@@ -880,21 +820,19 @@ $('#tabla_reporte_definiciones tbody').on('click', 'td.editar', function()
 		$('#modal_reporte_definicion .modal-title').html('Definición');
 
 		// mostrar modal
-		$('#modal_reporte_definicion').modal({backdrop:false});
+		$('#modal_reporte_definicion').modal({ backdrop: false });
 	}
 });
 
 
-$('#tabla_reporte_definiciones tbody').on('click', 'td>button.eliminar', function()
-{
+$('#tabla_reporte_definiciones tbody').on('click', 'td>button.eliminar', function () {
 	var tr = $(this).closest('tr');
 	var row = datatable_reportedefiniciones.row(tr);
 
-	if (parseInt(row.data().catactivo_id) >= 0)
-	{
+	if (parseInt(row.data().catactivo_id) >= 0) {
 		swal({
 			title: "¡Confirme que desea eliminar!",
-			text: "La definición: "+row.data().concepto,
+			text: "La definición: " + row.data().concepto,
 			type: "warning",
 			showCancelButton: true,
 			confirmButtonColor: "#DD6B55",
@@ -903,118 +841,107 @@ $('#tabla_reporte_definiciones tbody').on('click', 'td>button.eliminar', functio
 			closeOnConfirm: false,
 			closeOnCancel: false
 		},
-		function(isConfirm)
-		{
-			if (isConfirm)
-			{
-				swal({
-					title: "¡Por seguridad confirme nuevamente que desea eliminar!",
-					text: "La definición: "+row.data().concepto,
-					type: "warning",
-					showCancelButton: true,
-					confirmButtonColor: "#DD6B55",
-					confirmButtonText: "Eliminar!",
-					cancelButtonText: "Cancelar!",
-					closeOnConfirm: false,
-					closeOnCancel: false
-				},
-				function(isConfirm)
-				{
-					if (isConfirm)
-					{
-						// cerrar msj confirmacion
-						swal.close();
+			function (isConfirm) {
+				if (isConfirm) {
+					swal({
+						title: "¡Por seguridad confirme nuevamente que desea eliminar!",
+						text: "La definición: " + row.data().concepto,
+						type: "warning",
+						showCancelButton: true,
+						confirmButtonColor: "#DD6B55",
+						confirmButtonText: "Eliminar!",
+						cancelButtonText: "Cancelar!",
+						closeOnConfirm: false,
+						closeOnCancel: false
+					},
+						function (isConfirm) {
+							if (isConfirm) {
+								// cerrar msj confirmacion
+								swal.close();
 
-						$.ajax({
-							type: "GET",
-							dataType: "json",
-							url: "/reporteruidodefinicioneliminar/"+row.data().id,
-							data:{},
-							cache: false,
-							success:function(dato)
-							{
-								// Actualizar tabla
-								tabla_reporte_definiciones(proyecto.id, agente_nombre);
+								$.ajax({
+									type: "GET",
+									dataType: "json",
+									url: "/reporteruidodefinicioneliminar/" + row.data().id,
+									data: {},
+									cache: false,
+									success: function (dato) {
+										// Actualizar tabla
+										tabla_reporte_definiciones(proyecto.id, agente_nombre);
 
-								// mensaje
-								swal({
-									title: "Correcto",
-									text: ""+dato.msj,
-									type: "success", // warning, error, success, info
-									buttons: {
-										visible: false, // true , false
+										// mensaje
+										swal({
+											title: "Correcto",
+											text: "" + dato.msj,
+											type: "success", // warning, error, success, info
+											buttons: {
+												visible: false, // true , false
+											},
+											timer: 1500,
+											showConfirmButton: false
+										});
 									},
-									timer: 1500,
-									showConfirmButton: false
-								});
-							},
-							beforeSend: function()
-							{
-								// $('#tabla_reporte_definiciones tbody').html('<tr><td colspan="5"><i class="fa fa-spin fa-spinner" style="font-size: 40px!important;"></i></td></tr>');
-							},
-							error: function(dato)
-							{
+									beforeSend: function () {
+										// $('#tabla_reporte_definiciones tbody').html('<tr><td colspan="5"><i class="fa fa-spin fa-spinner" style="font-size: 40px!important;"></i></td></tr>');
+									},
+									error: function (dato) {
+										// mensaje
+										swal({
+											title: "Error",
+											text: "" + dato.msj,
+											type: "error", // warning, error, success, info
+											buttons: {
+												visible: false, // true , false
+											},
+											timer: 1500,
+											showConfirmButton: false
+										});
+
+										return false;
+									}
+								});//Fin ajax
+							}
+							else {
 								// mensaje
 								swal({
-									title: "Error",
-									text: ""+dato.msj,
+									title: "Cancelado",
+									text: "Acción cancelada",
 									type: "error", // warning, error, success, info
 									buttons: {
 										visible: false, // true , false
 									},
-									timer: 1500,
+									timer: 500,
 									showConfirmButton: false
 								});
-
-								return false;
 							}
-						});//Fin ajax
-					}
-					else 
-					{
-						// mensaje
-						swal({
-							title: "Cancelado",
-							text: "Acción cancelada",
-							type: "error", // warning, error, success, info
-							buttons: {
-								visible: false, // true , false
-							},
-							timer: 500,
-							showConfirmButton: false
 						});
-					}
-				});
-			}
-			else 
-			{
-				// mensaje
-				swal({
-					title: "Cancelado",
-					text: "Acción cancelada",
-					type: "error", // warning, error, success, info
-					buttons: {
-						visible: false, // true , false
-					},
-					timer: 500,
-					showConfirmButton: false
-				});
-			}
-		});
+				}
+				else {
+					// mensaje
+					swal({
+						title: "Cancelado",
+						text: "Acción cancelada",
+						type: "error", // warning, error, success, info
+						buttons: {
+							visible: false, // true , false
+						},
+						timer: 500,
+						showConfirmButton: false
+					});
+				}
+			});
 		return false;
 	}
 });
 
 
-$("#botonguardar_modal_definicion").click(function()
-{
+$("#botonguardar_modal_definicion").click(function () {
 	// valida campos vacios
 	var valida = this.form.checkValidity();
-	if (valida)
-	{
+	if (valida) {
 		swal({
 			title: "¡Confirme que desea guardar!",
-			text: "Definición: "+$('#reportedefiniciones_concepto').val(),
+			text: "Definición: " + $('#reportedefiniciones_concepto').val(),
 			type: "warning",
 			showCancelButton: true,
 			confirmButtonColor: "#DD6B55",
@@ -1023,99 +950,93 @@ $("#botonguardar_modal_definicion").click(function()
 			closeOnConfirm: false,
 			closeOnCancel: false
 		},
-		function(isConfirm)
-		{
-			if (isConfirm)
-			{
-				// cerrar msj confirmacion
-				swal.close();
+			function (isConfirm) {
+				if (isConfirm) {
+					// cerrar msj confirmacion
+					swal.close();
 
-				// enviar datos
-				$('#form_modal_definicion').ajaxForm({
-					dataType: 'json',
-					type: 'POST',
-					url: ''+ruta_storage_guardar,
-					data: {
-						opcion: 2,
-						proyecto_id: proyecto.id,
-						agente_id: agente_id,
-						agente_nombre: agente_nombre,
-						reporteregistro_id: reporteregistro_id,
-						catactivo_id: $("#reporte_catactivo_id").val(),
-						reporte_instalacion: $("#reporte_instalacion").val()
-					},
-					resetForm: false,
-					success: function(dato)
-					{
-						// Actualizar ID reporte
-						reporteregistro_id = dato.reporteregistro_id;
+					// enviar datos
+					$('#form_modal_definicion').ajaxForm({
+						dataType: 'json',
+						type: 'POST',
+						url: '' + ruta_storage_guardar,
+						data: {
+							opcion: 2,
+							proyecto_id: proyecto.id,
+							agente_id: agente_id,
+							agente_nombre: agente_nombre,
+							reporteregistro_id: reporteregistro_id,
+							catactivo_id: $("#reporte_catactivo_id").val(),
+							reporte_instalacion: $("#reporte_instalacion").val()
+						},
+						resetForm: false,
+						success: function (dato) {
+							// Actualizar ID reporte
+							reporteregistro_id = dato.reporteregistro_id;
 
-						// Actualizar tabla
-						tabla_reporte_definiciones(proyecto.id, agente_nombre, reporteregistro_id);
+							// Actualizar tabla
+							tabla_reporte_definiciones(proyecto.id, agente_nombre, reporteregistro_id);
 
-						// tabla_reporte_revisiones(proyecto.id);
+							// tabla_reporte_revisiones(proyecto.id);
 
-						// mensaje
-						swal({
-							title: "Correcto",
-							text: ""+dato.msj,
-							type: "success", // warning, error, success, info
-							buttons: {
-								visible: false, // true , false
-							},
-							timer: 1500,
-							showConfirmButton: false
-						});
+							// mensaje
+							swal({
+								title: "Correcto",
+								text: "" + dato.msj,
+								type: "success", // warning, error, success, info
+								buttons: {
+									visible: false, // true , false
+								},
+								timer: 1500,
+								showConfirmButton: false
+							});
 
-						// actualiza boton
-						$('#botonguardar_modal_definicion').html('Guardar <i class="fa fa-save"></i>');
-						$('#botonguardar_modal_definicion').attr('disabled', false);
+							// actualiza boton
+							$('#botonguardar_modal_definicion').html('Guardar <i class="fa fa-save"></i>');
+							$('#botonguardar_modal_definicion').attr('disabled', false);
 
-						// cerrar modal
-						$('#modal_reporte_definicion').modal('hide');
-					},
-					beforeSend: function()
-					{
-						$('#botonguardar_modal_definicion').html('Guardando <i class="fa fa-spin fa-spinner"></i>');
-						$('#botonguardar_modal_definicion').attr('disabled', true);
-					},
-					error: function(dato)
-					{
-						// actualiza boton
-						$('#botonguardar_modal_definicion').html('Guardar <i class="fa fa-save"></i>');
-						$('#botonguardar_modal_definicion').attr('disabled', false);
+							// cerrar modal
+							$('#modal_reporte_definicion').modal('hide');
+						},
+						beforeSend: function () {
+							$('#botonguardar_modal_definicion').html('Guardando <i class="fa fa-spin fa-spinner"></i>');
+							$('#botonguardar_modal_definicion').attr('disabled', true);
+						},
+						error: function (dato) {
+							// actualiza boton
+							$('#botonguardar_modal_definicion').html('Guardar <i class="fa fa-save"></i>');
+							$('#botonguardar_modal_definicion').attr('disabled', false);
 
-						// mensaje
-						swal({
-							title: "Error",
-							text: ""+dato.msj,
-							type: "error", // warning, error, success, info
-							buttons: {
-								visible: false, // true , false
-							},
-							timer: 1500,
-							showConfirmButton: false
-						});
-						return false;
-					}
-				}).submit();
-				return false;
-			}
-			else 
-			{
-				// mensaje
-				swal({
-					title: "Cancelado",
-					text: "Acción cancelada",
-					type: "error", // warning, error, success, info
-					buttons: {
-						visible: false, // true , false
-					},
-					timer: 500,
-					showConfirmButton: false
-				});
-			}
-		});
+							// mensaje
+							swal({
+								title: "Error",
+								text: "" + dato.msj,
+								type: "error", // warning, error, success, info
+								buttons: {
+									visible: false, // true , false
+								},
+								timer: 1500,
+								showConfirmButton: false
+							});
+							return false;
+						}
+					}).submit();
+					return false;
+				}
+				else {
+					// mensaje
+					swal({
+						title: "Cancelado",
+						text: "Acción cancelada",
+						type: "error", // warning, error, success, info
+						buttons: {
+							visible: false, // true , false
+						},
+						timer: 500,
+						showConfirmButton: false
+					});
+				}
+			});
 		return false;
 	}
 });
@@ -1125,12 +1046,10 @@ $("#botonguardar_modal_definicion").click(function()
 // OBJETIVO GENERAL
 
 
-$("#botonguardar_reporte_objetivogeneral").click(function()
-{
+$("#botonguardar_reporte_objetivogeneral").click(function () {
 	// valida campos vacios
 	var valida = this.form.checkValidity();
-	if (valida)
-	{
+	if (valida) {
 		swal({
 			title: "¡Confirme que desea guardar!",
 			text: "Objetivo general",
@@ -1142,95 +1061,89 @@ $("#botonguardar_reporte_objetivogeneral").click(function()
 			closeOnConfirm: false,
 			closeOnCancel: false
 		},
-		function(isConfirm)
-		{
-			if (isConfirm)
-			{
-				// cerrar msj confirmacion
-				swal.close();
+			function (isConfirm) {
+				if (isConfirm) {
+					// cerrar msj confirmacion
+					swal.close();
 
-				// enviar datos
-				$('#form_reporte_objetivogeneral').ajaxForm({
-					dataType: 'json',
-					type: 'POST',
-					url: ''+ruta_storage_guardar,
-					data: {
-						opcion: 3,
-						proyecto_id: proyecto.id,
-						agente_id: agente_id,
-						agente_nombre: agente_nombre,
-						reporteregistro_id: reporteregistro_id,
-						catactivo_id: $("#reporte_catactivo_id").val(),
-						reporte_instalacion: $("#reporte_instalacion").val()
-					},
-					resetForm: false,
-					success: function(dato)
-					{
-						// Actualizar ID reporte						
-						reporteregistro_id = dato.reporteregistro_id;
+					// enviar datos
+					$('#form_reporte_objetivogeneral').ajaxForm({
+						dataType: 'json',
+						type: 'POST',
+						url: '' + ruta_storage_guardar,
+						data: {
+							opcion: 3,
+							proyecto_id: proyecto.id,
+							agente_id: agente_id,
+							agente_nombre: agente_nombre,
+							reporteregistro_id: reporteregistro_id,
+							catactivo_id: $("#reporte_catactivo_id").val(),
+							reporte_instalacion: $("#reporte_instalacion").val()
+						},
+						resetForm: false,
+						success: function (dato) {
+							// Actualizar ID reporte						
+							reporteregistro_id = dato.reporteregistro_id;
 
-						menureporte_estado("menureporte_3_1", 1);
+							menureporte_estado("menureporte_3_1", 1);
 
-						// tabla_reporte_revisiones(proyecto.id);
+							// tabla_reporte_revisiones(proyecto.id);
 
-						// mensaje
-						swal({
-							title: "Correcto",
-							text: ""+dato.msj,
-							type: "success", // warning, error, success, info
-							buttons: {
-								visible: false, // true , false
-							},
-							timer: 1500,
-							showConfirmButton: false
-						});
+							// mensaje
+							swal({
+								title: "Correcto",
+								text: "" + dato.msj,
+								type: "success", // warning, error, success, info
+								buttons: {
+									visible: false, // true , false
+								},
+								timer: 1500,
+								showConfirmButton: false
+							});
 
-						// actualiza boton
-						$('#botonguardar_reporte_objetivogeneral').html('Guardar objetivo general <i class="fa fa-save"></i>');
-						$('#botonguardar_reporte_objetivogeneral').attr('disabled', false);
-					},
-					beforeSend: function()
-					{
-						$('#botonguardar_reporte_objetivogeneral').html('Guardando objetivo general <i class="fa fa-spin fa-spinner"></i>');
-						$('#botonguardar_reporte_objetivogeneral').attr('disabled', true);
-					},
-					error: function(dato)
-					{
-						// actualiza boton
-						$('#botonguardar_reporte_objetivogeneral').html('Guardar objetivo general <i class="fa fa-save"></i>');
-						$('#botonguardar_reporte_objetivogeneral').attr('disabled', false);
+							// actualiza boton
+							$('#botonguardar_reporte_objetivogeneral').html('Guardar objetivo general <i class="fa fa-save"></i>');
+							$('#botonguardar_reporte_objetivogeneral').attr('disabled', false);
+						},
+						beforeSend: function () {
+							$('#botonguardar_reporte_objetivogeneral').html('Guardando objetivo general <i class="fa fa-spin fa-spinner"></i>');
+							$('#botonguardar_reporte_objetivogeneral').attr('disabled', true);
+						},
+						error: function (dato) {
+							// actualiza boton
+							$('#botonguardar_reporte_objetivogeneral').html('Guardar objetivo general <i class="fa fa-save"></i>');
+							$('#botonguardar_reporte_objetivogeneral').attr('disabled', false);
 
-						// mensaje
-						swal({
-							title: "Error",
-							text: ""+dato.msj,
-							type: "error", // warning, error, success, info
-							buttons: {
-								visible: false, // true , false
-							},
-							timer: 1500,
-							showConfirmButton: false
-						});
-						return false;
-					}
-				}).submit();
-				return false;
-			}
-			else 
-			{
-				// mensaje
-				swal({
-					title: "Cancelado",
-					text: "Acción cancelada",
-					type: "error", // warning, error, success, info
-					buttons: {
-						visible: false, // true , false
-					},
-					timer: 500,
-					showConfirmButton: false
-				});
-			}
-		});
+							// mensaje
+							swal({
+								title: "Error",
+								text: "" + dato.msj,
+								type: "error", // warning, error, success, info
+								buttons: {
+									visible: false, // true , false
+								},
+								timer: 1500,
+								showConfirmButton: false
+							});
+							return false;
+						}
+					}).submit();
+					return false;
+				}
+				else {
+					// mensaje
+					swal({
+						title: "Cancelado",
+						text: "Acción cancelada",
+						type: "error", // warning, error, success, info
+						buttons: {
+							visible: false, // true , false
+						},
+						timer: 500,
+						showConfirmButton: false
+					});
+				}
+			});
 		return false;
 	}
 });
@@ -1240,12 +1153,10 @@ $("#botonguardar_reporte_objetivogeneral").click(function()
 // OBJETIVOS ESPECIFICOS
 
 
-$("#botonguardar_reporte_objetivoespecifico").click(function()
-{
+$("#botonguardar_reporte_objetivoespecifico").click(function () {
 	// valida campos vacios
 	var valida = this.form.checkValidity();
-	if (valida)
-	{
+	if (valida) {
 		swal({
 			title: "¡Confirme que desea guardar!",
 			text: "Objetivos específicos",
@@ -1257,95 +1168,89 @@ $("#botonguardar_reporte_objetivoespecifico").click(function()
 			closeOnConfirm: false,
 			closeOnCancel: false
 		},
-		function(isConfirm)
-		{
-			if (isConfirm)
-			{
-				// cerrar msj confirmacion
-				swal.close();
+			function (isConfirm) {
+				if (isConfirm) {
+					// cerrar msj confirmacion
+					swal.close();
 
-				// enviar datos
-				$('#form_reporte_objetivoespecifico').ajaxForm({
-					dataType: 'json',
-					type: 'POST',
-					url: ''+ruta_storage_guardar,
-					data: {
-						opcion: 4,
-						proyecto_id: proyecto.id,
-						agente_id: agente_id,
-						agente_nombre: agente_nombre,
-						reporteregistro_id: reporteregistro_id,
-						catactivo_id: $("#reporte_catactivo_id").val(),
-						reporte_instalacion: $("#reporte_instalacion").val()
-					},
-					resetForm: false,
-					success: function(dato)
-					{
-						// Actualizar ID reporte						
-						reporteregistro_id = dato.reporteregistro_id;
+					// enviar datos
+					$('#form_reporte_objetivoespecifico').ajaxForm({
+						dataType: 'json',
+						type: 'POST',
+						url: '' + ruta_storage_guardar,
+						data: {
+							opcion: 4,
+							proyecto_id: proyecto.id,
+							agente_id: agente_id,
+							agente_nombre: agente_nombre,
+							reporteregistro_id: reporteregistro_id,
+							catactivo_id: $("#reporte_catactivo_id").val(),
+							reporte_instalacion: $("#reporte_instalacion").val()
+						},
+						resetForm: false,
+						success: function (dato) {
+							// Actualizar ID reporte						
+							reporteregistro_id = dato.reporteregistro_id;
 
-						menureporte_estado("menureporte_3_2", 1);
+							menureporte_estado("menureporte_3_2", 1);
 
-						// tabla_reporte_revisiones(proyecto.id);
+							// tabla_reporte_revisiones(proyecto.id);
 
-						// mensaje
-						swal({
-							title: "Correcto",
-							text: ""+dato.msj,
-							type: "success", // warning, error, success, info
-							buttons: {
-								visible: false, // true , false
-							},
-							timer: 1500,
-							showConfirmButton: false
-						});
+							// mensaje
+							swal({
+								title: "Correcto",
+								text: "" + dato.msj,
+								type: "success", // warning, error, success, info
+								buttons: {
+									visible: false, // true , false
+								},
+								timer: 1500,
+								showConfirmButton: false
+							});
 
-						// actualiza boton
-						$('#botonguardar_reporte_objetivoespecifico').html('Guardar objetivos específicos <i class="fa fa-save"></i>');
-						$('#botonguardar_reporte_objetivoespecifico').attr('disabled', false);
-					},
-					beforeSend: function()
-					{
-						$('#botonguardar_reporte_objetivoespecifico').html('Guardando objetivos específicos <i class="fa fa-spin fa-spinner"></i>');
-						$('#botonguardar_reporte_objetivoespecifico').attr('disabled', true);
-					},
-					error: function(dato)
-					{
-						// actualiza boton
-						$('#botonguardar_reporte_objetivoespecifico').html('Guardar objetivos específicos <i class="fa fa-save"></i>');
-						$('#botonguardar_reporte_objetivoespecifico').attr('disabled', false);
+							// actualiza boton
+							$('#botonguardar_reporte_objetivoespecifico').html('Guardar objetivos específicos <i class="fa fa-save"></i>');
+							$('#botonguardar_reporte_objetivoespecifico').attr('disabled', false);
+						},
+						beforeSend: function () {
+							$('#botonguardar_reporte_objetivoespecifico').html('Guardando objetivos específicos <i class="fa fa-spin fa-spinner"></i>');
+							$('#botonguardar_reporte_objetivoespecifico').attr('disabled', true);
+						},
+						error: function (dato) {
+							// actualiza boton
+							$('#botonguardar_reporte_objetivoespecifico').html('Guardar objetivos específicos <i class="fa fa-save"></i>');
+							$('#botonguardar_reporte_objetivoespecifico').attr('disabled', false);
 
-						// mensaje
-						swal({
-							title: "Error",
-							text: ""+dato.msj,
-							type: "error", // warning, error, success, info
-							buttons: {
-								visible: false, // true , false
-							},
-							timer: 1500,
-							showConfirmButton: false
-						});
-						return false;
-					}
-				}).submit();
-				return false;
-			}
-			else 
-			{
-				// mensaje
-				swal({
-					title: "Cancelado",
-					text: "Acción cancelada",
-					type: "error", // warning, error, success, info
-					buttons: {
-						visible: false, // true , false
-					},
-					timer: 500,
-					showConfirmButton: false
-				});
-			}
-		});
+							// mensaje
+							swal({
+								title: "Error",
+								text: "" + dato.msj,
+								type: "error", // warning, error, success, info
+								buttons: {
+									visible: false, // true , false
+								},
+								timer: 1500,
+								showConfirmButton: false
+							});
+							return false;
+						}
+					}).submit();
+					return false;
+				}
+				else {
+					// mensaje
+					swal({
+						title: "Cancelado",
+						text: "Acción cancelada",
+						type: "error", // warning, error, success, info
+						buttons: {
+							visible: false, // true , false
+						},
+						timer: 500,
+						showConfirmButton: false
+					});
+				}
+			});
 		return false;
 	}
 });
@@ -1355,12 +1260,10 @@ $("#botonguardar_reporte_objetivoespecifico").click(function()
 // METODOLOGÍA PUNTO 4.1
 
 
-$("#botonguardar_reporte_metodologia_4_1").click(function()
-{
+$("#botonguardar_reporte_metodologia_4_1").click(function () {
 	// valida campos vacios
 	var valida = this.form.checkValidity();
-	if (valida)
-	{
+	if (valida) {
 		swal({
 			title: "¡Confirme que desea guardar!",
 			text: "Metodológía punto 4.1",
@@ -1372,95 +1275,89 @@ $("#botonguardar_reporte_metodologia_4_1").click(function()
 			closeOnConfirm: false,
 			closeOnCancel: false
 		},
-		function(isConfirm)
-		{
-			if (isConfirm)
-			{
-				// cerrar msj confirmacion
-				swal.close();
+			function (isConfirm) {
+				if (isConfirm) {
+					// cerrar msj confirmacion
+					swal.close();
 
-				// enviar datos
-				$('#form_reporte_metodologia_4_1').ajaxForm({
-					dataType: 'json',
-					type: 'POST',
-					url: ''+ruta_storage_guardar,
-					data: {
-						opcion: 5,
-						proyecto_id: proyecto.id,
-						agente_id: agente_id,
-						agente_nombre: agente_nombre,
-						reporteregistro_id: reporteregistro_id,
-						catactivo_id: $("#reporte_catactivo_id").val(),
-						reporte_instalacion: $("#reporte_instalacion").val()
-					},
-					resetForm: false,
-					success: function(dato)
-					{
-						// Actualizar ID reporte						
-						reporteregistro_id = dato.reporteregistro_id;
+					// enviar datos
+					$('#form_reporte_metodologia_4_1').ajaxForm({
+						dataType: 'json',
+						type: 'POST',
+						url: '' + ruta_storage_guardar,
+						data: {
+							opcion: 5,
+							proyecto_id: proyecto.id,
+							agente_id: agente_id,
+							agente_nombre: agente_nombre,
+							reporteregistro_id: reporteregistro_id,
+							catactivo_id: $("#reporte_catactivo_id").val(),
+							reporte_instalacion: $("#reporte_instalacion").val()
+						},
+						resetForm: false,
+						success: function (dato) {
+							// Actualizar ID reporte						
+							reporteregistro_id = dato.reporteregistro_id;
 
-						menureporte_estado("menureporte_4_1", 1);
+							menureporte_estado("menureporte_4_1", 1);
 
-						// tabla_reporte_revisiones(proyecto.id);
+							// tabla_reporte_revisiones(proyecto.id);
 
-						// mensaje
-						swal({
-							title: "Correcto",
-							text: ""+dato.msj,
-							type: "success", // warning, error, success, info
-							buttons: {
-								visible: false, // true , false
-							},
-							timer: 1500,
-							showConfirmButton: false
-						});
+							// mensaje
+							swal({
+								title: "Correcto",
+								text: "" + dato.msj,
+								type: "success", // warning, error, success, info
+								buttons: {
+									visible: false, // true , false
+								},
+								timer: 1500,
+								showConfirmButton: false
+							});
 
-						// actualiza boton
-						$('#botonguardar_reporte_metodologia_4_1').html('Guardar metodología punto 4.1 <i class="fa fa-save"></i>');
-						$('#botonguardar_reporte_metodologia_4_1').attr('disabled', false);
-					},
-					beforeSend: function()
-					{
-						$('#botonguardar_reporte_metodologia_4_1').html('Guardando metodología punto 4.1 <i class="fa fa-spin fa-spinner"></i>');
-						$('#botonguardar_reporte_metodologia_4_1').attr('disabled', true);
-					},
-					error: function(dato)
-					{
-						// actualiza boton
-						$('#botonguardar_reporte_metodologia_4_1').html('Guardar metodología punto 4.1 <i class="fa fa-save"></i>');
-						$('#botonguardar_reporte_metodologia_4_1').attr('disabled', false);
+							// actualiza boton
+							$('#botonguardar_reporte_metodologia_4_1').html('Guardar metodología punto 4.1 <i class="fa fa-save"></i>');
+							$('#botonguardar_reporte_metodologia_4_1').attr('disabled', false);
+						},
+						beforeSend: function () {
+							$('#botonguardar_reporte_metodologia_4_1').html('Guardando metodología punto 4.1 <i class="fa fa-spin fa-spinner"></i>');
+							$('#botonguardar_reporte_metodologia_4_1').attr('disabled', true);
+						},
+						error: function (dato) {
+							// actualiza boton
+							$('#botonguardar_reporte_metodologia_4_1').html('Guardar metodología punto 4.1 <i class="fa fa-save"></i>');
+							$('#botonguardar_reporte_metodologia_4_1').attr('disabled', false);
 
-						// mensaje
-						swal({
-							title: "Error",
-							text: ""+dato.msj,
-							type: "error", // warning, error, success, info
-							buttons: {
-								visible: false, // true , false
-							},
-							timer: 1500,
-							showConfirmButton: false
-						});
-						return false;
-					}
-				}).submit();
-				return false;
-			}
-			else 
-			{
-				// mensaje
-				swal({
-					title: "Cancelado",
-					text: "Acción cancelada",
-					type: "error", // warning, error, success, info
-					buttons: {
-						visible: false, // true , false
-					},
-					timer: 500,
-					showConfirmButton: false
-				});
-			}
-		});
+							// mensaje
+							swal({
+								title: "Error",
+								text: "" + dato.msj,
+								type: "error", // warning, error, success, info
+								buttons: {
+									visible: false, // true , false
+								},
+								timer: 1500,
+								showConfirmButton: false
+							});
+							return false;
+						}
+					}).submit();
+					return false;
+				}
+				else {
+					// mensaje
+					swal({
+						title: "Cancelado",
+						text: "Acción cancelada",
+						type: "error", // warning, error, success, info
+						buttons: {
+							visible: false, // true , false
+						},
+						timer: 500,
+						showConfirmButton: false
+					});
+				}
+			});
 		return false;
 	}
 });
@@ -1470,12 +1367,10 @@ $("#botonguardar_reporte_metodologia_4_1").click(function()
 // METODOLOGÍA PUNTO 4.2
 
 
-$("#botonguardar_reporte_metodologia_4_2").click(function()
-{
+$("#botonguardar_reporte_metodologia_4_2").click(function () {
 	// valida campos vacios
 	var valida = this.form.checkValidity();
-	if (valida)
-	{
+	if (valida) {
 		swal({
 			title: "¡Confirme que desea guardar!",
 			text: "Metodológía punto 4.2",
@@ -1487,95 +1382,89 @@ $("#botonguardar_reporte_metodologia_4_2").click(function()
 			closeOnConfirm: false,
 			closeOnCancel: false
 		},
-		function(isConfirm)
-		{
-			if (isConfirm)
-			{
-				// cerrar msj confirmacion
-				swal.close();
+			function (isConfirm) {
+				if (isConfirm) {
+					// cerrar msj confirmacion
+					swal.close();
 
-				// enviar datos
-				$('#form_reporte_metodologia_4_2').ajaxForm({
-					dataType: 'json',
-					type: 'POST',
-					url: ''+ruta_storage_guardar,
-					data: {
-						opcion: 6,
-						proyecto_id: proyecto.id,
-						agente_id: agente_id,
-						agente_nombre: agente_nombre,
-						reporteregistro_id: reporteregistro_id,
-						catactivo_id: $("#reporte_catactivo_id").val(),
-						reporte_instalacion: $("#reporte_instalacion").val()
-					},
-					resetForm: false,
-					success: function(dato)
-					{
-						// Actualizar ID reporte						
-						reporteregistro_id = dato.reporteregistro_id;
+					// enviar datos
+					$('#form_reporte_metodologia_4_2').ajaxForm({
+						dataType: 'json',
+						type: 'POST',
+						url: '' + ruta_storage_guardar,
+						data: {
+							opcion: 6,
+							proyecto_id: proyecto.id,
+							agente_id: agente_id,
+							agente_nombre: agente_nombre,
+							reporteregistro_id: reporteregistro_id,
+							catactivo_id: $("#reporte_catactivo_id").val(),
+							reporte_instalacion: $("#reporte_instalacion").val()
+						},
+						resetForm: false,
+						success: function (dato) {
+							// Actualizar ID reporte						
+							reporteregistro_id = dato.reporteregistro_id;
 
-						menureporte_estado("menureporte_4_2", 1);
+							menureporte_estado("menureporte_4_2", 1);
 
-						// tabla_reporte_revisiones(proyecto.id);
+							// tabla_reporte_revisiones(proyecto.id);
 
-						// mensaje
-						swal({
-							title: "Correcto",
-							text: ""+dato.msj,
-							type: "success", // warning, error, success, info
-							buttons: {
-								visible: false, // true , false
-							},
-							timer: 1500,
-							showConfirmButton: false
-						});
+							// mensaje
+							swal({
+								title: "Correcto",
+								text: "" + dato.msj,
+								type: "success", // warning, error, success, info
+								buttons: {
+									visible: false, // true , false
+								},
+								timer: 1500,
+								showConfirmButton: false
+							});
 
-						// actualiza boton
-						$('#botonguardar_reporte_metodologia_4_2').html('Guardar metodología punto 4.2 <i class="fa fa-save"></i>');
-						$('#botonguardar_reporte_metodologia_4_2').attr('disabled', false);
-					},
-					beforeSend: function()
-					{
-						$('#botonguardar_reporte_metodologia_4_2').html('Guardando metodología punto 4.2 <i class="fa fa-spin fa-spinner"></i>');
-						$('#botonguardar_reporte_metodologia_4_2').attr('disabled', true);
-					},
-					error: function(dato)
-					{
-						// actualiza boton
-						$('#botonguardar_reporte_metodologia_4_2').html('Guardar metodología punto 4.2 <i class="fa fa-save"></i>');
-						$('#botonguardar_reporte_metodologia_4_2').attr('disabled', false);
+							// actualiza boton
+							$('#botonguardar_reporte_metodologia_4_2').html('Guardar metodología punto 4.2 <i class="fa fa-save"></i>');
+							$('#botonguardar_reporte_metodologia_4_2').attr('disabled', false);
+						},
+						beforeSend: function () {
+							$('#botonguardar_reporte_metodologia_4_2').html('Guardando metodología punto 4.2 <i class="fa fa-spin fa-spinner"></i>');
+							$('#botonguardar_reporte_metodologia_4_2').attr('disabled', true);
+						},
+						error: function (dato) {
+							// actualiza boton
+							$('#botonguardar_reporte_metodologia_4_2').html('Guardar metodología punto 4.2 <i class="fa fa-save"></i>');
+							$('#botonguardar_reporte_metodologia_4_2').attr('disabled', false);
 
-						// mensaje
-						swal({
-							title: "Error",
-							text: ""+dato.msj,
-							type: "error", // warning, error, success, info
-							buttons: {
-								visible: false, // true , false
-							},
-							timer: 1500,
-							showConfirmButton: false
-						});
-						return false;
-					}
-				}).submit();
-				return false;
-			}
-			else 
-			{
-				// mensaje
-				swal({
-					title: "Cancelado",
-					text: "Acción cancelada",
-					type: "error", // warning, error, success, info
-					buttons: {
-						visible: false, // true , false
-					},
-					timer: 500,
-					showConfirmButton: false
-				});
-			}
-		});
+							// mensaje
+							swal({
+								title: "Error",
+								text: "" + dato.msj,
+								type: "error", // warning, error, success, info
+								buttons: {
+									visible: false, // true , false
+								},
+								timer: 1500,
+								showConfirmButton: false
+							});
+							return false;
+						}
+					}).submit();
+					return false;
+				}
+				else {
+					// mensaje
+					swal({
+						title: "Cancelado",
+						text: "Acción cancelada",
+						type: "error", // warning, error, success, info
+						buttons: {
+							visible: false, // true , false
+						},
+						timer: 500,
+						showConfirmButton: false
+					});
+				}
+			});
 		return false;
 	}
 });
@@ -1588,15 +1477,14 @@ $("#botonguardar_reporte_metodologia_4_2").click(function()
 var ubicacionmapa = '';
 
 
-$(document).ready(function()
-{
+$(document).ready(function () {
 	$('#reporteubicacionfoto').dropify({
 		messages:
 		{
 			'default': 'Arrastre el mapa aquí o haga click',
 			'replace': 'Arrastre el mapa o haga clic para reemplazar',
-			'remove':  'Quitar',
-			'error':   'Ooops, ha ocurrido un error.'
+			'remove': 'Quitar',
+			'error': 'Ooops, ha ocurrido un error.'
 		},
 		error:
 		{
@@ -1611,8 +1499,7 @@ $(document).ready(function()
 });
 
 
-function redimencionar_mapaubicacion()
-{
+function redimencionar_mapaubicacion() {
 	// Bloquear boton
 	$('#botonguardar_reporte_ubicacion').attr('disabled', true);
 
@@ -1630,14 +1517,12 @@ function redimencionar_mapaubicacion()
 	reader.readAsDataURL(file);
 
 	// Set the image once loaded into file reader
-	reader.onload = function(e)
-	{
-	    //img.src = e.target.result;
+	reader.onload = function (e) {
+		//img.src = e.target.result;
 		var img = new Image();
 		img.src = this.result;
-		
-	    setTimeout(function()
-	    {
+
+		setTimeout(function () {
 			var canvas = document.createElement("canvas");
 			//var canvas = $("<canvas>", {"id":"testing"})[0];
 			//var ctx = canvas.getContext("2d");
@@ -1648,30 +1533,24 @@ function redimencionar_mapaubicacion()
 			var height = img.height;
 
 			// Dimensiones Nuevas
-			if (parseInt(width) > 8000)
-			{
+			if (parseInt(width) > 8000) {
 				var MAX_WIDTH = 4000; //Ancho de la imagen
 				var MAX_HEIGHT = 3000; //Alto de la imagen
 			}
-			else
-			{
+			else {
 				var MAX_WIDTH = 1200; //Ancho de la imagen
 				var MAX_HEIGHT = 900; //Alto de la imagen
 			}
 
 			// Dimensionar con respecto a la relacion de aspecto
-			if (width > height)
-			{
-				if (width > MAX_WIDTH)
-				{
+			if (width > height) {
+				if (width > MAX_WIDTH) {
 					height *= MAX_WIDTH / width;
 					width = MAX_WIDTH;
 				}
 			}
-			else
-			{
-				if (height > MAX_HEIGHT)
-				{
+			else {
+				if (height > MAX_HEIGHT) {
 					width *= MAX_HEIGHT / height;
 					height = MAX_HEIGHT;
 				}
@@ -1681,7 +1560,7 @@ function redimencionar_mapaubicacion()
 			canvas.height = height;
 			var ctx = canvas.getContext("2d");
 			ctx.drawImage(img, 0, 0, width, height);
-			console.log("Nuevas dimensiones ",width, height);
+			console.log("Nuevas dimensiones ", width, height);
 
 			// Resultado
 			var dataurl = canvas.toDataURL("image/jpeg");
@@ -1695,12 +1574,10 @@ function redimencionar_mapaubicacion()
 }
 
 
-$("#botonguardar_reporte_ubicacion").click(function()
-{
+$("#botonguardar_reporte_ubicacion").click(function () {
 	// valida campos vacios
 	var valida = this.form.checkValidity();
-	if (valida)
-	{
+	if (valida) {
 		swal({
 			title: "¡Confirme que desea guardar!",
 			text: "Datos de la ubicación",
@@ -1712,108 +1589,101 @@ $("#botonguardar_reporte_ubicacion").click(function()
 			closeOnConfirm: false,
 			closeOnCancel: false
 		},
-		function(isConfirm)
-		{
-			if (isConfirm)
-			{
-				// cerrar msj confirmacion
-				swal.close();
+			function (isConfirm) {
+				if (isConfirm) {
+					// cerrar msj confirmacion
+					swal.close();
 
-				// enviar datos
-				$('#form_reporte_ubicacion').ajaxForm({
-					dataType: 'json',
-					type: 'POST',
-					url: ''+ruta_storage_guardar,
-					data: {
-						opcion: 7,
-						proyecto_id: proyecto.id,
-						agente_id: agente_id,
-						agente_nombre: agente_nombre,
-						reporteregistro_id: reporteregistro_id,
-						catactivo_id: $("#reporte_catactivo_id").val(),
-						reporte_instalacion: $("#reporte_instalacion").val(),
-						ubicacionmapa: ubicacionmapa
-					},
-					resetForm: false,
-					success: function(dato)
-					{
-						// Actualizar ID reporte						
-						reporteregistro_id = dato.reporteregistro_id;
+					// enviar datos
+					$('#form_reporte_ubicacion').ajaxForm({
+						dataType: 'json',
+						type: 'POST',
+						url: '' + ruta_storage_guardar,
+						data: {
+							opcion: 7,
+							proyecto_id: proyecto.id,
+							agente_id: agente_id,
+							agente_nombre: agente_nombre,
+							reporteregistro_id: reporteregistro_id,
+							catactivo_id: $("#reporte_catactivo_id").val(),
+							reporte_instalacion: $("#reporte_instalacion").val(),
+							ubicacionmapa: ubicacionmapa
+						},
+						resetForm: false,
+						success: function (dato) {
+							// Actualizar ID reporte						
+							reporteregistro_id = dato.reporteregistro_id;
 
-						menureporte_estado("menureporte_5_1", 1);
+							menureporte_estado("menureporte_5_1", 1);
 
-						// tabla_reporte_revisiones(proyecto.id);
+							// tabla_reporte_revisiones(proyecto.id);
 
-						$('#reporteubicacionfoto').val('');
-						$('#reporteubicacionfoto').attr('required', false);
-						$('#boton_descargarmapaubicacion').css('display', 'block');
+							$('#reporteubicacionfoto').val('');
+							$('#reporteubicacionfoto').attr('required', false);
+							$('#boton_descargarmapaubicacion').css('display', 'block');
 
-						// mensaje
-						swal({
-							title: "Correcto",
-							text: ""+dato.msj,
-							type: "success", // warning, error, success, info
-							buttons: {
-								visible: false, // true , false
-							},
-							timer: 1500,
-							showConfirmButton: false
-						});
+							// mensaje
+							swal({
+								title: "Correcto",
+								text: "" + dato.msj,
+								type: "success", // warning, error, success, info
+								buttons: {
+									visible: false, // true , false
+								},
+								timer: 1500,
+								showConfirmButton: false
+							});
 
-						// actualiza boton
-						$('#botonguardar_reporte_ubicacion').html('Guardar ubicación <i class="fa fa-save"></i>');
-						$('#botonguardar_reporte_ubicacion').attr('disabled', false);
-					},
-					beforeSend: function()
-					{
-						$('#botonguardar_reporte_ubicacion').html('Guardando ubicación <i class="fa fa-spin fa-spinner"></i>');
-						$('#botonguardar_reporte_ubicacion').attr('disabled', true);
-					},
-					error: function(dato)
-					{
-						// actualiza boton
-						$('#botonguardar_reporte_ubicacion').html('Guardar ubicación <i class="fa fa-save"></i>');
-						$('#botonguardar_reporte_ubicacion').attr('disabled', false);
+							// actualiza boton
+							$('#botonguardar_reporte_ubicacion').html('Guardar ubicación <i class="fa fa-save"></i>');
+							$('#botonguardar_reporte_ubicacion').attr('disabled', false);
+						},
+						beforeSend: function () {
+							$('#botonguardar_reporte_ubicacion').html('Guardando ubicación <i class="fa fa-spin fa-spinner"></i>');
+							$('#botonguardar_reporte_ubicacion').attr('disabled', true);
+						},
+						error: function (dato) {
+							// actualiza boton
+							$('#botonguardar_reporte_ubicacion').html('Guardar ubicación <i class="fa fa-save"></i>');
+							$('#botonguardar_reporte_ubicacion').attr('disabled', false);
 
-						// mensaje
-						swal({
-							title: "Error",
-							text: ""+dato.msj,
-							type: "error", // warning, error, success, info
-							buttons: {
-								visible: false, // true , false
-							},
-							timer: 1500,
-							showConfirmButton: false
-						});
-						return false;
-					}
-				}).submit();
-				return false;
-			}
-			else 
-			{
-				// mensaje
-				swal({
-					title: "Cancelado",
-					text: "Acción cancelada",
-					type: "error", // warning, error, success, info
-					buttons: {
-						visible: false, // true , false
-					},
-					timer: 500,
-					showConfirmButton: false
-				});
-			}
-		});
+							// mensaje
+							swal({
+								title: "Error",
+								text: "" + dato.msj,
+								type: "error", // warning, error, success, info
+								buttons: {
+									visible: false, // true , false
+								},
+								timer: 1500,
+								showConfirmButton: false
+							});
+							return false;
+						}
+					}).submit();
+					return false;
+				}
+				else {
+					// mensaje
+					swal({
+						title: "Cancelado",
+						text: "Acción cancelada",
+						type: "error", // warning, error, success, info
+						buttons: {
+							visible: false, // true , false
+						},
+						timer: 500,
+						showConfirmButton: false
+					});
+				}
+			});
 		return false;
 	}
 });
 
 
-$("#boton_descargarmapaubicacion").click(function()
-{
-	window.open('/reporteruidomapaubicacion/'+reporteregistro_id+'/'+1);
+$("#boton_descargarmapaubicacion").click(function () {
+	window.open('/reporteruidomapaubicacion/' + reporteregistro_id + '/' + 1);
 });
 
 
@@ -1821,12 +1691,10 @@ $("#boton_descargarmapaubicacion").click(function()
 // PROCESO INSTALACIÓN
 
 
-$("#botonguardar_reporte_procesoinstalacion").click(function()
-{
+$("#botonguardar_reporte_procesoinstalacion").click(function () {
 	// valida campos vacios
 	var valida = this.form.checkValidity();
-	if (valida)
-	{
+	if (valida) {
 		swal({
 			title: "¡Confirme que desea guardar!",
 			text: "Proceso y actividad principal de la instalación",
@@ -1838,95 +1706,89 @@ $("#botonguardar_reporte_procesoinstalacion").click(function()
 			closeOnConfirm: false,
 			closeOnCancel: false
 		},
-		function(isConfirm)
-		{
-			if (isConfirm)
-			{
-				// cerrar msj confirmacion
-				swal.close();
+			function (isConfirm) {
+				if (isConfirm) {
+					// cerrar msj confirmacion
+					swal.close();
 
-				// enviar datos
-				$('#form_reporte_procesoinstalacion').ajaxForm({
-					dataType: 'json',
-					type: 'POST',
-					url: ''+ruta_storage_guardar,
-					data: {
-						opcion: 8,
-						proyecto_id: proyecto.id,
-						agente_id: agente_id,
-						agente_nombre: agente_nombre,
-						reporteregistro_id: reporteregistro_id,
-						catactivo_id: $("#reporte_catactivo_id").val(),
-						reporte_instalacion: $("#reporte_instalacion").val(),
-					},
-					resetForm: false,
-					success: function(dato)
-					{
-						// Actualizar ID reporte						
-						reporteregistro_id = dato.reporteregistro_id;
+					// enviar datos
+					$('#form_reporte_procesoinstalacion').ajaxForm({
+						dataType: 'json',
+						type: 'POST',
+						url: '' + ruta_storage_guardar,
+						data: {
+							opcion: 8,
+							proyecto_id: proyecto.id,
+							agente_id: agente_id,
+							agente_nombre: agente_nombre,
+							reporteregistro_id: reporteregistro_id,
+							catactivo_id: $("#reporte_catactivo_id").val(),
+							reporte_instalacion: $("#reporte_instalacion").val(),
+						},
+						resetForm: false,
+						success: function (dato) {
+							// Actualizar ID reporte						
+							reporteregistro_id = dato.reporteregistro_id;
 
-						menureporte_estado("menureporte_5_2", 1);
+							menureporte_estado("menureporte_5_2", 1);
 
-						// tabla_reporte_revisiones(proyecto.id);
+							// tabla_reporte_revisiones(proyecto.id);
 
-						// mensaje
-						swal({
-							title: "Correcto",
-							text: ""+dato.msj,
-							type: "success", // warning, error, success, info
-							buttons: {
-								visible: false, // true , false
-							},
-							timer: 1500,
-							showConfirmButton: false
-						});
+							// mensaje
+							swal({
+								title: "Correcto",
+								text: "" + dato.msj,
+								type: "success", // warning, error, success, info
+								buttons: {
+									visible: false, // true , false
+								},
+								timer: 1500,
+								showConfirmButton: false
+							});
 
-						// actualiza boton
-						$('#botonguardar_reporte_procesoinstalacion').html('Guardar proceso instalación <i class="fa fa-save"></i>');
-						$('#botonguardar_reporte_procesoinstalacion').attr('disabled', false);
-					},
-					beforeSend: function()
-					{
-						$('#botonguardar_reporte_procesoinstalacion').html('Guardando proceso instalación <i class="fa fa-spin fa-spinner"></i>');
-						$('#botonguardar_reporte_procesoinstalacion').attr('disabled', true);
-					},
-					error: function(dato)
-					{
-						// actualiza boton
-						$('#botonguardar_reporte_procesoinstalacion').html('Guardar proceso instalación <i class="fa fa-save"></i>');
-						$('#botonguardar_reporte_procesoinstalacion').attr('disabled', false);
+							// actualiza boton
+							$('#botonguardar_reporte_procesoinstalacion').html('Guardar proceso instalación <i class="fa fa-save"></i>');
+							$('#botonguardar_reporte_procesoinstalacion').attr('disabled', false);
+						},
+						beforeSend: function () {
+							$('#botonguardar_reporte_procesoinstalacion').html('Guardando proceso instalación <i class="fa fa-spin fa-spinner"></i>');
+							$('#botonguardar_reporte_procesoinstalacion').attr('disabled', true);
+						},
+						error: function (dato) {
+							// actualiza boton
+							$('#botonguardar_reporte_procesoinstalacion').html('Guardar proceso instalación <i class="fa fa-save"></i>');
+							$('#botonguardar_reporte_procesoinstalacion').attr('disabled', false);
 
-						// mensaje
-						swal({
-							title: "Error",
-							text: ""+dato.msj,
-							type: "error", // warning, error, success, info
-							buttons: {
-								visible: false, // true , false
-							},
-							timer: 1500,
-							showConfirmButton: false
-						});
-						return false;
-					}
-				}).submit();
-				return false;
-			}
-			else 
-			{
-				// mensaje
-				swal({
-					title: "Cancelado",
-					text: "Acción cancelada",
-					type: "error", // warning, error, success, info
-					buttons: {
-						visible: false, // true , false
-					},
-					timer: 500,
-					showConfirmButton: false
-				});
-			}
-		});
+							// mensaje
+							swal({
+								title: "Error",
+								text: "" + dato.msj,
+								type: "error", // warning, error, success, info
+								buttons: {
+									visible: false, // true , false
+								},
+								timer: 1500,
+								showConfirmButton: false
+							});
+							return false;
+						}
+					}).submit();
+					return false;
+				}
+				else {
+					// mensaje
+					swal({
+						title: "Cancelado",
+						text: "Acción cancelada",
+						type: "error", // warning, error, success, info
+						buttons: {
+							visible: false, // true , false
+						},
+						timer: 500,
+						showConfirmButton: false
+					});
+				}
+			});
 		return false;
 	}
 });
@@ -1936,29 +1798,23 @@ $("#botonguardar_reporte_procesoinstalacion").click(function()
 // CATEGORIAS
 
 
-$(document).ready(function()
-{
-	setTimeout(function()
-	{
+$(document).ready(function () {
+	setTimeout(function () {
 		tabla_reporte_categorias(proyecto.id, reporteregistro_id);
 	}, 2500);
 });
 
 
 var datatable_reportecategorias = null;
-function tabla_reporte_categorias(proyecto_id, reporteregistro_id)
-{
-	try 
-	{
-		var ruta = "/reporteruidocategorias/"+proyecto_id+"/"+reporteregistro_id+"/"+areas_poe;
+function tabla_reporte_categorias(proyecto_id, reporteregistro_id) {
+	try {
+		var ruta = "/reporteruidocategorias/" + proyecto_id + "/" + reporteregistro_id + "/" + areas_poe;
 
-		if (datatable_reportecategorias != null)
-		{
+		if (datatable_reportecategorias != null) {
 			datatable_reportecategorias.clear().draw();
 			datatable_reportecategorias.ajax.url(ruta).load();
 		}
-		else
-		{
+		else {
 			var numeroejecucion = 1;
 			datatable_reportecategorias = $('#tabla_reporte_categoria').DataTable({
 				"ajax": {
@@ -1967,8 +1823,7 @@ function tabla_reporte_categorias(proyecto_id, reporteregistro_id)
 					"cache": false,
 					dataType: "json",
 					data: {},
-					dataSrc: function (json)
-					{
+					dataSrc: function (json) {
 						// if (parseInt(json.data.length) > 0 && parseInt(json.total_singuardar) == 0)
 						// {
 						// 	menureporte_estado("menureporte_5_4", 1);
@@ -1979,22 +1834,19 @@ function tabla_reporte_categorias(proyecto_id, reporteregistro_id)
 						// }
 
 
-						if (parseInt(areas_poe) == 1)
-						{
+						if (parseInt(areas_poe) == 1) {
 							$("#boton_reporte_nuevacategoria").attr('disabled', true);
 							$("#boton_reporte_nuevaarea").attr('disabled', true);
 						}
-						
+
 
 						// alert("Done! "+json.msj);
 						return json.data;
 					},
-					error: function (xhr, error, code)
-					{
+					error: function (xhr, error, code) {
 						// console.log(xhr); console.log(code);
 						console.log('error en datatable_reportecategorias');
-						if (numeroejecucion <= 1)
-						{
+						if (numeroejecucion <= 1) {
 							tabla_reporte_categorias(proyecto_id, reporteregistro_id);
 							numeroejecucion += 1;
 						}
@@ -2031,7 +1883,7 @@ function tabla_reporte_categorias(proyecto_id, reporteregistro_id)
 				],
 				"lengthMenu": [[20, 50, 100, -1], [20, 50, 100, "Todos"]],
 				// "rowsGroup": [0, 1], //agrupar filas
-				"order": [[ 0, "DESC" ]],
+				"order": [[0, "DESC"]],
 				"ordering": false,
 				"processing": true,
 				"paging": true,
@@ -2052,25 +1904,22 @@ function tabla_reporte_categorias(proyecto_id, reporteregistro_id)
 						"previous": "Anterior"
 					}
 				}
-		    });
+			});
 		}
 
 		// Tooltip en DataTable
-		datatable_reportecategorias.on('draw', function ()
-		{
+		datatable_reportecategorias.on('draw', function () {
 			$('[data-toggle="tooltip"]').tooltip();
 		});
 	}
-	catch (exception)
-	{
+	catch (exception) {
 		tabla_reporte_categorias(proyecto_id, reporteregistro_id);
-    }
+	}
 }
 
 
-$("#boton_reporte_nuevacategoria").click(function()
-{
-	$('#form_modal_categoria').each(function(){
+$("#boton_reporte_nuevacategoria").click(function () {
+	$('#form_modal_categoria').each(function () {
 		this.reset();
 	});
 
@@ -2081,17 +1930,16 @@ $("#boton_reporte_nuevacategoria").click(function()
 	$('#modal_reporte_categoria .modal-title').html('Nueva categoría');
 
 	// mostrar modal
-	$('#modal_reporte_categoria').modal({backdrop:false});
+	$('#modal_reporte_categoria').modal({ backdrop: false });
 });
 
 
-$('#tabla_reporte_categoria tbody').on('click', 'td>button.editar', function()
-{
+$('#tabla_reporte_categoria tbody').on('click', 'td>button.editar', function () {
 	var tr = $(this).closest('tr');
 	var row = datatable_reportecategorias.row(tr);
 
 
-	$('#form_modal_categoria').each(function(){
+	$('#form_modal_categoria').each(function () {
 		this.reset();
 	});
 
@@ -2104,16 +1952,14 @@ $('#tabla_reporte_categoria tbody').on('click', 'td>button.editar', function()
 	$('#reporteruidocategoria_total').val(row.data().reporteruidocategoria_total);
 
 
-	if (areas_poe == 1)
-	{
+	if (areas_poe == 1) {
 		$('#reporteruidocategoria_nombre').attr('required', false);
 		$('#reporteruidocategoria_nombre').attr('disabled', true);
 
 		$('#reporteruidocategoria_total').attr('required', false);
 		$('#reporteruidocategoria_total').attr('disabled', true);
 	}
-	else
-	{
+	else {
 		$('#reporteruidocategoria_nombre').attr('disabled', false);
 		$('#reporteruidocategoria_nombre').attr('required', true);
 
@@ -2127,18 +1973,17 @@ $('#tabla_reporte_categoria tbody').on('click', 'td>button.editar', function()
 
 
 	// mostrar modal
-	$('#modal_reporte_categoria').modal({backdrop:false});
+	$('#modal_reporte_categoria').modal({ backdrop: false });
 });
 
 
-$('#tabla_reporte_categoria tbody').on('click', 'td>button.eliminar', function()
-{
+$('#tabla_reporte_categoria tbody').on('click', 'td>button.eliminar', function () {
 	var tr = $(this).closest('tr');
 	var row = datatable_reportecategorias.row(tr);
 
 	swal({
 		title: "¡Confirme que desea eliminar!",
-		text: "La categoría: "+row.data().reporteruidocategoria_nombre,
+		text: "La categoría: " + row.data().reporteruidocategoria_nombre,
 		type: "warning",
 		showCancelButton: true,
 		confirmButtonColor: "#DD6B55",
@@ -2147,215 +1992,90 @@ $('#tabla_reporte_categoria tbody').on('click', 'td>button.eliminar', function()
 		closeOnConfirm: false,
 		closeOnCancel: false
 	},
-	function(isConfirm)
-	{
-		if (isConfirm)
-		{
-			swal({
-				title: "¡Por seguridad confirme nuevamente que desea eliminar!",
-				text: "La categoría: "+row.data().reporteruidocategoria_nombre,
-				type: "warning",
-				showCancelButton: true,
-				confirmButtonColor: "#DD6B55",
-				confirmButtonText: "Eliminar!",
-				cancelButtonText: "Cancelar!",
-				closeOnConfirm: false,
-				closeOnCancel: false
-			},
-			function(isConfirm)
-			{
-				if (isConfirm)
-				{
-					// cerrar msj confirmacion
-					swal.close();
+		function (isConfirm) {
+			if (isConfirm) {
+				swal({
+					title: "¡Por seguridad confirme nuevamente que desea eliminar!",
+					text: "La categoría: " + row.data().reporteruidocategoria_nombre,
+					type: "warning",
+					showCancelButton: true,
+					confirmButtonColor: "#DD6B55",
+					confirmButtonText: "Eliminar!",
+					cancelButtonText: "Cancelar!",
+					closeOnConfirm: false,
+					closeOnCancel: false
+				},
+					function (isConfirm) {
+						if (isConfirm) {
+							// cerrar msj confirmacion
+							swal.close();
 
-					$.ajax({
-						type: "GET",
-						dataType: "json",
-						url: "/reporteruidocategoriaeliminar/"+row.data().id,
-						data:{},
-						cache: false,
-						success:function(dato)
-						{
-							// Actualizar tabla
-							tabla_reporte_categorias(proyecto.id, reporteregistro_id);
+							$.ajax({
+								type: "GET",
+								dataType: "json",
+								url: "/reporteruidocategoriaeliminar/" + row.data().id,
+								data: {},
+								cache: false,
+								success: function (dato) {
+									// Actualizar tabla
+									tabla_reporte_categorias(proyecto.id, reporteregistro_id);
 
-							// Tablas datos del reporte
-							// tabla_reporte_areas(proyecto.id, reporteregistro_id);
-							// tabla_reporte_5_4(proyecto.id, reporteregistro_id);
-							// tabla_reporte_5_5(proyecto.id, reporteregistro_id);
-							// tabla_reporte_6_1(proyecto.id, reporteregistro_id);
-							// tabla_reporte_6_2_1(proyecto.id, reporteregistro_id);
-							// tabla_reporte_6_2_2(proyecto.id, reporteregistro_id);
+									// Tablas datos del reporte
+									// tabla_reporte_areas(proyecto.id, reporteregistro_id);
+									// tabla_reporte_5_4(proyecto.id, reporteregistro_id);
+									// tabla_reporte_5_5(proyecto.id, reporteregistro_id);
+									// tabla_reporte_6_1(proyecto.id, reporteregistro_id);
+									// tabla_reporte_6_2_1(proyecto.id, reporteregistro_id);
+									// tabla_reporte_6_2_2(proyecto.id, reporteregistro_id);
 
-							// mensaje
-							swal({
-								title: "Correcto",
-								text: ""+dato.msj,
-								type: "success", // warning, error, success, info
-								buttons: {
-									visible: false, // true , false
+									// mensaje
+									swal({
+										title: "Correcto",
+										text: "" + dato.msj,
+										type: "success", // warning, error, success, info
+										buttons: {
+											visible: false, // true , false
+										},
+										timer: 1500,
+										showConfirmButton: false
+									});
 								},
-								timer: 1500,
-								showConfirmButton: false
-							});
-						},
-						beforeSend: function()
-						{
-							// $('#tabla_reporte_definiciones tbody').html('<tr><td colspan="5"><i class="fa fa-spin fa-spinner" style="font-size: 40px!important;"></i></td></tr>');
-						},
-						error: function(dato)
-						{
+								beforeSend: function () {
+									// $('#tabla_reporte_definiciones tbody').html('<tr><td colspan="5"><i class="fa fa-spin fa-spinner" style="font-size: 40px!important;"></i></td></tr>');
+								},
+								error: function (dato) {
+									// mensaje
+									swal({
+										title: "Error",
+										text: "" + dato.msj,
+										type: "error", // warning, error, success, info
+										buttons: {
+											visible: false, // true , false
+										},
+										timer: 1500,
+										showConfirmButton: false
+									});
+
+									return false;
+								}
+							});//Fin ajax
+						}
+						else {
 							// mensaje
 							swal({
-								title: "Error",
-								text: ""+dato.msj,
+								title: "Cancelado",
+								text: "Acción cancelada",
 								type: "error", // warning, error, success, info
 								buttons: {
 									visible: false, // true , false
 								},
-								timer: 1500,
+								timer: 500,
 								showConfirmButton: false
 							});
-
-							return false;
 						}
-					});//Fin ajax
-				}
-				else 
-				{
-					// mensaje
-					swal({
-						title: "Cancelado",
-						text: "Acción cancelada",
-						type: "error", // warning, error, success, info
-						buttons: {
-							visible: false, // true , false
-						},
-						timer: 500,
-						showConfirmButton: false
 					});
-				}
-			});
-		}
-		else 
-		{
-			// mensaje
-			swal({
-				title: "Cancelado",
-				text: "Acción cancelada",
-				type: "error", // warning, error, success, info
-				buttons: {
-					visible: false, // true , false
-				},
-				timer: 500,
-				showConfirmButton: false
-			});
-		}
-	});
-	return false;
-});
-
-
-$("#botonguardar_modal_categoria").click(function()
-{
-	// valida campos vacios
-	var valida = this.form.checkValidity();
-	if (valida)
-	{
-		swal({
-			title: "¡Confirme que desea guardar!",
-			text: "Categoría: "+$("#reporteruidocategoria_nombre").val(),
-			type: "warning",
-			showCancelButton: true,
-			confirmButtonColor: "#DD6B55",
-			confirmButtonText: "Guardar!",
-			cancelButtonText: "Cancelar!",
-			closeOnConfirm: false,
-			closeOnCancel: false
-		},
-		function(isConfirm)
-		{
-			if (isConfirm)
-			{
-				// cerrar msj confirmacion
-				swal.close();
-
-				// enviar datos
-				$('#form_modal_categoria').ajaxForm({
-					dataType: 'json',
-					type: 'POST',
-					url: ''+ruta_storage_guardar,
-					data: {
-						opcion: 9,
-						proyecto_id: proyecto.id,
-						agente_id: agente_id,
-						agente_nombre: agente_nombre,
-						reporteregistro_id: reporteregistro_id,
-						catactivo_id: $("#reporte_catactivo_id").val(),
-						reporte_instalacion: $("#reporte_instalacion").val(),
-					},
-					resetForm: false,
-					success: function(dato)
-					{
-						// Actualizar ID reporte						
-						reporteregistro_id = dato.reporteregistro_id;
-
-						// tabla_reporte_revisiones(proyecto.id);
-
-						// Actualizar tabla
-						tabla_reporte_categorias(proyecto.id, reporteregistro_id);
-						tabla_reporte_areas(proyecto.id, reporteregistro_id);
-						tabla_reporte_5_6_equipoauditivo(proyecto.id, reporteregistro_id);
-
-						// mensaje
-						swal({
-							title: "Correcto",
-							text: ""+dato.msj,
-							type: "success", // warning, error, success, info
-							buttons: {
-								visible: false, // true , false
-							},
-							timer: 1500,
-							showConfirmButton: false
-						});
-
-						// actualiza boton
-						$('#botonguardar_modal_categoria').html('Guardar <i class="fa fa-save"></i>');
-						$('#botonguardar_modal_categoria').attr('disabled', false);
-
-						// cerrar modal
-						$('#modal_reporte_categoria').modal('hide');
-					},
-					beforeSend: function()
-					{
-						$('#botonguardar_modal_categoria').html('Guardando <i class="fa fa-spin fa-spinner"></i>');
-						$('#botonguardar_modal_categoria').attr('disabled', true);
-					},
-					error: function(dato)
-					{
-						// actualiza boton
-						$('#botonguardar_modal_categoria').html('Guardar <i class="fa fa-save"></i>');
-						$('#botonguardar_modal_categoria').attr('disabled', false);
-
-						// mensaje
-						swal({
-							title: "Error",
-							text: ""+dato.msj,
-							type: "error", // warning, error, success, info
-							buttons: {
-								visible: false, // true , false
-							},
-							timer: 1500,
-							showConfirmButton: false
-						});
-						return false;
-					}
-				}).submit();
-				return false;
 			}
-			else 
-			{
+			else {
 				// mensaje
 				swal({
 					title: "Cancelado",
@@ -2369,6 +2089,114 @@ $("#botonguardar_modal_categoria").click(function()
 				});
 			}
 		});
+	return false;
+});
+
+
+$("#botonguardar_modal_categoria").click(function () {
+	// valida campos vacios
+	var valida = this.form.checkValidity();
+	if (valida) {
+		swal({
+			title: "¡Confirme que desea guardar!",
+			text: "Categoría: " + $("#reporteruidocategoria_nombre").val(),
+			type: "warning",
+			showCancelButton: true,
+			confirmButtonColor: "#DD6B55",
+			confirmButtonText: "Guardar!",
+			cancelButtonText: "Cancelar!",
+			closeOnConfirm: false,
+			closeOnCancel: false
+		},
+			function (isConfirm) {
+				if (isConfirm) {
+					// cerrar msj confirmacion
+					swal.close();
+
+					// enviar datos
+					$('#form_modal_categoria').ajaxForm({
+						dataType: 'json',
+						type: 'POST',
+						url: '' + ruta_storage_guardar,
+						data: {
+							opcion: 9,
+							proyecto_id: proyecto.id,
+							agente_id: agente_id,
+							agente_nombre: agente_nombre,
+							reporteregistro_id: reporteregistro_id,
+							catactivo_id: $("#reporte_catactivo_id").val(),
+							reporte_instalacion: $("#reporte_instalacion").val(),
+						},
+						resetForm: false,
+						success: function (dato) {
+							// Actualizar ID reporte						
+							reporteregistro_id = dato.reporteregistro_id;
+
+							// tabla_reporte_revisiones(proyecto.id);
+
+							// Actualizar tabla
+							tabla_reporte_categorias(proyecto.id, reporteregistro_id);
+							tabla_reporte_areas(proyecto.id, reporteregistro_id);
+							tabla_reporte_5_6_equipoauditivo(proyecto.id, reporteregistro_id);
+
+							// mensaje
+							swal({
+								title: "Correcto",
+								text: "" + dato.msj,
+								type: "success", // warning, error, success, info
+								buttons: {
+									visible: false, // true , false
+								},
+								timer: 1500,
+								showConfirmButton: false
+							});
+
+							// actualiza boton
+							$('#botonguardar_modal_categoria').html('Guardar <i class="fa fa-save"></i>');
+							$('#botonguardar_modal_categoria').attr('disabled', false);
+
+							// cerrar modal
+							$('#modal_reporte_categoria').modal('hide');
+						},
+						beforeSend: function () {
+							$('#botonguardar_modal_categoria').html('Guardando <i class="fa fa-spin fa-spinner"></i>');
+							$('#botonguardar_modal_categoria').attr('disabled', true);
+						},
+						error: function (dato) {
+							// actualiza boton
+							$('#botonguardar_modal_categoria').html('Guardar <i class="fa fa-save"></i>');
+							$('#botonguardar_modal_categoria').attr('disabled', false);
+
+							// mensaje
+							swal({
+								title: "Error",
+								text: "" + dato.msj,
+								type: "error", // warning, error, success, info
+								buttons: {
+									visible: false, // true , false
+								},
+								timer: 1500,
+								showConfirmButton: false
+							});
+							return false;
+						}
+					}).submit();
+					return false;
+				}
+				else {
+					// mensaje
+					swal({
+						title: "Cancelado",
+						text: "Acción cancelada",
+						type: "error", // warning, error, success, info
+						buttons: {
+							visible: false, // true , false
+						},
+						timer: 500,
+						showConfirmButton: false
+					});
+				}
+			});
 		return false;
 	}
 });
@@ -2382,29 +2210,23 @@ var selectareas = '';
 var selectequipos = '';
 
 
-$(document).ready(function()
-{
-	setTimeout(function()
-	{
+$(document).ready(function () {
+	setTimeout(function () {
 		tabla_reporte_areas(proyecto.id, reporteregistro_id);
 	}, 6000);
 });
 
 
 var datatable_reporteareas = null;
-function tabla_reporte_areas(proyecto_id, reporteregistro_id)
-{
-	try 
-	{
-		var ruta = "/reporteruidoareas/"+proyecto_id+"/"+reporteregistro_id+"/"+areas_poe;
+function tabla_reporte_areas(proyecto_id, reporteregistro_id) {
+	try {
+		var ruta = "/reporteruidoareas/" + proyecto_id + "/" + reporteregistro_id + "/" + areas_poe;
 
-		if (datatable_reporteareas != null)
-		{
+		if (datatable_reporteareas != null) {
 			datatable_reporteareas.clear().draw();
 			datatable_reporteareas.ajax.url(ruta).load();
 		}
-		else
-		{
+		else {
 			var numeroejecucion = 1;
 			datatable_reporteareas = $('#tabla_reporte_area').DataTable({
 				"ajax": {
@@ -2413,18 +2235,15 @@ function tabla_reporte_areas(proyecto_id, reporteregistro_id)
 					"cache": false,
 					dataType: "json",
 					data: {},
-					dataSrc: function (json)
-					{
-						if (parseInt(json.data.length) > 0 && parseInt(json.total_singuardar) == 0)
-						{
+					dataSrc: function (json) {
+						if (parseInt(json.data.length) > 0 && parseInt(json.total_singuardar) == 0) {
 							menureporte_estado("menureporte_5_3", 1);
 							menureporte_estado("menureporte_5_4", 1);
 							menureporte_estado("menureporte_5_5", 1);
 							menureporte_estado("menureporte_5_8", 1);
 							menureporte_estado("menureporte_6_1", 1);
 						}
-						else
-						{
+						else {
 							menureporte_estado("menureporte_5_3", 0);
 							menureporte_estado("menureporte_5_4", 0);
 							menureporte_estado("menureporte_5_5", 0);
@@ -2433,8 +2252,7 @@ function tabla_reporte_areas(proyecto_id, reporteregistro_id)
 						}
 
 
-						if (parseInt(areas_poe) == 1)
-						{
+						if (parseInt(areas_poe) == 1) {
 							$("#boton_reporte_nuevacategoria").attr('disabled', true);
 							$("#boton_reporte_nuevaarea").attr('disabled', true);
 						}
@@ -2456,12 +2274,10 @@ function tabla_reporte_areas(proyecto_id, reporteregistro_id)
 						// alert("Done! "+json.msj);
 						return json.data;
 					},
-					error: function (xhr, error, code)
-					{
+					error: function (xhr, error, code) {
 						// console.log(xhr); console.log(code);
 						console.log('error en datatable_reporteareas');
-						if (numeroejecucion <= 1)
-						{
+						if (numeroejecucion <= 1) {
 							tabla_reporte_areas(proyecto_id, reporteregistro_id)
 							numeroejecucion += 1;
 						}
@@ -2502,7 +2318,7 @@ function tabla_reporte_areas(proyecto_id, reporteregistro_id)
 				],
 				"lengthMenu": [[20, 50, 100, -1], [20, 50, 100, "Todos"]],
 				"rowsGroup": [1, 0, 2, 4, 5], //agrupar filas
-				"order": [[ 0, "DESC" ]],
+				"order": [[0, "DESC"]],
 				"ordering": false,
 				"processing": true,
 				"paging": true,
@@ -2523,25 +2339,22 @@ function tabla_reporte_areas(proyecto_id, reporteregistro_id)
 						"previous": "Anterior"
 					}
 				}
-		    });
+			});
 		}
 
 		// Tooltip en DataTable
-		datatable_reporteareas.on('draw', function ()
-		{
+		datatable_reporteareas.on('draw', function () {
 			$('[data-toggle="tooltip"]').tooltip();
 		});
 	}
-	catch (exception)
-	{
+	catch (exception) {
 		tabla_reporte_areas(proyecto_id, reporteregistro_id);
-    }
+	}
 }
 
 
-$("#boton_reporte_nuevaarea").click(function()
-{
-	$('#form_reporte_area').each(function(){
+$("#boton_reporte_nuevaarea").click(function () {
+	$('#form_reporte_area').each(function () {
 		this.reset();
 	});
 
@@ -2550,30 +2363,27 @@ $("#boton_reporte_nuevaarea").click(function()
 
 
 	// Tabla fuentes generadoras
-	$('#tabla_areamaquinaria tbody').html('<tr>'+
-												'<td><input type="text" class="form-control" name="reporteruidoareamaquinaria_nombre[]" required></td>'+
-												'<td><input type="number" min="1" class="form-control" name="reporteruidoareamaquinaria_cantidad[]" required></td>'+
-												'<td><button type="button" class="btn btn-danger waves-effect btn-circle eliminar"><i class="fa fa-trash fa-1x"></i></button></td>'+
-											'</tr>');
+	$('#tabla_areamaquinaria tbody').html('<tr>' +
+		'<td><input type="text" class="form-control" name="reporteruidoareamaquinaria_nombre[]" required></td>' +
+		'<td><input type="number" min="1" class="form-control" name="reporteruidoareamaquinaria_cantidad[]" required></td>' +
+		'<td><button type="button" class="btn btn-danger waves-effect btn-circle eliminar"><i class="fa fa-trash fa-1x"></i></button></td>' +
+		'</tr>');
 
 	// Consultar categorias
 	$.ajax({
 		type: "GET",
 		dataType: "json",
-		url: "/reporteruidoareascategoriasmaquinaria/"+proyecto.id+"/"+reporteregistro_id+"/"+0,
-		data:{},
+		url: "/reporteruidoareascategoriasmaquinaria/" + proyecto.id + "/" + reporteregistro_id + "/" + 0,
+		data: {},
 		cache: false,
-		success:function(dato)
-		{
+		success: function (dato) {
 			// $('#tabla_areamaquinaria tbody').html(dato.areamaquinaria);
 			tabla_areacategorias(dato.areacategorias);
 		},
-		beforeSend: function()
-		{
+		beforeSend: function () {
 			$('#tabla_areacategorias tbody').html('<tr><td colspan="3" style="text-align: center;"><i class="fa fa-spin fa-spinner" style="font-size: 40px!important;"></i></td></tr>');
 		},
-		error: function(dato)
-		{
+		error: function (dato) {
 			$('#tabla_areacategorias tbody').html('<tr><td colspan="3" style="text-align: center;">Error al cargar las categorías</td></tr>');
 			return false;
 		}
@@ -2584,31 +2394,26 @@ $("#boton_reporte_nuevaarea").click(function()
 	$('#modal_reporte_area .modal-title').html('Nueva área');
 
 	// mostrar modal
-	$('#modal_reporte_area').modal({backdrop:false});
+	$('#modal_reporte_area').modal({ backdrop: false });
 });
 
 
-function activa_areacategoria(checkbox, num_registro)
-{
-	if (checkbox.checked)
-	{
-		$(".areacategoria_"+num_registro).attr('readonly', false);
-		$(".areacategoria_"+num_registro).attr('required', true);
+function activa_areacategoria(checkbox, num_registro) {
+	if (checkbox.checked) {
+		$(".areacategoria_" + num_registro).attr('readonly', false);
+		$(".areacategoria_" + num_registro).attr('required', true);
 	}
-	else
-	{
-		$(".areacategoria_"+num_registro).val('');
-		$(".areacategoria_"+num_registro).attr('required', false);
-		$(".areacategoria_"+num_registro).attr('readonly', true);
+	else {
+		$(".areacategoria_" + num_registro).val('');
+		$(".areacategoria_" + num_registro).attr('required', false);
+		$(".areacategoria_" + num_registro).attr('readonly', true);
 	}
 }
 
 
 var datatable_areacategoria = null;
-function tabla_areacategorias(tbody)
-{
-	if (datatable_areacategoria != null)
-	{
+function tabla_areacategorias(tbody) {
+	if (datatable_areacategoria != null) {
 		datatable_areacategoria.destroy();
 	}
 
@@ -2616,10 +2421,10 @@ function tabla_areacategorias(tbody)
 
 	datatable_areacategoria = $('#tabla_areacategorias').DataTable({
 		"scrollY": "190px",
-        "scrollCollapse": true,
+		"scrollCollapse": true,
 		"lengthMenu": [[20, 50, 100, -1], [20, 50, 100, "Todos"]],
 		// "rowsGroup": [0], //agrupar filas
-		"order": [[ 0, "DESC" ]],
+		"order": [[0, "DESC"]],
 		"ordering": false,
 		"searching": true,
 		"processing": true,
@@ -2645,82 +2450,77 @@ function tabla_areacategorias(tbody)
 }
 
 
-$("#botonnueva_areamaquina").click(function()
-{
-    $('#tabla_areamaquinaria > tbody').append('<tr>'+
-                                                    '<td><input type="text" class="form-control" name="reporteruidoareamaquinaria_nombre[]" required></td>'+
-													'<td><input type="number" min="1" class="form-control" name="reporteruidoareamaquinaria_cantidad[]" required></td>'+
-													'<td><button type="button" class="btn btn-danger waves-effect btn-circle eliminar"><i class="fa fa-trash fa-1x"></i></button></td>'+
-												'</tr>');
+$("#botonnueva_areamaquina").click(function () {
+	$('#tabla_areamaquinaria > tbody').append('<tr>' +
+		'<td><input type="text" class="form-control" name="reporteruidoareamaquinaria_nombre[]" required></td>' +
+		'<td><input type="number" min="1" class="form-control" name="reporteruidoareamaquinaria_cantidad[]" required></td>' +
+		'<td><button type="button" class="btn btn-danger waves-effect btn-circle eliminar"><i class="fa fa-trash fa-1x"></i></button></td>' +
+		'</tr>');
 
-    // desplazar a la ultima fila de la tabla
-    $('#div_tabla_areamaquinaria').animate({
-    	scrollTop: $('#tabla_areamaquinaria > tbody > tr:last').position().top //ultima fila
-    }, 500);
+	// desplazar a la ultima fila de la tabla
+	$('#div_tabla_areamaquinaria').animate({
+		scrollTop: $('#tabla_areamaquinaria > tbody > tr:last').position().top //ultima fila
+	}, 500);
 });
 
 
-$('#tabla_areamaquinaria tbody').on('click', 'td>button.eliminar', function()
-{
-    // obtener fila tabla
-    var fila = $(this);
-    
-    // confirmar
-    swal({   
-        title: "¿Eliminar maquinaria?",   
-        text: "Quitar de la lista",   
-        type: "warning",   
-        showCancelButton: true,   
-        confirmButtonColor: "#DD6B55",   
-        confirmButtonText: "Eliminar!",   
-        cancelButtonText: "Cancelar!",   
-        closeOnConfirm: false,   
-        closeOnCancel: false 
-    }, function(isConfirm){   
-        if (isConfirm)
-        {
-        	// cerrar msj confirmacion
+$('#tabla_areamaquinaria tbody').on('click', 'td>button.eliminar', function () {
+	// obtener fila tabla
+	var fila = $(this);
+
+	// confirmar
+	swal({
+		title: "¿Eliminar maquinaria?",
+		text: "Quitar de la lista",
+		type: "warning",
+		showCancelButton: true,
+		confirmButtonColor: "#DD6B55",
+		confirmButtonText: "Eliminar!",
+		cancelButtonText: "Cancelar!",
+		closeOnConfirm: false,
+		closeOnCancel: false
+	}, function (isConfirm) {
+		if (isConfirm) {
+			// cerrar msj confirmacion
 			swal.close();
 
-            var tr = fila.closest('tr');
-            fila.closest("tr").remove(); // eliminar fila TR
+			var tr = fila.closest('tr');
+			fila.closest("tr").remove(); // eliminar fila TR
 
-            // mensaje
-            swal({
-                title: "Correcto",
-                 text: "Maquinaria eliminada de la lista",
-                type: "success", // warning, error, success, info
-                buttons: {
-                    visible: false, // true , false
-                },
-                timer: 1000,
-                showConfirmButton: false
-            });
-        }
-        else 
-        {
-            // mensaje
-            swal({
-                title: "Cancelado",
-                text: "",
-                type: "error", // warning, error, success, info
-                buttons: {
-                    visible: false, // true , false
-                },
-                timer: 500,
-                showConfirmButton: false
-            });   
-        } 
-    });
+			// mensaje
+			swal({
+				title: "Correcto",
+				text: "Maquinaria eliminada de la lista",
+				type: "success", // warning, error, success, info
+				buttons: {
+					visible: false, // true , false
+				},
+				timer: 1000,
+				showConfirmButton: false
+			});
+		}
+		else {
+			// mensaje
+			swal({
+				title: "Cancelado",
+				text: "",
+				type: "error", // warning, error, success, info
+				buttons: {
+					visible: false, // true , false
+				},
+				timer: 500,
+				showConfirmButton: false
+			});
+		}
+	});
 });
 
 
-$('#tabla_reporte_area tbody').on('click', 'td.editar', function()
-{
+$('#tabla_reporte_area tbody').on('click', 'td.editar', function () {
 	var tr = $(this).closest('tr');
 	var row = datatable_reporteareas.row(tr);
 
-	$('#form_reporte_area').each(function(){
+	$('#form_reporte_area').each(function () {
 		this.reset();
 	});
 
@@ -2755,13 +2555,12 @@ $('#tabla_reporte_area tbody').on('click', 'td.editar', function()
 
 		$('#aplica_ruido_si').prop('checked', false);
 		$('#aplica_ruido_no').prop('checked', true);
-		
+
 	}
 
 
 
-	if (areas_poe == 1)
-	{
+	if (areas_poe == 1) {
 		$('#reporteruidoarea_instalacion').attr('required', false);
 		$('#reporteruidoarea_instalacion').attr('disabled', true);
 
@@ -2774,8 +2573,7 @@ $('#tabla_reporte_area tbody').on('click', 'td.editar', function()
 		// $('#reporteruidoarea_porcientooperacion').attr('required', false);
 		// $('#reporteruidoarea_porcientooperacion').attr('disabled', true);
 	}
-	else
-	{
+	else {
 		$('#reporteruidoarea_instalacion').attr('disabled', false);
 		$('#reporteruidoarea_instalacion').attr('required', true);
 
@@ -2795,21 +2593,18 @@ $('#tabla_reporte_area tbody').on('click', 'td.editar', function()
 	$.ajax({
 		type: "GET",
 		dataType: "json",
-		url: "/reporteruidoareascategoriasmaquinaria/"+proyecto.id+"/"+reporteregistro_id+"/"+row.data().id+"/"+areas_poe,
-		data:{},
+		url: "/reporteruidoareascategoriasmaquinaria/" + proyecto.id + "/" + reporteregistro_id + "/" + row.data().id + "/" + areas_poe,
+		data: {},
 		cache: false,
-		success:function(dato)
-		{
+		success: function (dato) {
 			$('#tabla_areamaquinaria tbody').html(dato.areamaquinaria);
 			tabla_areacategorias(dato.areacategorias);
 		},
-		beforeSend: function()
-		{
+		beforeSend: function () {
 			$('#tabla_areacategorias tbody').html('<tr><td colspan="2" style="text-align: center;"><i class="fa fa-spin fa-spinner" style="font-size: 40px!important;"></i></td></tr>');
 			$('#tabla_areamaquinaria tbody').html('<tr><td colspan="3" style="text-align: center;"><i class="fa fa-spin fa-spinner" style="font-size: 40px!important;"></i></td></tr>');
 		},
-		error: function(dato)
-		{
+		error: function (dato) {
 			$('#tabla_areacategorias tbody').html('<tr><td colspan="2" style="text-align: center;">Error al cargar las categorías</td></tr>');
 			$('#tabla_areamaquinaria tbody').html('<tr><td colspan="3" style="text-align: center;">Error al cargar las fuentes generadoras</td></tr>');
 			return false;
@@ -2822,18 +2617,17 @@ $('#tabla_reporte_area tbody').on('click', 'td.editar', function()
 
 
 	// mostrar modal
-	$('#modal_reporte_area').modal({backdrop:false});
+	$('#modal_reporte_area').modal({ backdrop: false });
 });
 
 
-$('#tabla_reporte_area tbody').on('click', 'td>button.eliminar', function()
-{
+$('#tabla_reporte_area tbody').on('click', 'td>button.eliminar', function () {
 	var tr = $(this).closest('tr');
 	var row = datatable_reporteareas.row(tr);
 
 	swal({
 		title: "¡Confirme que desea eliminar!",
-		text: "El área: "+row.data().reporteruidoarea_nombre,
+		text: "El área: " + row.data().reporteruidoarea_nombre,
 		type: "warning",
 		showCancelButton: true,
 		confirmButtonColor: "#DD6B55",
@@ -2842,105 +2636,96 @@ $('#tabla_reporte_area tbody').on('click', 'td>button.eliminar', function()
 		closeOnConfirm: false,
 		closeOnCancel: false
 	},
-	function(isConfirm)
-	{
-		if (isConfirm)
-		{
-			swal({
-				title: "¡Por seguridad confirme nuevamente que desea eliminar!",
-				text: "El área: "+row.data().reporteruidoarea_nombre,
-				type: "warning",
-				showCancelButton: true,
-				confirmButtonColor: "#DD6B55",
-				confirmButtonText: "Eliminar!",
-				cancelButtonText: "Cancelar!",
-				closeOnConfirm: false,
-				closeOnCancel: false
-			},
-			function(isConfirm)
-			{
-				if (isConfirm)
-				{
-					// cerrar msj confirmacion
-					swal.close();
+		function (isConfirm) {
+			if (isConfirm) {
+				swal({
+					title: "¡Por seguridad confirme nuevamente que desea eliminar!",
+					text: "El área: " + row.data().reporteruidoarea_nombre,
+					type: "warning",
+					showCancelButton: true,
+					confirmButtonColor: "#DD6B55",
+					confirmButtonText: "Eliminar!",
+					cancelButtonText: "Cancelar!",
+					closeOnConfirm: false,
+					closeOnCancel: false
+				},
+					function (isConfirm) {
+						if (isConfirm) {
+							// cerrar msj confirmacion
+							swal.close();
 
-					$.ajax({
-						type: "GET",
-						dataType: "json",
-						url: "/reporteruidoareaeliminar/"+row.data().id,
-						data:{},
-						cache: false,
-						success:function(dato)
-						{
-							// Actualizar tabla
-							tabla_reporte_areas(proyecto.id, reporteregistro_id);
+							$.ajax({
+								type: "GET",
+								dataType: "json",
+								url: "/reporteruidoareaeliminar/" + row.data().id,
+								data: {},
+								cache: false,
+								success: function (dato) {
+									// Actualizar tabla
+									tabla_reporte_areas(proyecto.id, reporteregistro_id);
 
 
-							// mensaje
-							swal({
-								title: "Correcto",
-								text: ""+dato.msj,
-								type: "success", // warning, error, success, info
-								buttons: {
-									visible: false, // true , false
+									// mensaje
+									swal({
+										title: "Correcto",
+										text: "" + dato.msj,
+										type: "success", // warning, error, success, info
+										buttons: {
+											visible: false, // true , false
+										},
+										timer: 1500,
+										showConfirmButton: false
+									});
 								},
-								timer: 1500,
-								showConfirmButton: false
-							});
-						},
-						beforeSend: function()
-						{
-							// $('#tabla_reporte_definiciones tbody').html('<tr><td colspan="5"><i class="fa fa-spin fa-spinner" style="font-size: 40px!important;"></i></td></tr>');
-						},
-						error: function(dato)
-						{
+								beforeSend: function () {
+									// $('#tabla_reporte_definiciones tbody').html('<tr><td colspan="5"><i class="fa fa-spin fa-spinner" style="font-size: 40px!important;"></i></td></tr>');
+								},
+								error: function (dato) {
+									// mensaje
+									swal({
+										title: "Error",
+										text: "" + dato.msj,
+										type: "error", // warning, error, success, info
+										buttons: {
+											visible: false, // true , false
+										},
+										timer: 1500,
+										showConfirmButton: false
+									});
+
+									return false;
+								}
+							});//Fin ajax
+						}
+						else {
 							// mensaje
 							swal({
-								title: "Error",
-								text: ""+dato.msj,
+								title: "Cancelado",
+								text: "Acción cancelada",
 								type: "error", // warning, error, success, info
 								buttons: {
 									visible: false, // true , false
 								},
-								timer: 1500,
+								timer: 500,
 								showConfirmButton: false
 							});
-
-							return false;
 						}
-					});//Fin ajax
-				}
-				else 
-				{
-					// mensaje
-					swal({
-						title: "Cancelado",
-						text: "Acción cancelada",
-						type: "error", // warning, error, success, info
-						buttons: {
-							visible: false, // true , false
-						},
-						timer: 500,
-						showConfirmButton: false
 					});
-				}
-			});
-		}
-		else 
-		{
-			// mensaje
-			swal({
-				title: "Cancelado",
-				text: "Acción cancelada",
-				type: "error", // warning, error, success, info
-				buttons: {
-					visible: false, // true , false
-				},
-				timer: 500,
-				showConfirmButton: false
-			});
-		}
-	});
+			}
+			else {
+				// mensaje
+				swal({
+					title: "Cancelado",
+					text: "Acción cancelada",
+					type: "error", // warning, error, success, info
+					buttons: {
+						visible: false, // true , false
+					},
+					timer: 500,
+					showConfirmButton: false
+				});
+			}
+		});
 	return false;
 });
 
@@ -2952,10 +2737,10 @@ function validarCampos() {
 	const aplica = document.getElementById('aplica_ruido_no');
 
 	if (aplica.checked) {
-		
-			return true;
-	
-	} else { 
+
+		return true;
+
+	} else {
 
 		if (!algunoMarcado) {
 			swal({
@@ -2969,11 +2754,11 @@ function validarCampos() {
 			})
 			return false;
 		}
-	
-	
+
+
 		const textInputs = document.querySelectorAll('#tabla_areamaquinaria input[name="reporteruidoareamaquinaria_nombre[]"]');
 		const algunoLleno = Array.from(textInputs).some(input => input.value.trim() !== "");
-	
+
 		if (!algunoLleno) {
 			swal({
 				title: "Por favor no se olvide de agregar al menos una fuentes generadoras.",
@@ -2986,15 +2771,15 @@ function validarCampos() {
 			})
 			return false;
 		}
-		
+
 		return true;
-	
+
 	}
 }
 
 
-$("#botonguardar_modal_area").click(function(e){
-	
+$("#botonguardar_modal_area").click(function (e) {
+
 	datatable_areacategoria.search("").draw();
 	e.preventDefault();
 
@@ -3003,7 +2788,7 @@ $("#botonguardar_modal_area").click(function(e){
 
 		var valida = this.form.checkValidity();
 		if (valida) {
-			
+
 			swal({
 				title: "¡Confirme que desea guardar!",
 				text: "Área: " + $("#reporteruidoarea_nombre").val(),
@@ -3016,7 +2801,7 @@ $("#botonguardar_modal_area").click(function(e){
 				closeOnCancel: false
 			},
 				function (isConfirm) {
-				
+
 					if (isConfirm) {
 						// cerrar msj confirmacion
 						swal.close();
@@ -3109,10 +2894,8 @@ $("#botonguardar_modal_area").click(function(e){
 
 
 var datatable_reporte_5_3 = null;
-function tabla_reporte_5_3(tbody)
-{
-	if (datatable_reporte_5_3 != null)
-	{
+function tabla_reporte_5_3(tbody) {
+	if (datatable_reporte_5_3 != null) {
 		datatable_reporte_5_3.destroy();
 	}
 
@@ -3121,7 +2904,7 @@ function tabla_reporte_5_3(tbody)
 	datatable_reporte_5_3 = $('#tabla_reporte_5_3').DataTable({
 		"lengthMenu": [[20, 50, 100, -1], [20, 50, 100, "Todos"]],
 		"rowsGroup": [0], //agrupar filas
-		"order": [[ 0, "DESC" ]],
+		"order": [[0, "DESC"]],
 		"ordering": false,
 		"searching": false,
 		"processing": true,
@@ -3148,10 +2931,8 @@ function tabla_reporte_5_3(tbody)
 
 
 var datatable_reporte_5_5 = null;
-function tabla_reporte_5_5(tbody)
-{
-	if (datatable_reporte_5_5 != null)
-	{
+function tabla_reporte_5_5(tbody) {
+	if (datatable_reporte_5_5 != null) {
 		datatable_reporte_5_5.destroy();
 	}
 
@@ -3160,7 +2941,7 @@ function tabla_reporte_5_5(tbody)
 	datatable_reporte_5_5 = $('#tabla_reporte_5_5').DataTable({
 		"lengthMenu": [[20, 50, 100, -1], [20, 50, 100, "Todos"]],
 		"rowsGroup": [0, 1], //agrupar filas
-		"order": [[ 0, "DESC" ]],
+		"order": [[0, "DESC"]],
 		"ordering": false,
 		"searching": false,
 		"processing": true,
@@ -3187,10 +2968,8 @@ function tabla_reporte_5_5(tbody)
 
 
 var datatable_reporte_5_8_UNO = null;
-function tabla_reporte_5_8_UNO(tbody)
-{
-	if (datatable_reporte_5_8_UNO != null)
-	{
+function tabla_reporte_5_8_UNO(tbody) {
+	if (datatable_reporte_5_8_UNO != null) {
 		datatable_reporte_5_8_UNO.destroy();
 	}
 
@@ -3199,7 +2978,7 @@ function tabla_reporte_5_8_UNO(tbody)
 	datatable_reporte_5_8_UNO = $('#tabla_reporte_5_8_UNO').DataTable({
 		"lengthMenu": [[20, 50, 100, -1], [20, 50, 100, "Todos"]],
 		"rowsGroup": [0], //agrupar filas
-		"order": [[ 0, "DESC" ]],
+		"order": [[0, "DESC"]],
 		"ordering": false,
 		"searching": false,
 		"processing": true,
@@ -3226,10 +3005,8 @@ function tabla_reporte_5_8_UNO(tbody)
 
 
 var datatable_reporte_5_8_DOS = null;
-function tabla_reporte_5_8_DOS(tbody)
-{
-	if (datatable_reporte_5_8_DOS != null)
-	{
+function tabla_reporte_5_8_DOS(tbody) {
+	if (datatable_reporte_5_8_DOS != null) {
 		datatable_reporte_5_8_DOS.destroy();
 	}
 
@@ -3238,7 +3015,7 @@ function tabla_reporte_5_8_DOS(tbody)
 	datatable_reporte_5_8_DOS = $('#tabla_reporte_5_8_DOS').DataTable({
 		"lengthMenu": [[20, 50, 100, -1], [20, 50, 100, "Todos"]],
 		"rowsGroup": [0, 1], //agrupar filas
-		"order": [[ 0, "DESC" ]],
+		"order": [[0, "DESC"]],
 		"ordering": false,
 		"searching": false,
 		"processing": true,
@@ -3265,10 +3042,8 @@ function tabla_reporte_5_8_DOS(tbody)
 
 
 var datatable_reporte_6_1 = null;
-function tabla_reporte_6_1(tbody)
-{
-	if (datatable_reporte_6_1 != null)
-	{
+function tabla_reporte_6_1(tbody) {
+	if (datatable_reporte_6_1 != null) {
 		datatable_reporte_6_1.destroy();
 	}
 
@@ -3277,7 +3052,7 @@ function tabla_reporte_6_1(tbody)
 	datatable_reporte_6_1 = $('#tabla_reporte_6_1').DataTable({
 		"lengthMenu": [[20, 50, 100, -1], [20, 50, 100, "Todos"]],
 		"rowsGroup": [1, 3], //agrupar filas
-		"order": [[ 0, "DESC" ]],
+		"order": [[0, "DESC"]],
 		"ordering": false,
 		"searching": false,
 		"processing": true,
@@ -3307,20 +3082,16 @@ function tabla_reporte_6_1(tbody)
 // EQUIPO AUDITIVO
 
 
-$(document).ready(function()
-{
-	setTimeout(function()
-	{
+$(document).ready(function () {
+	setTimeout(function () {
 		tabla_reporte_5_6_equipoauditivo(proyecto.id, reporteregistro_id);
 	}, 7000);
 });
 
 
 var datatable_reporte_5_6 = null;
-function tabla_reporte_5_6(tbody)
-{
-	if (datatable_reporte_5_6 != null)
-	{
+function tabla_reporte_5_6(tbody) {
+	if (datatable_reporte_5_6 != null) {
 		datatable_reporte_5_6.destroy();
 	}
 
@@ -3329,7 +3100,7 @@ function tabla_reporte_5_6(tbody)
 	datatable_reporte_5_6 = $('#tabla_reporte_5_6').DataTable({
 		"lengthMenu": [[20, 50, 100, -1], [20, 50, 100, "Todos"]],
 		"rowsGroup": [0, 1, 2, 3, 4], //agrupar filas
-		"order": [[ 0, "DESC" ]],
+		"order": [[0, "DESC"]],
 		"ordering": false,
 		"searching": false,
 		"processing": true,
@@ -3356,51 +3127,47 @@ function tabla_reporte_5_6(tbody)
 
 
 var equipoauditivo_ejecuciones = 0;
-function tabla_reporte_5_6_equipoauditivo(proyecto_id, reporteregistro_id)
-{
+function tabla_reporte_5_6_equipoauditivo(proyecto_id, reporteregistro_id) {
 	// Enviar datos
 	$.ajax({
 		type: "GET",
 		dataType: "json",
-		url: "/reporteruidoequipoauditivotabla/"+proyecto_id+"/"+reporteregistro_id+"/"+areas_poe,
-		data:{},
+		url: "/reporteruidoequipoauditivotabla/" + proyecto_id + "/" + reporteregistro_id + "/" + areas_poe,
+		data: {},
 		cache: false,
-		success:function(dato)
-		{
+		success: function (dato) {
 			menureporte_estado("menureporte_5_6", parseInt(dato.equipoauditivo_lista.length));
 			menureporte_estado("menureporte_7_4", parseInt(dato.equipoauditivo_lista.length));
 
 			$("#div_tablas_equiposautivos").html(dato.equiposauditivos_tablas);
-			
+
 			tabla_reporte_5_6(dato.tabla_5_6);
 
 			// $("#equiposauditivos_datos").html(dato.equiposauditivos_datos);
 		},
-		error: function(dato)
-		{
-			if (equipoauditivo_ejecuciones == 0)
-			{
+		error: function (dato) {
+			if (equipoauditivo_ejecuciones == 0) {
 				equipoauditivo_ejecuciones += 1;
 				tabla_reporte_5_6_equipoauditivo(proyecto_id, reporteregistro_id);
 			}
 
-			$("#div_tablas_equiposautivos").html('<table class="table table-hover tabla_info_centrado" width="100%">'+
-                                                    '<thead'+
-                                                        '<tr'+
-                                                            '<th rowspan="2" width="200">Equipo</th'+
-                                                            '<th rowspan="2" width="80">NRR</th'+
-                                                            '<th>Atenuación por bandas de octava</th'+
-                                                        '</tr'+
-                                                        '<tr'+
-                                                            '<th>0</th'+
-                                                        '</tr'+
-                                                    '</thead'+
-                                                    '<tbody'+
-                                                        '<tr'+
-                                                            '<td colspan="3">Error al cargar los datos</th>'+
-                                                        '</tr'+
-                                                    '</tbody'+
-                                                '</table>');
+			$("#div_tablas_equiposautivos").html('<table class="table table-hover tabla_info_centrado" width="100%">' +
+				'<thead' +
+				'<tr' +
+				'<th rowspan="2" width="200">Equipo</th' +
+				'<th rowspan="2" width="80">NRR</th' +
+				'<th>Atenuación por bandas de octava</th' +
+				'</tr' +
+				'<tr' +
+				'<th>0</th' +
+				'</tr' +
+				'</thead' +
+				'<tbody' +
+				'<tr' +
+				'<td colspan="3">Error al cargar los datos</th>' +
+				'</tr' +
+				'</tbody' +
+				'</table>');
 
 			// $("#equiposauditivos_datos").html('<p class="justificado">Error al consultar los equipos auditivos</p>');
 		}
@@ -3408,17 +3175,16 @@ function tabla_reporte_5_6_equipoauditivo(proyecto_id, reporteregistro_id)
 }
 
 
-$("#boton_reporte_nuevoequipoauditivo").click(function()
-{
-	$('#form_reporte_equipoauditivo').each(function(){
+$("#boton_reporte_nuevoequipoauditivo").click(function () {
+	$('#form_reporte_equipoauditivo').each(function () {
 		this.reset();
 	});
 
-	$('#tabla_equipoauditivo_atenuaciones tbody').html('<tr>'+
-															'<td width="40%"><input type="number" step="any" class="form-control" name="reporteruidoequipoauditivoatenuacion_bandaNRR[]" value="" required></td>'+
-															'<td width="40%"><input type="number" step="any" class="form-control" name="reporteruidoequipoauditivoatenuacion_bandaatenuacion[]" value="" required></td>'+
-															'<td width="10%"><button type="button" class="btn btn-default waves-effect btn-circle"><i class="fa fa-ban fa-2x"></i></button></td>'+
-														'</tr>');
+	$('#tabla_equipoauditivo_atenuaciones tbody').html('<tr>' +
+		'<td width="40%"><input type="number" step="any" class="form-control" name="reporteruidoequipoauditivoatenuacion_bandaNRR[]" value="" required></td>' +
+		'<td width="40%"><input type="number" step="any" class="form-control" name="reporteruidoequipoauditivoatenuacion_bandaatenuacion[]" value="" required></td>' +
+		'<td width="10%"><button type="button" class="btn btn-default waves-effect btn-circle"><i class="fa fa-ban fa-2x"></i></button></td>' +
+		'</tr>');
 
 	// categorias
 	equipoauditivo_categorias(proyecto_id, reporteregistro_id, 0);
@@ -3431,101 +3197,93 @@ $("#boton_reporte_nuevoequipoauditivo").click(function()
 	$('#modal_reporte_equipoauditivo .modal-title').html('Equipo auditivo');
 
 	// mostrar modal
-	$('#modal_reporte_equipoauditivo').modal({backdrop:false});
+	$('#modal_reporte_equipoauditivo').modal({ backdrop: false });
 
 
 });
 
 
-$("#boton_equipoauditivo_nuevaatenuacion").click(function()
-{
-    $('#tabla_equipoauditivo_atenuaciones > tbody').append('<tr>'+
-                                                                '<td width="40%"><input type="number" step="any" class="form-control" name="reporteruidoequipoauditivoatenuacion_bandaNRR[]" required></td>'+
-                                                                '<td width="40%"><input type="number" step="any" class="form-control" name="reporteruidoequipoauditivoatenuacion_bandaatenuacion[]" required></td>'+
-                                                                '<td width="10%"><button type="button" class="btn btn-danger waves-effect btn-circle eliminar"><i class="fa fa-trash fa-2x"></i></button></td>'+
-                                                            '</tr>');
+$("#boton_equipoauditivo_nuevaatenuacion").click(function () {
+	$('#tabla_equipoauditivo_atenuaciones > tbody').append('<tr>' +
+		'<td width="40%"><input type="number" step="any" class="form-control" name="reporteruidoequipoauditivoatenuacion_bandaNRR[]" required></td>' +
+		'<td width="40%"><input type="number" step="any" class="form-control" name="reporteruidoequipoauditivoatenuacion_bandaatenuacion[]" required></td>' +
+		'<td width="10%"><button type="button" class="btn btn-danger waves-effect btn-circle eliminar"><i class="fa fa-trash fa-2x"></i></button></td>' +
+		'</tr>');
 
-    // desplazar a la ultima fila de la tabla
-    $('#div_tabla_equipoauditivo_atenuaciones').animate({
-    	scrollTop: $('#tabla_equipoauditivo_atenuaciones > tbody > tr:last').position().top //ultima fila
-    }, 500);
+	// desplazar a la ultima fila de la tabla
+	$('#div_tabla_equipoauditivo_atenuaciones').animate({
+		scrollTop: $('#tabla_equipoauditivo_atenuaciones > tbody > tr:last').position().top //ultima fila
+	}, 500);
 });
 
 
-$('#tabla_equipoauditivo_atenuaciones tbody').on('click', 'td>button.eliminar', function()
-{
-    // obtener fila tabla
-    var fila = $(this);
-    
-    // confirmar
-    swal({   
-        title: "¿Eliminar registro?",   
-        text: "Quitar de la lista",   
-        type: "warning",   
-        showCancelButton: true,   
-        confirmButtonColor: "#DD6B55",   
-        confirmButtonText: "Eliminar!",   
-        cancelButtonText: "Cancelar!",   
-        closeOnConfirm: false,   
-        closeOnCancel: false 
-    }, function(isConfirm){   
-        if (isConfirm)
-        {
-        	// cerrar msj confirmacion
+$('#tabla_equipoauditivo_atenuaciones tbody').on('click', 'td>button.eliminar', function () {
+	// obtener fila tabla
+	var fila = $(this);
+
+	// confirmar
+	swal({
+		title: "¿Eliminar registro?",
+		text: "Quitar de la lista",
+		type: "warning",
+		showCancelButton: true,
+		confirmButtonColor: "#DD6B55",
+		confirmButtonText: "Eliminar!",
+		cancelButtonText: "Cancelar!",
+		closeOnConfirm: false,
+		closeOnCancel: false
+	}, function (isConfirm) {
+		if (isConfirm) {
+			// cerrar msj confirmacion
 			swal.close();
 
-            var tr = fila.closest('tr');
-            fila.closest("tr").remove(); // eliminar fila TR
+			var tr = fila.closest('tr');
+			fila.closest("tr").remove(); // eliminar fila TR
 
-            // mensaje
-            swal({
-                title: "Correcto",
-                 text: "Registro eliminado de la lista",
-                type: "success", // warning, error, success, info
-                buttons: {
-                    visible: false, // true , false
-                },
-                timer: 1000,
-                showConfirmButton: false
-            });
-        }
-        else 
-        {
-            // mensaje
-            swal({
-                title: "Cancelado",
-                text: "",
-                type: "error", // warning, error, success, info
-                buttons: {
-                    visible: false, // true , false
-                },
-                timer: 500,
-                showConfirmButton: false
-            });   
-        } 
-    });
+			// mensaje
+			swal({
+				title: "Correcto",
+				text: "Registro eliminado de la lista",
+				type: "success", // warning, error, success, info
+				buttons: {
+					visible: false, // true , false
+				},
+				timer: 1000,
+				showConfirmButton: false
+			});
+		}
+		else {
+			// mensaje
+			swal({
+				title: "Cancelado",
+				text: "",
+				type: "error", // warning, error, success, info
+				buttons: {
+					visible: false, // true , false
+				},
+				timer: 500,
+				showConfirmButton: false
+			});
+		}
+	});
 });
 
-function consulta_menuProteccionAuditiva(proyecto_id)
-{
+function consulta_menuProteccionAuditiva(proyecto_id) {
 	$.ajax({
 		type: "GET",
 		dataType: "json",
-		url: "/menuProteccionAuditiva/"+proyecto_id,
-		data:{},
+		url: "/menuProteccionAuditiva/" + proyecto_id,
+		data: {},
 		cache: false,
-		success:function(dato)
-		{
+		success: function (dato) {
 			// Pintar menu opciones
 			$('#select_proteccionAuditiva').html(dato.opciones_menu);
 		},
-		beforeSend: function()
-		{
+		beforeSend: function () {
 			// $('#lista_menu_parametros_reportes').html('<li class="nav-item" style="border-bottom: 1px #F0F0F0 solid;"><i class="fa fa-spin fa-spinner" style="font-size: 40px!important;"></i></li>');
 			$('#select_proteccionAuditiva').html('<option value=""><i class="fa fa-spin fa-spinner""></i></option>');
 		},
-		error: function(dato)
-		{
+		error: function (dato) {
 
 			// $('#lista_menu_parametros_reportes').html('<li class="nav-item" style="border-bottom: 1px #F0F0F0 solid;">Error al cargar los parametros</li>');
 			$('#select_proteccionAuditiva').html('<option value="">Error al cargar la lista de equipos de proteccion auditiva, actualice la página</option>');
@@ -3534,105 +3292,92 @@ function consulta_menuProteccionAuditiva(proyecto_id)
 	});//Fin ajax
 }
 
-function mostrar_proteccionauditiva(ID_PROTECCION)
-{
-// Enviar datos
-$.ajax({
-	type: "GET",
-	dataType: "json",
-	url: "/reporteruidoequipoauditivocampos/"+ID_PROTECCION,
-	data:{},
-	cache: false,
-	success:function(dato)
-	{
-		$('#tabla_equipoauditivo_atenuaciones > tbody').html('');
-		json= JSON.parse(dato.ATENUACIONES_JSON);
-		var atenuaciones = json[0]; 
-		$.each(atenuaciones, function (key, value) {
-			$('#tabla_equipoauditivo_atenuaciones > tbody').append(`<tr>
-				<td width="40%"><input type="number" value="${key}" class="form-control" name="reporteruidoequipoauditivoatenuacion_bandaNRR[]" required></td>
-				<td width="40%"><input type="number" value="${value}" class="form-control" name="reporteruidoequipoauditivoatenuacion_bandaatenuacion[]" required></td>
-				<td width="10%"><button type="button" class="btn btn-danger waves-effect btn-circle eliminar"><i class="fa fa-trash fa-2x"></i></button></td>
-			'</tr>`);
-			
-		});
-		//$('#tabla_equipoauditivo_atenuaciones tbody').html(dato.atenuaciones);
-		$('#reporteruidoequipoauditivo_tipo').val(dato.TIPO);
-		$('#reporteruidoequipoauditivo_marca').val(dato.MARCA);
-		$('#reporteruidoequipoauditivo_modelo').val(dato.MODELO);
-		$('#reporteruidoequipoauditivo_NRR').val(dato.NRR);
-		
-	},
-	beforeSend: function()
-	{
-		//$('#tabla_equipoauditivo_atenuaciones tbody').html('<tr><td colspan="3"><i class="fa fa-spin fa-spinner" style="font-size: 40px!important;"></i></td></tr>');
-	},
-	error: function(dato)
-	{
-		$('#reporteruidoequipoauditivo_tipo').val('ERROR');
-		$('#reporteruidoequipoauditivo_marca').val('ERROR');
-		$('#reporteruidoequipoauditivo_modelo').val('ERROR');
-		$('#reporteruidoequipoauditivo_NRR').val('ERROR');
-		
-	}
-
-});//Fin ajax
-}
-
-function equipoauditivo_atenuaciones(equipoauditivo_id)
-{
+function mostrar_proteccionauditiva(ID_PROTECCION) {
 	// Enviar datos
 	$.ajax({
 		type: "GET",
 		dataType: "json",
-		url: "/reporteruidoequipoauditivoatenuaciones/"+equipoauditivo_id,
-		data:{},
+		url: "/reporteruidoequipoauditivocampos/" + ID_PROTECCION,
+		data: {},
 		cache: false,
-		success:function(dato)
-		{
+		success: function (dato) {
+			$('#tabla_equipoauditivo_atenuaciones > tbody').html('');
+			json = JSON.parse(dato.ATENUACIONES_JSON);
+			var atenuaciones = json[0];
+			$.each(atenuaciones, function (key, value) {
+				$('#tabla_equipoauditivo_atenuaciones > tbody').append(`<tr>
+				<td width="40%"><input type="number" value="${key}" class="form-control" name="reporteruidoequipoauditivoatenuacion_bandaNRR[]" required></td>
+				<td width="40%"><input type="number" value="${value}" class="form-control" name="reporteruidoequipoauditivoatenuacion_bandaatenuacion[]" required></td>
+				<td width="10%"><button type="button" class="btn btn-danger waves-effect btn-circle eliminar"><i class="fa fa-trash fa-2x"></i></button></td>
+			'</tr>`);
+
+			});
+			//$('#tabla_equipoauditivo_atenuaciones tbody').html(dato.atenuaciones);
+			$('#reporteruidoequipoauditivo_tipo').val(dato.TIPO);
+			$('#reporteruidoequipoauditivo_marca').val(dato.MARCA);
+			$('#reporteruidoequipoauditivo_modelo').val(dato.MODELO);
+			$('#reporteruidoequipoauditivo_NRR').val(dato.NRR);
+
+		},
+		beforeSend: function () {
+			//$('#tabla_equipoauditivo_atenuaciones tbody').html('<tr><td colspan="3"><i class="fa fa-spin fa-spinner" style="font-size: 40px!important;"></i></td></tr>');
+		},
+		error: function (dato) {
+			$('#reporteruidoequipoauditivo_tipo').val('ERROR');
+			$('#reporteruidoequipoauditivo_marca').val('ERROR');
+			$('#reporteruidoequipoauditivo_modelo').val('ERROR');
+			$('#reporteruidoequipoauditivo_NRR').val('ERROR');
+
+		}
+
+	});//Fin ajax
+}
+
+function equipoauditivo_atenuaciones(equipoauditivo_id) {
+	// Enviar datos
+	$.ajax({
+		type: "GET",
+		dataType: "json",
+		url: "/reporteruidoequipoauditivoatenuaciones/" + equipoauditivo_id,
+		data: {},
+		cache: false,
+		success: function (dato) {
 			$('#tabla_equipoauditivo_atenuaciones tbody').html(dato.atenuaciones);
 		},
-		beforeSend: function()
-		{
+		beforeSend: function () {
 			$('#tabla_equipoauditivo_atenuaciones tbody').html('<tr><td colspan="3"><i class="fa fa-spin fa-spinner" style="font-size: 40px!important;"></i></td></tr>');
 		},
-		error: function(dato)
-		{
+		error: function (dato) {
 			$('#tabla_equipoauditivo_atenuaciones tbody').html('<tr><td colspan="3">Error al consultar los datos</td></tr>');
 		}
 	});//Fin ajax
 }
 
 
-function equipoauditivo_categorias(proyecto_id, reporteregistro_id, equipoauditivo_id)
-{
+function equipoauditivo_categorias(proyecto_id, reporteregistro_id, equipoauditivo_id) {
 	// Enviar datos
 	$.ajax({
 		type: "GET",
 		dataType: "json",
-		url: "/reporteruidoequipoauditivocategorias/"+proyecto_id+"/"+reporteregistro_id+"/"+equipoauditivo_id+"/"+areas_poe,
-		data:{},
+		url: "/reporteruidoequipoauditivocategorias/" + proyecto_id + "/" + reporteregistro_id + "/" + equipoauditivo_id + "/" + areas_poe,
+		data: {},
 		cache: false,
-		success:function(dato)
-		{
+		success: function (dato) {
 			$('#reporteequipoauditivo_categoriaslista').html(dato.equipoauditivocategorias_lista);
-			
+
 		},
-		beforeSend: function()
-		{
+		beforeSend: function () {
 			$('#reporteequipoauditivo_categoriaslista').html('<i class="fa fa-spin fa-spinner" style="font-size: 40px!important;"></i>');
 		},
-		error: function(dato)
-		{
+		error: function (dato) {
 			$('#reporteequipoauditivo_categoriaslista').html('Error al consultar las categorías');
 		}
 	});//Fin ajax
 }
 
 
-function equipoauditivo_editar(proyecto_id, reporteregistro_id, equipoauditivo_id, equipoauditivo_tipo, equipoauditivo_marca, equipoauditivo_modelo, equipoauditivo_nrr)
-{
-	$('#form_reporte_equipoauditivo').each(function(){
+function equipoauditivo_editar(proyecto_id, reporteregistro_id, equipoauditivo_id, equipoauditivo_tipo, equipoauditivo_marca, equipoauditivo_modelo, equipoauditivo_nrr) {
+	$('#form_reporte_equipoauditivo').each(function () {
 		this.reset();
 	});
 
@@ -3657,15 +3402,14 @@ function equipoauditivo_editar(proyecto_id, reporteregistro_id, equipoauditivo_i
 	$('#modal_reporte_equipoauditivo .modal-title').html('Equipo auditivo');
 
 	// mostrar modal
-	$('#modal_reporte_equipoauditivo').modal({backdrop:false});
+	$('#modal_reporte_equipoauditivo').modal({ backdrop: false });
 }
 
 
-function equipoauditivo_eliminar(equipoauditivo_id, equipoauditivo_tipo)
-{
+function equipoauditivo_eliminar(equipoauditivo_id, equipoauditivo_tipo) {
 	swal({
 		title: "¡Confirme que desea eliminar!",
-		text: ""+equipoauditivo_tipo,
+		text: "" + equipoauditivo_tipo,
 		type: "warning",
 		showCancelButton: true,
 		confirmButtonColor: "#DD6B55",
@@ -3674,206 +3418,84 @@ function equipoauditivo_eliminar(equipoauditivo_id, equipoauditivo_tipo)
 		closeOnConfirm: false,
 		closeOnCancel: false
 	},
-	function(isConfirm)
-	{
-		if (isConfirm)
-		{
-			swal({
-				title: "¡Por seguridad confirme nuevamente que desea eliminar!",
-				text: ""+equipoauditivo_tipo,
-				type: "warning",
-				showCancelButton: true,
-				confirmButtonColor: "#DD6B55",
-				confirmButtonText: "Eliminar!",
-				cancelButtonText: "Cancelar!",
-				closeOnConfirm: false,
-				closeOnCancel: false
-			},
-			function(isConfirm)
-			{
-				if (isConfirm)
-				{
-					// cerrar msj confirmacion
-					swal.close();
+		function (isConfirm) {
+			if (isConfirm) {
+				swal({
+					title: "¡Por seguridad confirme nuevamente que desea eliminar!",
+					text: "" + equipoauditivo_tipo,
+					type: "warning",
+					showCancelButton: true,
+					confirmButtonColor: "#DD6B55",
+					confirmButtonText: "Eliminar!",
+					cancelButtonText: "Cancelar!",
+					closeOnConfirm: false,
+					closeOnCancel: false
+				},
+					function (isConfirm) {
+						if (isConfirm) {
+							// cerrar msj confirmacion
+							swal.close();
 
-					// alert(equipoauditivo_id);
+							// alert(equipoauditivo_id);
 
-					$.ajax({
-						type: "GET",
-						dataType: "json",
-						url: "/reporteruidoequipoauditivoeliminar/"+equipoauditivo_id,
-						data:{},
-						cache: false,
-						success:function(dato)
-						{
-							// Actualizar tabla
-							tabla_reporte_5_6_equipoauditivo(proyecto.id, reporteregistro_id);
+							$.ajax({
+								type: "GET",
+								dataType: "json",
+								url: "/reporteruidoequipoauditivoeliminar/" + equipoauditivo_id,
+								data: {},
+								cache: false,
+								success: function (dato) {
+									// Actualizar tabla
+									tabla_reporte_5_6_equipoauditivo(proyecto.id, reporteregistro_id);
 
-							// mensaje
-							swal({
-								title: "Correcto",
-								text: ""+dato.msj,
-								type: "success", // warning, error, success, info
-								buttons: {
-									visible: false, // true , false
+									// mensaje
+									swal({
+										title: "Correcto",
+										text: "" + dato.msj,
+										type: "success", // warning, error, success, info
+										buttons: {
+											visible: false, // true , false
+										},
+										timer: 1500,
+										showConfirmButton: false
+									});
 								},
-								timer: 1500,
-								showConfirmButton: false
-							});
-						},
-						beforeSend: function()
-						{
-							// $('#tabla_reporte_definiciones tbody').html('<tr><td colspan="5"><i class="fa fa-spin fa-spinner" style="font-size: 40px!important;"></i></td></tr>');
-						},
-						error: function(dato)
-						{
+								beforeSend: function () {
+									// $('#tabla_reporte_definiciones tbody').html('<tr><td colspan="5"><i class="fa fa-spin fa-spinner" style="font-size: 40px!important;"></i></td></tr>');
+								},
+								error: function (dato) {
+									// mensaje
+									swal({
+										title: "Error",
+										text: "" + dato.msj,
+										type: "error", // warning, error, success, info
+										buttons: {
+											visible: false, // true , false
+										},
+										timer: 1500,
+										showConfirmButton: false
+									});
+
+									return false;
+								}
+							});//Fin ajax
+						}
+						else {
 							// mensaje
 							swal({
-								title: "Error",
-								text: ""+dato.msj,
+								title: "Cancelado",
+								text: "Acción cancelada",
 								type: "error", // warning, error, success, info
 								buttons: {
 									visible: false, // true , false
 								},
-								timer: 1500,
+								timer: 500,
 								showConfirmButton: false
 							});
-
-							return false;
 						}
-					});//Fin ajax
-				}
-				else 
-				{
-					// mensaje
-					swal({
-						title: "Cancelado",
-						text: "Acción cancelada",
-						type: "error", // warning, error, success, info
-						buttons: {
-							visible: false, // true , false
-						},
-						timer: 500,
-						showConfirmButton: false
 					});
-				}
-			});
-		}
-		else 
-		{
-			// mensaje
-			swal({
-				title: "Cancelado",
-				text: "Acción cancelada",
-				type: "error", // warning, error, success, info
-				buttons: {
-					visible: false, // true , false
-				},
-				timer: 500,
-				showConfirmButton: false
-			});
-		}
-	});
-	return false;
-}
-
-
-$("#botonguardar_modal_equipoauditivo").click(function()
-{
-	// valida campos vacios
-	var valida = this.form.checkValidity();
-	if (valida)
-	{
-		swal({
-			title: "¡Confirme que desea guardar!",
-			text: "Equipo auditivo",
-			type: "warning",
-			showCancelButton: true,
-			confirmButtonColor: "#DD6B55",
-			confirmButtonText: "Guardar!",
-			cancelButtonText: "Cancelar!",
-			closeOnConfirm: false,
-			closeOnCancel: false
-		},
-		function(isConfirm)
-		{
-			if (isConfirm)
-			{
-				// cerrar msj confirmacion
-				swal.close();
-
-				// enviar datos
-				$('#form_reporte_equipoauditivo').ajaxForm({
-					dataType: 'json',
-					type: 'POST',
-					url: ''+ruta_storage_guardar,
-					data: {
-						opcion: 11,
-						proyecto_id: proyecto.id,
-						agente_id: agente_id,
-						agente_nombre: agente_nombre,
-						reporteregistro_id: reporteregistro_id,
-						catactivo_id: $("#reporte_catactivo_id").val(),
-						reporte_instalacion: $("#reporte_instalacion").val(),
-					},
-					resetForm: false,
-					success: function(dato)
-					{
-						// Actualizar ID reporte						
-						reporteregistro_id = dato.reporteregistro_id;
-
-						tabla_reporte_5_6_equipoauditivo(proyecto.id, reporteregistro_id);
-
-						// tabla_reporte_7_5(proyecto.id, reporteregistro_id);
-
-						// mensaje
-						swal({
-							title: "Correcto",
-							text: ""+dato.msj,
-							type: "success", // warning, error, success, info
-							buttons: {
-								visible: false, // true , false
-							},
-							timer: 1500,
-							showConfirmButton: false
-						});
-
-						// actualiza boton
-						$('#botonguardar_modal_equipoauditivo').html('Guardar <i class="fa fa-save"></i>');
-						$('#botonguardar_modal_equipoauditivo').attr('disabled', false);
-
-						// cerrar modal
-						$('#modal_reporte_equipoauditivo').modal('hide');
-					},
-					beforeSend: function()
-					{
-						$('#botonguardar_modal_equipoauditivo').html('Guardando <i class="fa fa-spin fa-spinner"></i>');
-						$('#botonguardar_modal_equipoauditivo').attr('disabled', true);
-					},
-					error: function(dato)
-					{
-						// actualiza boton
-						$('#botonguardar_modal_equipoauditivo').html('Guardar <i class="fa fa-save"></i>');
-						$('#botonguardar_modal_equipoauditivo').attr('disabled', false);
-
-						// mensaje
-						swal({
-							title: "Error",
-							text: ""+dato.msj,
-							type: "error", // warning, error, success, info
-							buttons: {
-								visible: false, // true , false
-							},
-							timer: 1500,
-							showConfirmButton: false
-						});
-						return false;
-					}
-				}).submit();
-				return false;
 			}
-			else 
-			{
+			else {
 				// mensaje
 				swal({
 					title: "Cancelado",
@@ -3887,6 +3509,111 @@ $("#botonguardar_modal_equipoauditivo").click(function()
 				});
 			}
 		});
+	return false;
+}
+
+
+$("#botonguardar_modal_equipoauditivo").click(function () {
+	// valida campos vacios
+	var valida = this.form.checkValidity();
+	if (valida) {
+		swal({
+			title: "¡Confirme que desea guardar!",
+			text: "Equipo auditivo",
+			type: "warning",
+			showCancelButton: true,
+			confirmButtonColor: "#DD6B55",
+			confirmButtonText: "Guardar!",
+			cancelButtonText: "Cancelar!",
+			closeOnConfirm: false,
+			closeOnCancel: false
+		},
+			function (isConfirm) {
+				if (isConfirm) {
+					// cerrar msj confirmacion
+					swal.close();
+
+					// enviar datos
+					$('#form_reporte_equipoauditivo').ajaxForm({
+						dataType: 'json',
+						type: 'POST',
+						url: '' + ruta_storage_guardar,
+						data: {
+							opcion: 11,
+							proyecto_id: proyecto.id,
+							agente_id: agente_id,
+							agente_nombre: agente_nombre,
+							reporteregistro_id: reporteregistro_id,
+							catactivo_id: $("#reporte_catactivo_id").val(),
+							reporte_instalacion: $("#reporte_instalacion").val(),
+						},
+						resetForm: false,
+						success: function (dato) {
+							// Actualizar ID reporte						
+							reporteregistro_id = dato.reporteregistro_id;
+
+							tabla_reporte_5_6_equipoauditivo(proyecto.id, reporteregistro_id);
+
+							// tabla_reporte_7_5(proyecto.id, reporteregistro_id);
+
+							// mensaje
+							swal({
+								title: "Correcto",
+								text: "" + dato.msj,
+								type: "success", // warning, error, success, info
+								buttons: {
+									visible: false, // true , false
+								},
+								timer: 1500,
+								showConfirmButton: false
+							});
+
+							// actualiza boton
+							$('#botonguardar_modal_equipoauditivo').html('Guardar <i class="fa fa-save"></i>');
+							$('#botonguardar_modal_equipoauditivo').attr('disabled', false);
+
+							// cerrar modal
+							$('#modal_reporte_equipoauditivo').modal('hide');
+						},
+						beforeSend: function () {
+							$('#botonguardar_modal_equipoauditivo').html('Guardando <i class="fa fa-spin fa-spinner"></i>');
+							$('#botonguardar_modal_equipoauditivo').attr('disabled', true);
+						},
+						error: function (dato) {
+							// actualiza boton
+							$('#botonguardar_modal_equipoauditivo').html('Guardar <i class="fa fa-save"></i>');
+							$('#botonguardar_modal_equipoauditivo').attr('disabled', false);
+
+							// mensaje
+							swal({
+								title: "Error",
+								text: "" + dato.msj,
+								type: "error", // warning, error, success, info
+								buttons: {
+									visible: false, // true , false
+								},
+								timer: 1500,
+								showConfirmButton: false
+							});
+							return false;
+						}
+					}).submit();
+					return false;
+				}
+				else {
+					// mensaje
+					swal({
+						title: "Cancelado",
+						text: "Acción cancelada",
+						type: "error", // warning, error, success, info
+						buttons: {
+							visible: false, // true , false
+						},
+						timer: 500,
+						showConfirmButton: false
+					});
+				}
+			});
 		return false;
 	}
 });
@@ -3896,29 +3623,23 @@ $("#botonguardar_modal_equipoauditivo").click(function()
 // EQUIPO PROTECCION PERSONAL
 
 
-$(document).ready(function()
-{
-	setTimeout(function()
-	{
+$(document).ready(function () {
+	setTimeout(function () {
 		tabla_reporte_epp(proyecto.id, reporteregistro_id);
 	}, 7000);
 });
 
 
 var datatable_epp = null;
-function tabla_reporte_epp(proyecto_id, reporteregistro_id)
-{
-	try 
-	{
-		var ruta = "/reporteruidoepptabla/"+proyecto_id+"/"+reporteregistro_id;
+function tabla_reporte_epp(proyecto_id, reporteregistro_id) {
+	try {
+		var ruta = "/reporteruidoepptabla/" + proyecto_id + "/" + reporteregistro_id;
 
-		if (datatable_epp != null)
-		{
+		if (datatable_epp != null) {
 			datatable_epp.clear().draw();
 			datatable_epp.ajax.url(ruta).load();
 		}
-		else
-		{
+		else {
 			var numeroejecucion = 1;
 			datatable_epp = $('#tabla_reporte_epp').DataTable({
 				ajax: {
@@ -3927,17 +3648,14 @@ function tabla_reporte_epp(proyecto_id, reporteregistro_id)
 					cache: false,
 					dataType: "json",
 					data: {},
-					dataSrc: function (json)
-					{
+					dataSrc: function (json) {
 						menureporte_estado("menureporte_5_7", parseInt(json.total));
 
 						return json.data;
 					},
-					error: function (xhr, error, code)
-					{						
-						console.log('error en datatable_epp '+code);
-						if (numeroejecucion <= 1)
-						{
+					error: function (xhr, error, code) {
+						console.log('error en datatable_epp ' + code);
+						if (numeroejecucion <= 1) {
 							tabla_reporte_epp(proyecto_id, reporteregistro_id)
 							numeroejecucion += 1;
 						}
@@ -3999,8 +3717,7 @@ function tabla_reporte_epp(proyecto_id, reporteregistro_id)
 						previous: "Anterior"
 					}
 				},
-				rowCallback: function(row, data, index)
-				{
+				rowCallback: function (row, data, index) {
 					// console.log(index+' - '+data.reporteiluminacionpuntos_nopunto);
 
 					// if(data.reporteiluminacionpuntos_nopunto == 2)
@@ -4016,21 +3733,18 @@ function tabla_reporte_epp(proyecto_id, reporteregistro_id)
 		}
 
 		// Tooltip en DataTable
-		datatable_epp.on('draw', function ()
-		{
+		datatable_epp.on('draw', function () {
 			$('[data-toggle="tooltip"]').tooltip();
 		});
 	}
-	catch (exception)
-	{
+	catch (exception) {
 		tabla_reporte_epp(proyecto_id, reporteregistro_id);
-    }
+	}
 }
 
 
-$("#boton_reporte_nuevoepp").click(function()
-{
-	$('#form_modal_epp').each(function(){
+$("#boton_reporte_nuevoepp").click(function () {
+	$('#form_modal_epp').each(function () {
 		this.reset();
 	});
 	// Campos Hidden
@@ -4042,117 +3756,112 @@ $("#boton_reporte_nuevoepp").click(function()
 	//consulta_categoria_epp();
 
 	$("#tabla_lista_epp_ruido tbody").html('');
-	$("#tabla_lista_epp_ruido tbody").append(  '<tr>'+
-		'<td style="width:250px"><select class="custom-select form-control regionAnatomica" id="reporteruidoepp_partecuerpo" name="reporteruidoepp_partecuerpo" required>'+opciones_catepp+'</select></td>'+
+	$("#tabla_lista_epp_ruido tbody").append('<tr>' +
+		'<td style="width:250px"><select class="custom-select form-control regionAnatomica" id="reporteruidoepp_partecuerpo" name="reporteruidoepp_partecuerpo" required>' + opciones_catepp + '</select></td>' +
 		'<td style="width:400px"><select class="custom-select form-control claveyEpp" id="reporteruidoepp_equipo" name="reporteruidoepp_equipo" required></select></td>' +
-	'</tr>');
-	$('#modal_reporte_epp').modal({backdrop:false});
+		'</tr>');
+	$('#modal_reporte_epp').modal({ backdrop: false });
 });
 
-$("#tabla_lista_epp_ruido tbody").on("change", ".regionAnatomica", function() {
-  
-    var valorSeleccionado = $(this).val();
+$("#tabla_lista_epp_ruido tbody").on("change", ".regionAnatomica", function () {
+
+	var valorSeleccionado = $(this).val();
 	var fila = $(this).closest("tr");
 	var selectClaveEppp = fila.find("select[name='reporteruidoepp_equipo']"); // Encontrar el Select en la misma fila
-	
-	 $.ajax({
-        type: "GET",
-        dataType: "json",
-        url: "/recsensorialClaveEppruido/"+valorSeleccionado,
-        data:{},
-        cache: false,
-        success:function(dato){
-        	selectClaveEppp.html(dato.opciones);
-        },
-        error: function(dato){
-            // alert('Error: '+dato.msj);
-            return false;
-        }
-    });//
-	
+
+	$.ajax({
+		type: "GET",
+		dataType: "json",
+		url: "/recsensorialClaveEppruido/" + valorSeleccionado,
+		data: {},
+		cache: false,
+		success: function (dato) {
+			selectClaveEppp.html(dato.opciones);
+		},
+		error: function (dato) {
+			// alert('Error: '+dato.msj);
+			return false;
+		}
+	});//
+
 
 });
 
-function consulta_categoria_epp()
-{
+function consulta_categoria_epp() {
 	// alert('mensaje');
 	$.ajax({
 		type: "GET",
 		dataType: "json",
 		url: "/recsensorialeppcatalogoruido",
-		data:{},
+		data: {},
 		cache: false,
-		success:function(dato)
-		{
+		success: function (dato) {
 			opciones_catepp = dato.opciones;
 		},
-		error: function(dato)
-		{
+		error: function (dato) {
 			// alert('Error: '+dato.msj);
 			return false;
 		}
 	});//Fin ajax
 }
 
-$('#tabla_reporte_epp tbody').on('click', 'td.editar', function()
-{
+$('#tabla_reporte_epp tbody').on('click', 'td.editar', function () {
 	var tr = $(this).closest('tr');
 	var row = datatable_epp.row(tr);
 
-	$('#form_modal_epp').each(function(){
+	$('#form_modal_epp').each(function () {
 		this.reset();
 	});
 	// Titulo del modal
 	$('#modal_reporte_epp .modal-title').html('Equipo de protección personal');
 
 	consulta_categoria_epp()
-	
+
 	$("#tabla_lista_epp_ruido tbody").html('');
-	$("#tabla_lista_epp_ruido tbody").append(  '<tr>'+
-			'<td style="width:250px"><select class="custom-select form-control regionAnatomica" id="reporteruidoepp_partecuerpo" name="reporteruidoepp_partecuerpo" required>'+opciones_catepp+'</select></td>'+
-			'<td style="width:400px"><select class="custom-select form-control claveyEpp" id="reporteruidoepp_equipo" name="reporteruidoepp_equipo" required></select></td>' +
+	$("#tabla_lista_epp_ruido tbody").append('<tr>' +
+		'<td style="width:250px"><select class="custom-select form-control regionAnatomica" id="reporteruidoepp_partecuerpo" name="reporteruidoepp_partecuerpo" required>' + opciones_catepp + '</select></td>' +
+		'<td style="width:400px"><select class="custom-select form-control claveyEpp" id="reporteruidoepp_equipo" name="reporteruidoepp_equipo" required></select></td>' +
 		'</tr>');
-		
+
 	// Llenar campos
 	// Campos Hidden
 	$('#reporteepp_id').val(row.data().id);
-	
-	
+
+
 	$.ajax({
-        type: "GET",
-        dataType: "json",
-        url: "/recsensorialClaveEppruido/"+row.data().reporteruidoepp_partecuerpo,
-        data:{},
-        cache: false,
-        success:function(dato){
+		type: "GET",
+		dataType: "json",
+		url: "/recsensorialClaveEppruido/" + row.data().reporteruidoepp_partecuerpo,
+		data: {},
+		cache: false,
+		success: function (dato) {
 			$('#reporteruidoepp_equipo').html(dato.opciones);
 			setTimeout(() => {
 				$('#reporteruidoepp_partecuerpo').val(row.data().reporteruidoepp_partecuerpo);
 				$('#reporteruidoepp_equipo').val(row.data().reporteruidoepp_equipo);
 
 			}, 500);
-        },
-        error: function(dato){
-            // alert('Error: '+dato.msj);
-            return false;
-        }
-    });//
-	
-	
+		},
+		error: function (dato) {
+			// alert('Error: '+dato.msj);
+			return false;
+		}
+	});//
+
+
 
 	// mostrar modal
-	$('#modal_reporte_epp').modal({backdrop:false});
+	$('#modal_reporte_epp').modal({ backdrop: false });
 });
 
 
-$('#tabla_reporte_epp tbody').on('click', 'td>button.eliminar', function()
-{
+$('#tabla_reporte_epp tbody').on('click', 'td>button.eliminar', function () {
 	var tr = $(this).closest('tr');
 	var row = datatable_epp.row(tr);
 
 	swal({
 		title: "¡Confirme que desea eliminar!",
-		text: "E.P.P.: "+row.data().reporteruidoepp_partecuerpo,
+		text: "E.P.P.: " + row.data().reporteruidoepp_partecuerpo,
 		type: "warning",
 		showCancelButton: true,
 		confirmButtonColor: "#DD6B55",
@@ -4161,208 +3870,83 @@ $('#tabla_reporte_epp tbody').on('click', 'td>button.eliminar', function()
 		closeOnConfirm: false,
 		closeOnCancel: false
 	},
-	function(isConfirm)
-	{
-		if (isConfirm)
-		{
-			swal({
-				title: "¡Por seguridad confirme nuevamente que desea eliminar!",
-				text: "E.P.P.: "+row.data().reporteruidoepp_partecuerpo,
-				type: "warning",
-				showCancelButton: true,
-				confirmButtonColor: "#DD6B55",
-				confirmButtonText: "Eliminar!",
-				cancelButtonText: "Cancelar!",
-				closeOnConfirm: false,
-				closeOnCancel: false
-			},
-			function(isConfirm)
-			{
-				if (isConfirm)
-				{
-					// cerrar msj confirmacion
-					swal.close();
+		function (isConfirm) {
+			if (isConfirm) {
+				swal({
+					title: "¡Por seguridad confirme nuevamente que desea eliminar!",
+					text: "E.P.P.: " + row.data().reporteruidoepp_partecuerpo,
+					type: "warning",
+					showCancelButton: true,
+					confirmButtonColor: "#DD6B55",
+					confirmButtonText: "Eliminar!",
+					cancelButtonText: "Cancelar!",
+					closeOnConfirm: false,
+					closeOnCancel: false
+				},
+					function (isConfirm) {
+						if (isConfirm) {
+							// cerrar msj confirmacion
+							swal.close();
 
-					$.ajax({
-						type: "GET",
-						dataType: "json",
-						url: "/reporteruidoeppeliminar/"+row.data().id,
-						data:{},
-						cache: false,
-						success:function(dato)
-						{
-							// Actualizar tabla
-							tabla_reporte_epp(proyecto.id, reporteregistro_id);
+							$.ajax({
+								type: "GET",
+								dataType: "json",
+								url: "/reporteruidoeppeliminar/" + row.data().id,
+								data: {},
+								cache: false,
+								success: function (dato) {
+									// Actualizar tabla
+									tabla_reporte_epp(proyecto.id, reporteregistro_id);
 
-							// mensaje
-							swal({
-								title: "Correcto",
-								text: ""+dato.msj,
-								type: "success", // warning, error, success, info
-								buttons: {
-									visible: false, // true , false
+									// mensaje
+									swal({
+										title: "Correcto",
+										text: "" + dato.msj,
+										type: "success", // warning, error, success, info
+										buttons: {
+											visible: false, // true , false
+										},
+										timer: 1500,
+										showConfirmButton: false
+									});
 								},
-								timer: 1500,
-								showConfirmButton: false
-							});
-						},
-						beforeSend: function()
-						{
-							
-							// $('#tabla_reporte_definiciones tbody').html('<tr><td colspan="5"><i class="fa fa-spin fa-spinner" style="font-size: 40px!important;"></i></td></tr>');
-						},
-						error: function(dato)
-						{
+								beforeSend: function () {
+
+									// $('#tabla_reporte_definiciones tbody').html('<tr><td colspan="5"><i class="fa fa-spin fa-spinner" style="font-size: 40px!important;"></i></td></tr>');
+								},
+								error: function (dato) {
+									// mensaje
+									swal({
+										title: "Error",
+										text: "" + dato.msj,
+										type: "error", // warning, error, success, info
+										buttons: {
+											visible: false, // true , false
+										},
+										timer: 1500,
+										showConfirmButton: false
+									});
+
+									return false;
+								}
+							});//Fin ajax
+						}
+						else {
 							// mensaje
 							swal({
-								title: "Error",
-								text: ""+dato.msj,
+								title: "Cancelado",
+								text: "Acción cancelada",
 								type: "error", // warning, error, success, info
 								buttons: {
 									visible: false, // true , false
 								},
-								timer: 1500,
+								timer: 500,
 								showConfirmButton: false
 							});
-
-							return false;
 						}
-					});//Fin ajax
-				}
-				else 
-				{
-					// mensaje
-					swal({
-						title: "Cancelado",
-						text: "Acción cancelada",
-						type: "error", // warning, error, success, info
-						buttons: {
-							visible: false, // true , false
-						},
-						timer: 500,
-						showConfirmButton: false
 					});
-				}
-			});
-		}
-		else 
-		{
-			// mensaje
-			swal({
-				title: "Cancelado",
-				text: "Acción cancelada",
-				type: "error", // warning, error, success, info
-				buttons: {
-					visible: false, // true , false
-				},
-				timer: 500,
-				showConfirmButton: false
-			});
-		}
-	});
-	return false;
-});
-
-
-$("#botonguardar_modal_epp").click(function()
-{
-	// valida campos vacios
-	var valida = this.form.checkValidity();
-	if (valida)
-	{
-		swal({
-			title: "¡Confirme que desea guardar!",
-			text: "Equipo de protección personal",
-			type: "warning",
-			showCancelButton: true,
-			confirmButtonColor: "#DD6B55",
-			confirmButtonText: "Guardar!",
-			cancelButtonText: "Cancelar!",
-			closeOnConfirm: false,
-			closeOnCancel: false
-		},
-		function(isConfirm)
-		{
-			if (isConfirm)
-			{
-				// cerrar msj confirmacion
-				swal.close();
-
-				// enviar datos
-				$('#form_modal_epp').ajaxForm({
-					dataType: 'json',
-					type: 'POST',
-					url: ''+ruta_storage_guardar,
-					data: {
-						opcion: 12,
-						proyecto_id: proyecto.id,
-						agente_id: agente_id,
-						agente_nombre: agente_nombre,
-						reporteregistro_id: reporteregistro_id,
-						catactivo_id: $("#reporte_catactivo_id").val(),
-						reporte_instalacion: $("#reporte_instalacion").val(),
-
-					},
-					resetForm: false,
-					success: function(dato)
-					{
-						// Actualizar ID reporte						
-						reporteregistro_id = dato.reporteregistro_id;
-
-						tabla_reporte_epp(proyecto.id, reporteregistro_id);
-
-						// Actualizar tabla
-						// tabla_reporte_areas(proyecto.id, reporteregistro_id);
-
-						// mensaje
-						swal({
-							title: "Correcto",
-							text: ""+dato.msj,
-							type: "success", // warning, error, success, info
-							buttons: {
-								visible: false, // true , false
-							},
-							timer: 1500,
-							showConfirmButton: false
-						});
-
-						// actualiza boton
-						$('#botonguardar_modal_epp').html('Guardar <i class="fa fa-save"></i>');
-						$('#botonguardar_modal_epp').attr('disabled', false);
-
-						// cerrar modal
-						$('#modal_reporte_epp').modal('hide');
-					},
-					beforeSend: function()
-					{
-						console.log($('#form_modal_epp').serializeArray());
-						$('#botonguardar_modal_epp').html('Guardando <i class="fa fa-spin fa-spinner"></i>');
-						$('#botonguardar_modal_epp').attr('disabled', true);
-					},
-					error: function(dato)
-					{
-						// actualiza boton
-						$('#botonguardar_modal_epp').html('Guardar <i class="fa fa-save"></i>');
-						$('#botonguardar_modal_epp').attr('disabled', false);
-
-						// mensaje
-						swal({
-							title: "Error",
-							text: ""+dato.msj,
-							type: "error", // warning, error, success, info
-							buttons: {
-								visible: false, // true , false
-							},
-							timer: 1500,
-							showConfirmButton: false
-						});
-						return false;
-					}
-				}).submit();
-				return false;
 			}
-			else 
-			{
+			else {
 				// mensaje
 				swal({
 					title: "Cancelado",
@@ -4376,6 +3960,114 @@ $("#botonguardar_modal_epp").click(function()
 				});
 			}
 		});
+	return false;
+});
+
+
+$("#botonguardar_modal_epp").click(function () {
+	// valida campos vacios
+	var valida = this.form.checkValidity();
+	if (valida) {
+		swal({
+			title: "¡Confirme que desea guardar!",
+			text: "Equipo de protección personal",
+			type: "warning",
+			showCancelButton: true,
+			confirmButtonColor: "#DD6B55",
+			confirmButtonText: "Guardar!",
+			cancelButtonText: "Cancelar!",
+			closeOnConfirm: false,
+			closeOnCancel: false
+		},
+			function (isConfirm) {
+				if (isConfirm) {
+					// cerrar msj confirmacion
+					swal.close();
+
+					// enviar datos
+					$('#form_modal_epp').ajaxForm({
+						dataType: 'json',
+						type: 'POST',
+						url: '' + ruta_storage_guardar,
+						data: {
+							opcion: 12,
+							proyecto_id: proyecto.id,
+							agente_id: agente_id,
+							agente_nombre: agente_nombre,
+							reporteregistro_id: reporteregistro_id,
+							catactivo_id: $("#reporte_catactivo_id").val(),
+							reporte_instalacion: $("#reporte_instalacion").val(),
+
+						},
+						resetForm: false,
+						success: function (dato) {
+							// Actualizar ID reporte						
+							reporteregistro_id = dato.reporteregistro_id;
+
+							tabla_reporte_epp(proyecto.id, reporteregistro_id);
+
+							// Actualizar tabla
+							// tabla_reporte_areas(proyecto.id, reporteregistro_id);
+
+							// mensaje
+							swal({
+								title: "Correcto",
+								text: "" + dato.msj,
+								type: "success", // warning, error, success, info
+								buttons: {
+									visible: false, // true , false
+								},
+								timer: 1500,
+								showConfirmButton: false
+							});
+
+							// actualiza boton
+							$('#botonguardar_modal_epp').html('Guardar <i class="fa fa-save"></i>');
+							$('#botonguardar_modal_epp').attr('disabled', false);
+
+							// cerrar modal
+							$('#modal_reporte_epp').modal('hide');
+						},
+						beforeSend: function () {
+							console.log($('#form_modal_epp').serializeArray());
+							$('#botonguardar_modal_epp').html('Guardando <i class="fa fa-spin fa-spinner"></i>');
+							$('#botonguardar_modal_epp').attr('disabled', true);
+						},
+						error: function (dato) {
+							// actualiza boton
+							$('#botonguardar_modal_epp').html('Guardar <i class="fa fa-save"></i>');
+							$('#botonguardar_modal_epp').attr('disabled', false);
+
+							// mensaje
+							swal({
+								title: "Error",
+								text: "" + dato.msj,
+								type: "error", // warning, error, success, info
+								buttons: {
+									visible: false, // true , false
+								},
+								timer: 1500,
+								showConfirmButton: false
+							});
+							return false;
+						}
+					}).submit();
+					return false;
+				}
+				else {
+					// mensaje
+					swal({
+						title: "Cancelado",
+						text: "Acción cancelada",
+						type: "error", // warning, error, success, info
+						buttons: {
+							visible: false, // true , false
+						},
+						timer: 500,
+						showConfirmButton: false
+					});
+				}
+			});
 		return false;
 	}
 });
@@ -4388,29 +4080,23 @@ $("#botonguardar_modal_epp").click(function()
 var ubicaciones_opciones = '<option value=""></option>';
 
 
-$(document).ready(function()
-{
-	setTimeout(function()
-	{
+$(document).ready(function () {
+	setTimeout(function () {
 		tabla_reporte_6_2(proyecto.id, reporteregistro_id);
 	}, 6000);
 });
 
 
 var datatable_reporte_6_2 = null;
-function tabla_reporte_6_2(proyecto_id, reporteregistro_id)
-{
-	try 
-	{
-		var ruta = "/reporteruidoareaevaluaciontabla/"+proyecto_id+"/"+reporteregistro_id+"/"+areas_poe;
+function tabla_reporte_6_2(proyecto_id, reporteregistro_id) {
+	try {
+		var ruta = "/reporteruidoareaevaluaciontabla/" + proyecto_id + "/" + reporteregistro_id + "/" + areas_poe;
 
-		if (datatable_reporte_6_2 != null)
-		{
+		if (datatable_reporte_6_2 != null) {
 			datatable_reporte_6_2.clear().draw();
 			datatable_reporte_6_2.ajax.url(ruta).load();
 		}
-		else
-		{
+		else {
 			var numeroejecucion = 1;
 			datatable_reporte_6_2 = $('#tabla_reporte_6_2').DataTable({
 				ajax: {
@@ -4419,8 +4105,7 @@ function tabla_reporte_6_2(proyecto_id, reporteregistro_id)
 					cache: false,
 					dataType: "json",
 					data: {},
-					dataSrc: function (json)
-					{
+					dataSrc: function (json) {
 						ubicaciones_opciones = json.ubicaciones_opciones;
 
 						$('#areaevaluacion_totalpuntos').html(json.areaevaluacion_totalpuntos);
@@ -4429,11 +4114,9 @@ function tabla_reporte_6_2(proyecto_id, reporteregistro_id)
 
 						return json.data;
 					},
-					error: function (xhr, error, code)
-					{						
-						console.log('error en datatable_reporte_6_2 '+code);
-						if (numeroejecucion <= 1)
-						{
+					error: function (xhr, error, code) {
+						console.log('error en datatable_reporte_6_2 ' + code);
+						if (numeroejecucion <= 1) {
 							tabla_reporte_6_2(proyecto_id, reporteregistro_id)
 							numeroejecucion += 1;
 						}
@@ -4504,8 +4187,7 @@ function tabla_reporte_6_2(proyecto_id, reporteregistro_id)
 						previous: "Anterior"
 					}
 				},
-				rowCallback: function(row, data, index)
-				{
+				rowCallback: function (row, data, index) {
 					// console.log(index+' - '+data.reporteiluminacionpuntos_nopunto);
 
 					// if(data.reporteiluminacionpuntos_nopunto == 2)
@@ -4521,21 +4203,18 @@ function tabla_reporte_6_2(proyecto_id, reporteregistro_id)
 		}
 
 		// Tooltip en DataTable
-		datatable_reporte_6_2.on('draw', function ()
-		{
+		datatable_reporte_6_2.on('draw', function () {
 			$('[data-toggle="tooltip"]').tooltip();
 		});
 	}
-	catch (exception)
-	{
+	catch (exception) {
 		tabla_reporte_6_2(proyecto_id, reporteregistro_id);
-    }
+	}
 }
 
 
-$("#boton_reporte_areaevaluacion").click(function()
-{
-	$('#form_modal_areaevaluacion').each(function(){
+$("#boton_reporte_areaevaluacion").click(function () {
+	$('#form_modal_areaevaluacion').each(function () {
 		this.reset();
 	});
 
@@ -4544,107 +4223,102 @@ $("#boton_reporte_areaevaluacion").click(function()
 
 	// Campo select areas
 	$('#reporteruidoarea_id').html(selectareas);
-	
+
 
 	// Tabla ubicaciones
-	$('#tabla_areaevaluacion_ubicaciones > tbody').html('<tr>'+
-															'<td width="30%">'+
-																'<input type="number" class="form-control" style="width: 90px; float: left;" name="reporteruidoareaevaluacion_nomedicion1[]" required>'+
-																'AL'+
-																'<input type="number" class="form-control" style="width: 90px; float: right;" name="reporteruidoareaevaluacion_nomedicion2[]" required>'+
-															'</td>'+
-															'<td width="60%"><input type="text" class="form-control" name="reporteruidoareaevaluacion_ubicacion[]" required></td>'+
-															'<td width="10%"><button type="button" class="btn btn-danger waves-effect btn-circle eliminar"><i class="fa fa-trash fa-2x"></i></button></td>'+
-														'</tr>');
+	$('#tabla_areaevaluacion_ubicaciones > tbody').html('<tr>' +
+		'<td width="30%">' +
+		'<input type="number" class="form-control" style="width: 90px; float: left;" name="reporteruidoareaevaluacion_nomedicion1[]" required>' +
+		'AL' +
+		'<input type="number" class="form-control" style="width: 90px; float: right;" name="reporteruidoareaevaluacion_nomedicion2[]" required>' +
+		'</td>' +
+		'<td width="60%"><input type="text" class="form-control" name="reporteruidoareaevaluacion_ubicacion[]" required></td>' +
+		'<td width="10%"><button type="button" class="btn btn-danger waves-effect btn-circle eliminar"><i class="fa fa-trash fa-2x"></i></button></td>' +
+		'</tr>');
 
 	// Titulo del modal
 	$('#modal_reporte_areaevaluacion .modal-title').html('Nueva área y puntos de evaluación');
 
 	// mostrar modal
-	$('#modal_reporte_areaevaluacion').modal({backdrop:false});
+	$('#modal_reporte_areaevaluacion').modal({ backdrop: false });
 });
 
 
-$("#boton_areaevaluacion_nuevaubicacion").click(function()
-{
-	$('#tabla_areaevaluacion_ubicaciones > tbody').append('<tr>'+
-																'<td width="30%">'+
-																	'<input type="number" class="form-control" style="width: 90px; float: left;" name="reporteruidoareaevaluacion_nomedicion1[]" required>'+
-																	'AL'+
-																	'<input type="number" class="form-control" style="width: 90px; float: right;" name="reporteruidoareaevaluacion_nomedicion2[]" required>'+
-																'</td>'+
-																'<td width="60%"><input type="text" class="form-control" name="reporteruidoareaevaluacion_ubicacion[]" required></td>'+
-																'<td width="10%"><button type="button" class="btn btn-danger waves-effect btn-circle eliminar"><i class="fa fa-trash fa-2x"></i></button></td>'+
-															'</tr>');
+$("#boton_areaevaluacion_nuevaubicacion").click(function () {
+	$('#tabla_areaevaluacion_ubicaciones > tbody').append('<tr>' +
+		'<td width="30%">' +
+		'<input type="number" class="form-control" style="width: 90px; float: left;" name="reporteruidoareaevaluacion_nomedicion1[]" required>' +
+		'AL' +
+		'<input type="number" class="form-control" style="width: 90px; float: right;" name="reporteruidoareaevaluacion_nomedicion2[]" required>' +
+		'</td>' +
+		'<td width="60%"><input type="text" class="form-control" name="reporteruidoareaevaluacion_ubicacion[]" required></td>' +
+		'<td width="10%"><button type="button" class="btn btn-danger waves-effect btn-circle eliminar"><i class="fa fa-trash fa-2x"></i></button></td>' +
+		'</tr>');
 
-    // desplazar a la ultima fila de la tabla
-    $('#div_tabla_areaevaluacion_ubicaciones').animate({
-    	scrollTop: $('#tabla_areaevaluacion_ubicaciones > tbody > tr:last').position().top //ultima fila
-    }, 500);
+	// desplazar a la ultima fila de la tabla
+	$('#div_tabla_areaevaluacion_ubicaciones').animate({
+		scrollTop: $('#tabla_areaevaluacion_ubicaciones > tbody > tr:last').position().top //ultima fila
+	}, 500);
 });
 
 
-$('#tabla_areaevaluacion_ubicaciones tbody').on('click', '.eliminar', function()
-{
-    // obtener fila tabla
-    var fila = $(this);
-    
-    // confirmar
-    swal({   
-        title: "¿Eliminar registro?",   
-        text: "Quitar de la lista",   
-        type: "warning",   
-        showCancelButton: true,   
-        confirmButtonColor: "#DD6B55",   
-        confirmButtonText: "Eliminar!",   
-        cancelButtonText: "Cancelar!",   
-        closeOnConfirm: false,   
-        closeOnCancel: false 
-    }, function(isConfirm){   
-        if (isConfirm)
-        {
-        	// cerrar msj confirmacion
+$('#tabla_areaevaluacion_ubicaciones tbody').on('click', '.eliminar', function () {
+	// obtener fila tabla
+	var fila = $(this);
+
+	// confirmar
+	swal({
+		title: "¿Eliminar registro?",
+		text: "Quitar de la lista",
+		type: "warning",
+		showCancelButton: true,
+		confirmButtonColor: "#DD6B55",
+		confirmButtonText: "Eliminar!",
+		cancelButtonText: "Cancelar!",
+		closeOnConfirm: false,
+		closeOnCancel: false
+	}, function (isConfirm) {
+		if (isConfirm) {
+			// cerrar msj confirmacion
 			swal.close();
 
-            var tr = fila.closest('tr');
-            fila.closest("tr").remove(); // eliminar fila TR
+			var tr = fila.closest('tr');
+			fila.closest("tr").remove(); // eliminar fila TR
 
-            // mensaje
-            swal({
-                title: "Correcto",
-                 text: "Registro eliminado de la lista",
-                type: "success", // warning, error, success, info
-                buttons: {
-                    visible: false, // true , false
-                },
-                timer: 1000,
-                showConfirmButton: false
-            });
-        }
-        else 
-        {
-            // mensaje
-            swal({
-                title: "Cancelado",
-                text: "",
-                type: "error", // warning, error, success, info
-                buttons: {
-                    visible: false, // true , false
-                },
-                timer: 500,
-                showConfirmButton: false
-            });   
-        } 
-    });
+			// mensaje
+			swal({
+				title: "Correcto",
+				text: "Registro eliminado de la lista",
+				type: "success", // warning, error, success, info
+				buttons: {
+					visible: false, // true , false
+				},
+				timer: 1000,
+				showConfirmButton: false
+			});
+		}
+		else {
+			// mensaje
+			swal({
+				title: "Cancelado",
+				text: "",
+				type: "error", // warning, error, success, info
+				buttons: {
+					visible: false, // true , false
+				},
+				timer: 500,
+				showConfirmButton: false
+			});
+		}
+	});
 });
 
 
-$('#tabla_reporte_6_2 tbody').on('click', 'td.editar', function()
-{
+$('#tabla_reporte_6_2 tbody').on('click', 'td.editar', function () {
 	var tr = $(this).closest('tr');
 	var row = datatable_reporte_6_2.row(tr);
 
-	$('#form_modal_areaevaluacion').each(function(){
+	$('#form_modal_areaevaluacion').each(function () {
 		this.reset();
 	});
 
@@ -4662,21 +4336,19 @@ $('#tabla_reporte_6_2 tbody').on('click', 'td.editar', function()
 	$('#reporteruidoareaevaluacion_noevaluaciones').val(row.data().reporteruidoareaevaluacion_noevaluaciones);
 
 	// Recorrer tabla
-	datatable_reporte_6_2.rows().every( function ( rowIdx, tableLoop, rowLoop )
-	{
+	datatable_reporte_6_2.rows().every(function (rowIdx, tableLoop, rowLoop) {
 		var data = this.data();
 
-		if (parseInt(row.data().reporteruidoarea_id) == parseInt(data.reporteruidoarea_id))
-		{
-			$('#tabla_areaevaluacion_ubicaciones > tbody').append('<tr>'+
-			                                                            '<td width="30%">'+
-			                                                            	'<input type="number" class="form-control" style="width: 90px; float: left;" name="reporteruidoareaevaluacion_nomedicion1[]" value="'+data.reporteruidoareaevaluacion_nomedicion1+'" required>'+
-																			'AL'+
-																			'<input type="number" class="form-control" style="width: 90px; float: right;" name="reporteruidoareaevaluacion_nomedicion2[]" value="'+data.reporteruidoareaevaluacion_nomedicion2+'" required>'+
-			                                                            '</td>'+
-			                                                            '<td width="60%"><input type="text" class="form-control" name="reporteruidoareaevaluacion_ubicacion[]" value="'+data.reporteruidoareaevaluacion_ubicacion+'" required></td>'+
-			                                                            '<td width="10%"><button type="button" class="btn btn-danger waves-effect btn-circle eliminar"><i class="fa fa-trash fa-2x"></i></button></td>'+
-			                                                        '</tr>');
+		if (parseInt(row.data().reporteruidoarea_id) == parseInt(data.reporteruidoarea_id)) {
+			$('#tabla_areaevaluacion_ubicaciones > tbody').append('<tr>' +
+				'<td width="30%">' +
+				'<input type="number" class="form-control" style="width: 90px; float: left;" name="reporteruidoareaevaluacion_nomedicion1[]" value="' + data.reporteruidoareaevaluacion_nomedicion1 + '" required>' +
+				'AL' +
+				'<input type="number" class="form-control" style="width: 90px; float: right;" name="reporteruidoareaevaluacion_nomedicion2[]" value="' + data.reporteruidoareaevaluacion_nomedicion2 + '" required>' +
+				'</td>' +
+				'<td width="60%"><input type="text" class="form-control" name="reporteruidoareaevaluacion_ubicacion[]" value="' + data.reporteruidoareaevaluacion_ubicacion + '" required></td>' +
+				'<td width="10%"><button type="button" class="btn btn-danger waves-effect btn-circle eliminar"><i class="fa fa-trash fa-2x"></i></button></td>' +
+				'</tr>');
 		}
 	});
 
@@ -4684,18 +4356,17 @@ $('#tabla_reporte_6_2 tbody').on('click', 'td.editar', function()
 	$('#modal_reporte_areaevaluacion .modal-title').html('Área y puntos de evaluación');
 
 	// mostrar modal
-	$('#modal_reporte_areaevaluacion').modal({backdrop:false});
+	$('#modal_reporte_areaevaluacion').modal({ backdrop: false });
 });
 
 
-$('#tabla_reporte_6_2 tbody').on('click', 'td>button.eliminar', function()
-{
+$('#tabla_reporte_6_2 tbody').on('click', 'td>button.eliminar', function () {
 	var tr = $(this).closest('tr');
 	var row = datatable_reporte_6_2.row(tr);
 
 	swal({
 		title: "¡Confirme que desea eliminar!",
-		text: ""+row.data().reporteruidoarea_nombre+" y puntos de evaluación",
+		text: "" + row.data().reporteruidoarea_nombre + " y puntos de evaluación",
 		type: "warning",
 		showCancelButton: true,
 		confirmButtonColor: "#DD6B55",
@@ -4704,43 +4375,145 @@ $('#tabla_reporte_6_2 tbody').on('click', 'td>button.eliminar', function()
 		closeOnConfirm: false,
 		closeOnCancel: false
 	},
-	function(isConfirm)
-	{
-		if (isConfirm)
-		{
-			swal({
-				title: "¡Por seguridad confirme nuevamente que desea eliminar!",
-				text: ""+row.data().reporteruidoarea_nombre+" y puntos de evaluación",
-				type: "warning",
-				showCancelButton: true,
-				confirmButtonColor: "#DD6B55",
-				confirmButtonText: "Eliminar!",
-				cancelButtonText: "Cancelar!",
-				closeOnConfirm: false,
-				closeOnCancel: false
-			},
-			function(isConfirm)
-			{
-				if (isConfirm)
-				{
+		function (isConfirm) {
+			if (isConfirm) {
+				swal({
+					title: "¡Por seguridad confirme nuevamente que desea eliminar!",
+					text: "" + row.data().reporteruidoarea_nombre + " y puntos de evaluación",
+					type: "warning",
+					showCancelButton: true,
+					confirmButtonColor: "#DD6B55",
+					confirmButtonText: "Eliminar!",
+					cancelButtonText: "Cancelar!",
+					closeOnConfirm: false,
+					closeOnCancel: false
+				},
+					function (isConfirm) {
+						if (isConfirm) {
+							// cerrar msj confirmacion
+							swal.close();
+
+							$.ajax({
+								type: "GET",
+								dataType: "json",
+								url: "/reporteruidoareaevaluacioneliminar/" + proyecto.id + "/" + reporteregistro_id + "/" + row.data().reporteruidoarea_id,
+								data: {},
+								cache: false,
+								success: function (dato) {
+									// Actualizar tabla
+									tabla_reporte_6_2(proyecto.id, reporteregistro_id);
+
+									// mensaje
+									swal({
+										title: "Correcto",
+										text: "" + dato.msj,
+										type: "success", // warning, error, success, info
+										buttons: {
+											visible: false, // true , false
+										},
+										timer: 1500,
+										showConfirmButton: false
+									});
+								},
+								beforeSend: function () {
+									// $('#tabla_reporte_definiciones tbody').html('<tr><td colspan="5"><i class="fa fa-spin fa-spinner" style="font-size: 40px!important;"></i></td></tr>');
+								},
+								error: function (dato) {
+									// mensaje
+									swal({
+										title: "Error",
+										text: "" + dato.msj,
+										type: "error", // warning, error, success, info
+										buttons: {
+											visible: false, // true , false
+										},
+										timer: 1500,
+										showConfirmButton: false
+									});
+
+									return false;
+								}
+							});//Fin ajax
+						}
+						else {
+							// mensaje
+							swal({
+								title: "Cancelado",
+								text: "Acción cancelada",
+								type: "error", // warning, error, success, info
+								buttons: {
+									visible: false, // true , false
+								},
+								timer: 500,
+								showConfirmButton: false
+							});
+						}
+					});
+			}
+			else {
+				// mensaje
+				swal({
+					title: "Cancelado",
+					text: "Acción cancelada",
+					type: "error", // warning, error, success, info
+					buttons: {
+						visible: false, // true , false
+					},
+					timer: 500,
+					showConfirmButton: false
+				});
+			}
+		});
+	return false;
+});
+
+
+$("#botonguardar_modal_areaevaluacion").click(function () {
+	// valida campos vacios
+	var valida = this.form.checkValidity();
+	if (valida) {
+		swal({
+			title: "¡Confirme que desea guardar!",
+			text: "Área y puntos de evaluación",
+			type: "warning",
+			showCancelButton: true,
+			confirmButtonColor: "#DD6B55",
+			confirmButtonText: "Guardar!",
+			cancelButtonText: "Cancelar!",
+			closeOnConfirm: false,
+			closeOnCancel: false
+		},
+			function (isConfirm) {
+				if (isConfirm) {
 					// cerrar msj confirmacion
 					swal.close();
 
-					$.ajax({
-						type: "GET",
-						dataType: "json",
-						url: "/reporteruidoareaevaluacioneliminar/"+proyecto.id+"/"+reporteregistro_id+"/"+row.data().reporteruidoarea_id,
-						data:{},
-						cache: false,
-						success:function(dato)
-						{
+					// enviar datos
+					$('#form_modal_areaevaluacion').ajaxForm({
+						dataType: 'json',
+						type: 'POST',
+						url: '' + ruta_storage_guardar,
+						data: {
+							opcion: 13,
+							proyecto_id: proyecto.id,
+							agente_id: agente_id,
+							agente_nombre: agente_nombre,
+							reporteregistro_id: reporteregistro_id,
+							catactivo_id: $("#reporte_catactivo_id").val(),
+							reporte_instalacion: $("#reporte_instalacion").val(),
+						},
+						resetForm: false,
+						success: function (dato) {
+							// Actualizar ID reporte						
+							reporteregistro_id = dato.reporteregistro_id;
+
 							// Actualizar tabla
 							tabla_reporte_6_2(proyecto.id, reporteregistro_id);
 
 							// mensaje
 							swal({
 								title: "Correcto",
-								text: ""+dato.msj,
+								text: "" + dato.msj,
 								type: "success", // warning, error, success, info
 								buttons: {
 									visible: false, // true , false
@@ -4748,17 +4521,27 @@ $('#tabla_reporte_6_2 tbody').on('click', 'td>button.eliminar', function()
 								timer: 1500,
 								showConfirmButton: false
 							});
+
+							// actualiza boton
+							$('#botonguardar_modal_areaevaluacion').html('Guardar <i class="fa fa-save"></i>');
+							$('#botonguardar_modal_areaevaluacion').attr('disabled', false);
+
+							// cerrar modal
+							$('#modal_reporte_areaevaluacion').modal('hide');
 						},
-						beforeSend: function()
-						{
-							// $('#tabla_reporte_definiciones tbody').html('<tr><td colspan="5"><i class="fa fa-spin fa-spinner" style="font-size: 40px!important;"></i></td></tr>');
+						beforeSend: function () {
+							$('#botonguardar_modal_areaevaluacion').html('Guardando <i class="fa fa-spin fa-spinner"></i>');
+							$('#botonguardar_modal_areaevaluacion').attr('disabled', true);
 						},
-						error: function(dato)
-						{
+						error: function (dato) {
+							// actualiza boton
+							$('#botonguardar_modal_areaevaluacion').html('Guardar <i class="fa fa-save"></i>');
+							$('#botonguardar_modal_areaevaluacion').attr('disabled', false);
+
 							// mensaje
 							swal({
 								title: "Error",
-								text: ""+dato.msj,
+								text: "" + dato.msj,
 								type: "error", // warning, error, success, info
 								buttons: {
 									visible: false, // true , false
@@ -4766,13 +4549,12 @@ $('#tabla_reporte_6_2 tbody').on('click', 'td>button.eliminar', function()
 								timer: 1500,
 								showConfirmButton: false
 							});
-
 							return false;
 						}
-					});//Fin ajax
+					}).submit();
+					return false;
 				}
-				else 
-				{
+				else {
 					// mensaje
 					swal({
 						title: "Cancelado",
@@ -4786,134 +4568,6 @@ $('#tabla_reporte_6_2 tbody').on('click', 'td>button.eliminar', function()
 					});
 				}
 			});
-		}
-		else 
-		{
-			// mensaje
-			swal({
-				title: "Cancelado",
-				text: "Acción cancelada",
-				type: "error", // warning, error, success, info
-				buttons: {
-					visible: false, // true , false
-				},
-				timer: 500,
-				showConfirmButton: false
-			});
-		}
-	});
-	return false;
-});
-
-
-$("#botonguardar_modal_areaevaluacion").click(function()
-{
-	// valida campos vacios
-	var valida = this.form.checkValidity();
-	if (valida)
-	{
-		swal({
-			title: "¡Confirme que desea guardar!",
-			text: "Área y puntos de evaluación",
-			type: "warning",
-			showCancelButton: true,
-			confirmButtonColor: "#DD6B55",
-			confirmButtonText: "Guardar!",
-			cancelButtonText: "Cancelar!",
-			closeOnConfirm: false,
-			closeOnCancel: false
-		},
-		function(isConfirm)
-		{
-			if (isConfirm)
-			{
-				// cerrar msj confirmacion
-				swal.close();
-
-				// enviar datos
-				$('#form_modal_areaevaluacion').ajaxForm({
-					dataType: 'json',
-					type: 'POST',
-					url: ''+ruta_storage_guardar,
-					data: {
-						opcion: 13,
-						proyecto_id: proyecto.id,
-						agente_id: agente_id,
-						agente_nombre: agente_nombre,
-						reporteregistro_id: reporteregistro_id,
-						catactivo_id: $("#reporte_catactivo_id").val(),
-						reporte_instalacion: $("#reporte_instalacion").val(),
-					},
-					resetForm: false,
-					success: function(dato)
-					{
-						// Actualizar ID reporte						
-						reporteregistro_id = dato.reporteregistro_id;
-
-						// Actualizar tabla
-						tabla_reporte_6_2(proyecto.id, reporteregistro_id);
-
-						// mensaje
-						swal({
-							title: "Correcto",
-							text: ""+dato.msj,
-							type: "success", // warning, error, success, info
-							buttons: {
-								visible: false, // true , false
-							},
-							timer: 1500,
-							showConfirmButton: false
-						});
-
-						// actualiza boton
-						$('#botonguardar_modal_areaevaluacion').html('Guardar <i class="fa fa-save"></i>');
-						$('#botonguardar_modal_areaevaluacion').attr('disabled', false);
-
-						// cerrar modal
-						$('#modal_reporte_areaevaluacion').modal('hide');
-					},
-					beforeSend: function()
-					{
-						$('#botonguardar_modal_areaevaluacion').html('Guardando <i class="fa fa-spin fa-spinner"></i>');
-						$('#botonguardar_modal_areaevaluacion').attr('disabled', true);
-					},
-					error: function(dato)
-					{
-						// actualiza boton
-						$('#botonguardar_modal_areaevaluacion').html('Guardar <i class="fa fa-save"></i>');
-						$('#botonguardar_modal_areaevaluacion').attr('disabled', false);
-
-						// mensaje
-						swal({
-							title: "Error",
-							text: ""+dato.msj,
-							type: "error", // warning, error, success, info
-							buttons: {
-								visible: false, // true , false
-							},
-							timer: 1500,
-							showConfirmButton: false
-						});
-						return false;
-					}
-				}).submit();
-				return false;
-			}
-			else 
-			{
-				// mensaje
-				swal({
-					title: "Cancelado",
-					text: "Acción cancelada",
-					type: "error", // warning, error, success, info
-					buttons: {
-						visible: false, // true , false
-					},
-					timer: 500,
-					showConfirmButton: false
-				});
-			}
-		});
 		return false;
 	}
 });
@@ -4923,12 +4577,10 @@ $("#botonguardar_modal_areaevaluacion").click(function()
 // METODO DE EVALUACION
 
 
-$("#botonguardar_reporte_metodoevaluacion").click(function()
-{
+$("#botonguardar_reporte_metodoevaluacion").click(function () {
 	// valida campos vacios
 	var valida = this.form.checkValidity();
-	if (valida)
-	{
+	if (valida) {
 		swal({
 			title: "¡Confirme que desea guardar!",
 			text: "Proceso y actividad principal de la instalación",
@@ -4940,95 +4592,89 @@ $("#botonguardar_reporte_metodoevaluacion").click(function()
 			closeOnConfirm: false,
 			closeOnCancel: false
 		},
-		function(isConfirm)
-		{
-			if (isConfirm)
-			{
-				// cerrar msj confirmacion
-				swal.close();
+			function (isConfirm) {
+				if (isConfirm) {
+					// cerrar msj confirmacion
+					swal.close();
 
-				// enviar datos
-				$('#form_reporte_metodoevaluacion').ajaxForm({
-					dataType: 'json',
-					type: 'POST',
-					url: ''+ruta_storage_guardar,
-					data: {
-						opcion: 14,
-						proyecto_id: proyecto.id,
-						agente_id: agente_id,
-						agente_nombre: agente_nombre,
-						reporteregistro_id: reporteregistro_id,
-						catactivo_id: $("#reporte_catactivo_id").val(),
-						reporte_instalacion: $("#reporte_instalacion").val(),
-					},
-					resetForm: false,
-					success: function(dato)
-					{
-						// Actualizar ID reporte						
-						reporteregistro_id = dato.reporteregistro_id;
+					// enviar datos
+					$('#form_reporte_metodoevaluacion').ajaxForm({
+						dataType: 'json',
+						type: 'POST',
+						url: '' + ruta_storage_guardar,
+						data: {
+							opcion: 14,
+							proyecto_id: proyecto.id,
+							agente_id: agente_id,
+							agente_nombre: agente_nombre,
+							reporteregistro_id: reporteregistro_id,
+							catactivo_id: $("#reporte_catactivo_id").val(),
+							reporte_instalacion: $("#reporte_instalacion").val(),
+						},
+						resetForm: false,
+						success: function (dato) {
+							// Actualizar ID reporte						
+							reporteregistro_id = dato.reporteregistro_id;
 
-						menureporte_estado("menureporte_6_3", 1);
+							menureporte_estado("menureporte_6_3", 1);
 
-						// tabla_reporte_revisiones(proyecto.id);
+							// tabla_reporte_revisiones(proyecto.id);
 
-						// mensaje
-						swal({
-							title: "Correcto",
-							text: ""+dato.msj,
-							type: "success", // warning, error, success, info
-							buttons: {
-								visible: false, // true , false
-							},
-							timer: 1500,
-							showConfirmButton: false
-						});
+							// mensaje
+							swal({
+								title: "Correcto",
+								text: "" + dato.msj,
+								type: "success", // warning, error, success, info
+								buttons: {
+									visible: false, // true , false
+								},
+								timer: 1500,
+								showConfirmButton: false
+							});
 
-						// actualiza boton
-						$('#botonguardar_reporte_metodoevaluacion').html('Guardar método de evaluación <i class="fa fa-save"></i>');
-						$('#botonguardar_reporte_metodoevaluacion').attr('disabled', false);
-					},
-					beforeSend: function()
-					{
-						$('#botonguardar_reporte_metodoevaluacion').html('Guardando método de evaluación <i class="fa fa-spin fa-spinner"></i>');
-						$('#botonguardar_reporte_metodoevaluacion').attr('disabled', true);
-					},
-					error: function(dato)
-					{
-						// actualiza boton
-						$('#botonguardar_reporte_metodoevaluacion').html('Guardar método de evaluación <i class="fa fa-save"></i>');
-						$('#botonguardar_reporte_metodoevaluacion').attr('disabled', false);
+							// actualiza boton
+							$('#botonguardar_reporte_metodoevaluacion').html('Guardar método de evaluación <i class="fa fa-save"></i>');
+							$('#botonguardar_reporte_metodoevaluacion').attr('disabled', false);
+						},
+						beforeSend: function () {
+							$('#botonguardar_reporte_metodoevaluacion').html('Guardando método de evaluación <i class="fa fa-spin fa-spinner"></i>');
+							$('#botonguardar_reporte_metodoevaluacion').attr('disabled', true);
+						},
+						error: function (dato) {
+							// actualiza boton
+							$('#botonguardar_reporte_metodoevaluacion').html('Guardar método de evaluación <i class="fa fa-save"></i>');
+							$('#botonguardar_reporte_metodoevaluacion').attr('disabled', false);
 
-						// mensaje
-						swal({
-							title: "Error",
-							text: ""+dato.msj,
-							type: "error", // warning, error, success, info
-							buttons: {
-								visible: false, // true , false
-							},
-							timer: 1500,
-							showConfirmButton: false
-						});
-						return false;
-					}
-				}).submit();
-				return false;
-			}
-			else 
-			{
-				// mensaje
-				swal({
-					title: "Cancelado",
-					text: "Acción cancelada",
-					type: "error", // warning, error, success, info
-					buttons: {
-						visible: false, // true , false
-					},
-					timer: 500,
-					showConfirmButton: false
-				});
-			}
-		});
+							// mensaje
+							swal({
+								title: "Error",
+								text: "" + dato.msj,
+								type: "error", // warning, error, success, info
+								buttons: {
+									visible: false, // true , false
+								},
+								timer: 1500,
+								showConfirmButton: false
+							});
+							return false;
+						}
+					}).submit();
+					return false;
+				}
+				else {
+					// mensaje
+					swal({
+						title: "Cancelado",
+						text: "Acción cancelada",
+						type: "error", // warning, error, success, info
+						buttons: {
+							visible: false, // true , false
+						},
+						timer: 500,
+						showConfirmButton: false
+					});
+				}
+			});
 		return false;
 	}
 });
@@ -5038,10 +4684,8 @@ $("#botonguardar_reporte_metodoevaluacion").click(function()
 // NIVEL SONORO CONTINUO
 
 
-$(document).ready(function()
-{
-	setTimeout(function()
-	{
+$(document).ready(function () {
+	setTimeout(function () {
 		tabla_reporte_7_1(proyecto.id, reporteregistro_id);
 	}, 7000);
 });
@@ -5049,23 +4693,19 @@ $(document).ready(function()
 
 var tabla_reporte_7_1_ejecuciones = 0;
 var datatable_reporte_7_1 = null;
-function tabla_reporte_7_1(proyecto_id, reporteregistro_id)
-{
+function tabla_reporte_7_1(proyecto_id, reporteregistro_id) {
 	// Enviar datos
 	$.ajax({
 		type: "GET",
 		dataType: "json",
-		url: "/reporteruidonivelsonorotabla/"+proyecto_id+"/"+reporteregistro_id,
-		data:{},
+		url: "/reporteruidonivelsonorotabla/" + proyecto_id + "/" + reporteregistro_id,
+		data: {},
 		cache: false,
-		success:function(dato)
-		{
+		success: function (dato) {
 			menureporte_estado("menureporte_7_1", parseInt(dato.total));
 
-			if (parseInt(dato.total) > 0)
-			{
-				if (datatable_reporte_7_1 != null)
-				{
+			if (parseInt(dato.total) > 0) {
+				if (datatable_reporte_7_1 != null) {
 					datatable_reporte_7_1.destroy();
 				}
 
@@ -5074,7 +4714,7 @@ function tabla_reporte_7_1(proyecto_id, reporteregistro_id)
 				datatable_reporte_7_1 = $('#tabla_reporte_7_1').DataTable({
 					"lengthMenu": [[50, 80, 100, -1], [50, 80, 100, "Todos"]],
 					"rowsGroup": [0, 1, 7, 8, 9], //agrupar filas
-					"order": [[ 0, "DESC" ]],
+					"order": [[0, "DESC"]],
 					"ordering": false,
 					"searching": false,
 					"processing": true,
@@ -5098,48 +4738,43 @@ function tabla_reporte_7_1(proyecto_id, reporteregistro_id)
 					}
 				});
 			}
-			else
-			{
+			else {
 				$('#tabla_reporte_7_1').html(dato.nivelsonoro_tabla);
 			}
 
 			tabla_reporte_7_1_ejecuciones = 0;
 		},
-		error: function(dato)
-		{
-			if (tabla_reporte_7_1_ejecuciones == 0)
-			{
+		error: function (dato) {
+			if (tabla_reporte_7_1_ejecuciones == 0) {
 				tabla_reporte_7_1_ejecuciones += 1;
 				tabla_reporte_7_1(proyecto_id, reporteregistro_id);
 			}
 
-			if (datatable_reporte_7_1 != null)
-			{
+			if (datatable_reporte_7_1 != null) {
 				datatable_reporte_7_1.destroy();
 			}
 
-			$("#tabla_reporte_7_1").html('<thead>'+
-		                                        '<tr>'+
-		                                            '<th width="100">No. Medición</th>'+
-		                                            '<th>Ubicación</th>'+
-		                                            '<th width="100">Periodo 1</th>'+
-		                                            '<th width="100">Periodo 2</th>'+
-		                                            '<th width="100">NSCE<sub>A, Ti</sub><br>Promedio</th>'+
-		                                        '</tr>'+
-		                                    '</thead>'+
-		                                    '<tbody>'+
-		                                        '<tr>'+
-		                                            '<td colspan="5">Error al consultar los datos</td>'+
-		                                        '</tr>'+
-		                                    '</tbody>');
+			$("#tabla_reporte_7_1").html('<thead>' +
+				'<tr>' +
+				'<th width="100">No. Medición</th>' +
+				'<th>Ubicación</th>' +
+				'<th width="100">Periodo 1</th>' +
+				'<th width="100">Periodo 2</th>' +
+				'<th width="100">NSCE<sub>A, Ti</sub><br>Promedio</th>' +
+				'</tr>' +
+				'</thead>' +
+				'<tbody>' +
+				'<tr>' +
+				'<td colspan="5">Error al consultar los datos</td>' +
+				'</tr>' +
+				'</tbody>');
 		}
 	});//Fin ajax
 }
 
 
-$("#boton_reporte_nuevonivelsonoro").click(function()
-{
-	$('#form_modal_nivelsonoro').each(function(){
+$("#boton_reporte_nuevonivelsonoro").click(function () {
+	$('#form_modal_nivelsonoro').each(function () {
 		this.reset();
 	});
 
@@ -5161,14 +4796,12 @@ $("#boton_reporte_nuevonivelsonoro").click(function()
 	$('#modal_reporte_nivelsonoro .modal-title').html('Punto de medición de nivel sonoro continuo');
 
 	// mostrar modal
-	$('#modal_reporte_nivelsonoro').modal({backdrop:false});
+	$('#modal_reporte_nivelsonoro').modal({ backdrop: false });
 });
 
 
-$("#boton_totalnivelsonoro").click(function()
-{
-	if (parseInt($('#reporteruidonivelsonoro_totalperiodos').val()) > 0 && parseInt($('#reporteruidonivelsonoro_totalresultados').val()) > 0)
-	{		
+$("#boton_totalnivelsonoro").click(function () {
+	if (parseInt($('#reporteruidonivelsonoro_totalperiodos').val()) > 0 && parseInt($('#reporteruidonivelsonoro_totalresultados').val()) > 0) {
 		$('#tabla_nivelsonoro > tbody').html('');
 
 		var periodo1_estado = 'disabled';
@@ -5177,44 +4810,39 @@ $("#boton_totalnivelsonoro").click(function()
 		var periodo4_estado = 'disabled';
 		var periodo5_estado = 'disabled';
 
-		if (parseInt($('#reporteruidonivelsonoro_totalperiodos').val()) >= 1){periodo1_estado = 'required';}
-		if (parseInt($('#reporteruidonivelsonoro_totalperiodos').val()) >= 2){periodo2_estado = 'required';}
-		if (parseInt($('#reporteruidonivelsonoro_totalperiodos').val()) >= 3){periodo3_estado = 'required';}
-		if (parseInt($('#reporteruidonivelsonoro_totalperiodos').val()) >= 4){periodo4_estado = 'required';}
-		if (parseInt($('#reporteruidonivelsonoro_totalperiodos').val()) >= 5){periodo5_estado = 'required';}
+		if (parseInt($('#reporteruidonivelsonoro_totalperiodos').val()) >= 1) { periodo1_estado = 'required'; }
+		if (parseInt($('#reporteruidonivelsonoro_totalperiodos').val()) >= 2) { periodo2_estado = 'required'; }
+		if (parseInt($('#reporteruidonivelsonoro_totalperiodos').val()) >= 3) { periodo3_estado = 'required'; }
+		if (parseInt($('#reporteruidonivelsonoro_totalperiodos').val()) >= 4) { periodo4_estado = 'required'; }
+		if (parseInt($('#reporteruidonivelsonoro_totalperiodos').val()) >= 5) { periodo5_estado = 'required'; }
 
-		for (var i = 0; i < parseInt($('#reporteruidonivelsonoro_totalresultados').val()); i++)
-		{
-			$('#tabla_nivelsonoro > tbody').append('<tr>'+
-                                                        '<td width="60">'+(i + 1)+'</td>'+
-                                                        '<td><input type="number" step="any" min="0" class="form-control nivel_sonoro_campo" name="reporteruidonivelsonoro_periodo1[]" value="" '+periodo1_estado+'></td>'+
-                                                        '<td><input type="number" step="any" min="0" class="form-control" name="reporteruidonivelsonoro_periodo2[]" value="" '+periodo2_estado+'></td>'+
-                                                        '<td><input type="number" step="any" min="0" class="form-control" name="reporteruidonivelsonoro_periodo3[]" value="" '+periodo3_estado+'></td>'+
-                                                        '<td><input type="number" step="any" min="0" class="form-control" name="reporteruidonivelsonoro_periodo4[]" value="" '+periodo4_estado+'></td>'+
-                                                        '<td><input type="number" step="any" min="0" class="form-control" name="reporteruidonivelsonoro_periodo5[]" value="" '+periodo5_estado+'></td>'+
-                                                    '</tr>');
+		for (var i = 0; i < parseInt($('#reporteruidonivelsonoro_totalresultados').val()); i++) {
+			$('#tabla_nivelsonoro > tbody').append('<tr>' +
+				'<td width="60">' + (i + 1) + '</td>' +
+				'<td><input type="number" step="any" min="0" class="form-control nivel_sonoro_campo" name="reporteruidonivelsonoro_periodo1[]" value="" ' + periodo1_estado + '></td>' +
+				'<td><input type="number" step="any" min="0" class="form-control" name="reporteruidonivelsonoro_periodo2[]" value="" ' + periodo2_estado + '></td>' +
+				'<td><input type="number" step="any" min="0" class="form-control" name="reporteruidonivelsonoro_periodo3[]" value="" ' + periodo3_estado + '></td>' +
+				'<td><input type="number" step="any" min="0" class="form-control" name="reporteruidonivelsonoro_periodo4[]" value="" ' + periodo4_estado + '></td>' +
+				'<td><input type="number" step="any" min="0" class="form-control" name="reporteruidonivelsonoro_periodo5[]" value="" ' + periodo5_estado + '></td>' +
+				'</tr>');
 		}
 	}
-	else
-	{
+	else {
 		alert('El campo "Total periodos" y "Total resultados" debe contener un valor mayor a 0');
 
-		if ($('#reporteruidonivelsonoro_totalresultados').val() == "")
-		{
+		if ($('#reporteruidonivelsonoro_totalresultados').val() == "") {
 			$('#reporteruidonivelsonoro_totalresultados').focus();
 		}
 
-		if ($('#reporteruidonivelsonoro_totalperiodos').val() == "")
-		{
+		if ($('#reporteruidonivelsonoro_totalperiodos').val() == "") {
 			$('#reporteruidonivelsonoro_totalperiodos').focus();
 		}
 	}
 });
 
 
-function nivelsonoro_editar(proyecto_id, reporteregistro_id, nivelsonoro_punto)
-{
-	$('#form_modal_nivelsonoro').each(function(){
+function nivelsonoro_editar(proyecto_id, reporteregistro_id, nivelsonoro_punto) {
+	$('#form_modal_nivelsonoro').each(function () {
 		this.reset();
 	});
 
@@ -5225,11 +4853,10 @@ function nivelsonoro_editar(proyecto_id, reporteregistro_id, nivelsonoro_punto)
 	$.ajax({
 		type: "GET",
 		dataType: "json",
-		url: "/reporteruidonivelsonoroconsultapunto/"+proyecto_id+"/"+reporteregistro_id+"/"+nivelsonoro_punto,
-		data:{},
+		url: "/reporteruidonivelsonoroconsultapunto/" + proyecto_id + "/" + reporteregistro_id + "/" + nivelsonoro_punto,
+		data: {},
 		cache: false,
-		success:function(dato)
-		{
+		success: function (dato) {
 			// Campos Hidden
 			$('#reportenivelsonoro_punto').val(dato.nivelsonororesultados[0]);
 
@@ -5248,12 +4875,10 @@ function nivelsonoro_editar(proyecto_id, reporteregistro_id, nivelsonoro_punto)
 			// Tabla resultados
 			$('#tabla_nivelsonoro > tbody').html(dato.nivelsonororesultados_tablafilas);
 		},
-		beforeSend: function()
-		{
+		beforeSend: function () {
 			$('#tabla_nivelsonoro > tbody').html('<tr><td colspan="6"><i class="fa fa-spin fa-spinner" style="font-size: 40px!important;"></i></td></tr>');
 		},
-		error: function(dato)
-		{
+		error: function (dato) {
 			$('#tabla_nivelsonoro > tbody').html('<tr><td colspan="6">Error al consultar los datos</td></tr>');
 		}
 	});//Fin ajax
@@ -5262,15 +4887,14 @@ function nivelsonoro_editar(proyecto_id, reporteregistro_id, nivelsonoro_punto)
 	$('#modal_reporte_nivelsonoro .modal-title').html('Punto de medición de nivel sonoro continuo');
 
 	// mostrar modal
-	$('#modal_reporte_nivelsonoro').modal({backdrop:false});
+	$('#modal_reporte_nivelsonoro').modal({ backdrop: false });
 }
 
 
-function nivelsonoro_eliminar(proyecto_id, reporteregistro_id, nivelsonoro_punto)
-{
+function nivelsonoro_eliminar(proyecto_id, reporteregistro_id, nivelsonoro_punto) {
 	swal({
 		title: "¡Confirme que desea eliminar!",
-		text: "Punto ["+nivelsonoro_punto+"] de medición de nivel sonoro continuo",
+		text: "Punto [" + nivelsonoro_punto + "] de medición de nivel sonoro continuo",
 		type: "warning",
 		showCancelButton: true,
 		confirmButtonColor: "#DD6B55",
@@ -5279,124 +4903,111 @@ function nivelsonoro_eliminar(proyecto_id, reporteregistro_id, nivelsonoro_punto
 		closeOnConfirm: false,
 		closeOnCancel: false
 	},
-	function(isConfirm)
-	{
-		if (isConfirm)
-		{
-			swal({
-				title: "¡Por seguridad confirme nuevamente que desea eliminar!",
-				text: "Punto ["+nivelsonoro_punto+"] de medición de nivel sonoro continuo",
-				type: "warning",
-				showCancelButton: true,
-				confirmButtonColor: "#DD6B55",
-				confirmButtonText: "Eliminar!",
-				cancelButtonText: "Cancelar!",
-				closeOnConfirm: false,
-				closeOnCancel: false
-			},
-			function(isConfirm)
-			{
-				if (isConfirm)
-				{
-					// cerrar msj confirmacion
-					swal.close();
+		function (isConfirm) {
+			if (isConfirm) {
+				swal({
+					title: "¡Por seguridad confirme nuevamente que desea eliminar!",
+					text: "Punto [" + nivelsonoro_punto + "] de medición de nivel sonoro continuo",
+					type: "warning",
+					showCancelButton: true,
+					confirmButtonColor: "#DD6B55",
+					confirmButtonText: "Eliminar!",
+					cancelButtonText: "Cancelar!",
+					closeOnConfirm: false,
+					closeOnCancel: false
+				},
+					function (isConfirm) {
+						if (isConfirm) {
+							// cerrar msj confirmacion
+							swal.close();
 
-					$.ajax({
-						type: "GET",
-						dataType: "json",
-						url: "/reporteruidonivelsonoroeliminar/"+proyecto_id+"/"+reporteregistro_id+"/"+nivelsonoro_punto,
-						data:{},
-						cache: false,
-						success:function(dato)
-						{
-							// Actualizar tabla
-							tabla_reporte_7_1(proyecto_id, reporteregistro_id);
+							$.ajax({
+								type: "GET",
+								dataType: "json",
+								url: "/reporteruidonivelsonoroeliminar/" + proyecto_id + "/" + reporteregistro_id + "/" + nivelsonoro_punto,
+								data: {},
+								cache: false,
+								success: function (dato) {
+									// Actualizar tabla
+									tabla_reporte_7_1(proyecto_id, reporteregistro_id);
 
-							// mensaje
-							swal({
-								title: "Correcto",
-								text: ""+dato.msj,
-								type: "success", // warning, error, success, info
-								buttons: {
-									visible: false, // true , false
+									// mensaje
+									swal({
+										title: "Correcto",
+										text: "" + dato.msj,
+										type: "success", // warning, error, success, info
+										buttons: {
+											visible: false, // true , false
+										},
+										timer: 1500,
+										showConfirmButton: false
+									});
 								},
-								timer: 1500,
-								showConfirmButton: false
-							});
-						},
-						beforeSend: function()
-						{
-							// $('#tabla_reporte_definiciones tbody').html('<tr><td colspan="5"><i class="fa fa-spin fa-spinner" style="font-size: 40px!important;"></i></td></tr>');
-						},
-						error: function(dato)
-						{
+								beforeSend: function () {
+									// $('#tabla_reporte_definiciones tbody').html('<tr><td colspan="5"><i class="fa fa-spin fa-spinner" style="font-size: 40px!important;"></i></td></tr>');
+								},
+								error: function (dato) {
+									// mensaje
+									swal({
+										title: "Error",
+										text: "" + dato.msj,
+										type: "error", // warning, error, success, info
+										buttons: {
+											visible: false, // true , false
+										},
+										timer: 1500,
+										showConfirmButton: false
+									});
+
+									return false;
+								}
+							});//Fin ajax
+						}
+						else {
 							// mensaje
 							swal({
-								title: "Error",
-								text: ""+dato.msj,
+								title: "Cancelado",
+								text: "Acción cancelada",
 								type: "error", // warning, error, success, info
 								buttons: {
 									visible: false, // true , false
 								},
-								timer: 1500,
+								timer: 500,
 								showConfirmButton: false
 							});
-
-							return false;
 						}
-					});//Fin ajax
-				}
-				else 
-				{
-					// mensaje
-					swal({
-						title: "Cancelado",
-						text: "Acción cancelada",
-						type: "error", // warning, error, success, info
-						buttons: {
-							visible: false, // true , false
-						},
-						timer: 500,
-						showConfirmButton: false
 					});
-				}
-			});
-		}
-		else 
-		{
-			// mensaje
-			swal({
-				title: "Cancelado",
-				text: "Acción cancelada",
-				type: "error", // warning, error, success, info
-				buttons: {
-					visible: false, // true , false
-				},
-				timer: 500,
-				showConfirmButton: false
-			});
-		}
-	});
+			}
+			else {
+				// mensaje
+				swal({
+					title: "Cancelado",
+					text: "Acción cancelada",
+					type: "error", // warning, error, success, info
+					buttons: {
+						visible: false, // true , false
+					},
+					timer: 500,
+					showConfirmButton: false
+				});
+			}
+		});
 	return false;
 }
 
 
-$("#botonguardar_modal_nivelsonoro").click(function()
-{
+$("#botonguardar_modal_nivelsonoro").click(function () {
 	// valida campos vacios
 	var total_campos = 0;
-	$('.nivel_sonoro_campo').each(function()
-	{
+	$('.nivel_sonoro_campo').each(function () {
 		total_campos += 1;
 	});
 
 
-	if (total_campos > 0)
-	{
+	if (total_campos > 0) {
 		// valida campos vacios
 		var valida = this.form.checkValidity();
-		if (valida)
-		{
+		if (valida) {
 			swal({
 				title: "¡Confirme que desea guardar!",
 				text: "Punto de medición y resultados del nivel sonoro continuo",
@@ -5408,101 +5019,94 @@ $("#botonguardar_modal_nivelsonoro").click(function()
 				closeOnConfirm: false,
 				closeOnCancel: false
 			},
-			function(isConfirm)
-			{
-				if (isConfirm)
-				{
-					// cerrar msj confirmacion
-					swal.close();
+				function (isConfirm) {
+					if (isConfirm) {
+						// cerrar msj confirmacion
+						swal.close();
 
-					// enviar datos
-					$('#form_modal_nivelsonoro').ajaxForm({
-						dataType: 'json',
-						type: 'POST',
-						url: ''+ruta_storage_guardar,
-						data: {
-							opcion: 15,
-							proyecto_id: proyecto.id,
-							agente_id: agente_id,
-							agente_nombre: agente_nombre,
-							reporteregistro_id: reporteregistro_id,
-							catactivo_id: $("#reporte_catactivo_id").val(),
-							reporte_instalacion: $("#reporte_instalacion").val(),
-						},
-						resetForm: false,
-						success: function(dato)
-						{
-							// Actualizar ID reporte						
-							reporteregistro_id = dato.reporteregistro_id;
+						// enviar datos
+						$('#form_modal_nivelsonoro').ajaxForm({
+							dataType: 'json',
+							type: 'POST',
+							url: '' + ruta_storage_guardar,
+							data: {
+								opcion: 15,
+								proyecto_id: proyecto.id,
+								agente_id: agente_id,
+								agente_nombre: agente_nombre,
+								reporteregistro_id: reporteregistro_id,
+								catactivo_id: $("#reporte_catactivo_id").val(),
+								reporte_instalacion: $("#reporte_instalacion").val(),
+							},
+							resetForm: false,
+							success: function (dato) {
+								// Actualizar ID reporte						
+								reporteregistro_id = dato.reporteregistro_id;
 
-							tabla_reporte_7_1(proyecto.id, reporteregistro_id);
+								tabla_reporte_7_1(proyecto.id, reporteregistro_id);
 
-							// mensaje
-							swal({
-								title: "Correcto",
-								text: ""+dato.msj,
-								type: "success", // warning, error, success, info
-								buttons: {
-									visible: false, // true , false
-								},
-								timer: 1500,
-								showConfirmButton: false
-							});
+								// mensaje
+								swal({
+									title: "Correcto",
+									text: "" + dato.msj,
+									type: "success", // warning, error, success, info
+									buttons: {
+										visible: false, // true , false
+									},
+									timer: 1500,
+									showConfirmButton: false
+								});
 
-							// actualiza boton
-							$('#botonguardar_modal_nivelsonoro').html('Guardar <i class="fa fa-save"></i>');
-							$('#botonguardar_modal_nivelsonoro').attr('disabled', false);
+								// actualiza boton
+								$('#botonguardar_modal_nivelsonoro').html('Guardar <i class="fa fa-save"></i>');
+								$('#botonguardar_modal_nivelsonoro').attr('disabled', false);
 
-							// cerrar modal
-							$('#modal_reporte_nivelsonoro').modal('hide');
-						},
-						beforeSend: function()
-						{
-							$('#botonguardar_modal_nivelsonoro').html('Guardando <i class="fa fa-spin fa-spinner"></i>');
-							$('#botonguardar_modal_nivelsonoro').attr('disabled', true);
-						},
-						error: function(dato)
-						{
-							// actualiza boton
-							$('#botonguardar_modal_nivelsonoro').html('Guardar <i class="fa fa-save"></i>');
-							$('#botonguardar_modal_nivelsonoro').attr('disabled', false);
+								// cerrar modal
+								$('#modal_reporte_nivelsonoro').modal('hide');
+							},
+							beforeSend: function () {
+								$('#botonguardar_modal_nivelsonoro').html('Guardando <i class="fa fa-spin fa-spinner"></i>');
+								$('#botonguardar_modal_nivelsonoro').attr('disabled', true);
+							},
+							error: function (dato) {
+								// actualiza boton
+								$('#botonguardar_modal_nivelsonoro').html('Guardar <i class="fa fa-save"></i>');
+								$('#botonguardar_modal_nivelsonoro').attr('disabled', false);
 
-							// mensaje
-							swal({
-								title: "Error",
-								text: ""+dato.msj,
-								type: "error", // warning, error, success, info
-								buttons: {
-									visible: false, // true , false
-								},
-								timer: 1500,
-								showConfirmButton: false
-							});
-							return false;
-						}
-					}).submit();
-					return false;
-				}
-				else 
-				{
-					// mensaje
-					swal({
-						title: "Cancelado",
-						text: "Acción cancelada",
-						type: "error", // warning, error, success, info
-						buttons: {
-							visible: false, // true , false
-						},
-						timer: 500,
-						showConfirmButton: false
-					});
-				}
-			});
+								// mensaje
+								swal({
+									title: "Error",
+									text: "" + dato.msj,
+									type: "error", // warning, error, success, info
+									buttons: {
+										visible: false, // true , false
+									},
+									timer: 1500,
+									showConfirmButton: false
+								});
+								return false;
+							}
+						}).submit();
+						return false;
+					}
+					else {
+						// mensaje
+						swal({
+							title: "Cancelado",
+							text: "Acción cancelada",
+							type: "error", // warning, error, success, info
+							buttons: {
+								visible: false, // true , false
+							},
+							timer: 500,
+							showConfirmButton: false
+						});
+					}
+				});
 			return false;
 		}
 	}
-	else
-	{
+	else {
 		$('#boton_totalnivelsonoro').click();
 		return false;
 	}
@@ -5516,29 +5120,23 @@ $("#botonguardar_modal_nivelsonoro").click(function()
 var selectcategorias = '';
 
 
-$(document).ready(function()
-{
-	setTimeout(function()
-	{
+$(document).ready(function () {
+	setTimeout(function () {
 		tabla_reporte_7_2(proyecto.id, reporteregistro_id);
 	}, 7500);
 });
 
 
 var datatable_reporte_7_2 = null;
-function tabla_reporte_7_2(proyecto_id, reporteregistro_id)
-{
-	try 
-	{
-		var ruta = "/reporteruidopuntonertabla/"+proyecto_id+"/"+reporteregistro_id+"/"+areas_poe;
+function tabla_reporte_7_2(proyecto_id, reporteregistro_id) {
+	try {
+		var ruta = "/reporteruidopuntonertabla/" + proyecto_id + "/" + reporteregistro_id + "/" + areas_poe;
 
-		if (datatable_reporte_7_2 != null)
-		{
+		if (datatable_reporte_7_2 != null) {
 			datatable_reporte_7_2.clear().draw();
 			datatable_reporte_7_2.ajax.url(ruta).load();
 		}
-		else
-		{
+		else {
 			var numeroejecucion = 1;
 			datatable_reporte_7_2 = $('#tabla_reporte_7_2').DataTable({
 				ajax: {
@@ -5547,17 +5145,14 @@ function tabla_reporte_7_2(proyecto_id, reporteregistro_id)
 					cache: false,
 					dataType: "json",
 					data: {},
-					dataSrc: function (json)
-					{
+					dataSrc: function (json) {
 						menureporte_estado("menureporte_7_2", parseInt(json.total));
 
 						return json.data;
 					},
-					error: function (xhr, error, code)
-					{						
-						console.log('error en datatable_reporte_7_2 '+code);
-						if (numeroejecucion <= 1)
-						{
+					error: function (xhr, error, code) {
+						console.log('error en datatable_reporte_7_2 ' + code);
+						if (numeroejecucion <= 1) {
 							tabla_reporte_7_2(proyecto_id, reporteregistro_id)
 							numeroejecucion += 1;
 						}
@@ -5643,18 +5238,15 @@ function tabla_reporte_7_2(proyecto_id, reporteregistro_id)
 						previous: "Anterior"
 					}
 				},
-				rowCallback: function(row, data, index)
-				{
+				rowCallback: function (row, data, index) {
 					// console.log(index+' - '+data.reporteiluminacionpuntos_nopunto);
 					$(row).find('td:eq(7)').css('background', data.resultadoner_color);
 
-					if(data.resultadoner == 1)
-					{
+					if (data.resultadoner == 1) {
 						$(row).find('td:eq(7)').css('color', '#000000');
 						$(row).find('td:eq(7)').css('font-weight', 'bold');
 					}
-					else
-					{
+					else {
 						$(row).find('td:eq(7)').css('color', '#FFFFFF');
 						$(row).find('td:eq(7)').css('font-weight', 'bold');
 					}
@@ -5663,15 +5255,13 @@ function tabla_reporte_7_2(proyecto_id, reporteregistro_id)
 		}
 
 		// Tooltip en DataTable
-		datatable_reporte_7_2.on('draw', function ()
-		{
+		datatable_reporte_7_2.on('draw', function () {
 			$('[data-toggle="tooltip"]').tooltip();
 		});
 	}
-	catch (exception)
-	{
+	catch (exception) {
 		tabla_reporte_7_2(proyecto_id, reporteregistro_id);
-    }
+	}
 }
 
 
@@ -5679,7 +5269,7 @@ $("#boton_reporte_nuevopuntoner").click(function (e) {
 
 	valor = $('#reporteruido_lmpe').val();
 
-	if (valor == '') { 
+	if (valor == '') {
 
 		e.preventDefault()
 		swal({
@@ -5690,159 +5280,150 @@ $("#boton_reporte_nuevopuntoner").click(function (e) {
 		});
 
 	} else {
-		
-		$('#form_modal_puntoner').each(function(){
+
+		$('#form_modal_puntoner').each(function () {
 			this.reset();
 		});
-	
+
 		// Campos Hidden
 		$('#puntoner_id').val(0);
-	
+
 		// LLenar campos
 		$('#reporteruidopuntoner_lmpe').val(valor);
-	
+
 		// Campo ubicaciones
 		$('#reporteruidopuntoner_ubicacion').html(ubicaciones_opciones);
-	
+
 		// Campo select areas
 		$('#reporteruidopuntoner_areaid').html(selectareas);
 		mostrar_categoriasarea_puntoner(0, 0);
-	
+
 		// Campo select categorias
 		$('#puntoner_categorias').html('');
-	
+
 		// Titulo del modal
 		$('#modal_reporte_puntoner .modal-title').html('Punto de resultado de la determinación del NER');
-	
+
 		// mostrar modal
 		$('#modal_reporte_puntoner').modal({ backdrop: false });
-		
+
 	}
 
 });
 
 
-function mostrar_categoriasarea_puntoner(area_id, puntoner_id)
-{
-	if (parseInt(area_id) > 0)
-	{
+function mostrar_categoriasarea_puntoner(area_id, puntoner_id) {
+	if (parseInt(area_id) > 0) {
 		$('#boton_puntoner_nuevacategoria').attr('disabled', false);
 
 		$.ajax({
 			type: "GET",
 			dataType: "json",
-			url: "/reporteruidopuntonerareacategorias/"+proyecto.id+"/"+reporteregistro_id+"/"+area_id+"/"+puntoner_id+"/"+areas_poe,
-			data:{},
+			url: "/reporteruidopuntonerareacategorias/" + proyecto.id + "/" + reporteregistro_id + "/" + area_id + "/" + puntoner_id + "/" + areas_poe,
+			data: {},
 			cache: false,
-			success:function(dato)
-			{
+			success: function (dato) {
 				selectcategorias = dato.selectareacategorias_opciones;
 				$('#tabla_puntoner_areacategorias > tbody').html(dato.categorias_puntoner);
 				$('[data-toggle="tooltip"]').tooltip();
 			},
-			beforeSend: function()
-			{
+			beforeSend: function () {
 				$('#tabla_puntoner_areacategorias > tbody').html('<tr><td colspan="6"><i class="fa fa-spin fa-spinner" style="font-size: 40px!important;"></i></td></tr>');
 			},
-			error: function(dato)
-			{
+			error: function (dato) {
 				selectcategorias = '<option value=""></option>';
 				$('#tabla_puntoner_areacategorias > tbody').html('<tr><td colspan="6">Error al consultar las categorías, intentelo de nuevo.</td></tr>');
 				return false;
 			}
 		});//Fin ajax
 	}
-	else
-	{
+	else {
 		$('#boton_puntoner_nuevacategoria').attr('disabled', true);
 		$('#tabla_puntoner_areacategorias > tbody').html('');
 	}
 }
 
 
-$("#boton_puntoner_nuevacategoria").click(function() // Agregar fila categoria
+$("#boton_puntoner_nuevacategoria").click(function () // Agregar fila categoria
 {
-	$('#tabla_puntoner_areacategorias > tbody').append('<tr>'+
-															'<td width="319">'+
-																'<select class="custom-select form-control" name="reporteruidocategoria_id[]" required>'+
-                                                    				selectcategorias+
-                                                    			'</select>'+
-															'</td>'+
-															'<td width="100"><input type="number" min="1" class="form-control" name="reporteruidopuntonercategorias_total[]" value="" required></td>'+
-				                                            '<td width="100"><input type="number" min="1" class="form-control" name="reporteruidopuntonercategorias_geo[]" value="" required></td>'+
-				                                            '<td width="120"><input type="text" class="form-control" name="reporteruidopuntonercategorias_ficha[]" value="" required></td>'+
-				                                            '<td><input type="text" class="form-control" name="reporteruidopuntonercategorias_nombre[]" value="" required></td>'+
-															'<td width="60"><button type="button" class="btn btn-danger waves-effect btn-circle eliminar"><i class="fa fa-trash fa-2x"></i></button></td>'+
-														'</tr>');
+	$('#tabla_puntoner_areacategorias > tbody').append('<tr>' +
+		'<td width="319">' +
+		'<select class="custom-select form-control" name="reporteruidocategoria_id[]" required>' +
+		selectcategorias +
+		'</select>' +
+		'</td>' +
+		'<td width="100"><input type="number" min="1" class="form-control" name="reporteruidopuntonercategorias_total[]" value="" required></td>' +
+		'<td width="100"><input type="number" min="1" class="form-control" name="reporteruidopuntonercategorias_geo[]" value="" required></td>' +
+		'<td width="120"><input type="text" class="form-control" name="reporteruidopuntonercategorias_ficha[]" value="" required></td>' +
+		'<td><input type="text" class="form-control" name="reporteruidopuntonercategorias_nombre[]" value="" required></td>' +
+		'<td width="60"><button type="button" class="btn btn-danger waves-effect btn-circle eliminar"><i class="fa fa-trash fa-2x"></i></button></td>' +
+		'</tr>');
 
-    // desplazar a la ultima fila de la tabla
-    $('#divtabla_puntoner_areacategorias').animate({
-    	scrollTop: $('#tabla_puntoner_areacategorias > tbody > tr:last').position().top //ultima fila
-    }, 500);
+	// desplazar a la ultima fila de la tabla
+	$('#divtabla_puntoner_areacategorias').animate({
+		scrollTop: $('#tabla_puntoner_areacategorias > tbody > tr:last').position().top //ultima fila
+	}, 500);
 });
 
 
-$('#tabla_puntoner_areacategorias tbody').on('click', 'td>button.eliminar', function() // Eliminar fila categoría
+$('#tabla_puntoner_areacategorias tbody').on('click', 'td>button.eliminar', function () // Eliminar fila categoría
 {
-    // obtener fila tabla
-    var fila = $(this);
-    
-    // confirmar
-    swal({   
-        title: "¿Eliminar registro?",   
-        text: "Quitar de la lista",   
-        type: "warning",   
-        showCancelButton: true,   
-        confirmButtonColor: "#DD6B55",   
-        confirmButtonText: "Eliminar!",   
-        cancelButtonText: "Cancelar!",   
-        closeOnConfirm: false,   
-        closeOnCancel: false 
-    }, function(isConfirm){   
-        if (isConfirm)
-        {
-        	// cerrar msj confirmacion
+	// obtener fila tabla
+	var fila = $(this);
+
+	// confirmar
+	swal({
+		title: "¿Eliminar registro?",
+		text: "Quitar de la lista",
+		type: "warning",
+		showCancelButton: true,
+		confirmButtonColor: "#DD6B55",
+		confirmButtonText: "Eliminar!",
+		cancelButtonText: "Cancelar!",
+		closeOnConfirm: false,
+		closeOnCancel: false
+	}, function (isConfirm) {
+		if (isConfirm) {
+			// cerrar msj confirmacion
 			swal.close();
 
-            var tr = fila.closest('tr');
-            fila.closest("tr").remove(); // eliminar fila TR
+			var tr = fila.closest('tr');
+			fila.closest("tr").remove(); // eliminar fila TR
 
-            // mensaje
-            swal({
-                title: "Correcto",
-                 text: "Registro eliminado de la lista",
-                type: "success", // warning, error, success, info
-                buttons: {
-                    visible: false, // true , false
-                },
-                timer: 1000,
-                showConfirmButton: false
-            });
-        }
-        else 
-        {
-            // mensaje
-            swal({
-                title: "Cancelado",
-                text: "",
-                type: "error", // warning, error, success, info
-                buttons: {
-                    visible: false, // true , false
-                },
-                timer: 500,
-                showConfirmButton: false
-            });   
-        } 
-    });
+			// mensaje
+			swal({
+				title: "Correcto",
+				text: "Registro eliminado de la lista",
+				type: "success", // warning, error, success, info
+				buttons: {
+					visible: false, // true , false
+				},
+				timer: 1000,
+				showConfirmButton: false
+			});
+		}
+		else {
+			// mensaje
+			swal({
+				title: "Cancelado",
+				text: "",
+				type: "error", // warning, error, success, info
+				buttons: {
+					visible: false, // true , false
+				},
+				timer: 500,
+				showConfirmButton: false
+			});
+		}
+	});
 });
 
 
-$('#tabla_reporte_7_2 tbody').on('click', 'td.editar', function()
-{
+$('#tabla_reporte_7_2 tbody').on('click', 'td.editar', function () {
 	var tr = $(this).closest('tr');
 	var row = datatable_reporte_7_2.row(tr);
 
-	$('#form_modal_puntoner').each(function(){
+	$('#form_modal_puntoner').each(function () {
 		this.reset();
 	});
 
@@ -5869,18 +5450,17 @@ $('#tabla_reporte_7_2 tbody').on('click', 'td.editar', function()
 	$('#modal_reporte_puntoner .modal-title').html('Punto de resultado de la determinación del NER');
 
 	// mostrar modal
-	$('#modal_reporte_puntoner').modal({backdrop:false});
+	$('#modal_reporte_puntoner').modal({ backdrop: false });
 });
 
 
-$('#tabla_reporte_7_2 tbody').on('click', 'td>button.eliminar', function()
-{
+$('#tabla_reporte_7_2 tbody').on('click', 'td>button.eliminar', function () {
 	var tr = $(this).closest('tr');
 	var row = datatable_reporte_7_2.row(tr);
 
 	swal({
 		title: "¡Confirme que desea eliminar!",
-		text: "Punto ["+row.data().reporteruidopuntoner_punto+"] de resultado de la determinación del NER",
+		text: "Punto [" + row.data().reporteruidopuntoner_punto + "] de resultado de la determinación del NER",
 		type: "warning",
 		showCancelButton: true,
 		confirmButtonColor: "#DD6B55",
@@ -5889,219 +5469,90 @@ $('#tabla_reporte_7_2 tbody').on('click', 'td>button.eliminar', function()
 		closeOnConfirm: false,
 		closeOnCancel: false
 	},
-	function(isConfirm)
-	{
-		if (isConfirm)
-		{
-			swal({
-				title: "¡Por seguridad confirme nuevamente que desea eliminar!",
-				text: "Punto ["+row.data().reporteruidopuntoner_punto+"] de resultado de la determinación del NER",
-				type: "warning",
-				showCancelButton: true,
-				confirmButtonColor: "#DD6B55",
-				confirmButtonText: "Eliminar!",
-				cancelButtonText: "Cancelar!",
-				closeOnConfirm: false,
-				closeOnCancel: false
-			},
-			function(isConfirm)
-			{
-				if (isConfirm)
-				{
-					// cerrar msj confirmacion
-					swal.close();
+		function (isConfirm) {
+			if (isConfirm) {
+				swal({
+					title: "¡Por seguridad confirme nuevamente que desea eliminar!",
+					text: "Punto [" + row.data().reporteruidopuntoner_punto + "] de resultado de la determinación del NER",
+					type: "warning",
+					showCancelButton: true,
+					confirmButtonColor: "#DD6B55",
+					confirmButtonText: "Eliminar!",
+					cancelButtonText: "Cancelar!",
+					closeOnConfirm: false,
+					closeOnCancel: false
+				},
+					function (isConfirm) {
+						if (isConfirm) {
+							// cerrar msj confirmacion
+							swal.close();
 
-					$.ajax({
-						type: "GET",
-						dataType: "json",
-						url: "/reporteruidopuntonereliminar/"+row.data().id,
-						data:{},
-						cache: false,
-						success:function(dato)
-						{
-							// Actualizar tabla
-							tabla_reporte_7_2(proyecto.id, reporteregistro_id);
+							$.ajax({
+								type: "GET",
+								dataType: "json",
+								url: "/reporteruidopuntonereliminar/" + row.data().id,
+								data: {},
+								cache: false,
+								success: function (dato) {
+									// Actualizar tabla
+									tabla_reporte_7_2(proyecto.id, reporteregistro_id);
 
-							// tabla_reporte_7_5(proyecto.id, reporteregistro_id);
+									// tabla_reporte_7_5(proyecto.id, reporteregistro_id);
 
-							tabla_reporte_7_6(proyecto.id, reporteregistro_id);
+									tabla_reporte_7_6(proyecto.id, reporteregistro_id);
 
-							tabla_reporte_7_7(proyecto.id, reporteregistro_id); // Matriz de exposicion
+									tabla_reporte_7_7(proyecto.id, reporteregistro_id); // Matriz de exposicion
 
-							reporte_dashboard(proyecto.id, reporteregistro_id);
+									reporte_dashboard(proyecto.id, reporteregistro_id);
 
-							// mensaje
-							swal({
-								title: "Correcto",
-								text: ""+dato.msj,
-								type: "success", // warning, error, success, info
-								buttons: {
-									visible: false, // true , false
+									// mensaje
+									swal({
+										title: "Correcto",
+										text: "" + dato.msj,
+										type: "success", // warning, error, success, info
+										buttons: {
+											visible: false, // true , false
+										},
+										timer: 1500,
+										showConfirmButton: false
+									});
 								},
-								timer: 1500,
-								showConfirmButton: false
-							});
-						},
-						beforeSend: function()
-						{
-							// $('#tabla_reporte_definiciones tbody').html('<tr><td colspan="5"><i class="fa fa-spin fa-spinner" style="font-size: 40px!important;"></i></td></tr>');
-						},
-						error: function(dato)
-						{
+								beforeSend: function () {
+									// $('#tabla_reporte_definiciones tbody').html('<tr><td colspan="5"><i class="fa fa-spin fa-spinner" style="font-size: 40px!important;"></i></td></tr>');
+								},
+								error: function (dato) {
+									// mensaje
+									swal({
+										title: "Error",
+										text: "" + dato.msj,
+										type: "error", // warning, error, success, info
+										buttons: {
+											visible: false, // true , false
+										},
+										timer: 1500,
+										showConfirmButton: false
+									});
+
+									return false;
+								}
+							});//Fin ajax
+						}
+						else {
 							// mensaje
 							swal({
-								title: "Error",
-								text: ""+dato.msj,
+								title: "Cancelado",
+								text: "Acción cancelada",
 								type: "error", // warning, error, success, info
 								buttons: {
 									visible: false, // true , false
 								},
-								timer: 1500,
+								timer: 500,
 								showConfirmButton: false
 							});
-
-							return false;
 						}
-					});//Fin ajax
-				}
-				else 
-				{
-					// mensaje
-					swal({
-						title: "Cancelado",
-						text: "Acción cancelada",
-						type: "error", // warning, error, success, info
-						buttons: {
-							visible: false, // true , false
-						},
-						timer: 500,
-						showConfirmButton: false
 					});
-				}
-			});
-		}
-		else 
-		{
-			// mensaje
-			swal({
-				title: "Cancelado",
-				text: "Acción cancelada",
-				type: "error", // warning, error, success, info
-				buttons: {
-					visible: false, // true , false
-				},
-				timer: 500,
-				showConfirmButton: false
-			});
-		}
-	});
-	return false;
-});
-
-
-$("#botonguardar_modal_puntoner").click(function()
-{
-	// valida campos vacios
-	var valida = this.form.checkValidity();
-	if (valida)
-	{
-		swal({
-			title: "¡Confirme que desea guardar!",
-			text: "Punto de resultado de la determinación del NER",
-			type: "warning",
-			showCancelButton: true,
-			confirmButtonColor: "#DD6B55",
-			confirmButtonText: "Guardar!",
-			cancelButtonText: "Cancelar!",
-			closeOnConfirm: false,
-			closeOnCancel: false
-		},
-		function(isConfirm)
-		{
-			if (isConfirm)
-			{
-				// cerrar msj confirmacion
-				swal.close();
-
-				// enviar datos
-				$('#form_modal_puntoner').ajaxForm({
-					dataType: 'json',
-					type: 'POST',
-					url: ''+ruta_storage_guardar,
-					data: {
-						opcion: 16,
-						proyecto_id: proyecto.id,
-						agente_id: agente_id,
-						agente_nombre: agente_nombre,
-						reporteregistro_id: reporteregistro_id,
-						catactivo_id: $("#reporte_catactivo_id").val(),
-						reporte_instalacion: $("#reporte_instalacion").val(),
-					},
-					resetForm: false,
-					success: function(dato)
-					{
-						// Actualizar ID reporte						
-						reporteregistro_id = dato.reporteregistro_id;
-
-						tabla_reporte_7_2(proyecto.id, reporteregistro_id);
-
-						// tabla_reporte_7_5(proyecto.id, reporteregistro_id);
-
-						tabla_reporte_7_6(proyecto.id, reporteregistro_id);
-
-						tabla_reporte_7_7(proyecto.id, reporteregistro_id); // Matriz de exposicion
-
-						reporte_dashboard(proyecto.id, reporteregistro_id);
-
-
-						// mensaje
-						swal({
-							title: "Correcto",
-							text: ""+dato.msj,
-							type: "success", // warning, error, success, info
-							buttons: {
-								visible: false, // true , false
-							},
-							timer: 1500,
-							showConfirmButton: false
-						});
-
-						// actualiza boton
-						$('#botonguardar_modal_puntoner').html('Guardar <i class="fa fa-save"></i>');
-						$('#botonguardar_modal_puntoner').attr('disabled', false);
-
-						// cerrar modal
-						$('#modal_reporte_puntoner').modal('hide');
-					},
-					beforeSend: function()
-					{
-						$('#botonguardar_modal_puntoner').html('Guardando <i class="fa fa-spin fa-spinner"></i>');
-						$('#botonguardar_modal_puntoner').attr('disabled', true);
-					},
-					error: function(dato)
-					{
-						// actualiza boton
-						$('#botonguardar_modal_puntoner').html('Guardar <i class="fa fa-save"></i>');
-						$('#botonguardar_modal_puntoner').attr('disabled', false);
-
-						// mensaje
-						swal({
-							title: "Error",
-							text: ""+dato.msj,
-							type: "error", // warning, error, success, info
-							buttons: {
-								visible: false, // true , false
-							},
-							timer: 1500,
-							showConfirmButton: false
-						});
-						return false;
-					}
-				}).submit();
-				return false;
 			}
-			else 
-			{
+			else {
 				// mensaje
 				swal({
 					title: "Cancelado",
@@ -6115,6 +5566,118 @@ $("#botonguardar_modal_puntoner").click(function()
 				});
 			}
 		});
+	return false;
+});
+
+
+$("#botonguardar_modal_puntoner").click(function () {
+	// valida campos vacios
+	var valida = this.form.checkValidity();
+	if (valida) {
+		swal({
+			title: "¡Confirme que desea guardar!",
+			text: "Punto de resultado de la determinación del NER",
+			type: "warning",
+			showCancelButton: true,
+			confirmButtonColor: "#DD6B55",
+			confirmButtonText: "Guardar!",
+			cancelButtonText: "Cancelar!",
+			closeOnConfirm: false,
+			closeOnCancel: false
+		},
+			function (isConfirm) {
+				if (isConfirm) {
+					// cerrar msj confirmacion
+					swal.close();
+
+					// enviar datos
+					$('#form_modal_puntoner').ajaxForm({
+						dataType: 'json',
+						type: 'POST',
+						url: '' + ruta_storage_guardar,
+						data: {
+							opcion: 16,
+							proyecto_id: proyecto.id,
+							agente_id: agente_id,
+							agente_nombre: agente_nombre,
+							reporteregistro_id: reporteregistro_id,
+							catactivo_id: $("#reporte_catactivo_id").val(),
+							reporte_instalacion: $("#reporte_instalacion").val(),
+						},
+						resetForm: false,
+						success: function (dato) {
+							// Actualizar ID reporte						
+							reporteregistro_id = dato.reporteregistro_id;
+
+							tabla_reporte_7_2(proyecto.id, reporteregistro_id);
+
+							// tabla_reporte_7_5(proyecto.id, reporteregistro_id);
+
+							tabla_reporte_7_6(proyecto.id, reporteregistro_id);
+
+							tabla_reporte_7_7(proyecto.id, reporteregistro_id); // Matriz de exposicion
+
+							reporte_dashboard(proyecto.id, reporteregistro_id);
+
+
+							// mensaje
+							swal({
+								title: "Correcto",
+								text: "" + dato.msj,
+								type: "success", // warning, error, success, info
+								buttons: {
+									visible: false, // true , false
+								},
+								timer: 1500,
+								showConfirmButton: false
+							});
+
+							// actualiza boton
+							$('#botonguardar_modal_puntoner').html('Guardar <i class="fa fa-save"></i>');
+							$('#botonguardar_modal_puntoner').attr('disabled', false);
+
+							// cerrar modal
+							$('#modal_reporte_puntoner').modal('hide');
+						},
+						beforeSend: function () {
+							$('#botonguardar_modal_puntoner').html('Guardando <i class="fa fa-spin fa-spinner"></i>');
+							$('#botonguardar_modal_puntoner').attr('disabled', true);
+						},
+						error: function (dato) {
+							// actualiza boton
+							$('#botonguardar_modal_puntoner').html('Guardar <i class="fa fa-save"></i>');
+							$('#botonguardar_modal_puntoner').attr('disabled', false);
+
+							// mensaje
+							swal({
+								title: "Error",
+								text: "" + dato.msj,
+								type: "error", // warning, error, success, info
+								buttons: {
+									visible: false, // true , false
+								},
+								timer: 1500,
+								showConfirmButton: false
+							});
+							return false;
+						}
+					}).submit();
+					return false;
+				}
+				else {
+					// mensaje
+					swal({
+						title: "Cancelado",
+						text: "Acción cancelada",
+						type: "error", // warning, error, success, info
+						buttons: {
+							visible: false, // true , false
+						},
+						timer: 500,
+						showConfirmButton: false
+					});
+				}
+			});
 		return false;
 	}
 });
@@ -6124,29 +5687,23 @@ $("#botonguardar_modal_puntoner").click(function()
 // TABLA DE RESULTADOS DOSIS del NER
 
 
-$(document).ready(function()
-{
-	setTimeout(function()
-	{
+$(document).ready(function () {
+	setTimeout(function () {
 		tabla_reporte_7_3(proyecto.id, reporteregistro_id);
 	}, 6000);
 });
 
 
 var datatable_reporte_7_3 = null;
-function tabla_reporte_7_3(proyecto_id, reporteregistro_id)
-{
-	try 
-	{
-		var ruta = "/reporteruidodosisnertabla/"+proyecto_id+"/"+reporteregistro_id+"/"+areas_poe;
+function tabla_reporte_7_3(proyecto_id, reporteregistro_id) {
+	try {
+		var ruta = "/reporteruidodosisnertabla/" + proyecto_id + "/" + reporteregistro_id + "/" + areas_poe;
 
-		if (datatable_reporte_7_3 != null)
-		{
+		if (datatable_reporte_7_3 != null) {
 			datatable_reporte_7_3.clear().draw();
 			datatable_reporte_7_3.ajax.url(ruta).load();
 		}
-		else
-		{
+		else {
 			var numeroejecucion = 1;
 			datatable_reporte_7_3 = $('#tabla_reporte_7_3').DataTable({
 				ajax: {
@@ -6155,17 +5712,14 @@ function tabla_reporte_7_3(proyecto_id, reporteregistro_id)
 					cache: false,
 					dataType: "json",
 					data: {},
-					dataSrc: function (json)
-					{
+					dataSrc: function (json) {
 						menureporte_estado("menureporte_7_3", parseInt(json.total));
 
 						return json.data;
 					},
-					error: function (xhr, error, code)
-					{						
-						console.log('error en datatable_reporte_7_3 '+code);
-						if (numeroejecucion <= 1)
-						{
+					error: function (xhr, error, code) {
+						console.log('error en datatable_reporte_7_3 ' + code);
+						if (numeroejecucion <= 1) {
 							tabla_reporte_7_3(proyecto_id, reporteregistro_id)
 							numeroejecucion += 1;
 						}
@@ -6251,18 +5805,15 @@ function tabla_reporte_7_3(proyecto_id, reporteregistro_id)
 						previous: "Anterior"
 					}
 				},
-				rowCallback: function(row, data, index)
-				{
+				rowCallback: function (row, data, index) {
 					// console.log(index+' - '+data.reporteiluminacionpuntos_nopunto);
 					$(row).find('td:eq(7)').css('background', data.resultadoner_color);
 
-					if(data.resultadoner == 1) 
-					{
+					if (data.resultadoner == 1) {
 						$(row).find('td:eq(7)').css('color', '#000000');
 						$(row).find('td:eq(7)').css('font-weight', 'bold');
 					}
-					else
-					{
+					else {
 						$(row).find('td:eq(7)').css('color', '#FFFFFF');
 						$(row).find('td:eq(7)').css('font-weight', 'bold');
 					}
@@ -6271,20 +5822,18 @@ function tabla_reporte_7_3(proyecto_id, reporteregistro_id)
 		}
 
 		// Tooltip en DataTable
-		datatable_reporte_7_3.on('draw', function ()
-		{
+		datatable_reporte_7_3.on('draw', function () {
 			$('[data-toggle="tooltip"]').tooltip();
 		});
 	}
-	catch (exception)
-	{
+	catch (exception) {
 		tabla_reporte_7_3(proyecto_id, reporteregistro_id);
-    }
+	}
 }
 
 
 $("#boton_reporte_nuevadosisner").click(function (e) {
-	
+
 	valor = $('#reporteruido_lmpe').val();
 
 	if (valor == '') {
@@ -6297,75 +5846,68 @@ $("#boton_reporte_nuevadosisner").click(function (e) {
 			showConfirmButton: true
 		});
 	} else {
-		
-		$('#form_modal_dosisner').each(function(){
+
+		$('#form_modal_dosisner').each(function () {
 			this.reset();
 		});
-	
+
 		// Campos Hidden
 		$('#dosisner_id').val(0);
-	
+
 		// LLenar campos
-		$('#reporteruidodosisner_lmpe').val(valor);	
-	
+		$('#reporteruidodosisner_lmpe').val(valor);
+
 		// Campo select areas
 		$('#reporteruidodosisner_areaid').html(selectareas);
 		$('#reporteruidodosisner_equipo').html(selectequipos);
 
-	
+
 		// Campo select categorias
 		$('#reporteruidodosisner_categoriaid').html('<option value=""></option>');
-	
+
 		// Titulo del modal
 		$('#modal_reporte_dosisner .modal-title').html('Dosis de determinación del NER al personal');
-	
+
 		// mostrar modal
-		$('#modal_reporte_dosisner').modal({backdrop:false});
+		$('#modal_reporte_dosisner').modal({ backdrop: false });
 	}
 });
 
 
-function mostrar_categoriasarea(area_id, categoria_id, campo_nombre)
-{
-	if (parseInt(area_id) > 0)
-	{
+function mostrar_categoriasarea(area_id, categoria_id, campo_nombre) {
+	if (parseInt(area_id) > 0) {
 		$.ajax({
 			type: "GET",
 			dataType: "json",
-			url: "/reporteruidodosisnerareacategorias/"+proyecto.id+"/"+reporteregistro_id+"/"+area_id+"/"+categoria_id+"/"+areas_poe,
-			data:{},
+			url: "/reporteruidodosisnerareacategorias/" + proyecto.id + "/" + reporteregistro_id + "/" + area_id + "/" + categoria_id + "/" + areas_poe,
+			data: {},
 			cache: false,
-			success:function(dato)
-			{
-				$('#'+campo_nombre).attr('disabled', false);
-				$('#'+campo_nombre).html(dato.categoriasoption);
+			success: function (dato) {
+				$('#' + campo_nombre).attr('disabled', false);
+				$('#' + campo_nombre).html(dato.categoriasoption);
 			},
-			beforeSend: function()
-			{
-				$('#'+campo_nombre).html('<option value=""></option>');
-				$('#'+campo_nombre).attr('disabled', true);
+			beforeSend: function () {
+				$('#' + campo_nombre).html('<option value=""></option>');
+				$('#' + campo_nombre).attr('disabled', true);
 			},
-			error: function(dato)
-			{
-				$('#'+campo_nombre).attr('disabled', false);
-				$('#'+campo_nombre).html('<option value="">Error al consultar, intentelo de nuevo</option>');
+			error: function (dato) {
+				$('#' + campo_nombre).attr('disabled', false);
+				$('#' + campo_nombre).html('<option value="">Error al consultar, intentelo de nuevo</option>');
 				return false;
 			}
 		});//Fin ajax
 	}
-	else
-	{
-		$('#'+campo_nombre).html('<option value=""></option>');
+	else {
+		$('#' + campo_nombre).html('<option value=""></option>');
 	}
 }
 
 
-$('#tabla_reporte_7_3 tbody').on('click', 'td.editar', function()
-{
+$('#tabla_reporte_7_3 tbody').on('click', 'td.editar', function () {
 	var tr = $(this).closest('tr');
 	var row = datatable_reporte_7_3.row(tr);
 
-	$('#form_modal_dosisner').each(function(){
+	$('#form_modal_dosisner').each(function () {
 		this.reset();
 	});
 
@@ -6386,24 +5928,23 @@ $('#tabla_reporte_7_3 tbody').on('click', 'td.editar', function()
 	$('#reporteruidodosisner_dosis').val(row.data().reporteruidodosisner_dosis);
 	$('#reporteruidodosisner_ner').val(row.data().reporteruidodosisner_ner);
 	$('#reporteruidodosisner_lmpe').val(row.data().reporteruidodosisner_lmpe);
-	$('#reporteruidodosisner_tmpe').val(row.data().reporteruidodosisner_tmpe);	
+	$('#reporteruidodosisner_tmpe').val(row.data().reporteruidodosisner_tmpe);
 
 	// Titulo del modal
 	$('#modal_reporte_dosisner .modal-title').html('Dosis de determinación del NER al personal');
 
 	// mostrar modal
-	$('#modal_reporte_dosisner').modal({backdrop:false});
+	$('#modal_reporte_dosisner').modal({ backdrop: false });
 });
 
 
-$('#tabla_reporte_7_3 tbody').on('click', 'td>button.eliminar', function()
-{
+$('#tabla_reporte_7_3 tbody').on('click', 'td>button.eliminar', function () {
 	var tr = $(this).closest('tr');
 	var row = datatable_reporte_7_3.row(tr);
 
 	swal({
 		title: "¡Confirme que desea eliminar!",
-		text: "Dosis ["+row.data().reporteruidodosisner_punto+"] de determinación del NER al personal",
+		text: "Dosis [" + row.data().reporteruidodosisner_punto + "] de determinación del NER al personal",
 		type: "warning",
 		showCancelButton: true,
 		confirmButtonColor: "#DD6B55",
@@ -6412,210 +5953,86 @@ $('#tabla_reporte_7_3 tbody').on('click', 'td>button.eliminar', function()
 		closeOnConfirm: false,
 		closeOnCancel: false
 	},
-	function(isConfirm)
-	{
-		if (isConfirm)
-		{
-			swal({
-				title: "¡Por seguridad confirme nuevamente que desea eliminar!",
-				text: "Dosis ["+row.data().reporteruidodosisner_punto+"] de determinación del NER al personal",
-				type: "warning",
-				showCancelButton: true,
-				confirmButtonColor: "#DD6B55",
-				confirmButtonText: "Eliminar!",
-				cancelButtonText: "Cancelar!",
-				closeOnConfirm: false,
-				closeOnCancel: false
-			},
-			function(isConfirm)
-			{
-				if (isConfirm)
-				{
-					// cerrar msj confirmacion
-					swal.close();
+		function (isConfirm) {
+			if (isConfirm) {
+				swal({
+					title: "¡Por seguridad confirme nuevamente que desea eliminar!",
+					text: "Dosis [" + row.data().reporteruidodosisner_punto + "] de determinación del NER al personal",
+					type: "warning",
+					showCancelButton: true,
+					confirmButtonColor: "#DD6B55",
+					confirmButtonText: "Eliminar!",
+					cancelButtonText: "Cancelar!",
+					closeOnConfirm: false,
+					closeOnCancel: false
+				},
+					function (isConfirm) {
+						if (isConfirm) {
+							// cerrar msj confirmacion
+							swal.close();
 
-					$.ajax({
-						type: "GET",
-						dataType: "json",
-						url: "/reporteruidodosisnereliminar/"+row.data().id,
-						data:{},
-						cache: false,
-						success:function(dato)
-						{
-							// Actualizar tabla
-							tabla_reporte_7_3(proyecto.id, reporteregistro_id);
+							$.ajax({
+								type: "GET",
+								dataType: "json",
+								url: "/reporteruidodosisnereliminar/" + row.data().id,
+								data: {},
+								cache: false,
+								success: function (dato) {
+									// Actualizar tabla
+									tabla_reporte_7_3(proyecto.id, reporteregistro_id);
 
-							tabla_reporte_7_7(proyecto.id, reporteregistro_id); // Matriz de exposicion
+									tabla_reporte_7_7(proyecto.id, reporteregistro_id); // Matriz de exposicion
 
-							reporte_dashboard(proyecto.id, reporteregistro_id);
+									reporte_dashboard(proyecto.id, reporteregistro_id);
 
-							// mensaje
-							swal({
-								title: "Correcto",
-								text: ""+dato.msj,
-								type: "success", // warning, error, success, info
-								buttons: {
-									visible: false, // true , false
+									// mensaje
+									swal({
+										title: "Correcto",
+										text: "" + dato.msj,
+										type: "success", // warning, error, success, info
+										buttons: {
+											visible: false, // true , false
+										},
+										timer: 1500,
+										showConfirmButton: false
+									});
 								},
-								timer: 1500,
-								showConfirmButton: false
-							});
-						},
-						beforeSend: function()
-						{
-							// $('#tabla_reporte_definiciones tbody').html('<tr><td colspan="5"><i class="fa fa-spin fa-spinner" style="font-size: 40px!important;"></i></td></tr>');
-						},
-						error: function(dato)
-						{
+								beforeSend: function () {
+									// $('#tabla_reporte_definiciones tbody').html('<tr><td colspan="5"><i class="fa fa-spin fa-spinner" style="font-size: 40px!important;"></i></td></tr>');
+								},
+								error: function (dato) {
+									// mensaje
+									swal({
+										title: "Error",
+										text: "" + dato.msj,
+										type: "error", // warning, error, success, info
+										buttons: {
+											visible: false, // true , false
+										},
+										timer: 1500,
+										showConfirmButton: false
+									});
+
+									return false;
+								}
+							});//Fin ajax
+						}
+						else {
 							// mensaje
 							swal({
-								title: "Error",
-								text: ""+dato.msj,
+								title: "Cancelado",
+								text: "Acción cancelada",
 								type: "error", // warning, error, success, info
 								buttons: {
 									visible: false, // true , false
 								},
-								timer: 1500,
+								timer: 500,
 								showConfirmButton: false
 							});
-
-							return false;
 						}
-					});//Fin ajax
-				}
-				else 
-				{
-					// mensaje
-					swal({
-						title: "Cancelado",
-						text: "Acción cancelada",
-						type: "error", // warning, error, success, info
-						buttons: {
-							visible: false, // true , false
-						},
-						timer: 500,
-						showConfirmButton: false
 					});
-				}
-			});
-		}
-		else 
-		{
-			// mensaje
-			swal({
-				title: "Cancelado",
-				text: "Acción cancelada",
-				type: "error", // warning, error, success, info
-				buttons: {
-					visible: false, // true , false
-				},
-				timer: 500,
-				showConfirmButton: false
-			});
-		}
-	});
-	return false;
-});
-
-
-$("#botonguardar_modal_dosisner").click(function()
-{
-	// valida campos vacios
-	var valida = this.form.checkValidity();
-	if (valida)
-	{
-		swal({
-			title: "¡Confirme que desea guardar!",
-			text: "Dosis de determinación del NER al personal",
-			type: "warning",
-			showCancelButton: true,
-			confirmButtonColor: "#DD6B55",
-			confirmButtonText: "Guardar!",
-			cancelButtonText: "Cancelar!",
-			closeOnConfirm: false,
-			closeOnCancel: false
-		},
-		function(isConfirm)
-		{
-			if (isConfirm)
-			{
-				// cerrar msj confirmacion
-				swal.close();
-
-				// enviar datos
-				$('#form_modal_dosisner').ajaxForm({
-					dataType: 'json',
-					type: 'POST',
-					url: ''+ruta_storage_guardar,
-					data: {
-						opcion: 17,
-						proyecto_id: proyecto.id,
-						agente_id: agente_id,
-						agente_nombre: agente_nombre,
-						reporteregistro_id: reporteregistro_id,
-						catactivo_id: $("#reporte_catactivo_id").val(),
-						reporte_instalacion: $("#reporte_instalacion").val(),
-					},
-					resetForm: false,
-					success: function(dato)
-					{
-						// Actualizar ID reporte						
-						reporteregistro_id = dato.reporteregistro_id;
-
-						tabla_reporte_7_3(proyecto.id, reporteregistro_id);
-
-						tabla_reporte_7_7(proyecto.id, reporteregistro_id); // Matriz de exposicion
-
-						reporte_dashboard(proyecto.id, reporteregistro_id);
-
-						// mensaje
-						swal({
-							title: "Correcto",
-							text: ""+dato.msj,
-							type: "success", // warning, error, success, info
-							buttons: {
-								visible: false, // true , false
-							},
-							timer: 1500,
-							showConfirmButton: false
-						});
-
-						// actualiza boton
-						$('#botonguardar_modal_dosisner').html('Guardar <i class="fa fa-save"></i>');
-						$('#botonguardar_modal_dosisner').attr('disabled', false);
-
-						// cerrar modal
-						$('#modal_reporte_dosisner').modal('hide');
-					},
-					beforeSend: function()
-					{
-						$('#botonguardar_modal_dosisner').html('Guardando <i class="fa fa-spin fa-spinner"></i>');
-						$('#botonguardar_modal_dosisner').attr('disabled', true);
-					},
-					error: function(dato)
-					{
-						// actualiza boton
-						$('#botonguardar_modal_dosisner').html('Guardar <i class="fa fa-save"></i>');
-						$('#botonguardar_modal_dosisner').attr('disabled', false);
-
-						// mensaje
-						swal({
-							title: "Error",
-							text: ""+dato.msj,
-							type: "error", // warning, error, success, info
-							buttons: {
-								visible: false, // true , false
-							},
-							timer: 1500,
-							showConfirmButton: false
-						});
-						return false;
-					}
-				}).submit();
-				return false;
 			}
-			else 
-			{
+			else {
 				// mensaje
 				swal({
 					title: "Cancelado",
@@ -6629,6 +6046,113 @@ $("#botonguardar_modal_dosisner").click(function()
 				});
 			}
 		});
+	return false;
+});
+
+
+$("#botonguardar_modal_dosisner").click(function () {
+	// valida campos vacios
+	var valida = this.form.checkValidity();
+	if (valida) {
+		swal({
+			title: "¡Confirme que desea guardar!",
+			text: "Dosis de determinación del NER al personal",
+			type: "warning",
+			showCancelButton: true,
+			confirmButtonColor: "#DD6B55",
+			confirmButtonText: "Guardar!",
+			cancelButtonText: "Cancelar!",
+			closeOnConfirm: false,
+			closeOnCancel: false
+		},
+			function (isConfirm) {
+				if (isConfirm) {
+					// cerrar msj confirmacion
+					swal.close();
+
+					// enviar datos
+					$('#form_modal_dosisner').ajaxForm({
+						dataType: 'json',
+						type: 'POST',
+						url: '' + ruta_storage_guardar,
+						data: {
+							opcion: 17,
+							proyecto_id: proyecto.id,
+							agente_id: agente_id,
+							agente_nombre: agente_nombre,
+							reporteregistro_id: reporteregistro_id,
+							catactivo_id: $("#reporte_catactivo_id").val(),
+							reporte_instalacion: $("#reporte_instalacion").val(),
+						},
+						resetForm: false,
+						success: function (dato) {
+							// Actualizar ID reporte						
+							reporteregistro_id = dato.reporteregistro_id;
+
+							tabla_reporte_7_3(proyecto.id, reporteregistro_id);
+
+							tabla_reporte_7_7(proyecto.id, reporteregistro_id); // Matriz de exposicion
+
+							reporte_dashboard(proyecto.id, reporteregistro_id);
+
+							// mensaje
+							swal({
+								title: "Correcto",
+								text: "" + dato.msj,
+								type: "success", // warning, error, success, info
+								buttons: {
+									visible: false, // true , false
+								},
+								timer: 1500,
+								showConfirmButton: false
+							});
+
+							// actualiza boton
+							$('#botonguardar_modal_dosisner').html('Guardar <i class="fa fa-save"></i>');
+							$('#botonguardar_modal_dosisner').attr('disabled', false);
+
+							// cerrar modal
+							$('#modal_reporte_dosisner').modal('hide');
+						},
+						beforeSend: function () {
+							$('#botonguardar_modal_dosisner').html('Guardando <i class="fa fa-spin fa-spinner"></i>');
+							$('#botonguardar_modal_dosisner').attr('disabled', true);
+						},
+						error: function (dato) {
+							// actualiza boton
+							$('#botonguardar_modal_dosisner').html('Guardar <i class="fa fa-save"></i>');
+							$('#botonguardar_modal_dosisner').attr('disabled', false);
+
+							// mensaje
+							swal({
+								title: "Error",
+								text: "" + dato.msj,
+								type: "error", // warning, error, success, info
+								buttons: {
+									visible: false, // true , false
+								},
+								timer: 1500,
+								showConfirmButton: false
+							});
+							return false;
+						}
+					}).submit();
+					return false;
+				}
+				else {
+					// mensaje
+					swal({
+						title: "Cancelado",
+						text: "Acción cancelada",
+						type: "error", // warning, error, success, info
+						buttons: {
+							visible: false, // true , false
+						},
+						timer: 500,
+						showConfirmButton: false
+					});
+				}
+			});
 		return false;
 	}
 });
@@ -6720,19 +6244,19 @@ function tabla_reporte_7_5(proyecto_id, reporteregistro_id)
 			}
 
 			$("#tabla_reporte_7_5").html('<thead>'+
-		                                        '<tr>'+
-		                                            '<th width="70">No.<br>medición</th>'+
-		                                            '<th>Área</th>'+
-		                                            '<th>Puesto</th>'+
-		                                            '<th width="70">NER<br>dB(A)</th>'+
-		                                            '<th width="70">NRE<br>dB(A)</th>'+
-		                                        '</tr>'+
-		                                    '</thead>'+
-		                                    '<tbody>'+
-		                                        '<tr>'+
-		                                            '<td colspan="5">Error al consultar los datos</td>'+
-		                                        '</tr>'+
-		                                    '</tbody>');
+												'<tr>'+
+													'<th width="70">No.<br>medición</th>'+
+													'<th>Área</th>'+
+													'<th>Puesto</th>'+
+													'<th width="70">NER<br>dB(A)</th>'+
+													'<th width="70">NRE<br>dB(A)</th>'+
+												'</tr>'+
+											'</thead>'+
+											'<tbody>'+
+												'<tr>'+
+													'<td colspan="5">Error al consultar los datos</td>'+
+												'</tr>'+
+											'</tbody>');
 		}
 	});//Fin ajax
 }
@@ -6742,29 +6266,23 @@ function tabla_reporte_7_5(proyecto_id, reporteregistro_id)
 // TABLA 7.6 RESULTADOS DEL NIVEL DE RUIDO EFECTIVO (NRE) CON MODELO POR BANDAS DE OCTAVA
 
 
-$(document).ready(function()
-{
-	setTimeout(function()
-	{
+$(document).ready(function () {
+	setTimeout(function () {
 		tabla_reporte_7_6(proyecto.id, reporteregistro_id);
 	}, 6500);
 });
 
 
 var datatable_reporte_7_6 = null;
-function tabla_reporte_7_6(proyecto_id, reporteregistro_id)
-{
-	try 
-	{
-		var ruta = "/reporteruidobandasoctavatabla/"+proyecto_id+"/"+reporteregistro_id+"/"+areas_poe;
+function tabla_reporte_7_6(proyecto_id, reporteregistro_id) {
+	try {
+		var ruta = "/reporteruidobandasoctavatabla/" + proyecto_id + "/" + reporteregistro_id + "/" + areas_poe;
 
-		if (datatable_reporte_7_6 != null)
-		{
+		if (datatable_reporte_7_6 != null) {
 			datatable_reporte_7_6.clear().draw();
 			datatable_reporte_7_6.ajax.url(ruta).load();
 		}
-		else
-		{
+		else {
 			var numeroejecucion = 1;
 			datatable_reporte_7_6 = $('#tabla_reporte_7_6').DataTable({
 				ajax: {
@@ -6773,17 +6291,14 @@ function tabla_reporte_7_6(proyecto_id, reporteregistro_id)
 					cache: false,
 					dataType: "json",
 					data: {},
-					dataSrc: function (json)
-					{
+					dataSrc: function (json) {
 						menureporte_estado("menureporte_7_6", parseInt(json.total));
 
 						return json.data;
 					},
-					error: function (xhr, error, code)
-					{						
-						console.log('error en datatable_reporte_7_6 '+code);
-						if (numeroejecucion <= 1)
-						{
+					error: function (xhr, error, code) {
+						console.log('error en datatable_reporte_7_6 ' + code);
+						if (numeroejecucion <= 1) {
 							tabla_reporte_7_6(proyecto_id, reporteregistro_id)
 							numeroejecucion += 1;
 						}
@@ -6869,8 +6384,7 @@ function tabla_reporte_7_6(proyecto_id, reporteregistro_id)
 						previous: "Anterior"
 					}
 				},
-				rowCallback: function(row, data, index)
-				{
+				rowCallback: function (row, data, index) {
 					// console.log(index+' - '+data.reporteiluminacionpuntos_nopunto);
 					$(row).find('td:eq(8)').css('font-weight', 'bold');
 
@@ -6889,24 +6403,21 @@ function tabla_reporte_7_6(proyecto_id, reporteregistro_id)
 		}
 
 		// Tooltip en DataTable
-		datatable_reporte_7_6.on('draw', function ()
-		{
+		datatable_reporte_7_6.on('draw', function () {
 			$('[data-toggle="tooltip"]').tooltip();
 		});
 	}
-	catch (exception)
-	{
+	catch (exception) {
 		tabla_reporte_7_6(proyecto_id, reporteregistro_id);
-    }
+	}
 }
 
 
-$('#tabla_reporte_7_6 tbody').on('click', 'td.editar', function()
-{
+$('#tabla_reporte_7_6 tbody').on('click', 'td.editar', function () {
 	var tr = $(this).closest('tr');
 	var row = datatable_reporte_7_6.row(tr);
 
-	$('#form_modal_bandasoctava').each(function(){
+	$('#form_modal_bandasoctava').each(function () {
 		this.reset();
 	});
 
@@ -6917,19 +6428,19 @@ $('#tabla_reporte_7_6 tbody').on('click', 'td.editar', function()
 	$.ajax({
 		type: "GET",
 		dataType: "json",
-		url: "/consultarListaEquiposProteccion/"+proyecto.id+"/"+ row.data().reporteruidobandaoctava_equipo, //agregar el valor que viene en la base de datos osea lo que ya esta seleccionado
-		data:{},
+		url: "/consultarListaEquiposProteccion/" + proyecto.id + "/" + row.data().reporteruidobandaoctava_equipo, //agregar el valor que viene en la base de datos osea lo que ya esta seleccionado
+		data: {},
 		cache: false,
 		success: function (dato) {
-			
+
 			$("#reporteruidobandaoctava_equipo").html(dato.opciones);
-			
+
 		}, beforeSend: function () {
-			
+
 			$("#reporteruidobandaoctava_equipo").html('<option selected>Consultando equipos...</option>');
-			
+
 		},
-		error: function(dato){
+		error: function (dato) {
 			return false;
 		}
 	})
@@ -6948,37 +6459,33 @@ $('#tabla_reporte_7_6 tbody').on('click', 'td.editar', function()
 	$('#tabla_bandasoctava_frecuencias > tbody').html('');
 
 	// Recorrer tabla
-	datatable_reporte_7_6.rows().every( function ( rowIdx, tableLoop, rowLoop )
-	{
+	datatable_reporte_7_6.rows().every(function (rowIdx, tableLoop, rowLoop) {
 		var data = this.data();
 
-		if (parseInt(row.data().id) == parseInt(data.id))
-		{
-			$('#tabla_bandasoctava_frecuencias > tbody').append('<tr>'+
-			                                                        '<td>'+
-			                                                        	'<input type="text" class="form-control" name="reporteruidopuntonerfrecuencias_frecuencia[]" value="'+data.reporteruidopuntonerfrecuencias_frecuencia+'" readonly>'+
-			                                                        '</td>'+
-			                                                        '<td>'+
-			                                                        	'<input type="number" step="any" class="form-control" name="reporteruidopuntonerfrecuencias_nivel[]" value="'+data.reporteruidopuntonerfrecuencias_nivel+'" required>'+
-			                                                        '</td>'+
-			                                                    '</tr>');
+		if (parseInt(row.data().id) == parseInt(data.id)) {
+			$('#tabla_bandasoctava_frecuencias > tbody').append('<tr>' +
+				'<td>' +
+				'<input type="text" class="form-control" name="reporteruidopuntonerfrecuencias_frecuencia[]" value="' + data.reporteruidopuntonerfrecuencias_frecuencia + '" readonly>' +
+				'</td>' +
+				'<td>' +
+				'<input type="number" step="any" class="form-control" name="reporteruidopuntonerfrecuencias_nivel[]" value="' + data.reporteruidopuntonerfrecuencias_nivel + '" required>' +
+				'</td>' +
+				'</tr>');
 		}
 	});
 
 	// // Titulo del modal
-	$('#modal_reporte_bandasoctava .modal-title').html('Medición ['+row.data().reporteruidopuntoner_punto+'] del Nivel de Ruido Efectivo (NRE) con modelo por bandas de octava');
+	$('#modal_reporte_bandasoctava .modal-title').html('Medición [' + row.data().reporteruidopuntoner_punto + '] del Nivel de Ruido Efectivo (NRE) con modelo por bandas de octava');
 
 	// // mostrar modal
-	$('#modal_reporte_bandasoctava').modal({backdrop:false});
+	$('#modal_reporte_bandasoctava').modal({ backdrop: false });
 });
 
 
-$("#botonguardar_modal_bandasoctava").click(function()
-{
+$("#botonguardar_modal_bandasoctava").click(function () {
 	// valida campos vacios
 	var valida = this.form.checkValidity();
-	if (valida)
-	{
+	if (valida) {
 		swal({
 			title: "¡Confirme que desea guardar!",
 			text: "Ruido Efectivo (NRE) con modelo por bandas de octava",
@@ -6990,96 +6497,90 @@ $("#botonguardar_modal_bandasoctava").click(function()
 			closeOnConfirm: false,
 			closeOnCancel: false
 		},
-		function(isConfirm)
-		{
-			if (isConfirm)
-			{
-				// cerrar msj confirmacion
-				swal.close();
+			function (isConfirm) {
+				if (isConfirm) {
+					// cerrar msj confirmacion
+					swal.close();
 
-				// enviar datos
-				$('#form_modal_bandasoctava').ajaxForm({
-					dataType: 'json',
-					type: 'POST',
-					url: ''+ruta_storage_guardar,
-					data: {
-						opcion: 18,
-						proyecto_id: proyecto.id,
-						agente_id: agente_id,
-						agente_nombre: agente_nombre,
-						reporteregistro_id: reporteregistro_id,
-						catactivo_id: $("#reporte_catactivo_id").val(),
-						reporte_instalacion: $("#reporte_instalacion").val(),
-					},
-					resetForm: false,
-					success: function(dato)
-					{
-						// Actualizar ID reporte						
-						reporteregistro_id = dato.reporteregistro_id;
+					// enviar datos
+					$('#form_modal_bandasoctava').ajaxForm({
+						dataType: 'json',
+						type: 'POST',
+						url: '' + ruta_storage_guardar,
+						data: {
+							opcion: 18,
+							proyecto_id: proyecto.id,
+							agente_id: agente_id,
+							agente_nombre: agente_nombre,
+							reporteregistro_id: reporteregistro_id,
+							catactivo_id: $("#reporte_catactivo_id").val(),
+							reporte_instalacion: $("#reporte_instalacion").val(),
+						},
+						resetForm: false,
+						success: function (dato) {
+							// Actualizar ID reporte						
+							reporteregistro_id = dato.reporteregistro_id;
 
-						tabla_reporte_7_6(proyecto.id, reporteregistro_id);
+							tabla_reporte_7_6(proyecto.id, reporteregistro_id);
 
-						// mensaje
-						swal({
-							title: "Correcto",
-							text: ""+dato.msj,
-							type: "success", // warning, error, success, info
-							buttons: {
-								visible: false, // true , false
-							},
-							timer: 1500,
-							showConfirmButton: false
-						});
+							// mensaje
+							swal({
+								title: "Correcto",
+								text: "" + dato.msj,
+								type: "success", // warning, error, success, info
+								buttons: {
+									visible: false, // true , false
+								},
+								timer: 1500,
+								showConfirmButton: false
+							});
 
-						// actualiza boton
-						$('#botonguardar_modal_bandasoctava').html('Guardar <i class="fa fa-save"></i>');
-						$('#botonguardar_modal_bandasoctava').attr('disabled', false);
+							// actualiza boton
+							$('#botonguardar_modal_bandasoctava').html('Guardar <i class="fa fa-save"></i>');
+							$('#botonguardar_modal_bandasoctava').attr('disabled', false);
 
-						// cerrar modal
-						$('#modal_reporte_bandasoctava').modal('hide');
-					},
-					beforeSend: function()
-					{
-						$('#botonguardar_modal_bandasoctava').html('Guardando <i class="fa fa-spin fa-spinner"></i>');
-						$('#botonguardar_modal_bandasoctava').attr('disabled', true);
-					},
-					error: function(dato)
-					{
-						// actualiza boton
-						$('#botonguardar_modal_bandasoctava').html('Guardar <i class="fa fa-save"></i>');
-						$('#botonguardar_modal_bandasoctava').attr('disabled', false);
+							// cerrar modal
+							$('#modal_reporte_bandasoctava').modal('hide');
+						},
+						beforeSend: function () {
+							$('#botonguardar_modal_bandasoctava').html('Guardando <i class="fa fa-spin fa-spinner"></i>');
+							$('#botonguardar_modal_bandasoctava').attr('disabled', true);
+						},
+						error: function (dato) {
+							// actualiza boton
+							$('#botonguardar_modal_bandasoctava').html('Guardar <i class="fa fa-save"></i>');
+							$('#botonguardar_modal_bandasoctava').attr('disabled', false);
 
-						// mensaje
-						swal({
-							title: "Error",
-							text: ""+dato.msj,
-							type: "error", // warning, error, success, info
-							buttons: {
-								visible: false, // true , false
-							},
-							timer: 1500,
-							showConfirmButton: false
-						});
-						return false;
-					}
-				}).submit();
-				return false;
-			}
-			else 
-			{
-				// mensaje
-				swal({
-					title: "Cancelado",
-					text: "Acción cancelada",
-					type: "error", // warning, error, success, info
-					buttons: {
-						visible: false, // true , false
-					},
-					timer: 500,
-					showConfirmButton: false
-				});
-			}
-		});
+							// mensaje
+							swal({
+								title: "Error",
+								text: "" + dato.msj,
+								type: "error", // warning, error, success, info
+								buttons: {
+									visible: false, // true , false
+								},
+								timer: 1500,
+								showConfirmButton: false
+							});
+							return false;
+						}
+					}).submit();
+					return false;
+				}
+				else {
+					// mensaje
+					swal({
+						title: "Cancelado",
+						text: "Acción cancelada",
+						type: "error", // warning, error, success, info
+						buttons: {
+							visible: false, // true , false
+						},
+						timer: 500,
+						showConfirmButton: false
+					});
+				}
+			});
 		return false;
 	}
 });
@@ -7089,49 +6590,43 @@ $("#botonguardar_modal_bandasoctava").click(function()
 // TABLA 7.7 MATRIZ DE EXPOSICIÓN LABORAL
 
 
-$(document).ready(function()
-{
-	setTimeout(function()
-	{
+$(document).ready(function () {
+	setTimeout(function () {
 		tabla_reporte_7_7(proyecto.id, reporteregistro_id);
 	}, 7000);
 });
 
 
 var datatable_reporte_7_7 = null;
-function tabla_reporte_7_7(proyecto_id, reporteregistro_id)
-{
-	try 
-	{
-		var ruta = "/reporteruidomatrizexposicion/"+proyecto_id+"/"+reporteregistro_id+"/"+areas_poe;
+function tabla_reporte_7_7(proyecto_id, reporteregistro_id) {
+	try {
+		var ruta = "/reporteruidomatrizexposicion/" + proyecto_id + "/" + reporteregistro_id + "/" + areas_poe;
 
 
 		if (parseInt(proyecto.catregion_id) == 1) //REGION NORTE
 		{
-			if (datatable_reporte_7_7 != null)
-			{
+			if (datatable_reporte_7_7 != null) {
 				datatable_reporte_7_7.clear().draw();
 				datatable_reporte_7_7.ajax.url(ruta).load();
 			}
-			else
-			{
-				$('#tabla_reporte_7_7').html('<thead>'+
-													'<tr>'+
-														'<th width="60">Contador</th>'+
-														'<th width="120">Subdirección o<br>corporativo</th>'+
-														'<th width="120">Gerencia o<br>activo</th>'+
-														'<th width="120">Instalación</th>'+
-														'<th width="120">Área de<br>referencia<br>en atlas<br>de riesgo</th>'+
-														'<th width="">Nombre</th>'+
-														'<th width="60">Ficha</th>'+
-														'<th width="">Categoría</th>'+
-														'<th width="60">Número de<br>personas</th>'+
-														'<th width="60">Grupo de<br>exposición<br>homogénea</th>'+
-														'<th width="60">Ruido<br>dB (A)</th>'+
-														'<th width="60">Dosimetría</th>'+
-													'</tr>'+
-												'</thead>'+
-												'<tbody></tbody>');
+			else {
+				$('#tabla_reporte_7_7').html('<thead>' +
+					'<tr>' +
+					'<th width="60">Contador</th>' +
+					'<th width="120">Subdirección o<br>corporativo</th>' +
+					'<th width="120">Gerencia o<br>activo</th>' +
+					'<th width="120">Instalación</th>' +
+					'<th width="120">Área de<br>referencia<br>en atlas<br>de riesgo</th>' +
+					'<th width="">Nombre</th>' +
+					'<th width="60">Ficha</th>' +
+					'<th width="">Categoría</th>' +
+					'<th width="60">Número de<br>personas</th>' +
+					'<th width="60">Grupo de<br>exposición<br>homogénea</th>' +
+					'<th width="60">Ruido<br>dB (A)</th>' +
+					'<th width="60">Dosimetría</th>' +
+					'</tr>' +
+					'</thead>' +
+					'<tbody></tbody>');
 
 				var numeroejecucion = 1;
 				datatable_reporte_7_7 = $('#tabla_reporte_7_7').DataTable({
@@ -7141,18 +6636,15 @@ function tabla_reporte_7_7(proyecto_id, reporteregistro_id)
 						cache: false,
 						dataType: "json",
 						data: {},
-						dataSrc: function (json)
-						{
+						dataSrc: function (json) {
 							menureporte_estado("menureporte_7_7", parseInt(json.total));
 
 							// alert("Done! "+json.msj);
 							return json.data;
 						},
-						error: function (xhr, error, code)
-						{						
-							console.log('error en datatable_reporte_7_7 '+code);
-							if (numeroejecucion <= 1)
-							{
+						error: function (xhr, error, code) {
+							console.log('error en datatable_reporte_7_7 ' + code);
+							if (numeroejecucion <= 1) {
 								tabla_reporte_7_7(proyecto_id, reporteregistro_id);
 								numeroejecucion += 1;
 							}
@@ -7226,7 +6718,7 @@ function tabla_reporte_7_7(proyecto_id, reporteregistro_id)
 					],
 					lengthMenu: [[20, 50, 100, -1], [20, 50, 100, "Todos"]],
 					rowsGroup: [1, 2, 3, 4, 10, 11, 0], //agrupar filas
-					order: [[ 0, "ASC" ]],
+					order: [[0, "ASC"]],
 					ordering: false,
 					processing: true,
 					searching: true,
@@ -7248,8 +6740,7 @@ function tabla_reporte_7_7(proyecto_id, reporteregistro_id)
 							previous: "Anterior"
 						}
 					},
-					rowCallback: function(row, data, index)
-					{
+					rowCallback: function (row, data, index) {
 						// console.log(index+' - '+data.reporteiluminacionpuntos_nopunto);
 
 						// if(data.reporteiluminacionpuntos_nopunto == 2)
@@ -7272,37 +6763,33 @@ function tabla_reporte_7_7(proyecto_id, reporteregistro_id)
 			}
 
 			// Tooltip en DataTable
-			datatable_reporte_7_7.on('draw', function ()
-			{
+			datatable_reporte_7_7.on('draw', function () {
 				$('[data-toggle="tooltip"]').tooltip();
 			});
 		}
-		else
-		{
+		else {
 			// alert('sur');
 
-			if (datatable_reporte_7_7 != null)
-			{
+			if (datatable_reporte_7_7 != null) {
 				datatable_reporte_7_7.clear().draw();
 				datatable_reporte_7_7.ajax.url(ruta).load();
 			}
-			else
-			{
+			else {
 
-				$('#tabla_reporte_7_7').html('<thead>'+
-													'<tr>'+
-														'<th width="60">Contador</th>'+
-														'<th width="120">Subdirección o<br>corporativo</th>'+
-														'<th width="120">Gerencia o<br>activo</th>'+
-														'<th width="120">Instalación</th>'+
-														'<th width="120">Área de referencia<br>en atlas de riesgo</th>'+
-														'<th width="">Nombre</th>'+
-														'<th width="50">Ficha</th>'+
-														'<th width="">Categoría</th>'+
-														'<th width="90">Ruido dB (A)<br>(medido/LMEP)</th>'+
-													'</tr>'+
-												'</thead>'+
-												'<tbody></tbody>');
+				$('#tabla_reporte_7_7').html('<thead>' +
+					'<tr>' +
+					'<th width="60">Contador</th>' +
+					'<th width="120">Subdirección o<br>corporativo</th>' +
+					'<th width="120">Gerencia o<br>activo</th>' +
+					'<th width="120">Instalación</th>' +
+					'<th width="120">Área de referencia<br>en atlas de riesgo</th>' +
+					'<th width="">Nombre</th>' +
+					'<th width="50">Ficha</th>' +
+					'<th width="">Categoría</th>' +
+					'<th width="90">Ruido dB (A)<br>(medido/LMEP)</th>' +
+					'</tr>' +
+					'</thead>' +
+					'<tbody></tbody>');
 
 				var numeroejecucion = 1;
 				datatable_reporte_7_7 = $('#tabla_reporte_7_7').DataTable({
@@ -7312,18 +6799,15 @@ function tabla_reporte_7_7(proyecto_id, reporteregistro_id)
 						cache: false,
 						dataType: "json",
 						data: {},
-						dataSrc: function (json)
-						{
+						dataSrc: function (json) {
 							menureporte_estado("menureporte_7_7", parseInt(json.total));
 
 							// alert("Done! "+json.msj);
 							return json.data;
 						},
-						error: function (xhr, error, code)
-						{						
-							console.log('error en datatable_reporte_7_7 '+code);
-							if (numeroejecucion <= 1)
-							{
+						error: function (xhr, error, code) {
+							console.log('error en datatable_reporte_7_7 ' + code);
+							if (numeroejecucion <= 1) {
 								tabla_reporte_7_7(proyecto_id, reporteregistro_id);
 								numeroejecucion += 1;
 							}
@@ -7382,7 +6866,7 @@ function tabla_reporte_7_7(proyecto_id, reporteregistro_id)
 					],
 					lengthMenu: [[20, 50, 100, -1], [20, 50, 100, "Todos"]],
 					rowsGroup: [1, 2, 3, 4, 8, 0], //agrupar filas
-					order: [[ 0, "ASC" ]],
+					order: [[0, "ASC"]],
 					ordering: false,
 					processing: true,
 					searching: true,
@@ -7404,8 +6888,7 @@ function tabla_reporte_7_7(proyecto_id, reporteregistro_id)
 							previous: "Anterior"
 						}
 					},
-					rowCallback: function(row, data, index)
-					{
+					rowCallback: function (row, data, index) {
 						// console.log(index+' - '+data.reporteiluminacionpuntos_nopunto);
 
 						// if(data.reporteiluminacionpuntos_nopunto == 2)
@@ -7428,16 +6911,14 @@ function tabla_reporte_7_7(proyecto_id, reporteregistro_id)
 			}
 
 			// Tooltip en DataTable
-			datatable_reporte_7_7.on('draw', function ()
-			{
+			datatable_reporte_7_7.on('draw', function () {
 				$('[data-toggle="tooltip"]').tooltip();
 			});
 		}
 	}
-	catch (exception)
-	{
+	catch (exception) {
 		tabla_reporte_7_7(proyecto_id, reporteregistro_id);
-    }
+	}
 }
 
 
@@ -7453,12 +6934,10 @@ $('#ID_CATCONCLUSION').on('change', function (e) {
 
 })
 
-$("#botonguardar_reporte_conclusion").click(function()
-{
+$("#botonguardar_reporte_conclusion").click(function () {
 	// valida campos vacios
 	var valida = this.form.checkValidity();
-	if (valida)
-	{
+	if (valida) {
 		swal({
 			title: "¡Confirme que desea guardar!",
 			text: "Conclusión",
@@ -7470,95 +6949,89 @@ $("#botonguardar_reporte_conclusion").click(function()
 			closeOnConfirm: false,
 			closeOnCancel: false
 		},
-		function(isConfirm)
-		{
-			if (isConfirm)
-			{
-				// cerrar msj confirmacion
-				swal.close();
+			function (isConfirm) {
+				if (isConfirm) {
+					// cerrar msj confirmacion
+					swal.close();
 
-				// enviar datos
-				$('#form_reporte_conclusion').ajaxForm({
-					dataType: 'json',
-					type: 'POST',
-					url: ''+ruta_storage_guardar,
-					data: {
-						opcion: 19,
-						proyecto_id: proyecto.id,
-						agente_id: agente_id,
-						agente_nombre: agente_nombre,
-						reporteregistro_id: reporteregistro_id,
-						catactivo_id: $("#reporte_catactivo_id").val(),
-						reporte_instalacion: $("#reporte_instalacion").val(),
-					},
-					resetForm: false,
-					success: function(dato)
-					{
-						// Actualizar ID reporte						
-						reporteregistro_id = dato.reporteregistro_id;
+					// enviar datos
+					$('#form_reporte_conclusion').ajaxForm({
+						dataType: 'json',
+						type: 'POST',
+						url: '' + ruta_storage_guardar,
+						data: {
+							opcion: 19,
+							proyecto_id: proyecto.id,
+							agente_id: agente_id,
+							agente_nombre: agente_nombre,
+							reporteregistro_id: reporteregistro_id,
+							catactivo_id: $("#reporte_catactivo_id").val(),
+							reporte_instalacion: $("#reporte_instalacion").val(),
+						},
+						resetForm: false,
+						success: function (dato) {
+							// Actualizar ID reporte						
+							reporteregistro_id = dato.reporteregistro_id;
 
-						menureporte_estado("menureporte_8", 1);
+							menureporte_estado("menureporte_8", 1);
 
-						// tabla_reporte_revisiones(proyecto.id);
+							// tabla_reporte_revisiones(proyecto.id);
 
-						// mensaje
-						swal({
-							title: "Correcto",
-							text: ""+dato.msj,
-							type: "success", // warning, error, success, info
-							buttons: {
-								visible: false, // true , false
-							},
-							timer: 1500,
-							showConfirmButton: false
-						});
+							// mensaje
+							swal({
+								title: "Correcto",
+								text: "" + dato.msj,
+								type: "success", // warning, error, success, info
+								buttons: {
+									visible: false, // true , false
+								},
+								timer: 1500,
+								showConfirmButton: false
+							});
 
-						// actualiza boton
-						$('#botonguardar_reporte_conclusion').html('Guardar conclusión <i class="fa fa-save"></i>');
-						$('#botonguardar_reporte_conclusion').attr('disabled', false);
-					},
-					beforeSend: function()
-					{
-						$('#botonguardar_reporte_conclusion').html('Guardando conclusión <i class="fa fa-spin fa-spinner"></i>');
-						$('#botonguardar_reporte_conclusion').attr('disabled', true);
-					},
-					error: function(dato)
-					{
-						// actualiza boton
-						$('#botonguardar_reporte_conclusion').html('Guardar conclusión <i class="fa fa-save"></i>');
-						$('#botonguardar_reporte_conclusion').attr('disabled', false);
+							// actualiza boton
+							$('#botonguardar_reporte_conclusion').html('Guardar conclusión <i class="fa fa-save"></i>');
+							$('#botonguardar_reporte_conclusion').attr('disabled', false);
+						},
+						beforeSend: function () {
+							$('#botonguardar_reporte_conclusion').html('Guardando conclusión <i class="fa fa-spin fa-spinner"></i>');
+							$('#botonguardar_reporte_conclusion').attr('disabled', true);
+						},
+						error: function (dato) {
+							// actualiza boton
+							$('#botonguardar_reporte_conclusion').html('Guardar conclusión <i class="fa fa-save"></i>');
+							$('#botonguardar_reporte_conclusion').attr('disabled', false);
 
-						// mensaje
-						swal({
-							title: "Error",
-							text: ""+dato.msj,
-							type: "error", // warning, error, success, info
-							buttons: {
-								visible: false, // true , false
-							},
-							timer: 1500,
-							showConfirmButton: false
-						});
-						return false;
-					}
-				}).submit();
-				return false;
-			}
-			else 
-			{
-				// mensaje
-				swal({
-					title: "Cancelado",
-					text: "Acción cancelada",
-					type: "error", // warning, error, success, info
-					buttons: {
-						visible: false, // true , false
-					},
-					timer: 500,
-					showConfirmButton: false
-				});
-			}
-		});
+							// mensaje
+							swal({
+								title: "Error",
+								text: "" + dato.msj,
+								type: "error", // warning, error, success, info
+								buttons: {
+									visible: false, // true , false
+								},
+								timer: 1500,
+								showConfirmButton: false
+							});
+							return false;
+						}
+					}).submit();
+					return false;
+				}
+				else {
+					// mensaje
+					swal({
+						title: "Cancelado",
+						text: "Acción cancelada",
+						type: "error", // warning, error, success, info
+						buttons: {
+							visible: false, // true , false
+						},
+						timer: 500,
+						showConfirmButton: false
+					});
+				}
+			});
 		return false;
 	}
 });
@@ -7568,27 +7041,23 @@ $("#botonguardar_reporte_conclusion").click(function()
 // DASHBOARD
 
 
-$(document).ready(function()
-{
-	setTimeout(function()
-	{
+$(document).ready(function () {
+	setTimeout(function () {
 		reporte_dashboard(proyecto.id, reporteregistro_id);
 	}, 7500);
 });
 
 
 var dashboard_ejecusiones = 0;
-function reporte_dashboard(proyecto_id, reporteregistro_id)
-{
+function reporte_dashboard(proyecto_id, reporteregistro_id) {
 	// Enviar datos
 	$.ajax({
 		type: "GET",
 		dataType: "json",
-		url: "/reporteruidodashboard/"+proyecto_id+"/"+reporteregistro_id+"/"+areas_poe,
-		data:{},
+		url: "/reporteruidodashboard/" + proyecto_id + "/" + reporteregistro_id + "/" + areas_poe,
+		data: {},
 		cache: false,
-		success:function(dato)
-		{
+		success: function (dato) {
 			$("#dashboard_areas").html(dato.dashboard_areas);
 			$("#dashboard_categorias").html(dato.dashboard_categorias);
 			$("#dashboard_equipos").html(dato.dashboard_equipos);
@@ -7614,10 +7083,9 @@ function reporte_dashboard(proyecto_id, reporteregistro_id)
 
 			dashboard_ejecusiones = 0;
 		},
-		error: function(dato)
-		{1
-			if (dashboard_ejecusiones == 0)
-			{
+		error: function (dato) {
+			1
+			if (dashboard_ejecusiones == 0) {
 				reporte_dashboard(proyecto_id, reporteregistro_id);
 				dashboard_ejecusiones += 1;
 			}
@@ -7628,77 +7096,495 @@ function reporte_dashboard(proyecto_id, reporteregistro_id)
 }
 
 
+var grafica_genero = null;
+var grafica_edad = null;
+var grafica_escolaridad = null;
+var grafica_estadocivil = null;
+var grafica_regimen = null;
 var graficapastel_resultados = null;
-function grafica_dashboard_resultados(serie_grafico)
-{
-	graficapastel_resultados = AmCharts.makeChart("grafica_resultados",
-	{
-		"type": "pie",
-		"startDuration": 1,
-		"theme": "light",
-		"addClassNames": true,
-		"autoMargins": false,
-		"marginTop": 0,
-		"marginBottom": 0,
-		"marginLeft": 0,
-		"marginRight": 0,
-		"radius": "40%",
-		"innerRadius": "10%", // Grosor Dona
-		"fontSize": 14,
-		"defs": {
-			"filter": [{
-				"id": "shadow",
-				"width": "200%",
-				"height": "200%",
-				"feOffset": {
-					"result": "offOut",
-					"in": "SourceAlpha",
-					"dx": 0,
-					"dy": 0
-				},
-				"feGaussianBlur": {
-					"result": "blurOut",
-					"in": "offOut",
-					"stdDeviation": 5
-				},
-				"feBlend": {
-					"in": "SourceGraphic",
-					"in2": "blurOut",
-					"mode": "normal"
-				}
-			}]
-		},
-		"legend":{
-			'enabled': false,
-			"position":"bottom",
-			"marginRight":0,
-			"marginLeft":0,
-			"autoMargins":false,
-			"valueText": "[[description]]" //"[[description]] [[value]]"
-		},
-		"export": {
-			"enabled": true,
-			'position': 'top-right'
-		},
-		"valueField": "total",
-		"titleField": "titulo",
-		// "labelText": "[[title]]<br>$[[value]]<br>([[percents]]%)",
-		"labelText": "[[value]]<br>([[percents]]%)",
-		"balloonText": "[[title]]<br><span style='font-size:14px'><b>[[value]]</b> ([[percents]]%)</span>",
-		"labelRadius": -30,
-		"colors": ["#00FF00","#FFFF00", "#FF0000"], //color de la series
-		"dataProvider": serie_grafico,
-		// "dataProvider": [
-		// 	{
-		// 		"titulo": "Dentro de norma",
-		// 		"total": 2				
-		// 	},
-		// 	{
-		// 		"titulo": "Fuera de norma",
-		// 		"total": 1
-		// 	}
-		// ],
-	});
+function grafica_dashboard_resultados(serie_grafico) {
+	graficapastel_resultados = AmCharts.makeChart("grafica_areas",
+		{
+			"type": "pie",
+			"startDuration": 1,
+			"theme": "light",
+			"addClassNames": true,
+			"autoMargins": false,
+			"marginTop": 0,
+			"marginBottom": 0,
+			"marginLeft": 0,
+			"marginRight": 0,
+			"radius": "40%",
+			"innerRadius": "10%", // Grosor Dona
+			"fontSize": 14,
+			"defs": {
+				"filter": [{
+					"id": "shadow",
+					"width": "200%",
+					"height": "200%",
+					"feOffset": {
+						"result": "offOut",
+						"in": "SourceAlpha",
+						"dx": 0,
+						"dy": 0
+					},
+					"feGaussianBlur": {
+						"result": "blurOut",
+						"in": "offOut",
+						"stdDeviation": 5
+					},
+					"feBlend": {
+						"in": "SourceGraphic",
+						"in2": "blurOut",
+						"mode": "normal"
+					}
+				}]
+			},
+			"legend": {
+				'enabled': false,
+				"position": "bottom",
+				"marginRight": 0,
+				"marginLeft": 0,
+				"autoMargins": false,
+				"valueText": "[[description]]" //"[[description]] [[value]]"
+			},
+			"export": {
+				"enabled": true,
+				'position': 'top-right'
+			},
+			"valueField": "total",
+			"titleField": "titulo",
+			// "labelText": "[[title]]<br>$[[value]]<br>([[percents]]%)",
+			"labelText": "[[value]]<br>([[percents]]%)",
+			"balloonText": "[[title]]<br><span style='font-size:14px'><b>[[value]]</b> ([[percents]]%)</span>",
+			"labelRadius": -30,
+			"colors": ["#00FF00", "#FFFF00", "#FF0000"], //color de la series
+			"dataProvider": serie_grafico,
+			// "dataProvider": [
+			// 	{
+			// 		"titulo": "Dentro de norma",
+			// 		"total": 2				
+			// 	},
+			// 	{
+			// 		"titulo": "Fuera de norma",
+			// 		"total": 1
+			// 	}
+			// ],
+		});
+
+		grafica_genero = AmCharts.makeChart("grafica_genero",
+		{
+			"type": "pie",
+			"startDuration": 1,
+			"theme": "light",
+			"addClassNames": true,
+			"autoMargins": false,
+			"marginTop": 0,
+			"marginBottom": 0,
+			"marginLeft": 0,
+			"marginRight": 0,
+			"radius": "40%",
+			"innerRadius": "10%", // Grosor Dona
+			"fontSize": 14,
+			"defs": {
+				"filter": [{
+					"id": "shadow",
+					"width": "200%",
+					"height": "200%",
+					"feOffset": {
+						"result": "offOut",
+						"in": "SourceAlpha",
+						"dx": 0,
+						"dy": 0
+					},
+					"feGaussianBlur": {
+						"result": "blurOut",
+						"in": "offOut",
+						"stdDeviation": 5
+					},
+					"feBlend": {
+						"in": "SourceGraphic",
+						"in2": "blurOut",
+						"mode": "normal"
+					}
+				}]
+			},
+			"legend": {
+				'enabled': false,
+				"position": "bottom",
+				"marginRight": 0,
+				"marginLeft": 0,
+				"autoMargins": false,
+				"valueText": "[[description]]" //"[[description]] [[value]]"
+			},
+			"export": {
+				"enabled": true,
+				'position': 'top-right'
+			},
+			"valueField": "total",
+			"titleField": "titulo",
+			// "labelText": "[[title]]<br>$[[value]]<br>([[percents]]%)",
+			"labelText": "[[value]]<br>([[percents]]%)",
+			"balloonText": "[[title]]<br><span style='font-size:14px'><b>[[value]]</b> ([[percents]]%)</span>",
+			"labelRadius": -30,
+			"colors": ["#00FF00", "#FFFF00", "#FF0000"], //color de la series
+			"dataProvider": serie_grafico,
+			// "dataProvider": [
+			// 	{
+			// 		"titulo": "Dentro de norma",
+			// 		"total": 2				
+			// 	},
+			// 	{
+			// 		"titulo": "Fuera de norma",
+			// 		"total": 1
+			// 	}
+			// ],
+		});
+
+		grafica_edad = AmCharts.makeChart("grafica_edad",
+		{
+			"type": "pie",
+			"startDuration": 1,
+			"theme": "light",
+			"addClassNames": true,
+			"autoMargins": false,
+			"marginTop": 0,
+			"marginBottom": 0,
+			"marginLeft": 0,
+			"marginRight": 0,
+			"radius": "40%",
+			"innerRadius": "10%", // Grosor Dona
+			"fontSize": 14,
+			"defs": {
+				"filter": [{
+					"id": "shadow",
+					"width": "200%",
+					"height": "200%",
+					"feOffset": {
+						"result": "offOut",
+						"in": "SourceAlpha",
+						"dx": 0,
+						"dy": 0
+					},
+					"feGaussianBlur": {
+						"result": "blurOut",
+						"in": "offOut",
+						"stdDeviation": 5
+					},
+					"feBlend": {
+						"in": "SourceGraphic",
+						"in2": "blurOut",
+						"mode": "normal"
+					}
+				}]
+			},
+			"legend": {
+				'enabled': false,
+				"position": "bottom",
+				"marginRight": 0,
+				"marginLeft": 0,
+				"autoMargins": false,
+				"valueText": "[[description]]" //"[[description]] [[value]]"
+			},
+			"export": {
+				"enabled": true,
+				'position': 'top-right'
+			},
+			"valueField": "total",
+			"titleField": "titulo",
+			// "labelText": "[[title]]<br>$[[value]]<br>([[percents]]%)",
+			"labelText": "[[value]]<br>([[percents]]%)",
+			"balloonText": "[[title]]<br><span style='font-size:14px'><b>[[value]]</b> ([[percents]]%)</span>",
+			"labelRadius": -30,
+			"colors": ["#00FF00", "#FFFF00", "#FF0000"], //color de la series
+			"dataProvider": serie_grafico,
+			// "dataProvider": [
+			// 	{
+			// 		"titulo": "Dentro de norma",
+			// 		"total": 2				
+			// 	},
+			// 	{
+			// 		"titulo": "Fuera de norma",
+			// 		"total": 1
+			// 	}
+			// ],
+		});
+
+		grafica_escolaridad = AmCharts.makeChart("grafica_escolaridad",
+		{
+			"type": "pie",
+			"startDuration": 1,
+			"theme": "light",
+			"addClassNames": true,
+			"autoMargins": false,
+			"marginTop": 0,
+			"marginBottom": 0,
+			"marginLeft": 0,
+			"marginRight": 0,
+			"radius": "40%",
+			"innerRadius": "10%", // Grosor Dona
+			"fontSize": 14,
+			"defs": {
+				"filter": [{
+					"id": "shadow",
+					"width": "200%",
+					"height": "200%",
+					"feOffset": {
+						"result": "offOut",
+						"in": "SourceAlpha",
+						"dx": 0,
+						"dy": 0
+					},
+					"feGaussianBlur": {
+						"result": "blurOut",
+						"in": "offOut",
+						"stdDeviation": 5
+					},
+					"feBlend": {
+						"in": "SourceGraphic",
+						"in2": "blurOut",
+						"mode": "normal"
+					}
+				}]
+			},
+			"legend": {
+				'enabled': false,
+				"position": "bottom",
+				"marginRight": 0,
+				"marginLeft": 0,
+				"autoMargins": false,
+				"valueText": "[[description]]" //"[[description]] [[value]]"
+			},
+			"export": {
+				"enabled": true,
+				'position': 'top-right'
+			},
+			"valueField": "total",
+			"titleField": "titulo",
+			// "labelText": "[[title]]<br>$[[value]]<br>([[percents]]%)",
+			"labelText": "[[value]]<br>([[percents]]%)",
+			"balloonText": "[[title]]<br><span style='font-size:14px'><b>[[value]]</b> ([[percents]]%)</span>",
+			"labelRadius": -30,
+			"colors": ["#00FF00", "#FFFF00", "#FF0000"], //color de la series
+			"dataProvider": serie_grafico,
+			// "dataProvider": [
+			// 	{
+			// 		"titulo": "Dentro de norma",
+			// 		"total": 2				
+			// 	},
+			// 	{
+			// 		"titulo": "Fuera de norma",
+			// 		"total": 1
+			// 	}
+			// ],
+		});
+
+		grafica_estadocivil = AmCharts.makeChart("grafica_estadocivil",
+		{
+			"type": "pie",
+			"startDuration": 1,
+			"theme": "light",
+			"addClassNames": true,
+			"autoMargins": false,
+			"marginTop": 0,
+			"marginBottom": 0,
+			"marginLeft": 0,
+			"marginRight": 0,
+			"radius": "40%",
+			"innerRadius": "10%", // Grosor Dona
+			"fontSize": 14,
+			"defs": {
+				"filter": [{
+					"id": "shadow",
+					"width": "200%",
+					"height": "200%",
+					"feOffset": {
+						"result": "offOut",
+						"in": "SourceAlpha",
+						"dx": 0,
+						"dy": 0
+					},
+					"feGaussianBlur": {
+						"result": "blurOut",
+						"in": "offOut",
+						"stdDeviation": 5
+					},
+					"feBlend": {
+						"in": "SourceGraphic",
+						"in2": "blurOut",
+						"mode": "normal"
+					}
+				}]
+			},
+			"legend": {
+				'enabled': false,
+				"position": "bottom",
+				"marginRight": 0,
+				"marginLeft": 0,
+				"autoMargins": false,
+				"valueText": "[[description]]" //"[[description]] [[value]]"
+			},
+			"export": {
+				"enabled": true,
+				'position': 'top-right'
+			},
+			"valueField": "total",
+			"titleField": "titulo",
+			// "labelText": "[[title]]<br>$[[value]]<br>([[percents]]%)",
+			"labelText": "[[value]]<br>([[percents]]%)",
+			"balloonText": "[[title]]<br><span style='font-size:14px'><b>[[value]]</b> ([[percents]]%)</span>",
+			"labelRadius": -30,
+			"colors": ["#00FF00", "#FFFF00", "#FF0000"], //color de la series
+			"dataProvider": serie_grafico,
+			// "dataProvider": [
+			// 	{
+			// 		"titulo": "Dentro de norma",
+			// 		"total": 2				
+			// 	},
+			// 	{
+			// 		"titulo": "Fuera de norma",
+			// 		"total": 1
+			// 	}
+			// ],
+		});
+
+		grafica_regimen = AmCharts.makeChart("grafica_regimen",
+		{
+			"type": "pie",
+			"startDuration": 1,
+			"theme": "light",
+			"addClassNames": true,
+			"autoMargins": false,
+			"marginTop": 0,
+			"marginBottom": 0,
+			"marginLeft": 0,
+			"marginRight": 0,
+			"radius": "40%",
+			"innerRadius": "10%", // Grosor Dona
+			"fontSize": 14,
+			"defs": {
+				"filter": [{
+					"id": "shadow",
+					"width": "200%",
+					"height": "200%",
+					"feOffset": {
+						"result": "offOut",
+						"in": "SourceAlpha",
+						"dx": 0,
+						"dy": 0
+					},
+					"feGaussianBlur": {
+						"result": "blurOut",
+						"in": "offOut",
+						"stdDeviation": 5
+					},
+					"feBlend": {
+						"in": "SourceGraphic",
+						"in2": "blurOut",
+						"mode": "normal"
+					}
+				}]
+			},
+			"legend": {
+				'enabled': false,
+				"position": "bottom",
+				"marginRight": 0,
+				"marginLeft": 0,
+				"autoMargins": false,
+				"valueText": "[[description]]" //"[[description]] [[value]]"
+			},
+			"export": {
+				"enabled": true,
+				'position': 'top-right'
+			},
+			"valueField": "total",
+			"titleField": "titulo",
+			// "labelText": "[[title]]<br>$[[value]]<br>([[percents]]%)",
+			"labelText": "[[value]]<br>([[percents]]%)",
+			"balloonText": "[[title]]<br><span style='font-size:14px'><b>[[value]]</b> ([[percents]]%)</span>",
+			"labelRadius": -30,
+			"colors": ["#00FF00", "#FFFF00", "#FF0000"], //color de la series
+			"dataProvider": serie_grafico,
+			// "dataProvider": [
+			// 	{
+			// 		"titulo": "Dentro de norma",
+			// 		"total": 2				
+			// 	},
+			// 	{
+			// 		"titulo": "Fuera de norma",
+			// 		"total": 1
+			// 	}
+			// ],
+		});
+
+	graficapastel_resultados = AmCharts.makeChart("grafica_areas",
+		{
+			"type": "pie",
+			"startDuration": 1,
+			"theme": "light",
+			"addClassNames": true,
+			"autoMargins": false,
+			"marginTop": 0,
+			"marginBottom": 0,
+			"marginLeft": 0,
+			"marginRight": 0,
+			"radius": "40%",
+			"innerRadius": "10%", // Grosor Dona
+			"fontSize": 14,
+			"defs": {
+				"filter": [{
+					"id": "shadow",
+					"width": "200%",
+					"height": "200%",
+					"feOffset": {
+						"result": "offOut",
+						"in": "SourceAlpha",
+						"dx": 0,
+						"dy": 0
+					},
+					"feGaussianBlur": {
+						"result": "blurOut",
+						"in": "offOut",
+						"stdDeviation": 5
+					},
+					"feBlend": {
+						"in": "SourceGraphic",
+						"in2": "blurOut",
+						"mode": "normal"
+					}
+				}]
+			},
+			"legend": {
+				'enabled': false,
+				"position": "bottom",
+				"marginRight": 0,
+				"marginLeft": 0,
+				"autoMargins": false,
+				"valueText": "[[description]]" //"[[description]] [[value]]"
+			},
+			"export": {
+				"enabled": true,
+				'position': 'top-right'
+			},
+			"valueField": "total",
+			"titleField": "titulo",
+			// "labelText": "[[title]]<br>$[[value]]<br>([[percents]]%)",
+			"labelText": "[[value]]<br>([[percents]]%)",
+			"balloonText": "[[title]]<br><span style='font-size:14px'><b>[[value]]</b> ([[percents]]%)</span>",
+			"labelRadius": -30,
+			"colors": ["#00FF00", "#FFFF00", "#FF0000"], //color de la series
+			"dataProvider": serie_grafico,
+			// "dataProvider": [
+			// 	{
+			// 		"titulo": "Dentro de norma",
+			// 		"total": 2				
+			// 	},
+			// 	{
+			// 		"titulo": "Fuera de norma",
+			// 		"total": 1
+			// 	}
+			// ],
+		});
 }
 
 
@@ -7706,49 +7592,40 @@ function grafica_dashboard_resultados(serie_grafico)
 // RECOMENDACIONES
 
 
-$(document).ready(function()
-{
-	setTimeout(function()
-	{
+$(document).ready(function () {
+	setTimeout(function () {
 		tabla_reporte_9(proyecto.id, reporteregistro_id, agente_nombre);
 	}, 8000);
 });
 
 
 var datatable_9 = null;
-function tabla_reporte_9(proyecto_id, reporteregistro_id, agente_nombre)
-{
-	try 
-	{
-		var ruta = "/reporteruidorecomendacionestabla/"+proyecto_id+"/"+reporteregistro_id+"/"+agente_nombre;
+function tabla_reporte_9(proyecto_id, reporteregistro_id, agente_nombre) {
+	try {
+		var ruta = "/reporteruidorecomendacionestabla/" + proyecto_id + "/" + reporteregistro_id + "/" + agente_nombre;
 
-		if (datatable_9 != null)
-		{
+		if (datatable_9 != null) {
 			datatable_9.clear().draw();
 			datatable_9.ajax.url(ruta).load();
 		}
-		else
-		{
+		else {
 			var numeroejecucion = 1;
-		    datatable_9 = $('#tabla_reporte_9').DataTable({
+			datatable_9 = $('#tabla_reporte_9').DataTable({
 				ajax: {
 					url: ruta,
 					type: "get",
 					cache: false,
 					dataType: "json",
 					data: {},
-					dataSrc: function (json)
-					{
+					dataSrc: function (json) {
 						menureporte_estado("menureporte_9", parseInt(json.total));
 
 						// alert("Done! "+json.msj);
 						return json.data;
 					},
-					error: function (xhr, error, code)
-					{						
-						console.log('error en datatable_9 '+code);
-						if (numeroejecucion <= 1)
-						{
+					error: function (xhr, error, code) {
+						console.log('error en datatable_9 ' + code);
+						if (numeroejecucion <= 1) {
 							tabla_reporte_9(proyecto_id, reporteregistro_id, agente_nombre);
 							numeroejecucion += 1;
 						}
@@ -7778,7 +7655,7 @@ function tabla_reporte_9(proyecto_id, reporteregistro_id, agente_nombre)
 				],
 				lengthMenu: [[20, 50, 100, -1], [20, 50, 100, "Todos"]],
 				// rowsGroup: [1, 2, 3], //agrupar filas
-				order: [[ 0, "ASC" ]],
+				order: [[0, "ASC"]],
 				ordering: false,
 				processing: true,
 				searching: false,
@@ -7800,8 +7677,7 @@ function tabla_reporte_9(proyecto_id, reporteregistro_id, agente_nombre)
 						previous: "Anterior"
 					}
 				},
-				rowCallback: function(row, data, index)
-				{
+				rowCallback: function (row, data, index) {
 					// console.log(index+' - '+data.reporteiluminacionpuntos_nopunto);
 
 					// if(data.reporteiluminacionpuntos_nopunto == 2)
@@ -7824,152 +7700,136 @@ function tabla_reporte_9(proyecto_id, reporteregistro_id, agente_nombre)
 		}
 
 		// Tooltip en DataTable
-		datatable_9.on('draw', function ()
-		{
+		datatable_9.on('draw', function () {
 			$('[data-toggle="tooltip"]').tooltip();
 		});
 	}
-	catch (exception)
-	{
+	catch (exception) {
 		tabla_reporte_9(proyecto_id, reporteregistro_id, agente_nombre);
-    }
+	}
 }
 
 
-$("#boton_reporte_nuevarecomendacion").click(function()
-{
-    $("#tabla_reporte_9 tbody").append('<tr>'+
-											'<td>0</td>'+
-											'<td style="text-align: center;">'+
-												'<input type="checkbox" class="recomendacionadicional_checkbox" name="recomendacionadicional_checkbox[]" value="0" checked/>'+
-												'<br><button type="button" class="btn btn-danger waves-effect btn-circle eliminar" data-toggle="tooltip" title="Eliminar recomendación"><i class="fa fa-trash fa-2x"></i></button>'+
-											'</td>'+
-											'<td>'+
-												'<div class="form-group">'+
-													'<label>Tipo</label>'+
-													'<select class="custom-select form-control" name="recomendacionadicional_tipo[]" required>'+
-														'<option value=""></option>'+
-														'<option value="Preventiva">Preventiva</option>'+
-														'<option value="Correctiva">Correctiva</option>'+
-													'</select>'+
-												'</div>'+
-												'<div class="form-group">'+
-													'<label>Descripción</label>'+
-													'<textarea  class="form-control" style="margin-bottom: 0px;" rows="5" name="recomendacionadicional_descripcion[]" required></textarea>'+
-												'</div>'+
-											'</td>'+
-										'</tr>');
+$("#boton_reporte_nuevarecomendacion").click(function () {
+	$("#tabla_reporte_9 tbody").append('<tr>' +
+		'<td>0</td>' +
+		'<td style="text-align: center;">' +
+		'<input type="checkbox" class="recomendacionadicional_checkbox" name="recomendacionadicional_checkbox[]" value="0" checked/>' +
+		'<br><button type="button" class="btn btn-danger waves-effect btn-circle eliminar" data-toggle="tooltip" title="Eliminar recomendación"><i class="fa fa-trash fa-2x"></i></button>' +
+		'</td>' +
+		'<td>' +
+		'<div class="form-group">' +
+		'<label>Tipo</label>' +
+		'<select class="custom-select form-control" name="recomendacionadicional_tipo[]" required>' +
+		'<option value=""></option>' +
+		'<option value="Preventiva">Preventiva</option>' +
+		'<option value="Correctiva">Correctiva</option>' +
+		'</select>' +
+		'</div>' +
+		'<div class="form-group">' +
+		'<label>Descripción</label>' +
+		'<textarea  class="form-control" style="margin-bottom: 0px;" rows="5" name="recomendacionadicional_descripcion[]" required></textarea>' +
+		'</div>' +
+		'</td>' +
+		'</tr>');
 
-    var posicion = $("#tabla_reporte_9 > tbody > tr").eq((parseInt(document.getElementById("tabla_reporte_9").rows.length) - 1) - 2).offset().top;
-    $('html, body').animate({
-        scrollTop: posicion
-    }, 1000);
+	var posicion = $("#tabla_reporte_9 > tbody > tr").eq((parseInt(document.getElementById("tabla_reporte_9").rows.length) - 1) - 2).offset().top;
+	$('html, body').animate({
+		scrollTop: posicion
+	}, 1000);
 
-    $('[data-toggle="tooltip"]').tooltip();
+	$('[data-toggle="tooltip"]').tooltip();
 });
 
 
-function activa_recomendacion(checkbox)
-{
-	if (checkbox.checked)
-	{
-		$('#recomendacion_descripcion_'+checkbox.value).attr('readonly', false);
-		$('#recomendacion_descripcion_'+checkbox.value).attr('required', true);
+function activa_recomendacion(checkbox) {
+	if (checkbox.checked) {
+		$('#recomendacion_descripcion_' + checkbox.value).attr('readonly', false);
+		$('#recomendacion_descripcion_' + checkbox.value).attr('required', true);
 	}
-	else
-	{
-		$('#recomendacion_descripcion_'+checkbox.value).attr('required', false);
-		$('#recomendacion_descripcion_'+checkbox.value).attr('readonly', true);
+	else {
+		$('#recomendacion_descripcion_' + checkbox.value).attr('required', false);
+		$('#recomendacion_descripcion_' + checkbox.value).attr('readonly', true);
 	}
 }
 
 
-$('#tabla_reporte_9 tbody').on('click', 'td>button.eliminar', function()
-{
-    // obtener fila tabla
-    var fila = $(this);
-    
-    // confirmar
-    swal({   
-        title: "¿Eliminar recomendación?",   
-        text: "Quitar de la lista de recomendaciones",   
-        type: "warning",   
-        showCancelButton: true,   
-        confirmButtonColor: "#DD6B55",   
-        confirmButtonText: "Eliminar!",   
-        cancelButtonText: "Cancelar!",   
-        closeOnConfirm: false,   
-        closeOnCancel: false 
-    }, function(isConfirm){   
-        if (isConfirm)
-        {
-        	// cerrar msj confirmacion
+$('#tabla_reporte_9 tbody').on('click', 'td>button.eliminar', function () {
+	// obtener fila tabla
+	var fila = $(this);
+
+	// confirmar
+	swal({
+		title: "¿Eliminar recomendación?",
+		text: "Quitar de la lista de recomendaciones",
+		type: "warning",
+		showCancelButton: true,
+		confirmButtonColor: "#DD6B55",
+		confirmButtonText: "Eliminar!",
+		cancelButtonText: "Cancelar!",
+		closeOnConfirm: false,
+		closeOnCancel: false
+	}, function (isConfirm) {
+		if (isConfirm) {
+			// cerrar msj confirmacion
 			// swal.close();
 
-            var tr = fila.closest('tr');
-            fila.closest("tr").remove(); // eliminar fila TR
+			var tr = fila.closest('tr');
+			fila.closest("tr").remove(); // eliminar fila TR
 
-            // mensaje
-            swal({
-                title: "Correcto",
-                 text: "Recomendación eliminada de la lista",
-                type: "success", // warning, error, success, info
-                buttons: {
-                    visible: false, // true , false
-                },
-                timer: 1500,
-                showConfirmButton: false
-            });
-        }
-        else 
-        {
-            // mensaje
-            swal({
-                title: "Cancelado",
-                text: "",
-                type: "error", // warning, error, success, info
-                buttons: {
-                    visible: false, // true , false
-                },
-                timer: 500,
-                showConfirmButton: false
-            });   
-        } 
-    });
-    return false;
+			// mensaje
+			swal({
+				title: "Correcto",
+				text: "Recomendación eliminada de la lista",
+				type: "success", // warning, error, success, info
+				buttons: {
+					visible: false, // true , false
+				},
+				timer: 1500,
+				showConfirmButton: false
+			});
+		}
+		else {
+			// mensaje
+			swal({
+				title: "Cancelado",
+				text: "",
+				type: "error", // warning, error, success, info
+				buttons: {
+					visible: false, // true , false
+				},
+				timer: 500,
+				showConfirmButton: false
+			});
+		}
+	});
+	return false;
 });
 
 
-$("#botonguardar_reporte_recomendaciones").click(function()
-{
+$("#botonguardar_reporte_recomendaciones").click(function () {
 	// borrar campo filtro del DATATABLE
 	// datatable_recomendaciones.search("").draw();
 
 	// valida campos vacios
 	var seleccionados = 0;
-	$('.recomendacion_checkbox').each(function()
-	{
-		if (this.checked)
-		{
+	$('.recomendacion_checkbox').each(function () {
+		if (this.checked) {
 			seleccionados += 1;
 		}
 	});
 
-	$('.recomendacionadicional_checkbox').each(function()
-	{
-		if (this.checked)
-		{
+	$('.recomendacionadicional_checkbox').each(function () {
+		if (this.checked) {
 			seleccionados += 1;
 		}
 	});
 
 
-	if (seleccionados > 0)
-	{
+	if (seleccionados > 0) {
 		// valida campos vacios
 		var valida = this.form.checkValidity();
-		if (valida)
-		{
+		if (valida) {
 			swal({
 				title: "¡Confirme que desea guardar!",
 				text: "Recomendaciones",
@@ -7981,100 +7841,93 @@ $("#botonguardar_reporte_recomendaciones").click(function()
 				closeOnConfirm: false,
 				closeOnCancel: false
 			},
-			function(isConfirm)
-			{
-				if (isConfirm)
-				{
-					// cerrar msj confirmacion
-					swal.close();
+				function (isConfirm) {
+					if (isConfirm) {
+						// cerrar msj confirmacion
+						swal.close();
 
-					// enviar datos
-					$('#form_reporte_recomendaciones').ajaxForm({
-						dataType: 'json',
-						type: 'POST',
-						url: ''+ruta_storage_guardar,
-						data: {
-							opcion: 20,
-							proyecto_id: proyecto.id,
-							agente_id: agente_id,
-							agente_nombre: agente_nombre,
-							reporteregistro_id: reporteregistro_id,
-							catactivo_id: $("#reporte_catactivo_id").val(),
-							reporte_instalacion: $("#reporte_instalacion").val(),
-						},
-						resetForm: false,
-						success: function(dato)
-						{
-							// Actualizar ID reporte
-							reporteregistro_id = dato.reporteregistro_id;
+						// enviar datos
+						$('#form_reporte_recomendaciones').ajaxForm({
+							dataType: 'json',
+							type: 'POST',
+							url: '' + ruta_storage_guardar,
+							data: {
+								opcion: 20,
+								proyecto_id: proyecto.id,
+								agente_id: agente_id,
+								agente_nombre: agente_nombre,
+								reporteregistro_id: reporteregistro_id,
+								catactivo_id: $("#reporte_catactivo_id").val(),
+								reporte_instalacion: $("#reporte_instalacion").val(),
+							},
+							resetForm: false,
+							success: function (dato) {
+								// Actualizar ID reporte
+								reporteregistro_id = dato.reporteregistro_id;
 
-							menureporte_estado("menureporte_9", 1);
+								menureporte_estado("menureporte_9", 1);
 
-							// tabla_reporte_revisiones(proyecto.id);
+								// tabla_reporte_revisiones(proyecto.id);
 
-							// mensaje
-							swal({
-								title: "Correcto",
-								text: ""+dato.msj,
-								type: "success", // warning, error, success, info
-								buttons: {
-									visible: false, // true , false
-								},
-								timer: 1500,
-								showConfirmButton: false
-							});
+								// mensaje
+								swal({
+									title: "Correcto",
+									text: "" + dato.msj,
+									type: "success", // warning, error, success, info
+									buttons: {
+										visible: false, // true , false
+									},
+									timer: 1500,
+									showConfirmButton: false
+								});
 
-							// actualiza boton
-							$('#botonguardar_reporte_recomendaciones').html('Guardar recomendaciones <i class="fa fa-save"></i>');
-							$('#botonguardar_reporte_recomendaciones').attr('disabled', false);
-						},
-						beforeSend: function()
-						{
-							$('#botonguardar_reporte_recomendaciones').html('Guardando recomendaciones <i class="fa fa-spin fa-spinner"></i>');
-							$('#botonguardar_reporte_recomendaciones').attr('disabled', true);
-						},
-						error: function(dato)
-						{
-							// actualiza boton
-							$('#botonguardar_reporte_recomendaciones').html('Guardar recomendaciones <i class="fa fa-save"></i>');
-							$('#botonguardar_reporte_recomendaciones').attr('disabled', false);
+								// actualiza boton
+								$('#botonguardar_reporte_recomendaciones').html('Guardar recomendaciones <i class="fa fa-save"></i>');
+								$('#botonguardar_reporte_recomendaciones').attr('disabled', false);
+							},
+							beforeSend: function () {
+								$('#botonguardar_reporte_recomendaciones').html('Guardando recomendaciones <i class="fa fa-spin fa-spinner"></i>');
+								$('#botonguardar_reporte_recomendaciones').attr('disabled', true);
+							},
+							error: function (dato) {
+								// actualiza boton
+								$('#botonguardar_reporte_recomendaciones').html('Guardar recomendaciones <i class="fa fa-save"></i>');
+								$('#botonguardar_reporte_recomendaciones').attr('disabled', false);
 
-							// mensaje
-							swal({
-								title: "Error",
-								text: ""+dato.msj,
-								type: "error", // warning, error, success, info
-								buttons: {
-									visible: false, // true , false
-								},
-								timer: 1500,
-								showConfirmButton: false
-							});
-							return false;
-						}
-					}).submit();
-					return false;
-				}
-				else 
-				{
-					// mensaje
-					swal({
-						title: "Cancelado",
-						text: "Acción cancelada",
-						type: "error", // warning, error, success, info
-						buttons: {
-							visible: false, // true , false
-						},
-						timer: 500,
-						showConfirmButton: false
-					});
-				}
-			});
+								// mensaje
+								swal({
+									title: "Error",
+									text: "" + dato.msj,
+									type: "error", // warning, error, success, info
+									buttons: {
+										visible: false, // true , false
+									},
+									timer: 1500,
+									showConfirmButton: false
+								});
+								return false;
+							}
+						}).submit();
+						return false;
+					}
+					else {
+						// mensaje
+						swal({
+							title: "Cancelado",
+							text: "Acción cancelada",
+							type: "error", // warning, error, success, info
+							buttons: {
+								visible: false, // true , false
+							},
+							timer: 500,
+							showConfirmButton: false
+						});
+					}
+				});
 			return false;
 		}
 	}
-	else
-	{
+	else {
 		// mensaje
 		swal({
 			title: "Seleccione recomendaciones",
@@ -8095,15 +7948,14 @@ $("#botonguardar_reporte_recomendaciones").click(function()
 // RESPONSABLES DEL INFORME
 
 
-$(document).ready(function()
-{
+$(document).ready(function () {
 	$('#reporteresponsable1documento').dropify({
 		messages:
 		{
 			'default': 'Arrastre el mapa aquí o haga click',
 			'replace': 'Arrastre el mapa o haga clic para reemplazar',
-			'remove':  'Quitar',
-			'error':   'Ooops, ha ocurrido un error.'
+			'remove': 'Quitar',
+			'error': 'Ooops, ha ocurrido un error.'
 		},
 		error:
 		{
@@ -8121,8 +7973,8 @@ $(document).ready(function()
 		{
 			'default': 'Arrastre el mapa aquí o haga click',
 			'replace': 'Arrastre el mapa o haga clic para reemplazar',
-			'remove':  'Quitar',
-			'error':   'Ooops, ha ocurrido un error.'
+			'remove': 'Quitar',
+			'error': 'Ooops, ha ocurrido un error.'
 		},
 		error:
 		{
@@ -8140,8 +7992,8 @@ $(document).ready(function()
 		{
 			'default': 'Arrastre el mapa aquí o haga click',
 			'replace': 'Arrastre el mapa o haga clic para reemplazar',
-			'remove':  'Quitar',
-			'error':   'Ooops, ha ocurrido un error.'
+			'remove': 'Quitar',
+			'error': 'Ooops, ha ocurrido un error.'
 		},
 		error:
 		{
@@ -8156,12 +8008,10 @@ $(document).ready(function()
 });
 
 
-$("#botonguardar_reporte_responsablesinforme").click(function()
-{
+$("#botonguardar_reporte_responsablesinforme").click(function () {
 	// valida campos vacios
 	var valida = this.form.checkValidity();
-	if (valida)
-	{
+	if (valida) {
 		swal({
 			title: "¡Confirme que desea guardar!",
 			text: "Responsables del informe",
@@ -8173,115 +8023,107 @@ $("#botonguardar_reporte_responsablesinforme").click(function()
 			closeOnConfirm: false,
 			closeOnCancel: false
 		},
-		function(isConfirm)
-		{
-			if (isConfirm)
-			{
-				// cerrar msj confirmacion
-				swal.close();
+			function (isConfirm) {
+				if (isConfirm) {
+					// cerrar msj confirmacion
+					swal.close();
 
-				// enviar datos
-				$('#form_reporte_responsablesinforme').ajaxForm({
-					dataType: 'json',
-					type: 'POST',
-					url: ''+ruta_storage_guardar,
-					data: {
-						opcion: 21,
-						proyecto_id: proyecto.id,
-						agente_id: agente_id,
-						agente_nombre: agente_nombre,
-						reporteregistro_id: reporteregistro_id,
-						catactivo_id: $("#reporte_catactivo_id").val(),
-						reporte_instalacion: $("#reporte_instalacion").val(),
-					},
-					resetForm: false,
-					success: function(dato)
-					{
-						// Actualizar ID reporte
-						reporteregistro_id = dato.reporteregistro_id;
+					// enviar datos
+					$('#form_reporte_responsablesinforme').ajaxForm({
+						dataType: 'json',
+						type: 'POST',
+						url: '' + ruta_storage_guardar,
+						data: {
+							opcion: 21,
+							proyecto_id: proyecto.id,
+							agente_id: agente_id,
+							agente_nombre: agente_nombre,
+							reporteregistro_id: reporteregistro_id,
+							catactivo_id: $("#reporte_catactivo_id").val(),
+							reporte_instalacion: $("#reporte_instalacion").val(),
+						},
+						resetForm: false,
+						success: function (dato) {
+							// Actualizar ID reporte
+							reporteregistro_id = dato.reporteregistro_id;
 
-						menureporte_estado("menureporte_10", 1);
+							menureporte_estado("menureporte_10", 1);
 
-						// tabla_reporte_revisiones(proyecto.id);
+							// tabla_reporte_revisiones(proyecto.id);
 
-						$('#boton_descargarresponsabledoc1').css('display', 'block');
-						$('#boton_descargarresponsabledoc2').css('display', 'block');
+							$('#boton_descargarresponsabledoc1').css('display', 'block');
+							$('#boton_descargarresponsabledoc2').css('display', 'block');
 
-						// Carpeta ubicacion documentos historial
-						$('#responsablesinforme_carpetadocumentoshistorial').val('');
+							// Carpeta ubicacion documentos historial
+							$('#responsablesinforme_carpetadocumentoshistorial').val('');
 
-						// mensaje
-						swal({
-							title: "Correcto",
-							text: ""+dato.msj,
-							type: "success", // warning, error, success, info
-							buttons: {
-								visible: false, // true , false
-							},
-							timer: 1500,
-							showConfirmButton: false
-						});
+							// mensaje
+							swal({
+								title: "Correcto",
+								text: "" + dato.msj,
+								type: "success", // warning, error, success, info
+								buttons: {
+									visible: false, // true , false
+								},
+								timer: 1500,
+								showConfirmButton: false
+							});
 
-						// actualiza boton
-						$('#botonguardar_reporte_responsablesinforme').html('Guardar responsables del informe <i class="fa fa-save"></i>');
-						$('#botonguardar_reporte_responsablesinforme').attr('disabled', false);
-					},
-					beforeSend: function()
-					{
-						$('#botonguardar_reporte_responsablesinforme').html('Guardando responsables del informe <i class="fa fa-spin fa-spinner"></i>');
-						$('#botonguardar_reporte_responsablesinforme').attr('disabled', true);
-					},
-					error: function(dato)
-					{
-						// actualiza boton
-						$('#botonguardar_reporte_responsablesinforme').html('Guardar responsables del informe <i class="fa fa-save"></i>');
-						$('#botonguardar_reporte_responsablesinforme').attr('disabled', false);
+							// actualiza boton
+							$('#botonguardar_reporte_responsablesinforme').html('Guardar responsables del informe <i class="fa fa-save"></i>');
+							$('#botonguardar_reporte_responsablesinforme').attr('disabled', false);
+						},
+						beforeSend: function () {
+							$('#botonguardar_reporte_responsablesinforme').html('Guardando responsables del informe <i class="fa fa-spin fa-spinner"></i>');
+							$('#botonguardar_reporte_responsablesinforme').attr('disabled', true);
+						},
+						error: function (dato) {
+							// actualiza boton
+							$('#botonguardar_reporte_responsablesinforme').html('Guardar responsables del informe <i class="fa fa-save"></i>');
+							$('#botonguardar_reporte_responsablesinforme').attr('disabled', false);
 
-						// mensaje
-						swal({
-							title: "Error",
-							text: ""+dato.msj,
-							type: "error", // warning, error, success, info
-							buttons: {
-								visible: false, // true , false
-							},
-							timer: 1500,
-							showConfirmButton: false
-						});
-						return false;
-					}
-				}).submit();
-				return false;
-			}
-			else 
-			{
-				// mensaje
-				swal({
-					title: "Cancelado",
-					text: "Acción cancelada",
-					type: "error", // warning, error, success, info
-					buttons: {
-						visible: false, // true , false
-					},
-					timer: 500,
-					showConfirmButton: false
-				});
-			}
-		});
+							// mensaje
+							swal({
+								title: "Error",
+								text: "" + dato.msj,
+								type: "error", // warning, error, success, info
+								buttons: {
+									visible: false, // true , false
+								},
+								timer: 1500,
+								showConfirmButton: false
+							});
+							return false;
+						}
+					}).submit();
+					return false;
+				}
+				else {
+					// mensaje
+					swal({
+						title: "Cancelado",
+						text: "Acción cancelada",
+						type: "error", // warning, error, success, info
+						buttons: {
+							visible: false, // true , false
+						},
+						timer: 500,
+						showConfirmButton: false
+					});
+				}
+			});
 		return false;
 	}
 });
 
 
-$("#boton_descargarresponsabledoc1").click(function()
-{
-	window.open('/reporteruidoresponsabledocumento/'+reporteregistro_id+'/'+1+'/'+1);
+$("#boton_descargarresponsabledoc1").click(function () {
+	window.open('/reporteruidoresponsabledocumento/' + reporteregistro_id + '/' + 1 + '/' + 1);
 });
 
 
-$("#boton_descargarresponsabledoc2").click(function()
-{
-	window.open('/reporteruidoresponsabledocumento/'+reporteregistro_id+'/'+2+'/'+1);
+$("#boton_descargarresponsabledoc2").click(function () {
+	window.open('/reporteruidoresponsabledocumento/' + reporteregistro_id + '/' + 2 + '/' + 1);
 });
 
 
@@ -8289,29 +8131,23 @@ $("#boton_descargarresponsabledoc2").click(function()
 // PLANOS
 
 
-$(document).ready(function()
-{
-	setTimeout(function()
-	{
+$(document).ready(function () {
+	setTimeout(function () {
 		tabla_reporte_planos(proyecto.id, reporteregistro_id, agente_nombre);
 	}, 8500);
 });
 
 
 var datatable_planos = null;
-function tabla_reporte_planos(proyecto_id, reporteregistro_id, agente_nombre)
-{
-	try 
-	{
-		var ruta = "/reporteruidoplanostabla/"+proyecto_id+"/"+reporteregistro_id+"/"+agente_nombre;
+function tabla_reporte_planos(proyecto_id, reporteregistro_id, agente_nombre) {
+	try {
+		var ruta = "/reporteruidoplanostabla/" + proyecto_id + "/" + reporteregistro_id + "/" + agente_nombre;
 
-		if (datatable_planos != null)
-		{
+		if (datatable_planos != null) {
 			datatable_planos.clear().draw();
 			datatable_planos.ajax.url(ruta).load();
 		}
-		else
-		{
+		else {
 			var numeroejecucion = 1;
 			datatable_planos = $('#tabla_reporte_planos').DataTable({
 				ajax: {
@@ -8320,19 +8156,16 @@ function tabla_reporte_planos(proyecto_id, reporteregistro_id, agente_nombre)
 					cache: false,
 					dataType: "json",
 					data: {},
-					dataSrc: function (json)
-					{
+					dataSrc: function (json) {
 						// Actualiza menu
 						menureporte_estado("menureporte_11_2", json.total);
 
 						// alert("Done! "+json.msj);
 						return json.data;
 					},
-					error: function (xhr, error, code)
-					{						
-						console.log('error en datatable_planos '+code);
-						if (numeroejecucion <= 1)
-						{
+					error: function (xhr, error, code) {
+						console.log('error en datatable_planos ' + code);
+						if (numeroejecucion <= 1) {
 							tabla_reporte_planos(proyecto_id, reporteregistro_id, agente_nombre);
 							numeroejecucion += 1;
 						}
@@ -8365,7 +8198,7 @@ function tabla_reporte_planos(proyecto_id, reporteregistro_id, agente_nombre)
 				],
 				lengthMenu: [[20, 50, 100, -1], [20, 50, 100, "Todos"]],
 				// rowsGroup: [0, 1], //agrupar filas
-				order: [[ 0, "ASC" ]],
+				order: [[0, "ASC"]],
 				ordering: false,
 				processing: true,
 				searching: false,
@@ -8387,8 +8220,7 @@ function tabla_reporte_planos(proyecto_id, reporteregistro_id, agente_nombre)
 						previous: "Anterior"
 					}
 				},
-				rowCallback: function(row, data, index)
-				{
+				rowCallback: function (row, data, index) {
 					// console.log(index+' - '+data.reporteiluminacionpuntos_nopunto);
 
 					// if(data.reporteiluminacionpuntos_nopunto == 2)
@@ -8411,24 +8243,20 @@ function tabla_reporte_planos(proyecto_id, reporteregistro_id, agente_nombre)
 		}
 
 		// Tooltip en DataTable
-		datatable_planos.on('draw', function ()
-		{
+		datatable_planos.on('draw', function () {
 			$('[data-toggle="tooltip"]').tooltip();
 		});
 	}
-	catch (exception)
-	{
+	catch (exception) {
 		tabla_reporte_planos(proyecto_id, reporteregistro_id, agente_nombre);
-    }
+	}
 }
 
 
-$("#botonguardar_reporte_planos").click(function()
-{
+$("#botonguardar_reporte_planos").click(function () {
 	// valida campos vacios
 	var valida = this.form.checkValidity();
-	if (valida)
-	{
+	if (valida) {
 		swal({
 			title: "¡Confirme que desea guardar!",
 			text: "Carpeta planos seleccionados",
@@ -8440,96 +8268,90 @@ $("#botonguardar_reporte_planos").click(function()
 			closeOnConfirm: false,
 			closeOnCancel: false
 		},
-		function(isConfirm)
-		{
-			if (isConfirm)
-			{
-				// cerrar msj confirmacion
-				swal.close();
+			function (isConfirm) {
+				if (isConfirm) {
+					// cerrar msj confirmacion
+					swal.close();
 
-				// enviar datos
-				$('#form_reporte_planos').ajaxForm({
-					dataType: 'json',
-					type: 'POST',
-					url: ''+ruta_storage_guardar,
-					data: {
-						opcion: 22,
-						proyecto_id: proyecto.id,
-						agente_id: agente_id,
-						agente_nombre: agente_nombre,
-						reporteregistro_id: reporteregistro_id,
-						catactivo_id: $("#reporte_catactivo_id").val(),
-						reporte_instalacion: $("#reporte_instalacion").val(),
-					},
-					resetForm: false,
-					success: function(dato)
-					{
-						// Actualizar ID reporte
-						reporteregistro_id = dato.reporteregistro_id;
+					// enviar datos
+					$('#form_reporte_planos').ajaxForm({
+						dataType: 'json',
+						type: 'POST',
+						url: '' + ruta_storage_guardar,
+						data: {
+							opcion: 22,
+							proyecto_id: proyecto.id,
+							agente_id: agente_id,
+							agente_nombre: agente_nombre,
+							reporteregistro_id: reporteregistro_id,
+							catactivo_id: $("#reporte_catactivo_id").val(),
+							reporte_instalacion: $("#reporte_instalacion").val(),
+						},
+						resetForm: false,
+						success: function (dato) {
+							// Actualizar ID reporte
+							reporteregistro_id = dato.reporteregistro_id;
 
-						// Actualiza menu
-						menureporte_estado("menureporte_11_2", dato.total);
+							// Actualiza menu
+							menureporte_estado("menureporte_11_2", dato.total);
 
-						// tabla_reporte_revisiones(proyecto.id);
+							// tabla_reporte_revisiones(proyecto.id);
 
-						// mensaje
-						swal({
-							title: "Correcto",
-							text: ""+dato.msj,
-							type: "success", // warning, error, success, info
-							buttons: {
-								visible: false, // true , false
-							},
-							timer: 1500,
-							showConfirmButton: false
-						});
+							// mensaje
+							swal({
+								title: "Correcto",
+								text: "" + dato.msj,
+								type: "success", // warning, error, success, info
+								buttons: {
+									visible: false, // true , false
+								},
+								timer: 1500,
+								showConfirmButton: false
+							});
 
-						// actualiza boton
-						$('#botonguardar_reporte_planos').html('Guardar carpeta planos <i class="fa fa-save"></i>');
-						$('#botonguardar_reporte_planos').attr('disabled', false);
-					},
-					beforeSend: function()
-					{
-						$('#botonguardar_reporte_planos').html('Guardando carpeta planos <i class="fa fa-spin fa-spinner"></i>');
-						$('#botonguardar_reporte_planos').attr('disabled', true);
-					},
-					error: function(dato)
-					{
-						// actualiza boton
-						$('#botonguardar_reporte_planos').html('Guardar carpeta planos <i class="fa fa-save"></i>');
-						$('#botonguardar_reporte_planos').attr('disabled', false);
+							// actualiza boton
+							$('#botonguardar_reporte_planos').html('Guardar carpeta planos <i class="fa fa-save"></i>');
+							$('#botonguardar_reporte_planos').attr('disabled', false);
+						},
+						beforeSend: function () {
+							$('#botonguardar_reporte_planos').html('Guardando carpeta planos <i class="fa fa-spin fa-spinner"></i>');
+							$('#botonguardar_reporte_planos').attr('disabled', true);
+						},
+						error: function (dato) {
+							// actualiza boton
+							$('#botonguardar_reporte_planos').html('Guardar carpeta planos <i class="fa fa-save"></i>');
+							$('#botonguardar_reporte_planos').attr('disabled', false);
 
-						// mensaje
-						swal({
-							title: "Error",
-							text: ""+dato.msj,
-							type: "error", // warning, error, success, info
-							buttons: {
-								visible: false, // true , false
-							},
-							timer: 1500,
-							showConfirmButton: false
-						});
-						return false;
-					}
-				}).submit();
-				return false;
-			}
-			else 
-			{
-				// mensaje
-				swal({
-					title: "Cancelado",
-					text: "Acción cancelada",
-					type: "error", // warning, error, success, info
-					buttons: {
-						visible: false, // true , false
-					},
-					timer: 500,
-					showConfirmButton: false
-				});
-			}
-		});
+							// mensaje
+							swal({
+								title: "Error",
+								text: "" + dato.msj,
+								type: "error", // warning, error, success, info
+								buttons: {
+									visible: false, // true , false
+								},
+								timer: 1500,
+								showConfirmButton: false
+							});
+							return false;
+						}
+					}).submit();
+					return false;
+				}
+				else {
+					// mensaje
+					swal({
+						title: "Cancelado",
+						text: "Acción cancelada",
+						type: "error", // warning, error, success, info
+						buttons: {
+							visible: false, // true , false
+						},
+						timer: 500,
+						showConfirmButton: false
+					});
+				}
+			});
 		return false;
 	}
 });
@@ -8539,29 +8361,23 @@ $("#botonguardar_reporte_planos").click(function()
 // EQUIPO UTILIZADO
 
 
-$(document).ready(function()
-{
-	setTimeout(function()
-	{
+$(document).ready(function () {
+	setTimeout(function () {
 		tabla_reporte_equipoutilizado(proyecto.id, reporteregistro_id, agente_nombre);
 	}, 9000);
 });
 
 
 var datatable_equipoutilizado = null;
-function tabla_reporte_equipoutilizado(proyecto_id, reporteregistro_id, agente_nombre)
-{
-	try 
-	{
-		var ruta = "/reporteruidoequipoutilizadotabla/"+proyecto_id+"/"+reporteregistro_id+"/"+agente_nombre;
+function tabla_reporte_equipoutilizado(proyecto_id, reporteregistro_id, agente_nombre) {
+	try {
+		var ruta = "/reporteruidoequipoutilizadotabla/" + proyecto_id + "/" + reporteregistro_id + "/" + agente_nombre;
 
-		if (datatable_equipoutilizado != null)
-		{
+		if (datatable_equipoutilizado != null) {
 			datatable_equipoutilizado.clear().draw();
 			datatable_equipoutilizado.ajax.url(ruta).load();
 		}
-		else
-		{
+		else {
 			var numeroejecucion = 1;
 			datatable_equipoutilizado = $('#tabla_reporte_equipoutilizado').DataTable({
 				ajax: {
@@ -8570,19 +8386,16 @@ function tabla_reporte_equipoutilizado(proyecto_id, reporteregistro_id, agente_n
 					cache: false,
 					dataType: "json",
 					data: {},
-					dataSrc: function (json)
-					{
+					dataSrc: function (json) {
 						menureporte_estado("menureporte_11_5", parseInt(json.total));
 						menureporte_estado("menureporte_11_6", parseInt(json.total));
 
 						// alert("Done! "+json.msj);
 						return json.data;
 					},
-					error: function (xhr, error, code)
-					{						
-						console.log('error en datatable_equipoutilizado '+code);
-						if (numeroejecucion <= 1)
-						{
+					error: function (xhr, error, code) {
+						console.log('error en datatable_equipoutilizado ' + code);
+						if (numeroejecucion <= 1) {
 							tabla_reporte_equipoutilizado(proyecto_id, reporteregistro_id, agente_nombre);
 							numeroejecucion += 1;
 						}
@@ -8615,7 +8428,7 @@ function tabla_reporte_equipoutilizado(proyecto_id, reporteregistro_id, agente_n
 				],
 				lengthMenu: [[20, 50, 100, -1], [20, 50, 100, "Todos"]],
 				// rowsGroup: [0, 1], //agrupar filas
-				order: [[ 0, "ASC" ]],
+				order: [[0, "ASC"]],
 				ordering: false,
 				processing: true,
 				searching: true,
@@ -8641,80 +8454,69 @@ function tabla_reporte_equipoutilizado(proyecto_id, reporteregistro_id, agente_n
 		}
 
 		// Tooltip en DataTable
-		datatable_equipoutilizado.on('draw', function ()
-		{
+		datatable_equipoutilizado.on('draw', function () {
 			$('[data-toggle="tooltip"]').tooltip();
 		});
 	}
-	catch (exception)
-	{
+	catch (exception) {
 		tabla_reporte_equipoutilizado(proyecto_id, reporteregistro_id, agente_nombre);
-    }
-}
-
-
-function activa_checkboxcarta(checkbox, equipo_id)
-{
-	if (checkbox.checked)
-	{
-		$('#equipoutilizado_checkboxcarta_'+equipo_id).attr('disabled', false);
-	}
-	else
-	{
-		$('#equipoutilizado_checkboxcarta_'+equipo_id).prop("checked", false);
-		$('#equipoutilizado_checkboxcarta_'+equipo_id).attr('disabled', true);
 	}
 }
 
 
-$('#tabla_reporte_equipoutilizado tbody').on('click', 'td.cartapdf', function()
-{
+function activa_checkboxcarta(checkbox, equipo_id) {
+	if (checkbox.checked) {
+		$('#equipoutilizado_checkboxcarta_' + equipo_id).attr('disabled', false);
+	}
+	else {
+		$('#equipoutilizado_checkboxcarta_' + equipo_id).prop("checked", false);
+		$('#equipoutilizado_checkboxcarta_' + equipo_id).attr('disabled', true);
+	}
+}
+
+
+$('#tabla_reporte_equipoutilizado tbody').on('click', 'td.cartapdf', function () {
 	var tr = $(this).closest('tr');
 	var row = datatable_equipoutilizado.row(tr);
 
-	if (row.data().equipo_cartaPDF)
-	{
-		$('#visor_documento').attr('src', '/assets/plugins/viewer-pdfjs/web/viewer_read.html?file=/verequipodocumento/'+row.data().equipo_id+'/'+2);
+	if (row.data().equipo_cartaPDF) {
+		$('#visor_documento').attr('src', '/assets/plugins/viewer-pdfjs/web/viewer_read.html?file=/verequipodocumento/' + row.data().equipo_id + '/' + 2);
 
 		// Titulo modal
-		$('#modal_visor .modal-title').html('Carta '+row.data().equipo_Descripcion+' ['+row.data().equipo_Serie+']');
+		$('#modal_visor .modal-title').html('Carta ' + row.data().equipo_Descripcion + ' [' + row.data().equipo_Serie + ']');
 
 		// Abrir modal
-		$('#modal_visor').modal({backdrop:false});
+		$('#modal_visor').modal({ backdrop: false });
 	}
 });
 
 
-$('#tabla_reporte_equipoutilizado tbody').on('click', 'td.certificadopdf', function()
-{
+$('#tabla_reporte_equipoutilizado tbody').on('click', 'td.certificadopdf', function () {
 	var tr = $(this).closest('tr');
 	var row = datatable_equipoutilizado.row(tr);
 
-	if (row.data().equipo_CertificadoPDF)
-	{
-		$('#visor_documento').attr('src', '/assets/plugins/viewer-pdfjs/web/viewer_read.html?file=/verequipodocumento/'+row.data().equipo_id+'/'+1);
+	if (row.data().equipo_CertificadoPDF) {
+		$('#visor_documento').attr('src', '/assets/plugins/viewer-pdfjs/web/viewer_read.html?file=/verequipodocumento/' + row.data().equipo_id + '/' + 1);
 
 		// Titulo modal
-		$('#modal_visor .modal-title').html('Certificado de calibración '+row.data().equipo_Descripcion+' ['+row.data().equipo_Serie+']');
+		$('#modal_visor .modal-title').html('Certificado de calibración ' + row.data().equipo_Descripcion + ' [' + row.data().equipo_Serie + ']');
 
 		// Abrir modal
-		$('#modal_visor').modal({backdrop:false});
+		$('#modal_visor').modal({ backdrop: false });
 	}
 });
 
 
-$("#botoncerrar_modalvisor_reporte").click(function()
-{
+$("#botoncerrar_modalvisor_reporte").click(function () {
 	// Titulo modal
-    $('#modal_visor .modal-title').html('Documento');
+	$('#modal_visor .modal-title').html('Documento');
 
 	// Visor
 	$('#visor_documento').attr('src', '/assets/images/cargando.gif');
 });
 
 
-$("#botonguardar_reporte_equipoutilizado").click(function()
-{
+$("#botonguardar_reporte_equipoutilizado").click(function () {
 	// borrar campo filtro del DATATABLE
 	// datatable_equipoutilizado.search($(this).val()).draw();
 	datatable_equipoutilizado.search("").draw();
@@ -8722,21 +8524,17 @@ $("#botonguardar_reporte_equipoutilizado").click(function()
 
 	// valida campos vacios
 	var seleccionados = 0;
-	$('.equipoutilizado_checkbox').each(function()
-	{
-		if (this.checked)
-		{
+	$('.equipoutilizado_checkbox').each(function () {
+		if (this.checked) {
 			seleccionados += 1;
 		}
 	});
 
 
-	if (seleccionados > 0)
-	{
+	if (seleccionados > 0) {
 		// valida campos vacios
 		var valida = this.form.checkValidity();
-		if (valida)
-		{
+		if (valida) {
 			swal({
 				title: "¡Confirme que desea guardar!",
 				text: "Equipo (s) utilizado (s)",
@@ -8748,101 +8546,94 @@ $("#botonguardar_reporte_equipoutilizado").click(function()
 				closeOnConfirm: false,
 				closeOnCancel: false
 			},
-			function(isConfirm)
-			{
-				if (isConfirm)
-				{
-					// cerrar msj confirmacion
-					swal.close();
+				function (isConfirm) {
+					if (isConfirm) {
+						// cerrar msj confirmacion
+						swal.close();
 
-					// enviar datos
-					$('#form_reporte_equipoutilizado').ajaxForm({
-						dataType: 'json',
-						type: 'POST',
-						url: ''+ruta_storage_guardar,
-						data: {
-							opcion: 23,
-							proyecto_id: proyecto.id,
-							agente_id: agente_id,
-							agente_nombre: agente_nombre,
-							reporteregistro_id: reporteregistro_id,
-							catactivo_id: $("#reporte_catactivo_id").val(),
-							reporte_instalacion: $("#reporte_instalacion").val(),
-						},
-						resetForm: false,
-						success: function(dato)
-						{
-							// Actualizar ID reporte
-							reporteregistro_id = dato.reporteregistro_id;
+						// enviar datos
+						$('#form_reporte_equipoutilizado').ajaxForm({
+							dataType: 'json',
+							type: 'POST',
+							url: '' + ruta_storage_guardar,
+							data: {
+								opcion: 23,
+								proyecto_id: proyecto.id,
+								agente_id: agente_id,
+								agente_nombre: agente_nombre,
+								reporteregistro_id: reporteregistro_id,
+								catactivo_id: $("#reporte_catactivo_id").val(),
+								reporte_instalacion: $("#reporte_instalacion").val(),
+							},
+							resetForm: false,
+							success: function (dato) {
+								// Actualizar ID reporte
+								reporteregistro_id = dato.reporteregistro_id;
 
-							menureporte_estado("menureporte_11_5", 1);
-							menureporte_estado("menureporte_11_6", 1);
+								menureporte_estado("menureporte_11_5", 1);
+								menureporte_estado("menureporte_11_6", 1);
 
-							// datatable_equipoutilizado.ajax.reload();
+								// datatable_equipoutilizado.ajax.reload();
 
-							// mensaje
-							swal({
-								title: "Correcto",
-								text: ""+dato.msj,
-								type: "success", // warning, error, success, info
-								buttons: {
-									visible: false, // true , false
-								},
-								timer: 1500,
-								showConfirmButton: false
-							});
+								// mensaje
+								swal({
+									title: "Correcto",
+									text: "" + dato.msj,
+									type: "success", // warning, error, success, info
+									buttons: {
+										visible: false, // true , false
+									},
+									timer: 1500,
+									showConfirmButton: false
+								});
 
-							// actualiza boton
-							$('#botonguardar_reporte_equipoutilizado').html('Guardar equipo utilizado <i class="fa fa-save"></i>');
-							$('#botonguardar_reporte_equipoutilizado').attr('disabled', false);
-						},
-						beforeSend: function()
-						{
-							$('#botonguardar_reporte_equipoutilizado').html('Guardando equipo utilizado <i class="fa fa-spin fa-spinner"></i>');
-							$('#botonguardar_reporte_equipoutilizado').attr('disabled', true);
-						},
-						error: function(dato)
-						{
-							// actualiza boton
-							$('#botonguardar_reporte_equipoutilizado').html('Guardar equipo utilizado <i class="fa fa-save"></i>');
-							$('#botonguardar_reporte_equipoutilizado').attr('disabled', false);
+								// actualiza boton
+								$('#botonguardar_reporte_equipoutilizado').html('Guardar equipo utilizado <i class="fa fa-save"></i>');
+								$('#botonguardar_reporte_equipoutilizado').attr('disabled', false);
+							},
+							beforeSend: function () {
+								$('#botonguardar_reporte_equipoutilizado').html('Guardando equipo utilizado <i class="fa fa-spin fa-spinner"></i>');
+								$('#botonguardar_reporte_equipoutilizado').attr('disabled', true);
+							},
+							error: function (dato) {
+								// actualiza boton
+								$('#botonguardar_reporte_equipoutilizado').html('Guardar equipo utilizado <i class="fa fa-save"></i>');
+								$('#botonguardar_reporte_equipoutilizado').attr('disabled', false);
 
-							// mensaje
-							swal({
-								title: "Error",
-								text: ""+dato.msj,
-								type: "error", // warning, error, success, info
-								buttons: {
-									visible: false, // true , false
-								},
-								timer: 1500,
-								showConfirmButton: false
-							});
-							return false;
-						}
-					}).submit();
-					return false;
-				}
-				else 
-				{
-					// mensaje
-					swal({
-						title: "Cancelado",
-						text: "Acción cancelada",
-						type: "error", // warning, error, success, info
-						buttons: {
-							visible: false, // true , false
-						},
-						timer: 500,
-						showConfirmButton: false
-					});
-				}
-			});
+								// mensaje
+								swal({
+									title: "Error",
+									text: "" + dato.msj,
+									type: "error", // warning, error, success, info
+									buttons: {
+										visible: false, // true , false
+									},
+									timer: 1500,
+									showConfirmButton: false
+								});
+								return false;
+							}
+						}).submit();
+						return false;
+					}
+					else {
+						// mensaje
+						swal({
+							title: "Cancelado",
+							text: "Acción cancelada",
+							type: "error", // warning, error, success, info
+							buttons: {
+								visible: false, // true , false
+							},
+							timer: 500,
+							showConfirmButton: false
+						});
+					}
+				});
 			return false;
 		}
 	}
-	else
-	{
+	else {
 		// mensaje
 		swal({
 			title: "Seleccione equipo (s)",
@@ -8863,29 +8654,23 @@ $("#botonguardar_reporte_equipoutilizado").click(function()
 // INFORME DE RESULTADOS LABORATORIO
 
 
-$(document).ready(function()
-{
-	setTimeout(function()
-	{
+$(document).ready(function () {
+	setTimeout(function () {
 		tabla_reporte_anexosresultados(proyecto.id, reporteregistro_id, agente_nombre);
 	}, 9500);
 });
 
 
 var datatable_informeresultados = null;
-function tabla_reporte_anexosresultados(proyecto_id, reporteregistro_id, agente_nombre)
-{
-	try 
-	{
-		var ruta = "/reporteruidoanexosresultadostabla/"+proyecto_id+"/"+reporteregistro_id+"/"+agente_nombre;
+function tabla_reporte_anexosresultados(proyecto_id, reporteregistro_id, agente_nombre) {
+	try {
+		var ruta = "/reporteruidoanexosresultadostabla/" + proyecto_id + "/" + reporteregistro_id + "/" + agente_nombre;
 
-		if (datatable_informeresultados != null)
-		{
+		if (datatable_informeresultados != null) {
 			datatable_informeresultados.clear().draw();
 			datatable_informeresultados.ajax.url(ruta).load();
 		}
-		else
-		{
+		else {
 			var numeroejecucion = 1;
 			datatable_informeresultados = $('#tabla_reporte_anexosresultados').DataTable({
 				ajax: {
@@ -8894,8 +8679,7 @@ function tabla_reporte_anexosresultados(proyecto_id, reporteregistro_id, agente_
 					cache: false,
 					dataType: "json",
 					data: {},
-					dataSrc: function (json)
-					{
+					dataSrc: function (json) {
 						// Actualiza menu
 						menureporte_estado("menureporte_11_3", json.total);
 						menureporte_estado("menureporte_11_4", json.total);
@@ -8904,11 +8688,9 @@ function tabla_reporte_anexosresultados(proyecto_id, reporteregistro_id, agente_
 						// alert("Done! "+json.msj);
 						return json.data;
 					},
-					error: function (xhr, error, code)
-					{						
-						console.log('error en datatable_informeresultados '+code);
-						if (numeroejecucion <= 1)
-						{
+					error: function (xhr, error, code) {
+						console.log('error en datatable_informeresultados ' + code);
+						if (numeroejecucion <= 1) {
 							tabla_reporte_anexosresultados(proyecto_id, reporteregistro_id, agente_nombre);
 							numeroejecucion += 1;
 						}
@@ -8951,7 +8733,7 @@ function tabla_reporte_anexosresultados(proyecto_id, reporteregistro_id, agente_
 				],
 				lengthMenu: [[20, 50, 100, -1], [20, 50, 100, "Todos"]],
 				// rowsGroup: [0, 1], //agrupar filas
-				order: [[ 0, "ASC" ]],
+				order: [[0, "ASC"]],
 				ordering: false,
 				processing: true,
 				searching: false,
@@ -8977,37 +8759,30 @@ function tabla_reporte_anexosresultados(proyecto_id, reporteregistro_id, agente_
 		}
 
 		// Tooltip en DataTable
-		datatable_informeresultados.on('draw', function ()
-		{
+		datatable_informeresultados.on('draw', function () {
 			$('[data-toggle="tooltip"]').tooltip();
 		});
 	}
-	catch (exception)
-	{
+	catch (exception) {
 		tabla_reporte_anexosresultados(proyecto_id, reporteregistro_id, agente_nombre);
-    }
+	}
 }
 
 
-$("#botonguardar_reporte_anexosresultados").click(function()
-{
+$("#botonguardar_reporte_anexosresultados").click(function () {
 	// valida campos vacios
 	var seleccionados = 0;
-	$('.anexoresultado_checkbox').each(function()
-	{
-		if (this.checked)
-		{
+	$('.anexoresultado_checkbox').each(function () {
+		if (this.checked) {
 			seleccionados += 1;
 		}
 	});
 
 
-	if (seleccionados > 0)
-	{
+	if (seleccionados > 0) {
 		// valida campos vacios
 		var valida = this.form.checkValidity();
-		if (valida)
-		{
+		if (valida) {
 			swal({
 				title: "¡Confirme que desea guardar!",
 				text: "Lista de anexos de resultados",
@@ -9019,103 +8794,96 @@ $("#botonguardar_reporte_anexosresultados").click(function()
 				closeOnConfirm: false,
 				closeOnCancel: false
 			},
-			function(isConfirm)
-			{
-				if (isConfirm)
-				{
-					// cerrar msj confirmacion
-					swal.close();
+				function (isConfirm) {
+					if (isConfirm) {
+						// cerrar msj confirmacion
+						swal.close();
 
-					// enviar datos
-					$('#form_reporte_anexosresultados').ajaxForm({
-						dataType: 'json',
-						type: 'POST',
-						url: ''+ruta_storage_guardar,
-						data: {
-							opcion: 24,
-							proyecto_id: proyecto.id,
-							agente_id: agente_id,
-							agente_nombre: agente_nombre,
-							reporteregistro_id: reporteregistro_id,
-							catactivo_id: $("#reporte_catactivo_id").val(),
-							reporte_instalacion: $("#reporte_instalacion").val(),
-						},
-						resetForm: false,
-						success: function(dato)
-						{
-							// Actualizar ID reporte
-							reporteregistro_id = dato.reporteregistro_id;
+						// enviar datos
+						$('#form_reporte_anexosresultados').ajaxForm({
+							dataType: 'json',
+							type: 'POST',
+							url: '' + ruta_storage_guardar,
+							data: {
+								opcion: 24,
+								proyecto_id: proyecto.id,
+								agente_id: agente_id,
+								agente_nombre: agente_nombre,
+								reporteregistro_id: reporteregistro_id,
+								catactivo_id: $("#reporte_catactivo_id").val(),
+								reporte_instalacion: $("#reporte_instalacion").val(),
+							},
+							resetForm: false,
+							success: function (dato) {
+								// Actualizar ID reporte
+								reporteregistro_id = dato.reporteregistro_id;
 
-							// Actualiza menu
-							menureporte_estado("menureporte_11_3", dato.total);
-							menureporte_estado("menureporte_11_4", dato.total);
-							menureporte_estado("menureporte_11_7", dato.total);
+								// Actualiza menu
+								menureporte_estado("menureporte_11_3", dato.total);
+								menureporte_estado("menureporte_11_4", dato.total);
+								menureporte_estado("menureporte_11_7", dato.total);
 
-							// tabla_reporte_revisiones(proyecto.id);
+								// tabla_reporte_revisiones(proyecto.id);
 
-							// mensaje
-							swal({
-								title: "Correcto",
-								text: ""+dato.msj,
-								type: "success", // warning, error, success, info
-								buttons: {
-									visible: false, // true , false
-								},
-								timer: 1500,
-								showConfirmButton: false
-							});
+								// mensaje
+								swal({
+									title: "Correcto",
+									text: "" + dato.msj,
+									type: "success", // warning, error, success, info
+									buttons: {
+										visible: false, // true , false
+									},
+									timer: 1500,
+									showConfirmButton: false
+								});
 
-							// actualiza boton
-							$('#botonguardar_reporte_anexosresultados').html('Guardar anexos resultados <i class="fa fa-save"></i>');
-							$('#botonguardar_reporte_anexosresultados').attr('disabled', false);
-						},
-						beforeSend: function()
-						{
-							$('#botonguardar_reporte_anexosresultados').html('Guardando anexos resultados <i class="fa fa-spin fa-spinner"></i>');
-							$('#botonguardar_reporte_anexosresultados').attr('disabled', true);
-						},
-						error: function(dato)
-						{
-							// actualiza boton
-							$('#botonguardar_reporte_anexosresultados').html('Guardar anexos resultados <i class="fa fa-save"></i>');
-							$('#botonguardar_reporte_anexosresultados').attr('disabled', false);
+								// actualiza boton
+								$('#botonguardar_reporte_anexosresultados').html('Guardar anexos resultados <i class="fa fa-save"></i>');
+								$('#botonguardar_reporte_anexosresultados').attr('disabled', false);
+							},
+							beforeSend: function () {
+								$('#botonguardar_reporte_anexosresultados').html('Guardando anexos resultados <i class="fa fa-spin fa-spinner"></i>');
+								$('#botonguardar_reporte_anexosresultados').attr('disabled', true);
+							},
+							error: function (dato) {
+								// actualiza boton
+								$('#botonguardar_reporte_anexosresultados').html('Guardar anexos resultados <i class="fa fa-save"></i>');
+								$('#botonguardar_reporte_anexosresultados').attr('disabled', false);
 
-							// mensaje
-							swal({
-								title: "Error",
-								text: ""+dato.msj,
-								type: "error", // warning, error, success, info
-								buttons: {
-									visible: false, // true , false
-								},
-								timer: 1500,
-								showConfirmButton: false
-							});
-							return false;
-						}
-					}).submit();
-					return false;
-				}
-				else 
-				{
-					// mensaje
-					swal({
-						title: "Cancelado",
-						text: "Acción cancelada",
-						type: "error", // warning, error, success, info
-						buttons: {
-							visible: false, // true , false
-						},
-						timer: 500,
-						showConfirmButton: false
-					});
-				}
-			});
+								// mensaje
+								swal({
+									title: "Error",
+									text: "" + dato.msj,
+									type: "error", // warning, error, success, info
+									buttons: {
+										visible: false, // true , false
+									},
+									timer: 1500,
+									showConfirmButton: false
+								});
+								return false;
+							}
+						}).submit();
+						return false;
+					}
+					else {
+						// mensaje
+						swal({
+							title: "Cancelado",
+							text: "Acción cancelada",
+							type: "error", // warning, error, success, info
+							buttons: {
+								visible: false, // true , false
+							},
+							timer: 500,
+							showConfirmButton: false
+						});
+					}
+				});
 			return false;
 		}
 	}
-	else
-	{
+	else {
 		// mensaje
 		swal({
 			title: "Seleccione anexos (s)",
@@ -9132,24 +8900,21 @@ $("#botonguardar_reporte_anexosresultados").click(function()
 });
 
 
-$('#tabla_reporte_anexosresultados tbody').on('click', 'td.documentopdf', function()
-{
+$('#tabla_reporte_anexosresultados tbody').on('click', 'td.documentopdf', function () {
 	var tr = $(this).closest('tr');
 	var row = datatable_informeresultados.row(tr);
 
-	if (row.data().proyectoevidenciadocumento_extension == ".pdf" || row.data().proyectoevidenciadocumento_extension == ".PDF")
-	{
-		$('#visor_documento').attr('src', '/assets/plugins/viewer-pdfjs/web/viewer_read.html?file=/proyectoevidenciadocumentodescargar/'+row.data().id+'/'+0); // 0 mostrar
+	if (row.data().proyectoevidenciadocumento_extension == ".pdf" || row.data().proyectoevidenciadocumento_extension == ".PDF") {
+		$('#visor_documento').attr('src', '/assets/plugins/viewer-pdfjs/web/viewer_read.html?file=/proyectoevidenciadocumentodescargar/' + row.data().id + '/' + 0); // 0 mostrar
 
 		// Titulo modal
 		$('#modal_visor .modal-title').html(row.data().proyectoevidenciadocumento_nombre);
 
 		// Abrir modal
-		$('#modal_visor').modal({backdrop:false});
+		$('#modal_visor').modal({ backdrop: false });
 	}
-	else
-	{
-		window.open("/proyectoevidenciadocumentodescargar/"+row.data().id+"/"+1); //1 descargar
+	else {
+		window.open("/proyectoevidenciadocumentodescargar/" + row.data().id + "/" + 1); //1 descargar
 	}
 });
 
@@ -9158,29 +8923,23 @@ $('#tabla_reporte_anexosresultados tbody').on('click', 'td.documentopdf', functi
 // ANEXOS - ACREDITACIONES Y / O APROBACIONES
 
 
-$(document).ready(function()
-{
-	setTimeout(function()
-	{
+$(document).ready(function () {
+	setTimeout(function () {
 		tabla_reporte_acreditacionaprobacion(proyecto.id, reporteregistro_id, agente_nombre);
 	}, 10000);
 });
 
 
 var datatable_acreditacionaprobacion = null;
-function tabla_reporte_acreditacionaprobacion(proyecto_id, reporteregistro_id, agente_nombre)
-{
-	try 
-	{
-		var ruta = "/reporteruidoanexosacreditacionestabla/"+proyecto_id+"/"+reporteregistro_id+"/"+agente_nombre;
+function tabla_reporte_acreditacionaprobacion(proyecto_id, reporteregistro_id, agente_nombre) {
+	try {
+		var ruta = "/reporteruidoanexosacreditacionestabla/" + proyecto_id + "/" + reporteregistro_id + "/" + agente_nombre;
 
-		if (datatable_acreditacionaprobacion != null)
-		{
+		if (datatable_acreditacionaprobacion != null) {
 			datatable_acreditacionaprobacion.clear().draw();
 			datatable_acreditacionaprobacion.ajax.url(ruta).load();
 		}
-		else
-		{
+		else {
 			var numeroejecucion = 1;
 			datatable_acreditacionaprobacion = $('#tabla_reporte_acreditacionaprobacion').DataTable({
 				ajax: {
@@ -9189,10 +8948,8 @@ function tabla_reporte_acreditacionaprobacion(proyecto_id, reporteregistro_id, a
 					cache: false,
 					dataType: "json",
 					data: {},
-					dataSrc: function (json)
-					{
-						if (parseInt(json.total) > 0)
-						{
+					dataSrc: function (json) {
+						if (parseInt(json.total) > 0) {
 							menureporte_estado("menureporte_11_8", 1);
 							menureporte_estado("menureporte_11_9", 1);
 						}
@@ -9200,11 +8957,9 @@ function tabla_reporte_acreditacionaprobacion(proyecto_id, reporteregistro_id, a
 						// alert("Done! "+json.msj);
 						return json.data;
 					},
-					error: function (xhr, error, code)
-					{						
-						console.log('error en datatable_acreditacionaprobacion '+code);
-						if (numeroejecucion <= 1)
-						{
+					error: function (xhr, error, code) {
+						console.log('error en datatable_acreditacionaprobacion ' + code);
+						if (numeroejecucion <= 1) {
 							tabla_reporte_acreditacionaprobacion(proyecto_id);
 							numeroejecucion += 1;
 						}
@@ -9281,8 +9036,7 @@ function tabla_reporte_acreditacionaprobacion(proyecto_id, reporteregistro_id, a
 						previous: "Anterior"
 					}
 				},
-				rowCallback: function(row, data, index)
-				{
+				rowCallback: function (row, data, index) {
 					// console.log(index+' - '+data.reporteiluminacionpuntos_nopunto);
 
 					// if(data.reporteiluminacionpuntos_nopunto == 2)
@@ -9298,59 +9052,50 @@ function tabla_reporte_acreditacionaprobacion(proyecto_id, reporteregistro_id, a
 		}
 
 		// Tooltip en DataTable
-		datatable_acreditacionaprobacion.on('draw', function ()
-		{
+		datatable_acreditacionaprobacion.on('draw', function () {
 			$('[data-toggle="tooltip"]').tooltip();
 		});
 	}
-	catch (exception)
-	{
+	catch (exception) {
 		tabla_reporte_acreditacionaprobacion(proyecto_id, reporteregistro_id, agente_nombre);
-    }
+	}
 }
 
 
-$('#tabla_reporte_acreditacionaprobacion tbody').on('click', 'td.certificadopdf', function()
-{
+$('#tabla_reporte_acreditacionaprobacion tbody').on('click', 'td.certificadopdf', function () {
 	var tr = $(this).closest('tr');
 	var row = datatable_acreditacionaprobacion.row(tr);
 
-	if (row.data().acreditacion_SoportePDF)
-	{
-		$('#visor_documento').attr('src', '/assets/plugins/viewer-pdfjs/web/viewer_read.html?file=/veracreditaciondocumento/'+row.data().id + '/' + 0);
+	if (row.data().acreditacion_SoportePDF) {
+		$('#visor_documento').attr('src', '/assets/plugins/viewer-pdfjs/web/viewer_read.html?file=/veracreditaciondocumento/' + row.data().id + '/' + 0);
 
 		// Titulo modal
-		$('#modal_visor .modal-title').html(row.data().catTipoAcreditacion_Nombre+' '+row.data().acreditacion_Entidad+' ['+row.data().acreditacion_Numero+']');
+		$('#modal_visor .modal-title').html(row.data().catTipoAcreditacion_Nombre + ' ' + row.data().acreditacion_Entidad + ' [' + row.data().acreditacion_Numero + ']');
 
 		// Abrir modal
-		$('#modal_visor').modal({backdrop:false});
+		$('#modal_visor').modal({ backdrop: false });
 	}
 });
 
 
-$("#botonguardar_reporte_acreditacionaprobacion").click(function()
-{
+$("#botonguardar_reporte_acreditacionaprobacion").click(function () {
 	// valida campos vacios
 	var seleccionados = 0;
-	$('.anexoacreditacion_checkbox').each(function()
-	{
-		if (this.checked)
-		{
+	$('.anexoacreditacion_checkbox').each(function () {
+		if (this.checked) {
 			seleccionados += 1;
 		}
 	});
 
 
-	if (seleccionados > 0)
-	{
+	if (seleccionados > 0) {
 		// borrar campo filtro del DATATABLE
 		// datatable_acreditacionaprobacion.search($(this).val()).draw();
 		datatable_acreditacionaprobacion.search("").draw();
 
 		// valida campos vacios
 		var valida = this.form.checkValidity();
-		if (valida)
-		{
+		if (valida) {
 			swal({
 				title: "¡Confirme que desea guardar!",
 				text: "Lista de anexos acreditaciones y/o aprobaciones",
@@ -9362,102 +9107,95 @@ $("#botonguardar_reporte_acreditacionaprobacion").click(function()
 				closeOnConfirm: false,
 				closeOnCancel: false
 			},
-			function(isConfirm)
-			{
-				if (isConfirm)
-				{
-					// cerrar msj confirmacion
-					swal.close();
+				function (isConfirm) {
+					if (isConfirm) {
+						// cerrar msj confirmacion
+						swal.close();
 
-					// enviar datos
-					$('#form_reporte_acreditacionaprobacion').ajaxForm({
-						dataType: 'json',
-						type: 'POST',
-						url: ''+ruta_storage_guardar,
-						data: {
-							opcion: 25,
-							proyecto_id: proyecto.id,
-							agente_id: agente_id,
-							agente_nombre: agente_nombre,
-							reporteregistro_id: reporteregistro_id,
-							catactivo_id: $("#reporte_catactivo_id").val(),
-							reporte_instalacion: $("#reporte_instalacion").val(),
-						},
-						resetForm: false,
-						success: function(dato)
-						{
-							// Actualizar ID reporte
-							reporteregistro_id = dato.reporteregistro_id;
+						// enviar datos
+						$('#form_reporte_acreditacionaprobacion').ajaxForm({
+							dataType: 'json',
+							type: 'POST',
+							url: '' + ruta_storage_guardar,
+							data: {
+								opcion: 25,
+								proyecto_id: proyecto.id,
+								agente_id: agente_id,
+								agente_nombre: agente_nombre,
+								reporteregistro_id: reporteregistro_id,
+								catactivo_id: $("#reporte_catactivo_id").val(),
+								reporte_instalacion: $("#reporte_instalacion").val(),
+							},
+							resetForm: false,
+							success: function (dato) {
+								// Actualizar ID reporte
+								reporteregistro_id = dato.reporteregistro_id;
 
-							// Actualiza menu
-							menureporte_estado("menureporte_11_8", dato.total);
-							menureporte_estado("menureporte_11_9", dato.total);
+								// Actualiza menu
+								menureporte_estado("menureporte_11_8", dato.total);
+								menureporte_estado("menureporte_11_9", dato.total);
 
-							// tabla_reporte_revisiones(proyecto.id);
+								// tabla_reporte_revisiones(proyecto.id);
 
-							// mensaje
-							swal({
-								title: "Correcto",
-								text: ""+dato.msj,
-								type: "success", // warning, error, success, info
-								buttons: {
-									visible: false, // true , false
-								},
-								timer: 1500,
-								showConfirmButton: false
-							});
+								// mensaje
+								swal({
+									title: "Correcto",
+									text: "" + dato.msj,
+									type: "success", // warning, error, success, info
+									buttons: {
+										visible: false, // true , false
+									},
+									timer: 1500,
+									showConfirmButton: false
+								});
 
-							// actualiza boton
-							$('#botonguardar_reporte_acreditacionaprobacion').html('Guardar anexos 7 (STPS) y 8 (EMA) <i class="fa fa-save"></i>');
-							$('#botonguardar_reporte_acreditacionaprobacion').attr('disabled', false);
-						},
-						beforeSend: function()
-						{
-							$('#botonguardar_reporte_acreditacionaprobacion').html('Guardando anexos 7 (STPS) y 8 (EMA) <i class="fa fa-spin fa-spinner"></i>');
-							$('#botonguardar_reporte_acreditacionaprobacion').attr('disabled', true);
-						},
-						error: function(dato)
-						{
-							// actualiza boton
-							$('#botonguardar_reporte_acreditacionaprobacion').html('Guardar anexos 7 (STPS) y 8 (EMA) <i class="fa fa-save"></i>');
-							$('#botonguardar_reporte_acreditacionaprobacion').attr('disabled', false);
+								// actualiza boton
+								$('#botonguardar_reporte_acreditacionaprobacion').html('Guardar anexos 7 (STPS) y 8 (EMA) <i class="fa fa-save"></i>');
+								$('#botonguardar_reporte_acreditacionaprobacion').attr('disabled', false);
+							},
+							beforeSend: function () {
+								$('#botonguardar_reporte_acreditacionaprobacion').html('Guardando anexos 7 (STPS) y 8 (EMA) <i class="fa fa-spin fa-spinner"></i>');
+								$('#botonguardar_reporte_acreditacionaprobacion').attr('disabled', true);
+							},
+							error: function (dato) {
+								// actualiza boton
+								$('#botonguardar_reporte_acreditacionaprobacion').html('Guardar anexos 7 (STPS) y 8 (EMA) <i class="fa fa-save"></i>');
+								$('#botonguardar_reporte_acreditacionaprobacion').attr('disabled', false);
 
-							// mensaje
-							swal({
-								title: "Error",
-								text: ""+dato.msj,
-								type: "error", // warning, error, success, info
-								buttons: {
-									visible: false, // true , false
-								},
-								timer: 1500,
-								showConfirmButton: false
-							});
-							return false;
-						}
-					}).submit();
-					return false;
-				}
-				else 
-				{
-					// mensaje
-					swal({
-						title: "Cancelado",
-						text: "Acción cancelada",
-						type: "error", // warning, error, success, info
-						buttons: {
-							visible: false, // true , false
-						},
-						timer: 500,
-						showConfirmButton: false
-					});
-				}
-			});
+								// mensaje
+								swal({
+									title: "Error",
+									text: "" + dato.msj,
+									type: "error", // warning, error, success, info
+									buttons: {
+										visible: false, // true , false
+									},
+									timer: 1500,
+									showConfirmButton: false
+								});
+								return false;
+							}
+						}).submit();
+						return false;
+					}
+					else {
+						// mensaje
+						swal({
+							title: "Cancelado",
+							text: "Acción cancelada",
+							type: "error", // warning, error, success, info
+							buttons: {
+								visible: false, // true , false
+							},
+							timer: 500,
+							showConfirmButton: false
+						});
+					}
+				});
 			return false;
 		}
 	}
-	else
-	{
+	else {
 		// mensaje
 		swal({
 			title: "Seleccione anexos (s)",
@@ -9482,19 +9220,15 @@ var ultimaversion_cancelada = 0;
 var ultimarevision_id = 0;
 
 
-$(document).ready(function()
-{
-	setTimeout(function()
-	{
+$(document).ready(function () {
+	setTimeout(function () {
 		tabla_reporte_revisiones(proyecto.id);
 	}, 11000);
 });
 
 
-$(document).on('submit', function()
-{
-	setTimeout(function()
-	{
+$(document).on('submit', function () {
+	setTimeout(function () {
 		// alert('Guardaste algo');
 		tabla_reporte_revisiones(proyecto.id);
 	}, 6000);
@@ -9502,19 +9236,15 @@ $(document).on('submit', function()
 
 
 var datatable_reporterevisiones = null;
-function tabla_reporte_revisiones(proyecto_id)
-{
-	try 
-	{
-		var ruta = "/reporteruidorevisionestabla/"+proyecto_id;
+function tabla_reporte_revisiones(proyecto_id) {
+	try {
+		var ruta = "/reporteruidorevisionestabla/" + proyecto_id;
 
-		if (datatable_reporterevisiones != null)
-		{
+		if (datatable_reporterevisiones != null) {
 			datatable_reporterevisiones.clear().draw();
 			datatable_reporterevisiones.ajax.url(ruta).load();
 		}
-		else
-		{
+		else {
 			var numeroejecucion = 1;
 			datatable_reporterevisiones = $('#tabla_reporte_revisiones').DataTable({
 				ajax: {
@@ -9523,14 +9253,11 @@ function tabla_reporte_revisiones(proyecto_id)
 					cache: false,
 					dataType: "json",
 					data: {},
-					dataSrc: function (json)
-					{
-						if (parseInt(json.total) > 0)
-						{
+					dataSrc: function (json) {
+						if (parseInt(json.total) > 0) {
 							$("#boton_reporte_nuevarevision").attr('disabled', false);
 						}
-						else
-						{
+						else {
 							$("#boton_reporte_nuevarevision").attr('disabled', true);
 						}
 
@@ -9540,10 +9267,8 @@ function tabla_reporte_revisiones(proyecto_id)
 						botoninforme_estado(json.ultimaversion_estado);
 
 
-						if (areas_poe == 1)
-						{
-							setTimeout(function()
-							{
+						if (areas_poe == 1) {
+							setTimeout(function () {
 								$("#boton_reporte_nuevacategoria").attr('disabled', true);
 								$("#boton_reporte_nuevaarea").attr('disabled', true);
 							}, 5000);
@@ -9552,11 +9277,9 @@ function tabla_reporte_revisiones(proyecto_id)
 
 						return json.data;
 					},
-					error: function (xhr, error, code)
-					{						
-						console.log('error en datatable_reporterevisiones '+code);
-						if (numeroejecucion <= 1)
-						{
+					error: function (xhr, error, code) {
+						console.log('error en datatable_reporterevisiones ' + code);
+						if (numeroejecucion <= 1) {
 							tabla_reporte_revisiones(proyecto_id)
 							numeroejecucion += 1;
 						}
@@ -9630,8 +9353,7 @@ function tabla_reporte_revisiones(proyecto_id)
 						previous: "Anterior"
 					}
 				},
-				rowCallback: function(row, data, index)
-				{
+				rowCallback: function (row, data, index) {
 					// console.log(index+' - '+data.reporteiluminacionpuntos_nopunto);
 
 					// if(data.reporteiluminacionpuntos_nopunto == 2)
@@ -9647,29 +9369,24 @@ function tabla_reporte_revisiones(proyecto_id)
 		}
 
 		// Tooltip en DataTable
-		datatable_reporterevisiones.on('draw', function ()
-		{
+		datatable_reporterevisiones.on('draw', function () {
 			$('[data-toggle="tooltip"]').tooltip();
 		});
 	}
-	catch (exception)
-	{
+	catch (exception) {
 		tabla_reporte_revisiones(proyecto_id);
-    }
+	}
 }
 
 
-function botoninforme_estado(boton_estado)
-{
-	if (parseInt(boton_estado) > 0)
-	{
+function botoninforme_estado(boton_estado) {
+	if (parseInt(boton_estado) > 0) {
 		$(".botoninforme").attr('disabled', true);
 
 		$(".botoninforme>i").removeClass('fa-save');
 		$(".botoninforme>i").addClass('fa-ban');
 	}
-	else
-	{
+	else {
 		$(".botoninforme").attr('disabled', false);
 
 		$(".botoninforme>i").removeClass('fa-ban');
@@ -9678,10 +9395,8 @@ function botoninforme_estado(boton_estado)
 }
 
 
-function reporte_concluido(reporte_id, perfil, checkbox)
-{
-	if (parseInt(perfil) == 1)
-	{
+function reporte_concluido(reporte_id, perfil, checkbox) {
+	if (parseInt(perfil) == 1) {
 		if (checkbox.checked) // Activado
 		{
 			$(checkbox).prop('checked', false);
@@ -9689,23 +9404,21 @@ function reporte_concluido(reporte_id, perfil, checkbox)
 
 			var pendientes = 0;
 			var pendientes_puntos = '';
-			$('#top-menu .fa-times').each(function()
-			{
+			$('#top-menu .fa-times').each(function () {
 				pendientes += 1;
 
 				var texto = this.id;
 				texto = texto.replace("menureporte_", "");
 				texto = texto.replace("_", ".");
-				pendientes_puntos += '\nPunto: '+texto;
+				pendientes_puntos += '\nPunto: ' + texto;
 			});
 
 
-			if (parseInt(pendientes) == 0)
-			{
+			if (parseInt(pendientes) == 0) {
 				// Confirmar
 				swal({
 					title: "¿Concluir informe?",
-					text: "Ultima revisión del informe de "+agente_nombre,
+					text: "Ultima revisión del informe de " + agente_nombre,
 					type: "warning",
 					showCancelButton: true,
 					confirmButtonColor: "#DD6B55",
@@ -9714,23 +9427,134 @@ function reporte_concluido(reporte_id, perfil, checkbox)
 					closeOnConfirm: false,
 					closeOnCancel: false
 				},
-				function(isConfirm)
-				{
-					if (isConfirm)
-					{
+					function (isConfirm) {
+						if (isConfirm) {
+							// cerrar msj confirmacion
+							swal.close();
+
+
+							// Enviar datos
+							$.ajax({
+								type: "GET",
+								dataType: "json",
+								url: "/reporteruidorevisionconcluir/" + reporte_id,
+								data: {},
+								cache: false,
+								success: function (dato) {
+									// Actualizar tablas
+									botoninforme_estado(dato.estado);
+									tabla_reporte_revisiones(proyecto.id);
+
+									tabla_reporte_definiciones(proyecto.id, agente_nombre, reporteregistro_id)
+									tabla_reporte_categorias(proyecto.id, reporteregistro_id);
+									tabla_reporte_areas(proyecto.id, reporteregistro_id);
+									tabla_reporte_5_6_equipoauditivo(proyecto.id, reporteregistro_id);
+									tabla_reporte_epp(proyecto.id, reporteregistro_id);
+									tabla_reporte_6_2(proyecto.id, reporteregistro_id);
+									tabla_reporte_7_1(proyecto.id, reporteregistro_id);
+									tabla_reporte_7_2(proyecto.id, reporteregistro_id);
+									tabla_reporte_7_3(proyecto.id, reporteregistro_id);
+
+
+									// desplazar a la ultima fila de la tabla
+									setTimeout(function () {
+										$('html, body').animate({
+											scrollTop: $('#tabla_reporte_revisiones').offset().top //ultima fila
+										}, 1000);
+									}, 2000);
+
+
+									// mensaje
+									swal({
+										title: "Correcto",
+										text: "" + dato.msj,
+										type: "success", // warning, error, success, info
+										buttons: {
+											visible: false, // true , false
+										},
+										timer: 1500,
+										showConfirmButton: false
+									});
+								},
+								error: function (dato) {
+									tabla_reporte_revisiones(proyecto.id);
+
+									// mensaje
+									swal({
+										title: "No se pudo realizar esta acción",
+										text: dato.responseJSON,
+										type: "warning", // warning, error, success, info
+										buttons: {
+											visible: false, // true , false
+										},
+										timer: 2000,
+										showConfirmButton: false
+									});
+
+									return false;
+								}
+							});//Fin ajax
+						}
+						else {
+							// mensaje
+							swal({
+								title: "Cancelado",
+								text: "Acción cancelada",
+								type: "error", // warning, error, success, info
+								buttons: {
+									visible: false, // true , false
+								},
+								timer: 500,
+								showConfirmButton: false
+							});
+						}
+					});
+			}
+			else {
+				// mensaje
+				swal({
+					title: "No disponible",
+					text: 'Esta revisión del informe aún no ha sido completada, se encontraron ' + pendientes + ' punto(s) pendiente(s) en todo el contenido por guardar.\n' + pendientes_puntos,
+					type: "info", // warning, error, success, info
+					buttons: {
+						visible: false, // true , false
+					},
+					timer: 6000,
+					showConfirmButton: false
+				});
+			}
+
+			return false;
+		}
+		else {
+			$(checkbox).prop('checked', true);
+
+			// Confirmar
+			swal({
+				title: "¿Quitar concluido?",
+				text: "Ultima revisión del informe de " + agente_nombre,
+				type: "warning",
+				showCancelButton: true,
+				confirmButtonColor: "#DD6B55",
+				confirmButtonText: "Aceptar!",
+				cancelButtonText: "Cancelar!",
+				closeOnConfirm: false,
+				closeOnCancel: false
+			},
+				function (isConfirm) {
+					if (isConfirm) {
 						// cerrar msj confirmacion
 						swal.close();
 
-						
+
 						// Enviar datos
 						$.ajax({
 							type: "GET",
 							dataType: "json",
-							url: "/reporteruidorevisionconcluir/"+reporte_id,
-							data:{},
+							url: "/reporteruidorevisionconcluir/" + reporte_id,
+							data: {},
 							cache: false,
-							success:function(dato)
-							{
+							success: function (dato) {
 								// Actualizar tablas
 								botoninforme_estado(dato.estado);
 								tabla_reporte_revisiones(proyecto.id);
@@ -9747,8 +9571,7 @@ function reporte_concluido(reporte_id, perfil, checkbox)
 
 
 								// desplazar a la ultima fila de la tabla
-								setTimeout(function()
-								{
+								setTimeout(function () {
 									$('html, body').animate({
 										scrollTop: $('#tabla_reporte_revisiones').offset().top //ultima fila
 									}, 1000);
@@ -9758,7 +9581,7 @@ function reporte_concluido(reporte_id, perfil, checkbox)
 								// mensaje
 								swal({
 									title: "Correcto",
-									text: ""+dato.msj,
+									text: "" + dato.msj,
 									type: "success", // warning, error, success, info
 									buttons: {
 										visible: false, // true , false
@@ -9767,19 +9590,18 @@ function reporte_concluido(reporte_id, perfil, checkbox)
 									showConfirmButton: false
 								});
 							},
-							error: function(dato)
-							{
+							error: function (dato) {
 								tabla_reporte_revisiones(proyecto.id);
 
 								// mensaje
-									swal({
-									title: "No se pudo realizar esta acción",
-									text: dato.responseJSON,
-									type: "warning", // warning, error, success, info
+								swal({
+									title: "Correcto",
+									text: "" + dato.msj,
+									type: "error", // warning, error, success, info
 									buttons: {
 										visible: false, // true , false
 									},
-									timer: 2000,
+									timer: 1500,
 									showConfirmButton: false
 								});
 
@@ -9787,8 +9609,7 @@ function reporte_concluido(reporte_id, perfil, checkbox)
 							}
 						});//Fin ajax
 					}
-					else 
-					{
+					else {
 						// mensaje
 						swal({
 							title: "Cancelado",
@@ -9802,139 +9623,15 @@ function reporte_concluido(reporte_id, perfil, checkbox)
 						});
 					}
 				});
-			}
-			else
-			{
-				// mensaje
-				swal({
-					title: "No disponible",
-					text: 'Esta revisión del informe aún no ha sido completada, se encontraron '+pendientes+' punto(s) pendiente(s) en todo el contenido por guardar.\n'+pendientes_puntos,
-					type: "info", // warning, error, success, info
-					buttons: {
-						visible: false, // true , false
-					},
-					timer: 6000,
-					showConfirmButton: false
-				});
-			}
-
 			return false;
 		}
-		else
-		{
-			$(checkbox).prop('checked', true);
-
-			// Confirmar
-			swal({
-				title: "¿Quitar concluido?",
-				text: "Ultima revisión del informe de "+agente_nombre,
-				type: "warning",
-				showCancelButton: true,
-				confirmButtonColor: "#DD6B55",
-				confirmButtonText: "Aceptar!",
-				cancelButtonText: "Cancelar!",
-				closeOnConfirm: false,
-				closeOnCancel: false
-			},
-			function(isConfirm)
-			{
-				if (isConfirm)
-				{
-					// cerrar msj confirmacion
-					swal.close();
-
-					
-					// Enviar datos
-					$.ajax({
-						type: "GET",
-						dataType: "json",
-						url: "/reporteruidorevisionconcluir/"+reporte_id,
-						data:{},
-						cache: false,
-						success:function(dato)
-						{
-							// Actualizar tablas
-							botoninforme_estado(dato.estado);
-							tabla_reporte_revisiones(proyecto.id);
-
-							tabla_reporte_definiciones(proyecto.id, agente_nombre, reporteregistro_id)
-							tabla_reporte_categorias(proyecto.id, reporteregistro_id);
-							tabla_reporte_areas(proyecto.id, reporteregistro_id);
-							tabla_reporte_5_6_equipoauditivo(proyecto.id, reporteregistro_id);
-							tabla_reporte_epp(proyecto.id, reporteregistro_id);
-							tabla_reporte_6_2(proyecto.id, reporteregistro_id);
-							tabla_reporte_7_1(proyecto.id, reporteregistro_id);
-							tabla_reporte_7_2(proyecto.id, reporteregistro_id);
-							tabla_reporte_7_3(proyecto.id, reporteregistro_id);
-
-
-							// desplazar a la ultima fila de la tabla
-							setTimeout(function()
-							{
-								$('html, body').animate({
-									scrollTop: $('#tabla_reporte_revisiones').offset().top //ultima fila
-								}, 1000);
-							}, 2000);
-
-
-							// mensaje
-							swal({
-								title: "Correcto",
-								text: ""+dato.msj,
-								type: "success", // warning, error, success, info
-								buttons: {
-									visible: false, // true , false
-								},
-								timer: 1500,
-								showConfirmButton: false
-							});
-						},
-						error: function(dato)
-						{
-							tabla_reporte_revisiones(proyecto.id);
-
-							// mensaje
-							swal({
-								title: "Correcto",
-								text: ""+dato.msj,
-								type: "error", // warning, error, success, info
-								buttons: {
-									visible: false, // true , false
-								},
-								timer: 1500,
-								showConfirmButton: false
-							});
-
-							return false;
-						}
-					});//Fin ajax
-				}
-				else 
-				{
-					// mensaje
-					swal({
-						title: "Cancelado",
-						text: "Acción cancelada",
-						type: "error", // warning, error, success, info
-						buttons: {
-							visible: false, // true , false
-						},
-						timer: 500,
-						showConfirmButton: false
-					});
-				}
-			});
-			return false;
-		}	
 	}
 }
 
 
-function reporte_cancelado(reporte_id, perfil, checkbox)
-{
-	if (parseInt(perfil) == 1)
-	{
-		$('#form_modal_cancelacionobservacion').each(function(){
+function reporte_cancelado(reporte_id, perfil, checkbox) {
+	if (parseInt(perfil) == 1) {
+		$('#form_modal_cancelacionobservacion').each(function () {
 			this.reset();
 		});
 
@@ -9949,10 +9646,9 @@ function reporte_cancelado(reporte_id, perfil, checkbox)
 			// alert('Cancelado '+checkbox.checked);
 
 			// mostrar modal observacion
-			$('#modal_reporte_cancelacionobservacion').modal({backdrop:false, keyboard:false});
+			$('#modal_reporte_cancelacionobservacion').modal({ backdrop: false, keyboard: false });
 		}
-		else
-		{
+		else {
 			$(checkbox).prop('checked', true);
 			// alert('Descancelado '+checkbox.checked);
 
@@ -9960,7 +9656,7 @@ function reporte_cancelado(reporte_id, perfil, checkbox)
 			// Confirmar
 			swal({
 				title: "¿Quitar cancelación?",
-				text: "Ultima revisión del informe de "+agente_nombre,
+				text: "Ultima revisión del informe de " + agente_nombre,
 				type: "warning",
 				showCancelButton: true,
 				confirmButtonColor: "#DD6B55",
@@ -9969,315 +9665,28 @@ function reporte_cancelado(reporte_id, perfil, checkbox)
 				closeOnConfirm: false,
 				closeOnCancel: false
 			},
-			function(isConfirm)
-			{
-				if (isConfirm)
-				{
-					// cerrar msj confirmacion
-					swal.close();
-
-					
-					// enviar datos
-					$('#form_modal_cancelacionobservacion').ajaxForm({
-						dataType: 'json',
-						type: 'POST',
-						url: ''+ruta_storage_guardar,
-						data: {
-							opcion: 26,
-							proyecto_id: proyecto.id,
-							agente_id: agente_id,
-							agente_nombre: agente_nombre,
-							reporteregistro_id: reporteregistro_id,
-							catactivo_id: $("#reporte_catactivo_id").val(),
-							reporte_instalacion: $("#reporte_instalacion").val(),
-						},
-						resetForm: false,
-						success: function(dato)
-						{
-							// Actualizar tablas
-							botoninforme_estado(dato.estado);
-							tabla_reporte_revisiones(proyecto.id);
-
-							tabla_reporte_definiciones(proyecto.id, agente_nombre, reporteregistro_id)
-							tabla_reporte_categorias(proyecto.id, reporteregistro_id);
-							tabla_reporte_areas(proyecto.id, reporteregistro_id);
-							tabla_reporte_5_6_equipoauditivo(proyecto.id, reporteregistro_id);
-							tabla_reporte_epp(proyecto.id, reporteregistro_id);
-							tabla_reporte_6_2(proyecto.id, reporteregistro_id);
-							tabla_reporte_7_1(proyecto.id, reporteregistro_id);
-							tabla_reporte_7_2(proyecto.id, reporteregistro_id);
-							tabla_reporte_7_3(proyecto.id, reporteregistro_id);
+				function (isConfirm) {
+					if (isConfirm) {
+						// cerrar msj confirmacion
+						swal.close();
 
 
-							// desplazar a la ultima fila de la tabla
-							setTimeout(function()
-							{
-								$('html, body').animate({
-									scrollTop: $('#tabla_reporte_revisiones').offset().top //ultima fila
-								}, 1000);
-							}, 2000);
-
-
-							// mensaje
-							swal({
-								title: "Correcto",
-								text: ""+dato.msj,
-								type: "success", // warning, error, success, info
-								buttons: {
-									visible: false, // true , false
-								},
-								timer: 1500,
-								showConfirmButton: false
-							});
-
-							// actualiza boton
-							// $('#botonguardar_modal_cancelacionobservacion').html('Guardar observación y cancelar revisión <i class="fa fa-save"></i>');
-							// $('#botonguardar_modal_cancelacionobservacion').attr('disabled', false);
-
-							// cerrar modal
-							// $('#modal_reporte_cancelacionobservacion').modal('hide');
-						},
-						beforeSend: function()
-						{
-							// $('#botonguardar_modal_cancelacionobservacion').html('Guardando observación y cancelar revisión <i class="fa fa-spin fa-spinner"></i>');
-							// $('#botonguardar_modal_cancelacionobservacion').attr('disabled', true);
-						},
-						error: function(dato)
-						{
-							// actualiza boton
-							// $('#botonguardar_modal_cancelacionobservacion').html('Guardar observación y cancelar revisión <i class="fa fa-save"></i>');
-							// $('#botonguardar_modal_cancelacionobservacion').attr('disabled', false);
-
-							// mensaje
-							swal({
-								title: "Error",
-								text: ""+dato.msj,
-								type: "error", // warning, error, success, info
-								buttons: {
-									visible: false, // true , false
-								},
-								timer: 1500,
-								showConfirmButton: false
-							});
-							return false;
-						}
-					}).submit();
-					return false;
-				}
-				else 
-				{
-					// mensaje
-					swal({
-						title: "Cancelado",
-						text: "Acción cancelada",
-						type: "error", // warning, error, success, info
-						buttons: {
-							visible: false, // true , false
-						},
-						timer: 500,
-						showConfirmButton: false
-					});
-				}
-			});
-			return false;
-		}
-	}
-}
-
-
-$("#botonguardar_modal_cancelacionobservacion").click(function()
-{
-	// valida campos vacios
-	var valida = this.form.checkValidity();
-	if (valida)
-	{
-		swal({
-			title: "¡Confirme que desea cancelar!",
-			text: "Ultima revisión del informe de "+agente_nombre,
-			type: "warning",
-			showCancelButton: true,
-			confirmButtonColor: "#DD6B55",
-			confirmButtonText: "Aceptar!",
-			cancelButtonText: "Cancelar!",
-			closeOnConfirm: false,
-			closeOnCancel: false
-		},
-		function(isConfirm)
-		{
-			if (isConfirm)
-			{
-				// cerrar msj confirmacion
-				swal.close();
-
-				// enviar datos
-				$('#form_modal_cancelacionobservacion').ajaxForm({
-					dataType: 'json',
-					type: 'POST',
-					url: ''+ruta_storage_guardar,
-					data: {
-						opcion: 26,
-						proyecto_id: proyecto.id,
-						agente_id: agente_id,
-						agente_nombre: agente_nombre,
-						reporteregistro_id: reporteregistro_id,
-						catactivo_id: $("#reporte_catactivo_id").val(),
-						reporte_instalacion: $("#reporte_instalacion").val(),
-					},
-					resetForm: false,
-					success: function(dato)
-					{
-						// Actualizar tablas
-						botoninforme_estado(dato.estado);
-						tabla_reporte_revisiones(proyecto.id);
-
-						tabla_reporte_definiciones(proyecto.id, agente_nombre, reporteregistro_id)
-						tabla_reporte_categorias(proyecto.id, reporteregistro_id);
-						tabla_reporte_areas(proyecto.id, reporteregistro_id);
-						tabla_reporte_5_6_equipoauditivo(proyecto.id, reporteregistro_id);
-						tabla_reporte_epp(proyecto.id, reporteregistro_id);
-						tabla_reporte_6_2(proyecto.id, reporteregistro_id);
-						tabla_reporte_7_1(proyecto.id, reporteregistro_id);
-						tabla_reporte_7_2(proyecto.id, reporteregistro_id);
-						tabla_reporte_7_3(proyecto.id, reporteregistro_id);
-
-
-						// desplazar a la ultima fila de la tabla
-						setTimeout(function()
-						{
-							$('html, body').animate({
-								scrollTop: $('#tabla_reporte_revisiones').offset().top //ultima fila
-							}, 1000);
-						}, 2000);
-
-
-						// mensaje
-						swal({
-							title: "Correcto",
-							text: ""+dato.msj,
-							type: "success", // warning, error, success, info
-							buttons: {
-								visible: false, // true , false
-							},
-							timer: 1500,
-							showConfirmButton: false
-						});
-
-						// actualiza boton
-						$('#botonguardar_modal_cancelacionobservacion').html('Guardar observación y cancelar revisión <i class="fa fa-save"></i>');
-						$('#botonguardar_modal_cancelacionobservacion').attr('disabled', false);
-
-						// cerrar modal
-						$('#modal_reporte_cancelacionobservacion').modal('hide');
-					},
-					beforeSend: function()
-					{
-						$('#botonguardar_modal_cancelacionobservacion').html('Guardando observación y cancelar revisión <i class="fa fa-spin fa-spinner"></i>');
-						$('#botonguardar_modal_cancelacionobservacion').attr('disabled', true);
-					},
-					error: function(dato)
-					{
-						// actualiza boton
-						$('#botonguardar_modal_cancelacionobservacion').html('Guardar observación y cancelar revisión <i class="fa fa-save"></i>');
-						$('#botonguardar_modal_cancelacionobservacion').attr('disabled', false);
-
-						// mensaje
-						swal({
-							title: "Error",
-							text: ""+dato.msj,
-							type: "error", // warning, error, success, info
-							buttons: {
-								visible: false, // true , false
-							},
-							timer: 1500,
-							showConfirmButton: false
-						});
-						return false;
-					}
-				}).submit();
-				return false;
-			}
-			else 
-			{
-				// mensaje
-				swal({
-					title: "Cancelado",
-					text: "Acción cancelada",
-					type: "error", // warning, error, success, info
-					buttons: {
-						visible: false, // true , false
-					},
-					timer: 500,
-					showConfirmButton: false
-				});
-			}
-		});
-		return false;
-	}
-});
-
-
-$("#boton_reporte_nuevarevision").click(function()
-{
-	if (ultimaversion_cancelada == 1)
-	{
-		if (parseInt(datatable_reporte_7_2.data().count()) > 0)
-		{
-			swal({
-				title: "¿Generar nueva revision?",
-				text: "Informe de Ruido",
-				type: "info",
-				showCancelButton: true,
-				confirmButtonColor: "#DD6B55",
-				confirmButtonText: "Aceptar!",
-				cancelButtonText: "Cancelar!",
-				closeOnConfirm: false,
-				closeOnCancel: false
-			}, function(isConfirm){
-				if (isConfirm)
-				{
-					// cerrar msj confirmacion
-					swal.close();
-
-					$('#boton_reporte_nuevarevision').html('<span class="btn-label"><i class="fa fa-spin fa-spinner"></i></span>Copiando revisión, por favor espere...');
-					$('#boton_reporte_nuevarevision').attr('disabled', true);
-
-
-					var grafica_imgbase64 = '';
-					graficapastel_resultados.export.capture({}, function ()
-					{
-						this.toPNG({quality: 1, multiplier: 6}, function (img_base64)
-						{
-							// var image = new Image();
-							// image.src = img_base64;
-							// document.getElementById("captura").appendChild(image);
-							// console.log('grafica pastel iluminacion');
-
-							grafica_imgbase64 = img_base64;
-						});
-					});
-
-
-					setTimeout(function()
-					{
-						// Enviar datos
-						$.ajax({
-							type: "POST",
-							dataType: "json",
-							url: "/reporteruidoword",
-							data:{
-								_token: document.querySelector('meta[name="csrf-token"]')['content'],
+						// enviar datos
+						$('#form_modal_cancelacionobservacion').ajaxForm({
+							dataType: 'json',
+							type: 'POST',
+							url: '' + ruta_storage_guardar,
+							data: {
+								opcion: 26,
 								proyecto_id: proyecto.id,
 								agente_id: agente_id,
 								agente_nombre: agente_nombre,
 								reporteregistro_id: reporteregistro_id,
-								areas_poe: areas_poe,
-								ultimarevision_id: ultimarevision_id,
-								crear_revision: 1,
-								grafica_dashboard: grafica_imgbase64,
+								catactivo_id: $("#reporte_catactivo_id").val(),
+								reporte_instalacion: $("#reporte_instalacion").val(),
 							},
-							cache: false,
-							success:function(dato)
-							{
+							resetForm: false,
+							success: function (dato) {
 								// Actualizar tablas
 								botoninforme_estado(dato.estado);
 								tabla_reporte_revisiones(proyecto.id);
@@ -10294,8 +9703,7 @@ $("#boton_reporte_nuevarevision").click(function()
 
 
 								// desplazar a la ultima fila de la tabla
-								setTimeout(function()
-								{
+								setTimeout(function () {
 									$('html, body').animate({
 										scrollTop: $('#tabla_reporte_revisiones').offset().top //ultima fila
 									}, 1000);
@@ -10305,7 +9713,270 @@ $("#boton_reporte_nuevarevision").click(function()
 								// mensaje
 								swal({
 									title: "Correcto",
-									text: ""+dato.msj,
+									text: "" + dato.msj,
+									type: "success", // warning, error, success, info
+									buttons: {
+										visible: false, // true , false
+									},
+									timer: 1500,
+									showConfirmButton: false
+								});
+
+								// actualiza boton
+								// $('#botonguardar_modal_cancelacionobservacion').html('Guardar observación y cancelar revisión <i class="fa fa-save"></i>');
+								// $('#botonguardar_modal_cancelacionobservacion').attr('disabled', false);
+
+								// cerrar modal
+								// $('#modal_reporte_cancelacionobservacion').modal('hide');
+							},
+							beforeSend: function () {
+								// $('#botonguardar_modal_cancelacionobservacion').html('Guardando observación y cancelar revisión <i class="fa fa-spin fa-spinner"></i>');
+								// $('#botonguardar_modal_cancelacionobservacion').attr('disabled', true);
+							},
+							error: function (dato) {
+								// actualiza boton
+								// $('#botonguardar_modal_cancelacionobservacion').html('Guardar observación y cancelar revisión <i class="fa fa-save"></i>');
+								// $('#botonguardar_modal_cancelacionobservacion').attr('disabled', false);
+
+								// mensaje
+								swal({
+									title: "Error",
+									text: "" + dato.msj,
+									type: "error", // warning, error, success, info
+									buttons: {
+										visible: false, // true , false
+									},
+									timer: 1500,
+									showConfirmButton: false
+								});
+								return false;
+							}
+						}).submit();
+						return false;
+					}
+					else {
+						// mensaje
+						swal({
+							title: "Cancelado",
+							text: "Acción cancelada",
+							type: "error", // warning, error, success, info
+							buttons: {
+								visible: false, // true , false
+							},
+							timer: 500,
+							showConfirmButton: false
+						});
+					}
+				});
+			return false;
+		}
+	}
+}
+
+
+$("#botonguardar_modal_cancelacionobservacion").click(function () {
+	// valida campos vacios
+	var valida = this.form.checkValidity();
+	if (valida) {
+		swal({
+			title: "¡Confirme que desea cancelar!",
+			text: "Ultima revisión del informe de " + agente_nombre,
+			type: "warning",
+			showCancelButton: true,
+			confirmButtonColor: "#DD6B55",
+			confirmButtonText: "Aceptar!",
+			cancelButtonText: "Cancelar!",
+			closeOnConfirm: false,
+			closeOnCancel: false
+		},
+			function (isConfirm) {
+				if (isConfirm) {
+					// cerrar msj confirmacion
+					swal.close();
+
+					// enviar datos
+					$('#form_modal_cancelacionobservacion').ajaxForm({
+						dataType: 'json',
+						type: 'POST',
+						url: '' + ruta_storage_guardar,
+						data: {
+							opcion: 26,
+							proyecto_id: proyecto.id,
+							agente_id: agente_id,
+							agente_nombre: agente_nombre,
+							reporteregistro_id: reporteregistro_id,
+							catactivo_id: $("#reporte_catactivo_id").val(),
+							reporte_instalacion: $("#reporte_instalacion").val(),
+						},
+						resetForm: false,
+						success: function (dato) {
+							// Actualizar tablas
+							botoninforme_estado(dato.estado);
+							tabla_reporte_revisiones(proyecto.id);
+
+							tabla_reporte_definiciones(proyecto.id, agente_nombre, reporteregistro_id)
+							tabla_reporte_categorias(proyecto.id, reporteregistro_id);
+							tabla_reporte_areas(proyecto.id, reporteregistro_id);
+							tabla_reporte_5_6_equipoauditivo(proyecto.id, reporteregistro_id);
+							tabla_reporte_epp(proyecto.id, reporteregistro_id);
+							tabla_reporte_6_2(proyecto.id, reporteregistro_id);
+							tabla_reporte_7_1(proyecto.id, reporteregistro_id);
+							tabla_reporte_7_2(proyecto.id, reporteregistro_id);
+							tabla_reporte_7_3(proyecto.id, reporteregistro_id);
+
+
+							// desplazar a la ultima fila de la tabla
+							setTimeout(function () {
+								$('html, body').animate({
+									scrollTop: $('#tabla_reporte_revisiones').offset().top //ultima fila
+								}, 1000);
+							}, 2000);
+
+
+							// mensaje
+							swal({
+								title: "Correcto",
+								text: "" + dato.msj,
+								type: "success", // warning, error, success, info
+								buttons: {
+									visible: false, // true , false
+								},
+								timer: 1500,
+								showConfirmButton: false
+							});
+
+							// actualiza boton
+							$('#botonguardar_modal_cancelacionobservacion').html('Guardar observación y cancelar revisión <i class="fa fa-save"></i>');
+							$('#botonguardar_modal_cancelacionobservacion').attr('disabled', false);
+
+							// cerrar modal
+							$('#modal_reporte_cancelacionobservacion').modal('hide');
+						},
+						beforeSend: function () {
+							$('#botonguardar_modal_cancelacionobservacion').html('Guardando observación y cancelar revisión <i class="fa fa-spin fa-spinner"></i>');
+							$('#botonguardar_modal_cancelacionobservacion').attr('disabled', true);
+						},
+						error: function (dato) {
+							// actualiza boton
+							$('#botonguardar_modal_cancelacionobservacion').html('Guardar observación y cancelar revisión <i class="fa fa-save"></i>');
+							$('#botonguardar_modal_cancelacionobservacion').attr('disabled', false);
+
+							// mensaje
+							swal({
+								title: "Error",
+								text: "" + dato.msj,
+								type: "error", // warning, error, success, info
+								buttons: {
+									visible: false, // true , false
+								},
+								timer: 1500,
+								showConfirmButton: false
+							});
+							return false;
+						}
+					}).submit();
+					return false;
+				}
+				else {
+					// mensaje
+					swal({
+						title: "Cancelado",
+						text: "Acción cancelada",
+						type: "error", // warning, error, success, info
+						buttons: {
+							visible: false, // true , false
+						},
+						timer: 500,
+						showConfirmButton: false
+					});
+				}
+			});
+		return false;
+	}
+});
+
+
+$("#boton_reporte_nuevarevision").click(function () {
+	if (ultimaversion_cancelada == 1) {
+		if (parseInt(datatable_reporte_7_2.data().count()) > 0) {
+			swal({
+				title: "¿Generar nueva revision?",
+				text: "Informe de Ruido",
+				type: "info",
+				showCancelButton: true,
+				confirmButtonColor: "#DD6B55",
+				confirmButtonText: "Aceptar!",
+				cancelButtonText: "Cancelar!",
+				closeOnConfirm: false,
+				closeOnCancel: false
+			}, function (isConfirm) {
+				if (isConfirm) {
+					// cerrar msj confirmacion
+					swal.close();
+
+					$('#boton_reporte_nuevarevision').html('<span class="btn-label"><i class="fa fa-spin fa-spinner"></i></span>Copiando revisión, por favor espere...');
+					$('#boton_reporte_nuevarevision').attr('disabled', true);
+
+
+					var grafica_imgbase64 = '';
+					graficapastel_resultados.export.capture({}, function () {
+						this.toPNG({ quality: 1, multiplier: 6 }, function (img_base64) {
+							// var image = new Image();
+							// image.src = img_base64;
+							// document.getElementById("captura").appendChild(image);
+							// console.log('grafica pastel iluminacion');
+
+							grafica_imgbase64 = img_base64;
+						});
+					});
+
+
+					setTimeout(function () {
+						// Enviar datos
+						$.ajax({
+							type: "POST",
+							dataType: "json",
+							url: "/reporteruidoword",
+							data: {
+								_token: document.querySelector('meta[name="csrf-token"]')['content'],
+								proyecto_id: proyecto.id,
+								agente_id: agente_id,
+								agente_nombre: agente_nombre,
+								reporteregistro_id: reporteregistro_id,
+								areas_poe: areas_poe,
+								ultimarevision_id: ultimarevision_id,
+								crear_revision: 1,
+								grafica_dashboard: grafica_imgbase64,
+							},
+							cache: false,
+							success: function (dato) {
+								// Actualizar tablas
+								botoninforme_estado(dato.estado);
+								tabla_reporte_revisiones(proyecto.id);
+
+								tabla_reporte_definiciones(proyecto.id, agente_nombre, reporteregistro_id)
+								tabla_reporte_categorias(proyecto.id, reporteregistro_id);
+								tabla_reporte_areas(proyecto.id, reporteregistro_id);
+								tabla_reporte_5_6_equipoauditivo(proyecto.id, reporteregistro_id);
+								tabla_reporte_epp(proyecto.id, reporteregistro_id);
+								tabla_reporte_6_2(proyecto.id, reporteregistro_id);
+								tabla_reporte_7_1(proyecto.id, reporteregistro_id);
+								tabla_reporte_7_2(proyecto.id, reporteregistro_id);
+								tabla_reporte_7_3(proyecto.id, reporteregistro_id);
+
+
+								// desplazar a la ultima fila de la tabla
+								setTimeout(function () {
+									$('html, body').animate({
+										scrollTop: $('#tabla_reporte_revisiones').offset().top //ultima fila
+									}, 1000);
+								}, 2000);
+
+
+								// mensaje
+								swal({
+									title: "Correcto",
+									text: "" + dato.msj,
 									type: "success", // warning, error, success, info
 									buttons: {
 										visible: false, // true , false
@@ -10323,8 +9994,7 @@ $("#boton_reporte_nuevarevision").click(function()
 							// 	$('#boton_reporte_nuevarevision').html('<span class="btn-label"><i class="fa fa-spin fa-spinner"></i></span>Copiando revisión, por favor espere...');
 							// 	$('#boton_reporte_nuevarevision').attr('disabled', true);
 							// },
-							error: function(dato)
-							{
+							error: function (dato) {
 								botoninforme_estado(1); //Bloquear
 
 								tabla_reporte_revisiones(proyecto.id);
@@ -10335,7 +10005,7 @@ $("#boton_reporte_nuevarevision").click(function()
 								// mensaje
 								swal({
 									title: "Error",
-									text: ""+dato.msj,
+									text: "" + dato.msj,
 									type: "error", // warning, error, success, info
 									buttons: {
 										visible: false, // true , false
@@ -10349,8 +10019,7 @@ $("#boton_reporte_nuevarevision").click(function()
 						});//Fin ajax
 					}, 1000);
 				}
-				else 
-				{
+				else {
 					// mensaje
 					swal({
 						title: "Cancelado",
@@ -10365,8 +10034,7 @@ $("#boton_reporte_nuevarevision").click(function()
 				}
 			});
 		}
-		else
-		{
+		else {
 			// mensaje
 			swal({
 				title: "No disponible",
@@ -10380,8 +10048,7 @@ $("#boton_reporte_nuevarevision").click(function()
 			});
 		}
 	}
-	else
-	{
+	else {
 		// mensaje
 		swal({
 			title: "No disponible",
@@ -10401,8 +10068,7 @@ $("#boton_reporte_nuevarevision").click(function()
 // GENERAR WORD
 
 
-$('#tabla_reporte_revisiones tbody').on('click', 'td>button.botondescarga', function()
-{
+$('#tabla_reporte_revisiones tbody').on('click', 'td>button.botondescarga', function () {
 	var botondescarga = this;
 
 
@@ -10411,18 +10077,14 @@ $('#tabla_reporte_revisiones tbody').on('click', 'td>button.botondescarga', func
 
 
 	// Boton descarga
-	$("#"+botondescarga.id).html('<i class="fa fa-spin fa-spinner fa-2x"></i>');
+	$("#" + botondescarga.id).html('<i class="fa fa-spin fa-spinner fa-2x"></i>');
 
 
-	setTimeout(function()
-	{
-		if (parseInt(row.data().id) == parseInt(ultimarevision_id))
-		{
+	setTimeout(function () {
+		if (parseInt(row.data().id) == parseInt(ultimarevision_id)) {
 			var grafica_imgbase64 = '';
-			graficapastel_resultados.export.capture({}, function ()
-			{
-				this.toPNG({quality: 1, multiplier: 6}, function (img_base64)
-				{
+			graficapastel_resultados.export.capture({}, function () {
+				this.toPNG({ quality: 1, multiplier: 6 }, function (img_base64) {
 					// var image = new Image();
 					// image.src = img_base64;
 					// document.getElementById("captura").appendChild(image);
@@ -10433,14 +10095,13 @@ $('#tabla_reporte_revisiones tbody').on('click', 'td>button.botondescarga', func
 			});
 
 
-			setTimeout(function()
-			{
+			setTimeout(function () {
 				// Enviar datos
 				$.ajax({
 					type: "POST",
 					dataType: "json",
 					url: "/reporteruidoword",
-					data:{
+					data: {
 						_token: document.querySelector('meta[name="csrf-token"]')['content'],
 						proyecto_id: proyecto.id,
 						agente_id: agente_id,
@@ -10452,25 +10113,21 @@ $('#tabla_reporte_revisiones tbody').on('click', 'td>button.botondescarga', func
 						grafica_dashboard: grafica_imgbase64,
 					},
 					cache: false,
-					success:function(dato)
-					{
-						ventana = window.open('/reporteruidoworddescargar/'+proyecto.id+"/"+row.data().id+"/"+ultimarevision_id);
+					success: function (dato) {
+						ventana = window.open('/reporteruidoworddescargar/' + proyecto.id + "/" + row.data().id + "/" + ultimarevision_id);
 
 
 						// // Boton descarga
 						// $("#"+botondescarga.id).html('<i class="fa fa-download fa-2x"></i>');
 
 
-						setTimeout(function()
-						{
+						setTimeout(function () {
 							tabla_reporte_revisiones(proyecto.id);
 						}, 6000);
 
 
-						setTimeout(function()
-						{
-							if (ventana.window)
-							{
+						setTimeout(function () {
+							if (ventana.window) {
 								ventana.window.close();
 							}
 						}, 15000);
@@ -10488,8 +10145,7 @@ $('#tabla_reporte_revisiones tbody').on('click', 'td>button.botondescarga', func
 						// 	showConfirmButton: false
 						// });
 					},
-					error: function(dato)
-					{
+					error: function (dato) {
 						// mensaje
 						swal({
 							title: "Error",
@@ -10506,25 +10162,21 @@ $('#tabla_reporte_revisiones tbody').on('click', 'td>button.botondescarga', func
 				});//Fin ajax
 			}, 1000);
 		}
-		else
-		{
-			ventana = window.open('/reporteruidoworddescargar/'+proyecto.id+"/"+row.data().id+"/"+ultimarevision_id);
+		else {
+			ventana = window.open('/reporteruidoworddescargar/' + proyecto.id + "/" + row.data().id + "/" + ultimarevision_id);
 
 
 			// // Boton descarga
 			// $("#"+botondescarga.id).html('<i class="fa fa-download fa-2x"></i>');
 
 
-			setTimeout(function()
-			{
+			setTimeout(function () {
 				tabla_reporte_revisiones(proyecto.id);
 			}, 6000);
 
 
-			setTimeout(function()
-			{
-				if (ventana.window)
-				{
+			setTimeout(function () {
+				if (ventana.window) {
 					ventana.window.close();
 				}
 			}, 15000);
@@ -10550,185 +10202,185 @@ $('#tabla_reporte_revisiones tbody').on('click', 'td>button.botondescarga', func
 
 $('#btn_descargar_plantilla').on('click', function (e) {
 	e.preventDefault();
-	
-    swal({
-        title: "¡Confirme descargar!",
-        text: "Plantilla principal del Informe.",
-        type: "info",
-        showCancelButton: true,
-        confirmButtonColor: "#DD6B55",
-        confirmButtonText: "Descargar!",
-        cancelButtonText: "Cancelar!",
-        closeOnConfirm: false,
-        closeOnCancel: false
-    },
-    function(isConfirm) {
-        if (isConfirm) {
-            // Mostrar mensaje de carga
-            swal({
-                title: "Generando documento",
-                text: 'Espere un momento, el documento se esta generando...',
-                type: "info",
-                showConfirmButton: false,
-                allowOutsideClick: false
-            });
 
-			url = 'descargarPortadaInformes/' + proyecto.id + '/' + 1;
-			instalacion = $('#reporte_instalacion').val();
+	swal({
+		title: "¡Confirme descargar!",
+		text: "Plantilla principal del Informe.",
+		type: "info",
+		showCancelButton: true,
+		confirmButtonColor: "#DD6B55",
+		confirmButtonText: "Descargar!",
+		cancelButtonText: "Cancelar!",
+		closeOnConfirm: false,
+		closeOnCancel: false
+	},
+		function (isConfirm) {
+			if (isConfirm) {
+				// Mostrar mensaje de carga
+				swal({
+					title: "Generando documento",
+					text: 'Espere un momento, el documento se esta generando...',
+					type: "info",
+					showConfirmButton: false,
+					allowOutsideClick: false
+				});
 
-            $.ajax({
-                url: url,
-                method: 'GET',
-                xhrFields: {
-                    responseType: 'blob'
-                },
-                success: function(data) {
-                    var a = document.createElement('a');
-                    var url = window.URL.createObjectURL(data);
-                    a.href = url;
-                    a.download = `Plantilla principal (Ruido) - ${instalacion}.docx`;
-                    document.body.append(a);
-                    a.click();
-                    a.remove();
-                    window.URL.revokeObjectURL(url);
+				url = 'descargarPortadaInformes/' + proyecto.id + '/' + 1;
+				instalacion = $('#reporte_instalacion').val();
 
-                    // Cerrar mensaje de carga
-                    swal.close();
+				$.ajax({
+					url: url,
+					method: 'GET',
+					xhrFields: {
+						responseType: 'blob'
+					},
+					success: function (data) {
+						var a = document.createElement('a');
+						var url = window.URL.createObjectURL(data);
+						a.href = url;
+						a.download = `Plantilla principal (Ruido) - ${instalacion}.docx`;
+						document.body.append(a);
+						a.click();
+						a.remove();
+						window.URL.revokeObjectURL(url);
 
-                    $('#btn_descargar_plantilla').prop('disabled', false);
-                },
-                error: function() {
-                    swal({
-                        title: "Hubo un problema al generar el documento.",
-                        text: "Intentelo de nuevo, o comuniquelo con el responsable",
-                        type: "error",
-                        showConfirmButton: true
-                    });
-                }
-            });
-        } else {
-            // mensaje de cancelación
-            swal({
-                title: "Cancelado",
-                text: "Acción cancelada",
-                type: "error",
-                buttons: {
-                    visible: false,
-                },
-                timer: 500,
-                showConfirmButton: false
-            });
-        }
-    });
-    return false;
+						// Cerrar mensaje de carga
+						swal.close();
+
+						$('#btn_descargar_plantilla').prop('disabled', false);
+					},
+					error: function () {
+						swal({
+							title: "Hubo un problema al generar el documento.",
+							text: "Intentelo de nuevo, o comuniquelo con el responsable",
+							type: "error",
+							showConfirmButton: true
+						});
+					}
+				});
+			} else {
+				// mensaje de cancelación
+				swal({
+					title: "Cancelado",
+					text: "Acción cancelada",
+					type: "error",
+					buttons: {
+						visible: false,
+					},
+					timer: 500,
+					showConfirmButton: false
+				});
+			}
+		});
+	return false;
 })
 
 
 //DESCARGAR PCA
 $('#boton_reporte_pca').on('click', function (e) {
 	e.preventDefault();
-	
-    swal({
-        title: "¡Confirme para Generar PCA!",
-        text: "Programa de Conservación de la Audición.",
-        type: "info",
-        showCancelButton: true,
-        confirmButtonColor: "#DD6B55",
-        confirmButtonText: "Descargar!",
-        cancelButtonText: "Cancelar!",
-        closeOnConfirm: false,
-        closeOnCancel: false
-    },
-    function(isConfirm) {
-        if (isConfirm) {
-			// Mostrar mensaje de carga
 
-            $('#boton_reporte_pca').prop('disabled', true);
-            swal({
-                title: "Generando documento PCA...",
-                text: 'Espere un momento, el documento se esta generando...',
-                type: "info",
-                showConfirmButton: false,
-                allowOutsideClick: false
-            });
+	swal({
+		title: "¡Confirme para Generar PCA!",
+		text: "Programa de Conservación de la Audición.",
+		type: "info",
+		showCancelButton: true,
+		confirmButtonColor: "#DD6B55",
+		confirmButtonText: "Descargar!",
+		cancelButtonText: "Cancelar!",
+		closeOnConfirm: false,
+		closeOnCancel: false
+	},
+		function (isConfirm) {
+			if (isConfirm) {
+				// Mostrar mensaje de carga
 
-			url = 'generarPCA/' + proyecto.id ;
-			instalacion = $('#reporte_instalacion').val();
+				$('#boton_reporte_pca').prop('disabled', true);
+				swal({
+					title: "Generando documento PCA...",
+					text: 'Espere un momento, el documento se esta generando...',
+					type: "info",
+					showConfirmButton: false,
+					allowOutsideClick: false
+				});
 
-            $.ajax({
-                url: url,
-                method: 'GET',
-                xhrFields: {
-                    responseType: 'blob'
-                },
-                success: function(data) {
-                    var a = document.createElement('a');
-                    var url = window.URL.createObjectURL(data);
-                    a.href = url;
-                    a.download = `Programa de Conservación de la Audición - ${instalacion}.xls`;
-                    document.body.append(a);
-                    a.click();
-                    a.remove();
-                    window.URL.revokeObjectURL(url);
+				url = 'generarPCA/' + proyecto.id;
+				instalacion = $('#reporte_instalacion').val();
 
-                    // Cerrar mensaje de carga
-                    swal.close();
+				$.ajax({
+					url: url,
+					method: 'GET',
+					xhrFields: {
+						responseType: 'blob'
+					},
+					success: function (data) {
+						var a = document.createElement('a');
+						var url = window.URL.createObjectURL(data);
+						a.href = url;
+						a.download = `Programa de Conservación de la Audición - ${instalacion}.xls`;
+						document.body.append(a);
+						a.click();
+						a.remove();
+						window.URL.revokeObjectURL(url);
 
-                    $('#boton_reporte_pca').prop('disabled', false);
-				},
-                error: function() {
-                    swal({
-                        title: "Hubo un problema al generar el documento.",
-                        text: "Intentelo de nuevo, o comuniquelo con el responsable",
-                        type: "error",
-                        showConfirmButton: true
-                    });
-                }
-            });
-        } else {
-            // mensaje de cancelación
-            swal({
-                title: "Cancelado",
-                text: "Acción cancelada",
-                type: "error",
-                buttons: {
-                    visible: false,
-                },
-                timer: 500,
-                showConfirmButton: false
-            });
-        }
-    });
-    return false;
+						// Cerrar mensaje de carga
+						swal.close();
+
+						$('#boton_reporte_pca').prop('disabled', false);
+					},
+					error: function () {
+						swal({
+							title: "Hubo un problema al generar el documento.",
+							text: "Intentelo de nuevo, o comuniquelo con el responsable",
+							type: "error",
+							showConfirmButton: true
+						});
+					}
+				});
+			} else {
+				// mensaje de cancelación
+				swal({
+					title: "Cancelado",
+					text: "Acción cancelada",
+					type: "error",
+					buttons: {
+						visible: false,
+					},
+					timer: 500,
+					showConfirmButton: false
+				});
+			}
+		});
+	return false;
 })
 
 
 function obtenerdatos() {
-	
-    // $('#PROYECTO_ID_INFORME').val($('#proyecto_id').val());
 
-    $.ajax({
-        type: "GET",
-        dataType: "json",
-        url: "/obtenerDatosInformesProyecto/" + proyecto.id,
-        data: {},
-        cache: false,
-        success: function(dato) {
+	// $('#PROYECTO_ID_INFORME').val($('#proyecto_id').val());
 
-        
-            $("#NIVEL1").html(dato.opciones);
-            $("#NIVEL2").html(dato.opciones);
-            $("#NIVEL3").html(dato.opciones);
-            $("#NIVEL4").html(dato.opciones);
-            $("#NIVEL5").html(dato.opciones);
+	$.ajax({
+		type: "GET",
+		dataType: "json",
+		url: "/obtenerDatosInformesProyecto/" + proyecto.id,
+		data: {},
+		cache: false,
+		success: function (dato) {
 
-            $("#OPCION_PORTADA1").html(dato.checks);
-            $("#OPCION_PORTADA2").html(dato.checks);
-            $("#OPCION_PORTADA3").html(dato.checks);
-            $("#OPCION_PORTADA4").html(dato.checks);
-            $("#OPCION_PORTADA5").html(dato.checks);
+
+			$("#NIVEL1").html(dato.opciones);
+			$("#NIVEL2").html(dato.opciones);
+			$("#NIVEL3").html(dato.opciones);
+			$("#NIVEL4").html(dato.opciones);
+			$("#NIVEL5").html(dato.opciones);
+
+			$("#OPCION_PORTADA1").html(dato.checks);
+			$("#OPCION_PORTADA2").html(dato.checks);
+			$("#OPCION_PORTADA3").html(dato.checks);
+			$("#OPCION_PORTADA4").html(dato.checks);
+			$("#OPCION_PORTADA5").html(dato.checks);
 			$("#OPCION_PORTADA6").html(dato.checks);
-			
+
 
 			setTimeout(() => {
 				$("#NIVEL1").val(portada.NIVEL1);
@@ -10746,7 +10398,7 @@ function obtenerdatos() {
 				$("#OPCION_PORTADA6").val(portada.OPCION_PORTADA6);
 
 				if (portada.RUTA_IMAGEN_PORTADA) {
-           			
+
 					var archivo = portada.RUTA_IMAGEN_PORTADA;
 					var extension = archivo.substring(archivo.lastIndexOf("."));
 					var imagenUrl = '/logoPortada/' + portada.ID_RECURSO_INFORME + extension;
@@ -10760,8 +10412,8 @@ function obtenerdatos() {
 						$('#PORTADA').dropify().data('dropify').init();
 					}
 					else {
-				
-					
+
+
 						$('#PORTADA').attr('data-default-file', imagenUrl);
 						$('#PORTADA').dropify({
 							messages: {
@@ -10781,15 +10433,15 @@ function obtenerdatos() {
 						});
 
 					}
-				}			
+				}
 
 			}, 1000);
-        },
-        error: function(xhr, status, error) {
-            console.log('Error: ' + error);
-            swal('Error', 'No se pudieron obtener los datos del informe', 'error');
-        }
-    });
+		},
+		error: function (xhr, status, error) {
+			console.log('Error: ' + error);
+			swal('Error', 'No se pudieron obtener los datos del informe', 'error');
+		}
+	});
 }
 
 // CAMPO DE LMPE 
@@ -10798,23 +10450,23 @@ function obtenerdatos() {
 $('#reporteruido_lmpe').on('change', function () {
 
 	if ($(this).val() != '') {
-		
+
 		$.ajax({
 			type: "GET",
 			dataType: "json",
-			url: "/guardarCampolmpe/" + proyecto.id + "/" + reporteregistro_id +"/"+ $('#reporteruido_lmpe').val(),
+			url: "/guardarCampolmpe/" + proyecto.id + "/" + reporteregistro_id + "/" + $('#reporteruido_lmpe').val(),
 			data: {},
 			cache: false,
-			success: function(dato) {
+			success: function (dato) {
 			},
 
-			error: function(xhr, status, error) {
+			error: function (xhr, status, error) {
 				console.log('Error: ' + error);
 				swal('Error', 'Datos no cargados LMPE', 'error');
 			}
 		});
 	}
- 
+
 });
 
 ///FUNCION BOTONES DE INSERCION POR MEDIO DE EXCEL
@@ -10823,40 +10475,40 @@ function abrirModalPuntos(tipo) {
 	valor = $('#reporteruido_lmpe').val();
 	if (tipo == 1) {
 		$('#formExcelPuntos')[0].reset();
-		
+
 		// Campos Hidden
 		$('#tipoArchivo').val(tipo);
-	
+
 		$('#divCargarPuntos').css('display', 'none');
 		$('#alertaVerificacion').css('display', 'none');
-	
-	
-		$('#modal_excel_puntos').modal({backdrop:false});
-		
+
+
+		$('#modal_excel_puntos').modal({ backdrop: false });
+
 	} else {
-		
+
 		if (valor == '') {
-	
+
 			swal({
 				title: "No existe un LMPA dB(A) para evaluar.",
 				text: "Por favor ingrese un valor en el campo de LMPA dB(A) para evaluar",
 				type: "info",
 				showConfirmButton: true
 			});
-	
-		} else { 
-	
+
+		} else {
+
 			$('#formExcelPuntos')[0].reset();
-			
+
 			// Campos Hidden
 			$('#tipoArchivo').val(tipo);
-		
+
 			$('#divCargarPuntos').css('display', 'none');
 			$('#alertaVerificacion').css('display', 'none');
-		
-		
-			$('#modal_excel_puntos').modal({backdrop:false});
-	
+
+
+			$('#modal_excel_puntos').modal({ backdrop: false });
+
 		}
 
 	}
@@ -10864,39 +10516,39 @@ function abrirModalPuntos(tipo) {
 }
 
 
- $('#excelPuntos').change(function () {
-        
+$('#excelPuntos').change(function () {
+
 	if ($(this).val()) {
-		
+
 		$('#alertaVerificacion').css('display', 'block');
 
 	} else {
 		$('#alertaVerificacion').css('display', 'none');
-		
+
 	}
 });
 
 
-$("#botonCargarPuntos").click(function() {
+$("#botonCargarPuntos").click(function () {
 	var guardar = 0;
 	var tipo = $('#tipoArchivo').val();
 
 	// valida campos vacios
 	var valida = this.form.checkValidity();
-	if (valida){
-		if ($("#excelPersonal").val() != ""){
+	if (valida) {
+		if ($("#excelPersonal").val() != "") {
 			// Tipo archivo
 			var archivo = $("#excelPuntos").val();
 			var extension = archivo.substring(archivo.lastIndexOf("."));
 
 			// valida tipo de archivo
-			if(extension == ".xlsx" || extension == ".XLSX"){
+			if (extension == ".xlsx" || extension == ".XLSX") {
 				guardar = 1;
 			}
-			else{
+			else {
 				// mensaje
 				swal({
-					title: "Tipo de archivo incorrecto "+extension,
+					title: "Tipo de archivo incorrecto " + extension,
 					text: "Solo se pueden cargar archivos tipo .xlsx",
 					type: "warning", // warning, error, success, info
 					buttons: {
@@ -10910,26 +10562,26 @@ $("#botonCargarPuntos").click(function() {
 				return false;
 			}
 		}
-		else{
+		else {
 			guardar = 0;
 		}
 
 		// guardar
-		if (guardar == 1){
-		
-			swal({   
-				title: "¿Está  seguro de cargar este documento?",   
-				text: "Está acción  no se puede revertir",   
-				type: "warning",   
-				showCancelButton: true,   
-				confirmButtonColor: "#DD6B55",   
-				confirmButtonText: "Guardar!",   
-				cancelButtonText: "Cancelar!",   
-				closeOnConfirm: false,   
-				closeOnCancel: false 
-			}, function (isConfirm) {   
-				
-				if (isConfirm){
+		if (guardar == 1) {
+
+			swal({
+				title: "¿Está  seguro de cargar este documento?",
+				text: "Está acción  no se puede revertir",
+				type: "warning",
+				showCancelButton: true,
+				confirmButtonColor: "#DD6B55",
+				confirmButtonText: "Guardar!",
+				cancelButtonText: "Cancelar!",
+				closeOnConfirm: false,
+				closeOnCancel: false
+			}, function (isConfirm) {
+
+				if (isConfirm) {
 					// cerrar msj confirmacion
 					swal.close();
 
@@ -10950,65 +10602,65 @@ $("#botonCargarPuntos").click(function() {
 							// actualizar boton
 							$('#botonCargarPuntos').prop('disabled', false);
 							$('#divCargarPuntos').css('display', 'none');
-							
+
 							if (dato.code == 200) {
-								
+
 								// cerrar modal
 								$('#modal_excel_puntos').modal('hide');
 
 								// mensaje
 								swal({
 									title: "Los datos fueron importados exitosamente",
-									text: ""+dato.msj,
-									type: "success", 
-									buttons: {visible: true},
+									text: "" + dato.msj,
+									type: "success",
+									buttons: { visible: true },
 									showConfirmButton: true,
 									showCancelButton: false
 								});
 
 								setTimeout(() => {
-									
+
 									//Recar	gamos las tabla correspondientes
 									if (tipo == 1) { //Punto 7.1
 
 										tabla_reporte_7_1(proyecto.id, reporteregistro_id);
 										tabla_reporte_7_6(proyecto.id, reporteregistro_id);
 
-										
+
 									} else if (tipo == 2) { //Punto 7.2
-	
+
 										tabla_reporte_7_2(proyecto.id, reporteregistro_id);
-	 
+
 									} else if (tipo == 3) { //Punto 7.3
-										
+
 										tabla_reporte_7_3(proyecto.id, reporteregistro_id);
-	
+
 									}
-									
+
 								}, 2000);
 
-							
+
 							} else {
 
 								swal({
 									title: "Ocurrio un error al intentar importar los datos.",
 									// text: ""+dato.msj,
 									type: "error", // warning, error, success, info
-									buttons: {visible: true},
+									buttons: { visible: true },
 									showConfirmButton: true,
 									showCancelButton: false
 								});
 							}
 
-							
+
 						},
 						beforeSend: function () {
 
 							$('#botonCargarPuntos').prop('disabled', true);
 							$('#divCargarPuntos').css('display', 'block');
 						},
-						error: function(dato) {
-							
+						error: function (dato) {
+
 							// actualiza boton
 							$('#botonCargarPuntos').prop('disabled', false);
 							$('#divCargarPuntos').css('display', 'none');
@@ -11016,7 +10668,7 @@ $("#botonCargarPuntos").click(function() {
 							// mensaje
 							swal({
 								title: "Error al cargar los datos.",
-								text: ""+dato.msj,
+								text: "" + dato.msj,
 								type: "error", // warning, error, success, info
 								buttons: {
 									visible: false, // true , false
@@ -11030,8 +10682,7 @@ $("#botonCargarPuntos").click(function() {
 					}).submit();
 					return false;
 				}
-				else 
-				{
+				else {
 					// mensaje
 					swal({
 						title: "Cancelado",
@@ -11042,13 +10693,13 @@ $("#botonCargarPuntos").click(function() {
 						},
 						timer: 1500,
 						showConfirmButton: false
-					});   
-				} 
+					});
+				}
 			});
 			return false;
 		}
 	}
-}); 
+});
 
 function validarPermisosAsignados(proyecto_id) {
 
@@ -11059,21 +10710,21 @@ function validarPermisosAsignados(proyecto_id) {
 		data: {},
 		cache: false,
 		success: function (dato) {
-			
-			if (dato.permisos == 1) { 
+
+			if (dato.permisos == 1) {
 
 				$('input[type="submit"], button[type="submit"]').fadeIn(0);
 
 			} else {
-				
+
 				$('input[type="submit"], button[type="submit"]').fadeOut(0);
 
 			}
 
-		}, beforeSend: function () {},
+		}, beforeSend: function () { },
 		error: function (dato) {
 			// alert('Error: '+dato.msj);
-            alert('Los permisos no han sido cargado')
+			alert('Los permisos no han sido cargado')
 
 			return false;
 		}
