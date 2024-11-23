@@ -7172,419 +7172,437 @@ function grafica_dashboard_resultados(serie_grafico) {
 			// ],
 		});
 
-		grafica_genero = AmCharts.makeChart("grafica_genero",
-		{
-			"type": "pie",
-			"startDuration": 1,
-			"theme": "light",
-			"addClassNames": true,
-			"autoMargins": false,
-			"marginTop": 0,
-			"marginBottom": 0,
-			"marginLeft": 0,
-			"marginRight": 0,
-			"radius": "40%",
-			"innerRadius": "10%", // Grosor Dona
-			"fontSize": 14,
-			"defs": {
-				"filter": [{
-					"id": "shadow",
-					"width": "200%",
-					"height": "200%",
-					"feOffset": {
-						"result": "offOut",
-						"in": "SourceAlpha",
-						"dx": 0,
-						"dy": 0
-					},
-					"feGaussianBlur": {
-						"result": "blurOut",
-						"in": "offOut",
-						"stdDeviation": 5
-					},
-					"feBlend": {
-						"in": "SourceGraphic",
-						"in2": "blurOut",
-						"mode": "normal"
-					}
-				}]
-			},
-			"legend": {
-				'enabled': false,
-				"position": "bottom",
-				"marginRight": 0,
-				"marginLeft": 0,
-				"autoMargins": false,
-				"valueText": "[[description]]" //"[[description]] [[value]]"
-			},
-			"export": {
-				"enabled": true,
-				'position': 'top-right'
-			},
-			"valueField": "total",
-			"titleField": "titulo",
-			// "labelText": "[[title]]<br>$[[value]]<br>([[percents]]%)",
-			"labelText": "[[value]]<br>([[percents]]%)",
-			"balloonText": "[[title]]<br><span style='font-size:14px'><b>[[value]]</b> ([[percents]]%)</span>",
-			"labelRadius": -30,
-			"colors": ["#00FF00", "#FFFF00", "#FF0000"], //color de la series
-			"dataProvider": serie_grafico,
-			// "dataProvider": [
-			// 	{
-			// 		"titulo": "Dentro de norma",
-			// 		"total": 2				
-			// 	},
-			// 	{
-			// 		"titulo": "Fuera de norma",
-			// 		"total": 1
-			// 	}
-			// ],
-		});
+		var grafica_genero = AmCharts.makeChart("grafica_genero", {
+            "type": "pie",
+            "theme": "light",
+            "dataProvider": [
+                { "titulo": "Hombres", "total": 60 },
+                { "titulo": "Mujeres", "total": 40 }
+            ],
+            "valueField": "total",
+            "titleField": "titulo",
+            "innerRadius": "40%",
+            "balloonText": "[[titulo]]: [[value]] ([[percents]]%)"
+        });
 
-		grafica_edad = AmCharts.makeChart("grafica_edad",
-		{
-			"type": "pie",
-			"startDuration": 1,
-			"theme": "light",
-			"addClassNames": true,
-			"autoMargins": false,
-			"marginTop": 0,
-			"marginBottom": 0,
-			"marginLeft": 0,
-			"marginRight": 0,
-			"radius": "40%",
-			"innerRadius": "10%", // Grosor Dona
-			"fontSize": 14,
-			"defs": {
-				"filter": [{
-					"id": "shadow",
-					"width": "200%",
-					"height": "200%",
-					"feOffset": {
-						"result": "offOut",
-						"in": "SourceAlpha",
-						"dx": 0,
-						"dy": 0
-					},
-					"feGaussianBlur": {
-						"result": "blurOut",
-						"in": "offOut",
-						"stdDeviation": 5
-					},
-					"feBlend": {
-						"in": "SourceGraphic",
-						"in2": "blurOut",
-						"mode": "normal"
-					}
-				}]
-			},
-			"legend": {
-				'enabled': false,
-				"position": "bottom",
-				"marginRight": 0,
-				"marginLeft": 0,
-				"autoMargins": false,
-				"valueText": "[[description]]" //"[[description]] [[value]]"
-			},
-			"export": {
-				"enabled": true,
-				'position': 'top-right'
-			},
-			"valueField": "total",
-			"titleField": "titulo",
-			// "labelText": "[[title]]<br>$[[value]]<br>([[percents]]%)",
-			"labelText": "[[value]]<br>([[percents]]%)",
-			"balloonText": "[[title]]<br><span style='font-size:14px'><b>[[value]]</b> ([[percents]]%)</span>",
-			"labelRadius": -30,
-			"colors": ["#00FF00", "#FFFF00", "#FF0000"], //color de la series
-			"dataProvider": serie_grafico,
-			// "dataProvider": [
-			// 	{
-			// 		"titulo": "Dentro de norma",
-			// 		"total": 2				
-			// 	},
-			// 	{
-			// 		"titulo": "Fuera de norma",
-			// 		"total": 1
-			// 	}
-			// ],
-		});
+        // Gráfico de barras para "grafica_edad"
+        grafica_edad = AmCharts.makeChart("grafica_edad", {
+            "type": "serial",
+            "theme": "light",
+            "dataProvider": [
+                { "titulo": "18-25", "total": 50 },
+                { "titulo": "26-35", "total": 70 },
+                { "titulo": "36-45", "total": 30 }
+            ],
+            "graphs": [{
+                "type": "column",
+                "valueField": "total",
+                "balloonText": "[[titulo]]: [[value]]",
+                "fillAlphas": 1
+            }],
+            "categoryField": "titulo",
+            "categoryAxis": { "gridPosition": "start" },
+            "valueAxes": [{ "title": "Personas" }]
+        });
 
-		grafica_escolaridad = AmCharts.makeChart("grafica_escolaridad",
-		{
-			"type": "pie",
-			"startDuration": 1,
-			"theme": "light",
-			"addClassNames": true,
-			"autoMargins": false,
-			"marginTop": 0,
-			"marginBottom": 0,
-			"marginLeft": 0,
-			"marginRight": 0,
-			"radius": "40%",
-			"innerRadius": "10%", // Grosor Dona
-			"fontSize": 14,
-			"defs": {
-				"filter": [{
-					"id": "shadow",
-					"width": "200%",
-					"height": "200%",
-					"feOffset": {
-						"result": "offOut",
-						"in": "SourceAlpha",
-						"dx": 0,
-						"dy": 0
-					},
-					"feGaussianBlur": {
-						"result": "blurOut",
-						"in": "offOut",
-						"stdDeviation": 5
-					},
-					"feBlend": {
-						"in": "SourceGraphic",
-						"in2": "blurOut",
-						"mode": "normal"
-					}
-				}]
-			},
-			"legend": {
-				'enabled': false,
-				"position": "bottom",
-				"marginRight": 0,
-				"marginLeft": 0,
-				"autoMargins": false,
-				"valueText": "[[description]]" //"[[description]] [[value]]"
-			},
-			"export": {
-				"enabled": true,
-				'position': 'top-right'
-			},
-			"valueField": "total",
-			"titleField": "titulo",
-			// "labelText": "[[title]]<br>$[[value]]<br>([[percents]]%)",
-			"labelText": "[[value]]<br>([[percents]]%)",
-			"balloonText": "[[title]]<br><span style='font-size:14px'><b>[[value]]</b> ([[percents]]%)</span>",
-			"labelRadius": -30,
-			"colors": ["#00FF00", "#FFFF00", "#FF0000"], //color de la series
-			"dataProvider": serie_grafico,
-			// "dataProvider": [
-			// 	{
-			// 		"titulo": "Dentro de norma",
-			// 		"total": 2				
-			// 	},
-			// 	{
-			// 		"titulo": "Fuera de norma",
-			// 		"total": 1
-			// 	}
-			// ],
-		});
+        // Gráfico de líneas para "grafica_escolaridad"
+        grafica_escolaridad = AmCharts.makeChart("grafica_escolaridad", {
+            "type": "serial",
+            "theme": "light",
+            "dataProvider": [
+                { "titulo": "Primaria", "total": 20 },
+                { "titulo": "Secundaria", "total": 30 },
+                { "titulo": "Preparatoria", "total": 40 },
+                { "titulo": "Universidad", "total": 50 }
+            ],
+            "graphs": [{
+                "type": "line",
+                "valueField": "total",
+                "bullet": "round",
+                "lineThickness": 2,
+                "balloonText": "[[titulo]]: [[value]]"
+            }],
+            "categoryField": "titulo",
+            "valueAxes": [{ "title": "Nivel educativo" }],
+            "categoryAxis": { "gridPosition": "start" }
+        });
 
-		grafica_estadocivil = AmCharts.makeChart("grafica_estadocivil",
-		{
-			"type": "pie",
-			"startDuration": 1,
-			"theme": "light",
-			"addClassNames": true,
-			"autoMargins": false,
-			"marginTop": 0,
-			"marginBottom": 0,
-			"marginLeft": 0,
-			"marginRight": 0,
-			"radius": "40%",
-			"innerRadius": "10%", // Grosor Dona
-			"fontSize": 14,
-			"defs": {
-				"filter": [{
-					"id": "shadow",
-					"width": "200%",
-					"height": "200%",
-					"feOffset": {
-						"result": "offOut",
-						"in": "SourceAlpha",
-						"dx": 0,
-						"dy": 0
-					},
-					"feGaussianBlur": {
-						"result": "blurOut",
-						"in": "offOut",
-						"stdDeviation": 5
-					},
-					"feBlend": {
-						"in": "SourceGraphic",
-						"in2": "blurOut",
-						"mode": "normal"
-					}
-				}]
-			},
-			"legend": {
-				'enabled': false,
-				"position": "bottom",
-				"marginRight": 0,
-				"marginLeft": 0,
-				"autoMargins": false,
-				"valueText": "[[description]]" //"[[description]] [[value]]"
-			},
-			"export": {
-				"enabled": true,
-				'position': 'top-right'
-			},
-			"valueField": "total",
-			"titleField": "titulo",
-			// "labelText": "[[title]]<br>$[[value]]<br>([[percents]]%)",
-			"labelText": "[[value]]<br>([[percents]]%)",
-			"balloonText": "[[title]]<br><span style='font-size:14px'><b>[[value]]</b> ([[percents]]%)</span>",
-			"labelRadius": -30,
-			"colors": ["#00FF00", "#FFFF00", "#FF0000"], //color de la series
-			"dataProvider": serie_grafico,
-			// "dataProvider": [
-			// 	{
-			// 		"titulo": "Dentro de norma",
-			// 		"total": 2				
-			// 	},
-			// 	{
-			// 		"titulo": "Fuera de norma",
-			// 		"total": 1
-			// 	}
-			// ],
-		});
+        // Gráfico radar para "grafica_estadocivil"
+        grafica_estadocivil = AmCharts.makeChart("grafica_estadocivil", {
+            "type": "radar",
+            "theme": "light",
+            "dataProvider": [
+                { "titulo": "Soltero", "total": 40 },
+                { "titulo": "Casado", "total": 30 },
+                { "titulo": "Divorciado", "total": 20 },
+                { "titulo": "Viudo", "total": 10 }
+            ],
+            "graphs": [{
+                "valueField": "total",
+                "bullet": "round",
+                "balloonText": "[[titulo]]: [[value]]"
+            }],
+            "categoryField": "titulo",
+            "valueAxes": [{ "axisTitleOffset": 20 }]
+        });
 
-		grafica_regimen = AmCharts.makeChart("grafica_regimen",
-		{
-			"type": "pie",
-			"startDuration": 1,
-			"theme": "light",
-			"addClassNames": true,
-			"autoMargins": false,
-			"marginTop": 0,
-			"marginBottom": 0,
-			"marginLeft": 0,
-			"marginRight": 0,
-			"radius": "40%",
-			"innerRadius": "10%", // Grosor Dona
-			"fontSize": 14,
-			"defs": {
-				"filter": [{
-					"id": "shadow",
-					"width": "200%",
-					"height": "200%",
-					"feOffset": {
-						"result": "offOut",
-						"in": "SourceAlpha",
-						"dx": 0,
-						"dy": 0
-					},
-					"feGaussianBlur": {
-						"result": "blurOut",
-						"in": "offOut",
-						"stdDeviation": 5
-					},
-					"feBlend": {
-						"in": "SourceGraphic",
-						"in2": "blurOut",
-						"mode": "normal"
-					}
-				}]
-			},
-			"legend": {
-				'enabled': false,
-				"position": "bottom",
-				"marginRight": 0,
-				"marginLeft": 0,
-				"autoMargins": false,
-				"valueText": "[[description]]" //"[[description]] [[value]]"
-			},
-			"export": {
-				"enabled": true,
-				'position': 'top-right'
-			},
-			"valueField": "total",
-			"titleField": "titulo",
-			// "labelText": "[[title]]<br>$[[value]]<br>([[percents]]%)",
-			"labelText": "[[value]]<br>([[percents]]%)",
-			"balloonText": "[[title]]<br><span style='font-size:14px'><b>[[value]]</b> ([[percents]]%)</span>",
-			"labelRadius": -30,
-			"colors": ["#00FF00", "#FFFF00", "#FF0000"], //color de la series
-			"dataProvider": serie_grafico,
-			// "dataProvider": [
-			// 	{
-			// 		"titulo": "Dentro de norma",
-			// 		"total": 2				
-			// 	},
-			// 	{
-			// 		"titulo": "Fuera de norma",
-			// 		"total": 1
-			// 	}
-			// ],
-		});
+        // Gráfico de pastel para "grafica_regimen"
+        grafica_regimen = AmCharts.makeChart("grafica_regimen", {
+            "type": "pie",
+            "theme": "light",
+            "dataProvider": [
+                { "titulo": "Régimen A", "total": 70 },
+                { "titulo": "Régimen B", "total": 30 }
+            ],
+            "valueField": "total",
+            "titleField": "titulo",
+            "balloonText": "[[titulo]]: [[value]] ([[percents]]%)"
+        });
 
-	graficapastel_resultados = AmCharts.makeChart("grafica_areas",
-		{
-			"type": "pie",
-			"startDuration": 1,
-			"theme": "light",
-			"addClassNames": true,
-			"autoMargins": false,
-			"marginTop": 0,
-			"marginBottom": 0,
-			"marginLeft": 0,
-			"marginRight": 0,
-			"radius": "40%",
-			"innerRadius": "10%", // Grosor Dona
-			"fontSize": 14,
-			"defs": {
-				"filter": [{
-					"id": "shadow",
-					"width": "200%",
-					"height": "200%",
-					"feOffset": {
-						"result": "offOut",
-						"in": "SourceAlpha",
-						"dx": 0,
-						"dy": 0
-					},
-					"feGaussianBlur": {
-						"result": "blurOut",
-						"in": "offOut",
-						"stdDeviation": 5
-					},
-					"feBlend": {
-						"in": "SourceGraphic",
-						"in2": "blurOut",
-						"mode": "normal"
-					}
-				}]
-			},
-			"legend": {
-				'enabled': false,
-				"position": "bottom",
-				"marginRight": 0,
-				"marginLeft": 0,
-				"autoMargins": false,
-				"valueText": "[[description]]" //"[[description]] [[value]]"
-			},
-			"export": {
-				"enabled": true,
-				'position': 'top-right'
-			},
-			"valueField": "total",
-			"titleField": "titulo",
-			// "labelText": "[[title]]<br>$[[value]]<br>([[percents]]%)",
-			"labelText": "[[value]]<br>([[percents]]%)",
-			"balloonText": "[[title]]<br><span style='font-size:14px'><b>[[value]]</b> ([[percents]]%)</span>",
-			"labelRadius": -30,
-			"colors": ["#00FF00", "#FFFF00", "#FF0000"], //color de la series
-			"dataProvider": serie_grafico,
-			// "dataProvider": [
-			// 	{
-			// 		"titulo": "Dentro de norma",
-			// 		"total": 2				
-			// 	},
-			// 	{
-			// 		"titulo": "Fuera de norma",
-			// 		"total": 1
-			// 	}
-			// ],
-		});
+		// grafica_genero = AmCharts.makeChart("grafica_genero",
+		// {
+		// 	"type": "pie",
+		// 	"startDuration": 1,
+		// 	"theme": "light",
+		// 	"addClassNames": true,
+		// 	"autoMargins": false,
+		// 	"marginTop": 0,
+		// 	"marginBottom": 0,
+		// 	"marginLeft": 0,
+		// 	"marginRight": 0,
+		// 	"radius": "40%",
+		// 	"innerRadius": "10%", // Grosor Dona
+		// 	"fontSize": 14,
+		// 	"defs": {
+		// 		"filter": [{
+		// 			"id": "shadow",
+		// 			"width": "200%",
+		// 			"height": "200%",
+		// 			"feOffset": {
+		// 				"result": "offOut",
+		// 				"in": "SourceAlpha",
+		// 				"dx": 0,
+		// 				"dy": 0
+		// 			},
+		// 			"feGaussianBlur": {
+		// 				"result": "blurOut",
+		// 				"in": "offOut",
+		// 				"stdDeviation": 5
+		// 			},
+		// 			"feBlend": {
+		// 				"in": "SourceGraphic",
+		// 				"in2": "blurOut",
+		// 				"mode": "normal"
+		// 			}
+		// 		}]
+		// 	},
+		// 	"legend": {
+		// 		'enabled': false,
+		// 		"position": "bottom",
+		// 		"marginRight": 0,
+		// 		"marginLeft": 0,
+		// 		"autoMargins": false,
+		// 		"valueText": "[[description]]" //"[[description]] [[value]]"
+		// 	},
+		// 	"export": {
+		// 		"enabled": true,
+		// 		'position': 'top-right'
+		// 	},
+		// 	"valueField": "total",
+		// 	"titleField": "titulo",
+		// 	// "labelText": "[[title]]<br>$[[value]]<br>([[percents]]%)",
+		// 	"labelText": "[[value]]<br>([[percents]]%)",
+		// 	"balloonText": "[[title]]<br><span style='font-size:14px'><b>[[value]]</b> ([[percents]]%)</span>",
+		// 	"labelRadius": -30,
+		// 	"colors": ["#00FF00", "#FFFF00", "#FF0000"], //color de la series
+		// 	"dataProvider": serie_grafico,
+		// 	// "dataProvider": [
+		// 	// 	{
+		// 	// 		"titulo": "Dentro de norma",
+		// 	// 		"total": 2				
+		// 	// 	},
+		// 	// 	{
+		// 	// 		"titulo": "Fuera de norma",
+		// 	// 		"total": 1
+		// 	// 	}
+		// 	// ],
+		// });
+
+		// grafica_edad = AmCharts.makeChart("grafica_edad",
+		// {
+		// 	"type": "pie",
+		// 	"startDuration": 1,
+		// 	"theme": "light",
+		// 	"addClassNames": true,
+		// 	"autoMargins": false,
+		// 	"marginTop": 0,
+		// 	"marginBottom": 0,
+		// 	"marginLeft": 0,
+		// 	"marginRight": 0,
+		// 	"radius": "40%",
+		// 	"innerRadius": "10%", // Grosor Dona
+		// 	"fontSize": 14,
+		// 	"defs": {
+		// 		"filter": [{
+		// 			"id": "shadow",
+		// 			"width": "200%",
+		// 			"height": "200%",
+		// 			"feOffset": {
+		// 				"result": "offOut",
+		// 				"in": "SourceAlpha",
+		// 				"dx": 0,
+		// 				"dy": 0
+		// 			},
+		// 			"feGaussianBlur": {
+		// 				"result": "blurOut",
+		// 				"in": "offOut",
+		// 				"stdDeviation": 5
+		// 			},
+		// 			"feBlend": {
+		// 				"in": "SourceGraphic",
+		// 				"in2": "blurOut",
+		// 				"mode": "normal"
+		// 			}
+		// 		}]
+		// 	},
+		// 	"legend": {
+		// 		'enabled': false,
+		// 		"position": "bottom",
+		// 		"marginRight": 0,
+		// 		"marginLeft": 0,
+		// 		"autoMargins": false,
+		// 		"valueText": "[[description]]" //"[[description]] [[value]]"
+		// 	},
+		// 	"export": {
+		// 		"enabled": true,
+		// 		'position': 'top-right'
+		// 	},
+		// 	"valueField": "total",
+		// 	"titleField": "titulo",
+		// 	// "labelText": "[[title]]<br>$[[value]]<br>([[percents]]%)",
+		// 	"labelText": "[[value]]<br>([[percents]]%)",
+		// 	"balloonText": "[[title]]<br><span style='font-size:14px'><b>[[value]]</b> ([[percents]]%)</span>",
+		// 	"labelRadius": -30,
+		// 	"colors": ["#00FF00", "#FFFF00", "#FF0000"], //color de la series
+		// 	"dataProvider": serie_grafico,
+		// 	// "dataProvider": [
+		// 	// 	{
+		// 	// 		"titulo": "Dentro de norma",
+		// 	// 		"total": 2				
+		// 	// 	},
+		// 	// 	{
+		// 	// 		"titulo": "Fuera de norma",
+		// 	// 		"total": 1
+		// 	// 	}
+		// 	// ],
+		// });
+
+		// grafica_escolaridad = AmCharts.makeChart("grafica_escolaridad",
+		// {
+		// 	"type": "pie",
+		// 	"startDuration": 1,
+		// 	"theme": "light",
+		// 	"addClassNames": true,
+		// 	"autoMargins": false,
+		// 	"marginTop": 0,
+		// 	"marginBottom": 0,
+		// 	"marginLeft": 0,
+		// 	"marginRight": 0,
+		// 	"radius": "40%",
+		// 	"innerRadius": "10%", // Grosor Dona
+		// 	"fontSize": 14,
+		// 	"defs": {
+		// 		"filter": [{
+		// 			"id": "shadow",
+		// 			"width": "200%",
+		// 			"height": "200%",
+		// 			"feOffset": {
+		// 				"result": "offOut",
+		// 				"in": "SourceAlpha",
+		// 				"dx": 0,
+		// 				"dy": 0
+		// 			},
+		// 			"feGaussianBlur": {
+		// 				"result": "blurOut",
+		// 				"in": "offOut",
+		// 				"stdDeviation": 5
+		// 			},
+		// 			"feBlend": {
+		// 				"in": "SourceGraphic",
+		// 				"in2": "blurOut",
+		// 				"mode": "normal"
+		// 			}
+		// 		}]
+		// 	},
+		// 	"legend": {
+		// 		'enabled': false,
+		// 		"position": "bottom",
+		// 		"marginRight": 0,
+		// 		"marginLeft": 0,
+		// 		"autoMargins": false,
+		// 		"valueText": "[[description]]" //"[[description]] [[value]]"
+		// 	},
+		// 	"export": {
+		// 		"enabled": true,
+		// 		'position': 'top-right'
+		// 	},
+		// 	"valueField": "total",
+		// 	"titleField": "titulo",
+		// 	// "labelText": "[[title]]<br>$[[value]]<br>([[percents]]%)",
+		// 	"labelText": "[[value]]<br>([[percents]]%)",
+		// 	"balloonText": "[[title]]<br><span style='font-size:14px'><b>[[value]]</b> ([[percents]]%)</span>",
+		// 	"labelRadius": -30,
+		// 	"colors": ["#00FF00", "#FFFF00", "#FF0000"], //color de la series
+		// 	"dataProvider": serie_grafico,
+		// 	// "dataProvider": [
+		// 	// 	{
+		// 	// 		"titulo": "Dentro de norma",
+		// 	// 		"total": 2				
+		// 	// 	},
+		// 	// 	{
+		// 	// 		"titulo": "Fuera de norma",
+		// 	// 		"total": 1
+		// 	// 	}
+		// 	// ],
+		// });
+
+		// grafica_estadocivil = AmCharts.makeChart("grafica_estadocivil",
+		// {
+		// 	"type": "pie",
+		// 	"startDuration": 1,
+		// 	"theme": "light",
+		// 	"addClassNames": true,
+		// 	"autoMargins": false,
+		// 	"marginTop": 0,
+		// 	"marginBottom": 0,
+		// 	"marginLeft": 0,
+		// 	"marginRight": 0,
+		// 	"radius": "40%",
+		// 	"innerRadius": "10%", // Grosor Dona
+		// 	"fontSize": 14,
+		// 	"defs": {
+		// 		"filter": [{
+		// 			"id": "shadow",
+		// 			"width": "200%",
+		// 			"height": "200%",
+		// 			"feOffset": {
+		// 				"result": "offOut",
+		// 				"in": "SourceAlpha",
+		// 				"dx": 0,
+		// 				"dy": 0
+		// 			},
+		// 			"feGaussianBlur": {
+		// 				"result": "blurOut",
+		// 				"in": "offOut",
+		// 				"stdDeviation": 5
+		// 			},
+		// 			"feBlend": {
+		// 				"in": "SourceGraphic",
+		// 				"in2": "blurOut",
+		// 				"mode": "normal"
+		// 			}
+		// 		}]
+		// 	},
+		// 	"legend": {
+		// 		'enabled': false,
+		// 		"position": "bottom",
+		// 		"marginRight": 0,
+		// 		"marginLeft": 0,
+		// 		"autoMargins": false,
+		// 		"valueText": "[[description]]" //"[[description]] [[value]]"
+		// 	},
+		// 	"export": {
+		// 		"enabled": true,
+		// 		'position': 'top-right'
+		// 	},
+		// 	"valueField": "total",
+		// 	"titleField": "titulo",
+		// 	// "labelText": "[[title]]<br>$[[value]]<br>([[percents]]%)",
+		// 	"labelText": "[[value]]<br>([[percents]]%)",
+		// 	"balloonText": "[[title]]<br><span style='font-size:14px'><b>[[value]]</b> ([[percents]]%)</span>",
+		// 	"labelRadius": -30,
+		// 	"colors": ["#00FF00", "#FFFF00", "#FF0000"], //color de la series
+		// 	"dataProvider": serie_grafico,
+		// 	// "dataProvider": [
+		// 	// 	{
+		// 	// 		"titulo": "Dentro de norma",
+		// 	// 		"total": 2				
+		// 	// 	},
+		// 	// 	{
+		// 	// 		"titulo": "Fuera de norma",
+		// 	// 		"total": 1
+		// 	// 	}
+		// 	// ],
+		// });
+
+		// grafica_regimen = AmCharts.makeChart("grafica_regimen",
+		// {
+		// 	"type": "pie",
+		// 	"startDuration": 1,
+		// 	"theme": "light",
+		// 	"addClassNames": true,
+		// 	"autoMargins": false,
+		// 	"marginTop": 0,
+		// 	"marginBottom": 0,
+		// 	"marginLeft": 0,
+		// 	"marginRight": 0,
+		// 	"radius": "40%",
+		// 	"innerRadius": "10%", // Grosor Dona
+		// 	"fontSize": 14,
+		// 	"defs": {
+		// 		"filter": [{
+		// 			"id": "shadow",
+		// 			"width": "200%",
+		// 			"height": "200%",
+		// 			"feOffset": {
+		// 				"result": "offOut",
+		// 				"in": "SourceAlpha",
+		// 				"dx": 0,
+		// 				"dy": 0
+		// 			},
+		// 			"feGaussianBlur": {
+		// 				"result": "blurOut",
+		// 				"in": "offOut",
+		// 				"stdDeviation": 5
+		// 			},
+		// 			"feBlend": {
+		// 				"in": "SourceGraphic",
+		// 				"in2": "blurOut",
+		// 				"mode": "normal"
+		// 			}
+		// 		}]
+		// 	},
+		// 	"legend": {
+		// 		'enabled': false,
+		// 		"position": "bottom",
+		// 		"marginRight": 0,
+		// 		"marginLeft": 0,
+		// 		"autoMargins": false,
+		// 		"valueText": "[[description]]" //"[[description]] [[value]]"
+		// 	},
+		// 	"export": {
+		// 		"enabled": true,
+		// 		'position': 'top-right'
+		// 	},
+		// 	"valueField": "total",
+		// 	"titleField": "titulo",
+		// 	// "labelText": "[[title]]<br>$[[value]]<br>([[percents]]%)",
+		// 	"labelText": "[[value]]<br>([[percents]]%)",
+		// 	"balloonText": "[[title]]<br><span style='font-size:14px'><b>[[value]]</b> ([[percents]]%)</span>",
+		// 	"labelRadius": -30,
+		// 	"colors": ["#00FF00", "#FFFF00", "#FF0000"], //color de la series
+		// 	"dataProvider": serie_grafico,
+		// 	// "dataProvider": [
+		// 	// 	{
+		// 	// 		"titulo": "Dentro de norma",
+		// 	// 		"total": 2				
+		// 	// 	},
+		// 	// 	{
+		// 	// 		"titulo": "Fuera de norma",
+		// 	// 		"total": 1
+		// 	// 	}
+		// 	// ],
+		// });
 }
 
 
