@@ -1997,7 +1997,8 @@ Route::get('eliminarLibro/{id}', ['as' => 'biblioteca.eliminarLibro', 'uses' => 
 //CATÁLOGOS
 Route::resource('recpsicocatalogos', 'PSICO\recpsicocatalogosController');
 Route::get('recpsicocatalogosguia/{num_catalogo}', ['as' => 'PSICO.recpsicocatalogos', 'uses' => 'PSICO\recpsicocatalogosController@tablaCatalogoGuia']);
-
+Route::resource('recpsicocatalogosrec', 'PSICO\recpsicocatalogosrecController');
+Route::get('recpsicocatalogosinformes/{num_catalogo}', ['as' => 'PSICO.recpsicocatalogosrec', 'uses' => 'PSICO\recpsicocatalogosrecController@tablaCatalogoRec']);
 
 
 Route::get('/clear-cache', function () {

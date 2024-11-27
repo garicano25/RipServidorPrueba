@@ -230,7 +230,7 @@ use Illuminate\Support\Str;
 
                     @endif
 
-                    @if (preg_match('/\bprogramaPsicosocial\b/', request()->path()) || preg_match('/\breconocimientoPsicosocial\b/', request()->path()) || preg_match('/\bejecucionPsicosocial\b/', request()->path()) || preg_match('/\binformesPsicosocial\b/', request()->path()) || preg_match('/\brecpsicocatalogos\b/', request()->path()))
+                    @if (preg_match('/\bprogramaPsicosocial\b/', request()->path()) || preg_match('/\breconocimientoPsicosocial\b/', request()->path()) || preg_match('/\bejecucionPsicosocial\b/', request()->path()) || preg_match('/\binformesPsicosocial\b/', request()->path()) || preg_match('/\brecpsicocatalogos\b/', request()->path())|| preg_match('/\brecpsicocatalogosrec\b/', request()->path()))
                     <div class="navbar-nav" style="left: 38%; position: absolute;">
 
                         <h1 style="color:#ffff;font-weight: bold;">Factor de Riesgo Psicosocial</h1>
@@ -514,7 +514,7 @@ use Illuminate\Support\Str;
 
                         @endif -->
 
-                        @if (preg_match('/\bprogramaPsicosocial\b/', request()->path()) || preg_match('/\breconocimientoPsicosocial\b/', request()->path()) || preg_match('/\bejecucionPsicosocial\b/', request()->path()) || preg_match('/\binformesPsicosocial\b/', request()->path()) || preg_match('/\brecpsicocatalogos\b/', request()->path()))
+                        @if (preg_match('/\bprogramaPsicosocial\b/', request()->path()) || preg_match('/\breconocimientoPsicosocial\b/', request()->path()) || preg_match('/\bejecucionPsicosocial\b/', request()->path()) || preg_match('/\binformesPsicosocial\b/', request()->path()) || preg_match('/\brecpsicocatalogos\b/', request()->path())|| preg_match('/\brecpsicocatalogosrec\b/', request()->path()))
 
 
 
@@ -560,6 +560,7 @@ use Illuminate\Support\Str;
                             <ul aria-expanded="false" class="collapse">
                                 @if(auth()->user()->hasRoles(['Superusuario', 'Administrador', 'Coordinador','Psicólogo']))
                                 <li><a href="{{route('recpsicocatalogos.index')}}">Banco de preguntas</a></li>
+                                <li><a href="{{route('recpsicocatalogosrec.index')}}">Módulo Rec. Psicosocial</a></li>
                                 @endif
                             </ul>
                         </li>
@@ -953,6 +954,20 @@ use Illuminate\Support\Str;
     <script src="/assets/plugins/datatables/jquery.dataTables.min.js"></script>
     <script src="/assets/plugins/datatables/dataTables.rowsGroup.js"></script>
     <script src="/js_sitio/recpsico_catalogos.js?v=1.0"></script>
+    <script src="/assets/plugins/dropify/dist/js/dropify.min.js"></script>
+    <script src="/assets/plugins/select-search/selectize.js" type="text/javascript"></script>
+
+
+
+    @endif
+
+    @if(request()->is('recpsicocatalogosrec'))
+    
+    <script src="/js/jasny-bootstrap.js"></script>
+
+    <script src="/assets/plugins/datatables/jquery.dataTables.min.js"></script>
+    <script src="/assets/plugins/datatables/dataTables.rowsGroup.js"></script>
+    <script src="/js_sitio/psicoInformes_catalogos.js?v=1.0"></script>
     <script src="/assets/plugins/dropify/dist/js/dropify.min.js"></script>
     <script src="/assets/plugins/select-search/selectize.js" type="text/javascript"></script>
 
