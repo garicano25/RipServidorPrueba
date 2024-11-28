@@ -182,18 +182,20 @@
 				<a href="#7_2" class="list-group-item submenu">7.2.- Información general del puesto de trabajo <i class="fa fa-times" id="menureporte_7_2"></i></a>
 				<a href="#8" class="list-group-item">8.- Valores de referencia</a>
 				<a href="#9" class="list-group-item">9.- Resultados</a>
-				<a href="#9_1" class="list-group-item submenu">9.1.- Registro de los resultados. Número de puntos evaluados<i class="fa fa-times" id="menureporte_9_1"></i></a>
-				<a href="#9_2" class="list-group-item submenu">9.2.- Código de representación gráfica y color, NOM-035-STPS-2018 <i class="fa fa-times" id="menureporte_9_2"></i></a>
-				<a href="#9_3" class="list-group-item submenu">9.3.- Resultados obtenidos en la Guía de Referencia I, Identificar a los trabajadores que fueron sujetos a acontecimientos traumáticos severos <i class="fa fa-times" id="menureporte_9_3"></i></a>
-				<a href="#9_4" class="list-group-item submenu">9.4.- Resultados obtenidos en la guía de referencia III, Identificación y análisis de los Factores de Riesgo Psicosocial y Evaluación del entorno organizacional en los centros de trabajo por categoría y dominio conforme a la NOM-035-STPS-2018 <i class="fa fa-times" id="menureporte_9_4"></i></a>
-				<a href="#9_5" class="list-group-item submenu">9.5.- Resultados obtenidos, Categoría ambiente de trabajo <i class="fa fa-times" id="menureporte_9_5"></i></a>
-				<a href="#9_6" class="list-group-item submenu">9.6.- Resultados obtenidos, Categoría factores propios de la actividad <i class="fa fa-times" id="menureporte_9_6"></i></a>
-				<a href="#9_7" class="list-group-item submenu">9.7.- Resultados obtenidos, Categoría organización del tiempo de trabajo <i class="fa fa-times" id="menureporte_9_7"></i></a>
-				<a href="#9_8" class="list-group-item submenu">9.8.- Resultados obtenidos, Categoría liderazgo y relaciones en el trabajo <i class="fa fa-times" id="menureporte_9_8"></i></a>
-				<a href="#9_9" class="list-group-item submenu">9.9.- Resultados obtenidos, Categoría entorno organizacional <i class="fa fa-times" id="menureporte_9_9"></i></a>
+				<a href="#9_1" class="list-group-item submenu">9.1.- Resultados obtenidos en la Guía de Referencia I, Identificar a los trabajadores que fueron sujetos a acontecimientos traumáticos severos <i class="fa fa-times" id="menureporte_9_1"></i></a>
+				<a href="#9_2" class="list-group-item submenu">9.2.- Resultados obtenidos en la guía de referencia III, Identificación y análisis de los Factores de Riesgo Psicosocial y Evaluación del entorno organizacional en los centros de trabajo por categoría y dominio conforme a la NOM-035-STPS-2018 <i class="fa fa-times" id="menureporte_9_2"></i></a>
+				<a href="#9_3" class="list-group-item submenu">9.3.- Resultados obtenidos, Categoría evento traumático severo <i class="fa fa-times" id="menureporte_9_3"></i></a>
+				<a href="#9_4" class="list-group-item submenu">9.4.- Resultados obtenidos, Categoría ambiente de trabajo <i class="fa fa-times" id="menureporte_9_4"></i></a>
+				<a href="#9_5" class="list-group-item submenu">9.5.- Resultados obtenidos, Categoría factores propios de la actividad <i class="fa fa-times" id="menureporte_9_5"></i></a>
+				<a href="#9_6" class="list-group-item submenu">9.6.- Resultados obtenidos, Categoría organización del tiempo de trabajo <i class="fa fa-times" id="menureporte_9_6"></i></a>
+				<a href="#9_7" class="list-group-item submenu">9.7.- Resultados obtenidos, Categoría liderazgo y relaciones en el trabajo <i class="fa fa-times" id="menureporte_9_7"></i></a>
+				<a href="#9_8" class="list-group-item submenu">9.8.- Resultados obtenidos, Categoría entorno organizacional <i class="fa fa-times" id="menureporte_9_8"></i></a>
+				<a href="#9_9" class="list-group-item submenu">9.9.- Resultados obtenidos, consolidado general<i class="fa fa-times" id="menureporte_9_9"></i></a>
 				<a href="#10" class="list-group-item">10.- Conclusiones <i class="fa fa-times" id="menureporte_10"></i></a>
 				<a href="#10_1" class="list-group-item submenu">10.1.- Conclusiones de conformidad a la NOM-035-STPS-2018 <i class="fa fa-times" id="menureporte_10_1"></i></a>
 				<a href="#11" class="list-group-item">11.- Recomendaciones de control <i class="fa fa-times" id="menureporte_11"></i></a>
+				<a href="#11_1" class="list-group-item submenu">11.1.- Registro de los resultados. Número de puntos evaluados<i class="fa fa-times" id="menureporte_9_1"></i></a>
+				<a href="#11_2" class="list-group-item submenu">11.2.- Código de representación gráfica y color, NOM-035-STPS-2018 <i class="fa fa-times" id="menureporte_9_2"></i></a>
 				<a href="#12" class="list-group-item">12.- Responsables del informe <i class="fa fa-times" id="menureporte_12"></i></a>
 				<a href="#13" class="list-group-item">13.- Anexos</a>
 				<a href="#13_1" class="list-group-item submenu">13.1.- Anexo 1: Memoria fotográfica <i class="fa fa-times" id="menureporte_13_1"></i></a>
@@ -926,91 +928,46 @@
 					</div>
 				</div>
 				<h4 class="card-title" id="9">9.- Resultados</h4>
-				<h4 class="card-title" id="9_1">9.1.- Registro de los resultados. Número de puntos evaluados</h4>
+				<h4 class="card-title" id="9_1">9.1.- Resultados obtenidos en la Guía de Referencia I, Identificar a los trabajadores que fueron sujetos a acontecimientos traumáticos severos.</h4>
 				<div class="row">
 					<div class="col-12">
-						<p class="justificado">En este apartado se muestra el registro de resultados</p><br>
-						<table class="table table-hover tabla_info_centrado" width="100%" id="tabla_reporte_categoria">
-							<thead>
-								<tr>
-									<th>GUIA DE REFERENCIA</th>
-									<th>NOMBRE</th>
-									<th>No. Preguntas</th>
-								</tr>
-							</thead>
-							<tbody></tbody>
-						</table><br>
+					<style>
+						#chartdiv {
+						width: 100%;
+						height: 500px;
+						}
+						</style>
+					<div id="guia1Chart"></div>
 					</div>
 				</div>
-				<h4 class="card-title" id="9_2">9.2.- Código de representación gráfica y color, NOM-035-STPS-2018</h4>
-				<div class="row">
-					<div class="col-12">
-						<p class="justificado">En este apartado se muestran: categorias, niveles de riesgo y recomendaciones, según el código de representación gráfica de riesgo </p><br>
-						<table class="table table-hover tabla_info_centrado" width="100%" id="tabla_reporte_categoria">
-							<thead>
-								<tr>
-									<th>Categoría</th>
-									<th>Nivel de riesggo</th>
-									<th>Recomendación</th>
-								</tr>
-							</thead>
-							<tbody>
-								<tr>
-									<td>Acontecimientos traumáticos severos</td>
-									<td>icono</td>
-									<td>
-										<input type="text" name="traumatic_event" placeholder="Escribir recomendación">
-									</td>
-								</tr>
-								<tr>
-									<td>Ambiente de trabajo</td>
-									<td>icono</td>
-									<td>
-										<input type="text" name="traumatic_event" placeholder="Escribir recomendación">
-									</td>
-								</tr>
-								<tr>
-									<td>Factores propios de la actividad</td>
-									<td>icono</td>
-									<td>
-										<input type="text" name="traumatic_event" placeholder="Escribir recomendación">
-									</td>
-								</tr>
-								<tr>
-									<td>Organización del tiempo de trabajo</td>
-									<td>icono</td>
-									<td>
-										<input type="text" name="traumatic_event" placeholder="Escribir recomendación">
-									</td>
-								</tr>
-								<tr>
-									<td>Liderazgo y relaciones en el trabajo</td>
-									<td>icono</td>
-									<td>
-										<input type="text" name="traumatic_event" placeholder="Escribir recomendación">
-									</td>
-								</tr>
-								<tr>
-									<td>Entorno organizacional</td>
-									<td>icono</td>
-									<td>
-										<input type="text" name="traumatic_event" placeholder="Escribir recomendación">
-									</td>
-								</tr>
-								
-							</tbody>
-						</table><br>
+				<h4 class="card-title" id="9_2">9.2.- Resultados obtenidos en la guía de referencia III, Identificación y análisis de los Factores de Riesgo Psicosocial y Evaluación del entorno organizacional en los centros de trabajo por categoría y dominio conforme a la NOM-035-STPS-2018.</h4>
+				<div class="col-12">
+					<style>
+						#chartdiv {
+						width: 100%;
+						height: 500px;
+						}
+						</style>
+					<div id="guia3Chart"></div>
 					</div>
 				</div>
-				<h4 class="card-title" id="9_3">9.3.- Resultados obtenidos en la Guía de Referencia I, Identificar a los trabajadores que fueron sujetos a acontecimientos traumáticos severos.</h4>
-				<h4 class="card-title" id="9_4">9.4.- Resultados obtenidos en la guía de referencia III, Identificación y análisis de los Factores de Riesgo Psicosocial y Evaluación del entorno organizacional en los centros de trabajo por categoría y dominio conforme a la NOM-035-STPS-2018.</h4>
-				<h4 class="card-title" id="9_5">9.5.- Resultados obtenidos, categoría evento traumatico severo.</h4>
-				<h4 class="card-title" id="9_6">9.6.- Resultados obtenidos, categoría ambiente de trabajo.</h4>
-				<h4 class="card-title" id="9_7">9.7.- Resultados obtenidos, categoría factores propios de la actividad.</h4>
-				<h4 class="card-title" id="9_8">9.8.- Resultados obtenidos, categoría organización del tiempo de trabajo.</h4>
-				<h4 class="card-title" id="9_9">9.9.- Resultados obtenidos, categoría liderazgo y relaciones en el trabajo.</h4>
-				<h4 class="card-title" id="9_10">9.10.- Resultados obtenidos, categoría entorno organizacional.</h4>
-				<h4 class="card-title" id="9_11">9.11.- Resultados obtenidos, consolidado general del centro de trabajo.</h4>
+				<h4 class="card-title" id="9_3">9.3.- Resultados obtenidos, categoría evento traumatico severo.</h4>
+				<div class="col-12">
+					<style>
+						#chartdiv {
+						width: 100%;
+						height: 500px;
+						}
+						</style>
+					<div id="guia1Chart"></div>
+					</div>
+				</div>
+				<h4 class="card-title" id="9_4">9.4.- Resultados obtenidos, categoría ambiente de trabajo.</h4>
+				<h4 class="card-title" id="9_5">9.5.- Resultados obtenidos, categoría factores propios de la actividad.</h4>
+				<h4 class="card-title" id="9_6">9.6.- Resultados obtenidos, categoría organización del tiempo de trabajo.</h4>
+				<h4 class="card-title" id="9_7">9.7.- Resultados obtenidos, categoría liderazgo y relaciones en el trabajo.</h4>
+				<h4 class="card-title" id="9_8">9.8.- Resultados obtenidos, categoría entorno organizacional.</h4>
+				<h4 class="card-title" id="9_9">9.9.- Resultados obtenidos, consolidado general del centro de trabajo.</h4>
 				<h4 class="card-title" id="10">10.- Conclusiones</h4>
 				<h4 class="card-title" id="10_1">10.1.- Conclusiones de conformidad a la NOM-035-STPS-2018.</h4>
 				<form method="post" enctype="multipart/form-data" name="form_reporte_procesoinstalacion" id="form_reporte_procesoinstalacion">
@@ -1084,6 +1041,82 @@
 						</div>
 					</div>
 				</form>
+				<h4 class="card-title" id="9_1">11.1.- Registro de los resultados. Número de puntos evaluados</h4>
+				<div class="row">
+					<div class="col-12">
+						<p class="justificado">En este apartado se muestra el registro de resultados</p><br>
+						<table class="table table-hover tabla_info_centrado" width="100%" id="tabla_reporte_categoria">
+							<thead>
+								<tr>
+									<th>GUIA DE REFERENCIA</th>
+									<th>NOMBRE</th>
+									<th>No. Preguntas</th>
+								</tr>
+							</thead>
+							<tbody></tbody>
+						</table><br>
+					</div>
+				</div>
+				<h4 class="card-title" id="9_2">11.2.- Código de representación gráfica y color, NOM-035-STPS-2018</h4>
+				<div class="row">
+					<div class="col-12">
+						<p class="justificado">En este apartado se muestran: categorias, niveles de riesgo y recomendaciones, según el código de representación gráfica de riesgo </p><br>
+						<table class="table table-hover tabla_info_centrado" width="100%" id="tabla_reporte_categoria">
+							<thead>
+								<tr>
+									<th>Categoría</th>
+									<th>Nivel de riesggo</th>
+									<th>Recomendación</th>
+								</tr>
+							</thead>
+							<tbody>
+								<tr>
+									<td>Acontecimientos traumáticos severos</td>
+									<td>icono</td>
+									<td>
+										<input type="text" name="traumatic_event" placeholder="Escribir recomendación">
+									</td>
+								</tr>
+								<tr>
+									<td>Ambiente de trabajo</td>
+									<td>icono</td>
+									<td>
+										<input type="text" name="traumatic_event" placeholder="Escribir recomendación">
+									</td>
+								</tr>
+								<tr>
+									<td>Factores propios de la actividad</td>
+									<td>icono</td>
+									<td>
+										<input type="text" name="traumatic_event" placeholder="Escribir recomendación">
+									</td>
+								</tr>
+								<tr>
+									<td>Organización del tiempo de trabajo</td>
+									<td>icono</td>
+									<td>
+										<input type="text" name="traumatic_event" placeholder="Escribir recomendación">
+									</td>
+								</tr>
+								<tr>
+									<td>Liderazgo y relaciones en el trabajo</td>
+									<td>icono</td>
+									<td>
+										<input type="text" name="traumatic_event" placeholder="Escribir recomendación">
+									</td>
+								</tr>
+								<tr>
+									<td>Entorno organizacional</td>
+									<td>icono</td>
+									<td>
+										<input type="text" name="traumatic_event" placeholder="Escribir recomendación">
+									</td>
+								</tr>
+								
+							</tbody>
+						</table><br>
+					</div>
+				</div>
 				<h4 class="card-title" id="12">12.- Responsables del informe</h4>
 				<form method="post" enctype="multipart/form-data" name="form_reporte_responsablesinforme" id="form_reporte_responsablesinforme">
 					<div class="row">
@@ -2498,7 +2531,7 @@
 
 {{-- Amcharts --}}
 <link href="/assets/plugins/c3-master/c3.min.css" rel="stylesheet">
-<script src="/assets/plugins/amChart/amcharts/amcharts.js" type="text/javascript"></script>
+<!-- <script src="/assets/plugins/amChart/amcharts/amcharts.js" type="text/javascript"></script>
 <script src="/assets/plugins/amChart/amcharts/serial.js" type="text/javascript"></script>
 <script src="/assets/plugins/amChart/amcharts/plugins/responsive/responsive.min.js" type="text/javascript"></script>
 <script src="/assets/plugins/amChart/amcharts/plugins/export/export.js" type="text/javascript"></script>
@@ -2508,7 +2541,9 @@
 <script src="/assets/plugins/amChart/amcharts/themes/black.js" type="text/javascript"></script>
 <script src="/assets/plugins/amChart/amcharts/themes/dark.js" type="text/javascript"></script>
 <script src="/assets/plugins/amChart/amcharts/themes/chalk.js" type="text/javascript"></script>
-<script src="/assets/plugins/amChart/amcharts/themes/patterns.js" type="text/javascript"></script>
+<script src="/assets/plugins/amChart/amcharts/themes/patterns.js" type="text/javascript"></script> -->
+
+
 <script type="text/javascript">
 	var proyecto = <?php echo json_encode($proyecto); ?>;
 	var recsensorial = <?php echo json_encode($recsensorial); ?>;
