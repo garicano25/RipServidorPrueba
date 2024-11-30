@@ -130,162 +130,236 @@ $(document).ready(function () {
 	});
 });
 
-am5.ready(function() {
+am5.ready(function () {
+    function createChart(containerId, titleText, subtitleText, data, categories) {
+        // Crear root
+        var root = am5.Root.new(containerId);
+        root.setThemes([am5themes_Animated.new(root)]);
 
-	// Create root element
-	// https://www.amcharts.com/docs/v5/getting-started/#Root_element
-	var root = am5.Root.new("chartdiv");
-	
-	
-	// Set themes
-	// https://www.amcharts.com/docs/v5/concepts/themes/
-	root.setThemes([
-	  am5themes_Animated.new(root)
-	]);
-	
-	
-	// Create chart
-	// https://www.amcharts.com/docs/v5/charts/xy-chart/
-	var chart = root.container.children.push(am5xy.XYChart.new(root, {
-	  panX: false,
-	  panY: false,
-	  wheelX: "panX",
-	  wheelY: "zoomX",
-	  layout: root.verticalLayout
-	}));
-	
-	
-	// Add legend
-	// https://www.amcharts.com/docs/v5/charts/xy-chart/legend-xy-series/
-	var legend = chart.children.push(
-	  am5.Legend.new(root, {
-		centerX: am5.p50,
-		x: am5.p50
-	  })
-	);
-	
-	var data = [{
-	  category: ""
-	}, {
-	  category: "g1-2021",
-	  s10: 20,
-	  s11: 12
-	}, {
-	  category: "g1-2022",
-	  s10: 15,
-	  s11: 8
-	}, {
-	  category: "g1-2023",
-	  s10: 12,
-	  s11: 16
-	}, {
-	  category: "g1-2024",
-	  s10: 9,
-	  s11: 12
-	}, {
-	  category: "g2-2021",
-	  s20: 15,
-	  s21: 16
-	}, {
-	  category: "g2-2022",
-	  s20: 20,
-	  s21: 6
-	}, {
-	  category: "g2-2023",
-	  s20: 14,
-	  s21: 11
-	}, {
-	  category: "g2-2024",
-	  s20: 19,
-	  s21: 12
-	}, {
-	  category: ""
-	}, {
-	  category: "g3-2021",
-	  s30: 5,
-	  s31: 10
-	}, {
-	  category: "g3-2022",
-	  s30: 7,
-	  s31: 12
-	}, {
-	  category: "g3-2023",
-	  s30: 15,
-	  s31: 10
-	}, {
-	  category: "g3-2024",
-	  s30: 13,
-	  s31: 14
-	}];
-	
-	
-	// Create axes
-	// https://www.amcharts.com/docs/v5/charts/xy-chart/axes/
-	var yAxis = chart.yAxes.push(am5xy.CategoryAxis.new(root, {
-	  categoryField: "category",
-	  renderer: am5xy.AxisRendererY.new(root, {
-		cellStartLocation: 0.1,
-		cellEndLocation: 0.9,
-		minGridDistance: 10
-	  }),
-	  tooltip: am5.Tooltip.new(root, {})
-	}));
-	
-	yAxis.get("renderer").labels.template.adapters.add("text", function(text, target) {
-	  if (target.dataItem) {
-		return target.dataItem.get("category").split("-")[1];
-	  }
-	  return text;
-	});
-	
-	yAxis.get("renderer").grid.template.set("forceHidden", true);
-	
-	yAxis.data.setAll(data);
-	
-	var xAxis = chart.xAxes.push(am5xy.ValueAxis.new(root, {
-	  renderer: am5xy.AxisRendererX.new(root, {})
-	}));
-	
-	
-	// Add series
-	// https://www.amcharts.com/docs/v5/charts/xy-chart/series/
-	function makeSeries(name, fieldName, color) {
-	  var series = chart.series.push(am5xy.ColumnSeries.new(root, {
-		name: name,
-		xAxis: xAxis,
-		yAxis: yAxis,
-		stacked: true,
-		valueXField: fieldName,
-		categoryYField: "category",
-		stroke: color,
-		fill: color
-	  }));
-	
-	  series.columns.template.setAll({
-		tooltipText: "{name}, {categoryY}:{valueX}",
-		width: am5.percent(90),
-		tooltipY: 0
-	  });
-	
-	  series.data.setAll(data);
-	  series.appear();
-	  legend.data.push(series);
-	}
-	
-	makeSeries("Series #1", "s10", am5.color(0x133F3D));
-	makeSeries("Series #2", "s11", am5.color(0x216E6A));
-	
-	makeSeries("Series #3", "s20", am5.color(0x20320C));
-	makeSeries("Series #4", "s21", am5.color(0x4A731C));
-	
-	makeSeries("Series #5", "s30", am5.color(0x3A1603));
-	makeSeries("Series #6", "s31", am5.color(0x883407));
-	
-	// Make stuff animate on load
-	// https://www.amcharts.com/docs/v5/concepts/animations/
-	chart.appear(1000, 100);
-	
-	});
+        // Crear el gráfico
+        var chart = root.container.children.push(am5xy.XYChart.new(root, {
+            panX: false,
+            panY: false,
+            wheelX: "panX",
+            wheelY: "zoomX",
+            layout: root.verticalLayout
+        }));
+
+		var titleY = 30;
+		var subtitleY = titleY + 40;
+        // Títulos
+
+		chart.children.unshift(
+            am5.Label.new(root, {
+                text: subtitleText,
+                fontSize: 14,
+                textAlign: "center",
+                x: am5.p50,
+                centerX: am5.p50,
+                marginTop: 10,
+            })
+        );
+        chart.children.unshift(
+            am5.Label.new(root, {
+                text: titleText,
+                fontSize: 20,
+                fontWeight: "bold",
+                textAlign: "center",
+                x: am5.p50,
+                centerX: am5.p50,
+            })
+        );
+
+        
+
+        // Leyenda
+        var legend = chart.children.push(
+            am5.Legend.new(root, {
+                centerX: am5.p50,
+                x: am5.p50
+            })
+        );
+
+        // Ejes
+        var yAxis = chart.yAxes.push(am5xy.CategoryAxis.new(root, {
+			categoryField: "category",
+			renderer: am5xy.AxisRendererY.new(root, {
+				inversed: true,
+				cellStartLocation: 0,
+				cellEndLocation: 0.9,
+				minGridDistance: 0
+			}),
+			tooltip: am5.Tooltip.new(root, {})
+		}));
+		
+		// Ocultar las líneas de la cuadrícula horizontal (líneas de la cuadrícula del eje Y)
+		yAxis.get("renderer").grid.template.set("forceHidden", true);
+
+        yAxis.data.setAll(data);
+
+        var xAxis = chart.xAxes.push(am5xy.ValueAxis.new(root, {
+            renderer: am5xy.AxisRendererX.new(root, {}),
+            min: 0,
+            max: 10
+        }));
+
+        // Formatear etiquetas de categorías
+        yAxis.get("renderer").labels.template.adapters.add("text", function (text, target) {
+            if (target.dataItem) {
+                let category = target.dataItem.get("category");
+                if (category.startsWith("g1")) {
+                    return "[bold]" + category.split("-")[1] + "[/]";
+                }
+                return category.split("-")[1];
+            }
+            return text;
+        });
+
+        // Series
+        function makeSeries(name, fieldName, color) {
+            var series = chart.series.push(am5xy.ColumnSeries.new(root, {
+                name: name,
+                xAxis: xAxis,
+                yAxis: yAxis,
+                stacked: true,
+                valueXField: fieldName,
+                categoryYField: "category",
+                stroke: color,
+                fill: color
+            }));
+
+            series.columns.template.setAll({
+                tooltipText: "{name}, {categoryY}:{valueX}",
+                width: am5.percent(90),
+                tooltipY: 0
+            });
+
+            series.data.setAll(data);
+            series.appear();
+            legend.data.push(series);
+        }
+
+        // Crear series
+        makeSeries("Muy alto", "s1", am5.color(0xFF0000));
+        makeSeries("Alto", "s2", am5.color(0xF7AA32));
+        makeSeries("Medio", "s3", am5.color(0xFFFF00));
+        makeSeries("Bajo", "s4", am5.color(0x00B050));
+        makeSeries("Nulo", "s5", am5.color(0x00B0F0));
+
+        chart.appear(1000, 100);
+    }
+
+    // Crear gráficos
+    createChart(
+        "ambienteChart",
+        "Factores de riesgo psicosocial en el trabajo-Identificación, análisis y prevención (Ambiente de trabajo)",
+        "(Nivel de riesgo/NOM-035-STPS-2018)\n\n",
+        [{
+            category: ""
+        }, {
+            category: "g1-Ambiente de trabajo",
+            s1: 2, s2: 3, s3: 1, s4: 3, s5: 1
+        }, {
+            category: ""
+        }, {
+            category: "g2-Ambiente de trabajo",
+            s1: 5, s2: 1, s3: 2, s4: 1, s5: 1
+        }, {
+            category: "g2-Condiciones del ambiente de trabajo",
+            s1: 3, s2: 2, s3: 2, s4: 2, s5: 1
+        }]
+    );
+
+    createChart(
+        "factoresChart",
+        "Factores de riesgo psicosocial en el trabajo-Identificación, análisis y prevención (Factores propios de la actividad)",
+        "(Nivel de riesgo/NOM-035-STPS-2018)\n\n",
+        [{
+            category: ""
+        }, {
+            category: "g1-Factores propios de la actividad",
+            s1: 2, s2: 3, s3: 1, s4: 3, s5: 1
+        }, {
+            category: ""
+        }, {
+            category: "g2-Carga de trabajo",
+            s1: 5, s2: 1, s3: 2, s4: 1, s5: 1
+        }, {
+            category: "g2-Falta de control sobre el trabajo",
+            s1: 3, s2: 2, s3: 2, s4: 2, s5: 1
+        }]
+    );
+
+	createChart(
+        "organizacionChart",
+        "Factores de riesgo psicosocial en el trabajo-Identificación, análisis y prevención (Organización del tiempo de trabajo)",
+        "(Nivel de riesgo/NOM-035-STPS-2018)\n\n",
+        [{
+            category: ""
+        }, {
+            category: "g1-Organización del tiempo de trabajo",
+            s1: 2, s2: 3, s3: 1, s4: 3, s5: 1
+        }, {
+            category: ""
+        }, {
+            category: "g2-Jornada de trabajo",
+            s1: 5, s2: 1, s3: 2, s4: 1, s5: 1
+        }, {
+            category: "g2-Interferencia trabajo/familia",
+            s1: 3, s2: 2, s3: 2, s4: 2, s5: 1
+        }]
+    );
+
+	createChart(
+        "liderazgoChart",
+        "Factores de riesgo psicosocial en el trabajo-Identificación, análisis y prevención (Liderazgo y relaciones en el trabajo)",
+        "(Nivel de riesgo/NOM-035-STPS-2018)\n\n",
+        [{
+            category: ""
+        }, {
+            category: "g1-Liderazgo y relaciones en el trabajo",
+            s1: 2, s2: 3, s3: 1, s4: 3, s5: 1
+        }, {
+            category: ""
+        },
+		{
+            category: "g2-Liderazgo",
+            s1: 5, s2: 1, s3: 2, s4: 1, s5: 1
+        }, {
+            category: "g2-Relaciones en el trabajo",
+            s1: 3, s2: 2, s3: 2, s4: 2, s5: 1
+        },
+		{
+            category: "g2-Relaciones en el trabajo",
+            s1: 3, s2: 2, s3: 2, s4: 2, s5: 1
+        }]
+    );
+
+	createChart(
+        "entornoChart",
+        "Factores de riesgo psicosocial en el trabajo-Identificación, análisis y prevención (Entorno organizacional)",
+        "(Nivel de riesgo/NOM-035-STPS-2018)\n\n",
+        [{
+            category: ""
+        }, {
+            category: "g1-Entorno organizacional",
+            s1: 2, s2: 3, s3: 1, s4: 3, s5: 1
+        }, {
+            category: ""
+        },{
+            category: "g2-Reconocimiento del desempeño",
+            s1: 5, s2: 1, s3: 2, s4: 1, s5: 1
+        }, {
+            category: "g2-Insuficiente sentido de pertenencia e inestabilidad",
+            s1: 3, s2: 2, s3: 2, s4: 2, s5: 1
+        }]
+    );
+    // Repite `createChart` para los demás gráficos con IDs, datos y títulos específicos.
+
+});
+
+
+
 //=================================================
 // DATOS GENERALES
 
@@ -7327,437 +7401,437 @@ function grafica_dashboard_resultados(serie_grafico) {
 			// ],
 		});
 
-		var grafica_genero = AmCharts.makeChart("grafica_genero", {
-            "type": "pie",
-            "theme": "light",
-            "dataProvider": [
-                { "titulo": "Hombres", "total": 60 },
-                { "titulo": "Mujeres", "total": 40 }
-            ],
-            "valueField": "total",
-            "titleField": "titulo",
-            "innerRadius": "40%",
-            "balloonText": "[[titulo]]: [[value]] ([[percents]]%)"
-        });
+	var grafica_genero = AmCharts.makeChart("grafica_genero", {
+		"type": "pie",
+		"theme": "light",
+		"dataProvider": [
+			{ "titulo": "Hombres", "total": 60 },
+			{ "titulo": "Mujeres", "total": 40 }
+		],
+		"valueField": "total",
+		"titleField": "titulo",
+		"innerRadius": "40%",
+		"balloonText": "[[titulo]]: [[value]] ([[percents]]%)"
+	});
 
-        // Gráfico de barras para "grafica_edad"
-        grafica_edad = AmCharts.makeChart("grafica_edad", {
-            "type": "serial",
-            "theme": "light",
-            "dataProvider": [
-                { "titulo": "18-25", "total": 50 },
-                { "titulo": "26-35", "total": 70 },
-                { "titulo": "36-45", "total": 30 }
-            ],
-            "graphs": [{
-                "type": "column",
-                "valueField": "total",
-                "balloonText": "[[titulo]]: [[value]]",
-                "fillAlphas": 1
-            }],
-            "categoryField": "titulo",
-            "categoryAxis": { "gridPosition": "start" },
-            "valueAxes": [{ "title": "Personas" }]
-        });
+	// Gráfico de barras para "grafica_edad"
+	grafica_edad = AmCharts.makeChart("grafica_edad", {
+		"type": "serial",
+		"theme": "light",
+		"dataProvider": [
+			{ "titulo": "18-25", "total": 50 },
+			{ "titulo": "26-35", "total": 70 },
+			{ "titulo": "36-45", "total": 30 }
+		],
+		"graphs": [{
+			"type": "column",
+			"valueField": "total",
+			"balloonText": "[[titulo]]: [[value]]",
+			"fillAlphas": 1
+		}],
+		"categoryField": "titulo",
+		"categoryAxis": { "gridPosition": "start" },
+		"valueAxes": [{ "title": "Personas" }]
+	});
 
-        // Gráfico de líneas para "grafica_escolaridad"
-        grafica_escolaridad = AmCharts.makeChart("grafica_escolaridad", {
-            "type": "serial",
-            "theme": "light",
-            "dataProvider": [
-                { "titulo": "Primaria", "total": 20 },
-                { "titulo": "Secundaria", "total": 30 },
-                { "titulo": "Preparatoria", "total": 40 },
-                { "titulo": "Universidad", "total": 50 }
-            ],
-            "graphs": [{
-                "type": "line",
-                "valueField": "total",
-                "bullet": "round",
-                "lineThickness": 2,
-                "balloonText": "[[titulo]]: [[value]]"
-            }],
-            "categoryField": "titulo",
-            "valueAxes": [{ "title": "Nivel educativo" }],
-            "categoryAxis": { "gridPosition": "start" }
-        });
+	// Gráfico de líneas para "grafica_escolaridad"
+	grafica_escolaridad = AmCharts.makeChart("grafica_escolaridad", {
+		"type": "serial",
+		"theme": "light",
+		"dataProvider": [
+			{ "titulo": "Primaria", "total": 20 },
+			{ "titulo": "Secundaria", "total": 30 },
+			{ "titulo": "Preparatoria", "total": 40 },
+			{ "titulo": "Universidad", "total": 50 }
+		],
+		"graphs": [{
+			"type": "line",
+			"valueField": "total",
+			"bullet": "round",
+			"lineThickness": 2,
+			"balloonText": "[[titulo]]: [[value]]"
+		}],
+		"categoryField": "titulo",
+		"valueAxes": [{ "title": "Nivel educativo" }],
+		"categoryAxis": { "gridPosition": "start" }
+	});
 
-        // Gráfico radar para "grafica_estadocivil"
-        grafica_estadocivil = AmCharts.makeChart("grafica_estadocivil", {
-            "type": "radar",
-            "theme": "light",
-            "dataProvider": [
-                { "titulo": "Soltero", "total": 40 },
-                { "titulo": "Casado", "total": 30 },
-                { "titulo": "Divorciado", "total": 20 },
-                { "titulo": "Viudo", "total": 10 }
-            ],
-            "graphs": [{
-                "valueField": "total",
-                "bullet": "round",
-                "balloonText": "[[titulo]]: [[value]]"
-            }],
-            "categoryField": "titulo",
-            "valueAxes": [{ "axisTitleOffset": 20 }]
-        });
+	// Gráfico radar para "grafica_estadocivil"
+	grafica_estadocivil = AmCharts.makeChart("grafica_estadocivil", {
+		"type": "radar",
+		"theme": "light",
+		"dataProvider": [
+			{ "titulo": "Soltero", "total": 40 },
+			{ "titulo": "Casado", "total": 30 },
+			{ "titulo": "Divorciado", "total": 20 },
+			{ "titulo": "Viudo", "total": 10 }
+		],
+		"graphs": [{
+			"valueField": "total",
+			"bullet": "round",
+			"balloonText": "[[titulo]]: [[value]]"
+		}],
+		"categoryField": "titulo",
+		"valueAxes": [{ "axisTitleOffset": 20 }]
+	});
 
-        // Gráfico de pastel para "grafica_regimen"
-        grafica_regimen = AmCharts.makeChart("grafica_regimen", {
-            "type": "pie",
-            "theme": "light",
-            "dataProvider": [
-                { "titulo": "Régimen A", "total": 70 },
-                { "titulo": "Régimen B", "total": 30 }
-            ],
-            "valueField": "total",
-            "titleField": "titulo",
-            "balloonText": "[[titulo]]: [[value]] ([[percents]]%)"
-        });
+	// Gráfico de pastel para "grafica_regimen"
+	grafica_regimen = AmCharts.makeChart("grafica_regimen", {
+		"type": "pie",
+		"theme": "light",
+		"dataProvider": [
+			{ "titulo": "Régimen A", "total": 70 },
+			{ "titulo": "Régimen B", "total": 30 }
+		],
+		"valueField": "total",
+		"titleField": "titulo",
+		"balloonText": "[[titulo]]: [[value]] ([[percents]]%)"
+	});
 
-		// grafica_genero = AmCharts.makeChart("grafica_genero",
-		// {
-		// 	"type": "pie",
-		// 	"startDuration": 1,
-		// 	"theme": "light",
-		// 	"addClassNames": true,
-		// 	"autoMargins": false,
-		// 	"marginTop": 0,
-		// 	"marginBottom": 0,
-		// 	"marginLeft": 0,
-		// 	"marginRight": 0,
-		// 	"radius": "40%",
-		// 	"innerRadius": "10%", // Grosor Dona
-		// 	"fontSize": 14,
-		// 	"defs": {
-		// 		"filter": [{
-		// 			"id": "shadow",
-		// 			"width": "200%",
-		// 			"height": "200%",
-		// 			"feOffset": {
-		// 				"result": "offOut",
-		// 				"in": "SourceAlpha",
-		// 				"dx": 0,
-		// 				"dy": 0
-		// 			},
-		// 			"feGaussianBlur": {
-		// 				"result": "blurOut",
-		// 				"in": "offOut",
-		// 				"stdDeviation": 5
-		// 			},
-		// 			"feBlend": {
-		// 				"in": "SourceGraphic",
-		// 				"in2": "blurOut",
-		// 				"mode": "normal"
-		// 			}
-		// 		}]
-		// 	},
-		// 	"legend": {
-		// 		'enabled': false,
-		// 		"position": "bottom",
-		// 		"marginRight": 0,
-		// 		"marginLeft": 0,
-		// 		"autoMargins": false,
-		// 		"valueText": "[[description]]" //"[[description]] [[value]]"
-		// 	},
-		// 	"export": {
-		// 		"enabled": true,
-		// 		'position': 'top-right'
-		// 	},
-		// 	"valueField": "total",
-		// 	"titleField": "titulo",
-		// 	// "labelText": "[[title]]<br>$[[value]]<br>([[percents]]%)",
-		// 	"labelText": "[[value]]<br>([[percents]]%)",
-		// 	"balloonText": "[[title]]<br><span style='font-size:14px'><b>[[value]]</b> ([[percents]]%)</span>",
-		// 	"labelRadius": -30,
-		// 	"colors": ["#00FF00", "#FFFF00", "#FF0000"], //color de la series
-		// 	"dataProvider": serie_grafico,
-		// 	// "dataProvider": [
-		// 	// 	{
-		// 	// 		"titulo": "Dentro de norma",
-		// 	// 		"total": 2				
-		// 	// 	},
-		// 	// 	{
-		// 	// 		"titulo": "Fuera de norma",
-		// 	// 		"total": 1
-		// 	// 	}
-		// 	// ],
-		// });
+	// grafica_genero = AmCharts.makeChart("grafica_genero",
+	// {
+	// 	"type": "pie",
+	// 	"startDuration": 1,
+	// 	"theme": "light",
+	// 	"addClassNames": true,
+	// 	"autoMargins": false,
+	// 	"marginTop": 0,
+	// 	"marginBottom": 0,
+	// 	"marginLeft": 0,
+	// 	"marginRight": 0,
+	// 	"radius": "40%",
+	// 	"innerRadius": "10%", // Grosor Dona
+	// 	"fontSize": 14,
+	// 	"defs": {
+	// 		"filter": [{
+	// 			"id": "shadow",
+	// 			"width": "200%",
+	// 			"height": "200%",
+	// 			"feOffset": {
+	// 				"result": "offOut",
+	// 				"in": "SourceAlpha",
+	// 				"dx": 0,
+	// 				"dy": 0
+	// 			},
+	// 			"feGaussianBlur": {
+	// 				"result": "blurOut",
+	// 				"in": "offOut",
+	// 				"stdDeviation": 5
+	// 			},
+	// 			"feBlend": {
+	// 				"in": "SourceGraphic",
+	// 				"in2": "blurOut",
+	// 				"mode": "normal"
+	// 			}
+	// 		}]
+	// 	},
+	// 	"legend": {
+	// 		'enabled': false,
+	// 		"position": "bottom",
+	// 		"marginRight": 0,
+	// 		"marginLeft": 0,
+	// 		"autoMargins": false,
+	// 		"valueText": "[[description]]" //"[[description]] [[value]]"
+	// 	},
+	// 	"export": {
+	// 		"enabled": true,
+	// 		'position': 'top-right'
+	// 	},
+	// 	"valueField": "total",
+	// 	"titleField": "titulo",
+	// 	// "labelText": "[[title]]<br>$[[value]]<br>([[percents]]%)",
+	// 	"labelText": "[[value]]<br>([[percents]]%)",
+	// 	"balloonText": "[[title]]<br><span style='font-size:14px'><b>[[value]]</b> ([[percents]]%)</span>",
+	// 	"labelRadius": -30,
+	// 	"colors": ["#00FF00", "#FFFF00", "#FF0000"], //color de la series
+	// 	"dataProvider": serie_grafico,
+	// 	// "dataProvider": [
+	// 	// 	{
+	// 	// 		"titulo": "Dentro de norma",
+	// 	// 		"total": 2				
+	// 	// 	},
+	// 	// 	{
+	// 	// 		"titulo": "Fuera de norma",
+	// 	// 		"total": 1
+	// 	// 	}
+	// 	// ],
+	// });
 
-		// grafica_edad = AmCharts.makeChart("grafica_edad",
-		// {
-		// 	"type": "pie",
-		// 	"startDuration": 1,
-		// 	"theme": "light",
-		// 	"addClassNames": true,
-		// 	"autoMargins": false,
-		// 	"marginTop": 0,
-		// 	"marginBottom": 0,
-		// 	"marginLeft": 0,
-		// 	"marginRight": 0,
-		// 	"radius": "40%",
-		// 	"innerRadius": "10%", // Grosor Dona
-		// 	"fontSize": 14,
-		// 	"defs": {
-		// 		"filter": [{
-		// 			"id": "shadow",
-		// 			"width": "200%",
-		// 			"height": "200%",
-		// 			"feOffset": {
-		// 				"result": "offOut",
-		// 				"in": "SourceAlpha",
-		// 				"dx": 0,
-		// 				"dy": 0
-		// 			},
-		// 			"feGaussianBlur": {
-		// 				"result": "blurOut",
-		// 				"in": "offOut",
-		// 				"stdDeviation": 5
-		// 			},
-		// 			"feBlend": {
-		// 				"in": "SourceGraphic",
-		// 				"in2": "blurOut",
-		// 				"mode": "normal"
-		// 			}
-		// 		}]
-		// 	},
-		// 	"legend": {
-		// 		'enabled': false,
-		// 		"position": "bottom",
-		// 		"marginRight": 0,
-		// 		"marginLeft": 0,
-		// 		"autoMargins": false,
-		// 		"valueText": "[[description]]" //"[[description]] [[value]]"
-		// 	},
-		// 	"export": {
-		// 		"enabled": true,
-		// 		'position': 'top-right'
-		// 	},
-		// 	"valueField": "total",
-		// 	"titleField": "titulo",
-		// 	// "labelText": "[[title]]<br>$[[value]]<br>([[percents]]%)",
-		// 	"labelText": "[[value]]<br>([[percents]]%)",
-		// 	"balloonText": "[[title]]<br><span style='font-size:14px'><b>[[value]]</b> ([[percents]]%)</span>",
-		// 	"labelRadius": -30,
-		// 	"colors": ["#00FF00", "#FFFF00", "#FF0000"], //color de la series
-		// 	"dataProvider": serie_grafico,
-		// 	// "dataProvider": [
-		// 	// 	{
-		// 	// 		"titulo": "Dentro de norma",
-		// 	// 		"total": 2				
-		// 	// 	},
-		// 	// 	{
-		// 	// 		"titulo": "Fuera de norma",
-		// 	// 		"total": 1
-		// 	// 	}
-		// 	// ],
-		// });
+	// grafica_edad = AmCharts.makeChart("grafica_edad",
+	// {
+	// 	"type": "pie",
+	// 	"startDuration": 1,
+	// 	"theme": "light",
+	// 	"addClassNames": true,
+	// 	"autoMargins": false,
+	// 	"marginTop": 0,
+	// 	"marginBottom": 0,
+	// 	"marginLeft": 0,
+	// 	"marginRight": 0,
+	// 	"radius": "40%",
+	// 	"innerRadius": "10%", // Grosor Dona
+	// 	"fontSize": 14,
+	// 	"defs": {
+	// 		"filter": [{
+	// 			"id": "shadow",
+	// 			"width": "200%",
+	// 			"height": "200%",
+	// 			"feOffset": {
+	// 				"result": "offOut",
+	// 				"in": "SourceAlpha",
+	// 				"dx": 0,
+	// 				"dy": 0
+	// 			},
+	// 			"feGaussianBlur": {
+	// 				"result": "blurOut",
+	// 				"in": "offOut",
+	// 				"stdDeviation": 5
+	// 			},
+	// 			"feBlend": {
+	// 				"in": "SourceGraphic",
+	// 				"in2": "blurOut",
+	// 				"mode": "normal"
+	// 			}
+	// 		}]
+	// 	},
+	// 	"legend": {
+	// 		'enabled': false,
+	// 		"position": "bottom",
+	// 		"marginRight": 0,
+	// 		"marginLeft": 0,
+	// 		"autoMargins": false,
+	// 		"valueText": "[[description]]" //"[[description]] [[value]]"
+	// 	},
+	// 	"export": {
+	// 		"enabled": true,
+	// 		'position': 'top-right'
+	// 	},
+	// 	"valueField": "total",
+	// 	"titleField": "titulo",
+	// 	// "labelText": "[[title]]<br>$[[value]]<br>([[percents]]%)",
+	// 	"labelText": "[[value]]<br>([[percents]]%)",
+	// 	"balloonText": "[[title]]<br><span style='font-size:14px'><b>[[value]]</b> ([[percents]]%)</span>",
+	// 	"labelRadius": -30,
+	// 	"colors": ["#00FF00", "#FFFF00", "#FF0000"], //color de la series
+	// 	"dataProvider": serie_grafico,
+	// 	// "dataProvider": [
+	// 	// 	{
+	// 	// 		"titulo": "Dentro de norma",
+	// 	// 		"total": 2				
+	// 	// 	},
+	// 	// 	{
+	// 	// 		"titulo": "Fuera de norma",
+	// 	// 		"total": 1
+	// 	// 	}
+	// 	// ],
+	// });
 
-		// grafica_escolaridad = AmCharts.makeChart("grafica_escolaridad",
-		// {
-		// 	"type": "pie",
-		// 	"startDuration": 1,
-		// 	"theme": "light",
-		// 	"addClassNames": true,
-		// 	"autoMargins": false,
-		// 	"marginTop": 0,
-		// 	"marginBottom": 0,
-		// 	"marginLeft": 0,
-		// 	"marginRight": 0,
-		// 	"radius": "40%",
-		// 	"innerRadius": "10%", // Grosor Dona
-		// 	"fontSize": 14,
-		// 	"defs": {
-		// 		"filter": [{
-		// 			"id": "shadow",
-		// 			"width": "200%",
-		// 			"height": "200%",
-		// 			"feOffset": {
-		// 				"result": "offOut",
-		// 				"in": "SourceAlpha",
-		// 				"dx": 0,
-		// 				"dy": 0
-		// 			},
-		// 			"feGaussianBlur": {
-		// 				"result": "blurOut",
-		// 				"in": "offOut",
-		// 				"stdDeviation": 5
-		// 			},
-		// 			"feBlend": {
-		// 				"in": "SourceGraphic",
-		// 				"in2": "blurOut",
-		// 				"mode": "normal"
-		// 			}
-		// 		}]
-		// 	},
-		// 	"legend": {
-		// 		'enabled': false,
-		// 		"position": "bottom",
-		// 		"marginRight": 0,
-		// 		"marginLeft": 0,
-		// 		"autoMargins": false,
-		// 		"valueText": "[[description]]" //"[[description]] [[value]]"
-		// 	},
-		// 	"export": {
-		// 		"enabled": true,
-		// 		'position': 'top-right'
-		// 	},
-		// 	"valueField": "total",
-		// 	"titleField": "titulo",
-		// 	// "labelText": "[[title]]<br>$[[value]]<br>([[percents]]%)",
-		// 	"labelText": "[[value]]<br>([[percents]]%)",
-		// 	"balloonText": "[[title]]<br><span style='font-size:14px'><b>[[value]]</b> ([[percents]]%)</span>",
-		// 	"labelRadius": -30,
-		// 	"colors": ["#00FF00", "#FFFF00", "#FF0000"], //color de la series
-		// 	"dataProvider": serie_grafico,
-		// 	// "dataProvider": [
-		// 	// 	{
-		// 	// 		"titulo": "Dentro de norma",
-		// 	// 		"total": 2				
-		// 	// 	},
-		// 	// 	{
-		// 	// 		"titulo": "Fuera de norma",
-		// 	// 		"total": 1
-		// 	// 	}
-		// 	// ],
-		// });
+	// grafica_escolaridad = AmCharts.makeChart("grafica_escolaridad",
+	// {
+	// 	"type": "pie",
+	// 	"startDuration": 1,
+	// 	"theme": "light",
+	// 	"addClassNames": true,
+	// 	"autoMargins": false,
+	// 	"marginTop": 0,
+	// 	"marginBottom": 0,
+	// 	"marginLeft": 0,
+	// 	"marginRight": 0,
+	// 	"radius": "40%",
+	// 	"innerRadius": "10%", // Grosor Dona
+	// 	"fontSize": 14,
+	// 	"defs": {
+	// 		"filter": [{
+	// 			"id": "shadow",
+	// 			"width": "200%",
+	// 			"height": "200%",
+	// 			"feOffset": {
+	// 				"result": "offOut",
+	// 				"in": "SourceAlpha",
+	// 				"dx": 0,
+	// 				"dy": 0
+	// 			},
+	// 			"feGaussianBlur": {
+	// 				"result": "blurOut",
+	// 				"in": "offOut",
+	// 				"stdDeviation": 5
+	// 			},
+	// 			"feBlend": {
+	// 				"in": "SourceGraphic",
+	// 				"in2": "blurOut",
+	// 				"mode": "normal"
+	// 			}
+	// 		}]
+	// 	},
+	// 	"legend": {
+	// 		'enabled': false,
+	// 		"position": "bottom",
+	// 		"marginRight": 0,
+	// 		"marginLeft": 0,
+	// 		"autoMargins": false,
+	// 		"valueText": "[[description]]" //"[[description]] [[value]]"
+	// 	},
+	// 	"export": {
+	// 		"enabled": true,
+	// 		'position': 'top-right'
+	// 	},
+	// 	"valueField": "total",
+	// 	"titleField": "titulo",
+	// 	// "labelText": "[[title]]<br>$[[value]]<br>([[percents]]%)",
+	// 	"labelText": "[[value]]<br>([[percents]]%)",
+	// 	"balloonText": "[[title]]<br><span style='font-size:14px'><b>[[value]]</b> ([[percents]]%)</span>",
+	// 	"labelRadius": -30,
+	// 	"colors": ["#00FF00", "#FFFF00", "#FF0000"], //color de la series
+	// 	"dataProvider": serie_grafico,
+	// 	// "dataProvider": [
+	// 	// 	{
+	// 	// 		"titulo": "Dentro de norma",
+	// 	// 		"total": 2				
+	// 	// 	},
+	// 	// 	{
+	// 	// 		"titulo": "Fuera de norma",
+	// 	// 		"total": 1
+	// 	// 	}
+	// 	// ],
+	// });
 
-		// grafica_estadocivil = AmCharts.makeChart("grafica_estadocivil",
-		// {
-		// 	"type": "pie",
-		// 	"startDuration": 1,
-		// 	"theme": "light",
-		// 	"addClassNames": true,
-		// 	"autoMargins": false,
-		// 	"marginTop": 0,
-		// 	"marginBottom": 0,
-		// 	"marginLeft": 0,
-		// 	"marginRight": 0,
-		// 	"radius": "40%",
-		// 	"innerRadius": "10%", // Grosor Dona
-		// 	"fontSize": 14,
-		// 	"defs": {
-		// 		"filter": [{
-		// 			"id": "shadow",
-		// 			"width": "200%",
-		// 			"height": "200%",
-		// 			"feOffset": {
-		// 				"result": "offOut",
-		// 				"in": "SourceAlpha",
-		// 				"dx": 0,
-		// 				"dy": 0
-		// 			},
-		// 			"feGaussianBlur": {
-		// 				"result": "blurOut",
-		// 				"in": "offOut",
-		// 				"stdDeviation": 5
-		// 			},
-		// 			"feBlend": {
-		// 				"in": "SourceGraphic",
-		// 				"in2": "blurOut",
-		// 				"mode": "normal"
-		// 			}
-		// 		}]
-		// 	},
-		// 	"legend": {
-		// 		'enabled': false,
-		// 		"position": "bottom",
-		// 		"marginRight": 0,
-		// 		"marginLeft": 0,
-		// 		"autoMargins": false,
-		// 		"valueText": "[[description]]" //"[[description]] [[value]]"
-		// 	},
-		// 	"export": {
-		// 		"enabled": true,
-		// 		'position': 'top-right'
-		// 	},
-		// 	"valueField": "total",
-		// 	"titleField": "titulo",
-		// 	// "labelText": "[[title]]<br>$[[value]]<br>([[percents]]%)",
-		// 	"labelText": "[[value]]<br>([[percents]]%)",
-		// 	"balloonText": "[[title]]<br><span style='font-size:14px'><b>[[value]]</b> ([[percents]]%)</span>",
-		// 	"labelRadius": -30,
-		// 	"colors": ["#00FF00", "#FFFF00", "#FF0000"], //color de la series
-		// 	"dataProvider": serie_grafico,
-		// 	// "dataProvider": [
-		// 	// 	{
-		// 	// 		"titulo": "Dentro de norma",
-		// 	// 		"total": 2				
-		// 	// 	},
-		// 	// 	{
-		// 	// 		"titulo": "Fuera de norma",
-		// 	// 		"total": 1
-		// 	// 	}
-		// 	// ],
-		// });
+	// grafica_estadocivil = AmCharts.makeChart("grafica_estadocivil",
+	// {
+	// 	"type": "pie",
+	// 	"startDuration": 1,
+	// 	"theme": "light",
+	// 	"addClassNames": true,
+	// 	"autoMargins": false,
+	// 	"marginTop": 0,
+	// 	"marginBottom": 0,
+	// 	"marginLeft": 0,
+	// 	"marginRight": 0,
+	// 	"radius": "40%",
+	// 	"innerRadius": "10%", // Grosor Dona
+	// 	"fontSize": 14,
+	// 	"defs": {
+	// 		"filter": [{
+	// 			"id": "shadow",
+	// 			"width": "200%",
+	// 			"height": "200%",
+	// 			"feOffset": {
+	// 				"result": "offOut",
+	// 				"in": "SourceAlpha",
+	// 				"dx": 0,
+	// 				"dy": 0
+	// 			},
+	// 			"feGaussianBlur": {
+	// 				"result": "blurOut",
+	// 				"in": "offOut",
+	// 				"stdDeviation": 5
+	// 			},
+	// 			"feBlend": {
+	// 				"in": "SourceGraphic",
+	// 				"in2": "blurOut",
+	// 				"mode": "normal"
+	// 			}
+	// 		}]
+	// 	},
+	// 	"legend": {
+	// 		'enabled': false,
+	// 		"position": "bottom",
+	// 		"marginRight": 0,
+	// 		"marginLeft": 0,
+	// 		"autoMargins": false,
+	// 		"valueText": "[[description]]" //"[[description]] [[value]]"
+	// 	},
+	// 	"export": {
+	// 		"enabled": true,
+	// 		'position': 'top-right'
+	// 	},
+	// 	"valueField": "total",
+	// 	"titleField": "titulo",
+	// 	// "labelText": "[[title]]<br>$[[value]]<br>([[percents]]%)",
+	// 	"labelText": "[[value]]<br>([[percents]]%)",
+	// 	"balloonText": "[[title]]<br><span style='font-size:14px'><b>[[value]]</b> ([[percents]]%)</span>",
+	// 	"labelRadius": -30,
+	// 	"colors": ["#00FF00", "#FFFF00", "#FF0000"], //color de la series
+	// 	"dataProvider": serie_grafico,
+	// 	// "dataProvider": [
+	// 	// 	{
+	// 	// 		"titulo": "Dentro de norma",
+	// 	// 		"total": 2				
+	// 	// 	},
+	// 	// 	{
+	// 	// 		"titulo": "Fuera de norma",
+	// 	// 		"total": 1
+	// 	// 	}
+	// 	// ],
+	// });
 
-		// grafica_regimen = AmCharts.makeChart("grafica_regimen",
-		// {
-		// 	"type": "pie",
-		// 	"startDuration": 1,
-		// 	"theme": "light",
-		// 	"addClassNames": true,
-		// 	"autoMargins": false,
-		// 	"marginTop": 0,
-		// 	"marginBottom": 0,
-		// 	"marginLeft": 0,
-		// 	"marginRight": 0,
-		// 	"radius": "40%",
-		// 	"innerRadius": "10%", // Grosor Dona
-		// 	"fontSize": 14,
-		// 	"defs": {
-		// 		"filter": [{
-		// 			"id": "shadow",
-		// 			"width": "200%",
-		// 			"height": "200%",
-		// 			"feOffset": {
-		// 				"result": "offOut",
-		// 				"in": "SourceAlpha",
-		// 				"dx": 0,
-		// 				"dy": 0
-		// 			},
-		// 			"feGaussianBlur": {
-		// 				"result": "blurOut",
-		// 				"in": "offOut",
-		// 				"stdDeviation": 5
-		// 			},
-		// 			"feBlend": {
-		// 				"in": "SourceGraphic",
-		// 				"in2": "blurOut",
-		// 				"mode": "normal"
-		// 			}
-		// 		}]
-		// 	},
-		// 	"legend": {
-		// 		'enabled': false,
-		// 		"position": "bottom",
-		// 		"marginRight": 0,
-		// 		"marginLeft": 0,
-		// 		"autoMargins": false,
-		// 		"valueText": "[[description]]" //"[[description]] [[value]]"
-		// 	},
-		// 	"export": {
-		// 		"enabled": true,
-		// 		'position': 'top-right'
-		// 	},
-		// 	"valueField": "total",
-		// 	"titleField": "titulo",
-		// 	// "labelText": "[[title]]<br>$[[value]]<br>([[percents]]%)",
-		// 	"labelText": "[[value]]<br>([[percents]]%)",
-		// 	"balloonText": "[[title]]<br><span style='font-size:14px'><b>[[value]]</b> ([[percents]]%)</span>",
-		// 	"labelRadius": -30,
-		// 	"colors": ["#00FF00", "#FFFF00", "#FF0000"], //color de la series
-		// 	"dataProvider": serie_grafico,
-		// 	// "dataProvider": [
-		// 	// 	{
-		// 	// 		"titulo": "Dentro de norma",
-		// 	// 		"total": 2				
-		// 	// 	},
-		// 	// 	{
-		// 	// 		"titulo": "Fuera de norma",
-		// 	// 		"total": 1
-		// 	// 	}
-		// 	// ],
-		// });
+	// grafica_regimen = AmCharts.makeChart("grafica_regimen",
+	// {
+	// 	"type": "pie",
+	// 	"startDuration": 1,
+	// 	"theme": "light",
+	// 	"addClassNames": true,
+	// 	"autoMargins": false,
+	// 	"marginTop": 0,
+	// 	"marginBottom": 0,
+	// 	"marginLeft": 0,
+	// 	"marginRight": 0,
+	// 	"radius": "40%",
+	// 	"innerRadius": "10%", // Grosor Dona
+	// 	"fontSize": 14,
+	// 	"defs": {
+	// 		"filter": [{
+	// 			"id": "shadow",
+	// 			"width": "200%",
+	// 			"height": "200%",
+	// 			"feOffset": {
+	// 				"result": "offOut",
+	// 				"in": "SourceAlpha",
+	// 				"dx": 0,
+	// 				"dy": 0
+	// 			},
+	// 			"feGaussianBlur": {
+	// 				"result": "blurOut",
+	// 				"in": "offOut",
+	// 				"stdDeviation": 5
+	// 			},
+	// 			"feBlend": {
+	// 				"in": "SourceGraphic",
+	// 				"in2": "blurOut",
+	// 				"mode": "normal"
+	// 			}
+	// 		}]
+	// 	},
+	// 	"legend": {
+	// 		'enabled': false,
+	// 		"position": "bottom",
+	// 		"marginRight": 0,
+	// 		"marginLeft": 0,
+	// 		"autoMargins": false,
+	// 		"valueText": "[[description]]" //"[[description]] [[value]]"
+	// 	},
+	// 	"export": {
+	// 		"enabled": true,
+	// 		'position': 'top-right'
+	// 	},
+	// 	"valueField": "total",
+	// 	"titleField": "titulo",
+	// 	// "labelText": "[[title]]<br>$[[value]]<br>([[percents]]%)",
+	// 	"labelText": "[[value]]<br>([[percents]]%)",
+	// 	"balloonText": "[[title]]<br><span style='font-size:14px'><b>[[value]]</b> ([[percents]]%)</span>",
+	// 	"labelRadius": -30,
+	// 	"colors": ["#00FF00", "#FFFF00", "#FF0000"], //color de la series
+	// 	"dataProvider": serie_grafico,
+	// 	// "dataProvider": [
+	// 	// 	{
+	// 	// 		"titulo": "Dentro de norma",
+	// 	// 		"total": 2				
+	// 	// 	},
+	// 	// 	{
+	// 	// 		"titulo": "Fuera de norma",
+	// 	// 		"total": 1
+	// 	// 	}
+	// 	// ],
+	// });
 }
 
 

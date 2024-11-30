@@ -698,228 +698,178 @@
 					</div>
 				</form>
 				<h4 class="card-title" id="7_2">7.2.- Información general del puesto de trabajo</h4>
-				<div class="row">
-					<div class="col-12">
-							<p class="justificado">A continuación, se plasman los resultados en la siguiente figura:</p><br>
-							<style type="text/css">
-							#tabla_dashboard th {
-								border: 1px #E9E9E9 solid;
-								background: #0C3F64;
-								color: #FFFFFF !important;
-								padding: 4px;
-								line-height: 16px;
-								margin: 0px;
-								text-align: center;
-								vertical-align: middle;
-							}
+							<style>
+			#tabla_dashboard {
+				border-spacing: 0;
+				background: white;
+				box-shadow: 0 3px 5px rgba(0, 0, 0, 0.1);
+				border-radius: 8px;
+				overflow: hidden;
+				width: 100%; /* Asegura que ocupe todo el ancho disponible */
+			}
 
-							#tabla_dashboard td {
-								border: 1px #E9E9E9 solid;
-								padding: 4px;
-								line-height: 1.1;
-								margin: 0px;
-								vertical-align: middle;
-								text-align: center;
-								font-size: 0.7vw !important;
-							}
+			#tabla_dashboard th {
+				background: #0C3F64;
+				color: #fff;
+				padding: 10px 15px;
+				text-align: center;
+				text-transform: uppercase;
+				font-weight: 700;
+			}
 
-							#tabla_dashboard td.td_top {
-								vertical-align: top;
-							}
+			#tabla_dashboard .title {
+				width: 100%;
+				padding: 15px 20px;
+				font-size: 1.8rem;
+				font-weight: bold;
+				text-align: center;
+				background: #0C3F64;
+				color: #fff;
+			}
 
-							#tabla_dashboard td .icono {
-								width: 100%;
-								font-size: 5vw !important;
-								margin: 10px 0px;
-							}
+			.cont-graficas {
+				display: flex;
+				justify-content: space-between;
+				gap: 20px;
+				padding: 20px;
+				box-sizing: border-box;
+				font-family: Arial, Helvetica, sans-serif;
+			}
 
-							#tabla_dashboard td .texto {
-								font-size: 0.9vw !important;
-								line-height: 1 !important;
-								font-weight: bold;
-							}
+			.graficas-izq, .graficas-der {
+				flex: 1;
+				display: flex;
+				flex-direction: column;
+				gap: 20px;
+			}
 
-							#tabla_dashboard td .numero {
-								font-size: 1.2vw !important;
-								line-height: 1.2 !important;
-								font-weight: bold;
-							}
-						</style>
-						<table class="table" width="100%" id="tabla_dashboard">
-							<tbody>
-								<tr>
-									<th colspan="5" style="font-size: 18px!important;">Información general del puesto de trabajo</th>
-								</tr>
-								<tr>
-									<th colspan="3">Trabajadores evaluados por género</th>
-									<th width="400">Trabajadores evaluados por rango de edades</th>
-									<th width="250">Trabajadores evaluados por escolaridad</th>
-								</tr>
-								<tr>
-								<td colspan="3" style="height: 200px; text-align: left;">
-								<div id="grafica_genero" style="height: 200px; width: 200px; border: 0px #000000 solid; margin: 0px auto;"></div>
-								<span style="color: #8ee66b;">■</span> Bajo<br>
-										<span style="color: #f4d03f;">■</span> Medio<br>
-										<span style="color: #fc4b6c;">■</span> Alto
-									</td>
-								
-							
-									<td>
-										<div id="grafica_edad" style="height: 200px; width: 200px; border: 0px #000000 solid; margin: 0px auto;"></div>
-										<span style="color: #8ee66b;">■</span> Bajo<br>
-										<span style="color: #f4d03f;">■</span> Medio<br>
-										<span style="color: #fc4b6c;">■</span> Alto
-									</td>
+			.card-titledas {
+				font-size: 1.2rem;
+				margin-bottom: 10px;
+				font-weight: bold;
+				color: #0C3F64; /* Color de texto para el título */
+			}
+
+			.carddas {
+				background: #fff;
+				padding: 15px;
+				border-radius: 8px;
+				box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+				display: flex;
+				flex-direction: column;
+				align-items: center; /* Centra el contenido */
+			}
+
+			.carddas p {
+				margin: 0 0 10px 0; /* Espacio entre el título y el gráfico */
+				color: #333;
+			}
+
+			.text-analisis {
+				font-family: 'Roboto', sans-serif;
+				font-size: 1.4rem;
+				color: #000000;
+				border-radius: 10px;
+				padding: 15px;
+				background: #f5f5f5; /* Fondo claro para destacar el análisis */
+				margin: 20px 0; /* Espacio alrededor del texto */
+				text-align: center;
+				box-shadow: 0 3px 5px rgba(0, 0, 0, 0.1);
+			}
+
+			.titledas {
+				font-family: 'Poppins', sans-serif;
+				font-size: 1.6rem;
+				font-weight: bold;
+				color: #000000;
+				letter-spacing: 1px;
+				margin-bottom: 15px; /* Espacio debajo del título */
+			}
+			#grafica_genero {
+			width: 100%;
+			height: 500px;
+			}
+			#grafica_edad {
+			width: 100%;
+			height: 500px;
+			}
+			#grafica_escolaridad {
+			width: 100%;
+			height: 500px;
+			}
+			#grafica_estadocivil {
+			width: 100%;
+			height: 500px;
+			}
+			#grafica_regimen {
+			width: 100%;
+			height: 500px;
+			}
+			#grafica_areas {
+			width: 100%;
+			height: 500px;
+			}
 						
-									<td>
-										<div id="grafica_escolaridad" style="height: 200px; width: 200px; border: 0px #000000 solid; margin: 0px auto;"></div>
-										<span style="color: #8ee66b;">■</span> Bajo<br>
-										<span style="color: #f4d03f;">■</span> Medio<br>
-										<span style="color: #fc4b6c;">■</span> Alto
-									</td>
-								</tr>
-								<tr>
-								<td colspan="3" style="height: 200px; text-align: left;">
-								<div id="grafica_estadocivil" style="height: 200px; width: 200px; border: 0px #000000 solid; margin: 0px auto;"></div>
-								<span style="color: #8ee66b;">■</span> Bajo<br>
-										<span style="color: #f4d03f;">■</span> Medio<br>
-										<span style="color: #fc4b6c;">■</span> Alto
-									</td>
-									
-									<td>
-										<div id="grafica_regimen" style="height: 200px; border: 0px #000000 solid; margin: 0px auto;"></div>
-										<span style="color: #8ee66b;">■</span> Bajo<br>
-										<span style="color: #f4d03f;">■</span> Medio<br>
-										<span style="color: #fc4b6c;">■</span> Alto
-									</td>
-									
-									<td>
-										<div id="grafica_areas" style="height: 200px; border: 0px #000000 solid; margin: 0px auto;"></div>
-										<span style="color: #8ee66b;">■</span> Bajo<br>
-										<span style="color: #f4d03f;">■</span> Medio<br>
-										<span style="color: #fc4b6c;">■</span> Alto
-									</td>
-									</tr>
-								
-								<tr>
-									<th colspan="5">Análisis derivado del informe de resultados de ruido "Condiciones de seguridad e higiene en los centros de trabajo donde se genere ruido (NOM-011-STPS-2001)".</th>
-								</tr>
-							</tbody>
-						</table>
-					</div>
-				</div>
-				<div class="row">
+		</style>
+
+   				
+				 <div class="row">
 					<div class="col-12">
-							<p class="justificado">A continuación, se plasman los resultados en la siguiente figura:</p><br>
-							<style type="text/css">
-								.graph-wrapper {
-								display: flex;
-								align-items: flex-end;
-								width: 350px;
-								height: 200px;
-								border: 1px solid #000000;
-								background-color: #ffffff;
-								padding: 10px;
-							}
+					<table id="tabla_dashboard">
+                <tbody>
+                    <p class="title">Información general del puesto de trabajo</p>
 
-							.percentage-scale {
-								width: 50px;
-								height: 90%;
-								display: flex;
-								flex-direction: column;
-								justify-content: space-between;
-								border-right: 1px solid #000000;
-								margin-right: 0px;
-								padding-right: 10px;
-								text-align: right;
-							}
+                    <div class="cont-graficas">
+                        <div class="graficas-izq">
+                            <!-- Género -->
+                            <div class="carddas">
+                                <p class="card-titledas">Trabajadores evaluados por género</p>
+                                <div id="grafica_genero"></div>
 
-							.percentage-scale div {
-								justify-content: end;
-								height: 40px;
-								font-size: 12px;
-								color: #000000;
-							}
+                            </div>
 
-							.graph-container {
-								display: flex;
-								align-items: flex-end;
-								height: 100%;
-							}
+                            <!-- Edad -->
+                            <div class="carddas">
+                                <p class="card-titledas">Trabajadores evaluados por rango de edades</p>
+                                <div id="grafica_edad"></div>
+                            </div>
 
-							.bar {
-								width: 150px;
-								display: flex;
-								flex-direction: column;
-								align-items: center;
-								position: relative;
-							}
+                            <!-- Escolaridad -->
+                            <div class="carddas">
+                                <p class="card-titledas">Trabajadores evaluados por escolaridad</p>
+                                <div id="grafica_escolaridad"></div>
 
-							.bar-label {
-								text-align: center;
-								margin-top: 10px;
-							}
-						</style>
-						 <div class="graph-wrapper">
-        <div class="percentage-scale">
-            <div>100%</div>
-            <div>75%</div>
-            <div>50%</div>
-            <div>25%</div>
-            <div>0%</div>
-        </div>
-        <div class="graph-container">
-            <div class="bar">
-                <!-- SVG HOMBRE -->
-                <svg viewBox="-146 0 512 512.00026" xmlns="http://www.w3.org/2000/svg">
-                    <defs>
-                        <linearGradient id="gradient1" x1="0%" y1="0%" x2="0%" y2="100%">
-                            <stop offset="0%" style="stop-color:#ff0000; stop-opacity:1" /> <!-- Rojo -->
-                            <stop offset="25%" style="stop-color:#ff7f00; stop-opacity:1" /> <!-- Naranja -->
-                            <stop offset="50%" style="stop-color:#ffff00; stop-opacity:1" /> <!-- Amarillo -->
-                            <stop offset="75%" style="stop-color:#00ff00; stop-opacity:1" /> <!-- Verde -->
-                            <stop offset="100%" style="stop-color:#0000ff; stop-opacity:1" /> <!-- Azul -->
-                        </linearGradient>
+                            </div>
+                        </div>
 
-                    </defs>
-                    <path
-                        d="m159.535156 49.886719c0 27.550781-22.332031 49.886719-49.886718 49.886719-27.550782 0-49.882813-22.335938-49.882813-49.886719s22.332031-49.886719 49.882813-49.886719c27.554687 0 49.886718 22.335938 49.886718 49.886719zm0 0"
-                        fill="url(#gradient1)" />
-                    <path
-                        d="m109.648438 0c-3.640626 0-7.191407.402344-10.613282 1.144531 22.449219 4.867188 39.269532 24.835938 39.269532 48.742188s-16.820313 43.875-39.269532 48.742187c3.421875.742188 6.96875 1.144532 10.613282 1.144532 27.550781 0 49.886718-22.335938 49.886718-49.886719s-22.335937-49.886719-49.886718-49.886719zm0 0"
-                        fill="url(#gradient1)" />
-                    <path
-                        d="m160.632812 108.273438h-101.964843c-32.402344 0-58.667969 26.269531-58.667969 58.667968v125.644532c0 10.234374 7.960938 18.949218 18.1875 19.3125 10.738281.382812 19.566406-8.210938 19.566406-18.863282v-115.820312c0-5.671875 4.597656-10.273438 10.269532-10.273438 5.671874 0 10.269531 4.597656 10.269531 10.273438v315.457031c0 10.234375 7.960937 18.953125 18.1875 19.316406 10.742187.378907 19.566406-8.210937 19.566406-18.867187v-136.65625c0-7.511719 6.089844-13.601563 13.601563-13.601563 7.515624 0 13.605468 6.089844 13.605468 13.601563v136.65625c0 10.425781 8.449219 18.878906 18.875 18.878906 10.425782 0 18.875-8.453125 18.875-18.878906v-315.90625c0-5.675782 4.597656-10.273438 10.269532-10.273438 5.671874 0 10.273437 4.597656 10.273437 10.273438v115.820312c0 10.425782 8.449219 18.875 18.875 18.875s18.875-8.449218 18.875-18.875v-126.09375c.003906-32.402344-26.265625-58.667968-58.664063-58.667968zm0 0"
-                        fill="url(#gradient1)" />
-                </svg>
-                <div class="bar-label">Hombre</div>
-            </div>
-            <div class="bar">
-                <!-- SVG MUJER -->
-                <svg viewBox="-110 0 512 512.00328" xmlns="http://www.w3.org/2000/svg">
-                    <defs>
-                        <linearGradient id="gradient2" x1="0%" y1="0%" x2="0%" y2="100%">
-                            <stop offset="10%" style="stop-color:#0000ff; stop-opacity:1" />
-                            <stop offset="22%" style="stop-color:#ff0000; stop-opacity:1" />
-                            <stop offset="54%" style="stop-color:#ff7f00; stop-opacity:1" />
-                            <stop offset="0%" style="stop-color:#ffff00; stop-opacity:1" />
-                            <stop offset="0%" style="stop-color:#00ff00; stop-opacity:1" />
-                        </linearGradient>
-                    </defs>
+                        <div class="graficas-der">
+                            <!-- Estado Civil -->
+                            <div class="carddas">
+                                <p class="card-titledas">Trabajadores evaluados por estado civil</p>
+                                <div id="grafica_estadocivil"></div>
 
-                    <path
-                        d="m291.59375 288.230469-38.324219-137.585938-.027343.007813c-7.191407-24.226563-29.613282-41.902344-56.175782-41.902344h-101.839844c-26.5625 0-48.984374 17.675781-56.175781 41.902344l-.027343-.007813-38.324219 137.589844c-2.796875 10.03125 3.070312 20.425781 13.101562 23.222656 10.03125 2.792969 20.429688-3.074219 23.222657-13.105469l34.371093-123.386718c1.253907-4.5 5.355469-7.617188 10.027344-7.617188 6.800781 0 11.777344 6.417969 10.082031 13.007813l-36.769531 142.933593-5.886719 22.886719c-.8125 3.164063 1.574219 6.246094 4.84375 6.246094h41.160156v140.273437c0 10.222657 7.949219 18.929688 18.167969 19.296876 10.722657.382812 19.539063-8.203126 19.539063-18.84375v-140.726563h27.175781v140.722656c0 10.414063 8.441406 18.855469 18.851563 18.855469 10.414062 0 18.855468-8.441406 18.855468-18.855469v-140.722656h41.160156c3.265626 0 5.65625-3.085937 4.84375-6.25l-5.886718-22.886719-36.773438-142.933594c-1.691406-6.585937 3.28125-13.003906 10.085938-13.003906 4.671875 0 8.773437 3.113282 10.027344 7.617188l34.367187 123.382812c2.796875 10.03125 13.191406 15.898438 23.222656 13.101563 10.03125-2.792969 15.898438-13.191407 13.105469-23.21875zm0 0"
-                        fill="url(#gradient2)" />
-                    <path
-                        d="m196.054688 49.910156c0 27.5625-22.34375 49.90625-49.90625 49.90625-27.566407 0-49.910157-22.34375-49.910157-49.90625 0-27.566406 22.34375-49.910156 49.910157-49.910156 27.5625 0 49.90625 22.34375 49.90625 49.910156zm0 0"
-                        fill="url(#gradient2)" />
-                </svg>
-                <div class="bar-label">Mujer</div>
-            </div>
-        </div>
+                            </div>
 
-    </div>
-					</div>
+                            <!-- Régimen -->
+                            <div class="carddas">
+                                <p class="card-titledas">Trabajadores evaluados por régimen</p>
+                                <div id="grafica_regimen"></div>
+
+                            </div>
+
+                            <!-- Áreas -->
+                            <div class="carddas">
+                                <p class="card-titledas">Trabajadores evaluados por áreas</p>
+                                <div id="grafica_areas"></div>
+
+                            </div>
+
+                        </div>
+                    </div>
+                    <p class="text-analisis">Análisis de datos demográficos (NOM-035-STPS-2018)</p>
+                </tbody>
+            </table>
+				</div>
 				</div>
 				<h4 class="card-title" id="8">8.- Valores de referencia</h4>
 				<div class="row">
@@ -932,7 +882,7 @@
 				<div class="row">
 					<div class="col-12">
 					<style>
-						#chartdiv {
+						#guia1Chart {
 						width: 100%;
 						height: 500px;
 						}
@@ -941,9 +891,10 @@
 					</div>
 				</div>
 				<h4 class="card-title" id="9_2">9.2.- Resultados obtenidos en la guía de referencia III, Identificación y análisis de los Factores de Riesgo Psicosocial y Evaluación del entorno organizacional en los centros de trabajo por categoría y dominio conforme a la NOM-035-STPS-2018.</h4>
+				<div class="row">
 				<div class="col-12">
 					<style>
-						#chartdiv {
+						#guia3Chart {
 						width: 100%;
 						height: 500px;
 						}
@@ -952,22 +903,89 @@
 					</div>
 				</div>
 				<h4 class="card-title" id="9_3">9.3.- Resultados obtenidos, categoría evento traumatico severo.</h4>
+				<div class="row">
 				<div class="col-12">
 					<style>
-						#chartdiv {
+						#eventoChart {
 						width: 100%;
 						height: 500px;
 						}
 						</style>
-					<div id="guia1Chart"></div>
+					<div id="eventoChart"></div>
 					</div>
 				</div>
 				<h4 class="card-title" id="9_4">9.4.- Resultados obtenidos, categoría ambiente de trabajo.</h4>
+				<div class="row">
+				<div class="col-12">
+					<style>
+						#ambienteChart {
+						width: 100%;
+						height: 500px;
+						}
+						</style>
+					<div id="ambienteChart"></div>
+					</div>
+				</div>
 				<h4 class="card-title" id="9_5">9.5.- Resultados obtenidos, categoría factores propios de la actividad.</h4>
+				<div class="row">
+				<div class="col-12">
+					<style>
+						#factoresChart {
+						width: 100%;
+						height: 500px;
+						}
+						</style>
+					<div id="factoresChart"></div>
+					</div>
+				</div>
 				<h4 class="card-title" id="9_6">9.6.- Resultados obtenidos, categoría organización del tiempo de trabajo.</h4>
+				<div class="row">
+				<div class="col-12">
+					<style>
+						#organizacionChart {
+						width: 100%;
+						height: 500px;
+						}
+						</style>
+					<div id="organizacionChart"></div>
+					</div>
+				</div>
 				<h4 class="card-title" id="9_7">9.7.- Resultados obtenidos, categoría liderazgo y relaciones en el trabajo.</h4>
+				<div class="row">
+				<div class="col-12">
+					<style>
+						#liderazgoChart {
+						width: 100%;
+						height: 500px;
+						}
+						</style>
+					<div id="liderazgoChart"></div>
+					</div>
+				</div>
 				<h4 class="card-title" id="9_8">9.8.- Resultados obtenidos, categoría entorno organizacional.</h4>
+				<div class="row">
+				<div class="col-12">
+					<style>
+						#entornoChart {
+						width: 100%;
+						height: 500px;
+						}
+						</style>
+					<div id="entornoChart"></div>
+					</div>
+				</div>
 				<h4 class="card-title" id="9_9">9.9.- Resultados obtenidos, consolidado general del centro de trabajo.</h4>
+				<div class="row">
+				<div class="col-12">
+					<style>
+						#consolidadoChart {
+						width: 100%;
+						height: 500px;
+						}
+						</style>
+					<div id="consolidadoChart"></div>
+					</div>
+				</div>
 				<h4 class="card-title" id="10">10.- Conclusiones</h4>
 				<h4 class="card-title" id="10_1">10.1.- Conclusiones de conformidad a la NOM-035-STPS-2018.</h4>
 				<form method="post" enctype="multipart/form-data" name="form_reporte_procesoinstalacion" id="form_reporte_procesoinstalacion">
