@@ -759,6 +759,16 @@
 				flex-direction: column;
 				align-items: center; /* Centra el contenido */
 			}
+			.cardgeneros {
+				display: flex;
+				flex-direction: row;
+				align-items: center; 
+				width: 100%;
+				height: 100%;
+			}
+			.amcharts-logo {
+    display: none !important;
+}
 
 			.carddas p {
 				margin: 0 0 10px 0; /* Espacio entre el título y el gráfico */
@@ -785,9 +795,13 @@
 				letter-spacing: 1px;
 				margin-bottom: 15px; /* Espacio debajo del título */
 			}
-			#grafica_genero {
-			width: 100%;
-			height: 500px;
+			#grafica_fem {
+			width: 50%;
+			height: 100px;
+			}
+			#grafica_male {
+			width: 50%;
+			height: 100px;
 			}
 			#grafica_edad {
 			width: 100%;
@@ -805,7 +819,7 @@
 			width: 100%;
 			height: 500px;
 			}
-			#grafica_areas {
+			#grafica_experiencia {
 			width: 100%;
 			height: 500px;
 			}
@@ -823,10 +837,12 @@
                         <div class="graficas-izq">
                             <!-- Género -->
                             <div class="carddas">
-                                <p class="card-titledas">Trabajadores evaluados por género</p>
-                                <div id="grafica_genero"></div>
-
-                            </div>
+								<p class="card-titledas">Trabajadores evaluados por género</p>
+								<div class="cardgeneros">
+									<div id="grafica_fem"></div>
+									<div id="grafica_male"></div>
+								</div>
+							</div>
 
                             <!-- Edad -->
                             <div class="carddas">
@@ -859,8 +875,8 @@
 
                             <!-- Áreas -->
                             <div class="carddas">
-                                <p class="card-titledas">Trabajadores evaluados por áreas</p>
-                                <div id="grafica_areas"></div>
+                                <p class="card-titledas">Trabajadores evaluados por experiencia laboral</p>
+                                <div id="grafica_experiencia"></div>
 
                             </div>
 
