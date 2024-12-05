@@ -906,19 +906,7 @@
 					<div id="guia1Chart"></div>
 					</div>
 				</div>
-				<h4 class="card-title" id="9_2">9.2.- Resultados obtenidos en la guía de referencia III, Identificación y análisis de los Factores de Riesgo Psicosocial y Evaluación del entorno organizacional en los centros de trabajo por categoría y dominio conforme a la NOM-035-STPS-2018.</h4>
-				<div class="row">
-				<div class="col-12">
-					<style>
-						#guia3Chart {
-						width: 100%;
-						height: 500px;
-						}
-						</style>
-					<div id="guia3Chart"></div>
-					</div>
-				</div>
-				<h4 class="card-title" id="9_3">9.3.- Resultados obtenidos, categoría evento traumatico severo.</h4>
+				<h4 class="card-title" id="9_3">9.1.1.- Resultados obtenidos, categoría evento traumatico severo.</h4>
 				<div class="row">
 				<div class="col-12">
 					<style>
@@ -930,7 +918,9 @@
 					<div id="eventoChart"></div>
 					</div>
 				</div>
-				<h4 class="card-title" id="9_4">9.4.- Resultados obtenidos, categoría ambiente de trabajo.</h4>
+				<h4 class="card-title" id="9_2">9.2.- Resultados obtenidos en la guía de referencia III, Identificación y análisis de los Factores de Riesgo Psicosocial y Evaluación del entorno organizacional en los centros de trabajo por categoría y dominio conforme a la NOM-035-STPS-2018.</h4>
+				
+				<h4 class="card-title" id="9_4">9.2.1.- Resultados obtenidos, categoría ambiente de trabajo.</h4>
 				<div class="row">
 				<div class="col-12">
 					<style>
@@ -942,7 +932,7 @@
 					<div id="ambienteChart"></div>
 					</div>
 				</div>
-				<h4 class="card-title" id="9_5">9.5.- Resultados obtenidos, categoría factores propios de la actividad.</h4>
+				<h4 class="card-title" id="9_5">9.2.2.- Resultados obtenidos, categoría factores propios de la actividad.</h4>
 				<div class="row">
 				<div class="col-12">
 					<style>
@@ -954,7 +944,7 @@
 					<div id="factoresChart"></div>
 					</div>
 				</div>
-				<h4 class="card-title" id="9_6">9.6.- Resultados obtenidos, categoría organización del tiempo de trabajo.</h4>
+				<h4 class="card-title" id="9_6">9.2.3.- Resultados obtenidos, categoría organización del tiempo de trabajo.</h4>
 				<div class="row">
 				<div class="col-12">
 					<style>
@@ -966,7 +956,7 @@
 					<div id="organizacionChart"></div>
 					</div>
 				</div>
-				<h4 class="card-title" id="9_7">9.7.- Resultados obtenidos, categoría liderazgo y relaciones en el trabajo.</h4>
+				<h4 class="card-title" id="9_7">9.2.4.- Resultados obtenidos, categoría liderazgo y relaciones en el trabajo.</h4>
 				<div class="row">
 				<div class="col-12">
 					<style>
@@ -978,7 +968,7 @@
 					<div id="liderazgoChart"></div>
 					</div>
 				</div>
-				<h4 class="card-title" id="9_8">9.8.- Resultados obtenidos, categoría entorno organizacional.</h4>
+				<h4 class="card-title" id="9_8">9.2.5.- Resultados obtenidos, categoría entorno organizacional.</h4>
 				<div class="row">
 				<div class="col-12">
 					<style>
@@ -990,7 +980,7 @@
 					<div id="entornoChart"></div>
 					</div>
 				</div>
-				<h4 class="card-title" id="9_9">9.9.- Resultados obtenidos, consolidado general del centro de trabajo.</h4>
+				<h4 class="card-title" id="9_9">9.3.- Resultados obtenidos, consolidado general del centro de trabajo.</h4>
 				<div class="row">
 				<div class="col-12">
 					<style>

@@ -740,17 +740,29 @@ function ordenarEjeYEscolaridad() {
 // Establecer los datos del gráfico de escolaridad
 var datosEscolaridad = [{
   categoriaEscolaridad: "Primaria",
-  valorEscolaridad: 60
+  valorEscolaridad: 2
 }, {
   categoriaEscolaridad: "Secundaria",
-  valorEscolaridad: 25
+  valorEscolaridad: 60
 }, {
   categoriaEscolaridad: "Preparatoria",
-  valorEscolaridad: 10
+  valorEscolaridad: 9
 }, {
-  categoriaEscolaridad: "Universidad",
-  valorEscolaridad: 5
-}];
+  categoriaEscolaridad: "Licenciatura",
+  valorEscolaridad: 0
+},{
+	categoriaEscolaridad: "Especialidad",
+	valorEscolaridad: 0
+  }, {
+	categoriaEscolaridad: "Maestria",
+	valorEscolaridad: 0
+  }, {
+	categoriaEscolaridad: "Doctorado",
+	valorEscolaridad: 0
+  }, {
+	categoriaEscolaridad: "Postdoctorado",
+	valorEscolaridad: 0
+  }];
 
 ejeYEscolaridad.data.setAll(datosEscolaridad);
 serieEscolaridad.data.setAll(datosEscolaridad);
@@ -897,28 +909,28 @@ serieExperienciaLaboral.columns.template.adapters.add("stroke", function (stroke
 // Establecer los datos para el gráfico (Rangos de experiencia y cantidad de empleados)
 var datosExperienciaLaboral = [{
   rango: "Menos de 6 meses",  // Primer rango
-  valor: 50  // Valor de empleados en este rango
+  valor: 10  // Valor de empleados en este rango
 }, {
   rango: "Entre 6 meses y 1 año",  // Segundo rango
-  valor: 120  // Valor de empleados en este rango
+  valor: 20  // Valor de empleados en este rango
 }, {
   rango: "Entre 1 a 4 años",  // Tercer rango
-  valor: 200  // Valor de empleados en este rango
+  valor: 12  // Valor de empleados en este rango
 }, {
   rango: "Entre 5 a 9 años",  // Cuarto rango
-  valor: 150  // Valor de empleados en este rango
+  valor: 8  // Valor de empleados en este rango
 }, {
   rango: "Entre 10 a 14 años",  // Quinto rango
-  valor: 100  // Valor de empleados en este rango
+  valor: 12  // Valor de empleados en este rango
 }, {
   rango: "Entre 15 a 19 años",  // Sexto rango
-  valor: 80  // Valor de empleados en este rango
+  valor: 5 // Valor de empleados en este rango
 }, {
   rango: "Entre 20 a 24 años",  // Séptimo rango
-  valor: 60  // Valor de empleados en este rango
+  valor: 4  // Valor de empleados en este rango
 }, {
   rango: "25 años o más",  // Octavo rango
-  valor: 30  // Valor de empleados en este rango
+  valor: 0  // Valor de empleados en este rango
 }];
 
 // Asignar los datos al gráfico y la serie
@@ -1026,7 +1038,200 @@ series.set("selectedDataItem", series.dataItems[0]);
 // Make stuff animate on load
 series.appear(1000, 100);
 
+
+
+// Crear un nuevo objeto root para el gráfico de régimen
+var rootGraficoGuia1 = am5.Root.new("guia1Chart"); // Cambié root a rootGraficoRegimen
+
+// Establecer el tema para el gráfico
+rootGraficoGuia1.setThemes([
+  am5themes_Animated.new(rootGraficoGuia1)
+]);
+
+// Crear el gráfico de tipo Pie para el régimen
+var graficoguia1 = rootGraficoGuia1.container.children.push(am5percent.PieChart.new(rootGraficoGuia1, {
+  layout: rootGraficoGuia1.verticalLayout,
+  innerRadius: am5.percent(50)
+}));
+
+// Crear la serie de tipo Pie para el gráfico de régimen
+var seriegrafica1 = graficoguia1.series.push(am5percent.PieSeries.new(rootGraficoGuia1, {
+  valueField: "valorgrafica1",  // Personalizado
+  categoryField: "categoriagrafica1",  // Personalizado
+  alignLabels: false
+}));
+
+// Configuración de las etiquetas en formato circular
+seriegrafica1.labels.template.setAll({
+  textType: "circular",
+  centerX: 0,
+  centerY: 0
 });
+
+// Establecer los datos para el gráfico de régimen (por ejemplo, plantas, sindicalizados, etc.)
+seriegrafica1.data.setAll([
+  { valorgrafica1: 2, categoriagrafica1: "Requiere atención clinica" },
+  { valorgrafica1: 69, categoriagrafica1: "No requiere antención clinica" },
+]);
+
+// Crear la leyenda para el gráfico de régimen
+var leyendagrafico1 = graficoguia1.children.push(am5.Legend.new(rootGraficoGuia1, {
+  centerX: am5.percent(50),
+  x: am5.percent(50),
+  marginTop: 15,
+  marginBottom: 15,
+}));
+
+leyendagrafico1.data.setAll(seriegrafica1.dataItems);
+
+// Animar la serie de manera inicial
+seriegrafica1.appear(1000, 100);
+
+
+});
+
+// Crear un nuevo objeto root para el gráfico de ambiente de trabajo
+var rootGraficoRiesgoTrabajo = am5.Root.new("eventoChart");
+
+// Establecer el tema para el gráfico
+rootGraficoRiesgoTrabajo.setThemes([am5themes_Animated.new(rootGraficoRiesgoTrabajo)]);
+
+// Crear el gráfico XY
+var graficoRiesgoTrabajo = rootGraficoRiesgoTrabajo.container.children.push(am5xy.XYChart.new(rootGraficoRiesgoTrabajo, {
+  panX: true,
+  panY: true,
+  wheelX: "panX",
+  wheelY: "zoomX",
+  pinchZoomX: true,
+  paddingLeft: 0,
+  paddingRight: 1
+}));
+
+// Agregar cursor
+var cursorRiesgoTrabajo = graficoRiesgoTrabajo.set("cursor", am5xy.XYCursor.new(rootGraficoRiesgoTrabajo, {}));
+cursorRiesgoTrabajo.lineY.set("visible", false);
+
+// Crear los ejes
+var xRendererRiesgoTrabajo = am5xy.AxisRendererX.new(rootGraficoRiesgoTrabajo, { 
+  minGridDistance: 30, 
+  minorGridEnabled: true
+});
+
+xRendererRiesgoTrabajo.labels.template.setAll({
+  rotation: -90,
+  centerY: am5.p50,
+  centerX: am5.p100,
+  paddingRight: 15
+});
+
+xRendererRiesgoTrabajo.grid.template.setAll({
+  location: 1
+});
+
+var xAxisRiesgoTrabajo = graficoRiesgoTrabajo.xAxes.push(am5xy.CategoryAxis.new(rootGraficoRiesgoTrabajo, {
+  maxDeviation: 0.3,
+  categoryField: "nivelRiesgo",  // Usando "nivelRiesgo" para los niveles de riesgo
+  renderer: xRendererRiesgoTrabajo,
+  tooltip: am5.Tooltip.new(rootGraficoRiesgoTrabajo, {})
+}));
+
+var yRendererRiesgoTrabajo = am5xy.AxisRendererY.new(rootGraficoRiesgoTrabajo, {
+  strokeOpacity: 0.1
+});
+
+var yAxisRiesgoTrabajo = graficoRiesgoTrabajo.yAxes.push(am5xy.ValueAxis.new(rootGraficoRiesgoTrabajo, {
+  maxDeviation: 0.3,
+  renderer: yRendererRiesgoTrabajo
+}));
+
+// Crear la serie
+var serieRiesgoTrabajo = graficoRiesgoTrabajo.series.push(am5xy.ColumnSeries.new(rootGraficoRiesgoTrabajo, {
+  name: "RiesgoTrabajo", 
+  xAxis: xAxisRiesgoTrabajo,
+  yAxis: yAxisRiesgoTrabajo,
+  valueYField: "cantidadEmpleados",  // Cambié "valor" por "cantidadEmpleados"
+  sequencedInterpolation: true,
+  categoryXField: "nivelRiesgo",  // Cambié "rango" por "nivelRiesgo"
+  tooltip: am5.Tooltip.new(rootGraficoRiesgoTrabajo, {
+    labelText: "{valueY} empleados"
+  })
+}));
+
+// Personalizar las columnas
+serieRiesgoTrabajo.columns.template.setAll({
+  cornerRadiusTL: 5,
+  cornerRadiusTR: 5,
+  strokeOpacity: 0
+});
+
+// Colores según el nivel de riesgo
+serieRiesgoTrabajo.columns.template.adapters.add("fill", function (fill, target) {
+  var nivel = target.dataItem.dataContext.nivelRiesgo;
+  if (nivel === "Muy Alto") {
+    return am5.color(0xFF0000); // Rojo
+  } else if (nivel === "Alto") {
+    return am5.color(0xFF7F00); // Naranja
+  } else if (nivel === "Medio") {
+    return am5.color(0xFFFF00); // Amarillo
+  } else if (nivel === "Bajo") {
+    return am5.color(0x00FF00); // Verde
+  } else if (nivel === "Nulo") {
+    return am5.color(0x00BFFF); // Azul Cielo
+  }
+  return fill; // Default
+});
+
+serieRiesgoTrabajo.columns.template.adapters.add("stroke", function (stroke, target) {
+  return target.fill; // Usar el mismo color para el borde
+});
+
+// Establecer los datos para el gráfico (niveles de riesgo y cantidad de empleados)
+var datosRiesgoTrabajo = [{
+  nivelRiesgo: "Muy Alto",  // Nivel de riesgo muy alto
+  cantidadEmpleados: 2
+}, {
+  nivelRiesgo: "Alto",  // Nivel de riesgo alto
+  cantidadEmpleados: 0
+}, {
+  nivelRiesgo: "Medio",  // Nivel de riesgo medio
+  cantidadEmpleados: 0
+}, {
+  nivelRiesgo: "Bajo",  // Nivel de riesgo bajo
+  cantidadEmpleados: 0
+}, {
+  nivelRiesgo: "Nulo",  // Nivel de riesgo nulo
+  cantidadEmpleados: 69
+}];
+
+// Asignar los datos al gráfico y la serie
+xAxisRiesgoTrabajo.data.setAll(datosRiesgoTrabajo);
+serieRiesgoTrabajo.data.setAll(datosRiesgoTrabajo);
+
+// Animar los elementos del gráfico al cargar
+serieRiesgoTrabajo.appear(1000);
+graficoRiesgoTrabajo.appear(1000, 100);
+
+// Crear las etiquetas sobre las columnas
+serieRiesgoTrabajo.columns.template.adapters.add("tooltipText", function(tooltipText, target) {
+  return "Número de empleados: " + target.dataItem.dataContext.cantidadEmpleados;
+});
+
+// Agregar etiquetas de texto a las columnas
+serieRiesgoTrabajo.columns.template.setAll({
+  templateField: "cantidadEmpleados", // Asocia el valor de cada barra con la cantidad de empleados
+});
+
+serieRiesgoTrabajo.columns.template.children.push(am5.Label.new(rootGraficoRiesgoTrabajo, {
+  text: "{cantidadEmpleados}",  // Muestra el valor de empleados
+  fill: am5.color(0xFFFFFF),  // Color blanco para el texto
+  centerX: am5.p50,           // Centrado horizontalmente
+  centerY: am5.p100,          // Ubicación al fondo de la barra
+  dy: -10,                    // Distancia de la etiqueta respecto a la barra
+  fontSize: 14,               // Tamaño de la fuente
+  fontWeight: "bold",         // Negrita
+  wordWrap: "break-word"      // Evitar que el texto se salga del contorno
+}));
+
 
 
 

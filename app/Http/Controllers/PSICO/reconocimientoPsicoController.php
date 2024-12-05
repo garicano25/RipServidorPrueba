@@ -20,7 +20,7 @@ use App\modelos\recsensorial\recsensorialModel;
 use App\modelos\reconocimientopsico\reconocimientopsicoModel;
 use App\modelos\recsensorial\catdepartamentoModel;
 use App\modelos\recsensorial\catmovilfijoModel;
-
+use App\modelos\reconocimientopsico\catcargos_psicoModel;
 
 
 class reconocimientoPsicoController extends Controller
@@ -42,15 +42,11 @@ class reconocimientoPsicoController extends Controller
     public function index()
     { //vista RECONOCIMIENTO SENSORIAL
 
-
         $catdepartamento = catdepartamentoModel::where('catdepartamento_activo', 1)->orderBy('catdepartamento_nombre', 'ASC')->get();
         $catmovilfijo = catmovilfijoModel::where('catmovilfijo_activo', 1)->get();
+        $cargos = catcargos_psicoModel::where('ACTIVO', 1)->get();
 
-
-        return view('catalogos.psico.reconocimiento_psicosocial', compact('catdepartamento','catmovilfijo'));
-
-
-
+        return view('catalogos.psico.reconocimiento_psicosocial', compact('catdepartamento','catmovilfijo','cargos'));
       
     }
 
@@ -445,6 +441,42 @@ class reconocimientoPsicoController extends Controller
 
                 // respuesta
                 $dato['recsensorial_activo'] = $recsensorial_activo;
+                $dato['recsensorial'] = $reconocimientopsico;
+            }
+            if (($request->opcion + 0) == 3) // RESPONSABLES DEL RECONOCIMIENTO
+            {
+
+                $reconocimientopsico = reconocimientopsicoModel::findOrFail($request->recsensorial_id);
+
+                // dd($recsensorial->all());
+
+                if ($request->NOMBRE_TECNICO) // RESPONSABLES DEL RECONOCIMIENTO
+                {
+                    if ($request->file('TECNICO_DOC_IMG')) {
+                        $extension = $request->file('TECNICO_DOC_IMG')->getClientOriginalExtension();
+                        $request['TECNICO_DOC'] = $request->file('TECNICO_DOC_IMG')->storeAs('reconocimiento_psico/' . $request->recsensorial_id . '/responsables', 'rep_tecnico.' . $extension);
+                    }
+
+                    if ($request->file('CONTRATO_DOC_IMG')) {
+                        $extension = $request->file('CONTRATO_DOC_IMG')->getClientOriginalExtension();
+                        $request['CONTRATO_DOC'] = $request->file('CONTRATO_DOC_IMG')->storeAs('reconocimiento_psico/' . $request->recsensorial_id . '/responsables', 'rep_admin.' . $extension);
+                    }
+                } else {
+                    // Eliminar carpeta si acaso existio
+                    Storage::deleteDirectory('reconocimiento_psico/' . $request->recsensorial_id . '/responsables');
+
+                    $request['NOMBRE_TECNICO'] = NULL;
+                    $request['NOMBRE_CONTRATO'] = NULL;
+                    $request['CARGO_TECNICO'] = NULL;
+                    $request['CARGO_CONTRATO'] = NULL;
+                    $request['TECNICO_DOC'] = NULL;
+                    $request['CONTRATO_DOC'] = NULL;
+                }
+
+                $reconocimientopsico->update($request->all());
+
+                // respuesta
+                $dato["msj"] = 'Datos de los responsables guardado correctamente';
                 $dato['recsensorial'] = $reconocimientopsico;
             }
             if (($request->opcion + 0) == 5) // PREGUNTAS DE GUIA 5
