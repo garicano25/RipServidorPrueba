@@ -208,7 +208,8 @@ var proyecto_id =  $('#informes_reco').val();
 					$('#estructura_reporte').load('/reporteserviciopersonalvista/'+proyecto_id);
 					break;
 				case 17:
-					$('#estructura_reporte').html('<p style="text-align: center; font-size: 24px;">Reporte no disponible</p>');
+					// $('#estructura_reporte').html('<p style="text-align: center; font-size: 24px;">Reporte no disponible</p>');
+					$('#estructura_reporte').load('/reportemapaderiesgovista/'+proyecto_id);
 					break;
 				case 22:
 					$('#estructura_reporte').load('/reportebeivista/'+proyecto_id);

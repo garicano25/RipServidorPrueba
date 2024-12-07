@@ -1733,6 +1733,11 @@ Route::post('reporteserviciopersonalword', ['as' => 'reporteserviciopersonal.rep
 Route::get('reporteserviciopersonalworddescargar/{proyecto_id}/{revision_id}/{ultima_revision}', ['as' => 'reporteserviciopersonal.reporteserviciopersonalworddescargar', 'uses' => 'reportes\reporteserviciopersonalwordController@reporteserviciopersonalworddescargar']);
 
 //================================================================================================
+Route::resource('reportemapaderiesgo', 'reportes\reporteMapaController');
+
+Route::get('reportemapaderiesgovista/{proyecto_id}', ['as' => 'reportemapaderiesgo.reportemapaderiesgovista', 'uses' => 'reportes\reporteMapaController@reportemapaderiesgovista']);
+
+//================================================================================================
 
 Route::resource('reportebei', 'reportes\reporteBeiController');
 

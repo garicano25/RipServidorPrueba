@@ -23,7 +23,7 @@
 
 
         @if(auth()->user()->hasRoles(['Superusuario', 'Administrador', 'Coordinador']))
-        <h4 class="text-white card-title" style="float: left; margin: 0px; padding: 0px;">Reporte de&nbsp;&nbsp;</h4>
+        <h4 class="text-white card-title" style="float: left; margin: 0px; padding: 0px;">Informes y entregables &nbsp;&nbsp;</h4>
         <select class="custom-select" style="float: left; width: 340px; height: 24px; margin: 0px; padding: 2px 4px; font-weight: 550; background: #FFF;" id="select_tiporeportes" onchange="mostrar_reporte(this.value);" disabled>
           <option value="">Seleccione</option>
         </select>
