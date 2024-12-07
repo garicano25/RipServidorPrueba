@@ -181,7 +181,7 @@
                             <div class="col-12">
                                 <div class="form-group">
                                     <label>Introducción *</label>
-                                    <input type="text" class="form-control" id="INTRODUCCION" name="INTRODUCCION" required>
+                                    <textarea class="form-control" id="INTRODUCCION" name="INTRODUCCION" rows="5" required></textarea>
                                 </div>
                             </div>
                             <div class="col-12">
@@ -226,7 +226,7 @@
                             <div class="col-12">
                                 <div class="form-group">
                                     <label>Descripción *</label>
-                                    <input type="text" class="form-control" id="DESCRIPCION" name="DESCRIPCION" required>
+                                    <textarea class="form-control" id="DESCRIPCION" name="DESCRIPCION" rows="5" required></textarea>
                                 </div>
                             </div>
                             <div class="col-12">
@@ -297,7 +297,7 @@
                             <div class="col-12">
                                 <div class="form-group">
                                     <label>Recomendación *</label>
-                                    <input type="text" class="form-control" id="RECOMENDACION" name="RECOMENDACION" required>
+                                    <textarea class="form-control" id="RECOMENDACION" name="RECOMENDACION" rows="5" required></textarea>
                                 </div>
                             </div>
                             <div class="col-12">
@@ -371,7 +371,7 @@
                             <div class="col-12">
                                 <div class="form-group">
                                     <label>Descripción *</label>
-                                    <input type="text" class="form-control" id="CONCLUSION" name="CONCLUSION" required>
+                                    <textarea class="form-control" id="CONCLUSION" name="CONCLUSION" rows="5" required></textarea>
                                 </div>
                             </div>
                             <div class="col-12">
