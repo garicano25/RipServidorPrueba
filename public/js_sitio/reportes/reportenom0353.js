@@ -5033,7 +5033,7 @@ $("#botonguardar_reporte_metodoevaluacion").click(function()
 
 
 //=================================================
-// NIVEL SONORO CONTINUO
+// fvalue SONORO CONTINUO
 
 
 $(document).ready(function()
@@ -11101,7 +11101,7 @@ am5.ready(function () {
 		chart.children.unshift(
             am5.Label.new(root, {
                 text: subtitleText,
-                fontSize: 14,
+                fontSize: 10,
                 textAlign: "center",
                 x: am5.p50,
                 centerX: am5.p50,
@@ -11111,7 +11111,7 @@ am5.ready(function () {
         chart.children.unshift(
             am5.Label.new(root, {
                 text: titleText,
-                fontSize: 20,
+                fontSize: 14,
                 fontWeight: "bold",
                 textAlign: "center",
                 x: am5.p50,
@@ -11128,6 +11128,7 @@ am5.ready(function () {
                 x: am5.p50
             })
         );
+		legend.labels.template.set("fontSize", 8);
 
         // Ejes
         var yAxis = chart.yAxes.push(am5xy.CategoryAxis.new(root, {
@@ -11304,6 +11305,7 @@ am5.ready(function () {
 
 	am5.ready(function() {
 
+		// Gráfico Femenino
 		var rootFem = am5.Root.new("grafica_fem");
 		rootFem.setThemes([am5themes_Animated.new(rootFem)]);
 	
@@ -11316,43 +11318,49 @@ am5.ready(function () {
 			orientation: "vertical",
 			valueField: "value",
 			categoryField: "category",
-		  svgPath: "M291.59375 288.230469L253.269531 150.644531C246.078124 126.417969 223.656249 108.742188 197.093749 108.742188H95.2539056C68.6914056 108.742188 46.2695312 126.417969 39.078124 150.644531L0.75390562 288.230469C-2.042969 298.261719 3.82421875 308.65625 13.8554688 311.453125 23.8867188 314.246094 34.2851562 308.378906 37.078124 298.347656L71.4492188 174.960938C72.703125 170.457031 76.8046875 167.339844 81.4765625 167.339844 88.2773438 167.339844 93.2539062 173.757813 91.5585938 180.347656L54.7890625 323.28125 48.9023438 346.167969C48.0898438 349.332031 50.4765625 352.414063 53.7460938 352.414063H94.9062499V492.6875C94.9062499 502.910157 102.855468 511.617188 113.074218 511.984374 123.796876 512.367188 132.613282 503.78125 132.613282 493.140625V352.414063H159.789062V493.136719C159.789062 503.550782 168.230468 511.992188 178.644531 511.992188 189.058593 511.992188 197.5 503.550782 197.5 493.136719V352.414063H238.660156C241.925782 352.414063 244.316406 349.328124 243.503906 346.164063L237.617187 323.277344 200.843749 180.347656C199.152343 173.761719 204.125 167.34375 210.929687 167.34375 215.601562 167.34375 219.703124 170.457031 220.953124 174.960938L255.320312 298.34375C258.117187 308.375 268.515624 314.242188 278.546874 311.449219 288.578124 308.65625 294.445312 298.257813 291.59375 288.230469Z M145 60 m -40,0 a 40,40 0 1,1 80,0 a 40,40 0 1,1 -80,0"  
+			svgPath: "M291.59375 288.230469L253.269531 150.644531C246.078124 126.417969 223.656249 108.742188 197.093749 108.742188H95.2539056C68.6914056 108.742188 46.2695312 126.417969 39.078124 150.644531L0.75390562 288.230469C-2.042969 298.261719 3.82421875 308.65625 13.8554688 311.453125 23.8867188 314.246094 34.2851562 308.378906 37.078124 298.347656L71.4492188 174.960938C72.703125 170.457031 76.8046875 167.339844 81.4765625 167.339844 88.2773438 167.339844 93.2539062 173.757813 91.5585938 180.347656L54.7890625 323.28125 48.9023438 346.167969C48.0898438 349.332031 50.4765625 352.414063 53.7460938 352.414063H94.9062499V492.6875C94.9062499 502.910157 102.855468 511.617188 113.074218 511.984374 123.796876 512.367188 132.613282 503.78125 132.613282 493.140625V352.414063H159.789062V493.136719C159.789062 503.550782 168.230468 511.992188 178.644531 511.992188 189.058593 511.992188 197.5 503.550782 197.5 493.136719V352.414063H238.660156C241.925782 352.414063 244.316406 349.328124 243.503906 346.164063L237.617187 323.277344 200.843749 180.347656C199.152343 173.761719 204.125 167.34375 210.929687 167.34375 215.601562 167.34375 219.703124 170.457031 220.953124 174.960938L255.320312 298.34375C258.117187 308.375 268.515624 314.242188 278.546874 311.449219 288.578124 308.65625 294.445312 298.257813 291.59375 288.230469Z M145 60 m -40,0 a 40,40 0 1,1 80,0 a 40,40 0 1,1 -80,0"
 		}));
-		
-		seriesFem.labelsContainer.set("width", 50);
-    seriesFem.ticks.template.set("location", 0.6);
-    seriesFem.data.setAll([
-        { value: 10, category: "One" },
-        { value: 9, category: "Two" }
-    ]);
-
-    chartFem.appear(1000, 100);
-
-    // Gráfico Masculino
-    var rootMale = am5.Root.new("grafica_male");
-    rootMale.setThemes([am5themes_Animated.new(rootMale)]);
-
-    var chartMale = rootMale.container.children.push(am5percent.SlicedChart.new(rootMale, {
-        layout: rootMale.verticalLayout
-    }));
-
-    var seriesMale = chartMale.series.push(am5percent.PictorialStackedSeries.new(rootMale, {
-        alignLabels: true,
-        orientation: "vertical",
-        valueField: "value",
-        categoryField: "category",
-		svgPath: "M53.5,476c0,14,6.833,21,20.5,21s20.5-7,20.5-21V287h21v189c0,14,6.834,21,20.5,21 c13.667,0,20.5-7,20.5-21V154h10v116c0,7.334,2.5,12.667,7.5,16s10.167,3.333,15.5,0s8-8.667,8-16V145c0-13.334-4.5-23.667-13.5-31 s-21.5-11-37.5-11h-82c-15.333,0-27.833,3.333-37.5,10s-14.5,17-14.5,31v133c0,6,2.667,10.333,8,13s10.5,2.667,15.5,0s7.5-7,7.5-13 V154h10V476 M61.5,42.5c0,11.667,4.167,21.667,12.5,30S92.333,85,104,85s21.667-4.167,30-12.5S146.5,54,146.5,42 c0-11.335-4.167-21.168-12.5-29.5C125.667,4.167,115.667,0,104,0S82.333,4.167,74,12.5S61.5,30.833,61.5,42.5z"
-}));
-	seriesMale.labelsContainer.set("width", 50);
-    seriesMale.ticks.template.set("location", 0.6);
-    seriesMale.data.setAll([
-        { value: 10, category: "One" },
-        { value: 9, category: "Two" }
-    ]);
-
-    chartMale.appear(1000, 100);
-		
-	}); 
+	
+		seriesFem.labels.template.set("fontSize", 10);  // Cambia el tamaño de la letra para los valores en el gráfico femenino
+	
+		seriesFem.labelsContainer.set("width", 40);
+		seriesFem.ticks.template.set("location", 0.5);
+		seriesFem.data.setAll([
+			{ value: 10, category: "" },
+			{ value: 9, category: "Evaluados" }
+		]);
+	
+		chartFem.appear(1000, 100);
+	
+		// Gráfico Masculino
+		var rootMale = am5.Root.new("grafica_male");
+		rootMale.setThemes([am5themes_Animated.new(rootMale)]);
+	
+		var chartMale = rootMale.container.children.push(am5percent.SlicedChart.new(rootMale, {
+			layout: rootMale.verticalLayout
+		}));
+	
+		var seriesMale = chartMale.series.push(am5percent.PictorialStackedSeries.new(rootMale, {
+			alignLabels: true,
+			orientation: "vertical",
+			valueField: "value",
+			categoryField: "category",
+			svgPath: "M53.5,476c0,14,6.833,21,20.5,21s20.5-7,20.5-21V287h21v189c0,14,6.834,21,20.5,21 c13.667,0,20.5-7,20.5-21V154h10v116c0,7.334,2.5,12.667,7.5,16s10.167,3.333,15.5,0s8-8.667,8-16V145c0-13.334-4.5-23.667-13.5-31 s-21.5-11-37.5-11h-82c-15.333,0-27.833,3.333-37.5,10s-14.5,17-14.5,31v133c0,6,2.667,10.333,8,13s10.5,2.667,15.5,0s7.5-7,7.5-13 V154h10V476 M61.5,42.5c0,11.667,4.167,21.667,12.5,30S92.333,85,104,85s21.667-4.167,30-12.5S146.5,54,146.5,42 c0-11.335-4.167-21.168-12.5-29.5C125.667,4.167,115.667,0,104,0S82.333,4.167,74,12.5S61.5,30.833,61.5,42.5z"
+		}));
+	
+		seriesMale.labelsContainer.set("width", 40);
+		seriesMale.ticks.template.set("location", 0.5);
+		seriesMale.data.setAll([
+			{ value: 10, category: "" },
+			{ value: 9, category: "Evaluados" }
+		]);
+	
+		seriesMale.labels.template.set("fontSize", 10);  // Cambia el tamaño de la letra para los valores en el gráfico masculino
+	
+		chartMale.appear(1000, 100);
+	
+	});
+	
 
 	var rootedad = am5.Root.new("grafica_edad");
 

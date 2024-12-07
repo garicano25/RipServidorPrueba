@@ -728,14 +728,13 @@
 			}
 
 			.cont-graficas {
-				display: flex;
-				justify-content: space-between;
+				display: grid;
+				grid-template-columns: repeat(3, 1fr); /* Tres columnas de igual ancho */
 				gap: 20px;
 				padding: 20px;
 				box-sizing: border-box;
 				font-family: Arial, Helvetica, sans-serif;
 			}
-
 			.graficas-izq, .graficas-der {
 				flex: 1;
 				display: flex;
@@ -749,7 +748,6 @@
 				font-weight: bold;
 				color: #0C3F64; /* Color de texto para el título */
 			}
-
 			.carddas {
 				background: #fff;
 				padding: 15px;
@@ -758,13 +756,14 @@
 				display: flex;
 				flex-direction: column;
 				align-items: center; /* Centra el contenido */
+				text-align: center; /* Alineación del texto */
 			}
 			.cardgeneros {
 				display: flex;
 				flex-direction: row;
 				align-items: center; 
-				width: 100%;
 				height: 100%;
+				width: 80%;
 			}
 			.amcharts-logo {
     display: none !important;
@@ -789,7 +788,7 @@
 
 			.titledas {
 				font-family: 'Poppins', sans-serif;
-				font-size: 1.6rem;
+				font-size: 14px;
 				font-weight: bold;
 				color: #000000;
 				letter-spacing: 1px;
@@ -805,23 +804,23 @@
 			}
 			#grafica_edad {
 			width: 100%;
-			height: 500px;
+			height: 300px;
 			}
 			#grafica_escolaridad {
 			width: 100%;
-			height: 500px;
+			height: 300px;
 			}
 			#grafica_estadocivil {
 			width: 100%;
-			height: 500px;
+			height: 300px;
 			}
 			#grafica_regimen {
 			width: 100%;
-			height: 500px;
+			height: 300px;
 			}
 			#grafica_experiencia {
 			width: 100%;
-			height: 500px;
+			height: 300px;
 			}
 						
 		</style>
@@ -834,7 +833,7 @@
                     <p class="title">Información general del puesto de trabajo</p>
 
                     <div class="cont-graficas">
-                        <div class="graficas-izq">
+                       
                             <!-- Género -->
                             <div class="carddas">
 								<p class="card-titledas">Trabajadores evaluados por género</p>
@@ -856,9 +855,7 @@
                                 <div id="grafica_escolaridad"></div>
 
                             </div>
-                        </div>
-
-                        <div class="graficas-der">
+                       
                             <!-- Estado Civil -->
                             <div class="carddas">
                                 <p class="card-titledas">Trabajadores evaluados por estado civil</p>
@@ -879,8 +876,6 @@
                                 <div id="grafica_experiencia"></div>
 
                             </div>
-
-                        </div>
                     </div>
                     <p class="text-analisis">Análisis de datos demográficos (NOM-035-STPS-2018)</p>
                 </tbody>
