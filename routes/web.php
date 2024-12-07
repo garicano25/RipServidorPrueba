@@ -1886,6 +1886,9 @@ Route::get('mostrarfotoinstalacionpsico/{archivo_opcion}/{reconocimientopsico_id
 Route::get('mostrarmapapsico/{archivo_opcion}/{reconocimientopsico_id}', ['as' => 'mostrarmapapsico', 'uses' => 'PSICO\reconocimientoPsicoController@mostrarmapapsico']);
 Route::get('tablareconocimientopsico', ['as' => 'reconocimientoPsico.tablareconocimientopsico', 'uses' => 'PSICO\reconocimientoPsicoController@tablareconocimientopsico']);
 
+Route::get('mostrartecnicodoc/{archivo_opcion}/{reconocimientopsico_id}', ['as' => 'mostrartecnicodoc', 'uses' => 'PSICO\reconocimientoPsicoController@mostrartecnicodoc']);
+Route::get('mostrarcontratodoc/{archivo_opcion}/{reconocimientopsico_id}', ['as' => 'mostrarcontratodoc', 'uses' => 'PSICO\reconocimientoPsicoController@mostrarcontratodoc']);
+
 //categoria
 Route::get('recopsicocategoriatabla/{reconocimientopsico_id}', ['as' => 'recopsicocategoria.recopsicocategoriatabla', 'uses' => 'PSICO\recopsicocategoriaController@recopsicocategoriatabla']);
 Route::resource('recopsicocategoria', 'PSICO\recopsicocategoriaController');
@@ -1940,7 +1943,7 @@ Route::put('guardarCambiosTrabajador', ['as' => 'PSICO.guardarCambiosTrabajador'
 
 //================INFORMES
 Route::resource('informesPsicosocial', 'PSICO\informesrecoPsicoController');
-
+Route::resource('reportenom0353', 'reportes\reportenom0353Controller');
 // =================GUIAS 
 
 // Route::get('/Guia/{id}/{guia1}/{guia2}/{guia3}', function () { return view('catalogos.psico.guias.guias');})->name('Guia');

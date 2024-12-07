@@ -84,13 +84,32 @@ class recpsicocatalogosrecController extends Controller
             case 4:
                 $lista = catrecomendaciones_psicoModel::all();
                 foreach ($lista as $key => $value) {
-                    if ($value->NIVEL == 1) {
-                        $value['NIVEL'] = 'Primer nivel';
-                    } elseif ($value->NIVEL == 2) {
-                        $value['NIVEL'] = 'Segundo nivel';
-                    } elseif ($value->NIVEL == 3) {
-                        $value['NIVEL'] = 'Tercer nivel';
+                    if ($value->CATEGORIA == 1) {
+                        $value['CATEGORIA'] = 'Acontecimientos traumáticos severos';
+                    } elseif ($value->CATEGORIA == 2) {
+                        $value['CATEGORIA'] = 'Ambiente de trabajo';
+                    } elseif ($value->CATEGORIA == 3) {
+                        $value['CATEGORIA'] = 'Factores propios de la actividad';
+                    } elseif ($value->CATEGORIA == 4) {
+                        $value['CATEGORIA'] = 'Organización del tiempo de trabajo';
+                    } elseif ($value->CATEGORIA == 5) {
+                        $value['CATEGORIA'] = 'Liderazgo y relaciones en el trabajo';
+                    } elseif ($value->CATEGORIA == 6) {
+                        $value['CATEGORIA'] = 'Entorno organizacional';
                     }
+
+                    if ($value->NIVELRIESGO == 1) {
+                        $value['NIVELRIESGO'] = 'Riesgo muy alto';
+                    } elseif ($value->NIVELRIESGO == 2) {
+                        $value['NIVELRIESGO'] = 'Riesgo alto';
+                    } elseif ($value->NIVELRIESGO == 3) {
+                        $value['NIVELRIESGO'] = 'Riesgo medio';
+                    } elseif ($value->NIVELRIESGO == 4) {
+                        $value['NIVELRIESGO'] = 'Riesgo bajo';
+                    } elseif ($value->NIVELRIESGO == 5) {
+                        $value['NIVELRIESGO'] = 'Riesgo nulo';
+                    }
+
                     $value['ID_RECOMENDACION_INFORME'] = $value->ID_RECOMENDACION_INFORME;
                     $value['boton_editar'] = '<button type="button" class="btn btn-danger btn-circle" onclick="editar_recomendacionInforme();"><i class="fa fa-pencil"></i></button>';
 
@@ -104,7 +123,56 @@ class recpsicocatalogosrecController extends Controller
             case 5:
                 $lista = catconclusiones_psicoModel::all();
                 foreach ($lista as $key => $value) {
-                    $value['NOMBRE'] = $value->NOMBRE;
+                    if ($value->DOMINIO == 1) {
+                        $value['DOMINIO'] = 'Acontecimientos traumáticos severos';
+                    } elseif ($value->DOMINIO == 2) {
+                        $value['DOMINIO'] = 'Ambiente de trabajo';
+                    } elseif ($value->DOMINIO == 3) {
+                        $value['DOMINIO'] = 'Factores propios de la actividad';
+                    } elseif ($value->DOMINIO == 4) {
+                        $value['DOMINIO'] = 'Organización del tiempo de trabajo';
+                    } elseif ($value->DOMINIO == 5) {
+                        $value['DOMINIO'] = 'Liderazgo y relaciones en el trabajo';
+                    } elseif ($value->DOMINIO == 6) {
+                        $value['DOMINIO'] = 'Entorno organizacional';
+                    } elseif ($value->DOMINIO == 7) {
+                        $value['DOMINIO'] = 'Condiciones del ambiente de trabajo';
+                    } elseif ($value->DOMINIO == 8) {
+                        $value['DOMINIO'] = 'Carga de trabajo';
+                    } elseif ($value->DOMINIO == 9) {
+                        $value['DOMINIO'] = 'Falta de control sobre el trabajo';
+                    } elseif ($value->DOMINIO == 10) {
+                        $value['DOMINIO'] = 'Jornada de trabajo';
+                    } elseif ($value->CATEGORIA == 11) {
+                        $value['DOMINIO'] = 'Interferencia trabajo-familia';
+                    } elseif ($value->DOMINIO == 12) {
+                        $value['DOMINIO'] = 'Liderazgo';
+                    } elseif ($value->DOMINIO == 13) {
+                        $value['DOMINIO'] = 'Relaciones en el trabajo';
+                    }elseif ($value->DOMINIO == 14) {
+                        $value['DOMINIO'] = 'Violencia';
+                    }elseif ($value->DOMINIO == 15) {
+                        $value['DOMINIO'] = 'Reconocimiento del desempeño';
+                    }elseif ($value->DOMINIO == 16) {
+                        $value['DOMINIO'] = 'Insuficiente sentido de pertenencia e inestabilidad';
+                    }
+                    
+
+                    if ($value->NIVEL == 1) {
+                        $value['NIVEL'] = 'Riesgo muy alto';
+                    } elseif ($value->NIVEL == 2) {
+                        $value['NIVEL'] = 'Riesgo alto';
+                    } elseif ($value->NIVEL == 3) {
+                        $value['NIVEL'] = 'Riesgo medio';
+                    } elseif ($value->NIVEL == 4) {
+                        $value['NIVEL'] = 'Riesgo bajo';
+                    } elseif ($value->NIVEL == 5) {
+                        $value['NIVEL'] = 'Riesgo nulo';
+                    }elseif ($value->NIVEL == 6) {
+                        $value['NIVEL'] = 'Acontecimiento traumático severo';
+                    } elseif ($value->NIVEL == 7) {
+                        $value['NIVEL'] = 'No existe acontecimiento traumático severo';
+                    }
                     $value['ID_CONCLUSION_INFORME'] = $value->ID_CONCLUSION_INFORME;
                     $value['boton_editar'] = '<button type="button" class="btn btn-danger btn-circle" onclick="editar_conclusionInforme();"><i class="fa fa-pencil"></i></button>';
 

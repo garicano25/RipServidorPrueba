@@ -566,6 +566,44 @@ class reconocimientoPsicoController extends Controller
             return Storage::download($reconocimientopsico->fotoplano);
         }
     }
+       /**
+     * Display the specified resource.
+     *
+     * @param  int  $archivo_opcion
+     * @param  int  $reconocimientopsico_id
+     * @return \Illuminate\Http\Response
+     */
+    public function mostrartecnicodoc($archivo_opcion, $reconocimientopsico_id)
+    {
+        $reconocimientopsico = reconocimientopsicoModel::findOrFail($reconocimientopsico_id);
+
+        if (($archivo_opcion + 0) == 0) {
+
+            return Storage::response($reconocimientopsico->TECNICO_DOC);
+        } else {
+
+            return Storage::download($reconocimientopsico->TECNICO_DOC);
+        }
+    }
+       /**
+     * Display the specified resource.
+     *
+     * @param  int  $archivo_opcion
+     * @param  int  $reconocimientopsico_id
+     * @return \Illuminate\Http\Response
+     */
+    public function mostrarcontratodoc($archivo_opcion, $reconocimientopsico_id)
+    {
+        $reconocimientopsico = reconocimientopsicoModel::findOrFail($reconocimientopsico_id);
+
+        if (($archivo_opcion + 0) == 0) {
+
+            return Storage::response($reconocimientopsico->CONTRATO_DOC);
+        } else {
+
+            return Storage::download($reconocimientopsico->CONTRATO_DOC);
+        }
+    }
 
         /**
      * Display the specified resource.

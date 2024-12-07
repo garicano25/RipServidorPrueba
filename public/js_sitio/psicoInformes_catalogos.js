@@ -10,6 +10,9 @@ $(document).ready(function () {
     mostrar_catalogo(1);
 
     $('[data-toggle="tooltip"]').tooltip();
+
+    document.getElementById('DOMINIO').addEventListener('change', actualizarOpcionesNivel);
+   
 });
 
 //------------------------------------------------------BOTONES--------------------------//
@@ -377,6 +380,35 @@ $("#boton_guardar_conclusion").click(function () {
 });
 
 //------------------------------------------------------FUNCIONES--------------------------//
+function actualizarOpcionesNivel() {
+    const dominioSelect = document.getElementById('DOMINIO');
+    const nivelSelect = document.getElementById('NIVEL');
+    const opciones = {
+        1: [
+            { value: "6", text: "Acontecimiento traumático severo" },
+            { value: "7", text: "No existe acontecimiento traumático severo" },
+        ],
+        default: [
+            { value: "1", text: "Riesgo muy alto" },
+            { value: "2", text: "Riesgo alto" },
+            { value: "3", text: "Riesgo medio" },
+            { value: "4", text: "Riesgo bajo" },
+            { value: "5", text: "Riesgo nulo" },
+        ]
+    };
+
+    const selectedValue = dominioSelect.value;
+    nivelSelect.innerHTML = '';
+
+    const opcionesNuevas = opciones[selectedValue] || opciones.default;
+    opcionesNuevas.forEach(opcion => {
+        const opt = document.createElement('option');
+        opt.value = opcion.value;
+        opt.textContent = opcion.text;
+        nivelSelect.appendChild(opt);
+    });
+}
+
 function mostrar_catalogo(num_catalogo) {
     catalogo = parseInt(num_catalogo);
 
@@ -500,7 +532,8 @@ function mostrar_catalogo(num_catalogo) {
                 '<thead>' +
                 '<tr>' +
                 '<th>No.</th>' +
-                '<th>Nivel</th>' +
+                '<th>Categoria</th>' +
+                '<th>Nivel de riesgo</th>' +
                 '<th style="width: 90px!important;">Editar</th>' +
                 '<th style="width: 90px!important;">Activo</th>' +
                 '</tr>' +
@@ -530,7 +563,8 @@ function mostrar_catalogo(num_catalogo) {
                 '<thead>' +
                 '<tr>' +
                 '<th>No.</th>' +
-                '<th>Nombre</th>' +
+                '<th>Categoria/dominio</th>' +
+                '<th>Riesgo</th>' +
                 '<th style="width: 90px!important;">Editar</th>' +
                 '<th style="width: 90px!important;">Activo</th>' +
                 '</tr>' +
@@ -616,17 +650,37 @@ function editar_recomendacionInforme() {
             this.reset();
         });
 
-        var nivel = row.data().NIVEL;
+        var categoria = row.data().CATEGORIA;
+        var nivelriesgo = row.data().NIVELRIESGO;
+
         // Llenar campo formulario
         $("#ID_RECOMENDACION_INFORME").val(row.data().ID_RECOMENDACION_INFORME);
-        if(nivel==="Primer nivel"){
-            $("#NIVEL").val(1);
-        }else if(nivel==="Segundo nivel"){
-            $("#NIVEL").val(2);
-        }else if(nivel==="Tercer nivel"){
-            $("#NIVEL").val(3);
+        if(nivelriesgo==="Riesgo muy alto"){
+            $("#NIVELRIESGO").val(1);
+        }else if(nivelriesgo==="Riesgo alto"){
+            $("#NIVELRIESGO").val(2);
+        }else if(nivelriesgo==="Riesgo medio"){
+            $("#NIVELRIESGO").val(3);
+        }else if(nivelriesgo==="Riesgo bajo"){
+            $("#NIVELRIESGO").val(4);
+        }else if(nivelriesgo==="Riesgo nulo"){
+            $("#NIVELRIESGO").val(5);
         }
 
+
+        if(categoria===""){
+            $("#CATEGORIA").val(1);
+        }else if(categoria==="Acontecimientos traumáticos severos"){
+            $("#CATEGORIA").val(2);
+        }else if(categoria==="Ambiente de trabajo"){
+            $("#CATEGORIA").val(3);
+        }else if(categoria==="Factores propios de la actividad"){
+            $("#CATEGORIA").val(4);
+        }else if(categoria==="Organización del tiempo de trabajo"){
+            $("#CATEGORIA").val(5);
+        }else if(categoria==="Liderazgo y relaciones en el trabaj"){
+            $("#CATEGORIA").val(6);
+        }
         $("#RECOMENDACION").val(row.data().RECOMENDACION);
         $("#catalogo").val(4);
 
@@ -647,10 +701,10 @@ function editar_conclusionInforme() {
 
         // Llenar campo formulario
         $("#ID_CONCLUSION_INFORME").val(row.data().ID_CONCLUSION_INFORME);
-        $("#NOMBRE").val(row.data().NOMBRE);
+        
         $("#CONCLUSION").val(row.data().CONCLUSION);
         $("#catalogo").val(5);
-
+        actualizarOpcionesNivel(); 
         // abrir modal
         $('#modal_conclusion').modal({ backdrop: false });
     });
@@ -895,7 +949,10 @@ function tabla_catalogo_recomendaciones(num_catalogo) {
                         "data": "ID_RECOMENDACION_INFORME"
                     },
                     {
-                        "data": "NIVEL"
+                        "data": "CATEGORIA"
+                    },
+                    {
+                        "data": "NIVELRIESGO"
                     },
                     {
                         "className": 'editar',
@@ -966,7 +1023,10 @@ function tabla_catalogo_conclusiones(num_catalogo) {
                         "data": "ID_CONCLUSION_INFORME"
                     },
                     {
-                        "data": "NOMBRE"
+                        "data": "DOMINIO"
+                    },
+                    {
+                        "data": "NIVEL"
                     },
                     {
                         "className": 'editar',

@@ -701,6 +701,7 @@ $('.link_menuprincipal').click(function () {
 			break;
 	}
 });
+
 $('.multisteps-form__progress-btn').click(function () {
 	switch (this.id) {
 		case "steps_menu_tab2":
@@ -721,11 +722,8 @@ $('.multisteps-form__progress-btn').click(function () {
 		case "steps_menu_tab5":
 			recsensorial = $("#recsensorial_id").val();
 
-			// $('#form_normativa').each(function () {
-			// 	this.reset();
-			// });
-			// cargarTrabajadores($("#recsensorial_id").val());
-			// datosNormativa($("#recsensorial_id").val());
+			
+
 		break;
 		default:
 		break;
@@ -1344,7 +1342,6 @@ $("#divEditarGuia4").click(function () {
 
 });
 
-
 $("#boton_guardar_responsables").click(function () {
 	// valida campos vacios
 	var valida = this.form.checkValidity();
@@ -1417,6 +1414,9 @@ $('#excelTrabajadores').change(function () {
 $('#tabla_reconocimiento_sensorial tbody').on('click', 'td.mostrar', function () {
 	var tr = $(this).closest('tr');
 	var row = tabla_recsensorial.row(tr);
+	$('#form_responsables').each(function () {
+		this.reset();
+	});
 
 	$('#inputfotomapa').attr('required', false);
 	$('#infoCliente').empty().css('border-style', 'none');
@@ -1488,6 +1488,7 @@ $('#tabla_reconocimiento_sensorial tbody').on('click', 'td.mostrar', function ()
 
 	$("#ordentrabajo_id").val(row.data().ordentrabajo_id);
 	$("#proyecto_folio").val(row.data().proyecto_folio);
+
 
 	//Mostramos si la informacion del contrato es la que se le da al reconocimiento
 	if (row.data().informe_del_cliente == 1) {
@@ -1626,6 +1627,106 @@ $('#tabla_reconocimiento_sensorial tbody').on('click', 'td.mostrar', function ()
 
 	// Perfil
 	recsensorial_perfil = parseInt(row.data().perfil);
+	//responsables
+	$("#NOMBRE_TECNICO").val(row.data().NOMBRE_TECNICO);
+	$("#NOMBRE_CONTRATO").val(row.data().NOMBRE_CONTRATO);
+	$("#CARGO_TECNICO").val(row.data().CARGO_TECNICO);
+	$("#CARGO_CONTRATO").val(row.data().CARGO_CONTRATO);
+	
+	if (row.data().TECNICO_DOC){
+		var archivo = row.data().TECNICO_DOC;
+		var extension = archivo.substring(archivo.lastIndexOf("."));
+		var imagenUrl = '/mostrartecnicodoc/0/' + row.data().id + extension;
+		
+		rutaMapa = imagenUrl
+
+		// INPUT FOTO TECNICO DOC
+		if ($('#TECNICO_DOC_IMG').data('dropify'))
+		{
+			$('#TECNICO_DOC_IMG').dropify().data('dropify').destroy();
+			// $('.dropify-wrapper').css('height', 400);
+			$('#TECNICO_DOC_IMG').dropify().data('dropify').settings.defaultFile = imagenUrl;
+			$('#TECNICO_DOC_IMG').dropify().data('dropify').init();
+		}
+		else
+		{
+			// $('#inputfotomapa').attr('data-height', 400);
+			$('#TECNICO_DOC_IMG').attr('data-default-file', imagenUrl);
+			$('#TECNICO_DOC_IMG').dropify({
+				messages: {
+					'default': 'Arrastre la imagen aquí o haga click',
+					'replace': 'Arrastre la imagen o haga clic para reemplazar',
+					'remove':  'Quitar',
+					'error':   'Ooops, ha ocurrido un error.'
+				},
+				error: {
+					'fileSize': 'Demasiado grande ({{ value }} max).',
+					'minWidth': 'Ancho demasiado pequeño (min {{ value }}}px).',
+					'maxWidth': 'Ancho demasiado grande (max {{ value }}}px).',
+					'minHeight': 'Alto demasiado pequeño (min {{ value }}}px).',
+					'maxHeight': 'Alto demasiado grande (max {{ value }}px max).',
+					'imageFormat': 'Formato no permitido, sólo ({{ value }}).'
+				}
+			});
+		}
+
+		// No requerir campo FOTO
+		$('#TECNICO_DOC_IMG').attr('required', false);
+
+		// Activar boton descarga
+		$("#boton_descargarTECNICO_DOC").css('display', 'block');
+	}
+	else
+	{
+		$("#boton_descargarTECNICO_DOC").css('display', 'none');
+	}
+
+	// OBTENER FOTO PLANO
+	if (row.data().CONTRATO_DOC) {
+		var archivo = row.data().CONTRATO_DOC;
+		var extension = archivo.substring(archivo.lastIndexOf("."));
+		var imagenUrl = '/mostrarcontratodoc/0/' + row.data().id + extension;
+
+		rutaMapa = imagenUrl
+
+
+		// INPUT FOTO PLANO
+		if ($('#CONTRATO_DOC_IMG').data('dropify')) {
+			$('#CONTRATO_DOC_IMG').dropify().data('dropify').destroy();
+			// $('.dropify-wrapper').css('height', 400);
+			$('#CONTRATO_DOC_IMG').dropify().data('dropify').settings.defaultFile = imagenUrl;
+			$('#CONTRATO_DOC_IMG').dropify().data('dropify').init();
+		}
+		else {
+			// $('#inputfotoplano').attr('data-height', 400);
+			$('#CONTRATO_DOC_IMG').attr('data-default-file', imagenUrl);
+			$('#CONTRATO_DOC_IMG').dropify({
+				messages: {
+					'default': 'Arrastre la imagen aquí o haga click',
+					'replace': 'Arrastre la imagen o haga clic para reemplazar',
+					'remove': 'Quitar',
+					'error': 'Ooops, ha ocurrido un error.'
+				},
+				error: {
+					'fileSize': 'Demasiado grande ({{ value }} max).',
+					'minWidth': 'Ancho demasiado pequeño (min {{ value }}}px).',
+					'maxWidth': 'Ancho demasiado grande (max {{ value }}}px).',
+					'minHeight': 'Alto demasiado pequeño (min {{ value }}}px).',
+					'maxHeight': 'Alto demasiado grande (max {{ value }}px max).',
+					'imageFormat': 'Formato no permitido, sólo ({{ value }}).'
+				}
+			});
+		}
+
+		// No requerir campo FOTO
+		$('#CONTRATO_DOC_IMG').attr('required', false);
+
+		// Activar boton descarga
+		$("#boton_descargarCONTRATO_DOC").css('display', 'block');
+	}
+	else {
+		$("#boton_descargarCONTRATO_DOC").css('display', 'none');
+	}
 
 
 	// Colocar nombre del reconocimieto

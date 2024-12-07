@@ -9,7 +9,8 @@ class catrecomendaciones_psicoModel extends Model
     protected $primaryKey = 'ID_RECOMENDACION_INFORME';
     protected $table = 'psicocat_recomendaciones';
     protected $fillable = [
-        'NIVEL',
+        'CATEGORIA',
+        'NIVELRIESGO',
         'RECOMENDACION',
         'ACTIVO'
     ];

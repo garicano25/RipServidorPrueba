@@ -270,11 +270,27 @@
                             </div>
                             <div class="col-12">
                                 <div class="form-group">
-                                    <label for="NIVEL">Selecciona una opción:</label>
-                                    <select class="form-control" id="NIVEL" name="NIVEL">
-                                        <option value="1">Primer Nivel</option>
-                                        <option value="2">Segundo Nivel</option>
-                                        <option value="3">Tercer Nivel</option>
+                                    <label for="CATEGORIA">Selecciona una opción:</label>
+                                    <select class="form-control" id="CATEGORIA" name="CATEGORIA">
+                                        <option value="1">Acontecimientos traumáticos severos</option>
+                                        <option value="2">Ambiente de trabajo</option>
+                                        <option value="3">Factores propios de la actividad</option>
+                                        <option value="4">Organización del tiempo de trabajo</option>
+                                        <option value="5">Liderazgo y relaciones en el trabajo</option>
+                                        <option value="6">Entorno organizacional</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="col-12">
+                                <div class="form-group">
+                                    <label for="NIVELRIESGO">Selecciona una opción:</label>
+                                    <select class="form-control" id="NIVELRIESGO" name="NIVELRIESGO">
+                                        <option value="1">Riesgo muy alto</option>
+                                        <option value="2">Riesgo alto</option>
+                                        <option value="3">Riesgo medio</option>
+                                        <option value="4">Riesgo bajo</option>
+                                        <option value="5">Riesgo nulo</option>
+
                                     </select>
                                 </div>
                             </div>
@@ -319,8 +335,37 @@
                             </div>
                             <div class="col-12">
                                 <div class="form-group">
-                                    <label>Nombre *</label>
-                                    <input type="text" class="form-control" id="NOMBRE" name="NOMBRE" required>
+                                    <label for="DOMINIO">Selecciona una opción:</label>
+                                    <select class="form-control" id="DOMINIO" name="DOMINIO">
+                                        <option value="1">Acontecimientos traumáticos severos</option>
+                                        <option value="2">Ambiente de trabajo</option>
+                                        <option value="3">Factores propios de la actividad</option>
+                                        <option value="4">Organización del tiempo de trabajo</option>
+                                        <option value="5">Liderazgo y relaciones en el trabajo</option>
+                                        <option value="6">Entorno organizacional</option>
+                                        <option value="7">Condiciones del ambiente de trabajo</option>
+                                        <option value="8">Carga de trabajo</option>
+                                        <option value="9">Falta de control sobre el trabajo</option>
+                                        <option value="10">Jornada de trabajo</option>
+                                        <option value="11">Interferencia trabajo-familia</option>
+                                        <option value="12">Liderazgo</option>
+                                        <option value="13">Relaciones en el trabajo</option>
+                                        <option value="14">Violencia</option>
+                                        <option value="15">Reconocimiento del desempeño</option>
+                                        <option value="16">Insuficiente sentido de pertenencia e inestabilidad</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="col-12">
+                                <div class="form-group">
+                                    <label for="NIVEL">Selecciona una opción:</label>
+                                    <select class="form-control" id="NIVEL" name="NIVEL">
+                                        <option value="1">Riesgo muy alto</option>
+                                        <option value="2">Riesgo alto</option>
+                                        <option value="3">Riesgo medio</option>
+                                        <option value="4">Riesgo bajo</option>
+                                        <option value="5">Riesgo nulo</option>
+                                    </select>
                                 </div>
                             </div>
                             <div class="col-12">

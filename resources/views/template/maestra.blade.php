@@ -933,6 +933,9 @@ use Illuminate\Support\Str;
     <!-- jQuery file upload -->
     <script src="/js/jasny-bootstrap.js"></script>
     <script src="/assets/plugins/dropify/dist/js/dropify.min.js"></script>
+    <script src="/assets/plugins/sticky-kit-master/dist/sticky-kit.min.js"></script>
+    <script src="/assets/plugins/sparkline/jquery.sparkline.min.js"></script>
+    <script src="js/custom.min.js"></script>
     {{-- pdfobject --}}
     <script src="/assets/plugins/pdfobject/pdfobject.js"></script>
     <!-- Magnific popup JavaScript -->
