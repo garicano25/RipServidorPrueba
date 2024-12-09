@@ -11684,163 +11684,165 @@ leyendagrafico1.data.setAll(seriegrafica1.dataItems);
 // Animar la serie de manera inicial
 seriegrafica1.appear(1000, 100);
 
-var rootConsolidado = am5.Root.new("consolidadoChart");
 
-// Crear un tema personalizado
-const miTemaConsolidado = am5.Theme.new(rootConsolidado);
-miTemaConsolidado.rule("Label").set("fontSize", 10);
-miTemaConsolidado.rule("Grid").set("strokeOpacity", 0.06);
 
-// Establecer los temas
-rootConsolidado.setThemes([
-  am5themes_Animated.new(rootConsolidado),
-  miTemaConsolidado
-]);
+// var rootConsolidado = am5.Root.new("consolidadoChart");
 
-// Datos de las categorías y subcategorías (sin cambios)
-var categoriasConsolidado = {
-  "Ambiente": [
-    ["ambiente de trabajo", 0.10, 0.20, 0.30, 0.40, 0.50],
-  ],
-  "Factores": [
-    ["factores 1", 0.20, 0.24, 0.30, 0.35, 0.40],
-    ["factores 2", 0.10, 0.24, 0.28, 0.34, 0.38],
-  ],
-  "Organizacion": [
-    ["orga 1", 0.16, 0.24, 0.32, 0.36, 0.42],
-    ["orga 2", 0.13, 0.24, 0.29, 0.34, 0.40],
-  ],
-  "Liderazgo": [
-    ["lider1", 0.45, 0.24, 0.15, 0.10, 0.05],
-    ["lider2", 0.30, 0.24, 0.20, 0.15, 0.10],
-    ["lider3", 0.60, 0.24, 0.40, 0.35, 0.30],
-  ]
-};
+// // Crear un tema personalizado
+// const miTemaConsolidado = am5.Theme.new(rootConsolidado);
+// miTemaConsolidado.rule("Label").set("fontSize", 10);
+// miTemaConsolidado.rule("Grid").set("strokeOpacity", 0.06);
 
-// Configuración de la raíz y su formato de número
-rootConsolidado.numberFormatter.set("numberFormat", "#%");
+// // Establecer los temas
+// rootConsolidado.setThemes([
+//   am5themes_Animated.new(rootConsolidado),
+//   miTemaConsolidado
+// ]);
 
-// Crear el gráfico con configuración específica
-var chartConsolidado = rootConsolidado.container.children.push(am5radar.RadarChart.new(rootConsolidado, {
-  panX: false,
-  panY: false,
-  wheelX: "panX",
-  wheelY: "zoomX",
-  innerRadius: am5.percent(40),
-  radius: am5.percent(65),
-  startAngle: 270 - 170,
-  endAngle: 270 + 170
-}));
+// // Datos de las categorías y subcategorías
+// var categoriasConsolidado = {
+//   "Ambiente": [
+//     ["ambiente de trabajo", 0.10, 0.20, 0.30, 0.40, 0.50],
+//   ],
+//   "Factores": [
+//     ["factores 1", 0.20, 0.24, 0.30, 0.35, 0.40],
+//     ["factores 2", 0.10, 0.24, 0.28, 0.34, 0.38],
+//   ],
+//   "Organizacion": [
+//     ["orga 1", 0.16, 0.24, 0.32, 0.36, 0.42],
+//     ["orga 2", 0.13, 0.24, 0.29, 0.34, 0.40],
+//   ],
+//   "Liderazgo": [
+//     ["lider1", 0.45, 0.24, 0.15, 0.10, 0.05],
+//     ["lider2", 0.30, 0.24, 0.20, 0.15, 0.10],
+//     ["lider3", 0.60, 0.24, 0.40, 0.35, 0.30],
+//   ]
+// };
 
-// Crear las series de riesgo con variables únicas
-var seriesRiesgoMuyAlto = chartConsolidado.series.push(am5radar.RadarColumnSeries.new(rootConsolidado, {
-  name: "Riesgo Muy Alto",
-  valueYField: "riesgoMuyAlto",
-  categoryXField: "country",
-  tooltip: am5.Tooltip.new(rootConsolidado, { labelText: "{categoryX}: {valueY}" })
-}));
+// // Configuración de la raíz y su formato de número
+// rootConsolidado.numberFormatter.set("numberFormat", "#%");
 
-var seriesRiesgoAlto = chartConsolidado.series.push(am5radar.RadarColumnSeries.new(rootConsolidado, {
-  name: "Riesgo Alto",
-  valueYField: "riesgoAlto",
-  categoryXField: "country",
-  tooltip: am5.Tooltip.new(rootConsolidado, { labelText: "{categoryX}: {valueY}" })
-}));
+// // Crear el gráfico con configuración específica
+// var chartConsolidado = rootConsolidado.container.children.push(am5radar.RadarChart.new(rootConsolidado, {
+//   panX: false,
+//   panY: false,
+//   wheelX: "panX",
+//   wheelY: "zoomX",
+//   innerRadius: am5.percent(40),
+//   radius: am5.percent(65),
+//   startAngle: 270 - 170,
+//   endAngle: 270 + 170
+// }));
 
-var seriesRiesgoMedio = chartConsolidado.series.push(am5radar.RadarColumnSeries.new(rootConsolidado, {
-  name: "Riesgo Medio",
-  valueYField: "riesgoMedio",
-  categoryXField: "country",
-  tooltip: am5.Tooltip.new(rootConsolidado, { labelText: "{categoryX}: {valueY}" })
-}));
+// // Crear las series de riesgo con variables únicas
+// var seriesRiesgoMuyAlto = chartConsolidado.series.push(am5radar.RadarColumnSeries.new(rootConsolidado, {
+//   name: "Riesgo Muy Alto",
+//   valueYField: "riesgoMuyAlto",
+//   categoryXField: "country",
+//   tooltip: am5.Tooltip.new(rootConsolidado, { labelText: "{categoryX}: {valueY}" })
+// }));
 
-var seriesRiesgoBajo = chartConsolidado.series.push(am5radar.RadarColumnSeries.new(rootConsolidado, {
-  name: "Riesgo Bajo",
-  valueYField: "riesgoBajo",
-  categoryXField: "country",
-  tooltip: am5.Tooltip.new(rootConsolidado, { labelText: "{categoryX}: {valueY}" })
-}));
+// var seriesRiesgoAlto = chartConsolidado.series.push(am5radar.RadarColumnSeries.new(rootConsolidado, {
+//   name: "Riesgo Alto",
+//   valueYField: "riesgoAlto",
+//   categoryXField: "country",
+//   tooltip: am5.Tooltip.new(rootConsolidado, { labelText: "{categoryX}: {valueY}" })
+// }));
 
-var seriesRiesgoNulo = chartConsolidado.series.push(am5radar.RadarColumnSeries.new(rootConsolidado, {
-  name: "Riesgo Nulo",
-  valueYField: "riesgoNulo",
-  categoryXField: "country",
-  tooltip: am5.Tooltip.new(rootConsolidado, { labelText: "{categoryX}: {valueY}" })
-}));
+// var seriesRiesgoMedio = chartConsolidado.series.push(am5radar.RadarColumnSeries.new(rootConsolidado, {
+//   name: "Riesgo Medio",
+//   valueYField: "riesgoMedio",
+//   categoryXField: "country",
+//   tooltip: am5.Tooltip.new(rootConsolidado, { labelText: "{categoryX}: {valueY}" })
+// }));
 
-// Configuración del color de las barras
-var colorSetConsolidado = am5.ColorSet.new(rootConsolidado, {});
-seriesRiesgoMuyAlto.set("fill", colorSetConsolidado.getIndex(0));
-seriesRiesgoAlto.set("fill", colorSetConsolidado.getIndex(1));
-seriesRiesgoMedio.set("fill", colorSetConsolidado.getIndex(2));
-seriesRiesgoBajo.set("fill", colorSetConsolidado.getIndex(3));
-seriesRiesgoNulo.set("fill", colorSetConsolidado.getIndex(4));
+// var seriesRiesgoBajo = chartConsolidado.series.push(am5radar.RadarColumnSeries.new(rootConsolidado, {
+//   name: "Riesgo Bajo",
+//   valueYField: "riesgoBajo",
+//   categoryXField: "country",
+//   tooltip: am5.Tooltip.new(rootConsolidado, { labelText: "{categoryX}: {valueY}" })
+// }));
 
-// Crear los ejes para el gráfico
-var xRendererConsolidado = am5radar.AxisRendererCircular.new(rootConsolidado, {
-  minGridDistance: 10
-});
-xRendererConsolidado.labels.template.setAll({
-  radius: 10,
-  textType: "radial",
-  centerY: am5.p50
-});
+// var seriesRiesgoNulo = chartConsolidado.series.push(am5radar.RadarColumnSeries.new(rootConsolidado, {
+//   name: "Riesgo Nulo",
+//   valueYField: "riesgoNulo",
+//   categoryXField: "country",
+//   tooltip: am5.Tooltip.new(rootConsolidado, { labelText: "{categoryX}: {valueY}" })
+// }));
 
-var yRendererConsolidado = am5radar.AxisRendererRadial.new(rootConsolidado, {
-  axisAngle: 90
-});
-yRendererConsolidado.labels.template.setAll({
-  centerX: am5.p50
-});
+// // Configuración del color de las barras
+// var colorSetConsolidado = am5.ColorSet.new(rootConsolidado, {});
+// seriesRiesgoMuyAlto.columns.template.set("fill", colorSetConsolidado.getIndex(0));
+// seriesRiesgoAlto.columns.template.set("fill", colorSetConsolidado.getIndex(1));
+// seriesRiesgoMedio.columns.template.set("fill", colorSetConsolidado.getIndex(2));
+// seriesRiesgoBajo.columns.template.set("fill", colorSetConsolidado.getIndex(3));
+// seriesRiesgoNulo.columns.template.set("fill", colorSetConsolidado.getIndex(4));
 
-var categoryAxisConsolidado = chartConsolidado.xAxes.push(am5xy.CategoryAxis.new(rootConsolidado, {
-  maxDeviation: 0,
-  categoryField: "country",
-  renderer: xRendererConsolidado
-}));
+// // Crear los ejes para el gráfico
+// var xRendererConsolidado = am5radar.AxisRendererCircular.new(rootConsolidado, {
+//   minGridDistance: 10
+// });
+// xRendererConsolidado.labels.template.setAll({
+//   radius: 10,
+//   textType: "radial",
+//   centerY: am5.p50
+// });
 
-var valueAxisConsolidado = chartConsolidado.yAxes.push(am5xy.ValueAxis.new(rootConsolidado, {
-  min: 0,
-  max: 1,
-  extraMax: 0.1,
-  renderer: yRendererConsolidado
-}));
+// var yRendererConsolidado = am5radar.AxisRendererRadial.new(rootConsolidado, {
+//   axisAngle: 90
+// });
+// yRendererConsolidado.labels.template.setAll({
+//   centerX: am5.p50
+// });
 
-// Función para generar los datos del radar
-function generarDatosRadarConsolidado() {
-  var datosConsolidado = [];
-  var i = 0;
-  for (var categoria in categoriasConsolidado) {
-    var datosCategoria = categoriasConsolidado[categoria];
+// var categoryAxisConsolidado = chartConsolidado.xAxes.push(am5xy.CategoryAxis.new(rootConsolidado, {
+//   maxDeviation: 0,
+//   categoryField: "country",
+//   renderer: xRendererConsolidado
+// }));
 
-    datosCategoria.forEach(function(subcategoria) {
-      var itemDatos = { "country": subcategoria[0] };
+// var valueAxisConsolidado = chartConsolidado.yAxes.push(am5xy.ValueAxis.new(rootConsolidado, {
+//   min: 0,
+//   max: 1,
+//   extraMax: 0.1,
+//   renderer: yRendererConsolidado
+// }));
 
-      // Añadir datos de los 5 niveles de riesgo
-      itemDatos["riesgoMuyAlto"] = subcategoria[1];
-      itemDatos["riesgoAlto"] = subcategoria[2];
-      itemDatos["riesgoMedio"] = subcategoria[3];
-      itemDatos["riesgoBajo"] = subcategoria[4];
-      itemDatos["riesgoNulo"] = subcategoria[5];
+// // Función para generar los datos del radar
+// function generarDatosRadarConsolidado() {
+//   var datosConsolidado = [];
+//   var i = 0;
+//   for (var categoria in categoriasConsolidado) {
+//     var datosCategoria = categoriasConsolidado[categoria];
 
-      datosConsolidado.push(itemDatos);
-    });
-  }
-  return datosConsolidado;
-}
+//     datosCategoria.forEach(function(subcategoria) {
+//       var itemDatos = { "country": subcategoria[0] };
 
-// Asignar los datos al gráfico
-var datosRadarConsolidado = generarDatosRadarConsolidado();
-seriesRiesgoMuyAlto.data.setAll(datosRadarConsolidado);
-seriesRiesgoAlto.data.setAll(datosRadarConsolidado);
-seriesRiesgoMedio.data.setAll(datosRadarConsolidado);
-seriesRiesgoBajo.data.setAll(datosRadarConsolidado);
-seriesRiesgoNulo.data.setAll(datosRadarConsolidado);
+//       // Añadir datos de los 5 niveles de riesgo
+//       itemDatos["riesgoMuyAlto"] = subcategoria[1];
+//       itemDatos["riesgoAlto"] = subcategoria[2];
+//       itemDatos["riesgoMedio"] = subcategoria[3];
+//       itemDatos["riesgoBajo"] = subcategoria[4];
+//       itemDatos["riesgoNulo"] = subcategoria[5];
 
-categoryAxisConsolidado.data.setAll(datosRadarConsolidado);
+//       datosConsolidado.push(itemDatos);
+//     });
+//   }
+//   return datosConsolidado;
+// }
 
-// Mostrar el gráfico
-chartConsolidado.appear(1000, 100);
+// // Asignar los datos al gráfico
+// var datosRadarConsolidado = generarDatosRadarConsolidado();
+// seriesRiesgoMuyAlto.data.setAll(datosRadarConsolidado);
+// seriesRiesgoAlto.data.setAll(datosRadarConsolidado);
+// seriesRiesgoMedio.data.setAll(datosRadarConsolidado);
+// seriesRiesgoBajo.data.setAll(datosRadarConsolidado);
+// seriesRiesgoNulo.data.setAll(datosRadarConsolidado);
+
+// categoryAxisConsolidado.data.setAll(datosRadarConsolidado);
+
+// // Mostrar el gráfico
+// chartConsolidado.appear(1000, 100);
 
 
 });
