@@ -990,18 +990,6 @@
 					<div id="guia1Chart"></div>
 					</div>
 				</div>
-				<h4 class="card-title" id="9_3">9.1.1.- Resultados obtenidos, categoría evento traumatico severo.</h4>
-				<div class="row">
-				<div class="col-12">
-					<style>
-						#eventoChart {
-						width: 100%;
-						height: 500px;
-						}
-						</style>
-					<div id="eventoChart"></div>
-					</div>
-				</div>
 				<h4 class="card-title" id="9_2">9.2.- Resultados obtenidos en la guía de referencia III, Identificación y análisis de los Factores de Riesgo Psicosocial y Evaluación del entorno organizacional en los centros de trabajo por categoría y dominio conforme a la NOM-035-STPS-2018.</h4>
 				
 				<h4 class="card-title" id="9_4">9.2.1.- Resultados obtenidos, categoría ambiente de trabajo.</h4>
@@ -1074,6 +1062,16 @@
 						}
 						</style>
 					<div id="consolidadoChart"></div>
+					</div>
+				</div>
+				<div class="col-12">
+					<style>
+						#consolidadoChart2 {
+						width: 100%;
+						height: 800px;
+						}
+						</style>
+					<div id="consolidadoChart2"></div>
 					</div>
 				</div>
 				<h4 class="card-title" id="10">10.- Conclusiones</h4>

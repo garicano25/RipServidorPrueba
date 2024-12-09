@@ -74,7 +74,7 @@ $("#boton_nuevo_registro").click(function () {
 
             // campos hidden
             $("#ID_CONCLUSION_INFORME").val(0);
-
+            actualizarOpcionesNivel();
             // abrir modal
             $('#modal_conclusion').modal({ backdrop: false });
             break;
@@ -83,7 +83,7 @@ $("#boton_nuevo_registro").click(function () {
             $('#form_catalogo').each(function () {
                 this.reset();
             });
-
+            actualizarOpcionesNivel();
             // campos hidden
             $("#id").val(0);
             $("#catalogo").val(catalogo);

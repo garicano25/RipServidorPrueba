@@ -11618,13 +11618,7 @@ const regimenData = [
   var chartExperiencia = new ApexCharts(document.querySelector("#grafica_experiencia"), optionsExperiencia);
   chartExperiencia.render();
 
-  
-  
-  
-
-
-
-// Crear un nuevo objeto root para el gráfico de régimen
+  // Crear un nuevo objeto root para el gráfico de régimen
 var rootGraficoGuia1 = am5.Root.new("guia1Chart"); // Cambié root a rootGraficoRegimen
 
 // Establecer el tema para el gráfico
@@ -11689,6 +11683,164 @@ leyendagrafico1.data.setAll(seriegrafica1.dataItems);
 
 // Animar la serie de manera inicial
 seriegrafica1.appear(1000, 100);
+
+var rootConsolidado = am5.Root.new("consolidadoChart");
+
+// Crear un tema personalizado
+const miTemaConsolidado = am5.Theme.new(rootConsolidado);
+miTemaConsolidado.rule("Label").set("fontSize", 10);
+miTemaConsolidado.rule("Grid").set("strokeOpacity", 0.06);
+
+// Establecer los temas
+rootConsolidado.setThemes([
+  am5themes_Animated.new(rootConsolidado),
+  miTemaConsolidado
+]);
+
+// Datos de las categorías y subcategorías (sin cambios)
+var categoriasConsolidado = {
+  "Ambiente": [
+    ["ambiente de trabajo", 0.10, 0.20, 0.30, 0.40, 0.50],
+  ],
+  "Factores": [
+    ["factores 1", 0.20, 0.24, 0.30, 0.35, 0.40],
+    ["factores 2", 0.10, 0.24, 0.28, 0.34, 0.38],
+  ],
+  "Organizacion": [
+    ["orga 1", 0.16, 0.24, 0.32, 0.36, 0.42],
+    ["orga 2", 0.13, 0.24, 0.29, 0.34, 0.40],
+  ],
+  "Liderazgo": [
+    ["lider1", 0.45, 0.24, 0.15, 0.10, 0.05],
+    ["lider2", 0.30, 0.24, 0.20, 0.15, 0.10],
+    ["lider3", 0.60, 0.24, 0.40, 0.35, 0.30],
+  ]
+};
+
+// Configuración de la raíz y su formato de número
+rootConsolidado.numberFormatter.set("numberFormat", "#%");
+
+// Crear el gráfico con configuración específica
+var chartConsolidado = rootConsolidado.container.children.push(am5radar.RadarChart.new(rootConsolidado, {
+  panX: false,
+  panY: false,
+  wheelX: "panX",
+  wheelY: "zoomX",
+  innerRadius: am5.percent(40),
+  radius: am5.percent(65),
+  startAngle: 270 - 170,
+  endAngle: 270 + 170
+}));
+
+// Crear las series de riesgo con variables únicas
+var seriesRiesgoMuyAlto = chartConsolidado.series.push(am5radar.RadarColumnSeries.new(rootConsolidado, {
+  name: "Riesgo Muy Alto",
+  valueYField: "riesgoMuyAlto",
+  categoryXField: "country",
+  tooltip: am5.Tooltip.new(rootConsolidado, { labelText: "{categoryX}: {valueY}" })
+}));
+
+var seriesRiesgoAlto = chartConsolidado.series.push(am5radar.RadarColumnSeries.new(rootConsolidado, {
+  name: "Riesgo Alto",
+  valueYField: "riesgoAlto",
+  categoryXField: "country",
+  tooltip: am5.Tooltip.new(rootConsolidado, { labelText: "{categoryX}: {valueY}" })
+}));
+
+var seriesRiesgoMedio = chartConsolidado.series.push(am5radar.RadarColumnSeries.new(rootConsolidado, {
+  name: "Riesgo Medio",
+  valueYField: "riesgoMedio",
+  categoryXField: "country",
+  tooltip: am5.Tooltip.new(rootConsolidado, { labelText: "{categoryX}: {valueY}" })
+}));
+
+var seriesRiesgoBajo = chartConsolidado.series.push(am5radar.RadarColumnSeries.new(rootConsolidado, {
+  name: "Riesgo Bajo",
+  valueYField: "riesgoBajo",
+  categoryXField: "country",
+  tooltip: am5.Tooltip.new(rootConsolidado, { labelText: "{categoryX}: {valueY}" })
+}));
+
+var seriesRiesgoNulo = chartConsolidado.series.push(am5radar.RadarColumnSeries.new(rootConsolidado, {
+  name: "Riesgo Nulo",
+  valueYField: "riesgoNulo",
+  categoryXField: "country",
+  tooltip: am5.Tooltip.new(rootConsolidado, { labelText: "{categoryX}: {valueY}" })
+}));
+
+// Configuración del color de las barras
+var colorSetConsolidado = am5.ColorSet.new(rootConsolidado, {});
+seriesRiesgoMuyAlto.set("fill", colorSetConsolidado.getIndex(0));
+seriesRiesgoAlto.set("fill", colorSetConsolidado.getIndex(1));
+seriesRiesgoMedio.set("fill", colorSetConsolidado.getIndex(2));
+seriesRiesgoBajo.set("fill", colorSetConsolidado.getIndex(3));
+seriesRiesgoNulo.set("fill", colorSetConsolidado.getIndex(4));
+
+// Crear los ejes para el gráfico
+var xRendererConsolidado = am5radar.AxisRendererCircular.new(rootConsolidado, {
+  minGridDistance: 10
+});
+xRendererConsolidado.labels.template.setAll({
+  radius: 10,
+  textType: "radial",
+  centerY: am5.p50
+});
+
+var yRendererConsolidado = am5radar.AxisRendererRadial.new(rootConsolidado, {
+  axisAngle: 90
+});
+yRendererConsolidado.labels.template.setAll({
+  centerX: am5.p50
+});
+
+var categoryAxisConsolidado = chartConsolidado.xAxes.push(am5xy.CategoryAxis.new(rootConsolidado, {
+  maxDeviation: 0,
+  categoryField: "country",
+  renderer: xRendererConsolidado
+}));
+
+var valueAxisConsolidado = chartConsolidado.yAxes.push(am5xy.ValueAxis.new(rootConsolidado, {
+  min: 0,
+  max: 1,
+  extraMax: 0.1,
+  renderer: yRendererConsolidado
+}));
+
+// Función para generar los datos del radar
+function generarDatosRadarConsolidado() {
+  var datosConsolidado = [];
+  var i = 0;
+  for (var categoria in categoriasConsolidado) {
+    var datosCategoria = categoriasConsolidado[categoria];
+
+    datosCategoria.forEach(function(subcategoria) {
+      var itemDatos = { "country": subcategoria[0] };
+
+      // Añadir datos de los 5 niveles de riesgo
+      itemDatos["riesgoMuyAlto"] = subcategoria[1];
+      itemDatos["riesgoAlto"] = subcategoria[2];
+      itemDatos["riesgoMedio"] = subcategoria[3];
+      itemDatos["riesgoBajo"] = subcategoria[4];
+      itemDatos["riesgoNulo"] = subcategoria[5];
+
+      datosConsolidado.push(itemDatos);
+    });
+  }
+  return datosConsolidado;
+}
+
+// Asignar los datos al gráfico
+var datosRadarConsolidado = generarDatosRadarConsolidado();
+seriesRiesgoMuyAlto.data.setAll(datosRadarConsolidado);
+seriesRiesgoAlto.data.setAll(datosRadarConsolidado);
+seriesRiesgoMedio.data.setAll(datosRadarConsolidado);
+seriesRiesgoBajo.data.setAll(datosRadarConsolidado);
+seriesRiesgoNulo.data.setAll(datosRadarConsolidado);
+
+categoryAxisConsolidado.data.setAll(datosRadarConsolidado);
+
+// Mostrar el gráfico
+chartConsolidado.appear(1000, 100);
 
 
 });
@@ -11787,144 +11939,150 @@ seriegrafica1.appear(1000, 100);
 	// xAxisCONSOLIDADO.data.setAll(DATOS_CONSOLIDADOS);
 
 
-	var root = am5.Root.new("consolidadoChart");
+var root = am5.Root.new("consolidadoChart2");
 
-	// Crear tema personalizado
-	const myTheme = am5.Theme.new(root);
-	myTheme.rule("Label").set("fontSize", 10);
-	myTheme.rule("Grid").set("strokeOpacity", 0.06);
-	// Crear un tema personalizado
+// Crear tema personalizado
+const myTheme = am5.Theme.new(root);
+myTheme.rule("Label").set("fontSize", 10);
+myTheme.rule("Grid").set("strokeOpacity", 0.06);
+// Crear un tema personalizado
 
 
 // Definir los estilos para los ejes dentro del tema
 myTheme.rule("AxisRenderer").setAll({
-  background: am5.Rectangle.new(root, {
-    fill: am5.color(0xFF5733),  // Color de fondo personalizado
-    fillOpacity: 0.7  // Opacidad del fondo
-  })
+background: am5.Rectangle.new(root, {
+fill: am5.color(0xFF5733),  // Color de fondo personalizado
+fillOpacity: 0.7  // Opacidad del fondo
+})
 });
 
 
-	
-	// Establecer temas
-	root.setThemes([am5themes_Animated.new(root), myTheme]);
-	
-	// Datos (con valores fijos para las 5 series)
-	var data = [
-	  {
-		"category": "Condiciones en el ambiente de trabajo",
-		"series1": 0.10,
-		"series2": 0.15,
-		"series3": 0.20,
-		"series4": 0.25,
-		"series5": 0.30
-	  },
-	  {
-		"category": "Falta de control sobre el trabajo",
-		"series1": 0.12,
-		"series2": 0.18,
-		"series3": 0.22,
-		"series4": 0.28,
-		"series5": 0.35
-	  },
-	  {
-		"category": "Carga de trabajo",
-		"series1": 0.13,
-		"series2": 0.17,
-		"series3": 0.21,
-		"series4": 0.26,
-		"series5": 0.32
-	  },
-	  {
-		"category": "Jornada de trabajo",
-		"series1": 0.14,
-		"series2": 0.19,
-		"series3": 0.23,
-		"series4": 0.27,
-		"series5": 0.34
-	  },
-	  {
-		"category": "Interferencia en la relacion trabajo-familia",
-		"series1": 0.16,
-		"series2": 0.20,
-		"series3": 0.24,
-		"series4": 0.29,
-		"series5": 0.36
-	  },
-	  {
-		"category": "Liderazgo\nLiderazgo sub",
-		"series1": 0.11,
-		"series2": 0.16,
-		"series3": 0.19,
-		"series4": 0.24,
-		"series5": 0.31
-	  },
-	  {
-		"category": "Relaciones en el trabajo",
-		"series1": 0.14,
-		"series2": 0.17,
-		"series3": 0.22,
-		"series4": 0.27,
-		"series5": 0.33
-	  },
-	  {
-		"category": "Violencia",
-		"series1": 0.25,
-		"series2": 0.10,
-		"series3": 0.20,
-		"series4": 0.40,
-		"series5": 0.05
-	  }
-	];
-	
-	// Modificar formato de números
-	root.numberFormatter.set("numberFormat", "#%");
-	
-	// Crear gráfico
-	var chart = root.container.children.push(am5radar.RadarChart.new(root, {
-	  panX: false,
-	  panY: false,
-	  innerRadius: am5.percent(10)  // Ajustar el espaciado entre las barras
-	}));
-	
-	// Crear ejes
-	var categoryAxisRenderer = am5radar.AxisRendererCircular.new(root, {
-	  innerRadius: am5.percent(10)  // Ajustar el espaciado entre las barras
-	});
-	var categoryAxis = chart.xAxes.push(am5xy.CategoryAxis.new(root, {
-	  categoryField: "category",
-	  renderer: categoryAxisRenderer
-	}));
-	
-	categoryAxisRenderer.labels.template.setAll({
-	  fill: am5.color(0x2c6e49),
-	  fontSize: 14,
-	  fontWeight: "bold",
-	  paddingLeft: 5,
-	  paddingRight: 5,
-	  paddingTop: 2,
-	  paddingBottom: 2
-	});
 
-	categoryAxis.events.on("afterRender", function() {
-		// Acceder a las etiquetas de las categorías ya renderizadas
-		var labels = categoryAxisRenderer.labels.children;
-	  
-		// Iterar a través de las etiquetas y aplicar el color basado en condiciones
-		labels.forEach(function(label, index) {
-		  // Cambiar color solo para la categoría con un índice específico
-		  if (index === 2) {  // Ejemplo: color para la tercera categoría
-			label.set("fill", am5.color(0xFF5733));  // Color para esa categoría
-		  } else {
-			label.set("fill", am5.color(0x333333));  // Color para otras categorías
-		  }
-		});
-	  });
-	// Definir los colores para las categorías
+// Establecer temas
+root.setThemes([am5themes_Animated.new(root), myTheme]);
+
+// Datos (con valores fijos para las 5 series)
+var data = [
+{
+"category": "Condiciones en el ambiente de trabajo",
+"series1": 0.10,
+"series2": 0.15,
+"series3": 0.20,
+"series4": 0.25,
+"series5": 0.30
+},
+{
+"category": "Falta de control sobre el trabajo",
+"series1": 0.35,
+"series2": 0.18,
+"series3": 0.22,
+"series4": 0.15,
+"series5": 0.10
+},
+{
+"category": "Carga de trabajo",
+"series1": 0.09,
+"series2": 0.36,
+"series3": 0.21,
+"series4": 0.26,
+"series5": 0.08
+},
+{
+"category": "Jornada de trabajo",
+"series1": 0.14,
+"series2": 0.19,
+"series3": 0.23,
+"series4": 0.27,
+"series5": 0.17
+},
+{
+"category": "Interferencia en la relacion trabajo-familia",
+"series1": 0.16,
+"series2": 0.20,
+"series3": 0.24,
+"series4": 0.29,
+"series5": 0.11
+},
+{
+"category": "Liderazgo\nLiderazgo sub",
+"series1": 0.11,
+"series2": 0.16,
+"series3": 0.19,
+"series4": 0.24,
+"series5": 0.30
+},
+{
+"category": "Relaciones en el trabajo",
+"series1": 0.14,
+"series2": 0.17,
+"series3": 0.22,
+"series4": 0.27,
+"series5": 0.20
+},
+{
+"category": "Violencia",
+"series1": 0.25,
+"series2": 0.10,
+"series3": 0.20,
+"series4": 0.40,
+"series5": 0.05
+}
+];
+
+
+var colorSet = am5.ColorSet.new(root, {});
+
+// Modificar formato de números
+root.numberFormatter.set("numberFormat", "#%");
+
+// Crear gráfico
+var chart = root.container.children.push(am5radar.RadarChart.new(root, {
+panX: false,
+panY: false,
+wheelX: "panX",
+wheelY: "zoomX",
+innerRadius: am5.percent(10),
+radius: am5.percent(65),
+}));
+
+// Crear ejes
+var categoryAxisRenderer = am5radar.AxisRendererCircular.new(root, {
+innerRadius: am5.percent(10)  // Ajustar el espaciado entre las barras
+});
+var categoryAxis = chart.xAxes.push(am5xy.CategoryAxis.new(root, {
+categoryField: "category",
+renderer: categoryAxisRenderer
+}));
+
+categoryAxisRenderer.labels.template.setAll({
+fill: am5.color(0x2c6e49),
+fontSize: 14,
+fontWeight: "bold",
+paddingLeft: 5,
+paddingRight: 5,
+paddingTop: 2,
+paddingBottom: 2
+});
+
+categoryAxis.events.on("afterRender", function() {
+// Acceder a las etiquetas de las categorías ya renderizadas
+var labels = categoryAxisRenderer.labels.children;
+
+// Iterar a través de las etiquetas y aplicar el color basado en condiciones
+labels.forEach(function(label, index) {
+	// Cambiar color solo para la categoría con un índice específico
+	if (index === 2) {  // Ejemplo: color para la tercera categoría
+	label.set("fill", am5.color(0xFF5733));  // Color para esa categoría
+	} else {
+	label.set("fill", am5.color(0x333333));  // Color para otras categorías
+	}
+});
+});
+// Definir los colores para las categorías
 // Crear ejes
 
-  
-  // Definir los colores para las categorías
+
+// Definir los colores para las categorías
 //   var categoryColors = {
 // 	"Condiciones en el ambiente de trabajo": am5.color(0xFF5733),  // Color para esta categoría
 // 	"Falta de control sobre el trabajo": am5.color(0x33FF57),      // Color para esta categoría
@@ -11935,7 +12093,7 @@ myTheme.rule("AxisRenderer").setAll({
 // 	"Relaciones en el trabajo": am5.color(0xFF5733),              // Color para esta categoría
 // 	"Violencia": am5.color(0x33FF57)                               // Color para esta categoría
 //   };
-  
+
 //   // Configuración del renderizador de ejes
 //   categoryAxisRenderer.labels.template.setAll({
 // 	fontSize: 14,
@@ -11945,7 +12103,7 @@ myTheme.rule("AxisRenderer").setAll({
 // 	paddingTop: 2,
 // 	paddingBottom: 2
 //   });
-  
+
 //   // Asignar colores a las etiquetas de categorías usando un `if` en un adaptador
 //   categoryAxisRenderer.labels.template.adapters.add("fill", function(fill, target) {
 // 	var categoryName = target.dataItem.get("category");  // Obtener el nombre de la categoría
@@ -11955,212 +12113,69 @@ myTheme.rule("AxisRenderer").setAll({
 // 	  return fill;  // Si no hay color definido, usar el valor por defecto
 // 	}
 //   });
-  
-	
-	// Crear eje de valor
-	var valueAxis = chart.yAxes.push(am5xy.ValueAxis.new(root, {
-	  renderer: am5radar.AxisRendererRadial.new(root, {}),
-	  min: 0,
-	  max: 1,
-	  strictMinMax: true,
-	  extraMax: 0.1
-	}));
-	
-	// Crear series apiladas
-	var seriesNames = ["series1", "series2", "series3", "series4", "series5"];
-	var seriesColors = [
-	  am5.color(0xff0000), // Rojo
-	  am5.color(0x00ff00), // Verde
-	  am5.color(0x0000ff), // Azul
-	  am5.color(0xffa500), // Naranja
-	  am5.color(0x800080)  // Morado
-	];
-	
-	seriesNames.forEach((seriesName, index) => {
-	  var series = chart.series.push(am5radar.RadarColumnSeries.new(root, {
-		stacked: true,
-		name: "Series " + (index + 1),
-		xAxis: categoryAxis,
-		yAxis: valueAxis,  // Asegúrate de que el yAxis está correctamente asignado
-		valueYField: seriesName,
-		categoryXField: "category"
-	  }));
-	
-	  // Cambiar el color de la serie
-	  series.columns.template.setAll({
-		tooltipText: "{name}: {valueY.formatNumber('#.##%')}",
-		cornerRadius: 0,
-		strokeOpacity: 0,
-		fill: seriesColors[index],
-		width: am5.percent(100)
-	  });
-	
-	  // Agregar etiquetas con porcentajes
-	  series.bullets.push(function () {
-		return am5.Bullet.new(root, {
-		  sprite: am5.Label.new(root, {
-			text: "{valueY.formatNumber('#.##%')}",
-			populateText: true,
-			centerX: am5.p50,
-			centerY: am5.p50,
-			fill: root.interfaceColors.get("alternativeText")
-		  })
-		});
-	  });
-	
-	  // Asignar datos
-	  series.data.setAll(data);
-	});
-	
-	// Asignar datos al eje de categorías
-	categoryAxis.data.setAll(data);
-	
-	// Animar el gráfico al cargar
-	chart.appear(1000, 100);
-	
 
- // end am5.ready()
 
-// Crear un nuevo objeto root para el gráfico de ambiente de trabajo
-var rootGraficoRiesgoTrabajo = am5.Root.new("eventoChart");
-
-// Establecer el tema para el gráfico
-rootGraficoRiesgoTrabajo.setThemes([am5themes_Animated.new(rootGraficoRiesgoTrabajo)]);
-
-// Crear el gráfico XY
-var graficoRiesgoTrabajo = rootGraficoRiesgoTrabajo.container.children.push(am5xy.XYChart.new(rootGraficoRiesgoTrabajo, {
-  panX: true,
-  panY: true,
-  wheelX: "panX",
-  wheelY: "zoomX",
-  pinchZoomX: true,
-  paddingLeft: 0,
-  paddingRight: 1
+// Crear eje de valor
+var valueAxis = chart.yAxes.push(am5xy.ValueAxis.new(root, {
+renderer: am5radar.AxisRendererRadial.new(root, {}),
+min: 0,
+max: 1,
+strictMinMax: true,
+extraMax: 0.1
 }));
 
-// Agregar cursor
-var cursorRiesgoTrabajo = graficoRiesgoTrabajo.set("cursor", am5xy.XYCursor.new(rootGraficoRiesgoTrabajo, {}));
-cursorRiesgoTrabajo.lineY.set("visible", false);
+// Crear series apiladas
+var seriesNames = ["series1", "series2", "series3", "series4", "series5"];
+var seriesColors = [
+am5.color(0x00B0F0), // Rojo
+am5.color(0x00B050), // Verde
+am5.color(0xFFFF00), // Azul
+am5.color(0xF7AA32), // Naranja
+am5.color(0xFF0000)  // Morado
+];
 
-// Crear los ejes
-var xRendererRiesgoTrabajo = am5xy.AxisRendererX.new(rootGraficoRiesgoTrabajo, { 
-  minGridDistance: 30, 
-  minorGridEnabled: true
-});
-
-xRendererRiesgoTrabajo.labels.template.setAll({
-  rotation: -90,
-  centerY: am5.p50,
-  centerX: am5.p100,
-  paddingRight: 15
-});
-
-xRendererRiesgoTrabajo.grid.template.setAll({
-  location: 1
-});
-
-var xAxisRiesgoTrabajo = graficoRiesgoTrabajo.xAxes.push(am5xy.CategoryAxis.new(rootGraficoRiesgoTrabajo, {
-  maxDeviation: 0.3,
-  categoryField: "nivelRiesgo",  // Usando "nivelRiesgo" para los niveles de riesgo
-  renderer: xRendererRiesgoTrabajo,
-  tooltip: am5.Tooltip.new(rootGraficoRiesgoTrabajo, {})
+seriesNames.forEach((seriesName, index) => {
+var series = chart.series.push(am5radar.RadarColumnSeries.new(root, {
+stacked: true,
+name: "Series " + (index + 1),
+xAxis: categoryAxis,
+yAxis: valueAxis,  // Asegúrate de que el yAxis está correctamente asignado
+valueYField: seriesName,
+categoryXField: "category"
 }));
 
-var yRendererRiesgoTrabajo = am5xy.AxisRendererY.new(rootGraficoRiesgoTrabajo, {
-  strokeOpacity: 0.1
+// Cambiar el color de la serie
+series.columns.template.setAll({
+tooltipText: "{name}: {valueY.formatNumber('#.##%')}",
+cornerRadius: 0,
+strokeOpacity: 0,
+fill: seriesColors[index],
+width: am5.percent(100)
 });
 
-var yAxisRiesgoTrabajo = graficoRiesgoTrabajo.yAxes.push(am5xy.ValueAxis.new(rootGraficoRiesgoTrabajo, {
-  maxDeviation: 0.3,
-  renderer: yRendererRiesgoTrabajo
-}));
-
-// Crear la serie
-var serieRiesgoTrabajo = graficoRiesgoTrabajo.series.push(am5xy.ColumnSeries.new(rootGraficoRiesgoTrabajo, {
-  name: "RiesgoTrabajo", 
-  xAxis: xAxisRiesgoTrabajo,
-  yAxis: yAxisRiesgoTrabajo,
-  valueYField: "cantidadEmpleados",  // Cambié "valor" por "cantidadEmpleados"
-  sequencedInterpolation: true,
-  categoryXField: "nivelRiesgo",  // Cambié "rango" por "nivelRiesgo"
-  tooltip: am5.Tooltip.new(rootGraficoRiesgoTrabajo, {
-    labelText: "{valueY} empleados"
-  })
-}));
-
-// Personalizar las columnas
-serieRiesgoTrabajo.columns.template.setAll({
-  cornerRadiusTL: 5,
-  cornerRadiusTR: 5,
-  strokeOpacity: 0
+// Agregar etiquetas con porcentajes
+series.bullets.push(function () {
+return am5.Bullet.new(root, {
+	sprite: am5.Label.new(root, {
+	text: "{valueY.formatNumber('#.##%')}",
+	populateText: true,
+	centerX: am5.p50,
+	centerY: am5.p50,
+	fill: root.interfaceColors.get("alternativeText")
+	})
+});
 });
 
-// Colores según el nivel de riesgo
-serieRiesgoTrabajo.columns.template.adapters.add("fill", function (fill, target) {
-  var nivel = target.dataItem.dataContext.nivelRiesgo;
-  if (nivel === "Muy Alto") {
-    return am5.color(0xFF0000); // Rojo
-  } else if (nivel === "Alto") {
-    return am5.color(0xFF7F00); // Naranja
-  } else if (nivel === "Medio") {
-    return am5.color(0xFFFF00); // Amarillo
-  } else if (nivel === "Bajo") {
-    return am5.color(0x00FF00); // Verde
-  } else if (nivel === "Nulo") {
-    return am5.color(0x00BFFF); // Azul Cielo
-  }
-  return fill; // Default
+// Asignar datos
+series.data.setAll(data);
 });
 
-serieRiesgoTrabajo.columns.template.adapters.add("stroke", function (stroke, target) {
-  return target.fill; // Usar el mismo color para el borde
-});
+// Asignar datos al eje de categorías
+categoryAxis.data.setAll(data);
 
-// Establecer los datos para el gráfico (niveles de riesgo y cantidad de empleados)
-var datosRiesgoTrabajo = [{
-  nivelRiesgo: "Muy Alto",  // Nivel de riesgo muy alto
-  cantidadEmpleados: 2
-}, {
-  nivelRiesgo: "Alto",  // Nivel de riesgo alto
-  cantidadEmpleados: 0
-}, {
-  nivelRiesgo: "Medio",  // Nivel de riesgo medio
-  cantidadEmpleados: 0
-}, {
-  nivelRiesgo: "Bajo",  // Nivel de riesgo bajo
-  cantidadEmpleados: 0
-}, {
-  nivelRiesgo: "Nulo",  // Nivel de riesgo nulo
-  cantidadEmpleados: 69
-}];
+// Animar el gráfico al cargar
+chart.appear(1000, 100);
 
-// Asignar los datos al gráfico y la serie
-xAxisRiesgoTrabajo.data.setAll(datosRiesgoTrabajo);
-serieRiesgoTrabajo.data.setAll(datosRiesgoTrabajo);
 
-// Animar los elementos del gráfico al cargar
-serieRiesgoTrabajo.appear(1000);
-graficoRiesgoTrabajo.appear(1000, 100);
+// The following control sections for play button and slider are now removed
 
-// Crear las etiquetas sobre las columnas
-serieRiesgoTrabajo.columns.template.adapters.add("tooltipText", function(tooltipText, target) {
-  return "Número de empleados: " + target.dataItem.dataContext.cantidadEmpleados;
-});
-
-// Agregar etiquetas de texto a las columnas
-serieRiesgoTrabajo.columns.template.setAll({
-  templateField: "cantidadEmpleados", // Asocia el valor de cada barra con la cantidad de empleados
-});
-
-serieRiesgoTrabajo.columns.template.children.push(am5.Label.new(rootGraficoRiesgoTrabajo, {
-  text: "{cantidadEmpleados}",  // Muestra el valor de empleados
-  fill: am5.color(0xFFFFFF),  // Color blanco para el texto
-  centerX: am5.p50,           // Centrado horizontalmente
-  centerY: am5.p100,          // Ubicación al fondo de la barra
-  dy: -10,                    // Distancia de la etiqueta respecto a la barra
-  fontSize: 14,               // Tamaño de la fuente
-  fontWeight: "bold",         // Negrita
-  wordWrap: "break-word"      // Evitar que el texto se salga del contorno
-}));
-
-  
