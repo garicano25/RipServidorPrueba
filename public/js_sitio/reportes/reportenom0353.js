@@ -11202,34 +11202,34 @@ am5.ready(function () {
     // Crear gráficos
     createChart(
         "ambienteChart",
-        "Factores de riesgo psicosocial en el trabajo-Identificación, análisis y prevención (Ambiente de trabajo)",
+        "Factores de riesgo psicosocial en el trabajo-Identificación, \nanálisis y prevención (Ambiente de trabajo)",
         "(Nivel de riesgo/NOM-035-STPS-2018)\n\n",
         [{
             category: ""
         }, {
-            category: "g1-Ambiente de trabajo",
+            category: "g1-Categoria:\nAmbiente de trabajo",
             s1: 2, s2: 3, s3: 1, s4: 3, s5: 1
         }, {
             category: ""
         }, {
-            category: "g2-Condiciones del ambiente de trabajo",
+            category: "g2-Dominios:\nCondiciones del ambiente de trabajo",
             s1: 3, s2: 2, s3: 2, s4: 2, s5: 1
         }]
     );
 
     createChart(
         "factoresChart",
-        "Factores de riesgo psicosocial en el trabajo-Identificación, análisis y prevención (Factores propios de la actividad)",
+        "Factores de riesgo psicosocial en el trabajo-Identificación,\n análisis y prevención (Factores propios de la actividad)",
         "(Nivel de riesgo/NOM-035-STPS-2018)\n\n",
         [{
             category: ""
         }, {
-            category: "g1-Factores propios de la actividad",
+            category: "g1-Categoria:\nFactores propios de la actividad",
             s1: 2, s2: 3, s3: 1, s4: 3, s5: 1
         }, {
             category: ""
         }, {
-            category: "g2-Carga de trabajo",
+            category: "g2-Dominios:\nCarga de trabajo",
             s1: 5, s2: 1, s3: 2, s4: 1, s5: 1
         }, {
             category: "g2-Falta de control sobre el trabajo",
@@ -11239,17 +11239,17 @@ am5.ready(function () {
 
 	createChart(
         "organizacionChart",
-        "Factores de riesgo psicosocial en el trabajo-Identificación, análisis y prevención (Organización del tiempo de trabajo)",
+        "Factores de riesgo psicosocial en el trabajo-Identificación, \nanálisis y prevención (Organización del tiempo de trabajo)",
         "(Nivel de riesgo/NOM-035-STPS-2018)\n\n",
         [{
             category: ""
         }, {
-            category: "g1-Organización del tiempo de trabajo",
+            category: "g1-Categoria:\nOrganización del tiempo de trabajo",
             s1: 2, s2: 3, s3: 1, s4: 3, s5: 1
         }, {
             category: ""
         }, {
-            category: "g2-Jornada de trabajo",
+            category: "g2-Dominios:\nJornada de trabajo",
             s1: 5, s2: 1, s3: 2, s4: 1, s5: 1
         }, {
             category: "g2-Interferencia trabajo/familia",
@@ -11259,7 +11259,7 @@ am5.ready(function () {
 
 	createChart(
         "liderazgoChart",
-        "Factores de riesgo psicosocial en el trabajo-Identificación, análisis y prevención (Liderazgo y relaciones en el trabajo)",
+        "Factores de riesgo psicosocial en el trabajo-Identificación, \nanálisis y prevención (Liderazgo y relaciones en el trabajo)",
         "(Nivel de riesgo/NOM-035-STPS-2018)\n\n",
         [{
             category: ""
@@ -11270,7 +11270,7 @@ am5.ready(function () {
             category: ""
         },
 		{
-            category: "g2--Dominios:\nLiderazgo",
+            category: "g2-Dominios:\nLiderazgo",
             s1: 5, s2: 1, s3: 2, s4: 1, s5: 1
         }, {
             category: "g2-Relaciones en el trabajo",
@@ -11284,17 +11284,17 @@ am5.ready(function () {
 
 	createChart(
         "entornoChart",
-        "Factores de riesgo psicosocial en el trabajo-Identificación, análisis y prevención (Entorno organizacional)",
+        "Factores de riesgo psicosocial en el trabajo-Identificación, \nanálisis y prevención (Entorno organizacional)",
         "(Nivel de riesgo/NOM-035-STPS-2018)\n\n",
         [{
             category: ""
         }, {
-            category: "g1-Entorno organizacional",
+            category: "g1-Categoria:\nEntorno organizacional",
             s1: 2, s2: 3, s3: 1, s4: 3, s5: 1
         }, {
             category: ""
         },{
-            category: "g2-Reconocimiento del desempeño",
+            category: "g2-Dominios:\nReconocimiento del desempeño",
             s1: 5, s2: 1, s3: 2, s4: 1, s5: 1
         }, {
             category: "g2-Insuficiente sentido de pertenencia e inestabilidad",
