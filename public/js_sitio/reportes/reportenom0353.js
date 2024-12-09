@@ -11840,7 +11840,7 @@ seriegrafica1.appear(1000, 100);
 		"series5": 0.36
 	  },
 	  {
-		"category": "Liderazgo",
+		"category": "Liderazgo\nLiderazgo sub",
 		"series1": 0.11,
 		"series2": 0.16,
 		"series3": 0.19,
@@ -11884,50 +11884,65 @@ seriegrafica1.appear(1000, 100);
 	  renderer: categoryAxisRenderer
 	}));
 	
-	// categoryAxisRenderer.labels.template.setAll({
-	//   fill: am5.color(0x2c6e49),
-	//   fontSize: 14,
-	//   fontWeight: "bold",
-	//   paddingLeft: 5,
-	//   paddingRight: 5,
-	//   paddingTop: 2,
-	//   paddingBottom: 2
-	// });
+	categoryAxisRenderer.labels.template.setAll({
+	  fill: am5.color(0x2c6e49),
+	  fontSize: 14,
+	  fontWeight: "bold",
+	  paddingLeft: 5,
+	  paddingRight: 5,
+	  paddingTop: 2,
+	  paddingBottom: 2
+	});
+
+	categoryAxis.events.on("afterRender", function() {
+		// Acceder a las etiquetas de las categorías ya renderizadas
+		var labels = categoryAxisRenderer.labels.children;
+	  
+		// Iterar a través de las etiquetas y aplicar el color basado en condiciones
+		labels.forEach(function(label, index) {
+		  // Cambiar color solo para la categoría con un índice específico
+		  if (index === 2) {  // Ejemplo: color para la tercera categoría
+			label.set("fill", am5.color(0xFF5733));  // Color para esa categoría
+		  } else {
+			label.set("fill", am5.color(0x333333));  // Color para otras categorías
+		  }
+		});
+	  });
 	// Definir los colores para las categorías
 // Crear ejes
 
   
   // Definir los colores para las categorías
-  var categoryColors = {
-	"Condiciones en el ambiente de trabajo": am5.color(0xFF5733),  // Color para esta categoría
-	"Falta de control sobre el trabajo": am5.color(0x33FF57),      // Color para esta categoría
-	"Carga de trabajo": am5.color(0x3357FF),                      // Color para esta categoría
-	"Jornada de trabajo": am5.color(0xFFFF33),                    // Color para esta categoría
-	"Interferencia en la relacion trabajo-familia": am5.color(0xFF33FF), // Color para esta categoría
-	"Liderazgo": am5.color(0x33FFFF),                              // Color para esta categoría
-	"Relaciones en el trabajo": am5.color(0xFF5733),              // Color para esta categoría
-	"Violencia": am5.color(0x33FF57)                               // Color para esta categoría
-  };
+//   var categoryColors = {
+// 	"Condiciones en el ambiente de trabajo": am5.color(0xFF5733),  // Color para esta categoría
+// 	"Falta de control sobre el trabajo": am5.color(0x33FF57),      // Color para esta categoría
+// 	"Carga de trabajo": am5.color(0x3357FF),                      // Color para esta categoría
+// 	"Jornada de trabajo": am5.color(0xFFFF33),                    // Color para esta categoría
+// 	"Interferencia en la relacion trabajo-familia": am5.color(0xFF33FF), // Color para esta categoría
+// 	"Liderazgo": am5.color(0x33FFFF),                              // Color para esta categoría
+// 	"Relaciones en el trabajo": am5.color(0xFF5733),              // Color para esta categoría
+// 	"Violencia": am5.color(0x33FF57)                               // Color para esta categoría
+//   };
   
-  // Configuración del renderizador de ejes
-  categoryAxisRenderer.labels.template.setAll({
-	fontSize: 14,
-	fontWeight: "bold",
-	paddingLeft: 5,
-	paddingRight: 5,
-	paddingTop: 2,
-	paddingBottom: 2
-  });
+//   // Configuración del renderizador de ejes
+//   categoryAxisRenderer.labels.template.setAll({
+// 	fontSize: 14,
+// 	fontWeight: "bold",
+// 	paddingLeft: 5,
+// 	paddingRight: 5,
+// 	paddingTop: 2,
+// 	paddingBottom: 2
+//   });
   
-  // Asignar colores a las etiquetas de categorías usando un `if` en un adaptador
-  categoryAxisRenderer.labels.template.adapters.add("fill", function(fill, target) {
-	var categoryName = target.dataItem.get("category");  // Obtener el nombre de la categoría
-	if (categoryColors[categoryName]) {
-	  return categoryColors[categoryName];  // Asignar color específico según la categoría
-	} else {
-	  return fill;  // Si no hay color definido, usar el valor por defecto
-	}
-  });
+//   // Asignar colores a las etiquetas de categorías usando un `if` en un adaptador
+//   categoryAxisRenderer.labels.template.adapters.add("fill", function(fill, target) {
+// 	var categoryName = target.dataItem.get("category");  // Obtener el nombre de la categoría
+// 	if (categoryColors[categoryName]) {
+// 	  return categoryColors[categoryName];  // Asignar color específico según la categoría
+// 	} else {
+// 	  return fill;  // Si no hay color definido, usar el valor por defecto
+// 	}
+//   });
   
 	
 	// Crear eje de valor
