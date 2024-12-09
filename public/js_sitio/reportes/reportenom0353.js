@@ -11793,6 +11793,18 @@ seriegrafica1.appear(1000, 100);
 	const myTheme = am5.Theme.new(root);
 	myTheme.rule("Label").set("fontSize", 10);
 	myTheme.rule("Grid").set("strokeOpacity", 0.06);
+	// Crear un tema personalizado
+
+
+// Definir los estilos para los ejes dentro del tema
+myTheme.rule("AxisRenderer").setAll({
+  background: am5.Rectangle.new(root, {
+    fill: am5.color(0xFF5733),  // Color de fondo personalizado
+    fillOpacity: 0.7  // Opacidad del fondo
+  })
+});
+
+
 	
 	// Establecer temas
 	root.setThemes([am5themes_Animated.new(root), myTheme]);
