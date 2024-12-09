@@ -698,7 +698,7 @@
 					</div>
 				</form>
 				<h4 class="card-title" id="7_2">7.2.- Información general del puesto de trabajo</h4>
-							<style>
+				<style>
 			#tabla_dashboard {
 				border-spacing: 0;
 				background: white;
@@ -711,7 +711,7 @@
 			#tabla_dashboard th {
 				background: #0C3F64;
 				color: #fff;
-				padding: 10px 15px;
+				padding: 5px 5px;
 				text-align: center;
 				text-transform: uppercase;
 				font-weight: 700;
@@ -730,44 +730,41 @@
 			.cont-graficas {
 				display: grid;
 				grid-template-columns: repeat(3, 1fr); /* Tres columnas de igual ancho */
-				gap: 20px;
-				padding: 20px;
+				gap: 5px;
+				padding: 5px;
 				box-sizing: border-box;
 				font-family: Arial, Helvetica, sans-serif;
 			}
-			.graficas-izq, .graficas-der {
-				flex: 1;
-				display: flex;
-				flex-direction: column;
-				gap: 20px;
-			}
+			
 
 			.card-titledas {
-				font-size: 1.2rem;
-				margin-bottom: 10px;
+				font-size: 13px;
+				margin-bottom: 5px;
 				font-weight: bold;
 				color: #0C3F64; /* Color de texto para el título */
 			}
 			.carddas {
 				background: #fff;
-				padding: 15px;
+				padding: 5px;
 				border-radius: 8px;
 				box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
 				display: flex;
 				flex-direction: column;
 				align-items: center; /* Centra el contenido */
 				text-align: center; /* Alineación del texto */
+				/* width: 350px; Ancho constante */
+				/* height: 270px;  */
+				min-width: 350px; /* Ancho constante */
+				height: 270px; /* Altura mínima */
 			}
+			
 			.cardgeneros {
 				display: flex;
 				flex-direction: row;
 				align-items: center; 
-				height: 100%;
+				height: 200px;
 				width: 80%;
 			}
-			.amcharts-logo {
-    display: none !important;
-}
 
 			.carddas p {
 				margin: 0 0 10px 0; /* Espacio entre el título y el gráfico */
@@ -776,19 +773,18 @@
 
 			.text-analisis {
 				font-family: 'Roboto', sans-serif;
-				font-size: 1.4rem;
+				font-size: 18px;
 				color: #000000;
 				border-radius: 10px;
 				padding: 15px;
-				background: #f5f5f5; /* Fondo claro para destacar el análisis */
-				margin: 20px 0; /* Espacio alrededor del texto */
+				background: #fff; /* Fondo claro para destacar el análisis */
+				margin: 10px 0; /* Espacio alrededor del texto */
 				text-align: center;
 				box-shadow: 0 3px 5px rgba(0, 0, 0, 0.1);
 			}
 
 			.titledas {
 				font-family: 'Poppins', sans-serif;
-				font-size: 14px;
 				font-weight: bold;
 				color: #000000;
 				letter-spacing: 1px;
@@ -796,32 +792,60 @@
 			}
 			#grafica_fem {
 			width: 50%;
-			height: 100px;
+			height: 120px;
 			}
 			#grafica_male {
 			width: 50%;
-			height: 100px;
+			height: 120px;
 			}
 			#grafica_edad {
 			width: 100%;
-			height: 300px;
+			height: 240px;
 			}
 			#grafica_escolaridad {
 			width: 100%;
-			height: 300px;
+			height: 240px;
 			}
 			#grafica_estadocivil {
 			width: 100%;
-			height: 300px;
+			height: 240px;
 			}
 			#grafica_regimen {
 			width: 100%;
-			height: 300px;
+			height: 240px;
 			}
 			#grafica_experiencia {
 			width: 100%;
-			height: 300px;
+			height: 240px;
 			}
+
+       
+        .graph-container {
+            display: flex;
+            align-items: flex-end;
+            height: 100%;
+        }
+
+        .bar {
+            width: 150px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            position: relative;
+        }
+
+        .bar-label {
+            text-align: center;
+            margin-top: 10px;
+        }
+		.circle-icon {
+    width: 12px;
+    height: 12px;
+    background-color: #00ff00; /* Cambia aquí el color del círculo */
+    border-radius: 50%;
+    display: inline-block;
+    margin-right: 8px; /* Espacio entre el círculo y el texto */
+  }
 						
 		</style>
 
@@ -831,17 +855,83 @@
 					<table id="tabla_dashboard">
                 <tbody>
                     <p class="title">Información general del puesto de trabajo</p>
+                    <p class="text-analisis">Análisis de datos sociodemográficos (NOM-035-STPS-2018)</p>
+
+					<!-- <div 
+    style="
+        background: #fff; 
+        border: 1px solid #ddd; 
+        border-radius: 8px; 
+        padding: 20px; 
+        text-align: center; 
+        width:350px; 
+        margin: auto; 
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);"
+>
+    <p 
+        style="
+            font-size: 12px; 
+            font-weight: bold; 
+            margin: 0 0 10px; 
+            color: #333;"
+    >
+        Trabajadores evaluados
+    </p>
+    <div style="margin-top: 10px;">
+        <span 
+            style="
+                font-size: 38px; 
+                font-weight: bold; 
+                line-height: 1; 
+                color: #154b75;"
+        >
+            120
+        </span>
+    </div>
+</div> -->
 
                     <div class="cont-graficas">
                        
-                            <!-- Género -->
-                            <div class="carddas">
-								<p class="card-titledas">Trabajadores evaluados por género</p>
-								<div class="cardgeneros">
-									<div id="grafica_fem"></div>
-									<div id="grafica_male"></div>
-								</div>
-							</div>
+        
+<div class="carddas">
+  <p class="card-titledas">Trabajadores evaluados por género</p>
+  <div class="cardgeneros">
+    <div class="graph-container">
+      <div class="bar">
+        <!-- SVG HOMBRE con cuerpo y cabeza combinados en un único path -->
+        <svg viewBox="-146 0 512 512.00026" xmlns="http://www.w3.org/2000/svg">
+          <defs>
+            <!-- Gradiente verde y blanco aplicado al 50% de la figura -->
+            <linearGradient id="gradient1" x1="0%" y1="0%" x2="0%" y2="100%">
+              <stop offset="20%" style="stop-color:#ffffff; stop-opacity:1" /> <!-- Verde en la mitad inferior -->
+              <stop offset="0%" style="stop-color:#154b75; stop-opacity:1" /> <!-- Blanco en la mitad superior -->
+            </linearGradient>
+          </defs>
+          <!-- Fondo de la figura con gradiente aplicado -->
+          <path d="M159.535156 49.886719c0 27.550781-22.332031 49.886719-49.886718 49.886719-27.550782 0-49.882813-22.335938-49.882813-49.886719s22.332031-49.886719 49.882813-49.886719c27.554687 0 49.886718 22.335938 49.886718 49.886719zm0 0M160.632812 108.273438h-101.964843c-32.402344 0-58.667969 26.269531-58.667969 58.667968v125.644532c0 10.234374 7.960938 18.949218 18.1875 19.3125 10.738281.382812 19.566406-8.210938 19.566406-18.863282v-115.820312c0-5.671875 4.597656-10.273438 10.269532-10.273438 5.671874 0 10.269531 4.597656 10.269531 10.273438v315.457031c0 10.234375 7.960937 18.953125 18.1875 19.316406 10.742187.378907 19.566406-8.210937 19.566406-18.867187v-136.65625c0-7.511719 6.089844-13.601563 13.601563-13.601563 7.515624 0 13.605468 6.089844 13.605468 13.601563v136.65625c0 10.425781 8.449219 18.878906 18.875 18.878906 10.425782 0 18.875-8.453125 18.875-18.878906v-315.90625c0-5.675782 4.597656-10.273438 10.269532-10.273438 5.671874 0 10.273437 4.597656 10.273437 10.273438v115.820312c0 10.425782 8.449219 18.875 18.875 18.875s18.875-8.449218 18.875-18.875v-126.09375c.003906-32.402344-26.265625-58.667968-58.664063-58.667968zm0 0"
+          fill="url(#gradient1)" stroke="black" stroke-width="1"/>
+        </svg>
+        <div class="bar-label"><span class="circle-icon" style="background-color: #154b75;"></span>Hombres: 60</div>
+      </div>
+      <div class="bar">
+        <!-- SVG MUJER con cuerpo y cabeza combinados en un único path -->
+        <svg viewBox="-110 0 512 512.00328" xmlns="http://www.w3.org/2000/svg">
+          <defs>
+            <!-- Gradiente verde y blanco aplicado al 50% de la figura -->
+            <linearGradient id="gradient2" x1="0%" y1="0%" x2="0%" y2="100%">
+              <stop offset="80%" style="stop-color:#ffffff; stop-opacity:1" /> <!-- Verde en la mitad inferior -->
+              <stop offset="0%" style="stop-color:#98c11d; stop-opacity:1" /> <!-- Blanco en la mitad superior -->
+            </linearGradient>
+          </defs>
+          <!-- Fondo de la figura con gradiente aplicado -->
+		  <path d="m291.59375 288.230469-38.324219-137.585938-.027343.007813c-7.191407-24.226563-29.613282-41.902344-56.175782-41.902344h-101.839844c-26.5625 0-48.984374 17.675781-56.175781 41.902344l-.027343-.007813-38.324219 137.589844c-2.796875 10.03125 3.070312 20.425781 13.101562 23.222656 10.03125 2.792969 20.429688-3.074219 23.222657-13.105469l34.371093-123.386718c1.253907-4.5 5.355469-7.617188 10.027344-7.617188 6.800781 0 11.777344 6.417969 10.082031 13.007813l-36.769531 142.933593-5.886719 22.886719c-.8125 3.164063 1.574219 6.246094 4.84375 6.246094h41.160156v140.273437c0 10.222657 7.949219 18.929688 18.167969 19.296876 10.722657.382812 19.539063-8.203126 19.539063-18.84375v-140.726563h27.175781v140.722656c0 10.414063 8.441406 18.855469 18.851563 18.855469 10.414062 0 18.855468-8.441406 18.855468-18.855469v-140.722656h41.160156c3.265626 0 5.65625-3.085937 4.84375-6.25l-5.886718-22.886719-36.773438-142.933594c-1.691406-6.585937 3.28125-13.003906 10.085938-13.003906 4.671875 0 8.773437 3.113282 10.027344 7.617188l34.367187 123.382812c2.796875 10.03125 13.191406 15.898438 23.222656 13.101563 10.03125-2.792969 15.898438-13.191407 13.105469-23.21875zm-145.539062-285.742188c27.5625 0 49.90625 22.34375 49.90625 49.90625 0 27.566406-22.34375 49.910156-49.90625 49.910156-27.566406 0-49.910157-22.34375-49.910157-49.910156 0-27.5625 22.34375-49.90625 49.910157-49.90625zm0 0" fill="url(#gradient2)" stroke="gray" stroke-width="2"/>
+		  </svg>
+        <div class="bar-label"><span class="circle-icon" style="background-color: #98c11d;"></span>Mujeres: 11</div>
+      </div>
+    </div>
+  </div>
+</div>
+
 
                             <!-- Edad -->
                             <div class="carddas">
@@ -877,7 +967,6 @@
 
                             </div>
                     </div>
-                    <p class="text-analisis">Análisis de datos demográficos (NOM-035-STPS-2018)</p>
                 </tbody>
             </table>
 				</div>
@@ -981,7 +1070,7 @@
 					<style>
 						#consolidadoChart {
 						width: 100%;
-						height: 500px;
+						height: 800px;
 						}
 						</style>
 					<div id="consolidadoChart"></div>

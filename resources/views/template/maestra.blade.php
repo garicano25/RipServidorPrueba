@@ -951,6 +951,7 @@ use Illuminate\Support\Str;
     <script src="https://cdn.amcharts.com/lib/5/hierarchy.js"></script>
     <script src="https://cdn.amcharts.com/lib/5/percent.js"></script>
     <script src="https://cdn.amcharts.com/lib/5/themes/Animated.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/apexcharts"></script>
     @endif
 
 

@@ -11303,697 +11303,324 @@ am5.ready(function () {
     );
     // dashboard
 
-	am5.ready(function() {
-
-		// Gráfico Femenino
-		var rootFem = am5.Root.new("grafica_fem");
-		rootFem.setThemes([am5themes_Animated.new(rootFem)]);
 	
-		var chartFem = rootFem.container.children.push(am5percent.SlicedChart.new(rootFem, {
-			layout: rootFem.verticalLayout
-		}));
-	
-		var seriesFem = chartFem.series.push(am5percent.PictorialStackedSeries.new(rootFem, {
-			alignLabels: true,
-			orientation: "vertical",
-			valueField: "value",
-			categoryField: "category",
-			svgPath: "M291.59375 288.230469L253.269531 150.644531C246.078124 126.417969 223.656249 108.742188 197.093749 108.742188H95.2539056C68.6914056 108.742188 46.2695312 126.417969 39.078124 150.644531L0.75390562 288.230469C-2.042969 298.261719 3.82421875 308.65625 13.8554688 311.453125 23.8867188 314.246094 34.2851562 308.378906 37.078124 298.347656L71.4492188 174.960938C72.703125 170.457031 76.8046875 167.339844 81.4765625 167.339844 88.2773438 167.339844 93.2539062 173.757813 91.5585938 180.347656L54.7890625 323.28125 48.9023438 346.167969C48.0898438 349.332031 50.4765625 352.414063 53.7460938 352.414063H94.9062499V492.6875C94.9062499 502.910157 102.855468 511.617188 113.074218 511.984374 123.796876 512.367188 132.613282 503.78125 132.613282 493.140625V352.414063H159.789062V493.136719C159.789062 503.550782 168.230468 511.992188 178.644531 511.992188 189.058593 511.992188 197.5 503.550782 197.5 493.136719V352.414063H238.660156C241.925782 352.414063 244.316406 349.328124 243.503906 346.164063L237.617187 323.277344 200.843749 180.347656C199.152343 173.761719 204.125 167.34375 210.929687 167.34375 215.601562 167.34375 219.703124 170.457031 220.953124 174.960938L255.320312 298.34375C258.117187 308.375 268.515624 314.242188 278.546874 311.449219 288.578124 308.65625 294.445312 298.257813 291.59375 288.230469Z M145 60 m -40,0 a 40,40 0 1,1 80,0 a 40,40 0 1,1 -80,0"
-		}));
-	
-		seriesFem.labels.template.set("fontSize", 10);  // Cambia el tamaño de la letra para los valores en el gráfico femenino
-	
-		seriesFem.labelsContainer.set("width", 40);
-		seriesFem.ticks.template.set("location", 0.5);
-		seriesFem.data.setAll([
-			{ value: 10, category: "" },
-			{ value: 9, category: "Evaluados" }
-		]);
-	
-		chartFem.appear(1000, 100);
-	
-		// Gráfico Masculino
-		var rootMale = am5.Root.new("grafica_male");
-		rootMale.setThemes([am5themes_Animated.new(rootMale)]);
-	
-		var chartMale = rootMale.container.children.push(am5percent.SlicedChart.new(rootMale, {
-			layout: rootMale.verticalLayout
-		}));
-	
-		var seriesMale = chartMale.series.push(am5percent.PictorialStackedSeries.new(rootMale, {
-			alignLabels: true,
-			orientation: "vertical",
-			valueField: "value",
-			categoryField: "category",
-			svgPath: "M53.5,476c0,14,6.833,21,20.5,21s20.5-7,20.5-21V287h21v189c0,14,6.834,21,20.5,21 c13.667,0,20.5-7,20.5-21V154h10v116c0,7.334,2.5,12.667,7.5,16s10.167,3.333,15.5,0s8-8.667,8-16V145c0-13.334-4.5-23.667-13.5-31 s-21.5-11-37.5-11h-82c-15.333,0-27.833,3.333-37.5,10s-14.5,17-14.5,31v133c0,6,2.667,10.333,8,13s10.5,2.667,15.5,0s7.5-7,7.5-13 V154h10V476 M61.5,42.5c0,11.667,4.167,21.667,12.5,30S92.333,85,104,85s21.667-4.167,30-12.5S146.5,54,146.5,42 c0-11.335-4.167-21.168-12.5-29.5C125.667,4.167,115.667,0,104,0S82.333,4.167,74,12.5S61.5,30.833,61.5,42.5z"
-		}));
-	
-		seriesMale.labelsContainer.set("width", 40);
-		seriesMale.ticks.template.set("location", 0.5);
-		seriesMale.data.setAll([
-			{ value: 10, category: "" },
-			{ value: 9, category: "Evaluados" }
-		]);
-	
-		seriesMale.labels.template.set("fontSize", 10);  // Cambia el tamaño de la letra para los valores en el gráfico masculino
-	
-		chartMale.appear(1000, 100);
-	
-	});
-	
+	const edadData = [
+		{ categoria: "Menos de 18 años", total: 10, color: "#98c11d" },
+		{ categoria: "18 a 24 años", total: 9, color: "#2c6e49" },
+		{ categoria: "25 a 34 años", total: 6, color: "#154b75" },
+		{ categoria: "35 a 44 años", total: 5, color: "#0098c7" },
+		{ categoria: "45 a 54 años", total: 4, color: "#171738" },
+		{ categoria: "55 a 64 años", total: 3, color: "#FF7F11" },
+		{ categoria: "65 años o más", total: 1, color: "#FF1B1C" }
+	  ];
+  
+	  // Extraer categorías, valores y colores
+	  const categoriasEdad = edadData.map(item => item.categoria);
+	  const valoresEdad = edadData.map(item => item.total);
+	  const coloresEdad = edadData.map(item => item.color);
+  
+	  // Configuración del gráfico con Distributed Columns
+	  const optionsEdades = {
+		series: [{
+		  data: valoresEdad
+		}],
+		chart: {
+		  type: 'bar',
+		  height: 220,
+		  events: {
+			click: function(chart, w, e) {
+			  // Acción al hacer clic (si es necesario)
+			}
+		  }
+		},
+		colors: coloresEdad, // Colores personalizados para cada barra
+		plotOptions: {
+		  bar: {
+			columnWidth: '45%',
+			distributed: true,
+		  }
+		},
+		dataLabels: {
+		  enabled: true, // Mostrar valores en las barras
+		  style: {
+			fontSize: '10px',
+			fontWeight: 'bold',
+		  },
+		  formatter: function (val) {
+			return val; // Mostrar el valor absoluto en la barra
+		  }
+		},
+		legend: {
+		  show: false // Ocultar la leyenda
+		},
+		xaxis: {
+		  categories: categoriasEdad, // Categorías en el eje X
+		  labels: {
+			style: {
+			  colors: coloresEdad,
+			  fontSize: '10px',
+			}
+		  }
+		}
+	  };
+  
+	  // Crear y renderizar el gráfico de Rango de Edades
+	  const chartEdades = new ApexCharts(document.querySelector("#grafica_edad"), optionsEdades);
+	  chartEdades.render();
 
-	var rootedad = am5.Root.new("grafica_edad");
+const estadoCivilData = [
+	{ categoria: "Soltero(a)", total: 600, color: "#98c11d" },
+	{ categoria: "Casado(a)", total: 250, color: "#2c6e49" },
+	{ categoria: "Divorciado(a)", total: 100, color: "#154b75" },
+	{ categoria: "Viudo(a)", total: 50, color: "#0098c7" }
+  ];
 
-// Establecer el tema en el contexto de 'rootedad'
-rootedad.setThemes([
-  am5themes_Animated.new(rootedad)
-]);
+  // Extraer categorías, valores y colores
+  const categoriasEstadoCivil = estadoCivilData.map(item => item.categoria);
+  const valoresEstadoCivil = estadoCivilData.map(item => item.total);
+  const coloresEstadoCivil = estadoCivilData.map(item => item.color);
 
-// Crear el gráfico de pastel
-var chartedad = rootedad.container.children.push(am5percent.PieChart.new(rootedad, {
-  layout: rootedad.verticalLayout
-}));
+  // Configuración del gráfico con Distributed Columns
+  const optionsEstadoCivil = {
+	series: [{
+	  data: valoresEstadoCivil
+	}],
+	chart: {
+	  type: 'bar',
+	  height: 220,
+	  events: {
+		click: function(chart, w, e) {
+		  // Acción al hacer clic (si es necesario)
+		}
+	  }
+	},
+	colors: coloresEstadoCivil, // Colores personalizados para cada barra
+	plotOptions: {
+	  bar: {
+		columnWidth: '45%',
+		distributed: true,
+	  }
+	},
+	dataLabels: {
+	  enabled: true, // Mostrar valores en las barras
+	  style: {
+		fontSize: '10px',
+		fontWeight: 'bold',
+	  },
+	  formatter: function (val) {
+		return val; // Mostrar el valor absoluto en la barra
+	  }
+	},
+	legend: {
+	  show: false // Ocultar la leyenda
+	},
+	xaxis: {
+	  categories: categoriasEstadoCivil, // Categorías en el eje X
+	  labels: {
+		style: {
+		  colors: coloresEstadoCivil,
+		  fontSize: '10px',
+		}
+	  }
+	}
+  };
 
-// Crear la serie de pastel
-var seriesedad = chartedad.series.push(am5percent.PieSeries.new(rootedad, {
-  valueField: "value",
-  categoryField: "category"
-}));
+  // Crear y renderizar el gráfico de Estado Civil
+  const chartEstadoCivil = new ApexCharts(document.querySelector("#grafica_estadocivil"), optionsEstadoCivil);
+  chartEstadoCivil.render();
 
-// Establecer los datos
-seriesedad.data.setAll([
-  { value: 10, category: "One" },
-  { value: 9, category: "Two" },
-  { value: 6, category: "Three" },
-  { value: 5, category: "Four" },
-  { value: 4, category: "Five" },
-  { value: 3, category: "Six" },
-  { value: 1, category: "Seven" },
-]);
+const datosEscolaridad = [
+	{ categoria: "Primaria", valor: 2 },
+	{ categoria: "Secundaria", valor: 60 },
+	{ categoria: "Preparatoria", valor: 9 },
+	{ categoria: "Licenciatura", valor: 0 },
+	{ categoria: "Especialidad", valor: 0 },
+	{ categoria: "Maestría", valor: 0 },
+	{ categoria: "Doctorado", valor: 0 },
+	{ categoria: "Postdoctorado", valor: 0 },
+  ];
 
-// Crear y configurar la leyenda
-var legendedad = chartedad.children.push(am5.Legend.new(rootedad, {
-  centerX: am5.percent(50),
-  x: am5.percent(50),
-  marginTop: 15,
-  marginBottom: 15
-}));
+  // Extraer categorías y valores
+  const categorias = datosEscolaridad.map(item => item.categoria);
+  const valores = datosEscolaridad.map(item => item.valor);
 
-// Asociar los elementos de datos de la serie con la leyenda
-legendedad.data.setAll(seriesedad.dataItems);
+  // Configuración de la gráfica
+  const options = {
+	chart: {
+	  type: 'bar',
+	  height: 240,
+	  toolbar: {
+		show: false // Ocultar herramientas de zoom y exportación
+	  }
+	},
+	plotOptions: {
+	  bar: {
+		horizontal: true, // Barras horizontales
+		borderRadius: 4, // Bordes redondeados
+		barHeight: '70%', // Ajustar altura de las barras
+	  }
+	},
+	dataLabels: {
+	  enabled: true, // Mostrar etiquetas con valores
+	  style: {
+		fontSize: '12px',
+		fontWeight: 'bold',
+	  }
+	},
+	xaxis: {
+	  categories: categorias, // Categorías en el eje Y
+	  labels: {
+		style: {
+		  fontSize: '12px',
+		  fontWeight: 'bold',
+		}
+	  }
+	},
+	yaxis: {
+	  labels: {
+		style: {
+		  fontSize: '12px',
+		  fontWeight: 'bold',
+		}
+	  }
+	},
+	series: [
+	  {
+		name: "Escolaridad",
+		data: valores, // Valores de las categorías
+	  }
+	],
+	colors: [
+	  "#98c11d", 
+	],
+	tooltip: {
+	  theme: 'dark', // Tema oscuro para el tooltip
+	}
+  };
 
-// Mostrar la animación de la serie al aparecer
-seriesedad.appear(1000, 100);
-
-
-// Crear un nuevo objeto root para el gráfico de estados civiles
-var rootGraficoEstadoCivil = am5.Root.new("grafica_estadocivil"); // Cambié root a rootGraficoEstadoCivil
-
-// Establecer temas para el gráfico
-rootGraficoEstadoCivil.setThemes([
-  am5themes_Animated.new(rootGraficoEstadoCivil)
-]);
-
-// Crear el gráfico de radar para los estados civiles
-var graficoEstadoCivil = rootGraficoEstadoCivil.container.children.push(am5radar.RadarChart.new(rootGraficoEstadoCivil, {
-  panX: false,
-  panY: false,
-  wheelX: "panX",
-  wheelY: "zoomX",
-  innerRadius: am5.percent(20),
-  startAngle: -90,
-  endAngle: 180
-}));
-
-// Datos de estados civiles
-var datosEstadoCivil = [{
-  categoriaEstadoCivil: "Soltero(a)",
-  porcentajeEstadoCivil: 60,  // Porcentaje de solteros
-  totalEstadoCivil: 100,
-  configuracionColumnaEstadoCivil: {
-    fill: graficoEstadoCivil.get("colors").getIndex(0)
-  }
-}, {
-  categoriaEstadoCivil: "Casado(a)",
-  porcentajeEstadoCivil: 25,  // Porcentaje de casados
-  totalEstadoCivil: 100,
-  configuracionColumnaEstadoCivil: {
-    fill: graficoEstadoCivil.get("colors").getIndex(1)
-  }
-}, {
-  categoriaEstadoCivil: "Divorciado(a)",
-  porcentajeEstadoCivil: 10,  // Porcentaje de divorciados
-  totalEstadoCivil: 100,
-  configuracionColumnaEstadoCivil: {
-    fill: graficoEstadoCivil.get("colors").getIndex(2)
-  }
-}, {
-  categoriaEstadoCivil: "Viudo(a)",
-  porcentajeEstadoCivil: 5,  // Porcentaje de viudos
-  totalEstadoCivil: 100,
-  configuracionColumnaEstadoCivil: {
-    fill: graficoEstadoCivil.get("colors").getIndex(3)
-  }
-}];
-
-// Agregar un cursor para interactividad
-var cursorEstadoCivil = graficoEstadoCivil.set("cursor", am5radar.RadarCursor.new(rootGraficoEstadoCivil, {
-  behavior: "zoomX"
-}));
-
-cursorEstadoCivil.lineY.set("visible", false);
-
-// Crear ejes y sus renderizadores para el gráfico
-var ejeRenderizadoCircular = am5radar.AxisRendererCircular.new(rootGraficoEstadoCivil, {});
-
-ejeRenderizadoCircular.labels.template.setAll({
-  radius: 10
-});
-
-ejeRenderizadoCircular.grid.template.setAll({
-  forceHidden: true
-});
-
-// Eje X para el gráfico de estados civiles
-var ejeXEstadoCivil = graficoEstadoCivil.xAxes.push(am5xy.ValueAxis.new(rootGraficoEstadoCivil, {
-  renderer: ejeRenderizadoCircular,
-  min: 0,
-  max: 100,
-  strictMinMax: true,
-  numberFormat: "#'%'",
-  tooltip: am5.Tooltip.new(rootGraficoEstadoCivil, {})
-}));
-
-// Eje Y para el gráfico de estados civiles
-var ejeRenderizadoRadial = am5radar.AxisRendererRadial.new(rootGraficoEstadoCivil, {
-  minGridDistance: 20
-});
-
-ejeRenderizadoRadial.labels.template.setAll({
-  centerX: am5.p100,
-  fontWeight: "500",
-  fontSize: 18,
-  templateField: "configuracionColumnaEstadoCivil"
-});
-
-ejeRenderizadoRadial.grid.template.setAll({
-  forceHidden: true
-});
-
-// Eje Y para las categorías de estado civil
-var ejeYEstadoCivil = graficoEstadoCivil.yAxes.push(am5xy.CategoryAxis.new(rootGraficoEstadoCivil, {
-  categoryField: "categoriaEstadoCivil",
-  renderer: ejeRenderizadoRadial
-}));
-
-ejeYEstadoCivil.data.setAll(datosEstadoCivil);
-
-// Crear las series para mostrar los datos en el gráfico
-var serieEstadoCivilTotal = graficoEstadoCivil.series.push(am5radar.RadarColumnSeries.new(rootGraficoEstadoCivil, {
-  xAxis: ejeXEstadoCivil,
-  yAxis: ejeYEstadoCivil,
-  clustered: false,
-  valueXField: "totalEstadoCivil",
-  categoryYField: "categoriaEstadoCivil",
-  fill: rootGraficoEstadoCivil.interfaceColors.get("alternativeBackground")
-}));
-
-serieEstadoCivilTotal.columns.template.setAll({
-  width: am5.p100,
-  fillOpacity: 0.08,
-  strokeOpacity: 0,
-  cornerRadius: 20
-});
-
-serieEstadoCivilTotal.data.setAll(datosEstadoCivil);
-
-var serieEstadoCivilPorcentaje = graficoEstadoCivil.series.push(am5radar.RadarColumnSeries.new(rootGraficoEstadoCivil, {
-  xAxis: ejeXEstadoCivil,
-  yAxis: ejeYEstadoCivil,
-  clustered: false,
-  valueXField: "porcentajeEstadoCivil",
-  categoryYField: "categoriaEstadoCivil"
-}));
-
-serieEstadoCivilPorcentaje.columns.template.setAll({
-  width: am5.p100,
-  strokeOpacity: 0,
-  tooltipText: "{categoriaEstadoCivil}: {valueX}%",
-  cornerRadius: 20,
-  templateField: "configuracionColumnaEstadoCivil"
-});
-
-serieEstadoCivilPorcentaje.data.setAll(datosEstadoCivil);
-
-// Animar la aparición del gráfico y las series
-serieEstadoCivilTotal.appear(1000);
-serieEstadoCivilPorcentaje.appear(1000);
-graficoEstadoCivil.appear(1000, 100);
-
-
-// Crear un nuevo objeto root para el gráfico de escolaridad
-var rootGraficoEscolaridad = am5.Root.new("grafica_escolaridad"); // Cambié root a rootGraficoEscolaridad
-
-// Definir tema personalizado
-var miTemaEscolaridad = am5.Theme.new(rootGraficoEscolaridad);
-miTemaEscolaridad.rule("Grid", ["base"]).setAll({
-  strokeOpacity: 0.1
-});
-
-// Establecer los temas
-rootGraficoEscolaridad.setThemes([
-  am5themes_Animated.new(rootGraficoEscolaridad),
-  miTemaEscolaridad
-]);
-
-// Crear el gráfico XY para escolaridad
-var graficoEscolaridad = rootGraficoEscolaridad.container.children.push(
-  am5xy.XYChart.new(rootGraficoEscolaridad, {
-    panX: false,
-    panY: false,
-    wheelX: "none",
-    wheelY: "none",
-    paddingLeft: 0
-  })
-);
-
-// Crear ejes para el gráfico de escolaridad
-var ejeYRenderizadoEscolaridad = am5xy.AxisRendererY.new(rootGraficoEscolaridad, {
-  minGridDistance: 30,
-  minorGridEnabled: true
-});
-ejeYRenderizadoEscolaridad.grid.template.set("location", 1);
-
-var ejeYEscolaridad = graficoEscolaridad.yAxes.push(
-  am5xy.CategoryAxis.new(rootGraficoEscolaridad, {
-    maxDeviation: 0,
-    categoryField: "categoriaEscolaridad",
-    renderer: ejeYRenderizadoEscolaridad
-  })
-);
-
-var ejeXEscolaridad = graficoEscolaridad.xAxes.push(
-  am5xy.ValueAxis.new(rootGraficoEscolaridad, {
-    maxDeviation: 0,
-    min: 0,
-    renderer: am5xy.AxisRendererX.new(rootGraficoEscolaridad, {
-      visible: true,
-      strokeOpacity: 0.1,
-      minGridDistance: 80
-    })
-  })
-);
-
-// Crear la serie para mostrar los datos de escolaridad
-var serieEscolaridad = graficoEscolaridad.series.push(
-  am5xy.ColumnSeries.new(rootGraficoEscolaridad, {
-    name: "Escolaridad",
-    xAxis: ejeXEscolaridad,
-    yAxis: ejeYEscolaridad,
-    valueXField: "valorEscolaridad",
-    sequencedInterpolation: true,
-    categoryYField: "categoriaEscolaridad"
-  })
-);
-
-// Plantilla de columnas para la serie
-var plantillaColumnaEscolaridad = serieEscolaridad.columns.template;
-
-plantillaColumnaEscolaridad.setAll({
-  draggable: true,
-  cursorOverStyle: "pointer",
-  tooltipText: "Arrastra para reorganizar",
-  cornerRadiusBR: 10,
-  cornerRadiusTR: 10,
-  strokeOpacity: 0
-});
-
-// Ajuste del color de las columnas
-plantillaColumnaEscolaridad.adapters.add("fill", (fill, target) => {
-  return graficoEscolaridad.get("colors").getIndex(serieEscolaridad.columns.indexOf(target));
-});
-
-plantillaColumnaEscolaridad.adapters.add("stroke", (stroke, target) => {
-  return graficoEscolaridad.get("colors").getIndex(serieEscolaridad.columns.indexOf(target));
-});
-
-// Evento para reorganizar las categorías del gráfico
-plantillaColumnaEscolaridad.events.on("dragstop", () => {
-  ordenarEjeYEscolaridad();
-});
-
-// Obtener el ítem de la serie por categoría
-function obtenerItemDeSerie(categoria) {
-  for (var i = 0; i < serieEscolaridad.dataItems.length; i++) {
-    var itemDato = serieEscolaridad.dataItems[i];
-    if (itemDato.get("categoryY") == categoria) {
-      return itemDato;
-    }
-  }
-}
-
-// Función para ordenar el eje Y por los valores de la serie
-function ordenarEjeYEscolaridad() {
-  // Ordenar por valor
-  serieEscolaridad.dataItems.sort(function (x, y) {
-    return y.get("graphics").y() - x.get("graphics").y();
-  });
-
-  var easing = am5.ease.out(am5.ease.cubic);
-
-  // Reordenar los elementos del eje Y
-  am5.array.each(ejeYEscolaridad.dataItems, function (dataItem) {
-    var itemSerieEscolaridad = obtenerItemDeSerie(dataItem.get("category"));
-
-    if (itemSerieEscolaridad) {
-      var index = serieEscolaridad.dataItems.indexOf(itemSerieEscolaridad);
-      var columna = itemSerieEscolaridad.get("graphics");
-
-      var fy = ejeYRenderizadoEscolaridad.positionToCoordinate(ejeYEscolaridad.indexToPosition(index)) - columna.height() / 2;
-
-      if (index != dataItem.get("index")) {
-        dataItem.set("index", index);
-        var x = columna.x();
-        var y = columna.y();
-
-        columna.set("dy", -(fy - y));
-        columna.set("dx", x);
-
-        columna.animate({ key: "dy", to: 0, duration: 600, easing: easing });
-        columna.animate({ key: "dx", to: 0, duration: 600, easing: easing });
-      } else {
-        columna.animate({ key: "y", to: fy, duration: 600, easing: easing });
-        columna.animate({ key: "x", to: 0, duration: 600, easing: easing });
-      }
-    }
-  });
-
-  // Ordenar los ítems del eje Y por índice
-  ejeYEscolaridad.dataItems.sort(function (x, y) {
-    return x.get("index") - y.get("index");
-  });
-}
-
-// Establecer los datos del gráfico de escolaridad
-var datosEscolaridad = [{
-  categoriaEscolaridad: "Primaria",
-  valorEscolaridad: 2
-}, {
-  categoriaEscolaridad: "Secundaria",
-  valorEscolaridad: 60
-}, {
-  categoriaEscolaridad: "Preparatoria",
-  valorEscolaridad: 9
-}, {
-  categoriaEscolaridad: "Licenciatura",
-  valorEscolaridad: 0
-},{
-	categoriaEscolaridad: "Especialidad",
-	valorEscolaridad: 0
-  }, {
-	categoriaEscolaridad: "Maestria",
-	valorEscolaridad: 0
-  }, {
-	categoriaEscolaridad: "Doctorado",
-	valorEscolaridad: 0
-  }, {
-	categoriaEscolaridad: "Postdoctorado",
-	valorEscolaridad: 0
-  }];
-
-ejeYEscolaridad.data.setAll(datosEscolaridad);
-serieEscolaridad.data.setAll(datosEscolaridad);
-
-// Animar la aparición de la serie y del gráfico
-serieEscolaridad.appear(1000);
-graficoEscolaridad.appear(1000, 100);
-
+  // Renderizar la gráfica
+  const chart = new ApexCharts(document.querySelector("#grafica_escolaridad"), options);
+  chart.render();
 
 // Crear un nuevo objeto root para el gráfico de régimen
-var rootGraficoRegimen = am5.Root.new("grafica_regimen"); // Cambié root a rootGraficoRegimen
+const regimenData = [
+	{ categoria: "Planta", valor: 20, color: "#98c11d" },
+	{ categoria: "Sindicalizado", valor: 30, color: "#2c6e49" },
+	{ categoria: "NA", valor: 25, color: "#154b75" },
+	{ categoria: "Otros", valor: 25, color: "#0098c7" }
+  ];
 
-// Establecer el tema para el gráfico
-rootGraficoRegimen.setThemes([
-  am5themes_Animated.new(rootGraficoRegimen)
-]);
+  // Extraer valores y colores
+  const valoresRegimen = regimenData.map(item => item.valor);
+  const coloresRegimen = regimenData.map(item => item.color);
+  const categoriasRegimen = regimenData.map(item => item.categoria);
 
-// Crear el gráfico de tipo Pie para el régimen
-var graficoRegimen = rootGraficoRegimen.container.children.push(am5percent.PieChart.new(rootGraficoRegimen, {
-  layout: rootGraficoRegimen.verticalLayout,
-  innerRadius: am5.percent(50)
-}));
+  // Configuración del gráfico donut
+  const optionsRegimen = {
+	series: valoresRegimen, // Valores para cada sección
+	chart: {
+	  type: 'donut', // Tipo de gráfico donut
+	  height: 240,
+	},
+	colors: coloresRegimen, // Colores personalizados
+	labels: categoriasRegimen, // Etiquetas para cada sección
+	dataLabels: {
+	  enabled: true,
+	  style: {
+		fontSize: '10px',
+		fontWeight: 'bold',
+	  },
+	  formatter: function(val) {
+		return val; // Mostrar los valores en lugar de porcentajes
+	  }
+	},
+	legend: {
+	  show: true, // Mostrar la leyenda
+	  position: 'right',
+	  fontSize: '10px',
+	  itemMargin: { // Reducir el espacio entre los elementos de la leyenda
+		horizontal: 2, // Espacio horizontal entre elementos
+		vertical: 4 // Espacio vertical entre elementos
+	  }
+	},
+	responsive: [{
+	  breakpoint: 480,
+	  options: {
+		chart: {
+		  width: 170 // Ajustar el tamaño en pantallas pequeñas
+		},
+		legend: {
+		  position: 'bottom' // Colocar la leyenda abajo en pantallas pequeñas
+		}
+	  }
+	}]
+  };
 
-// Crear la serie de tipo Pie para el gráfico de régimen
-var serieRegimen = graficoRegimen.series.push(am5percent.PieSeries.new(rootGraficoRegimen, {
-  valueField: "valorRegimen",  // Personalizado
-  categoryField: "categoriaRegimen",  // Personalizado
-  alignLabels: false
-}));
+  // Crear y renderizar el gráfico
+  var chartRegimen = new ApexCharts(document.querySelector("#grafica_regimen"), optionsRegimen);
+  chartRegimen.render();
 
-// Configuración de las etiquetas en formato circular
-serieRegimen.labels.template.setAll({
-  textType: "circular",
-  centerX: 0,
-  centerY: 0
-});
+  const experienciaData = [
+	{ rango: "Menos de 6 meses", valor: 10, color: "#98c11d" },
+	{ rango: "6 meses a 1 año", valor: 20, color: "#2c6e49" },
+	{ rango: "1 a 4 años", valor: 12, color: "#154b75" },
+	{ rango: "5 a 9 años", valor: 8, color: "#0098c7" },
+	{ rango: "10 a 14 años", valor: 12, color: "#FF1B1C" },
+	{ rango: "15 a 19 años", valor: 5, color: "#FF7F11" },
+	{ rango: "20 a 24 años", valor: 4, color: "#D7F75B" },
+	{ rango: "25 años o más", valor: 4, color: "#21D19F" }
+  ];
+  
+  // Extraer valores y colores
+  const valoresExperiencia = experienciaData.map(item => item.valor);
+  const coloresExperiencia = experienciaData.map(item => item.color);
+  const rangosExperiencia = experienciaData.map(item => item.rango);
+  
+  // Configuración del gráfico de tipo pie
+  const optionsExperiencia = {
+	series: valoresExperiencia, // Valores para cada sección
+	chart: {
+	  type: 'pie', // Tipo de gráfico pie
+	  height: 240, // Ancho del gráfico
+	},
+	labels: rangosExperiencia, // Etiquetas para cada sección
+	colors: coloresExperiencia, // Colores personalizados
+	dataLabels: {
+	  enabled: true,
+	  formatter: function(val, opts) {
+		return opts.w.config.series[opts.seriesIndex]; // Muestra el valor original
+	  }
+	},
+	legend: {
+	  show: true, // Mostrar la leyenda
+	  position: 'left',
+	  fontSize: '10px',
+	  itemMargin: { // Reducir el espacio entre los elementos de la leyenda
+		horizontal: 2, // Espacio horizontal entre elementos
+		vertical: 2 // Espacio vertical entre elementos
+	  }
+	},
+	responsive: [{
+	  breakpoint: 480,
+	  options: {
+		chart: {
+		  width: 120 // Ajustar el tamaño en pantallas pequeñas
+		},
+		legend: {
+		  position: 'bottom',
+		  fontSize: '10px' // Colocar la leyenda abajo en pantallas pequeñas
+		}
+	  }
+	}]
+  };
+  
+  // Crear y renderizar el gráfico
+  var chartExperiencia = new ApexCharts(document.querySelector("#grafica_experiencia"), optionsExperiencia);
+  chartExperiencia.render();
 
-// Establecer los datos para el gráfico de régimen (por ejemplo, plantas, sindicalizados, etc.)
-serieRegimen.data.setAll([
-  { valorRegimen: 20, categoriaRegimen: "Planta" },
-  { valorRegimen: 30, categoriaRegimen: "Sindicalizado" },
-  { valorRegimen: 25, categoriaRegimen: "NA" },
-  { valorRegimen: 25, categoriaRegimen: "Otros" }
-]);
-
-// Crear la leyenda para el gráfico de régimen
-var leyendaRegimen = graficoRegimen.children.push(am5.Legend.new(rootGraficoRegimen, {
-  centerX: am5.percent(50),
-  x: am5.percent(50),
-  marginTop: 15,
-  marginBottom: 15,
-}));
-
-leyendaRegimen.data.setAll(serieRegimen.dataItems);
-
-// Animar la serie de manera inicial
-serieRegimen.appear(1000, 100);
-
-
-// Crear un nuevo objeto root para el gráfico
-var rootGraficoExperienciaLaboral = am5.Root.new("grafica_experiencia");
-
-// Establecer el tema para el gráfico
-rootGraficoExperienciaLaboral.setThemes([
-  am5themes_Animated.new(rootGraficoExperienciaLaboral)
-]);
-
-// Crear el gráfico XY
-var graficoExperienciaLaboral = rootGraficoExperienciaLaboral.container.children.push(am5xy.XYChart.new(rootGraficoExperienciaLaboral, {
-  panX: true,
-  panY: true,
-  wheelX: "panX",
-  wheelY: "zoomX",
-  pinchZoomX: true,
-  paddingLeft: 0,
-  paddingRight: 1
-}));
-
-// Agregar cursor
-var cursorExperienciaLaboral = graficoExperienciaLaboral.set("cursor", am5xy.XYCursor.new(rootGraficoExperienciaLaboral, {}));
-cursorExperienciaLaboral.lineY.set("visible", false);
-
-// Crear los ejes
-var xRendererExperienciaLaboral = am5xy.AxisRendererX.new(rootGraficoExperienciaLaboral, { 
-  minGridDistance: 30, 
-  minorGridEnabled: true
-});
-
-xRendererExperienciaLaboral.labels.template.setAll({
-  rotation: -90,
-  centerY: am5.p50,
-  centerX: am5.p100,
-  paddingRight: 15
-});
-
-xRendererExperienciaLaboral.grid.template.setAll({
-  location: 1
-});
-
-var xAxisExperienciaLaboral = graficoExperienciaLaboral.xAxes.push(am5xy.CategoryAxis.new(rootGraficoExperienciaLaboral, {
-  maxDeviation: 0.3,
-  categoryField: "rango",  // Usando "rango" para los rangos de experiencia
-  renderer: xRendererExperienciaLaboral,
-  tooltip: am5.Tooltip.new(rootGraficoExperienciaLaboral, {})
-}));
-
-var yRendererExperienciaLaboral = am5xy.AxisRendererY.new(rootGraficoExperienciaLaboral, {
-  strokeOpacity: 0.1
-});
-
-var yAxisExperienciaLaboral = graficoExperienciaLaboral.yAxes.push(am5xy.ValueAxis.new(rootGraficoExperienciaLaboral, {
-  maxDeviation: 0.3,
-  renderer: yRendererExperienciaLaboral
-}));
-
-// Crear la serie
-var serieExperienciaLaboral = graficoExperienciaLaboral.series.push(am5xy.ColumnSeries.new(rootGraficoExperienciaLaboral, {
-  name: "ExperienciaLaboral", 
-  xAxis: xAxisExperienciaLaboral,
-  yAxis: yAxisExperienciaLaboral,
-  valueYField: "valor",  // Cambié "value" por "valor"
-  sequencedInterpolation: true,
-  categoryXField: "rango",  // Cambié "pais" por "rango"
-  tooltip: am5.Tooltip.new(rootGraficoExperienciaLaboral, {
-    labelText: "{valueY}"
-  })
-}));
-
-// Personalizar las columnas
-serieExperienciaLaboral.columns.template.setAll({
-  cornerRadiusTL: 5,
-  cornerRadiusTR: 5,
-  strokeOpacity: 0
-});
-
-serieExperienciaLaboral.columns.template.adapters.add("fill", function (fill, target) {
-  return graficoExperienciaLaboral.get("colors").getIndex(serieExperienciaLaboral.columns.indexOf(target));
-});
-
-serieExperienciaLaboral.columns.template.adapters.add("stroke", function (stroke, target) {
-  return graficoExperienciaLaboral.get("colors").getIndex(serieExperienciaLaboral.columns.indexOf(target));
-});
-
-// Establecer los datos para el gráfico (Rangos de experiencia y cantidad de empleados)
-var datosExperienciaLaboral = [{
-  rango: "Menos de 6 meses",  // Primer rango
-  valor: 10  // Valor de empleados en este rango
-}, {
-  rango: "Entre 6 meses y 1 año",  // Segundo rango
-  valor: 20  // Valor de empleados en este rango
-}, {
-  rango: "Entre 1 a 4 años",  // Tercer rango
-  valor: 12  // Valor de empleados en este rango
-}, {
-  rango: "Entre 5 a 9 años",  // Cuarto rango
-  valor: 8  // Valor de empleados en este rango
-}, {
-  rango: "Entre 10 a 14 años",  // Quinto rango
-  valor: 12  // Valor de empleados en este rango
-}, {
-  rango: "Entre 15 a 19 años",  // Sexto rango
-  valor: 5 // Valor de empleados en este rango
-}, {
-  rango: "Entre 20 a 24 años",  // Séptimo rango
-  valor: 4  // Valor de empleados en este rango
-}, {
-  rango: "25 años o más",  // Octavo rango
-  valor: 0  // Valor de empleados en este rango
-}];
-
-// Asignar los datos al gráfico y la serie
-xAxisExperienciaLaboral.data.setAll(datosExperienciaLaboral);
-serieExperienciaLaboral.data.setAll(datosExperienciaLaboral);
-
-// Animar los elementos del gráfico al cargar
-serieExperienciaLaboral.appear(1000);
-graficoExperienciaLaboral.appear(1000, 100);
-
-
-
-var root = am5.Root.new("consolidadoChart");
-
-// Set themes
-root.setThemes([am5themes_Animated.new(root)]);
-
-var container = root.container.children.push(
-  am5.ZoomableContainer.new(root, {
-    width: am5.p100,
-    height: am5.p100,
-    wheelable: true,
-    pinchZoom: true
-  })
-);
-
-var zoomTools = container.children.push(am5.ZoomTools.new(root, {
-  target: container
-}));
-
-// Create series
-var series = container.contents.children.push(am5hierarchy.Sunburst.new(root, {
-  singleBranchOnly: true,
-  downDepth: 2,
-  initialDepth: 2,
-  topDepth: 1,
-  innerRadius: 100,
-  valueField: "value",
-  categoryField: "name",
-  childDataField: "children"
-}));
-
-series.nodes.template.setAll({
-  tooltipText: "{category}"
-});
-
-series.slices.template.setAll({
-  templateField: "nodeSettings"
-});
-
-series.labels.template.setAll({
-  paddingLeft: 10,
-  paddingRight: 10,
-  paddingTop: 5,
-  paddingBottom: 5,
-  baseRadius: am5.p100,
-  centerX: am5.p100,
-  textAlign: "start"
-});
-
-// Set data
-var data = [{
-  name: "Factores Psicosociales",
-  nodeSettings: { fill: am5.color(0xaaaaaa) },
-  children: [{
-    name: "Condiciones del entorno y la organización del trabajo",
-    nodeSettings: { fill: am5.color(0x72588a) },
-    children: [
-      { name: "Exceso de carga de trabajo", nodeSettings: { fill: am5.color(0xbb3b4b) }, value: 20 },
-      { name: "Falta de control sobre el trabajo", nodeSettings: { fill: am5.color(0xbc366a) }, value: 15 },
-      { name: "Jornadas laborales largas", nodeSettings: { fill: am5.color(0x565585) }, value: 25 },
-      { name: "Ambientes laborales inseguros", nodeSettings: { fill: am5.color(0x473e58) }, value: 10 }
-    ]
-  }, {
-    name: "Ambiente de trabajo",
-    nodeSettings: { fill: am5.color(0xd14a8f) },
-    children: [
-      { name: "Condiciones en el ambiente de trabajo", nodeSettings: { fill: am5.color(0xa46b8b) }, value: 30 }
-    ]
-  }, {
-    value: 0.1, nodeSettings: { fill: am5.color(0xffffff) }
-  }, {
-    name: "Relaciones laborales",
-    nodeSettings: { fill: am5.color(0xe16858) },
-    children: [
-      { name: "Violencia laboral", nodeSettings: { fill: am5.color(0xbbc395) }, value: 20 },
-      { name: "Acoso laboral", nodeSettings: { fill: am5.color(0xb7c56e) }, value: 30 },
-      { name: "Conflictos interpersonales", nodeSettings: { fill: am5.color(0xd77639) }, value: 20 }
-    ]
-  }, {
-    value: 0.1, nodeSettings: { fill: am5.color(0xffffff) }
-  }, {
-    name: "Trabajo que implique riesgos psicosociales",
-    nodeSettings: { fill: am5.color(0x6ba478) },
-    children: [
-      { name: "Tareas monótonas y repetitivas", nodeSettings: { fill: am5.color(0x548263) }, value: 15 },
-      { name: "Trabajos con alta demanda emocional", nodeSettings: { fill: am5.color(0x79b16e) }, value: 25 }
-    ]
-  }]
-}];
-
-series.data.setAll(data);
-series.set("selectedDataItem", series.dataItems[0]);
-
-// Make stuff animate on load
-series.appear(1000, 100);
+  
+  
+  
 
 
 
@@ -12024,7 +11651,17 @@ seriegrafica1.labels.template.setAll({
   centerX: 0,
   centerY: 0
 });
-
+seriegrafica1.slices.template.setAll({
+	tooltipText: "{categoryField}: {valueField}%", // Personaliza el texto del tooltip
+	stroke: am5.color(0xffffff), // Color del borde
+	strokeWidth: 2 // Grosor del borde
+  });
+  
+  // Cambiar colores de las secciones
+  seriegrafica1.get("colors").set("colors", [
+	am5.color(0xFF5733), // Rojo
+	am5.color(0x33FF57)  // Verde
+  ]);
 // Establecer los datos para el gráfico de régimen (por ejemplo, plantas, sindicalizados, etc.)
 seriegrafica1.data.setAll([
   { valorgrafica1: 2, categoriagrafica1: "Requiere atención clinica" },
@@ -12038,7 +11675,16 @@ var leyendagrafico1 = graficoguia1.children.push(am5.Legend.new(rootGraficoGuia1
   marginTop: 15,
   marginBottom: 15,
 }));
-
+leyendagrafico1.labels.template.setAll({
+	fontSize: 14, // Tamaño de letra
+	fontWeight: "bold", // Peso de la fuente
+	fill: am5.color(0x333333) // Color de la letra
+  });
+  
+  leyendagrafico1.markers.template.setAll({
+	width: 20, // Ancho del marcador
+	height: 20 // Alto del marcador
+  });
 leyendagrafico1.data.setAll(seriegrafica1.dataItems);
 
 // Animar la serie de manera inicial
@@ -12046,6 +11692,307 @@ seriegrafica1.appear(1000, 100);
 
 
 });
+
+
+
+	// Crear el elemento raíz
+	//var ROOTCONSOLIDADO = am5.Root.new("consolidadoChart");
+  
+	// // Establecer los temas
+	// ROOTCONSOLIDADO.setThemes([
+	//   am5themes_Animated.new(ROOTCONSOLIDADO)
+	// ]);
+  
+	// // Generar y establecer datos
+	// var DCONSOLIDADO_CAT = -1;
+	// var DCONSOLIDADO_VALUE = 10;
+  
+	// function GENERAR_DATOS_CONSOLIDADOS() {
+	//   DCONSOLIDADO_VALUE = Math.round(Math.random() * 10);
+	//   DCONSOLIDADO_CAT++;
+	//   return {		
+	// 	DCONSOLIDADO_CATEGORIA: "cat" + DCONSOLIDADO_CAT,
+	// 	DCONSOLIDADO_VALOR: DCONSOLIDADO_VALUE
+	//   };
+	// }
+  
+	// function GENERAR_DATOS_CONSOLIDADOS_TOTAL(count) {
+	//   DCONSOLIDADO_CAT = -1;
+	//   var DATOS_CONSOLIDADOS = [];
+	//   for (var i = 0; i < count; ++i) {
+	// 	DATOS_CONSOLIDADOS.push(GENERAR_DATOS_CONSOLIDADOS());
+	//   }
+	//   return DATOS_CONSOLIDADOS;
+	// }
+  
+	// // Crear el gráfico
+	// var chartCONSOLIDADO = ROOTCONSOLIDADO.container.children.push(am5radar.RadarChart.new(ROOTCONSOLIDADO, {
+	//   panX: false,
+	//   panY: false,
+	//   wheelX: "panX",
+	//   wheelY: "zoomX"
+	// }));
+  
+	// // Añadir cursor
+	// var cursorCONSOLIDADO = chartCONSOLIDADO.set("cursor", am5radar.RadarCursor.new(ROOTCONSOLIDADO, {
+	//   behavior: "zoomX"
+	// }));
+  
+	// cursorCONSOLIDADO.lineY.set("visible", false);
+  
+	// // Crear ejes y sus renderizadores
+	// var xRendererCONSOLIDADO = am5radar.AxisRendererCircular.new(ROOTCONSOLIDADO, {});
+	// xRendererCONSOLIDADO.labels.template.setAll({
+	//   radius: 10
+	// });
+  
+	// var xAxisCONSOLIDADO = chartCONSOLIDADO.xAxes.push(am5xy.CategoryAxis.new(ROOTCONSOLIDADO, {
+	//   maxDeviation: 0,
+	//   categoryField: "DCONSOLIDADO_CATEGORIA",
+	//   renderer: xRendererCONSOLIDADO,
+	//   tooltip: am5.Tooltip.new(ROOTCONSOLIDADO, {})
+	// }));
+  
+	// var yAxisCONSOLIDADO = chartCONSOLIDADO.yAxes.push(am5xy.ValueAxis.new(ROOTCONSOLIDADO, {
+	//   renderer: am5radar.AxisRendererRadial.new(ROOTCONSOLIDADO, {})
+	// }));
+  
+	// // Crear series
+	// for (var i = 0; i < 5; i++) {
+	//   var seriesCONSOLIDADO = chartCONSOLIDADO.series.push(am5radar.RadarColumnSeries.new(ROOTCONSOLIDADO, {
+	// 	stacked: true,
+	// 	name: "Serie " + i,
+	// 	xAxis: xAxisCONSOLIDADO,
+	// 	yAxis: yAxisCONSOLIDADO,
+	// 	valueYField: "DCONSOLIDADO_VALOR",
+	// 	categoryXField: "DCONSOLIDADO_CATEGORIA"
+	//   }));
+  
+	//   seriesCONSOLIDADO.set("stroke", ROOTCONSOLIDADO.interfaceColors.get("background"));
+	//   seriesCONSOLIDADO.columns.template.setAll({
+	// 	width: am5.p100,
+	// 	strokeOpacity: 0.1,
+	// 	tooltipText: "{name}: {valueY}"
+	//   });
+  
+	//   seriesCONSOLIDADO.data.setAll(GENERAR_DATOS_CONSOLIDADOS_TOTAL(12));
+	//   seriesCONSOLIDADO.appear(1000);
+	// }
+  
+	// // Añadir barras de desplazamiento
+	// chartCONSOLIDADO.set("scrollbarX", am5.Scrollbar.new(ROOTCONSOLIDADO, { orientation: "horizontal", exportable: false }));
+	// chartCONSOLIDADO.set("scrollbarY", am5.Scrollbar.new(ROOTCONSOLIDADO, { orientation: "vertical", exportable: false }));
+  
+	// var DATOS_CONSOLIDADOS = GENERAR_DATOS_CONSOLIDADOS_TOTAL(12);
+	// xAxisCONSOLIDADO.data.setAll(DATOS_CONSOLIDADOS);
+
+
+	var root = am5.Root.new("consolidadoChart");
+
+	// Crear tema personalizado
+	const myTheme = am5.Theme.new(root);
+	myTheme.rule("Label").set("fontSize", 10);
+	myTheme.rule("Grid").set("strokeOpacity", 0.06);
+	
+	// Establecer temas
+	root.setThemes([am5themes_Animated.new(root), myTheme]);
+	
+	// Datos (con valores fijos para las 5 series)
+	var data = [
+	  {
+		"category": "Condiciones en el ambiente de trabajo",
+		"series1": 0.10,
+		"series2": 0.15,
+		"series3": 0.20,
+		"series4": 0.25,
+		"series5": 0.30
+	  },
+	  {
+		"category": "Falta de control sobre el trabajo",
+		"series1": 0.12,
+		"series2": 0.18,
+		"series3": 0.22,
+		"series4": 0.28,
+		"series5": 0.35
+	  },
+	  {
+		"category": "Carga de trabajo",
+		"series1": 0.13,
+		"series2": 0.17,
+		"series3": 0.21,
+		"series4": 0.26,
+		"series5": 0.32
+	  },
+	  {
+		"category": "Jornada de trabajo",
+		"series1": 0.14,
+		"series2": 0.19,
+		"series3": 0.23,
+		"series4": 0.27,
+		"series5": 0.34
+	  },
+	  {
+		"category": "Interferencia en la relacion trabajo-familia",
+		"series1": 0.16,
+		"series2": 0.20,
+		"series3": 0.24,
+		"series4": 0.29,
+		"series5": 0.36
+	  },
+	  {
+		"category": "Liderazgo",
+		"series1": 0.11,
+		"series2": 0.16,
+		"series3": 0.19,
+		"series4": 0.24,
+		"series5": 0.31
+	  },
+	  {
+		"category": "Relaciones en el trabajo",
+		"series1": 0.14,
+		"series2": 0.17,
+		"series3": 0.22,
+		"series4": 0.27,
+		"series5": 0.33
+	  },
+	  {
+		"category": "Violencia",
+		"series1": 0.25,
+		"series2": 0.10,
+		"series3": 0.20,
+		"series4": 0.40,
+		"series5": 0.05
+	  }
+	];
+	
+	// Modificar formato de números
+	root.numberFormatter.set("numberFormat", "#%");
+	
+	// Crear gráfico
+	var chart = root.container.children.push(am5radar.RadarChart.new(root, {
+	  panX: false,
+	  panY: false,
+	  innerRadius: am5.percent(10)  // Ajustar el espaciado entre las barras
+	}));
+	
+	// Crear ejes
+	var categoryAxisRenderer = am5radar.AxisRendererCircular.new(root, {
+	  innerRadius: am5.percent(10)  // Ajustar el espaciado entre las barras
+	});
+	var categoryAxis = chart.xAxes.push(am5xy.CategoryAxis.new(root, {
+	  categoryField: "category",
+	  renderer: categoryAxisRenderer
+	}));
+	
+	// categoryAxisRenderer.labels.template.setAll({
+	//   fill: am5.color(0x2c6e49),
+	//   fontSize: 14,
+	//   fontWeight: "bold",
+	//   paddingLeft: 5,
+	//   paddingRight: 5,
+	//   paddingTop: 2,
+	//   paddingBottom: 2
+	// });
+	// Definir los colores para las categorías
+// Crear ejes
+
+  
+  // Definir los colores para las categorías
+  var categoryColors = {
+	"Condiciones en el ambiente de trabajo": am5.color(0xFF5733),  // Color para esta categoría
+	"Falta de control sobre el trabajo": am5.color(0x33FF57),      // Color para esta categoría
+	"Carga de trabajo": am5.color(0x3357FF),                      // Color para esta categoría
+	"Jornada de trabajo": am5.color(0xFFFF33),                    // Color para esta categoría
+	"Interferencia en la relacion trabajo-familia": am5.color(0xFF33FF), // Color para esta categoría
+	"Liderazgo": am5.color(0x33FFFF),                              // Color para esta categoría
+	"Relaciones en el trabajo": am5.color(0xFF5733),              // Color para esta categoría
+	"Violencia": am5.color(0x33FF57)                               // Color para esta categoría
+  };
+  
+  // Configuración del renderizador de ejes
+  categoryAxisRenderer.labels.template.setAll({
+	fontSize: 14,
+	fontWeight: "bold",
+	paddingLeft: 5,
+	paddingRight: 5,
+	paddingTop: 2,
+	paddingBottom: 2
+  });
+  
+  // Asignar colores a las etiquetas de categorías usando un `if` en un adaptador
+  categoryAxisRenderer.labels.template.adapters.add("fill", function(fill, target) {
+	var categoryName = target.dataItem.get("category");  // Obtener el nombre de la categoría
+	if (categoryColors[categoryName]) {
+	  return categoryColors[categoryName];  // Asignar color específico según la categoría
+	} else {
+	  return fill;  // Si no hay color definido, usar el valor por defecto
+	}
+  });
+  
+	
+	// Crear eje de valor
+	var valueAxis = chart.yAxes.push(am5xy.ValueAxis.new(root, {
+	  renderer: am5radar.AxisRendererRadial.new(root, {}),
+	  min: 0,
+	  max: 1,
+	  strictMinMax: true,
+	  extraMax: 0.1
+	}));
+	
+	// Crear series apiladas
+	var seriesNames = ["series1", "series2", "series3", "series4", "series5"];
+	var seriesColors = [
+	  am5.color(0xff0000), // Rojo
+	  am5.color(0x00ff00), // Verde
+	  am5.color(0x0000ff), // Azul
+	  am5.color(0xffa500), // Naranja
+	  am5.color(0x800080)  // Morado
+	];
+	
+	seriesNames.forEach((seriesName, index) => {
+	  var series = chart.series.push(am5radar.RadarColumnSeries.new(root, {
+		stacked: true,
+		name: "Series " + (index + 1),
+		xAxis: categoryAxis,
+		yAxis: valueAxis,  // Asegúrate de que el yAxis está correctamente asignado
+		valueYField: seriesName,
+		categoryXField: "category"
+	  }));
+	
+	  // Cambiar el color de la serie
+	  series.columns.template.setAll({
+		tooltipText: "{name}: {valueY.formatNumber('#.##%')}",
+		cornerRadius: 0,
+		strokeOpacity: 0,
+		fill: seriesColors[index],
+		width: am5.percent(100)
+	  });
+	
+	  // Agregar etiquetas con porcentajes
+	  series.bullets.push(function () {
+		return am5.Bullet.new(root, {
+		  sprite: am5.Label.new(root, {
+			text: "{valueY.formatNumber('#.##%')}",
+			populateText: true,
+			centerX: am5.p50,
+			centerY: am5.p50,
+			fill: root.interfaceColors.get("alternativeText")
+		  })
+		});
+	  });
+	
+	  // Asignar datos
+	  series.data.setAll(data);
+	});
+	
+	// Asignar datos al eje de categorías
+	categoryAxis.data.setAll(data);
+	
+	// Animar el gráfico al cargar
+	chart.appear(1000, 100);
+	
+
+ // end am5.ready()
 
 // Crear un nuevo objeto root para el gráfico de ambiente de trabajo
 var rootGraficoRiesgoTrabajo = am5.Root.new("eventoChart");
@@ -12188,3 +12135,5 @@ serieRiesgoTrabajo.columns.template.children.push(am5.Label.new(rootGraficoRiesg
   fontWeight: "bold",         // Negrita
   wordWrap: "break-word"      // Evitar que el texto se salga del contorno
 }));
+
+  
