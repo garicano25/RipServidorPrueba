@@ -11264,13 +11264,13 @@ am5.ready(function () {
         [{
             category: ""
         }, {
-            category: "g1-Liderazgo y relaciones en el trabajo",
+            category: "g1-Categoria:\nLiderazgo y relaciones en el trabajo",
             s1: 2, s2: 3, s3: 1, s4: 3, s5: 1
         }, {
             category: ""
         },
 		{
-            category: "g2-Liderazgo",
+            category: "g2--Dominios:\nLiderazgo",
             s1: 5, s2: 1, s3: 2, s4: 1, s5: 1
         }, {
             category: "g2-Relaciones en el trabajo",
@@ -11654,7 +11654,7 @@ seriegrafica1.slices.template.setAll({
   // Cambiar colores de las secciones
   seriegrafica1.get("colors").set("colors", [
 	am5.color(0xFF5733), // Rojo
-	am5.color(0x33FF57)  // Verde
+	am5.color(0x0098c7)  // Verde
   ]);
 // Establecer los datos para el gráfico de régimen (por ejemplo, plantas, sindicalizados, etc.)
 seriegrafica1.data.setAll([
