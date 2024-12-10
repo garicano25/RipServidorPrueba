@@ -389,11 +389,15 @@ class ejecucionPsicoController extends Controller
                     $galeria .= '<div class="col-xl-2 col-lg-3 col-md-4 col-sm-6 foto_galeria">';
 
                     $galeria .= '<i class="fa fa-download text-success" style="font-size: 26px; text-shadow: 2px 2px 4px #000000; position: absolute; opacity: 0; margin-left: 40px;" data-toggle="tooltip" title="Descargar" onclick="evidencia_foto_descargar(1, ' . $value->ID_RECOPSICOFOTOTRABAJADOR . ');"></i>
-                                    <a href="/psicoevidenciafotomostrar/0/' . $value->ID_RECOPSICOFOTOTRABAJADOR . '" data-effect="mfp-3d-unfold">
-                                        <img class="d-block img-fluid" src="/psicoevidenciafotomostrar/0/' . $value->ID_RECOPSICOFOTOTRABAJADOR . '" style="margin: 0px 0px 20px 0px;" data-toggle="tooltip" title="Click para mostrar"/>
+                                    <a href="/psicoevidenciafotomostrar/0/0/' . $value->ID_RECOPSICOFOTOTRABAJADOR . '" data-effect="mfp-3d-unfold">
+                                        <img class="d-block img-fluid" src="/psicoevidenciafotomostrar/0/0/' . $value->ID_RECOPSICOFOTOTRABAJADOR . '" style="margin: 0px 0px 20px 0px;" data-toggle="tooltip" title="Click para mostrar"/>
+                                    </a>
+                                    <i class="fa fa-download text-success" style="font-size: 26px; text-shadow: 2px 2px 4px #000000; position: absolute; opacity: 0; margin-left: 40px;" data-toggle="tooltip" title="Descargar" onclick="evidencia_foto_descargar(1, ' . $value->ID_RECOPSICOFOTOTRABAJADOR . ');"></i>
+                                    <a href="/psicoevidenciafotomostrar/0/1/' . $value->ID_RECOPSICOFOTOTRABAJADOR . '" data-effect="mfp-3d-unfold">
+                                        <img class="d-block img-fluid" src="/psicoevidenciafotomostrar/0/1/' . $value->ID_RECOPSICOFOTOTRABAJADOR . '" style="margin: 0px 0px 20px 0px;" data-toggle="tooltip" title="Click para mostrar"/>
                                     </a>
                                 </div>';
-                
+    
             }
 
             // respuesta
@@ -415,9 +419,10 @@ class ejecucionPsicoController extends Controller
      *
      * @param  int  $foto_opcion
      * @param  int  $foto_id
+     * @param  int  $tipo_foto
      * @return \Illuminate\Http\Response
      */
-    public function psicoevidenciafotomostrar($foto_opcion, $foto_id)
+    public function psicoevidenciafotomostrar($foto_opcion,$tipo_foto, $foto_id)
     {
         // $foto = proyectoevidenciafotoModel::findOrFail($foto_id);
         // return Storage::download($foto->proyectoevidenciafoto_archivo);
@@ -426,9 +431,17 @@ class ejecucionPsicoController extends Controller
         $foto = recpsicofotostrabajadoresModel::findOrFail($foto_id);
 
         if (($foto_opcion + 0) == 0) {
-            return Storage::response($foto->RECPSICO_FOTOPREGUIA);
+            if($tipo_foto == 0){
+                return Storage::response($foto->RECPSICO_FOTOPREGUIA);
+            }else{
+                return Storage::response($foto->RECPSICO_FOTOPOSTGUIA);
+            }
         } else {
-            return Storage::download($foto->RECPSICO_FOTOPREGUIA);
+            if($tipo_foto == 0){
+                return Storage::download($foto->RECPSICO_FOTOPREGUIA);
+            }else{
+                return Storage::download($foto->RECPSICO_FOTOPOSTGUIA);
+            }
         }
     }
 

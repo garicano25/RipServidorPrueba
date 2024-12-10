@@ -1943,7 +1943,7 @@ Route::put('actualizarFechasOnline', ['as' => 'PSICO.actualizarFechasOnline', 'u
 
 Route::put('guardarCambiosTrabajador', ['as' => 'PSICO.guardarCambiosTrabajador', 'uses' => 'PSICO\ejecucionPsicoController@guardarCambiosTrabajador']);
 
-Route::get('psicoevidenciafotomostrar/{foto_opcion}/{foto_id}', ['as' => 'PSICO.proyectoevidenciafotomostrar', 'uses' => 'PSICO\ejecucionPsicoController@psicoevidenciafotomostrar']);
+Route::get('psicoevidenciafotomostrar/{foto_opcion}/{tipo_foto}/{foto_id}', ['as' => 'PSICO.proyectoevidenciafotomostrar', 'uses' => 'PSICO\ejecucionPsicoController@psicoevidenciafotomostrar']);
 
 Route::get('psicoevidenciafotosonline/{proyecto_id}', ['as' => 'PSICO.evidenciafotosOnline', 'uses' => 'PSICO\ejecucionPsicoController@evidenciafotosOnline']);
 

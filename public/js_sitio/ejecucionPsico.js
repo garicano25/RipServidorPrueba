@@ -1003,14 +1003,12 @@ function consulta_evidencia_fotos(proyecto_id)
 
 			if (parseInt(dato.fotos_total) > 0)
 			{
-				console.log("mando "+dato.fotos_total);
 				$("#evidencia_galeria_fotos_online").html(dato.fotos);
 				$('#tabmenu_evidencia_2').addClass('active');
 				$('#tab_evidencia_2').addClass('active show');	
 			}
 			else
 			{
-				console.log("no le llego nadota");
 				$('#evidencia_galeria_fotos_online').html('<div class="col-12" style="text-align: center;">No hay fotos que mostrar</div>');
 			}
 
