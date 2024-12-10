@@ -26,7 +26,8 @@ $('.nav-link').click(function () {
 			break;
 		case "tab_evidencias_ejecucion":
 			consulta_evidencia_fotos(proyecto_id);
-			tab_evidencia_2
+			$('#tabmenu_evidencia_2').addClass('active');
+			$('#tab_evidencia_2').addClass('active show');	
 			break;
 		default:
 			// return true;

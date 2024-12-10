@@ -360,46 +360,61 @@ class ejecucionPsicoController extends Controller
             $recoid = $proyecto->reconocimiento_psico_id;
 
             $sql = DB::select("SELECT
-                                    recopsicoFotosTrabajadores.ID_RECOPSICOFOTOTRABAJADOR,
-                                    recopsicoFotosTrabajadores.RECPSICO_ID,
-                                    recopsicoFotosTrabajadores.RECPSICO_TRABAJADOR,
-                                    recopsicoFotosTrabajadores.RECPSICO_FOTOPREGUIA,
-                                    recopsicoFotosTrabajadores.RECPSICO_FOTOPOSTGUIA,
-                                    recopsicoFotosTrabajadores.created_at,
-                                    recopsicoFotosTrabajadores.updated_at
-                                FROM
-                                    recopsicoFotosTrabajadores
-                                WHERE
-                                     recopsicoFotosTrabajadores.RECPSICO_ID = ?
-                                    ", [$recoid]);
+                recopsicoFotosTrabajadores.ID_RECOPSICOFOTOTRABAJADOR,
+                recopsicoFotosTrabajadores.RECPSICO_ID,
+                recopsicoFotosTrabajadores.RECPSICO_TRABAJADOR,
+                recopsicoFotosTrabajadores.RECPSICO_FOTOPREGUIA,
+                recopsicoFotosTrabajadores.RECPSICO_FOTOPOSTGUIA,
+                proyectotrabajadores.TRABAJADOR_NOMBRE,
+                recopsicoFotosTrabajadores.created_at,
+                recopsicoFotosTrabajadores.updated_at
+            FROM
+                recopsicoFotosTrabajadores
+                LEFT JOIN proyectotrabajadores ON recopsicoFotosTrabajadores.RECPSICO_TRABAJADOR = proyectotrabajadores.TRABAJADOR_ID
+            WHERE
+                recopsicoFotosTrabajadores.RECPSICO_ID = ?",
+            [$recoid]);
 
+        $galeria = '';
 
-            $galeria = '';
-            $carpeta = 'XXXx';
-            foreach ($sql as $key => $value) {
-
-                            $galeria .= '<div class="col-12">
-                                            <ol class="breadcrumb m-b-10" style="background: none; padding: 0px;">
-                                                <i class="fa fa-folder-open fa-2x text-warning" style="float: left; margin-top: 8px; font-size: 20px;"></i>
-                                                <span class="text-warning" style="float: left; margin-top: 3px; font-size: 20px; font-family: Calibri;">&nbsp;&nbsp;' . $value->RECPSICO_TRABAJADOR . '</span>';
-
-                            $galeria .= '</ol><hr>
-                                        </div>';
-                        
-                    $galeria .= '<div class="col-xl-2 col-lg-3 col-md-4 col-sm-6 foto_galeria">';
-
-                    $galeria .= '<i class="fa fa-download text-success" style="font-size: 26px; text-shadow: 2px 2px 4px #000000; position: absolute; opacity: 0; margin-left: 40px;" data-toggle="tooltip" title="Descargar" onclick="evidencia_foto_descargar(1, ' . $value->ID_RECOPSICOFOTOTRABAJADOR . ');"></i>
-                                    <a href="/psicoevidenciafotomostrar/0/0/' . $value->ID_RECOPSICOFOTOTRABAJADOR . '" data-effect="mfp-3d-unfold">
-                                        <img class="d-block img-fluid" src="/psicoevidenciafotomostrar/0/0/' . $value->ID_RECOPSICOFOTOTRABAJADOR . '" style="margin: 0px 0px 20px 0px;" data-toggle="tooltip" title="Click para mostrar"/>
-                                    </a>
-                                    <i class="fa fa-download text-success" style="font-size: 26px; text-shadow: 2px 2px 4px #000000; position: absolute; opacity: 0; margin-left: 40px;" data-toggle="tooltip" title="Descargar" onclick="evidencia_foto_descargar(1, ' . $value->ID_RECOPSICOFOTOTRABAJADOR . ');"></i>
-                                    <a href="/psicoevidenciafotomostrar/0/1/' . $value->ID_RECOPSICOFOTOTRABAJADOR . '" data-effect="mfp-3d-unfold">
-                                        <img class="d-block img-fluid" src="/psicoevidenciafotomostrar/0/1/' . $value->ID_RECOPSICOFOTOTRABAJADOR . '" style="margin: 0px 0px 20px 0px;" data-toggle="tooltip" title="Click para mostrar"/>
-                                    </a>
-                                </div>';
-    
+        foreach ($sql as $key => $value) {
+            // Verifica si ambos campos son NULL
+            if (is_null($value->RECPSICO_FOTOPREGUIA) && is_null($value->RECPSICO_FOTOPOSTGUIA)) {
+                continue; // Salta esta iteración si ambos son NULL
             }
-
+        
+            $galeria .= '<div class="col-12">
+                            <ol class="breadcrumb m-b-10" style="background: none; padding: 0px;">
+                                <i class="fa fa-folder-open fa-2x text-warning" style="float: left; margin-top: 8px; font-size: 20px;"></i>
+                                <span class="text-warning" style="float: left; margin-top: 3px; font-size: 20px; font-family: Calibri;">&nbsp;&nbsp;' . $value->TRABAJADOR_NOMBRE . '</span>
+                            </ol>
+                            <hr>
+                        </div>';
+        
+            // Validar si `RECPSICO_FOTOPREGUIA` no es NULL
+            if (!is_null($value->RECPSICO_FOTOPREGUIA)) {
+                $galeria .= '<div class="col-xl-2 col-lg-3 col-md-4 col-sm-6 foto_galeria">
+                            <i class="fa fa-download text-success" style="font-size: 26px; text-shadow: 2px 2px 4px #000000; position: absolute; opacity: 0; margin-left: 40px;" data-toggle="tooltip" title="Descargar" onclick="evidencia_foto_descargar(1, ' . $value->ID_RECOPSICOFOTOTRABAJADOR . ');"></i>
+                            <a href="/psicoevidenciafotomostrar/0/0/' . $value->ID_RECOPSICOFOTOTRABAJADOR . '" data-effect="mfp-3d-unfold">
+                                <img class="d-block img-fluid" src="/psicoevidenciafotomostrar/0/0/' . $value->ID_RECOPSICOFOTOTRABAJADOR . '" style="margin: 0px 0px 20px 0px;" data-toggle="tooltip" title="Click para mostrar"/>
+                            </a>
+                        </div>';
+            }
+        
+            // Validar si `RECPSICO_FOTOPOSTGUIA` no es NULL
+            if (!is_null($value->RECPSICO_FOTOPOSTGUIA)) {
+                $galeria .= '<div class="col-xl-2 col-lg-3 col-md-4 col-sm-6 foto_galeria">
+                            <i class="fa fa-download text-success" style="font-size: 26px; text-shadow: 2px 2px 4px #000000; position: absolute; opacity: 0; margin-left: 40px;" data-toggle="tooltip" title="Descargar" onclick="evidencia_foto_descargar(1, ' . $value->ID_RECOPSICOFOTOTRABAJADOR . ');"></i>
+                            <a href="/psicoevidenciafotomostrar/0/1/' . $value->ID_RECOPSICOFOTOTRABAJADOR . '" data-effect="mfp-3d-unfold">
+                                <img class="d-block img-fluid" src="/psicoevidenciafotomostrar/0/1/' . $value->ID_RECOPSICOFOTOTRABAJADOR . '" style="margin: 0px 0px 20px 0px;" data-toggle="tooltip" title="Click para mostrar"/>
+                            </a>
+                        </div>';
+            }
+            // Cierre de la fila
+            $galeria .= '</div>';
+        }
+        
+        
             // respuesta
             $dato['fotos_total'] = count($sql);
             // $dato['fotos'] = $sql;
