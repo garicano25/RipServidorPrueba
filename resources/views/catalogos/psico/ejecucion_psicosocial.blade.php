@@ -349,7 +349,7 @@
                                                 <div id="seccion_proyectoevidencias">
                                                     <ul class="nav nav-tabs customtab" role="tablist">
                                                         <li class="nav-item">
-                                                            <a class="nav-link active" data-toggle="tab" id="tabmenu_evidencia_2" href="#tab_evidencia_2" role="tab">Fotos Online</a>
+                                                            <a class="nav-link" data-toggle="tab" id="tabmenu_evidencia_2" href="#tab_evidencia_2" role="tab">Fotos Online</a>
                                                         </li>
                                                         <li class="nav-item">
                                                             <a class="nav-link" data-toggle="tab" id="tabmenu_evidencia_3" href="#tab_evidencia_3" role="tab">Fotos Presencial</a>

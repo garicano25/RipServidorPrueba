@@ -426,9 +426,9 @@ class ejecucionPsicoController extends Controller
         $foto = recpsicofotostrabajadoresModel::findOrFail($foto_id);
 
         if (($foto_opcion + 0) == 0) {
-            return Storage::response($foto->proyectoevidenciafoto_archivo);
+            return Storage::response($foto->RECPSICO_FOTOPREGUIA);
         } else {
-            return Storage::download($foto->proyectoevidenciafoto_archivo);
+            return Storage::download($foto->RECPSICO_FOTOPREGUIA);
         }
     }
 
