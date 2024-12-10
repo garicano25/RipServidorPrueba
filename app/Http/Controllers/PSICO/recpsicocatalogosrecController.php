@@ -47,9 +47,9 @@ class recpsicocatalogosrecController extends Controller
                     $value['boton_editar'] = '<button type="button" class="btn btn-danger btn-circle" onclick="editar_cargoInforme();"><i class="fa fa-pencil"></i></button>';
 
                     if ($value->ACTIVO == 1) {
-                        $value['CheckboxEstado'] = '<div class="switch"><label><input type="checkbox" checked onclick="estado_registro(' . $num_catalogo . ', ' . $value->ID_CARGO_INFORME . ', this);"><span class="lever switch-col-light-blue"></span></label></div>';
+                        $value['CheckboxEstado'] = '<div class="switch"><label><input type="checkbox" checked onclick="estado_registro(4, ' . $value->ID_CARGO_INFORME . ', this);"><span class="lever switch-col-light-blue"></span></label></div>';
                     } else {
-                        $value['CheckboxEstado'] = '<div class="switch"><label><input type="checkbox" onclick="estado_registro(' . $num_catalogo . ', ' . $value->ID_CARGO_INFORME . ', this);"><span class="lever switch-col-light-blue"></span></label></div>';
+                        $value['CheckboxEstado'] = '<div class="switch"><label><input type="checkbox" onclick="estado_registro(4, ' . $value->ID_CARGO_INFORME . ', this);"><span class="lever switch-col-light-blue"></span></label></div>';
                     }
                 }
             break;

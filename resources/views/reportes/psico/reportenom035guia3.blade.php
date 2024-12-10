@@ -1042,14 +1042,14 @@
 				</div>
 				<h4 class="card-title" id="9_8">9.2.5.- Resultados obtenidos, categoría entorno organizacional.</h4>
 				<div class="row">
-				<div class="col-12">
-					<style>
-						#entornoChart {
-						width: 100%;
-						height: 500px;
-						}
-						</style>
-					<div id="entornoChart"></div>
+					<div class="col-12">
+						<style>
+							#entornoChart {
+							width: 100%;
+							height: 500px;
+							}
+							</style>
+						<div id="entornoChart"></div>
 					</div>
 				</div>
 				<h4 class="card-title" id="9_9">9.3.- Resultados obtenidos, consolidado general del centro de trabajo.</h4>
@@ -1062,7 +1062,7 @@
 						}
 						</style>
 					<div id="consolidadoChart"></div>
-					</div>
+				</div>
 				</div>
 				<div class="col-12">
 					<style>
@@ -1072,7 +1072,7 @@
 						}
 						</style>
 					<div id="consolidadoChart2"></div>
-					</div>
+				</div>
 				</div>
 				<h4 class="card-title" id="10">10.- Conclusiones</h4>
 				<h4 class="card-title" id="10_1">10.1.- Conclusiones de conformidad a la NOM-035-STPS-2018.</h4>

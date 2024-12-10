@@ -271,7 +271,7 @@
                             <div class="col-12">
                                 <div class="form-group">
                                     <label for="CATEGORIA">Selecciona una opción:</label>
-                                    <select class="form-control" id="CATEGORIA" name="CATEGORIA">
+                                        <select class="form-control" id="CATEGORIA" name="CATEGORIA">
                                         <option value="1">Acontecimientos traumáticos severos</option>
                                         <option value="2">Ambiente de trabajo</option>
                                         <option value="3">Factores propios de la actividad</option>

@@ -5,9 +5,15 @@ namespace App\Http\Controllers\PSICO;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use DB;
+use Illuminate\Support\Facades\Storage;
+use Image;
 use App\Mail\sendGuiaPsico;
 use Illuminate\Support\Facades\Mail;
 use App\modelos\reconocimientopsico\recopsicotrabajadoresModel;
+use App\modelos\reconocimientopsico\recpsicofotostrabajadoresModel;
+use App\modelos\proyecto\proyectoModel;
+
+
 use Illuminate\Support\Facades\Crypt; // Importa el helper de encriptación
 class ejecucionPsicoController extends Controller
 {
@@ -336,6 +342,94 @@ class ejecucionPsicoController extends Controller
             return response()->json($response, 500);
         }
 
+    }
+
+       /**
+     * Display a listing of the resource.
+     *
+     * @param  int  $proyecto_id
+     * @param  int  $agente_id
+     * @param  $agente_nombre
+     * @return \Illuminate\Http\Response
+     */
+    public function evidenciafotosOnline($proyecto_id)
+    {
+        try {
+            // Proyecto
+            $proyecto = proyectoModel::findOrFail($proyecto_id);
+            $recoid = $proyecto->reconocimiento_psico_id;
+
+            $sql = DB::select("SELECT
+                                    recopsicoFotosTrabajadores.ID_RECOPSICOFOTOTRABAJADOR,
+                                    recopsicoFotosTrabajadores.RECPSICO_ID,
+                                    recopsicoFotosTrabajadores.RECPSICO_TRABAJADOR,
+                                    recopsicoFotosTrabajadores.RECPSICO_FOTOPREGUIA,
+                                    recopsicoFotosTrabajadores.RECPSICO_FOTOPOSTGUIA,
+                                    recopsicoFotosTrabajadores.created_at,
+                                    recopsicoFotosTrabajadores.updated_at
+                                FROM
+                                    recopsicoFotosTrabajadores
+                                WHERE
+                                     recopsicoFotosTrabajadores.RECPSICO_ID = ?
+                                    ", [$recoid]);
+
+
+            $galeria = '';
+            $carpeta = 'XXXx';
+            foreach ($sql as $key => $value) {
+
+                            $galeria .= '<div class="col-12">
+                                            <ol class="breadcrumb m-b-10" style="background: none; padding: 0px;">
+                                                <i class="fa fa-folder-open fa-2x text-warning" style="float: left; margin-top: 8px; font-size: 20px;"></i>
+                                                <span class="text-warning" style="float: left; margin-top: 3px; font-size: 20px; font-family: Calibri;">&nbsp;&nbsp;' . $value->RECPSICO_TRABAJADOR . '</span>';
+
+                            $galeria .= '</ol><hr>
+                                        </div>';
+                        
+                    $galeria .= '<div class="col-xl-2 col-lg-3 col-md-4 col-sm-6 foto_galeria">';
+
+                    $galeria .= '<i class="fa fa-download text-success" style="font-size: 26px; text-shadow: 2px 2px 4px #000000; position: absolute; opacity: 0; margin-left: 40px;" data-toggle="tooltip" title="Descargar" onclick="evidencia_foto_descargar(1, ' . $value->ID_RECOPSICOFOTOTRABAJADOR . ');"></i>
+                                    <a href="/psicoevidenciafotomostrar/0/' . $value->ID_RECOPSICOFOTOTRABAJADOR . '" data-effect="mfp-3d-unfold">
+                                        <img class="d-block img-fluid" src="/psicoevidenciafotomostrar/0/' . $value->ID_RECOPSICOFOTOTRABAJADOR . '" style="margin: 0px 0px 20px 0px;" data-toggle="tooltip" title="Click para mostrar"/>
+                                    </a>
+                                </div>';
+                
+            }
+
+            // respuesta
+            $dato['fotos_total'] = count($sql);
+            // $dato['fotos'] = $sql;
+            $dato['fotos'] = $galeria;
+            $dato["msj"] = 'Datos consultados correctamente';
+            return response()->json($dato);
+        } catch (Exception $e) {
+            $dato["msj"] = 'Error ' . $e->getMessage();
+            $dato['fotos_total'] = 0;
+            $dato['fotos'] = null;
+            return response()->json($dato);
+        }
+    }
+
+        /**
+     * Display the specified resource.
+     *
+     * @param  int  $foto_opcion
+     * @param  int  $foto_id
+     * @return \Illuminate\Http\Response
+     */
+    public function psicoevidenciafotomostrar($foto_opcion, $foto_id)
+    {
+        // $foto = proyectoevidenciafotoModel::findOrFail($foto_id);
+        // return Storage::download($foto->proyectoevidenciafoto_archivo);
+        // return Storage::response($foto->proyectoevidenciafoto_archivo);
+
+        $foto = recpsicofotostrabajadoresModel::findOrFail($foto_id);
+
+        if (($foto_opcion + 0) == 0) {
+            return Storage::response($foto->proyectoevidenciafoto_archivo);
+        } else {
+            return Storage::download($foto->proyectoevidenciafoto_archivo);
+        }
     }
 
 }

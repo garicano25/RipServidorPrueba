@@ -1943,6 +1943,9 @@ Route::put('actualizarFechasOnline', ['as' => 'PSICO.actualizarFechasOnline', 'u
 
 Route::put('guardarCambiosTrabajador', ['as' => 'PSICO.guardarCambiosTrabajador', 'uses' => 'PSICO\ejecucionPsicoController@guardarCambiosTrabajador']);
 
+Route::get('psicoevidenciafotomostrar/{foto_opcion}/{foto_id}', ['as' => 'PSICO.proyectoevidenciafotomostrar', 'uses' => 'PSICO\ejecucionPsicoController@psicoevidenciafotomostrar']);
+
+Route::get('psicoevidenciafotosonline/{proyecto_id}', ['as' => 'PSICO.evidenciafotosOnline', 'uses' => 'PSICO\ejecucionPsicoController@evidenciafotosOnline']);
 
 
 
@@ -2007,6 +2010,7 @@ Route::resource('recpsicocatalogos', 'PSICO\recpsicocatalogosController');
 Route::get('recpsicocatalogosguia/{num_catalogo}', ['as' => 'PSICO.recpsicocatalogos', 'uses' => 'PSICO\recpsicocatalogosController@tablaCatalogoGuia']);
 Route::resource('recpsicocatalogosrec', 'PSICO\recpsicocatalogosrecController');
 Route::get('recpsicocatalogosinformes/{num_catalogo}', ['as' => 'PSICO.recpsicocatalogosrec', 'uses' => 'PSICO\recpsicocatalogosrecController@tablaCatalogoRec']);
+Route::get('recpsicocatalogodesactiva/{catalogo}/{registro}/{estado}', ['as' => 'recpsicocatalogos.recpsicocatalogodesactiva', 'uses' => 'PSICO\recpsicocatalogosController@recpsicocatalogodesactiva']);
 
 
 Route::get('/clear-cache', function () {

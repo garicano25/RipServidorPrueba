@@ -12,6 +12,7 @@ class catalogosguiaspsicoModel extends Model
         'TIPOGUIA',
         'PREGUNTA_ID',
         'PREGUNTA_NOMBRE',
-        'PREGUNTA_EXPLICACION'
+        'PREGUNTA_EXPLICACION',
+        'ACTIVO'
     ];
 }
