@@ -344,6 +344,7 @@ class recopsiconormativaController extends Controller
                 }
                 
             }
+            if ($request->opcion == 1){
 
                 $RECPSICO_ID = $request['RECPSICO_ID'];
                 $normativaExists = recopsiconormativaModel::where('RECPSICO_ID', $RECPSICO_ID)->exists();
@@ -376,7 +377,7 @@ class recopsiconormativaController extends Controller
                  $dato["msj"] = 'Informacion guardada correctamente';
                 }
  
-
+            }
              // respuesta
              $dato['normativapsico'] = $normativapsico;
              return response()->json($dato);

@@ -11,6 +11,7 @@ var areacategorias_total = 0;
 var recsensorial_perfil = 0;
 var recsensorial = 0;
 var normativa_id = 0;
+var tabla = null;
 
 //--------------------------------------------------CARGA PRINCIPAL---------------------------------------------------------//
 $(document).ready(function () {
@@ -76,6 +77,43 @@ $(document).ready(function () {
 		}
 	});
 
+	// inicializar campo FOTO mapa ubicacion
+	$('#TECNICO_DOC_IMG').dropify({
+		messages: {
+			'default': 'Arrastre la imagen aquí o haga click',
+			'replace': 'Arrastre la imagen o haga clic para reemplazar',
+			'remove': 'Quitar',
+			'error': 'Ooops, ha ocurrido un error.'
+		},
+		error: {
+			'fileSize': 'Demasiado grande ({{ value }} max).',
+			'minWidth': 'Ancho demasiado pequeño (min {{ value }}}px).',
+			'maxWidth': 'Ancho demasiado grande (max {{ value }}}px).',
+			'minHeight': 'Alto demasiado pequeño (min {{ value }}}px).',
+			'maxHeight': 'Alto demasiado grande (max {{ value }}px max).',
+			'imageFormat': 'Formato no permitido, sólo ({{ value }}).'
+		}
+	});
+
+	// inicializar campo FOTO plano instalacion
+	$('#CONTRATO_DOC_IMG').dropify({
+		messages: {
+			'default': 'Arrastre la imagen aquí o haga click',
+			'replace': 'Arrastre la imagen o haga clic para reemplazar',
+			'remove': 'Quitar',
+			'error': 'Ooops, ha ocurrido un error.'
+		},
+		error: {
+			'fileSize': 'Demasiado grande ({{ value }} max).',
+			'minWidth': 'Ancho demasiado pequeño (min {{ value }}}px).',
+			'maxWidth': 'Ancho demasiado grande (max {{ value }}}px).',
+			'minHeight': 'Alto demasiado pequeño (min {{ value }}}px).',
+			'maxHeight': 'Alto demasiado grande (max {{ value }}px max).',
+			'imageFormat': 'Formato no permitido, sólo ({{ value }}).'
+		}
+	});
+
+
 	// Inicializar tooltip
 	$('[data-toggle="tooltip"]').tooltip();
 });
@@ -107,6 +145,30 @@ $(document).ready(function () {
 	});
 });
 $(document).ready(function() {
+	tabla = $('#tabla_trabajadores_cargados').DataTable({
+        "language": {
+            "url": "//cdn.datatables.net/plug-ins/1.10.25/i18n/Spanish.json"
+        },
+        "columns": [
+            { "data": "numero"},
+            { "data": "nombre"},
+            { "data": "muestra",
+            	"render": function(data, type, row) {
+                if (data == 0) {
+                    return '<i class="fa fa-times-circle fa-2x text-danger"></i>'; 
+                } else if (data == 1) {
+                    return '<i class="fa fa-check-circle fa-2x text-success"></i>'; 
+                } else {
+                    return data;
+				}
+			}
+		}
+        ],
+        "columnDefs": [
+            { "orderable": false, "targets": [0, 1, 2] }
+        ]
+    });
+ 
 	$("#boton_cargarTrabajadores").click(function() {
 		var guardar = 0;
 		var recpsico_id = $("#recsensorial_id").val();
@@ -194,7 +256,7 @@ $(document).ready(function() {
 								
 								if (dato.code == 200) {
 
-									cargarTrabajadores(recpsico_id);
+									cargarTrabajadores(recpsico_id, tabla);
 									// cerrar modal
 									$('#modal_cargarTrabajadores').modal('hide');
 
@@ -466,7 +528,6 @@ $(document).ready(function () {
 $(document).ready(function () {
 
 	document.getElementById('habilitar_opcional').checked = false;
-	document.getElementById('boton_carga_trabajadores').disabled = true;
 
 	document.getElementById('RECPSICOTRABAJADOR_MUESTRA').checked = false;
 	document.getElementById('RECPSICOTRABAJADOR_MUESTRA').disabled = true;
@@ -496,7 +557,6 @@ $(document).ready(function () {
 
         // Mostrar u ocultar campos opcionales según el estado del checkbox
         camposOpcionales.style.display = isChecked ? 'block' : 'none';
-		document.getElementById('boton_carga_trabajadores').disabled = true;
 
         // Habilitar/deshabilitar los selects e inputs numéricos
         document.getElementById('tipo_valor_hombres').disabled = !isChecked;
@@ -636,12 +696,12 @@ $('.link_menuprincipal').click(function () {
 			$("#tab_1").css('display', 'none');
 
 			$("#steps_menu_tab1").click();
-
 		break;
 		default:
 			break;
 	}
 });
+
 $('.multisteps-form__progress-btn').click(function () {
 	switch (this.id) {
 		case "steps_menu_tab2":
@@ -656,8 +716,14 @@ $('.multisteps-form__progress-btn').click(function () {
 			$('#form_normativa').each(function () {
 				this.reset();
 			});
-			cargarTrabajadores($("#recsensorial_id").val());
+			cargarTrabajadores($("#recsensorial_id").val(), tabla);
 			datosNormativa($("#recsensorial_id").val());
+		break;
+		case "steps_menu_tab5":
+			recsensorial = $("#recsensorial_id").val();
+
+			
+
 		break;
 		default:
 		break;
@@ -699,13 +765,12 @@ $("#boton_nuevo_reconocimiento").click(function () {
 	$("#tab_menu5").css('display', 'none');
 	$("#tab_menu6").css('display', 'none');
 
+
 	// ocultar secciones
 	$("#steps_menu_tab2").css('display', 'none');
 	$("#steps_menu_tab3").css('display', 'none');
 	$("#steps_menu_tab4").css('display', 'none');
 	$("#steps_menu_tab5").css('display', 'none');
-	$("#steps_menu_tab6").css('display', 'none');
-	$("#steps_menu_tab7").css('display', 'none');
 
 	// LIMPIAR TITULO DEL RECONOCIMIENTO
 	$(".div_reconocimiento_folios").html('FOLIO');
@@ -1131,6 +1196,7 @@ $("#boton_guardar_normativa").click(function (event) {
 	if (valida) {
 
 		var formData = new FormData($('#form_normativa')[0]);
+		formData.append('opcion', 1);
 		formData.append('RECPSICO_GENEROS', document.getElementById("habilitar_opcional").checked ? 1 : 0);
 		formData.append('RECPSICO_GUIAI', document.getElementById("option1").checked ? 1 : 0);
 		formData.append('RECPSICO_GUIAII', document.getElementById("option2").checked ? 1 : 0);
@@ -1168,7 +1234,6 @@ $("#boton_guardar_normativa").click(function (event) {
 				});
 
 				$('#boton_guardar_normativa').html('Guardar <i class="fa fa-save"></i>');
-				document.getElementById('boton_carga_trabajadores').disabled = false;
 
 
 			},
@@ -1239,13 +1304,13 @@ $("#boton_guadarGuiaV").click(function (event) {
 						showConfirmButton: true,
 						showCancelButton: false
 					});
-				$('#boton_editarGuiaV').html('Guardar <i class="fa fa-save"></i>');
+				$('#boton_editarGuiaV').html('Editar GUIA DE REFERENCIA V <i class="fa fa-pencil-square-o"></i>');
 			},
 			beforeSend: function () {
 				$('#boton_editarGuiaV').html('Guardando <i class="fa fa-spin fa-spinner"></i>');
 			},
 			error: function (error) {
-				$('#boton_editarGuiaV').html('Guardar <i class="fa fa-save"></i>');
+				$('#boton_editarGuiaV').html('Editar GUIA DE REFERENCIA V <i class="fa fa-pencil-square-o"></i>');
 				swal({
 					title: "Error",
 					text: "Error en la acción: " + error.responseText, 
@@ -1276,6 +1341,62 @@ $("#divEditarGuia4").click(function () {
 
 
 });
+
+$("#boton_guardar_responsables").click(function () {
+	// valida campos vacios
+	var valida = this.form.checkValidity();
+	if (valida) {
+		// enviar datos
+		$('#form_responsables').ajaxForm({
+			dataType: 'json',
+			type: 'POST',
+			url: '/reconocimientoPsicosocial',
+			data: {
+				opcion: 3,
+				recsensorial_id: recsensorial,
+			},
+			resetForm: false,
+			success: function (dato) {
+				// mensaje
+				swal({
+					title: "Correcto",
+					text: "" + dato.msj,
+					type: "success", // warning, error, success, info
+					buttons: {
+						visible: false, // true , false
+					},
+					timer: 1500,
+					showConfirmButton: false
+				});
+
+				// actualiza boton
+				$('#boton_guardar_responsables').html('Guardar <i class="fa fa-save"></i>');
+			},
+			beforeSend: function () {
+				$('#boton_guardar_responsables').html('Guardando <i class="fa fa-spin fa-spinner"></i>');
+			},
+			error: function (dato) {
+				// actualiza boton
+				$('#boton_guardar_responsables').html('Guardar <i class="fa fa-save"></i>');
+
+				// mensaje
+				swal({
+					title: "Error",
+					text: "Error en la acción: " + dato,
+					type: "error", // warning, error, success, info
+					buttons: {
+						visible: false, // true , false
+					},
+					timer: 1500,
+					showConfirmButton: false
+				});
+				return false;
+			}
+		}).submit();
+		return false;
+	}
+});
+
 //-------------------------------------------------------CHANGE---------------------------------------------------------------//
 $('#excelTrabajadores').change(function () {
         
@@ -1293,6 +1414,9 @@ $('#excelTrabajadores').change(function () {
 $('#tabla_reconocimiento_sensorial tbody').on('click', 'td.mostrar', function () {
 	var tr = $(this).closest('tr');
 	var row = tabla_recsensorial.row(tr);
+	$('#form_responsables').each(function () {
+		this.reset();
+	});
 
 	$('#inputfotomapa').attr('required', false);
 	$('#infoCliente').empty().css('border-style', 'none');
@@ -1314,16 +1438,12 @@ $('#tabla_reconocimiento_sensorial tbody').on('click', 'td.mostrar', function ()
 	$("#steps_menu_tab3").css('display', 'block');
 	$("#steps_menu_tab4").css('display', 'block');
 	$("#steps_menu_tab5").css('display', 'block');
-	$("#steps_menu_tab6").css('display', 'block');
-	$("#steps_menu_tab7").css('display', 'block');
 
 	// Menu principal
 	$("#tab_menu2").css('display', 'block');
 	$("#tab_menu3").css('display', 'none');
 	$("#tab_menu4").css('display', 'none');
 	$("#tab_menu5").css('display', 'none');
-	$("#tab_menu6").css('display', 'none');
-	$("#tab_menu9").css('display', 'none');
 
 	// Borrar formulario
 	$('#form_recsensorial').each(function () {
@@ -1368,6 +1488,7 @@ $('#tabla_reconocimiento_sensorial tbody').on('click', 'td.mostrar', function ()
 
 	$("#ordentrabajo_id").val(row.data().ordentrabajo_id);
 	$("#proyecto_folio").val(row.data().proyecto_folio);
+
 
 	//Mostramos si la informacion del contrato es la que se le da al reconocimiento
 	if (row.data().informe_del_cliente == 1) {
@@ -1506,6 +1627,106 @@ $('#tabla_reconocimiento_sensorial tbody').on('click', 'td.mostrar', function ()
 
 	// Perfil
 	recsensorial_perfil = parseInt(row.data().perfil);
+	//responsables
+	$("#NOMBRE_TECNICO").val(row.data().NOMBRE_TECNICO);
+	$("#NOMBRE_CONTRATO").val(row.data().NOMBRE_CONTRATO);
+	$("#CARGO_TECNICO").val(row.data().CARGO_TECNICO);
+	$("#CARGO_CONTRATO").val(row.data().CARGO_CONTRATO);
+	
+	if (row.data().TECNICO_DOC){
+		var archivo = row.data().TECNICO_DOC;
+		var extension = archivo.substring(archivo.lastIndexOf("."));
+		var imagenUrl = '/mostrartecnicodoc/0/' + row.data().id + extension;
+		
+		rutaMapa = imagenUrl
+
+		// INPUT FOTO TECNICO DOC
+		if ($('#TECNICO_DOC_IMG').data('dropify'))
+		{
+			$('#TECNICO_DOC_IMG').dropify().data('dropify').destroy();
+			// $('.dropify-wrapper').css('height', 400);
+			$('#TECNICO_DOC_IMG').dropify().data('dropify').settings.defaultFile = imagenUrl;
+			$('#TECNICO_DOC_IMG').dropify().data('dropify').init();
+		}
+		else
+		{
+			// $('#inputfotomapa').attr('data-height', 400);
+			$('#TECNICO_DOC_IMG').attr('data-default-file', imagenUrl);
+			$('#TECNICO_DOC_IMG').dropify({
+				messages: {
+					'default': 'Arrastre la imagen aquí o haga click',
+					'replace': 'Arrastre la imagen o haga clic para reemplazar',
+					'remove':  'Quitar',
+					'error':   'Ooops, ha ocurrido un error.'
+				},
+				error: {
+					'fileSize': 'Demasiado grande ({{ value }} max).',
+					'minWidth': 'Ancho demasiado pequeño (min {{ value }}}px).',
+					'maxWidth': 'Ancho demasiado grande (max {{ value }}}px).',
+					'minHeight': 'Alto demasiado pequeño (min {{ value }}}px).',
+					'maxHeight': 'Alto demasiado grande (max {{ value }}px max).',
+					'imageFormat': 'Formato no permitido, sólo ({{ value }}).'
+				}
+			});
+		}
+
+		// No requerir campo FOTO
+		$('#TECNICO_DOC_IMG').attr('required', false);
+
+		// Activar boton descarga
+		$("#boton_descargarTECNICO_DOC").css('display', 'block');
+	}
+	else
+	{
+		$("#boton_descargarTECNICO_DOC").css('display', 'none');
+	}
+
+	// OBTENER FOTO PLANO
+	if (row.data().CONTRATO_DOC) {
+		var archivo = row.data().CONTRATO_DOC;
+		var extension = archivo.substring(archivo.lastIndexOf("."));
+		var imagenUrl = '/mostrarcontratodoc/0/' + row.data().id + extension;
+
+		rutaMapa = imagenUrl
+
+
+		// INPUT FOTO PLANO
+		if ($('#CONTRATO_DOC_IMG').data('dropify')) {
+			$('#CONTRATO_DOC_IMG').dropify().data('dropify').destroy();
+			// $('.dropify-wrapper').css('height', 400);
+			$('#CONTRATO_DOC_IMG').dropify().data('dropify').settings.defaultFile = imagenUrl;
+			$('#CONTRATO_DOC_IMG').dropify().data('dropify').init();
+		}
+		else {
+			// $('#inputfotoplano').attr('data-height', 400);
+			$('#CONTRATO_DOC_IMG').attr('data-default-file', imagenUrl);
+			$('#CONTRATO_DOC_IMG').dropify({
+				messages: {
+					'default': 'Arrastre la imagen aquí o haga click',
+					'replace': 'Arrastre la imagen o haga clic para reemplazar',
+					'remove': 'Quitar',
+					'error': 'Ooops, ha ocurrido un error.'
+				},
+				error: {
+					'fileSize': 'Demasiado grande ({{ value }} max).',
+					'minWidth': 'Ancho demasiado pequeño (min {{ value }}}px).',
+					'maxWidth': 'Ancho demasiado grande (max {{ value }}}px).',
+					'minHeight': 'Alto demasiado pequeño (min {{ value }}}px).',
+					'maxHeight': 'Alto demasiado grande (max {{ value }}px max).',
+					'imageFormat': 'Formato no permitido, sólo ({{ value }}).'
+				}
+			});
+		}
+
+		// No requerir campo FOTO
+		$('#CONTRATO_DOC_IMG').attr('required', false);
+
+		// Activar boton descarga
+		$("#boton_descargarCONTRATO_DOC").css('display', 'block');
+	}
+	else {
+		$("#boton_descargarCONTRATO_DOC").css('display', 'none');
+	}
 
 
 	// Colocar nombre del reconocimieto
@@ -1537,31 +1758,23 @@ function datosNormativa(recpsico_id){
 		beforeSend: function () {
 		},
 		success: function (response) {
-
-				//hidden
-				$('#ID_RECOPSICONORMATIVA').val(response.info[0].RAZON_SOCIAL)
-				$('#total_empleados').val(response.info[0].RFC)
-				$('#RECPSICO_TOTALHOMBRESSELECCION').val(response.info[0].REPRESENTANTE)
-				$('#RECPSICO_TOTALMUJERESSELECCION').val(response.info[0].DIRRECCION)
-
-				$('#cliente_id').val(response.info[0].CLIENTE_ID)
-				$('#contrato_id').val(contrato)
-				$('#requiere_contrato').val(requiereContrato)
-				$('#descripcion_contrato').val(response.info[0].NOMBRE_CONTRATO)
-				$('#descripcion_cliente').val(response.info[0].RAZON_SOCIAL)
-
-
-				//INFORMACION CONSULTADA DE RECSENSORIAL
-				$('#ordenservicio').val(response.info[0].ORDENSERVICIO)
-				$('#representantelegal').val(response.info[0].REPRESENTANTE_LEGAL)
-				$('#codigopostal').val(response.info[0].CODIGOPOSTAL)
-				$('#coordenadas').val(response.info[0].COORDENADAS)
-				$('#actividadprincipal').val(response.info[0].ACTIVIDADPRINCIPAL)
-				$('#descripcionproceso').val(response.info[0].DESCRIPCIONPROCESO)
-				$('#observaciones').val(response.info[0].OBSERVACION)
-				$('#fechainicio').val(response.info[0].FECHAINICIO)
-				$('#fechafin').val(response.info[0].FECHAFIN)
+			console.log('Response completa:', response);
 		
+			if (response && response.length > 0) {
+				const data = response[0]; // Accede al primer objeto del array
+		
+				document.getElementById('total_empleados').value = data.RECPSICO_TOTALTRABAJADORES || 0;
+				validarEmpleados();
+
+				document.getElementById('aplicable_a').value = data.RECPSICO_TIPOAPLICACION || '';
+				document.getElementById('RECPSICO_TOTALHOMBRESSELECCION').value = data.RECPSICO_TOTALHOMBRESSELECCION || 0;
+				document.getElementById('RECPSICO_TOTALMUJERESSELECCION').value = data.RECPSICO_TOTALMUJERESSELECCION || 0;
+				document.getElementById('RECPSICO_PORCENTAJEHOMBRESTRABAJO').value = data.RECPSICO_PORCENTAJEHOMBRESTRABAJO || 0;
+				document.getElementById('RECPSICO_PORCENTAJEMUJERESTRABAJO').value = data.RECPSICO_PORCENTAJEMUJERESTRABAJO || 0;
+
+			} else {
+				console.error('No se encontraron datos en la respuesta');
+			}
 		},
 		error: function (jqXHR, textStatus, errorThrown) {
 			console.error('Error al consultar los datos:', textStatus, errorThrown);
@@ -1570,31 +1783,8 @@ function datosNormativa(recpsico_id){
 
 }
 
-function cargarTrabajadores(recpsico_id) {		
-	var tabla = $('#tabla_trabajadores_cargados').DataTable({
-        "language": {
-            "url": "//cdn.datatables.net/plug-ins/1.10.25/i18n/Spanish.json"
-        },
-        "columns": [
-            { "data": "numero"},
-            { "data": "nombre"},
-            { "data": "muestra",
-            	"render": function(data, type, row) {
-                if (data == 0) {
-                    return '<i class="fa fa-times-circle fa-2x text-danger"></i>'; 
-                } else if (data == 1) {
-                    return '<i class="fa fa-check-circle fa-2x text-success"></i>'; 
-                } else {
-                    return data;
-				}
-			}
-		}
-        ],
-        "columnDefs": [
-            { "orderable": false, "targets": [0, 1, 2] }
-        ]
-    });
-
+function cargarTrabajadores(recpsico_id, tabla) {		
+	
 	 $.ajax({
 		 url: '/recopsicotrabajadorescargados/' + recpsico_id,
 		 type: 'GET',
@@ -1625,12 +1815,15 @@ function activa_stepforms() {
 	$("#steps_menu_tab2").css('display', 'block');
 	$("#steps_menu_tab3").css('display', 'block');
 	$("#steps_menu_tab4").css('display', 'block');
+	$("#steps_menu_tab5").css('display', 'block');
 }
 
 function desactiva_stepforms() {
 	$("#steps_menu_tab2").css('display', 'none');
 	$("#steps_menu_tab3").css('display', 'none');
 	$("#steps_menu_tab4").css('display', 'none');
+	$("#steps_menu_tab5").css('display', 'none');
+
 }
 
 function menu_parametros_ocultar() {
@@ -2463,7 +2656,6 @@ function validarValores() {
             document.getElementById('valor_hombres').classList.add('is-invalid');
             document.getElementById('valor_mujeres').classList.add('is-invalid');
             showWarning("Los valores no coinciden con la cantidad total de empleados.");
-			document.getElementById('boton_carga_trabajadores').disabled = true;
         } else {
             // Limpiar las clases de advertencia si la validación es correcta
             document.getElementById('valor_hombres').classList.remove('is-invalid');
@@ -2514,7 +2706,6 @@ function validarValores() {
             document.getElementById('valor_hombres').classList.add('is-invalid');
             document.getElementById('valor_mujeres').classList.add('is-invalid');
             showWarning("Los porcentajes no coinciden con la cantidad total de empleados.");
-			document.getElementById('boton_carga_trabajadores').disabled = true;
         } else {
             // Limpiar las clases de advertencia si la validación es correcta
             document.getElementById('valor_hombres').classList.remove('is-invalid');
@@ -2577,7 +2768,6 @@ function validarValoresMuestra() {
             document.getElementById('valor_hombres').classList.add('is-invalid');
             document.getElementById('valor_mujeres').classList.add('is-invalid');
             showWarning("Los valores no coinciden con la cantidad total de empleados.");
-			document.getElementById('boton_carga_trabajadores').disabled = true;
         } else {
             // Limpiar las clases de advertencia si la validación es correcta
             document.getElementById('valor_hombres').classList.remove('is-invalid');
@@ -2628,7 +2818,6 @@ function validarValoresMuestra() {
             document.getElementById('valor_hombres').classList.add('is-invalid');
             document.getElementById('valor_mujeres').classList.add('is-invalid');
             showWarning("Los porcentajes no coinciden con la cantidad total de empleados.");
-			document.getElementById('boton_carga_trabajadores').disabled = true;
         } else {
             // Limpiar las clases de advertencia si la validación es correcta
             document.getElementById('valor_hombres').classList.remove('is-invalid');
@@ -2698,9 +2887,7 @@ function updateCheckboxValue(checkbox) {
 function validarEmpleados() {
     const totalEmpleados = parseInt(document.getElementById('total_empleados').value);
     const selectAplicableA = document.getElementById('aplicable_a');
-	document.getElementById('boton_carga_muestra').disabled = true;
 	document.getElementById('RECPSICOTRABAJADOR_MUESTRA').disabled = true;
-	document.getElementById('boton_carga_trabajadores').disabled = true;
 
     document.getElementById('habilitar_opcional').checked = false;
 

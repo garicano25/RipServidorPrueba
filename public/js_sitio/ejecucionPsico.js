@@ -24,7 +24,10 @@ $('.nav-link').click(function () {
 		case "tab_tabla_ejecucion":
 			$('#tab_info_ejecucion').css('display', 'none');
 			break;
-		case "tab_menu2":
+		case "tab_evidencias_ejecucion":
+			consulta_evidencia_fotos(proyecto_id);
+			$('#tabmenu_evidencia_2').addClass('active');
+			$('#tab_evidencia_2').addClass('active show');	
 			break;
 		default:
 			// return true;
@@ -57,7 +60,7 @@ $('#tabla_ejecucion tbody').on('click', 'td>button.mostrar', function () {
 //======================================BOTONES===================================================//
 $("#boton_nuevo_fotosevidencia").click(function () {
 	$('#modal_evidencia_fotos').modal({ backdrop: false });
-	cargarTrabajadoresNombres('trabajador_nombre_foto');
+	cargarTrabajadoresNombres('trabajador_nombre_foto');	
 });
 
 $("#botocargar_respuestas_trabajadores").click(function () {
@@ -987,6 +990,40 @@ function guardarCambios(trabajadorId, idRecsensorial) {
 
 }
 
+function consulta_evidencia_fotos(proyecto_id)
+{
+	$.ajax({
+		type: "GET",
+		dataType: "json",
+		url: "/psicoevidenciafotosonline/"+proyecto_id,
+		data:{},
+		cache: false,
+		success:function(dato)
+		{
+			$('#evidencia_galeria_fotos_online').html('');
+
+			if (parseInt(dato.fotos_total) > 0)
+			{
+				$("#evidencia_galeria_fotos_online").html(dato.fotos);
+				$('#tabmenu_evidencia_2').addClass('active');
+				$('#tab_evidencia_2').addClass('active show');	
+			}
+			else
+			{
+				$('#evidencia_galeria_fotos_online').html('<div class="col-12" style="text-align: center;">No hay fotos que mostrar</div>');
+			}
+
+			$('[data-toggle="tooltip"]').tooltip();
+		},
+		beforeSend: function(){
+			$('#evidencia_galeria_fotos_online').html('<div class="col-12" style="text-align: center;"><i class="fa fa-spin fa-spinner fa-5x"></i></div>');
+		},
+		error: function(dato){			
+			$('#evidencia_galeria_fotos_online').html('<div class="col-12" style="text-align: center;">Error al cargar las fotos</div>');
+			return false;
+		}
+	});//Fin ajax
+}
 
 
 

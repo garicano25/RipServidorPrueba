@@ -349,25 +349,39 @@
                                                 <div id="seccion_proyectoevidencias">
                                                     <ul class="nav nav-tabs customtab" role="tablist">
                                                         <li class="nav-item">
-                                                            <a class="nav-link active" data-toggle="tab" id="tabmenu_evidencia_2" href="#tab_evidencia_2" role="tab">Fotos</a>
+                                                            <a class="nav-link" data-toggle="tab" id="tabmenu_evidencia_2" href="#tab_evidencia_2" role="tab">Fotos Online</a>
+                                                        </li>
+                                                        <li class="nav-item">
+                                                            <a class="nav-link" data-toggle="tab" id="tabmenu_evidencia_3" href="#tab_evidencia_3" role="tab">Fotos Presencial</a>
                                                         </li>
                                                     </ul>
                                                     <div id="image-popups">
-                                                        <div class="tab-pane p-20" id="tab_evidencia_2" role="tabpanel">
-
-                                                            <ol class="breadcrumb m-b-10">
-                                                                <button type="button" class="btn btn-secondary waves-effect waves-light botonnuevo_moduloproyecto" data-toggle="tooltip" title="Agregar fotos" id="boton_nuevo_fotosevidencia">
-                                                                    <span class="btn-label"><i class="fa fa-plus"></i></span>Foto (s)
-                                                                </button>
-                                                            </ol>
-
+                                                        <div class="tab-content" style="height: 800px; max-height: 800px!important; overflow-x: none; overflow-y: auto;">
+                                                            <div class="tab-pane p-20" id="tab_evidencia_2" role="tabpanel">
                                                             <style type="text/css">
                                                                 #image-popups .foto_galeria:hover i {
                                                                     opacity: 1 !important;
                                                                     cursor: pointer;
                                                                 }
                                                             </style>
-                                                            <div class="row" id="evidencia_galeria_fotos"></div>
+                                                            <div class="row" id="evidencia_galeria_fotos_online"></div>
+                                                            </div>
+                                                            <div class="tab-pane p-20" id="tab_evidencia_3" role="tabpanel">
+
+                                                                <ol class="breadcrumb m-b-10">
+                                                                    <button type="button" class="btn btn-secondary waves-effect waves-light botonnuevo_moduloproyecto" data-toggle="tooltip" title="Agregar fotos" id="boton_nuevo_fotosevidencia">
+                                                                        <span class="btn-label"><i class="fa fa-plus"></i></span>Foto (s)
+                                                                    </button>
+                                                                </ol>
+
+                                                                <style type="text/css">
+                                                                    #image-popups .foto_galeria:hover i {
+                                                                        opacity: 1 !important;
+                                                                        cursor: pointer;
+                                                                    }
+                                                                </style>
+                                                                <div class="row" id="evidencia_galeria_fotos_presencial"></div>
+                                                            </div>
                                                         </div>
                                                     </div>
                                                 </div>

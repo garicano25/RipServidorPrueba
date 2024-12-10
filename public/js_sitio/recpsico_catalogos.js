@@ -103,6 +103,7 @@ function mostrar_catalogo(num_catalogo) {
                 '<th>Pregunta</th>' +
                 '<th>Explicación</th>' +
                 '<th style="width: 90px!important;">Editar</th>' +
+                '<th style="width: 90px!important;">Activo</th>' +
                 '</tr>' +
                 '</thead>' +
                 '<tbody></tbody>' +
@@ -132,6 +133,7 @@ function mostrar_catalogo(num_catalogo) {
                 '<th>Pregunta</th>' +
                 '<th>Explicación</th>' +
                 '<th style="width: 90px!important;">Editar</th>' +
+                '<th style="width: 90px!important;">Activo</th>' +
                 '</tr>' +
                 '</thead>' +
                 '<tbody></tbody>' +
@@ -162,6 +164,7 @@ function mostrar_catalogo(num_catalogo) {
                 '<th>Pregunta</th>' +
                 '<th>Explicación</th>' +
                 '<th style="width: 90px!important;">Editar</th>' +
+                '<th style="width: 90px!important;">Activo</th>' +
                 '</tr>' +
                 '</thead>' +
                 '<tbody></tbody>' +
@@ -233,6 +236,11 @@ function tabla_catalogo_guia(num_catalogo) {
                         "orderable": false,
                         "data": 'boton_editar',
                         "defaultContent": '-'
+                    },
+                    {
+                        "orderable": false,
+                        "data": 'CheckboxEstado',
+                        "defaultContent": '-'
                     }
                 ],
                 "lengthMenu": [[20, 50, 100, -1], [20, 50, 100, "Todos"]],
@@ -266,4 +274,58 @@ function tabla_catalogo_guia(num_catalogo) {
         // alert("error en el ajax");
         tabla_catalogo_guia(num_catalogo);
     }
+}
+
+function estado_registro(catalogo, registro, checkbox) {
+    var estado = 0;
+    if (checkbox.checked) {
+        estado = 1;// activo
+    }
+    else {
+        estado = 0;// Inactivo
+    }
+
+    // enviar datos
+    $.ajax({
+        type: "GET",
+        dataType: "json",
+        url: "/recpsicocatalogodesactiva/" + catalogo + "/" + registro + "/" + estado,
+        data: {},
+        cache: false,
+        success: function (dato) {
+            // mensaje
+            swal({
+                title: "Correcto",
+                text: "" + dato.msj,
+                type: "success", // warning, error, success, info
+                buttons: {
+                    visible: false, // true , false
+                },
+                timer: 1500,
+                showConfirmButton: false
+            });
+        },
+        error: function (dato) {
+            // checkbox estado anterior
+            if (checkbox.checked) {
+                $(checkbox).prop('checked', false); // volver a Inactivar
+            }
+            else {
+                $(checkbox).prop('checked', true); // volver activar
+            }
+
+            // mensaje
+            swal({
+                title: "Error",
+                text: "Error al modificar la información",
+                type: "error", // warning, error, success, info
+                buttons: {
+                    visible: false, // true , false
+                },
+                timer: 1500,
+                showConfirmButton: false
+            });
+            return false;
+        }
+    });//Fin ajax
 }

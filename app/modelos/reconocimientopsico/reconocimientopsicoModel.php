@@ -35,6 +35,12 @@ class reconocimientopsicoModel extends Model
         'requiere_contrato',
         'autorizado',
         'ordentrabajo_id',
-        'proyecto_folio'
+        'proyecto_folio',
+        'NOMBRE_TECNICO',
+        'NOMBRE_CONTRATO',
+        'CARGO_TECNICO',
+        'CARGO_CONTRATO',
+        'TECNICO_DOC',
+        'CONTRATO_DOC'
     ];
 }

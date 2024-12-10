@@ -1068,7 +1068,11 @@ Route::resource('reportes', 'reportes\reportesController');
 
 Route::get('reporteslistaparametros/{proyecto_id}', ['as' => 'reportes.reporteslistaparametros', 'uses' => 'reportes\reportesController@reporteslistaparametros']);
 
+Route::get('reporteslistaparametrosPsico/{proyecto_id}', ['as' => 'reportes.reporteslistaparametrosPsico', 'uses' => 'reportes\reportesController@reporteslistaparametrosPsico']);
+
 Route::get('/servicioHI', ['as' => 'reportes.servicioHI', 'uses' => 'reportes\reportesController@servicioHI']);
+
+Route::get('/servicioPsico', ['as' => 'reportes.servicioPsico', 'uses' => 'reportes\reportesController@servicioPsico']);
 
 Route::get('/validacionAsignacionUserProyecto/{id}', ['as' => 'reportes.validacionAsignacionUserProyecto', 'uses' => 'reportes\reportesController@validacionAsignacionUserProyecto']);
 
@@ -1083,6 +1087,8 @@ Route::get('logoPortada/{ID}', ['as' => 'reportes.logoPortada', 'uses' => 'repor
 Route::get('portadaInfo/{proyecto}/{agente}', ['as' => 'reportes.portadaInfo', 'uses' => 'reportes\reportesController@portadaInfo']);
 
 Route::get('reportepoevista/{proyecto_id}', ['as' => 'reportes.reportepoevista', 'uses' => 'reportes\reportesController@reportepoevista']);
+
+Route::get('reportepoevistapsico/{proyecto_id}', ['as' => 'reportes.reportepoevistapsico', 'uses' => 'reportes\reportesController@reportepoevistapsico']);
 
 Route::get('reportecategoriatabla/{proyecto_id}', ['as' => 'reportes.reportecategoriatabla', 'uses' => 'reportes\reportesController@reportecategoriatabla']);
 
@@ -1101,8 +1107,13 @@ Route::get('descargarPortadaInformes/{proyecto_id}/{tipo}', ['as' => 'reportes.d
 
 
 //==============================================
+Route::get('reportenom035vista2/{proyecto_id}', ['as' => 'reportenom035.reportenom035vista2', 'uses' => 'reportes\reportenom0352Controller@reportenom035vista2']);
+
+Route::get('reportenom035vista3/{proyecto_id}', ['as' => 'reportenom035.reportenom035vista3', 'uses' => 'reportes\reportenom0353Controller@reportenom035vista3']);
 
 
+
+//==============================================
 Route::resource('reporteiluminacion', 'reportes\reporteiluminacionController');
 
 Route::get('reporteiluminacionvista/{proyecto_id}', ['as' => 'reporteiluminacion.reporteiluminacionvista', 'uses' => 'reportes\reporteiluminacionController@reporteiluminacionvista']);
@@ -1722,6 +1733,11 @@ Route::post('reporteserviciopersonalword', ['as' => 'reporteserviciopersonal.rep
 Route::get('reporteserviciopersonalworddescargar/{proyecto_id}/{revision_id}/{ultima_revision}', ['as' => 'reporteserviciopersonal.reporteserviciopersonalworddescargar', 'uses' => 'reportes\reporteserviciopersonalwordController@reporteserviciopersonalworddescargar']);
 
 //================================================================================================
+Route::resource('reportemapaderiesgo', 'reportes\reporteMapaController');
+
+Route::get('reportemapaderiesgovista/{proyecto_id}', ['as' => 'reportemapaderiesgo.reportemapaderiesgovista', 'uses' => 'reportes\reporteMapaController@reportemapaderiesgovista']);
+
+//================================================================================================
 
 Route::resource('reportebei', 'reportes\reporteBeiController');
 
@@ -1875,6 +1891,9 @@ Route::get('mostrarfotoinstalacionpsico/{archivo_opcion}/{reconocimientopsico_id
 Route::get('mostrarmapapsico/{archivo_opcion}/{reconocimientopsico_id}', ['as' => 'mostrarmapapsico', 'uses' => 'PSICO\reconocimientoPsicoController@mostrarmapapsico']);
 Route::get('tablareconocimientopsico', ['as' => 'reconocimientoPsico.tablareconocimientopsico', 'uses' => 'PSICO\reconocimientoPsicoController@tablareconocimientopsico']);
 
+Route::get('mostrartecnicodoc/{archivo_opcion}/{reconocimientopsico_id}', ['as' => 'mostrartecnicodoc', 'uses' => 'PSICO\reconocimientoPsicoController@mostrartecnicodoc']);
+Route::get('mostrarcontratodoc/{archivo_opcion}/{reconocimientopsico_id}', ['as' => 'mostrarcontratodoc', 'uses' => 'PSICO\reconocimientoPsicoController@mostrarcontratodoc']);
+
 //categoria
 Route::get('recopsicocategoriatabla/{reconocimientopsico_id}', ['as' => 'recopsicocategoria.recopsicocategoriatabla', 'uses' => 'PSICO\recopsicocategoriaController@recopsicocategoriatabla']);
 Route::resource('recopsicocategoria', 'PSICO\recopsicocategoriaController');
@@ -1924,12 +1943,15 @@ Route::put('actualizarFechasOnline', ['as' => 'PSICO.actualizarFechasOnline', 'u
 
 Route::put('guardarCambiosTrabajador', ['as' => 'PSICO.guardarCambiosTrabajador', 'uses' => 'PSICO\ejecucionPsicoController@guardarCambiosTrabajador']);
 
+Route::get('psicoevidenciafotomostrar/{foto_opcion}/{tipo_foto}/{foto_id}', ['as' => 'PSICO.proyectoevidenciafotomostrar', 'uses' => 'PSICO\ejecucionPsicoController@psicoevidenciafotomostrar']);
+
+Route::get('psicoevidenciafotosonline/{proyecto_id}', ['as' => 'PSICO.evidenciafotosOnline', 'uses' => 'PSICO\ejecucionPsicoController@evidenciafotosOnline']);
 
 
 
 //================INFORMES
 Route::resource('informesPsicosocial', 'PSICO\informesrecoPsicoController');
-
+Route::resource('reportenom0353', 'reportes\reportenom0353Controller');
 // =================GUIAS 
 
 // Route::get('/Guia/{id}/{guia1}/{guia2}/{guia3}', function () { return view('catalogos.psico.guias.guias');})->name('Guia');
@@ -1986,7 +2008,9 @@ Route::get('eliminarLibro/{id}', ['as' => 'biblioteca.eliminarLibro', 'uses' => 
 //CATÁLOGOS
 Route::resource('recpsicocatalogos', 'PSICO\recpsicocatalogosController');
 Route::get('recpsicocatalogosguia/{num_catalogo}', ['as' => 'PSICO.recpsicocatalogos', 'uses' => 'PSICO\recpsicocatalogosController@tablaCatalogoGuia']);
-
+Route::resource('recpsicocatalogosrec', 'PSICO\recpsicocatalogosrecController');
+Route::get('recpsicocatalogosinformes/{num_catalogo}', ['as' => 'PSICO.recpsicocatalogosrec', 'uses' => 'PSICO\recpsicocatalogosrecController@tablaCatalogoRec']);
+Route::get('recpsicocatalogodesactiva/{catalogo}/{registro}/{estado}', ['as' => 'recpsicocatalogos.recpsicocatalogodesactiva', 'uses' => 'PSICO\recpsicocatalogosController@recpsicocatalogodesactiva']);
 
 
 Route::get('/clear-cache', function () {

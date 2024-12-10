@@ -187,18 +187,10 @@
                                                 <i class="fa fa-address-card"></i><br>
                                                 <span>Normativa</span>
                                             </div>
-                                            <!-- <div class="multisteps-form__progress-btn" id="steps_menu_tab5">
-                                                <i class="fa fa-handshake-o"></i><br>
-                                                <span>E. P. P.</span>
-                                            </div>
-                                            <div class="multisteps-form__progress-btn" id="steps_menu_tab6">
+                                            <div class="multisteps-form__progress-btn" id="steps_menu_tab5">
                                                 <i class="fa fa-address-card"></i><br>
                                                 <span>Responsables</span>
                                             </div>
-                                            <div class="multisteps-form__progress-btn" id="steps_menu_tab7">
-                                                <i class="fa fa-file-text-o"></i><br>
-                                                <span>Anexos</span>
-                                            </div> -->
                                         </div>
                                     </div>
                                 </div>
@@ -728,7 +720,6 @@
                                                 </div>
                                             </div>
                                             <!--STEP 4-->
-
                                             <div class="multisteps-form__panel" data-animation="scaleIn" id="steps_contenido_tab4">
                                                 <div class="multisteps-form__content">
                                                     <form name="form_normativa" id="form_normativa" enctype="multipart/form-data" method="post">
@@ -905,8 +896,102 @@
                                                                                 </div>
                                                                             </div>
                                                                         </div>   
-                                                                         
+                                                                    </div> 
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </form>
+                                                </div>
+                                            </div>
+                                           
+                                            <!--STEP 5-->
+                                            <div class="multisteps-form__panel" data-animation="scaleIn" id="steps_contenido_tab5">
+                                                <div class="multisteps-form__content">
+                                                    <form enctype="multipart/form-data" method="post" name="form_responsables" id="form_responsables">
+                                                        <div class="row justify-content-center align-items-center">
+                                                            <div class="col-12">
+                                                                {!! csrf_field() !!}
+                                                            </div>
+                                                            <div class="col-lg-12 col-md-12 col-sm-12">
+                                                                <ol class="breadcrumb m-b-10 text-light">
+                                                                    Responsables del informe de reconocimiento sensorial
+                                                                </ol>
+                                                                <div class="row">
+                                                                    <div class="col-6">
+                                                                        <div class="form-group">
+                                                                            <label> Nombre del responsable Técnico del informe</label>
+                                                                            <input type="text" class="form-control" id="NOMBRE_TECNICO" name="NOMBRE_TECNICO" required>
+                                                                        </div>
                                                                     </div>
+
+                                                                    <div class="col-6">
+                                                                        <div class="form-group">
+                                                                            <label> Nombre del responsable del Contrato/Proyecto </label>
+                                                                            <input type="text" class="form-control" id="NOMBRE_CONTRATO" name="NOMBRE_CONTRATO" required>
+                                                                        </div>
+                                                                    </div>
+                                                                    <div class="col-6">
+                                                                        <div class="form-group">
+                                                                            <label> Cargo del responsable Técnico del informe</label>
+                                                                            <select class="custom-select form-control" id="CARGO_TECNICO" name="CARGO_TECNICO" required>
+                                                                                <option value=""></option>
+                                                                                @foreach($cargos as $dato)
+                                                                                <option value="{{$dato->CARGO}}">{{$dato->CARGO}}</option>
+                                                                                @endforeach
+                                                                            </select>
+                                                                        </div>
+                                                                    </div>
+                                                                    <div class="col-6">
+                                                                        <div class="form-group">
+                                                                            <label> Cargo del responsable del Contrato/Proyecto</label>
+                                                                            <select class="custom-select form-control" id="CARGO_CONTRATO" name="CARGO_CONTRATO" required>
+                                                                                <option value=""></option>
+                                                                                @foreach($cargos as $dato)
+                                                                                <option value="{{$dato->CARGO}}">{{$dato->CARGO}}</option>
+                                                                                @endforeach
+                                                                            </select>
+                                                                        </div>
+                                                                    </div>
+                                                                    <div class="col-6">
+                                                                        <div class="form-group">
+                                                                            <label> Documento del responsable Técnico del informe</label>
+                                                                            <style type="text/css" media="screen">
+                                                                                .dropify-wrapper {
+                                                                                    height: 296px !important;
+                                                                                    /*tamaño estatico del campo foto*/
+                                                                                }
+                                                                            </style>
+                                                                            <input type="file" class="dropify" accept="image/jpeg,image/x-png" id="TECNICO_DOC_IMG" name="TECNICO_DOC_IMG" data-allowed-file-extensions="jpg png JPG PNG" data-height="296" data-default-file="" required>
+                                                                        </div>
+                                                                    </div>
+
+                                                                    <div class="col-6">
+                                                                        <div class="form-group">
+                                                                            <label> Documento del responsable del Contrato/Proyecto</label>
+                                                                            <style type="text/css" media="screen">
+                                                                                .dropify-wrapper {
+                                                                                    height: 296px !important;
+                                                                                    /*tamaño estatico del campo foto*/
+                                                                                }
+                                                                            </style>
+                                                                            <input type="file" class="dropify" accept="image/jpeg,image/x-png" id="CONTRATO_DOC_IMG" name="CONTRATO_DOC_IMG" data-allowed-file-extensions="jpg png JPG PNG" data-height="296" data-default-file="" required>
+                                                                        </div>
+                                                                    </div>
+                                                                   
+
+                                                                   
+                                                                    
+                                                                   
+                                                                </div>
+                                                            </div>
+
+
+                                                            <div class="col-sm-8">
+                                                                <div class="form-group" style="text-align: right;">
+                                                                    <button type="submit" class="btn btn-danger botonguardar_modulorecsensorial w-100 p-3" id="boton_guardar_responsables">
+                                                                        Guardar responsables <i class="fa fa-save"></i>
+                                                                    </button>
                                                                 </div>
                                                             </div>
                                                         </div>
@@ -1159,7 +1244,7 @@
                                 <div class="form-group">
                                     <label>Seleccionar las preguntas que desea aplicar de la Guia de referencia V *</label>
                                     <div class="custom-control custom-checkbox" style="display: block;">
-                                        <input type="checkbox" class="custom-control-input" id="pregunta1" name="pregunta1" checked disabled>
+                                        <input type="checkbox" class="custom-control-input" id="pregunta1" name="pregunta1" checked readonly>
                                         <label class="custom-control-label" for="pregunta1">Sexo</label>
                                     </div> 
                                     <div class="custom-control custom-checkbox" style="display: block;">
@@ -1175,11 +1260,11 @@
                                         <label class="custom-control-label" for="pregunta4">Nivel de estudios</label>
                                     </div> 
                                     <div class="custom-control custom-checkbox" style="display: block;">
-                                        <input type="checkbox" class="custom-control-input" id="pregunta5" name="pregunta5" checked disabled>
+                                        <input type="checkbox" class="custom-control-input" id="pregunta5" name="pregunta5" checked readonly>
                                         <label class="custom-control-label" for="pregunta5">Ocupacion/profesión/puesto</label>
                                     </div> 
                                     <div class="custom-control custom-checkbox" style="display: block;">
-                                        <input type="checkbox" class="custom-control-input" id="pregunta6" name="pregunta6" checked disabled>
+                                        <input type="checkbox" class="custom-control-input" id="pregunta6" name="pregunta6" checked readonly>
                                         <label class="custom-control-label" for="pregunta6">Departamento/Sección/Área</label>
                                     </div> 
                                     <div class="custom-control custom-checkbox" style="display: block;"> 

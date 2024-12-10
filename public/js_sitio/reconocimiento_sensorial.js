@@ -9436,6 +9436,10 @@ function funcion_tabla_quimicosresumen_3(recsensorial_id, numero_tabla) {
 					//     "data": "id"
 					// },
 					{
+						"data": "boton_eliminar",
+						"defaultContent": "-"
+					},
+					{
 						"data": "boton_editar",
 						"defaultContent": "-"
 					},
@@ -9481,7 +9485,7 @@ function funcion_tabla_quimicosresumen_3(recsensorial_id, numero_tabla) {
 					// }
 				],
 				"order": [[1, "asc"]],
-				"rowsGroup": [0, 1, 2, 3], //agrupar filas
+				"rowsGroup": [0, 1, 2, 3, 4], //agrupar filas
 				"lengthMenu": [[20, 50, 100, -1], [20, 50, 100, "Todos"]],
 				"ordering": false,
 				"processing": true,

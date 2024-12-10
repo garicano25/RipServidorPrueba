@@ -66,7 +66,7 @@ function cargarFoliosProyecto(proyecto_folio) {
     $.ajax({
         type: "GET",
         dataType: "json",
-        url: "/servicioHI",
+        url: "/servicioPsico",
         data: {},
         cache: false,
         success: function(dato) {
@@ -97,7 +97,7 @@ function consulta_menuparametros_reportes(proyecto_id)
 	$.ajax({
 		type: "GET",
 		dataType: "json",
-		url: "/reporteslistaparametros/"+proyecto_id,
+		url: "/reporteslistaparametrosPsico/"+proyecto_id,
 		data:{},
 		cache: false,
 		success:function(dato)
@@ -144,75 +144,25 @@ function seleccionar_proyectos(ProyectoID) {
 
 // function mostrar_reporte(agente_nombre)
 
-function mostrar_reporte(agente_id)
+function mostrar_reporte(paquete_id)
 {
 
 var proyecto_id =  $('#informes_reco').val();
-//   console.log(agente_id);
 	
 	// Cargar página reporte
 	$.ajax({
 		success:function()
 		{
-			switch (parseInt(agente_id))
+			switch (parseInt(paquete_id))
 			{ 
 				case 0:
-					$('#estructura_reporte').load('/reportepoevista/'+proyecto_id);
+					$('#estructura_reporte').load('/reportepoevistapsico/'+proyecto_id);
 					break;
 				case 1:
-				    $('#estructura_reporte').load('/reporteruidovista/'+proyecto_id);
+				    $('#estructura_reporte').load('/reportenom035vista2/'+proyecto_id);
 					break;
 				case 2:
-					$('#estructura_reporte').load('/reportevibracionvista/'+proyecto_id);
-					break;
-				case 3:
-					$('#estructura_reporte').load('/reportetemperaturavista/'+proyecto_id);
-					break;      
-				case 4:
-					$('#estructura_reporte').load('/reporteiluminacionvista/'+proyecto_id);
-					break;
-				case 5:
-					$('#estructura_reporte').html('<p style="text-align: center; font-size: 24px;">Reporte no disponible</p>');
-					break;
-				case 6:
-					$('#estructura_reporte').html('<p style="text-align: center; font-size: 24px;">Reporte no disponible</p>');
-					break;
-				case 7:
-					$('#estructura_reporte').html('<p style="text-align: center; font-size: 24px;">Reporte no disponible</p>');
-					break;
-				case 8:
-					$('#estructura_reporte').load('/reporteairevista/'+proyecto_id);
-					break;
-				case 9:
-					$('#estructura_reporte').load('/reporteaguavista/'+proyecto_id);
-					break;
-				case 10:
-					$('#estructura_reporte').load('/reportehielovista/'+proyecto_id);
-					break;
-				case 11:
-					$('#estructura_reporte').load('/reportealimentosvista/'+proyecto_id);
-					break;
-				case 12:
-					$('#estructura_reporte').html('<p style="text-align: center; font-size: 24px;">Reporte no disponible</p>');
-					break;
-				case 13:
-					$('#estructura_reporte').html('<p style="text-align: center; font-size: 24px;">Reporte no disponible</p>');
-					break;
-				case 14:
-					$('#estructura_reporte').html('<p style="text-align: center; font-size: 24px;">Reporte no disponible</p>');
-					break;
-				case 15:
-					$('#estructura_reporte').load('/reportequimicosvista/'+proyecto_id);
-					break;
-				case 16:
-					$('#estructura_reporte').load('/reporteserviciopersonalvista/'+proyecto_id);
-					break;
-				case 17:
-					// $('#estructura_reporte').html('<p style="text-align: center; font-size: 24px;">Reporte no disponible</p>');
-					$('#estructura_reporte').load('/reportemapaderiesgovista/'+proyecto_id);
-					break;
-				case 22:
-					$('#estructura_reporte').load('/reportebeivista/'+proyecto_id);
+				    $('#estructura_reporte').load('/reportenom035vista3/'+proyecto_id);
 					break;
 				default:
 					$('#estructura_reporte').html('<p style="text-align: center; font-size: 24px;">Seleccione un tipo de reporte</p>');
