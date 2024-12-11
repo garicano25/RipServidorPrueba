@@ -45,7 +45,7 @@ class reportenom0353Controller extends Controller
         if ($proyecto->proyecto_clienteinstalacion == NULL || $proyecto->proyecto_fechaentrega == NULL) {
             return '<div style="text-align: center;">
                         <p style="font-size: 24px;">Datos incompletos</p>
-                        <b style="font-size: 18px;">Para ingresar al diseño del reporte de Ruido primero debe completar todos los campos vacíos de la sección de datos generales del proyecto.</b>
+                        <b style="font-size: 18px;">Para ingresar al diseño del reporte de NOM-035-STPS-2028 primero debe completar todos los campos vacíos de la sección de datos generales del proyecto.</b>
                     </div>';
         } else {
             //CATEGORIAS POE
@@ -53,17 +53,17 @@ class reportenom0353Controller extends Controller
 
 
             $categorias = DB::select('SELECT
-                                            reporteruidocategoria.proyecto_id, 
-                                            reporteruidocategoria.registro_id, 
-                                            reporteruidocategoria.id, 
-                                            reporteruidocategoria.reporteruidocategoria_nombre, 
-                                            reporteruidocategoria.reporteruidocategoria_total
+                                            reportenom0353categoria.proyecto_id, 
+                                            reportenom0353categoria.registro_id, 
+                                            reportenom0353categoria.id, 
+                                            reportenom0353categoria.reportenom0353categoria_nombre, 
+                                            reportenom0353categoria.reportenom0353categoria_total
                                         FROM
-                                            reporteruidocategoria
+                                            reportenom0353categoria
                                         WHERE
-                                            reporteruidocategoria.proyecto_id = ' . $proyecto_id . ' 
+                                            reportenom0353categoria.proyecto_id = ' . $proyecto_id . ' 
                                         ORDER BY
-                                            reporteruidocategoria.reporteruidocategoria_nombre ASC');
+                                            reportenom0353categoria.reportenom0353categoria_nombre ASC');
 
 
             if (count($categorias) > 0) {
@@ -76,22 +76,21 @@ class reportenom0353Controller extends Controller
             // AREAS POE
             //-------------------------------------
 
-
             $areas = DB::select('SELECT
-                                    reporteruidoarea.proyecto_id, 
-                                    reporteruidoarea.registro_id, 
-                                    reporteruidoarea.id, 
-                                    reporteruidoarea.reporteruidoarea_instalacion, 
-                                    reporteruidoarea.reporteruidoarea_nombre, 
-                                    reporteruidoarea.reporteruidoarea_numorden, 
-                                    reporteruidoarea.reporteruidoarea_porcientooperacion
+                                    reportenom0353area.proyecto_id, 
+                                    reportenom0353area.registro_id, 
+                                    reportenom0353area.id, 
+                                    reportenom0353area.reporteruidoarea_instalacion,
+                                    reportenom0353area.reporteruidoarea_nombre, 
+                                    reportenom0353area.reporteruidoarea_numorden, 
+                                    reportenom0353area.reporteruidoarea_porcientooperacion
                                 FROM
-                                    reporteruidoarea
+                                    reportenom0353area
                                 WHERE
-                                    reporteruidoarea.proyecto_id = ' . $proyecto_id . ' 
+                                    reportenom0353area.proyecto_id = ' . $proyecto_id . ' 
                                 ORDER BY
-                                    reporteruidoarea.reporteruidoarea_numorden ASC,
-                                    reporteruidoarea.reporteruidoarea_nombre ASC');
+                                    reportenom0353area.reporteruidoarea_numorden ASC,
+                                    reportenom0353area.reporteruidoarea_nombre ASC');
 
 
             if (count($areas) > 0) {
