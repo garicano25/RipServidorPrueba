@@ -492,15 +492,6 @@
 					</div>
 				</form>
 
-
-
-				<!-- ======== ELIMINAR DESPUES DE SUBIR AL SERVIDOR =============-->
-				<div class="col-12 mt-4" style="text-align: center;">
-					<button type="submit" class="btn btn-info waves-effect waves-light" id="btn_descargar_plantilla">Descargar plantilla principal <i class="fa fa-download"></i></button>
-				</div>
-				<!-- ======== ELIMINAR DESPUES DE SUBIR AL SERVIDOR =============-->
-
-
 				<h4 class="card-title" id="2">2.- Definiciones</h4>
 				<div class="row">
 					<div class="col-12">
@@ -1306,11 +1297,7 @@
 								</button>
 
 							</div>
-							<div>
-								<button type="button" class="btn btn-default waves-effect" data-toggle="tooltip" title="Generar Programa de Conservación de la Audición" id="boton_reporte_pca">
-									<span class="btn-label"><i class="fa fa-file-excel-o"></i></span> Generar PCA
-								</button>
-							</div>
+
 						</div>
 						@endif
 						<table class="table table-hover tabla_reporte" width="100%" id="tabla_reporte_revisiones">

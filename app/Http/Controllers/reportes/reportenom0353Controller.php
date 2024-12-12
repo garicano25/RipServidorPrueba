@@ -5,7 +5,7 @@ namespace App\Http\Controllers\reportes;
 
 // Modelos
 use App\modelos\proyecto\proyectoModel;
-use App\modelos\recsensorial\recsensorialModel;
+use App\modelos\reconocimientopsico\reconocimientopsicoModel;
 
 //Tablas revisiones
 use App\modelos\reportes\reporterevisionesModel;
@@ -80,17 +80,17 @@ class reportenom0353Controller extends Controller
                                     reportenom0353area.proyecto_id, 
                                     reportenom0353area.registro_id, 
                                     reportenom0353area.id, 
-                                    reportenom0353area.reporteruidoarea_instalacion,
-                                    reportenom0353area.reporteruidoarea_nombre, 
-                                    reportenom0353area.reporteruidoarea_numorden, 
-                                    reportenom0353area.reporteruidoarea_porcientooperacion
+                                    reportenom0353area.reportenom0353area_instalacion,
+                                    reportenom0353area.reportenom0353area_nombre, 
+                                    reportenom0353area.reportenom0353area_numorden, 
+                                    reportenom0353area.reportenom0353area_porcientooperacion
                                 FROM
                                     reportenom0353area
                                 WHERE
                                     reportenom0353area.proyecto_id = ' . $proyecto_id . ' 
                                 ORDER BY
-                                    reportenom0353area.reporteruidoarea_numorden ASC,
-                                    reportenom0353area.reporteruidoarea_nombre ASC');
+                                    reportenom0353area.reportenom0353area_numorden ASC,
+                                    reportenom0353area.reportenom0353area_nombre ASC');
 
 
             if (count($areas) > 0) {
@@ -100,17 +100,7 @@ class reportenom0353Controller extends Controller
             }
 
 
-            //-------------------------------------
-
-
-            // $categorias_poe = 1; // TIENE POE GENERAL
-            // $areas_poe = 1; // TIENE POE GENERAL
-
-
-            //-------------------------------------
-
-
-            $recsensorial = recsensorialModel::with(['catregion', 'catgerencia', 'catactivo'])->findOrFail($proyecto->recsensorial_id);
+            $recsensorial = reconocimientopsicoModel::findOrFail($proyecto->reconocimiento_psico_id);
 
             // Catalogos
             $catregion = catregionModel::get();
@@ -137,12 +127,12 @@ class reportenom0353Controller extends Controller
     {
         try {
             $proyecto = proyectoModel::with(['catregion', 'catsubdireccion', 'catgerencia', 'catactivo'])->findOrFail($proyecto_id);
-            $recsensorial = recsensorialModel::with(['catregion', 'catsubdireccion', 'catgerencia', 'catactivo'])->findOrFail($proyecto->recsensorial_id);
+            $recsensorial = reconocimientopsicoModel::findOrFail($proyecto->reconocimiento_psico_id);
 
             $meses = ["Vacio", "Enero", "Febrero", "Marzo", "Abril", "Mayo", "Junio", "Julio", "Agosto", "Septiembre", "Octubre", "Noviembre", "Diciembre"];
             $proyectofecha = explode("-", $proyecto->proyecto_fechaentrega);
 
-            $reportecatalogo = reporteruidocatalogoModel::limit(1)->get();
+            $reportecatalogo = reportenom0353catalogoModel::limit(1)->get();
             $reporte  = reporteruidoModel::where('proyecto_id', $proyecto_id)
                 ->orderBy('reporteruido_revision', 'DESC')
                 ->limit(1)
@@ -332,10 +322,8 @@ class reportenom0353Controller extends Controller
 
             $dato['reporte_objetivogeneral'] = $this->datosproyectoreemplazartexto($proyecto, $recsensorial, $objetivogeneral);
 
-
             // OBJETIVOS ESPECIFICOS
             //===================================================
-
 
             if ($dato['reporteregistro_id'] >= 0 && $reporte->reporteruido_objetivoespecifico != NULL) {
                 if ($reporte->proyecto_id == $proyecto_id) {
