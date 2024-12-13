@@ -1981,4 +1981,119 @@ class reportenom0353Controller extends Controller
         }
     }
 
+      /**
+     * Display the specified resource.
+     *
+     * @param  int $proyecto_id
+     * @param  $agente_nombre
+     * @param  int $reporteregistro_id
+     * @return \Illuminate\Http\Response
+     */
+    public function reportenom0353tabladefiniciones($proyecto_id, $agente_nombre, $reporteregistro_id)
+    {
+        try {
+
+
+            $revision = reporterevisionesModel::where('proyecto_id', $proyecto_id)
+                ->where('agente_id', 1)
+                ->orderBy('reporterevisiones_revision', 'DESC')
+                ->get();
+
+
+            $edicion = 1;
+            if (count($revision) > 0) {
+                if ($revision[0]->reporterevisiones_concluido == 1 || $revision[0]->reporterevisiones_cancelado == 1) {
+                    $edicion = 0;
+                }
+            }
+
+
+            //==========================================
+
+
+            // Datos
+            $proyecto = proyectoModel::with(['catregion', 'catsubdireccion', 'catgerencia', 'catactivo'])->findOrFail($proyecto_id);
+            $recsensorial = reconocimientopsicoModel::findOrFail($proyecto->reconocimiento_psico_id);
+
+            $where_definiciones = '';
+
+            $definiciones_catalogo = collect(DB::select('SELECT
+                                                                TABLA.id,
+                                                                TABLA.agente_id,
+                                                                TABLA.agente_nombre,
+                                                                TABLA.catactivo_id,
+                                                                TABLA.concepto,
+                                                                TABLA.descripcion,
+                                                                TABLA.fuente
+                                                            FROM
+                                                                (
+                                                                    (
+                                                                        SELECT
+                                                                            reportedefinicionescatalogo.id,
+                                                                            reportedefinicionescatalogo.agente_id,
+                                                                            reportedefinicionescatalogo.agente_nombre,
+                                                                            -1 catactivo_id,
+                                                                            reportedefinicionescatalogo.reportedefinicionescatalogo_concepto AS concepto,
+                                                                            reportedefinicionescatalogo.reportedefinicionescatalogo_descripcion AS descripcion,
+                                                                            reportedefinicionescatalogo.reportedefinicionescatalogo_fuente AS fuente
+                                                                        FROM
+                                                                            reportedefinicionescatalogo
+                                                                        WHERE
+                                                                            reportedefinicionescatalogo.agente_nombre LIKE "' . $agente_nombre . '"
+                                                                            AND reportedefinicionescatalogo.reportedefinicionescatalogo_activo = 1
+                                                                        ORDER BY
+                                                                            reportedefinicionescatalogo.reportedefinicionescatalogo_concepto ASC
+                                                                    )
+                                                                    UNION ALL
+                                                                    (
+                                                                        SELECT
+                                                                            reportedefiniciones.id,
+                                                                            reportedefiniciones.agente_id,
+                                                                            reportedefiniciones.agente_nombre,
+                                                                            reportedefiniciones.catactivo_id,
+                                                                            reportedefiniciones.reportedefiniciones_concepto AS concepto,
+                                                                            reportedefiniciones.reportedefiniciones_descripcion AS descripcion,
+                                                                            reportedefiniciones.reportedefiniciones_fuente AS fuente 
+                                                                        FROM
+                                                                            reportedefiniciones
+                                                                        WHERE
+                                                                            reportedefiniciones.agente_nombre LIKE "' . $agente_nombre . '"
+                                                                            ' . $where_definiciones . ' 
+                                                                        ORDER BY
+                                                                            reportedefiniciones.agente_nombre ASC
+                                                                    )
+                                                                ) AS TABLA
+                                                            ORDER BY
+                                                                -- TABLA.catactivo_id ASC,
+                                                                TABLA.concepto ASC'));
+
+            foreach ($definiciones_catalogo as $key => $value) {
+                if (($value->catactivo_id + 0) < 0) {
+                    $value->descripcion_fuente = $value->descripcion . '<br><span style="color: #999999; font-style: italic;">Fuente: ' . $value->fuente . '</span>';
+                    $value->boton_editar = '<button type="button" class="btn btn-default waves-effect btn-circle"><i class="fa fa-ban fa-1x"></i></button>';
+                    $value->boton_eliminar = '<button type="button" class="btn btn-default waves-effect btn-circle" data-toggle="tooltip" title="No disponible"><i class="fa fa-ban fa-1x"></i></button>';
+                } else {
+                    $value->descripcion_fuente = $value->descripcion . '<br><span style="color: #999999; font-style: italic;">Fuente: ' . $value->fuente . '</span>';
+                    $value->boton_editar = '<button type="button" class="btn btn-warning waves-effect btn-circle"><i class="fa fa-pencil fa-1x"></i></button>';
+                    // $value->boton_eliminar = '<button type="button" class="btn btn-danger waves-effect btn-circle"><i class="fa fa-trash fa-1x"></i></button>';
+
+                    if ($edicion == 1) {
+                        $value->boton_eliminar = '<button type="button" class="btn btn-danger waves-effect btn-circle eliminar"><i class="fa fa-trash fa-1x"></i></button>';
+                    } else {
+                        $value->boton_eliminar = '<button type="button" class="btn btn-default waves-effect btn-circle" data-toggle="tooltip" title="No disponible"><i class="fa fa-eye fa-1x"></i></button>';
+                    }
+                }
+            }
+
+            // respuesta
+            $dato['data'] = $definiciones_catalogo;
+            $dato["msj"] = 'Datos consultados correctamente';
+            return response()->json($dato);
+        } catch (Exception $e) {
+            $dato['data'] = 0;
+            $dato["msj"] = 'Error ' . $e->getMessage();
+            return response()->json($dato);
+        }
+    }
+
 }

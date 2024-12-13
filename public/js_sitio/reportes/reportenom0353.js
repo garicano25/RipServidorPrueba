@@ -204,11 +204,34 @@ function datosgenerales()
 
 			$('.div_instalacion_nombre').html(dato.reporte_portada.reporte_instalacion);
 
-			$('#reporte_introduccion').html(dato.reporte_introduccion);
-			$('#reporte_objetivogeneral').html(dato.reporte_objetivogeneral);
-			$('#reporte_objetivoespecifico').html(dato.reporte_objetivoespecifico);
-			$('#reporte_metodologia_4_1').html(dato.reporte_metodologia_4_1);
-			$('#reporte_metodologia_4_2').html(dato.reporte_metodologia_4_2);
+			$('#reporte_introduccion').html('Es un hecho que los factores físicos, psíquicos y sociales, afectan la integridad mental de los trabajadores. Los Factores de Riesgo Psicosocial (FRPS) propios de las variadas actividades que se desarrollan en esta industria petrolera no son la excepción.\n\n' +
+'La manera de expresión del hombre en su esfera social y económica. Su cotidianeidad, su proyección vital, su experiencia emocional, cognoscitiva o espiritual, es dada con mayor frecuencia en el área de trabajo, dado el tiempo que se invierte.\n\n'+
+'Tomando en cuenta la importancia de la evaluación e intervención sobre los Factores de Riesgo Psicosocial, para promover un estado de bienestar entre los trabajadores de acuerdo con la Norma Oficial Mexicana NOM-035-STPS-2018, Factores de riesgo psicosocial en el trabajo-Identificación, análisis y prevención.\n\n'+
+'CENAGAS busca cumplir con los estándares en materia de higiene y seguridad, verificando que la salud de los trabajadores expuestos a Factores de Riesgo Psicosocial no se vea afectada por la actividad en el centro de trabajo, por lo cual realiza de manera periódica y de acuerdo con lo establecido en la normatividad oficial y sus procedimientos internos las evaluaciones requeridas para dar cumplimiento.\n\n'+
+'En el presente estudio se describen los resultados obtenidos durante la evaluación de Factores de Riesgo Psicosocial en el ambiente laboral de acuerdo con lo establecido en la Norma Oficial Mexicana; NOM-035-STPS-2018 “Factores de Riesgo psicosocial en el trabajo–Identificación, análisis y prevención” realizado en el Sector Fuerza, Edificio Sede CENAGAS el 11 de octubre del año 2024.');
+			$('#reporte_objetivogeneral').html("Identificar y analizar los Factores de Riesgo Psicosocial Edificio Sede CENAGAS");
+			$('#reporte_objetivoespecifico').html(
+				'• Medir la prevalencia de los Factores de Riesgo Psicosocial (FRPS) en personal de Edificio Sede CENAGAS.' +
+				'• Determinar y analizar el nivel de riesgo, así como las acciones que se deberán adoptar para el control de los Factores de Riesgo Psicosocial, como se establece en la Norma Oficial Mexicana; NOM-035-STPS-2018 “Factores de Riesgo Psicosocial en el Trabajo–Identificación, análisis y prevención”.\n\n' +
+				'• Determinar los parámetros para la prevención de los Factores de Riesgo Psicosocial.\n\n' +
+				'• Determinar los parámetros para la prevención de la violencia laboral.\n\n' +
+				'• Identificar a los trabajadores que fueron sujetos a eventos traumáticos severos durante o con motivo del trabajo.'
+			  );
+			  
+			$('#reporte_metodologia_4_1').html(
+				'Guía de referencia I, Cuestionario para identificar a los trabajadores que fueron sujetos a Acontecimientos traumáticos severos. Como lo dicta la NOM-035-STPS-2018, para identificar a los trabajadores que fueron sujetos a eventos traumáticos severos o con motivo del trabajo y, canalizarlos para su atención a la institución de seguridad social o privada, o al médico del centro de trabajo o de la empresa.\n\n'+
+				'Guía de referencia III, Identificación y análisis de los Factores de Riesgo Psicosocial y Evaluación del entorno organizacional en los centros de trabajo. Como lo dicta la NOM-035-STPS-2018, en los centros de trabajo que tengan entre 16 y 50 trabajadores.\n\n'+
+				'La identificación y análisis de los factores de riesgo psicosocial y la evaluación del entorno organizacional se realizará de conformidad con la NOM-035-STPS-2018:\n'+
+				'1.	Los centros de trabajo que cuenten con más de 50 trabajadores, deberán realizar la identificación y análisis los factores de riesgo psicosocial y evaluar el entorno organizacional, éstas se podrán realizar con una muestra representativa.'
+			);
+			$('#reporte_acontecimientos').html("");
+			$('#reporte_ambiente').html("");
+			$('#reporte_factores').html("");
+			$('#reporte_organizacion').html("");
+			$('#reporte_liderazgo').html("");
+			$('#reporte_entorno').html("");
+
+
 
 			$('#reporte_ubicacioninstalacion').html(dato.reporte_ubicacioninstalacion.ubicacion);
 			if (dato.reporte_ubicacioninstalacion.ubicacionfoto)
@@ -235,8 +258,8 @@ function datosgenerales()
 				$('#boton_descargarmapaubicacion').css('display', 'none');
 			}
 
-			$('#reporte_procesoinstalacion').html(dato.reporte_procesoinstalacion);
-			$('#reporte_actividadprincipal').html(dato.reporte_actividadprincipal);
+			$('#reporte_procesoinstalacion').html("descripcion del proceso");
+			$('#reporte_actividadprincipal').html("act principal");
 			$('#reporte_metodoevaluacion').html(dato.reporte_metodoevaluacion);
 			$('#reporte_conclusion').html(dato.reporte_conclusion);
 
@@ -335,6 +358,7 @@ function datosgenerales()
 			menureporte_estado("menureporte_9_2_3", 1);
 			menureporte_estado("menureporte_9_2_4", 1);
 			menureporte_estado("menureporte_9_2_5", 1);
+			menureporte_estado("menureporte_9_3", 1);
 			menureporte_estado("menureporte_10", 1);
 			menureporte_estado("menureporte_10_1", 1);
 
@@ -11760,14 +11784,12 @@ rootConsolidadoChart1.setThemes([am5themes_Animated.new(rootConsolidadoChart1), 
 
 // Datos (con valores fijos para las 5 series)
 var dataConsolidado1 = [
-  { "category": "Condiciones en el \nambiente de trabajo", "Nulo": 0.10, "Bajo": 0.15, "Medio": 0.20, "Alto": 0.25, "Muy alto": 0.30 },
-  { "category": "Falta de control \nsobre el trabajo", "Nulo": 0.35, "Bajo": 0.18, "Medio": 0.22, "Alto": 0.15, "Muy alto": 0.10 },
-  { "category": "Carga de trabajo", "Nulo": 0.09, "Bajo": 0.36, "Medio": 0.21, "Alto": 0.26, "Muy alto": 0.08 },
-  { "category": "Jornada de trabajo", "Nulo": 0.14, "Bajo": 0.19, "Medio": 0.23, "Alto": 0.27, "Muy alto": 0.17 },
-  { "category": "Interferencia en la relacion\n trabajo-familia", "Nulo": 0.16, "Bajo": 0.20, "Medio": 0.24, "s4": 0.29, "Muy alto": 0.11 },
-  { "category": "Liderazgo", "Nulo": 0.11, "Bajo": 0.16, "Medio": 0.19, "Alto": 0.24, "Muy alto": 0.30 },
-  { "category": "Relaciones en el trabajo", "Nulo": 0.14, "Bajo": 0.17, "Medio": 0.22, "Alto": 0.27, "Muy alto": 0.20 },
-  { "category": "Violencia", "Nulo": 0.25, "Bajo": 0.10, "Medio": 0.20, "Alto": 0.40, "Muy alto": 0.05 }
+  { "category": "Acontecimientos traumáticos\n severos.", "Nulo": 0.95, "Muy alto": 0.05 },
+  { "category": "Ambiente de\n trabajo", "Nulo": 0.35, "Bajo": 0.18, "Medio": 0.22, "Alto": 0.15, "Muy alto": 0.10 },
+  { "category": "Factores Propios\n de la actividad", "Nulo": 0.09, "Bajo": 0.36, "Medio": 0.21, "Alto": 0.26, "Muy alto": 0.08 },
+  { "category": "Organización del \ntiempo de trabajo", "Nulo": 0.14, "Bajo": 0.19, "Medio": 0.23, "Alto": 0.27, "Muy alto": 0.17 },
+  { "category": "Liderazgo y relaciones\n en el trabajo", "Nulo": 0.16, "Bajo": 0.20, "Medio": 0.24, "Alto": 0.29, "Muy alto": 0.11 },
+  { "category": "Entorno organizacional", "Nulo": 0.11, "Bajo": 0.16, "Medio": 0.19, "Alto": 0.24, "Muy alto": 0.30 },
 ];
 
 var colorSetConsolidado1 = am5.ColorSet.new(rootConsolidadoChart1, {});

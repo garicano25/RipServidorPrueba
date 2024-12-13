@@ -482,7 +482,7 @@
 						<div class="col-12">
 							<div class="form-group">
 								{!! csrf_field() !!}
-								<textarea class="form-control" style="margin-bottom: 0px;" rows="20" id="" name="" required></textarea>
+								<textarea class="form-control" style="margin-bottom: 0px;" rows="20" id="reporte_introduccion" name="reporte_introduccion" required></textarea>
 							</div>
 						</div>
 						<div class="col-12" style="text-align: right;">
@@ -521,7 +521,7 @@
 						<div class="col-12">
 							<div class="form-group">
 								{!! csrf_field() !!}
-								<textarea class="form-control" style="margin-bottom: 0px;" rows="8" id="" name="" required></textarea>
+								<textarea class="form-control" style="margin-bottom: 0px;" rows="8" id="reporte_objetivogeneral" name="reporte_objetivogeneral" required></textarea>
 							</div>
 						</div>
 						<div class="col-12" style="text-align: right;">
@@ -535,7 +535,7 @@
 						<div class="col-12">
 							<div class="form-group">
 								{!! csrf_field() !!}
-								<textarea class="form-control" style="margin-bottom: 0px;" rows="12" id="" name="" required></textarea>
+								<textarea class="form-control" style="margin-bottom: 0px;" rows="12" id="reporte_objetivoespecifico" name="reporte_objetivoespecifico" required></textarea>
 							</div>
 						</div>
 						<div class="col-12" style="text-align: right;">
@@ -550,7 +550,7 @@
 						<div class="col-12">
 							<div class="form-group">
 								{!! csrf_field() !!}
-								<textarea class="form-control" style="margin-bottom: 0px;" rows="8" id="" name="" required></textarea>
+								<textarea class="form-control" style="margin-bottom: 0px;" rows="8" id="reporte_metodologia_4_1" name="reporte_metodologia_4_1" required></textarea>
 							</div>
 						</div>
 						<div class="col-12" style="text-align: right;">
@@ -1071,27 +1071,27 @@
 							{!! csrf_field() !!}
 							<div class="form-group">
 								<label>Categoría acontecimientos traumáticos severos.</label>
-								<textarea class="form-control" style="margin-bottom: 0px;" rows="5" id="reporte_procesoinstalacion" name="reporte_procesoinstalacion" required></textarea>
+								<textarea class="form-control" style="margin-bottom: 0px;" rows="5" id="reporte_acontecimientos" name="reporte_acontecimientos" required></textarea>
 							</div>
 							<div class="form-group">
 								<label>Categoría ambiente de trabajo.</label>
-								<textarea class="form-control" style="margin-bottom: 0px;" rows="5" id="reporte_procesoinstalacion" name="reporte_procesoinstalacion" required></textarea>
+								<textarea class="form-control" style="margin-bottom: 0px;" rows="5" id="reporte_ambiente" name="reporte_ambiente" required></textarea>
 							</div>
 							<div class="form-group">
 								<label>Categoría factores propios de la actividad.</label>
-								<textarea class="form-control" style="margin-bottom: 0px;" rows="5" id="reporte_procesoinstalacion" name="reporte_procesoinstalacion" required></textarea>
+								<textarea class="form-control" style="margin-bottom: 0px;" rows="5" id="reporte_factores" name="reporte_factores" required></textarea>
 							</div>
 							<div class="form-group">
 								<label>Categoría organización del tiempo de trabajo.</label>
-								<textarea class="form-control" style="margin-bottom: 0px;" rows="5" id="reporte_procesoinstalacion" name="reporte_procesoinstalacion" required></textarea>
+								<textarea class="form-control" style="margin-bottom: 0px;" rows="5" id="reporte_organizacion" name="reporte_organizacion" required></textarea>
 							</div>
 							<div class="form-group">
 								<label>Categoría liderazgo y relaciones en el trabajo.</label>
-								<textarea class="form-control" style="margin-bottom: 0px;" rows="5" id="reporte_procesoinstalacion" name="reporte_procesoinstalacion" required></textarea>
+								<textarea class="form-control" style="margin-bottom: 0px;" rows="5" id="reporte_liderazgo" name="reporte_liderazgo" required></textarea>
 							</div>
 							<div class="form-group">
 								<label>Categoría entorno organizacional.</label>
-								<textarea class="form-control" style="margin-bottom: 0px;" rows="5" id="reporte_procesoinstalacion" name="reporte_procesoinstalacion" required></textarea>
+								<textarea class="form-control" style="margin-bottom: 0px;" rows="5" id="reporte_entorno" name="reporte_entorno" required></textarea>
 							</div>
 						</div>
 						<div class="col-12" style="text-align: right;">
@@ -2642,4 +2642,4 @@
 	var areas_poe = <?php echo json_encode($areas_poe); ?>;
 </script>
 {{-- <script src="/js_sitio/html2canvas.js"></script> --}}
-<script src="/js_sitio/reportes/reportenom0353.js?v=2.3"></script>
+<script src="/js_sitio/reportes/reportenom0353.js?v=2.4"></script>
