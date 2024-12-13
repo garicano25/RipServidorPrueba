@@ -17,6 +17,8 @@ use App\modelos\recsensorial\catgerenciaModel;
 use App\modelos\recsensorial\catactivoModel;
 use App\modelos\recsensorial\catConclusionesModel;
 
+use App\modelos\reportes\recursosPortadasInformesModel;
+
 
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;

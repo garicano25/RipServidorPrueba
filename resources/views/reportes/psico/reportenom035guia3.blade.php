@@ -1054,7 +1054,6 @@
 						</style>
 					<div id="consolidadoChart"></div>
 				</div>
-				</div>
 				<div class="col-12">
 					<style>
 						#consolidadoChart2 {

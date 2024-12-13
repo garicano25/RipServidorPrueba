@@ -10118,7 +10118,7 @@ $("#botonguardar_modal_cancelacionobservacion").click(function()
 						agente_id: agente_id,
 						agente_nombre: agente_nombre,
 						reporteregistro_id: reporteregistro_id,
-						catactivo_id: $("#reporte_catactivo_id").val(),
+						catactivo_id: 1,
 						reporte_instalacion: $("#reporte_instalacion").val(),
 					},
 					resetForm: false,
@@ -10987,6 +10987,7 @@ am5.ready(function () {
 		// Ocultar las líneas de la cuadrícula horizontal (líneas de la cuadrícula del eje Y)
 		yAxis.get("renderer").grid.template.set("forceHidden", true);
 
+
         yAxis.data.setAll(data);
 
         var xAxis = chart.xAxes.push(am5xy.ValueAxis.new(root, {
@@ -10994,6 +10995,8 @@ am5.ready(function () {
             min: 0,
             max: 10
         }));
+
+		xAxis.get("renderer").grid.template.set("forceHidden", true);
 
         // Formatear etiquetas de categorías
         yAxis.get("renderer").labels.template.adapters.add("text", function (text, target) {
@@ -11025,6 +11028,21 @@ am5.ready(function () {
                 width: am5.percent(90),
                 tooltipY: 0
             });
+
+			series.bullets.push(function () {
+				return am5.Bullet.new(root, {
+					locationX: 0.5,
+					locationY: 0.5,
+					sprite: am5.Label.new(root, {
+						text: "{valueX}",
+						centerX: am5.p50,
+						centerY: am5.p50,
+						populateText: true,
+						fontSize: "12px",
+						fill: am5.color(0xffffff) // Color del texto
+					})
+				});
+			});
 
             series.data.setAll(data);
             series.appear();
@@ -11119,7 +11137,7 @@ am5.ready(function () {
             s1: 3, s2: 2, s3: 2, s4: 2, s5: 1
         },
 		{
-            category: "g2-Relaciones en el trabajo",
+            category: "g2-Violencia",
             s1: 3, s2: 2, s3: 2, s4: 2, s5: 1
         }]
     );
@@ -11500,8 +11518,8 @@ seriegrafica1.slices.template.setAll({
   ]);
 // Establecer los datos para el gráfico de régimen (por ejemplo, plantas, sindicalizados, etc.)
 seriegrafica1.data.setAll([
-  { valorgrafica1: 2, categoriagrafica1: "Requiere atención clinica" },
-  { valorgrafica1: 69, categoriagrafica1: "No requiere antención clinica" },
+  { valorgrafica1: 2, categoriagrafica1: "Requiere valoración clinica" },
+  { valorgrafica1: 69, categoriagrafica1: "No requiere valoración clinica" },
 ]);
 
 // Crear la leyenda para el gráfico de régimen
