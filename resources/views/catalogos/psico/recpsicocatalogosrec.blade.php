@@ -46,7 +46,7 @@
                                         </td>
                                     </tr>
                                     <tr id="tr_2">
-                                        <td>Introducciones para Informes</td>
+                                        <td>Definiciones para Informes</td>
                                         <td>
                                             <a href="#" onclick="mostrar_catalogo(2);">
                                                 <i class="fa fa-chevron-circle-right fa-3x text-secondary"
@@ -55,7 +55,7 @@
                                         </td>
                                     </tr>
                                     <tr id="tr_3">
-                                        <td>Definiciones para Informes</td>
+                                        <td>Recomendaciones para Informes</td>
                                         <td>
                                             <a href="#" onclick="mostrar_catalogo(3);">
                                                 <i class="fa fa-chevron-circle-right fa-3x text-secondary"
@@ -64,20 +64,11 @@
                                         </td>
                                     </tr>
                                     <tr id="tr_4">
-                                        <td>Recomendaciones para Informes</td>
+                                        <td>Conclusiones para Informes</td>
                                         <td>
                                             <a href="#" onclick="mostrar_catalogo(4);">
                                                 <i class="fa fa-chevron-circle-right fa-3x text-secondary"
                                                     id="cat_4"></i>
-                                            </a>
-                                        </td>
-                                    </tr>
-                                    <tr id="tr_5">
-                                        <td>Conclusiones para Informes</td>
-                                        <td>
-                                            <a href="#" onclick="mostrar_catalogo(5);">
-                                                <i class="fa fa-chevron-circle-right fa-3x text-secondary"
-                                                    id="cat_5"></i>
                                             </a>
                                         </td>
                                     </tr>
@@ -162,45 +153,6 @@
         </div>
     </div>
 
-    <div id="modal_introduccion" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel"
-        aria-hidden="true" style="display: none;">
-        <div class="modal-dialog">
-            <div class="modal-content">
-                <form method="post" enctype="multipart/form-data" name="form_introduccion" id="form_introduccion">
-                    <div class="modal-header">
-                        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
-                        <h4 class="modal-title" id="modal_titulo">Introducción para Informes</h4>
-                    </div>
-                    <div class="modal-body">
-                        <div class="row">
-                            {!! csrf_field() !!}
-                            <div class="col-12">
-                                <input type="hidden" class="form-control" id="ID_INTRODUCCION_INFORME" name="ID_INTRODUCCION_INFORME"
-                                    value="0">
-                            </div>
-                            <div class="col-12">
-                                <div class="form-group">
-                                    <label>Introducción *</label>
-                                    <textarea class="form-control" id="INTRODUCCION" name="INTRODUCCION" rows="5" required></textarea>
-                                </div>
-                            </div>
-                            <div class="col-12">
-                                <input type="hidden" class="form-control" id="catalogo" name="catalogo"
-                                    value="2">
-                            </div>
-                        </div>
-                    </div>
-                    <div class="modal-footer">
-                        <button type="button" class="btn btn-default waves-effect" data-dismiss="modal">Cerrar</button>
-                        <button type="submit" class="btn btn-danger waves-effect waves-light" id="boton_guardar_introduccion">
-                            Guardar <i class="fa fa-save"></i>
-                        </button>
-                    </div>
-                </form>
-            </div>
-        </div>
-    </div>
-
     <div id="modal_definicion" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel"
         aria-hidden="true" style="display: none;">
         <div class="modal-dialog">
@@ -237,7 +189,7 @@
                             </div>
                             <div class="col-12">
                                 <input type="hidden" class="form-control" id="catalogo" name="catalogo"
-                                    value="3">
+                                    value="2">
                             </div>
                         </div>
                     </div>
@@ -302,7 +254,7 @@
                             </div>
                             <div class="col-12">
                                 <input type="hidden" class="form-control" id="catalogo" name="catalogo"
-                                    value="4">
+                                    value="3">
                             </div>
                         </div>
                     </div>
@@ -376,7 +328,7 @@
                             </div>
                             <div class="col-12">
                                 <input type="hidden" class="form-control" id="catalogo" name="catalogo"
-                                    value="5">
+                                    value="4">
                             </div>
                         </div>
                     </div>

@@ -183,18 +183,18 @@
 				<a href="#8" class="list-group-item">8.- Valores de referencia</a>
 				<a href="#9" class="list-group-item">9.- Resultados</a>
 				<a href="#9_1" class="list-group-item submenu">9.1.- Resultados obtenidos en la Guía de Referencia I, Identificar a los trabajadores que fueron sujetos a acontecimientos traumáticos severos <i class="fa fa-times" id="menureporte_9_1"></i></a>
-				<a href="#9_2" class="list-group-item submenu">9.2.- Resultados obtenidos en la guía de referencia III, Identificación y análisis de los Factores de Riesgo Psicosocial y Evaluación del entorno organizacional en los centros de trabajo por categoría y dominio conforme a la NOM-035-STPS-2018 <i class="fa fa-times" id="menureporte_9_2"></i></a>
-				<a href="#9_2_1" class="list-group-item submenu">9.2.1.- Resultados obtenidos, Categoría ambiente de trabajo <i class="fa fa-times" id="menureporte_9_4"></i></a>
-				<a href="#9_2_2" class="list-group-item submenu">9.2.2.- Resultados obtenidos, Categoría factores propios de la actividad <i class="fa fa-times" id="menureporte_9_5"></i></a>
-				<a href="#9_2_3" class="list-group-item submenu">9.2.3.- Resultados obtenidos, Categoría organización del tiempo de trabajo <i class="fa fa-times" id="menureporte_9_6"></i></a>
-				<a href="#9_2_4" class="list-group-item submenu">9.2.4..- Resultados obtenidos, Categoría liderazgo y relaciones en el trabajo <i class="fa fa-times" id="menureporte_9_7"></i></a>
-				<a href="#9_2_5" class="list-group-item submenu">9.2.5.- Resultados obtenidos, Categoría entorno organizacional <i class="fa fa-times" id="menureporte_9_8"></i></a>
-				<a href="#9_3" class="list-group-item submenu">9.3.- Resultados obtenidos, consolidado general<i class="fa fa-times" id="menureporte_9_9"></i></a>
-				<a href="#10" class="list-group-item">10.- Conclusiones <i class="fa fa-times" id="menureporte_10"></i></a>
+				<a href="#9_2" class="list-group-item submenu">9.2.- Resultados obtenidos en la guía de referencia III, Identificación y análisis de los Factores de Riesgo Psicosocial y Evaluación del entorno organizacional en los centros de trabajo por categoría y dominio conforme a la NOM-035-STPS-2018</a>
+				<a href="#9_2_1" class="list-group-item submenu">9.2.1.- Resultados obtenidos, Categoría ambiente de trabajo <i class="fa fa-times" id="menureporte_9_2_1"></i></a>
+				<a href="#9_2_2" class="list-group-item submenu">9.2.2.- Resultados obtenidos, Categoría factores propios de la actividad <i class="fa fa-times" id="menureporte_9_2_2"></i></a>
+				<a href="#9_2_3" class="list-group-item submenu">9.2.3.- Resultados obtenidos, Categoría organización del tiempo de trabajo <i class="fa fa-times" id="menureporte_9_2_3"></i></a>
+				<a href="#9_2_4" class="list-group-item submenu">9.2.4..- Resultados obtenidos, Categoría liderazgo y relaciones en el trabajo <i class="fa fa-times" id="menureporte_9_2_4"></i></a>
+				<a href="#9_2_5" class="list-group-item submenu">9.2.5.- Resultados obtenidos, Categoría entorno organizacional <i class="fa fa-times" id="menureporte_9_2_5"></i></a>
+				<a href="#9_3" class="list-group-item submenu">9.3.- Resultados obtenidos, consolidado general<i class="fa fa-times" id="menureporte_9_3"></i></a>
+				<a href="#10" class="list-group-item">10.- Conclusiones</a>
 				<a href="#10_1" class="list-group-item submenu">10.1.- Conclusiones de conformidad a la NOM-035-STPS-2018 <i class="fa fa-times" id="menureporte_10_1"></i></a>
 				<a href="#11" class="list-group-item">11.- Recomendaciones de control <i class="fa fa-times" id="menureporte_11"></i></a>
-				<a href="#11_1" class="list-group-item submenu">11.1.- Registro de los resultados. Número de puntos evaluados<i class="fa fa-times" id="menureporte_9_1"></i></a>
-				<a href="#11_2" class="list-group-item submenu">11.2.- Código de representación gráfica y color, NOM-035-STPS-2018 <i class="fa fa-times" id="menureporte_9_2"></i></a>
+				<a href="#11_1" class="list-group-item submenu">11.1.- Registro de los resultados. Número de puntos evaluados<i class="fa fa-times" id="menureporte_11_1"></i></a>
+				<a href="#11_2" class="list-group-item submenu">11.2.- Código de representación gráfica y color, NOM-035-STPS-2018 <i class="fa fa-times" id="menureporte_11_2"></i></a>
 				<a href="#12" class="list-group-item">12.- Responsables del informe <i class="fa fa-times" id="menureporte_12"></i></a>
 				<a href="#13" class="list-group-item">13.- Anexos</a>
 				<a href="#13_1" class="list-group-item submenu">13.1.- Anexo 1: Memoria fotográfica <i class="fa fa-times" id="menureporte_13_1"></i></a>
@@ -554,7 +554,7 @@
 							</div>
 						</div>
 						<div class="col-12" style="text-align: right;">
-							<button type="submit" class="btn btn-danger waves-effect waves-light botoninforme" id="botonguardar_reporte_metodologia_4_1">Guardar metodología punto 4.1 <i class="fa fa-save"></i></button>
+							<button type="submit" class="btn btn-danger waves-effect waves-light botoninforme" id="botonguardar_reporte_metodologia_4_1">Guardar metodología<i class="fa fa-save"></i></button>
 						</div>
 					</div>
 				</form>
@@ -1136,7 +1136,7 @@
 						</div>
 					</div>
 				</form>
-				<h4 class="card-title" id="9_1">11.1.- Registro de los resultados. Número de puntos evaluados</h4>
+				<h4 class="card-title" id="11_1">11.1.- Registro de los resultados. Número de puntos evaluados</h4>
 				<div class="row">
 					<div class="col-12">
 						<p class="justificado">En este apartado se muestra el registro de resultados</p><br>
@@ -1152,7 +1152,7 @@
 						</table><br>
 					</div>
 				</div>
-				<h4 class="card-title" id="9_2">11.2.- Código de representación gráfica y color, NOM-035-STPS-2018</h4>
+				<h4 class="card-title" id="11_2">11.2.- Código de representación gráfica y color, NOM-035-STPS-2018</h4>
 				<div class="row">
 					<div class="col-12">
 						<p class="justificado">En este apartado se muestran: categorias, niveles de riesgo y recomendaciones, según el código de representación gráfica de riesgo </p><br>
@@ -1276,8 +1276,8 @@
 						</div>
 					</div>
 				</form>
-				<h4 class="card-title" id="11">13.- Anexos</h4>
-				<h4 class="card-title" id="11_1">13.1.- Anexo 1: Memoria fotográfica</h4>
+				<h4 class="card-title" id="13">13.- Anexos</h4>
+				<h4 class="card-title" id="13_1">13.1.- Anexo 1: Memoria fotográfica</h4>
 				<div class="row">
 					<div class="col-12" style="padding-top: 10px;">
 						<p class="justificado"><b style="color: #333333; font-weight: bold;">Nota del software:</b> Se encontraron <span id="memoriafotografica_total">0</span> fotos de los trabajadores evaluados.</p>
@@ -2642,4 +2642,4 @@
 	var areas_poe = <?php echo json_encode($areas_poe); ?>;
 </script>
 {{-- <script src="/js_sitio/html2canvas.js"></script> --}}
-<script src="/js_sitio/reportes/reportenom0353.js?v=2.2"></script>
+<script src="/js_sitio/reportes/reportenom0353.js?v=2.3"></script>

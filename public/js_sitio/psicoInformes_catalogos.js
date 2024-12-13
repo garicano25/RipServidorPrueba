@@ -32,18 +32,6 @@ $("#boton_nuevo_registro").click(function () {
             break;
         case 2:
             // Borrar formulario
-            $('#form_introduccion').each(function () {
-                this.reset();
-            });
-
-            // campos hidden
-            $("#ID_INTRODUCCION_INFORME").val(0);
-
-            // abrir modal
-            $('#modal_introduccion').modal({ backdrop: false });
-            break;
-        case 3:
-            // Borrar formulario
             $('#form_definicion').each(function () {
                 this.reset();
             });
@@ -54,7 +42,7 @@ $("#boton_nuevo_registro").click(function () {
             // abrir modal
             $('#modal_definicion').modal({ backdrop: false });
             break;
-        case 4:
+        case 3:
             // Borrar formulario
             $('#form_recomendacion').each(function () {
                 this.reset();
@@ -66,7 +54,7 @@ $("#boton_nuevo_registro").click(function () {
             // abrir modal
             $('#modal_recomendacion').modal({ backdrop: false });
             break;
-        case 5:
+        case 4:
             // Borrar formulario
             $('#form_conclusion').each(function () {
                 this.reset();
@@ -133,63 +121,6 @@ $("#boton_guardar_cargo").click(function () {
             error: function (dato) {
                 // actualiza boton
                 $('#boton_guardar_cargo').html('Guardar <i class="fa fa-save"></i>');
-                // mensaje
-                swal({
-                    title: "Error",
-                    text: "Error en la acción: " + dato,
-                    type: "error", // warning, error, success, info
-                    buttons: {
-                        visible: false, // true , false
-                    },
-                    timer: 1500,
-                    showConfirmButton: false
-                });
-                return false;
-            }
-        }).submit();
-        return false;
-    }
-});
-
-$("#boton_guardar_introduccion").click(function () {
-    // valida campos vacios
-    var valida = this.form.checkValidity();
-    if (valida) {
-        // enviar datos
-        $('#form_introduccion').ajaxForm({
-            dataType: 'json',
-            type: 'POST',
-            url: '/recpsicocatalogosrec',
-            data: {},
-            resetForm: false,
-            success: function (dato) {
-                // actualizar tabla
-                tabla_catalogo_introducciones(catalogo);
-
-                // mensaje
-                swal({
-                    title: "Correcto",
-                    text: "Información guardada correctamente",
-                    type: "success", // warning, error, success, info
-                    buttons: {
-                        visible: false, // true , false
-                    },
-                    timer: 2000,
-                    showConfirmButton: false
-                });
-
-                // actualiza boton
-                $('#boton_guardar_introduccion').html('Guardar <i class="fa fa-save"></i>');
-
-                // cerrar modal
-                $('#modal_introduccion').modal('hide');
-            },
-            beforeSend: function () {
-                $('#boton_guardar_introduccion').html('Guardando <i class="fa fa-spin fa-spinner"></i>');
-            },
-            error: function (dato) {
-                // actualiza boton
-                $('#boton_guardar_introduccion').html('Guardar <i class="fa fa-save"></i>');
                 // mensaje
                 swal({
                     title: "Error",
@@ -455,40 +386,10 @@ function mostrar_catalogo(num_catalogo) {
         case 2:
 
             // activa menu
-            $("#titulo_tabla").html('Catálogo de introducciones para informes');
-            $("#modal_titulo").html("Catálogo de introducciones para informes");
-            $("#tr_2").addClass("active");
-            $("#cat_2").addClass("text-info");
-
-            // Inicializar tabla
-            if (datatable_introducciones != null) {
-                datatable_introducciones.destroy();
-                datatable_introducciones = null;
-            }
-
-
-            // diseño tabla
-            $("#div_datatable").html('<table class="table table-hover stylish-table" id="tabla_lista_catalogo_introducciones" width="100%">' +
-                '<thead>' +
-                '<tr>' +
-                '<th>No.</th>' +
-                '<th>Introducción</th>' +
-                '<th style="width: 90px!important;">Editar</th>' +
-                '<th style="width: 90px!important;">Activo</th>' +
-                '</tr>' +
-                '</thead>' +
-                '<tbody></tbody>' +
-                '</table>');
-
-            tabla_catalogo_introducciones(catalogo);
-            break;
-        case 3:
-
-            // activa menu
             $("#titulo_tabla").html('Catálogo de definiciones para informes');
             $("#modal_titulo").html("Catálogo de definiciones para informes");
-            $("#tr_3").addClass("active");
-            $("#cat_3").addClass("text-info");
+            $("#tr_2").addClass("active");
+            $("#cat_2").addClass("text-info");
 
             // Inicializar tabla
             if (datatable_definiciones != null) {
@@ -512,13 +413,13 @@ function mostrar_catalogo(num_catalogo) {
 
             tabla_catalogo_definiciones(catalogo);
             break;
-        case 4:
+        case 3:
 
             // activa menu
             $("#titulo_tabla").html('Catálogo de recomendaciones para informes');
             $("#modal_titulo").html("Catálogo de recomendaciones para informes");
-            $("#tr_4").addClass("active");
-            $("#cat_4").addClass("text-info");
+            $("#tr_3").addClass("active");
+            $("#cat_3").addClass("text-info");
 
             // Inicializar tabla
             if (datatable_recomendaciones != null) {
@@ -543,13 +444,13 @@ function mostrar_catalogo(num_catalogo) {
 
                 tabla_catalogo_recomendaciones(catalogo);
             break;
-        case 5:
+        case 4:
 
             // activa menu
             $("#titulo_tabla").html('Catálogo de conclusiones para informes');
             $("#modal_titulo").html("Catálogo de conclusiones para informes");
-            $("#tr_5").addClass("active");
-            $("#cat_5").addClass("text-info");
+            $("#tr_4").addClass("active");
+            $("#cat_4").addClass("text-info");
 
             // Inicializar tabla
             if (datatable_conclusiones != null) {

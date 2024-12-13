@@ -54,20 +54,6 @@ class recpsicocatalogosrecController extends Controller
                 }
             break;
             case 2:
-                $lista = catintroducciones_psicoModel::all();
-                foreach ($lista as $key => $value) {
-                    $value['INTRODUCCION'] = $value->INTRODUCCION;
-                    $value['ID_INTRODUCCION_INFORME'] = $value->ID_INTRODUCCION_INFORME;
-                    $value['boton_editar'] = '<button type="button" class="btn btn-danger btn-circle" onclick="editar_introduccionInforme();"><i class="fa fa-pencil"></i></button>';
-
-                    if ($value->ACTIVO == 1) {
-                        $value['CheckboxEstado'] = '<div class="switch"><label><input type="checkbox" checked onclick="estado_registro(' . $num_catalogo . ', ' . $value->ID_INTRODUCCION_INFORME . ', this);"><span class="lever switch-col-light-blue"></span></label></div>';
-                    } else {
-                        $value['CheckboxEstado'] = '<div class="switch"><label><input type="checkbox" onclick="estado_registro(' . $num_catalogo . ', ' . $value->ID_INTRODUCCION_INFORME . ', this);"><span class="lever switch-col-light-blue"></span></label></div>';
-                    }
-                }
-            break;
-            case 3:
                 $lista = catdefiniciones_psicoModel::all();
                 foreach ($lista as $key => $value) {
                     $value['CONCEPTO'] = $value->CONCEPTO;
@@ -81,7 +67,7 @@ class recpsicocatalogosrecController extends Controller
                     }
                 }
             break;
-            case 4:
+            case 3:
                 $lista = catrecomendaciones_psicoModel::all();
                 foreach ($lista as $key => $value) {
                     if ($value->CATEGORIA == 1) {
@@ -120,7 +106,7 @@ class recpsicocatalogosrecController extends Controller
                     }
                 }
             break;
-            case 5:
+            case 4:
                 $lista = catconclusiones_psicoModel::all();
                 foreach ($lista as $key => $value) {
                     if ($value->DOMINIO == 1) {
@@ -218,22 +204,6 @@ class recpsicocatalogosrecController extends Controller
                     }
                     break;
                 case 2:
-                    if ($request['ID_INTRODUCCION_INFORME'] == 0) {
-                        DB::statement('ALTER TABLE psicocat_introducciones AUTO_INCREMENT=1');
-
-                        $request["ACTIVO"] = 1;
-                        $catalogo = catintroducciones_psicoModel::create($request->all());
-
-                        $dato["msj"] = 'Información guardada correctamente';
-                    } else {
-
-                        $catalogo = catintroducciones_psicoModel::findOrFail($request['ID_INTRODUCCION_INFORME']);
-                        $catalogo->update($request->all());
-
-                        $dato["msj"] = 'Información modificada correctamente';
-                    }
-                    break;
-                case 3:
                     if ($request['ID_DEFINICION_INFORME'] == 0) {
                         DB::statement('ALTER TABLE psicocat_definiciones AUTO_INCREMENT=1');
 
@@ -249,7 +219,7 @@ class recpsicocatalogosrecController extends Controller
                         $dato["msj"] = 'Información modificada correctamente';
                     }
                     break;
-                case 4:
+                case 3:
                     if ($request['ID_RECOMENDACION_INFORME'] == 0) {
                         DB::statement('ALTER TABLE psicocat_recomendaciones AUTO_INCREMENT=1');
 
@@ -265,7 +235,7 @@ class recpsicocatalogosrecController extends Controller
                         $dato["msj"] = 'Información modificada correctamente';
                     }
                     break;
-                case 5:
+                case 4:
                     if ($request['ID_CONCLUSION_INFORME'] == 0) {
                         DB::statement('ALTER TABLE psicocat_conclusiones AUTO_INCREMENT=1');
 

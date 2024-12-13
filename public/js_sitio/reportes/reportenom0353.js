@@ -318,7 +318,27 @@ function datosgenerales()
 			menureporte_estado("menureporte_6_3", dato.reporte_metodoevaluacion_guardado);
 			menureporte_estado("menureporte_8", dato.reporte_conclusion_guardado);
 			menureporte_estado("menureporte_10", dato.reporte_responsablesinforme_guardado);
-			menureporte_estado("menureporte_11_1", dato.reporte_memoriafotografica_guardado);
+			menureporte_estado("menureporte_11", 1);
+			menureporte_estado("menureporte_11_1", 1);
+			menureporte_estado("menureporte_11_2", 1);
+			menureporte_estado("menureporte_12", 1);
+
+
+
+
+
+			menureporte_estado("menureporte_7_2", 1);
+			menureporte_estado("menureporte_8", 1);
+			menureporte_estado("menureporte_9_1", 1);
+			menureporte_estado("menureporte_9_2_1", 1);
+			menureporte_estado("menureporte_9_2_2", 1);
+			menureporte_estado("menureporte_9_2_3", 1);
+			menureporte_estado("menureporte_9_2_4", 1);
+			menureporte_estado("menureporte_9_2_5", 1);
+			menureporte_estado("menureporte_10", 1);
+			menureporte_estado("menureporte_10_1", 1);
+
+			
 
 
 			//Bloquear botones nuevas categorias y nuevas areas si este proyecto tiene POE general
@@ -11371,9 +11391,9 @@ const valores = datosFiltrados.map(item => item.valor);
 // Crear un nuevo objeto root para el gráfico de régimen
 const regimenData = [
 	{ categoria: "Planta", valor: 53, color: "#98c11d" },
-	{ categoria: "Sindicalizado", valor: 20, color: "#2c6e49" },
-	{ categoria: "NA", valor: 2, color: "#154b75" },
-	{ categoria: "Otros", valor: 1, color: "#0098c7" }
+	{ categoria: "Sindicalizado", valor: 12, color: "#2c6e49" },
+	{ categoria: "NA", valor: 6, color: "#154b75" },
+	{ categoria: "Otros", valor: 5, color: "#0098c7" }
   ];
 
   // Extraer valores y colores

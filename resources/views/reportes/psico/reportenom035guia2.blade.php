@@ -570,7 +570,7 @@
 							</div>
 						</div>
 						<div class="col-12" style="text-align: right;">
-							<button type="submit" class="btn btn-danger waves-effect waves-light botoninforme" id="botonguardar_reporte_metodologia_4_1">Guardar metodología punto 4.1 <i class="fa fa-save"></i></button>
+							<button type="submit" class="btn btn-danger waves-effect waves-light botoninforme" id="botonguardar_reporte_metodologia_4_1">Guardar metodología punto<i class="fa fa-save"></i></button>
 						</div>
 					</div>
 				</form>

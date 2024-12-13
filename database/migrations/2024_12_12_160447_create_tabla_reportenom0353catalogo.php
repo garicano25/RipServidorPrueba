@@ -24,7 +24,8 @@ class CreateTablaReportenom0353catalogo extends Migration
             $table->text('reportenom0353catalogo_objetivoespecifico')->nullable();
             $table->text('reportenom0353catalogo_metodologia')->nullable();
             $table->text('reportenom0353catalogo_ubicacioninstalacion')->nullable();
-            $table->text('reportenom0353catalogo_procesoelaboracion')->nullable();
+            $table->text('reportenom0353catalogo_estrategiasmedicion')->nullable(); 
+            $table->text('reportenom0353catalogo_metodoaplicacion')->nullable();
             $table->timestamps();
         });
     }
