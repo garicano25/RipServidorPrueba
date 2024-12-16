@@ -1985,11 +1985,9 @@ class reportenom0353Controller extends Controller
      * Display the specified resource.
      *
      * @param  int $proyecto_id
-     * @param  $agente_nombre
-     * @param  int $reporteregistro_id
      * @return \Illuminate\Http\Response
      */
-    public function reportenom0353tabladefiniciones($proyecto_id, $agente_nombre, $reporteregistro_id)
+    public function reportenom0353tabladefiniciones($proyecto_id)
     {
         try {
 
@@ -2017,73 +2015,27 @@ class reportenom0353Controller extends Controller
 
             $where_definiciones = '';
 
-            $definiciones_catalogo = collect(DB::select('SELECT
-                                                                TABLA.id,
-                                                                TABLA.agente_id,
-                                                                TABLA.agente_nombre,
-                                                                TABLA.catactivo_id,
-                                                                TABLA.concepto,
-                                                                TABLA.descripcion,
-                                                                TABLA.fuente
+            $definiciones_catalogo = collect(DB::select('SELECT psicocat_definiciones.ID_DEFINICION_INFORME,
+                                                            psicocat_definiciones.CONCEPTO,
+                                                            psicocat_definiciones.DESCRIPCION,
+                                                            psicocat_definiciones.FUENTE
                                                             FROM
-                                                                (
-                                                                    (
-                                                                        SELECT
-                                                                            reportedefinicionescatalogo.id,
-                                                                            reportedefinicionescatalogo.agente_id,
-                                                                            reportedefinicionescatalogo.agente_nombre,
-                                                                            -1 catactivo_id,
-                                                                            reportedefinicionescatalogo.reportedefinicionescatalogo_concepto AS concepto,
-                                                                            reportedefinicionescatalogo.reportedefinicionescatalogo_descripcion AS descripcion,
-                                                                            reportedefinicionescatalogo.reportedefinicionescatalogo_fuente AS fuente
-                                                                        FROM
-                                                                            reportedefinicionescatalogo
-                                                                        WHERE
-                                                                            reportedefinicionescatalogo.agente_nombre LIKE "' . $agente_nombre . '"
-                                                                            AND reportedefinicionescatalogo.reportedefinicionescatalogo_activo = 1
-                                                                        ORDER BY
-                                                                            reportedefinicionescatalogo.reportedefinicionescatalogo_concepto ASC
-                                                                    )
-                                                                    UNION ALL
-                                                                    (
-                                                                        SELECT
-                                                                            reportedefiniciones.id,
-                                                                            reportedefiniciones.agente_id,
-                                                                            reportedefiniciones.agente_nombre,
-                                                                            reportedefiniciones.catactivo_id,
-                                                                            reportedefiniciones.reportedefiniciones_concepto AS concepto,
-                                                                            reportedefiniciones.reportedefiniciones_descripcion AS descripcion,
-                                                                            reportedefiniciones.reportedefiniciones_fuente AS fuente 
-                                                                        FROM
-                                                                            reportedefiniciones
-                                                                        WHERE
-                                                                            reportedefiniciones.agente_nombre LIKE "' . $agente_nombre . '"
-                                                                            ' . $where_definiciones . ' 
-                                                                        ORDER BY
-                                                                            reportedefiniciones.agente_nombre ASC
-                                                                    )
-                                                                ) AS TABLA
+                                                                                    psicocat_definiciones
+                                                                            WHERE
+                                                                                    psicocat_definiciones.ACTIVO = 1
                                                             ORDER BY
-                                                                -- TABLA.catactivo_id ASC,
-                                                                TABLA.concepto ASC'));
+                                                            psicocat_definiciones.CONCEPTO ASC'));
 
             foreach ($definiciones_catalogo as $key => $value) {
-                if (($value->catactivo_id + 0) < 0) {
-                    $value->descripcion_fuente = $value->descripcion . '<br><span style="color: #999999; font-style: italic;">Fuente: ' . $value->fuente . '</span>';
-                    $value->boton_editar = '<button type="button" class="btn btn-default waves-effect btn-circle"><i class="fa fa-ban fa-1x"></i></button>';
-                    $value->boton_eliminar = '<button type="button" class="btn btn-default waves-effect btn-circle" data-toggle="tooltip" title="No disponible"><i class="fa fa-ban fa-1x"></i></button>';
-                } else {
-                    $value->descripcion_fuente = $value->descripcion . '<br><span style="color: #999999; font-style: italic;">Fuente: ' . $value->fuente . '</span>';
+                    $value->descripcion_fuente = $value->DESCRIPCION . '<br><span style="color: #999999; font-style: italic;">Fuente: ' . $value->FUENTE . '</span>';
                     $value->boton_editar = '<button type="button" class="btn btn-warning waves-effect btn-circle"><i class="fa fa-pencil fa-1x"></i></button>';
-                    // $value->boton_eliminar = '<button type="button" class="btn btn-danger waves-effect btn-circle"><i class="fa fa-trash fa-1x"></i></button>';
-
                     if ($edicion == 1) {
                         $value->boton_eliminar = '<button type="button" class="btn btn-danger waves-effect btn-circle eliminar"><i class="fa fa-trash fa-1x"></i></button>';
                     } else {
                         $value->boton_eliminar = '<button type="button" class="btn btn-default waves-effect btn-circle" data-toggle="tooltip" title="No disponible"><i class="fa fa-eye fa-1x"></i></button>';
                     }
                 }
-            }
+            
 
             // respuesta
             $dato['data'] = $definiciones_catalogo;

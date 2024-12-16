@@ -1952,6 +1952,8 @@ Route::get('psicoevidenciafotosonline/{proyecto_id}', ['as' => 'PSICO.evidenciaf
 //================INFORMES
 Route::resource('informesPsicosocial', 'PSICO\informesrecoPsicoController');
 Route::resource('reportenom0353', 'reportes\reportenom0353Controller');
+Route::get('reportenom0353tabladefiniciones/{proyecto_id}', ['as' => 'reportenom0353.reportenom0353tabladefiniciones', 'uses' => 'reportes\reportenom0353Controller@reportenom0353tabladefiniciones']);
+
 // =================GUIAS 
 
 // Route::get('/Guia/{id}/{guia1}/{guia2}/{guia3}', function () { return view('catalogos.psico.guias.guias');})->name('Guia');

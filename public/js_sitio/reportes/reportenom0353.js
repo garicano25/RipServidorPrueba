@@ -780,17 +780,17 @@ $(document).ready(function()
 
 	setTimeout(function()
 	{
-		tabla_reporte_definiciones(proyecto.id, agente_nombre, reporteregistro_id);
+		tabla_reporte_definiciones(proyecto.id);
 	}, 2000);
 });
 
 
 var datatable_reportedefiniciones = null;
-function tabla_reporte_definiciones(proyecto_id, agente_nombre, reporteregistro_id)
+function tabla_reporte_definiciones(proyecto_id)
 {
 	try 
 	{
-		var ruta = "/reporteruidotabladefiniciones/"+proyecto_id+"/"+agente_nombre+"/"+reporteregistro_id;
+		var ruta = "/reportenom0353tabladefiniciones/"+proyecto_id;
 
 		if (datatable_reportedefiniciones != null)
 		{
@@ -811,7 +811,7 @@ function tabla_reporte_definiciones(proyecto_id, agente_nombre, reporteregistro_
 							console.log('error en datatable_reportedefiniciones');
 							if (numeroejecucion <= 1)
 							{
-								tabla_reporte_definiciones(proyecto_id, agente_nombre, reporteregistro_id);
+								tabla_reporte_definiciones(proyecto_id);
 								numeroejecucion += 1;
 							}
 						},
@@ -822,7 +822,7 @@ function tabla_reporte_definiciones(proyecto_id, agente_nombre, reporteregistro_
 					//     "data": "id" 
 					// },
 					{
-						"data": "concepto",
+						"data": "CONCEPTO",
 						"defaultContent": "-"
 					},
 					{
@@ -877,7 +877,7 @@ function tabla_reporte_definiciones(proyecto_id, agente_nombre, reporteregistro_
 	}
 	catch (exception)
 	{
-		tabla_reporte_definiciones(proyecto_id, agente_nombre, reporteregistro_id);
+		tabla_reporte_definiciones(proyecto_id);
     }
 }
 
@@ -976,7 +976,7 @@ $('#tabla_reporte_definiciones tbody').on('click', 'td>button.eliminar', functio
 							success:function(dato)
 							{
 								// Actualizar tabla
-								tabla_reporte_definiciones(proyecto.id, agente_nombre);
+								tabla_reporte_definiciones(proyecto.id);
 
 								// mensaje
 								swal({
@@ -1093,7 +1093,7 @@ $("#botonguardar_modal_definicion").click(function()
 						reporteregistro_id = dato.reporteregistro_id;
 
 						// Actualizar tabla
-						tabla_reporte_definiciones(proyecto.id, agente_nombre, reporteregistro_id);
+						tabla_reporte_definiciones(proyecto.id);
 
 						// tabla_reporte_revisiones(proyecto.id);
 
@@ -9777,7 +9777,7 @@ function reporte_concluido(reporte_id, perfil, checkbox)
 								botoninforme_estado(dato.estado);
 								tabla_reporte_revisiones(proyecto.id);
 
-								tabla_reporte_definiciones(proyecto.id, agente_nombre, reporteregistro_id)
+								tabla_reporte_definiciones(proyecto.id)
 								tabla_reporte_categorias(proyecto.id, reporteregistro_id);
 								tabla_reporte_areas(proyecto.id, reporteregistro_id);
 								tabla_reporte_5_6_equipoauditivo(proyecto.id, reporteregistro_id);
@@ -9899,7 +9899,7 @@ function reporte_concluido(reporte_id, perfil, checkbox)
 							botoninforme_estado(dato.estado);
 							tabla_reporte_revisiones(proyecto.id);
 
-							tabla_reporte_definiciones(proyecto.id, agente_nombre, reporteregistro_id)
+							tabla_reporte_definiciones(proyecto.id);
 							tabla_reporte_categorias(proyecto.id, reporteregistro_id);
 							tabla_reporte_areas(proyecto.id, reporteregistro_id);
 							tabla_reporte_5_6_equipoauditivo(proyecto.id, reporteregistro_id);
@@ -10040,7 +10040,7 @@ function reporte_cancelado(reporte_id, perfil, checkbox)
 							botoninforme_estado(dato.estado);
 							tabla_reporte_revisiones(proyecto.id);
 
-							tabla_reporte_definiciones(proyecto.id, agente_nombre, reporteregistro_id)
+							tabla_reporte_definiciones(proyecto.id);
 							tabla_reporte_categorias(proyecto.id, reporteregistro_id);
 							tabla_reporte_areas(proyecto.id, reporteregistro_id);
 							tabla_reporte_5_6_equipoauditivo(proyecto.id, reporteregistro_id);
@@ -10172,7 +10172,7 @@ $("#botonguardar_modal_cancelacionobservacion").click(function()
 						botoninforme_estado(dato.estado);
 						tabla_reporte_revisiones(proyecto.id);
 
-						tabla_reporte_definiciones(proyecto.id, agente_nombre, reporteregistro_id)
+						tabla_reporte_definiciones(proyecto.id);
 						tabla_reporte_categorias(proyecto.id, reporteregistro_id);
 						tabla_reporte_areas(proyecto.id, reporteregistro_id);
 						tabla_reporte_5_6_equipoauditivo(proyecto.id, reporteregistro_id);
@@ -10324,7 +10324,7 @@ $("#boton_reporte_nuevarevision").click(function()
 								botoninforme_estado(dato.estado);
 								tabla_reporte_revisiones(proyecto.id);
 
-								tabla_reporte_definiciones(proyecto.id, agente_nombre, reporteregistro_id)
+								tabla_reporte_definiciones(proyecto.id);
 								tabla_reporte_categorias(proyecto.id, reporteregistro_id);
 								tabla_reporte_areas(proyecto.id, reporteregistro_id);
 								tabla_reporte_5_6_equipoauditivo(proyecto.id, reporteregistro_id);

@@ -20,6 +20,13 @@ use App\modelos\reconocimientopsico\catrecomendaciones_psicoModel;
 
 class recpsicocatalogosrecController extends Controller
 {
+      //
+      public function __construct()
+      {
+          $this->middleware('auth');
+          // $this->middleware('Superusuario,Administrador,Proveedor,Reconocimiento,Proyecto,Compras,Staff,Psicólogo,Ergónomo,CoordinadorPsicosocial,CoordinadorErgonómico,CoordinadorRN,CoordinadorRS,CoordinadorRM,CoordinadorHI,ApoyoTecnico,Reportes,Externo');
+          $this->middleware('roles:Superusuario,Administrador,Coordinador,Psicólogo');
+      }
      /**
      * Display a listing of the resource.
      *
