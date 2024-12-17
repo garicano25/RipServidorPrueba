@@ -499,26 +499,6 @@ function editar_cargoInforme() {
     });
 }
 
-function editar_introduccionInforme() {
-    $('#tabla_lista_catalogo_introducciones tbody').on('click', 'td.editar', function () {
-        // console.log();
-        var tr = $(this).closest('tr');
-        var row = datatable_introducciones.row(tr);
-
-        $('#form_introduccion').each(function () {
-            this.reset();
-        });
-
-        // Llenar campo formulario
-        $("#ID_INTRODUCCION_INFORME").val(row.data().ID_INTRODUCCION_INFORME);
-        $("#INTRODUCCION").val(row.data().INTRODUCCION);
-        $("#catalogo").val(2);
-
-        // abrir modal
-        $('#modal_introduccion').modal({ backdrop: false });
-    });
-}
-
 function editar_definicionInforme() {
     $('#tabla_lista_catalogo_definiciones tbody').on('click', 'td.editar', function () {
         // console.log();
@@ -534,7 +514,7 @@ function editar_definicionInforme() {
         $("#CONCEPTO").val(row.data().CONCEPTO);
         $("#DESCRIPCION").val(row.data().DESCRIPCION);
         $("#FUENTE").val(row.data().FUENTE);
-        $("#catalogo").val(3);
+        $("#catalogo").val(2);
 
         // abrir modal
         $('#modal_definicion').modal({ backdrop: false });
@@ -583,7 +563,7 @@ function editar_recomendacionInforme() {
             $("#CATEGORIA").val(6);
         }
         $("#RECOMENDACION").val(row.data().RECOMENDACION);
-        $("#catalogo").val(4);
+        $("#catalogo").val(3);
 
         // abrir modal
         $('#modal_recomendacion').modal({ backdrop: false });
@@ -602,10 +582,64 @@ function editar_conclusionInforme() {
 
         // Llenar campo formulario
         $("#ID_CONCLUSION_INFORME").val(row.data().ID_CONCLUSION_INFORME);
+        var dominio = row.data().DOMINIO;
+        var nivel = row.data().NIVEL;
+
+        console.log(nivel);
+
+        if (dominio == 'Acontecimientos traumáticos severos') {
+            $("#DOMINIO").val(1);
+        } else if (dominio == 'Ambiente de trabajo') {
+            $("#DOMINIO").val(2);
+        } else if (dominio == 'Factores propios de la actividad') {
+            $("#DOMINIO").val(3);
+        }else if (dominio == 'Organización del tiempo de trabajo') {
+            $("#DOMINIO").val(4);
+        }else if (dominio == 'Liderazgo y relaciones en el trabajo') {
+            $("#DOMINIO").val(5);
+        }else if (dominio == 'Entorno organizacional') {
+            $("#DOMINIO").val(6);
+        }else if (dominio == 'Condiciones del ambiente de trabajo') {
+            $("#DOMINIO").val(7);
+        }else if (dominio == 'Carga de trabajo') {
+            $("#DOMINIO").val(8);
+        }else if (dominio == 'Falta de control sobre el trabajo') {
+            $("#DOMINIO").val(9);
+        }else if (dominio == 'Jornada de trabajo') {
+            $("#DOMINIO").val(10);
+        }else if (dominio == 'Interferencia trabajo-familia') {
+            $("#DOMINIO").val(11);
+        }else if (dominio == 'Liderazgo') {
+            $("#DOMINIO").val(12);
+        }else if (dominio == 'Relaciones en el trabajo') {
+            $("#DOMINIO").val(13);
+        }else if (dominio == 'Violencia') {
+            $("#DOMINIO").val(14);
+        }else if (dominio == 'Reconocimiento del desempeño') {
+            $("#DOMINIO").val(15);
+        }else if (dominio == 'Insuficiente sentido de pertenencia e inestabilidad') {
+            $("#DOMINIO").val(16);
+        }
+        actualizarOpcionesNivel(); 
+
+        if (nivel === 'Riesgo muy alto') {
+            $("#NIVEL").val(1);
+        } else if (nivel === 'Riesgo alto') {
+            $("#NIVEL").val(2);
+        } else if (nivel === 'Riesgo medio') {
+            $("#NIVEL").val(3);
+        }else if (nivel === 'Riesgo bajo') {
+            $("#NIVEL").val(4);
+        }else if (nivel === 'Riesgo nulo') {
+            $("#NIVEL").val(5);
+        }else if (nivel === 'Acontecimiento traumático severo') {
+            $("#NIVEL").val(6);
+        }else if (nivel === 'No existe acontecimiento traumático severo') {
+            $("#NIVEL").val(7);
+        }
         
         $("#CONCLUSION").val(row.data().CONCLUSION);
-        $("#catalogo").val(5);
-        actualizarOpcionesNivel(); 
+        $("#catalogo").val(4);
         // abrir modal
         $('#modal_conclusion').modal({ backdrop: false });
     });
