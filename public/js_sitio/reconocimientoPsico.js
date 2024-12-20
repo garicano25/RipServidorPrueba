@@ -2458,8 +2458,14 @@ function obtenerEstructuraProyectos(FOLIO, NUEVO) {
 				$('#descripcion_contrato').val(response.info[0].NOMBRE_CONTRATO)
 				$('#descripcion_cliente').val(response.info[0].RAZON_SOCIAL)
 
+				console.log(response.info[0].CLIENTE_ID,contrato,requiereContrato,response.info[0].NOMBRE_CONTRATO,response.info[0].RAZON_SOCIAL);
+
 
 				//INFORMACION CONSULTADA DE RECSENSORIAL
+
+
+			
+				
 				$('#ordenservicio').val(response.info[0].ORDENSERVICIO)
 				$('#representantelegal').val(response.info[0].REPRESENTANTE_LEGAL)
 				$('#codigopostal').val(response.info[0].CODIGOPOSTAL)

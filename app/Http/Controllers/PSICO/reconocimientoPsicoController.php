@@ -216,14 +216,8 @@ class reconocimientoPsicoController extends Controller
                             $request['contrato_id'] = 0;
                         }
 
-                        $request['recsensorial_fisicosimprimirbloqueado'] = 0;
-                        $request['recsensorial_quimicosimprimirbloqueado'] = 0;
-                        $request['recsensorial_bloqueado'] = 0;
-
-                        $request['recsensorial_eliminado'] = 0;
                         $reconocimientopsico = reconocimientopsicoModel::create($request->all());
                         // $recsensorial->recsensorialpruebas()->sync($request->parametro); // SE COMENTO PORQUE YA SON DOS ARREGLOS DE PRUEBAS ENTONCES SI HIZO APARTE
-
 
                         //UNA VEZ GUARDADO TODO LO DE RECONOCIMIENTO PROCEDEMOS A VINCULAR EL  ID DEL RECONOCIMIENTO CON EL PROYECTO
                         $proyecto = proyectoModel::where('proyecto_folio', $request["proyecto_folio"])->first();

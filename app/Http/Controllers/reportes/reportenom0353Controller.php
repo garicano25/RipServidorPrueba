@@ -19,6 +19,8 @@ use App\modelos\recsensorial\catConclusionesModel;
 
 use App\modelos\reportes\recursosPortadasInformesModel;
 
+use App\modelos\reportes\reportenom0353Model;
+
 
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
@@ -135,8 +137,8 @@ class reportenom0353Controller extends Controller
             $proyectofecha = explode("-", $proyecto->proyecto_fechaentrega);
 
             $reportecatalogo = reportenom0353catalogoModel::limit(1)->get();
-            $reporte  = reporteruidoModel::where('proyecto_id', $proyecto_id)
-                ->orderBy('reporteruido_revision', 'DESC')
+            $reporte  = reportenom0353Model::where('proyecto_id', $proyecto_id)
+                ->orderBy('reportenom0353_revision', 'DESC')
                 ->limit(1)
                 ->get();
 
@@ -147,11 +149,63 @@ class reportenom0353Controller extends Controller
             } else {
                 if (($recsensorial->recsensorial_tipocliente + 0) == 1) // 1 = Pemex, 0 = cliente
                 {
-                    $reporte = reporteruidoModel::where('catactivo_id', $proyecto->catactivo_id)
-                        ->orderBy('proyecto_id', 'DESC')
-                        ->orderBy('reporteruido_revision', 'DESC')
-                        ->limit(1)
-                        ->get();
+                    // $reporte = reportenom0353Model::where('catactivo_id', $proyecto->catactivo_id)
+                    //     ->orderBy('proyecto_id', 'DESC')
+                    //     ->orderBy('reporteruido_revision', 'DESC')
+                    //     ->limit(1)
+                    //     ->get();
+                    $reporte = DB::select('SELECT
+                        reconocimientopsico.recsensorial_tipocliente,
+                        reconocimientopsico.cliente_id,
+                        reportenom0353.id,
+                        reportenom0353.proyecto_id,
+                        reportenom0353.agente_id,
+                        reportenom0353.agente_nombre,
+                        reportenom0353.catactivo_id,
+                        reportenom0353.reporteruido_revision,
+                        reportenom0353.reporteruido_fecha,
+                        reportenom0353.reporte_mes,
+                        reportenom0353.reporteruido_instalacion,
+                        reportenom0353.reporteruido_catregion_activo,
+                        reportenom0353.reporteruido_catsubdireccion_activo,
+                        reportenom0353.reporteruido_catgerencia_activo,
+                        reportenom0353.reporteruido_catactivo_activo,
+                        reportenom0353.reporteruido_introduccion,
+                        reportenom0353.reporteruido_objetivogeneral,
+                        reportenom0353.reporteruido_objetivoespecifico,
+                        reportenom0353.reporteruido_metodologia_4_1,
+                        reportenom0353.reporteruido_metodologia_4_2,
+                        reportenom0353.reporteruido_ubicacioninstalacion,
+                        reportenom0353.reporteruido_ubicacionfoto,
+                        reportenom0353.reporteruido_procesoinstalacion,
+                        reportenom0353.reporteruido_actividadprincipal,
+                        reportenom0353.reporteruido_metodoevaluacion,
+                        reportenom0353.reporteruido_conclusion,
+                        reportenom0353.reporteruido_responsable1,
+                        reportenom0353.reporteruido_responsable1cargo,
+                        reportenom0353.reporteruido_responsable1documento,
+                        reportenom0353.reporteruido_responsable2,
+                        reportenom0353.reporteruido_responsable2cargo,
+                        reportenom0353.reporteruido_responsable2documento,
+                        reportenom0353.reporteruido_concluido,
+                        reportenom0353.reporteruido_concluidonombre,
+                        reportenom0353.reporteruido_concluidofecha,
+                        reportenom0353.reporteruido_cancelado,
+                        reportenom0353.reporteruido_canceladonombre,
+                        reportenom0353.reporteruido_canceladofecha,
+                        reportenom0353.reporteruido_canceladoobservacion,
+                        reportenom0353.reporteruido_lmpe,
+                        reportenom0353.created_at,
+                        reportenom0353.updated_at 
+                    FROM
+                        reconocimientopsico
+                        LEFT JOIN proyecto ON reconocimientopsico.id = proyecto.reconocimiento_psico_id
+                        LEFT JOIN reportenom0353 ON proyecto.id = reportenom0353.proyecto_id 
+                    WHERE
+                        reconocimientopsico.cliente_id = ' . $recsensorial->cliente_id . ' 
+                        AND reportenom0353.reportenom0353_instalacion <> "" 
+                    ORDER BY
+                        reportenom0353.updated_at DESC');
                 } else {
                     $reporte = DB::select('SELECT
                                                 recsensorial.recsensorial_tipocliente,
