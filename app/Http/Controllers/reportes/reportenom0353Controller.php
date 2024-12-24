@@ -161,42 +161,46 @@ class reportenom0353Controller extends Controller
                         reportenom0353.proyecto_id,
                         reportenom0353.agente_id,
                         reportenom0353.agente_nombre,
-                        reportenom0353.catactivo_id,
-                        reportenom0353.reporteruido_revision,
-                        reportenom0353.reporteruido_fecha,
+                        reportenom0353.reportenom0353_revision,
+                        reportenom0353.reportenom0353_fecha,
                         reportenom0353.reporte_mes,
-                        reportenom0353.reporteruido_instalacion,
-                        reportenom0353.reporteruido_catregion_activo,
-                        reportenom0353.reporteruido_catsubdireccion_activo,
-                        reportenom0353.reporteruido_catgerencia_activo,
-                        reportenom0353.reporteruido_catactivo_activo,
-                        reportenom0353.reporteruido_introduccion,
-                        reportenom0353.reporteruido_objetivogeneral,
-                        reportenom0353.reporteruido_objetivoespecifico,
-                        reportenom0353.reporteruido_metodologia_4_1,
-                        reportenom0353.reporteruido_metodologia_4_2,
-                        reportenom0353.reporteruido_ubicacioninstalacion,
-                        reportenom0353.reporteruido_ubicacionfoto,
-                        reportenom0353.reporteruido_procesoinstalacion,
-                        reportenom0353.reporteruido_actividadprincipal,
-                        reportenom0353.reporteruido_metodoevaluacion,
-                        reportenom0353.reporteruido_conclusion,
-                        reportenom0353.reporteruido_responsable1,
-                        reportenom0353.reporteruido_responsable1cargo,
-                        reportenom0353.reporteruido_responsable1documento,
-                        reportenom0353.reporteruido_responsable2,
-                        reportenom0353.reporteruido_responsable2cargo,
-                        reportenom0353.reporteruido_responsable2documento,
-                        reportenom0353.reporteruido_concluido,
-                        reportenom0353.reporteruido_concluidonombre,
-                        reportenom0353.reporteruido_concluidofecha,
-                        reportenom0353.reporteruido_cancelado,
-                        reportenom0353.reporteruido_canceladonombre,
-                        reportenom0353.reporteruido_canceladofecha,
-                        reportenom0353.reporteruido_canceladoobservacion,
-                        reportenom0353.reporteruido_lmpe,
+                        reportenom0353.reportenom0353_instalacion,
+                        reportenom0353.reportenom0353_catregion_activo,
+                        reportenom0353.reportenom0353_catsubdireccion_activo,
+                        reportenom0353.reportenom0353_catgerencia_activo,
+                        reportenom0353.reportenom0353_catactivo_activo,
+                        reportenom0353.reportenom0353_introduccion,
+                        reportenom0353.reportenom0353_objetivogeneral,
+                        reportenom0353.reportenom0353_objetivoespecifico,
+                        reportenom0353.reportenom0353_metodologiainstrumentos,
+                        reportenom0353.reportenom0353_ubicacioninstalacion,
+                        reportenom0353.reportenom0353_ubicacionfoto,
+                        reportenom0353.reportenom0353_procesoinstalacion,
+                        reportenom0353.reportenom0353_metodoevaluacion,
+                        reportenom0353.reportenom0353_datosdemograficos,
+                        reportenom0353.reportenom0353_interpretacion1,
+                        reportenom0353.reportenom0353_interpretacion2,
+                        reportenom0353.reportenom0353_interpretacion3,
+                        reportenom0353.reportenom0353_interpretacion4,
+                        reportenom0353.reportenom0353_interpretacion5,
+                        reportenom0353.reportenom0353_interpretacion6,
+                        reportenom0353.reportenom0353_interpretacion7,
+                        reportenom0353.reportenom0353_conclusion,
+                        reportenom0353.reportenom0353_responsable1,
+                        reportenom0353.reportenom0353_responsable1cargo,
+                        reportenom0353.reportenom0353_responsable1documento,
+                        reportenom0353.reportenom0353_responsable2,
+                        reportenom0353.reportenom0353_responsable2cargo,
+                        reportenom0353.reportenom0353_responsable2doc,
+                        reportenom0353.reportenom0353_concluido,
+                        reportenom0353.reportenom0353_concluidonombre,
+                        reportenom0353.reportenom0353_concluidofecha,
+                        reportenom0353.reportenom0353_cancelado,
+                        reportenom0353.reportenom0353_canceladonombre,
+                        reportenom0353.reportenom0353_canceladofecha,
+                        reportenom0353.reportenom0353_canceladoobservacion,
                         reportenom0353.created_at,
-                        reportenom0353.updated_at 
+                        reportenom0353.updated_at
                     FROM
                         reconocimientopsico
                         LEFT JOIN proyecto ON reconocimientopsico.id = proyecto.reconocimiento_psico_id
@@ -208,60 +212,62 @@ class reportenom0353Controller extends Controller
                         reportenom0353.updated_at DESC');
                 } else {
                     $reporte = DB::select('SELECT
-                                                recsensorial.recsensorial_tipocliente,
-                                                recsensorial.cliente_id,
-                                                reporteruido.id,
-                                                reporteruido.proyecto_id,
-                                                reporteruido.agente_id,
-                                                reporteruido.agente_nombre,
-                                                reporteruido.catactivo_id,
-                                                reporteruido.reporteruido_revision,
-                                                reporteruido.reporteruido_fecha,
-                                                reporteruido.reporte_mes,
-                                                reporteruido.reporteruido_instalacion,
-                                                reporteruido.reporteruido_catregion_activo,
-                                                reporteruido.reporteruido_catsubdireccion_activo,
-                                                reporteruido.reporteruido_catgerencia_activo,
-                                                reporteruido.reporteruido_catactivo_activo,
-                                                reporteruido.reporteruido_introduccion,
-                                                reporteruido.reporteruido_objetivogeneral,
-                                                reporteruido.reporteruido_objetivoespecifico,
-                                                reporteruido.reporteruido_metodologia_4_1,
-                                                reporteruido.reporteruido_metodologia_4_2,
-                                                reporteruido.reporteruido_ubicacioninstalacion,
-                                                reporteruido.reporteruido_ubicacionfoto,
-                                                reporteruido.reporteruido_procesoinstalacion,
-                                                reporteruido.reporteruido_actividadprincipal,
-                                                reporteruido.reporteruido_metodoevaluacion,
-                                                reporteruido.reporteruido_conclusion,
-                                                reporteruido.reporteruido_responsable1,
-                                                reporteruido.reporteruido_responsable1cargo,
-                                                reporteruido.reporteruido_responsable1documento,
-                                                reporteruido.reporteruido_responsable2,
-                                                reporteruido.reporteruido_responsable2cargo,
-                                                reporteruido.reporteruido_responsable2documento,
-                                                reporteruido.reporteruido_concluido,
-                                                reporteruido.reporteruido_concluidonombre,
-                                                reporteruido.reporteruido_concluidofecha,
-                                                reporteruido.reporteruido_cancelado,
-                                                reporteruido.reporteruido_canceladonombre,
-                                                reporteruido.reporteruido_canceladofecha,
-                                                reporteruido.reporteruido_canceladoobservacion,
-                                                reporteruido.reporteruido_lmpe,
-                                                reporteruido.created_at,
-                                                reporteruido.updated_at 
-                                            FROM
-                                                recsensorial
-                                                LEFT JOIN proyecto ON recsensorial.id = proyecto.recsensorial_id
-                                                LEFT JOIN reporteruido ON proyecto.id = reporteruido.proyecto_id 
-                                            WHERE
-                                                recsensorial.cliente_id = ' . $recsensorial->cliente_id . ' 
-                                                AND reporteruido.reporteruido_instalacion <> "" 
-                                            ORDER BY
-                                                reporteruido.updated_at DESC');
+                    reconocimientopsico.recsensorial_tipocliente,
+                    reconocimientopsico.cliente_id,
+                    reportenom0353.id,
+                    reportenom0353.proyecto_id,
+                    reportenom0353.agente_id,
+                    reportenom0353.agente_nombre,
+                    reportenom0353.reportenom0353_revision,
+                    reportenom0353.reportenom0353_fecha,
+                    reportenom0353.reporte_mes,
+                    reportenom0353.reportenom0353_instalacion,
+                    reportenom0353.reportenom0353_catregion_activo,
+                    reportenom0353.reportenom0353_catsubdireccion_activo,
+                    reportenom0353.reportenom0353_catgerencia_activo,
+                    reportenom0353.reportenom0353_catactivo_activo,
+                    reportenom0353.reportenom0353_introduccion,
+                    reportenom0353.reportenom0353_objetivogeneral,
+                    reportenom0353.reportenom0353_objetivoespecifico,
+                    reportenom0353.reportenom0353_metodologiainstrumentos,
+                    reportenom0353.reportenom0353_ubicacioninstalacion,
+                    reportenom0353.reportenom0353_ubicacionfoto,
+                    reportenom0353.reportenom0353_procesoinstalacion,
+                    reportenom0353.reportenom0353_metodoevaluacion,
+                    reportenom0353.reportenom0353_datosdemograficos,
+                    reportenom0353.reportenom0353_interpretacion1,
+                    reportenom0353.reportenom0353_interpretacion2,
+                    reportenom0353.reportenom0353_interpretacion3,
+                    reportenom0353.reportenom0353_interpretacion4,
+                    reportenom0353.reportenom0353_interpretacion5,
+                    reportenom0353.reportenom0353_interpretacion6,
+                    reportenom0353.reportenom0353_interpretacion7,
+                    reportenom0353.reportenom0353_conclusion,
+                    reportenom0353.reportenom0353_responsable1,
+                    reportenom0353.reportenom0353_responsable1cargo,
+                    reportenom0353.reportenom0353_responsable1documento,
+                    reportenom0353.reportenom0353_responsable2,
+                    reportenom0353.reportenom0353_responsable2cargo,
+                    reportenom0353.reportenom0353_responsable2doc,
+                    reportenom0353.reportenom0353_concluido,
+                    reportenom0353.reportenom0353_concluidonombre,
+                    reportenom0353.reportenom0353_concluidofecha,
+                    reportenom0353.reportenom0353_cancelado,
+                    reportenom0353.reportenom0353_canceladonombre,
+                    reportenom0353.reportenom0353_canceladofecha,
+                    reportenom0353.reportenom0353_canceladoobservacion,
+                    reportenom0353.created_at,
+                    reportenom0353.updated_at
+                FROM
+                    reconocimientopsico
+                    LEFT JOIN proyecto ON reconocimientopsico.id = proyecto.reconocimiento_psico_id
+                    LEFT JOIN reportenom0353 ON proyecto.id = reportenom0353.proyecto_id 
+                WHERE
+                    reconocimientopsico.cliente_id = ' . $recsensorial->cliente_id . ' 
+                    AND reportenom0353.reportenom0353_instalacion <> "" 
+                ORDER BY
+                    reportenom0353.updated_at DESC');
                 }
-
-
                 if (count($reporte) > 0) {
                     $reporte = $reporte[0];
                     $dato['reporteregistro_id'] = 0;
@@ -275,7 +281,7 @@ class reportenom0353Controller extends Controller
 
 
             $revision = reporterevisionesModel::where('proyecto_id', $proyecto_id)
-                ->where('agente_id', 1) //Ruido
+                ->where('agente_id', 352) //nom 0353
                 ->orderBy('reporterevisiones_revision', 'DESC')
                 ->get();
 
