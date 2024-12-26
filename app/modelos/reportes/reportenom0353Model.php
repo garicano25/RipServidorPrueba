@@ -26,6 +26,7 @@ class reportenom0353Model extends Model
 		'reportenom0353_ubicacioninstalacion',
 		'reportenom0353_ubicacionfoto',
 		'reportenom0353_procesoinstalacion',
+		'reportenom0353_actividadprincipal',
 		'reportenom0353_metodoevaluacion',
 		'reportenom0353_datosdemograficos',
 		'reportenom0353_interpretacion1',

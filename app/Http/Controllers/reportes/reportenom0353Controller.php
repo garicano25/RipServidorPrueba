@@ -6,6 +6,9 @@ namespace App\Http\Controllers\reportes;
 // Modelos
 use App\modelos\proyecto\proyectoModel;
 use App\modelos\reconocimientopsico\reconocimientopsicoModel;
+use App\modelos\reconocimientopsico\respuestastrabajadorespsicoModel;
+use App\modelos\recsensorial\recsensorialModel;
+
 
 //Tablas revisiones
 use App\modelos\reportes\reporterevisionesModel;
@@ -134,6 +137,9 @@ class reportenom0353Controller extends Controller
         try {
             $proyecto = proyectoModel::with(['catregion', 'catsubdireccion', 'catgerencia', 'catactivo'])->findOrFail($proyecto_id);
             $recsensorial = reconocimientopsicoModel::findOrFail($proyecto->reconocimiento_psico_id);
+            $recoHigiene = recsensorialModel::findOrFail($proyecto->recsensorial_id);
+            $respuestasTrabajadores = respuestastrabajadorespsicoModel::where('RECPSICO_ID', $proyecto->reconocimiento_psico_id)->get();
+
 
             $meses = ["Vacio", "Enero", "Febrero", "Marzo", "Abril", "Mayo", "Junio", "Julio", "Agosto", "Septiembre", "Octubre", "Noviembre", "Diciembre"];
             $proyectofecha = explode("-", $proyecto->proyecto_fechaentrega);
@@ -306,7 +312,7 @@ class reportenom0353Controller extends Controller
             $dato['tipocliente'] = ($recsensorial->tipocliente + 0);
 
 
-            if ($dato['reporteregistro_id'] >= 0 && $reporte->reporteruido_fecha != NULL && $reporte->proyecto_id == $proyecto_id) {
+            if ($dato['reporteregistro_id'] >= 0 && $reporte->reportenom0353_fecha != NULL && $reporte->proyecto_id == $proyecto_id) {
                 $reportefecha = $reporte->reportenom0353_fecha;
                 $dato['reporte_portada_guardado'] = 1;
 
@@ -369,14 +375,14 @@ class reportenom0353Controller extends Controller
             //===================================================
 
 
-            if ($dato['reporteregistro_id'] >= 0 && $reporte->reporteruido_objetivogeneral != NULL) {
+            if ($dato['reporteregistro_id'] >= 0 && $reporte->reportenom0353_objetivogeneral != NULL) {
                 if ($reporte->proyecto_id == $proyecto_id) {
                     $dato['reporte_objetivogeneral_guardado'] = 1;
                 } else {
                     $dato['reporte_objetivogeneral_guardado'] = 0;
                 }
 
-                $objetivogeneral = $reporte->reporteruido_objetivogeneral;
+                $objetivogeneral = $reporte->reportenom0353_objetivogeneral;
             } else {
                 $dato['reporte_objetivogeneral_guardado'] = 0;
                 $objetivogeneral = $reportecatalogo[0]->reportenom0353catalogo_objetivogeneral;
@@ -387,7 +393,7 @@ class reportenom0353Controller extends Controller
             // OBJETIVOS ESPECIFICOS
             //===================================================
 
-            if ($dato['reporteregistro_id'] >= 0 && $reporte->reporteruido_objetivoespecifico != NULL) {
+            if ($dato['reporteregistro_id'] >= 0 && $reporte->reportenom0353_objetivoespecifico != NULL) {
                 if ($reporte->proyecto_id == $proyecto_id) {
                     $dato['reporte_objetivoespecifico_guardado'] = 1;
                 } else {
@@ -403,67 +409,48 @@ class reportenom0353Controller extends Controller
             $dato['reporte_objetivoespecifico'] = $this->datosproyectoreemplazartexto($proyecto, $recsensorial, $objetivoespecifico);
 
 
-            // METODOLOGIA PUNTO 4.1
+            // METODOLOGIA PUNTO 4.1 instrumentoos
             //===================================================
 
 
-            if ($dato['reporteregistro_id'] >= 0 && $reporte->reporteruido_metodologia_4_1 != NULL) {
+            if ($dato['reporteregistro_id'] >= 0 && $reporte->reportenom0353_metodologiainstrumentos != NULL) {
                 if ($reporte->proyecto_id == $proyecto_id) {
                     $dato['reporte_metodologia_4_1_guardado'] = 1;
                 } else {
                     $dato['reporte_metodologia_4_1_guardado'] = 0;
                 }
 
-                $metodologia_4_1 = $reporte->reporteruido_metodologia_4_1;
+                $metodologia_4_1 = $reporte->reportenom0353_metodologiainstrumentos;
             } else {
                 $dato['reporte_metodologia_4_1_guardado'] = 0;
-                $metodologia_4_1 = $reportecatalogo[0]->reportenom0353catalogo_metodologia_4_1;
+                $metodologia_4_1 = $reportecatalogo[0]->reportenom0353catalogo_metodologia;
             }
 
             $dato['reporte_metodologia_4_1'] = $this->datosproyectoreemplazartexto($proyecto, $recsensorial, $metodologia_4_1);
 
-
-            // METODOLOGIA PUNTO 4.2
-            //===================================================
-
-
-            if ($dato['reporteregistro_id'] >= 0 && $reporte->reporteruido_metodologia_4_2 != NULL) {
-                if ($reporte->proyecto_id == $proyecto_id) {
-                    $dato['reporte_metodologia_4_2_guardado'] = 1;
-                } else {
-                    $dato['reporte_metodologia_4_2_guardado'] = 0;
-                }
-
-                $metodologia_4_2 = $reporte->reporteruido_metodologia_4_2;
-            } else {
-                $dato['reporte_metodologia_4_2_guardado'] = 0;
-                $metodologia_4_2 = $reportecatalogo[0]->reporteruidocatalogo_metodologia_4_2;
-            }
-
-            $dato['reporte_metodologia_4_2'] = $this->datosproyectoreemplazartexto($proyecto, $recsensorial, $metodologia_4_2);
 
 
             // UBICACION
             //===================================================
 
 
-            if ($dato['reporteregistro_id'] >= 0 && $reporte->reporteruido_ubicacioninstalacion != NULL) {
+            if ($dato['reporteregistro_id'] >= 0 && $reporte->reportenom0353_ubicacioninstalacion != NULL) {
                 if ($reporte->proyecto_id == $proyecto_id) {
                     $dato['reporte_ubicacioninstalacion_guardado'] = 1;
                 } else {
                     $dato['reporte_ubicacioninstalacion_guardado'] = 0;
                 }
 
-                $ubicacion = $reporte->reporteruido_ubicacioninstalacion;
+                $ubicacion = $reporte->reportenom0353_ubicacioninstalacion;
             } else {
                 $dato['reporte_ubicacioninstalacion_guardado'] = 0;
-                $ubicacion = $reportecatalogo[0]->reporteruidocatalogo_ubicacioninstalacion;
+                $ubicacion = $reportecatalogo[0]->reportenom0353catalogo_ubicacioninstalacion;
             }
 
 
             $ubicacionfoto = NULL;
-            if ($dato['reporteregistro_id'] >= 0 && $reporte->reporteruido_ubicacionfoto != NULL && $reporte->proyecto_id == $proyecto_id) {
-                $ubicacionfoto = $reporte->reporteruido_ubicacionfoto;
+            if ($dato['reporteregistro_id'] >= 0 && $reporte->reportenom0353_ubicacionfoto != NULL && $reporte->proyecto_id == $proyecto_id) {
+                $ubicacionfoto = $reporte->reportenom0353_ubicacionfoto;
             }
 
             $dato['reporte_ubicacioninstalacion'] = array(
@@ -475,13 +462,15 @@ class reportenom0353Controller extends Controller
             // PROCESO INSTALACION
             //===================================================
 
-
-            if ($dato['reporteregistro_id'] >= 0 && $reporte->reporteruido_procesoinstalacion != NULL && $reporte->proyecto_id == $proyecto_id) {
+            if ($dato['reporteregistro_id'] >= 0 && $reporte->reportenom0353_procesoinstalacion != NULL && $reporte->proyecto_id == $proyecto_id) {
                 $dato['reporte_procesoinstalacion_guardado'] = 1;
-                $procesoinstalacion = $reporte->reporteruido_procesoinstalacion;
+                $procesoinstalacion = $reporte->reportenom0353_procesoinstalacion;
+            }else if ($dato['reporteregistro_id'] >= 0 && $recoHigiene->recsensorial_descripcionproceso != NULL) {
+                $dato['reporte_procesoinstalacion_guardado'] = 0;
+                $procesoinstalacion = $recoHigiene->recsensorial_descripcionproceso;
             } else {
                 $dato['reporte_procesoinstalacion_guardado'] = 0;
-                $procesoinstalacion = $recsensorial->recsensorial_descripcionproceso;
+                $procesoinstalacion = $recsensorial->descripcionproceso;
             }
 
             $dato['reporte_procesoinstalacion'] = $this->datosproyectoreemplazartexto($proyecto, $recsensorial, $procesoinstalacion);
@@ -491,10 +480,10 @@ class reportenom0353Controller extends Controller
             //===================================================
 
 
-            if ($dato['reporteregistro_id'] >= 0 && $reporte->reporteruido_actividadprincipal != NULL && $reporte->proyecto_id == $proyecto_id) {
-                $procesoinstalacion = $reporte->reporteruido_actividadprincipal;
+            if ($dato['reporteregistro_id'] >= 0 && $reporte->reportenom0353_actividadprincipal != NULL && $reporte->proyecto_id == $proyecto_id) {
+                $procesoinstalacion = $reporte->reportenom0353_actividadprincipal;
             } else {
-                $procesoinstalacion = $recsensorial->recsensorial_actividadprincipal;
+                $procesoinstalacion = $recsensorial->actividadprincipal;
             }
 
             $dato['reporte_actividadprincipal'] = $this->datosproyectoreemplazartexto($proyecto, $recsensorial, $procesoinstalacion);
@@ -504,12 +493,12 @@ class reportenom0353Controller extends Controller
             //===================================================
 
 
-            if ($dato['reporteregistro_id'] >= 0 && $reporte->reporteruido_metodoevaluacion != NULL && $reporte->proyecto_id == $proyecto_id) {
+            if ($dato['reporteregistro_id'] >= 0 && $reporte->reportenom0353_metodoevaluacion != NULL && $reporte->proyecto_id == $proyecto_id) {
                 $dato['reporte_metodoevaluacion_guardado'] = 1;
-                $metodoevaluacion = $reporte->reporteruido_metodoevaluacion;
+                $metodoevaluacion = $reporte->reportenom0353_metodoevaluacion;
             } else {
                 $dato['reporte_metodoevaluacion_guardado'] = 0;
-                $metodoevaluacion = $reportecatalogo[0]->reporteruidocatalogo_metodoevaluacion;
+                $metodoevaluacion = $reportecatalogo[0]->reportenom0353catalogo_metodoaplicacion;
             }
 
             $dato['reporte_metodoevaluacion'] = $this->datosproyectoreemplazartexto($proyecto, $recsensorial, $metodoevaluacion);
@@ -518,17 +507,69 @@ class reportenom0353Controller extends Controller
             // CONCLUSION
             //===================================================
 
+            $acontecimiento = 0;
+            $totalTrabajadores = count($respuestasTrabajadores);
+            $cantAcontecimientos = 0;
+            $cantSinAcontecimientos = 0;
 
-            if ($dato['reporteregistro_id'] >= 0 && $reporte->reporteruido_conclusion != NULL && $reporte->proyecto_id == $proyecto_id) {
+            if ($dato['reporteregistro_id'] >= 0 && $reporte->reportenom0353_acontecimientos != NULL && $reporte->proyecto_id == $proyecto_id) {
                 $dato['reporte_conclusion_guardado'] = 1;
-                $conclusion = $reporte->reporteruido_conclusion;
+                $reporte_acontecimientos = $reporte->reportenom0353_acontecimientos;
             } else {
                 $dato['reporte_conclusion_guardado'] = 0;
-                $conclusion = $reportecatalogo[0]->reporteruidocatalogo_conclusion;
+                
+                // Contar trabajadores con y sin acontecimientos
+                foreach ($respuestasTrabajadores as $respuesta) {
+                    $respuestasJson = json_decode($respuesta->RECPSICO_GUIAI_RESPUESTAS, true);
+                    if (isset($respuestasJson[0]) && $respuestasJson[0] == "1") {
+                        $cantAcontecimientos++;
+                        $acontecimiento = 1;
+                    } else {
+                        $cantSinAcontecimientos++;
+                    }
+                }
+                
+                // Calcular porcentajes
+                $porcentajeAcontecimientos = $totalTrabajadores > 0 ? 
+                    round(($cantAcontecimientos / $totalTrabajadores) * 100, 2) : 0;
+                $porcentajeSinAcontecimientos = $totalTrabajadores > 0 ? 
+                    round(($cantSinAcontecimientos / $totalTrabajadores) * 100, 2) : 0;
+                
+                if($acontecimiento == 1) { //si hay acontecimiento traumático
+                    $acontecimientotraumatico = DB::select('SELECT 
+                                                            psicocat_conclusiones.CONCLUSION 
+                                                        FROM 
+                                                            psicocat_conclusiones 
+                                                        WHERE 
+                                                            psicocat_conclusiones.NIVEL = 6');
+                    $reporte_acontecimientos = "El " . $porcentajeAcontecimientos . "% (" . $cantAcontecimientos . ") " .
+                                            $acontecimientotraumatico[0]->CONCLUSION;
+                } else {
+                    $acontecimientotraumatico = DB::select('SELECT 
+                                                            psicocat_conclusiones.CONCLUSION 
+                                                        FROM 
+                                                            psicocat_conclusiones 
+                                                        WHERE 
+                                                            psicocat_conclusiones.NIVEL = 7');
+                    $reporte_acontecimientos = "El " . $porcentajeSinAcontecimientos . "% (" . $cantSinAcontecimientos . ") " .
+                                            $acontecimientotraumatico[0]->CONCLUSION;
+                }
             }
 
-            $dato['reporte_conclusion'] = $this->datosproyectoreemplazartexto($proyecto, $recsensorial, $conclusion);
+            $dato['reporte_acontecimientos'] = $reporte_acontecimientos;
 
+
+            //AMBIENTE DE TRABAJO
+            $ambiente = 0;
+            $cantambiente = 0;
+
+            if ($dato['reporteregistro_id'] >= 0 && $reporte->reportenom0353_ambiente != NULL && $reporte->proyecto_id == $proyecto_id) {
+                $reporte_ambiente = $reporte->reportenom0353_ambiente;
+            } else {
+               
+            }
+
+            $dato['reporte_ambiente'] = "El 50% (1) de los trabajadores percibe como un riesgo alto, las condiciones del ambiente de trabajo son peligrosas, inseguras, deficientes o insalubres, lo cual puede generar o aumentar el nivel de estrés laboral y ansiedad.";
 
             // RESPONSABLES DEL INFORME
             //===================================================
@@ -1022,8 +1063,6 @@ class reportenom0353Controller extends Controller
 
             // PORTADA
             if (($request->opcion + 0) == 0) {
-
-
                 $reporte->update([
                     'reportenom0353_catregion_activo' => 0,
                     'reportenom0353_catsubdireccion_activo' => 0,
@@ -1161,7 +1200,7 @@ class reportenom0353Controller extends Controller
             // OBJETIVO GENERAL
             if (($request->opcion + 0) == 3) {
                 $reporte->update([
-                    'reporteruido_objetivogeneral' => $this->datosproyectolimpiartexto($proyecto, $recsensorial, $request->reporte_objetivogeneral)
+                    'reportenom0353_objetivogeneral' => $this->datosproyectolimpiartexto($proyecto, $recsensorial, $request->reporte_objetivogeneral)
                 ]);
 
                 // Mensaje
@@ -1172,7 +1211,7 @@ class reportenom0353Controller extends Controller
             // OBJETIVOS  ESPECIFICOS
             if (($request->opcion + 0) == 4) {
                 $reporte->update([
-                    'reporteruido_objetivoespecifico' => $this->datosproyectolimpiartexto($proyecto, $recsensorial, $request->reporte_objetivoespecifico)
+                    'reportenom0353_objetivoespecifico' => $this->datosproyectolimpiartexto($proyecto, $recsensorial, $request->reporte_objetivoespecifico)
                 ]);
 
                 // Mensaje
@@ -1183,24 +1222,12 @@ class reportenom0353Controller extends Controller
             // METODOLOGIA PUNTO 4.1
             if (($request->opcion + 0) == 5) {
                 $reporte->update([
-                    'reporteruido_metodologia_4_1' => $this->datosproyectolimpiartexto($proyecto, $recsensorial, $request->reporte_metodologia_4_1)
+                    'reportenom0353_metodologiainstrumentos' => $this->datosproyectolimpiartexto($proyecto, $recsensorial, $request->reporte_metodologia_4_1)
                 ]);
 
                 // Mensaje
                 $dato["msj"] = 'Datos guardados correctamente';
             }
-
-
-            // METODOLOGIA PUNTO 4.2
-            if (($request->opcion + 0) == 6) {
-                $reporte->update([
-                    'reporteruido_metodologia_4_2' => $this->datosproyectolimpiartexto($proyecto, $recsensorial, $request->reporte_metodologia_4_2)
-                ]);
-
-                // Mensaje
-                $dato["msj"] = 'Datos guardados correctamente';
-            }
-
 
             // UBICACION
             if (($request->opcion + 0) == 7) {

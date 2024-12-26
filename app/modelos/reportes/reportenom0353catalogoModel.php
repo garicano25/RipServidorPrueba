@@ -9,17 +9,16 @@ class reportenom0353catalogoModel extends Model
     protected $table = 'reportenom0353catalogo';
     
 	protected $fillable = [
-		  'reporteruidocatalogo_catregion_activo'
-		, 'reporteruidocatalogo_catsubdireccion_activo'
-		, 'reporteruidocatalogo_catgerencia_activo'
-		, 'reporteruidocatalogo_catactivo_activo'
-		, 'reporteruidocatalogo_introduccion'
-		, 'reporteruidocatalogo_objetivogeneral'
-		, 'reporteruidocatalogo_objetivoespecifico'
-		, 'reporteruidocatalogo_metodologia_4_1'
-		, 'reporteruidocatalogo_metodologia_4_2'
-		, 'reporteruidocatalogo_ubicacioninstalacion'
-		, 'reporteruidocatalogo_metodoevaluacion'
-		, 'reporteruidocatalogo_conclusion'
+		  'reportenom0353catalogo_catregion_activo'
+		, 'reportenom0353catalogo_catsubdireccion_activo'
+		, 'reportenom0353catalogo_catgerencia_activo'
+		, 'reportenom0353catalogo_catactivo_activo'
+		, 'reportenom0353catalogo_introduccion'
+		, 'reportenom0353catalogo_objetivogeneral'
+		, 'reportenom0353catalogo_objetivoespecifico'
+		, 'reportenom0353catalogo_metodologia'
+		, 'reportenom0353catalogo_ubicacioninstalacion'
+		, 'reportenom0353catalogo_metodoevaluacion'
+		, 'reportenom0353catalogo_conclusion'
 	];
 }

@@ -203,27 +203,15 @@ function datosgenerales()
 			$('.div_instalacion_nombre').html(dato.reporte_portada.reporte_instalacion);
 
 			$('#reporte_introduccion').html(dato.reporte_introduccion);
-			console.log(dato.reporte_introduccion);
-			$('#reporte_objetivoespecifico').html(
-				'• Medir la prevalencia de los Factores de Riesgo Psicosocial (FRPS) en personal de Edificio Sede CENAGAS.' +
-				'• Determinar y analizar el nivel de riesgo, así como las acciones que se deberán adoptar para el control de los Factores de Riesgo Psicosocial, como se establece en la Norma Oficial Mexicana; NOM-035-STPS-2018 “Factores de Riesgo Psicosocial en el Trabajo–Identificación, análisis y prevención”.\n\n' +
-				'• Determinar los parámetros para la prevención de los Factores de Riesgo Psicosocial.\n\n' +
-				'• Determinar los parámetros para la prevención de la violencia laboral.\n\n' +
-				'• Identificar a los trabajadores que fueron sujetos a eventos traumáticos severos durante o con motivo del trabajo.'
-			  );
-			  
-			$('#reporte_metodologia_4_1').html(
-				'Guía de referencia I, Cuestionario para identificar a los trabajadores que fueron sujetos a Acontecimientos traumáticos severos. Como lo dicta la NOM-035-STPS-2018, para identificar a los trabajadores que fueron sujetos a eventos traumáticos severos o con motivo del trabajo y, canalizarlos para su atención a la institución de seguridad social o privada, o al médico del centro de trabajo o de la empresa.\n\n'+
-				'Guía de referencia III, Identificación y análisis de los Factores de Riesgo Psicosocial y Evaluación del entorno organizacional en los centros de trabajo. Como lo dicta la NOM-035-STPS-2018, en los centros de trabajo que tengan entre 16 y 50 trabajadores.\n\n'+
-				'La identificación y análisis de los factores de riesgo psicosocial y la evaluación del entorno organizacional se realizará de conformidad con la NOM-035-STPS-2018:\n'+
-				'1.	Los centros de trabajo que cuenten con más de 50 trabajadores, deberán realizar la identificación y análisis los factores de riesgo psicosocial y evaluar el entorno organizacional, éstas se podrán realizar con una muestra representativa.'
-			);
-			$('#reporte_acontecimientos').html("");
-			$('#reporte_ambiente').html("");
-			$('#reporte_factores').html("");
-			$('#reporte_organizacion').html("");
-			$('#reporte_liderazgo').html("");
-			$('#reporte_entorno').html("");
+			$('#reporte_objetivogeneral').html(dato.reporte_objetivogeneral);
+			$('#reporte_objetivoespecifico').html(dato.reporte_objetivoespecifico);
+			$('#reporte_metodologia_4_1').html(dato.reporte_metodologia_4_1);
+			$('#reporte_acontecimientos').html(dato.reporte_acontecimientos);
+			$('#reporte_ambiente').html(dato.reporte_ambiente);
+			$('#reporte_factores').html(dato.reporte_factores);
+			$('#reporte_organizacion').html(dato.reporte_organizacion);
+			$('#reporte_liderazgo').html(dato.reporte_liderazgo);
+			$('#reporte_entorno').html(dato.reporte_entorno);
 
 
 
@@ -232,7 +220,7 @@ function datosgenerales()
 			{
 				var archivo = dato.reporte_ubicacioninstalacion.ubicacionfoto;
 				var extension = archivo.substring(archivo.lastIndexOf("."));
-				var imagenUrl = '/reporteruidomapaubicacion/'+reporteregistro_id+'/'+0;
+				var imagenUrl = '/reportenom0353mapaubicacion/'+reporteregistro_id+'/'+0;
 				$('#reporteubicacionfoto').dropify().data('dropify').destroy();
 				$('#reporteubicacionfoto').dropify().data('dropify').settings.defaultFile = imagenUrl+extension;
 				$('#reporteubicacionfoto').dropify().data('dropify').init();
@@ -252,10 +240,9 @@ function datosgenerales()
 				$('#boton_descargarmapaubicacion').css('display', 'none');
 			}
 
-			$('#reporte_procesoinstalacion').html("descripcion del proceso");
-			$('#reporte_actividadprincipal').html("act principal");
-			$('#reporte_metodoevaluacion').html(dato.reporte_metodoevaluacion);
-			$('#reporte_conclusion').html(dato.reporte_conclusion);
+			$('#reporte_procesoinstalacion').html(dato.reporte_procesoinstalacion);
+			$('#reporte_actividadprincipal').html(dato.reporte_actividadprincipal);
+			$('#reporte_descripcionmetodo').html(dato.reporte_metodoevaluacion);
 
 			if (dato.reporte_responsablesinforme.responsable1)
 			{
@@ -323,38 +310,35 @@ function datosgenerales()
 			$('#memoriafotografica_total').html(dato.reporte_memoriafotografica_guardado);
 
 			// ACTUALIZAR MENU INDICE, SI CADA PUNTO YA HA SIDO GUARDADO
-			menureporte_estado("menureporte_0", dato.reporte_portada_guardado);
-			menureporte_estado("menureporte_1", dato.reporte_introduccion_guardado);
+			// menureporte_estado("menureporte_0", dato.reporte_portada_guardado);
+			// menureporte_estado("menureporte_1", dato.reporte_introduccion_guardado);
+			// menureporte_estado("menureporte_2", 1); // Definiciones
+			// menureporte_estado("menureporte_3_1", dato.reporte_objetivogeneral_guardado);
+			// menureporte_estado("menureporte_3_2", dato.reporte_objetivoespecifico_guardado);
+			// menureporte_estado("menureporte_4_1", dato.reporte_metodologia_4_1_guardado);
+			// menureporte_estado("menureporte_4_2", dato.reporte_metodologia_4_2_guardado);
+			// menureporte_estado("menureporte_5_1", dato.reporte_ubicacioninstalacion_guardado);
+			// menureporte_estado("menureporte_5_2", dato.reporte_procesoinstalacion_guardado);
+			// menureporte_estado("menureporte_6_3", dato.reporte_metodoevaluacion_guardado);
+			// menureporte_estado("menureporte_8", dato.reporte_conclusion_guardado);
+			// menureporte_estado("menureporte_10", dato.reporte_responsablesinforme_guardado);
+
+			menureporte_estado("menureporte_0", 1);
+			menureporte_estado("menureporte_1", 1);
 			menureporte_estado("menureporte_2", 1); // Definiciones
-			menureporte_estado("menureporte_3_1", dato.reporte_objetivogeneral_guardado);
-			menureporte_estado("menureporte_3_2", dato.reporte_objetivoespecifico_guardado);
-			menureporte_estado("menureporte_4_1", dato.reporte_metodologia_4_1_guardado);
-			menureporte_estado("menureporte_4_2", dato.reporte_metodologia_4_2_guardado);
-			menureporte_estado("menureporte_5_1", dato.reporte_ubicacioninstalacion_guardado);
-			menureporte_estado("menureporte_5_2", dato.reporte_procesoinstalacion_guardado);
-			menureporte_estado("menureporte_6_3", dato.reporte_metodoevaluacion_guardado);
-			menureporte_estado("menureporte_8", dato.reporte_conclusion_guardado);
-			menureporte_estado("menureporte_10", dato.reporte_responsablesinforme_guardado);
+			menureporte_estado("menureporte_3_1", 1);
+			menureporte_estado("menureporte_3_2", 1);
+			menureporte_estado("menureporte_4_1", 1);
+			menureporte_estado("menureporte_4_2", 1);
+			menureporte_estado("menureporte_5_1", 1);
+			menureporte_estado("menureporte_5_2", 1);
+			menureporte_estado("menureporte_6_3", 1);
+			menureporte_estado("menureporte_8", 1);
+			menureporte_estado("menureporte_10", 1);
 			menureporte_estado("menureporte_11", 1);
 			menureporte_estado("menureporte_11_1", 1);
 			menureporte_estado("menureporte_11_2", 1);
 			menureporte_estado("menureporte_12", 1);
-
-
-
-
-
-			menureporte_estado("menureporte_7_2", 1);
-			menureporte_estado("menureporte_8", 1);
-			menureporte_estado("menureporte_9_1", 1);
-			menureporte_estado("menureporte_9_2_1", 1);
-			menureporte_estado("menureporte_9_2_2", 1);
-			menureporte_estado("menureporte_9_2_3", 1);
-			menureporte_estado("menureporte_9_2_4", 1);
-			menureporte_estado("menureporte_9_2_5", 1);
-			menureporte_estado("menureporte_9_3", 1);
-			menureporte_estado("menureporte_10", 1);
-			menureporte_estado("menureporte_10_1", 1);
 
 			
 
@@ -571,8 +555,8 @@ $("#botonguardar_reporte_portada").click(function()
 					data: {
 						opcion: 0,
 						proyecto_id: proyecto.id,
-						agente_id: agente_id,
-						agente_nombre: agente_nombre,
+						agente_id: 353,
+						agente_nombre: 'NOM0353',
 						reporteregistro_id: reporteregistro_id,
 						catactivo_id: $("#reporte_catactivo_id").val()
 					},
@@ -11612,7 +11596,6 @@ rootConsolidadoChart1.setThemes([am5themes_Animated.new(rootConsolidadoChart1), 
 
 // Datos (con valores fijos para las 5 series)
 var dataConsolidado1 = [
-  { "category": "Acontecimientos traumáticos\n severos.", "Nulo": 0.95, "Muy alto": 0.05 },
   { "category": "Ambiente de\n trabajo", "Nulo": 0.35, "Bajo": 0.18, "Medio": 0.22, "Alto": 0.15, "Muy alto": 0.10 },
   { "category": "Factores Propios\n de la actividad", "Nulo": 0.09, "Bajo": 0.36, "Medio": 0.21, "Alto": 0.26, "Muy alto": 0.08 },
   { "category": "Organización del \ntiempo de trabajo", "Nulo": 0.14, "Bajo": 0.19, "Medio": 0.23, "Alto": 0.27, "Muy alto": 0.17 },

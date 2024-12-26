@@ -136,7 +136,7 @@ class recpsicocatalogosrecController extends Controller
                         $value['DOMINIO'] = 'Falta de control sobre el trabajo';
                     } elseif ($value->DOMINIO == 10) {
                         $value['DOMINIO'] = 'Jornada de trabajo';
-                    } elseif ($value->CATEGORIA == 11) {
+                    } elseif ($value->DOMINIO == 11) {
                         $value['DOMINIO'] = 'Interferencia trabajo-familia';
                     } elseif ($value->DOMINIO == 12) {
                         $value['DOMINIO'] = 'Liderazgo';
