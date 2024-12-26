@@ -72,8 +72,8 @@ $(window).scroll(function()
 
 var meses = ["VACIO", "ENERO", "FEBRERO", "MARZO", "ABRIL", "MAYO", "JUNIO", "JULIO", "AGOSTO", "SEPTIEMBRE", "OCTUBRE", "NOVIEMBRE", "DICIEMBRE"];
 var reporteregistro_id = 0;
-var agente_id = 1;
-var agente_nombre = "NOM-035-STPS-2018";
+var agente_id = 353;
+var agente_nombre = "NOM035";
 var ruta_storage_guardar = '/reportenom0353';
 
 
@@ -149,7 +149,7 @@ function datosgenerales()
 	$.ajax({
 		type: "GET",
 		dataType: "json",
-		url: "/reporteruidodatosgenerales/"+proyecto.id+"/"+agente_id+"/"+agente_nombre,
+		url: "/reportenom0353datosgenerales/"+proyecto.id+"/"+agente_id+"/"+agente_nombre,
 		data:{},
 		cache: false,
 		success:function(dato)
@@ -171,7 +171,7 @@ function datosgenerales()
 			}
 
 
-			if (parseInt(dato.recsensorial_tipocliente) == 1) //1= pemex, 0 =  cliente
+			if (parseInt(dato.tipocliente) == 1) //1= pemex, 0 =  cliente
 			{
 				$('#reporte_catsubdireccion_activo').prop('checked', dato.reporte_portada.reporte_catsubdireccion_activo);
 				$('#reporte_catsubdireccion_id').val(dato.reporte_portada.catsubdireccion_id);
@@ -200,16 +200,10 @@ function datosgenerales()
 
 			$('#reporte_mes').val(dato.reporte_portada.reporte_mes);
 
-			$('#reporteruido_lmpe').val(dato.reporteruido_lmpe);
-
 			$('.div_instalacion_nombre').html(dato.reporte_portada.reporte_instalacion);
 
-			$('#reporte_introduccion').html('Es un hecho que los factores físicos, psíquicos y sociales, afectan la integridad mental de los trabajadores. Los Factores de Riesgo Psicosocial (FRPS) propios de las variadas actividades que se desarrollan en esta industria petrolera no son la excepción.\n\n' +
-'La manera de expresión del hombre en su esfera social y económica. Su cotidianeidad, su proyección vital, su experiencia emocional, cognoscitiva o espiritual, es dada con mayor frecuencia en el área de trabajo, dado el tiempo que se invierte.\n\n'+
-'Tomando en cuenta la importancia de la evaluación e intervención sobre los Factores de Riesgo Psicosocial, para promover un estado de bienestar entre los trabajadores de acuerdo con la Norma Oficial Mexicana NOM-035-STPS-2018, Factores de riesgo psicosocial en el trabajo-Identificación, análisis y prevención.\n\n'+
-'CENAGAS busca cumplir con los estándares en materia de higiene y seguridad, verificando que la salud de los trabajadores expuestos a Factores de Riesgo Psicosocial no se vea afectada por la actividad en el centro de trabajo, por lo cual realiza de manera periódica y de acuerdo con lo establecido en la normatividad oficial y sus procedimientos internos las evaluaciones requeridas para dar cumplimiento.\n\n'+
-'En el presente estudio se describen los resultados obtenidos durante la evaluación de Factores de Riesgo Psicosocial en el ambiente laboral de acuerdo con lo establecido en la Norma Oficial Mexicana; NOM-035-STPS-2018 “Factores de Riesgo psicosocial en el trabajo–Identificación, análisis y prevención” realizado en el Sector Fuerza, Edificio Sede CENAGAS el 11 de octubre del año 2024.');
-			$('#reporte_objetivogeneral').html("Identificar y analizar los Factores de Riesgo Psicosocial Edificio Sede CENAGAS");
+			$('#reporte_introduccion').html(dato.reporte_introduccion);
+			console.log(dato.reporte_introduccion);
 			$('#reporte_objetivoespecifico').html(
 				'• Medir la prevalencia de los Factores de Riesgo Psicosocial (FRPS) en personal de Edificio Sede CENAGAS.' +
 				'• Determinar y analizar el nivel de riesgo, así como las acciones que se deberán adoptar para el control de los Factores de Riesgo Psicosocial, como se establece en la Norma Oficial Mexicana; NOM-035-STPS-2018 “Factores de Riesgo Psicosocial en el Trabajo–Identificación, análisis y prevención”.\n\n' +
@@ -5717,52 +5711,6 @@ function tabla_reporte_7_2(proyecto_id, reporteregistro_id)
 }
 
 
-$("#boton_reporte_nuevopuntoner").click(function (e) {
-
-	valor = $('#reporteruido_lmpe').val();
-
-	if (valor == '') { 
-
-		e.preventDefault()
-		swal({
-			title: "No existe un LMPA dB(A) para evaluar.",
-			text: "Por favor ingrese un valor en el campo de LMPA dB(A) para evaluar",
-			type: "info",
-			showConfirmButton: true
-		});
-
-	} else {
-		
-		$('#form_modal_puntoner').each(function(){
-			this.reset();
-		});
-	
-		// Campos Hidden
-		$('#puntoner_id').val(0);
-	
-		// LLenar campos
-		$('#reporteruidopuntoner_lmpe').val(valor);
-	
-		// Campo ubicaciones
-		$('#reporteruidopuntoner_ubicacion').html(ubicaciones_opciones);
-	
-		// Campo select areas
-		$('#reporteruidopuntoner_areaid').html(selectareas);
-		mostrar_categoriasarea_puntoner(0, 0);
-	
-		// Campo select categorias
-		$('#puntoner_categorias').html('');
-	
-		// Titulo del modal
-		$('#modal_reporte_puntoner .modal-title').html('Punto de resultado de la determinación del NER');
-	
-		// mostrar modal
-		$('#modal_reporte_puntoner').modal({ backdrop: false });
-		
-	}
-
-});
-
 
 function mostrar_categoriasarea_puntoner(area_id, puntoner_id)
 {
@@ -6324,47 +6272,6 @@ function tabla_reporte_7_3(proyecto_id, reporteregistro_id)
     }
 }
 
-
-$("#boton_reporte_nuevadosisner").click(function (e) {
-	
-	valor = $('#reporteruido_lmpe').val();
-
-	if (valor == '') {
-
-		e.preventDefault()
-		swal({
-			title: "No existe un LMPA dB(A) para evaluar.",
-			text: "Por favor ingrese un valor en el campo de LMPA dB(A) para evaluar",
-			type: "info",
-			showConfirmButton: true
-		});
-	} else {
-		
-		$('#form_modal_dosisner').each(function(){
-			this.reset();
-		});
-	
-		// Campos Hidden
-		$('#dosisner_id').val(0);
-	
-		// LLenar campos
-		$('#reporteruidodosisner_lmpe').val(valor);	
-	
-		// Campo select areas
-		$('#reporteruidodosisner_areaid').html(selectareas);
-		$('#reporteruidodosisner_equipo').html(selectequipos);
-
-	
-		// Campo select categorias
-		$('#reporteruidodosisner_categoriaid').html('<option value=""></option>');
-	
-		// Titulo del modal
-		$('#modal_reporte_dosisner .modal-title').html('Dosis de determinación del NER al personal');
-	
-		// mostrar modal
-		$('#modal_reporte_dosisner').modal({backdrop:false});
-	}
-});
 
 
 function mostrar_categoriasarea(area_id, categoria_id, campo_nombre)
@@ -10679,86 +10586,7 @@ function obtenerdatos() {
 // CAMPO DE LMPE 
 
 
-$('#reporteruido_lmpe').on('change', function () {
 
-	if ($(this).val() != '') {
-		
-		$.ajax({
-			type: "GET",
-			dataType: "json",
-			url: "/guardarCampolmpe/" + proyecto.id + "/" + reporteregistro_id +"/"+ $('#reporteruido_lmpe').val(),
-			data: {},
-			cache: false,
-			success: function(dato) {
-			},
-
-			error: function(xhr, status, error) {
-				console.log('Error: ' + error);
-				swal('Error', 'Datos no cargados LMPE', 'error');
-			}
-		});
-	}
- 
-});
-
-///FUNCION BOTONES DE INSERCION POR MEDIO DE EXCEL
-function abrirModalPuntos(tipo) {
-
-	valor = $('#reporteruido_lmpe').val();
-	if (tipo == 1) {
-		$('#formExcelPuntos')[0].reset();
-		
-		// Campos Hidden
-		$('#tipoArchivo').val(tipo);
-	
-		$('#divCargarPuntos').css('display', 'none');
-		$('#alertaVerificacion').css('display', 'none');
-	
-	
-		$('#modal_excel_puntos').modal({backdrop:false});
-		
-	} else {
-		
-		if (valor == '') {
-	
-			swal({
-				title: "No existe un LMPA dB(A) para evaluar.",
-				text: "Por favor ingrese un valor en el campo de LMPA dB(A) para evaluar",
-				type: "info",
-				showConfirmButton: true
-			});
-	
-		} else { 
-	
-			$('#formExcelPuntos')[0].reset();
-			
-			// Campos Hidden
-			$('#tipoArchivo').val(tipo);
-		
-			$('#divCargarPuntos').css('display', 'none');
-			$('#alertaVerificacion').css('display', 'none');
-		
-		
-			$('#modal_excel_puntos').modal({backdrop:false});
-	
-		}
-
-	}
-
-}
-
-
- $('#excelPuntos').change(function () {
-        
-	if ($(this).val()) {
-		
-		$('#alertaVerificacion').css('display', 'block');
-
-	} else {
-		$('#alertaVerificacion').css('display', 'none');
-		
-	}
-});
 
 
 $("#botonCargarPuntos").click(function() {

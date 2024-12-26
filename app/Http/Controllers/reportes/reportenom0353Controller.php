@@ -20,6 +20,8 @@ use App\modelos\recsensorial\catConclusionesModel;
 use App\modelos\reportes\recursosPortadasInformesModel;
 
 use App\modelos\reportes\reportenom0353Model;
+use App\modelos\reportes\reportenom0353catalogoModel;
+
 
 
 use Illuminate\Http\Request;
@@ -147,7 +149,7 @@ class reportenom0353Controller extends Controller
                 $reporte = $reporte[0];
                 $dato['reporteregistro_id'] = $reporte->id;
             } else {
-                if (($recsensorial->recsensorial_tipocliente + 0) == 1) // 1 = Pemex, 0 = cliente
+                if (($recsensorial->tipocliente + 0) == 1) // 1 = Pemex, 0 = cliente
                 {
                     // $reporte = reportenom0353Model::where('catactivo_id', $proyecto->catactivo_id)
                     //     ->orderBy('proyecto_id', 'DESC')
@@ -155,7 +157,7 @@ class reportenom0353Controller extends Controller
                     //     ->limit(1)
                     //     ->get();
                     $reporte = DB::select('SELECT
-                        reconocimientopsico.recsensorial_tipocliente,
+                        reconocimientopsico.tipocliente,
                         reconocimientopsico.cliente_id,
                         reportenom0353.id,
                         reportenom0353.proyecto_id,
@@ -212,7 +214,7 @@ class reportenom0353Controller extends Controller
                         reportenom0353.updated_at DESC');
                 } else {
                     $reporte = DB::select('SELECT
-                    reconocimientopsico.recsensorial_tipocliente,
+                    reconocimientopsico.tipocliente,
                     reconocimientopsico.cliente_id,
                     reportenom0353.id,
                     reportenom0353.proyecto_id,
@@ -281,7 +283,7 @@ class reportenom0353Controller extends Controller
 
 
             $revision = reporterevisionesModel::where('proyecto_id', $proyecto_id)
-                ->where('agente_id', 352) //nom 0353
+                ->where('agente_id', 353) //nom 0353
                 ->orderBy('reporterevisiones_revision', 'DESC')
                 ->get();
 
@@ -300,23 +302,22 @@ class reportenom0353Controller extends Controller
 
             // PORTADA
             //===================================================
-            $dato['reporteruido_lmpe'] = $reporte->reporteruido_lmpe;
 
-            $dato['recsensorial_tipocliente'] = ($recsensorial->recsensorial_tipocliente + 0);
+            $dato['tipocliente'] = ($recsensorial->tipocliente + 0);
 
 
             if ($dato['reporteregistro_id'] >= 0 && $reporte->reporteruido_fecha != NULL && $reporte->proyecto_id == $proyecto_id) {
-                $reportefecha = $reporte->reporteruido_fecha;
+                $reportefecha = $reporte->reportenom0353_fecha;
                 $dato['reporte_portada_guardado'] = 1;
 
                 $dato['reporte_portada'] = array(
-                    'reporte_catregion_activo' => $reporte->reporteruido_catregion_activo,
+                    'reporte_catregion_activo' => $reporte->reportenom0353_catregion_activo,
                     'catregion_id' => $proyecto->catregion_id,
-                    'reporte_catsubdireccion_activo' => $reporte->reporteruido_catsubdireccion_activo,
+                    'reporte_catsubdireccion_activo' => $reporte->reportenom0353_catsubdireccion_activo,
                     'catsubdireccion_id' => $proyecto->catsubdireccion_id,
-                    'reporte_catgerencia_activo' => $reporte->reporteruido_catgerencia_activo,
+                    'reporte_catgerencia_activo' => $reporte->reportenom0353_catgerencia_activo,
                     'catgerencia_id' => $proyecto->catgerencia_id,
-                    'reporte_catactivo_activo' => $reporte->reporteruido_catactivo_activo,
+                    'reporte_catactivo_activo' => $reporte->reportenom0353_catactivo_activo,
                     'catactivo_id' => $proyecto->catactivo_id,
                     'reporte_instalacion' => $proyecto->proyecto_clienteinstalacion,
                     'reporte_fecha' => $reportefecha,
@@ -338,9 +339,6 @@ class reportenom0353Controller extends Controller
                     'reporte_instalacion' => $proyecto->proyecto_clienteinstalacion,
                     'reporte_fecha' => $reportefecha,
                     'reporte_mes' => ""
-
-
-
                 );
             }
 
@@ -349,20 +347,22 @@ class reportenom0353Controller extends Controller
             //===================================================
 
 
-            if ($dato['reporteregistro_id'] >= 0 && $reporte->reporteruido_introduccion != NULL) {
+            if ($dato['reporteregistro_id'] >= 0 && $reporte->reportenom0353_introduccion != NULL) {
                 if ($reporte->proyecto_id == $proyecto_id) {
                     $dato['reporte_introduccion_guardado'] = 1;
                 } else {
                     $dato['reporte_introduccion_guardado'] = 0;
                 }
 
-                $introduccion = $reporte->reporteruido_introduccion;
+                $introduccion = $reporte->reportenom0353_introduccion;
             } else {
                 $dato['reporte_introduccion_guardado'] = 0;
-                $introduccion = $reportecatalogo[0]->reporteruidocatalogo_introduccion;
+               
+                    $introduccion = $reportecatalogo[0]->reportenom0353catalogo_introduccion;
             }
 
             $dato['reporte_introduccion'] = $this->datosproyectoreemplazartexto($proyecto, $recsensorial, $introduccion);
+
 
 
             // OBJETIVO GENERAL
@@ -379,7 +379,7 @@ class reportenom0353Controller extends Controller
                 $objetivogeneral = $reporte->reporteruido_objetivogeneral;
             } else {
                 $dato['reporte_objetivogeneral_guardado'] = 0;
-                $objetivogeneral = $reportecatalogo[0]->reporteruidocatalogo_objetivogeneral;
+                $objetivogeneral = $reportecatalogo[0]->reportenom0353catalogo_objetivogeneral;
             }
 
             $dato['reporte_objetivogeneral'] = $this->datosproyectoreemplazartexto($proyecto, $recsensorial, $objetivogeneral);
@@ -397,7 +397,7 @@ class reportenom0353Controller extends Controller
                 $objetivoespecifico = $reporte->reporteruido_objetivoespecifico;
             } else {
                 $dato['reporte_objetivoespecifico_guardado'] = 0;
-                $objetivoespecifico = $reportecatalogo[0]->reporteruidocatalogo_objetivoespecifico;
+                $objetivoespecifico = $reportecatalogo[0]->reportenom0353catalogo_objetivoespecifico;
             }
 
             $dato['reporte_objetivoespecifico'] = $this->datosproyectoreemplazartexto($proyecto, $recsensorial, $objetivoespecifico);
@@ -417,7 +417,7 @@ class reportenom0353Controller extends Controller
                 $metodologia_4_1 = $reporte->reporteruido_metodologia_4_1;
             } else {
                 $dato['reporte_metodologia_4_1_guardado'] = 0;
-                $metodologia_4_1 = $reportecatalogo[0]->reporteruidocatalogo_metodologia_4_1;
+                $metodologia_4_1 = $reportecatalogo[0]->reportenom0353catalogo_metodologia_4_1;
             }
 
             $dato['reporte_metodologia_4_1'] = $this->datosproyectoreemplazartexto($proyecto, $recsensorial, $metodologia_4_1);
@@ -554,13 +554,8 @@ class reportenom0353Controller extends Controller
             } else {
                 $dato['reporte_responsablesinforme_guardado'] = 0;
 
-                // $reportehistorial = reporteruidoModel::where('catactivo_id', $proyecto->catactivo_id)
-                //                                         ->orderBy('proyecto_id', 'DESC')
-                //                                         ->orderBy('reporteruido_revision', 'DESC')
-                //                                         ->limit(1)
-                //                                         ->get();
-
-                $reportehistorial = reporteruidoModel::where('reporteruido_responsable1', '!=', '')
+            
+                $reportehistorial = reportenom0353Model::where('reporteruido_responsable1', '!=', '')
                     ->orderBy('updated_at', 'DESC')
                     ->limit(1)
                     ->get();
@@ -937,18 +932,18 @@ class reportenom0353Controller extends Controller
 
             $proyectoRecursos = recursosPortadasInformesModel::where('PROYECTO_ID', $request->proyecto_id)->where('AGENTE_ID', $request->agente_id)->get();
             $proyecto = proyectoModel::with(['catregion', 'catsubdireccion', 'catgerencia', 'catactivo'])->findOrFail($request->proyecto_id);
-            $recsensorial = recsensorialModel::with(['catregion', 'catsubdireccion', 'catgerencia', 'catactivo'])->findOrFail($proyecto->recsensorial_id);
+            $recsensorial = reconocimientopsicoModel::findOrFail($proyecto->reconocimiento_psico_id);
 
             $meses = ["Vacio", "Enero", "Febrero", "Marzo", "Abril", "Mayo", "Junio", "Julio", "Agosto", "Septiembre", "Octubre", "Noviembre", "Diciembre"];
             $reportefecha = explode("-", $proyecto->proyecto_fechaentrega);
 
 
             if (($request->reporteregistro_id + 0) > 0) {
-                $reporte = reporteruidoModel::findOrFail($request->reporteregistro_id);
+                $reporte = reportenom0353Model::findOrFail($request->reporteregistro_id);
 
 
                 $reporte->update([
-                    'reporteruido_instalacion' => $request->reporte_instalacion
+                    'reportenom0353_instalacion' => $request->reporte_instalacion
                 ]);
 
 
@@ -976,25 +971,25 @@ class reportenom0353Controller extends Controller
                     return response()->json($dato);
                 }
             } else {
-                DB::statement('ALTER TABLE reporteruido AUTO_INCREMENT = 1;');
+                DB::statement('ALTER TABLE reportenom0353 AUTO_INCREMENT = 1;');
 
                 if (!$request->catactivo_id) {
                     $request['catactivo_id'] = 0; // es es modo cliente y viene en null se pone en cero
                 }
 
-                $reporte = reporteruidoModel::create([
+                $reporte = reportenom0353Model::create([
                     'proyecto_id' => $request->proyecto_id,
                     'agente_id' => $request->agente_id,
                     'agente_nombre' => $request->agente_nombre,
                     'catactivo_id' => $request->catactivo_id,
-                    'reporteruido_revision' => 0,
-                    'reporteruido_instalacion' => $request->reporte_instalacion,
-                    'reporteruido_catregion_activo' => 1,
-                    'reporteruido_catsubdireccion_activo' => 1,
-                    'reporteruido_catgerencia_activo' => 1,
-                    'reporteruido_catactivo_activo' => 1,
-                    'reporteruido_concluido' => 0,
-                    'reporteruido_cancelado' => 0
+                    'reportenom0353_revision' => 0,
+                    'reportenom0353_instalacion' => $request->reporte_instalacion,
+                    'reportenom0353_catregion_activo' => 1,
+                    'reportenom0353_catsubdireccion_activo' => 1,
+                    'reportenom0353_catgerencia_activo' => 1,
+                    'reportenom0353_catactivo_activo' => 1,
+                    'reportenom0353_concluido' => 0,
+                    'reportenom0353_cancelado' => 0
                 ]);
 
 
@@ -1003,7 +998,7 @@ class reportenom0353Controller extends Controller
 
                 // ASIGNAR CATEGORIAS AL REGISTRO ACTUAL
                 DB::statement('UPDATE 
-                                    reporteruidocategoria
+                                    reportenom0353categoria
                                 SET 
                                     registro_id = ' . $reporte->id . '
                                 WHERE 
@@ -1030,12 +1025,12 @@ class reportenom0353Controller extends Controller
 
 
                 $reporte->update([
-                    'reporteruido_catregion_activo' => 0,
-                    'reporteruido_catsubdireccion_activo' => 0,
-                    'reporteruido_catgerencia_activo' => 0,
-                    'reporteruido_catactivo_activo' => 0,
-                    'reporteruido_instalacion' => $request->reporte_instalacion,
-                    'reporteruido_fecha' => $request->reporte_fecha,
+                    'reportenom0353_catregion_activo' => 0,
+                    'reportenom0353_catsubdireccion_activo' => 0,
+                    'reportenom0353_catgerencia_activo' => 0,
+                    'reportenom0353_catactivo_activo' => 0,
+                    'reportenom0353_instalacion' => $request->reporte_instalacion,
+                    'reportenom0353_fecha' => $request->reporte_fecha,
                     'reporte_mes' => $request->reporte_mes
 
                 ]);
@@ -1117,7 +1112,7 @@ class reportenom0353Controller extends Controller
             // INTRODUCCION
             if (($request->opcion + 0) == 1) {
                 $reporte->update([
-                    'reporteruido_introduccion' => $request->reporte_introduccion,
+                    'reportenom0353_introduccion' => $request->reporte_introduccion,
                 ]);
 
                 // Mensaje
@@ -2106,6 +2101,55 @@ class reportenom0353Controller extends Controller
             $dato["msj"] = 'Error ' . $e->getMessage();
             return response()->json($dato);
         }
+    }
+
+    public function datosproyectolimpiartexto($proyecto, $recsensorial, $texto)
+    {
+        $meses = ["Vacio", "Enero", "Febrero", "Marzo", "Abril", "Mayo", "Junio", "Julio", "Agosto", "Septiembre", "Octubre", "Noviembre", "Diciembre"];
+        $reportefecha = explode("-", $proyecto->proyecto_fechaentrega);
+
+        $texto = str_replace($proyecto->proyecto_clienteinstalacion, 'INSTALACION_NOMBRE', $texto);
+        $texto = str_replace($proyecto->proyecto_clientedireccionservicio, 'INSTALACION_DIRECCION', $texto);
+        $texto = str_replace($reportefecha[2] . " de " . $meses[($reportefecha[1] + 0)] . " del año " . $reportefecha[0], 'REPORTE_FECHA_LARGA', $texto);
+
+        if (($recsensorial->recsensorial_tipocliente + 0) == 1) // 1 = pemex, 0 = cliente
+        {
+            $texto = str_replace($proyecto->catsubdireccion->catsubdireccion_nombre, 'SUBDIRECCION_NOMBRE', $texto);
+            $texto = str_replace($proyecto->catgerencia->catgerencia_nombre, 'GERENCIA_NOMBRE', $texto);
+            $texto = str_replace($proyecto->catactivo->catactivo_nombre, 'ACTIVO_NOMBRE', $texto);
+        } else {
+            $texto = str_replace($recsensorial->recsensorial_empresa, 'PEMEX Exploración y Producción', $texto);
+        }
+
+        return $texto;
+    }
+
+
+    public function datosproyectoreemplazartexto($proyecto, $recsensorial, $texto)
+    {
+        $meses = ["Vacio", "Enero", "Febrero", "Marzo", "Abril", "Mayo", "Junio", "Julio", "Agosto", "Septiembre", "Octubre", "Noviembre", "Diciembre"];
+        $reportefecha = explode("-", $proyecto->proyecto_fechaentrega);
+
+        $texto = str_replace('INSTALACION_NOMBRE', $proyecto->proyecto_clienteinstalacion, $texto);
+        $texto = str_replace('INSTALACION_DIRECCION', $proyecto->proyecto_clientedireccionservicio, $texto);
+        $texto = str_replace('INSTALACION_CODIGOPOSTAL', 'C.P. ' . $recsensorial->codigopostal, $texto);
+        $texto = str_replace('INSTALACION_COORDENADAS', $recsensorial->coordenadas, $texto);
+        $texto = str_replace('REPORTE_FECHA_LARGA', $reportefecha[2] . " de " . $meses[($reportefecha[1] + 0)] . " del año " . $reportefecha[0], $texto);
+
+        if (($recsensorial->tipocliente + 0) == 1) // 1 = pemex, 0 = cliente
+        {
+            $texto = str_replace('SUBDIRECCION_NOMBRE', $proyecto->catsubdireccion->catsubdireccion_nombre, $texto);
+            $texto = str_replace('GERENCIA_NOMBRE', $proyecto->catgerencia->catgerencia_nombre, $texto);
+            $texto = str_replace('ACTIVO_NOMBRE', $proyecto->catactivo->catactivo_nombre, $texto);
+        } else {
+            $texto = str_replace('SUBDIRECCION_NOMBRE', '', $texto);
+            $texto = str_replace('GERENCIA_NOMBRE', '', $texto);
+            $texto = str_replace('ACTIVO_NOMBRE', '', $texto);
+
+            $texto = str_replace('PEMEX Exploración y Producción', $recsensorial->recsensorial_empresa, $texto);
+        }
+
+        return $texto;
     }
 
 }

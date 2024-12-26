@@ -6,7 +6,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class reportenom0353catalogoModel extends Model
 {
-    protected $table = 'reporteruidocatalogo';
+    protected $table = 'reportenom0353catalogo';
     
 	protected $fillable = [
 		  'reporteruidocatalogo_catregion_activo'
