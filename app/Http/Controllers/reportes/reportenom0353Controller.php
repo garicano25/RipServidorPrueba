@@ -7,6 +7,7 @@ namespace App\Http\Controllers\reportes;
 use App\modelos\proyecto\proyectoModel;
 use App\modelos\reconocimientopsico\reconocimientopsicoModel;
 use App\modelos\reconocimientopsico\respuestastrabajadorespsicoModel;
+use App\modelos\reconocimientopsico\proyectotrabajadoresModel;
 use App\modelos\recsensorial\recsensorialModel;
 
 
@@ -57,6 +58,30 @@ class reportenom0353Controller extends Controller
                         <b style="font-size: 18px;">Para ingresar al diseño del reporte de NOM-035-STPS-2028 primero debe completar todos los campos vacíos de la sección de datos generales del proyecto.</b>
                     </div>';
         } else {
+
+            $revision = reporterevisionesModel::where('proyecto_id', $proyecto_id)
+            ->where('agente_id', 353) //nom 0353
+            ->orderBy('reporterevisiones_revision', 'DESC')
+            ->get();
+
+
+            if (count($revision) == 0) {
+                DB::statement('ALTER TABLE reporterevisiones AUTO_INCREMENT = 1;');
+
+                $revision = reporterevisionesModel::create([
+                    'proyecto_id' => $proyecto_id,
+                    'agente_id' => 353,
+                    'agente_nombre' => 'NOM0353',
+                    'reporterevisiones_revision' => 0,
+                    'reporterevisiones_concluido' => 0,
+                    'reporterevisiones_concluidonombre' => NULL,
+                    'reporterevisiones_concluidofecha' => NULL,
+                    'reporterevisiones_cancelado' => 0,
+                    'reporterevisiones_canceladonombre' => NULL,
+                    'reporterevisiones_canceladofecha' => NULL,
+                    'reporterevisiones_canceladoobservacion' => NULL
+                ]);
+            }
             //CATEGORIAS POE
             //-------------------------------------
 
@@ -132,7 +157,7 @@ class reportenom0353Controller extends Controller
      * @param  $agente_nombre
      * @return \Illuminate\Http\Response
      */
-    public function reportepsico3datosgenerales($proyecto_id)
+    public function reportepsico3datosgenerales($proyecto_id, $agente_id, $agente_nombre)
     {
         try {
             $proyecto = proyectoModel::with(['catregion', 'catsubdireccion', 'catgerencia', 'catactivo'])->findOrFail($proyecto_id);
@@ -287,24 +312,25 @@ class reportenom0353Controller extends Controller
 
             //------------------------------
 
-
             $revision = reporterevisionesModel::where('proyecto_id', $proyecto_id)
-                ->where('agente_id', 353) //nom 0353
-                ->orderBy('reporterevisiones_revision', 'DESC')
-                ->get();
+            ->where('agente_id', 353) //nom0353
+            ->orderBy('reporterevisiones_revision', 'DESC')
+            ->get();
 
 
             if (count($revision) > 0) {
                 $revision = reporterevisionesModel::findOrFail($revision[0]->id);
 
 
-                $dato['reporte_concluido'] = $revision->reporterevisiones_concluido;
-                $dato['reporte_cancelado'] = $revision->reporterevisiones_cancelado;
+                $dato['reportenom0353_concluido'] = $revision->reporterevisiones_concluido;
+                $dato['reportenom0353_cancelado'] = $revision->reporterevisiones_cancelado;
             } else {
-                $dato['reporte_concluido'] = 0;
-                $dato['reporte_cancelado'] = 0;
+                $dato['reportenom0353_concluido'] = 0;
+                $dato['reportenom0353_cancelado'] = 0;
             }
 
+
+    
 
             // PORTADA
             //===================================================
@@ -400,7 +426,7 @@ class reportenom0353Controller extends Controller
                     $dato['reporte_objetivoespecifico_guardado'] = 0;
                 }
 
-                $objetivoespecifico = $reporte->reporteruido_objetivoespecifico;
+                $objetivoespecifico = $reporte->reportenom0353_objetivoespecifico;
             } else {
                 $dato['reporte_objetivoespecifico_guardado'] = 0;
                 $objetivoespecifico = $reportecatalogo[0]->reportenom0353catalogo_objetivoespecifico;
@@ -489,18 +515,53 @@ class reportenom0353Controller extends Controller
             $dato['reporte_actividadprincipal'] = $this->datosproyectoreemplazartexto($proyecto, $recsensorial, $procesoinstalacion);
 
 
-            // METODO DE EVALUACION
-            //===================================================
+           // MÉTODO DE EVALUACIÓN
+            // ===================================================
 
+            $tipoAplicacion = 0; // 1 es Online, 2 es Offline (Presencial), y 3 es Mixta
 
-            if ($dato['reporteregistro_id'] >= 0 && $reporte->reportenom0353_metodoevaluacion != NULL && $reporte->proyecto_id == $proyecto_id) {
+            // MODELO DE LA MODALIDAD DE LOS TRABAJADORES
+            $proyectoTrabajadores = proyectotrabajadoresModel::where('proyecto_id', $proyecto_id)->get();
+
+            if ($dato['reporteregistro_id'] >= 0 && 
+                $reporte->reportenom0353_metodoevaluacion != NULL && 
+                $reporte->proyecto_id == $proyecto_id) {
+                
+                // Método de evaluación ya guardado previamente
                 $dato['reporte_metodoevaluacion_guardado'] = 1;
                 $metodoevaluacion = $reporte->reportenom0353_metodoevaluacion;
+                
             } else {
                 $dato['reporte_metodoevaluacion_guardado'] = 0;
-                $metodoevaluacion = $reportecatalogo[0]->reportenom0353catalogo_metodoaplicacion;
+
+                // Obtener las modalidades de los trabajadores
+                $modalidades = $proyectoTrabajadores->pluck('TRABAJADOR_MODALIDAD')->unique();
+
+                // Determinar el tipo de aplicación basado en las modalidades
+                if ($modalidades->count() === 1) {
+                    $tipoAplicacion = $modalidades->first() === 'Online' ? 1 : 2; // 1 para Online, 2 para Presencial
+                } else {
+                    $tipoAplicacion = 3; // Mixta
+                }
+
+                // Asignar el método de evaluación según el tipo de aplicación
+                switch ($tipoAplicacion) {
+                    case 1: // Online
+                        $metodoevaluacion = $reportecatalogo[0]->reportenom0353catalogo_aplicaciononline;
+                        break;
+                    case 2: // Presencial
+                        $metodoevaluacion = $reportecatalogo[0]->reportenom0353catalogo_aplicacionoffline;
+                        break;
+                    case 3: // Mixta
+                        $metodoevaluacion = $reportecatalogo[0]->reportenom0353catalogo_aplicacionmixta;
+                        break;
+                    default:
+                        $metodoevaluacion = null;
+                        break;
+                }
             }
 
+            // Reemplazar texto en el reporte con los datos del proyecto
             $dato['reporte_metodoevaluacion'] = $this->datosproyectoreemplazartexto($proyecto, $recsensorial, $metodoevaluacion);
 
 
@@ -575,7 +636,7 @@ class reportenom0353Controller extends Controller
             //===================================================
 
 
-            if ($dato['reporteregistro_id'] >= 0 && $reporte->reporteruido_responsable1 != NULL) {
+            if ($dato['reporteregistro_id'] >= 0 && $reporte->reportenom0353_responsable1 != NULL) {
                 if ($reporte->proyecto_id == $proyecto_id) {
                     $dato['reporte_responsablesinforme_guardado'] = 1;
                 } else {
@@ -583,9 +644,9 @@ class reportenom0353Controller extends Controller
                 }
 
                 $dato['reporte_responsablesinforme'] = array(
-                    'responsable1' => $reporte->reporteruido_responsable1,
-                    'responsable1cargo' => $reporte->reporteruido_responsable1cargo,
-                    'responsable1documento' => $reporte->reporteruido_responsable1documento,
+                    'responsable1' => $reporte->reportenom0353_responsable1,
+                    'responsable1cargo' => $reporte->reportenom0353_responsable1cargo,
+                    'responsable1documento' => $reporte->reportenom0353_responsable1documento,
                     'responsable2' => $reporte->reporteruido_responsable2,
                     'responsable2cargo' => $reporte->reporteruido_responsable2cargo,
                     'responsable2documento' => $reporte->reporteruido_responsable2documento,
@@ -596,16 +657,16 @@ class reportenom0353Controller extends Controller
                 $dato['reporte_responsablesinforme_guardado'] = 0;
 
             
-                $reportehistorial = reportenom0353Model::where('reporteruido_responsable1', '!=', '')
+                $reportehistorial = reportenom0353Model::where('reportenom0353_responsable1', '!=', '')
                     ->orderBy('updated_at', 'DESC')
                     ->limit(1)
                     ->get();
 
-                if (count($reportehistorial) > 0 && $reportehistorial[0]->reporteruido_responsable1 != NULL) {
+                if (count($reportehistorial) > 0 && $reportehistorial[0]->reportenom0353_responsable1 != NULL) {
                     $dato['reporte_responsablesinforme'] = array(
-                        'responsable1' => $reportehistorial[0]->reporteruido_responsable1,
-                        'responsable1cargo' => $reportehistorial[0]->reporteruido_responsable1cargo,
-                        'responsable1documento' => $reportehistorial[0]->reporteruido_responsable1documento,
+                        'responsable1' => $reportehistorial[0]->reportenom0353_responsable1,
+                        'responsable1cargo' => $reportehistorial[0]->reportenom0353_responsable1cargo,
+                        'responsable1documento' => $reportehistorial[0]->reportenom0353_responsable1documento,
                         'responsable2' => $reportehistorial[0]->reporteruido_responsable2,
                         'responsable2cargo' => $reportehistorial[0]->reporteruido_responsable2cargo,
                         'responsable2documento' => $reportehistorial[0]->reporteruido_responsable2documento,
@@ -1005,6 +1066,7 @@ class reportenom0353Controller extends Controller
                 }
 
 
+
                 if (($revision->reporterevisiones_concluido == 1 || $revision->reporterevisiones_cancelado == 1) && ($request->opcion + 0) != 26) // Valida disponibilidad de esta version
                 {
                     // respuesta
@@ -1104,6 +1166,7 @@ class reportenom0353Controller extends Controller
 
                         $recusros->update(['RUTA_IMAGEN_PORTADA' => $imgGuardada]);
                     }
+                    
                 } else {
 
                     foreach ($proyectoRecursos as $recurso) {
@@ -1232,7 +1295,7 @@ class reportenom0353Controller extends Controller
             // UBICACION
             if (($request->opcion + 0) == 7) {
                 $reporte->update([
-                    'reporteruido_ubicacioninstalacion' => $this->datosproyectolimpiartexto($proyecto, $recsensorial, $request->reporte_ubicacioninstalacion)
+                    'reportenom0353_ubicacioninstalacion' => $this->datosproyectolimpiartexto($proyecto, $recsensorial, $request->reporte_ubicacioninstalacion)
                 ]);
 
                 // si envia archivo
@@ -1249,7 +1312,7 @@ class reportenom0353Controller extends Controller
                     // file_put_contents(public_path('/imagen.jpg'), $imagen_nueva); // Guardar en public
 
                     $reporte->update([
-                        'reporteruido_ubicacionfoto' => $destinoPath
+                        'reportenom0353_ubicacionfoto' => $destinoPath
                     ]);
                 }
 
@@ -1261,8 +1324,8 @@ class reportenom0353Controller extends Controller
             // PROCESO INSTALACION
             if (($request->opcion + 0) == 8) {
                 $reporte->update([
-                    'reporteruido_procesoinstalacion' => $this->datosproyectolimpiartexto($proyecto, $recsensorial, $request->reporte_procesoinstalacion),
-                    'reporteruido_actividadprincipal' => $this->datosproyectolimpiartexto($proyecto, $recsensorial, $request->reporte_actividadprincipal)
+                    'reportenom0353_procesoinstalacion' => $request->reporte_procesoinstalacion,
+                    'reportenom0353_actividadprincipal' => $request->reporte_actividadprincipal
                 ]);
 
                 // Mensaje
@@ -1450,275 +1513,20 @@ class reportenom0353Controller extends Controller
             }
 
 
-            // EQUIPO AUDITIVO
-            if (($request->opcion + 0) == 11) {
-                if (($request->reporteequipoauditivo_id + 0) == 0) {
-                    $request['registro_id'] = $reporte->id;
-                    DB::statement('ALTER TABLE reporteruidoequipoauditivo AUTO_INCREMENT = 1;');
-                    $equipoauditivo = reporteruidoequipoauditivoModel::create($request->all());
-
-                    if ($request->reporteruidoequipoauditivoatenuacion_bandaNRR) {
-                        // DB::statement('ALTER TABLE reporteruidoequipoauditivoatenuacion AUTO_INCREMENT = 1;');
-
-                        foreach ($request->reporteruidoequipoauditivoatenuacion_bandaNRR as $key => $value) {
-                            $atenuacion = reporteruidoequipoauditivoatenuacionModel::create([
-                                'reporteruidoequipoauditivo_id' => $equipoauditivo->id,
-                                'reporteruidoequipoauditivoatenuacion_bandaNRR' => $value,
-                                'reporteruidoequipoauditivoatenuacion_bandaatenuacion' => $request['reporteruidoequipoauditivoatenuacion_bandaatenuacion'][$key]
-                            ]);
-                        }
-                    }
-
-                    if ($request->equipoauditivo_categoria) {
-                        // DB::statement('ALTER TABLE reporteruidoequipoauditivocategorias AUTO_INCREMENT = 1;');
-
-                        foreach ($request->equipoauditivo_categoria as $key => $value) {
-                            $categoria = reporteruidoequipoauditivocategoriasModel::create([
-                                'reporteruidoequipoauditivo_id' => $equipoauditivo->id,
-                                'reporteruidocategoria_id' => $value
-                            ]);
-                        }
-                    }
-
-                    // Mensaje
-                    $dato["msj"] = 'Datos guardados correctamente';
-                } else {
-                    $request['registro_id'] = $reporte->id;
-                    $equipoauditivo = reporteruidoequipoauditivoModel::findOrFail($request->reporteequipoauditivo_id);
-                    $equipoauditivo->update($request->all());
-
-                    if ($request->reporteruidoequipoauditivoatenuacion_bandaNRR) {
-                        $eliminar_atenuaciones = reporteruidoequipoauditivoatenuacionModel::where('reporteruidoequipoauditivo_id', $request->reporteequipoauditivo_id)->delete();
-
-                        DB::statement('ALTER TABLE reporteruidoequipoauditivoatenuacion AUTO_INCREMENT = 1;');
-
-                        foreach ($request->reporteruidoequipoauditivoatenuacion_bandaNRR as $key => $value) {
-                            $atenuacion = reporteruidoequipoauditivoatenuacionModel::create([
-                                'reporteruidoequipoauditivo_id' => $equipoauditivo->id,
-                                'reporteruidoequipoauditivoatenuacion_bandaNRR' => $value,
-                                'reporteruidoequipoauditivoatenuacion_bandaatenuacion' => $request['reporteruidoequipoauditivoatenuacion_bandaatenuacion'][$key]
-                            ]);
-                        }
-                    }
-
-                    if ($request->equipoauditivo_categoria) {
-                        $eliminar_categorias = reporteruidoequipoauditivocategoriasModel::where('reporteruidoequipoauditivo_id', $request->reporteequipoauditivo_id)->delete();
-
-                        DB::statement('ALTER TABLE reporteruidoequipoauditivocategorias AUTO_INCREMENT = 1;');
-
-                        foreach ($request->equipoauditivo_categoria as $key => $value) {
-                            $categoria = reporteruidoequipoauditivocategoriasModel::create([
-                                'reporteruidoequipoauditivo_id' => $equipoauditivo->id,
-                                'reporteruidocategoria_id' => $value
-                            ]);
-                        }
-                    }
-
-                    // Mensaje
-                    $dato["msj"] = 'Datos modificados correctamente';
-                }
-            }
-
-
-            // EQUIPO PROTECCION PERSONAL
-            if (($request->opcion + 0) == 12) {
-                if (($request->reporteepp_id + 0) == 0) {
-                    DB::statement('ALTER TABLE reporteruidoepp AUTO_INCREMENT = 1;');
-
-                    $request['registro_id'] = $reporte->id;
-                    $categoria = reporteruidoeppModel::create($request->all());
-
-                    // Mensaje
-                    $dato["msj"] = 'Datos guardados correctamente';
-                } else {
-                    $request['registro_id'] = $reporte->id;
-                    $categoria = reporteruidoeppModel::findOrFail($request->reporteepp_id);
-                    $categoria->update($request->all());
-
-                    // Mensaje
-                    $dato["msj"] = 'Datos modificados correctamente';
-                }
-            }
-
-
-            // AREAS PUNTOS DE EVALUACION
-            if (($request->opcion + 0) == 13) {
-                $eliminar_areaevaluacion = reporteruidoareaevaluacionModel::where('proyecto_id', $request->proyecto_id)
-                    ->where('registro_id', $reporte->id)
-                    ->where('reporteruidoarea_id', $request->reporteruidoarea_id)
-                    ->delete();
-
-                if ($request->reporteruidoareaevaluacion_nomedicion1) {
-                    DB::statement('ALTER TABLE reporteruidoareaevaluacion AUTO_INCREMENT = 1;');
-
-                    foreach ($request->reporteruidoareaevaluacion_nomedicion1 as $key => $value) {
-                        $areaevaluacion = reporteruidoareaevaluacionModel::create([
-                            'proyecto_id' => $request->proyecto_id,
-                            'registro_id' => $reporte->id,
-                            'reporteruidoarea_id' => $request->reporteruidoarea_id,
-                            'reporteruidoareaevaluacion_noevaluaciones' => $request->reporteruidoareaevaluacion_noevaluaciones,
-                            'reporteruidoareaevaluacion_nomedicion1' => $value,
-                            'reporteruidoareaevaluacion_nomedicion2' => $request['reporteruidoareaevaluacion_nomedicion2'][$key],
-                            'reporteruidoareaevaluacion_ubicacion' => $request['reporteruidoareaevaluacion_ubicacion'][$key]
-                        ]);
-                    }
-                }
-
-                // Mensaje
-                $dato["msj"] = 'Datos guardados correctamente';
-            }
-
-
             // METODO DE EVALUACION
             if (($request->opcion + 0) == 14) {
                 $reporte->update([
-                    'reporteruido_metodoevaluacion' => $this->datosproyectolimpiartexto($proyecto, $recsensorial, $request->reporte_metodoevaluacion)
+                    'reportenom0353_metodoevaluacion' => $this->datosproyectolimpiartexto($proyecto, $recsensorial, $request->reporte_descripcionmetodo)
                 ]);
 
                 // Mensaje
                 $dato["msj"] = 'Datos guardados correctamente';
             }
-
-
-            // PUNTO DE MEDICION NIVEL SONORO
-            if (($request->opcion + 0) == 15) {
-
-                $eliminar_nivelsonoro = reporteruidonivelsonoroModel::where('proyecto_id', $request->proyecto_id)
-                    ->where('registro_id', $reporte->id)
-                    ->where('reporteruidonivelsonoro_punto', $request->reportenivelsonoro_punto)
-                    ->delete();
-
-                if ($request->reporteruidonivelsonoro_periodo1) {
-                    DB::statement('ALTER TABLE reporteruidonivelsonoro AUTO_INCREMENT = 1;');
-
-                    foreach ($request->reporteruidonivelsonoro_periodo1 as $key => $value) {
-                        $nivelsonoro = reporteruidonivelsonoroModel::create([
-                            'proyecto_id' => $request->proyecto_id,
-                            'registro_id' => $reporte->id,
-                            'reporteruidonivelsonoro_punto' => $request->reporteruidonivelsonoro_punto,
-                            'reporteruidonivelsonoro_ubicacion' => $request->reporteruidonivelsonoro_ubicacion,
-                            'reporteruidonivelsonoro_promedio' => $request->reporteruidonivelsonoro_promedio,
-                            'reporteruidonivelsonoro_totalperiodos' => $request->reporteruidonivelsonoro_totalperiodos,
-                            'reporteruidonivelsonoro_totalresultados' => $request->reporteruidonivelsonoro_totalresultados,
-                            'reporteruidonivelsonoro_periodo1' => $value,
-                            'reporteruidonivelsonoro_periodo2' => $request['reporteruidonivelsonoro_periodo2'][$key] ?? null,
-                            'reporteruidonivelsonoro_periodo3' => $request['reporteruidonivelsonoro_periodo3'][$key] ?? null,
-                            'reporteruidonivelsonoro_periodo4' => $request['reporteruidonivelsonoro_periodo4'][$key] ?? null,
-                            'reporteruidonivelsonoro_periodo5' => $request['reporteruidonivelsonoro_periodo5'][$key] ?? null,
-                        ]);
-                    }
-                }
-
-                // Mensaje
-                $dato["msj"] = 'Datos guardados correctamente';
-            }
-
-
-
-            // PUNTO DE DETERMINACION DEL NER
-            if (($request->opcion + 0) == 16) {
-                if (($request->puntoner_id + 0) == 0) {
-                    DB::statement('ALTER TABLE reporteruidopuntoner AUTO_INCREMENT = 1;');
-
-                    $request['registro_id'] = $reporte->id;
-                    $puntoner = reporteruidopuntonerModel::create($request->all());
-
-                    //====================== DESACTIVAMOS LA INSERCION DE LAS CATEGORIAS YA QUE NO ES NECSARIO PARA ESTE PUNTO
-                    // if ($request->reporteruidocategoria_id) {
-                    //     DB::statement('ALTER TABLE reporteruidopuntonercategorias AUTO_INCREMENT = 1;');
-
-                    //     foreach ($request->reporteruidocategoria_id as $key => $value) {
-                    //         $categoria = reporteruidopuntonercategoriasModel::create([
-                    //             'reporteruidopuntoner_id' => $puntoner->id, 'reporteruidocategoria_id' => $value, 'reporteruidopuntonercategorias_total' => $request['reporteruidopuntonercategorias_total'][$key], 'reporteruidopuntonercategorias_geo' => $request['reporteruidopuntonercategorias_geo'][$key], 'reporteruidopuntonercategorias_ficha' => $request['reporteruidopuntonercategorias_ficha'][$key], 'reporteruidopuntonercategorias_nombre' => $request['reporteruidopuntonercategorias_nombre'][$key]
-                    //         ]);
-                    //     }
-                    // }
-
-                    $frecuencias_bandasoctava = array('31.5', '63', '125', '250', '500', '1K', '2K', '4K', '8K');
-                    foreach ($frecuencias_bandasoctava as $key => $value) {
-                        $frecuencia = reporteruidopuntonerfrecuenciasModel::create([
-                            'reporteruidopuntoner_id' => $puntoner->id,
-                            'reporteruidopuntonerfrecuencias_orden' => ($key + 1),
-                            'reporteruidopuntonerfrecuencias_frecuencia' => $value,
-                            'reporteruidopuntonerfrecuencias_nivel' => NULL
-                        ]);
-                    }
-
-                    // Mensaje
-                    $dato["msj"] = 'Datos guardados correctamente';
-                } else {
-                    $request['registro_id'] = $reporte->id;
-                    $puntoner = reporteruidopuntonerModel::findOrFail($request->puntoner_id);
-                    $puntoner->update($request->all());
-
-                    //====================== DESACTIVAMOS LA INSERCION DE LAS CATEGORIAS YA QUE NO ES NECESARIO PARA ESTE PUNTO
-
-                    // if ($request->reporteruidocategoria_id) {
-                    //     $eliminar_categorias = reporteruidopuntonercategoriasModel::where('reporteruidopuntoner_id', $request->puntoner_id)->delete();
-
-                    //     DB::statement('ALTER TABLE reporteruidopuntonercategorias AUTO_INCREMENT = 1;');
-
-                    //     foreach ($request->reporteruidocategoria_id as $key => $value) {
-                    //         $categoria = reporteruidopuntonercategoriasModel::create([
-                    //             'reporteruidopuntoner_id' => $puntoner->id, 'reporteruidocategoria_id' => $value, 'reporteruidopuntonercategorias_total' => $request['reporteruidopuntonercategorias_total'][$key], 'reporteruidopuntonercategorias_geo' => $request['reporteruidopuntonercategorias_geo'][$key], 'reporteruidopuntonercategorias_ficha' => $request['reporteruidopuntonercategorias_ficha'][$key], 'reporteruidopuntonercategorias_nombre' => $request['reporteruidopuntonercategorias_nombre'][$key]
-                    //         ]);
-                    //     }
-                    // }
-
-
-                    // Mensaje
-                    $dato["msj"] = 'Datos modificados correctamente';
-                }
-            }
-
-
-            // DOSIS DE DETERMINACION DEL NER
-            if (($request->opcion + 0) == 17) {
-                if (($request->dosisner_id + 0) == 0) {
-                    DB::statement('ALTER TABLE reporteruidodosisner AUTO_INCREMENT = 1;');
-
-                    $request['registro_id'] = $reporte->id;
-                    $dosisner = reporteruidodosisnerModel::create($request->all());
-
-                    // Mensaje
-                    $dato["msj"] = 'Datos guardados correctamente';
-                } else {
-                    $request['registro_id'] = $reporte->id;
-                    $dosisner = reporteruidodosisnerModel::findOrFail($request->dosisner_id);
-                    $dosisner->update($request->all());
-
-                    // Mensaje
-                    $dato["msj"] = 'Datos modificados correctamente';
-                }
-            }
-
-
-            // RUIDO EFECTIVO CON MODELO POR BANDAS DE OCTAVA
-            if (($request->opcion + 0) == 18) {
-                $puntoner = reporteruidopuntonerModel::findOrFail($request->reporteruidopuntoner_id);
-
-                $puntoner->update([
-                    'reporteruidopuntoner_RdB' => $request->reporteruidobandaoctava_RdB,
-                    'reporteruidopuntoner_NRE' => $request->reporteruidobandaoctava_NRE,
-                    'reporteruidobandaoctava_equipo' => $request->reporteruidobandaoctava_equipo
-                ]);
-
-                foreach ($request->reporteruidopuntonerfrecuencias_frecuencia as $key => $value) {
-                    DB::statement('UPDATE reporteruidopuntonerfrecuencias
-                                    SET reporteruidopuntonerfrecuencias_nivel = ' . $request['reporteruidopuntonerfrecuencias_nivel'][$key] . ' 
-                                    WHERE reporteruidopuntoner_id = ' . $request->reporteruidopuntoner_id . '
-                                    AND reporteruidopuntonerfrecuencias_frecuencia = "' . $value . '";');
-                }
-
-                // Mensaje
-                $dato["msj"] = 'Datos modificados correctamente';
-            }
-
 
             // CONCLUSION
             if (($request->opcion + 0) == 19) {
                 $reporte->update([
-                    'reporteruido_conclusion' => $this->datosproyectolimpiartexto($proyecto, $recsensorial, $request->reporte_conclusion)
+                    'reportenom0353_conclusion' => $this->datosproyectolimpiartexto($proyecto, $recsensorial, $request->reporte_conclusion)
                 ]);
 
                 // Mensaje
@@ -1788,8 +1596,8 @@ class reportenom0353Controller extends Controller
             // RESPONSABLES DEL INFORME
             if (($request->opcion + 0) == 21) {
                 $reporte->update([
-                    'reporteruido_responsable1' => $request->reporte_responsable1,
-                    'reporteruido_responsable1cargo' => $request->reporte_responsable1cargo,
+                    'reportenom0353_responsable1' => $request->reporte_responsable1,
+                    'reportenom0353_responsable1cargo' => $request->reporte_responsable1cargo,
                     'reporteruido_responsable2' => $request->reporte_responsable2,
                     'reporteruido_responsable2cargo' => $request->reporte_responsable2cargo
                 ]);
@@ -1802,7 +1610,7 @@ class reportenom0353Controller extends Controller
                     File::copyDirectory(storage_path('app/' . $request->responsablesinforme_carpetadocumentoshistorial), storage_path('app/' . $nuevo_destino));
 
                     $reporte->update([
-                        'reporteruido_responsable1documento' => $nuevo_destino . 'responsable1_doc.jpg',
+                        'reportenom0353_responsable1documento' => $nuevo_destino . 'responsable1_doc.jpg',
                         'reporteruido_responsable2documento' => $nuevo_destino . 'responsable2_doc.jpg'
                     ]);
                 }
@@ -1821,7 +1629,7 @@ class reportenom0353Controller extends Controller
                     // file_put_contents(public_path('/imagen.jpg'), $imagen_nueva); // Guardar en public
 
                     $reporte->update([
-                        'reporteruido_responsable1documento' => $destinoPath
+                        'reportenom0353_responsable1documento' => $destinoPath
                     ]);
                 }
 
@@ -2177,6 +1985,24 @@ class reportenom0353Controller extends Controller
         }
 
         return $texto;
+    }
+
+        /**
+     * Display the specified resource.
+     *
+     * @param  int  $reporteregistro_id
+     * @param  int  $archivo_opcion
+     * @return \Illuminate\Http\Response
+     */
+    public function reportenom0353mapaubicacion($reporteregistro_id, $archivo_opcion)
+    {
+        $reporte  = reportenom0353Model::findOrFail($reporteregistro_id);
+
+        if ($archivo_opcion == 0) {
+            return Storage::response($reporte->reportenom0353_ubicacionfoto);
+        } else {
+            return Storage::download($reporte->reportenom0353_ubicacionfoto);
+        }
     }
 
 }

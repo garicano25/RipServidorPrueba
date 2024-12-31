@@ -73,7 +73,7 @@ $(window).scroll(function()
 var meses = ["VACIO", "ENERO", "FEBRERO", "MARZO", "ABRIL", "MAYO", "JUNIO", "JULIO", "AGOSTO", "SEPTIEMBRE", "OCTUBRE", "NOVIEMBRE", "DICIEMBRE"];
 var reporteregistro_id = 0;
 var agente_id = 353;
-var agente_nombre = "NOM035";
+var agente_nombre = "NOM0353";
 var ruta_storage_guardar = '/reportenom0353';
 
 
@@ -136,6 +136,12 @@ $(document).ready(function()
     {
         $(this).datepicker('setDate', $(this).val());// Mostrar fecha del input y marcar en el calendario
     });
+
+	document.getElementById('botonguardar_reporte_procesoinstalacion').addEventListener('click', function (e) {
+		// Copiar el contenido HTML a los inputs ocultos
+		document.getElementById('reporte_procesoinstalacion').value = document.getElementById('editableProcesoInstalacion').innerHTML;
+		document.getElementById('reporte_actividadprincipal').value = document.getElementById('editableActividadPrincipal').innerHTML;
+	});
 });
 
 
@@ -240,8 +246,8 @@ function datosgenerales()
 				$('#boton_descargarmapaubicacion').css('display', 'none');
 			}
 
-			$('#reporte_procesoinstalacion').html(dato.reporte_procesoinstalacion);
-			$('#reporte_actividadprincipal').html(dato.reporte_actividadprincipal);
+			$('#editableProcesoInstalacion').html(dato.reporte_procesoinstalacion);
+			$('#editableActividadPrincipal').html(dato.reporte_actividadprincipal);
 			$('#reporte_descripcionmetodo').html(dato.reporte_metodoevaluacion);
 
 			if (dato.reporte_responsablesinforme.responsable1)
@@ -310,35 +316,28 @@ function datosgenerales()
 			$('#memoriafotografica_total').html(dato.reporte_memoriafotografica_guardado);
 
 			// ACTUALIZAR MENU INDICE, SI CADA PUNTO YA HA SIDO GUARDADO
-			// menureporte_estado("menureporte_0", dato.reporte_portada_guardado);
-			// menureporte_estado("menureporte_1", dato.reporte_introduccion_guardado);
-			// menureporte_estado("menureporte_2", 1); // Definiciones
-			// menureporte_estado("menureporte_3_1", dato.reporte_objetivogeneral_guardado);
-			// menureporte_estado("menureporte_3_2", dato.reporte_objetivoespecifico_guardado);
-			// menureporte_estado("menureporte_4_1", dato.reporte_metodologia_4_1_guardado);
-			// menureporte_estado("menureporte_4_2", dato.reporte_metodologia_4_2_guardado);
-			// menureporte_estado("menureporte_5_1", dato.reporte_ubicacioninstalacion_guardado);
-			// menureporte_estado("menureporte_5_2", dato.reporte_procesoinstalacion_guardado);
-			// menureporte_estado("menureporte_6_3", dato.reporte_metodoevaluacion_guardado);
-			// menureporte_estado("menureporte_8", dato.reporte_conclusion_guardado);
-			// menureporte_estado("menureporte_10", dato.reporte_responsablesinforme_guardado);
-
-			menureporte_estado("menureporte_0", 1);
-			menureporte_estado("menureporte_1", 1);
+			menureporte_estado("menureporte_0", dato.reporte_portada_guardado);
+			menureporte_estado("menureporte_1", dato.reporte_introduccion_guardado);
 			menureporte_estado("menureporte_2", 1); // Definiciones
-			menureporte_estado("menureporte_3_1", 1);
-			menureporte_estado("menureporte_3_2", 1);
-			menureporte_estado("menureporte_4_1", 1);
-			menureporte_estado("menureporte_4_2", 1);
-			menureporte_estado("menureporte_5_1", 1);
-			menureporte_estado("menureporte_5_2", 1);
-			menureporte_estado("menureporte_6_3", 1);
-			menureporte_estado("menureporte_8", 1);
-			menureporte_estado("menureporte_10", 1);
-			menureporte_estado("menureporte_11", 1);
-			menureporte_estado("menureporte_11_1", 1);
-			menureporte_estado("menureporte_11_2", 1);
-			menureporte_estado("menureporte_12", 1);
+			menureporte_estado("menureporte_3_1", dato.reporte_objetivogeneral_guardado);
+			menureporte_estado("menureporte_3_2", dato.reporte_objetivoespecifico_guardado);
+			menureporte_estado("menureporte_4_1", dato.reporte_metodologia_4_1_guardado);
+			menureporte_estado("menureporte_5_1", dato.reporte_ubicacioninstalacion_guardado);
+			menureporte_estado("menureporte_5_2", dato.reporte_procesoinstalacion_guardado);
+			menureporte_estado("menureporte_5_3", 1); //descripcion de actividades del personal expuesto
+			menureporte_estado("menureporte_7_1", dato.reporte_metodoevaluacion_guardado);
+			menureporte_estado("menureporte_7_2", 1); //dashboard
+			menureporte_estado("menureporte_9_1", 1); //grafica guia 1
+			menureporte_estado("menureporte_9_2_1", 1); // grafica 1 guia 3
+			menureporte_estado("menureporte_9_2_2", 1); // grafica 2 guia 3
+			menureporte_estado("menureporte_9_2_3", 1); // grafica 3 guia 3
+			menureporte_estado("menureporte_9_2_4", 1); // grafica 4 guia 3
+			menureporte_estado("menureporte_9_2_5", 1); // grafica 5 guia 3
+			menureporte_estado("menureporte_9_3", 1); //graficas de consolidado general
+			menureporte_estado("menureporte_10_1", dato.reporte_conclusion_guardado);
+			menureporte_estado("menureporte_11_1", dato.reporte_recomendacion_guardado);
+			menureporte_estado("menureporte_12", dato.reporte_responsablesinforme_guardado);
+			menureporte_estado("menureporte_13_1", 1);//anexos
 
 			
 
@@ -396,9 +395,9 @@ function datosgenerales()
 			$('#reporte_objetivogeneral').html('Error al cargar los datos');
 			$('#reporte_objetivoespecifico').html('Error al cargar los datos');
 			$('#reporte_metodologia_4_1').html('Error al cargar los datos');
-			$('#reporte_metodologia_4_2').html('Error al cargar los datos');
 			$('#reporte_ubicacioninstalacion').html('Error al cargar los datos');
-			$('#reporte_procesoinstalacion').html('Error al cargar los datos');
+			$('#editableTextarea').html('Error al cargar los datos');
+			$('#editableActividadPrincipal').html('Error al cargar los datos');
 			$('#reporteruido_metodoevaluacion').html('Error al cargar los datos');
 			$('#reporte_conclusion').html('Error al cargar los datos');
 
@@ -1487,121 +1486,6 @@ $("#botonguardar_reporte_metodologia_4_1").click(function()
 
 
 //=================================================
-// METODOLOGÍA PUNTO 4.2
-
-
-$("#botonguardar_reporte_metodologia_4_2").click(function()
-{
-	// valida campos vacios
-	var valida = this.form.checkValidity();
-	if (valida)
-	{
-		swal({
-			title: "¡Confirme que desea guardar!",
-			text: "Metodológía punto 4.2",
-			type: "warning",
-			showCancelButton: true,
-			confirmButtonColor: "#DD6B55",
-			confirmButtonText: "Guardar!",
-			cancelButtonText: "Cancelar!",
-			closeOnConfirm: false,
-			closeOnCancel: false
-		},
-		function(isConfirm)
-		{
-			if (isConfirm)
-			{
-				// cerrar msj confirmacion
-				swal.close();
-
-				// enviar datos
-				$('#form_reporte_metodologia_4_2').ajaxForm({
-					dataType: 'json',
-					type: 'POST',
-					url: ''+ruta_storage_guardar,
-					data: {
-						opcion: 6,
-						proyecto_id: proyecto.id,
-						agente_id: agente_id,
-						agente_nombre: agente_nombre,
-						reporteregistro_id: reporteregistro_id,
-						catactivo_id: $("#reporte_catactivo_id").val(),
-						reporte_instalacion: $("#reporte_instalacion").val()
-					},
-					resetForm: false,
-					success: function(dato)
-					{
-						// Actualizar ID reporte						
-						reporteregistro_id = dato.reporteregistro_id;
-
-						menureporte_estado("menureporte_4_2", 1);
-
-						// tabla_reporte_revisiones(proyecto.id);
-
-						// mensaje
-						swal({
-							title: "Correcto",
-							text: ""+dato.msj,
-							type: "success", // warning, error, success, info
-							buttons: {
-								visible: false, // true , false
-							},
-							timer: 1500,
-							showConfirmButton: false
-						});
-
-						// actualiza boton
-						$('#botonguardar_reporte_metodologia_4_2').html('Guardar metodología punto 4.2 <i class="fa fa-save"></i>');
-						$('#botonguardar_reporte_metodologia_4_2').attr('disabled', false);
-					},
-					beforeSend: function()
-					{
-						$('#botonguardar_reporte_metodologia_4_2').html('Guardando metodología punto 4.2 <i class="fa fa-spin fa-spinner"></i>');
-						$('#botonguardar_reporte_metodologia_4_2').attr('disabled', true);
-					},
-					error: function(dato)
-					{
-						// actualiza boton
-						$('#botonguardar_reporte_metodologia_4_2').html('Guardar metodología punto 4.2 <i class="fa fa-save"></i>');
-						$('#botonguardar_reporte_metodologia_4_2').attr('disabled', false);
-
-						// mensaje
-						swal({
-							title: "Error",
-							text: ""+dato.msj,
-							type: "error", // warning, error, success, info
-							buttons: {
-								visible: false, // true , false
-							},
-							timer: 1500,
-							showConfirmButton: false
-						});
-						return false;
-					}
-				}).submit();
-				return false;
-			}
-			else 
-			{
-				// mensaje
-				swal({
-					title: "Cancelado",
-					text: "Acción cancelada",
-					type: "error", // warning, error, success, info
-					buttons: {
-						visible: false, // true , false
-					},
-					timer: 500,
-					showConfirmButton: false
-				});
-			}
-		});
-		return false;
-	}
-});
-
-
-//=================================================
 // UBICACION
 
 
@@ -1843,6 +1727,9 @@ $("#boton_descargarmapaubicacion").click(function()
 
 $("#botonguardar_reporte_procesoinstalacion").click(function()
 {
+
+	document.getElementById('reporte_procesoinstalacion').value = document.getElementById('editableProcesoInstalacion').innerHTML;
+	document.getElementById('reporte_actividadprincipal').value = document.getElementById('editableActividadPrincipal').innerHTML;
 	// valida campos vacios
 	var valida = this.form.checkValidity();
 	if (valida)
@@ -2326,7 +2213,6 @@ $("#botonguardar_modal_categoria").click(function()
 						// Actualizar tabla
 						tabla_reporte_categorias(proyecto.id, reporteregistro_id);
 						tabla_reporte_areas(proyecto.id, reporteregistro_id);
-						tabla_reporte_5_6_equipoauditivo(proyecto.id, reporteregistro_id);
 
 						// mensaje
 						swal({
@@ -2445,11 +2331,11 @@ function tabla_reporte_areas(proyecto_id, reporteregistro_id)
 						}
 						else
 						{
-							menureporte_estado("menureporte_5_3", 0);
-							menureporte_estado("menureporte_5_4", 0);
-							menureporte_estado("menureporte_5_5", 0);
-							menureporte_estado("menureporte_5_8", 0);
-							menureporte_estado("menureporte_6_1", 0);
+							// menureporte_estado("menureporte_5_3", 0);
+							// menureporte_estado("menureporte_5_4", 0);
+							// menureporte_estado("menureporte_5_5", 0);
+							// menureporte_estado("menureporte_5_8", 0);
+							// menureporte_estado("menureporte_6_1", 0);
 						}
 
 
@@ -3327,14 +3213,6 @@ function tabla_reporte_6_1(tbody)
 // EQUIPO AUDITIVO
 
 
-$(document).ready(function()
-{
-	setTimeout(function()
-	{
-		tabla_reporte_5_6_equipoauditivo(proyecto.id, reporteregistro_id);
-	}, 7000);
-});
-
 
 var datatable_reporte_5_6 = null;
 function tabla_reporte_5_6(tbody)
@@ -3375,543 +3253,6 @@ function tabla_reporte_5_6(tbody)
 }
 
 
-var equipoauditivo_ejecuciones = 0;
-function tabla_reporte_5_6_equipoauditivo(proyecto_id, reporteregistro_id)
-{
-	// Enviar datos
-	$.ajax({
-		type: "GET",
-		dataType: "json",
-		url: "/reporteruidoequipoauditivotabla/"+proyecto_id+"/"+reporteregistro_id+"/"+areas_poe,
-		data:{},
-		cache: false,
-		success:function(dato)
-		{
-			menureporte_estado("menureporte_5_6", parseInt(dato.equipoauditivo_lista.length));
-			menureporte_estado("menureporte_7_4", parseInt(dato.equipoauditivo_lista.length));
-
-			$("#div_tablas_equiposautivos").html(dato.equiposauditivos_tablas);
-			
-			tabla_reporte_5_6(dato.tabla_5_6);
-
-			// $("#equiposauditivos_datos").html(dato.equiposauditivos_datos);
-		},
-		error: function(dato)
-		{
-			if (equipoauditivo_ejecuciones == 0)
-			{
-				equipoauditivo_ejecuciones += 1;
-				tabla_reporte_5_6_equipoauditivo(proyecto_id, reporteregistro_id);
-			}
-
-			$("#div_tablas_equiposautivos").html('<table class="table table-hover tabla_info_centrado" width="100%">'+
-                                                    '<thead'+
-                                                        '<tr'+
-                                                            '<th rowspan="2" width="200">Equipo</th'+
-                                                            '<th rowspan="2" width="80">NRR</th'+
-                                                            '<th>Atenuación por bandas de octava</th'+
-                                                        '</tr'+
-                                                        '<tr'+
-                                                            '<th>0</th'+
-                                                        '</tr'+
-                                                    '</thead'+
-                                                    '<tbody'+
-                                                        '<tr'+
-                                                            '<td colspan="3">Error al cargar los datos</th>'+
-                                                        '</tr'+
-                                                    '</tbody'+
-                                                '</table>');
-
-			// $("#equiposauditivos_datos").html('<p class="justificado">Error al consultar los equipos auditivos</p>');
-		}
-	});//Fin ajax
-}
-
-
-$("#boton_reporte_nuevoequipoauditivo").click(function()
-{
-	$('#form_reporte_equipoauditivo').each(function(){
-		this.reset();
-	});
-
-	$('#tabla_equipoauditivo_atenuaciones tbody').html('<tr>'+
-															'<td width="40%"><input type="number" step="any" class="form-control" name="reporteruidoequipoauditivoatenuacion_bandaNRR[]" value="" required></td>'+
-															'<td width="40%"><input type="number" step="any" class="form-control" name="reporteruidoequipoauditivoatenuacion_bandaatenuacion[]" value="" required></td>'+
-															'<td width="10%"><button type="button" class="btn btn-default waves-effect btn-circle"><i class="fa fa-ban fa-2x"></i></button></td>'+
-														'</tr>');
-
-	// categorias
-	equipoauditivo_categorias(proyecto_id, reporteregistro_id, 0);
-	consulta_menuProteccionAuditiva(proyecto_id);
-
-	// Campos Hidden
-	$('#reporteequipoauditivo_id').val(0);
-
-	// Titulo del modal
-	$('#modal_reporte_equipoauditivo .modal-title').html('Equipo auditivo');
-
-	// mostrar modal
-	$('#modal_reporte_equipoauditivo').modal({backdrop:false});
-
-
-});
-
-
-$("#boton_equipoauditivo_nuevaatenuacion").click(function()
-{
-    $('#tabla_equipoauditivo_atenuaciones > tbody').append('<tr>'+
-                                                                '<td width="40%"><input type="number" step="any" class="form-control" name="reporteruidoequipoauditivoatenuacion_bandaNRR[]" required></td>'+
-                                                                '<td width="40%"><input type="number" step="any" class="form-control" name="reporteruidoequipoauditivoatenuacion_bandaatenuacion[]" required></td>'+
-                                                                '<td width="10%"><button type="button" class="btn btn-danger waves-effect btn-circle eliminar"><i class="fa fa-trash fa-2x"></i></button></td>'+
-                                                            '</tr>');
-
-    // desplazar a la ultima fila de la tabla
-    $('#div_tabla_equipoauditivo_atenuaciones').animate({
-    	scrollTop: $('#tabla_equipoauditivo_atenuaciones > tbody > tr:last').position().top //ultima fila
-    }, 500);
-});
-
-
-$('#tabla_equipoauditivo_atenuaciones tbody').on('click', 'td>button.eliminar', function()
-{
-    // obtener fila tabla
-    var fila = $(this);
-    
-    // confirmar
-    swal({   
-        title: "¿Eliminar registro?",   
-        text: "Quitar de la lista",   
-        type: "warning",   
-        showCancelButton: true,   
-        confirmButtonColor: "#DD6B55",   
-        confirmButtonText: "Eliminar!",   
-        cancelButtonText: "Cancelar!",   
-        closeOnConfirm: false,   
-        closeOnCancel: false 
-    }, function(isConfirm){   
-        if (isConfirm)
-        {
-        	// cerrar msj confirmacion
-			swal.close();
-
-            var tr = fila.closest('tr');
-            fila.closest("tr").remove(); // eliminar fila TR
-
-            // mensaje
-            swal({
-                title: "Correcto",
-                 text: "Registro eliminado de la lista",
-                type: "success", // warning, error, success, info
-                buttons: {
-                    visible: false, // true , false
-                },
-                timer: 1000,
-                showConfirmButton: false
-            });
-        }
-        else 
-        {
-            // mensaje
-            swal({
-                title: "Cancelado",
-                text: "",
-                type: "error", // warning, error, success, info
-                buttons: {
-                    visible: false, // true , false
-                },
-                timer: 500,
-                showConfirmButton: false
-            });   
-        } 
-    });
-});
-
-function consulta_menuProteccionAuditiva(proyecto_id)
-{
-	$.ajax({
-		type: "GET",
-		dataType: "json",
-		url: "/menuProteccionAuditiva/"+proyecto_id,
-		data:{},
-		cache: false,
-		success:function(dato)
-		{
-			// Pintar menu opciones
-			$('#select_proteccionAuditiva').html(dato.opciones_menu);
-		},
-		beforeSend: function()
-		{
-			// $('#lista_menu_parametros_reportes').html('<li class="nav-item" style="border-bottom: 1px #F0F0F0 solid;"><i class="fa fa-spin fa-spinner" style="font-size: 40px!important;"></i></li>');
-			$('#select_proteccionAuditiva').html('<option value=""><i class="fa fa-spin fa-spinner""></i></option>');
-		},
-		error: function(dato)
-		{
-
-			// $('#lista_menu_parametros_reportes').html('<li class="nav-item" style="border-bottom: 1px #F0F0F0 solid;">Error al cargar los parametros</li>');
-			$('#select_proteccionAuditiva').html('<option value="">Error al cargar la lista de equipos de proteccion auditiva, actualice la página</option>');
-			return false;
-		}
-	});//Fin ajax
-}
-
-function mostrar_proteccionauditiva(ID_PROTECCION)
-{
-// Enviar datos
-$.ajax({
-	type: "GET",
-	dataType: "json",
-	url: "/reporteruidoequipoauditivocampos/"+ID_PROTECCION,
-	data:{},
-	cache: false,
-	success:function(dato)
-	{
-		$('#tabla_equipoauditivo_atenuaciones > tbody').html('');
-		json= JSON.parse(dato.ATENUACIONES_JSON);
-		var atenuaciones = json[0]; 
-		$.each(atenuaciones, function (key, value) {
-			$('#tabla_equipoauditivo_atenuaciones > tbody').append(`<tr>
-				<td width="40%"><input type="number" value="${key}" class="form-control" name="reporteruidoequipoauditivoatenuacion_bandaNRR[]" required></td>
-				<td width="40%"><input type="number" value="${value}" class="form-control" name="reporteruidoequipoauditivoatenuacion_bandaatenuacion[]" required></td>
-				<td width="10%"><button type="button" class="btn btn-danger waves-effect btn-circle eliminar"><i class="fa fa-trash fa-2x"></i></button></td>
-			'</tr>`);
-			
-		});
-		//$('#tabla_equipoauditivo_atenuaciones tbody').html(dato.atenuaciones);
-		$('#reporteruidoequipoauditivo_tipo').val(dato.TIPO);
-		$('#reporteruidoequipoauditivo_marca').val(dato.MARCA);
-		$('#reporteruidoequipoauditivo_modelo').val(dato.MODELO);
-		$('#reporteruidoequipoauditivo_NRR').val(dato.NRR);
-		
-	},
-	beforeSend: function()
-	{
-		//$('#tabla_equipoauditivo_atenuaciones tbody').html('<tr><td colspan="3"><i class="fa fa-spin fa-spinner" style="font-size: 40px!important;"></i></td></tr>');
-	},
-	error: function(dato)
-	{
-		$('#reporteruidoequipoauditivo_tipo').val('ERROR');
-		$('#reporteruidoequipoauditivo_marca').val('ERROR');
-		$('#reporteruidoequipoauditivo_modelo').val('ERROR');
-		$('#reporteruidoequipoauditivo_NRR').val('ERROR');
-		
-	}
-
-});//Fin ajax
-}
-
-function equipoauditivo_atenuaciones(equipoauditivo_id)
-{
-	// Enviar datos
-	$.ajax({
-		type: "GET",
-		dataType: "json",
-		url: "/reporteruidoequipoauditivoatenuaciones/"+equipoauditivo_id,
-		data:{},
-		cache: false,
-		success:function(dato)
-		{
-			$('#tabla_equipoauditivo_atenuaciones tbody').html(dato.atenuaciones);
-		},
-		beforeSend: function()
-		{
-			$('#tabla_equipoauditivo_atenuaciones tbody').html('<tr><td colspan="3"><i class="fa fa-spin fa-spinner" style="font-size: 40px!important;"></i></td></tr>');
-		},
-		error: function(dato)
-		{
-			$('#tabla_equipoauditivo_atenuaciones tbody').html('<tr><td colspan="3">Error al consultar los datos</td></tr>');
-		}
-	});//Fin ajax
-}
-
-
-function equipoauditivo_categorias(proyecto_id, reporteregistro_id, equipoauditivo_id)
-{
-	// Enviar datos
-	$.ajax({
-		type: "GET",
-		dataType: "json",
-		url: "/reporteruidoequipoauditivocategorias/"+proyecto_id+"/"+reporteregistro_id+"/"+equipoauditivo_id+"/"+areas_poe,
-		data:{},
-		cache: false,
-		success:function(dato)
-		{
-			$('#reporteequipoauditivo_categoriaslista').html(dato.equipoauditivocategorias_lista);
-			
-		},
-		beforeSend: function()
-		{
-			$('#reporteequipoauditivo_categoriaslista').html('<i class="fa fa-spin fa-spinner" style="font-size: 40px!important;"></i>');
-		},
-		error: function(dato)
-		{
-			$('#reporteequipoauditivo_categoriaslista').html('Error al consultar las categorías');
-		}
-	});//Fin ajax
-}
-
-
-function equipoauditivo_editar(proyecto_id, reporteregistro_id, equipoauditivo_id, equipoauditivo_tipo, equipoauditivo_marca, equipoauditivo_modelo, equipoauditivo_nrr)
-{
-	$('#form_reporte_equipoauditivo').each(function(){
-		this.reset();
-	});
-
-	$('#tabla_equipoauditivo_atenuaciones tbody').html('');
-
-	// Campos Hidden
-	$('#reporteequipoauditivo_id').val(equipoauditivo_id);
-
-	// Llenar campos
-	$('#reporteruidoequipoauditivo_tipo').val(equipoauditivo_tipo);
-	$('#reporteruidoequipoauditivo_marca').val(equipoauditivo_marca);
-	$('#reporteruidoequipoauditivo_modelo').val(equipoauditivo_modelo);
-	$('#reporteruidoequipoauditivo_NRR').val(equipoauditivo_nrr);
-
-	// Atenuaciones
-	equipoauditivo_atenuaciones(equipoauditivo_id);
-
-	// categorias
-	equipoauditivo_categorias(proyecto_id, reporteregistro_id, equipoauditivo_id);
-
-	// Titulo del modal
-	$('#modal_reporte_equipoauditivo .modal-title').html('Equipo auditivo');
-
-	// mostrar modal
-	$('#modal_reporte_equipoauditivo').modal({backdrop:false});
-}
-
-
-function equipoauditivo_eliminar(equipoauditivo_id, equipoauditivo_tipo)
-{
-	swal({
-		title: "¡Confirme que desea eliminar!",
-		text: ""+equipoauditivo_tipo,
-		type: "warning",
-		showCancelButton: true,
-		confirmButtonColor: "#DD6B55",
-		confirmButtonText: "Aceptar!",
-		cancelButtonText: "Cancelar!",
-		closeOnConfirm: false,
-		closeOnCancel: false
-	},
-	function(isConfirm)
-	{
-		if (isConfirm)
-		{
-			swal({
-				title: "¡Por seguridad confirme nuevamente que desea eliminar!",
-				text: ""+equipoauditivo_tipo,
-				type: "warning",
-				showCancelButton: true,
-				confirmButtonColor: "#DD6B55",
-				confirmButtonText: "Eliminar!",
-				cancelButtonText: "Cancelar!",
-				closeOnConfirm: false,
-				closeOnCancel: false
-			},
-			function(isConfirm)
-			{
-				if (isConfirm)
-				{
-					// cerrar msj confirmacion
-					swal.close();
-
-					// alert(equipoauditivo_id);
-
-					$.ajax({
-						type: "GET",
-						dataType: "json",
-						url: "/reporteruidoequipoauditivoeliminar/"+equipoauditivo_id,
-						data:{},
-						cache: false,
-						success:function(dato)
-						{
-							// Actualizar tabla
-							tabla_reporte_5_6_equipoauditivo(proyecto.id, reporteregistro_id);
-
-							// mensaje
-							swal({
-								title: "Correcto",
-								text: ""+dato.msj,
-								type: "success", // warning, error, success, info
-								buttons: {
-									visible: false, // true , false
-								},
-								timer: 1500,
-								showConfirmButton: false
-							});
-						},
-						beforeSend: function()
-						{
-							// $('#tabla_reporte_definiciones tbody').html('<tr><td colspan="5"><i class="fa fa-spin fa-spinner" style="font-size: 40px!important;"></i></td></tr>');
-						},
-						error: function(dato)
-						{
-							// mensaje
-							swal({
-								title: "Error",
-								text: ""+dato.msj,
-								type: "error", // warning, error, success, info
-								buttons: {
-									visible: false, // true , false
-								},
-								timer: 1500,
-								showConfirmButton: false
-							});
-
-							return false;
-						}
-					});//Fin ajax
-				}
-				else 
-				{
-					// mensaje
-					swal({
-						title: "Cancelado",
-						text: "Acción cancelada",
-						type: "error", // warning, error, success, info
-						buttons: {
-							visible: false, // true , false
-						},
-						timer: 500,
-						showConfirmButton: false
-					});
-				}
-			});
-		}
-		else 
-		{
-			// mensaje
-			swal({
-				title: "Cancelado",
-				text: "Acción cancelada",
-				type: "error", // warning, error, success, info
-				buttons: {
-					visible: false, // true , false
-				},
-				timer: 500,
-				showConfirmButton: false
-			});
-		}
-	});
-	return false;
-}
-
-
-$("#botonguardar_modal_equipoauditivo").click(function()
-{
-	// valida campos vacios
-	var valida = this.form.checkValidity();
-	if (valida)
-	{
-		swal({
-			title: "¡Confirme que desea guardar!",
-			text: "Equipo auditivo",
-			type: "warning",
-			showCancelButton: true,
-			confirmButtonColor: "#DD6B55",
-			confirmButtonText: "Guardar!",
-			cancelButtonText: "Cancelar!",
-			closeOnConfirm: false,
-			closeOnCancel: false
-		},
-		function(isConfirm)
-		{
-			if (isConfirm)
-			{
-				// cerrar msj confirmacion
-				swal.close();
-
-				// enviar datos
-				$('#form_reporte_equipoauditivo').ajaxForm({
-					dataType: 'json',
-					type: 'POST',
-					url: ''+ruta_storage_guardar,
-					data: {
-						opcion: 11,
-						proyecto_id: proyecto.id,
-						agente_id: agente_id,
-						agente_nombre: agente_nombre,
-						reporteregistro_id: reporteregistro_id,
-						catactivo_id: $("#reporte_catactivo_id").val(),
-						reporte_instalacion: $("#reporte_instalacion").val(),
-					},
-					resetForm: false,
-					success: function(dato)
-					{
-						// Actualizar ID reporte						
-						reporteregistro_id = dato.reporteregistro_id;
-
-						tabla_reporte_5_6_equipoauditivo(proyecto.id, reporteregistro_id);
-
-						// tabla_reporte_7_5(proyecto.id, reporteregistro_id);
-
-						// mensaje
-						swal({
-							title: "Correcto",
-							text: ""+dato.msj,
-							type: "success", // warning, error, success, info
-							buttons: {
-								visible: false, // true , false
-							},
-							timer: 1500,
-							showConfirmButton: false
-						});
-
-						// actualiza boton
-						$('#botonguardar_modal_equipoauditivo').html('Guardar <i class="fa fa-save"></i>');
-						$('#botonguardar_modal_equipoauditivo').attr('disabled', false);
-
-						// cerrar modal
-						$('#modal_reporte_equipoauditivo').modal('hide');
-					},
-					beforeSend: function()
-					{
-						$('#botonguardar_modal_equipoauditivo').html('Guardando <i class="fa fa-spin fa-spinner"></i>');
-						$('#botonguardar_modal_equipoauditivo').attr('disabled', true);
-					},
-					error: function(dato)
-					{
-						// actualiza boton
-						$('#botonguardar_modal_equipoauditivo').html('Guardar <i class="fa fa-save"></i>');
-						$('#botonguardar_modal_equipoauditivo').attr('disabled', false);
-
-						// mensaje
-						swal({
-							title: "Error",
-							text: ""+dato.msj,
-							type: "error", // warning, error, success, info
-							buttons: {
-								visible: false, // true , false
-							},
-							timer: 1500,
-							showConfirmButton: false
-						});
-						return false;
-					}
-				}).submit();
-				return false;
-			}
-			else 
-			{
-				// mensaje
-				swal({
-					title: "Cancelado",
-					text: "Acción cancelada",
-					type: "error", // warning, error, success, info
-					buttons: {
-						visible: false, // true , false
-					},
-					timer: 500,
-					showConfirmButton: false
-				});
-			}
-		});
-		return false;
-	}
-});
-
-
 //=================================================
 // EQUIPO PROTECCION PERSONAL
 
@@ -3949,7 +3290,9 @@ function tabla_reporte_epp(proyecto_id, reporteregistro_id)
 					data: {},
 					dataSrc: function (json)
 					{
-						menureporte_estado("menureporte_5_7", parseInt(json.total));
+						//menureporte_estado("menureporte_5_7", parseInt(json.total));
+						menureporte_estado("menureporte_5_7", 1);
+
 
 						return json.data;
 					},
@@ -4445,7 +3788,9 @@ function tabla_reporte_6_2(proyecto_id, reporteregistro_id)
 
 						$('#areaevaluacion_totalpuntos').html(json.areaevaluacion_totalpuntos);
 
-						menureporte_estado("menureporte_6_2", parseInt(json.total));
+						//menureporte_estado("menureporte_6_2", parseInt(json.total));
+						menureporte_estado("menureporte_6_2", 1);
+
 
 						return json.data;
 					},
@@ -4943,7 +4288,7 @@ $("#botonguardar_modal_areaevaluacion").click(function()
 // METODO DE EVALUACION
 
 
-$("#botonguardar_reporte_metodoevaluacion").click(function()
+$("#botonguardar_reporte_descripcionmetodo").click(function()
 {
 	// valida campos vacios
 	var valida = this.form.checkValidity();
@@ -4951,7 +4296,7 @@ $("#botonguardar_reporte_metodoevaluacion").click(function()
 	{
 		swal({
 			title: "¡Confirme que desea guardar!",
-			text: "Proceso y actividad principal de la instalación",
+			text: "Método de aplicación",
 			type: "warning",
 			showCancelButton: true,
 			confirmButtonColor: "#DD6B55",
@@ -4968,7 +4313,7 @@ $("#botonguardar_reporte_metodoevaluacion").click(function()
 				swal.close();
 
 				// enviar datos
-				$('#form_reporte_metodoevaluacion').ajaxForm({
+				$('#form_reporte_descripcionmetodo').ajaxForm({
 					dataType: 'json',
 					type: 'POST',
 					url: ''+ruta_storage_guardar,
@@ -4987,7 +4332,7 @@ $("#botonguardar_reporte_metodoevaluacion").click(function()
 						// Actualizar ID reporte						
 						reporteregistro_id = dato.reporteregistro_id;
 
-						menureporte_estado("menureporte_6_3", 1);
+						menureporte_estado("menureporte_7_1", 1);
 
 						// tabla_reporte_revisiones(proyecto.id);
 
@@ -5004,19 +4349,19 @@ $("#botonguardar_reporte_metodoevaluacion").click(function()
 						});
 
 						// actualiza boton
-						$('#botonguardar_reporte_metodoevaluacion').html('Guardar método de evaluación <i class="fa fa-save"></i>');
-						$('#botonguardar_reporte_metodoevaluacion').attr('disabled', false);
+						$('#botonguardar_reporte_descripcionmetodo').html('Guardar método de evaluación <i class="fa fa-save"></i>');
+						$('#botonguardar_reporte_descripcionmetodo').attr('disabled', false);
 					},
 					beforeSend: function()
 					{
-						$('#botonguardar_reporte_metodoevaluacion').html('Guardando método de evaluación <i class="fa fa-spin fa-spinner"></i>');
-						$('#botonguardar_reporte_metodoevaluacion').attr('disabled', true);
+						$('#botonguardar_reporte_descripcionmetodo').html('Guardando método de evaluación <i class="fa fa-spin fa-spinner"></i>');
+						$('#botonguardar_reporte_descripcionmetodo').attr('disabled', true);
 					},
 					error: function(dato)
 					{
 						// actualiza boton
-						$('#botonguardar_reporte_metodoevaluacion').html('Guardar método de evaluación <i class="fa fa-save"></i>');
-						$('#botonguardar_reporte_metodoevaluacion').attr('disabled', false);
+						$('#botonguardar_reporte_descripcionmetodo').html('Guardar método de evaluación <i class="fa fa-save"></i>');
+						$('#botonguardar_reporte_descripcionmetodo').attr('disabled', false);
 
 						// mensaje
 						swal({
@@ -5080,7 +4425,9 @@ function tabla_reporte_7_1(proyecto_id, reporteregistro_id)
 		cache: false,
 		success:function(dato)
 		{
-			menureporte_estado("menureporte_7_1", parseInt(dato.total));
+			//menureporte_estado("menureporte_7_1", parseInt(dato.total));
+			menureporte_estado("menureporte_7_1", 1);
+
 
 			if (parseInt(dato.total) > 0)
 			{
@@ -5569,7 +4916,9 @@ function tabla_reporte_7_2(proyecto_id, reporteregistro_id)
 					data: {},
 					dataSrc: function (json)
 					{
-						menureporte_estado("menureporte_7_2", parseInt(json.total));
+						//menureporte_estado("menureporte_7_2", parseInt(json.total));
+						menureporte_estado("menureporte_7_2", 1);
+
 
 						return json.data;
 					},
@@ -6131,7 +5480,9 @@ function tabla_reporte_7_3(proyecto_id, reporteregistro_id)
 					data: {},
 					dataSrc: function (json)
 					{
-						menureporte_estado("menureporte_7_3", parseInt(json.total));
+						//menureporte_estado("menureporte_7_3", parseInt(json.total));
+						menureporte_estado("menureporte_7_3", 1);
+
 
 						return json.data;
 					},
@@ -6708,7 +6059,8 @@ function tabla_reporte_7_6(proyecto_id, reporteregistro_id)
 					data: {},
 					dataSrc: function (json)
 					{
-						menureporte_estado("menureporte_7_6", parseInt(json.total));
+						//menureporte_estado("menureporte_7_6", parseInt(json.total));
+						menureporte_estado("menureporte_7_6", 1);
 
 						return json.data;
 					},
@@ -7076,7 +6428,9 @@ function tabla_reporte_7_7(proyecto_id, reporteregistro_id)
 						data: {},
 						dataSrc: function (json)
 						{
-							menureporte_estado("menureporte_7_7", parseInt(json.total));
+							//menureporte_estado("menureporte_7_7", parseInt(json.total));
+							menureporte_estado("menureporte_7_7", 1);
+
 
 							// alert("Done! "+json.msj);
 							return json.data;
@@ -7247,7 +6601,9 @@ function tabla_reporte_7_7(proyecto_id, reporteregistro_id)
 						data: {},
 						dataSrc: function (json)
 						{
-							menureporte_estado("menureporte_7_7", parseInt(json.total));
+							//menureporte_estado("menureporte_7_7", parseInt(json.total));
+
+							menureporte_estado("menureporte_7_7", 1);
 
 							// alert("Done! "+json.msj);
 							return json.data;
@@ -7672,7 +7028,9 @@ function tabla_reporte_9(proyecto_id, reporteregistro_id, agente_nombre)
 					data: {},
 					dataSrc: function (json)
 					{
-						menureporte_estado("menureporte_9", parseInt(json.total));
+						//menureporte_estado("menureporte_9", parseInt(json.total));
+						menureporte_estado("menureporte_9", 1);
+
 
 						// alert("Done! "+json.msj);
 						return json.data;
@@ -8256,7 +7614,9 @@ function tabla_reporte_planos(proyecto_id, reporteregistro_id, agente_nombre)
 					dataSrc: function (json)
 					{
 						// Actualiza menu
-						menureporte_estado("menureporte_11_2", json.total);
+						//menureporte_estado("menureporte_11_2", json.total);
+						menureporte_estado("menureporte_11_2", 1);
+
 
 						// alert("Done! "+json.msj);
 						return json.data;
@@ -8401,7 +7761,9 @@ $("#botonguardar_reporte_planos").click(function()
 						reporteregistro_id = dato.reporteregistro_id;
 
 						// Actualiza menu
-						menureporte_estado("menureporte_11_2", dato.total);
+						//menureporte_estado("menureporte_11_2", dato.total);
+						menureporte_estado("menureporte_11_2", 1);
+
 
 						// tabla_reporte_revisiones(proyecto.id);
 
@@ -8505,8 +7867,10 @@ function tabla_reporte_equipoutilizado(proyecto_id, reporteregistro_id, agente_n
 					data: {},
 					dataSrc: function (json)
 					{
-						menureporte_estado("menureporte_11_5", parseInt(json.total));
-						menureporte_estado("menureporte_11_6", parseInt(json.total));
+						// menureporte_estado("menureporte_11_5", parseInt(json.total));
+						// menureporte_estado("menureporte_11_6", parseInt(json.total));
+						menureporte_estado("menureporte_11_5", 1);
+						menureporte_estado("menureporte_11_6", 1);
 
 						// alert("Done! "+json.msj);
 						return json.data;
@@ -8830,10 +8194,13 @@ function tabla_reporte_anexosresultados(proyecto_id, reporteregistro_id, agente_
 					dataSrc: function (json)
 					{
 						// Actualiza menu
-						menureporte_estado("menureporte_11_3", json.total);
-						menureporte_estado("menureporte_11_4", json.total);
-						menureporte_estado("menureporte_11_7", json.total);
+						// menureporte_estado("menureporte_11_3", json.total);
+						// menureporte_estado("menureporte_11_4", json.total);
+						// menureporte_estado("menureporte_11_7", json.total);
 
+						menureporte_estado("menureporte_11_3", 1);
+						menureporte_estado("menureporte_11_4", 1);
+						menureporte_estado("menureporte_11_7", 1);
 						// alert("Done! "+json.msj);
 						return json.data;
 					},
@@ -8980,9 +8347,13 @@ $("#botonguardar_reporte_anexosresultados").click(function()
 							reporteregistro_id = dato.reporteregistro_id;
 
 							// Actualiza menu
-							menureporte_estado("menureporte_11_3", dato.total);
-							menureporte_estado("menureporte_11_4", dato.total);
-							menureporte_estado("menureporte_11_7", dato.total);
+							// menureporte_estado("menureporte_11_3", dato.total);
+							// menureporte_estado("menureporte_11_4", dato.total);
+							// menureporte_estado("menureporte_11_7", dato.total);
+
+							menureporte_estado("menureporte_11_3", 1);
+							menureporte_estado("menureporte_11_4", 1);
+							menureporte_estado("menureporte_11_7", 1);
 
 							// tabla_reporte_revisiones(proyecto.id);
 
@@ -9323,8 +8694,10 @@ $("#botonguardar_reporte_acreditacionaprobacion").click(function()
 							reporteregistro_id = dato.reporteregistro_id;
 
 							// Actualiza menu
-							menureporte_estado("menureporte_11_8", dato.total);
-							menureporte_estado("menureporte_11_9", dato.total);
+							// menureporte_estado("menureporte_11_8", dato.total);
+							// menureporte_estado("menureporte_11_9", dato.total);
+							menureporte_estado("menureporte_11_8", 1);
+							menureporte_estado("menureporte_11_9", 1);
 
 							// tabla_reporte_revisiones(proyecto.id);
 
@@ -9671,8 +9044,6 @@ function reporte_concluido(reporte_id, perfil, checkbox)
 								tabla_reporte_definiciones(proyecto.id)
 								tabla_reporte_categorias(proyecto.id, reporteregistro_id);
 								tabla_reporte_areas(proyecto.id, reporteregistro_id);
-								tabla_reporte_5_6_equipoauditivo(proyecto.id, reporteregistro_id);
-								tabla_reporte_epp(proyecto.id, reporteregistro_id);
 								tabla_reporte_6_2(proyecto.id, reporteregistro_id);
 								tabla_reporte_7_1(proyecto.id, reporteregistro_id);
 								tabla_reporte_7_2(proyecto.id, reporteregistro_id);
@@ -9793,8 +9164,6 @@ function reporte_concluido(reporte_id, perfil, checkbox)
 							tabla_reporte_definiciones(proyecto.id);
 							tabla_reporte_categorias(proyecto.id, reporteregistro_id);
 							tabla_reporte_areas(proyecto.id, reporteregistro_id);
-							tabla_reporte_5_6_equipoauditivo(proyecto.id, reporteregistro_id);
-							tabla_reporte_epp(proyecto.id, reporteregistro_id);
 							tabla_reporte_6_2(proyecto.id, reporteregistro_id);
 							tabla_reporte_7_1(proyecto.id, reporteregistro_id);
 							tabla_reporte_7_2(proyecto.id, reporteregistro_id);
@@ -9934,8 +9303,6 @@ function reporte_cancelado(reporte_id, perfil, checkbox)
 							tabla_reporte_definiciones(proyecto.id);
 							tabla_reporte_categorias(proyecto.id, reporteregistro_id);
 							tabla_reporte_areas(proyecto.id, reporteregistro_id);
-							tabla_reporte_5_6_equipoauditivo(proyecto.id, reporteregistro_id);
-							tabla_reporte_epp(proyecto.id, reporteregistro_id);
 							tabla_reporte_6_2(proyecto.id, reporteregistro_id);
 							tabla_reporte_7_1(proyecto.id, reporteregistro_id);
 							tabla_reporte_7_2(proyecto.id, reporteregistro_id);
@@ -10066,8 +9433,6 @@ $("#botonguardar_modal_cancelacionobservacion").click(function()
 						tabla_reporte_definiciones(proyecto.id);
 						tabla_reporte_categorias(proyecto.id, reporteregistro_id);
 						tabla_reporte_areas(proyecto.id, reporteregistro_id);
-						tabla_reporte_5_6_equipoauditivo(proyecto.id, reporteregistro_id);
-						tabla_reporte_epp(proyecto.id, reporteregistro_id);
 						tabla_reporte_6_2(proyecto.id, reporteregistro_id);
 						tabla_reporte_7_1(proyecto.id, reporteregistro_id);
 						tabla_reporte_7_2(proyecto.id, reporteregistro_id);
@@ -10196,7 +9561,7 @@ $("#boton_reporte_nuevarevision").click(function()
 						$.ajax({
 							type: "POST",
 							dataType: "json",
-							url: "/reporteruidoword",
+							url: "/reportenom0353word",
 							data:{
 								_token: document.querySelector('meta[name="csrf-token"]')['content'],
 								proyecto_id: proyecto.id,
@@ -10218,8 +9583,6 @@ $("#boton_reporte_nuevarevision").click(function()
 								tabla_reporte_definiciones(proyecto.id);
 								tabla_reporte_categorias(proyecto.id, reporteregistro_id);
 								tabla_reporte_areas(proyecto.id, reporteregistro_id);
-								tabla_reporte_5_6_equipoauditivo(proyecto.id, reporteregistro_id);
-								tabla_reporte_epp(proyecto.id, reporteregistro_id);
 								tabla_reporte_6_2(proyecto.id, reporteregistro_id);
 								tabla_reporte_7_1(proyecto.id, reporteregistro_id);
 								tabla_reporte_7_2(proyecto.id, reporteregistro_id);
@@ -10352,7 +9715,7 @@ $('#tabla_reporte_revisiones tbody').on('click', 'td>button.botondescarga', func
 		if (parseInt(row.data().id) == parseInt(ultimarevision_id))
 		{
 			var grafica_imgbase64 = '';
-			graficapastel_resultados.export.capture({}, function ()
+			chartConsolidado1.export.capture({}, function ()
 			{
 				this.toPNG({quality: 1, multiplier: 6}, function (img_base64)
 				{
@@ -10372,7 +9735,7 @@ $('#tabla_reporte_revisiones tbody').on('click', 'td>button.botondescarga', func
 				$.ajax({
 					type: "POST",
 					dataType: "json",
-					url: "/reporteruidoword",
+					url: "/reportenom0353word",
 					data:{
 						_token: document.querySelector('meta[name="csrf-token"]')['content'],
 						proyecto_id: proyecto.id,
@@ -10387,7 +9750,7 @@ $('#tabla_reporte_revisiones tbody').on('click', 'td>button.botondescarga', func
 					cache: false,
 					success:function(dato)
 					{
-						ventana = window.open('/reporteruidoworddescargar/'+proyecto.id+"/"+row.data().id+"/"+ultimarevision_id);
+						ventana = window.open('/reportenom0353worddescargar/'+proyecto.id+"/"+row.data().id+"/"+ultimarevision_id);
 
 
 						// // Boton descarga
@@ -10441,7 +9804,7 @@ $('#tabla_reporte_revisiones tbody').on('click', 'td>button.botondescarga', func
 		}
 		else
 		{
-			ventana = window.open('/reporteruidoworddescargar/'+proyecto.id+"/"+row.data().id+"/"+ultimarevision_id);
+			ventana = window.open('/reportenom0353worddescargar/'+proyecto.id+"/"+row.data().id+"/"+ultimarevision_id);
 
 
 			// // Boton descarga

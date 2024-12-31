@@ -192,13 +192,11 @@
 				<a href="#9_3" class="list-group-item submenu">9.3.- Resultados obtenidos, consolidado general<i class="fa fa-times" id="menureporte_9_3"></i></a>
 				<a href="#10" class="list-group-item">10.- Conclusiones</a>
 				<a href="#10_1" class="list-group-item submenu">10.1.- Conclusiones de conformidad a la NOM-035-STPS-2018 <i class="fa fa-times" id="menureporte_10_1"></i></a>
-				<a href="#11" class="list-group-item">11.- Recomendaciones de control <i class="fa fa-times" id="menureporte_11"></i></a>
-				<a href="#11_1" class="list-group-item submenu">11.1.- Registro de los resultados. Número de puntos evaluados<i class="fa fa-times" id="menureporte_11_1"></i></a>
-				<a href="#11_2" class="list-group-item submenu">11.2.- Código de representación gráfica y color, NOM-035-STPS-2018 <i class="fa fa-times" id="menureporte_11_2"></i></a>
+				<a href="#11" class="list-group-item">11.- Recomendaciones de control</a>
+				<a href="#11_1" class="list-group-item submenu">11.1.- Código de representación gráfica y color, NOM-035-STPS-2018 <i class="fa fa-times" id="menureporte_11_1"></i></a>
 				<a href="#12" class="list-group-item">12.- Responsables del informe <i class="fa fa-times" id="menureporte_12"></i></a>
 				<a href="#13" class="list-group-item">13.- Anexos</a>
 				<a href="#13_1" class="list-group-item submenu">13.1.- Anexo 1: Memoria fotográfica <i class="fa fa-times" id="menureporte_13_1"></i></a>
-				
 				<a href="#14" class="list-group-item submenu" id="menu_opcion_final">Generar informe <i class="fa fa-download text-success" id="menureporte_14"></i></a>
 			</div>
 		</div>
@@ -225,7 +223,7 @@
 												/*tamaño estatico del campo foto*/
 											}
 										</style>
-										<input type="file" accept="image/jpeg,image/x-png" id="PORTADA" name="PORTADA" data-allowed-file-extensions="jpg png JPG PNG" data-height="300" data-default-file="" required />
+										<input type="file" accept="image/jpeg,image/x-png" id="PORTADA" name="PORTADA" data-allowed-file-extensions="jpg png JPG PNG" data-height="300" data-default-file="" />
 									</div>
 								</div>
 							</div>
@@ -589,17 +587,64 @@
 						<div class="col-12">
 							{!! csrf_field() !!}
 							<div class="form-group">
-								<label>Descripción del proceso en la instalación</label>
-								<textarea class="form-control" style="margin-bottom: 0px;" rows="20" id="reporte_procesoinstalacion" name="reporte_procesoinstalacion" required></textarea>
+								<label for="editableTextarea">Descripción</label>
+								<div id="editableProcesoInstalacion" 
+									class="form-control col-12" 
+									contenteditable="true" 
+									style="
+										display: block;
+										width: 100%;
+										min-height: 150px; 
+										padding: 0.375rem 0.75rem; 
+										font-size: 1rem; 
+										line-height: 1.5; 
+										color: #495057; 
+										background-color: #fff; 
+										background-clip: padding-box; 
+										border: 1px solid #ced4da; 
+										border-radius: 0.375rem; 
+										box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.075); 
+										transition: border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;">
+									<!-- Texto inicial opcional -->
+								</div>
+								<input type="hidden" id="reporte_procesoinstalacion" name="reporte_procesoinstalacion">
 							</div>
+							
+						</div>
+						
+						<div class="col-12">
 							<div class="form-group">
-								<label>Descripción de la actividad principal de la instalación</label>
-								<textarea class="form-control" style="margin-bottom: 0px;" rows="7" id="reporte_actividadprincipal" name="reporte_actividadprincipal" required></textarea>
+								<label for="editableTextarea">Descripción de la actividad principal de la instalación</label>
+								<div id="editableActividadPrincipal" 
+									class="form-control col-12" 
+									contenteditable="true" 
+									style="
+										display: block;
+										width: 100%;
+										min-height: 150px; 
+										padding: 0.375rem 0.75rem; 
+										font-size: 1rem; 
+										line-height: 1.5; 
+										color: #495057; 
+										background-color: #fff; 
+										background-clip: padding-box; 
+										border: 1px solid #ced4da; 
+										border-radius: 0.375rem; 
+										box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.075); 
+										transition: border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;">
+									<!-- Texto inicial opcional -->
+								</div>
+								<input type="hidden" id="reporte_actividadprincipal" name="reporte_actividadprincipal">
+
 							</div>
 						</div>
+
+						<!-- Botón para guardar -->
 						<div class="col-12" style="text-align: right;">
 							<div class="form-group">
-								<button type="submit" class="btn btn-danger waves-effect waves-light botoninforme" id="botonguardar_reporte_procesoinstalacion">Guardar proceso instalación <i class="fa fa-save"></i></button>
+								<button type="submit" class="btn btn-danger waves-effect waves-light botoninforme" id="botonguardar_reporte_procesoinstalacion">
+									Guardar proceso instalación <i class="fa fa-save"></i>
+								</button>
 							</div>
 						</div>
 					</div>
@@ -1136,23 +1181,7 @@
 						</div>
 					</div>
 				</form>
-				<h4 class="card-title" id="11_1">11.1.- Registro de los resultados. Número de puntos evaluados</h4>
-				<div class="row">
-					<div class="col-12">
-						<p class="justificado">En este apartado se muestra el registro de resultados</p><br>
-						<table class="table table-hover tabla_info_centrado" width="100%" id="tabla_reporte_categoria">
-							<thead>
-								<tr>
-									<th>GUIA DE REFERENCIA</th>
-									<th>NOMBRE</th>
-									<th>No. Preguntas</th>
-								</tr>
-							</thead>
-							<tbody></tbody>
-						</table><br>
-					</div>
-				</div>
-				<h4 class="card-title" id="11_2">11.2.- Código de representación gráfica y color, NOM-035-STPS-2018</h4>
+				<h4 class="card-title" id="11_1">11.1.- Código de representación gráfica y color, NOM-035-STPS-2018</h4>
 				<div class="row">
 					<div class="col-12">
 						<p class="justificado">En este apartado se muestran: categorias, niveles de riesgo y recomendaciones, según el código de representación gráfica de riesgo </p><br>
@@ -1284,7 +1313,7 @@
 					</div>
 				</div>
 				
-				<h4 class="card-title" id="13">Generar informe .docx + Anexos .Zip</h4>
+				<h4 class="card-title" id="14">Generar informe .docx + Anexos .Zip</h4>
 				<div class="row">
 					<div class="col-12">
 						@if(auth()->user()->hasRoles(['Superusuario', 'Administrador', 'Proyecto', 'Coordinador']))

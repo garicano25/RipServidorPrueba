@@ -1954,6 +1954,10 @@ Route::resource('informesPsicosocial', 'PSICO\informesrecoPsicoController');
 Route::resource('reportenom0353', 'reportes\reportenom0353Controller');
 Route::get('reportenom0353tabladefiniciones/{proyecto_id}', ['as' => 'reportenom0353.reportenom0353tabladefiniciones', 'uses' => 'reportes\reportenom0353Controller@reportenom0353tabladefiniciones']);
 Route::get('reportenom0353datosgenerales/{proyecto_id}/{agente_id}/{agente_nombre}', ['as' => 'reportenom0353.reportenom0353datosgenerales', 'uses' => 'reportes\reportenom0353Controller@reportepsico3datosgenerales']);
+Route::post('reportenom0353word', ['as' => 'reporteruido.reporteruidoword', 'uses' => 'reportes\reportenom0353wordController@reportenom0353word']);
+Route::get('reportenom0353worddescargar/{proyecto_id}/{revision_id}/{ultima_revision}', ['as' => 'reportenom035.reportenom0353worddescargar', 'uses' => 'reportes\reportenom0353wordController@reportenom035worddescargar']);
+Route::get('reportenom0353mapaubicacion/{reporteregistro_id}/{archivo_opcion}', ['as' => 'reportenom0353.reportenom0353mapaubicacion', 'uses' => 'reportes\reportenom0353Controller@reportenom0353mapaubicacion']);
+
 
 // =================GUIAS 
 
