@@ -573,9 +573,27 @@ class reportenom0353Controller extends Controller
             $cantAcontecimientos = 0;
             $cantSinAcontecimientos = 0;
 
-            if ($dato['reporteregistro_id'] >= 0 && $reporte->reportenom0353_acontecimientos != NULL && $reporte->proyecto_id == $proyecto_id) {
+            if ($dato['reporteregistro_id'] >= 0 && $reporte->reportenom0353_conclusiones != NULL && $reporte->proyecto_id == $proyecto_id) {
                 $dato['reporte_conclusion_guardado'] = 1;
-                $reporte_acontecimientos = $reporte->reportenom0353_acontecimientos;
+                    $conclusionesJson = json_decode($reporte->reportenom0353_conclusiones, true);
+
+                    // Asignar valores desde el JSON a los campos correspondientes
+                    $dato['reporte_acontecimientos_conclusiones'] = $conclusionesJson['acontecimientos_traumaticos'] ?? null;
+                    $dato['reporte_ambiente_conclusiones'] = $conclusionesJson['ambiente_trabajo'] ?? null;
+                    $dato['reporte_condiciones_conclusiones'] = $conclusionesJson['condiciones_ambiente'] ?? null;
+                    $dato['reporte_factores_conclusiones'] = $conclusionesJson['factores_actividad'] ?? null;
+                    $dato['reporte_carga_conclusiones'] = $conclusionesJson['carga_trabajo'] ?? null;
+                    $dato['reporte_falta_conclusiones'] = $conclusionesJson['falta_control'] ?? null;
+                    $dato['reporte_organizacion_conclusiones'] = $conclusionesJson['organizacion_tiempo'] ?? null;
+                    $dato['reporte_jornada_conclusiones'] = $conclusionesJson['jornada_trabajo'] ?? null;
+                    $dato['reporte_interferencia_conclusiones'] = $conclusionesJson['interferencia_trabajo_familia'] ?? null;
+                    $dato['reporte_liderazgorelaciones_conclusiones'] = $conclusionesJson['liderazgo_relaciones'] ?? null;
+                    $dato['reporte_liderazgo_conclusiones'] = $conclusionesJson['liderazgo'] ?? null;
+                    $dato['reporte_relaciones_conclusiones'] = $conclusionesJson['relaciones_trabajo'] ?? null;
+                    $dato['reporte_violencia_conclusiones'] = $conclusionesJson['violencia'] ?? null;
+                    $dato['reporte_entorno_conclusiones'] = $conclusionesJson['entorno_organizacional'] ?? null;
+                    $dato['reporte_reconocimiento_conclusiones'] = $conclusionesJson['reconocimiento_desempeno'] ?? null;
+                    $dato['reporte_insuficiente_conclusiones'] = $conclusionesJson['insuficiente_pertenencia'] ?? null;
             } else {
                 $dato['reporte_conclusion_guardado'] = 0;
                 
@@ -603,6 +621,94 @@ class reportenom0353Controller extends Controller
                                                             psicocat_conclusiones 
                                                         WHERE 
                                                             psicocat_conclusiones.NIVEL = 6');
+                    $dato['reporte_acontecimientos_conclusiones'] = "El " . $porcentajeAcontecimientos . "% (" . $cantAcontecimientos . ") " .
+                                            $acontecimientotraumatico[0]->CONCLUSION;
+                } else {
+                    $acontecimientotraumatico = DB::select('SELECT 
+                                                            psicocat_conclusiones.CONCLUSION 
+                                                        FROM 
+                                                            psicocat_conclusiones 
+                                                        WHERE 
+                                                            psicocat_conclusiones.NIVEL = 7');
+                    $reporte_acontecimientos = "El " . $porcentajeSinAcontecimientos . "% (" . $cantSinAcontecimientos . ") " .
+                                            $acontecimientotraumatico[0]->CONCLUSION;
+                }
+
+                $dato['reporte_ambiente_conclusiones'] = "El 50% (1) de los trabajadores percibe como un riesgo alto, las condiciones del ambiente de trabajo son peligrosas, inseguras, deficientes o insalubres, lo cual puede generar o aumentar el nivel de estrés laboral y ansiedad.";
+                $dato['reporte_condiciones_conclusiones'] = "El 50% (1) de los trabajadores percibe como un riesgo alto, las condiciones del ambiente de trabajo son peligrosas, inseguras, deficientes o insalubres, lo cual puede generar o aumentar el nivel de estrés laboral y ansiedad.";
+                $dato['reporte_factores_conclusiones'] = "El 50% (1) de los trabajadores percibe como un riesgo alto, las condiciones del ambiente de trabajo son peligrosas, inseguras, deficientes o insalubres, lo cual puede generar o aumentar el nivel de estrés laboral y ansiedad.";
+                $dato['reporte_carga_conclusiones'] = "El 50% (1) de los trabajadores percibe como un riesgo alto, las condiciones del ambiente de trabajo son peligrosas, inseguras, deficientes o insalubres, lo cual puede generar o aumentar el nivel de estrés laboral y ansiedad.";
+                $dato['reporte_falta_conclusiones'] = "El 50% (1) de los trabajadores percibe como un riesgo alto, las condiciones del ambiente de trabajo son peligrosas, inseguras, deficientes o insalubres, lo cual puede generar o aumentar el nivel de estrés laboral y ansiedad.";
+                $dato['reporte_organizacion_conclusiones'] = "El 50% (1) de los trabajadores percibe como un riesgo alto, las condiciones del ambiente de trabajo son peligrosas, inseguras, deficientes o insalubres, lo cual puede generar o aumentar el nivel de estrés laboral y ansiedad.";
+                $dato['reporte_jornada_conclusiones'] = "El 50% (1) de los trabajadores percibe como un riesgo alto, las condiciones del ambiente de trabajo son peligrosas, inseguras, deficientes o insalubres, lo cual puede generar o aumentar el nivel de estrés laboral y ansiedad.";
+                $dato['reporte_interferencia_conclusiones'] = "El 50% (1) de los trabajadores percibe como un riesgo alto, las condiciones del ambiente de trabajo son peligrosas, inseguras, deficientes o insalubres, lo cual puede generar o aumentar el nivel de estrés laboral y ansiedad.";
+                $dato['reporte_liderazgorelaciones_conclusiones'] = "El 50% (1) de los trabajadores percibe como un riesgo alto, las condiciones del ambiente de trabajo son peligrosas, inseguras, deficientes o insalubres, lo cual puede generar o aumentar el nivel de estrés laboral y ansiedad.";
+                $dato['reporte_liderazgo_conclusiones'] = "El 50% (1) de los trabajadores percibe como un riesgo alto, las condiciones del ambiente de trabajo son peligrosas, inseguras, deficientes o insalubres, lo cual puede generar o aumentar el nivel de estrés laboral y ansiedad.";
+                $dato['reporte_relaciones_conclusiones'] = "El 50% (1) de los trabajadores percibe como un riesgo alto, las condiciones del ambiente de trabajo son peligrosas, inseguras, deficientes o insalubres, lo cual puede generar o aumentar el nivel de estrés laboral y ansiedad.";
+                $dato['reporte_violencia_conclusiones'] = "El 50% (1) de los trabajadores percibe como un riesgo alto, las condiciones del ambiente de trabajo son peligrosas, inseguras, deficientes o insalubres, lo cual puede generar o aumentar el nivel de estrés laboral y ansiedad.";
+                $dato['reporte_entorno_conclusiones'] = "El 50% (1) de los trabajadores percibe como un riesgo alto, las condiciones del ambiente de trabajo son peligrosas, inseguras, deficientes o insalubres, lo cual puede generar o aumentar el nivel de estrés laboral y ansiedad.";
+                $dato['reporte_reconocimiento_conclusiones'] = "El 50% (1) de los trabajadores percibe como un riesgo alto, las condiciones del ambiente de trabajo son peligrosas, inseguras, deficientes o insalubres, lo cual puede generar o aumentar el nivel de estrés laboral y ansiedad.";
+                $dato['reporte_insuficiente_conclusiones'] = "El 50% (1) de los trabajadores percibe como un riesgo alto, las condiciones del ambiente de trabajo son peligrosas, inseguras, deficientes o insalubres, lo cual puede generar o aumentar el nivel de estrés laboral y ansiedad.";
+    
+            }
+
+
+            //AMBIENTE DE TRABAJO
+            $ambiente = 0;
+            $cantambiente = 0;
+
+          
+
+               // RECOMENDACIONES
+            //===================================================
+
+            if ($dato['reporteregistro_id'] >= 0 && $reporte->reportenom0353_recomendaciones != NULL && $reporte->proyecto_id == $proyecto_id) {
+                $dato['reporte_recomendacion_guardado'] = 1;
+                 // Decodificar el JSON guardado
+                $recomendacionesJson = json_decode($reporte->reportenom0353_recomendaciones, true);
+
+                // Asignar valores desde el JSON a los campos correspondientes
+                $dato['reporte_acontecimientos_recomendaciones'] = $recomendacionesJson['acontecimientos_traumaticos'] ?? null;
+                $dato['reporte_ambiente_recomendaciones'] = $recomendacionesJson['ambiente_trabajo'] ?? null;
+                $dato['reporte_condiciones_recomendaciones'] = $recomendacionesJson['condiciones_ambiente'] ?? null;
+                $dato['reporte_factores_recomendaciones'] = $recomendacionesJson['factores_actividad'] ?? null;
+                $dato['reporte_carga_recomendaciones'] = $recomendacionesJson['carga_trabajo'] ?? null;
+                $dato['reporte_falta_recomendaciones'] = $recomendacionesJson['falta_control'] ?? null;
+                $dato['reporte_organizacion_recomendaciones'] = $recomendacionesJson['organizacion_tiempo'] ?? null;
+                $dato['reporte_jornada_recomendaciones'] = $recomendacionesJson['jornada_trabajo'] ?? null;
+                $dato['reporte_interferencia_recomendaciones'] = $recomendacionesJson['interferencia_trabajo_familia'] ?? null;
+                $dato['reporte_liderazgorelaciones_recomendaciones'] = $recomendacionesJson['liderazgo_relaciones'] ?? null;
+                $dato['reporte_liderazgo_recomendaciones'] = $recomendacionesJson['liderazgo'] ?? null;
+                $dato['reporte_relaciones_recomendaciones'] = $recomendacionesJson['relaciones_trabajo'] ?? null;
+                $dato['reporte_violencia_recomendaciones'] = $recomendacionesJson['violencia'] ?? null;
+                $dato['reporte_entorno_recomendaciones'] = $recomendacionesJson['entorno_organizacional'] ?? null;
+                $dato['reporte_reconocimiento_recomendaciones'] = $recomendacionesJson['reconocimiento_desempeno'] ?? null;
+                $dato['reporte_insuficiente_recomendaciones'] = $recomendacionesJson['insuficiente_pertenencia'] ?? null;
+            } else {
+                $dato['reporte_recomendacion_guardado'] = 0;
+                
+                foreach ($respuestasTrabajadores as $respuesta) {
+                    $respuestasJson = json_decode($respuesta->RECPSICO_GUIAI_RESPUESTAS, true);
+                    if (isset($respuestasJson[0]) && $respuestasJson[0] == "1") {
+                        $cantAcontecimientos++;
+                        $acontecimiento = 1;
+                    } else {
+                        $cantSinAcontecimientos++;
+                    }
+                }
+              
+                $porcentajeAcontecimientos = $totalTrabajadores > 0 ? 
+                    round(($cantAcontecimientos / $totalTrabajadores) * 100, 2) : 0;
+                $porcentajeSinAcontecimientos = $totalTrabajadores > 0 ? 
+                    round(($cantSinAcontecimientos / $totalTrabajadores) * 100, 2) : 0;
+                
+                if($acontecimiento == 1) { 
+                    $acontecimientotraumatico = DB::select('SELECT 
+                                                            psicocat_conclusiones.CONCLUSION 
+                                                        FROM 
+                                                            psicocat_conclusiones 
+                                                        WHERE 
+                                                            psicocat_conclusiones.NIVEL = 6');
                     $reporte_acontecimientos = "El " . $porcentajeAcontecimientos . "% (" . $cantAcontecimientos . ") " .
                                             $acontecimientotraumatico[0]->CONCLUSION;
                 } else {
@@ -615,22 +721,26 @@ class reportenom0353Controller extends Controller
                     $reporte_acontecimientos = "El " . $porcentajeSinAcontecimientos . "% (" . $cantSinAcontecimientos . ") " .
                                             $acontecimientotraumatico[0]->CONCLUSION;
                 }
+                $dato['reporte_acontecimientos_recomendaciones'] =  $reporte_acontecimientos;
+
+                
+            $dato['reporte_ambiente_recomendaciones'] = "El 50% (1) de los trabajadores percibe como un riesgo alto, las condiciones del ambiente de trabajo son peligrosas, inseguras, deficientes o insalubres, lo cual puede generar o aumentar el nivel de estrés laboral y ansiedad.";
+            $dato['reporte_condiciones_recomendaciones'] = "El 50% (1) de los trabajadores percibe como un riesgo alto, las condiciones del ambiente de trabajo son peligrosas, inseguras, deficientes o insalubres, lo cual puede generar o aumentar el nivel de estrés laboral y ansiedad.";
+            $dato['reporte_factores_recomendaciones'] = "El 50% (1) de los trabajadores percibe como un riesgo alto, las condiciones del ambiente de trabajo son peligrosas, inseguras, deficientes o insalubres, lo cual puede generar o aumentar el nivel de estrés laboral y ansiedad.";
+            $dato['reporte_carga_recomendaciones'] = "El 50% (1) de los trabajadores percibe como un riesgo alto, las condiciones del ambiente de trabajo son peligrosas, inseguras, deficientes o insalubres, lo cual puede generar o aumentar el nivel de estrés laboral y ansiedad.";
+            $dato['reporte_falta_recomendaciones'] = "El 50% (1) de los trabajadores percibe como un riesgo alto, las condiciones del ambiente de trabajo son peligrosas, inseguras, deficientes o insalubres, lo cual puede generar o aumentar el nivel de estrés laboral y ansiedad.";
+            $dato['reporte_organizacion_recomendaciones'] = "El 50% (1) de los trabajadores percibe como un riesgo alto, las condiciones del ambiente de trabajo son peligrosas, inseguras, deficientes o insalubres, lo cual puede generar o aumentar el nivel de estrés laboral y ansiedad.";
+            $dato['reporte_jornada_recomendaciones'] = "El 50% (1) de los trabajadores percibe como un riesgo alto, las condiciones del ambiente de trabajo son peligrosas, inseguras, deficientes o insalubres, lo cual puede generar o aumentar el nivel de estrés laboral y ansiedad.";
+            $dato['reporte_interferencia_recomendaciones'] = "El 50% (1) de los trabajadores percibe como un riesgo alto, las condiciones del ambiente de trabajo son peligrosas, inseguras, deficientes o insalubres, lo cual puede generar o aumentar el nivel de estrés laboral y ansiedad.";
+            $dato['reporte_liderazgorelaciones_recomendaciones'] = "El 50% (1) de los trabajadores percibe como un riesgo alto, las condiciones del ambiente de trabajo son peligrosas, inseguras, deficientes o insalubres, lo cual puede generar o aumentar el nivel de estrés laboral y ansiedad.";
+            $dato['reporte_liderazgo_recomendaciones'] = "El 50% (1) de los trabajadores percibe como un riesgo alto, las condiciones del ambiente de trabajo son peligrosas, inseguras, deficientes o insalubres, lo cual puede generar o aumentar el nivel de estrés laboral y ansiedad.";
+            $dato['reporte_relaciones_recomendaciones'] = "El 50% (1) de los trabajadores percibe como un riesgo alto, las condiciones del ambiente de trabajo son peligrosas, inseguras, deficientes o insalubres, lo cual puede generar o aumentar el nivel de estrés laboral y ansiedad.";
+            $dato['reporte_violencia_recomendaciones'] = "El 50% (1) de los trabajadores percibe como un riesgo alto, las condiciones del ambiente de trabajo son peligrosas, inseguras, deficientes o insalubres, lo cual puede generar o aumentar el nivel de estrés laboral y ansiedad.";
+            $dato['reporte_entorno_recomendaciones'] = "El 50% (1) de los trabajadores percibe como un riesgo alto, las condiciones del ambiente de trabajo son peligrosas, inseguras, deficientes o insalubres, lo cual puede generar o aumentar el nivel de estrés laboral y ansiedad.";
+            $dato['reporte_reconocimiento_recomendaciones'] = "El 50% (1) de los trabajadores percibe como un riesgo alto, las condiciones del ambiente de trabajo son peligrosas, inseguras, deficientes o insalubres, lo cual puede generar o aumentar el nivel de estrés laboral y ansiedad.";
+            $dato['reporte_insuficiente_recomendaciones'] = "El 50% (1) de los trabajadores percibe como un riesgo alto, las condiciones del ambiente de trabajo son peligrosas, inseguras, deficientes o insalubres, lo cual puede generar o aumentar el nivel de estrés laboral y ansiedad.";
+
             }
-
-            $dato['reporte_acontecimientos'] = $reporte_acontecimientos;
-
-
-            //AMBIENTE DE TRABAJO
-            $ambiente = 0;
-            $cantambiente = 0;
-
-            if ($dato['reporteregistro_id'] >= 0 && $reporte->reportenom0353_ambiente != NULL && $reporte->proyecto_id == $proyecto_id) {
-                $reporte_ambiente = $reporte->reportenom0353_ambiente;
-            } else {
-               
-            }
-
-            $dato['reporte_ambiente'] = "El 50% (1) de los trabajadores percibe como un riesgo alto, las condiciones del ambiente de trabajo son peligrosas, inseguras, deficientes o insalubres, lo cual puede generar o aumentar el nivel de estrés laboral y ansiedad.";
 
             // RESPONSABLES DEL INFORME
             //===================================================
@@ -717,303 +827,6 @@ class reportenom0353Controller extends Controller
     public function store(Request $request)
     {
         try {
-
-            //IMPORTACION DE DATOS POR MEDIO DE EXEL
-            if ($request->opcion == 1000) {
-
-                //VARIABLES GLOBALES
-                $proyecto_id = $request['proyecto_id'];
-                $registro_id = $request['registro_id'];
-
-                try {
-
-                    // Verificar si hay un archivo en la solicitud
-                    if ($request->hasFile('excelPuntos')) {
-
-                        // Obtenemos el Excel de los personales
-                        $excel = $request->file('excelPuntos');
-
-                        // Cargamos el archivo usando la libreria de PhpSpreadsheet
-                        $spreadsheet = IOFactory::load($excel->getPathname());
-                        $sheet = $spreadsheet->getActiveSheet();
-                        $data = $sheet->toArray(null, true, true, true);
-
-                        // Eliminar los encabezados dependiendo el tipo de documento
-                        if (intval($request['tipoArchivo']) == 1) {
-                            $data = array_slice($data, 4);
-                        } else if (intval($request['tipoArchivo']) == 2) {
-                            $data = array_slice($data, 2);
-                        } else if (intval($request['tipoArchivo']) == 3) {
-                            $data = array_slice($data, 2);
-                        }
-
-
-                        $datosGenerales = [];
-                        foreach ($data as $row) {
-                            // Verificar si la fila no está completamente vacía
-                            if (!empty(array_filter($row))) {
-
-                                $datosGenerales[] = $row;
-                            }
-                        }
-
-                        // return response()->json(['msj' => $datosGenerales, "code" => 500]);
-
-                        // ========================================================== DATOS GENERALES ===============================================================
-                        // =========================================================================================================================
-                        //Puntos totales
-                        $totalPuntos = count($datosGenerales);
-                        $puntosInsertados = 0;
-
-
-                        //BUCAMOS Y ARMAMOS EL ARRAY PARA OBTENER LAS CATEGORIAS CON SU ID
-                        $IdCategorias = [];
-                        $caategorias = reportecategoriaModel::where('proyecto_id', $proyecto_id)->get();
-                        foreach ($caategorias as $cat) {
-                            $clave = $cat->reportecategoria_nombre;
-                            $IdCategorias[$clave] = $cat->id;
-                        }
-
-
-                        //BUCAMOS Y ARMAMOS EL ARRAY PARA OBTENER LAS AREAS CON SU ID
-                        $IdAreas = [];
-                        $areas = reporteareaModel::where('proyecto_id', $proyecto_id)->get();
-                        foreach ($areas as $area) {
-                            $clave = $area->reportearea_nombre;
-                            $IdAreas[$clave] = $area->id;
-                        }
-
-                        //BUCAMOS EL LMPE EN LA TABLA DE REPORTERUIDO
-                        $lmpeQuery = DB::select('SELECT reporteruido_lmpe FROM reporteruido WHERE id = ? AND proyecto_id = ?', [$registro_id, $proyecto_id]);
-                        $lmpe = $lmpeQuery[0]->reporteruido_lmpe;
-
-
-                        //BUSCAMOS Y CREAMOS EL ARRAY DE LAS UBICACIONES
-                        $ubicacionesQuery = DB::select('SELECT reporteruidoareaevaluacion_nomedicion1 AS num1,
-                                                                reporteruidoareaevaluacion_nomedicion2 as num2,
-                                                                 reporteruidoareaevaluacion_ubicacion as ubicacion
-                                                        FROM reporteruidoareaevaluacion WHERE registro_id = ? AND proyecto_id = ?', [$registro_id, $proyecto_id]);
-
-                        // Crear el arreglo de ubicaciones
-                        $ubicaciones = [];
-                        foreach ($ubicacionesQuery as $fila) {
-                            $num1 = $fila->num1;
-                            $num2 = $fila->num2;
-                            $ubicacion = $fila->ubicacion;
-
-                            for ($i = $num1; $i <= $num2; $i++) {
-
-                                $ubicaciones[intval($i)] = $ubicacion;
-                            }
-                        }
-
-
-                        // =========================================================================================================================
-                        // =========================================================================================================================
-
-
-                        // ====================================================== FUNCIONES ===================================================================
-                        // =========================================================================================================================
-                        function calculartmpe($valor)
-                        {
-
-                            $numero = floatval($valor);
-                            $numeroRedondeado = intval(round($numero));
-
-                            // Tabla de correspondencia
-                            $tabla = [
-                                91 => 6.35,
-                                92 => 5.04,
-                                93 => 4.00,
-                                94 => 3.17,
-                                95 => 2.52,
-                                96 => 2.00,
-                                97 => 1.59,
-                                98 => 1.26,
-                                99 => 1.00,
-                                100 => 0.79,
-                                101 => 0.63,
-                                102 => 0.50,
-                                103 => 0.40,
-                                104 => 0.31,
-                                105 => 0.25
-                            ];
-
-                            if (array_key_exists($numeroRedondeado, $tabla)) {
-                                return $tabla[$numeroRedondeado];
-                            } else {
-                                return 'NA';
-                            }
-                        }
-
-
-
-                        // =========================================================================================================================
-                        // =========================================================================================================================
-
-
-                        // ====================================================== INSERCION DE DATOS ===================================================================
-                        // =========================================================================================================================
-
-                        switch (intval($request['tipoArchivo'])) {
-                            case 1: // Excel con el formato de puntos de la LMPE
-
-                                DB::statement('ALTER TABLE reporteruidonivelsonoro AUTO_INCREMENT = 1;');
-
-                                foreach ($datosGenerales as $rowData) {
-                                    //Columna en donde empiezan los resultados
-                                    $columnaInicial = 'E';
-                                    $puntosId = [];
-
-
-                                    //Variables unicas
-                                    $numPunto = $rowData['A'];
-                                    $promedio = is_numeric($rowData['B']) ? $rowData['B'] : null;
-                                    $periodos = is_null($rowData['C']) ? 0 : intval($rowData['C']);
-                                    $resultados = is_null($rowData['D']) ? 0 : intval($rowData['D']);
-                                    $ubicacion = isset($ubicaciones[$rowData['A']]) ? $ubicaciones[$rowData['A']] : null;
-
-                                    //Recorremos todos los resultados de manera dinamica conforme a los periodos y los resultados de cada punto
-                                    for ($i = 1; $i <= $periodos; $i++) {
-
-                                        //Cuando se inserta por primera vez creamos los registros para obtener sus IDs y despues poder actualizarlos
-                                        if ($i == 1) {
-
-                                            for ($j = 1; $j <= $resultados; $j++) {
-
-                                                $punto = reporteruidonivelsonoroModel::create([
-                                                    'proyecto_id' => $proyecto_id,
-                                                    'registro_id' => $registro_id,
-                                                    'reporteruidonivelsonoro_punto' => $numPunto,
-                                                    'reporteruidonivelsonoro_promedio' => $promedio,
-                                                    'reporteruidonivelsonoro_totalperiodos' => $periodos,
-                                                    'reporteruidonivelsonoro_totalresultados' => $resultados,
-                                                    'reporteruidonivelsonoro_ubicacion' => $ubicacion,
-                                                    'reporteruidonivelsonoro_periodo1' => $rowData[$columnaInicial],
-                                                ]);
-
-
-                                                // Guardmos el ID de los insertados en el arreglo usando $j como clave para luego poder obtenerlos y actualizarlos
-                                                $puntosId[$j] = $punto->id;
-
-
-                                                $columnaInicial++;
-                                            }
-
-                                            //Una vez creado el areglo donde estan los puntos 
-                                        } else {
-
-                                            for ($j = 1; $j <= $resultados; $j++) {
-
-
-                                                $punto = reporteruidonivelsonoroModel::where('id', $puntosId[$j])
-                                                    ->update([
-                                                        'proyecto_id' => $proyecto_id,
-                                                        'registro_id' => $registro_id,
-                                                        'reporteruidonivelsonoro_punto' => $numPunto,
-                                                        'reporteruidonivelsonoro_promedio' => $promedio,
-                                                        'reporteruidonivelsonoro_totalperiodos' => $periodos,
-                                                        'reporteruidonivelsonoro_totalresultados' => $resultados,
-                                                        'reporteruidonivelsonoro_ubicacion' => $ubicacion,
-                                                        'reporteruidonivelsonoro_periodo' . $i => $rowData[$columnaInicial],
-                                                    ]);
-
-
-                                                $columnaInicial++;
-                                            }
-                                        }
-                                    }
-
-
-                                    $puntosInsertados++;
-                                }
-
-                                break;
-                            case 2: // 7.2.- Tabla de resultados de la determinación del NER
-
-                                DB::statement('ALTER TABLE reporteruidopuntoner AUTO_INCREMENT = 1;');
-
-
-                                //Limpiamos, Validamos y Insertamos todos los datos del Excel
-                                foreach ($datosGenerales as $rowData) {
-
-                                    $punto = reporteruidopuntonerModel::create([
-                                        'proyecto_id' => $proyecto_id,
-                                        'registro_id' => $registro_id,
-                                        'reporteruidoarea_id' => isset($IdAreas[$rowData['C']]) ? $IdAreas[$rowData['C']] : null,
-                                        'reporteruidopuntoner_punto' => is_null($rowData['A']) ? null : $rowData['A'],
-                                        'reporteruidopuntoner_identificacion' => is_null($rowData['D']) ? null : $rowData['D'],
-                                        'reporteruidopuntoner_ner' => is_null($rowData['B']) ? null : $rowData['B'],
-                                        'reporteruidopuntoner_RdB' => NULL,
-                                        'reporteruidopuntoner_lmpe' => $lmpe,
-                                        'reporteruidopuntoner_tmpe' => is_null($rowData['B']) ? 'NA' : calculartmpe($rowData['B']),
-                                        'reporteruidopuntoner_ubicacion' => $ubicaciones[$rowData['A']],
-
-                                    ]);
-
-
-                                    #Verificamos si existe registro con ese ID en la tabla de reporteruidopuntonerfrecuencias para  no duplicar los datos
-                                    $total = reporteruidopuntonerfrecuenciasModel::where('reporteruidopuntoner_id', $punto->id)->count();
-
-                                    if ($total == 0) {
-
-                                        $frecuencias_bandasoctava = array('31.5', '63', '125', '250', '500', '1K', '2K', '4K', '8K');
-                                        foreach ($frecuencias_bandasoctava as $key => $value) {
-                                            $frecuencia = reporteruidopuntonerfrecuenciasModel::create([
-                                                'reporteruidopuntoner_id' => $punto->id,
-                                                'reporteruidopuntonerfrecuencias_orden' => ($key + 1),
-                                                'reporteruidopuntonerfrecuencias_frecuencia' => $value, 
-                                                'reporteruidopuntonerfrecuencias_nivel' => NULL
-                                            ]);
-                                        }
-
-                                    }
-
-
-
-                                    $puntosInsertados++;
-                                }
-
-                                break;
-                            case 3: // Excel con el formato de puntos de la LMPE, la fecha de evaluación y la fecha de entrega
-
-                                DB::statement('ALTER TABLE reporteruidodosisner AUTO_INCREMENT = 1;');
-
-                                //Limpiamos, Validamos y Insertamos todos los datos del Excel
-                                foreach ($datosGenerales as $rowData) {
-
-
-                                    $punto = reporteruidodosisnerModel::create([
-                                        'proyecto_id' => $proyecto_id,
-                                        'registro_id' => $registro_id,
-                                        'reporteruidodosisner_punto' => is_null($rowData['A']) ? null : $rowData['A'],
-                                        'reporteruidodosisner_dosis' => is_null($rowData['B']) ? null : $rowData['B'],
-                                        'reporteruidodosisner_ner' => is_null($rowData['C']) ? null : $rowData['C'],
-                                        'reporteruidoarea_id' => isset($IdAreas[$rowData['D']]) ? $IdAreas[$rowData['D']] : null,
-                                        'reporteruidocategoria_id' => isset($IdCategorias[$rowData['E']]) ?  $IdCategorias[$rowData['E']] : null,
-                                        'reporteruidodosisner_lmpe' => $lmpe,
-                                        'reporteruidodosisner_tmpe' => is_null($rowData['C']) ? 'NA' : calculartmpe($rowData['C']),
-                                        'reporteruidodosisner_nombre' => is_null($rowData['F']) ? 'NA' : $rowData['F'],
-                                    ]);
-
-
-                                    $puntosInsertados++;
-                                }
-
-                                break;
-                        }
-
-                        //RETORNAMOS UN MENSAJE DE CUANTOS INSERTO 
-                        return response()->json(['msj' => 'Total de puntos insertados : ' . $puntosInsertados . ' de ' . $totalPuntos, 'code' => 200]);
-                    } else {
-
-                        return response()->json(["msj" => 'No se ha subido ningún archivo Excel', "code" => 500]);
-                    }
-                } catch (Exception $e) {
-
-                    return response()->json(['msj' => 'Se produjo un error al intentar cargar los puntos, inténtelo de nuevo o comuníquelo con el responsable ' . ' ---- ' . $e->getMessage(), 'code' => 500]);
-                }
-            }
 
             // TABLAS
             //============================================================
@@ -1511,71 +1324,71 @@ class reportenom0353Controller extends Controller
 
             // CONCLUSION
             if (($request->opcion + 0) == 19) {
+                $form_conclusiones = [
+                    'acontecimientos_traumaticos' => $request->input('reporte_acontecimientos_conclusiones'),
+                    'ambiente_trabajo' => $request->input('reporte_ambiente_conclusiones'),
+                    'condiciones_ambiente' => $request->input('reporte_condiciones_conclusiones'),
+                    'factores_actividad' => $request->input('reporte_factores_conclusiones'),
+                    'carga_trabajo' => $request->input('reporte_carga_conclusiones'),
+                    'falta_control' => $request->input('reporte_falta_conclusiones'),
+                    'organizacion_tiempo' => $request->input('reporte_organizacion_conclusiones'),
+                    'jornada_trabajo' => $request->input('reporte_jornada_conclusiones'),
+                    'interferencia_trabajo_familia' => $request->input('reporte_interferencia_conclusiones'),
+                    'liderazgo_relaciones' => $request->input('reporte_liderazgorelaciones_conclusiones'),
+                    'liderazgo' => $request->input('reporte_liderazgo_conclusiones'),
+                    'relaciones_trabajo' => $request->input('reporte_relaciones_conclusiones'),
+                    'violencia' => $request->input('reporte_violencia_conclusiones'),
+                    'entorno_organizacional' => $request->input('reporte_entorno_conclusiones'),
+                    'reconocimiento_desempeno' => $request->input('reporte_reconocimiento_conclusiones'),
+                    'insuficiente_pertenencia' => $request->input('reporte_insuficiente_conclusiones'),
+                ];
+            
+                // Convertir el array a JSON
+                $jsonConclusiones = json_encode($form_conclusiones);
+            
+                // Actualizar el registro en la base de datos
                 $reporte->update([
-                    'reportenom0353_conclusion' => $this->datosproyectolimpiartexto($proyecto, $recsensorial, $request->reporte_conclusion)
+                    'reportenom0353_conclusiones' => $jsonConclusiones,
                 ]);
+            
 
                 // Mensaje
                 $dato["msj"] = 'Datos guardados correctamente';
             }
 
+              // CONCLUSION
+              if (($request->opcion + 0) == 20) {
+                $form_recomendaciones = [
+                    'acontecimientos_traumaticos' => $request->input('reporte_acontecimientos_recomendaciones'),
+                    'ambiente_trabajo' => $request->input('reporte_ambiente_recomendaciones'),
+                    'condiciones_ambiente' => $request->input('reporte_condiciones_recomendaciones'),
+                    'factores_actividad' => $request->input('reporte_factores_recomendaciones'),
+                    'carga_trabajo' => $request->input('reporte_carga_recomendaciones'),
+                    'falta_control' => $request->input('reporte_falta_recomendaciones'),
+                    'organizacion_tiempo' => $request->input('reporte_organizacion_recomendaciones'),
+                    'jornada_trabajo' => $request->input('reporte_jornada_recomendaciones'),
+                    'interferencia_trabajo_familia' => $request->input('reporte_interferencia_recomendaciones'),
+                    'liderazgo_relaciones' => $request->input('reporte_liderazgorelaciones_recomendaciones'),
+                    'liderazgo' => $request->input('reporte_liderazgo_recomendaciones'),
+                    'relaciones_trabajo' => $request->input('reporte_relaciones_recomendaciones'),
+                    'violencia' => $request->input('reporte_violencia_recomendaciones'),
+                    'entorno_organizacional' => $request->input('reporte_entorno_recomendaciones'),
+                    'reconocimiento_desempeno' => $request->input('reporte_reconocimiento_recomendaciones'),
+                    'insuficiente_pertenencia' => $request->input('reporte_insuficiente_recomendaciones'),
+                ];
+                
+            
+                // Convertir el array a JSON
+                $jsonRecomendaciones = json_encode($form_recomendaciones);
+            
+                // Actualizar el registro en la base de datos
+                $reporte->update([
+                    'reportenom0353_recomendaciones' => $jsonRecomendaciones,
+                ]);
+            
 
-            // RECOMENDACIONES
-            if (($request->opcion + 0) == 20) {
-                if ($request->recomendacion_checkbox) {
-                    $eliminar_recomendaciones = reporterecomendacionesModel::where('proyecto_id', $request->proyecto_id)
-                        ->where('catactivo_id', $request->catactivo_id)
-                        ->where('agente_nombre', $request->agente_nombre)
-                        ->where('registro_id', $reporte->id)
-                        ->delete();
-
-                    DB::statement('ALTER TABLE reporterecomendaciones AUTO_INCREMENT = 1;');
-
-                    foreach ($request->recomendacion_checkbox as $key => $value) {
-                        $recomendacion = reporterecomendacionesModel::create([
-                            'agente_id' => $request->agente_id,
-                            'agente_nombre' => $request->agente_nombre,
-                            'proyecto_id' => $request->proyecto_id,
-                            'registro_id' => $reporte->id,
-                            'catactivo_id' => $request->catactivo_id,
-                            'reporterecomendacionescatalogo_id' => $value,
-                            'reporterecomendaciones_tipo' => $request['recomendacion_tipo_' . $value],
-                            'reporterecomendaciones_descripcion' => $this->datosproyectolimpiartexto($proyecto, $recsensorial, $request['recomendacion_descripcion_' . $value])
-                        ]);
-                    }
-
-                    // Mensaje
-                    $dato["msj"] = 'Datos guardados correctamente';
-                }
-
-
-                if ($request->recomendacionadicional_checkbox) {
-                    if (!$request->recomendacion_checkbox) {
-                        $eliminar_recomendaciones = reporterecomendacionesModel::where('proyecto_id', $request->proyecto_id)
-                            ->where('catactivo_id', $request->catactivo_id)
-                            ->where('agente_nombre', $request->agente_nombre)
-                            ->where('registro_id', $reporte->id)
-                            ->delete();
-                    }
-
-                    DB::statement('ALTER TABLE reporterecomendaciones AUTO_INCREMENT = 1;');
-
-                    foreach ($request->recomendacionadicional_checkbox as $key => $value) {
-                        $recomendacion = reporterecomendacionesModel::create([
-                            'agente_id' => $request->agente_id,
-                            'agente_nombre' => $request->agente_nombre,
-                            'proyecto_id' => $request->proyecto_id,
-                            'registro_id' => $reporte->id,
-                            'catactivo_id' => $request->catactivo_id,
-                            'reporterecomendacionescatalogo_id' => 0,
-                            'reporterecomendaciones_tipo' => $request->recomendacionadicional_tipo[$key],
-                            'reporterecomendaciones_descripcion' => $this->datosproyectolimpiartexto($proyecto, $recsensorial, $request->recomendacionadicional_descripcion[$key])
-                        ]);
-                    }
-
-                    // Mensaje
-                    $dato["msj"] = 'Datos guardados correctamente';
-                }
+                // Mensaje
+                $dato["msj"] = 'Datos guardados correctamente';
             }
 
 

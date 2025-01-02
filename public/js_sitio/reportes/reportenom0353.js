@@ -212,12 +212,40 @@ function datosgenerales()
 			$('#reporte_objetivogeneral').html(dato.reporte_objetivogeneral);
 			$('#reporte_objetivoespecifico').html(dato.reporte_objetivoespecifico);
 			$('#reporte_metodologia_4_1').html(dato.reporte_metodologia_4_1);
-			$('#reporte_acontecimientos').html(dato.reporte_acontecimientos);
-			$('#reporte_ambiente').html(dato.reporte_ambiente);
-			$('#reporte_factores').html(dato.reporte_factores);
-			$('#reporte_organizacion').html(dato.reporte_organizacion);
-			$('#reporte_liderazgo').html(dato.reporte_liderazgo);
-			$('#reporte_entorno').html(dato.reporte_entorno);
+
+			$('#reporte_acontecimientos_conclusiones').html(dato.reporte_acontecimientos_conclusiones);
+			$('#reporte_ambiente_conclusiones').html(dato.reporte_ambiente_conclusiones);
+			$('#reporte_condiciones_conclusiones').html(dato.reporte_condiciones_conclusiones);
+			$('#reporte_factores_conclusiones').html(dato.reporte_factores_conclusiones);
+			$('#reporte_carga_conclusiones').html(dato.reporte_carga_conclusiones);
+			$('#reporte_falta_conclusiones').html(dato.reporte_falta_conclusiones);
+			$('#reporte_organizacion_conclusiones').html(dato.reporte_organizacion_conclusiones);
+			$('#reporte_jornada_conclusiones').html(dato.reporte_jornada_conclusiones);
+			$('#reporte_interferencia_conclusiones').html(dato.reporte_interferencia_conclusiones);
+			$('#reporte_liderazgorelaciones_conclusiones').html(dato.reporte_liderazgorelaciones_conclusiones);
+			$('#reporte_liderazgo_conclusiones').html(dato.reporte_liderazgo_conclusiones);
+			$('#reporte_relaciones_conclusiones').html(dato.reporte_relaciones_conclusiones);
+			$('#reporte_violencia_conclusiones').html(dato.reporte_violencia_conclusiones);
+			$('#reporte_entorno_conclusiones').html(dato.reporte_entorno_conclusiones);
+			$('#reporte_reconocimiento_conclusiones').html(dato.reporte_reconocimiento_conclusiones);
+			$('#reporte_insuficiente_conclusiones').html(dato.reporte_insuficiente_conclusiones);
+
+			$('#reporte_acontecimientos_recomendaciones').html(dato.reporte_acontecimientos_recomendaciones);
+			$('#reporte_ambiente_recomendaciones').html(dato.reporte_ambiente_recomendaciones);
+			$('#reporte_condiciones_recomendaciones').html(dato.reporte_condiciones_recomendaciones);
+			$('#reporte_factores_recomendaciones').html(dato.reporte_factores_recomendaciones);
+			$('#reporte_carga_recomendaciones').html(dato.reporte_carga_recomendaciones);
+			$('#reporte_falta_recomendaciones').html(dato.reporte_falta_recomendaciones);
+			$('#reporte_organizacion_recomendaciones').html(dato.reporte_organizacion_recomendaciones);
+			$('#reporte_jornada_recomendaciones').html(dato.reporte_jornada_recomendaciones);
+			$('#reporte_interferencia_recomendaciones').html(dato.reporte_interferencia_recomendaciones);
+			$('#reporte_liderazgorelaciones_recomendaciones').html(dato.reporte_liderazgorelaciones_recomendaciones);
+			$('#reporte_liderazgo_recomendaciones').html(dato.reporte_liderazgo_recomendaciones);
+			$('#reporte_relaciones_recomendaciones').html(dato.reporte_relaciones_recomendaciones);
+			$('#reporte_violencia_recomendaciones').html(dato.reporte_violencia_recomendaciones);
+			$('#reporte_entorno_recomendaciones').html(dato.reporte_entorno_recomendaciones);
+			$('#reporte_reconocimiento_recomendaciones').html(dato.reporte_reconocimiento_recomendaciones);
+			$('#reporte_insuficiente_recomendaciones').html(dato.reporte_insuficiente_recomendaciones);
 
 
 
@@ -7233,31 +7261,6 @@ $('#tabla_reporte_9 tbody').on('click', 'td>button.eliminar', function()
 
 $("#botonguardar_reporte_recomendaciones").click(function()
 {
-	// borrar campo filtro del DATATABLE
-	// datatable_recomendaciones.search("").draw();
-
-	// valida campos vacios
-	var seleccionados = 0;
-	$('.recomendacion_checkbox').each(function()
-	{
-		if (this.checked)
-		{
-			seleccionados += 1;
-		}
-	});
-
-	$('.recomendacionadicional_checkbox').each(function()
-	{
-		if (this.checked)
-		{
-			seleccionados += 1;
-		}
-	});
-
-
-	if (seleccionados > 0)
-	{
-		// valida campos vacios
 		var valida = this.form.checkValidity();
 		if (valida)
 		{
@@ -7363,22 +7366,6 @@ $("#botonguardar_reporte_recomendaciones").click(function()
 			});
 			return false;
 		}
-	}
-	else
-	{
-		// mensaje
-		swal({
-			title: "Seleccione recomendaciones",
-			text: "Antes de guardar debe seleccionar uno o más recomendaciones",
-			type: "info", // warning, error, success, info
-			buttons: {
-				visible: false, // true , false
-			},
-			timer: 1500,
-			showConfirmButton: false
-		});
-		return false;
-	}
 });
 
 
@@ -9522,7 +9509,7 @@ $("#boton_reporte_nuevarevision").click(function()
 		{
 			swal({
 				title: "¿Generar nueva revision?",
-				text: "Informe de Ruido",
+				text: "Informe de NOM035",
 				type: "info",
 				showCancelButton: true,
 				confirmButtonColor: "#DD6B55",
@@ -9538,22 +9525,6 @@ $("#boton_reporte_nuevarevision").click(function()
 
 					$('#boton_reporte_nuevarevision').html('<span class="btn-label"><i class="fa fa-spin fa-spinner"></i></span>Copiando revisión, por favor espere...');
 					$('#boton_reporte_nuevarevision').attr('disabled', true);
-
-
-					var grafica_imgbase64 = '';
-					graficapastel_resultados.export.capture({}, function ()
-					{
-						this.toPNG({quality: 1, multiplier: 6}, function (img_base64)
-						{
-							// var image = new Image();
-							// image.src = img_base64;
-							// document.getElementById("captura").appendChild(image);
-							// console.log('grafica pastel iluminacion');
-
-							grafica_imgbase64 = img_base64;
-						});
-					});
-
 
 					setTimeout(function()
 					{
@@ -9571,7 +9542,6 @@ $("#boton_reporte_nuevarevision").click(function()
 								areas_poe: areas_poe,
 								ultimarevision_id: ultimarevision_id,
 								crear_revision: 1,
-								grafica_dashboard: grafica_imgbase64,
 							},
 							cache: false,
 							success:function(dato)
@@ -9714,20 +9684,6 @@ $('#tabla_reporte_revisiones tbody').on('click', 'td>button.botondescarga', func
 	{
 		if (parseInt(row.data().id) == parseInt(ultimarevision_id))
 		{
-			var grafica_imgbase64 = '';
-			chartConsolidado1.export.capture({}, function ()
-			{
-				this.toPNG({quality: 1, multiplier: 6}, function (img_base64)
-				{
-					// var image = new Image();
-					// image.src = img_base64;
-					// document.getElementById("captura").appendChild(image);
-					// console.log('grafica pastel iluminacion');
-
-					grafica_imgbase64 = img_base64;
-				});
-			});
-
 
 			setTimeout(function()
 			{
@@ -9745,7 +9701,6 @@ $('#tabla_reporte_revisiones tbody').on('click', 'td>button.botondescarga', func
 						areas_poe: areas_poe,
 						ultimarevision_id: ultimarevision_id,
 						crear_revision: 0,
-						grafica_dashboard: grafica_imgbase64,
 					},
 					cache: false,
 					success:function(dato)
@@ -10798,8 +10753,8 @@ seriegrafica1.appear(1000, 100);
 	  { "category": "Condiciones en el \nambiente de trabajo", "Nulo": 0.10, "Bajo": 0.15, "Medio": 0.20, "Alto": 0.25, "Muy alto": 0.30 },
 	  { "category": "Falta de control \nsobre el trabajo", "Nulo": 0.35, "Bajo": 0.18, "Medio": 0.22, "Alto": 0.15, "Muy alto": 0.10 },
 	  { "category": "Carga de trabajo", "Nulo": 0.09, "Bajo": 0.36, "Medio": 0.21, "Alto": 0.26, "Muy alto": 0.08 },
-	  { "category": "Jornada de trabajo", "Nulo": 0.14, "Bajo": 0.19, "Medio": 0.23, "Alto": 0.27, "Muy alto": 0.17 },
-	  { "category": "Interferencia en la relacion\n trabajo-familia", "Nulo": 0.16, "Bajo": 0.20, "Medio": 0.24, "Alto": 0.29, "Muy alto": 0.11 },
+	  { "category": "Jornada de\n trabajo", "Nulo": 0.14, "Bajo": 0.19, "Medio": 0.23, "Alto": 0.27, "Muy alto": 0.17 },
+	  { "category": "Interferencia en la\n relacion\n trabajo-familia", "Nulo": 0.16, "Bajo": 0.20, "Medio": 0.24, "Alto": 0.29, "Muy alto": 0.11 },
 	  { "category": "Liderazgo", "Nulo": 0.11, "Bajo": 0.16, "Medio": 0.19, "Alto": 0.24, "Muy alto": 0.30 },
 	  { "category": "Relaciones en el trabajo", "Nulo": 0.14, "Bajo": 0.17, "Medio": 0.22, "Alto": 0.27, "Muy alto": 0.20 },
 	  { "category": "Violencia", "Nulo": 0.25, "Bajo": 0.10, "Medio": 0.20, "Alto": 0.40, "Muy alto": 0.05 }

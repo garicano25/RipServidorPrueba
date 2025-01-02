@@ -1110,20 +1110,20 @@
 				</div>
 				<h4 class="card-title" id="10">10.- Conclusiones</h4>
 				<h4 class="card-title" id="10_1">10.1.- Conclusiones de conformidad a la NOM-035-STPS-2018.</h4>
-				<form method="post" enctype="multipart/form-data" name="form_reporte_conclusiones" id="form_reporte_conclusiones">
+				<form method="post" enctype="multipart/form-data" name="form_reporte_conclusion" id="form_reporte_conclusion">
 					<div class="row">
 						<div class="col-12">
 							{!! csrf_field() !!}
 							<div class="form-group">
-								<label>Acontecimientos traumáticos severos.</label>
+								<label>Acontecimientos traumáticos severos</label>
 								<textarea class="form-control" style="margin-bottom: 0px;" rows="5" id="reporte_acontecimientos_conclusiones" name="reporte_acontecimientos_conclusiones" required></textarea>
 							</div>
 							<div class="form-group">
-								<label>Ambiente de trabajo.</label>
+								<label>Ambiente de trabajo</label>
 								<textarea class="form-control" style="margin-bottom: 0px;" rows="5" id="reporte_ambiente_conclusiones" name="reporte_ambiente_conclusiones" required></textarea>
 							</div>
 							<div class="form-group">
-								<label>Condiciones del ambiente de trabajo.</label>
+								<label>Condiciones del ambiente de trabajo</label>
 								<textarea class="form-control" style="margin-bottom: 0px;" rows="5" id="reporte_condiciones_conclusiones" name="reporte_condiciones_conclusiones" required></textarea>
 							</div>
 							<div class="form-group">
@@ -1175,13 +1175,13 @@
 								<textarea class="form-control" style="margin-bottom: 0px;" rows="5" id="reporte_reconocimiento_conclusiones" name="reporte_reconocimiento_conclusiones" required></textarea>
 							</div>
 							<div class="form-group">
-								<label>insuficiente sentido de pertenencia e inestabilidad</label>
-								<textarea class="form-control" style="margin-bottom: 0px;" rows="5" id="reporte_insuficiente" name="reporte_insuficiente" required></textarea>
+								<label>Insuficiente sentido de pertenencia e inestabilidad</label>
+								<textarea class="form-control" style="margin-bottom: 0px;" rows="5" id="reporte_insuficiente_conclusiones" name="reporte_insuficiente_conclusiones" required></textarea>
 							</div>
 						</div>
 						<div class="col-12" style="text-align: right;">
 							<div class="form-group">
-								<button type="submit" class="btn btn-danger waves-effect waves-light botoninforme" id="botonguardar_reporte_conclusiones">Guardar conclusiones <i class="fa fa-save"></i></button>
+								<button type="submit" class="btn btn-danger waves-effect waves-light botoninforme" id="botonguardar_reporte_conclusion">Guardar conclusiones <i class="fa fa-save"></i></button>
 							</div>
 						</div>
 					</div>
@@ -1193,15 +1193,15 @@
 						<div class="col-12">
 							{!! csrf_field() !!}
 							<div class="form-group">
-								<label>Acontecimientos traumáticos severos.</label>
+								<label>Acontecimientos traumáticos severos</label>
 								<textarea class="form-control" style="margin-bottom: 0px;" rows="5" id="reporte_acontecimientos_recomendaciones" name="reporte_acontecimientos_recomendaciones" required></textarea>
 							</div>
 							<div class="form-group">
-								<label>Ambiente de trabajo.</label>
+								<label>Ambiente de trabajo</label>
 								<textarea class="form-control" style="margin-bottom: 0px;" rows="5" id="reporte_ambiente_recomendaciones" name="reporte_ambiente_recomendaciones" required></textarea>
 							</div>
 							<div class="form-group">
-								<label>Condiciones del ambiente de trabajo.</label>
+								<label>Condiciones del ambiente de trabajo</label>
 								<textarea class="form-control" style="margin-bottom: 0px;" rows="5" id="reporte_condiciones_recomendaciones" name="reporte_condiciones_recomendaciones" required></textarea>
 							</div>
 							<div class="form-group">
@@ -1253,7 +1253,7 @@
 								<textarea class="form-control" style="margin-bottom: 0px;" rows="5" id="reporte_reconocimiento_recomendaciones" name="reporte_reconocimiento_recomendaciones" required></textarea>
 							</div>
 							<div class="form-group">
-								<label>insuficiente sentido de pertenencia e inestabilidad</label>
+								<label>Insuficiente sentido de pertenencia e inestabilidad</label>
 								<textarea class="form-control" style="margin-bottom: 0px;" rows="5" id="reporte_insuficiente_recomendaciones" name="reporte_insuficiente_recomendaciones" required></textarea>
 							</div>
 						</div>
@@ -1364,7 +1364,6 @@
 							</thead>
 							<tbody></tbody>
 						</table>
-						{{-- <div id="captura" style="width: 100%; border: 1px #000 solid;">graficas</div><br> --}}
 					</div>
 				</div>
 			</div>
