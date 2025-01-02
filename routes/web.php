@@ -1957,6 +1957,8 @@ Route::get('reportenom0353datosgenerales/{proyecto_id}/{agente_id}/{agente_nombr
 Route::post('reportenom0353word', ['as' => 'reporteruido.reporteruidoword', 'uses' => 'reportes\reportenom0353wordController@reportenom0353word']);
 Route::get('reportenom0353worddescargar/{proyecto_id}/{revision_id}/{ultima_revision}', ['as' => 'reportenom035.reportenom0353worddescargar', 'uses' => 'reportes\reportenom0353wordController@reportenom035worddescargar']);
 Route::get('reportenom0353mapaubicacion/{reporteregistro_id}/{archivo_opcion}', ['as' => 'reportenom0353.reportenom0353mapaubicacion', 'uses' => 'reportes\reportenom0353Controller@reportenom0353mapaubicacion']);
+Route::get('reportenom0353responsabledocumento/{reporteregistro_id}/{responsabledoc_tipo}/{responsabledoc_opcion}', ['as' => 'reportenom0353.reportenom0353responsabledocumento', 'uses' => 'reportes\reportenom0353Controller@reportenom0353responsabledocumento']);
+Route::get('reportenom0353recomendacionicono/{proyecto_id}/{categoria_dominio}/{opcion}', ['as' => 'reportenom0353.reportenom0353recomendacionicono', 'uses' => 'reportes\reportenom0353Controller@reportenom0353recomendacionicono']);
 
 
 // =================GUIAS 

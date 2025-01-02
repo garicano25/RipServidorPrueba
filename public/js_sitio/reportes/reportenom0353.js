@@ -259,7 +259,7 @@ function datosgenerales()
 				$('#reporteresponsable1documento').val('');
 				var archivo = dato.reporte_responsablesinforme.responsable1documento;
 				var extension = archivo.substring(archivo.lastIndexOf("."));
-				var imagenUrl = '/reporteruidoresponsabledocumento/'+dato.reporte_responsablesinforme.registro_id+'/'+1+'/'+0;
+				var imagenUrl = '/reportenom0353responsabledocumento/'+dato.reporte_responsablesinforme.registro_id+'/'+1+'/'+0;
 				$('#reporteresponsable1documento').dropify().data('dropify').destroy();
 				$('#reporteresponsable1documento').dropify().data('dropify').settings.defaultFile = imagenUrl+extension;
 				$('#reporteresponsable1documento').dropify().data('dropify').init();
@@ -272,7 +272,7 @@ function datosgenerales()
 				$('#reporteresponsable2documento').val('');
 				var archivo = dato.reporte_responsablesinforme.responsable2documento;
 				var extension = archivo.substring(archivo.lastIndexOf("."));
-				var imagenUrl = '/reporteruidoresponsabledocumento/'+dato.reporte_responsablesinforme.registro_id+'/'+2+'/'+0;
+				var imagenUrl = '/reportenom0353responsabledocumento/'+dato.reporte_responsablesinforme.registro_id+'/'+2+'/'+0;
 				$('#reporteresponsable2documento').dropify().data('dropify').destroy();
 				$('#reporteresponsable2documento').dropify().data('dropify').settings.defaultFile = imagenUrl+extension;
 				$('#reporteresponsable2documento').dropify().data('dropify').init();
@@ -7566,13 +7566,13 @@ $("#botonguardar_reporte_responsablesinforme").click(function()
 
 $("#boton_descargarresponsabledoc1").click(function()
 {
-	window.open('/reporteruidoresponsabledocumento/'+reporteregistro_id+'/'+1+'/'+1);
+	window.open('/reportenom0353responsabledocumento/'+reporteregistro_id+'/'+1+'/'+1);
 });
 
 
 $("#boton_descargarresponsabledoc2").click(function()
 {
-	window.open('/reporteruidoresponsabledocumento/'+reporteregistro_id+'/'+2+'/'+1);
+	window.open('/reportenom0353responsabledocumento/'+reporteregistro_id+'/'+2+'/'+1);
 });
 
 

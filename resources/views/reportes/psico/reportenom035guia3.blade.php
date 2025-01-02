@@ -1110,69 +1110,152 @@
 				</div>
 				<h4 class="card-title" id="10">10.- Conclusiones</h4>
 				<h4 class="card-title" id="10_1">10.1.- Conclusiones de conformidad a la NOM-035-STPS-2018.</h4>
-				<form method="post" enctype="multipart/form-data" name="form_reporte_procesoinstalacion" id="form_reporte_procesoinstalacion">
+				<form method="post" enctype="multipart/form-data" name="form_reporte_conclusiones" id="form_reporte_conclusiones">
 					<div class="row">
 						<div class="col-12">
 							{!! csrf_field() !!}
 							<div class="form-group">
-								<label>Categoría acontecimientos traumáticos severos.</label>
-								<textarea class="form-control" style="margin-bottom: 0px;" rows="5" id="reporte_acontecimientos" name="reporte_acontecimientos" required></textarea>
+								<label>Acontecimientos traumáticos severos.</label>
+								<textarea class="form-control" style="margin-bottom: 0px;" rows="5" id="reporte_acontecimientos_conclusiones" name="reporte_acontecimientos_conclusiones" required></textarea>
 							</div>
 							<div class="form-group">
-								<label>Categoría ambiente de trabajo.</label>
-								<textarea class="form-control" style="margin-bottom: 0px;" rows="5" id="reporte_ambiente" name="reporte_ambiente" required></textarea>
+								<label>Ambiente de trabajo.</label>
+								<textarea class="form-control" style="margin-bottom: 0px;" rows="5" id="reporte_ambiente_conclusiones" name="reporte_ambiente_conclusiones" required></textarea>
 							</div>
 							<div class="form-group">
-								<label>Categoría factores propios de la actividad.</label>
-								<textarea class="form-control" style="margin-bottom: 0px;" rows="5" id="reporte_factores" name="reporte_factores" required></textarea>
+								<label>Condiciones del ambiente de trabajo.</label>
+								<textarea class="form-control" style="margin-bottom: 0px;" rows="5" id="reporte_condiciones_conclusiones" name="reporte_condiciones_conclusiones" required></textarea>
 							</div>
 							<div class="form-group">
-								<label>Categoría organización del tiempo de trabajo.</label>
-								<textarea class="form-control" style="margin-bottom: 0px;" rows="5" id="reporte_organizacion" name="reporte_organizacion" required></textarea>
+								<label>Factores propios de la actividad</label>
+								<textarea class="form-control" style="margin-bottom: 0px;" rows="5" id="reporte_factores_conclusiones" name="reporte_factores_conclusiones" required></textarea>
 							</div>
 							<div class="form-group">
-								<label>Categoría liderazgo y relaciones en el trabajo.</label>
-								<textarea class="form-control" style="margin-bottom: 0px;" rows="5" id="reporte_liderazgo" name="reporte_liderazgo" required></textarea>
+								<label>Carga de trabajo</label>
+								<textarea class="form-control" style="margin-bottom: 0px;" rows="5" id="reporte_carga_conclusiones" name="reporte_carga_conclusiones" required></textarea>
 							</div>
 							<div class="form-group">
-								<label>Categoría entorno organizacional.</label>
-								<textarea class="form-control" style="margin-bottom: 0px;" rows="5" id="reporte_entorno" name="reporte_entorno" required></textarea>
+								<label>Falta de control sobre el trabajo</label>
+								<textarea class="form-control" style="margin-bottom: 0px;" rows="5" id="reporte_falta_conclusiones" name="reporte_falta_conclusiones" required></textarea>
+							</div>
+							<div class="form-group">
+								<label>Organización del tiempo de trabajo</label>
+								<textarea class="form-control" style="margin-bottom: 0px;" rows="5" id="reporte_organizacion_conclusiones" name="reporte_organizacion_conclusiones" required></textarea>
+							</div>
+							<div class="form-group">
+								<label>Jornada de trabajo</label>
+								<textarea class="form-control" style="margin-bottom: 0px;" rows="5" id="reporte_jornada_conclusiones" name="reporte_jornada_conclusiones" required></textarea>
+							</div>
+							<div class="form-group">
+								<label>Interferencia trabajo-familia</label>
+								<textarea class="form-control" style="margin-bottom: 0px;" rows="5" id="reporte_interferencia_conclusiones" name="reporte_interferencia_conclusiones" required></textarea>
+							</div>
+							<div class="form-group">
+								<label>Liderazgo y relaciones en el trabajo</label>
+								<textarea class="form-control" style="margin-bottom: 0px;" rows="5" id="reporte_liderazgorelaciones_conclusiones" name="reporte_liderazgorelaciones_conclusiones" required></textarea>
+							</div>
+							<div class="form-group">
+								<label>Liderazgo</label>
+								<textarea class="form-control" style="margin-bottom: 0px;" rows="5" id="reporte_liderazgo_conclusiones" name="reporte_liderazgo_conclusiones" required></textarea>
+							</div>
+							<div class="form-group">
+								<label>Relaciones en el trabajo</label>
+								<textarea class="form-control" style="margin-bottom: 0px;" rows="5" id="reporte_relaciones_conclusiones" name="reporte_relaciones_conclusiones" required></textarea>
+							</div>
+							<div class="form-group">
+								<label>Violencia</label>
+								<textarea class="form-control" style="margin-bottom: 0px;" rows="5" id="reporte_violencia_conclusiones" name="reporte_violencia_conclusiones" required></textarea>
+							</div>
+							<div class="form-group">
+								<label>Entorno organizacional</label>
+								<textarea class="form-control" style="margin-bottom: 0px;" rows="5" id="reporte_entorno_conclusiones" name="reporte_entorno_conclusiones" required></textarea>
+							</div>
+							<div class="form-group">
+								<label>Reconocimiento del desempeño</label>
+								<textarea class="form-control" style="margin-bottom: 0px;" rows="5" id="reporte_reconocimiento_conclusiones" name="reporte_reconocimiento_conclusiones" required></textarea>
+							</div>
+							<div class="form-group">
+								<label>insuficiente sentido de pertenencia e inestabilidad</label>
+								<textarea class="form-control" style="margin-bottom: 0px;" rows="5" id="reporte_insuficiente" name="reporte_insuficiente" required></textarea>
 							</div>
 						</div>
 						<div class="col-12" style="text-align: right;">
 							<div class="form-group">
-								<button type="submit" class="btn btn-danger waves-effect waves-light botoninforme" id="botonguardar_reporte_procesoinstalacion">Guardar proceso instalación <i class="fa fa-save"></i></button>
+								<button type="submit" class="btn btn-danger waves-effect waves-light botoninforme" id="botonguardar_reporte_conclusiones">Guardar conclusiones <i class="fa fa-save"></i></button>
 							</div>
 						</div>
 					</div>
 				</form>
 				<h4 class="card-title" id="11">11.- Recomendaciones de control</h4>
+				<h4 class="card-title" id="11_1">11.1.- Código de representación gráfica y color, NOM-035-STPS-2018</h4>
 				<form method="post" enctype="multipart/form-data" name="form_reporte_recomendaciones" id="form_reporte_recomendaciones">
 					<div class="row">
 						<div class="col-12">
 							{!! csrf_field() !!}
-						</div>
-						<div class="col-12">
-							<ol class="breadcrumb" style="padding: 6px; margin: 10px 0px;">
-								<button type="button" class="btn btn-default waves-effect botoninforme" data-toggle="tooltip" title="Agregar nueva recomendación" id="boton_reporte_nuevarecomendacion">
-									<span class="btn-label"><i class="fa fa-plus"></i></span>Nueva recomendación
-								</button>
-							</ol>
-							<style type="text/css">
-								#tabla_reporte_9 td.alinear_izquierda {
-									text-align: left;
-								}
-							</style>
-							<table class="table table-hover tabla_info_centrado" width="100%" id="tabla_reporte_9">
-								<thead>
-									<tr>
-										<th width="60">No.</th>
-										<th width="70">Activo</th>
-										<th>Descripción</th>
-									</tr>
-								</thead>
-								<tbody></tbody>
-							</table>
+							<div class="form-group">
+								<label>Acontecimientos traumáticos severos.</label>
+								<textarea class="form-control" style="margin-bottom: 0px;" rows="5" id="reporte_acontecimientos_recomendaciones" name="reporte_acontecimientos_recomendaciones" required></textarea>
+							</div>
+							<div class="form-group">
+								<label>Ambiente de trabajo.</label>
+								<textarea class="form-control" style="margin-bottom: 0px;" rows="5" id="reporte_ambiente_recomendaciones" name="reporte_ambiente_recomendaciones" required></textarea>
+							</div>
+							<div class="form-group">
+								<label>Condiciones del ambiente de trabajo.</label>
+								<textarea class="form-control" style="margin-bottom: 0px;" rows="5" id="reporte_condiciones_recomendaciones" name="reporte_condiciones_recomendaciones" required></textarea>
+							</div>
+							<div class="form-group">
+								<label>Factores propios de la actividad</label>
+								<textarea class="form-control" style="margin-bottom: 0px;" rows="5" id="reporte_factores_recomendaciones" name="reporte_factores_recomendaciones" required></textarea>
+							</div>
+							<div class="form-group">
+								<label>Carga de trabajo</label>
+								<textarea class="form-control" style="margin-bottom: 0px;" rows="5" id="reporte_carga_recomendaciones" name="reporte_carga_recomendaciones" required></textarea>
+							</div>
+							<div class="form-group">
+								<label>Falta de control sobre el trabajo</label>
+								<textarea class="form-control" style="margin-bottom: 0px;" rows="5" id="reporte_falta_recomendaciones" name="reporte_falta_recomendaciones" required></textarea>
+							</div>
+							<div class="form-group">
+								<label>Organización del tiempo de trabajo</label>
+								<textarea class="form-control" style="margin-bottom: 0px;" rows="5" id="reporte_organizacion_recomendaciones" name="reporte_organizacion_recomendaciones" required></textarea>
+							</div>
+							<div class="form-group">
+								<label>Jornada de trabajo</label>
+								<textarea class="form-control" style="margin-bottom: 0px;" rows="5" id="reporte_jornada_recomendaciones" name="reporte_jornada_recomendaciones" required></textarea>
+							</div>
+							<div class="form-group">
+								<label>Interferencia trabajo-familia</label>
+								<textarea class="form-control" style="margin-bottom: 0px;" rows="5" id="reporte_interferencia_recomendaciones" name="reporte_interferencia_recomendaciones" required></textarea>
+							</div>
+							<div class="form-group">
+								<label>Liderazgo y relaciones en el trabajo</label>
+								<textarea class="form-control" style="margin-bottom: 0px;" rows="5" id="reporte_liderazgorelaciones_recomendaciones" name="reporte_liderazgorelaciones_recomendaciones" required></textarea>
+							</div>
+							<div class="form-group">
+								<label>Liderazgo</label>
+								<textarea class="form-control" style="margin-bottom: 0px;" rows="5" id="reporte_liderazgo_recomendaciones" name="reporte_liderazgo_recomendaciones" required></textarea>
+							</div>
+							<div class="form-group">
+								<label>Relaciones en el trabajo</label>
+								<textarea class="form-control" style="margin-bottom: 0px;" rows="5" id="reporte_relaciones_recomendaciones" name="reporte_relaciones_recomendaciones" required></textarea>
+							</div>
+							<div class="form-group">
+								<label>Violencia</label>
+								<textarea class="form-control" style="margin-bottom: 0px;" rows="5" id="reporte_violencia_recomendaciones" name="reporte_violencia_recomendaciones" required></textarea>
+							</div>
+							<div class="form-group">
+								<label>Entorno organizacional</label>
+								<textarea class="form-control" style="margin-bottom: 0px;" rows="5" id="reporte_entorno_recomendaciones" name="reporte_entorno_recomendaciones" required></textarea>
+							</div>
+							<div class="form-group">
+								<label>Reconocimiento del desempeño</label>
+								<textarea class="form-control" style="margin-bottom: 0px;" rows="5" id="reporte_reconocimiento_recomendaciones" name="reporte_reconocimiento_recomendaciones" required></textarea>
+							</div>
+							<div class="form-group">
+								<label>insuficiente sentido de pertenencia e inestabilidad</label>
+								<textarea class="form-control" style="margin-bottom: 0px;" rows="5" id="reporte_insuficiente_recomendaciones" name="reporte_insuficiente_recomendaciones" required></textarea>
+							</div>
 						</div>
 						<div class="col-12" style="text-align: right;">
 							<div class="form-group">
@@ -1181,66 +1264,6 @@
 						</div>
 					</div>
 				</form>
-				<h4 class="card-title" id="11_1">11.1.- Código de representación gráfica y color, NOM-035-STPS-2018</h4>
-				<div class="row">
-					<div class="col-12">
-						<p class="justificado">En este apartado se muestran: categorias, niveles de riesgo y recomendaciones, según el código de representación gráfica de riesgo </p><br>
-						<table class="table table-hover tabla_info_centrado" width="100%" id="tabla_reporte_categoria">
-							<thead>
-								<tr>
-									<th>Categoría</th>
-									<th>Nivel de riesggo</th>
-									<th>Recomendación</th>
-								</tr>
-							</thead>
-							<tbody>
-								<tr>
-									<td>Acontecimientos traumáticos severos</td>
-									<td>icono</td>
-									<td>
-										<input type="text" name="traumatic_event" placeholder="Escribir recomendación">
-									</td>
-								</tr>
-								<tr>
-									<td>Ambiente de trabajo</td>
-									<td>icono</td>
-									<td>
-										<input type="text" name="traumatic_event" placeholder="Escribir recomendación">
-									</td>
-								</tr>
-								<tr>
-									<td>Factores propios de la actividad</td>
-									<td>icono</td>
-									<td>
-										<input type="text" name="traumatic_event" placeholder="Escribir recomendación">
-									</td>
-								</tr>
-								<tr>
-									<td>Organización del tiempo de trabajo</td>
-									<td>icono</td>
-									<td>
-										<input type="text" name="traumatic_event" placeholder="Escribir recomendación">
-									</td>
-								</tr>
-								<tr>
-									<td>Liderazgo y relaciones en el trabajo</td>
-									<td>icono</td>
-									<td>
-										<input type="text" name="traumatic_event" placeholder="Escribir recomendación">
-									</td>
-								</tr>
-								<tr>
-									<td>Entorno organizacional</td>
-									<td>icono</td>
-									<td>
-										<input type="text" name="traumatic_event" placeholder="Escribir recomendación">
-									</td>
-								</tr>
-								
-							</tbody>
-						</table><br>
-					</div>
-				</div>
 				<h4 class="card-title" id="12">12.- Responsables del informe</h4>
 				<form method="post" enctype="multipart/form-data" name="form_reporte_responsablesinforme" id="form_reporte_responsablesinforme">
 					<div class="row">

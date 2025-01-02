@@ -647,44 +647,25 @@ class reportenom0353Controller extends Controller
                     'responsable1' => $reporte->reportenom0353_responsable1,
                     'responsable1cargo' => $reporte->reportenom0353_responsable1cargo,
                     'responsable1documento' => $reporte->reportenom0353_responsable1documento,
-                    'responsable2' => $reporte->reporteruido_responsable2,
-                    'responsable2cargo' => $reporte->reporteruido_responsable2cargo,
-                    'responsable2documento' => $reporte->reporteruido_responsable2documento,
+                    'responsable2' => $reporte->reportenom0353_responsable2,
+                    'responsable2cargo' => $reporte->reportenom0353_responsable2cargo,
+                    'responsable2documento' => $reporte->reportenom0353_responsable2doc,
                     'proyecto_id' => $reporte->proyecto_id,
                     'registro_id' => $reporte->id
                 );
             } else {
                 $dato['reporte_responsablesinforme_guardado'] = 0;
-
-            
-                $reportehistorial = reportenom0353Model::where('reportenom0353_responsable1', '!=', '')
-                    ->orderBy('updated_at', 'DESC')
-                    ->limit(1)
-                    ->get();
-
-                if (count($reportehistorial) > 0 && $reportehistorial[0]->reportenom0353_responsable1 != NULL) {
                     $dato['reporte_responsablesinforme'] = array(
-                        'responsable1' => $reportehistorial[0]->reportenom0353_responsable1,
-                        'responsable1cargo' => $reportehistorial[0]->reportenom0353_responsable1cargo,
-                        'responsable1documento' => $reportehistorial[0]->reportenom0353_responsable1documento,
-                        'responsable2' => $reportehistorial[0]->reporteruido_responsable2,
-                        'responsable2cargo' => $reportehistorial[0]->reporteruido_responsable2cargo,
-                        'responsable2documento' => $reportehistorial[0]->reporteruido_responsable2documento,
-                        'proyecto_id' => $reportehistorial[0]->proyecto_id,
-                        'registro_id' => $reportehistorial[0]->id
+                        'responsable1' => $recsensorial->NOMBRE_TECNICO,
+                        'responsable1cargo' => $recsensorial->CARGO_TECNICO,
+                        'responsable1documento' => $recsensorial->TECNICO_DOC,
+                        'responsable2' => $recsensorial->NOMBRE_CONTRATO,
+                        'responsable2cargo' => $recsensorial->CARGO_CONTRATO,
+                        'responsable2documento' => $recsensorial->CONTRATO_DOC,
+                        'proyecto_id' => $reporte->proyecto_id,
+                        'registro_id' => $recsensorial->id
                     );
-                } else {
-                    $dato['reporte_responsablesinforme'] = array(
-                        'responsable1' => NULL,
-                        'responsable1cargo' => NULL,
-                        'responsable1documento' => NULL,
-                        'responsable2' => NULL,
-                        'responsable2cargo' => NULL,
-                        'responsable2documento' => NULL,
-                        'proyecto_id' => 0,
-                        'registro_id' => 0
-                    );
-                }
+              
             }
 
 
@@ -692,28 +673,33 @@ class reportenom0353Controller extends Controller
             //===================================================
 
 
-            $memoriafotografica = DB::select('SELECT
-                                                    -- proyectoevidenciafoto.id,
-                                                    proyectoevidenciafoto.proyecto_id,
-                                                    -- proyectoevidenciafoto.proveedor_id,
-                                                    -- proyectoevidenciafoto.agente_id,
-                                                    proyectoevidenciafoto.agente_nombre,
-                                                    -- proyectoevidenciafoto.proyectoevidenciafoto_carpeta,
-                                                    IFNULL(COUNT(proyectoevidenciafoto.proyectoevidenciafoto_descripcion), 0) AS total
-                                                    -- ,proyectoevidenciafoto.proyectoevidenciafoto_archivo,
-                                                    -- proyectoevidenciafoto.proyectoevidenciafoto_descripcion 
-                                                FROM
-                                                    proyectoevidenciafoto
-                                                WHERE
-                                                    proyectoevidenciafoto.proyecto_id = ' . $proyecto_id . '
-                                                    AND proyectoevidenciafoto.agente_nombre = "' . $agente_nombre . '"
-                                                GROUP BY
-                                                    proyectoevidenciafoto.proyecto_id,
-                                                    proyectoevidenciafoto.agente_nombre
-                                                LIMIT 1');
+
+            $recoid = $proyecto->reconocimiento_psico_id;
+
+            $memoriafotografica = DB::select("SELECT
+                        -- Conteo total de fotopreguia (si no son NULL)
+                        SUM(CASE WHEN recopsicoFotosTrabajadores.RECPSICO_FOTOPREGUIA IS NOT NULL THEN 1 ELSE 0 END) AS total_fotopreguia,
+                        -- Conteo total de fotopostguia (si no son NULL)
+                        SUM(CASE WHEN recopsicoFotosTrabajadores.RECPSICO_FOTOPOSTGUIA IS NOT NULL THEN 1 ELSE 0 END) AS total_fotopostguia,
+                                -- Conteo total de fotopresencial (si no son NULL)
+                        SUM(CASE WHEN recopsicoFotosTrabajadores.RECPSICO_FOTOPRESENCIAL IS NOT NULL THEN 1 ELSE 0 END) AS total_fotopresencial,
+                        -- Conteo total de fotos entre ambos campos
+                        SUM(
+                            CASE WHEN recopsicoFotosTrabajadores.RECPSICO_FOTOPREGUIA IS NOT NULL THEN 1 ELSE 0 END +
+                            CASE WHEN recopsicoFotosTrabajadores.RECPSICO_FOTOPOSTGUIA IS NOT NULL THEN 1 ELSE 0 END +
+                            CASE WHEN recopsicoFotosTrabajadores.RECPSICO_FOTOPRESENCIAL IS NOT NULL THEN 1 ELSE 0 END 
+                        ) AS total_fotos
+                    FROM
+                        recopsicoFotosTrabajadores
+                    WHERE
+                        recopsicoFotosTrabajadores.RECPSICO_ID = ?",
+            [$recoid]);
+                                   
+            //count($memoriafotografica);
+            
 
             if (count($memoriafotografica) > 0) {
-                $dato['reporte_memoriafotografica_guardado'] = $memoriafotografica[0]->total;
+                $dato['reporte_memoriafotografica_guardado'] = $memoriafotografica[0]->total_fotos;
             } else {
                 $dato['reporte_memoriafotografica_guardado'] = 0;
             }
@@ -1598,8 +1584,8 @@ class reportenom0353Controller extends Controller
                 $reporte->update([
                     'reportenom0353_responsable1' => $request->reporte_responsable1,
                     'reportenom0353_responsable1cargo' => $request->reporte_responsable1cargo,
-                    'reporteruido_responsable2' => $request->reporte_responsable2,
-                    'reporteruido_responsable2cargo' => $request->reporte_responsable2cargo
+                    'reportenom0353_responsable2' => $request->reporte_responsable2,
+                    'reportenom0353_responsable2cargo' => $request->reporte_responsable2cargo
                 ]);
 
 
@@ -1611,7 +1597,7 @@ class reportenom0353Controller extends Controller
 
                     $reporte->update([
                         'reportenom0353_responsable1documento' => $nuevo_destino . 'responsable1_doc.jpg',
-                        'reporteruido_responsable2documento' => $nuevo_destino . 'responsable2_doc.jpg'
+                        'reportenom0353_responsable2documento' => $nuevo_destino . 'responsable2_doc.jpg'
                     ]);
                 }
 
@@ -1647,7 +1633,7 @@ class reportenom0353Controller extends Controller
                     // file_put_contents(public_path('/imagen.jpg'), $imagen_nueva); // Guardar en public
 
                     $reporte->update([
-                        'reporteruido_responsable2documento' => $destinoPath
+                        'reportenom0353_responsable2doc' => $destinoPath
                     ]);
                 }
 
@@ -2002,6 +1988,87 @@ class reportenom0353Controller extends Controller
             return Storage::response($reporte->reportenom0353_ubicacionfoto);
         } else {
             return Storage::download($reporte->reportenom0353_ubicacionfoto);
+        }
+    }
+
+    
+    /**
+     * Display the specified resource.
+     *
+     * @param int $reporteregistro_id
+     * @param int $responsabledoc_tipo
+     * @param int $responsabledoc_opcion
+     * @return \Illuminate\Http\Response
+     */
+    public function reportenom0353responsabledocumento($reporteregistro_id, $responsabledoc_tipo, $responsabledoc_opcion)
+    {
+        $reporte = reportenom0353Model::findOrFail($reporteregistro_id);
+
+        if ($responsabledoc_tipo == 1) {
+            if ($responsabledoc_opcion == 0) {
+                return Storage::response($reporte->reportenom0353_responsable1documento);
+            } else {
+                return Storage::download($reporte->reportenom0353_responsable1documento);
+            }
+        } else {
+            if ($responsabledoc_opcion == 0) {
+                return Storage::response($reporte->reportenom0353_responsable2doc);
+            } else {
+                return Storage::download($reporte->reportenom0353_responsable2doc);
+            }
+        }
+    }
+
+     /**
+     * Display the specified resource.
+     *
+     * @param int $proyecto_id
+     * @param int $categoria_dominio
+     * @param int $opcion
+     * @return \Illuminate\Http\Response
+     */
+    public function reportenom0353recomendacionicono($proyecto_id, $categoria_dominio, $opcion)
+    {
+        //$reporte = reportenom0353Model::findOrFail($proyecto_id);
+        $nivel = 0;
+
+        $ruta_muyalto = 'plantillas_reportes/recursosPsico/nivel_riesgo/muyalto.png';
+        $ruta_alto = 'plantillas_reportes/recursosPsico/nivel_riesgo/alto.png';
+        $ruta_medio = 'plantillas_reportes/recursosPsico/nivel_riesgo/medio.png';
+        $ruta_bajo = 'plantillas_reportes/recursosPsico/nivel_riesgo/bajo.png';
+        $ruta_nulo = 'plantillas_reportes/recursosPsico/nivel_riesgo/nulo.png';
+
+        //1 nulo, 2 bajo, 3 medio, 4 alto, 5 muy alto
+        if ($nivel == 1) {
+            if ($opcion == 0) {
+                return Storage::response($ruta_nulo);
+            } else {
+                return Storage::download($ruta_nulo);
+            }
+        }else if($nivel == 2){
+            if ($opcion == 0) {
+                return Storage::response($ruta_bajo);
+            } else {
+                return Storage::download($ruta_bajo);
+            }
+        }else if($nivel == 3){
+            if ($opcion == 0) {
+                return Storage::response($ruta_medio);
+            } else {
+                return Storage::download($ruta_medio);
+            }
+        }else if($nivel == 4){
+            if ($opcion == 0) {
+                return Storage::response($ruta_alto);
+            } else {
+                return Storage::download($ruta_alto);
+            }
+        }else if($nivel == 5){
+            if ($opcion == 0) {
+                return Storage::response($ruta_muyalto);
+            } else {
+                return Storage::download($ruta_muyalto);
+            }
         }
     }
 
