@@ -683,6 +683,8 @@ use Illuminate\Support\Str;
     <script src="/assets/plugins/amChart/amcharts/themes/patterns.js" type="text/javascript"></script>
     <script type="text/javascript" src="/js_sitio/index.js"></script>
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <script src="https://cdn.amcharts.com/lib/5/plugins/exporting.js"></script>
+
 
     {{-- datatable --}}
     <script src="/assets/plugins/datatables/jquery.dataTables.min.js"></script>
@@ -952,6 +954,8 @@ use Illuminate\Support\Str;
     <script src="https://cdn.amcharts.com/lib/5/percent.js"></script>
     <script src="https://cdn.amcharts.com/lib/5/themes/Animated.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/apexcharts"></script>
+    <script src="https://cdn.amcharts.com/lib/5/plugins/exporting.js"></script>
+
     @endif
 
 

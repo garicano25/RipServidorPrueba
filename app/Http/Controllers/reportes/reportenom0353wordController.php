@@ -919,7 +919,90 @@ class reportenom0353wordController extends Controller
                 }
 
 
-                
+                if ($request->ambienteChart) {
+                    $imagen_recibida = explode(',', $request->ambienteChart);
+                    $imagen_base64 = base64_decode($imagen_recibida[1]);
+                    $imagen_temporal_ruta = 'reportes/informes/ambientechart_' . $agente_nombre . '_' . $proyecto->proyecto_folio . '.png';
+                    Storage::put($imagen_temporal_ruta, $imagen_base64); // Guardar en storage
+    
+    
+                    if (Storage::exists($imagen_temporal_ruta)) {
+                        $plantillaword->setImageValue('GRAFICA_2', array('path' => storage_path('app/' . $imagen_temporal_ruta), 'width' => 1000, 'height' => 700, 'ratio' => true, 'borderColor' => '000000'));
+                        Storage::delete($imagen_temporal_ruta); // Eliminar imagen temporal
+                    } else {
+                        $plantillaword->setValue('GRAFICA_2', 'NO SE ENCONTRÓ IMAGEN QUE MOSTRAR.');
+                    }
+                } else {
+                    $plantillaword->setValue('GRAFICA_2', 'NO SE ENVIÓ IMAGEN QUE MOSTRAR.');
+                }
+
+                if ($request->factoresChart) {
+                    $imagen_recibida = explode(',', $request->factoresChart);
+                    $imagen_base64 = base64_decode($imagen_recibida[1]);
+                    $imagen_temporal_ruta = 'reportes/informes/factoresChart_' . $agente_nombre . '_' . $proyecto->proyecto_folio . '.png';
+                    Storage::put($imagen_temporal_ruta, $imagen_base64); // Guardar en storage
+    
+    
+                    if (Storage::exists($imagen_temporal_ruta)) {
+                        $plantillaword->setImageValue('GRAFICA_3', array('path' => storage_path('app/' . $imagen_temporal_ruta), 'width' => 1000, 'height' => 800, 'ratio' => true, 'borderColor' => '000000'));
+                        Storage::delete($imagen_temporal_ruta); // Eliminar imagen temporal
+                    } else {
+                        $plantillaword->setValue('GRAFICA_3', 'NO SE ENCONTRÓ IMAGEN QUE MOSTRAR.');
+                    }
+                } else {
+                    $plantillaword->setValue('GRAFICA_3', 'NO SE ENVIÓ IMAGEN QUE MOSTRAR.');
+                }
+
+                if ($request->organizacionChart) {
+                    $imagen_recibida = explode(',', $request->organizacionChart);
+                    $imagen_base64 = base64_decode($imagen_recibida[1]);
+                    $imagen_temporal_ruta = 'reportes/informes/organizacionChart_' . $agente_nombre . '_' . $proyecto->proyecto_folio . '.png';
+                    Storage::put($imagen_temporal_ruta, $imagen_base64); // Guardar en storage
+    
+    
+                    if (Storage::exists($imagen_temporal_ruta)) {
+                        $plantillaword->setImageValue('GRAFICA_4', array('path' => storage_path('app/' . $imagen_temporal_ruta), 'width' => 1000, 'height' => 900, 'ratio' => true, 'borderColor' => '000000'));
+                        Storage::delete($imagen_temporal_ruta); // Eliminar imagen temporal
+                    } else {
+                        $plantillaword->setValue('GRAFICA_4', 'NO SE ENCONTRÓ IMAGEN QUE MOSTRAR.');
+                    }
+                } else {
+                    $plantillaword->setValue('GRAFICA_4', 'NO SE ENVIÓ IMAGEN QUE MOSTRAR.');
+                }
+
+                if ($request->liderazgoChart) {
+                    $imagen_recibida = explode(',', $request->liderazgoChart);
+                    $imagen_base64 = base64_decode($imagen_recibida[1]);
+                    $imagen_temporal_ruta = 'reportes/informes/liderazgoChart_' . $agente_nombre . '_' . $proyecto->proyecto_folio . '.png';
+                    Storage::put($imagen_temporal_ruta, $imagen_base64); // Guardar en storage
+    
+    
+                    if (Storage::exists($imagen_temporal_ruta)) {
+                        $plantillaword->setImageValue('GRAFICA_5', array('path' => storage_path('app/' . $imagen_temporal_ruta), 'width' => 1000, 'height' => 600, 'ratio' => true, 'borderColor' => '000000'));
+                        Storage::delete($imagen_temporal_ruta); // Eliminar imagen temporal
+                    } else {
+                        $plantillaword->setValue('GRAFICA_5', 'NO SE ENCONTRÓ IMAGEN QUE MOSTRAR.');
+                    }
+                } else {
+                    $plantillaword->setValue('GRAFICA_5', 'NO SE ENVIÓ IMAGEN QUE MOSTRAR.');
+                }
+
+                if ($request->entornoChart) {
+                    $imagen_recibida = explode(',', $request->entornoChart);
+                    $imagen_base64 = base64_decode($imagen_recibida[1]);
+                    $imagen_temporal_ruta = 'reportes/informes/entornoChart_' . $proyecto->proyecto_folio . '.png';
+                    Storage::put($imagen_temporal_ruta, $imagen_base64); // Guardar en storage
+    
+    
+                    if (Storage::exists($imagen_temporal_ruta)) {
+                        $plantillaword->setImageValue('GRAFICA_6', array('path' => storage_path('app/' . $imagen_temporal_ruta), 'width' => 1000, 'height' => 750, 'ratio' => true, 'borderColor' => '000000'));
+                        Storage::delete($imagen_temporal_ruta); // Eliminar imagen temporal
+                    } else {
+                        $plantillaword->setValue('GRAFICA_6', 'NO SE ENCONTRÓ IMAGEN QUE MOSTRAR.');
+                    }
+                } else {
+                    $plantillaword->setValue('GRAFICA_6', 'NO SE ENVIÓ IMAGEN QUE MOSTRAR.');
+                }
     
     
                 // DASHBOARD

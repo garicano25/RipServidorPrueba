@@ -1,5 +1,8 @@
 // modulo EPP
 var opciones_catepp = "";
+var ambientechart = null;
+var chartPngs = {};
+
 //=================================================
 // MENU INDICE
 
@@ -6915,8 +6918,6 @@ function reporte_dashboard(proyecto_id, reporteregistro_id)
 			$("#dashboard_sonometria_total_fueranorma").html(dato.dashboard_sonometria_total_fueranorma);
 			$("#dashboard_recomendaciones_total").html(dato.dashboard_recomendaciones_total);
 
-			grafica_dashboard_resultados(dato.serie_grafico);
-
 			// // mensaje
 			// swal({
 			// 	title: "Correcto",
@@ -6942,80 +6943,6 @@ function reporte_dashboard(proyecto_id, reporteregistro_id)
 			return false;
 		}
 	});//Fin ajax
-}
-
-
-var graficapastel_resultados = null;
-function grafica_dashboard_resultados(serie_grafico)
-{
-	graficapastel_resultados = AmCharts.makeChart("grafica_resultados",
-	{
-		"type": "pie",
-		"startDuration": 1,
-		"theme": "light",
-		"addClassNames": true,
-		"autoMargins": false,
-		"marginTop": 0,
-		"marginBottom": 0,
-		"marginLeft": 0,
-		"marginRight": 0,
-		"radius": "40%",
-		"innerRadius": "10%", // Grosor Dona
-		"fontSize": 14,
-		"defs": {
-			"filter": [{
-				"id": "shadow",
-				"width": "200%",
-				"height": "200%",
-				"feOffset": {
-					"result": "offOut",
-					"in": "SourceAlpha",
-					"dx": 0,
-					"dy": 0
-				},
-				"feGaussianBlur": {
-					"result": "blurOut",
-					"in": "offOut",
-					"stdDeviation": 5
-				},
-				"feBlend": {
-					"in": "SourceGraphic",
-					"in2": "blurOut",
-					"mode": "normal"
-				}
-			}]
-		},
-		"legend":{
-			'enabled': false,
-			"position":"bottom",
-			"marginRight":0,
-			"marginLeft":0,
-			"autoMargins":false,
-			"valueText": "[[description]]" //"[[description]] [[value]]"
-		},
-		"export": {
-			"enabled": true,
-			'position': 'top-right'
-		},
-		"valueField": "total",
-		"titleField": "titulo",
-		// "labelText": "[[title]]<br>$[[value]]<br>([[percents]]%)",
-		"labelText": "[[value]]<br>([[percents]]%)",
-		"balloonText": "[[title]]<br><span style='font-size:14px'><b>[[value]]</b> ([[percents]]%)</span>",
-		"labelRadius": -30,
-		"colors": ["#00FF00","#FFFF00", "#FF0000"], //color de la series
-		"dataProvider": serie_grafico,
-		// "dataProvider": [
-		// 	{
-		// 		"titulo": "Dentro de norma",
-		// 		"total": 2				
-		// 	},
-		// 	{
-		// 		"titulo": "Fuera de norma",
-		// 		"total": 1
-		// 	}
-		// ],
-	});
 }
 
 
@@ -9505,8 +9432,6 @@ $("#boton_reporte_nuevarevision").click(function()
 {
 	if (ultimaversion_cancelada == 1)
 	{
-		if (parseInt(datatable_reporte_7_2.data().count()) > 0)
-		{
 			swal({
 				title: "¿Generar nueva revision?",
 				text: "Informe de NOM035",
@@ -9526,6 +9451,11 @@ $("#boton_reporte_nuevarevision").click(function()
 					$('#boton_reporte_nuevarevision').html('<span class="btn-label"><i class="fa fa-spin fa-spinner"></i></span>Copiando revisión, por favor espere...');
 					$('#boton_reporte_nuevarevision').attr('disabled', true);
 
+
+
+					
+
+
 					setTimeout(function()
 					{
 						// Enviar datos
@@ -9542,6 +9472,7 @@ $("#boton_reporte_nuevarevision").click(function()
 								areas_poe: areas_poe,
 								ultimarevision_id: ultimarevision_id,
 								crear_revision: 1,
+								
 							},
 							cache: false,
 							success:function(dato)
@@ -9630,21 +9561,6 @@ $("#boton_reporte_nuevarevision").click(function()
 					});
 				}
 			});
-		}
-		else
-		{
-			// mensaje
-			swal({
-				title: "No disponible",
-				text: "En este informe aún no se han capturado los resultados.",
-				type: "info", // warning, error, success, info
-				buttons: {
-					visible: false, // true , false
-				},
-				timer: 3000,
-				showConfirmButton: false
-			});
-		}
 	}
 	else
 	{
@@ -9667,134 +9583,221 @@ $("#boton_reporte_nuevarevision").click(function()
 // GENERAR WORD
 
 
-$('#tabla_reporte_revisiones tbody').on('click', 'td>button.botondescarga', function()
-{
-	var botondescarga = this;
+// $('#tabla_reporte_revisiones tbody').on('click', 'td>button.botondescarga', function()
+// {
+// 	var botondescarga = this;
 
 
-	var tr = $(this).closest('tr');
-	var row = datatable_reporterevisiones.row(tr);
+// 	var tr = $(this).closest('tr');
+// 	var row = datatable_reporterevisiones.row(tr);
 
 
-	// Boton descarga
-	$("#"+botondescarga.id).html('<i class="fa fa-spin fa-spinner fa-2x"></i>');
+// 	// Boton descarga
+// 	$("#"+botondescarga.id).html('<i class="fa fa-spin fa-spinner fa-2x"></i>');
 
 
-	setTimeout(function()
-	{
-		if (parseInt(row.data().id) == parseInt(ultimarevision_id))
-		{
+// 	setTimeout(function()
+// 	{
+// 		if (parseInt(row.data().id) == parseInt(ultimarevision_id))
+// 		{
 
-			setTimeout(function()
-			{
-				// Enviar datos
-				$.ajax({
-					type: "POST",
-					dataType: "json",
-					url: "/reportenom0353word",
-					data:{
-						_token: document.querySelector('meta[name="csrf-token"]')['content'],
-						proyecto_id: proyecto.id,
-						agente_id: agente_id,
-						agente_nombre: agente_nombre,
-						reporteregistro_id: reporteregistro_id,
-						areas_poe: areas_poe,
-						ultimarevision_id: ultimarevision_id,
-						crear_revision: 0,
-					},
-					cache: false,
-					success:function(dato)
-					{
-						ventana = window.open('/reportenom0353worddescargar/'+proyecto.id+"/"+row.data().id+"/"+ultimarevision_id);
-
-
-						// // Boton descarga
-						// $("#"+botondescarga.id).html('<i class="fa fa-download fa-2x"></i>');
+// 			setTimeout(function()
+// 			{
+// 				// Enviar datos
+// 				$.ajax({
+// 					type: "POST",
+// 					dataType: "json",
+// 					url: "/reportenom0353word",
+// 					data:{
+// 						_token: document.querySelector('meta[name="csrf-token"]')['content'],
+// 						proyecto_id: proyecto.id,
+// 						agente_id: agente_id,
+// 						agente_nombre: agente_nombre,
+// 						reporteregistro_id: reporteregistro_id,
+// 						areas_poe: areas_poe,
+// 						ultimarevision_id: ultimarevision_id,
+// 						crear_revision: 0,
+// 						ambientegrafico: grafica_imgbase64,
+// 					},
+// 					cache: false,
+// 					success:function(dato)
+// 					{
+// 						ventana = window.open('/reportenom0353worddescargar/'+proyecto.id+"/"+row.data().id+"/"+ultimarevision_id);
 
 
-						setTimeout(function()
-						{
-							tabla_reporte_revisiones(proyecto.id);
-						}, 6000);
+// 						// // Boton descarga
+// 						// $("#"+botondescarga.id).html('<i class="fa fa-download fa-2x"></i>');
 
 
-						setTimeout(function()
-						{
-							if (ventana.window)
-							{
-								ventana.window.close();
-							}
-						}, 15000);
+// 						setTimeout(function()
+// 						{
+// 							tabla_reporte_revisiones(proyecto.id);
+// 						}, 6000);
 
 
-						// // mensaje
-						// swal({
-						// 	title: "Correcto",
-						// 	text: ""+dato.msj,
-						// 	type: "success", // warning, error, success, info
-						// 	buttons: {
-						// 		visible: false, // true , false
-						// 	},
-						// 	timer: 1500,
-						// 	showConfirmButton: false
-						// });
-					},
-					error: function(dato)
-					{
-						// mensaje
-						swal({
-							title: "Error",
-							text: "Al intentar crear el informe, intentelo de nuevo.",
-							type: "error", // warning, error, success, info
-							buttons: {
-								visible: false, // true , false
-							},
-							timer: 1500,
-							showConfirmButton: false
-						});
-						return false;
-					}
-				});//Fin ajax
-			}, 1000);
-		}
-		else
-		{
-			ventana = window.open('/reportenom0353worddescargar/'+proyecto.id+"/"+row.data().id+"/"+ultimarevision_id);
+// 						setTimeout(function()
+// 						{
+// 							if (ventana.window)
+// 							{
+// 								ventana.window.close();
+// 							}
+// 						}, 15000);
 
 
-			// // Boton descarga
-			// $("#"+botondescarga.id).html('<i class="fa fa-download fa-2x"></i>');
+// 						// // mensaje
+// 						// swal({
+// 						// 	title: "Correcto",
+// 						// 	text: ""+dato.msj,
+// 						// 	type: "success", // warning, error, success, info
+// 						// 	buttons: {
+// 						// 		visible: false, // true , false
+// 						// 	},
+// 						// 	timer: 1500,
+// 						// 	showConfirmButton: false
+// 						// });
+// 					},
+// 					error: function(dato)
+// 					{
+// 						// mensaje
+// 						swal({
+// 							title: "Error",
+// 							text: "Al intentar crear el informe, intentelo de nuevo.",
+// 							type: "error", // warning, error, success, info
+// 							buttons: {
+// 								visible: false, // true , false
+// 							},
+// 							timer: 1500,
+// 							showConfirmButton: false
+// 						});
+// 						return false;
+// 					}
+// 				});//Fin ajax
+// 			}, 1000);
+// 		}
+// 		else
+// 		{
+// 			ventana = window.open('/reportenom0353worddescargar/'+proyecto.id+"/"+row.data().id+"/"+ultimarevision_id);
 
 
-			setTimeout(function()
-			{
-				tabla_reporte_revisiones(proyecto.id);
-			}, 6000);
+// 			// // Boton descarga
+// 			// $("#"+botondescarga.id).html('<i class="fa fa-download fa-2x"></i>');
 
 
-			setTimeout(function()
-			{
-				if (ventana.window)
-				{
-					ventana.window.close();
-				}
-			}, 15000);
+// 			setTimeout(function()
+// 			{
+// 				tabla_reporte_revisiones(proyecto.id);
+// 			}, 6000);
 
 
-			// // mensaje
-			// swal({
-			// 	title: "Correcto",
-			// 	text: ""+dato.msj,
-			// 	type: "success", // warning, error, success, info
-			// 	buttons: {
-			// 		visible: false, // true , false
-			// 	},
-			// 	timer: 1500,
-			// 	showConfirmButton: false
-			// });
-		}
-	}, 500);
+// 			setTimeout(function()
+// 			{
+// 				if (ventana.window)
+// 				{
+// 					ventana.window.close();
+// 				}
+// 			}, 15000);
+
+
+// 			// // mensaje
+// 			// swal({
+// 			// 	title: "Correcto",
+// 			// 	text: ""+dato.msj,
+// 			// 	type: "success", // warning, error, success, info
+// 			// 	buttons: {
+// 			// 		visible: false, // true , false
+// 			// 	},
+// 			// 	timer: 1500,
+// 			// 	showConfirmButton: false
+// 			// });
+// 		}
+// 	}, 500);
+// });
+
+$('#tabla_reporte_revisiones tbody').on('click', 'td>button.botondescarga', function() {
+    var botondescarga = this;
+
+    var tr = $(this).closest('tr');
+    var row = datatable_reporterevisiones.row(tr);
+
+    // Cambiar el estado del botón a cargando
+    $("#" + botondescarga.id).html('<i class="fa fa-spin fa-spinner fa-2x"></i>');
+
+    setTimeout(function() {
+        if (parseInt(row.data().id) === parseInt(ultimarevision_id)) {
+            // Crear el objeto de exportación
+			var ambienteChartImage = chartPngs['ambienteChart'] || ''; 
+            var factoresChartImage = chartPngs['factoresChart'] || '';
+            var organizacionChartImage = chartPngs['organizacionChart'] || '';
+            var liderazgoChartImage = chartPngs['liderazgoChart'] || '';
+            var entornoChartImage = chartPngs['entornoChart'] || '';
+
+			console.log(ambienteChartImage,factoresChartImage, organizacionChartImage, liderazgoChartImage, entornoChartImage);
+                // Enviar datos al servidor mediante AJAX
+                $.ajax({
+                    type: "POST",
+                    dataType: "json",
+                    url: "/reportenom0353word",
+                    data: {
+                        _token: document.querySelector('meta[name="csrf-token"]')['content'],
+                        proyecto_id: proyecto.id,
+                        agente_id: agente_id,
+                        agente_nombre: agente_nombre,
+                        reporteregistro_id: reporteregistro_id,
+                        areas_poe: areas_poe,
+                        ultimarevision_id: ultimarevision_id,
+                        crear_revision: 0,
+                        ambienteChart: ambienteChartImage,  // Imagen en base64
+						factoresChart: factoresChartImage, // Imagen en base64
+						organizacionChart: organizacionChartImage, // Imagen en base64
+						liderazgoChart: liderazgoChartImage, // Imagen en base64
+						entornoChart: entornoChartImage, // Imagen en base64
+                    },
+                    cache: false,
+                    success: function(dato) {
+                        // Abrir la ventana para descargar el archivo
+                        var ventana = window.open('/reportenom0353worddescargar/' + proyecto.id + "/" + row.data().id + "/" + ultimarevision_id);
+
+                        // Actualizar la tabla después de un tiempo
+                        setTimeout(function() {
+                            tabla_reporte_revisiones(proyecto.id);
+                        }, 6000);
+
+                        setTimeout(function() {
+                            if (ventana && ventana.window) {
+                                ventana.window.close();
+                            }
+                        }, 15000);
+                    },
+                    error: function(dato) {
+                        // Mostrar mensaje de error
+                        swal({
+                            title: "Error",
+                            text: "Al intentar crear el informe, inténtelo de nuevo.",
+                            type: "error",
+                            buttons: { visible: false },
+                            timer: 1500,
+                            showConfirmButton: false
+                        });
+                    }
+                });
+        } else {
+            // En caso de que no sea la última revisión
+            var ventana = window.open('/reportenom0353worddescargar/' + proyecto.id + "/" + row.data().id + "/" + ultimarevision_id);
+
+            // Actualizar tabla después de un tiempo
+            setTimeout(function() {
+                tabla_reporte_revisiones(proyecto.id);
+            }, 6000);
+
+            setTimeout(function() {
+                if (ventana && ventana.window) {
+                    ventana.window.close();
+                }
+            }, 15000);
+        }
+    }, 500);
 });
+
 
 function obtenerdatos() {
 	
@@ -10096,58 +10099,53 @@ function validarPermisosAsignados(proyecto_id) {
 
 
 am5.ready(function () {
-    function createChart(containerId, titleText, subtitleText, data, categories) {
-        // Crear root
-        var root = am5.Root.new(containerId);
-        root.setThemes([am5themes_Animated.new(root)]);
-
-        // Crear el gráfico
-        var chart = root.container.children.push(am5xy.XYChart.new(root, {
-            panX: false,
-            panY: false,
-            wheelX: "panX",
-            wheelY: "zoomX",
-            layout: root.verticalLayout
-        }));
-
-		var titleY = 30;
-		var subtitleY = titleY + 40;
-        // Títulos
-
+	function createChart(containerId, titleText, subtitleText, data, chartName) {
+		// Crear root
+		var root = am5.Root.new(containerId);
+		root.setThemes([am5themes_Animated.new(root)]);
+	
+		// Crear el gráfico
+		var chart = root.container.children.push(am5xy.XYChart.new(root, {
+			panX: false,
+			panY: false,
+			wheelX: "panX",
+			wheelY: "zoomX",
+			layout: root.verticalLayout
+		}));
+	
+		// Títulos
 		chart.children.unshift(
-            am5.Label.new(root, {
-                text: subtitleText,
-                fontSize: 10,
-                textAlign: "center",
-                x: am5.p50,
-                centerX: am5.p50,
-                marginTop: 10,
-            })
-        );
-        chart.children.unshift(
-            am5.Label.new(root, {
-                text: titleText,
-                fontSize: 14,
-                fontWeight: "bold",
-                textAlign: "center",
-                x: am5.p50,
-                centerX: am5.p50,
-            })
-        );
-
-        
-
-        // Leyenda
-        var legend = chart.children.push(
-            am5.Legend.new(root, {
-                centerX: am5.p50,
-                x: am5.p50
-            })
-        );
-		legend.labels.template.set("fontSize", 8);
-
-        // Ejes
-        var yAxis = chart.yAxes.push(am5xy.CategoryAxis.new(root, {
+			am5.Label.new(root, {
+				text: subtitleText,
+				fontSize: 20,
+				textAlign: "center",
+				x: am5.p50,
+				centerX: am5.p50,
+				marginTop: 10,
+			})
+		);
+		chart.children.unshift(
+			am5.Label.new(root, {
+				text: titleText,
+				fontSize: 25,
+				fontWeight: "bold",
+				textAlign: "center",
+				x: am5.p50,
+				centerX: am5.p50,
+			})
+		);
+	
+		// Leyenda
+		var legend = chart.children.push(
+			am5.Legend.new(root, {
+				centerX: am5.p50,
+				x: am5.p50
+			})
+		);
+		legend.labels.template.set("fontSize", 20);
+	
+		// Ejes
+		var yAxis = chart.yAxes.push(am5xy.CategoryAxis.new(root, {
 			categoryField: "category",
 			renderer: am5xy.AxisRendererY.new(root, {
 				inversed: true,
@@ -10157,91 +10155,137 @@ am5.ready(function () {
 			}),
 			tooltip: am5.Tooltip.new(root, {})
 		}));
-		
-		// Ocultar las líneas de la cuadrícula horizontal (líneas de la cuadrícula del eje Y)
+	
 		yAxis.get("renderer").grid.template.set("forceHidden", true);
-
-
-        yAxis.data.setAll(data);
-
-        var xAxis = chart.xAxes.push(am5xy.ValueAxis.new(root, {
-            renderer: am5xy.AxisRendererX.new(root, {}),
-            min: 0,
-            max: 10
-        }));
-
+	
+		yAxis.data.setAll(data);
+	
+		var xAxis = chart.xAxes.push(am5xy.ValueAxis.new(root, {
+			renderer: am5xy.AxisRendererX.new(root, {}),
+			min: 0
+		}));
+	
 		xAxis.get("renderer").grid.template.set("forceHidden", true);
-
-        // Formatear etiquetas de categorías
-        yAxis.get("renderer").labels.template.adapters.add("text", function (text, target) {
-            if (target.dataItem) {
-                let category = target.dataItem.get("category");
-                if (category.startsWith("g1")) {
-                    return "[bold]" + category.split("-")[1] + "[/]";
-                }
-                return category.split("-")[1];
-            }
-            return text;
-        });
-
-        // Series
-        function makeSeries(name, fieldName, color) {
-            var series = chart.series.push(am5xy.ColumnSeries.new(root, {
-                name: name,
-                xAxis: xAxis,
-                yAxis: yAxis,
-                stacked: true,
-                valueXField: fieldName,
-                categoryYField: "category",
-                stroke: color,
-                fill: color
-            }));
-
-            series.columns.template.setAll({
-                tooltipText: "{name}, {categoryY}:{valueX}",
-                width: am5.percent(90),
-                tooltipY: 0
-            });
-
+	
+		// Formatear etiquetas de categorías
+		yAxis.get("renderer").labels.template.adapters.add("text", function (text, target) {
+			if (target.dataItem) {
+				let category = target.dataItem.get("category");
+				if (category.startsWith("g1")) {
+					return "[bold]" + category.split("-")[1] + "[/]";
+				}
+				return category.split("-")[1];
+			}
+			return text;
+		});
+	
+		// Calcular porcentajes y agregar al dataset
+		function calculatePercentages(data) {
+			return data.map(item => {
+				const total = (item.s1 || 0) + (item.s2 || 0) + (item.s3 || 0) + (item.s4 || 0) + (item.s5 || 0);
+				if (total > 0) {
+					return {
+						...item,
+						percentage_s1: ((item.s1 || 0) / total * 100).toFixed(1),
+						percentage_s2: ((item.s2 || 0) / total * 100).toFixed(1),
+						percentage_s3: ((item.s3 || 0) / total * 100).toFixed(1),
+						percentage_s4: ((item.s4 || 0) / total * 100).toFixed(1),
+						percentage_s5: ((item.s5 || 0) / total * 100).toFixed(1),
+					};
+				}
+				return { ...item, percentage_s1: 0, percentage_s2: 0, percentage_s3: 0, percentage_s4: 0, percentage_s5: 0 };
+			});
+		}
+	
+		const processedData = calculatePercentages(data);
+	
+		// Series
+		function makeSeries(name, fieldName, percentageFieldName, color) {
+			var series = chart.series.push(am5xy.ColumnSeries.new(root, {
+				name: name,
+				xAxis: xAxis,
+				yAxis: yAxis,
+				stacked: true,
+				valueXField: fieldName,
+				categoryYField: "category",
+				stroke: color,
+				fill: color
+			}));
+	
+			series.columns.template.setAll({
+				tooltipText: "{name}, {categoryY}: {valueX} ({percentage}%)",
+				width: am5.percent(90),
+				tooltipY: 0
+			});
+	
 			series.bullets.push(function () {
 				return am5.Bullet.new(root, {
 					locationX: 0.5,
 					locationY: 0.5,
 					sprite: am5.Label.new(root, {
-						text: "{valueX}",
+						text: "{valueX} ({percentage}%)",
 						centerX: am5.p50,
 						centerY: am5.p50,
 						populateText: true,
-						fontSize: "12px",
-						fill:  am5.color(0x000000),
-						fontWeight: "bold" 
+						fontSize: "18px",
+						fill: am5.color(0x000000),
+						fontWeight: "bold"
 					})
 				});
 			});
+	
+			series.data.setAll(
+				processedData.map(item => ({
+					...item,
+					percentage: item[percentageFieldName],
+				}))
+			);
+			series.appear();
+			legend.data.push(series);
+		}
+	
+		// Crear series
+		makeSeries("Muy alto", "s1", "percentage_s1", am5.color(0xFF0000));
+		makeSeries("Alto", "s2", "percentage_s2", am5.color(0xF7AA32));
+		makeSeries("Medio", "s3", "percentage_s3", am5.color(0xFFFF00));
+		makeSeries("Bajo", "s4", "percentage_s4", am5.color(0x00B050));
+		makeSeries("Nulo", "s5", "percentage_s5", am5.color(0x00B0F0));
 
-            series.data.setAll(data);
-            series.appear();
-            legend.data.push(series);
-        }
+		
+		chart.appear(1000, 100).then(() => {
+			setTimeout(() => {
+				if (typeof am5plugins_exporting !== 'undefined') {
+					console.log('Plugin de exportación dispo');
 
-        // Crear series
-        makeSeries("Muy alto", "s1", am5.color(0xFF0000));
-        makeSeries("Alto", "s2", am5.color(0xF7AA32));
-        makeSeries("Medio", "s3", am5.color(0xFFFF00));
-        makeSeries("Bajo", "s4", am5.color(0x00B050));
-        makeSeries("Nulo", "s5", am5.color(0x00B0F0));
+					var exporting = am5plugins_exporting.Exporting.new(root, {
+						menu: am5plugins_exporting.ExportingMenu.new(root, {}),
+						dpi: 300, // Ajusta el DPI para mejorar la calidad de la imagen exportada
+						// También puedes ajustar el tamaño de la imagen, si lo deseas
+						maxWidth: 2000, // Ancho máximo en píxeles
+						maxHeight: 2000,
+					  });
+					console.log('si creo el exporting');
 
-        chart.appear(1000, 100);
-    }
+					exporting.export("png").then(function(data) {
+						chartPngs[chartName] = data;
+						console.log(chartName + " exportado exitosamente");
+					}).catch(error => console.error('Error al exportar:', error));
+				} else {
+					console.log('Plugin de exportación no disponible');
+				}
+			}, 1000); // Aumenté el timeout
+		});
+}
+	
+	
+	
 
     // Crear gráficos
-    createChart(
+ createChart(
         "ambienteChart",
         "Factores de riesgo psicosocial en el trabajo-Identificación, \nanálisis y prevención (Ambiente de trabajo)",
         "(Nivel de riesgo/NOM-035-STPS-2018)\n\n",
         [{
-            category: ""
-        }, {
             category: "g1-Categoria:\nAmbiente de trabajo",
             s1: 2, s2: 3, s3: 1, s4: 3, s5: 1
         }, {
@@ -10249,7 +10293,8 @@ am5.ready(function () {
         }, {
             category: "g2-Dominios:\nCondiciones del ambiente de trabajo",
             s1: 3, s2: 2, s3: 2, s4: 2, s5: 1
-        }]
+        }],
+        'ambienteChart'
     );
 
     createChart(
@@ -10257,8 +10302,6 @@ am5.ready(function () {
         "Factores de riesgo psicosocial en el trabajo-Identificación,\n análisis y prevención (Factores propios de la actividad)",
         "(Nivel de riesgo/NOM-035-STPS-2018)\n\n",
         [{
-            category: ""
-        }, {
             category: "g1-Categoria:\nFactores propios de la actividad",
             s1: 2, s2: 3, s3: 1, s4: 3, s5: 1
         }, {
@@ -10269,16 +10312,15 @@ am5.ready(function () {
         }, {
             category: "g2-Falta de control sobre el trabajo",
             s1: 3, s2: 2, s3: 2, s4: 2, s5: 1
-        }]
+        }],
+        'factoresChart'
     );
 
 	createChart(
         "organizacionChart",
         "Factores de riesgo psicosocial en el trabajo-Identificación, \nanálisis y prevención (Organización del tiempo de trabajo)",
         "(Nivel de riesgo/NOM-035-STPS-2018)\n\n",
-        [{
-            category: ""
-        }, {
+        [ {
             category: "g1-Categoria:\nOrganización del tiempo de trabajo",
             s1: 2, s2: 3, s3: 1, s4: 3, s5: 1
         }, {
@@ -10289,7 +10331,8 @@ am5.ready(function () {
         }, {
             category: "g2-Interferencia trabajo/familia",
             s1: 3, s2: 2, s3: 2, s4: 2, s5: 1
-        }]
+        }],
+        'organizacionChart'
     );
 
 	createChart(
@@ -10297,8 +10340,6 @@ am5.ready(function () {
         "Factores de riesgo psicosocial en el trabajo-Identificación, \nanálisis y prevención (Liderazgo y relaciones en el trabajo)",
         "(Nivel de riesgo/NOM-035-STPS-2018)\n\n",
         [{
-            category: ""
-        }, {
             category: "g1-Categoria:\nLiderazgo y relaciones en el trabajo",
             s1: 2, s2: 3, s3: 1, s4: 3, s5: 1
         }, {
@@ -10314,7 +10355,8 @@ am5.ready(function () {
 		{
             category: "g2-Violencia",
             s1: 3, s2: 2, s3: 2, s4: 2, s5: 1
-        }]
+        }],
+        'liderazgoChart'
     );
 
 	createChart(
@@ -10322,8 +10364,6 @@ am5.ready(function () {
         "Factores de riesgo psicosocial en el trabajo-Identificación, \nanálisis y prevención (Entorno organizacional)",
         "(Nivel de riesgo/NOM-035-STPS-2018)\n\n",
         [{
-            category: ""
-        }, {
             category: "g1-Categoria:\nEntorno organizacional",
             s1: 2, s2: 3, s3: 1, s4: 3, s5: 1
         }, {
@@ -10334,7 +10374,8 @@ am5.ready(function () {
         }, {
             category: "g2-Insuficiente sentido de pertenencia e inestabilidad",
             s1: 3, s2: 2, s3: 2, s4: 2, s5: 1
-        }]
+        }],
+        'entornoChart'
     );
     // dashboard
 
@@ -10693,7 +10734,7 @@ seriegrafica1.slices.template.setAll({
   
   // Cambiar colores de las secciones
   seriegrafica1.get("colors").set("colors", [
-	am5.color(0xFF5733), // Rojo
+	am5.color(0xff0000), // Rojo
 	am5.color(0x0098c7)  // Verde
   ]);
 // Establecer los datos para el gráfico de régimen (por ejemplo, plantas, sindicalizados, etc.)
