@@ -178,7 +178,7 @@
 				<a href="#5_3" class="list-group-item submenu">5.3.- Descripción de las actividades del personal expuesto <i class="fa fa-times" id="menureporte_5_3"></i></a>
 				<a href="#6" class="list-group-item">6.- Estrategias de medición</a>
 				<a href="#7" class="list-group-item">7.- Evaluación</a>
-				<a href="#7_1" class="list-group-item submenu">7.1.- Descripción del método realizado para la evaluación de los Factores de Riesgo Psicosocial <i class="fa fa-times" id="menureporte_7_1"></i></a>
+				<a href="#7" class="list-group-item submenu">7.1.- Descripción del método realizado para la evaluación de los Factores de Riesgo Psicosocial <i class="fa fa-times" id="menureporte_7"></i></a>
 				<a href="#7_2" class="list-group-item submenu">7.2.- Información general del puesto de trabajo <i class="fa fa-times" id="menureporte_7_2"></i></a>
 				<a href="#8" class="list-group-item">8.- Valores de referencia</a>
 				<a href="#9" class="list-group-item">9.- Resultados</a>
