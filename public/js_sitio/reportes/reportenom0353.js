@@ -5074,7 +5074,7 @@ $("#botonguardar_reporte_responsablesinforme").click(function()
 						// Actualizar ID reporte
 						reporteregistro_id = dato.reporteregistro_id;
 
-						menureporte_estado("menureporte_10", 1);
+						menureporte_estado("menureporte_12", 1);
 
 						// tabla_reporte_revisiones(proyecto.id);
 
