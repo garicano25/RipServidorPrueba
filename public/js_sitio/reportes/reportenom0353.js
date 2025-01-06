@@ -356,7 +356,7 @@ function datosgenerales()
 			menureporte_estado("menureporte_5_1", dato.reporte_ubicacioninstalacion_guardado);
 			menureporte_estado("menureporte_5_2", dato.reporte_procesoinstalacion_guardado);
 			menureporte_estado("menureporte_5_3", 1); //descripcion de actividades del personal expuesto
-			//menureporte_estado("menureporte_7_1", dato.reporte_metodoevaluacion_guardado);
+			menureporte_estado("menureporte_7_1", dato.reporte_metodoevaluacion_guardado);
 			menureporte_estado("menureporte_7_2", 1); //dashboard
 			menureporte_estado("menureporte_9_1", 1); //grafica guia 1
 			menureporte_estado("menureporte_9_2_1", 1); // grafica 1 guia 3
