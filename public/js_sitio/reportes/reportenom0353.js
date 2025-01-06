@@ -6817,7 +6817,7 @@ $("#botonguardar_reporte_conclusion").click(function()
 						// Actualizar ID reporte						
 						reporteregistro_id = dato.reporteregistro_id;
 
-						menureporte_estado("menureporte_8", 1);
+						menureporte_estado("menureporte_10_1", 1);
 
 						// tabla_reporte_revisiones(proyecto.id);
 
@@ -7229,7 +7229,7 @@ $("#botonguardar_reporte_recomendaciones").click(function()
 							// Actualizar ID reporte
 							reporteregistro_id = dato.reporteregistro_id;
 
-							menureporte_estado("menureporte_9", 1);
+							menureporte_estado("menureporte_11_1", 1);
 
 							// tabla_reporte_revisiones(proyecto.id);
 
