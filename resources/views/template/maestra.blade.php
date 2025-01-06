@@ -954,8 +954,8 @@ use Illuminate\Support\Str;
     <script src="https://cdn.amcharts.com/lib/5/percent.js"></script>
     <script src="https://cdn.amcharts.com/lib/5/themes/Animated.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/apexcharts"></script>
-    <script src="https://cdn.amcharts.com/lib/5/plugins/exporting.js"></script>
-
+    <script src="https://cdn.amcharts.com/lib/5/plugins/exporting.js"></script>\
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
     @endif
 
 

@@ -459,10 +459,36 @@ class reportenom0353wordController extends Controller
     
     
     
+                // DEFINICIONES
+                //================================================================================
+    
+    
                 $definiciones_simbolo = ["¹", "²", "³", "⁴", "⁵", "⁶", "⁷", "⁸", "⁹", "*", "●", "♦", "~", "°", "¨", "#"];
-                $definiciones_fuentes = [];
-                $fuentes_unicas = []; // Mapa para almacenar fuentes únicas
-                
+                $definiciones_fuentes ;
+                $fuentes_unicas = [];
+    
+                $where_definiciones = '';
+                if (($recsensorial->tipocliente + 0) == 1) // 1 = pemex, 0 = cliente
+                {
+                    $where_definiciones = 'AND psicocat.ACTIVO = 1';
+                }
+    
+    
+                $sql = collect(DB::select('
+                                                        SELECT
+                                                            psicocat_definiciones.ID_DEFINICION_INFORME,
+                                                            0 catactivo_id,
+                                                            psicocat_definiciones.CONCEPTO AS concepto,
+                                                            psicocat_definiciones.DESCRIPCION AS descripcion,
+                                                            psicocat_definiciones.FUENTE AS fuente
+                                                        FROM
+                                                            psicocat_definiciones
+                                                        WHERE
+                                                            psicocat_definiciones.ACTIVO = 1
+                                                        ORDER BY
+                                                            psicocat_definiciones.CONCEPTO ASC'));
+    
+                $definicionesfuentes = '';
                 if (count($sql) > 0) {
                     foreach ($sql as $key => $value) {
                         if (!array_key_exists($value->fuente, $fuentes_unicas)) {
@@ -491,7 +517,8 @@ class reportenom0353wordController extends Controller
                     $conceptoSanitizado = sanitizeText($value->concepto);
                     $descripcionSanitizada = sanitizeText($value->descripcion);
                     $simbolo = $fuentes_unicas[$value->fuente] ?? '';
-                
+
+                    // Agregar dos puntos y salto de línea después de cada definición, excepto la última
                     $definiciones .= '<w:p>
                                         <w:pPr>
                                             <w:jc w:val="both"/>
@@ -500,14 +527,19 @@ class reportenom0353wordController extends Controller
                                         <w:rPr>
                                             <w:b w:val="true"/>
                                         </w:rPr>
-                                        <w:t>' . $conceptoSanitizado . '</w:t>
+                                        <w:t>' . $conceptoSanitizado . ': </w:t>
                                         <w:rPr>
                                             <w:b w:val="false"/>
                                         </w:rPr>
-                                        <w:t>' . $descripcionSanitizada . ' ' . ($simbolo ? $simbolo . '*' : '') . '</w:t>
-                                      </w:p>';
+                                        <w:t>   ' . $descripcionSanitizada . ' ' . ($simbolo ? $simbolo . '*' : '') . '</w:t>
+                                    </w:p>';
+
+                    // Añadir dos puntos y salto de línea si no es la última definición
+                    if ($key < count($sql) - 1) {
+                        $definiciones .= '<w:br/>';
+                    }
                 }
-                
+
                 $plantillaword->setValue('DEFINICIONES', $definiciones);
                 
     
@@ -867,6 +899,23 @@ class reportenom0353wordController extends Controller
                     for ($i = 1; $i <= 16; $i++) {
                         $plantillaword->setValue("RECOMENDACION_$i", 'N/A');
                     }
+                }
+
+                if ($request->edadChart) {
+                    $imagen_recibida = explode(',', $request->edadChart);
+                    $imagen_base64 = base64_decode($imagen_recibida[1]);
+                    $imagen_temporal_ruta = 'reportes/informes/edadChart_' . $agente_nombre . '_' . $proyecto->proyecto_folio . '.png';
+                    Storage::put($imagen_temporal_ruta, $imagen_base64); // Guardar en storage
+    
+    
+                    if (Storage::exists($imagen_temporal_ruta)) {
+                        $plantillaword->setImageValue('GRAFICA_1_DASHBOARD', array('path' => storage_path('app/' . $imagen_temporal_ruta), 'width' => 200, 'height' => 70, 'ratio' => true, 'borderColor' => '000000'));
+                        Storage::delete($imagen_temporal_ruta); // Eliminar imagen temporal
+                    } else {
+                        $plantillaword->setValue('GRAFICA_1_DASHBOARD', 'NO SE ENCONTRÓ IMAGEN QUE MOSTRAR.');
+                    }
+                } else {
+                    $plantillaword->setValue('GRAFICA_1_DASHBOARD', 'NO SE ENVIÓ IMAGEN QUE MOSTRAR.');
                 }
 
 

@@ -2,6 +2,13 @@
 var opciones_catepp = "";
 var ambientechart = null;
 var chartPngs = {};
+var edadeschart = null;
+var escolaridadchart = null;
+var estadocivilchart = null;
+var regimenchart = null;
+var experienciachart = null;
+var generoschart = null;
+
 
 //=================================================
 // MENU INDICE
@@ -6803,6 +6810,7 @@ $("#boton_reporte_nuevarevision").click(function()
 // 	}, 500);
 // });
 
+
 $('#tabla_reporte_revisiones tbody').on('click', 'td>button.botondescarga', function() {
     var botondescarga = this;
 
@@ -6821,8 +6829,9 @@ $('#tabla_reporte_revisiones tbody').on('click', 'td>button.botondescarga', func
             var liderazgoChartImage = chartPngs['liderazgoChart'] || '';
             var entornoChartImage = chartPngs['entornoChart'] || '';
 
-			console.log(ambienteChartImage,factoresChartImage, organizacionChartImage, liderazgoChartImage, entornoChartImage);
-                // Enviar datos al servidor mediante AJAX
+
+          
+
                 $.ajax({
                     type: "POST",
                     dataType: "json",
@@ -6841,6 +6850,7 @@ $('#tabla_reporte_revisiones tbody').on('click', 'td>button.botondescarga', func
 						organizacionChart: organizacionChartImage, // Imagen en base64
 						liderazgoChart: liderazgoChartImage, // Imagen en base64
 						entornoChart: entornoChartImage, // Imagen en base64
+						edadChart: edadeschart['imgURI'], // Imagen en base64
                     },
                     cache: false,
                     success: function(dato) {
@@ -7473,325 +7483,7 @@ am5.ready(function () {
     );
     // dashboard
 
-	
-	const edadData = [
-		{ categoria: "Menos de 18 años", total: 10, color: "#98c11d" },
-		{ categoria: "18 a 24 años", total: 9, color: "#2c6e49" },
-		{ categoria: "25 a 34 años", total: 6, color: "#154b75" },
-		{ categoria: "35 a 44 años", total: 5, color: "#0098c7" },
-		{ categoria: "45 a 54 años", total: 4, color: "#171738" },
-		{ categoria: "55 a 64 años", total: 3, color: "#6F4F98" },
-		{ categoria: "65 años o más", total: 1, color: "#9A33B2" }
-	  ];
-  
-	  // Extraer categorías, valores y colores
-	  const categoriasEdad = edadData.map(item => item.categoria);
-	  const valoresEdad = edadData.map(item => item.total);
-	  const coloresEdad = edadData.map(item => item.color);
-  
-	  // Configuración del gráfico con Distributed Columns
-	  const optionsEdades = {
-		series: [{
-		  data: valoresEdad
-		}],
-		chart: {
-		  type: 'bar',
-		  height: 220,
-		  events: {
-			click: function(chart, w, e) {
-			  // Acción al hacer clic (si es necesario)
-			}
-		  }
-		},
-		colors: coloresEdad, // Colores personalizados para cada barra
-		plotOptions: {
-		  bar: {
-			columnWidth: '45%',
-			distributed: true,
-		  }
-		},
-		dataLabels: {
-		  enabled: true, // Mostrar valores en las barras
-		  style: {
-			fontSize: '10px',
-			fontWeight: 'bold',
-		  },
-		  formatter: function (val) {
-			return val; // Mostrar el valor absoluto en la barra
-		  }
-		},
-		legend: {
-		  show: false // Ocultar la leyenda
-		},
-		xaxis: {
-		  categories: categoriasEdad, // Categorías en el eje X
-		  labels: {
-			style: {
-			  colors: coloresEdad,
-			  fontSize: '10px',
-			}
-		  }
-		}
-	  };
-  
-	  // Crear y renderizar el gráfico de Rango de Edades
-	  const chartEdades = new ApexCharts(document.querySelector("#grafica_edad"), optionsEdades);
-	  chartEdades.render();
 
-const estadoCivilData = [
-	{ categoria: "Soltero(a)", total: 11, color: "#98c11d" },
-	{ categoria: "Casado(a)", total: 54, color: "#2c6e49" },
-	{ categoria: "Divorciado(a)", total: 10, color: "#154b75" },
-	{ categoria: "Viudo(a)", total: 2, color: "#0098c7" }
-  ];
-
-  // Extraer categorías, valores y colores
-  const categoriasEstadoCivil = estadoCivilData.map(item => item.categoria);
-  const valoresEstadoCivil = estadoCivilData.map(item => item.total);
-  const coloresEstadoCivil = estadoCivilData.map(item => item.color);
-
-  // Configuración del gráfico con Distributed Columns
-  const optionsEstadoCivil = {
-	series: [{
-	  data: valoresEstadoCivil
-	}],
-	chart: {
-	  type: 'bar',
-	  height: 220,
-	  events: {
-		click: function(chart, w, e) {
-		  // Acción al hacer clic (si es necesario)
-		}
-	  }
-	},
-	colors: coloresEstadoCivil, // Colores personalizados para cada barra
-	plotOptions: {
-	  bar: {
-		columnWidth: '45%',
-		distributed: true,
-	  }
-	},
-	dataLabels: {
-	  enabled: true, // Mostrar valores en las barras
-	  style: {
-		fontSize: '10px',
-		fontWeight: 'bold',
-	  },
-	  formatter: function (val) {
-		return val; // Mostrar el valor absoluto en la barra
-	  }
-	},
-	legend: {
-	  show: false // Ocultar la leyenda
-	},
-	xaxis: {
-	  categories: categoriasEstadoCivil, // Categorías en el eje X
-	  labels: {
-		style: {
-		  colors: coloresEstadoCivil,
-		  fontSize: '10px',
-		}
-	  }
-	}
-  };
-
-  // Crear y renderizar el gráfico de Estado Civil
-  const chartEstadoCivil = new ApexCharts(document.querySelector("#grafica_estadocivil"), optionsEstadoCivil);
-  chartEstadoCivil.render();
-
-const datosEscolaridad = [
-	{ categoria: "Primaria", valor: 2 },
-	{ categoria: "Secundaria", valor: 60 },
-	{ categoria: "Preparatoria", valor: 9 },
-	{ categoria: "Licenciatura", valor: 0 },
-	{ categoria: "Especialidad", valor: 0 },
-	{ categoria: "Maestría", valor: 0 },
-	{ categoria: "Doctorado", valor: 0 },
-	{ categoria: "Postdoctorado", valor: 0 },
-  ];
-
-  const datosFiltrados = datosEscolaridad.filter(item => item.valor > 0);
-
-// Extraer categorías y valores de los datos filtrados
-const categorias = datosFiltrados.map(item => item.categoria);
-const valores = datosFiltrados.map(item => item.valor);
-  // Extraer categorías y valores
-//   const categorias = datosEscolaridad.map(item => item.categoria);
-//   const valores = datosEscolaridad.map(item => item.valor);
-
-  // Configuración de la gráfica
-  const options = {
-	chart: {
-	  type: 'bar',
-	  height: 240,
-	  toolbar: {
-		show: false // Ocultar herramientas de zoom y exportación
-	  }
-	},
-	plotOptions: {
-	  bar: {
-		horizontal: true, // Barras horizontales
-		borderRadius: 4, // Bordes redondeados
-		barHeight: '70%', // Ajustar altura de las barras
-	  }
-	},
-	dataLabels: {
-	  enabled: true, // Mostrar etiquetas con valores
-	  style: {
-		fontSize: '12px',
-		fontWeight: 'bold',
-	  }
-	},
-	xaxis: {
-	  categories: categorias, // Categorías en el eje Y
-	  labels: {
-		style: {
-		  fontSize: '12px',
-		  fontWeight: 'bold',
-		}
-	  }
-	},
-	yaxis: {
-	  labels: {
-		style: {
-		  fontSize: '12px',
-		  fontWeight: 'bold',
-		}
-	  }
-	},
-	series: [
-	  {
-		name: "Escolaridad",
-		data: valores, // Valores de las categorías
-	  }
-	],
-	colors: [
-	  "#98c11d", 
-	],
-	tooltip: {
-	  theme: 'dark', // Tema oscuro para el tooltip
-	}
-  };
-
-  // Renderizar la gráfica
-  const chart = new ApexCharts(document.querySelector("#grafica_escolaridad"), options);
-  chart.render();
-
-// Crear un nuevo objeto root para el gráfico de régimen
-const regimenData = [
-	{ categoria: "Planta", valor: 53, color: "#98c11d" },
-	{ categoria: "Sindicalizado", valor: 12, color: "#2c6e49" },
-	{ categoria: "NA", valor: 6, color: "#154b75" },
-	{ categoria: "Otros", valor: 5, color: "#0098c7" }
-  ];
-
-  // Extraer valores y colores
-  const valoresRegimen = regimenData.map(item => item.valor);
-  const coloresRegimen = regimenData.map(item => item.color);
-  const categoriasRegimen = regimenData.map(item => item.categoria);
-
-  // Configuración del gráfico donut
-  const optionsRegimen = {
-	series: valoresRegimen, // Valores para cada sección
-	chart: {
-	  type: 'donut', // Tipo de gráfico donut
-	  height: 240,
-	},
-	colors: coloresRegimen, // Colores personalizados
-	labels: categoriasRegimen, // Etiquetas para cada sección
-	dataLabels: {
-	  enabled: true,
-	  style: {
-		fontSize: '10px',
-		fontWeight: 'bold',
-	  },
-	  formatter: function(val, opts) {
-		return opts.w.config.series[opts.seriesIndex]; // Muestra el valor original
-	  }
-	},
-	legend: {
-	  show: true, // Mostrar la leyenda
-	  position: 'right',
-	  fontSize: '10px',
-	  itemMargin: { // Reducir el espacio entre los elementos de la leyenda
-		horizontal: 2, // Espacio horizontal entre elementos
-		vertical: 4 // Espacio vertical entre elementos
-	  }
-	},
-	responsive: [{
-	  breakpoint: 480,
-	  options: {
-		chart: {
-		  width: 170 // Ajustar el tamaño en pantallas pequeñas
-		},
-		legend: {
-		  position: 'bottom' // Colocar la leyenda abajo en pantallas pequeñas
-		}
-	  }
-	}]
-  };
-
-  // Crear y renderizar el gráfico
-  var chartRegimen = new ApexCharts(document.querySelector("#grafica_regimen"), optionsRegimen);
-  chartRegimen.render();
-
-  const experienciaData = [
-	{ rango: "Menos de 6 meses", valor: 10, color: "#98c11d" },
-	{ rango: "6 meses a 1 año", valor: 20, color: "#2c6e49" },
-	{ rango: "1 a 4 años", valor: 12, color: "#154b75" },
-	{ rango: "5 a 9 años", valor: 8, color: "#0098c7" },
-	{ rango: "10 a 14 años", valor: 12, color: "#9A33B2" },
-	{ rango: "15 a 19 años", valor: 5, color: "#6F4F98" },
-	{ rango: "20 a 24 años", valor: 4, color: "#4C7F97" },
-	{ rango: "25 años o más", valor: 4, color: "#21D19F" }
-  ];
-  
-  // Extraer valores y colores
-  const valoresExperiencia = experienciaData.map(item => item.valor);
-  const coloresExperiencia = experienciaData.map(item => item.color);
-  const rangosExperiencia = experienciaData.map(item => item.rango);
-  
-  // Configuración del gráfico de tipo pie
-  const optionsExperiencia = {
-	series: valoresExperiencia, // Valores para cada sección
-	chart: {
-	  type: 'pie', // Tipo de gráfico pie
-	  height: 240, // Ancho del gráfico
-	},
-	labels: rangosExperiencia, // Etiquetas para cada sección
-	colors: coloresExperiencia, // Colores personalizados
-	dataLabels: {
-	  enabled: true,
-	  formatter: function(val, opts) {
-		return opts.w.config.series[opts.seriesIndex]; // Muestra el valor original
-	  }
-	},
-	legend: {
-	  show: true, // Mostrar la leyenda
-	  position: 'left',
-	  fontSize: '10px',
-	  itemMargin: { // Reducir el espacio entre los elementos de la leyenda
-		horizontal: 2, // Espacio horizontal entre elementos
-		vertical: 2 // Espacio vertical entre elementos
-	  }
-	},
-	responsive: [{
-	  breakpoint: 480,
-	  options: {
-		chart: {
-		  width: 120 // Ajustar el tamaño en pantallas pequeñas
-		},
-		legend: {
-		  position: 'bottom',
-		  fontSize: '10px' // Colocar la leyenda abajo en pantallas pequeñas
-		}
-	  }
-	}]
-  };
-  
-  // Crear y renderizar el gráfico
-  var chartExperiencia = new ApexCharts(document.querySelector("#grafica_experiencia"), optionsExperiencia);
-  chartExperiencia.render();
 
   // Crear un nuevo objeto root para el gráfico de régimen
 var rootGraficoGuia1 = am5.Root.new("guia1Chart"); // Cambié root a rootGraficoRegimen
@@ -7858,8 +7550,6 @@ leyendagrafico1.data.setAll(seriegrafica1.dataItems);
 
 // Animar la serie de manera inicial
 seriegrafica1.appear(1000, 100);
-
-
 
 });
 
@@ -8183,5 +7873,329 @@ seriesNamesConsolidado1.forEach((seriesName, index) => {
 
 // Agregar leyenda con los datos correctos
 legendConsolidado1.data.setAll(chartConsolidado1.series.values);
+
+
+
+	
+const edadData = [
+	{ categoria: "Menos de 18 años", total: 10, color: "#98c11d" },
+	{ categoria: "18 a 24 años", total: 9, color: "#2c6e49" },
+	{ categoria: "25 a 34 años", total: 6, color: "#154b75" },
+	{ categoria: "35 a 44 años", total: 5, color: "#0098c7" },
+	{ categoria: "45 a 54 años", total: 4, color: "#171738" },
+	{ categoria: "55 a 64 años", total: 3, color: "#6F4F98" },
+	{ categoria: "65 años o más", total: 1, color: "#9A33B2" }
+  ];
+
+  // Extraer categorías, valores y colores
+  const categoriasEdad = edadData.map(item => item.categoria);
+  const valoresEdad = edadData.map(item => item.total);
+  const coloresEdad = edadData.map(item => item.color);
+
+  // Configuración del gráfico con Distributed Columns
+  const optionsEdades = {
+	series: [{
+	  data: valoresEdad
+	}],
+	chart: {
+	  type: 'bar',
+	  height: 220
+	},
+	colors: coloresEdad, // Colores personalizados para cada barra
+	plotOptions: {
+	  bar: {
+		columnWidth: '45%',
+		distributed: true,
+	  }
+	},
+	dataLabels: {
+	  enabled: true, // Mostrar valores en las barras
+	  style: {
+		fontSize: '10px',
+		fontWeight: 'bold',
+	  },
+	  formatter: function (val) {
+		return val; // Mostrar el valor absoluto en la barra
+	  }
+	},
+	legend: {
+	  show: false // Ocultar la leyenda
+	},
+	xaxis: {
+	  categories: categoriasEdad, // Categorías en el eje X
+	  labels: {
+		style: {
+		  colors: coloresEdad,
+		  fontSize: '10px',
+		}
+	  }
+	}
+  };
+
+  // Crear y renderizar el gráfico de Rango de Edades
+  const chartEdades = new ApexCharts(document.querySelector("#grafica_edad"), optionsEdades);
+chartEdades.render().then(() => {
+	setTimeout(function() {
+	  chart.dataURI().then(uri => {
+		console.log(uri);
+		edadeschart = uri;
+	  });
+	}, 4000);
+  });
+
+const estadoCivilData = [
+{ categoria: "Soltero(a)", total: 11, color: "#98c11d" },
+{ categoria: "Casado(a)", total: 54, color: "#2c6e49" },
+{ categoria: "Divorciado(a)", total: 10, color: "#154b75" },
+{ categoria: "Viudo(a)", total: 2, color: "#0098c7" }
+];
+
+// Extraer categorías, valores y colores
+const categoriasEstadoCivil = estadoCivilData.map(item => item.categoria);
+const valoresEstadoCivil = estadoCivilData.map(item => item.total);
+const coloresEstadoCivil = estadoCivilData.map(item => item.color);
+
+// Configuración del gráfico con Distributed Columns
+const optionsEstadoCivil = {
+series: [{
+  data: valoresEstadoCivil
+}],
+chart: {
+  type: 'bar',
+  height: 220,
+  events: {
+	click: function(chart, w, e) {
+	  // Acción al hacer clic (si es necesario)
+	}
+  }
+},
+colors: coloresEstadoCivil, // Colores personalizados para cada barra
+plotOptions: {
+  bar: {
+	columnWidth: '45%',
+	distributed: true,
+  }
+},
+dataLabels: {
+  enabled: true, // Mostrar valores en las barras
+  style: {
+	fontSize: '10px',
+	fontWeight: 'bold',
+  },
+  formatter: function (val) {
+	return val; // Mostrar el valor absoluto en la barra
+  }
+},
+legend: {
+  show: false // Ocultar la leyenda
+},
+xaxis: {
+  categories: categoriasEstadoCivil, // Categorías en el eje X
+  labels: {
+	style: {
+	  colors: coloresEstadoCivil,
+	  fontSize: '10px',
+	}
+  }
+}
+};
+
+// Crear y renderizar el gráfico de Estado Civil
+const chartEstadoCivil = new ApexCharts(document.querySelector("#grafica_estadocivil"), optionsEstadoCivil);
+chartEstadoCivil.render();
+
+const datosEscolaridad = [
+{ categoria: "Primaria", valor: 2 },
+{ categoria: "Secundaria", valor: 60 },
+{ categoria: "Preparatoria", valor: 9 },
+{ categoria: "Licenciatura", valor: 0 },
+{ categoria: "Especialidad", valor: 0 },
+{ categoria: "Maestría", valor: 0 },
+{ categoria: "Doctorado", valor: 0 },
+{ categoria: "Postdoctorado", valor: 0 },
+];
+
+const datosFiltrados = datosEscolaridad.filter(item => item.valor > 0);
+
+// Extraer categorías y valores de los datos filtrados
+const categorias = datosFiltrados.map(item => item.categoria);
+const valores = datosFiltrados.map(item => item.valor);
+// Extraer categorías y valores
+//   const categorias = datosEscolaridad.map(item => item.categoria);
+//   const valores = datosEscolaridad.map(item => item.valor);
+
+// Configuración de la gráfica
+const options = {
+chart: {
+  type: 'bar',
+  height: 240,
+  toolbar: {
+	show: false // Ocultar herramientas de zoom y exportación
+  }
+},
+plotOptions: {
+  bar: {
+	horizontal: true, // Barras horizontales
+	borderRadius: 4, // Bordes redondeados
+	barHeight: '70%', // Ajustar altura de las barras
+  }
+},
+dataLabels: {
+  enabled: true, // Mostrar etiquetas con valores
+  style: {
+	fontSize: '12px',
+	fontWeight: 'bold',
+  }
+},
+xaxis: {
+  categories: categorias, // Categorías en el eje Y
+  labels: {
+	style: {
+	  fontSize: '12px',
+	  fontWeight: 'bold',
+	}
+  }
+},
+yaxis: {
+  labels: {
+	style: {
+	  fontSize: '12px',
+	  fontWeight: 'bold',
+	}
+  }
+},
+series: [
+  {
+	name: "Escolaridad",
+	data: valores, // Valores de las categorías
+  }
+],
+colors: [
+  "#98c11d", 
+],
+tooltip: {
+  theme: 'dark', // Tema oscuro para el tooltip
+}
+};
+
+// Renderizar la gráfica
+const chart = new ApexCharts(document.querySelector("#grafica_escolaridad"), options);
+chart.render();
+
+// Crear un nuevo objeto root para el gráfico de régimen
+const regimenData = [
+{ categoria: "Planta", valor: 53, color: "#98c11d" },
+{ categoria: "Sindicalizado", valor: 12, color: "#2c6e49" },
+{ categoria: "NA", valor: 6, color: "#154b75" },
+{ categoria: "Otros", valor: 5, color: "#0098c7" }
+];
+
+// Extraer valores y colores
+const valoresRegimen = regimenData.map(item => item.valor);
+const coloresRegimen = regimenData.map(item => item.color);
+const categoriasRegimen = regimenData.map(item => item.categoria);
+
+// Configuración del gráfico donut
+const optionsRegimen = {
+series: valoresRegimen, // Valores para cada sección
+chart: {
+  type: 'donut', // Tipo de gráfico donut
+  height: 240,
+},
+colors: coloresRegimen, // Colores personalizados
+labels: categoriasRegimen, // Etiquetas para cada sección
+dataLabels: {
+  enabled: true,
+  style: {
+	fontSize: '10px',
+	fontWeight: 'bold',
+  },
+  formatter: function(val, opts) {
+	return opts.w.config.series[opts.seriesIndex]; // Muestra el valor original
+  }
+},
+legend: {
+  show: true, // Mostrar la leyenda
+  position: 'right',
+  fontSize: '10px',
+  itemMargin: { // Reducir el espacio entre los elementos de la leyenda
+	horizontal: 2, // Espacio horizontal entre elementos
+	vertical: 4 // Espacio vertical entre elementos
+  }
+},
+responsive: [{
+  breakpoint: 480,
+  options: {
+	chart: {
+	  width: 170 // Ajustar el tamaño en pantallas pequeñas
+	},
+	legend: {
+	  position: 'bottom' // Colocar la leyenda abajo en pantallas pequeñas
+	}
+  }
+}]
+};
+
+// Crear y renderizar el gráfico
+var chartRegimen = new ApexCharts(document.querySelector("#grafica_regimen"), optionsRegimen);
+chartRegimen.render();
+
+const experienciaData = [
+{ rango: "Menos de 6 meses", valor: 10, color: "#98c11d" },
+{ rango: "6 meses a 1 año", valor: 20, color: "#2c6e49" },
+{ rango: "1 a 4 años", valor: 12, color: "#154b75" },
+{ rango: "5 a 9 años", valor: 8, color: "#0098c7" },
+{ rango: "10 a 14 años", valor: 12, color: "#9A33B2" },
+{ rango: "15 a 19 años", valor: 5, color: "#6F4F98" },
+{ rango: "20 a 24 años", valor: 4, color: "#4C7F97" },
+{ rango: "25 años o más", valor: 4, color: "#21D19F" }
+];
+
+// Extraer valores y colores
+const valoresExperiencia = experienciaData.map(item => item.valor);
+const coloresExperiencia = experienciaData.map(item => item.color);
+const rangosExperiencia = experienciaData.map(item => item.rango);
+
+// Configuración del gráfico de tipo pie
+const optionsExperiencia = {
+series: valoresExperiencia, // Valores para cada sección
+chart: {
+  type: 'pie', // Tipo de gráfico pie
+  height: 240, // Ancho del gráfico
+},
+labels: rangosExperiencia, // Etiquetas para cada sección
+colors: coloresExperiencia, // Colores personalizados
+dataLabels: {
+  enabled: true,
+  formatter: function(val, opts) {
+	return opts.w.config.series[opts.seriesIndex]; // Muestra el valor original
+  }
+},
+legend: {
+  show: true, // Mostrar la leyenda
+  position: 'left',
+  fontSize: '10px',
+  itemMargin: { // Reducir el espacio entre los elementos de la leyenda
+	horizontal: 2, // Espacio horizontal entre elementos
+	vertical: 2 // Espacio vertical entre elementos
+  }
+},
+responsive: [{
+  breakpoint: 480,
+  options: {
+	chart: {
+	  width: 120 // Ajustar el tamaño en pantallas pequeñas
+	},
+	legend: {
+	  position: 'bottom',
+	  fontSize: '10px' // Colocar la leyenda abajo en pantallas pequeñas
+	}
+  }
+}]
+};
+
+// Crear y renderizar el gráfico
+var chartExperiencia = new ApexCharts(document.querySelector("#grafica_experiencia"), optionsExperiencia);
+chartExperiencia.render();
 // Animar el gráfico al cargar
 chartConsolidado1.appear(1000, 100);
