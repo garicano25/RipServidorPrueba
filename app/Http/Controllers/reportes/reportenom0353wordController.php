@@ -459,106 +459,57 @@ class reportenom0353wordController extends Controller
     
     
     
-                // DEFINICIONES
-                //================================================================================
-    
-    
                 $definiciones_simbolo = ["¹", "²", "³", "⁴", "⁵", "⁶", "⁷", "⁸", "⁹", "*", "●", "♦", "~", "°", "¨", "#"];
-                $definiciones_fuentes ;
-    
-    
-                $where_definiciones = '';
-                if (($recsensorial->tipocliente + 0) == 1) // 1 = pemex, 0 = cliente
-                {
-                    $where_definiciones = 'AND psicocat.ACTIVO = 1';
-                }
-    
-    
-                $sql = collect(DB::select('
-                                                        SELECT
-                                                            psicocat_definiciones.ID_DEFINICION_INFORME,
-                                                            0 catactivo_id,
-                                                            psicocat_definiciones.CONCEPTO AS concepto,
-                                                            psicocat_definiciones.DESCRIPCION AS descripcion,
-                                                            psicocat_definiciones.FUENTE AS fuente
-                                                        FROM
-                                                            psicocat_definiciones
-                                                        WHERE
-                                                            psicocat_definiciones.ACTIVO = 1
-                                                        ORDER BY
-                                                            psicocat_definiciones.CONCEPTO ASC'));
-    
-                $definicionesfuentes = '';
-                if (count($sql) > 1) {
+                $definiciones_fuentes = [];
+                $fuentes_unicas = []; // Mapa para almacenar fuentes únicas
+                
+                if (count($sql) > 0) {
                     foreach ($sql as $key => $value) {
-                        $definiciones_fuentes[] = array(
-                            'fuente_descripcion' => $value->fuente,
-                            'fuente_simbolo' => ' ' . $definiciones_simbolo[$key] . '*'
-                        );
-    
-    
-                        if (($key + 0) < (count($sql) - 1)) {
-                            $definicionesfuentes .= 'Fuentes ' . $definiciones_simbolo[$key] . '*: ' . $value->fuente . '<w:br/>';
-                        } else {
-                            $definicionesfuentes .= 'Fuentes ' . $definiciones_simbolo[$key] . '*: ' . $value->fuente;
+                        if (!array_key_exists($value->fuente, $fuentes_unicas)) {
+                            $simbolo = $definiciones_simbolo[count($fuentes_unicas)] ?? ''; // Obtener el símbolo correspondiente
+                            $fuentes_unicas[$value->fuente] = $simbolo;
+                            $definiciones_fuentes[] = [
+                                'fuente_descripcion' => $value->fuente,
+                                'fuente_simbolo' => $simbolo ? ' ' . $simbolo . '*' : ''
+                            ];
                         }
                     }
+                
+                    // Generar la cadena de fuentes únicas
+                    $definicionesfuentes = implode('<w:br/>', array_map(function ($fuente, $simbolo) {
+                        return 'Fuentes ' . $simbolo . '*: ' . $fuente;
+                    }, array_keys($fuentes_unicas), $fuentes_unicas));
                 } else {
-                    $definiciones_fuentes[] = array(
-                        'fuente_descripcion' => $sql[0]->fuente,
-                        'fuente_simbolo' => ''
-                    );
-    
-                    $definicionesfuentes = 'Fuentes: ' . $sql[0]->fuente;
-                }
-    
-                $plantillaword->setValue('DEFINICIONES_FUENTES', $definicionesfuentes);
-    
-                $definiciones = '';
-                foreach ($sql as $key => $value) {
-                    foreach ($definiciones_fuentes as $key2 => $dato) {
-                        if ($value->fuente == $dato['fuente_descripcion']) {
-                            $conceptoSanitizado = sanitizeText($value->concepto); // Sanitize only concept text
-                            $descripcionSanitizada = sanitizeText($value->descripcion); // Sanitize only description text
-                            
-                            // Construir el contenido de Word sin escapar las etiquetas de formato
-                            if (($key + 0) < (count($sql) - 1)) {
-                                $definiciones .= '<w:p>
-                                                    <w:pPr>
-                                                        <w:jc w:val="both"/>
-                                                        <w:spacing w:before="0" w:after="0" w:line="240" w:lineRule="exactly" w:beforeAutospacing="0" w:afterAutospacing="0"/>
-                                                    </w:pPr>
-                                                    <w:rPr>
-                                                        <w:b w:val="true"/>
-                                                    </w:rPr>
-                                                    <w:t>' . $conceptoSanitizado . '</w:t>
-                                                    <w:rPr>
-                                                        <w:b w:val="false"/>
-                                                    </w:rPr>
-                                                    <w:t>' . $descripcionSanitizada . '' . $dato['fuente_simbolo'] . '</w:t>
-                                                </w:p><w:br/>';
-                            } else {
-                                $definiciones .= '<w:p>
-                                                    <w:pPr>
-                                                        <w:jc w:val="both"/>
-                                                        <w:spacing w:before="0" w:after="0" w:line="240" w:lineRule="exactly" w:beforeAutospacing="0" w:afterAutospacing="0"/>
-                                                    </w:pPr>
-                                                    <w:rPr>
-                                                        <w:b w:val="true"/>
-                                                    </w:rPr>
-                                                    <w:t>' . $conceptoSanitizado . '</w:t>
-                                                    <w:rPr>
-                                                        <w:b w:val="false"/>
-                                                    </w:rPr>
-                                                    <w:t>' . $descripcionSanitizada . '' . $dato['fuente_simbolo'] . '</w:t>
-                                                </w:p>';
-                            }
-                        }
-                    }
+                    $definicionesfuentes = 'Fuentes: Ninguna disponible';
                 }
                 
-                // Insertar el contenido procesado en la plantilla
+                $plantillaword->setValue('DEFINICIONES_FUENTES', $definicionesfuentes);
+                
+                // Procesar las definiciones
+                $definiciones = '';
+                foreach ($sql as $key => $value) {
+                    $conceptoSanitizado = sanitizeText($value->concepto);
+                    $descripcionSanitizada = sanitizeText($value->descripcion);
+                    $simbolo = $fuentes_unicas[$value->fuente] ?? '';
+                
+                    $definiciones .= '<w:p>
+                                        <w:pPr>
+                                            <w:jc w:val="both"/>
+                                            <w:spacing w:before="0" w:after="0" w:line="240" w:lineRule="exactly" w:beforeAutospacing="0" w:afterAutospacing="0"/>
+                                        </w:pPr>
+                                        <w:rPr>
+                                            <w:b w:val="true"/>
+                                        </w:rPr>
+                                        <w:t>' . $conceptoSanitizado . '</w:t>
+                                        <w:rPr>
+                                            <w:b w:val="false"/>
+                                        </w:rPr>
+                                        <w:t>' . $descripcionSanitizada . ' ' . ($simbolo ? $simbolo . '*' : '') . '</w:t>
+                                      </w:p>';
+                }
+                
                 $plantillaword->setValue('DEFINICIONES', $definiciones);
+                
     
     
                 // OBJETIVO GENERAL
