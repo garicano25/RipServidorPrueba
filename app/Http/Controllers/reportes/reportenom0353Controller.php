@@ -630,7 +630,7 @@ class reportenom0353Controller extends Controller
                                                             psicocat_conclusiones 
                                                         WHERE 
                                                             psicocat_conclusiones.NIVEL = 7');
-                    $reporte_acontecimientos = "El " . $porcentajeSinAcontecimientos . "% (" . $cantSinAcontecimientos . ") " .
+                    $dato['reporte_acontecimientos_conclusiones'] = "El " . $porcentajeSinAcontecimientos . "% (" . $cantSinAcontecimientos . ") " .
                                             $acontecimientotraumatico[0]->CONCLUSION;
                 }
 
