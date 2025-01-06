@@ -269,7 +269,7 @@ class reportenom0353wordController extends Controller
                 // PORTADA EXTERNA
                 $titulo_partida = clientepartidasModel::where('CONTRATO_ID', $recsensorial->contrato_id)
                     ->where('clientepartidas_tipo', 2) // Informe de resultados
-                    ->where('catprueba_id', 1) // ruido
+                    ->where('catprueba_id', 14) // psico
                     ->orderBy('updated_at', 'DESC')
                     ->get();
     
