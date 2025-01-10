@@ -182,14 +182,15 @@
 				<a href="#7_2" class="list-group-item submenu">7.2.- Información general del puesto de trabajo <i class="fa fa-times" id="menureporte_7_2"></i></a>
 				<a href="#8" class="list-group-item">8.- Valores de referencia</a>
 				<a href="#9" class="list-group-item">9.- Resultados</a>
-				<a href="#9_1" class="list-group-item submenu">9.1.- Resultados obtenidos en la Guía de Referencia I, Identificar a los trabajadores que fueron sujetos a acontecimientos traumáticos severos <i class="fa fa-times" id="menureporte_9_1"></i></a>
-				<a href="#9_2" class="list-group-item submenu">9.2.- Resultados obtenidos en la guía de referencia III, Identificación y análisis de los Factores de Riesgo Psicosocial y Evaluación del entorno organizacional en los centros de trabajo por categoría y dominio conforme a la NOM-035-STPS-2018</a>
-				<a href="#9_2_1" class="list-group-item submenu">9.2.1.- Resultados obtenidos, Categoría ambiente de trabajo <i class="fa fa-times" id="menureporte_9_2_1"></i></a>
-				<a href="#9_2_2" class="list-group-item submenu">9.2.2.- Resultados obtenidos, Categoría factores propios de la actividad <i class="fa fa-times" id="menureporte_9_2_2"></i></a>
-				<a href="#9_2_3" class="list-group-item submenu">9.2.3.- Resultados obtenidos, Categoría organización del tiempo de trabajo <i class="fa fa-times" id="menureporte_9_2_3"></i></a>
-				<a href="#9_2_4" class="list-group-item submenu">9.2.4..- Resultados obtenidos, Categoría liderazgo y relaciones en el trabajo <i class="fa fa-times" id="menureporte_9_2_4"></i></a>
-				<a href="#9_2_5" class="list-group-item submenu">9.2.5.- Resultados obtenidos, Categoría entorno organizacional <i class="fa fa-times" id="menureporte_9_2_5"></i></a>
-				<a href="#9_3" class="list-group-item submenu">9.3.- Resultados obtenidos, consolidado general<i class="fa fa-times" id="menureporte_9_3"></i></a>
+				<a href="#9_1" class="list-group-item submenu">9.1.- Registro de los resultados. Número de puntos evaluados </a>
+				<a href="#9_2" class="list-group-item submenu">9.2.- Resultados obtenidos, concentrado de calificaciones globales <i class="fa fa-times" id="menureporte_9_2"></i></a>
+				<a href="#9_3" class="list-group-item submenu">9.3.- Resultados obtenidos en la Guía de Referencia I, Identificar a los trabajadores que fueron sujetos a acontecimientos traumáticos severos <i class="fa fa-times" id="menureporte_9_3"></i></a>
+				<a href="#9_4" class="list-group-item submenu">9.4.- Resultados obtenidos en la guía de referencia III, Identificación y análisis de los Factores de Riesgo Psicosocial y Evaluación del entorno organizacional en los centros de trabajo por categoría y dominio conforme a la NOM-035-STPS-2018</a>
+				<a href="#9_4_1" class="list-group-item submenu">9.4.1.- Resultados obtenidos, Categoría ambiente de trabajo <i class="fa fa-times" id="menureporte_9_4_1"></i></a>
+				<a href="#9_4_2" class="list-group-item submenu">9.4.2.- Resultados obtenidos, Categoría factores propios de la actividad <i class="fa fa-times" id="menureporte_9_4_2"></i></a>
+				<a href="#9_4_3" class="list-group-item submenu">9.4.3.- Resultados obtenidos, Categoría organización del tiempo de trabajo <i class="fa fa-times" id="menureporte_9_4_3"></i></a>
+				<a href="#9_4_4" class="list-group-item submenu">9.4.4..- Resultados obtenidos, Categoría liderazgo y relaciones en el trabajo <i class="fa fa-times" id="menureporte_9_4_4"></i></a>
+				<a href="#9_4_5" class="list-group-item submenu">9.4.5.- Resultados obtenidos, Categoría entorno organizacional <i class="fa fa-times" id="menureporte_9_4_5"></i></a>
 				<a href="#10" class="list-group-item">10.- Conclusiones</a>
 				<a href="#10_1" class="list-group-item submenu">10.1.- Conclusiones de conformidad a la NOM-035-STPS-2018 <i class="fa fa-times" id="menureporte_10_1"></i></a>
 				<a href="#11" class="list-group-item">11.- Recomendaciones de control</a>
@@ -197,6 +198,8 @@
 				<a href="#12" class="list-group-item">12.- Responsables del informe <i class="fa fa-times" id="menureporte_12"></i></a>
 				<a href="#13" class="list-group-item">13.- Anexos</a>
 				<a href="#13_1" class="list-group-item submenu">13.1.- Anexo 1: Memoria fotográfica <i class="fa fa-times" id="menureporte_13_1"></i></a>
+				<a href="#13_2" class="list-group-item submenu">13.2.- Anexo 2: Cuestionarios <i class="fa fa-times" id="menureporte_13_2"></i></a>
+				<a href="#13_3" class="list-group-item submenu">13.3.- Anexo 3: Matriz de exposición laboral MEL <i class="fa fa-times" id="menureporte_13_3"></i></a>
 				<a href="#14" class="list-group-item submenu" id="menu_opcion_final">Generar informe <i class="fa fa-download text-success" id="menureporte_14"></i></a>
 			</div>
 		</div>
@@ -792,7 +795,10 @@
 				min-width: 350px; /* Ancho constante */
 				height: 270px; /* Altura mínima */
 			}
-			
+			.data-labels-contour {
+				-webkit-text-stroke: 1px #000; /* Contorno negro de 1px */
+				text-stroke: 1px #000; /* Para navegadores que no sean Webkit */
+			}
 			.cardgeneros {
 				display: flex;
 				flex-direction: row;
@@ -899,7 +905,7 @@
         
 <div class="carddas">
   <p class="card-titledas">Trabajadores evaluados por género</p>
-  <div class="cardgeneros">
+  <div class="cardgeneros" id="cardgeneros">
     <div class="graph-container">
       <div class="bar">
         <!-- SVG HOMBRE con cuerpo y cabeza combinados en un único path -->
@@ -915,7 +921,7 @@
           <path d="M159.535156 49.886719c0 27.550781-22.332031 49.886719-49.886718 49.886719-27.550782 0-49.882813-22.335938-49.882813-49.886719s22.332031-49.886719 49.882813-49.886719c27.554687 0 49.886718 22.335938 49.886718 49.886719zm0 0M160.632812 108.273438h-101.964843c-32.402344 0-58.667969 26.269531-58.667969 58.667968v125.644532c0 10.234374 7.960938 18.949218 18.1875 19.3125 10.738281.382812 19.566406-8.210938 19.566406-18.863282v-115.820312c0-5.671875 4.597656-10.273438 10.269532-10.273438 5.671874 0 10.269531 4.597656 10.269531 10.273438v315.457031c0 10.234375 7.960937 18.953125 18.1875 19.316406 10.742187.378907 19.566406-8.210937 19.566406-18.867187v-136.65625c0-7.511719 6.089844-13.601563 13.601563-13.601563 7.515624 0 13.605468 6.089844 13.605468 13.601563v136.65625c0 10.425781 8.449219 18.878906 18.875 18.878906 10.425782 0 18.875-8.453125 18.875-18.878906v-315.90625c0-5.675782 4.597656-10.273438 10.269532-10.273438 5.671874 0 10.273437 4.597656 10.273437 10.273438v115.820312c0 10.425782 8.449219 18.875 18.875 18.875s18.875-8.449218 18.875-18.875v-126.09375c.003906-32.402344-26.265625-58.667968-58.664063-58.667968zm0 0"
           fill="url(#gradient1)" stroke="black" stroke-width="1"/>
         </svg>
-        <div class="bar-label"><span class="circle-icon" style="background-color: #154b75;"></span>Hombres: 60</div>
+        <!-- <div class="bar-label"><span class="circle-icon" style="background-color: #154b75;"></span>Hombres: 60</div> -->
       </div>
       <div class="bar">
         <!-- SVG MUJER con cuerpo y cabeza combinados en un único path -->
@@ -930,7 +936,7 @@
           <!-- Fondo de la figura con gradiente aplicado -->
 		  <path d="m291.59375 288.230469-38.324219-137.585938-.027343.007813c-7.191407-24.226563-29.613282-41.902344-56.175782-41.902344h-101.839844c-26.5625 0-48.984374 17.675781-56.175781 41.902344l-.027343-.007813-38.324219 137.589844c-2.796875 10.03125 3.070312 20.425781 13.101562 23.222656 10.03125 2.792969 20.429688-3.074219 23.222657-13.105469l34.371093-123.386718c1.253907-4.5 5.355469-7.617188 10.027344-7.617188 6.800781 0 11.777344 6.417969 10.082031 13.007813l-36.769531 142.933593-5.886719 22.886719c-.8125 3.164063 1.574219 6.246094 4.84375 6.246094h41.160156v140.273437c0 10.222657 7.949219 18.929688 18.167969 19.296876 10.722657.382812 19.539063-8.203126 19.539063-18.84375v-140.726563h27.175781v140.722656c0 10.414063 8.441406 18.855469 18.851563 18.855469 10.414062 0 18.855468-8.441406 18.855468-18.855469v-140.722656h41.160156c3.265626 0 5.65625-3.085937 4.84375-6.25l-5.886718-22.886719-36.773438-142.933594c-1.691406-6.585937 3.28125-13.003906 10.085938-13.003906 4.671875 0 8.773437 3.113282 10.027344 7.617188l34.367187 123.382812c2.796875 10.03125 13.191406 15.898438 23.222656 13.101563 10.03125-2.792969 15.898438-13.191407 13.105469-23.21875zm-145.539062-285.742188c27.5625 0 49.90625 22.34375 49.90625 49.90625 0 27.566406-22.34375 49.910156-49.90625 49.910156-27.566406 0-49.910157-22.34375-49.910157-49.910156 0-27.5625 22.34375-49.90625 49.910157-49.90625zm0 0" fill="url(#gradient2)" stroke="gray" stroke-width="2"/>
 		  </svg>
-        <div class="bar-label"><span class="circle-icon" style="background-color: #98c11d;"></span>Mujeres: 11</div>
+        <!-- <div class="bar-label"><span class="circle-icon" style="background-color: #98c11d;"></span>Mujeres: 11</div> -->
       </div>
     </div>
   </div>
@@ -982,82 +988,49 @@
 					</div>
 				</div>
 				<h4 class="card-title" id="9">9.- Resultados</h4>
-				<h4 class="card-title" id="9_1">9.1.- Resultados obtenidos en la Guía de Referencia I, Identificar a los trabajadores que fueron sujetos a acontecimientos traumáticos severos.</h4>
+				<h4 class="card-title" id="9_1">9.1.- Registro de los resultados. Número de puntos evaluados.</h4>
 				<div class="row">
 					<div class="col-12">
-					<style>
-						#guia1Chart {
-						width: 100%;
-						height: 500px;
-						}
-						</style>
-					<div id="guia1Chart"></div>
 					</div>
 				</div>
-				<h4 class="card-title" id="9_2">9.2.- Resultados obtenidos en la guía de referencia III, Identificación y análisis de los Factores de Riesgo Psicosocial y Evaluación del entorno organizacional en los centros de trabajo por categoría y dominio conforme a la NOM-035-STPS-2018.</h4>
-				
-				<h4 class="card-title" id="9_2_1">9.2.1.- Resultados obtenidos, categoría ambiente de trabajo.</h4>
+				<h4 class="card-title" id="9_2">9.2.- Resultados obtenidos, concentrado de calificaciones globales.</h4>
 				<div class="row">
 				<div class="col-12">
 					<style>
-						#ambienteChart {
+						#calificacion4Chart {
 						width: 100%;
-						height: 500px;
+						height: 600px;
 						}
 						</style>
-					<div id="ambienteChart"></div>
-					</div>
+					<div id="calificacion4Chart"></div>
 				</div>
-				<h4 class="card-title" id="9_2_1">9.2.2.- Resultados obtenidos, categoría factores propios de la actividad.</h4>
-				<div class="row">
 				<div class="col-12">
 					<style>
-						#factoresChart {
+						#calificacionChart {
 						width: 100%;
-						height: 500px;
+						height: 600px;
 						}
 						</style>
-					<div id="factoresChart"></div>
-					</div>
+					<div id="calificacionChart"></div>
 				</div>
-				<h4 class="card-title" id="9_2_3">9.2.3.- Resultados obtenidos, categoría organización del tiempo de trabajo.</h4>
-				<div class="row">
-				<div class="col-12">
-					<style>
-						#organizacionChart {
-						width: 100%;
-						height: 500px;
-						}
-						</style>
-					<div id="organizacionChart"></div>
-					</div>
-				</div>
-				<h4 class="card-title" id="9_2_4">9.2.4.- Resultados obtenidos, categoría liderazgo y relaciones en el trabajo.</h4>
-				<div class="row">
-				<div class="col-12">
-					<style>
-						#liderazgoChart {
-						width: 100%;
-						height: 500px;
-						}
-						</style>
-					<div id="liderazgoChart"></div>
-					</div>
-				</div>
-				<h4 class="card-title" id="9_2_5">9.2.5.- Resultados obtenidos, categoría entorno organizacional.</h4>
-				<div class="row">
 					<div class="col-12">
-						<style>
-							#entornoChart {
-							width: 100%;
-							height: 500px;
-							}
-							</style>
-						<div id="entornoChart"></div>
+					<style>
+						#calificacionChart2 {
+						width: 100%;
+						height: 700px;
+						}
+						</style>
+					<div id="calificacionChart2"></div>
 					</div>
-				</div>
-				<h4 class="card-title" id="9_3">9.3.- Resultados obtenidos, consolidado general del centro de trabajo.</h4>
-				<div class="row">
+					<div class="col-12">
+					<style>
+						#calificacionChart3 {
+						width: 100%;
+						height: 700px;
+						}
+						</style>
+					<div id="calificacionChart3"></div>
+					</div>
 				<div class="col-6">
 					<style>
 						#consolidadoChart {
@@ -1076,6 +1049,80 @@
 						</style>
 					<div id="consolidadoChart2"></div>
 				</div>
+				</div>
+				<h4 class="card-title" id="9_3">9.3.- Resultados obtenidos en la Guía de Referencia I, Identificar a los trabajadores que fueron sujetos a acontecimientos traumáticos severos.</h4>
+				<div class="row">
+					<div class="col-12">
+					<style>
+						#guia1Chart {
+						width: 100%;
+						height: 500px;
+						}
+						</style>
+					<div id="guia1Chart"></div>
+					</div>
+				</div>
+				<h4 class="card-title" id="9_4">9.4.- Resultados obtenidos en la guía de referencia III, Identificación y análisis de los Factores de Riesgo Psicosocial y Evaluación del entorno organizacional en los centros de trabajo por categoría y dominio conforme a la NOM-035-STPS-2018.</h4>
+				
+				<h4 class="card-title" id="9_4_1">9.4.1.- Resultados obtenidos, categoría ambiente de trabajo.</h4>
+				<div class="row">
+				<div class="col-12">
+					<style>
+						#ambienteChart {
+						width: 100%;
+						height: 500px;
+						}
+						</style>
+					<div id="ambienteChart"></div>
+					</div>
+				</div>
+				<h4 class="card-title" id="9_4_2">9.4.2.- Resultados obtenidos, categoría factores propios de la actividad.</h4>
+				<div class="row">
+				<div class="col-12">
+					<style>
+						#factoresChart {
+						width: 100%;
+						height: 500px;
+						}
+						</style>
+					<div id="factoresChart"></div>
+					</div>
+				</div>
+				<h4 class="card-title" id="9_4_3">9.4.3.- Resultados obtenidos, categoría organización del tiempo de trabajo.</h4>
+				<div class="row">
+				<div class="col-12">
+					<style>
+						#organizacionChart {
+						width: 100%;
+						height: 500px;
+						}
+						</style>
+					<div id="organizacionChart"></div>
+					</div>
+				</div>
+				<h4 class="card-title" id="9_4_4">9.4.4.- Resultados obtenidos, categoría liderazgo y relaciones en el trabajo.</h4>
+				<div class="row">
+				<div class="col-12">
+					<style>
+						#liderazgoChart {
+						width: 100%;
+						height: 500px;
+						}
+						</style>
+					<div id="liderazgoChart"></div>
+					</div>
+				</div>
+				<h4 class="card-title" id="9_4_5">9.4.5.- Resultados obtenidos, categoría entorno organizacional.</h4>
+				<div class="row">
+					<div class="col-12">
+						<style>
+							#entornoChart {
+							width: 100%;
+							height: 500px;
+							}
+							</style>
+						<div id="entornoChart"></div>
+					</div>
 				</div>
 				<h4 class="card-title" id="10">10.- Conclusiones</h4>
 				<h4 class="card-title" id="10_1">10.1.- Conclusiones de conformidad a la NOM-035-STPS-2018.</h4>

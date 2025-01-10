@@ -14,7 +14,7 @@
     <div class="card mt-4">
       <div class="card-body bg-info">
         <div class="form-group ">
-          <label style="color: #ffffff; font-weight: 600;">Seleccione folio de proyecto y reconociminento</label>
+          <label style="color: #ffffff; font-weight: 600;">Seleccione folio de proyecto y reconocimiento</label>
           <select class="custom-select form-control" id="informes_reco" name="informes_reco" onchange="seleccionar_proyectos(this.value);">
             <option value="">&nbsp;</option>
           </select>

@@ -514,7 +514,7 @@ use Illuminate\Support\Str;
 
                         @endif -->
 
-                        @if (preg_match('/\bprogramaPsicosocial\b/', request()->path()) || preg_match('/\breconocimientoPsicosocial\b/', request()->path()) || preg_match('/\bejecucionPsicosocial\b/', request()->path()) || preg_match('/\binformesPsicosocial\b/', request()->path()) || preg_match('/\brecpsicocatalogos\b/', request()->path())|| preg_match('/\brecpsicocatalogosrec\b/', request()->path()))
+                        @if (preg_match('/\bprogramaPsicosocial\b/', request()->path()) || preg_match('/\breconocimientoPsicosocial\b/', request()->path()) || preg_match('/\bejecucionPsicosocial\b/', request()->path()) || preg_match('/\binformesPsicosocial\b/', request()->path()) || preg_match('/\brecpsicocatalogos\b/', request()->path())|| preg_match('/\brecpsicocatalogosrec\b/', request()->path())|| preg_match('/\bbibliotecapsico\b/', request()->path()))
 
 
 
@@ -548,7 +548,7 @@ use Illuminate\Support\Str;
                         @if(auth()->user()->hasRoles(['Superusuario', 'Administrador', 'Coordinador','Psicólogo']))
                         <li>
                             <a class="has-arrow " href="{{route('informesPsicosocial.index')}}" aria-expanded="false">
-                                <i class="fa fa-print"></i><span class="hide-menu">Informes </span>
+                                <i class="fa fa-print"></i><span class="hide-menu">Informes y entregables</span>
                             </a>
                         </li>
                         @endif
@@ -565,7 +565,15 @@ use Illuminate\Support\Str;
                             </ul>
                         </li>
                         @endif
+                        @if(auth()->user()->hasRoles(['Superusuario', 'Administrador', 'Coordinador','Psicólogo']))
+                        <li>
+                            <a class="has-arrow " href="{{route('biblioteca.index')}}" aria-expanded="false">
+                                <i class="fa fa-book"></i><span class="hide-menu">Centro de información</span>
+                            </a>
+                        </li>
                         @endif
+                        @endif
+
 
                         @if(auth()->user()->hasRoles(['Externo']))
                         <li>
@@ -956,6 +964,9 @@ use Illuminate\Support\Str;
     <script src="https://cdn.jsdelivr.net/npm/apexcharts"></script>
     <script src="https://cdn.amcharts.com/lib/5/plugins/exporting.js"></script>\
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.js"></script>
+
+    
     @endif
 
 
@@ -989,6 +1000,11 @@ use Illuminate\Support\Str;
 
     @endif
 
+
+    @if(request()->is('bibliotecapsico'))
+    <script src="/js_sitio/bibliotecapsico.js"></script>
+    <script src="/js/jasny-bootstrap.js"></script>
+    @endif
 
     @if(request()->is('proyectos'))
 
