@@ -670,75 +670,26 @@ class reportenom0353Controller extends Controller
                 // Asignar valores desde el JSON a los campos correspondientes
                 $dato['reporte_acontecimientos_recomendaciones'] = $recomendacionesJson['acontecimientos_traumaticos'] ?? null;
                 $dato['reporte_ambiente_recomendaciones'] = $recomendacionesJson['ambiente_trabajo'] ?? null;
-                $dato['reporte_condiciones_recomendaciones'] = $recomendacionesJson['condiciones_ambiente'] ?? null;
+              
                 $dato['reporte_factores_recomendaciones'] = $recomendacionesJson['factores_actividad'] ?? null;
-                $dato['reporte_carga_recomendaciones'] = $recomendacionesJson['carga_trabajo'] ?? null;
-                $dato['reporte_falta_recomendaciones'] = $recomendacionesJson['falta_control'] ?? null;
+              
                 $dato['reporte_organizacion_recomendaciones'] = $recomendacionesJson['organizacion_tiempo'] ?? null;
-                $dato['reporte_jornada_recomendaciones'] = $recomendacionesJson['jornada_trabajo'] ?? null;
-                $dato['reporte_interferencia_recomendaciones'] = $recomendacionesJson['interferencia_trabajo_familia'] ?? null;
+               
                 $dato['reporte_liderazgorelaciones_recomendaciones'] = $recomendacionesJson['liderazgo_relaciones'] ?? null;
-                $dato['reporte_liderazgo_recomendaciones'] = $recomendacionesJson['liderazgo'] ?? null;
-                $dato['reporte_relaciones_recomendaciones'] = $recomendacionesJson['relaciones_trabajo'] ?? null;
-                $dato['reporte_violencia_recomendaciones'] = $recomendacionesJson['violencia'] ?? null;
+              
                 $dato['reporte_entorno_recomendaciones'] = $recomendacionesJson['entorno_organizacional'] ?? null;
-                $dato['reporte_reconocimiento_recomendaciones'] = $recomendacionesJson['reconocimiento_desempeno'] ?? null;
-                $dato['reporte_insuficiente_recomendaciones'] = $recomendacionesJson['insuficiente_pertenencia'] ?? null;
+              
             } else {
                 $dato['reporte_recomendacion_guardado'] = 0;
-                
-                foreach ($respuestasTrabajadores as $respuesta) {
-                    $respuestasJson = json_decode($respuesta->RECPSICO_GUIAI_RESPUESTAS, true);
-                    if (isset($respuestasJson[0]) && $respuestasJson[0] == "1") {
-                        $cantAcontecimientos++;
-                        $acontecimiento = 1;
-                    } else {
-                        $cantSinAcontecimientos++;
-                    }
-                }
               
-                $porcentajeAcontecimientos = $totalTrabajadores > 0 ? 
-                    round(($cantAcontecimientos / $totalTrabajadores) * 100, 2) : 0;
-                $porcentajeSinAcontecimientos = $totalTrabajadores > 0 ? 
-                    round(($cantSinAcontecimientos / $totalTrabajadores) * 100, 2) : 0;
-                
-                if($acontecimiento == 1) { 
-                    $acontecimientotraumatico = DB::select('SELECT 
-                                                            psicocat_conclusiones.CONCLUSION 
-                                                        FROM 
-                                                            psicocat_conclusiones 
-                                                        WHERE 
-                                                            psicocat_conclusiones.NIVEL = 6');
-                    $reporte_acontecimientos = "El " . $porcentajeAcontecimientos . "% (" . $cantAcontecimientos . ") " .
-                                            $acontecimientotraumatico[0]->CONCLUSION;
-                } else {
-                    $acontecimientotraumatico = DB::select('SELECT 
-                                                            psicocat_conclusiones.CONCLUSION 
-                                                        FROM 
-                                                            psicocat_conclusiones 
-                                                        WHERE 
-                                                            psicocat_conclusiones.NIVEL = 7');
-                    $reporte_acontecimientos = "El " . $porcentajeSinAcontecimientos . "% (" . $cantSinAcontecimientos . ") " .
-                                            $acontecimientotraumatico[0]->CONCLUSION;
-                }
-                $dato['reporte_acontecimientos_recomendaciones'] =  $reporte_acontecimientos;
+                $dato['reporte_acontecimientos_recomendaciones'] =  "Realizar evaluaciones específicas y desarrollar estrategias para abordar las consecuencias de eventos traumáticos, priorizando la salud mental.";
 
                 
-            $dato['reporte_ambiente_recomendaciones'] = "El 50% (1) de los trabajadores percibe como un riesgo alto, las condiciones del ambiente de trabajo son peligrosas, inseguras, deficientes o insalubres, lo cual puede generar o aumentar el nivel de estrés laboral y ansiedad.";
-            $dato['reporte_condiciones_recomendaciones'] = "El 50% (1) de los trabajadores percibe como un riesgo alto, las condiciones del ambiente de trabajo son peligrosas, inseguras, deficientes o insalubres, lo cual puede generar o aumentar el nivel de estrés laboral y ansiedad.";
-            $dato['reporte_factores_recomendaciones'] = "El 50% (1) de los trabajadores percibe como un riesgo alto, las condiciones del ambiente de trabajo son peligrosas, inseguras, deficientes o insalubres, lo cual puede generar o aumentar el nivel de estrés laboral y ansiedad.";
-            $dato['reporte_carga_recomendaciones'] = "El 50% (1) de los trabajadores percibe como un riesgo alto, las condiciones del ambiente de trabajo son peligrosas, inseguras, deficientes o insalubres, lo cual puede generar o aumentar el nivel de estrés laboral y ansiedad.";
-            $dato['reporte_falta_recomendaciones'] = "El 50% (1) de los trabajadores percibe como un riesgo alto, las condiciones del ambiente de trabajo son peligrosas, inseguras, deficientes o insalubres, lo cual puede generar o aumentar el nivel de estrés laboral y ansiedad.";
-            $dato['reporte_organizacion_recomendaciones'] = "El 50% (1) de los trabajadores percibe como un riesgo alto, las condiciones del ambiente de trabajo son peligrosas, inseguras, deficientes o insalubres, lo cual puede generar o aumentar el nivel de estrés laboral y ansiedad.";
-            $dato['reporte_jornada_recomendaciones'] = "El 50% (1) de los trabajadores percibe como un riesgo alto, las condiciones del ambiente de trabajo son peligrosas, inseguras, deficientes o insalubres, lo cual puede generar o aumentar el nivel de estrés laboral y ansiedad.";
-            $dato['reporte_interferencia_recomendaciones'] = "El 50% (1) de los trabajadores percibe como un riesgo alto, las condiciones del ambiente de trabajo son peligrosas, inseguras, deficientes o insalubres, lo cual puede generar o aumentar el nivel de estrés laboral y ansiedad.";
-            $dato['reporte_liderazgorelaciones_recomendaciones'] = "El 50% (1) de los trabajadores percibe como un riesgo alto, las condiciones del ambiente de trabajo son peligrosas, inseguras, deficientes o insalubres, lo cual puede generar o aumentar el nivel de estrés laboral y ansiedad.";
-            $dato['reporte_liderazgo_recomendaciones'] = "El 50% (1) de los trabajadores percibe como un riesgo alto, las condiciones del ambiente de trabajo son peligrosas, inseguras, deficientes o insalubres, lo cual puede generar o aumentar el nivel de estrés laboral y ansiedad.";
-            $dato['reporte_relaciones_recomendaciones'] = "El 50% (1) de los trabajadores percibe como un riesgo alto, las condiciones del ambiente de trabajo son peligrosas, inseguras, deficientes o insalubres, lo cual puede generar o aumentar el nivel de estrés laboral y ansiedad.";
-            $dato['reporte_violencia_recomendaciones'] = "El 50% (1) de los trabajadores percibe como un riesgo alto, las condiciones del ambiente de trabajo son peligrosas, inseguras, deficientes o insalubres, lo cual puede generar o aumentar el nivel de estrés laboral y ansiedad.";
-            $dato['reporte_entorno_recomendaciones'] = "El 50% (1) de los trabajadores percibe como un riesgo alto, las condiciones del ambiente de trabajo son peligrosas, inseguras, deficientes o insalubres, lo cual puede generar o aumentar el nivel de estrés laboral y ansiedad.";
-            $dato['reporte_reconocimiento_recomendaciones'] = "El 50% (1) de los trabajadores percibe como un riesgo alto, las condiciones del ambiente de trabajo son peligrosas, inseguras, deficientes o insalubres, lo cual puede generar o aumentar el nivel de estrés laboral y ansiedad.";
-            $dato['reporte_insuficiente_recomendaciones'] = "El 50% (1) de los trabajadores percibe como un riesgo alto, las condiciones del ambiente de trabajo son peligrosas, inseguras, deficientes o insalubres, lo cual puede generar o aumentar el nivel de estrés laboral y ansiedad.";
+            $dato['reporte_ambiente_recomendaciones'] = "Realizar una renovación integral del entorno laboral, integrando diseños innovadores que fomenten la seguridad y el bienestar.";
+            $dato['reporte_factores_recomendaciones'] = "Diseñar un programa integral de intervención para reestructurar roles y responsabilidades, disminuyendo significativamente el estrés laboral.";
+            $dato['reporte_organizacion_recomendaciones'] = "Revisar y reestructurar los turnos y horarios para minimizar las horas extras y garantizar suficientes períodos de descanso y días libres.";
+            $dato['reporte_liderazgorelaciones_recomendaciones'] = "Reestructurar equipos y liderazgos para resolver conflictos crónicos y mejorar el ambiente laboral.";
+            $dato['reporte_entorno_recomendaciones'] = "Transformar profundamente las políticas organizacionales para garantizar equidad y seguridad para todos.";
 
             }
 
@@ -1356,26 +1307,16 @@ class reportenom0353Controller extends Controller
                 $dato["msj"] = 'Datos guardados correctamente';
             }
 
-              // CONCLUSION
+              // recomendaciones
               if (($request->opcion + 0) == 20) {
                 $form_recomendaciones = [
                     'acontecimientos_traumaticos' => $request->input('reporte_acontecimientos_recomendaciones'),
                     'ambiente_trabajo' => $request->input('reporte_ambiente_recomendaciones'),
-                    'condiciones_ambiente' => $request->input('reporte_condiciones_recomendaciones'),
                     'factores_actividad' => $request->input('reporte_factores_recomendaciones'),
-                    'carga_trabajo' => $request->input('reporte_carga_recomendaciones'),
-                    'falta_control' => $request->input('reporte_falta_recomendaciones'),
                     'organizacion_tiempo' => $request->input('reporte_organizacion_recomendaciones'),
-                    'jornada_trabajo' => $request->input('reporte_jornada_recomendaciones'),
-                    'interferencia_trabajo_familia' => $request->input('reporte_interferencia_recomendaciones'),
-                    'liderazgo_relaciones' => $request->input('reporte_liderazgorelaciones_recomendaciones'),
-                    'liderazgo' => $request->input('reporte_liderazgo_recomendaciones'),
-                    'relaciones_trabajo' => $request->input('reporte_relaciones_recomendaciones'),
-                    'violencia' => $request->input('reporte_violencia_recomendaciones'),
-                    'entorno_organizacional' => $request->input('reporte_entorno_recomendaciones'),
-                    'reconocimiento_desempeno' => $request->input('reporte_reconocimiento_recomendaciones'),
-                    'insuficiente_pertenencia' => $request->input('reporte_insuficiente_recomendaciones'),
-                ];
+                  'liderazgo_relaciones' => $request->input('reporte_liderazgorelaciones_recomendaciones'),
+                   'entorno_organizacional' => $request->input('reporte_entorno_recomendaciones'),
+                    ];
                 
             
                 // Convertir el array a JSON

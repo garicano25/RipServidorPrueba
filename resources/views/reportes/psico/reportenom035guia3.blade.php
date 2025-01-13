@@ -1217,60 +1217,20 @@
 								<textarea class="form-control" style="margin-bottom: 0px;" rows="5" id="reporte_ambiente_recomendaciones" name="reporte_ambiente_recomendaciones" required></textarea>
 							</div>
 							<div class="form-group">
-								<label>Condiciones del ambiente de trabajo</label>
-								<textarea class="form-control" style="margin-bottom: 0px;" rows="5" id="reporte_condiciones_recomendaciones" name="reporte_condiciones_recomendaciones" required></textarea>
-							</div>
-							<div class="form-group">
 								<label>Factores propios de la actividad</label>
 								<textarea class="form-control" style="margin-bottom: 0px;" rows="5" id="reporte_factores_recomendaciones" name="reporte_factores_recomendaciones" required></textarea>
-							</div>
-							<div class="form-group">
-								<label>Carga de trabajo</label>
-								<textarea class="form-control" style="margin-bottom: 0px;" rows="5" id="reporte_carga_recomendaciones" name="reporte_carga_recomendaciones" required></textarea>
-							</div>
-							<div class="form-group">
-								<label>Falta de control sobre el trabajo</label>
-								<textarea class="form-control" style="margin-bottom: 0px;" rows="5" id="reporte_falta_recomendaciones" name="reporte_falta_recomendaciones" required></textarea>
 							</div>
 							<div class="form-group">
 								<label>Organización del tiempo de trabajo</label>
 								<textarea class="form-control" style="margin-bottom: 0px;" rows="5" id="reporte_organizacion_recomendaciones" name="reporte_organizacion_recomendaciones" required></textarea>
 							</div>
 							<div class="form-group">
-								<label>Jornada de trabajo</label>
-								<textarea class="form-control" style="margin-bottom: 0px;" rows="5" id="reporte_jornada_recomendaciones" name="reporte_jornada_recomendaciones" required></textarea>
-							</div>
-							<div class="form-group">
-								<label>Interferencia trabajo-familia</label>
-								<textarea class="form-control" style="margin-bottom: 0px;" rows="5" id="reporte_interferencia_recomendaciones" name="reporte_interferencia_recomendaciones" required></textarea>
-							</div>
-							<div class="form-group">
 								<label>Liderazgo y relaciones en el trabajo</label>
 								<textarea class="form-control" style="margin-bottom: 0px;" rows="5" id="reporte_liderazgorelaciones_recomendaciones" name="reporte_liderazgorelaciones_recomendaciones" required></textarea>
 							</div>
 							<div class="form-group">
-								<label>Liderazgo</label>
-								<textarea class="form-control" style="margin-bottom: 0px;" rows="5" id="reporte_liderazgo_recomendaciones" name="reporte_liderazgo_recomendaciones" required></textarea>
-							</div>
-							<div class="form-group">
-								<label>Relaciones en el trabajo</label>
-								<textarea class="form-control" style="margin-bottom: 0px;" rows="5" id="reporte_relaciones_recomendaciones" name="reporte_relaciones_recomendaciones" required></textarea>
-							</div>
-							<div class="form-group">
-								<label>Violencia</label>
-								<textarea class="form-control" style="margin-bottom: 0px;" rows="5" id="reporte_violencia_recomendaciones" name="reporte_violencia_recomendaciones" required></textarea>
-							</div>
-							<div class="form-group">
 								<label>Entorno organizacional</label>
 								<textarea class="form-control" style="margin-bottom: 0px;" rows="5" id="reporte_entorno_recomendaciones" name="reporte_entorno_recomendaciones" required></textarea>
-							</div>
-							<div class="form-group">
-								<label>Reconocimiento del desempeño</label>
-								<textarea class="form-control" style="margin-bottom: 0px;" rows="5" id="reporte_reconocimiento_recomendaciones" name="reporte_reconocimiento_recomendaciones" required></textarea>
-							</div>
-							<div class="form-group">
-								<label>Insuficiente sentido de pertenencia e inestabilidad</label>
-								<textarea class="form-control" style="margin-bottom: 0px;" rows="5" id="reporte_insuficiente_recomendaciones" name="reporte_insuficiente_recomendaciones" required></textarea>
 							</div>
 						</div>
 						<div class="col-12" style="text-align: right;">

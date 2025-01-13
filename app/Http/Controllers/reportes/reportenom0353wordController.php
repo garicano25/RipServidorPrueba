@@ -878,25 +878,15 @@ class reportenom0353wordController extends Controller
 
                 // Asignar valores desde el JSON a variables específicas en el Word
                 if ($recomendacionesJson) {
-                    $plantillaword->setValue('RECOMENDACION_1', sanitizeText($recomendacionesJson['acontecimientos_traumaticos']) ?? 'N/A');
-                    $plantillaword->setValue('RECOMENDACION_2', sanitizeText($recomendacionesJson['ambiente_trabajo']) ?? 'N/A');
-                    $plantillaword->setValue('RECOMENDACION_3', sanitizeText($recomendacionesJson['condiciones_ambiente']) ?? 'N/A');
-                    $plantillaword->setValue('RECOMENDACION_4', sanitizeText($recomendacionesJson['factores_actividad']) ?? 'N/A');
-                    $plantillaword->setValue('RECOMENDACION_5', sanitizeText($recomendacionesJson['carga_trabajo']) ?? 'N/A');
-                    $plantillaword->setValue('RECOMENDACION_6', sanitizeText($recomendacionesJson['falta_control']) ?? 'N/A');
-                    $plantillaword->setValue('RECOMENDACION_7', sanitizeText($recomendacionesJson['organizacion_tiempo']) ?? 'N/A');
-                    $plantillaword->setValue('RECOMENDACION_8', sanitizeText($recomendacionesJson['jornada_trabajo']) ?? 'N/A');
-                    $plantillaword->setValue('RECOMENDACION_9', sanitizeText($recomendacionesJson['interferencia_trabajo_familia']) ?? 'N/A');
-                    $plantillaword->setValue('RECOMENDACION_10', sanitizeText($recomendacionesJson['liderazgo_relaciones']) ?? 'N/A');
-                    $plantillaword->setValue('RECOMENDACION_11', sanitizeText($recomendacionesJson['liderazgo']) ?? 'N/A');
-                    $plantillaword->setValue('RECOMENDACION_12', sanitizeText($recomendacionesJson['relaciones_trabajo']) ?? 'N/A');
-                    $plantillaword->setValue('RECOMENDACION_13', sanitizeText($recomendacionesJson['violencia']) ?? 'N/A');
-                    $plantillaword->setValue('RECOMENDACION_14', sanitizeText($recomendacionesJson['entorno_organizacional']) ?? 'N/A');
-                    $plantillaword->setValue('RECOMENDACION_15', sanitizeText($recomendacionesJson['reconocimiento_desempeno']) ?? 'N/A');
-                    $plantillaword->setValue('RECOMENDACION_16', sanitizeText($recomendacionesJson['insuficiente_pertenencia']) ?? 'N/A');
+                    $plantillaword->setValue('RECOMENDACION_1', 'Realizar evaluaciones específicas y desarrollar estrategias para abordar las consecuencias de eventos traumáticos, priorizando la salud mental.');
+                    $plantillaword->setValue('RECOMENDACION_4', 'Reformar radicalmente los horarios laborales, estableciendo límites claros a la jornada laboral para proteger la salud del personal.');
+                    $plantillaword->setValue('RECOMENDACION_3', 'Optimizar procesos laborales e implementar técnicas modernas de gestión del tiempo y reducción de estrés.');
+                    $plantillaword->setValue('RECOMENDACION_2', 'Realizar una renovación integral del entorno laboral, integrando diseños innovadores que fomenten la seguridad y el bienestar.');
+                    $plantillaword->setValue('RECOMENDACION_5', 'Reestructurar equipos y liderazgos para resolver conflictos crónicos y mejorar el ambiente laboral.');
+                    $plantillaword->setValue('RECOMENDACION_6', 'Transformar profundamente las políticas organizacionales para garantizar equidad y seguridad para todos.');
                 } else {
                     // En caso de que no exista JSON válido, asignar valores por defecto
-                    for ($i = 1; $i <= 16; $i++) {
+                    for ($i = 1; $i <= 6; $i++) {
                         $plantillaword->setValue("RECOMENDACION_$i", 'N/A');
                     }
                 }
@@ -975,7 +965,7 @@ class reportenom0353wordController extends Controller
     
     
                     if (Storage::exists($imagen_temporal_ruta)) {
-                        $plantillaword->setImageValue('GRAFICA_ 1', array('path' => storage_path('app/' . $imagen_temporal_ruta), 'width' => 1000, 'height' => 900, 'ratio' => true, 'borderColor' => '000000'));
+                        $plantillaword->setImageValue('GRAFICA_ 1', array('path' => storage_path('app/' . $imagen_temporal_ruta), 'width' => 700, 'height' => 600, 'ratio' => true, 'borderColor' => '000000'));
                         Storage::delete($imagen_temporal_ruta); // Eliminar imagen temporal
                     } else {
                         $plantillaword->setValue('GRAFICA_ 1', 'NO SE ENCONTRÓ IMAGEN QUE MOSTRAR.');
@@ -1095,7 +1085,7 @@ class reportenom0353wordController extends Controller
     
     
                     if (Storage::exists($imagen_temporal_ruta)) {
-                        $plantillaword->setImageValue('GRAFICA_2', array('path' => storage_path('app/' . $imagen_temporal_ruta), 'width' => 1000, 'height' => 700, 'ratio' => true, 'borderColor' => '000000'));
+                        $plantillaword->setImageValue('GRAFICA_2', array('path' => storage_path('app/' . $imagen_temporal_ruta), 'width' => 700, 'height' => 500, 'ratio' => true, 'borderColor' => '000000'));
                         Storage::delete($imagen_temporal_ruta); // Eliminar imagen temporal
                     } else {
                         $plantillaword->setValue('GRAFICA_2', 'NO SE ENCONTRÓ IMAGEN QUE MOSTRAR.');
@@ -1112,7 +1102,7 @@ class reportenom0353wordController extends Controller
     
     
                     if (Storage::exists($imagen_temporal_ruta)) {
-                        $plantillaword->setImageValue('GRAFICA_3', array('path' => storage_path('app/' . $imagen_temporal_ruta), 'width' => 1000, 'height' => 800, 'ratio' => true, 'borderColor' => '000000'));
+                        $plantillaword->setImageValue('GRAFICA_3', array('path' => storage_path('app/' . $imagen_temporal_ruta), 'width' => 700, 'height' => 600, 'ratio' => true, 'borderColor' => '000000'));
                         Storage::delete($imagen_temporal_ruta); // Eliminar imagen temporal
                     } else {
                         $plantillaword->setValue('GRAFICA_3', 'NO SE ENCONTRÓ IMAGEN QUE MOSTRAR.');
@@ -1129,7 +1119,7 @@ class reportenom0353wordController extends Controller
     
     
                     if (Storage::exists($imagen_temporal_ruta)) {
-                        $plantillaword->setImageValue('GRAFICA_4', array('path' => storage_path('app/' . $imagen_temporal_ruta), 'width' => 1000, 'height' => 900, 'ratio' => true, 'borderColor' => '000000'));
+                        $plantillaword->setImageValue('GRAFICA_4', array('path' => storage_path('app/' . $imagen_temporal_ruta), 'width' => 700, 'height' => 600, 'ratio' => true, 'borderColor' => '000000'));
                         Storage::delete($imagen_temporal_ruta); // Eliminar imagen temporal
                     } else {
                         $plantillaword->setValue('GRAFICA_4', 'NO SE ENCONTRÓ IMAGEN QUE MOSTRAR.');
@@ -1146,7 +1136,7 @@ class reportenom0353wordController extends Controller
     
     
                     if (Storage::exists($imagen_temporal_ruta)) {
-                        $plantillaword->setImageValue('GRAFICA_5', array('path' => storage_path('app/' . $imagen_temporal_ruta), 'width' => 1000, 'height' => 600, 'ratio' => true, 'borderColor' => '000000'));
+                        $plantillaword->setImageValue('GRAFICA_5', array('path' => storage_path('app/' . $imagen_temporal_ruta), 'width' => 700, 'height' => 600, 'ratio' => true, 'borderColor' => '000000'));
                         Storage::delete($imagen_temporal_ruta); // Eliminar imagen temporal
                     } else {
                         $plantillaword->setValue('GRAFICA_5', 'NO SE ENCONTRÓ IMAGEN QUE MOSTRAR.');
@@ -1163,7 +1153,7 @@ class reportenom0353wordController extends Controller
     
     
                     if (Storage::exists($imagen_temporal_ruta)) {
-                        $plantillaword->setImageValue('GRAFICA_6', array('path' => storage_path('app/' . $imagen_temporal_ruta), 'width' => 1000, 'height' => 750, 'ratio' => true, 'borderColor' => '000000'));
+                        $plantillaword->setImageValue('GRAFICA_6', array('path' => storage_path('app/' . $imagen_temporal_ruta), 'width' => 700, 'height' => 600, 'ratio' => true, 'borderColor' => '000000'));
                         Storage::delete($imagen_temporal_ruta); // Eliminar imagen temporal
                     } else {
                         $plantillaword->setValue('GRAFICA_6', 'NO SE ENCONTRÓ IMAGEN QUE MOSTRAR.');
