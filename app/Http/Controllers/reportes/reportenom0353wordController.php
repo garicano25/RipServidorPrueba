@@ -898,29 +898,13 @@ class reportenom0353wordController extends Controller
     
     
                     if (Storage::exists($imagen_temporal_ruta)) {
-                        $plantillaword->setImageValue('GRAFICA_CALIFICACION1', array('path' => storage_path('app/' . $imagen_temporal_ruta), 'width' => 576, 'height' => 330, 'ratio' => true, 'borderColor' => '000000'));
+                        $plantillaword->setImageValue('GRAFICA_CALIFICACION1', array('path' => storage_path('app/' . $imagen_temporal_ruta), 'width' => 900, 'height' => 500, 'ratio' => true, 'borderColor' => '000000'));
                         Storage::delete($imagen_temporal_ruta); // Eliminar imagen temporal
                     } else {
                         $plantillaword->setValue('GRAFICA_CALIFICACION1', 'NO SE ENCONTRÓ IMAGEN QUE MOSTRAR.');
                     }
                 } else {
                     $plantillaword->setValue('GRAFICA_CALIFICACION1', 'NO SE ENVIÓ IMAGEN QUE MOSTRAR.');
-                }
-                if ($request->calificacion4Chart) {
-                    $imagen_recibida = explode(',', $request->calificacion4Chart);
-                    $imagen_base64 = base64_decode($imagen_recibida[1]);
-                    $imagen_temporal_ruta = 'reportes/informes/calificacion4Chart_' . $agente_nombre . '_' . $proyecto->proyecto_folio . '.png';
-                    Storage::put($imagen_temporal_ruta, $imagen_base64); // Guardar en storage
-    
-    
-                    if (Storage::exists($imagen_temporal_ruta)) {
-                        $plantillaword->setImageValue('GRAFICA_CALIFICACION2', array('path' => storage_path('app/' . $imagen_temporal_ruta), 'width' => 584, 'height' => 350, 'ratio' => true, 'borderColor' => '000000'));
-                        Storage::delete($imagen_temporal_ruta); // Eliminar imagen temporal
-                    } else {
-                        $plantillaword->setValue('GRAFICA_CALIFICACION2', 'NO SE ENCONTRÓ IMAGEN QUE MOSTRAR.');
-                    }
-                } else {
-                    $plantillaword->setValue('GRAFICA_CALIFICACION2', 'NO SE ENVIÓ IMAGEN QUE MOSTRAR.');
                 }
 
                 if ($request->categoriasChart) {
@@ -931,7 +915,7 @@ class reportenom0353wordController extends Controller
     
     
                     if (Storage::exists($imagen_temporal_ruta)) {
-                        $plantillaword->setImageValue('GRAFICA_CATEGORIAS', array('path' => storage_path('app/' . $imagen_temporal_ruta), 'width' => 500, 'height' => 900, 'ratio' => true, 'borderColor' => '000000'));
+                        $plantillaword->setImageValue('GRAFICA_CATEGORIAS', array('path' => storage_path('app/' . $imagen_temporal_ruta), 'width' => 900, 'height' => 500, 'ratio' => true, 'borderColor' => '000000'));
                         Storage::delete($imagen_temporal_ruta); // Eliminar imagen temporal
                     } else {
                         $plantillaword->setValue('GRAFICA_CATEGORIAS', 'NO SE ENCONTRÓ IMAGEN QUE MOSTRAR.');
@@ -948,7 +932,7 @@ class reportenom0353wordController extends Controller
     
     
                     if (Storage::exists($imagen_temporal_ruta)) {
-                        $plantillaword->setImageValue('GRAFICA_DOMINIOS', array('path' => storage_path('app/' . $imagen_temporal_ruta), 'width' => 500, 'height' => 900, 'ratio' => true, 'borderColor' => '000000'));
+                        $plantillaword->setImageValue('GRAFICA_DOMINIOS', array('path' => storage_path('app/' . $imagen_temporal_ruta), 'width' => 900, 'height' => 500, 'ratio' => true, 'borderColor' => '000000'));
                         Storage::delete($imagen_temporal_ruta); // Eliminar imagen temporal
                     } else {
                         $plantillaword->setValue('GRAFICA_DOMINIOS', 'NO SE ENCONTRÓ IMAGEN QUE MOSTRAR.');
@@ -965,13 +949,13 @@ class reportenom0353wordController extends Controller
     
     
                     if (Storage::exists($imagen_temporal_ruta)) {
-                        $plantillaword->setImageValue('GRAFICA_ 1', array('path' => storage_path('app/' . $imagen_temporal_ruta), 'width' => 700, 'height' => 600, 'ratio' => true, 'borderColor' => '000000'));
+                        $plantillaword->setImageValue('GRAFICA_1', array('path' => storage_path('app/' . $imagen_temporal_ruta), 'width' => 800, 'height' => 450, 'ratio' => true, 'borderColor' => '000000'));
                         Storage::delete($imagen_temporal_ruta); // Eliminar imagen temporal
                     } else {
-                        $plantillaword->setValue('GRAFICA_ 1', 'NO SE ENCONTRÓ IMAGEN QUE MOSTRAR.');
+                        $plantillaword->setValue('GRAFICA_1', 'NO SE ENCONTRÓ IMAGEN QUE MOSTRAR.');
                     }
                 } else {
-                    $plantillaword->setValue('GRAFICA_ 1', 'NO SE ENVIÓ IMAGEN QUE MOSTRAR.');
+                    $plantillaword->setValue('GRAFICA_1', 'NO SE ENVIÓ IMAGEN QUE MOSTRAR.');
                 }
 
                 if ($request->edadChart) {
@@ -1085,7 +1069,7 @@ class reportenom0353wordController extends Controller
     
     
                     if (Storage::exists($imagen_temporal_ruta)) {
-                        $plantillaword->setImageValue('GRAFICA_2', array('path' => storage_path('app/' . $imagen_temporal_ruta), 'width' => 700, 'height' => 500, 'ratio' => true, 'borderColor' => '000000'));
+                        $plantillaword->setImageValue('GRAFICA_2', array('path' => storage_path('app/' . $imagen_temporal_ruta), 'width' => 850, 'height' => 400, 'ratio' => true, 'borderColor' => '000000'));
                         Storage::delete($imagen_temporal_ruta); // Eliminar imagen temporal
                     } else {
                         $plantillaword->setValue('GRAFICA_2', 'NO SE ENCONTRÓ IMAGEN QUE MOSTRAR.');
@@ -1102,7 +1086,7 @@ class reportenom0353wordController extends Controller
     
     
                     if (Storage::exists($imagen_temporal_ruta)) {
-                        $plantillaword->setImageValue('GRAFICA_3', array('path' => storage_path('app/' . $imagen_temporal_ruta), 'width' => 700, 'height' => 600, 'ratio' => true, 'borderColor' => '000000'));
+                        $plantillaword->setImageValue('GRAFICA_3', array('path' => storage_path('app/' . $imagen_temporal_ruta), 'width' => 850, 'height' => 600, 'ratio' => true, 'borderColor' => '000000'));
                         Storage::delete($imagen_temporal_ruta); // Eliminar imagen temporal
                     } else {
                         $plantillaword->setValue('GRAFICA_3', 'NO SE ENCONTRÓ IMAGEN QUE MOSTRAR.');
@@ -1119,7 +1103,7 @@ class reportenom0353wordController extends Controller
     
     
                     if (Storage::exists($imagen_temporal_ruta)) {
-                        $plantillaword->setImageValue('GRAFICA_4', array('path' => storage_path('app/' . $imagen_temporal_ruta), 'width' => 700, 'height' => 600, 'ratio' => true, 'borderColor' => '000000'));
+                        $plantillaword->setImageValue('GRAFICA_4', array('path' => storage_path('app/' . $imagen_temporal_ruta), 'width' => 850, 'height' => 600, 'ratio' => true, 'borderColor' => '000000'));
                         Storage::delete($imagen_temporal_ruta); // Eliminar imagen temporal
                     } else {
                         $plantillaword->setValue('GRAFICA_4', 'NO SE ENCONTRÓ IMAGEN QUE MOSTRAR.');
@@ -1136,7 +1120,7 @@ class reportenom0353wordController extends Controller
     
     
                     if (Storage::exists($imagen_temporal_ruta)) {
-                        $plantillaword->setImageValue('GRAFICA_5', array('path' => storage_path('app/' . $imagen_temporal_ruta), 'width' => 700, 'height' => 600, 'ratio' => true, 'borderColor' => '000000'));
+                        $plantillaword->setImageValue('GRAFICA_5', array('path' => storage_path('app/' . $imagen_temporal_ruta), 'width' => 800, 'height' => 600, 'ratio' => true, 'borderColor' => '000000'));
                         Storage::delete($imagen_temporal_ruta); // Eliminar imagen temporal
                     } else {
                         $plantillaword->setValue('GRAFICA_5', 'NO SE ENCONTRÓ IMAGEN QUE MOSTRAR.');
@@ -1153,7 +1137,7 @@ class reportenom0353wordController extends Controller
     
     
                     if (Storage::exists($imagen_temporal_ruta)) {
-                        $plantillaword->setImageValue('GRAFICA_6', array('path' => storage_path('app/' . $imagen_temporal_ruta), 'width' => 700, 'height' => 600, 'ratio' => true, 'borderColor' => '000000'));
+                        $plantillaword->setImageValue('GRAFICA_6', array('path' => storage_path('app/' . $imagen_temporal_ruta), 'width' => 800, 'height' => 600, 'ratio' => true, 'borderColor' => '000000'));
                         Storage::delete($imagen_temporal_ruta); // Eliminar imagen temporal
                     } else {
                         $plantillaword->setValue('GRAFICA_6', 'NO SE ENCONTRÓ IMAGEN QUE MOSTRAR.');

@@ -913,7 +913,7 @@
           <defs>
             <!-- Gradiente verde y blanco aplicado al 50% de la figura -->
             <linearGradient id="gradient1" x1="0%" y1="0%" x2="0%" y2="100%">
-              <stop offset="20%" style="stop-color:#ffffff; stop-opacity:1" /> <!-- Verde en la mitad inferior -->
+              <stop offset="40%" style="stop-color:#ffffff; stop-opacity:1" /> <!-- Verde en la mitad inferior -->
               <stop offset="0%" style="stop-color:#154b75; stop-opacity:1" /> <!-- Blanco en la mitad superior -->
             </linearGradient>
           </defs>
@@ -929,7 +929,7 @@
           <defs>
             <!-- Gradiente verde y blanco aplicado al 50% de la figura -->
             <linearGradient id="gradient2" x1="0%" y1="0%" x2="0%" y2="100%">
-              <stop offset="80%" style="stop-color:#ffffff; stop-opacity:1" /> <!-- Verde en la mitad inferior -->
+              <stop offset="60%" style="stop-color:#ffffff; stop-opacity:1" /> <!-- Verde en la mitad inferior -->
               <stop offset="0%" style="stop-color:#98c11d; stop-opacity:1" /> <!-- Blanco en la mitad superior -->
             </linearGradient>
           </defs>
@@ -997,15 +997,6 @@
 				<div class="row">
 				<div class="col-12">
 					<style>
-						#calificacion4Chart {
-						width: 100%;
-						height: 600px;
-						}
-						</style>
-					<div id="calificacion4Chart"></div>
-				</div>
-				<div class="col-12">
-					<style>
 						#calificacionChart {
 						width: 100%;
 						height: 600px;
@@ -1013,38 +1004,20 @@
 						</style>
 					<div id="calificacionChart"></div>
 				</div>
-					<div class="col-12">
-					<style>
-						#calificacionChart2 {
-						width: 100%;
-						height: 700px;
-						}
-						</style>
-					<div id="calificacionChart2"></div>
-					</div>
-					<div class="col-12">
-					<style>
-						#calificacionChart3 {
-						width: 100%;
-						height: 700px;
-						}
-						</style>
-					<div id="calificacionChart3"></div>
-					</div>
-				<div class="col-6">
+				<div class="col-12">
 					<style>
 						#consolidadoChart {
 						width: 100%;
-						height: 800px;
+						height: 900px;
 						}
 						</style>
 					<div id="consolidadoChart"></div>
 				</div>
-				<div class="col-6">
+				<div class="col-12">
 					<style>
 						#consolidadoChart2 {
 						width: 100%;
-						height: 800px;
+						height: 900px;
 						}
 						</style>
 					<div id="consolidadoChart2"></div>
@@ -1082,7 +1055,7 @@
 					<style>
 						#factoresChart {
 						width: 100%;
-						height: 500px;
+						height: 650px;
 						}
 						</style>
 					<div id="factoresChart"></div>
@@ -1094,7 +1067,7 @@
 					<style>
 						#organizacionChart {
 						width: 100%;
-						height: 500px;
+						height: 650px;
 						}
 						</style>
 					<div id="organizacionChart"></div>
@@ -1106,7 +1079,7 @@
 					<style>
 						#liderazgoChart {
 						width: 100%;
-						height: 500px;
+						height: 800px;
 						}
 						</style>
 					<div id="liderazgoChart"></div>
@@ -1118,7 +1091,7 @@
 						<style>
 							#entornoChart {
 							width: 100%;
-							height: 500px;
+							height: 650px;
 							}
 							</style>
 						<div id="entornoChart"></div>

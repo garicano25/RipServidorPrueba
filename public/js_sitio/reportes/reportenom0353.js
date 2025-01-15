@@ -12,9 +12,7 @@ var categoriaschart = null;
 var dominioschart = null;
 var acontecimientoschart = null;
 var calificacionchart = null;
-var calificacion2chart = null;
-var calificacion3chart = null;
-var calificacion4chart = null;
+
 
 
 //=================================================
@@ -6400,8 +6398,7 @@ $('#tabla_reporte_revisiones tbody').on('click', 'td>button.botondescarga', func
 							categoriasChart: categoriaschart,
 							dominiosChart: dominioschart,
 							acontecimientosChart: acontecimientoschart,
-							calificacionChart: calificacionchart,
-							calificacion4Chart: calificacion4chart['imgURI']
+							calificacionChart: calificacionchart
 							// Imagen en base64
 						},
 						cache: false,
@@ -6767,22 +6764,22 @@ am5.ready(function () {
 		var chart = root.container.children.push(am5xy.XYChart.new(root, {
 			panX: false,
 			panY: false,
-			wheelX: "panX",
-			wheelY: "zoomX",
+			wheelX: "none",
+			wheelY: "none",
 			layout: root.verticalLayout
 		}));
 
 		// Títulos
-		chart.children.unshift(
-			am5.Label.new(root, {
-				text: subtitleText,
-				fontSize: 20,
-				textAlign: "center",
-				x: am5.p50,
-				centerX: am5.p50,
-				marginTop: 10,
-			})
-		);
+		// chart.children.unshift(
+		// 	am5.Label.new(root, {
+		// 		text: subtitleText,
+		// 		fontSize: 20,
+		// 		textAlign: "center",
+		// 		x: am5.p50,
+		// 		centerX: am5.p50,
+		// 		marginTop: 10,
+		// 	})
+		// );
 		chart.children.unshift(
 			am5.Label.new(root, {
 				text: titleText,
@@ -6790,7 +6787,7 @@ am5.ready(function () {
 				fontWeight: "bold",
 				textAlign: "center",
 				x: am5.p50,
-				centerX: am5.p50,
+				centerX: am5.p50
 			})
 		);
 
@@ -6810,12 +6807,24 @@ am5.ready(function () {
 				inversed: true,
 				cellStartLocation: 0,
 				cellEndLocation: 0.9,
-				minGridDistance: 0
+				minGridDistance: 0,
+				// opposite: true
 			}),
 			tooltip: am5.Tooltip.new(root, {})
 		}));
 
 		yAxis.get("renderer").grid.template.set("forceHidden", true);
+
+		yAxis.get("renderer").labels.template.setAll({
+            fontSize: 18,
+            fontWeight: "70",
+            centerY: am5.p50,
+            centerX: am5.p0,
+            textAlign: "center",
+            inside: true,  // Poner las etiquetas dentro del área del gráfico
+            rotation: 0,
+            paddingTop: -100  // Ajustar la posición vertical de las etiquetas
+        }); 
 
 		yAxis.data.setAll(data);
 
@@ -6836,6 +6845,10 @@ am5.ready(function () {
 				let category = target.dataItem.get("category");
 				if (category.startsWith("g1")) {
 					return "[bold]" + category.split("-")[1] + "[/]";
+				}
+				if (category.startsWith("g3")) {
+					target.set("x", target.get("x") + 27); // Mover la categoría a la derecha
+					return category.split("-")[1];  // No hace falta modificar el texto, solo moverlo
 				}
 				return category.split("-")[1];
 			}
@@ -6877,7 +6890,7 @@ am5.ready(function () {
 
 			series.columns.template.setAll({
 				tooltipText: "{name}, {categoryY}: {valueX} ({percentage}%)",
-				width: am5.percent(90),
+				width: am5.percent(100),
 				tooltipY: 0
 			});
 
@@ -6946,15 +6959,15 @@ am5.ready(function () {
 	// Crear gráficos
 	createChart(
 		"ambienteChart",
-		"Factores de riesgo psicosocial en el trabajo-Identificación, \nanálisis y prevención (Ambiente de trabajo)",
+		"Categoría\n Ambiente de trabajo \n\n",
 		"(Nivel de riesgo/NOM-035-STPS-2018)\n\n",
 		[{
-			category: "g1-Categoria:\nAmbiente \nde trabajo",
+			category: "g1-Ambiente de trabajo",
 			s1: 2, s2: 3, s3: 1, s4: 3, s5: 1
 		}, {
-			category: ""
+			category: "g3-\n\n\nDominios:"
 		}, {
-			category: "g2-Dominios:\nCondiciones \ndel ambiente\n de trabajo",
+			category: "g2-Condiciones del ambiente de trabajo",
 			s1: 3, s2: 2, s3: 2, s4: 2, s5: 1
 		}],
 		'ambienteChart'
@@ -6962,18 +6975,18 @@ am5.ready(function () {
 
 	createChart(
 		"factoresChart",
-		"Factores de riesgo psicosocial en el trabajo-Identificación,\n análisis y prevención (Factores propios de la actividad)",
+		"Categoría\n Factores propios de la actividad \n\n",
 		"(Nivel de riesgo/NOM-035-STPS-2018)\n\n",
 		[{
-			category: "g1-Categoria:\nFactores \npropios de \nla actividad",
+			category: "g1-Factores propios de la actividad",
 			s1: 2, s2: 3, s3: 1, s4: 3, s5: 1
 		}, {
-			category: ""
+			category: "g3-\n\n\nDominios:"
 		}, {
-			category: "g2-Dominios:\nCarga de\n trabajo",
+			category: "g2-Carga de trabajo",
 			s1: 5, s2: 1, s3: 2, s4: 1, s5: 1
 		}, {
-			category: "g2-Falta de\n control sobre\n el trabajo",
+			category: "g2-Falta de control sobre el trabajo",
 			s1: 3, s2: 2, s3: 2, s4: 2, s5: 1
 		}],
 		'factoresChart'
@@ -6981,18 +6994,18 @@ am5.ready(function () {
 
 	createChart(
 		"organizacionChart",
-		"Factores de riesgo psicosocial en el trabajo-Identificación, \nanálisis y prevención (Organización del tiempo de trabajo)",
+		"Categoría\n Organización del tiempo de trabajo \n\n",
 		"(Nivel de riesgo/NOM-035-STPS-2018)\n\n",
 		[{
-			category: "g1-Categoria:\nOrganización\n del tiempo\n de trabajo",
+			category: "g1-Organización del tiempo de trabajo",
 			s1: 2, s2: 3, s3: 1, s4: 3, s5: 1
 		}, {
-			category: ""
+			category: "g3-\n\n\nDominios:"
 		}, {
-			category: "g2-Dominios:\nJornada \nde trabajo",
+			category: "g2-Jornada de trabajo",
 			s1: 5, s2: 1, s3: 2, s4: 1, s5: 1
-		}, {
-			category: "g2-Interferencia\n trabajo/familia",
+		},  {
+			category: "g2-Interferencia trabajo/familia",
 			s1: 3, s2: 2, s3: 2, s4: 2, s5: 1
 		}],
 		'organizacionChart'
@@ -7000,19 +7013,20 @@ am5.ready(function () {
 
 	createChart(
 		"liderazgoChart",
-		"Factores de riesgo psicosocial en el trabajo-Identificación, \nanálisis y prevención (Liderazgo y relaciones en el trabajo)",
+		"Categoría\n Liderazgo y relaciones en el trabajo \n\n\n",
 		"(Nivel de riesgo/NOM-035-STPS-2018)\n\n",
 		[{
-			category: "g1-Categoria:\nLiderazgo y\n relaciones en\n el trabajo",
+			category: "g1-Liderazgo y relaciones en el trabajo",
 			s1: 2, s2: 3, s3: 1, s4: 3, s5: 1
 		}, {
-			category: ""
+			category: "g3-\n\n\nDominios:"
 		},
 		{
-			category: "g2-Dominios:\nLiderazgo",
+			category: "g2-Liderazgo",
 			s1: 5, s2: 1, s3: 2, s4: 1, s5: 1
-		}, {
-			category: "g2-Relaciones\nen el\n trabajo",
+		},
+		 {
+			category: "g2-Relaciones en el trabajo",
 			s1: 3, s2: 2, s3: 2, s4: 2, s5: 1
 		},
 		{
@@ -7024,119 +7038,227 @@ am5.ready(function () {
 
 	createChart(
 		"entornoChart",
-		"Factores de riesgo psicosocial en el trabajo-Identificación, \nanálisis y prevención (Entorno organizacional)",
+		"Categoría\n Entorno organizacional \n\n",
 		"(Nivel de riesgo/NOM-035-STPS-2018)\n\n",
 		[{
-			category: "g1-Categoria:\nEntorno\n organizacional",
+			category: "g1-Entorno organizacional",
 			s1: 2, s2: 3, s3: 1, s4: 3, s5: 1
 		}, {
-			category: ""
+			category: "g3-\n\n\nDominios:"
 		}, {
-			category: "g2-Dominios:\nReconocimiento\n del desempeño",
+			category: "g2-Reconocimiento del desempeño",
 			s1: 5, s2: 1, s3: 2, s4: 1, s5: 1
-		}, {
-			category: "g2-Insuficiente\n sentido de\n pertenencia e\n inestabilidad",
+		},
+		 {
+			category: "g2-Insuficiente sentido de pertenencia e inestabilidad",
 			s1: 3, s2: 2, s3: 2, s4: 2, s5: 1
 		}],
 		'entornoChart'
 	);
 	// dashboard
 
+	var guia1_root = am5.Root.new("guia1Chart");
 
-
-	// Crear un nuevo objeto root para el gráfico de régimen
-	var rootGraficoGuia1 = am5.Root.new("guia1Chart"); // Cambié root a rootGraficoRegimen
-
-	// Establecer el tema para el gráfico
-	rootGraficoGuia1.setThemes([
-		am5themes_Animated.new(rootGraficoGuia1)
+	// Establecer temas
+	guia1_root.setThemes([
+		am5themes_Animated.new(guia1_root)
 	]);
-
-	// Crear el gráfico de tipo Pie para el régimen
-	var graficoguia1 = rootGraficoGuia1.container.children.push(am5percent.PieChart.new(rootGraficoGuia1, {
-		layout: rootGraficoGuia1.verticalLayout,
-		innerRadius: am5.percent(50)
+	
+	// Crear gráfico
+	var guia1_chart = guia1_root.container.children.push(am5percent.PieChart.new(guia1_root, {
+		startAngle: 180,
+		endAngle: 360,
+		layout: guia1_root.verticalLayout,
+		innerRadius: am5.percent(50),
+		paddingBottom: 0
 	}));
-
-	// Crear la serie de tipo Pie para el gráfico de régimen
-	var seriegrafica1 = graficoguia1.series.push(am5percent.PieSeries.new(rootGraficoGuia1, {
-		valueField: "valorgrafica1",  // Personalizado
-		categoryField: "categoriagrafica1",  // Personalizado
+	
+	// Definir los colores primero
+	const colors2 = {
+		"Requiere valoración clinica": 0xFF0000,
+		"No requiere valoración clinica": 0x00B0F0
+	};
+	
+	// Crear leyenda con texto más grande y grueso
+	let legend3 = guia1_chart.children.push(
+		am5.Legend.new(guia1_root, {
+			centerX: am5.percent(50),
+			x: am5.percent(50),
+			layout: guia1_root.verticalLayout,
+			fontSize: 16,
+			fontWeight: "bold",
+			marginTop: -10,  // Reducir el margen superior
+			dy: -10 // Mover la leyenda hacia arriba
+		})
+	);
+	
+	// Crear serie
+	var guia1_series = guia1_chart.series.push(am5percent.PieSeries.new(guia1_root, {
+		startAngle: 180,
+		endAngle: 360,
+		valueField: "value",
+		categoryField: "category",
 		alignLabels: false
 	}));
-
-	// Configuración de las etiquetas en formato circular
-	seriegrafica1.labels.template.setAll({
-		textType: "circular",
-		centerX: 0,
-		centerY: 0
+	
+	// Configurar etiquetas
+	guia1_series.labels.template.setAll({
+		fontSize: 20,
+		fontWeight: "bold",
+		text: "{value}"
 	});
-	seriegrafica1.slices.template.setAll({
-		tooltipText: "{categoryField}: {valueField}%", // Personaliza el texto del tooltip
-		stroke: am5.color(0xffffff), // Color del borde
-		strokeWidth: 2 // Grosor del borde
+	
+	// Configurar los colores y estilos de la leyenda
+	legend3.labels.template.setAll({
+		fontSize: 20,
+		fontWeight: "bold"
 	});
-
-	// Cambiar colores de las secciones
-	seriegrafica1.get("colors").set("colors", [
-		am5.color(0xff0000), // Rojo
-		am5.color(0x0098c7)  // Verde
+	
+	legend3.valueLabels.template.setAll({
+		fontSize: 20,
+		fontWeight: "bold"
+	});
+	
+	legend3.markers.template.setAll({
+		width: 20,
+		height: 20
+	});
+	
+	// Estilo de las rebanadas
+	guia1_series.slices.template.setAll({
+		cornerRadius: 5,
+		stroke: am5.color(0xFFFFFF)
+	});
+	
+	guia1_series.slices.template.adapters.add("fill", function(fill, target) {
+		var category = target.dataItem.get("category");
+		return am5.color(colors2[category] || fill);
+	});
+	
+	// Establecer datos
+	guia1_series.data.setAll([
+		{ value: 2, category: "Requiere valoración clinica" },
+		{ value: 69, category: "No requiere valoración clinica" },
 	]);
-	// Establecer los datos para el gráfico de régimen (por ejemplo, plantas, sindicalizados, etc.)
-	seriegrafica1.data.setAll([
-		{ valorgrafica1: 2, categoriagrafica1: "Requiere valoración clinica" },
-		{ valorgrafica1: 69, categoriagrafica1: "No requiere valoración clinica" },
-	]);
-
-	// Crear la leyenda para el gráfico de régimen
-	var leyendagrafico1 = graficoguia1.children.push(am5.Legend.new(rootGraficoGuia1, {
-		centerX: am5.percent(50),
-		x: am5.percent(50),
-		marginTop: 15,
-		marginBottom: 15,
-	}));
-	leyendagrafico1.labels.template.setAll({
-		fontSize: 14, // Tamaño de letra
-		fontWeight: "bold", // Peso de la fuente
-		fill: am5.color(0x333333) // Color de la letra
-	});
-
-	leyendagrafico1.markers.template.setAll({
-		width: 20, // Ancho del marcador
-		height: 20 // Alto del marcador
-	});
-	leyendagrafico1.data.setAll(seriegrafica1.dataItems);
-
-	seriegrafica1.appear(1000, 100).then(() => {
+	
+	// Conectar la leyenda con la serie
+	legend3.data.setAll(guia1_series.dataItems);
+	
+	// Animación
+	guia1_series.appear(1000, 100).then(() => {
 		setTimeout(() => {
 			if (typeof am5plugins_exporting !== 'undefined') {
-				console.log('Plugin de exportación dispo');
-
-				var exporting = am5plugins_exporting.Exporting.new(rootGraficoGuia1, {
-					menu: am5plugins_exporting.ExportingMenu.new(rootGraficoGuia1, {}),
-					dpi: 300, // Ajusta el DPI para mejorar la calidad de la imagen exportada
-					// También puedes ajustar el tamaño de la imagen, si lo deseas
-					maxWidth: 2000, // Ancho máximo en píxeles
+				var exporting = am5plugins_exporting.Exporting.new(guia1_root, {
+					menu: am5plugins_exporting.ExportingMenu.new(guia1_root, {}),
+					dpi: 300,
+					maxWidth: 2000,
 					maxHeight: 2000,
 				});
-				console.log('si creo el exporting');
-
+	
 				exporting.export("png").then(function (data) {
 					acontecimientoschart = data;
-					console.log("acontecimientochart exportado exitosamente");
+					console.log("guia1_chart exportado exitosamente");
 				}).catch(error => console.error('Error al exportar:', error));
 			} else {
 				console.log('Plugin de exportación no disponible');
 			}
-		}, 1000); // Aumenté el timeout
+		}, 1000);
 	});
+	
+
+// 	// Crear un nuevo objeto root para el gráfico de régimen
+// 	var rootGraficoGuia1 = am5.Root.new("guia1Chart"); // Cambié root a rootGraficoRegimen
+
+// 	// Establecer el tema para el gráfico
+// 	rootGraficoGuia1.setThemes([
+// 		am5themes_Animated.new(rootGraficoGuia1)
+// 	]);
+
+// 	// Crear el gráfico de tipo Pie para el régimen
+// 	var graficoguia1 = rootGraficoGuia1.container.children.push(am5percent.PieChart.new(rootGraficoGuia1, {
+// 		layout: rootGraficoGuia1.verticalLayout,
+// 		innerRadius: am5.percent(50)
+// 	}));
+
+// 	// Crear la serie de tipo Pie para el gráfico de régimen
+// 	var seriegrafica1 = graficoguia1.series.push(am5percent.PieSeries.new(rootGraficoGuia1, {
+// 		valueField: "valorgrafica1",  // Personalizado
+// 		categoryField: "categoriagrafica1",  // Personalizado
+// 		alignLabels: false
+// 	}));
+
+// 	// Configuración de las etiquetas en formato circular
+// 	seriegrafica1.labels.template.setAll({
+// 		textType: "circular",
+// 		centerX: 0,
+// 		centerY: 0
+// 	});
+// 	seriegrafica1.slices.template.setAll({
+// 		tooltipText: "{categoryField}: {valueField}%", // Personaliza el texto del tooltip
+// 		stroke: am5.color(0xffffff), // Color del borde
+// 		strokeWidth: 2 // Grosor del borde
+// 	});
+
+// 	// Cambiar colores de las secciones
+// 	seriegrafica1.get("colors").set("colors", [
+// 		am5.color(0xff0000), // Rojo
+// 		am5.color(0x0098c7)  // Verde
+// 	]);
+// 	// Establecer los datos para el gráfico de régimen (por ejemplo, plantas, sindicalizados, etc.)
+// 	seriegrafica1.data.setAll([
+// 		{ valorgrafica1: 2, categoriagrafica1: "Requiere valoración clinica" },
+// 		{ valorgrafica1: 69, categoriagrafica1: "No requiere valoración clinica" },
+// 	]);
+
+// 	// Crear la leyenda para el gráfico de régimen
+// 	var leyendagrafico1 = graficoguia1.children.push(am5.Legend.new(rootGraficoGuia1, {
+// 		centerX: am5.percent(50),
+// 		x: am5.percent(50),
+// 		marginTop: 15,
+// 		marginBottom: 15,
+// 	}));
+// 	leyendagrafico1.labels.template.setAll({
+// 		fontSize: 14, // Tamaño de letra
+// 		fontWeight: "bold", // Peso de la fuente
+// 		fill: am5.color(0x333333) // Color de la letra
+// 	});
+
+// 	leyendagrafico1.markers.template.setAll({
+// 		width: 20, // Ancho del marcador
+// 		height: 20 // Alto del marcador
+// 	});
+// 	leyendagrafico1.data.setAll(seriegrafica1.dataItems);
+
+// 	seriegrafica1.appear(1000, 100).then(() => {
+// 		setTimeout(() => {
+// 			if (typeof am5plugins_exporting !== 'undefined') {
+// 				console.log('Plugin de exportación dispo');
+
+// 				var exporting = am5plugins_exporting.Exporting.new(rootGraficoGuia1, {
+// 					menu: am5plugins_exporting.ExportingMenu.new(rootGraficoGuia1, {}),
+// 					dpi: 300, // Ajusta el DPI para mejorar la calidad de la imagen exportada
+// 					// También puedes ajustar el tamaño de la imagen, si lo deseas
+// 					maxWidth: 2000, // Ancho máximo en píxeles
+// 					maxHeight: 2000,
+// 				});
+// 				console.log('si creo el exporting');
+
+// 				exporting.export("png").then(function (data) {
+// 					acontecimientoschart = data;
+// 					console.log("acontecimientochart exportado exitosamente");
+// 				}).catch(error => console.error('Error al exportar:', error));
+// 			} else {
+// 				console.log('Plugin de exportación no disponible');
+// 			}
+// 		}, 1000); // Aumenté el timeout
+// 	});
 
 });
 var rootConsolidadoChart2 = am5.Root.new("consolidadoChart2");
 
 // Crear tema personalizado
 const customThemeConsolidado2 = am5.Theme.new(rootConsolidadoChart2);
-customThemeConsolidado2.rule("Label").set("fontSize", 14);
+customThemeConsolidado2.rule("Label").set("fontSize", 17);
 customThemeConsolidado2.rule("Grid").set("strokeOpacity", 0); // Ocultar las líneas de porcentaje
 
 // Definir los estilos para los ejes dentro del tema
@@ -7171,10 +7293,10 @@ rootConsolidadoChart2.numberFormatter.set("numberFormat", "#%");
 var chartConsolidado2 = rootConsolidadoChart2.container.children.push(am5radar.RadarChart.new(rootConsolidadoChart2, {
 	panX: false,
 	panY: false,
-	wheelX: "panX",
-	wheelY: "zoomX",
+	wheelX: "none", // Removed zoom functionality
+    wheelY: "none",
 	innerRadius: am5.percent(10),
-	radius: am5.percent(65)
+	radius: am5.percent(85)
 }));
 
 // Crear ejes
@@ -7188,12 +7310,16 @@ var categoryAxisConsolidado2 = chartConsolidado2.xAxes.push(am5xy.CategoryAxis.n
 
 categoryAxisRendererConsolidado2.labels.template.setAll({
 	fill: am5.color(0x000000),
-	fontSize: 14,
+	fontSize: 20,
 	fontWeight: "bold",
 	paddingLeft: 5,
 	paddingRight: 5,
 	paddingTop: 2,
-	paddingBottom: 2
+	paddingBottom: 2,
+	radius: 5,
+	centerX: am5.p50,
+    centerY: am5.p50,
+	 textAlign: "center"
 });
 
 categoryAxisConsolidado2.data.setAll(dataConsolidado2);
@@ -7234,7 +7360,9 @@ seriesNamesConsolidado2.forEach((seriesName, index) => {
 	series.columns.template.setAll({
 		tooltipText: "{name}: {valueY.formatNumber('#.##%')}",
 		cornerRadius: 0,
-		strokeOpacity: 0,
+		strokeOpacity: 1, // Changed from 0 to 1 to show borders
+        stroke: am5.color(0x000000), // Added black border
+        strokeWidth: 0.5, // Added border width
 		fill: seriesColorsConsolidado2[index],
 		width: am5.percent(100)
 	});
@@ -7258,16 +7386,16 @@ seriesNamesConsolidado2.forEach((seriesName, index) => {
 });
 
 // Añadir un título al gráfico
-var title = chartConsolidado2.children.unshift(am5.Label.new(rootConsolidadoChart2, {
-	text: "FACTORES PSICOSOCIALES NOM-035-STPS-2028\n Dominios",
-	fontSize: 14,
-	fontWeight: "bold",
-	textAlign: "center",
-	x: am5.p50,
-	centerX: am5.p50,
-	y: 0,
-	paddingBottom: 1
-}));
+// var title = chartConsolidado2.children.unshift(am5.Label.new(rootConsolidadoChart2, {
+// 	text: "FACTORES PSICOSOCIALES NOM-035-STPS-2028\n Dominios",
+// 	fontSize: 14,
+// 	fontWeight: "bold",
+// 	textAlign: "center",
+// 	x: am5.p50,
+// 	centerX: am5.p50,
+// 	y: 0,
+// 	paddingBottom: 1
+// }));
 
 // Crear la leyenda
 var legendConsolidado2 = chartConsolidado2.children.push(am5.Legend.new(rootConsolidadoChart2, {
@@ -7313,179 +7441,6 @@ chartConsolidado2.appear(1000, 100).then(() => {
 			}
 		}, 1000); // Aumenté el timeout
 	});
-
-
-// var rootConsolidadoChart2 = am5.Root.new("consolidadoChart2");
-
-// // Crear tema personalizado
-// const customThemeConsolidado = am5.Theme.new(rootConsolidadoChart2);
-// customThemeConsolidado.rule("Label").set("fontSize", 14);
-// customThemeConsolidado.rule("Grid").set("strokeOpacity", 0); // Ocultar las líneas de porcentaje
-
-// // Definir los estilos para los ejes dentro del tema
-// customThemeConsolidado.rule("AxisRenderer").setAll({
-// 	background: am5.Rectangle.new(rootConsolidadoChart2, {
-// 		fill: am5.color(0x000000),
-// 		fillOpacity: 0.7
-// 	})
-// });
-
-// // Establecer temas
-// rootConsolidadoChart2.setThemes([am5themes_Animated.new(rootConsolidadoChart2), customThemeConsolidado]);
-
-// // Datos (con valores fijos para las 5 series)
-// var dataConsolidado = [
-// 	{ "category": "Condiciones en el \nambiente de trabajo", "Nulo": 0.10, "Bajo": 0.15, "Medio": 0.20, "Alto": 0.25, "Muy alto": 0.30 },
-// 	{ "category": "Falta de control \nsobre el trabajo", "Nulo": 0.35, "Bajo": 0.18, "Medio": 0.22, "Alto": 0.15, "Muy alto": 0.10 },
-// 	{ "category": "Carga de trabajo", "Nulo": 0.09, "Bajo": 0.36, "Medio": 0.21, "Alto": 0.26, "Muy alto": 0.08 },
-// 	{ "category": "Jornada de\n trabajo", "Nulo": 0.14, "Bajo": 0.19, "Medio": 0.23, "Alto": 0.27, "Muy alto": 0.17 },
-// 	{ "category": "Interferencia en la\n relacion\n trabajo-familia", "Nulo": 0.16, "Bajo": 0.20, "Medio": 0.24, "Alto": 0.29, "Muy alto": 0.11 },
-// 	{ "category": "Liderazgo", "Nulo": 0.11, "Bajo": 0.16, "Medio": 0.19, "Alto": 0.24, "Muy alto": 0.30 },
-// 	{ "category": "Relaciones en el trabajo", "Nulo": 0.14, "Bajo": 0.17, "Medio": 0.22, "Alto": 0.27, "Muy alto": 0.20 },
-// 	{ "category": "Violencia", "Nulo": 0.25, "Bajo": 0.10, "Medio": 0.20, "Alto": 0.40, "Muy alto": 0.05 }
-// ];
-
-// var colorSetConsolidado = am5.ColorSet.new(rootConsolidadoChart2, {});
-
-// // Modificar formato de números
-// rootConsolidadoChart2.numberFormatter.set("numberFormat", "#%");
-
-// // Crear gráfico
-// var chartConsolidado = rootConsolidadoChart2.container.children.push(am5radar.RadarChart.new(rootConsolidadoChart2, {
-// 	panX: false,
-// 	panY: false,
-// 	wheelX: "panX",
-// 	wheelY: "zoomX",
-// 	innerRadius: am5.percent(0),
-// 	radius: am5.percent(65)
-// }));
-
-// // Crear ejes
-// var categoryAxisRendererConsolidado = am5radar.AxisRendererCircular.new(rootConsolidadoChart2, {
-// 	innerRadius: am5.percent(0)
-// });
-// var categoryAxisConsolidado = chartConsolidado.xAxes.push(am5xy.CategoryAxis.new(rootConsolidadoChart2, {
-// 	categoryField: "category",
-// 	renderer: categoryAxisRendererConsolidado
-// }));
-
-// categoryAxisRendererConsolidado.labels.template.setAll({
-// 	fill: am5.color(0x000000),
-// 	fontSize: 14,
-// 	fontWeight: "bold",
-// 	paddingLeft: 5,
-// 	paddingRight: 5,
-// 	paddingTop: 2,
-// 	paddingBottom: 2
-// });
-
-// categoryAxisConsolidado.data.setAll(dataConsolidado);
-
-
-
-// // Crear eje de valor
-// var valueAxisConsolidado = chartConsolidado.yAxes.push(am5xy.ValueAxis.new(rootConsolidadoChart2, {
-// 	renderer: am5radar.AxisRendererRadial.new(rootConsolidadoChart2, {}),
-// 	min: 0,
-// 	max: 1,
-// 	strictMinMax: true,
-// 	extraMax: 0.1
-// }));
-
-// valueAxisConsolidado.get("renderer").labels.template.setAll({
-// 	visible: false
-// });
-
-// // Crear series apiladas
-// var seriesNamesConsolidado = ["Nulo", "Bajo", "Medio", "Alto", "Muy alto"];
-// var seriesColorsConsolidado = [
-// 	am5.color(0x00B0F0),
-// 	am5.color(0x00B050),
-// 	am5.color(0xFFFF00),
-// 	am5.color(0xF7AA32),
-// 	am5.color(0xFF0000)
-// ];
-
-// seriesNamesConsolidado.forEach((seriesName, index) => {
-// 	var series = chartConsolidado.series.push(am5radar.RadarColumnSeries.new(rootConsolidadoChart2, {
-// 		stacked: true,
-// 		name: seriesName,
-// 		xAxis: categoryAxisConsolidado,
-// 		yAxis: valueAxisConsolidado,
-// 		valueYField: seriesName,
-// 		categoryXField: "category"
-// 	}));
-
-
-// 	series.columns.template.setAll({
-// 		tooltipText: "{name}: {valueY.formatNumber('#.##%')}",
-// 		cornerRadius: 0,
-// 		strokeOpacity: 0,
-// 		fill: seriesColorsConsolidado[index],
-// 		width: am5.percent(100)
-// 	});
-
-// 	// Agregar etiquetas con porcentajes
-// 	series.bullets.push(function () {
-// 		return am5.Bullet.new(rootConsolidadoChart2, {
-// 			sprite: am5.Label.new(rootConsolidadoChart2, {
-// 				text: "{valueY.formatNumber('#.##%')}",
-// 				populateText: true,
-// 				centerX: am5.p50,
-// 				centerY: am5.p50,
-// 				fill: am5.color(0x000000),
-// 				fontWeight: "bold"
-// 			})
-// 		});
-// 	});
-
-// 	// Asignar datos
-// 	series.data.setAll(dataConsolidado);
-// });
-
-// var title = chartConsolidado.children.unshift(am5.Label.new(rootConsolidadoChart2, {
-// 	text: "FACTORES PSICOSOCIALES NOM-035-STPS-2028\n Dominios",
-// 	fontSize: 20,
-// 	fontWeight: "bold",
-// 	textAlign: "center",
-// 	x: am5.p50,
-// 	centerX: am5.p50,
-// 	y: 0,
-// 	paddingBottom: 15
-//   }));
-// // Crear la leyenda
-// var legendConsolidado = chartConsolidado.children.push(am5.Legend.new(rootConsolidadoChart2, {
-//     centerX: am5.p50, // Centrar horizontalmente
-//     x: am5.p50,
-//     y: am5.p100, // Colocarla en la parte inferior del gráfico
-//     layout: rootConsolidadoChart2.horizontalLayout, // Cambiar a disposición horizontal
-//     marginTop: 5
-// }));
-
-
-// chartConsolidado.appear(1000, 100).then(() => {
-// 	setTimeout(() => {
-// 		if (typeof am5plugins_exporting !== 'undefined') {
-// 			console.log('Plugin de exportación dispo');
-
-// 			var exporting = am5plugins_exporting.Exporting.new(rootConsolidadoChart2, {
-// 				menu: am5plugins_exporting.ExportingMenu.new(rootConsolidadoChart2, {}),
-// 				dpi: 300, // Ajusta el DPI para mejorar la calidad de la imagen exportada
-// 				// También puedes ajustar el tamaño de la imagen, si lo deseas
-// 				maxWidth: 2000, // Ancho máximo en píxeles
-// 				maxHeight: 2000,
-// 			});
-// 			console.log('si creo el exporting');
-
-// 			exporting.export("png").then(function (data) {
-// 				dominioschart = data;
-// 				console.log("consolidado1 categorias exportado exitosamente");
-// 			}).catch(error => console.error('Error al exportar:', error));
-// 		} else {
-// 			console.log('Plugin de exportación no disponible');
-// 		}
-// 	}, 1000); // Aumenté el timeout
-// });
 
 var calificaciones_root = am5.Root.new("calificacionChart");
 
@@ -7536,19 +7491,19 @@ var calificaciones_series = calificaciones_chart.series.push(am5percent.PieSerie
 
 // Configurar etiquetas
 calificaciones_series.labels.template.setAll({
-    fontSize: 16,
+    fontSize: 20,
     fontWeight: "bold",
-    text: "{category}: {value}"
+    text: "{value}"
 });
 
 // Configurar los colores y estilos de la leyenda
 legend2.labels.template.setAll({
-    fontSize: 16,
+    fontSize: 20,
     fontWeight: "bold"
 });
 
 legend2.valueLabels.template.setAll({
-    fontSize: 16,
+    fontSize: 20,
     fontWeight: "bold"
 });
 
@@ -7607,7 +7562,7 @@ var rootConsolidadoChart1 = am5.Root.new("consolidadoChart");
 
 // Crear tema personalizado
 const customThemeConsolidado1 = am5.Theme.new(rootConsolidadoChart1);
-customThemeConsolidado1.rule("Label").set("fontSize", 14);
+customThemeConsolidado1.rule("Label").set("fontSize", 17);
 customThemeConsolidado1.rule("Grid").set("strokeOpacity", 0); // Ocultar las líneas de porcentaje
 
 // Definir los estilos para los ejes dentro del tema
@@ -7639,16 +7594,20 @@ rootConsolidadoChart1.numberFormatter.set("numberFormat", "#%");
 var chartConsolidado1 = rootConsolidadoChart1.container.children.push(am5radar.RadarChart.new(rootConsolidadoChart1, {
 	panX: false,
 	panY: false,
-	wheelX: "panX",
-	wheelY: "zoomX",
+	wheelX: "none", // Removed zoom functionality
+    wheelY: "none",
 	innerRadius: am5.percent(10),
-	radius: am5.percent(65)
+	radius: am5.percent(85)
 }));
+
+chartConsolidado1.zoomOutButton.set("forceHidden", true);
 
 // Crear ejes
 var categoryAxisRendererConsolidado1 = am5radar.AxisRendererCircular.new(rootConsolidadoChart1, {
 	innerRadius: am5.percent(10)
 });
+
+
 var categoryAxisConsolidado1 = chartConsolidado1.xAxes.push(am5xy.CategoryAxis.new(rootConsolidadoChart1, {
 	categoryField: "category",
 	renderer: categoryAxisRendererConsolidado1
@@ -7656,7 +7615,7 @@ var categoryAxisConsolidado1 = chartConsolidado1.xAxes.push(am5xy.CategoryAxis.n
 
 categoryAxisRendererConsolidado1.labels.template.setAll({
 	fill: am5.color(0x000000),
-	fontSize: 14,
+	fontSize: 20,
 	fontWeight: "bold",
 	paddingLeft: 5,
 	paddingRight: 5,
@@ -7702,7 +7661,9 @@ seriesNamesConsolidado1.forEach((seriesName, index) => {
 	series.columns.template.setAll({
 		tooltipText: "{name}: {valueY.formatNumber('#.##%')}",
 		cornerRadius: 0,
-		strokeOpacity: 0,
+		strokeOpacity: 1, // Changed from 0 to 1 to show borders
+        stroke: am5.color(0x000000), // Added black border
+        strokeWidth: 0.5, // Added border width
 		fill: seriesColorsConsolidado1[index],
 		width: am5.percent(100)
 	});
@@ -7726,16 +7687,16 @@ seriesNamesConsolidado1.forEach((seriesName, index) => {
 });
 
 // Añadir un título al gráfico
-var title = chartConsolidado1.children.unshift(am5.Label.new(rootConsolidadoChart1, {
-	text: "FACTORES PSICOSOCIALES NOM-035-STPS-2028\n Categorias",
-	fontSize: 14,
-	fontWeight: "bold",
-	textAlign: "center",
-	x: am5.p50,
-	centerX: am5.p50,
-	y: 0,
-	paddingBottom: 1
-}));
+// var title = chartConsolidado1.children.unshift(am5.Label.new(rootConsolidadoChart1, {
+// 	text: "FACTORES PSICOSOCIALES NOM-035-STPS-2028\n Categorias",
+// 	fontSize: 14,
+// 	fontWeight: "bold",
+// 	textAlign: "center",
+// 	x: am5.p50,
+// 	centerX: am5.p50,
+// 	y: 0,
+// 	paddingBottom: 1
+// }));
 
 // Crear la leyenda
 var legendConsolidado1 = chartConsolidado1.children.push(am5.Legend.new(rootConsolidadoChart1, {
@@ -7743,7 +7704,7 @@ var legendConsolidado1 = chartConsolidado1.children.push(am5.Legend.new(rootCons
 	x: am5.p50,
 	y: am5.p100, // Colocarla en la parte inferior del gráfico
 	layout: rootConsolidadoChart1.horizontalLayout, // Cambiar a disposición horizontal
-	marginTop: 1
+	marginTop: 3
 }));
 
 // Vincular colores y nombres de las series a la leyenda
@@ -8166,296 +8127,3 @@ chartExperiencia.render().then(() => {
 	}, 4000);
 });
 
-
-var calificacion2Root = am5.Root.new("calificacionChart2");
-
-// Set themes
-calificacion2Root.setThemes([
-    am5themes_Animated.new(calificacion2Root)
-]);
-
-// Create chart
-var calificacion2Chart = calificacion2Root.container.children.push(
-    am5percent.PieChart.new(calificacion2Root, {
-        endAngle: 270,
-        layout: calificacion2Root.verticalLayout,
-        innerRadius: am5.percent(60)
-    })
-);
-
-// Create series
-var calificacion2Series = calificacion2Chart.series.push(
-    am5percent.PieSeries.new(calificacion2Root, {
-        valueField: "value",
-        categoryField: "category",
-        endAngle: 270,
-        legendLabelText: "{category}",
-        legendValueText: "{value}" // Mostrar valores reales
-    })
-);
-
-// Set custom colors
-calificacion2Series.set("colors", am5.ColorSet.new(calificacion2Root, {
-    colors: [
-        am5.color(0xFF0000), // Muy Alto - Rojo
-        am5.color(0xF7AA32), // Alto - Naranja
-        am5.color(0xFFFF00), // Medio - Amarillo
-        am5.color(0x00B050), // Bajo - Verde
-        am5.color(0x00B0F0)  // Nulo - Azul
-    ]
-}));
-
-// Style slices
-calificacion2Series.slices.template.setAll({
-    strokeWidth: 2,
-    stroke: am5.color(0xffffff),
-    cornerRadius: 10,
-    shadowOpacity: 0.1,
-    shadowOffsetX: 2,
-    shadowOffsetY: 2,
-    shadowColor: am5.color(0x000000),
-    fillOpacity: 1,
-    tooltipText: "{category}: {value}" // Mostrar valores reales en el tooltip
-});
-
-// Configure labels
-calificacion2Series.labels.template.setAll({
-    text: "{category}: {value}", // Mostrar categoría y valor
-    fontSize: 14,
-    fill: am5.color(0x000000),
-    textType: "circular",
-    centerX: 0,
-    centerY: 0
-});
-
-// Remove unnecessary patterns or gradients
-calificacion2Series.slices.template.set("fillGradient", undefined);
-
-// Hover state
-calificacion2Series.slices.template.states.create("hover", {
-    shadowOpacity: 1,
-    shadowBlur: 10
-});
-
-// Style ticks
-calificacion2Series.ticks.template.setAll({
-    strokeOpacity: 0.4,
-    strokeDasharray: [2, 2]
-});
-
-calificacion2Series.states.create("hidden", {
-    endAngle: -90
-});
-
-// Set data
-calificacion2Series.data.setAll([
-    { category: "Muy Alto", value: 1 },
-    { category: "Alto", value: 31 },
-    { category: "Medio", value: 75 },
-    { category: "Bajo", value: 89 },
-    { category: "Nulo", value: 55 }
-]);
-
-// Add legend
-var calificacion2Legend = calificacion2Chart.children.push(am5.Legend.new(calificacion2Root, {
-    centerX: am5.percent(50),
-    x: am5.percent(50),
-    marginTop: 15,
-    marginBottom: 15,
-}));
-
-// Configure legend style
-calificacion2Legend.labels.template.setAll({
-    fontSize: 14,
-    fontWeight: "bold",
-    fill: am5.color(0x333333)
-});
-
-calificacion2Legend.markerRectangles.template.setAll({
-    fillGradient: undefined,
-    width: 20,
-    height: 20
-});
-
-// Link legend to series data
-calificacion2Legend.data.setAll(calificacion2Series.dataItems);
-
-// Animate appearance
-calificacion2Series.appear(1000, 100);
-
-// Crear root
-var rootCalificacion3 = am5.Root.new("calificacionChart3");
-
-// Establecer tema
-rootCalificacion3.setThemes([
-    am5themes_Animated.new(rootCalificacion3)
-]);
-
-// Crear gráfico
-var chartCalificacion3 = rootCalificacion3.container.children.push(
-    am5percent.PieChart.new(rootCalificacion3, {
-        layout: rootCalificacion3.verticalLayout,
-        endAngle: 270
-    })
-);
-
-// Crear serie
-var seriesCalificacion3 = chartCalificacion3.series.push(
-    am5percent.PieSeries.new(rootCalificacion3, {
-        valueField: "value",
-        categoryField: "category",
-        endAngle: 270,
-        legendLabelText: "{category}",
-        legendValueText: "{value}"
-    })
-);
-
-// Configurar las etiquetas
-seriesCalificacion3.labels.template.setAll({
-    textType: "circular",
-    centerX: 0,
-    centerY: 0,
-    text: "{category}: {value}",
-    fontSize: 14,
-    fill: am5.color(0x000000)
-});
-
-// Configurar las rebanadas
-seriesCalificacion3.slices.template.setAll({
-    strokeWidth: 2,
-    stroke: am5.color(0xffffff),
-    tooltipText: "{category}: {value}"
-});
-
-// Configurar colores específicos
-seriesCalificacion3.set("colors", am5.ColorSet.new(rootCalificacion3, {
-    colors: [
-        am5.color(0xFF0000),  // Rojo - Muy Alto
-        am5.color(0xF7AA32),  // Naranja - Alto
-        am5.color(0xFFFF00),  // Amarillo - Medio
-        am5.color(0x00B050),  // Verde - Bajo
-        am5.color(0x00B0F0)   // Azul - Nulo
-    ]
-}));
-
-// Establecer datos
-seriesCalificacion3.data.setAll([
-    { category: "Muy Alto", value: 1 },
-    { category: "Alto", value: 31 },
-    { category: "Medio", value: 75 },
-    { category: "Bajo", value: 89 },
-    { category: "Nulo", value: 55 }
-]);
-
-// Crear leyenda
-var legend = chartCalificacion3.children.push(
-    am5.Legend.new(rootCalificacion3, {
-        centerX: am5.percent(50),
-        x: am5.percent(50),
-        marginTop: 15,
-        marginBottom: 15
-    })
-);
-
-// Configurar estilo de la leyenda
-legend.labels.template.setAll({
-    fontSize: 14,
-    fontWeight: "bold",
-    fill: am5.color(0x333333)
-});
-
-legend.markers.template.setAll({
-    width: 20,
-    height: 20
-});
-
-// Conectar la leyenda con la serie
-legend.data.setAll(seriesCalificacion3.dataItems);
-
-// Configurar estado oculto
-seriesCalificacion3.states.create("hidden", {
-    endAngle: -90
-});
-
-// Animación y exportación
-seriesCalificacion3.appear(1000, 100);
-
-
-const calificacion4Data = [
-	{ categoria: "Muy Alto", total: 1, color: "#FF0000" },
-	{ categoria: "Alto", total: 31, color: "#F7AA32" },
-	{ categoria: "Medio", total: 75, color: "#FFFF00" },
-	{ categoria: "Bajo", total: 89, color: "#00B050" },
-	{ categoria: "Nulo", total: 55, color: "#00B0F0" }
-];
-
-// Extraer categorías, valores y colores
-const categoriasCalif4 = calificacion4Data.map(item => item.categoria);
-const valoresCalif4 = calificacion4Data.map(item => item.total);
-const coloresCalif4 = calificacion4Data.map(item => item.color);
-
-// Configuración del gráfico con Distributed Columns
-const optionsCalif4 = {
-	series: [{
-		data: valoresCalif4
-	}],
-	chart: {
-		type: 'bar',
-		height: 620
-	},
-	colors: coloresCalif4, // Colores personalizados para cada barra
-	plotOptions: {
-		bar: {
-			columnWidth: '65%',
-			distributed: true,
-			borderRadius: 3,
-			dataLabels: {
-                position: 'top' // Forzar etiquetas arriba de las barras
-            }
-		},
-		
-	},
-	dataLabels: {
-		enabled: true,
-		offsetY: -30,
-		style: {
-			fontSize: '18px',
-			fontWeight: 'bold',
-			colors: ['#000000']
-		},
-		formatter: function (val, opts) {
-			const category = categoriasCalif4[opts.dataPointIndex];
-            return `${category}: ${val}`;
-		}
-	},
-	legend: {
-		show: true,
-		labels: {
-			colors: ['#000000'],
-			useSeriesColors: false
-		},
-		fontSize: '14px',
-		fontWeight: 'bold',
-		fontFamily: 'Helvetica, Arial, sans-serif'
-	},
-	xaxis: {
-		categories: categoriasCalif4, // Categorías en el eje X
-		labels: {
-			style: {
-				colors: coloresCalif4,
-				fontSize: '0px',
-			}
-		}
-	}
-};
-
-// Crear y renderizar el gráfico de Rango de Calif4
-const chartCalif4 = new ApexCharts(document.querySelector("#calificacion4Chart"), optionsCalif4);
-chartCalif4.render().then(() => {
-	setTimeout(function () {
-		chartCalif4.dataURI().then(uri => {
-			console.log(uri);
-			calificacion4chart = uri;
-		});
-	}, 4000);
-});
