@@ -6783,7 +6783,7 @@ am5.ready(function () {
 		chart.children.unshift(
 			am5.Label.new(root, {
 				text: titleText,
-				fontSize: 25,
+				fontSize: 18,
 				fontWeight: "bold",
 				textAlign: "center",
 				x: am5.p50,
@@ -6847,10 +6847,10 @@ am5.ready(function () {
 					return "[bold]" + category.split("-")[1] + "[/]";
 				}
 				if (category.startsWith("g3")) {
-					target.set("x", target.get("x") + 27); // Mover la categoría a la derecha
+					//target.set("x", target.get("x") + 27); // Mover la categoría a la derecha
 					return category.split("-")[1];  // No hace falta modificar el texto, solo moverlo
 				}
-				return category.split("-")[1];
+				return "[bold]" + category.split("-")[1] + "[/]";
 			}
 			return text;
 		});
@@ -7085,7 +7085,7 @@ am5.ready(function () {
 			centerX: am5.percent(50),
 			x: am5.percent(50),
 			layout: guia1_root.verticalLayout,
-			fontSize: 16,
+			fontSize: 17,
 			fontWeight: "bold",
 			marginTop: -10,  // Reducir el margen superior
 			dy: -10 // Mover la leyenda hacia arriba
@@ -7103,19 +7103,19 @@ am5.ready(function () {
 	
 	// Configurar etiquetas
 	guia1_series.labels.template.setAll({
-		fontSize: 20,
+		fontSize: 17,
 		fontWeight: "bold",
 		text: "{value}"
 	});
 	
 	// Configurar los colores y estilos de la leyenda
 	legend3.labels.template.setAll({
-		fontSize: 20,
+		fontSize: 17,
 		fontWeight: "bold"
 	});
 	
 	legend3.valueLabels.template.setAll({
-		fontSize: 20,
+		fontSize: 17,
 		fontWeight: "bold"
 	});
 	
@@ -7258,7 +7258,7 @@ var rootConsolidadoChart2 = am5.Root.new("consolidadoChart2");
 
 // Crear tema personalizado
 const customThemeConsolidado2 = am5.Theme.new(rootConsolidadoChart2);
-customThemeConsolidado2.rule("Label").set("fontSize", 17);
+customThemeConsolidado2.rule("Label").set("fontSize", 20);
 customThemeConsolidado2.rule("Grid").set("strokeOpacity", 0); // Ocultar las líneas de porcentaje
 
 // Definir los estilos para los ejes dentro del tema
@@ -7310,7 +7310,7 @@ var categoryAxisConsolidado2 = chartConsolidado2.xAxes.push(am5xy.CategoryAxis.n
 
 categoryAxisRendererConsolidado2.labels.template.setAll({
 	fill: am5.color(0x000000),
-	fontSize: 20,
+	fontSize: 24,
 	fontWeight: "bold",
 	paddingLeft: 5,
 	paddingRight: 5,
@@ -7473,7 +7473,7 @@ let legend2 = calificaciones_chart.children.push(
         centerX: am5.percent(50),
         x: am5.percent(50),
         layout: calificaciones_root.verticalLayout,
-        fontSize: 16,
+        fontSize: 12,
         fontWeight: "bold",
 		marginTop: -10,  // Reducir el margen superior
         dy: -10 // Mover la leyenda hacia arriba
@@ -7491,19 +7491,19 @@ var calificaciones_series = calificaciones_chart.series.push(am5percent.PieSerie
 
 // Configurar etiquetas
 calificaciones_series.labels.template.setAll({
-    fontSize: 20,
+    fontSize: 12,
     fontWeight: "bold",
     text: "{value}"
 });
 
 // Configurar los colores y estilos de la leyenda
 legend2.labels.template.setAll({
-    fontSize: 20,
+    fontSize: 12,
     fontWeight: "bold"
 });
 
 legend2.valueLabels.template.setAll({
-    fontSize: 20,
+    fontSize: 12,
     fontWeight: "bold"
 });
 

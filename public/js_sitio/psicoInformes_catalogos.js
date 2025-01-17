@@ -3,6 +3,7 @@ var datatable_introducciones = null;
 var datatable_definiciones = null;
 var datatable_recomendaciones = null;
 var datatable_conclusiones = null;
+var datatable_recomendaciones_control = null;
 
 var catalogo = 0;
 
@@ -66,12 +67,24 @@ $("#boton_nuevo_registro").click(function () {
             // abrir modal
             $('#modal_conclusion').modal({ backdrop: false });
             break;
+        case 5:
+            // Borrar formulario
+            $('#form_recomendaciones_control').each(function () {
+                this.reset();
+            });
+
+            // campos hidden
+            $("#ID_RECOMENDACION_CONTROL_INFORME").val(0);
+
+            // abrir modal
+            $('#modal_recomendaciones_control').modal({ backdrop: false });
+            break;
         default:
             // Borrar formulario
             $('#form_catalogo').each(function () {
                 this.reset();
             });
-            actualizarOpcionesNivel();
+            
             // campos hidden
             $("#id").val(0);
             $("#catalogo").val(catalogo);
@@ -310,6 +323,63 @@ $("#boton_guardar_conclusion").click(function () {
     }
 });
 
+$("#boton_guardar_recomendacion_control").click(function () {
+    // valida campos vacios
+    var valida = this.form.checkValidity();
+    if (valida) {
+        // enviar datos
+        $('#form_recomendaciones_control').ajaxForm({
+            dataType: 'json',
+            type: 'POST',
+            url: '/recpsicocatalogosrec',
+            data: {},
+            resetForm: false,
+            success: function (dato) {
+                // actualizar tabla
+                tabla_catalogo_recomendaciones_control(catalogo);
+
+                // mensaje
+                swal({
+                    title: "Correcto",
+                    text: "Información guardada correctamente",
+                    type: "success", // warning, error, success, info
+                    buttons: {
+                        visible: false, // true , false
+                    },
+                    timer: 2000,
+                    showConfirmButton: false
+                });
+
+                // actualiza boton
+                $('#boton_guardar_recomendacion_control').html('Guardar <i class="fa fa-save"></i>');
+
+                // cerrar modal
+                $('#modal_recomendaciones_control').modal('hide');
+            },
+            beforeSend: function () {
+                $('#boton_guardar_recomendacion_control').html('Guardando <i class="fa fa-spin fa-spinner"></i>');
+            },
+            error: function (dato) {
+                // actualiza boton
+                $('#boton_guardar_recomendacion_control').html('Guardar <i class="fa fa-save"></i>');
+                // mensaje
+                swal({
+                    title: "Error",
+                    text: "Error en la acción: " + dato,
+                    type: "error", // warning, error, success, info
+                    buttons: {
+                        visible: false, // true , false
+                    },
+                    timer: 1500,
+                    showConfirmButton: false
+                });
+                return false;
+            }
+        }).submit();
+        return false;
+    }
+});
+
 //------------------------------------------------------FUNCIONES--------------------------//
 function actualizarOpcionesNivel() {
     const dominioSelect = document.getElementById('DOMINIO');
@@ -474,6 +544,37 @@ function mostrar_catalogo(num_catalogo) {
                 '</table>');
 
             tabla_catalogo_conclusiones(catalogo);
+            break;
+
+        case 5:
+
+            // activa menu
+            $("#titulo_tabla").html('Catálogo de recomendaciones de control para informes');
+            $("#modal_titulo").html("Catálogo de recomendaciones de control para informes");
+            $("#tr_5").addClass("active");
+            $("#cat_5").addClass("text-info");
+
+            // Inicializar tabla
+            if (datatable_recomendaciones_control != null) {
+                datatable_recomendaciones_control.destroy();
+                datatable_recomendaciones_control = null;
+            }
+
+
+            // diseño tabla
+            $("#div_datatable").html('<table class="table table-hover stylish-table" id="tabla_lista_catalogo_recomendaciones_control" width="100%">' +
+                '<thead>' +
+                '<tr>' +
+                '<th>No.</th>' +
+                '<th>Recomendacion</th>' +
+                '<th style="width: 90px!important;">Editar</th>' +
+                '<th style="width: 90px!important;">Activo</th>' +
+                '</tr>' +
+                '</thead>' +
+                '<tbody></tbody>' +
+                '</table>');
+
+            tabla_catalogo_recomendaciones_control(catalogo);
             break;
 
     }
@@ -645,6 +746,25 @@ function editar_conclusionInforme() {
     });
 }
 
+function editar_recomendacioncontrolInforme() {
+    $('#tabla_lista_catalogo_recomendaciones_control tbody').on('click', 'td.editar', function () {
+        // console.log();
+        var tr = $(this).closest('tr');
+        var row = datatable_recomendaciones_control.row(tr);
+
+        $('#form_recomendaciones_control').each(function () {
+            this.reset();
+        });
+
+        // Llenar campo formulario
+        $("#ID_RECOMENDACION_CONTROL_INFORME").val(row.data().ID_RECOMENDACION_CONTROL_INFORME);
+        $("#RECOMENDACION_CONTROL").val(row.data().RECOMENDACION_CONTROL);
+        $("#catalogo").val(5);
+
+        // abrir modal
+        $('#modal_recomendaciones_control').modal({ backdrop: false });
+    });
+}
 
 //--------------------------------------------------------TABLAS----------------------------//
 function tabla_catalogo_cargos(num_catalogo) {
@@ -718,31 +838,31 @@ function tabla_catalogo_cargos(num_catalogo) {
     }
 }
 
-function tabla_catalogo_introducciones(num_catalogo) {
+function tabla_catalogo_recomendaciones_control(num_catalogo) {
     var ruta = "/recpsicocatalogosinformes/" + num_catalogo;
 
     try {
-        if (datatable_introducciones != null) {
-            datatable_introducciones.clear().draw();
-            datatable_introducciones.ajax.url(ruta).load();
+        if (datatable_recomendaciones_control != null) {
+            datatable_recomendaciones_control.clear().draw();
+            datatable_recomendaciones_control.ajax.url(ruta).load();
         }
         else {
-            datatable_introducciones = $('#tabla_lista_catalogo_introducciones').DataTable({
+            datatable_recomendaciones_control = $('#tabla_lista_catalogo_recomendaciones_control').DataTable({
                 "ajax": {
                     "url": ruta,
                     "type": "get",
                     "cache": false,
                     error: function (xhr, error, code) {
-                        tabla_catalogo_introducciones(num_catalogo);
+                        tabla_catalogo_recomendaciones_control(num_catalogo);
                     },
                     "data": {}
                 },
                "columns": [
                     {
-                        "data": "ID_INTRODUCCION_INFORME"
+                        "data": "ID_RECOMENDACION_CONTROL_INFORME"
                     },
                     {
-                        "data": "INTRODUCCION"
+                        "data": "RECOMENDACION_CONTROL"
                     },
                     {
                         "className": 'editar',
@@ -785,7 +905,7 @@ function tabla_catalogo_introducciones(num_catalogo) {
         }
     }
     catch (exception) {
-        tabla_catalogo_introducciones(num_catalogo);
+        tabla_catalogo_recomendaciones_control(num_catalogo);
     }
 }
 

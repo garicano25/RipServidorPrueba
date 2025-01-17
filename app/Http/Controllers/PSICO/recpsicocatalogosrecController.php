@@ -17,6 +17,7 @@ use App\modelos\reconocimientopsico\catconclusiones_psicoModel;
 use App\modelos\reconocimientopsico\catdefiniciones_psicoModel;
 use App\modelos\reconocimientopsico\catintroducciones_psicoModel;
 use App\modelos\reconocimientopsico\catrecomendaciones_psicoModel;
+use App\modelos\reconocimientopsico\catrecomendacionescontrol_psicoModel;
 
 class recpsicocatalogosrecController extends Controller
 {
@@ -176,6 +177,20 @@ class recpsicocatalogosrecController extends Controller
                     }
                 }
             break;
+            case 5:
+                $lista = catrecomendacionescontrol_psicoModel::all();
+                foreach ($lista as $key => $value) {
+                    $value['RECOMENDACION_CONTROL'] = $value->RECOMENDACION_CONTROL;
+                    $value['ID_RECOMENDACION_CONTROL_INFORME'] = $value->ID_RECOMENDACION_CONTROL_INFORME;
+                    $value['boton_editar'] = '<button type="button" class="btn btn-danger btn-circle" onclick="editar_recomendacioncontrolInforme();"><i class="fa fa-pencil"></i></button>';
+
+                    if ($value->ACTIVO == 1) {
+                        $value['CheckboxEstado'] = '<div class="switch"><label><input type="checkbox" checked onclick="estado_registro(5, ' . $value->ID_RECOMENDACION_CONTROL_INFORME . ', this);"><span class="lever switch-col-light-blue"></span></label></div>';
+                    } else {
+                        $value['CheckboxEstado'] = '<div class="switch"><label><input type="checkbox" onclick="estado_registro(5, ' . $value->ID_RECOMENDACION_CONTROL_INFORME . ', this);"><span class="lever switch-col-light-blue"></span></label></div>';
+                    }
+                }
+            break;
         }
 
         // Respuesta
@@ -258,6 +273,22 @@ class recpsicocatalogosrecController extends Controller
                         $dato["msj"] = 'Información modificada correctamente';
                     }
                     break;
+                case 5:
+                        if ($request['ID_RECOMENDACION_CONTROL_INFORME'] == 0) {
+                            DB::statement('ALTER TABLE psicocat_recomendacionescontrol AUTO_INCREMENT=1');
+    
+                            $request["ACTIVO"] = 1;
+                            $catalogo = catrecomendacionescontrol_psicoModel::create($request->all());
+    
+                            $dato["msj"] = 'Información guardada correctamente';
+                        } else {
+    
+                            $catalogo = catrecomendacionescontrol_psicoModel::findOrFail($request['ID_RECOMENDACION_CONTROL_INFORME']);
+                            $catalogo->update($request->all());
+    
+                            $dato["msj"] = 'Información modificada correctamente';
+                        }
+                        break;
                
 
 

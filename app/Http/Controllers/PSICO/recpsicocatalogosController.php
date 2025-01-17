@@ -11,6 +11,7 @@ use App\modelos\reconocimientopsico\catintroducciones_psicoModel;
 use App\modelos\reconocimientopsico\catdefiniciones_psicoModel;
 use App\modelos\reconocimientopsico\catrecomendaciones_psicoModel;
 use App\modelos\reconocimientopsico\catconclusiones_psicoModel;
+use App\modelos\reconocimientopsico\catrecomendacionescontrol_psicoModel;
 
 
 
@@ -207,7 +208,7 @@ class recpsicocatalogosController extends Controller
                     $tabla->update(['ACTIVO' => $estado]);
                     break;
                 case 5:
-                    $tabla = catintroducciones_psicoModel::findOrFail($registro);
+                    $tabla = catrecomendacionescontrol_psicoModel::findOrFail($registro);
                     $tabla->update(['ACTIVO' => $estado]);
                     break;
                 case 6:
