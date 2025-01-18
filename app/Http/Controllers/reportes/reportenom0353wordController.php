@@ -21,7 +21,7 @@ use PhpOffice\PhpWord\TemplateProcessor;
 use Illuminate\Support\Facades\Storage;
 use DB;
 use ZipArchive;
-
+use PhpOffice\PhpWord\Element\TextRun;
 
 
 ///////////////////MODELOS//////////////////
@@ -49,6 +49,9 @@ use App\modelos\reportes\reporterevisionesarchivoModel;
 // Modelos estructura reporte
 use App\modelos\reportes\reportenom0353catalogoModel;
 use App\modelos\reportes\reportenom0353Model;
+
+use App\modelos\reportes\reporterecomendacionescontrolModel;
+
 
 use App\modelos\reportes\reporteanexosModel;
 use App\modelos\clientes\clientepartidasModel;
@@ -871,6 +874,51 @@ class reportenom0353wordController extends Controller
                     }
                 }
 
+               // $plantillaword->setValue('RECOMENDACIONES_GENERALES',   $recomendacionescontrol->reporterecomendaciones_descripcion);
+               $recomendacionesControl = reporterecomendacionescontrolModel::where('proyecto_id', $proyecto_id)
+               ->where('registro_id', $reporteregistro_id)
+               ->pluck('reporterecomendaciones_descripcion'); // Obtener solo la columna
+             
+               $textRun = new TextRun();
+                $contador = 1;
+                $mapa = [
+                    'M' => 1000, 'CM' => 900, 'D' => 500, 'CD' => 400,
+                    'C' => 100, 'XC' => 90, 'L' => 50, 'XL' => 40,
+                    'X' => 10, 'IX' => 9, 'V' => 5, 'IV' => 4, 'I' => 1,
+                ];
+                foreach ($recomendacionesControl as $recomendacion) {
+                    $numeroActual = $contador;
+                    $resultado = ''; // Inicializar el número romano como cadena vacía
+                    
+                    foreach ($mapa as $romano => $valor) {
+                        while ($numeroActual >= $valor) {
+                            $resultado .= $romano;
+                            $numeroActual -= $valor;
+                        }
+                    }
+                    
+                    $textRun->addText($resultado . '. ' . $recomendacion); // Agregar texto con número romano
+                    $textRun->addTextBreak(); 
+                    $textRun->addTextBreak();
+                    $textRun->addTextBreak();
+                    $contador++; // Incrementar el contador
+                }
+
+                // Insertar el TextRun en el marcador
+                $plantillaword->setComplexValue('RECOMENDACIONES_GENERALES', $textRun);
+
+                $plantillaword->setValue('NM', '30');
+
+                $plantillaword->setValue('NH', '41');
+
+                $plantillaword->setValue('NUMERO_TRABAJADORES', '71');
+
+
+                // Función para convertir un número a romano
+                
+           
+                //$plantillaword->setValue('RECOMENDACIONES_GENERALES', $recomendacionesTexto);
+           
                 // RECOMENDACIONES
                 //================================================================================
 
@@ -1523,6 +1571,22 @@ class reportenom0353wordController extends Controller
                     return '<h3>No se encontró el archivo historial del informe de ' . $agente_nombre . ' 2</h3>';
                 }
             }
+        }
+
+        private function convertirANumeroRomano($numero) {
+            $mapa = [
+                'M' => 1000, 'CM' => 900, 'D' => 500, 'CD' => 400,
+                'C' => 100, 'XC' => 90, 'L' => 50, 'XL' => 40,
+                'X' => 10, 'IX' => 9, 'V' => 5, 'IV' => 4, 'I' => 1,
+            ];
+            $resultado = '';
+            foreach ($mapa as $romano => $valor) {
+                while ($numero >= $valor) {
+                    $resultado .= $romano;
+                    $numero -= $valor;
+                }
+            }
+            return $resultado;
         }
     }
 
