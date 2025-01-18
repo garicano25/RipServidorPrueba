@@ -1767,7 +1767,7 @@ FROM
                     IFNULL(
                         (
                             SELECT
-                                reporterecomendacionescontrol.descripcion
+                                reporterecomendacionescontrol.reporterecomendaciones_descripcion
                             FROM
                                 reporterecomendacionescontrol
                             WHERE
@@ -1789,7 +1789,7 @@ FROM
         -- Segunda subconsulta para obtener datos de reporterecomendacionescontrol
         SELECT
             0 AS id,
-            reporterecomendacionescontrol.descripcion AS recomendaciones_descripcion,
+            reporterecomendacionescontrol.reporterecomendaciones_descripcion AS recomendaciones_descripcion,
             "checked" AS checked
         FROM
             reporterecomendacionescontrol
