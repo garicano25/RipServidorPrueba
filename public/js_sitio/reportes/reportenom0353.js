@@ -3383,14 +3383,6 @@ $("#boton_reporte_nuevarecomendacion").click(function()
 															'</td>'+
 															'<td>'+
 																'<div class="form-group">'+
-																	'<label>Tipo</label>'+
-																	'<select class="custom-select form-control" name="recomendacionadicional_tipo[]" required>'+
-																		'<option value=""></option>'+
-																		'<option value="Preventiva">Preventiva</option>'+
-																		'<option value="Correctiva">Correctiva</option>'+
-																	'</select>'+
-																'</div>'+
-																'<div class="form-group">'+
 																	'<label>Descripción</label>'+
 																	'<textarea  class="form-control" style="margin-bottom: 0px;" rows="5" name="recomendacionadicional_descripcion[]" required></textarea>'+
 																'</div>'+
