@@ -5956,12 +5956,12 @@ am5.ready(function () {
 		"Categoría\n Ambiente de trabajo \n\n",
 		"(Nivel de riesgo/NOM-035-STPS-2018)\n\n",
 		[{
-			category: "g1-Ambiente de trabajo",
+			category: "g1-Ambiente de trabajo\n",
 			s1: 2, s2: 3, s3: 1, s4: 3, s5: 1
 		}, {
 			category: "g3-\n\n\nDominios:"
 		}, {
-			category: "g2-Condiciones del ambiente de trabajo",
+			category: "g2-Condiciones del ambiente de trabajo\n",
 			s1: 3, s2: 2, s3: 2, s4: 2, s5: 1
 		}],
 		'ambienteChart'
@@ -5972,15 +5972,15 @@ am5.ready(function () {
 		"Categoría\n Factores propios de la actividad \n\n",
 		"(Nivel de riesgo/NOM-035-STPS-2018)\n\n",
 		[{
-			category: "g1-Factores propios de la actividad",
+			category: "g1-Factores propios de la actividad\n",
 			s1: 2, s2: 3, s3: 1, s4: 3, s5: 1
 		}, {
 			category: "g3-\n\n\nDominios:"
 		}, {
-			category: "g2-Carga de trabajo",
+			category: "g2-Carga de trabajo\n",
 			s1: 5, s2: 1, s3: 2, s4: 1, s5: 1
 		}, {
-			category: "g2-Falta de control sobre el trabajo",
+			category: "g2-Falta de control sobre el trabajo\n",
 			s1: 3, s2: 2, s3: 2, s4: 2, s5: 1
 		}],
 		'factoresChart'
@@ -5991,15 +5991,15 @@ am5.ready(function () {
 		"Categoría\n Organización del tiempo de trabajo \n\n",
 		"(Nivel de riesgo/NOM-035-STPS-2018)\n\n",
 		[{
-			category: "g1-Organización del tiempo de trabajo",
+			category: "g1-Organización del tiempo de trabajo\n",
 			s1: 2, s2: 3, s3: 1, s4: 3, s5: 1
 		}, {
 			category: "g3-\n\n\nDominios:"
 		}, {
-			category: "g2-Jornada de trabajo",
+			category: "g2-Jornada de trabajo\n",
 			s1: 5, s2: 1, s3: 2, s4: 1, s5: 1
 		},  {
-			category: "g2-Interferencia trabajo/familia",
+			category: "g2-Interferencia trabajo/familia\n",
 			s1: 3, s2: 2, s3: 2, s4: 2, s5: 1
 		}],
 		'organizacionChart'
@@ -6010,21 +6010,21 @@ am5.ready(function () {
 		"Categoría\n Liderazgo y relaciones en el trabajo \n\n\n",
 		"(Nivel de riesgo/NOM-035-STPS-2018)\n\n",
 		[{
-			category: "g1-Liderazgo y relaciones en el trabajo",
+			category: "g1-Liderazgo y relaciones en el trabajo\n",
 			s1: 2, s2: 3, s3: 1, s4: 3, s5: 1
 		}, {
 			category: "g3-\n\n\nDominios:"
 		},
 		{
-			category: "g2-Liderazgo",
+			category: "g2-Liderazgo\n",
 			s1: 5, s2: 1, s3: 2, s4: 1, s5: 1
 		},
 		 {
-			category: "g2-Relaciones en el trabajo",
+			category: "g2-Relaciones en el trabajo\n",
 			s1: 3, s2: 2, s3: 2, s4: 2, s5: 1
 		},
 		{
-			category: "g2-Violencia",
+			category: "g2-Violencia\n",
 			s1: 3, s2: 2, s3: 2, s4: 2, s5: 1
 		}],
 		'liderazgoChart'
@@ -6035,16 +6035,16 @@ am5.ready(function () {
 		"Categoría\n Entorno organizacional \n\n",
 		"(Nivel de riesgo/NOM-035-STPS-2018)\n\n",
 		[{
-			category: "g1-Entorno organizacional",
+			category: "g1-Entorno organizacional\n",
 			s1: 2, s2: 3, s3: 1, s4: 3, s5: 1
 		}, {
 			category: "g3-\n\n\nDominios:"
 		}, {
-			category: "g2-Reconocimiento del desempeño",
+			category: "g2-Reconocimiento del desempeño\n",
 			s1: 5, s2: 1, s3: 2, s4: 1, s5: 1
 		},
 		 {
-			category: "g2-Insuficiente sentido de pertenencia e inestabilidad",
+			category: "g2-Insuficiente sentido de pertenencia e inestabilidad\n",
 			s1: 3, s2: 2, s3: 2, s4: 2, s5: 1
 		}],
 		'entornoChart'
