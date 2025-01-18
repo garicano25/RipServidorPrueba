@@ -6079,7 +6079,7 @@ am5.ready(function () {
 			centerX: am5.percent(50),
 			x: am5.percent(50),
 			layout: guia1_root.verticalLayout,
-			fontSize: 17,
+			fontSize: 19,
 			fontWeight: "bold",
 			marginTop: -10,  // Reducir el margen superior
 			dy: -10 // Mover la leyenda hacia arriba
@@ -6097,19 +6097,19 @@ am5.ready(function () {
 	
 	// Configurar etiquetas
 	guia1_series.labels.template.setAll({
-		fontSize: 17,
+		fontSize: 19,
 		fontWeight: "bold",
 		text: "{value}"
 	});
 	
 	// Configurar los colores y estilos de la leyenda
 	legend3.labels.template.setAll({
-		fontSize: 17,
+		fontSize: 19,
 		fontWeight: "bold"
 	});
 	
 	legend3.valueLabels.template.setAll({
-		fontSize: 17,
+		fontSize: 19,
 		fontWeight: "bold"
 	});
 	
@@ -6469,7 +6469,7 @@ let legend2 = calificaciones_chart.children.push(
         centerX: am5.percent(50),
         x: am5.percent(50),
         layout: calificaciones_root.verticalLayout,
-        fontSize: 12,
+        fontSize: 14,
         fontWeight: "bold",
 		marginTop: -10,  // Reducir el margen superior
         dy: -10 // Mover la leyenda hacia arriba
@@ -6487,19 +6487,19 @@ var calificaciones_series = calificaciones_chart.series.push(am5percent.PieSerie
 
 // Configurar etiquetas
 calificaciones_series.labels.template.setAll({
-    fontSize: 12,
+    fontSize: 14,
     fontWeight: "bold",
     text: "{value}"
 });
 
 // Configurar los colores y estilos de la leyenda
 legend2.labels.template.setAll({
-    fontSize: 12,
+    fontSize: 14,
     fontWeight: "bold"
 });
 
 legend2.valueLabels.template.setAll({
-    fontSize: 12,
+    fontSize: 14,
     fontWeight: "bold"
 });
 
