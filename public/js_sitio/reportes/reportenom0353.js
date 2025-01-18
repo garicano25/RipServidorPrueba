@@ -2213,11 +2213,11 @@ function tabla_reporte_areas(proyecto_id, reporteregistro_id) {
 
 
 						// Tablas
-						tabla_reporte_5_3(json.tabla_5_3);
-						tabla_reporte_5_5(json.tabla_5_5);
-						tabla_reporte_5_8_UNO(json.tabla_5_8_UNO);
-						tabla_reporte_5_8_DOS(json.tabla_5_8_DOS);
-						tabla_reporte_6_1(json.tabla_6_1);
+						// tabla_reporte_5_3(json.tabla_5_3);
+						// tabla_reporte_5_5(json.tabla_5_5);
+						// tabla_reporte_5_8_UNO(json.tabla_5_8_UNO);
+						// tabla_reporte_5_8_DOS(json.tabla_5_8_DOS);
+						// tabla_reporte_6_1(json.tabla_6_1);
 
 
 						// Actualizar select areas
@@ -2847,189 +2847,189 @@ $("#botonguardar_modal_area").click(function (e) {
 });
 
 
-var datatable_reporte_5_3 = null;
-function tabla_reporte_5_3(tbody) {
-	if (datatable_reporte_5_3 != null) {
-		datatable_reporte_5_3.destroy();
-	}
+// var datatable_reporte_5_3 = null;
+// function tabla_reporte_5_3(tbody) {
+// 	if (datatable_reporte_5_3 != null) {
+// 		datatable_reporte_5_3.destroy();
+// 	}
 
-	$('#tabla_reporte_5_3 tbody').html(tbody);
+// 	$('#tabla_reporte_5_3 tbody').html(tbody);
 
-	datatable_reporte_5_3 = $('#tabla_reporte_5_3').DataTable({
-		"lengthMenu": [[20, 50, 100, -1], [20, 50, 100, "Todos"]],
-		"rowsGroup": [0], //agrupar filas
-		"order": [[0, "DESC"]],
-		"ordering": false,
-		"searching": false,
-		"processing": true,
-		"paging": false,
-		"language": {
-			"lengthMenu": "Mostrar _MENU_ Registros",
-			"zeroRecords": "No se encontraron registros",
-			"info": "Página _PAGE_ de _PAGES_ (Total _TOTAL_ registros)",
-			"infoEmpty": "No se encontraron registros",
-			"infoFiltered": "(Filtrado de _MAX_ registros)",
-			"emptyTable": "No hay datos disponibles en la tabla",
-			"loadingRecords": "Cargando datos....",
-			"processing": "Procesando <i class='fa fa-spin fa-spinner fa-3x'></i>",
-			"search": "Buscar",
-			"paginate": {
-				"first": "Primera",
-				"last": "Ultima",
-				"next": "Siguiente",
-				"previous": "Anterior"
-			}
-		}
-	});
-}
-
-
-var datatable_reporte_5_5 = null;
-function tabla_reporte_5_5(tbody) {
-	if (datatable_reporte_5_5 != null) {
-		datatable_reporte_5_5.destroy();
-	}
-
-	$('#tabla_reporte_5_5 tbody').html(tbody);
-
-	datatable_reporte_5_5 = $('#tabla_reporte_5_5').DataTable({
-		"lengthMenu": [[20, 50, 100, -1], [20, 50, 100, "Todos"]],
-		"rowsGroup": [0, 1], //agrupar filas
-		"order": [[0, "DESC"]],
-		"ordering": false,
-		"searching": false,
-		"processing": true,
-		"paging": false,
-		"language": {
-			"lengthMenu": "Mostrar _MENU_ Registros",
-			"zeroRecords": "No se encontraron registros",
-			"info": "Página _PAGE_ de _PAGES_ (Total _TOTAL_ registros)",
-			"infoEmpty": "No se encontraron registros",
-			"infoFiltered": "(Filtrado de _MAX_ registros)",
-			"emptyTable": "No hay datos disponibles en la tabla",
-			"loadingRecords": "Cargando datos....",
-			"processing": "Procesando <i class='fa fa-spin fa-spinner fa-3x'></i>",
-			"search": "Buscar",
-			"paginate": {
-				"first": "Primera",
-				"last": "Ultima",
-				"next": "Siguiente",
-				"previous": "Anterior"
-			}
-		}
-	});
-}
+// 	datatable_reporte_5_3 = $('#tabla_reporte_5_3').DataTable({
+// 		"lengthMenu": [[20, 50, 100, -1], [20, 50, 100, "Todos"]],
+// 		"rowsGroup": [0], //agrupar filas
+// 		"order": [[0, "DESC"]],
+// 		"ordering": false,
+// 		"searching": false,
+// 		"processing": true,
+// 		"paging": false,
+// 		"language": {
+// 			"lengthMenu": "Mostrar _MENU_ Registros",
+// 			"zeroRecords": "No se encontraron registros",
+// 			"info": "Página _PAGE_ de _PAGES_ (Total _TOTAL_ registros)",
+// 			"infoEmpty": "No se encontraron registros",
+// 			"infoFiltered": "(Filtrado de _MAX_ registros)",
+// 			"emptyTable": "No hay datos disponibles en la tabla",
+// 			"loadingRecords": "Cargando datos....",
+// 			"processing": "Procesando <i class='fa fa-spin fa-spinner fa-3x'></i>",
+// 			"search": "Buscar",
+// 			"paginate": {
+// 				"first": "Primera",
+// 				"last": "Ultima",
+// 				"next": "Siguiente",
+// 				"previous": "Anterior"
+// 			}
+// 		}
+// 	});
+// }
 
 
-var datatable_reporte_5_8_UNO = null;
-function tabla_reporte_5_8_UNO(tbody) {
-	if (datatable_reporte_5_8_UNO != null) {
-		datatable_reporte_5_8_UNO.destroy();
-	}
+// var datatable_reporte_5_5 = null;
+// function tabla_reporte_5_5(tbody) {
+// 	if (datatable_reporte_5_5 != null) {
+// 		datatable_reporte_5_5.destroy();
+// 	}
 
-	$('#tabla_reporte_5_8_UNO tbody').html(tbody);
+// 	$('#tabla_reporte_5_5 tbody').html(tbody);
 
-	datatable_reporte_5_8_UNO = $('#tabla_reporte_5_8_UNO').DataTable({
-		"lengthMenu": [[20, 50, 100, -1], [20, 50, 100, "Todos"]],
-		"rowsGroup": [0], //agrupar filas
-		"order": [[0, "DESC"]],
-		"ordering": false,
-		"searching": false,
-		"processing": true,
-		"paging": false,
-		"language": {
-			"lengthMenu": "Mostrar _MENU_ Registros",
-			"zeroRecords": "No se encontraron registros",
-			"info": "Página _PAGE_ de _PAGES_ (Total _TOTAL_ registros)",
-			"infoEmpty": "No se encontraron registros",
-			"infoFiltered": "(Filtrado de _MAX_ registros)",
-			"emptyTable": "No hay datos disponibles en la tabla",
-			"loadingRecords": "Cargando datos....",
-			"processing": "Procesando <i class='fa fa-spin fa-spinner fa-3x'></i>",
-			"search": "Buscar",
-			"paginate": {
-				"first": "Primera",
-				"last": "Ultima",
-				"next": "Siguiente",
-				"previous": "Anterior"
-			}
-		}
-	});
-}
-
-
-var datatable_reporte_5_8_DOS = null;
-function tabla_reporte_5_8_DOS(tbody) {
-	if (datatable_reporte_5_8_DOS != null) {
-		datatable_reporte_5_8_DOS.destroy();
-	}
-
-	$('#tabla_reporte_5_8_DOS tbody').html(tbody);
-
-	datatable_reporte_5_8_DOS = $('#tabla_reporte_5_8_DOS').DataTable({
-		"lengthMenu": [[20, 50, 100, -1], [20, 50, 100, "Todos"]],
-		"rowsGroup": [0, 1], //agrupar filas
-		"order": [[0, "DESC"]],
-		"ordering": false,
-		"searching": false,
-		"processing": true,
-		"paging": false,
-		"language": {
-			"lengthMenu": "Mostrar _MENU_ Registros",
-			"zeroRecords": "No se encontraron registros",
-			"info": "Página _PAGE_ de _PAGES_ (Total _TOTAL_ registros)",
-			"infoEmpty": "No se encontraron registros",
-			"infoFiltered": "(Filtrado de _MAX_ registros)",
-			"emptyTable": "No hay datos disponibles en la tabla",
-			"loadingRecords": "Cargando datos....",
-			"processing": "Procesando <i class='fa fa-spin fa-spinner fa-3x'></i>",
-			"search": "Buscar",
-			"paginate": {
-				"first": "Primera",
-				"last": "Ultima",
-				"next": "Siguiente",
-				"previous": "Anterior"
-			}
-		}
-	});
-}
+// 	datatable_reporte_5_5 = $('#tabla_reporte_5_5').DataTable({
+// 		"lengthMenu": [[20, 50, 100, -1], [20, 50, 100, "Todos"]],
+// 		"rowsGroup": [0, 1], //agrupar filas
+// 		"order": [[0, "DESC"]],
+// 		"ordering": false,
+// 		"searching": false,
+// 		"processing": true,
+// 		"paging": false,
+// 		"language": {
+// 			"lengthMenu": "Mostrar _MENU_ Registros",
+// 			"zeroRecords": "No se encontraron registros",
+// 			"info": "Página _PAGE_ de _PAGES_ (Total _TOTAL_ registros)",
+// 			"infoEmpty": "No se encontraron registros",
+// 			"infoFiltered": "(Filtrado de _MAX_ registros)",
+// 			"emptyTable": "No hay datos disponibles en la tabla",
+// 			"loadingRecords": "Cargando datos....",
+// 			"processing": "Procesando <i class='fa fa-spin fa-spinner fa-3x'></i>",
+// 			"search": "Buscar",
+// 			"paginate": {
+// 				"first": "Primera",
+// 				"last": "Ultima",
+// 				"next": "Siguiente",
+// 				"previous": "Anterior"
+// 			}
+// 		}
+// 	});
+// }
 
 
-var datatable_reporte_6_1 = null;
-function tabla_reporte_6_1(tbody) {
-	if (datatable_reporte_6_1 != null) {
-		datatable_reporte_6_1.destroy();
-	}
+// var datatable_reporte_5_8_UNO = null;
+// function tabla_reporte_5_8_UNO(tbody) {
+// 	if (datatable_reporte_5_8_UNO != null) {
+// 		datatable_reporte_5_8_UNO.destroy();
+// 	}
 
-	$('#tabla_reporte_6_1 tbody').html(tbody);
+// 	$('#tabla_reporte_5_8_UNO tbody').html(tbody);
 
-	datatable_reporte_6_1 = $('#tabla_reporte_6_1').DataTable({
-		"lengthMenu": [[20, 50, 100, -1], [20, 50, 100, "Todos"]],
-		"rowsGroup": [1, 3], //agrupar filas
-		"order": [[0, "DESC"]],
-		"ordering": false,
-		"searching": false,
-		"processing": true,
-		"paging": false,
-		"language": {
-			"lengthMenu": "Mostrar _MENU_ Registros",
-			"zeroRecords": "No se encontraron registros",
-			"info": "Página _PAGE_ de _PAGES_ (Total _TOTAL_ registros)",
-			"infoEmpty": "No se encontraron registros",
-			"infoFiltered": "(Filtrado de _MAX_ registros)",
-			"emptyTable": "No hay datos disponibles en la tabla",
-			"loadingRecords": "Cargando datos....",
-			"processing": "Procesando <i class='fa fa-spin fa-spinner fa-3x'></i>",
-			"search": "Buscar",
-			"paginate": {
-				"first": "Primera",
-				"last": "Ultima",
-				"next": "Siguiente",
-				"previous": "Anterior"
-			}
-		}
-	});
-}
+// 	datatable_reporte_5_8_UNO = $('#tabla_reporte_5_8_UNO').DataTable({
+// 		"lengthMenu": [[20, 50, 100, -1], [20, 50, 100, "Todos"]],
+// 		"rowsGroup": [0], //agrupar filas
+// 		"order": [[0, "DESC"]],
+// 		"ordering": false,
+// 		"searching": false,
+// 		"processing": true,
+// 		"paging": false,
+// 		"language": {
+// 			"lengthMenu": "Mostrar _MENU_ Registros",
+// 			"zeroRecords": "No se encontraron registros",
+// 			"info": "Página _PAGE_ de _PAGES_ (Total _TOTAL_ registros)",
+// 			"infoEmpty": "No se encontraron registros",
+// 			"infoFiltered": "(Filtrado de _MAX_ registros)",
+// 			"emptyTable": "No hay datos disponibles en la tabla",
+// 			"loadingRecords": "Cargando datos....",
+// 			"processing": "Procesando <i class='fa fa-spin fa-spinner fa-3x'></i>",
+// 			"search": "Buscar",
+// 			"paginate": {
+// 				"first": "Primera",
+// 				"last": "Ultima",
+// 				"next": "Siguiente",
+// 				"previous": "Anterior"
+// 			}
+// 		}
+// 	});
+// }
+
+
+// var datatable_reporte_5_8_DOS = null;
+// function tabla_reporte_5_8_DOS(tbody) {
+// 	if (datatable_reporte_5_8_DOS != null) {
+// 		datatable_reporte_5_8_DOS.destroy();
+// 	}
+
+// 	$('#tabla_reporte_5_8_DOS tbody').html(tbody);
+
+// 	datatable_reporte_5_8_DOS = $('#tabla_reporte_5_8_DOS').DataTable({
+// 		"lengthMenu": [[20, 50, 100, -1], [20, 50, 100, "Todos"]],
+// 		"rowsGroup": [0, 1], //agrupar filas
+// 		"order": [[0, "DESC"]],
+// 		"ordering": false,
+// 		"searching": false,
+// 		"processing": true,
+// 		"paging": false,
+// 		"language": {
+// 			"lengthMenu": "Mostrar _MENU_ Registros",
+// 			"zeroRecords": "No se encontraron registros",
+// 			"info": "Página _PAGE_ de _PAGES_ (Total _TOTAL_ registros)",
+// 			"infoEmpty": "No se encontraron registros",
+// 			"infoFiltered": "(Filtrado de _MAX_ registros)",
+// 			"emptyTable": "No hay datos disponibles en la tabla",
+// 			"loadingRecords": "Cargando datos....",
+// 			"processing": "Procesando <i class='fa fa-spin fa-spinner fa-3x'></i>",
+// 			"search": "Buscar",
+// 			"paginate": {
+// 				"first": "Primera",
+// 				"last": "Ultima",
+// 				"next": "Siguiente",
+// 				"previous": "Anterior"
+// 			}
+// 		}
+// 	});
+// }
+
+
+// var datatable_reporte_6_1 = null;
+// function tabla_reporte_6_1(tbody) {
+// 	if (datatable_reporte_6_1 != null) {
+// 		datatable_reporte_6_1.destroy();
+// 	}
+
+// 	$('#tabla_reporte_6_1 tbody').html(tbody);
+
+// 	datatable_reporte_6_1 = $('#tabla_reporte_6_1').DataTable({
+// 		"lengthMenu": [[20, 50, 100, -1], [20, 50, 100, "Todos"]],
+// 		"rowsGroup": [1, 3], //agrupar filas
+// 		"order": [[0, "DESC"]],
+// 		"ordering": false,
+// 		"searching": false,
+// 		"processing": true,
+// 		"paging": false,
+// 		"language": {
+// 			"lengthMenu": "Mostrar _MENU_ Registros",
+// 			"zeroRecords": "No se encontraron registros",
+// 			"info": "Página _PAGE_ de _PAGES_ (Total _TOTAL_ registros)",
+// 			"infoEmpty": "No se encontraron registros",
+// 			"infoFiltered": "(Filtrado de _MAX_ registros)",
+// 			"emptyTable": "No hay datos disponibles en la tabla",
+// 			"loadingRecords": "Cargando datos....",
+// 			"processing": "Procesando <i class='fa fa-spin fa-spinner fa-3x'></i>",
+// 			"search": "Buscar",
+// 			"paginate": {
+// 				"first": "Primera",
+// 				"last": "Ultima",
+// 				"next": "Siguiente",
+// 				"previous": "Anterior"
+// 			}
+// 		}
+// 	});
+// }
 
 //=================================================
 // METODO DE EVALUACION
@@ -3375,7 +3375,7 @@ function tabla_reporte_recomendaciones_control(proyecto_id, reporteregistro_id)
 
 $("#boton_reporte_nuevarecomendacion").click(function()
 {
-    $("#tabla_reporte_recomendaciones tbody").append( '<tr>'+
+    $("#tabla_reporte_recomendaciones_control tbody").append( '<tr>'+
 															'<td>0</td>'+
 															'<td style="text-align: center;">'+
 																'<input type="checkbox" class="recomendacionadicional_checkbox" name="recomendacionadicional_checkbox[]" value="0" checked/>'+
@@ -3397,7 +3397,7 @@ $("#boton_reporte_nuevarecomendacion").click(function()
 															'</td>'+
 														'</tr>');
 
-    var posicion = $("#tabla_reporte_recomendaciones > tbody > tr").eq((parseInt(document.getElementById("tabla_reporte_recomendaciones").rows.length) - 1) - 2).offset().top;
+    var posicion = $("#tabla_reporte_recomendaciones_control > tbody > tr").eq((parseInt(document.getElementById("tabla_reporte_recomendaciones_control").rows.length) - 1) - 2).offset().top;
     $('html, body').animate({
         scrollTop: posicion
     }, 1000);
@@ -3526,7 +3526,7 @@ $("#botonguardar_reporte_recomendaciones_control").click(function()
 					swal.close();
 
 					// enviar datos
-					$('#form_reporte_recomendaciones').ajaxForm({
+					$('#form_reporte_recomendaciones_control').ajaxForm({
 						dataType: 'json',
 						type: 'POST',
 						url: '/reportenom0353',
@@ -3535,19 +3535,19 @@ $("#botonguardar_reporte_recomendaciones_control").click(function()
 							proyecto_id: proyecto.id,
 							agente_id: agente_id,
 							agente_nombre: agente_nombre,
-							reporteiluminacion_id: reporteiluminacion_id,
-							catactivo_id: $("#reporteiluminacion_catactivo_id").val(),
-							reporteiluminacion_instalacion: $("#reporteiluminacion_instalacion").val(),
+							reporteregistro_id: reporteregistro_id,
+							catactivo_id: $("#reporte_catactivo_id").val(),
+							reporte_instalacion: $("#reporte_instalacion").val(),
 						},
 						resetForm: false,
 						success: function(dato)
 						{
 							// Actualizar ID reporte						
-							reporteiluminacion_id = dato.reporteiluminacion_id;
+							reporteregistro_id = dato.reporteregistro_id;
 
-							menureporte_estado("menureporte_9", 1);
+							menureporte_estado("menureporte_11_1", 1);
 
-							tabla_reporte_revisiones(proyecto.id);
+							//tabla_reporte_revisiones(proyecto.id);
 
 							// mensaje
 							swal({
@@ -3562,19 +3562,19 @@ $("#botonguardar_reporte_recomendaciones_control").click(function()
 							});
 
 							// actualiza boton
-							$('#botonguardar_reporte_recomendaciones').html('Guardar recomendaciones <i class="fa fa-save"></i>');
-							$('#botonguardar_reporte_recomendaciones').attr('disabled', false);
+							$('#botonguardar_reporte_recomendaciones_control').html('Guardar recomendaciones <i class="fa fa-save"></i>');
+							$('#botonguardar_reporte_recomendaciones_control').attr('disabled', false);
 						},
 						beforeSend: function()
 						{
-							$('#botonguardar_reporte_recomendaciones').html('Guardando recomendaciones <i class="fa fa-spin fa-spinner"></i>');
-							$('#botonguardar_reporte_recomendaciones').attr('disabled', true);
+							$('#botonguardar_reporte_recomendaciones_control').html('Guardando recomendaciones <i class="fa fa-spin fa-spinner"></i>');
+							$('#botonguardar_reporte_recomendaciones_control').attr('disabled', true);
 						},
 						error: function(dato)
 						{
 							// actualiza boton
-							$('#botonguardar_reporte_recomendaciones').html('Guardar recomendaciones <i class="fa fa-save"></i>');
-							$('#botonguardar_reporte_recomendaciones').attr('disabled', false);
+							$('#botonguardar_reporte_recomendaciones_control').html('Guardar recomendaciones <i class="fa fa-save"></i>');
+							$('#botonguardar_reporte_recomendaciones_control').attr('disabled', false);
 
 							// mensaje
 							swal({
@@ -4621,12 +4621,12 @@ function reporte_concluido(reporte_id, perfil, checkbox) {
 									tabla_reporte_revisiones(proyecto.id);
 
 									tabla_reporte_definiciones(proyecto.id)
-									tabla_reporte_categorias(proyecto.id, reporteregistro_id);
-									tabla_reporte_areas(proyecto.id, reporteregistro_id);
-									tabla_reporte_6_2(proyecto.id, reporteregistro_id);
-									tabla_reporte_7_1(proyecto.id, reporteregistro_id);
-									tabla_reporte_7_2(proyecto.id, reporteregistro_id);
-									tabla_reporte_7_3(proyecto.id, reporteregistro_id);
+									// tabla_reporte_categorias(proyecto.id, reporteregistro_id);
+									// tabla_reporte_areas(proyecto.id, reporteregistro_id);
+									// tabla_reporte_6_2(proyecto.id, reporteregistro_id);
+									// tabla_reporte_7_1(proyecto.id, reporteregistro_id);
+									// tabla_reporte_7_2(proyecto.id, reporteregistro_id);
+									// tabla_reporte_7_3(proyecto.id, reporteregistro_id);
 
 
 									// desplazar a la ultima fila de la tabla
@@ -4733,12 +4733,12 @@ function reporte_concluido(reporte_id, perfil, checkbox) {
 								tabla_reporte_revisiones(proyecto.id);
 
 								tabla_reporte_definiciones(proyecto.id);
-								tabla_reporte_categorias(proyecto.id, reporteregistro_id);
-								tabla_reporte_areas(proyecto.id, reporteregistro_id);
-								tabla_reporte_6_2(proyecto.id, reporteregistro_id);
-								tabla_reporte_7_1(proyecto.id, reporteregistro_id);
-								tabla_reporte_7_2(proyecto.id, reporteregistro_id);
-								tabla_reporte_7_3(proyecto.id, reporteregistro_id);
+								// tabla_reporte_categorias(proyecto.id, reporteregistro_id);
+								// tabla_reporte_areas(proyecto.id, reporteregistro_id);
+								// tabla_reporte_6_2(proyecto.id, reporteregistro_id);
+								// tabla_reporte_7_1(proyecto.id, reporteregistro_id);
+								// tabla_reporte_7_2(proyecto.id, reporteregistro_id);
+								// tabla_reporte_7_3(proyecto.id, reporteregistro_id);
 
 
 								// desplazar a la ultima fila de la tabla
@@ -4863,12 +4863,12 @@ function reporte_cancelado(reporte_id, perfil, checkbox) {
 								tabla_reporte_revisiones(proyecto.id);
 
 								tabla_reporte_definiciones(proyecto.id);
-								tabla_reporte_categorias(proyecto.id, reporteregistro_id);
-								tabla_reporte_areas(proyecto.id, reporteregistro_id);
-								tabla_reporte_6_2(proyecto.id, reporteregistro_id);
-								tabla_reporte_7_1(proyecto.id, reporteregistro_id);
-								tabla_reporte_7_2(proyecto.id, reporteregistro_id);
-								tabla_reporte_7_3(proyecto.id, reporteregistro_id);
+								// tabla_reporte_categorias(proyecto.id, reporteregistro_id);
+								// tabla_reporte_areas(proyecto.id, reporteregistro_id);
+								// tabla_reporte_6_2(proyecto.id, reporteregistro_id);
+								// tabla_reporte_7_1(proyecto.id, reporteregistro_id);
+								// tabla_reporte_7_2(proyecto.id, reporteregistro_id);
+								// tabla_reporte_7_3(proyecto.id, reporteregistro_id);
 
 
 								// desplazar a la ultima fila de la tabla
@@ -4984,12 +4984,12 @@ $("#botonguardar_modal_cancelacionobservacion").click(function () {
 							tabla_reporte_revisiones(proyecto.id);
 
 							tabla_reporte_definiciones(proyecto.id);
-							tabla_reporte_categorias(proyecto.id, reporteregistro_id);
-							tabla_reporte_areas(proyecto.id, reporteregistro_id);
-							tabla_reporte_6_2(proyecto.id, reporteregistro_id);
-							tabla_reporte_7_1(proyecto.id, reporteregistro_id);
-							tabla_reporte_7_2(proyecto.id, reporteregistro_id);
-							tabla_reporte_7_3(proyecto.id, reporteregistro_id);
+							// tabla_reporte_categorias(proyecto.id, reporteregistro_id);
+							// tabla_reporte_areas(proyecto.id, reporteregistro_id);
+							// tabla_reporte_6_2(proyecto.id, reporteregistro_id);
+							// tabla_reporte_7_1(proyecto.id, reporteregistro_id);
+							// tabla_reporte_7_2(proyecto.id, reporteregistro_id);
+							// tabla_reporte_7_3(proyecto.id, reporteregistro_id);
 
 
 							// desplazar a la ultima fila de la tabla
@@ -5112,12 +5112,12 @@ $("#boton_reporte_nuevarevision").click(function () {
 							tabla_reporte_revisiones(proyecto.id);
 
 							tabla_reporte_definiciones(proyecto.id);
-							tabla_reporte_categorias(proyecto.id, reporteregistro_id);
-							tabla_reporte_areas(proyecto.id, reporteregistro_id);
-							tabla_reporte_6_2(proyecto.id, reporteregistro_id);
-							tabla_reporte_7_1(proyecto.id, reporteregistro_id);
-							tabla_reporte_7_2(proyecto.id, reporteregistro_id);
-							tabla_reporte_7_3(proyecto.id, reporteregistro_id);
+							// tabla_reporte_categorias(proyecto.id, reporteregistro_id);
+							// tabla_reporte_areas(proyecto.id, reporteregistro_id);
+							// tabla_reporte_6_2(proyecto.id, reporteregistro_id);
+							// tabla_reporte_7_1(proyecto.id, reporteregistro_id);
+							// tabla_reporte_7_2(proyecto.id, reporteregistro_id);
+							// tabla_reporte_7_3(proyecto.id, reporteregistro_id);
 
 
 							// desplazar a la ultima fila de la tabla
@@ -5838,7 +5838,9 @@ am5.ready(function () {
 		}));
 
 		xAxis.get("renderer").grid.template.set("forceHidden", true);
-
+		xAxis.get("renderer").labels.template.setAll({
+			forceHidden: true
+		});
 		// Formatear etiquetas de categorías
 		yAxis.get("renderer").labels.template.adapters.add("text", function (text, target) {
 			if (target.dataItem) {
@@ -6274,13 +6276,15 @@ rootConsolidadoChart2.setThemes([am5themes_Animated.new(rootConsolidadoChart2), 
 
 // Datos (con valores fijos para las 5 series)
 var dataConsolidado2 = [
+	{ "category": "Interferencia en la\n relacion\n trabajo-familia", "Nulo": 0.16, "Bajo": 0.20, "Medio": 0.24, "Alto": 0.29, "Muy alto": 0.11 },
+	{ "category": "Jornada de\n trabajo", "Nulo": 0.14, "Bajo": 0.19, "Medio": 0.23, "Alto": 0.27, "Muy alto": 0.17 },
 		{ "category": "Condiciones en el \nambiente de trabajo", "Nulo": 0.10, "Bajo": 0.15, "Medio": 0.20, "Alto": 0.25, "Muy alto": 0.30 },
-		{ "category": "Falta de control \nsobre el trabajo", "Nulo": 0.35, "Bajo": 0.18, "Medio": 0.22, "Alto": 0.15, "Muy alto": 0.10 },
-		{ "category": "Carga de trabajo", "Nulo": 0.09, "Bajo": 0.36, "Medio": 0.21, "Alto": 0.26, "Muy alto": 0.08 },
-		{ "category": "Jornada de\n trabajo", "Nulo": 0.14, "Bajo": 0.19, "Medio": 0.23, "Alto": 0.27, "Muy alto": 0.17 },
-		{ "category": "Interferencia en la\n relacion\n trabajo-familia", "Nulo": 0.16, "Bajo": 0.20, "Medio": 0.24, "Alto": 0.29, "Muy alto": 0.11 },
 		{ "category": "Liderazgo", "Nulo": 0.11, "Bajo": 0.16, "Medio": 0.19, "Alto": 0.24, "Muy alto": 0.30 },
+		
+		{ "category": "Carga de trabajo", "Nulo": 0.09, "Bajo": 0.36, "Medio": 0.21, "Alto": 0.26, "Muy alto": 0.08 },
 		{ "category": "Relaciones en el trabajo", "Nulo": 0.14, "Bajo": 0.17, "Medio": 0.22, "Alto": 0.27, "Muy alto": 0.20 },
+		{ "category": "Falta de control \nsobre el trabajo", "Nulo": 0.35, "Bajo": 0.18, "Medio": 0.22, "Alto": 0.15, "Muy alto": 0.10 },
+
 		{ "category": "Violencia", "Nulo": 0.25, "Bajo": 0.10, "Medio": 0.20, "Alto": 0.40, "Muy alto": 0.05 }
 	];
 
@@ -6580,9 +6584,10 @@ rootConsolidadoChart1.setThemes([am5themes_Animated.new(rootConsolidadoChart1), 
 var dataConsolidado1 = [
 	{ "category": "Ambiente de\n trabajo", "Nulo": 0.35, "Bajo": 0.18, "Medio": 0.22, "Alto": 0.15, "Muy alto": 0.10 },
 	{ "category": "Factores Propios\n de la actividad", "Nulo": 0.09, "Bajo": 0.36, "Medio": 0.21, "Alto": 0.26, "Muy alto": 0.08 },
-	{ "category": "Organización del \ntiempo de trabajo", "Nulo": 0.14, "Bajo": 0.19, "Medio": 0.23, "Alto": 0.27, "Muy alto": 0.17 },
-	{ "category": "Liderazgo y relaciones\n en el trabajo", "Nulo": 0.16, "Bajo": 0.20, "Medio": 0.24, "Alto": 0.29, "Muy alto": 0.11 },
 	{ "category": "Entorno organizacional", "Nulo": 0.11, "Bajo": 0.16, "Medio": 0.19, "Alto": 0.24, "Muy alto": 0.30 },
+	{ "category": "Liderazgo y relaciones\n en el trabajo", "Nulo": 0.16, "Bajo": 0.20, "Medio": 0.24, "Alto": 0.29, "Muy alto": 0.11 },
+	{ "category": "Organización del \ntiempo de trabajo", "Nulo": 0.14, "Bajo": 0.19, "Medio": 0.23, "Alto": 0.27, "Muy alto": 0.17 },
+
 ];
 
 var colorSetConsolidado1 = am5.ColorSet.new(rootConsolidadoChart1, {});

@@ -25,6 +25,8 @@ use App\modelos\reportes\recursosPortadasInformesModel;
 
 use App\modelos\reportes\reportenom0353Model;
 use App\modelos\reportes\reportenom0353catalogoModel;
+use App\modelos\reportes\reporterecomendacionescontrolModel;
+
 
 
 
@@ -1306,6 +1308,53 @@ class reportenom0353Controller extends Controller
                 // Mensaje
                 $dato["msj"] = 'Datos guardados correctamente';
             }
+
+             // RECOMENDACIONES
+             if (($request->opcion + 0) == 30) {
+                if ($request->recomendacion_checkbox) {
+                    $eliminar_recomendaciones = reporterecomendacionescontrolModel::where('proyecto_id', $request->proyecto_id)
+                        ->where('registro_id', $reporte->id)
+                        ->delete();
+
+                    DB::statement('ALTER TABLE reporterecomendacionescontrol AUTO_INCREMENT = 1;');
+
+                    foreach ($request->recomendacion_checkbox as $key => $value) {
+                        $recomendacion = reporterecomendacionescontrolModel::create([
+                            'proyecto_id' => $request->proyecto_id,
+                            'registro_id' => $reporte->id,
+                            'reporterecomendacionescatalogo_id' => $value,
+                            'reporterecomendaciones_descripcion' => $this->datosproyectolimpiartexto($proyecto, $recsensorial, $request['recomendacion_descripcion_' . $value])
+                        ]);
+                    }
+
+                    // Mensaje
+                    $dato["msj"] = 'Datos guardados correctamente';
+                }
+
+
+                if ($request->recomendacionadicional_checkbox) {
+                    if (!$request->recomendacion_checkbox) {
+                        $eliminar_recomendaciones = reporterecomendacionescontrolModel::where('proyecto_id', $request->proyecto_id)
+                            ->where('registro_id', $reporte->id)
+                            ->delete();
+                    }
+
+                    DB::statement('ALTER TABLE reporterecomendacionescontrol AUTO_INCREMENT = 1;');
+
+                    foreach ($request->recomendacionadicional_checkbox as $key => $value) {
+                        $recomendacion = reporterecomendacionescontrolModel::create([
+                            'proyecto_id' => $request->proyecto_id,
+                            'registro_id' => $reporte->id,
+                            'reporterecomendacionescatalogo_id' => 0,
+                            'reporterecomendaciones_descripcion' => $this->datosproyectolimpiartexto($proyecto, $recsensorial, $request->recomendacionadicional_descripcion[$key])
+                        ]);
+                    }
+
+                    // Mensaje
+                    $dato["msj"] = 'Datos guardados correctamente';
+                }
+            }
+
 
               // recomendaciones
               if (($request->opcion + 0) == 20) {
