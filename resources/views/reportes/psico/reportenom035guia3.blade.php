@@ -193,8 +193,9 @@
 				<a href="#9_4_5" class="list-group-item submenu">9.4.5.- Resultados obtenidos, Categoría entorno organizacional <i class="fa fa-times" id="menureporte_9_4_5"></i></a>
 				<a href="#10" class="list-group-item">10.- Conclusiones</a>
 				<a href="#10_1" class="list-group-item submenu">10.1.- Conclusiones de conformidad a la NOM-035-STPS-2018 <i class="fa fa-times" id="menureporte_10_1"></i></a>
-				<a href="#11" class="list-group-item">11.- Recomendaciones de control</a>
-				<a href="#11_1" class="list-group-item submenu">11.1.- Código de representación gráfica y color, NOM-035-STPS-2018 <i class="fa fa-times" id="menureporte_11_1"></i></a>
+				<a href="#11" class="list-group-item">11.- Recomendaciones</a>
+				<a href="#11_1" class="list-group-item submenu">11.1.- Recomendaciones de control <i class="fa fa-times" id="menureporte_11_1"></i></a>
+				<a href="#11_2" class="list-group-item submenu">11.2.- Recomendaciones por categoria <i class="fa fa-times" id="menureporte_11_2"></i></a>
 				<a href="#12" class="list-group-item">12.- Responsables del informe <i class="fa fa-times" id="menureporte_12"></i></a>
 				<a href="#13" class="list-group-item">13.- Anexos</a>
 				<a href="#13_1" class="list-group-item submenu">13.1.- Anexo 1: Memoria fotográfica <i class="fa fa-times" id="menureporte_13_1"></i></a>
@@ -1175,8 +1176,38 @@
 						</div>
 					</div>
 				</form>
-				<h4 class="card-title" id="11">11.- Recomendaciones de control</h4>
-				<h4 class="card-title" id="11_1">11.1.- Código de representación gráfica y color, NOM-035-STPS-2018</h4>
+				<h4 class="card-title" id="11">11.- Recomendaciones</h4>
+				<h4 class="card-title" id="11_1">11.1.- Recomendaciones de control</h4>
+				<form method="post" enctype="multipart/form-data" name="form_reporte_recomendaciones_control" id="form_reporte_recomendaciones_control">
+					<div class="row">
+						<div class="col-12">
+							{!! csrf_field() !!}
+						</div>
+						<div class="col-12">
+							<ol class="breadcrumb" style="padding: 6px; margin: 10px 0px;">
+								<button type="button" class="btn btn-default waves-effect botoninforme" data-toggle="tooltip" title="Agregar nueva recomendación" id="boton_reporte_nuevarecomendacion">
+									<span class="btn-label"><i class="fa fa-plus"></i></span>Nueva recomendación
+								</button>
+							</ol>
+							<table class="table-hover tabla_info_centrado" width="100%" id="tabla_reporte_recomendaciones_control">
+								<thead>
+									<tr>
+										<th width="60">No.</th>
+										<th width="60">Activo</th>
+										<th>Descripción</th>
+									</tr>
+								</thead>
+								<tbody></tbody>
+							</table>
+						</div>
+						<div class="col-12" style="text-align: right;">
+							<div class="form-group">
+								<button type="submit" class="btn btn-danger waves-effect waves-light botoninforme" id="botonguardar_reporte_recomendaciones_control">Guardar recomendaciones <i class="fa fa-save"></i></button>
+							</div>
+						</div>
+					</div>
+				</form>
+				<h4 class="card-title" id="11_2">11.2.- Recomendaciones por categoria</h4>
 				<form method="post" enctype="multipart/form-data" name="form_reporte_recomendaciones" id="form_reporte_recomendaciones">
 					<div class="row">
 						<div class="col-12">

@@ -1678,6 +1678,132 @@ class reportenom0353Controller extends Controller
         }
     }
 
+       /**
+     * Display the specified resource.
+     *
+     * @param  int $proyecto_id
+     * @param  int $reporteregistro_id
+     * @return \Illuminate\Http\Response
+     */
+    public function reportenom0353tablarecomendaciones($proyecto_id, $reporteregistro_id)
+    {
+        try {
+            $proyecto = proyectoModel::with(['catregion', 'catsubdireccion', 'catgerencia', 'catactivo'])->findOrFail($proyecto_id);
+            $recsensorial = reconocimientopsicoModel::findOrFail($proyecto->reconocimiento_psico_id);
+
+            $tabla = collect(DB::select('SELECT
+    TABLA.id,
+    TABLA.recomendaciones_descripcion,
+    TABLA.checked
+FROM
+    (
+        -- Primera subconsulta para obtener datos de psicocat_recomendacionescontrol
+        SELECT
+            CATALOGO.id,
+            IF(
+                CATALOGO.recomendaciones_descripcion != "",
+                CATALOGO.recomendaciones_descripcion,
+                CATALOGO.recomendacionescatalogo_descripcion
+            ) AS recomendaciones_descripcion,
+            IF(
+                CATALOGO.recomendaciones_descripcion != "",
+                "checked",
+                ""
+            ) AS checked
+        FROM
+            (
+                SELECT
+                    psicocat_recomendacionescontrol.ID_RECOMENDACION_CONTROL_INFORME AS id,
+                    psicocat_recomendacionescontrol.RECOMENDACION_CONTROL AS recomendacionescatalogo_descripcion,
+                    IFNULL(
+                        (
+                            SELECT
+                                reporterecomendacionescontrol.descripcion
+                            FROM
+                                reporterecomendacionescontrol
+                            WHERE
+                                reporterecomendacionescontrol.proyecto_id = ' . $proyecto_id . '
+                                AND reporterecomendacionescontrol.registro_id = ' . $reporteregistro_id . '
+                                AND reporterecomendacionescontrol.reporterecomendacionescatalogo_id = psicocat_recomendacionescontrol.ID_RECOMENDACION_CONTROL_INFORME
+                            LIMIT 1
+                        ),
+                        NULL
+                    ) AS recomendaciones_descripcion
+                FROM
+                    psicocat_recomendacionescontrol
+                WHERE
+                    psicocat_recomendacionescontrol.ACTIVO = 1
+            ) AS CATALOGO
+
+        UNION ALL
+
+        -- Segunda subconsulta para obtener datos de reporterecomendacionescontrol
+        SELECT
+            0 AS id,
+            reporterecomendacionescontrol.descripcion AS recomendaciones_descripcion,
+            "checked" AS checked
+        FROM
+            reporterecomendacionescontrol
+        WHERE
+            reporterecomendacionescontrol.proyecto_id = ' . $proyecto_id . '
+            AND reporterecomendacionescontrol.registro_id = ' . $reporteregistro_id . '
+            AND reporterecomendacionescontrol.reporterecomendacionescatalogo_id = 0
+    ) AS TABLA
+ORDER BY
+    TABLA.id ASC;'));
+
+            $numero_registro = 0;
+            $total = 0;
+            foreach ($tabla as $key => $value) {
+                $numero_registro += 1;
+                $value->numero_registro = $numero_registro;
+
+                if (($value->id + 0) > 0) {
+                    $required_readonly = 'readonly';
+                    if ($value->checked) {
+                        $required_readonly = 'required';
+                    }
+
+                    $value->checkbox = '<div class="switch">
+                                            <label>
+                                                <input type="checkbox" class="recomendacion_checkbox" name="recomendacion_checkbox[]" value="' . $value->id . '" ' . $value->checked . ' onclick="activa_recomendacion(this);">
+                                                <span class="lever switch-col-light-blue"></span>
+                                            </label>
+                                        </div>';
+
+                    $value->descripcion = '<label>Recomendación de control</label>
+                                            <textarea  class="form-control" rows="5" id="recomendacion_descripcion_' . $value->id . '" name="recomendacion_descripcion_' . $value->id . '" ' . $required_readonly . '>' . $this->datosproyectoreemplazartexto($proyecto, $recsensorial, $value->recomendaciones_descripcion) . '</textarea>';
+                } else {
+                    $value->checkbox = '<input type="checkbox" class="recomendacionadicional_checkbox" name="recomendacionadicional_checkbox[]" value="0" checked/>
+                                        <button type="button" class="btn btn-danger waves-effect btn-circle eliminar" data-toggle="tooltip" title="Eliminar recomendación"><i class="fa fa-trash fa-1x"></i></button>';
+
+                    
+
+                    $value->descripcion = '
+                                            <div class="form-group">
+                                                <label>Descripción</label>
+                                                <textarea  class="form-control" rows="5" name="recomendacionadicional_descripcion[]" required>' . $this->datosproyectoreemplazartexto($proyecto, $recsensorial, $value->recomendaciones_descripcion) . '</textarea>
+                                            </div>';
+                }
+
+                if ($value->checked) {
+                    $total += 1;
+                }
+            }
+
+            // respuesta
+            $dato['data'] = $tabla;
+            $dato['total'] = $total;
+            $dato["msj"] = 'Datos consultados correctamente';
+            return response()->json($dato);
+        } catch (Exception $e) {
+            $dato['data'] = 0;
+            $dato['total'] = 0;
+            $dato["msj"] = 'Error ' . $e->getMessage();
+            return response()->json($dato);
+        }
+    }
+
     public function datosproyectolimpiartexto($proyecto, $recsensorial, $texto)
     {
         $meses = ["Vacio", "Enero", "Febrero", "Marzo", "Abril", "Mayo", "Junio", "Julio", "Agosto", "Septiembre", "Octubre", "Noviembre", "Diciembre"];
