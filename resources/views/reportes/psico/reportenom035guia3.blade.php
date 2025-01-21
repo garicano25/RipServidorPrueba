@@ -1186,7 +1186,7 @@
 						<div class="col-12">
 							<ol class="breadcrumb" style="padding: 6px; margin: 10px 0px;">
 								<button type="button" class="btn btn-default waves-effect botoninforme" data-toggle="tooltip" title="Agregar nueva recomendación" id="boton_reporte_nuevarecomendacion">
-									<span class="btn-label"><i class="fa fa-plus"></i></span>Nueva recomendación
+									<span class="btn-label"><i class="fa fa-plus"></i></span>Nueva recomendación de control
 								</button>
 							</ol>
 							<table class="table-hover tabla_info_centrado" width="100%" id="tabla_reporte_recomendaciones_control">
@@ -1202,48 +1202,79 @@
 						</div>
 						<div class="col-12" style="text-align: right;">
 							<div class="form-group">
-								<button type="submit" class="btn btn-danger waves-effect waves-light botoninforme" id="botonguardar_reporte_recomendaciones_control">Guardar recomendaciones <i class="fa fa-save"></i></button>
+								<button type="submit" class="btn btn-danger waves-effect waves-light botoninforme" id="botonguardar_reporte_recomendaciones_control">Guardar recomendaciones de control <i class="fa fa-save"></i></button>
 							</div>
 						</div>
 					</div>
 				</form>
-				<h4 class="card-title" id="11_2">11.2.- Recomendaciones por categoria</h4>
-				<form method="post" enctype="multipart/form-data" name="form_reporte_recomendaciones" id="form_reporte_recomendaciones">
+				<h4 class="card-title" id="11_2">11.2.- Recomendaciones por categoría</h4>
+				<div id="divRecomendacionesCategoria" class="col-12">
+				</div>
+				<form method="post" enctype="multipart/form-data" name="form_reporte_recomendaciones_categorias" id="form_reporte_recomendaciones_categorias">
 					<div class="row">
 						<div class="col-12">
 							{!! csrf_field() !!}
-							<div class="form-group">
-								<label>Acontecimientos traumáticos severos</label>
-								<textarea class="form-control" style="margin-bottom: 0px;" rows="5" id="reporte_acontecimientos_recomendaciones" name="reporte_acontecimientos_recomendaciones" required></textarea>
-							</div>
-							<div class="form-group">
-								<label>Ambiente de trabajo</label>
-								<textarea class="form-control" style="margin-bottom: 0px;" rows="5" id="reporte_ambiente_recomendaciones" name="reporte_ambiente_recomendaciones" required></textarea>
-							</div>
-							<div class="form-group">
-								<label>Factores propios de la actividad</label>
-								<textarea class="form-control" style="margin-bottom: 0px;" rows="5" id="reporte_factores_recomendaciones" name="reporte_factores_recomendaciones" required></textarea>
-							</div>
-							<div class="form-group">
-								<label>Organización del tiempo de trabajo</label>
-								<textarea class="form-control" style="margin-bottom: 0px;" rows="5" id="reporte_organizacion_recomendaciones" name="reporte_organizacion_recomendaciones" required></textarea>
-							</div>
-							<div class="form-group">
-								<label>Liderazgo y relaciones en el trabajo</label>
-								<textarea class="form-control" style="margin-bottom: 0px;" rows="5" id="reporte_liderazgorelaciones_recomendaciones" name="reporte_liderazgorelaciones_recomendaciones" required></textarea>
-							</div>
-							<div class="form-group">
-								<label>Entorno organizacional</label>
-								<textarea class="form-control" style="margin-bottom: 0px;" rows="5" id="reporte_entorno_recomendaciones" name="reporte_entorno_recomendaciones" required></textarea>
-							</div>
+						</div>
+						<div class="col-12">
+							<ol class="breadcrumb" style="padding: 6px; margin: 10px 0px;">
+								<button type="button" class="btn btn-default waves-effect botoninforme" data-toggle="tooltip" title="Agregar nueva recomendación" id="boton_reporte_nuevarecomendacion_categoria">
+									<span class="btn-label"><i class="fa fa-plus"></i></span>Nueva recomendación
+								</button>
+							</ol>
+							<table class="table-hover tabla_info_centrado" width="100%" id="tabla_reporte_recomendaciones_categoria">
+								<thead>
+									<tr>
+										<th width="60">No.</th>
+										<th width="60">Activo</th>
+										<th>Descripción</th>
+									</tr>
+								</thead>
+								<tbody></tbody>
+							</table>
 						</div>
 						<div class="col-12" style="text-align: right;">
 							<div class="form-group">
-								<button type="submit" class="btn btn-danger waves-effect waves-light botoninforme" id="botonguardar_reporte_recomendaciones">Guardar recomendaciones <i class="fa fa-save"></i></button>
+								<button type="submit" class="btn btn-danger waves-effect waves-light botoninforme" id="botonguardar_reporte_recomendaciones_categoria">Guardar recomendaciones <i class="fa fa-save"></i></button>
 							</div>
 						</div>
 					</div>
 				</form>
+
+
+
+							<!-- <div class="col-12">
+								{!! csrf_field() !!}
+								<div class="form-group">
+									<label>Acontecimientos traumáticos severos</label>
+									<textarea class="form-control" style="margin-bottom: 0px;" rows="5" id="reporte_acontecimientos_recomendaciones" name="reporte_acontecimientos_recomendaciones" required></textarea>
+								</div>
+								<div class="form-group">
+									<label>Ambiente de trabajo</label>
+									<textarea class="form-control" style="margin-bottom: 0px;" rows="5" id="reporte_ambiente_recomendaciones" name="reporte_ambiente_recomendaciones" required></textarea>
+								</div>
+								<div class="form-group">
+									<label>Factores propios de la actividad</label>
+									<textarea class="form-control" style="margin-bottom: 0px;" rows="5" id="reporte_factores_recomendaciones" name="reporte_factores_recomendaciones" required></textarea>
+								</div>
+								<div class="form-group">
+									<label>Organización del tiempo de trabajo</label>
+									<textarea class="form-control" style="margin-bottom: 0px;" rows="5" id="reporte_organizacion_recomendaciones" name="reporte_organizacion_recomendaciones" required></textarea>
+								</div>
+								<div class="form-group">
+									<label>Liderazgo y relaciones en el trabajo</label>
+									<textarea class="form-control" style="margin-bottom: 0px;" rows="5" id="reporte_liderazgorelaciones_recomendaciones" name="reporte_liderazgorelaciones_recomendaciones" required></textarea>
+								</div>
+								<div class="form-group">
+									<label>Entorno organizacional</label>
+									<textarea class="form-control" style="margin-bottom: 0px;" rows="5" id="reporte_entorno_recomendaciones" name="reporte_entorno_recomendaciones" required></textarea>
+								</div>
+							</div>
+							<div class="col-12" style="text-align: right;">
+								<div class="form-group">
+									<button type="submit" class="btn btn-danger waves-effect waves-light botoninforme" id="botonguardar_reporte_recomendaciones">Guardar recomendaciones <i class="fa fa-save"></i></button>
+								</div>
+							</div>
+						</div> -->
 				<h4 class="card-title" id="12">12.- Responsables del informe</h4>
 				<form method="post" enctype="multipart/form-data" name="form_reporte_responsablesinforme" id="form_reporte_responsablesinforme">
 					<div class="row">
@@ -1991,4 +2022,4 @@
 	var areas_poe = <?php echo json_encode($areas_poe); ?>;
 </script>
 {{-- <script src="/js_sitio/html2canvas.js"></script> --}}
-<script src="/js_sitio/reportes/reportenom0353.js?v=3.0"></script>
+<script src="/js_sitio/reportes/reportenom0353.js?v=3.1"></script>

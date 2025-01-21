@@ -3373,6 +3373,171 @@ function tabla_reporte_recomendaciones_control(proyecto_id, reporteregistro_id)
 }
 
 
+
+$(document).ready(function()
+{
+	const divradioButton = document.getElementById('divRecomendacionesCategoria');
+    divradioButton.innerHTML = `<div class="container text-center mt-4">
+                        <div class="btn-group btn-group-toggle d-flex justify-content-center flex-wrap" data-toggle="buttons">
+                            <div class="row justify-content-center w-100">
+                                <label class="btn btn-primary mx-2 mb-2 flex-fill text-truncate" style="min-width: 250px;">
+                                    <input type="radio" name="options" id="recomendaciones_option1" value="1">
+                                    Acontecimientos traumáticos severos
+                                </label>
+                                <label class="btn btn-primary mx-2 mb-2 flex-fill text-truncate" style="min-width: 250px;">
+                                    <input type="radio" name="options" id="recomendaciones_option2" value="2">
+                                    Ambiente de trabajo
+                                </label>
+                                <label class="btn btn-primary mx-2 mb-2 flex-fill text-truncate" style="min-width: 250px;">
+                                    <input type="radio" name="options" id="recomendaciones_option3" value="3">
+                                    Factores propios de la actividad
+                                </label>
+                                <label class="btn btn-primary mx-2 mb-2 flex-fill text-truncate" style="min-width: 250px;">
+                                    <input type="radio" name="options" id="recomendaciones_option4" value="4">
+                                    Organización del tiempo de trabajo
+                                </label>
+                                <label class="btn btn-primary mx-2 mb-2 flex-fill text-truncate" style="min-width: 250px;">
+                                    <input type="radio" name="options" id="recomendaciones_option5" value="5">
+                                    Liderazgo y relaciones en el trabajo
+                                </label>
+                                <label class="btn btn-primary mx-2 mb-2 flex-fill text-truncate" style="min-width: 250px;">
+                                    <input type="radio" name="options" id="recomendaciones_option6" value="6">
+                                    Entorno organizacional
+                                </label>
+                            </div>
+                        </div>
+                    </div>`;
+
+    // Activar el primer radio al cargar la página
+    const radioButton = document.getElementById('recomendaciones_option1');
+    if (radioButton) {
+        radioButton.checked = true;
+        const label = radioButton.closest('label');
+        if (label) {
+            label.classList.add('btn-success', 'active');
+        }
+    }
+
+    // Manejar el cambio de selección de radio
+    $('input[type="radio"][name="options"]').change(function () {
+        // Eliminar las clases de todos los labels
+        $('label.btn').removeClass('btn-success active');
+
+        // Agregar clases al label del radio seleccionado
+        const selectedLabel = $(this).closest('label');
+        if (selectedLabel) {
+            selectedLabel.addClass('btn-success active');
+        }
+
+        // Obtener el valor del radio seleccionado y llamar a la función
+        const categoria_id = $(this).val(); // Obtener el valor directamente del input
+        tabla_reporte_recomendaciones_categoria(proyecto.id, reporteregistro_id, categoria_id);
+    });
+
+	
+	setTimeout(function()
+	{
+		tabla_reporte_recomendaciones_categoria(proyecto.id, reporteregistro_id, 1); // 1= acontecimientos, 2=ambiente, 3=factores, 4=organizacion, 5=liderazgo, 6=entorno
+	}, 6500);
+});
+
+
+var datatable_recomendaciones_categoria = null;
+function tabla_reporte_recomendaciones_categoria(proyecto_id, reporteregistro_id, categoria_id)
+{
+	try 
+	{
+		var ruta = "/reportenom0353tablarecomendaciones_categorias/"+proyecto_id+"/"+reporteregistro_id+"/"+categoria_id;
+
+		if (datatable_recomendaciones_categoria != null)
+		{
+			datatable_recomendaciones_categoria.clear().draw();
+			datatable_recomendaciones_categoria.ajax.url(ruta).load();
+		}
+		else
+		{
+			var numeroejecucion = 1;
+			datatable_recomendaciones_categoria = $('#tabla_reporte_recomendaciones_categoria').DataTable({
+				"ajax": {
+					"url": ruta,
+					"type": "get",
+					"cache": false,
+					dataType: "json",
+					data: {},
+					dataSrc: function (json)
+					{
+						// alert("Done! "+json.msj);
+						return json.data;
+					},
+					error: function (xhr, error, code)
+					{
+						// console.log(xhr); console.log(code);
+						console.log('error en datatable_recomendaciones_categoria');
+						if (numeroejecucion <= 1)
+						{
+							tabla_reporte_recomendaciones_categoria(proyecto_id, reporteregistro_id);
+							numeroejecucion += 1;
+						}
+					},
+					"data": {}
+				},
+				"columns": [
+					// {
+					//     "data": "id" 
+					// },
+					{
+						"data": "numero_registro",
+						"defaultContent": "-"
+					},
+					{
+						"data": "checkbox",
+						"defaultContent": "-"
+					},
+					{
+						"data": "descripcion",
+						"defaultContent": "-"
+					}
+				],
+				"lengthMenu": [[20, 50, 100, -1], [20, 50, 100, "Todos"]],
+				// "rowsGroup": [0, 1], //agrupar filas
+				"order": [[ 0, "ASC" ]],
+				"ordering": false,
+				"processing": true,
+				"searching": false,
+				"paging": false,
+				"language": {
+					"lengthMenu": "Mostrar _MENU_ Registros",
+					"zeroRecords": "No se encontraron registros",
+					"info": "Página _PAGE_ de _PAGES_ (Total _TOTAL_ registros)",
+					"infoEmpty": "No se encontraron registros",
+					"infoFiltered": "(Filtrado de _MAX_ registros)",
+					"emptyTable": "No hay datos disponibles en la tabla",
+					"loadingRecords": "Cargando datos....",
+					"processing": "Procesando <i class='fa fa-spin fa-spinner fa-3x'></i>",
+					"search": "Buscar",
+					"paginate": {
+						"first": "Primera",
+						"last": "Ultima",
+						"next": "Siguiente",
+						"previous": "Anterior"
+					}
+				}
+		    });
+		}
+
+		// Tooltip en DataTable
+		datatable_recomendaciones_categoria.on('draw', function ()
+		{
+			$('[data-toggle="tooltip"]').tooltip();
+		});
+	}
+	catch (exception)
+	{
+		tabla_reporte_recomendaciones_categoria(proyecto_id, reporteregistro_id);
+    }
+}
+
+
 $("#boton_reporte_nuevarecomendacion").click(function()
 {
     $("#tabla_reporte_recomendaciones_control tbody").append( '<tr>'+
