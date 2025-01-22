@@ -6258,8 +6258,8 @@ am5.ready(function () {
 					return "[bold]" + category.split("-")[1] + "[/]";
 				}
 				if (category.startsWith("g3")) {
-					//target.set("x", target.get("x") + 27); // Mover la categoría a la derecha
-					return category.split("-")[1];  // No hace falta modificar el texto, solo moverlo
+					target.set("x", target.get("x") + 28); // Mover la categoría a la derecha
+					//return category.split("-")[1];  // No hace falta modificar el texto, solo moverlo
 				}
 				return "[bold]" + category.split("-")[1] + "[/]";
 			}
@@ -6300,7 +6300,7 @@ am5.ready(function () {
 			}));
 
 			series.columns.template.setAll({
-				tooltipText: "{name}, {categoryY}: {valueX} ({percentage}%)",
+				//tooltipText: "{name}, {categoryY}: {valueX} ({percentage}%)",
 				width: am5.percent(100),
 				tooltipY: 0
 			});
@@ -6370,7 +6370,7 @@ am5.ready(function () {
 	// Crear gráficos
 	createChart(
 		"ambienteChart",
-		"Categoría\n Ambiente de trabajo \n\n",
+		"Categoría\n\n\n",
 		"(Nivel de riesgo/NOM-035-STPS-2018)\n\n",
 		[{
 			category: "g1-Ambiente de trabajo\n",
@@ -6386,7 +6386,7 @@ am5.ready(function () {
 
 	createChart(
 		"factoresChart",
-		"Categoría\n Factores propios de la actividad \n\n",
+		"Categoría\n\n\n",
 		"(Nivel de riesgo/NOM-035-STPS-2018)\n\n",
 		[{
 			category: "g1-Factores propios de la actividad\n",
@@ -6405,7 +6405,7 @@ am5.ready(function () {
 
 	createChart(
 		"organizacionChart",
-		"Categoría\n Organización del tiempo de trabajo \n\n",
+		"Categoría\n\n\n",
 		"(Nivel de riesgo/NOM-035-STPS-2018)\n\n",
 		[{
 			category: "g1-Organización del tiempo de trabajo\n",
@@ -6424,7 +6424,7 @@ am5.ready(function () {
 
 	createChart(
 		"liderazgoChart",
-		"Categoría\n Liderazgo y relaciones en el trabajo \n\n\n",
+		"Categoría\n\n\n",
 		"(Nivel de riesgo/NOM-035-STPS-2018)\n\n",
 		[{
 			category: "g1-Liderazgo y relaciones en el trabajo\n",
@@ -6449,7 +6449,7 @@ am5.ready(function () {
 
 	createChart(
 		"entornoChart",
-		"Categoría\n Entorno organizacional \n\n",
+		"Categoría\n\n\n",
 		"(Nivel de riesgo/NOM-035-STPS-2018)\n\n",
 		[{
 			category: "g1-Entorno organizacional\n",
