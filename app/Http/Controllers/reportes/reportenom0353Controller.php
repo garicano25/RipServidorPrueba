@@ -26,6 +26,8 @@ use App\modelos\reportes\recursosPortadasInformesModel;
 use App\modelos\reportes\reportenom0353Model;
 use App\modelos\reportes\reportenom0353catalogoModel;
 use App\modelos\reportes\reporterecomendacionescontrolModel;
+use App\modelos\reportes\reporterecomendacionescategoriaModel;
+
 
 
 
@@ -1357,28 +1359,53 @@ class reportenom0353Controller extends Controller
 
 
               // recomendaciones
-              if (($request->opcion + 0) == 20) {
-                $form_recomendaciones = [
-                    'acontecimientos_traumaticos' => $request->input('reporte_acontecimientos_recomendaciones'),
-                    'ambiente_trabajo' => $request->input('reporte_ambiente_recomendaciones'),
-                    'factores_actividad' => $request->input('reporte_factores_recomendaciones'),
-                    'organizacion_tiempo' => $request->input('reporte_organizacion_recomendaciones'),
-                  'liderazgo_relaciones' => $request->input('reporte_liderazgorelaciones_recomendaciones'),
-                   'entorno_organizacional' => $request->input('reporte_entorno_recomendaciones'),
-                    ];
-                
-            
-                // Convertir el array a JSON
-                $jsonRecomendaciones = json_encode($form_recomendaciones);
-            
-                // Actualizar el registro en la base de datos
-                $reporte->update([
-                    'reportenom0353_recomendaciones' => $jsonRecomendaciones,
-                ]);
-            
+            if (($request->opcion + 0) == 20) {
+                if ($request->recomendacion_categoria_checkbox) {
+                    $eliminar_recomendaciones_categoria = reporterecomendacionescategoriaModel::where('proyecto_id', $request->proyecto_id)
+                        ->where('registro_id', $reporte->id)
+                        ->where('reporterecomendacionescategoria_id', $request->categoria_id)
+                        ->delete();
 
-                // Mensaje
-                $dato["msj"] = 'Datos guardados correctamente';
+                    DB::statement('ALTER TABLE reporterecomendacionescategoria AUTO_INCREMENT = 1;');
+
+                    foreach ($request->recomendacion_categoria_checkbox as $key => $value) {
+                        $recomendacionCategoria = reporterecomendacionescategoriaModel::create([
+                            'proyecto_id' => $request->proyecto_id,
+                            'registro_id' => $reporte->id,
+                            'reporterecomendacionescatalogo_id' => $value,
+                            'reporterecomendaciones_descripcion' => $this->datosproyectolimpiartexto($proyecto, $recsensorial, $request['recomendacion_categoria_descripcion_' . $value]),
+                            'reporterecomendacionescategoria_id' => $request->categoria_id,
+                        ]);
+                    }
+
+                    // Mensaje
+                    $dato["msj"] = 'Datos guardados correctamente';
+                }
+
+
+                if ($request->recomendacionadicional_categoria_checkbox) {
+                    if (!$request->recomendacion_categoria_checkbox) {
+                        $eliminar_recomendaciones_categoria = reporterecomendacionescategoriaModel::where('proyecto_id', $request->proyecto_id)
+                            ->where('registro_id', $reporte->id)
+                            ->where('reporterecomendacionescategoria_id', $request->categoria_id)
+                            ->delete();
+                    }
+
+                    DB::statement('ALTER TABLE reporterecomendacionescategoria AUTO_INCREMENT = 1;');
+
+                    foreach ($request->recomendacionadicional_categoria_checkbox as $key => $value) {
+                        $recomendacionCategoria = reporterecomendacionescategoriaModel::create([
+                            'proyecto_id' => $request->proyecto_id,
+                            'registro_id' => $reporte->id,
+                            'reporterecomendacionescatalogo_id' => 0,
+                            'reporterecomendaciones_descripcion' => $this->datosproyectolimpiartexto($proyecto, $recsensorial, $request->recomendacionadicional_categoria_descripcion[$key]),
+                            'reporterecomendacionescategoria_id' => $request->categoria_id,
+                        ]);
+                    }
+
+                    // Mensaje
+                    $dato["msj"] = 'Datos guardados correctamente';
+                }
             }
 
 
@@ -1839,7 +1866,6 @@ class reportenom0353Controller extends Controller
                     $total += 1;
                 }
             }
-
             // respuesta
             $dato['data'] = $tabla;
             $dato['total'] = $total;
@@ -1946,15 +1972,15 @@ class reportenom0353Controller extends Controller
 
                     $value->checkbox = '<div class="switch">
                                             <label>
-                                                <input type="checkbox" class="recomendacion_checkbox" name="recomendacion_checkbox[]" value="' . $value->id . '" ' . $value->checked . ' onclick="activa_recomendacion(this);">
+                                                <input type="checkbox" class="recomendacion_categoria_checkbox" name="recomendacion_categoria_checkbox[]" value="' . $value->id . '" ' . $value->checked . ' onclick="activa_recomendacion_categoria(this);">
                                                 <span class="lever switch-col-light-blue"></span>
                                             </label>
                                         </div>';
 
                     $value->descripcion = '
-                                            <textarea  class="form-control" rows="5" id="recomendacion_descripcion_' . $value->id . '" name="recomendacion_descripcion_' . $value->id . '" ' . $required_readonly . '>' . $this->datosproyectoreemplazartexto($proyecto, $recsensorial, $value->recomendaciones_descripcion) . '</textarea>';
+                                            <textarea  class="form-control" rows="5" id="recomendacion_categoria_descripcion_' . $value->id . '" name="recomendacion_categoria_descripcion_' . $value->id . '" ' . $required_readonly . '>' . $this->datosproyectoreemplazartexto($proyecto, $recsensorial, $value->recomendaciones_descripcion) . '</textarea>';
                 } else {
-                    $value->checkbox = '<input type="checkbox" class="recomendacionadicional_checkbox" name="recomendacionadicional_checkbox[]" value="0" checked/>
+                    $value->checkbox = '<input type="checkbox" class="recomendacionadicional_categoria_checkbox" name="recomendacionadicional_categoria_checkbox[]" value="0" checked/>
                                         <button type="button" class="btn btn-danger waves-effect btn-circle eliminar" data-toggle="tooltip" title="Eliminar recomendación"><i class="fa fa-trash fa-1x"></i></button>';
 
                     
@@ -1962,7 +1988,7 @@ class reportenom0353Controller extends Controller
                     $value->descripcion = '
                                             <div class="form-group">
                                                 <label>Descripción</label>
-                                                <textarea  class="form-control" rows="5" name="recomendacionadicional_descripcion[]" required>' . $this->datosproyectoreemplazartexto($proyecto, $recsensorial, $value->recomendaciones_descripcion) . '</textarea>
+                                                <textarea  class="form-control" rows="5" name="recomendacionadicional_categoria_descripcion[]" required>' . $this->datosproyectoreemplazartexto($proyecto, $recsensorial, $value->recomendaciones_descripcion) . '</textarea>
                                             </div>';
                 }
 

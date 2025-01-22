@@ -3263,114 +3263,7 @@ $("#botonguardar_reporte_conclusion").click(function () {
 
 
 
-$(document).ready(function()
-{
-	setTimeout(function()
-	{
-		tabla_reporte_recomendaciones_control(proyecto.id, reporteregistro_id);
-	}, 6500);
-});
 
-
-var datatable_recomendaciones_control = null;
-function tabla_reporte_recomendaciones_control(proyecto_id, reporteregistro_id)
-{
-	try 
-	{
-		var ruta = "/reportenom0353tablarecomendaciones/"+proyecto_id+"/"+reporteregistro_id;
-
-		if (datatable_recomendaciones_control != null)
-		{
-			datatable_recomendaciones_control.clear().draw();
-			datatable_recomendaciones_control.ajax.url(ruta).load();
-		}
-		else
-		{
-			var numeroejecucion = 1;
-			datatable_recomendaciones_control = $('#tabla_reporte_recomendaciones_control').DataTable({
-				"ajax": {
-					"url": ruta,
-					"type": "get",
-					"cache": false,
-					dataType: "json",
-					data: {},
-					dataSrc: function (json)
-					{
-						if (parseInt(json.total) > 0)
-						{
-							menureporte_estado("menureporte_11_1", 1);
-						}
-
-						// alert("Done! "+json.msj);
-						return json.data;
-					},
-					error: function (xhr, error, code)
-					{
-						// console.log(xhr); console.log(code);
-						console.log('error en datatable_recomendaciones_control');
-						if (numeroejecucion <= 1)
-						{
-							tabla_reporte_recomendaciones_control(proyecto_id, reporteregistro_id);
-							numeroejecucion += 1;
-						}
-					},
-					"data": {}
-				},
-				"columns": [
-					// {
-					//     "data": "id" 
-					// },
-					{
-						"data": "numero_registro",
-						"defaultContent": "-"
-					},
-					{
-						"data": "checkbox",
-						"defaultContent": "-"
-					},
-					{
-						"data": "descripcion",
-						"defaultContent": "-"
-					}
-				],
-				"lengthMenu": [[20, 50, 100, -1], [20, 50, 100, "Todos"]],
-				// "rowsGroup": [0, 1], //agrupar filas
-				"order": [[ 0, "ASC" ]],
-				"ordering": false,
-				"processing": true,
-				"searching": false,
-				"paging": false,
-				"language": {
-					"lengthMenu": "Mostrar _MENU_ Registros",
-					"zeroRecords": "No se encontraron registros",
-					"info": "Página _PAGE_ de _PAGES_ (Total _TOTAL_ registros)",
-					"infoEmpty": "No se encontraron registros",
-					"infoFiltered": "(Filtrado de _MAX_ registros)",
-					"emptyTable": "No hay datos disponibles en la tabla",
-					"loadingRecords": "Cargando datos....",
-					"processing": "Procesando <i class='fa fa-spin fa-spinner fa-3x'></i>",
-					"search": "Buscar",
-					"paginate": {
-						"first": "Primera",
-						"last": "Ultima",
-						"next": "Siguiente",
-						"previous": "Anterior"
-					}
-				}
-		    });
-		}
-
-		// Tooltip en DataTable
-		datatable_recomendaciones_control.on('draw', function ()
-		{
-			$('[data-toggle="tooltip"]').tooltip();
-		});
-	}
-	catch (exception)
-	{
-		tabla_reporte_recomendaciones_control(proyecto_id, reporteregistro_id);
-    }
-}
 
 
 
@@ -3537,6 +3430,365 @@ function tabla_reporte_recomendaciones_categoria(proyecto_id, reporteregistro_id
     }
 }
 
+$("#boton_reporte_nuevarecomendacion_categoria").click(function()
+{
+    $("#tabla_reporte_recomendaciones_categoria tbody").append( '<tr>'+
+															'<td>0</td>'+
+															'<td style="text-align: center;">'+
+																'<input type="checkbox" class="recomendacionadicional_categoria_checkbox" name="recomendacionadicional_categoria_checkbox[]" value="0" checked/>'+
+																'<br><button type="button" class="btn btn-danger waves-effect btn-circle eliminar" data-toggle="tooltip" title="Eliminar recomendación"><i class="fa fa-trash fa-2x"></i></button>'+
+															'</td>'+
+															'<td>'+
+																'<div class="form-group">'+
+																	'<label>Descripción</label>'+
+																	'<textarea  class="form-control" style="margin-bottom: 0px;" rows="5" name="recomendacionadicional_categoria_descripcion[]" required></textarea>'+
+																'</div>'+
+															'</td>'+
+														'</tr>');
+
+    var posicion = $("#tabla_reporte_recomendaciones_categoria > tbody > tr").eq((parseInt(document.getElementById("tabla_reporte_recomendaciones_categoria").rows.length) - 1) - 2).offset().top;
+    $('html, body').animate({
+        scrollTop: posicion
+    }, 1000);
+
+    $('[data-toggle="tooltip"]').tooltip();
+});
+
+
+function activa_recomendacion_categoria(checkbox)
+{
+	if (checkbox.checked)
+	{
+		$('#recomendacion_categoria_descripcion_'+checkbox.value).attr('readonly', false);
+		$('#recomendacion_categoria_descripcion_'+checkbox.value).attr('required', true);
+	}
+	else
+	{
+		$('#recomendacion_categoria_descripcion_'+checkbox.value).attr('required', false);
+		$('#recomendacion_categoria_descripcion_'+checkbox.value).attr('readonly', true);
+	}
+}
+
+
+$('#tabla_reporte_recomendaciones_categoria tbody').on('click', '.eliminar', function()
+{
+    // obtener fila tabla
+    var fila = $(this);
+    
+    // confirmar
+    swal({   
+        title: "¿Eliminar recomendación?",   
+        text: "de la lista de recomendaciones",   
+        type: "warning",   
+        showCancelButton: true,   
+        confirmButtonColor: "#DD6B55",   
+        confirmButtonText: "Eliminar!",   
+        cancelButtonText: "Cancelar!",   
+        closeOnConfirm: false,   
+        closeOnCancel: false 
+    }, function(isConfirm){   
+        if (isConfirm)
+        {
+        	// cerrar msj confirmacion
+			// swal.close();
+
+            var tr = fila.closest('tr');
+            fila.closest("tr").remove(); // eliminar fila TR
+
+            // mensaje
+            swal({
+                title: "Correcto",
+                 text: "Recomendación eliminada de la lista",
+                type: "success", // warning, error, success, info
+                buttons: {
+                    visible: false, // true , false
+                },
+                timer: 1500,
+                showConfirmButton: false
+            });
+        }
+        else 
+        {
+            // mensaje
+            swal({
+                title: "Cancelado",
+                text: "",
+                type: "error", // warning, error, success, info
+                buttons: {
+                    visible: false, // true , false
+                },
+                timer: 500,
+                showConfirmButton: false
+            });   
+        } 
+    });
+    return false;
+});
+
+
+$("#botonguardar_reporte_recomendaciones_categoria").click(function()
+{
+	// borrar campo filtro del DATATABLE
+	// datatable_recomendaciones.search("").draw();
+	const categoria_id = $('input[type="radio"][name="options"]:checked').val();
+	console.log('Radio seleccionado:', categoria_id);
+	// valida campos vacios
+	var seleccionados = 0;
+	$('.recomendacion_categoria_checkbox').each(function()
+	{
+		if (this.checked)
+		{
+			seleccionados += 1;
+		}
+	});
+
+	$('.recomendacionadicional_categoria_checkbox').each(function()
+	{
+		if (this.checked)
+		{
+			seleccionados += 1;
+		}
+	});
+
+
+	if (seleccionados > 0)
+	{
+		// valida campos vacios
+		var valida = this.form.checkValidity();
+		if (valida)
+		{
+			swal({
+				title: "¡Confirme que desea guardar!",
+				text: "Recomendaciones",
+				type: "warning",
+				showCancelButton: true,
+				confirmButtonColor: "#DD6B55",
+				confirmButtonText: "Guardar!",
+				cancelButtonText: "Cancelar!",
+				closeOnConfirm: false,
+				closeOnCancel: false
+			},
+			function(isConfirm)
+			{
+				if (isConfirm)
+				{
+					// cerrar msj confirmacion
+					swal.close();
+
+					// enviar datos
+					$('#form_reporte_recomendaciones_categorias').ajaxForm({
+						dataType: 'json',
+						type: 'POST',
+						url: '/reportenom0353',
+						data: {
+							opcion: 20,
+							proyecto_id: proyecto.id,
+							agente_id: agente_id,
+							agente_nombre: agente_nombre,
+							reporteregistro_id: reporteregistro_id,
+							catactivo_id: $("#reporte_catactivo_id").val(),
+							reporte_instalacion: $("#reporte_instalacion").val(),
+							categoria_id: categoria_id,
+						},
+						resetForm: false,
+						success: function(dato)
+						{
+							// Actualizar ID reporte						
+							reporteregistro_id = dato.reporteregistro_id;
+
+							//menureporte_estado("menureporte_11_1", 1);
+
+							//tabla_reporte_revisiones(proyecto.id);
+
+							// mensaje
+							swal({
+								title: "Correcto",
+								text: ""+dato.msj,
+								type: "success", // warning, error, success, info
+								buttons: {
+									visible: false, // true , false
+								},
+								timer: 1500,
+								showConfirmButton: false
+							});
+
+							// actualiza boton
+							$('#botonguardar_reporte_recomendaciones_categoria').html('Guardar recomendaciones <i class="fa fa-save"></i>');
+							$('#botonguardar_reporte_recomendaciones_categoria').attr('disabled', false);
+						},
+						beforeSend: function()
+						{
+							$('#botonguardar_reporte_recomendaciones_categoria').html('Guardando recomendaciones <i class="fa fa-spin fa-spinner"></i>');
+							$('#botonguardar_reporte_recomendaciones_categoria').attr('disabled', true);
+						},
+						error: function(dato)
+						{
+							// actualiza boton
+							$('#botonguardar_reporte_recomendaciones_categoria').html('Guardar recomendaciones <i class="fa fa-save"></i>');
+							$('#botonguardar_reporte_recomendaciones_categoria').attr('disabled', false);
+
+							// mensaje
+							swal({
+								title: "Error",
+								text: ""+dato.msj,
+								type: "error", // warning, error, success, info
+								buttons: {
+									visible: false, // true , false
+								},
+								timer: 1500,
+								showConfirmButton: false
+							});
+							return false;
+						}
+					}).submit();
+					return false;
+				}
+				else 
+				{
+					// mensaje
+					swal({
+						title: "Cancelado",
+						text: "Acción cancelada",
+						type: "error", // warning, error, success, info
+						buttons: {
+							visible: false, // true , false
+						},
+						timer: 500,
+						showConfirmButton: false
+					});
+				}
+			});
+			return false;
+		}
+	}
+	else
+	{
+		// mensaje
+		swal({
+			title: "Seleccione recomendaciones",
+			text: "Antes de guardar debe seleccionar uno o más recomendaciones",
+			type: "info", // warning, error, success, info
+			buttons: {
+				visible: false, // true , false
+			},
+			timer: 1500,
+			showConfirmButton: false
+		});
+		return false;
+	}
+});
+
+
+///RECOMNEDACIONES DE CONTROL
+
+$(document).ready(function()
+{
+	setTimeout(function()
+	{
+		tabla_reporte_recomendaciones_control(proyecto.id, reporteregistro_id);
+	}, 6500);
+});
+
+
+var datatable_recomendaciones_control = null;
+function tabla_reporte_recomendaciones_control(proyecto_id, reporteregistro_id)
+{
+	try 
+	{
+		var ruta = "/reportenom0353tablarecomendaciones/"+proyecto_id+"/"+reporteregistro_id;
+
+		if (datatable_recomendaciones_control != null)
+		{
+			datatable_recomendaciones_control.clear().draw();
+			datatable_recomendaciones_control.ajax.url(ruta).load();
+		}
+		else
+		{
+			var numeroejecucion = 1;
+			datatable_recomendaciones_control = $('#tabla_reporte_recomendaciones_control').DataTable({
+				"ajax": {
+					"url": ruta,
+					"type": "get",
+					"cache": false,
+					dataType: "json",
+					data: {},
+					dataSrc: function (json)
+					{
+						if (parseInt(json.total) > 0)
+						{
+							menureporte_estado("menureporte_11_1", 1);
+						}
+
+						// alert("Done! "+json.msj);
+						return json.data;
+					},
+					error: function (xhr, error, code)
+					{
+						// console.log(xhr); console.log(code);
+						console.log('error en datatable_recomendaciones_control');
+						if (numeroejecucion <= 1)
+						{
+							tabla_reporte_recomendaciones_control(proyecto_id, reporteregistro_id);
+							numeroejecucion += 1;
+						}
+					},
+					"data": {}
+				},
+				"columns": [
+					// {
+					//     "data": "id" 
+					// },
+					{
+						"data": "numero_registro",
+						"defaultContent": "-"
+					},
+					{
+						"data": "checkbox",
+						"defaultContent": "-"
+					},
+					{
+						"data": "descripcion",
+						"defaultContent": "-"
+					}
+				],
+				"lengthMenu": [[20, 50, 100, -1], [20, 50, 100, "Todos"]],
+				// "rowsGroup": [0, 1], //agrupar filas
+				"order": [[ 0, "ASC" ]],
+				"ordering": false,
+				"processing": true,
+				"searching": false,
+				"paging": false,
+				"language": {
+					"lengthMenu": "Mostrar _MENU_ Registros",
+					"zeroRecords": "No se encontraron registros",
+					"info": "Página _PAGE_ de _PAGES_ (Total _TOTAL_ registros)",
+					"infoEmpty": "No se encontraron registros",
+					"infoFiltered": "(Filtrado de _MAX_ registros)",
+					"emptyTable": "No hay datos disponibles en la tabla",
+					"loadingRecords": "Cargando datos....",
+					"processing": "Procesando <i class='fa fa-spin fa-spinner fa-3x'></i>",
+					"search": "Buscar",
+					"paginate": {
+						"first": "Primera",
+						"last": "Ultima",
+						"next": "Siguiente",
+						"previous": "Anterior"
+					}
+				}
+		    });
+		}
+
+		// Tooltip en DataTable
+		datatable_recomendaciones_control.on('draw', function ()
+		{
+			$('[data-toggle="tooltip"]').tooltip();
+		});
+	}
+	catch (exception)
+	{
+		tabla_reporte_recomendaciones_control(proyecto_id, reporteregistro_id);
+    }
+}
 
 $("#boton_reporte_nuevarecomendacion").click(function()
 {
@@ -3719,7 +3971,7 @@ $("#botonguardar_reporte_recomendaciones_control").click(function()
 							});
 
 							// actualiza boton
-							$('#botonguardar_reporte_recomendaciones_control').html('Guardar recomendaciones <i class="fa fa-save"></i>');
+							$('#botonguardar_reporte_recomendaciones_control').html('Guardar recomendaciones de control <i class="fa fa-save"></i>');
 							$('#botonguardar_reporte_recomendaciones_control').attr('disabled', false);
 						},
 						beforeSend: function()
@@ -3730,7 +3982,7 @@ $("#botonguardar_reporte_recomendaciones_control").click(function()
 						error: function(dato)
 						{
 							// actualiza boton
-							$('#botonguardar_reporte_recomendaciones_control').html('Guardar recomendaciones <i class="fa fa-save"></i>');
+							$('#botonguardar_reporte_recomendaciones_control').html('Guardar recomendaciones de control <i class="fa fa-save"></i>');
 							$('#botonguardar_reporte_recomendaciones_control').attr('disabled', false);
 
 							// mensaje
