@@ -13,6 +13,7 @@ $(document).ready(function () {
     $('[data-toggle="tooltip"]').tooltip();
 
     document.getElementById('DOMINIO').addEventListener('change', actualizarOpcionesNivel);
+    document.getElementById('CATEGORIA').addEventListener('change', actualizarOpcionesNivelCategorias);
    
 });
 
@@ -51,7 +52,7 @@ $("#boton_nuevo_registro").click(function () {
 
             // campos hidden
             $("#ID_RECOMENDACION_INFORME").val(0);
-
+            actualizarOpcionesNivelCategorias();
             // abrir modal
             $('#modal_recomendacion').modal({ backdrop: false });
             break;
@@ -410,6 +411,35 @@ function actualizarOpcionesNivel() {
     });
 }
 
+function actualizarOpcionesNivelCategorias() {
+    const categoriaSelect = document.getElementById('CATEGORIA');
+    const nivelSelect = document.getElementById('NIVELRIESGO');
+    const opciones = {
+        1: [
+            { value: "6", text: "Hay casos" },
+            { value: "7", text: "Sin casos" },
+        ],
+        default: [
+            { value: "1", text: "Riesgo muy alto" },
+            { value: "2", text: "Riesgo alto" },
+            { value: "3", text: "Riesgo medio" },
+            { value: "4", text: "Riesgo bajo" },
+            { value: "5", text: "Riesgo nulo" },
+        ]
+    };
+
+    const selectedValue = categoriaSelect.value;
+    nivelSelect.innerHTML = '';
+
+    const opcionesNuevas = opciones[selectedValue] || opciones.default;
+    opcionesNuevas.forEach(opcion => {
+        const opt = document.createElement('option');
+        opt.value = opcion.value;
+        opt.textContent = opcion.text;
+        nivelSelect.appendChild(opt);
+    });
+}
+
 function mostrar_catalogo(num_catalogo) {
     catalogo = parseInt(num_catalogo);
 
@@ -637,6 +667,23 @@ function editar_recomendacionInforme() {
 
         // Llenar campo formulario
         $("#ID_RECOMENDACION_INFORME").val(row.data().ID_RECOMENDACION_INFORME);
+
+        if(categoria==="Acontecimientos traumáticos severos"){
+            $("#CATEGORIA").val(1);
+        }else if(categoria==="Ambiente de trabajo"){
+            $("#CATEGORIA").val(2);
+        }else if(categoria==="Factores propios de la actividad"){
+            $("#CATEGORIA").val(3);
+        }else if(categoria==="Organización del tiempo de trabajo"){
+            $("#CATEGORIA").val(4);
+        }else if(categoria==="Liderazgo y relaciones en el trabajo"){
+            $("#CATEGORIA").val(5);
+        }else if(categoria==="Entorno organizacional"){
+            $("#CATEGORIA").val(6);
+        }
+
+        actualizarOpcionesNivelCategorias();
+
         if(nivelriesgo==="Riesgo muy alto"){
             $("#NIVELRIESGO").val(1);
         }else if(nivelriesgo==="Riesgo alto"){
@@ -647,22 +694,14 @@ function editar_recomendacionInforme() {
             $("#NIVELRIESGO").val(4);
         }else if(nivelriesgo==="Riesgo nulo"){
             $("#NIVELRIESGO").val(5);
+        }else if (nivelriesgo === 'Hay casos') {
+            $("#NIVELRIESGO").val(6);
+        }else if (nivelriesgo === 'Sin casos') {
+            $("#NIVELRIESGO").val(7);
         }
 
 
-        if(categoria===""){
-            $("#CATEGORIA").val(1);
-        }else if(categoria==="Acontecimientos traumáticos severos"){
-            $("#CATEGORIA").val(2);
-        }else if(categoria==="Ambiente de trabajo"){
-            $("#CATEGORIA").val(3);
-        }else if(categoria==="Factores propios de la actividad"){
-            $("#CATEGORIA").val(4);
-        }else if(categoria==="Organización del tiempo de trabajo"){
-            $("#CATEGORIA").val(5);
-        }else if(categoria==="Liderazgo y relaciones en el trabaj"){
-            $("#CATEGORIA").val(6);
-        }
+       
         $("#RECOMENDACION").val(row.data().RECOMENDACION);
         $("#catalogo").val(3);
 

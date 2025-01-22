@@ -102,6 +102,10 @@ class recpsicocatalogosrecController extends Controller
                         $value['NIVELRIESGO'] = 'Riesgo bajo';
                     } elseif ($value->NIVELRIESGO == 5) {
                         $value['NIVELRIESGO'] = 'Riesgo nulo';
+                    }elseif ($value->NIVELRIESGO == 6) {
+                        $value['NIVELRIESGO'] = 'Hay casos';
+                    } elseif ($value->NIVELRIESGO == 7) {
+                        $value['NIVELRIESGO'] = 'Sin casos';
                     }
 
                     $value['ID_RECOMENDACION_INFORME'] = $value->ID_RECOMENDACION_INFORME;
