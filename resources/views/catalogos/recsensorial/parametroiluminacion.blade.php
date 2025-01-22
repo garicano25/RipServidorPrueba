@@ -142,7 +142,7 @@
                                 <label>Puntos</label>
                                 <input type="number" step="0.01" onkeypress="return this.value.length < 4;"
                                     oninput="if(this.value.length>=4) { this.value = this.value.slice(0,4); }"
-                                    class="form-control" id="parametroiluminacion_puntos" name="parametroiluminacion_puntos" required >
+                                    class="form-control" id="parametroiluminacion_puntos" name="parametroiluminacion_puntos" required>
                             </div>
                         </div>
 
@@ -1130,9 +1130,19 @@
         }
 
         const IC = (largo * ancho) / (alto * (largo + ancho));
-        const indiceArea = Math.round(IC); // Redondear al entero más cercano
+        let puntos = "";
 
-        document.getElementById("parametroiluminacion_puntos").value = indiceArea;
+        if (IC < 1) {
+            puntos = "4 - 6";
+        } else if (IC >= 1 && IC < 2) {
+            puntos = "9 - 12";
+        } else if (IC >= 2 && IC < 3) {
+            puntos = "16 - 20";
+        } else if (IC >= 3) {
+            puntos = "25 - 30";
+        }
+
+        document.getElementById("parametroiluminacion_puntos").value = puntos;
     }
 </script>
 
