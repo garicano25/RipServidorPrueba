@@ -532,7 +532,6 @@ function mostrar_catalogo(num_catalogo) {
             $("#div_datatable").html('<table class="table table-hover stylish-table" id="tabla_lista_catalogo_recomendaciones" width="100%">' +
                 '<thead>' +
                 '<tr>' +
-                '<th>No.</th>' +
                 '<th>Categoria</th>' +
                 '<th>Nivel de riesgo</th>' +
                 '<th style="width: 90px!important;">Editar</th>' +
@@ -1040,9 +1039,6 @@ function tabla_catalogo_recomendaciones(num_catalogo) {
                 },
                "columns": [
                     {
-                        "data": "ID_RECOMENDACION_INFORME"
-                    },
-                    {
                         "data": "CATEGORIA"
                     },
                     {
@@ -1064,9 +1060,9 @@ function tabla_catalogo_recomendaciones(num_catalogo) {
                 "lengthMenu": [[20, 50, 100, -1], [20, 50, 100, "Todos"]],
                 "order": [[0, "asc"]],
                 "rowsGroup": [0],
-                "searching": false,
+                "searching": true,
                 "paging": false,
-                "ordering": false,
+                "ordering": true,
                 "processing": true,
                 "language": {
                     "lengthMenu": "Mostrar _MENU_ Registros",

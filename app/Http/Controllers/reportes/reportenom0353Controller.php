@@ -1928,7 +1928,7 @@ class reportenom0353Controller extends Controller
                                                                         reporterecomendacionescategoria.proyecto_id = ' . $proyecto_id . '
                                                                         AND reporterecomendacionescategoria.registro_id = ' . $reporteregistro_id . '
 																		AND reporterecomendacionescategoria.reporterecomendacionescategoria_id = ' . $categoria_id . '
-                                                                        AND reporterecomendacionescategoria.reporterecomendacionescatalogo_id = psicocat_recomendaciones.CATEGORIA
+                                                                        AND reporterecomendacionescategoria.reporterecomendacionescatalogo_id = psicocat_recomendaciones.ID_RECOMENDACION_INFORME
                                                                     LIMIT 1
                                                                 ),
                                                                 NULL

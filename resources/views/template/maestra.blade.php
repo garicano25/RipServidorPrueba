@@ -992,7 +992,7 @@ use Illuminate\Support\Str;
 
     <script src="/assets/plugins/datatables/jquery.dataTables.min.js"></script>
     <script src="/assets/plugins/datatables/dataTables.rowsGroup.js"></script>
-    <script src="/js_sitio/psicoInformes_catalogos.js?v=2.2"></script>
+    <script src="/js_sitio/psicoInformes_catalogos.js?v=2.3"></script>
     <script src="/assets/plugins/dropify/dist/js/dropify.min.js"></script>
     <script src="/assets/plugins/select-search/selectize.js" type="text/javascript"></script>
 
