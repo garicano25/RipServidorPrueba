@@ -51,6 +51,8 @@ use App\modelos\reportes\reportenom0353catalogoModel;
 use App\modelos\reportes\reportenom0353Model;
 
 use App\modelos\reportes\reporterecomendacionescontrolModel;
+use App\modelos\reportes\reporterecomendacionescategoriaModel;
+
 
 
 use App\modelos\reportes\reporteanexosModel;
@@ -921,23 +923,55 @@ class reportenom0353wordController extends Controller
            
                 // RECOMENDACIONES
                 //================================================================================
-
-                $recomendacionesJson = json_decode($reporte->reportenom0353_recomendaciones, true);
+                $recomendacionesAconteciemientos = reporterecomendacionescategoriaModel::where('proyecto_id', $proyecto_id)
+                ->where('registro_id', $reporteregistro_id)
+                ->where('categoria_id', 1)
+                ->pluck('reporterecomendaciones_descripcion'); // Obtener solo la columna
+              
+                $textRun2 = new TextRun();
+                 $contador2 = 1;
+                 $mapa2 = [
+                     'M' => 1000, 'CM' => 900, 'D' => 500, 'CD' => 400,
+                     'C' => 100, 'XC' => 90, 'L' => 50, 'XL' => 40,
+                     'X' => 10, 'IX' => 9, 'V' => 5, 'IV' => 4, 'I' => 1,
+                 ];
+                 foreach ($recomendacionesAconteciemientos as $recomendacion) {
+                     $numeroActual2 = $contador2;
+                     $resultado2 = ''; // Inicializar el número romano como cadena vacía
+                     
+                     foreach ($mapa2 as $romano => $valor) {
+                         while ($numeroActual >= $valor) {
+                             $resultado2 .= $romano;
+                             $numeroActual -= $valor;
+                         }
+                     }
+                     
+                     $textRun2->addText($resultado2 . '. ' . $recomendacion); // Agregar texto con número romano
+                     $textRun2->addTextBreak(); 
+                     $textRun2->addTextBreak();
+                     $textRun2->addTextBreak();
+                     $contador2++; // Incrementar el contador
+                 }
+ 
+                 // Insertar el TextRun en el marcador
+                 $plantillaword->setComplexValue('RECOMENDACION_1', $textRun2);
+                
+                //$recomendacionesJson = json_decode($reporte->reportenom0353_recomendaciones, true);
 
                 // Asignar valores desde el JSON a variables específicas en el Word
-                if ($recomendacionesJson) {
-                    $plantillaword->setValue('RECOMENDACION_1', 'Realizar evaluaciones específicas y desarrollar estrategias para abordar las consecuencias de eventos traumáticos, priorizando la salud mental.');
-                    $plantillaword->setValue('RECOMENDACION_4', 'Reformar radicalmente los horarios laborales, estableciendo límites claros a la jornada laboral para proteger la salud del personal.');
-                    $plantillaword->setValue('RECOMENDACION_3', 'Optimizar procesos laborales e implementar técnicas modernas de gestión del tiempo y reducción de estrés.');
-                    $plantillaword->setValue('RECOMENDACION_2', 'Realizar una renovación integral del entorno laboral, integrando diseños innovadores que fomenten la seguridad y el bienestar.');
-                    $plantillaword->setValue('RECOMENDACION_5', 'Reestructurar equipos y liderazgos para resolver conflictos crónicos y mejorar el ambiente laboral.');
-                    $plantillaword->setValue('RECOMENDACION_6', 'Transformar profundamente las políticas organizacionales para garantizar equidad y seguridad para todos.');
-                } else {
-                    // En caso de que no exista JSON válido, asignar valores por defecto
-                    for ($i = 1; $i <= 6; $i++) {
-                        $plantillaword->setValue("RECOMENDACION_$i", 'N/A');
-                    }
-                }
+                // if ($recomendacionesJson) {
+                //     $plantillaword->setValue('RECOMENDACION_1', 'Realizar evaluaciones específicas y desarrollar estrategias para abordar las consecuencias de eventos traumáticos, priorizando la salud mental.');
+                //     $plantillaword->setValue('RECOMENDACION_4', 'Reformar radicalmente los horarios laborales, estableciendo límites claros a la jornada laboral para proteger la salud del personal.');
+                //     $plantillaword->setValue('RECOMENDACION_3', 'Optimizar procesos laborales e implementar técnicas modernas de gestión del tiempo y reducción de estrés.');
+                //     $plantillaword->setValue('RECOMENDACION_2', 'Realizar una renovación integral del entorno laboral, integrando diseños innovadores que fomenten la seguridad y el bienestar.');
+                //     $plantillaword->setValue('RECOMENDACION_5', 'Reestructurar equipos y liderazgos para resolver conflictos crónicos y mejorar el ambiente laboral.');
+                //     $plantillaword->setValue('RECOMENDACION_6', 'Transformar profundamente las políticas organizacionales para garantizar equidad y seguridad para todos.');
+                // } else {
+                //     // En caso de que no exista JSON válido, asignar valores por defecto
+                //     for ($i = 1; $i <= 6; $i++) {
+                //         $plantillaword->setValue("RECOMENDACION_$i", 'N/A');
+                //     }
+                // }
                 if ($request->calificacionChart) {
                     $imagen_recibida = explode(',', $request->calificacionChart);
                     $imagen_base64 = base64_decode($imagen_recibida[1]);
