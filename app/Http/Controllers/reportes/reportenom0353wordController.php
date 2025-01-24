@@ -925,7 +925,7 @@ class reportenom0353wordController extends Controller
                 //================================================================================
                 $recomendacionesAconteciemientos = reporterecomendacionescategoriaModel::where('proyecto_id', $proyecto_id)
                 ->where('registro_id', $reporteregistro_id)
-                ->where('categoria_id', 1)
+                ->where('reporterecomendacionescategoria_id', 1)
                 ->pluck('reporterecomendaciones_descripcion'); // Obtener solo la columna
               
                 $textRun2 = new TextRun();
@@ -940,9 +940,9 @@ class reportenom0353wordController extends Controller
                      $resultado2 = ''; // Inicializar el número romano como cadena vacía
                      
                      foreach ($mapa2 as $romano => $valor) {
-                         while ($numeroActual >= $valor) {
+                         while ($numeroActual2 >= $valor) {
                              $resultado2 .= $romano;
-                             $numeroActual -= $valor;
+                             $numeroActual2 -= $valor;
                          }
                      }
                      
@@ -955,6 +955,172 @@ class reportenom0353wordController extends Controller
  
                  // Insertar el TextRun en el marcador
                  $plantillaword->setComplexValue('RECOMENDACION_1', $textRun2);
+
+
+                 $recomendacionesAmbiente = reporterecomendacionescategoriaModel::where('proyecto_id', $proyecto_id)
+                 ->where('registro_id', $reporteregistro_id)
+                 ->where('reporterecomendacionescategoria_id', 2)
+                 ->pluck('reporterecomendaciones_descripcion'); // Obtener solo la columna
+               
+                 $textRun3 = new TextRun();
+                  $contador3 = 1;
+                  $mapa3 = [
+                      'M' => 1000, 'CM' => 900, 'D' => 500, 'CD' => 400,
+                      'C' => 100, 'XC' => 90, 'L' => 50, 'XL' => 40,
+                      'X' => 10, 'IX' => 9, 'V' => 5, 'IV' => 4, 'I' => 1,
+                  ];
+                  foreach ($recomendacionesAmbiente as $recomendacion) {
+                      $numeroActual3 = $contador3;
+                      $resultado3 = ''; // Inicializar el número romano como cadena vacía
+                      
+                      foreach ($mapa3 as $romano => $valor) {
+                          while ($numeroActual3 >= $valor) {
+                              $resultado3 .= $romano;
+                              $numeroActual3 -= $valor;
+                          }
+                      }
+                      
+                      $textRun3->addText($resultado3 . '. ' . $recomendacion); // Agregar texto con número romano
+                      $textRun3->addTextBreak(); 
+                      $textRun3->addTextBreak();
+                      $textRun3->addTextBreak();
+                      $contador3++; // Incrementar el contador
+                  }
+  
+                  // Insertar el TextRun en el marcador
+                  $plantillaword->setComplexValue('RECOMENDACION_2', $textRun3);
+
+                  $recomendacionesFactores = reporterecomendacionescategoriaModel::where('proyecto_id', $proyecto_id)
+                 ->where('registro_id', $reporteregistro_id)
+                 ->where('reporterecomendacionescategoria_id', 3)
+                 ->pluck('reporterecomendaciones_descripcion'); // Obtener solo la columna
+               
+                 $textRun4 = new TextRun();
+                  $contador4 = 1;
+                  $mapa4 = [
+                      'M' => 1000, 'CM' => 900, 'D' => 500, 'CD' => 400,
+                      'C' => 100, 'XC' => 90, 'L' => 50, 'XL' => 40,
+                      'X' => 10, 'IX' => 9, 'V' => 5, 'IV' => 4, 'I' => 1,
+                  ];
+                  foreach ($recomendacionesFactores as $recomendacion) {
+                      $numeroActual4 = $contador4;
+                      $resultado4 = ''; // Inicializar el número romano como cadena vacía
+                      
+                      foreach ($mapa4 as $romano => $valor) {
+                          while ($numeroActual4 >= $valor) {
+                              $resultado4 .= $romano;
+                              $numeroActual4 -= $valor;
+                          }
+                      }
+                      
+                      $textRun4->addText($resultado4 . '. ' . $recomendacion); // Agregar texto con número romano
+                      $textRun4->addTextBreak(); 
+                      $textRun4->addTextBreak();
+                      $textRun4->addTextBreak();
+                      $contador4++; // Incrementar el contador
+                  }
+  
+                  // Insertar el TextRun en el marcador
+                  $plantillaword->setComplexValue('RECOMENDACION_3', $textRun4);
+
+                  $recomendacionesOrganizacion = reporterecomendacionescategoriaModel::where('proyecto_id', $proyecto_id)
+                 ->where('registro_id', $reporteregistro_id)
+                 ->where('reporterecomendacionescategoria_id', 4)
+                 ->pluck('reporterecomendaciones_descripcion'); // Obtener solo la columna
+               
+                 $textRun5 = new TextRun();
+                  $contador5 = 1;
+                  $mapa5 = [
+                      'M' => 1000, 'CM' => 900, 'D' => 500, 'CD' => 400,
+                      'C' => 100, 'XC' => 90, 'L' => 50, 'XL' => 40,
+                      'X' => 10, 'IX' => 9, 'V' => 5, 'IV' => 4, 'I' => 1,
+                  ];
+                  foreach ($recomendacionesOrganizacion as $recomendacion) {
+                      $numeroActual5 = $contador5;
+                      $resultado5 = ''; // Inicializar el número romano como cadena vacía
+                      
+                      foreach ($mapa5 as $romano => $valor) {
+                          while ($numeroActual5 >= $valor) {
+                              $resultado5 .= $romano;
+                              $numeroActual5 -= $valor;
+                          }
+                      }
+                      
+                      $textRun5->addText($resultado5 . '. ' . $recomendacion); // Agregar texto con número romano
+                      $textRun5->addTextBreak(); 
+                      $textRun5->addTextBreak();
+                      $textRun5->addTextBreak();
+                      $contador5++; // Incrementar el contador
+                  }
+  
+                  // Insertar el TextRun en el marcador
+                  $plantillaword->setComplexValue('RECOMENDACION_4', $textRun5);
+
+                  $recomendacionesLiderazgo = reporterecomendacionescategoriaModel::where('proyecto_id', $proyecto_id)
+                 ->where('registro_id', $reporteregistro_id)
+                 ->where('reporterecomendacionescategoria_id', 5)
+                 ->pluck('reporterecomendaciones_descripcion'); // Obtener solo la columna
+               
+                 $textRun6 = new TextRun();
+                  $contador6 = 1;
+                  $mapa6 = [
+                      'M' => 1000, 'CM' => 900, 'D' => 500, 'CD' => 400,
+                      'C' => 100, 'XC' => 90, 'L' => 50, 'XL' => 40,
+                      'X' => 10, 'IX' => 9, 'V' => 5, 'IV' => 4, 'I' => 1,
+                  ];
+                  foreach ($recomendacionesLiderazgo as $recomendacion) {
+                      $numeroActual6 = $contador6;
+                      $resultado6 = ''; 
+                      
+                      foreach ($mapa6 as $romano => $valor) {
+                          while ($numeroActual6 >= $valor) {
+                              $resultado6 .= $romano;
+                              $numeroActual6 -= $valor;
+                          }
+                      }
+                      
+                      $textRun6->addText($resultado6 . '. ' . $recomendacion); 
+                      $textRun6->addTextBreak(); 
+                      $textRun6->addTextBreak();
+                      $textRun6->addTextBreak();
+                      $contador6++; 
+                  }
+  
+                
+                  $plantillaword->setComplexValue('RECOMENDACION_5', $textRun6);
+
+                  $recomendacionesEntorno = reporterecomendacionescategoriaModel::where('proyecto_id', $proyecto_id)
+                 ->where('registro_id', $reporteregistro_id)
+                 ->where('reporterecomendacionescategoria_id', 6)
+                 ->pluck('reporterecomendaciones_descripcion');
+               
+                 $textRun7 = new TextRun();
+                  $contador7 = 1;
+                  $mapa7 = [
+                      'M' => 1000, 'CM' => 900, 'D' => 500, 'CD' => 400,
+                      'C' => 100, 'XC' => 90, 'L' => 50, 'XL' => 40,
+                      'X' => 10, 'IX' => 9, 'V' => 5, 'IV' => 4, 'I' => 1,
+                  ];
+                  foreach ($recomendacionesEntorno as $recomendacion) {
+                      $numeroActual7 = $contador7;
+                      $resultado7 = '';                 
+                      
+                      foreach ($mapa7 as $romano => $valor) {
+                          while ($numeroActual7 >= $valor) {
+                              $resultado7 .= $romano;
+                              $numeroActual7 -= $valor;
+                          }
+                      }
+                      
+                      $textRun7->addText($resultado7 . '. ' . $recomendacion); // Agregar texto con número romano
+                      $textRun7->addTextBreak(); 
+                      $textRun7->addTextBreak();
+                      $textRun7->addTextBreak();
+                      $contador7++; // Incrementar el contador
+                  }
+  
+                  // Insertar el TextRun en el marcador
+                  $plantillaword->setComplexValue('RECOMENDACION_6', $textRun7);
                 
                 //$recomendacionesJson = json_decode($reporte->reportenom0353_recomendaciones, true);
 

@@ -350,7 +350,8 @@ function datosgenerales() {
 			menureporte_estado("menureporte_9_4_4", 1); // grafica 4 guia 3
 			menureporte_estado("menureporte_9_4_5", 1); // grafica 5 guia 3
 			menureporte_estado("menureporte_10_1", dato.reporte_conclusion_guardado);
-			menureporte_estado("menureporte_11_1", dato.reporte_recomendacion_control_guardado);
+			//menureporte_estado("menureporte_11_1", dato.reporte_recomendacion_control_guardado);
+			menureporte_estado("menureporte_11_1", 1);
 			menureporte_estado("menureporte_11_2", dato.reporte_recomendacion_guardado);
 			menureporte_estado("menureporte_12", dato.reporte_responsablesinforme_guardado);
 			menureporte_estado("menureporte_13_1", 1);//anexos
