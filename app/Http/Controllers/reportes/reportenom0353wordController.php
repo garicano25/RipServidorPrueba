@@ -23,6 +23,9 @@ use DB;
 use ZipArchive;
 use PhpOffice\PhpWord\Element\TextRun;
 
+// plugins PDF
+use Barryvdh\DomPDF\Facade as PDF;
+use PDFMerger;
 
 ///////////////////MODELOS//////////////////
 
@@ -1556,6 +1559,50 @@ class reportenom0353wordController extends Controller
     
                 if (($request->crear_revision + 0) == 0) // Crear informe y guardar en carpeta temporal para descarga
                 {
+                    $pdf_nombre = 'Informe_Fotos_Proyecto_' . $proyecto->proyecto_folio . '.pdf';
+                    $pdf_ruta = storage_path('app/reportes/informes/' . $pdf_nombre);
+                    
+                    // Generar el PDF con las imágenes
+                    $fotos = DB::table('recopsicoFotosTrabajadores')
+                        ->select('RECPSICO_FOTOPREGUIA', 'RECPSICO_FOTOPOSTGUIA')
+                        ->where('RECPSICO_ID', 1)
+                        ->get();
+                    
+                    // Crear contenido HTML para el PDF
+                    $html = '<h1 style="text-align: center;">Informe de Fotos - ' . $proyecto->proyecto_folio . '</h1>';
+                    $html .= '<table style="width: 100%; text-align: center; border-collapse: collapse;">';
+                    $contador = 0;
+                    
+                    foreach ($fotos as $foto) {
+                        if ($contador % 7 == 0) {
+                            $html .= '<tr>';
+                        }
+                        foreach (['RECPSICO_FOTOPREGUIA', 'RECPSICO_FOTOPOSTGUIA'] as $campo) {
+                            if (!empty($foto->$campo)) {
+                                // Obtener la URL accesible de la imagen
+                                $ruta = Storage::url($foto->$campo); // Convierte la ruta en una URL pública
+                                if (Storage::exists($foto->$campo)) {
+                                    $html .= '<td style="padding: 5px; border: 1px solid #ddd;">';
+                                    $html .= '<img src="' . asset($ruta) . '" style="width: 100px; height: 100px; display: block; margin: auto;">';
+                                    $html .= '</td>';
+                                }
+                            }
+                        }
+                        $contador++;
+                        if ($contador % 7 == 0) {
+                            $html .= '</tr>';
+                        }
+                    }
+                    
+                    if ($contador % 7 !== 0) {
+                        $html .= '</tr>'; // Cerrar la última fila si no está completa
+                    }
+                    $html .= '</table>';
+                    
+                    // Generar el PDF con DomPDF
+                    $pdf = PDF::loadHTML($html)->setPaper('a4', 'landscape');
+                    $pdf->save($pdf_ruta); // Guardar el PDF en el servidor
+
                     //================================================================================
                     // CREAR .ZIP INFORME
     
@@ -1569,8 +1616,10 @@ class reportenom0353wordController extends Controller
                     if ($zip->open($zip_ruta . '/' . $zip_nombre, ZipArchive::CREATE) === TRUE) {
                         // Add File in ZipArchive
                         $zip->addFile(storage_path('app/reportes/informes/' . $informe_nombre), $informe_nombre); //Word
-    
-    
+                      
+                         // Agregar el PDF generado con las imágenes al ZIP
+                         $zip->addFile($pdf_ruta, 'Anexo_Fotos/' . $pdf_nombre);
+
                         // foreach ($anexos_lista as $key => $file) {
                         //     if (Storage::exists($file->archivo)) {
                         //         $extencion = explode(".", $file->archivo);
@@ -1596,6 +1645,8 @@ class reportenom0353wordController extends Controller
                     $dato["msj"] = 'Informe creado correctamente';
                 } else // Crear informes historial y guardar en base de datos
                 {
+                     //================================================================================
+                 
                     //================================================================================
                     // CREAR .ZIP INFORME
     
@@ -1612,14 +1663,23 @@ class reportenom0353wordController extends Controller
                     if ($zip->open($zip_ruta_completa . '/' . $zip_nombre, ZipArchive::CREATE) === TRUE) {
                         // Add File in ZipArchive
                         $zip->addFile(storage_path('app/reportes/informes/' . $informe_nombre), $informe_nombre); //Word
-    
-    
+                        // Agregar el PDF generado con las imágenes al ZIP
+                        $zip->addFile($pdf_ruta, 'Anexo_Fotos/' . $pdf_nombre);
+
                         foreach ($anexos_lista as $key => $file) {
-                            if (Storage::exists($file->archivo)) {
-                                $extencion = explode(".", $file->archivo);
-                                $zip->addFile(storage_path('app/' . $file->archivo), ($key + 1) . '.- ' . $file->nombre . '.' . $extencion[1]); // Pdf Anexos
+                        if (Storage::exists($file->archivo)) {
+                            $extencion = explode(".", $file->archivo);
+                            $zip->addFile(
+                            storage_path('app/' . $file->archivo), ($key + 1) . '.- ' . $file->nombre . '.' . $extencion[1]); // Pdf Anexos
                             }
                         }
+    
+                        // foreach ($anexos_lista as $key => $file) {
+                        //     if (Storage::exists($file->archivo)) {
+                        //         $extencion = explode(".", $file->archivo);
+                        //         $zip->addFile(storage_path('app/' . $file->archivo), ($key + 1) . '.- ' . $file->nombre . '.' . $extencion[1]); // Pdf Anexos
+                        //     }
+                        // }
     
     
                         $zip->close(); // Close ZipArchive
@@ -1642,6 +1702,9 @@ class reportenom0353wordController extends Controller
                         Storage::delete('reportes/informes/' . $informe_nombre);
                     }
     
+                    if (Storage::exists('reportes/informes/' . $pdf_nombre)) {
+                        Storage::delete('reportes/informes/' . $pdf_nombre);
+                    }
     
                     //================================================================================
                     // GUARDAR RUTA EN BASE DE DATOS
