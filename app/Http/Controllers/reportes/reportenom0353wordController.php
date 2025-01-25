@@ -1561,63 +1561,69 @@ class reportenom0353wordController extends Controller
                 {
                     $pdf_nombre = 'Informe_Fotos_Proyecto_' . $proyecto->proyecto_folio . '.pdf';
                     $pdf_ruta = storage_path('app/reportes/informes/' . $pdf_nombre);
-
+                    
                     // Obtener las fotos desde la base de datos
                     $fotos = DB::table('recopsicoFotosTrabajadores')
                         ->select('RECPSICO_FOTOPREGUIA', 'RECPSICO_FOTOPOSTGUIA', 'ID_RECOPSICOFOTOTRABAJADOR')
                         ->where('RECPSICO_ID', 1)
                         ->get();
-
+                    
                     // Crear contenido HTML para el PDF
                     $html = '<h1 style="text-align: center;">Informe de Fotos - ' . $proyecto->proyecto_folio . '</h1>';
                     $html .= '<table style="width: 100%; text-align: center; border-collapse: collapse;">';
                     $contador = 0;
-
+                    
                     foreach ($fotos as $foto) {
                         // Verificar si ambos campos son nulos
                         if (is_null($foto->RECPSICO_FOTOPREGUIA) && is_null($foto->RECPSICO_FOTOPOSTGUIA)) {
                             continue;
                         }
-
-                        // Encabezado con el nombre del trabajador
-                        $html .= '<tr><td colspan="7" style="text-align: left; font-weight: bold; font-size: 14px;"> </td></tr>';
-
+                    
+                        $html .= '<tr>'; // Abrir nueva fila para cada grupo de fotos
+                    
                         // Mostrar RECPSICO_FOTOPREGUIA
                         if (!is_null($foto->RECPSICO_FOTOPREGUIA)) {
-                            $url_pre = url('/psicoevidenciafotomostrar/0/0/' . $foto->ID_RECOPSICOFOTOTRABAJADOR);
-                            $html .= '<td style="padding: 5px; border: 1px solid #ddd;">
-                                        <img src="' . $url_pre . '" style="width: 100px; height: 100px;">
-                                    </td>';
+                            $path_pre = Storage::path($foto->RECPSICO_FOTOPREGUIA);
+                            if (file_exists($path_pre)) {
+                                $html .= '<td style="padding: 5px; border: 1px solid #ddd;">
+                                            <img src="file://' . $path_pre . '" style="width: 100px; height: 100px;">
+                                          </td>';
+                            } else {
+                                $html .= '<td style="padding: 5px; border: 1px solid #ddd;">Imagen no disponible</td>';
+                            }
                             $contador++;
                         }
-
+                    
                         // Mostrar RECPSICO_FOTOPOSTGUIA
                         if (!is_null($foto->RECPSICO_FOTOPOSTGUIA)) {
-                            $url_post = url('/psicoevidenciafotomostrar/0/1/' . $foto->ID_RECOPSICOFOTOTRABAJADOR);
-                            $html .= '<td style="padding: 5px; border: 1px solid #ddd;">
-                                        <img src="' . $url_post . '" style="width: 100px; height: 100px;">
-                                    </td>';
+                            $path_post = Storage::path($foto->RECPSICO_FOTOPOSTGUIA);
+                            if (file_exists($path_post)) {
+                                $html .= '<td style="padding: 5px; border: 1px solid #ddd;">
+                                            <img src="file://' . $path_post . '" style="width: 100px; height: 100px;">
+                                          </td>';
+                            } else {
+                                $html .= '<td style="padding: 5px; border: 1px solid #ddd;">Imagen no disponible</td>';
+                            }
                             $contador++;
                         }
-
+                    
                         // Cierre de la fila después de cada grupo de 7 fotos
                         if ($contador % 7 == 0) {
                             $html .= '</tr><tr>';
                         }
                     }
-
+                    
                     // Completar la fila si no está completa
                     if ($contador % 7 !== 0) {
-                        $html .= str_repeat('<td style="border: 1px solid #ddd;"></td>', 7 - ($contador % 7));
+                        $html .= str_repeat('<td style="border: 1px solid #ddd;"></td>', 7 - ($contador % 7)) . '</tr>';
                     }
-
+                    
                     $html .= '</table>';
-
+                    
                     // Generar el PDF con DomPDF
                     $pdf = PDF::loadHTML($html)->setPaper('a4', 'landscape');
-                    $pdf->save($pdf_ruta); // Guardar el PDF en el servidor
-
-
+                    $pdf->save($pdf_ruta);
+                    
                     //================================================================================
                     // CREAR .ZIP INFORME
     
