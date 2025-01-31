@@ -5,7 +5,7 @@ namespace App\Http\Controllers\reportes;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Log;
-
+use Intervention\Image\Facades\Image;
 // Plugins
 use PhpOffice\PhpWord\PhpWord;
 use PhpOffice\PhpWord\Element\Chart;
@@ -1587,9 +1587,14 @@ class reportenom0353wordController extends Controller
                
                    $path = Storage::path($ruta);
                    if (file_exists($path)) {
-                    $imageData = base64_encode(file_get_contents($path));
+                    $img = Image::make($path);
+                    $img->resize(145, 100, function ($constraint) {
+                        $constraint->aspectRatio();
+                    });
+                    $imageData = base64_encode($img->encode('jpg', 80));
                     $src = 'data:image/jpeg;base64,' . $imageData;
-                    Log::info('Imagen encontrada en: ' . $path);
+
+                    Log::info('Imagen encontrada en: ' . $src);
                        $html .= '<td style="padding: 0; margin: 0; width: 120px; height: 90px; border: 1px solid #ddd; text-align: center; vertical-align: middle; page-break-inside: avoid;">
                            <img src="' . $src . '" style="width: 145px; height: 100px; object-fit: cover; display: block; border-radius: 0px;">
                        </td>';
