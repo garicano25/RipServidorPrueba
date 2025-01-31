@@ -1571,7 +1571,7 @@ class reportenom0353wordController extends Controller
                $result = [];
                foreach ($fotos as $foto) {
                    if (!is_null($foto->RECPSICO_FOTOPREGUIA)) {
-                       $result[] = $foto->RECPSICO_FOTOPREGUIA;
+                       $result[] = Storage::response($foto->RECPSICO_FOTOPREGUIA);
                    }
                    if (!is_null($foto->RECPSICO_FOTOPOSTGUIA)) {
                        $result[] = $foto->RECPSICO_FOTOPOSTGUIA;
@@ -1588,7 +1588,7 @@ class reportenom0353wordController extends Controller
                    $path = Storage::path($ruta);
                    if (file_exists($path)) {
                        $html .= '<td style="padding: 0; margin: 0; width: 120px; height: 90px; border: 1px solid #ddd; text-align: center; vertical-align: middle; page-break-inside: avoid;">
-                           <img src="' . url('storage/evidencias_psico/' . $ruta) . '" style="width: 145px; height: 100px; object-fit: cover; display: block; border-radius: 0px;">
+                           <img src="'. $ruta .'" style="width: 145px; height: 100px; object-fit: cover; display: block; border-radius: 0px;">
                        </td>';
                    } else {
                        $html .= '<td style="padding: 0; margin: 0; width: 130px; height: 100px; border: 1px solid #ddd;">Imagen no disponible</td>';
