@@ -4,7 +4,7 @@ namespace App\Http\Controllers\reportes;
 
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
-
+use Illuminate\Support\Facades\Log;
 
 // Plugins
 use PhpOffice\PhpWord\PhpWord;
