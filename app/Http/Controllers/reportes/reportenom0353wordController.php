@@ -1587,9 +1587,11 @@ class reportenom0353wordController extends Controller
                
                    $path = Storage::path($ruta);
                    if (file_exists($path)) {
+                    $imageData = base64_encode(file_get_contents($path));
+                    $src = 'data:image/jpeg;base64,' . $imageData;
                     Log::info('Imagen encontrada en: ' . $path);
                        $html .= '<td style="padding: 0; margin: 0; width: 120px; height: 90px; border: 1px solid #ddd; text-align: center; vertical-align: middle; page-break-inside: avoid;">
-                           <img src="file://' . $path . '" style="width: 145px; height: 100px; object-fit: cover; display: block; border-radius: 0px;">
+                           <img src="' . $src . '" style="width: 145px; height: 100px; object-fit: cover; display: block; border-radius: 0px;">
                        </td>';
                    } else {
                     Log::warning('Imagen no encontrada en la ruta: ' . $path);
