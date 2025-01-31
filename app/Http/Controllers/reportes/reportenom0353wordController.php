@@ -1561,14 +1561,7 @@ class reportenom0353wordController extends Controller
                 {
                     $pdf_nombre = 'Informe_Fotos_Proyecto_' . $proyecto->proyecto_folio . '.pdf';
                     $pdf_ruta = storage_path('app/reportes/informes/' . $pdf_nombre);
-                     // $fotos_pre = $fotos->filter(fn($foto) => !is_null($foto->RECPSICO_FOTOPREGUIA));
-                    // $fotos_post = $fotos->filter(fn($foto) => !is_null($foto->RECPSICO_FOTOPOSTGUIA));
                     
-                    // Crear contenido HTML para el PDF
-                    //$html = '<h1 style="text-align: center;">Informe de Fotos - ' . $proyecto->proyecto_folio . '</h1>';
-
-                    // Obtener las fotos desde la base de datos
-                   // Obtener las fotos desde la base de datos
                    $fotos = DB::table('recopsicoFotosTrabajadores')
                    ->select('RECPSICO_FOTOPREGUIA', 'RECPSICO_FOTOPOSTGUIA', 'ID_RECOPSICOFOTOTRABAJADOR')
                    ->where('RECPSICO_ID', 1)
@@ -1593,22 +1586,14 @@ class reportenom0353wordController extends Controller
                    }
                
                    $path = Storage::path($ruta);
-                //    if (file_exists($path)) {
-                //        $html .= '<td style="padding: 0; margin: 0; width: 120px; height: 90px; border: 1px solid #ddd; text-align: center; vertical-align: middle; page-break-inside: avoid;">
-                //            <img src="file://' . $path . '" style="width: 145px; height: 100px; object-fit: cover; display: block; border-radius: 0px;">
-                //        </td>';
-                //    } else {
-                //        $html .= '<td style="padding: 0; margin: 0; width: 130px; height: 100px; border: 1px solid #ddd;">Imagen no disponible</td>';
-                //    }
-               
                    if (file_exists($path)) {
-                    $html .= '<td style="padding: 0; margin: 0; width: 120px; height: 90px; border: 1px solid #ddd; text-align: center; vertical-align: middle; page-break-inside: avoid;">
-                        <img src="file://evidencias_psico/1/ONLINE/20_preguia.png" style="width: 145px; height: 100px; object-fit: cover; display: block; border-radius: 0px;">
-                    </td>';
-                } else {
-                    $html .= '<td style="padding: 0; margin: 0; width: 130px; height: 100px; border: 1px solid #ddd;">Imagen no disponible</td>';
-                }
-            
+                       $html .= '<td style="padding: 0; margin: 0; width: 120px; height: 90px; border: 1px solid #ddd; text-align: center; vertical-align: middle; page-break-inside: avoid;">
+                           <img src="' . url('storage/' . $ruta) . '" style="width: 145px; height: 100px; object-fit: cover; display: block; border-radius: 0px;">
+                       </td>';
+                   } else {
+                       $html .= '<td style="padding: 0; margin: 0; width: 130px; height: 100px; border: 1px solid #ddd;">Imagen no disponible</td>';
+                   }
+    
                    $contador++;
                    if ($contador % 7 == 0) {
                        $html .= '</tr>';
