@@ -1346,6 +1346,28 @@
 						<p class="justificado"><b style="color: #333333; font-weight: bold;">Nota del software:</b> Se encontraron <span id="memoriafotografica_total">0</span> fotos de los trabajadores evaluados.</p>
 					</div>
 				</div>
+				<h4 class="card-title" id="13_2">13.2.- Anexo 2: Cuestionarios de trabajadores</h4>
+				<div class="row">
+					<div class="col-12" style="padding-top: 10px;">
+						<p class="justificado"><b style="color: #333333; font-weight: bold;">Nota del software:</b> Se encontraron <span id="">0</span> cuestionarios de los trabajadores evaluados.</p>
+					</div>
+					<div class="col-12">
+						<button type="button" class="btn btn-info waves-effect" data-toggle="tooltip" title="Generar zip de cuestionarios aplicados" id="boton_reporte_cuestionarios">
+							<span class="btn-label"><i class="fa fa-file-excel-o"></i></span> Descargar cuestionarios
+						</button>
+					</div>
+				</div>
+				<h4 class="card-title" id="13_3">13.3.- Anexo 3: Matriz de exposición laboral (MEL)</h4>
+				<div class="row">
+					<div class="col-12" style="padding-top: 10px;">
+						<!-- <p class="justificado"><b style="color: #333333; font-weight: bold;">Nota del software:</b> Se encontraron <span id="">0</span> fotos de los trabajadores evaluados.</p> -->
+					</div>
+					<div class="col-12"> 
+						<button type="button" class="btn btn-success waves-effect" data-toggle="tooltip" title="Generar Programa de Conservación de la Audición" id="boton_reporte_mel">
+							<span class="btn-label"><i class="fa fa-file-excel-o"></i></span> Generar MEL
+						</button>
+					</div>
+				</div>
 				
 				<h4 class="card-title" id="14">Generar informe .docx + Anexos .Zip</h4>
 				<div class="row">
@@ -2022,4 +2044,4 @@
 	var areas_poe = <?php echo json_encode($areas_poe); ?>;
 </script>
 {{-- <script src="/js_sitio/html2canvas.js"></script> --}}
-<script src="/js_sitio/reportes/reportenom0353.js?v=3.4"></script>
+<script src="/js_sitio/reportes/reportenom0353.js?v=3.5"></script>

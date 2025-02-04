@@ -5956,7 +5956,84 @@ function obtenerdatos() {
 }
 
 // CAMPO DE LMPE 
+//DESCARGAR PCA
+$('#boton_reporte_mel').on('click', function (e) {
+	e.preventDefault();
+	
+    swal({
+        title: "¡Confirme para generar MEL!",
+        text: "Matriz de exposición laboral.",
+        type: "info",
+        showCancelButton: true,
+        confirmButtonColor: "#DD6B55",
+        confirmButtonText: "Descargar!",
+        cancelButtonText: "Cancelar!",
+        closeOnConfirm: false,
+        closeOnCancel: false
+    },
+    function(isConfirm) {
+        if (isConfirm) {
+			// Mostrar mensaje de carga
 
+            $('#boton_reporte_mel').prop('disabled', true);
+            swal({
+                title: "Generando documento MEL...",
+                text: 'Espere un momento, el documento se esta generando...',
+                type: "info",
+                showConfirmButton: false,
+                allowOutsideClick: false
+            });
+
+			url = 'generarMEL0353/' + proyecto.id ;
+			instalacion = $('#reporte_instalacion').val();
+
+            $.ajax({
+                url: url,
+                method: 'GET',
+                xhrFields: {
+                    responseType: 'blob'
+                },
+                success: function(data) {
+                    var a = document.createElement('a');
+                    var url = window.URL.createObjectURL(data);
+                    a.href = url;
+                    a.download = `MEL NOM 035 - ${instalacion}.xls`;
+                    document.body.append(a);
+                    a.click();
+                    a.remove();
+                    window.URL.revokeObjectURL(url);
+
+                    // Cerrar mensaje de carga
+                    swal.close();
+
+                    $('#boton_reporte_mel').prop('disabled', false);
+				},
+                error: function() {
+                    swal({
+                        title: "Hubo un problema al generar el documento.",
+                        text: "Intentelo de nuevo, o comuniquelo con el responsable",
+                        type: "error",
+                        showConfirmButton: true
+                    });
+					$('#boton_reporte_mel').prop('disabled', false);
+                }
+            });
+        } else {
+            // mensaje de cancelación
+            swal({
+                title: "Cancelado",
+                text: "Acción cancelada",
+                type: "error",
+                buttons: {
+                    visible: false,
+                },
+                timer: 500,
+                showConfirmButton: false
+            });
+        }
+    });
+    return false;
+})
 
 
 

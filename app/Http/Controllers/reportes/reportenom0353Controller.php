@@ -31,7 +31,15 @@ use App\modelos\reportes\reportenom0353catalogoModel;
 use App\modelos\reportes\reporterecomendacionescontrolModel;
 use App\modelos\reportes\reporterecomendacionescategoriaModel;
 
-
+//Recursos para el Excel
+use PhpOffice\PhpSpreadsheet\IOFactory;
+use PhpOffice\PhpSpreadsheet\Spreadsheet;
+use PhpOffice\PhpSpreadsheet\Writer\Xlsx;
+use PhpOffice\PhpSpreadsheet\Style\Alignment;
+use PhpOffice\PhpSpreadsheet\Style\Border;
+use PhpOffice\PhpSpreadsheet\Style\Color;
+use PhpOffice\PhpSpreadsheet\Style\Fill;
+use Illuminate\Support\Facades\Response;
 
 
 
@@ -942,6 +950,320 @@ class reportenom0353Controller extends Controller
             return response()->json($dato);
         }
     }
+
+
+       /**
+     * Display the specified resource.
+     *
+     * @param  int $proyecto_id
+     * @return \Illuminate\Http\Response
+     */
+    public function generarMEL0353($proyecto_id)
+    {
+        try {
+
+            //=============================================================== FUNCIONES GENERALES ===============================================================
+
+            function pintarCelda($sheet, $columna, $fila, $nivel)
+                {
+                    $colores = [
+                        'NULO' => '00B0F0', // Azul para nulo
+                        'BAJO' => '92D050', // Verde limón
+                        'MEDIO' => 'FFFF00', // Verde bandera
+                        'ALTO' => 'ED7D31', // Rojo
+                        'MUY ALTO' => 'FF0000' // Vino
+                    ];
+
+                    $color = isset($colores[$nivel]) ? $colores[$nivel] : 'D3D3D3'; // Gris por defecto
+
+                    $style = $sheet->getStyle($columna . $fila);
+                    $style->getFill()
+                        ->setFillType(Fill::FILL_SOLID)
+                        ->getStartColor()
+                        ->setRGB($color);
+                }
+
+            //=============================================================== CARGAMOS EL EXCEL ===============================================================
+            $ruta = storage_path('app/plantillas_reportes/proyecto_infomes/plantilla_mel_0353.xlsx');
+            $spreadsheet = IOFactory::load($ruta);
+            $HOJA_MEL = $spreadsheet->getSheet(0);
+
+
+            //=============================================================== OBTENEMOS LOS DATOS GENERALES DEL PROYECTO ===============================================================
+            $datosMEL = DB::select("SELECT
+                                    IFNULL(recopsicoguia_5.RECPSICOTRABAJADOR_ID, 'NA') as TRABAJADOR_ID,
+                                    IFNULL(proyectotrabajadores.TRABAJADOR_NOMBRE, 'NA') as TRABAJADOR_NOMBRE,
+                                    IFNULL(recopsicoguia_5.RECPSICOTRABAJADOR_GENERO, 'NA') as RECPSICOTRABAJADOR_GENERO,
+                                    IFNULL(recopsicoguia_5.RECPSICOTRABAJADOR_EDAD, 'NA') as RECPSICOTRABAJADOR_EDAD,
+                                    IFNULL(recopsicoguia_5.RECPSICOTRABAJADOR_ESTADOCIVIL, 'NA') as RECPSICOTRABAJADOR_ESTADOCIVIL,
+                                    IFNULL(recopsicoguia_5.RECPSICOTRABAJADOR_ESTUDIOS, 'NA') as RECPSICOTRABAJADOR_ESTUDIOS,
+                                    IFNULL(recopsicoguia_5.RECPSICOTRABAJADOR_TIPOPUESTO, 'NA') as RECPSICOTRABAJADOR_TIPOPUESTO,
+                                    'PENDIENTE' AS AREA,
+                                    IFNULL(recopsicoguia_5.RECPSICOTRABAJADOR_TIPOCONTRATACION, 'NA') as RECPSICOTRABAJADOR_TIPOCONTRATACION,
+                                    IFNULL(recopsicoguia_5.RECPSICOTRABAJADOR_TIPOJORNADA, 'NA') as RECPSICOTRABAJADOR_TIPOJORNADA,
+                                    IFNULL(recopsicoguia_5.RECPSICOTRABAJADOR_ROTACIONTURNOS, 'NA') as RECPSICOTRABAJADOR_ROTACIONTURNOS,
+                                    IFNULL(reporte_calificacionestrabajadornom035.GUIA1_CALIFICACION, 'NA') as GUIA1_CALIFICACION,
+                                    IFNULL(
+                                            CASE 
+                                                WHEN reporte_calificacionestrabajadornom035.GLOBAL_NIVEL = 1 THEN 'NULO'
+                                                WHEN reporte_calificacionestrabajadornom035.GLOBAL_NIVEL = 2 THEN 'BAJO'
+                                                WHEN reporte_calificacionestrabajadornom035.GLOBAL_NIVEL = 3 THEN 'MEDIO'
+                                                WHEN reporte_calificacionestrabajadornom035.GLOBAL_NIVEL = 4 THEN 'ALTO'
+                                                WHEN reporte_calificacionestrabajadornom035.GLOBAL_NIVEL = 5 THEN 'MUY ALTO'
+                                                ELSE 'NA'
+                                            END, 
+                                            'NA'
+                                        ) AS GLOBAL_NIVEL,
+                                            IFNULL(
+                                            CASE 
+                                                WHEN reporte_calificacionestrabajadornom035.C_AMBIENTE_NIVEL = 1 THEN 'NULO'
+                                                WHEN reporte_calificacionestrabajadornom035.C_AMBIENTE_NIVEL = 2 THEN 'BAJO'
+                                                WHEN reporte_calificacionestrabajadornom035.C_AMBIENTE_NIVEL = 3 THEN 'MEDIO'
+                                                WHEN reporte_calificacionestrabajadornom035.C_AMBIENTE_NIVEL = 4 THEN 'ALTO'
+                                                WHEN reporte_calificacionestrabajadornom035.C_AMBIENTE_NIVEL = 5 THEN 'MUY ALTO'
+                                                ELSE 'NA'
+                                            END, 
+                                            'NA'
+                                        ) AS C_AMBIENTE_NIVEL,
+                                            IFNULL(
+                                            CASE 
+                                                WHEN reporte_calificacionestrabajadornom035.D_CONDICIONES_NIVEL = 1 THEN 'NULO'
+                                                WHEN reporte_calificacionestrabajadornom035.D_CONDICIONES_NIVEL = 2 THEN 'BAJO'
+                                                WHEN reporte_calificacionestrabajadornom035.D_CONDICIONES_NIVEL = 3 THEN 'MEDIO'
+                                                WHEN reporte_calificacionestrabajadornom035.D_CONDICIONES_NIVEL = 4 THEN 'ALTO'
+                                                WHEN reporte_calificacionestrabajadornom035.D_CONDICIONES_NIVEL = 5 THEN 'MUY ALTO'
+                                                ELSE 'NA'
+                                            END, 
+                                            'NA'
+                                        ) AS D_CONDICIONES_NIVEL,
+                                            IFNULL(
+                                            CASE 
+                                                WHEN reporte_calificacionestrabajadornom035.C_FACTORES_NIVEL = 1 THEN 'NULO'
+                                                WHEN reporte_calificacionestrabajadornom035.C_FACTORES_NIVEL = 2 THEN 'BAJO'
+                                                WHEN reporte_calificacionestrabajadornom035.C_FACTORES_NIVEL = 3 THEN 'MEDIO'
+                                                WHEN reporte_calificacionestrabajadornom035.C_FACTORES_NIVEL = 4 THEN 'ALTO'
+                                                WHEN reporte_calificacionestrabajadornom035.C_FACTORES_NIVEL = 5 THEN 'MUY ALTO'
+                                                ELSE 'NA'
+                                            END, 
+                                            'NA'
+                                        ) AS C_FACTORES_NIVEL,
+                                            IFNULL(
+                                            CASE 
+                                                WHEN reporte_calificacionestrabajadornom035.D_CARGA_NIVEL = 1 THEN 'NULO'
+                                                WHEN reporte_calificacionestrabajadornom035.D_CARGA_NIVEL = 2 THEN 'BAJO'
+                                                WHEN reporte_calificacionestrabajadornom035.D_CARGA_NIVEL = 3 THEN 'MEDIO'
+                                                WHEN reporte_calificacionestrabajadornom035.D_CARGA_NIVEL = 4 THEN 'ALTO'
+                                                WHEN reporte_calificacionestrabajadornom035.D_CARGA_NIVEL = 5 THEN 'MUY ALTO'
+                                                ELSE 'NA'
+                                            END, 
+                                            'NA'
+                                        ) AS D_CARGA_NIVEL,
+                                            IFNULL(
+                                            CASE 
+                                                WHEN reporte_calificacionestrabajadornom035.D_FALTA_NIVEL = 1 THEN 'NULO'
+                                                WHEN reporte_calificacionestrabajadornom035.D_FALTA_NIVEL = 2 THEN 'BAJO'
+                                                WHEN reporte_calificacionestrabajadornom035.D_FALTA_NIVEL = 3 THEN 'MEDIO'
+                                                WHEN reporte_calificacionestrabajadornom035.D_FALTA_NIVEL = 4 THEN 'ALTO'
+                                                WHEN reporte_calificacionestrabajadornom035.D_FALTA_NIVEL = 5 THEN 'MUY ALTO'
+                                                ELSE 'NA'
+                                            END, 
+                                            'NA'
+                                        ) AS D_FALTA_NIVEL,
+                                            IFNULL(
+                                            CASE 
+                                                WHEN reporte_calificacionestrabajadornom035.C_ORGANIZACION_NIVEL = 1 THEN 'NULO'
+                                                WHEN reporte_calificacionestrabajadornom035.C_ORGANIZACION_NIVEL = 2 THEN 'BAJO'
+                                                WHEN reporte_calificacionestrabajadornom035.C_ORGANIZACION_NIVEL = 3 THEN 'MEDIO'
+                                                WHEN reporte_calificacionestrabajadornom035.C_ORGANIZACION_NIVEL = 4 THEN 'ALTO'
+                                                WHEN reporte_calificacionestrabajadornom035.C_ORGANIZACION_NIVEL = 5 THEN 'MUY ALTO'
+                                                ELSE 'NA'
+                                            END, 
+                                            'NA'
+                                        ) AS C_ORGANIZACION_NIVEL,
+                                            IFNULL(
+                                            CASE 
+                                                WHEN reporte_calificacionestrabajadornom035.D_JORNADA_NIVEL = 1 THEN 'NULO'
+                                                WHEN reporte_calificacionestrabajadornom035.D_JORNADA_NIVEL = 2 THEN 'BAJO'
+                                                WHEN reporte_calificacionestrabajadornom035.D_JORNADA_NIVEL = 3 THEN 'MEDIO'
+                                                WHEN reporte_calificacionestrabajadornom035.D_JORNADA_NIVEL = 4 THEN 'ALTO'
+                                                WHEN reporte_calificacionestrabajadornom035.D_JORNADA_NIVEL = 5 THEN 'MUY ALTO'
+                                                ELSE 'NA'
+                                            END, 
+                                            'NA'
+                                        ) AS D_JORNADA_NIVEL,
+                                            IFNULL(
+                                            CASE 
+                                                WHEN reporte_calificacionestrabajadornom035.D_INTERFERENCIA_NIVEL = 1 THEN 'NULO'
+                                                WHEN reporte_calificacionestrabajadornom035.D_INTERFERENCIA_NIVEL = 2 THEN 'BAJO'
+                                                WHEN reporte_calificacionestrabajadornom035.D_INTERFERENCIA_NIVEL = 3 THEN 'MEDIO'
+                                                WHEN reporte_calificacionestrabajadornom035.D_INTERFERENCIA_NIVEL = 4 THEN 'ALTO'
+                                                WHEN reporte_calificacionestrabajadornom035.D_INTERFERENCIA_NIVEL = 5 THEN 'MUY ALTO'
+                                                ELSE 'NA'
+                                            END, 
+                                            'NA'
+                                        ) AS D_INTERFERENCIA_NIVEL,
+                                                    IFNULL(
+                                            CASE 
+                                                WHEN reporte_calificacionestrabajadornom035.C_LIDERAZGO_NIVEL = 1 THEN 'NULO'
+                                                WHEN reporte_calificacionestrabajadornom035.C_LIDERAZGO_NIVEL = 2 THEN 'BAJO'
+                                                WHEN reporte_calificacionestrabajadornom035.C_LIDERAZGO_NIVEL = 3 THEN 'MEDIO'
+                                                WHEN reporte_calificacionestrabajadornom035.C_LIDERAZGO_NIVEL = 4 THEN 'ALTO'
+                                                WHEN reporte_calificacionestrabajadornom035.C_LIDERAZGO_NIVEL = 5 THEN 'MUY ALTO'
+                                                ELSE 'NA'
+                                            END, 
+                                            'NA'
+                                        ) AS C_LIDERAZGO_NIVEL,
+                                                    IFNULL(
+                                            CASE 
+                                                WHEN reporte_calificacionestrabajadornom035.D_LIDERAZGO_NIVEL = 1 THEN 'NULO'
+                                                WHEN reporte_calificacionestrabajadornom035.D_LIDERAZGO_NIVEL = 2 THEN 'BAJO'
+                                                WHEN reporte_calificacionestrabajadornom035.D_LIDERAZGO_NIVEL = 3 THEN 'MEDIO'
+                                                WHEN reporte_calificacionestrabajadornom035.D_LIDERAZGO_NIVEL = 4 THEN 'ALTO'
+                                                WHEN reporte_calificacionestrabajadornom035.D_LIDERAZGO_NIVEL = 5 THEN 'MUY ALTO'
+                                                ELSE 'NA'
+                                            END, 
+                                            'NA'
+                                        ) AS D_LIDERAZGO_NIVEL,
+                                                    IFNULL(
+                                            CASE 
+                                                WHEN reporte_calificacionestrabajadornom035.D_RELACIONES_NIVEL = 1 THEN 'NULO'
+                                                WHEN reporte_calificacionestrabajadornom035.D_RELACIONES_NIVEL = 2 THEN 'BAJO'
+                                                WHEN reporte_calificacionestrabajadornom035.D_RELACIONES_NIVEL = 3 THEN 'MEDIO'
+                                                WHEN reporte_calificacionestrabajadornom035.D_RELACIONES_NIVEL = 4 THEN 'ALTO'
+                                                WHEN reporte_calificacionestrabajadornom035.D_RELACIONES_NIVEL = 5 THEN 'MUY ALTO'
+                                                ELSE 'NA'
+                                            END, 
+                                            'NA'
+                                        ) AS D_RELACIONES_NIVEL,
+                                                    IFNULL(
+                                            CASE 
+                                                WHEN reporte_calificacionestrabajadornom035.D_VIOLENCIA_NIVEL = 1 THEN 'NULO'
+                                                WHEN reporte_calificacionestrabajadornom035.D_VIOLENCIA_NIVEL = 2 THEN 'BAJO'
+                                                WHEN reporte_calificacionestrabajadornom035.D_VIOLENCIA_NIVEL = 3 THEN 'MEDIO'
+                                                WHEN reporte_calificacionestrabajadornom035.D_VIOLENCIA_NIVEL = 4 THEN 'ALTO'
+                                                WHEN reporte_calificacionestrabajadornom035.D_VIOLENCIA_NIVEL = 5 THEN 'MUY ALTO'
+                                                ELSE 'NA'
+                                            END, 
+                                            'NA'
+                                        ) AS D_VIOLENCIA_NIVEL,
+                                            IFNULL(
+                                            CASE 
+                                                WHEN reporte_calificacionestrabajadornom035.C_ENTORNO_NIVEL = 1 THEN 'NULO'
+                                                WHEN reporte_calificacionestrabajadornom035.C_ENTORNO_NIVEL = 2 THEN 'BAJO'
+                                                WHEN reporte_calificacionestrabajadornom035.C_ENTORNO_NIVEL = 3 THEN 'MEDIO'
+                                                WHEN reporte_calificacionestrabajadornom035.C_ENTORNO_NIVEL = 4 THEN 'ALTO'
+                                                WHEN reporte_calificacionestrabajadornom035.C_ENTORNO_NIVEL = 5 THEN 'MUY ALTO'
+                                                ELSE 'NA'
+                                            END, 
+                                            'NA'
+                                        ) AS C_ENTORNO_NIVEL,
+                                            IFNULL(
+                                            CASE 
+                                                WHEN reporte_calificacionestrabajadornom035.D_RECONOCIMIENTO_NIVEL = 1 THEN 'NULO'
+                                                WHEN reporte_calificacionestrabajadornom035.D_RECONOCIMIENTO_NIVEL = 2 THEN 'BAJO'
+                                                WHEN reporte_calificacionestrabajadornom035.D_RECONOCIMIENTO_NIVEL = 3 THEN 'MEDIO'
+                                                WHEN reporte_calificacionestrabajadornom035.D_RECONOCIMIENTO_NIVEL = 4 THEN 'ALTO'
+                                                WHEN reporte_calificacionestrabajadornom035.D_RECONOCIMIENTO_NIVEL = 5 THEN 'MUY ALTO'
+                                                ELSE 'NA'
+                                            END, 
+                                            'NA'
+                                        ) AS D_RECONOCIMIENTO_NIVEL,
+                                            IFNULL(
+                                            CASE 
+                                                WHEN reporte_calificacionestrabajadornom035.D_INSUFICIENTE_NIVEL = 1 THEN 'NULO'
+                                                WHEN reporte_calificacionestrabajadornom035.D_INSUFICIENTE_NIVEL = 2 THEN 'BAJO'
+                                                WHEN reporte_calificacionestrabajadornom035.D_INSUFICIENTE_NIVEL = 3 THEN 'MEDIO'
+                                                WHEN reporte_calificacionestrabajadornom035.D_INSUFICIENTE_NIVEL = 4 THEN 'ALTO'
+                                                WHEN reporte_calificacionestrabajadornom035.D_INSUFICIENTE_NIVEL = 5 THEN 'MUY ALTO'
+                                                ELSE 'NA'
+                                            END, 
+                                            'NA'
+                                        ) AS D_INSUFICIENTE_NIVEL
+                                    FROM
+                                    reporte_calificacionestrabajadornom035
+                                    INNER JOIN recopsicoguia_5 ON reporte_calificacionestrabajadornom035.TRABAJADOR_ID = recopsicoguia_5.RECPSICOTRABAJADOR_ID
+                                    INNER JOIN proyectotrabajadores ON recopsicoguia_5.RECPSICOTRABAJADOR_ID = proyectotrabajadores.TRABAJADOR_ID
+                                    WHERE reporte_calificacionestrabajadornom035.proyecto_id = ?", [$proyecto_id]);
+                     
+                     
+            
+                     $fila = 8; // Inicia en la fila 8
+
+                     foreach ($datosMEL as $dato) {
+                         $HOJA_MEL->setCellValue('C' . $fila, strtoupper($dato->TRABAJADOR_NOMBRE));
+                         $HOJA_MEL->setCellValue('D' . $fila, strtoupper($dato->RECPSICOTRABAJADOR_GENERO));
+                         $HOJA_MEL->setCellValue('E' . $fila, strtoupper($dato->RECPSICOTRABAJADOR_EDAD));
+                         $HOJA_MEL->setCellValue('F' . $fila, strtoupper($dato->RECPSICOTRABAJADOR_ESTADOCIVIL));
+                         $HOJA_MEL->setCellValue('G' . $fila, strtoupper($dato->RECPSICOTRABAJADOR_ESTUDIOS));
+                         $HOJA_MEL->setCellValue('H' . $fila, strtoupper($dato->RECPSICOTRABAJADOR_TIPOPUESTO));
+                         $HOJA_MEL->setCellValue('I' . $fila, strtoupper($dato->AREA));
+                         $HOJA_MEL->setCellValue('J' . $fila, strtoupper($dato->RECPSICOTRABAJADOR_TIPOCONTRATACION));
+                         $HOJA_MEL->setCellValue('K' . $fila, strtoupper($dato->RECPSICOTRABAJADOR_TIPOJORNADA));
+                         $HOJA_MEL->setCellValue('L' . $fila, strtoupper($dato->RECPSICOTRABAJADOR_ROTACIONTURNOS));
+                         $HOJA_MEL->setCellValue('M' . $fila, $dato->GUIA1_CALIFICACION);
+                         $HOJA_MEL->setCellValue('N' . $fila, $dato->GLOBAL_NIVEL);
+                         $HOJA_MEL->setCellValue('O' . $fila, $dato->C_AMBIENTE_NIVEL);
+                         $HOJA_MEL->setCellValue('P' . $fila, $dato->D_CONDICIONES_NIVEL);
+                         $HOJA_MEL->setCellValue('Q' . $fila, $dato->C_FACTORES_NIVEL);
+                         $HOJA_MEL->setCellValue('R' . $fila, $dato->D_CARGA_NIVEL);
+                         $HOJA_MEL->setCellValue('S' . $fila, $dato->D_FALTA_NIVEL);
+                         $HOJA_MEL->setCellValue('T' . $fila, $dato->C_ORGANIZACION_NIVEL);
+                         $HOJA_MEL->setCellValue('U' . $fila, $dato->D_JORNADA_NIVEL);
+                         $HOJA_MEL->setCellValue('V' . $fila, $dato->D_INTERFERENCIA_NIVEL);
+                         $HOJA_MEL->setCellValue('W' . $fila, $dato->C_LIDERAZGO_NIVEL);
+                         $HOJA_MEL->setCellValue('X' . $fila, $dato->D_LIDERAZGO_NIVEL);
+                         $HOJA_MEL->setCellValue('Y' . $fila, $dato->D_RELACIONES_NIVEL);
+                         $HOJA_MEL->setCellValue('Z' . $fila, $dato->D_VIOLENCIA_NIVEL);
+                         $HOJA_MEL->setCellValue('AA' . $fila, $dato->C_ENTORNO_NIVEL);
+                         $HOJA_MEL->setCellValue('AB' . $fila, $dato->D_RECONOCIMIENTO_NIVEL);
+                         $HOJA_MEL->setCellValue('AC' . $fila, $dato->D_INSUFICIENTE_NIVEL);
+                     
+                         $columnasNiveles = [
+                            'N' => $dato->GLOBAL_NIVEL,
+                            'O' => $dato->C_AMBIENTE_NIVEL,
+                            'P' => $dato->D_CONDICIONES_NIVEL,
+                            'Q' => $dato->C_FACTORES_NIVEL,
+                            'R' => $dato->D_CARGA_NIVEL,
+                            'S' => $dato->D_FALTA_NIVEL,
+                            'T' => $dato->C_ORGANIZACION_NIVEL,
+                            'U' => $dato->D_JORNADA_NIVEL,
+                            'V' => $dato->D_INTERFERENCIA_NIVEL,
+                            'W' => $dato->C_LIDERAZGO_NIVEL,
+                            'X' => $dato->D_LIDERAZGO_NIVEL,
+                            'Y' => $dato->D_RELACIONES_NIVEL,
+                            'Z' => $dato->D_VIOLENCIA_NIVEL,
+                            'AA' => $dato->C_ENTORNO_NIVEL,
+                            'AB' => $dato->D_RECONOCIMIENTO_NIVEL,
+                            'AC' => $dato->D_INSUFICIENTE_NIVEL
+                        ];
+                    
+                        foreach ($columnasNiveles as $columna => $valorNivel) {
+                            $HOJA_MEL->setCellValue($columna . $fila, $valorNivel);
+                            pintarCelda($HOJA_MEL, $columna, $fila, $valorNivel);
+                        }
+
+                         $fila++; // Mueve a la siguiente fila
+                     }
+
+
+
+            // =============================================================== DESCARGAMOS EL ARCHIVO Y LO MANDAMOS AL FRONT PARA DARLE NOMBRE Y QUE EL USUARIO PUEDA VER LA DESCARGA
+            $nombre_descarga = "MEL - MATRIZ DE EXPOSICION LABORAL.xls";
+            $writer = IOFactory::createWriter($spreadsheet, 'Xls');
+            return response()->stream(function () use ($writer) {
+                $writer->save('php://output');
+            }, 200, [
+                'Content-Type' => 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
+                'Content-Disposition' => "attachment; filename=\"{$nombre_descarga}\"",
+            ]);
+            
+        } catch (Exception $e) {
+
+            $dato["msj"] = 'Error ' . $e->getMessage();
+            return response()->json($dato);
+        }
+    }
+
 
     public function store(Request $request)
     {

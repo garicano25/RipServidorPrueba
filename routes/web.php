@@ -1965,6 +1965,7 @@ Route::get('reportenom0353mapaubicacion/{reporteregistro_id}/{archivo_opcion}', 
 Route::get('reportenom0353responsabledocumento/{reporteregistro_id}/{responsabledoc_tipo}/{responsabledoc_opcion}', ['as' => 'reportenom0353.reportenom0353responsabledocumento', 'uses' => 'reportes\reportenom0353Controller@reportenom0353responsabledocumento']);
 Route::get('reportenom0353recomendacionicono/{proyecto_id}/{categoria_dominio}/{opcion}', ['as' => 'reportenom0353.reportenom0353recomendacionicono', 'uses' => 'reportes\reportenom0353Controller@reportenom0353recomendacionicono']);
 
+Route::get('generarMEL0353/{proyecto_id}', ['as' => 'reportenom0353.generarMEL0353', 'uses' => 'reportes\reportenom0353Controller@generarMEL0353']);
 
 // =================GUIAS 
 
