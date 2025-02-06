@@ -149,10 +149,10 @@ class reportenom0353Controller extends Controller
                         
 
                     //seccion 1 de guia 3
-                    $D_CONDICIONES_CALIFICACION = getValue($arrayCalificacionesGuia3, 0) + getValue($arrayCalificacionesGuia3, 2);
+                    $D_CONDICIONES_CALIFICACION = getValue($arrayCalificacionesGuia3, 0) + getValue($arrayCalificacionesGuia3, 1) + getValue($arrayCalificacionesGuia3, 2) + getValue($arrayCalificacionesGuia3, 3) + getValue($arrayCalificacionesGuia3, 4);
                     $C_AMBIENTE_CALIFICACION = $D_CONDICIONES_CALIFICACION;
                     //1 es nulo, 2 es bajo, 3 es medio, 4 es alto, 5 es muy alto
-                    $C_AMBIENTE_NIVEL =  ( $C_AMBIENTE_CALIFICACION < 5 ? 1 : ($C_AMBIENTE_CALIFICACION >= 5 && $C_AMBIENTE_CALIFICACION < 9   ? 2 : ($C_AMBIENTE_CALIFICACION >= 9 && $C_AMBIENTE_CALIFICACION < 11   ? 3 :($C_AMBIENTE_CALIFICACION >= 11 && $C_AMBIENTE_CALIFICACION < 14 ? 4 :($AFECTACION_CALIFICACION >= 14 ? 5 : 0)))));
+                    $C_AMBIENTE_NIVEL =  ( $C_AMBIENTE_CALIFICACION < 5 ? 1 : ($C_AMBIENTE_CALIFICACION >= 5 && $C_AMBIENTE_CALIFICACION < 9   ? 2 : ($C_AMBIENTE_CALIFICACION >= 9 && $C_AMBIENTE_CALIFICACION < 11   ? 3 :($C_AMBIENTE_CALIFICACION >= 11 && $C_AMBIENTE_CALIFICACION < 14 ? 4 :($C_AMBIENTE_CALIFICACION >= 14 ? 5 : 0)))));
                     $D_CONDICIONES_NIVEL =  ( $D_CONDICIONES_CALIFICACION < 5 ? 1 : ($D_CONDICIONES_CALIFICACION >= 5 && $D_CONDICIONES_CALIFICACION < 9   ? 2 : ($D_CONDICIONES_CALIFICACION >= 9 && $D_CONDICIONES_CALIFICACION < 11   ? 3 :($D_CONDICIONES_CALIFICACION >= 11 && $D_CONDICIONES_CALIFICACION < 14 ? 4 :($D_CONDICIONES_CALIFICACION >= 14 ? 5 : 0)))));
                     
                     //seccion 2 de guia 3
@@ -968,10 +968,12 @@ class reportenom0353Controller extends Controller
                 {
                     $colores = [
                         'NULO' => '00B0F0', // Azul para nulo
+                        'NO' => '00B0F0', // Azul para NO
                         'BAJO' => '92D050', // Verde limón
                         'MEDIO' => 'FFFF00', // Verde bandera
                         'ALTO' => 'ED7D31', // Rojo
-                        'MUY ALTO' => 'FF0000' // Vino
+                        'MUY ALTO' => 'FF0000', // Vino
+                        'SI' => 'FF0000' // Vino
                     ];
 
                     $color = isset($colores[$nivel]) ? $colores[$nivel] : 'D3D3D3'; // Gris por defecto
@@ -1002,7 +1004,14 @@ class reportenom0353Controller extends Controller
                                     IFNULL(recopsicoguia_5.RECPSICOTRABAJADOR_TIPOCONTRATACION, 'NA') as RECPSICOTRABAJADOR_TIPOCONTRATACION,
                                     IFNULL(recopsicoguia_5.RECPSICOTRABAJADOR_TIPOJORNADA, 'NA') as RECPSICOTRABAJADOR_TIPOJORNADA,
                                     IFNULL(recopsicoguia_5.RECPSICOTRABAJADOR_ROTACIONTURNOS, 'NA') as RECPSICOTRABAJADOR_ROTACIONTURNOS,
-                                    IFNULL(reporte_calificacionestrabajadornom035.GUIA1_CALIFICACION, 'NA') as GUIA1_CALIFICACION,
+                                    IFNULL(
+                                            CASE 
+                                                WHEN reporte_calificacionestrabajadornom035.GUIA1_CALIFICACION = 0 THEN 'NO'
+                                                WHEN reporte_calificacionestrabajadornom035.GUIA1_CALIFICACION = 1 THEN 'SI'
+                                                ELSE 'NA'
+                                            END, 
+                                            'NA'
+                                        ) AS GUIA1_CALIFICACION,
                                     IFNULL(
                                             CASE 
                                                 WHEN reporte_calificacionestrabajadornom035.GLOBAL_NIVEL = 1 THEN 'NULO'
@@ -1219,6 +1228,7 @@ class reportenom0353Controller extends Controller
                          $HOJA_MEL->setCellValue('AC' . $fila, $dato->D_INSUFICIENTE_NIVEL);
                      
                          $columnasNiveles = [
+                            'M' => $dato->GUIA1_CALIFICACION,
                             'N' => $dato->GLOBAL_NIVEL,
                             'O' => $dato->C_AMBIENTE_NIVEL,
                             'P' => $dato->D_CONDICIONES_NIVEL,

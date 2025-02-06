@@ -113,7 +113,7 @@ function updateClock() {
 
 $(document).ready(function () {
 	// Modal cargando
-	$('#modal_cargando .modal-title').html('Cargando zorme de ' + agente_nombre); // Titulo modal
+	$('#modal_cargando .modal-title').html('Cargando Informe de ' + agente_nombre); // Titulo modal
 	$('#modal_cargando').modal(); // Abrir modal
 	updateClock(); // Ejecutar tiempo de espera
 
