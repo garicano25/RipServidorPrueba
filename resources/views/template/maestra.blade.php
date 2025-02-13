@@ -734,7 +734,7 @@ use Illuminate\Support\Str;
     @endif
 
     @if(request()->is('biblioteca'))
-    <script src="/js_sitio/biblioteca.js"></script>
+    <script src="/js_sitio/biblioteca.js?v=1.0"></script>
     <script src="/js/jasny-bootstrap.js"></script>
 
     @endif
@@ -972,7 +972,7 @@ use Illuminate\Support\Str;
     @endif
 
     @if(request()->is('recpsicocatalogosrec'))
-    
+
     <script src="/js/jasny-bootstrap.js"></script>
 
     <script src="/assets/plugins/datatables/jquery.dataTables.min.js"></script>
