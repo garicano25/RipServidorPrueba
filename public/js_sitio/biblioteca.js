@@ -16,11 +16,11 @@ $(document).ready(function () {
 
         $('#documento').css('display', 'block');
         $('#enlace').css('display', 'none');
-        $('#RUTA_DOCUMENTO').prop('required', true);
+        $('#RUTA_DOCUMENTO').prop('required', false);
         $('#RUTA_LINK').prop('required', false);
 
         $('#check').prop('checked', false);
-        $('#RUTA_DOCUMENTO').prop('required', true);
+        $('#RUTA_DOCUMENTO').prop('required', false);
         $('#RUTA_LINK').prop('required', false);
         $('#documento').css('display', 'block');
         $('#enlace').css('display', 'none');
@@ -141,7 +141,7 @@ function seleccionarInformacion(checkbox) {
 
     } else {
 
-        $('#RUTA_DOCUMENTO').prop('required', true);
+        $('#RUTA_DOCUMENTO').prop('required', false);
         $('#RUTA_LINK').prop('required', false);
         $('#documento').css('display', 'block');
         $('#enlace').css('display', 'none');
@@ -350,7 +350,7 @@ function editarLibro(id) {
             if (dato[0].RUTA_LINK === null || dato[0].RUTA_LINK === "") {
 
                 $('#check').prop('checked', false);
-                $('#RUTA_DOCUMENTO').prop('required', true);
+                $('#RUTA_DOCUMENTO').prop('required', false);
                 $('#RUTA_LINK').prop('required', false);
                 $('#documento').css('display', 'block');
                 $('#enlace').css('display', 'none');
