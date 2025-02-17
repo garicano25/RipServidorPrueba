@@ -1479,7 +1479,7 @@ class proyectoController extends Controller
 
 
                     //GUARDAMOS LOS TIPOS DEL
-                    if ($request['HI']) {
+                    if ($request['HI'] || $request['ERGO'] || $request['PSICO'] || $request['SEGURIDAD']) {
 
                         serviciosProyectoModel::create([
                             'PROYECTO_ID' => $proyectoo->id,
