@@ -1604,7 +1604,7 @@ class proyectoController extends Controller
 
                     //Actualizamos los servicios del proyecto
                     $eliminar_columnas = serviciosProyectoModel::where('PROYECTO_ID', $request->proyecto_id)->delete();
-                    if ($request['HI']) {
+                    if ($request['HI'] || $request['ERGO'] || $request['PSICO'] || $request['SEGURIDAD']) {
 
                         serviciosProyectoModel::create([
                             'PROYECTO_ID' => $proyecto->id,
