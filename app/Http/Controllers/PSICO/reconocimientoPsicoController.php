@@ -56,21 +56,6 @@ class reconocimientoPsicoController extends Controller
         try {
             $opciones_select = '<option value="">&nbsp;</option>';
 
-            // $proyectos = DB::select("SELECT 
-            //                         p.id, 
-            //                         p.proyecto_folio,
-            //                         p.proyecto_clienteinstalacion,
-            //                         proyecto_clientedireccionservicio,
-            //                         p.recsensorial_id
-            //                     FROM 
-            //                         proyecto p
-            //                     LEFT JOIN 
-            //                         serviciosProyecto sp ON p.id = sp.PROYECTO_ID
-            //                     WHERE 
-            //                         sp.PSICO = 1
-            //                         AND sp.PSICO_RECONOCIMIENTO = 1
-            //                         AND (p.reconocimiento_psico_id IS NULL OR p.proyecto_folio = ?) ", [$proyecto_folio]);
-
             $proyectos = DB::select("SELECT 
                                     p.id, 
                                     p.proyecto_folio,
