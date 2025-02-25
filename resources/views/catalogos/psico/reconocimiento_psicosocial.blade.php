@@ -259,7 +259,7 @@
                                                                     
                                                                             <div class="col-12 mt-3 mb-3">
                                                                             <input type="hidden" class="form-control" id="recsensorial_id" name="recsensorial_id" value="0">
-                                                                            <input type="hidden" class="form-control" id="recsensorial_tipocliente" value="1">
+                                                                            <input type="hidden" class="form-control" id="tipocliente" name="tipocliente" value="1">
                                                                             </div>
                                                                             <div class="col-12 text-center" id="infoCliente">
                                                                                 <!-- <style>
@@ -299,6 +299,7 @@
 
                                                                             </div>
                                                                             <!-- Datos del cliente Obtenidos del proyecto -->
+                                                                            <input type="hidden" name="higiene" id="higiene">
                                                                             <input type="hidden" name="cliente_id" id="cliente_id">
                                                                             <input type="hidden" name="requiere_contrato" id="requiere_contrato">
                                                                             <input type="hidden" name="contrato_id" id="contrato_id">

@@ -130,7 +130,7 @@
 
                                         <div class="row circle-one">
                                             <div class="col-12 circle-two">
-                                                <img src="/assets/images/modulos/psicosocial.png" class="logos" alt="Modulos de Factor Piscosocial">
+                                                <img src="/assets/images/modulos/psicosocial.png" class="logos" alt="Modulos de Factor Psicosocial">
                                             </div>
                                             <span class="titulos" style="justify-content: center; margin-top:20px">Factor Psicosocial</span>
 

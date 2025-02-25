@@ -10,6 +10,7 @@ class reconocimientopsicoModel extends Model
     protected $table = 'reconocimientopsico';
     protected $fillable = [
         'tipocliente',
+        'higiene',
         'cliente_id',
         'descripcion_cliente',
         'empresa',

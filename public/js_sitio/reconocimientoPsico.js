@@ -12,6 +12,7 @@ var recsensorial_perfil = 0;
 var recsensorial = 0;
 var normativa_id = 0;
 var tabla = null;
+var HIGIENE = 1;
 
 //--------------------------------------------------CARGA PRINCIPAL---------------------------------------------------------//
 $(document).ready(function () {
@@ -889,6 +890,7 @@ $("#boton_guardar_recsensorial").click(function () {
 							url: '/reconocimientoPsicosocial',
 							data: {
 								opcion: 1,
+								higiene: HIGIENE,
 							},
 							resetForm: false,
 							success: function (dato) {
@@ -2430,13 +2432,20 @@ function obtenerEstructuraProyectos(FOLIO, NUEVO) {
 
 			
 			if(response.HIGIENE[0].HI_RECONOCIMIENTO===1){
+				HIGIENE = 1;
 				$('#boton_nueva_categoria').prop('disabled', true);
 				$('#boton_guardar_categoria').prop('disabled', true);
 				$('#boton_nueva_area').prop('disabled', true);
 				$('#boton_guardar_area').prop('disabled', true);
 
+			}else{
+				HIGIENE = 0;
 			}
+
+			console.log(HIGIENE);
 			//MOSTRAMOS LOS DATOS DEL PROYECTO SOLO SI ES NUEVO SI YA ESTA CARGADO MOSTRAMOS LOS DATOS GUARDADOS EN LA BASE DE DATOS
+			$('#higiene').val(HIGIENE)
+
 			if (NUEVO == 1) {
 
 				
@@ -2450,7 +2459,6 @@ function obtenerEstructuraProyectos(FOLIO, NUEVO) {
 				// Input ocultos
 				var contrato = response.info[0].CONTRATO_ID == 0 ? "" : response.info[0].CONTRATO_ID
 				var requiereContrato = response.info[0].CONTRATO_ID == 0 ? 0 : 1
-
 
 				$('#cliente_id').val(response.info[0].CLIENTE_ID)
 				$('#contrato_id').val(contrato)
