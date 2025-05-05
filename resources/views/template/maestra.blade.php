@@ -730,7 +730,7 @@ use Illuminate\Support\Str;
     @if(request()->is('banco-imagenes'))
     <script src="/assets/plugins/datatables/jquery.dataTables.min.js"></script>
     <script src="/assets/plugins/dropify/dist/js/dropify.min.js"></script>
-    <script src="/js_sitio/catalagoPlantilla.js?v=2.0"></script>
+    <script src="/js_sitio/catalagoPlantilla.js?v=2.1"></script>
     @endif
 
     @if(request()->is('biblioteca'))
