@@ -89,7 +89,7 @@
                             <!-- Campo para subir imágenes -->
                             <div class="form-group">
                                 <label>Logo*</label>
-                                <input type="file" class="dropify" accept="image/jpeg,image/x-png" id="logo" name="logo" data-allowed-file-extensions="jpg png JPG PNG" data-height="164" data-default-file="" required>
+                                <input type="file" accept="image/jpeg,image/x-png" id="RUTA_IMAGEN" name="RUTA_IMAGEN" class="dropify" data-allowed-file-extensions="jpg png" data-height="300" data-default-file="" />
                             </div>
 
                             <br>

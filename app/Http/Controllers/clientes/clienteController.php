@@ -26,7 +26,7 @@ use App\modelos\proyecto\proyectoModel;
 use App\modelos\recsensorial\recsensorialModel;
 use DB;
 
-
+use Illuminate\Support\Str;
 
 use Illuminate\Support\Facades\Storage;
 use Image;
@@ -495,6 +495,16 @@ class clienteController extends Controller
         return Storage::response($logo->RUTA_IMAGEN);
     }
 
+
+
+    public function mostrarplantillafoto($ID_PLANTILLA_IMAGEN)
+    {
+        $foto = TablaPantillaClientesModel::findOrFail($ID_PLANTILLA_IMAGEN);
+        return Storage::response($foto->RUTA_IMAGEN);
+    }
+
+
+
     public function tablaplantilla()
     {
         try {
@@ -507,7 +517,7 @@ class clienteController extends Controller
                 $num_registro += 1;
                 $value->num_registro = $num_registro;
 
-                $value->RUTA_IMAGEN_LOGO = '<img src="/listalogo/' . $value->ID_PLANTILLA_IMAGEN . '" alt="" class="img-fluid" style="display: block; margin: auto;" width="200" height="200">';
+                $value->RUTA_IMAGEN_LOGO = '<img src="/mostrarplantillafoto/' . $value->ID_PLANTILLA_IMAGEN . '" alt="" class="img-fluid" style="display: block; margin: auto;" width="200" height="200">';
                 // Botones
                 if (auth()->user()->hasRoles(['Superusuario', 'Administrador', 'Coordinador', 'Almacen', 'Operativo HI', 'Compras'])) {
                     $value->accion_activa = 1;
@@ -1645,28 +1655,86 @@ class clienteController extends Controller
                 return response()->json($documento);
             }
 
+            // if (($request->opcion + 0) == 10) // PLANTILLA CLIENTE
+            // {
+            //     DB::statement('ALTER TABLE plantillas_imagenes_clientes AUTO_INCREMENT=1;');
+            //     $banco_img = TablaPantillaClientesModel::create($request->all());
+
+            //     if ($request->file('logo')) {
+            //         // Eliminar IMG anterior
+            //         if (Storage::exists($banco_img->RUTA_IMAGEN)) {
+            //             Storage::delete($banco_img->RUTA_IMAGEN);
+            //         }
+
+            //         $extension = $request->file('logo')->getClientOriginalExtension();
+
+            //         // Sanitiza el nombre del archivo
+            //         $nombre_limpio = Str::ascii($request->NOMBRE_PLANTILLA); // Elimina acentos y símbolos
+            //         $nombre_archivo = $nombre_limpio . '.' . $extension;
+
+            //         $ruta = $request->file('logo')->storeAs('clientes/Banco de imagenes', $nombre_archivo);
+            //         $request['RUTA_IMAGEN'] = $ruta;
+            //     }
+
+            //     $banco_img->update($request->all());
+
+            //     return response()->json($banco_img);
+            // }
+
             if (($request->opcion + 0) == 10) // PLANTILLA CLIENTE
             {
+                if (intval($request->ID_PLANTILLA_IMAGEN) === 0) {
+                    // === CREAR NUEVA PLANTILLA ===
+                    DB::statement('ALTER TABLE plantillas_imagenes_clientes AUTO_INCREMENT=1;');
 
-                // $contrado = TablaPantillaClientesModel::findOrFail($request['ID_PLANTILLA_IMAGEN']);
-                DB::statement('ALTER TABLE plantillas_imagenes_clientes AUTO_INCREMENT=1;');
-                $banco_img = TablaPantillaClientesModel::create($request->all());
+                    // Guardar el registro sin la imagen
+                    $banco_img = TablaPantillaClientesModel::create($request->except('RUTA_IMAGEN'));
 
-                if ($request->file('logo')) {
-                    // Eliminar IMG anterior
-                    if (Storage::exists($banco_img->RUTA_IMAGEN)) {
-                        Storage::delete($banco_img->RUTA_IMAGEN);
+                    // Manejo de imagen
+                    if ($request->hasFile('RUTA_IMAGEN')) {
+                        $file = $request->file('RUTA_IMAGEN');
+
+                        $folder = "clientes/Banco de imagenes/{$banco_img->ID_PLANTILLA_IMAGEN}";
+                        $filename = Str::ascii($request->NOMBRE_PLANTILLA) . '.' . $file->getClientOriginalExtension();
+
+                        $ruta = $file->storeAs($folder, $filename);
+
+                        $banco_img->RUTA_IMAGEN = $ruta;
+                        $banco_img->save();
                     }
 
-                    $extension = $request->file('logo')->getClientOriginalExtension();
+                    return response()->json($banco_img);
+                } else {
+                    // === EDITAR PLANTILLA EXISTENTE ===
+                    $banco_img = TablaPantillaClientesModel::find($request->ID_PLANTILLA_IMAGEN);
 
-                    $request['RUTA_IMAGEN'] = $request->file('logo')->storeAs('clientes/Banco de imagenes', $request->NOMBRE_PLANTILLA . '.' . $extension);
+                    if (!$banco_img) {
+                        return response()->json(['code' => 0, 'msj' => 'Plantilla no encontrada']);
+                    }
+
+                    // Si viene una imagen nueva, eliminar la anterior y guardar la nueva
+                    if ($request->hasFile('RUTA_IMAGEN')) {
+                        if ($banco_img->RUTA_IMAGEN && Storage::exists($banco_img->RUTA_IMAGEN)) {
+                            Storage::delete($banco_img->RUTA_IMAGEN);
+                        }
+
+                        $file = $request->file('RUTA_IMAGEN');
+                        $folder = "clientes/Banco de imagenes/{$banco_img->ID_PLANTILLA_IMAGEN}";
+                        $filename = Str::ascii($request->NOMBRE_PLANTILLA) . '.' . $file->getClientOriginalExtension();
+
+                        $ruta = $file->storeAs($folder, $filename);
+
+                        $banco_img->RUTA_IMAGEN = $ruta;
+                    }
+
+                    // Actualizar el resto de campos (excepto la imagen)
+                    $banco_img->fill($request->except('RUTA_IMAGEN'))->save();
+
+                    return response()->json($banco_img);
                 }
-
-                $banco_img->update($request->all());
-
-                return response()->json($banco_img);
             }
+
+
 
             if (($request->opcion + 0) == 11) // PLANTILLA CLIENTE
             {

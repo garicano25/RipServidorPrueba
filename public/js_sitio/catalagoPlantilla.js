@@ -7,21 +7,21 @@ $(document).ready(function () {
 
     $('#modal_plantilla').on('shown.bs.modal', function () {
         // $('#form_subir_imagen').trigger('reset');
-        $('#logo').dropify().data('dropify').clearElement();
+        $('#RUTA_IMAGEN').dropify().data('dropify').clearElement();
     });
 
      // inicializar campos FOTOS
-    if ($('#logo').data('dropify'))
+    if ($('#RUTA_IMAGEN').data('dropify'))
     {
-        $('#logo').dropify().data('dropify').resetPreview();
-        $('#logo').dropify().data('dropify').clearElement();
+        $('#RUTA_IMAGEN').dropify().data('dropify').resetPreview();
+        $('#RUTA_IMAGEN').dropify().data('dropify').clearElement();
         // $('#plantillalogoizquierdo').dropify().data('dropify').destroy();
         // $('#plantillalogoizquierdo').dropify().data('dropify').init();
     }
     else
     {
       
-        $('#logo').dropify({
+        $('#RUTA_IMAGEN').dropify({
             messages: {
                 'default': 'Arrastre la imagen aquí o haga click',
                 'replace': 'Arrastre la imagen o haga clic para reemplazar',
@@ -75,7 +75,7 @@ $(document).ready(function () {
                         },
                         resetForm: false,
                         success: function(data) {
-                            console.log(data);
+                            // console.log(data);
         
                             // Cerrar modal
                             $('#modal_plantilla').modal('hide');
@@ -143,6 +143,7 @@ $(document).ready(function () {
         }
     });
     
+    })
     
 function tabla_plantillas() {
     try {
@@ -317,19 +318,63 @@ $('#tabla_plantillas tbody').on('click', 'td>button.boton_eliminar', function()
 });
 
 
-//Editar Catálogo
-
-//Editar Partida
 $('#tabla_plantillas tbody').on('click', 'td>button.boton_editar', function (){
         var tr = $(this).closest('tr');
         var row = datatable_tabla_plantilla.row(tr);
+        
     
-        $("#NOMBRE_PLANTILLA").val(row.data().NOMBRE_PLANTILLA);
-        $("#ID_PLANTILLA_IMAGEN").val(row.data().ID_PLANTILLA_IMAGEN);
-        $("#DESCRIPCION_PLANTILLA").val(row.data().DESCRIPCION_PLANTILLA);
+    
+    $("#ID_PLANTILLA_IMAGEN").val(row.data().ID_PLANTILLA_IMAGEN);
+    $("#NOMBRE_PLANTILLA").val(row.data().NOMBRE_PLANTILLA);
+    $("#DESCRIPCION_PLANTILLA").val(row.data().DESCRIPCION_PLANTILLA);
+    
 
+
+    if (row.data().RUTA_IMAGEN) {
+        var archivo = row.data().RUTA_IMAGEN;
+        var extension = archivo.substring(archivo.lastIndexOf("."));
+        var imagenUrl = '/mostrarplantillafoto/' + row.data().ID_PLANTILLA_IMAGEN + extension;
+
+        if ($('#RUTA_IMAGEN').data('dropify')) {
+            $('#RUTA_IMAGEN').dropify().data('dropify').destroy();
+            $('#RUTA_IMAGEN').dropify().data('dropify').settings.defaultFile = imagenUrl;
+            $('#RUTA_IMAGEN').dropify().data('dropify').init();
+        } else {
+            $('#RUTA_IMAGEN').attr('data-default-file', imagenUrl);
+            $('#RUTA_IMAGEN').dropify({
+                messages: {
+                    'default': 'Arrastre la imagen aquí o haga click',
+                    'replace': 'Arrastre la imagen o haga clic para reemplazar',
+                    'remove': 'Quitar',
+                    'error': 'Ooops, ha ocurrido un error.'
+                },
+                error: {
+                    'fileSize': 'Demasiado grande ({{ value }} max).',
+                    'minWidth': 'Ancho demasiado pequeño (min {{ value }}}px).',
+                    'maxWidth': 'Ancho demasiado grande (max {{ value }}}px).',
+                    'minHeight': 'Alto demasiado pequeño (min {{ value }}}px).',
+                    'maxHeight': 'Alto demasiado grande (max {{ value }}px max).',
+                    'imageFormat': 'Formato no permitido, sólo ({{ value }}).'
+                }
+            });
+        }
+    } else {
+        $('#RUTA_IMAGEN').dropify().data('dropify').resetPreview();
+        $('#RUTA_IMAGEN').dropify().data('dropify').clearElement();
+    }
+
+
+
+
+    
+
+
+
+    
 
         // abrir modal
         $('#modal_plantilla').modal({backdrop:false});
     });
-})
+
+
+
