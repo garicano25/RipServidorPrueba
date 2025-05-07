@@ -523,6 +523,64 @@ class recsensorialquimicoscatalogosController extends Controller
     }
 
 
+    // public function tablasustanciasEntidad($SUSTANCIA_QUIMICA_ID)
+    // {
+    //     try {
+    //         $catalogo = DB::select('SELECT e.ENTIDAD, e.DESCRIPCION, s.*
+    //                             FROM sustanciaQuimicaEntidad s
+    //                             LEFT JOIN catEntidades e ON e.ID_ENTIDAD = s.ENTIDAD_ID
+    //                             LEFT JOIN catsustancias_quimicas q ON q.ID_SUSTANCIA_QUIMICA = s.SUSTANCIA_QUIMICA_ID
+    //                             WHERE q.ID_SUSTANCIA_QUIMICA = ?', [$SUSTANCIA_QUIMICA_ID]);
+
+    //         // crear campos NOMBRE Y ESTADO
+    //         foreach ($catalogo as $key => $value) {
+    //             $connotacionesText = '';
+
+    //             $connotacionesArray = json_decode($value->CONNOTACION);
+
+    //             // Comprueba si json_decode devuelve un array
+    //             if (is_array($connotacionesArray)) {
+    //                 $len = count($connotacionesArray);
+    //                 $num = 1;
+    //                 foreach ($connotacionesArray as $val) {
+    //                     $conn = DB::select('SELECT ABREVIATURA
+    //                                     FROM catConnotaciones
+    //                                     WHERE ID_CONNOTACION = ?', [intval($val)]);
+
+    //                     if ($num == $len) {
+    //                         $connotacionesText .= $conn[0]->ABREVIATURA;
+    //                     } else {
+    //                         $connotacionesText .= $conn[0]->ABREVIATURA . ', ';
+    //                     }
+
+    //                     $num++;
+    //                 }
+    //             } else {
+    //                 // Manejo en caso de que $value->CONNOTACION no sea un JSON válido o sea null
+    //                 $connotacionesText = 'N/A';
+    //             }
+
+    //             $value->listaConnotaciones = $connotacionesText;
+
+    //             if (auth()->user()->hasRoles(['Superusuario', 'Administrador', 'Reconocimiento', 'Coordinador'])) {
+    //                 $value->acciones = '<button type="button" class="btn btn-warning btn-circle EDITAR" onclick="seleccionar_sustanciaQuimicaEntidad();"><i class="fa fa-pencil"></i></button> <button type="button" class="btn btn-danger btn-circle ELIMINAR" onclick="eliminar_sustanciaQuimicaEntidad();"><i class="fa fa-trash"></i></button>';
+    //             } else {
+    //                 $value->acciones = '<button type="button" class="btn btn-secondary btn-circle" ><i class="fa fa-ban" aria-hidden="true"></i></button>';
+    //             }
+    //         }
+
+    //         // Respuesta
+    //         $dato['data']  = $catalogo;
+    //         return response()->json($dato);
+    //     } catch (Exception $e) {
+    //         $dato["msj"] = 'Error ' . $e->getMessage();
+    //         $dato['data'] = 0;
+    //         return response()->json($dato);
+    //     }
+    // }
+
+
+
     public function tablasustanciasEntidad($SUSTANCIA_QUIMICA_ID)
     {
         try {
@@ -542,15 +600,24 @@ class recsensorialquimicoscatalogosController extends Controller
                 if (is_array($connotacionesArray)) {
                     $len = count($connotacionesArray);
                     $num = 1;
+
                     foreach ($connotacionesArray as $val) {
                         $conn = DB::select('SELECT ABREVIATURA
                                         FROM catConnotaciones
                                         WHERE ID_CONNOTACION = ?', [intval($val)]);
 
-                        if ($num == $len) {
-                            $connotacionesText .= $conn[0]->ABREVIATURA;
+                        if (!empty($conn)) {
+                            if ($num == $len) {
+                                $connotacionesText .= $conn[0]->ABREVIATURA;
+                            } else {
+                                $connotacionesText .= $conn[0]->ABREVIATURA . ', ';
+                            }
                         } else {
-                            $connotacionesText .= $conn[0]->ABREVIATURA . ', ';
+                            if ($num == $len) {
+                                $connotacionesText .= 'N/A';
+                            } else {
+                                $connotacionesText .= 'N/A, ';
+                            }
                         }
 
                         $num++;
@@ -565,7 +632,7 @@ class recsensorialquimicoscatalogosController extends Controller
                 if (auth()->user()->hasRoles(['Superusuario', 'Administrador', 'Reconocimiento', 'Coordinador'])) {
                     $value->acciones = '<button type="button" class="btn btn-warning btn-circle EDITAR" onclick="seleccionar_sustanciaQuimicaEntidad();"><i class="fa fa-pencil"></i></button> <button type="button" class="btn btn-danger btn-circle ELIMINAR" onclick="eliminar_sustanciaQuimicaEntidad();"><i class="fa fa-trash"></i></button>';
                 } else {
-                    $value->acciones = '<button type="button" class="btn btn-secondary btn-circle" ><i class="fa fa-ban" aria-hidden="true"></i></button>';
+                    $value->acciones = '<button type="button" class="btn btn-secondary btn-circle"><i class="fa fa-ban" aria-hidden="true"></i></button>';
                 }
             }
 
@@ -579,6 +646,8 @@ class recsensorialquimicoscatalogosController extends Controller
         }
     }
 
+
+    
 
     public function listaMetodosSustanciasQuimicas($SUSTANCIA_QUIMICA_ID){
         try {
