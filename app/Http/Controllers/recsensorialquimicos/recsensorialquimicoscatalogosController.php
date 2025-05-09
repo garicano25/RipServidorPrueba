@@ -1227,45 +1227,61 @@ class recsensorialquimicoscatalogosController extends Controller
                     }
                     break;
 
+                // case 9:
+
+                //     if ($request['ID_CONNOTACION'] == 0) {
+                //         // $sql = DB::select('ALTER TABLE catvolatilidad AUTO_INCREMENT=1');
+
+                //         $cadena_mayusculas = mb_strtoupper($request['ABREVIATURA'], 'UTF-8');
+                //         $sql = DB::select('SELECT COUNT(*) IGUAL
+                //                                 FROM catConnotaciones
+                //                                 WHERE UPPER(ABREVIATURA) = ? AND ENTIDAD_ID = ?', [$cadena_mayusculas, $request['ENTIDAD_ID']]);
+
+
+                //         if ($sql[0]->IGUAL != 0) {
+
+                //             $dato["code"] = 2;
+                //             $dato["msj"] = 'Al parecer ya existe una Connotación con la misma Abreviatura ';
+                //             return response()->json($dato);
+                //         } else {
+
+                //             $catalogo = catConnotacionModel::create($request->all());
+                //         }
+                //     } else {
+
+                //         $cadena_mayusculas = mb_strtoupper($request['ABREVIATURA'], 'UTF-8');
+                //         $sql = DB::select('SELECT COUNT(*) IGUAL
+                //                             FROM catConnotaciones
+                //                             WHERE UPPER(ABREVIATURA) = ? AND ENTIDAD_ID = ?', [$cadena_mayusculas, $request['ENTIDAD_ID']]);
+
+                //         if ($sql[0]->IGUAL != 0) {
+
+                //             $dato["code"] = 2;
+                //             $dato["msj"] = 'Al parecer ya existe una Connotación con la misma Abreviatura ';
+                //             return response()->json($dato);
+                //         } else {
+
+                //             $catalogo = catConnotacionModel::findOrFail($request['ID_CONNOTACION']);
+                //             $catalogo->update($request->all());
+                //         }
+                //     }
+                //     break;
+
                 case 9:
-
                     if ($request['ID_CONNOTACION'] == 0) {
-                        // $sql = DB::select('ALTER TABLE catvolatilidad AUTO_INCREMENT=1');
-
-                        $cadena_mayusculas = mb_strtoupper($request['ABREVIATURA'], 'UTF-8');
-                        $sql = DB::select('SELECT COUNT(*) IGUAL
-                                                FROM catConnotaciones
-                                                WHERE UPPER(ABREVIATURA) = ? AND ENTIDAD_ID = ?', [$cadena_mayusculas, $request['ENTIDAD_ID']]);
-
-
-                        if ($sql[0]->IGUAL != 0) {
-
-                            $dato["code"] = 2;
-                            $dato["msj"] = 'Al parecer ya existe una Connotación con la misma Abreviatura ';
-                            return response()->json($dato);
-                        } else {
-
-                            $catalogo = catConnotacionModel::create($request->all());
-                        }
+                        $catalogo = catConnotacionModel::create($request->all());
                     } else {
-
-                        $cadena_mayusculas = mb_strtoupper($request['ABREVIATURA'], 'UTF-8');
-                        $sql = DB::select('SELECT COUNT(*) IGUAL
-                                            FROM catConnotaciones
-                                            WHERE UPPER(ABREVIATURA) = ? AND ENTIDAD_ID = ?', [$cadena_mayusculas, $request['ENTIDAD_ID']]);
-
-                        if ($sql[0]->IGUAL != 0) {
-
-                            $dato["code"] = 2;
-                            $dato["msj"] = 'Al parecer ya existe una Connotación con la misma Abreviatura ';
-                            return response()->json($dato);
-                        } else {
-
-                            $catalogo = catConnotacionModel::findOrFail($request['ID_CONNOTACION']);
-                            $catalogo->update($request->all());
-                        }
+                        $catalogo = catConnotacionModel::findOrFail($request['ID_CONNOTACION']);
+                        $catalogo->update($request->all());
                     }
+
+                    $dato["code"] = 1;
+                    $dato["msj"] = 'Connotación guardada correctamente';
+                    return response()->json($dato);
                     break;
+
+
+                    
                 case 10:
 
                     if ($request['ID_ENTIDAD'] == 0) {

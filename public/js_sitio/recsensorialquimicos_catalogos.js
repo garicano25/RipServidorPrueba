@@ -4708,91 +4708,144 @@ function boton_nuevo_catConnotacion(){
     $('#modal_catConnotacion').modal({backdrop:false});
 }
 
-$("#boton_guardar_catConnotacion").click(function()
-{
-    // valida campos vacios
+// $("#boton_guardar_catConnotacion").click(function()
+// {
+//     // valida campos vacios
+//     var valida = this.form.checkValidity();
+//     if (valida)
+//     {
+//         // enviar datos
+//         $('#form_catConnotacion').ajaxForm({
+//             dataType: 'json',
+//             type: 'POST',
+//             url: '/recsensorialquimicoscatalogos',
+//             data: {},
+//             resetForm: false,
+//             success: function(dato)
+//             {
+
+
+//                 if (dato.code == 2) {
+//                        // mensaje
+//                     swal({
+//                         title: "Connotación repetida",
+//                          text: ""+dato.msj,
+//                         type: "warning", // warning, error, success, info
+//                         buttons: {
+//                             visible: false, // true , false
+//                         },
+//                         timer: 2000,
+//                         showConfirmButton: false
+//                     });
+                    
+
+//                 } else {
+                    
+//                     // actualiza tabla
+//                     tabla_catConnotacion.ajax.url("/recsensorialquimicoscatalogostabla/9").load();
+    
+    
+    
+//                     // mensaje
+//                     swal({
+//                         title: "Correcto",
+//                          text: ""+dato.msj,
+//                         type: "success", // warning, error, success, info
+//                         buttons: {
+//                             visible: false, // true , false
+//                         },
+//                         timer: 1500,
+//                         showConfirmButton: false
+//                     });
+    
+                   
+    
+//                     // cerrar modal
+//                     $('#modal_catConnotacion').modal('hide');
+//                 }
+
+//                  // actualiza boton
+//                 $('#boton_guardar_catConnotacion').html('Guardar <i class="fa fa-save"></i>');
+//             },
+//             beforeSend: function()
+//             {
+//                 $('#boton_guardar_catConnotacion').html('Guardando <i class="fa fa-spin fa-spinner"></i>');
+//             },
+//             error: function(dato)
+//             {
+//                 // actualiza boton
+//                 $('#boton_guardar_catConnotacion').html('Guardar <i class="fa fa-save"></i>');
+                
+//                 // mensaje
+//                 swal({
+//                     title: "Error",
+//                     text: "Error en la acción: "+dato,
+//                     type: "error", // warning, error, success, info
+//                     buttons: {
+//                         visible: false, // true , false
+//                     },
+//                     timer: 1500,
+//                     showConfirmButton: false
+//                 });
+//                 return false;
+//             }
+//         }).submit();
+//         return false;
+//     }
+// });
+
+
+$("#boton_guardar_catConnotacion").click(function () {
     var valida = this.form.checkValidity();
-    if (valida)
-    {
-        // enviar datos
+
+    if (valida) {
         $('#form_catConnotacion').ajaxForm({
             dataType: 'json',
             type: 'POST',
             url: '/recsensorialquimicoscatalogos',
             data: {},
             resetForm: false,
-            success: function(dato)
-            {
+            success: function (dato) {
+                // actualiza tabla
+                tabla_catConnotacion.ajax.url("/recsensorialquimicoscatalogostabla/9").load();
 
-
-                if (dato.code == 2) {
-                       // mensaje
-                    swal({
-                        title: "Connotación repetida",
-                         text: ""+dato.msj,
-                        type: "warning", // warning, error, success, info
-                        buttons: {
-                            visible: false, // true , false
-                        },
-                        timer: 2000,
-                        showConfirmButton: false
-                    });
-                    
-
-                } else {
-                    
-                    // actualiza tabla
-                    tabla_catConnotacion.ajax.url("/recsensorialquimicoscatalogostabla/9").load();
-    
-    
-    
-                    // mensaje
-                    swal({
-                        title: "Correcto",
-                         text: ""+dato.msj,
-                        type: "success", // warning, error, success, info
-                        buttons: {
-                            visible: false, // true , false
-                        },
-                        timer: 1500,
-                        showConfirmButton: false
-                    });
-    
-                   
-    
-                    // cerrar modal
-                    $('#modal_catConnotacion').modal('hide');
-                }
-
-                 // actualiza boton
-                $('#boton_guardar_catConnotacion').html('Guardar <i class="fa fa-save"></i>');
-            },
-            beforeSend: function()
-            {
-                $('#boton_guardar_catConnotacion').html('Guardando <i class="fa fa-spin fa-spinner"></i>');
-            },
-            error: function(dato) 
-            {
-                // actualiza boton
-                $('#boton_guardar_catConnotacion').html('Guardar <i class="fa fa-save"></i>');
-                
-                // mensaje
+                // mensaje de éxito
                 swal({
-                    title: "Error",
-                    text: "Error en la acción: "+dato,
-                    type: "error", // warning, error, success, info
-                    buttons: {
-                        visible: false, // true , false
-                    },
+                    title: "Correcto",
+                    text: "" + dato.msj,
+                    type: "success",
+                    buttons: { visible: false },
                     timer: 1500,
                     showConfirmButton: false
                 });
-                return false;
+
+                // cerrar modal
+                $('#modal_catConnotacion').modal('hide');
+
+                // restaurar botón
+                $('#boton_guardar_catConnotacion').html('Guardar <i class="fa fa-save"></i>');
+            },
+            beforeSend: function () {
+                $('#boton_guardar_catConnotacion').html('Guardando <i class="fa fa-spin fa-spinner"></i>');
+            },
+            error: function (dato) {
+                $('#boton_guardar_catConnotacion').html('Guardar <i class="fa fa-save"></i>');
+
+                swal({
+                    title: "Error",
+                    text: "Error en la acción: " + dato,
+                    type: "error",
+                    buttons: { visible: false },
+                    timer: 1500,
+                    showConfirmButton: false
+                });
             }
         }).submit();
         return false;
     }
 });
+
+
 
 function selecciona_catConnotacion()
 {
@@ -4977,7 +5030,7 @@ function function_tabla_catConnotacion(num_catalogo)
             "lengthMenu": [[10, 30, 50, -1], [10, 30, 50, "Todos"]],
             "rowsGroup": [0], //agrupar filas
             "order": [[ 0, "DESC" ]],        
-            "searching": false,
+            "searching": true,
             "paging": false,
             "ordering": true,
             "processing": true,
@@ -5066,7 +5119,7 @@ function function_tabla_catEntidad(num_catalogo)
             // "rowsGroup": [0, 3], //agrupar filas
             "lengthMenu": [[10, 30, 50, -1], [10, 30, 50, "Todos"]],
             "order": [[ 0, "DESC" ]],        
-            "searching": false,
+            "searching": true,
             "paging": false,
             "ordering": true,
             "processing": true,
