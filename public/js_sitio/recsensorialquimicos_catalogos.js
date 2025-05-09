@@ -2979,6 +2979,8 @@ $("#boton_guardar_catSustanciaQuimicaEntidad").click(function(){
             {
                 // actualiza tabla
                 tabla_catsustanciaQuimicasEntidad.ajax.url("/tablasustanciasEntidad/" + SUSTANCIA_QUIMICA_ID).load();
+                tabla_catsustanciaQuimicas.ajax.url("/recsensorialquimicoscatalogostabla/0").load();
+
 
                 // mensaje
                 swal({
