@@ -8753,7 +8753,7 @@ $(document).ready(function () {
 
                                 // actualizar boton
                                 // Ocultar el botón
-								$('#boton_reporte_iluminacion_importar').css('display', 'none');
+								$('#boton_reporte_iluminacion_importar').css('display', 'block');
 
                                 $('#divCargaPuntos').css('display', 'none');
                                 
