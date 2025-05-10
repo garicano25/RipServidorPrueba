@@ -152,7 +152,7 @@ function datosgenerales()
 		{
 			console.log(parseInt(dato.reporteiluminacion_excel));
 			if(parseInt(dato.reporteiluminacion_excel)==1){
-				$('#boton_reporte_iluminacion_importar').css('display', 'none');
+				$('#boton_reporte_iluminacion_importar').css('display', 'block');
 			}else{
 				$('#boton_reporte_iluminacion_importar').css('display', 'block');
 			}
