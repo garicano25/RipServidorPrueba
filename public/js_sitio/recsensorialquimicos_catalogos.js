@@ -2790,58 +2790,7 @@ function boton_nueva_sustancia_quimica(){
 }
 
 
-document.addEventListener("DOMContentLoaded", function() {
-    const botonAgregar = document.getElementById('botonagregarBeis');
-    botonAgregar.addEventListener('click', agregarBeis);
 
-    function agregarBeis() {
-        const divBais = document.createElement('div');
-        divBais.classList.add('row', 'NuevoagregarBeis','m-2');
-        divBais.innerHTML = `
-        <div class="col-3">
-            <div class="form-group">
-                <label>Determinante: *</label>
-                <input type="text" class="form-control" name="DETERMINATE" required>
-            </div>
-        </div>
-        <div class="col-2">
-            <div class="form-group">
-                <label>Tiempo de muestreo: *</label>
-                <input type="text" class="form-control" name="TIEMPO_MUESTREO" required>
-            </div>
-        </div>
-        <div class="col-2">
-            <div class="form-group">
-                <label> IBE *</label>
-                <input type="text" class="form-control" name="BEI" required>
-            </div>
-        </div>
-        <div class="col-2">
-            <div class="form-group">
-                <label> Notación *</label>
-                <input type="text" class="form-control" name="NOTACION" required>
-            </div>
-        </div>
-         <div class="col-3">
-            <div class="form-group">
-                <label> Recomendación *</label>
-                <input type="text" class="form-control" name="RECOMENDACION" required>
-            </div>
-        </div>
-        <div class="col-1 mt-4">
-			<button type="button" class="btn btn-danger btn-circle botonEliminarBais"> <i class="fa fa-trash"></i></button>
-        </div>
-        
-        `;
-        const contenedor = document.querySelector('.agregarBeis');
-        contenedor.appendChild(divBais);
-
-        const botonEliminar = divBais.querySelector('.botonEliminarBais');
-        botonEliminar.addEventListener('click', function() {
-            contenedor.removeChild(divBais);
-        });
-    }
-});
 
 function obtenerBEIs(data) {
     
@@ -2889,8 +2838,8 @@ function obtenerBEIs(data) {
         </div>
         
         `;
-        const contenedor = document.querySelector('.agregarBeis');
-        contenedor.appendChild(divBais);
+        // const contenedor = document.querySelector('.agregarBeis');
+        // contenedor.appendChild(divBais);
 
         const botonEliminar = divBais.querySelector('.botonEliminarBais');
         botonEliminar.addEventListener('click', function() {
@@ -2922,6 +2871,7 @@ $('#boton_nueva_sustanciaEntidad').on('click', function (e) {
     }
 
     $('#opciones_seleccionadas').html('');
+    
 
     $('#form_catSustanciQuimicaEntidad').each(function () {
         this.reset();
@@ -3118,6 +3068,24 @@ $('#boton_nueva_bei').on('click', function (e) {
     $('#form_beiSustancias').each(function () {
         this.reset();
     });
+
+
+    if ($('#NOTACION_BEI')[0].selectize) {
+        var selectize = $('#NOTACION_BEI')[0].selectize;
+        selectize.clear();
+         selectize.enable();
+
+    } else {
+        
+        $('#NOTACION_BEI').html('');
+        $('#NOTACION_BEI').val('');
+        
+    }
+
+
+    $('#opciones_seleccionadas').html('');
+
+    $('#opciones_seleccionadas_bei').html('');
 
 
     // campos hidden
@@ -3408,7 +3376,7 @@ function tablaBeiSustanciasQuimicas(SUSTANCIA_QUIMICA_ID) {
                     "defaultContent": ''
                 },
                 {
-                    "data": "BEI_DESCRIPCION",
+                    "data": "VALOR_REFERENCIA",
                     "defaultContent": ''
                 },
                 {
