@@ -146,16 +146,15 @@ class recsensorialquimicoscatalogosController extends Controller
                                                 cat.GRADO_RIESGO_ID,
                                                 cat.CLASIFICACION_RIESGO,
                                                 cat.VIA_INGRESO, 
-                                                COUNT(sus.ID_SUSTANCIA_QUIMICA_ENTIDAD) as TOTAL,
-                                                COUNT(beis.ID_BEI) as TOTALBEIS
+                                                COUNT(DISTINCT sus.ID_SUSTANCIA_QUIMICA_ENTIDAD) as TOTAL,
+                                                COUNT(DISTINCT beis.ID_BEI) as TOTALBEIS
                                                 FROM catsustancias_quimicas as cat
                                                 LEFT JOIN sustanciaQuimicaEntidad sus 
-                                                        ON sus.SUSTANCIA_QUIMICA_ID = cat.ID_SUSTANCIA_QUIMICA
-                                                        AND cat.ACTIVO = 1
+                                                ON sus.SUSTANCIA_QUIMICA_ID = cat.ID_SUSTANCIA_QUIMICA
+                                                AND cat.ACTIVO = 1
                                                 LEFT JOIN sustanciasEntidadBeis beis 
-                                                    ON beis.SUSTANCIA_QUIMICA_ID = cat.ID_SUSTANCIA_QUIMICA
-                                                    AND cat.ACTIVO = 1
-
+                                                ON beis.SUSTANCIA_QUIMICA_ID = cat.ID_SUSTANCIA_QUIMICA
+                                                AND cat.ACTIVO = 1
                                                 GROUP BY cat.ID_SUSTANCIA_QUIMICA,
                                                 cat.SUSTANCIA_QUIMICA,
                                                 cat.ALTERACION_EFECTO,
