@@ -146,11 +146,16 @@ class recsensorialquimicoscatalogosController extends Controller
                                                 cat.GRADO_RIESGO_ID,
                                                 cat.CLASIFICACION_RIESGO,
                                                 cat.VIA_INGRESO, 
-                                                COUNT(sus.ID_SUSTANCIA_QUIMICA_ENTIDAD) as TOTAL
+                                                COUNT(sus.ID_SUSTANCIA_QUIMICA_ENTIDAD) as TOTAL,
+                                                COUNT(beis.ID_BEI) as TOTALBEIS
                                                 FROM catsustancias_quimicas as cat
                                                 LEFT JOIN sustanciaQuimicaEntidad sus 
                                                         ON sus.SUSTANCIA_QUIMICA_ID = cat.ID_SUSTANCIA_QUIMICA
                                                         AND cat.ACTIVO = 1
+                                                LEFT JOIN sustanciasEntidadBeis beis 
+                                                    ON beis.SUSTANCIA_QUIMICA_ID = cat.ID_SUSTANCIA_QUIMICA
+                                                    AND cat.ACTIVO = 1
+
                                                 GROUP BY cat.ID_SUSTANCIA_QUIMICA,
                                                 cat.SUSTANCIA_QUIMICA,
                                                 cat.ALTERACION_EFECTO,
@@ -173,6 +178,8 @@ class recsensorialquimicoscatalogosController extends Controller
 
 
                         $value->total_registro = '<span class="badge badge-success p-2" style="font-size: 15px">' . $value->TOTAL . '</span>';
+                        $value->total_registroBEIS = '<span class="badge badge-success p-2" style="font-size: 15px">' . $value->TOTALBEIS . '</span>';
+
 
 
                         $value->boton_ver = '<button type="button" class="btn btn-info btn-circle VER" onclick="ver_sustancia_quimico();"><i class="fa fa-eye" aria-hidden="true"></i></button>';

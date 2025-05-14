@@ -115,7 +115,9 @@ function mostrar_catalogo(num_catalogo)
                                                                 '<th>Alteración / Efecto a la Salud</th>'+
                                                                 '<th>PM</th>'+
                                                                 '<th>No. CAS</th>'+
-                                                                '<th>Reg. Totales</th>'+
+                                                                '<th>Reg. Totales VLE</th>' +
+                                                                '<th>Reg. Totales IBE</th>'+
+                    
                                                                 // '<th>VLE<br>PPT</th>'+
                                                                 // '<th>VLE<br>CT o P</th>' +
                                                                 // '<th>Normatividad</th>' +
@@ -620,6 +622,10 @@ function function_tabla_catsustancia_quimico(num_catalogo)
                 },
                 {
                     "data": "total_registro",
+                    "defaultContent": ''
+                },
+                {
+                    "data": "total_registroBEIS",
                     "defaultContent": ''
                 },
                 {
