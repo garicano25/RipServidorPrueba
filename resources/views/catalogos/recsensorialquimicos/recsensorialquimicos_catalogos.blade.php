@@ -1170,7 +1170,7 @@
 						<div class="col-6">
 							<div class="form-group">
 								<label>Determinante *</label>
-								<input type="text" class="form-control" id="DETERMINANTE_BEI" name="DETERMINANTE" required>
+								<textarea class="form-control" id="DETERMINANTE_BEI" name="DETERMINANTE" rows="2" required></textarea>
 							</div>
 						</div>
 						<div class="col-6">
@@ -1188,7 +1188,7 @@
 						<div class="col-6">
 							<div class="form-group">
 								<label>Recolección recomendada *</label>
-								<input type="text" class="form-control" id="BEI_DESCRIPCION" name="BEI_DESCRIPCION" required>
+								<textarea class="form-control" id="BEI_DESCRIPCION" name="BEI_DESCRIPCION" rows="2" required></textarea>
 							</div>
 						</div>
 						<div class="col-6">
