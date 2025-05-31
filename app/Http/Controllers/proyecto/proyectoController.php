@@ -1429,7 +1429,7 @@ class proyectoController extends Controller
 
                         //Buscamos los proyectos Internos
                         $folio = DB::select('SELECT
-                                            (COUNT(proyecto.proyecto_folio)+42) AS nuevo_folio_proyecto
+                                            (COUNT(proyecto.proyecto_folio)+1) AS nuevo_folio_proyecto
                                         FROM
                                             proyecto
                                         WHERE
@@ -1452,7 +1452,7 @@ class proyectoController extends Controller
 
 
                         $folio = DB::select('SELECT
-                                            (COUNT(proyecto.proyecto_folio)+42) AS nuevo_folio_proyecto
+                                            (COUNT(proyecto.proyecto_folio)+1) AS nuevo_folio_proyecto
                                         FROM
                                             proyecto
                                         WHERE
