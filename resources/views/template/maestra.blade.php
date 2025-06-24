@@ -194,8 +194,7 @@ use Illuminate\Support\Str;
                         <a class="navbar-brand" href="#">
                             <!-- Logo icon -->
                             <b>
-                                <img src="/assets/images/logo.png" alt="homepage" class="dark-logo" />
-                                <img src="/assets/images/logo-light.png" class="light-logo" alt="homepage" />
+                                <img src="/assets/images/logoBlanco.png" class="light-logo" alt="homepage" />
                             </b>
                             <!--End Logo icon -->
                             <!-- Logo text -->
