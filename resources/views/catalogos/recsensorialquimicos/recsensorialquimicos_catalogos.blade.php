@@ -841,7 +841,7 @@
 											<a class="nav-link" id="metodos-tab" data-toggle="tab" href="#metodos" role="tab" aria-controls="metodos" aria-selected="false">Métodos </a>
 										</li>
 										<li class="nav-item">
-											<a class="nav-link" id="beis-tab" data-toggle="tab" href="#beis" role="tab" aria-controls="beis" aria-selected="false">BEIs</a>
+											<a class="nav-link" id="beis-tab" data-toggle="tab" href="#beis" role="tab" aria-controls="beis" aria-selected="false">IBE</a>
 										</li>
 									</ul>
 									<div class="tab-content" id="myTabContent">
@@ -916,10 +916,10 @@
 										<div class="tab-pane" id="beis" role="tabpanel" aria-labelledby="beis-tab">
 											<div class="col-12 tablaEntidades">
 												<ol class="breadcrumb mb-2 p-2 mt-3 d-flex justify-content-between align-items-center">
-													<h2 style="color: #fff; margin: 0;" class="mx-2"><i class="fa fa-list-ol" aria-hidden="true"></i> Lista de BEIs </h2>
+													<h2 style="color: #fff; margin: 0;" class="mx-2"><i class="fa fa-list-ol" aria-hidden="true"></i> Lista de IBE </h2>
 
 													@if(auth()->user()->hasRoles(['Superusuario','Administrador', 'Reconocimiento', 'Coordinador']))
-													<button type="button" class="btn btn-secondary waves-effect waves-light" data-toggle="tooltip" title="Nuevo BEI" id="boton_nueva_bei" style="margin-left: 75%;"> BEI <i class="fa fa-plus"></i></button>
+													<button type="button" class="btn btn-secondary waves-effect waves-light" data-toggle="tooltip" title="Nuevo IBE" id="boton_nueva_bei" style="margin-left: 75%;"> IBE <i class="fa fa-plus"></i></button>
 													@endif
 												</ol>
 											</div>
@@ -931,7 +931,7 @@
 																<th>Entidad</th>
 																<th>Determinante</th>
 																<th>Tiempo de muestreo</th>
-																<th>BEI</th>
+																<th>IBE</th>
 																<th>Editar</th>
 																<th>Eliminar</th>
 															</tr>
@@ -1170,7 +1170,7 @@
 						<div class="col-6">
 							<div class="form-group">
 								<label>Determinante *</label>
-								<input type="text" class="form-control" id="DETERMINANTE_BEI" name="DETERMINANTE" required>
+								<textarea class="form-control" id="DETERMINANTE_BEI" name="DETERMINANTE" rows="2" required></textarea>
 							</div>
 						</div>
 						<div class="col-6">
@@ -1181,8 +1181,14 @@
 						</div>
 						<div class="col-6">
 							<div class="form-group">
-								<label>Descripción BEI *</label>
-								<input type="text" class="form-control" id="BEI_DESCRIPCION" name="BEI_DESCRIPCION" required>
+								<label>IBE/BEI (Valor de referencia) *</label>
+								<input type="text" class="form-control" id="VALOR_REFERENCIA" name="VALOR_REFERENCIA" required>
+							</div>
+						</div>
+						<div class="col-6">
+							<div class="form-group">
+								<label>Recolección recomendada *</label>
+								<textarea class="form-control" id="BEI_DESCRIPCION" name="BEI_DESCRIPCION" rows="2" required></textarea>
 							</div>
 						</div>
 						<div class="col-6">
@@ -1191,16 +1197,11 @@
 								<input type="text" class="form-control" id="UNIDAD_MEDIDA_BEI" name="UNIDAD_MEDIDA" required>
 							</div>
 						</div>
-						<div class="col-6">
-							<div class="form-group">
-								<label>BEI (Valor de referencia) *</label>
-								<input type="text" class="form-control" id="VALOR_REFERENCIA" name="VALOR_REFERENCIA" required>
-							</div>
-						</div>
+
 						<div class="col-12">
 							<div class="form-group">
-								<label>Recomendación </label>
-								<input type="text" class="form-control" id="RECOMENDACION_BEI" name="RECOMENDACION">
+								<label>Notas/observaciones</label>
+								<textarea type="text" class="form-control" id="RECOMENDACION_BEI" name="RECOMENDACION" rows="3"></textarea>
 							</div>
 						</div>
 						<div class="col-12">

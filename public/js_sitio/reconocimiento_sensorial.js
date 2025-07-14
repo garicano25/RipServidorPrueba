@@ -9436,10 +9436,6 @@ function funcion_tabla_quimicosresumen_3(recsensorial_id, numero_tabla) {
 					//     "data": "id"
 					// },
 					{
-						"data": "boton_eliminar",
-						"defaultContent": "-"
-					},
-					{
 						"data": "boton_editar",
 						"defaultContent": "-"
 					},

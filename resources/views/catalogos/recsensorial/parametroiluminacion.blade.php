@@ -112,30 +112,41 @@
                                 </label>
                             </div>
                         </div>
+
                         <div class="col-2">
                             <div class="form-group">
                                 <label>Largo (mts)</label>
-                                <input type="number" onkeypress="return this.value.length < 4;" oninput="if(this.value.length>=4) { this.value = this.value.slice(0,4); }" class="form-control" id="parametroiluminacion_largo" name="parametroiluminacion_largo" disabled>
+                                <input type="number" step="0.01" onkeypress="return this.value.length < 4;"
+                                    oninput="if(this.value.length>=4) { this.value = this.value.slice(0,4); } calcularIC();"
+                                    class="form-control" id="parametroiluminacion_largo" name="parametroiluminacion_largo" disabled>
                             </div>
                         </div>
                         <div class="col-2">
                             <div class="form-group">
                                 <label>Ancho (mts)</label>
-                                <input type="number" onkeypress="return this.value.length < 4;" oninput="if(this.value.length>=4) { this.value = this.value.slice(0,4); }" class="form-control" id="parametroiluminacion_ancho" name="parametroiluminacion_ancho" disabled>
+                                <input type="number" step="0.01" onkeypress="return this.value.length < 4;"
+                                    oninput="if(this.value.length>=4) { this.value = this.value.slice(0,4); } calcularIC();"
+                                    class="form-control" id="parametroiluminacion_ancho" name="parametroiluminacion_ancho" disabled>
                             </div>
                         </div>
                         <div class="col-2">
                             <div class="form-group">
                                 <label>Alto (mts)</label>
-                                <input type="number" onkeypress="return this.value.length < 4;" oninput="if(this.value.length>=4) { this.value = this.value.slice(0,4); }" class="form-control" id="parametroiluminacion_alto" name="parametroiluminacion_alto" disabled>
+                                <input type="number" step="0.01" onkeypress="return this.value.length < 4;"
+                                    oninput="if(this.value.length>=4) { this.value = this.value.slice(0,4); } calcularIC();"
+                                    class="form-control" id="parametroiluminacion_alto" name="parametroiluminacion_alto" disabled>
                             </div>
                         </div>
                         <div class="col-4">
                             <div class="form-group">
-                                <label> Puntos</label>
-                                <input type="number" onkeypress="return this.value.length < 4;" oninput="if(this.value.length>=4) { this.value = this.value.slice(0,4); }" class="form-control" id="parametroiluminacion_puntos" name="parametroiluminacion_puntos" required>
+                                <label>Puntos</label>
+                                <input type="number" step="0.01" onkeypress="return this.value.length < 4;"
+                                    oninput="if(this.value.length>=4) { this.value = this.value.slice(0,4); }"
+                                    class="form-control" id="parametroiluminacion_puntos" name="parametroiluminacion_puntos" required>
                             </div>
                         </div>
+
+
                     </div>
                 </div>
                 <div class="modal-footer">
@@ -1105,6 +1116,33 @@
             }
         });
         return false;
+    }
+
+
+    function calcularIC() {
+        const largo = parseFloat(document.getElementById("parametroiluminacion_largo").value) || 0;
+        const ancho = parseFloat(document.getElementById("parametroiluminacion_ancho").value) || 0;
+        const alto = parseFloat(document.getElementById("parametroiluminacion_alto").value) || 0;
+
+        if (alto === 0) {
+            document.getElementById("parametroiluminacion_puntos").value = "";
+            return;
+        }
+
+        const IC = (largo * ancho) / (alto * (largo + ancho));
+        let puntos = "";
+
+        if (IC < 1) {
+            puntos = "4 - 6";
+        } else if (IC >= 1 && IC < 2) {
+            puntos = "9 - 12";
+        } else if (IC >= 2 && IC < 3) {
+            puntos = "16 - 20";
+        } else if (IC >= 3) {
+            puntos = "25 - 30";
+        }
+
+        document.getElementById("parametroiluminacion_puntos").value = puntos;
     }
 </script>
 

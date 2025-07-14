@@ -115,7 +115,9 @@ function mostrar_catalogo(num_catalogo)
                                                                 '<th>Alteración / Efecto a la Salud</th>'+
                                                                 '<th>PM</th>'+
                                                                 '<th>No. CAS</th>'+
-                                                                '<th>Reg. Totales</th>'+
+                                                                '<th>Reg. Totales VLE</th>' +
+                                                                '<th>Reg. Totales IBE</th>'+
+                    
                                                                 // '<th>VLE<br>PPT</th>'+
                                                                 // '<th>VLE<br>CT o P</th>' +
                                                                 // '<th>Normatividad</th>' +
@@ -620,6 +622,10 @@ function function_tabla_catsustancia_quimico(num_catalogo)
                 },
                 {
                     "data": "total_registro",
+                    "defaultContent": ''
+                },
+                {
+                    "data": "total_registroBEIS",
                     "defaultContent": ''
                 },
                 {
@@ -2790,58 +2796,7 @@ function boton_nueva_sustancia_quimica(){
 }
 
 
-document.addEventListener("DOMContentLoaded", function() {
-    const botonAgregar = document.getElementById('botonagregarBeis');
-    botonAgregar.addEventListener('click', agregarBeis);
 
-    function agregarBeis() {
-        const divBais = document.createElement('div');
-        divBais.classList.add('row', 'NuevoagregarBeis','m-2');
-        divBais.innerHTML = `
-        <div class="col-3">
-            <div class="form-group">
-                <label>Determinante: *</label>
-                <input type="text" class="form-control" name="DETERMINATE" required>
-            </div>
-        </div>
-        <div class="col-2">
-            <div class="form-group">
-                <label>Tiempo de muestreo: *</label>
-                <input type="text" class="form-control" name="TIEMPO_MUESTREO" required>
-            </div>
-        </div>
-        <div class="col-2">
-            <div class="form-group">
-                <label> IBE *</label>
-                <input type="text" class="form-control" name="BEI" required>
-            </div>
-        </div>
-        <div class="col-2">
-            <div class="form-group">
-                <label> Notación *</label>
-                <input type="text" class="form-control" name="NOTACION" required>
-            </div>
-        </div>
-         <div class="col-3">
-            <div class="form-group">
-                <label> Recomendación *</label>
-                <input type="text" class="form-control" name="RECOMENDACION" required>
-            </div>
-        </div>
-        <div class="col-1 mt-4">
-			<button type="button" class="btn btn-danger btn-circle botonEliminarBais"> <i class="fa fa-trash"></i></button>
-        </div>
-        
-        `;
-        const contenedor = document.querySelector('.agregarBeis');
-        contenedor.appendChild(divBais);
-
-        const botonEliminar = divBais.querySelector('.botonEliminarBais');
-        botonEliminar.addEventListener('click', function() {
-            contenedor.removeChild(divBais);
-        });
-    }
-});
 
 function obtenerBEIs(data) {
     
@@ -2889,8 +2844,8 @@ function obtenerBEIs(data) {
         </div>
         
         `;
-        const contenedor = document.querySelector('.agregarBeis');
-        contenedor.appendChild(divBais);
+        // const contenedor = document.querySelector('.agregarBeis');
+        // contenedor.appendChild(divBais);
 
         const botonEliminar = divBais.querySelector('.botonEliminarBais');
         botonEliminar.addEventListener('click', function() {
@@ -2922,6 +2877,7 @@ $('#boton_nueva_sustanciaEntidad').on('click', function (e) {
     }
 
     $('#opciones_seleccionadas').html('');
+    
 
     $('#form_catSustanciQuimicaEntidad').each(function () {
         this.reset();
@@ -2979,6 +2935,8 @@ $("#boton_guardar_catSustanciaQuimicaEntidad").click(function(){
             {
                 // actualiza tabla
                 tabla_catsustanciaQuimicasEntidad.ajax.url("/tablasustanciasEntidad/" + SUSTANCIA_QUIMICA_ID).load();
+                tabla_catsustanciaQuimicas.ajax.url("/recsensorialquimicoscatalogostabla/0").load();
+
 
                 // mensaje
                 swal({
@@ -3116,6 +3074,24 @@ $('#boton_nueva_bei').on('click', function (e) {
     $('#form_beiSustancias').each(function () {
         this.reset();
     });
+
+
+    if ($('#NOTACION_BEI')[0].selectize) {
+        var selectize = $('#NOTACION_BEI')[0].selectize;
+        selectize.clear();
+         selectize.enable();
+
+    } else {
+        
+        $('#NOTACION_BEI').html('');
+        $('#NOTACION_BEI').val('');
+        
+    }
+
+
+    $('#opciones_seleccionadas').html('');
+
+    $('#opciones_seleccionadas_bei').html('');
 
 
     // campos hidden
@@ -3406,7 +3382,7 @@ function tablaBeiSustanciasQuimicas(SUSTANCIA_QUIMICA_ID) {
                     "defaultContent": ''
                 },
                 {
-                    "data": "BEI_DESCRIPCION",
+                    "data": "VALOR_REFERENCIA",
                     "defaultContent": ''
                 },
                 {
@@ -4533,7 +4509,7 @@ function cambiarVolatilidadSustanciaTem(opcion, id,  valor) {
         if (inputValue > 150) {
             $('#' + id).val(1).removeClass('error')
             
-        } else if (inputValue > 50 && inputValue <= 150) {
+        } else if (inputValue >= 50 && inputValue <= 150) {
             $('#' + id).val(2).removeClass('error')
     
         } else if (inputValue < 50) {
@@ -4708,91 +4684,144 @@ function boton_nuevo_catConnotacion(){
     $('#modal_catConnotacion').modal({backdrop:false});
 }
 
-$("#boton_guardar_catConnotacion").click(function()
-{
-    // valida campos vacios
+// $("#boton_guardar_catConnotacion").click(function()
+// {
+//     // valida campos vacios
+//     var valida = this.form.checkValidity();
+//     if (valida)
+//     {
+//         // enviar datos
+//         $('#form_catConnotacion').ajaxForm({
+//             dataType: 'json',
+//             type: 'POST',
+//             url: '/recsensorialquimicoscatalogos',
+//             data: {},
+//             resetForm: false,
+//             success: function(dato)
+//             {
+
+
+//                 if (dato.code == 2) {
+//                        // mensaje
+//                     swal({
+//                         title: "Connotación repetida",
+//                          text: ""+dato.msj,
+//                         type: "warning", // warning, error, success, info
+//                         buttons: {
+//                             visible: false, // true , false
+//                         },
+//                         timer: 2000,
+//                         showConfirmButton: false
+//                     });
+                    
+
+//                 } else {
+                    
+//                     // actualiza tabla
+//                     tabla_catConnotacion.ajax.url("/recsensorialquimicoscatalogostabla/9").load();
+    
+    
+    
+//                     // mensaje
+//                     swal({
+//                         title: "Correcto",
+//                          text: ""+dato.msj,
+//                         type: "success", // warning, error, success, info
+//                         buttons: {
+//                             visible: false, // true , false
+//                         },
+//                         timer: 1500,
+//                         showConfirmButton: false
+//                     });
+    
+                   
+    
+//                     // cerrar modal
+//                     $('#modal_catConnotacion').modal('hide');
+//                 }
+
+//                  // actualiza boton
+//                 $('#boton_guardar_catConnotacion').html('Guardar <i class="fa fa-save"></i>');
+//             },
+//             beforeSend: function()
+//             {
+//                 $('#boton_guardar_catConnotacion').html('Guardando <i class="fa fa-spin fa-spinner"></i>');
+//             },
+//             error: function(dato)
+//             {
+//                 // actualiza boton
+//                 $('#boton_guardar_catConnotacion').html('Guardar <i class="fa fa-save"></i>');
+                
+//                 // mensaje
+//                 swal({
+//                     title: "Error",
+//                     text: "Error en la acción: "+dato,
+//                     type: "error", // warning, error, success, info
+//                     buttons: {
+//                         visible: false, // true , false
+//                     },
+//                     timer: 1500,
+//                     showConfirmButton: false
+//                 });
+//                 return false;
+//             }
+//         }).submit();
+//         return false;
+//     }
+// });
+
+
+$("#boton_guardar_catConnotacion").click(function () {
     var valida = this.form.checkValidity();
-    if (valida)
-    {
-        // enviar datos
+
+    if (valida) {
         $('#form_catConnotacion').ajaxForm({
             dataType: 'json',
             type: 'POST',
             url: '/recsensorialquimicoscatalogos',
             data: {},
             resetForm: false,
-            success: function(dato)
-            {
+            success: function (dato) {
+                // actualiza tabla
+                tabla_catConnotacion.ajax.url("/recsensorialquimicoscatalogostabla/9").load();
 
-
-                if (dato.code == 2) {
-                       // mensaje
-                    swal({
-                        title: "Connotación repetida",
-                         text: ""+dato.msj,
-                        type: "warning", // warning, error, success, info
-                        buttons: {
-                            visible: false, // true , false
-                        },
-                        timer: 2000,
-                        showConfirmButton: false
-                    });
-                    
-
-                } else {
-                    
-                    // actualiza tabla
-                    tabla_catConnotacion.ajax.url("/recsensorialquimicoscatalogostabla/9").load();
-    
-    
-    
-                    // mensaje
-                    swal({
-                        title: "Correcto",
-                         text: ""+dato.msj,
-                        type: "success", // warning, error, success, info
-                        buttons: {
-                            visible: false, // true , false
-                        },
-                        timer: 1500,
-                        showConfirmButton: false
-                    });
-    
-                   
-    
-                    // cerrar modal
-                    $('#modal_catConnotacion').modal('hide');
-                }
-
-                 // actualiza boton
-                $('#boton_guardar_catConnotacion').html('Guardar <i class="fa fa-save"></i>');
-            },
-            beforeSend: function()
-            {
-                $('#boton_guardar_catConnotacion').html('Guardando <i class="fa fa-spin fa-spinner"></i>');
-            },
-            error: function(dato) 
-            {
-                // actualiza boton
-                $('#boton_guardar_catConnotacion').html('Guardar <i class="fa fa-save"></i>');
-                
-                // mensaje
+                // mensaje de éxito
                 swal({
-                    title: "Error",
-                    text: "Error en la acción: "+dato,
-                    type: "error", // warning, error, success, info
-                    buttons: {
-                        visible: false, // true , false
-                    },
+                    title: "Correcto",
+                    text: "" + dato.msj,
+                    type: "success",
+                    buttons: { visible: false },
                     timer: 1500,
                     showConfirmButton: false
                 });
-                return false;
+
+                // cerrar modal
+                $('#modal_catConnotacion').modal('hide');
+
+                // restaurar botón
+                $('#boton_guardar_catConnotacion').html('Guardar <i class="fa fa-save"></i>');
+            },
+            beforeSend: function () {
+                $('#boton_guardar_catConnotacion').html('Guardando <i class="fa fa-spin fa-spinner"></i>');
+            },
+            error: function (dato) {
+                $('#boton_guardar_catConnotacion').html('Guardar <i class="fa fa-save"></i>');
+
+                swal({
+                    title: "Error",
+                    text: "Error en la acción: " + dato,
+                    type: "error",
+                    buttons: { visible: false },
+                    timer: 1500,
+                    showConfirmButton: false
+                });
             }
         }).submit();
         return false;
     }
 });
+
+
 
 function selecciona_catConnotacion()
 {
@@ -4977,7 +5006,7 @@ function function_tabla_catConnotacion(num_catalogo)
             "lengthMenu": [[10, 30, 50, -1], [10, 30, 50, "Todos"]],
             "rowsGroup": [0], //agrupar filas
             "order": [[ 0, "DESC" ]],        
-            "searching": false,
+            "searching": true,
             "paging": false,
             "ordering": true,
             "processing": true,
@@ -5066,7 +5095,7 @@ function function_tabla_catEntidad(num_catalogo)
             // "rowsGroup": [0, 3], //agrupar filas
             "lengthMenu": [[10, 30, 50, -1], [10, 30, 50, "Todos"]],
             "order": [[ 0, "DESC" ]],        
-            "searching": false,
+            "searching": true,
             "paging": false,
             "ordering": true,
             "processing": true,

@@ -194,8 +194,7 @@ use Illuminate\Support\Str;
                         <a class="navbar-brand" href="#">
                             <!-- Logo icon -->
                             <b>
-                                <img src="/assets/images/logo.png" alt="homepage" class="dark-logo" />
-                                <img src="/assets/images/logo-light.png" class="light-logo" alt="homepage" />
+                                <img src="/assets/images/logoBlanco.png" class="light-logo" alt="homepage" />
                             </b>
                             <!--End Logo icon -->
                             <!-- Logo text -->
@@ -740,11 +739,11 @@ use Illuminate\Support\Str;
     @if(request()->is('banco-imagenes'))
     <script src="/assets/plugins/datatables/jquery.dataTables.min.js"></script>
     <script src="/assets/plugins/dropify/dist/js/dropify.min.js"></script>
-    <script src="/js_sitio/catalagoPlantilla.js?v=2.0"></script>
+    <script src="/js_sitio/catalagoPlantilla.js?v=2.1"></script>
     @endif
 
     @if(request()->is('biblioteca'))
-    <script src="/js_sitio/biblioteca.js"></script>
+    <script src="/js_sitio/biblioteca.js?v=1.0"></script>
     <script src="/js/jasny-bootstrap.js"></script>
 
     @endif
@@ -771,7 +770,7 @@ use Illuminate\Support\Str;
     <script src="/assets/plugins/Magnific-Popup-master/dist/jquery.magnific-popup.min.js"></script>
     <script src="/assets/plugins/Magnific-Popup-master/dist/jquery.magnific-popup-init.js"></script>
     {{-- pagina --}}
-    <script src="/js_sitio/reconocimiento_sensorial.js?v=17.0"></script>
+    <script src="/js_sitio/reconocimiento_sensorial.js?v=18.0"></script>
     @endif
 
     @if(request()->is('reconocimientoPsicosocial'))
@@ -829,7 +828,7 @@ use Illuminate\Support\Str;
 
     @if(request()->is('recsensorialquimicoscatalogos'))
     <script src="/assets/plugins/datatables/jquery.dataTables.min.js"></script>
-    <script src="/js_sitio/recsensorialquimicos_catalogos.js?v=10.0"></script>
+    <script src="/js_sitio/recsensorialquimicos_catalogos.js?v=10.4"></script>
     <script src="/assets/plugins/datatables/dataTables.rowsGroup.js"></script>
     {{-- Select search filter --}}
     <script src="/assets/plugins/select-search/selectize.js" type="text/javascript"></script>
@@ -987,7 +986,7 @@ use Illuminate\Support\Str;
     @endif
 
     @if(request()->is('recpsicocatalogosrec'))
-    
+
     <script src="/js/jasny-bootstrap.js"></script>
 
     <script src="/assets/plugins/datatables/jquery.dataTables.min.js"></script>

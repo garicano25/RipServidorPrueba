@@ -155,6 +155,11 @@ Route::get('tablaplantilla/', ['as' => 'cliente.tablaplantilla', 'uses' => 'clie
 
 Route::get('listalogo/{id}', ['as' => 'listalogo', 'uses' => 'clientes\clienteController@listalogo']);
 
+
+// Route::get('mostrarplantillafoto/{id}', ['as' => 'mostrarplantillafoto', 'uses' => 'clientes\clienteController@mostrarplantillafoto']);
+
+Route::get('mostrarplantillafoto/{archivo_opcion}/{ID_PLANTILLA_IMAGEN}', ['as' => 'mostrarplantillafoto', 'uses' => 'clientes\clienteController@mostrarplantillafoto']);
+
 Route::get('catalogoimageneseliminar/{id}', ['as' => 'cliente.catalogoimageneseliminar', 'uses' => 'clientes\clienteController@catalogoimageneseliminar']);
 
 Route::get('clienteanexoeliminar/{anexo_id}', ['as' => 'cliente.clienteanexoeliminar', 'uses' => 'clientes\clienteController@clienteanexoeliminar']);

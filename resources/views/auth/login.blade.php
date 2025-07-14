@@ -31,45 +31,46 @@
     <!-- ============================================================== -->
     <div class="preloader">
         <svg class="circular" viewBox="25 25 50 50">
-            <circle class="path" cx="50" cy="50" r="20" fill="none" stroke-width="2" stroke-miterlimit="10" /> </svg>
+            <circle class="path" cx="50" cy="50" r="20" fill="none" stroke-width="2" stroke-miterlimit="10" />
+        </svg>
     </div>
     <!-- ============================================================== -->
     <!-- Main wrapper - style you can find in pages.scss -->
     <!-- ============================================================== -->
     <section id="wrapper">
         {{-- <div class="login-register" style="background-image:url(../assets/images/background/fondo-login.jpg);"> --}}
-        <div class="login-register">        
+        <div class="login-register">
             <div class="login-box card">
-            <div class="card-body">
-                <form class="form-horizontal form-material" name="form_login" id="form_login" enctype="multipart/form-data" method="post" action="{{ route('login') }}">
-                    {!! csrf_field() !!}
-                    {{-- {{ Auth::user()}} --}}
-                    <h3 class="box-title m-b-20">Acceso</h3>
-                    <div class="form-group ">
-                        <div class="col-xs-12">
-                            <input class="form-control" type="text" placeholder="Correo electrónico" name="email" value="" required>
+                <div class="card-body">
+                    <form class="form-horizontal form-material" name="form_login" id="form_login" enctype="multipart/form-data" method="post" action="{{ route('login') }}">
+                        {!! csrf_field() !!}
+                        {{-- {{ Auth::user()}} --}}
+                        <h3 class="box-title m-b-20">Acceso</h3>
+                        <div class="form-group ">
+                            <div class="col-xs-12">
+                                <input class="form-control" type="text" placeholder="Correo electrónico" name="email" value="" required>
+                            </div>
+                            <div class="text-danger" style="text-align: center;">{{ $errors->first('email') }}</div>
                         </div>
-                        <div class="text-danger" style="text-align: center;">{{ $errors->first('email') }}</div>
-                    </div>
-                    <div class="form-group">
-                        <div class="col-xs-12">
-                            <input class="form-control" type="password" placeholder="Contraseña" name="password" value="" required>
+                        <div class="form-group">
+                            <div class="col-xs-12">
+                                <input class="form-control" type="password" placeholder="Contraseña" name="password" value="" required>
+                            </div>
+                            <div class="text-danger" style="text-align: center;">{{ $errors->first('password') }}</div>
                         </div>
-                        <div class="text-danger" style="text-align: center;">{{ $errors->first('password') }}</div>
-                    </div>
-                    <div class="form-group text-center m-t-20">
-                        <div class="col-xs-12">
-                            <button type="submit" class="btn btn-info btn-lg btn-block text-uppercase waves-effect waves-light" id="boton_entrar">Entrar</button>
+                        <div class="form-group text-center m-t-20">
+                            <div class="col-xs-12">
+                                <button type="submit" class="btn btn-info btn-lg btn-block text-uppercase waves-effect waves-light" id="boton_entrar">Entrar</button>
+                            </div>
                         </div>
-                    </div>
-                    <div style="text-align: center;">
-                        <img src="/assets/images/Logo_Color_results_original.png" alt="" height="100" style="margin: 0px auto;">    
-                    </div>
-                </form>
+                        <div style="text-align: center;">
+                            <img src="/assets/images/Colorancho.png" alt="" height="100" style="margin: 0px auto;">
+                        </div>
+                    </form>
+                </div>
             </div>
-          </div>
         </div>
-        
+
     </section>
     <!-- ============================================================== -->
     <!-- End Wrapper -->
@@ -100,30 +101,26 @@
     <script src="/assets/plugins/background-backstretch/jquery.backstretch.js"></script>
     <script type="text/javascript">
         $.backstretch(
-            [ 
+            [
                 "/assets/images/background/fondo-login-original.jpg",
                 "/assets/images/background/fondo-login-verde.jpg",
                 "/assets/images/background/fondo-login-azul.jpg",
                 "/assets/images/background/fondo-login-celeste.jpg"
-            ],
-            {
+            ], {
                 duration: 2500,
                 fade: 2000
             }
         );
 
         // Load TABLA PROVEEDORES
-        $(document).ready(function()
-        {
+        $(document).ready(function() {
             $("#boton_entrar").html("Entrar");
         });
 
 
-        $("#boton_entrar").click(function()
-        {
+        $("#boton_entrar").click(function() {
             var valida = this.form.checkValidity();
-            if (valida)
-            {
+            if (valida) {
                 $('#boton_entrar').html('Entrar <i class="fa fa-spin fa-spinner"></i>');
             }
         });

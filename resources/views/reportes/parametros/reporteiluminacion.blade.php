@@ -2637,4 +2637,4 @@
 </script>
 
 <script src="/js_sitio/html2canvas.js"></script>
-<script src="/js_sitio/reportes/reporteiluminacion.js?v=5.0"></script>
+<script src="/js_sitio/reportes/reporteiluminacion.js?v=5.2"></script>

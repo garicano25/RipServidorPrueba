@@ -146,11 +146,15 @@ class recsensorialquimicoscatalogosController extends Controller
                                                 cat.GRADO_RIESGO_ID,
                                                 cat.CLASIFICACION_RIESGO,
                                                 cat.VIA_INGRESO, 
-                                                COUNT(sus.ID_SUSTANCIA_QUIMICA_ENTIDAD) as TOTAL
+                                                COUNT(DISTINCT sus.ID_SUSTANCIA_QUIMICA_ENTIDAD) as TOTAL,
+                                                COUNT(DISTINCT beis.ID_BEI) as TOTALBEIS
                                                 FROM catsustancias_quimicas as cat
                                                 LEFT JOIN sustanciaQuimicaEntidad sus 
-                                                        ON sus.SUSTANCIA_QUIMICA_ID = cat.ID_SUSTANCIA_QUIMICA
-                                                        AND cat.ACTIVO = 1
+                                                ON sus.SUSTANCIA_QUIMICA_ID = cat.ID_SUSTANCIA_QUIMICA
+                                                AND cat.ACTIVO = 1
+                                                LEFT JOIN sustanciasEntidadBeis beis 
+                                                ON beis.SUSTANCIA_QUIMICA_ID = cat.ID_SUSTANCIA_QUIMICA
+                                                AND cat.ACTIVO = 1
                                                 GROUP BY cat.ID_SUSTANCIA_QUIMICA,
                                                 cat.SUSTANCIA_QUIMICA,
                                                 cat.ALTERACION_EFECTO,
@@ -173,6 +177,8 @@ class recsensorialquimicoscatalogosController extends Controller
 
 
                         $value->total_registro = '<span class="badge badge-success p-2" style="font-size: 15px">' . $value->TOTAL . '</span>';
+                        $value->total_registroBEIS = '<span class="badge badge-success p-2" style="font-size: 15px">' . $value->TOTALBEIS . '</span>';
+
 
 
                         $value->boton_ver = '<button type="button" class="btn btn-info btn-circle VER" onclick="ver_sustancia_quimico();"><i class="fa fa-eye" aria-hidden="true"></i></button>';
@@ -523,6 +529,64 @@ class recsensorialquimicoscatalogosController extends Controller
     }
 
 
+    // public function tablasustanciasEntidad($SUSTANCIA_QUIMICA_ID)
+    // {
+    //     try {
+    //         $catalogo = DB::select('SELECT e.ENTIDAD, e.DESCRIPCION, s.*
+    //                             FROM sustanciaQuimicaEntidad s
+    //                             LEFT JOIN catEntidades e ON e.ID_ENTIDAD = s.ENTIDAD_ID
+    //                             LEFT JOIN catsustancias_quimicas q ON q.ID_SUSTANCIA_QUIMICA = s.SUSTANCIA_QUIMICA_ID
+    //                             WHERE q.ID_SUSTANCIA_QUIMICA = ?', [$SUSTANCIA_QUIMICA_ID]);
+
+    //         // crear campos NOMBRE Y ESTADO
+    //         foreach ($catalogo as $key => $value) {
+    //             $connotacionesText = '';
+
+    //             $connotacionesArray = json_decode($value->CONNOTACION);
+
+    //             // Comprueba si json_decode devuelve un array
+    //             if (is_array($connotacionesArray)) {
+    //                 $len = count($connotacionesArray);
+    //                 $num = 1;
+    //                 foreach ($connotacionesArray as $val) {
+    //                     $conn = DB::select('SELECT ABREVIATURA
+    //                                     FROM catConnotaciones
+    //                                     WHERE ID_CONNOTACION = ?', [intval($val)]);
+
+    //                     if ($num == $len) {
+    //                         $connotacionesText .= $conn[0]->ABREVIATURA;
+    //                     } else {
+    //                         $connotacionesText .= $conn[0]->ABREVIATURA . ', ';
+    //                     }
+
+    //                     $num++;
+    //                 }
+    //             } else {
+    //                 // Manejo en caso de que $value->CONNOTACION no sea un JSON válido o sea null
+    //                 $connotacionesText = 'N/A';
+    //             }
+
+    //             $value->listaConnotaciones = $connotacionesText;
+
+    //             if (auth()->user()->hasRoles(['Superusuario', 'Administrador', 'Reconocimiento', 'Coordinador'])) {
+    //                 $value->acciones = '<button type="button" class="btn btn-warning btn-circle EDITAR" onclick="seleccionar_sustanciaQuimicaEntidad();"><i class="fa fa-pencil"></i></button> <button type="button" class="btn btn-danger btn-circle ELIMINAR" onclick="eliminar_sustanciaQuimicaEntidad();"><i class="fa fa-trash"></i></button>';
+    //             } else {
+    //                 $value->acciones = '<button type="button" class="btn btn-secondary btn-circle" ><i class="fa fa-ban" aria-hidden="true"></i></button>';
+    //             }
+    //         }
+
+    //         // Respuesta
+    //         $dato['data']  = $catalogo;
+    //         return response()->json($dato);
+    //     } catch (Exception $e) {
+    //         $dato["msj"] = 'Error ' . $e->getMessage();
+    //         $dato['data'] = 0;
+    //         return response()->json($dato);
+    //     }
+    // }
+
+
+
     public function tablasustanciasEntidad($SUSTANCIA_QUIMICA_ID)
     {
         try {
@@ -542,15 +606,24 @@ class recsensorialquimicoscatalogosController extends Controller
                 if (is_array($connotacionesArray)) {
                     $len = count($connotacionesArray);
                     $num = 1;
+
                     foreach ($connotacionesArray as $val) {
                         $conn = DB::select('SELECT ABREVIATURA
                                         FROM catConnotaciones
                                         WHERE ID_CONNOTACION = ?', [intval($val)]);
 
-                        if ($num == $len) {
-                            $connotacionesText .= $conn[0]->ABREVIATURA;
+                        if (!empty($conn)) {
+                            if ($num == $len) {
+                                $connotacionesText .= $conn[0]->ABREVIATURA;
+                            } else {
+                                $connotacionesText .= $conn[0]->ABREVIATURA . ', ';
+                            }
                         } else {
-                            $connotacionesText .= $conn[0]->ABREVIATURA . ', ';
+                            if ($num == $len) {
+                                $connotacionesText .= 'N/A';
+                            } else {
+                                $connotacionesText .= 'N/A, ';
+                            }
                         }
 
                         $num++;
@@ -565,7 +638,7 @@ class recsensorialquimicoscatalogosController extends Controller
                 if (auth()->user()->hasRoles(['Superusuario', 'Administrador', 'Reconocimiento', 'Coordinador'])) {
                     $value->acciones = '<button type="button" class="btn btn-warning btn-circle EDITAR" onclick="seleccionar_sustanciaQuimicaEntidad();"><i class="fa fa-pencil"></i></button> <button type="button" class="btn btn-danger btn-circle ELIMINAR" onclick="eliminar_sustanciaQuimicaEntidad();"><i class="fa fa-trash"></i></button>';
                 } else {
-                    $value->acciones = '<button type="button" class="btn btn-secondary btn-circle" ><i class="fa fa-ban" aria-hidden="true"></i></button>';
+                    $value->acciones = '<button type="button" class="btn btn-secondary btn-circle"><i class="fa fa-ban" aria-hidden="true"></i></button>';
                 }
             }
 
@@ -579,6 +652,8 @@ class recsensorialquimicoscatalogosController extends Controller
         }
     }
 
+
+    
 
     public function listaMetodosSustanciasQuimicas($SUSTANCIA_QUIMICA_ID){
         try {
@@ -1158,45 +1233,61 @@ class recsensorialquimicoscatalogosController extends Controller
                     }
                     break;
 
+                // case 9:
+
+                //     if ($request['ID_CONNOTACION'] == 0) {
+                //         // $sql = DB::select('ALTER TABLE catvolatilidad AUTO_INCREMENT=1');
+
+                //         $cadena_mayusculas = mb_strtoupper($request['ABREVIATURA'], 'UTF-8');
+                //         $sql = DB::select('SELECT COUNT(*) IGUAL
+                //                                 FROM catConnotaciones
+                //                                 WHERE UPPER(ABREVIATURA) = ? AND ENTIDAD_ID = ?', [$cadena_mayusculas, $request['ENTIDAD_ID']]);
+
+
+                //         if ($sql[0]->IGUAL != 0) {
+
+                //             $dato["code"] = 2;
+                //             $dato["msj"] = 'Al parecer ya existe una Connotación con la misma Abreviatura ';
+                //             return response()->json($dato);
+                //         } else {
+
+                //             $catalogo = catConnotacionModel::create($request->all());
+                //         }
+                //     } else {
+
+                //         $cadena_mayusculas = mb_strtoupper($request['ABREVIATURA'], 'UTF-8');
+                //         $sql = DB::select('SELECT COUNT(*) IGUAL
+                //                             FROM catConnotaciones
+                //                             WHERE UPPER(ABREVIATURA) = ? AND ENTIDAD_ID = ?', [$cadena_mayusculas, $request['ENTIDAD_ID']]);
+
+                //         if ($sql[0]->IGUAL != 0) {
+
+                //             $dato["code"] = 2;
+                //             $dato["msj"] = 'Al parecer ya existe una Connotación con la misma Abreviatura ';
+                //             return response()->json($dato);
+                //         } else {
+
+                //             $catalogo = catConnotacionModel::findOrFail($request['ID_CONNOTACION']);
+                //             $catalogo->update($request->all());
+                //         }
+                //     }
+                //     break;
+
                 case 9:
-
                     if ($request['ID_CONNOTACION'] == 0) {
-                        // $sql = DB::select('ALTER TABLE catvolatilidad AUTO_INCREMENT=1');
-
-                        $cadena_mayusculas = mb_strtoupper($request['ABREVIATURA'], 'UTF-8');
-                        $sql = DB::select('SELECT COUNT(*) IGUAL
-                                                FROM catConnotaciones
-                                                WHERE UPPER(ABREVIATURA) = ? AND ENTIDAD_ID = ?', [$cadena_mayusculas, $request['ENTIDAD_ID']]);
-
-
-                        if ($sql[0]->IGUAL != 0) {
-
-                            $dato["code"] = 2;
-                            $dato["msj"] = 'Al parecer ya existe una Connotación con la misma Abreviatura ';
-                            return response()->json($dato);
-                        } else {
-
-                            $catalogo = catConnotacionModel::create($request->all());
-                        }
+                        $catalogo = catConnotacionModel::create($request->all());
                     } else {
-
-                        $cadena_mayusculas = mb_strtoupper($request['ABREVIATURA'], 'UTF-8');
-                        $sql = DB::select('SELECT COUNT(*) IGUAL
-                                            FROM catConnotaciones
-                                            WHERE UPPER(ABREVIATURA) = ? AND ENTIDAD_ID = ?', [$cadena_mayusculas, $request['ENTIDAD_ID']]);
-
-                        if ($sql[0]->IGUAL != 0) {
-
-                            $dato["code"] = 2;
-                            $dato["msj"] = 'Al parecer ya existe una Connotación con la misma Abreviatura ';
-                            return response()->json($dato);
-                        } else {
-
-                            $catalogo = catConnotacionModel::findOrFail($request['ID_CONNOTACION']);
-                            $catalogo->update($request->all());
-                        }
+                        $catalogo = catConnotacionModel::findOrFail($request['ID_CONNOTACION']);
+                        $catalogo->update($request->all());
                     }
+
+                    $dato["code"] = 1;
+                    $dato["msj"] = 'Connotación guardada correctamente';
+                    return response()->json($dato);
                     break;
+
+
+                    
                 case 10:
 
                     if ($request['ID_ENTIDAD'] == 0) {
