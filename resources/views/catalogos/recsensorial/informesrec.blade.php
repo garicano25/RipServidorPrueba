@@ -33,7 +33,7 @@
 
 
         <button class="btn btn-light" style="margin-left: 50%;" type="button" id="btnPoeProyecto" data-toggle="tooltip" title="Población Ocupacionalmente Expuesta" disabled> <i class="fa fa-users" aria-hidden="true"></i> POE Proyecto</button>
-        <button class="btn btn-light" style="margin-left: 1%;" type="button" data-toggle="tooltip" title="Matriz de Exposición Laboral (No disponible)" disabled> <i class="fa fa-table" aria-hidden="true"></i> MEL Proyecto</button>
+        <button class="btn btn-light" style="margin-left: 1%;" type="button" id="btnMatriz" data-toggle="tooltip" title="Matriz de riesgo a la salud" disabled> <i class="fa fa-table" aria-hidden="true"></i> MRS Proyecto</button>
       </div>
       <div class="card-body" style="border: 0px #f00 solid; min-height: 856px!important;" id="estructura_reporte">
         <p style="text-align: center; font-size: 24px;" id="estatusInformes"></p>

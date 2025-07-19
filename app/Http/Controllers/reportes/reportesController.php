@@ -189,6 +189,46 @@ class reportesController extends Controller
         }
     }
 
+
+
+    /**
+     * Display the specified resource.
+     *
+     * @param  int  $proyecto_id
+     * @return \Illuminate\Http\Response
+     */
+    public function reportematrizlaboralvista($proyecto_id)
+    {
+        $proyecto = proyectoModel::findOrFail($proyecto_id);
+
+        if (($proyecto->recsensorial->recsensorial_tipocliente + 0) == 1 && ($proyecto->recsensorial_id == NULL || $proyecto->proyecto_clienteinstalacion == NULL || $proyecto->proyecto_fechaentrega == NULL)) {
+         
+        } else {
+
+           
+
+
+            //===================================================
+
+
+            // $recsensorial = recsensorialModel::with(['catcontrato', 'catregion', 'catgerencia', 'catactivo'])->findOrFail($proyecto->recsensorial_id);
+            $recsensorial = recsensorialModel::with(['cliente', 'catregion', 'catgerencia', 'catactivo'])->findOrFail($proyecto->recsensorial_id);
+
+            // Catalogos
+            $catregion = catregionModel::get();
+            $catsubdireccion = catsubdireccionModel::orderBy('catsubdireccion_nombre', 'ASC')->get();
+            $catgerencia = catgerenciaModel::orderBy('catgerencia_nombre', 'ASC')->get();
+            $catactivo = catactivoModel::orderBy('catactivo_nombre', 'ASC')->get();
+            $estatus = estatusReportesInformeModel::where('PROYECTO_ID', $proyecto_id)->get();
+
+
+            // Vista
+            return view('reportes.parametros.reportematirzlab', compact('proyecto', 'recsensorial', 'catregion', 'catsubdireccion', 'catgerencia', 'catactivo', 'estatus'));
+        }
+    }
+
+
+
       /**
      * Display the specified resource.
      *
@@ -540,21 +580,22 @@ class reportesController extends Controller
             // $opciones_menu .= '<option value="0">POE PROYECTO</option>';  -> EL POE ESTARA APARTE EN EL SELECT SOLO ESTARAN LOS REPORTES DE LOS AGENTES
 
             //DESCOMENTAR DESPUES DE SUBIR AL SERVIDOR
-            foreach ($sql as $key => $value){
-                $opciones_menu .= '<option value="'.$value->agente_id.'">'.$value->agente_nombre.'</option>';
-            }
+            // foreach ($sql as $key => $value){
+            //     $opciones_menu .= '<option value="'.$value->agente_id.'">'.$value->agente_nombre.'</option>';
+            // }
 
 
             // QUITAR DESPUES DE SUBIR AL SERVIDOR
-            // $opciones_menu .= '<option value="1">Ruido</option>';
-            // $opciones_menu .= '<option value="2">Vibración</option>';
-            // $opciones_menu .= '<option value="3">Temperatura</option>';
-            // $opciones_menu .= '<option value="4">Iluminación</option>';
-            // $opciones_menu .= '<option value="8">Ventilación y calidad del aire</option>';
-            // $opciones_menu .= '<option value="9">Agua</option>';
-            // $opciones_menu .= '<option value="10">Hielo</option>';
-            // $opciones_menu .= '<option value="15">Químicos</option>';
-            // $opciones_menu .= '<option value="16">Infraestructura para servicios al personal</option>';
+            $opciones_menu .= '<option value="1">Ruido</option>';
+            $opciones_menu .= '<option value="2">Vibración</option>';
+            $opciones_menu .= '<option value="3">Temperatura</option>';
+            $opciones_menu .= '<option value="4">Iluminación</option>';
+            $opciones_menu .= '<option value="8">Ventilación y calidad del aire</option>';
+            $opciones_menu .= '<option value="9">Agua</option>';
+            $opciones_menu .= '<option value="10">Hielo</option>';
+            $opciones_menu .= '<option value="15">Químicos</option>';
+            $opciones_menu .= '<option value="16">Infraestructura para servicios al personal</option>';
+            $opciones_menu .= '<option value="22">BEI</option>';
 
 
             $dato['opciones_menu'] = $opciones_menu;
@@ -621,6 +662,193 @@ class reportesController extends Controller
             return response()->json($dato);
         }
     }
+
+
+
+    /**
+     * Display the specified resource.
+     *
+     * @param  int $proyecto_id
+     * @return \Illuminate\Http\Response
+     */
+    // public function reportematrizlabtablageneral($proyecto_id)
+    // {
+    //     try {
+    //         $proyecto = proyectoModel::with('recsensorial')->findOrFail($proyecto_id);
+    //         $recsensorial = $proyecto->recsensorial;
+
+    //         if (!$recsensorial) {
+    //             throw new \Exception("No se encontró información de reconocimiento sensorial para este proyecto.");
+    //         }
+
+    //         $areas = recsensorialareaModel::with([
+    //             'recsensorialareapruebas.catprueba',
+    //             'recsensorialareacategorias.categorias'
+    //         ])
+    //             ->where('recsensorial_id', $recsensorial->id)
+    //             ->orderBy('id', 'asc')
+    //             ->get();
+
+    //         $filas = [];
+    //         $contadorArea = 1;
+
+
+    //         foreach ($areas as $area) {
+    //             $agentes = $area->recsensorialareapruebas->pluck('catprueba.catPrueba_Nombre')->toArray();
+    //             $categorias = $area->recsensorialareacategorias->map(function ($cat) {
+    //                 return [
+    //                     'nombre' => $cat->categorias->recsensorialcategoria_nombrecategoria ?? '',
+    //                     'total' => $cat->recsensorialareacategorias_total ?? '',
+    //                     'tiempoexpo' => $cat->recsensorialareacategorias_tiempoexpo ?? '',
+    //                 ];
+    //             })->toArray();
+
+    //             $maxFilas = max(count($agentes), count($categorias), 1);
+    //             $agentes = array_pad($agentes, $maxFilas, '');
+    //             $categorias = array_pad($categorias, $maxFilas, ['nombre' => '', 'total' => '', 'tiempoexpo' => '']);
+
+    //             for ($i = 0; $i < $maxFilas; $i++) {
+    //                 $categoria = $categorias[$i];
+    //                 $mostrarSelect = !empty($agentes[$i]['nombre']);
+
+    //                 $fila_id = $contadorArea . '_' . $i;
+
+    //                 $fila = [
+    //                     'numero_registro' => $fila_id,
+    //                     'numero_visible' => $contadorArea,
+    //                     'recsensorialarea_nombre' => $i === 0 ? $area->recsensorialarea_nombre : '',
+    //                     'agente' => !empty($agentes[$i]['nombre']) ? $agentes[$i]['nombre'] . ' (ID: ' . $agentes[$i]['id'] . ')' : '',
+    //                     'categoria' => $categoria['nombre'],
+    //                     'recsensorialarea_numerotrabajadores' => $categoria['total'],
+    //                     'recsensorialarea_tiempoexposicion' => $categoria['tiempoexpo'],
+    //                     'recsensorialarea_indicepeligro' => $mostrarSelect ? '' : '-',
+    //                     'recsensorialarea_indiceexposicion' => $mostrarSelect ? '' : '-',
+    //                     'recsensorialarea_riesgo' => '',
+    //                     'recsensorialarea_lmpnmp' => $i === 0 ? $area->recsensorialarea_lmpnmp : '',
+    //                     'recsensorialarea_cumplimiento' => $i === 0 ? $area->recsensorialarea_cumplimiento : '',
+    //                     'recsensorialarea_medidas' => $i === 0 ? $area->recsensorialarea_medidas : '',
+    //                     'rowspan' => $i === 0 ? $maxFilas : 0,
+    //                     'mostrar_select' => $mostrarSelect,
+    //                 ];
+
+    //                 $filas[] = $fila;
+    //             }
+
+
+    //             $contadorArea++; // este sigue siendo el número general por área
+    //         }
+
+
+
+    //         return response()->json([
+    //             'data' => $filas,
+    //             'msj' => 'Datos cargados correctamente'
+    //         ]);
+    //     } catch (\Exception $e) {
+    //         return response()->json([
+    //             'data' => [],
+    //             'msj' => 'Error: ' . $e->getMessage()
+    //         ]);
+    //     }
+    // }
+
+
+
+
+    public function reportematrizlabtablageneral($proyecto_id)
+    {
+        try {
+            $proyecto = proyectoModel::with('recsensorial')->findOrFail($proyecto_id);
+            $recsensorial = $proyecto->recsensorial;
+
+            if (!$recsensorial) {
+                throw new \Exception("No se encontró información de reconocimiento sensorial para este proyecto.");
+            }
+
+            $areas = recsensorialareaModel::with([
+                'recsensorialareapruebas.catprueba',
+                'recsensorialareacategorias.categorias'
+            ])
+                ->where('recsensorial_id', $recsensorial->id)
+                ->orderBy('id', 'asc')
+                ->get();
+
+            $filas = [];
+            $contadorArea = 1;
+
+            foreach ($areas as $area) {
+                $agentes = $area->recsensorialareapruebas->map(function ($prueba) {
+                    $catprueba = $prueba->catprueba;
+                    return [
+                        'id' => $catprueba->id ?? '',
+                        'nombre' => $catprueba->catPrueba_Nombre ?? '',
+                    ];
+                })->toArray();
+
+                // Obtener categorías
+                $categorias = $area->recsensorialareacategorias->map(function ($cat) {
+                    return [
+                        'nombre' => $cat->categorias->recsensorialcategoria_nombrecategoria ?? '',
+                        'total' => $cat->recsensorialareacategorias_total ?? '',
+                        'tiempoexpo' => $cat->recsensorialareacategorias_tiempoexpo ?? '',
+                    ];
+                })->toArray();
+
+                $maxFilas = max(count($agentes), count($categorias), 1);
+                $agentes = array_pad($agentes, $maxFilas, ['id' => '', 'nombre' => '']);
+                $categorias = array_pad($categorias, $maxFilas, ['nombre' => '', 'total' => '', 'tiempoexpo' => '']);
+
+                for ($i = 0; $i < $maxFilas; $i++) {
+                    $categoria = $categorias[$i];
+                    $mostrarSelect = !empty($agentes[$i]['nombre']);
+                    $fila_id = $contadorArea . '_' . $i;
+
+                    $agenteTexto = '';
+                    if (!empty($agentes[$i]['nombre'])) {
+                        $agenteTexto = $agentes[$i]['nombre'];
+                        // if (!empty($agentes[$i]['id'])) {
+                        //     $agenteTexto .= ' (ID: ' . $agentes[$i]['id'] . ')';
+                        // }
+                    }
+
+                    $fila = [
+                        'numero_registro' => $fila_id,
+                        'numero_visible' => $contadorArea,
+                        'recsensorialarea_nombre' => $i === 0 ? $area->recsensorialarea_nombre : '',
+                        'agente' => $agenteTexto,
+                        'categoria' => $categoria['nombre'],
+                        'recsensorialarea_numerotrabajadores' => $categoria['total'],
+                        'recsensorialarea_tiempoexposicion' => $categoria['tiempoexpo'],
+                        'recsensorialarea_indicepeligro' => $mostrarSelect ? '' : '-',
+                        'recsensorialarea_indiceexposicion' => $mostrarSelect ? '' : '-',
+                        'recsensorialarea_riesgo' => '',
+                        'recsensorialarea_lmpnmp' => $i === 0 ? $area->recsensorialarea_lmpnmp : '',
+                        'recsensorialarea_cumplimiento' => $i === 0 ? $area->recsensorialarea_cumplimiento : '',
+                        'recsensorialarea_medidas' => $i === 0 ? $area->recsensorialarea_medidas : '',
+                        'rowspan' => $i === 0 ? $maxFilas : 0,
+                        'mostrar_select' => $mostrarSelect,
+                    ];
+
+                    $filas[] = $fila;
+                }
+
+                $contadorArea++;
+            }
+
+            return response()->json([
+                'data' => $filas,
+                'msj' => 'Datos cargados correctamente'
+            ]);
+        } catch (\Exception $e) {
+            return response()->json([
+                'data' => [],
+                'msj' => 'Error: ' . $e->getMessage()
+            ]);
+        }
+    }
+
+
+
 
 
     /**

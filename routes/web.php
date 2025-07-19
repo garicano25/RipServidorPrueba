@@ -1093,9 +1093,14 @@ Route::get('portadaInfo/{proyecto}/{agente}', ['as' => 'reportes.portadaInfo', '
 
 Route::get('reportepoevista/{proyecto_id}', ['as' => 'reportes.reportepoevista', 'uses' => 'reportes\reportesController@reportepoevista']);
 
+Route::get('reportematrizlaboralvista/{proyecto_id}', ['as' => 'reportes.reportematrizlaboralvista', 'uses' => 'reportes\reportesController@reportematrizlaboralvista']);
+
 Route::get('reportepoevistapsico/{proyecto_id}', ['as' => 'reportes.reportepoevistapsico', 'uses' => 'reportes\reportesController@reportepoevistapsico']);
 
 Route::get('reportecategoriatabla/{proyecto_id}', ['as' => 'reportes.reportecategoriatabla', 'uses' => 'reportes\reportesController@reportecategoriatabla']);
+
+Route::get('reportematrizlabtablageneral/{proyecto_id}', ['as' => 'reportes.reportematrizlabtablageneral', 'uses' => 'reportes\reportesController@reportematrizlabtablageneral']);
+
 
 Route::get('reportecategoriaeliminar/{reportecategoria_id}', ['as' => 'reportes.reportecategoriaeliminar', 'uses' => 'reportes\reportesController@reportecategoriaeliminar']);
 
