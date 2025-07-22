@@ -1044,13 +1044,10 @@ class reportesController extends Controller
                     $medidas = 'N/A';
 
                     $areaId = $area->id;
-
-                    // Obtener los IDs de 'reportearea' que están vinculados a esta área
                     $reporteAreaIds = DB::table('reportearea')
                         ->where('recsensorialarea_id', $areaId)
                         ->pluck('id');
 
-                    // Lógica para agente ID 4: iluminación
                     if ($idAgente == 4) {
                         $puntosIluminacion = DB::table('reporteiluminacionpuntos')
                             ->whereIn('reporteiluminacionpuntos_area_id', $reporteAreaIds)
@@ -1077,18 +1074,17 @@ class reportesController extends Controller
                             if ($registroMax) {
                                 $ner = $registroMax->reporteruidopuntoner_ner;
                                 $lmpe = $registroMax->reporteruidopuntoner_lmpe;
-                                $valorLMPNMP = number_format($ner, 2);
+                                $valorLMPNMP = number_format($ner) . ' /' . number_format($lmpe);
 
                                 $cumplimiento = ($ner <= $lmpe) ? 'DENTRO DE NORMA' : 'FUERA DE NORMA';
                             }
                         } else {
                             $valorLMPNMP = 'No tiene registro';
                         }
-                    }
-                    // Resto de agentes no válidos
-                    elseif ($idAgente !== '' && !in_array($idAgente, $idsValidos)) {
+                    } elseif ($idAgente !== '' && !in_array($idAgente, $idsValidos)) {
                         $valorLMPNMP = 'N/A';
                     }
+
 
 
                     // Recomendaciones
