@@ -902,7 +902,7 @@ class reportesController extends Controller
                         'recsensorialarea_indiceexposicion' => $mostrarSelect ? '' : '-',
                         'recsensorialarea_riesgo' => '',
                         'recsensorialarea_lmpnmp' => $valorLMPNMP,
-                        'recsensorialarea_cumplimiento' => $i === 0 ? $cumplimiento : '',
+                        'recsensorialarea_cumplimiento' => ($cumplimiento ?: ''),
                         'recsensorialarea_medidas' => $medidas,
                         'rowspan' => $i === 0 ? $maxFilas : 0,
                         'mostrar_select' => $mostrarSelect,
