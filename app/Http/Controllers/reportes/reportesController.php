@@ -555,6 +555,11 @@ class reportesController extends Controller
                                                     WHEN catprueba_id = 16 THEN "Infraestructura para servicios al personal"
                                                     WHEN catprueba_id = 17 THEN "Mapa de riesgos" -- "Mapa de riesgos"
                                                     WHEN catprueba_id = 22 THEN "BEI" -- "Beis"
+                                                    WHEN catprueba_id = 23 THEN "Mapa con matriz" -- "Beis"
+                                                    WHEN catprueba_id = 24 THEN "Mapa sin matriz" -- "Beis"
+                                                    WHEN catprueba_id = 25 THEN "Instalación mapa" -- "Beis"
+
+
                                                     ELSE ""
                                                 END
                                             ) AS agente_nombre
@@ -579,23 +584,25 @@ class reportesController extends Controller
             $opciones_menu = '<option value="">Seleccione</option>';
             // $opciones_menu .= '<option value="0">POE PROYECTO</option>';  -> EL POE ESTARA APARTE EN EL SELECT SOLO ESTARAN LOS REPORTES DE LOS AGENTES
 
-            //DESCOMENTAR DESPUES DE SUBIR AL SERVIDOR
-            // foreach ($sql as $key => $value){
-            //     $opciones_menu .= '<option value="'.$value->agente_id.'">'.$value->agente_nombre.'</option>';
-            // }
+            // DESCOMENTAR DESPUES DE SUBIR AL SERVIDOR
+            foreach ($sql as $key => $value){
+                $opciones_menu .= '<option value="'.$value->agente_id.'">'.$value->agente_nombre.'</option>';
+            }
 
 
-            // QUITAR DESPUES DE SUBIR AL SERVIDOR
-            $opciones_menu .= '<option value="1">Ruido</option>';
-            $opciones_menu .= '<option value="2">Vibración</option>';
-            $opciones_menu .= '<option value="3">Temperatura</option>';
-            $opciones_menu .= '<option value="4">Iluminación</option>';
-            $opciones_menu .= '<option value="8">Ventilación y calidad del aire</option>';
-            $opciones_menu .= '<option value="9">Agua</option>';
-            $opciones_menu .= '<option value="10">Hielo</option>';
-            $opciones_menu .= '<option value="15">Químicos</option>';
-            $opciones_menu .= '<option value="16">Infraestructura para servicios al personal</option>';
-            $opciones_menu .= '<option value="22">BEI</option>';
+            // // QUITAR DESPUES DE SUBIR AL SERVIDOR
+            // $opciones_menu .= '<option value="1">Ruido</option>';
+            // $opciones_menu .= '<option value="2">Vibración</option>';
+            // $opciones_menu .= '<option value="3">Temperatura</option>';
+            // $opciones_menu .= '<option value="4">Iluminación</option>';
+            // $opciones_menu .= '<option value="8">Ventilación y calidad del aire</option>';
+            // $opciones_menu .= '<option value="9">Agua</option>';
+            // $opciones_menu .= '<option value="10">Hielo</option>';
+            // $opciones_menu .= '<option value="15">Químicos</option>';
+            // $opciones_menu .= '<option value="16">Infraestructura para servicios al personal</option>';
+            // $opciones_menu .= '<option value="22">BEI</option>';
+            // $opciones_menu .= '<option value="23">Mapa con matriz</option>';
+
 
 
             $dato['opciones_menu'] = $opciones_menu;
@@ -671,6 +678,9 @@ class reportesController extends Controller
      * @param  int $proyecto_id
      * @return \Illuminate\Http\Response
      */
+
+
+
     // public function reportematrizlabtablageneral($proyecto_id)
     // {
     //     try {
@@ -692,9 +702,19 @@ class reportesController extends Controller
     //         $filas = [];
     //         $contadorArea = 1;
 
+    //         // $idsValidos = [1, 2, 3, 4, 8, 9, 10, 15, 16, 22];
+    //         $idsValidos = [1, 2, 3, 4, 8, 15, 16, 22];
+
 
     //         foreach ($areas as $area) {
-    //             $agentes = $area->recsensorialareapruebas->pluck('catprueba.catPrueba_Nombre')->toArray();
+    //             $agentes = $area->recsensorialareapruebas->map(function ($prueba) {
+    //                 $catprueba = $prueba->catprueba;
+    //                 return [
+    //                     'id' => $catprueba->id ?? '',
+    //                     'nombre' => $catprueba->catPrueba_Nombre ?? '',
+    //                 ];
+    //             })->toArray();
+
     //             $categorias = $area->recsensorialareacategorias->map(function ($cat) {
     //                 return [
     //                     'nombre' => $cat->categorias->recsensorialcategoria_nombrecategoria ?? '',
@@ -704,27 +724,41 @@ class reportesController extends Controller
     //             })->toArray();
 
     //             $maxFilas = max(count($agentes), count($categorias), 1);
-    //             $agentes = array_pad($agentes, $maxFilas, '');
+    //             $agentes = array_pad($agentes, $maxFilas, ['id' => '', 'nombre' => '']);
     //             $categorias = array_pad($categorias, $maxFilas, ['nombre' => '', 'total' => '', 'tiempoexpo' => '']);
 
     //             for ($i = 0; $i < $maxFilas; $i++) {
     //                 $categoria = $categorias[$i];
     //                 $mostrarSelect = !empty($agentes[$i]['nombre']);
-
     //                 $fila_id = $contadorArea . '_' . $i;
+
+    //                 $agenteTexto = '';
+    //                 if (!empty($agentes[$i]['nombre'])) {
+    //                     $agenteTexto = $agentes[$i]['nombre'];
+    //                     if (!empty($agentes[$i]['id'])) {
+    //                         $agenteTexto .= ' (ID: ' . $agentes[$i]['id'] . ')';
+    //                     }
+    //                 }
+
+    //                 // Determinar valor de LMP/NMP por agente
+    //                 $idAgente = $agentes[$i]['id'];
+    //                 $valorLMPNMP = '';
+    //                 if ($idAgente !== '' && !in_array($idAgente, $idsValidos)) {
+    //                     $valorLMPNMP = 'N/A';
+    //                 }
 
     //                 $fila = [
     //                     'numero_registro' => $fila_id,
     //                     'numero_visible' => $contadorArea,
     //                     'recsensorialarea_nombre' => $i === 0 ? $area->recsensorialarea_nombre : '',
-    //                     'agente' => !empty($agentes[$i]['nombre']) ? $agentes[$i]['nombre'] . ' (ID: ' . $agentes[$i]['id'] . ')' : '',
+    //                     'agente' => $agenteTexto,
     //                     'categoria' => $categoria['nombre'],
     //                     'recsensorialarea_numerotrabajadores' => $categoria['total'],
     //                     'recsensorialarea_tiempoexposicion' => $categoria['tiempoexpo'],
     //                     'recsensorialarea_indicepeligro' => $mostrarSelect ? '' : '-',
     //                     'recsensorialarea_indiceexposicion' => $mostrarSelect ? '' : '-',
     //                     'recsensorialarea_riesgo' => '',
-    //                     'recsensorialarea_lmpnmp' => $i === 0 ? $area->recsensorialarea_lmpnmp : '',
+    //                     'recsensorialarea_lmpnmp' => $valorLMPNMP,
     //                     'recsensorialarea_cumplimiento' => $i === 0 ? $area->recsensorialarea_cumplimiento : '',
     //                     'recsensorialarea_medidas' => $i === 0 ? $area->recsensorialarea_medidas : '',
     //                     'rowspan' => $i === 0 ? $maxFilas : 0,
@@ -734,11 +768,8 @@ class reportesController extends Controller
     //                 $filas[] = $fila;
     //             }
 
-
-    //             $contadorArea++; // este sigue siendo el número general por área
+    //             $contadorArea++;
     //         }
-
-
 
     //         return response()->json([
     //             'data' => $filas,
@@ -755,100 +786,298 @@ class reportesController extends Controller
 
 
 
-    public function reportematrizlabtablageneral($proyecto_id)
-    {
-        try {
-            $proyecto = proyectoModel::with('recsensorial')->findOrFail($proyecto_id);
-            $recsensorial = $proyecto->recsensorial;
+    // public function reportematrizlabtablageneral($proyecto_id)
+    // {
+    //     try {
+    //         $proyecto = proyectoModel::with('recsensorial')->findOrFail($proyecto_id);
+    //         $recsensorial = $proyecto->recsensorial;
 
-            if (!$recsensorial) {
-                throw new \Exception("No se encontró información de reconocimiento sensorial para este proyecto.");
-            }
+    //         if (!$recsensorial) {
+    //             throw new \Exception("No se encontró información de reconocimiento sensorial para este proyecto.");
+    //         }
 
-            $areas = recsensorialareaModel::with([
-                'recsensorialareapruebas.catprueba',
-                'recsensorialareacategorias.categorias'
-            ])
-                ->where('recsensorial_id', $recsensorial->id)
-                ->orderBy('id', 'asc')
-                ->get();
+    //         $areas = recsensorialareaModel::with([
+    //             'recsensorialareapruebas.catprueba',
+    //             'recsensorialareacategorias.categorias'
+    //         ])
+    //             ->where('recsensorial_id', $recsensorial->id)
+    //             ->orderBy('id', 'asc')
+    //             ->get();
 
-            $filas = [];
-            $contadorArea = 1;
+    //         $filas = [];
+    //         $contadorArea = 1;
 
-            foreach ($areas as $area) {
-                $agentes = $area->recsensorialareapruebas->map(function ($prueba) {
-                    $catprueba = $prueba->catprueba;
-                    return [
-                        'id' => $catprueba->id ?? '',
-                        'nombre' => $catprueba->catPrueba_Nombre ?? '',
-                    ];
-                })->toArray();
+    //         $idsValidos = [1, 2, 3, 4, 8, 15, 16, 22];
 
-                // Obtener categorías
-                $categorias = $area->recsensorialareacategorias->map(function ($cat) {
-                    return [
-                        'nombre' => $cat->categorias->recsensorialcategoria_nombrecategoria ?? '',
-                        'total' => $cat->recsensorialareacategorias_total ?? '',
-                        'tiempoexpo' => $cat->recsensorialareacategorias_tiempoexpo ?? '',
-                    ];
-                })->toArray();
+    //         foreach ($areas as $area) {
+    //             $agentes = $area->recsensorialareapruebas->map(function ($prueba) {
+    //                 $catprueba = $prueba->catprueba;
+    //                 return [
+    //                     'id' => $catprueba->id ?? '',
+    //                     'nombre' => $catprueba->catPrueba_Nombre ?? '',
+    //                 ];
+    //             })->toArray();
 
-                $maxFilas = max(count($agentes), count($categorias), 1);
-                $agentes = array_pad($agentes, $maxFilas, ['id' => '', 'nombre' => '']);
-                $categorias = array_pad($categorias, $maxFilas, ['nombre' => '', 'total' => '', 'tiempoexpo' => '']);
+    //             $categorias = $area->recsensorialareacategorias->map(function ($cat) {
+    //                 return [
+    //                     'nombre' => $cat->categorias->recsensorialcategoria_nombrecategoria ?? '',
+    //                     'total' => $cat->recsensorialareacategorias_total ?? '',
+    //                     'tiempoexpo' => $cat->recsensorialareacategorias_tiempoexpo ?? '',
+    //                 ];
+    //             })->toArray();
 
-                for ($i = 0; $i < $maxFilas; $i++) {
-                    $categoria = $categorias[$i];
-                    $mostrarSelect = !empty($agentes[$i]['nombre']);
-                    $fila_id = $contadorArea . '_' . $i;
+    //             $maxFilas = max(count($agentes), count($categorias), 1);
+    //             $agentes = array_pad($agentes, $maxFilas, ['id' => '', 'nombre' => '']);
+    //             $categorias = array_pad($categorias, $maxFilas, ['nombre' => '', 'total' => '', 'tiempoexpo' => '']);
 
-                    $agenteTexto = '';
-                    if (!empty($agentes[$i]['nombre'])) {
-                        $agenteTexto = $agentes[$i]['nombre'];
-                        // if (!empty($agentes[$i]['id'])) {
-                        //     $agenteTexto .= ' (ID: ' . $agentes[$i]['id'] . ')';
-                        // }
+    //             for ($i = 0; $i < $maxFilas; $i++) {
+    //                 $categoria = $categorias[$i];
+    //                 $mostrarSelect = !empty($agentes[$i]['nombre']);
+    //                 $fila_id = $contadorArea . '_' . $i;
+
+    //                 $agenteTexto = '';
+    //                 if (!empty($agentes[$i]['nombre'])) {
+    //                     $agenteTexto = $agentes[$i]['nombre'];
+    //                     if (!empty($agentes[$i]['id'])) {
+    //                         $agenteTexto .= ' (ID: ' . $agentes[$i]['id'] . ')';
+    //                     }
+    //                 }
+
+    //                 $idAgente = $agentes[$i]['id'];
+    //                 $valorLMPNMP = '';
+    //                 $cumplimiento = '';
+
+    //                 if ($idAgente == 4) {
+    //                     $existenRegistros = DB::table('reporteiluminacionpuntos')
+    //                         ->where('proyecto_id', $proyecto_id)
+    //                         ->exists();
+
+    //                     if ($existenRegistros) {
+    //                         $valorMaxLux = DB::table('reporteiluminacionpuntos')
+    //                             ->where('proyecto_id', $proyecto_id)
+    //                             ->max('reporteiluminacionpuntos_lux');
+
+    //                         $totalLuxNorma = DB::table('reporteiluminacionpuntos')
+    //                             ->selectRaw('
+    //                             SUM(
+    //                                 CASE WHEN reporteiluminacionpuntos_luxmed1 <= reporteiluminacionpuntos_lux THEN 1 ELSE 0 END +
+    //                                 CASE WHEN reporteiluminacionpuntos_luxmed2 <= reporteiluminacionpuntos_lux THEN 1 ELSE 0 END +
+    //                                 CASE WHEN reporteiluminacionpuntos_luxmed3 <= reporteiluminacionpuntos_lux THEN 1 ELSE 0 END
+    //                             ) as total_cumplen,
+    //                             COUNT(*) * 3 as total_medidas
+    //                         ')
+    //                             ->where('proyecto_id', $proyecto_id)
+    //                             ->first();
+
+    //                         if ($totalLuxNorma && $totalLuxNorma->total_medidas > 0) {
+    //                             $dentroNorma = ($totalLuxNorma->total_cumplen == $totalLuxNorma->total_medidas);
+    //                             $valorLMPNMP = number_format($valorMaxLux, 2) . ' /200';
+    //                             $cumplimiento = $dentroNorma ? 'DENTRO DE NORMA' : 'FUERA DE NORMA';
+    //                         }
+    //                     }
+    //                 } elseif ($idAgente !== '' && !in_array($idAgente, $idsValidos)) {
+    //                     $valorLMPNMP = 'N/A';
+    //                 }
+
+    //                 $fila = [
+    //                     'numero_registro' => $fila_id,
+    //                     'numero_visible' => $contadorArea,
+    //                     'recsensorialarea_nombre' => $i === 0 ? $area->recsensorialarea_nombre : '',
+    //                     'agente' => $agenteTexto,
+    //                     'categoria' => $categoria['nombre'],
+    //                     'recsensorialarea_numerotrabajadores' => $categoria['total'],
+    //                     'recsensorialarea_tiempoexposicion' => $categoria['tiempoexpo'],
+    //                     'recsensorialarea_indicepeligro' => $mostrarSelect ? '' : '-',
+    //                     'recsensorialarea_indiceexposicion' => $mostrarSelect ? '' : '-',
+    //                     'recsensorialarea_riesgo' => '',
+    //                     'recsensorialarea_lmpnmp' => $valorLMPNMP,
+    //                     'recsensorialarea_cumplimiento' => $i === 0 ? ($cumplimiento ?: $area->recsensorialarea_cumplimiento) : '',
+    //                     'recsensorialarea_medidas' => $i === 0 ? $area->recsensorialarea_medidas : '',
+    //                     'rowspan' => $i === 0 ? $maxFilas : 0,
+    //                     'mostrar_select' => $mostrarSelect,
+    //                 ];
+
+    //                 $filas[] = $fila;
+    //             }
+
+    //             $contadorArea++;
+    //         }
+
+    //         return response()->json([
+    //             'data' => $filas,
+    //             'msj' => 'Datos cargados correctamente'
+    //         ]);
+    //     } catch (\Exception $e) {
+    //         return response()->json([
+    //             'data' => [],
+    //             'msj' => 'Error: ' . $e->getMessage()
+    //         ]);
+    //     }
+    // }
+
+
+   public function reportematrizlabtablageneral($proyecto_id)
+{
+    try {
+        $proyecto = proyectoModel::with('recsensorial')->findOrFail($proyecto_id);
+        $recsensorial = $proyecto->recsensorial;
+
+        if (!$recsensorial) {
+            throw new \Exception("No se encontró información de reconocimiento sensorial para este proyecto.");
+        }
+
+        $areas = recsensorialareaModel::with([
+            'recsensorialareapruebas.catprueba',
+            'recsensorialareacategorias.categorias'
+        ])
+            ->where('recsensorial_id', $recsensorial->id)
+            ->orderBy('id', 'asc')
+            ->get();
+
+        $filas = [];
+        $contadorArea = 1;
+
+        $idsValidos = [1, 2, 3, 4, 8, 15, 16, 22];
+
+        foreach ($areas as $area) {
+            $agentes = $area->recsensorialareapruebas->map(function ($prueba) {
+                $catprueba = $prueba->catprueba;
+                return [
+                    'id' => $catprueba->id ?? '',
+                    'nombre' => $catprueba->catPrueba_Nombre ?? '',
+                ];
+            })->toArray();
+
+            $categorias = $area->recsensorialareacategorias->map(function ($cat) {
+                return [
+                    'nombre' => $cat->categorias->recsensorialcategoria_nombrecategoria ?? '',
+                    'total' => $cat->recsensorialareacategorias_total ?? '',
+                    'tiempoexpo' => $cat->recsensorialareacategorias_tiempoexpo ?? '',
+                ];
+            })->toArray();
+
+            $maxFilas = max(count($agentes), count($categorias), 1);
+            $agentes = array_pad($agentes, $maxFilas, ['id' => '', 'nombre' => '']);
+            $categorias = array_pad($categorias, $maxFilas, ['nombre' => '', 'total' => '', 'tiempoexpo' => '']);
+
+            for ($i = 0; $i < $maxFilas; $i++) {
+                $categoria = $categorias[$i];
+                $mostrarSelect = !empty($agentes[$i]['nombre']);
+                $fila_id = $contadorArea . '_' . $i;
+
+                $agenteTexto = '';
+                if (!empty($agentes[$i]['nombre'])) {
+                    $agenteTexto = $agentes[$i]['nombre'];
+                    if (!empty($agentes[$i]['id'])) {
+                        $agenteTexto .= ' (ID: ' . $agentes[$i]['id'] . ')';
                     }
-
-                    $fila = [
-                        'numero_registro' => $fila_id,
-                        'numero_visible' => $contadorArea,
-                        'recsensorialarea_nombre' => $i === 0 ? $area->recsensorialarea_nombre : '',
-                        'agente' => $agenteTexto,
-                        'categoria' => $categoria['nombre'],
-                        'recsensorialarea_numerotrabajadores' => $categoria['total'],
-                        'recsensorialarea_tiempoexposicion' => $categoria['tiempoexpo'],
-                        'recsensorialarea_indicepeligro' => $mostrarSelect ? '' : '-',
-                        'recsensorialarea_indiceexposicion' => $mostrarSelect ? '' : '-',
-                        'recsensorialarea_riesgo' => '',
-                        'recsensorialarea_lmpnmp' => $i === 0 ? $area->recsensorialarea_lmpnmp : '',
-                        'recsensorialarea_cumplimiento' => $i === 0 ? $area->recsensorialarea_cumplimiento : '',
-                        'recsensorialarea_medidas' => $i === 0 ? $area->recsensorialarea_medidas : '',
-                        'rowspan' => $i === 0 ? $maxFilas : 0,
-                        'mostrar_select' => $mostrarSelect,
-                    ];
-
-                    $filas[] = $fila;
                 }
 
-                $contadorArea++;
+                $idAgente = $agentes[$i]['id'];
+                $valorLMPNMP = '';
+                $cumplimiento = '';
+                $medidas = 'N/A';
+
+                // Lógica para agente ID 4: iluminación
+                if ($idAgente == 4) {
+                    $existenRegistros = DB::table('reporteiluminacionpuntos')
+                        ->where('proyecto_id', $proyecto_id)
+                        ->exists();
+
+                    if ($existenRegistros) {
+                        $valorMaxLux = DB::table('reporteiluminacionpuntos')
+                            ->where('proyecto_id', $proyecto_id)
+                            ->max('reporteiluminacionpuntos_lux');
+
+                        $totalLuxNorma = DB::table('reporteiluminacionpuntos')
+                            ->selectRaw('
+                                SUM(
+                                    CASE WHEN reporteiluminacionpuntos_luxmed1 <= reporteiluminacionpuntos_lux THEN 1 ELSE 0 END +
+                                    CASE WHEN reporteiluminacionpuntos_luxmed2 <= reporteiluminacionpuntos_lux THEN 1 ELSE 0 END +
+                                    CASE WHEN reporteiluminacionpuntos_luxmed3 <= reporteiluminacionpuntos_lux THEN 1 ELSE 0 END
+                                ) as total_cumplen,
+                                COUNT(*) * 3 as total_medidas
+                            ')
+                            ->where('proyecto_id', $proyecto_id)
+                            ->first();
+
+                        if ($totalLuxNorma && $totalLuxNorma->total_medidas > 0) {
+                            $dentroNorma = ($totalLuxNorma->total_cumplen == $totalLuxNorma->total_medidas);
+                            $valorLMPNMP = number_format($valorMaxLux, 2) . ' /200';
+                            $cumplimiento = $dentroNorma ? 'DENTRO DE NORMA' : 'FUERA DE NORMA';
+                        }
+                    }
+                } elseif ($idAgente !== '' && !in_array($idAgente, $idsValidos)) {
+                    $valorLMPNMP = 'N/A';
+                }
+
+                    // Recomendaciones para agentes válidos
+                    $medidas = 'N/A';
+
+                            if (in_array($idAgente, $idsValidos)) {
+                                $recomendaciones = DB::table('reporterecomendaciones')
+                                    ->where('proyecto_id', $proyecto_id)
+                                    ->where('agente_id', $idAgente)
+                                    ->get();
+
+                                if ($recomendaciones->count() > 0) {
+                                    $htmlRecomendaciones = '';
+                                    foreach ($recomendaciones as $value) {
+                                        $descripcionTexto = $value->reporterecomendaciones_descripcion ?? '';
+
+                                        $checkbox = '<div class="switch">
+                                    <label>
+                                        <input type="checkbox" class="recomendacion_checkbox" name="recomendacion_checkbox[]" value="' . $value->id . '" onclick="activa_recomendacion(this);">
+                                        <span class="lever switch-col-light-blue"></span>
+                                    </label>
+                                </div>';
+
+                                        $textarea = '
+                        <textarea class="form-control" rows="5" id="recomendacion_descripcion_' . $value->id . '" name="recomendacion_descripcion_' . $value->id . '">' . $descripcionTexto . '</textarea>';
+
+                                        $htmlRecomendaciones .= '<div class="recomendacion-bloque mb-2">' . $checkbox . $textarea . '</div>';
+                                    }
+
+                                    $medidas = $htmlRecomendaciones;
+                                }
+                            }
+
+
+                    $fila = [
+                    'numero_registro' => $fila_id,
+                    'numero_visible' => $contadorArea,
+                    'recsensorialarea_nombre' => $i === 0 ? $area->recsensorialarea_nombre : '',
+                    'agente' => $agenteTexto,
+                    'categoria' => $categoria['nombre'],
+                    'recsensorialarea_numerotrabajadores' => $categoria['total'],
+                    'recsensorialarea_tiempoexposicion' => $categoria['tiempoexpo'],
+                    'recsensorialarea_indicepeligro' => $mostrarSelect ? '' : '-',
+                    'recsensorialarea_indiceexposicion' => $mostrarSelect ? '' : '-',
+                    'recsensorialarea_riesgo' => '',
+                    'recsensorialarea_lmpnmp' => $valorLMPNMP,
+                    'recsensorialarea_cumplimiento' => $i === 0 ? ($cumplimiento ?: $area->recsensorialarea_cumplimiento) : '',
+                    'recsensorialarea_medidas' => $medidas,
+                    'rowspan' => $i === 0 ? $maxFilas : 0,
+                    'mostrar_select' => $mostrarSelect,
+                ];
+
+                $filas[] = $fila;
             }
 
-            return response()->json([
-                'data' => $filas,
-                'msj' => 'Datos cargados correctamente'
-            ]);
-        } catch (\Exception $e) {
-            return response()->json([
-                'data' => [],
-                'msj' => 'Error: ' . $e->getMessage()
-            ]);
+            $contadorArea++;
         }
+
+        return response()->json([
+            'data' => $filas,
+            'msj' => 'Datos cargados correctamente'
+        ]);
+    } catch (\Exception $e) {
+        return response()->json([
+            'data' => [],
+            'msj' => 'Error: ' . $e->getMessage()
+        ]);
     }
-
-
-
+}
 
 
     /**
