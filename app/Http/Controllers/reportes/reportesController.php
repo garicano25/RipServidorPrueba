@@ -1002,7 +1002,7 @@ class reportesController extends Controller
 
             $filas = [];
             $contadorArea = 1;
-            $idsValidos = [1, 2, 3, 4, 8, 15, 16, 22];
+            $idsValidos = [1, 2, 3, 4, 8, 15, 22];
 
             foreach ($areas as $area) {
                 $agentes = $area->recsensorialareapruebas->map(function ($prueba) {
@@ -1075,7 +1075,47 @@ class reportesController extends Controller
                         } else {
                             $valorLMPNMP = 'No tiene registro';
                         }
+
                     }
+                    // Agente 3 (Temperatura)
+                    elseif ($idAgente == 3) {
+                        // Obtener los IDs de 'reportearea' que están vinculados a esta área
+                        $reporteAreaIds = DB::table('reportearea')
+                            ->where('recsensorialarea_id', $area->id)
+                            ->pluck('id');
+
+                        $registrosTemp = DB::table('reportetemperaturaevaluacion')
+                            ->whereIn('reportearea_id', $reporteAreaIds)
+                            ->where('proyecto_id', $proyecto_id)
+                            ->get();
+
+                        if ($registrosTemp->count() > 0) {
+                            $maxValor = null;
+                            $lmpeValor = null;
+
+                            foreach ($registrosTemp as $registro) {
+                                $valores = [
+                                    (float) $registro->reportetemperaturaevaluacion_I,
+                                    (float) $registro->reportetemperaturaevaluacion_II,
+                                    (float) $registro->reportetemperaturaevaluacion_III,
+                                ];
+                                $valorMaxLocal = max($valores);
+
+                                if (is_null($maxValor) || $valorMaxLocal > $maxValor) {
+                                    $maxValor = $valorMaxLocal;
+                                    $lmpeValor = (float) $registro->reportetemperaturaevaluacion_LMPE;
+                                }
+                            }
+
+                            if (!is_null($maxValor) && !is_null($lmpeValor)) {
+                                $valorLMPNMP = number_format($maxValor, 1) . ' /' . number_format($lmpeValor, 1);
+                                $cumplimiento = ($maxValor <= $lmpeValor) ? 'DENTRO DE NORMA' : 'FUERA DE NORMA';
+                            }
+                        } else {
+                            $valorLMPNMP = 'No tiene registro';
+                        }
+                    }
+
 
                     // Otros agentes no válidos
                     elseif ($idAgente !== '' && !in_array($idAgente, $idsValidos)) {
