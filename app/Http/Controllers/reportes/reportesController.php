@@ -862,7 +862,13 @@ class reportesController extends Controller
                             } else {
                                 $valorLMPNMP = 'No tiene registro';
                             }
+                        } 
+                        elseif ($idAgente === '' || !in_array($idAgente, $idsValidos)) {
+                            $valorLMPNMP = 'N/A';
+                            $cumplimiento = 'FUERA DE NORMA';
+                            $medidas = 'N/A';
                         }
+
 
                         // Recomendaciones
                         if (in_array($idAgente, $idsValidos)) {
