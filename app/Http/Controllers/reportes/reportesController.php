@@ -1036,7 +1036,6 @@ class reportesController extends Controller
                     $cumplimiento = '';
                     $medidas = 'N/A';
 
-                    // IDs de reportearea relacionados con el área actual
                     $reporteAreaIds = DB::table('reportearea')
                         ->where('recsensorialarea_id', $area->id)
                         ->pluck('id');
@@ -1049,9 +1048,7 @@ class reportesController extends Controller
 
                         if ($puntosIluminacion->exists()) {
                             $valorMaxLuxRaw = $puntosIluminacion->max('reporteiluminacionpuntos_lux');
-
                             $cumplimiento = ($valorMaxLuxRaw >= 200) ? 'DENTRO DE NORMA' : 'FUERA DE NORMA';
-
                             $valorLMPNMP = number_format($valorMaxLuxRaw) . ' /200';
                         } else {
                             $valorLMPNMP = 'No tiene registro';
@@ -1075,15 +1072,10 @@ class reportesController extends Controller
                         } else {
                             $valorLMPNMP = 'No tiene registro';
                         }
-
                     }
-                    // Agente 3 (Temperatura)
-                    elseif ($idAgente == 3) {
-                        // Obtener los IDs de 'reportearea' que están vinculados a esta área
-                        $reporteAreaIds = DB::table('reportearea')
-                            ->where('recsensorialarea_id', $area->id)
-                            ->pluck('id');
 
+                    // Agente 3 (temperatura)
+                    elseif ($idAgente == 3) {
                         $registrosTemp = DB::table('reportetemperaturaevaluacion')
                             ->whereIn('reportearea_id', $reporteAreaIds)
                             ->where('proyecto_id', $proyecto_id)
@@ -1108,7 +1100,7 @@ class reportesController extends Controller
                             }
 
                             if (!is_null($maxValor) && !is_null($lmpeValor)) {
-                                $valorLMPNMP = number_format($maxValor, 1) . ' /' . number_format($lmpeValor, 1);
+                                $valorLMPNMP = number_format($maxValor) . ' /' . number_format($lmpeValor);
                                 $cumplimiento = ($maxValor <= $lmpeValor) ? 'DENTRO DE NORMA' : 'FUERA DE NORMA';
                             }
                         } else {
@@ -1116,13 +1108,12 @@ class reportesController extends Controller
                         }
                     }
 
-
                     // Otros agentes no válidos
                     elseif ($idAgente !== '' && !in_array($idAgente, $idsValidos)) {
                         $valorLMPNMP = 'N/A';
                     }
 
-                    // Recomendaciones
+                    // Recomendaciones por agente
                     if (in_array($idAgente, $idsValidos)) {
                         $recomendaciones = DB::table('reporterecomendaciones')
                             ->where('proyecto_id', $proyecto_id)
@@ -1146,6 +1137,7 @@ class reportesController extends Controller
                         }
                     }
 
+                    // Agregar fila
                     $filas[] = [
                         'numero_registro' => $fila_id,
                         'numero_visible' => $contadorArea,
@@ -1158,13 +1150,12 @@ class reportesController extends Controller
                         'recsensorialarea_indiceexposicion' => $mostrarSelect ? '' : '-',
                         'recsensorialarea_riesgo' => '',
                         'recsensorialarea_lmpnmp' => $valorLMPNMP,
-                        'recsensorialarea_cumplimiento' => $i === 0 ? ($cumplimiento ?: $area->recsensorialarea_cumplimiento) : '',
+                        'recsensorialarea_cumplimiento' => $i === 0 ? ($cumplimiento ?: '') : '',
                         'recsensorialarea_medidas' => $medidas,
                         'rowspan' => $i === 0 ? $maxFilas : 0,
                         'mostrar_select' => $mostrarSelect,
                     ];
                 }
-
                 $contadorArea++;
             }
 
