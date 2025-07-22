@@ -1058,29 +1058,13 @@ class reportesController extends Controller
 
                         if ($puntosIluminacion->exists()) {
                             $valorMaxLux = $puntosIluminacion->max('reporteiluminacionpuntos_lux');
+                            $valorLMPNMP = number_format($valorMaxLux) . ' /200';
 
-                            $totalLuxNorma = $puntosIluminacion
-                                ->selectRaw('
-                                SUM(
-                                    CASE WHEN reporteiluminacionpuntos_luxmed1 <= reporteiluminacionpuntos_lux THEN 1 ELSE 0 END +
-                                    CASE WHEN reporteiluminacionpuntos_luxmed2 <= reporteiluminacionpuntos_lux THEN 1 ELSE 0 END +
-                                    CASE WHEN reporteiluminacionpuntos_luxmed3 <= reporteiluminacionpuntos_lux THEN 1 ELSE 0 END
-                                ) as total_cumplen,
-                                COUNT(*) * 3 as total_medidas')
-                                ->first();
-
-                            if ($totalLuxNorma && $totalLuxNorma->total_medidas > 0) {
-                                $dentroNorma = ($totalLuxNorma->total_cumplen == $totalLuxNorma->total_medidas);
-                                $valorLMPNMP = number_format($valorMaxLux) . ' /200';
-                                $cumplimiento = $dentroNorma ? 'DENTRO DE NORMA' : 'FUERA DE NORMA';
-                            }
+                            $cumplimiento = ($valorMaxLux >= 200) ? 'DENTRO DE NORMA' : 'FUERA DE NORMA';
                         } else {
                             $valorLMPNMP = 'No tiene registro';
                         }
-                    }
-
-                    // Lógica para agente ID 1: ruido
-                    elseif ($idAgente == 1) {
+                    } elseif ($idAgente == 1) {
                         $puntosRuido = DB::table('reporteruidopuntoner')
                             ->whereIn('reporteruidoarea_id', $reporteAreaIds)
                             ->where('proyecto_id', $proyecto_id);
@@ -1093,13 +1077,19 @@ class reportesController extends Controller
                             if ($registroMax) {
                                 $ner = $registroMax->reporteruidopuntoner_ner;
                                 $lmpe = $registroMax->reporteruidopuntoner_lmpe;
-                                $valorLMPNMP = number_format($ner);
-                                $cumplimiento = $ner <= $lmpe ? 'DENTRO DE NORMA' : 'FUERA DE NORMA';
+                                $valorLMPNMP = number_format($ner, 2);
+
+                                $cumplimiento = ($ner <= $lmpe) ? 'DENTRO DE NORMA' : 'FUERA DE NORMA';
                             }
                         } else {
                             $valorLMPNMP = 'No tiene registro';
                         }
                     }
+                    // Resto de agentes no válidos
+                    elseif ($idAgente !== '' && !in_array($idAgente, $idsValidos)) {
+                        $valorLMPNMP = 'N/A';
+                    }
+
 
                     // Recomendaciones
                     if (in_array($idAgente, $idsValidos)) {
@@ -1165,6 +1155,7 @@ class reportesController extends Controller
             ]);
         }
     }
+
 
 
     /**
