@@ -523,63 +523,129 @@ class reportesController extends Controller
     public function reporteslistaparametros($proyecto_id)
     {
         try {
+
             $sql = DB::select('SELECT
-                                    TABLA.proyecto_id,
-                                    TABLA.agente_id,
-                                    TABLA.agente_nombre
-                                FROM
-                                    (
-                                        SELECT
-                                            proyectoproveedores.proyecto_id,
-                                            proyectoproveedores.proveedor_id,
-                                            proyectoproveedores.proyectoproveedores_tipoadicional,
-                                            proyectoproveedores.catprueba_id AS agente_id,
-                                            proyectoproveedores.proyectoproveedores_agente,
-                                            (
-                                                CASE
-                                                    WHEN catprueba_id = 1 THEN "Ruido"
-                                                    WHEN catprueba_id = 2 THEN "Vibración"
-                                                    WHEN catprueba_id = 3 THEN "Temperatura"
-                                                    WHEN catprueba_id = 4 THEN "Iluminación"
-                                                    WHEN catprueba_id = 5 THEN "" -- "Radiaciones ionizantes"
-                                                    WHEN catprueba_id = 6 THEN "" -- "Radiaciones no ionizantes"
-                                                    WHEN catprueba_id = 7 THEN "" -- "Presiones ambientales anormales"
-                                                    WHEN catprueba_id = 8 THEN "Ventilación y calidad del aire"
-                                                    WHEN catprueba_id = 9 THEN "Agua"
-                                                    WHEN catprueba_id = 10 THEN "Hielo"
-                                                    WHEN catprueba_id = 11 THEN "Alimentos" -- "Alimentos"
-                                                    WHEN catprueba_id = 12 THEN "" -- "Superficies"
-                                                    WHEN catprueba_id = 13 THEN "" -- "Riesgos ergonómicos"
-                                                    WHEN catprueba_id = 14 THEN "" -- "Factores psicosociales"
-                                                    WHEN catprueba_id = 15 THEN "Químicos"
-                                                    WHEN catprueba_id = 16 THEN "Infraestructura para servicios al personal"
-                                                    WHEN catprueba_id = 17 THEN "Mapa de riesgos" -- "Mapa de riesgos"
-                                                    WHEN catprueba_id = 22 THEN "BEI" -- "Beis"
-                                                    WHEN catprueba_id = 23 THEN "Mapa con matriz" -- "Beis"
-                                                    WHEN catprueba_id = 24 THEN "Mapa sin matriz" -- "Beis"
-                                                    WHEN catprueba_id = 25 THEN "Instalación mapa" -- "Beis"
+                                        TABLA.proyecto_id,
+                                        TABLA.agente_id,
+                                        TABLA.agente_nombre
+                                    FROM
+                                        (
+                                            SELECT
+                                                proyectoproveedores.proyecto_id,
+                                                proyectoproveedores.proveedor_id,
+                                                proyectoproveedores.proyectoproveedores_tipoadicional,
+                                                proyectoproveedores.catprueba_id AS agente_id,
+                                                proyectoproveedores.proyectoproveedores_agente,
+                                                (
+                                                    CASE
+                                                        WHEN catprueba_id = 1 THEN "Ruido"
+                                                        WHEN catprueba_id = 2 THEN "Vibración"
+                                                        WHEN catprueba_id = 3 THEN "Temperatura"
+                                                        WHEN catprueba_id = 4 THEN "Iluminación"
+                                                        WHEN catprueba_id = 5 THEN "" -- Radiaciones ionizantes
+                                                        WHEN catprueba_id = 6 THEN "" -- Radiaciones no ionizantes
+                                                        WHEN catprueba_id = 7 THEN "" -- Presiones ambientales anormales
+                                                        WHEN catprueba_id = 8 THEN "Ventilación y calidad del aire"
+                                                        WHEN catprueba_id = 9 THEN "Agua"
+                                                        WHEN catprueba_id = 10 THEN "Hielo"
+                                                        WHEN catprueba_id = 11 THEN "Alimentos"
+                                                        WHEN catprueba_id = 12 THEN "" -- Superficies
+                                                        WHEN catprueba_id = 13 THEN "" -- Riesgos ergonómicos
+                                                        WHEN catprueba_id = 14 THEN "" -- Factores psicosociales
+                                                        WHEN catprueba_id = 15 THEN "Químicos"
+                                                        WHEN catprueba_id = 16 THEN "Infraestructura para servicios al personal"
+                                                        WHEN catprueba_id = 17 THEN "Mapa de riesgos"
+                                                        WHEN catprueba_id = 22 THEN "BEI"
+                                                        WHEN catprueba_id = 23 THEN "Mapa con matriz"
+                                                        WHEN catprueba_id = 24 THEN "Mapa sin matriz"
+                                                        WHEN catprueba_id = 25 THEN "Instalación mapa"
+                                                        ELSE ""
+                                                    END
+                                                ) AS agente_nombre
+                                            FROM
+                                                proyectoproveedores
+                                            WHERE
+                                                proyectoproveedores.proyecto_id = ?
+                                                AND (
+                                                    proyectoproveedores.proyectoproveedores_tipoadicional < 2
+                                                    OR proyectoproveedores.catprueba_id = 23
+                                                )
+                                            ORDER BY
+                                                proyectoproveedores.proyectoproveedores_tipoadicional ASC,
+                                                proyectoproveedores.catprueba_id ASC
+                                        ) AS TABLA
+                                    WHERE
+                                        IFNULL(TABLA.agente_nombre, "") != ""
+                                    GROUP BY
+                                        TABLA.proyecto_id,
+                                        TABLA.agente_id,
+                                        TABLA.agente_nombre
+                                    ORDER BY
+                                        TABLA.agente_nombre ASC', [$proyecto_id]);
 
 
-                                                    ELSE ""
-                                                END
-                                            ) AS agente_nombre
-                                        FROM
-                                            proyectoproveedores
-                                        WHERE
-                                            proyectoproveedores.proyecto_id = ? 
-                                            AND proyectoproveedores.proyectoproveedores_tipoadicional < 2
-                                        ORDER BY
-                                            proyectoproveedores.proyectoproveedores_tipoadicional ASC,
-                                            proyectoproveedores.catprueba_id ASC
-                                    ) AS TABLA
-                                WHERE
-                                    IFNULL(TABLA.agente_nombre, "") != ""
-                                GROUP BY
-                                    TABLA.proyecto_id,
-                                    TABLA.agente_id,
-                                    TABLA.agente_nombre
-                                ORDER BY
-                                    TABLA.agente_nombre ASC', [$proyecto_id]);
+
+
+
+
+            // $sql = DB::select('SELECT
+            //                         TABLA.proyecto_id,
+            //                         TABLA.agente_id,
+            //                         TABLA.agente_nombre
+            //                     FROM
+            //                         (
+            //                             SELECT
+            //                                 proyectoproveedores.proyecto_id,
+            //                                 proyectoproveedores.proveedor_id,
+            //                                 proyectoproveedores.proyectoproveedores_tipoadicional,
+            //                                 proyectoproveedores.catprueba_id AS agente_id,
+            //                                 proyectoproveedores.proyectoproveedores_agente,
+            //                                 (
+            //                                     CASE
+            //                                         WHEN catprueba_id = 1 THEN "Ruido"
+            //                                         WHEN catprueba_id = 2 THEN "Vibración"
+            //                                         WHEN catprueba_id = 3 THEN "Temperatura"
+            //                                         WHEN catprueba_id = 4 THEN "Iluminación"
+            //                                         WHEN catprueba_id = 5 THEN "" -- "Radiaciones ionizantes"
+            //                                         WHEN catprueba_id = 6 THEN "" -- "Radiaciones no ionizantes"
+            //                                         WHEN catprueba_id = 7 THEN "" -- "Presiones ambientales anormales"
+            //                                         WHEN catprueba_id = 8 THEN "Ventilación y calidad del aire"
+            //                                         WHEN catprueba_id = 9 THEN "Agua"
+            //                                         WHEN catprueba_id = 10 THEN "Hielo"
+            //                                         WHEN catprueba_id = 11 THEN "Alimentos" -- "Alimentos"
+            //                                         WHEN catprueba_id = 12 THEN "" -- "Superficies"
+            //                                         WHEN catprueba_id = 13 THEN "" -- "Riesgos ergonómicos"
+            //                                         WHEN catprueba_id = 14 THEN "" -- "Factores psicosociales"
+            //                                         WHEN catprueba_id = 15 THEN "Químicos"
+            //                                         WHEN catprueba_id = 16 THEN "Infraestructura para servicios al personal"
+            //                                         WHEN catprueba_id = 17 THEN "Mapa de riesgos" -- "Mapa de riesgos"
+            //                                         WHEN catprueba_id = 22 THEN "BEI" -- "Beis"
+            //                                         WHEN catprueba_id = 23 THEN "Mapa con matriz" -- "Beis"
+            //                                         WHEN catprueba_id = 24 THEN "Mapa sin matriz" -- "Beis"
+            //                                         WHEN catprueba_id = 25 THEN "Instalación mapa" -- "Beis"
+
+
+            //                                         ELSE ""
+            //                                     END
+            //                                 ) AS agente_nombre
+            //                             FROM
+            //                                 proyectoproveedores
+            //                             WHERE
+            //                                 proyectoproveedores.proyecto_id = ? 
+            //                                 AND proyectoproveedores.proyectoproveedores_tipoadicional < 2
+            //                             ORDER BY
+            //                                 proyectoproveedores.proyectoproveedores_tipoadicional ASC,
+            //                                 proyectoproveedores.catprueba_id ASC
+            //                         ) AS TABLA
+            //                     WHERE
+            //                         IFNULL(TABLA.agente_nombre, "") != ""
+            //                     GROUP BY
+            //                         TABLA.proyecto_id,
+            //                         TABLA.agente_id,
+            //                         TABLA.agente_nombre
+            //                     ORDER BY
+            //                         TABLA.agente_nombre ASC', [$proyecto_id]);
+
 
             $opciones_menu = '<option value="">Seleccione</option>';
             // $opciones_menu .= '<option value="0">POE PROYECTO</option>';  -> EL POE ESTARA APARTE EN EL SELECT SOLO ESTARAN LOS REPORTES DE LOS AGENTES
