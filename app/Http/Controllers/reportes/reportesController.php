@@ -982,79 +982,76 @@ class reportesController extends Controller
     // }
 
 
-   public function reportematrizlabtablageneral($proyecto_id)
-{
-    try {
-        $proyecto = proyectoModel::with('recsensorial')->findOrFail($proyecto_id);
-        $recsensorial = $proyecto->recsensorial;
+    public function reportematrizlabtablageneral($proyecto_id)
+    {
+        try {
+            $proyecto = proyectoModel::with('recsensorial')->findOrFail($proyecto_id);
+            $recsensorial = $proyecto->recsensorial;
 
-        if (!$recsensorial) {
-            throw new \Exception("No se encontró información de reconocimiento sensorial para este proyecto.");
-        }
+            if (!$recsensorial) {
+                throw new \Exception("No se encontró información de reconocimiento sensorial para este proyecto.");
+            }
 
-        $areas = recsensorialareaModel::with([
-            'recsensorialareapruebas.catprueba',
-            'recsensorialareacategorias.categorias'
-        ])
-            ->where('recsensorial_id', $recsensorial->id)
-            ->orderBy('id', 'asc')
-            ->get();
+            $areas = recsensorialareaModel::with([
+                'recsensorialareapruebas.catprueba',
+                'recsensorialareacategorias.categorias'
+            ])
+                ->where('recsensorial_id', $recsensorial->id)
+                ->orderBy('id', 'asc')
+                ->get();
 
-        $filas = [];
-        $contadorArea = 1;
+            $filas = [];
+            $contadorArea = 1;
+            $idsValidos = [1, 2, 3, 4, 8, 15, 16, 22];
 
-        $idsValidos = [1, 2, 3, 4, 8, 15, 16, 22];
+            foreach ($areas as $area) {
+                $agentes = $area->recsensorialareapruebas->map(function ($prueba) {
+                    $catprueba = $prueba->catprueba;
+                    return [
+                        'id' => $catprueba->id ?? '',
+                        'nombre' => $catprueba->catPrueba_Nombre ?? '',
+                    ];
+                })->toArray();
 
-        foreach ($areas as $area) {
-            $agentes = $area->recsensorialareapruebas->map(function ($prueba) {
-                $catprueba = $prueba->catprueba;
-                return [
-                    'id' => $catprueba->id ?? '',
-                    'nombre' => $catprueba->catPrueba_Nombre ?? '',
-                ];
-            })->toArray();
+                $categorias = $area->recsensorialareacategorias->map(function ($cat) {
+                    return [
+                        'nombre' => $cat->categorias->recsensorialcategoria_nombrecategoria ?? '',
+                        'total' => $cat->recsensorialareacategorias_total ?? '',
+                        'tiempoexpo' => $cat->recsensorialareacategorias_tiempoexpo ?? '',
+                    ];
+                })->toArray();
 
-            $categorias = $area->recsensorialareacategorias->map(function ($cat) {
-                return [
-                    'nombre' => $cat->categorias->recsensorialcategoria_nombrecategoria ?? '',
-                    'total' => $cat->recsensorialareacategorias_total ?? '',
-                    'tiempoexpo' => $cat->recsensorialareacategorias_tiempoexpo ?? '',
-                ];
-            })->toArray();
+                $maxFilas = max(count($agentes), count($categorias), 1);
+                $agentes = array_pad($agentes, $maxFilas, ['id' => '', 'nombre' => '']);
+                $categorias = array_pad($categorias, $maxFilas, ['nombre' => '', 'total' => '', 'tiempoexpo' => '']);
 
-            $maxFilas = max(count($agentes), count($categorias), 1);
-            $agentes = array_pad($agentes, $maxFilas, ['id' => '', 'nombre' => '']);
-            $categorias = array_pad($categorias, $maxFilas, ['nombre' => '', 'total' => '', 'tiempoexpo' => '']);
+                for ($i = 0; $i < $maxFilas; $i++) {
+                    $categoria = $categorias[$i];
+                    $mostrarSelect = !empty($agentes[$i]['nombre']);
+                    $fila_id = $contadorArea . '_' . $i;
 
-            for ($i = 0; $i < $maxFilas; $i++) {
-                $categoria = $categorias[$i];
-                $mostrarSelect = !empty($agentes[$i]['nombre']);
-                $fila_id = $contadorArea . '_' . $i;
-
-                $agenteTexto = '';
-                if (!empty($agentes[$i]['nombre'])) {
-                    $agenteTexto = $agentes[$i]['nombre'];
-                    if (!empty($agentes[$i]['id'])) {
-                        $agenteTexto .= ' (ID: ' . $agentes[$i]['id'] . ')';
+                    $agenteTexto = '';
+                    if (!empty($agentes[$i]['nombre'])) {
+                        $agenteTexto = $agentes[$i]['nombre'];
+                        if (!empty($agentes[$i]['id'])) {
+                            $agenteTexto .= ' (ID: ' . $agentes[$i]['id'] . ')';
+                        }
                     }
-                }
 
-                $idAgente = $agentes[$i]['id'];
-                $valorLMPNMP = '';
-                $cumplimiento = '';
-                $medidas = 'N/A';
+                    $idAgente = $agentes[$i]['id'];
+                    $valorLMPNMP = '';
+                    $cumplimiento = '';
+                    $medidas = 'N/A';
+
+                    $areaId = $area->id;
+
+                    // Obtener los IDs de 'reportearea' que están vinculados a esta área
+                    $reporteAreaIds = DB::table('reportearea')
+                        ->where('recsensorialarea_id', $areaId)
+                        ->pluck('id');
 
                     // Lógica para agente ID 4: iluminación
                     if ($idAgente == 4) {
-                        // Buscar el ID del área actual
-                        $areaId = $area->id;
-
-                        // Obtener los IDs de 'reportearea' que están vinculados a esta área
-                        $reporteAreaIds = DB::table('reportearea')
-                            ->where('recsensorialarea_id', $areaId)
-                            ->pluck('id');
-
-                        // Obtener puntos de iluminación que pertenecen a esas áreas
                         $puntosIluminacion = DB::table('reporteiluminacionpuntos')
                             ->whereIn('reporteiluminacionpuntos_area_id', $reporteAreaIds)
                             ->where('proyecto_id', $proyecto_id);
@@ -1064,12 +1061,12 @@ class reportesController extends Controller
 
                             $totalLuxNorma = $puntosIluminacion
                                 ->selectRaw('
-                SUM(
-                    CASE WHEN reporteiluminacionpuntos_luxmed1 <= reporteiluminacionpuntos_lux THEN 1 ELSE 0 END +
-                    CASE WHEN reporteiluminacionpuntos_luxmed2 <= reporteiluminacionpuntos_lux THEN 1 ELSE 0 END +
-                    CASE WHEN reporteiluminacionpuntos_luxmed3 <= reporteiluminacionpuntos_lux THEN 1 ELSE 0 END
-                ) as total_cumplen,
-                COUNT(*) * 3 as total_medidas')
+                                SUM(
+                                    CASE WHEN reporteiluminacionpuntos_luxmed1 <= reporteiluminacionpuntos_lux THEN 1 ELSE 0 END +
+                                    CASE WHEN reporteiluminacionpuntos_luxmed2 <= reporteiluminacionpuntos_lux THEN 1 ELSE 0 END +
+                                    CASE WHEN reporteiluminacionpuntos_luxmed3 <= reporteiluminacionpuntos_lux THEN 1 ELSE 0 END
+                                ) as total_cumplen,
+                                COUNT(*) * 3 as total_medidas')
                                 ->first();
 
                             if ($totalLuxNorma && $totalLuxNorma->total_medidas > 0) {
@@ -1079,80 +1076,95 @@ class reportesController extends Controller
                             }
                         } else {
                             $valorLMPNMP = 'No tiene registro';
-                            $cumplimiento = '';
                         }
+                    }
 
-                    } elseif ($idAgente !== '' && !in_array($idAgente, $idsValidos)) {
-                    $valorLMPNMP = 'N/A';
-                }
+                    // Lógica para agente ID 1: ruido
+                    elseif ($idAgente == 1) {
+                        $puntosRuido = DB::table('reporteruidopuntoner')
+                            ->whereIn('reporteruidoarea_id', $reporteAreaIds)
+                            ->where('proyecto_id', $proyecto_id);
 
-                    // Recomendaciones para agentes válidos
-                    $medidas = 'N/A';
+                        if ($puntosRuido->exists()) {
+                            $registroMax = $puntosRuido
+                                ->orderByDesc('reporteruidopuntoner_ner')
+                                ->first();
 
-                            if (in_array($idAgente, $idsValidos)) {
-                                $recomendaciones = DB::table('reporterecomendaciones')
-                                    ->where('proyecto_id', $proyecto_id)
-                                    ->where('agente_id', $idAgente)
-                                    ->get();
+                            if ($registroMax) {
+                                $ner = $registroMax->reporteruidopuntoner_ner;
+                                $lmpe = $registroMax->reporteruidopuntoner_lmpe;
+                                $valorLMPNMP = number_format($ner);
+                                $cumplimiento = $ner <= $lmpe ? 'DENTRO DE NORMA' : 'FUERA DE NORMA';
+                            }
+                        } else {
+                            $valorLMPNMP = 'No tiene registro';
+                        }
+                    }
 
-                                if ($recomendaciones->count() > 0) {
-                                    $htmlRecomendaciones = '';
-                                    foreach ($recomendaciones as $value) {
-                                        $descripcionTexto = $value->reporterecomendaciones_descripcion ?? '';
+                    // Recomendaciones
+                    if (in_array($idAgente, $idsValidos)) {
+                        $recomendaciones = DB::table('reporterecomendaciones')
+                            ->where('proyecto_id', $proyecto_id)
+                            ->where('agente_id', $idAgente)
+                            ->get();
 
-                                        $checkbox = '<div class="switch">
-                                    <label>
-                                        <input type="checkbox" class="recomendacion_checkbox" name="recomendacion_checkbox[]" value="' . $value->id . '" onclick="activa_recomendacion(this);">
-                                        <span class="lever switch-col-light-blue"></span>
-                                    </label>
-                                </div>';
+                        if ($recomendaciones->count() > 0) {
+                            $htmlRecomendaciones = '';
+                            foreach ($recomendaciones as $value) {
+                                $descripcionTexto = $value->reporterecomendaciones_descripcion ?? '';
 
-                                        $textarea = '
-                        <textarea class="form-control" rows="5" id="recomendacion_descripcion_' . $value->id . '" name="recomendacion_descripcion_' . $value->id . '">' . $descripcionTexto . '</textarea>';
+                                $checkbox = '<div class="switch">
+                                <label>
+                                    <input type="checkbox" class="recomendacion_checkbox" name="recomendacion_checkbox[]" value="' . $value->id . '" onclick="activa_recomendacion(this);">
+                                    <span class="lever switch-col-light-blue"></span>
+                                </label>
+                            </div>';
 
-                                        $htmlRecomendaciones .= '<div class="recomendacion-bloque mb-2">' . $checkbox . $textarea . '</div>';
-                                    }
+                                $textarea = '<textarea class="form-control" rows="5" id="recomendacion_descripcion_' . $value->id . '" name="recomendacion_descripcion_' . $value->id . '">' . $descripcionTexto . '</textarea>';
 
-                                    $medidas = $htmlRecomendaciones;
-                                }
+                                $htmlRecomendaciones .= '<div class="recomendacion-bloque mb-2">' . $checkbox . $textarea . '</div>';
                             }
 
+                            $medidas = $htmlRecomendaciones;
+                        }
+                    }
 
+                    // Construcción de fila
                     $fila = [
-                    'numero_registro' => $fila_id,
-                    'numero_visible' => $contadorArea,
+                        'numero_registro' => $fila_id,
+                        'numero_visible' => $contadorArea,
                         'recsensorialarea_nombre' => $i === 0 ? $area->recsensorialarea_nombre . ' (ID: ' . $area->id . ')' : '',
                         'agente' => $agenteTexto,
-                    'categoria' => $categoria['nombre'],
-                    'recsensorialarea_numerotrabajadores' => $categoria['total'],
-                    'recsensorialarea_tiempoexposicion' => $categoria['tiempoexpo'],
-                    'recsensorialarea_indicepeligro' => $mostrarSelect ? '' : '-',
-                    'recsensorialarea_indiceexposicion' => $mostrarSelect ? '' : '-',
-                    'recsensorialarea_riesgo' => '',
-                    'recsensorialarea_lmpnmp' => $valorLMPNMP,
-                    'recsensorialarea_cumplimiento' => $i === 0 ? ($cumplimiento ?: $area->recsensorialarea_cumplimiento) : '',
-                    'recsensorialarea_medidas' => $medidas,
-                    'rowspan' => $i === 0 ? $maxFilas : 0,
-                    'mostrar_select' => $mostrarSelect,
-                ];
+                        'categoria' => $categoria['nombre'],
+                        'recsensorialarea_numerotrabajadores' => $categoria['total'],
+                        'recsensorialarea_tiempoexposicion' => $categoria['tiempoexpo'],
+                        'recsensorialarea_indicepeligro' => $mostrarSelect ? '' : '-',
+                        'recsensorialarea_indiceexposicion' => $mostrarSelect ? '' : '-',
+                        'recsensorialarea_riesgo' => '',
+                        'recsensorialarea_lmpnmp' => $valorLMPNMP,
+                        'recsensorialarea_cumplimiento' => $i === 0 ? ($cumplimiento ?: $area->recsensorialarea_cumplimiento) : '',
+                        'recsensorialarea_medidas' => $medidas,
+                        'rowspan' => $i === 0 ? $maxFilas : 0,
+                        'mostrar_select' => $mostrarSelect,
+                    ];
 
-                $filas[] = $fila;
+                    $filas[] = $fila;
+                }
+
+                $contadorArea++;
             }
 
-            $contadorArea++;
+            return response()->json([
+                'data' => $filas,
+                'msj' => 'Datos cargados correctamente'
+            ]);
+        } catch (\Exception $e) {
+            return response()->json([
+                'data' => [],
+                'msj' => 'Error: ' . $e->getMessage()
+            ]);
         }
-
-        return response()->json([
-            'data' => $filas,
-            'msj' => 'Datos cargados correctamente'
-        ]);
-    } catch (\Exception $e) {
-        return response()->json([
-            'data' => [],
-            'msj' => 'Error: ' . $e->getMessage()
-        ]);
     }
-}
 
 
     /**
