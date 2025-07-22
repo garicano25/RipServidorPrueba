@@ -48,33 +48,49 @@ function tabla_matrizlab(proyecto_id) {
 				{ data: "recsensorialarea_tiempoexposicion", defaultContent: "-", orderable: false },
 
 				{
-					data: null,
-					orderable: false,
-					render: function (data, type, row) {
-						if (!row.mostrar_select) return '';
-						let opciones = `<option value="">--</option>`;
-						for (let i = 1; i <= 5; i++) {
-							const selected = (i == row.recsensorialarea_indicepeligro) ? 'selected' : '';
-							opciones += `<option value="${i}" ${selected}>${i}</option>`;
-						}
-						return `<select class="ip-select" data-id="${row.numero_registro}">${opciones}</select>`;
-					}
-				},
+				data: null,
+				orderable: false,
+				render: function (data, type, row) {
+					if (!row.mostrar_select) return '';
 
-				{
-					data: null,
-					orderable: false,
-					render: function (data, type, row) {
-						if (!row.mostrar_select) return '';
-						const letras = ['A', 'B', 'C', 'D', 'E'];
-						let opciones = `<option value="">--</option>`;
-						letras.forEach(letra => {
-							const selected = (letra == row.recsensorialarea_indiceexposicion) ? 'selected' : '';
-							opciones += `<option value="${letra}" ${selected}>${letra}</option>`;
-						});
-						return `<select class="ie-select" data-id="${row.numero_registro}">${opciones}</select>`;
+					let opciones = `<option value="">--</option>`;
+					for (let i = 1; i <= 5; i++) {
+						const selected = (i == row.recsensorialarea_indicepeligro) ? 'selected' : '';
+						opciones += `<option value="${i}" ${selected}>${i}</option>`;
 					}
-				},
+
+					return `
+						<select class="form-select form-select-sm ip-select" 
+								data-id="${row.numero_registro}" 
+								style="min-width: 100px;">
+							${opciones}
+						</select>
+					`;
+				}
+			},
+			{
+				data: null,
+				orderable: false,
+				render: function (data, type, row) {
+					if (!row.mostrar_select) return '';
+
+					const letras = ['A', 'B', 'C', 'D', 'E'];
+					let opciones = `<option value="">--</option>`;
+					letras.forEach(letra => {
+						const selected = (letra == row.recsensorialarea_indiceexposicion) ? 'selected' : '';
+						opciones += `<option value="${letra}" ${selected}>${letra}</option>`;
+					});
+
+					return `
+						<select class="form-select form-select-sm ie-select" 
+								data-id="${row.numero_registro}" 
+								style="min-width: 100px;">
+							${opciones}
+						</select>
+					`;
+				}
+			},
+
 
 				{
                         data: null,

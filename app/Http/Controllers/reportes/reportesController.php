@@ -651,23 +651,23 @@ class reportesController extends Controller
             // $opciones_menu .= '<option value="0">POE PROYECTO</option>';  -> EL POE ESTARA APARTE EN EL SELECT SOLO ESTARAN LOS REPORTES DE LOS AGENTES
 
             // DESCOMENTAR DESPUES DE SUBIR AL SERVIDOR
-            foreach ($sql as $key => $value){
-                $opciones_menu .= '<option value="'.$value->agente_id.'">'.$value->agente_nombre.'</option>';
-            }
+            // foreach ($sql as $key => $value){
+            //     $opciones_menu .= '<option value="'.$value->agente_id.'">'.$value->agente_nombre.'</option>';
+            // }
 
 
             // // QUITAR DESPUES DE SUBIR AL SERVIDOR
-            // $opciones_menu .= '<option value="1">Ruido</option>';
-            // $opciones_menu .= '<option value="2">Vibración</option>';
-            // $opciones_menu .= '<option value="3">Temperatura</option>';
-            // $opciones_menu .= '<option value="4">Iluminación</option>';
-            // $opciones_menu .= '<option value="8">Ventilación y calidad del aire</option>';
-            // $opciones_menu .= '<option value="9">Agua</option>';
-            // $opciones_menu .= '<option value="10">Hielo</option>';
-            // $opciones_menu .= '<option value="15">Químicos</option>';
-            // $opciones_menu .= '<option value="16">Infraestructura para servicios al personal</option>';
-            // $opciones_menu .= '<option value="22">BEI</option>';
-            // $opciones_menu .= '<option value="23">Mapa con matriz</option>';
+            $opciones_menu .= '<option value="1">Ruido</option>';
+            $opciones_menu .= '<option value="2">Vibración</option>';
+            $opciones_menu .= '<option value="3">Temperatura</option>';
+            $opciones_menu .= '<option value="4">Iluminación</option>';
+            $opciones_menu .= '<option value="8">Ventilación y calidad del aire</option>';
+            $opciones_menu .= '<option value="9">Agua</option>';
+            $opciones_menu .= '<option value="10">Hielo</option>';
+            $opciones_menu .= '<option value="15">Químicos</option>';
+            $opciones_menu .= '<option value="16">Infraestructura para servicios al personal</option>';
+            $opciones_menu .= '<option value="22">BEI</option>';
+            $opciones_menu .= '<option value="23">Mapa con matriz</option>';
 
 
 
@@ -1044,36 +1044,45 @@ class reportesController extends Controller
                 $cumplimiento = '';
                 $medidas = 'N/A';
 
-                // Lógica para agente ID 4: iluminación
-                if ($idAgente == 4) {
-                    $existenRegistros = DB::table('reporteiluminacionpuntos')
-                        ->where('proyecto_id', $proyecto_id)
-                        ->exists();
+                    // Lógica para agente ID 4: iluminación
+                    if ($idAgente == 4) {
+                        // Buscar el ID del área actual
+                        $areaId = $area->id;
 
-                    if ($existenRegistros) {
-                        $valorMaxLux = DB::table('reporteiluminacionpuntos')
-                            ->where('proyecto_id', $proyecto_id)
-                            ->max('reporteiluminacionpuntos_lux');
+                        // Obtener los IDs de 'reportearea' que están vinculados a esta área
+                        $reporteAreaIds = DB::table('reportearea')
+                            ->where('recsensorialarea_id', $areaId)
+                            ->pluck('id');
 
-                        $totalLuxNorma = DB::table('reporteiluminacionpuntos')
-                            ->selectRaw('
-                                SUM(
-                                    CASE WHEN reporteiluminacionpuntos_luxmed1 <= reporteiluminacionpuntos_lux THEN 1 ELSE 0 END +
-                                    CASE WHEN reporteiluminacionpuntos_luxmed2 <= reporteiluminacionpuntos_lux THEN 1 ELSE 0 END +
-                                    CASE WHEN reporteiluminacionpuntos_luxmed3 <= reporteiluminacionpuntos_lux THEN 1 ELSE 0 END
-                                ) as total_cumplen,
-                                COUNT(*) * 3 as total_medidas
-                            ')
-                            ->where('proyecto_id', $proyecto_id)
-                            ->first();
+                        // Obtener puntos de iluminación que pertenecen a esas áreas
+                        $puntosIluminacion = DB::table('reporteiluminacionpuntos')
+                            ->whereIn('reporteiluminacionpuntos_area_id', $reporteAreaIds)
+                            ->where('proyecto_id', $proyecto_id);
 
-                        if ($totalLuxNorma && $totalLuxNorma->total_medidas > 0) {
-                            $dentroNorma = ($totalLuxNorma->total_cumplen == $totalLuxNorma->total_medidas);
-                            $valorLMPNMP = number_format($valorMaxLux, 2) . ' /200';
-                            $cumplimiento = $dentroNorma ? 'DENTRO DE NORMA' : 'FUERA DE NORMA';
+                        if ($puntosIluminacion->exists()) {
+                            $valorMaxLux = $puntosIluminacion->max('reporteiluminacionpuntos_lux');
+
+                            $totalLuxNorma = $puntosIluminacion
+                                ->selectRaw('
+                SUM(
+                    CASE WHEN reporteiluminacionpuntos_luxmed1 <= reporteiluminacionpuntos_lux THEN 1 ELSE 0 END +
+                    CASE WHEN reporteiluminacionpuntos_luxmed2 <= reporteiluminacionpuntos_lux THEN 1 ELSE 0 END +
+                    CASE WHEN reporteiluminacionpuntos_luxmed3 <= reporteiluminacionpuntos_lux THEN 1 ELSE 0 END
+                ) as total_cumplen,
+                COUNT(*) * 3 as total_medidas')
+                                ->first();
+
+                            if ($totalLuxNorma && $totalLuxNorma->total_medidas > 0) {
+                                $dentroNorma = ($totalLuxNorma->total_cumplen == $totalLuxNorma->total_medidas);
+                                $valorLMPNMP = number_format($valorMaxLux) . ' /200';
+                                $cumplimiento = $dentroNorma ? 'DENTRO DE NORMA' : 'FUERA DE NORMA';
+                            }
+                        } else {
+                            $valorLMPNMP = 'No tiene registro';
+                            $cumplimiento = '';
                         }
-                    }
-                } elseif ($idAgente !== '' && !in_array($idAgente, $idsValidos)) {
+
+                    } elseif ($idAgente !== '' && !in_array($idAgente, $idsValidos)) {
                     $valorLMPNMP = 'N/A';
                 }
 
@@ -1112,8 +1121,8 @@ class reportesController extends Controller
                     $fila = [
                     'numero_registro' => $fila_id,
                     'numero_visible' => $contadorArea,
-                    'recsensorialarea_nombre' => $i === 0 ? $area->recsensorialarea_nombre : '',
-                    'agente' => $agenteTexto,
+                        'recsensorialarea_nombre' => $i === 0 ? $area->recsensorialarea_nombre . ' (ID: ' . $area->id . ')' : '',
+                        'agente' => $agenteTexto,
                     'categoria' => $categoria['nombre'],
                     'recsensorialarea_numerotrabajadores' => $categoria['total'],
                     'recsensorialarea_tiempoexposicion' => $categoria['tiempoexpo'],
