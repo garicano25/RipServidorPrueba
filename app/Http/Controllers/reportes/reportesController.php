@@ -795,107 +795,100 @@ class reportesController extends Controller
                     $idAgente = $agentes[$i]['id'];
                     $agenteTexto = $agentes[$i]['nombre'] . ($idAgente ? ' (ID: ' . $idAgente . ')' : '');
 
-                    $valorLMPNMP = '';
+                    $valorLMPNMP = 'N/A';
                     $cumplimiento = '';
                     $medidas = 'N/A';
 
-                    $reporteAreaIds = DB::table('reportearea')
-                        ->where('recsensorialarea_id', $area->id)
-                        ->pluck('id');
+                    if (!empty($idAgente)) {
+                        $reporteAreaIds = DB::table('reportearea')
+                            ->where('recsensorialarea_id', $area->id)
+                            ->pluck('id');
 
-                    // ===== Agente 4: Iluminación =====
-                    if ($idAgente == 4) {
-                        $valorMaxLuxRaw = DB::table('reporteiluminacionpuntos')
-                            ->whereIn('reporteiluminacionpuntos_area_id', $reporteAreaIds)
-                            ->where('proyecto_id', $proyecto_id)
-                            ->max('reporteiluminacionpuntos_lux');
+                        if ($idAgente == 4) {
+                            $puntosIluminacion = DB::table('reporteiluminacionpuntos')
+                                ->whereIn('reporteiluminacionpuntos_area_id', $reporteAreaIds)
+                                ->where('proyecto_id', $proyecto_id);
 
-                        if (!is_null($valorMaxLuxRaw)) {
-                            $valorMaxLux = floatval($valorMaxLuxRaw);
-                            $cumplimiento = $valorMaxLux >= 200 ? 'DENTRO DE NORMA' : 'FUERA DE NORMA';
-                            $valorLMPNMP = number_format($valorMaxLux) . ' /200';
-                        } else {
-                            $valorLMPNMP = 'No tiene registro';
-                            $cumplimiento = 'No tiene registro';
-                        }
-                    }
+                            if ($puntosIluminacion->exists()) {
+                                $valorMaxLuxRaw = $puntosIluminacion->max('reporteiluminacionpuntos_lux');
+                                $valorLMPNMP = number_format($valorMaxLuxRaw) . ' /200';
+                                $cumplimiento = ($valorMaxLuxRaw >= 200) ? 'DENTRO DE NORMA' : 'FUERA DE NORMA';
+                            } else {
+                                $valorLMPNMP = 'No tiene registro';
+                            }
+                        } elseif ($idAgente == 1) {
+                            $puntosRuido = DB::table('reporteruidopuntoner')
+                                ->whereIn('reporteruidoarea_id', $reporteAreaIds)
+                                ->where('proyecto_id', $proyecto_id);
 
-                    // ===== Agente 1: Ruido =====
-                    elseif ($idAgente == 1) {
-                        $registroMax = DB::table('reporteruidopuntoner')
-                            ->whereIn('reporteruidoarea_id', $reporteAreaIds)
-                            ->where('proyecto_id', $proyecto_id)
-                            ->orderByDesc('reporteruidopuntoner_ner')
-                            ->first();
+                            if ($puntosRuido->exists()) {
+                                $registroMax = $puntosRuido->orderByDesc('reporteruidopuntoner_ner')->first();
+                                if ($registroMax) {
+                                    $ner = $registroMax->reporteruidopuntoner_ner;
+                                    $lmpe = $registroMax->reporteruidopuntoner_lmpe;
+                                    $valorLMPNMP = number_format($ner) . ' /90';
+                                    $cumplimiento = ($ner <= $lmpe) ? 'DENTRO DE NORMA' : 'FUERA DE NORMA';
+                                }
+                            } else {
+                                $valorLMPNMP = 'No tiene registro';
+                            }
+                        } elseif ($idAgente == 3) {
+                            $registrosTemp = DB::table('reportetemperaturaevaluacion')
+                                ->whereIn('reportearea_id', $reporteAreaIds)
+                                ->where('proyecto_id', $proyecto_id)
+                                ->get();
 
-                        if ($registroMax) {
-                            $ner = floatval($registroMax->reporteruidopuntoner_ner);
-                            $lmpe = floatval($registroMax->reporteruidopuntoner_lmpe);
-                            $valorLMPNMP = number_format($ner) . ' /90';
-                            $cumplimiento = $ner <= $lmpe ? 'DENTRO DE NORMA' : 'FUERA DE NORMA';
-                        } else {
-                            $valorLMPNMP = 'No tiene registro';
-                            $cumplimiento = 'No tiene registro';
-                        }
-                    }
+                            if ($registrosTemp->count() > 0) {
+                                $maxValor = null;
+                                $lmpeValor = null;
 
-                    // ===== Agente 3: Temperatura =====
-                    elseif ($idAgente == 3) {
-                        $registrosTemp = DB::table('reportetemperaturaevaluacion')
-                            ->whereIn('reportearea_id', $reporteAreaIds)
-                            ->where('proyecto_id', $proyecto_id)
-                            ->get();
+                                foreach ($registrosTemp as $registro) {
+                                    $valores = [
+                                        (float) $registro->reportetemperaturaevaluacion_I,
+                                        (float) $registro->reportetemperaturaevaluacion_II,
+                                        (float) $registro->reportetemperaturaevaluacion_III,
+                                    ];
+                                    $valorMaxLocal = max($valores);
+                                    if (is_null($maxValor) || $valorMaxLocal > $maxValor) {
+                                        $maxValor = $valorMaxLocal;
+                                        $lmpeValor = (float) $registro->reportetemperaturaevaluacion_LMPE;
+                                    }
+                                }
 
-                        $maxValor = null;
-                        $lmpeValor = null;
-
-                        foreach ($registrosTemp as $registro) {
-                            $valores = [
-                                (float) $registro->reportetemperaturaevaluacion_I,
-                                (float) $registro->reportetemperaturaevaluacion_II,
-                                (float) $registro->reportetemperaturaevaluacion_III,
-                            ];
-                            $valorMaxLocal = max($valores);
-
-                            if (is_null($maxValor) || $valorMaxLocal > $maxValor) {
-                                $maxValor = $valorMaxLocal;
-                                $lmpeValor = (float) $registro->reportetemperaturaevaluacion_LMPE;
+                                if (!is_null($maxValor) && !is_null($lmpeValor)) {
+                                    $valorLMPNMP = number_format($maxValor, 1) . ' /' . number_format($lmpeValor, 1);
+                                    $cumplimiento = ($maxValor <= $lmpeValor) ? 'DENTRO DE NORMA' : 'FUERA DE NORMA';
+                                }
+                            } else {
+                                $valorLMPNMP = 'No tiene registro';
                             }
                         }
 
-                        if (!is_null($maxValor) && !is_null($lmpeValor)) {
-                            $valorLMPNMP = number_format($maxValor) . ' /' . number_format($lmpeValor, 1);
-                            $cumplimiento = ($maxValor <= $lmpeValor) ? 'DENTRO DE NORMA' : 'FUERA DE NORMA';
-                        } else {
-                            $valorLMPNMP = 'No tiene registro';
-                            $cumplimiento = 'No tiene registro';
-                        }
-                    }
+                        // Recomendaciones
+                        if (in_array($idAgente, $idsValidos)) {
+                            $recomendaciones = DB::table('reporterecomendaciones')
+                                        ->where('proyecto_id', $proyecto_id)
+                                        ->where('agente_id', $idAgente)
+                                        ->get();
 
-                    // ===== Otros Agentes =====
-                    elseif ($idAgente !== '' && !in_array($idAgente, $idsValidos)) {
-                        $valorLMPNMP = 'N/A';
-                        $cumplimiento = 'N/A';
-                    }
-
-                    // ===== Recomendaciones =====
-                    if (in_array($idAgente, $idsValidos)) {
-                        $recomendaciones = DB::table('reporterecomendaciones')
-                            ->where('proyecto_id', $proyecto_id)
-                            ->where('agente_id', $idAgente)
-                            ->get();
-
-                        if ($recomendaciones->count() > 0) {
-                            $htmlRecomendaciones = '';
-                            foreach ($recomendaciones as $value) {
-                                $descripcionTexto = $value->reporterecomendaciones_descripcion ?? '';
-                                $checkbox = '<div class="switch"><label><input type="checkbox" class="recomendacion_checkbox" name="recomendacion_checkbox[]" value="' . $value->id . '" onclick="activa_recomendacion(this);"><span class="lever switch-col-light-blue"></span></label></div>';
-                                $textarea = '<textarea class="form-control" rows="5" id="recomendacion_descripcion_' . $value->id . '" name="recomendacion_descripcion_' . $value->id . '">' . $descripcionTexto . '</textarea>';
-                                $htmlRecomendaciones .= '<div class="recomendacion-bloque mb-2">' . $checkbox . $textarea . '</div>';
+                                    if ($recomendaciones->count() > 0) {
+                                        $htmlRecomendaciones = '';
+                                        foreach ($recomendaciones as $value) {
+                                            $descripcionTexto = $value->reporterecomendaciones_descripcion ?? '';
+                                            $checkbox = '<div class="switch">
+                            <label>
+                                <input type="checkbox" class="recomendacion_checkbox" name="recomendacion_checkbox[]" value="' . $value->id . '" onclick="activa_recomendacion(this);">
+                                <span class="lever switch-col-light-blue"></span>
+                            </label>
+                        </div>';
+                                            $textarea = '<textarea class="form-control" rows="5" id="recomendacion_descripcion_' . $value->id . '" name="recomendacion_descripcion_' . $value->id . '">' . $descripcionTexto . '</textarea>';
+                                            $htmlRecomendaciones .= '<div class="recomendacion-bloque mb-2">' . $checkbox . $textarea . '</div>';
+                                        }
+                                        $medidas = $htmlRecomendaciones;
+                                    }
+                                }
                             }
-                            $medidas = $htmlRecomendaciones;
-                        }
-                    }
+
 
                     $filas[] = [
                         'numero_registro' => $fila_id,
