@@ -1029,25 +1029,19 @@ class reportesController extends Controller
                     $categoria = $categorias[$i];
                     $mostrarSelect = !empty($agentes[$i]['nombre']);
                     $fila_id = $contadorArea . '_' . $i;
-
-                    $agenteTexto = '';
-                    if (!empty($agentes[$i]['nombre'])) {
-                        $agenteTexto = $agentes[$i]['nombre'];
-                        if (!empty($agentes[$i]['id'])) {
-                            $agenteTexto .= ' (ID: ' . $agentes[$i]['id'] . ')';
-                        }
-                    }
-
                     $idAgente = $agentes[$i]['id'];
+                    $agenteTexto = $agentes[$i]['nombre'] . ($idAgente ? ' (ID: ' . $idAgente . ')' : '');
+
                     $valorLMPNMP = '';
                     $cumplimiento = '';
                     $medidas = 'N/A';
 
-                    $areaId = $area->id;
+                    // IDs de reportearea relacionados con el área actual
                     $reporteAreaIds = DB::table('reportearea')
-                        ->where('recsensorialarea_id', $areaId)
+                        ->where('recsensorialarea_id', $area->id)
                         ->pluck('id');
 
+                    // Agente 4 (iluminación)
                     if ($idAgente == 4) {
                         $puntosIluminacion = DB::table('reporteiluminacionpuntos')
                             ->whereIn('reporteiluminacionpuntos_area_id', $reporteAreaIds)
@@ -1056,36 +1050,35 @@ class reportesController extends Controller
                         if ($puntosIluminacion->exists()) {
                             $valorMaxLux = $puntosIluminacion->max('reporteiluminacionpuntos_lux');
                             $valorLMPNMP = number_format($valorMaxLux) . ' /200';
-
                             $cumplimiento = ($valorMaxLux >= 200) ? 'DENTRO DE NORMA' : 'FUERA DE NORMA';
                         } else {
                             $valorLMPNMP = 'No tiene registro';
                         }
-                    } elseif ($idAgente == 1) {
+                    }
+
+                    // Agente 1 (ruido)
+                    elseif ($idAgente == 1) {
                         $puntosRuido = DB::table('reporteruidopuntoner')
                             ->whereIn('reporteruidoarea_id', $reporteAreaIds)
                             ->where('proyecto_id', $proyecto_id);
 
                         if ($puntosRuido->exists()) {
-                            $registroMax = $puntosRuido
-                                ->orderByDesc('reporteruidopuntoner_ner')
-                                ->first();
-
+                            $registroMax = $puntosRuido->orderByDesc('reporteruidopuntoner_ner')->first();
                             if ($registroMax) {
                                 $ner = $registroMax->reporteruidopuntoner_ner;
                                 $lmpe = $registroMax->reporteruidopuntoner_lmpe;
-                                $valorLMPNMP = number_format($ner) . ' /' . number_format($lmpe);
-
+                                $valorLMPNMP = number_format($ner) . ' /90';
                                 $cumplimiento = ($ner <= $lmpe) ? 'DENTRO DE NORMA' : 'FUERA DE NORMA';
                             }
                         } else {
                             $valorLMPNMP = 'No tiene registro';
                         }
-                    } elseif ($idAgente !== '' && !in_array($idAgente, $idsValidos)) {
-                        $valorLMPNMP = 'N/A';
                     }
 
-
+                    // Otros agentes no válidos
+                    elseif ($idAgente !== '' && !in_array($idAgente, $idsValidos)) {
+                        $valorLMPNMP = 'N/A';
+                    }
 
                     // Recomendaciones
                     if (in_array($idAgente, $idsValidos)) {
@@ -1098,25 +1091,20 @@ class reportesController extends Controller
                             $htmlRecomendaciones = '';
                             foreach ($recomendaciones as $value) {
                                 $descripcionTexto = $value->reporterecomendaciones_descripcion ?? '';
-
                                 $checkbox = '<div class="switch">
                                 <label>
                                     <input type="checkbox" class="recomendacion_checkbox" name="recomendacion_checkbox[]" value="' . $value->id . '" onclick="activa_recomendacion(this);">
                                     <span class="lever switch-col-light-blue"></span>
                                 </label>
                             </div>';
-
                                 $textarea = '<textarea class="form-control" rows="5" id="recomendacion_descripcion_' . $value->id . '" name="recomendacion_descripcion_' . $value->id . '">' . $descripcionTexto . '</textarea>';
-
                                 $htmlRecomendaciones .= '<div class="recomendacion-bloque mb-2">' . $checkbox . $textarea . '</div>';
                             }
-
                             $medidas = $htmlRecomendaciones;
                         }
                     }
 
-                    // Construcción de fila
-                    $fila = [
+                    $filas[] = [
                         'numero_registro' => $fila_id,
                         'numero_visible' => $contadorArea,
                         'recsensorialarea_nombre' => $i === 0 ? $area->recsensorialarea_nombre . ' (ID: ' . $area->id . ')' : '',
@@ -1133,8 +1121,6 @@ class reportesController extends Controller
                         'rowspan' => $i === 0 ? $maxFilas : 0,
                         'mostrar_select' => $mostrarSelect,
                     ];
-
-                    $filas[] = $fila;
                 }
 
                 $contadorArea++;
