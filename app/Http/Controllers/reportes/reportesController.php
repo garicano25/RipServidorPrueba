@@ -1048,9 +1048,11 @@ class reportesController extends Controller
                             ->where('proyecto_id', $proyecto_id);
 
                         if ($puntosIluminacion->exists()) {
-                            $valorMaxLux = $puntosIluminacion->max('reporteiluminacionpuntos_lux');
-                            $valorLMPNMP = number_format($valorMaxLux) . ' /200';
-                            $cumplimiento = ($valorMaxLux >= 200) ? 'DENTRO DE NORMA' : 'FUERA DE NORMA';
+                            $valorMaxLuxRaw = $puntosIluminacion->max('reporteiluminacionpuntos_lux');
+
+                            $cumplimiento = ($valorMaxLuxRaw >= 200) ? 'DENTRO DE NORMA' : 'FUERA DE NORMA';
+
+                            $valorLMPNMP = number_format($valorMaxLuxRaw) . ' /200';
                         } else {
                             $valorLMPNMP = 'No tiene registro';
                         }
