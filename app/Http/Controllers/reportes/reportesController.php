@@ -862,7 +862,47 @@ class reportesController extends Controller
                             } else {
                                 $valorLMPNMP = 'No tiene registro';
                             }
-                        } 
+                        }
+                        // Agente 8 (Bioaerosoles)
+                        elseif ($idAgente == 8) {
+                            // Obtener IDs de reportearea relacionados con esta área
+                            $reporteAreaIds = DB::table('reportearea')
+                                ->where('recsensorialarea_id', $area->id)
+                                ->pluck('id');
+
+                            $evaluaciones = DB::table('reporteaireevaluacion')
+                                ->where('proyecto_id', $proyecto_id)
+                                ->whereIn('reporteairearea_id', $reporteAreaIds)
+                                ->get();
+
+                            if ($evaluaciones->count() > 0) {
+                                $fuera = false;
+                                $maxValor = 0;
+
+                                foreach ($evaluaciones as $eval) {
+                                    $valores = [
+                                        preg_replace('/[^\d.]/', '', $eval->reporteaireevaluacion_ct),
+                                        preg_replace('/[^\d.]/', '', $eval->reporteaireevaluacion_ctma),
+                                        preg_replace('/[^\d.]/', '', $eval->reporteaireevaluacion_hongos),
+                                        preg_replace('/[^\d.]/', '', $eval->reporteaireevaluacion_levaduras),
+                                    ];
+
+                                    foreach ($valores as $valor) {
+                                        $num = is_numeric($valor) ? floatval($valor) : 0;
+                                        $maxValor = max($maxValor, $num);
+                                        if ($num > 500) {
+                                            $fuera = true;
+                                        }
+                                    }
+                                }
+
+                                $valorLMPNMP = number_format($maxValor) . ' /500';
+                                $cumplimiento = $fuera ? 'FUERA DE NORMA' : 'DENTRO DE NORMA';
+                            } else {
+                                $valorLMPNMP = 'No tiene registro';
+                            }
+                        }
+                        
                         elseif ($idAgente === '' || !in_array($idAgente, $idsValidos)) {
                             $valorLMPNMP = 'N/A';
                             $cumplimiento = 'FUERA DE NORMA';
