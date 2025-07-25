@@ -19,7 +19,7 @@ use PhpOffice\PhpWord\SimpleType\TblWidth;
 use PhpOffice\PhpWord\Shared\Converter;
 use PhpOffice\PhpWord\Style\TablePosition;
 use PhpOffice\PhpWord\TemplateProcessor;
-
+use DOMDocument;
 //----------------------------------------------------------
 
 // Modelos
@@ -43,6 +43,9 @@ use App\modelos\reportes\reporteareacategoriaModel;
 //----------------------------------------------------------
 use App\modelos\reportes\reporteequiposutilizadosModel;
 use App\modelos\proyecto\estatusReportesInformeModel;
+
+use App\modelos\reportes\matrizlaboral;
+
 
 
 // RECURSOS DE LOS INFORMES
@@ -648,23 +651,23 @@ class reportesController extends Controller
             // $opciones_menu .= '<option value="0">POE PROYECTO</option>';  -> EL POE ESTARA APARTE EN EL SELECT SOLO ESTARAN LOS REPORTES DE LOS AGENTES
 
             // DESCOMENTAR DESPUES DE SUBIR AL SERVIDOR
-            // foreach ($sql as $key => $value){
-            //     $opciones_menu .= '<option value="'.$value->agente_id.'">'.$value->agente_nombre.'</option>';
-            // }
+            foreach ($sql as $key => $value){
+                $opciones_menu .= '<option value="'.$value->agente_id.'">'.$value->agente_nombre.'</option>';
+            }
 
 
             // // QUITAR DESPUES DE SUBIR AL SERVIDOR
-            $opciones_menu .= '<option value="1">Ruido</option>';
-            $opciones_menu .= '<option value="2">Vibración</option>';
-            $opciones_menu .= '<option value="3">Temperatura</option>';
-            $opciones_menu .= '<option value="4">Iluminación</option>';
-            $opciones_menu .= '<option value="8">Ventilación y calidad del aire</option>';
-            $opciones_menu .= '<option value="9">Agua</option>';
-            $opciones_menu .= '<option value="10">Hielo</option>';
-            $opciones_menu .= '<option value="15">Químicos</option>';
-            $opciones_menu .= '<option value="16">Infraestructura para servicios al personal</option>';
-            $opciones_menu .= '<option value="22">BEI</option>';
-            $opciones_menu .= '<option value="23">Mapa con matriz</option>';
+            // $opciones_menu .= '<option value="1">Ruido</option>';
+            // $opciones_menu .= '<option value="2">Vibración</option>';
+            // $opciones_menu .= '<option value="3">Temperatura</option>';
+            // $opciones_menu .= '<option value="4">Iluminación</option>';
+            // $opciones_menu .= '<option value="8">Ventilación y calidad del aire</option>';
+            // $opciones_menu .= '<option value="9">Agua</option>';
+            // $opciones_menu .= '<option value="10">Hielo</option>';
+            // $opciones_menu .= '<option value="15">Químicos</option>';
+            // $opciones_menu .= '<option value="16">Infraestructura para servicios al personal</option>';
+            // $opciones_menu .= '<option value="22">BEI</option>';
+            // $opciones_menu .= '<option value="23">Mapa con matriz</option>';
 
 
 
@@ -766,7 +769,7 @@ class reportesController extends Controller
 
             $filas = [];
             $contadorArea = 1;
-            $idsValidos = [1, 2, 3, 4, 8, 15, 22];
+            $idsValidos = [1, 2, 3, 4, 8, 15];
 
             foreach ($areas as $area) {
                 $agentes = $area->recsensorialareapruebas->map(function ($prueba) {
@@ -793,7 +796,10 @@ class reportesController extends Controller
                     $mostrarSelect = !empty($agentes[$i]['nombre']);
                     $fila_id = $contadorArea . '_' . $i;
                     $idAgente = $agentes[$i]['id'];
-                    $agenteTexto = $agentes[$i]['nombre'] . ($idAgente ? ' (ID: ' . $idAgente . ')' : '');
+                    // $agenteTexto = $agentes[$i]['nombre'] . ($idAgente ? ' (ID: ' . $idAgente . ')' : '');
+
+                    $agenteTexto = $agentes[$i]['nombre'];
+
 
                     $valorLMPNMP = 'N/A';
                     $cumplimiento = '';
@@ -863,9 +869,7 @@ class reportesController extends Controller
                                 $valorLMPNMP = 'No tiene registro';
                             }
                         }
-                        // Agente 8 (Bioaerosoles)
                         elseif ($idAgente == 8) {
-                            // Obtener IDs de reportearea relacionados con esta área
                             $reporteAreaIds = DB::table('reportearea')
                                 ->where('recsensorialarea_id', $area->id)
                                 ->pluck('id');
@@ -911,35 +915,33 @@ class reportesController extends Controller
 
 
                         // Recomendaciones
+                        $medidas_array = [];
+
                         if (in_array($idAgente, $idsValidos)) {
                             $recomendaciones = DB::table('reporterecomendaciones')
-                                        ->where('proyecto_id', $proyecto_id)
-                                        ->where('agente_id', $idAgente)
-                                        ->get();
+                                ->where('proyecto_id', $proyecto_id)
+                                ->where('agente_id', $idAgente)
+                                ->get();
 
-                                    if ($recomendaciones->count() > 0) {
-                                        $htmlRecomendaciones = '';
-                                        foreach ($recomendaciones as $value) {
-                                            $descripcionTexto = $value->reporterecomendaciones_descripcion ?? '';
-                                            $checkbox = '<div class="switch">
-                            <label>
-                                <input type="checkbox" class="recomendacion_checkbox" name="recomendacion_checkbox[]" value="' . $value->id . '" onclick="activa_recomendacion(this);">
-                                <span class="lever switch-col-light-blue"></span>
-                            </label>
-                        </div>';
-                                            $textarea = '<textarea class="form-control" rows="5" id="recomendacion_descripcion_' . $value->id . '" name="recomendacion_descripcion_' . $value->id . '">' . $descripcionTexto . '</textarea>';
-                                            $htmlRecomendaciones .= '<div class="recomendacion-bloque mb-2">' . $checkbox . $textarea . '</div>';
-                                        }
-                                        $medidas = $htmlRecomendaciones;
-                                    }
-                                }
+                            foreach ($recomendaciones as $value) {
+                                $descripcionTexto = $value->reporterecomendaciones_descripcion ?? '';
+                                $medidas_array[] = [
+                                    'descripcion' => $descripcionTexto,
+                                    'seleccionado' => false // valor por defecto, ya que es carga inicial
+                                ];
                             }
+                        }
+                    }
 
 
                     $filas[] = [
                         'numero_registro' => $fila_id,
                         'numero_visible' => $contadorArea,
                         'recsensorialarea_nombre' => $i === 0 ? $area->recsensorialarea_nombre . ' (ID: ' . $area->id . ')' : '',
+
+                        // 'recsensorialarea_nombre' => $i === 0 ? $area->recsensorialarea_nombre  : '',
+
+
                         'agente' => $agenteTexto,
                         'categoria' => $categoria['nombre'],
                         'recsensorialarea_numerotrabajadores' => $categoria['total'],
@@ -949,7 +951,7 @@ class reportesController extends Controller
                         'recsensorialarea_riesgo' => '',
                         'recsensorialarea_lmpnmp' => $valorLMPNMP,
                         'recsensorialarea_cumplimiento' => ($cumplimiento ?: ''),
-                        'recsensorialarea_medidas' => $medidas,
+                        'recsensorialarea_medidas_array' => $medidas_array,
                         'rowspan' => $i === 0 ? $maxFilas : 0,
                         'mostrar_select' => $mostrarSelect,
                     ];
@@ -969,6 +971,57 @@ class reportesController extends Controller
             ]);
         }
     }
+
+    public function guardarMatrizLaboral(Request $request)
+    {
+        $proyecto_id = $request->proyecto_id;
+        $filas = $request->filas;
+
+        if (!$filas || !is_array($filas)) {
+            return response()->json(['success' => false, 'message' => 'No se proporcionaron datos válidos.']);
+        }
+
+        matrizlaboral::where('proyecto_id', $proyecto_id)->delete();
+
+        foreach ($filas as $fila) {
+            $medidas = [];
+
+            // Si existe el array lo procesamos, si no, lo dejamos como array vacío
+            if (isset($fila['recsensorialarea_medidas']) && is_array($fila['recsensorialarea_medidas'])) {
+                foreach ($fila['recsensorialarea_medidas'] as $medida) {
+                    $medidas[] = [
+                        'descripcion' => $medida['descripcion'] ?? '',
+                        'seleccionado' => filter_var($medida['seleccionado'], FILTER_VALIDATE_BOOLEAN),
+                    ];
+                }
+            }
+
+            // Guardar aunque medidas esté vacío
+            matrizlaboral::create([
+                'proyecto_id' => $proyecto_id,
+                'area_id' => $fila['area_id'] ?? 0,
+                'fila_id' => $fila['numero_registro'],
+                'agente' => $fila['agente'],
+                'categoria' => $fila['categoria'],
+                'numero_trabajadores' => $fila['recsensorialarea_numerotrabajadores'] ?? '',
+                'tiempo_exposicion' => $fila['recsensorialarea_tiempoexposicion'] ?? '',
+                'indice_peligro' => $fila['recsensorialarea_indicepeligro'] ?? '',
+                'indice_exposicion' => $fila['recsensorialarea_indiceexposicion'] ?? '',
+                'riesgo' => $fila['recsensorialarea_riesgo'] ?? '',
+                'valor_lmpnmp' => $fila['recsensorialarea_lmpnmp'] ?? '',
+                'cumplimiento' => $fila['recsensorialarea_cumplimiento'] ?? '',
+                'medidas_json' => json_encode($medidas, JSON_UNESCAPED_UNICODE),
+            ]);
+        }
+
+        return response()->json(['success' => true, 'message' => 'Matriz guardada correctamente.']);
+    }
+
+
+
+
+
+
 
 
 

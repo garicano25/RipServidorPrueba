@@ -29,7 +29,9 @@
                     <h3 class="text-light m-0" style="font-weight: bold;">MATRIZ DE RIESGO A LA SALUD</h3>
                 </ol>
             </div>
-
+            <div class="col-12" style="text-align: center;">
+                <button type="submit" class="btn btn-danger waves-effect waves-light botoninforme" id="botonguardar_reporte_matriz">Guardar matriz <i class="fa fa-save"></i></button>
+            </div>
             <div class="col-12">
                 <div style="overflow-x: auto; width: 100%;">
                     <table id="tabla_matrizlab" class="table table-bordered text-center align-middle" style="font-size: 13px; table-layout: fixed; min-width: 1200px;">
@@ -67,4 +69,4 @@
     var estatus = <?php echo json_encode($estatus); ?>;
     var recsensorial = <?php echo json_encode($recsensorial); ?>;
 </script>
-<script src="/js_sitio/reportes/reportematrizlab.js?v=1.2"></script>
+<script src="/js_sitio/reportes/reportematrizlab.js?v=1.3"></script>

@@ -20,7 +20,7 @@ var datatable_matrizlab;
 
 function tabla_matrizlab(proyecto_id) {
 	try {
-		var ruta = "/reportematrizlabtablageneral/" + proyecto_id;
+		const ruta = "/reportematrizlabtablageneral/" + proyecto_id;
 
 		if ($.fn.DataTable.isDataTable('#tabla_matrizlab')) {
 			$('#tabla_matrizlab').DataTable().clear().destroy();
@@ -48,62 +48,89 @@ function tabla_matrizlab(proyecto_id) {
 				{ data: "recsensorialarea_tiempoexposicion", defaultContent: "-", orderable: false },
 
 				{
-				data: null,
-				orderable: false,
-				render: function (data, type, row) {
-					if (!row.mostrar_select) return '';
+					data: null,
+					orderable: false,
+					render: function (data, type, row) {
+						if (!row.mostrar_select) return '';
 
-					let opciones = `<option value="">--</option>`;
-					for (let i = 1; i <= 5; i++) {
-						const selected = (i == row.recsensorialarea_indicepeligro) ? 'selected' : '';
-						opciones += `<option value="${i}" ${selected}>${i}</option>`;
+						let opciones = `<option value="">--</option>`;
+						for (let i = 1; i <= 5; i++) {
+							const selected = (i == row.recsensorialarea_indicepeligro) ? 'selected' : '';
+							opciones += `<option value="${i}" ${selected}>${i}</option>`;
+						}
+
+						return `
+							<select class="form-select form-select-sm ip-select" 
+									data-id="${row.numero_registro}" 
+									style="min-width: 100px;">
+								${opciones}
+							</select>
+						`;
 					}
-
-					return `
-						<select class="form-select form-select-sm ip-select" 
-								data-id="${row.numero_registro}" 
-								style="min-width: 100px;">
-							${opciones}
-						</select>
-					`;
-				}
-			},
-			{
-				data: null,
-				orderable: false,
-				render: function (data, type, row) {
-					if (!row.mostrar_select) return '';
-
-					const letras = ['A', 'B', 'C', 'D', 'E'];
-					let opciones = `<option value="">--</option>`;
-					letras.forEach(letra => {
-						const selected = (letra == row.recsensorialarea_indiceexposicion) ? 'selected' : '';
-						opciones += `<option value="${letra}" ${selected}>${letra}</option>`;
-					});
-
-					return `
-						<select class="form-select form-select-sm ie-select" 
-								data-id="${row.numero_registro}" 
-								style="min-width: 100px;">
-							${opciones}
-						</select>
-					`;
-				}
-			},
-
-
+				},
 				{
-                        data: null,
-                        orderable: false,
-                        render: function (data, type, row) {
-                            return `<div class="riesgo-resultado" data-id="${row.numero_registro}"></div>`;
-                        }
-                    },
+					data: null,
+					orderable: false,
+					render: function (data, type, row) {
+						if (!row.mostrar_select) return '';
 
+						const letras = ['A', 'B', 'C', 'D', 'E'];
+						let opciones = `<option value="">--</option>`;
+						letras.forEach(letra => {
+							const selected = (letra == row.recsensorialarea_indiceexposicion) ? 'selected' : '';
+							opciones += `<option value="${letra}" ${selected}>${letra}</option>`;
+						});
 
+						return `
+							<select class="form-select form-select-sm ie-select" 
+									data-id="${row.numero_registro}" 
+									style="min-width: 100px;">
+								${opciones}
+							</select>
+						`;
+					}
+				},
+				{
+					data: null,
+					orderable: false,
+					render: function (data, type, row) {
+						return `<div class="riesgo-resultado" data-id="${row.numero_registro}"></div>`;
+					}
+				},
 				{ data: "recsensorialarea_lmpnmp", defaultContent: "-", orderable: false },
 				{ data: "recsensorialarea_cumplimiento", defaultContent: "-", orderable: false },
-				{ data: "recsensorialarea_medidas", defaultContent: "-", orderable: false }
+		{
+				data: null,
+				orderable: false,
+				render: function (data, type, row) {
+						const fila_id = row.numero_registro;
+						const recomendaciones = row.recsensorialarea_medidas_array || [];
+
+						if (!recomendaciones.length) return 'N/A';
+
+						let html = `<div class="contenedor-recomendaciones" data-recomendaciones="${fila_id}">`;
+						recomendaciones.forEach((r, i) => {
+							const isChecked = r.seleccionado === true || r.seleccionado === 'true' ? 'checked' : '';
+							html += `
+								<div class="recomendacion-bloque mb-2">
+									<div class="switch">
+										<label>
+											<input type="checkbox" class="recomendacion_checkbox" ${isChecked}>
+											<span class="lever switch-col-light-blue"></span>
+										</label>
+									</div>
+									<textarea class="form-control" rows="5" readonly>${r.descripcion}</textarea>
+								</div>
+							`;
+						});
+						html += `</div>`;
+						return html;
+					}
+
+			}
+
+				
+
 			],
 			order: [[0, "asc"]],
 			rowsGroup: [0, 1],
@@ -129,30 +156,50 @@ function tabla_matrizlab(proyecto_id) {
 					previous: "Anterior"
 				}
 			},
+			
 			drawCallback: function () {
-                    $('[data-toggle="tooltip"]').tooltip();
+				$('[data-toggle="tooltip"]').tooltip();
 
-                    $('.riesgo-resultado').each(function () {
-                        const id = $(this).data('id');
-                        const ip = $(`.ip-select[data-id="${id}"]`).val();
-                        const ie = $(`.ie-select[data-id="${id}"]`).val();
+				$('.riesgo-resultado').each(function () {
+					const id = $(this).data('id');
+					const ip = $(`.ip-select[data-id="${id}"]`).val();
+					const ie = $(`.ie-select[data-id="${id}"]`).val();
 
-                        const resultado = calcularRiesgoPrioridad(ip, ie);
-                        const colorTexto = resultado.color === 'red' ? 'white' : 'black';
+					const resultado = calcularRiesgoPrioridad(ip, ie);
+					const colorTexto = resultado.color === 'red' ? 'white' : 'black';
 
-                        $(this).html(resultado.texto);
-                        $(this).css({
-                            'background-color': resultado.color,
-                            'color': colorTexto,
-                            'padding': '4px',
-                        });
-                    });
-                }
+					$(this).html(resultado.texto);
+					$(this).css({
+						'background-color': resultado.color,
+						'color': colorTexto,
+						'padding': '4px',
+					});
+				});
+
+				$('.contenedor-recomendaciones').each(function () {
+					const contenedor = $(this);
+					contenedor.find('.recomendacion_checkbox').each(function () {
+
+					});
+					});
+			}
 
 		});
 
+		// 👇 Aquí solo se actualiza el resultado, NO se redibuja ni recarga la tabla
 		$(document).on('change', '.ip-select, .ie-select', function () {
-			datatable_matrizlab.draw(false);
+			const id = $(this).data('id');
+			const ip = $(`.ip-select[data-id="${id}"]`).val();
+			const ie = $(`.ie-select[data-id="${id}"]`).val();
+
+			const resultado = calcularRiesgoPrioridad(ip, ie);
+			const colorTexto = resultado.color === 'red' ? 'white' : 'black';
+
+			$(`.riesgo-resultado[data-id="${id}"]`).html(resultado.texto).css({
+				'background-color': resultado.color,
+				'color': colorTexto,
+				'padding': '4px',
+			});
 		});
 	} catch (error) {
 		console.error("Excepción en tabla_matrizlab:", error);
@@ -160,14 +207,146 @@ function tabla_matrizlab(proyecto_id) {
 }
 
 
-$(document).on('change', '.ip-select, .ie-select', function () {
-	let id = $(this).data('id');
-	let valor = $(this).val();
-	let tipo = $(this).hasClass('ip-select') ? 'IP' : 'IE';
+// $('#botonguardar_reporte_matriz').on('click', async function () {
+//     const filas = [];
 
-	console.log(`Cambio en ${tipo} para fila ${id}: ${valor}`);
-	datatable_matrizlab.draw(false);
+//     $('.contenedor-recomendaciones').each(function () {
+//         const container = $(this);
+//         const numero_registro = container.data('recomendaciones');
+
+//         const medidas = [];
+
+//         container.find('.recomendacion-bloque').each(function () {
+//             const bloque = $(this);
+//             const descripcion = bloque.find('textarea').val()?.trim() || '';
+//             const checkbox = bloque.find('input[type="checkbox"]');
+//             const seleccionado = checkbox.is(':checked');
+
+//             medidas.push({ descripcion, seleccionado });
+//         });
+
+//         // Buscar la fila original desde DataTable
+//         const row = $('#tabla_matrizlab').DataTable().rows().data().toArray().find(r => r.numero_registro == numero_registro);
+//         if (!row) return;
+
+//         const tr = $(`[data-recomendaciones="${numero_registro}"]`).closest('tr');
+
+//         const fila = {
+//             numero_registro,
+//             area_id: row.recsensorialarea_nombre.match(/\(ID: (\d+)\)/)?.[1] || 0,
+//             agente: row.agente,
+//             categoria: row.categoria,
+//             recsensorialarea_numerotrabajadores: row.recsensorialarea_numerotrabajadores,
+//             recsensorialarea_tiempoexposicion: row.recsensorialarea_tiempoexposicion,
+//             recsensorialarea_indicepeligro: tr.find('.ip-select').val(),
+//             recsensorialarea_indiceexposicion: tr.find('.ie-select').val(),
+//             recsensorialarea_riesgo: tr.find('.riesgo-resultado').text(),
+//             recsensorialarea_lmpnmp: row.recsensorialarea_lmpnmp,
+//             recsensorialarea_cumplimiento: row.recsensorialarea_cumplimiento,
+//             recsensorialarea_medidas: medidas // array vacío si no hay
+//         };
+
+//         filas.push(fila);
+//     });
+
+//     if (!filas.length) {
+//         alertToast('No hay datos para guardar.', 'warning');
+//         return;
+//     }
+
+//     try {
+//         const res = await $.ajax({
+//             url: '/reportematrizlabguardar',
+//             method: 'POST',
+//             data: {
+//                 proyecto_id: proyecto.id,
+//                 filas,
+//                 _token: $('meta[name="csrf-token"]').attr('content')
+//             }
+//         });
+
+//         if (res.success) {
+//             alertToast('Matriz guardada correctamente.', 'success');
+//         } else {
+//             alertToast(res.message || 'Error al guardar.', 'error');
+//         }
+//     } catch (err) {
+//         console.error(err);
+//         alertToast('Error de conexión al guardar matriz.', 'error');
+//     }
+// });
+
+
+
+$('#botonguardar_reporte_matriz').on('click', async function () {
+    const data = $('#tabla_matrizlab').DataTable().rows().data().toArray();
+    const filas = [];
+
+    data.forEach(row => {
+        const numero_registro = row.numero_registro;
+        const tr = $(`[data-recomendaciones="${numero_registro}"]`).closest('tr');
+
+        const medidas = [];
+
+        // Si hay contenedor de medidas en el DOM, procesarlas
+        const container = $(`.contenedor-recomendaciones[data-recomendaciones="${numero_registro}"]`);
+        if (container.length) {
+            container.find('.recomendacion-bloque').each(function () {
+                const bloque = $(this);
+                const descripcion = bloque.find('textarea').val()?.trim() || '';
+                const seleccionado = bloque.find('input[type="checkbox"]').is(':checked');
+
+                medidas.push({ descripcion, seleccionado });
+            });
+        }
+
+        const fila = {
+            numero_registro,
+            area_id: row.recsensorialarea_nombre.match(/\(ID: (\d+)\)/)?.[1] || 0,
+            agente: row.agente,
+            categoria: row.categoria,
+            recsensorialarea_numerotrabajadores: row.recsensorialarea_numerotrabajadores,
+            recsensorialarea_tiempoexposicion: row.recsensorialarea_tiempoexposicion,
+            recsensorialarea_indicepeligro: tr.find('.ip-select').val() ?? '',
+            recsensorialarea_indiceexposicion: tr.find('.ie-select').val() ?? '',
+            recsensorialarea_riesgo: tr.find('.riesgo-resultado').text() ?? '',
+            recsensorialarea_lmpnmp: row.recsensorialarea_lmpnmp,
+            recsensorialarea_cumplimiento: row.recsensorialarea_cumplimiento,
+            recsensorialarea_medidas: medidas // array vacío si no hay medidas
+        };
+
+        filas.push(fila);
+    });
+
+    if (!filas.length) {
+        alertToast('No hay datos para guardar.', 'warning');
+        return;
+    }
+
+    try {
+        const res = await $.ajax({
+            url: '/reportematrizlabguardar',
+            method: 'POST',
+            data: {
+                proyecto_id: proyecto.id,
+                filas,
+                _token: $('meta[name="csrf-token"]').attr('content')
+            }
+        });
+
+        if (res.success) {
+            alertToast('Matriz guardada correctamente.', 'success');
+        } else {
+            alertToast(res.message || 'Error al guardar.', 'error');
+        }
+    } catch (err) {
+        console.error(err);
+        alertToast('Error de conexión al guardar matriz.', 'error');
+    }
 });
+
+
+
 
 function calcularRiesgoPrioridad(ip, ie) {
 	if (!ip || !ie) return { texto: '-', color: 'white' };
@@ -207,6 +386,10 @@ function calcularRiesgoPrioridad(ip, ie) {
 
 	return mapa[clave] || { texto: '-', color: 'white' };
 }
+
+
+
+
 
 
 
