@@ -29,9 +29,16 @@
                     <h3 class="text-light m-0" style="font-weight: bold;">MATRIZ DE RIESGO A LA SALUD</h3>
                 </ol>
             </div>
-            <div class="col-12" style="text-align: center;">
-                <button type="submit" class="btn btn-danger waves-effect waves-light botoninforme" id="botonguardar_reporte_matriz">Guardar matriz <i class="fa fa-save"></i></button>
+            <div class="col-12 text-center">
+                <button type="submit" class="btn btn-danger waves-effect waves-light botoninforme" id="botonguardar_reporte_matriz">
+                    Guardar matriz <i class="fa fa-save"></i>
+                </button>
+
+                <button type="button" class="btn btn-default waves-effect" style="margin-left: 15px;" data-toggle="tooltip" title="Generar matriz" id="boton_reporte_matriz">
+                    <span class="btn-label"><i class="fa fa-file-excel-o"></i></span> Generar matriz
+                </button>
             </div>
+
             <div class="col-12">
                 <div style="overflow-x: auto; width: 100%;">
                     <table id="tabla_matrizlab" class="table table-bordered text-center align-middle" style="font-size: 13px; table-layout: fixed; min-width: 1200px;">
@@ -69,4 +76,5 @@
     var estatus = <?php echo json_encode($estatus); ?>;
     var recsensorial = <?php echo json_encode($recsensorial); ?>;
 </script>
-<script src="/js_sitio/reportes/reportematrizlab.js?v=1.4"></script>
+<script src="/js_sitio/reportes/reportematrizlab.js?v=1.5"></script>
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>

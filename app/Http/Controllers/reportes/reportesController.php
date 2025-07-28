@@ -61,6 +61,16 @@ use App\modelos\reportes\reportehieloModel;
 use App\modelos\reportes\reportequimicosModel;
 use App\modelos\reportes\reporteserviciopersonalModel;
 
+/// EXCEL 
+use PhpOffice\PhpSpreadsheet\IOFactory;
+use PhpOffice\PhpSpreadsheet\Spreadsheet;
+use PhpOffice\PhpSpreadsheet\Writer\Xlsx;
+use PhpOffice\PhpSpreadsheet\Style\Alignment;
+use PhpOffice\PhpSpreadsheet\Style\Border;
+use PhpOffice\PhpSpreadsheet\Style\Color;
+use PhpOffice\PhpSpreadsheet\Style\Fill;
+use Illuminate\Support\Facades\Response;
+
 
 
 //ZONA DE HORARIO
@@ -1989,9 +1999,420 @@ class reportesController extends Controller
 
 
 
+    // public function reporteexcelmatrizlab($proyecto_id)
+    // {
+    //     $registros = DB::table('matriz_laboral')->where('proyecto_id', $proyecto_id)->orderBy('fila_id')->get();
+    //     $areas = DB::table('recsensorialarea')->pluck('recsensorialarea_nombre', 'id');
+
+    //     $spreadsheet = new Spreadsheet();
+    //     $sheet = $spreadsheet->getActiveSheet();
+    //     $sheet->setTitle('Matriz Laboral');
+
+    //     // Encabezados
+    //     $encabezados = [
+    //         'No.',
+    //         'Área de Trabajo Evaluada',
+    //         'Tipo de agente/Factor de Riesgo',
+    //         'No. de Trabajadores',
+    //         'Categorías',
+    //         'Tiempo de Exposición (minutos)',
+    //         'Índice de Peligro (IP)',
+    //         'Índice de Exposición (IE)',
+    //         'Riesgo / Prioridad de atención',
+    //         'Nivel Máximo LMP-NMP',
+    //         'Cumplimiento Normativo',
+    //         'Medidas de Control',
+    //     ];
+
+    //     // Estilo encabezados
+    //     $sheet->getStyle('A1:L1')->getFont()->setBold(true);
+    //     $sheet->getStyle('A1:L1')->getAlignment()->setHorizontal(Alignment::HORIZONTAL_CENTER);
+    //     $sheet->fromArray($encabezados, null, 'A1');
+
+    //     $filaExcel = 2;
+    //     $contador = 1;
+    //     $areasRegistradas = [];
+
+    //     foreach ($registros as $registro) {
+    //         $mostrarArea = $registro->area_id != 0;
+    //         $areaNombre = $mostrarArea ? ($areas[$registro->area_id] ?? 'Área no encontrada') : '';
+
+    //         // Procesar medidas seleccionadas
+    //         $medidasTexto = '';
+    //         $medidas = json_decode($registro->medidas_json, true);
+    //         if (is_array($medidas)) {
+    //             foreach ($medidas as $medida) {
+    //                 if (!empty($medida['seleccionado'])) {
+    //                     $medidasTexto .= "- {$medida['descripcion']}\n";
+    //                 }
+    //             }
+    //         }
+
+    //         $sheet->setCellValue("A{$filaExcel}", $contador++);
+    //         $sheet->setCellValue("B{$filaExcel}", $areaNombre);
+    //         $sheet->setCellValue("C{$filaExcel}", $registro->agente);
+    //         $sheet->setCellValue("D{$filaExcel}", $registro->numero_trabajadores);
+    //         $sheet->setCellValue("E{$filaExcel}", $registro->categoria);
+    //         $sheet->setCellValue("F{$filaExcel}", $registro->tiempo_exposicion);
+    //         $sheet->setCellValue("G{$filaExcel}", $registro->indice_peligro);
+    //         $sheet->setCellValue("H{$filaExcel}", $registro->indice_exposicion);
+    //         $sheet->setCellValue("I{$filaExcel}", $registro->riesgo);
+    //         $sheet->setCellValue("J{$filaExcel}", $registro->valor_lmpnmp);
+    //         $sheet->setCellValue("K{$filaExcel}", $registro->cumplimiento);
+    //         $sheet->setCellValue("L{$filaExcel}", $medidasTexto);
+
+    //         // Ajustes de formato
+    //         $sheet->getStyle("L{$filaExcel}")->getAlignment()->setWrapText(true);
+
+    //         $filaExcel++;
+    //     }
+
+    //     // Establecer ancho automático
+    //     foreach (range('A', 'L') as $col) {
+    //         $sheet->getColumnDimension($col)->setAutoSize(true);
+    //     }
+
+    //     // Descargar archivo
+    //     $writer = new Xlsx($spreadsheet);
+    //     $fileName = 'Matriz_Laboral_' . date('Ymd_His') . '.xlsx';
+    //     $temp_file = tempnam(sys_get_temp_dir(), $fileName);
+    //     $writer->save($temp_file);
+
+    //     return Response::download($temp_file, $fileName)->deleteFileAfterSend(true);
+    // }
 
 
 
+
+
+    // public function reporteexcelmatrizlab($proyecto_id)
+    // {
+    //     $registros = DB::table('matriz_laboral')
+    //         ->where('proyecto_id', $proyecto_id)
+    //         ->orderBy('fila_id')
+    //         ->get();
+
+    //     $areasNombres = DB::table('recsensorialarea')->pluck('recsensorialarea_nombre', 'id');
+
+    //     $spreadsheet = new Spreadsheet();
+    //     $sheet = $spreadsheet->getActiveSheet();
+    //     $sheet->setTitle('Matriz Laboral');
+
+    //     $encabezados = [
+    //         'Área de Trabajo Evaluada',
+    //         'Tipo de agente/Factor de Riesgo',
+    //         'No. de Trabajadores',
+    //         'Categorías',
+    //         'Tiempo de Exposición (minutos)',
+    //         'Índice de Peligro (IP)',
+    //         'Índice de Exposición (IE)',
+    //         'Riesgo / Prioridad de atención',
+    //         'Nivel Máximo LMP-NMP',
+    //         'Cumplimiento Normativo',
+    //         'Medidas de Control',
+    //     ];
+
+    //     $sheet->fromArray($encabezados, null, 'A1');
+    //     $sheet->getStyle('A1:K1')->getFont()->setBold(true);
+    //     $sheet->getStyle('A1:K1')->getAlignment()->setHorizontal(Alignment::HORIZONTAL_CENTER);
+    //     $sheet->getStyle('A1:K1')->getAlignment()->setWrapText(true);
+    //     $sheet->getStyle('A1:K1')->getFill()->setFillType(Fill::FILL_SOLID)->getStartColor()->setARGB('FFD9D9D9');
+
+    //     // Heredar área_id
+    //     $registros = $registros->values();
+    //     $areaActual = null;
+    //     foreach ($registros as $registro) {
+    //         if ($registro->area_id != 0) {
+    //             $areaActual = $registro->area_id;
+    //         }
+    //         $registro->area_id_real = $areaActual;
+    //     }
+
+    //     $filaExcel = 2;
+    //     $areas = $registros->groupBy('area_id_real');
+
+    //     foreach ($areas as $area_id => $filasArea) {
+    //         $areaNombre = $areasNombres[$area_id] ?? 'Área no encontrada';
+
+    //         $agentes = collect($filasArea);
+    //         $categorias = collect($filasArea)
+    //             ->unique(function ($item) {
+    //                 return $item->categoria . '|' . $item->numero_trabajadores . '|' . $item->tiempo_exposicion;
+    //             })
+    //             ->map(function ($item) {
+    //                 return [
+    //                     'categoria' => $item->categoria,
+    //                     'numero_trabajadores' => $item->numero_trabajadores,
+    //                     'tiempo_exposicion' => $item->tiempo_exposicion
+    //                 ];
+    //             })->values();
+
+    //         $numAgentes = $agentes->count();
+    //         $numCategorias = $categorias->count();
+
+    //         // Fusionar celda del área
+    //         $sheet->mergeCells("A{$filaExcel}:A" . ($filaExcel + $numAgentes - 1));
+    //         $sheet->setCellValue("A{$filaExcel}", $areaNombre);
+    //         $sheet->getStyle("A{$filaExcel}")->getAlignment()->setVertical(Alignment::VERTICAL_CENTER);
+    //         $sheet->getStyle("A{$filaExcel}")->getAlignment()->setWrapText(true);
+
+    //         // Calcular tamaño proporcional por categoría (repartido entre los agentes)
+    //         $reparto = floor($numAgentes / $numCategorias);
+    //         $resto = $numAgentes % $numCategorias;
+    //         $bloques = [];
+
+    //         for ($i = 0; $i < $numCategorias; $i++) {
+    //             $bloques[] = $reparto + ($i < $resto ? 1 : 0);
+    //         }
+
+    //         $inicioBloque = $filaExcel;
+    //         foreach ($categorias as $index => $categoria) {
+    //             $rango = $bloques[$index];
+    //             $finBloque = $inicioBloque + $rango - 1;
+
+    //             $sheet->mergeCells("C{$inicioBloque}:C{$finBloque}");
+    //             $sheet->setCellValue("C{$inicioBloque}", $categoria['numero_trabajadores']);
+
+    //             $sheet->mergeCells("D{$inicioBloque}:D{$finBloque}");
+    //             $sheet->setCellValue("D{$inicioBloque}", $categoria['categoria']);
+
+    //             $sheet->mergeCells("E{$inicioBloque}:E{$finBloque}");
+    //             $sheet->setCellValue("E{$inicioBloque}", $categoria['tiempo_exposicion']);
+
+    //             $inicioBloque = $finBloque + 1;
+    //         }
+
+    //         // Imprimir agentes
+    //         foreach ($agentes as $registro) {
+    //             $medidasTexto = '';
+    //             $medidas = json_decode($registro->medidas_json, true);
+    //             if (is_array($medidas)) {
+    //                 foreach ($medidas as $medida) {
+    //                     if (!empty($medida['seleccionado'])) {
+    //                         $medidasTexto .= "- {$medida['descripcion']}\n";
+    //                     }
+    //                 }
+    //             }
+
+    //             $sheet->setCellValue("B{$filaExcel}", $registro->agente);
+    //             $sheet->setCellValue("F{$filaExcel}", $registro->indice_peligro);
+    //             $sheet->setCellValue("G{$filaExcel}", $registro->indice_exposicion);
+    //             $sheet->setCellValue("H{$filaExcel}", $registro->riesgo);
+    //             $sheet->setCellValue("I{$filaExcel}", $registro->valor_lmpnmp);
+    //             $sheet->setCellValue("J{$filaExcel}", $registro->cumplimiento);
+    //             $sheet->setCellValue("K{$filaExcel}", $medidasTexto);
+    //             $sheet->getStyle("K{$filaExcel}")->getAlignment()->setWrapText(true);
+    //             $sheet->getStyle("K{$filaExcel}")->getAlignment()->setVertical(Alignment::VERTICAL_TOP);
+
+    //             $filaExcel++;
+    //         }
+    //     }
+
+    //     // 👉 Establecer anchos personalizados
+    //     $sheet->getColumnDimension('A')->setWidth(29); // Área
+    //     $sheet->getColumnDimension('B')->setWidth(21); // Agente
+    //     $sheet->getColumnDimension('C')->setWidth(16); // No. Trabajadores
+    //     $sheet->getColumnDimension('D')->setWidth(28); // Categorías
+    //     $sheet->getColumnDimension('E')->setWidth(15); // Tiempo exposición
+    //     $sheet->getColumnDimension('F')->setWidth(15); // Índice de peligro
+    //     $sheet->getColumnDimension('G')->setWidth(15); // Índice de exposición
+    //     $sheet->getColumnDimension('H')->setWidth(28); // Riesgo
+    //     $sheet->getColumnDimension('I')->setWidth(25); // LMP-NMP
+    //     $sheet->getColumnDimension('J')->setWidth(22); // Cumplimiento
+    //     $sheet->getColumnDimension('K')->setWidth(85); // Recomendaciones
+
+    //     $writer = new Xlsx($spreadsheet);
+    //     $fileName = 'Matriz_Laboral_' . date('Ymd_His') . '.xlsx';
+    //     $temp_file = tempnam(sys_get_temp_dir(), $fileName);
+    //     $writer->save($temp_file);
+
+    //     return Response::download($temp_file, $fileName)->deleteFileAfterSend(true);
+    // }
+
+
+    public function reporteexcelmatrizlab($proyecto_id)
+    {
+        $registros = DB::table('matriz_laboral')
+            ->where('proyecto_id', $proyecto_id)
+            ->orderBy('fila_id')
+            ->get();
+
+        $areasNombres = DB::table('recsensorialarea')->pluck('recsensorialarea_nombre', 'id');
+
+        $spreadsheet = new Spreadsheet();
+        $sheet = $spreadsheet->getActiveSheet();
+        $sheet->setTitle('Matriz Laboral');
+
+        $encabezados = [
+            'Área de Trabajo Evaluada',
+            'Tipo de agente/Factor de Riesgo',
+            'No. de Trabajadores',
+            'Categorías',
+            'Tiempo de Exposición (minutos)',
+            'Índice de Peligro (IP)',
+            'Índice de Exposición (IE)',
+            'Riesgo / Prioridad de atención',
+            'Nivel Máximo LMP-NMP',
+            'Cumplimiento Normativo',
+            'Medidas de Control',
+        ];
+
+        $sheet->fromArray($encabezados, null, 'A1');
+        $sheet->getStyle('A1:K1')->getFont()->setBold(true);
+        $sheet->getStyle('A1:K1')->getAlignment()->setHorizontal(Alignment::HORIZONTAL_CENTER);
+        $sheet->getStyle('A1:K1')->getAlignment()->setWrapText(true);
+        $sheet->getStyle('A1:K1')->getFill()->setFillType(Fill::FILL_SOLID)->getStartColor()->setARGB('FFD9D9D9');
+
+        // Anchos personalizados
+        $sheet->getColumnDimension('A')->setWidth(29);
+        $sheet->getColumnDimension('B')->setWidth(21);
+        $sheet->getColumnDimension('C')->setWidth(16);
+        $sheet->getColumnDimension('D')->setWidth(28);
+        $sheet->getColumnDimension('E')->setWidth(15);
+        $sheet->getColumnDimension('F')->setWidth(15);
+        $sheet->getColumnDimension('G')->setWidth(15);
+        $sheet->getColumnDimension('H')->setWidth(25);
+        $sheet->getColumnDimension('I')->setWidth(22);
+        $sheet->getColumnDimension('J')->setWidth(22);
+        $sheet->getColumnDimension('K')->setWidth(85);
+
+        // Combinaciones de color para riesgo
+        $combinaciones = [
+            '1A' => ['texto' => 'Bajo riesgo / Vigilancia para mejora continua', 'color' => 'FFFFFF'],
+            '1B' => ['texto' => 'Bajo riesgo / Vigilancia para mejora continua', 'color' => 'FFFFFF'],
+            '1C' => ['texto' => 'Riesgo medio / Tercera prioridad', 'color' => '00B050'],
+            '1D' => ['texto' => 'Riesgo medio / Tercera prioridad', 'color' => '00B050'],
+            '1E' => ['texto' => 'Alto riesgo / Segunda prioridad', 'color' => 'FFFF00'],
+            '2A' => ['texto' => 'Bajo riesgo / Vigilancia para mejora continua', 'color' => 'FFFFFF'],
+            '2B' => ['texto' => 'Bajo riesgo / Vigilancia para mejora continua', 'color' => 'FFFFFF'],
+            '2C' => ['texto' => 'Riesgo medio / Tercera prioridad', 'color' => '00B050'],
+            '2D' => ['texto' => 'Alto riesgo / Segunda prioridad', 'color' => 'FFFF00'],
+            '2E' => ['texto' => 'Alto riesgo / Segunda prioridad', 'color' => 'FFFF00'],
+            '3A' => ['texto' => 'Bajo riesgo / Vigilancia para mejora continua', 'color' => 'FFFFFF'],
+            '3B' => ['texto' => 'Riesgo medio / Tercera prioridad', 'color' => '00B050'],
+            '3C' => ['texto' => 'Alto riesgo / Segunda prioridad', 'color' => 'FFFF00'],
+            '3D' => ['texto' => 'Muy alto / Primera prioridad', 'color' => 'FF0000'],
+            '3E' => ['texto' => 'Muy alto / Primera prioridad', 'color' => 'FF0000'],
+            '4A' => ['texto' => 'Bajo riesgo / Vigilancia para mejora continua', 'color' => 'FFFFFF'],
+            '4B' => ['texto' => 'Riesgo medio / Tercera prioridad', 'color' => '00B050'],
+            '4C' => ['texto' => 'Alto riesgo / Segunda prioridad', 'color' => 'FFFF00'],
+            '4D' => ['texto' => 'Muy alto / Primera prioridad', 'color' => 'FF0000'],
+            '4E' => ['texto' => 'Muy alto / Primera prioridad', 'color' => 'FF0000'],
+            '5A' => ['texto' => 'Bajo riesgo / Vigilancia para mejora continua', 'color' => 'FFFFFF'],
+            '5B' => ['texto' => 'Riesgo medio / Tercera prioridad', 'color' => '00B050'],
+            '5C' => ['texto' => 'Alto riesgo / Segunda prioridad', 'color' => 'FFFF00'],
+            '5D' => ['texto' => 'Muy alto / Primera prioridad', 'color' => 'FF0000'],
+            '5E' => ['texto' => 'Muy alto / Primera prioridad', 'color' => 'FF0000'],
+        ];
+
+        // Heredar área_id
+        $registros = $registros->values();
+        $areaActual = null;
+        foreach ($registros as $registro) {
+            if ($registro->area_id != 0) {
+                $areaActual = $registro->area_id;
+            }
+            $registro->area_id_real = $areaActual;
+        }
+
+        $filaExcel = 2;
+        $areas = $registros->groupBy('area_id_real');
+
+        foreach ($areas as $area_id => $filasArea) {
+            $areaNombre = $areasNombres[$area_id] ?? 'Área no encontrada';
+
+            $agentes = collect($filasArea);
+            $categorias = collect($filasArea)
+                ->unique(function ($item) {
+                    return $item->categoria . '|' . $item->numero_trabajadores . '|' . $item->tiempo_exposicion;
+                })
+                ->map(function ($item) {
+                    return [
+                        'categoria' => $item->categoria,
+                        'numero_trabajadores' => $item->numero_trabajadores,
+                        'tiempo_exposicion' => $item->tiempo_exposicion
+                    ];
+                })->values();
+
+            $numAgentes = $agentes->count();
+            $numCategorias = $categorias->count();
+
+            // Fusionar celda del área
+            $sheet->mergeCells("A{$filaExcel}:A" . ($filaExcel + $numAgentes - 1));
+            $sheet->setCellValue("A{$filaExcel}", $areaNombre);
+            $sheet->getStyle("A{$filaExcel}")->getAlignment()->setVertical(Alignment::VERTICAL_CENTER);
+            $sheet->getStyle("A{$filaExcel}")->getAlignment()->setWrapText(true);
+
+            // Calcular tamaño proporcional por categoría
+            $reparto = floor($numAgentes / $numCategorias);
+            $resto = $numAgentes % $numCategorias;
+            $bloques = [];
+            for ($i = 0; $i < $numCategorias; $i++) {
+                $bloques[] = $reparto + ($i < $resto ? 1 : 0);
+            }
+
+            $inicioBloque = $filaExcel;
+            foreach ($categorias as $index => $categoria) {
+                $rango = $bloques[$index];
+                $finBloque = $inicioBloque + $rango - 1;
+
+                $sheet->mergeCells("C{$inicioBloque}:C{$finBloque}");
+                $sheet->setCellValue("C{$inicioBloque}", $categoria['numero_trabajadores']);
+
+                $sheet->mergeCells("D{$inicioBloque}:D{$finBloque}");
+                $sheet->setCellValue("D{$inicioBloque}", $categoria['categoria']);
+
+                $sheet->mergeCells("E{$inicioBloque}:E{$finBloque}");
+                $sheet->setCellValue("E{$inicioBloque}", $categoria['tiempo_exposicion']);
+
+                $inicioBloque = $finBloque + 1;
+            }
+
+            foreach ($agentes as $registro) {
+                $medidasTexto = '';
+                $medidas = json_decode($registro->medidas_json, true);
+                if (is_array($medidas)) {
+                    foreach ($medidas as $medida) {
+                        if (!empty($medida['seleccionado'])) {
+                            $medidasTexto .= "- {$medida['descripcion']}\n";
+                        }
+                    }
+                }
+
+                $sheet->setCellValue("B{$filaExcel}", $registro->agente);
+                $sheet->setCellValue("F{$filaExcel}", $registro->indice_peligro);
+                $sheet->setCellValue("G{$filaExcel}", $registro->indice_exposicion);
+
+                // RIESGO CON COLOR
+                $clave = "{$registro->indice_peligro}{$registro->indice_exposicion}";
+                if (isset($combinaciones[$clave])) {
+                    $color = $combinaciones[$clave]['color'];
+                    $texto = $combinaciones[$clave]['texto'];
+
+                    $sheet->setCellValue("H{$filaExcel}", $texto);
+                    $sheet->getStyle("H{$filaExcel}")->getFill()
+                        ->setFillType(Fill::FILL_SOLID)
+                        ->getStartColor()->setARGB($color);
+                } else {
+                    $sheet->setCellValue("H{$filaExcel}", $registro->riesgo);
+                }
+
+                $sheet->setCellValue("I{$filaExcel}", $registro->valor_lmpnmp);
+                $sheet->setCellValue("J{$filaExcel}", $registro->cumplimiento);
+                $sheet->setCellValue("K{$filaExcel}", $medidasTexto);
+                $sheet->getStyle("K{$filaExcel}")->getAlignment()->setWrapText(true);
+
+                $filaExcel++;
+            }
+        }
+
+        $writer = new Xlsx($spreadsheet);
+        $fileName = 'Matriz_Laboral_' . date('Ymd_His') . '.xlsx';
+        $temp_file = tempnam(sys_get_temp_dir(), $fileName);
+        $writer->save($temp_file);
+
+        return Response::download($temp_file, $fileName)->deleteFileAfterSend(true);
+    }
 
 
 

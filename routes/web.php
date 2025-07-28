@@ -1101,6 +1101,9 @@ Route::get('reportecategoriatabla/{proyecto_id}', ['as' => 'reportes.reportecate
 
 Route::get('reportematrizlabtablageneral/{proyecto_id}', ['as' => 'reportes.reportematrizlabtablageneral', 'uses' => 'reportes\reportesController@reportematrizlabtablageneral']);
 
+Route::get('reporteexcelmatrizlab/{proyecto_id}', ['as' => 'reportes.reporteexcelmatrizlab', 'uses' => 'reportes\reportesController@reporteexcelmatrizlab']);
+
+
 
 Route::get('reportecategoriaeliminar/{reportecategoria_id}', ['as' => 'reportes.reportecategoriaeliminar', 'uses' => 'reportes\reportesController@reportecategoriaeliminar']);
 

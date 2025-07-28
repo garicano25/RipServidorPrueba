@@ -288,42 +288,53 @@ $('#botonguardar_reporte_matriz').on('click', async function () {
 
     data.forEach(row => {
         const numero_registro = row.numero_registro;
-		// const tr = $(`[data-recomendaciones="${numero_registro}"]`).closest('tr');
-		const tr = $(`.fila-matrizlab[data-numero-registro="${numero_registro}"]`);
-
-
+        const tr = $(`.fila-matrizlab[data-numero-registro="${numero_registro}"]`);
         const medidas = [];
-			const container = $(`.contenedor-recomendaciones[data-recomendaciones="${numero_registro}"]`);
-			if (container.length) {
-				container.find('.recomendacion-bloque').each(function () {
-					const bloque = $(this);
-					const descripcion = bloque.find('textarea').val()?.trim() || '';
-					const seleccionado = bloque.find('input[type="checkbox"]').is(':checked');
-					medidas.push({ descripcion, seleccionado });
-				});
-			}
 
-			const fila = {
-				numero_registro,
-				area_id: row.recsensorialarea_nombre.match(/\(ID: (\d+)\)/)?.[1] || 0,
-				agente: row.agente,
-				categoria: row.categoria,
-				recsensorialarea_numerotrabajadores: row.recsensorialarea_numerotrabajadores,
-				recsensorialarea_tiempoexposicion: row.recsensorialarea_tiempoexposicion,
-				recsensorialarea_indicepeligro: tr.find('.ip-select').val() ?? '',
-				recsensorialarea_indiceexposicion: tr.find('.ie-select').val() ?? '',
-				recsensorialarea_riesgo: tr.find('.riesgo-resultado').text() ?? '',
-				recsensorialarea_lmpnmp: row.recsensorialarea_lmpnmp,
-				recsensorialarea_cumplimiento: row.recsensorialarea_cumplimiento,
-				recsensorialarea_medidas: medidas 
-			};
+        const container = $(`.contenedor-recomendaciones[data-recomendaciones="${numero_registro}"]`);
+        if (container.length) {
+            container.find('.recomendacion-bloque').each(function () {
+                const bloque = $(this);
+                const descripcion = bloque.find('textarea').val()?.trim() || '';
+                const seleccionado = bloque.find('input[type="checkbox"]').is(':checked');
+                medidas.push({ descripcion, seleccionado });
+            });
+        }
 
-			filas.push(fila);
-		});
+        const fila = {
+            numero_registro,
+            area_id: row.recsensorialarea_nombre.match(/\(ID: (\d+)\)/)?.[1] || 0,
+            agente: row.agente,
+            categoria: row.categoria,
+            recsensorialarea_numerotrabajadores: row.recsensorialarea_numerotrabajadores,
+            recsensorialarea_tiempoexposicion: row.recsensorialarea_tiempoexposicion,
+            recsensorialarea_indicepeligro: tr.find('.ip-select').val() ?? '',
+            recsensorialarea_indiceexposicion: tr.find('.ie-select').val() ?? '',
+            recsensorialarea_riesgo: tr.find('.riesgo-resultado').text() ?? '',
+            recsensorialarea_lmpnmp: row.recsensorialarea_lmpnmp,
+            recsensorialarea_cumplimiento: row.recsensorialarea_cumplimiento,
+            recsensorialarea_medidas: medidas 
+        };
+
+        filas.push(fila);
+    });
 
     if (!filas.length) {
         alertToast('No hay datos para guardar.', 'warning');
         return;
+    }
+
+    // ✅ CONFIRMACIÓN antes de guardar
+    const confirmacion = await Swal.fire({
+        title: '¿Desea guardar la matriz?',
+        icon: 'question',
+        showCancelButton: true,
+        confirmButtonText: 'Sí, guardar',
+        cancelButtonText: 'Cancelar'
+    });
+
+    if (!confirmacion.isConfirmed) {
+        return; // Usuario canceló
     }
 
     try {
@@ -347,6 +358,73 @@ $('#botonguardar_reporte_matriz').on('click', async function () {
         alertToast('Error de conexión al guardar matriz.', 'error');
     }
 });
+
+
+// $('#botonguardar_reporte_matriz').on('click', async function () {
+//     const data = $('#tabla_matrizlab').DataTable().rows().data().toArray();
+//     const filas = [];
+
+//     data.forEach(row => {
+//         const numero_registro = row.numero_registro;
+// 		// const tr = $(`[data-recomendaciones="${numero_registro}"]`).closest('tr');
+// 		const tr = $(`.fila-matrizlab[data-numero-registro="${numero_registro}"]`);
+
+
+//         const medidas = [];
+// 			const container = $(`.contenedor-recomendaciones[data-recomendaciones="${numero_registro}"]`);
+// 			if (container.length) {
+// 				container.find('.recomendacion-bloque').each(function () {
+// 					const bloque = $(this);
+// 					const descripcion = bloque.find('textarea').val()?.trim() || '';
+// 					const seleccionado = bloque.find('input[type="checkbox"]').is(':checked');
+// 					medidas.push({ descripcion, seleccionado });
+// 				});
+// 			}
+
+// 			const fila = {
+// 				numero_registro,
+// 				area_id: row.recsensorialarea_nombre.match(/\(ID: (\d+)\)/)?.[1] || 0,
+// 				agente: row.agente,
+// 				categoria: row.categoria,
+// 				recsensorialarea_numerotrabajadores: row.recsensorialarea_numerotrabajadores,
+// 				recsensorialarea_tiempoexposicion: row.recsensorialarea_tiempoexposicion,
+// 				recsensorialarea_indicepeligro: tr.find('.ip-select').val() ?? '',
+// 				recsensorialarea_indiceexposicion: tr.find('.ie-select').val() ?? '',
+// 				recsensorialarea_riesgo: tr.find('.riesgo-resultado').text() ?? '',
+// 				recsensorialarea_lmpnmp: row.recsensorialarea_lmpnmp,
+// 				recsensorialarea_cumplimiento: row.recsensorialarea_cumplimiento,
+// 				recsensorialarea_medidas: medidas 
+// 			};
+
+// 			filas.push(fila);
+// 		});
+
+//     if (!filas.length) {
+//         alertToast('No hay datos para guardar.', 'warning');
+//         return;
+//     }
+
+//     try {
+//         const res = await $.ajax({
+//             url: '/reportematrizlabguardar',
+//             method: 'POST',
+//             data: {
+//                 proyecto_id: proyecto.id,
+//                 filas,
+//                 _token: $('meta[name="csrf-token"]').attr('content')
+//             }
+//         });
+
+//         if (res.success) {
+//             alertToast('Matriz guardada correctamente.', 'success');
+//         } else {
+//             alertToast(res.message || 'Error al guardar.', 'error');
+//         }
+//     } catch (err) {
+//         console.error(err);
+//         alertToast('Error de conexión al guardar matriz.', 'error');
+//     }
+// });
 
 
 
@@ -397,3 +475,74 @@ function calcularRiesgoPrioridad(ip, ie) {
 
 
 
+
+$('#boton_reporte_matriz').on('click', function (e) {
+    e.preventDefault();
+
+    Swal.fire({
+        title: "¿Desea generar el reporte Excel?",
+        text: "Matriz Laboral por áreas de trabajo.",
+        icon: "question",
+        showCancelButton: true,
+        confirmButtonColor: "#28a745",
+        cancelButtonColor: "#d33",
+        confirmButtonText: "Sí, descargar",
+        cancelButtonText: "Cancelar",
+        reverseButtons: true
+    }).then((result) => {
+        if (result.isConfirmed) {
+            $('#boton_reporte_matriz').prop('disabled', true);
+
+            Swal.fire({
+                title: "Generando reporte...",
+                text: "Espere un momento mientras se prepara el documento.",
+                icon: "info",
+                allowOutsideClick: false,
+                showConfirmButton: false,
+                didOpen: () => {
+                    Swal.showLoading();
+                }
+            });
+
+            let url = 'reporteexcelmatrizlab/' + proyecto.id;
+
+            $.ajax({
+                url: url,
+                method: 'GET',
+                xhrFields: {
+                    responseType: 'blob'
+                },
+                success: function (data) {
+                    const a = document.createElement('a');
+                    const urlDescarga = window.URL.createObjectURL(data);
+                    a.href = urlDescarga;
+                    a.download = `Matriz_Laboral_${new Date().toISOString().slice(0,10)}.xlsx`;
+                    document.body.appendChild(a);
+                    a.click();
+                    a.remove();
+                    window.URL.revokeObjectURL(urlDescarga);
+
+                    Swal.close();
+                    $('#boton_reporte_matriz').prop('disabled', false);
+                },
+                error: function () {
+                    Swal.fire({
+                        title: "Error",
+                        text: "Hubo un problema al generar el documento.",
+                        icon: "error",
+                        confirmButtonText: "Cerrar"
+                    });
+                    $('#boton_reporte_matriz').prop('disabled', false);
+                }
+            });
+        } else {
+            Swal.fire({
+                title: "Cancelado",
+                text: "No se generó el documento.",
+                icon: "info",
+                timer: 1000,
+                showConfirmButton: false
+            });
+        }
+    });
+});
