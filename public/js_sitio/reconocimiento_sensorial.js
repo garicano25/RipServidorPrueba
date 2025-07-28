@@ -7320,7 +7320,7 @@ $('#tabla_recsensorialanexos tbody').on('click', 'td>button.anexo_pdf', function
 		var archivo = row.data().acreditacion_SoportePDF;
 		var extension = archivo.substring(archivo.lastIndexOf("."));
 		// Obtener FOTO
-		var imagenUrl = '/mostrarFotoAnexo/' + row.data().contrato_anexo_id + extension;
+		var imagenUrl = '/mostrarFotoAnexo/' + row.data().id + extension;
 
 		// Mostrar Foto en el INPUT
 		if ($('#contrato_anexo_imagen').data('dropify')) {
@@ -7363,7 +7363,7 @@ $('#tabla_recsensorialanexos tbody').on('click', 'td>button.anexo_pdf', function
 		if (row.data().acreditacion_id === null) {
 
 
-			$('#visor_documento').attr('src', '/assets/plugins/viewer-pdfjs/web/viewer_read.html?file=/veracreditaciondocumento/' + row.data().contrato_anexo_id + '/' + 1);
+			$('#visor_documento').attr('src', '/assets/plugins/viewer-pdfjs/web/viewer_read.html?file=/veracreditaciondocumento/' + row.data().id + '/' + 1);
 
 			// Titulo modal
 			$('#modal_visor .modal-title').html('Anexo: ' + row.data().proveedor_RazonSocial);

@@ -172,7 +172,7 @@ class acreditacionController extends Controller
 
             return Storage::response($documento->acreditacion_SoportePDF);
         }else{
-            $documento1 = recsensorialanexoModel::where('contrato_anexo_id',$acreditacion_id)->first();
+            $documento1 = recsensorialanexoModel::where('id',$acreditacion_id)->first();
 
             return Storage::response($documento1->ruta_anexo);
 
