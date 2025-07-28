@@ -69,4 +69,4 @@
     var estatus = <?php echo json_encode($estatus); ?>;
     var recsensorial = <?php echo json_encode($recsensorial); ?>;
 </script>
-<script src="/js_sitio/reportes/reportematrizlab.js?v=1.3"></script>
+<script src="/js_sitio/reportes/reportematrizlab.js?v=1.4"></script>

@@ -128,10 +128,11 @@ function tabla_matrizlab(proyecto_id) {
 					}
 
 			}
-
-				
-
 			],
+			createdRow: function (row, data, dataIndex) {
+				$(row).addClass('fila-matrizlab').attr('data-numero-registro', data.numero_registro);
+			},
+
 			order: [[0, "asc"]],
 			rowsGroup: [0, 1],
 			ordering: false,
@@ -181,12 +182,15 @@ function tabla_matrizlab(proyecto_id) {
 					contenedor.find('.recomendacion_checkbox').each(function () {
 
 					});
-					});
+				});
+				
+				
 			}
+			
+			
 
 		});
 
-		// 👇 Aquí solo se actualiza el resultado, NO se redibuja ni recarga la tabla
 		$(document).on('change', '.ip-select, .ie-select', function () {
 			const id = $(this).data('id');
 			const ip = $(`.ip-select[data-id="${id}"]`).val();
@@ -284,39 +288,38 @@ $('#botonguardar_reporte_matriz').on('click', async function () {
 
     data.forEach(row => {
         const numero_registro = row.numero_registro;
-        const tr = $(`[data-recomendaciones="${numero_registro}"]`).closest('tr');
+		// const tr = $(`[data-recomendaciones="${numero_registro}"]`).closest('tr');
+		const tr = $(`.fila-matrizlab[data-numero-registro="${numero_registro}"]`);
+
 
         const medidas = [];
+			const container = $(`.contenedor-recomendaciones[data-recomendaciones="${numero_registro}"]`);
+			if (container.length) {
+				container.find('.recomendacion-bloque').each(function () {
+					const bloque = $(this);
+					const descripcion = bloque.find('textarea').val()?.trim() || '';
+					const seleccionado = bloque.find('input[type="checkbox"]').is(':checked');
+					medidas.push({ descripcion, seleccionado });
+				});
+			}
 
-        // Si hay contenedor de medidas en el DOM, procesarlas
-        const container = $(`.contenedor-recomendaciones[data-recomendaciones="${numero_registro}"]`);
-        if (container.length) {
-            container.find('.recomendacion-bloque').each(function () {
-                const bloque = $(this);
-                const descripcion = bloque.find('textarea').val()?.trim() || '';
-                const seleccionado = bloque.find('input[type="checkbox"]').is(':checked');
+			const fila = {
+				numero_registro,
+				area_id: row.recsensorialarea_nombre.match(/\(ID: (\d+)\)/)?.[1] || 0,
+				agente: row.agente,
+				categoria: row.categoria,
+				recsensorialarea_numerotrabajadores: row.recsensorialarea_numerotrabajadores,
+				recsensorialarea_tiempoexposicion: row.recsensorialarea_tiempoexposicion,
+				recsensorialarea_indicepeligro: tr.find('.ip-select').val() ?? '',
+				recsensorialarea_indiceexposicion: tr.find('.ie-select').val() ?? '',
+				recsensorialarea_riesgo: tr.find('.riesgo-resultado').text() ?? '',
+				recsensorialarea_lmpnmp: row.recsensorialarea_lmpnmp,
+				recsensorialarea_cumplimiento: row.recsensorialarea_cumplimiento,
+				recsensorialarea_medidas: medidas 
+			};
 
-                medidas.push({ descripcion, seleccionado });
-            });
-        }
-
-        const fila = {
-            numero_registro,
-            area_id: row.recsensorialarea_nombre.match(/\(ID: (\d+)\)/)?.[1] || 0,
-            agente: row.agente,
-            categoria: row.categoria,
-            recsensorialarea_numerotrabajadores: row.recsensorialarea_numerotrabajadores,
-            recsensorialarea_tiempoexposicion: row.recsensorialarea_tiempoexposicion,
-            recsensorialarea_indicepeligro: tr.find('.ip-select').val() ?? '',
-            recsensorialarea_indiceexposicion: tr.find('.ie-select').val() ?? '',
-            recsensorialarea_riesgo: tr.find('.riesgo-resultado').text() ?? '',
-            recsensorialarea_lmpnmp: row.recsensorialarea_lmpnmp,
-            recsensorialarea_cumplimiento: row.recsensorialarea_cumplimiento,
-            recsensorialarea_medidas: medidas // array vacío si no hay medidas
-        };
-
-        filas.push(fila);
-    });
+			filas.push(fila);
+		});
 
     if (!filas.length) {
         alertToast('No hay datos para guardar.', 'warning');

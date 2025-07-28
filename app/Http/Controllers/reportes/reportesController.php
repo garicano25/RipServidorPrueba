@@ -749,11 +749,857 @@ class reportesController extends Controller
 
 
 
+    // public function reportematrizlabtablageneral($proyecto_id)
+    // {
+    //     try {
+    //         $proyecto = proyectoModel::with('recsensorial')->findOrFail($proyecto_id);
+    //         $recsensorial = $proyecto->recsensorial;
+
+    //         if (!$recsensorial) {
+    //             throw new \Exception("No se encontró información de reconocimiento sensorial para este proyecto.");
+    //         }
+
+    //         $areas = recsensorialareaModel::with([
+    //             'recsensorialareapruebas.catprueba',
+    //             'recsensorialareacategorias.categorias'
+    //         ])
+    //             ->where('recsensorial_id', $recsensorial->id)
+    //             ->orderBy('id', 'asc')
+    //             ->get();
+
+    //         $filas = [];
+    //         $contadorArea = 1;
+    //         $idsValidos = [1, 2, 3, 4, 8, 15];
+
+    //         foreach ($areas as $area) {
+    //             $agentes = $area->recsensorialareapruebas->map(function ($prueba) {
+    //                 return [
+    //                     'id' => $prueba->catprueba->id ?? '',
+    //                     'nombre' => $prueba->catprueba->catPrueba_Nombre ?? '',
+    //                 ];
+    //             })->toArray();
+
+    //             $categorias = $area->recsensorialareacategorias->map(function ($cat) {
+    //                 return [
+    //                     'nombre' => $cat->categorias->recsensorialcategoria_nombrecategoria ?? '',
+    //                     'total' => $cat->recsensorialareacategorias_total ?? '',
+    //                     'tiempoexpo' => $cat->recsensorialareacategorias_tiempoexpo ?? '',
+    //                 ];
+    //             })->toArray();
+
+    //             $maxFilas = max(count($agentes), count($categorias), 1);
+    //             $agentes = array_pad($agentes, $maxFilas, ['id' => '', 'nombre' => '']);
+    //             $categorias = array_pad($categorias, $maxFilas, ['nombre' => '', 'total' => '', 'tiempoexpo' => '']);
+
+    //             for ($i = 0; $i < $maxFilas; $i++) {
+    //                 $categoria = $categorias[$i];
+    //                 $mostrarSelect = !empty($agentes[$i]['nombre']);
+    //                 $fila_id = $contadorArea . '_' . $i;
+    //                 $idAgente = $agentes[$i]['id'];
+    //                 // $agenteTexto = $agentes[$i]['nombre'] . ($idAgente ? ' (ID: ' . $idAgente . ')' : '');
+
+    //                 $agenteTexto = $agentes[$i]['nombre'];
+
+
+    //                 $valorLMPNMP = 'N/A';
+    //                 $cumplimiento = '';
+    //                 $medidas = 'N/A';
+
+    //                 if (!empty($idAgente)) {
+    //                     $reporteAreaIds = DB::table('reportearea')
+    //                         ->where('recsensorialarea_id', $area->id)
+    //                         ->pluck('id');
+
+    //                     // if ($idAgente == 4) {
+    //                     //     $puntosIluminacion = DB::table('reporteiluminacionpuntos')
+    //                     //         ->whereIn('reporteiluminacionpuntos_area_id', $reporteAreaIds)
+    //                     //         ->where('proyecto_id', $proyecto_id);
+
+    //                     //     if ($puntosIluminacion->exists()) {
+    //                     //         $valorMaxLuxRaw = $puntosIluminacion->max('reporteiluminacionpuntos_lux');
+    //                     //         $valorLMPNMP = number_format($valorMaxLuxRaw) . ' /200';
+    //                     //         $cumplimiento = ($valorMaxLuxRaw >= 200) ? 'DENTRO DE NORMA' : 'FUERA DE NORMA';
+    //                     //     } else {
+    //                     //         $valorLMPNMP = 'No tiene registro';
+    //                     //     }
+    //                     // } 
+    //                     if ($idAgente == 4) {
+    //                         $puntosIluminacion = DB::table('reporteiluminacionpuntos')
+    //                             ->whereIn('reporteiluminacionpuntos_area_id', $reporteAreaIds)
+    //                             ->where('proyecto_id', $proyecto_id);
+
+    //                         if ($puntosIluminacion->exists()) {
+    //                             $valorMaxLuxRaw = $puntosIluminacion->max('reporteiluminacionpuntos_lux');
+    //                             $valorLMPNMP = $valorMaxLuxRaw . ' /200';
+    //                             $cumplimiento = ($valorMaxLuxRaw >= 200) ? 'DENTRO DE NORMA' : 'FUERA DE NORMA';
+    //                         } else {
+    //                             $valorLMPNMP = 'No tiene registro';
+    //                             $cumplimiento = 'FUERA DE NORMA';
+    //                         }
+    //                     }
+    //                     // elseif ($idAgente == 1) {
+    //                     //     $puntosRuido = DB::table('reporteruidopuntoner')
+    //                     //         ->whereIn('reporteruidoarea_id', $reporteAreaIds)
+    //                     //         ->where('proyecto_id', $proyecto_id);
+
+    //                     //     if ($puntosRuido->exists()) {
+    //                     //         $registroMax = $puntosRuido->orderByDesc('reporteruidopuntoner_ner')->first();
+    //                     //         if ($registroMax) {
+    //                     //             $ner = $registroMax->reporteruidopuntoner_ner;
+    //                     //             $lmpe = $registroMax->reporteruidopuntoner_lmpe;
+    //                     //             $valorLMPNMP = number_format($ner) . ' /90';
+    //                     //             $cumplimiento = ($ner <= $lmpe) ? 'DENTRO DE NORMA' : 'FUERA DE NORMA';
+    //                     //         }
+    //                     //     } else {
+    //                     //         $valorLMPNMP = 'No tiene registro';
+    //                     //     }
+    //                     // }
+
+    //                     elseif ($idAgente == 1) {
+    //                         $puntosRuido = DB::table('reporteruidopuntoner')
+    //                             ->whereIn('reporteruidoarea_id', $reporteAreaIds)
+    //                             ->where('proyecto_id', $proyecto_id);
+
+    //                         if ($puntosRuido->exists()) {
+    //                             $registroMax = $puntosRuido->orderByDesc('reporteruidopuntoner_ner')->first();
+    //                             if ($registroMax) {
+    //                                 $ner = $registroMax->reporteruidopuntoner_ner;
+    //                                 $lmpe = $registroMax->reporteruidopuntoner_lmpe;
+    //                                 $valorLMPNMP = $ner . ' /' . $lmpe;
+    //                                 $cumplimiento = ($ner <= $lmpe) ? 'DENTRO DE NORMA' : 'FUERA DE NORMA';
+    //                             }
+    //                         } else {
+    //                             $valorLMPNMP = 'No tiene registro';
+    //                             $cumplimiento = 'FUERA DE NORMA';
+    //                         }
+    //                     }
+
+    //                     // elseif ($idAgente == 3) {
+    //                     //     $registrosTemp = DB::table('reportetemperaturaevaluacion')
+    //                     //         ->whereIn('reportearea_id', $reporteAreaIds)
+    //                     //         ->where('proyecto_id', $proyecto_id)
+    //                     //         ->get();
+
+    //                     //     if ($registrosTemp->count() > 0) {
+    //                     //         $maxValor = null;
+    //                     //         $lmpeValor = null;
+
+    //                     //         foreach ($registrosTemp as $registro) {
+    //                     //             $valores = [
+    //                     //                 (float) $registro->reportetemperaturaevaluacion_I,
+    //                     //                 (float) $registro->reportetemperaturaevaluacion_II,
+    //                     //                 (float) $registro->reportetemperaturaevaluacion_III,
+    //                     //             ];
+    //                     //             $valorMaxLocal = max($valores);
+    //                     //             if (is_null($maxValor) || $valorMaxLocal > $maxValor) {
+    //                     //                 $maxValor = $valorMaxLocal;
+    //                     //                 $lmpeValor = (float) $registro->reportetemperaturaevaluacion_LMPE;
+    //                     //             }
+    //                     //         }
+
+    //                     //         if (!is_null($maxValor) && !is_null($lmpeValor)) {
+    //                     //             $valorLMPNMP = number_format($maxValor, 1) . ' /' . number_format($lmpeValor, 1);
+    //                     //             $cumplimiento = ($maxValor <= $lmpeValor) ? 'DENTRO DE NORMA' : 'FUERA DE NORMA';
+    //                     //         }
+    //                     //     } else {
+    //                     //         $valorLMPNMP = 'No tiene registro';
+    //                     //     }
+    //                     // }
+
+    //                     elseif ($idAgente == 3) {
+    //                         $registrosTemp = DB::table('reportetemperaturaevaluacion')
+    //                             ->whereIn('reportearea_id', $reporteAreaIds)
+    //                             ->where('proyecto_id', $proyecto_id)
+    //                             ->get();
+
+    //                         if ($registrosTemp->count() > 0) {
+    //                             $maxValor = null;
+    //                             $lmpeValor = null;
+
+    //                             foreach ($registrosTemp as $registro) {
+    //                                 $valores = [
+    //                                     $registro->reportetemperaturaevaluacion_I,
+    //                                     $registro->reportetemperaturaevaluacion_II,
+    //                                     $registro->reportetemperaturaevaluacion_III,
+    //                                 ];
+    //                                 $valorMaxLocal = max($valores);
+    //                                 if (is_null($maxValor) || $valorMaxLocal > $maxValor) {
+    //                                     $maxValor = $valorMaxLocal;
+    //                                     $lmpeValor = $registro->reportetemperaturaevaluacion_LMPE;
+    //                                 }
+    //                             }
+
+    //                             if (!is_null($maxValor) && !is_null($lmpeValor)) {
+    //                                 $valorLMPNMP = $maxValor . ' /' . $lmpeValor;
+    //                                 $cumplimiento = ($maxValor <= $lmpeValor) ? 'DENTRO DE NORMA' : 'FUERA DE NORMA';
+    //                             }
+    //                         } else {
+    //                             $valorLMPNMP = 'No tiene registro';
+    //                             $cumplimiento = 'FUERA DE NORMA';
+    //                         }
+    //                     }
+
+    //                     // elseif ($idAgente == 8) {
+    //                     //     $reporteAreaIds = DB::table('reportearea')
+    //                     //         ->where('recsensorialarea_id', $area->id)
+    //                     //         ->pluck('id');
+
+    //                     //     $evaluaciones = DB::table('reporteaireevaluacion')
+    //                     //         ->where('proyecto_id', $proyecto_id)
+    //                     //         ->whereIn('reporteairearea_id', $reporteAreaIds)
+    //                     //         ->get();
+
+    //                     //     if ($evaluaciones->count() > 0) {
+    //                     //         $fuera = false;
+    //                     //         $maxValor = 0;
+
+    //                     //         foreach ($evaluaciones as $eval) {
+    //                     //             $valores = [
+    //                     //                 preg_replace('/[^\d.]/', '', $eval->reporteaireevaluacion_ct),
+    //                     //                 preg_replace('/[^\d.]/', '', $eval->reporteaireevaluacion_ctma),
+    //                     //                 preg_replace('/[^\d.]/', '', $eval->reporteaireevaluacion_hongos),
+    //                     //                 preg_replace('/[^\d.]/', '', $eval->reporteaireevaluacion_levaduras),
+    //                     //             ];
+
+    //                     //             foreach ($valores as $valor) {
+    //                     //                 $num = is_numeric($valor) ? floatval($valor) : 0;
+    //                     //                 $maxValor = max($maxValor, $num);
+    //                     //                 if ($num > 500) {
+    //                     //                     $fuera = true;
+    //                     //                 }
+    //                     //             }
+    //                     //         }
+
+    //                     //         $valorLMPNMP = number_format($maxValor) . ' /500';
+    //                     //         $cumplimiento = $fuera ? 'FUERA DE NORMA' : 'DENTRO DE NORMA';
+    //                     //     } else {
+    //                     //         $valorLMPNMP = 'No tiene registro';
+    //                     //     }
+    //                     // } 
+
+    //                     elseif ($idAgente == 8) {
+    //                         $reporteAreaIds = DB::table('reportearea')
+    //                             ->where('recsensorialarea_id', $area->id)
+    //                             ->pluck('id');
+
+    //                         $evaluaciones = DB::table('reporteaireevaluacion')
+    //                             ->where('proyecto_id', $proyecto_id)
+    //                             ->whereIn('reporteairearea_id', $reporteAreaIds)
+    //                             ->get();
+
+    //                         if ($evaluaciones->count() > 0) {
+    //                             $fuera = false;
+    //                             $maxValor = 0;
+
+    //                             foreach ($evaluaciones as $eval) {
+    //                                 $valores = [
+    //                                     preg_replace('/[^\d.]/', '', $eval->reporteaireevaluacion_ct),
+    //                                     preg_replace('/[^\d.]/', '', $eval->reporteaireevaluacion_ctma),
+    //                                     preg_replace('/[^\d.]/', '', $eval->reporteaireevaluacion_hongos),
+    //                                     preg_replace('/[^\d.]/', '', $eval->reporteaireevaluacion_levaduras),
+    //                                 ];
+
+    //                                 foreach ($valores as $valor) {
+    //                                     $num = is_numeric($valor) ? $valor : 0;
+    //                                     $maxValor = max($maxValor, $num);
+    //                                     if ($num > 500) {
+    //                                         $fuera = true;
+    //                                     }
+    //                                 }
+    //                             }
+
+    //                             $valorLMPNMP = $maxValor . ' /500';
+    //                             $cumplimiento = $fuera ? 'FUERA DE NORMA' : 'DENTRO DE NORMA';
+    //                         } else {
+    //                             $valorLMPNMP = 'No tiene registro';
+    //                             $cumplimiento = 'FUERA DE NORMA';
+    //                         }
+    //                     }
+
+    //                     elseif ($idAgente == 2) {
+    //                         $reporteAreaIds = DB::table('reportearea')
+    //                             ->where('recsensorialarea_id', $area->id)
+    //                             ->pluck('id');
+
+    //                         $registros = DB::table('reportevibracionevaluacion')
+    //                             ->join('reportevibracionevaluaciondatos', 'reportevibracionevaluacion.id', '=', 'reportevibracionevaluaciondatos.reportevibracionevaluacion_id')
+    //                             ->whereIn('reportevibracionevaluacion.reportearea_id', $reporteAreaIds)
+    //                             ->select(
+    //                                 'reportevibracionevaluaciondatos.reportevibracionevaluaciondatos_az1',
+    //                                 'reportevibracionevaluaciondatos.reportevibracionevaluaciondatos_az2',
+    //                                 'reportevibracionevaluaciondatos.reportevibracionevaluaciondatos_az3',
+    //                                 'reportevibracionevaluaciondatos.reportevibracionevaluaciondatos_ax1',
+    //                                 'reportevibracionevaluaciondatos.reportevibracionevaluaciondatos_ax2',
+    //                                 'reportevibracionevaluaciondatos.reportevibracionevaluaciondatos_ax3',
+    //                                 'reportevibracionevaluaciondatos.reportevibracionevaluaciondatos_ay1',
+    //                                 'reportevibracionevaluaciondatos.reportevibracionevaluaciondatos_ay2',
+    //                                 'reportevibracionevaluaciondatos.reportevibracionevaluaciondatos_ay3',
+    //                                 'reportevibracionevaluaciondatos.reportevibracionevaluaciondatos_azlimite',
+    //                                 'reportevibracionevaluaciondatos.reportevibracionevaluaciondatos_axylimite'
+    //                             )
+    //                             ->get();
+
+    //                         if ($registros->count() > 0) {
+    //                             $maxValor = null;
+    //                             $limiteComparacion = null;
+    //                             $valorSeleccionado = '';
+    //                             $limiteSeleccionado = '';
+
+    //                             foreach ($registros as $r) {
+    //                                 $valores = [
+    //                                     $r->reportevibracionevaluaciondatos_az1,
+    //                                     $r->reportevibracionevaluaciondatos_az2,
+    //                                     $r->reportevibracionevaluaciondatos_az3,
+    //                                     $r->reportevibracionevaluaciondatos_ax1,
+    //                                     $r->reportevibracionevaluaciondatos_ax2,
+    //                                     $r->reportevibracionevaluaciondatos_ax3,
+    //                                     $r->reportevibracionevaluaciondatos_ay1,
+    //                                     $r->reportevibracionevaluaciondatos_ay2,
+    //                                     $r->reportevibracionevaluaciondatos_ay3,
+    //                                 ];
+
+    //                                 foreach ($valores as $idx => $valor) {
+    //                                     if (is_numeric($valor)) {
+    //                                         if (is_null($maxValor) || $valor > $maxValor) {
+    //                                             $maxValor = $valor;
+    //                                             $valorSeleccionado = $valor;
+    //                                             $limiteComparacion = $idx <= 2
+    //                                                 ? $r->reportevibracionevaluaciondatos_azlimite
+    //                                                 : $r->reportevibracionevaluaciondatos_axylimite;
+    //                                             $limiteSeleccionado = $limiteComparacion;
+    //                                         }
+    //                                     }
+    //                                 }
+    //                             }
+
+    //                             if (!is_null($valorSeleccionado) && !is_null($limiteSeleccionado)) {
+    //                                 $valorLMPNMP = $valorSeleccionado . ' /' . $limiteSeleccionado;
+    //                                 $cumplimiento = $valorSeleccionado <= $limiteSeleccionado ? 'DENTRO DE NORMA' : 'FUERA DE NORMA';
+    //                             }
+    //                         } else {
+    //                             $valorLMPNMP = 'No tiene registro';
+    //                             $cumplimiento = 'FUERA DE NORMA';
+    //                         }
+    //                     }
+
+    //                     // Agente 15 (químicos)
+    //                     elseif ($idAgente == 15) {
+    //                         $reporteAreaIds = DB::table('reportearea')
+    //                             ->where('recsensorialarea_id', $area->id)
+    //                             ->pluck('id');
+
+    //                         $evaluaciones = DB::table('reportequimicosevaluacion')
+    //                             ->where('proyecto_id', $proyecto_id)
+    //                             ->whereIn('reportequimicosarea_id', $reporteAreaIds)
+    //                             ->pluck('id');
+
+    //                         if ($evaluaciones->isNotEmpty()) {
+    //                             $parametros = DB::table('reportequimicosevaluacionparametro')
+    //                                 ->whereIn('reportequimicosevaluacion_id', $evaluaciones)
+    //                                 ->get();
+
+    //                             if ($parametros->count() > 0) {
+    //                                 $concentracionMax = null;
+    //                                 $valorLimite = null;
+
+    //                                 foreach ($parametros as $p) {
+    //                                     $concentracion = is_numeric($p->reportequimicosevaluacionparametro_concentracion)
+    //                                         ? $p->reportequimicosevaluacionparametro_concentracion + 0
+    //                                         : null;
+    //                                     $limite = is_numeric($p->reportequimicosevaluacionparametro_valorlimite)
+    //                                         ? $p->reportequimicosevaluacionparametro_valorlimite + 0
+    //                                         : null;
+
+    //                                     if (!is_null($concentracion) && !is_null($limite)) {
+    //                                         if (is_null($concentracionMax) || $concentracion > $concentracionMax) {
+    //                                             $concentracionMax = $concentracion;
+    //                                             $valorLimite = $limite;
+    //                                         }
+    //                                     }
+    //                                 }
+
+    //                                 if (!is_null($concentracionMax) && !is_null($valorLimite)) {
+    //                                     $valorLMPNMP = $concentracionMax . ' /' . $valorLimite;
+    //                                     $cumplimiento = ($concentracionMax <= $valorLimite) ? 'DENTRO DE NORMA' : 'FUERA DE NORMA';
+    //                                 } else {
+    //                                     $valorLMPNMP = 'No tiene registro';
+    //                                 }
+    //                             } else {
+    //                                 $valorLMPNMP = 'No tiene registro';
+    //                             }
+    //                         } else {
+    //                             $valorLMPNMP = 'No tiene registro';
+    //                         }
+    //                     }
+
+    //                     elseif ($idAgente === '' || !in_array($idAgente, $idsValidos)) {
+    //                         $valorLMPNMP = 'N/A';
+    //                         $cumplimiento = 'FUERA DE NORMA';
+    //                         $medidas = 'N/A';
+    //                     }
+
+
+    //                     // Recomendaciones
+    //                     $medidas_array = [];
+
+    //                     if (in_array($idAgente, $idsValidos)) {
+    //                         $recomendaciones = DB::table('reporterecomendaciones')
+    //                             ->where('proyecto_id', $proyecto_id)
+    //                             ->where('agente_id', $idAgente)
+    //                             ->get();
+
+    //                         foreach ($recomendaciones as $value) {
+    //                             $descripcionTexto = $value->reporterecomendaciones_descripcion ?? '';
+    //                             $medidas_array[] = [
+    //                                 'descripcion' => $descripcionTexto,
+    //                                 'seleccionado' => false 
+    //                             ];
+    //                         }
+    //                     }
+    //                 }
+
+
+    //                 $filas[] = [
+    //                     'numero_registro' => $fila_id,
+    //                     'numero_visible' => $contadorArea,
+    //                     'recsensorialarea_nombre' => $i === 0 ? $area->recsensorialarea_nombre . ' (ID: ' . $area->id . ')' : '',
+    //                     'agente' => $agenteTexto,
+    //                     'categoria' => $categoria['nombre'],
+    //                     'recsensorialarea_numerotrabajadores' => $categoria['total'],
+    //                     'recsensorialarea_tiempoexposicion' => $categoria['tiempoexpo'],
+    //                     'recsensorialarea_indicepeligro' => $mostrarSelect ? '' : '-',
+    //                     'recsensorialarea_indiceexposicion' => $mostrarSelect ? '' : '-',
+    //                     'recsensorialarea_riesgo' => '',
+    //                     'recsensorialarea_lmpnmp' => $valorLMPNMP,
+    //                     'recsensorialarea_cumplimiento' => ($cumplimiento ?: ''),
+    //                     'recsensorialarea_medidas_array' => $medidas_array,
+    //                     'rowspan' => $i === 0 ? $maxFilas : 0,
+    //                     'mostrar_select' => $mostrarSelect,
+    //                 ];
+    //             }
+
+    //             $contadorArea++;
+    //         }
+
+    //         return response()->json([
+    //             'data' => $filas,
+    //             'msj' => 'Datos cargados correctamente'
+    //         ]);
+    //     } catch (\Exception $e) {
+    //         return response()->json([
+    //             'data' => [],
+    //             'msj' => 'Error: ' . $e->getMessage()
+    //         ]);
+    //     }
+    // }
+
+    public function datosproyectoreemplazartexto($proyecto, $recsensorial, $texto)
+    {
+        $meses = ["Vacio", "Enero", "Febrero", "Marzo", "Abril", "Mayo", "Junio", "Julio", "Agosto", "Septiembre", "Octubre", "Noviembre", "Diciembre"];
+        $reportefecha = explode("-", $proyecto->proyecto_fechaentrega);
+
+        if (($recsensorial->recsensorial_tipocliente + 0) == 1) // 1 = pemex, 0 = cliente
+        {
+            $texto = str_replace('SUBDIRECCION_NOMBRE', $proyecto->catsubdireccion->catsubdireccion_nombre, $texto);
+            $texto = str_replace('GERENCIA_NOMBRE', $proyecto->catgerencia->catgerencia_nombre, $texto);
+            $texto = str_replace('ACTIVO_NOMBRE', $proyecto->catactivo->catactivo_nombre, $texto);
+        } else {
+            $texto = str_replace('SUBDIRECCION_NOMBRE', '', $texto);
+            $texto = str_replace('GERENCIA_NOMBRE', '', $texto);
+            $texto = str_replace('ACTIVO_NOMBRE', '', $texto);
+
+            $texto = str_replace('PEMEX Exploración y Producción', $recsensorial->recsensorial_empresa, $texto);
+            $texto = str_replace('Pemex Exploración y Producción', $recsensorial->recsensorial_empresa, $texto);
+        }
+
+        $texto = str_replace('INSTALACION_NOMBRE', $proyecto->proyecto_clienteinstalacion, $texto);
+        $texto = str_replace('INSTALACION_DIRECCION', $proyecto->proyecto_clientedireccionservicio, $texto);
+        $texto = str_replace('INSTALACION_CODIGOPOSTAL', 'C.P. ' . $recsensorial->recsensorial_codigopostal, $texto);
+        $texto = str_replace('INSTALACION_COORDENADAS', $recsensorial->recsensorial_coordenadas, $texto);
+        $texto = str_replace('REPORTE_FECHA_LARGA', $reportefecha[2] . " de " . $meses[($reportefecha[1] + 0)] . " del año " . $reportefecha[0], $texto);
+
+        return $texto;
+    }
+
+
+    // public function reportematrizlabtablageneral($proyecto_id)
+    // {
+    //     try {
+    //         $proyecto = proyectoModel::with('recsensorial')->findOrFail($proyecto_id);
+    //         $recsensorial = $proyecto->recsensorial;
+
+    //         $matrizGuardada = matrizlaboral::where('proyecto_id', $proyecto_id)->get()->keyBy('fila_id');
+
+
+    //         if (!$recsensorial) {
+    //             throw new \Exception("No se encontró información de reconocimiento sensorial para este proyecto.");
+    //         }
+
+    //         $areas = recsensorialareaModel::with([
+    //             'recsensorialareapruebas.catprueba',
+    //             'recsensorialareacategorias.categorias'
+    //         ])
+    //             ->where('recsensorial_id', $recsensorial->id)
+    //             ->orderBy('id', 'asc')
+    //             ->get();
+
+    //         $filas = [];
+    //         $contadorArea = 1;
+    //         $idsValidos = [1, 2, 3, 4, 8, 15];
+
+    //         foreach ($areas as $area) {
+    //             $agentes = $area->recsensorialareapruebas->map(function ($prueba) {
+    //                 return [
+    //                     'id' => $prueba->catprueba->id ?? '',
+    //                     'nombre' => $prueba->catprueba->catPrueba_Nombre ?? '',
+    //                 ];
+    //             })->toArray();
+
+    //             $categorias = $area->recsensorialareacategorias->map(function ($cat) {
+    //                 return [
+    //                     'nombre' => $cat->categorias->recsensorialcategoria_nombrecategoria ?? '',
+    //                     'total' => $cat->recsensorialareacategorias_total ?? '',
+    //                     'tiempoexpo' => $cat->recsensorialareacategorias_tiempoexpo ?? '',
+    //                 ];
+    //             })->toArray();
+
+    //             $maxFilas = max(count($agentes), count($categorias), 1);
+    //             $agentes = array_pad($agentes, $maxFilas, ['id' => '', 'nombre' => '']);
+    //             $categorias = array_pad($categorias, $maxFilas, ['nombre' => '', 'total' => '', 'tiempoexpo' => '']);
+
+    //             for ($i = 0; $i < $maxFilas; $i++) {
+    //                 $categoria = $categorias[$i];
+    //                 $mostrarSelect = !empty($agentes[$i]['nombre']);
+    //                 $fila_id = $contadorArea . '_' . $i;
+    //                 $idAgente = $agentes[$i]['id'];
+
+    //                 $agenteTexto = $agentes[$i]['nombre'];
+
+
+    //                 $valorLMPNMP = 'N/A';
+    //                 $cumplimiento = '';
+    //                 $medidas = 'N/A';
+
+    //                 if (!empty($idAgente)) {
+    //                     $reporteAreaIds = DB::table('reportearea')
+    //                         ->where('recsensorialarea_id', $area->id)
+    //                         ->pluck('id');
+
+
+    //                     if ($idAgente == 4) {
+    //                         $puntosIluminacion = DB::table('reporteiluminacionpuntos')
+    //                             ->whereIn('reporteiluminacionpuntos_area_id', $reporteAreaIds)
+    //                             ->where('proyecto_id', $proyecto_id);
+
+    //                         if ($puntosIluminacion->exists()) {
+    //                             $valorMaxLuxRaw = $puntosIluminacion->max('reporteiluminacionpuntos_lux');
+    //                             $valorLMPNMP = $valorMaxLuxRaw . ' /200';
+    //                             $cumplimiento = ($valorMaxLuxRaw >= 200) ? 'DENTRO DE NORMA' : 'FUERA DE NORMA';
+    //                         } else {
+    //                             $valorLMPNMP = 'No tiene registro';
+    //                             $cumplimiento = 'FUERA DE NORMA';
+    //                         }
+    //                     }
+
+    //                     elseif ($idAgente == 1) {
+    //                         $puntosRuido = DB::table('reporteruidopuntoner')
+    //                             ->whereIn('reporteruidoarea_id', $reporteAreaIds)
+    //                             ->where('proyecto_id', $proyecto_id);
+
+    //                         if ($puntosRuido->exists()) {
+    //                             $registroMax = $puntosRuido->orderByDesc('reporteruidopuntoner_ner')->first();
+    //                             if ($registroMax) {
+    //                                 $ner = $registroMax->reporteruidopuntoner_ner;
+    //                                 $lmpe = $registroMax->reporteruidopuntoner_lmpe;
+    //                                 $valorLMPNMP = $ner . ' /' . $lmpe;
+    //                                 $cumplimiento = ($ner <= $lmpe) ? 'DENTRO DE NORMA' : 'FUERA DE NORMA';
+    //                             }
+    //                         } else {
+    //                             $valorLMPNMP = 'No tiene registro';
+    //                             $cumplimiento = 'FUERA DE NORMA';
+    //                         }
+    //                     }
+
+
+    //                     elseif ($idAgente == 3) {
+    //                         $registrosTemp = DB::table('reportetemperaturaevaluacion')
+    //                             ->whereIn('reportearea_id', $reporteAreaIds)
+    //                             ->where('proyecto_id', $proyecto_id)
+    //                             ->get();
+
+    //                         if ($registrosTemp->count() > 0) {
+    //                             $maxValor = null;
+    //                             $lmpeValor = null;
+
+    //                             foreach ($registrosTemp as $registro) {
+    //                                 $valores = [
+    //                                     $registro->reportetemperaturaevaluacion_I,
+    //                                     $registro->reportetemperaturaevaluacion_II,
+    //                                     $registro->reportetemperaturaevaluacion_III,
+    //                                 ];
+    //                                 $valorMaxLocal = max($valores);
+    //                                 if (is_null($maxValor) || $valorMaxLocal > $maxValor) {
+    //                                     $maxValor = $valorMaxLocal;
+    //                                     $lmpeValor = $registro->reportetemperaturaevaluacion_LMPE;
+    //                                 }
+    //                             }
+
+    //                             if (!is_null($maxValor) && !is_null($lmpeValor)) {
+    //                                 $valorLMPNMP = $maxValor . ' /' . $lmpeValor;
+    //                                 $cumplimiento = ($maxValor <= $lmpeValor) ? 'DENTRO DE NORMA' : 'FUERA DE NORMA';
+    //                             }
+    //                         } else {
+    //                             $valorLMPNMP = 'No tiene registro';
+    //                             $cumplimiento = 'FUERA DE NORMA';
+    //                         }
+    //                     }
+
+    //                     elseif ($idAgente == 8) {
+    //                         $reporteAreaIds = DB::table('reportearea')
+    //                             ->where('recsensorialarea_id', $area->id)
+    //                             ->pluck('id');
+
+    //                         $evaluaciones = DB::table('reporteaireevaluacion')
+    //                             ->where('proyecto_id', $proyecto_id)
+    //                             ->whereIn('reporteairearea_id', $reporteAreaIds)
+    //                             ->get();
+
+    //                         if ($evaluaciones->count() > 0) {
+    //                             $fuera = false;
+    //                             $maxValor = 0;
+
+    //                             foreach ($evaluaciones as $eval) {
+    //                                 $valores = [
+    //                                     preg_replace('/[^\d.]/', '', $eval->reporteaireevaluacion_ct),
+    //                                     preg_replace('/[^\d.]/', '', $eval->reporteaireevaluacion_ctma),
+    //                                     preg_replace('/[^\d.]/', '', $eval->reporteaireevaluacion_hongos),
+    //                                     preg_replace('/[^\d.]/', '', $eval->reporteaireevaluacion_levaduras),
+    //                                 ];
+
+    //                                 foreach ($valores as $valor) {
+    //                                     $num = is_numeric($valor) ? $valor : 0;
+    //                                     $maxValor = max($maxValor, $num);
+    //                                     if ($num > 500) {
+    //                                         $fuera = true;
+    //                                     }
+    //                                 }
+    //                             }
+
+    //                             $valorLMPNMP = $maxValor . ' /500';
+    //                             $cumplimiento = $fuera ? 'FUERA DE NORMA' : 'DENTRO DE NORMA';
+    //                         } else {
+    //                             $valorLMPNMP = 'No tiene registro';
+    //                             $cumplimiento = 'FUERA DE NORMA';
+    //                         }
+    //                     } elseif ($idAgente == 2) {
+    //                         $reporteAreaIds = DB::table('reportearea')
+    //                             ->where('recsensorialarea_id', $area->id)
+    //                             ->pluck('id');
+
+    //                         $registros = DB::table('reportevibracionevaluacion')
+    //                             ->join('reportevibracionevaluaciondatos', 'reportevibracionevaluacion.id', '=', 'reportevibracionevaluaciondatos.reportevibracionevaluacion_id')
+    //                             ->whereIn('reportevibracionevaluacion.reportearea_id', $reporteAreaIds)
+    //                             ->select(
+    //                                 'reportevibracionevaluaciondatos.reportevibracionevaluaciondatos_az1',
+    //                                 'reportevibracionevaluaciondatos.reportevibracionevaluaciondatos_az2',
+    //                                 'reportevibracionevaluaciondatos.reportevibracionevaluaciondatos_az3',
+    //                                 'reportevibracionevaluaciondatos.reportevibracionevaluaciondatos_ax1',
+    //                                 'reportevibracionevaluaciondatos.reportevibracionevaluaciondatos_ax2',
+    //                                 'reportevibracionevaluaciondatos.reportevibracionevaluaciondatos_ax3',
+    //                                 'reportevibracionevaluaciondatos.reportevibracionevaluaciondatos_ay1',
+    //                                 'reportevibracionevaluaciondatos.reportevibracionevaluaciondatos_ay2',
+    //                                 'reportevibracionevaluaciondatos.reportevibracionevaluaciondatos_ay3',
+    //                                 'reportevibracionevaluaciondatos.reportevibracionevaluaciondatos_azlimite',
+    //                                 'reportevibracionevaluaciondatos.reportevibracionevaluaciondatos_axylimite'
+    //                             )
+    //                             ->get();
+
+    //                         if ($registros->count() > 0) {
+    //                             $maxValor = null;
+    //                             $limiteComparacion = null;
+    //                             $valorSeleccionado = '';
+    //                             $limiteSeleccionado = '';
+
+    //                             foreach ($registros as $r) {
+    //                                 $valores = [
+    //                                     $r->reportevibracionevaluaciondatos_az1,
+    //                                     $r->reportevibracionevaluaciondatos_az2,
+    //                                     $r->reportevibracionevaluaciondatos_az3,
+    //                                     $r->reportevibracionevaluaciondatos_ax1,
+    //                                     $r->reportevibracionevaluaciondatos_ax2,
+    //                                     $r->reportevibracionevaluaciondatos_ax3,
+    //                                     $r->reportevibracionevaluaciondatos_ay1,
+    //                                     $r->reportevibracionevaluaciondatos_ay2,
+    //                                     $r->reportevibracionevaluaciondatos_ay3,
+    //                                 ];
+
+    //                                 foreach ($valores as $idx => $valor) {
+    //                                     if (is_numeric($valor)) {
+    //                                         if (is_null($maxValor) || $valor > $maxValor) {
+    //                                             $maxValor = $valor;
+    //                                             $valorSeleccionado = $valor;
+    //                                             $limiteComparacion = $idx <= 2
+    //                                                 ? $r->reportevibracionevaluaciondatos_azlimite
+    //                                                 : $r->reportevibracionevaluaciondatos_axylimite;
+    //                                             $limiteSeleccionado = $limiteComparacion;
+    //                                         }
+    //                                     }
+    //                                 }
+    //                             }
+
+    //                             if (!is_null($valorSeleccionado) && !is_null($limiteSeleccionado)) {
+    //                                 $valorLMPNMP = $valorSeleccionado . ' /' . $limiteSeleccionado;
+    //                                 $cumplimiento = $valorSeleccionado <= $limiteSeleccionado ? 'DENTRO DE NORMA' : 'FUERA DE NORMA';
+    //                             }
+    //                         } else {
+    //                             $valorLMPNMP = 'No tiene registro';
+    //                             $cumplimiento = 'FUERA DE NORMA';
+    //                         }
+    //                     }
+
+    //                     // Agente 15 (químicos)
+    //                     elseif ($idAgente == 15) {
+    //                         $reporteAreaIds = DB::table('reportearea')
+    //                             ->where('recsensorialarea_id', $area->id)
+    //                             ->pluck('id');
+
+    //                         $evaluaciones = DB::table('reportequimicosevaluacion')
+    //                             ->where('proyecto_id', $proyecto_id)
+    //                             ->whereIn('reportequimicosarea_id', $reporteAreaIds)
+    //                             ->pluck('id');
+
+    //                         if ($evaluaciones->isNotEmpty()) {
+    //                             $parametros = DB::table('reportequimicosevaluacionparametro')
+    //                                 ->whereIn('reportequimicosevaluacion_id', $evaluaciones)
+    //                                 ->get();
+
+    //                             if ($parametros->count() > 0) {
+    //                                 $concentracionMax = null;
+    //                                 $valorLimite = null;
+
+    //                                 foreach ($parametros as $p) {
+    //                                     $concentracion = is_numeric($p->reportequimicosevaluacionparametro_concentracion)
+    //                                         ? $p->reportequimicosevaluacionparametro_concentracion + 0
+    //                                         : null;
+    //                                     $limite = is_numeric($p->reportequimicosevaluacionparametro_valorlimite)
+    //                                         ? $p->reportequimicosevaluacionparametro_valorlimite + 0
+    //                                         : null;
+
+    //                                     if (!is_null($concentracion) && !is_null($limite)) {
+    //                                         if (is_null($concentracionMax) || $concentracion > $concentracionMax) {
+    //                                             $concentracionMax = $concentracion;
+    //                                             $valorLimite = $limite;
+    //                                         }
+    //                                     }
+    //                                 }
+
+    //                                 if (!is_null($concentracionMax) && !is_null($valorLimite)) {
+    //                                     $valorLMPNMP = $concentracionMax . ' /' . $valorLimite;
+    //                                     $cumplimiento = ($concentracionMax <= $valorLimite) ? 'DENTRO DE NORMA' : 'FUERA DE NORMA';
+    //                                 } else {
+    //                                     $valorLMPNMP = 'No tiene registro';
+    //                                 }
+    //                             } else {
+    //                                 $valorLMPNMP = 'No tiene registro';
+    //                             }
+    //                         } else {
+    //                             $valorLMPNMP = 'No tiene registro';
+    //                         }
+    //                     } elseif ($idAgente === '' || !in_array($idAgente, $idsValidos)) {
+    //                         $valorLMPNMP = 'N/A';
+    //                         $cumplimiento = 'FUERA DE NORMA';
+    //                         $medidas = 'N/A';
+    //                     }
+
+
+
+
+    //                 }
+
+    //                 $registroGuardado = $matrizGuardada[$fila_id] ?? null;
+
+    //                 $indicePeligroGuardado = $registroGuardado->indice_peligro ?? '';
+    //                 $indiceExposicionGuardado = $registroGuardado->indice_exposicion ?? '';
+    //                 $riesgoGuardado = $registroGuardado->riesgo ?? '';
+
+
+
+
+    //                 $medidasGuardadas = collect(json_decode($registroGuardado->medidas_json ?? '[]', true));
+
+    //                 $medidas_array = [];
+
+    //                 if (in_array($idAgente, $idsValidos)) {
+    //                     $recomendaciones = DB::table('reporterecomendaciones')
+    //                         ->where('proyecto_id', $proyecto_id)
+    //                         ->where('agente_id', $idAgente)
+    //                         ->get();
+
+    //                     foreach ($recomendaciones as $value) {
+    //                         $descripcionOriginal = $value->reporterecomendaciones_descripcion ?? '';
+    //                         $descripcionTexto = $this->datosproyectoreemplazartexto($proyecto, $recsensorial, $descripcionOriginal);
+
+    //                         $yaGuardada = $medidasGuardadas->firstWhere('descripcion', $descripcionTexto);
+    //                         $seleccionado = $yaGuardada['seleccionado'] ?? false;
+
+    //                         $medidas_array[] = [
+    //                             'descripcion' => $descripcionTexto,
+    //                             'seleccionado' => $seleccionado
+    //                         ];
+    //                     }
+    //                 }
+
+
+    //                 $filas[] = [
+    //                     'numero_registro' => $fila_id,
+    //                     'numero_visible' => $contadorArea,
+    //                     'recsensorialarea_nombre' => $i === 0 ? $area->recsensorialarea_nombre . ' (ID: ' . $area->id . ')' : '',
+    //                     'agente' => $agenteTexto,
+    //                     'categoria' => $categoria['nombre'],
+    //                     'recsensorialarea_numerotrabajadores' => $categoria['total'],
+    //                     'recsensorialarea_tiempoexposicion' => $categoria['tiempoexpo'],
+    //                     // 'recsensorialarea_indicepeligro' => $mostrarSelect ? '' : '-',
+    //                     'recsensorialarea_indicepeligro' => $mostrarSelect ? $indicePeligroGuardado : '-',
+
+    //                     // 'recsensorialarea_indiceexposicion' => $mostrarSelect ? '' : '-',
+    //                     'recsensorialarea_indiceexposicion' => $mostrarSelect ? $indiceExposicionGuardado : '-',
+
+    //                     // 'recsensorialarea_riesgo' => '',
+    //                     'recsensorialarea_riesgo' => $mostrarSelect ? $riesgoGuardado : '',
+
+    //                     'recsensorialarea_lmpnmp' => $valorLMPNMP,
+    //                     'recsensorialarea_cumplimiento' => ($cumplimiento ?: ''),
+    //                     'recsensorialarea_medidas_array' => $medidas_array,
+    //                     'rowspan' => $i === 0 ? $maxFilas : 0,
+    //                     'mostrar_select' => $mostrarSelect,
+    //                 ];
+    //             }
+
+    //             $contadorArea++;
+    //         }
+
+    //         return response()->json([
+    //             'data' => $filas,
+    //             'msj' => 'Datos cargados correctamente'
+    //         ]);
+    //     } catch (\Exception $e) {
+    //         return response()->json([
+    //             'data' => [],
+    //             'msj' => 'Error: ' . $e->getMessage()
+    //         ]);
+    //     }
+    // }
+
+
+
     public function reportematrizlabtablageneral($proyecto_id)
     {
         try {
             $proyecto = proyectoModel::with('recsensorial')->findOrFail($proyecto_id);
             $recsensorial = $proyecto->recsensorial;
+
+            $matrizGuardada = matrizlaboral::where('proyecto_id', $proyecto_id)->get()->keyBy('fila_id');
+
 
             if (!$recsensorial) {
                 throw new \Exception("No se encontró información de reconocimiento sensorial para este proyecto.");
@@ -796,7 +1642,6 @@ class reportesController extends Controller
                     $mostrarSelect = !empty($agentes[$i]['nombre']);
                     $fila_id = $contadorArea . '_' . $i;
                     $idAgente = $agentes[$i]['id'];
-                    // $agenteTexto = $agentes[$i]['nombre'] . ($idAgente ? ' (ID: ' . $idAgente . ')' : '');
 
                     $agenteTexto = $agentes[$i]['nombre'];
 
@@ -810,6 +1655,7 @@ class reportesController extends Controller
                             ->where('recsensorialarea_id', $area->id)
                             ->pluck('id');
 
+
                         if ($idAgente == 4) {
                             $puntosIluminacion = DB::table('reporteiluminacionpuntos')
                                 ->whereIn('reporteiluminacionpuntos_area_id', $reporteAreaIds)
@@ -817,10 +1663,11 @@ class reportesController extends Controller
 
                             if ($puntosIluminacion->exists()) {
                                 $valorMaxLuxRaw = $puntosIluminacion->max('reporteiluminacionpuntos_lux');
-                                $valorLMPNMP = number_format($valorMaxLuxRaw) . ' /200';
+                                $valorLMPNMP = $valorMaxLuxRaw . ' /200';
                                 $cumplimiento = ($valorMaxLuxRaw >= 200) ? 'DENTRO DE NORMA' : 'FUERA DE NORMA';
                             } else {
                                 $valorLMPNMP = 'No tiene registro';
+                                $cumplimiento = 'FUERA DE NORMA';
                             }
                         } elseif ($idAgente == 1) {
                             $puntosRuido = DB::table('reporteruidopuntoner')
@@ -832,11 +1679,12 @@ class reportesController extends Controller
                                 if ($registroMax) {
                                     $ner = $registroMax->reporteruidopuntoner_ner;
                                     $lmpe = $registroMax->reporteruidopuntoner_lmpe;
-                                    $valorLMPNMP = number_format($ner) . ' /90';
+                                    $valorLMPNMP = $ner . ' /' . $lmpe;
                                     $cumplimiento = ($ner <= $lmpe) ? 'DENTRO DE NORMA' : 'FUERA DE NORMA';
                                 }
                             } else {
                                 $valorLMPNMP = 'No tiene registro';
+                                $cumplimiento = 'FUERA DE NORMA';
                             }
                         } elseif ($idAgente == 3) {
                             $registrosTemp = DB::table('reportetemperaturaevaluacion')
@@ -850,26 +1698,26 @@ class reportesController extends Controller
 
                                 foreach ($registrosTemp as $registro) {
                                     $valores = [
-                                        (float) $registro->reportetemperaturaevaluacion_I,
-                                        (float) $registro->reportetemperaturaevaluacion_II,
-                                        (float) $registro->reportetemperaturaevaluacion_III,
+                                        $registro->reportetemperaturaevaluacion_I,
+                                        $registro->reportetemperaturaevaluacion_II,
+                                        $registro->reportetemperaturaevaluacion_III,
                                     ];
                                     $valorMaxLocal = max($valores);
                                     if (is_null($maxValor) || $valorMaxLocal > $maxValor) {
                                         $maxValor = $valorMaxLocal;
-                                        $lmpeValor = (float) $registro->reportetemperaturaevaluacion_LMPE;
+                                        $lmpeValor = $registro->reportetemperaturaevaluacion_LMPE;
                                     }
                                 }
 
                                 if (!is_null($maxValor) && !is_null($lmpeValor)) {
-                                    $valorLMPNMP = number_format($maxValor, 1) . ' /' . number_format($lmpeValor, 1);
+                                    $valorLMPNMP = $maxValor . ' /' . $lmpeValor;
                                     $cumplimiento = ($maxValor <= $lmpeValor) ? 'DENTRO DE NORMA' : 'FUERA DE NORMA';
                                 }
                             } else {
                                 $valorLMPNMP = 'No tiene registro';
+                                $cumplimiento = 'FUERA DE NORMA';
                             }
-                        }
-                        elseif ($idAgente == 8) {
+                        } elseif ($idAgente == 8) {
                             $reporteAreaIds = DB::table('reportearea')
                                 ->where('recsensorialarea_id', $area->id)
                                 ->pluck('id');
@@ -892,7 +1740,7 @@ class reportesController extends Controller
                                     ];
 
                                     foreach ($valores as $valor) {
-                                        $num = is_numeric($valor) ? floatval($valor) : 0;
+                                        $num = is_numeric($valor) ? $valor : 0;
                                         $maxValor = max($maxValor, $num);
                                         if ($num > 500) {
                                             $fuera = true;
@@ -900,36 +1748,162 @@ class reportesController extends Controller
                                     }
                                 }
 
-                                $valorLMPNMP = number_format($maxValor) . ' /500';
+                                $valorLMPNMP = $maxValor . ' /500';
                                 $cumplimiento = $fuera ? 'FUERA DE NORMA' : 'DENTRO DE NORMA';
                             } else {
                                 $valorLMPNMP = 'No tiene registro';
+                                $cumplimiento = 'FUERA DE NORMA';
+                            }
+                        } elseif ($idAgente == 2) {
+                            $reporteAreaIds = DB::table('reportearea')
+                                ->where('recsensorialarea_id', $area->id)
+                                ->pluck('id');
+
+                            $registros = DB::table('reportevibracionevaluacion')
+                                ->join('reportevibracionevaluaciondatos', 'reportevibracionevaluacion.id', '=', 'reportevibracionevaluaciondatos.reportevibracionevaluacion_id')
+                                ->whereIn('reportevibracionevaluacion.reportearea_id', $reporteAreaIds)
+                                ->select(
+                                    'reportevibracionevaluaciondatos.reportevibracionevaluaciondatos_az1',
+                                    'reportevibracionevaluaciondatos.reportevibracionevaluaciondatos_az2',
+                                    'reportevibracionevaluaciondatos.reportevibracionevaluaciondatos_az3',
+                                    'reportevibracionevaluaciondatos.reportevibracionevaluaciondatos_ax1',
+                                    'reportevibracionevaluaciondatos.reportevibracionevaluaciondatos_ax2',
+                                    'reportevibracionevaluaciondatos.reportevibracionevaluaciondatos_ax3',
+                                    'reportevibracionevaluaciondatos.reportevibracionevaluaciondatos_ay1',
+                                    'reportevibracionevaluaciondatos.reportevibracionevaluaciondatos_ay2',
+                                    'reportevibracionevaluaciondatos.reportevibracionevaluaciondatos_ay3',
+                                    'reportevibracionevaluaciondatos.reportevibracionevaluaciondatos_azlimite',
+                                    'reportevibracionevaluaciondatos.reportevibracionevaluaciondatos_axylimite'
+                                )
+                                ->get();
+
+                            if ($registros->count() > 0) {
+                                $maxValor = null;
+                                $limiteComparacion = null;
+                                $valorSeleccionado = '';
+                                $limiteSeleccionado = '';
+
+                                foreach ($registros as $r) {
+                                    $valores = [
+                                        $r->reportevibracionevaluaciondatos_az1,
+                                        $r->reportevibracionevaluaciondatos_az2,
+                                        $r->reportevibracionevaluaciondatos_az3,
+                                        $r->reportevibracionevaluaciondatos_ax1,
+                                        $r->reportevibracionevaluaciondatos_ax2,
+                                        $r->reportevibracionevaluaciondatos_ax3,
+                                        $r->reportevibracionevaluaciondatos_ay1,
+                                        $r->reportevibracionevaluaciondatos_ay2,
+                                        $r->reportevibracionevaluaciondatos_ay3,
+                                    ];
+
+                                    foreach ($valores as $idx => $valor) {
+                                        if (is_numeric($valor)) {
+                                            if (is_null($maxValor) || $valor > $maxValor) {
+                                                $maxValor = $valor;
+                                                $valorSeleccionado = $valor;
+                                                $limiteComparacion = $idx <= 2
+                                                    ? $r->reportevibracionevaluaciondatos_azlimite
+                                                    : $r->reportevibracionevaluaciondatos_axylimite;
+                                                $limiteSeleccionado = $limiteComparacion;
+                                            }
+                                        }
+                                    }
+                                }
+
+                                if (!is_null($valorSeleccionado) && !is_null($limiteSeleccionado)) {
+                                    $valorLMPNMP = $valorSeleccionado . ' /' . $limiteSeleccionado;
+                                    $cumplimiento = $valorSeleccionado <= $limiteSeleccionado ? 'DENTRO DE NORMA' : 'FUERA DE NORMA';
+                                }
+                            } else {
+                                $valorLMPNMP = 'No tiene registro';
+                                $cumplimiento = 'FUERA DE NORMA';
                             }
                         }
-                        
-                        elseif ($idAgente === '' || !in_array($idAgente, $idsValidos)) {
+
+                        // Agente 15 (químicos)
+                        elseif ($idAgente == 15) {
+                            $reporteAreaIds = DB::table('reportearea')
+                                ->where('recsensorialarea_id', $area->id)
+                                ->pluck('id');
+
+                            $evaluaciones = DB::table('reportequimicosevaluacion')
+                                ->where('proyecto_id', $proyecto_id)
+                                ->whereIn('reportequimicosarea_id', $reporteAreaIds)
+                                ->pluck('id');
+
+                            if ($evaluaciones->isNotEmpty()) {
+                                $parametros = DB::table('reportequimicosevaluacionparametro')
+                                    ->whereIn('reportequimicosevaluacion_id', $evaluaciones)
+                                    ->get();
+
+                                if ($parametros->count() > 0) {
+                                    $concentracionMax = null;
+                                    $valorLimite = null;
+
+                                    foreach ($parametros as $p) {
+                                        $concentracion = is_numeric($p->reportequimicosevaluacionparametro_concentracion)
+                                            ? $p->reportequimicosevaluacionparametro_concentracion + 0
+                                            : null;
+                                        $limite = is_numeric($p->reportequimicosevaluacionparametro_valorlimite)
+                                            ? $p->reportequimicosevaluacionparametro_valorlimite + 0
+                                            : null;
+
+                                        if (!is_null($concentracion) && !is_null($limite)) {
+                                            if (is_null($concentracionMax) || $concentracion > $concentracionMax) {
+                                                $concentracionMax = $concentracion;
+                                                $valorLimite = $limite;
+                                            }
+                                        }
+                                    }
+
+                                    if (!is_null($concentracionMax) && !is_null($valorLimite)) {
+                                        $valorLMPNMP = $concentracionMax . ' /' . $valorLimite;
+                                        $cumplimiento = ($concentracionMax <= $valorLimite) ? 'DENTRO DE NORMA' : 'FUERA DE NORMA';
+                                    } else {
+                                        $valorLMPNMP = 'No tiene registro';
+                                    }
+                                } else {
+                                    $valorLMPNMP = 'No tiene registro';
+                                }
+                            } else {
+                                $valorLMPNMP = 'No tiene registro';
+                            }
+                        } elseif ($idAgente === '' || !in_array($idAgente, $idsValidos)) {
                             $valorLMPNMP = 'N/A';
                             $cumplimiento = 'FUERA DE NORMA';
                             $medidas = 'N/A';
                         }
+                    }
+
+                    $registroGuardado = $matrizGuardada[$fila_id] ?? null;
+
+                    $indicePeligroGuardado = $registroGuardado->indice_peligro ?? '';
+                    $indiceExposicionGuardado = $registroGuardado->indice_exposicion ?? '';
+                    $riesgoGuardado = $registroGuardado->riesgo ?? '';
 
 
-                        // Recomendaciones
-                        $medidas_array = [];
 
-                        if (in_array($idAgente, $idsValidos)) {
-                            $recomendaciones = DB::table('reporterecomendaciones')
-                                ->where('proyecto_id', $proyecto_id)
-                                ->where('agente_id', $idAgente)
-                                ->get();
+                    $medidasGuardadas = collect(json_decode($registroGuardado->medidas_json ?? '[]', true));
 
-                            foreach ($recomendaciones as $value) {
-                                $descripcionTexto = $value->reporterecomendaciones_descripcion ?? '';
-                                $medidas_array[] = [
-                                    'descripcion' => $descripcionTexto,
-                                    'seleccionado' => false // valor por defecto, ya que es carga inicial
-                                ];
-                            }
+                    $medidas_array = [];
+
+                    if (!empty($idAgente)) {
+                        $recomendaciones = DB::table('reporterecomendaciones')
+                            ->where('proyecto_id', $proyecto_id)
+                            ->where('agente_id', $idAgente)
+                            ->get();
+
+                        foreach ($recomendaciones as $value) {
+                            $descripcionOriginal = $value->reporterecomendaciones_descripcion ?? '';
+                            $descripcionTexto = $this->datosproyectoreemplazartexto($proyecto, $recsensorial, $descripcionOriginal);
+
+                            $yaGuardada = $medidasGuardadas->firstWhere('descripcion', $descripcionTexto);
+                            $seleccionado = $yaGuardada['seleccionado'] ?? false;
+
+                            $medidas_array[] = [
+                                'descripcion' => $descripcionTexto,
+                                'seleccionado' => $seleccionado
+                            ];
                         }
                     }
 
@@ -938,17 +1912,13 @@ class reportesController extends Controller
                         'numero_registro' => $fila_id,
                         'numero_visible' => $contadorArea,
                         'recsensorialarea_nombre' => $i === 0 ? $area->recsensorialarea_nombre . ' (ID: ' . $area->id . ')' : '',
-
-                        // 'recsensorialarea_nombre' => $i === 0 ? $area->recsensorialarea_nombre  : '',
-
-
                         'agente' => $agenteTexto,
                         'categoria' => $categoria['nombre'],
                         'recsensorialarea_numerotrabajadores' => $categoria['total'],
                         'recsensorialarea_tiempoexposicion' => $categoria['tiempoexpo'],
-                        'recsensorialarea_indicepeligro' => $mostrarSelect ? '' : '-',
-                        'recsensorialarea_indiceexposicion' => $mostrarSelect ? '' : '-',
-                        'recsensorialarea_riesgo' => '',
+                        'recsensorialarea_indicepeligro' => $indicePeligroGuardado,
+                        'recsensorialarea_indiceexposicion' => $indiceExposicionGuardado,
+                        'recsensorialarea_riesgo' => $riesgoGuardado,
                         'recsensorialarea_lmpnmp' => $valorLMPNMP,
                         'recsensorialarea_cumplimiento' => ($cumplimiento ?: ''),
                         'recsensorialarea_medidas_array' => $medidas_array,
@@ -972,6 +1942,7 @@ class reportesController extends Controller
         }
     }
 
+
     public function guardarMatrizLaboral(Request $request)
     {
         $proyecto_id = $request->proyecto_id;
@@ -986,7 +1957,6 @@ class reportesController extends Controller
         foreach ($filas as $fila) {
             $medidas = [];
 
-            // Si existe el array lo procesamos, si no, lo dejamos como array vacío
             if (isset($fila['recsensorialarea_medidas']) && is_array($fila['recsensorialarea_medidas'])) {
                 foreach ($fila['recsensorialarea_medidas'] as $medida) {
                     $medidas[] = [
@@ -996,7 +1966,6 @@ class reportesController extends Controller
                 }
             }
 
-            // Guardar aunque medidas esté vacío
             matrizlaboral::create([
                 'proyecto_id' => $proyecto_id,
                 'area_id' => $fila['area_id'] ?? 0,
