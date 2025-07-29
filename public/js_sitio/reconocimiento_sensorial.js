@@ -1669,12 +1669,12 @@ $('#tabla_reconocimiento_sensorial tbody').on('click', 'td.mostrar', function ()
 
 
 	//Validamos si ya esta finalizado el reconocimiento de quimico para mostras el div que es validado
-	if (row.data().recsensorial_quimicoFinalizado == 1) {
-		$('#finalizarQuimico').fadeIn(0)
-	} else {
-		$('#finalizarQuimico').fadeOut(0)
+	// if (row.data().recsensorial_quimicoFinalizado == 1) {
+	// 	$('#finalizarQuimico').fadeIn(0)
+	// } else {
+	// 	$('#finalizarQuimico').fadeOut(0)
 
-	}
+	// }
 
 	//Asignamos el valor, para ver si esta autorizado o no el reconocimiento
 	rec_autorizado = row.data().autorizado
