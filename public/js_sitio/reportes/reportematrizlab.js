@@ -324,7 +324,6 @@ $('#botonguardar_reporte_matriz').on('click', async function () {
         return;
     }
 
-    // ✅ CONFIRMACIÓN antes de guardar
     const confirmacion = await Swal.fire({
         title: '¿Desea guardar la matriz?',
         icon: 'question',
@@ -334,7 +333,7 @@ $('#botonguardar_reporte_matriz').on('click', async function () {
     });
 
     if (!confirmacion.isConfirmed) {
-        return; // Usuario canceló
+        return; 
     }
 
     try {
@@ -349,82 +348,28 @@ $('#botonguardar_reporte_matriz').on('click', async function () {
         });
 
         if (res.success) {
-            alertToast('Matriz guardada correctamente.', 'success');
+            await Swal.fire({
+                title: 'Éxito',
+                text: 'Matriz guardada correctamente.',
+                icon: 'success'
+            });
         } else {
-            alertToast(res.message || 'Error al guardar.', 'error');
+            await Swal.fire({
+                title: 'Error',
+                text: res.message || 'Error al guardar la matriz.',
+                icon: 'error'
+            });
         }
     } catch (err) {
         console.error(err);
-        alertToast('Error de conexión al guardar matriz.', 'error');
+        await Swal.fire({
+            title: 'Error',
+            text: 'Error de conexión al guardar matriz.',
+            icon: 'error'
+        });
     }
 });
 
-
-// $('#botonguardar_reporte_matriz').on('click', async function () {
-//     const data = $('#tabla_matrizlab').DataTable().rows().data().toArray();
-//     const filas = [];
-
-//     data.forEach(row => {
-//         const numero_registro = row.numero_registro;
-// 		// const tr = $(`[data-recomendaciones="${numero_registro}"]`).closest('tr');
-// 		const tr = $(`.fila-matrizlab[data-numero-registro="${numero_registro}"]`);
-
-
-//         const medidas = [];
-// 			const container = $(`.contenedor-recomendaciones[data-recomendaciones="${numero_registro}"]`);
-// 			if (container.length) {
-// 				container.find('.recomendacion-bloque').each(function () {
-// 					const bloque = $(this);
-// 					const descripcion = bloque.find('textarea').val()?.trim() || '';
-// 					const seleccionado = bloque.find('input[type="checkbox"]').is(':checked');
-// 					medidas.push({ descripcion, seleccionado });
-// 				});
-// 			}
-
-// 			const fila = {
-// 				numero_registro,
-// 				area_id: row.recsensorialarea_nombre.match(/\(ID: (\d+)\)/)?.[1] || 0,
-// 				agente: row.agente,
-// 				categoria: row.categoria,
-// 				recsensorialarea_numerotrabajadores: row.recsensorialarea_numerotrabajadores,
-// 				recsensorialarea_tiempoexposicion: row.recsensorialarea_tiempoexposicion,
-// 				recsensorialarea_indicepeligro: tr.find('.ip-select').val() ?? '',
-// 				recsensorialarea_indiceexposicion: tr.find('.ie-select').val() ?? '',
-// 				recsensorialarea_riesgo: tr.find('.riesgo-resultado').text() ?? '',
-// 				recsensorialarea_lmpnmp: row.recsensorialarea_lmpnmp,
-// 				recsensorialarea_cumplimiento: row.recsensorialarea_cumplimiento,
-// 				recsensorialarea_medidas: medidas 
-// 			};
-
-// 			filas.push(fila);
-// 		});
-
-//     if (!filas.length) {
-//         alertToast('No hay datos para guardar.', 'warning');
-//         return;
-//     }
-
-//     try {
-//         const res = await $.ajax({
-//             url: '/reportematrizlabguardar',
-//             method: 'POST',
-//             data: {
-//                 proyecto_id: proyecto.id,
-//                 filas,
-//                 _token: $('meta[name="csrf-token"]').attr('content')
-//             }
-//         });
-
-//         if (res.success) {
-//             alertToast('Matriz guardada correctamente.', 'success');
-//         } else {
-//             alertToast(res.message || 'Error al guardar.', 'error');
-//         }
-//     } catch (err) {
-//         console.error(err);
-//         alertToast('Error de conexión al guardar matriz.', 'error');
-//     }
-// });
 
 
 
@@ -476,73 +421,160 @@ function calcularRiesgoPrioridad(ip, ie) {
 
 
 
+
+
 $('#boton_reporte_matriz').on('click', function (e) {
     e.preventDefault();
 
-    Swal.fire({
-        title: "¿Desea generar el reporte Excel?",
-        text: "Matriz Laboral por áreas de trabajo.",
-        icon: "question",
-        showCancelButton: true,
-        confirmButtonColor: "#28a745",
-        cancelButtonColor: "#d33",
-        confirmButtonText: "Sí, descargar",
-        cancelButtonText: "Cancelar",
-        reverseButtons: true
-    }).then((result) => {
-        if (result.isConfirmed) {
-            $('#boton_reporte_matriz').prop('disabled', true);
+    // PRIMERA VERIFICACIÓN: ¿existen registros?
+    $.ajax({
+        url: '/verificarmatrizlab/' + proyecto.id,
+        method: 'GET',
+        success: function (respuesta) {
+            if (respuesta.success) {
+                // Si hay registros, mostrar confirmación
+                Swal.fire({
+                    title: "¿Desea generar el reporte Excel?",
+                    text: "Matriz Laboral por áreas de trabajo.",
+                    icon: "question",
+                    showCancelButton: true,
+                    confirmButtonColor: "#28a745",
+                    cancelButtonColor: "#d33",
+                    confirmButtonText: "Sí, descargar",
+                    cancelButtonText: "Cancelar",
+                    reverseButtons: true
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        $('#boton_reporte_matriz').prop('disabled', true);
+
+                        Swal.fire({
+                            title: "Generando reporte...",
+                            text: "Espere un momento mientras se prepara el documento.",
+                            icon: "info",
+                            allowOutsideClick: false,
+                            showConfirmButton: false,
+                            didOpen: () => {
+                                Swal.showLoading();
+                            }
+                        });
+
+                        let url = 'reporteexcelmatrizlab/' + proyecto.id;
+
+                        $.ajax({
+                            url: url,
+                            method: 'GET',
+                            xhrFields: {
+                                responseType: 'blob'
+                            },
+                            success: function (data, status, xhr) {
+                                const contentType = xhr.getResponseHeader('Content-Type') || '';
+
+                                // Si el servidor respondió con JSON (posible error), mostrar alerta
+                                if (contentType.includes('application/json') || contentType.includes('text/json')) {
+                                    const reader = new FileReader();
+                                    reader.onload = function () {
+                                        try {
+                                            const response = JSON.parse(reader.result);
+                                            Swal.fire({
+                                                title: "Atención",
+                                                text: response.message || "No se puede generar el reporte.",
+                                                icon: "warning"
+                                            });
+                                        } catch (e) {
+                                            Swal.fire({
+                                                title: "Error",
+                                                text: "Respuesta inválida del servidor.",
+                                                icon: "error"
+                                            });
+                                        }
+                                        $('#boton_reporte_matriz').prop('disabled', false);
+                                    };
+                                    reader.readAsText(data);
+                                    return;
+                                }
+
+                                // Descargar el archivo Excel
+                                const a = document.createElement('a');
+                                const urlDescarga = window.URL.createObjectURL(data);
+                                a.href = urlDescarga;
+                                a.download = `Matriz_Laboral_${new Date().toISOString().slice(0, 10)}.xlsx`;
+                                document.body.appendChild(a);
+                                a.click();
+                                a.remove();
+                                window.URL.revokeObjectURL(urlDescarga);
+
+                                // ✅ Mostrar alerta de éxito
+                                Swal.fire({
+                                    title: "Éxito",
+                                    text: "El reporte fue generado correctamente.",
+                                    icon: "success",
+                                    confirmButtonText: "Cerrar"
+                                });
+
+                                $('#boton_reporte_matriz').prop('disabled', false);
+                            },
+                            error: function (xhr) {
+                                const reader = new FileReader();
+                                reader.onload = function () {
+                                    try {
+                                        const response = JSON.parse(reader.result);
+                                        Swal.fire({
+                                            title: "Atención",
+                                            text: response.message || "Error desconocido del servidor.",
+                                            icon: "warning"
+                                        });
+                                    } catch (e) {
+                                        Swal.fire({
+                                            title: "Error",
+                                            text: "No se pudo interpretar la respuesta del servidor.",
+                                            icon: "error"
+                                        });
+                                    }
+                                    $('#boton_reporte_matriz').prop('disabled', false);
+                                };
+
+                                if (xhr.response) {
+                                    reader.readAsText(xhr.response);
+                                } else {
+                                    Swal.fire({
+                                        title: "Error",
+                                        text: "No se recibió respuesta del servidor.",
+                                        icon: "error"
+                                    });
+                                    $('#boton_reporte_matriz').prop('disabled', false);
+                                }
+                            }
+                        });
+                    } else {
+                        Swal.fire({
+                            title: "Cancelado",
+                            text: "No se generó el documento.",
+                            icon: "info",
+                            timer: 1000,
+                            showConfirmButton: false
+                        });
+                    }
+                });
+            }
+        },
+        error: function (xhr) {
+            let mensaje = "No se pudo verificar la información.";
+
+            try {
+                const response = JSON.parse(xhr.responseText);
+                if (response.message) {
+                    mensaje = response.message;
+                }
+            } catch (e) {}
 
             Swal.fire({
-                title: "Generando reporte...",
-                text: "Espere un momento mientras se prepara el documento.",
-                icon: "info",
-                allowOutsideClick: false,
-                showConfirmButton: false,
-                didOpen: () => {
-                    Swal.showLoading();
-                }
-            });
-
-            let url = 'reporteexcelmatrizlab/' + proyecto.id;
-
-            $.ajax({
-                url: url,
-                method: 'GET',
-                xhrFields: {
-                    responseType: 'blob'
-                },
-                success: function (data) {
-                    const a = document.createElement('a');
-                    const urlDescarga = window.URL.createObjectURL(data);
-                    a.href = urlDescarga;
-                    a.download = `Matriz_Laboral_${new Date().toISOString().slice(0,10)}.xlsx`;
-                    document.body.appendChild(a);
-                    a.click();
-                    a.remove();
-                    window.URL.revokeObjectURL(urlDescarga);
-
-                    Swal.close();
-                    $('#boton_reporte_matriz').prop('disabled', false);
-                },
-                error: function () {
-                    Swal.fire({
-                        title: "Error",
-                        text: "Hubo un problema al generar el documento.",
-                        icon: "error",
-                        confirmButtonText: "Cerrar"
-                    });
-                    $('#boton_reporte_matriz').prop('disabled', false);
-                }
-            });
-        } else {
-            Swal.fire({
-                title: "Cancelado",
-                text: "No se generó el documento.",
-                icon: "info",
-                timer: 1000,
-                showConfirmButton: false
+                title: "Atención",
+                text: mensaje,
+                icon: "warning"
             });
         }
     });
 });
+
+
+

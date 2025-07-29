@@ -70,6 +70,7 @@ use PhpOffice\PhpSpreadsheet\Style\Border;
 use PhpOffice\PhpSpreadsheet\Style\Color;
 use PhpOffice\PhpSpreadsheet\Style\Fill;
 use Illuminate\Support\Facades\Response;
+use Symfony\Component\HttpFoundation\Response as HttpResponse;
 
 
 
@@ -1173,13 +1174,34 @@ class reportesController extends Controller
                 throw new \Exception("No se encontró información de reconocimiento sensorial para este proyecto.");
             }
 
+            // $areas = recsensorialareaModel::with([
+            //     'recsensorialareapruebas.catprueba',
+            //     'recsensorialareacategorias.categorias'
+            // ])
+            //     ->where('recsensorial_id', $recsensorial->id)
+            //     ->orderBy('id', 'asc')
+            //     ->get();
+
+
             $areas = recsensorialareaModel::with([
+                'recsensorialareapruebas' => function ($query) {
+                    // Solo incluye pruebas cuya catprueba no sea 17
+                    $query->whereHas('catprueba', function ($q) {
+                        $q->where('id', '!=', 17);
+                    });
+                },
                 'recsensorialareapruebas.catprueba',
                 'recsensorialareacategorias.categorias'
             ])
                 ->where('recsensorial_id', $recsensorial->id)
+                ->whereHas('recsensorialareapruebas.catprueba', function ($q) {
+                    // Filtra las áreas para que solo se incluyan si al menos una prueba tiene catprueba diferente de 17
+                    $q->where('id', '!=', 17);
+                })
                 ->orderBy('id', 'asc')
                 ->get();
+
+
 
             $filas = [];
             $contadorArea = 1;
@@ -1788,6 +1810,23 @@ class reportesController extends Controller
     // }
 
 
+
+    public function verificarmatrizlab($proyecto_id)
+    {
+        $existe = DB::table('matriz_laboral')->where('proyecto_id', $proyecto_id)->exists();
+
+        if ($existe) {
+            return response()->json(['success' => true]);
+        }
+
+        return response()->json([
+            'success' => false,
+            'message' => 'No hay registros para este proyecto en la matriz laboral.'
+        ], 404);
+    }
+
+    
+
     public function reporteexcelmatrizlab($proyecto_id)
     {
         $registros = DB::table('matriz_laboral')
@@ -1795,6 +1834,9 @@ class reportesController extends Controller
             ->orderBy('fila_id')
             ->get();
 
+     
+
+        
         $areasNombres = DB::table('recsensorialarea')->pluck('recsensorialarea_nombre', 'id');
 
         $spreadsheet = new Spreadsheet();
