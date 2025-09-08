@@ -531,7 +531,12 @@ class clienteController extends Controller
                 $num_registro += 1;
                 $value->num_registro = $num_registro;
 
-                $value->RUTA_IMAGEN_LOGO = '<img src="/listalogo/' . $value->ID_PLANTILLA_IMAGEN . '" alt="" class="img-fluid" style="display: block; margin: auto;" width="200" height="200">';
+
+                $value->RUTA_IMAGEN_LOGO = '<img src="/listalogo/' . $value->ID_PLANTILLA_IMAGEN . '?v=' . time() . '" 
+                alt="" class="img-fluid" style="display: block; margin: auto;" width="200" height="200">';
+
+
+
                 // Botones
                 if (auth()->user()->hasRoles(['Superusuario', 'Administrador', 'Coordinador', 'Almacen', 'Operativo HI', 'Compras'])) {
                     $value->accion_activa = 1;

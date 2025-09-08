@@ -121,8 +121,10 @@ $(document).ready(function () {
                             // Restablecer el formulario
                             $('#form_subir_imagen').trigger('reset');
         
-                            // Actualizar tabla
         
+                            // actualizar tabla
+                            $("#tabla_plantillas").DataTable().ajax.reload();
+
                             // Restaurar el botón
                             $('#boton_guardar_logo').html('Guardar <i class="fa fa-save"></i>');
         
@@ -138,7 +140,7 @@ $(document).ready(function () {
                                 showConfirmButton: false
                             });
                             
-                            tabla_plantillas();
+                          
 
                         },
                         beforeSend: function() {
@@ -181,7 +183,7 @@ $(document).ready(function () {
         }
     });
     
-    })
+})
     
 function tabla_plantillas() {
     try {
