@@ -738,18 +738,7 @@
                                                                                     </div>
                                                                                 </div>
                                                                             </div>
-                                                                            <div class="col-12 " id="requiere_fisicos">
-                                                                                <div class="col-lg-12 col-sm-1" id="tituloPersonaElabora" style="display: none;">
-                                                                                    <h3><i class="fa fa-users"></i> Persona que elabora / proporciona los datos del reconocimiento sensorial *</h3>
-                                                                                </div>
-                                                                                <!-- <div class="form-group">
-                                                                                    <label> Persona que elabora / proporciona los datos del reconocimiento sensorial *</label>
-                                                                                    <input type="text" class="form-control" id="recsensorial_elabora1" name="recsensorial_elabora1" required>
-                                                                                </div> -->
-
-                                                                                <button type="button" class="btn btn-danger botonagregarElaborador mb-3" id="botonagregarElaborador">Agregar persona que elabora <i class="fa fa-user-circle"></i></button>
-
-                                                                            </div>
+                                                                            
 
 
                                                                         </div>

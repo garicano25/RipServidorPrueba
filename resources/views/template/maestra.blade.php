@@ -770,7 +770,7 @@ use Illuminate\Support\Str;
     <script src="/assets/plugins/Magnific-Popup-master/dist/jquery.magnific-popup.min.js"></script>
     <script src="/assets/plugins/Magnific-Popup-master/dist/jquery.magnific-popup-init.js"></script>
     {{-- pagina --}}
-    <script src="/js_sitio/reconocimiento_sensorial.js?v=18.2"></script>
+    <script src="/js_sitio/reconocimiento_sensorial.js?v=18.3"></script>
     @endif
 
     @if(request()->is('reconocimientoPsicosocial'))

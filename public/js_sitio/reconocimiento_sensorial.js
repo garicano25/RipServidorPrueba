@@ -905,40 +905,7 @@ $('#sustancias_quimicias').on('select2:unselect', function (e) {
 });
 
 
-//Agregar nuevos contactos que eleaboran el reconocimiento
-$("#botonagregarElaborador").on('click', function (e) {
 
-	$('#tituloPersonaElabora').css('display', "block")
-
-	const divContactosucursal = document.createElement('div');
-	divContactosucursal.classList.add('row', 'generarPersonaElabora');
-	divContactosucursal.innerHTML = `
-		<div class="col-5">
-			<div class="form-group">
-				<label>Nombre completo: *</label>
-				<input type="text" class="form-control" name="NOMBRE_PERSONA_ELABORA" required>
-			</div>
-		</div>
-		<div class="col-5">
-			<div class="form-group">
-				<label> Cargo *</label>
-				<input type="text" class="form-control" name="CARGO_PESONA_ELABORA" required>
-			</div>
-		</div>
-		<div class="col-2 mt-4">
-			<button type="button" class="btn btn-danger btn-circle botonEliminarPersonalElabora"> <i class="fa fa-trash"></i></button>
-		</div>
-	
-		`;
-	const contenedor = document.querySelector('#requiere_fisicos');
-	contenedor.appendChild(divContactosucursal);
-
-	const botonEliminar = divContactosucursal.querySelector('.botonEliminarPersonalElabora');
-	botonEliminar.addEventListener('click', function () {
-		contenedor.removeChild(divContactosucursal);
-	});
-
-})
 
 
 
@@ -1700,11 +1667,6 @@ $('#tabla_reconocimiento_sensorial tbody').on('click', 'td.mostrar', function ()
 
 
 
-	//Mostramos las personas que elaboran en caso de que existan
-	if (row.data().json_personas_elaboran) {
-		mostrarPersonasElaboran(row.data().json_personas_elaboran)
-	}
-
 
 
 	//Si el reconocimiento contiene fisicos
@@ -2356,42 +2318,7 @@ function mostarSustanciasQuimicas(ID) {
 
 }
 
-function mostrarPersonasElaboran(data) {
 
-	$('#tituloPersonaElabora').css('display', "block")
-	dataClean = JSON.parse(data);
-	$.each(dataClean, function (index, valor) {
-
-		const divContactosucursal = document.createElement('div');
-		divContactosucursal.classList.add('row', 'generarPersonaElabora');
-		divContactosucursal.innerHTML = `
-		<div class="col-5">
-			<div class="form-group">
-				<label>Nombre completo: *</label>
-				<input type="text" class="form-control" name="NOMBRE_PERSONA_ELABORA" value="${valor.NOMBRE_PERSONA_ELABORA}" required>
-			</div>
-		</div>
-		<div class="col-5">
-			<div class="form-group">
-				<label> Cargo *</label>
-				<input type="text" class="form-control" name="CARGO_PESONA_ELABORA" value="${valor.CARGO_PERSONA_ELABORA}" required>
-			</div>
-		</div>
-		<div class="col-2 mt-4">
-			<button type="button" class="btn btn-danger btn-circle botonEliminarPersonalElabora"> <i class="fa fa-trash"></i></button>
-		</div>
-	
-		`;
-		const contenedor = document.querySelector('#requiere_fisicos');
-		contenedor.appendChild(divContactosucursal);
-
-		const botonEliminar = divContactosucursal.querySelector('.botonEliminarPersonalElabora');
-		botonEliminar.addEventListener('click', function () {
-			contenedor.removeChild(divContactosucursal);
-		});
-
-	});
-}
 
 
 $("#boton_descargarmapaubicacion").click(function () {
@@ -3746,8 +3673,7 @@ $("#boton_guardar_recsensorial").click(function () {
 							sustancias = crearArregloSustanciasQuimicas($('#recsensorial_id').val());
 						}
 
-						//Creamos el JSON para mandar las personas que elaboran el reconocimiento
-						personasElaboran = crearArregloPersonaElabora()
+					
 
 						// enviar datos
 						$('#form_recsensorial').ajaxForm({
@@ -4104,24 +4030,7 @@ function crearArregloSustanciasQuimicas(RECSENSORIAL_ID = 0) {
 
 }
 
-//Funcion para poder crear y mandar el JSON de las personas que eleboran
-function crearArregloPersonaElabora() {
 
-
-	var personasElaboran = [];
-
-	$('.generarPersonaElabora').each(function (valor) {
-
-		var persona = {
-			'NOMBRE_PERSONA_ELABORA': $(this).find("input[name='NOMBRE_PERSONA_ELABORA']").val(),
-			'CARGO_PERSONA_ELABORA': $(this).find("input[name='CARGO_PESONA_ELABORA']").val(),
-		};
-
-		personasElaboran.push(persona);
-	});
-
-	return personasElaboran;
-}
 
 
 //===============================================================
