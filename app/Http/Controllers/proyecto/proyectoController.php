@@ -1425,53 +1425,102 @@ class proyectoController extends Controller
 
 
                     // folio proyecto
+                    // if (intval($request->proyectoInterno) == 0) { //ASIGNAMOS UN FOLIO NORMAL
+
+                    //     //Buscamos los proyectos Internos
+                    //     $folio = DB::select('SELECT
+                    //                         (COUNT(proyecto.proyecto_folio)+1) AS nuevo_folio_proyecto
+                    //                     FROM
+                    //                         proyecto
+                    //                     WHERE
+                    //                         proyecto.proyectoInterno = 0
+                    //                         AND DATE_FORMAT(proyecto.created_at, "%Y") = DATE_FORMAT(CURDATE(), "%Y")');
+
+
+                    //     switch ($folio[0]->nuevo_folio_proyecto) {
+                    //         case ($folio[0]->nuevo_folio_proyecto < 10):
+                    //             $proyecto_folio = "RES-PJ-" . $ano . "-00" . $folio[0]->nuevo_folio_proyecto;
+                    //             break;
+                    //         case ($folio[0]->nuevo_folio_proyecto < 100):
+                    //             $proyecto_folio = "RES-PJ-" . $ano . "-0" . $folio[0]->nuevo_folio_proyecto;
+                    //             break;
+                    //         default:
+                    //             $proyecto_folio = "RES-PJ-" . $ano . "-" . $folio[0]->nuevo_folio_proyecto;
+                    //             break;
+                    //     }
+                    // } 
                     if (intval($request->proyectoInterno) == 0) { //ASIGNAMOS UN FOLIO NORMAL
 
                         //Buscamos los proyectos Internos
                         $folio = DB::select('SELECT
-                                            (COUNT(proyecto.proyecto_folio)+1) AS nuevo_folio_proyecto
-                                        FROM
-                                            proyecto
-                                        WHERE
-                                            proyecto.proyectoInterno = 0
-                                            AND DATE_FORMAT(proyecto.created_at, "%Y") = DATE_FORMAT(CURDATE(), "%Y")');
-
-
-                        switch ($folio[0]->nuevo_folio_proyecto) {
-                            case ($folio[0]->nuevo_folio_proyecto < 10):
-                                $proyecto_folio = "RES-PJ-" . $ano . "-00" . $folio[0]->nuevo_folio_proyecto;
-                                break;
-                            case ($folio[0]->nuevo_folio_proyecto < 100):
-                                $proyecto_folio = "RES-PJ-" . $ano . "-0" . $folio[0]->nuevo_folio_proyecto;
-                                break;
-                            default:
-                                $proyecto_folio = "RES-PJ-" . $ano . "-" . $folio[0]->nuevo_folio_proyecto;
-                                break;
-                        }
-                    } else { // ASIGNAMOS UN FOLIO INTERNO 
-
-
-                        $folio = DB::select('SELECT
-                                            (COUNT(proyecto.proyecto_folio)+1) AS nuevo_folio_proyecto
-                                        FROM
-                                            proyecto
-                                        WHERE
-                                            proyecto.proyectoInterno = 1
-                                            AND DATE_FORMAT(proyecto.created_at, "%Y") = DATE_FORMAT(CURDATE(), "%Y")');
+                            (COUNT(proyecto.proyecto_folio)+1) AS nuevo_folio_proyecto
+                        FROM
+                            proyecto
+                        WHERE
+                            proyecto.proyectoInterno = 0
+                            AND DATE_FORMAT(proyecto.created_at, "%Y") = DATE_FORMAT(CURDATE(), "%Y")');
 
                         switch ($folio[0]->nuevo_folio_proyecto) {
                             case ($folio[0]->nuevo_folio_proyecto < 10):
-                                $proyecto_folio = "RES-PI-" . $ano . "-00" . $folio[0]->nuevo_folio_proyecto;
+                                $proyecto_folio = "SST-CO" . $ano . "-00" . $folio[0]->nuevo_folio_proyecto;
                                 break;
                             case ($folio[0]->nuevo_folio_proyecto < 100):
-                                $proyecto_folio = "RES-PI-" . $ano . "-0" . $folio[0]->nuevo_folio_proyecto;
+                                $proyecto_folio = "SST-CO" . $ano . "-0" . $folio[0]->nuevo_folio_proyecto;
                                 break;
                             default:
-                                $proyecto_folio = "RES-PI-" . $ano . "-" . $folio[0]->nuevo_folio_proyecto;
+                                $proyecto_folio = "SST-CO" . $ano . "-" . $folio[0]->nuevo_folio_proyecto;
                                 break;
                         }
                     }
 
+                    // else { // ASIGNAMOS UN FOLIO INTERNO 
+
+
+                    //     $folio = DB::select('SELECT
+                    //                         (COUNT(proyecto.proyecto_folio)+1) AS nuevo_folio_proyecto
+                    //                     FROM
+                    //                         proyecto
+                    //                     WHERE
+                    //                         proyecto.proyectoInterno = 1
+                    //                         AND DATE_FORMAT(proyecto.created_at, "%Y") = DATE_FORMAT(CURDATE(), "%Y")');
+
+                    //     switch ($folio[0]->nuevo_folio_proyecto) {
+                    //         case ($folio[0]->nuevo_folio_proyecto < 10):
+                    //             $proyecto_folio = "RES-PI-" . $ano . "-00" . $folio[0]->nuevo_folio_proyecto;
+                    //             break;
+                    //         case ($folio[0]->nuevo_folio_proyecto < 100):
+                    //             $proyecto_folio = "RES-PI-" . $ano . "-0" . $folio[0]->nuevo_folio_proyecto;
+                    //             break;
+                    //         default:
+                    //             $proyecto_folio = "RES-PI-" . $ano . "-" . $folio[0]->nuevo_folio_proyecto;
+                    //             break;
+                    //     }
+                    // }
+
+                    else { // ASIGNAMOS UN FOLIO INTERNO 
+
+                        $folio = DB::select('SELECT
+                            (COUNT(proyecto.proyecto_folio)+1) AS nuevo_folio_proyecto
+                        FROM
+                            proyecto
+                        WHERE
+                            proyecto.proyectoInterno = 1
+                            AND DATE_FORMAT(proyecto.created_at, "%Y") = DATE_FORMAT(CURDATE(), "%Y")');
+
+                        switch ($folio[0]->nuevo_folio_proyecto) {
+                            case ($folio[0]->nuevo_folio_proyecto < 10):
+                                $proyecto_folio = "SST-CO" . $ano . "-PI-00" . $folio[0]->nuevo_folio_proyecto;
+                                break;
+                            case ($folio[0]->nuevo_folio_proyecto < 100):
+                                $proyecto_folio = "SST-CO" . $ano . "-PI-0" . $folio[0]->nuevo_folio_proyecto;
+                                break;
+                            default:
+                                $proyecto_folio = "SST-CO" . $ano . "-PI-" . $folio[0]->nuevo_folio_proyecto;
+                                break;
+                        }
+                    }
+
+                    
                     // actualizar folio
                     $proyectoo->update([
                         'proyecto_folio' => $proyecto_folio

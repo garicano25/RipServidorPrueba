@@ -285,7 +285,7 @@
                                                                         </style>
                                                                         <div class="col-5 d-flex align-items-center">
                                                                             <label class="text-danger me-2">¿El proyecto es Interno? </label>
-                                                                            <div class="switch mx-4 rol_lista" data-toggle="tooltip" title="Al aceptar esta opción el proyecto tendrá un folio de Proyectos Internos. Ejem: RES-PI-XX-XXX">
+                                                                            <div class="switch mx-4 rol_lista" data-toggle="tooltip" title="Al aceptar esta opción el proyecto tendrá un folio de Proyectos Internos. Ejem: SST-COXX-PI-XXX">
                                                                                 <label>
                                                                                     No<input type="checkbox" id="proyectoInternoCheck" value="1" onchange="cambiarFolio(this)">
                                                                                     <span class=" lever switch-col-light-blue"></span>Si
