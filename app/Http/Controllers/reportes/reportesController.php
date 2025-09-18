@@ -1461,7 +1461,7 @@ class reportesController extends Controller
                         } 
                         elseif (in_array($idAgente, [13, 14])) {
                             $valorLMPNMP = 'N/A';
-                            $cumplimiento = 'POR DETERMINAR';
+                            $cumplimiento = 'DETERMINAR';
                             $medidas = 'N/A';
                         } 
                         elseif ($idAgente === '' || !in_array($idAgente, $idsValidos)) {
