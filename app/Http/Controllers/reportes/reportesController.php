@@ -1174,15 +1174,6 @@ class reportesController extends Controller
                 throw new \Exception("No se encontró información de reconocimiento sensorial para este proyecto.");
             }
 
-            // $areas = recsensorialareaModel::with([
-            //     'recsensorialareapruebas.catprueba',
-            //     'recsensorialareacategorias.categorias'
-            // ])
-            //     ->where('recsensorial_id', $recsensorial->id)
-            //     ->orderBy('id', 'asc')
-            //     ->get();
-
-
             $areas = recsensorialareaModel::with([
                 'recsensorialareapruebas' => function ($query) {
                     // Solo incluye pruebas cuya catprueba no sea 17
@@ -1411,6 +1402,54 @@ class reportesController extends Controller
                         }
 
                         // Agente 15 (químicos)
+                        // elseif ($idAgente == 15) {
+                        //     $reporteAreaIds = DB::table('reportearea')
+                        //         ->where('recsensorialarea_id', $area->id)
+                        //         ->pluck('id');
+
+                        //     $evaluaciones = DB::table('reportequimicosevaluacion')
+                        //         ->where('proyecto_id', $proyecto_id)
+                        //         ->whereIn('reportequimicosarea_id', $reporteAreaIds)
+                        //         ->pluck('id');
+
+                        //     if ($evaluaciones->isNotEmpty()) {
+                        //         $parametros = DB::table('reportequimicosevaluacionparametro')
+                        //             ->whereIn('reportequimicosevaluacion_id', $evaluaciones)
+                        //             ->get();
+
+                        //         if ($parametros->count() > 0) {
+                        //             $concentracionMax = null;
+                        //             $valorLimite = null;
+
+                        //             foreach ($parametros as $p) {
+                        //                 $concentracion = is_numeric($p->reportequimicosevaluacionparametro_concentracion)
+                        //                     ? $p->reportequimicosevaluacionparametro_concentracion + 0
+                        //                     : null;
+                        //                 $limite = is_numeric($p->reportequimicosevaluacionparametro_valorlimite)
+                        //                     ? $p->reportequimicosevaluacionparametro_valorlimite + 0
+                        //                     : null;
+
+                        //                 if (!is_null($concentracion) && !is_null($limite)) {
+                        //                     if (is_null($concentracionMax) || $concentracion > $concentracionMax) {
+                        //                         $concentracionMax = $concentracion;
+                        //                         $valorLimite = $limite;
+                        //                     }
+                        //                 }
+                        //             }
+
+                        //             if (!is_null($concentracionMax) && !is_null($valorLimite)) {
+                        //                 $valorLMPNMP = $concentracionMax . ' /' . $valorLimite;
+                        //                 $cumplimiento = ($concentracionMax <= $valorLimite) ? 'DENTRO DE NORMA' : 'FUERA DE NORMA';
+                        //             } else {
+                        //                 $valorLMPNMP = 'No tiene registro';
+                        //             }
+                        //         } else {
+                        //             $valorLMPNMP = 'No tiene registro';
+                        //         }
+                        //     } else {
+                        //         $valorLMPNMP = 'No tiene registro';
+                        //     }
+                        // } 
                         elseif ($idAgente == 15) {
                             $reporteAreaIds = DB::table('reportearea')
                                 ->where('recsensorialarea_id', $area->id)
@@ -1424,41 +1463,38 @@ class reportesController extends Controller
                             if ($evaluaciones->isNotEmpty()) {
                                 $parametros = DB::table('reportequimicosevaluacionparametro')
                                     ->whereIn('reportequimicosevaluacion_id', $evaluaciones)
-                                    ->get();
+                                    ->get()
+                                    ->values(); // asegura índices consecutivos 0..n
 
-                                if ($parametros->count() > 0) {
-                                    $concentracionMax = null;
-                                    $valorLimite = null;
+                                if (isset($parametros[$i])) {
+                                    $p = $parametros[$i];
 
-                                    foreach ($parametros as $p) {
-                                        $concentracion = is_numeric($p->reportequimicosevaluacionparametro_concentracion)
-                                            ? $p->reportequimicosevaluacionparametro_concentracion + 0
-                                            : null;
-                                        $limite = is_numeric($p->reportequimicosevaluacionparametro_valorlimite)
-                                            ? $p->reportequimicosevaluacionparametro_valorlimite + 0
-                                            : null;
+                                    $concentracion = is_numeric($p->reportequimicosevaluacionparametro_concentracion)
+                                        ? $p->reportequimicosevaluacionparametro_concentracion + 0
+                                        : null;
+                                    $limite = is_numeric($p->reportequimicosevaluacionparametro_valorlimite)
+                                        ? $p->reportequimicosevaluacionparametro_valorlimite + 0
+                                        : null;
 
-                                        if (!is_null($concentracion) && !is_null($limite)) {
-                                            if (is_null($concentracionMax) || $concentracion > $concentracionMax) {
-                                                $concentracionMax = $concentracion;
-                                                $valorLimite = $limite;
-                                            }
-                                        }
-                                    }
-
-                                    if (!is_null($concentracionMax) && !is_null($valorLimite)) {
-                                        $valorLMPNMP = $concentracionMax . ' /' . $valorLimite;
-                                        $cumplimiento = ($concentracionMax <= $valorLimite) ? 'DENTRO DE NORMA' : 'FUERA DE NORMA';
+                                    if (!is_null($concentracion) && !is_null($limite)) {
+                                        $valorLMPNMP = $concentracion . ' /' . $limite;
+                                        $cumplimiento = ($concentracion <= $limite) ? 'DENTRO DE NORMA' : 'FUERA DE NORMA';
                                     } else {
                                         $valorLMPNMP = 'No tiene registro';
+                                        $cumplimiento = 'FUERA DE NORMA';
                                     }
                                 } else {
+                                    // si hay más filas que parámetros → no hay datos para esa fila
                                     $valorLMPNMP = 'No tiene registro';
+                                    $cumplimiento = 'FUERA DE NORMA';
                                 }
                             } else {
                                 $valorLMPNMP = 'No tiene registro';
+                                $cumplimiento = 'FUERA DE NORMA';
                             }
-                        } 
+                        }
+                        
+                        
                         elseif (in_array($idAgente, [13, 14])) {
                             $valorLMPNMP = 'N/A';
                             $cumplimiento = 'DETERMINAR';
