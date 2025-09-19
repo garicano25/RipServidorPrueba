@@ -987,7 +987,7 @@ class clienteController extends Controller
             // Informacion del cliente
             $sheet->setCellValue('A3', 'Cliente:');
             pintarCelda($sheet, 'A', 3);
-            $sheet->setCellValue('B3', $cliente->cliente_RazonSocialContrato);
+            $sheet->setCellValue('B3', $cliente->cliente_RazonSocial);
 
             $sheet->setCellValue('A4', 'No. Contrato:');
             pintarCelda($sheet, 'A', 4);
@@ -1009,7 +1009,7 @@ class clienteController extends Controller
 
             $sheet->setCellValue('B6', $validado);
 
-            $sheet->setCellValue('A7', 'Autorizado por por:');
+            $sheet->setCellValue('A7', 'Autorizado por:');
             pintarCelda($sheet, 'A', 7);
             $autorizadoo = $autorizado && !is_null($autorizado->NOMBRE_AUTORIZACION_CRONOGRAMA)
                 ? $autorizado->NOMBRE_AUTORIZACION_CRONOGRAMA
@@ -1231,7 +1231,7 @@ class clienteController extends Controller
 
             $sheet->setCellValue('B6', $validado);
 
-            $sheet->setCellValue('A7', 'Autorizado por por:');
+            $sheet->setCellValue('A7', 'Autorizado por:');
             pintarCelda($sheet, 'A', 7);
             $autorizadoo = $autorizado && !is_null($autorizado->NOMBRE_AUTORIZACION_CRONOGRAMA)
                 ? $autorizado->NOMBRE_AUTORIZACION_CRONOGRAMA
