@@ -1218,6 +1218,9 @@ class reportesController extends Controller
                 $agentes = array_pad($agentes, $maxFilas, ['id' => '', 'nombre' => '']);
                 $categorias = array_pad($categorias, $maxFilas, ['nombre' => '', 'total' => '', 'tiempoexpo' => '']);
 
+                $indiceQuimico = 0;
+
+
                 for ($i = 0; $i < $maxFilas; $i++) {
                     $categoria = $categorias[$i];
                     $mostrarSelect = !empty($agentes[$i]['nombre']);
@@ -1464,10 +1467,10 @@ class reportesController extends Controller
                                 $parametros = DB::table('reportequimicosevaluacionparametro')
                                     ->whereIn('reportequimicosevaluacion_id', $evaluaciones)
                                     ->get()
-                                    ->values(); // asegura índices consecutivos 0..n
+                                    ->values();
 
-                                if (isset($parametros[$i])) {
-                                    $p = $parametros[$i];
+                                if (isset($parametros[$indiceQuimico])) {
+                                    $p = $parametros[$indiceQuimico];
 
                                     $concentracion = is_numeric($p->reportequimicosevaluacionparametro_concentracion)
                                         ? $p->reportequimicosevaluacionparametro_concentracion + 0
@@ -1484,16 +1487,17 @@ class reportesController extends Controller
                                         $cumplimiento = 'FUERA DE NORMA';
                                     }
                                 } else {
-                                    // si hay más filas que parámetros → no hay datos para esa fila
                                     $valorLMPNMP = 'No tiene registro';
                                     $cumplimiento = 'FUERA DE NORMA';
                                 }
+
+                                // 👈 avanzamos el contador solo cuando estamos en un agente 15
+                                $indiceQuimico++;
                             } else {
                                 $valorLMPNMP = 'No tiene registro';
                                 $cumplimiento = 'FUERA DE NORMA';
                             }
                         }
-                        
                         
                         elseif (in_array($idAgente, [13, 14])) {
                             $valorLMPNMP = 'N/A';
