@@ -712,7 +712,7 @@ use Illuminate\Support\Str;
     <script src="https://cdn.jsdelivr.net/npm/@fullcalendar/multimonth@6.1.15/index.global.min.js"></script>
 
     {{-- JS pagina --}}
-    <script src="/js_sitio/cliente.js?v=9.0"></script>
+    <script src="/js_sitio/cliente.js?v=9.1"></script>
     @endif
 
     @if(request()->is('proveedor'))

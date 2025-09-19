@@ -2343,7 +2343,7 @@ function tabla_clientecontratos(cliente_id) {
                         orderable: false,
                     },
                     {
-                        data: "TIPO_SERVICIO",
+                        data: "TIPO_SERVICIO_TEXTO",
                         defaultContent: "-",
                         // className: '',
                         orderable: false,
@@ -2454,10 +2454,7 @@ $('#tabla_clientecontratos tbody').on('click', 'td>button.editar', function () {
     $("#CONTRATO_ID_PRINCIPAL").val(row.data().ID_CONTRATO);
 
     // CAMPOS
-
-
     $("#TIPO_SERVICIO").val(row.data().TIPO_SERVICIO);
-
     $("#NOMBRE_CONTACTO").val(row.data().NOMBRE_CONTACTO);
     $("#CARGO_CONTACTO").val(row.data().CARGO_CONTACTO);
     $("#CORREO_CONTACTO").val(row.data().CORREO_CONTACTO);

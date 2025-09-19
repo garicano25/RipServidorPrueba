@@ -1395,7 +1395,6 @@
                                     <option value="1">Contrato</option>
                                     <option value="2">O.S / O.C</option>
                                     <option value="3">Cotización aceptada</option>
-
                                 </select>
                             </div>
                         </div>

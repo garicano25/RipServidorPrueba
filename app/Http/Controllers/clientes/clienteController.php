@@ -294,17 +294,19 @@ class clienteController extends Controller
 
                 switch ($value->TIPO_SERVICIO) {
                     case 1:
-                        $value->TIPO_SERVICIO = 'Contrato';
+                        $value->TIPO_SERVICIO_TEXTO = 'Contrato';
                         break;
                     case 2:
-                        $value->TIPO_SERVICIO = 'O.S / O.C';
+                        $value->TIPO_SERVICIO_TEXTO = 'O.S / O.C';
                         break;
                     case 3:
-                        $value->TIPO_SERVICIO = 'Cotización aceptada';
+                        $value->TIPO_SERVICIO_TEXTO = 'Cotización aceptada';
                         break;
                     default:
-                        $value->TIPO_SERVICIO = 'N/A';
+                        $value->TIPO_SERVICIO_TEXTO = 'N/A';
                 }
+
+
 
 
                 // Botones
