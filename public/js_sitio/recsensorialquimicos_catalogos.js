@@ -2996,7 +2996,7 @@ $('#boton_nueva_metodo').on('click', function (e) {
     $('#METODO_SUSTANCIA_QUIMICA_ID').val(SUSTANCIA_QUIMICA_ID);
     $('#ID_METODO').val(0);
     $('#ELIMINAR_METODO').val(0);
-    $('#CATALOGO_METODO').val(13);
+    $('#CATALOGO_METODO').val(133);
 
 
     $('#titulo_modal_metodo').html('Método de evaluación para ' + $('#SUSTANCIA_QUIMICA').val());
