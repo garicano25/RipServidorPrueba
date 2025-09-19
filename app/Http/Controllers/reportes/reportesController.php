@@ -1472,16 +1472,21 @@ class reportesController extends Controller
                                 if (isset($parametros[$indiceQuimico])) {
                                     $p = $parametros[$indiceQuimico];
 
-                                    $concentracion = is_numeric($p->reportequimicosevaluacionparametro_concentracion)
-                                        ? $p->reportequimicosevaluacionparametro_concentracion + 0
-                                        : null;
-                                    $limite = is_numeric($p->reportequimicosevaluacionparametro_valorlimite)
-                                        ? $p->reportequimicosevaluacionparametro_valorlimite + 0
-                                        : null;
+                                    // 🔹 Versión original (con < o >) → para mostrar
+                                    $concentracionOriginal = $p->reportequimicosevaluacionparametro_concentracion ?? '';
+                                    $limiteOriginal = $p->reportequimicosevaluacionparametro_valorlimite ?? '';
 
-                                    if (!is_null($concentracion) && !is_null($limite)) {
-                                        $valorLMPNMP = $concentracion . ' /' . $limite;
-                                        $cumplimiento = ($concentracion <= $limite) ? 'DENTRO DE NORMA' : 'FUERA DE NORMA';
+                                    // 🔹 Versión limpia (solo número) → para comparar
+                                    $concentracionNum = preg_replace('/[^\d.]/', '', $concentracionOriginal);
+                                    $limiteNum = preg_replace('/[^\d.]/', '', $limiteOriginal);
+
+                                    $concentracionNum = is_numeric($concentracionNum) ? (float)$concentracionNum : null;
+                                    $limiteNum = is_numeric($limiteNum) ? (float)$limiteNum : null;
+
+                                    if (!is_null($concentracionNum) && !is_null($limiteNum)) {
+                                        // mostramos con el símbolo original, pero comparamos con el valor limpio
+                                        $valorLMPNMP = $concentracionOriginal . ' /' . $limiteOriginal;
+                                        $cumplimiento = ($concentracionNum <= $limiteNum) ? 'DENTRO DE NORMA' : 'FUERA DE NORMA';
                                     } else {
                                         $valorLMPNMP = 'No tiene registro';
                                         $cumplimiento = 'FUERA DE NORMA';
@@ -1491,15 +1496,12 @@ class reportesController extends Controller
                                     $cumplimiento = 'FUERA DE NORMA';
                                 }
 
-                                // 👈 avanzamos el contador solo cuando estamos en un agente 15
                                 $indiceQuimico++;
                             } else {
                                 $valorLMPNMP = 'No tiene registro';
                                 $cumplimiento = 'FUERA DE NORMA';
                             }
-                        }
-                        
-                        elseif (in_array($idAgente, [13, 14])) {
+                        } elseif (in_array($idAgente, [13, 14])) {
                             $valorLMPNMP = 'N/A';
                             $cumplimiento = 'DETERMINAR';
                             $medidas = 'N/A';
