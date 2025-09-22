@@ -1247,7 +1247,7 @@ class reportesController extends Controller
 
                             if ($puntosIluminacion->exists()) {
                                 $registros = $puntosIluminacion->get([
-                                    'id', // opcional si quieres identificar el registro
+                                    'id',
                                     'reporteiluminacionpuntos_lux',
                                     'reporteiluminacionpuntos_luxmed1',
                                     'reporteiluminacionpuntos_luxmed2',
@@ -1257,15 +1257,15 @@ class reportesController extends Controller
                                 $valoresComparacion = [];
 
                                 foreach ($registros as $registro) {
-                                    // valores medidos de este registro (ignorar null)
+                                    // valores medidos de este registro (ignorar null y ceros)
                                     $valores = array_filter([
                                         $registro->reporteiluminacionpuntos_luxmed1,
                                         $registro->reporteiluminacionpuntos_luxmed2,
                                         $registro->reporteiluminacionpuntos_luxmed3
-                                    ], fn($v) => !is_null($v));
+                                    ], fn($v) => !is_null($v) && $v != 0);
 
                                     if (!empty($valores)) {
-                                        // en este registro tomamos el MENOR de los med1,2,3
+                                        // tomar el MENOR de los med1,2,3 válidos
                                         $minMedicion = min($valores);
 
                                         $valoresComparacion[] = [
@@ -1277,7 +1277,7 @@ class reportesController extends Controller
                                 }
 
                                 if (!empty($valoresComparacion)) {
-                                    // Ahora de todos los registros, tomamos el MÁS BAJO
+                                    // Tomamos el MÁS BAJO de los mínimos
                                     $seleccionado = collect($valoresComparacion)->sortBy('minMedicion')->first();
 
                                     $minMedicion = $seleccionado['minMedicion'];
@@ -1293,7 +1293,7 @@ class reportesController extends Controller
                                 $valorLMPNMP  = 'No tiene registro';
                                 $cumplimiento = 'FUERA DE NORMA';
                             }
-                        }elseif ($idAgente == 1) {
+                        } elseif ($idAgente == 1) {
                             $puntosRuido = DB::table('reporteruidopuntoner')
                                 ->whereIn('reporteruidoarea_id', $reporteAreaIds)
                                 ->where('proyecto_id', $proyecto_id);
