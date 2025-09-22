@@ -1260,7 +1260,6 @@ class reportesController extends Controller
                                 ->where('proyecto_id', $proyecto_id);
 
                             if ($puntosIluminacion->exists()) {
-                                // Traemos todos los registros
                                 $registros = $puntosIluminacion->get([
                                     'reporteiluminacionpuntos_lux',
                                     'reporteiluminacionpuntos_luxmed1',
@@ -1268,14 +1267,14 @@ class reportesController extends Controller
                                     'reporteiluminacionpuntos_luxmed3'
                                 ]);
 
-                                $cumplimiento = 'FUERA DE NORMA'; // por defecto
-                                $valorLMPNMP   = 'No tiene registro';
+                                $valoresComparacion = [];
+                                $limiteReferencia   = null;
 
                                 foreach ($registros as $registro) {
-                                    // Límite de este registro
+                                    // límite de este registro
                                     $limite = $registro->reporteiluminacionpuntos_lux;
 
-                                    // Tomar el valor más alto de los med1, med2, med3 (ignorando nulls/vacíos)
+                                    // valores medidos de este registro
                                     $valores = array_filter([
                                         $registro->reporteiluminacionpuntos_luxmed1,
                                         $registro->reporteiluminacionpuntos_luxmed2,
@@ -1283,22 +1282,30 @@ class reportesController extends Controller
                                     ], fn($v) => !is_null($v));
 
                                     if (!empty($valores)) {
-                                        $maxMedicion = max($valores);
-
-                                        // Guardar el último valor evaluado (puedes ajustarlo a tu lógica)
-                                        $valorLMPNMP = $maxMedicion . ' /' . $limite;
-
-                                        // Comparación con el límite
-                                        if ($maxMedicion >= $limite) {
-                                            $cumplimiento = 'DENTRO DE NORMA';
-                                        } else {
-                                            $cumplimiento = 'FUERA DE NORMA';
-                                        }
+                                        $maxMedicion = max($valores); // mayor de med1,2,3
+                                        $valoresComparacion[] = [
+                                            'maxMedicion' => $maxMedicion,
+                                            'limite'      => $limite
+                                        ];
                                     }
                                 }
+
+                                if (!empty($valoresComparacion)) {
+                                    // Ahora tomamos el más BAJO de los máximos
+                                    $seleccionado = collect($valoresComparacion)->sortBy('maxMedicion')->first();
+
+                                    $maxMedicion = $seleccionado['maxMedicion'];
+                                    $limite      = $seleccionado['limite'];
+
+                                    $valorLMPNMP  = $maxMedicion . ' /' . $limite;
+                                    $cumplimiento = ($maxMedicion >= $limite) ? 'DENTRO DE NORMA' : 'FUERA DE NORMA';
+                                } else {
+                                    $valorLMPNMP  = 'No tiene registro';
+                                    $cumplimiento = 'FUERA DE NORMA';
+                                }
                             } else {
-                                $valorLMPNMP   = 'No tiene registro';
-                                $cumplimiento  = 'FUERA DE NORMA';
+                                $valorLMPNMP  = 'No tiene registro';
+                                $cumplimiento = 'FUERA DE NORMA';
                             }
                         } elseif ($idAgente == 1) {
                             $puntosRuido = DB::table('reporteruidopuntoner')
