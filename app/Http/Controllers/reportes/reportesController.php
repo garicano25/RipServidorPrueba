@@ -1240,20 +1240,6 @@ class reportesController extends Controller
                             ->pluck('id');
 
 
-                        // if ($idAgente == 4) {
-                        //     $puntosIluminacion = DB::table('reporteiluminacionpuntos')
-                        //         ->whereIn('reporteiluminacionpuntos_area_id', $reporteAreaIds)
-                        //         ->where('proyecto_id', $proyecto_id);
-
-                        //     if ($puntosIluminacion->exists()) {
-                        //         $valorMaxLuxRaw = $puntosIluminacion->max('reporteiluminacionpuntos_lux');
-                        //         $valorLMPNMP = $valorMaxLuxRaw . ' /200';
-                        //         $cumplimiento = ($valorMaxLuxRaw >= 200) ? 'DENTRO DE NORMA' : 'FUERA DE NORMA';
-                        //     } else {
-                        //         $valorLMPNMP = 'No tiene registro';
-                        //         $cumplimiento = 'FUERA DE NORMA';
-                        //     }
-                        // }
                         if ($idAgente == 4) {
                             $puntosIluminacion = DB::table('reporteiluminacionpuntos')
                                 ->whereIn('reporteiluminacionpuntos_area_id', $reporteAreaIds)
@@ -1261,6 +1247,7 @@ class reportesController extends Controller
 
                             if ($puntosIluminacion->exists()) {
                                 $registros = $puntosIluminacion->get([
+                                    'id', // opcional si quieres identificar el registro
                                     'reporteiluminacionpuntos_lux',
                                     'reporteiluminacionpuntos_luxmed1',
                                     'reporteiluminacionpuntos_luxmed2',
@@ -1268,13 +1255,9 @@ class reportesController extends Controller
                                 ]);
 
                                 $valoresComparacion = [];
-                                $limiteReferencia   = null;
 
                                 foreach ($registros as $registro) {
-                                    // límite de este registro
-                                    $limite = $registro->reporteiluminacionpuntos_lux;
-
-                                    // valores medidos de este registro
+                                    // valores medidos de este registro (ignorar null)
                                     $valores = array_filter([
                                         $registro->reporteiluminacionpuntos_luxmed1,
                                         $registro->reporteiluminacionpuntos_luxmed2,
@@ -1282,23 +1265,26 @@ class reportesController extends Controller
                                     ], fn($v) => !is_null($v));
 
                                     if (!empty($valores)) {
-                                        $maxMedicion = max($valores); // mayor de med1,2,3
+                                        // en este registro tomamos el MENOR de los med1,2,3
+                                        $minMedicion = min($valores);
+
                                         $valoresComparacion[] = [
-                                            'maxMedicion' => $maxMedicion,
-                                            'limite'      => $limite
+                                            'registro_id' => $registro->id ?? null,
+                                            'minMedicion' => $minMedicion,
+                                            'limite'      => $registro->reporteiluminacionpuntos_lux
                                         ];
                                     }
                                 }
 
                                 if (!empty($valoresComparacion)) {
-                                    // Ahora tomamos el más BAJO de los máximos
-                                    $seleccionado = collect($valoresComparacion)->sortBy('maxMedicion')->first();
+                                    // Ahora de todos los registros, tomamos el MÁS BAJO
+                                    $seleccionado = collect($valoresComparacion)->sortBy('minMedicion')->first();
 
-                                    $maxMedicion = $seleccionado['maxMedicion'];
+                                    $minMedicion = $seleccionado['minMedicion'];
                                     $limite      = $seleccionado['limite'];
 
-                                    $valorLMPNMP  = $maxMedicion . ' /' . $limite;
-                                    $cumplimiento = ($maxMedicion >= $limite) ? 'DENTRO DE NORMA' : 'FUERA DE NORMA';
+                                    $valorLMPNMP  = $minMedicion . ' /' . $limite;
+                                    $cumplimiento = ($minMedicion >= $limite) ? 'DENTRO DE NORMA' : 'FUERA DE NORMA';
                                 } else {
                                     $valorLMPNMP  = 'No tiene registro';
                                     $cumplimiento = 'FUERA DE NORMA';
@@ -1307,7 +1293,7 @@ class reportesController extends Controller
                                 $valorLMPNMP  = 'No tiene registro';
                                 $cumplimiento = 'FUERA DE NORMA';
                             }
-                        } elseif ($idAgente == 1) {
+                        }elseif ($idAgente == 1) {
                             $puntosRuido = DB::table('reporteruidopuntoner')
                                 ->whereIn('reporteruidoarea_id', $reporteAreaIds)
                                 ->where('proyecto_id', $proyecto_id);
