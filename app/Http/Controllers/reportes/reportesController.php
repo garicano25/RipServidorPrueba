@@ -1240,18 +1240,65 @@ class reportesController extends Controller
                             ->pluck('id');
 
 
+                        // if ($idAgente == 4) {
+                        //     $puntosIluminacion = DB::table('reporteiluminacionpuntos')
+                        //         ->whereIn('reporteiluminacionpuntos_area_id', $reporteAreaIds)
+                        //         ->where('proyecto_id', $proyecto_id);
+
+                        //     if ($puntosIluminacion->exists()) {
+                        //         $valorMaxLuxRaw = $puntosIluminacion->max('reporteiluminacionpuntos_lux');
+                        //         $valorLMPNMP = $valorMaxLuxRaw . ' /200';
+                        //         $cumplimiento = ($valorMaxLuxRaw >= 200) ? 'DENTRO DE NORMA' : 'FUERA DE NORMA';
+                        //     } else {
+                        //         $valorLMPNMP = 'No tiene registro';
+                        //         $cumplimiento = 'FUERA DE NORMA';
+                        //     }
+                        // }
                         if ($idAgente == 4) {
                             $puntosIluminacion = DB::table('reporteiluminacionpuntos')
                                 ->whereIn('reporteiluminacionpuntos_area_id', $reporteAreaIds)
                                 ->where('proyecto_id', $proyecto_id);
 
                             if ($puntosIluminacion->exists()) {
-                                $valorMaxLuxRaw = $puntosIluminacion->max('reporteiluminacionpuntos_lux');
-                                $valorLMPNMP = $valorMaxLuxRaw . ' /200';
-                                $cumplimiento = ($valorMaxLuxRaw >= 200) ? 'DENTRO DE NORMA' : 'FUERA DE NORMA';
+                                // Traemos todos los registros
+                                $registros = $puntosIluminacion->get([
+                                    'reporteiluminacionpuntos_lux',
+                                    'reporteiluminacionpuntos_luxmed1',
+                                    'reporteiluminacionpuntos_luxmed2',
+                                    'reporteiluminacionpuntos_luxmed3'
+                                ]);
+
+                                $cumplimiento = 'FUERA DE NORMA'; // por defecto
+                                $valorLMPNMP   = 'No tiene registro';
+
+                                foreach ($registros as $registro) {
+                                    // Límite de este registro
+                                    $limite = $registro->reporteiluminacionpuntos_lux;
+
+                                    // Tomar el valor más alto de los med1, med2, med3 (ignorando nulls/vacíos)
+                                    $valores = array_filter([
+                                        $registro->reporteiluminacionpuntos_luxmed1,
+                                        $registro->reporteiluminacionpuntos_luxmed2,
+                                        $registro->reporteiluminacionpuntos_luxmed3
+                                    ], fn($v) => !is_null($v));
+
+                                    if (!empty($valores)) {
+                                        $maxMedicion = max($valores);
+
+                                        // Guardar el último valor evaluado (puedes ajustarlo a tu lógica)
+                                        $valorLMPNMP = $maxMedicion . ' /' . $limite;
+
+                                        // Comparación con el límite
+                                        if ($maxMedicion >= $limite) {
+                                            $cumplimiento = 'DENTRO DE NORMA';
+                                        } else {
+                                            $cumplimiento = 'FUERA DE NORMA';
+                                        }
+                                    }
+                                }
                             } else {
-                                $valorLMPNMP = 'No tiene registro';
-                                $cumplimiento = 'FUERA DE NORMA';
+                                $valorLMPNMP   = 'No tiene registro';
+                                $cumplimiento  = 'FUERA DE NORMA';
                             }
                         } elseif ($idAgente == 1) {
                             $puntosRuido = DB::table('reporteruidopuntoner')
