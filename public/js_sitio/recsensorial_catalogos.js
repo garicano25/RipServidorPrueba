@@ -2449,10 +2449,6 @@ function tabla_catalogo_epp(num_catalogo) {
                     "data": {}
                 },
                 "columns": [
-                    // {
-                    //     "data": "COUNT",
-                    //     "defaultContent": '-'
-                    // },
                     {
                         "data": "PARTECUERPO",
                         "defaultContent": '-'
@@ -2483,9 +2479,9 @@ function tabla_catalogo_epp(num_catalogo) {
                 "lengthMenu": [[20, 50, 100, -1], [20, 50, 100, "Todos"]],
                 "order": [[0, "asc"]],
                 "rowsGroup": [0],
-                "searching": false,
+                "searching":true,
                 "paging": false,
-                "ordering": false,
+                "ordering": true,
                 "processing": true,
                 "language": {
                     "lengthMenu": "Mostrar _MENU_ Registros",
@@ -2512,6 +2508,8 @@ function tabla_catalogo_epp(num_catalogo) {
         tabla_catalogo_epp(6);
     }
 }
+
+
 
 function tabla_catalogo_pa(num_catalogo) {
     var ruta = "/recsensorialconsultacatalogo/" + num_catalogo;
