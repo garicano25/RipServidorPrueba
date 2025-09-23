@@ -17,6 +17,14 @@ class cronogramaActividadesModel extends Model
         'FECHA_FIN_ACTIVIDAD',
         'AGENTE_ACTIVIDAD_ID',
         'PUNTOS_ACTIVIDAD',
-        'COLOR_ACTIVIDAD'
+        'COLOR_ACTIVIDAD',
+        'CAT_SUSTANICAQUIMICAS'
     ];
+
+
+    protected $casts = [
+        'CAT_SUSTANICAQUIMICAS' => 'array'
+    ];
+
+
 }

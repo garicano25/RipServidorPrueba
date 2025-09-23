@@ -61,6 +61,8 @@ use Illuminate\Support\Str;
     <link href='https://cdn.jsdelivr.net/npm/fullcalendar@6.1.4/main.min.css' rel='stylesheet' />
     <link rel="stylesheet" href="/assets/plugins/dropify/dist/css/dropify.min.css">
     <link href="/assets/plugins/form_wizard_steps_bootstrap/form_wizard_style.css" rel="stylesheet">
+    <link href="/assets/plugins/select-search/selectize.css" rel="stylesheet" type="text/css" />
+
     </link>
 
     @endif
@@ -153,6 +155,7 @@ use Illuminate\Support\Str;
     <link href="/assets/plugins/Magnific-Popup-master/dist/magnific-popup.css" rel="stylesheet">
     {{-- Select search filter --}}
     <link href="/assets/plugins/select-search/selectize.css" rel="stylesheet" type="text/css" />
+
     @endif
 
     @if(request()->is('usuario'))
@@ -713,9 +716,11 @@ use Illuminate\Support\Str;
     <!-- FullCalendar JS -->
     <script src='https://cdn.jsdelivr.net/npm/fullcalendar@6.1.15/index.global.min.js'></script>
     <script src="https://cdn.jsdelivr.net/npm/@fullcalendar/multimonth@6.1.15/index.global.min.js"></script>
+    {{-- Select search filter --}}
+    <script src="/assets/plugins/select-search/selectize.js" type="text/javascript"></script>
 
     {{-- JS pagina --}}
-    <script src="/js_sitio/cliente.js?v=9.1"></script>
+    <script src="/js_sitio/cliente.js?v=9.2"></script>
     @endif
 
     @if(request()->is('proveedor'))
@@ -1024,12 +1029,16 @@ use Illuminate\Support\Str;
     <script src="/assets/plugins/Magnific-Popup-master/dist/jquery.magnific-popup.min.js"></script>
     <script src="/assets/plugins/Magnific-Popup-master/dist/jquery.magnific-popup-init.js"></script>
     {{-- Select search filter --}}
-    <script src="/assets/plugins/select-search/selectize.js" type="text/javascript"></script>
     <!-- FullCalendar JS -->
     <script src='https://cdn.jsdelivr.net/npm/fullcalendar@6.1.15/index.global.min.js'></script>
     <script src="https://cdn.jsdelivr.net/npm/@fullcalendar/multimonth@6.1.15/index.global.min.js"></script>
     {{-- pagina --}}
-    <script src="/js_sitio/proyecto.js?v=8.0"></script>
+    <script src="/js_sitio/proyecto.js?v=8.1"></script>
+
+    {{-- Select search filter --}}
+    <script src="/assets/plugins/select-search/selectize.js" type="text/javascript"></script>
+    {{-- Select2 search filter --}}
+    <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
     @endif
 
 

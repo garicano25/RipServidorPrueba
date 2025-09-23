@@ -2111,6 +2111,20 @@
                                 <input type="number" class="form-control" name="PUNTOS_ACTIVIDAD" id="PUNTOS_ACTIVIDAD">
                             </div>
                         </div>
+
+
+                        <div class="col-12" id="SUSTANCIA_QUIMICAS" style="display: none;">
+                            <div class="form-group">
+                                <label>Sustancias químicas</label>
+                                <select class="custom-select form-control" id="CAT_SUSTANICAQUIMICAS" name="CAT_SUSTANICAQUIMICAS[]" multiple>
+                                    @foreach($catSustanciasQuimicas as $dato)
+                                    <option value="{{$dato->ID_SUSTANCIA_QUIMICA}}">[{{$dato->NUM_CAS}}] {{$dato->SUSTANCIA_QUIMICA}} </option>
+                                    @endforeach
+                                </select>
+                            </div>
+                        </div>
+
+
                         <div class="col-12">
                             <div class="form-group" style="position: relative;">
                                 <label>Color etiqueta</label>

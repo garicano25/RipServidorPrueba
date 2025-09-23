@@ -1189,6 +1189,7 @@ class recsensorialquimicoscatalogosController extends Controller
                     break;
                 case 7:
                     if ($request['ID_SUSTANCIA_QUIMICA_ENTIDAD'] == 0) {
+                        
                         // $sql = DB::select('ALTER TABLE catestadofisicosustancia AUTO_INCREMENT=1');
                         $request['CONNOTACION'] = isset($request['CONNOTACIONES']) ? $request['CONNOTACIONES'] : null;
                         $catalogo = sustanciaQuimicaEntidadModel::create($request->all());

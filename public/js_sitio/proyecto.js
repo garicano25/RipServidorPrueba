@@ -10446,21 +10446,91 @@ $('#tabla_usuarios_asignados tbody').on('click', 'td>button.editar', function ()
 
 //======================================= CRONOGRAMA DE ACTIVIDADES ==============================================
 
-$("#boton_nueva_actividad").click(function () {
 
-	// Borrar formulario
-	$('#form_actividad').each(function () {
-		this.reset();
+$(document).ready(function () {
+    var selectizeInstance = $('#CAT_SUSTANICAQUIMICAS').selectize({
+        placeholder: 'Seleccione una sustancia química',
+        allowEmptyOption: true,
+    	closeAfterSelect: false,               
 	});
+	
+	
+	$("#boton_nueva_actividad").click(function () {
 
-	$('#ID_ACTIVIDAD').val(0)
-	$('#COLOR_ACTIVIDAD').val('#1E88E6')
-	$('#etiqueta-div').css('background-color', '#1E88E6');
+		// Borrar formulario
+		$('#form_actividad').each(function () {
+			this.reset();
+		});
 
-	// Abrir modal
-	$('#modal_actividades').modal({ backdrop: false });
+		$('#ID_ACTIVIDAD').val(0)
+		$('#COLOR_ACTIVIDAD').val('#1E88E6')
+		$('#etiqueta-div').css('background-color', '#1E88E6');
 
+		$('#SUSTANCIA_QUIMICAS').hide();
+
+		var selectize = selectizeInstance[0].selectize;
+		selectize.clear(); 
+		
+		// Abrir modal
+		$('#modal_actividades').modal({ backdrop: false });
+
+	});
+	
 });
+
+
+
+$(document).ready(function () {
+    $('#AGENTE_ACTIVIDAD_ID').on('change', function () {
+        var valor = $(this).val();
+
+        if (valor == "15") {
+            $('#SUSTANCIA_QUIMICAS').show();
+
+            if (!$('#CAT_SUSTANICAQUIMICAS')[0].selectize) {
+                $('#CAT_SUSTANICAQUIMICAS').selectize({
+                    plugins: ['remove_button'],
+                    placeholder: 'Seleccione una o más sustancias',
+                    maxItems: null
+                });
+            }
+        } else {
+            $('#SUSTANCIA_QUIMICAS').hide();
+
+            if ($('#CAT_SUSTANICAQUIMICAS')[0].selectize) {
+                var selectize = $('#CAT_SUSTANICAQUIMICAS')[0].selectize;
+                selectize.clear();
+            }
+        }
+    });
+});
+
+
+// $("#boton_nueva_actividad").click(function () {
+
+// 	// Borrar formulario
+// 	$('#form_actividad').each(function () {
+// 		this.reset();
+// 	});
+
+//    if ($('#CAT_SUSTANICAQUIMICAS')[0].selectize) {
+//         var selectize = $('#CAT_SUSTANICAQUIMICAS')[0].selectize;
+//         selectize.clear();   // limpia selección
+//         selectize.enable();  // habilita
+//     }
+
+
+// 	$('#ID_ACTIVIDAD').val(0)
+// 	$('#COLOR_ACTIVIDAD').val('#1E88E6')
+// 	$('#etiqueta-div').css('background-color', '#1E88E6');
+
+
+	
+
+// 	// Abrir modal
+// 	$('#modal_actividades').modal({ backdrop: false });
+
+// });
 
 
 $("#boton_guardar_actividad").click(function () {
@@ -10688,6 +10758,8 @@ function mostrarActividadesCronograma() {
                         <input type="hidden" class="form-control" id="PUNTOS_ACTIVIDAD_${actividad.ID_ACTIVIDAD}"  value="${actividad.PUNTOS_ACTIVIDAD}">
                         <input type="hidden" class="form-control" id="COLOR_ACTIVIDAD_${actividad.ID_ACTIVIDAD}"  value="${actividad.COLOR_ACTIVIDAD}">
 
+						<input type="hidden" id="CAT_SUSTANICAQUIMICAS_${actividad.ID_ACTIVIDAD}" value='${JSON.stringify(actividad.CAT_SUSTANICAQUIMICAS ?? [])}'>
+
                         <h5 style="color: ${actividad.COLOR_ACTIVIDAD}"><i class="fa fa-star" aria-hidden="true"></i> ${actividad.DESCRIPCION_ACTIVIDAD}</h5>
                         <p> <i class="fa fa-calendar-check-o" aria-hidden="true"></i> Del: ${actividad.FECHA_INICIO_ACTIVIDAD} al: ${actividad.FECHA_FIN_ACTIVIDAD}</p>
                         <div class="col-12" style="justify-content: end; display: flex;">
@@ -10829,28 +10901,84 @@ function eliminarActividad(ID) {
 }
 
 
+// function editarActividad(ID) {
+// 	// Borrar formulario
+// 	$('#form_actividad').each(function () {
+// 		this.reset();
+// 	});
+
+// 	// Rellenamos los datos almacenados
+// 	$('#ID_ACTIVIDAD').val($(`#ID_ACTIVIDAD_${ID}`).val())
+// 	$('#FECHA_INICIO_ACTIVIDAD').val($(`#FECHA_INICIO_ACTIVIDAD_${ID}`).val())
+// 	$('#FECHA_FIN_ACTIVIDAD').val($(`#FECHA_FIN_ACTIVIDAD_${ID}`).val())
+// 	$('#DESCRIPCION_ACTIVIDAD').val($(`#DESCRIPCION_ACTIVIDAD_${ID}`).val())
+// 	$('#AGENTE_ACTIVIDAD_ID').val($(`#AGENTE_ID_ACTIVIDAD_${ID}`).val())
+// 	$('#PUNTOS_ACTIVIDAD').val($(`#PUNTOS_ACTIVIDAD_${ID}`).val())
+
+// 	color = $(`#COLOR_ACTIVIDAD_${ID}`).val()
+// 	$('#COLOR_ACTIVIDAD').val(color)
+// 	$('#etiqueta-div').css('background-color', color);
+
+
+
+// 	// Abrir modal
+// 	$('#modal_actividades').modal({ backdrop: false });
+// }
+
+
+
 function editarActividad(ID) {
-	// Borrar formulario
-	$('#form_actividad').each(function () {
-		this.reset();
-	});
+    // Reset form
+    $('#form_actividad').each(function () { this.reset(); });
 
-	// Rellenamos los datos almacenados
-	$('#ID_ACTIVIDAD').val($(`#ID_ACTIVIDAD_${ID}`).val())
-	$('#FECHA_INICIO_ACTIVIDAD').val($(`#FECHA_INICIO_ACTIVIDAD_${ID}`).val())
-	$('#FECHA_FIN_ACTIVIDAD').val($(`#FECHA_FIN_ACTIVIDAD_${ID}`).val())
-	$('#DESCRIPCION_ACTIVIDAD').val($(`#DESCRIPCION_ACTIVIDAD_${ID}`).val())
-	$('#AGENTE_ACTIVIDAD_ID').val($(`#AGENTE_ID_ACTIVIDAD_${ID}`).val())
-	$('#PUNTOS_ACTIVIDAD').val($(`#PUNTOS_ACTIVIDAD_${ID}`).val())
+    // Datos base
+    $('#ID_ACTIVIDAD').val($(`#ID_ACTIVIDAD_${ID}`).val());
+    $('#FECHA_INICIO_ACTIVIDAD').val($(`#FECHA_INICIO_ACTIVIDAD_${ID}`).val());
+    $('#FECHA_FIN_ACTIVIDAD').val($(`#FECHA_FIN_ACTIVIDAD_${ID}`).val());
+    $('#DESCRIPCION_ACTIVIDAD').val($(`#DESCRIPCION_ACTIVIDAD_${ID}`).val());
+    $('#AGENTE_ACTIVIDAD_ID').val($(`#AGENTE_ID_ACTIVIDAD_${ID}`).val());
+    $('#PUNTOS_ACTIVIDAD').val($(`#PUNTOS_ACTIVIDAD_${ID}`).val());
 
-	color = $(`#COLOR_ACTIVIDAD_${ID}`).val()
-	$('#COLOR_ACTIVIDAD').val(color)
-	$('#etiqueta-div').css('background-color', color);
+    let color = $(`#COLOR_ACTIVIDAD_${ID}`).val();
+    $('#COLOR_ACTIVIDAD').val(color);
+    $('#etiqueta-div').css('background-color', color);
 
+    let agente = $(`#AGENTE_ID_ACTIVIDAD_${ID}`).val();
+    if (agente == "15") {
+        $('#SUSTANCIA_QUIMICAS').show();
 
+        if (!$('#CAT_SUSTANICAQUIMICAS')[0].selectize) {
+            $('#CAT_SUSTANICAQUIMICAS').selectize({
+                plugins: ['remove_button'],
+                placeholder: 'Seleccione una o más sustancias',
+                maxItems: null
+            });
+        }
 
-	// Abrir modal
-	$('#modal_actividades').modal({ backdrop: false });
+        let selectize = $('#CAT_SUSTANICAQUIMICAS')[0].selectize;
+        selectize.clear();
+
+        let sustancias = $(`#CAT_SUSTANICAQUIMICAS_${ID}`).val();
+        if (sustancias) {
+            try {
+                let valores = JSON.parse(sustancias);
+                if (Array.isArray(valores)) {
+                    selectize.setValue(valores);
+                }
+            } catch (e) {
+                console.error("Error parseando sustancias", e);
+            }
+        }
+
+    } else {
+        $('#SUSTANCIA_QUIMICAS').hide();
+        if ($('#CAT_SUSTANICAQUIMICAS')[0].selectize) {
+            $('#CAT_SUSTANICAQUIMICAS')[0].selectize.clear();
+        }
+    }
+
+    // Abrir modal
+    $('#modal_actividades').modal({ backdrop: false });
 }
 
 document.getElementById('etiqueta-div').addEventListener('click', function () {

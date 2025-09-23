@@ -1512,11 +1512,9 @@ class reportesController extends Controller
                                 if (isset($parametros[$indiceQuimico])) {
                                     $p = $parametros[$indiceQuimico];
 
-                                    // 🔹 Versión original (con < o >) → para mostrar
                                     $concentracionOriginal = $p->reportequimicosevaluacionparametro_concentracion ?? '';
                                     $limiteOriginal = $p->reportequimicosevaluacionparametro_valorlimite ?? '';
 
-                                    // 🔹 Versión limpia (solo número) → para comparar
                                     $concentracionNum = preg_replace('/[^\d.]/', '', $concentracionOriginal);
                                     $limiteNum = preg_replace('/[^\d.]/', '', $limiteOriginal);
 
