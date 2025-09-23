@@ -1045,8 +1045,8 @@
                             <div class="col-12">
                                 <div class="form-group">
                                     <label>Tipo de riesgo en funcion de la actividad del trabajador *</label>
-                                    <input type="text" class="form-control" id="TIPO_RIEGO" name="TIPO_RIEGO"
-                                        required>
+                                    <textarea  class="form-control" id="TIPO_RIEGO" name="TIPO_RIEGO" rows="5"
+                                        required></textarea>
                                 </div>
                             </div>
                             <div class="col-12">
