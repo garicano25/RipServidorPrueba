@@ -1449,7 +1449,7 @@ class clienteController extends Controller
                                         DATE_FORMAT(a.FECHA_INICIO_ACTIVIDAD, "%Y-%m-%d %H:%i") AS FECHA_INICIO_ACTIVIDAD,
                                         DATE_FORMAT(a.FECHA_FIN_ACTIVIDAD, "%Y-%m-%d %H:%i") AS FECHA_FIN_ACTIVIDAD,
                                         DATEDIFF(a.FECHA_FIN_ACTIVIDAD, a.FECHA_INICIO_ACTIVIDAD) AS TOTAL_DIAS,
-                                        CONCAT("Del ",DATE_FORMAT(a.FECHA_INICIO_ACTIVIDAD, "%Y-%m-%d"), " al " ,DATE_FORMAT(a.FECHA_FIN_ACTIVIDAD, "%Y-%m-%d")) PERIODO_ACTIVIDAD,
+                                        CONCAT(DATE_FORMAT(a.FECHA_INICIO_ACTIVIDAD, "%Y-%m-%d"), " - " ,DATE_FORMAT(a.FECHA_FIN_ACTIVIDAD, "%Y-%m-%d")) PERIODO_ACTIVIDAD,
                                         DATEDIFF( a.FECHA_INICIO_ACTIVIDAD, (SELECT MIN(a.FECHA_INICIO_ACTIVIDAD) 
                                                 FROM cronogramaActividades AS a WHERE a.CONTRATO_ID = ?)) AS DIFERENCIA_INICIO,
                                         REPLACE(a.COLOR_ACTIVIDAD, "#", "") AS COLOR_CELDA,
@@ -1479,7 +1479,7 @@ class clienteController extends Controller
                                         DATE_FORMAT(a.FECHA_INICIO_ACTIVIDAD, "%Y-%m-%d %H:%i") AS FECHA_INICIO_ACTIVIDAD,
                                         DATE_FORMAT(a.FECHA_FIN_ACTIVIDAD, "%Y-%m-%d %H:%i") AS FECHA_FIN_ACTIVIDAD,
                                         DATEDIFF(a.FECHA_FIN_ACTIVIDAD, a.FECHA_INICIO_ACTIVIDAD) AS TOTAL_DIAS,
-                                        CONCAT("Del ",DATE_FORMAT(a.FECHA_INICIO_ACTIVIDAD, "%Y-%m-%d"), " al " ,DATE_FORMAT(a.FECHA_FIN_ACTIVIDAD, "%Y-%m-%d")) PERIODO_ACTIVIDAD,
+                                        CONCAT(DATE_FORMAT(a.FECHA_INICIO_ACTIVIDAD, "%Y-%m-%d"), " - " ,DATE_FORMAT(a.FECHA_FIN_ACTIVIDAD, "%Y-%m-%d")) PERIODO_ACTIVIDAD,
                                         DATEDIFF( a.FECHA_INICIO_ACTIVIDAD, (SELECT MIN(a.FECHA_INICIO_ACTIVIDAD) 
                                                 FROM cronogramaActividades AS a WHERE a.PROYECTO_ID = ?)) AS DIFERENCIA_INICIO,
                                         REPLACE(a.COLOR_ACTIVIDAD, "#", "") AS COLOR_CELDA,
@@ -1537,7 +1537,7 @@ class clienteController extends Controller
         // Encabezados
         $sheet->setCellValue($columnaActividad . '10', 'Actividad');
         pintarCelda($sheet, $columnaActividad, 10);
-        $sheet->setCellValue($columnaPeriodo   . '10', 'Período actividad');
+        $sheet->setCellValue($columnaPeriodo   . '10', 'Fecha Inicio - Fecha Fin');
         pintarCelda($sheet, $columnaPeriodo, 10);
         $sheet->setCellValue($columnaAgente    . '10', 'Agente');
         pintarCelda($sheet, $columnaAgente, 10);

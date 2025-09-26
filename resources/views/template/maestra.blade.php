@@ -771,7 +771,6 @@ use Illuminate\Support\Str;
     <script src="js/custom.min.js"></script>
     {{-- Select2 search filter --}}
     <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
-
     {{-- Select search filter --}}
     <script src="/assets/plugins/select-search/selectize.js" type="text/javascript"></script>
     <!-- Magnific popup JavaScript -->
