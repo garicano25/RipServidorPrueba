@@ -594,10 +594,10 @@ class reportenom0353wordController extends Controller
     
                // if (($recsensorial->tipocliente + 0) == 1) // 1 = Pemex, 0 = Cliente
                 // {
-                //     $fuente = 'Arial';
+                //     $fuente = 'Poppins';
                 //     $font_size = 10;
                 // } else {
-                //     $fuente = 'Arial';
+                //     $fuente = 'Poppins';
                 //     $font_size = 10;
                 // }
     

@@ -668,7 +668,7 @@ class reportealimentosWordController extends Controller
 
             // TIPOGRAFIAS PARA LAS TABLAS
             //================================================================================
-            $fuente = 'Arial';
+            $fuente = 'Poppins';
             $font_size = 10;
 
             $bgColor_encabezado = '#0C3F64'; //#1A5276
@@ -693,7 +693,7 @@ class reportealimentosWordController extends Controller
             $table = null;
             $No = 1;
             $total = 0;
-            $table = new Table(array('name' => 'Arial', 'width' => 13500, 'borderSize' => 10, 'borderColor' => '000000', 'cellMargin' => 0, 'spaceAfter' => 0, 'unit' => TblWidth::TWIP));
+            $table = new Table(array('name' => 'Poppins', 'width' => 13500, 'borderSize' => 10, 'borderColor' => '000000', 'cellMargin' => 0, 'spaceAfter' => 0, 'unit' => TblWidth::TWIP));
 
             $sql8_1 = DB::select('CALL sp_obtener_puntos_alimentos_8_1_b(?)', [$proyecto_id]);
 
@@ -768,7 +768,7 @@ class reportealimentosWordController extends Controller
             $table = null;
             $No = 1;
             $total = 0;
-            $table = new Table(array('name' => 'Arial', 'width' => 13500, 'borderSize' => 10, 'borderColor' => '000000', 'cellMargin' => 0, 'spaceAfter' => 0, 'unit' => TblWidth::TWIP));
+            $table = new Table(array('name' => 'Poppins', 'width' => 13500, 'borderSize' => 10, 'borderColor' => '000000', 'cellMargin' => 0, 'spaceAfter' => 0, 'unit' => TblWidth::TWIP));
 
             $sql8_1_1 = DB::select('CALL sp_obtener_puntos_alimentos_8_1_1_b(?)', [$proyecto_id]);
 
@@ -833,7 +833,7 @@ class reportealimentosWordController extends Controller
             $table = null;
             $No = 1;
             $total = 0;
-            $table = new Table(array('name' => 'Arial', 'width' => 13500, 'borderSize' => 10, 'borderColor' => '000000', 'cellMargin' => 0, 'spaceAfter' => 0, 'unit' => TblWidth::TWIP));
+            $table = new Table(array('name' => 'Poppins', 'width' => 13500, 'borderSize' => 10, 'borderColor' => '000000', 'cellMargin' => 0, 'spaceAfter' => 0, 'unit' => TblWidth::TWIP));
 
             $sql8_2 = DB::select('CALL sp_obtener_puntos_alimentos_8_2_b(?)', [$proyecto_id]);
 
@@ -911,7 +911,7 @@ class reportealimentosWordController extends Controller
             $table = null;
             $No = 1;
             $total = 0;
-            $table = new Table(array('name' => 'Arial', 'width' => 13500, 'borderSize' => 10, 'borderColor' => '000000', 'cellMargin' => 0, 'spaceAfter' => 0, 'unit' => TblWidth::TWIP));
+            $table = new Table(array('name' => 'Poppins', 'width' => 13500, 'borderSize' => 10, 'borderColor' => '000000', 'cellMargin' => 0, 'spaceAfter' => 0, 'unit' => TblWidth::TWIP));
 
             $sql8_3 = DB::select('CALL sp_obtener_puntos_alimentos_8_3_b(?)', [$proyecto_id]);
 
@@ -989,7 +989,7 @@ class reportealimentosWordController extends Controller
             $table = null;
             $No = 1;
             $total = 0;
-            $table = new Table(array('name' => 'Arial', 'width' => 13500, 'borderSize' => 10, 'borderColor' => '000000', 'cellMargin' => 0, 'spaceAfter' => 0, 'unit' => TblWidth::TWIP));
+            $table = new Table(array('name' => 'Poppins', 'width' => 13500, 'borderSize' => 10, 'borderColor' => '000000', 'cellMargin' => 0, 'spaceAfter' => 0, 'unit' => TblWidth::TWIP));
 
             // encabezado tabla
             $table->addRow(200, array('tblHeader' => true));
@@ -1049,7 +1049,7 @@ class reportealimentosWordController extends Controller
             $table = null;
             $No = 1;
             $total = 0;
-            $table = new Table(array('name' => 'Arial', 'width' => 13500, 'borderSize' => 10, 'borderColor' => '000000', 'cellMargin' => 0, 'spaceAfter' => 0, 'unit' => TblWidth::TWIP));
+            $table = new Table(array('name' => 'Poppins', 'width' => 13500, 'borderSize' => 10, 'borderColor' => '000000', 'cellMargin' => 0, 'spaceAfter' => 0, 'unit' => TblWidth::TWIP));
 
 
             // encabezado tabla
@@ -1097,7 +1097,7 @@ class reportealimentosWordController extends Controller
             $table = null;
             $No = 1;
             $total = 0;
-            $table = new Table(array('name' => 'Arial', 'width' => 13500, 'borderSize' => 10, 'borderColor' => '000000', 'cellMargin' => 0, 'spaceAfter' => 0, 'unit' => TblWidth::TWIP));
+            $table = new Table(array('name' => 'Poppins', 'width' => 13500, 'borderSize' => 10, 'borderColor' => '000000', 'cellMargin' => 0, 'spaceAfter' => 0, 'unit' => TblWidth::TWIP));
 
 
             // encabezado tabla
@@ -1159,7 +1159,7 @@ class reportealimentosWordController extends Controller
             $table = null;
             $No = 1;
             $total = 0;
-            $table = new Table(array('name' => 'Arial', 'width' => 13500, 'borderSize' => 10, 'borderColor' => '000000', 'cellMargin' => 0, 'spaceAfter' => 0, 'unit' => TblWidth::TWIP));
+            $table = new Table(array('name' => 'Poppins', 'width' => 13500, 'borderSize' => 10, 'borderColor' => '000000', 'cellMargin' => 0, 'spaceAfter' => 0, 'unit' => TblWidth::TWIP));
 
 
             // encabezado tabla
@@ -1457,7 +1457,7 @@ class reportealimentosWordController extends Controller
                                                 AND reporteplanoscarpetas.registro_id = ' . $reportealimentos_id);
 
 
-            $planoscarpetasvariales = '';
+            $planoscarpetasvPoppinses = '';
             $planocontador = 0;
             $plano_archivo = array();
             if (count($planoscarpetas) > 0) {
@@ -1478,7 +1478,7 @@ class reportealimentosWordController extends Controller
                                                 proyectoevidenciaplano.proyectoevidenciaplano_carpeta ASC');
 
                     foreach ($planos as $key => $plano) {
-                        $planoscarpetasvariales .= '${PLANO_' . $planocontador . '_FOTO}';
+                        $planoscarpetasvPoppinses .= '${PLANO_' . $planocontador . '_FOTO}';
 
                         $plano_archivo[] = $plano->proyectoevidenciaplano_archivo;
 
@@ -1487,11 +1487,11 @@ class reportealimentosWordController extends Controller
                 }
             } else {
                 $plano_archivo = array();
-                $planoscarpetasvariales = 'NO HAY PLANOS QUE MOSTRAR.';
+                $planoscarpetasvPoppinses = 'NO HAY PLANOS QUE MOSTRAR.';
             }
 
 
-            $plantillaword->setValue('PLANOS', $planoscarpetasvariales);
+            $plantillaword->setValue('PLANOS', $planoscarpetasvPoppinses);
 
 
            

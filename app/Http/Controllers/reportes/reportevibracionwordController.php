@@ -942,12 +942,12 @@ class reportevibracionwordController extends Controller
 
             if (($recsensorial->recsensorial_tipocliente+0) == 1) // 1 = Pemex, 0 = Cliente
             {
-                $fuente = 'Arial';
+                $fuente = 'Poppins';
                 $font_size = 10;
             }
             else
             {
-                $fuente = 'Arial';
+                $fuente = 'Poppins';
                 $font_size = 10;
             }
 
@@ -2154,12 +2154,12 @@ class reportevibracionwordController extends Controller
 
             if (($recsensorial->recsensorial_tipocliente+0) == 1) // 1 = Pemex, 0 = Cliente
             {
-                $fuente = 'Arial';
+                $fuente = 'Poppins';
                 $font_size = 6;
             }
             else
             {
-                $fuente = 'Arial';
+                $fuente = 'Poppins';
                 $font_size = 6;
             }
 
@@ -4660,7 +4660,7 @@ class reportevibracionwordController extends Controller
                                                 AND reporteplanoscarpetas.agente_nombre LIKE "%'.$agente_nombre.'%"');
 
 
-            $planoscarpetasvariales = ''; $planocontador = 0; $plano_archivo = array();
+            $planoscarpetasvPoppinses = ''; $planocontador = 0; $plano_archivo = array();
             if (count($planoscarpetas) > 0)
             {
                 foreach ($planoscarpetas as $key => $carpeta)
@@ -4683,7 +4683,7 @@ class reportevibracionwordController extends Controller
 
                     foreach ($planos as $key => $plano)
                     {
-                        $planoscarpetasvariales .= '${PLANO_'.$planocontador.'_FOTO}';
+                        $planoscarpetasvPoppinses .= '${PLANO_'.$planocontador.'_FOTO}';
 
                         $plano_archivo[] = $plano->proyectoevidenciaplano_archivo;
 
@@ -4694,11 +4694,11 @@ class reportevibracionwordController extends Controller
             else
             {
                 $plano_archivo = array();
-                $planoscarpetasvariales = 'NO SE ENCONTRARÓN PLANOS QUE MOSTRAR.';
+                $planoscarpetasvPoppinses = 'NO SE ENCONTRARÓN PLANOS QUE MOSTRAR.';
             }
                 
 
-            $plantillaword->setValue('PLANOS', $planoscarpetasvariales);
+            $plantillaword->setValue('PLANOS', $planoscarpetasvPoppinses);
 
 
             // TABLA ANEXO 3, EQUIPO UTILIZADO PARA LA MEDICION

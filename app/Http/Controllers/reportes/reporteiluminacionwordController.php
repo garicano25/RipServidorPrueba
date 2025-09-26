@@ -713,7 +713,7 @@ class reporteiluminacionwordController extends Controller
 
 
             
-            $fuente = 'Arial';
+            $fuente = 'Poppins';
             $font_size = 10;
            
 
@@ -743,7 +743,7 @@ class reporteiluminacionwordController extends Controller
 
             // Crear tabla
             $table = null;
-            $table = new Table(array('name' => 'Arial', 'borderSize' => 1, 'borderColor' => '000000', 'cellMargin' => 40, 'unit' => TblWidth::TWIP));
+            $table = new Table(array('name' => 'Poppins', 'borderSize' => 1, 'borderColor' => '000000', 'cellMargin' => 40, 'unit' => TblWidth::TWIP));
             
             // encabezado tabla
             $table->addRow(200, array('tblHeader' => true));
@@ -2320,7 +2320,7 @@ class reporteiluminacionwordController extends Controller
 
 
             
-            $fuente = 'Arial';
+            $fuente = 'Poppins';
             $font_size = 8;
            
 
@@ -2905,9 +2905,9 @@ class reporteiluminacionwordController extends Controller
                 $table->addCell($ancho_col_12, $celda2)->addTextRun($centrado2)->addText($value->luxmed3, array('color' => $value->luxmed3_color, 'size' => 8, 'bold' => false, 'name' => $fuente));
 
                 if ($value->lux_resultado == "Fuera de norma") {
-                    $table->addCell($ancho_col_13, array('valign' => 'center', 'bgColor' => $value->lux_resultado_color))->addTextRun($centrado2)->addText($value->lux_resultado, array('color' => 'FFFFFF', 'size' => 8, 'bold' => true, 'name' => 'Arial'));
+                    $table->addCell($ancho_col_13, array('valign' => 'center', 'bgColor' => $value->lux_resultado_color))->addTextRun($centrado2)->addText($value->lux_resultado, array('color' => 'FFFFFF', 'size' => 8, 'bold' => true, 'name' => 'Poppins'));
                 } else {
-                    $table->addCell($ancho_col_13, array('valign' => 'center', 'bgColor' => $value->lux_resultado_color))->addTextRun($centrado2)->addText($value->lux_resultado, array('color' => '000000', 'size' => 8, 'bold' => true, 'name' => 'Arial'));
+                    $table->addCell($ancho_col_13, array('valign' => 'center', 'bgColor' => $value->lux_resultado_color))->addTextRun($centrado2)->addText($value->lux_resultado, array('color' => '000000', 'size' => 8, 'bold' => true, 'name' => 'Poppins'));
                 }
             }
 
@@ -3017,9 +3017,9 @@ class reporteiluminacionwordController extends Controller
                 $table->addCell($ancho_col_15, $celda2)->addTextRun($centrado2)->addText($value->frptmed3, array('color' => $value->frptmed3_color, 'size' => 8, 'bold' => false, 'name' => $fuente));
 
                 if ($value->fr_resultado == "Fuera de norma") {
-                    $table->addCell($ancho_col_16, array('valign' => 'center', 'bgColor' => $value->fr_resultado_color))->addTextRun($centrado2)->addText($value->fr_resultado, array('color' => 'FFFFFF', 'size' => 8, 'bold' => true, 'name' => 'Arial'));
+                    $table->addCell($ancho_col_16, array('valign' => 'center', 'bgColor' => $value->fr_resultado_color))->addTextRun($centrado2)->addText($value->fr_resultado, array('color' => 'FFFFFF', 'size' => 8, 'bold' => true, 'name' => 'Poppins'));
                 } else {
-                    $table->addCell($ancho_col_16, array('valign' => 'center', 'bgColor' => $value->fr_resultado_color))->addTextRun($centrado2)->addText($value->fr_resultado, array('color' => '000000', 'size' => 8, 'bold' => true, 'name' => 'Arial'));
+                    $table->addCell($ancho_col_16, array('valign' => 'center', 'bgColor' => $value->fr_resultado_color))->addTextRun($centrado2)->addText($value->fr_resultado, array('color' => '000000', 'size' => 8, 'bold' => true, 'name' => 'Poppins'));
                 }
             }
 
@@ -3032,7 +3032,7 @@ class reporteiluminacionwordController extends Controller
 
 
          
-            $fuente = 'Arial';
+            $fuente = 'Poppins';
             $font_size = 6;
             
 
@@ -4462,7 +4462,7 @@ class reporteiluminacionwordController extends Controller
                                                 AND reporteplanoscarpetas.registro_id = ' . $reporteiluminacion_id);
 
 
-            $planoscarpetasvariales = '';
+            $planoscarpetasvPoppinses = '';
             $planocontador = 0;
             $plano_archivo = array();
             if (count($planoscarpetas) > 0) {
@@ -4483,7 +4483,7 @@ class reporteiluminacionwordController extends Controller
                                                 proyectoevidenciaplano.proyectoevidenciaplano_carpeta ASC');
 
                     foreach ($planos as $key => $plano) {
-                        $planoscarpetasvariales .= '${PLANO_' . $planocontador . '_FOTO}';
+                        $planoscarpetasvPoppinses .= '${PLANO_' . $planocontador . '_FOTO}';
 
                         $plano_archivo[] = $plano->proyectoevidenciaplano_archivo;
 
@@ -4492,11 +4492,11 @@ class reporteiluminacionwordController extends Controller
                 }
             } else {
                 $plano_archivo = array();
-                $planoscarpetasvariales = 'NO HAY PLANOS QUE MOSTRAR.';
+                $planoscarpetasvPoppinses = 'NO HAY PLANOS QUE MOSTRAR.';
             }
 
 
-            $plantillaword->setValue('PLANOS', $planoscarpetasvariales);
+            $plantillaword->setValue('PLANOS', $planoscarpetasvPoppinses);
 
 
             // TABLA ANEXO 3, EQUIPO UTILIZADO PARA LA MEDICION

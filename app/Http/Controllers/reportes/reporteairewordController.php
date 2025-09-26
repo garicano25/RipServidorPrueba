@@ -722,10 +722,10 @@ class reporteairewordController extends Controller
 
             if (($recsensorial->recsensorial_tipocliente + 0) == 1) // 1 = Pemex, 0 = Cliente
             {
-                $fuente = 'Arial';
+                $fuente = 'Poppins';
                 $font_size = 10;
             } else {
-                $fuente = 'Arial';
+                $fuente = 'Poppins';
                 $font_size = 10;
             }
 
@@ -1517,10 +1517,10 @@ class reporteairewordController extends Controller
 
             if (($recsensorial->recsensorial_tipocliente + 0) == 1) // 1 = Pemex, 0 = Cliente
             {
-                $fuente = 'Arial';
+                $fuente = 'Poppins';
                 $font_size = 9;
             } else {
-                $fuente = 'Arial';
+                $fuente = 'Poppins';
                 $font_size = 9;
             }
 
@@ -2551,12 +2551,12 @@ class reporteairewordController extends Controller
                     $text_color = "#000000";
                     $bgColor = "#00FF00";
 
-                    $table->addCell($ancho_col_8, array('bgColor' => $bgColor, 'valign' => 'center'))->addTextRun($centrado)->addText($value->so2_resultado, array('color' => $text_color, 'size' => $font_size, 'bold' => true, 'name' => "Arial"));
+                    $table->addCell($ancho_col_8, array('bgColor' => $bgColor, 'valign' => 'center'))->addTextRun($centrado)->addText($value->so2_resultado, array('color' => $text_color, 'size' => $font_size, 'bold' => true, 'name' => "Poppins"));
                 } else {
                     $text_color = "#FFFFFF";
                     $bgColor = "#FF0000";
 
-                    $table->addCell($ancho_col_8, array('bgColor' => $bgColor, 'valign' => 'center'))->addTextRun($centrado)->addText($value->so2_resultado, array('color' => $text_color, 'size' => $font_size, 'bold' => true, 'name' => "Arial"));
+                    $table->addCell($ancho_col_8, array('bgColor' => $bgColor, 'valign' => 'center'))->addTextRun($centrado)->addText($value->so2_resultado, array('color' => $text_color, 'size' => $font_size, 'bold' => true, 'name' => "Poppins"));
                 }
             }
 
@@ -2570,10 +2570,10 @@ class reporteairewordController extends Controller
 
             if (($recsensorial->recsensorial_tipocliente + 0) == 1) // 1 = Pemex, 0 = Cliente
             {
-                $fuente = 'Arial';
+                $fuente = 'Poppins';
                 $font_size = 6;
             } else {
-                $fuente = 'Arial';
+                $fuente = 'Poppins';
                 $font_size = 6;
             }
 
@@ -3900,7 +3900,7 @@ class reporteairewordController extends Controller
                                                 AND reporteplanoscarpetas.agente_nombre LIKE "%' . $agente_nombre . '%"');
 
 
-            $planoscarpetasvariales = '';
+            $planoscarpetasvPoppinses = '';
             $planocontador = 0;
             $plano_archivo = array();
             if (count($planoscarpetas) > 0) {
@@ -3922,7 +3922,7 @@ class reporteairewordController extends Controller
                                                 proyectoevidenciaplano.proyectoevidenciaplano_archivo ASC');
 
                     foreach ($planos as $key => $plano) {
-                        $planoscarpetasvariales .= '${PLANO_' . $planocontador . '_FOTO}';
+                        $planoscarpetasvPoppinses .= '${PLANO_' . $planocontador . '_FOTO}';
 
                         $plano_archivo[] = $plano->proyectoevidenciaplano_archivo;
 
@@ -3931,11 +3931,11 @@ class reporteairewordController extends Controller
                 }
             } else {
                 $plano_archivo = array();
-                $planoscarpetasvariales = 'NO SE ENCONTRARÓN PLANOS QUE MOSTRAR.';
+                $planoscarpetasvPoppinses = 'NO SE ENCONTRARÓN PLANOS QUE MOSTRAR.';
             }
 
 
-            $plantillaword->setValue('PLANOS', $planoscarpetasvariales);
+            $plantillaword->setValue('PLANOS', $planoscarpetasvPoppinses);
 
 
             // TABLA ANEXO 3, EQUIPO UTILIZADO PARA LA MEDICION

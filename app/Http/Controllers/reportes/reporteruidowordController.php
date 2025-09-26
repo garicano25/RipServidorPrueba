@@ -724,10 +724,10 @@ class reporteruidowordController extends Controller
 
             if (($recsensorial->recsensorial_tipocliente + 0) == 1) // 1 = Pemex, 0 = Cliente
             {
-                $fuente = 'Arial';
+                $fuente = 'Poppins';
                 $font_size = 10;
             } else {
-                $fuente = 'Arial';
+                $fuente = 'Poppins';
                 $font_size = 10;
             }
 
@@ -2528,13 +2528,13 @@ class reporteruidowordController extends Controller
 
 
                 if ($value->reporteruidopuntoner_ner > 90) {
-                    $table->addCell($ancho_col_8, array('valign' => 'center', 'bgColor' => '#FF0000'))->addTextRun($centrado)->addText('Fuera de norma', array('color' => '#FFFFFF', 'size' => 10, 'bold' => true, 'name' => 'Arial'));
+                    $table->addCell($ancho_col_8, array('valign' => 'center', 'bgColor' => '#FF0000'))->addTextRun($centrado)->addText('Fuera de norma', array('color' => '#FFFFFF', 'size' => 10, 'bold' => true, 'name' => 'Poppins'));
 
                 } elseif ($value->reporteruidopuntoner_ner >= 85 && $value->reporteruidopuntoner_ner <= 90) {
-                    $table->addCell($ancho_col_8, array('valign' => 'center', 'bgColor' => '#FFFF00'))->addTextRun($centrado)->addText('Nivel de acción', array('color' => '#000000', 'size' => 10, 'bold' => true, 'name' => 'Arial'));
+                    $table->addCell($ancho_col_8, array('valign' => 'center', 'bgColor' => '#FFFF00'))->addTextRun($centrado)->addText('Nivel de acción', array('color' => '#000000', 'size' => 10, 'bold' => true, 'name' => 'Poppins'));
 
                 } else {
-                    $table->addCell($ancho_col_8, array('valign' => 'center', 'bgColor' => '#00FF00'))->addTextRun($centrado)->addText('Dentro de norma', array('color' => '#000000', 'size' => 10, 'bold' => true, 'name' => 'Arial'));
+                    $table->addCell($ancho_col_8, array('valign' => 'center', 'bgColor' => '#00FF00'))->addTextRun($centrado)->addText('Dentro de norma', array('color' => '#000000', 'size' => 10, 'bold' => true, 'name' => 'Poppins'));
                 }
             }
 
@@ -2648,14 +2648,14 @@ class reporteruidowordController extends Controller
                 // $table->addCell($ancho_col_8, $celda)->addTextRun($centrado)->addText($value->reporteruidodosisner_dosis, $texto);
 
                 if ($value->reporteruidodosisner_ner > 90) {
-                    $table->addCell($ancho_col_8, array('valign' => 'center', 'bgColor' => '#FF0000'))->addTextRun($centrado)->addText('Fuera de norma', array('color' => '#FFFFFF', 'size' => 10, 'bold' => true, 'name' => 'Arial'));
+                    $table->addCell($ancho_col_8, array('valign' => 'center', 'bgColor' => '#FF0000'))->addTextRun($centrado)->addText('Fuera de norma', array('color' => '#FFFFFF', 'size' => 10, 'bold' => true, 'name' => 'Poppins'));
 
                 } elseif ($value->reporteruidodosisner_ner >= 85 && $value->reporteruidodosisner_ner <= 90) {
 
-                    $table->addCell($ancho_col_8, array('valign' => 'center', 'bgColor' => '#FFFF00'))->addTextRun($centrado)->addText('Nivel de acción', array('color' => '#000000', 'size' => 10, 'bold' => true, 'name' => 'Arial'));
+                    $table->addCell($ancho_col_8, array('valign' => 'center', 'bgColor' => '#FFFF00'))->addTextRun($centrado)->addText('Nivel de acción', array('color' => '#000000', 'size' => 10, 'bold' => true, 'name' => 'Poppins'));
 
                 } else {
-                    $table->addCell($ancho_col_8, array('valign' => 'center', 'bgColor' => '#00FF00'))->addTextRun($centrado)->addText('Dentro de norma', array('color' => '#000000', 'size' => 10, 'bold' => true, 'name' => 'Arial'));
+                    $table->addCell($ancho_col_8, array('valign' => 'center', 'bgColor' => '#00FF00'))->addTextRun($centrado)->addText('Dentro de norma', array('color' => '#000000', 'size' => 10, 'bold' => true, 'name' => 'Poppins'));
                 }
 
              
@@ -3079,10 +3079,10 @@ class reporteruidowordController extends Controller
 
             if (($recsensorial->recsensorial_tipocliente + 0) == 1) // 1 = Pemex, 0 = Cliente
             {
-                $fuente = 'Arial';
+                $fuente = 'Poppins';
                 $font_size = 6;
             } else {
-                $fuente = 'Arial';
+                $fuente = 'Poppins';
                 $font_size = 6;
             }
 
@@ -4268,7 +4268,7 @@ class reporteruidowordController extends Controller
                                                 AND reporteplanoscarpetas.registro_id = ' . $reporteregistro_id);
 
 
-            $planoscarpetasvariales = '';
+            $planoscarpetasvPoppinses = '';
             $planocontador = 0;
             $plano_archivo = array();
             if (count($planoscarpetas) > 0) {
@@ -4289,7 +4289,7 @@ class reporteruidowordController extends Controller
                                                 proyectoevidenciaplano.proyectoevidenciaplano_carpeta ASC');
 
                     foreach ($planos as $key => $plano) {
-                        $planoscarpetasvariales .= '${PLANO_' . $planocontador . '_FOTO}';
+                        $planoscarpetasvPoppinses .= '${PLANO_' . $planocontador . '_FOTO}';
 
                         $plano_archivo[] = $plano->proyectoevidenciaplano_archivo;
 
@@ -4298,11 +4298,11 @@ class reporteruidowordController extends Controller
                 }
             } else {
                 $plano_archivo = array();
-                $planoscarpetasvariales = 'NO HAY PLANOS QUE MOSTRAR.';
+                $planoscarpetasvPoppinses = 'NO HAY PLANOS QUE MOSTRAR.';
             }
 
 
-            $plantillaword->setValue('PLANOS', $planoscarpetasvariales);
+            $plantillaword->setValue('PLANOS', $planoscarpetasvPoppinses);
 
 
             // TABLA ANEXO 5, EQUIPO UTILIZADO PARA LA MEDICION

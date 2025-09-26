@@ -180,7 +180,7 @@ class reporteBeiWordController extends Controller
             // ====================================================
             //Estilos de las tablas
             $encabezado_celda = array('bgColor' => '1A5276', 'valign' => 'center'); //'bgColor' => '1A5276'
-            $encabezado_texto = array('color' => 'FFFFFF', 'size' => 11, 'bold' => false, 'name' => 'Arial');
+            $encabezado_texto = array('color' => 'FFFFFF', 'size' => 11, 'bold' => false, 'name' => 'Poppins');
             $combinar_fila_encabezado = array('vMerge' => 'restart', 'valign' => 'center', 'bgColor' => '1A5276');
             $combinar_fila = array('vMerge' => 'restart', 'valign' => 'center');
             $varias_columnas = array('gridSpan' => 2, 'valign' => 'center');
@@ -189,10 +189,10 @@ class reporteBeiWordController extends Controller
             $centrado = array('align' => 'center', 'spaceBefore' => 0, 'spaceAfter' => 0, 'lineHeight' => 1.15);
             $izquierda = array('align' => 'left', 'spaceBefore' => 0, 'spaceAfter' => 0, 'lineHeight' => 1.15);
             $justificado = array('align' => 'both', 'spaceBefore' => 0, 'spaceAfter' => 0, 'lineHeight' => 1.15);
-            $texto = array('color' => '000000', 'size' => 11, 'bold' => false, 'name' => 'Arial');
-            $texto10 = array('color' => '000000', 'size' => 10, 'bold' => false, 'name' => 'Arial');
-            $textonegrita = array('color' => '000000', 'size' => 11, 'bold' => true, 'name' => 'Arial');
-            $textototal = array('color' => 'FFFFFF', 'size' => 11, 'bold' => false, 'name' => 'Arial');
+            $texto = array('color' => '000000', 'size' => 11, 'bold' => false, 'name' => 'Poppins');
+            $texto10 = array('color' => '000000', 'size' => 10, 'bold' => false, 'name' => 'Poppins');
+            $textonegrita = array('color' => '000000', 'size' => 11, 'bold' => true, 'name' => 'Poppins');
+            $textototal = array('color' => 'FFFFFF', 'size' => 11, 'bold' => false, 'name' => 'Poppins');
 
 
             $proyecto_id = $request->proyecto_id;
@@ -683,7 +683,7 @@ class reporteBeiWordController extends Controller
             $table = null;
             $No = 1;
             $total = 0;
-            $table = new Table(array('name' => 'Arial', 'width' => 9500, 'borderSize' => 10, 'borderColor' => '000000', 'cellMargin' => 0, 'spaceAfter' => 0, 'unit' => TblWidth::TWIP));
+            $table = new Table(array('name' => 'Poppins', 'width' => 9500, 'borderSize' => 10, 'borderColor' => '000000', 'cellMargin' => 0, 'spaceAfter' => 0, 'unit' => TblWidth::TWIP));
 
             $sql = DB::select('SELECT
                                         reportearea.proyecto_id,
@@ -782,7 +782,7 @@ class reporteBeiWordController extends Controller
 
             // Crear tabla
             $table = null;
-            $table = new Table(array('name' => 'Arial','width' => 9500, 'borderSize' => 1, 'borderColor' => '000000', 'cellMargin' => 40, 'unit' => TblWidth::TWIP));
+            $table = new Table(array('name' => 'Poppins','width' => 9500, 'borderSize' => 1, 'borderColor' => '000000', 'cellMargin' => 40, 'unit' => TblWidth::TWIP));
 
             // encabezado tabla
             $ancho_col_1 = 4000;
@@ -809,7 +809,7 @@ class reporteBeiWordController extends Controller
             $table = null;
             $No = 1;
             $total = 0;
-            $table = new Table(array('name' => 'Arial', 'width' => 9500, 'borderSize' => 10, 'borderColor' => '000000', 'cellMargin' => 0, 'spaceAfter' => 0, 'unit' => TblWidth::TWIP));
+            $table = new Table(array('name' => 'Poppins', 'width' => 9500, 'borderSize' => 10, 'borderColor' => '000000', 'cellMargin' => 0, 'spaceAfter' => 0, 'unit' => TblWidth::TWIP));
 
             $sql = DB::select('SELECT
                                         reportearea.proyecto_id,
@@ -888,7 +888,7 @@ class reporteBeiWordController extends Controller
             $table = null;
             $No = 1;
             $total = 0;
-            $table = new Table(array('name' => 'Arial', 'width' => 9500, 'borderSize' => 10, 'borderColor' => '000000', 'cellMargin' => 0, 'spaceAfter' => 0, 'unit' => TblWidth::TWIP));
+            $table = new Table(array('name' => 'Poppins', 'width' => 9500, 'borderSize' => 10, 'borderColor' => '000000', 'cellMargin' => 0, 'spaceAfter' => 0, 'unit' => TblWidth::TWIP));
 
             $sql = DB::select('SELECT
                                 reportearea.proyecto_id,
@@ -950,7 +950,7 @@ class reporteBeiWordController extends Controller
             $table = null;
             $No = 1;
             $total = 0;
-            $table = new Table(array('name' => 'Arial', 'width' => 13500, 'borderSize' => 10, 'borderColor' => '000000', 'cellMargin' => 0, 'spaceAfter' => 0, 'unit' => TblWidth::TWIP));
+            $table = new Table(array('name' => 'Poppins', 'width' => 13500, 'borderSize' => 10, 'borderColor' => '000000', 'cellMargin' => 0, 'spaceAfter' => 0, 'unit' => TblWidth::TWIP));
 
             $sql = DB::select('SELECT p.ID_BEI_INFORME,
                                         CONCAT(p.EDAD_BEI," años") as EDAD_BEI_TEXTO,
@@ -1213,7 +1213,7 @@ class reporteBeiWordController extends Controller
 
             // Crear tabla
             $table = null;
-            $table = new Table(array('name' => 'Arial', 'borderSize' => 1, 'borderColor' => '000000', 'cellMargin' => 40, 'unit' => TblWidth::TWIP));
+            $table = new Table(array('name' => 'Poppins', 'borderSize' => 1, 'borderColor' => '000000', 'cellMargin' => 40, 'unit' => TblWidth::TWIP));
 
             $fotos = DB::select('SELECT
                                     proyectoevidenciafoto.id,
@@ -1239,13 +1239,13 @@ class reporteBeiWordController extends Controller
 
             // Crear tabla
             $table = null;
-            $table = new Table(array('name' => 'Arial', 'borderSize' => 1, 'borderColor' => '000000', 'cellMargin' => 40, 'unit' => TblWidth::TWIP));
+            $table = new Table(array('name' => 'Poppins', 'borderSize' => 1, 'borderColor' => '000000', 'cellMargin' => 40, 'unit' => TblWidth::TWIP));
 
 
             $table->addRow(400, array('tblHeader' => true));
             $table->addCell(($ancho_col_1 + $ancho_col_2),
                 array('gridSpan' => 2, 'valign' => 'center', 'borderTopColor' => 'ffffff', 'borderTopSize' => 1, 'borderRightColor' => 'ffffff', 'borderRightSize' => 1, 'borderBottomColor' => '000000', 'borderBottomSize' => 1, 'borderLeftColor' => 'ffffff', 'borderLeftSize' => 1,)
-            )->addTextRun($centrado)->addText('Memoria fotográfica', array('color' => '000000', 'size' => 12, 'bold' => true, 'name' => 'Arial'));
+            )->addTextRun($centrado)->addText('Memoria fotográfica', array('color' => '000000', 'size' => 12, 'bold' => true, 'name' => 'Poppins'));
             $table->addRow(400, array('tblHeader' => true));
             $table->addCell(($ancho_col_1 + $ancho_col_2), array('gridSpan' => 2, 'valign' => 'center', 'bgColor' => '0C3F64'))->addTextRun($centrado)->addText('Evaluación de IBE', $encabezado_texto);
 
@@ -1313,7 +1313,7 @@ class reporteBeiWordController extends Controller
 
             // Crear tabla
             $table = null;
-            $table = new Table(array('name' => 'Arial', 'borderSize' => 1, 'borderColor' => '000000', 'cellMargin' => 40, 'unit' => TblWidth::TWIP));
+            $table = new Table(array('name' => 'Poppins', 'borderSize' => 1, 'borderColor' => '000000', 'cellMargin' => 40, 'unit' => TblWidth::TWIP));
 
 
             $sql = DB::select('SELECT

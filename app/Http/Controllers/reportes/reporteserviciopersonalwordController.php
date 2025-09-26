@@ -1066,7 +1066,7 @@ class reporteserviciopersonalwordController extends Controller
 
                 if (($recsensorial->recsensorial_tipocliente+0) == 1) // 1 = Pemex, 0 = Cliente
                 {
-                    $fuente = 'Arial';
+                    $fuente = 'Poppins';
                     $font_size = 10;
                 }
                 else
@@ -1731,7 +1731,7 @@ class reporteserviciopersonalwordController extends Controller
 
             if (($recsensorial->recsensorial_tipocliente+0) == 1) // 1 = Pemex, 0 = Cliente
             {
-                $fuente = 'Arial';
+                $fuente = 'Poppins';
                 $font_size = 10;
             }
             else
@@ -1794,7 +1794,7 @@ class reporteserviciopersonalwordController extends Controller
                 //             </w:pPr>
                 //             <w:rPr>
                 //                 <w:name w:val="Heading2"/>
-                //                 <w:rFonts w:ascii="Arial Black" w:hAnsi="Arial Black"/>
+                //                 <w:rFonts w:ascii="Poppins Black" w:hAnsi="Poppins Black"/>
                 //                 <w:b/>
                 //                 <w:color w:val="365F91"/>
                 //                 <w:sz w:val="28"/>
@@ -2224,7 +2224,7 @@ class reporteserviciopersonalwordController extends Controller
             {
                 if (($recsensorial->recsensorial_tipocliente+0) == 1) // 1 = Pemex, 0 = Cliente
                 {
-                    $fuente = 'Arial';
+                    $fuente = 'Poppins';
                     $font_size = 9;
                 }
                 else
@@ -2700,7 +2700,7 @@ class reporteserviciopersonalwordController extends Controller
             {
                 if (($recsensorial->recsensorial_tipocliente+0) == 1) // 1 = Pemex, 0 = Cliente
                 {
-                    $fuente = 'Arial';
+                    $fuente = 'Poppins';
                     $font_size = 9;
                 }
                 else
@@ -2787,7 +2787,7 @@ class reporteserviciopersonalwordController extends Controller
 
                 if (($recsensorial->recsensorial_tipocliente+0) == 1) // 1 = Pemex, 0 = Cliente
                 {
-                    $fuente = 'Arial';
+                    $fuente = 'Poppins';
                     $font_size = 6;
                 }
                 else
@@ -2940,7 +2940,7 @@ class reporteserviciopersonalwordController extends Controller
                                                 AND reporteplanoscarpetas.agente_nombre LIKE "%'.$agente_nombre.'%"');
 
 
-            $planoscarpetasvariales = ''; $planocontador = 0; $plano_archivo = array();
+            $planoscarpetasvPoppinses = ''; $planocontador = 0; $plano_archivo = array();
             if (count($planoscarpetas) > 0)
             {
                 foreach ($planoscarpetas as $key_c => $carpeta)
@@ -2966,11 +2966,11 @@ class reporteserviciopersonalwordController extends Controller
                     {
                         if (($key_c+0) == (count($planoscarpetas)-1) && ($key_p+0) == (count($planos)-1)) // ultima carpeta y ultimo plano
                         {
-                            $planoscarpetasvariales .= '${PLANO_'.$planocontador.'_FOTO}';
+                            $planoscarpetasvPoppinses .= '${PLANO_'.$planocontador.'_FOTO}';
                         }
                         else
                         {
-                            $planoscarpetasvariales .= '${PLANO_'.$planocontador.'_FOTO}<w:pPr><w:br w:type="page" /></w:pPr>';
+                            $planoscarpetasvPoppinses .= '${PLANO_'.$planocontador.'_FOTO}<w:pPr><w:br w:type="page" /></w:pPr>';
                         }
 
 
@@ -2982,11 +2982,11 @@ class reporteserviciopersonalwordController extends Controller
             else
             {
                 $plano_archivo = array();
-                $planoscarpetasvariales = 'NO SE ENCONTRARÓN PLANOS QUE MOSTRAR.';
+                $planoscarpetasvPoppinses = 'NO SE ENCONTRARÓN PLANOS QUE MOSTRAR.';
             }
                 
 
-            $plantillaword->setValue('PLANOS', $planoscarpetasvariales);
+            $plantillaword->setValue('PLANOS', $planoscarpetasvPoppinses);
 
 
             /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////

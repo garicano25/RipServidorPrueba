@@ -714,10 +714,10 @@ class reportetemperaturawordController extends Controller
 
             if (($recsensorial->recsensorial_tipocliente + 0) == 1) // 1 = Pemex, 0 = Cliente
             {
-                $fuente = 'Arial';
+                $fuente = 'Poppins';
                 $font_size = 10;
             } else {
-                $fuente = 'Arial';
+                $fuente = 'Poppins';
                 $font_size = 10;
             }
 
@@ -1500,10 +1500,10 @@ class reportetemperaturawordController extends Controller
 
             if (($recsensorial->recsensorial_tipocliente + 0) == 1) // 1 = Pemex, 0 = Cliente
             {
-                $fuente = 'Arial';
+                $fuente = 'Poppins';
                 $font_size = 9;
             } else {
-                $fuente = 'Arial';
+                $fuente = 'Poppins';
                 $font_size = 9;
             }
 
@@ -1721,10 +1721,10 @@ class reportetemperaturawordController extends Controller
 
             if (($recsensorial->recsensorial_tipocliente + 0) == 1) // 1 = Pemex, 0 = Cliente
             {
-                $fuente = 'Arial';
+                $fuente = 'Poppins';
                 $font_size = 6;
             } else {
-                $fuente = 'Arial';
+                $fuente = 'Poppins';
                 $font_size = 6;
             }
 
@@ -2762,7 +2762,7 @@ class reportetemperaturawordController extends Controller
                                                 AND reporteplanoscarpetas.agente_nombre LIKE "%' . $agente_nombre . '%"');
 
 
-            $planoscarpetasvariales = '';
+            $planoscarpetasvPoppinses = '';
             $planocontador = 0;
             $plano_archivo = array();
             if (count($planoscarpetas) > 0) {
@@ -2784,7 +2784,7 @@ class reportetemperaturawordController extends Controller
                                                 proyectoevidenciaplano.proyectoevidenciaplano_archivo ASC');
 
                     foreach ($planos as $key => $plano) {
-                        $planoscarpetasvariales .= '${PLANO_' . $planocontador . '_FOTO}';
+                        $planoscarpetasvPoppinses .= '${PLANO_' . $planocontador . '_FOTO}';
 
                         $plano_archivo[] = $plano->proyectoevidenciaplano_archivo;
 
@@ -2793,11 +2793,11 @@ class reportetemperaturawordController extends Controller
                 }
             } else {
                 $plano_archivo = array();
-                $planoscarpetasvariales = 'NO SE ENCONTRARÓN PLANOS QUE MOSTRAR.';
+                $planoscarpetasvPoppinses = 'NO SE ENCONTRARÓN PLANOS QUE MOSTRAR.';
             }
 
 
-            $plantillaword->setValue('PLANOS', $planoscarpetasvariales);
+            $plantillaword->setValue('PLANOS', $planoscarpetasvPoppinses);
 
 
             // TABLA ANEXO 3, EQUIPO UTILIZADO PARA LA MEDICION
