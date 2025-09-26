@@ -486,7 +486,7 @@
 					</div>
 				</form>
 				<!-- ======== ELIMINAR DESPUES DE SUBIR AL SERVIDOR =============-->
-				<div class="col-12 mt-4" style="text-align: center;">
+				<div class="col-12 mt-4" style="text-align: center; display: none;">
 					<button type="submit" class="btn btn-info waves-effect waves-light" id="btn_descargar_plantilla">Descargar plantilla principal <i class="fa fa-download"></i></button>
 				</div>
 				<!-- ======== ELIMINAR DESPUES DE SUBIR AL SERVIDOR =============-->

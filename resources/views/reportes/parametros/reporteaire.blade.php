@@ -157,27 +157,25 @@
 	}
 
 
-	
+
 	.evluaraire {
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        flex-direction: column;
-        height: 23vh; 
-        text-align: center; 
-    }
+		display: flex;
+		justify-content: center;
+		align-items: center;
+		flex-direction: column;
+		height: 23vh;
+		text-align: center;
+	}
 
-    .checkbox-container {
-        display: flex;
-        justify-content: center;
-        flex-wrap: wrap; 
-    }
+	.checkbox-container {
+		display: flex;
+		justify-content: center;
+		flex-wrap: wrap;
+	}
 
-    .checkbox-container div {
-        margin: 10px 20px; 
-    }
-
-
+	.checkbox-container div {
+		margin: 10px 20px;
+	}
 </style>
 
 
@@ -185,7 +183,7 @@
 	<div class="col-xlg-2 col-lg-3 col-md-5">
 		<div class="stickyside">
 			<div class="list-group" id="top-menu">
-				<a href="#0_1" class="list-group-item active">Característica del aire<i  id="menureporte_0_1"></i></a>
+				<a href="#0_1" class="list-group-item active">Característica del aire<i id="menureporte_0_1"></i></a>
 				<a href="#0" class="list-group-item ">Portada <i class="fa fa-times" id="menureporte_0"></i></a>
 				<a href="#1" class="list-group-item">1.- Introducción <i class="fa fa-times" id="menureporte_1"></i></a>
 				<a href="#2" class="list-group-item">2.- Definiciones <i class="fa fa-times" id="menureporte_2"></i></a>
@@ -229,10 +227,10 @@
 			</div>
 		</div>
 	</div>
-	
-	<div class="col-xlg-10 col-lg-9 col-md-7" >
+
+	<div class="col-xlg-10 col-lg-9 col-md-7">
 		<div class="card">
-	
+
 			<div class="evluaraire mt-4">
 				<h3 class="card-title" style="padding: 0px!important;" id="0_1">Seleccione las características a evaluar de aire</h3>
 				<form method="post" enctype="multipart/form-data" name="form_reporte_evaluaraire" id="form_reporte_evaluaraire">
@@ -279,7 +277,7 @@
 							<label for="Formaldehídos">Formaldehídos</label>
 						</div>
 					</div>
-			
+
 					<div class="col-12" style="text-align: center; margin-top: 20px;">
 						<button type="submit" class="btn btn-danger waves-effect waves-light " id="botonguardar_reporte_evaluaraire">
 							Guardar características de aire <i class="fa fa-save"></i>
@@ -287,10 +285,10 @@
 					</div>
 				</form>
 			</div>
-			
-			
 
-			
+
+
+
 			<div class="card-body" style="display: block">
 				<h4 class="card-title" style="padding: 0px!important;" id="0">Portadas</h4>
 				<form method="post" enctype="multipart/form-data" name="form_reporte_portada" id="form_reporte_portada">
@@ -572,7 +570,7 @@
 					</div>
 				</form>
 				<!-- ======== ELIMINAR DESPUES DE SUBIR AL SERVIDOR =============-->
-				<div class="col-12 mt-4" style="text-align: center;">
+				<div class="col-12 mt-4" style="text-align: center; display: none;">
 					<button type="submit" class="btn btn-info waves-effect waves-light" id="btn_descargar_plantilla">Descargar plantilla principal <i class="fa fa-download"></i></button>
 				</div>
 				<!-- ======== ELIMINAR DESPUES DE SUBIR AL SERVIDOR =============-->
@@ -721,7 +719,7 @@
 										<td>Velocidad del aire</td>
 										<td>0.15-0.25 m/s</td>
 										{{-- <td style="text-align: justify!important;">NOM-001-STPS-2008, Edificios, locales, instalaciones y áreas en los centros de trabajo - Condiciones de seguridad.</td> --}}
-									</tr >
+									</tr>
 									<tr id="CO_AIRE_1" style="display: none">
 										<td>Concentración de monóxido de carbono (CO)</td>
 										<td>25 ppm</td>
@@ -946,17 +944,17 @@
 									<td>500 UFC</td>
 								</tr> --}}
 								<tr id="TEM_AIRE_2" style="display: none">
-									<td >Temperatura del aire</td>
+									<td>Temperatura del aire</td>
 									<td>Sin Método</td>
 									<td>22-24.5°C</td>
 								</tr>
 								<tr id="HUMEDAD_AIRE_2" style="display: none">
-									<td >Humedad relativa</td>
+									<td>Humedad relativa</td>
 									<td>Sin Método</td>
 									<td>20-60%</td>
 								</tr>
 								<tr id="VELOCIDAD_AIRE_2" style="display: none">
-									<td >Velocidad del aire</td>
+									<td>Velocidad del aire</td>
 									<td>Sin Método</td>
 									<td>0.15-0.25 m/s</td>
 								</tr>
