@@ -518,7 +518,7 @@ class recsensorialquimicosreportewordController extends Controller
 
         // formato celdas
         $encabezado_celda = array('bgColor' => '1A5276', 'valign' => 'center'); //'bgColor' => '1A5276'
-        $encabezado_texto = array('color' => 'FFFFFF', 'size' => 11, 'bold' => false, 'name' => 'Arial');
+        $encabezado_texto = array('color' => 'FFFFFF', 'size' => 11, 'bold' => false, 'name' => 'Poppins');
         $combinar_fila_encabezado = array('vMerge' => 'restart', 'valign' => 'center', 'bgColor' => '1A5276');
         $combinar_fila = array('vMerge' => 'restart', 'valign' => 'center');
         $varias_columnas = array('gridSpan' => 2, 'valign' => 'center');
@@ -527,9 +527,9 @@ class recsensorialquimicosreportewordController extends Controller
         $centrado = array('align' => 'center', 'spaceBefore' => 0, 'spaceAfter' => 0, 'lineHeight' => 1.15);
         $izquierda = array('align' => 'left', 'spaceBefore' => 0, 'spaceAfter' => 0, 'lineHeight' => 1.15);
         $justificado = array('align' => 'both', 'spaceBefore' => 0, 'spaceAfter' => 0, 'lineHeight' => 1.15);
-        $texto = array('color' => '000000', 'size' => 11, 'bold' => false, 'name' => 'Arial');
-        $textonegrita = array('color' => '000000', 'size' => 11, 'bold' => true, 'name' => 'Arial');
-        $textototal = array('color' => 'FFFFFF', 'size' => 11, 'bold' => false, 'name' => 'Arial');
+        $texto = array('color' => '000000', 'size' => 11, 'bold' => false, 'name' => 'Poppins');
+        $textonegrita = array('color' => '000000', 'size' => 11, 'bold' => true, 'name' => 'Poppins');
+        $textototal = array('color' => 'FFFFFF', 'size' => 11, 'bold' => false, 'name' => 'Poppins');
 
 
 
@@ -539,7 +539,7 @@ class recsensorialquimicosreportewordController extends Controller
         $table = null;
         $No = 1;
         $total = 0;
-        $table = new Table(array('name' => 'Arial', 'width' => 13500, 'borderSize' => 10, 'borderColor' => '000000', 'cellMargin' => 0, 'spaceAfter' => 0, 'unit' => TblWidth::TWIP));
+        $table = new Table(array('name' => 'Poppins', 'width' => 13500, 'borderSize' => 10, 'borderColor' => '000000', 'cellMargin' => 0, 'spaceAfter' => 0, 'unit' => TblWidth::TWIP));
 
         $sql = DB::select('SELECT a.recsensorialarea_nombre AREA, a.RECSENSORIALAREA_PROCESO PROCESO, c.recsensorialcategoria_nombrecategoria CATEGORIA, ac.recsensorialareacategorias_total PERSONAS
         FROM recsensorialareacategorias ac
@@ -588,7 +588,7 @@ class recsensorialquimicosreportewordController extends Controller
         $table = null;
         $No = 1;
         $total = 0;
-        $table = new Table(array('name' => 'Arial', 'width' => 13500, 'borderSize' => 10, 'borderColor' => '000000', 'cellMargin' => 0, 'spaceAfter' => 0, 'unit' => TblWidth::TWIP));
+        $table = new Table(array('name' => 'Poppins', 'width' => 13500, 'borderSize' => 10, 'borderColor' => '000000', 'cellMargin' => 0, 'spaceAfter' => 0, 'unit' => TblWidth::TWIP));
 
         $sql = DB::select('SELECT
                             recsensorialquimicosinventario.recsensorial_id,
@@ -674,7 +674,7 @@ class recsensorialquimicosreportewordController extends Controller
         $table = null;
         $No = 1;
         $total = 0;
-        $table = new Table(array('name' => 'Arial', 'width' => 13500, 'borderSize' => 10, 'borderColor' => '000000', 'cellMargin' => 0, 'spaceAfter' => 0, 'unit' => TblWidth::TWIP));
+        $table = new Table(array('name' => 'Poppins', 'width' => 13500, 'borderSize' => 10, 'borderColor' => '000000', 'cellMargin' => 0, 'spaceAfter' => 0, 'unit' => TblWidth::TWIP));
 
         $sql = DB::select('CALL sp_obtener_caracteristicas_sustancia_informe_b(?)', [$recsensorial_id]);
 
@@ -745,7 +745,7 @@ class recsensorialquimicosreportewordController extends Controller
         $table = null;
         $No = 1;
         $total = 0;
-        $table = new Table(array('name' => 'Arial', 'width' => 13500, 'borderSize' => 10, 'borderColor' => '000000', 'cellMargin' => 0, 'spaceAfter' => 0, 'unit' => TblWidth::TWIP));
+        $table = new Table(array('name' => 'Poppins', 'width' => 13500, 'borderSize' => 10, 'borderColor' => '000000', 'cellMargin' => 0, 'spaceAfter' => 0, 'unit' => TblWidth::TWIP));
 
         $sql = DB::select("SELECT  hoja.catsustancia_nombre,
                                         sus.SUSTANCIA_QUIMICA,
@@ -826,7 +826,7 @@ class recsensorialquimicosreportewordController extends Controller
         $table = null;
         $No = 1;
         $total = 0;
-        $table = new Table(array('name' => 'Arial', 'width' => 13500, 'borderSize' => 10, 'borderColor' => '000000', 'cellMargin' => 0, 'spaceAfter' => 0, 'unit' => TblWidth::TWIP));
+        $table = new Table(array('name' => 'Poppins', 'width' => 13500, 'borderSize' => 10, 'borderColor' => '000000', 'cellMargin' => 0, 'spaceAfter' => 0, 'unit' => TblWidth::TWIP));
 
         $sql = DB::select('SELECT
                             recsensorialmaquinaria.recsensorial_id,
@@ -900,7 +900,7 @@ class recsensorialquimicosreportewordController extends Controller
         $table = null;
         $No = 1;
         $total = 0;
-        $table = new Table(array('name' => 'Arial', 'width' => 13500, 'borderSize' => 10, 'borderColor' => '000000', 'cellMargin' => 0, 'spaceAfter' => 0, 'unit' => TblWidth::TWIP));
+        $table = new Table(array('name' => 'Poppins', 'width' => 13500, 'borderSize' => 10, 'borderColor' => '000000', 'cellMargin' => 0, 'spaceAfter' => 0, 'unit' => TblWidth::TWIP));
 
         $sql = DB::select('SELECT
                                 recsensorialarea.recsensorial_id,
@@ -949,7 +949,7 @@ class recsensorialquimicosreportewordController extends Controller
         $table = null;
         $No = 1;
         $total = 0;
-        $table = new Table(array('name' => 'Arial', 'width' => 13500, 'borderSize' => 10, 'borderColor' => '000000', 'cellMargin' => 0, 'spaceAfter' => 0, 'unit' => TblWidth::TWIP));
+        $table = new Table(array('name' => 'Poppins', 'width' => 13500, 'borderSize' => 10, 'borderColor' => '000000', 'cellMargin' => 0, 'spaceAfter' => 0, 'unit' => TblWidth::TWIP));
 
         $sql = DB::select("CALL sp_ponderacion1_tabla8_1_b(?)", [$recsensorial_id]);
 
@@ -1035,7 +1035,7 @@ class recsensorialquimicosreportewordController extends Controller
         $table = null;
         $No = 1;
         $total = 0;
-        $table = new Table(array('name' => 'Arial', 'width' => 13500, 'borderSize' => 10, 'borderColor' => '000000', 'cellMargin' => 0, 'spaceAfter' => 0, 'unit' => TblWidth::TWIP));
+        $table = new Table(array('name' => 'Poppins', 'width' => 13500, 'borderSize' => 10, 'borderColor' => '000000', 'cellMargin' => 0, 'spaceAfter' => 0, 'unit' => TblWidth::TWIP));
 
         $sql = DB::select('CALL sp_obtenerDeterminacionGEH_b(?) ', [$recsensorial_id]);
 
@@ -1212,7 +1212,7 @@ class recsensorialquimicosreportewordController extends Controller
         $table = null;
         $No = 1;
         $total = 0;
-        $table = new Table(array('name' => 'Arial', 'width' => 13500, 'borderSize' => 10, 'borderColor' => '000000', 'cellMargin' => 0, 'spaceAfter' => 0, 'unit' => TblWidth::TWIP));
+        $table = new Table(array('name' => 'Poppins', 'width' => 13500, 'borderSize' => 10, 'borderColor' => '000000', 'cellMargin' => 0, 'spaceAfter' => 0, 'unit' => TblWidth::TWIP));
 
         $sql = DB::select('CALL sp_obtenerGEH_b(?) ', [$recsensorial_id]);
 
@@ -1367,7 +1367,7 @@ class recsensorialquimicosreportewordController extends Controller
         $table = null;
         $No = 1;
         $total = 0;
-        $table = new Table(array('name' => 'Arial', 'width' => 13500, 'borderSize' => 10, 'borderColor' => '000000', 'cellMargin' => 0, 'spaceAfter' => 0, 'unit' => TblWidth::TWIP));
+        $table = new Table(array('name' => 'Poppins', 'width' => 13500, 'borderSize' => 10, 'borderColor' => '000000', 'cellMargin' => 0, 'spaceAfter' => 0, 'unit' => TblWidth::TWIP));
 
         $sql = DB::select('SELECT
                                 recsensorialarea.id,
@@ -1429,7 +1429,7 @@ class recsensorialquimicosreportewordController extends Controller
         $table = null;
         $No = 1;
         $total = 0;
-        $table = new Table(array('name' => 'Arial', 'width' => 9950, 'borderSize' => 10, 'borderColor' => '000000', 'cellMargin' => 0, 'spaceAfter' => 0, 'unit' => TblWidth::TWIP));
+        $table = new Table(array('name' => 'Poppins', 'width' => 9950, 'borderSize' => 10, 'borderColor' => '000000', 'cellMargin' => 0, 'spaceAfter' => 0, 'unit' => TblWidth::TWIP));
 
         $sql = DB::select('SELECT
                                 recsensorialequipopp.recsensorial_id,
@@ -1485,7 +1485,7 @@ class recsensorialquimicosreportewordController extends Controller
         $table = null;
         $No = 1;
         $total = 0;
-        $table = new Table(array('name' => 'Arial', 'width' => 13500, 'borderSize' => 10, 'borderColor' => '000000', 'cellMargin' => 0, 'spaceAfter' => 0, 'unit' => TblWidth::TWIP));
+        $table = new Table(array('name' => 'Poppins', 'width' => 13500, 'borderSize' => 10, 'borderColor' => '000000', 'cellMargin' => 0, 'spaceAfter' => 0, 'unit' => TblWidth::TWIP));
 
         $sql = DB::select('CALL sp_puntos_de_muestreoPOE_informe_b(?)', [$recsensorial_id]);
 
@@ -1558,7 +1558,7 @@ class recsensorialquimicosreportewordController extends Controller
         $table = null;
         $No = 1;
         $total = 0;
-        $table = new Table(array('name' => 'Arial', 'width' => 13500, 'borderSize' => 10, 'borderColor' => '000000', 'cellMargin' => 0, 'spaceAfter' => 0, 'unit' => TblWidth::TWIP));
+        $table = new Table(array('name' => 'Poppins', 'width' => 13500, 'borderSize' => 10, 'borderColor' => '000000', 'cellMargin' => 0, 'spaceAfter' => 0, 'unit' => TblWidth::TWIP));
 
         $sql = DB::select('SELECT
                                     area.recsensorial_id,
@@ -1597,7 +1597,7 @@ class recsensorialquimicosreportewordController extends Controller
         $table = null;
         $No = 1;
         $total = 0;
-        $table = new Table(array('name' => 'Arial', 'width' => 9950, 'borderSize' => 10, 'borderColor' => '000000', 'cellMargin' => 0, 'spaceAfter' => 0, 'unit' => TblWidth::TWIP));
+        $table = new Table(array('name' => 'Poppins', 'width' => 9950, 'borderSize' => 10, 'borderColor' => '000000', 'cellMargin' => 0, 'spaceAfter' => 0, 'unit' => TblWidth::TWIP));
 
         $sql = DB::select('CALL sp_obtener_puntos_finales_b(?)', [$recsensorial_id]);
 
@@ -1643,7 +1643,7 @@ class recsensorialquimicosreportewordController extends Controller
         $table = null;
         $No = 1;
         $total = 0;
-        $table = new Table(array('name' => 'Arial', 'width' => 13500, 'borderSize' => 10, 'borderColor' => '000000', 'cellMargin' => 0, 'spaceAfter' => 0, 'unit' => TblWidth::TWIP));
+        $table = new Table(array('name' => 'Poppins', 'width' => 13500, 'borderSize' => 10, 'borderColor' => '000000', 'cellMargin' => 0, 'spaceAfter' => 0, 'unit' => TblWidth::TWIP));
 
         $sql = DB::select(' SELECT area.recsensorialarea_nombre AREA,
                                     IF(cliente.CATEGORIA_ID = 0 ,"Ambiente laboral", categoria.recsensorialcategoria_nombrecategoria) AS CATEGORIA,
