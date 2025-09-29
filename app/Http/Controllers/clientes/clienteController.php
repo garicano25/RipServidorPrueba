@@ -2050,7 +2050,7 @@ class clienteController extends Controller
                     $partida = autorizacionCronogramaModel::findOrFail($request->ID_AUTORIZACION);
 
                     $partida->update($request->all());
-
+ 
                     $dato['msj'] = 'Informacion actualizada correctamente';
                 }
 

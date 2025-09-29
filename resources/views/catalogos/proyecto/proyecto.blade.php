@@ -698,6 +698,12 @@
                                                                                     </div>
                                                                                     <div class="col-12">
                                                                                         <div class="form-group">
+                                                                                            <label>Representante legal * </label>
+                                                                                            <input type="text" class="form-control" id="proyecto_representantelegal" name="proyecto_representantelegal">
+                                                                                        </div>
+                                                                                    </div>
+                                                                                    <div class="col-12">
+                                                                                        <div class="form-group">
                                                                                             <label> Descripción del servicio *</label>
                                                                                             <textarea class="form-control" rows="6" id="proyecto_clienteobjetivoservicio" name="proyecto_clienteobjetivoservicio"></textarea>
                                                                                         </div>

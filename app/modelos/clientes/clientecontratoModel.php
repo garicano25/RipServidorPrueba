@@ -29,6 +29,7 @@ class clientecontratoModel extends Model
         'FECHA_FIN',
         'RUTA_CONTRATO',
         'CONCLUIDO',
-        'ACTIVO'
+        'ACTIVO',
+        'REPRESENTANTE_LEGAL_CONTRATO'
     ];
 }

@@ -1503,6 +1503,7 @@ class recsensorialController extends Controller
                                                 p.proyecto_clientepersonacontacto REPRESENTANTE,
                                                 p.proyecto_clienterfc RFC,
                                                 p.proyecto_clienterazonsocial RAZON_SOCIAL,
+                                                p.proyecto_representantelegal REPRESENTANTE_LEGAL,
                                                 IFNULL(p.cliente_id, (SELECT CLIENTE_ID FROM contratos_clientes WHERE ID_CONTRATO = p.contrato_id)) CLIENTE_ID,
                                                 IFNULL(p.contrato_id, 0) CONTRATO_ID,
                                                 IF(p.requiereContrato = 0, "No aplica", 

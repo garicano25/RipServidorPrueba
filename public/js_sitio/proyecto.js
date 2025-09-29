@@ -710,6 +710,7 @@ function consultar_contrato(contrato_id) {
 				$('#proyecto_clientecelularcontacto').val(dato.data[0].CELULAR_CONTACTO);
 				$('#proyecto_clientecorreocontacto').val(dato.data[0].CORREO_CONTACTO);
 				$('#proyecto_clienteobjetivoservicio').val(dato.data[0].DESCRIPCION_CONTRATO);
+				$('#proyecto_representantelegal').val(dato.data[0].REPRESENTANTE_LEGAL_CONTRATO);
 
 				//Asignamos valor a las etiquetas y desabilitamos la ID de las etiquetas
 				$.each(dato.etiquetas, function (index, etiqueta) {
@@ -1292,6 +1293,8 @@ $('#tabla_proyectos tbody').on('click', 'td.mostrar', function () {
 		$('#proyecto_fechafin').val(row.data().proyecto_fechafin);
 		$('#proyecto_totaldias').val(row.data().proyecto_totaldias);
 		$('#proyecto_fechaentrega').val(row.data().proyecto_fechaentrega);
+		$('#proyecto_representantelegal').val(row.data().proyecto_representantelegal);
+
 
 		if (row.data().proyecto_fechainicio != "" && parseInt(row.data().proyecto_totaldias) > 0) {
 			var fechainput = row.data().proyecto_fechainicio.split("-");
@@ -1651,6 +1654,7 @@ $('#tabla_proyectos_internos tbody').on('click', 'td.mostrar', function () {
 		$('#proyecto_fechafin').val(row.data().proyecto_fechafin);
 		$('#proyecto_totaldias').val(row.data().proyecto_totaldias);
 		$('#proyecto_fechaentrega').val(row.data().proyecto_fechaentrega);
+		$('#proyecto_representantelegal').val(row.data().proyecto_representantelegal);
 
 		if (row.data().proyecto_fechainicio != "" && parseInt(row.data().proyecto_totaldias) > 0) {
 			var fechainput = row.data().proyecto_fechainicio.split("-");

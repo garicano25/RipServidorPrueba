@@ -838,6 +838,7 @@ class proyectoController extends Controller
 
             $info = DB::select(
                 'SELECT con.ID_CONTRATO,
+
                                 cli.cliente_RazonSocial RAZON_SOCIAL,
                                 cli.cliente_NombreComercial NOMBRE_COMERCIAL,
                                 cli.cliente_Rfc RFC,
@@ -846,7 +847,8 @@ class proyectoController extends Controller
                                 con.TELEFONO_CONTACTO,
                                 con.CELULAR_CONTACTO,
                                 con.CORREO_CONTACTO,
-                                con.DESCRIPCION_CONTRATO
+                                con.DESCRIPCION_CONTRATO,
+                                con.REPRESENTANTE_LEGAL_CONTRATO
                             FROM contratos_clientes con
                             LEFT JOIN cliente cli ON cli.id = con.CLIENTE_ID 
                             WHERE con.ID_CONTRATO = ?',

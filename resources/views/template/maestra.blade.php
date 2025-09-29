@@ -720,7 +720,7 @@ use Illuminate\Support\Str;
     <script src="/assets/plugins/select-search/selectize.js" type="text/javascript"></script>
 
     {{-- JS pagina --}}
-    <script src="/js_sitio/cliente.js?v=9.2"></script>
+    <script src="/js_sitio/cliente.js?v=9.3"></script>
     @endif
 
     @if(request()->is('proveedor'))
@@ -777,7 +777,7 @@ use Illuminate\Support\Str;
     <script src="/assets/plugins/Magnific-Popup-master/dist/jquery.magnific-popup.min.js"></script>
     <script src="/assets/plugins/Magnific-Popup-master/dist/jquery.magnific-popup-init.js"></script>
     {{-- pagina --}}
-    <script src="/js_sitio/reconocimiento_sensorial.js?v=18.3"></script>
+    <script src="/js_sitio/reconocimiento_sensorial.js?v=18.4"></script>
     @endif
 
     @if(request()->is('reconocimientoPsicosocial'))
@@ -1032,7 +1032,7 @@ use Illuminate\Support\Str;
     <script src='https://cdn.jsdelivr.net/npm/fullcalendar@6.1.15/index.global.min.js'></script>
     <script src="https://cdn.jsdelivr.net/npm/@fullcalendar/multimonth@6.1.15/index.global.min.js"></script>
     {{-- pagina --}}
-    <script src="/js_sitio/proyecto.js?v=8.1"></script>
+    <script src="/js_sitio/proyecto.js?v=8.2"></script>
 
     {{-- Select search filter --}}
     <script src="/assets/plugins/select-search/selectize.js" type="text/javascript"></script>

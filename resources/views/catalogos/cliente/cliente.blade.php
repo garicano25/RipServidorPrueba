@@ -1448,6 +1448,14 @@
                                 <input type="text" step="any" class="form-control" name="NUMERO_CONTRATO" id="NUMERO_CONTRATO">
                             </div>
                         </div>
+
+                        <div class="col-12">
+                            <div class="form-group">
+                                <label>Representante legal *</label>
+                                <input type="text" step="any" class="form-control" name="REPRESENTANTE_LEGAL_CONTRATO" id="REPRESENTANTE_LEGAL_CONTRATO" required>
+                            </div>
+                        </div>
+
                         <div class="col-12">
                             <div class="form-group">
                                 <label>Objeto del servicio *</label>

@@ -2474,6 +2474,7 @@ $('#tabla_clientecontratos tbody').on('click', 'td>button.editar', function () {
     }
     $("#MONTO").val(row.data().MONTO_SINFORMATO);
 
+    $("#REPRESENTANTE_LEGAL_CONTRATO").val(row.data().REPRESENTANTE_LEGAL_CONTRATO);
 
 
 

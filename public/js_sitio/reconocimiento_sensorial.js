@@ -12372,6 +12372,8 @@ function obtenerEstructuraProyectos(FOLIO, NUEVO) {
 				$('#recsensorial_representanteseguridad').val(response.info[0].REPRESENTANTE)
 				$('#recsensorial_direccion').val(response.info[0].DIRRECCION)
 				$('#recsensorial_instalacion').val(response.info[0].INSTALACION)
+				$('#recsensorial_representantelegal').val(response.info[0].REPRESENTANTE_LEGAL)
+
 
 				// Input ocultos
 				var contrato = response.info[0].CONTRATO_ID == 0 ? "" : response.info[0].CONTRATO_ID
