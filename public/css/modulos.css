@@ -191,7 +191,6 @@ a {
 
 /* ======== Ajuste a pantalla completa sin romper diseño ======== */
 
-/* Que el body y html llenen toda la ventana */
 html,
 body {
     height: 100%;
@@ -199,17 +198,14 @@ body {
     padding: 0;
 }
 
-/* Contenedor principal ocupa toda la pantalla */
 .container-fluid {
     height: 100%;
 }
 
-/* La fila principal se divide en 2 mitades que ocupan 100% */
 .container-fluid>.row {
     height: 100%;
 }
 
-/* Cada mitad (col-6) ocupa la mitad de la pantalla */
 .col-6 {
     height: 100%;
     display: flex;
