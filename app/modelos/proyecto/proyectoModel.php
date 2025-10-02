@@ -8,9 +8,9 @@ class proyectoModel extends Model
 {
     protected $table = 'proyecto';
     protected $fillable = [
-        'contrato_id'
-         , 'recsensorial_id'
-         , 'reconocimiento_psico_id' 
+          'contrato_id'
+        , 'recsensorial_id'
+        , 'reconocimiento_psico_id' 
         , 'proyecto_folio'
         , 'proyecto_ordenservicio'
         , 'proyecto_cotizacion'
@@ -49,15 +49,15 @@ class proyectoModel extends Model
         , 'proyecto_puntosrealesactivo'
         , 'proyecto_bitacoraactivo'
         , 'proyecto_concluido'
-        , 'proyecto_eliminado',
-        'solicitudOS',
-        'proyectoInterno',
-        'requiereContrato',
-        'cliente_id',
-        'tipoServicioCliente',
-        'reconocimiento_psico_id',
-        'proyecto_clonado',
-        'proyecto_representantelegal'
+        , 'proyecto_eliminado'
+        ,'solicitudOS'
+        ,'proyectoInterno'
+        ,'requiereContrato'
+        ,'cliente_id'
+        ,'tipoServicioCliente'
+        ,'reconocimiento_psico_id'
+        ,'proyecto_clonado'
+        ,'proyecto_representantelegal'
     ];
 
     //=============== RELACION A TABLAS ===================

@@ -2464,6 +2464,7 @@ $('#tabla_clientecontratos tbody').on('click', 'td>button.editar', function () {
     $("#DESCRIPCION_CONTRATO").val(row.data().DESCRIPCION_CONTRATO);
     $("#FECHA_INICIO").val(row.data().FECHA_INICIO);
     $("#FECHA_FIN").val(row.data().FECHA_FIN);
+    
     if (row.data().MONEDA_MONTO == 'MXN') {
 
         $("#MONEDA_MONTOMNX").prop("checked", true);

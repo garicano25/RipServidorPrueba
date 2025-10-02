@@ -220,6 +220,10 @@ class reporteruidoController extends Controller
         $texto = str_replace($proyecto->proyecto_clientedireccionservicio, 'INSTALACION_DIRECCION', $texto);
         $texto = str_replace($reportefecha[2] . " de " . $meses[($reportefecha[1] + 0)] . " del año " . $reportefecha[0], 'REPORTE_FECHA_LARGA', $texto);
 
+        $texto = str_replace($proyecto->proyecto_clientenombrecomercial, 'NOMBRE_EMPRESA_NUEVO', $texto);
+
+        
+        
         if (($recsensorial->recsensorial_tipocliente + 0) == 1) // 1 = pemex, 0 = cliente
         {
             $texto = str_replace($proyecto->catsubdireccion->catsubdireccion_nombre, 'SUBDIRECCION_NOMBRE', $texto);
@@ -239,6 +243,7 @@ class reporteruidoController extends Controller
         $reportefecha = explode("-", $proyecto->proyecto_fechaentrega);
 
         $texto = str_replace('INSTALACION_NOMBRE', $proyecto->proyecto_clienteinstalacion, $texto);
+        $texto = str_replace('NOMBRE_EMPRESA_NUEVO', $proyecto->proyecto_clientenombrecomercial, $texto);
         $texto = str_replace('INSTALACION_DIRECCION', $proyecto->proyecto_clientedireccionservicio, $texto);
         $texto = str_replace('INSTALACION_CODIGOPOSTAL', 'C.P. ' . $recsensorial->recsensorial_codigopostal, $texto);
         $texto = str_replace('INSTALACION_COORDENADAS', $recsensorial->recsensorial_coordenadas, $texto);

@@ -80,3 +80,139 @@ body {
 a {
     text-decoration: none !important;
 }
+
+
+
+/* ================== RESPONSIVE ================== */
+
+/* Ajustes generales en móviles */
+@media (max-width: 991.98px) {
+    .col-6 {
+        flex: 0 0 100%;
+        max-width: 100%;
+    }
+
+    /* Centrar títulos y usuario */
+    #typing-text {
+        text-align: center;
+        margin: 10px 0;
+    }
+
+    .user {
+        margin: 0 auto;
+        display: block;
+    }
+
+    /* Ajustar tamaños de círculos en pantallas medianas */
+    .circle-one {
+        width: 180px;
+        height: 180px;
+        padding: 12px;
+    }
+
+    .circle-two {
+        width: 90px;
+        height: 140px;
+    }
+
+    .logos {
+        width: 100px;
+        height: auto;
+    }
+
+    h1.ld-breath {
+        font-size: 120px !important;
+        margin: 20px !important;
+    }
+
+    /* Logo central */
+    .box-logo {
+        position: static;
+        margin: 20px auto;
+        display: flex;
+        justify-content: center;
+    }
+
+    .logo {
+        width: 120px;
+    }
+
+    /* Ajustar imágenes decorativas */
+    img[style*="Group 27.png"],
+    img[style*="Group 28.png"] {
+        max-width: 200px !important;
+        margin: 20px auto !important;
+        display: block;
+    }
+
+    /* Textos girados en vertical (Results In Performance) */
+    .col-3[style*="rotate(-90deg)"] {
+        transform: none !important;
+        text-align: center;
+        margin-bottom: 10px;
+    }
+}
+
+/* En móviles pequeños (menos de 576px) */
+@media (max-width: 575.98px) {
+    .circle-one {
+        width: 150px;
+        height: 150px;
+        padding: 8px;
+    }
+
+    .circle-two {
+        width: 70px;
+        height: 110px;
+    }
+
+    .logos {
+        width: 80px;
+        height: auto;
+    }
+
+    h1.ld-breath {
+        font-size: 90px !important;
+        margin: 10px !important;
+    }
+
+    .titulos {
+        font-size: 14px;
+        text-align: center;
+    }
+
+    .logo {
+        width: 90px;
+    }
+}
+
+
+
+
+/* ======== Ajuste a pantalla completa sin romper diseño ======== */
+
+/* Que el body y html llenen toda la ventana */
+html,
+body {
+    height: 100%;
+    margin: 0;
+    padding: 0;
+}
+
+/* Contenedor principal ocupa toda la pantalla */
+.container-fluid {
+    height: 100%;
+}
+
+/* La fila principal se divide en 2 mitades que ocupan 100% */
+.container-fluid>.row {
+    height: 100%;
+}
+
+/* Cada mitad (col-6) ocupa la mitad de la pantalla */
+.col-6 {
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+}
