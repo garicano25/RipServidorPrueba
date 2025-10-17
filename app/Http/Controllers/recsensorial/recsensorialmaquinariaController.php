@@ -104,9 +104,6 @@ class recsensorialmaquinariaController extends Controller
                         case 6:
                             $value->recsensorialmaquinaria_cantidad_formateada =  $value->recsensorialmaquinaria_cantidad . ' de ' . $value->recsensorialmaquinaria_contenido . ' T';
                             break;
-                        case 7:
-                            $value->recsensorialmaquinaria_cantidad_formateada =  $value->recsensorialmaquinaria_cantidad . ' de ' . $value->recsensorialmaquinaria_contenido . ' pz';
-                            break;
                         default:
                             $value->recsensorialmaquinaria_cantidad_formateada =  'ND';
 
