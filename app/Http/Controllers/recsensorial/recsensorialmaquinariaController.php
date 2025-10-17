@@ -87,7 +87,7 @@ class recsensorialmaquinariaController extends Controller
 
                     switch ($value->recsensorialmaquinaria_unidadMedida) {
                         case 1:
-                            $value->recsensorialmaquinaria_cantidad_formateada =  $value->recsensorialmaquinaria_cantidad . ' de ' . $value->recsensorialmaquinaria_contenido . ' mg';
+                            $value->recsensorialmaquinaria_cantidad_formateada =  $value->recsensorialmaquinaria_cantidad . ' de ' . $value->recsensorialmaquinaria_contenido . ' ml';
                             break;
                         case 2:
                             $value->recsensorialmaquinaria_cantidad_formateada =  $value->recsensorialmaquinaria_cantidad . ' de ' . $value->recsensorialmaquinaria_contenido . ' L';
@@ -103,6 +103,9 @@ class recsensorialmaquinariaController extends Controller
                             break;
                         case 6:
                             $value->recsensorialmaquinaria_cantidad_formateada =  $value->recsensorialmaquinaria_cantidad . ' de ' . $value->recsensorialmaquinaria_contenido . ' T';
+                            break;
+                        case 7:
+                            $value->recsensorialmaquinaria_cantidad_formateada =  $value->recsensorialmaquinaria_cantidad . ' de ' . $value->recsensorialmaquinaria_contenido . ' pz';
                             break;
                         default:
                             $value->recsensorialmaquinaria_cantidad_formateada =  'ND';
