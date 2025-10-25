@@ -9688,7 +9688,7 @@ $('#contrato_anexo_id').on('change', function () {
 	if (val == 'ARCHIVO') {
 
 		$('#anexoArchivo').css('display', 'block')
-		$('#anexo_archivo').prop('required', true);
+		$('#anexo_archivo').prop('required', false);
 
 		$('#anexoImagen').css('display', 'none')
 		$('#anexo_imagen').prop('required', false);
