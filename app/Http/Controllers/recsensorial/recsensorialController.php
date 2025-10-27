@@ -2103,67 +2103,135 @@ class recsensorialController extends Controller
             }
 
 
-            if (($request->opcion + 0) == 3) // RESPONSABLES DEL RECONOCIMIENTO
-            {
-                // dd($request->all());
+            // if (($request->opcion + 0) == 3) // RESPONSABLES DEL RECONOCIMIENTO
+            // {
+            //     // dd($request->all());
 
+            //     $recsensorial = recsensorialModel::findOrFail($request->recsensorial_id);
+
+            //     // dd($recsensorial->all());
+
+            //     if ($request->recsensorial_repfisicos1nombre) // RESPONSABLES DEL RECONOCIMIENTO DE FISICOS
+            //     {
+            //         if ($request->file('fisicosresponsabletecnico')) {
+            //             $extension = $request->file('fisicosresponsabletecnico')->getClientOriginalExtension();
+            //             $request['recsensorial_repfisicos1doc'] = $request->file('fisicosresponsabletecnico')->storeAs('recsensorial/' . $request->recsensorial_id . '/responsables/rec_fisicos', 'rep_tecnico.' . $extension);
+            //         }
+
+            //         if ($request->file('fisicosresponsableadministrativo')) {
+            //             $extension = $request->file('fisicosresponsableadministrativo')->getClientOriginalExtension();
+            //             $request['recsensorial_repfisicos2doc'] = $request->file('fisicosresponsableadministrativo')->storeAs('recsensorial/' . $request->recsensorial_id . '/responsables/rec_fisicos', 'rep_admin.' . $extension);
+            //         }
+            //     } else {
+            //         // Eliminar carpeta si acaso existio
+            //         Storage::deleteDirectory('recsensorial/' . $request->recsensorial_id . '/responsables/rec_fisicos');
+
+            //         $request['recsensorial_repfisicos1nombre'] = NULL;
+            //         $request['recsensorial_repfisicos1cargo'] = NULL;
+            //         $request['recsensorial_repfisicos1doc'] = NULL;
+            //         $request['recsensorial_repfisicos2nombre'] = NULL;
+            //         $request['recsensorial_repfisicos2cargo'] = NULL;
+            //         $request['recsensorial_repfisicos2doc'] = NULL;
+            //     }
+
+
+            //     if ($request->recsensorial_repquimicos1nombre) // RESPONSABLES DEL RECONOCIMIENTO DE QUIMICOS
+            //     {
+            //         if ($request->file('quimicosresponsabletecnico')) {
+            //             $extension = $request->file('quimicosresponsabletecnico')->getClientOriginalExtension();
+            //             $request['recsensorial_repquimicos1doc'] = $request->file('quimicosresponsabletecnico')->storeAs('recsensorial/' . $request->recsensorial_id . '/responsables/rec_quimicos', 'rep_tecnico.' . $extension);
+            //         }
+
+            //         if ($request->file('quimicosresponsableadministrativo')) {
+            //             $extension = $request->file('quimicosresponsableadministrativo')->getClientOriginalExtension();
+            //             $request['recsensorial_repquimicos2doc'] = $request->file('quimicosresponsableadministrativo')->storeAs('recsensorial/' . $request->recsensorial_id . '/responsables/rec_quimicos', 'rep_admin.' . $extension);
+            //         }
+            //     } else {
+            //         // Eliminar carpeta si acaso existio
+            //         Storage::deleteDirectory('recsensorial/' . $request->recsensorial_id . '/responsables/rec_quimicos');
+
+            //         $request['recsensorial_repquimicos1nombre'] = NULL;
+            //         $request['recsensorial_repquimicos1cargo'] = NULL;
+            //         $request['recsensorial_repquimicos1doc'] = NULL;
+            //         $request['recsensorial_repquimicos2nombre'] = NULL;
+            //         $request['recsensorial_repquimicos2cargo'] = NULL;
+            //         $request['recsensorial_repquimicos2doc'] = NULL;
+            //     }
+
+            //     $recsensorial->update($request->all());
+
+            //     // respuesta
+            //     $dato["msj"] = 'Datos de los responsables guardado correctamente';
+            //     $dato['recsensorial'] = $recsensorial;
+            // }
+
+
+
+            if (($request->opcion + 0) == 3) 
+            {
                 $recsensorial = recsensorialModel::findOrFail($request->recsensorial_id);
 
-                // dd($recsensorial->all());
-
-                if ($request->recsensorial_repfisicos1nombre) // RESPONSABLES DEL RECONOCIMIENTO DE FISICOS
-                {
+                // ========================== RESPONSABLES FÍSICOS ==========================
+                if ($request->recsensorial_repfisicos1nombre) {
+                    // Subir documento técnico
                     if ($request->file('fisicosresponsabletecnico')) {
                         $extension = $request->file('fisicosresponsabletecnico')->getClientOriginalExtension();
-                        $request['recsensorial_repfisicos1doc'] = $request->file('fisicosresponsabletecnico')->storeAs('recsensorial/' . $request->recsensorial_id . '/responsables/rec_fisicos', 'rep_tecnico.' . $extension);
+                        $request['recsensorial_repfisicos1doc'] =
+                            $request->file('fisicosresponsabletecnico')
+                            ->storeAs('recsensorial/' . $request->recsensorial_id . '/responsables/rec_fisicos', 'rep_tecnico.' . $extension);
                     }
 
+                    // Subir documento administrativo
                     if ($request->file('fisicosresponsableadministrativo')) {
                         $extension = $request->file('fisicosresponsableadministrativo')->getClientOriginalExtension();
-                        $request['recsensorial_repfisicos2doc'] = $request->file('fisicosresponsableadministrativo')->storeAs('recsensorial/' . $request->recsensorial_id . '/responsables/rec_fisicos', 'rep_admin.' . $extension);
+                        $request['recsensorial_repfisicos2doc'] =
+                            $request->file('fisicosresponsableadministrativo')
+                            ->storeAs('recsensorial/' . $request->recsensorial_id . '/responsables/rec_fisicos', 'rep_admin.' . $extension);
                     }
                 } else {
-                    // Eliminar carpeta si acaso existio
-                    Storage::deleteDirectory('recsensorial/' . $request->recsensorial_id . '/responsables/rec_fisicos');
-
-                    $request['recsensorial_repfisicos1nombre'] = NULL;
-                    $request['recsensorial_repfisicos1cargo'] = NULL;
-                    $request['recsensorial_repfisicos1doc'] = NULL;
-                    $request['recsensorial_repfisicos2nombre'] = NULL;
-                    $request['recsensorial_repfisicos2cargo'] = NULL;
-                    $request['recsensorial_repfisicos2doc'] = NULL;
+                    unset(
+                        $request['recsensorial_repfisicos1nombre'],
+                        $request['recsensorial_repfisicos1cargo'],
+                        $request['recsensorial_repfisicos1doc'],
+                        $request['recsensorial_repfisicos2nombre'],
+                        $request['recsensorial_repfisicos2cargo'],
+                        $request['recsensorial_repfisicos2doc']
+                    );
                 }
 
-
-                if ($request->recsensorial_repquimicos1nombre) // RESPONSABLES DEL RECONOCIMIENTO DE QUIMICOS
-                {
+                // ========================== RESPONSABLES QUÍMICOS ==========================
+                if ($request->recsensorial_repquimicos1nombre) {
                     if ($request->file('quimicosresponsabletecnico')) {
                         $extension = $request->file('quimicosresponsabletecnico')->getClientOriginalExtension();
-                        $request['recsensorial_repquimicos1doc'] = $request->file('quimicosresponsabletecnico')->storeAs('recsensorial/' . $request->recsensorial_id . '/responsables/rec_quimicos', 'rep_tecnico.' . $extension);
+                        $request['recsensorial_repquimicos1doc'] =
+                            $request->file('quimicosresponsabletecnico')
+                            ->storeAs('recsensorial/' . $request->recsensorial_id . '/responsables/rec_quimicos', 'rep_tecnico.' . $extension);
                     }
 
                     if ($request->file('quimicosresponsableadministrativo')) {
                         $extension = $request->file('quimicosresponsableadministrativo')->getClientOriginalExtension();
-                        $request['recsensorial_repquimicos2doc'] = $request->file('quimicosresponsableadministrativo')->storeAs('recsensorial/' . $request->recsensorial_id . '/responsables/rec_quimicos', 'rep_admin.' . $extension);
+                        $request['recsensorial_repquimicos2doc'] =
+                            $request->file('quimicosresponsableadministrativo')
+                            ->storeAs('recsensorial/' . $request->recsensorial_id . '/responsables/rec_quimicos', 'rep_admin.' . $extension);
                     }
                 } else {
-                    // Eliminar carpeta si acaso existio
-                    Storage::deleteDirectory('recsensorial/' . $request->recsensorial_id . '/responsables/rec_quimicos');
-
-                    $request['recsensorial_repquimicos1nombre'] = NULL;
-                    $request['recsensorial_repquimicos1cargo'] = NULL;
-                    $request['recsensorial_repquimicos1doc'] = NULL;
-                    $request['recsensorial_repquimicos2nombre'] = NULL;
-                    $request['recsensorial_repquimicos2cargo'] = NULL;
-                    $request['recsensorial_repquimicos2doc'] = NULL;
+                    unset(
+                        $request['recsensorial_repquimicos1nombre'],
+                        $request['recsensorial_repquimicos1cargo'],
+                        $request['recsensorial_repquimicos1doc'],
+                        $request['recsensorial_repquimicos2nombre'],
+                        $request['recsensorial_repquimicos2cargo'],
+                        $request['recsensorial_repquimicos2doc']
+                    );
                 }
 
-                $recsensorial->update($request->all());
+                // ========================== GUARDADO FINAL ==========================
+                $recsensorial->update($request->except(['_token', 'opcion']));
 
-                // respuesta
-                $dato["msj"] = 'Datos de los responsables guardado correctamente';
+                $dato["msj"] = 'Datos de los responsables guardados correctamente';
                 $dato['recsensorial'] = $recsensorial;
             }
+
 
 
             if (($request->opcion + 0) == 4) // FOTOS EVIDENCIA PARAMETROS
