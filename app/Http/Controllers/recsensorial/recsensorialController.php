@@ -1606,28 +1606,37 @@ class recsensorialController extends Controller
                 // $request['recsensorial_fechafin'] = Carbon::createFromFormat('d-m-Y', $request['recsensorial_fechafin'])->format('Y-m-d');
 
 
-                if (($request->recsensorial_alcancefisico + 0) == 0) {
-                    // Eliminar carpeta si acaso existio
-                    Storage::deleteDirectory('recsensorial/' . $request->recsensorial_id . '/responsables/rec_fisicos');
+                // if (($request->recsensorial_alcancefisico + 0) == 0) {
+                //     // Eliminar carpeta si acaso existio
+                //     Storage::deleteDirectory('recsensorial/' . $request->recsensorial_id . '/responsables/rec_fisicos');
 
-                    $request['recsensorial_repfisicos1nombre'] = NULL;
-                    $request['recsensorial_repfisicos1cargo'] = NULL;
-                    $request['recsensorial_repfisicos1doc'] = NULL;
-                    $request['recsensorial_repfisicos2nombre'] = NULL;
-                    $request['recsensorial_repfisicos2cargo'] = NULL;
-                    $request['recsensorial_repfisicos2doc'] = NULL;
+                //     $request['recsensorial_repfisicos1nombre'] = NULL;
+                //     $request['recsensorial_repfisicos1cargo'] = NULL;
+                //     $request['recsensorial_repfisicos1doc'] = NULL;
+                //     $request['recsensorial_repfisicos2nombre'] = NULL;
+                //     $request['recsensorial_repfisicos2cargo'] = NULL;
+                //     $request['recsensorial_repfisicos2doc'] = NULL;
+                // }
+
+                // if (($request->recsensorial_alcancequimico + 0) == 0) {
+                //     // Eliminar carpeta si acaso existio
+                //     Storage::deleteDirectory('recsensorial/' . $request->recsensorial_id . '/responsables/rec_quimicos');
+
+                //     $request['recsensorial_repquimicos1nombre'] = NULL;
+                //     $request['recsensorial_repquimicos1cargo'] = NULL;
+                //     $request['recsensorial_repquimicos1doc'] = NULL;
+                //     $request['recsensorial_repquimicos2nombre'] = NULL;
+                //     $request['recsensorial_repquimicos2cargo'] = NULL;
+                //     $request['recsensorial_repquimicos2doc'] = NULL;
+                // }
+
+
+
+                if (($request->recsensorial_alcancefisico + 0) == 0) {
+                   
                 }
 
                 if (($request->recsensorial_alcancequimico + 0) == 0) {
-                    // Eliminar carpeta si acaso existio
-                    Storage::deleteDirectory('recsensorial/' . $request->recsensorial_id . '/responsables/rec_quimicos');
-
-                    $request['recsensorial_repquimicos1nombre'] = NULL;
-                    $request['recsensorial_repquimicos1cargo'] = NULL;
-                    $request['recsensorial_repquimicos1doc'] = NULL;
-                    $request['recsensorial_repquimicos2nombre'] = NULL;
-                    $request['recsensorial_repquimicos2cargo'] = NULL;
-                    $request['recsensorial_repquimicos2doc'] = NULL;
                 }
 
 
