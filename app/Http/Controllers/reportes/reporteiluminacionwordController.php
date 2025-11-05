@@ -313,7 +313,7 @@ class reporteiluminacionwordController extends Controller
             if ($recursos[0]->RUTA_IMAGEN_PORTADA) {
                 if (file_exists(storage_path('app/' . $recursos[0]->RUTA_IMAGEN_PORTADA))) {
 
-                    $plantillaword->setImageValue('foto_portada', array('path' => storage_path('app/' . $recursos[0]->RUTA_IMAGEN_PORTADA), 'width' => 650, 'height' => 750, 'ratio' => true, 'borderColor' => '000000'));
+                    $plantillaword->setImageValue('foto_portada', array('path' => storage_path('app/' . $recursos[0]->RUTA_IMAGEN_PORTADA), 'width' => 969, 'height' => 689, 'ratio' => true, 'borderColor' => '000000'));
                 } else {
 
                     $plantillaword->setValue('foto_portada', 'LA IMAGEN NO HA SIDO ENCONTRADA');
