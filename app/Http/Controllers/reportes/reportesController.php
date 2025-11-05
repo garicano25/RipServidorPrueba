@@ -2227,9 +2227,9 @@ class reportesController extends Controller
                 $numero_registro += 1;
 
                 if ($value->checked) {
-                    $readonly_required = 'readonly';
+                    $readonly_required = '';
                 } else {
-                    $readonly_required = 'readonly';
+                    $readonly_required = '';
                 }
 
 
