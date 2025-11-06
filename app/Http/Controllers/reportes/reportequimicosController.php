@@ -731,12 +731,70 @@ class reportequimicosController extends Controller
             //===================================================
 
 
-            if ($dato['reporteregistro_id'] >= 0 && $reporte->reportequimicos_responsable1 != NULL) {
-                if ($reporte->proyecto_id == $proyecto_id) {
-                    $dato['reporte_responsablesinforme_guardado'] = 1;
-                } else {
-                    $dato['reporte_responsablesinforme_guardado'] = 0;
-                }
+            // if ($dato['reporteregistro_id'] >= 0 && $reporte->reportequimicos_responsable1 != NULL) {
+
+            //     if ($reporte->proyecto_id == $proyecto_id) {
+            //         $dato['reporte_responsablesinforme_guardado'] = 1;
+            //     } else {
+            //         $dato['reporte_responsablesinforme_guardado'] = 0;
+            //     }
+
+            //     $dato['reporte_responsablesinforme'] = array(
+            //         'responsable1' => $reporte->reportequimicos_responsable1,
+            //         'responsable1cargo' => $reporte->reportequimicos_responsable1cargo,
+            //         'responsable1documento' => $reporte->reportequimicos_responsable1documento,
+            //         'responsable2' => $reporte->reportequimicos_responsable2,
+            //         'responsable2cargo' => $reporte->reportequimicos_responsable2cargo,
+            //         'responsable2documento' => $reporte->reportequimicos_responsable2documento,
+            //         'proyecto_id' => $reporte->proyecto_id,
+            //         'registro_id' => $reporte->id
+            //     );
+            // } else {
+            //     $dato['reporte_responsablesinforme_guardado'] = 0;
+
+
+            //     $reportehistorial = reportequimicosModel::where('reportequimicos_responsable1', '!=', '')
+            //         ->orderBy('updated_at', 'DESC')
+            //         ->limit(1)
+            //         ->get();
+
+            //     if (count($reportehistorial) > 0 && $reportehistorial[0]->reportequimicos_responsable1 != NULL) {
+            //         $dato['reporte_responsablesinforme'] = array(
+            //             'responsable1' => $reportehistorial[0]->reportequimicos_responsable1,
+            //             'responsable1cargo' => $reportehistorial[0]->reportequimicos_responsable1cargo,
+            //             'responsable1documento' => $reportehistorial[0]->reportequimicos_responsable1documento,
+            //             'responsable2' => $reportehistorial[0]->reportequimicos_responsable2,
+            //             'responsable2cargo' => $reportehistorial[0]->reportequimicos_responsable2cargo,
+            //             'responsable2documento' => $reportehistorial[0]->reportequimicos_responsable2documento,
+            //             'proyecto_id' => $reportehistorial[0]->proyecto_id,
+            //             'registro_id' => $reportehistorial[0]->id
+            //         );
+            //     } else {
+            //         $dato['reporte_responsablesinforme'] = array(
+            //             'responsable1' => NULL,
+            //             'responsable1cargo' => NULL,
+            //             'responsable1documento' => NULL,
+            //             'responsable2' => NULL,
+            //             'responsable2cargo' => NULL,
+            //             'responsable2documento' => NULL,
+            //             'proyecto_id' => 0,
+            //             'registro_id' => 0
+            //         );
+            //     }
+            // }
+
+
+            // RESPONSABLES DEL INFORME
+            //===================================================
+
+            if (
+                isset($dato['reporteregistro_id']) &&
+                $reporte->id == $dato['reporteregistro_id'] &&
+                $reporte->proyecto_id == $proyecto_id &&
+                !is_null($reporte->reportequimicos_responsable1) &&
+                $reporte->reportequimicos_responsable1 != ''
+            ) {
+                $dato['reporte_responsablesinforme_guardado'] = 1;
 
                 $dato['reporte_responsablesinforme'] = array(
                     'responsable1' => $reporte->reportequimicos_responsable1,
@@ -751,36 +809,18 @@ class reportequimicosController extends Controller
             } else {
                 $dato['reporte_responsablesinforme_guardado'] = 0;
 
-
-                $reportehistorial = reportequimicosModel::where('reportequimicos_responsable1', '!=', '')
-                    ->orderBy('updated_at', 'DESC')
-                    ->limit(1)
-                    ->get();
-
-                if (count($reportehistorial) > 0 && $reportehistorial[0]->reportequimicos_responsable1 != NULL) {
-                    $dato['reporte_responsablesinforme'] = array(
-                        'responsable1' => $reportehistorial[0]->reportequimicos_responsable1,
-                        'responsable1cargo' => $reportehistorial[0]->reportequimicos_responsable1cargo,
-                        'responsable1documento' => $reportehistorial[0]->reportequimicos_responsable1documento,
-                        'responsable2' => $reportehistorial[0]->reportequimicos_responsable2,
-                        'responsable2cargo' => $reportehistorial[0]->reportequimicos_responsable2cargo,
-                        'responsable2documento' => $reportehistorial[0]->reportequimicos_responsable2documento,
-                        'proyecto_id' => $reportehistorial[0]->proyecto_id,
-                        'registro_id' => $reportehistorial[0]->id
-                    );
-                } else {
-                    $dato['reporte_responsablesinforme'] = array(
-                        'responsable1' => NULL,
-                        'responsable1cargo' => NULL,
-                        'responsable1documento' => NULL,
-                        'responsable2' => NULL,
-                        'responsable2cargo' => NULL,
-                        'responsable2documento' => NULL,
-                        'proyecto_id' => 0,
-                        'registro_id' => 0
-                    );
-                }
+                $dato['reporte_responsablesinforme'] = array(
+                    'responsable1' => NULL,
+                    'responsable1cargo' => NULL,
+                    'responsable1documento' => NULL,
+                    'responsable2' => NULL,
+                    'responsable2cargo' => NULL,
+                    'responsable2documento' => NULL,
+                    'proyecto_id' => 0,
+                    'registro_id' => 0
+                );
             }
+
 
 
             // MEMORIA FOTOGRAFICA
