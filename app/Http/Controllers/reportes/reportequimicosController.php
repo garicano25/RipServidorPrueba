@@ -2328,6 +2328,12 @@ class reportequimicosController extends Controller
                                                 reportequimicosevaluacion.reportequimicosevaluacion_geo,
                                                 reportequimicosevaluacion.reportequimicosevaluacion_total,
                                                 reportequimicosevaluacion.reportequimicosevaluacion_punto,
+
+                                                reportequimicosevaluacion.reportequimicosevaluacion_anios,
+                                                reportequimicosevaluacion.reportequimicosevaluacion_antiguedadgeneral,
+                                                reportequimicosevaluacion.reportequimicosevaluacion_antiguedadcategoria,
+                                                reportequimicosevaluacion.reportequimicosevaluacion_horariotrabajo,
+
                                                 reportequimicosevaluacionparametro.id AS reportequimicosevaluacionparametro_id,
                                                 reportequimicosevaluacionparametro.id AS reportequimicosevaluacion_id,
                                                 reportequimicosevaluacionparametro.reportequimicosevaluacionparametro_parametro,
@@ -2389,6 +2395,10 @@ class reportequimicosController extends Controller
                                                 reportequimicosevaluacion.reportequimicosevaluacion_geo,
                                                 reportequimicosevaluacion.reportequimicosevaluacion_total,
                                                 reportequimicosevaluacion.reportequimicosevaluacion_punto,
+                                                  reportequimicosevaluacion.reportequimicosevaluacion_anios,
+                                                reportequimicosevaluacion.reportequimicosevaluacion_antiguedadgeneral,
+                                                reportequimicosevaluacion.reportequimicosevaluacion_antiguedadcategoria,
+                                                reportequimicosevaluacion.reportequimicosevaluacion_horariotrabajo,
                                                 reportequimicosevaluacionparametro.id AS reportequimicosevaluacionparametro_id,
                                                 reportequimicosevaluacionparametro.id AS reportequimicosevaluacion_id,
                                                 reportequimicosevaluacionparametro.reportequimicosevaluacionparametro_parametro,
