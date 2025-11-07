@@ -4739,6 +4739,11 @@ $('#tabla_reporte_7 tbody').on('click', 'td.editar', function()
 	$('#reportequimicosevaluacion_ficha').val(row.data().reportequimicosevaluacion_ficha);
 	$('#reportequimicosevaluacion_geo').val(row.data().reportequimicosevaluacion_geo);
 	$('#reportequimicosevaluacion_total').val(row.data().reportequimicosevaluacion_total);
+	$('#reportequimicosevaluacion_anios').val(row.data().reportequimicosevaluacion_anios);
+	$('#reportequimicosevaluacion_antiguedadgeneral').val(row.data().reportequimicosevaluacion_antiguedadgeneral);
+	$('#reportequimicosevaluacion_antiguedadcategoria').val(row.data().reportequimicosevaluacion_antiguedadcategoria);
+	$('#reportequimicosevaluacion_horariotrabajo').val(row.data().reportequimicosevaluacion_horariotrabajo);
+
 
 
 	// Recorrer tabla

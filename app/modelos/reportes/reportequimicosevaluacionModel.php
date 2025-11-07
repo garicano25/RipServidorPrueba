@@ -17,5 +17,10 @@ class reportequimicosevaluacionModel extends Model
 		, 'reportequimicosevaluacion_ficha'
 		, 'reportequimicosevaluacion_geo'
 		, 'reportequimicosevaluacion_total'
+		
+		, 'reportequimicosevaluacion_anios'
+		, 'reportequimicosevaluacion_antiguedadgeneral'
+		, 'reportequimicosevaluacion_antiguedadcategoria'
+		, 'reportequimicosevaluacion_horariotrabajo'
 	];
 }

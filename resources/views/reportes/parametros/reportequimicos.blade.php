@@ -1953,6 +1953,36 @@
 								<input type="number" min="0" class="form-control" id="reportequimicosevaluacion_total" name="reportequimicosevaluacion_total" required>
 							</div>
 						</div>
+
+
+
+						<div class="col-3">
+							<div class="form-group">
+								<label>Edad (años)</label>
+								<input type="text" class="form-control" id="reportequimicosevaluacion_anios" name="reportequimicosevaluacion_anios" required>
+							</div>
+						</div>
+
+						<div class="col-3">
+							<div class="form-group">
+								<label>Antigüedad General (años)</label>
+								<input type="text" class="form-control" id="reportequimicosevaluacion_antiguedadgeneral" name="reportequimicosevaluacion_antiguedadgeneral" required>
+							</div>
+						</div>
+
+						<div class="col-3">
+							<div class="form-group">
+								<label>Antigüedad en la categoría (años)</label>
+								<input type="text" class="form-control" id="reportequimicosevaluacion_antiguedadcategoria" name="reportequimicosevaluacion_antiguedadcategoria" required>
+							</div>
+						</div>
+
+						<div class="col-3">
+							<div class="form-group">
+								<label>Horario de trabajo</label>
+								<input type="text" class="form-control" id="reportequimicosevaluacion_horariotrabajo" name="reportequimicosevaluacion_horariotrabajo" required>
+							</div>
+						</div>
 					</div>
 					<div class="row">
 						<div class="col-12">
@@ -2288,4 +2318,4 @@
 	var areas_poe = <?php echo json_encode($areas_poe); ?>;
 </script>
 <script src="/js_sitio/html2canvas.js"></script>
-<script src="/js_sitio/reportes/reportequimicos.js?v=10.0"></script>
+<script src="/js_sitio/reportes/reportequimicos.js?v=11.0"></script>
