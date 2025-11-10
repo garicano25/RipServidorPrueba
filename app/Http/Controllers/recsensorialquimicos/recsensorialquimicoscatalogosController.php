@@ -162,6 +162,7 @@ class recsensorialquimicoscatalogosController extends Controller
                                                 cat.PM, 
                                                 cat.NUM_CAS,
                                                 cat.ACTIVO,
+                                                cat.OTROS_NOMBRES,
                                                 cat.TIPO_CLASIFICACION,
                                                 cat.CATEGORIA_PELIGRO_ID,
                                                 cat.GRADO_RIESGO_ID,
