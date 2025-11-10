@@ -745,6 +745,12 @@
 									</div>
 									<div class="col-6">
 										<div class="form-group">
+											<label>Otros nombres </label>
+											<input type="text" class="form-control" id="OTROS_NOMBRES" name="OTROS_NOMBRES">
+										</div>
+									</div>
+									<div class="col-12">
+										<div class="form-group">
 											<label>No. CAS </label>
 											<input type="text" class="form-control" id="NUM_CAS" name="NUM_CAS">
 										</div>

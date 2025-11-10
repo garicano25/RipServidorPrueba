@@ -111,7 +111,8 @@ function mostrar_catalogo(num_catalogo)
                                                         '<thead>'+
                                                             '<tr>'+
                                                                 '<th style="width: 80px !important;">No</th>'+
-                                                                '<th>Sustancia</th>'+
+                                                                '<th>Sustancia</th>' +
+                                                                '<th>Otros nombres</th>'+
                                                                 '<th>Alteración / Efecto a la Salud</th>'+
                                                                 '<th>PM</th>'+
                                                                 '<th>No. CAS</th>'+
@@ -606,6 +607,10 @@ function function_tabla_catsustancia_quimico(num_catalogo)
                 },
                 {
                     "data": "SUSTANCIA_QUIMICA",
+                    "defaultContent": ''
+                },
+                {
+                    "data": "OTROS_NOMBRES",
                     "defaultContent": ''
                 },
                 {

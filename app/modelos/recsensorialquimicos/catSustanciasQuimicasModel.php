@@ -18,6 +18,7 @@ class catSustanciasQuimicasModel extends Model
         'CATEGORIA_PELIGRO_ID',
         'GRADO_RIESGO_ID',
         'CLASIFICACION_RIESGO',
-        'ACTIVO'
+        'ACTIVO',
+        'OTROS_NOMBRES'
     ];
 }
