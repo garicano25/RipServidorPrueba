@@ -2590,6 +2590,8 @@ function selecciona_sustancia_quimico()
         $("#ALTERACION_EFECTO").val(row.data().ALTERACION_EFECTO);
         $("#PM").val(row.data().PM);
         $("#NUM_CAS").val(row.data().NUM_CAS);
+        $("#OTROS_NOMBRES").val(row.data().OTROS_NOMBRES);
+
 
         $("#VIA_INGRESO").val(row.data().VIA_INGRESO);
 
