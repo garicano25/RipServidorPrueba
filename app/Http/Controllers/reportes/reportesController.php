@@ -279,116 +279,136 @@ class reportesController extends Controller
     public function tablameldraft($proyecto_id, $reporteregistro_id, $areas_poe)
     {
         try {
-            if (($areas_poe + 0) == 1) {
-                $puntos = DB::select('SELECT
-                                            reportequimicosevaluacion.id,
-                                            reportequimicosevaluacion.proyecto_id,
-                                            reportequimicosevaluacion.registro_id,
-                                            IF(catregion_nombre = "N/A", "", catregion_nombre) AS catregion_nombre,
-                                            IF(catsubdireccion_nombre = "N/A", "", catsubdireccion_nombre) AS catsubdireccion_nombre,
-                                            IF(catgerencia_nombre = "N/A", "", catgerencia_nombre) AS catgerencia_nombre,
-                                            IF(catactivo_nombre = "N/A", "", catactivo_nombre) AS catactivo_nombre,
-                                            (
-                                                CASE
-                                                    WHEN IF(catactivo_nombre = "N/A", "", catactivo_nombre) != "" THEN catactivo_nombre
-                                                    ELSE catgerencia_nombre
-                                                END
-                                            ) AS gerencia_activo,
-                                            reportearea.reportearea_instalacion AS reportequimicosarea_instalacion,
-                                            reportearea.reportearea_nombre AS reportequimicosarea_nombre,
-                                            reportecategoria.reportecategoria_nombre AS reportequimicoscategoria_nombre,
-                                            reportequimicosevaluacion.reportequimicosevaluacion_nombre,
-                                            reportequimicosevaluacion.reportequimicosevaluacion_ficha,
-                                            reportequimicosevaluacion.reportequimicosevaluacion_geo,
-                                            reportequimicosevaluacion.reportequimicosevaluacion_total,
-                                            reportequimicosevaluacion.reportequimicosevaluacion_punto,
-                                            IFNULL((
-                                                SELECT
-                                                    REPLACE(GROUP_CONCAT(CONCAT("<b>", reportequimicosevaluacionparametro_parametro, "</b>,(", reportequimicosevaluacionparametro_concentracion, " / ",    reportequimicosevaluacionparametro_valorlimite, ")")), ",", "<br>")
-                                                FROM
-                                                    reportequimicosevaluacionparametro
-                                                WHERE
-                                                    reportequimicosevaluacionparametro.reportequimicosevaluacion_id = reportequimicosevaluacion.id
-                                            ), "-") AS parametros
-                                        FROM
-                                            reportequimicosevaluacion
-                                            LEFT JOIN proyecto ON reportequimicosevaluacion.proyecto_id = proyecto.id
-                                            LEFT JOIN catregion ON proyecto.catregion_id = catregion.id
-                                            LEFT JOIN catsubdireccion ON proyecto.catsubdireccion_id = catsubdireccion.id
-                                            LEFT JOIN catgerencia ON proyecto.catgerencia_id = catgerencia.id
-                                            LEFT JOIN catactivo ON proyecto.catactivo_id = catactivo.id
-                                            LEFT JOIN reportearea ON reportequimicosevaluacion.reportequimicosarea_id = reportearea.id
-                                            LEFT JOIN reportecategoria ON reportequimicosevaluacion.reportequimicoscategoria_id = reportecategoria.id
-                                        WHERE
-                                            reportequimicosevaluacion.proyecto_id = ' . $proyecto_id . ' 
-                                            AND reportequimicosevaluacion.registro_id = ' . $reporteregistro_id . ' 
-                                        ORDER BY
-                                            reportequimicosevaluacion.reportequimicosevaluacion_punto ASC');
-            } else {
-                $puntos = DB::select('SELECT
-                                            reportequimicosevaluacion.id,
-                                            reportequimicosevaluacion.proyecto_id,
-                                            reportequimicosevaluacion.registro_id,
-                                            IF(catregion_nombre = "N/A", "", catregion_nombre) AS catregion_nombre,
-                                            IF(catsubdireccion_nombre = "N/A", "", catsubdireccion_nombre) AS catsubdireccion_nombre,
-                                            IF(catgerencia_nombre = "N/A", "", catgerencia_nombre) AS catgerencia_nombre,
-                                            IF(catactivo_nombre = "N/A", "", catactivo_nombre) AS catactivo_nombre,
-                                            (
-                                                CASE
-                                                    WHEN IF(catactivo_nombre = "N/A", "", catactivo_nombre) != "" THEN catactivo_nombre
-                                                    ELSE catgerencia_nombre
-                                                END
-                                            ) AS gerencia_activo,
-                                            reportequimicosarea.reportequimicosarea_instalacion,
-                                            reportequimicosarea.reportequimicosarea_nombre,
-                                            reportequimicoscategoria.reportequimicoscategoria_nombre,
-                                            reportequimicosevaluacion.reportequimicosevaluacion_nombre,
-                                            reportequimicosevaluacion.reportequimicosevaluacion_ficha,
-                                            reportequimicosevaluacion.reportequimicosevaluacion_geo,
-                                            reportequimicosevaluacion.reportequimicosevaluacion_total,
-                                            reportequimicosevaluacion.reportequimicosevaluacion_punto,
-                                            IFNULL((
-                                                SELECT
-                                                    REPLACE(GROUP_CONCAT(CONCAT("<b>", reportequimicosevaluacionparametro_parametro, "</b>,(", reportequimicosevaluacionparametro_concentracion, " / ",    reportequimicosevaluacionparametro_valorlimite, ")")), ",", "<br>")
-                                                FROM
-                                                    reportequimicosevaluacionparametro
-                                                WHERE
-                                                    reportequimicosevaluacionparametro.reportequimicosevaluacion_id = reportequimicosevaluacion.id
-                                            ), "-") AS parametros
-                                        FROM
-                                            reportequimicosevaluacion
-                                            LEFT JOIN proyecto ON reportequimicosevaluacion.proyecto_id = proyecto.id
-                                            LEFT JOIN catregion ON proyecto.catregion_id = catregion.id
-                                            LEFT JOIN catsubdireccion ON proyecto.catsubdireccion_id = catsubdireccion.id
-                                            LEFT JOIN catgerencia ON proyecto.catgerencia_id = catgerencia.id
-                                            LEFT JOIN catactivo ON proyecto.catactivo_id = catactivo.id
-                                            LEFT JOIN reportequimicosarea ON reportequimicosevaluacion.reportequimicosarea_id = reportequimicosarea.id
-                                            LEFT JOIN reportequimicoscategoria ON reportequimicosevaluacion.reportequimicoscategoria_id = reportequimicoscategoria.id
-                                        WHERE
-                                            reportequimicosevaluacion.proyecto_id = ' . $proyecto_id . ' 
-                                            AND reportequimicosevaluacion.registro_id = ' . $reporteregistro_id . ' 
-                                        ORDER BY
-                                            reportequimicosevaluacion.reportequimicosevaluacion_punto ASC');
+            // ============================================================
+            // 1️⃣ Si el registro_id viene vacío o 0, buscarlo en reportequimicosgrupos
+            // ============================================================
+            if (empty($reporteregistro_id) || $reporteregistro_id == 0) {
+                $registro = DB::table('reportequimicosgrupos')
+                    ->where('proyecto_id', $proyecto_id)
+                    ->select('registro_id')
+                    ->orderBy('created_at', 'desc') // toma el último registro creado
+                    ->first();
+
+                if ($registro) {
+                    $reporteregistro_id = $registro->registro_id;
+                } else {
+                    // Si no existe, regresamos un mensaje claro
+                    return response()->json([
+                        'data' => [],
+                        'total' => 0,
+                        'msj' => 'No se encontró registro_id para el proyecto especificado en reportequimicosgrupos'
+                    ]);
+                }
             }
 
+            // ============================================================
+            // 2️⃣ Ejecutar consulta según áreas_poe
+            // ============================================================
+            if (($areas_poe + 0) == 1) {
+                $puntos = DB::select('SELECT
+                    rq.id,
+                    rq.proyecto_id,
+                    rq.registro_id,
+                    IF(cr.catregion_nombre = "N/A", "", cr.catregion_nombre) AS catregion_nombre,
+                    IF(cs.catsubdireccion_nombre = "N/A", "", cs.catsubdireccion_nombre) AS catsubdireccion_nombre,
+                    IF(cg.catgerencia_nombre = "N/A", "", cg.catgerencia_nombre) AS catgerencia_nombre,
+                    IF(ca.catactivo_nombre = "N/A", "", ca.catactivo_nombre) AS catactivo_nombre,
+                    (
+                        CASE
+                            WHEN IF(ca.catactivo_nombre = "N/A", "", ca.catactivo_nombre) != "" THEN ca.catactivo_nombre
+                            ELSE cg.catgerencia_nombre
+                        END
+                    ) AS gerencia_activo,
+                    ra.reportearea_instalacion AS reportequimicosarea_instalacion,
+                    ra.reportearea_nombre AS reportequimicosarea_nombre,
+                    rc.reportecategoria_nombre AS reportequimicoscategoria_nombre,
+                    rq.reportequimicosevaluacion_nombre,
+                    rq.reportequimicosevaluacion_ficha,
+                    rq.reportequimicosevaluacion_geo,
+                    rq.reportequimicosevaluacion_total,
+                    rq.reportequimicosevaluacion_punto,
+                    IFNULL((
+                        SELECT
+                            REPLACE(GROUP_CONCAT(CONCAT("<b>", rp.reportequimicosevaluacionparametro_parametro, "</b>,(", rp.reportequimicosevaluacionparametro_concentracion, " / ", rp.reportequimicosevaluacionparametro_valorlimite, ")")), ",", "<br>")
+                        FROM reportequimicosevaluacionparametro rp
+                        WHERE rp.reportequimicosevaluacion_id = rq.id
+                    ), "-") AS parametros
+                FROM reportequimicosevaluacion rq
+                LEFT JOIN proyecto p ON rq.proyecto_id = p.id
+                LEFT JOIN catregion cr ON p.catregion_id = cr.id
+                LEFT JOIN catsubdireccion cs ON p.catsubdireccion_id = cs.id
+                LEFT JOIN catgerencia cg ON p.catgerencia_id = cg.id
+                LEFT JOIN catactivo ca ON p.catactivo_id = ca.id
+                LEFT JOIN reportearea ra ON rq.reportequimicosarea_id = ra.id
+                LEFT JOIN reportecategoria rc ON rq.reportequimicoscategoria_id = rc.id
+                WHERE rq.proyecto_id = ' . $proyecto_id . ' 
+                AND rq.registro_id = ' . $reporteregistro_id . ' 
+                ORDER BY rq.reportequimicosevaluacion_punto ASC');
+            } else {
+                $puntos = DB::select('SELECT
+                    rq.id,
+                    rq.proyecto_id,
+                    rq.registro_id,
+                    IF(cr.catregion_nombre = "N/A", "", cr.catregion_nombre) AS catregion_nombre,
+                    IF(cs.catsubdireccion_nombre = "N/A", "", cs.catsubdireccion_nombre) AS catsubdireccion_nombre,
+                    IF(cg.catgerencia_nombre = "N/A", "", cg.catgerencia_nombre) AS catgerencia_nombre,
+                    IF(ca.catactivo_nombre = "N/A", "", ca.catactivo_nombre) AS catactivo_nombre,
+                    (
+                        CASE
+                            WHEN IF(ca.catactivo_nombre = "N/A", "", ca.catactivo_nombre) != "" THEN ca.catactivo_nombre
+                            ELSE cg.catgerencia_nombre
+                        END
+                    ) AS gerencia_activo,
+                    ra.reportequimicosarea_instalacion,
+                    ra.reportequimicosarea_nombre,
+                    rc.reportequimicoscategoria_nombre,
+                    rq.reportequimicosevaluacion_nombre,
+                    rq.reportequimicosevaluacion_ficha,
+                    rq.reportequimicosevaluacion_geo,
+                    rq.reportequimicosevaluacion_total,
+                    rq.reportequimicosevaluacion_punto,
+                    IFNULL((
+                        SELECT
+                            REPLACE(GROUP_CONCAT(CONCAT("<b>", rp.reportequimicosevaluacionparametro_parametro, "</b>,(", rp.reportequimicosevaluacionparametro_concentracion, " / ", rp.reportequimicosevaluacionparametro_valorlimite, ")")), ",", "<br>")
+                        FROM reportequimicosevaluacionparametro rp
+                        WHERE rp.reportequimicosevaluacion_id = rq.id
+                    ), "-") AS parametros
+                FROM reportequimicosevaluacion rq
+                LEFT JOIN proyecto p ON rq.proyecto_id = p.id
+                LEFT JOIN catregion cr ON p.catregion_id = cr.id
+                LEFT JOIN catsubdireccion cs ON p.catsubdireccion_id = cs.id
+                LEFT JOIN catgerencia cg ON p.catgerencia_id = cg.id
+                LEFT JOIN catactivo ca ON p.catactivo_id = ca.id
+                LEFT JOIN reportequimicosarea ra ON rq.reportequimicosarea_id = ra.id
+                LEFT JOIN reportequimicoscategoria rc ON rq.reportequimicoscategoria_id = rc.id
+                WHERE rq.proyecto_id = ' . $proyecto_id . ' 
+                AND rq.registro_id = ' . $reporteregistro_id . ' 
+                ORDER BY rq.reportequimicosevaluacion_punto ASC');
+            }
 
+            // ============================================================
+            // 3️⃣ Agregar número correlativo
+            // ============================================================
             $numero_registro = 0;
-            foreach ($puntos as $key => $value) {
-                $numero_registro += 1;
+            foreach ($puntos as $value) {
+                $numero_registro++;
                 $value->numero_registro = $numero_registro;
             }
 
-
-            // respuesta
-            $dato["data"] = $puntos;
-            $dato["total"] = count($puntos);
-            $dato["msj"] = 'Datos consultados correctamente';
-            return response()->json($dato);
+            // ============================================================
+            // 4️⃣ Respuesta final
+            // ============================================================
+            return response()->json([
+                'data' => $puntos,
+                'total' => count($puntos),
+                'msj' => 'Datos consultados correctamente'
+            ]);
         } catch (Exception $e) {
-            $dato["data"] = 0;
-            $dato["total"] = 0;
-            $dato["msj"] = 'Error ' . $e->getMessage();
-            return response()->json($dato);
+            return response()->json([
+                'data' => [],
+                'total' => 0,
+                'msj' => 'Error: ' . $e->getMessage()
+            ]);
         }
     }
 
