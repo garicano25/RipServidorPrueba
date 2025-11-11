@@ -211,75 +211,6 @@ function tabla_matrizlab(proyecto_id) {
 }
 
 
-// $('#botonguardar_reporte_matriz').on('click', async function () {
-//     const filas = [];
-
-//     $('.contenedor-recomendaciones').each(function () {
-//         const container = $(this);
-//         const numero_registro = container.data('recomendaciones');
-
-//         const medidas = [];
-
-//         container.find('.recomendacion-bloque').each(function () {
-//             const bloque = $(this);
-//             const descripcion = bloque.find('textarea').val()?.trim() || '';
-//             const checkbox = bloque.find('input[type="checkbox"]');
-//             const seleccionado = checkbox.is(':checked');
-
-//             medidas.push({ descripcion, seleccionado });
-//         });
-
-//         // Buscar la fila original desde DataTable
-//         const row = $('#tabla_matrizlab').DataTable().rows().data().toArray().find(r => r.numero_registro == numero_registro);
-//         if (!row) return;
-
-//         const tr = $(`[data-recomendaciones="${numero_registro}"]`).closest('tr');
-
-//         const fila = {
-//             numero_registro,
-//             area_id: row.recsensorialarea_nombre.match(/\(ID: (\d+)\)/)?.[1] || 0,
-//             agente: row.agente,
-//             categoria: row.categoria,
-//             recsensorialarea_numerotrabajadores: row.recsensorialarea_numerotrabajadores,
-//             recsensorialarea_tiempoexposicion: row.recsensorialarea_tiempoexposicion,
-//             recsensorialarea_indicepeligro: tr.find('.ip-select').val(),
-//             recsensorialarea_indiceexposicion: tr.find('.ie-select').val(),
-//             recsensorialarea_riesgo: tr.find('.riesgo-resultado').text(),
-//             recsensorialarea_lmpnmp: row.recsensorialarea_lmpnmp,
-//             recsensorialarea_cumplimiento: row.recsensorialarea_cumplimiento,
-//             recsensorialarea_medidas: medidas // array vacío si no hay
-//         };
-
-//         filas.push(fila);
-//     });
-
-//     if (!filas.length) {
-//         alertToast('No hay datos para guardar.', 'warning');
-//         return;
-//     }
-
-//     try {
-//         const res = await $.ajax({
-//             url: '/reportematrizlabguardar',
-//             method: 'POST',
-//             data: {
-//                 proyecto_id: proyecto.id,
-//                 filas,
-//                 _token: $('meta[name="csrf-token"]').attr('content')
-//             }
-//         });
-
-//         if (res.success) {
-//             alertToast('Matriz guardada correctamente.', 'success');
-//         } else {
-//             alertToast(res.message || 'Error al guardar.', 'error');
-//         }
-//     } catch (err) {
-//         console.error(err);
-//         alertToast('Error de conexión al guardar matriz.', 'error');
-//     }
-// });
-
 
 
 $('#botonguardar_reporte_matriz').on('click', async function () {
@@ -426,13 +357,11 @@ function calcularRiesgoPrioridad(ip, ie) {
 $('#boton_reporte_matriz').on('click', function (e) {
     e.preventDefault();
 
-    // PRIMERA VERIFICACIÓN: ¿existen registros?
     $.ajax({
         url: '/verificarmatrizlab/' + proyecto.id,
         method: 'GET',
         success: function (respuesta) {
             if (respuesta.success) {
-                // Si hay registros, mostrar confirmación
                 Swal.fire({
                     title: "¿Desea generar el reporte Excel?",
                     text: "Matriz Laboral por áreas de trabajo.",
@@ -469,7 +398,6 @@ $('#boton_reporte_matriz').on('click', function (e) {
                             success: function (data, status, xhr) {
                                 const contentType = xhr.getResponseHeader('Content-Type') || '';
 
-                                // Si el servidor respondió con JSON (posible error), mostrar alerta
                                 if (contentType.includes('application/json') || contentType.includes('text/json')) {
                                     const reader = new FileReader();
                                     reader.onload = function () {
@@ -493,7 +421,6 @@ $('#boton_reporte_matriz').on('click', function (e) {
                                     return;
                                 }
 
-                                // Descargar el archivo Excel
                                 const a = document.createElement('a');
                                 const urlDescarga = window.URL.createObjectURL(data);
                                 a.href = urlDescarga;
@@ -503,7 +430,6 @@ $('#boton_reporte_matriz').on('click', function (e) {
                                 a.remove();
                                 window.URL.revokeObjectURL(urlDescarga);
 
-                                // ✅ Mostrar alerta de éxito
                                 Swal.fire({
                                     title: "Éxito",
                                     text: "El reporte fue generado correctamente.",

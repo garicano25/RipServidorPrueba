@@ -49,7 +49,7 @@ class recsensorialquimicosreportewordController extends Controller
         $plantillaword->setValue('razon_social', 'RAZON SOCIAL DE PRUEBA');
         $plantillaword->setValue('instalacion', 'INTALACION SOCIAL DE PRUEBA');
         $plantillaword->setValue('lugar_fecha', 'LUGAR Y FECHA DE PRUEBA');
-        $plantillaword->setImageValue('foto_portada', array('path' => storage_path('app/plantillas_reportes/FOTO.png'), 'width' => 650, 'height' => 750, 'ratio' => true, 'borderColor' => '000000'));
+        $plantillaword->setImageValue('foto_portada', array('path' => storage_path('app/plantillas_reportes/FOTO.png'), 'width' => 1050, 'height' => 750, 'ratio' => true, 'borderColor' => '000000'));
 
 
         Storage::makeDirectory('reportes/ejemplo'); //crear directorio
@@ -315,7 +315,7 @@ class recsensorialquimicosreportewordController extends Controller
         if ($recursos[0]->IMAGEN_PORTADA) {
             if (file_exists(storage_path('app/' . $recursos[0]->IMAGEN_PORTADA))) {
 
-                $plantillaword->setImageValue('foto_portada', array('path' => storage_path('app/' . $recursos[0]->IMAGEN_PORTADA), 'width' => 650, 'height' => 750, 'ratio' => true, 'borderColor' => '000000'));
+                $plantillaword->setImageValue('foto_portada', array('path' => storage_path('app/' . $recursos[0]->IMAGEN_PORTADA), 'width' => 969, 'height' => 689, 'ratio' => true, 'borderColor' => '000000'));
             } else {
 
                 $plantillaword->setValue('foto_portada', 'LA IMAGEN NO HA SIDO ENCONTRADA');

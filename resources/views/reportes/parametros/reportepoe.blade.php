@@ -410,4 +410,4 @@
 	var estatus = <?php echo json_encode($estatus); ?>;
 	var recsensorial = <?php echo json_encode($recsensorial); ?>;
 </script>
-<script src="/js_sitio/reportes/reportepoe.js?v=1.0"></script>
+<script src="/js_sitio/reportes/reportepoe.js?v=1.1"></script>

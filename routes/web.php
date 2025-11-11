@@ -1095,6 +1095,12 @@ Route::get('reportepoevista/{proyecto_id}', ['as' => 'reportes.reportepoevista',
 
 Route::get('reportematrizlaboralvista/{proyecto_id}', ['as' => 'reportes.reportematrizlaboralvista', 'uses' => 'reportes\reportesController@reportematrizlaboralvista']);
 
+Route::get('reportemeldraftvista/{proyecto_id}', ['as' => 'reportes.reportemeldraftvista', 'uses' => 'reportes\reportesController@reportemeldraftvista']);
+
+Route::get('tablameldraft/{proyecto_id}/{reporteregistro_id}/{areas_poe}', ['as' => 'reportes.tablameldraft', 'uses' => 'reportes\reportesController@tablameldraft']);
+
+
+
 Route::get('reportepoevistapsico/{proyecto_id}', ['as' => 'reportes.reportepoevistapsico', 'uses' => 'reportes\reportesController@reportepoevistapsico']);
 
 Route::get('reportecategoriatabla/{proyecto_id}', ['as' => 'reportes.reportecategoriatabla', 'uses' => 'reportes\reportesController@reportecategoriatabla']);

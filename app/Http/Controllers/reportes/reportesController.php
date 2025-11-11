@@ -240,7 +240,162 @@ class reportesController extends Controller
 
 
 
-      /**
+    /**
+     * Display the specified resource.
+     *
+     * @param  int  $proyecto_id
+     * @return \Illuminate\Http\Response
+     */
+    public function reportemeldraftvista($proyecto_id)
+    {
+        $proyecto = proyectoModel::findOrFail($proyecto_id);
+
+
+
+
+
+        //===================================================
+
+
+        // $recsensorial = recsensorialModel::with(['catcontrato', 'catregion', 'catgerencia', 'catactivo'])->findOrFail($proyecto->recsensorial_id);
+        $recsensorial = recsensorialModel::with(['cliente', 'catregion', 'catgerencia', 'catactivo'])->findOrFail($proyecto->recsensorial_id);
+
+        // Catalogos
+        $catregion = catregionModel::get();
+        $catsubdireccion = catsubdireccionModel::orderBy('catsubdireccion_nombre', 'ASC')->get();
+        $catgerencia = catgerenciaModel::orderBy('catgerencia_nombre', 'ASC')->get();
+        $catactivo = catactivoModel::orderBy('catactivo_nombre', 'ASC')->get();
+        $estatus = estatusReportesInformeModel::where('PROYECTO_ID', $proyecto_id)->get();
+
+
+        // Vista
+        return view('reportes.parametros.reportemeldraft', compact('proyecto', 'recsensorial', 'catregion', 'catsubdireccion', 'catgerencia', 'catactivo', 'estatus'));
+    }
+
+
+
+
+
+    public function tablameldraft($proyecto_id, $reporteregistro_id, $areas_poe)
+    {
+        try {
+            if (($areas_poe + 0) == 1) {
+                $puntos = DB::select('SELECT
+                                            reportequimicosevaluacion.id,
+                                            reportequimicosevaluacion.proyecto_id,
+                                            reportequimicosevaluacion.registro_id,
+                                            IF(catregion_nombre = "N/A", "", catregion_nombre) AS catregion_nombre,
+                                            IF(catsubdireccion_nombre = "N/A", "", catsubdireccion_nombre) AS catsubdireccion_nombre,
+                                            IF(catgerencia_nombre = "N/A", "", catgerencia_nombre) AS catgerencia_nombre,
+                                            IF(catactivo_nombre = "N/A", "", catactivo_nombre) AS catactivo_nombre,
+                                            (
+                                                CASE
+                                                    WHEN IF(catactivo_nombre = "N/A", "", catactivo_nombre) != "" THEN catactivo_nombre
+                                                    ELSE catgerencia_nombre
+                                                END
+                                            ) AS gerencia_activo,
+                                            reportearea.reportearea_instalacion AS reportequimicosarea_instalacion,
+                                            reportearea.reportearea_nombre AS reportequimicosarea_nombre,
+                                            reportecategoria.reportecategoria_nombre AS reportequimicoscategoria_nombre,
+                                            reportequimicosevaluacion.reportequimicosevaluacion_nombre,
+                                            reportequimicosevaluacion.reportequimicosevaluacion_ficha,
+                                            reportequimicosevaluacion.reportequimicosevaluacion_geo,
+                                            reportequimicosevaluacion.reportequimicosevaluacion_total,
+                                            reportequimicosevaluacion.reportequimicosevaluacion_punto,
+                                            IFNULL((
+                                                SELECT
+                                                    REPLACE(GROUP_CONCAT(CONCAT("<b>", reportequimicosevaluacionparametro_parametro, "</b>,(", reportequimicosevaluacionparametro_concentracion, " / ",    reportequimicosevaluacionparametro_valorlimite, ")")), ",", "<br>")
+                                                FROM
+                                                    reportequimicosevaluacionparametro
+                                                WHERE
+                                                    reportequimicosevaluacionparametro.reportequimicosevaluacion_id = reportequimicosevaluacion.id
+                                            ), "-") AS parametros
+                                        FROM
+                                            reportequimicosevaluacion
+                                            LEFT JOIN proyecto ON reportequimicosevaluacion.proyecto_id = proyecto.id
+                                            LEFT JOIN catregion ON proyecto.catregion_id = catregion.id
+                                            LEFT JOIN catsubdireccion ON proyecto.catsubdireccion_id = catsubdireccion.id
+                                            LEFT JOIN catgerencia ON proyecto.catgerencia_id = catgerencia.id
+                                            LEFT JOIN catactivo ON proyecto.catactivo_id = catactivo.id
+                                            LEFT JOIN reportearea ON reportequimicosevaluacion.reportequimicosarea_id = reportearea.id
+                                            LEFT JOIN reportecategoria ON reportequimicosevaluacion.reportequimicoscategoria_id = reportecategoria.id
+                                        WHERE
+                                            reportequimicosevaluacion.proyecto_id = ' . $proyecto_id . ' 
+                                            AND reportequimicosevaluacion.registro_id = ' . $reporteregistro_id . ' 
+                                        ORDER BY
+                                            reportequimicosevaluacion.reportequimicosevaluacion_punto ASC');
+            } else {
+                $puntos = DB::select('SELECT
+                                            reportequimicosevaluacion.id,
+                                            reportequimicosevaluacion.proyecto_id,
+                                            reportequimicosevaluacion.registro_id,
+                                            IF(catregion_nombre = "N/A", "", catregion_nombre) AS catregion_nombre,
+                                            IF(catsubdireccion_nombre = "N/A", "", catsubdireccion_nombre) AS catsubdireccion_nombre,
+                                            IF(catgerencia_nombre = "N/A", "", catgerencia_nombre) AS catgerencia_nombre,
+                                            IF(catactivo_nombre = "N/A", "", catactivo_nombre) AS catactivo_nombre,
+                                            (
+                                                CASE
+                                                    WHEN IF(catactivo_nombre = "N/A", "", catactivo_nombre) != "" THEN catactivo_nombre
+                                                    ELSE catgerencia_nombre
+                                                END
+                                            ) AS gerencia_activo,
+                                            reportequimicosarea.reportequimicosarea_instalacion,
+                                            reportequimicosarea.reportequimicosarea_nombre,
+                                            reportequimicoscategoria.reportequimicoscategoria_nombre,
+                                            reportequimicosevaluacion.reportequimicosevaluacion_nombre,
+                                            reportequimicosevaluacion.reportequimicosevaluacion_ficha,
+                                            reportequimicosevaluacion.reportequimicosevaluacion_geo,
+                                            reportequimicosevaluacion.reportequimicosevaluacion_total,
+                                            reportequimicosevaluacion.reportequimicosevaluacion_punto,
+                                            IFNULL((
+                                                SELECT
+                                                    REPLACE(GROUP_CONCAT(CONCAT("<b>", reportequimicosevaluacionparametro_parametro, "</b>,(", reportequimicosevaluacionparametro_concentracion, " / ",    reportequimicosevaluacionparametro_valorlimite, ")")), ",", "<br>")
+                                                FROM
+                                                    reportequimicosevaluacionparametro
+                                                WHERE
+                                                    reportequimicosevaluacionparametro.reportequimicosevaluacion_id = reportequimicosevaluacion.id
+                                            ), "-") AS parametros
+                                        FROM
+                                            reportequimicosevaluacion
+                                            LEFT JOIN proyecto ON reportequimicosevaluacion.proyecto_id = proyecto.id
+                                            LEFT JOIN catregion ON proyecto.catregion_id = catregion.id
+                                            LEFT JOIN catsubdireccion ON proyecto.catsubdireccion_id = catsubdireccion.id
+                                            LEFT JOIN catgerencia ON proyecto.catgerencia_id = catgerencia.id
+                                            LEFT JOIN catactivo ON proyecto.catactivo_id = catactivo.id
+                                            LEFT JOIN reportequimicosarea ON reportequimicosevaluacion.reportequimicosarea_id = reportequimicosarea.id
+                                            LEFT JOIN reportequimicoscategoria ON reportequimicosevaluacion.reportequimicoscategoria_id = reportequimicoscategoria.id
+                                        WHERE
+                                            reportequimicosevaluacion.proyecto_id = ' . $proyecto_id . ' 
+                                            AND reportequimicosevaluacion.registro_id = ' . $reporteregistro_id . ' 
+                                        ORDER BY
+                                            reportequimicosevaluacion.reportequimicosevaluacion_punto ASC');
+            }
+
+
+            $numero_registro = 0;
+            foreach ($puntos as $key => $value) {
+                $numero_registro += 1;
+                $value->numero_registro = $numero_registro;
+            }
+
+
+            // respuesta
+            $dato["data"] = $puntos;
+            $dato["total"] = count($puntos);
+            $dato["msj"] = 'Datos consultados correctamente';
+            return response()->json($dato);
+        } catch (Exception $e) {
+            $dato["data"] = 0;
+            $dato["total"] = 0;
+            $dato["msj"] = 'Error ' . $e->getMessage();
+            return response()->json($dato);
+        }
+    }
+
+
+
+
+    /**
      * Display the specified resource.
      *
      * @param  int  $proyecto_id

@@ -1165,6 +1165,7 @@ $('#btnFinalizarPoe').on('click', function (e) {
 					if (nuevo == 1) {
 
 						$('#select_tiporeportes').prop('disabled', false)
+						$('#btnMatriz').prop('disabled', false)
 
 						
 						swal({
@@ -1202,6 +1203,7 @@ $('#btnFinalizarPoe').on('click', function (e) {
 						if (opcion == 1) {
 
 							$('#select_tiporeportes').prop('disabled', false)
+							$('#btnMatriz').prop('disabled', false)
 
 
 							swal({
@@ -1222,6 +1224,7 @@ $('#btnFinalizarPoe').on('click', function (e) {
 						} else {
 
 							$('#select_tiporeportes').prop('disabled', true)
+							$('#btnMatriz').prop('disabled', true)
 
 							
 							swal({
