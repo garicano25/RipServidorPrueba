@@ -53,7 +53,7 @@
                                 <th class="text-center">Edad (años)</th>
                                 <th class="text-center">Antigüedad General (años)</th>
                                 <th class="text-center">Antigüedad en la categoría (años)</th>
-                                <th class="text-center">Antigüedad en la categoría (años)</th>
+                                <th class="text-center">Horario de trabajo</th>
                                 <th class="text-center">Agentes químicos<br>evaluados</th>
                             </tr>
                         </thead>
@@ -75,5 +75,5 @@
     var estatus = <?php echo json_encode($estatus); ?>;
     var recsensorial = <?php echo json_encode($recsensorial); ?>;
 </script>
-<script src="/js_sitio/reportes/reportemeldraft.js?v=1.2"></script>
+<script src="/js_sitio/reportes/reportemeldraft.js?v=1.3"></script>
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
