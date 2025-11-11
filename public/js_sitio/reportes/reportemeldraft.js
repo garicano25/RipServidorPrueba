@@ -61,8 +61,9 @@ function tabla_mel_draft(proyecto_id, reporteregistro_id, areas_poe) {
 				{ data: "reportequimicosevaluacion_horariotrabajo", defaultContent: "-", orderable: false },
 				{ data: "parametros", defaultContent: "-", orderable: false }
 			],
-			order: [[0, "asc"]],
-			rowsGroup: [0, 1],
+			lengthMenu: [[20, 50, 100, -1], [20, 50, 100, "Todos"]],
+            rowsGroup: [1], 
+            order: [[ 0, "ASC" ]],
 			ordering: false,
 			processing: true,
 			searching: true,
