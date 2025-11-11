@@ -44,15 +44,17 @@
                     <table id="tabla_mel_draft" class="table table-bordered text-center align-middle" style="font-size: 13px; table-layout: fixed; min-width: 1200px;">
                         <thead>
                             <tr>
-                                <th width="60">Contador</th>
-                                <th>Instalación</th>
-                                <th>Área de<br>referencia<br>en atlas<br>de riesgo</th>
-                                <th>Nombre</th>
-                                <th width="70">Ficha</th>
-                                <th>Categoría</th>
-                                <th width="60">Número de<br>personas</th>
-                                <th width="80">Grupo de<br>exposición<br>homogénea</th>
-                                <th width="100">Agentes químicos<br>evaluados</th>
+                                <th class="text-center">Contador</th>
+                                <th class="text-center">Instalación</th>
+                                <th class="text-center">Área de<br>referencia<br>en atlas<br>de riesgo</th>
+                                <th class="text-center">Nombre</th>
+                                <th class="text-center">Ficha</th>
+                                <th class="text-center">Categoría</th>
+                                <th class="text-center">Edad (años)</th>
+                                <th class="text-center">Antigüedad General (años)</th>
+                                <th class="text-center">Antigüedad en la categoría (años)</th>
+                                <th class="text-center">Antigüedad en la categoría (años)</th>
+                                <th class="text-center">Agentes químicos<br>evaluados</th>
                             </tr>
                         </thead>
                         <tbody></tbody>
@@ -73,5 +75,5 @@
     var estatus = <?php echo json_encode($estatus); ?>;
     var recsensorial = <?php echo json_encode($recsensorial); ?>;
 </script>
-<script src="/js_sitio/reportes/reportemeldraft.js?v=1.0"></script>
+<script src="/js_sitio/reportes/reportemeldraft.js?v=1.1"></script>
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
