@@ -3662,7 +3662,7 @@ class reportequimicosController extends Controller
 
 
                     $value->descripcion = '<div class="row">
-                                                <div class="col-6">
+                                                <div class="col-12">
                                                     <label>Tipo</label>
                                                     <select class="custom-select form-control" name="recomendacionadicional_tipo[]" required>
                                                         <option value=""></option>
@@ -3670,12 +3670,7 @@ class reportequimicosController extends Controller
                                                         <option value="Correctiva" ' . $correctiva . '>Correctiva</option>
                                                     </select>
                                                 </div>
-                                                <div class="col-6">
-                                                    <label>Partida informe</label>
-                                                    <select class="custom-select form-control" name="recomendacionadicional_quimicopartida[]" required>
-                                                        ' . $partidas_opciones . '
-                                                    </select>
-                                                </div>
+                            
                                                 <div class="col-12">
                                                     <br>
                                                     <label>Descripción</label>

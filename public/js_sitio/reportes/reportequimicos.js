@@ -6364,18 +6364,12 @@ $("#boton_reporte_nuevarecomendacion").click(function()
 															'</td>'+
 															'<td style="text-align: left;">'+
 																'<div class="row">'+
-																	'<div class="col-6">'+
+																	'<div class="col-12">'+
 																		'<label>Tipo</label>'+
 																		'<select class="custom-select form-control" name="recomendacionadicional_tipo[]" required>'+
 																			'<option value=""></option>'+
 																			'<option value="Preventiva">Preventiva</option>'+
 																			'<option value="Correctiva">Correctiva</option>'+
-																		'</select>'+
-																	'</div>'+
-																	'<div class="col-6">'+
-																		'<label>Partida informe</label>'+
-																		'<select class="custom-select form-control" name="recomendacionadicional_quimicopartida[]" required>'+
-																			catpartidasquimicos_utilizadas+
 																		'</select>'+
 																	'</div>'+
 																	'<div class="col-12">'+
