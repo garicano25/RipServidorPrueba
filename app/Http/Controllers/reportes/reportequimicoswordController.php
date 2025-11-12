@@ -1770,10 +1770,10 @@ class reportequimicoswordController extends Controller
                     $ancho_col_7,
                     array('vMerge' => 'restart', 'valign' => 'center', 'bgColor' => $value->COLOR)
                 )
-                    ->addTextRun(array_merge($centrado, ['name' => $fuente]))
+                    ->addTextRun(array_merge($centrado, ['name' => 'Poppins']))
                     ->addText(
                         $value->PRIORIDAD,
-                        array('color' => $texto_color, 'size' => 10, 'bold' => true, 'name' => $fuente)
+                        array('color' => $texto_color, 'size' => 10, 'bold' => true, 'name' => 'Poppins')
                     );
 
 
@@ -2221,13 +2221,12 @@ class reportequimicoswordController extends Controller
                     $ancho_col_8,
                     array('bgColor' => $value->resultado_color)
                 )
-                    ->addTextRun(array_merge($centrado, ['name' => $fuente]))
+                    ->addTextRun(array_merge($centrado, ['name' => 'Poppins']))
                     ->addText(
                         $value->resultado_texto,
-                        array('color' => $texto_color, 'size' => 10, 'bold' => true, 'name' => $fuente)
+                        array('color' => $texto_color, 'size' => 10, 'bold' => true, 'name' => 'Poppins')
                     );
-
-                }
+            }
 
 
             $plantillaword->setComplexBlock('TABLA_7', $table);
