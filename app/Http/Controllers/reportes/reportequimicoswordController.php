@@ -314,7 +314,7 @@ class reportequimicoswordController extends Controller
             if (count($titulo_partida) > 0) {
 
                 //Para el valor que lleva proyecto se utilizo: descripcion de la partida, Numero del contrato y la descripcion del contrato
-                $plantillaword->setValue('proyecto_portada', str_replace("\n", "<w:br/>", $titulo_partida[0]->clientepartidas_descripcion) . ' - Contrato: ' . $clienteInfo[0]->NUMERO_CONTRATO);
+                $plantillaword->setValue('proyecto_portada', str_replace("\n", "<w:br/>", $clienteInfo[0]->DESCRIPCION_CONTRATO) . ' - Contrato: ' . $clienteInfo[0]->NUMERO_CONTRATO);
 
                 $plantillaword->setValue('PARTIDA',
                     str_replace("\n", "<w:br/>", $titulo_partida[0]->clientepartidas_descripcion)
