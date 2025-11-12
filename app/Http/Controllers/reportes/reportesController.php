@@ -19,6 +19,10 @@ use PhpOffice\PhpWord\SimpleType\TblWidth;
 use PhpOffice\PhpWord\Shared\Converter;
 use PhpOffice\PhpWord\Style\TablePosition;
 use PhpOffice\PhpWord\TemplateProcessor;
+
+
+
+
 use DOMDocument;
 //----------------------------------------------------------
 
@@ -72,6 +76,8 @@ use PhpOffice\PhpSpreadsheet\Style\Color;
 use PhpOffice\PhpSpreadsheet\Style\Fill;
 use Illuminate\Support\Facades\Response;
 use Symfony\Component\HttpFoundation\Response as HttpResponse;
+use PhpOffice\PhpSpreadsheet\Cell\DataType;
+
 
 
 
@@ -596,6 +602,7 @@ private function evaluarCumplimiento($concentracion, $valorLimite)
 
 
 
+
     public function guardarmeldraft(Request $request)
     {
         try {
@@ -624,12 +631,471 @@ private function evaluarCumplimiento($concentracion, $valorLimite)
         }
     }
 
-    /**
-     * Display the specified resource.
-     *
-     * @param  int  $proyecto_id
-     * @return \Illuminate\Http\Response
-     */
+
+    public function verificarmeldraft($proyecto_id)
+    {
+        $existe = DB::table('departamentos_meldraft')->where('proyecto_id', $proyecto_id)->exists();
+
+        if ($existe) {
+            return response()->json(['success' => true]);
+        }
+
+        return response()->json([
+            'success' => false,
+            'message' => 'No hay registros para generar la MEL.'
+        ], 404);
+    }
+
+
+
+
+    // public function exportarMeldraft($proyecto_id)
+    // {
+    //     try {
+    //         $registro = DB::table('reportequimicosgrupos')
+    //             ->where('proyecto_id', $proyecto_id)
+    //             ->select('registro_id')
+    //             ->orderBy('created_at', 'desc')
+    //             ->first();
+
+    //         if (!$registro) {
+    //             return response()->json(['success' => false, 'message' => 'No se encontró registro_id para este proyecto.']);
+    //         }
+
+    //         $reporteregistro_id = $registro->registro_id;
+
+    //         $departamento = DB::table('departamentos_meldraft')
+    //             ->where('proyecto_id', $proyecto_id)
+    //             ->value('DEPARTAMENTO_MEL') ?? "No tiene departamento guardado";
+
+    //         $puntos = DB::select("
+    //         SELECT
+    //             rq.id,
+    //             rq.proyecto_id,
+    //             rq.registro_id,
+    //             IF(cr.catregion_nombre = 'N/A', '', cr.catregion_nombre) AS catregion_nombre,
+    //             IF(cs.catsubdireccion_nombre = 'N/A', '', cs.catsubdireccion_nombre) AS catsubdireccion_nombre,
+    //             IF(cg.catgerencia_nombre = 'N/A', '', cg.catgerencia_nombre) AS catgerencia_nombre,
+    //             IF(ca.catactivo_nombre = 'N/A', '', ca.catactivo_nombre) AS catactivo_nombre,
+    //             (
+    //                 CASE
+    //                     WHEN IF(ca.catactivo_nombre = 'N/A', '', ca.catactivo_nombre) != '' THEN ca.catactivo_nombre
+    //                     ELSE cg.catgerencia_nombre
+    //                 END
+    //             ) AS gerencia_activo,
+    //             ra.reportearea_instalacion AS reportequimicosarea_instalacion,
+    //             ra.reportearea_nombre AS reportequimicosarea_nombre,
+    //             rc.reportecategoria_nombre AS reportequimicoscategoria_nombre,
+    //             rq.reportequimicosevaluacion_nombre,
+    //             rq.reportequimicosevaluacion_anios,
+    //             rq.reportequimicosevaluacion_antiguedadgeneral,
+    //             rq.reportequimicosevaluacion_antiguedadcategoria,
+    //             rq.reportequimicosevaluacion_horariotrabajo,
+    //             rq.reportequimicosevaluacion_ficha,
+    //             rq.reportequimicosevaluacion_geo,
+    //             rq.reportequimicosevaluacion_total,
+    //             rq.reportequimicosevaluacion_punto,
+    //             rp.reportequimicosevaluacionparametro_parametro AS tipo,
+    //             rp.reportequimicosevaluacionparametro_valorlimite AS referencia_vle,
+    //             rp.reportequimicosevaluacionparametro_concentracion AS resultado_concentracion
+    //         FROM reportequimicosevaluacion rq
+    //         LEFT JOIN proyecto p ON rq.proyecto_id = p.id
+    //         LEFT JOIN catregion cr ON p.catregion_id = cr.id
+    //         LEFT JOIN catsubdireccion cs ON p.catsubdireccion_id = cs.id
+    //         LEFT JOIN catgerencia cg ON p.catgerencia_id = cg.id
+    //         LEFT JOIN catactivo ca ON p.catactivo_id = ca.id
+    //         LEFT JOIN reportearea ra ON rq.reportequimicosarea_id = ra.id
+    //         LEFT JOIN reportecategoria rc ON rq.reportequimicoscategoria_id = rc.id
+    //         LEFT JOIN reportequimicosevaluacionparametro rp ON rp.reportequimicosevaluacion_id = rq.id
+    //         WHERE rq.proyecto_id = $proyecto_id
+    //         AND rq.registro_id = $reporteregistro_id
+    //         ORDER BY rq.reportequimicosevaluacion_punto ASC
+    //     ");
+
+    //         if (empty($puntos)) {
+    //             return response()->json(['success' => false, 'message' => 'No hay datos para exportar.']);
+    //         }
+
+    //         $templatePath = storage_path('app/plantillas_reportes/proyecto_infomes/plantillla_meldraft.xlsx');
+    //         if (!file_exists($templatePath)) {
+    //             return response()->json(['success' => false, 'message' => 'No se encontró la plantilla Excel.']);
+    //         }
+
+    //         $spreadsheet = IOFactory::load($templatePath);
+    //         $sheet = $spreadsheet->getActiveSheet();
+    //         $fila = 6;
+
+    //         foreach ($puntos as $value) {
+    //             $cumplimiento = $this->evaluarCumplimiento(
+    //                 $value->resultado_concentracion,
+    //                 $value->referencia_vle
+    //             );
+
+    //             $sheet->setCellValue("B{$fila}", $departamento ?: '');
+    //             $sheet->setCellValue("C{$fila}", $value->reportequimicosarea_instalacion ?: '');
+    //             $sheet->setCellValue("D{$fila}", $value->reportequimicosarea_nombre ?: '');
+    //             $sheet->setCellValue("E{$fila}", $value->reportequimicosevaluacion_nombre ?: '');
+    //             $sheet->setCellValue("F{$fila}", $value->reportequimicosevaluacion_ficha ?: '');
+    //             $sheet->setCellValue("G{$fila}", $value->reportequimicoscategoria_nombre ?: '');
+    //             $sheet->setCellValue("H{$fila}", $value->reportequimicosevaluacion_anios ?: '');
+    //             $sheet->setCellValue("I{$fila}", $value->reportequimicosevaluacion_antiguedadgeneral ?: '');
+    //             $sheet->setCellValue("J{$fila}", $value->reportequimicosevaluacion_antiguedadcategoria ?: '');
+    //             $sheet->setCellValue("K{$fila}", $value->reportequimicosevaluacion_horariotrabajo ?: '');
+    //             $sheet->setCellValue("L{$fila}", $value->tipo ?: '');
+    //             $sheet->setCellValue("M{$fila}", $value->referencia_vle ?: '');
+    //             $sheet->setCellValue("N{$fila}", $value->resultado_concentracion ?: '');
+    //             $sheet->setCellValue("O{$fila}", $cumplimiento ?: '');
+
+    //             $fila++;
+    //         }
+
+    //         $fileName = 'MELDRAFT_' . $proyecto_id . '_' . date('Ymd_His') . '.xlsx';
+    //         $filePath = storage_path('app/plantillas_reportes/proyecto_infomes/' . $fileName);
+
+    //         $writer = new Xlsx($spreadsheet);
+    //         $writer->save($filePath);
+
+    //         return response()->download($filePath)->deleteFileAfterSend(true);
+    //     } catch (\Exception $e) {
+    //         return response()->json([
+    //             'success' => false,
+    //             'message' => 'Error al generar el Excel: ' . $e->getMessage()
+    //         ]);
+    //     }
+    // }
+
+
+
+
+
+
+    // public function exportarMeldraft($proyecto_id)
+    // {
+    //     try {
+    //         // 🔹 Buscar último registro
+    //         $registro = DB::table('reportequimicosgrupos')
+    //             ->where('proyecto_id', $proyecto_id)
+    //             ->select('registro_id')
+    //             ->orderBy('created_at', 'desc')
+    //             ->first();
+
+    //         if (!$registro) {
+    //             return response()->json(['success' => false, 'message' => 'No se encontró registro_id para este proyecto.']);
+    //         }
+
+    //         $reporteregistro_id = $registro->registro_id;
+
+    //         $departamento = DB::table('departamentos_meldraft')
+    //             ->where('proyecto_id', $proyecto_id)
+    //             ->value('DEPARTAMENTO_MEL') ?? "No tiene departamento guardado";
+
+    //         $puntos = DB::select("
+    //         SELECT
+    //             rq.id,
+    //             rq.proyecto_id,
+    //             rq.registro_id,
+    //             ra.reportearea_instalacion AS reportequimicosarea_instalacion,
+    //             ra.reportearea_nombre AS reportequimicosarea_nombre,
+    //             rc.reportecategoria_nombre AS reportequimicoscategoria_nombre,
+    //             rq.reportequimicosevaluacion_nombre,
+    //             rq.reportequimicosevaluacion_ficha,
+    //             rq.reportequimicosevaluacion_anios,
+    //             rq.reportequimicosevaluacion_antiguedadgeneral,
+    //             rq.reportequimicosevaluacion_antiguedadcategoria,
+    //             rq.reportequimicosevaluacion_horariotrabajo,
+    //             rp.reportequimicosevaluacionparametro_parametro AS tipo,
+    //             rp.reportequimicosevaluacionparametro_valorlimite AS referencia_vle,
+    //             rp.reportequimicosevaluacionparametro_concentracion AS resultado_concentracion
+    //         FROM reportequimicosevaluacion rq
+    //         LEFT JOIN reportearea ra ON rq.reportequimicosarea_id = ra.id
+    //         LEFT JOIN reportecategoria rc ON rq.reportequimicoscategoria_id = rc.id
+    //         LEFT JOIN reportequimicosevaluacionparametro rp ON rp.reportequimicosevaluacion_id = rq.id
+    //         WHERE rq.proyecto_id = $proyecto_id
+    //         AND rq.registro_id = $reporteregistro_id
+    //         ORDER BY rq.reportequimicosevaluacion_punto ASC
+    //     ");
+
+    //         if (empty($puntos)) {
+    //             return response()->json(['success' => false, 'message' => 'No hay datos para exportar.']);
+    //         }
+
+    //         $templatePath = storage_path('app/plantillas_reportes/proyecto_infomes/plantillla_meldraft.xlsx');
+    //         if (!file_exists($templatePath)) {
+    //             return response()->json(['success' => false, 'message' => 'No se encontró la plantilla Excel.']);
+    //         }
+
+    //         $reader = IOFactory::createReader('Xlsx');
+    //         $reader->setIncludeCharts(true);
+    //         $reader->setReadDataOnly(false);
+    //         $spreadsheet = $reader->load($templatePath);
+    //         $sheet = $spreadsheet->getActiveSheet();
+
+    //         $blueHeader = [
+    //             'fill' => [
+    //                 'fillType' => Fill::FILL_SOLID,
+    //                 'color' => ['rgb' => 'C5D9F1']
+    //             ],
+    //             'borders' => [
+    //                 'allBorders' => [
+    //                     'borderStyle' => Border::BORDER_THIN,
+    //                     'color' => ['rgb' => '000000']
+    //                 ]
+    //             ]
+    //         ];
+
+    //         $purpleHeader = [
+    //             'fill' => [
+    //                 'fillType' => Fill::FILL_SOLID,
+    //                 'color' => ['rgb' => 'E4DFEC']
+    //             ],
+    //             'borders' => [
+    //                 'allBorders' => [
+    //                     'borderStyle' => Border::BORDER_THIN,
+    //                     'color' => ['rgb' => '000000']
+    //                 ]
+    //             ]
+    //         ];
+
+    //         $sheet->getStyle('B3:K5')->applyFromArray($blueHeader);
+    //         $sheet->getStyle('L3:O5')->applyFromArray($purpleHeader);
+
+    //         $borderStyle = [
+    //             'borders' => [
+    //                 'allBorders' => [
+    //                     'borderStyle' => Border::BORDER_THIN,
+    //                     'color' => ['argb' => '000000'],
+    //                 ],
+    //             ],
+    //             'alignment' => [
+    //                 'horizontal' => Alignment::HORIZONTAL_CENTER,
+    //                 'vertical' => Alignment::VERTICAL_CENTER,
+    //                 'wrapText' => true,
+    //             ],
+    //         ];
+
+    //         $fila = 6;
+    //         foreach ($puntos as $value) {
+    //             $cumplimiento = $this->evaluarCumplimiento(
+    //                 $value->resultado_concentracion,
+    //                 $value->referencia_vle
+    //             );
+
+    //             $sheet->setCellValueExplicit("B{$fila}", $departamento, DataType::TYPE_STRING);
+    //             $sheet->setCellValueExplicit("C{$fila}", $value->reportequimicosarea_instalacion ?? '', DataType::TYPE_STRING);
+    //             $sheet->setCellValueExplicit("D{$fila}", $value->reportequimicosarea_nombre ?? '', DataType::TYPE_STRING);
+    //             $sheet->setCellValueExplicit("E{$fila}", $value->reportequimicosevaluacion_nombre ?? '', DataType::TYPE_STRING);
+    //             $sheet->setCellValueExplicit("F{$fila}", $value->reportequimicosevaluacion_ficha ?? '', DataType::TYPE_STRING);
+    //             $sheet->setCellValueExplicit("G{$fila}", $value->reportequimicoscategoria_nombre ?? '', DataType::TYPE_STRING);
+    //             $sheet->setCellValueExplicit("H{$fila}", $value->reportequimicosevaluacion_anios ?? '', DataType::TYPE_STRING);
+    //             $sheet->setCellValueExplicit("I{$fila}", $value->reportequimicosevaluacion_antiguedadgeneral ?? '', DataType::TYPE_STRING);
+    //             $sheet->setCellValueExplicit("J{$fila}", $value->reportequimicosevaluacion_antiguedadcategoria ?? '', DataType::TYPE_STRING);
+    //             $sheet->setCellValueExplicit("K{$fila}", $value->reportequimicosevaluacion_horariotrabajo ?? '', DataType::TYPE_STRING);
+    //             $sheet->setCellValueExplicit("L{$fila}", $value->tipo ?? '', DataType::TYPE_STRING);
+    //             $sheet->setCellValueExplicit("M{$fila}", $value->referencia_vle ?? '', DataType::TYPE_STRING);
+    //             $sheet->setCellValueExplicit("N{$fila}", $value->resultado_concentracion ?? '', DataType::TYPE_STRING);
+    //             $sheet->setCellValueExplicit("O{$fila}", $cumplimiento ?? '', DataType::TYPE_STRING);
+
+    //             $sheet->getStyle("B{$fila}:O{$fila}")->applyFromArray($borderStyle);
+    //             $fila++;
+    //         }
+
+    //         $writer = IOFactory::createWriter($spreadsheet, 'Xlsx');
+    //         $writer->setPreCalculateFormulas(false);
+
+    //         $fileName = 'Matriz_de_Exposición_Laboral_' . date('Ymd_His') . '.xlsx';
+    //         $filePath = storage_path('app/plantillas_reportes/proyecto_infomes/' . $fileName);
+    //         $writer->save($filePath);
+
+    //         return response()->download($filePath)->deleteFileAfterSend(true);
+    //     } catch (\Exception $e) {
+    //         return response()->json([
+    //             'success' => false,
+    //             'message' => 'Error al generar el Excel: ' . $e->getMessage(),
+    //             'line' => $e->getLine(),
+    //         ]);
+    //     }
+    // }
+
+
+
+    public function exportarMeldraft($proyecto_id)
+    {
+        try {
+            // 🔹 Buscar último registro
+            $registro = DB::table('reportequimicosgrupos')
+                ->where('proyecto_id', $proyecto_id)
+                ->select('registro_id')
+                ->orderBy('created_at', 'desc')
+                ->first();
+
+            if (!$registro) {
+                return response()->json(['success' => false, 'message' => 'No se encontró registro_id para este proyecto.']);
+            }
+
+            $reporteregistro_id = $registro->registro_id;
+
+            // 🔹 Obtener departamento
+            $departamento = DB::table('departamentos_meldraft')
+                ->where('proyecto_id', $proyecto_id)
+                ->value('DEPARTAMENTO_MEL') ?? "No tiene departamento guardado";
+
+            // 🔹 Consulta principal
+            $puntos = DB::select("
+            SELECT
+                rq.id,
+                rq.proyecto_id,
+                rq.registro_id,
+                ra.reportearea_instalacion AS reportequimicosarea_instalacion,
+                ra.reportearea_nombre AS reportequimicosarea_nombre,
+                rc.reportecategoria_nombre AS reportequimicoscategoria_nombre,
+                rq.reportequimicosevaluacion_nombre,
+                rq.reportequimicosevaluacion_ficha,
+                rq.reportequimicosevaluacion_anios,
+                rq.reportequimicosevaluacion_antiguedadgeneral,
+                rq.reportequimicosevaluacion_antiguedadcategoria,
+                rq.reportequimicosevaluacion_horariotrabajo,
+                rp.reportequimicosevaluacionparametro_parametro AS tipo,
+                rp.reportequimicosevaluacionparametro_valorlimite AS referencia_vle,
+                rp.reportequimicosevaluacionparametro_concentracion AS resultado_concentracion
+            FROM reportequimicosevaluacion rq
+            LEFT JOIN reportearea ra ON rq.reportequimicosarea_id = ra.id
+            LEFT JOIN reportecategoria rc ON rq.reportequimicoscategoria_id = rc.id
+            LEFT JOIN reportequimicosevaluacionparametro rp ON rp.reportequimicosevaluacion_id = rq.id
+            WHERE rq.proyecto_id = $proyecto_id
+            AND rq.registro_id = $reporteregistro_id
+            ORDER BY rq.reportequimicosevaluacion_punto ASC
+        ");
+
+            if (empty($puntos)) {
+                return response()->json(['success' => false, 'message' => 'No hay datos para exportar.']);
+            }
+
+            // 🔹 Cargar plantilla
+            $templatePath = storage_path('app/plantillas_reportes/proyecto_infomes/plantillla_meldraft.xlsx');
+            if (!file_exists($templatePath)) {
+                return response()->json(['success' => false, 'message' => 'No se encontró la plantilla Excel.']);
+            }
+
+            $reader = IOFactory::createReader('Xlsx');
+            $reader->setIncludeCharts(true);
+            $reader->setReadDataOnly(false);
+            $spreadsheet = $reader->load($templatePath);
+            $sheet = $spreadsheet->getActiveSheet();
+
+            // 🔹 Colores encabezado
+            $blueHeader = [
+                'fill' => [
+                    'fillType' => Fill::FILL_SOLID,
+                    'color' => ['rgb' => 'C5D9F1']
+                ],
+                'borders' => [
+                    'allBorders' => [
+                        'borderStyle' => Border::BORDER_THIN,
+                        'color' => ['rgb' => '000000']
+                    ]
+                ]
+            ];
+
+            $purpleHeader = [
+                'fill' => [
+                    'fillType' => Fill::FILL_SOLID,
+                    'color' => ['rgb' => 'E4DFEC']
+                ],
+                'borders' => [
+                    'allBorders' => [
+                        'borderStyle' => Border::BORDER_THIN,
+                        'color' => ['rgb' => '000000']
+                    ]
+                ]
+            ];
+
+            $sheet->getStyle('B3:K5')->applyFromArray($blueHeader);
+            $sheet->getStyle('L3:O5')->applyFromArray($purpleHeader);
+
+            // 🔹 Bordes y alineación para los datos
+            $borderStyle = [
+                'borders' => [
+                    'allBorders' => [
+                        'borderStyle' => Border::BORDER_THIN,
+                        'color' => ['argb' => '000000'],
+                    ],
+                ],
+                'alignment' => [
+                    'horizontal' => Alignment::HORIZONTAL_CENTER,
+                    'vertical' => Alignment::VERTICAL_CENTER,
+                    'wrapText' => true,
+                ],
+            ];
+
+            // 🔹 Insertar datos
+            $filaInicio = 6;
+            $fila = $filaInicio;
+
+            foreach ($puntos as $value) {
+                $cumplimiento = $this->evaluarCumplimiento(
+                    $value->resultado_concentracion,
+                    $value->referencia_vle
+                );
+
+                // 🔸 No repetimos departamento aquí, solo en la celda combinada
+                $sheet->setCellValueExplicit("C{$fila}", $value->reportequimicosarea_instalacion ?? '', DataType::TYPE_STRING);
+                $sheet->setCellValueExplicit("D{$fila}", $value->reportequimicosarea_nombre ?? '', DataType::TYPE_STRING);
+                $sheet->setCellValueExplicit("E{$fila}", $value->reportequimicosevaluacion_nombre ?? '', DataType::TYPE_STRING);
+                $sheet->setCellValueExplicit("F{$fila}", $value->reportequimicosevaluacion_ficha ?? '', DataType::TYPE_STRING);
+                $sheet->setCellValueExplicit("G{$fila}", $value->reportequimicoscategoria_nombre ?? '', DataType::TYPE_STRING);
+                $sheet->setCellValueExplicit("H{$fila}", $value->reportequimicosevaluacion_anios ?? '', DataType::TYPE_STRING);
+                $sheet->setCellValueExplicit("I{$fila}", $value->reportequimicosevaluacion_antiguedadgeneral ?? '', DataType::TYPE_STRING);
+                $sheet->setCellValueExplicit("J{$fila}", $value->reportequimicosevaluacion_antiguedadcategoria ?? '', DataType::TYPE_STRING);
+                $sheet->setCellValueExplicit("K{$fila}", $value->reportequimicosevaluacion_horariotrabajo ?? '', DataType::TYPE_STRING);
+                $sheet->setCellValueExplicit("L{$fila}", $value->tipo ?? '', DataType::TYPE_STRING);
+                $sheet->setCellValueExplicit("M{$fila}", $value->referencia_vle ?? '', DataType::TYPE_STRING);
+                $sheet->setCellValueExplicit("N{$fila}", $value->resultado_concentracion ?? '', DataType::TYPE_STRING);
+                $sheet->setCellValueExplicit("O{$fila}", $cumplimiento ?? '', DataType::TYPE_STRING);
+
+                $sheet->getStyle("B{$fila}:O{$fila}")->applyFromArray($borderStyle);
+                $fila++;
+            }
+
+            // 🔹 Combinar celda del Departamento (columna B)
+            $ultimaFila = $fila - 1;
+            if ($ultimaFila >= $filaInicio) {
+                $sheet->mergeCells("B{$filaInicio}:B{$ultimaFila}");
+                $sheet->setCellValue("B{$filaInicio}", $departamento);
+                $sheet->getStyle("B{$filaInicio}:B{$ultimaFila}")->getAlignment()->setVertical(Alignment::VERTICAL_CENTER);
+                $sheet->getStyle("B{$filaInicio}:B{$ultimaFila}")->getAlignment()->setHorizontal(Alignment::HORIZONTAL_CENTER);
+                $sheet->getStyle("B{$filaInicio}:B{$ultimaFila}")->applyFromArray([
+                    'borders' => [
+                        'allBorders' => [
+                            'borderStyle' => Border::BORDER_THIN,
+                            'color' => ['argb' => '000000'],
+                        ],
+                    ],
+                ]);
+            }
+
+            // 🔹 Guardar sin recalcular fórmulas
+            $writer = IOFactory::createWriter($spreadsheet, 'Xlsx');
+            $writer->setPreCalculateFormulas(false);
+
+            $fileName = 'Matriz_de_Exposición_Laboral_' . date('Ymd_His') . '.xlsx';
+            $filePath = storage_path('app/plantillas_reportes/proyecto_infomes/' . $fileName);
+            $writer->save($filePath);
+
+            return response()->download($filePath)->deleteFileAfterSend(true);
+        } catch (\Exception $e) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Error al generar el Excel: ' . $e->getMessage(),
+                'line' => $e->getLine(),
+            ]);
+        }
+    }
+        /**
+         * Display the specified resource.
+         *
+         * @param  int  $proyecto_id
+         * @return \Illuminate\Http\Response
+         */
     public function reportepoevistapsico($proyecto_id)
     {
         $proyecto = proyectoModel::findOrFail($proyecto_id);

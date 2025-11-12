@@ -1132,6 +1132,14 @@ Route::post('reportematrizlabguardar', ['as' => 'reportes.reportematrizlabguarda
 Route::post('guardarmeldraft', ['as' => 'reportes.guardarmeldraft', 'uses' => 'reportes\reportesController@guardarmeldraft']);
 
 Route::get('obtenermeldraft/{ID}', ['as' => 'reportes.obtenermeldraft', 'uses' => 'reportes\reportesController@obtenermeldraft']);
+
+Route::get('verificarmeldraft/{proyecto_id}', ['as' => 'reportes.verificarmeldraft', 'uses' => 'reportes\reportesController@verificarmeldraft']);
+
+
+Route::get('exportarMeldraft/{proyecto_id}', ['as' => 'reportes.exportarMeldraft', 'uses' => 'reportes\reportesController@exportarMeldraft']);
+
+
+
 //==============================================
 Route::get('reportenom035vista2/{proyecto_id}', ['as' => 'reportenom035.reportenom035vista2', 'uses' => 'reportes\reportenom0352Controller@reportenom035vista2']);
 

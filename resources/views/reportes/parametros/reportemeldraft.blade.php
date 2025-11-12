@@ -66,7 +66,7 @@
                         class="btn btn-default waves-effect"
                         style="margin-left: 15px;"
                         data-toggle="tooltip" title="Generar matriz"
-                        id="boton_reporte_matriz">
+                        id="btnExportarExcel">
                         <span class="btn-label"><i class="fa fa-file-excel-o"></i></span>
                         Generar matriz
                     </button>
@@ -114,5 +114,5 @@
     var estatus = <?php echo json_encode($estatus); ?>;
     var recsensorial = <?php echo json_encode($recsensorial); ?>;
 </script>
-<script src="/js_sitio/reportes/reportemeldraft.js?v=1.4"></script>
+<script src="/js_sitio/reportes/reportemeldraft.js?v=1.5"></script>
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>

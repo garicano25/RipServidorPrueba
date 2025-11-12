@@ -183,7 +183,6 @@ $('#botonguardar_reporte_matriz').on('click', async function (e) {
                 confirmButtonText: 'Aceptar'
             });
 
-            // 🔄 Solo recarga la tabla ya existente
             if ($.fn.DataTable.isDataTable('#tabla_mel_draft')) {
                 $('#tabla_mel_draft').DataTable().ajax.reload(null, false);
             }
@@ -212,3 +211,155 @@ $('#botonguardar_reporte_matriz').on('click', async function (e) {
 });
 
 
+
+
+
+$(document).on('click', '#btnExportarExcel', function (e) {
+    e.preventDefault();
+
+    $.ajax({
+        url: '/verificarmeldraft/' + proyecto.id,
+        method: 'GET',
+        success: function (respuesta) {
+            if (respuesta.success) {
+                Swal.fire({
+                    title: "¿Desea generar la Matriz de Exposición Laboral?",
+                    text: "Se exportará el archivo Excel con los datos actuales del proyecto.",
+                    icon: "question",
+                    showCancelButton: true,
+                    confirmButtonColor: "#28a745",
+                    cancelButtonColor: "#d33",
+                    confirmButtonText: "Sí, descargar",
+                    cancelButtonText: "Cancelar",
+                    reverseButtons: true
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        $('#btnExportarExcel').prop('disabled', true);
+
+                        Swal.fire({
+                            title: "Generando reporte...",
+                            text: "Espere un momento mientras se prepara el documento.",
+                            icon: "info",
+                            allowOutsideClick: false,
+                            showConfirmButton: false,
+                            didOpen: () => {
+                                Swal.showLoading();
+                            }
+                        });
+
+                        let url = '/exportarMeldraft/' + proyecto.id;
+
+                        $.ajax({
+                            url: url,
+                            method: 'GET',
+                            xhrFields: {
+                                responseType: 'blob'
+                            },
+                            success: function (data, status, xhr) {
+                                const contentType = xhr.getResponseHeader('Content-Type') || '';
+
+                                // Si devuelve JSON (error), lo mostramos con SweetAlert
+                                if (contentType.includes('application/json') || contentType.includes('text/json')) {
+                                    const reader = new FileReader();
+                                    reader.onload = function () {
+                                        try {
+                                            const response = JSON.parse(reader.result);
+                                            Swal.fire({
+                                                title: "Atención",
+                                                text: response.message || "No se puede generar el reporte.",
+                                                icon: "warning"
+                                            });
+                                        } catch (e) {
+                                            Swal.fire({
+                                                title: "Error",
+                                                text: "Respuesta inválida del servidor.",
+                                                icon: "error"
+                                            });
+                                        }
+                                        $('#btnExportarExcel').prop('disabled', false);
+                                    };
+                                    reader.readAsText(data);
+                                    return;
+                                }
+
+                                // ✅ Si todo va bien: descargar archivo directamente
+                                const a = document.createElement('a');
+                                const urlDescarga = window.URL.createObjectURL(data);
+                                a.href = urlDescarga;
+                                a.download = `Matriz de Exposición Laboral.xlsx`;
+                                document.body.appendChild(a);
+                                a.click();
+                                a.remove();
+                                window.URL.revokeObjectURL(urlDescarga);
+
+                                Swal.fire({
+                                    title: "Éxito",
+                                    text: "El archivo 'Matriz de Exposición Laboral.xlsx' se descargó correctamente.",
+                                    icon: "success",
+                                    confirmButtonText: "Cerrar"
+                                });
+
+                                $('#btnExportarExcel').prop('disabled', false);
+                            },
+                            error: function (xhr) {
+                                const reader = new FileReader();
+                                reader.onload = function () {
+                                    try {
+                                        const response = JSON.parse(reader.result);
+                                        Swal.fire({
+                                            title: "Atención",
+                                            text: response.message || "Error desconocido del servidor.",
+                                            icon: "warning"
+                                        });
+                                    } catch (e) {
+                                        Swal.fire({
+                                            title: "Error",
+                                            text: "No se pudo interpretar la respuesta del servidor.",
+                                            icon: "error"
+                                        });
+                                    }
+                                    $('#btnExportarExcel').prop('disabled', false);
+                                };
+
+                                if (xhr.response) {
+                                    reader.readAsText(xhr.response);
+                                } else {
+                                    Swal.fire({
+                                        title: "Error",
+                                        text: "No se recibió respuesta del servidor.",
+                                        icon: "error"
+                                    });
+                                    $('#btnExportarExcel').prop('disabled', false);
+                                }
+                            }
+                        });
+                    } else {
+                        Swal.fire({
+                            title: "Cancelado",
+                            text: "No se generó el documento.",
+                            icon: "info",
+                            timer: 1000,
+                            showConfirmButton: false
+                        });
+                    }
+                });
+            }
+        },
+        error: function (xhr) {
+            let mensaje = "No se pudo verificar la información.";
+
+            try {
+                const response = JSON.parse(xhr.responseText);
+                if (response.message) {
+                    mensaje = response.message;
+                }
+            } catch (e) {}
+
+            Swal.fire({
+                title: "Atención",
+                text: mensaje,
+                icon: "warning"
+            });
+        }
+    });
+});
