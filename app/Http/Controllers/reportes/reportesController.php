@@ -45,6 +45,7 @@ use App\modelos\reportes\reporteequiposutilizadosModel;
 use App\modelos\proyecto\estatusReportesInformeModel;
 
 use App\modelos\reportes\matrizlaboral;
+use App\modelos\reportes\departamentosmeldraft;
 
 
 
@@ -275,37 +276,183 @@ class reportesController extends Controller
 
 
 
+//  public function tablameldraft($proyecto_id, $reporteregistro_id, $areas_poe)
+//     {
+//         try {
+//             if (empty($reporteregistro_id) || $reporteregistro_id == 0) {
+//                 $registro = DB::table('reportequimicosgrupos')
+//                     ->where('proyecto_id', $proyecto_id)
+//                     ->select('registro_id')
+//                     ->orderBy('created_at', 'desc')
+//                     ->first();
 
-    public function tablameldraft($proyecto_id, $reporteregistro_id, $areas_poe)
-    {
-        try {
-            // ============================================================
-            // 1️⃣ Si el registro_id viene vacío o 0, buscarlo en reportequimicosgrupos
-            // ============================================================
-            if (empty($reporteregistro_id) || $reporteregistro_id == 0) {
-                $registro = DB::table('reportequimicosgrupos')
-                    ->where('proyecto_id', $proyecto_id)
-                    ->select('registro_id')
-                    ->orderBy('created_at', 'desc') // toma el último registro creado
-                    ->first();
+//                 if ($registro) {
+//                     $reporteregistro_id = $registro->registro_id;
+//                 } else {
+//                     return response()->json([
+//                         'data' => [],
+//                         'total' => 0,
+//                         'msj' => 'No se encontró registro_id para el proyecto especificado en reportequimicosgrupos'
+//                     ]);
+//                 }
+//             }
 
-                if ($registro) {
-                    $reporteregistro_id = $registro->registro_id;
-                } else {
-                    // Si no existe, regresamos un mensaje claro
-                    return response()->json([
-                        'data' => [],
-                        'total' => 0,
-                        'msj' => 'No se encontró registro_id para el proyecto especificado en reportequimicosgrupos'
-                    ]);
-                }
+//             $departamento = DB::table('departamentos_meldraft')
+//                 ->where('proyecto_id', $proyecto_id)
+//                 ->value('DEPARTAMENTO_MEL');
+
+//             if (!$departamento) {
+//                 $departamento = "No tiene departamento guardado";
+//             }
+
+//             if (($areas_poe + 0) == 1) {
+//                 $puntos = DB::select('
+//                 SELECT
+//                     rq.id,
+//                     rq.proyecto_id,
+//                     rq.registro_id,
+//                     IF(cr.catregion_nombre = "N/A", "", cr.catregion_nombre) AS catregion_nombre,
+//                     IF(cs.catsubdireccion_nombre = "N/A", "", cs.catsubdireccion_nombre) AS catsubdireccion_nombre,
+//                     IF(cg.catgerencia_nombre = "N/A", "", cg.catgerencia_nombre) AS catgerencia_nombre,
+//                     IF(ca.catactivo_nombre = "N/A", "", ca.catactivo_nombre) AS catactivo_nombre,
+//                     (
+//                         CASE
+//                             WHEN IF(ca.catactivo_nombre = "N/A", "", ca.catactivo_nombre) != "" THEN ca.catactivo_nombre
+//                             ELSE cg.catgerencia_nombre
+//                         END
+//                     ) AS gerencia_activo,
+//                     ra.reportearea_instalacion AS reportequimicosarea_instalacion,
+//                     ra.reportearea_nombre AS reportequimicosarea_nombre,
+//                     rc.reportecategoria_nombre AS reportequimicoscategoria_nombre,
+//                     rq.reportequimicosevaluacion_nombre,
+//                     rq.reportequimicosevaluacion_anios,
+//                     rq.reportequimicosevaluacion_antiguedadgeneral,
+//                     rq.reportequimicosevaluacion_antiguedadcategoria,
+//                     rq.reportequimicosevaluacion_horariotrabajo,
+//                     rq.reportequimicosevaluacion_ficha,
+//                     rq.reportequimicosevaluacion_geo,
+//                     rq.reportequimicosevaluacion_total,
+//                     rq.reportequimicosevaluacion_punto,
+//                     IFNULL((
+//                         SELECT
+//                             REPLACE(GROUP_CONCAT(CONCAT("<b>", rp.reportequimicosevaluacionparametro_parametro, "</b>,(", rp.reportequimicosevaluacionparametro_concentracion, " / ", rp.reportequimicosevaluacionparametro_valorlimite, ")")), ",", "<br>")
+//                         FROM reportequimicosevaluacionparametro rp
+//                         WHERE rp.reportequimicosevaluacion_id = rq.id
+//                     ), "-") AS parametros
+//                 FROM reportequimicosevaluacion rq
+//                 LEFT JOIN proyecto p ON rq.proyecto_id = p.id
+//                 LEFT JOIN catregion cr ON p.catregion_id = cr.id
+//                 LEFT JOIN catsubdireccion cs ON p.catsubdireccion_id = cs.id
+//                 LEFT JOIN catgerencia cg ON p.catgerencia_id = cg.id
+//                 LEFT JOIN catactivo ca ON p.catactivo_id = ca.id
+//                 LEFT JOIN reportearea ra ON rq.reportequimicosarea_id = ra.id
+//                 LEFT JOIN reportecategoria rc ON rq.reportequimicoscategoria_id = rc.id
+//                 WHERE rq.proyecto_id = ' . $proyecto_id . '
+//                 AND rq.registro_id = ' . $reporteregistro_id . '
+//                 ORDER BY rq.reportequimicosevaluacion_punto ASC
+//             ');
+//             } else {
+//                 $puntos = DB::select('
+//                 SELECT
+//                     rq.id,
+//                     rq.proyecto_id,
+//                     rq.registro_id,
+//                     IF(cr.catregion_nombre = "N/A", "", cr.catregion_nombre) AS catregion_nombre,
+//                     IF(cs.catsubdireccion_nombre = "N/A", "", cs.catsubdireccion_nombre) AS catsubdireccion_nombre,
+//                     IF(cg.catgerencia_nombre = "N/A", "", cg.catgerencia_nombre) AS catgerencia_nombre,
+//                     IF(ca.catactivo_nombre = "N/A", "", ca.catactivo_nombre) AS catactivo_nombre,
+//                     (
+//                         CASE
+//                             WHEN IF(ca.catactivo_nombre = "N/A", "", ca.catactivo_nombre) != "" THEN ca.catactivo_nombre
+//                             ELSE cg.catgerencia_nombre
+//                         END
+//                     ) AS gerencia_activo,
+//                     ra.reportequimicosarea_instalacion,
+//                     ra.reportequimicosarea_nombre,
+//                     rc.reportequimicoscategoria_nombre,
+//                     rq.reportequimicosevaluacion_nombre,
+//                     rq.reportequimicosevaluacion_anios,
+//                     rq.reportequimicosevaluacion_antiguedadgeneral,
+//                     rq.reportequimicosevaluacion_antiguedadcategoria,
+//                     rq.reportequimicosevaluacion_horariotrabajo,
+//                     rq.reportequimicosevaluacion_ficha,
+//                     rq.reportequimicosevaluacion_geo,
+//                     rq.reportequimicosevaluacion_total,
+//                     rq.reportequimicosevaluacion_punto,
+//                     IFNULL((
+//                         SELECT
+//                             REPLACE(GROUP_CONCAT(CONCAT("<b>", rp.reportequimicosevaluacionparametro_parametro, "</b>,(", rp.reportequimicosevaluacionparametro_concentracion, " / ", rp.reportequimicosevaluacionparametro_valorlimite, ")")), ",", "<br>")
+//                         FROM reportequimicosevaluacionparametro rp
+//                         WHERE rp.reportequimicosevaluacion_id = rq.id
+//                     ), "-") AS parametros
+//                 FROM reportequimicosevaluacion rq
+//                 LEFT JOIN proyecto p ON rq.proyecto_id = p.id
+//                 LEFT JOIN catregion cr ON p.catregion_id = cr.id
+//                 LEFT JOIN catsubdireccion cs ON p.catsubdireccion_id = cs.id
+//                 LEFT JOIN catgerencia cg ON p.catgerencia_id = cg.id
+//                 LEFT JOIN catactivo ca ON p.catactivo_id = ca.id
+//                 LEFT JOIN reportequimicosarea ra ON rq.reportequimicosarea_id = ra.id
+//                 LEFT JOIN reportequimicoscategoria rc ON rq.reportequimicoscategoria_id = rc.id
+//                 WHERE rq.proyecto_id = ' . $proyecto_id . '
+//                 AND rq.registro_id = ' . $reporteregistro_id . '
+//                 ORDER BY rq.reportequimicosevaluacion_punto ASC
+//             ');
+//             }
+
+//             $numero_registro = 0;
+//             foreach ($puntos as $value) {
+//                 $numero_registro++;
+//                 $value->numero_registro = $numero_registro;
+//                 $value->DEPARTAMENTO_MEL = $departamento;
+//             }
+
+//             return response()->json([
+//                 'data' => $puntos,
+//                 'total' => count($puntos),
+//                 'msj' => 'Datos consultados correctamente'
+//             ]);
+//         } catch (Exception $e) {
+//             return response()->json([
+//                 'data' => [],
+//                 'total' => 0,
+//                 'msj' => 'Error: ' . $e->getMessage()
+//             ]);
+//         }
+//     }
+
+
+public function tablameldraft($proyecto_id, $reporteregistro_id, $areas_poe)
+{
+    try {
+        if (empty($reporteregistro_id) || $reporteregistro_id == 0) {
+            $registro = DB::table('reportequimicosgrupos')
+                ->where('proyecto_id', $proyecto_id)
+                ->select('registro_id')
+                ->orderBy('created_at', 'desc')
+                ->first();
+
+            if ($registro) {
+                $reporteregistro_id = $registro->registro_id;
+            } else {
+                return response()->json([
+                    'data' => [],
+                    'total' => 0,
+                    'msj' => 'No se encontró registro_id para el proyecto especificado en reportequimicosgrupos'
+                ]);
             }
+        }
 
-            // ============================================================
-            // 2️⃣ Ejecutar consulta según áreas_poe
-            // ============================================================
-            if (($areas_poe + 0) == 1) {
-                $puntos = DB::select('SELECT
+        $departamento = DB::table('departamentos_meldraft')
+            ->where('proyecto_id', $proyecto_id)
+            ->value('DEPARTAMENTO_MEL');
+
+        if (!$departamento) {
+            $departamento = "No tiene departamento guardado";
+        }
+
+        if (($areas_poe + 0) == 1) {
+            $puntos = DB::select('
+                SELECT
                     rq.id,
                     rq.proyecto_id,
                     rq.registro_id,
@@ -331,12 +478,9 @@ class reportesController extends Controller
                     rq.reportequimicosevaluacion_geo,
                     rq.reportequimicosevaluacion_total,
                     rq.reportequimicosevaluacion_punto,
-                    IFNULL((
-                        SELECT
-                            REPLACE(GROUP_CONCAT(CONCAT("<b>", rp.reportequimicosevaluacionparametro_parametro, "</b>,(", rp.reportequimicosevaluacionparametro_concentracion, " / ", rp.reportequimicosevaluacionparametro_valorlimite, ")")), ",", "<br>")
-                        FROM reportequimicosevaluacionparametro rp
-                        WHERE rp.reportequimicosevaluacion_id = rq.id
-                    ), "-") AS parametros
+                    rp.reportequimicosevaluacionparametro_parametro AS tipo,
+                    rp.reportequimicosevaluacionparametro_valorlimite AS referencia_vle,
+                    rp.reportequimicosevaluacionparametro_concentracion AS resultado_concentracion
                 FROM reportequimicosevaluacion rq
                 LEFT JOIN proyecto p ON rq.proyecto_id = p.id
                 LEFT JOIN catregion cr ON p.catregion_id = cr.id
@@ -345,11 +489,14 @@ class reportesController extends Controller
                 LEFT JOIN catactivo ca ON p.catactivo_id = ca.id
                 LEFT JOIN reportearea ra ON rq.reportequimicosarea_id = ra.id
                 LEFT JOIN reportecategoria rc ON rq.reportequimicoscategoria_id = rc.id
-                WHERE rq.proyecto_id = ' . $proyecto_id . ' 
-                AND rq.registro_id = ' . $reporteregistro_id . ' 
-                ORDER BY rq.reportequimicosevaluacion_punto ASC');
-            } else {
-                $puntos = DB::select('SELECT
+                LEFT JOIN reportequimicosevaluacionparametro rp ON rp.reportequimicosevaluacion_id = rq.id
+                WHERE rq.proyecto_id = ' . $proyecto_id . '
+                AND rq.registro_id = ' . $reporteregistro_id . '
+                ORDER BY rq.reportequimicosevaluacion_punto ASC
+            ');
+        } else {
+            $puntos = DB::select('
+                SELECT
                     rq.id,
                     rq.proyecto_id,
                     rq.registro_id,
@@ -375,12 +522,9 @@ class reportesController extends Controller
                     rq.reportequimicosevaluacion_geo,
                     rq.reportequimicosevaluacion_total,
                     rq.reportequimicosevaluacion_punto,
-                    IFNULL((
-                        SELECT
-                            REPLACE(GROUP_CONCAT(CONCAT("<b>", rp.reportequimicosevaluacionparametro_parametro, "</b>,(", rp.reportequimicosevaluacionparametro_concentracion, " / ", rp.reportequimicosevaluacionparametro_valorlimite, ")")), ",", "<br>")
-                        FROM reportequimicosevaluacionparametro rp
-                        WHERE rp.reportequimicosevaluacion_id = rq.id
-                    ), "-") AS parametros
+                    rp.reportequimicosevaluacionparametro_parametro AS tipo,
+                    rp.reportequimicosevaluacionparametro_valorlimite AS referencia_vle,
+                    rp.reportequimicosevaluacionparametro_concentracion AS resultado_concentracion
                 FROM reportequimicosevaluacion rq
                 LEFT JOIN proyecto p ON rq.proyecto_id = p.id
                 LEFT JOIN catregion cr ON p.catregion_id = cr.id
@@ -389,39 +533,96 @@ class reportesController extends Controller
                 LEFT JOIN catactivo ca ON p.catactivo_id = ca.id
                 LEFT JOIN reportequimicosarea ra ON rq.reportequimicosarea_id = ra.id
                 LEFT JOIN reportequimicoscategoria rc ON rq.reportequimicoscategoria_id = rc.id
-                WHERE rq.proyecto_id = ' . $proyecto_id . ' 
-                AND rq.registro_id = ' . $reporteregistro_id . ' 
-                ORDER BY rq.reportequimicosevaluacion_punto ASC');
-            }
+                LEFT JOIN reportequimicosevaluacionparametro rp ON rp.reportequimicosevaluacion_id = rq.id
+                WHERE rq.proyecto_id = ' . $proyecto_id . '
+                AND rq.registro_id = ' . $reporteregistro_id . '
+                ORDER BY rq.reportequimicosevaluacion_punto ASC
+            ');
+        }
 
-            // ============================================================
-            // 3️⃣ Agregar número correlativo
-            // ============================================================
-            $numero_registro = 0;
-            foreach ($puntos as $value) {
-                $numero_registro++;
-                $value->numero_registro = $numero_registro;
-            }
+        $numero_registro = 0;
+        foreach ($puntos as $value) {
+            $numero_registro++;
+            $value->numero_registro = $numero_registro;
+            $value->DEPARTAMENTO_MEL = $departamento;
 
-            // ============================================================
-            // 4️⃣ Respuesta final
-            // ============================================================
-            return response()->json([
-                'data' => $puntos,
-                'total' => count($puntos),
-                'msj' => 'Datos consultados correctamente'
+            // Evaluar cumplimiento
+            $value->cumplimiento = $this->evaluarCumplimiento(
+                $value->resultado_concentracion,
+                $value->referencia_vle
+            );
+        }
+
+        return response()->json([
+            'data' => $puntos,
+            'total' => count($puntos),
+            'msj' => 'Datos consultados correctamente'
+        ]);
+    } catch (Exception $e) {
+        return response()->json([
+            'data' => [],
+            'total' => 0,
+            'msj' => 'Error: ' . $e->getMessage()
+        ]);
+    }
+}
+
+/**
+ * Evalúa el cumplimiento normativo
+ */
+private function evaluarCumplimiento($concentracion, $valorLimite)
+{
+    try {
+        if ($concentracion === null || $valorLimite === null) {
+            return "-";
+        }
+
+        $concStr = trim($concentracion);
+        $limStr = trim($valorLimite);
+
+        $concVal = floatval(str_replace(['<', '>', '='], '', $concStr));
+        $limVal = floatval(str_replace(['<', '>', '='], '', $limStr));
+
+        if ($limVal == 0) return "No aplica";
+        if (str_contains($concStr, '<')) return "Cumple";
+        if (str_contains($concStr, '>')) return "No cumple";
+
+        return ($concVal <= $limVal) ? "Cumple" : "No cumple";
+    } catch (\Throwable $th) {
+        return "Indeterminado";
+    }
+}
+
+
+
+
+    public function guardarmeldraft(Request $request)
+    {
+        try {
+            $request->validate([
+                'proyecto_id' => 'required|integer',
+                'DEPARTAMENTO_MEL' => 'required|string|max:255',
             ]);
-        } catch (Exception $e) {
-            return response()->json([
-                'data' => [],
-                'total' => 0,
-                'msj' => 'Error: ' . $e->getMessage()
+
+            departamentosmeldraft::where('proyecto_id', $request->proyecto_id)->delete();
+
+            $registro = departamentosmeldraft::create([
+                'proyecto_id' => $request->proyecto_id,
+                'DEPARTAMENTO_MEL' => $request->DEPARTAMENTO_MEL,
             ]);
+
+            return response()->json([
+                'success' => true,
+                'message' => 'Departamento actualizado correctamente.',
+                'data' => $registro
+            ]);
+        } catch (\Exception $e) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Error: ' . $e->getMessage()
+            ], 500);
         }
     }
-
-
-
 
     /**
      * Display the specified resource.
@@ -1429,241 +1630,6 @@ class reportesController extends Controller
         return response()->json(['success' => true, 'message' => 'Matriz guardada correctamente.']);
     }
 
-
-
-
-    // public function reporteexcelmatrizlab($proyecto_id)
-    // {
-    //     $registros = DB::table('matriz_laboral')->where('proyecto_id', $proyecto_id)->orderBy('fila_id')->get();
-    //     $areas = DB::table('recsensorialarea')->pluck('recsensorialarea_nombre', 'id');
-
-    //     $spreadsheet = new Spreadsheet();
-    //     $sheet = $spreadsheet->getActiveSheet();
-    //     $sheet->setTitle('Matriz Laboral');
-
-    //     // Encabezados
-    //     $encabezados = [
-    //         'No.',
-    //         'Área de Trabajo Evaluada',
-    //         'Tipo de agente/Factor de Riesgo',
-    //         'No. de Trabajadores',
-    //         'Categorías',
-    //         'Tiempo de Exposición (minutos)',
-    //         'Índice de Peligro (IP)',
-    //         'Índice de Exposición (IE)',
-    //         'Riesgo / Prioridad de atención',
-    //         'Nivel Máximo LMP-NMP',
-    //         'Cumplimiento Normativo',
-    //         'Medidas de Control',
-    //     ];
-
-    //     // Estilo encabezados
-    //     $sheet->getStyle('A1:L1')->getFont()->setBold(true);
-    //     $sheet->getStyle('A1:L1')->getAlignment()->setHorizontal(Alignment::HORIZONTAL_CENTER);
-    //     $sheet->fromArray($encabezados, null, 'A1');
-
-    //     $filaExcel = 2;
-    //     $contador = 1;
-    //     $areasRegistradas = [];
-
-    //     foreach ($registros as $registro) {
-    //         $mostrarArea = $registro->area_id != 0;
-    //         $areaNombre = $mostrarArea ? ($areas[$registro->area_id] ?? 'Área no encontrada') : '';
-
-    //         // Procesar medidas seleccionadas
-    //         $medidasTexto = '';
-    //         $medidas = json_decode($registro->medidas_json, true);
-    //         if (is_array($medidas)) {
-    //             foreach ($medidas as $medida) {
-    //                 if (!empty($medida['seleccionado'])) {
-    //                     $medidasTexto .= "- {$medida['descripcion']}\n";
-    //                 }
-    //             }
-    //         }
-
-    //         $sheet->setCellValue("A{$filaExcel}", $contador++);
-    //         $sheet->setCellValue("B{$filaExcel}", $areaNombre);
-    //         $sheet->setCellValue("C{$filaExcel}", $registro->agente);
-    //         $sheet->setCellValue("D{$filaExcel}", $registro->numero_trabajadores);
-    //         $sheet->setCellValue("E{$filaExcel}", $registro->categoria);
-    //         $sheet->setCellValue("F{$filaExcel}", $registro->tiempo_exposicion);
-    //         $sheet->setCellValue("G{$filaExcel}", $registro->indice_peligro);
-    //         $sheet->setCellValue("H{$filaExcel}", $registro->indice_exposicion);
-    //         $sheet->setCellValue("I{$filaExcel}", $registro->riesgo);
-    //         $sheet->setCellValue("J{$filaExcel}", $registro->valor_lmpnmp);
-    //         $sheet->setCellValue("K{$filaExcel}", $registro->cumplimiento);
-    //         $sheet->setCellValue("L{$filaExcel}", $medidasTexto);
-
-    //         // Ajustes de formato
-    //         $sheet->getStyle("L{$filaExcel}")->getAlignment()->setWrapText(true);
-
-    //         $filaExcel++;
-    //     }
-
-    //     // Establecer ancho automático
-    //     foreach (range('A', 'L') as $col) {
-    //         $sheet->getColumnDimension($col)->setAutoSize(true);
-    //     }
-
-    //     // Descargar archivo
-    //     $writer = new Xlsx($spreadsheet);
-    //     $fileName = 'Matriz_Laboral_' . date('Ymd_His') . '.xlsx';
-    //     $temp_file = tempnam(sys_get_temp_dir(), $fileName);
-    //     $writer->save($temp_file);
-
-    //     return Response::download($temp_file, $fileName)->deleteFileAfterSend(true);
-    // }
-
-
-
-
-
-    // public function reporteexcelmatrizlab($proyecto_id)
-    // {
-    //     $registros = DB::table('matriz_laboral')
-    //         ->where('proyecto_id', $proyecto_id)
-    //         ->orderBy('fila_id')
-    //         ->get();
-
-    //     $areasNombres = DB::table('recsensorialarea')->pluck('recsensorialarea_nombre', 'id');
-
-    //     $spreadsheet = new Spreadsheet();
-    //     $sheet = $spreadsheet->getActiveSheet();
-    //     $sheet->setTitle('Matriz Laboral');
-
-    //     $encabezados = [
-    //         'Área de Trabajo Evaluada',
-    //         'Tipo de agente/Factor de Riesgo',
-    //         'No. de Trabajadores',
-    //         'Categorías',
-    //         'Tiempo de Exposición (minutos)',
-    //         'Índice de Peligro (IP)',
-    //         'Índice de Exposición (IE)',
-    //         'Riesgo / Prioridad de atención',
-    //         'Nivel Máximo LMP-NMP',
-    //         'Cumplimiento Normativo',
-    //         'Medidas de Control',
-    //     ];
-
-    //     $sheet->fromArray($encabezados, null, 'A1');
-    //     $sheet->getStyle('A1:K1')->getFont()->setBold(true);
-    //     $sheet->getStyle('A1:K1')->getAlignment()->setHorizontal(Alignment::HORIZONTAL_CENTER);
-    //     $sheet->getStyle('A1:K1')->getAlignment()->setWrapText(true);
-    //     $sheet->getStyle('A1:K1')->getFill()->setFillType(Fill::FILL_SOLID)->getStartColor()->setARGB('FFD9D9D9');
-
-    //     // Heredar área_id
-    //     $registros = $registros->values();
-    //     $areaActual = null;
-    //     foreach ($registros as $registro) {
-    //         if ($registro->area_id != 0) {
-    //             $areaActual = $registro->area_id;
-    //         }
-    //         $registro->area_id_real = $areaActual;
-    //     }
-
-    //     $filaExcel = 2;
-    //     $areas = $registros->groupBy('area_id_real');
-
-    //     foreach ($areas as $area_id => $filasArea) {
-    //         $areaNombre = $areasNombres[$area_id] ?? 'Área no encontrada';
-
-    //         $agentes = collect($filasArea);
-    //         $categorias = collect($filasArea)
-    //             ->unique(function ($item) {
-    //                 return $item->categoria . '|' . $item->numero_trabajadores . '|' . $item->tiempo_exposicion;
-    //             })
-    //             ->map(function ($item) {
-    //                 return [
-    //                     'categoria' => $item->categoria,
-    //                     'numero_trabajadores' => $item->numero_trabajadores,
-    //                     'tiempo_exposicion' => $item->tiempo_exposicion
-    //                 ];
-    //             })->values();
-
-    //         $numAgentes = $agentes->count();
-    //         $numCategorias = $categorias->count();
-
-    //         // Fusionar celda del área
-    //         $sheet->mergeCells("A{$filaExcel}:A" . ($filaExcel + $numAgentes - 1));
-    //         $sheet->setCellValue("A{$filaExcel}", $areaNombre);
-    //         $sheet->getStyle("A{$filaExcel}")->getAlignment()->setVertical(Alignment::VERTICAL_CENTER);
-    //         $sheet->getStyle("A{$filaExcel}")->getAlignment()->setWrapText(true);
-
-    //         // Calcular tamaño proporcional por categoría (repartido entre los agentes)
-    //         $reparto = floor($numAgentes / $numCategorias);
-    //         $resto = $numAgentes % $numCategorias;
-    //         $bloques = [];
-
-    //         for ($i = 0; $i < $numCategorias; $i++) {
-    //             $bloques[] = $reparto + ($i < $resto ? 1 : 0);
-    //         }
-
-    //         $inicioBloque = $filaExcel;
-    //         foreach ($categorias as $index => $categoria) {
-    //             $rango = $bloques[$index];
-    //             $finBloque = $inicioBloque + $rango - 1;
-
-    //             $sheet->mergeCells("C{$inicioBloque}:C{$finBloque}");
-    //             $sheet->setCellValue("C{$inicioBloque}", $categoria['numero_trabajadores']);
-
-    //             $sheet->mergeCells("D{$inicioBloque}:D{$finBloque}");
-    //             $sheet->setCellValue("D{$inicioBloque}", $categoria['categoria']);
-
-    //             $sheet->mergeCells("E{$inicioBloque}:E{$finBloque}");
-    //             $sheet->setCellValue("E{$inicioBloque}", $categoria['tiempo_exposicion']);
-
-    //             $inicioBloque = $finBloque + 1;
-    //         }
-
-    //         // Imprimir agentes
-    //         foreach ($agentes as $registro) {
-    //             $medidasTexto = '';
-    //             $medidas = json_decode($registro->medidas_json, true);
-    //             if (is_array($medidas)) {
-    //                 foreach ($medidas as $medida) {
-    //                     if (!empty($medida['seleccionado'])) {
-    //                         $medidasTexto .= "- {$medida['descripcion']}\n";
-    //                     }
-    //                 }
-    //             }
-
-    //             $sheet->setCellValue("B{$filaExcel}", $registro->agente);
-    //             $sheet->setCellValue("F{$filaExcel}", $registro->indice_peligro);
-    //             $sheet->setCellValue("G{$filaExcel}", $registro->indice_exposicion);
-    //             $sheet->setCellValue("H{$filaExcel}", $registro->riesgo);
-    //             $sheet->setCellValue("I{$filaExcel}", $registro->valor_lmpnmp);
-    //             $sheet->setCellValue("J{$filaExcel}", $registro->cumplimiento);
-    //             $sheet->setCellValue("K{$filaExcel}", $medidasTexto);
-    //             $sheet->getStyle("K{$filaExcel}")->getAlignment()->setWrapText(true);
-    //             $sheet->getStyle("K{$filaExcel}")->getAlignment()->setVertical(Alignment::VERTICAL_TOP);
-
-    //             $filaExcel++;
-    //         }
-    //     }
-
-    //     // 👉 Establecer anchos personalizados
-    //     $sheet->getColumnDimension('A')->setWidth(29); // Área
-    //     $sheet->getColumnDimension('B')->setWidth(21); // Agente
-    //     $sheet->getColumnDimension('C')->setWidth(16); // No. Trabajadores
-    //     $sheet->getColumnDimension('D')->setWidth(28); // Categorías
-    //     $sheet->getColumnDimension('E')->setWidth(15); // Tiempo exposición
-    //     $sheet->getColumnDimension('F')->setWidth(15); // Índice de peligro
-    //     $sheet->getColumnDimension('G')->setWidth(15); // Índice de exposición
-    //     $sheet->getColumnDimension('H')->setWidth(28); // Riesgo
-    //     $sheet->getColumnDimension('I')->setWidth(25); // LMP-NMP
-    //     $sheet->getColumnDimension('J')->setWidth(22); // Cumplimiento
-    //     $sheet->getColumnDimension('K')->setWidth(85); // Recomendaciones
-
-    //     $writer = new Xlsx($spreadsheet);
-    //     $fileName = 'Matriz_Laboral_' . date('Ymd_His') . '.xlsx';
-    //     $temp_file = tempnam(sys_get_temp_dir(), $fileName);
-    //     $writer->save($temp_file);
-
-    //     return Response::download($temp_file, $fileName)->deleteFileAfterSend(true);
-    // }
-
-
-
     public function verificarmatrizlab($proyecto_id)
     {
         $existe = DB::table('matriz_laboral')->where('proyecto_id', $proyecto_id)->exists();
@@ -1687,9 +1653,7 @@ class reportesController extends Controller
             ->orderBy('fila_id')
             ->get();
 
-     
-
-        
+    
         $areasNombres = DB::table('recsensorialarea')->pluck('recsensorialarea_nombre', 'id');
 
         $spreadsheet = new Spreadsheet();
@@ -1716,7 +1680,6 @@ class reportesController extends Controller
         $sheet->getStyle('A1:K1')->getAlignment()->setWrapText(true);
         $sheet->getStyle('A1:K1')->getFill()->setFillType(Fill::FILL_SOLID)->getStartColor()->setARGB('FFD9D9D9');
 
-        // Anchos personalizados
         $sheet->getColumnDimension('A')->setWidth(29);
         $sheet->getColumnDimension('B')->setWidth(21);
         $sheet->getColumnDimension('C')->setWidth(16);
@@ -1729,7 +1692,6 @@ class reportesController extends Controller
         $sheet->getColumnDimension('J')->setWidth(22);
         $sheet->getColumnDimension('K')->setWidth(85);
 
-        // Combinaciones de color para riesgo
         $combinaciones = [
             '1A' => ['texto' => 'Bajo riesgo / Vigilancia para mejora continua', 'color' => 'FFFFFF'],
             '1B' => ['texto' => 'Bajo riesgo / Vigilancia para mejora continua', 'color' => 'FFFFFF'],
@@ -1758,7 +1720,6 @@ class reportesController extends Controller
             '5E' => ['texto' => 'Muy alto / Primera prioridad', 'color' => 'FF0000'],
         ];
 
-        // Heredar área_id
         $registros = $registros->values();
         $areaActual = null;
         foreach ($registros as $registro) {
@@ -1790,13 +1751,11 @@ class reportesController extends Controller
             $numAgentes = $agentes->count();
             $numCategorias = $categorias->count();
 
-            // Fusionar celda del área
             $sheet->mergeCells("A{$filaExcel}:A" . ($filaExcel + $numAgentes - 1));
             $sheet->setCellValue("A{$filaExcel}", $areaNombre);
             $sheet->getStyle("A{$filaExcel}")->getAlignment()->setVertical(Alignment::VERTICAL_CENTER);
             $sheet->getStyle("A{$filaExcel}")->getAlignment()->setWrapText(true);
 
-            // Calcular tamaño proporcional por categoría
             $reparto = floor($numAgentes / $numCategorias);
             $resto = $numAgentes % $numCategorias;
             $bloques = [];
@@ -1836,7 +1795,6 @@ class reportesController extends Controller
                 $sheet->setCellValue("F{$filaExcel}", $registro->indice_peligro);
                 $sheet->setCellValue("G{$filaExcel}", $registro->indice_exposicion);
 
-                // RIESGO CON COLOR
                 $clave = "{$registro->indice_peligro}{$registro->indice_exposicion}";
                 if (isset($combinaciones[$clave])) {
                     $color = $combinaciones[$clave]['color'];
@@ -4220,6 +4178,107 @@ class reportesController extends Controller
             default:
                 # code...
                 break;
+        }
+    }
+
+    public function obtenermeldraft($ID)
+    {
+        try {
+            $opciones_select = '<option value="">&nbsp;</option>';
+            $html  = '<option value="">&nbsp;</option>';
+
+            $departamento_guardado = DB::table('departamentos_meldraft')
+                ->where('proyecto_id', $ID)
+                ->value('DEPARTAMENTO_MEL');
+
+            $info = DB::select('SELECT ID_RECURSO_INFORME,
+                                     PROYECTO_ID,
+                                     AGENTE_ID,
+                                     NORMA_ID,
+                                     RUTA_IMAGEN_PORTADA,
+                                     OPCION_PORTADA1,
+                                     OPCION_PORTADA2,
+                                     OPCION_PORTADA3,
+                                     OPCION_PORTADA4,
+                                     OPCION_PORTADA5,
+                                     OPCION_PORTADA6,                                        
+                                     NIVEL1,
+                                     NIVEL2,
+                                     NIVEL3,
+                                     NIVEL4,
+                                     NIVEL5
+                             FROM recursosPortadasInformes
+                             WHERE PROYECTO_ID = ?', [$ID]);
+
+            $niveles = DB::select('
+                SELECT 
+                    "Instalación" ETIQUETA,
+                    proyecto_clienteinstalacion OPCION,
+                    0 NIVEL
+                FROM proyecto
+                WHERE id = ?
+                UNION
+                SELECT
+                    IFNULL(ce.NOMBRE_ETIQUETA, "NO") AS ETIQUETA,
+                    IFNULL(co.NOMBRE_OPCIONES , "NO") AS OPCION, 
+                    IFNULL(ep.NIVEL, 0) NIVEL
+                FROM proyecto rs
+                LEFT JOIN proyecto p ON rs.proyecto_folio = p.proyecto_folio
+                LEFT JOIN estructuraProyectos ep ON p.id = ep.PROYECTO_ID
+                LEFT JOIN cat_etiquetas ce ON ep.ETIQUETA_ID = ce.ID_ETIQUETA
+                LEFT JOIN catetiquetas_opciones co ON ep.OPCION_ID = co.ID_OPCIONES_ETIQUETAS
+                WHERE rs.id = ?
+                UNION
+                SELECT 
+                    "Folio" ETIQUETA,
+                    proyecto_folio OPCION,
+                    0 NIVEL
+                FROM proyecto
+                WHERE id = ?
+                UNION
+                SELECT
+                    "Razón social" ETIQUETA,
+                    proyecto_clienterazonsocial OPCION,
+                    0 NIVEL
+                FROM proyecto
+                WHERE id = ?
+                UNION
+                SELECT 
+                    "Nombre comercial" ETIQUETA,
+                    c.cliente_NombreComercial OPCION,
+                    0 NIVEL
+                FROM cliente c
+                LEFT JOIN proyecto r ON r.cliente_id = c.id
+                WHERE r.id = ?
+                ORDER BY NIVEL', [$ID, $ID, $ID, $ID, $ID]);
+
+            foreach ($niveles as $key => $value) {
+                if ($value->ETIQUETA == 'NO') {
+                    $opciones_select .= '<option value="" disabled>Proyecto vinculado sin Estructura organizacional para mostrar</option>';
+                } else {
+                    $texto = $value->ETIQUETA . ' : ' . $value->OPCION;
+                    if ($value->NIVEL != 0) {
+                        $texto .= ' [Nivel ' . $value->NIVEL . ']';
+                    }
+
+                    $selected = ($departamento_guardado && $departamento_guardado == $value->OPCION) ? 'selected' : '';
+
+                    $opciones_select .= '<option value="' . $value->OPCION . '" ' . $selected . '>' . $texto . '</option>';
+                }
+            }
+
+            // 🔹 Armar respuesta
+            $dato = [
+                "opciones" => $opciones_select,
+                "departamento_guardado" => $departamento_guardado ?? null,
+                "data" => $info ?: 'No se encontraron datos'
+            ];
+
+            return response()->json($dato);
+        } catch (Exception $e) {
+            return response()->json([
+                "msj" => 'Error ' . $e->getMessage()
+            ], 500);
         }
     }
 }

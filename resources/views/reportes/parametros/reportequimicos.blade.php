@@ -778,7 +778,7 @@
 				<h4 class="card-title" id="5_5">5.5.- Actividades del personal expuesto</h4>
 				<div class="row">
 					<div class="col-12">
-						<p class="justificado">A continuación, se describen las actividades realizadas en cada área con exposición a ruido, según la categoría encontrada en dicho sitio.</p><br>
+						<p class="justificado">A continuación, se describen las actividades realizadas en cada área con exposición a químicos, según la categoría encontrada en dicho sitio.</p><br>
 						<div class="informacion_estatica">
 							<table class="table table-hover tabla_info_centrado" width="100%" id="tabla_reporte_5_5">
 								<thead>

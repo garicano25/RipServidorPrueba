@@ -1129,8 +1129,9 @@ Route::get('descargarPortadaInformes/{proyecto_id}/{tipo}', ['as' => 'reportes.d
 
 Route::post('reportematrizlabguardar', ['as' => 'reportes.reportematrizlabguardar', 'uses' => 'reportes\reportesController@guardarMatrizLaboral']);
 
+Route::post('guardarmeldraft', ['as' => 'reportes.guardarmeldraft', 'uses' => 'reportes\reportesController@guardarmeldraft']);
 
-
+Route::get('obtenermeldraft/{ID}', ['as' => 'reportes.obtenermeldraft', 'uses' => 'reportes\reportesController@obtenermeldraft']);
 //==============================================
 Route::get('reportenom035vista2/{proyecto_id}', ['as' => 'reportenom035.reportenom035vista2', 'uses' => 'reportes\reportenom0352Controller@reportenom035vista2']);
 
