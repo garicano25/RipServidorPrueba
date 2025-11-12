@@ -1764,8 +1764,20 @@ class reportequimicoswordController extends Controller
                     $texto_color = "#FFFFFF";
                 }
 
-                $table->addCell($ancho_col_7, array('vMerge' => 'restart', 'valign' => 'center', 'bgColor' => $value->COLOR))->addTextRun($centrado)->addText($value->PRIORIDAD, array('color' => $texto_color, 'size' => 10, 'bold' => true, 'name' => $fuente));
-                
+                // $table->addCell($ancho_col_7, array('vMerge' => 'restart', 'valign' => 'center', 'bgColor' => $value->COLOR))->addTextRun($centrado)->addText($value->PRIORIDAD, array('color' => $texto_color, 'size' => 10, 'bold' => true, 'name' => $fuente));
+
+                $table->addCell(
+                    $ancho_col_7,
+                    array('vMerge' => 'restart', 'valign' => 'center', 'bgColor' => $value->COLOR)
+                )
+                    ->addTextRun(array_merge($centrado, ['name' => $fuente]))
+                    ->addText(
+                        $value->PRIORIDAD,
+                        array('color' => $texto_color, 'size' => 10, 'bold' => true, 'name' => $fuente)
+                    );
+
+
+
                 $sustancia = $value->PRODUCTO;
                 
             }
@@ -2203,8 +2215,19 @@ class reportequimicoswordController extends Controller
                 }
 
 
-                $table->addCell($ancho_col_8, array('bgColor' => $value->resultado_color))->addTextRun($centrado)->addText($value->resultado_texto, array('color' => $texto_color, 'size' => 10, 'bold' => true, 'name' => $fuente));
-            }
+                // $table->addCell($ancho_col_8, array('bgColor' => $value->resultado_color))->addTextRun($centrado)->addText($value->resultado_texto, array('color' => $texto_color, 'size' => 10, 'bold' => true, 'name' => $fuente));
+
+                $table->addCell(
+                    $ancho_col_8,
+                    array('bgColor' => $value->resultado_color)
+                )
+                    ->addTextRun(array_merge($centrado, ['name' => $fuente]))
+                    ->addText(
+                        $value->resultado_texto,
+                        array('color' => $texto_color, 'size' => 10, 'bold' => true, 'name' => $fuente)
+                    );
+
+                }
 
 
             $plantillaword->setComplexBlock('TABLA_7', $table);
