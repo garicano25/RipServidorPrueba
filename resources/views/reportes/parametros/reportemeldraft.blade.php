@@ -33,7 +33,7 @@
 <div class="row reporte_estructura">
     <div class="col-12">
         <div class="row">
-            <!-- Título -->
+        
             <div class="col-12">
                 <ol class="breadcrumb mb-4 d-flex justify-content-center"
                     style="padding: 6px; margin: 0px 0px 10px 0px; background: #94B732!important">
@@ -114,5 +114,5 @@
     var estatus = <?php echo json_encode($estatus); ?>;
     var recsensorial = <?php echo json_encode($recsensorial); ?>;
 </script>
-<script src="/js_sitio/reportes/reportemeldraft.js?v=1.5"></script>
+<script src="/js_sitio/reportes/reportemeldraft.js?v=1.6"></script>
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>

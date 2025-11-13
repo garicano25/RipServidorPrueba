@@ -61,7 +61,16 @@ function tabla_mel_draft(proyecto_id, reporteregistro_id, areas_poe) {
 				{ data: "reportequimicosevaluacion_antiguedadcategoria", defaultContent: "-", orderable: false },
 				{ data: "reportequimicosevaluacion_horariotrabajo", defaultContent: "-", orderable: false },
 				{ data: "tipo", defaultContent: "-", orderable: false },
-				{ data: "referencia_vle", defaultContent: "-", orderable: false },
+                {
+                        data: null,
+                        orderable: false,
+                        render: function (data, type, row) {
+                            if (!row.referencia_vle && !row.unidad_vle) return "-";
+                            const valor = row.referencia_vle ?? "";
+                            const unidad = row.unidad_vle ? ` ${row.unidad_vle}` : "";
+                            return `${valor}${unidad}`;
+                        }
+                    },
 				{ data: "resultado_concentracion", defaultContent: "-", orderable: false },
 				{ data: "cumplimiento", defaultContent: "-", orderable: false }
 
