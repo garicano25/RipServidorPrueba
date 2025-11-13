@@ -699,12 +699,14 @@ class reportesController extends Controller
 
 
 
-
     public function matrizrecomendaciones($proyecto_id, $reporteregistro_id, $areas_poe)
     {
         try {
             $numero_registro = 0;
             $data = [];
+            $instalacion = 'XXX';
+            $area = 'XXX';
+            $area2 = 'XXX';
 
             // 🔹 Si no viene un registro_id válido, obtener el más reciente
             if (empty($reporteregistro_id) || $reporteregistro_id == 0) {
@@ -730,35 +732,50 @@ class reportesController extends Controller
                 ->where('proyecto_id', $proyecto_id)
                 ->value('DEPARTAMENTO_MEL') ?? 'No asignado';
 
-            // 🔹 Consulta base de áreas y categorías
+            // 🔹 Consulta principal (idéntica base de 5.5)
             $areas = DB::select("
             SELECT
-                rq.id,
-                rq.proyecto_id,
-                rq.registro_id,
-                ra.reportearea_instalacion AS reportequimicosarea_instalacion,
-                ra.reportearea_nombre AS reportequimicosarea_nombre,
-                rc.reportecategoria_nombre AS reportequimicoscategoria_nombre
-            FROM reportequimicosevaluacion rq
-            LEFT JOIN reportearea ra ON rq.reportequimicosarea_id = ra.id
-            LEFT JOIN reportecategoria rc ON rq.reportequimicoscategoria_id = rc.id
-            WHERE rq.proyecto_id = $proyecto_id
-              AND rq.registro_id = $reporteregistro_id
-            ORDER BY ra.reportearea_nombre ASC
+                reportearea.proyecto_id,
+                reportearea.id,
+                reportearea.reportearea_instalacion AS reportequimicosarea_instalacion,
+                reportearea.reportearea_nombre AS reportequimicosarea_nombre,
+                reportearea.reportearea_porcientooperacion,
+                reporteareacategoria.reportecategoria_id AS reportequimicoscategoria_id,
+                reportecategoria.reportecategoria_nombre AS reportequimicoscategoria_nombre,
+                IFNULL((
+                    SELECT
+                        IF(reportequimicosareacategoria.reportequimicoscategoria_id, 'activo', '') AS checked
+                    FROM reportequimicosareacategoria
+                    WHERE reportequimicosareacategoria.reportequimicosarea_id = reportearea.id
+                      AND reportequimicosareacategoria.reportequimicoscategoria_id = reporteareacategoria.reportecategoria_id
+                      AND reportequimicosareacategoria.reportequimicosareacategoria_poe = $reporteregistro_id
+                    LIMIT 1
+                ), '') AS activo
+            FROM reportearea
+            LEFT JOIN reporteareacategoria ON reportearea.id = reporteareacategoria.reportearea_id
+            LEFT JOIN reportecategoria ON reporteareacategoria.reportecategoria_id = reportecategoria.id
+            WHERE reportearea.proyecto_id = $proyecto_id
+            ORDER BY 
+                reportearea.reportearea_instalacion ASC,
+                reportearea.reportearea_nombre ASC,
+                reportecategoria.reportecategoria_orden ASC
         ");
 
+            // 🔹 Formatear resultados
             foreach ($areas as $value) {
-                $numero_registro++;
+                if ($value->reportequimicosarea_porcientooperacion > 0 && $value->activo) {
+                    $numero_registro++;
 
-                $data[] = [
-                    'numero_registro' => $numero_registro,
-                    'DEPARTAMENTO_MEL' => $departamento,
-                    'reportequimicosarea_instalacion' => $value->reportequimicosarea_instalacion ?? '-',
-                    'reportequimicosarea_nombre' => $value->reportequimicosarea_nombre ?? '-',
-                    'reportequimicoscategoria_nombre' => $value->reportequimicoscategoria_nombre ?? '-',
-                    'nombre_agente' => 'Químico', // Valor fijo solicitado
-                    'recomendaciones' => '-' // 🔹 Placeholder (vendrá luego de otra fuente)
-                ];
+                    $data[] = [
+                        'numero_registro' => $numero_registro,
+                        'DEPARTAMENTO_MEL' => $departamento,
+                        'reportequimicosarea_instalacion' => $value->reportequimicosarea_instalacion ?? '-',
+                        'reportequimicosarea_nombre' => $value->reportequimicosarea_nombre ?? '-',
+                        'reportequimicoscategoria_nombre' => $value->reportequimicoscategoria_nombre ?? '-',
+                        'nombre_agente' => 'Químico',
+                        'recomendaciones' => '-' // Se llenará después
+                    ];
+                }
             }
 
             return response()->json([
@@ -775,8 +792,6 @@ class reportesController extends Controller
             ]);
         }
     }
-
-
 
 
 
