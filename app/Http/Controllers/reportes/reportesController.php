@@ -764,34 +764,9 @@ private function evaluarCumplimiento($concentracion, $valorLimite)
                 ],
             ];
 
-            // 🔹 Insertar datos
             $filaInicio = 6;
             $fila = $filaInicio;
 
-            // foreach ($puntos as $value) {
-            //     $cumplimiento = $this->evaluarCumplimiento(
-            //         $value->resultado_concentracion,
-            //         $value->referencia_vle
-            //     );
-
-            //     // 🔸 No repetimos departamento aquí, solo en la celda combinada
-            //     $sheet->setCellValueExplicit("C{$fila}", $value->reportequimicosarea_instalacion ?? '', DataType::TYPE_STRING);
-            //     $sheet->setCellValueExplicit("D{$fila}", $value->reportequimicosarea_nombre ?? '', DataType::TYPE_STRING);
-            //     $sheet->setCellValueExplicit("E{$fila}", $value->reportequimicosevaluacion_nombre ?? '', DataType::TYPE_STRING);
-            //     $sheet->setCellValueExplicit("F{$fila}", $value->reportequimicosevaluacion_ficha ?? '', DataType::TYPE_STRING);
-            //     $sheet->setCellValueExplicit("G{$fila}", $value->reportequimicoscategoria_nombre ?? '', DataType::TYPE_STRING);
-            //     $sheet->setCellValueExplicit("H{$fila}", $value->reportequimicosevaluacion_anios ?? '', DataType::TYPE_STRING);
-            //     $sheet->setCellValueExplicit("I{$fila}", $value->reportequimicosevaluacion_antiguedadgeneral ?? '', DataType::TYPE_STRING);
-            //     $sheet->setCellValueExplicit("J{$fila}", $value->reportequimicosevaluacion_antiguedadcategoria ?? '', DataType::TYPE_STRING);
-            //     $sheet->setCellValueExplicit("K{$fila}", $value->reportequimicosevaluacion_horariotrabajo ?? '', DataType::TYPE_STRING);
-            //     $sheet->setCellValueExplicit("L{$fila}", $value->tipo ?? '', DataType::TYPE_STRING);
-            //     $sheet->setCellValueExplicit("M{$fila}", $value->referencia_vle ?? '', DataType::TYPE_STRING);
-            //     $sheet->setCellValueExplicit("N{$fila}", $value->resultado_concentracion ?? '', DataType::TYPE_STRING);
-            //     $sheet->setCellValueExplicit("O{$fila}", $cumplimiento ?? '', DataType::TYPE_STRING);
-
-            //     $sheet->getStyle("B{$fila}:O{$fila}")->applyFromArray($borderStyle);
-            //     $fila++;
-            // }
 
 
             foreach ($puntos as $value) {
@@ -818,8 +793,12 @@ private function evaluarCumplimiento($concentracion, $valorLimite)
                 $sheet->setCellValueExplicit("O{$fila}", $cumplimiento ?? '', DataType::TYPE_STRING);
 
                 $sheet->getStyle("B{$fila}:O{$fila}")->applyFromArray($borderStyle);
+
+                $sheet->getRowDimension($fila)->setRowHeight(42.90);
+
                 $fila++;
             }
+
 
 
             $ultimaFila = $fila - 1;
@@ -838,7 +817,6 @@ private function evaluarCumplimiento($concentracion, $valorLimite)
                 ]);
             }
 
-            // 🔹 Guardar sin recalcular fórmulas
             $writer = IOFactory::createWriter($spreadsheet, 'Xlsx');
             $writer->setPreCalculateFormulas(false);
 
@@ -855,12 +833,14 @@ private function evaluarCumplimiento($concentracion, $valorLimite)
             ]);
         }
     }
-        /**
-         * Display the specified resource.
-         *
-         * @param  int  $proyecto_id
-         * @return \Illuminate\Http\Response
-         */
+
+
+    /**
+     * Display the specified resource.
+     *
+     * @param  int  $proyecto_id
+     * @return \Illuminate\Http\Response
+     */
     public function reportepoevistapsico($proyecto_id)
     {
         $proyecto = proyectoModel::findOrFail($proyecto_id);
